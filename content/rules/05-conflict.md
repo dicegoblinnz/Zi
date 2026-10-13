@@ -5,6 +5,7 @@ order: 5
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 Every fight in this game runs on one engine, whether you're fighting with blades, with words or against the clock.
@@ -15,8 +16,8 @@ Most of the time the game's just a conversation. The GM describes what's going o
 ## The Round {#s-round}
 
 1.  **The GM telegraphs.** Everything that's coming this round goes on the table, face up: what it's doing, who it's aimed at, and how hard, in dice.
-2.  **The players act**, in any order they like, two actions each. You can take one action, let someone else go, and come back for your second. Talk it through and make a plan. There's no initiative.
-3.  **The round ends.** Every telegraph nobody answered **lands**. Clocks and events tick, and every condition steps down one size. Then the GM telegraphs the next round.
+2.  **The players act**, in any order they like, one action each. Talk it through and make a plan. There's no initiative.
+3.  **The round ends.** Every telegraph nobody answered **lands**. Clocks and events nobody worked step down, and every condition steps down one size. Then the GM telegraphs the next round.
 
 Everything else in this chapter is what happens inside a round.
 
@@ -36,62 +37,107 @@ Nothing's been rolled yet. Now that you know exactly what's coming, it's up to y
 
 -   **A threat telegraphs with its Challenge die.** That's as hard as it pushes. A glancing blow can be smaller, and a tag can say it hits harder. How many telegraphs it makes is up to the story and the budget.
 -   **Anything can telegraph.** It can be a threat, the ground (the fire spreads to the stair), an event (the bell starts to ring), or something the GM's just decided the scene needs. If it's on the table, it came with a die.
--   **The GM has a budget.** Every round she's got a number of steps to telegraph with, set by the size and experience of the crew. Within it, threats can do as much as the story allows. The details are in [Running the Game](#s-budget), and you never need to track it.
+-   **The GM has a budget.** It works out at about 5 steps a round for each of you, so about a d10 each, and she can split it into lots of smaller telegraphs to spread you thin. Within it, threats can do as much as the story allows. The details are in [Running the Game](#s-budget), and you never need to track it.
 -   **Telegraphs are honest.** The GM never hides a telegraph's size or its target.
 -   **Running doesn't dodge.** A telegraph aimed at you lands on you at the end of the round, wherever you've gone. It's already coming. To stop it, answer it. A telegraph aimed at a place, like the burning stair or the doorway under the chandelier, only hits whoever's in it when it lands, so getting out of there gets you clear.
 -   **Some telegraphs have only one answer.** If the GM says so when she telegraphs it, that's what happens if it lands, and there's no trading it for something else.
 -   **The round can change.** When something you do sets off something new, like the guard seeing you and shouting, the GM can put a new telegraph on the table, as long as someone's still got an action to answer it with. She never adds one after the last player has acted.
 
-## Your Two Actions {#s-actions}
+## Your Action {#s-actions}
 
-Every round you get **two actions**. Each action can:
+Every round you get **one action**. It can:
 
--   **Act.** Build a roll with its intents and throw it: strike, trick, talk, climb, pick, work a stake, strip a tag, study something.
+-   **Act.** Build a roll from your set action and throw it: strike, trick, talk, climb, pick a lock, heal someone, work a stake, strip a tag, study something.
 -   **Answer a telegraph**: stop it before it lands.
--   **Guard**: brace yourself or someone near you against whatever lands at the end of the round.
+-   **Defend**: roll your Armour once for every blow that's coming, and pull an enemy's attack off your friends. See [Defend](#s-defend).
 -   **Move** further than your stride. See [Movement and Range](#s-movement).
--   **Help**: give your steps to an ally's roll. See [Working Together](#s-teamwork).
+-   **Lead**: an order, a rallying song or a blessing, with its steps handed out to your friends. See [Working Together](#s-teamwork).
 -   **Pull something out of your bag.**
 -   **Break a condition**, yours or a friend's. Beat its die and it's gone.
 
-Some things are free: your stride, a few words, dropping something or putting something away.
+Some things are free: your stride (before or after your action, or between two), a few words, dropping something or putting it away. [Taking the hit](#s-take-the-hit) for a friend is free too.
 
-You can **save** one action and carry it into the next round, where you'll have three. You can't hold it back to use later in *this* round once the telegraphs start landing, because there are no last-moment reactions in Zi. Everything you might react to is already on the table, so you deal with it on your turn.
+There's no special action for helping. To help a friend, put your action into the same thing they're doing. That's a **combo**: you add your [set actions](#s-set-actions) together and one of you rolls the lot. It doesn't cost Aura, it has to be one thing in the story, and every action in it gives you a split. Any number of friends can pile into the same roll. There's one under [Answering a Telegraph](#s-answering), and the rest is in [Working Together](#s-teamwork).
+
+### Extra actions {#s-extra-actions}
+
+Now and then you'll get more than one action in a round:
+
+-   **Hold it.** Do nothing this round apart from your stride, and you've got two actions next round.
+-   **Spend a Spark** for an extra action this round.
+-   **A trait that says so**, once a scene: *Second Wind* gives you an extra action, and *Fast* gives you a free Move action.
+-   **The Extra action Boon** gives you one extra action a scene. See [Boons and Burdens](#s-boons).
+
+An extra action can be its own roll, or it can go into the same roll as a combo. Put it into the same set action again and that's 1 more step. Put a different set action in and it brings its lines with it as a new approach, like Fight with Sneak for a sneak attack, and anything that's on both counts once.
+
+:::example[Extra actions]
+**Holding:** Vesk spends round two crossing the gallery on her stride and nothing else. In round three she's got two actions, and she puts both into the vault door. Her Locks twice is 5 + 1 = 6 steps, a d12.
+
+**A Spark:** Ash spends a Spark for an extra action and puts it into her Fight as well, so it's 5 steps instead of 4.
+:::
+
+You can't keep your action back to use later in *this* round once the telegraphs start landing, because there are no last-moment reactions in Zi'Dara. Everything you might react to is already on the table, so you deal with it on your turn.
 
 ## Answering a Telegraph {#s-answering}
 
-To **answer** a telegraph, spend one or more actions and build a roll from whatever fits the *way* you're stopping it: dodge it, parry it, shove the brute's arm aside, shout the crowd down, slam the door before it slams on you, or shoot the archer first. Then roll against the telegraph's dice.
+To **answer** a telegraph, spend your action and build a roll from the set action that fits the *way* you're stopping it: dodge it, parry it, shove the brute's arm aside, shout the crowd down, slam the door before it slams on you, or shoot the archer first. Then roll against the telegraph's dice. Friends can put their actions in too, and then it's a combo with one roll between you.
 
 -   **Win, and it's stopped.** It doesn't land.
 -   **Lose, and it lands at once**, right there and then, and nobody rolls a defence against it. A tie's a loss, unless you pay 1 Aura.
 
 Answering's a gamble. It lets you throw everything you've got at a problem instead of trusting your Armour, but if the answer fails, you've walked straight into it.
 
--   **You can answer for someone else.** Step in front of the spear, drag your friend out of the way, or talk over the man shouting at her. If you answered by putting yourself in the way and you lose, it lands on *you*.
+-   **You can answer for someone else.** Get your shield in front of the spear, drag your friend out of the way, or talk over the man shouting at her. If you answered by putting yourself in the way and you lose, it lands on *you*. If you'd rather not roll for it at all, you can [take the hit](#s-take-the-hit) for them instead, and then it lands on you for sure.
 -   **Several dice on the same answer** are advantage: your best die counts.
 -   **Taking the source down answers everything it telegraphed.** If the archer falls before the end of the round, his arrow never flies. Strip a tag and whatever it gave a telegraph goes with it, so if you take its *Reach*, the spear can't reach you.
 -   **Telegraphs aimed at a stake, a place or a clock** have no defence to roll. If nobody answers them, they happen.
 
-## Letting It Ride {#s-defending}
+:::example[Answering together]
+The brute telegraphs his club at Isolde, a d8, and her Armour's a d2. Wren answers it for her with an arrow into his arm, and Bram puts his action into the same thing, getting his hammer under the club. Wren's Fight is 5 steps and Bram's is 4, so that's 9 steps from two actions, a d12 and a d6, and they put both on the club. It rolls 6 and the d12 comes up 8, so it never lands. If they'd lost, it'd have landed on Isolde there and then.
+:::
 
-You're never going to answer everything. Whatever nobody answers **lands at the end of the round**, and its target rolls a **defence die against each die aimed at them**:
+## When It Lands {#s-defending}
 
--   **Armour** against blows, blades, falling rocks and teeth.
--   **Confidence** against fear, lies, pressure and anything that works on the mind.
+You're never going to answer everything. Whatever nobody answers **lands at the end of the round**, and you get **one defence roll a round**:
 
-The telegraph has to beat your defence. **Ties go to you.**
+-   **Armour**, rolled once, against all the blows, blades, falling rocks and teeth.
+-   **Confidence**, rolled once, against all the fear, lies, pressure and anything else that works on the mind.
+
+That one roll stands against everything that comes at you this round. Every die aimed at you has to beat it, and **ties go to you**. Whatever beats it lands, and the GM names the [cost](#s-consequences).
+
+:::example[One roll against two blows]
+Two guards telegraph at Vesk this round, a d8 and a d6, and nobody answers either of them. At the end of the round she rolls her Armour once, a d4, and gets a 3. The d8 rolls 6, so that one lands. The d6 rolls 3, a tie, so it doesn't.
+:::
+
+**Threats get one roll a round too.** The first time anyone goes at a threat in a round, roll its Challenge die, and that roll stands till the round's over. Everyone who goes at it after that has to beat that same number, whatever die they're rolling and whatever it's for. If Bram rolls a 4 for the guard captain when he swings at him, that's the 4 Wren has to beat when she shoots the captain later in the round. A *Layered* threat rolls all its dice the first time it's attacked in the round, and its best die is the roll that stands. A stake works the same way.
 
 :::rule{#s-past-d12}
 **Past d12.** Armour or Confidence bigger than a d12 rolls both dice and keeps the best. When it steps down, the extra die goes first: d12 + d6, then d12 + d4, then d12 + d2, then a plain d12. That's three blows soaked before you're any weaker, and heavy armour's supposed to feel like this.
 :::
 
-### Guard {#s-guard}
+### Defend {#s-defend}
 
-Spend an action to **guard**. Build a die from whatever fits bracing, blocking or covering (a shield, *Defender*, a doorway you're holding) plus 1 for the action. **Don't roll it.** Add its steps to your own Armour or Confidence, or to the Armour or Confidence of one ally within your reach, against everything that lands on whoever you're guarding at the end of this round.
+**Defend** takes your action and uses no steps. When the telegraphs land at the end of the round, you roll your Armour once for **every die** coming at you, instead of once for the lot, then choose which roll blocks which. It's the same with Confidence against fear, lies and pressure.
 
-:::example
-Bram's Armour is a d6, which is 3 steps. He guards, and *Defender*, his shield and his Title all fit, plus the action, so that's 4 more steps. Against everything that lands on him this round, his Armour is 7 steps: a d12 and a d2, and he keeps the best.
+You can also **pull one enemy's whole attack** onto yourself. Everything it aimed at friends within your stride comes at you instead, so you'll roll for those too. That's one enemy, unless you've got the Boon that pulls from two.
+
+:::example[Bram Defends]
+A brute telegraphs three d8s at Wren. Wren's within Bram's stride, so he Defends and pulls all three onto himself. When they land, the d8s come up 7, 5 and 2, and Bram rolls his d6 Armour three times: 6, 3 and 1. He puts the 6 on the 5 and the 3 on the 2, so only the 7 gets through. On a single roll, his 3 would only have stopped the 2.
 :::
+
+It's what you do when a lot's coming at one person, or at a friend whose Armour can't take it. It only covers what lands at the end of the round, though, so a failed answer still lands at once, with no defence roll.
+
+### Taking the Hit {#s-take-the-hit}
+
+When an attack's aimed at someone else within your stride, you can step in front of it and **take the hit** instead. It's free, so it doesn't use your action, and you can say so any time before it lands. You don't roll to defend: you just take it, and the GM names the cost.
+
+Anyone can do it, the GM's people too. The bodyguard throws himself in front of the knife meant for his lord, and a summon can take the hit for someone the same way (one hit takes a summon out, see [Summoning](#s-summoning)).
+
+:::example[Taking the hit]
+The brute's club is coming down at Isolde again, a d8, and her Armour's a d2. Bram's right beside her, so he says he's taking it. It's free, so his action still goes on the brute's shield. At the end of the round the club lands on Bram with no roll at all, and the GM names a Hurt. Bram offers his Armour instead, and it steps down to a d4.
+:::
+
+There's a Boon and a Burden for it, in [Boons and Burdens](#s-boons). With the Boon, when you take the hit, you can spend 1 Aura to roll your Armour against it, the way Defend does. With the Burden, taking the hit costs you 1 Aura.
 
 ## Consequences: When Something Lands {#s-consequences}
 
@@ -99,8 +145,8 @@ When a telegraph lands on you, or when a miss costs you something because it mat
 
 -   **Step your Armour down** one size, for a blow. It can't go below d2.
 -   **Step your Confidence down** one size, for words, fear or pressure. It can't go below d2.
--   **Take a Hurt.** Fill a box, and if it's your last box, you Blaze.
--   **Break an item.** Cross it out until it's mended.
+-   **Take a Hurt.** Fill a box on your Hurt track. If every box is already full, you Blaze. See [Hurt, Blaze and Scars](#s-blaze).
+-   **Break an item.** Something you carry breaks: cross it out until it's mended. Your attuned things are magic, and they can't be broken.
 -   **Step your Aspiration back down** one size, never below d2. The blow costs you your dream instead of your body.
 -   **Step the party Goal back down** one size, never below d2.
 -   **Tick a clock**: step one of the scene's clocks, or one of the campaign's, down one.
@@ -112,7 +158,7 @@ If the telegraph's intent was something specific, like *pin you*, *grab the pain
 
 ### Player versus Player {#s-pvp}
 
-The rules are the same when one player goes at another. Both dice hit the table and ties go to the defender. Whoever throws the punch spends the action and names the cost, and whoever takes it can offer another.
+The rules are the same when one player goes at another. Both dice hit the table, ties go to the defender, and the one defence roll a round counts here too. Whoever throws the punch spends the action and names the cost, and whoever takes it can offer another.
 
 ## Threats {#s-challenges}
 
@@ -136,22 +182,22 @@ A tag is something true about a threat that the whole table can see, use and pla
 -   **What keeps it going.** *Armoured, Shield, Flies, Regrows.* These are its **health**, and every win strips one.
 -   **What drives it.** *Loyal, Greedy, Scared, Code of Honour.* These are what it wants, fears and loves, and they're how you talk to it, buy it, scare it or turn it.
 
-**Its defence against every intent is its Challenge die.** A Challenge 5 defends against a sword at a d10, and against a bribe at a d10. What changes is what a win takes away.
+**Its defence against every intent is its Challenge die.** A Challenge 5 defends against a sword at a d10, and against a bribe at a d10. It rolls that die once a round, the first time anyone goes at it, and what's different from one intent to the next is what a win takes away.
 
 ### Tags are its health {#s-staying}
 
-Most threats in Zi don't have hit points. Count a threat's **keeps-it-going tags**, and that's how many times you've got to beat it to bring it down. Every win strips one. **Strip the last and it falls.** A threat with none at all falls to one good win.
+Most threats in Zi'Dara don't have hit points. Count a threat's **keeps-it-going tags**, and that's how many times you've got to beat it to bring it down. Every win strips one. **Strip the last and it falls.** A threat with none at all falls to one good win.
 
 -   A **mook** has none or one, so one good hit does it.
 -   A **named** threat has two, which makes for a proper fight.
 -   A **boss** has three or more, some hidden, and a weak point. A boss that should last has [Tough](#s-tough) as well, and Tough works like hit points.
 
 :::rule{#s-layered}
-**Layered.** Special encounters stack their dice. A threat or a stake that's *Layered* rolls one Challenge die for every tag it's got left keeping it going, and its best die counts. Strip a tag and it rolls one fewer. Save it for the doors, wards and bosses that should feel like a wall, not for every guard.
+**Layered.** Special encounters stack their dice. A threat or a stake that's *Layered* rolls one Challenge die for every tag it's got left keeping it going, and its best die counts. It rolls them the first time it's attacked in a round, and that best die stands for the rest of the round. Strip a tag and it rolls one fewer from the next round on. Save it for the doors, wards and bosses that should feel like a wall, not for every guard.
 :::
 
 :::example[The enchanted door]
-A vault door is Challenge 4, and three tags keep it shut: *Oak*, *Iron Bars* and *Warded*. That's three wins against its d8 to break it. Make it *Layered* and the first win is against 3d8, the next against 2d8, and the last against a single d8.
+A vault door is Challenge 4, and three tags keep it shut: *Oak*, *Iron Bars* and *Warded*. That's three wins against its d8 to break it. Make it *Layered* and it rolls 3d8 the first time someone goes at it in a round, and keeps the best. Once a tag's gone it's 2d8 the next round, and the last tag only has a single d8 behind it.
 :::
 
 ### Tough {#s-tough}
@@ -161,7 +207,7 @@ Some threats are built to last, and those have **Tough**. It works like hit poin
 Plain *Tough* comes off anything that hurts it. Tough can have a name too, like *Natural Armour 40* or *Commanding Presence 20*, and then only what fits it chips it: blades and hammers chip *Natural Armour*, shaming a captain in front of his men chips *Commanding Presence*, and bribes and threats chip a crowd that's *Loyal 20*. Either way, Tough is one of the threat's keeps-it-going tags, just a big one. Its other tags are the specific things you can go after: knock it out of the air, break the shield, gag it before the shout wakes the house.
 
 -   **Some come first.** Tough marked *first*, like *Natural Armour 40 (first)*, has to go before anything under it can be stripped. You chip through the hide before you get at the rest.
--   **Every die can chip it.** Call several dice at it, each as its own intent, and it defends against each one. Every die that wins takes its number off.
+-   **Every die can chip it.** Call several dice at it, each as its own intent. It rolls its defence once that round, and every die that beats that roll takes its number off.
 -   **You always know what's left.** The GM says the number out loud every time it drops.
 -   **Openings and weak points ignore the numbers.** A weak point still ends the threat at once, and an opening works the way it always does: one win ends a Mook or a Named threat, and a Boss loses two tags, with Tough counting as one of them.
 -   **Piercing still gets through.** A *Piercing* weapon ignores *Armoured*, Tough or not, even when it comes first.
@@ -170,9 +216,9 @@ Plain *Tough* comes off anything that hurts it. Tough can have a name too, like 
 :::example[Chipping through]
 The thing under the bridge is Challenge 5, and it's *Natural Armour 40 (first)*, *Relentless* and *Hungry*. Nothing touches *Relentless* or *Hungry* until the armour's gone.
 
-Bram puts both actions into it. *Combat*, *war hammer*, the hammer, *Pack Fighter* (Ash is right beside him) and his Title make six steps an action, twelve for both: two d12s, each one its own swing at the hide. He rolls 9 and 10, and rolls the thing's d10 against each: 4 and 10. The 9 wins. The 10 ties, so Bram pays 1 Aura to take it. That's 9 + 10 = 19 off, and it's *Natural Armour 21*.
+Bram goes at the hide first. His Fight is 4 steps, a d8. He's the first to go at it this round, so he rolls its d10 as well, and it comes up 3. His d8 rolls 7, so that's 7 off, and it's *Natural Armour 33*.
 
-Ash throws fire at the same hide. *Evocation*, *fire*, her ember stone and her Title make five steps an action, ten for both: a d12 and a d8. The d12 rolls 7 against its 3, so that's 7 more off. The d8 rolls 2 against its 6 and loses. *Natural Armour 14*. One more good round and the crew's into it.
+Ash throws fire at the same hide with her Fight: her Title, *throw fire* and her ember stone, 4 steps with the action, a d8. The thing's 3 still stands, so nobody rolls its d10 again. Ash's d8 comes up 8, its top face, so she gets 1 Aura back and takes 8 more off. It's down to *Natural Armour 25*. Another round or two like that and the crew's into it.
 :::
 
 ### Hidden tags and weak points {#s-hidden}
@@ -221,23 +267,23 @@ The scene ends when the stakes are settled, not when the last enemy falls. A cre
 A **condition** is a tag carrying a die. It can be **against you** (*Burning d8, Pinned d6, Frightened d10*) or **for you** (*Warded d8, Unseen d6, Blessed d12*). Good or bad, every condition works the same way.
 
 -   **Its die is the die that placed it.** Beat a Warden with a d10 meant to set it alight, and it's *Burning d10*. When nothing pushes back, like a ward on a friend or a blessing before the charge, there's no roll, and the die you built is the condition's die.
--   **Passive: one step, while it lasts.** A condition against you costs you a step on whatever it gets in the way of, and a condition for you gives you a step on whatever it helps. The condition says what fits. It counts once on a roll, even when you put both actions in.
--   **Active: spend it for one big thing.** Every condition has one strong effect. Spend it and it happens, and the condition's gone. Spending it costs nothing: no action, no roll.
+-   **Passive: one step, while it lasts.** A condition against you costs you a step on whatever it gets in the way of, and a condition for you gives you a step on whatever it helps. The condition says what fits. It counts once on a roll, however many actions go into it.
+-   **Active: spend it for one big thing.** Every condition has one strong effect. Spend it and it happens, and the condition's gone. Spending it doesn't cost anything: no action, no roll.
 -   **It fades.** At the end of every round, every condition steps down one size, and past d2 it's gone. It lasts as many rounds as it has steps, so a d4 lasts two and a d12 lasts six.
--   **Break it.** Spend an action and beat its die: put the fire out, shake off the fear, tear down their ward. A friend can do it for you, if they can reach you.
+-   **Break it.** Spend your action and beat its die: put the fire out, shake off the fear, tear down their ward. A friend can do it for you, if they can reach you.
 -   **One of each, once a round.** Nobody carries two of the same condition, and the same condition goes on the same target only once a round, whoever places it. Spent or broken, it can't go back on them until next round. Place it again in a later round and the new one replaces the old one, die and all. Different conditions are fine: a Warden can be *Burning* and *Pinned* in the same round.
 
 ### Who spends it {#s-conditions-spend}
 
 -   **A condition for you:** you do, whenever it fits.
 -   **A condition on a threat:** anyone in the crew, on their turn.
--   **A condition the GM put on you:** the GM spends it at the end of the round, and she says so when she telegraphs. Until then it's yours to break, so if you don't want it, spend the action and put it out.
+-   **A condition the GM put on you:** the GM spends it at the end of the round, and she says so when she telegraphs. Until then it's yours to break, so if you don't want it, spend your action and put it out.
 -   **A threat's own good conditions:** the GM spends them when they fit, out loud.
 
 A threat can break a condition too. The GM telegraphs it (*the Warden beats at the flames, a d10 against its Burning*) and it rolls at the end of the round. If the crew wants that Burning spent, spend it first.
 
 :::rule
-**Conditions on a threat.** A threat doesn't have Hurt boxes, actions or Aura, so read its conditions like this.
+**Conditions on a threat.** A threat doesn't have a Hurt track, actions or Aura, so read its conditions like this.
 
 -   **A Hurt** is a tag stripped, one of the tags that keeps it going. Whoever spends it picks one the story allows.
 -   **An action** is a telegraph. If it loses one, one of its telegraphs is gone. If it gains one, the GM adds a telegraph, free of the budget.
@@ -256,14 +302,14 @@ These are examples, not a complete list, so write your own in the same shape: a 
 | **Burning** | anything physical. | take a Hurt. |
 | **Bleeding** | anything strenuous. | take a Hurt. |
 | **Poisoned** | anything that needs a steady hand or a clear eye. | your Armour steps down one size. |
-| **Exposed** | your Armour. | you lose an action, spent getting your guard back. |
+| **Exposed** | your Armour. | you lose your next action getting your guard back. Unless you've got an extra one, that's your whole turn. |
 | **Pinned** | moving. | you can't move this round, not even your stride. |
 | **Prone** | your Armour, against anyone standing over you. | your stride this round goes on getting up. |
 | **Staggered** | keeping your feet. | you go down: you're *Prone*, at the same die. |
 | **Grabbed** | anything but breaking free. | they drag you up to their stride, wherever they like. |
 | **Disarmed** | fighting with what was in your hand. | it's gone: out of reach, or in their hand. Cross it off until you get it back. |
 | **Blinded** | anything that needs your eyes. | one of your dice this round goes wide: it doesn't count. |
-| **Deafened** | anything that needs your ears. | you can't Help, or be Helped, this round. |
+| **Deafened** | anything that needs your ears. | you can't join a friend's roll, or have a friend join yours, this round. |
 | **Silenced** | anything spoken. | you can't speak this round: no orders, no words of power, no talking your way out. |
 | **Frightened** | anything that brings you closer to what you fear. | your next action goes on getting away from it. |
 | **Shaken** | your Confidence. | your Confidence steps down one size. |
@@ -285,56 +331,91 @@ These are examples, not a complete list, so write your own in the same shape: a 
 | **Unseen** | anything done unnoticed. | take an extra action. |
 | **Fleet** | moving. | move your stride again, free, whenever you like this round. |
 | **Blessed** | the action it blesses. | if that action fails, roll it again. |
-| **Inspired** | one ability, named when it's placed. | gain 1 Aura. |
+| **Inspired** | one of your set actions, named when it's placed. | gain 1 Aura. |
 | **Rallied** | answering telegraphs. | answer one telegraph without spending an action. |
 | **Sighted** | anything against one target. | the GM tells you one of its hidden tags. |
-| **Guided** | finding your way. | stretch the ground into a permission without paying Aura. |
+| **Guided** | finding your way. | bring the ground in without paying Aura. |
 | **Disguised** | passing as someone else. | one person believes it completely. No roll. |
 | **Fortunate** | anything that's mostly chance. | win a tie without paying Aura. |
-| **Surging** | one ability, named when it's placed. | one of its dice becomes a d12 before you roll. |
+| **Surging** | one of your set actions, named when it's placed. | one of its dice becomes a d12 before you roll. |
 
 :::example[Fire and a ward, at the table]
-**Round 1.** Ash's d10 beats the Warden's defence. Her intent was to set it alight, so the Warden is *Burning d10*. While it burns, anyone who goes at it gets a step. Its spear at Dorrie is still a d10, because its Challenge never moves.
+**Round 1.** Ash's d8 beats the Warden's defence. Her intent was to set it alight, so the Warden is *Burning d8*. While it burns, anyone who goes at it gets a step. Its spear at Dorrie is still a d10, because its Challenge never moves.
 
-Isolde's got nothing to beat, so she doesn't roll. *Ritualist*, *warding*, her chalk and salt, her Title and an action make five steps. Dorrie is *Warded d10*, and her Armour d2 is a d4 while it lasts.
+Isolde's got nothing to beat, so she doesn't roll. Her Ward is her Title and her chalk and salt, 3 steps with the action. Dorrie is *Warded d6*, and her Armour d2 is a d4 while it lasts.
 
-**End of Round 1.** The spear rolls 7 against Dorrie's d4. It lands, and the GM names a Hurt. Dorrie spends the ward and it takes the Hurt instead, so the ward's gone. The Burning steps down to a d8.
+**End of Round 1.** Dorrie rolls her Armour once, the d4, and gets a 2. The spear rolls 7. It lands, and the GM names a Hurt. Dorrie spends the ward and it takes the Hurt instead, so the ward's gone. The Burning steps down to a d6.
 
-**Round 2.** The GM telegraphs: *the Warden beats at the flames, a d10 against its Burning.* Bram doesn't wait. He spends the Burning (no action, no roll) and the Warden's *Armoured* blackens and cracks off in plates. Then he swings at its d10.
+**Round 2.** The GM telegraphs: *the Warden beats at the flames, a d10 against its Burning.* Bram doesn't wait. He spends the Burning (no action, no roll) and the Warden's *Armoured* blackens and cracks off in plates. Then he swings at it, and since he's the first to go at it this round, he rolls its d10 along with his own die.
 :::
 
-## Hurt, Scars, and Blaze of Glory {#s-blaze}
+## Hurt, Blaze and Scars {#s-blaze}
 
-You start with three Hurt boxes. **Hurt only heals in downtime**, one box per slot. Nothing clears it in the middle of a job except a trait that says so, like *Field Dressing* or *Healer's Hands*. Magic doesn't clear it either. Every box you fill stays filled until the job's over.
+Your **Hurt track** is three bars of three boxes, nine in all. It's one track for body and mind, so a spear and a night of horrors fill the same boxes. When a consequence is a Hurt, fill the next box.
 
-Fill the last Hurt box and you **Blaze**. Declare something extraordinary and it happens, no roll. Then you leave the scene, and you take a **Scar**.
+**Fill a bar and write a Catch in it**: an injury like *cracked ribs* or *can't stand the dark*. It's a Catch like any other, so you can let it bite for 1 Aura whenever you like, as long as it brings real trouble every time. A bar that's already got its Catch doesn't get another when it fills again.
 
-A Scar crosses out one Hurt box for good. When every box is crossed out you're **scarred out**, and your next Blaze is your last.
+**At the end of every scene the loose boxes clear.** You drop back to 3 boxes for each Catch on your Hurt track, so the bars with a Catch stay full and the rest empty out.
 
-In downtime, write the Scar as a **permission** or a **passive**: what the moment taught you, or what it took, like *I don't feel pain from constructs* or *I can carry more than I should*.
+:::example[A bar fills]
+Vesk takes her third Hurt, fills her first bar and writes *twisted ankle* in it. She takes two more before the scene ends. Those two clear, and she starts the next scene with her first bar still full.
 
-A Scar's for good, unless the GM decides the story has earned it back, like a miracle, a ritual or a year of rest. Then the box opens again, and the permission the Scar gave goes with it.
+Later, on a wet roof with the watch below, she lets the ankle bite. It gives way right over the sergeant's head, the GM runs with it, and she takes 1 Aura.
+:::
+
+Some of you have more than three bars. Bram's *Unyielding* gives him a fourth, and the Hurt Boon adds one (the Burden takes one away). See [Boons and Burdens](#s-boons).
+
+**Take a Hurt with every box full and you Blaze.** Declare something extraordinary and it happens, no roll. From your very first Blaze, **you can choose for your character to die**. If you don't, they'll leave the scene and take a **Scar**.
+
+:::note
+**For the GM.** If a player chooses to die, slow right down. Let them tell their last moment in their own words, and make sure what they died for happens: the door holds, the crew gets out, the threat goes down with them. Then give everyone at the table a moment to answer it, in character. The farewell's in [Growing](#s-death).
+:::
+
+A **Scar** crosses out one box for good, unless the GM decides the story has earned it back, like a miracle, a ritual or a year of rest. Then the box opens again. Scars are for the story, and it's up to you where it is on your body. A Scar doesn't do anything else. When every box is crossed out you're **scarred out**, and your next Blaze is your last.
+
+## Healing {#s-healing}
+
+You don't have to wait for downtime to heal someone. A **heal** is an action, built like any other roll from what fits how you're doing it, and you roll it against your patient's **heal die**. That's a d6, a size bigger for each Catch on their Hurt track: a d8 with one, a d10 with two and a d12 with three.
+
+-   **Each of your dice that beats it clears one box**, so split your roll to heal more.
+-   **A heal can clear any box**, even one in a bar with a Catch, but the Catch stays. At the end of the scene they're back to 3 boxes for each Catch, the same as always.
+
+:::example[A heal]
+Say you're healing Vesk, who's got one Catch on her Hurt track, so you roll against a d8. Split your roll into two dice, and if both beat it, she clears two boxes. Her d8 rolls 4 and your dice come up 6 and 5, so that's two boxes gone. Her *twisted ankle* stays in the bar.
+:::
+
+**Quick heal.** Pay 1 Aura to clear one box on one person, no roll. It still takes your action. It's how a crew with no healer gets by: Dorrie can't stitch a wound, but she can spend the Aura and her action to clear one of Bram's boxes. A trait like *Field Dressing* does the same without the Aura (see [Traits](#s-traits)).
+
+**Healing a group.** Make one of your dice your area, the same as a ward: it costs 1 Aura and takes a split. Its number is how many friends it reaches, and each of them clears a box if your heal beats their heal die.
+
+:::example[Healing a group]
+Say your Title's *The field surgeon of the Red Company*, and your Patch up set action is your Title, *stitch a wound*, *keep someone alive till help comes* and your kit: 5 steps. You split it into a d6 to heal and a d4 for the area, and pay the 1 Aura. The d4 comes up 3, so it reaches Bram, Dorrie and Vesk, and your d6 rolls 5. Bram's and Dorrie's heal dice are d6s, and they roll 2 and 4, so they clear a box each. Vesk's got a Catch, so hers is a d8, and it rolls 6, so she doesn't.
+:::
+
+**In downtime,** each Catch on your Hurt track takes a downtime slot to heal, and none heal for free. A trait that says so can spend one slot to clear a Catch on everyone in the crew. See [Downtime](#recover).
+
+A few Boons and Burdens change your heal die, or let you heal on your own. They're in [Boons and Burdens](#s-boons).
 
 ## Social and Mental Conflict {#s-social}
 
 Social and mental conflict run on the same engine and the same dice. A threat has one Challenge whether you're trading blows or trading words. There are only two differences: its telegraphs come at your Confidence instead of your Armour, and its *keeps-it-going* tags are its resolve (the duty, pride and fear that keep it saying no). Strip them all and it gives in. Find what drives it and you might not need to strip anything.
 
 :::example[A social conflict, played out]
-A few sessions in, Dorrie's trying to talk a magistrate into releasing Vesk from a cell before the Vane Estate's lawyers arrive in the morning. The magistrate is *The Honest Magistrate*, Challenge 5. *Duty-bound* and *Wary* keep him going, and one hidden tag drives him.
+A few sessions in, Dorrie's trying to talk a magistrate into releasing Vesk from a cell before the Vane Estate's lawyers arrive in the morning. Isolde's come along as her clerk. The magistrate is *The Honest Magistrate*, Challenge 5. *Duty-bound* and *Wary* keep him going, and one hidden tag drives him.
 
-**Round 1.** The GM telegraphs: *"Show me the law that lets her walk."* That's a d10 at Dorrie's Confidence. Dorrie answers it with *Influence* (Skilled, 2) + *Bureaucrat* (Novice, 1) + her Title + one action = 5 steps, a d10. She cites a harbour statute nobody's used in forty years. She rolls a 6 and the telegraph rolls a 4, so it's stopped.
+**Round 1.** The GM telegraphs: *"Show me the law that lets her walk."* That's a d10 at Dorrie's Confidence. Dorrie answers it, and Isolde puts her action into the same thing. Isolde digs up a harbour statute nobody's used in forty years, and Dorrie swears the court leaned on it only last spring. Dorrie's Talk is 4 steps and Isolde's Study is 4, so that's 8 steps from two actions, a d12 and a d4. The d12 goes on the answer, and the d4 goes straight at *Wary*.
 
-Her second action goes straight at *Wary* and bounces off: her d8 rolls 3 against his d10's 7. He's not ready to trust her. So she fires *Cold Reader* (free, once per scene, one true thing about his mood), and the GM reveals the hidden tag: *Hates the Vane Estate.*
+The telegraph rolls 4 and the d12 rolls 9, so it's stopped. The magistrate's d10 rolls 7 against the d4's 3, so *Wary* holds. He's not ready to trust her. So she fires *Cold Reader* (free, once per scene, one true thing about his mood), and the GM reveals the hidden tag: *Hates the Vane Estate.*
 
 **Round 2.** *Duty-bound* comes into play, and he reaches for the bell to call the captain of the watch. That's a d10 aimed at the stake, and it's got one answer: if it lands, the hearing's over for tonight.
 
-Dorrie pays 1 Aura to stretch *Hates the Vane Estate* into a permission of her own: "You know who wants her kept in here, don't you?" Each action is *Influence* 2 + *Bureaucrat* 1 + 1 for the tag + 1 for her Title + 1 for the action = 6 steps, so both actions make 12 steps, two d12s. She calls them: one answers the bell, and one strips *Duty-bound*.
+Dorrie pays 1 Aura to bring *Hates the Vane Estate* in: "You know who wants her kept in here, don't you?" That's her Talk and the tag, 5 steps. Isolde joins in again with her Study, reciting every time the Vane Estate's bent the harbour law, so it's 9 steps from two actions. They share them out as a d10 for the bell and a d8 for *Duty-bound*.
 
-The bell's d10 rolls 5 and she rolls 10, so the bell's stopped. Against *Duty-bound* he defends with his d10. He rolls 3 and she rolls 7, so it's stripped, and now only *Wary* keeps him going.
+The bell's d10 rolls 5 and theirs rolls 10, a top face, so the bell's stopped and Dorrie gets her Aura back. Against *Duty-bound* he rolls his d10 once for the round, and it's a 3. The d8 rolls 7, so it's stripped, and now only *Wary* keeps him going.
 
-**Round 3.** He wavers: *"And why should I trust you?"* That's a d10 at her Confidence. She lets it ride and spends both actions on *Wary*. Her d12 beats his d10, 9 to 8. *Wary* is gone, and with it his last reason to say no. He releases Vesk on her own recognizance.
+**Round 3.** He wavers: *"And why should I trust you?"* That's a d10 at her Confidence. Dorrie doesn't answer it. She goes at *Wary* instead, with her Talk and the tag again for 1 Aura, 5 steps, a d10. Her d10 beats his, 9 to 8. *Wary* is gone, and with it his last reason to say no. He releases Vesk on her own recognizance.
 
-His question never lands. A threat that gives in takes its telegraphs with it, and Dorrie knew it. She let the d10 ride because ending him was the best answer there was.
+His question never lands. A threat that gives in takes its telegraphs with it, and Dorrie knew it. She left the d10 alone because ending him was the best answer there was.
 :::
 
 ## A Full Fight, Start to Finish {#s-fight}
@@ -343,10 +424,10 @@ His question never lands. A threat that gives in takes its telegraphs with it, a
 The rules make a lot more sense once you've seen them in a fight, so here's one, played out round by round.
 :::
 
-The crew are in the lower corridor of the Vane manor: Vesk, Dorrie, Bram and Isolde, all as they start in the [ready-made characters](#s-pregens). Bram's just forced the vault door, and it was loud.
+The crew are in the lower corridor of the Vane manor: Vesk, Dorrie, Bram and Isolde, all as they start in the [six crew](#s-pregens). Bram's just forced the vault door, and it was loud.
 
 :::example
-The corridor's thirty feet of polished marble, lit by candles in iron brackets. At the far end, two suits of armour are already on the move, not walking so much as moving the way the vault door moved. They've got spears, and they're aimed at you. Behind you, three paintings hang in the open vault. On the servants' stair, a scullery maid has frozen with a tray in her hands. Tell me what you do.
+The corridor's thirty feet of polished marble, lit by candles in iron brackets. At the far end, two suits of armour are already on the move, not walking so much as moving the way the vault door moved. They've got spears, and they're aimed at you. Behind you, three paintings hang in the open vault, each one chained to the wall with a padlock. On the servants' stair, a scullery maid has frozen with a tray in her hands. Tell me what you do.
 :::
 
 :::rule
@@ -360,10 +441,10 @@ The corridor's thirty feet of polished marble, lit by candles in iron brackets. 
 
 **Ground:** *Candlelight, Narrow Stair*, and one hidden tag.
 
-**Budget:** four characters with one Title each, × 10 = **40 steps a round**.
+**Telegraphs:** about 5 steps a round for each of the four, so about 20.
 :::
 
-That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way.
+That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way. Bram's Armour is a d6 and Vesk's is a d4, and Dorrie's and Isolde's are both d2s. Everyone's got 5 Aura and two Sparks.
 
 ### Round 1: The telegraph {#round-1-the-telegraph}
 
@@ -371,131 +452,137 @@ That's four keeps-it-going tags each, so grinding a Warden down will take four w
 **GM:** The left Warden closes in to pin Bram against the wall, that's a d10. As it passes, it sweeps its spear low at Vesk, a d8. The right Warden drives its spear at Isolde, a d10, and plants itself in the vault doorway, another d10. And the maid's going to bolt up the stair and wake the house. That's a d4, and it's only got one answer: if it lands, the household clock drops two sizes.
 :::
 
-That's 5 + 4 + 5 + 5 + 2 = 21 steps, about half the budget, because it's round one and the Wardens are slow to wake. The sweep at Vesk is a glancing blow as it goes past, so the GM makes it smaller than it could be. She keeps the rest in hand for whatever the crew sets off.
+That's 5 + 4 + 5 + 5 + 2 = 21 steps, about what four players get, and it's five telegraphs against four actions. The sweep at Vesk's a glancing blow as it goes past, so the GM makes it smaller than it could be.
 
 **Bram** goes first. Isolde's Armour is a d2, and there's a spear coming at her.
 
 :::example
-**Bram:** Both actions on the spear going at Isolde. I step in front of her with my shield. *Defender*, *guarding one person*, my shield and my Title all fit, twice, plus the actions. That's ten steps, a d12 and a d8.
+**Bram:** I'm Defending, and I'm pulling the right Warden onto me. Isolde's two steps away, well inside my stride.
 
-**GM:** If you lose, it lands on you. Roll.
-
-**Bram:** ...7, and 5 on the d8. The spear's d10 comes up 7 as well, so I'll pay an Aura for the tie. It rings off the shield.
-:::
-
-**Dorrie** takes the maid.
-
-:::example
-**Dorrie:** I'm putting both actions into answering her. "Love, come down. You're not in trouble, we're the ones in trouble." *Influence* and my Title, twice, plus the actions, so six steps. I'll make it a d10 to talk her down and a d2 to watch which way she'd run.
-
-**GM:** She's a d4. Roll it twice, once for each of yours.
-
-**Dorrie:** 8 on the d10, and her d4's a 3. And the d2 comes up 2 against her 1, and that's its top face. I'm already at five, so the Aura goes to Bram, and that pays back his tie. **GM:** She comes down, shaking, and she's staying.
-
-**Dorrie:** I'll fire *Cold Reader*. What's she feeling? **GM:** Terror. She saw Bram's face on the stair. That's the hidden tag on *Leave no trace*: *A Servant Saw Bram*.
+**GM:** Then its spear comes at you instead of her. The doorway's aimed at the stake, not a friend, so that one stays put. When they land, you'll roll your Armour once for the pin and once for the spear.
 :::
 
 **Isolde** studies the right Warden.
 
 :::example
-**Isolde:** *Scholar*, *forbidden texts* and my Title, because this binding is my order's work. Plus the action, that's four steps, a d8. What's holding it together?
+**Isolde:** My Study is my scholar's Title, *know the history of anything old* and *Iron Will*, so that's 4 steps with the action. This binding's my order's work, though, so I'll bring my other Title in for 1 Aura. That's 5. I'll split it: a d6 for what's holding it together, and a d4 for what else it's hiding.
 
-**GM:** It defends with its d10, so roll that too.
+**GM:** Nobody's gone at it yet this round, so roll its d10 too. Whatever it rolls stands till the round's over.
 
-**Isolde:** 7, and its d10's a 3. **GM:** *Bound to a Place* is its weak point. There's a sigil cut into the floor under each Warden. Break the sigil and it falls.
+**Isolde:** It's a 3. My d6 is a 5, and the d4 comes up 4, its top face, so that's my Aura back.
 
-**Isolde:** And I'll fire *Quick Study*. **GM:** Its hidden tag is *A Person Inside*. Someone was built into that armour a hundred years ago.
-
-**Isolde:** I'll save my second action.
+**GM:** Both beat it. *Bound to a Place* is its weak point. There's a sigil cut into the floor under each Warden, and if you break the sigil, it falls. Its hidden tag is *A Person Inside*. Someone was built into that armour a hundred years ago.
 :::
 
-That changes the whole fight, because now nobody has to grind through four tags.
-
-**Vesk** ignores the Wardens and goes for the stake.
+That changes the whole fight, because now nobody has to grind through four tags. Isolde isn't done, either.
 
 :::example
-**Vesk:** Both actions on the paintings. I'm cutting all three canvases out of their frames and rolling them into one bundle. My Title and *Larceny*'s quick hands, twice, plus the actions. That's six steps, a d12, all on stripping *Three of Them*.
+**Isolde:** I'm spending a Spark for an extra action. I want a ward on Vesk and Bram. My Ward is my Title and my chalk and salt, 3 steps, so I'll make it a d4 for the ward and a d2 for the area, and pay 1 Aura for the area.
+
+**GM:** Nothing's pushing back on a ward, so only the d2 gets rolled.
+
+**Isolde:** ...1. Just one of them, then. Bram's got his plate, so it's Vesk. **GM:** Vesk's *Warded d4*, and her Armour's a size bigger while it lasts.
+:::
+
+A ward on Vesk alone would've been the whole 3 steps, a d6, with no Aura. The area was a gamble on the d2, and it came up 1.
+
+**Dorrie** takes the maid.
+
+:::example
+**Dorrie:** I'm answering her. "Love, come down. It's only the new locks going in, did nobody tell you?" That's my Talk: my Title, *read a room in a glance* and *make a lie sound like old news*, 4 steps, a d8.
+
+**GM:** She's a d4. Roll it with yours.
+
+**Dorrie:** 6, and her d4's a 3. **GM:** She comes down, shaking, and she's staying.
+
+**Dorrie:** I'll fire *Cold Reader*. What's she feeling? **GM:** Terror. She saw Bram's face on the stair. That's the hidden tag on *Leave no trace*: *A Servant Saw Bram*.
+:::
+
+**Vesk** doesn't bother with the Wardens. She goes for the stake.
+
+:::example
+**Vesk:** The paintings. Those padlocks are mine. My Locks is my Title, *pick a mechanical lock*, *know how a lock's built* and my picks, with the action 5 steps, a d10. It's all on stripping *Three of Them*.
 
 **GM:** It's Challenge 4, so roll a d8 for it.
 
-**Vesk:** 11, and the d8's a 4. **GM:** Three canvases, one roll under your arm. Only *Heavy Load* is left in the way.
+**Vesk:** 9, and the d8's a 4. **GM:** Three padlocks open, three canvases cut free, and one roll under your arm. Only *Heavy Load* is left in the way.
 :::
 
-**End of Round 1.** The spear at Isolde and the maid were both answered, so three telegraphs land.
+**End of Round 1.** The maid was answered, and Bram pulled the spear off Isolde, so four telegraphs land.
 
 -   **The doorway** (aimed at the stake) lands with no roll. The right Warden fills the vault door, and *Get the paintings out* gains a new tag in the way: *Blocked*.
--   **The pin at Bram:** the Warden's d10 rolls 10 against his Armour d6's 4. It lands, and the GM names it: *Pinned*. Bram offers something else: "I twist out from under it and take it on the plate." It fits and it costs about as much, so his Armour steps down to a d4.
--   **The sweep at Vesk:** 7 against her Armour d6's 5. It lands, and the GM names her Armour. Her Aspiration's still at d2, so she's got nothing better to offer, and her Armour goes down to a d4.
+-   **The pin and the spear at Bram.** He Defended, so he rolls his d6 Armour once for each. The pin's d10 rolls 10 and the spear's rolls 6, and Bram rolls 6 and 2. He puts the 6 on the spear, and the tie goes to him, so it rings off his shield. The 2 can't stop the pin, and the GM names *Pinned*. Bram doesn't want to be stuck against the wall with another Warden coming, so he offers a Hurt instead: it cracks his ribs on the stone, but he's free. That's his first box.
+-   **The sweep at Vesk.** She rolls her Armour once, a d6 with the ward, and gets 2. The sweep rolls 7, so it lands, and the GM names her Armour. Her Aspiration's still at d2, so she's got nothing better to offer, and her leathers go down to a d2. A ward only takes a Hurt, so she keeps it.
 
-Nobody worked on *Leave no trace*, so its clock steps down to a d6. *The household wakes* steps down to a d6 as well.
+Nobody worked *Leave no trace*, so its clock steps down to a d6. *The household wakes* steps down to a d6 as well, and Vesk's ward fades to a d2.
 
 ### Round 2: The plan {#round-2-the-plan}
 
 :::example
-**GM:** The left Warden comes at Bram again, a d10. The right Warden's braced in the doorway, and it drives its spear at Vesk, a d10, and at Dorrie, another d10. Upstairs, a door bangs, so somebody heard. And the portraits along the wall have started to whisper. One of them is saying Isolde's name, and that's a d6 at her Confidence.
+**GM:** The left Warden comes at Bram again, a d10. The right Warden's braced in the doorway, and it drives its spear back into the vault at Vesk, twice, two d8s, and out at Dorrie, a d10. Upstairs, a door bangs, so somebody heard. And the portraits along the wall have started to whisper. One of them is saying Isolde's name, and that's a d6 at her Confidence.
 :::
 
-That's 5 + 5 + 5 + 3 = 18 steps, and the GM's holding the rest back for the twist. The portraits were the hidden ground tag: *Portraits That Watch*.
+That's 5 + 8 + 5 + 3 = 21 steps. The portraits were the hidden ground tag: *Portraits That Watch*.
 
-The table talks it through. Isolde's got three actions, the sigil under the left Warden is the target, and Bram's right next to it.
+The table talks it through. The sigil under the left Warden is the target, and Bram's right next to it.
 
 :::example
-**Bram:** I'll go first. *Combat*, *war hammer*, the hammer itself, *Pack Fighter* (Isolde's right here) and my Title, because I'm holding this corridor. That's six steps an action, twelve for both. I'm splitting it three ways: a d8 to shove it off the sigil, a d8 to crack its breastplate, and a d8 to answer the spear coming at me.
+**Isolde:** I'll break the sigil, but not with that thing standing on it.
 
-**GM:** Roll its d10 against the shove, and again against the breastplate. The spear you're answering is its own d10, so roll that too.
+**Bram:** Then I'll shift it. I'm putting my action in with yours: I heave it off the sigil and hold it, and you cut the line.
 
-**Bram:** 7, 3 and 6, and its dice are 5, 9 and 8. **GM:** Shove: 7 beats 5, and it staggers off the sigil. Breastplate: 3 against 9, so that holds. The spear: 6 against 8. It gets through at once, with no Armour roll, so that's a Hurt.
+**GM:** That's one thing, so it's a combo. What have you got?
 
-**Bram:** I'll take it. One box.
+**Isolde:** My Ward, 3 steps. **Bram:** Lift and carry, my Title and *lift what two men can't*, 3 as well. **Isolde:** So it's 6 between us, a d12, and the whole lot goes on the sigil.
+
+**Bram:** And the spear going at Dorrie, I'll take that one. She's right behind me.
+
+**Dorrie:** Then you're not taking it with a Hurt already on you. I'm spending a Spark for an extra action, and I'll quick-heal you: 1 Aura and the action, and your box is clear.
 :::
 
-Now it's Isolde's turn, with the sigil out in the open.
+Dorrie's 1 Aura clears Bram's box before anything's rolled. Then Isolde rolls for the combo. Nobody's gone at the left Warden yet this round, so its d10 rolls too, and it comes up 9. The d12 comes up 11. The chalk bites through the old line and the left Warden stops mid-step. The armour empties out like a coat coming off a hook, and clatters to the marble, and its d10 at Bram goes with it.
 
-:::example
-**Isolde:** Two actions on breaking the sigil. *Ritualist*, *warding*, *chalk and salt* and my Title, twice, plus the actions, so ten steps. That's a d12 and a d8, both on the sigil.
+One Warden's down, and three of its four keeps-it-going tags weren't even touched, because the sigil was its weak point.
 
-**Dorrie:** I'll help. I can't do magic, but I can hold the candle steady and keep reading her the words off the floor. *Scholar*? No… **GM:** Nothing on your sheet fits that, so it'd just be the action. **Dorrie:** One step, then. **Isolde:** That makes eleven steps: a d12 and a d10.
-
-**GM:** It defends with its d10. Roll it with yours.
-
-**Isolde:** ...11, and 4 on the d10. Its d10's a 9, so my 11 counts. **GM:** The chalk bites through the old line and the left Warden stops mid-step. The armour empties out like a coat coming off a hook, and clatters to the marble.
-:::
-
-One Warden's down, and three of its four keeps-it-going tags were never touched, because the sigil was its weak point.
-
-Isolde's got one action left. She answers the portrait whispering her name with *Medium* and *the recently dead* (this is a soul, not a painting) and *Iron Will*, plus the action, for a d8. Her d8 beats its d6, 5 to 2. It goes quiet, and looks at her.
-
-**Vesk** has the bundle, but the doorway's *Blocked* and there's a spear coming.
+**Vesk** has the bundle, but the doorway's *Blocked* and there are spears coming.
 
 :::example
 **Vesk:** I want out through the skylight in the vault. The vault's three storeys tall and I've got a grappling line.
 
 **GM:** That strips *Blocked*, because you don't need the door. But hauling three canvases up a rope is *Heavy Load*.
 
-**Vesk:** One action, then. *A grappling line* and my Title, that's three steps, a d6, on *Blocked*. ...5, and the stake's d8 is a 4. **GM:** You're up the rope before the Warden turns around.
+**Vesk:** My Move, then: my Title and the grappling line. *Run the rooftops* doesn't come into it till I'm up there, so I'll leave it out. That's 3 steps, a d6, on *Blocked*. ...5, and the stake's d8 is a 4. **GM:** You're up the rope before the Warden turns around.
 
-**Vesk:** Nothing on my sheet's any good for hauling, so I'll save my second action. **Bram:** Stay there, I'll help next round.
+**Vesk:** Nothing on my sheet's any good for hauling. **Bram:** Stay up there. I'll get it to you next round.
 :::
 
-**Dorrie's** second action goes on the stake nobody's watching: *Leave no trace*. She sits the maid down and gives her a story to tell. *Deception*, *false names* and her Title, plus the action, make four steps, a d8, against *A Servant Saw Bram*. The stake is Challenge 3, so it rolls a d6, and her 5 beats its 2. The maid saw a stranger, and she'll swear to it.
+**Dorrie's** other action goes on the stake nobody's watching: *Leave no trace*. She sits the maid down and gives her a story to tell. Her Talk is 4 steps, a d8, against *A Servant Saw Bram*. The stake is Challenge 3, so it rolls a d6, and her 5 beats its 2. The maid saw a stranger, and she'll swear to it.
 
-**End of Round 2.** The left Warden's gone, though its spear had already found Bram. The spear at Vesk still lands, because climbing away doesn't stop a telegraph aimed at you. She's on the rope when it finds her, 8 against her Armour d4's 3, and the GM names Armour down a size. Her leathers are a d2 now. The spear at Dorrie lands, 9 against her Armour d2's 1, and the GM names a Hurt. Dorrie's no fighter, so she offers the party Goal instead. It's at a d4, and the table agrees it fits, so it steps back down to a d2, because they're going to be here longer than they wanted. The work on *Leave no trace* stopped its clock, and *The household wakes* steps down to a d4.
+**End of Round 2.** The left Warden's gone, so its d10 at Bram never lands. The rest do.
+
+-   **The two spears at Vesk.** She's on the rope when they find her, because climbing away doesn't stop a telegraph aimed at you. She rolls her Armour once against both, a d4 with what's left of the ward, and gets 3. The d8s roll 6 and 2. The 2 doesn't get through, but the 6 does, and since her Armour's already at d2, the GM names a Hurt. Vesk spends the ward, and it takes the Hurt instead.
+-   **The spear at Dorrie** lands on Bram, because he took the hit. He doesn't roll, and the GM names a Hurt. That's one box, and thanks to Dorrie it's his only one.
+-   **The portrait's whisper** goes against Isolde's Confidence, a d8 with *Iron Will*, and she rolls it once: 7. The d6 rolls 4, so it doesn't get in. The portrait goes quiet, and looks at her.
+
+The work on *Leave no trace* kept its clock where it was, and *The household wakes* steps down to a d4.
 
 ### Round 3: The turn {#round-3-the-turn}
 
-The GM leans in. The right Warden abandons the doorway and comes for Isolde with everything it's got: a d10 at her, a d10 at Bram and a d10 at the rope Vesk is hanging from. The butler's lantern appears on the main stair, a d8 aimed at *Leave no trace*. Then the GM plays the twist she held back. The portrait Isolde quieted speaks out loud, and it knows the name of the person inside the second Warden.
+The GM leans in. The right Warden abandons the doorway and comes for Isolde with everything it's got: a d10 at her, a d10 at Bram and a d10 at Vesk's rope. The butler's lantern appears on the main stair, a d8 aimed at *Leave no trace*. Then the GM plays her twist. The portrait Isolde stared down speaks out loud, and it knows the name of the person inside the second Warden.
 
-Isolde doesn't go for the second sigil. She speaks the name instead, which is the other way to end it, because the hidden tag *A Person Inside* is a weak point of its own. Her roll wins, and the right Warden kneels on the marble. Its three telegraphs go with it.
+Isolde doesn't go for the second sigil. She speaks the name instead, which is the other way to end it, because the hidden tag *A Person Inside* is a weak point of its own. Her set action for this is The dead, her first Title and *speak with the recently dead*, 3 steps with the action. A hundred years isn't recent, so speaking to this one is going beyond, for 1 Aura. She brings in *A Person Inside*, a tag she knows, for 1 Aura more, and that makes 4 steps, a d8. The right Warden's d10 rolls 6, and her d8 comes up 8, its top face, so she gets 1 Aura back. The right Warden kneels on the marble, and its three telegraphs go with it.
 
-Bram puts both actions into the rope and hauls the bundle up to Vesk. *Athlete* and *heavy lifting* strip *Heavy Load*, and the paintings are theirs. Dorrie answers the butler's lantern with a smile and a lie about the wind, and her second die strips *Watched*, so *Leave no trace* is theirs too.
+Bram ties the bundle on and heaves it up the rope, and Vesk puts her action into the same thing, hauling from the top. His Lift and carry is 3 steps, and she's got nothing that fits, so she adds 1 for her action. That's 4 steps, a d8, against the stake's d8: 7 against 3. *Heavy Load* is gone, and the paintings are theirs.
 
-At the end of the round the household clock steps down to its last die. When it runs out there'll be lamps lit on every floor, but by then the crew will be three roofs away, and the maid will be swearing she saw a stranger.
+Dorrie meets the butler at the foot of the main stair as the housekeeper, with a smile and a story about the wind and a loose shutter. That's her Pass as someone else: her second Title, *pass as someone I'm not*, *keep my story straight under questions* and her signet pin, 5 steps. She splits it into a d6 to answer the lantern and a d4 to strip *Watched*. The lantern's d8 rolls 4 against her 6, and the stake's d6 rolls 3 against her 4. That's two top faces, which fills her Aura with one to spare, so the spare goes to Isolde. *Leave no trace* is theirs too.
+
+At the end of the round the household clock steps down to its last die. When it runs out there'll be lamps lit on every floor, but by then the crew will be three roofs away, and the maid will be swearing she saw a stranger. When the scene ends, Bram's one box clears, because nobody filled a bar.
 
 ### What the fight taught {#what-the-fight-taught}
 
 -   **The crew never ground a Warden down.** They studied, found a weak point and a hidden tag, and took both routes.
--   **The stakes mattered more than the enemies.** Vesk spent her whole first round on canvases instead of spears, and it won the scene.
--   **Every cost was named out loud.** Bram traded a pin for his plate, Dorrie traded a Hurt for the party Goal, and Vesk's leathers took the spear she couldn't climb away from. Nobody lost anything they didn't see coming.
--   **Dice did many things at once.** Bram's three d8s moved a Warden, tested its plate and answered a spear, all in one round. Only one of them won, and it was the one that mattered.
+-   **The stakes mattered more than the enemies.** Vesk spent her whole first round on padlocks instead of spears, and it won the scene.
+-   **Every cost was named out loud.** Bram traded a pin for a Hurt, and Vesk's leathers took the sweep she couldn't stop. Nobody lost anything they didn't see coming.
+-   **One action each made them work together.** The sigil fell to a combo, and Bram took Dorrie's spear for free after she'd cleared his box.
 
 Isolde doesn't take a Scar this time. She takes something better: the name of the person who was inside the armour, and the knowledge that there are more of them in this house.

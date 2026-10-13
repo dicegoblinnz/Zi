@@ -5,6 +5,7 @@ order: 29
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 Here are forty threats you can run straight off the page, all laid out the same way.
@@ -14,7 +15,7 @@ Each threat gets a **Challenge**, its tags sorted into the three kinds, three te
 
 The **Telegraphs** line gives you three to read out as they're written, each with its die and what it hits. They come from the threat's own tags, so the crew can see how to answer them. Spend them from your [round budget](#s-budget) like any telegraph, and write your own as the scene needs them ([Telegraphing Well](#s-telegraphing) has the tricks). If a tag like *Ambush* makes the first one a step bigger, it's listed first.
 
-Every Challenge 6 threat has **Tough**, and so do two Challenge 5s that should take a while. It works like hit points: every winning die against it takes off what it rolled, and at 0 it's gone. Plain *Tough* drops to anything that hurts it, and a named one like *Armoured 40* only to what fits it. It's written for four characters with one Title each, a round budget of 40, so scale it to your crew: *Tough 40* means your whole budget and *Tough 20* means half. Four characters with three Titles each have a budget of 60, so they'd be 60 and 30. There's more in [Tough](#s-tough-gm), in Running the Game.
+Every Challenge 6 threat has **Tough**, and so do two Challenge 5s that should take a while. It works like hit points: every winning die against it takes off what it rolled, and at 0 it's gone. Plain *Tough* drops to anything that hurts it, and a named one like *Armoured 40* only to what fits it. It's written for a starting crew of four, a [threat budget](#s-threat-budget) of 40, so scale it to your crew: *Tough 40* means your whole threat budget and *Tough 20* means half. Four characters with four Titles each have a threat budget of 60, so they'd be 60 and 30. There's more in [Tough](#s-tough-gm), in Running the Game.
 
 When a threat with **Forms** loses its last keeps-it-going tag, it changes shape instead of falling. Its Tough fills back up, and you pick 3 to 5 tags for its new shape from its Forms list and tell the table what it's becoming. It changes once with *Forms (2)* and twice with *Forms (3)*, and its Tough refills each time, so its Tough is split across its forms: about 20 a form with two, and 13 to 15 with three. Its weak point still ends it in any shape, and its last form falls like anything else.
 
@@ -69,7 +70,7 @@ A mastiff who's bitten before.
 
 **Voice** Nothing. It only barks.
 
-**Hidden** *Older Than It Looks* (weak point). Stiff in the joints. Past the first corner it cannot keep up.
+**Hidden** *Older Than It Looks* (weak point). Stiff in the joints. Past the first corner it can't keep up.
 :::
 
 :::threat[The Drunk]
@@ -169,7 +170,7 @@ A mirror with a grudge.
 
 **Voice** "They only kept you because you were first."
 
-**Hidden** *Secretly Fond* (weak point). They love you. They cannot admit it. Say something kind and true and they falter.
+**Hidden** *Secretly Fond* (weak point). They love you. They can't admit it. Say something kind and true and they falter.
 :::
 
 :::threat[The Street Preacher]
@@ -237,7 +238,7 @@ A blade that's never been beaten.
 
 **Voice** "Ooh. A real one. This is going to be fun."
 
-**Hidden** *Lost Once*. The one who beat her is standing behind her. With them watching, she cannot fight clean.
+**Hidden** *Lost Once*. The one who beat her is standing behind her. With them watching, she can't fight clean.
 :::
 
 :::threat[The Scholar of Things Better Left Buried]
@@ -317,7 +318,7 @@ Faith that won't be moved.
 
 **Voice** "You are not the first to ask."
 
-**Hidden** *Years of Doubt* (weak point). Speak to the doubt, honestly, and they will not raise a hand.
+**Hidden** *Years of Doubt* (weak point). Speak to the doubt, honestly, and they won't raise a hand.
 :::
 
 :::threat[The Court Assassin]
@@ -333,7 +334,7 @@ You won't see them coming.
 
 **Voice** Nothing. They are already gone by the time you turn.
 
-**Hidden** *Blackmailed* (weak point). They do not want to be here. Free them from whoever holds the letter and they walk away.
+**Hidden** *Blackmailed* (weak point). They don't want to be here. Free them from whoever holds the letter and they walk away.
 :::
 
 :::threat[The Wandering Monk]
@@ -435,7 +436,7 @@ Not a wolf. A decision the wolves made.
 
 **Telegraphs** *It comes out of the dark at whoever strayed furthest from the fire.* (d10, Armour) · *It howls at whoever's holding the torch, and the pack answers from every side.* (d10, Confidence, Frightened) · *It sends the horses bolting off into the night.* (d10, a stake)
 
-**Voice** Nothing. It does not need to speak.
+**Voice** Nothing. It doesn't need to speak.
 
 **Hidden** *Starving* (weak point). The pack is hungry, not cruel. Feed it and the hunt is over.
 :::
@@ -505,7 +506,7 @@ Five voices singing the same note forever.
 
 **Voice** A note. Just the one note.
 
-**Hidden** *Keeping Something In*. They are not trapped. They are guarding. Break the circle and something else gets out.
+**Hidden** *Keeping Something In*. They aren't trapped. They're guarding. Break the circle and something else gets out.
 :::
 
 :::threat[The Lantern-Bearer]
@@ -557,7 +558,7 @@ You keep seeing it, and you keep forgetting you saw it.
 
 **Voice** Nothing you can hear.
 
-**Hidden** *Standing Still* (weak point). It is not following. You are moving past it. Stop moving and it cannot reach you.
+**Hidden** *Standing Still* (weak point). It isn't following. You're moving past it. Stop moving and it can't reach you.
 :::
 
 ## Bosses: Challenge 6 {#bosses-challenge-6}
@@ -611,7 +612,7 @@ He's been dying in this hall for a century and he's thoroughly sick of it.
 
 **Voice** "...Oh. It is you again."
 
-**Hidden** *A Prisoner* (weak point). He is not the guardian. He is kept here. Free him and he kneels.
+**Hidden** *A Prisoner* (weak point). He isn't the guardian. He's kept here. Free him and he kneels.
 :::
 
 :::threat[The Thing in the Dark]

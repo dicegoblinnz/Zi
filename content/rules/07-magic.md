@@ -5,119 +5,133 @@ order: 7
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 Everyone's got a soul, and a soul can be spent.
 :::
 
-*Zi* is the Sumerian word for soul. In Zi, magic is an ability, like a sword or a silver tongue. It runs on the same rules as everything else, and it grows the same way: more steps, bigger dice, and then more dice.
+Zi'Dara starts with *Zi*, the Sumerian word for soul. In Zi'Dara, magic is a permission, like a sword or a silver tongue. It runs on the same rules as everything else, and it grows the same way: more steps, bigger dice, and then more dice.
 
-## Magic Is an Ability {#s-magic}
+## Magic Is a Permission {#s-magic}
 
--   **The ability is what you can do.** *Evocation* is magic that throws raw energy, *Phase* is passing through things, and *Teleport* is being somewhere else. You take it at Novice, Skilled or Master, like any other ability.
--   **The specialization is the one thing you do best with it**, like *fire*, *stone* or *places I can see*. Take it three times and you're the best alive at it.
--   **Items can be foci**, like *an ember stone on a chain: call fire without a word or a gesture*. A focus is a permission like any other item.
--   **Build the die, give it intents, and roll.** A Novice fire-speaker can throw a bolt of fire at a man, light a room or burn a rope.
--   **Bigger things are bigger Challenges**, like going through the vault door or across the city, or fire that doesn't burn the child standing in it. The GM sets the Challenge by how hard it is in the world, with tags for what stands in the way. A Master with the right specializations, a Title and both actions has the dice for it, and a Novice doesn't, yet.
--   **Many things at once is an area die**, like fire across the whole guardroom, or a ward on as many friends as the area die rolls. See [Area](#s-area).
+-   **You need a magic permission or a magic item** to do magic at all. *Throw fire*, *change my face* and *speak with the recently dead* are permissions like any other, and they're written as narrow as any other: *throw fire*, not *fire magic*. See [Writing permissions](#s-writing-permissions).
+-   **A school of magic is a Title.** Ash is *The last fire-speaker of the Ember Court*, and that's the Fire school. It's one school per Title, so pick the one you're known for, because *Archmage* is too wide. Every permission has to fit inside its Title, so Ash's fire-speaker can have *throw fire* and *feel every flame in a room*, and her other Title, *The Court's runaway heir*, can't.
+-   **A magic item works the same way.** Ash's ember stone is attuned, and it's got one permission: *call fire without a word or a gesture*. A magic permission on an attuned thing lets you do that magic, school or no school. See [Attunement](#s-attunement).
+-   **Every permission does what it says, for free.** Ash's Fight is her Title, *throw fire* and her ember stone, so with the action it's 4 steps, a d8, and no Aura. If *throw fire* covers it, whether it's a bolt at a man or a rope burning through, it doesn't cost a thing.
+-   **Going beyond what a permission normally does costs 1 Aura**, the same as it does with a sword. Phasing's free until you phase through a wall. A shapeshifter taking a creature's form for the scene pays 1 Aura. If you have to make a case for why it's normal, it's going beyond, so pay the Aura and keep playing. There's more in [Going beyond](#s-going-beyond).
+-   **An area costs 1 Aura**, every time, and it takes one of your splits. *Throw fire* is free, but a fireball that spreads is an area. See [Area](#s-area).
+-   **Anything that works on its own is [summoning](#s-summoning).** Raising the dead to fight or carry something as part of your own action is your permission doing what it says, and it's free. One of the dead that gets up and works for you on its own is a summon.
 
-A sword works exactly the same way, and so does a voice, a pair of fast feet or a good eye.
+It's exactly the same with a sword. A master of combat fights for free, and an aimed shot that takes out the tag you choose costs 1 Aura.
 
 How far magic reaches is the story's call. A fireball can land across the town square, but burning hands need you close. A threat that's *Warded* is protected against magic the way *Armoured* is against steel: it's one more reason the threat's still standing.
 
-:::example[Big magic at the table]
-**A gate:** Years on, Ash is a Master of *Evocation*, with *fire* taken three times. Add her ember stone and her Title and that's eight steps whenever she throws fire. The city gate is Challenge 5, and two tags keep it shut: *Iron* and *Barred*. She puts both actions in, so that's eighteen steps, three d12s: one for each tag, and one for the guards behind it. The gate rolls its d10 against the first two, and the guards roll their own.
+Going beyond lets your permission do the bigger thing. If something's in the way, it's still in the way, and you've still got to beat it.
 
-**A door:** A phase-walker, Skilled at *Phase* with *iron* taken twice, is standing at the vault door. It's Challenge 5 and *Layered*, and three tags keep it shut, so it rolls 3d10 and its best die counts. Her ability, her specializations, her Title and both actions make twelve steps. That's two d12s, and she puts both on the first tag for advantage. Every tag she strips, the door rolls one die fewer.
+:::example[Magic at the table]
+**For free:** A guard levels a crossbow at Ash across the warehouse. She throws fire at him from her Fight, 4 steps, a d8. A bolt of fire at a man is what *throw fire* does, so it doesn't cost her anything.
+
+**Going beyond:** In the Vane crypt, Isolde wants a word with the mason who built the vault, a hundred years dead. Her set action for the dead is her first Title and *speak with the recently dead*, with the action 3 steps, a d6. A hundred years isn't recent, so that's going beyond, and she pays 1 Aura. The old man doesn't want to come, and the GM makes him Challenge 3, a d6. Isolde rolls 5 against his 4, and he starts talking.
+
+**Bigger, with a friend:** The city gate is Challenge 5, a d10, and two tags keep it shut: *Iron* and *Barred*. *Throw fire* doesn't normally make iron give, so Ash pays 1 Aura to go beyond. Bram puts his action in with his war hammer, so it's a combo. Ash's Fight is 4 steps, and Bram's is 3, because *hold the line* doesn't fit a gate and he leaves it out. That's 7 steps between them, a d12 and a d2, and they share them out as a d8 for *Iron* and a d6 for *Barred*. Ash rolls for both of them. The gate hasn't been attacked yet this round, so it rolls its d10 once, a 5, and both dice have to beat it. The d8 comes up 7, so *Iron*'s gone. The d6 comes up 5, a tie, and the gate keeps a tie unless she pays, so Ash pays 1 Aura, the bar splits, and the gate swings open.
 :::
 
-### Area, with any ability {#s-magic-area}
+### Area, with any permission {#s-magic-area}
+
+An area's the same with a hammer or a voice as it is with fire: 1 Aura every time, and one of your splits. The exception's a *Sweep* weapon, because going at everyone within your reach is the weapon's own property.
 
 :::example
-**A blade:** Years later, Bram's a Master of *Combat*, and four of the Guild's men are closing on him at the foot of the stair. *Combat*, *war hammer*, the hammer, his Title and one action make seven steps: a d12 and a free d2. The d2 is his area, a burst on himself. It comes up 2, a top face, so he gets 1 Aura back and the burst reaches everyone within two squares. All four defend against the same d12.
+**A blade:** A few sessions on, Bram's added *fight two at once* and *fight in tight spaces*, and made a set action for what he does best, Hold the door: his Title, *hold the line*, both new permissions and his war hammer, with the action 6 steps. Four of the Guild's men are closing on him at the foot of the stair. He splits it into a d10 and a d2, and makes the d2 a burst on himself for 1 Aura. It comes up 1, so the burst reaches the two men already on him, and both of them defend against his d10.
 
-**A ward:** The volley's coming, and the crew's bunched up around Isolde. *Ritualist*, *warding*, her chalk and salt, her Title and the action make five steps. She splits them into a d8 for the ward and a d2 for the area. Nothing pushes back, so only the d2 gets rolled, and it counts friends, not squares. It comes up 2, a top face, so she gets 1 Aura back, and the two friends pressed closest to her, Bram and Dorrie, are *Warded d8*.
+**A ward:** The volley's coming, and the crew's bunched up around Isolde. Her Ward is her first Title and her chalk and salt, with the action 3 steps. She splits them into a d4 for the ward and a d2 for the area, for 1 Aura. Nothing pushes back, so only the d2 gets rolled, and it counts friends, not squares. It comes up 2, a top face, so the Aura comes straight back, and the two friends pressed closest to her, Bram and Dorrie, are *Warded d4*.
 
-**A line:** A storm-caller throws lightning down the corridor, with a d8 for the bolt and a d4 for a line. The d4 rolls 3, so it reaches six squares, straight out. The three guards in it each defend against the d8.
+**A line:** A storm-caller with 6 steps throws lightning down the corridor, with a d8 for the bolt and a d4 for a line, for 1 Aura. The d4 rolls 3, so the line's six squares long. The three guards in it each defend against the d8.
 
-**A voice:** Years on, Dorrie's a Master of *Influence*, and the line is breaking. She shouts to steady them, with a d10 for the shout and a d4 for the area. The d4 comes up 4, a top face, so she gets 1 Aura back, and four friends who can hear her over the noise are *Heartened d10*.
-
-**A look:** Isolde's grown Skilled at *Scholar*. She's standing at the Guildmaster's desk, studying it and everything around it, with a d8 to study and a d4 for a burst on the desk. The d4 rolls 3, so everything within three squares defends against the d8, and everything she beats gives her something.
+**A look:** Isolde's at the Guildmaster's desk, which is older than the Guild, with her Study: her second Title, *know the history of anything old* and *Iron Will*, with the action 4 steps. She splits them into two d4s, one to study and one for a burst on the desk, for 1 Aura. The burst rolls 3, so everything within three squares defends against her other d4, and everything she beats gives her something.
 :::
 
-## Magical Abilities {#s-schools}
+## Schools of Magic {#s-schools}
 
-Here are seventeen magical abilities. Take one as one of your abilities, or write your own in the same shape. Each one tells you what it covers, gives you some specializations, and shows you what it looks like on an ordinary day, on a hard one, and in a legend.
+A school of magic is a Title, the same as a role. Here are fifteen to start from. Each one shows a few things its permissions do for free, and what going beyond looks like, for 1 Aura. Pick one, write your Title for it, real and specific, and choose three permissions that fit inside it. You'll find the full ideas for every school, with Titles, permissions and traits, in [Title ideas](#s-title-ideas).
 
-| Ability | What it covers | Specializations |
-| --- | --- | --- |
-| **Evocation** | Raw energy thrown at the world. | fire, frost, lightning, force, light |
-| **Kinesis** | Moving things with the mind. | lifting, pushing, holding still, leaping, falling safely |
-| **Warding** | Keeping things out, and in. | circles, thresholds, seals, shields, against spirits |
-| **Mending** | Making broken things whole. | flesh, bone, poison, fever, broken objects |
-| **Illusion** | Things that aren't there. | light, sound, false faces, hiding in plain sight, crowds |
-| **Enchantment** | Reaching into a mind. | charm, calm, fear, forgetting, sleep |
-| **Divination** | Seeing what can't be seen. | far places, the past, what is coming, lies, lost things |
-| **Wildcraft** | The living world. | beasts, birds, growing things, weather, rivers |
-| **Artifice** | Magic made into things. | sigils, enchanted objects, constructs, locks, bindings |
-| **Veil** | Shadow, silence and passage. | darkness, silence, walking unseen, doors |
-| **Phase** | Passing through what should stop you. | stone, wood, iron, crowds, locked doors |
-| **Teleport** | Being somewhere else, now. | places I can see, places I have been, short hops, taking someone with me |
-| **Soulcraft** | The soul itself. | sensing souls, bonds, lending strength, loosening what binds, the dying |
-| **Medium** | The spirit world. | the recently dead, hauntings, possession, old battlefields |
-| **Hexer** | Curses and blights. | curses, blighting crops, bad luck, sickness, breaking curses |
-| **Faith** | Holy or protective power. | healing prayers, warding evil, holy ground, exorcism |
-| **Ritualist** | Long, careful workings. | binding, warding, divination, summoning, circles and sigils |
-
-### What each one looks like {#what-each-one-looks-like}
-
-The harder it is, the higher the Challenge the GM sets. Hard things are Challenge 3 or 4, and legends are 5 or 6, often with tags in the way.
-
-| Ability | Everyday | Hard | Legendary |
+| School | You might be | For free | Going beyond, for 1 Aura |
 | --- | --- | --- | --- |
-| **Evocation** | A bolt of fire at a man. Light a room. Freeze a lock. | Fire that doesn't spread. A bolt through a door. | Fire through a gate. A storm of lightning over a ship. |
-| **Kinesis** | Shove a man. Catch a falling glass. Leap a gap. | Hold a door shut against a crowd. Fall three storeys softly. | Lift a cart. Hold a collapsing roof. Stop an arrow storm. |
-| **Warding** | A circle nothing crosses. A threshold that bites. *Warded* on a friend. | A ward over a whole wall. A shield around a friend across the room. | A house that nothing enters for a night. A city gate that won't open. |
-| **Mending** | Stop bleeding: break *Bleeding*. Fix a broken blade. | Break any condition on a friend. Purge a poison at once. | Hold the dying in this world until dawn. Rebuild a bridge overnight. |
-| **Illusion** | A false sound. A face that isn't yours. | A second you, walking the other way. A room that looks empty. | An army on the hill. A whole street that isn't there. |
-| **Enchantment** | A calm word. A moment of fear. Make someone like you. | A guard forgets your face. A mob hesitates. | A regiment lays down its arms. A king believes the dream. |
-| **Divination** | Know if someone lies. Find something lost in the room. | See the next room. Hear what was said here yesterday. | See across the sea. Glimpse the ending of the night. |
-| **Wildcraft** | Calm a dog. Speak to a bird. Make a vine hold. | A pack answers your call. Fog rolls in off the river. | The forest closes the road. The river rises. |
-| **Artifice** | Read a sigil. Wake a lock. Mend a construct. | Seal a door with a word. Turn a construct aside. | Command a Warden. Bind a thing into a sword. |
-| **Veil** | Snuff the lights. Silence your steps. | Step through a door that's locked. A whole room goes dark and quiet. | A night so dark the city stops. |
-| **Phase** | Through a stone wall a hand thick. Through a crowd without touching anyone. | Through a door of oak and iron. Through a wall, with a friend. | Through the vault door. Through the mountain. |
-| **Teleport** | Across the town square to a place you can see. | Up onto the roof you can't see. Out of the chains. | Into a room you've only heard described. Across the city. Into the unknown. |
-| **Soulcraft** | Feel who is alive in a room. Read what someone loves. | Lend a friend your strength across a room: Help from wherever you stand. Hold a dying soul in place. | Loosen a soul from a painting. Call every bond you have at once. |
-| **Medium** | Sense the dead. Ask a fresh ghost one question. | A spirit speaks through you. A haunting goes quiet. | An old battlefield rises for one night. A possession is broken. |
-| **Hexer** | A stumble. Milk that sours. *Hexed* on a threat. | A curse that lasts a week. Bad luck that follows one man. | A family cursed for a generation. A curse broken that shouldn't break. |
-| **Faith** | A prayer that steadies: *Blessed* on a friend. Holy water that burns the wrong things. | Holy ground where you stand. An exorcism in a single breath. | A temple no evil can enter. A miracle the whole town sees. |
-| **Ritualist** | Read a working. Unpick a small ward. | A ritual done in minutes that should take an hour. | See [Rituals](#rituals). Some things need a circle. |
+| **Fire** | a pyromancer or fire-speaker | *throw fire* · *light a room with a word* · *burn through rope or wood* | become a column of flame · see through a fire on the other side of the city |
+| **Storm** | a storm-caller or wind-witch | *call lightning down on a man* · *throw a gust that knocks men flat* · *fill a sail* | ride the wind · call a storm out of a clear sky |
+| **Illusion** | an illusionist or trickster | *make a false sound* · *change my face* · *hide in plain sight* | duplicate myself · an image that fools the whole street |
+| **Enchantment** | an enchanter or mesmer | *calm someone with a word* · *make someone like me* · *put a moment of fear in someone* | make someone forget the last minute · put someone to sleep with a word |
+| **Divination** | a seer, oracle or scryer | *know if someone's lying* · *find something lost in a room* · *see an object's past* | see a place far away · glimpse what's coming |
+| **Wildcraft** | a druid, beast-talker or green witch | *calm an animal* · *make a vine hold* · *speak with birds* | wear a beast's shape for the scene · make a plant grow in a moment |
+| **Warding** | a warder, sigil-maker or ritualist | *ward a friend against harm* · *bar a door with a sigil* · *keep a spirit out of a room* | seal a room so nothing gets in or out · unpick a ward someone powerful made |
+| **Mending** | a mender, healer-mage or bone-setter | *stop bleeding with a touch* · *draw out a poison* · *mend a broken object* | keep the dying alive till dawn · mend a whole wall or a ship's hull |
+| **Veil** | a shadow-mage or night-walker | *snuff the lights* · *silence my steps* · *see in the dark* | open a shadow door to somewhere nearby · make a room forget I was in it |
+| **Phase** | a walker-through-walls or blink-mage | *slip out of any grip* · *pass through a crowd without touching anyone* · *step to a place I can see* | step through a wall · take someone with me when I step |
+| **Medium** | a medium, spirit-talker or necromancer | *speak with the recently dead* · *sense the dead nearby* · *raise the dead to fight or carry things* | call up someone who died long ago · lay a ghost to rest for good |
+| **Hexer** | a hexer, curse-witch or bone-caster | *make someone stumble* · *spoil food and drink* · *put bad luck on someone* | break a curse someone else laid · curse a bloodline |
+| **Faith** | a priest, paladin or holy warrior | *steady a friend with a prayer* · *bless a friend before a fight* · *hold holy ground* | drive out a spirit · hallow a place so nothing evil can enter |
+| **Kinesis** | a mind-mover or force-mage | *shove a man without touching him* · *catch anything that falls* · *lift something heavy with my mind* | fly · stop an arrow in the air |
+| **Artifice** | an artificer, sigil-smith or golem-maker | *read a sigil* · *wake a lock* · *mend a construct* | make a lock only I can open · bind a spirit into an object |
 
-### And every other ability {#and-every-other-ability}
+A beast called up to hunt for you through the scene, or one of the dead brought back to work at your command, works on its own, so that's [summoning](#s-summoning), below.
 
-The same three columns work just as well for a sword.
+### Writing your own school {#writing-your-own}
 
-| Ability | Everyday | Hard | Legendary |
-| --- | --- | --- | --- |
-| **Combat** | Beat a man with a blade. Disarm him. Put him on the floor. | Cut a rope from across the room with a thrown knife. Split a shield in two. | Cut through a portcullis chain. Hold a stair alone against thirty. |
-| **Athlete** | Climb a wall. Jump the alley. Outrun the watch. | Climb the tower in the rain. Jump the canal. | Run the rooftops of the whole quarter before the bell stops. Catch a falling bridge span. |
-| **Stealth** | Cross a room unseen. Follow someone home. | Walk through a lit ballroom unseen. Hide in a room with nowhere to hide. | Walk into the Guildmaster's study at noon and out again, and nobody ever knows. |
-| **Larceny** | Pick a lock. Lift a purse. | Pick a lock in the dark, in seconds. Lift the ring off his finger. | Open a vault built by a master. Steal the crown during the coronation. |
-| **Influence** | Talk a guard round. Face down a bully. | Turn a hostile room. Talk a man out of a killing. | Turn a mob. Talk a duke out of his own house. |
-| **Defender** | Hold a doorway. Take the blow meant for her. | Hold a doorway against a charge. Guard everyone on the stair. | Hold the harbour gate until dawn. |
-| **Tracker** | Follow a trail. Read who passed. | Follow a trail across stone, or in the rain. | Follow a trail a year cold. Find the one man in the whole city. |
+A school's a Title, so write it like one: who you are, real and specific, and one school only. Give it a trait and three permissions, each with a doing word and the part that says how, what or where. Magic's written as narrow as anything else, so it's *throw fire*, not *fire magic*. Then think about what going beyond looks like for your school, so the table knows when it's time to pay the Aura. There's more on permissions in [Writing permissions](#s-writing-permissions).
 
-### Writing your own {#writing-your-own}
-
-An ability is a name and one line, like *Tidecalling: the sea, and everything in it.* Then add a few specializations, each naming one specific situation, thing or target. If a specialization covers most of what the ability does, it's too broad. Then write one line each for what it looks like on an ordinary day, a hard one, and in a legend.
+:::example[A school of your own]
+Say you want a sea-witch, and none of the fifteen fits. Your school's the tide, and your Title is *The tide-witch the fishing fleet won't sail without*. For permissions you take *calm a rough sea*, *call a wave onto a deck* and *breathe under water*. Each one's something you'd do a few times a session in a campaign at sea, and each one fits inside the Title. Going beyond is parting the harbour, or sinking a ship with one wave. For your trait, *Sure-Footed* suits a deck that won't keep still.
+:::
 
 ### Magic in the World {#s-ritualist}
 
-Magic in Zi is a craft, and there's no caste or class of wizards, just people with a magical ability on their sheet.
+Magic in Zi'Dara is a craft, and there's no caste or class of wizards, just people with a magic permission or a magic item on their sheet.
 
 **The Book-Bound** learned it from reading, and Isolde's one of them. **The Quiet Orders** are small religious traditions that do one or two things very well and nothing else. **The Practical Crafters** are the alchemists, ward-makers and sigil-carvers. **The Born** could always do it and never knew why. **The Desperate** can be anyone, once, when they need something enough. That's what a Spark is for.
 
 How magic sits in society is up to your world. In the Steeplands it sits quietly: most people don't believe rituals are real, and the ones who do keep their voices down. Decide it in [Session Zero](#session-zero), because it decides what happens when the crew uses magic in the street.
+
+## Summoning {#s-summoning}
+
+A summoner catches souls, then calls them back out to work for her. A summon is anything that works on its own, like a hound that tracks for you, or a caught courtier who'll talk to people you can't.
+
+**Souls go in attunement.** A summoning attunement holds souls the way an attuned item holds permissions, and the souls you catch are its material. It sits in one of your [attunement](#s-attunement) slots and grows through the same three stages:
+
+| Stage | Souls | It can hold more | In all |
+| --- | --- | --- | --- |
+| Awakened | 1 | 1 more with a Catch | 2 |
+| Tempered | 2 | 2 more with a Burden | 4 |
+| Perfected | 3 | 3 more with a Burden and a Catch | 6 |
+
+You start at Awakened, like anything you attune, so that's one soul, or two if you give it its Catch. Starting souls are d4s.
+
+**Your Summon dice** are a set action like any other: your Title, the permissions that fit, and the action. They're what you catch souls with, and what you call them back out with.
+
+**Catching a soul.** When a creature falls, spend your action and roll your Summon dice against its Challenge. Beat it and its soul goes into one of your utility slots. Miss and that soul's gone. In downtime, put it into your summoning attunement. You can swap a soul in your attunement for one you're carrying whenever you've got the slot.
+
+**Calling them out.** Summoning takes your action, and it needs a reason in the story. Nobody calls up a horde to drink at the tavern. Roll your Summon dice against your souls' dice, and each of your dice brings out one soul it beats. Split to go for more.
+
+**Aura.** When you're catching or summoning, 1 Aura adds +2 to one of your dice. A tie still costs 1 Aura to win. The summoning Boon adds +1 to that bonus each time you take it: +3 with one, +4 with two and +5 with three.
+
+**A soul is what it was.** A caught courtier talks, a hound tracks and a Warden fights. It keeps its Challenge die, and each one rolls its own die for whatever it does.
+
+**Summons act in the round like anyone.** One hit takes a summon out, and its soul goes back to its slot, so you can call it again. Like anyone, a summon can take the hit for someone.
+
+**Blocking.** As its action, a summon can pull the attacks aimed at someone onto itself and roll against each one. Each one it beats is stopped. The first one it loses takes it out, and any others it loses go through to whoever it's protecting.
+
+**At the end of a scene,** roll each summon's die. On 3 or lower it goes back to its slot. They all go back at downtime.
+
+Summons can't combo, and their top faces don't give Aura.
+
+:::example[Summoning at the table]
+Sable's Summon action is a d10, and she's got three souls: a rat swarm (d4), a hound (d6) and the harbour Warden (d8). She splits into a d6 and a d4 and goes for the two small ones. Her d4 comes up 2 against the rats' 3, so she spends 1 Aura to make it a 4, and the rats pour out. Her d6 beats the hound.
+
+Next round, two dockhands come at Sable with clubs, a d6 each. The hound blocks for her: it pulls both clubs onto itself and rolls its d6 against each. It rolls 5 against the first club's 4, so that one's stopped. It rolls 2 against the second club's 3, and that's the hound out. Its soul goes back to its slot, ready to call again.
+
+Later the dock boss falls, and Sable spends her action catching his soul: her d10 against his Challenge 3, a d6. She rolls 7 against his 4, and his soul goes into one of her utility slots, a d6. In downtime she can put him in her attunement if there's room, or swap him for the rats.
+
+At the end of the scene the rats are still out, so Sable rolls their d4. It's a 2, so they go back to their slot too.
+:::
 
 ## Rituals {#rituals}
 
@@ -125,15 +139,17 @@ How magic sits in society is up to your world. In the Steeplands it sits quietly
 A ritual is magic that's too big for one moment.
 :::
 
-Some workings can't be done in a breath. They need a circle, a price and time, and while you work, something's trying to stop you. A ritual is a **stake** with a **price**, and everything in [Conflict](#conflict) applies.
+Some workings can't be done in a breath. They need a circle, a price and time, and while you work, something's trying to stop you. A ritual's a **stake** with a **price**, and everything in [Conflict](#conflict) applies.
 
 ### How a ritual runs {#s-ritual-runs}
 
 1.  **Name the goal.** *To free a soul from its frame.*
-2.  **Pay the cost.** Every ritual has a price, paid *before* the first die is thrown: a name spoken aloud, a memory given up, a drop of blood in someone's tea.
-3.  **Work it.** The ritual has a Challenge and tags **in the way**, and every win strips one. Strip them all and it's done. Anyone with a permission that fits can help.
+2.  **Pay the cost.** Every ritual has a price, paid *before* the first die's thrown: a name spoken aloud, a memory given up, a drop of blood in someone's tea.
+3.  **Work it.** The ritual has a Challenge and tags **in the way**, and every win strips one. Strip them all and it's done. Anyone with a permission that fits can work a tag, or put their action into someone else's roll.
 4.  **Something interferes.** Most rituals have an **interference die**: something's coming. The GM telegraphs it every round, at the circle or at whoever's working, from the round budget.
 5.  **If it fails** (the interference lands on the working, or the scene's clock runs out), the **failure mode** happens. A failed ritual goes wrong in a particular way, and each ritual below tells you how.
+
+There's no Aura to pay for a ritual. The price is what it costs.
 
 If you're out of danger, with all the time in the world, the GM can just let it take an hour and ask for the cost. The dice come out when something's pushing back.
 
@@ -230,5 +246,5 @@ Every ritual worth rolling for has three things: something *interfering*, someth
 :::example[The Unbinding, at the Vane manor]
 Isolde kneels in the binding room with the three paintings, and the crew gathers round the circle. She speaks her own true name aloud, and the GM starts the interference: Vane's household is at the door, a d10 each round.
 
-Isolde works *Old Ink* with *Ritualist* and her Title, because this binding is her order's work. Dorrie helps with *Courtier*: she knows the old families, and she reads their names off the frames. Bram answers the interference at the door. Vesk works *Names*, since she stole these paintings and knows whose they were. Three rounds later, *Mercy* is the last tag standing, and it's Isolde's to strip. She has to mean it.
+Isolde works *Old Ink* from her Study, and brings in *read the order's old script* for 1 Aura, because this binding is her order's work. Bram answers the interference at the door. Vesk works *Names*, since she stole these paintings and knows whose they were, and Dorrie puts her action into the same roll: she knows the old families, and she reads their names off the frames. Three rounds later, *Mercy*'s the last tag standing, and it's Isolde's to strip. She has to mean it.
 :::

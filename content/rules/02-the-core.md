@@ -5,43 +5,71 @@ order: 2
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 You play someone who's properly good at something, like a thief who can open any lock in the city or a fighter nobody wants to meet in a narrow corridor. Being good means you stack the odds in your favour before anyone touches a die.
 
-Everything your character can do is a **permission**, a short line on your sheet: *I can pick locks. I can fight. I can read people.* If it's on your sheet, you can do it, no questions asked. That's the story side of the game: your sheet is a list of green lights.
+Everything your character can do is a **permission**, a short line on your sheet: *I can pick a mechanical lock. I can fight with a sword. I can read a room in a glance.* If it's on your sheet, you can do it, no questions asked. That's the story side of the game: your sheet is a list of green lights.
 
-The tactics come from stacking those green lights. Every permission that fits what you're doing makes your die bigger, and so does every action you put in. Once your die is as big as it gets, you start getting more dice instead.
+The tactics come from stacking those green lights. Every permission that fits what you're doing makes your die bigger, and so does every friend who puts their action in with yours. Once your die's as big as it gets, you start getting more dice instead.
 
 At the end of the day the question is simple: **did you succeed?** You roll against whatever's in your way, and if you beat the number, you did.
 
 ## Permissions {#s-permissions}
 
-A permission is one line that starts with *I can*, even if only in your head. Keep it to one idea, short enough that a stranger could read it and get it straight away. *I can throw knives* is a permission. A paragraph about how your character learned to throw knives isn't.
+You start with two **Titles**. A Title is who you are, a role or a school of magic, real and specific: *the best cat burglar in the city*, *Captain of the Guard*, *Master of Illusions*. Each one has a trait and its permissions, three to start and six at most, and that's where everything your character can do is written.
 
-Permissions come from all over your sheet: your **Titles**, your **abilities** and their **specializations**, your **items**, some of your **traits** and **resources**, even your **Scars**. It doesn't matter which box a permission lives in. The story decides whether it fits what you're doing right now, and if it fits, it counts.
+A permission finishes *I can…*, and it's got two parts: a doing word, and how, what or where. *Fight with a sword*, *talk my way past a guard* and *climb sheer walls* are finished. *Deceive* on its own is only half a permission. *Deceive through actions* is finished, and it covers feints and misdirection when you fight or sneak, but not talking your way past someone. A good one comes up a few times a session, and it's got to fit inside its Title. Magic's as narrow as anything else: *throw fire*, not *fire magic*. There's more in [Writing permissions](#s-writing-permissions).
+
+Your Title's a step on anything it fits, and so is a plain item: a sword's a sword, so it's a step in a sword fight. An attuned thing counts through its own permissions (see [Attunement](#s-attunement)). Some traits are a step too, like Vesk's Silent Step: +1 to moving unseen. Each of these is a **line** on your sheet, the same as a permission.
 
 ### How permissions stack {#how-permissions-stack}
 
-Count up every permission you've got that plainly fits what you're doing. Each one is a **step**.
+Every line that fits what you're doing is a **step**, and it counts once a roll.
 
--   **Everything that fits counts**, even when two lines sound alike. Say you're *Captain of the Guard* with *Combat* and a *sword* specialization. In a sword fight that's three steps, no issue.
+-   **Everything that fits counts**, even lines that sound alike. You can have *move unseen* and *stick to the shadows*, and when you're sneaking, both count. You just can't take the same one twice.
 -   **There's no cap on Titles.** Every Title that fits the moment is another step.
+-   **Permissions don't come in levels.** One you picked up last week is worth the same 1 step as one you started with.
 
-:::rule
-**No arguing at the table.** A permission plainly covers what you're doing, or it's close, or it doesn't apply. If it plainly covers it, it counts, and it's free. If it's close, pay 1 Aura and it counts. If you have to make a case for why it fits, it's close. Don't argue, just say how it fits and pay the Aura. If it doesn't apply, it doesn't count. The GM can say no to a stretch, but that should be rare, mostly for when a player's being cheeky. The rest of the time you pay the Aura and you're good. It keeps the game moving and it keeps your character competent.
-:::
+## Set Actions {#s-set-actions}
+
+Your sheet does the counting before you play, so every roll starts from a number. That's what **set actions** are for. **Fight**, **Move**, **Sneak**, **Study** and **Talk** are on every sheet, and you add your own for the things you do all the time, like Locks or Ward. Fight covers melee and ranged, so split it into Fight and Shoot if you like.
+
+Put everything on a set action that fits it nearly every time: your Titles, permissions from either Title, items and traits. A permission can sit on as many set actions as it fits. **A set action's steps are 1 for the action and 1 for every line on it.**
+
+| Vesk's set action | What's on it | Steps | Die |
+| --- | --- | --- | --- |
+| Sneak | her first Title, *move unseen*, Silent Step | 4 | d8 |
+| Move | her first Title, *run the rooftops*, her grappling line | 4 | d8 |
+| Locks | her first Title, *pick a mechanical lock*, *know how a lock's built*, her picks | 5 | d10 |
+| Fight | *fight dirty with a knife* | 2 | d4 |
+| Study and Talk | nothing yet | 1 | d2 |
+
+*Know how a lock's built* comes from Vesk's other Title, *Raised by the Guild*, and it sits on Locks with the rest. Your set action is *how* you're doing something, not what you're trying to get done: Dorrie's Talk gets her past the gate guard, into the harbour records and out of a fight before it starts. Filling in yours is in [Building Your Character](#s-step-set-actions).
 
 ## Steps and Dice {#s-building-die}
 
-When things get tense you get **two actions** a round. Outside a round, the GM tells you how much time you've got: one action for a quick go, two if you can take your time.
+When things get tense you've got **one action** a round (see [Conflict](#s-actions)). Outside a round, the GM tells you how much time you've got: one action for a quick go, or two if you can take your time, and a second action into the same set action adds 1.
 
-Every action you put into a roll is a step, **and it brings every permission that fits what that action's doing**. So if you put both actions into the same thing, every permission that fits counts twice.
+Every roll goes the same way:
 
-:::example[Vesk opens a vault door]
-*Larceny* plainly covers locks, so that's 1 step. Her specialization is *mechanical locks*, and this is one, so that's another. Her Title, *The best cat burglar in the city*, plainly covers anything a thief would try: 1 step. Her *perfect set of picks*: 1 step. That's 4 steps from her sheet, plus 1 for the action. She's on 5 steps, a d10.
+1.  Say what you're doing and how, and pick the set action that fits.
+2.  Start from its steps. If a line on it doesn't fit this time, leave it out.
+3.  Anything else that fits costs **1 Aura** each to bring in, and each one's a step.
+4.  Going beyond what a permission normally does costs **1 Aura** (see [Going Beyond](#s-going-beyond)).
+5.  Turn your steps into dice, and give every die an intent.
 
-If she puts both actions into the door, each action brings all four permissions again: (4 + 1) + (4 + 1) = 10 steps. That's past six, so she rolls two dice, a d12 and a d8.
+:::example[Building a roll]
+**Bringing one in:** Vesk's going over Lord Vane's roof without a sound. She starts from her Sneak: her first Title, *move unseen* and Silent Step, with the action, 4 steps, a d8. Her grappling line fits too, but it's on her Move, not her Sneak, so bringing it in costs 1 Aura. That's 5 steps, a d10.
+
+**Leaving one out:** Bram swings at a smuggler who's running for the door. His Fight is his first Title, *hold the line* and his war hammer, with the action, 4 steps. He isn't holding any line, so he leaves that one out: 3 steps, a d6.
 :::
+
+:::rule
+**No arguing at the table.** If a line's on your set action and it fits, it's free. Anything else that fits costs 1 Aura to bring in, even when it plainly fits. If you have to make a case for why what you're doing is normal, it's going beyond, so say how, pay the Aura and keep playing. The GM can still say no, but that should be rare, mostly for when a player's being cheeky. It keeps the game moving and it keeps your character competent.
+:::
+
+### Steps into dice {#steps-into-dice}
 
 :::quote
 Your die is your steps × 2, up to a d12. Every six steps gives you another d12, and whatever's left over makes one more die.
@@ -65,81 +93,64 @@ Your die is your steps × 2, up to a d12. Every six steps gives you another d12,
 | 24 | 4d12 |
 
 :::rule
-**No die you build is ever bigger than a d12.** A gifted beginner can build a d12 on a good day, and so can a master. The difference is how many of them you throw. A new character throws two or three dice a round. A veteran throws three or four d12s, and each one can do something different. In Zi, getting stronger means throwing more dice.
+**No die you build is ever bigger than a d12.** A gifted beginner can build a d12 on a good day, and so can a master. The difference is how many of them you throw, and rolls get big when people work together: three of the crew putting their actions into one roll can throw two d12s, each doing something different. In Zi'Dara, getting stronger means throwing more dice.
 :::
 
-**Nothing on your sheet fits?** You can still have a go. One action on its own is 1 step, a d2. Put both actions in and it's 2 steps, a d4. It's a long shot, but long shots do land.
-
-:::example[One action or two]
-Isolde's unpicking a stranger's ward on a door, with nothing in her hands. *Ritualist* and her *warding* specialization both fit, so she's got 2 steps from her sheet. Her Title doesn't come into it, because it isn't her order's work.
-
--   **One action:** 2 + 1 = **3 steps**, a d6.
--   **Both actions on the ward:** (2 + 1) + (2 + 1) = **6 steps**, a d12.
-
-If she uses her actions for different things, say one on the ward and one watching the stairs, each action only counts what fits its own job.
-:::
+**Nothing fits, not even a Title?** You can still have a go. The action on its own is 1 step, a d2. It's a long shot, but long shots do land.
 
 ## The Roll {#s-the-roll}
 
-Most of the time you're rolling against something that pushes back: a guard, a lock, a magistrate, a storm. You roll your dice, you roll theirs too in another colour, and you compare. The GM almost never touches a die in Zi. She's busy running everything else.
+Most of the time you're rolling against something that pushes back: a guard, a lock, a magistrate, a storm. You roll your dice, you roll theirs too in another colour, and you compare. The GM almost never touches a die in Zi'Dara. She's busy running everything else.
 
 -   **Beat it** and you did it.
--   **Tie** and it goes to whoever's defending. When something lands on your Armour or Confidence, that's you. When you go at the guard, that's him. If you're the one acting, even when you're acting to stop something coming at you, you can pay **1 Aura** to win the tie. The GM never spends Aura.
+-   **Tie** and it goes to whoever's defending: you when something lands on your Armour or Confidence, him when you go at the guard. If you're the one acting, even to stop something coming at you, you can pay **1 Aura** to win the tie. The GM never spends Aura, and there's no Aura in downtime (see [Downtime](#s-downtime-rolls)).
 -   **Roll under** and you didn't. Try something else.
 
-Sometimes nothing's actively fighting you, like a wall you need to climb or a book you have to get through before dawn. That's still a **Challenge**. You roll its die too, and you still have to beat it.
+**A target rolls its defence once a round.** The first time anyone goes at a threat in a round, roll its die, and that roll stands against everyone who goes at it till the round's over. It's the same for you when the telegraphs land: one roll of your Armour against all the blows and one of your Confidence against all the pressure (see [Conflict](#s-defending)), unless you spend your action to [Defend](#s-defend).
 
-Every Challenge is a die twice its number, so Challenge 2 is a d4 and Challenge 6 is a d12. Threats also have **tags**, like *Armoured* or *Loyal*, and your wins strip them off. A win can also leave a **condition** on something, like *Burning*, and the condition carries your die. You'll find both in [Conflict](#s-challenges).
+A wall you need to climb or a book you've got to get through before dawn doesn't fight back, but it's still a **Challenge**, and you still roll its die and have to beat it. A Challenge is a die twice its number, so Challenge 2 is a d4 and Challenge 6 is a d12. Threats have **tags** too, like *Armoured* or *Loyal*, and your wins strip them off. A win can also leave a **condition**, like *Burning*, that carries your die. Both are in [Conflict](#s-challenges).
 
-**Whenever one of your dice rolls its highest number, its top face, you get 1 Aura back.** Every die counts on its own. Small dice hit their top face more often, so you'll see players split off a tiny die they don't really need, just to fish for Aura. It still needs an intent, and it still uses one of your extra dice. That's smart play, and I'm all for it.
+**Whenever one of your dice rolls its highest number, its top face, you get 1 Aura back.** Every die counts on its own, area dice included. Small dice hit their top face more often, so you'll see players split off a tiny die they don't really need, just to fish for Aura. It still needs an intent, and it still uses one of your splits. That's smart play, and I'm all for it.
 
 ### When a miss matters {#s-miss}
 
-A miss is just a miss. You didn't get what you wanted, and the game moves on. But when something's pushing back, or time's running out, a miss **costs** you something. That's a **consequence**. **The GM names it**: your Armour, your Confidence, your body, your gear, your dreams, the crew's Goal, or the clock. If you'd rather pay something else that fits and costs about as much, offer it. The full list is in [Conflict](#s-consequences).
-
-The GM never charges you for a miss that didn't matter. Picking a lock with all night and nobody around costs nothing if it goes wrong. Picking it with the guard coming up the stairs is a different story.
+A miss is just a miss, unless something's pushing back or time's running out. Then it **costs** you something, a **consequence**, and **the GM names it**: your Armour, your Confidence, your body, your gear, your dreams, the crew's Goal, or the clock. If you'd rather pay something else that fits and costs about as much, offer it (see [Conflict](#s-consequences)). Picking a lock with all night and nobody around costs nothing if it goes wrong. With the guard coming up the stairs, it's a different story.
 
 ## Intents: What Each Die Is For {#s-intents}
 
-Before you roll, give **every die an intent**: what it's trying to do, and who or what it's aimed at. Say it out loud. *This d12 is for the lock. This d8 keeps it quiet.*
-
-An intent can be anything the story allows: hurt it, disarm it, knock it down, frighten it, pin it, shove it off the stairs, grab the key off its belt, find out what it's hiding, stop what it's about to do. Whatever you gave the die is what happens if it wins.
+Before you roll, give **every die an intent**: what it's trying to do, and who or what it's aimed at. Say it out loud. *This d6 is for the lock. This d4 keeps it quiet.* An intent can be anything the story allows: hurt it, disarm it, pin it, shove it off the stairs, grab the key off its belt, find out what it's hiding. Whatever you gave the die, that's what happens if it wins.
 
 ### Several dice, several intents {#several-dice-several-intents}
 
-Your dice don't have to go at different targets. Put three dice on one man and each one can try something different. **The target defends each intent separately**, rolling one defence die for every intent aimed at it. A threat defends with its Challenge die.
+Put three dice on one man and each one can try something different. He'll roll his defence once this round, and **each of your dice has to beat that one roll**. A threat defends with its Challenge die.
 
 ### Several dice, one intent {#several-dice-one-intent}
 
-Put more than one die on the **same** intent and that's **advantage**: the target rolls once for that intent, and your **best** die counts. **Dice never add together**, except when you move.
+Put more than one die on the **same** intent and that's **advantage**: your **best** die counts. **Dice never add together**, except when you move.
 
 ### Past six steps: more dice, more intents {#past-six-steps-more-dice-more-intents}
 
-Every die you get past six steps can have **its own intent**, and that's what big rolls are for. Two dice going at the same Warden are two hits, so two chances to strip two tags. Or one hits it and the other knocks it over. You can still stack them on one intent for advantage, but a d12 and a d4 doing two different things is nearly always worth more than a d12 with a spare.
+Every die you get past six steps can have **its own intent**, and that's what big rolls are for. Two dice at the same Warden are two chances to strip two tags. You can still stack them on one intent for advantage, but a d12 and a d4 doing two different things is nearly always worth more than a d12 with a spare.
 
-:::example[Three d8s on the guard captain]
-Bram has twelve steps this round and a guard captain in his way. He splits them into three d8s and calls them before he rolls: *one to knock the sword out of his hand, one to put him on the floor, one to make him give up.*
+:::example[Three d6s on the guard captain]
+Bram's holding the barricade, and the guard captain's coming over it. Bram's Fight is 4 steps, and Wren puts her action in from the gallery with her Fight, 5 steps. That's a combo, 9 steps from two actions, and Bram rolls the lot as three d6s: *one to knock the sword out of his hand, one to put him on the floor, one to make him give up.*
 
-The captain is Challenge 3, a d6. *Trained* and *Armoured* keep him going, and he's *Loyal*. He rolls a defence die for each intent, so it's three d8s against three d6s.
-
-Bram rolls 7, 2 and 6. The captain rolls 4, 5 and 6. The sword goes skittering across the floor, but the captain keeps his feet. The last pair is a tie. Bram could pay 1 Aura to win it, but he lets it go. So now the captain's disarmed, still standing, and he won't yield. That's a very different scene from one where he ran, and that's what makes mixed results fun.
+The captain's Challenge 3, and it's the first time anyone's gone at him this round, so he rolls his d6 once: 4. The three d6s come up 5, 2 and 4. The sword goes skittering, but he keeps his feet, and the last one's a tie. Bram could pay 1 Aura to win it, but he lets it go. So the captain's disarmed, still standing, and he won't yield.
 :::
 
 ### Splitting: shaping your dice {#s-splitting}
 
-You can **split** your steps into more, smaller dice. The limit is **one extra die for each action you spend.** Dice past six steps are already separate, each with its own intent, and they don't use up your extra dice.
+You can **split** your steps into more, smaller dice. **Every action in the roll gives you one split**, so one action can turn a d8 into two d4s, or a d2 and a d6. Dice past six steps are already separate and don't use up your splits, so going past 6 steps gives you a split on top of the one your action gives: 8 steps on one action can be a d6, a d6 and a d4. You can also share your steps out between the dice you've got, so a d12 and a d8 can be two d10s.
 
-The steps you split all come from what you were doing, so your dice go at things that belong to that job. A fighter's steps can disarm, trip and frighten someone, because that's all part of a fight. If a die would be doing something completely different, like picking a lock in the middle of a sword fight, build it from its own action instead. There's more on shaping your dice well in [Tactical Play](#s-shaping).
+Your dice all go at things that belong to the same job. A fighter's steps can disarm, trip and frighten someone, because that's all part of a fight. If a die would be doing something completely different, like picking a lock in the middle of a sword fight, build it from its own action instead. There's more on shaping your dice in [Tactical Play](#s-shaping).
 
-:::example[Splitting at the table]
-Vesk has 10 steps at the vault door, a d12 and a d8. She could put both on the door for advantage. Instead she calls them: the d12 goes for the lock, and the d8 keeps the work quiet so the guard on the stairs hears nothing.
-
-The door is Challenge 4, a d8. Her d12 rolls a 9 and the door rolls a 3, so it opens. Her d8 lands on 8, a top face, so she gets 1 Aura back, and it beats the guard's 5. He walks past on the stairs and never looks at the door.
+:::example[Splitting at the study door]
+Vesk's at the study door with her Locks, 5 steps. On her own she can split once: a d6 for the lock, and a d4 to keep it quiet so the guard at the foot of the stairs hears nothing. The lock's d6 rolls a 3, and her 5 opens it. Her d4 lands on 4, a top face, so she gets 1 Aura back, and it beats the guard's 3. He never looks up.
 :::
 
 ### Area: one die for how far {#s-area}
 
-One of your dice can be your **area** instead of an intent. Say what shape it is, roll it with the rest, and the number tells you how far your roll reaches. Everything in the area defends against your other die on its own, and whatever you beat, your intent happens to it.
+One of your dice can be your **area** instead of an intent. It costs **1 Aura every time**, and it takes one of your splits. Say what shape it is and roll it with the rest. Everything in the area defends against your other die on its own, and whatever you beat, your intent happens to it.
 
 -   **Burst:** out from a point in every direction, as many squares as you rolled.
 -   **Cone:** out from you the way you're facing, as many squares long as you rolled, and as wide at the end as it is long.
@@ -147,17 +158,33 @@ One of your dice can be your **area** instead of an intent. Say what shape it is
 
 **You can always make it smaller** than you rolled. The story decides what's in it, and a ball of fire catches friend and foe alike. Without a grid, 1 or 2 is everyone close to the target, 3 to 5 is everyone within a few steps, and 6 or more is the whole room.
 
-**When nothing pushes back**, like a ward, a blessing or a rallying shout, you don't roll for the effect, and the area die **counts friends** instead of squares. The number you roll is how many friends it reaches, and they have to make sense in the story: they can hear you, see the signal or stand in the circle. The die you built becomes the condition's die for each of them.
+**When nothing pushes back**, like a ward, a blessing or a rallying shout, you don't roll for the effect, and the area die **counts friends** instead of squares. The number you roll is how many friends it reaches, and they've got to make sense in the story: they can hear you, see the signal or stand in the circle. The die you built becomes the condition's die for each of them.
 
-Every step you put in the area die is a step you take out of the blow. So you're choosing between one big hit and a smaller one on everybody.
+**Sweep** weapons don't pay, because one die at everyone within your reach is what the weapon does. Threats don't have Aura, so their areas cost them nothing.
 
 :::example[An area at the table]
-The guardroom door opens on five men. Ash has five steps of fire: *Evocation*, *fire*, the ember stone, her Title and the action. She splits them into a d6 of fire and a d4 for the area, a burst centred on the man in the middle. The d4 rolls 3, three squares out, and all five are in it. The d6 rolls 5, once. Each man rolls his own d6 defence. Three come in under, and they're *Burning d6*.
+The guardroom door opens on five men. Ash's Scare them off is her first Title, *throw fire*, *make a threat stick* and her ember stone, with the action, 5 steps. She splits it into a d6 to scare them and a d4 for the area, and making the d4 a burst costs 1 Aura. It rolls 3, three squares out, and they're all in it. Her d6 rolls 5, once, and each man rolls his own d6 defence. Three come in under, and they run for it.
+
+Isolde's ward on three friends costs 1 Aura the same way. Her Ward is 3 steps. With the dead coming up through the crypt floor, she brings in *draw a ward the dead can't cross* for 1 Aura, because it isn't on her Ward (most of her wards aren't against the dead). That's 4 steps: a d4 for the ward and a d4 for the area. Nothing pushes back, so only the area's rolled, and it comes up 3. Bram, Vesk and Dorrie are inside her chalk circle, so they're all *Warded d4*. Wren's up on the roof, so she was never going to be one of them.
 :::
 
-:::example[A ward on three friends]
-Isolde kneels and draws a circle in chalk on the warehouse floor. *Ritualist*, *warding*, her chalk and salt, her Title and the action make five steps. She splits them into a d6 for the ward and a d4 for the area. Nothing pushes back, so only the d4 gets rolled, and it comes up 3: three friends. Bram, Vesk and Dorrie are all inside the circle, so all three are *Warded d6*. Wren's up on the roof with her bow, so she was never going to be one of them, whatever the d4 said.
-:::
+## Going Beyond {#s-going-beyond}
+
+Every permission, magic or not, does what it says for free, the same as a sword. You need a magic permission or a magic item to do magic at all, and once you've got one, it works like anything else.
+
+**Going beyond** what a permission normally does costs **1 Aura**, for a sword or a spell. It doesn't add a step. You pay the Aura and the permission does the bigger thing.
+
+-   *Throw fire* is free. A fireball that spreads is an area, and an area costs 1 Aura anyway.
+-   Phasing is free until you phase through a wall. That's 1 Aura.
+-   A master of combat fights for free. An aimed shot that takes out the tag you choose costs 1 Aura.
+-   A shapeshifter taking a creature's form for the scene costs 1 Aura.
+-   A necromancer raising the dead to attack or carry something, as part of their own action, is free.
+-   Teleporting is movement without the boundaries, so it's free. Going further, or bringing friends along, costs 1 Aura.
+-   Isolde speaks with the recently dead for free. Calling up someone who died a hundred years ago costs her 1 Aura.
+
+Anything that works on its own, like a summoned beast or a raised servant acting for you, is **summoning**, and that's in [Summoning](#s-summoning).
+
+**If you have to make a case for why it's normal, it's going beyond.** Pay the Aura and keep playing.
 
 ## Aura {#s-aura}
 
@@ -167,108 +194,97 @@ If you can justify it, it costs 1 Aura. If you can't, it doesn't happen.
 
 **Aura** is your character's nerve and luck, the bit of soul they put into a moment when skill alone won't get them there.
 
--   **You start every scene full.** Your maximum is **5**, unless something on your sheet changes it. A scene is one place and one problem, and the next one starts when that problem's sorted or the crew moves on.
--   **Every top face gives you 1 back.**
+-   **You start every scene full.** Your maximum's **5**, unless something on your sheet changes it. A scene is one place and one problem, and the next one starts when that problem's sorted or the crew moves on. There's no Aura in downtime.
+-   **Every top face gives you 1 back**, except a summon's.
 -   **Already full?** Give it to someone else in the scene. Aura's never wasted while a friend's nearby.
 
-Anything that isn't on your sheet and isn't already covered by the story costs **1 Aura**. Aura does two things, and only two:
+**Spend 1 Aura to:**
 
--   **Stretch a permission.** One of these counts as a permission on your roll, and like any permission it counts on every action you put in:
-    -   a permission of yours that almost fits
-    -   the ground, like a chandelier, a crowd or the rain
-    -   a threat's tag you know about, like his pride or her greed
-    -   an item's Catch, turned to your advantage for a moment or kept quiet this time (see [Items](#s-items))
-    -   a friend's permission, through a connection you share (see [Bonds](#s-bonds))
+-   **Bring something in** that isn't on your set action, as a step on your roll: one of your own permissions, items or traits, the ground (a chandelier, a crowd, the rain), a threat's tag you know about (his pride, her greed), a Catch turned your way for a moment, or a friend's permission through a connection you share (see [Bonds](#s-bonds)).
+-   **Go beyond** what a permission normally does.
+-   **Make a die your area.**
 -   **Win a tie** when you're the one acting.
 
-**Traits don't cost Aura.** They're free, as often as they say. A once-per-scene trait works once a scene, and that's it. If a trait does cost Aura, it'll say so.
+1 Aura also keeps a Catch quiet this time, pays for a quick heal (see [Healing](#s-healing)), and puts +2 on a die when you're catching or summoning a soul (see [Summoning](#s-summoning)).
+
+**Traits are free**, as often as they say, unless they say they cost Aura. A once-per-scene trait works once a scene, and that's it. You only pay for a trait when you bring it in as a step and it isn't on your set action.
+
+### Getting it back {#getting-it-back}
+
+-   **Let a Catch bite**, as often as you like. A Catch is trouble written on your sheet that the GM can bring into a scene: an attuned thing's Catch (see [Attunement](#s-attunement)) or the injury you wrote when you filled a Hurt bar (see [Hurt](#s-blaze)). Say how it causes trouble, the GM runs with it, and you take 1 Aura. Every bite has to bring real trouble.
+-   **Bring trouble on yourself.** You don't need a Catch for it. Bring real trouble on yourself in the story and take 1 Aura. A written Catch is trouble that's ready to go.
+-   **Traits that say so**, like Ash's Killer Instinct (1 Aura when she takes a threat down) and Battle Focus (3 Aura, once a scene).
+-   **A great setup that doesn't land.** You planned it, it was cool, and the dice said no. The GM can give you 1 Aura for it.
+-   **Boons** like *Beat a threat* and *In your element* (see [Boons](#s-boons)).
 
 :::example[Aura at one table]
-**Almost fits:** Vesk's *Larceny* covers locks, not windows, and she wants to pop a window latch. Close enough. She pays 1 Aura and it works.
+**Spent:** There's a chandelier over the corridor. Bram pays 1 Aura to bring it down on the Warden, and the chandelier's a step on his roll.
 
-**The ground:** There's a chandelier over the corridor. Bram pays 1 Aura and brings it down on the Warden, and the chandelier counts as a permission on his roll.
-
-**A tag you know:** Dorrie knows the magistrate is *Duty-bound*. She pays 1 Aura and quotes the law back at him, and *Duty-bound* counts as a permission on her roll.
-
-**A Catch:** Isolde's coat has the Catch *Conspicuous*. At a crowded ball she pays 1 Aura to make the coat the one thing every guard is watching, while Vesk slips past behind them.
-
-**A friend:** Vesk needs *Deception* and doesn't have it. Dorrie does, and they share a connection. Vesk pays 1 Aura and counts Dorrie's *Deception* as a permission on her roll.
-
-**A tie:** Bram's war hammer rolls a 6 against the Warden's 6. He pays 1 Aura, and the Warden doesn't get to keep the tie.
+**Got back:** Crossing the market, Vesk's player says a watch sergeant knows her face from the posters. The GM has him shout for the watch, and Vesk takes 1 Aura.
 :::
 
 ## Spark {#s-spark}
 
-A **Spark** is your ace up the sleeve. You hold **one** at most, and you start every session with it. If yours is spent and you do something that makes the story better, like a brave call or a line the table's still quoting next week, the GM can hand you another. And whenever the GM brings you [trouble](#s-trouble) and you take it, you get one.
+A **Spark** is your ace up the sleeve. You get **a Spark for each Title**, so you've got two to start, and they all come back every downtime. The GM can hand a spent one back for a moment that makes the story better, like a brave call or a line the table's still quoting next week, but never past your number of Sparks. Taking [trouble](#s-trouble) gets you one too.
 
-Spend it to do one of these:
+Spend a Spark to:
 
--   **Roll again.** Reroll a roll you just failed, every one of your dice. The threat's dice stay where they landed.
--   **Make an opportunity.** Something your character could have done, or could know, is true now. *I paid this guard last week. I left a rope on this wall. My cousin drinks in this tavern.* It can reach back into the past, as long as it's something your character would have done, and it counts as a permission for you.
+-   **Roll again.** Reroll a roll you just failed, every one of your dice. The threat's dice stay where they landed. It works in downtime too, where there's no Aura.
+-   **Take an extra action** this round, as its own roll or in the same roll as a combo.
+-   **Make an opportunity.** Something your character could have done, or could know, is true now: *I paid this guard last week. My cousin drinks in this tavern.* It can reach back into the past, as long as it's something your character would have done, and it counts as a permission.
 -   **Add a permission** that isn't on your sheet, for the rest of the scene. *I crewed a ship for a summer. Count it.*
+-   **Turn down trouble** the GM offers you.
 
-If the GM says it's too big, make it smaller or pick something else. Only a Spark reaches into the past, or a trait that says it can. That's the difference between a Spark and [Study](#s-study): Study finds something that's really there, and a Spark makes something true.
+What a Spark gives you for the scene can't sit on a set action, so it counts free on any roll it fits. If the GM says it's too big, make it smaller or pick something else. Only a Spark reaches into the past, or a trait that says it can.
 
 :::example[Spark at the table]
-**A rope:** Vesk's at the back of a Guild warehouse and the wall is sheer. She spends her Spark: *"I walked past here last week and left a rope coiled in the gutter."* It's there, and it counts as a permission on her climb.
+**An opportunity:** Vesk needs into a Guild warehouse with no windows. She spends a Spark: *"I walked past here last week and left the coal hatch unbolted."* It's unbolted, and it's a step on her Sneak: 5 steps, a d10.
 
-**A face:** Dorrie's stuck at the door of a ball. *"The steward's my cousin's husband."* It's true, it counts for her, and the GM gets to decide what the cousin's husband wants in return.
-
-**A second chance:** Bram swings at the Warden's last tag, 4 against its 9. He spends his Spark and rolls again: 11. The Warden falls.
+**An extra action:** Ash spends a Spark and puts a second action into her Fight. The same set action twice adds 1, so it's 5 steps instead of 4, a d10.
 :::
 
 ### Trouble {#s-trouble}
 
-Now and then the GM brings one of you **trouble**. Something on your sheet turns on you, or your plan goes sideways: your *Loud* coat gives you away, the fence calls in your debt, or someone turns up for the thing that's *Wanted*. She tells you what's about to happen and offers you a Spark.
+Now and then the GM brings one of you **trouble**. Something on your sheet turns on you, or your plan goes sideways: the fence calls in your debt, someone comes for the longbow that's *Wanted*, or your cracked ribs give out at the worst moment. She tells you what's about to happen and offers you a Spark.
 
--   **Take it**, and it happens, and you get the Spark. If you've already got one, give it to someone in the crew who's spent theirs.
--   **Turn it down** by spending your Spark, and it doesn't happen. No Spark, no turning it down.
+-   **Take it**, and it happens, and you get the Spark. If your Sparks are full, give it to someone in the crew who's spent one.
+-   **Turn it down** by spending a Spark, and it doesn't happen. No Spark, no turning it down.
 
-Trouble is never the cost of a miss, because you've already paid for that, and it never takes you out of the scene. Expect it about once a session each. Taking it is usually worth it: the story gets more interesting, and you get your Spark back. Trouble can start in downtime, like a debt called in while you were healing, but it lands in the next session, and that's when the GM offers you the Spark.
+Trouble's never the cost of a miss, because you've already paid for that, and it never takes you out of the scene. Expect it about once a session each. It can start in downtime, like a debt called in while you were healing, but it lands in the next session, and that's when the GM offers the Spark. Trouble you bring on yourself pays 1 Aura instead (see [Getting it back](#getting-it-back)).
 
 :::example[Trouble at the table]
-**Taken:** Vesk's leathers are *Heavy*, and she's crossing the roof of a Guild warehouse. The GM says: "A slate cracks under you, loud, right over the night watchman. Take a Spark?" Vesk's player takes it. The watchman's up and coming, and Vesk has her Spark back.
-
-**Turned down:** At a dinner in the Guild hall, the GM offers Dorrie trouble: her host knows the hand on her letter of introduction, and it isn't the one it claims to be. Dorrie spends her Spark, and it doesn't happen.
+Vesk owes the fence, and it's on her sheet as a debt. Halfway across a Guild warehouse roof, the GM says: "The fence's boy is under the drainpipe, and he wants paying tonight. Take a Spark?" Vesk could spend a Spark to turn it down. She takes it instead, and now there's a debt collector shouting under the watchman's window.
 :::
 
 ## Working Together {#s-teamwork}
 
-Helping someone is just spending an action. Build it the usual way, 1 step plus every permission that fits *how you're helping*, and give those steps to your friend's roll. You don't roll them yourself. They join your friend's steps before your friend shapes their dice.
+There's no special action for helping. To help a friend, put your action into the same thing they're doing. That's a **combo**: two or more actions going into the same thing at the same time. Add their set actions together and roll once, between you.
 
--   **Split it any way you like.** Four steps can go three to Bram and one to Vesk.
--   **Any number of people can help.** Three people piling into one roll is where the big moments come from.
--   **Help counts once.** If your friend puts both actions into the roll, their permissions count twice, but your Help still goes in once.
--   **It has to fit the story.** You need to be able to help from where you are, with what you've got.
+-   **Nobody pays Aura for it**, but it has to be one thing in the story, and you've got to be able to join in from where you are. Any number of friends can join one roll.
+-   **Every action in the roll gives you a split**, and lines on both count once.
+-   **Joining a friend's roll** brings your set action's steps and your action, plus any steps an order handed you. Whoever rolls gets the Aura for every top face, friends' dice included.
+-   **Your own extra action** works the same way: bring in another of your set actions as a new approach, like Fight with Sneak for a sneak attack. Put it into the same set action again and it adds 1. Extra actions come from holding your action, a Spark, or a trait or Boon that says so (see [Conflict](#s-actions)).
 
-Helping costs you the action. Stretching a friend's permission through a connection you share costs you 1 Aura instead, and it costs them nothing.
+:::example[Back at the study door]
+Vesk's at the study door with her Locks, 5 steps. Dorrie joins in, keeping the guard talking at the foot of the stairs, and adds her Talk, 4 steps. That's 9 steps from two actions. Two actions give them two splits, and going past 6 steps gives them a third, but they only need two: a d8 for the lock, a d6 to keep it quiet and a d4 to keep the guard talking.
 
-:::example[Teamwork at the table]
-Isolde needs to break the sigil that binds the Warden to the floor. On her own, *Ritualist*, *warding*, her chalk and salt, her Title and one action make 5 steps, a d10.
+The next night Vesk's held her action for a round, so she's got two, and she puts them together: her Sneak, 4 steps, and her Fight, 2. Nothing's on both, so it's 6 steps, a d12, for one knife out of the dark.
+:::
 
-Dorrie's got nothing magical and nothing that fits, but she can hold the candle and read the old inscription out while Isolde works. That's just her action, 1 step. Bram spends an action standing over them both with his shield up: *Defender*, his *guarding one person* specialization, his shield and his Title, plus the action. That's 5 steps.
+### Leading and inspiring {#leading-and-inspiring}
 
-Isolde's roll is 5 + 1 + 5 = 11 steps, a d12 and a d10. She puts both dice on the sigil, so it's advantage, and her best die counts.
+An order, a rallying song or a blessing is an action like any other. Build it from your set action, then hand its steps out to your friends however you like. They add them to their own rolls this round, and those steps don't have to fit. Steps you're handed don't give you a split. A lead can be a combo too, with friends putting their actions in before you hand it out.
+
+:::example[Bram barks orders]
+Bram barks orders from the doorway. His Talk is his second Title, *bark an order that gets obeyed* and Intimidating Presence, with the action, 4 steps. He gives 2 to Vesk and 2 to Wren, so this round Vesk's Locks is 7 steps and Wren's Fight is 7.
 :::
 
 ## Studying Something {#s-study}
 
-Most things worth fighting have more going on than they show. **Study** is an intent like any other. Use a permission that fits looking closely, like *Scholar* for an old construct, *Empathy* for a nervous witness, *Tracker* for a beast or *Investigator* for a crime scene, and roll against its Challenge. **Win, and pick one:**
+Most things worth fighting have more going on than they show. **Study** is an intent like any other. Build it from whatever fits how you're looking, usually your Study set action, and roll against the target's Challenge. Isolde's *know the history of anything old* fits an old construct, and Dorrie's *read a room in a glance* fits a nervous witness. **Win, and pick one:**
 
 -   **A hidden tag.** The GM reveals one. Ask something specific, like *what's holding it together?*, and she reveals the tag that answers it, if there is one. It's how you find weak points, and the thing a threat wants that could end the fight without a blow.
 -   **A straight answer.** Ask one question about it, and the GM answers it truthfully.
--   **Something that helps.** Look for something that could really be here: a rusted hinge, a loose board, the guard's tell, the draught that means there's a second door. If it could be here, it is. It counts as a permission for anyone in the crew for the rest of the scene.
+-   **Something that helps.** Look for something that could really be here: a rusted hinge, a loose board, the guard's tell, the draught that means there's a second door. If it could be here, it is. It counts as a permission for anyone in the crew for the rest of the scene, free on any roll it fits.
 
 Study works on people, places, stakes and whole scenes. It finds what's really there, and a [Spark](#s-spark) makes something true.
-
-## Two Rolls, Start to Finish {#two-rolls-start-to-finish}
-
-:::example[Getting through the door]
-Say you've got *Larceny* at Novice. One permission plus one action is two steps, a d4. You throw a second action at the same lock and it brings *Larceny* with it again, so that's four steps, a d8. The lock is Challenge 3. You roll a 6, and the lock rolls a 6. It's a tie, so you spend an Aura and the tumblers give.
-:::
-
-:::example[Two things at once]
-Say you're a *Marksman* at Skilled, with specializations in *throwing knives* and *longbow*, and you've got a belt of throwing knives. There are two runners and one lantern. Each action brings everything that fits: 2 (Skilled) + 1 (throwing knives) + 1 (the knives themselves) + 1 (the action) = 5 steps. With two actions that's 10 steps, a d12 and a d8.
-
-You'd rather have two even dice, so you share the steps out as a d10 and a d10. One pins the first runner's sleeve to a door, and the other knocks the lantern out of the second runner's hand. That's two intents at two targets, so they roll two defence dice.
-:::

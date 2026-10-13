@@ -5,20 +5,35 @@ order: 3
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 Your whole character fits in a few plain sentences and some numbers.
 :::
 
-You start with one Title, three Traits, three Abilities with their specializations, three Items, two Resources and three connections spread across your bonds. On top of that you've got Aura 5 and three Hurt boxes.
+Here's what you write down, step by step:
 
-In a hurry? The [Quick Build](#s-quick) at the end of this chapter gets you a character in ten minutes, and with the [six ready-made characters](#s-pregens) you just pick one and play.
+1.  **Two Titles**, each a role or a school of magic.
+2.  **A trait** for each Title.
+3.  **Three permissions** on each Title.
+4.  **Your set actions:** Fight, Move, Sneak, Study and Talk, and your own, with everything that fits them on.
+5.  **What you carry:** 3 equipment, 3 utility items and a keepsake, and a bag.
+6.  **Two attuned things**, which start at Awakened.
+7.  **Three connections**, spread across your bonds however you like.
+8.  **A few answers** that tie you to the rest of the crew.
+9.  **An Aspiration** at d2.
 
-**Those are just your starting numbers, not limits.** You earn more Titles, traits, abilities, items and connections as you play, and there's no cap on any of them. The only limit is what you can carry: six items and six resources (see [Carrying and bags](#s-carrying)).
+You start with 5 Aura, a Spark for each Title, a stride of 3 and a Hurt track of three bars. Armour starts at d2, a size bigger for each piece of plain armour you wear. Confidence starts at d2 too, and every Title makes it a size bigger, so with two Titles it's a d6.
 
-## Step 1: Title {#s-title}
+In a hurry? The [Quick Build](#s-quick) in the next chapter gets you a character in ten minutes, or you can pick one of the [six ready-made characters](#s-pregens) and play. If you've got a character in your head but not the words for it yet, start from the [Title ideas](#s-title-ideas): 14 roles and 15 schools of magic, each with permissions and traits to pick from.
 
-Your Title is your single broadest permission, and it needs a **definition**: a real, specific identity. A Title that could mean anything tells the table nothing. One that says exactly what your character's good at, and how they got that way, does all the work.
+**Those are your starting numbers, not limits.** You earn more Titles, traits, permissions and connections as you play, and there's no cap on Titles, traits or connections. A Title can't hold more than six permissions, though, and [what you carry](#s-carrying) has its limits.
+
+## Step 1: Titles {#s-title}
+
+A **Title** is who you are: a role or a school of magic, real and specific. *The best cat burglar in the city* is a Title, and so are *Captain of the Guard* and *Master of Illusions*. You start with two.
+
+One role or one school per Title. *Archmage* is too wide, so pick the school you're known for. A Title that could mean anything tells the table nothing, but one that says exactly what your character's good at, and how they got that way, does all the work.
 
 :::example
 **Written:** *Master of all trades.*\
@@ -36,43 +51,57 @@ Your Title is your single broadest permission, and it needs a **definition**: a 
 -   *The best cat burglar in the city.* Specific and boastful, and it suggests there's a rival somewhere.
 -   *The last student of a dead order.* Specific and lonely, and it hands you a whole history.
 -   *A doctor who stopped believing in medicine.* Specific and conflicted. It tells you how they think.
--   *The man who buried the king.* Specific and mysterious. The party's going to ask what happened.
+-   *Master of Illusions.* One school of magic, so the table knows straight away what you're good at.
 
 ### Three bad Titles {#three-bad-titles}
 
 -   *Adventurer.* It means nothing, because adventure's what the whole game is about.
--   *Warrior.* Is that Combat, or is it Influence? Nobody at the table knows.
+-   *Warrior.* A duellist and a sergeant in a shield wall are both warriors, and they don't do the same things. Nobody at the table knows which one you are.
 -   *Good at everything.* Nobody is, and it doesn't tell the table what you're actually good at.
 
-Your Title counts as a permission whenever it bears on the moment. You don't roll for it separately, because it's just one more green light.
+### What a Title holds {#what-a-title-holds}
 
-**Titles are the biggest growth in the game.** You earn a new one every time an Aspiration resolves. Each new Title is another step whenever it fits and another size of Confidence, and it raises the stakes for the whole table: the GM's [round budget](#s-budget) grows as the crew earns them.
+**A Title is its trait and its permissions.** It brings one trait (Step 2) and three permissions to start (Step 3), and it holds six permissions at most. There's no Catch and no Burden on a Title: Catches come from [attunement](#s-attunement) and from Hurt, and Burdens only ever come on attuned things.
 
-## Step 2: Traits (three) {#s-traits}
+**The Title counts too.** It's 1 step on any roll it fits, the same as a permission. Every Title also makes your Confidence a size bigger, and it gives you a Spark.
 
-Traits are always true and always on, and they never cost an action unless the trait says so. Abilities are things you *do*, and Traits are things you *are*.
+:::sheet[Bram's first Title]
+**Title:** *The wall that held the harbour gate.*
 
-Every trait has a **type** and an **effect**, and you write them down together.
+**Trait:** Unyielding (Passive). An extra Hurt bar.
+
+**Permissions:** *hold the line* · *guard one person* · *lift what two men can't*.
+
+**Room to grow:** three more permissions.
+:::
+
+**Titles are the biggest growth in the game.** You earn a new one every time your Aspiration climbs past d12. A Title you gain later starts with a trait and one permission, and Grow fills it from there. It counts the same way your first two do, and it raises the stakes for the whole table: the GM's [threat budget](#s-threat-budget) grows as the crew earns them.
+
+## Step 2: Traits {#s-traits}
+
+A **trait** is something always true of you, with one effect, like *Silent Step: +1 to moving unseen*. Each Title brings one, so you've got two. Permissions are things you *do*, and traits are things you *are*.
+
+Traits are free, and they don't cost an action unless the trait says so. Every trait has a **type** and an **effect**, and you write them down together.
 
 ### Trait types {#trait-types}
 
 -   **Passive.** It's always on, with no cost and no trigger.
 -   **Triggered.** It fires by itself when something specific happens, and the trait says what.
--   **Invoked.** It costs Aura to fire, as the trait says. None of the 48 below is Invoked, so write one yourself when a trait should cost something every time it fires.
+-   **Invoked.** It costs Aura to fire, as the trait says. None of the traits below is Invoked, so if you want one that costs something every time it fires, you'll have to write it yourself.
 -   **Once per scene.** It fires once per scene for free, and not again until the next one. A few say *per person*, which means once for each person in the scene.
 -   **Once per downtime.** It fires once between sessions.
 
-### The 48 traits {#the-48-traits}
+### The 49 traits {#the-48-traits}
 
-Pick three to start, or write your own in the same shape: a name, a type and one line. You can gain more in play.
+Pick one for each Title, or write your own in the same shape: a name, a type and one line. You'll pick up more in play.
 
-Some traits change a number on your sheet. *Prepared* lets you carry one more item and one more resource, *Unyielding* gives you another Hurt box, and *Light on my Feet* adds 2 to your stride (how far you move each round for free). If you write your own, say which number it changes.
+Some traits change a number on your sheet. *Unyielding* gives you another Hurt bar, *Prepared* lets you carry one more utility item, and *Light on my Feet* adds 2 to your stride (how far you move each round for free). If you write your own, say which number it changes. A trait that adds to your Hurt adds a whole bar of three boxes.
 
 #### Combat {#combat}
 
 | Trait | Type | Effect |
 | --- | --- | --- |
-| **Unyielding** | Passive | You have one extra Hurt box. |
+| **Unyielding** | Passive | You have an extra Hurt bar. |
 | **Battle Focus** | Once per scene | Gain 3 Aura. |
 | **Killer Instinct** | Triggered | Gain 1 Aura when you take a threat down. |
 | **Duelist** | Passive | +1 step when fighting one-on-one. |
@@ -80,9 +109,10 @@ Some traits change a number on your sheet. *Prepared* lets you carry one more it
 | **Never Unarmed** | Once per scene | You have a weapon on you, whatever anyone searched. No Aura, no roll. |
 | **Marksman's Eye** | Passive | +1 step with ranged weapons if you haven't moved this round. |
 | **Ready Hand** | Passive | Once per round, pulling something out of your bag costs no action. |
-| **Tenacious** | Once per scene | When you'd fill your last Hurt box, you don't. Take the blow somewhere else, or shrug it off. |
-| **Field Dressing** | Once per scene | Spend an action to clear one Hurt from someone within reach. Outside downtime, only traits like this one heal. |
-| **Healer's Hands** | Once per scene, per person | Spend an action to clear one Hurt from someone within reach. You can do it once for each person in the scene, yourself included. |
+| **Tenacious** | Once per scene | When a Hurt would make you Blaze, it doesn't. Take the blow somewhere else, or shrug it off. |
+| **Field Dressing** | Once per scene | Spend your action to clear one box on someone within reach. No roll, and no Aura. |
+| **Healer's Hands** | Once per scene, per person | Spend your action to clear one box on someone within reach. No roll, and no Aura. You can do it once for each person in the scene, yourself included. |
+| **Tend the Crew** | Once per downtime | Spend one downtime slot to heal a Catch on the Hurt track of everyone in the crew who wants it, yourself included. |
 | **Predator's Eye** | Once per scene | Ask the GM whether a threat has a weak point, and where. She answers honestly. |
 
 #### Movement {#movement}
@@ -124,7 +154,7 @@ Some traits change a number on your sheet. *Prepared* lets you carry one more it
 | **Hard to Lie To** | Once per scene | Ask the GM if someone's lying. She answers honestly. |
 | **Perfect Recall** | Once per scene | Recall a detail from a scene you were in. The GM tells you it exactly, and it counts as a permission once. |
 | **Quick Study** | Once per scene | The GM reveals one of a threat's hidden tags. No roll. |
-| **Prepared Mind** | Once per scene | Reach back to something small you prepared: a rope left on the wall, a note in the right pocket. It's there, and no Spark is spent. |
+| **Prepared Mind** | Once per scene | Reach back to something small you prepared: a rope left on the wall, a note tucked where you'd need it. It's there, and no Spark is spent. |
 | **Cool Under Pressure** | Once per scene | Your Confidence steps back up three sizes, never past full. |
 | **Deep Well** | Passive | Your Aura maximum is one higher. |
 
@@ -132,10 +162,10 @@ Some traits change a number on your sheet. *Prepared* lets you carry one more it
 
 | Trait | Type | Effect |
 | --- | --- | --- |
-| **I Have the Thing** | Once per scene | Pull out a resource you packed all along, wherever you are. Pay a purse of gold for it. |
-| **Prepared** | Passive | You carry one extra Item and one extra Resource. |
+| **I Have the Thing** | Once per scene | Pull out a utility item you packed all along, wherever you are. Cross off a purse of gold for it. |
+| **Prepared** | Passive | You can carry one more utility item. |
 | **Contingency** | Once per downtime | Write a plan down in secret. Once, in any later scene, reveal it: it was in place all along. |
-| **Cache** | Once per downtime | Retrieve an item or Resource of your choosing. |
+| **Cache** | Once per downtime | Retrieve any plain item you like, equipment or utility, from wherever you've stashed it. |
 | **Tireless** | Once per downtime | Take one extra downtime slot. |
 | **Scout Ahead** | Once per downtime | Add 3 ground tags to a scene in a place you've seen before. |
 | **Network** | Once per downtime | Secure a meeting with anyone. When you first take it, you also write 3 new connections, on bonds you already have. |
@@ -144,164 +174,181 @@ Some traits change a number on your sheet. *Prepared* lets you carry one more it
 :::example[A trait firing at the table]
 Dorrie's at a noble's table, trying to talk her way into the vault room. The noble's steward is cold and won't budge, so Dorrie's player has a look at her sheet.
 
-*Reputation Precedes Me* is passive. Has the steward heard of her? The GM says yes: she's been in the city three months and the low market knows her name. So that's +1 step from the passive. She rolls her *Influence* at Novice (1 step) + her Title (1) + the passive (1) + one action (1) = 4 steps, a d8. She rolls a 5 and the steward's d8 rolls a 3, so she's in.
+*Cold Reader* is once per scene, so she fires it and asks the GM one true thing about his mood. The GM says he's frightened of his master, and Dorrie leans on that. It's her Talk: her first Title, *read a room in a glance* and *make a lie sound like old news*, with the action, 4 steps. *Talk my way past a door* fits too, but it isn't on her Talk, so she brings it in for 1 Aura. That's 5 steps, a d10. She rolls a 6 and the steward's d8 rolls a 3, so she's in.
 
-Then she pushes her luck and asks for the key. Her d8 rolls a 2 against his 7. She fires *Silver Tongue* (it's once per scene) and the failed roll becomes a success. The steward hands her the key and never quite knows why.
+Then she pushes her luck and asks for the key. This time it's just her Talk, a d8, and it rolls a 2 against his 7. She fires *Silver Tongue* (it's once per scene too) and the failed roll becomes a success. The steward hands her the key and never quite knows why.
 :::
 
-## Step 3: Abilities (three) {#s-abilities}
+## Step 3: Permissions {#s-writing-permissions}
 
-Abilities are broad, and each one is a single line of fiction. A **Combat** ability covers fighting with weapons and fists. An **Influence** ability covers persuading, commanding and intimidating.
+A **permission** is something your character can do, and it finishes "I can…": *I can pick a mechanical lock*, *I can throw fire*. Each Title starts with three, so you've got six. It's what you lean on every time you roll, so it's worth a couple of minutes to get right. Here's how I write them.
 
-### Tier {#tier}
+### Every part of your sheet takes a different kind of word {#kinds-of-word}
 
-| Tier | Permissions | Specializations |
+| On your sheet | What it is | Example |
 | --- | --- | --- |
-| **Novice** | 1 step | 1 free |
-| **Skilled** | 2 steps | 2 free |
-| **Master** | 3 steps | 3 free |
+| Title | who you are, a name | *The best cat burglar in the city* |
+| Permission | something you do, and it finishes "I can…" | *pick a mechanical lock* |
+| Trait | something always true of you, with one effect | *Silent Step: +1 to moving unseen* |
+| Catch | trouble the GM can bring into a scene, from an attuned thing or a Hurt | *Wanted* · *cracked ribs* |
 
-### Specializations {#specializations}
+If what you've written reads like a name, like *Combat master*, it's a Title. If it's a describing word, like *Deceptive* or *Strong*, it's a trait. A permission is something you do.
 
-A specialization is a narrow focus that *stacks*. Each one adds +1 step when it applies, and they come free with the tier. Take the same one twice and it counts twice.
+### Two parts {#two-parts}
+
+Every permission has two parts, and it isn't finished until it's got both: the doing word, and the part that says how, what or where.
+
+-   *fight* and *with a war hammer* makes *fight with a war hammer*
+-   *spot* and *who's in charge* makes *spot who's in charge*
+-   *read* and *dead languages* makes *read dead languages*
+
+If it's still too wide, add where or how: *move through the wild unseen*, *fight in a shield wall*.
+
+*Deceive* on its own is only half a permission. *Deceive through actions* is finished. It covers feints and misdirection when you fight or sneak, but it won't talk you past anyone or dig up information.
+
+Two words on their own aren't enough either. *Sword combat* is two words, but it's a label, and *do magic* is two words that cover everything. A doing word plus the how, what or where fixes both.
+
+### Check the size {#check-the-size}
+
+Picture the moment you'd use it, then ask how often it'd come up. A good permission comes up a few times a session. If it'd fit every scene, it's too broad. If it'd come up once a campaign, it's too narrow.
+
+| Too broad | About right | Too narrow |
+| --- | --- | --- |
+| Combat master | *fight with a sword* | *duel Vane's captain* |
+| Deception | *lie to someone's face* | *lie to Vane's steward* |
+| Strength | *lift what two men can't* | *lift Vane's portcullis* |
+| Stealth | *move unseen* | *hide in Vane's wine cellar* |
+| Fire magic | *throw fire* | *light Vane's candles from across the room* |
+
+### Fixing the usual ones {#fixing-the-usual-ones}
+
+-   **Deceptive** is a describing word, so make it your trait (*Deceptive: +1 to lying to someone's face*), or split it into what you actually do: *make a lie sound like old news*, *pass as someone I'm not*, *keep my story straight under questions*.
+-   **Combat master** reads like a Title. As permissions it's things like *fight with a sword*, *fight two at once* and *fight in tight spaces*.
+-   **Stealth** becomes *move unseen*, *pick a pocket* or *hide in a crowd*.
+-   **Strong** becomes *lift what two men can't*, *break down doors* or *pin someone down*.
+-   **Fire magic** becomes *throw fire*, *feel every flame in a room* or *put a fire out with a word*. Magic's written as narrow as anything else.
+
+Don't worry that a narrow one won't come up. A permission counts on every roll it fits, whatever you're trying to get done, so everything Dorrie's got for talking counts whether she's getting past the gate guard, into the harbour records or out of a fight before it starts.
+
+### How they work {#how-permissions-work}
+
+-   **It's got to fit inside its Title.** *Raised by the Guild* can have *know how a lock's built*, but not *throw fire*.
+-   **Each one's worth 1 step** on any roll it fits, once a roll. Lines that sound alike both count, so you can have *move unseen* and *stick to the shadows*, but you can't take the same permission twice.
+-   **Magic needs a magic permission**, or a magic item. Without one you can't do magic at all. With one, it does what it says for free, and pushing it past that is [going beyond](#s-going-beyond), for 1 Aura.
+-   **Put each one on every set action it fits nearly every time** (that's Step 4). Anywhere else, say how it fits and pay 1 Aura to bring it in.
+-   **Took one you never use?** You're not stuck with it. In downtime you can swap any of your permissions for others that fit your Title, as long as it makes sense for your character.
+
+**Two permission slots can hold a Boon instead.** A [Boon](#s-boons) is a permanent upgrade, like an extra Hurt bar or a longer stride, and it costs two permission slots on one of your Titles. You can build one in when you make your character, or swap two permissions for one in downtime, and back again later.
+
+### The crew's, as examples {#the-crews-permissions}
+
+| Who | Title | Permissions |
+| --- | --- | --- |
+| Vesk | *The best cat burglar in the city* | *move unseen* · *run the rooftops* · *pick a mechanical lock* |
+| Bram | *The wall that held the harbour gate* | *hold the line* · *guard one person* · *lift what two men can't* |
+| Ash | *The last fire-speaker of the Ember Court* | *throw fire* · *make a threat stick* · *feel every flame in a room* |
+| Isolde | *The last student of a dead order* | *speak with the recently dead* · *draw a ward the dead can't cross* · *read the order's old script* |
+| Dorrie | *The voice that talked a duke out of his own house* | *talk my way past a door* · *read a room in a glance* · *make a lie sound like old news* |
+| Wren | *The hunter who has never lost a trail* | *follow any trail* · *move through the wild unseen* · *know a beast's habits* |
+
+### The quick test {#the-quick-test}
+
+1.  Does it finish "I can…" with a doing word, and say how, what or where?
+2.  Can you picture the moment you'd use it?
+3.  Would it come up a few times a session?
+4.  Does it fit inside your Title?
+
+Four yeses and it's a permission.
+
+### Permission ideas {#permission-ideas}
+
+A few to start from, sorted by what they're for. The [Title ideas](#s-title-ideas) have plenty more, role by role and school by school.
+
+| For | Permission ideas |
+| --- | --- |
+| Fighting | *fight with a sword* · *fight two at once* · *fight in tight spaces* · *shoot a longbow* |
+| Moving | *climb sheer walls* · *leap a wide gap* · *ride hard over rough country* |
+| Sneaking and thieving | *hide in a crowd* · *lift a purse* · *spot a trap* · *case a house* |
+| Talking | *talk my way past a guard* · *lie to someone's face* · *haggle anyone down* |
+| Knowing | *read dead languages* · *read a crime scene* · *know a poison by its smell* |
+| The wild | *follow any trail* · *live off the land* · *read the weather* |
+| Mending and making | *stitch a wound* · *mix a remedy* · *fix anything mechanical* |
+| Magic | *throw fire* · *change my face* · *step to a place I can see* · *ward a friend against harm* |
+
+## Step 4: Set actions {#s-step-set-actions}
+
+Now fill in your [set actions](#s-set-actions). **Fight**, **Move**, **Sneak**, **Study** and **Talk** are on every sheet, and you add your own for the things you do all the time, like Locks or Ward. If you'd rather keep shooting apart from swinging, split Fight into Fight and Shoot.
+
+Go down your sheet one line at a time: your two Titles, your six permissions and your traits. For each one, ask whether it'd help nearly every time you do that set action. If it would, it goes on, and it can go on as many set actions as it fits. Lines from both Titles can share one. Then count it up: 1 for the action and 1 for every line, and write the die next to it. If nothing fits a set action, it's 1 step, a d2.
 
 :::rule
-**What makes a good specialization.** It names one specific situation, place, tool or target, specific enough that everyone at the table can tell when it's in play. If it describes most of what the ability already does, it's too broad. *Hiding* is just Stealth, but *rooftops*, *crowds* and *noble houses* are specializations.
+**A set action's steps:** 1 for the action, and 1 for every line on it. Anything else that fits a roll costs 1 Aura to bring in.
 :::
 
-:::example[A Master's Combat stack, at the table]
-Say a duellist has **Combat (Master)** with all three specializations in *sword*. Here's what she gets from the ability alone (her sword and her Title would add more):
+| Bram's set action | What's on it | Steps | Die |
+| --- | --- | --- | --- |
+| Fight | his first Title, *hold the line*, his war hammer | 4 | d8 |
+| Talk | his second Title, *bark an order that gets obeyed*, Intimidating Presence | 4 | d8 |
+| Lift and carry | his first Title, *lift what two men can't* | 3 | d6 |
+| Study | *spot who's in charge* | 2 | d4 |
+| Move and Sneak | nothing fits nearly every time | 1 | d2 |
 
--   Swinging a sword: 3 (Master) + 3 (Sword ×3) = **6 steps**. With one action it's 7, a d12 and a d2.
--   Swinging anything else: 3 steps. With one action it's 4, a d8.
--   Using Combat tactically (outflanking, holding a line): 3 steps. With one action it's 4, a d8.
+*Bark an order that gets obeyed* is on Bram's second Title, *A sergeant who lost his stripes*, so that's the Title his Talk counts. His war hammer's in nearly every fight he gets into, so it goes on Fight too. He leaves *guard one person* off, because it only fits now and then, and brings it in for 1 Aura when it does.
 
-If she puts both actions into a sword swing, still counting the ability alone, it's (6 + 1) + (6 + 1) = 14 steps: a d12, a d12 and a d4. She names them before she rolls: one d12 for the strike, one to knock the Warden's spear aside, and the d4 to keep it from calling out. She rolls a 10, an 8 and a 3. The strike lands, the spear goes wide, and the call goes unanswered.
+Make a set action of your own when a few of your lines all point at one thing you do a lot, the way Bram's first Title and *lift what two men can't* make Lift and carry. You don't have to fill every set action, and you'll come back to them: as you pick items and attune things in the next two steps, put each one on every set action it fits nearly every time. How a roll starts from your set action is in [Set actions](#s-set-actions).
+
+:::example[A set action of your own]
+Two Grows later, Bram's added *fight two at once* and *fight in tight spaces* to his first Title. They don't fit every fight, so he makes a set action for the thing he does best, Hold the door: his first Title, *hold the line*, both new permissions and his hammer. In a doorway with two guards coming, that's 6 steps off one action, a d12.
 :::
 
-:::example[Same ability, two different characters]
-**Bram**, years on, has *Combat (Master)* with three specs: war hammer, shield and holding a line. He fights a Warden with his hammer, so that's 3 (Master) + 1 (war hammer) = 4 steps from the ability, and 5 with one action, a d10. When he shields Isolde behind him, the shield spec applies, so it's the same again.
+## Step 5: Items and what you carry {#s-items}
 
-**The duellist** has *Combat (Master)* with all three specs in sword. She fights the same Warden with a sword: 3 + 3 = 6 steps from the ability, and 7 with one action, a d12 and a d2. When she drops the sword and goes hand-to-hand, it's just the 3, and 4 with the action, a d8.
+**Plain items are just what they are.** A sword's a sword. It counts as a line when it fits, so it's a step on your roll, and it lets you do what a sword does. A rope lets you climb down a well, and a lantern lets you see what's at the bottom.
 
-It's the same ability at the same tier, and they fight in completely different ways. Specialization is what makes a Master feel like *this* Master.
+**Each piece of plain armour makes your Armour a size bigger.** Bram wears plate armour and carries a shield, so that's d2 stepped up twice: a d6.
+
+Plain items don't have Catches. Plate's heavy and a pistol's loud, and the story knows it, but trouble like *Loud* and *Fragile* only goes on [attuned things](#s-attunement). Things you use up, like a smoke bomb or an antidote, are utility items you cross off once they're used.
+
+### What you carry {#s-carrying}
+
+:::rule
+**What you carry:** 3 **equipment** (what you wear or wield: weapons, armour, shields), 3 **utility** items (tools and things you use up: rope, a lantern, a smoke bomb) and a **keepsake**, something that matters to your character. Your **bag** holds 10 more.
 :::
 
-### The ability list (30) {#the-ability-list-30}
+-   **Attuned things are on top of that.** You start with 2 attunement slots, and what you attune doesn't count towards what you carry. If both of yours are equipment, you've got 5 pieces of equipment.
+-   **Your bag.** Nothing in it can be used until you've pulled it out, and getting something out takes your action. Putting something away is free. What you pull out takes a place among what you carry, so if you're full, put something away first. A bag can't go inside another bag.
+-   **A purse of gold** is a utility item, about a month's wages.
+-   **Some things change a limit by one.** *Prepared* lets you carry one more utility item, and the Kit Boon and the Kit Burden make it one more item or one fewer (see [Boons and Burdens](#s-boons)).
+-   **Past the limit**, it goes in your bag or it stays behind.
+-   **When something breaks**, it's something you carry. Attuned things can't be broken.
 
-Pick three to start with, all at Novice. Or write your own in the same shape: a name, and one line for what it covers.
+:::example[A hunter's pack]
+A few sessions in, Wren's longbow and her hooded cloak are both attuned, so neither counts towards what she carries. On her belt she's got rations, a waterskin and a snare kit, which is all 3 of her utility. Her keepsake's a torn map, and her hunter's pack is her bag, with a torch bundle and a coil of rope inside: 2 of 10.
 
-**Magic works exactly the same way.** The ability is what you can do, and the specialization is the one thing you do best with it. Take *Evocation* (magic that throws raw energy) with *fire*. A Master of Evocation with fire taken three times throws fire at 3 + 3 = 6 steps from the ability. You'll find seventeen magical abilities in [Magical Abilities](#s-schools), with what each one looks like on an ordinary day, on a hard one and in a legend. Four of them are in the list below.
-
-| \# | Ability | What it covers |
-| --- | --- | --- |
-| 1 | **Combat** | Fighting with weapons and fists. |
-| 2 | **Marksman** | Fighting at range. |
-| 3 | **Defender** | Holding a line, taking hits for others. |
-| 4 | **Athlete** | Moving through the world. |
-| 5 | **Acrobat** | Precision movement. |
-| 6 | **Stealth** | Moving unseen and unheard. |
-| 7 | **Larceny** | Locks, traps, quick hands. |
-| 8 | **Disguise** | Passing as someone else. |
-| 9 | **Influence** | Persuading, commanding, intimidating. |
-| 10 | **Deception** | Lying and misdirection. |
-| 11 | **Empathy** | Reading people. |
-| 12 | **Courtier** | Navigating society. |
-| 13 | **Performer** | Captivating an audience. |
-| 14 | **Scholar** | General knowledge. |
-| 15 | **Investigator** | Solving mysteries. |
-| 16 | **Strategist** | Planning and command. |
-| 17 | **Crafter** | Making things. |
-| 18 | **Engineer** | Structures and machines. |
-| 19 | **Medic** | Treating wounds, sickness and poison. |
-| 20 | **Merchant** | The trade of things. |
-| 21 | **Survivor** | Living off the land. |
-| 22 | **Tracker** | Following things. |
-| 23 | **Rider** | Mounts and vehicles. |
-| 24 | **Navigator** | Finding the way. |
-| 25 | **Ritualist** | Performing rituals. |
-| 26 | **Medium** | The spirit world. |
-| 27 | **Hexer** | Curses and blights. |
-| 28 | **Faith** | Holy or protective magic. |
-| 29 | **Streetwise** | Navigating the underworld. |
-| 30 | **Bureaucrat** | The machinery of power. |
-
-### Specialization examples per ability {#specialization-examples-per-ability}
-
-Same test as before: a specialization names one specific situation, place, tool or target, and if it describes most of what the ability already does, it's too broad.
-
-| Ability | Specializations |
-| --- | --- |
-| **Combat** | sword, spear, axe, shield, two blades, bare hands, on horseback, tight corridors, outnumbered |
-| **Marksman** | longbow, crossbow, throwing knives, from cover, moving targets, long range, from the saddle |
-| **Defender** | shield, guarding one person, holding a doorway, against beasts, shield wall |
-| **Athlete** | climbing, swimming, sprinting, jumping gaps, heavy lifting, long marches |
-| **Acrobat** | rooftops, rigging and masts, tightropes, falling safely, tumbling past guards |
-| **Stealth** | rooftops, crowds, forests, noble houses, tailing someone, sewers |
-| **Larceny** | mechanical locks, safes, pickpocketing, traps, sleight of hand, vaults |
-| **Disguise** | servants, nobility, city watch, voices, one particular person |
-| **Influence** | crowds, nobility, soldiers, bargaining, threats, speeches |
-| **Deception** | cards and dice, forged papers, false names, lying to authority, feints |
-| **Empathy** | spotting lies, calming the frightened, reading a room, grief, children |
-| **Courtier** | royal courts, etiquette, gossip, balls and banquets, old families |
-| **Performer** | music, storytelling, taverns, street shows, drawing a crowd |
-| **Scholar** | history, religion, languages, old maps, law, forbidden texts |
-| **Investigator** | crime scenes, questioning witnesses, paper trails, poisons, forgeries |
-| **Strategist** | sieges, ambushes, small squads, sea battles, supply lines |
-| **Crafter** | blacksmithing, carpentry, tailoring, jewellery, field repairs |
-| **Engineer** | bridges, siege engines, clockwork, ships, demolition |
-| **Medic** | battlefield wounds, surgery, poisons and antidotes, herbal remedies, fevers |
-| **Merchant** | haggling, appraising, smuggled goods, spices, shipping routes |
-| **Survivor** | deserts, mountains, forests, winter, foraging, finding shelter |
-| **Tracker** | beasts, people in cities, blood trails, old tracks, in the rain |
-| **Rider** | warhorses, carriages, small boats, chases, mounted combat |
-| **Navigator** | the stars, coastlines, sewers and tunnels, city streets, storms at sea |
-| **Ritualist** | binding, warding, divination, summoning, circles and sigils |
-| **Medium** | the recently dead, hauntings, possession, old battlefields |
-| **Hexer** | curses, blighting crops, bad luck, sickness, breaking curses |
-| **Faith** | healing prayers, warding evil, holy ground, exorcism |
-| **Streetwise** | black markets, gangs, informants, safehouses, the docks |
-| **Bureaucrat** | permits, tax offices, courts, guild charters, forged paperwork |
-
-## Step 4: Items (three) {#s-items}
-
-Each item is a **permission**. Give it a **Catch** and it carries **one more**. Weapons also carry **properties**, and those come free with the weapon.
-
-You start with three, and [Carrying and bags](#s-carrying) covers how many you can hold.
+The trail runs into a cave. Her utility's full, so she puts the snare kit away in the pack, which is free, and spends her action pulling out the torch bundle. Now she can light it.
+:::
 
 ### What a written item looks like {#what-a-written-item-looks-like}
 
 :::sheet
-**Item:** Fine sword. *Permission: wield a sword with skill.*
+**Equipment:** A fine sword · a spear (*Reach, Thrown*) · worn leathers (Armour a size bigger).
 
-**Item:** A spear. *Permission: fight with a spear.* **Properties:** *Reach, Thrown.*
+**Utility:** A lantern · 50 feet of rope · a smoke bomb.
 
-**Item:** Worn leathers. *Permission: Armour (step up).* **Catch:** *Heavy.* *Second permission: Armour (step up again).*
+**Keepsake:** A letter you never sent.
 
-**Item:** A perfect set of picks. *Permission: open any lock with a mechanism.*
+**Bag:** Rations, a waterskin and a change of clothes. 3 of 10.
 
-**Item:** A travelling coat with many pockets. *Permission: conceal small objects on your person.* **Catch:** *Loud.* *Second permission: carry more than your hands allow.*
+**Attuned:** A perfect set of picks, Awakened. *Open any lock with a mechanism.*
 
-**Item:** The ring that was his. *Permission: bear a family seal.* **Catch:** *Marked.* *Second permission: pass as a Vane.*
+**Attuned:** The ring that was his, Awakened. *Bear a family seal.* **Catch:** *Marked.* *Pass as a Vane.*
 :::
 
-That's all an item is: one line, sometimes two. There are no hidden properties and no "+1 to hit". If the permission is *Armour*, it steps Armour up. If the permission is *Use rope*, you can use rope.
-
-### Rarity {#s-rarity}
-
-Most items are **common**, with one permission. A **rare** item starts with two and a **legendary** one with three, and the better the item, the more Catches there's room for. Each Catch still carries one more permission, so a legendary thing that's taken all three carries six.
-
-| Rarity | Permissions | Catches |
-| --- | --- | --- |
-| **Common** | 1 | Up to 1 (2 permissions at most) |
-| **Rare** | 2 | Up to 2 (4 permissions at most) |
-| **Legendary** | 3 | Up to 3 (6 permissions at most) |
-
-Rare and legendary things come from the story: you win them, inherit them or take them from a boss. They never come off a shelf. You'll find twenty of them, and how to write your own, in [Rare and Legendary Things](#s-rare).
+That's all an item is: one line, and for an attuned thing, its permissions. There aren't any hidden properties, and there's no "+1 to hit". A plain sword counts 1 when it fits, a piece of plain armour makes your Armour a size bigger, and rope lets you use rope.
 
 ### Weapons and their properties {#s-weapon-props}
 
-A weapon's permission gives its step, like any item. Its **properties** say what it lets you do that bare hands can't. They're what make a spear a spear, and they come free with the weapon, so you don't spend a Catch or a permission on them.
+A weapon's a plain item, so it counts 1 on a roll it fits, like anything else. Its **properties** say what it lets you do that bare hands can't. They're what make a spear a spear, and they come free with the weapon.
 
 | Property | What it does |
 | --- | --- |
@@ -343,9 +390,11 @@ A weapon's permission gives its step, like any item. Its **properties** say what
 | Crossbow | Long, Piercing, Reload, Two-Handed |
 | Improvised weapon | Whatever the fiction gives it. A chair leg is a club, and a broken bottle is a knife that isn't Concealed. |
 
-How far a bow or a thrown weapon reaches is the story's call, and the properties say what kind of distance it likes. Write them in brackets after the weapon. If your world has pistols or stranger things, build them the same way: a pistol is *Ranged, Piercing, Reload* with the Catch *Loud* already built in. There's more on using all of this in [Tactical Play](#s-weapons-tactics).
+How far a bow or a thrown weapon reaches is the story's call, and the properties say what kind of distance it likes. Write them in brackets after the weapon. If your world has pistols or stranger things, build them the same way: a pistol is *Ranged, Piercing, Reload*, and everyone nearby hears it go off. There's more on using all of this in [Tactical Play](#s-weapons-tactics).
 
 ### The item list {#the-item-list}
+
+Weapons, armour and anything else you wear or wield are equipment. Tools and things you use up are utility items. A signature thing often makes the best keepsake, or the best thing to attune.
 
 | Group | Examples |
 | --- | --- |
@@ -356,64 +405,18 @@ How far a bow or a thrown weapon reaches is the story's call, and the properties
 | **Personal** | Journal · quill and ink · set of dice · deck of cards · musical instrument · well-loved book · bedroll · backpack · bag · sling bag |
 | **Signature** | Your mother's blade · the coat you took off a dead man · the ring that was his · a book you never finished · a letter you never sent · a knife with your name on it · the mask from the job |
 
-### Catches (12) {#catches-12}
+### Things you use up: 20 {#consumables-20}
 
-A Catch is a downside. Give an item a Catch and it carries one more permission. When the GM turns a Catch on you hard enough to change the scene, that's [trouble](#s-trouble), and it pays you a Spark.
+Each of these is a utility item, and you cross it off once it's used. You can get more in play, even mid-scene, if there's someone to get it from: a purse of gold, a favour called in, or a promise made. Deep in a vault with nobody to buy from, only a trait like *I Have the Thing* helps, because you'd packed it all along.
 
-| \# | Catch | What it means |
-| --- | --- | --- |
-| 1 | **Loud** | Everyone knows where you are. |
-| 2 | **Heavy** | Reduces your stride by 1 unit. Two heavies and you're at 1. Three and you're at 0. |
-| 3 | **Fragile** | When a consequence breaks one of your items, it's this one. If you have several fragile items, roll to see which. |
-| 4 | **Fussy** | 3 charges. Each use of its permission spends one. A downtime slot of upkeep refills them. |
-| 5 | **Marked** | You can be identified by the item from a distance. |
-| 6 | **Cursed** | Once per scene, the GM can put a condition on you through it, at a d6. Agree which condition when you get the item. |
-| 7 | **Wanted** | Someone else wants it, and knows you have it. The GM will use that. |
-| 8 | **Slow** | Using its permission takes two actions, not one. |
-| 9 | **Conspicuous** | Can't be hidden. |
-| 10 | **Bright** | Can't be used in darkness. |
-| 11 | **Narrow** | Only useful in specific circumstances (aquatic, urban, indoors). |
-| 12 | **Delicate** | A 1 on any die where it's used makes the item dormant until the end of the scene. |
-
-:::example[A Catch firing at the table]
-Isolde carries *a fine coat with silver thread*. Its permission is *look like you belong*, its Catch is *Conspicuous* (it can't be hidden), and its second permission is *Confidence*.
-
-When she wears it at court, her Confidence is a size bigger for it. When she wears it on the street, guards notice her. So the coat cuts both ways: it opens the noble door and closes the back-alley one.
-
-Later she wants to slip past a guard post, and the coat's conspicuous. She has to leave it behind, or stretch: 1 Aura to have the fiction support it (the fog, the crowd, the flickering lantern), and the Catch keeps quiet this time.
-:::
-
-## Step 5: Resources (two) {#s-resources}
-
-A Resource is a **small item you carry**, with one specific use. There are two kinds: **keepsakes** (permanent, and always available) and **consumables** (one use, then they're gone).
-
-You start with two. You can get more in play, even mid-scene, if there's someone to get it from: **a purse of gold**, a favour called in, or a promise made. Deep in a vault with nobody to buy from, only a trait like *I Have the Thing* helps, because you packed it all along.
-
-### Keepsakes: 10 {#keepsakes-10}
-
-| Resource | Effect |
+| Item | What it does |
 | --- | --- |
-| **Signet ring** | You're treated as a member of a specific noble house. Once per downtime, one contact will meet with you. |
-| **Letter of introduction** | You're received as a friend by anyone named in it. |
-| **Silver locket** | You can't be Charmed while wearing it. |
-| **Old letter** | Once per arc, ask the GM one true question about its writer. |
-| **Family seal** | You may claim to be from a specific family. |
-| **Torn map** | You know the way to one specific place. |
-| **Lock of hair** | Once a session, you know which way its owner is. |
-| **Child's toy** | Gain 1 Aura once per scene when you look at it. |
-| **Coin from home** | You can't get lost while holding it. |
-| **Wedding band** | You're presumed married in social settings. |
-
-### Consumables: 20 {#consumables-20}
-
-| Resource | Effect |
-| --- | --- |
-| **Medical kit** | Break *Bleeding*, *Burning* or *Poisoned* on someone, no roll. Or, in downtime, heal one Hurt without spending a slot. |
+| **Medical kit** | Break *Bleeding*, *Burning* or *Poisoned* on someone, no roll. Or use it for a quick heal that costs no Aura: clear one box on someone, no roll. |
 | **Antidote** | Break *Poisoned*, no roll. Nothing can poison you for the rest of the scene. |
 | **Acid vial** | Strip one protective tag (*Armoured*, *Warded*, *Fortified*) from a threat, no roll. |
 | **Smoke bomb** | A burst of smoke one square out from where it lands, for one round. Anything aimed into it or out of it is one step less. |
 | **Caltrops** | Cover two squares. Anyone who crosses them is *Staggered d6*. In a chase, the Pursuer steps down one. |
-| **Purse of gold** | +1 step to one social roll, or buy something ordinary. |
+| **Purse of gold** | +1 step to one social roll, or buy something ordinary. About a month's wages. |
 | **Silver mirror** | Reveal one illusion or hidden thing in sight. |
 | **Salt packet** | Ward a threshold. Supernatural things can't cross for one scene. |
 | **Whetstone** | Sharpen one blade. Its next attack is *Piercing*. |
@@ -429,41 +432,93 @@ You start with two. You can get more in play, even mid-scene, if there's someone
 | **Waterskin** | One day of water. |
 | **Fine bottle of wine** | You're welcome at any table for one scene. |
 
-:::example[A resource used at the table]
+:::example[A smoke bomb at the table]
 The corridor's filling up with Iron Wardens. Vesk pulls a *smoke bomb* from her belt: a burst of smoke one square out, for one round.
 
 She throws it and the GM marks the smoke on the map. Everything the Wardens aim into it comes in a step weaker. Bram drags Isolde out of the corridor, Vesk follows, and the smoke bomb gets crossed off her sheet.
 
-Later in the same fight the smoke's gone and Vesk needs another. There's nobody in a vault to buy one from, but she's got *I Have the Thing*. She fires it (it's once per scene) and crosses off her purse of gold. She packed a second smoke bomb all along.
+Later in the same fight the smoke's gone and Vesk could use another, but there's nobody in a vault to buy one from. If she had *I Have the Thing*, she'd cross off her purse of gold and pull out a second smoke bomb she'd packed all along.
 :::
 
-### Carrying and bags {#s-carrying}
+### Keepsakes: 10 {#keepsakes-10}
 
-You start with **three items** and **two resources**, and you pick up more in play. In hand, you can carry up to **six items** and **six resources**.
+Your **keepsake** is something that matters to your character, like a ring or an old letter. It doesn't have a rule of its own yet. It does what it plainly would in the story, and it tells the table something about who you are.
 
--   **Some things change a limit by one.** The trait *Prepared* raises both. A coat with many pockets, or a Scar like *I can carry more than I should*, raises one. A Catch you write can lower one.
--   **Past the limit**, it goes in a bag or it stays behind.
+| Keepsake | In the story |
+| --- | --- |
+| **Signet ring** | You're treated as a member of a specific noble house. |
+| **Letter of introduction** | You're received as a friend by anyone named in it. |
+| **Silver locket** | A face inside, or a curl of hair, and it's up to you whose. |
+| **Old letter** | In the hand of someone you've lost, or someone you're still looking for. |
+| **Family seal** | You can prove you're from a specific family, and seal a letter in its name. |
+| **Torn map** | Part of the way to one specific place. |
+| **Lock of hair** | Someone's, kept close. |
+| **Child's toy** | From a child you knew, or the one you were. |
+| **Coin from home** | A reminder of where you're from. |
+| **Wedding band** | You're taken for married in social settings. |
 
-:::rule
-**A bag is an item.** It counts as one of your items, and it's got **10 pockets** of its own.
+## Step 6: Attunement {#s-attunement}
 
--   An item inside fills **2 pockets**, and a resource fills **1**.
--   Nothing in the bag can be used until you **pull it out**, and pulling something out **costs an action**. It needs room in your hands.
--   Putting something away is free.
--   A bag can't go inside another bag.
+When you **attune** something, it gets permissions of its own, and it'll grow with you. You start with **2 attunement slots**. What you attune starts at **Awakened**, with one permission, and you can give it its **Catch** now for a second.
+
+Attuned things are on top of what you carry, so they don't take up your equipment or your utility. They're magic, and they can't be broken.
+
+**An attuned thing counts through its permissions.** Each of its permissions that fits is a line, the same as a permission on a Title, and the thing doesn't count again on top. Its permissions go on your set actions like any other line. Vesk's picks are Awakened with *open any lock with a mechanism*, so they're 1 step on her Locks. A magic permission on an attuned thing lets you do that magic: Ash's ember stone lets her *call fire without a word or a gesture*.
+
+Write its permissions the way you'd write any other, a doing word and how, what or where, and make them things the thing itself does. A set of picks opens locks.
+
+### Three stages {#attunement-stages}
+
+An attuned thing grows in three stages. **Each new stage needs a material**, found in the story or bought, and **every new permission takes a downtime slot**. Each stage can take on more, for a price:
+
+| Stage | Permissions | It can add | In all |
+| --- | --- | --- | --- |
+| Awakened | 1 | 1 more with a Catch | 2 |
+| Tempered | 2 | 2 more with a Burden (the Catch becomes the Burden) | 4 |
+| Perfected | 3 | 3 more with a Burden and a Catch | 6 |
+
+That's six permissions at most, with one Catch and one Burden. You can't take a Burden before Tempered, so there aren't any when you make your character. What's a material? Whatever makes sense for the thing, like steel from a vault door your picks have beaten.
+
+A **Burden** is a permanent cost from the list in [Boons and Burdens](#s-boons), like *Bad Knee* (stride −2). It's always on, and it's worth two permissions on that thing, or a Boon for you instead.
+
+**You can hand an attuned thing to a friend** with a free attunement slot. Its permissions, its Catch and its Burden go with it, and so does a Boon its Burden paid for.
+
+A summoner's attunement holds souls the way an item holds permissions, on the same three stages (see [Summoning](#s-summoning)). Some attuned things come out of the story already Tempered or Perfected, and you'll find them, and how to write your own, in [Attuned things from the story](#s-rare).
+
+### Catch ideas: 12 {#catches-12}
+
+A **Catch** is trouble that comes with an attuned thing. (The other Catches on your sheet come from Hurt.) It has to be something the GM can bring into a scene, and if she'd never use it, it isn't a Catch. You can let it bite as often as you like for 1 Aura, as long as it brings real trouble every time, and 1 Aura on your own roll keeps it quiet (see [Getting it back](#getting-it-back)). When the GM turns it on you herself, that's [trouble](#s-trouble), and she offers you a Spark.
+
+| \# | Catch | What it means |
+| --- | --- | --- |
+| 1 | **Loud** | Everyone knows where you are. |
+| 2 | **Heavy** | Your stride's 1 unit shorter for each thing you've got that's *Heavy*. |
+| 3 | **Fragile** | It can't break, but when a consequence breaks something you carry, the GM can name this instead. It goes dormant (its permissions don't count) until you mend it in downtime. |
+| 4 | **Fussy** | 3 charges. Each use of its permissions spends one. A downtime slot of upkeep refills them. |
+| 5 | **Marked** | You can be identified by it from a distance. |
+| 6 | **Cursed** | Once per scene, the GM can put a condition on you through it, at a d6. Agree which condition when you attune it. |
+| 7 | **Wanted** | Someone else wants it, and knows you have it. The GM will use that. |
+| 8 | **Slow** | Using its permissions takes two of your actions, not one: hold your action a round first, or use an extra action. |
+| 9 | **Conspicuous** | Can't be hidden. |
+| 10 | **Bright** | Can't be used in darkness. |
+| 11 | **Narrow** | Only useful in specific circumstances (aquatic, urban, indoors). |
+| 12 | **Delicate** | A 1 on any die where it's used makes it dormant until the end of the scene. |
+
+:::example[Wren's longbow]
+Wren attunes her longbow when she makes her character. It's Awakened with one permission, *shoot a longbow*. She gives it its Catch now, *Wanted* (the Duke's foresters want it back, and they know she's got it), and that buys it a second permission: *hit anything I can see*. Both go on her Fight, with her first Title and Marksman's Eye, so with the action that's 5 steps, a d10.
+
+In the market at Thornby, Wren's player lets *Wanted* bite: one of the foresters knows the bow, and the GM has him follow her out of the market with two friends. Wren takes 1 Aura.
+
+If she wants the bow Tempered one day, she'll need a material first, and the string off the Duke's own bow would do nicely. After that, every new permission on it takes a downtime slot.
 :::
 
-:::example[A hunter's pack]
-A few sessions in, Wren's carrying a longbow, a hooded cloak and a hunter's pack, so that's three items in hand. Inside the pack she's got a snare kit (2 pockets), a waterskin and a torch bundle (1 each). That's 4 of 10 pockets used.
+## Step 7: Aura, Sparks, Hurt and Bonds {#s-bonds}
 
-The trail runs into a cave. Wren spends an action to pull out the torch bundle, and now it's in her hand and she can light it.
-:::
+Your [Aura](#s-aura) maximum is 5, unless something on your sheet changes it, and you're full at the start of every scene. You get a [Spark](#s-spark) for each Title, so two to start, and they all come back every downtime. Your stride is 3: that's how far you move each round without spending an action (see [Movement and Range](#s-movement)). Armour and Confidence both start at d2, and you'll find how they grow at the end of this chapter.
 
-## Step 6: Aura, Hurt, and Bonds {#s-bonds}
+Your **Hurt** track is three bars of three boxes, nine in all, and it's one track for body and mind. When you fill a bar, you write a Catch in it, an injury like *cracked ribs* or *can't stand the dark*, and if you take a Hurt with every box full, you Blaze. How Hurt fills, clears and heals is in [Hurt, Blaze and Scars](#s-blaze) and [Healing](#s-healing).
 
-Your Aura maximum is 5, unless something on your sheet changes it. You get 3 Hurt boxes, and Armour and Confidence both start at d2. Your stride is 3: that's how far you move each round without spending an action (see [Movement and Range](#s-movement)).
-
-A **bond** is a person who matters to your character. A **connection** is one sentence that's always true between you, like a debt, a rescue, a secret or a shared past. You start with **three connections**, spread however you like: three people with one each, or one person with all three. Share a connection with an ally and you can stretch one of their permissions into your roll for 1 Aura. Connections are also a good place to spend your [Spark](#s-spark): call on someone when you need them most. And every connection is a hook the GM can pull.
+A **bond** is a person who matters to your character. A **connection** is one sentence that's always true between you, like a debt, a rescue, a secret or a shared past. You start with **three connections**, spread however you like: three people with one each, or one person with all three. Share a connection with a friend and you can bring one of their permissions into your roll for 1 Aura. Connections are also a good place to spend a Spark: call on someone when you need them most. And every connection is a hook the GM can pull.
 
 :::example
 *Dorrie: we have pulled a dozen jobs. I trust her with my life.*
@@ -474,12 +529,12 @@ A **bond** is a person who matters to your character. A **connection** is one se
 :::
 
 -   **Add more in play.** When the story makes something new true between you, write it down. There's no cap.
--   **Three or more on one bond** makes your Confidence one size bigger, and every bond with three live connections counts.
+-   **Three live connections on one bond** make your Confidence a size bigger, and every bond with three counts.
 -   **Burn a connection** when the story breaks it, like a betrayal, a death or a debt paid off. Cross it out rather than erasing it. It stops counting, but it stays on your sheet as history. If the story mends it, restore it.
 
 You can also write one connection as a **debt**, and you earn a fourth connection in return. A debt is a connection with a hook: someone else holds it, they can call it in, and you don't get to say no.
 
-## Step 7: Connect {#s-connect}
+## Step 8: Connect {#s-connect}
 
 Before you play, tie the crew together. Go round the table with these ten questions. Everyone answers **at least two**, and names another player's character in each answer. If the table's enjoying it, answer all ten.
 
@@ -496,28 +551,28 @@ Before you play, tie the crew together. Go round the table with these ten questi
 
 A good answer can become a connection: if it's true between you and another character, write it on your bonds too. The GM uses the rest to put you in each other's way.
 
-## Step 8: Aspiration {#s-aspiration}
+## Step 9: Aspiration {#s-aspiration}
 
-Your **Aspiration** is one thing you want. It starts at **d2** and climbs as you chase it, so the first steps come easy and the last ones are hard work.
+Your **Aspiration** is one thing you want. It starts at **d2** and climbs as you chase it, so the first steps come easy and the last ones are hard work. The crew writes its [Party Goal](#s-goal) at d2 as well, and it climbs the same way.
 
 -   **Chase it.** When something you do really moves it along, roll against its die, built from whatever you're doing about it. Beat it and it climbs one. In a scene, that's an action aimed at it, when the GM says it's within reach (usually once or twice a session). In downtime, it's a slot.
 -   **One step a roll.** However many dice you put on it, one roll moves it one step at most. More dice is advantage, and your best die counts.
 -   **A setback** steps it back down one, never below d2.
 
-When it climbs past d12, it **resolves**: you gain a new Title, and write a new Aspiration at d2.
+When it climbs past d12, it **resolves**: you gain a new Title, with a trait and one permission, and write a new Aspiration at d2.
 
 Your Aspiration is also somewhere a consequence can land. When a blow or a failure costs you, you can step your Aspiration back down instead of taking it on your Armour or your body, so the fight costs you your dream instead of your skin. You can't do it while it's at d2.
 
 :::example[Vesk's Aspiration, session by session]
-**Session 1:** *Own the score of a lifetime*, at d2. She's casing a small job in the Low Market when the GM says it's within reach. *Larceny*, *mechanical locks*, her picks, her Title and the action make five steps, a d10. She rolls 7 against the Aspiration's d2, which rolls a 1, and it climbs to d4.
+**Session 1:** *Own the score of a lifetime*, at d2. She's cracking a merchant's strongbox in the Low Market when the GM says it's within reach. That's her Locks, 5 steps, a d10. She rolls 7 against the Aspiration's d2, which rolls a 1, and it climbs to d4.
 
 **Downtime:** she spends a slot on it, the same five steps. 3 against the d4's 2, so it's d6.
 
 **Session 2:** She gets run out of a warehouse. That's a setback, so it's back to d4.
 
-**Sessions 3 to 5:** She spends a slot every downtime and pulls one good job, and it climbs to d12. The last two steps took her a few goes, because a d10 against a d10 is close to a coin toss.
+**Sessions 3 to 6:** She spends a slot on it most downtimes and pulls one good job, and it climbs to d12. The last two steps took her a few goes, because a d10 against a d10 is close to a coin toss.
 
-**Session 7:** She robs the Vane Estate. Her last roll is at the vault itself, her d10 against the Aspiration's d12. It's 9 against 9, and she pays 1 Aura to take the tie. It climbs past d12 and resolves. Vesk writes a new Title, *The woman who has never been seen*, and a new Aspiration, *Find out who the fence really is.* That one starts at d2.
+**Session 7:** She robs the Vane Estate. Her last roll is at the vault itself, her d10 against the Aspiration's d12. It's 9 against 9, and she pays 1 Aura to take the tie. It climbs past d12 and resolves. Vesk writes a new Title, *The woman who has never been seen*, with a trait and one permission, and a new Aspiration, *Find out who the fence really is.* That one starts at d2.
 :::
 
 ## Confidence {#s-confidence}
@@ -526,15 +581,14 @@ Confidence is your mental defence against threats, persuasion, fear, pressure an
 
 ### Starting Confidence {#starting-confidence}
 
-Confidence starts at **d2**, and it steps up with:
+Confidence starts at **d2**, and it's a size bigger for:
 
--   **Gaining a Title.** +1 step per Title, so one Title is d4, two is d6, three is d8, four is d10 and five is d12.
--   **Wearing the right clothes.** +1 step when the outfit fits the scene.
--   **Surrounding yourself with the right circle.** +1 step per bond that has three or more live connections.
--   **Gear that says so.** An item whose permission is Confidence steps it up, just as Armour gear steps up Armour.
--   **A trait that says so,** like *Iron Will*.
+-   **Each Title.** With two Titles you're on a d6. Three is d8, four is d10 and five is d12.
+-   **The right clothes.** A size bigger when what you're wearing fits the scene.
+-   **The right circle.** A size bigger for each bond with three live connections.
+-   **Gear or a trait that says so,** like *Iron Will*, and the Confidence Boon.
 
-Past d12 it gets a second die, like Armour does (see [Letting It Ride](#s-defending)).
+Past d12 it gets a second die, like Armour does (see [Past d12](#s-past-d12)).
 
 ### Recovering Confidence {#recovering-confidence}
 
@@ -545,40 +599,83 @@ All of it comes back when:
 -   **You keep a promise** you made to yourself, and prove it. Once a session.
 
 :::example[Confidence stepping up and recovering at the table]
-Vesk starts with d2 Confidence. She's got one Title, *The best cat burglar in the city*, so that's d2 + 1 step = d4.
+Vesk's Confidence starts at d2, and her two Titles make it a d6.
 
-Session 5: she wears a servant's uniform into a noble house. The outfit fits the scene, so it's d4 + 1 = d6 for the scene.
+Session 5: she wears a servant's uniform into a noble house. It fits the scene, so she's on a d8 for the scene.
 
-Session 7: she gains a second Title (*The woman who has never been seen*). That's d4 + 1 = d6.
+Session 7: she gains a third Title, *The woman who has never been seen*. That's a d8 on its own now, and a d10 when her clothes fit the scene.
 
-Session 8: she's dragged before Vane's steward and threatened with the Guild. The threat lands: 5 against her Confidence d6's 3. The GM names her Confidence and she takes it, so it steps down from d6 to d4.
+Session 8: she's dragged before Vane's steward and threatened with the Guild. When the threat lands, his d8 comes up 5 and her Confidence rolls a 3. The GM names her Confidence and she takes it, so it steps down from d8 to d6.
 
-Downtime: she spends the whole week walking the docks at night, remembering who she used to be. That's both slots, and her Confidence is back to d6.
+Downtime: she spends the whole week walking the docks at night, remembering who she used to be. That's both slots, and her Confidence is back to d8.
 :::
 
 ## Armour {#s-armour}
 
-Armour is your physical defence, and it comes from your gear. It starts at **d2**, and it only steps up when you carry something that says it does. Past d12 it gets a second die (see [Letting It Ride](#s-defending)).
+Armour is your physical defence against blows, blades and teeth, and it comes from your gear. It starts at **d2**, and it's a size bigger for each piece of plain armour you wear, and for gear or Boons that say so. Past d12 it gets a second die (see [Past d12](#s-past-d12)).
 
 **Stepping your Armour down is one of the costs a blow can have.** The GM names the cost, and you can offer another that fits and costs about as much. A condition that says so, like *Poisoned*, steps it down too.
 
 ### Recovering Armour {#recovering-armour}
 
-You can step Armour back up to its full value with:
+You can step Armour back up to its full size with:
 
--   **A purse of gold**, spent wherever the fiction gives you the chance, like a smith, an armoury or a market.
+-   **A purse of gold**, spent wherever the story gives you the chance, like a smith, an armoury or a market.
 -   **A downtime slot** spent on upkeep.
 
 :::example[Armour at the table]
-Bram carries *plate armour*, with the permission *Armour (step up from d2 to d4)*. He also carries a *shield*, with the permission *Armour (step up again to d6)*. So his base Armour in play is d6.
+Bram wears plate armour and carries a shield. That's two pieces of plain armour, so his Armour's d2 stepped up twice: a d6.
 
-Round 1: a Warden's spear beats his d6 (it rolls a 6 against his 4). The GM names his Armour, and it steps down from d6 to d4.
+Round 1: a Warden's spear lands. Bram's Armour roll for the round is a 4, and the spear comes up 6. The GM names his Armour, and it steps down from d6 to d4.
 
 Round 3: another spear beats him, and the GM names a Hurt. Bram offers his plate instead, so his Armour steps down from d4 to d2.
 
 Round 4: a hit lands. His Armour is at d2 and can't step any lower, so the GM names a Hurt. Bram's Aspiration has climbed to a d4, so he offers that instead and keeps his body whole, and it steps back down to d2.
 
-Downtime: he spends a slot at the smithy, and his Armour goes back to its starting d6.
+Downtime: he spends a slot at the smithy, and his Armour goes back to its full d6.
+:::
+
+## Boons and Burdens {#s-boons}
+
+A **Boon** is a permanent upgrade, like an extra Hurt bar or a longer stride. It costs **two permission slots on one of your Titles**, and you can swap it back for permissions in downtime. You can build one in when you make your character, so two of that Title's three starting permissions are a Boon instead, or you can swap two permissions for one in downtime.
+
+A **Burden** is a permanent cost, and it only ever comes on an attuned thing. Titles never take them. A Burden's worth two permissions on that thing, or a Boon for you, and a thing can't take one before it's Tempered (see [Attunement](#s-attunement)).
+
+-   **Give them names from the story:** *Iron Lungs* (+1 bar), *Bad Knee* (stride −2).
+-   **A Burden is always on**, and it's got to cost you something you actually use. Nothing goes below its smallest size, so there's no Armour Burden on a d2.
+-   **You can take the same Boon more than once.**
+
+| Lever | Boon | Burden |
+| --- | --- | --- |
+| Hurt | +1 bar | −1 bar |
+| Heals on you | your heal die is a size smaller | your heal die is a size bigger |
+| Regen | at the end of each round, roll your heal die, and a top face clears a box | when someone heals you, your heal die is rolled twice and the higher counts |
+| Hurt Catches in downtime | one heals free each downtime | yours only heal with someone else's downtime slot |
+| Aura | +2 to your maximum | −2 to your maximum |
+| Stride | +2 | −2 |
+| Getting around | climb, swim or cross difficult ground at full stride (one of them each time you take it) | difficult ground costs you 3 a square |
+| Extra action | one extra action a scene | you say your action before the GM telegraphs, and you're stuck with it |
+| Splits | +1 split | −1 split |
+| Ties | you win every tie, attacking too, without paying Aura | you lose every tie, even defending, and can't pay to win one |
+| Going beyond | once a scene, go beyond for free | none |
+| Armour | a size bigger | a size smaller |
+| Confidence | a size bigger | a size smaller |
+| Conditions | one condition (say which) can't touch you | one condition doesn't fade on you, and stays until someone breaks it with an action |
+| Defend | pull from two enemies | you can't Defend |
+| Take the hit | spend 1 Aura to roll your Armour when you take the hit | taking the hit costs you 1 Aura |
+| Summons | +1 to your summoning Aura bonus each time (+3, then +4) | none |
+| Sparks | +1 Spark | −1 Spark |
+| Kit | carry one more item | carry one fewer item |
+
+**Boons that get you Aura back.** Each of these is its own Boon, and there's no Burden to go with it:
+
+-   **Beat a threat:** take 1 Aura whenever a threat of any kind falls to you, whether it's a monster, a locked door, a puzzle or an argument.
+-   **In your element:** start a scene somewhere your Title belongs and take 1 Aura, even past your maximum.
+
+Some levers aren't on the menu, and that's on purpose: bringing things in, leading, downtime slots and bonds. Three summoning Boons make your summoning Aura bonus +5 (see [Summoning](#s-summoning)). For the Defend and Take the hit levers, see [Defend](#s-defend) and [Taking the hit](#s-take-the-hit).
+
+:::example[Building a Boon in]
+Say you're making a sellsword, and you want to soak up more punishment than anyone. Your first Title, *The sword the Margrave couldn't buy*, takes *fight with a sword*, and its other two starting slots go on the Hurt Boon. You call it *Iron Lungs*. You start with four Hurt bars, one permission on that Title, and three more slots on it to fill as you grow.
 :::
 
 ## A Complete Character, Start to Finish {#a-complete-character-start-to-finish}
@@ -587,38 +684,60 @@ Downtime: he spends a slot at the smithy, and his Armour goes back to its starti
 Here's what it looks like to build a character, and every choice here is a real one.
 :::
 
-### Step 1: Title {#step-1-title}
+### Step 1: Titles {#step-1-title}
 
 The player wants a thief, so he starts to write *Thief*. The GM pushes back: "The best at what? A thief who does what?" He has a think and comes up with *The best cat burglar in the city.*
 
-### Step 2: Traits (three) {#step-2-traits-three}
+For the second Title he asks himself where she learned it all, and writes *Raised by the Guild*. It's a real role, and it hands the GM a whole Guild to play with.
 
-He picks:
+### Step 2: Traits {#step-2-traits-three}
 
--   **Light on my Feet** (Passive). +2 units of movement.
--   **Silent Step** (Passive). Movement makes no sound, and you get +1 step to moving unseen.
--   **I Have the Thing** (Once per scene). Pull out a resource you packed all along. Pay a purse of gold.
+One for each Title:
 
-### Step 3: Abilities (three) {#step-3-abilities-three}
+-   **Silent Step** (Passive), on *The best cat burglar in the city*. Her movement makes no sound, and she gets +1 step to moving unseen.
+-   **Light on my Feet** (Passive), on *Raised by the Guild*. +2 units of movement, so her stride's 5.
 
-He wants a thief rather than a fighter, so he picks:
+### Step 3: Permissions {#step-3-permissions}
 
--   **Larceny** at Novice, with 1 spec: *mechanical locks*. That's 1 step for the ability, and +1 when locks are involved.
--   **Stealth** at Novice, with 1 spec: *rooftops*. That's 1 step, and +1 up on the rooftops.
--   **Combat** at Novice, with 1 spec: *dagger*. That's 1 step, and +1 with a dagger.
+He writes *Stealth* first, and the GM points at the size table: that'd fit every scene. *Move unseen* is about right. He ends up with three on each Title:
 
-### Step 4: Items (three) {#step-4-items-three}
+-   *The best cat burglar in the city:* *move unseen*, *run the rooftops* and *pick a mechanical lock*.
+-   *Raised by the Guild:* *know how a lock's built*, *fight dirty with a knife* and *find a buyer for anything*.
 
--   **A perfect set of picks.** Permission: *open any lock with a mechanism*.
--   **Worn leathers.** Permission: *Armour (step up)*. Catch: *Heavy*, which gives it a second permission: *Armour (step up again)*. So that's Armour two sizes up, but she moves 1 unit slower.
--   **A grappling line.** Permission: *climb or swing anywhere you can throw a hook*.
+Every one passes the quick test. *Know how a lock's built* is all about locks, but it's the kind of thing you learn growing up in the Guild, so it fits inside her second Title.
 
-### Step 5: Resources (two) {#step-5-resources-two}
+### Step 4: Set actions {#step-4-set-actions}
 
--   **Purse of gold.** +1 step to a social roll, or buy something ordinary.
--   **Smoke bomb.** A burst of smoke one square out, for one round.
+He fills in her set actions with what she's got so far:
 
-### Step 6: Bonds {#step-6-bonds}
+| Set action | What's on it | Steps | Die |
+| --- | --- | --- | --- |
+| Sneak | her first Title, *move unseen*, Silent Step | 4 | d8 |
+| Move | her first Title, *run the rooftops* | 3 | d6 |
+| Locks | her first Title, *pick a mechanical lock*, *know how a lock's built* | 4 | d8 |
+| Fight | *fight dirty with a knife* | 2 | d4 |
+| Study | nothing fits nearly every time | 1 | d2 |
+| Talk | nothing fits nearly every time | 1 | d2 |
+
+Locks is her own, for the thing she does all the time, and *know how a lock's built* sits on it beside her first Title's lines. Her second Title and *find a buyer for anything* don't fit any of these nearly every time, so they stay off, and when one of them fits she'll bring it in for 1 Aura. Move and Locks grow in Step 6.
+
+### Step 5: What she carries {#step-4-items-three}
+
+-   **Equipment:** worn leathers. That's one piece of plain armour, so her Armour's a d4, and she's still got two equipment slots free.
+-   **Utility:** a purse of gold and a smoke bomb, and there's room for one more.
+-   **Keepsake:** the first coin she ever stole.
+-   **Bag:** empty, and ready for whatever she lifts.
+
+### Step 6: Attunement {#step-6-attunement}
+
+She attunes the two things she'd never sell. Both start at Awakened, with one permission each:
+
+-   **A perfect set of picks:** *open any lock with a mechanism*.
+-   **A grappling line:** *climb or swing anywhere you can throw a hook*.
+
+He could give each one its Catch now for a second permission, but there's no trouble he wants on them yet, so he leaves it. The picks go on Locks, which makes it 5 steps, a d10. The line goes on Move: 4 steps, a d8. Neither counts towards what she carries, and neither can be broken.
+
+### Step 7: Bonds {#step-6-bonds}
 
 He writes three connections: one each with two of the crew, and one with someone outside it. The last one's a debt, so he's got room for a fourth when he thinks of one.
 
@@ -626,7 +745,7 @@ He writes three connections: one each with two of the crew, and one with someone
 -   *Bram: he once carried me out of a fire. I have never said thank you.*
 -   *The fence: I owe a debt I would rather not discuss.*
 
-### Step 7: Connect {#step-7-connect}
+### Step 8: Connect {#step-7-connect}
 
 He answers two of the crew questions:
 
@@ -635,22 +754,24 @@ He answers two of the crew questions:
 
 Now she's got a reason to be in the crew.
 
-### Step 8: Aspiration {#step-8-aspiration}
+### Step 9: Aspiration {#step-8-aspiration}
 
 *Own the score of a lifetime.* It starts at d2.
 
 ### Final sheet {#final-sheet}
 
 :::sheet[The best cat burglar in the city]
-**Title:** The best cat burglar in the city.
+**Titles:** The best cat burglar in the city · Raised by the Guild.
 
-**Traits:** Light on my Feet (Passive) · Silent Step (Passive) · I Have the Thing (Once per scene).
+**Traits:** Silent Step (Passive) · Light on my Feet (Passive).
 
-**Abilities:** Larceny (Novice, mech. locks) · Stealth (Novice, rooftops) · Combat (Novice, dagger).
+**Permissions:** *move unseen*, *run the rooftops*, *pick a mechanical lock* (first Title) · *know how a lock's built*, *fight dirty with a knife*, *find a buyer for anything* (second Title).
 
-**Items:** A perfect set of picks · Worn leathers (Catch: Heavy; 2nd: Armour) · A grappling line. 3 of 6.
+**Set actions:** Sneak 4 (d8) · Move 4 (d8) · Locks 5 (d10) · Fight 2 (d4) · Study 1 (d2) · Talk 1 (d2).
 
-**Resources:** Purse of gold · Smoke bomb. 2 of 6.
+**Carries:** Worn leathers (equipment, 1 of 3) · purse of gold, smoke bomb (utility, 2 of 3) · the first coin she ever stole (keepsake) · her bag (0 of 10).
+
+**Attuned:** A perfect set of picks (Awakened: *open any lock with a mechanism*) · a grappling line (Awakened: *climb or swing anywhere you can throw a hook*). 2 of 2.
 
 **Bonds:** Dorrie · Bram · The fence (debt). One connection each.
 
@@ -658,450 +779,5 @@ Now she's got a reason to be in the crew.
 
 **Aspiration:** Own the score of a lifetime (d2).
 
-**Numbers:** Aura 5 · Armour d6 (d2, stepped up twice by the leathers) · Confidence d4 (d2 + 1 Title) · Stride 4 (3 + 2 − 1) · Hurt 3 boxes.
-:::
-
-## Quick Build {#s-quick}
-
-:::quote
-Ten minutes, and you're playing.
-:::
-
-A kit is a character with the blanks left in. It gives you three abilities, three traits, three items and two resources that work together, and you bring the parts that make it yours: the Title, the people, and what you want.
-
-1.  **Pick a kit.**
-2.  **Write your Title.** Each kit gives you three shapes. Fill the blank with something specific: instead of *the best blade in the city*, go for *the best blade in the Low Market*.
-3.  **Swap one thing, if you like.** You can trade any one ability, trait or item for another from the lists in this chapter.
-4.  **Write three connections**: one each to two of the crew, and one to someone outside it.
-5.  **Write your Aspiration** at d2. Each kit suggests three.
-6.  **Check the numbers.** Aura 5, Hurt 3, and whatever the kit says.
-
-A quick-built character is every bit as real as one built the long way, and everything about it grows the same way.
-
-### Archetypes {#s-archetypes}
-
-Each kit's built round an **archetype**, a kind of character you already know from fantasy, so you can see at a glance which one's closest to the character in your head. It's a starting shape, not a class, and nothing stops your Rogue learning magic a few sessions in. The archetype's name isn't your Title, though, so a Warrior still needs one that says the best at what.
-
-| Archetype | What it does in the crew | Plays like | Ready-made |
-| --- | --- | --- | --- |
-| [**The Warrior**](#k-warrior) | Fights, and wins | Fighter, sellsword, duellist, gladiator | — |
-| [**The Guardian**](#k-guardian) | Stands in front, and doesn't move | Bodyguard, shield-bearer, man-at-arms | [Bram](#s-pregens) |
-| [**The Rogue**](#k-rogue) | Never seen, never caught | Thief, burglar, pickpocket, scout | [Vesk](#s-pregens) |
-| [**The Face**](#k-face) | Talks the crew through doors | Con artist, diplomat, courtier, spy | [Dorrie](#s-pregens) |
-| [**The Bard**](#k-bard) | Lifts the crew, and holds the room | Minstrel, storyteller, travelling player | — |
-| [**The Investigator**](#k-investigator) | Sees what everyone else missed | Detective, thief-taker, inquisitor | — |
-| [**The Ranger**](#k-ranger) | Sees them first, and hits them from further away | Hunter, scout, archer, outrider | [Wren](#s-pregens) |
-| [**The Wizard**](#k-wizard) | Reads the old books, and works the rituals | Mage, sage, seer, astrologer | [Isolde](#s-pregens) |
-| [**The Sorcerer**](#k-sorcerer) | One kind of magic, and very good at it | Fire mage, storm-caller, wild mage, elementalist | [Ash](#s-pregens) |
-| [**The Healer**](#k-healer) | Keeps everyone else alive | Priest, field surgeon, plague doctor, midwife | — |
-| [**The Druid**](#k-druid) | Calls the beasts, and patches up the crew | Herbalist, beast-talker, forest hermit | — |
-| [**The Warlock**](#k-warlock) | Curses them now, and pays for it later | Pact-maker, curse-thrower, cultist, spirit-talker | — |
-| [**The Artificer**](#k-artificer) | Builds the thing that solves it | Inventor, tinker, clockmaker, sigil-carver | — |
-| [**The Captain**](#k-captain) | Leads, and the others follow | Officer, warlord, ship's captain | — |
-
-If what you want to play isn't in that table, it's probably one swap away. Start with the kit, and use your swap from step 3 for the change.
-
-| If you like playing… | Start with | and change |
-| --- | --- | --- |
-| an alchemist | [the Artificer](#k-artificer) | *Engineer* for *Medic* (poisons and antidotes) |
-| an assassin | [the Rogue](#k-rogue) | *Acrobat* for *Combat* (dagger) |
-| a barbarian or berserker | [the Warrior](#k-warrior) | *Duelist* for *Battle Focus* |
-| a battle mage | [the Warrior](#k-warrior) | *Streetwise* for *Evocation* (fire) |
-| a knight | [the Captain](#k-captain) | *Strategist* for *Rider* (warhorses) |
-| a monk or brawler | [the Rogue](#k-rogue) | *Larceny* for *Combat* (bare hands) |
-| a necromancer | [the Wizard](#k-wizard) | *Divination* for *Medium* (the recently dead) |
-| a paladin or holy knight | [the Guardian](#k-guardian) | *Athlete* for *Faith* (warding evil) |
-| a swashbuckler or pirate | [the Warrior](#k-warrior) | *Athlete* for *Acrobat* (rigging and masts) |
-| a witch | [the Druid](#k-druid) | *Medic* for *Hexer* (curses) |
-
-:::sheet[The Warrior: fights, and wins]{#k-warrior}
-**Plays like** a fighter, sellsword, duellist or gladiator.
-
-**Abilities:** Combat (Novice, sword) · Athlete (Novice, sprinting) · Streetwise (Novice, the docks).
-
-**Traits:** Duelist (Passive) · Tenacious (Once per scene) · Ready Hand (Passive).
-
-**Items:** A fine sword (Wield a sword with skill) · A chain shirt (Armour; Catch: Loud; second: Armour) · A long knife (Fight with a knife; Thrown, Concealed, Quick).
-
-**Resources:** Medical kit · Whetstone.
-
-**Title:** *The best blade in \_\_\_* · *The duellist who never \_\_\_* · *The sword \_\_\_ could not buy*.
-
-**Aspiration:** *Beat the one who beat me* · *Earn a name the songs remember* · *Pay back the teacher I failed*.
-
-**Numbers:** Armour d6 · Confidence d4 · Stride 3.
-:::
-
-:::sheet[The Guardian: stands in front, and doesn't move]{#k-guardian}
-**Plays like** a bodyguard, shield-bearer or man-at-arms.
-
-**Abilities:** Defender (Novice, holding a doorway) · Combat (Novice, mace) · Athlete (Novice, heavy lifting).
-
-**Traits:** Unyielding (Passive) · Pack Fighter (Passive) · Steady Hands (Passive).
-
-**Items:** A shield (Armour) · Plate armour (Armour; Catch: Heavy; second: Armour) · A mace (Fight with a mace; Breaker).
-
-**Resources:** Medical kit · Coin from home.
-
-**Title:** *The wall that held \_\_\_* · *The last one standing at \_\_\_* · *\_\_\_'s shield*.
-
-**Aspiration:** *Keep \_\_\_ alive, whatever it costs* · *Earn back the rank they took* · *Hold a line that matters*.
-
-**Numbers:** Armour d8 · Confidence d4 · Stride 2 · Hurt 4 boxes.
-:::
-
-:::sheet[The Rogue: never seen, never caught]{#k-rogue}
-**Plays like** a thief, burglar, pickpocket or scout.
-
-**Abilities:** Stealth (Novice, rooftops) · Larceny (Novice, mechanical locks) · Acrobat (Novice, falling safely).
-
-**Traits:** Silent Step (Passive) · Light on my Feet (Passive) · Ready Hand (Passive).
-
-**Items:** A perfect set of picks (Open any lock with a mechanism) · Dark clothes (Vanish into shadow; Catch: Narrow, only at night; second: Climb anything with a handhold) · Throwing knives (Throw a knife true; Thrown, Concealed, Quick).
-
-**Resources:** Smoke bomb · Spare lockpick.
-
-**Title:** *The best \_\_\_ in the city* · *The one who has never been seen* · *The ghost of \_\_\_*.
-
-**Aspiration:** *The score of a lifetime* · *Find out who sold me out* · *Walk away clean*.
-
-**Numbers:** Armour d2 · Confidence d4 · Stride 5.
-:::
-
-:::sheet[The Face: talks the crew through doors]{#k-face}
-**Plays like** a con artist, diplomat, courtier or spy.
-
-**Abilities:** Influence (Novice, nobility) · Deception (Novice, false names) · Courtier (Novice, gossip).
-
-**Traits:** Silver Tongue (Once per scene) · Reputation Precedes Me (Passive) · Charming (Once per scene).
-
-**Items:** Court clothes (Look like I belong anywhere; Catch: Conspicuous; second: Confidence) · A borrowed signet (Pass as someone who matters) · A stiletto (Fight with a stiletto; Piercing, Concealed).
-
-**Resources:** Purse of gold · Letter of introduction.
-
-**Title:** *The voice that \_\_\_* · *The one everyone at court owes* · *The liar who \_\_\_*.
-
-**Aspiration:** *A seat at the table that ruined my family* · *Make \_\_\_ apologise in public* · *Become someone real*.
-
-**Numbers:** Armour d2 · Confidence d6 · Stride 3.
-:::
-
-:::sheet[The Bard: lifts the crew, and holds the room]{#k-bard}
-**Plays like** a minstrel, storyteller or travelling player.
-
-**Abilities:** Performer (Novice, music) · Enchantment (Novice, charm), or Influence (Novice, crowds) · Empathy (Novice, reading a room).
-
-**Traits:** Showstopper (Once per scene) · Style (Passive) · Reputation Precedes Me (Passive).
-
-**Items:** A lute (Play for any crowd; Catch: Loud; second: Lift anyone who hears me play) · A rapier (Fight with a rapier; Piercing) · A book of old songs (Find the story behind any name or place, given an hour).
-
-**Resources:** Fine bottle of wine · Lock of hair.
-
-**Title:** *The one who played for \_\_\_* · *The singer \_\_\_ banned* · *The storyteller who \_\_\_*.
-
-**Aspiration:** *Play the hall that turned me away* · *Tell the true story of \_\_\_* · *Write a song they'll still sing when I'm gone*.
-
-**Numbers:** Armour d2 · Confidence d4 · Stride 3.
-:::
-
-:::sheet[The Investigator: sees what everyone else missed]{#k-investigator}
-**Plays like** a detective, thief-taker or inquisitor.
-
-**Abilities:** Investigator (Novice, crime scenes) · Scholar (Novice, history) · Empathy (Novice, spotting lies).
-
-**Traits:** Hard to Lie To (Once per scene) · Perfect Recall (Once per scene) · Quick Study (Once per scene).
-
-**Items:** A journal of cases (Remember every detail I wrote down) · A spyglass (See far, and see small) · A sword-cane (Fight with a hidden blade; Concealed).
-
-**Resources:** Silver mirror · Truth serum.
-
-**Title:** *The one who solved \_\_\_* · *The investigator the watch hates* · *The last honest \_\_\_*.
-
-**Aspiration:** *Find who really did it* · *Close the case that broke me* · *Prove \_\_\_ wrong*.
-
-**Numbers:** Armour d2 · Confidence d4 · Stride 3.
-:::
-
-:::sheet[The Ranger: sees them first, and hits them from further away]{#k-ranger}
-**Plays like** a hunter, scout, archer or outrider.
-
-**Abilities:** Marksman (Novice, longbow) · Tracker (Novice, beasts) · Survivor (Novice, forests).
-
-**Traits:** Marksman's Eye (Passive) · Sure-Footed (Passive) · Predator's Eye (Once per scene).
-
-**Items:** A longbow (Shoot a longbow; Long, Two-Handed) · A hunting knife (Fight with a knife; Thrown, Concealed, Quick) · A hooded cloak (Vanish into trees and shadow).
-
-**Resources:** Rations · Caltrops.
-
-**Title:** *The hunter who never lost a trail* · *The one who killed \_\_\_* · *The warden of \_\_\_*.
-
-**Aspiration:** *Put down the thing that \_\_\_* · *Find the way home* · *Guard the last wild place*.
-
-**Numbers:** Armour d2 · Confidence d4 · Stride 3.
-:::
-
-:::sheet[The Wizard: reads the old books, and works the rituals]{#k-wizard}
-**Plays like** a mage, sage, seer or astrologer.
-
-**Abilities:** Ritualist (Novice, warding) · Scholar (Novice, forbidden texts) · Divination (Novice, the past), or Warding or Artifice.
-
-**Traits:** Quick Study (Once per scene) · Prepared Mind (Once per scene) · Iron Will (Passive).
-
-**Items:** A book of workings (Find the working I need, given an hour) · Chalk and salt (Draw a warding circle anywhere I can kneel) · Quill and ink (Copy any page or sigil exactly).
-
-**Resources:** Salt packet · Silver mirror.
-
-**Title:** *The apprentice who \_\_\_* · *The scholar \_\_\_ threw out* · *The one who read \_\_\_*.
-
-**Aspiration:** *Find the teacher who vanished* · *Read the book they keep locked away* · *Find out who burned \_\_\_*.
-
-**Numbers:** Armour d2 · Confidence d6 · Stride 3.
-:::
-
-:::sheet[The Sorcerer: one kind of magic, and very good at it]{#k-sorcerer}
-**Plays like** a fire mage, storm-caller, wild mage or elementalist.
-
-**Abilities:** Evocation (Novice, fire), or any [magical ability](#s-schools) · Influence (Novice, threats) · Athlete (Novice, sprinting).
-
-**Traits:** Battle Focus (Once per scene) · Focused (Once per scene) · Iron Will (Passive).
-
-**Items:** A focus (Call my magic without a word or a gesture) · A carved staff (Fight with a staff; Reach, Two-Handed) · A scorched coat (Armour; Catch: Marked; second: Walk through fire unharmed).
-
-**Resources:** Flash powder · Silver locket.
-
-**Title:** *The last \_\_\_ of the \_\_\_* · *The one who burned \_\_\_* · *The \_\_\_ nobody taught*.
-
-**Aspiration:** *Master what nearly killed me* · *Find out why I can do this* · *Take back \_\_\_*.
-
-**Numbers:** Armour d4 · Confidence d6 · Stride 3.
-:::
-
-:::sheet[The Healer: keeps everyone else alive]{#k-healer}
-**Plays like** a priest, field surgeon, plague doctor or midwife.
-
-**Abilities:** Mending (Novice, flesh), or Medic (Novice, battlefield wounds) · Faith (Novice, healing prayers) · Empathy (Novice, calming the frightened).
-
-**Traits:** Healer's Hands (Once per scene, per person) · Steady Hands (Passive) · Cool Under Pressure (Once per scene).
-
-**Items:** A healer's satchel (Treat wounds anywhere) · A holy symbol (Call on my faith; Catch: Marked; second: Confidence) · A quarterstaff (Fight with a staff; Reach, Two-Handed).
-
-**Resources:** Medical kit · Antidote.
-
-**Title:** *The doctor who \_\_\_* · *The one who sat with the dying at \_\_\_* · *\_\_\_'s mercy*.
-
-**Aspiration:** *Save the one I could not* · *Stop the plague before it reaches \_\_\_* · *Find out what I am*.
-
-**Numbers:** Armour d2 · Confidence d6 · Stride 3.
-:::
-
-:::sheet[The Druid: calls the beasts, and patches up the crew]{#k-druid}
-**Plays like** a herbalist, beast-talker or forest hermit.
-
-**Abilities:** Wildcraft (Novice, beasts) · Survivor (Novice, foraging) · Medic (Novice, herbal remedies).
-
-**Traits:** Field Dressing (Once per scene) · Sure-Footed (Passive) · Scout Ahead (Once per downtime).
-
-**Items:** A sling (Sling a stone true; Ranged, Concealed) · A bone flute (Call the beasts to me) · A belt with pouches (Always have the right herb).
-
-**Resources:** Antidote · Sleeping draught.
-
-**Title:** *The one the \_\_\_ listen to* · *The hermit of \_\_\_* · *The herbalist \_\_\_ ran out of town*.
-
-**Aspiration:** *Keep \_\_\_ from being cut down* · *Find the grove from my mother's stories* · *Heal what \_\_\_ poisoned*.
-
-**Numbers:** Armour d2 · Confidence d4 · Stride 3.
-:::
-
-:::sheet[The Warlock: curses them now, and pays for it later]{#k-warlock}
-**Plays like** a pact-maker, curse-thrower, cultist or spirit-talker.
-
-**Abilities:** Hexer (Novice, curses) · Medium (Novice, the recently dead) · Deception (Novice, lying to authority).
-
-**Traits:** Deep Well (Passive) · Lucky (Once per scene) · Hard to Lie To (Once per scene).
-
-**Items:** A ring that isn't mine (Call on my patron; Catch: Cursed, Charmed by my patron; second: See in the dark) · A knife with my name on it (Fight with a knife; Thrown, Concealed, Quick) · A silver bell (Call the dead to answer).
-
-**Resources:** Old letter · Child's toy.
-
-**Title:** *The voice \_\_\_ speaks through* · *The one who said yes to \_\_\_* · *The heretic \_\_\_ couldn't burn*.
-
-**Aspiration:** *Break the pact and live* · *Find out what \_\_\_ really wants* · *Get my true name back*.
-
-**Numbers:** Armour d2 · Confidence d4 · Stride 3 · Aura 6.
-:::
-
-:::sheet[The Artificer: builds the thing that solves it]{#k-artificer}
-**Plays like** an inventor, tinker, clockmaker or sigil-carver.
-
-**Abilities:** Engineer (Novice, clockwork) · Crafter (Novice, field repairs) · Artifice (Novice, sigils).
-
-**Traits:** Prepared (Passive) · I Have the Thing (Once per scene) · Tactical Mind (Once per scene).
-
-**Items:** A roll of tools (Fix or build anything, given time) · A crossbow (Shoot a crossbow; Long, Piercing, Reload, Two-Handed) · An apron with a hundred pockets (Armour; Catch: Conspicuous; second: Always have the right small part).
-
-**Resources:** Acid vial · Ball bearings.
-
-**Title:** *The engineer who built \_\_\_* · *The one who can fix anything* · *\_\_\_'s best student*.
-
-**Aspiration:** *Build the thing they said was impossible* · *Undo what my machine did* · *Get my name on \_\_\_*.
-
-**Numbers:** Armour d4 · Confidence d4 · Stride 3 · Carries 7 items and 7 resources.
-:::
-
-:::sheet[The Captain: leads, and the others follow]{#k-captain}
-**Plays like** an officer, warlord or ship's captain.
-
-**Abilities:** Strategist (Novice, small squads) · Influence (Novice, soldiers) · Combat (Novice, sword).
-
-**Traits:** Commanding Presence (Once per scene) · Pack Fighter (Passive) · Diplomat (Once per scene).
-
-**Items:** An officer's sword (Wield a sword with skill) · A breastplate (Armour; Catch: Marked; second: Armour) · A signal horn (Call the crew to me; Catch: Loud; second: Rally anyone who hears it).
-
-**Resources:** Purse of gold · Signet ring.
-
-**Title:** *The captain who \_\_\_* · *The officer who brought them home from \_\_\_* · *The one they still salute*.
-
-**Aspiration:** *Bring every one of them home* · *Win back my command* · *Finish the war properly*.
-
-**Numbers:** Armour d6 · Confidence d4 · Stride 3.
-:::
-
-## Six Ready-Made Characters {#s-pregens}
-
-:::quote
-Pick one and play tonight.
-:::
-
-These are the same six you can choose in the Player Companion app. Take one as written, or copy one and change anything you like. They're the crew as they start out. The examples elsewhere in this book sometimes show them later in their careers, with more Titles, higher tiers and new tricks.
-
-:::sheet[Vesk the Rogue: The best cat burglar in the city]
-*A thief who never gets seen. Fast, quiet, and good with locks.*
-
-**Plays like** a cat burglar, thief or scout.
-
-**Traits:** Light on my Feet (Passive) · Silent Step (Passive) · I Have the Thing (Once per scene).
-
-**Abilities:** Larceny (Novice, mechanical locks) · Stealth (Novice, rooftops) · Combat (Novice, dagger).
-
-**Items:** A perfect set of picks (Open any lock with a mechanism) · Worn leathers (Armour; Catch: Heavy; second: Armour) · A grappling line (Climb or swing anywhere you can throw a hook).
-
-**Resources:** Purse of gold (consumable) · Smoke bomb (consumable).
-
-**Bonds:** Dorrie: *We have pulled a dozen jobs. I trust her with my life.* · Bram: *He once carried me out of a fire. I have never said thank you.* · The fence: *I owe a debt I would rather not discuss.* (debt)
-
-**Crew:** *Who in the crew do you already know, and how?* Dorrie. We have pulled a dozen jobs together. *Who do you have unfinished business with?* Bram. He carried me out of a fire and I never thanked him.
-
-**Aspiration:** Own the score of a lifetime (d2).
-
-**Numbers:** Aura 5 · Armour d6 · Confidence d4 · Stride 4 · Hurt 3 boxes.
-:::
-
-:::sheet[Dorrie the Face: The voice that talked a duke out of his own house]
-*The face of the crew. Gets you through doors you can't pick.*
-
-**Plays like** a con artist, courtier or spy.
-
-**Traits:** Reputation Precedes Me (Passive) · Silver Tongue (Once per scene) · Cold Reader (Once per scene).
-
-**Abilities:** Influence (Novice, nobility) · Deception (Novice, false names) · Courtier (Novice, gossip).
-
-**Items:** Court clothes (Confidence; Catch: Conspicuous; second: Get past any doorman who judges by clothes) · A signet pin (Pass as someone who matters) · A deck of marked cards (Win any card game I sit down at).
-
-**Resources:** Letter of introduction (keepsake) · Fine bottle of wine (consumable).
-
-**Bonds:** Vesk: *We came up on the same streets. She never asks why.* · Bram: *He thinks I sold him out on the harbour job. I did not.* · Isolde: *I keep her secrets at court. She keeps mine.*
-
-**Crew:** *Who in the crew do you already know, and how?* Vesk. We came up on the same streets. *Who do you have unfinished business with?* Bram. He thinks I sold him out on the harbour job. *Who in the crew do you trust most, and why?* Isolde. She is the only one who knows my real name.
-
-**Aspiration:** Get a seat at the table that ruined my family (d2).
-
-**Numbers:** Aura 5 · Armour d2 · Confidence d6 · Stride 3 · Hurt 3 boxes.
-:::
-
-:::sheet[Bram the Guardian: The wall that held the harbour gate]
-*The muscle. Stands in front of the crew and doesn't move.*
-
-**Plays like** a bodyguard, shield-bearer or man-at-arms.
-
-**Traits:** Unyielding (Passive) · Pack Fighter (Passive) · Intimidating Presence (Passive).
-
-**Abilities:** Combat (Novice, war hammer) · Defender (Novice, guarding one person) · Athlete (Novice, heavy lifting).
-
-**Items:** A war hammer (Fight with a war hammer; Breaker; Catch: Heavy; second: Knock a man off his feet) · Plate armour (Armour) · A shield (Armour).
-
-**Resources:** Medical kit (consumable) · Coin from home (keepsake).
-
-**Bonds:** Isolde: *I swore to her father I would keep her alive.* · Vesk: *I carried her out of a fire. She has never said thank you.* · Dorrie: *I do not trust her, and she knows it.*
-
-**Crew:** *Who in the crew do you already know, and how?* Isolde. I have guarded her since she was twelve. *Who do you have unfinished business with?* Dorrie. The harbour job went wrong and she walked away clean.
-
-**Aspiration:** Earn back the rank they stripped from me (d2).
-
-**Numbers:** Aura 5 · Armour d6 · Confidence d4 · Stride 2 · Hurt 4 boxes (Unyielding).
-:::
-
-:::sheet[Isolde the Wizard: The last student of a dead order]
-*The scholar. Reads the old books and works the rituals nobody else will touch.*
-
-**Plays like** a mage, sage or medium.
-
-**Traits:** Perfect Recall (Once per scene) · Quick Study (Once per scene) · Iron Will (Passive).
-
-**Abilities:** Ritualist (Novice, warding) · Scholar (Novice, forbidden texts) · Medium (Novice, the recently dead).
-
-**Items:** A fine coat with silver thread (Look like I belong; Catch: Conspicuous; second: Confidence) · A book I never finished (Find the ritual I need, given an hour) · Chalk and salt (Draw a warding circle anywhere I can kneel).
-
-**Resources:** Salt packet (consumable) · Old letter (keepsake).
-
-**Bonds:** Bram: *He swore to my father he would keep me alive. He takes it too seriously.* · Vesk: *She stole the book that started all this. I have not told her.* · Dorrie: *She keeps my secrets at court. I keep hers.*
-
-**Crew:** *Who in the crew do you already know, and how?* Bram. He has guarded me since I was twelve. *Who do you have unfinished business with?* Vesk. The book she stole belonged to my order.
-
-**Aspiration:** Find out who burned my order’s library (d2).
-
-**Numbers:** Aura 5 · Armour d2 · Confidence d8 · Stride 3 · Hurt 3 boxes.
-:::
-
-:::sheet[Wren the Ranger: The hunter who has never lost a trail]
-*The scout. Sees them first, and hits them from further away than they thought possible.*
-
-**Plays like** a hunter, archer or tracker.
-
-**Traits:** Marksman's Eye (Passive) · Sure-Footed (Passive) · Scout Ahead (Once per downtime).
-
-**Abilities:** Marksman (Novice, longbow) · Tracker (Novice, beasts) · Survivor (Novice, forests).
-
-**Items:** A longbow (Shoot a longbow; Long, Two-Handed; Catch: Wanted; second: Hit anything I can see) · A cloak with a hood (Vanish into trees and shadow) · A hunter's pack (a bag; her rations and map ride in it: 2 of 10 pockets).
-
-**Resources:** Rations (consumable) · Torn map (keepsake).
-
-**Bonds:** Bram: *He is the only one who can keep up with me.* · Isolde: *She named the thing that took my brother.* · Vesk: *I owe her for the night she hid me from the watch.* (debt)
-
-**Crew:** *Who in the crew do you already know, and how?* Bram. We fought in the same border war. *Who do you have unfinished business with?* Isolde. She knows more about my brother than she has said.
-
-**Aspiration:** Find the thing that took my brother, and put it down (d2).
-
-**Numbers:** Aura 5 · Armour d2 · Confidence d4 · Stride 3 · Hurt 3 boxes.
-:::
-
-:::sheet[Ash the Sorcerer: The last fire-speaker of the Ember Court]
-*The fire mage. One kind of magic, and very, very good at it.*
-
-**Plays like** a pyromancer, elementalist or wild mage.
-
-**Traits:** Battle Focus (Once per scene) · Focused (Once per scene) · Killer Instinct (Triggered).
-
-**Abilities:** Evocation (Novice, fire), written as *Magic that throws raw energy: fire, force, lightning.* · Influence (Novice, threats) · Scholar (Novice, history).
-
-**Items:** An ember stone on a chain (Call fire without a word or a gesture) · A scorched coat (Armour; Catch: Marked; second: Walk through fire unharmed) · A tinderbox (Start a fire anywhere).
-
-**Resources:** Flash powder (consumable) · Silver locket (keepsake).
-
-**Bonds:** Dorrie: *She smuggled me out of the Ember Court. I owe her my life.* (debt) · Isolde: *She is the only one who is not afraid of me.* · Wren: *We have never agreed on anything.*
-
-**Crew:** *Who in the crew do you already know, and how?* Dorrie. She smuggled me out of the Ember Court. *Who do you have unfinished business with?* Wren. We have never agreed on anything, and we are both usually right.
-
-**Aspiration:** Burn the Ember Court down, or take it back (d2).
-
-**Numbers:** Aura 5 · Armour d4 · Confidence d4 · Stride 3 · Hurt 3 boxes.
+**Numbers:** Aura 5 · Sparks 2 · Armour d4 (worn leathers) · Confidence d6 (d2 and two Titles) · Stride 5 (3 + 2) · Hurt three bars of three.
 :::

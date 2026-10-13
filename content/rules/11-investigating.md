@@ -5,6 +5,7 @@ order: 11
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 Somebody knows what happened. Usually several somebodies, and none of them want to tell you.
@@ -40,7 +41,7 @@ The crew can work it like any event. Watch the gates, or get to the witness firs
 
 When the last tag's stripped, the crew knows. What they do about it is the next scene, whether that's a fight in a cellar or a quiet word with a magistrate. Proving it to someone who doesn't want to believe it is a stake of its own, with tags like *Respectable* or *Friends on the Council* in the way.
 
-That's where the clues pay off. Every one the crew wrote down is a tag they know, and a tag you know can be stretched into a permission for 1 Aura.
+That's where the clues pay off. Every one the crew wrote down is a tag they know, and you can bring a tag you know into your roll for 1 Aura.
 
 -   **If they name the wrong person**, play it out. Don't tell them they're wrong. The other side's event keeps stepping down while they're busy, and the truth's still where you left it.
 -   **If they're stuck**, make a move and bring a trail to them. Somebody knocks on the door, or a second body turns up.
@@ -64,13 +65,13 @@ Dorrie's uncle Anselm died at his own table, and the family thinks Dorrie poison
 
 The question is *Who killed Anselm?*, Challenge 4, a d8. *Looks Like His Heart*, *A Houseful of Suspects* and *Clean Hands* are in the way. The stake's the one from [Running the Game](#s-stakes-gm): clear Dorrie's name before the funeral, or her family never speaks to her again. *The steward leaves the city* is an event at a d8.
 
-**The wake.** Isolde sits with the body before they close the coffin. Anselm's been dead two days and he isn't making much sense, so she Studies him. *Medium* and *the recently dead*, plus the action, twice, make 6 steps, a d12. She rolls 10, and the question's d8 comes up 4. She asks for a straight answer: what did you taste last? "Almonds," he says. "Bitter." *Looks Like His Heart* is stripped, and the crew writes down *Bitter Almond in the Wine*.
+**The wake.** Isolde sits with the body before they close the coffin. Anselm's been dead two days and he isn't making much sense, so she Studies him. That's her set action The dead: her first Title and *speak with the recently dead*, 3 steps with the action. Nobody rushes you at a wake, so she takes her time, and the same set action twice adds 1. She's on 4 steps, a d8. She rolls 7, and the question's d8 comes up 4. She asks for a straight answer: what did you taste last? "Almonds," he says. "Bitter." *Looks Like His Heart* is stripped, and the crew writes down *Bitter Almond in the Wine*.
 
 Across the room, Dorrie uses *Cold Reader* on the steward. It's once a scene, and there's no roll. The GM answers honestly: he's terrified, and he keeps looking at the nephew.
 
-Bram doesn't do subtle. He corners the steward in the pantry with *Intimidating Presence*, plus the action: 2 steps, a d4, against the steward's d6. He rolls 3, and the steward's d6 comes up 5. The steward says nothing, and now he knows they're onto him. That's the crew tipping its hand, so *The steward leaves the city* steps down to a d6, and at the end of the wake it steps down again, to a d4.
+Bram doesn't do subtle. He corners the steward in the pantry with his Talk: his second Title, *bark an order that gets obeyed* and Intimidating Presence, 4 steps with the action, a d8, against the steward's d6. He rolls 3, and the steward's d6 comes up 5. The steward says nothing, and now he knows they're onto him. That's the crew tipping its hand, so *The steward leaves the city* steps down to a d6, and at the end of the wake it steps down again, to a d4.
 
-**That night.** Vesk follows the steward across the rooftops. *Stealth*, *rooftops*, her Title and *Silent Step*, plus the action, make 5 steps, a d10, against the steward's d6, because he keeps looking over his shoulder. She rolls 8 against 3, and from the chapel roof she watches the nephew hand him a purse in the lane below. *Clean Hands* is stripped, and the crew writes down *Paid by the Nephew*.
+**That night.** Vesk follows the steward across the rooftops. She starts from her Sneak, 4 steps, a d8. *Run the rooftops* fits too, but it's on her Move, so bringing it in costs 1 Aura. That's 5 steps, a d10, against the steward's d6, because he keeps looking over his shoulder. She rolls 8 against 3, and from the chapel roof she watches the nephew hand him a purse in the lane below. *Clean Hands* is stripped, and the crew writes down *Paid by the Nephew*.
 
-At the end of the night the steward's event is at a d2, and he's packing. *A Houseful of Suspects* is still in the way, and the funeral's tomorrow. When Dorrie stands up in front of the family, she can stretch both of the crew's clues into her roll for 1 Aura each.
+At the end of the night the steward's event is at a d2, and he's packing. *A Houseful of Suspects* is still in the way, and the funeral's tomorrow. When Dorrie stands up in front of the family, she can bring both of the crew's clues into her roll for 1 Aura each.
 :::

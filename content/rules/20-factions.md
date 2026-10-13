@@ -5,6 +5,7 @@ order: 20
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 The factions keep moving whatever the crew does, but the crew gets to choose where it stands.
@@ -138,7 +139,7 @@ Wealth is what money can do for a faction, on a die. Spending it steps it down o
 
 -   **A second move** this downtime.
 -   **Another faction's move.** It pays a faction to make one move where it says, rolled with that faction's own dice. Nobody takes money from an *Enemy*.
--   **A tag or a resource** bought from a faction that'll sell it, one that's *Neutral* or better towards the buyer. It changes hands.
+-   **A tag or a thing** bought from a faction that'll sell it, one that's *Neutral* or better towards the buyer. It changes hands.
 
 The crew spends its Wealth the same way, and it gets two more uses that factions don't: winning a tie on a downtime roll, and paying for something too big for a purse in a session. See [The Crew](#s-crew-wealth).
 
@@ -182,14 +183,14 @@ Roll a d12. An *Enemy* or *Wary* faction rolls on the first table, and a *Friend
 | 6 | It hires someone: a Named threat is on the crew's trail. | Shelter: a safehouse, for as long as the crew needs it. |
 | 7 | It tells the law. | A secret about a rival faction: one of its hidden tags. |
 | 8 | It squeezes their money. The crew's Wealth steps down one, and prices double next session. | It settles a debt someone in the crew owed. |
-| 9 | It spreads a story. The crew's name gets worse on every street it reaches. | Muscle: its people Help in the crew's next big scene. |
+| 9 | It spreads a story. The crew's name gets worse on every street it reaches. | Muscle: its people join in at the crew's next big scene. |
 | 10 | It takes someone on a bond. | An invitation: a party, a council, a wedding. |
 | 11 | It sets a trap. The next job isn't what it looks like. | It asks the crew to choose: us, or them. |
 | 12 | It moves in the open: a fight in the street, next session. | It needs rescuing. |
 
 ## The Crew and the Factions {#s-faction-crew}
 
-The crew moves on factions with its **party slots**, and a party slot is an action for the crew. Roll the crew's **Power**, plus a step for every crew tag and Reputation that fits. If one character's plainly the right person for it, they can roll their own permissions instead: 1 step for the slot, plus everything that fits. **Two party slots on one move count everything twice**, the same as two actions, and that's the crew's whole downtime gone on one thing.
+The crew moves on factions with its **party slots**, and a party slot is an action for the crew. Roll the crew's **Power**, plus a step for every crew tag and Reputation that fits. If one character's plainly the right person for it, they can roll their own permissions instead: 1 step for the slot, plus everything that fits. **Two party slots on one move count everything twice**, and that's the crew's whole downtime gone on one thing.
 
 :::rule
 **Going at a bigger faction.** If a faction's Power is bigger than the crew's, the crew can only roll against **its Power** with both party slots on that one move. With one slot, go at the smaller things: its agenda, its face, its people, or a [project](#s-projects) of your own that'll cost it something when it's done.
@@ -199,10 +200,10 @@ The crew moves on factions with its **party slots**, and a party slot is an acti
 | --- | --- | --- | --- |
 | **Interfere** | Its Power and its agenda's die at once: one roll, two dice against it. Against a bigger faction with one slot, its agenda only. | **Beat the agenda** and its move this downtime fails, and the agenda steps down one, never below d2. **Beat its Power** and you take something as well: one of its tags (if it's a thing it owns, it's yours now, as a party resource), or a step of its Wealth, which steps the crew's up one. | Nothing happens, and its move goes ahead. |
 | **Strike** | Its Power. | Strip one of its tags, or step its Power or Wealth down one. Its Standing drops one. | Its Standing drops one anyway, and its next move is on the crew. |
-| **Deal** | Its face. A Deal's always open: one slot, however big the faction is and however it sees the crew. | Its Standing goes up one, or it trades: a favour for a favour, or one of its tags or resources for a step of the crew's Wealth. | Nothing, and next time the price is higher. |
+| **Deal** | Its face. A Deal's always open: one slot, however big the faction is and however it sees the crew. | Its Standing goes up one, or it trades: a favour for a favour, or one of its tags, or a thing it owns, for a step of the crew's Wealth. | Nothing, and next time the price is higher. |
 | **Work for it** | No roll. | It gives the crew a job. The job is a scene next session. Do it, and its Standing goes up one and it pays: a purse of gold each, a favour, or for a big job, a step of the crew's Wealth. | — |
 
-Ties go to the faction. There's no Aura in downtime, but a player can spend their Spark to roll again (their own dice only), or the crew can step its Wealth down one and take the tie. Only the crew gets to do that. See [Rolling in downtime](#s-downtime-rolls).
+Ties go to the faction. There's no Aura in downtime, but a player can spend a Spark to roll again (their own dice only), or the crew can step its Wealth down one and take the tie. Only the crew gets to do that. See [Rolling in downtime](#s-downtime-rolls).
 
 Scenes move factions too. If the crew burns a Guild warehouse in play, they've struck the Guild, whatever they spent in downtime. Say so, and move its Standing and its dice.
 
@@ -210,8 +211,8 @@ Scenes move factions too. If the crew burns a Guild warehouse in play, they've s
 
 -   **Its people** are threats with a Challenge to match its Power, and its tags can be theirs too.
 -   **Its money** is its Wealth die: the bribe it can offer, the price it can pay and the guards it can hire.
--   **Its secret** can be found like any hidden tag. Once the crew knows it, they can stretch it into a permission for 1 Aura, the same as any tag they know about.
--   **Its Standing** shows up in person: an ally's agents Help, and an enemy's face telegraphs.
+-   **Its secret** can be found like any hidden tag. Once the crew knows it, they can bring it into a roll for 1 Aura, the same as any tag they know about.
+-   **Its Standing** shows up in person: an ally's agents join in, and an enemy's face telegraphs.
 
 The crew's own Power, Wealth, tags and Reputations, and how the crew grows, are in [The Party Sheet](#s-party-faction).
 
@@ -224,7 +225,7 @@ Now for the moves. The Estate's move has already failed. The Guild rolls a d12 o
 :::
 
 :::note
-**If war comes.** There are no war rules in Zi, because a war is a lot of factions moving at once, and the faction turn already does that. If your campaign goes to war:
+**If war comes.** There aren't any war rules in Zi'Dara, because a war is a lot of factions moving at once, and the faction turn already does that. If your campaign goes to war:
 
 -   Give each side a war agenda, like *take the harbour*, at a d2 or a d4. Every downtime, each side advances its own and attacks the other's Power.
 -   Whoever's agenda climbs past d12 first wins. If a side's Power steps down past d2, it's broken.

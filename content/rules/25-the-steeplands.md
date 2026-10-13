@@ -5,9 +5,10 @@ order: 25
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
-You can play Zi in any setting you like, but if you don't have a world in mind, here's one in two pages, ready to play.
+You can play Zi'Dara in any setting you like, but if you don't have a world in mind, here's one in two pages, ready to play.
 :::
 
 The Steeplands are a rain-soaked archipelago of trade cities and old grudges. Ships come and go from every harbour, nobody asks where you're from, and nobody forgets a debt.

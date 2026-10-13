@@ -5,6 +5,7 @@ order: 21
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 The Oracle is three d20s. It's how the world makes up its mind when nobody at the table wants to decide.
@@ -74,7 +75,7 @@ It's two in the morning, so the GM says it's likely. She rolls Fate 11 and Bane 
 
 1.  It takes longer than you thought.
 2.  Someone notices.
-3.  It costs you a resource.
+3.  It costs you something you carry.
 4.  A second problem attaches.
 5.  It works, but not the way you meant.
 6.  Someone else is already here.

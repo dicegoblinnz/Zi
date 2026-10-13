@@ -5,6 +5,7 @@ order: 28
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 There's no monster manual here, because you don't need one. A threat is a Challenge and a few tags.
@@ -20,7 +21,7 @@ This chapter's just the procedure. [Running the Game](#s-building-threats) has t
 4.  **What keeps it going.** Give it as many as its size says. That's its health.
 5.  **What drives it.** Anything with a name gets at least one. It's how the crew talks to it, buys it, scares it or turns it.
 6.  **Hide one.** Every named threat and every boss gets a hidden tag. On a boss, make it the weak point, or make the weak point something they can see but can't reach yet.
-7.  **Give it a power, if it has one.** That's an impossible thing it can do, written as a tag and telegraphed from the budget. Most threats don't need one. There's more in [unique mechanics](#s-unique-threats). If it has Forms, write *Forms (2)* or *Forms (3)*, and a Forms list of about ten tags to pick its new shapes from.
+7.  **Give it a power, if it has one.** That's an impossible thing it can do, written as a tag and telegraphed from the round budget. Most threats don't need one. There's more in [unique mechanics](#s-unique-threats). If it has Forms, write *Forms (2)* or *Forms (3)*, and a Forms list of about ten tags to pick its new shapes from.
 8.  **Name it, and give it a voice.** Write one line for it to say in character, and the first thing the crew notices.
 
 ## What it is {#what-it-is}
@@ -113,6 +114,6 @@ For how he comes at you, she rolls a 9, *Calls for Help*, and decides that's his
 **What you notice:** The wolf arrives first. It always does.
 :::
 
-Three plain tags would be three wins against his d12, and a crew of four can manage that in a single round. So she gives two of them [Tough](#s-tough-gm). The crew's four characters with one Title each, so her budget's 40, and that's what she puts into them: *Armoured 20*, which comes first, and *Feeds 20*. Now he's three or four rounds the long way, or one win if the crew has read Vane's ledger. That makes him a boss worth a session, because he's hard to grind down and he's got a secret worth hunting for.
+Three plain tags would be three wins against his d12, and a crew of four can manage that in a single round. So she gives two of them [Tough](#s-tough-gm). Her table's a starting crew of four, so her [threat budget](#s-threat-budget)'s 40, and that's what she puts into them: *Armoured 20*, which comes first, and *Feeds 20*. Now he's three or four rounds the long way, or one win if the crew has read Vane's ledger. That makes him a boss worth a session, because he's hard to grind down and he's got a secret worth hunting for.
 
 At the table, Redhand telegraphs from the round budget like everything else. His axe is a d12, and *Reach* lets it pin someone at the end of it. His wolf goes for the scene's clock with a d12: *it howls, and the pack answers.* Write three like that on his card before the session, the way every threat in [The Bestiary](#bestiary) has them, and you'll never be stuck for what he does next.

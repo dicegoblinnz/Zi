@@ -5,6 +5,7 @@ order: 14
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 Some players need the table set up a bit differently, and it's usually easy to sort.
@@ -32,8 +33,8 @@ When you act against a threat, you roll its die too, in another colour, so you c
 -   **A telegraph board.** The GM writes each telegraph on a whiteboard as she says it, big, with its die and who it's aimed at, and rubs it out once it's answered or landed. Put the board wherever it's easiest to see.
 -   **No grid, if the grid's hard to see.** Use the bands from [Playing Without a Grid](#s-theatre) instead.
 
-:::example[One pair at a time]
-Bram splits his 12 steps into three d8s on the guard captain: one to knock his sword away, one to floor him and one to make him give up. The captain's Challenge 3, so he defends each one with a d6. Bram's player calls all three, then rolls one d8 and one d6 at a time and says each pair out loud. The sword's 7 against 4, and it goes skittering. The floor's 2 against 5, so the captain keeps his feet. Giving up is 6 against 6, and Bram lets the tie go.
+:::example[One die at a time]
+Wren joins Bram's roll on the guard captain, so it's his Fight, 4 steps, and hers, 5. That's 9 steps from two actions, and they make it three d6s: one to knock his sword away, one to floor him and one to make him give up. The captain's Challenge 3, and his d6 only gets rolled once this round, so Bram's player rolls it first and leaves it showing: a 4. Then he calls all three and rolls his d6s one at a time, saying each one out loud. The sword's 5 against 4, and it goes skittering. The floor's 2 against 4, so the captain keeps his feet. Giving up is 4 against 4, and Bram lets the tie go.
 :::
 
 ## Hearing {#s-access-hearing}
@@ -41,7 +42,7 @@ Bram splits his 12 steps into three d8s on the guard captain: one to knock his s
 Telegraphs come all at once, and they're the part nobody can afford to miss, so the GM writes each one on an index card as she says it: what it's doing, and its die. The die sits on the card, and the card goes in front of whoever it's aimed at (or beside the stake, place or clock). Whoever answers it, or has it land on them, picks that die up and rolls it. Then the card comes off the table.
 
 :::example[Round one, on cards]
-In the Vane manor, five cards go down: *Pin him to the wall* (d10) in front of Bram, *Spear sweep* (d8) in front of Vesk, *Spear* (d10) in front of Isolde, *Block the vault doorway* (d10) on the stake *Get the paintings out*, and *Wake the house* (d4, one answer) by the household clock. At the end of the round, Bram picks the d10 up off his card and rolls it against his Armour d6. It's 10 against 4, and it lands.
+In the Vane manor, five cards go down: *Pin him to the wall* (d10) in front of Bram, *Spear sweep* (d8) in front of Vesk, *Spear* (d10) in front of Isolde, *Block the vault doorway* (d10) on the stake *Get the paintings out*, and *Wake the house* (d4, one answer) by the household clock. At the end of the round, Bram picks the d10 up off his card and rolls it against his Armour d6, his one defence roll this round. It's 10 against 4, and it lands.
 :::
 
 Sit where you can see the GM's face and everyone else's, at the quietest end of the room. Planning a round gets loud, so talk one at a time, and let whoever's talking finish. Online, turn the captions on if your call has them, and the GM types every telegraph into the chat as she says it.
@@ -50,12 +51,12 @@ Sit where you can see the GM's face and everyone else's, at the quietest end of 
 
 A dice tray stops the dice going off the edge of the table, and with a dice tower you just drop them in the top. Chunky dice are easier to pick up, too.
 
-If throwing dice is hard work, ask a friend to roll for you. **Every call's still yours**: the intents, the Aura and your Spark. Or roll in the Player app, which builds and rolls any roll from your sheet and rolls your defence when something lands on you, so all you do is tap. With the app, someone at the table rolls the threat's die alongside it.
+If throwing dice is hard work, ask a friend to roll for you. **Every call's still yours**: the intents, the Aura and your Sparks. Or roll in the Player app, which builds and rolls any roll from your sheet and rolls your defence when something lands on you, so all you do is tap. With the app, someone at the table rolls the threat's die alongside it.
 
 Cut down the bits to handle, too. Tokens for Aura are easier than rubbing out a number, and the clocks can go on the whiteboard, so nobody's swapping dice at the end of every round.
 
 :::example[A friend's hands]
-Bram's player has asked Dorrie's player to roll for him tonight. Bram answers the spear at Isolde, and his player builds it: *Defender*, *guarding one person*, his shield and his Title, twice, plus both actions. That's 10 steps, a d12 and a d8, both on the spear. Dorrie's player rolls them with the spear's d10: 7 and 5, against a 7. It's a tie, and it's Bram's player who decides to pay 1 Aura to win it.
+Bram's player has asked Dorrie's player to roll for him tonight. Bram answers the spear at Isolde, and his player builds it: his Fight is 4 steps, and *guard one person* fits too, but it isn't on his Fight, so he pays 1 Aura to bring it in. That's 5 steps, a d10, on the spear. Dorrie's player rolls it with the spear's d10: 7 against a 7. It's a tie, and it's Bram's player who decides to pay 1 Aura to win it.
 :::
 
 :::note
@@ -64,16 +65,16 @@ Bram's player has asked Dorrie's player to roll for him tonight. Bram answers th
 
 ## Reading, Numbers and Words {#s-access-reading}
 
-The book's in plain words, and every rule term's in the [glossary](#appendix-glossary) at the back, one line each. The web book's search finds any word, on a phone or a computer, and the Player app's got the rules too, searchable, with thirteen short lessons on how to play.
+The book's in plain words, and every rule term's in the [glossary](#appendix-glossary) at the back, one line each. The web book's search finds any word, on a phone or a computer, and the Player app's got the rules too, searchable, with short lessons on how to play.
 
--   **Skip the long build.** A [Quick Build](#s-quick) kit gets you a character in ten minutes, or you can pick a [ready-made character](#s-pregens) and play. The same six are in the Player app.
--   **Keep the ladder beside you.** The steps-to-dice ladder's at the top of the player reference, so there's no maths to do in your head, and the table can help you count: "*Larceny*, your locks specialization, your Title and your picks, plus the action. That's 5, a d10."
--   **A cut-down sheet.** Copy the lines you'll use most onto one card, in big, clear writing, and keep the full sheet nearby for the rest.
+-   **Skip the long build.** [Quick Build](#s-quick) gets you a character in ten minutes, or you can pick a [ready-made character](#s-pregens) and play. The same six are in the Player app.
+-   **Let your set actions count for you.** Each one has its steps and its die written on your sheet, so most rolls start from a number and there's no maths to do in your head. When you bring something in, keep the steps-to-dice ladder from the player reference beside you, and the table can help you count: "Your Sneak's 4, and your grappling line's 1 more for 1 Aura. That's 5, a d10."
+-   **A cut-down sheet.** Copy your set actions onto one card, with their steps and dice, in big, clear writing, and keep the full sheet nearby for the rest.
 -   **Say your sheet out loud.** Before you play, read your permissions to the table as plain *I can* lines. Then everyone knows what you're good at, and anyone can say "your cloak fits that" when you've missed one.
 -   **Use your own words.** You don't need the game's terms. Say what your character does, and the table turns it into steps: "I'm burning that arrow out of the air before it gets to Isolde" is an answer, and the GM says so.
 
 :::example[Wren, out loud]
-"I'm the hunter who's never lost a trail. I can fight at range, best with a longbow. I can follow things, best when they're beasts, and I can live off the land, best in a forest. I can vanish into trees and shadow in my cloak, and I can hit anything I can see with my bow."
+"I'm the hunter who's never lost a trail, so I can follow any trail, move through the wild unseen and know a beast's habits. I'm an outrider from the border war too: I can scout ahead of an army, ride hard over rough country and read the land for an ambush. And I can shoot a longbow, and with this one I can hit anything I can see."
 :::
 
 ## Focus, Memory and Energy {#s-access-focus}
@@ -87,7 +88,7 @@ The book's in plain words, and every rule term's in the [glossary](#appendix-glo
 
 ## Talking at the Table {#s-access-voice}
 
-You don't have to do voices, or talk as your character at all. Say what they do, in the third person if that's easier: "Dorrie gives the clerk a false name and flashes her signet pin." It's the same roll either way: *Deception*, *false names*, the pin and her Title, plus the action, make 5 steps, a d10.
+You don't have to do voices, or talk as your character at all. Say what they do, in the third person if that's easier: "Dorrie gives the clerk a false name and flashes her signet pin." It's the same roll either way: her Pass as someone else, with the pin already on it, 5 steps, a d10.
 
 -   **Take the spotlight when you want it.** Want a moment? Ask for one: "Can Dorrie have a go at the clerk?" If you'd rather sit back for a scene, tell the GM and she'll aim it at someone else. When your moment comes, it can be a roll instead of a speech.
 -   **Ask before putting anyone on the spot.** The GM asks players to make up bits of the world (see [The Conversation](#s-conversation)). Some love it and some don't, so she gives a heads-up and a way out: "Isolde, in a minute I'll ask what your order's sigils mean, so have a think. Or I'll make it up, if you'd rather."
@@ -95,9 +96,9 @@ You don't have to do voices, or talk as your character at all. Say what they do,
 
 ## Playing from Somewhere Else {#s-access-remote}
 
-Some nights getting to the table's the hard part. Zi plays fine over a video call, and it works with one player on a screen and the rest round the table. For the nights someone can't make it at all, see [When Someone Can't Make It](#s-absent).
+Some nights getting to the table's the hard part. Zi'Dara plays fine over a video call, and it works with one player on a screen and the rest round the table. For the nights someone can't make it at all, see [When Someone Can't Make It](#s-absent).
 
-Roll in the Player app, or roll real dice where the camera can see them, and say every number out loud either way. If the table would rather see every roll, use a dice roller you can all see in the chat. Keep the party sheet and the log in a shared document everyone can open. With one player on a screen, point a phone at the telegraph cards and the party sheet, and before the round ends, the GM checks they've had their actions.
+Roll in the Player app, or roll real dice where the camera can see them, and say every number out loud either way. If the table would rather see every roll, use a dice roller you can all see in the chat. Keep the party sheet and the log in a shared document everyone can open. With one player on a screen, point a phone at the telegraph cards and the party sheet, and before the round ends, the GM checks they've had their action.
 
 ## The GM's Side {#s-access-gm}
 
@@ -119,7 +120,7 @@ The rules are there for the table, so if one gets in the way of someone playing,
 
 That leaves plenty of room:
 
--   **Fewer dice on the table.** Roll a pair at a time, so only two dice are ever down at once. Or have one person roll the threats' dice for everyone, and the GM can pick them back up for anyone who'd rather she did.
+-   **Fewer dice on the table.** A defence roll stands for the whole round, the threat's and yours, so roll it first and leave it showing (or write the number on the board), then roll the dice coming at it one at a time. Only two dice are ever down at once. Or have one person roll the threats' dice for everyone, and the GM can pick them back up for anyone who'd rather she did.
 -   **Bigger dice.** Bigger in your hand, with the same number of sides.
 -   **Numbers instead of dice.** A roller on a screen, like the Player app, gives you the number with nothing to pick up or read off a die.
 -   **A friend's hands.** Someone else rolls, and you make every call.

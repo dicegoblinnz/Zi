@@ -5,6 +5,7 @@ order: 9
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 Three days over the fells is one sentence, unless the fells have something to say about it.
@@ -29,18 +30,18 @@ A journey's built from parts you already know: a stake, a clock, an event and te
 
 A **leg**'s a day on the road, or one stage of it, and it runs like a round.
 
-1.  **The GM telegraphs** what the road throws at you this leg, face up, like a river in flood or something following you. It comes out of the round budget: half of it for an easy road, and all of it when the country's trying to kill you.
-2.  **Everyone gets two actions** for the day.
+1.  **The GM telegraphs** what the road throws at you this leg, face up, like a river in flood or something following you. It comes out of the [round budget](#s-budget), about 5 steps for each player: half of it for an easy road, and all of it when the country's trying to kill you.
+2.  **Everyone gets one action** for the day, the same as in a round.
 3.  **The leg ends.** Unanswered telegraphs land. Supplies steps down, unless somebody fed the crew. The deadline steps down too, unless somebody worked it, and every condition steps down one.
 
 Here's what you can do with your day:
 
--   **Lead the way.** One of you leads, and anyone else can help. Roll against the way's Challenge, and if you win, the stage you're on is behind you. If something on your sheet plainly covers knowing the way, like a map of this road, and nothing's pushing back, you just walk it.
--   **Feed the crew.** Hunt or forage, or buy from a farm. Beat the way's Challenge and Supplies doesn't step down this leg. Every Rations somebody spends steps it up one.
+-   **Lead the way.** One of you leads, and anyone else can join the roll. Roll against the way's Challenge, and if you win, the stage you're on is behind you. If something on your sheet plainly covers knowing the way, like a map of this road, and nothing's pushing back, you just walk it.
+-   **Feed the crew.** Hunt or forage, or buy from a farm. Beat the way's Challenge and Supplies doesn't step down this leg. Rations are a utility item, and every Rations somebody crosses off steps it up one.
 -   **Keep watch.** Answer whatever's coming, for yourself or for someone else.
--   **Study the road.** Find the hidden tag before you walk into it, get a straight answer (*where would they ambush us?*), or find something that helps, like a drove road or a ford the maps forgot. If it could be out there, it is, and it's a permission for the crew for the rest of the journey.
+-   **Study the road.** Find the hidden tag before you walk into it, get a straight answer (*where would they ambush us?*), or find something that helps, like a drove road or a ford the maps forgot. If it could be out there, it is, and it's a permission for the crew for the rest of the journey, free on any roll it fits.
 -   **Slow what's behind you.** Burn the bridge, or lay a false trail. Beat the deadline's die and it steps back up one.
--   **Look after each other.** Help, guard, or break a condition.
+-   **Look after each other.** Join someone's roll, Defend, or break a condition.
 
 A telegraph aimed at the way or at Supplies has no defence to roll, like any telegraph at a stake or a clock. If nobody answers it, it happens. One that lands on the way costs you the day: you're on the same stage tomorrow, whatever you rolled.
 
@@ -54,7 +55,7 @@ It's one problem, getting there, however many days it takes. Aura fills when you
 
 ### Horses, carts and boats {#horses-carts-and-boats}
 
-They're [party resources](#party-sheet), so each one's a permission for whoever's using it, where it fits. A good horse makes time on a road and a boat gets you down the river. A cart is why Supplies starts at a d10, and its Catch is usually *Needs a Road*.
+They're [party resources](#s-party-resources), so each one counts for whoever's using it, on any roll it fits, for 1 Aura to bring it in. A good horse makes time on a road and a boat gets you down the river. A cart is why Supplies starts at a d10, and it won't go anywhere there isn't a road.
 
 ### On the road {#on-the-road}
 
@@ -74,21 +75,21 @@ When you need something for the road to throw at them, roll a d8.
 :::example[Over the fells]
 Wren, Bram, Isolde and Ash have to reach the abbey on the far side of the fells before the Estate's riders do. The GM sets it up. *Reach the abbey* is Challenge 4, a d8, with *The Ford*, *The Fells* and *The Long Bog* in the way. The riders are an event at a d8, and when it runs out, they get there first. The crew packed properly, so Supplies starts at a d8. Wren's torn map is of the old abbey road, so she knows the way.
 
-**Leg 1.** The GM telegraphs: "The river's up. That's a d8 at Supplies, and if it lands, it takes a pack and Supplies drops two sizes. And something's been following you since the drove road. A d6 at Isolde, at the back."
+**Leg 1.** The GM telegraphs: "The river's up. That's a d8 at Supplies, and if it lands, it takes a pack and Supplies drops two sizes. And something's been following you since the last farm. A d6 at Isolde, at the back."
 
-The ford's in flood, so it's pushing back, and Wren has to roll for it even with the map. *Survivor* fits finding a crossing, so that's 2 steps an action, 4 for both. Isolde holds the rope on the bank. Nothing on her sheet fits, so it's just her action, 1 step. Wren's on 5 steps, a d10. She rolls 7, and the way's d8, which she rolls too, comes up 6. *The Ford*'s behind them.
+The ford's in flood, so it's pushing back, and Wren has to roll for it even with the map. Her Move is just her second Title, 2 steps with the action. *Scout ahead of an army* fits finding a crossing, but it isn't on any of her set actions, so she brings it in for 1 Aura. That's 3 steps, a d6. She rolls 5, and the way's d8, which she rolls too, comes up 4. *The Ford*'s behind them.
 
-Bram answers the river by carrying the packs across above his head. *Athlete* and *heavy lifting*, twice, plus the actions, make 6 steps, a d12. He rolls 9 against the river's 5, and the packs stay dry. Ash answers the d6 at Isolde with a little fire at the back of the line. *Evocation*, *fire*, the ember stone and her Title, plus the action, make 5 steps, a d10. She rolls 8 against 2, and the wolves melt back into the heather.
+Bram answers the river by carrying the packs across above his head. His Lift and carry is his first Title and *lift what two men can't*, 3 steps with the action, a d6. He rolls 5 against the river's 3, and the packs stay dry. Ash answers the d6 at Isolde with a little fire at the back of the line. That's her Scare them off: her first Title, *throw fire*, *make a threat stick* and her ember stone, with the action 5 steps, a d10. She rolls 8 against 2, and the wolves melt back into the heather.
 
-With her second action Ash Studies the road ahead. *Scholar* and *history*, plus the action, make 3 steps. Isolde helps with her other action, *Scholar* plus the action, so Ash is on 5 steps, a d10. She rolls 8 against the way's 4 and asks for something that helps: the old drove road the monks used to bring their sheep down. It could be out there, so it is, and it's a permission for the whole crew for the rest of the journey.
+Isolde Studies the road ahead. Her Study is her second Title, *know the history of anything old* and Iron Will, with the action 4 steps, a d8. She rolls 7 against the way's 4 and asks for something that helps: the old drove road the monks used to bring their sheep down. It could be out there, so it is, and it's a permission for the whole crew for the rest of the journey.
 
 Nobody fed the crew, so at the end of the leg Supplies steps down to a d6. The riders step down to a d6 as well.
 
-**Leg 2.** Wren knows the way and nothing's pushing back on the open fells, so they just walk them. The GM telegraphs the weather instead: "Fog's coming down off the tops. A d8 at the way, and if it lands, you lose the day." Bram holds up his coin from home. He can't get lost while he's holding it, so he walks in front and the crew follows him through the fog. Nobody rolls, and the fog never lands.
+**Leg 2.** Wren knows the way and nothing's pushing back on the open fells, so they just walk them. The GM telegraphs the weather instead: "Fog's coming down off the tops. A d8 at the way, and if it lands, you lose the day." Isolde answers it. The monks marked their drove road with cairns and she knows how to read them, so it's her Study again, 4 steps. The drove road counts too, and it's free, because it's something the crew's got for the whole journey. That's 5 steps, a d10. She rolls 7 against the fog's 4, and she walks them from cairn to cairn until it lifts.
 
-That leaves Wren free to hunt. *Tracker*, *beasts*, *Marksman*, *longbow*, her bow and what it does best, and her Title, plus the action, make 8 steps, a d12 and a d4. She puts both on the hunt and rolls 9 and 3, and the way's d8 comes up 5. There's venison tonight, so Supplies doesn't step down.
+That leaves Wren free to hunt. It's the bow that puts venison on the fire, so she starts from her Fight: her first Title, *shoot a longbow*, *hit anything I can see* and Marksman's Eye, 5 steps with the action. *Know a beast's habits* is on her Track, so bringing it in costs 1 Aura. That's 6 steps, a d12. She rolls 9, and the way's d8 comes up 5. There's venison tonight, so Supplies doesn't step down.
 
-Ash goes back up the drove road and sets the heather alight behind them. *Evocation*, *fire*, the ember stone, her tinderbox and her Title, plus the action, make 6 steps, a d12, against the riders' d6. She rolls 7 against 3, and the riders step back up to a d8. Somebody worked them this leg, so they don't step down at the end of it.
+Ash goes back up the drove road to set the heather alight behind them, and Bram drags a dead gorse bush across the road for it to catch. They've put their actions into the same thing, so it's a combo. Ash's Fight is her first Title, *throw fire* and her ember stone, 4 steps, and Bram's Lift and carry is 3. That's 7 steps between them, a d12 and a d2, and they put both on the riders' d6. They roll 7 and 1 against 3, and the best die counts, so the riders step back up to a d8. Somebody worked them this leg, so they don't step down at the end of it.
 
-On the third morning they're at the edge of the Long Bog, with Supplies at a d6, the riders at a d8 and *The Fells* behind them. The bog's pushing back, and Wren's the only one who can hunt or find a way through it. She's got two actions to do both.
+On the third morning they're at the edge of the Long Bog, with Supplies at a d6, the riders at a d8 and *The Fells* behind them. The bog's pushing back, and Wren's the only one who can hunt or find a way through it. She's only got one action a leg, so she'll have to pick one, unless she spends a Spark for a second.
 :::

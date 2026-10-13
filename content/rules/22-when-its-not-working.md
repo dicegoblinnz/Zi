@@ -5,6 +5,7 @@ order: 22
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 Every long campaign hits a week where it isn't working.
@@ -16,7 +17,7 @@ Try ignoring it first: play without it for a session.
 
 ## When Fights Feel Too Easy, or Too Hard {#when-fights-feel-too-easy-or-too-hard}
 
--   **Too easy?** Check the budget: are you actually spending it? Are your telegraphs aimed at stakes and clocks, or only at Armour? Add a stake the crew can't ignore.
+-   **Too easy?** Check the budgets: are you actually spending the [round budget](#s-budget), and is the boss's Tough sized to the [threat budget](#s-threat-budget)? Are your telegraphs aimed at stakes and clocks, or only at Armour? Add a stake the crew can't ignore.
 -   **Too hard?** Run the next scene as a breather. Give the boss an obvious weak point. Make sure every threat that matters has something driving it, so fighting isn't the only way through.
 -   **Too long?** Count the keeps-it-going tags. Four on every threat is a slog. Cut them, or make them findable.
 

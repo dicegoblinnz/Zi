@@ -5,6 +5,7 @@ order: 15
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 Before you touch a die, sit down together and have one conversation.
@@ -38,13 +39,15 @@ The list in [Playing Carefully](#s-lines-veils) is a good place to start. Put th
 
 The GM reads [the promises](#s-gm-promises) from *Running the Game* out loud. They're what the players can hold the GM to, so if a player thinks one's been broken, they can say so, and the table sorts it out.
 
-## 5. The Character Connections {#the-character-connections}
+## 5. The Characters and Their Connections {#the-character-connections}
 
-Go around the table with the ten crew questions from [Step 7](#s-connect). Everyone answers at least two, naming another character each time. If anyone wants to play tonight without building, they can take one of the [ready-made characters](#s-pregens).
+Make your characters at the table, so everyone hears everyone else's Titles as they go down. You each write two Titles, with a trait and three permissions on each, then fill in your set actions, what you carry and your two attuned things. You get a Spark for each Title, so that's two to start. [Building Your Character](#building-character) takes you through it a step at a time.
+
+Then go around the table with the [ten crew questions](#s-connect). Everyone answers at least two, naming another character each time. If anyone wants to play tonight without building, they can take one of the [ready-made characters](#s-pregens).
 
 ## 6. The Party Sheet {#the-party-sheet}
 
-Draw it up together. Put every Aspiration at d2 and the party Goal at d2. Give the crew its starting dice, Power d4 and Wealth d4, and a name if you've got one. Then add your first factions and note down the party resources.
+Draw it up together. Put every Aspiration at d2 and the party Goal at d2. Give the crew its starting dice, Power d4 and Wealth d4, and a name if you've got one. Then add your first factions, and anything the crew owns together.
 
 The Goal is what the first arc's about, so take your time over it. A good first Goal is something the whole crew wants and can't get in one night, like *clear Dorrie's name* or *own the Low Market*. Two or three factions is plenty to start, as long as one of them wants something the crew has.
 
@@ -54,7 +57,7 @@ Decide how magic sits in this world. Is it rare, feared, common, holy or illegal
 
 ## 8. The Map {#the-map}
 
-Grid or theatre of the mind? Zi's built for a grid, but it plays fine without one, so decide together. If you use a grid, one square is one unit, about five feet. There's more on this in [Tactical Play](#tactics).
+Grid or theatre of the mind? Zi'Dara's built for a grid, but it plays fine without one, so decide together. If you use a grid, one square is one unit, about five feet. There's more on this in [Tactical Play](#tactics).
 
 ## 9. If You've Played Other Games {#if-youve-played-other-games}
 
@@ -64,7 +67,7 @@ Players who've played other roleplaying games bring habits with them, and most o
 -   **Most threats don't have hit points.** They have tags, and every win strips one, so look for the weak point instead of grinding. The big ones have Tough, and Tough works like hit points.
 -   **You roll their dice too.** The GM almost never rolls, so pick up the threat's die in another colour.
 
-There's more in [Welcome to Zi](#s-from-dnd).
+There's more in [Welcome to Zi'Dara](#s-from-dnd).
 
 ## 10. Session Length and Rhythm {#session-length-and-rhythm}
 

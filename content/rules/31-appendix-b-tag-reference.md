@@ -5,8 +5,9 @@ order: 31
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
-Every tag in here tells you how it shows up in the story and what it opens up for the crew. Tags don't make a threat's dice bigger. A tag only changes dice when it says so. Players who know a tag can stretch it into a permission for 1 Aura.
+Every tag in here tells you how it shows up in the story and what it opens up for the crew. Tags don't make a threat's dice bigger. A tag only changes dice when it says so. Players who know a tag can bring it into a roll for 1 Aura.
 
 ## How it comes at you {#how-it-comes-at-you}
 
@@ -87,7 +88,7 @@ These tags are its health. Each one's a reason it's still standing, and when you
 | **Knows the Streets** | It has an alley for every problem and a friend on every corner. Chase it here and you lose. |
 | **Knows the Territory** | This is its ground. It knows the river crossings, the dens, the cliffs. Lead it somewhere new. |
 | **Knows the Waterfront** | Every pier, boat and dockhand. It can vanish into the harbour in a heartbeat. |
-| **Layered** | Built in layers, and every one holds. It rolls one Challenge die for every tag it has left keeping it going, and its best die counts. Strip one and it rolls one fewer. Layered itself is never stripped. For special encounters only. |
+| **Layered** | Built in layers, and every one holds. The first time it's attacked in a round, it rolls one Challenge die for every tag it has left keeping it going, and its best die is the roll that stands for the round. Strip one and it rolls one fewer. Layered itself is never stripped. For special encounters only. |
 | **Mournful** | It grieves. The grief makes it strong and slow. Speak to the grief and the strength goes out of it. |
 | **Never Beaten** | It has never lost, and it fights like it. The first real wound shakes it more than it should. |
 | **Not Really Here** | Your blade passes through. It's somewhere else, and this is its shadow. Find where it really is. |
@@ -161,7 +162,7 @@ These tags are what it wants, fears and loves, and they're how you talk to it, b
 
 ## The ground {#the-ground}
 
-The ground is the place itself, and anyone can use it. For a player, that means stretching it into a permission for 1 Aura. The GM can telegraph from it too.
+The ground is the place itself, and anyone can use it. For a player, that means bringing it into a roll for 1 Aura. The GM can telegraph from it too.
 
 | Tag | How it plays |
 | --- | --- |
@@ -211,7 +212,7 @@ These tags go on a stake, for whatever's in the way. Every win strips one, and w
 | **Hidden Away** | Nobody knows exactly where it is. Search, ask, or follow someone who does. |
 | **In Plain Sight** | It's right there, in front of everyone. Taking it is easy. Taking it unseen isn't. |
 | **Locked** | A lock, a bar, a seal. Someone has to open it, break it or find the key. |
-| **Needs Two Hands** | One person cannot do this alone. Somebody has to stop what they are doing to help. |
+| **Needs Two Hands** | One person can't do this alone. Somebody has to stop what they're doing and put their action in with you. |
 | **On a Timer** | It only works for a moment: a tide, a bell, a changing of the guard. Miss it and wait. |
 | **Paperwork** | A seal, a signature, a stamp. The right document makes it legal. The wrong one makes it a crime. |
 | **Proof Needed** | Nobody will believe you without evidence. Find it, make it, or find a witness. |

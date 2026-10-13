@@ -5,12 +5,13 @@ order: 13
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 Everything in this book assumes you're playing with people you trust.
 :::
 
-Zi goes to dark places sometimes, like a soul trapped in paint or a friend who doesn't make it out. That's fine as long as everyone at the table is fine with it. These tools keep it that way, and none of them slow the game down.
+Zi'Dara goes to dark places sometimes, like a soul trapped in paint or a friend who doesn't make it out. That's fine as long as everyone at the table is fine with it. These tools keep it that way, and none of them slow the game down.
 
 ## The X-Card {#s-x-card}
 

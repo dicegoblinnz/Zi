@@ -5,18 +5,19 @@ order: 23
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
-You can play Zi solo. It's not as good as playing with a table, but it works.
+You can play Zi'Dara solo. It's not as good as playing with a table, but it works.
 :::
 
 You can play one character with a GM, which changes a couple of numbers, or with nobody but the Oracle, which is what most of this chapter's about.
 
 ## Solo With a GM {#s-solo-gm}
 
-If it's just you and a GM, you get one extra Hurt box. The [round budget](#s-budget) doesn't change: it's 10 steps a round for one character with one Title, 15 with three and 20 with five, and somewhere in between for two or four. Build scenes with fewer stakes, because one character can't be in three places at once.
+If it's just you and a GM, you get one extra Hurt bar, so your Hurt track's four bars instead of three. The [round budget](#s-budget) doesn't change: it's about 5 steps a round for each player, so that's 5 for you. Build scenes with fewer stakes, because one character can't be in three places at once.
 
-The bestiary writes every [Tough](#s-tough) number for a budget of 40, four characters with one Title each, so scale it to yours. For one character with one Title, *Tough 40* is *Tough 10* and *Tough 20* is *Tough 5*.
+The bestiary writes every [Tough](#s-tough) number for a starting crew of four, a [threat budget](#s-threat-budget) of 40, so scale it to yours. One character with two Titles is a threat budget of 10, so *Tough 40* is *Tough 10* and *Tough 20* is *Tough 5*.
 
 ## Solo Alone {#s-solo-alone}
 
@@ -27,9 +28,9 @@ All you need is one character, one set of dice and the Oracle, and the Oracle's 
 1.  **Roll the Prompt** below: something happens, and maybe there's a complication.
 2.  **Build the scene** the way the GM would: one or two stakes, whatever pushes back and a clock. Ask the Oracle anything you don't know, and say [how likely](#s-oracle-odds) it is first. Play fair with yourself: if the guards are always awake at this hour, it's likely they're awake.
 3.  **Set Challenges** by rolling a d6 when you can't decide: 1–2 is Challenge 2, 3–4 is 3, 5 is 4 and 6 is 5. A boss is always 6.
-4.  **Telegraph for the world** before you act. With one Title, the budget's 10 steps a round. [Running the Threats Yourself](#s-solo-threats) shows you how.
+4.  **Telegraph for the world** before you act. For one character, the round budget's about 5 steps. [Running the Threats Yourself](#s-solo-threats) shows you how.
 5.  **Play it out,** and write one sentence in the log.
-6.  **Downtime,** as normal, with one extra Hurt box to your name. [Downtime and Factions](#s-solo-downtime) covers the slots.
+6.  **Downtime,** as normal, with one extra Hurt bar to your name. [Downtime and Factions](#s-solo-downtime) covers the slots.
 
 Outside a round, when you'd look at the GM and wait, make a move for the world instead ([When They Look at You](#s-gm-moves)), and if nothing comes to you, roll on the Twist table in [The Oracle](#oracle).
 
@@ -83,14 +84,14 @@ When you're the GM and the player at once, it's easy to go soft on yourself with
 -   **Decide clocks and Challenges before you look at your sheet.** Set each one by what the thing is, and pick threats that belong where you are, whatever your dice look like.
 -   **When you're unsure, let the Oracle decide.** If you catch yourself weighing up what would suit your character best, stop and roll it.
 -   **Keep secrets from yourself.** Cover a threat's Hidden line with your thumb, and don't read it till you've found it, with Study, the Oracle, or because it gave itself away. If you know the [bestiary](#bestiary) by heart, roll it a new hidden tag from the tables in [The Threat Builder](#threat-builder).
--   **Read permissions the way the GM would.** If you're making a case for one, it's close, so pay the Aura.
+-   **Read your sheet the way the GM would.** Anything that isn't on your set action costs 1 Aura to bring in, however well it fits. And if you're making a case for why a permission would normally do something, it's going beyond, so pay the Aura.
 -   **Name the cost before you pick one.** When something lands, name the consequence that fits the blow, the one the GM would name. Then you can offer another that fits and costs about as much, as usual.
 -   **Say when your Aspiration's within reach** while you're building the scene, once or twice a session, the way the GM would. Don't decide it halfway through a round because you need the step.
--   **Bring yourself trouble** about once a session, from your sheet, as in [Bringing Trouble](#s-trouble-gm). There's nobody to pass a spare Spark to, so bring it when yours is spent. With no table to hand you one for a great moment, it's how you earn it back.
+-   **Bring yourself trouble** about once a session, from your sheet, as in [Bringing Trouble](#s-trouble-gm). There's nobody to pass a spare Spark to, so bring it when you've spent one. With no table to hand one back for a great moment, it's how you earn it back before downtime.
 
 ## Running the Threats Yourself {#s-solo-threats}
 
-Every round starts with the telegraphs, and on your own you make them, out loud, before you look at your sheet. Scale any Tough to your budget first, as in [Solo With a GM](#s-solo-gm).
+Every round starts with the telegraphs, and on your own you make them, out loud, before you look at your sheet. Scale any Tough to your threat budget first, as in [Solo With a GM](#s-solo-gm).
 
 ### What it telegraphs {#what-it-telegraphs}
 
@@ -107,7 +108,7 @@ For a threat without a *Telegraphs* line, or when none of its three fits what's 
 | 5 | Protect something | Its die at the stake. If it lands, the stake gains a tag in the way, like *Guarded*. |
 | 6 | Change the ground | Its die at the place. If it lands, the place gains a ground tag, like *Pitch Dark* or *Fire*. |
 
-How many it makes is down to the budget and the story, the same as at a table.
+How many it makes is down to the round budget and the story, the same as at a table.
 
 ### Who it goes for {#s-solo-targets}
 
@@ -121,9 +122,9 @@ If that doesn't settle it, roll for it.
 
 ### Say it, then stick to it {#say-it-then-stick-to-it}
 
--   **Spend the budget the way the GM would.** At Even that's about one harm telegraph a round at each character, and the rest on control, stakes, clocks and the ground. A telegraph costs its die's steps, once for each target.
+-   **Spend the round budget the way the GM would.** At Even that's about one harm telegraph a round at each character, and the rest on control, stakes, clocks and the ground. A telegraph costs its die's steps, once for each target.
 -   **Say it all out loud**, or jot it on a card: what it does, at whom, and its die. Put the dice out, and only then pick up your sheet.
--   **Stick to it.** The threat doesn't get to change its mind once you've seen what you're doing. The only new telegraph is one your own action sets off, like a guard who sees you and shouts, and only while you've still got an action to answer it.
+-   **Stick to it.** The threat doesn't get to change its mind once you've seen what you're doing. The only new telegraph is one your own action sets off, like a guard who sees you and shouts, and only while you've still got an action to answer it (an extra one from a Spark, say). If you haven't, it goes in next round's telegraphs.
 
 ## Journeys, Sites and Mysteries {#s-solo-explore}
 
@@ -131,7 +132,7 @@ The three exploring chapters work on your own as written, apart from the secret,
 
 ### A journey {#a-journey}
 
-Set it up as [Travelling](#travelling) says, with three possible secrets. Each leg, roll *On the road* for what the road throws at you, and pay for it out of your budget: 5 steps on an easy road, and all 10 when the country's trying to kill you. Roll for the secret the first time you Study the road, or as you start the last stage if you never do.
+Set it up as [Travelling](#travelling) says, with three possible secrets. Each leg, roll *On the road* for what the road throws at you, and pay for it out of your round budget: 2 or 3 steps on an easy road, so a d8 from the table comes in as a d6, and all 5 when the country's trying to kill you. Roll for the secret the first time you Study the road, or as you start the last stage if you never do.
 
 When you're following something across country, roll the d12 below each leg as well.
 
@@ -193,20 +194,20 @@ Say Dorrie's on her own with *Who killed Anselm?* She writes three answers. One,
 -   **Name the four pressures** before you spend a slot: one off your sheet, your Goal, the one the faction turn gives you, and for the world, the d20 Prompt.
 -   **The faction turn runs itself.** Roll the d6 in [The Faction Turn](#s-faction-turn) for every faction, never pick, and say every move out loud before you spend a slot. Two or three factions are plenty on your own.
 -   **Your slots.** You get your two personal slots, and since you're the whole crew, its two party slots as well. They work as written: the crew's Power, or your own permissions when you're plainly the right person for it (1 step for the slot plus what fits), and two slots on one move count everything twice.
--   **Downtime rolls.** Ties go to the defender, and a die you're climbing counts as the defender. There's no Aura in downtime. Spend your Spark to roll again (your dice only), or step the crew's Wealth down one to win a tie. The factions can't do either.
+-   **Downtime rolls.** Ties go to the defender, and a die you're climbing counts as the defender. There's no Aura in downtime. Spend a Spark to roll again (your dice only), or step the crew's Wealth down one to win a tie. The factions can't do either.
 -   **Trouble waits.** Whatever downtime stirs up lands next session, when it bites, and that's when you take the Spark for it.
 -   **Next session might be waiting.** A pressure you've ignored twice is a scene, and so is a job a faction gave you, so skip the d20 and start there.
 
 ## A Crew of Your Own {#s-solo-crew}
 
-You can play two or three characters at once, which gives each of them someone to Help and someone to argue with. Past three, it's hard to keep them all in your head.
+You can play two or three characters at once, which gives each of them someone to work with and someone to argue with. Past three, it's hard to keep them all in your head.
 
--   **Telegraph for the whole crew first**, then act with them in any order, the same as a table. Each one builds and rolls their own actions from their own sheet, and Help works as usual.
--   **The budget's each character's share, added up.** Two characters with one Title each is 20. Wren with one Title and Vesk with three is 10 + 15 = 25.
+-   **Telegraph for the whole crew first**, then act with them in any order, the same as a table. Each one builds their action from their own sheet, and they can put their actions into one roll as a [combo](#s-teamwork).
+-   **Both budgets count every character.** The round budget's about 5 steps for each of them, and the threat budget's each character's share, added up: two characters with two Titles each is 20, and Wren with two Titles and Vesk with four is 10 + 15 = 25.
 -   **Use the list in [Who it goes for](#s-solo-targets)**, so you don't quietly aim everything at whoever's got the best Armour.
--   **No extra Hurt box.** That's for one character on their own.
+-   **No extra Hurt bar.** That's for one character on their own.
 -   **Keep their bonds honest.** When two of them want different things, let them. If you can't tell what one would do, ask the Oracle and let their connections set the odds: Wren's sheet says Bram's the only one who can keep up with her, so if she heads up the fell, it's likely he follows.
--   **The rest is shared as usual.** Spare Aura goes to whoever's in the scene, a Spark from trouble goes to whoever's spent theirs, and in downtime each of them gets two personal slots while the crew shares two party slots.
+-   **The rest is shared as usual.** Spare Aura goes to whoever's in the scene, a Spark from trouble goes to whoever's spent one, and in downtime each of them gets two personal slots while the crew shares two party slots.
 
 ## Keeping It Going {#s-solo-going}
 
@@ -218,31 +219,29 @@ You can play two or three characters at once, which gives each of them someone t
 ## A Solo Session, Start to Finish {#s-solo-example}
 
 :::example[Wren on the moor]
-Wren's out on her own with her ready-made sheet: Aura 5, Armour d2, Confidence d4, her Spark, and four Hurt boxes, the usual three and the solo one.
+Wren's out on her own with her ready-made sheet: Aura 5, Armour d2, Confidence d6, two Sparks, and four Hurt bars, the usual three and the solo one.
 
 **The Prompt.** The d20 says 5, *A rumour reaches you that changes something*, and she wants it to bite, so she rolls the d12 too: 5, *You're being followed*. A drover at the inn says a shepherd went up onto the moor after a lost ewe and never came down, and his fold gate's scored with the claw marks Isolde told her about. She leaves who's following her to the dice.
 
-**The scene.** She builds it before she looks at her sheet. It's nearly dark at the shepherd's fold, with a small fire going in the lee of the wall and rain coming over the tops. The stake's *Keep the trail*, Challenge 3 for hill country, a d6, with *Trampled by Sheep* and *Doubles Back* in the way, and the rain's its clock, at a d8. The ground's *Deep Heather* and *Firelight*, and the budget's 10.
+**The scene.** She builds it before she looks at her sheet. It's nearly dark at the shepherd's fold, with a small fire going in the lee of the wall and rain coming over the tops. The stake's *Keep the trail*, Challenge 3 for hill country, a d6, with *Trampled by Sheep* and *Doubles Back* in the way, and the rain's its clock, at a d8. The ground's *Deep Heather* and *Firelight*, and the round budget's 5.
 
 Is anything else hunting up here? Something took the shepherd, so she calls it likely before she rolls: Fate 9, Bane 6, and two Boon dice, 4 and 13. She keeps the 13, which beats Fate while Bane doesn't, so it's a yes. Her d6 for its Challenge says 4, so it's Challenge 3, and the Wilderness threat at 3 is the Moor Cat: *Ambush*, *Sees in the Dark*, *Cowardly*. Her thumb goes over its Hidden line. Its *Telegraphs* line has it drop out of the heather onto whoever's at the back (a d8 at Armour), knock the lantern out of whoever's hand (a d6 at the ground), or show its eyes in the firelight right behind whoever's on watch (a d6 at Confidence, *Frightened*). She's on her own, so she's at the back and on watch.
 
-**Round 1.** The d6 says 2, so it drops on her: a d8, 4 steps. Then 3, the lantern, but she isn't carrying one, so she rolls again and gets 6: the eyes, a d6, 3 steps. The last 3 steps go on the rain, a d6 at the clock. That's 10, said out loud, and fixed.
+**Round 1.** The d6 says 2, so it drops on her: a d8, 4 steps. That leaves 1, and it goes on the rain, a d2 at the clock. That's 5, said out loud, and fixed.
 
-Now the sheet. A d2 Armour stops almost nothing, so she answers the drop. Since she hasn't moved, *Marksman's Eye* is live: *Marksman*, *longbow*, the bow and what it does best, her Title and the trait, plus the action, make 7 steps, a d12 and a d2, both on the drop. She rolls 3 and 1 against its 5, and a lost answer lands at once, with no Armour roll. Her Armour can't go below a d2, so the cost that fits is a Hurt. Her cloak would cost about as much, but she'll want it later, so she fills one box of four.
+Now the sheet. She's got one action, so it's the drop or the trail. Her d2 Armour won't stop much, but a loose Hurt box clears at the end of the scene, and the rain's coming for the trail, so she works the trail and takes her chances with the drop. Her Track is her first Title, *follow any trail* and *know a beast's habits* (whatever she's after leaves claw marks), plus the action: 4 steps, a d8. It's 4 against the stake's 4, a tie, so she pays 1 Aura to win it and strips *Trampled by Sheep*.
 
-Her second action's the trail. *Tracker* and *beasts* fit (whatever she's after leaves claw marks), and so does her Title, plus the action: 4 steps, a d8. It's 4 against the stake's 4, a tie, so she pays 1 Aura to win it and strips *Trampled by Sheep*.
+At the end of the round the drop comes down, and she rolls her Armour once against it: 1 on her d2, against 5 on the cat's d8, so it lands. Her Armour can't go below a d2, so the cost that fits is a Hurt. Her cloak would cost about as much, but she'll want it later, so she fills one box. The rain lands too, and the clock steps down to a d6. She worked the stake, so it doesn't step again.
 
-At the end of the round she rolls her Confidence d4 against the eyes: 3 against 2, so they don't land. The rain does, and the clock steps down to a d6. She worked the stake, so it doesn't step again.
+**Round 2.** The d6 says 3, the lantern, but she isn't carrying one, so she rolls again and gets 6: the eyes, a d6, 3 steps. The last 2 go on the rain, a d4 at the clock, for 5.
 
-**Round 2.** The d6 says 1, the drop again, a d8, and then 5, the eyes, a d6. That's 4 + 3, and the last 3 go on the rain, a d6 at the clock, for 10.
-
-This time she Studies it first: *Tracker*, *beasts*, her Title and the action, 4 steps, a d8. It's 6 against the cat's 2, and she asks why it's on her trail instead of eating her. Off comes her thumb: *Hunting Something Else*, its weak point. It's after whatever's following her, and if she steps aside, it'll pass.
+This time she Studies it. Her Study is her second Title and *read the land for an ambush*, plus the action, 3 steps. *Know a beast's habits* fits too, but it's on her Track, not her Study, so bringing it in costs 1 Aura. That's 4 steps, a d8. It's 6 against the cat's 2, and she asks why it's on her trail instead of eating her. Off comes her thumb: *Hunting Something Else*, its weak point. It's after whatever's following her, and if she steps aside, it'll pass.
 
 Is there a rock she can get up onto, out of its road? She wants a yes, but it's open moor, so she calls it unlikely: Fate 12, Bane 7, and two Boon dice, 15 and 9. She keeps the lower, and neither 9 nor 7 beats Fate, so it's a no.
 
 Then she reads her sheet again. She's *Sure-Footed*, so heather that would bog anyone else down is just ground to her. She steps off the trail into it on her free stride, and the cat isn't trying to stop her, so there's nothing to roll. It goes past her and away down the trail she came up, and its telegraphs go with it.
 
-Her second action goes on *Doubles Back*, another d8. She rolls 8 against the stake's 5, and that's a top face, so her Aura comes back. The tracks go on up into the hills, and she's read which way before the rain can wash them out, so the stake's hers.
+That leaves *Doubles Back*, and her action's gone, so she spends a Spark on another. It's her Track again, another d8, and she rolls 8 against the stake's 5. That's a top face, so 1 Aura comes back. The tracks go on up into the hills, and she's read which way before the rain can wash them out, so the stake's hers.
 
 **The log.** That's enough for one night, so she writes: *The moor cat at the fold wasn't hunting me: it went back down the trail to meet whatever's been following me since the inn.* Next session starts there.
 :::

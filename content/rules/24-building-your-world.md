@@ -5,6 +5,7 @@ order: 24
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
 You build everything else with the same tools you used to make your character.

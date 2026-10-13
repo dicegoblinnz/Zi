@@ -1,8 +1,9 @@
 ---
-title: "Welcome to Zi"
+title: "Welcome to Zi'Dara"
 id: how-to-use
 order: 1
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::note
 **What you need to play.** Two to six players and a GM. Polyhedral dice (d4, d6, d8, d10 and d12), a few d2s (a coin works), and three d20s for the Oracle, or one d20 rolled three times. A grid map helps, but you don't need one. Paper and pencils. A session runs two to four hours.
@@ -14,7 +15,7 @@ I like characters who kick ass and take names. So I built a game about competent
 
 Every rule in here has been through real games at a real table. Plenty of rules got thrown out along the way, and what you're holding is the stuff that survived.
 
-Zi is the Sumerian word for soul. It's short, it's easy to remember, and it's a nod to where this game started.
+Zi'Dara starts with *Zi*, the Sumerian word for soul. That's a nod to where this game started.
 
 ## If you've never played a roleplaying game {#s-new-to-rpgs}
 
@@ -22,32 +23,32 @@ Here's the short version. You and a few friends tell a story together. One of yo
 
 Nobody wins or loses the way they would in a board game. A session runs a few hours, and a run of sessions with the same crew is a campaign.
 
-## Coming from D&D? {#s-from-dnd}
+## Coming from another roleplaying game? {#s-from-dnd}
 
-You'll pick it up fast, but a few things work differently. You don't roll a d20 to see if it works: your die grows out of what you're good at. Most threats don't have hit points. They have tags, and every win strips one, though the big ones have Tough, which works like hit points. There's no initiative either. The GM shows you everything that's coming first, then the crew acts in any order. If you want a proper side-by-side, there's a free guide called *Crossing Over*.
+You'll pick it up fast, but a few things work differently. There are no classes and no skill list. Your character has two Titles, like *the best cat burglar in the city*, and everything they can do is a permission written on one of them. You don't roll a d20 to see if it works either. Your die grows out of what you're good at, and your sheet has it counted before you sit down. Most threats don't have hit points. They have tags, and every win strips one, though the big ones have Tough, which works like hit points. There's no initiative. The GM shows you everything that's coming first, then everyone takes one action, in any order. If you want a proper side-by-side, there's a free guide called *Crossing Over*.
 
 ## What it looks like at the table {#s-at-the-table}
 
 Don't worry about the words yet. *The Core* and *Conflict* explain all of them.
 
 :::example[Over the wall]
-**GM:** Vesk, you're halfway over the manor wall when the gate guard turns and sees you. He's reaching for the bell rope. That's a d6 at the bell, and if it lands, the whole house wakes up. Bram, his dog's already coming for you. That's a d8 at your Armour.
+**GM:** Vesk, you're halfway over the manor wall. The gate guard hasn't seen you yet, but his dog's spotted Bram at the gate, and he's reaching for the bell rope. That's a d6 at the bell, and if it lands, the whole house wakes up. Bram, the dog's already coming for you. That's a d8 at your Armour.
 
-**Vesk:** He's not ringing that bell. Both actions: I drop off the wall onto him and drag him away from the rope. *Stealth* fits, my Title fits, and my rooftops specialization is close enough. It's a wall, not a roof, so I'll pay an Aura for it. That's 4 steps an action, 8 for both, so a d12 and a d4, both on the bell.
+**Vesk:** He's not ringing that bell. I drop off the wall onto him from behind and drag him away from the rope. That's my Sneak: my Title, *move unseen* and Silent Step, with the action, 4 steps. My grappling line's on my Move, so I'll pay an Aura to bring it in and swing down on it. That's 5 steps, a d10, on the bell.
 
 **GM:** Fair enough. Roll his d6 as well.
 
-**Vesk:** 9 on the d12, and the d4 came up 4. That's a top face, so I get my Aura straight back. His d6 is a 5.
+**Vesk:** 10 on the d10. That's a top face, so I get my Aura straight back. His d6 is a 5.
 
 **GM:** You land on him before his hand's on the rope. Nobody's heard a thing.
 
-**Bram:** I want my actions for the gate, so I'll let the dog ride.
+**Bram:** I'm getting the gate open. The dog can have a go at my plate.
 
 At the end of the round the dog's d8 rolls a 7 against Bram's Armour, a d6, which rolls a 3. It lands.
 
 **GM:** It gets its teeth into your arm. Take a Hurt.
 
-**Bram:** Can it get the sleeve instead? Step my Armour down.
+**Bram:** Can it get the plate instead? Step my Armour down.
 
 **GM:** Fair. Your Armour's a d4 now.
 :::
@@ -56,9 +57,9 @@ At the end of the round the dog's d8 rolls a 7 against Bram's Armour, a d6, whic
 
 This book is the whole game. You don't need anything else.
 
-There are twenty-eight chapters. The first eleven teach you to play. The next six are about playing together over a campaign. The next five are for the GM. The last six are the world: how to build your own, a ready-made one called the Steeplands, five frames to choose a different world from, twenty places ready to drop in, a threat builder and a bestiary. After that come the appendices, a glossary and an index.
+There are twenty-nine chapters. The first twelve teach you to play. The next six are about playing together over a campaign. The next five are for the GM. The last six are the world: how to build your own, a ready-made one called the Steeplands, five frames to choose a different world from, twenty places ready to drop in, a threat builder and a bestiary. After that come the appendices, a glossary and an index.
 
-There are worked examples all the way through: a fight on the page and a round on the grid, a social duel, a chase, a journey, a dig under a burned library, a murder, a week of downtime, one character's whole career, a crew's whole career, and a four-session campaign. If you want to play tonight, the end of the character chapter has fourteen archetypes you can build from in ten minutes, and six ready-made characters.
+There are worked examples all the way through: a fight on the page and a round on the grid, a social duel, a chase, a journey, a dig under a burned library, a murder, a week of downtime, one character's whole career, a crew's whole career, and a four-session campaign. If you want to play tonight, *Title Ideas and the Crew* has fourteen roles and fifteen schools of magic you can build from in ten minutes, and six ready-made characters.
 
 ## Where to start {#where-to-start}
 
@@ -66,13 +67,13 @@ There are worked examples all the way through: a fight on the page and a round o
 
 **If you're the GM**, read the lot, in order. Everyone skips *The Party Sheet*, so don't. *Running the Game* is the chapter you'll keep coming back to.
 
-**If you're all new to Zi**, start with the free starter adventure, *Ironjaw*. It teaches the whole table the game while you play it, and the GM only needs to read it through once.
+**If you're all new to Zi'Dara**, start with the free starter adventure, *Ironjaw*. It teaches the whole table the game while you play it, and the GM only needs to read it through once.
 
 **If you've been away for a while**, read *The Core* again, skim the *Quick Reference* at the back, then jump back into whatever chapter you were up to.
 
 ## Finding things {#finding-things}
 
-The contents run down the side of every page. Press <span class="kbd">/</span> to search the whole book, and <span class="kbd">\\</span> to hide the contents. At the very back there's a glossary with every rule term in one line, and an index that tells you where each one lives.
+On the website, search finds anything in the book. At the very back there's a glossary with every rule term in one line, and an index that tells you where each one lives.
 
 ## A word on the rules {#a-word-on-the-rules}
 

@@ -5,9 +5,10 @@ order: 16
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
+updated: 2026-10-13
 ---
 :::quote
-A session is one night of Zi, and it's got a shape.
+A session is one night of Zi'Dara, and it's got a shape.
 :::
 
 Here's that shape for a three-hour night. Stretch it or squeeze it to fit your table, but keep the order.
@@ -26,7 +27,7 @@ Here's that shape for a three-hour night. Stretch it or squeeze it to fit your t
 2.  **Downtime.** The four pressures land, then everyone spends their slots.
 3.  **Read the party sheet.** Go through the Goal, every Aspiration and every faction.
 4.  **Check-in.** "Anything anyone wants to flag before we start?"
-5.  **Sparks.** Everyone starts the session with their [Spark](#s-spark).
+5.  **Sparks.** Everyone starts the session with all their [Sparks](#s-spark), one for each Title, because they come back every downtime.
 
 Take turns doing the recap, so it isn't always the same person. If the log doesn't jog anyone's memory, the GM fills in the gaps.
 
