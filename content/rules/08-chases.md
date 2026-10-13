@@ -20,7 +20,7 @@ A chase runs in rounds like any conflict, with telegraphs, answers and consequen
 **The Pursuer's die starts at its Challenge**, but in a chase (and only in a chase) it's how much chase the pursuer has left. That's why shaking it steps it down. It never tires on its own, so you have to make it.
 :::
 
-## The Round
+## The Round {#the-round}
 
 1.  **The GM telegraphs.** The Pursuer grabs, shoots, cuts a corner or calls for help. The Ground throws something in the way, like a cart, a gap between two roofs or a market day.
 2.  **The players act**, in any order.
@@ -28,7 +28,7 @@ A chase runs in rounds like any conflict, with telegraphs, answers and consequen
 
 The chase ends the moment any die runs out (past d2, or the Gap past d12), and whichever one got there first decides how.
 
-## What You Can Do
+## What You Can Do {#what-you-can-do}
 
 -   **Gain ground.** Roll against the Gap's die. Beat it and it steps *up* one.
 -   **Shake the pursuer.** Roll against its die. Beat it and it steps *down* one. Or go after one of its tags instead, and strip it.

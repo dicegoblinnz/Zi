@@ -10,7 +10,7 @@ source: 2026-10-02 rulebook
 Here's what Zi looks like over a month at the table: four sessions, a small crew in a city, and one score that keeps going wrong.
 :::
 
-## Session 1: The Job
+## Session 1: The Job {#session-1-the-job}
 
 **Setup.** The crew meets at a tavern in the Low Market. A woman named Verity has hired them separately, and here's the job: get into the Vane Estate's private archive at Marrow, lift a small painted box, and get out. She's paid half, and she'll pay the other half when they bring her the box.
 
@@ -20,7 +20,7 @@ Here's what Zi looks like over a month at the table: four sessions, a small crew
 
 **Aftermath scene.** Verity's payment comes up short. She says "the rest after the festival." The crew isn't happy, but they take it. The GM makes a move and advances a faction: *the Vane Estate has been seen meeting with the Harbour Guild*, and *Vane comes home* climbs to d8. Word on the street goes from nothing to *the thieves who took the painted box*.
 
-## Session 2: Downtime and the Next Job
+## Session 2: Downtime and the Next Job {#session-2-downtime-and-the-next-job}
 
 **Downtime.** The GM names four pressures. Personal: Bram's old commander has written to him. Party: the crew has three days before the festival. Faction: the Vane Estate is moving, and it's going to push its agenda, at d8, this week. World: the festival's coming.
 
@@ -34,7 +34,7 @@ Round 1: Vesk gains ground, and the Gap goes from d8 to d10. Nobody deals with t
 
 **Aftermath.** The rival crew lost a man, and it's the first time the party has cost someone their life. Bram takes a Scar. He was already battered from the dock, and then he falls from a rooftop, fills his last Hurt box and Blazes. The Scar becomes *I can fall from any height and land on my feet.*
 
-## Session 3: Complications Return
+## Session 3: Complications Return {#session-3-complications-return}
 
 **Setup.** The festival's tonight. The Vane Estate's agenda is at d10, and if it climbs twice more, Vane comes home. The rest of Verity's payment still hasn't turned up, and the rival crew wants payback.
 
@@ -46,7 +46,7 @@ Round 1: Vesk gains ground, and the Gap goes from d8 to d10. Nobody deals with t
 
 **Aftermath.** The crew meets back up, and Verity's name is a bigger problem than Verity's money. In the downtime that follows, the Estate comes for the crew, because it's worked out who took the box: the watch starts asking after a cat burglar in the Low Market. It spends Wealth for a second move too, and advances its agenda to d12. One more step and Vane's home. The world pressure fires as well, so the festival becomes a scene. The law's everywhere, and the crew scatters.
 
-## Session 4: The Job Resolves, Faction Move, Downtime
+## Session 4: The Job Resolves, Faction Move, Downtime {#session-4-the-job-resolves-faction-move-downtime}
 
 **Setup.** Vane's coming home tomorrow, so the crew has one day to act. They decide to go back to the manor and free the people in the paintings, including the one they already stole.
 
@@ -65,7 +65,7 @@ The fight runs six rounds, and it's the biggest the crew has seen. Bram drops to
 
 The arc closes, and the campaign has changed shape.
 
-## What the arc taught
+## What the arc taught {#what-the-arc-taught}
 
 -   **Session 1:** a job, a party forming a plan.
 -   **Session 2:** downtime, a faction moving, a chase, a Scar.

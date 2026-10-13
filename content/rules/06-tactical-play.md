@@ -43,7 +43,7 @@ You play Zi on a grid first, where 1 square is 1 unit, about five feet.
 **No reactions, no opportunity attacks.** You can walk right past a guard and nothing lashes out at you for moving. Threats control space with their *telegraphs*, like *cut off the way to the door* or *grab whoever runs*, so you always know what moving will cost before you move. Moving doesn't get you out of a telegraph aimed at you, though. That one lands wherever you end up, and diving behind cover once it's aimed is a way of answering it, so roll for it. Only a telegraph aimed at a place, like a fire or a falling chandelier, can be walked out of.
 :::
 
-### Reach and range
+### Reach and range {#reach-and-range}
 
 How far a bow, a thrown knife or a spell reaches is the story's call. The bands are a guide, so don't go getting a ruler out.
 
@@ -108,7 +108,7 @@ You never need to ask how hurt something is. Read its tags instead. If it's got 
 -   **Drives it**: how to end the fight without winning it. You can buy the greedy ones, let the frightened ones go, and show the loyal ones what their master really did.
 -   **Hidden**: there's always more on a boss than you can see. Spend an action to Study. It's almost never wasted.
 
-### Openings
+### Openings {#openings}
 
 An **opening** is how a big threat falls in one blow, and there are three kinds.
 
@@ -232,7 +232,7 @@ Wren's answered two telegraphs without rolling a single answer. She took away wh
 
 **End of Round 1.** Bandit one's telegraph went into the river with him. Bandit two's d6 rolls a 5 against Bram's guarded d12 and d2, which come up 8 and 1, so nothing lands. The fire's out, so nothing ticks. The captain's *Exposed* steps down to a d8.
 
-### Round 2: The opening
+### Round 2: The opening {#round-2-the-opening}
 
 :::example
 **GM:** The captain drops his shield and grabs for the knife in Vesk's hand, a d8 at her. Bandit two, alone on the bridge, swings wild at Bram. It's a d4 now, with his captain in no state to command anyone.

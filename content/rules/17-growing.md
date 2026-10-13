@@ -10,21 +10,21 @@ source: 2026-10-02 rulebook
 There aren't any levels in Zi. Your character grows, and you choose how.
 :::
 
-## There is no XP
+## There is no XP {#there-is-no-xp}
 
 You don't earn anything in Zi by counting kills. Everything that changes on your sheet changes because the story changed it, or because you chose it in downtime.
 
-## What changes every session
+## What changes every session {#what-changes-every-session}
 
 Every session ends in a [downtime](#downtime), and you choose what your two slots buy. Nobody chooses for you. The only thing pushing back is the world, which always wants some of your time.
 
-## What changes over an arc
+## What changes over an arc {#what-changes-over-an-arc}
 
 -   **An Aspiration resolves.** You gain a new Title, and growth doesn't get any bigger than that. See [Step 1](#s-title).
 -   **Abilities climb** to Master, and you start throwing more dice than you've ever thrown.
 -   **The crew grows**, the way a character does. See [The Crew](#s-party-faction), and [The Crew, Session 1 to 20](#s-crew-1-20) below.
 
-## How power grows
+## How power grows {#how-power-grows}
 
 A starting character rolls a d8 to a d12 with one action, and throws two or three dice a round. A veteran with three Titles and a Master ability rolls two or three d12s a round, and does that many things with them. The GM's budget grows alongside, so the world keeps pace, and threats that used to be bosses become lieutenants.
 
@@ -76,7 +76,7 @@ Play the farewell scene at the start of the next session, before anything else. 
 
 A new player joining, or a player whose character retired or died, builds at about the same progression as the rest of the crew. Answer two crew questions about how you know them, and write a connection with somebody already in the crew. The GM puts the new character in the next scene with a reason to be there, ideally one that's already in trouble.
 
-## Vesk, Session 1 to 20
+## Vesk, Session 1 to 20 {#vesk-session-1-to-20}
 
 :::quote
 Here's what growth actually looks like.

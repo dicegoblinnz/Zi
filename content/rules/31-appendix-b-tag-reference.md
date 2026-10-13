@@ -8,7 +8,7 @@ source: 2026-10-02 rulebook
 ---
 Every tag in here tells you how it shows up in the story and what it opens up for the crew. Tags don't make a threat's dice bigger. A tag only changes dice when it says so. Players who know a tag can stretch it into a permission for 1 Aura.
 
-## How it comes at you
+## How it comes at you {#how-it-comes-at-you}
 
 These tags say what its telegraphs can do to you.
 
@@ -55,7 +55,7 @@ These tags say what its telegraphs can do to you.
 | **Vengeful** | It remembers. Hurt it and it'll come for you, maybe not today. Make peace, or make sure. |
 | **Venom** | A scratch that burns an hour later. Its hits leave *Poisoned* behind. Know the antidote and it's only pain. |
 
-## What keeps it going
+## What keeps it going {#what-keeps-it-going}
 
 These tags are its health. Each one's a reason it's still standing, and when you strip them all, it falls. *Tough* works like hit points, and a few, like *Crumbling*, *Forms* and *Layered*, change how the rest works.
 
@@ -111,7 +111,7 @@ These tags are its health. Each one's a reason it's still standing, and when you
 | **Well-Connected** | Hurt it and someone important hears. It has friends in every room that matters. |
 | **Won't Back Down** | It won't back down, give ground or change its mind. Threats slide off. Respect might not. |
 
-## What drives it
+## What drives it {#what-drives-it}
 
 These tags are what it wants, fears and loves, and they're how you talk to it, buy it, scare it or turn it.
 
@@ -159,7 +159,7 @@ These tags are what it wants, fears and loves, and they're how you talk to it, b
 | **Well-Read** | It knows the old texts, the rules, the precedents. It can be out-argued, but only from the right book. |
 | **Zealous** | It believes. Arguments bounce off. Proof that its faith is being used might not. |
 
-## The ground
+## The ground {#the-ground}
 
 The ground is the place itself, and anyone can use it. For a player, that means stretching it into a permission for 1 Aura. The GM can telegraph from it too.
 
@@ -196,7 +196,7 @@ The ground is the place itself, and anyone can use it. For a player, that means 
 | **Tall Grass** | Waist high and whispering. Hide in it, lose people in it, set it on fire. |
 | **Thin Walls** | Everyone next door can hear. Anyone strong enough can go through. |
 
-## In the way
+## In the way {#in-the-way}
 
 These tags go on a stake, for whatever's in the way. Every win strips one, and when you've stripped them all, the stake's yours.
 
@@ -223,7 +223,7 @@ These tags go on a stake, for whatever's in the way. Every win strips one, and w
 | **Watched** | Someone's looking. Deal with the watcher, or be very quiet. |
 | **Written in Code** | You have it, but you can't read it. Someone has to crack it. |
 
-## Faction strength
+## Faction strength {#faction-strength}
 
 These tags are what makes a faction strong, and a faction attack can strip one.
 
@@ -242,7 +242,7 @@ These tags are what makes a faction strong, and a faction attack can strip one.
 | **Watchful** | It sees what happens in its territory. Moving against it quietly is hard. |
 | **Wealthy** | It can pay for anything, once. Money buys guards, silence and time. |
 
-## Condition tags
+## Condition tags {#condition-tags}
 
 Every condition carries a die. While it lasts, it's one step for or against, and it can be spent once for its big effect. It steps down one size at the end of every round, and an action that beats its die breaks it. You'll find the full rules, and what each one does, in [Conditions](#s-conditions).
 

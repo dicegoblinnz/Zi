@@ -16,7 +16,7 @@ After **every session** there's a downtime: a week, a month, a season, however l
 **Progression in Zi is yours.** Nobody hands out levels, and there's no experience to count. Every downtime, you choose what your character gets: a better ability, a new one, a new trait, a roll at your Aspiration, a new connection. What you don't get to choose is how much time you have, and the world's always asking for some of it.
 :::
 
-## The Four Pressures
+## The Four Pressures {#the-four-pressures}
 
 Every downtime, four pressures land on the party, and the GM names them before anyone spends a slot. The faction pressure comes from the faction turn (see [Factions](#s-faction-turn)).
 
@@ -27,17 +27,17 @@ Every downtime, four pressures land on the party, and the GM names them before a
 
 If you ignore a pressure, it sticks around and gets worse, and the GM brings it to the next session. Ignore it twice and it becomes a scene. A pressure never pays a Spark. Trouble that starts in downtime lands next session, and that's when the GM offers one.
 
-## Your Slots
+## Your Slots {#your-slots}
 
 Every player gets **two personal slots**, and the crew shares **two party slots**. A player can put one of their own slots toward a party action.
 
-## What You Can Do With a Slot
+## What You Can Do With a Slot {#what-you-can-do-with-a-slot}
 
-### Face a pressure
+### Face a pressure {#face-a-pressure}
 
 -   **Deal with it.** Pay the debt, answer the letter, lie low, meet the man. One slot usually settles a pressure, and the GM says if it needs two. If something pushes back, roll for it.
 
-### Recover
+### Recover {#recover}
 
 -   **Heal a Hurt**, one box per slot.
 -   **Recover all your Confidence.** This takes both slots, because you spend the whole downtime finding yourself.
@@ -45,7 +45,7 @@ Every player gets **two personal slots**, and the crew shares **two party slots*
 -   **Tend the crew.** If you have a healing ability (*Medic*, *Mending*, *Faith* with *healing prayers*), one slot heals one Hurt on every member of the crew who wants it, yourself included.
 -   **Mend a broken item.**
 
-### Grow
+### Grow {#grow}
 
 -   **Raise an ability a tier.** Novice to Skilled takes one slot, and Skilled to Master takes both. Each tier adds a step and a specialization.
 -   **Earn a new ability** at Novice, with one specialization. The story should say where you learned it.
@@ -56,7 +56,7 @@ Every player gets **two personal slots**, and the crew shares **two party slots*
 
 Two things happen in downtime without costing a slot: a Scar you took gets written as a permission or a passive, and once-per-downtime traits refresh.
 
-### Party slots
+### Party slots {#party-slots}
 
 A party slot is an action for the crew. Two slots on the same thing count everything twice, the same as two actions.
 
@@ -77,7 +77,7 @@ Most slots just happen. When something pushes back (the fence wants his money, o
 -   **There's no Aura in downtime**, so you can't pay to win a tie. You've got two other ways out: spend your Spark to roll again (your dice only), or step the crew's Wealth down one and take the tie. It's the crew's money, so ask the table first.
 -   **Only the crew can do that.** A faction never rerolls, and never buys a tie.
 
-## A Full Week, Played Out
+## A Full Week, Played Out {#a-full-week-played-out}
 
 :::example
 **GM:** First up, *personal*. Vesk, your debt to the fence has been called. He wants his money by the end of the week, or he talks to the guild.

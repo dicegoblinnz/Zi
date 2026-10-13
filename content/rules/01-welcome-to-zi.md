@@ -52,7 +52,7 @@ At the end of the round the dog's d8 rolls a 7 against Bram's Armour, a d6, whic
 **GM:** Fair. Your Armour's a d4 now.
 :::
 
-## What's in this book
+## What's in this book {#whats-in-this-book}
 
 This book is the whole game. You don't need anything else.
 
@@ -60,7 +60,7 @@ There are twenty-eight chapters. The first eleven teach you to play. The next si
 
 There are worked examples all the way through: a fight on the page and a round on the grid, a social duel, a chase, a journey, a dig under a burned library, a murder, a week of downtime, one character's whole career, a crew's whole career, and a four-session campaign. If you want to play tonight, the end of the character chapter has fourteen archetypes you can build from in ten minutes, and six ready-made characters.
 
-## Where to start
+## Where to start {#where-to-start}
 
 **If you're a player**, read *The Core*, *Building Your Character* and *Conflict*, plus the *Movement and Range* section of *Tactical Play*. That's enough to sit down and play tonight. Come back for the rest of *Tactical Play* when you want to get good at it.
 
@@ -70,10 +70,10 @@ There are worked examples all the way through: a fight on the page and a round o
 
 **If you've been away for a while**, read *The Core* again, skim the *Quick Reference* at the back, then jump back into whatever chapter you were up to.
 
-## Finding things
+## Finding things {#finding-things}
 
 The contents run down the side of every page. Press <span class="kbd">/</span> to search the whole book, and <span class="kbd">\\</span> to hide the contents. At the very back there's a glossary with every rule term in one line, and an index that tells you where each one lives.
 
-## A word on the rules
+## A word on the rules {#a-word-on-the-rules}
 
 Every rule in here is a rule, but a rule's only worth keeping if it makes your table better. If one gets in the way, play a session without it. If the game's better for it, bin it. It's your table.

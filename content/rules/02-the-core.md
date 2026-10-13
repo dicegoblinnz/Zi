@@ -20,7 +20,7 @@ A permission is one line that starts with *I can*, even if only in your head. Ke
 
 Permissions come from all over your sheet: your **Titles**, your **abilities** and their **specializations**, your **items**, some of your **traits** and **resources**, even your **Scars**. It doesn't matter which box a permission lives in. The story decides whether it fits what you're doing right now, and if it fits, it counts.
 
-### How permissions stack
+### How permissions stack {#how-permissions-stack}
 
 Count up every permission you've got that plainly fits what you're doing. Each one is a **step**.
 
@@ -105,15 +105,15 @@ Before you roll, give **every die an intent**: what it's trying to do, and who o
 
 An intent can be anything the story allows: hurt it, disarm it, knock it down, frighten it, pin it, shove it off the stairs, grab the key off its belt, find out what it's hiding, stop what it's about to do. Whatever you gave the die is what happens if it wins.
 
-### Several dice, several intents
+### Several dice, several intents {#several-dice-several-intents}
 
 Your dice don't have to go at different targets. Put three dice on one man and each one can try something different. **The target defends each intent separately**, rolling one defence die for every intent aimed at it. A threat defends with its Challenge die.
 
-### Several dice, one intent
+### Several dice, one intent {#several-dice-one-intent}
 
 Put more than one die on the **same** intent and that's **advantage**: the target rolls once for that intent, and your **best** die counts. **Dice never add together**, except when you move.
 
-### Past six steps: more dice, more intents
+### Past six steps: more dice, more intents {#past-six-steps-more-dice-more-intents}
 
 Every die you get past six steps can have **its own intent**, and that's what big rolls are for. Two dice going at the same Warden are two hits, so two chances to strip two tags. Or one hits it and the other knocks it over. You can still stack them on one intent for advantage, but a d12 and a d4 doing two different things is nearly always worth more than a d12 with a spare.
 
@@ -261,7 +261,7 @@ Most things worth fighting have more going on than they show. **Study** is an in
 
 Study works on people, places, stakes and whole scenes. It finds what's really there, and a [Spark](#s-spark) makes something true.
 
-## Two Rolls, Start to Finish
+## Two Rolls, Start to Finish {#two-rolls-start-to-finish}
 
 :::example[Getting through the door]
 Say you've got *Larceny* at Novice. One permission plus one action is two steps, a d4. You throw a second action at the same lock and it brings *Larceny* with it again, so that's four steps, a d8. The lock is Challenge 3. You roll a 6, and the lock rolls a 6. It's a tie, so you spend an Aura and the tumblers give.

@@ -69,7 +69,7 @@ Here are seventeen magical abilities. Take one as one of your abilities, or writ
 | **Faith** | Holy or protective power. | healing prayers, warding evil, holy ground, exorcism |
 | **Ritualist** | Long, careful workings. | binding, warding, divination, summoning, circles and sigils |
 
-### What each one looks like
+### What each one looks like {#what-each-one-looks-like}
 
 The harder it is, the higher the Challenge the GM sets. Hard things are Challenge 3 or 4, and legends are 5 or 6, often with tags in the way.
 
@@ -93,7 +93,7 @@ The harder it is, the higher the Challenge the GM sets. Hard things are Challeng
 | **Faith** | A prayer that steadies: *Blessed* on a friend. Holy water that burns the wrong things. | Holy ground where you stand. An exorcism in a single breath. | A temple no evil can enter. A miracle the whole town sees. |
 | **Ritualist** | Read a working. Unpick a small ward. | A ritual done in minutes that should take an hour. | See [Rituals](#rituals). Some things need a circle. |
 
-### And every other ability
+### And every other ability {#and-every-other-ability}
 
 The same three columns work just as well for a sword.
 
@@ -107,7 +107,7 @@ The same three columns work just as well for a sword.
 | **Defender** | Hold a doorway. Take the blow meant for her. | Hold a doorway against a charge. Guard everyone on the stair. | Hold the harbour gate until dawn. |
 | **Tracker** | Follow a trail. Read who passed. | Follow a trail across stone, or in the rain. | Follow a trail a year cold. Find the one man in the whole city. |
 
-### Writing your own
+### Writing your own {#writing-your-own}
 
 An ability is a name and one line, like *Tidecalling: the sea, and everything in it.* Then add a few specializations, each naming one specific situation, thing or target. If a specialization covers most of what the ability does, it's too broad. Then write one line each for what it looks like on an ordinary day, a hard one, and in a legend.
 
@@ -119,7 +119,7 @@ Magic in Zi is a craft, and there's no caste or class of wizards, just people wi
 
 How magic sits in society is up to your world. In the Steeplands it sits quietly: most people don't believe rituals are real, and the ones who do keep their voices down. Decide it in [Session Zero](#session-zero), because it decides what happens when the crew uses magic in the street.
 
-## Rituals
+## Rituals {#rituals}
 
 :::quote
 A ritual is magic that's too big for one moment.
@@ -137,93 +137,93 @@ Some workings can't be done in a breath. They need a circle, a price and time, a
 
 If you're out of danger, with all the time in the world, the GM can just let it take an hour and ask for the cost. The dice come out when something's pushing back.
 
-### Twelve Rituals
+### Twelve Rituals {#twelve-rituals}
 
-:::rule
+:::rule{#rit-unbinding}
 **The Unbinding**: to free a soul from its frame.\
 **Challenge 6.** In the way: *Names* · *Mercy* · *Old Ink*. Interference d10.\
 **Cost:** You speak your own true name aloud.\
 **Failure Mode:** The soul is *loosened*: free of the frame, and of everything else.
 :::
 
-:::rule
+:::rule{#rit-quiet-word}
 **The Quiet Word**: to make one named person believe one named thing for one day.\
 **Challenge 4.** Interference d6 if the target has allies.\
 **Cost:** A drop of your blood in their tea.\
 **Failure Mode:** They believe the opposite for a week.
 :::
 
-:::rule
+:::rule{#rit-iron-door}
 **The Iron Door**: to seal a room against entry for one night.\
 **Challenge 5.**\
 **Cost:** A lock of hair from whoever will sleep inside.\
 **Failure Mode:** The seal holds, but only against *you*.
 :::
 
-:::rule
+:::rule{#rit-debt-called}
 **The Debt Called**: to make a person honour an obligation they've tried to forget.\
 **Challenge 6.** In the way: *They Forgot*.\
 **Cost:** Something they gave you once and now can't have back.\
 **Failure Mode:** The debt transfers to you.
 :::
 
-:::rule
+:::rule{#rit-named-blow}
 **The Named Blow**: to make a weapon strike true against one specific person.\
 **Challenge 3.**\
 **Cost:** You write their name on the weapon. Every day you do, you lose something you used to have.\
 **Failure Mode:** The strike lands on you instead.
 :::
 
-:::rule
+:::rule{#rit-empty-hour}
 **The Empty Hour**: to make one room forget that you were in it.\
 **Challenge 4.**\
 **Cost:** You must leave through a door you haven't used before.\
 **Failure Mode:** The room forgets you, but everyone remembers where you went.
 :::
 
-:::rule
+:::rule{#rit-long-watch}
 **The Long Watch**: to see through a linked token from any distance, for one hour.\
 **Challenge 5.**\
 **Cost:** You can't eat for a day.\
 **Failure Mode:** You see the wrong thing.
 :::
 
-:::rule
+:::rule{#rit-quiet-passing}
 **The Quiet Passing**: to let one recently dead soul speak, once, for a minute.\
 **Challenge 3.**\
 **Cost:** A question you've been avoiding, spoken aloud.\
 **Failure Mode:** The soul doesn't speak. Something else does.
 :::
 
-:::rule
+:::rule{#rit-broken-vow}
 **The Broken Vow**: to make two people unable to harm each other for one day.\
 **Challenge 5.**\
 **Cost:** You break one of your own promises, aloud, in front of a witness.\
 **Failure Mode:** They can't harm each other, but they both know you cast it.
 :::
 
-:::rule
+:::rule{#rit-waking-stone}
 **The Waking Stone**: to wake something sleeping inside a stone.\
 **Challenge 6.** In the way: *Deep Sleep*. Interference d8.\
 **Cost:** A memory that mattered, spoken and then forgotten.\
 **Failure Mode:** The thing inside wakes somewhere near you, and it isn't pleased.
 :::
 
-:::rule
+:::rule{#rit-gilded-lie}
 **The Gilded Lie**: to make a lie true for one hour.\
 **Challenge 4.**\
 **Cost:** You must believe the lie yourself while you speak it.\
 **Failure Mode:** The lie becomes true for a year instead of an hour, and you can't tell anyone.
 :::
 
-:::rule
+:::rule{#rit-long-goodbye}
 **The Long Goodbye**: to speak to someone who's been dead for years.\
 **Challenge 6.** In the way: *Years*. Interference d8.\
 **Cost:** A day of your life, given willingly and never returned.\
 **Failure Mode:** You speak to something wearing their face.
 :::
 
-### Rituals at the Table
+### Rituals at the Table {#rituals-at-the-table}
 
 Every ritual worth rolling for has three things: something *interfering*, something *at stake*, and something that'll *break* if it fails. If none of those are true, it's just a lock with a fancy name, so let it take an hour and move on.
 

@@ -56,13 +56,13 @@ Most things just happen. **Only roll when something pushes back, or when the out
 -   You never add a telegraph after the last player has acted, or land one nobody could possibly have answered.
 -   You never use Aura or Spark, because you don't have any.
 
-### Reading permissions
+### Reading permissions {#reading-permissions}
 
 Players will ask whether a permission fits a hundred times a session. Answer fast and be generous: [plainly, close, or not at all](#s-permissions). If you catch yourself arguing about it, it's close, so take the Aura and move on.
 
 Be consistent. If a window latch was a stretch for *Larceny* last week, it's a stretch this week too.
 
-### Ask questions, and use the answers
+### Ask questions, and use the answers {#ask-questions-and-use-the-answers}
 
 You don't have to invent everything. The players know things about their characters that you don't.
 
@@ -90,7 +90,7 @@ A move is something the world does. Most of them are a telegraph outside a round
 -   **Bring trouble.** Turn something on one character's sheet against them, and offer a Spark. There's more below.
 -   **Cut to the next scene.** If nothing's pushing back and they've got what they came for, say so and move on.
 
-### How hard to go
+### How hard to go {#how-hard-to-go}
 
 -   **Gentle first.** Show it coming before it lands. A die on the table is a warning they can act on.
 -   **Harder when they ignore it.** If they let it ride, it lands. If a roll that mattered misses, the move can land straight away, as long as you showed it coming. That's [failing forward](#s-gm-consequences).
@@ -213,11 +213,11 @@ That's nine sentences, and that scene will run for two hours.
 
 A threat is a **Challenge** and a handful of **tags**. The full procedure, with tables to roll on, is in [The Threat Builder](#threat-builder). Here's the thinking behind it.
 
-### Challenge is defence
+### Challenge is defence {#challenge-is-defence}
 
 Pick the Challenge by what the threat *is*, not by how hard you want the fight to be. The ladder's in [Threats](#s-challenges). If this one's weaker than usual (young, half-woken, hurt), run it a size small, and say why.
 
-### Write tags that change what the players do
+### Write tags that change what the players do {#write-tags-that-change-what-the-players-do}
 
 A good tag tells the table how to deal with it, and a bad one's just a number in disguise.
 
@@ -231,7 +231,7 @@ A good tag tells the table how to deal with it, and a bad one's just a number in
 
 Every tag is one of three kinds: **how it comes at you**, **what keeps it going**, and **what drives it**. A threat with only the first two is a wall to grind through, so give everything that matters at least one thing that drives it.
 
-### Tags are health
+### Tags are health {#tags-are-health}
 
 A threat's **keeps-it-going** tags are how many wins it takes to bring it down. It defends and telegraphs with its Challenge die, and tags don't make it bigger unless the tag says so.
 
@@ -258,13 +258,13 @@ One win, one tag is right for most threats. A boss that should last needs more t
 Redhand, the boss in [The Threat Builder](#threat-builder), started as three plain tags and a weak point. Against four characters with one Title each, he'd often fall in the first round. Their budget's 40, so he gets about 40 in Tough: *Armoured 20 (first)*, *Relentless* and *Feeds 20*. Now it's about a round of the whole crew to get through his armour, a win for *Relentless*, and another round to stop him feeding. Most crews will spend three or four rounds on him, or one, if they've read Vane's ledger and say his name.
 :::
 
-### Hidden tags and weak points
+### Hidden tags and weak points {#hidden-tags-and-weak-points}
 
 Anything that matters should have **one hidden tag**, and every boss should have a **weak point**: the tag that holds the whole thing together. Break the binding, speak the true name or show the zealot her own child in the crowd, and it falls, whatever else it's got left.
 
 A weak point is the reward for paying attention: for studying, asking questions, remembering what the old woman in session two said. Make weak points findable, and make finding them feel like winning.
 
-### Powers are tags
+### Powers are tags {#powers-are-tags}
 
 Threats never have Aura. If a threat can do something impossible, write it as a tag (*Calls the Storm, Walks Through Walls, Wears Your Face*) and telegraph it from the budget like anything else. The players see it coming, with a die, and they can answer it. Don't let a power skip the telegraph, because then the players don't get to play against it.
 
@@ -297,7 +297,7 @@ Every round you've got a number of steps to telegraph with. That's your **round 
 
 It's a guide, so budget anywhere in that range and move it to suit the table: if the crew's walking through everything, push harder, and if they're drowning, ease off. If the crew's mixed, add up each character's share. Past the fifth Title the crew's growing in ways the budget doesn't count, like Master tiers and better gear, so go by what you see at the table.
 
-### Spending it
+### Spending it {#spending-it}
 
 -   **A telegraph costs its steps.** A d10 is 5, and you take it off the budget as you say it.
 -   **Spend it on everything.** Threats, the ground, events, stakes, and anything else you decide the scene needs. A telegraph aimed at a clock or a stake is as good as one aimed at a character, and often better.
@@ -307,7 +307,7 @@ It's a guide, so budget anywhere in that range and move it to suit the table: if
 -   **It refills every round.** Unspent steps don't carry over.
 -   **Within the budget, the fiction decides.** A single guard doesn't telegraph six times, but a boss with two blades might telegraph three.
 
-### How hard it pushes
+### How hard it pushes {#how-hard-it-pushes}
 
 | Setting | Budget | Use it for |
 | --- | --- | --- |
@@ -329,11 +329,11 @@ Say it's two Wardens with four keeps-it-going tags each, and two stakes with two
 
 In a fight, everything the world does comes through a telegraph. Every round you're telling the table what the world's about to do. Do it well and the players will feel the danger before a single die gets rolled.
 
-### Say it as one sentence
+### Say it as one sentence {#say-it-as-one-sentence}
 
 **Who, does what, to whom, how hard.** *"The captain levels his crossbow at Ash, a d8."* Don't just say *"he attacks."* Every telegraph should be something a player could picture, and something a player could answer.
 
-### Mix what you telegraph
+### Mix what you telegraph {#mix-what-you-telegraph}
 
 A round of five telegraphs that all say "hits someone" is a boring round, so mix them up:
 
@@ -346,23 +346,23 @@ A round of five telegraphs that all say "hits someone" is a boring round, so mix
 
 Let the threat's tags tell you what it does. *Reach* pins from a distance, *Calls for Help* goes after the clock, and *Grasping* goes for what they're carrying. A threat that telegraphs from its tags feels like itself.
 
-### Aim at what they care about
+### Aim at what they care about {#aim-at-what-they-care-about}
 
 Go for the stake they're winning, the friend with a d2 Armour, the item marked *Wanted* or the bond they wrote in session one. The crew should never feel safe letting a telegraph ride just because it's small.
 
-### Pressure heavy armour
+### Pressure heavy armour {#pressure-heavy-armour}
 
 Armour has no ceiling. A knight in plate with a shield and a helm, guarding, can sit behind a d12 and a second die and shrug off blows all night, and that's what plate's meant to do. Instead of fighting it with bigger numbers, fight it with choices. Aim at what Armour doesn't stop: pin him, drag him, frighten him, or go for the stake behind him, the friend beside him or the clock. Telegraph more than the crew can answer, so the one in plate has to spend his actions standing in front of people instead of swinging. Heavy armour buys time, so make them decide what to spend it on.
 
-### One answer, sparingly
+### One answer, sparingly {#one-answer-sparingly}
 
 A telegraph with only one answer, like *if this lands, the house wakes*, is a spotlight. Use one or two a scene, on things that really matter, and always say so when you telegraph it.
 
-### The quick telegraph
+### The quick telegraph {#the-quick-telegraph}
 
 You don't need to prepare every telegraph. When the scene needs something (the candles gutter, the floor groans, a dog starts barking two streets away), just put a die on the table and say what it is. *"The floorboards under the gallery are giving way. A d8, at anyone standing there."* It comes off the budget like anything else.
 
-### Telegraph at their strengths
+### Telegraph at their strengths {#telegraph-at-their-strengths}
 
 Give the wall something big to answer, the eye something hidden to find, and the voice someone to talk to. Telegraphs are how you threaten the crew, and they're also how you invite each of them to be brilliant.
 
@@ -375,7 +375,7 @@ Give the wall something big to answer, the eye something hidden to find, and the
 5.  **End the round.** Everything unanswered lands, and the players roll Armour or Confidence against each die aimed at them, and the telegraph's die as well. For each one that lands, name what it costs, and take a fair swap if they offer one. Untouched events and clocks step down, and every condition steps down one size. Spend the ones you said you would.
 6.  **Describe the new situation.** Then telegraph again.
 
-### Judging intents
+### Judging intents {#judging-intents}
 
 Players will give their dice all kinds of intents. These three questions settle almost everything:
 
@@ -383,7 +383,7 @@ Players will give their dice all kinds of intents. These three questions settle 
 -   **Is it one intent or two?** "Knock him down and take his sword" is two dice, or one die and a choice.
 -   **What does it get past?** If the intent goes around everything that's keeping a threat going, say so. That's an opening, and they've earned it.
 
-### Recognise openings
+### Recognise openings {#recognise-openings}
 
 When a player shoves the shielded captain off a narrow bridge, *Shield* and *Fortified* do nothing for him. When the thief puts a knife to the throat of a guard who never saw her, his *Trained* doesn't help. Say it out loud: *"That's an opening. If you win, he's done."* (Against a Boss: *"that's two tags."*) If players get rewarded for clever play, they'll keep playing cleverly.
 

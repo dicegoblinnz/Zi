@@ -46,7 +46,7 @@ That's where the clues pay off. Every one the crew wrote down is a tag they know
 -   **If they're stuck**, make a move and bring a trail to them. Somebody knocks on the door, or a second body turns up.
 -   **A Spark makes something true about you**, like an old friend at the watch house or a key you lifted last year. That can get you to a trail, but it won't change what happened.
 
-### Trails in a hurry
+### Trails in a hurry {#trails-in-a-hurry}
 
 When you need trails fast, roll a d6 for each.
 

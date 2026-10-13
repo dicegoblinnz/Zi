@@ -22,7 +22,7 @@ The bestiary writes every [Tough](#s-tough) number for a budget of 40, four char
 
 All you need is one character, one set of dice and the Oracle, and the Oracle's your GM. You'll be making the GM's calls as well, so read [Being Fair to Yourself](#s-solo-fair) before you start.
 
-### The solo loop
+### The solo loop {#the-solo-loop}
 
 1.  **Roll the Prompt** below: something happens, and maybe there's a complication.
 2.  **Build the scene** the way the GM would: one or two stakes, whatever pushes back and a clock. Ask the Oracle anything you don't know, and say [how likely](#s-oracle-odds) it is first. Play fair with yourself: if the guards are always awake at this hour, it's likely they're awake.
@@ -33,11 +33,11 @@ All you need is one character, one set of dice and the Oracle, and the Oracle's 
 
 Outside a round, when you'd look at the GM and wait, make a move for the world instead ([When They Look at You](#s-gm-moves)), and if nothing comes to you, roll on the Twist table in [The Oracle](#oracle).
 
-### The Prompt
+### The Prompt {#the-prompt}
 
 Roll the d20 for what happens. When you want the session to bite harder, roll the d12 as well.
 
-#### d20: Something happens
+#### d20: Something happens {#d20-something-happens}
 
 1.  A stranger asks you a favour.
 2.  Someone you owed money to turns up.
@@ -60,7 +60,7 @@ Roll the d20 for what happens. When you want the session to bite harder, roll th
 19. Something gets fixed by someone you don't trust.
 20. The world changes.
 
-#### d12: A complication
+#### d12: A complication {#d12-a-complication}
 
 1.  Someone's watching.
 2.  The clock is faster than you thought.
@@ -92,7 +92,7 @@ When you're the GM and the player at once, it's easy to go soft on yourself with
 
 Every round starts with the telegraphs, and on your own you make them, out loud, before you look at your sheet. Scale any Tough to your budget first, as in [Solo With a GM](#s-solo-gm).
 
-### What it telegraphs
+### What it telegraphs {#what-it-telegraphs}
 
 Every threat in the bestiary has three ready-made telegraphs on its *Telegraphs* line. Roll a d6 for each telegraph it makes this round: 1–2 is the first, 3–4 the second and 5–6 the third. If you roll one that can't happen right now, like a lantern nobody's carrying or a tag that's been stripped, roll again.
 
@@ -119,7 +119,7 @@ With one character it's you, your stake or your clock, and the table sorts that 
 
 If that doesn't settle it, roll for it.
 
-### Say it, then stick to it
+### Say it, then stick to it {#say-it-then-stick-to-it}
 
 -   **Spend the budget the way the GM would.** At Even that's about one harm telegraph a round at each character, and the rest on control, stakes, clocks and the ground. A telegraph costs its die's steps, once for each target.
 -   **Say it all out loud**, or jot it on a card: what it does, at whom, and its die. Put the dice out, and only then pick up your sheet.
@@ -129,7 +129,7 @@ If that doesn't settle it, roll for it.
 
 The three exploring chapters work on your own as written, apart from the secret, because you can't go looking for something you wrote yourself. So when the book says to write a secret, write three possible ones, number them, and don't decide which is true until the game makes you.
 
-### A journey
+### A journey {#a-journey}
 
 Set it up as [Travelling](#travelling) says, with three possible secrets. Each leg, roll *On the road* for what the road throws at you, and pay for it out of your budget: 5 steps on an easy road, and all 10 when the country's trying to kill you. Roll for the secret the first time you Study the road, or as you start the last stage if you never do.
 
@@ -150,7 +150,7 @@ When you're following something across country, roll the d12 below each leg as w
 | 11 | Nothing. The trail stops dead, so ask the Oracle where it went. |
 | 12 | A mark it left on purpose, for whoever's following. |
 
-### A site
+### A site {#a-site}
 
 Build it as [Exploring](#exploring) says, but don't draw the places ahead. Roll a d6 for how many there are (1–2 is three, 3–4 five and 5–6 seven), and put the stake's last tag in the last one. At every door, roll the d12 below for the place, then *What's in this place?* for the one thing in it. Roll for the secret when that table hands you a clue to it, or when you Study a place for it.
 
@@ -171,7 +171,7 @@ Study a place from the doorway and you roll what's in it first, so the Study can
 | 11 | A crypt, with niches all the way up the walls. | *Old Wards* · *Pitch Dark* |
 | 12 | A room somebody's been living in, lately. | *Warm Ashes* · *Thin Walls* |
 
-### A mystery
+### A mystery {#a-mystery}
 
 [Investigating](#investigating) starts with you writing down the truth. Write three answers instead, and let the clues pick one.
 

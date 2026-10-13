@@ -43,15 +43,15 @@ A trap's a hidden tag on a place until somebody finds it.
 -   **Find it first** and it's a stake. Disarm it against the site's Challenge, or go round it. Once you know where it is, stepping over it doesn't need a roll.
 -   **Some traps run on a clock**, like a room filling with water. That's an event, so play it in rounds.
 
-### Study does most of the work
+### Study does most of the work {#study-does-most-of-the-work}
 
 Study a place against the site's Challenge and win, and you get what Study always gives you: a hidden tag (the trap on the stair), a straight answer (*what's behind that door?*), or something that helps (the draught that means there's another way out). Put an area die on it and you Study the whole room at once.
 
-### One scene, until you come out
+### One scene, until you come out {#one-scene-until-you-come-out}
 
 Aura fills when you go in, and not again until you come out. Come back another day and it's a new scene with full Aura, but the place has had a day too. Start the alarm a size smaller than last time, because whatever lives there knows somebody's been in.
 
-### What's in this place?
+### What's in this place? {#whats-in-this-place}
 
 When a place needs something in it, roll a d8.
 

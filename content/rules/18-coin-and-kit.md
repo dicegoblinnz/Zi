@@ -10,14 +10,14 @@ source: 2026-10-02 rulebook
 Money in Zi is simple: a purse of gold is roughly a month's wages.
 :::
 
-## What you can afford
+## What you can afford {#what-you-can-afford}
 
 -   **Nothing worth tracking.** A meal, a bed for the night or a round of drinks.
 -   **A purse of gold.** It counts as one Resource, and it covers a bribe to a mid-level official, a good set of tools or a horse.
 -   **Several purses of gold.** A quality weapon, real armour or passage on a ship.
 -   **A small fortune.** A ship or a house.
 
-## Upgrading gear
+## Upgrading gear {#upgrading-gear}
 
 The story earns the die, and you can't pay for a step up. Instead of a *+1*, a better sword is a new item with a better permission, or a Catch you were willing to take to get a second one. A weapon's properties come with the weapon, so buying a crossbow gets you *Long* and *Piercing* with it.
 
@@ -27,7 +27,7 @@ Replacing a broken item, or mending one, takes a downtime slot and usually a pur
 
 A rare or legendary thing is an item with more on it. A rare one starts with two permissions and a legendary one with three, and they've got room for more Catches (see [Rarity](#s-rarity)). Here's how to write one and where they come from, then twenty you can use straight off the page or pull apart for ideas.
 
-### How to write one
+### How to write one {#how-to-write-one}
 
 You write one the same way as any item, with a few things to watch.
 
@@ -46,7 +46,7 @@ For Catches, use the twelve in [Step 4](#s-items), or write your own in the same
 | **Sworn** | It comes with a promise, agreed when you get it. Break the promise and none of its permissions count until you've put it right. |
 | **Borrowed** | It belongs to someone else, and they can ask for it back. The GM says when. |
 
-### Where they come from, and how often
+### Where they come from, and how often {#where-they-come-from-and-how-often}
 
 **Only from the story.** A rare or legendary thing turns up because something happened in play, and it's usually one of these:
 
@@ -61,7 +61,7 @@ Go easy with them. I'd give each character about one rare thing over an arc. Leg
 
 **Their Catches are some of the best trouble you've got.** The player took each one for a permission, so when you turn it on them, offer the Spark the way you would for any trouble: the pilots want their glass back the night before the crew sails, or the skull starts lecturing halfway down the vault stairs. See [Bringing Trouble](#s-trouble-gm).
 
-### Twelve rare things
+### Twelve rare things {#twelve-rare-things}
 
 They're written out in full, Catches and all. Use them as written, or swap the names and the story for ones that'll fit your world.
 
@@ -165,7 +165,7 @@ They're written out in full, Catches and all. Use them as written, or swap the n
 **Catch** *Narrow*: It only works between sunset and sunrise. **Adds** Spin a rope out of anything, strong enough to hold a man.
 :::
 
-### Eight legendary things
+### Eight legendary things {#eight-legendary-things}
 
 :::sheet[The Weatherwife's Flute]
 *A bone flute carved from the wing of a bird nobody's seen in living memory. The old weatherwife played the boats home with it, and she left it to whoever would keep doing it.*
@@ -257,13 +257,13 @@ She gets her ten minutes. On the way down he asks what she was after, and she te
 Dorrie's already spent her Spark tonight, so there's no turning it down, and it happens. The steward's off down the stair to find his master, and the GM telegraphs it with his d8: if nobody deals with it, the house knows somebody's been in those rooms before the toasts. Dorrie's got a new problem with a name and a reason, and she's got her Spark back to deal with it.
 :::
 
-### Writing your own
+### Writing your own {#writing-your-own}
 
 Write it in the same order as the sheets above: one line of story, then the permissions, then any Catches with the permission each one carries. Do it with the player who's getting it. The GM says what the thing does, because it's come out of her world. The player decides whether to take Catches for more, up to the limit, and you'll work out between you what each one carries.
 
 Then read it back the way you'd use it at the table. Every permission should be quick to call (plainly, close or not at all), and every Catch should give the GM something she can turn on its owner. If a line could mean two things, fix it now, so it doesn't come up in the middle of a fight.
 
-## What money cannot buy
+## What money cannot buy {#what-money-cannot-buy}
 
 Money buys things, but it won't buy you relationships, reputation, favours or trust.
 

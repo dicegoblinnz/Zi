@@ -18,7 +18,7 @@ Every Challenge 6 threat has **Tough**, and so do two Challenge 5s that should t
 
 When a threat with **Forms** loses its last keeps-it-going tag, it changes shape instead of falling. Its Tough fills back up, and you pick 3 to 5 tags for its new shape from its Forms list and tell the table what it's becoming. It changes once with *Forms (2)* and twice with *Forms (3)*, and its Tough refills each time, so its Tough is split across its forms: about 20 a form with two, and 13 to 15 with three. Its weak point still ends it in any shape, and its last form falls like anything else.
 
-## Mooks: Challenge 2–3
+## Mooks: Challenge 2–3 {#mooks-challenge-23}
 
 :::threat[The Watchman]
 A tired man on a long shift.
@@ -188,7 +188,7 @@ A voice for people who have none.
 **Hidden** *Mostly Right*. Agree with what is true in the sermon and the crowd turns with you.
 :::
 
-## Named: Challenge 4–5
+## Named: Challenge 4–5 {#named-challenge-45}
 
 :::threat[The Hired Blade]
 A killer who does it for coin.
@@ -388,7 +388,7 @@ Politically untouchable, personally fragile.
 **Hidden** *Watched by the Crown*. The Crown already has eyes on them. Anything public ruins them.
 :::
 
-## Wilderness
+## Wilderness {#wilderness}
 
 :::threat[The Moor Cat]
 Bigger than a hound, quieter than a thought.
@@ -472,7 +472,7 @@ Riders who shouldn't be riding.
 **Hidden** *After What You Carry* (weak point). They want something the crew is carrying. Drop it and they ride past.
 :::
 
-## Supernatural
+## Supernatural {#supernatural}
 
 :::threat[The Weeping Widow]
 She's not crying for you.
@@ -560,7 +560,7 @@ You keep seeing it, and you keep forgetting you saw it.
 **Hidden** *Standing Still* (weak point). It is not following. You are moving past it. Stop moving and it cannot reach you.
 :::
 
-## Bosses: Challenge 6
+## Bosses: Challenge 6 {#bosses-challenge-6}
 
 :::threat[Captain Marrow]
 A duellist who's never lost, and knows it.

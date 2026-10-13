@@ -12,14 +12,14 @@ You can play Zi in any setting you like, but if you don't have a world in mind, 
 
 The Steeplands are a rain-soaked archipelago of trade cities and old grudges. Ships come and go from every harbour, nobody asks where you're from, and nobody forgets a debt.
 
-## The four great powers
+## The four great powers {#the-four-great-powers}
 
 -   **The Vane Estate.** Old money, deep pockets and a grudge against everyone younger. It runs the salt trade. Its Lord, Aldous Vane, has been collecting rare and beautiful things for thirty years, and lately he's started collecting people.
 -   **The Harbour Guild.** New money with a wide reach. It runs the docks, the warehouses and most of the smuggling.
 -   **The Quiet Order.** A religious tradition that runs the temples and the funerals. Officially it stays out of politics, but it's actually very political.
 -   **The Bound.** The collection of souls Vane has trapped in paint and marble over the last decade.
 
-### The board
+### The board {#the-board}
 
 | Faction | Power / Wealth | Agenda | Tags | Secret |
 | --- | --- | --- | --- | --- |
@@ -30,13 +30,13 @@ The Steeplands are a rain-soaked archipelago of trade cities and old grudges. Sh
 
 All four start *Neutral* towards a new crew, except the Estate, which is *Wary* of anyone who asks about its paintings.
 
-## The four cities that matter
+## The four cities that matter {#the-four-cities-that-matter}
 
 -   **Steepwater.** The largest port, where everything happens.
 -   **The Low Market.** Strictly speaking it's a district, the criminal quarter of Steepwater.
 -   **Thistle.** A smaller port town where the Quiet Order trains its people.
 -   **Marrow.** Where the Vane Estate keeps its collection.
 
-## How the world feels
+## How the world feels {#how-the-world-feels}
 
 The rain's gentle and it never stops. There are ships in harbour at every hour, and the whole place is candlelight, salt, fish and money. Everyone knows someone who knows someone. Nobody asks your name, because names change and money doesn't.

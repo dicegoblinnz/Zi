@@ -7,7 +7,7 @@ partNumber: "Part V"
 source: 2026-10-02 rulebook
 ---
 :::index-section
-## A
+## A {#a}
 
 -   **Ability** — [Step 3](#s-abilities)
 -   **Absent players** — [When Someone Can't Make It](#s-absent)
@@ -25,7 +25,7 @@ source: 2026-10-02 rulebook
 -   **Aspiration** — [Step 8](#s-aspiration)
 -   **Aura** — [Aura](#s-aura)
 
-## B
+## B {#b}
 
 -   **Bag** — [Carrying and bags](#s-carrying)
 -   **Blaze of Glory** — [Hurt, Scars, and Blaze](#s-blaze)
@@ -34,7 +34,7 @@ source: 2026-10-02 rulebook
 -   **Boss** — [Tags are its health](#s-staying), [Tough](#s-tough-gm)
 -   **Budget, round** — [The Round Budget](#s-budget)
 
-## C
+## C {#c}
 
 -   **Campaign, ending a** — [Ending a Campaign](#s-ending)
 -   **Carrying** — [Carrying and bags](#s-carrying)
@@ -53,21 +53,21 @@ source: 2026-10-02 rulebook
 -   **Crew tags** — [Crew tags](#s-crew-tags)
 -   **Crew, as a faction** — [The Crew](#s-party-faction)
 
-## D
+## D {#d}
 
 -   **Death** — [Death](#s-death)
 -   **Defence** — [Letting It Ride](#s-defending)
 -   **Downtime** — [Downtime](#downtime)
 -   **Downtime rolls** — [Rolling in downtime](#s-downtime-rolls)
 
-## E
+## E {#e}
 
 -   **Epilogues** — [Ending a Campaign](#s-ending)
 -   **Event** — [Stakes, Clocks and Events](#s-stakes)
 -   **Exploring** — [Exploring](#exploring)
 -   **Exposed** — [Conditions to start with](#s-conditions-list)
 
-## F
+## F {#f}
 
 -   **Faction** — [Factions](#factions)
 -   **Faction Sheet** — [Appendix A](#s-sheet-faction)
@@ -77,7 +77,7 @@ source: 2026-10-02 rulebook
 -   **Forms** — [Unique mechanics](#s-unique-threats)
 -   **Frames** — [Frames](#frames)
 
-## G
+## G {#g}
 
 -   **Glossary** — [Appendix F](#appendix-glossary)
 -   **GM moves** — [When They Look at You](#s-gm-moves)
@@ -85,25 +85,25 @@ source: 2026-10-02 rulebook
 -   **Growing** — [Growing](#growing)
 -   **Guard** — [Guard](#s-guard)
 
-## H
+## H {#h}
 
 -   **Hidden tag** — [Hidden tags and weak points](#s-hidden)
 -   **Hook** — [The aftermath](#s-aftermath)
 -   **Hurt** — [Hurt, Scars, and Blaze](#s-blaze)
 
-## I
+## I {#i}
 
 -   **Intent** — [Intents](#s-intents)
 -   **Investigating** — [Investigating](#investigating)
 -   **Items** — [Step 4](#s-items)
 -   **Items, rare and legendary** — [Rarity](#s-rarity), [Rare and Legendary Things](#s-rare)
 
-## J
+## J {#j}
 
 -   **Joining a crew** — [New Characters](#s-new-character)
 -   **Journey** — [Travelling](#travelling)
 
-## L
+## L {#l}
 
 -   **Layered** — [Tags are its health](#s-layered), [Unique mechanics](#s-unique-threats), [Tag Reference](#appendix-tags)
 -   **Leg** — [A Leg on the Road](#s-legs)
@@ -113,22 +113,22 @@ source: 2026-10-02 rulebook
 -   **Log** — [The log](#s-log)
 -   **Long game** — [The Long Game](#s-long-game)
 
-## M
+## M {#m}
 
 -   **Magic** — [Magic](#magic), [Magical Abilities](#s-schools)
 -   **Move action** — [Movement and Range](#s-movement)
 
-## N
+## N {#n}
 
 -   **New characters** — [New Characters](#s-new-character)
 
-## O
+## O {#o}
 
 -   **Opening** — [What a Win Does](#s-win), [Tags Are the Battlefield](#s-tags-battlefield)
 -   **Oracle odds** — [How Likely Is It?](#s-oracle-odds)
 -   **Oracle, The** — [The Oracle](#oracle)
 
-## P
+## P {#p}
 
 -   **Party sheet** — [The Party Sheet](#party-sheet)
 -   **Permission** — [Permissions](#s-permissions)
@@ -137,14 +137,14 @@ source: 2026-10-02 rulebook
 -   **Playing Carefully** — [Playing Carefully](#playing-carefully)
 -   **Projects** — [Projects](#s-projects)
 
-## Q
+## Q {#q}
 
 -   **Question, investigation** — [The Question](#s-question)
 -   **Quick Build** — [Quick Build](#s-quick)
 -   **Quick Reference** — [Appendix D](#appendix-quick)
 -   **Quick Rulings** — [Quick Rulings](#s-rulings)
 
-## R
+## R {#r}
 
 -   **Range** — [Movement and Range](#s-movement)
 -   **Rarity** — [Rarity](#s-rarity)
@@ -156,7 +156,7 @@ source: 2026-10-02 rulebook
 -   **Round** — [The Round](#s-round)
 -   **Running doesn't dodge** — [Telegraphs](#s-telegraphs)
 
-## S
+## S {#s}
 
 -   **Scar** — [Hurt, Scars, and Blaze](#s-blaze)
 -   **Scene clock** — [A clock on every scene](#s-scene-clock)
@@ -176,7 +176,7 @@ source: 2026-10-02 rulebook
 -   **Study** — [Studying Something](#s-study)
 -   **Supplies** — [Setting Up a Journey](#s-journey), [Running out](#s-supplies)
 
-## T
+## T {#t}
 
 -   **Tactics** — [Tactical Play](#tactics)
 -   **Tag** — [Threats](#s-challenges), [Appendix B](#appendix-tags)
@@ -193,14 +193,14 @@ source: 2026-10-02 rulebook
 -   **Trouble** — [Trouble](#s-trouble), [Bringing Trouble](#s-trouble-gm)
 -   **Twist table** — [The Oracle](#oracle)
 
-## W
+## W {#w}
 
 -   **War** — [If war comes](#s-faction-crew)
 -   **Weak point** — [Hidden tags and weak points](#s-hidden)
 -   **Wealth** — [Spending Wealth (factions)](#s-wealth), [Spending Wealth (the crew)](#s-crew-wealth)
 -   **Weapon properties** — [Weapons and their properties](#s-weapon-props)
 
-## X
+## X {#x}
 
 -   **X-card** — [The X-Card](#s-x-card)
 :::

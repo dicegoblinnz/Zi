@@ -31,14 +31,14 @@ Your Title is your single broadest permission, and it needs a **definition**: a 
 **Title:** *Knight of the Broken Oath.* Now the character's got a whole backstory in five words.
 :::
 
-### Four good Titles
+### Four good Titles {#four-good-titles}
 
 -   *The best cat burglar in the city.* Specific and boastful, and it suggests there's a rival somewhere.
 -   *The last student of a dead order.* Specific and lonely, and it hands you a whole history.
 -   *A doctor who stopped believing in medicine.* Specific and conflicted. It tells you how they think.
 -   *The man who buried the king.* Specific and mysterious. The party's going to ask what happened.
 
-### Three bad Titles
+### Three bad Titles {#three-bad-titles}
 
 -   *Adventurer.* It means nothing, because adventure's what the whole game is about.
 -   *Warrior.* Is that Combat, or is it Influence? Nobody at the table knows.
@@ -54,7 +54,7 @@ Traits are always true and always on, and they never cost an action unless the t
 
 Every trait has a **type** and an **effect**, and you write them down together.
 
-### Trait types
+### Trait types {#trait-types}
 
 -   **Passive.** It's always on, with no cost and no trigger.
 -   **Triggered.** It fires by itself when something specific happens, and the trait says what.
@@ -62,13 +62,13 @@ Every trait has a **type** and an **effect**, and you write them down together.
 -   **Once per scene.** It fires once per scene for free, and not again until the next one. A few say *per person*, which means once for each person in the scene.
 -   **Once per downtime.** It fires once between sessions.
 
-### The 48 traits
+### The 48 traits {#the-48-traits}
 
 Pick three to start, or write your own in the same shape: a name, a type and one line. You can gain more in play.
 
 Some traits change a number on your sheet. *Prepared* lets you carry one more item and one more resource, *Unyielding* gives you another Hurt box, and *Light on my Feet* adds 2 to your stride (how far you move each round for free). If you write your own, say which number it changes.
 
-#### Combat
+#### Combat {#combat}
 
 | Trait | Type | Effect |
 | --- | --- | --- |
@@ -85,7 +85,7 @@ Some traits change a number on your sheet. *Prepared* lets you carry one more it
 | **Healer's Hands** | Once per scene, per person | Spend an action to clear one Hurt from someone within reach. You can do it once for each person in the scene, yourself included. |
 | **Predator's Eye** | Once per scene | Ask the GM whether a threat has a weak point, and where. She answers honestly. |
 
-#### Movement
+#### Movement {#movement}
 
 | Trait | Type | Effect |
 | --- | --- | --- |
@@ -100,7 +100,7 @@ Some traits change a number on your sheet. *Prepared* lets you carry one more it
 | **Lucky** | Once per scene | Reroll one of your dice. Only one die: it doesn't reroll a full split. |
 | **Focused** | Once per scene | After you roll, one of your dice counts as its highest face. (Not a top face: no Aura.) |
 
-#### Social
+#### Social {#social}
 
 | Trait | Type | Effect |
 | --- | --- | --- |
@@ -115,7 +115,7 @@ Some traits change a number on your sheet. *Prepared* lets you carry one more it
 | **Diplomat** | Once per scene | Two hostile parties will hear you out before acting. |
 | **Host** | Once per downtime | Someone you've hosted owes you a small favour. |
 
-#### Mental
+#### Mental {#mental}
 
 | Trait | Type | Effect |
 | --- | --- | --- |
@@ -128,7 +128,7 @@ Some traits change a number on your sheet. *Prepared* lets you carry one more it
 | **Cool Under Pressure** | Once per scene | Your Confidence steps back up three sizes, never past full. |
 | **Deep Well** | Passive | Your Aura maximum is one higher. |
 
-#### Preparation
+#### Preparation {#preparation}
 
 | Trait | Type | Effect |
 | --- | --- | --- |
@@ -153,7 +153,7 @@ Then she pushes her luck and asks for the key. Her d8 rolls a 2 against his 7. S
 
 Abilities are broad, and each one is a single line of fiction. A **Combat** ability covers fighting with weapons and fists. An **Influence** ability covers persuading, commanding and intimidating.
 
-### Tier
+### Tier {#tier}
 
 | Tier | Permissions | Specializations |
 | --- | --- | --- |
@@ -161,7 +161,7 @@ Abilities are broad, and each one is a single line of fiction. A **Combat** abil
 | **Skilled** | 2 steps | 2 free |
 | **Master** | 3 steps | 3 free |
 
-### Specializations
+### Specializations {#specializations}
 
 A specialization is a narrow focus that *stacks*. Each one adds +1 step when it applies, and they come free with the tier. Take the same one twice and it counts twice.
 
@@ -187,7 +187,7 @@ If she puts both actions into a sword swing, still counting the ability alone, i
 It's the same ability at the same tier, and they fight in completely different ways. Specialization is what makes a Master feel like *this* Master.
 :::
 
-### The ability list (30)
+### The ability list (30) {#the-ability-list-30}
 
 Pick three to start with, all at Novice. Or write your own in the same shape: a name, and one line for what it covers.
 
@@ -226,7 +226,7 @@ Pick three to start with, all at Novice. Or write your own in the same shape: a 
 | 29 | **Streetwise** | Navigating the underworld. |
 | 30 | **Bureaucrat** | The machinery of power. |
 
-### Specialization examples per ability
+### Specialization examples per ability {#specialization-examples-per-ability}
 
 Same test as before: a specialization names one specific situation, place, tool or target, and if it describes most of what the ability already does, it's too broad.
 
@@ -269,7 +269,7 @@ Each item is a **permission**. Give it a **Catch** and it carries **one more**. 
 
 You start with three, and [Carrying and bags](#s-carrying) covers how many you can hold.
 
-### What a written item looks like
+### What a written item looks like {#what-a-written-item-looks-like}
 
 :::sheet
 **Item:** Fine sword. *Permission: wield a sword with skill.*
@@ -345,7 +345,7 @@ A weapon's permission gives its step, like any item. Its **properties** say what
 
 How far a bow or a thrown weapon reaches is the story's call, and the properties say what kind of distance it likes. Write them in brackets after the weapon. If your world has pistols or stranger things, build them the same way: a pistol is *Ranged, Piercing, Reload* with the Catch *Loud* already built in. There's more on using all of this in [Tactical Play](#s-weapons-tactics).
 
-### The item list
+### The item list {#the-item-list}
 
 | Group | Examples |
 | --- | --- |
@@ -356,7 +356,7 @@ How far a bow or a thrown weapon reaches is the story's call, and the properties
 | **Personal** | Journal · quill and ink · set of dice · deck of cards · musical instrument · well-loved book · bedroll · backpack · bag · sling bag |
 | **Signature** | Your mother's blade · the coat you took off a dead man · the ring that was his · a book you never finished · a letter you never sent · a knife with your name on it · the mask from the job |
 
-### Catches (12)
+### Catches (12) {#catches-12}
 
 A Catch is a downside. Give an item a Catch and it carries one more permission. When the GM turns a Catch on you hard enough to change the scene, that's [trouble](#s-trouble), and it pays you a Spark.
 
@@ -389,7 +389,7 @@ A Resource is a **small item you carry**, with one specific use. There are two k
 
 You start with two. You can get more in play, even mid-scene, if there's someone to get it from: **a purse of gold**, a favour called in, or a promise made. Deep in a vault with nobody to buy from, only a trait like *I Have the Thing* helps, because you packed it all along.
 
-### Keepsakes: 10
+### Keepsakes: 10 {#keepsakes-10}
 
 | Resource | Effect |
 | --- | --- |
@@ -404,7 +404,7 @@ You start with two. You can get more in play, even mid-scene, if there's someone
 | **Coin from home** | You can't get lost while holding it. |
 | **Wedding band** | You're presumed married in social settings. |
 
-### Consumables: 20
+### Consumables: 20 {#consumables-20}
 
 | Resource | Effect |
 | --- | --- |
@@ -524,7 +524,7 @@ Your Aspiration is also somewhere a consequence can land. When a blow or a failu
 
 Confidence is your mental defence against threats, persuasion, fear, pressure and anything else that works on the mind. It's your nerve, not your sanity.
 
-### Starting Confidence
+### Starting Confidence {#starting-confidence}
 
 Confidence starts at **d2**, and it steps up with:
 
@@ -536,7 +536,7 @@ Confidence starts at **d2**, and it steps up with:
 
 Past d12 it gets a second die, like Armour does (see [Letting It Ride](#s-defending)).
 
-### Recovering Confidence
+### Recovering Confidence {#recovering-confidence}
 
 All of it comes back when:
 
@@ -562,7 +562,7 @@ Armour is your physical defence, and it comes from your gear. It starts at **d2*
 
 **Stepping your Armour down is one of the costs a blow can have.** The GM names the cost, and you can offer another that fits and costs about as much. A condition that says so, like *Poisoned*, steps it down too.
 
-### Recovering Armour
+### Recovering Armour {#recovering-armour}
 
 You can step Armour back up to its full value with:
 
@@ -581,7 +581,7 @@ Round 4: a hit lands. His Armour is at d2 and can't step any lower, so the GM na
 Downtime: he spends a slot at the smithy, and his Armour goes back to its starting d6.
 :::
 
-## A Complete Character, Start to Finish
+## A Complete Character, Start to Finish {#a-complete-character-start-to-finish}
 
 :::quote
 Here's what it looks like to build a character, and every choice here is a real one.
@@ -618,7 +618,7 @@ He wants a thief rather than a fighter, so he picks:
 -   **Purse of gold.** +1 step to a social roll, or buy something ordinary.
 -   **Smoke bomb.** A burst of smoke one square out, for one round.
 
-### Step 6: Bonds
+### Step 6: Bonds {#step-6-bonds}
 
 He writes three connections: one each with two of the crew, and one with someone outside it. The last one's a debt, so he's got room for a fourth when he thinks of one.
 
@@ -639,7 +639,7 @@ Now she's got a reason to be in the crew.
 
 *Own the score of a lifetime.* It starts at d2.
 
-### Final sheet
+### Final sheet {#final-sheet}
 
 :::sheet[The best cat burglar in the city]
 **Title:** The best cat burglar in the city.
@@ -714,7 +714,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 | a swashbuckler or pirate | [the Warrior](#k-warrior) | *Athlete* for *Acrobat* (rigging and masts) |
 | a witch | [the Druid](#k-druid) | *Medic* for *Hexer* (curses) |
 
-:::sheet[The Warrior: fights, and wins]
+:::sheet[The Warrior: fights, and wins]{#k-warrior}
 **Plays like** a fighter, sellsword, duellist or gladiator.
 
 **Abilities:** Combat (Novice, sword) · Athlete (Novice, sprinting) · Streetwise (Novice, the docks).
@@ -732,7 +732,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d6 · Confidence d4 · Stride 3.
 :::
 
-:::sheet[The Guardian: stands in front, and doesn't move]
+:::sheet[The Guardian: stands in front, and doesn't move]{#k-guardian}
 **Plays like** a bodyguard, shield-bearer or man-at-arms.
 
 **Abilities:** Defender (Novice, holding a doorway) · Combat (Novice, mace) · Athlete (Novice, heavy lifting).
@@ -750,7 +750,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d8 · Confidence d4 · Stride 2 · Hurt 4 boxes.
 :::
 
-:::sheet[The Rogue: never seen, never caught]
+:::sheet[The Rogue: never seen, never caught]{#k-rogue}
 **Plays like** a thief, burglar, pickpocket or scout.
 
 **Abilities:** Stealth (Novice, rooftops) · Larceny (Novice, mechanical locks) · Acrobat (Novice, falling safely).
@@ -768,7 +768,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d2 · Confidence d4 · Stride 5.
 :::
 
-:::sheet[The Face: talks the crew through doors]
+:::sheet[The Face: talks the crew through doors]{#k-face}
 **Plays like** a con artist, diplomat, courtier or spy.
 
 **Abilities:** Influence (Novice, nobility) · Deception (Novice, false names) · Courtier (Novice, gossip).
@@ -786,7 +786,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d2 · Confidence d6 · Stride 3.
 :::
 
-:::sheet[The Bard: lifts the crew, and holds the room]
+:::sheet[The Bard: lifts the crew, and holds the room]{#k-bard}
 **Plays like** a minstrel, storyteller or travelling player.
 
 **Abilities:** Performer (Novice, music) · Enchantment (Novice, charm), or Influence (Novice, crowds) · Empathy (Novice, reading a room).
@@ -804,7 +804,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d2 · Confidence d4 · Stride 3.
 :::
 
-:::sheet[The Investigator: sees what everyone else missed]
+:::sheet[The Investigator: sees what everyone else missed]{#k-investigator}
 **Plays like** a detective, thief-taker or inquisitor.
 
 **Abilities:** Investigator (Novice, crime scenes) · Scholar (Novice, history) · Empathy (Novice, spotting lies).
@@ -822,7 +822,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d2 · Confidence d4 · Stride 3.
 :::
 
-:::sheet[The Ranger: sees them first, and hits them from further away]
+:::sheet[The Ranger: sees them first, and hits them from further away]{#k-ranger}
 **Plays like** a hunter, scout, archer or outrider.
 
 **Abilities:** Marksman (Novice, longbow) · Tracker (Novice, beasts) · Survivor (Novice, forests).
@@ -840,7 +840,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d2 · Confidence d4 · Stride 3.
 :::
 
-:::sheet[The Wizard: reads the old books, and works the rituals]
+:::sheet[The Wizard: reads the old books, and works the rituals]{#k-wizard}
 **Plays like** a mage, sage, seer or astrologer.
 
 **Abilities:** Ritualist (Novice, warding) · Scholar (Novice, forbidden texts) · Divination (Novice, the past), or Warding or Artifice.
@@ -858,7 +858,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d2 · Confidence d6 · Stride 3.
 :::
 
-:::sheet[The Sorcerer: one kind of magic, and very good at it]
+:::sheet[The Sorcerer: one kind of magic, and very good at it]{#k-sorcerer}
 **Plays like** a fire mage, storm-caller, wild mage or elementalist.
 
 **Abilities:** Evocation (Novice, fire), or any [magical ability](#s-schools) · Influence (Novice, threats) · Athlete (Novice, sprinting).
@@ -876,7 +876,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d4 · Confidence d6 · Stride 3.
 :::
 
-:::sheet[The Healer: keeps everyone else alive]
+:::sheet[The Healer: keeps everyone else alive]{#k-healer}
 **Plays like** a priest, field surgeon, plague doctor or midwife.
 
 **Abilities:** Mending (Novice, flesh), or Medic (Novice, battlefield wounds) · Faith (Novice, healing prayers) · Empathy (Novice, calming the frightened).
@@ -894,7 +894,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d2 · Confidence d6 · Stride 3.
 :::
 
-:::sheet[The Druid: calls the beasts, and patches up the crew]
+:::sheet[The Druid: calls the beasts, and patches up the crew]{#k-druid}
 **Plays like** a herbalist, beast-talker or forest hermit.
 
 **Abilities:** Wildcraft (Novice, beasts) · Survivor (Novice, foraging) · Medic (Novice, herbal remedies).
@@ -912,7 +912,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d2 · Confidence d4 · Stride 3.
 :::
 
-:::sheet[The Warlock: curses them now, and pays for it later]
+:::sheet[The Warlock: curses them now, and pays for it later]{#k-warlock}
 **Plays like** a pact-maker, curse-thrower, cultist or spirit-talker.
 
 **Abilities:** Hexer (Novice, curses) · Medium (Novice, the recently dead) · Deception (Novice, lying to authority).
@@ -930,7 +930,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d2 · Confidence d4 · Stride 3 · Aura 6.
 :::
 
-:::sheet[The Artificer: builds the thing that solves it]
+:::sheet[The Artificer: builds the thing that solves it]{#k-artificer}
 **Plays like** an inventor, tinker, clockmaker or sigil-carver.
 
 **Abilities:** Engineer (Novice, clockwork) · Crafter (Novice, field repairs) · Artifice (Novice, sigils).
@@ -948,7 +948,7 @@ If what you want to play isn't in that table, it's probably one swap away. Start
 **Numbers:** Armour d4 · Confidence d4 · Stride 3 · Carries 7 items and 7 resources.
 :::
 
-:::sheet[The Captain: leads, and the others follow]
+:::sheet[The Captain: leads, and the others follow]{#k-captain}
 **Plays like** an officer, warlord or ship's captain.
 
 **Abilities:** Strategist (Novice, small squads) · Influence (Novice, soldiers) · Combat (Novice, sword).

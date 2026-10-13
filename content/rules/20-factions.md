@@ -144,7 +144,7 @@ The crew spends its Wealth the same way, and it gets two more uses that factions
 
 Jobs move Wealth and Power too. A burned warehouse steps the Guild's Wealth down, and a ship brought home steps the crew's up. When a job will do that, the GM says so when she offers it, and moves the dice when it's done.
 
-### When an agenda happens
+### When an agenda happens {#when-an-agenda-happens}
 
 -   **The world changes.** Say how in one sentence, and write it on the party sheet.
 -   **The faction grows.** Step its Power or Wealth up one, or give it a new tag.
@@ -206,7 +206,7 @@ Ties go to the faction. There's no Aura in downtime, but a player can spend thei
 
 Scenes move factions too. If the crew burns a Guild warehouse in play, they've struck the Guild, whatever they spent in downtime. Say so, and move its Standing and its dice.
 
-### Factions in a scene
+### Factions in a scene {#factions-in-a-scene}
 
 -   **Its people** are threats with a Challenge to match its Power, and its tags can be theirs too.
 -   **Its money** is its Wealth die: the bribe it can offer, the price it can pay and the guards it can hire.

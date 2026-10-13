@@ -12,7 +12,7 @@ You build everything else with the same tools you used to make your character.
 
 Everything's built the same way: a few plain sentences, something it wants and a secret. Roll on the tables below, or just read down them for ideas. Factions get their own chapter (see [Factions](#factions)).
 
-## Regions
+## Regions {#regions}
 
 Start with three questions:
 
@@ -35,7 +35,7 @@ Start with three questions:
 | 11 | A death no one has answered for. |
 | 12 | It's a refuge for people the world wants gone. |
 
-## Places
+## Places {#places}
 
 | d12 | The complication |
 | --- | --- |
@@ -52,7 +52,7 @@ Start with three questions:
 | 11 | The last people to come here didn't come back. |
 | 12 | The only place in the region where a certain thing is possible. |
 
-## People
+## People {#people}
 
 | d12 | What they want |
 | --- | --- |
@@ -84,7 +84,7 @@ Start with three questions:
 | 11 | They have the thing everyone's looking for. |
 | 12 | They're far more capable than they look, or far less. |
 
-## Hooks
+## Hooks {#hooks}
 
 | d20 | The trouble |
 | --- | --- |

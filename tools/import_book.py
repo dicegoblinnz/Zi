@@ -25,7 +25,7 @@ soup = BeautifulSoup(SRC.read_text(encoding="utf-8"), "html.parser")
 main = soup.find("main")
 
 PANDOC_TO = (
-    "markdown+fenced_divs+pipe_tables+header_attributes"
+    "markdown-auto_identifiers+fenced_divs+pipe_tables+header_attributes"
     "-grid_tables-multiline_tables-simple_tables-bracketed_spans"
     "-native_spans-raw_attribute-smart-link_attributes-fenced_code_attributes"
 )
@@ -124,6 +124,8 @@ def prepare(frag: Tag, slug: str) -> None:
             h4 = d.find("h4", recursive=False)
             if h4 is not None:
                 d["data-label"] = text(h4)
+                if h4.get("id") and not d.get("id"):
+                    d["id"] = h4["id"]
                 h4.decompose()
     for q in frag.select("p.quote"):
         q.name = "div"
@@ -169,9 +171,11 @@ def post(md: str) -> str:
                 attrs = m.group(2)
                 cls = re.findall(r"\.([A-Za-z-]+)", attrs)
                 label = re.search(r'label="([^"]*)"', attrs)
+                ident = re.search(r"#([A-Za-z0-9_-]+)", attrs)
                 name = {"beast": "threat"}.get(cls[0], cls[0]) if cls else "box"
                 lab = f"[{label.group(1)}]" if label else ""
-                out.append(f":::{name}{lab}")
+                idattr = f"{{#{ident.group(1)}}}" if ident else ""
+                out.append(f":::{name}{lab}{idattr}")
             else:
                 name = {"beast": "threat"}.get(m.group(4), m.group(4))
                 out.append(f":::{name}")

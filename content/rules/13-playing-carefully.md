@@ -18,7 +18,7 @@ Write an X on an index card and put it in the middle of the table. Anyone can ta
 
 Go back to just before whatever got tapped, change it, and keep playing. Nobody asks who tapped it or why, and nobody makes a fuss. If you're not sure what it was, cut back further than you need to. Playing online, typing an X in the chat does the same job.
 
-## The Open Door
+## The Open Door {#the-open-door}
 
 :::example
 "If at any point you need to leave the room, you can. You don't need to explain, and the game carries on."
@@ -49,15 +49,15 @@ If nobody knows where to start, go through this list and ask whether each one's 
 
 Lines and veils can change at any time. If something comes up mid-campaign, say so, and it goes on the list with no questions asked. The GM gets lines and veils too.
 
-## Pausing
+## Pausing {#pausing}
 
 Anyone can call a pause, the GM included. Stop, talk it through, and then carry on, change direction or cut to the next scene. It's a normal part of playing, so treat it like one.
 
-## After a Heavy Session
+## After a Heavy Session {#after-a-heavy-session}
 
 Take five minutes before everyone heads home. Go round the table: what did you enjoy, and did anything not sit right? If something needs to change before next time, change it. The GM goes first, so everyone knows it's safe to be honest.
 
-## The One Rule
+## The One Rule {#the-one-rule}
 
 :::rule
 **The people at the table matter more than the story.**

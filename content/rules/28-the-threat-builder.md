@@ -12,7 +12,7 @@ There's no monster manual here, because you don't need one. A threat is a Challe
 
 This chapter's just the procedure. [Running the Game](#s-building-threats) has the thinking behind it, and [The Bestiary](#bestiary) has forty threats built this way.
 
-## Building a threat
+## Building a threat {#building-a-threat}
 
 1.  **Decide what it is.** Roll on the table below, or pick one. That gives you a Challenge and a couple of tags to start with.
 2.  **Choose its size.** A mook has one tag that keeps it going, or none. A named threat has two, and a boss has three or more, plus a weak point. A boss that should last gets [Tough](#s-tough-gm), which works like hit points, and a special encounter can be [Layered](#s-layered).
@@ -23,7 +23,7 @@ This chapter's just the procedure. [Running the Game](#s-building-threats) has t
 7.  **Give it a power, if it has one.** That's an impossible thing it can do, written as a tag and telegraphed from the budget. Most threats don't need one. There's more in [unique mechanics](#s-unique-threats). If it has Forms, write *Forms (2)* or *Forms (3)*, and a Forms list of about ten tags to pick its new shapes from.
 8.  **Name it, and give it a voice.** Write one line for it to say in character, and the first thing the crew notices.
 
-## What it is
+## What it is {#what-it-is}
 
 | d20 | What it is | Challenge | Start with |
 | --- | --- | --- | --- |
@@ -48,7 +48,7 @@ This chapter's just the procedure. [Running the Game](#s-building-threats) has t
 | 19 | **The old power**: ancient, patient, far above your weight. | 6 | *Ancient, Bound by Rules, Calls for Help* |
 | 20 | **Roll twice**: two of these, fused into one nasty thing. | — | *Both sets of tags, and keep the higher Challenge* |
 
-## Its tags
+## Its tags {#its-tags}
 
 Roll on each table as many times as you need, or just read down them for ideas. Every tag here is explained in [Appendix B](#appendix-tags), along with how it plays at the table.
 
@@ -97,7 +97,7 @@ Roll on each table as many times as you need, or just read down them for ideas. 
 | 11 | Grieving. |
 | 12 | Cannot resist an audience. |
 
-## Building a Threat, Start to Finish
+## Building a Threat, Start to Finish {#building-a-threat-start-to-finish}
 
 The GM needs a boss for the end of the arc. She rolls 13, which is **the champion**: Challenge 6, starting with *Hits Like a Wagon*, *Armoured* and *Proud*. She wants him quicker than a wagon, so she swaps that one for *Reach*: he fights with a long-hafted axe.
 

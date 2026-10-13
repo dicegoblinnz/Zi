@@ -12,7 +12,7 @@ The Oracle is three d20s. It's how the world makes up its mind when nobody at th
 
 **Anyone at the table can roll it.** The GM rolls it for anything about the world she hasn't decided yet. A player rolls it to ask about the world when nobody at the table knows the answer. You don't have to be playing solo to use it. It's never how you *do* things, though: actions are always rolled with steps.
 
-## The Three Dice
+## The Three Dice {#the-three-dice}
 
 -   **Fate** is the target: how hard the question is.
 -   **Boon** says whether the answer is *yes*.
@@ -36,7 +36,7 @@ Fate and Bane stay as they are, so Bane's just as likely to bite either way. Rea
 It's two in the morning, so the GM says it's likely. She rolls Fate 11 and Bane 6, and two Boon dice, 4 and 15. She keeps the 15. Boon beats Fate and Bane doesn't, so it's a yes: the house is dark and quiet.
 :::
 
-## The Four Readings
+## The Four Readings {#the-four-readings}
 
 | Result | The dice | What it means |
 | --- | --- | --- |
@@ -45,7 +45,7 @@ It's two in the morning, so the GM says it's likely. She rolls Fate 11 and Bane 
 | **No** | Neither beats Fate. | It doesn't happen. Move on. |
 | **No, and** | Bane beats Fate. Boon doesn't. | It doesn't happen, and something else goes wrong. Roll on the Twist table. |
 
-## Harmony
+## Harmony {#harmony}
 
 | Result | The dice | What it means |
 | --- | --- | --- |
@@ -55,7 +55,7 @@ It's two in the morning, so the GM says it's likely. She rolls Fate 11 and Bane 
 | **Boon = Bane, both under Fate** | Both dice agree the answer isn't happening. | A definitive no. It's flat, so play it as the world refusing to be dramatic. |
 | **All three match** | Fate, Boon, and Bane all show the same number. | Scene-defining fact. Whoever asked introduces something true about the story. |
 
-## When to Roll the Oracle
+## When to Roll the Oracle {#when-to-roll-the-oracle}
 
 **The GM rolls it** when she really doesn't know the answer to a question about the world.
 
@@ -63,14 +63,14 @@ It's two in the morning, so the GM says it's likely. She rolls Fate 11 and Bane 
 
 **A solo player rolls it** whenever they'd otherwise ask a GM a question.
 
-## When Not to Roll It
+## When Not to Roll It {#when-not-to-roll-it}
 
 -   A permission on the sheet plainly covers it, so the GM just tells you.
 -   The story's already decided.
 -   The stakes are so high that a bad roll would break the scene.
 -   You're trying to strip a tag, impose a condition, or do anything else another rule already handles.
 
-## The Twist: d12
+## The Twist: d12 {#the-twist-d12}
 
 1.  It takes longer than you thought.
 2.  Someone notices.
@@ -85,7 +85,7 @@ It's two in the morning, so the GM says it's likely. She rolls Fate 11 and Bane 
 11. It works one time only.
 12. It wakes something up.
 
-## The Boon: d12
+## The Boon: d12 {#the-boon-d12}
 
 1.  You find something extra.
 2.  Someone owes you a favour.
@@ -100,7 +100,7 @@ It's two in the morning, so the GM says it's likely. She rolls Fate 11 and Bane 
 11. You recover something you thought you'd lost.
 12. You learn something about the situation that changes what you do next.
 
-## Six Worked Examples
+## Six Worked Examples {#six-worked-examples}
 
 :::example
 **The question:** *Is the household asleep?*

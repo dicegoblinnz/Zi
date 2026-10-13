@@ -48,15 +48,15 @@ A telegraph aimed at the way or at Supplies has no defence to roll, like any tel
 
 When Supplies steps down past a d2, you're out. From then on the GM telegraphs hunger every leg: a d6 at each of you, against Confidence. Feeding the crew answers it for everyone, and puts Supplies back at a d2.
 
-### The whole journey's one scene
+### The whole journey's one scene {#the-whole-journeys-one-scene}
 
 It's one problem, getting there, however many days it takes. Aura fills when you set out, and not again until you get there. If something on the road turns into a proper fight, or a meeting worth playing in rounds, stop the journey and play it as its own scene, Aura and all. Then pick the journey up where you left it, with whatever Aura you've got left.
 
-### Horses, carts and boats
+### Horses, carts and boats {#horses-carts-and-boats}
 
 They're [party resources](#party-sheet), so each one's a permission for whoever's using it, where it fits. A good horse makes time on a road and a boat gets you down the river. A cart is why Supplies starts at a d10, and its Catch is usually *Needs a Road*.
 
-### On the road
+### On the road {#on-the-road}
 
 When you need something for the road to throw at them, roll a d8.
 

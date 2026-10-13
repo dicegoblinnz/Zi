@@ -20,7 +20,7 @@ Here's that shape for a three-hour night. Stretch it or squeeze it to fit your t
 | Aftermath | 30 min | What it cost, and what it changed. |
 | Closing | 10 min | A check-in, the log, and a look at next time. |
 
-## Opening the session
+## Opening the session {#opening-the-session}
 
 1.  **Recap.** One player reads from last session's log.
 2.  **Downtime.** The four pressures land, then everyone spends their slots.
@@ -30,7 +30,7 @@ Here's that shape for a three-hour night. Stretch it or squeeze it to fit your t
 
 Take turns doing the recap, so it isn't always the same person. If the log doesn't jog anyone's memory, the GM fills in the gaps.
 
-## The session body
+## The session body {#the-session-body}
 
 -   **One planning scene.** The crew talks through what they're going to do.
 -   **One confrontation scene.** This is the thing they were planning for.
@@ -46,7 +46,7 @@ If the planning's still going after twenty minutes, make a move. Something in th
 
 The aftermath is where the job's consequences arrive, like the pay that comes up short, or the people they crossed finding out who did it. If the job set back the Goal or anyone's Aspiration, step it down now, and if a scene put one within reach and nobody rolled for it, say so, so they know to chase it next time. Then leave a **hook**: something that pulls them into the next session whether they planned for it or not, like a name they've never heard or a letter in a hand they know.
 
-## Closing the session
+## Closing the session {#closing-the-session}
 
 1.  **Session-end check-in.**
 2.  **Write the log.** Just one sentence.
@@ -62,6 +62,6 @@ The log is one sentence a session, written by a different player each time, in a
 -   **They still get their downtime.** They can tell someone what to spend their slots on, or spend them when they're back.
 -   **Bring them back in fast.** Open their first scene back with them in the middle of something.
 
-## Sharing the Spotlight
+## Sharing the Spotlight {#sharing-the-spotlight}
 
 Keep a rough count of who's had a moment tonight. Before the session ends, everyone should have had at least one problem that was theirs to solve. If someone's had a quiet night, bring them [trouble](#s-trouble-gm), or aim the next scene at their Aspiration. There's more in [A moment for each character](#s-spotlight).

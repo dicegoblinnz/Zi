@@ -81,7 +81,7 @@ You're never going to answer everything. Whatever nobody answers **lands at the 
 
 The telegraph has to beat your defence. **Ties go to you.**
 
-:::rule
+:::rule{#s-past-d12}
 **Past d12.** Armour or Confidence bigger than a d12 rolls both dice and keeps the best. When it steps down, the extra die goes first: d12 + d6, then d12 + d4, then d12 + d2, then a plain d12. That's three blows soaked before you're any weaker, and heavy armour's supposed to feel like this.
 :::
 
@@ -128,7 +128,7 @@ A threat is anything that pushes back: a person, a beast, a mob, a storm, a rumo
 
 **The Challenge is the threat's defence.** It's the die you've got to beat, and it never steps down. There's no Challenge above 6, so anything bigger is a Challenge 6 with more tags, and **the tags are what make a boss a boss**.
 
-### Tags
+### Tags {#tags}
 
 A tag is something true about a threat that the whole table can see, use and play to: *Armoured, Reach, Loyal, Calls for Help, Bound to a Place*. Tags don't make its dice bigger. They tell you what the threat is, what it does and what you've got to get through, and a tag only changes the dice when it says so. Every tag is one of three kinds:
 
@@ -146,7 +146,7 @@ Most threats in Zi don't have hit points. Count a threat's **keeps-it-going tags
 -   A **named** threat has two, which makes for a proper fight.
 -   A **boss** has three or more, some hidden, and a weak point. A boss that should last has [Tough](#s-tough) as well, and Tough works like hit points.
 
-:::rule
+:::rule{#s-layered}
 **Layered.** Special encounters stack their dice. A threat or a stake that's *Layered* rolls one Challenge die for every tag it's got left keeping it going, and its best die counts. Strip a tag and it rolls one fewer. Save it for the doors, wards and bosses that should feel like a wall, not for every guard.
 :::
 
@@ -249,7 +249,7 @@ A threat can break a condition too. The GM telegraphs it (*the Warden beats at t
 
 These are examples, not a complete list, so write your own in the same shape: a name, a passive and an active. The passive is always one step, for or against. The active is one strong thing that pulls one lever: a Hurt, an action, movement, Armour or Confidence, an item, a telegraph, a clock or a secret.
 
-#### Against you
+#### Against you {#against-you}
 
 | Condition | Passive: one step less on… | Active: spend it and… |
 | --- | --- | --- |
@@ -274,7 +274,7 @@ These are examples, not a complete list, so write your own in the same shape: a 
 | **Hexed** | one kind of thing, named when it's placed. | one roll you just won becomes a tie. |
 | **Hunted** | hiding, and resting. | a clock ticks: they're closing in. |
 
-#### For you
+#### For you {#for-you}
 
 | Condition | Passive: one step more on… | Active: spend it and… |
 | --- | --- | --- |
@@ -365,7 +365,7 @@ The corridor's thirty feet of polished marble, lit by candles in iron brackets. 
 
 That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way.
 
-### Round 1: The telegraph
+### Round 1: The telegraph {#round-1-the-telegraph}
 
 :::example
 **GM:** The left Warden closes in to pin Bram against the wall, that's a d10. As it passes, it sweeps its spear low at Vesk, a d8. The right Warden drives its spear at Isolde, a d10, and plants itself in the vault doorway, another d10. And the maid's going to bolt up the stair and wake the house. That's a d4, and it's only got one answer: if it lands, the household clock drops two sizes.
@@ -429,7 +429,7 @@ That changes the whole fight, because now nobody has to grind through four tags.
 
 Nobody worked on *Leave no trace*, so its clock steps down to a d6. *The household wakes* steps down to a d6 as well.
 
-### Round 2: The plan
+### Round 2: The plan {#round-2-the-plan}
 
 :::example
 **GM:** The left Warden comes at Bram again, a d10. The right Warden's braced in the doorway, and it drives its spear at Vesk, a d10, and at Dorrie, another d10. Upstairs, a door bangs, so somebody heard. And the portraits along the wall have started to whisper. One of them is saying Isolde's name, and that's a d6 at her Confidence.
@@ -481,7 +481,7 @@ Isolde's got one action left. She answers the portrait whispering her name with 
 
 **End of Round 2.** The left Warden's gone, though its spear had already found Bram. The spear at Vesk still lands, because climbing away doesn't stop a telegraph aimed at you. She's on the rope when it finds her, 8 against her Armour d4's 3, and the GM names Armour down a size. Her leathers are a d2 now. The spear at Dorrie lands, 9 against her Armour d2's 1, and the GM names a Hurt. Dorrie's no fighter, so she offers the party Goal instead. It's at a d4, and the table agrees it fits, so it steps back down to a d2, because they're going to be here longer than they wanted. The work on *Leave no trace* stopped its clock, and *The household wakes* steps down to a d4.
 
-### Round 3: The turn
+### Round 3: The turn {#round-3-the-turn}
 
 The GM leans in. The right Warden abandons the doorway and comes for Isolde with everything it's got: a d10 at her, a d10 at Bram and a d10 at the rope Vesk is hanging from. The butler's lantern appears on the main stair, a d8 aimed at *Leave no trace*. Then the GM plays the twist she held back. The portrait Isolde quieted speaks out loud, and it knows the name of the person inside the second Warden.
 
@@ -491,7 +491,7 @@ Bram puts both actions into the rope and hauls the bundle up to Vesk. *Athlete* 
 
 At the end of the round the household clock steps down to its last die. When it runs out there'll be lamps lit on every floor, but by then the crew will be three roofs away, and the maid will be swearing she saw a stranger.
 
-### What the fight taught
+### What the fight taught {#what-the-fight-taught}
 
 -   **The crew never ground a Warden down.** They studied, found a weak point and a hidden tag, and took both routes.
 -   **The stakes mattered more than the enemies.** Vesk spent her whole first round on canvases instead of spears, and it won the scene.
