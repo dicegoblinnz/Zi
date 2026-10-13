@@ -1,0 +1,38 @@
+<svg aria-label="Grid map of the toll bridge at the start of round one" role="img" viewBox="0 0 480 270" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<pattern height="12" id="zi-water" patternUnits="userSpaceOnUse" width="12"><rect fill="#D6E3E6" height="12" width="12"></rect><path d="M0 8 Q3 5 6 8 T12 8" fill="none" stroke="#B8CDD2" stroke-width="1.2"></path></pattern>
+<pattern height="30" id="zi-grid" patternUnits="userSpaceOnUse" width="30"><path d="M30 0 V30 H0" fill="none" stroke="#CFC5B2" stroke-width="0.6"></path></pattern>
+</defs>
+<rect fill="#EFE8DA" height="270" width="480" x="0" y="0"></rect>
+<rect fill="url(#zi-water)" height="270" width="240" x="120" y="0"></rect>
+<rect fill="#C9A77A" height="60" width="300" x="90" y="120"></rect>
+<g stroke="#A88659" stroke-width="1">
+<line x1="90" x2="390" y1="135" y2="135"></line><line x1="90" x2="390" y1="150" y2="150"></line><line x1="90" x2="390" y1="165" y2="165"></line>
+</g>
+<rect fill="#7C6A58" height="75" width="90" x="390" y="0"></rect>
+<text fill="#FAF8F3" font-family="sans-serif" font-size="10" text-anchor="middle" x="435" y="42">Toll-house</text>
+<rect fill="#8A6A45" height="56" rx="4" width="88" x="150" y="122"></rect>
+<text fill="#FAF8F3" font-family="sans-serif" font-size="10" text-anchor="middle" x="194" y="154">Wagon</text>
+<rect fill="#5B4A3A" height="56" rx="3" width="58" x="360" y="122"></rect>
+<text fill="#FAF8F3" font-family="sans-serif" font-size="8" text-anchor="middle" x="389" y="148">Bandit</text>
+<text fill="#FAF8F3" font-family="sans-serif" font-size="8" text-anchor="middle" x="389" y="159">cart</text>
+<g fill="#EA580C"><path d="M372 104 q6 -14 6 -2 q4 -8 4 4 q-5 8 -10 -2z"></path><path d="M372 196 q6 -14 6 -2 q4 -8 4 4 q-5 8 -10 -2z"></path></g>
+<text fill="#9A3412" font-family="sans-serif" font-size="8" text-anchor="middle" x="378" y="222">burning ropes</text>
+<rect fill="url(#zi-grid)" height="270" width="480" x="0" y="0"></rect>
+<line stroke="#9A3412" stroke-dasharray="4 3" stroke-width="1.2" x1="75" x2="398" y1="225" y2="98"></line>
+<g font-family="sans-serif" font-size="11" font-weight="700" text-anchor="middle">
+<circle cx="255" cy="135" fill="#9A3412" r="12"></circle><text fill="#fff" x="255" y="139">B</text>
+<circle cx="255" cy="165" fill="#9A3412" r="12"></circle><text fill="#fff" x="255" y="169">V</text>
+<circle cx="135" cy="135" fill="#9A3412" r="12"></circle><text fill="#fff" x="135" y="139">A</text>
+<circle cx="75" cy="225" fill="#9A3412" r="12"></circle><text fill="#fff" x="75" y="229">W</text>
+<rect fill="#1C1917" height="24" rx="3" width="24" x="273" y="123"></rect><text fill="#fff" x="285" y="139">1</text>
+<rect fill="#1C1917" height="24" rx="3" width="24" x="273" y="153"></rect><text fill="#fff" x="285" y="169">2</text>
+<rect fill="#1C1917" height="24" rx="3" width="24" x="333" y="123"></rect><text fill="#fff" x="345" y="139">3</text>
+<rect fill="#1C1917" height="24" rx="3" width="24" x="393" y="83"></rect><text fill="#fff" x="405" y="99">C</text>
+</g>
+<g fill="#44403C" font-family="sans-serif" font-size="9">
+<text x="60" y="20">West bank</text>
+<text font-style="italic" text-anchor="middle" x="240" y="60">River Below</text>
+<text font-style="italic" text-anchor="middle" x="240" y="196">Narrow Bridge</text>
+</g>
+</svg>
