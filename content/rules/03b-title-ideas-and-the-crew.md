@@ -1,6 +1,7 @@
 ---
 title: "Title Ideas and the Crew"
 id: title-ideas
+slug: title-ideas-and-the-crew
 order: 3.5
 part: "Play"
 partNumber: "Part I"

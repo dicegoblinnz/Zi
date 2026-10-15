@@ -1,6 +1,7 @@
 ---
 title: "The Archetypes"
 id: archetypes
+slug: the-archetypes
 order: 3.2
 part: "Play"
 partNumber: "Part I"

@@ -1,6 +1,7 @@
 ---
 title: "Index"
 id: index
+slug: the-index
 order: 36
 part: "Appendices & Index"
 partNumber: "Part V"

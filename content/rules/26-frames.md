@@ -1,6 +1,7 @@
 ---
 title: "Frames"
 id: frames
+slug: frames
 order: 26
 part: "The World"
 partNumber: "Part IV"

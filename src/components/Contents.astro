@@ -1,0 +1,41 @@
+---
+import book from "../generated/book.json";
+
+interface Props {
+  currentSlug?: string;
+  headings?: { id: string; text: string }[];
+}
+const { currentSlug, headings = [] } = Astro.props;
+
+// Group the chapters by part, keeping book order.
+const groups: { number: string | null; name: string | null; chapters: typeof book.chapters }[] = [];
+for (const ch of book.chapters) {
+  const last = groups[groups.length - 1];
+  if (last && last.number === ch.partNumber) last.chapters.push(ch);
+  else groups.push({ number: ch.partNumber, name: ch.partName, chapters: [ch] });
+}
+---
+<ol class="toc">
+  <li>
+    <a href="/changes/" aria-current={currentSlug === "changes" ? "page" : undefined}>What's changed</a>
+  </li>
+  {groups.map((g) => (
+    <>
+      {g.number && (
+        <li class="toc-part"><b>{g.number}</b>{g.name}</li>
+      )}
+      {g.chapters.map((ch) => (
+        <li>
+          <a href={`/rules/${ch.slug}/`} aria-current={ch.slug === currentSlug ? "page" : undefined}>{ch.title}</a>
+          {ch.slug === currentSlug && headings.length > 0 && (
+            <ol class="sub">
+              {headings.map((h) => (
+                <li><a href={`#${h.id}`}>{h.text}</a></li>
+              ))}
+            </ol>
+          )}
+        </li>
+      ))}
+    </>
+  ))}
+</ol>

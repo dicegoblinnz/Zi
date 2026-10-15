@@ -1,6 +1,7 @@
 ---
 title: "Welcome to Zi'Dara"
 id: how-to-use
+slug: welcome
 order: 1
 source: 2026-10-02 rulebook
 updated: 2026-10-16

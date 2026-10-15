@@ -1,6 +1,7 @@
 ---
 title: "Appendix A: The Sheets"
 id: appendix-sheet
+slug: appendix-a-the-sheets
 order: 30
 part: "Appendices & Index"
 partNumber: "Part V"

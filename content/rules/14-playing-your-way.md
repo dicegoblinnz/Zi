@@ -1,6 +1,7 @@
 ---
 title: "Playing Your Way"
 id: access
+slug: playing-your-way
 order: 14
 part: "The Table"
 partNumber: "Part II"

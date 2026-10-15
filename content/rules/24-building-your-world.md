@@ -1,6 +1,7 @@
 ---
 title: "Building Your World"
 id: world
+slug: building-your-world
 order: 24
 part: "The World"
 partNumber: "Part IV"

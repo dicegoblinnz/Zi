@@ -1,6 +1,7 @@
 ---
 title: "The Party Sheet"
 id: party-sheet
+slug: the-party-sheet
 order: 4
 part: "Play"
 partNumber: "Part I"

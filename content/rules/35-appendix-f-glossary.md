@@ -1,6 +1,7 @@
 ---
 title: "Appendix F: Glossary"
 id: appendix-glossary
+slug: appendix-f-glossary
 order: 35
 part: "Appendices & Index"
 partNumber: "Part V"

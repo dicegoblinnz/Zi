@@ -1,6 +1,7 @@
 ---
 title: "Tactical Play"
 id: tactics
+slug: tactical-play
 order: 6
 part: "Play"
 partNumber: "Part I"

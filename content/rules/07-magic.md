@@ -1,6 +1,7 @@
 ---
 title: "Magic"
 id: magic
+slug: magic
 order: 7
 part: "Play"
 partNumber: "Part I"

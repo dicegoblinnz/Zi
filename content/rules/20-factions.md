@@ -1,6 +1,7 @@
 ---
 title: "Factions"
 id: factions
+slug: factions
 order: 20
 part: "The GM"
 partNumber: "Part III"

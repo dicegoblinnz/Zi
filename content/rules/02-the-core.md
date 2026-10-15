@@ -1,6 +1,7 @@
 ---
 title: "The Core"
 id: the-core
+slug: the-core
 order: 2
 part: "Play"
 partNumber: "Part I"

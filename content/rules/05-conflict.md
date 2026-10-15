@@ -1,6 +1,7 @@
 ---
 title: "Conflict"
 id: conflict
+slug: conflict
 order: 5
 part: "Play"
 partNumber: "Part I"

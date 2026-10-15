@@ -1,6 +1,7 @@
 ---
 title: "The Oracle"
 id: oracle
+slug: the-oracle
 order: 21
 part: "The GM"
 partNumber: "Part III"

@@ -1,6 +1,7 @@
 ---
 title: "Building Your Character"
 id: building-character
+slug: building-your-character
 order: 3
 part: "Play"
 partNumber: "Part I"

@@ -1,6 +1,7 @@
 ---
 title: "Appendix C: Every Lever in the Game"
 id: appendix-levers
+slug: appendix-c-every-lever-in-the-game
 order: 32
 part: "Appendices & Index"
 partNumber: "Part V"

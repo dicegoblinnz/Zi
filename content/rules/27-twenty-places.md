@@ -1,6 +1,7 @@
 ---
 title: "Twenty Places"
 id: places
+slug: twenty-places
 order: 27
 part: "The World"
 partNumber: "Part IV"

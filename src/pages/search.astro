@@ -1,0 +1,29 @@
+---
+import Base from "../layouts/Base.astro";
+---
+<Base title="Search" current="search" description="Search the Zi’Dara rules.">
+  <link slot="head" href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+  <main id="main" class="home frame search-page">
+    <h1>Search</h1>
+    <p class="tag">Every chapter and the change log.</p>
+    <div id="search"></div>
+    <noscript><p>Search needs JavaScript. The <a href="/rules/the-index/">index</a> works without it.</p></noscript>
+  </main>
+  <script is:inline src="/pagefind/pagefind-ui.js"></script>
+  <script is:inline>
+    window.addEventListener("DOMContentLoaded", function () {
+      if (!window.PagefindUI) return;
+      new PagefindUI({
+        element: "#search",
+        showSubResults: true,
+        showImages: false,
+        translations: { placeholder: "Resolve, wound die, Guardian…", zero_results: "Nothing matches [SEARCH_TERM]. Try one word, like Resolve or Guardian." },
+      });
+      var input = document.querySelector("#search input");
+      if (input) input.setAttribute("aria-label", "Search the rules");
+      var q = new URLSearchParams(location.search).get("q");
+      if (input && q) { input.value = q; input.dispatchEvent(new Event("input")); }
+      if (input) input.focus();
+    });
+  </script>
+</Base>

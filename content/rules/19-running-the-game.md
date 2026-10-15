@@ -1,6 +1,7 @@
 ---
 title: "Running the Game"
 id: running
+slug: running-the-game
 order: 19
 part: "The GM"
 partNumber: "Part III"

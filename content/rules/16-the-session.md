@@ -1,6 +1,7 @@
 ---
 title: "The Session"
 id: the-session
+slug: the-session
 order: 16
 part: "The Table"
 partNumber: "Part II"

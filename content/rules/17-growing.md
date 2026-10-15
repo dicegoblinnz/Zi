@@ -1,6 +1,7 @@
 ---
 title: "Growing"
 id: growing
+slug: growing
 order: 17
 part: "The Table"
 partNumber: "Part II"

@@ -1,6 +1,7 @@
 ---
 title: "The Threat Builder"
 id: threat-builder
+slug: the-threat-builder
 order: 28
 part: "The World"
 partNumber: "Part IV"

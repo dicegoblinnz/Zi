@@ -26,7 +26,8 @@ This repo is the master copy of the rules for **Zi'Dara**, Mo's tabletop rolepla
 2. Add an entry to the top of `content/changes.md`: the date, what changed in plain words, what it replaced, and links to the sections.
 3. If you made a call, add it to `notes/to-confirm.md`.
 4. Run `python3 -I tools/check_terms.py`, `python3 -I tools/check_terms.py --links` and `python3 -I tools/voice_check.py FILE --lines` on what you changed. Add newly retired words to `RETIRED` in `check_terms.py`.
-5. Work on a branch and commit. Mo approves anything that goes to `main`.
+5. Rebuild and check the site (`npm run build`, then `node tests/check-site.mjs`).
+6. Work on a branch and commit. `main` is what the live site deploys from, so only merge to `main` when Mo says so.
 
 ## The voice
 
@@ -45,6 +46,11 @@ Write as Mo, teaching at the table with dice in hand. Use the `zi-voice` skill w
 - Pipe tables only, with ` · ` between items in a cell. Links are `[text](#id)`.
 - Permissions, tags, Catches, conditions and quoted threads in *italics*.
 
-## The site (not built yet)
+## The site
 
-The plan is Astro on Cloudflare (Workers with static assets, D1, R2, Durable Objects for live telegraphs), in Mo's own Cloudflare account, deployed from this repo through Workers Builds. Accounts are invite-only, the rules are open to everyone, and characters come first after the rules.
+- Astro 7, static, served by Cloudflare Workers static assets in Mo's own Cloudflare account, deployed from `main` by Workers Builds (`npm run build`, then `npx wrangler deploy`). The Worker is called `zidara`.
+- `scripts/build-content.mjs` renders the Markdown itself (unified: remark-parse, remark-gfm, remark-directive, smartypants) into `src/generated/book.json`, so it doesn't depend on Astro's Markdown pipeline. It rewrites `#id` links to the page that holds the id. Chapter URLs come from each chapter's `slug:` in its front matter, so keep slugs stable.
+- `src/pages/`: home, `/rules/` and `/rules/<slug>/`, `/changes/`, `/search/` (Pagefind, built after Astro), `404`.
+- `tests/check-site.mjs` must pass before anything goes to `main`: 320, 360, 390, 430 and 1280 wide, light and dark, no sideways scroll, no console errors, 44px tap targets, axe, and search.
+- The look is a starting look (lapis and gold, the same as the reading copy) until Mo picks one.
+- Still to come, in Mo's order: characters (accounts are invite-only), campaigns, worlds and maps, live telegraphs on phones and a table screen (Durable Objects), and offline use.

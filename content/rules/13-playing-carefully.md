@@ -1,6 +1,7 @@
 ---
 title: "Playing Carefully"
 id: playing-carefully
+slug: playing-carefully
 order: 13
 part: "The Table"
 partNumber: "Part II"

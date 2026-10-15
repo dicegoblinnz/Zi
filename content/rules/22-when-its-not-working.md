@@ -1,6 +1,7 @@
 ---
 title: "When It's Not Working"
 id: when-not-working
+slug: when-its-not-working
 order: 22
 part: "The GM"
 partNumber: "Part III"

@@ -1,6 +1,7 @@
 ---
 title: "Appendix D: Quick Reference"
 id: appendix-quick
+slug: appendix-d-quick-reference
 order: 33
 part: "Appendices & Index"
 partNumber: "Part V"

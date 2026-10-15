@@ -1,6 +1,7 @@
 ---
 title: "Playing Alone"
 id: solo
+slug: playing-alone
 order: 23
 part: "The GM"
 partNumber: "Part III"

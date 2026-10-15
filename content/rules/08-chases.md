@@ -1,6 +1,7 @@
 ---
 title: "Chases"
 id: chases
+slug: chases
 order: 8
 part: "Play"
 partNumber: "Part I"

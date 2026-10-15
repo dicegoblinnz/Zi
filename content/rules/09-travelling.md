@@ -1,6 +1,7 @@
 ---
 title: "Travelling"
 id: travelling
+slug: travelling
 order: 9
 part: "Play"
 partNumber: "Part I"

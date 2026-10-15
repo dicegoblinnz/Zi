@@ -1,0 +1,42 @@
+---
+import Base from "../../layouts/Base.astro";
+import Contents from "../../components/Contents.astro";
+import book from "../../generated/book.json";
+
+export function getStaticPaths() {
+  return book.chapters.map((chapter) => ({ params: { slug: chapter.slug }, props: { chapter } }));
+}
+
+const { chapter } = Astro.props;
+const eyebrow = chapter.partNumber ? `${chapter.partNumber} · ${chapter.partName}` : "Zi’Dara";
+---
+<Base title={chapter.title} current="rules">
+  <div class="with-rail frame">
+    <aside class="rail" aria-label="Contents" data-pagefind-ignore>
+      <nav><Contents currentSlug={chapter.slug} headings={chapter.headings} /></nav>
+    </aside>
+    <main id="main" class="reading">
+      <div class="page">
+        <details class="toc-mobile" data-pagefind-ignore>
+          <summary>Contents</summary>
+          <nav><Contents currentSlug={chapter.slug} headings={chapter.headings} /></nav>
+        </details>
+        <article class="prose" data-pagefind-body data-pagefind-meta={`part:${chapter.partName ?? "Welcome"}`}>
+          <header class="chapter-head">
+            <p class="eyebrow">{eyebrow}</p>
+            <h1>{chapter.title}</h1>
+          </header>
+          <Fragment set:html={chapter.html} />
+        </article>
+        <nav class="pager" aria-label="Chapters" data-pagefind-ignore>
+          {chapter.prev && (
+            <a class="prev" href={`/rules/${chapter.prev.slug}/`}><span>Before</span>{chapter.prev.title}</a>
+          )}
+          {chapter.next && (
+            <a class="next" href={`/rules/${chapter.next.slug}/`}><span>Next</span>{chapter.next.title}</a>
+          )}
+        </nav>
+      </div>
+    </main>
+  </div>
+</Base>

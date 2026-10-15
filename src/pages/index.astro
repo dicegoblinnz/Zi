@@ -1,0 +1,39 @@
+---
+import Base from "../layouts/Base.astro";
+import book from "../generated/book.json";
+
+const welcome = book.chapters.find((c) => c.slug === "welcome");
+// The opening of the Welcome chapter is Mo introducing the game in his own words.
+const opening = (welcome?.html.match(/<p>I’m Mo\.[\s\S]*?(?=<p>Zi’Dara starts with)/) ?? [""])[0];
+const latest = book.changes.headings[0];
+const parts = book.parts.map((p) => ({ ...p, chapters: book.chapters.filter((c) => c.partNumber === p.number) }));
+const updated = book.updated
+  ? new Date(book.updated).toLocaleDateString("en-NZ", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
+  : null;
+---
+<Base title="Zi’Dara" current="home">
+  <main id="main" class="home frame">
+    <h1>Zi’Dara</h1>
+    <p class="tag">A tabletop roleplaying game{updated && <> · the rules as of {updated}</>}</p>
+    <div class="intro prose"><Fragment set:html={opening} /></div>
+    <div class="actions">
+      <a class="button primary" href="/rules/welcome/">Start reading</a>
+      <a class="button" href="/rules/the-archetypes/">The archetypes</a>
+      <a class="button" href="/search/">Search the rules</a>
+    </div>
+    {latest && (
+      <p class="stamp">Latest change: <a href={`/changes/#${latest.id}`}>{latest.text}</a></p>
+    )}
+    <div class="parts">
+      {parts.map((p) => (
+        <section class="part">
+          <p class="eyebrow">{p.number}</p>
+          <h2>{p.name}</h2>
+          <ol>
+            {p.chapters.map((c) => <li><a href={`/rules/${c.slug}/`}>{c.title}</a></li>)}
+          </ol>
+        </section>
+      ))}
+    </div>
+  </main>
+</Base>

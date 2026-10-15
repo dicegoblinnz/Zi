@@ -1,0 +1,33 @@
+---
+import Base from "../layouts/Base.astro";
+import Contents from "../components/Contents.astro";
+import book from "../generated/book.json";
+
+const { title, html, headings } = book.changes;
+---
+<Base title={title} current="changes" description="Every rules change since the 2 Oct 2026 book, newest first.">
+  <div class="with-rail frame">
+    <aside class="rail" aria-label="Contents">
+      <nav><Contents currentSlug="changes" /></nav>
+    </aside>
+    <main id="main" class="reading">
+      <div class="page">
+        <details class="toc-mobile">
+          <summary>On this page</summary>
+          <nav>
+            <ol class="toc">
+              {headings.map((h) => <li><a href={`#${h.id}`}>{h.text}</a></li>)}
+            </ol>
+          </nav>
+        </details>
+        <article class="prose" data-pagefind-body>
+          <header class="chapter-head">
+            <p class="eyebrow">The rules</p>
+            <h1>{title}</h1>
+          </header>
+          <Fragment set:html={html} />
+        </article>
+      </div>
+    </main>
+  </div>
+</Base>

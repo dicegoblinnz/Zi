@@ -1,6 +1,7 @@
 ---
 title: "The Steeplands"
 id: steeplands
+slug: the-steeplands
 order: 25
 part: "The World"
 partNumber: "Part IV"

@@ -1,6 +1,7 @@
 ---
 title: "The Bestiary"
 id: bestiary
+slug: the-bestiary
 order: 29
 part: "The World"
 partNumber: "Part IV"

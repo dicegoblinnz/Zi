@@ -1,6 +1,7 @@
 ---
 title: "Downtime"
 id: downtime
+slug: downtime
 order: 12
 part: "Play"
 partNumber: "Part I"

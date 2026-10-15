@@ -1,6 +1,7 @@
 ---
 title: "Appendix E: A Worked Campaign Arc"
 id: appendix-campaign
+slug: appendix-e-a-worked-campaign-arc
 order: 34
 part: "Appendices & Index"
 partNumber: "Part V"

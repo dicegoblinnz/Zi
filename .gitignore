@@ -7,3 +7,5 @@ dist/
 .dev.vars
 .env
 __pycache__/
+src/generated/
+public/figures/

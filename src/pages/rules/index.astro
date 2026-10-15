@@ -1,0 +1,29 @@
+---
+import Base from "../../layouts/Base.astro";
+import book from "../../generated/book.json";
+
+const welcome = book.chapters.filter((c) => !c.partNumber);
+const parts = book.parts.map((p) => ({ ...p, chapters: book.chapters.filter((c) => c.partNumber === p.number) }));
+---
+<Base title="The Rules" current="rules" description="Every chapter of the Zi’Dara rulebook, in book order.">
+  <main id="main" class="home frame">
+    <h1>The Rules</h1>
+    <p class="tag">Every chapter, in book order. They’re the master copy, so they’re always the current rules.</p>
+    <div class="actions">
+      {welcome.map((c) => <a class="button primary" href={`/rules/${c.slug}/`}>Start with {c.title}</a>)}
+      <a class="button" href="/changes/">What’s changed</a>
+    </div>
+    <div class="parts">
+      {parts.map((p) => (
+        <section class="part">
+          <p class="eyebrow">{p.number}</p>
+          <h2>{p.name}</h2>
+          <p>{p.description}</p>
+          <ol>
+            {p.chapters.map((c) => <li><a href={`/rules/${c.slug}/`}>{c.title}</a></li>)}
+          </ol>
+        </section>
+      ))}
+    </div>
+  </main>
+</Base>

@@ -1,6 +1,7 @@
 ---
 title: "Coin and Kit"
 id: coin-kit
+slug: coin-and-kit
 order: 18
 part: "The Table"
 partNumber: "Part II"

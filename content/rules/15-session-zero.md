@@ -1,6 +1,7 @@
 ---
 title: "Session Zero"
 id: session-zero
+slug: session-zero
 order: 15
 part: "The Table"
 partNumber: "Part II"

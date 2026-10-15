@@ -1,6 +1,7 @@
 ---
 title: "Appendix B: Tag Reference"
 id: appendix-tags
+slug: appendix-b-tag-reference
 order: 31
 part: "Appendices & Index"
 partNumber: "Part V"
