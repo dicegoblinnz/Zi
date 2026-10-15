@@ -11,6 +11,7 @@ This repo is the master copy of the rules for **Zi'Dara**, Mo's tabletop rolepla
 - `notes/playtest-sheets/`: Mo's "What's changed" playtest sheets (text), the primary source for each change.
 - `tools/check_terms.py`: flags retired rules words (`--links` checks every `](#id)` link against the chapters' ids).
 - `tools/voice_check.py`: flags em dashes, semicolons, exclamation marks, stiff phrases and filler, and counts contractions.
+- `tools/build_book.py` and `tools/book_template.html`: build a one-page reading copy of the whole book (`python3 tools/build_book.py OUT.html`). Rebuild it after every rules change.
 - `tools/import_book.py`: the one-off import of the 2 Oct HTML book. Don't run it again.
 
 ## The rules

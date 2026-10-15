@@ -20,6 +20,6 @@ This repo is the **master copy of the rules**. The website, the printed book, th
 
 1. Change the chapter (or chapters) where the rule lives, and anywhere it's summarised (the quick reference, every lever, the glossary).
 2. Add an entry to the top of `content/changes.md`: the date, what changed, what it replaced, and which chapters.
-3. Run the checks in `tools/` and commit.
+3. Run the checks in `tools/`, rebuild the reading copy with `tools/build_book.py`, and commit.
 
 Every commit is a version, so GitHub's history shows exactly what changed and when.

@@ -1,0 +1,294 @@
+<title>Zi'Dara Rules</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Sans+Condensed:wght@400;500;600&display=swap">
+<style>
+/* Layout: a sticky contents rail beside one reading column; on a phone the contents drop down from a top bar. */
+:root {
+  --bg: #f4f5f8;
+  --surface: #ffffff;
+  --ink: #1a2130;
+  --muted: #586174;
+  --line: #d8dce5;
+  --accent: #284895;
+  --accent-soft: #e8ecf7;
+  --gold: #8f6a1c;
+  --gold-soft: #f6efdf;
+  --display: "Marcellus", "Trajan Pro", Georgia, serif;
+  --body: "Literata", Georgia, "Times New Roman", serif;
+  --ui: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --measure: 68ch;
+  --rail: 19rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f131b; --surface: #161c28; --ink: #e5e8ee; --muted: #9aa3b6; --line: #29324a;
+    --accent: #95acf1; --accent-soft: #1b2540; --gold: #d8b45f; --gold-soft: #282214;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f131b; --surface: #161c28; --ink: #e5e8ee; --muted: #9aa3b6; --line: #29324a;
+  --accent: #95acf1; --accent-soft: #1b2540; --gold: #d8b45f; --gold-soft: #282214;
+  color-scheme: dark;
+}
+html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 4.5rem); }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--bg); }
+a { color: var(--accent); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: max(16px, env(safe-area-inset-left, 0px)); top: 0.5rem; z-index: 50; background: var(--surface); padding: 0.4rem 0.7rem; }
+
+.topbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding-block: 0.65rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: baseline; gap: 0.7rem; min-width: 0; }
+.brand b { font-family: var(--display); font-weight: 400; font-size: 1.45rem; letter-spacing: 0.02em; }
+.brand span { font-family: var(--ui); font-size: 0.82rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.menu-btn {
+  font-family: var(--ui); font-size: 0.9rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 6px; padding: 0.4rem 0.8rem; cursor: pointer;
+}
+.layout { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); align-items: start; }
+.rail {
+  position: sticky; top: calc(env(safe-area-inset-top, 0px) + 3.6rem); height: calc(100dvh - env(safe-area-inset-top, 0px) - 3.6rem);
+  overflow-y: auto; overscroll-behavior: contain; border-right: 1px solid var(--line);
+  padding-block: 1rem 2rem; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: 1rem;
+  font-family: var(--ui); font-size: 0.95rem;
+}
+.search { display: grid; gap: 0.35rem; margin-bottom: 1rem; }
+.search label { font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.search input {
+  font: inherit; width: 100%; box-sizing: border-box; padding: 0.5rem 0.65rem; border-radius: 6px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+}
+.results { display: grid; gap: 0.15rem; }
+.results a { display: grid; gap: 0.1rem; padding: 0.45rem 0.5rem; border-radius: 5px; text-decoration: none; color: var(--ink); }
+.results a:hover { background: var(--accent-soft); }
+.results .r-where { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.03em; }
+.results .r-head { font-weight: 600; }
+.results .r-snip { font-size: 0.82rem; color: var(--muted); }
+.results mark { background: var(--gold-soft); color: inherit; border-radius: 2px; }
+.results p { color: var(--muted); font-size: 0.9rem; margin: 0.3rem 0.5rem; }
+.toc-list, .toc-sub { list-style: none; margin: 0; padding: 0; }
+.toc-part { margin: 1.1rem 0 0.35rem; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.toc-part span { color: var(--gold); font-weight: 600; margin-right: 0.3rem; }
+.toc-chapter summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 0.4rem; padding: 0.22rem 0; }
+.toc-chapter summary::-webkit-details-marker { display: none; }
+.toc-chapter summary::before { content: "›"; color: var(--muted); width: 0.7rem; flex: none; transition: transform 0.15s; }
+.toc-chapter details[open] > summary::before { transform: rotate(90deg); }
+.toc-chapter summary a { color: var(--ink); text-decoration: none; }
+.toc-chapter[aria-current="true"] summary a { color: var(--accent); font-weight: 600; }
+.toc-sub { margin: 0.1rem 0 0.5rem 1.1rem; border-left: 1px solid var(--line); padding-left: 0.6rem; }
+.toc-sub a { display: block; padding: 0.12rem 0; color: var(--muted); text-decoration: none; font-size: 0.88rem; }
+.toc-sub a:hover, .toc-chapter summary a:hover { color: var(--accent); }
+.ladder { margin-top: 1.6rem; border-top: 1px solid var(--line); padding-top: 0.9rem; }
+.ladder p { margin: 0 0 0.45rem; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ladder ol { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.25rem; font-variant-numeric: tabular-nums; }
+.ladder li { display: grid; text-align: center; border: 1px solid var(--line); border-radius: 5px; padding: 0.25rem 0; background: var(--surface); }
+.ladder li b { font-weight: 600; color: var(--gold); font-size: 0.8rem; }
+.ladder li span { font-size: 0.9rem; }
+.ladder small { display: block; margin-top: 0.4rem; color: var(--muted); font-size: 0.8rem; }
+
+main { min-width: 0; padding-block: 1.5rem 5rem; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.page { max-width: var(--measure); margin: 0 auto; }
+.lede { font-family: var(--ui); color: var(--muted); font-size: 0.92rem; border-bottom: 1px solid var(--line); padding-bottom: 1rem; margin-bottom: 1rem; }
+.resume { display: inline-block; margin-top: 0.5rem; font-family: var(--ui); }
+.part-band { margin: 4.5rem 0 1.5rem; padding: 1.4rem 0 1.2rem; border-top: 3px double var(--line); border-bottom: 1px solid var(--line); }
+.part-num { margin: 0; font-family: var(--ui); font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); font-size: 0.85rem; }
+.part-name { margin: 0.2rem 0 0.3rem; font-family: var(--display); font-size: 2.2rem; line-height: 1.15; }
+.part-desc { margin: 0; color: var(--muted); font-style: italic; }
+.chapter { padding-top: 2.5rem; }
+.chapter h1 { font-family: var(--display); font-weight: 400; font-size: clamp(2rem, 1.5rem + 2vw, 2.7rem); line-height: 1.1; margin: 0 0 1.2rem; text-wrap: balance; }
+.chapter h2 { font-family: var(--display); font-weight: 400; font-size: 1.6rem; line-height: 1.2; margin: 2.6rem 0 0.6rem; text-wrap: balance; }
+.chapter h3 { font-family: var(--ui); font-weight: 600; font-size: 1.08rem; letter-spacing: 0.02em; margin: 1.9rem 0 0.4rem; }
+.chapter h4 { font-family: var(--ui); font-weight: 600; font-size: 0.95rem; margin: 1.4rem 0 0.3rem; color: var(--muted); }
+.chapter p, .chapter li { text-wrap: pretty; }
+.chapter ul, .chapter ol { padding-left: 1.3rem; }
+.chapter li + li { margin-top: 0.25rem; }
+.chapter img { display: block; max-width: 100%; height: auto; margin: 1rem auto; border-radius: 6px; border: 1px solid var(--line); background: #fff; }
+.table-wrap { overflow-x: auto; margin: 1rem 0; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; line-height: 1.45; }
+th, td { text-align: left; vertical-align: top; padding: 0.45rem 0.65rem; border-bottom: 1px solid var(--line); }
+th { font-family: var(--ui); font-weight: 600; font-size: 0.85rem; letter-spacing: 0.03em; background: var(--accent-soft); }
+tr:last-child td { border-bottom: 0; }
+td { font-variant-numeric: tabular-nums; }
+
+.box { margin: 1.4rem 0; padding: 0.9rem 1.1rem; border-radius: 8px; }
+.box > :last-child { margin-bottom: 0; }
+.box-label { margin: 0 0 0.5rem; font-family: var(--ui); font-size: 0.86rem; display: flex; flex-wrap: wrap; gap: 0.15rem 0.5rem; align-items: baseline; }
+.box-kind { font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.75rem; }
+.box-name { font-weight: 600; font-size: 0.98rem; }
+.box-example { background: var(--surface); border: 1px solid var(--line); }
+.box-example .box-kind { color: var(--accent); }
+.box-rule { background: var(--accent-soft); }
+.box-rule .box-kind { color: var(--accent); }
+.box-note { background: var(--gold-soft); }
+.box-note .box-kind { color: var(--gold); }
+.box-quote { padding: 0.2rem 0 0.2rem 1.4rem; margin: 1.2rem 0 1.6rem; font-style: italic; font-size: 1.12rem; color: var(--muted); position: relative; }
+.box-quote::before { content: "\201C"; position: absolute; left: 0; top: -0.35rem; font-family: var(--display); font-size: 2.2rem; color: var(--gold); font-style: normal; }
+.box-sheet, .box-threat, .box-place { background: var(--surface); border: 1px solid var(--line); }
+.box-sheet .box-label, .box-threat .box-label, .box-place .box-label { border-bottom: 1px solid var(--line); padding-bottom: 0.45rem; }
+.box-sheet .box-name, .box-threat .box-name, .box-place .box-name { font-family: var(--display); font-weight: 400; font-size: 1.25rem; }
+.box-threat .box-kind, .box-place .box-kind { color: var(--gold); }
+.box-sheet p, .box-threat p, .box-place p { margin: 0.35rem 0; font-size: 0.95rem; }
+.sheet-fields, .index-section { margin: 1rem 0; }
+.index-section ul { columns: 2 16rem; column-gap: 2rem; padding-left: 1rem; }
+.index-section li { break-inside: avoid; }
+
+@media (max-width: 900px) {
+  .layout { display: block; }
+  .rail:not(.open) { display: none; }
+  .rail {
+    position: fixed; z-index: 25; inset: calc(env(safe-area-inset-top, 0px) + 3.3rem) 0 0 0; height: auto;
+    background: var(--bg); border-right: 0; border-top: 1px solid var(--line);
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+  }
+  body { font-size: 16.5px; }
+}
+@media (min-width: 901px) { .menu-btn { display: none; } }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+</style>
+
+<a class="skip" href="#main">Skip to the rules</a>
+<header class="topbar">
+  <div class="brand"><b>Zi'Dara</b><span>Rules, as of {{STAMP}}</span></div>
+  <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="rail">Contents</button>
+</header>
+<div class="layout">
+  <aside class="rail" id="rail">
+    <div class="search">
+      <label for="q">Search the rules</label>
+      <input id="q" type="search" placeholder="Resolve, wound die, Guardian…" autocomplete="off">
+    </div>
+    <div class="results" id="results" hidden></div>
+    <div id="toc">{{TOC}}</div>
+    <div class="ladder" aria-label="Steps to dice">
+      <p>Steps to dice</p>
+      <ol>
+        <li><b>1</b><span>d2</span></li><li><b>2</b><span>d4</span></li><li><b>3</b><span>d6</span></li>
+        <li><b>4</b><span>d8</span></li><li><b>5</b><span>d10</span></li><li><b>6</b><span>d12</span></li>
+      </ol>
+      <small>Past 6 steps, build a second die the same way.</small>
+    </div>
+  </aside>
+  <main id="main">
+    <div class="page">
+      <p class="lede">This is a reading copy of the Zi'Dara rulebook, built from the master copy of the rules. It starts with what's changed since the 2 Oct book, newest first. <a class="resume" id="resume" href="#" hidden>Pick up where you left off</a></p>
+      {{BODY}}
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+  var rail = document.getElementById('rail');
+  var btn = document.getElementById('menu-btn');
+  var narrow = window.matchMedia('(max-width: 900px)');
+  function setOpen(open) {
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    btn.textContent = open ? 'Close' : 'Contents';
+    rail.classList.toggle('open', open);
+  }
+  if (narrow.addEventListener) narrow.addEventListener('change', function () { setOpen(false); });
+  btn.addEventListener('click', function () { setOpen(!rail.classList.contains('open')); });
+  rail.addEventListener('click', function (e) {
+    if (e.target.closest('a') && narrow.matches) setOpen(false);
+  });
+
+  // Search: one entry per heading, with the text under it.
+  var index = [];
+  document.querySelectorAll('.chapter').forEach(function (ch) {
+    var chapterTitle = ch.querySelector('h1').textContent;
+    var current = { id: ch.id, where: chapterTitle, head: chapterTitle, text: '' };
+    index.push(current);
+    Array.prototype.forEach.call(ch.children, function (el) {
+      if ((el.tagName === 'H2' || el.tagName === 'H3') && el.id) {
+        current = { id: el.id, where: chapterTitle, head: el.textContent, text: '' };
+        index.push(current);
+      } else if (el.tagName !== 'H1') {
+        current.text += ' ' + el.textContent;
+      }
+    });
+  });
+  index.forEach(function (e) { e.text = e.text.replace(/\s+/g, ' ').trim(); e.low = (e.head + ' ' + e.text).toLowerCase(); e.headLow = e.head.toLowerCase(); });
+
+  var q = document.getElementById('q');
+  var results = document.getElementById('results');
+  var toc = document.getElementById('toc');
+  function esc(s) { return s.replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function mark(s, words) {
+    var out = esc(s);
+    words.forEach(function (w) {
+      if (!w) return;
+      var re = new RegExp('(' + w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig');
+      out = out.replace(re, '<mark>$1</mark>');
+    });
+    return out;
+  }
+  var timer;
+  q.addEventListener('input', function () {
+    clearTimeout(timer);
+    timer = setTimeout(run, 120);
+  });
+  function run() {
+    var text = q.value.trim().toLowerCase();
+    if (text.length < 2) { results.hidden = true; toc.hidden = false; return; }
+    var words = text.split(/\s+/);
+    var hits = index.filter(function (e) { return words.every(function (w) { return e.low.indexOf(w) !== -1; }); });
+    hits.sort(function (a, b) {
+      var sa = words.filter(function (w) { return a.headLow.indexOf(w) !== -1; }).length;
+      var sb = words.filter(function (w) { return b.headLow.indexOf(w) !== -1; }).length;
+      return sb - sa;
+    });
+    var html = hits.slice(0, 40).map(function (e) {
+      var at = e.text.toLowerCase().indexOf(words[0]);
+      var start = Math.max(0, at - 50);
+      var snip = at === -1 ? e.text.slice(0, 110) : (start ? '…' : '') + e.text.slice(start, start + 140) + '…';
+      return '<a href="#' + e.id + '"><span class="r-where">' + esc(e.where) + '</span><span class="r-head">' + mark(e.head, words) + '</span><span class="r-snip">' + mark(snip, words) + '</span></a>';
+    }).join('');
+    results.innerHTML = html || '<p>Nothing matches that. Try one word, like Resolve or Guardian.</p>';
+    if (hits.length > 40) results.innerHTML += '<p>' + (hits.length - 40) + ' more. Add a word to narrow it down.</p>';
+    results.hidden = false;
+    toc.hidden = true;
+  }
+
+  // Show where you are in the contents.
+  var items = {};
+  document.querySelectorAll('.toc-chapter').forEach(function (li) { items[li.getAttribute('data-chapter')] = li; });
+  var currentLi = null;
+  if ('IntersectionObserver' in window) {
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var li = items[en.target.id];
+        if (!li || li === currentLi) return;
+        if (currentLi) currentLi.removeAttribute('aria-current');
+        li.setAttribute('aria-current', 'true');
+        currentLi = li;
+        try { localStorage.setItem('zidara-last', en.target.id); } catch (e) {}
+      });
+    }, { rootMargin: '-15% 0px -80% 0px' });
+    document.querySelectorAll('.chapter').forEach(function (ch) { obs.observe(ch); });
+  }
+
+  // Pick up where you left off.
+  try {
+    var last = localStorage.getItem('zidara-last');
+    var resume = document.getElementById('resume');
+    if (last && !location.hash && last !== 'changes' && document.getElementById(last)) {
+      resume.href = '#' + last;
+      resume.textContent = 'Pick up where you left off: ' + document.getElementById(last).querySelector('h1').textContent;
+      resume.hidden = false;
+    }
+  } catch (e) {}
+})();
+</script>
