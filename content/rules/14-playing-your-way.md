@@ -5,7 +5,7 @@ order: 14
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Some players need the table set up a bit differently, and it's usually easy to sort.
@@ -51,9 +51,9 @@ Sit where you can see the GM's face and everyone else's, at the quietest end of 
 
 A dice tray stops the dice going off the edge of the table, and with a dice tower you just drop them in the top. Chunky dice are easier to pick up, too.
 
-If throwing dice is hard work, ask a friend to roll for you. **Every call's still yours**: the intents, the Aura and your Sparks. Or roll in the Player app, which builds and rolls any roll from your sheet and rolls your defence when something lands on you, so all you do is tap. With the app, someone at the table rolls the threat's die alongside it.
+If throwing dice is hard work, ask a friend to roll for you. **Every call's still yours**: the intents, the Aura and your Resolve. Or roll in the Player app, which builds and rolls any roll from your sheet and rolls your defence when something lands on you, so all you do is tap. With the app, someone at the table rolls the threat's die alongside it.
 
-Cut down the bits to handle, too. Tokens for Aura are easier than rubbing out a number, and the clocks can go on the whiteboard, so nobody's swapping dice at the end of every round.
+Cut down the bits to handle, too. Tokens for Aura and Resolve are easier than rubbing out a number, and so is a token on the Confidence die you're on, because that moves up and down all scene. The clocks can go on the whiteboard, so nobody's swapping dice at the end of every round.
 
 :::example[A friend's hands]
 Bram's player has asked Dorrie's player to roll for him tonight. Bram answers the spear at Isolde, and his player builds it: his Fight is 4 steps, and *guard one person* fits too, but it isn't on his Fight, so he pays 1 Aura to bring it in. That's 5 steps, a d10, on the spear. Dorrie's player rolls it with the spear's d10: 7 against a 7. It's a tie, and it's Bram's player who decides to pay 1 Aura to win it.
@@ -74,7 +74,7 @@ The book's in plain words, and every rule term's in the [glossary](#appendix-glo
 -   **Use your own words.** You don't need the game's terms. Say what your character does, and the table turns it into steps: "I'm burning that arrow out of the air before it gets to Isolde" is an answer, and the GM says so.
 
 :::example[Wren, out loud]
-"I'm the hunter who's never lost a trail, so I can follow any trail, move through the wild unseen and know a beast's habits. I'm an outrider from the border war too: I can scout ahead of an army, ride hard over rough country and read the land for an ambush. And I can shoot a longbow, and with this one I can hit anything I can see."
+"I'm the hunter who's never lost a trail, so I can follow any trail, move through the wild unseen and know a beast's habits. I'm an outrider from the border war too: I can scout ahead of an army, ride hard over rough country and read the land for an ambush. And I can shoot a longbow, and with this one I can hit anything I can see. In this cloak I can vanish into trees and shadow."
 :::
 
 ## Focus, Memory and Energy {#s-access-focus}
@@ -88,7 +88,7 @@ The book's in plain words, and every rule term's in the [glossary](#appendix-glo
 
 ## Talking at the Table {#s-access-voice}
 
-You don't have to do voices, or talk as your character at all. Say what they do, in the third person if that's easier: "Dorrie gives the clerk a false name and flashes her signet pin." It's the same roll either way: her Pass as someone else, with the pin already on it, 5 steps, a d10.
+You don't have to do voices, or talk as your character at all. Say what they do, in the third person if that's easier: "Dorrie gives the clerk a false name and flashes her signet pin." It's the same roll either way: her Pass as someone else, with the pin already on it, 5 steps, a d10. The [Resolve](#s-resolve) the GM gives for great roleplay works the same way. It's for what your character does, like facing their fear or keeping a promise to themselves, so it counts however you tell it.
 
 -   **Take the spotlight when you want it.** Want a moment? Ask for one: "Can Dorrie have a go at the clerk?" If you'd rather sit back for a scene, tell the GM and she'll aim it at someone else. When your moment comes, it can be a roll instead of a speech.
 -   **Ask before putting anyone on the spot.** The GM asks players to make up bits of the world (see [The Conversation](#s-conversation)). Some love it and some don't, so she gives a heads-up and a way out: "Isolde, in a minute I'll ask what your order's sigils mean, so have a think. Or I'll make it up, if you'd rather."

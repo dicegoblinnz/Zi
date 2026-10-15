@@ -5,7 +5,7 @@ order: 25
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 You can play Zi'Dara in any setting you like, but if you don't have a world in mind, here's one in two pages, ready to play.

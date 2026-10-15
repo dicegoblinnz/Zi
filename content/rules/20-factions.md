@@ -5,7 +5,7 @@ order: 20
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 The factions keep moving whatever the crew does, but the crew gets to choose where it stands.
@@ -49,7 +49,7 @@ You write a faction in eight lines.
 | City | d8–d10 | d8–d10 | The watch, the harbour guild, the old families. |
 | Great | d10–d12 | d10–d12 | A great house, a church, the crown's own office. |
 
-Three to five factions makes a good board. With fewer the world feels small, and with more nobody at the table can keep track.
+Three to five factions makes a good board. With fewer the world feels small, and with more, the table can't keep track.
 
 ## Building a Faction {#s-faction-build}
 
@@ -176,7 +176,7 @@ Roll a d12. An *Enemy* or *Wary* faction rolls on the first table, and a *Friend
 | d12 | Enemy or Wary | Friendly or Ally |
 | --- | --- | --- |
 | 1 | A price on someone's head: next session, a crew member is *Hunted*, at the faction's Power. | A job, well paid and a little dangerous. |
-| 2 | It buys someone the crew relies on: a fence, a landlord, a contact. Burn that connection unless someone spends a slot to win them back. | A warning: someone's coming for you. |
+| 2 | It buys someone the crew relies on: a fence, a landlord, a contact. A [thread](#s-bonds) with them snaps unless someone spends a slot to win them back. | A warning: someone's coming for you. |
 | 3 | It raids or seizes a party resource. | A gift: a purse of gold each, an item, a door opened. |
 | 4 | It frames a crew member for something it did. | A favour asked. Something small now, something big later. |
 | 5 | Its face comes to talk: a warning, a threat, an offer. | An introduction to someone useful. |
@@ -203,7 +203,7 @@ The crew moves on factions with its **party slots**, and a party slot is an acti
 | **Deal** | Its face. A Deal's always open: one slot, however big the faction is and however it sees the crew. | Its Standing goes up one, or it trades: a favour for a favour, or one of its tags, or a thing it owns, for a step of the crew's Wealth. | Nothing, and next time the price is higher. |
 | **Work for it** | No roll. | It gives the crew a job. The job is a scene next session. Do it, and its Standing goes up one and it pays: a purse of gold each, a favour, or for a big job, a step of the crew's Wealth. | — |
 
-Ties go to the faction. There's no Aura in downtime, but a player can spend a Spark to roll again (their own dice only), or the crew can step its Wealth down one and take the tie. Only the crew gets to do that. See [Rolling in downtime](#s-downtime-rolls).
+Ties go to the faction. There's no Aura in downtime, but a player can spend 1 Resolve to roll again (their own dice only), or the crew can step its Wealth down one and take the tie. Only the crew gets to do that. See [Rolling in downtime](#s-downtime-rolls).
 
 Scenes move factions too. If the crew burns a Guild warehouse in play, they've struck the Guild, whatever they spent in downtime. Say so, and move its Standing and its dice.
 
@@ -219,7 +219,7 @@ The crew's own Power, Wealth, tags and Reputations, and how the crew grows, are 
 :::example[A faction turn, at the table]
 There are three factions on the board, and the GM picks their moves. The **Vane Estate** will advance *Vane comes home*, which is sitting at d10. The **Harbour Guild** is *Wary* of the crew. The GM doesn't know what it'll do, so she rolls and gets a 5: it moves on the crew. And the **Quiet Order** schemes. The faction pressure is the Estate: *Vane is nearly home.*
 
-The Estate's Power is a d12 and the crew's is a d4, so the crew can only touch its Power with both party slots. They put both in to interfere, and everything counts twice: their d4 becomes a d8, rolled against the Estate's Power and its agenda at once. The crew rolls 7. The Power rolls 9 and the agenda rolls 4. They've beaten the agenda but not the Power, so the Estate's move fails this downtime, and *Vane comes home* steps back down to d8. They don't get to take anything, but Vane's carriage has turned round on the north road.
+The Estate's Power is a d12 and the crew's is a d4, so the crew can't touch its Power without both party slots. They put both in to interfere, and everything counts twice: their d4 becomes a d8, rolled against the Estate's Power and its agenda at once. The crew rolls 7. The Power rolls 9 and the agenda rolls 4. They've beaten the agenda but not the Power, so the Estate's move fails this downtime, and *Vane comes home* steps back down to d8. They don't get to take anything, but Vane's carriage has turned round on the north road.
 
 Now for the moves. The Estate's move has already failed. The Guild rolls a d12 on the first table and gets a 7: it tells the law, and next session the watch has the crew's names. The Order writes a new agenda, *Find the painted box*, which starts at d4 and gets stepped up once, to d6.
 :::

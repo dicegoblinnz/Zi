@@ -5,7 +5,7 @@ order: 11
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Somebody knows what happened. Usually several somebodies, and none of them want to tell you.
@@ -28,7 +28,7 @@ Like any stake, say what it costs if they don't get there in time: *clear Dorrie
 For every tag on the question, write three **trails**: a person who knows, a place that shows it and a thing that proves it. The crew only needs one, so if they miss one, they'll find another.
 
 -   **Following a trail** is a scene, or part of one. Whatever's there pushes back like anything else: a witness who won't talk is a threat to talk round, and a locked office is a stake.
--   **When you get there**, a permission that plainly covers looking finds what nobody's hiding, with no roll. If someone's hiding it, Study it against the question's Challenge.
+-   **When you get there**, a permission that plainly covers looking finds what nobody's hiding, with no roll. If someone's hiding it, Study it against the question's Challenge, for a hidden tag or a straight answer.
 -   **Get what the trail's got** and that tag's stripped off the question. Write what you found down as a tag you know, like *Bitter Almond in the Wine*.
 
 ### What they do next {#s-next-move}
@@ -45,7 +45,7 @@ That's where the clues pay off. Every one the crew wrote down is a tag they know
 
 -   **If they name the wrong person**, play it out. Don't tell them they're wrong. The other side's event keeps stepping down while they're busy, and the truth's still where you left it.
 -   **If they're stuck**, make a move and bring a trail to them. Somebody knocks on the door, or a second body turns up.
--   **A Spark makes something true about you**, like an old friend at the watch house or a key you lifted last year. That can get you to a trail, but it won't change what happened.
+-   **A [Scholar](#a-scholar) who wins a Study** can introduce a truth, like a back stair the servants use or a clerk who copied the will. That can get you to a trail, but it won't change what happened.
 
 ### Trails in a hurry {#trails-in-a-hurry}
 

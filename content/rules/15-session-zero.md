@@ -5,13 +5,13 @@ order: 15
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Before you touch a die, sit down together and have one conversation.
 :::
 
-Session Zero is the night before the first job. You build the crew together and agree on what game you're all playing. With characters to make, it takes about two hours. Go through these in order, and write the answers down where everyone can see them.
+Session Zero's the night before the first job. You build the crew together and agree on what game you're all playing. With characters to make, it'll take about two hours. Go through these in order, and write the answers down where everyone can see them.
 
 ## 1. The Pitch {#the-pitch}
 
@@ -39,17 +39,19 @@ The list in [Playing Carefully](#s-lines-veils) is a good place to start. Put th
 
 The GM reads [the promises](#s-gm-promises) from *Running the Game* out loud. They're what the players can hold the GM to, so if a player thinks one's been broken, they can say so, and the table sorts it out.
 
-## 5. The Characters and Their Connections {#the-character-connections}
+## 5. The Characters and Their Threads {#the-character-connections}
 
-Make your characters at the table, so everyone hears everyone else's Titles as they go down. You each write two Titles, with a trait and three permissions on each, then fill in your set actions, what you carry and your two attuned things. You get a Spark for each Title, so that's two to start. [Building Your Character](#building-character) takes you through it a step at a time.
+Make your characters at the table, so everyone hears everyone else's archetypes and Titles as they go down. You each pick two [archetypes](#archetypes), name each one with a Title and give it three permissions, then pick two traits and fill in your set actions, what you carry and your two attuned things. Each Title gives you 1 Resolve, so that's 2 to start. [Building Your Character](#building-character) takes you through it a step at a time.
 
-Then go around the table with the [ten crew questions](#s-connect). Everyone answers at least two, naming another character each time. If anyone wants to play tonight without building, they can take one of the [ready-made characters](#s-pregens).
+Then go around the table with the [ten crew questions](#s-connect). Everyone answers at least two, naming another character each time, and a good answer can become a [thread](#s-bonds). You've each got three to write, spread across your bonds however you like, and if you write one as a debt, you'll get a fourth. A thread with someone in the crew goes on both your sheets and counts for both of you, so agree on it together before it's written down. Dorrie and Isolde settle on *I keep her secrets at court. She keeps mine.* It goes on both their sheets, and if either of them strains it, it's strained for both.
+
+If anyone wants to play tonight without building, they can take one of the [ready-made characters](#s-pregens).
 
 ## 6. The Party Sheet {#the-party-sheet}
 
-Draw it up together. Put every Aspiration at d2 and the party Goal at d2. Give the crew its starting dice, Power d4 and Wealth d4, and a name if you've got one. Then add your first factions, and anything the crew owns together.
+Draw it up together. Put every Aspiration at d2 and the Party Goal at d2. Give the crew its starting dice, Power d4 and Wealth d4, and a name if you've got one. Then add your first factions, and anything the crew owns together.
 
-The Goal is what the first arc's about, so take your time over it. A good first Goal is something the whole crew wants and can't get in one night, like *clear Dorrie's name* or *own the Low Market*. Two or three factions is plenty to start, as long as one of them wants something the crew has.
+The Goal is what the first arc's about, so take your time over it. A good first Goal is something the whole crew wants and can't get in one night, like *clear Dorrie's name* or *own the Low Market*. Two or three factions is plenty to start, as long as one of them wants something the crew's got.
 
 ## 7. Magic and the Strange {#magic-and-the-strange}
 
@@ -57,7 +59,7 @@ Decide how magic sits in this world. Is it rare, feared, common, holy or illegal
 
 ## 8. The Map {#the-map}
 
-Grid or theatre of the mind? Zi'Dara's built for a grid, but it plays fine without one, so decide together. If you use a grid, one square is one unit, about five feet. There's more on this in [Tactical Play](#tactics).
+Grid or theatre of the mind? Zi'Dara's built for a grid, but it plays fine without one, so decide together. If you use a grid, one square's one unit, about five feet. There's more on this in [Tactical Play](#tactics).
 
 ## 9. If You've Played Other Games {#if-youve-played-other-games}
 
@@ -81,7 +83,7 @@ There's more in [Welcome to Zi'Dara](#s-from-dnd).
 "In Session One you meet at a job. You've all been hired separately."
 :::
 
-Some of you already know each other from the crew questions, and this job's the first time you're all in one room. Don't spend long on the hiring. Get to the job as fast as you can, and let the crew's plan come out of what they already know about each other.
+Some of you'll already know each other from the crew questions, and this job's the first time you're all in one room. Don't spend long on the hiring. Get to the job as fast as you can, and let the crew's plan come out of what they already know about each other.
 
 Keep the first session small, so everyone learns the rules by using them:
 

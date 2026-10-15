@@ -5,7 +5,7 @@ order: 26
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Before anyone builds a character, pick the kind of world you want to play in.
@@ -175,7 +175,7 @@ Good Brinewake Titles say what you do on a ship, or what the sea's done to you:
 -   *The smuggler the Tithe Fleet hanged and didn't kill*
 -   *The diver who's touched the drowned towers*
 
-Every crew needs a Captain and a Sailor, so they're the first [Title ideas](#s-title-ideas) to fill, but nearly all of them have a place aboard. The Warrior leads the boarding party, the Rogue runs the hidden hold, the Face does the deals in port, and the Ranger's up the mast with the harpoon. The Storm school fits better here than nearly anywhere, as a weather-caller or a sea witch, and so does the Healer, because at sea there's no doctor but the one you brought.
+Every crew needs a Captain and a Sailor, so they're the first [Title ideas](#s-title-ideas) to fill, and they both make good Leaders. Nearly all the rest have a place aboard too. The Warrior's first over the rail when you board, the Rogue runs the hidden hold as a Shadow, the Face does the deals in port, and the Ranger's a Hunter, up the mast with the harpoon. The Storm school fits better here than nearly anywhere, as a weather-caller or a sea witch (an Elementalist either way), and so does the Healer, because at sea there's no doctor but the one you brought.
 
 Permissions that earn their keep: *find the way in a storm*, *know every coast*, *read the stars*, *steer a ship through the Combs*, *climb the rigging*, *swim in rough water*, *handle a small boat*, *patch a ship's hull*, *plan a sea battle*, *know the shipping routes*, *hide smuggled goods* and *know who's who on the docks*. For magic, a Storm Title with *fill a sail* and a Medium with *speak with the drowned* could've been made for this sea.
 
@@ -377,7 +377,7 @@ Good Titles in the Deep Company say what you do on a team, or what the dark's do
 -   *The rope-boss who's never dropped anyone*
 -   *The only delver who's been to the Underneath and come back*
 
-A delving team wants someone in front, someone who finds the traps, someone who reads the old work and someone who keeps everyone alive. That's the Guardian, the Rogue, the Scholar or the Artifice school, and the Healer, and they're the [Title ideas](#s-title-ideas) that fit best. The Ranger's welcome as the one who always finds the way back, and every team needs a Captain to argue with the Company about the cut. The Face does less below ground, but somebody has to talk to the things that'd rather be talked to.
+A delving team wants someone in front, someone who finds the traps, someone who reads the old work and someone who keeps everyone alive. That's the Guardian, the Rogue, the Scholar or the Artifice school, and the Healer, and they're the [Title ideas](#s-title-ideas) that fit best. As archetypes, that's a Guardian, a Shadow, a Scholar or a Maker, and a Healer. The Ranger's welcome as the Hunter who always finds the way back, and every team needs a Captain to argue with the Company about the cut. The Face does less below ground, but somebody has to talk to the things that'd rather be talked to.
 
 Permissions that earn their keep: *spot a trap*, *pick a mechanical lock*, *take an old machine apart*, *shore up a tunnel*, *climb a sheer wall*, *rig a rope*, *find the way through tunnels*, *survive in the deep caves*, *read an old map*, *know the history of anything old*, *hold a doorway* and *stitch a wound*, with *know what a find is worth* for when you get back up. The old city's wards and constructs make the Artifice and Warding schools worth having, and a Veil Title with *see in the dark* is a delver's dream.
 
@@ -385,7 +385,7 @@ In Lanternhead magic's a trade, like rope work, and nobody cares how you light t
 
 ### The frame rule: Depth {#the-frame-rule-depth}
 
-Every level of the Underhold is its own site, and its alarm is called **Depth**. Instead of setting it by how awake the place is, set it by how deep the level is: a d10 on the first level, a d8 on the second, a d6 on the third, and a d4 on the fourth and everything below it. Otherwise it works like any [alarm](#s-alarm). It steps down for noise and wasted time, and every round once you're in rounds, and you can work it to keep things quiet. When it runs out, the level wakes up, and you play the sentence you wrote for it. Going back to a level you've already been on starts it a size smaller than last time, as usual. Each level's a new scene, so your Aura fills when you get there, and your Hurt drops back to 3 boxes for each Catch on your track. Those Catches only heal in downtime, though, and downtime's at the top of the lift. How deep you go comes down to how many of them you're willing to carry back up.
+Every level of the Underhold is its own site, and its alarm is called **Depth**. Instead of setting it by how awake the place is, set it by how deep the level is: a d10 on the first level, a d8 on the second, a d6 on the third, and a d4 on the fourth and everything below it. Otherwise it works like any [alarm](#s-alarm). It steps down for noise and wasted time, and every round once you're in rounds, and you can work it to keep things quiet. When it runs out, the level wakes up, and you play the sentence you wrote for it. Going back to a level you've already been on starts it a size smaller than last time, as usual. Each level's a new scene, so your Aura fills when you get there, your Confidence starts on d6 again, and your Hurt drops back to 3 boxes for each Catch on your track. You take 1 Resolve for every level you leave behind, too. Those Catches only heal in downtime, though, and downtime's at the top of the lift. How deep you go comes down to how many of them you're willing to carry back up.
 
 :::example[Three levels down]
 Vesk, Bram and Isolde are on the third level, the Drowned Mills, so Depth starts at a d6. Bram heaves a rusted sluice gate open. It works, but it's loud, so Depth steps down to a d4 straight away.
@@ -577,15 +577,15 @@ Good Lanternfall Titles say what you know that other people don't, or what it co
 -   *The inspector they threw off the Watch for asking about the fog*
 -   *The lamplighter who's never let her lamp go out*
 
-The Investigator's the [Title idea](#s-title-ideas) this frame's built around, and the Healer and the Face aren't far behind. One's a surgeon who can read a body, and the other can get into the drawing rooms on the Gaslight Mile. The Scholar and the Medium fit as occultists who know more than they should, and the Guardian's the one who walks everybody home. The Warrior's welcome too, because sooner or later the crew has to fight whatever it's found.
+The Investigator's the [Title idea](#s-title-ideas) this frame's built around, whether you play it as a Scholar or a Hunter, and the Healer and the Face aren't far behind. One's a surgeon who can read a body, and the other can get into the drawing rooms on the Gaslight Mile. The Scholar and the Medium fit as occultists who know more than they should, and the Guardian's the one who walks everybody home. The Warrior's welcome too, because sooner or later the crew has to fight whatever it's found.
 
 Permissions that earn their keep: *read a crime scene*, *follow a paper trail*, *question a witness*, *tell a haunting from a draught*, *speak with the recently dead*, *read forbidden texts*, *know the history of anything old*, *spot a lie*, *calm the grieving*, *do surgery by lamplight*, *get word from an informant*, *know the old families*, *move unseen in the fog*, *know the signs of dark worship* and *hold holy ground*.
 
-Magic's real, but most people in Lanternfall would call it a fraud or a sickness, and anyone who does it in public ends up in Saint Ardwen's. Quiet schools like Medium, Divination and Warding fit well. Loud magic, like a bolt of fire in the street, brings the Watch and then the asylum, in that order. People carry pistols and swordsticks here, and a pistol's *Ranged*, *Piercing* and *Reload*, the same as in [Weapons and their properties](#s-weapon-props). It's *Loud*, too, so the whole street knows where you are.
+Magic's real, but most people in Lanternfall would call it a fraud or a sickness, and anyone who does it in public ends up in Saint Ardwen's. Quiet schools like Medium, Divination and Warding fit well, and they all make good Oracles. Loud magic, like a bolt of fire in the street, brings the Watch and then the asylum, in that order. People carry pistols and swordsticks here, and a pistol's *Ranged*, *Piercing* and *Reload*, the same as in [Weapons and their properties](#s-weapon-props). It's loud, too, so the whole street knows where you are.
 
 ### The frame rule: Dread {#the-frame-rule-dread}
 
-**Dread** is a condition against you, and in Lanternfall it's what the horrors put on you instead of a wound. It's dread of one thing, named when it's placed. Its passive is one step less on anything that means facing that thing: going at it, Studying it, or going first into the dark it's hiding in. Spend it, and you lose your next action, spent looking anywhere but at it. Any horror with *Fear* can telegraph Dread at your Confidence, and if it lands you're in Dread at the telegraph's die, though you can offer another cost instead, like any intent. Everything else works like any [condition](#s-conditions). It fades a size every round, the GM spends it at the end of the round and says so when she telegraphs, and anyone who can reach you can break it with an action that beats its die. A lit lamp'll fit breaking it, and so will a friend's hand on your shoulder.
+**Dread** is a condition against you, and in Lanternfall it's what the horrors put on you instead of a wound. It's dread of one thing, named when it's placed. Its passive is one step less on anything that means facing that thing: going at it, Studying it, or going first into the dark it's hiding in. Spend it, and you lose your next action, spent looking anywhere but at it. Any horror with *Fear* can telegraph Dread at your Confidence, and if it lands you're in Dread at the telegraph's die. You can trade it for a cost instead, like any intent, and with fear the cost is one of your three choices: let it shake you and drop a size, bury it and take a Hurt, or hold your ground for 1 Resolve (see [Confidence](#s-confidence)). Everything else works like any [condition](#s-conditions). It fades a size every round, the GM spends it at the end of the round and says so when she telegraphs, and anyone who can reach you can break it with an action that beats its die. A lit lamp'll fit breaking it, and so will a friend's hand on your shoulder.
 
 :::example[The stare on Gallow Street]
 The GM telegraphs: "The Lamplighter turns his head and looks at Isolde. That's a d10 at her Confidence, and if it lands, she's in Dread of him. I'll spend it at the end of the round."
@@ -646,7 +646,7 @@ It isn't a game of bowing and etiquette lessons, and nobody has to know which fo
 
 ### What the crew does {#what-the-crew-does-3}
 
-A session usually starts with an errand from a patron, and that's *Work for it* in [Factions](#factions). Then the crew works a room, like a ball, a council or a hunt in the Thornwood. Most scenes there are [social conflict](#s-social), where threats come at your Confidence and their resolve keeps them going, and [Study](#s-study) on a person, finding out what drives them or what they're hiding, does more than any blade. When the talking runs out there's a duel, and when somebody runs, there's a [chase](#chases) across the palace roofs.
+A session usually starts with an errand from a patron, and that's *Work for it* in [Factions](#factions). Then the crew works a room, like a ball, a council or a hunt in the Thornwood. Most scenes there are [social conflict](#s-social), where threats come at your Confidence and it's their pride and duty that keep them going, and [Study](#s-study) on a person, finding out what drives them or what they're hiding, does more than any blade. When the talking runs out there's a duel, and when somebody runs, there's a [chase](#chases) across the palace roofs.
 
 Factions matter more here than in any other frame. Every family's on the board, the crew's [Standing](#s-standing) with each of them moves nearly every session, and *Deal* is the party slot you'll use most. Over an arc, the crew picks a side in the succession, or makes one of its own. It collects favours (the frame rule's below), runs projects that chip at the great families, and tries to still be standing when the Queen dies. [Downtime](#downtime) is when the families move, and at court every move's aimed at somebody.
 
@@ -775,7 +775,7 @@ Good Titles at court say what the people who matter think of you, or what you kn
 -   *The forger who wrote the Duke's love letters*
 -   *Confessor to half the court*
 
-The Face and the Courtier are built for this frame, and the Bard's a close second, because the court runs on talk and they all live there. They're the [Title ideas](#s-title-ideas) that fit best. The Rogue gets into the rooms nobody's invited to, and the Investigator works out who poisoned whom. The Warrior fits as a duellist, the Captain as the head of a household guard, and a Hexer as someone with a patron of their own, and at this court that's half the point.
+The Face and the Courtier are built for this frame, and the Bard's a close second, because the court runs on talk and they all live there. They're the [Title ideas](#s-title-ideas) that fit best, and they make Faces, Leaders and Bards, or a Shadow for a spy. The Rogue's a Shadow who gets into the rooms nobody's invited to, and the Investigator works out who poisoned whom. The Warrior fits as a duellist, the Captain as the head of a household guard, and a Hexer as someone with a patron of their own, and at this court that's half the point.
 
 Permissions that earn their keep: *read court etiquette*, *hear the gossip first*, *work a ballroom*, *know every noble house*, *talk a noble round*, *forge a letter in any hand*, *live under a false name*, *spot a lie*, *read a room in a glance*, *pass as a servant*, *pass as a noble*, *know a poison by its smell*, *spot a forgery*, *get papers through the court's offices*, *play any instrument*, *mix an antidote*, *fight with a rapier* and *fight a duel by the rules*.
 
@@ -783,14 +783,14 @@ Brute force doesn't get far in the palace. There's a hundred guards, and a law a
 
 ### The frame rule: favours {#the-frame-rule-favours}
 
-At court, a connection can be a **favour**. When someone owes you, write it on your bond with them as a connection that says so, like *Lady Maud owes me for the letter.* It counts like any connection: it's a hook the GM can pull, and three live ones on a bond make your Confidence a size bigger. Call it in, and they do one thing for you that's within their power, with no roll. Then burn the connection, because the favour's paid. If the GM says it's too big for one favour, make it smaller, or call in two. A favour has to come from the story, from a service you did them in a scene or a downtime slot you spent on them. The ones you owe are [debts](#s-bonds), and when somebody calls one in, you don't get to say no.
+At court, a thread can be a **favour**. When someone owes you, write it on your bond with them as a thread that says so, like *Lady Maud owes me for the letter.* It works like any thread. Calling it in is straining it: you take 1 Resolve, and they do one thing for you that's within their power, with no roll. The thread stays strained until you make it right with them, and if you call on it again before then, it snaps. Once you've made it right, the favour's paid: rewrite the thread as whatever's true between you now. If the GM says it's too big for one favour, make it smaller, or call in two. A favour has to come from the story, from a service you did them in a scene or a downtime slot you spent on them. The ones you owe are [debts](#s-bonds), and when somebody calls one in, you don't get to say no.
 
 :::example[Calling in Lady Maud]
-In this game Dorrie's got three connections on her bond with Lady Maud, and one of them's a favour: *Maud owes me for the letter I never sent.* Her Confidence is usually a d6. At court her court clothes fit the scene, so they make it a d8, and that bond makes it a d10.
+In this game Dorrie's got three threads on her bond with Lady Maud, and one of them's a favour: *Maud owes me for the letter I never sent.* She's down to 1 Resolve.
 
-Dorrie needs to be in the Queen's sickroom tonight, so she calls the favour in. Maud gets her a place among the Queen's women, with no roll, and Dorrie burns the connection. That bond's down to two live connections, so her Confidence drops back to a d8.
+Dorrie needs to be in the Queen's sickroom tonight, so she calls the favour in, and Maud gets her a place among the Queen's women, with no roll. That strains the thread, so Dorrie takes 1 Resolve and she's back on 2. It stays strained until she makes it right with Maud, and at court that probably means doing her a favour back.
 
-At supper the Dowager telegraphs: "And how is your mother, dear? Still taking in laundry?" That's a d10 at Dorrie's Confidence, and she doesn't answer it. At the end of the round her d8 rolls 4, and the Dowager's d10 rolls 6, so it lands and her Confidence steps down to a d6. With the favour still on her sheet, she'd have been rolling a d10.
+At supper the Dowager telegraphs: "And how is your mother, dear? Still taking in laundry?" That's a d10 at Dorrie's Confidence. Her court clothes fit the scene, so she started it on a d8 instead of a d6, and she lets the telegraph ride. At the end of the round her d8 rolls 4, and the Dowager's d10 rolls 6, so it gets through. She could let it shake her down to a d6, or bury it and take a Hurt, but she's got the Resolve from Maud's favour, so she spends it and holds her ground. She's still on a d8.
 :::
 
 ### The first Goal {#the-first-goal-3}
@@ -846,7 +846,7 @@ It isn't a space opera full of empires and chosen ones, and nobody's got a glowi
 
 A session usually starts at a station with a contract (that's *Work for it* or a *Deal* in [Factions](#factions)). Then there's the run. A run between stations is a journey from [Travelling](#travelling): the route's a stake with a tag for every stage, like *The Shipping Lanes*, *The Graveyard* and *Tolliver's Approach*, and each jump's a leg. Supplies is food, water and air, and Fuel is the frame rule below. Then there's the trouble at the other end, like a customs standoff, a boarding or a dead ship to search. A dead ship's a site from [Exploring](#exploring), with the airlock as the way in. Patrols and pirates mean a [chase](#chases), with debris and station traffic as the Ground.
 
-The ship's a [party resource](#s-party-resources), a line for whoever's flying her or fixing her (1 Aura to bring her in, the same as Brinewake's ship), and the Second Chance carries a Catch, *Hot Reactor*, until somebody fixes it. She's also home, so [downtime](#downtime) mostly happens aboard her, in dock, with repairs and shore leave while the faction turn moves the board. Over an arc, the crew pays off the ship and fixes her up, picks a side between the Combine and the Free Stations, and finds out who's switching off the beacons.
+The ship's a [party resource](#s-party-resources), a line for whoever's flying her or fixing her (1 Aura to bring her in, the same as Brinewake's ship), and the Second Chance has trouble aboard, *Hot Reactor*, until somebody fixes it. It isn't anyone's Catch, so anyone aboard can bring it into a scene as real trouble and take 1 Aura. She's also home, so [downtime](#downtime) mostly happens aboard her, in dock, with repairs and shore leave while the faction turn moves the board. Over an arc, the crew pays off the ship and fixes her up, picks a side between the Combine and the Free Stations, and finds out who's switching off the beacons.
 
 ### The world {#the-world-4}
 
@@ -975,15 +975,15 @@ Good Long Haul Titles say what you do aboard, or what you walked away from:
 -   *The Combine marine who walked away*
 -   *The cargo master who can get anything through customs*
 
-The Captain and the Tinker are the two [Title ideas](#s-title-ideas) a freighter can't fly without. The Rogue's the smuggler and the Warrior's the ex-marine, the Face does the deals at every station, and the Healer's the only medic for a hundred light years. If the crew wants to know what happened on Waystation Nine, they'll want an Investigator too. The schools of magic don't fit unless the table wants the strange out here.
+The Captain and the Tinker are the two [Title ideas](#s-title-ideas) a freighter can't fly without, a Leader to run her and a Maker to hold her together. The Rogue's the smuggler and the Warrior's the ex-marine, the Face does the deals at every station, and the Healer's the only medic for a hundred light years. If the crew wants to know what happened on Waystation Nine, they'll want an Investigator too. The schools of magic don't fit unless the table wants the strange out here.
 
-Three new Title ideas fit this world. They work like the rest, so you can build a Title from one like any other.
+Three new Title ideas fit this world. They work like the rest. Pick the one you want, take an archetype it suits, and build your Title from it like any other.
 
-| Title idea | What it covers | Permissions | Going beyond |
-| --- | --- | --- | --- |
-| **Pilot** | Flying anything that flies. | *fly anything with an engine* · *dock at a busy station* · *thread a debris field* · *fly in atmosphere* · *win a dogfight* · *fly blind* | fly through a station's hangar at full burn and out the other side · outrun a gunship to the jump point |
-| **Spacer** | Living and working where there's no air. | *work in vacuum* · *move in zero gravity* · *patch a hull* · *pack a cargo hold* · *keep a damaged ship running* | cross between two ships with no line · keep a dying ship breathing for a week |
-| **Systems** | Making computers and ship systems do what you want. | *crack a security lock* · *read a ship's sensors* · *listen in on comms* · *talk round a station mind* · *read old code* | take a gunship's controls from outside its hull · wake a station that's been dead for a century |
+| Title idea | What it covers | Suits | Permissions | Going beyond |
+| --- | --- | --- | --- | --- |
+| **Pilot** | Flying anything that flies. | Warrior, or Leader | *fly anything with an engine* · *dock at a busy station* · *thread a debris field* · *fly in atmosphere* · *win a dogfight* · *fly blind* | fly through a station's hangar at full burn and out the other side · outrun a gunship to the jump point |
+| **Spacer** | Living and working where there's no air. | Maker | *work in vacuum* · *move in zero gravity* · *patch a hull* · *pack a cargo hold* · *keep a damaged ship running* | cross between two ships with no line · keep a dying ship breathing for a week |
+| **Systems** | Making computers and ship systems do what you want. | Scholar, or Face | *crack a security lock* · *read a ship's sensors* · *listen in on comms* · *talk round a station mind* · *read old code* | take a gunship's controls from outside its hull · wake a station that's been dead for a century |
 
 From the usual Title ideas, permissions like *fix a jump drive*, *keep a reactor running*, *patch up life support*, *plot a jump*, *find the way through the Graveyard*, *shoot a pistol*, *shoot in zero gravity*, *fight with my bare hands*, *fight in tight corridors*, *stitch a wound*, *price salvage*, *know what ore's worth*, *get a cargo through customs*, *find the catch in a contract* and *find my way round a station's undercity* all earn their place. On a planet's surface, *ride anything with wheels or legs* does the job, and the Pilot covers everything that flies. Money works the same as anywhere, so a purse of gold is about a month's wages, and out here it's a credit chit.
 
@@ -993,14 +993,14 @@ Zi'Dara doesn't care whether your weapon's a sword or a gun. A weapon's a plain 
 | --- | --- |
 | Knife | Thrown, Concealed, Quick |
 | Shock stick | None. Stunning someone with it is an intent like any other. |
-| Pistol | Ranged, Piercing, Reload, and it's *Loud* |
-| Holdout pistol | Ranged, Concealed, Reload, and it's *Loud* |
+| Pistol | Ranged, Piercing, Reload, and it's loud |
+| Holdout pistol | Ranged, Concealed, Reload, and it's loud |
 | Needle gun | Ranged, Concealed, Quick |
-| Long rifle | Long, Piercing, Reload, Two-Handed, and it's *Loud* |
+| Long rifle | Long, Piercing, Reload, Two-Handed, and it's loud |
 | Tether gun | Ranged, Grapple |
-| Cutting torch | Breaker, and it's *Slow* |
+| Cutting torch | Breaker, and it's slow |
 
-Armour's an item like anywhere else. A vac suit's plain armour, so it makes your Armour a size bigger, and it lets you work in vacuum for an hour. It's *Heavy*, too. There's no magic in Long Haul unless your table wants it. If you do, decide at Session Zero what it looks like out here, like a handful of people born with a sense for the void, and build it from the Kinesis, Divination or Enchantment schools, with permissions to match.
+Armour's an item like anywhere else. A vac suit's plain armour, so it makes your Armour a size bigger, and it lets you work in vacuum for an hour. It's heavy, too. There's no magic in Long Haul unless your table wants it. If you do, decide at Session Zero what it looks like out here, like a handful of people born with a sense for the void, and build it from the Kinesis, Divination or Enchantment schools, with permissions to match.
 
 ### The frame rule: Fuel {#the-frame-rule-fuel}
 
@@ -1018,7 +1018,7 @@ The Second Chance leaves Port Meridian with full tanks, so Fuel's a d8. The run'
 
 Start with *Pay off the Second Chance*, at d2. Here's what to run alongside it:
 
--   **Fix the reactor shield.** When it's done, the ship loses its Catch, *Hot Reactor*, and nobody aboard has to wear a radiation badge any more.
+-   **Fix the reactor shield.** When it's done, *Hot Reactor* is gone, and nobody aboard has to wear a radiation badge any more.
 -   **Light Waystation Nine.** When it's done, the beacon's back on, the Free Stations Compact's agenda steps up one, and its Standing with the crew goes up one too.
 -   **Find the forged note.** When it's done, Halberd Credit's secret is the crew's, and Mr Pell stops calling.
 
@@ -1059,7 +1059,7 @@ Every frame in this chapter is the same eleven parts in the same order. Write ea
 4.  **The world.** Four or five places, a sentence or two each. [Building Your World](#world) has tables if you're stuck.
 5.  **The board.** Three or four factions, each on a sheet, with at least one that wants something the crew's got.
 6.  **Threats.** Two that only this world has, built with [The Threat Builder](#threat-builder), each with three telegraphs. If one's a boss, give it about your [threat budget](#s-threat-budget) in Tough.
-7.  **Characters.** Four Titles that fit, the [Title ideas](#s-title-ideas) that fit best, the permissions that matter here, and anything that doesn't belong, magic included. If the world needs a Title idea the book hasn't got, write it in the same shape, the way Long Haul does.
+7.  **Characters.** Four Titles that fit, the [Title ideas](#s-title-ideas) that fit best, the permissions that matter here, and anything that doesn't belong, magic included. If the world needs a Title idea the book hasn't got, write it in the same shape, the way Long Haul does, and say which archetypes it suits.
 8.  **One frame rule.** One small thing built from parts the book already has: a clock, a condition, a tag or a party resource. If it takes more than a paragraph to explain, it's too big.
 9.  **The first Goal**, at d2, with two or three projects to run alongside it.
 10. **The first job**, in the nine sentences from [Building a Scene](#s-building-scenes).

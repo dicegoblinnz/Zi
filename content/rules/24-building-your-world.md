@@ -5,7 +5,7 @@ order: 24
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 You build everything else with the same tools you used to make your character.
@@ -36,7 +36,7 @@ Start with three questions:
 | 11 | A death no one has answered for. |
 | 12 | It's a refuge for people the world wants gone. |
 
-## Places {#places}
+## Places {#s-world-places}
 
 | d12 | The complication |
 | --- | --- |

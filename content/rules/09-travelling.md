@@ -5,7 +5,7 @@ order: 9
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Three days over the fells is one sentence, unless the fells have something to say about it.
@@ -36,10 +36,10 @@ A **leg**'s a day on the road, or one stage of it, and it runs like a round.
 
 Here's what you can do with your day:
 
--   **Lead the way.** One of you leads, and anyone else can join the roll. Roll against the way's Challenge, and if you win, the stage you're on is behind you. If something on your sheet plainly covers knowing the way, like a map of this road, and nothing's pushing back, you just walk it.
+-   **Find the way.** One of you goes in front, and anyone else can join the roll. Roll against the way's Challenge, and if you win, the stage you're on is behind you. If something on your sheet plainly covers knowing the way, like a map of this road, and nothing's pushing back, you just walk it.
 -   **Feed the crew.** Hunt or forage, or buy from a farm. Beat the way's Challenge and Supplies doesn't step down this leg. Rations are a utility item, and every Rations somebody crosses off steps it up one.
 -   **Keep watch.** Answer whatever's coming, for yourself or for someone else.
--   **Study the road.** Find the hidden tag before you walk into it, get a straight answer (*where would they ambush us?*), or find something that helps, like a drove road or a ford the maps forgot. If it could be out there, it is, and it's a permission for the crew for the rest of the journey, free on any roll it fits.
+-   **Study the road.** Find the hidden tag before you walk into it, or get a straight answer (*where would they ambush us?*). A [Scholar](#a-scholar) can introduce a truth instead, like a drove road or a ford the maps forgot. Say it, and it's out there. It counts as a permission for the crew for the rest of the journey, free on any roll it fits.
 -   **Slow what's behind you.** Burn the bridge, or lay a false trail. Beat the deadline's die and it steps back up one.
 -   **Look after each other.** Join someone's roll, Defend, or break a condition.
 
@@ -47,11 +47,11 @@ A telegraph aimed at the way or at Supplies has no defence to roll, like any tel
 
 ### Running out {#s-supplies}
 
-When Supplies steps down past a d2, you're out. From then on the GM telegraphs hunger every leg: a d6 at each of you, against Confidence. Feeding the crew answers it for everyone, and puts Supplies back at a d2.
+When Supplies steps down past a d2, you're out. From then on the GM telegraphs hunger every leg: a d6 at each of you, against [Confidence](#s-confidence). Feeding the crew answers it for everyone, and puts Supplies back at a d2.
 
 ### The whole journey's one scene {#the-whole-journeys-one-scene}
 
-It's one problem, getting there, however many days it takes. Aura fills when you set out, and not again until you get there. If something on the road turns into a proper fight, or a meeting worth playing in rounds, stop the journey and play it as its own scene, Aura and all. Then pick the journey up where you left it, with whatever Aura you've got left.
+It's one problem, getting there, however many days it takes. Aura fills when you set out, and not again until you get there. Your Confidence starts the journey where it'd start any scene, and it swings all the way there. If something on the road turns into a proper fight, or a meeting worth playing in rounds, stop the journey and play it as its own scene, Aura and all. Then pick the journey up where you left it, with whatever Aura you've got left and your Confidence back on d6.
 
 ### Horses, carts and boats {#horses-carts-and-boats}
 
@@ -81,7 +81,7 @@ The ford's in flood, so it's pushing back, and Wren has to roll for it even with
 
 Bram answers the river by carrying the packs across above his head. His Lift and carry is his first Title and *lift what two men can't*, 3 steps with the action, a d6. He rolls 5 against the river's 3, and the packs stay dry. Ash answers the d6 at Isolde with a little fire at the back of the line. That's her Scare them off: her first Title, *throw fire*, *make a threat stick* and her ember stone, with the action 5 steps, a d10. She rolls 8 against 2, and the wolves melt back into the heather.
 
-Isolde Studies the road ahead. Her Study is her second Title, *know the history of anything old* and Iron Will, with the action 4 steps, a d8. She rolls 7 against the way's 4 and asks for something that helps: the old drove road the monks used to bring their sheep down. It could be out there, so it is, and it's a permission for the whole crew for the rest of the journey.
+Isolde Studies the road ahead. Her Study is her second Title, *know the history of anything old* and Iron Will, with the action 4 steps, a d8. She rolls 7 against the way's 4. She's a Scholar, so instead of a hidden tag or a straight answer, she introduces a truth: there's an old drove road the monks used to bring their sheep down. Now there is, and it's a permission for the whole crew for the rest of the journey.
 
 Nobody fed the crew, so at the end of the leg Supplies steps down to a d6. The riders step down to a d6 as well.
 
@@ -91,5 +91,5 @@ That leaves Wren free to hunt. It's the bow that puts venison on the fire, so sh
 
 Ash goes back up the drove road to set the heather alight behind them, and Bram drags a dead gorse bush across the road for it to catch. They've put their actions into the same thing, so it's a combo. Ash's Fight is her first Title, *throw fire* and her ember stone, 4 steps, and Bram's Lift and carry is 3. That's 7 steps between them, a d12 and a d2, and they put both on the riders' d6. They roll 7 and 1 against 3, and the best die counts, so the riders step back up to a d8. Somebody worked them this leg, so they don't step down at the end of it.
 
-On the third morning they're at the edge of the Long Bog, with Supplies at a d6, the riders at a d8 and *The Fells* behind them. The bog's pushing back, and Wren's the only one who can hunt or find a way through it. She's only got one action a leg, so she'll have to pick one, unless she spends a Spark for a second.
+On the third morning they're at the edge of the Long Bog, with Supplies at a d6, the riders at a d8 and *The Fells* behind them. The bog's pushing back, and Wren's the only one who can hunt or find a way through it. She's only got one action a leg, so she'll have to pick one, unless she spends 1 Resolve for a second.
 :::

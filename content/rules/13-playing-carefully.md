@@ -5,7 +5,7 @@ order: 13
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Everything in this book assumes you're playing with people you trust.
@@ -37,7 +37,7 @@ Watch faces as well as listening for answers. If someone's gone quiet, ask them 
 
 **Lines** don't exist in the story at all. **Veils** exist, but they aren't played out at the table.
 
-A veil is a fade to black. Everyone knows what the torturer does in that cellar, but nobody describes it, and the scene cuts to the next morning.
+A veil's a fade to black. Everyone knows what the torturer does in that cellar, but nobody describes it, and the scene cuts to the next morning.
 
 If nobody knows where to start, go through this list and ask whether each one's a line, a veil, or fine:
 
@@ -53,6 +53,8 @@ Lines and veils can change at any time. If something comes up mid-campaign, say 
 ## Pausing {#pausing}
 
 Anyone can call a pause, the GM included. Stop, talk it through, and then carry on, change direction or cut to the next scene. It's a normal part of playing, so treat it like one.
+
+It's worth a pause, too, when a strained thread between two of the crew starts to feel personal. The strain's about that one truth, so play that and nothing bigger, and once it's been made right, let it go. There's more in [Playing the strain](#s-playing-the-strain).
 
 ## After a Heavy Session {#after-a-heavy-session}
 

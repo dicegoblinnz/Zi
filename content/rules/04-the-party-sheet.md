@@ -5,7 +5,7 @@ order: 4
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Everything the crew wants, owns and owes, out on the table where everyone can see it.
@@ -18,14 +18,14 @@ Each tile has six seats, one for every faction that matters, with room for its d
 Here's what lives on it:
 
 -   **The crew.** Its name, its Reputations, its Power and Wealth, its tags, and the people it relies on, with how it grows and what its Wealth can buy.
--   **The party Goal**, and any **projects** on the go.
+-   **The Party Goal**, and any **projects** on the go.
 -   **Aspirations.** Every player's, where everyone can see them.
 -   **The faction board.** Every power that matters: its dice, its agendas, and how it sees the crew.
--   **What has changed.** One line for every agenda that happened and every Spark that should outlast its scene.
+-   **What has changed.** One line for every agenda that happened.
 -   **Party resources.** Things the crew owns together.
 -   **Crew tags.** All twelve, so the table can pick one when the crew grows.
 
-The downtime page has the order downtime runs in, how downtime rolls work, the Standing ladder, the crew's moves on a faction, the faction turn and its d6, and what happens when a faction comes for the crew, so nobody has to look them up.
+The downtime page has the order downtime runs in, how downtime rolls work, the Standing ladder, the crew's moves on a faction, the faction turn and its d6, and what happens when a faction comes for the crew, so you don't have to look them up.
 
 ## Things That Climb {#s-climb}
 
@@ -46,12 +46,12 @@ The Goal is what the crew's after this arc, like *clear Dorrie's name*, *free th
 
 -   **It climbs** when someone chases it and wins: an action in a scene when the GM says the Goal's within reach, or a party slot in downtime (or a personal slot someone puts toward it).
 -   **It steps back down** one when a consequence lands on it, or when the crew takes a real setback. It never goes below d2.
--   **When it climbs past d12, the crew's done it.** Play the moment out. Then the crew grows (see [How the crew grows](#s-crew-grows)), everyone writes one new connection, to someone the Goal brought into their life, and the table writes the next Goal, at d2.
+-   **When it climbs past d12, the crew's done it.** Play the moment out. Then the crew grows (see [How the crew grows](#s-crew-grows)), everyone writes one new [thread](#s-bonds), to someone the Goal brought into their life, and the table writes the next Goal, at d2.
 
 :::example[Clearing Dorrie's name]
 **Session 1.** The crew corners the forger who's been signing Dorrie's hand on letters, and the GM says it out loud: the Goal's within reach. The proof's locked in his desk, so Vesk goes at it with her Locks: her first Title, *pick a mechanical lock*, *know how a lock's built* and her picks, with the action 5 steps, a d10. She rolls 6 against the Goal's d2, which rolls a 2, and it climbs to d4.
 
-**Downtime.** Dorrie puts a party slot into getting the proof in front of the right magistrate. That's 1 step for the slot, plus what fits: her first Title, *talk my way past a door* and *read a room in a glance*. She's on 4 steps, a d8, against the d4. It's 3 against 3, and the tie goes to the Goal. She spends a Spark to roll again and gets a 7, so it's d6.
+**Downtime.** Dorrie puts a party slot into getting the proof in front of the right magistrate. That's 1 step for the slot, plus what fits: her first Title, *talk my way past a door* and *read a room in a glance*. She's on 4 steps, a d8, against the d4. It's 3 against 3, and the tie goes to the Goal. She spends 1 Resolve to roll again and gets a 7, so it's d6.
 
 **Sessions 2 to 5.** It climbs slower as it goes, and a bad night at the magistrate's knocks it back a step. By session 5 it's at d12, and the last roll is Dorrie standing up in court. She wins it, the Goal climbs past d12, and the crew's done it.
 :::

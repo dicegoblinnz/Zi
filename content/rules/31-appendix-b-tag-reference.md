@@ -5,7 +5,7 @@ order: 31
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 Every tag in here tells you how it shows up in the story and what it opens up for the crew. Tags don't make a threat's dice bigger. A tag only changes dice when it says so. Players who know a tag can bring it into a roll for 1 Aura.
 
@@ -247,6 +247,14 @@ These tags are what makes a faction strong, and a faction attack can strip one.
 
 Every condition carries a die. While it lasts, it's one step for or against, and it can be spent once for its big effect. It steps down one size at the end of every round, and an action that beats its die breaks it. You'll find the full rules, and what each one does, in [Conditions](#s-conditions).
 
+A condition you put on a friend, like a ward or a blessing, goes on one friend at the die you built, and the second die of a split can put it on another friend you can touch (see [Wards and blessings](#s-wards)).
+
 **Against you: one step less while it lasts.** *Burning* · *Bleeding* · *Poisoned* · *Exposed* · *Pinned* · *Prone* · *Staggered* · *Grabbed* · *Disarmed* · *Blinded* · *Deafened* · *Silenced* · *Frightened* · *Shaken* · *Stunned* · *Taunted* · *Charmed* · *Spotted* · *Hexed* · *Hunted*
 
 **For you: one step more while it lasts.** *Warded* · *Heartened* · *Covered* · *Braced* · *Unseen* · *Fleet* · *Blessed* · *Inspired* · *Rallied* · *Sighted* · *Guided* · *Disguised* · *Fortunate* · *Surging*
+
+Two of them move your Confidence as it swings. Spend *Heartened* and it comes back up a size, as far as where it started the scene, and spend *Shaken* and it drops a size.
+
+*Unseen* gives you an extra action when you spend it. Coming out of hiding gives you one too, and with both it's still one.
+
+**The Hunter's mark.** *Marked* is a special condition only a Hunter puts on, carrying the die they won with, like *Marked d10*. It doesn't give a step and nobody spends it. Anyone who acts against whatever's *Marked* rolls the Mark die too, as one more die against it, and it fades a size every round like any condition. See [Hunter](#a-hunter).

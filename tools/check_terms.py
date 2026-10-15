@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Flag rules words that the 7 to 13 Oct 2026 changes retired, and broken links.
+"""Flag rules words that the 7 to 16 Oct 2026 changes retired, and broken links.
 
 Usage: python3 tools/check_terms.py [FILE.md ...]   (default: every chapter)
        add --links to check every #anchor link points at a real heading id
@@ -24,14 +24,29 @@ RETIRED = [
     ("resources", r"\bresources?\b"),
     ("item rarity", r"\b(rarity|Rare|Legendary|Common)\b"),
     ("stretch", r"\bstretch(es|ed|ing)?\b"),
-    ("let it ride", r"\blet(ting|s)? it ride\b"),
     ("old names", r"\b(Insight|Truth|Limit Break|Spread|pour in)\b"),
     ("pockets", r"\bpockets?\b"),
     ("old Hurt", r"\b(three|3) Hurt boxes\b|\bHurt boxes\b|\bfourth Hurt\b"),
     ("Catch on a Title", r"\bTitle['’]?s? Catch(es)?\b|\bCatch on (each|your|a) Title\b|\bonce a scene\b.*\bCatch\b|\bCatch\b.*\bonce a scene\b"),
-    ("one Spark", r"\bone Spark at most\b|\bSpark at most\b|\bback each session\b|\bstart every session with it\b"),
     ("big magic", r"\bbig magic\b"),
-    ("archetypes and kits", r"\barchetypes?\b|\bquick-build kits?\b"),
+    ("quick-build kits", r"\bquick-build kits?\b"),
+    # 14 Oct: archetypes
+    ("trait on a Title", r"\b(each|every|your) Title (brings|has|gives) (a|one|its) trait\b|\btrait (for|on) each Title\b|\bTitle['’]s trait\b"),
+    ("area for anyone", r"\barea\b.*\b1 Aura\b|\b1 Aura\b.*\barea\b|\bmake a die your area\b|\bcounts? friends\b"),
+    ("heal a group", r"\bheal(ing)? a group\b|\bgroup heal\b"),
+    ("something that helps", r"\bsomething that helps\b"),
+    ("Defend from two", r"\bpull(s|ing)? from two\b|\bfrom two enemies\b"),
+    ("summoning Boon", r"\bsummoning Boons?\b|\bSummons Boon\b"),
+    ("roles and schools", r"\b(14|fourteen) roles\b|\b(15|fifteen) schools\b"),
+    # 16 Oct: Resolve, Confidence, threads
+    ("Spark", r"\bSparks?\b"),
+    ("GM trouble", r"\b(offers?|offered|take|turn(s|ed)? down|taking) (you )?(the )?trouble\b|\btrouble\b.*\bSpark\b|\bonce a session each\b"),
+    ("heal die", r"\bheal dice?\b"),
+    ("connections", r"\bconnections?\b"),
+    ("Confidence from Titles", r"\b(every|each) Title makes your Confidence\b|\bthree live\b|\bConfidence (is|is a|are) (one )?size bigger\b|\ball your Confidence\b"),
+    ("opportunity", r"\bmake an opportunity\b|\bmaking an opportunity\b"),
+    ("fear check", r"\bfear checks?\b"),
+    ("Confidence past d12", r"\bConfidence\b.*\bpast d12\b|\bpast d12\b.*\bConfidence\b"),
 ]
 
 

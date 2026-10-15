@@ -5,7 +5,7 @@ order: 22
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Every long campaign hits a week where it isn't working.
@@ -37,7 +37,7 @@ Go for a hard reset. Kill an NPC, give the crew what they wanted, break the Goal
 -   **Make it cost something.** Aim a telegraph at the thing they keep leaning on.
 -   **Talk about it.**
 
-Some things look like exploits and aren't. Farming Aura with small dice is a strategy the game wants you to use. Answering a telegraph by taking out its source is the best way to answer it. And finding the weak point in round one and ending the fight is exactly what weak points are for.
+Some things look like exploits and aren't. Farming Aura with small dice is a strategy the game wants you to use. So is straining a thread for Resolve, and the thread keeps it honest: pull it again before it's mended and it snaps (see [Playing the strain](#s-playing-the-strain)). Answering a telegraph by taking out its source is the best way to answer it. And finding the weak point in round one and ending the fight is exactly what weak points are for.
 
 ## The Last Word {#the-last-word}
 

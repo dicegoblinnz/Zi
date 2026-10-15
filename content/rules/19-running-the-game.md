@@ -5,7 +5,7 @@ order: 19
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Your job is to build the players a world worth being competent in, and beating them isn't part of it.
@@ -24,7 +24,7 @@ Say these out loud at Session Zero, and then stick to them.
 -   **I'll never punish you for being good.** Building a big die is what you're meant to do, and I won't treat it as a problem to fix.
 -   **Your wins will change things.** Every time you succeed, something in the world moves.
 -   **Your failures will be interesting.** A miss changes the situation, but it never stops the story.
--   **I'll say what it costs, and you can offer another.** When a consequence lands, I'll name it out loud. If something else fits and costs about as much, you can have that instead.
+-   **I'll say what it costs, and you can offer another.** When a blow lands or a miss costs you, I'll name it out loud. If something else fits and costs about as much, you can have that instead. When fear, lies or pressure get through, it's your call what it costs.
 -   **Everyone gets to be brilliant.** Every scene has a moment in it built for each of you.
 :::
 
@@ -41,9 +41,9 @@ Most things just happen. **Only roll when something pushes back, or when the out
 
 ### Saying Yes {#s-saying-yes}
 
-**Yes, and.** When a player tries something that fits the fiction, the answer's yes. When a player spends a Spark, the answer's almost always yes.
+**Yes, and.** When a player tries something that fits the fiction, the answer's yes. When a player spends Resolve, the answer's almost always yes.
 
-**Yes, but.** When a player tries something that pushes a permission past what it normally does, the answer's yes, but there's a cost: 1 Aura to go beyond, a higher Challenge for something bigger, or a complication.
+**Yes, but.** When a player tries something that pushes a permission past what it normally does, the answer's yes, but there's a cost: 1 Resolve to go beyond, a higher Challenge for something bigger, or a complication.
 
 **No, not like that.** Sometimes the fiction just doesn't allow something. Then the answer's *no, not like that*, and straight away you tell them what would work.
 
@@ -55,11 +55,11 @@ Most things just happen. **Only roll when something pushes back, or when the out
 -   You never take away agency the fiction's given the player.
 -   You never hide how big something is and then act surprised when they lose to it.
 -   You never add a telegraph after the last player has acted, or land one nobody could possibly have answered.
--   You never use Aura or Spark, because you don't have any.
+-   You never use Aura or Resolve, because you don't have any.
 
 ### Reading permissions {#reading-permissions}
 
-Players will ask whether something fits a hundred times a session. Answer fast and be generous. Whatever's on the [set action](#s-set-actions) they're rolling is free. Anything else that fits costs them 1 Aura to bring in, even when it plainly fits, and pushing a permission past what it normally does costs 1 Aura to [go beyond](#s-going-beyond). If you catch yourself arguing about whether it's normal, it's going beyond, so take the Aura and move on.
+Players will ask whether something fits a hundred times a session. Answer fast and be generous. Whatever's on the [set action](#s-set-actions) they're rolling is free. Anything else that fits costs them 1 Aura to bring in, even when it plainly fits, and pushing a permission past what it normally does costs 1 Resolve to [go beyond](#s-going-beyond). If you catch yourself arguing about whether it's normal, it's going beyond, so take the Resolve and move on.
 
 Be consistent. If calling up someone a hundred years dead was going beyond for Isolde last week, it's going beyond this week too.
 
@@ -88,7 +88,6 @@ A move is something the world does. Most of them are a telegraph outside a round
 -   **Move a clock.** Step an event down or a faction's agenda up, and say what it means. *"Vane's carriage was seen at the north gate. Vane comes home is a d10 now."*
 -   **Split them up, or cut to someone else.** Leave one of them on the edge of something, and ask the next player what they're doing.
 -   **Ask a question, and build on the answer.** *"Isolde, you've read about doors like this. What happens to people who open them wrong?"* Whatever she says is true now.
--   **Bring trouble.** Turn something on one character's sheet against them, and offer a Spark. There's more below.
 -   **Cut to the next scene.** If nothing's pushing back and they've got what they came for, say so and move on.
 
 ### How hard to go {#how-hard-to-go}
@@ -110,22 +109,21 @@ Vesk answers it. She pinches out the lamp and steps behind the door. That's her 
 Then Isolde finds the deed, and the GM makes another move. She reveals something they won't like: it was signed over to the Harbour Guild a week ago.
 :::
 
-### Bringing Trouble {#s-trouble-gm}
+## Catches and Resolve at the Table {#s-catches-gm}
 
-Trouble is the one move that pays the player. Turn something on one character's sheet against them and offer a Spark: *"I can make this worse for you. Take a Spark?"* If they take it, it happens, and they get the Spark (if their Sparks are already full, they give it to someone who's spent one). If they spend a Spark to turn it down, it doesn't happen, and you move on. They've got a Spark for each Title, and with none left, they can't turn trouble down.
+Letting a Catch bite is up to the player. You've got telegraphs, the cost of a miss and every move above to make things go wrong, so leave their Catches to them. When one bites, or a player drops their character in it without a Catch at all, run with it and make it real trouble: a new telegraph, a new stake, or someone who wants something. They take 1 Aura each time, as often as they like.
 
--   **About once a session for each player.** More often than that and it starts to feel like you're picking on them.
--   **Take it from their sheet.** A Catch biting, a debt called in, someone coming for the *Wanted* item, a bond in danger, a Scar acting up, a setback on their Aspiration, or their plan going sideways at the worst moment.
--   **Make it change the scene.** Good trouble gives them something new to deal with: a new telegraph, a new stake, or a person who wants something.
--   **Never the cost of a miss.** That's already paid for. And trouble never takes a character out of the scene.
--   **From downtime, it lands next session.** Downtime can start trouble, like a debt called in while they were healing, but it lands in the next session, and that's when you offer the Spark. The four pressures themselves never pay one.
--   **Spread it around.** Look for the player who's had the quietest night, and bring them trouble. It puts them in the middle of things.
+When a Catch bites big, because it changes the scene or costs them something they wanted, they can take 1 Resolve instead of the Aura. It's their call when.
 
 :::example[Wren's longbow]
-Wren's longbow is attuned, and its Catch is *Wanted*. The crew's crossing the market, and the GM brings trouble: "A woman in a hunter's cloak stops dead and stares at your bow. She knows it, and she's following you. Take a Spark?" Wren's player takes it. Now there's a new problem in the scene with a name and a reason. Wren's still got both her Sparks, so she gives this one to Bram, who spent one on a reroll at the gate.
+Wren's longbow is attuned, and its Catch is *Wanted*. The crew's crossing the market, and Wren's player lets it bite: a woman in a hunter's cloak stops dead and stares at the bow. The GM runs with it. The woman knows that bow, and she's following them. Now there's a new problem in the scene with a name and a reason, and Wren takes 1 Aura.
+
+If Wren's player had said the woman shouts for the watch and the market turns into a chase, that'd change the scene, so Wren could take 1 Resolve instead.
 :::
 
-Players can bring trouble on themselves too. When one lets a Catch bite, or drops their character in it without a Catch at all, run with it and make it real trouble. They take 1 Aura each time, as often as they like, and you don't offer a Spark for it.
+-   **Give 1 Resolve for great roleplay**, like a character facing their fear or keeping a promise they made to themselves. It's your best way of saying *more of that*. It can't take anyone past their maximum.
+-   **Give 1 Aura when a great setup doesn't land.** There's an example in [Consequences and Failure](#s-gm-consequences).
+-   **Play your NPCs' side of a thread.** When a player strains a thread with one of your people, like calling in a favour or using their name, they take 1 Resolve, and that person feels it. Play it the way [Playing the strain](#s-playing-the-strain) says: the thread gives the reason, so say how it shows and what would make it right, and play that and nothing bigger. They can mend it in downtime or in a scene with that person, but not in the middle of the fight where they strained it, and once it's mended, let it go.
 
 ## Building a Scene {#s-building-scenes}
 
@@ -191,6 +189,8 @@ Before you build, look at every character's sheet and ask what they're the best 
 -   Isolde's order made the binding, so she's the only one who can read it, and break it.
 
 This is what makes specialists feel like specialists, so don't make them split their dice across everything. Give each of them a problem that's *theirs*, let them dominate it, and make the scene hard because there are four of those problems at once.
+
+Look at their archetypes too, because each one has something only it can do. Ash is an Elementalist, so put a crowd of guards in front of her, and Wren's a Hunter, so give her something worth marking.
 
 :::example[Building a scene, start to finish]
 The crew has to recover a ledger from the Harbourmaster's ball before it's read aloud at midnight. Here's how the GM builds it.
@@ -269,7 +269,7 @@ A weak point is the reward for paying attention: for studying, asking questions,
 
 ### Powers are tags {#powers-are-tags}
 
-Threats never have Aura, so they don't pay to go beyond or to make an area. Fire breathed at three of the crew is just a telegraph at three targets, paid for from your round budget. If a threat can do something impossible, write it as a tag (*Calls the Storm, Walks Through Walls, Wears Your Face*) and telegraph it from the round budget like anything else. The players see it coming, with a die, and they can answer it. Don't let a power skip the telegraph, because then the players don't get to play against it.
+Threats never have Aura or Resolve, so they don't pay to go beyond, and an area costs them nothing. Fire breathed at three of the crew is just a telegraph at three targets, paid for from your round budget. If a threat can do something impossible, write it as a tag (*Calls the Storm, Walks Through Walls, Wears Your Face*) and telegraph it from the round budget like anything else. The players see it coming, with a die, and they can answer it. Don't let a power skip the telegraph, because then the players don't get to play against it.
 
 ### Unique mechanics {#s-unique-threats}
 
@@ -361,13 +361,19 @@ A round of five telegraphs that all say "hits someone" is a boring round, so mix
 
 Let the threat's tags tell you what it does. *Reach* pins from a distance, *Calls for Help* goes after the clock, and *Grasping* goes for what they're carrying. A threat that telegraphs from its tags feels like itself.
 
+### Fear is a telegraph {#s-fear-gm}
+
+Fear, lies and pressure are telegraphs like any attack, aimed at Confidence: *the brute roars at Bram, a d8 at his Confidence.* Bram can answer it, Defend or let it ride, the usual way, and that's his fear check. There isn't another one.
+
+It's worth going after Confidence, because it swings up and down through a scene. Anyone who stops all the fear, lies and pressure that came at them goes up a size, and so does anyone who takes a threat down. When some gets through, they choose what it costs them (see [Consequences and Failure](#s-gm-consequences)). At d2 they're shaken, and they've got to spend 1 Resolve every time they go at a threat, in a fight or face to face. Say the roar gets through to Bram two rounds running, and both times he lets it shake him: d6 to d4, then d2. Now he's shaken, so going at the brute costs him 1 Resolve.
+
 ### Aim at what they care about {#aim-at-what-they-care-about}
 
 Go for the stake they're winning, the friend with a d2 Armour, the item marked *Wanted* or the bond they wrote in session one. The crew should never feel safe leaving a telegraph unanswered just because it's small.
 
 ### Pressure heavy armour {#pressure-heavy-armour}
 
-Armour has no ceiling. Every piece of plain armour makes it a size bigger, so a knight in plate with a shield and a helm is on a d8 before he's taken a single Boon. Give him a couple of Armour Boons and he'll sit behind a d12 and shrug off blows all night, and that's what plate's meant to do. Instead of fighting it with bigger numbers, fight it with choices. Aim at what Armour doesn't stop: pin him, drag him, frighten him, or go for the stake behind him, the friend beside him or the clock. Telegraph more than the crew can answer, so the one in plate has to spend his action Defending the people next to him instead of swinging. Heavy armour buys time, so make them decide what to spend it on.
+Armour has no ceiling. Every piece of plain armour makes it a size bigger, so a knight in plate with a shield and a helm is on a d8 before he's taken a single Boon. Give him a couple of Armour Boons and he'll sit behind a d12 and shrug off blows all night, and that's what plate's meant to do. Instead of fighting it with bigger numbers, fight it with choices. Aim at what Armour doesn't stop: pin him, drag him, frighten him (his plate does nothing for his Confidence), or go for the stake behind him, the friend beside him or the clock. Telegraph more than the crew can answer, so the one in plate has to spend his action Defending the people next to him instead of swinging. Heavy armour buys time, so make them decide what to spend it on.
 
 ### One answer, sparingly {#one-answer-sparingly}
 
@@ -387,10 +393,12 @@ Give the wall something big to answer, the eye something hidden to find, and the
 2.  **Ask what they do.** They go in whatever order they like, one action each. Let them talk and plan, but keep it moving.
 3.  **Let them roll for your side.** The first time a threat's attacked in a round, the player going at it rolls its Challenge die too, in another colour. That roll stands for the round, so everyone who goes at that threat this round has to beat it. A *Layered* threat rolls one die for every tag it's got left keeping it going, and its best die is the roll that stands. A stake works the same way. You'll hardly touch a die all round.
 4.  **Say what the win does.** The player's intent happens: strip the tag, place the condition, move the threat, reveal the secret. If they made an opening, a Mook or a Named threat falls, and a Boss loses two tags, unless it was its weak point. On Tough, take off what the die rolled and say what's left.
-5.  **End the round.** Everything unanswered lands. Each player rolls their Armour once against all the blows aimed at them, and their Confidence once against all the fear and pressure, then rolls the telegraphs' dice too, and each one has to beat that one number. Anyone who [Defended](#s-defend) rolls their Armour once for every die coming at them instead, and picks which roll blocks which. For each one that lands, name what it costs, and take a fair swap if they offer one. Untouched events and clocks step down, and every condition steps down one size. Spend the ones you said you would.
+5.  **End the round.** Everything unanswered lands. Each player rolls their Armour once against all the blows aimed at them, and their Confidence once against all the fear, lies and pressure, then rolls the telegraphs' dice too, and each one has to beat that one number. Anyone who [Defended](#s-defend) rolls once for every die coming at them instead, Armour for blows and Confidence for the rest, and picks which roll blocks which. For each blow that lands, name what it costs, and take a fair swap if they offer one. For each telegraph at Confidence that gets through, the player chooses: drop a size of Confidence, take a Hurt, or spend 1 Resolve to hold their ground. Untouched events and clocks step down, and every condition steps down one size. Spend the ones you said you would.
 6.  **Describe the new situation.** Then telegraph again.
 
 The first roll on a threat matters. If Bram goes at the captain and the captain's d8 comes up 2, everyone else in the crew knows the captain's wide open for the rest of the round.
+
+**Defend pulls attacks.** Someone who Defends can pull one enemy's whole attack onto themselves, everything it aimed at friends within their stride. A [Guardian](#a-guardian) pulls every attack aimed at those friends, whichever enemy it's from, so to get past one, you've got to pull the crew apart.
 
 **Your side can take the hit too.** Anyone can step in front of an attack aimed at someone within their stride and [take it](#s-take-the-hit), and that goes for your NPCs: a bodyguard steps in front of the blow meant for his lord, a hound in front of its master. Say so before the player rolls. The one who steps in doesn't roll to defend, so the blow counts as a win against it: it loses a tag, or falls if it's a mook. Use it when the story says they would.
 
@@ -410,7 +418,9 @@ When a player shoves the shielded captain off a narrow bridge, *Shield* and *For
 
 **A miss only costs something when it matters.** When something pushes back or time's short, a miss lands a consequence. When nothing's at stake, a miss is just a miss: the lock didn't open, so try something else.
 
-**Name the cost.** Pick one that fits the blow and the threat: Armour, Confidence, a Hurt, breaking something they carry (never an attuned thing, because those can't break), their Aspiration, the party Goal or a clock. A threat's tags are a good guide: *Venom* poisons, and *Grasping* takes what they carry. If the player offers a different one that fits and costs about as much, take it. If the telegraph had one answer, it happens.
+**Name the cost.** When a blow lands or a miss matters, pick a cost that fits it and the threat: Armour, a Hurt, breaking something they carry (never an attuned thing, because those can't break), their Aspiration, the Party Goal or a clock. A miss can cost Confidence too, when it fits. A threat's tags are a good guide: *Venom* poisons, and *Grasping* takes what they carry. If the player offers a different one that fits and costs about as much, take it. If the telegraph had one answer, it happens.
+
+**Fear, lies and pressure are the player's call.** When one gets through, they choose: let it shake them and drop a size of Confidence, bury it and take a Hurt, or hold their ground and spend 1 Resolve so neither happens. Nothing takes Confidence below d2, so at d2 it's a Hurt or 1 Resolve. If it had a specific intent, like *Frightened* or *Taunted*, that's what it does, unless they trade it for one of those three.
 
 **Fail forward.** When a miss matters outside a round, change the situation. The lock holds and the guard's footsteps are on the stair, or the magistrate refuses and now he knows your name. The Twist table in [The Oracle](#oracle) is full of these.
 
@@ -424,17 +434,21 @@ When a player shoves the shielded captain off a narrow bridge, *Shield* and *For
 
 -   **Put a secret in everything that matters.** Every named threat, every stake and every important place gets one hidden tag.
 -   **Reveal generously.** When a player looks at something nobody's hiding, and they've got a permission that covers it, tell them without a roll. A threat's hidden tags take Study, because the threat pushes back.
--   **When they Study and win, give them what they asked for.** That's a hidden tag, a straight answer, or something here that helps. If what they're looking for could be here, it's here.
+-   **When they Study and win, give them what they asked for.** That's a hidden tag or a straight answer. A Scholar can introduce a truth instead, and there's more on judging those in [Archetypes, Resolve and Study at the Table](#s-gm-area).
 -   **Leave three trails to every important secret.** A person who knows, a place that shows it and a thing that proves it. If they miss one, they'll find another.
 -   **Let secrets change the fight.** The best hidden tags turn a slog into a single roll: the weak point, the want, the name.
 
-## Area, Spark and Study at the Table {#s-gm-area}
+## Archetypes, Resolve and Study at the Table {#s-gm-area}
 
--   **Big things are big Challenges.** Going beyond is 1 Aura whatever the size, so the size goes in the Challenge. Through the vault door, across the city: set the Challenge by how hard it is in the world, with tags for what stands in the way, and let them roll.
--   **Say what an area touches, before they roll.** An area die costs them 1 Aura and a split. Fire catches everyone in the squares it covers, friend and foe. If a friend's standing in the fireball, say so, and let them make it smaller. A ward or a rallying shout counts friends instead, and only ones who can hear it, see the signal or stand in the circle.
--   **Hand back Sparks.** When a player does something that makes the story better and they've spent a Spark, give them one back, never past one for each of their Titles. It's your best way of saying *more of that*. The other way they get one is [trouble](#s-trouble-gm), and they all come back in downtime.
--   **Say yes to Sparks.** If one's too big, offer the smaller version. It has to be something their character would have done.
--   **Study finds what's there.** If it could be in the scene, it's there. A Spark can make something true that wasn't, but Study can't.
+-   **Let each archetype do its thing.** Every [archetype](#archetypes) has something only it can do. When it comes out, let it change the fight, and say what it looks like: Dorrie's influence turning the captain's cut onto his own sergeant, or an Illusionist's wall sending the guards the long way round.
+-   **Areas are the Elementalist's.** An [Elementalist](#a-elementalist) can make a die their area, and it takes a split but no Aura. Say what it touches before they roll. Fire catches everyone in the squares it covers, friend and foe, so if a friend's standing in the fireball, say so, and let them make it smaller. Wards, blessings and heals reach one person, and a split's second die can reach another friend they can touch.
+-   **Big things are big Challenges.** Going beyond is 1 Resolve whatever the size, so the size goes in the Challenge. Phasing through a garden wall and through the vault door both cost 1 Resolve, but the vault door's a far bigger Challenge, with tags for what stands in the way. Set it by how hard it is in the world, and let them roll.
+-   **Study finds what's there:** a hidden tag or a straight answer. Only a Scholar's truth makes something true that wasn't.
+-   **Judge a Scholar's truth by the scene.** When a [Scholar](#a-scholar) wins a Study, they can introduce a truth instead, something that wasn't obvious to anyone else, and it counts as a permission for the crew this scene. If it could be here, it is. If it's too big, ask them to make it smaller or pick something else.
+
+:::example[Isolde's truth]
+Isolde wins her Study on the Warden and says the chalk circle it's bound to has a crack in it. A crack could be there, so now there's one, and anyone in the crew can use it this scene. If she'd said the circle was never drawn at all, that's too big, so the GM asks her for something smaller.
+:::
 
 ## Quick Rulings {#s-rulings}
 
@@ -445,17 +459,17 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 | Nothing on the sheet fits, not even a Title. | The action alone is 1 step: a d2. They can still bring in the ground, or a tag they know, for 1 Aura each. |
 | How hard is it? Nothing's fighting back. | A Challenge. 2: easy for a pro. 3: it takes care. 4: hard. 5: very hard. 6: the best in the world might fail. A tag for each thing that makes it worse. |
 | The whole crew does the same thing. | It's a [combo](#s-teamwork): add up everyone's set actions and roll once, between them, with a split for every action in it. Nobody pays Aura for it. |
-| Two things in one action. | Split the die: a split for each action in the roll, and another when it's past 6 steps. Or find another action: hold this one and they've got two next round, or spend a Spark. |
+| Two things in one action. | Split the die: a split for each action in the roll, and another when it's past 6 steps. Or find another action: hold this one and they've got two next round, or spend 1 Resolve. |
 | The crew strikes first. | If the crew acts before the threats know, the GM telegraphs nothing that round. Anyone who never saw it coming is helpless. |
 | An ally fights beside the crew. | It's a threat on your side: a Challenge and tags. A player spends an action to direct it: roll its Challenge die. Threats can telegraph at it. It has no Hurt track, so strip its tags. It can take the hit for any of the crew, and they can for it. |
 | Fire, falls, floods, traps. | The world telegraphs: a die at whoever's in it, from the round budget. Answer it, or roll your defence when it lands. |
 | Something that lasts a while: a poison, a spell, an alarm. | A condition, if it sits on someone. A clock or an event, if it sits on the scene. |
 | A long task: research for a day, forging papers. | Outside rounds, one action for a quick go, or two if they can take their time. In downtime, a slot. |
-| Something big and strange the rules don't cover. | Is it an intent (roll against a Challenge), going beyond (1 Aura), or a Spark? It's almost always one of those. |
+| Something big and strange the rules don't cover. | Is it an intent (roll against a Challenge), or going beyond (1 Resolve)? It's almost always one or the other. |
 | They want to know something about the world. | If a permission covers knowing it, tell them. If nobody knows, roll the [Oracle](#oracle). |
 | A player is taken prisoner, or knocked out. | Only a one-answer telegraph, a Blaze, or the player's choice does that. Say so when you telegraph it. |
-| A resting break between scenes. | Aura refills when the next scene starts. The loose Hurt clears at the end of the scene, down to 3 boxes for each Catch, and the Catches wait for downtime. |
-| A player argues a permission fits. | If they have to make a case for it, it's going beyond: 1 Aura, and move on. |
+| A resting break between scenes. | Aura refills when the next scene starts. At the end of the scene, everyone gets 1 Resolve back, Confidence goes back to d6, and the loose Hurt clears, down to 3 boxes for each Catch. The Catches wait for downtime. |
+| A player argues a permission fits. | If it isn't on the set action they're rolling, they say how it fits and pay 1 Aura to bring it in. If they're making a case for why it's normal, it's going beyond: 1 Resolve, and move on. |
 
 ## Pacing {#s-pacing}
 
@@ -468,7 +482,7 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 
 ## Campaigns {#s-campaigns}
 
--   **An arc is four to six sessions.** It's got a party Goal, a faction moving against the crew, and at least one Aspiration coming to a head.
+-   **An arc is four to six sessions.** It's got a Party Goal, a faction moving against the crew, and at least one Aspiration coming to a head.
 -   **Aspirations are your map.** Every player's written down what their character wants, so build scenes that put it within reach, then make them choose between it and something else.
 -   **Titles are the milestones.** When an Aspiration resolves and a Title gets written, the campaign's turned a page, so mark it.
 -   **The world grows with them.** The [threat budget](#s-threat-budget) rises with every new Title, and threats that were bosses become lieutenants. Factions notice the crew and start treating it as a power (see [Factions](#factions)).
@@ -479,15 +493,17 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 :::rule
 **Before the session.** Two or three scenes, each with stakes, a scene clock, a twist and a moment for everyone, plus one secret in everything that matters.
 
-**At the table.** Describe, ask, say yes, and only roll when something pushes back. Be generous with permissions and consistent with rulings. When they look at you, make a move, and bring each player trouble about once a session.
+**At the table.** Describe, ask, say yes, and only roll when something pushes back. Be generous with permissions and consistent with rulings. When they look at you, make a move.
 
-**In a round.** Telegraph everything, face up, within the round budget: about 5 steps for each player, about half that for a breather and half again at Hard. Mix harm, control, position, stakes, clocks and words, about one harm telegraph each at Even. Let the players roll the threats' dice, once a round for each threat, let wins change things, and recognise openings.
+**Catches and Resolve.** Catches are the players' to let bite. When one bites, make it real trouble. A big bite pays 1 Resolve instead of 1 Aura, and that's their call. Give 1 Resolve for great roleplay, and 1 Aura when a great setup misses. When a thread strains with one of your people, play their side.
+
+**In a round.** Telegraph everything, face up, within the round budget: about 5 steps for each player, about half that for a breather and half again at Hard. Mix harm, control, position, stakes, clocks and words, about one harm telegraph each at Even. Fear, lies and pressure are telegraphs at Confidence like any other. Let the players roll the threats' dice, once a round for each threat, let wins change things, and recognise openings.
 
 **Threats.** Size Tough and scenes from the threat budget: 10 a character with two Titles, so that's 40 for a starting crew of four, and it climbs as they earn more.
 
-**Consequences.** Only when it matters. Name the cost, take a fair swap, and fail forward. Give 1 Aura when a great setup misses. When a player chooses to die at a Blaze, slow right down and let them tell it.
+**Consequences.** Only when it matters. Name the cost of a blow or a miss, take a fair swap, and fail forward. When fear, lies or pressure get through, it's the player's choice: a size of Confidence, a Hurt or 1 Resolve. When a player chooses to die at a Blaze, slow right down and let them tell it.
 
-**Area, Spark, Study.** Say what an area touches. Hand back a spent Spark for a great moment, and say yes to them. If what they Study for could be there, it's there.
+**Archetypes, Resolve, Study.** Let each archetype do its thing, and say what an Elementalist's area touches. Going beyond is 1 Resolve, so put the size in the Challenge. Study finds what's there, and if a Scholar's truth could be there, it is.
 
 **Conditions.** Face up, with their die, and say when you'll spend them.
 

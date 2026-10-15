@@ -5,7 +5,7 @@ order: 36
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::index-section
 ## A {#a}
@@ -17,20 +17,25 @@ updated: 2026-10-13
 -   **Aftermath** — [The aftermath](#s-aftermath)
 -   **Agenda** — [What a Faction Is](#s-faction-board), [Agendas](#s-agendas)
 -   **Alarm** — [The alarm](#s-alarm)
+-   **Animal tags** — [Shifter](#a-shifter)
 -   **Answering a telegraph** — [Answering](#s-answering)
+-   **Archetypes** — [The Archetypes](#archetypes), [How Archetypes Work](#s-how-archetypes), [Picking Your Archetypes](#s-picking-archetypes), [Archetypes and Titles](#s-title), [Archetypes, Resolve and Study at the Table](#s-gm-area)
 -   **Arcs** — [Campaigns](#s-campaigns), [Between Arcs](#s-arcs)
--   **Area die** — [Area](#s-area), [Area, with any permission](#s-magic-area)
+-   **Area die** — [Area](#s-area), [Area magic](#s-magic-area), [Elementalist](#a-elementalist)
 -   **Armour** — [Armour](#s-armour), [When It Lands](#s-defending)
 -   **Aspiration** — [Aspiration](#s-aspiration)
 -   **Attunement** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
--   **Aura** — [Aura](#s-aura)
+-   **Aura** — [Aura](#s-aura), [Aura and Resolve](#s-aura-tactics)
 -   **Awakened** — [Attunement](#s-attunement)
 
 ## B {#b}
 
 -   **Bag** — [What You Carry](#s-carrying)
+-   **Bard** — [Bard](#a-bard)
 -   **Blaze** — [Hurt, Blaze and Scars](#s-blaze)
--   **Bonds** — [Bonds](#s-bonds)
+-   **Blessings** — [Wards and blessings](#s-wards)
+-   **Bloodsworn** — [Bloodsworn](#a-bloodsworn)
+-   **Bonds** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
 -   **Boon table** — [The Oracle](#oracle)
 -   **Boons** — [Boons and Burdens](#s-boons), [Appendix C](#s-levers-boons)
 -   **Boss** — [Tags are its health](#s-staying), [Tough](#s-tough-gm)
@@ -42,7 +47,7 @@ updated: 2026-10-13
 
 -   **Campaign, ending a** — [Ending a Campaign](#s-ending)
 -   **Carrying** — [What You Carry](#s-carrying)
--   **Catch** — [Attunement](#s-attunement), [Hurt, Blaze and Scars](#s-blaze)
+-   **Catch** — [Catches and Trouble](#s-trouble), [Attunement](#s-attunement), [Hurt, Blaze and Scars](#s-blaze), [Catches and Resolve at the Table](#s-catches-gm)
 -   **Challenge** — [Threats](#s-challenges)
 -   **Character sheet** — [Appendix A](#s-sheet-character)
 -   **Chase** — [Chases](#chases)
@@ -51,8 +56,7 @@ updated: 2026-10-13
 -   **Clock** — [Stakes, Clocks and Events](#s-stakes)
 -   **Combo** — [Working Together](#s-teamwork)
 -   **Condition** — [Conditions](#s-conditions)
--   **Confidence** — [Confidence](#s-confidence)
--   **Connection** — [Bonds](#s-bonds)
+-   **Confidence** — [Confidence](#s-confidence), [When It Lands](#s-defending), [Appendix C](#s-levers-confidence)
 -   **Consequence** — [Consequences](#s-consequences)
 -   **Crew** — [The Crew](#s-party-faction), [The Crew, Session 1 to 20](#s-crew-1-20)
 -   **Crew questions** — [Connect](#s-connect)
@@ -63,25 +67,30 @@ updated: 2026-10-13
 
 -   **Death** — [Death](#s-death), [Hurt, Blaze and Scars](#s-blaze)
 -   **Defence** — [When It Lands](#s-defending)
--   **Defend** — [Defend](#s-defend)
+-   **Defend** — [Defend](#s-defend), [Guardian](#a-guardian)
 -   **Downtime** — [Downtime](#downtime)
 -   **Downtime rolls** — [Rolling in downtime](#s-downtime-rolls)
 
 ## E {#e}
 
+-   **Elementalist** — [Elementalist](#a-elementalist)
 -   **Epilogues** — [Ending a Campaign](#s-ending)
 -   **Equipment** — [What You Carry](#s-carrying)
 -   **Event** — [Stakes, Clocks and Events](#s-stakes)
+-   **Exploding dice** — [Warrior](#a-warrior)
 -   **Exploring** — [Exploring](#exploring)
 -   **Exposed** — [Conditions to start with](#s-conditions-list)
--   **Extra actions** — [Your Action](#s-actions)
+-   **Extra actions** — [Extra actions](#s-extra-actions)
 
 ## F {#f}
 
+-   **Face (archetype)** — [Face](#a-face)
 -   **Faction** — [Factions](#factions)
 -   **Faction Sheet** — [Appendix A](#s-sheet-faction)
 -   **Faction turn** — [The Faction Turn](#s-faction-turn)
 -   **Factions** — [Factions](#factions)
+-   **Fear** — [Confidence](#s-confidence), [When It Lands](#s-defending)
+-   **Fired up** — [Confidence](#s-confidence)
 -   **First session** — [Session Zero](#session-zero)
 -   **Forms** — [Unique mechanics](#s-unique-threats)
 -   **Frames** — [Frames](#frames)
@@ -93,18 +102,25 @@ updated: 2026-10-13
 -   **Goal, party** — [The Party Goal](#s-goal)
 -   **Going beyond** — [Going Beyond](#s-going-beyond)
 -   **Growing** — [Growing](#growing)
+-   **Guardian** — [Guardian](#a-guardian)
 
 ## H {#h}
 
--   **Heal die** — [Healing](#s-healing)
--   **Healing** — [Healing](#s-healing)
+-   **Healer** — [Healer](#a-healer)
+-   **Healing** — [Healing](#s-healing), [Healer](#a-healer)
 -   **Hidden tag** — [Hidden tags and weak points](#s-hidden)
+-   **Hiding** — [Extra actions](#s-extra-actions), [Shadow](#a-shadow)
+-   **Holding your ground** — [Confidence](#s-confidence)
 -   **Hook** — [The aftermath](#s-aftermath)
+-   **Hunter** — [Hunter](#a-hunter)
 -   **Hurt** — [Hurt, Blaze and Scars](#s-blaze), [Healing](#s-healing)
 
 ## I {#i}
 
+-   **Illusionist** — [Illusionist](#a-illusionist)
+-   **Influence** — [Face](#a-face)
 -   **Intent** — [Intents](#s-intents)
+-   **Introducing a truth** — [Scholar](#a-scholar), [Studying Something](#s-study)
 -   **Investigating** — [Investigating](#investigating)
 -   **Items** — [Items](#s-items), [What You Carry](#s-carrying)
 -   **Items, attuned** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
@@ -121,9 +137,11 @@ updated: 2026-10-13
 ## L {#l}
 
 -   **Layered** — [Tags are its health](#s-layered), [Unique mechanics](#s-unique-threats), [Tag Reference](#appendix-tags)
--   **Leading** — [Working Together](#s-teamwork)
+-   **Leader** — [Leader](#a-leader)
+-   **Leading** — [Leader](#a-leader)
 -   **Leg** — [A Leg on the Road](#s-legs)
--   **Letting trouble bite** — [Aura](#s-aura)
+-   **Let it ride** — [When It Lands](#s-defending), [Answer, Defend, Take the Hit or Let It Ride](#s-answer-or-ride)
+-   **Letting trouble bite** — [Catches and Trouble](#s-trouble), [Aura](#s-aura)
 -   **Levers** — [Appendix C](#appendix-levers)
 -   **Likely and unlikely** — [How Likely Is It?](#s-oracle-odds)
 -   **Lines and veils** — [Lines and Veils](#s-lines-veils)
@@ -133,7 +151,10 @@ updated: 2026-10-13
 ## M {#m}
 
 -   **Magic** — [Magic](#magic), [Schools of Magic](#s-schools)
+-   **Maker** — [Maker](#a-maker)
+-   **Marked** — [Hunter](#a-hunter), [Marked](#s-marked)
 -   **Material** — [Attunement](#s-attunement)
+-   **Mending a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain), [Mending Threads](#s-downtime-threads)
 -   **Move action** — [Movement and Range](#s-movement)
 
 ## N {#n}
@@ -143,6 +164,7 @@ updated: 2026-10-13
 ## O {#o}
 
 -   **Opening** — [What a Win Does](#s-win), [Tags Are the Battlefield](#s-tags-battlefield)
+-   **Oracle (archetype)** — [Oracle](#a-oracle)
 -   **Oracle odds** — [How Likely Is It?](#s-oracle-odds)
 -   **Oracle, The** — [The Oracle](#oracle)
 
@@ -170,6 +192,7 @@ updated: 2026-10-13
 -   **Range** — [Movement and Range](#s-movement)
 -   **Ready-made characters** — [Six Ready-Made Characters](#s-pregens)
 -   **Reputation** — [The Crew](#s-party-faction)
+-   **Resolve** — [Resolve](#s-resolve), [Aura and Resolve](#s-aura-tactics), [Catches and Resolve at the Table](#s-catches-gm), [Archetypes, Resolve and Study at the Table](#s-gm-area)
 -   **Retiring** — [Retiring a character](#s-retiring)
 -   **Ritual** — [Rituals](#rituals)
 -   **Round** — [The Round](#s-round)
@@ -181,42 +204,52 @@ updated: 2026-10-13
 -   **Scar** — [Hurt, Blaze and Scars](#s-blaze)
 -   **Scene clock** — [A clock on every scene](#s-scene-clock)
 -   **Scene, building a** — [Building a Scene](#s-building-scenes)
+-   **Scholar** — [Scholar](#a-scholar)
 -   **Session Zero** — [Session Zero](#session-zero)
 -   **Session, the** — [The Session](#the-session)
 -   **Set actions** — [Set Actions](#s-set-actions), [Filling In Your Set Actions](#s-step-set-actions)
+-   **Shadow** — [Shadow](#a-shadow)
+-   **Shadow pool** — [Shadow](#a-shadow)
+-   **Shaken** — [Confidence](#s-confidence), [Conditions to start with](#s-conditions-list)
+-   **Shifter** — [Shifter](#a-shifter)
 -   **Site** — [Building a Site](#s-site)
--   **Souls** — [Summoning](#s-summoning)
--   **Spark** — [Spark](#s-spark), [Area, Spark and Study at the Table](#s-gm-area)
+-   **Snapping a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
+-   **Souls** — [Summoning](#s-summoning), [Summoner](#a-summoner)
 -   **Splitting** — [Splitting](#s-splitting)
 -   **Spotlight** — [A moment for each character](#s-spotlight)
 -   **Stake** — [Stakes, Clocks and Events](#s-stakes), [Stakes, not obstacles](#s-stakes-gm)
 -   **Standing** — [Standing](#s-standing)
 -   **Step** — [Steps and Dice](#s-building-die)
+-   **Straining a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
 -   **Stride** — [Movement and Range](#s-movement)
--   **Study** — [Studying Something](#s-study)
--   **Summoning** — [Summoning](#s-summoning)
+-   **Study** — [Studying Something](#s-study), [Scholar](#a-scholar), [Archetypes, Resolve and Study at the Table](#s-gm-area)
+-   **Summoner** — [Summoner](#a-summoner)
+-   **Summoning** — [Summoning](#s-summoning), [Summoner](#a-summoner)
 -   **Supplies** — [Setting Up a Journey](#s-journey), [Running out](#s-supplies)
 -   **Swapping permissions** — [Grow](#grow), [Boons and Burdens](#s-boons)
 
 ## T {#t}
 
 -   **Tactics** — [Tactical Play](#tactics)
--   **Tag** — [Threats](#s-challenges), [Appendix B](#appendix-tags)
+-   **Tag** — [Threats](#s-challenges), [Appendix B](#appendix-tags), [Maker](#a-maker)
+-   **Take a breath** — [Your Action](#s-actions), [Confidence](#s-confidence)
 -   **Take the hit** — [Taking the Hit](#s-take-the-hit)
 -   **Teamwork** — [Working Together](#s-teamwork)
 -   **Telegraph** — [Telegraphs](#s-telegraphs), [Telegraphing Well](#s-telegraphing)
+-   **Teleporter** — [Teleporter](#a-teleporter)
 -   **Tempered** — [Attunement](#s-attunement)
+-   **Threads** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
 -   **Threat budget** — [The Threat Budget](#s-threat-budget)
 -   **Threat, building a** — [The Threat Builder](#threat-builder)
 -   **Tie** — [The Roll](#s-the-roll)
--   **Title** — [Titles](#s-title), [Title Ideas](#s-title-ideas)
+-   **Title** — [Archetypes and Titles](#s-title), [Title Ideas](#s-title-ideas)
 -   **Title ideas** — [Title Ideas](#s-title-ideas)
 -   **Tough** — [Tough](#s-tough), [Running the Game](#s-tough-gm)
 -   **Trail** — [Three trails to everything](#s-trails), [Secrets and Discovery](#s-discovery)
 -   **Traits** — [Traits](#s-traits)
 -   **Traps** — [Traps](#s-traps)
 -   **Travelling** — [Travelling](#travelling)
--   **Trouble** — [Trouble](#s-trouble), [Bringing Trouble](#s-trouble-gm)
+-   **Trouble** — [Catches and Trouble](#s-trouble), [Catches and Resolve at the Table](#s-catches-gm)
 -   **Twist table** — [The Oracle](#oracle)
 
 ## U {#u}
@@ -226,9 +259,12 @@ updated: 2026-10-13
 ## W {#w}
 
 -   **War** — [If war comes](#s-faction-crew)
+-   **Wards** — [Wards and blessings](#s-wards)
+-   **Warrior** — [Warrior](#a-warrior)
 -   **Weak point** — [Hidden tags and weak points](#s-hidden)
 -   **Wealth** — [Spending Wealth (factions)](#s-wealth), [Spending Wealth (the crew)](#s-crew-wealth)
 -   **Weapon properties** — [Weapons and their properties](#s-weapon-props)
+-   **Wound die** — [Healing](#s-healing)
 
 ## X {#x}
 

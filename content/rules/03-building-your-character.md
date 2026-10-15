@@ -5,7 +5,7 @@ order: 3
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Your whole character fits in a few plain sentences and some numbers.
@@ -13,25 +13,29 @@ Your whole character fits in a few plain sentences and some numbers.
 
 Here's what you write down, step by step:
 
-1.  **Two Titles**, each a role or a school of magic.
-2.  **A trait** for each Title.
+1.  **Two archetypes**, like Guardian or Shadow, and a **Title** for each: the name you give it, a role or a school of magic.
+2.  **Two traits.**
 3.  **Three permissions** on each Title.
 4.  **Your set actions:** Fight, Move, Sneak, Study and Talk, and your own, with everything that fits them on.
 5.  **What you carry:** 3 equipment, 3 utility items and a keepsake, and a bag.
 6.  **Two attuned things**, which start at Awakened.
-7.  **Three connections**, spread across your bonds however you like.
+7.  **Three threads**, spread across your bonds however you like.
 8.  **A few answers** that tie you to the rest of the crew.
 9.  **An Aspiration** at d2.
 
-You start with 5 Aura, a Spark for each Title, a stride of 3 and a Hurt track of three bars. Armour starts at d2, a size bigger for each piece of plain armour you wear. Confidence starts at d2 too, and every Title makes it a size bigger, so with two Titles it's a d6.
+You start with 5 Aura, 2 Resolve (one for each Title), a stride of 3 and a Hurt track of three bars. Armour starts at d2, a size bigger for each piece of plain armour you wear. Confidence starts every scene on d6, or a size up in clothes that fit the scene.
 
-In a hurry? The [Quick Build](#s-quick) in the next chapter gets you a character in ten minutes, or you can pick one of the [six ready-made characters](#s-pregens) and play. If you've got a character in your head but not the words for it yet, start from the [Title ideas](#s-title-ideas): 14 roles and 15 schools of magic, each with permissions and traits to pick from.
+In a hurry? The [Quick Build](#s-quick) gets you a character in ten minutes, or you can pick one of the [six ready-made characters](#s-pregens) and play. If you've got a character in your head but not the words for it yet, start from the [Title ideas](#s-title-ideas): example Titles, permissions and trait ideas for each archetype.
 
-**Those are your starting numbers, not limits.** You earn more Titles, traits, permissions and connections as you play, and there's no cap on Titles, traits or connections. A Title can't hold more than six permissions, though, and [what you carry](#s-carrying) has its limits.
+**Those are your starting numbers, not limits.** You earn more Titles, traits, permissions and threads as you play, and there's no cap on Titles, traits or threads. A Title can't hold more than six permissions, though, and [what you carry](#s-carrying) has its limits.
 
-## Step 1: Titles {#s-title}
+## Step 1: Archetypes and Titles {#s-title}
 
-A **Title** is who you are: a role or a school of magic, real and specific. *The best cat burglar in the city* is a Title, and so are *Captain of the Guard* and *Master of Illusions*. You start with two.
+You start with two **archetypes**. An archetype is the kind of character you are, like a Guardian, a Healer or a Shadow, and each one has a **mechanic**, something only that archetype can do. A Guardian who Defends pulls every attack aimed at friends within his stride onto himself, and a Hunter marks a creature so everyone who acts against it rolls her Mark die as well. There are seventeen, and you'll find them all, with what each one does, in [The Archetypes](#s-how-archetypes).
+
+On most of them, 1 Aura puts +2 on one die of the mechanic, once you've rolled and know you need it. **You can take the same archetype twice**, and then it's +3.
+
+Then you name each one with a **Title**, and that's who you are: a role or a school of magic, real and specific. Bram's a Guardian, and his Title is *The wall that held the harbour gate*. Vesk's a Shadow twice over, as *The best cat burglar in the city* and *Raised by the Guild*. *Captain of the Guard* and *Master of Illusions* are Titles too. If you're not sure which archetype you're after, every [Title idea](#s-title-ideas) says which ones it suits.
 
 One role or one school per Title. *Archmage* is too wide, so pick the school you're known for. A Title that could mean anything tells the table nothing, but one that says exactly what your character's good at, and how they got that way, does all the work.
 
@@ -56,30 +60,36 @@ One role or one school per Title. *Archmage* is too wide, so pick the school you
 ### Three bad Titles {#three-bad-titles}
 
 -   *Adventurer.* It means nothing, because adventure's what the whole game is about.
--   *Warrior.* A duellist and a sergeant in a shield wall are both warriors, and they don't do the same things. Nobody at the table knows which one you are.
+-   *Warrior.* That's an archetype, and you still need a Title to say what kind. A duellist and a sergeant in a shield wall can both be Warriors, and they don't do the same things, so nobody at the table knows which one you are.
 -   *Good at everything.* Nobody is, and it doesn't tell the table what you're actually good at.
 
 ### What a Title holds {#what-a-title-holds}
 
-**A Title is its trait and its permissions.** It brings one trait (Step 2) and three permissions to start (Step 3), and it holds six permissions at most. There's no Catch and no Burden on a Title: Catches come from [attunement](#s-attunement) and from Hurt, and Burdens only ever come on attuned things.
+**A Title holds its archetype's mechanic and its permissions.** It starts with three permissions (Step 3), and it holds six at most. There's no Catch and no Burden on a Title: Catches come from [attunement](#s-attunement) and from Hurt, and Burdens only ever come on attuned things.
 
-**The Title counts too.** It's 1 step on any roll it fits, the same as a permission. Every Title also makes your Confidence a size bigger, and it gives you a Spark.
+**The Title counts too.** It's 1 step on any roll it fits, the same as a permission. Each Title also gives you 1 [Resolve](#s-resolve) of maximum, so with two you've got 2. It doesn't make your Confidence bigger, though. Everyone starts every scene on d6 (see [Confidence](#s-confidence)).
 
 :::sheet[Bram's first Title]
 **Title:** *The wall that held the harbour gate.*
 
-**Trait:** Unyielding (Passive). An extra Hurt bar.
+**Archetype:** Guardian. When he Defends, every attack aimed at friends within his stride comes at him, whichever enemy it's from.
+
+**1 Aura:** +2 to one of his Armour dice.
 
 **Permissions:** *hold the line* · *guard one person* · *lift what two men can't*.
 
 **Room to grow:** three more permissions.
 :::
 
-**Titles are the biggest growth in the game.** You earn a new one every time your Aspiration climbs past d12. A Title you gain later starts with a trait and one permission, and Grow fills it from there. It counts the same way your first two do, and it raises the stakes for the whole table: the GM's [threat budget](#s-threat-budget) grows as the crew earns them.
+**Titles are the biggest growth in the game.** Every time your Aspiration climbs past d12, you take a new archetype and name it with a Title. It starts with one permission, and Grow fills it from there. It counts the same way your first two do, it puts your Resolve maximum up by 1, and it raises the stakes for the whole table: the GM's [threat budget](#s-threat-budget) grows as the crew earns them.
 
 ## Step 2: Traits {#s-traits}
 
-A **trait** is something always true of you, with one effect, like *Silent Step: +1 to moving unseen*. Each Title brings one, so you've got two. Permissions are things you *do*, and traits are things you *are*.
+A **trait** is something always true of you, with one effect, like *Silent Step: +1 to moving unseen*. You pick yours from the list below, and they aren't tied to either Title. Permissions are things you *do*, and traits are things you *are*.
+
+:::note
+Traits are being reworked. Until that's done, you've got two.
+:::
 
 Traits are free, and they don't cost an action unless the trait says so. Every trait has a **type** and an **effect**, and you write them down together.
 
@@ -93,7 +103,7 @@ Traits are free, and they don't cost an action unless the trait says so. Every t
 
 ### The 49 traits {#the-48-traits}
 
-Pick one for each Title, or write your own in the same shape: a name, a type and one line. You'll pick up more in play.
+Pick two, or write your own in the same shape: a name, a type and one line. You'll pick up more in play.
 
 Some traits change a number on your sheet. *Unyielding* gives you another Hurt bar, *Prepared* lets you carry one more utility item, and *Light on my Feet* adds 2 to your stride (how far you move each round for free). If you write your own, say which number it changes. A trait that adds to your Hurt adds a whole bar of three boxes.
 
@@ -136,10 +146,10 @@ Some traits change a number on your sheet. *Unyielding* gives you another Hurt b
 | --- | --- | --- |
 | **Reputation Precedes Me** | Passive | +1 step to any social roll where the target has heard of you. No cost. |
 | **Silver Tongue** | Once per scene | Turn a failed social roll into a success. |
-| **Charming** | Once per scene | Add a temporary connection to one of your bonds for the scene. |
+| **Charming** | Once per scene | Add a temporary thread to one of your bonds for the scene. |
 | **Commanding Presence** | Once per scene | A subordinate follows one order without question. |
 | **Cold Reader** | Once per scene | Ask the GM one true thing about someone's mood. She answers honestly. |
-| **Style** | Passive | Pick a signature look. When it fits the scene: +1 step, and your Confidence is one size bigger. |
+| **Style** | Passive | Pick a signature look. When it fits the scene: +1 step, and you start the scene a size up on Confidence. |
 | **Showstopper** | Once per scene | Draw a crowd's attention where you want it. |
 | **Intimidating Presence** | Passive | +1 step to threats and coercion. |
 | **Diplomat** | Once per scene | Two hostile parties will hear you out before acting. |
@@ -149,13 +159,13 @@ Some traits change a number on your sheet. *Unyielding* gives you another Hurt b
 
 | Trait | Type | Effect |
 | --- | --- | --- |
-| **Iron Will** | Passive | Your Confidence is one size bigger. +1 step to mental rolls. |
+| **Iron Will** | Passive | You start every scene a size up on Confidence. +1 step to mental rolls. |
 | **Steady Hands** | Passive | +1 step to Armour or Confidence when you've had a moment to prepare. |
 | **Hard to Lie To** | Once per scene | Ask the GM if someone's lying. She answers honestly. |
 | **Perfect Recall** | Once per scene | Recall a detail from a scene you were in. The GM tells you it exactly, and it counts as a permission once. |
 | **Quick Study** | Once per scene | The GM reveals one of a threat's hidden tags. No roll. |
-| **Prepared Mind** | Once per scene | Reach back to something small you prepared: a rope left on the wall, a note tucked where you'd need it. It's there, and no Spark is spent. |
-| **Cool Under Pressure** | Once per scene | Your Confidence steps back up three sizes, never past full. |
+| **Prepared Mind** | Once per scene | Reach back to something small you prepared: a rope left on the wall, a note tucked where you'd need it. It was there all along. |
+| **Cool Under Pressure** | Once per scene | Your Confidence comes back up three sizes, as far as where it started the scene. |
 | **Deep Well** | Passive | Your Aura maximum is one higher. |
 
 #### Preparation {#preparation}
@@ -168,7 +178,7 @@ Some traits change a number on your sheet. *Unyielding* gives you another Hurt b
 | **Cache** | Once per downtime | Retrieve any plain item you like, equipment or utility, from wherever you've stashed it. |
 | **Tireless** | Once per downtime | Take one extra downtime slot. |
 | **Scout Ahead** | Once per downtime | Add 3 ground tags to a scene in a place you've seen before. |
-| **Network** | Once per downtime | Secure a meeting with anyone. When you first take it, you also write 3 new connections, on bonds you already have. |
+| **Network** | Once per downtime | Secure a meeting with anyone. When you first take it, you also write 3 new threads, on bonds you already have. |
 | **Tactical Mind** | Once per scene | Point out something useful here that nobody else noticed. If it could be here, it is: a permission for the crew, this scene. No roll. |
 
 :::example[A trait firing at the table]
@@ -190,7 +200,7 @@ A **permission** is something your character can do, and it finishes "I can…":
 | Title | who you are, a name | *The best cat burglar in the city* |
 | Permission | something you do, and it finishes "I can…" | *pick a mechanical lock* |
 | Trait | something always true of you, with one effect | *Silent Step: +1 to moving unseen* |
-| Catch | trouble the GM can bring into a scene, from an attuned thing or a Hurt | *Wanted* · *cracked ribs* |
+| Catch | trouble the GM can run with, from an attuned thing or a Hurt | *Wanted* · *cracked ribs* |
 
 If what you've written reads like a name, like *Combat master*, it's a Title. If it's a describing word, like *Deceptive* or *Strong*, it's a trait. A permission is something you do.
 
@@ -222,7 +232,7 @@ Picture the moment you'd use it, then ask how often it'd come up. A good permiss
 
 ### Fixing the usual ones {#fixing-the-usual-ones}
 
--   **Deceptive** is a describing word, so make it your trait (*Deceptive: +1 to lying to someone's face*), or split it into what you actually do: *make a lie sound like old news*, *pass as someone I'm not*, *keep my story straight under questions*.
+-   **Deceptive** is a describing word, so make it one of your traits (*Deceptive: +1 to lying to someone's face*), or split it into what you actually do: *make a lie sound like old news*, *pass as someone I'm not*, *keep my story straight under questions*.
 -   **Combat master** reads like a Title. As permissions it's things like *fight with a sword*, *fight two at once* and *fight in tight spaces*.
 -   **Stealth** becomes *move unseen*, *pick a pocket* or *hide in a crowd*.
 -   **Strong** becomes *lift what two men can't*, *break down doors* or *pin someone down*.
@@ -234,22 +244,22 @@ Don't worry that a narrow one won't come up. A permission counts on every roll i
 
 -   **It's got to fit inside its Title.** *Raised by the Guild* can have *know how a lock's built*, but not *throw fire*.
 -   **Each one's worth 1 step** on any roll it fits, once a roll. Lines that sound alike both count, so you can have *move unseen* and *stick to the shadows*, but you can't take the same permission twice.
--   **Magic needs a magic permission**, or a magic item. Without one you can't do magic at all. With one, it does what it says for free, and pushing it past that is [going beyond](#s-going-beyond), for 1 Aura.
+-   **Magic needs a magic permission**, or a magic item. Without one you can't do magic at all. With one, it does what it says for free, and pushing it past that is [going beyond](#s-going-beyond), for 1 Resolve.
 -   **Put each one on every set action it fits nearly every time** (that's Step 4). Anywhere else, say how it fits and pay 1 Aura to bring it in.
 -   **Took one you never use?** You're not stuck with it. In downtime you can swap any of your permissions for others that fit your Title, as long as it makes sense for your character.
 
-**Two permission slots can hold a Boon instead.** A [Boon](#s-boons) is a permanent upgrade, like an extra Hurt bar or a longer stride, and it costs two permission slots on one of your Titles. You can build one in when you make your character, or swap two permissions for one in downtime, and back again later.
+**Two permission slots can hold a Boon instead.** A [Boon](#s-boons) is a permanent upgrade, like an extra Hurt bar or a longer stride, and it costs two permission slots on one of your archetypes. You can build one in when you make your character, or swap two permissions for one in downtime, and back again later.
 
 ### The crew's, as examples {#the-crews-permissions}
 
-| Who | Title | Permissions |
-| --- | --- | --- |
-| Vesk | *The best cat burglar in the city* | *move unseen* · *run the rooftops* · *pick a mechanical lock* |
-| Bram | *The wall that held the harbour gate* | *hold the line* · *guard one person* · *lift what two men can't* |
-| Ash | *The last fire-speaker of the Ember Court* | *throw fire* · *make a threat stick* · *feel every flame in a room* |
-| Isolde | *The last student of a dead order* | *speak with the recently dead* · *draw a ward the dead can't cross* · *read the order's old script* |
-| Dorrie | *The voice that talked a duke out of his own house* | *talk my way past a door* · *read a room in a glance* · *make a lie sound like old news* |
-| Wren | *The hunter who has never lost a trail* | *follow any trail* · *move through the wild unseen* · *know a beast's habits* |
+| Who | Archetype | Title | Permissions |
+| --- | --- | --- | --- |
+| Vesk | Shadow | *The best cat burglar in the city* | *move unseen* · *run the rooftops* · *pick a mechanical lock* |
+| Bram | Guardian | *The wall that held the harbour gate* | *hold the line* · *guard one person* · *lift what two men can't* |
+| Ash | Elementalist | *The last fire-speaker of the Ember Court* | *throw fire* · *make a threat stick* · *feel every flame in a room* |
+| Isolde | Oracle | *The last student of a dead order* | *speak with the recently dead* · *draw a ward the dead can't cross* · *read the order's old script* |
+| Dorrie | Face | *The voice that talked a duke out of his own house* | *talk my way past a door* · *read a room in a glance* · *make a lie sound like old news* |
+| Wren | Hunter | *The hunter who has never lost a trail* | *follow any trail* · *move through the wild unseen* · *know a beast's habits* |
 
 ### The quick test {#the-quick-test}
 
@@ -293,7 +303,7 @@ Go down your sheet one line at a time: your two Titles, your six permissions and
 | Study | *spot who's in charge* | 2 | d4 |
 | Move and Sneak | nothing fits nearly every time | 1 | d2 |
 
-*Bark an order that gets obeyed* is on Bram's second Title, *A sergeant who lost his stripes*, so that's the Title his Talk counts. His war hammer's in nearly every fight he gets into, so it goes on Fight too. He leaves *guard one person* off, because it only fits now and then, and brings it in for 1 Aura when it does.
+*Bark an order that gets obeyed* is on Bram's second Title, *A sergeant who lost his stripes*, so that's the Title his Talk counts. That Title's a Leader, and when he leads, he builds the order from his Talk like any other roll. His war hammer's in nearly every fight he gets into, so it goes on Fight too. He leaves *guard one person* off, because it only fits now and then, and brings it in for 1 Aura when it does.
 
 Make a set action of your own when a few of your lines all point at one thing you do a lot, the way Bram's first Title and *lift what two men can't* make Lift and carry. You don't have to fill every set action, and you'll come back to them: as you pick items and attune things in the next two steps, put each one on every set action it fits nearly every time. How a roll starts from your set action is in [Set actions](#s-set-actions).
 
@@ -483,11 +493,11 @@ A **Burden** is a permanent cost from the list in [Boons and Burdens](#s-boons),
 
 **You can hand an attuned thing to a friend** with a free attunement slot. Its permissions, its Catch and its Burden go with it, and so does a Boon its Burden paid for.
 
-A summoner's attunement holds souls the way an item holds permissions, on the same three stages (see [Summoning](#s-summoning)). Some attuned things come out of the story already Tempered or Perfected, and you'll find them, and how to write your own, in [Attuned things from the story](#s-rare).
+If you're a [Summoner](#a-summoner), your summoning attunement holds souls the way an item holds permissions, on the same three stages (see [Summoning](#s-summoning)). Some attuned things come out of the story already Tempered or Perfected, and you'll find them, and how to write your own, in [Attuned things from the story](#s-rare).
 
 ### Catch ideas: 12 {#catches-12}
 
-A **Catch** is trouble that comes with an attuned thing. (The other Catches on your sheet come from Hurt.) It has to be something the GM can bring into a scene, and if she'd never use it, it isn't a Catch. You can let it bite as often as you like for 1 Aura, as long as it brings real trouble every time, and 1 Aura on your own roll keeps it quiet (see [Getting it back](#getting-it-back)). When the GM turns it on you herself, that's [trouble](#s-trouble), and she offers you a Spark.
+A **Catch** is trouble that comes with an attuned thing. (The other Catches on your sheet come from Hurt.) It has to be something that can bring real trouble into a scene, something the GM can run with, and if it'd never come up, it isn't a Catch. You can let it bite as often as you like for 1 Aura, as long as it brings real trouble every time, and 1 Aura on your own roll keeps it quiet (see [Getting it back](#getting-it-back)). Letting it bite is always your call. When it bites in a big way, one that changes the scene or costs you something you wanted, you can take 1 Resolve instead of the Aura (see [Catches and Trouble](#s-trouble)).
 
 | \# | Catch | What it means |
 | --- | --- | --- |
@@ -496,8 +506,8 @@ A **Catch** is trouble that comes with an attuned thing. (The other Catches on y
 | 3 | **Fragile** | It can't break, but when a consequence breaks something you carry, the GM can name this instead. It goes dormant (its permissions don't count) until you mend it in downtime. |
 | 4 | **Fussy** | 3 charges. Each use of its permissions spends one. A downtime slot of upkeep refills them. |
 | 5 | **Marked** | You can be identified by it from a distance. |
-| 6 | **Cursed** | Once per scene, the GM can put a condition on you through it, at a d6. Agree which condition when you attune it. |
-| 7 | **Wanted** | Someone else wants it, and knows you have it. The GM will use that. |
+| 6 | **Cursed** | When you let it bite, it puts a condition on you, at a d6. Agree which condition when you attune it. |
+| 7 | **Wanted** | Someone else wants it, and knows you have it. Let it bite and they come for it. |
 | 8 | **Slow** | Using its permissions takes two of your actions, not one: hold your action a round first, or use an extra action. |
 | 9 | **Conspicuous** | Can't be hidden. |
 | 10 | **Bright** | Can't be used in darkness. |
@@ -512,15 +522,23 @@ In the market at Thornby, Wren's player lets *Wanted* bite: one of the foresters
 If she wants the bow Tempered one day, she'll need a material first, and the string off the Duke's own bow would do nicely. After that, every new permission on it takes a downtime slot.
 :::
 
-## Step 7: Aura, Sparks, Hurt and Bonds {#s-bonds}
+## Step 7: Aura, Resolve, Hurt and bonds {#s-starting-numbers}
 
-Your [Aura](#s-aura) maximum is 5, unless something on your sheet changes it, and you're full at the start of every scene. You get a [Spark](#s-spark) for each Title, so two to start, and they all come back every downtime. Your stride is 3: that's how far you move each round without spending an action (see [Movement and Range](#s-movement)). Armour and Confidence both start at d2, and you'll find how they grow at the end of this chapter.
+Your [Aura](#s-aura) maximum is 5, unless something on your sheet changes it, and you're full at the start of every scene. Aura's for the small stuff, like bringing in something that isn't on your set action, or the +2 on your archetype's mechanic.
+
+**Resolve** is your character pushing themselves, so it pays for the big stuff, like an extra action or going beyond what a permission normally does. You've got as much as you've got Titles, so 2 to start, and you can't hold more than that. You get 1 back at the end of every scene and all of it after downtime, and there are a few other ways to earn it, like straining a thread (below). It's all in [Resolve](#s-resolve).
+
+Your stride is 3: that's how far you move each round without spending an action (see [Movement and Range](#s-movement)). Armour starts at d2 and Confidence starts every scene on d6, and you'll find how they work at the end of this chapter.
 
 Your **Hurt** track is three bars of three boxes, nine in all, and it's one track for body and mind. When you fill a bar, you write a Catch in it, an injury like *cracked ribs* or *can't stand the dark*, and if you take a Hurt with every box full, you Blaze. How Hurt fills, clears and heals is in [Hurt, Blaze and Scars](#s-blaze) and [Healing](#s-healing).
 
-A **bond** is a person who matters to your character. A **connection** is one sentence that's always true between you, like a debt, a rescue, a secret or a shared past. You start with **three connections**, spread however you like: three people with one each, or one person with all three. Share a connection with a friend and you can bring one of their permissions into your roll for 1 Aura. Connections are also a good place to spend a Spark: call on someone when you need them most. And every connection is a hook the GM can pull.
+### Bonds and threads {#s-bonds}
 
-:::example
+A **bond** is a person who matters to your character, someone in the crew or anyone else. Each **thread** is one truth you two share, like a debt, a rescue, a secret or a shared past, and the more threads you've got with someone, the deeper the bond. You start with **three threads**, spread however you like: three people with one each, or one person with all three.
+
+You can write one of them as a **debt**, and you get a fourth thread in return. A debt's a thread with a hook: someone else holds it, they can call it in, and you don't get to say no.
+
+:::example[Vesk's three threads]
 *Dorrie: we have pulled a dozen jobs. I trust her with my life.*
 
 *Bram: he once carried me out of a fire. I have never said thank you.*
@@ -528,11 +546,43 @@ A **bond** is a person who matters to your character. A **connection** is one se
 *The fence: I owe a debt I would rather not discuss.*
 :::
 
--   **Add more in play.** When the story makes something new true between you, write it down. There's no cap.
--   **Three live connections on one bond** make your Confidence a size bigger, and every bond with three counts.
--   **Burn a connection** when the story breaks it, like a betrayal, a death or a debt paid off. Cross it out rather than erasing it. It stops counting, but it stays on your sheet as history. If the story mends it, restore it.
+Every thread's a hook the GM can pull, and it's something you can lean on, too:
 
-You can also write one connection as a **debt**, and you earn a fourth connection in return. A debt is a connection with a hook: someone else holds it, they can call it in, and you don't get to say no.
+-   **Borrow through a thread.** 1 Aura brings one of their permissions into your roll, the same as anything else you bring in, and it doesn't strain anything. You can't borrow through a strained thread until it's mended.
+-   **Strain a thread.** Lean on them in the story, like calling in the favour, using their name, dragging them into it or using the secret, and take **1 Resolve**. It's free, it doesn't take an action, and the thread's now **strained**.
+-   **Mend it.** Make it right with them, by roleplaying it, doing them a favour or paying them, whatever suits them. That happens in downtime or in a scene with them, not in the middle of the fight where you strained it. Then it's whole again.
+-   **Strain it again before it's mended and it snaps.** You still take the Resolve, but cross the thread out. When the last thread goes, so does the bond.
+
+**A thread with someone in the crew goes on both your sheets**, and it counts for both of you, so agree on it together. If either of you strains it, it's strained for both.
+
+New threads come from [Grow](#grow) in downtime, and when the crew's [Party Goal](#s-goal) is done, everyone writes one to someone the Goal brought into their life.
+
+:::example[Straining a thread]
+Vesk's on Vane's roof with no Resolve left. She drops the fence's name to the guard captain, who's in the fence's pocket, and takes 1 Resolve. Her thread with the fence, *I owe a debt I would rather not discuss*, is strained. After the job she brings him a cut of the haul, and it's mended.
+:::
+
+### Playing the strain {#s-playing-the-strain}
+
+This is for when someone in the crew strains a thread with your character, so it stays honest both ways.
+
+The thread gives the reason. The strain's about that one truth, so nobody has to invent a grudge.
+
+| The thread | Strained, it sounds like | It's mended when |
+| --- | --- | --- |
+| A debt | "We're square now. Aren't we?" | you pay it back or do them a turn |
+| A rescue | "I can't keep pulling you out." | you save them, or finally say thank you |
+| A secret | "You swore you'd keep that." | you trust them with one of yours |
+| A shared past | "That's not who we are any more." | you go back to it together |
+
+Say how it shows, and what would make it right. Play that and nothing bigger, and once they've made it right, let it go.
+
+Play it by what's left. With two or more threads still whole, it's a grumble and a "you owe me". With one, it's a real problem and you'll say so. With none, you're cold until they make it right, and one more pull snaps it.
+
+It never stops you working together in the moment. You still combo and still take the hit for each other.
+
+:::example[Vesk and Bram]
+Vesk's thread with Bram is *He once carried me out of a fire. I have never said thank you.* She's out of Resolve on a wall and yells for him to haul her up again, so she strains it and takes 1 Resolve. Bram's player says he's starting to feel like her ladder, and she can fix it by saying thank you. It was their only thread, so none are whole now, and he's cold with her until she makes it right. At the bar afterwards she finally says it. The thread's mended, and she rewrites it now that it's said.
+:::
 
 ## Step 8: Connect {#s-connect}
 
@@ -549,7 +599,7 @@ Before you play, tie the crew together. Go round the table with these ten questi
 9.  What job did you pull together that went badly?
 10. Why are you still with this crew?
 
-A good answer can become a connection: if it's true between you and another character, write it on your bonds too. The GM uses the rest to put you in each other's way.
+A good answer can become a thread. If it's true between you and someone else in the crew, agree on it together and it goes on both your sheets. The GM uses the rest to put you in each other's way.
 
 ## Step 9: Aspiration {#s-aspiration}
 
@@ -559,60 +609,59 @@ Your **Aspiration** is one thing you want. It starts at **d2** and climbs as you
 -   **One step a roll.** However many dice you put on it, one roll moves it one step at most. More dice is advantage, and your best die counts.
 -   **A setback** steps it back down one, never below d2.
 
-When it climbs past d12, it **resolves**: you gain a new Title, with a trait and one permission, and write a new Aspiration at d2.
+When it climbs past d12, it **resolves**: you take a new archetype with one permission, name it with a Title, and write a new Aspiration at d2. Another Title puts your Resolve maximum up by 1 as well.
 
 Your Aspiration is also somewhere a consequence can land. When a blow or a failure costs you, you can step your Aspiration back down instead of taking it on your Armour or your body, so the fight costs you your dream instead of your skin. You can't do it while it's at d2.
 
 :::example[Vesk's Aspiration, session by session]
 **Session 1:** *Own the score of a lifetime*, at d2. She's cracking a merchant's strongbox in the Low Market when the GM says it's within reach. That's her Locks, 5 steps, a d10. She rolls 7 against the Aspiration's d2, which rolls a 1, and it climbs to d4.
 
-**Downtime:** she spends a slot on it, the same five steps. 3 against the d4's 2, so it's d6.
+**Downtime:** she spends a slot on it, the same 5 steps. 3 against the d4's 2, so it's d6.
 
 **Session 2:** She gets run out of a warehouse. That's a setback, so it's back to d4.
 
 **Sessions 3 to 6:** She spends a slot on it most downtimes and pulls one good job, and it climbs to d12. The last two steps took her a few goes, because a d10 against a d10 is close to a coin toss.
 
-**Session 7:** She robs the Vane Estate. Her last roll is at the vault itself, her d10 against the Aspiration's d12. It's 9 against 9, and she pays 1 Aura to take the tie. It climbs past d12 and resolves. Vesk writes a new Title, *The woman who has never been seen*, with a trait and one permission, and a new Aspiration, *Find out who the fence really is.* That one starts at d2.
+**Session 7:** She robs the Vane Estate. Her last roll is at the vault itself, her d10 against the Aspiration's d12. It's 9 against 9, and she pays 1 Aura to take the tie. It climbs past d12 and resolves. Vesk takes a third archetype and names it *The woman who has never been seen*, with one permission, and her Resolve maximum's 3 now. Her new Aspiration, *Find out who the fence really is*, starts at d2.
 :::
 
 ## Confidence {#s-confidence}
 
-Confidence is your mental defence against threats, persuasion, fear, pressure and anything else that works on the mind. It's your nerve, not your sanity.
+**Confidence** is how you're holding up right now. It's the die you roll against fear, lies, pressure and anything else that works on the mind, and it swings up and down during a scene. It's your nerve, not your sanity.
 
-### Starting Confidence {#starting-confidence}
+:::rule
+**Confidence starts every scene on d6**, and it goes back to d6 when the scene ends. In between, it never goes below d2 or past d12.
+:::
 
-Confidence starts at **d2**, and it's a size bigger for:
+### Where it starts {#starting-confidence}
 
--   **Each Title.** With two Titles you're on a d6. Three is d8, four is d10 and five is d12.
--   **The right clothes.** A size bigger when what you're wearing fits the scene.
--   **The right circle.** A size bigger for each bond with three live connections.
--   **Gear or a trait that says so,** like *Iron Will*, and the Confidence Boon.
+Clothes that fit the scene start you a size up, so when Vesk walks into a noble house in a servant's uniform, she's on d8. A trait that says so, like *Iron Will*, starts you a size up too, and so does the Confidence Boon. The Confidence Burden starts you a size down.
 
-Past d12 it gets a second die, like Armour does (see [Past d12](#s-past-d12)).
+### How it swings {#how-confidence-swings}
 
-### Recovering Confidence {#recovering-confidence}
+**Fear is a telegraph.** The GM telegraphs fear, lies and pressure like any attack, say a dragon's roar as a d10 at everyone's Confidence, and you answer it, Defend or let it ride, [the usual way](#s-answer-or-ride).
 
-All of it comes back when:
+**For each one that gets through, you choose:** let it **shake** you and drop a size, **bury** it and take a Hurt, or **hold your ground** and spend 1 Resolve so neither happens. When a blow lands, the GM names the cost (see [Consequences](#s-consequences)), but this one's your call.
 
--   **You spend a whole downtime** finding yourself, which takes both slots.
--   **You face your fear**: you act anyway, against the thing that shook you. Once a session.
--   **You keep a promise** you made to yourself, and prove it. Once a session.
+-   **Up a size:** stop all of it in a round, every bit of fear, lies and pressure that came at you, or take a threat down (in a combo, that's everyone who put an action in). If nothing's aimed at you, it doesn't move. A [Bard](#a-bard) can lift you with a song as well, as far as d10.
+-   **Down a size:** let something shake you, or fill a Hurt bar and write a Catch.
+-   **Nothing takes it below d2.** Anything that would is a Hurt instead, or 1 Resolve to hold your ground.
+-   **At d12 you're fired up.** Cash it in for an extra action, or to clear a Hurt box, and it drops back to d6.
+-   **At d2 you're shaken.** You won't go at a threat, in a fight or face to face, unless you spend 1 Resolve each time you do.
+-   **Take a breath:** spend your action and your Confidence comes up a size, as far as d6.
+-   **At the end of the scene it goes back to d6.** Anything that should last is a Catch.
 
-:::example[Confidence stepping up and recovering at the table]
-Vesk's Confidence starts at d2, and her two Titles make it a d6.
+:::example[Dorrie at the duke's ball]
+Dorrie walks into the duke's ball in her court clothes, so she starts on d8. She sees straight through the steward's lie, so she's on d10. Then the duke's sister cuts her down in front of the room, and it gets through. Dorrie doesn't want to lose her nerve now, so she buries it, takes a Hurt and stays on d10.
+:::
 
-Session 5: she wears a servant's uniform into a noble house. It fits the scene, so she's on a d8 for the scene.
-
-Session 7: she gains a third Title, *The woman who has never been seen*. That's a d8 on its own now, and a d10 when her clothes fit the scene.
-
-Session 8: she's dragged before Vane's steward and threatened with the Guild. When the threat lands, his d8 comes up 5 and her Confidence rolls a 3. The GM names her Confidence and she takes it, so it steps down from d8 to d6.
-
-Downtime: she spends the whole week walking the docks at night, remembering who she used to be. That's both slots, and her Confidence is back to d8.
+:::example[Bram and the brute's roar]
+In a fight, a brute's roar gets through to Bram two rounds running, and both times he lets it shake him: d6 to d4, then d2. He's shaken, so he spends 1 Resolve to go at it anyway.
 :::
 
 ## Armour {#s-armour}
 
-Armour is your physical defence against blows, blades and teeth, and it comes from your gear. It starts at **d2**, and it's a size bigger for each piece of plain armour you wear, and for gear or Boons that say so. Past d12 it gets a second die (see [Past d12](#s-past-d12)).
+Armour is your physical defence against blows, blades and teeth, and it comes from your gear. It starts at **d2**, and it's a size bigger for each piece of plain armour you wear, and for gear or Boons that say so. Unlike Confidence, Armour can go past d12, and then it gets a second die (see [Past d12](#s-past-d12)).
 
 **Stepping your Armour down is one of the costs a blow can have.** The GM names the cost, and you can offer another that fits and costs about as much. A condition that says so, like *Poisoned*, steps it down too.
 
@@ -637,7 +686,7 @@ Downtime: he spends a slot at the smithy, and his Armour goes back to its full d
 
 ## Boons and Burdens {#s-boons}
 
-A **Boon** is a permanent upgrade, like an extra Hurt bar or a longer stride. It costs **two permission slots on one of your Titles**, and you can swap it back for permissions in downtime. You can build one in when you make your character, so two of that Title's three starting permissions are a Boon instead, or you can swap two permissions for one in downtime.
+A **Boon** is a permanent upgrade, like an extra Hurt bar or a longer stride. It costs **two permission slots on one of your archetypes**, and you can swap it back for permissions in downtime. You can build one in when you make your character, so two of that archetype's three starting permissions are a Boon instead, or you can swap two permissions for one in downtime.
 
 A **Burden** is a permanent cost, and it only ever comes on an attuned thing. Titles never take them. A Burden's worth two permissions on that thing, or a Boon for you, and a thing can't take one before it's Tempered (see [Attunement](#s-attunement)).
 
@@ -648,8 +697,8 @@ A **Burden** is a permanent cost, and it only ever comes on an attuned thing. Ti
 | Lever | Boon | Burden |
 | --- | --- | --- |
 | Hurt | +1 bar | −1 bar |
-| Heals on you | your heal die is a size smaller | your heal die is a size bigger |
-| Regen | at the end of each round, roll your heal die, and a top face clears a box | when someone heals you, your heal die is rolled twice and the higher counts |
+| Heals on you | your wound die is a size smaller | your wound die is a size bigger |
+| Regen | at the end of each round, roll your wound die, and a top face clears a box | when someone heals you, your wound die is rolled twice and the higher counts |
 | Hurt Catches in downtime | one heals free each downtime | yours only heal with someone else's downtime slot |
 | Aura | +2 to your maximum | −2 to your maximum |
 | Stride | +2 | −2 |
@@ -657,14 +706,13 @@ A **Burden** is a permanent cost, and it only ever comes on an attuned thing. Ti
 | Extra action | one extra action a scene | you say your action before the GM telegraphs, and you're stuck with it |
 | Splits | +1 split | −1 split |
 | Ties | you win every tie, attacking too, without paying Aura | you lose every tie, even defending, and can't pay to win one |
-| Going beyond | once a scene, go beyond for free | none |
+| Going beyond | once a scene, go beyond without spending Resolve | none |
 | Armour | a size bigger | a size smaller |
-| Confidence | a size bigger | a size smaller |
+| Confidence | you start every scene a size up | you start every scene a size down |
 | Conditions | one condition (say which) can't touch you | one condition doesn't fade on you, and stays until someone breaks it with an action |
-| Defend | pull from two enemies | you can't Defend |
+| Defend | none (pulling more than one enemy's attack is the Guardian's) | you can't Defend |
 | Take the hit | spend 1 Aura to roll your Armour when you take the hit | taking the hit costs you 1 Aura |
-| Summons | +1 to your summoning Aura bonus each time (+3, then +4) | none |
-| Sparks | +1 Spark | −1 Spark |
+| Resolve | +1 to your Resolve maximum | −1 to your Resolve maximum |
 | Kit | carry one more item | carry one fewer item |
 
 **Boons that get you Aura back.** Each of these is its own Boon, and there's no Burden to go with it:
@@ -672,10 +720,10 @@ A **Burden** is a permanent cost, and it only ever comes on an attuned thing. Ti
 -   **Beat a threat:** take 1 Aura whenever a threat of any kind falls to you, whether it's a monster, a locked door, a puzzle or an argument.
 -   **In your element:** start a scene somewhere your Title belongs and take 1 Aura, even past your maximum.
 
-Some levers aren't on the menu, and that's on purpose: bringing things in, leading, downtime slots and bonds. Three summoning Boons make your summoning Aura bonus +5 (see [Summoning](#s-summoning)). For the Defend and Take the hit levers, see [Defend](#s-defend) and [Taking the hit](#s-take-the-hit).
+Some levers aren't on the menu, and that's on purpose: bringing things in, leading, downtime slots and bonds. On most archetypes, taking the same one again gets you more for your 1 Aura (see [The Archetypes](#s-how-archetypes)). For the Defend and Take the hit levers, see [Defend](#s-defend) and [Taking the hit](#s-take-the-hit).
 
 :::example[Building a Boon in]
-Say you're making a sellsword, and you want to soak up more punishment than anyone. Your first Title, *The sword the Margrave couldn't buy*, takes *fight with a sword*, and its other two starting slots go on the Hurt Boon. You call it *Iron Lungs*. You start with four Hurt bars, one permission on that Title, and three more slots on it to fill as you grow.
+Say you're making a sellsword, and you want to soak up more punishment than anyone. Your first archetype's a Warrior, and you name it *The sword the Margrave couldn't buy*. It takes *fight with a sword*, and its other two starting slots go on the Hurt Boon. You call it *Iron Lungs*. You start with four Hurt bars, one permission on that Title, and three more slots on it to fill as you grow.
 :::
 
 ## A Complete Character, Start to Finish {#a-complete-character-start-to-finish}
@@ -684,18 +732,20 @@ Say you're making a sellsword, and you want to soak up more punishment than anyo
 Here's what it looks like to build a character, and every choice here is a real one.
 :::
 
-### Step 1: Titles {#step-1-title}
+### Step 1: Archetypes and Titles {#step-1-title}
 
-The player wants a thief, so he starts to write *Thief*. The GM pushes back: "The best at what? A thief who does what?" He has a think and comes up with *The best cat burglar in the city.*
+The player wants a thief called Vesk, so he picks the Shadow. When she gets into hiding, the dice she hid with go into her shadow pool, the things she noticed while nobody was looking, and she can add them to any roll after that.
 
-For the second Title he asks himself where she learned it all, and writes *Raised by the Guild*. It's a real role, and it hands the GM a whole Guild to play with.
+For the Title he starts to write *Thief*. The GM pushes back: "The best at what? A thief who does what?" He has a think and comes up with *The best cat burglar in the city.*
+
+For the second Title he asks himself where she learned it all, and writes *Raised by the Guild*. It's a real role, and it hands the GM a whole Guild to play with. He makes it a Shadow as well, so she's taken the same archetype twice, and 1 Aura on her roll to hide or on a shadow die is +3 instead of +2.
 
 ### Step 2: Traits {#step-2-traits-three}
 
-One for each Title:
+He picks two from the list:
 
--   **Silent Step** (Passive), on *The best cat burglar in the city*. Her movement makes no sound, and she gets +1 step to moving unseen.
--   **Light on my Feet** (Passive), on *Raised by the Guild*. +2 units of movement, so her stride's 5.
+-   **Silent Step** (Passive). Her movement makes no sound, and she gets +1 step to moving unseen.
+-   **Light on my Feet** (Passive). +2 units of movement, so her stride's 5.
 
 ### Step 3: Permissions {#step-3-permissions}
 
@@ -719,7 +769,7 @@ He fills in her set actions with what she's got so far:
 | Study | nothing fits nearly every time | 1 | d2 |
 | Talk | nothing fits nearly every time | 1 | d2 |
 
-Locks is her own, for the thing she does all the time, and *know how a lock's built* sits on it beside her first Title's lines. Her second Title and *find a buyer for anything* don't fit any of these nearly every time, so they stay off, and when one of them fits she'll bring it in for 1 Aura. Move and Locks grow in Step 6.
+Locks is her own, for the thing she does all the time, and *know how a lock's built* sits on it beside her first Title's lines. Her second Title and *find a buyer for anything* don't fit any of these nearly every time, so they stay off, and when one of them fits she'll bring it in for 1 Aura. Move and Locks grow in Step 6. Her Sneak's what she hides with, so when it gets her into hiding, that d8 goes in her shadow pool.
 
 ### Step 5: What she carries {#step-4-items-three}
 
@@ -737,13 +787,23 @@ She attunes the two things she'd never sell. Both start at Awakened, with one pe
 
 He could give each one its Catch now for a second permission, but there's no trouble he wants on them yet, so he leaves it. The picks go on Locks, which makes it 5 steps, a d10. The line goes on Move: 4 steps, a d8. Neither counts towards what she carries, and neither can be broken.
 
-### Step 7: Bonds {#step-6-bonds}
+### Step 7: Aura, Resolve, Hurt and bonds {#step-6-bonds}
 
-He writes three connections: one each with two of the crew, and one with someone outside it. The last one's a debt, so he's got room for a fourth when he thinks of one.
+She starts with the usual numbers: 5 Aura, 2 Resolve (one for each Title) and three Hurt bars. Her stride's 5 with Light on my Feet, her Armour's d4 from the worn leathers, and her Confidence starts every scene on d6.
+
+He writes three threads: one each with two of the crew, and one with someone outside it. The last one's a debt, so he's got room for a fourth when he thinks of one.
 
 -   *Dorrie: we have pulled a dozen jobs. I trust her with my life.*
 -   *Bram: he once carried me out of a fire. I have never said thank you.*
 -   *The fence: I owe a debt I would rather not discuss.*
+
+Bram's player wrote the same truth from his side, so that's one thread on both their sheets. The rest of the crew write theirs too, and three of them are with Vesk, so they go on her sheet as well, in their own words:
+
+-   *Dorrie: we came up on the same streets. She never asks why.* (Dorrie's)
+-   *Isolde: she stole the book that started all this.* (Isolde's)
+-   *Wren: I owe her for the night she hid me from the watch.* (Wren's, a debt)
+
+That's six threads on five bonds, and two of them are with Dorrie.
 
 ### Step 8: Connect {#step-7-connect}
 
@@ -761,7 +821,9 @@ Now she's got a reason to be in the crew.
 ### Final sheet {#final-sheet}
 
 :::sheet[The best cat burglar in the city]
-**Titles:** The best cat burglar in the city · Raised by the Guild.
+**Titles:** The best cat burglar in the city (Shadow) · Raised by the Guild (Shadow).
+
+**Archetype:** Shadow, twice. The dice she hides with go in her shadow pool, and 1 Aura on her roll to hide or a shadow die is +3.
 
 **Traits:** Silent Step (Passive) · Light on my Feet (Passive).
 
@@ -773,11 +835,19 @@ Now she's got a reason to be in the crew.
 
 **Attuned:** A perfect set of picks (Awakened: *open any lock with a mechanism*) · a grappling line (Awakened: *climb or swing anywhere you can throw a hook*). 2 of 2.
 
-**Bonds:** Dorrie · Bram · The fence (debt). One connection each.
+**Threads with Dorrie:** *We have pulled a dozen jobs. I trust her with my life.* · *We came up on the same streets. She never asks why.* (Dorrie's)
+
+**Thread with Bram:** *He once carried me out of a fire. I have never said thank you.*
+
+**Thread with the fence:** *I owe a debt I would rather not discuss.* (a debt)
+
+**Thread with Isolde:** *She stole the book that started all this.* (Isolde's)
+
+**Thread with Wren:** *I owe her for the night she hid me from the watch.* (Wren's, a debt)
 
 **Crew:** Already knows Dorrie · Unfinished business with Bram.
 
 **Aspiration:** Own the score of a lifetime (d2).
 
-**Numbers:** Aura 5 · Sparks 2 · Armour d4 (worn leathers) · Confidence d6 (d2 and two Titles) · Stride 5 (3 + 2) · Hurt three bars of three.
+**Numbers:** Aura 5 · Resolve 2 · Armour d4 (worn leathers) · Confidence d6 every scene · Stride 5 (3 + 2) · Hurt three bars of three.
 :::

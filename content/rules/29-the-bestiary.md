@@ -5,7 +5,7 @@ order: 29
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Here are forty threats you can run straight off the page, all laid out the same way.
@@ -104,7 +104,7 @@ A patient man with a ledger.
 
 **Voice** "It's not personal. It never is."
 
-**Hidden** *Someone Else’s Man* (weak point). He is here on someone’s behalf. Name who, and he backs down.
+**Hidden** *Someone Else's Man* (weak point). He is here on someone's behalf. Name who, and he backs down.
 :::
 
 :::threat[The Dock Thug]

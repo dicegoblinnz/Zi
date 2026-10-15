@@ -5,7 +5,7 @@ order: 10
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Somebody built this place to keep people out, and something else has moved in since.
@@ -26,7 +26,7 @@ A **site**'s somewhere the crew goes into and has to find its way through, like 
 
 Exploring's mostly the conversation. Say where they are, what they can see and what's in the way, then ask what they do. When they move on, describe the next place. Roll when something pushes back, and go into rounds when timing matters, like a fight or a trap going off under someone's feet. When it's dealt with, go back to the conversation.
 
-Draw the map as they go. Rough boxes are fine, and the grid only comes out for a fight, if you use one at all.
+Draw the map as they go. Rough boxes are fine, and you'll only want the grid for a fight, if you use one at all.
 
 ### The alarm {#s-alarm}
 
@@ -40,17 +40,17 @@ The **alarm** is how much the place knows about you. It works like any scene clo
 
 A trap's a hidden tag on a place until somebody finds it.
 
--   **Walk into one nobody's found** and the GM telegraphs it there and then: what it does, at whom, and its die. Whoever set it off can answer it with their action, or let it land and roll their defence against it. Either way it's loud, so the alarm steps down.
+-   **Walk into one nobody's found** and the GM telegraphs it there and then: what it does, at whom, and its die. Whoever set it off can answer it with their action, or let it ride and roll their defence against it. Either way it's loud, so the alarm steps down.
 -   **Find it first** and it's a stake. Disarm it against the site's Challenge, or go round it. Once you know where it is, stepping over it doesn't need a roll.
 -   **Some traps run on a clock**, like a room filling with water. That's an event, so play it in rounds.
 
 ### Study does most of the work {#study-does-most-of-the-work}
 
-Study a place against the site's Challenge and win, and you get what Study always gives you: a hidden tag (the trap on the stair), a straight answer (*what's behind that door?*), or something that helps (the draught that means there's another way out). Make one of your dice an area (1 Aura, and it takes a split, like any area) and you Study the whole room at once.
+Study a place against the site's Challenge and win, and you get what Study always gives you: a hidden tag (the trap on the stair) or a straight answer (*what's behind that door?*). A [Scholar](#a-scholar) can introduce a truth instead, like the draught that means there's another way out. If you're an [Elementalist](#a-elementalist), one of your dice can be your area (it takes one of your splits), and you Study the whole room at once.
 
 ### One scene, until you come out {#one-scene-until-you-come-out}
 
-Aura fills when you go in, and not again until you come out. Come back another day and it's a new scene with full Aura, but the place has had a day too. Start the alarm a size smaller than last time, because whatever lives there knows somebody's been in.
+Aura fills when you go in, and not again until you come out. Your Confidence starts on d6 when you go in, and it swings all the way through. Come back another day and it's a new scene with full Aura, but the place has had a day too. Start the alarm a size smaller than last time, because whatever lives there knows somebody's been in.
 
 ### What's in this place? {#whats-in-this-place}
 

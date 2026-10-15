@@ -5,13 +5,14 @@ order: 33
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 ## Building the die {#building-the-die}
 
 -   Pick the set action that fits how you're doing it. It's 1 step for the action and 1 for every line on it. Leave out a line that doesn't fit this time.
--   Anything else that fits is 1 Aura each to bring in. Going beyond what a permission normally does is 1 Aura, sword or spell.
+-   Anything else that fits is 1 Aura each to bring in. Going beyond what a permission normally does is 1 Resolve, sword or spell.
 -   Two sides a step, up to a d12. Past 6 steps, build a second die the same way. Nothing fits, not even a Title? It's a d2.
+-   After you roll, 1 Aura puts your archetype's +2 on one die of its mechanic, if you need it.
 -   Every sheet has Fight, Move, Sneak, Study and Talk, and you add your own, like Locks or Ward. Everything that fits one nearly every time goes on it.
 
 | Steps | Dice |
@@ -33,41 +34,43 @@ updated: 2026-10-13
 
 ## Intents {#intents}
 
--   Every die gets an intent and a target before you roll. Several dice on one intent is advantage: your best die counts. Dice never add, except when you move.
+-   Every die gets an intent and a target before you roll. Several dice on one intent is advantage: your best die counts. Dice never add, except when you move, when a Warrior's dice explode, and the archetype's +2.
 -   **Splits:** one for every action in the roll, and one more past 6 steps, so 8 steps on one action can be a d6, a d6 and a d4. Dice past 6 steps are already separate, each with its own intent. You can share your steps between the dice you've got.
--   **Area:** one die can be how far instead of an intent: a burst (that many squares out from a point), a cone (that long, and as wide at the end), a line (twice as far), or that many friends for a ward, a blessing or a heal. It's 1 Aura every time, and it takes a split. You can always make it smaller. No grid: 1 to 2 is close, 3 to 5 a few steps, 6 or more the whole room. *Sweep* weapons get one die at everyone in reach, free.
+-   **Area** (the Elementalist's): one die can be how far instead of an intent: a burst (that many squares out from a point), a cone (that long, and as wide at the end) or a line (twice as far). It takes a split and costs no Aura, and you can always make it smaller. No grid: 1 to 2 is close, 3 to 5 a few steps, 6 or more the whole room. *Sweep* weapons get one die at everyone in reach, free, whoever's holding them.
 
 ## The roll {#the-roll}
 
 -   You roll the threat's die too, in another colour. The GM almost never rolls in a round.
 -   Anything that's attacked rolls its defence once a round, the first time, and every die at it that round has to beat that roll.
--   **Beat it:** you did it. **Tie:** the defender wins (you when it lands on you, them when you act), but if you're acting, answering included, 1 Aura wins it. **Under:** you didn't, and it only costs you when it matters.
--   **Top face:** 1 Aura back per die. Full? Give it to someone in the scene. A summon's top faces don't count.
+-   **Beat it:** you did it. **Tie:** the defender wins (you when it lands on you, them when you act), but if you're acting, answering included, 1 Aura wins it. An Illusionist meets or beats. **Under:** you didn't, and it only costs you when it matters.
+-   **Top face:** 1 Aura back per die. Full? Give it to someone in the scene. A die the archetype's +2 took there doesn't count, and nor does a summon's.
+-   **Failed?** 1 Resolve rerolls it, all your dice or just one. The threat's dice stay where they landed.
 
 ## Your action {#s-qr-action}
 
--   One a round: act, answer a telegraph, Defend, move past your stride, pull something from your bag, break a condition, or lead. Your stride, a few words, and dropping something or putting it away are free.
--   **Hold it** (just your stride this round) and you've got two next round. A Spark, the Boon or a trait that says so gives you an extra one.
+-   One a round: act, answer a telegraph, Defend, move past your stride, pull something from your bag, break a condition, take a breath (your Confidence comes up a size, as far as d6), or lead if you're a Leader. Your stride, a few words, dropping something or putting it away, and taking the hit are free.
+-   **Extra actions:** hold it (just your stride this round) and you've got two next round · 1 Resolve · coming out of hiding, one even if you're *Unseen* as well · cashing in fired-up Confidence · the Boon, or a trait that says so.
 -   **Combo:** two or more actions into the same thing at the same time, yours or your friends'. Add the set actions and roll once, with no Aura. Lines on both count once, and whoever rolls takes the Aura for every top face. Your own extra action brings in another set action (Fight with Sneak), or the same one again for +1.
--   **Lead:** build an order, a song or a blessing and hand its steps to friends this round. They don't have to fit, and they don't bring a split.
+-   **Lead** (the Leader's): build an order or a rallying song and hand its steps to friends who can hear or see you, this round. They don't have to fit, and they don't bring a split.
 -   Outside a round, it's one action for a quick go, two if you can take your time.
 
 ## Aura {#aura}
 
 -   Up to your maximum, 5 to start. You're full every scene, and there's none in downtime.
--   **Spend 1:** bring something in · go beyond · win a tie when you're acting · make a die your area · a quick heal · +2 on a catching or summoning die · keep a Catch quiet, or turn it your way, on your own roll.
+-   **Spend 1:** bring something in, a friend's permission through a thread too · keep a Catch quiet, or turn it your way · win a tie when you're acting · what 1 Aura gets your archetype · a quick heal.
 -   **Get 1 back:** every top face · letting a Catch bite, as often as you like, as long as it's real trouble · bringing real trouble on yourself with no Catch · a great setup that didn't land, if the GM says so · traits and Boons that say so.
 -   Traits are free, as often as they say, unless they say they cost Aura.
 
-## Sparks {#spark}
+## Resolve {#s-qr-resolve}
 
--   One for each Title, and they're all back every downtime. The GM can hand back a spent one for a great moment, never past your number.
--   Spend one: reroll a roll you just failed (your dice) · an extra action this round · make an opportunity, even from the past · add a permission for the scene · turn down trouble. In downtime it rerolls your own dice.
--   **Trouble:** the GM turns something on your sheet against you, or sends the plan sideways, and offers you a Spark. Take it and it happens, and the Spark's yours (full? give it to someone who's spent one). Spend one to turn it down. It comes about once a session each.
+-   As much as you've got Titles, so 2 to start, and you can't hold more. The Resolve Boon makes it one more, and the Burden one fewer.
+-   **Spend 1:** an extra action this round · reroll a roll you just failed · go beyond what a permission normally does · hold your ground when fear, lies or pressure get through · go at a threat when you're shaken · in downtime, roll your own dice again.
+-   **Get 1 back:** at the end of every scene · when a Catch bites in a big way, changing the scene or costing you something you wanted (instead of the Aura, and it's your call when) · when the GM rewards great roleplay, like facing your fear · when you strain a thread.
+-   All of it comes back after downtime.
 
 ## Study {#study}
 
-Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer · something that could be here, and is: a permission for the crew this scene.
+Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer. A Scholar can introduce a truth instead: say something that wasn't obvious to anyone else, and it's true, and it counts as a permission for the crew this scene.
 
 ## The round {#s-qr-round}
 
@@ -78,23 +81,36 @@ Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer
 ## Telegraphs and defence {#telegraphs-and-defence}
 
 -   **Answer:** your action against its dice, built from what fits how you stop it, and friends can join in. Win and it's stopped. Lose and it lands at once, with no defence roll. A tie's a loss unless you pay 1 Aura. You can answer for a friend, and if you stepped in the way and lose, it lands on you.
--   **When it lands:** one Armour roll against all the blows, and one Confidence roll against all the fear and pressure. Every die at you has to beat it, and ties go to you.
--   **Defend:** your action, and it uses no steps. Roll your Armour once for every die coming at you and choose which roll blocks which (Confidence works the same). You can pull one enemy's whole attack on friends within your stride onto yourself.
+-   **Let it ride:** whatever you don't answer or Defend lands at the end of the round, against one Armour roll for all the blows and one Confidence roll for all the fear, lies and pressure. Every die at you has to beat it, and ties go to you.
+-   **Defend:** your action, and it uses no steps. Roll your Armour once for every die coming at you and choose which roll blocks which (Confidence works the same). You can pull one enemy's whole attack on friends within your stride onto yourself. A Guardian pulls every attack on friends within their stride, whoever it's from.
 -   **Take the hit:** free, for anyone. Step in front of an attack aimed at someone within your stride and take it, with no defence roll.
 -   **Running doesn't dodge.** One aimed at you lands wherever you've gone. Only one aimed at a place can be walked out of.
--   **Past d12:** roll both dice and keep the best. The extra die steps down first.
+-   **Past d12** (Armour only): roll both dice and keep the best. The extra die steps down first.
 -   At a stake, a place or a clock there's no defence. Unanswered, it happens.
 
 ## Consequences: the GM names one {#consequences-the-gm-names-one}
 
-Armour down · Confidence down · a Hurt · break something you carry (attuned things can't break) · Aspiration down · party Goal down · a clock ticks. You can offer another that fits and costs about as much. A specific intent happens unless you trade it for one of these. A one-answer telegraph can't be traded.
+Armour down · Confidence down (for a miss, where it fits) · a Hurt · break something you carry (attuned things can't break) · Aspiration down · Party Goal down · a clock ticks. You can offer another that fits and costs about as much. A specific intent happens unless you trade it for one of these. A one-answer telegraph can't be traded.
+
+When it's fear, lies or pressure that got through, you choose instead (see [Confidence](#s-qr-confidence)).
+
+## Confidence {#s-qr-confidence}
+
+-   **Every scene starts on d6.** Clothes that fit the scene start you a size up, and so do the Boon and traits that say so. The Burden starts you a size down. At the end of the scene it goes back to d6, and anything that should last is a Catch.
+-   **Fear is a telegraph.** The GM telegraphs fear, lies and pressure at your Confidence like any attack, and you answer it, Defend or let it ride.
+-   **Up a size:** stop all of it that came at you, or take a threat down. If nothing came at you, it doesn't move. Taking a breath brings it up a size too, as far as d6.
+-   **When one gets through,** you choose, for each: let it shake you (down a size) · bury it (take a Hurt) · hold your ground (1 Resolve, and neither happens).
+-   **Down a size** as well when you fill a Hurt bar and write its Catch. Nothing takes it below d2: anything that would is a Hurt instead, or 1 Resolve to hold your ground.
+-   **d12, fired up:** cash it in for an extra action, or to clear a Hurt box, and it drops back to d6. It never goes higher than d12.
+-   **d2, shaken:** you won't go at a threat, in a fight or face to face, unless you spend 1 Resolve each time.
 
 ## Hurt and healing {#s-qr-hurt}
 
--   Three bars of three boxes, one track for body and mind. Fill a bar and write a Catch in it, like *cracked ribs*. A bar that's got its Catch doesn't get another.
+-   Three bars of three boxes, one track for body and mind. Fill a bar and write a Catch in it, like *cracked ribs*, and your Confidence drops a size. A bar that's got its Catch doesn't get another.
 -   At the end of every scene the loose boxes clear, and you're back to 3 for each Catch.
 -   **Blaze:** take a Hurt with every box full and declare something extraordinary. It happens, no roll. You can choose to die. If you don't, leave the scene and take a Scar, a box crossed out for good, and it's for the story only. Every box crossed out? Your next Blaze is your last.
--   **Heal:** an action against the patient's heal die, a d6 and a size bigger for each Catch on their track. Each die that beats it clears a box. A **quick heal** is 1 Aura for one box, no roll, and it still takes your action. An area die heals a group.
+-   **Heal** (the Healer's): an action against the patient's wound die, a d6 and a size bigger for each Catch on their track. Each die that beats it clears a box. It reaches one person, and a split can clear more boxes or reach a second person you can touch.
+-   **Quick heal**, for anyone: 1 Aura clears one box on one person, no roll, and it still takes your action.
 -   **Downtime:** a slot for each Catch on your Hurt track, and none heal free.
 
 ## Threats {#s-qr-threats}
@@ -110,8 +126,10 @@ Armour down · Confidence down · a Hurt · break something you carry (attuned t
 ## Conditions {#conditions}
 
 -   A tag with a die, the die that placed it, for you or against you. Passive: one step. Active: spend it, free, for its big effect.
+-   A condition you put on a friend, like a ward or a blessing, goes on one friend at the die you built. The second die of a split can put it on another friend you can touch.
 -   It steps down a size every round, and it's gone past d2. Break it with an action that beats its die. One of each on a target, and the same one goes on once a round. Placed again later, the new one replaces it.
 -   On a threat, spending *Burning*, *Bleeding* or *Poisoned* strips a tag with no roll (on Tough, its die's size comes off), and a lost action is a telegraph gone.
+-   *Marked* is the Hunter's. It gives no step and nobody spends it: anyone who acts against whatever's *Marked* rolls the Mark die too.
 
 ## Stakes, clocks, events {#stakes-clocks-events}
 
@@ -122,20 +140,50 @@ Armour down · Confidence down · a Hurt · break something you carry (attuned t
 
 ## Moving {#moving}
 
--   Stride 3, free, before, between or after your action. A Move action rolls whatever makes you fast here, plus the action, for extra squares, and those dice add.
+-   Stride 3, free, before, between or after your action. A Move action rolls whatever makes you fast here, plus the action, for extra squares, and those dice add. A Teleporter's stride can be a teleport of up to 10 units.
 -   Difficult ground costs 2 a square. Diagonals count as one. There are no opportunity attacks. Cover is line of sight, and it doesn't add steps.
 -   Close 1 · Reach 2 · Near · Far · Beyond. No grid? Close, Reach and Near are within your stride, Far takes a Move action, and Beyond takes more than a round.
 -   Weapon properties: Reach · Thrown · Ranged · Long · Grapple · Sweep · Piercing · Breaker · Charge · Concealed · Quick · Two-Handed · Reload.
 
 ## Your character {#your-character}
 
--   **Titles:** two to start, each with a trait and three permissions, and six at most. A Title counts 1 where it fits, and it's a size of Confidence. The new one you get past d12 on your Aspiration starts with a trait and one permission.
+-   **Archetypes and Titles:** two to start. Each one gets a Title you name for it and three permissions, six at most, and the Title counts 1 where it fits. You can take the same archetype twice. The new one you get past d12 on your Aspiration starts with one permission.
+-   **Traits:** two, on their own, and Grow can give you more.
 -   **Permissions:** a doing word and how, what or where, like *climb sheer walls*. It's 1 step on a roll it fits, once a roll. You need a magic permission or a magic item to do magic at all.
 -   **Boons:** two permission slots on a Title buy one. Burdens only come on attuned things. The menu's in [Boons and Burdens](#s-boons).
 -   **Aspiration:** starts at d2 and climbs. An action when it's within reach, or a slot. One step a roll.
--   **Armour:** d2, a size bigger for each piece of plain armour. **Confidence:** d2, a size bigger for each Title, each bond with three live connections, clothes that fit the scene, and gear or traits that say so.
--   **Bonds:** three connections to start, and a debt earns a fourth. Three live on one bond is a size of Confidence. Bring a friend's permission in for 1 Aura through a connection you share.
--   **To start:** 5 Aura, a Spark for each Title, a stride of 3 and three Hurt bars.
+-   **Armour:** d2, a size bigger for each piece of plain armour. **Confidence:** d6 at the start of every scene (see [Confidence](#s-qr-confidence)).
+-   **To start:** 5 Aura, 2 Resolve (one for each Title), a stride of 3 and three Hurt bars.
+
+## The archetypes {#s-qr-archetypes}
+
+On most of them, 1 Aura puts +2 on one die of the mechanic after you roll, and taking the same archetype twice makes it +3. The whole of each one is in [The Archetypes](#archetypes).
+
+-   **Bard:** your action lifts every friend who can hear you a size of Confidence, as far as d10, or one roll of your song answers all the fear, lies and pressure coming at you and them.
+-   **Bloodsworn:** every Hurt you take adds 3 steps to your action, and your Aura, with your action, clears boxes on your own Hurt track, one for each you spend.
+-   **Elementalist:** one of your dice can be an area, a burst, a cone or a line, and it costs no Aura.
+-   **Face:** build your dice but don't roll them, and put them on a threat as influence. Roll them against one of its telegraphs before it lands, and each of its dice your best one beats does what you say.
+-   **Guardian:** when you Defend, every attack on friends within your stride comes at you, whoever it's from.
+-   **Healer:** the only one who makes a heal roll, against the patient's wound die.
+-   **Hunter:** mark a creature, and anyone who acts against it rolls your Mark die too.
+-   **Illusionist:** meet or beat the threats' Challenge, and they believe your illusion until they interact with it or try to get through it.
+-   **Leader:** an order or a rallying song hands its steps to friends who can hear or see you.
+-   **Maker:** roll against an item's size, and every die that beats it gives the item a tag for the scene.
+-   **Oracle:** build your action but don't roll it, and take its steps off the threats' telegraphs, a size a step.
+-   **Scholar:** win a Study and introduce a truth, a permission for the crew this scene.
+-   **Shadow:** the dice you hide with go into your shadow pool, to add to any roll after that.
+-   **Shifter:** catch animal tags against their die, and keep them until downtime.
+-   **Summoner:** the only one who catches souls and summons them.
+-   **Teleporter:** your stride can be a teleport of up to 10 units, and 1 Aura opens a portal.
+-   **Warrior:** your dice explode in a fight, so a top face rolls again and adds on.
+
+## Bonds and threads {#s-qr-threads}
+
+-   A bond is a person. Each thread is one truth you two share, like a debt, a rescue, a secret or a shared past. Three threads to start, and writing one as a debt earns a fourth.
+-   **Borrow:** 1 Aura brings their permission into your roll, and it doesn't strain anything. You can't borrow through a strained thread.
+-   **Strain:** lean on them in the story and take 1 Resolve. It's free and takes no action, and the thread's strained. One with someone in the crew is strained for both of you.
+-   **Mend:** make it right with them, in downtime or in a scene with them (not the fight where you strained it), and it's whole again.
+-   **Snap:** strain it again before it's mended. You still take the Resolve, but cross the thread out. When the last one goes, so does the bond.
 
 ## What you carry {#s-qr-carry}
 
@@ -145,9 +193,9 @@ Armour down · Confidence down · a Hurt · break something you carry (attuned t
 
 ## Summoning {#s-qr-summoning}
 
--   A summoning attunement holds souls on the same ladder: 1 at Awakened (2 with a Catch), 2 at Tempered (4 with a Burden), 3 at Perfected (6 with a Burden and a Catch). Starting souls are d4s.
+-   Only a Summoner catches souls and summons them. A summoning attunement holds souls on the same ladder: 1 at Awakened (2 with a Catch), 2 at Tempered (4 with a Burden), 3 at Perfected (6 with a Burden and a Catch). Starting souls are d4s.
 -   **Catch one:** when a creature falls, spend your action and roll your Summon dice against its Challenge. Beat it and its soul goes in a utility slot, and into your attunement in downtime. Miss and it's gone.
--   **Call them out:** your action, with a reason in the story. Each of your Summon dice brings out one soul whose die it beats. 1 Aura is +2 on one die.
+-   **Call them out:** your action, with a reason in the story. Each of your Summon dice brings out one soul whose die it beats. 1 Aura is +2 on one die, and +3 if you've taken Summoner twice.
 -   A summon acts like anyone and rolls its own die. One hit sends it back to its slot. As its action, it can pull the attacks on someone onto itself and roll against each: every one it beats is stopped, the first it loses takes it out, and any more it loses go through. At the end of the scene, roll its die, and on 3 or lower it goes back. They all go back at downtime. Summons can't combo, and their top faces don't give Aura.
 
 ## Chases {#s-qr-chases}
@@ -157,10 +205,11 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 ## Downtime {#s-qr-downtime}
 
 -   Four pressures: personal, party, faction, world. Ignore one and it gets worse, and twice makes it a scene. Every faction picks one move, and it's rolled after the slots.
--   Two slots each, and two for the crew. A party slot's an action for the crew. Your Sparks all come back.
--   **Recover:** heal a Catch on your Hurt track (a slot each) · all your Confidence (both slots) · Armour back to full · mend something broken. **Grow:** a new permission on a Title · a new trait or connection · chase your Aspiration · get something.
+-   Two slots each, and two for the crew. A party slot's an action for the crew. All your Resolve comes back.
+-   **Recover:** heal a Catch on your Hurt track (a slot each) · Armour back to full · mend something broken. **Grow:** a new permission on a Title · a new trait or thread · chase your Aspiration · get something.
+-   **Mend a thread** you've strained by making it right with them. Downtime's one place for it, and a scene with them is the other.
 -   **Swap** a permission for another that fits your Title, or two for a Boon, and back. **Attune:** a slot for each new permission, and the material for a new stage. A soul you're carrying goes into your summoning attunement.
--   Ties go to the defender. No Aura: spend a Spark to roll again, or a step of the crew's Wealth to take the tie.
+-   Ties go to the defender. No Aura: spend 1 Resolve to roll your dice again, or a step of the crew's Wealth to take the tie.
 
 ## Factions {#s-qr-factions}
 
@@ -172,7 +221,7 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 
 ## The session {#s-qr-session}
 
-Open: recap, downtime (your Sparks come back), the party sheet, a check-in. Play: planning, confrontation, aftermath. Close: a check-in, one line in the log, a preview.
+Open: recap, downtime (all your Resolve comes back), the party sheet, a check-in. Play: planning, confrontation, aftermath. Close: a check-in, one line in the log, a preview.
 
 ## The Oracle {#the-oracle}
 

@@ -5,7 +5,7 @@ order: 18
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Money in Zi'Dara is simple: a purse of gold is roughly a month's wages.
@@ -22,13 +22,13 @@ Money in Zi'Dara is simple: a purse of gold is roughly a month's wages.
 
 Money buys plain things, and a plain thing is just what it is. A sword's a sword: when it fits, it's a line on your roll, and it lets you do what a sword does. A finer one is still one line, so you can't pay for a step up. A weapon's properties come with the weapon, so buying a crossbow gets you *Long* and *Piercing* with it.
 
-Armour's different: each piece of plain armour you wear makes your Armour a size bigger, so Bram's plate and shield take him from a d2 to a d6. Anything more than that is [attunement](#s-attunement), and money can buy the material for an attuned thing's next stage, if somebody's selling.
+Armour's different: each piece of plain armour you wear makes your Armour a size bigger, so Bram's plate and shield take him from a d2 to a d6. Anything more than that is [attunement](#s-attunement), and money can buy the material for an attuned thing's next stage, if somebody's selling. A [Maker](#a-maker) can give a thing tags as well, but they only last the scene.
 
 Replacing a broken item, or mending one, takes a downtime slot and usually a purse of gold. Attuned things are magic and can't break, so it's always something you carry. Some things can't be replaced, and shouldn't be. Your mother's blade isn't for sale.
 
 ## Attuned Things from the Story {#s-rare}
 
-Some things come out of the story already grown, like the harpoon they cut out of the thing in the bay, or a skull that won't stop talking. They're attuned things like the ones you start with, just further along: a **Tempered** thing has two permissions of its own and room for two more, and a **Perfected** one has three and room for three more. The rules for attunement itself are in [Attunement](#s-attunement). Here's how materials work, how to write one of these and where they come from, then twenty you can use straight off the page or pull apart for ideas.
+Some things come out of the story already grown, like the harpoon they cut out of the thing in the bay, or a skull that won't stop talking. They're attuned things like the ones you start with, just further along: a **Tempered** thing has two permissions of its own and room for two more with a Burden, and a **Perfected** one has three and room for three more with a Burden and a Catch. The rules for attunement itself are in [Attunement](#s-attunement). Here's how materials work, how to write one of these and where they come from, then twenty you can use straight off the page or pull apart for ideas.
 
 ### Materials {#s-materials}
 
@@ -40,18 +40,19 @@ You write one the same way as anything you attune, with a few things to watch.
 
 -   **One plain line for each permission**, with a doing word and the how, what or where: *stitch a wound closed*, *find the road, day or night, in any weather*. There's no number on it and no +1. Each one that fits is a line on your roll, the same as a permission on a Title, and the thing doesn't count again on top. When nothing's pushing back, you just do it.
 -   **Write permissions for different situations**, so the thing does many things rather than one thing very hard. Three permissions that all mean *fight with a sword* are one permission written three times: every swing gets 3 steps out of it, and it's no help anywhere else. The Bosun's Axe fights, and it climbs. In a fight it's 1 step, the same as a plain hand axe, and halfway up a ship's side it's a step no other axe gives you. Now and then two of a thing's permissions fit the same roll, and that's fine: both count, like any two permissions that fit.
--   **A Catch carries one more permission, and a Burden two.** A Catch is trouble, and if the GM couldn't ever turn it on you at the table, it's too soft, so write another. A Burden comes off the list in [Boons and Burdens](#s-boons) with a name from the story, and it has to cost its owner something they use.
+-   **A Catch carries one more permission, and a Burden two.** A Catch is trouble, and if the GM couldn't run with it at the table, it's too soft, so write another. A Burden comes off the list in [Boons and Burdens](#s-boons) with a name from the story, and it has to cost its owner something they use.
 -   **Weapons keep their properties for free.** A Tempered spear is still *Reach* and *Thrown*, and you don't spend a permission, a Catch or a Burden on that.
--   **Armour and Confidence lines.** A line that makes your Armour or your Confidence a size bigger does just that, and it takes a permission's place on the thing. That's how attuned armour gives you its Armour.
+-   **Armour and Confidence lines.** A line that makes your Armour a size bigger does just that, and a Confidence line starts you every scene a size up. Either one takes a permission's place on the thing. That's how attuned armour gives you its Armour.
+-   **Permissions that heal.** Only a [Healer](#a-healer) makes a heal roll, so for a Healer, a permission like *stitch a wound closed* is a line on it. For anyone else, it's a quick heal that costs no Aura, once a scene.
 
 For Catches, use the [Catch ideas](#catches-12), or write your own in the same shape: a name, and one line for what it means. Here are four more.
 
 | Catch | What it means |
 | --- | --- |
 | **Talks** | It has a voice and opinions of its own, and the GM speaks for it. |
-| **Honest** | Lie while you carry it and the GM can make it give you away. |
+| **Honest** | Lie while you carry it and it can give you away. |
 | **Sworn** | It comes with a promise, agreed when you get it. Break the promise and none of its permissions count until you've put it right. |
-| **Borrowed** | It belongs to someone else, and they can ask for it back. The GM says when. |
+| **Borrowed** | It belongs to someone else, and they can ask for it back. |
 
 ### Where they come from, and how often {#where-they-come-from-and-how-often}
 
@@ -68,7 +69,7 @@ For Catches, use the [Catch ideas](#catches-12), or write your own in the same s
 
 Go easy with them. I'd give each character about one Tempered thing over an arc. Perfected things shouldn't turn up more than a handful of times in a whole campaign, and only at the moments that matter, like the end of an arc or a boss that nearly broke the crew. Any more than that and they'll stop feeling rare. Go easy with materials too, because each one's a whole stage.
 
-**Their Catches are some of the best trouble you've got.** The player took each one for a permission, so when you turn it on them, offer the Spark the way you would for any trouble: the pilots want their glass back the night before the crew sails, or the skull starts lecturing halfway down the vault stairs. See [Bringing Trouble](#s-trouble-gm). The player can let it bite whenever they like, too, and take 1 Aura for it.
+**Their Catches are some of the best trouble you'll get.** The player took each one for a permission, and letting it bite is up to them. When they do, run with it and make it real: the pilots want their glass back the night before the crew sails, or the skull starts lecturing halfway down the vault stairs. They take 1 Aura for it, or 1 Resolve when it changes the scene or costs them something they wanted (see [Catches and Resolve at the table](#s-catches-gm)).
 
 ### Twelve Tempered things {#twelve-rare-things}
 
@@ -125,7 +126,7 @@ They're written out in full, with what tempered each one. Use them as written, o
 
 **Tempered** *light the way through fog and dark water* · *hold the dead back with its light*
 
-**Burden** *River Cold*: your heal die is a size bigger.
+**Burden** *River Cold*: your wound die is a size bigger.
 
 **Adds** *speak with the dead who come to its light*, with room for one more.
 
@@ -147,7 +148,7 @@ They're written out in full, with what tempered each one. Use them as written, o
 :::sheet[The Dancing Master's Coat]
 *A dove-grey coat cut for the man who taught three generations of the old families to dance. His nephew lost it at cards.*
 
-**Tempered** *dance with anyone at any ball, and never put a foot wrong* · Confidence a size bigger
+**Tempered** *dance with anyone at any ball, and never put a foot wrong* · Confidence starts every scene a size up
 
 **Burden** *Leads the Dance*: you say your action before the GM telegraphs, and you're stuck with it.
 
@@ -187,7 +188,7 @@ They're written out in full, with what tempered each one. Use them as written, o
 
 **Tempered** *know who owed the old abbey, and how much* · *read any cipher or code*
 
-**Burden** *The Keeper's Weight*: your Confidence is a size smaller.
+**Burden** *The Keeper's Weight*: your Confidence starts every scene a size down.
 
 **Adds** *call in a debt that's written in it* · *know a forgery on sight*
 
@@ -259,11 +260,11 @@ They're written out in full, with what tempered each one. Use them as written, o
 
 **Perfected** *be received by the old families as one of their own* · *know any old family's history and feuds* · *seal a letter so only the one it's for can open it*
 
-**Burden** *The Last of the Quells*: you've got one fewer Spark.
+**Burden** *The Last of the Quells*: your Resolve maximum is 1 less.
 
-**Catch** *Honest*: lie while you wear it and the GM can make it give you away.
+**Catch** *Honest*: lie while you wear it and it can give you away.
 
-**Adds** *tell when someone's lying to me* · Confidence a size bigger, with room for one more.
+**Adds** *tell when someone's lying to me* · Confidence starts every scene a size up, with room for one more.
 
 **Material** The Quell family seal, melted into the band.
 :::
@@ -275,7 +276,7 @@ They're written out in full, with what tempered each one. Use them as written, o
 
 **Burden** *Eye to the Glass*: you've got one fewer split.
 
-**Catch** *Borrowed*: it belongs to the pilots, and they can ask for it back. The GM says when.
+**Catch** *Borrowed*: it belongs to the pilots, and they can ask for it back.
 
 **Adds** *signal anyone who can see me, by flashing the sun off it* · *call on any harbour pilot for help, and get it*, with room for one more.
 
@@ -311,26 +312,26 @@ They're written out in full, with what tempered each one. Use them as written, o
 :::
 
 :::example[Dorrie and Lady Quell's Ring]
-Say Dorrie's got a free attunement slot, and Lady Quell's Ring is in it. The rest of her sheet's the one she started with, and the ring's Burden leaves her one Spark. She's at a wedding at the Vane house, and she wants ten minutes alone in Lord Vane's private rooms. The steward's on the stair.
+Say Dorrie's got a free attunement slot, and Lady Quell's Ring is in it. The rest of her sheet's the one she started with, and the ring's Burden leaves her 1 Resolve. She's at a wedding at the Vane house, and she wants ten minutes alone in Lord Vane's private rooms. The steward's on the stair.
 
 First she wants to know how to play him, so she asks what the Vanes did to the Quells. The ring's *know any old family's history and feuds* covers that, and nothing's pushing back, so there's no roll. The GM tells her: when the Quells went under, the Vanes bought the house with the servants still in it, and the steward was one of them.
 
 Now she works on him. Her Talk is her first Title, *read a room in a glance* and *make a lie sound like old news*, with the action 4 steps. She isn't lying to him, so *make a lie sound like old news* sits this one out, and that's 3. The ring's *be received by the old families as one of their own* fits, because he served the Quells and he knows that ring on sight, but it isn't on her Talk, so she pays 1 Aura to bring it in. That's 4 steps, a d8.
 
-The rest of the ring sits this one out. There's no letter to seal, nobody's lying to her, and its Confidence line's already in her Confidence die. Anything else she wanted would cost another Aura each, so she stops there.
+The rest of the ring sits this one out. There's no letter to seal, nobody's lying to her, and its Confidence line already started her a size up when the scene began. Anything else she wanted would cost another Aura each, so she stops there.
 
 The steward's Challenge 4, so she rolls his d8 with hers. Hers comes up 6 and his comes up 4. He takes her up the back stair himself.
 
-She gets her ten minutes. On the way down he asks what she was after, and she tells him she wanted to see Lady Quell's portrait. That's a lie, and the ring's *Honest*, so the GM brings trouble: "The ring goes cold on your finger, and the stone clouds over right under his nose. He knows what that means. Take a Spark?"
+She gets her ten minutes. On the way down he asks what she was after, and she tells him she wanted to see Lady Quell's portrait. That's a lie, and the ring's *Honest*. Dorrie spent her only Resolve earlier tonight, so her player lets the Catch bite: the ring goes cold on her finger, and the stone clouds over right under his nose. He knows what that means.
 
-Dorrie's already spent her one Spark tonight, so there's no turning it down, and it happens. The steward's off down the stair to find his master, and the GM telegraphs it with his d8: if nobody deals with it, the house knows somebody's been in those rooms before the toasts. Dorrie's got a new problem with a name and a reason, and she's got a Spark back to deal with it.
+The steward's off down the stair to find his master, and the GM telegraphs it with his d8: if nobody deals with it, the house knows somebody's been in those rooms before the toasts. That changes the scene, so it's a big bite, and Dorrie takes 1 Resolve instead of the Aura. She's got a new problem with a name and a reason, and the Resolve to deal with it.
 :::
 
 ### Writing your own {#s-kit-writing-your-own}
 
 Write it in the same order as the sheets above: one line of story, its stage and its own permissions, then any Burden or Catch with what it carries, and the material that took it there. Do it with the player who's getting it. The GM says what the thing does, because it's come out of her world. The player decides whether to take a Burden or a Catch for more, up to what its stage allows, and you'll work out between you what each one carries.
 
-Then read it back the way you'd use it at the table. Every permission should be quick to call (it fits or it doesn't), every Burden should cost its owner something they use, and every Catch should give the GM something she can turn on its owner. If a line could mean two things, fix it now, so it doesn't come up in the middle of a fight.
+Then read it back the way you'd use it at the table. Every permission should be quick to call (it fits or it doesn't), every Burden should cost its owner something they use, and every Catch should give the GM something she can run with when its owner lets it bite. If a line could mean two things, fix it now, so it doesn't come up in the middle of a fight.
 
 ## What money cannot buy {#what-money-cannot-buy}
 

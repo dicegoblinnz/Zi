@@ -5,7 +5,7 @@ order: 21
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 The Oracle is three d20s. It's how the world makes up its mind when nobody at the table wants to decide.
@@ -97,7 +97,7 @@ It's two in the morning, so the GM says it's likely. She rolls Fate 11 and Bane 
 7.  It earns you a reputation.
 8.  You avoid a consequence you had coming.
 9.  A complication you feared doesn't happen.
-10. You gain a connection with someone.
+10. You gain a thread with someone.
 11. You recover something you thought you'd lost.
 12. You learn something about the situation that changes what you do next.
 

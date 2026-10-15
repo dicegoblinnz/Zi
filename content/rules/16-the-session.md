@@ -5,7 +5,7 @@ order: 16
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 A session is one night of Zi'Dara, and it's got a shape.
@@ -15,7 +15,7 @@ Here's that shape for a three-hour night. Stretch it or squeeze it to fit your t
 
 | Part | Time | What happens |
 | --- | --- | --- |
-| Opening | 20 min | Recap, downtime, the party sheet, a check-in, Sparks back. |
+| Opening | 20 min | Recap, downtime, the party sheet, a check-in, Resolve back. |
 | Planning | 20 min | The crew decides what it's doing tonight. |
 | Confrontation | 90 min | The job, the fight, the chase or the ball. |
 | Aftermath | 30 min | What it cost, and what it changed. |
@@ -27,7 +27,7 @@ Here's that shape for a three-hour night. Stretch it or squeeze it to fit your t
 2.  **Downtime.** The four pressures land, then everyone spends their slots.
 3.  **Read the party sheet.** Go through the Goal, every Aspiration and every faction.
 4.  **Check-in.** "Anything anyone wants to flag before we start?"
-5.  **Sparks.** Everyone starts the session with all their [Sparks](#s-spark), one for each Title, because they come back every downtime.
+5.  **Resolve.** Everyone starts the session with all their [Resolve](#s-resolve), one for each Title, because it all comes back after downtime.
 
 Take turns doing the recap, so it isn't always the same person. If the log doesn't jog anyone's memory, the GM fills in the gaps.
 
@@ -39,7 +39,7 @@ Take turns doing the recap, so it isn't always the same person. If the log doesn
 
 ### The planning scene {#s-planning}
 
-Let them plan, and answer their questions honestly: who's on the door, or when the guard changes. Anything a permission plainly covers knowing, they know. When the plan's good enough to start, start, even if it isn't finished. Nobody can plan for everything, and that's what a Spark's for: *"I paid this guard last week."*
+Let them plan, and answer their questions honestly: who's on the door, or when the guard changes. Anything a permission plainly covers knowing, they know. When the plan's good enough to start, start, even if it isn't finished. Nobody can plan for everything, and when the plan goes sideways, they've still got their Resolve to push through it.
 
 If the planning's still going after twenty minutes, make a move. Something in the world shifts, and the plan has to start now.
 
@@ -61,8 +61,9 @@ The log is one sentence a session, written by a different player each time, in a
 
 -   **Play anyway**, if most of the crew's there. Their character's off doing something else, or quietly in the background. Nobody plays them unless their player said that's fine, and nothing lands on a character whose player isn't there.
 -   **They still get their downtime.** They can tell someone what to spend their slots on, or spend them when they're back.
+-   **Their threads still work.** If someone strains a thread they share with the missing character, it's strained on both sheets, so tell the player when they're back, and they can play the strain from there (see [Playing the strain](#s-playing-the-strain)).
 -   **Bring them back in fast.** Open their first scene back with them in the middle of something.
 
 ## Sharing the Spotlight {#sharing-the-spotlight}
 
-Keep a rough count of who's had a moment tonight. Before the session ends, everyone should have had at least one problem that was theirs to solve. If someone's had a quiet night, bring them [trouble](#s-trouble-gm), or aim the next scene at their Aspiration. There's more in [A moment for each character](#s-spotlight).
+Keep a rough count of who's had a moment tonight. Before the session ends, everyone should have had at least one problem that was theirs to solve. If someone's had a quiet night, aim the next scene at their Aspiration or at someone they've got a thread with, or put something in it one of their Catches could bite on, like a forester in the market for Wren's *Wanted* longbow. Whether it bites is up to them (see [Catches and Resolve at the Table](#s-catches-gm)). There's more in [A moment for each character](#s-spotlight).

@@ -5,7 +5,7 @@ order: 27
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
 Twenty places you can run tonight, with the people and the secrets already in them.
@@ -509,11 +509,11 @@ Then she telegraphs. "Jessamy looks at Dorrie through the grille: 'No ticket, no
 
 **Dorrie** fires Cold Reader first, which is free once a scene, and asks what Jessamy's feeling. "She's frightened, and not of you. Every time anyone goes near that stair she stops breathing." Then Dorrie leans on the counter and works on the missing ticket: the clerk sent her, and he's lost it. That's her Talk, and her Title, *read a room in a glance* and *make a lie sound like old news* all fit, so with the action it's 4 steps, a d8. She puts it on *Paperwork* and rolls the stake's d6 with it. Her d8 lands on 8, its top face, and the stake rolls 2. Jessamy writes her a new ticket. Dorrie's Aura is already full, so the top face goes to Bram and pays back his tie.
 
-**Vesk**'s at the strongroom door under the stair, behind Bram's back. Her Locks is her Title, *pick a mechanical lock*, *know how a lock's built* and her picks, so with the action it's 5 steps, a d10. She rolls 7, and the stake's d6 can't beat that, so the door swings open. With *Locked* and *Paperwork* both gone, the key's theirs, ticket and all.
+**Vesk**'s at the strongroom door under the stair, behind Bram's back. Her Locks is her Title, *pick a mechanical lock*, *know how a lock's built* and her picks, so with the action it's 5 steps, a d10. She rolls 7, and the stake's still on the 2 it rolled against Dorrie, so the door swings open. With *Locked* and *Paperwork* both gone, the key's theirs, ticket and all.
 
 **Isolde**'s been at the foot of the stair since they came in, because that's where the sweet smell's strongest. She Studies the house, starting from The dead and feeling for whoever's up there. Her first Title and *speak with the recently dead* both fit, so with the action it's 3 steps, a d6. The Pledge House is Challenge 3, so she rolls its d6 too. She rolls 5, and the house rolls 4. She asks what's upstairs, and the GM gives her the hidden tag: *The Master's Been Dead a Month*. "He's up there in his chair, and he's been there four weeks. He isn't happy about what's happening to his shop."
 
-End of the round. Jessamy's d6 rolls 2 against Dorrie's Confidence d6, which rolls 5, so it doesn't land. The Rudd's d6 rolls 6 against Bram's Armour d6, which rolls 3, so it does, and the GM names it: he's on the floor. Bram offers his plate instead, because he isn't leaving that stair, and the GM takes the swap. His Armour's a d4 now. Quill was answered, so the scene clock only takes its usual step, down to a d6.
+End of the round. Jessamy's d6 rolls 2 against Dorrie's Confidence d6, which rolls 5, so it doesn't land. That was everything aimed at her Confidence, so it goes up a size, to a d8. The Rudd's d6 rolls 6 against Bram's Armour d6, which rolls 3, so it does, and the GM names it: he's on the floor. Bram offers his plate instead, because he isn't leaving that stair, and the GM takes the swap. His Armour's a d4 now. Quill was answered, so the scene clock only takes its usual step, down to a d6.
 
 That changes the whole scene. Jessamy's been giving the street its pledges back before the Rudds can sell them, and she's been terrified of exactly this. The crew knows the tag now, so any of them can bring it into a roll for 1 Aura. Next round Dorrie won't need to beat her at all. She can lean on the grille and ask, quietly, how long he's been up there.
 :::

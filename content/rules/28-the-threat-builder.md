@@ -5,10 +5,10 @@ order: 28
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-13
+updated: 2026-10-16
 ---
 :::quote
-There's no monster manual here, because you don't need one. A threat is a Challenge and a few tags.
+You don't need a page of numbers for every monster. A threat is a Challenge and a few tags.
 :::
 
 This chapter's just the procedure. [Running the Game](#s-building-threats) has the thinking behind it, and [The Bestiary](#bestiary) has forty threats built this way.
