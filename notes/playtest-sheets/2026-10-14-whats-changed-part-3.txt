@@ -1,0 +1,248 @@
+Z I P L AY T E S T · 1 4 O C T O B E R 2 0 2 6
+
+
+What’s changed, part 3
+Here’s what’s changed since part 2. The big one is archetypes: every Title is one now, and each has
+something only it can do. A few things everyone used to do have gone to one of them. Where this says it
+replaces something, go with this one. Everything else in parts 1 and 2 still stands.
+
+   AT A G L A N C E
+    1    Archetypes: your Titles become archetypes, and                   4   Boons and Banes: they stay, minus two that
+         each one has something only it can do                                belong to archetypes now
+    2    The archetypes: all sixteen, and what 1 Aura gets                5   Still to come: traits, Confidence and a few loose
+         each one                                                             ends
+    3    Changes for everyone: leading, areas, wards,
+         healing, Study and hiding
+
+
+
+1 Archetypes
+   R E P LAC E S    Titles as they were, and the trait on each one.
+
+Every Title is an archetype now, like Guardian, Healer or Shadow. An archetype gives you permissions the way a Title did,
+and it has a mechanic of its own, something only that archetype can do.
+
+    Your Title is the name you give your archetype. Bram’s a Guardian, and his Title is The wall that held the harbour gate. It
+    still counts 1 on any roll it fits.
+    Got a character already? Pick the archetype that fits each of your Titles, and write it next to the Title on your sheet. If
+    none of them fits, tell me.
+    You start with two archetypes, each with three permissions. A new one comes when your Aspiration climbs past d12,
+    and it starts with one permission.
+    Permissions haven’t changed. They have to fit inside your Title, and you can have six on each at most.
+    The mechanic takes the place of your Title’s trait. Keep the traits you’ve got for now, until we’ve sorted out where
+    traits go (see section 5).
+    On most archetypes, 1 Aura adds +2 to one die on its mechanic. Spend it after you roll, once you know you need it.
+    A die the +2 takes to its top face, or past it, doesn’t give you Aura, though a Warrior ’s still explodes.
+    Take the same archetype twice and its +2 becomes +3, three times and it’s +4, and so on.
+    You still get a Spark for each archetype, and for now each one still makes your Confidence a size bigger.
+
+   E X AM P LE
+   Bram’s Defending, and a d10 comes at him. It lands on 5 and his d6 Armour comes up 4, so he spends 1 Aura to make
+   the 4 a 6, and it’s stopped. That’s his d6’s top face, but the +2 got it there, so there’s no Aura back. If he’d taken
+   Guardian twice, it’d be a 7.
+
+
+2 The archetypes
+Here are all sixteen, in alphabetical order, with what each one’s mechanic does and what 1 Aura gets you on it.
+
+  Bloodsworn          Elementalist       Face    Guardian      Healer    Hunter    Illusionist   Leader    Maker     Oracle
+
+  Scholar          Shadow      Shifter      Summoner      Teleporter    Warrior
+
+
+
+Zi · What’s changed, part 3 · 14 October 2026                                                                              Page 1 of 5
+Bloodsworn                    Every Hurt you take adds 3 steps to your action. Take one on purpose as you act and the steps go on
+                              that roll. Take one any other way and they go on your next action.
+                               AU R A     There’s no +2 on this one. Spend as much Aura as you like, plus your action, and clear that
+                                          many of your own Hurt boxes.
+                                Two telegraphs land on you this round and you take two Hurts, so your next action’s got 6 more steps.
+
+
+Elementalist                  Areas are yours now. One of your dice can be your area instead of an intent: a burst (that many squares
+                              out from a point), a cone (that long the way you face, and as wide at the end) or a line (twice as far,
+                              straight out). It takes one of your splits, and it doesn’t cost Aura any more. Everyone the story puts in it
+                              defends against your other die, and you can always make it smaller.
+                               1 AU R A    +2 to your area die.
+                                Ash splits her 5 steps of fire into a d6 and a d4, and the d4’s her burst. It rolls 2, but the five guards are
+                                three squares out, so she spends 1 Aura and it’s a 4. All five defend against her d6.
+
+
+Face                          Spend your action and build your dice the usual way, but don’t roll them. Put them on a threat as
+                              influence, and they stay until you use them or the scene ends. At any point before one of its telegraphs
+                              lands, roll your influence against it. Each of its dice that your best influence die beats is yours: say what
+                              it does instead, as long as it fits the story, like hitting one of its own or the ground. Then the influence is
+                              spent.
+                               1 AU R A    +2 to one of your influence dice.
+                                Dorrie’s got a d8 of influence on the bandit captain. He telegraphs two d6s at Bram, and she rolls her d8
+                                against them: 5. They come up 3 and 6. The 3’s hers, so that cut lands on his own sergeant, and the 6
+                                still goes at Bram.
+
+
+Guardian                      When you Defend, every attack aimed at friends within your stride comes at you, whichever enemy it’s
+                              from. Roll your Armour once for each die, or your Confidence against fear, lies and pressure, then choose
+                              which roll blocks which. To get past you, threats have to pull the crew apart.
+                               1 AU R A    +2 to one of your Armour dice.
+                                Three goblins telegraph a d6 each at Vesk, Wren and Isolde, all within Bram’s stride. He Defends and
+                                takes all three. They land 6, 4 and 1, and his d6 Armour rolls 5, 4 and 2. The 4 holds the 4, because ties
+                                go to him, and the 2 holds the 1. He spends 1 Aura to make the 5 a 7 against the 6, and nothing gets
+                                through.
+
+
+Healer                        Only a Healer can make a heal roll, and it works the way it did: an action rolled against the patient’s heal
+                              die, and each die that beats it clears a box. A heal reaches one person. Split it to clear more boxes, or to
+                              reach a second person you can touch. Quick heal is still for everyone (see section 3).
+                               1 AU R A    +2 to one of your heal dice.
+                                Say you’re healing Vesk, who’s got one Catch on her Hurt track, so her heal die’s a d8. You roll 7 and her
+                                d8 comes up 8, so you spend 1 Aura and make your 7 a 9. She clears a box.
+
+
+Hunter                        Spend your action and roll against a creature to mark it. Win and it’s Marked, a special condition carrying
+                              the die you won with. It doesn’t give a step and nobody spends it. Instead, anyone who acts against it
+                              rolls the Mark die too, as one more die against it. It fades a size every round like any condition.
+                               1 AU R A    +2 to the Mark die when it’s rolled. It’s your Aura, whoever’s rolling.
+                                Wren marks the Warden with a d10 and wins, so it’s Marked d10. Bram swings at it with his d8 and rolls
+                                the Mark d10 with it. Next round it’s Marked d8.
+
+
+
+
+Zi · What’s changed, part 3 · 14 October 2026                                                                                       Page 2 of 5
+Illusionist                   Spend your action and roll your illusion dice against the threats’ Challenge. Meet or beat it and they
+                              believe your illusion until they interact with it or try to get through it: a clone of you for them to hit, a wall
+                              to run around, a crate to hide under. To see through it before then, a threat has to beat what you rolled.
+                               1 AU R A   +2 to one of your illusion dice.
+                                Say you throw a wall across the corridor. Your d8 rolls 6 and the guards’ d6 rolls 6, which is enough. They
+                                run the long way round, and if one stops to look hard at it, he has to beat your 6.
+
+
+Leader                        Only a Leader leads now. An order or a rallying song is an action: build it from your set action, then hand
+                              its steps out however you like to friends who can hear or see you. They add them to their own rolls this
+                              round, and the steps don’t have to fit.
+                               1 AU R A   +2 to one of a friend’s dice, on a roll your steps went into.
+                                Bram barks orders from the doorway, 4 steps off his Talk, and gives 2 to Vesk and 2 to Wren. Vesk’s
+                                Sneak goes from a d8 to a d12. She rolls 6 against the guard’s 7, so Bram spends 1 Aura and she’s on 8.
+
+
+Maker                         Spend your action and roll against the item’s size: a d4 for something tiny like a ring, a d6 for something
+                              small like a dagger, a d8 for something medium like a shield, a d10 for something large like armour, and a
+                              d12 for anything intricate. Each die that beats it gives the item a tag for the scene.
+                              A tag is a special property, and it follows the same rules as a permission. A ring that gives you an extra
+                              step to dodge is fine, and a ring that gives you haste isn’t. Whoever’s holding the item can break a tag
+                              instead of taking a Hurt.
+                               1 AU R A   +2 to one of your making dice.
+                                Vesk hands you her ring, a d4. Your d8 rolls 6 against its 3, so the ring gets a tag for the scene, an extra
+                                step when she dodges, and you hand it back. When a blade gets through, she can break that tag instead
+                                of taking the Hurt.
+
+
+Oracle                        Spend your action and build it from your set action, but don’t roll. Take its steps off the threats’
+                              telegraphs however you like. Every step takes a telegraph’s die down a size, so 2 steps turn a d8 into a
+                              d4, and a die with no steps left is gone.
+                               1 AU R A   2 more steps to take off. Take Oracle twice and it’s 3 more, three times and it’s 4, and so on.
+                                Say you’ve got 4 steps. A brute telegraphs a d8 at Wren and a d6 at Bram. You take 2 off the d8, so it’s a
+                                d4, and 2 off the d6, so it’s a d2. Then you spend 1 Aura for 2 more, and the d4’s gone.
+
+
+Scholar                       Everyone’s Study finds a hidden tag or a straight answer now (see section 3). When you win a Study, you
+                              can introduce a truth instead: something that wasn’t obvious to anyone else. Say it, and it’s true and it
+                              matters here. It counts as a permission for the crew this scene.
+                               1 AU R A   +2 to one of your Study dice.
+                                Isolde wins her Study on the Warden and says the chalk circle it’s bound to has a crack in it. Now it
+                                does, and anyone in the crew can use that this scene.
+
+
+Shadow                        When you get into hiding, the dice you rolled to hide go into your shadow pool. They ’re the things you
+                              noticed while nobody was looking. Add them to any roll after that, talking and Study included, as their
+                              own dice or as steps (a d8 is 4 steps). A die’s gone once you use it, and the next time you hide, your pool
+                              starts again with the new dice. Coming out of hiding gives you an extra action, the same as anyone.
+                               1 AU R A   +2 to your roll to hide, or to a shadow die when you use it.
+                                Vesk slips into the rafters with her Sneak, a d8, and gets away with it, so the d8 goes in her pool. Later
+                                the steward’s lying to her face, and she adds it to her Talk, because she saw him pocket the letter from
+                                up there.
+
+
+
+
+Zi · What’s changed, part 3 · 14 October 2026                                                                                        Page 3 of 5
+Shifter                       You collect animal tags, the way a Summoner catches souls. Spend your action, pick one and roll your
+                              Shifter dice against its die: most are a d4, swimming’s a d6, flying’s a d8 and a breath attack’s a d12. Beat
+                              it and the tag’s yours until downtime. It lets you do what the animal does, and it counts as a line when it
+                              fits. Split to go for more than one, and strip one of your animal tags instead of taking a Hurt if you want
+                              to.
+                               1 AU R A   +2 to one of your Shifter dice.
+                                Say you want wings. Flying’s a d8, and your d10 rolls 7 against its 5, so you’ve got wings as an animal tag
+                                until downtime. When an axe gets through, you can strip the wings instead of taking the Hurt.
+
+
+Summoner                      Catching souls and summoning are the Summoner’s now, and nobody else can do them. Everything else
+                              about summoning in part 2 still stands: your souls live in your summoning attunement, you catch one
+                              when a creature falls, and you summon against your souls’ dice.
+                               1 AU R A   +2 to one of your dice when you’re catching or summoning, the same as before.
+                              The summoning Boon’s gone. Take Summoner twice for +3, three times for +4, and so on.
+
+
+Teleporter                    Your stride can be a teleport of up to 10 units. If you’re a Guardian as well, your Defend reaches every
+WO R K I NG NA M E            friend within those 10 units, because you jump to each of them.
+                               1 AU R A   Open a portal and link it to another spot within 10 units. It lasts the round, and anyone who
+                                          steps in comes out the other end.
+
+
+Warrior                       Your dice explode when you fight. A die that lands on its top face gives you 1 Aura as usual, then you roll
+                              it again and add the new number on, the only time dice add apart from moving. It keeps going as long as
+                              it keeps landing on top, so a d8 that comes up 8, then 5, is a 13.
+                               1 AU R A   +2 to any one of your dice in a fight. If that takes it to its top face or past, there’s no Aura for
+                                          it, but it still explodes.
+
+
+3 Changes for everyone
+   R E P LAC E S   The rules each line names.
+
+    Leading is the Leader’s now. Nobody else can hand their steps out to friends, so lead or inspire comes off everyone
+    else’s list of actions. Working together hasn’t changed: anyone can still put their action into the same thing as a combo.
+    Areas are the Elementalist’s. Nobody else can make a die their area, so that’s off the Aura list. Sweep weapons still go
+    at everyone in your reach, free.
+    Wards and blessings reach one person. Warded or Blessed goes on one friend, and the second die of a split can put it
+    on another friend you can touch. A Healer ’s heals work the same way, and that replaces healing a group with an area.
+    Only a Healer can make a heal roll. Quick heal’s still for everyone: 1 Aura clears one box on one person, no roll, and it
+    still takes your action. Regen, and traits that say they heal, still work.
+    Study finds a hidden tag or a straight answer. The third choice, something that helps, is gone, and a Scholar can
+    introduce a truth in its place. A Spark can still make an opportunity, for anyone.
+    Coming out of hiding gives you an extra action, whoever you are. It’s one extra action, even if you’re Unseen as well.
+
+   E X AM P LE
+   Isolde’s Ward is 5 steps. She splits it into a d6 and a d4, so Bram gets Warded d6, and Vesk, who’s right beside her,
+   gets Warded d4.
+
+
+
+
+Zi · What’s changed, part 3 · 14 October 2026                                                                                        Page 4 of 5
+4 Boons and Banes
+   R E P LAC E S   Two of the Boons.
+
+    Boons and Banes stay. A Boon still costs two permission slots, now on one of your archetypes, and a Burden on
+    attunement still pays for one.
+    Summons is gone. Taking Summoner twice does that job now.
+    Defend’s pull from two is gone. Pulling more than one enemy’s attack onto you is the Guardian’s now. Its Burden, you
+    can’t Defend, stays.
+    Everything else on the list, and the Burdens, works the same.
+
+
+5 Still to come
+These are next on the list, so play them as they stand for now.
+
+    Traits: where they go, now that your archetype’s mechanic has taken their place. Keep yours until then.
+    Confidence: what makes it bigger, along with traits.
+    The Teleporter needs a better name.
+    Taking the Teleporter or the Bloodsworn twice: neither has a +2 to grow, so what you get is still to come.
+    The Shifter: where you find your animal tags in the first place.
+    Permissions like teleport, take an animal’s form or cast illusions: whether they still work without the archetype.
+
+Have a go with your archetypes and tell me how they play, especially the new ones.
+
+
+
+
+Zi · What’s changed, part 3 · 14 October 2026                                                                      Page 5 of 5
+

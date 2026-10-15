@@ -1,0 +1,142 @@
+Z I P L AY T E S T · 1 3 O C T O B E R 2 0 2 6
+
+
+What’s changed, part 2
+Here’s what we’ve changed since the last sheet. Where this one says it replaces something, go
+with this one. Everything else in the last sheet still stands.
+
+   AT A G L A N C E
+    1     Items: plain items, what you carry and your bag               5   Summoning: souls in your attunement (replaces
+    2                                                                       the last sheet’s)
+          Attunement: how an item grows, and what it costs
+    3                                                                   6   Boons and Banes: Banes only come on
+          Titles and Catches: Titles don’t have Catches any
+                                                                            attunement now
+          more
+    4                                                                   7   Permissions: every one needs two parts
+          Taking the hit: anyone can step in front of an
+          attack                                                        8   Splitting past a d12: made clearer
+
+
+
+1 Items
+   R E P LAC E S   The items and resources on your sheet.
+
+    Plain items are just what they are. A sword’s a sword. It counts as a line when it fits, so it’s a step on your roll, and it
+    lets you do what a sword does. Each piece of plain armour makes your Armour a size bigger.
+    Resources are just items now.
+    What you carry: 3 equipment (what you wear or wield, like weapons, armour and shields), 3 utility items (tools and
+    things you use up, like rope, a lantern or a smoke bomb) and a keepsake, something that matters to your character.
+    Your bag holds 10 more. Getting something out of it still takes your action.
+    Attunement is on top of all that. You start with 2 attunement slots, and attuned things don’t count towards what you
+    carry. If both of yours are equipment, you’ve got 5 pieces of equipment.
+    When something breaks, it’s something you carry. Attuned things are magic, and they can’t be broken.
+
+
+2 Attunement
+   NE W     How an attuned item grows.
+
+An attuned item has permissions of its own, and it grows in three stages. Each new stage needs a material, found in the
+story or bought, and every new permission takes a downtime slot. Each stage can also take on more, for a price:
+
+  S TA GE                     PE RMI S S I ON S   I T CA N A DD                                                      IN ALL
+
+  Awakened                    1                   1 more with a Catch                                                2
+
+  Tempered                    2                   2 more with a Burden (the Catch becomes the Burden)                4
+
+  Perfected                   3                   3 more with a Burden and a Catch                                   6
+
+    That’s six permissions at most, with one Catch and one Burden. You can’t take a Burden before Tempered.
+    You start with your attuned things at Awakened, and you can give each one its Catch when you make your character.
+    You can hand an attuned item to a friend with a free attunement slot. Its permissions, its Catch and its Burden all go
+    with it, and so does a Boon its Burden paid for.
+
+
+
+
+Zi · What’s changed, part 2 · 13 October 2026                                                                            Page 1 of 3
+3 Titles and Catches
+   R E P LAC E S   The Catch on each Title.
+
+    Titles don’t have Catches any more. A Title is its trait and its permissions.
+    Catches come from attunement and from Hurt, the Catch you write when you fill a bar.
+    Letting a Catch bite works the same: as often as you like, real trouble every time, and 1 Aura each time.
+    You don’t need a Catch on your sheet to let trouble bite. Bring real trouble on yourself in the story and take 1 Aura. A
+    written Catch just gives you trouble that’s ready to go.
+
+
+4 Taking the hit
+   NE W   For everyone, summons included.
+
+    When an attack’s aimed at someone else within your stride, you can step in front of it and take it instead. That goes for
+    players, NPCs and summons alike. It’s free, and you don’t roll to defend: you just take it.
+    There’s a Boon and a Bane for it. Boon: when you take the hit, you can spend 1 Aura to roll your Armour against it, like a
+    Defend that doesn’t use your action. Bane: taking the hit costs you 1 Aura.
+    This replaces the Step in Boon from the last sheet.
+
+
+5 Summoning
+   R E P LAC E S   Summoning in the last sheet.
+
+    Souls go in attunement. A summoning attunement holds souls the way an item holds permissions, and the souls you
+    catch are its material: 1 at Awakened (2 with a Catch), 2 at Tempered (4 with a Burden) and 3 at Perfected (6 with a
+    Burden and a Catch). Starting souls are d4s.
+    Catching a soul: when a creature falls, spend your action and roll your Summon dice against its Challenge. Beat it and
+    its soul goes into one of your utility slots, and miss and that soul’s gone. In downtime, put it into your summoning
+    attunement. You can swap a soul in your attunement for one you’re carrying whenever you’ve got the slot.
+    Summoning takes your action, and it needs a reason in the story. Nobody calls up a horde to drink at the tavern. Roll
+    your Summon dice against your souls’ dice, and each of your dice brings out one soul it beats. Split to go for more.
+    Aura: 1 Aura adds +2 to one of your dice when you’re catching or summoning. A tie still costs 1 Aura to win.
+    A soul is what it was. A caught courtier talks, a hound tracks, a Warden fights. Each one rolls its own die for whatever
+    it does.
+    Summons act in the round like anyone. One hit takes a summon out, and its soul goes back to its slot, so you can call it
+    again. Like anyone, a summon can take the hit for someone.
+    Blocking: as its action, a summon can pull the attacks aimed at someone onto itself and roll against each. Each one it
+    beats is stopped. The first one it loses kills it, and any others it loses go through to whoever it was protecting.
+    At the end of a scene, roll each summon’s die. On 3 or lower it goes back to its slot. They all go back at downtime.
+    Still true: summons can’t combo, and their top faces don’t give Aura.
+    The summoning Boon now adds +1 to that Aura bonus each time you take it: +3, then +4.
+
+  E X AM P LE
+  Sable’s Summon action is a d10, and she’s got three souls: a rat swarm (d4), a hound (d6) and the harbour Warden (d8).
+  She splits into a d6 and a d4 and goes for the two small ones. Her d4 comes up 2 against the rats’ 3, so she spends 1
+  Aura to make it a 4, and the rats pour out. Her d6 beats the hound.
+
+
+
+
+Zi · What’s changed, part 2 · 13 October 2026                                                                       Page 2 of 3
+6 Boons and Banes
+   R E P LAC E S   Parts of Boons and Banes in the last sheet.
+
+    Banes only come on attunement now, as a Burden. Titles never take them. A Burden is worth two permissions on
+    that attuned thing, or a Boon for you.
+    Boons still cost two permission slots on a Title.
+    The Bane column in the last sheet is now the list of Burdens an attuned thing can carry.
+    On the menu, Take the hit is new (see section 4), Summons is now +1 to your summoning Aura bonus, and Step in is
+    gone. So three summoning Boons now make your bonus +5, not 6 steps an Aura.
+
+
+7 Permissions
+   R E P LAC E S   “Write each one with a doing word and what you do it to.”
+
+    Every permission has two parts, and it isn’t finished until it’s got both: the doing word, and the part that says how,
+    what or where.
+    Deceive on its own is only half a permission. Deceive through actions is finished. It covers feints and misdirection when
+    you fight or sneak, but not talking your way past someone or digging for information.
+    More finished ones: fight with a sword, talk my way past a guard, climb sheer walls.
+
+
+8 Splitting past a d12
+   M AD E C LE AR E R Not a change, just easier to read.
+
+
+Going past 6 steps gives you a split on top of the one your action gives. So 8 steps on one action can be three dice, like a
+d6, a d6 and a d4.
+
+
+
+
+Zi · What’s changed, part 2 · 13 October 2026                                                                        Page 3 of 3
+

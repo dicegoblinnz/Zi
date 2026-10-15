@@ -1,0 +1,219 @@
+Z I P L AY T E S T · 1 6 O C T O B E R 2 0 2 6
+
+
+What’s changed, part 4
+Here’s what’s changed since part 3, and it all came out of the playtests. Sparks are now Resolve,
+Confidence swings up and down during a scene, bonds are threads you can lean on, and there’s a new
+archetype, the Bard. Where this says it replaces something, go with this one. Everything else in parts 1
+to 3 still stands.
+
+   AT A G L A N C E
+    1    Resolve: replaces Sparks, and pays for pushing              5    Bonds and threads: lean on someone for Resolve,
+         yourself                                                         then mend it
+    2    Aura: what it’s for now                                     6    The Bard: a new archetype for nerve
+    3    Confidence: a die that swings up and down during            7    Boons and Banes: three rows that change
+         a scene                                                     8    Your sheet for now: where it all goes on the 13
+    4    The wound die: the heal die’s new name                           October sheet
+                                                                     9    Still to come: traits and a few loose ends
+
+
+
+1 Resolve
+   R E P LAC E S   Sparks.
+
+Resolve is your character pushing themselves, so it pays for the big stuff. You have as much Resolve as you have Titles, so
+2 to start, and you can’t hold more than that.
+
+    Spend 1 Resolve to:
+         take an extra action this round
+         reroll a roll you just failed. You choose whether it’s all your dice or just one, and the threat’s dice stay where they
+         landed.
+         go beyond what a permission normally does. If you have to make a case for why it’s normal, it’s going beyond. That
+         used to cost 1 Aura.
+         hold your ground when fear, lies or pressure get through (see section 3)
+         go at a threat when you’re shaken (see section 3)
+    Get it back:
+         1 at the end of every scene, and all of it after downtime
+         1 when your Catch bites in a big way, one that changes the scene or costs you something you wanted. That’s
+         instead of the usual 1 Aura, and it’s your call when.
+         1 when the GM rewards great roleplay, like facing your fear or keeping a promise to yourself
+         1 when you strain a thread (see section 5)
+    Sparks are gone, and so are making an opportunity and adding a permission for the scene.
+    So is GM trouble. The GM doesn’t offer you trouble for a Spark any more, and nobody turns trouble down. Letting your
+    Catches bite is up to you now.
+
+   E X AM P LE
+
+   Isolde speaks with the recently dead for free. Calling up someone who died a hundred years ago is going beyond, so
+   that’s 1 Resolve now.
+
+
+
+
+Zi · What’s changed, part 4 · 16 October 2026                                                                            Page 1 of 4
+2 Aura
+   R E P LAC E S   Going beyond for 1 Aura.
+
+Aura keeps the small stuff:
+    bringing in something that isn’t on your set action
+    keeping a Catch quiet, or turning it your way for a moment
+    winning a tie when you’re acting
+    what 1 Aura gets your archetype
+    a quick heal
+    borrowing a permission through a thread (see section 5)
+
+You get it back the same ways as before: top faces, letting a Catch bite, and the GM when a great setup doesn’t land.
+
+
+3 Confidence
+   R E P LAC E S   Confidence counting your Titles, bonds and clothes, and coming back in downtime.
+
+Confidence is how you’re holding up right now. It’s still the die you roll against fear, lies and pressure, and now it moves
+up and down during a scene. It never goes below d2 or past d12.
+
+    Start every scene on d6. Clothes that fit the scene start you a size up. Titles and bonds don’t make it bigger any more.
+    Fear is a telegraph. The GM telegraphs fear, lies and pressure like any attack, say a dragon’s roar as a d10 at everyone’s
+    Confidence, and you answer it, Defend or let it ride, the usual way. That’s your fear check, and there isn’t another one.
+    Stop all of it and your Confidence goes up a size. Taking a threat down sends it up a size too. If nothing’s aimed at
+    you, it doesn’t move.
+    For each one that gets through, you choose: let it shake you and drop a size, bury it and take a Hurt, or hold your
+    ground and spend 1 Resolve so neither happens. That’s instead of the GM naming the cost.
+    Fill a Hurt bar and write a Catch, and your Confidence drops a size as well.
+    Nothing takes it below d2. Anything that would is a Hurt instead, or 1 Resolve to hold your ground.
+    At d12 you’re fired up. Cash it in for an extra action, or to clear a Hurt box, and it drops back to d6.
+    At d2 you’re shaken. You won’t go at a threat, in a fight or face to face, unless you spend 1 Resolve each time you do.
+    Take a breath: spend your action and your Confidence comes up a size, as far as d6.
+    At the end of the scene it goes back to d6. Anything that should last is a Catch.
+
+  E X AM P LE
+
+  Dorrie walks into the duke’s ball in her best gown, so she starts on d8. She sees straight through the steward’s lie, so
+  she’s on d10. Then the duke’s sister cuts her down in front of the room, and it gets through. Dorrie doesn’t want to
+  lose her nerve now, so she buries it, takes a Hurt and stays on d10.
+
+
+  E X AM P LE
+  In a fight, a brute’s roar gets through to Bram two rounds running, and both times he lets it shake him: d6 to d4, then
+  d2. He’s shaken, so he spends 1 Resolve to go at it anyway.
+
+
+4 The wound die
+   R E NAM E D The heal die.
+
+
+Your heal die is now called your wound die, because a bigger wound is worse. It works the same way: a d6, a size bigger
+for each Catch on your Hurt track, and a heal has to beat it.
+
+
+Zi · What’s changed, part 4 · 16 October 2026                                                                        Page 2 of 4
+5 Bonds and threads
+   R E P LAC E S   Bonds and connections, and the Confidence a bond with three connections gave you.
+
+A bond is a person, someone in the crew or anyone else. Each connection you’ve got with them is a thread, one truth you
+two share, like a debt, a rescue, a secret or a shared past. The more threads, the deeper the bond.
+
+    Borrow through a thread: 1 Aura brings in their permission, the same as before, and it doesn’t strain anything. You
+    can’t borrow through a strained thread until it’s mended.
+    Strain a thread: lean on them in the story, like calling in the favour, using their name, dragging them into it or using
+    the secret, and take 1 Resolve. It’s free, it doesn’t take an action, and the thread’s now strained.
+    Mend it: make it right with them, by roleplaying it, doing them a favour or paying them, whatever suits them. That
+    happens in downtime or in a scene with them, not in the middle of the fight where you strained it. Then it’s whole
+    again.
+    Strain it again before it’s mended and it snaps. You still take the Resolve, but cross the thread out. When the last
+    thread goes, so does the bond.
+    New threads come the way connections did: three when you make your character (write one as a debt and you get a
+    fourth), from Grow, and when the Party Goal’s done.
+    A thread with someone in the crew goes on both your sheets and counts for both of you, so agree on it together. If
+    either of you strains it, it’s strained for both.
+
+  E X AM P LE
+
+  Vesk’s on Vane’s roof with no Resolve left. She drops the fence’s name to the guard captain, who’s in the fence’s
+  pocket, and takes 1 Resolve. Her thread with the fence, I owe him a debt I’d rather not discuss, is strained. After the job
+  she brings him a cut of the haul, and it’s mended.
+
+
+Playing the strain
+This is for when someone in the crew strains a thread with your character, so it stays honest both ways.
+
+The thread gives the reason. The strain is about that one truth, so nobody has to invent a grudge.
+
+ THE THRE A D              S TRA I N E D, I T S OUN DS L I KE                  I T’S ME N DE D W HE N
+
+ A debt                    “We’re square now. Aren’t we?”                      you pay it back or do them a turn
+
+ A rescue                  “I can’t keep pulling you out.”                     you save them, or finally say thank you
+
+ A secret                  “You swore you’d keep that.”                        you trust them with one of yours
+
+ A shared past             “That’s not who we are any more.”                   you go back to it together
+
+Say how it shows, and what would make it right. Play that and nothing bigger, and once they’ve made it right, let it go.
+
+Play it by what’s left. With two or more threads still whole, it’s a grumble and a “you owe me”. With one, it’s a real problem
+and you’ll say so. With none, you’re cold until they make it right, and one more pull snaps it.
+
+It never stops you working together in the moment. You still combo and still take the hit for each other.
+
+  E X AM P LE
+
+  Vesk’s thread with Bram is he carried me out of a fire, and I’ve never said thank you. She’s out of Resolve on a wall and
+  yells for him to haul her up again, so she strains it and takes 1 Resolve. Bram’s player says he’s starting to feel like her
+  ladder, and she can fix it by saying thank you. It was their only thread, so none are whole now, and he’s cold with her
+  until she makes it right. At the bar afterwards she finally says it. The thread’s mended, and she rewrites it now that it’s
+  said.
+
+
+
+
+Zi · What’s changed, part 4 · 16 October 2026                                                                            Page 3 of 4
+6 The Bard
+   NE W   A seventeenth archetype.
+
+
+Bard                          Lift them: spend your action, and every friend who can hear you goes up a size of Confidence, as far as
+                              d10. The last push to d12 has to be their own.
+                              Hold them: when fear, lies or pressure come at you or friends who can hear you, answer all of it with
+                              one roll of your song, as your action. Each telegraph your roll beats is stopped, and each one it doesn’t
+                              lands at once, the same as any answer you lose. Anyone who had all of it stopped goes up a size, as if
+                              they ’d stopped it themselves.
+                               1 AU R A   +2 to your song die.
+                                 A dragon roars at the whole crew, a d10 at everyone’s Confidence. Say you’re the Bard. You answer it
+                                 with your song, a d8 that comes up 6 against the roar’s 7, so you spend 1 Aura and make it an 8. Nobody
+                                 drops a size, and everyone goes up one.
+
+
+7 Boons and Banes
+   R E P LAC E S   Three rows on the list.
+
+    Sparks becomes Resolve: the Boon is +1 to your Resolve maximum, and the Burden is −1.
+    Confidence: the Boon starts you a size up every scene, and the Burden starts you a size down.
+    Going beyond: the Boon lets you go beyond once a scene without spending Resolve.
+
+
+8 Your sheet for now
+Until the sheet’s updated, here’s how to use the 13 October one:
+    Resolve goes in the Sparks stars. Your maximum is as many stars as you’ve got Titles, plus or minus a Resolve Boon or
+    Burden.
+    Confidence: ring the die you’re on in its row, and move the ring as it swings.
+    Threads go on your bonds’ connection lines, one each. Put a tick beside a line when it’s strained, cross it out if it snaps,
+    and if you’ve got a fourth thread with the same person, put it in Notes. Ignore the Three live box.
+    The heal die ring is your wound die.
+    The printed notes for Rolling, Aura, Sparks, Confidence and bonds still give the old rules, so go with this instead.
+
+
+9 Still to come
+These are still open, so play them as they stand for now:
+    Traits: where they go, now that your archetype’s mechanic has taken their place. Keep yours until then.
+    The Teleporter still needs a better name.
+    Taking the Teleporter or the Bloodsworn twice: what you get for it.
+    The Shifter: where you find your animal tags in the first place.
+    Permissions like teleport, take an animal’s form or cast illusions: whether they still work without the archetype.
+
+Tell me how Resolve and the swing feel at the table.
+
+
+
+
+Zi · What’s changed, part 4 · 16 October 2026                                                                                  Page 4 of 4
+
