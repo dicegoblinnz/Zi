@@ -206,7 +206,8 @@ function listView() {
       <p class="blurb">${esc(c.blurb)}</p>
       <button type="button" class="button primary" data-act="play" data-c="${esc(c.id)}">Play ${esc(c.name)}</button></div></article>`;
   return `<header class="cc-intro"><p class="kicker">Your phone at the table</p><h1>Characters</h1>
-    <p class="lede">Pick one of the crew, give them a name and play them from your phone. The counting’s done for you, and they’re saved on this phone, signal or not.</p></header>
+    <p class="lede">Pick one of the crew, give them a name and play them from your phone. The counting’s done for you, and they’re saved on this phone, signal or not.</p>
+    <p class="cc-paper">Playing on paper? Print a character sheet and the player reference from the <a href="/sheets/">Sheets page</a>.</p></header>
     ${saveNote()}
     ${mine.length ? `<section class="cc-sec" aria-labelledby="cc-mine"><h2 id="cc-mine">On this phone</h2><ul class="cc-mine">${mine.map(saved).join("")}</ul></section>` : ""}
     <section class="cc-sec" aria-labelledby="cc-crew"><h2 id="cc-crew">Pick from the crew</h2>

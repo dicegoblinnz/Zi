@@ -1,0 +1,59 @@
+---
+// The printable sheets. scripts/build-sheets.mjs builds both PDFs into
+// public/sheets/ and writes src/data/sheets.json, which this page reads.
+import Base from "../layouts/Base.astro";
+import built from "../data/sheets.json";
+
+const sheet = built["character-sheet"];
+const reference = built["player-reference"];
+const day = (iso) => new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-NZ", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+---
+<Base title="Sheets" current="sheets" description="Zi’Dara’s character sheet, one A4 sheet you can fill in on screen or print blank, and the player reference, ready to print.">
+  <main id="main" class="reading frame">
+    <div class="page sheets">
+      <header class="chapter-head">
+        <p class="eyebrow">Print and play</p>
+        <h1>Sheets</h1>
+      </header>
+      <p class="lede">Your character on one sheet of A4, and the rules you’ll reach for at the table on four more.</p>
+
+      <section class="card download" aria-labelledby="sheet-h">
+        <h2 id="sheet-h">The character sheet</h2>
+        <p>Two pages on one A4 sheet, printed back to back. The front’s for play: Aura, Armour, Resolve, Confidence, Hurt, conditions and your set actions, with the steps-into-dice ladder underneath. The back’s who you are: your Titles, what you’ve attuned and your bonds.</p>
+        <p>Type into it on screen and then print it, or print it blank and fill it in with a pencil.</p>
+        <a class="button primary" href={sheet.file} download>Download the sheet</a>
+        <p class="meta">PDF · {sheet.pages} pages · {sheet.kb} KB · fillable</p>
+      </section>
+
+      <section class="card download" aria-labelledby="reference-h">
+        <h2 id="reference-h">The player reference</h2>
+        <p>The quick reference from the rules, in four parts: making and growing a character, archetypes, Aura and the round, rolling, and threats, moving and gear. There’s nothing to fill in, so keep one by the dice.</p>
+        <a class="button primary" href={reference.file} download>Download the reference</a>
+        <p class="meta">PDF · {reference.pages} pages · {reference.kb} KB</p>
+      </section>
+
+      <section class="printing" aria-labelledby="print-h">
+        <h2 id="print-h">Printing the character sheet</h2>
+        <ul>
+          <li>Print on A4 at actual size (100%), so the boxes stay big enough for a pencil.</li>
+          <li>Print double-sided and flip on the long edge, so the back’s the right way up.</li>
+          <li>Filled it in on screen? Save a copy before you print, so your typing’s kept.</li>
+        </ul>
+        <p>Both are built from the rules on this site, so they change when the rules do. These ones were built on {day(sheet.built)}.</p>
+      </section>
+    </div>
+  </main>
+</Base>
+
+<style>
+  .sheets .lede { margin: 0 0 2rem; }
+  .download { padding: 1.4rem 1.4rem 1.2rem; margin: 0 0 1.5rem; }
+  .sheets h2 { font-family: var(--display); font-weight: 600; font-size: 1.35rem; letter-spacing: 0.02em; margin: 0 0 0.6rem; }
+  .download p { margin: 0 0 0.8rem; }
+  .download .button { margin-top: 0.4rem; }
+  .download .meta { margin: 0.7rem 0 0; color: var(--muted); font-size: 0.9rem; }
+  .printing { margin-top: 2.2rem; }
+  .sheets ul { padding-left: 1.3rem; }
+  .sheets li + li { margin-top: 0.35rem; }
+  .sheets li::marker { color: var(--gold-ink); }
+</style>

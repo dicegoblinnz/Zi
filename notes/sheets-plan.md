@@ -61,3 +61,15 @@ Mo's weekly limit is tight. Work in this chat only, read only the parts of files
 - Work on the `sheets` branch, made from `website`, so the companion's already in it. Its preview is https://sheets-zi.storyforgenz.workers.dev. If `website` gets new commits, merge them in before you finish.
 - Commit with the attribution lines, then send Mo the preview link and the two PDFs. List any calls you made at the bottom of this file.
 - Merge to `main` only when Mo says so.
+
+## Calls I made
+
+- **What's on each side.** Titles, attunement and bonds fill the back, so traits, the Kit (equipment, utility, keepsake and the bag) and notes went on the front with play.
+- **How many rows.** Seven rows for set actions of your own (Appendix A had nine), three trait rows (two to start), five Hurt bars (three, and two extras like Unyielding's), four conditions, six Titles with six permission lines each, two attunement slots with six lines each, and six bonds with four threads each. Vesk, Bram and Dorrie's long Title all fit.
+- **Armour has a "now" box** beside "full", because Armour drops as a consequence and comes back to full in downtime.
+- **Dropped from the sheet, kept in the reference:** what Aura and Resolve buy, your archetype's +2, building a roll and your action. The sheet keeps short labels like "full every scene".
+- **The player reference** leaves out Factions, The session and The Oracle (they're the GM's and the party sheet's), and the round and threat budgets from Threats (the GM's tools). Combos come out of Your action and go in Rolling, and "Things that climb" goes in part 1, the way Appendix A lists them. Links in Appendix D are plain words in the PDF. A new section in Appendix D stops `npm run sheets` until it's given a part.
+- **Rows you ring** (Confidence, the wound die, each condition's die, Aspiration, Party Goal and an attunement's stage) are radio buttons on screen: tap one to ring it, and tap it again to clear it.
+- **Typed text is Helvetica**, 9 point (8.5 for permissions and trait text, 8 for threads), because every PDF viewer has it. The page itself is Cinzel and Alegreya Sans, embedded.
+- **The stamp** is the build date and a 12-character hash of what each PDF's built from (Appendix D, the templates and the build script), in the footer and the PDF's keywords. `tests/check-site.mjs` compares the hash, so it catches a same-day change too.
+- The Sheets page reads `src/data/sheets.json`, which `npm run sheets` writes. The PDFs aren't kept offline by the service worker, so downloading them needs a signal, like search.

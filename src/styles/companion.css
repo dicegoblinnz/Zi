@@ -8,6 +8,7 @@
 .cc h3 { font-size: 1.02rem; margin: 1rem 0 0.4rem; color: var(--gold-ink); }
 .cc-intro { padding-block: 1.2rem 0.25rem; }
 .cc-intro .lede { font-size: 1.1rem; }
+.cc-intro .cc-paper { margin: 0.6rem 0 0; color: var(--muted); }
 .cc-sec { margin-top: 2.2rem; }
 .cc-lead { color: var(--muted); font-size: 0.95rem; margin: 0.4rem 0; }
 .cc-small { color: var(--muted); font-size: 0.92rem; margin: 0.3rem 0; }

@@ -5,16 +5,19 @@
 // For each page, at 320, 360, 390, 430 and 1280 wide, in light and dark:
 // nothing fetched from outside the site, no sideways scrolling, no console
 // errors, and tap targets at least 44px high in the menus. Runs axe on every
-// page, tries a search and flips the light switch.
+// page, tries a search and flips the light switch. Checks the printable
+// sheets are in the build and were built from the rules as they are now.
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { join, extname } from "node:path";
 import { chromium } from "playwright";
 import { AxeBuilder } from "@axe-core/playwright";
+import { PDFDocument } from "pdf-lib";
+import { SHEETS, sourceHash, stampedHash } from "../scripts/sheets/sources.mjs";
 
 const DIST = join(process.cwd(), "dist");
 const SHOTS = process.argv[2] || null;
-const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".txt": "text/plain" };
+const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".txt": "text/plain", ".pdf": "application/pdf" };
 
 // A small static server that answers the way Cloudflare's assets do.
 async function resolve(path) {
@@ -44,7 +47,7 @@ const PAGES = [
   "/", "/rules/", "/rules/welcome/", "/rules/the-core/", "/rules/the-archetypes/",
   "/rules/title-ideas-and-the-crew/", "/rules/conflict/", "/rules/the-bestiary/",
   "/rules/appendix-c-every-lever-in-the-game/", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
-  "/characters/", "/characters/?c=check-vesk",
+  "/characters/", "/characters/?c=check-vesk", "/sheets/",
 ];
 // A character saved on the phone, so a sheet gets checked like any other page.
 // Its hash is blank, so the sheet shows its "changed in the rules" note too.
@@ -60,6 +63,18 @@ async function sealed(context) {
   const outside = [];
   await context.route((url) => url.hostname !== "localhost", (route) => { outside.push(route.request().url()); return route.abort(); });
   return outside;
+}
+
+// The printable sheets. Each PDF carries a hash of what it was built from
+// (scripts/sheets/sources.mjs), so one that's fallen behind the rules, like
+// the player reference behind a change to Appendix D, fails here.
+for (const [name, sheet] of Object.entries(SHEETS)) {
+  let bytes;
+  try { bytes = await readFile(join(DIST, "sheets", sheet.file)); } catch { note(`sheets: ${sheet.file} isn't in the build`); continue; }
+  const pdf = await PDFDocument.load(bytes, { updateMetadata: false });
+  const stamped = stampedHash(pdf.getKeywords());
+  if (stamped !== sourceHash(name)) note(`sheets: ${sheet.file} is older than what it's built from (${SHEETS[name].sources[0]} and the rest). Run npm run sheets and commit the PDFs.`);
+  else console.log(`sheets: ${sheet.file} matches its sources (${stamped})`);
 }
 
 const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});

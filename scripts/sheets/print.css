@@ -1,0 +1,202 @@
+/* The printable sheets: white paper and dark ink, with the Sigil look in the
+   accents (Cinzel headings, Alegreya Sans text, gold corner brackets and thin
+   rules). Nothing's dark-filled, so it prints cleanly on any printer.
+   The fonts come from node_modules, added by scripts/build-sheets.mjs. */
+:root {
+  --ink: #1d1526;
+  --muted: #5a4f66;
+  --gold: #b8892a;
+  --gold-ink: #6e5110;
+  --violet: #5b36b0;
+  --rule: rgba(184, 137, 42, 0.6);
+  --line: rgba(29, 21, 38, 0.45);
+  --box: rgba(29, 21, 38, 0.7);
+  --display: "Cinzel", Georgia, serif;
+  --body: "Alegreya Sans", "Gill Sans", sans-serif;
+  --lh: 5mm;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #fff; color: var(--ink); }
+body { font: 400 8pt/1.25 var(--body); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+h1, h2, h3, h4, p { margin: 0; }
+
+/* The brand: a violet diamond round a gold core, and the name in Cinzel. */
+.brand { display: flex; align-items: center; gap: 2.2mm; }
+.brand svg { width: 7mm; height: 7mm; flex: none; }
+.wordmark { font: 700 15pt/1 var(--display); letter-spacing: 0.08em; color: var(--gold-ink); }
+.doc { font: 500 7.5pt/1.2 var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 0.8mm; }
+
+/* Cards: a thin gold line with gold corner brackets. */
+.card {
+  position: relative;
+  border: 0.25mm solid var(--rule);
+  padding: 2mm 2.6mm 2.2mm;
+  background:
+    linear-gradient(var(--gold), var(--gold)) left top / 3.2mm 0.55mm no-repeat,
+    linear-gradient(var(--gold), var(--gold)) left top / 0.55mm 3.2mm no-repeat,
+    linear-gradient(var(--gold), var(--gold)) right top / 3.2mm 0.55mm no-repeat,
+    linear-gradient(var(--gold), var(--gold)) right top / 0.55mm 3.2mm no-repeat,
+    linear-gradient(var(--gold), var(--gold)) left bottom / 3.2mm 0.55mm no-repeat,
+    linear-gradient(var(--gold), var(--gold)) left bottom / 0.55mm 3.2mm no-repeat,
+    linear-gradient(var(--gold), var(--gold)) right bottom / 3.2mm 0.55mm no-repeat,
+    linear-gradient(var(--gold), var(--gold)) right bottom / 0.55mm 3.2mm no-repeat;
+  background-origin: border-box;
+}
+h2.sec, .card h3 {
+  font: 700 8pt/1 var(--display);
+  letter-spacing: 0.07em;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 2mm;
+}
+h2.sec { font-size: 9pt; margin: 0 0 1.6mm; }
+h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); transform: translateY(-0.6mm); }
+.hint { font: italic 400 6.6pt/1.25 var(--body); color: var(--muted); }
+.lab { font: 500 6.3pt/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+
+/* Write-in spaces. Each one gets a fillable field in the PDF. */
+.w { display: block; height: var(--lh); border-bottom: 0.25mm solid var(--line); flex: 1; min-width: 0; }
+.box { display: inline-block; width: 9.5mm; height: 6.8mm; border: 0.3mm solid var(--box); border-radius: 0.8mm; flex: none; }
+.tick { display: inline-block; width: 2.9mm; height: 2.9mm; border: 0.25mm solid var(--box); border-radius: 0.3mm; flex: none; }
+.hurtbox { display: inline-block; width: 5.6mm; height: 5.6mm; border: 0.35mm solid var(--box); border-radius: 0.5mm; flex: none; }
+.star {
+  display: inline-block; width: 4.6mm; height: 4.6mm; flex: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1.8l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.9l-6.4 3.5 1.4-7.1-5.3-5 7.2-.9z' fill='none' stroke='%236e5110' stroke-width='1.3' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+/* A die to ring: a hexagon with its size in it. */
+.die {
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 8.6mm; height: 6.2mm;
+  font: 700 7.2pt/1 var(--body); color: var(--ink);
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 86 62' preserveAspectRatio='none'%3E%3Cpath d='M20 2h46l18 29-18 29H20L2 31z' fill='none' stroke='%23b8892a' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+.dice { display: flex; gap: 1.2mm; align-items: center; }
+.word { display: inline-flex; align-items: center; justify-content: center; padding: 1.3mm 2.1mm; font: 500 6.9pt/1 var(--body); }
+
+.stamp { display: flex; justify-content: space-between; font: 400 6pt/1 var(--body); color: var(--muted); letter-spacing: 0.04em; }
+
+/* ---------- The character sheet: two A4 pages, back to back. ---------- */
+.cs .page {
+  width: 210mm; height: 297mm;
+  padding: 7.5mm 9mm 6mm;
+  display: flex; flex-direction: column; gap: 2.8mm;
+  overflow: hidden;
+  break-after: page;
+}
+.cs .page:last-child { break-after: auto; }
+.cs .stamp { margin-top: auto; }
+.cs .head { display: flex; align-items: flex-end; gap: 7mm; padding-bottom: 2mm; border-bottom: 0.25mm solid var(--rule); }
+.cs .ident { flex: 1; display: flex; gap: 4mm; }
+.cs .field { display: flex; flex-direction: column; gap: 0.8mm; }
+.cs .field .w { height: 6mm; flex: none; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2.8mm 4mm; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2.8mm 3.6mm; }
+.stack { display: flex; flex-direction: column; gap: 2.8mm; }
+.row { display: flex; align-items: center; gap: 1.6mm; }
+.cs h3 + .hint, .cs .card > .hint { margin-top: 0.8mm; }
+
+.stats .statrow { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3mm; }
+.stats .statrow + .statrow { margin-top: 2mm; padding-top: 1.8mm; border-top: 0.25mm solid rgba(184, 137, 42, 0.35); }
+.stats .statrow.rs { grid-template-columns: 1fr 21mm; }
+.stats .statrow.one { grid-template-columns: 1fr; }
+.stat .nums { display: flex; align-items: center; gap: 1.4mm; margin-top: 1.4mm; }
+.stat .nums .lab { margin-left: 0.6mm; }
+.stars { display: flex; gap: 0.7mm; align-items: center; }
+.die-notes { display: flex; gap: 1.2mm; margin-top: 0.7mm; }
+.die-notes span { width: 8.6mm; text-align: center; font: italic 400 6pt/1 var(--body); color: var(--muted); white-space: nowrap; }
+
+.cond { display: flex; align-items: flex-end; gap: 2mm; margin-top: 0.9mm; }
+.cond .w { height: 5.6mm; }
+
+.bar { display: flex; align-items: flex-end; gap: 1.6mm; margin-top: 1.3mm; }
+.bar .n { width: 3mm; font: 700 7pt/1 var(--display); color: var(--gold-ink); align-self: center; text-align: center; }
+.bar .cell { display: flex; align-items: flex-end; gap: 0.5mm; }
+.bar .catch { flex: 1; display: flex; align-items: flex-end; gap: 1.2mm; margin-left: 1mm; }
+.bar.extra .hurtbox { border-style: dashed; border-color: rgba(29, 21, 38, 0.55); }
+.bar.extra .n { color: var(--muted); }
+.wound { display: flex; align-items: center; gap: 1.6mm; margin-top: 2.2mm; padding-top: 1.8mm; border-top: 0.25mm solid var(--rule); }
+.key { display: flex; gap: 3mm; align-items: center; margin-top: 1.5mm; }
+.key .row { gap: 1mm; }
+
+.goal + .goal { margin-top: 2.4mm; }
+.goal .row { margin-top: 1mm; }
+
+.sa { width: 100%; border-collapse: collapse; margin-top: 1.2mm; }
+.sa th { font: 500 6.3pt/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 0 1.2mm 0.8mm 0; }
+.sa td { height: 5.3mm; padding: 0 1.4mm 0 0; border-bottom: 0.25mm solid var(--line); vertical-align: bottom; }
+.sa td .w { border: 0; height: 5mm; }
+.sa td:last-child { padding-right: 0; }
+.sa .name { width: 38mm; }
+.sa .steps { width: 11mm; }
+.sa .dicecol { width: 17mm; }
+.sa .fixed { font: 700 7.6pt/1 var(--display); letter-spacing: 0.04em; padding-bottom: 1.1mm; white-space: nowrap; }
+.sa .fixed i { font: italic 400 6.3pt/1 var(--body); letter-spacing: 0; color: var(--muted); margin-left: 1mm; }
+.sa td.steps, .sa td.dicecol, .sa th.steps, .sa th.dicecol { border-left: 0.25mm solid var(--line); padding-left: 1.2mm; text-align: center; }
+.sa td.name .w { border-right: 0.25mm dotted var(--line); }
+.ladder { display: grid; grid-template-columns: repeat(14, 1fr); margin-top: 1.8mm; border: 0.25mm solid var(--rule); }
+.ladder div { text-align: center; padding: 0.9mm 0 1mm; border-left: 0.25mm solid var(--rule); }
+.ladder div:first-child { border-left: 0; }
+.ladder b { display: block; font: 700 7pt/1 var(--display); color: var(--gold-ink); }
+.ladder span { display: block; font: 500 7pt/1.1 var(--body); margin-top: 0.6mm; }
+
+.trait + .trait { margin-top: 1.2mm; }
+.trait .row { align-items: flex-end; }
+.lines .w + .w { margin-top: 0; }
+.kit-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3mm; }
+.kit-sub { margin-top: 1.6mm; }
+.kit-sub .lab { display: block; margin-bottom: 0.2mm; }
+.notes .ruled { background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--lh) - 0.25mm), var(--line) calc(var(--lh) - 0.25mm) var(--lh)); }
+
+/* The back. */
+.cs .slim { display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.6mm; border-bottom: 0.25mm solid var(--rule); }
+.cs .slim .wordmark { font-size: 11pt; }
+.cs .slim svg { width: 5.4mm; height: 5.4mm; }
+.cs .slim .doc { margin: 0; }
+.back { --lh: 4.9mm; }
+.tcard .top { display: flex; align-items: flex-start; gap: 1.6mm; }
+.tcard .numeral { font: 700 11pt/1 var(--display); color: var(--gold-ink); width: 6mm; padding-top: 1.2mm; }
+.tcard .w.two { height: 8.8mm; border: 0; background: linear-gradient(var(--line), var(--line)) 0 4.4mm / 100% 0.25mm no-repeat, linear-gradient(var(--line), var(--line)) 0 100% / 100% 0.25mm no-repeat; }
+.tcard .arch { display: flex; align-items: flex-end; gap: 1.6mm; }
+.tcard .perms { margin-top: 0.4mm; }
+.acard .top, .bcard .top { display: flex; align-items: flex-end; gap: 1.6mm; }
+.acard .stage { display: flex; gap: 0.6mm; margin-left: 1mm; }
+.acard .three { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 0 2.4mm; margin-top: 0.6mm; }
+.acard .three > div { display: flex; align-items: flex-end; gap: 1.2mm; }
+.thread { display: flex; align-items: flex-end; gap: 1mm; }
+.thread .tick { margin-bottom: 0.8mm; }
+.thread .w { margin-right: 0.8mm; }
+
+/* ---------- The player reference: Appendix D, in four parts. ---------- */
+.ref { font: 400 9.4pt/1.32 var(--body); }
+.ref-head { display: flex; align-items: center; justify-content: space-between; gap: 8mm; padding-bottom: 2.4mm; margin-bottom: 3mm; border-bottom: 0.3mm solid var(--rule); }
+.ref-head .intro { flex: 1; max-width: 100mm; text-align: right; font: italic 400 8pt/1.3 var(--body); color: var(--muted); }
+.part + .part { margin-top: 4mm; }
+.part h2 {
+  display: flex; align-items: center; gap: 2.4mm;
+  font: 700 11pt/1.1 var(--display); letter-spacing: 0.05em; color: var(--ink);
+  margin: 0 0 2.4mm; padding: 1.6mm 0 1.6mm 3.2mm;
+  break-after: avoid;
+  background:
+    linear-gradient(var(--gold), var(--gold)) left top / 3.2mm 0.55mm no-repeat,
+    linear-gradient(var(--gold), var(--gold)) left top / 0.55mm 3.2mm no-repeat,
+    linear-gradient(var(--gold), var(--gold)) left bottom / 3.2mm 0.55mm no-repeat,
+    linear-gradient(var(--gold), var(--gold)) left bottom / 0.55mm 3.2mm no-repeat;
+  border-bottom: 0.25mm solid var(--rule);
+}
+.part h2 .num { font: 700 9pt/1 var(--display); color: var(--gold-ink); }
+.cols { column-count: 2; column-gap: 6.5mm; column-rule: 0.25mm solid rgba(184, 137, 42, 0.35); }
+.qr { margin: 0 0 2.6mm; }
+.qr h3 { font: 700 8.6pt/1.15 var(--display); letter-spacing: 0.05em; color: var(--gold-ink); margin: 0 0 1mm; break-after: avoid; }
+.qr p { margin: 0 0 1mm; }
+.qr ul, .qr ol { margin: 0; padding: 0 0 0 3.4mm; }
+.qr li { margin: 0 0 0.9mm; }
+.qr ul { list-style: none; }
+.qr ul > li { position: relative; }
+.qr ul > li::before { content: ""; position: absolute; left: -3mm; top: 1.45mm; width: 1.3mm; height: 1.3mm; background: var(--gold); transform: rotate(45deg); }
+.qr ol { padding-left: 4mm; }
+.qr ol > li::marker { font: 700 8pt var(--display); color: var(--gold-ink); }
+.qr strong { font-weight: 700; }
+.qr table { border-collapse: collapse; margin: 1.4mm 0 1.6mm; break-inside: avoid; }
+.qr th, .qr td { font-size: 8.6pt; padding: 0.4mm 3mm 0.4mm 0; border-bottom: 0.25mm solid rgba(184, 137, 42, 0.4); text-align: left; }
+.qr th { font: 500 6.6pt/1.2 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }

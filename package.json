@@ -6,7 +6,8 @@
     "content": "node scripts/build-content.mjs",
     "dev": "npm run content && astro dev",
     "build": "npm run content && astro build && pagefind --site dist && node scripts/build-sw.mjs",
-    "preview": "npm run build && wrangler dev"
+    "preview": "npm run build && wrangler dev",
+    "sheets": "node scripts/build-sheets.mjs"
   },
   "dependencies": {
     "@fontsource/alegreya-sans": "5.3.0",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
     "pagefind": "1.5.2",
+    "pdf-lib": "1.17.1",
     "playwright": "1.56.0",
     "wrangler": "4.148.0"
   }

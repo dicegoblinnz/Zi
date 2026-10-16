@@ -16,6 +16,7 @@ This repo is the master copy of the rules for **Zi'Dara**, Mo's tabletop rolepla
 - `tools/voice_check.py`: flags em dashes, semicolons, exclamation marks, stiff phrases and filler, and counts contractions.
 - `tools/build_book.py` and `tools/book_template.html`: build a one-page reading copy of the whole book (`python3 tools/build_book.py OUT.html`). Rebuild it after every rules change.
 - `tools/import_book.py`: the one-off import of the 2 Oct HTML book. Don't run it again.
+- `scripts/build-sheets.mjs` (`npm run sheets`): builds the two-page fillable character sheet and the four-page player reference into `public/sheets/`, from `scripts/sheets/` and Appendix D, and writes `src/data/sheets.json` for the Sheets page (`/sheets/`). Workers Builds can't run Chromium, so the PDFs are committed. Rebuild them after any change to Appendix D or `scripts/sheets/`.
 
 ## The rules
 
@@ -30,7 +31,7 @@ This repo is the master copy of the rules for **Zi'Dara**, Mo's tabletop rolepla
 2. Add an entry to the top of `content/changes.md`: the date, what changed in plain words, what it replaced, and links to the sections.
 3. If you made a call, add it to `notes/to-confirm.md`.
 4. Run `python3 -I tools/check_terms.py`, `python3 -I tools/check_terms.py --links` and `python3 -I tools/voice_check.py FILE --lines` on what you changed. Add newly retired words to `RETIRED` in `check_terms.py`.
-5. Rebuild and check the site (`npm run build`, then `node tests/check-site.mjs`).
+5. If Appendix D changed, rebuild the sheets (`npm run sheets`). Then rebuild and check the site (`npm run build`, then `node tests/check-site.mjs`, which fails when a sheet's behind its sources).
 6. Work on a branch and commit. `main` is what the live site deploys from, so only merge to `main` when Mo says so.
 
 ## The voice

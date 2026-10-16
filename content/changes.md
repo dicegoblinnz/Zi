@@ -1,9 +1,15 @@
 ---
 title: "What's Changed"
 id: changes
-updated: 2026-10-16
+updated: 2026-10-17
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
+
+## 17 Oct 2026: A two-page character sheet, and the player reference on its own {#c-2026-10-17}
+
+**The character sheet is one A4 sheet now**, printed back to back. The front's for play and the back's who you are. It was four pages, with the player reference on the backs. The long reminders, like what Aura and Resolve buy, moved to the reference. You can still type into it on screen, or print it blank and use a pencil. See [The character sheet](#s-sheet-character).
+
+**The player reference is a PDF of its own**: the [quick reference](#appendix-quick) in four parts, on four pages. Both are on the [Sheets page](/sheets/).
 
 ## 16 Oct 2026: Resolve, Confidence that swings, threads and the Bard {#c-2026-10-16}
 
