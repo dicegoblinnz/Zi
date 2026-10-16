@@ -189,15 +189,31 @@ async function play(page, crewId, name) {
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
 
-  // Two guards let ride against her d4 Armour: the d8's 6 gets through, and
+  // Shaken on d2, going at a threat costs 1 Resolve.
+  await page.click('.cc-stat[data-p="conf"]');
+  await page.click('.cc-panel button[data-act="conf"][data-v="2"]');
+  await tile("Fight");
+  has(await page.textContent("#cc-dialog .cc-costs"), "1 Resolve", "going at a threat while shaken");
+  await page.click('#cc-dialog .dlg-head button[data-act="close"]');
+  await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  await page.click('.cc-panel button[data-act="conf"][data-v="6"]');
+
+  // Warded d6 is a step on her Armour, so the d4 rolls as a d6.
+  await page.selectOption('form[data-form="cond"] select[name="pick"]', "Warded");
+  await page.selectOption('form[data-form="cond"] select[name="die"]', "6");
+  await page.click('form[data-form="cond"] button[type="submit"]');
+
+  // Two guards let ride against her Armour: the d8's 6 gets through, and
   // the d6's 3 ties her 3, so it doesn't.
   await page.click('.tile[data-act="defence"]');
+  has(await page.textContent("#cc-dialog .dlg-body"), "you’re rolling a d6", "her d4 Armour while she's Warded");
   await page.click('#cc-dialog button[data-act="d-add"][data-v="8"]');
   await page.click('#cc-dialog button[data-act="d-add"][data-v="6"]');
   await page.evaluate(() => window.ziCompanion.setDice([3, 6, 3]));
   await page.click('#cc-dialog button[data-act="d-go"]');
   await page.waitForSelector("#cc-dialog .res .res-out");
   same(await page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Gets through", "Stopped"], "two blows against one Armour roll");
+  has(await page.textContent("#cc-dialog .cc-mine-roll"), "Your d6", "the Warded Armour die");
   await shot(page, "5-when-it-lands");
   await page.click('#cc-dialog button[data-act="armour"][data-d="-1"]');
   has(await page.textContent("#cc-dialog .dlg-body"), "Armour d2", "Armour after it steps down");

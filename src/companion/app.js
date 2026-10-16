@@ -53,7 +53,7 @@ function fresh(c) {
   const n = c.numbers;
   return {
     aura: n.aura, resolve: n.resolve, conf: n.confidence, armour: n.armour,
-    hurt: 0, catches: [], scars: 0, blaze: false,
+    hurt: 0, catches: [], scars: 0, blaze: false, dead: false,
     conditions: [], threads: {}, used: {}, crossed: {}, picked: [],
     asp: c.aspiration.die, aspText: "", notes: "", last: null,
   };
@@ -74,6 +74,7 @@ function normal(ch) {
   s.hurt = clamp(s.hurt, 0, n.hurtBars * 3 - s.scars);
   s.catches = (Array.isArray(s.catches) ? s.catches : []).slice(0, n.hurtBars).map(String);
   s.asp = even(s.asp, 2, 12);
+  s.dead = Boolean(s.dead);
   s.conditions = (Array.isArray(s.conditions) ? s.conditions : []).filter((x) => x && x.name).map((x) => ({ name: String(x.name), die: even(x.die, 2, 12), kind: x.kind === "for" ? "for" : "against" }));
   s.picked = (Array.isArray(s.picked) ? s.picked : []).filter((p) => p && p.name && ["equipment", "utility", "bag"].includes(p.where));
   for (const key of ["threads", "used", "crossed"]) if (!s[key] || typeof s[key] !== "object") s[key] = {};
@@ -168,6 +169,7 @@ function takeHurt(s, c) {
 
 // The end of a scene: Aura's full, 1 Resolve back, Confidence back to where it
 // starts, the loose boxes clear, conditions end and once-per-scene traits reset.
+// A Blaze that's still waiting stays until the player chooses.
 function endScene(s, c) {
   const { open } = hurtInfo(s, c);
   s.aura = c.numbers.aura;
@@ -176,7 +178,6 @@ function endScene(s, c) {
   s.hurt = Math.min(open, 3 * s.catches.length);
   s.conditions = [];
   s.used = {};
-  s.blaze = false;
 }
 
 // ---------------------------------------------------------------- the list
@@ -343,6 +344,7 @@ function sheetView(ch, c) {
     <div class="chips">${c.archetypes.map((a) => `<span class="chip">${esc(a)}</span>`).join("")}</div>
     <p class="cc-small">${ch.name !== c.name ? `${esc(c.name)}’s sheet, from the crew · ` : ""}${facts.join(" · ")}</p></header>
   ${saveNote()}${changed}
+  ${s.dead ? `<div class="cc-note is-warn"><p><b>${esc(ch.name)} died in play.</b> Keep the sheet to remember them, or delete them from this phone at the bottom of the page.</p></div>` : ""}
   ${stripView(ch, c, s)}
   <section class="cc-sec cc-play" aria-labelledby="cc-actions"><h2 id="cc-actions" class="sr-only">Set actions</h2>
     <div class="cc-tiles">${tiles}<button type="button" class="tile card tile-defend" data-act="defence"><span class="tile-name">When it lands</span><span class="tile-sub">Armour d${s.armour} · Confidence d${s.conf}</span></button></div>
@@ -370,9 +372,9 @@ function sheetView(ch, c) {
     <div class="cc-bars">${bars}</div>
     ${hi.needsCatch ? `<form class="cc-form cc-note" data-form="catch"><label class="cc-field">That bar’s full. Write the injury in it, like <em>cracked ribs</em> or <em>can’t stand the dark</em>. <input name="catch" maxlength="60" autocomplete="off" required></label><button type="submit" class="button primary">Write it in</button></form>` : ""}
     ${s.blaze ? `<div class="cc-note is-warn" role="alert"><p><b>You Blaze.</b> Declare something extraordinary and it happens, no roll. From your very first Blaze you can choose for your character to die. If you don’t, they leave the scene and take a Scar, which crosses out a box for good.</p>
-      <div class="cc-row"><button type="button" class="button primary" data-act="scar">Take a Scar</button><button type="button" class="button" data-act="blaze-off">Not now</button></div></div>` : ""}
+      <div class="cc-row"><button type="button" class="button primary" data-act="scar">Take a Scar and leave the scene</button><button type="button" class="button" data-act="die">${esc(ch.name)} dies</button></div></div>` : ""}
     ${s.scars >= hi.bars * 3 ? '<p class="cc-note is-warn">Every box is crossed out. You’re scarred out, and your next Blaze is your last.</p>' : ""}
-    <div class="cc-row"><button type="button" class="button" data-act="hurt" data-d="1">Take a Hurt</button><button type="button" class="button" data-act="hurt" data-d="-1"${off(s.hurt < 1)}>Clear a box</button></div>
+    <div class="cc-row"><button type="button" class="button" data-act="hurt" data-d="1">Take a Hurt</button><button type="button" class="button" data-act="hurt" data-d="-1"${off(s.hurt < 1)}>Clear a box</button>${s.scars ? '<button type="button" class="button" data-act="unscar">The story earned a Scar back</button>' : ""}</div>
     <h3 class="cc-h3">Conditions</h3>
     ${conds ? `<ul class="cc-conds">${conds}</ul><div class="cc-row"><button type="button" class="button" data-act="round">End of round: every condition down a size</button></div>` : '<p class="cc-lead">Nothing on you right now.</p>'}
     <form class="cc-form" data-form="cond">
@@ -439,10 +441,11 @@ function counted(r, c, s) {
   const shape = clamp(r.shape, 0, shapes.length - 1);
   const dice = shapes[shape] ?? stepsToDice(total);
   const aura = brought.length + r.other;
-  const resolve = (r.beyond ? 1 : 0) + (extra && r.via === "resolve" ? 1 : 0);
+  const shaken = s.conf <= 2 && r.shaken !== false;
+  const resolve = (r.beyond ? 1 : 0) + (extra && r.via === "resolve" ? 1 : 0) + (shaken ? 1 : 0);
   const fired = Boolean(extra) && r.via === "fired";
   const short = aura > s.aura ? `You’ve got ${s.aura} Aura, and this needs ${aura}.` : resolve > s.resolve ? `You’ve got ${s.resolve} Resolve, and this needs ${resolve}.` : fired && s.conf < 12 ? "Your Confidence has to be on d12 to cash it in." : "";
-  return { act, extra, free, lines, brought, total, splits, fewest, most, count, shapes, shape, dice, aura, resolve, fired, short };
+  return { act, extra, free, lines, brought, total, splits, fewest, most, count, shapes, shape, dice, aura, resolve, fired, shaken, short };
 }
 
 const stepper = (name, value, min, max, label, i = "") => `<span class="cc-step"><button type="button" class="cc-stepbtn" data-act="step" data-n="${name}" data-i="${i}" data-d="-1" aria-label="${label}: one less"${off(value <= min)}>−</button><output>${value}</output><button type="button" class="cc-stepbtn" data-act="step" data-n="${name}" data-i="${i}" data-d="1" aria-label="${label}: one more"${off(value >= max)}>+</button></span>`;
@@ -456,7 +459,7 @@ function buildView(c, s) {
     return list.length ? `<h3>${title}</h3>${list.map((l) => toggle(l, r.in.has(l.key), "in")).join("")}` : "";
   }).join("");
   const name = k.extra ? (k.extra === k.act ? `${k.act.name}, twice` : `${k.act.name} and ${k.extra.name}`) : k.act.name;
-  const vias = [["resolve", "1 Resolve"], ["held", "I held my action"], ["hiding", "Coming out of hiding"], ["fired", "Cashing in fired-up Confidence"], ["trait", "A trait, condition or Boon that says so"]];
+  const vias = [["resolve", "1 Resolve"], ["time", "Taking my time, outside a round"], ["held", "I held my action"], ["hiding", "Coming out of hiding"], ["fired", "Cashing in fired-up Confidence"], ["trait", "A trait, condition or Boon that says so"]];
   return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${esc(name)}</h2>
       <p class="cc-dice" aria-live="polite">${k.dice.map((d) => hex(`d${d}`, "on")).join("")}<span><b>${steps(k.total)}</b>, ${diceLabel(k.dice)}${r.mark ? `, and the Mark d${r.mark}` : ""}</span></p>
       ${k.aura || k.resolve ? `<p class="cc-costs">${k.aura ? `<span class="chip">${k.aura} Aura</span>` : ""}${k.resolve ? `<span class="chip">${k.resolve} Resolve</span>` : ""}</p>` : ""}</div>
@@ -464,6 +467,7 @@ function buildView(c, s) {
   <div class="dlg-body">
     <fieldset class="cc-group"><legend>On your ${esc(k.extra && k.extra !== k.act ? `${k.act.name} and ${k.extra.name}` : k.act.name)}</legend>
       ${k.free.size ? `${[...k.free].map((key) => toggle(lineOf(c, key), !r.off.has(key), "off")).join("")}<p class="cc-lead">Tap a line off when it doesn’t fit this time.</p>` : '<p class="cc-lead">Nothing’s on it yet, so it’s the action on its own.</p>'}</fieldset>
+    ${s.conf <= 2 ? `<fieldset class="cc-group"><legend>You’re shaken</legend><button type="button" class="cc-line" data-act="shaken"${pressed(k.shaken)}><span class="tick" aria-hidden="true"></span><span>Going at a threat costs 1 Resolve <small>in a fight or face to face, every time. Tap it off when this isn’t going at a threat.</small></span></button></fieldset>` : ""}
     <details class="cc-group" data-open="bring"${ui.open.has("bring") ? " open" : ""}><summary>Bring something in <small>1 Aura each${k.aura ? `, ${k.aura} in` : ""}</small></summary>
       <p class="cc-lead">Anything else that fits costs 1 Aura to bring in, even when it plainly fits.</p>${groups}
       <div class="cc-stepper"><span>Something else that fits <small>the ground, a threat’s tag you know, or a friend’s permission through a thread that isn’t strained</small></span>${stepper("other", r.other, 0, 9, "Something else")}</div></details>
@@ -519,7 +523,8 @@ function go(real) {
     s.resolve -= k.resolve;
     r.log = [];
     if (k.aura) r.log.push(`Paid ${k.aura} Aura to bring in ${[...k.brought.map((key) => lineName(lineOf(c, key))), ...(r.other ? [`${r.other} more thing${r.other > 1 ? "s" : ""} that fit${r.other > 1 ? "" : "s"}`] : [])].join(", ")}.`);
-    if (k.resolve) r.log.push(`Paid ${k.resolve} Resolve${r.beyond ? " to go beyond" : ""}${r.beyond && k.extra && r.via === "resolve" ? " and" : ""}${k.extra && r.via === "resolve" ? " for the extra action" : ""}.`);
+    const why = [r.beyond && "to go beyond", k.extra && r.via === "resolve" && "for the extra action", k.shaken && "to go at it while you’re shaken"].filter(Boolean);
+    if (k.resolve) r.log.push(`Paid ${k.resolve} Resolve ${why.join(" and ")}.`);
     if (k.fired) {
       s.conf = 6;
       r.log.push("Cashed in your Confidence for the extra action, so it’s back to d6.");
@@ -609,8 +614,22 @@ function resultView(c, s, ch) {
 // ---------------------------------------------------------------- defending
 
 function openDefence() {
-  roll = { kind: "defence", mode: "build", against: "armour", defend: false, incoming: [], mine: [], opp: [], pick: null, log: [], spinning: false, padOpp: true };
+  roll = { kind: "defence", mode: "build", against: "armour", defend: false, incoming: [], mine: [], opp: [], pick: null, log: [], spinning: false, padOpp: true, dconds: {} };
   openDialog();
+}
+
+// A condition is one step on whatever it fits, so Warded makes a d2 Armour a
+// d4. The ones that name your Armour or Confidence start on, and the player
+// can tap any of them off or on.
+function defenceCondOn(x, r) {
+  if (r.dconds && x.name in r.dconds) return r.dconds[x.name];
+  const rule = COND.get(x.name);
+  return Boolean(rule) && new RegExp(`\\b${r.against === "armour" ? "Armour" : "Confidence"}\\b`).test(rule.passive);
+}
+function defenceDie(s, r) {
+  const base = r.against === "armour" ? s.armour : s.conf;
+  const shift = s.conditions.filter((x) => defenceCondOn(x, r)).reduce((t, x) => t + (x.kind === "for" ? 2 : -2), 0);
+  return even(base + shift, 2, 12);
 }
 
 // Which of your rolls stops which die. Ties go to you. Letting it ride, your
@@ -635,7 +654,7 @@ function defenceGo(real) {
   const r = roll;
   if (!r.incoming.length) return;
   change("rolling your defence", (s, c) => {
-    const size = r.against === "armour" ? s.armour : s.conf;
+    const size = defenceDie(s, r);
     r.size = size;
     r.mine = Array.from({ length: r.defend ? r.incoming.length : 1 }, () => ({ size, nat: 0, plus: 0 }));
     r.opp = r.incoming.map(() => 0);
@@ -661,12 +680,15 @@ function settleDefence(s, c) {
 
 function defenceBuild(s) {
   const r = roll;
+  const die = defenceDie(s, r);
+  const conds = s.conditions.map((x) => `<button type="button" class="cc-line" data-act="d-cond" data-k="${esc(x.name)}"${pressed(defenceCondOn(x, r))}><span class="tick" aria-hidden="true"></span><span><em>${esc(x.name)}</em> d${x.die} <small>${x.kind === "for" ? "one step more" : "one step less"}${COND.get(x.name) ? ` on ${esc(COND.get(x.name).passive.replace(/<[^>]+>/g, "").replace(/\.$/, ""))}` : ""}</small></span></button>`).join("");
   return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">When it lands</h2><p class="cc-small">Whatever nobody answered lands at the end of the round.</p></div>
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
   <div class="dlg-body">
     <fieldset class="cc-group"><legend>What’s coming at you</legend>
       <button type="button" class="cc-line" data-act="d-against" data-v="armour"${pressed(r.against === "armour")}><span class="tick" aria-hidden="true"></span><span>Blows, blades, falling rocks and teeth <small>your Armour, d${s.armour}</small></span></button>
       <button type="button" class="cc-line" data-act="d-against" data-v="confidence"${pressed(r.against === "confidence")}><span class="tick" aria-hidden="true"></span><span>Fear, lies and pressure <small>your Confidence, d${s.conf}</small></span></button></fieldset>
+    ${conds ? `<fieldset class="cc-group"><legend>Conditions on you</legend>${conds}<p class="cc-lead">Each one that fits is a step on the die you roll, so you’re rolling a d${die}.</p></fieldset>` : ""}
     <fieldset class="cc-group"><legend>How you take it</legend>
       <button type="button" class="cc-line" data-act="d-defend" data-v="0"${pressed(!r.defend)}><span class="tick" aria-hidden="true"></span><span>Let it ride <small>one roll against the lot</small></span></button>
       <button type="button" class="cc-line" data-act="d-defend" data-v="1"${pressed(r.defend)}><span class="tick" aria-hidden="true"></span><span>Defend <small>a roll for every die, and it takes your action</small></span></button></fieldset>
@@ -991,9 +1013,26 @@ const ACT = {
     s.hurt = Math.min(s.hurt, c.numbers.hurtBars * 3 - s.scars);
     return "You leave the scene with a Scar, and a box is crossed out for good.";
   }),
-  "blaze-off": () => change("putting the Blaze away", (s) => {
+  die: () => change("their death", (s, c, ch) => {
     s.blaze = false;
+    s.dead = true;
+    return `${ch.name} dies, and what they died for happens.`;
   }),
+  unscar: () => change("a Scar earned back", (s) => {
+    s.scars = Math.max(0, s.scars - 1);
+    return "The story’s earned it back, so the box opens again.";
+  }),
+  shaken() {
+    roll.shaken = !counted(roll, normal(current()), current().state).shaken;
+    renderDialog();
+  },
+  "d-cond"(el) {
+    const ch = current();
+    const x = ch.state.conditions.find((y) => y.name === el.dataset.k);
+    if (!x) return;
+    roll.dconds = { ...roll.dconds, [x.name]: !defenceCondOn(x, roll) };
+    renderDialog();
+  },
   "heal-catch": (el) => change("healing a Catch", (s) => {
     const [gone] = s.catches.splice(Number(el.dataset.b), 1);
     s.hurt = Math.max(0, s.hurt - 3);
@@ -1135,6 +1174,7 @@ const ACT = {
   "d-pick": (el) => plusOn(Number(el.dataset.i)),
   "d-against"(el) {
     roll.against = el.dataset.v;
+    roll.dconds = {};
     renderDialog();
   },
   "d-defend"(el) {
