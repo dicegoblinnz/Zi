@@ -33,4 +33,4 @@ The site is built from `content/` every time, so a rules change goes live when i
 - `npm install`, then `npm run dev` to work on it locally.
 - `npm run build` makes the whole site in `dist/`: every chapter as its own page, the change log, and the search index.
 - `node tests/check-site.mjs` checks the built site in a browser.
-- Cloudflare builds and deploys it from `main` (Workers Builds: build command `npm run build`, deploy command `npx wrangler deploy`). `wrangler.jsonc` holds the settings, and the Worker's name there, `zidara`, has to match the one in the dashboard.
+- Cloudflare builds and deploys it from `main` (Workers Builds: build command `npm run build`, deploy command `npx wrangler deploy`). `wrangler.jsonc` holds the settings. The Worker is called `zi` in the dashboard, and zidara.world is attached to it as a custom domain.

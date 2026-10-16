@@ -48,7 +48,7 @@ Write as Mo, teaching at the table with dice in hand. Use the `zi-voice` skill w
 
 ## The site
 
-- Astro 7, static, served by Cloudflare Workers static assets in Mo's own Cloudflare account, deployed from `main` by Workers Builds (`npm run build`, then `npx wrangler deploy`). The Worker is called `zidara`.
+- Astro 7, static, served by Cloudflare Workers static assets in Mo's own Cloudflare account, deployed from `main` by Workers Builds (`npm run build`, then `npx wrangler deploy`). The Worker is called `zi`, and zidara.world is attached to it as a custom domain. Mo's first deploy was a manual one from the dashboard, which leaves no check run on GitHub.
 - `scripts/build-content.mjs` renders the Markdown itself (unified: remark-parse, remark-gfm, remark-directive, smartypants) into `src/generated/book.json`, so it doesn't depend on Astro's Markdown pipeline. It rewrites `#id` links to the page that holds the id. Chapter URLs come from each chapter's `slug:` in its front matter, so keep slugs stable.
 - `src/pages/`: home, `/rules/` and `/rules/<slug>/`, `/changes/`, `/search/` (Pagefind, built after Astro), `404`.
 - `tests/check-site.mjs` must pass before anything goes to `main`: 320, 360, 390, 430 and 1280 wide, light and dark, no sideways scroll, no console errors, 44px tap targets, axe, and search.

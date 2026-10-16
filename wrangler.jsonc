@@ -1,7 +1,8 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  // The Worker's name in the Cloudflare dashboard has to match this.
-  "name": "zidara",
+  // The Worker is called "zi" in the Cloudflare dashboard, with zidara.world
+  // attached as a custom domain. Keep this name the same as the dashboard's.
+  "name": "zi",
   "compatibility_date": "2026-10-13",
   "assets": {
     "directory": "./dist",
