@@ -9,6 +9,7 @@ This repo is the master copy of the rules for **Zi'Dara**, Mo's tabletop rolepla
 - `content/figures/`: SVG figures the chapters use.
 - `notes/to-confirm.md`: calls Claude made to fill gaps in Mo's rules, waiting for Mo's yes or no.
 - `notes/website-brief.md`: what Mo wants from the website (look, companions, live play, worlds, order). Read it before any site work.
+- `notes/companion-plan.md`: the agreed first version of the character companion, and what comes after it.
 - `notes/playtest-sheets/`: Mo's "What's changed" playtest sheets (text), the primary source for each change.
 - `tools/check_terms.py`: flags retired rules words (`--links` checks every `](#id)` link against the chapters' ids).
 - `tools/voice_check.py`: flags em dashes, semicolons, exclamation marks, stiff phrases and filler, and counts contractions.
@@ -55,4 +56,4 @@ Write as Mo, teaching at the table with dice in hand. Use the `zi-voice` skill w
 - `tests/check-site.mjs` must pass before anything goes to `main`: 320, 360, 390, 430 and 1280 wide, light and dark, nothing fetched from outside the site, no sideways scroll, no console errors, 44px tap targets, axe, search and the light switch.
 - The look is Sigil, which Mo picked on 16 Oct (the details are in `notes/website-brief.md`): Cinzel headings and Alegreya Sans text, self-hosted through `@fontsource` so they work offline, plum-black with gold corner brackets and violet links. It's dark by default with a light switch (remembered as `zi-theme`), and fully separate from Dice Goblin. The colours are tokens at the top of `src/styles/site.css`, and both themes have to pass 4.5:1 contrast.
 - Branches other than `main` build a Preview with `npx wrangler preview`, which needs the empty `previews` block in `wrangler.jsonc`.
-- Still to come, in Mo's order: the character companion (accounts are invite-only), then campaigns, worlds and maps, and live telegraphs on phones and a table screen (Durable Objects). Each piece goes to Mo's playtests as soon as it's ready. Sheets and rules must work offline.
+- Still to come, in Mo's order: the character companion, starting with the first version in `notes/companion-plan.md` (the six crew on phones, saved on the phone, no sign-in yet), then sign-in (invite-only) and building your own, then campaigns, worlds and maps, and live telegraphs on phones and a table screen (Durable Objects). Each piece goes to Mo's playtests as soon as it's ready. Sheets and rules must work offline.

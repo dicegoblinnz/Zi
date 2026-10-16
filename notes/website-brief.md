@@ -35,6 +35,9 @@ Mo's answers from 16 Oct 2026, given before the redesign. Everything built for z
 - Its number one job is building a roll fast: tap an action and see its steps and dice ready, with the lines that need Aura marked. Playtests found rolls take 1 to 3 minutes while players hunt for permissions.
 - Dice: roll in the app, with a proper animation, or roll real dice and tap in the result. The player chooses.
 - A sheet is seen by the player and their GM, nobody else.
+- What was wrong with the old companion apps: rolls took too long, they were hard to use at the table, they fell behind the rules, and sheets got lost or stuck.
+- When a rule changes, a saved character's numbers recount themselves, and anything the player has to choose gets flagged.
+- 17 Oct: the first version lets players pick one of the six crew (no blank sheets yet), saves on the phone and works offline. Sign-in comes after it, to keep the first version quick and light on usage. The plan is in `notes/companion-plan.md`.
 
 ## The GM companion and live play
 
