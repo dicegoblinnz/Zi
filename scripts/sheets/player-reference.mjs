@@ -32,7 +32,7 @@ const PARTS = [
   {
     title: "Archetypes, Aura and the round",
     sections: [
-      { id: "s-qr-archetypes" },
+      { id: "s-qr-archetypes", spanIntro: true },
       { id: "aura" },
       { id: "s-qr-resolve" },
       { id: "s-qr-round" },
@@ -53,6 +53,7 @@ const PARTS = [
   },
   {
     title: "Threats, moving and gear",
+    newPage: true,
     sections: [
       { id: "moving" },
       { id: "s-qr-threats", drop: ["**Round budget:**", "**Threat budget:**"] },
@@ -119,9 +120,17 @@ export function playerReference(stamp) {
       const section = found.get(s.id);
       if (!section) throw new Error(`Appendix D has no section #${s.id} any more`);
       used.add(s.id);
-      return `<section class="qr"><h3>${s.heading || section.heading}</h3>${render(pick(section, s))}</section>`;
+      const heading = s.heading || section.heading;
+      const html = render(pick(section, s));
+      // A section that opens with a few lines before its list can run them
+      // across both columns, so they're never split between the two.
+      const list = html.indexOf("<ul>");
+      if (s.spanIntro && list > 0) return `<div class="qr span-intro"><h3>${heading}</h3>${html.slice(0, list)}</div><section class="qr">${html.slice(list)}</section>`;
+      return `<section class="qr"><h3>${heading}</h3>${html}</section>`;
     }).join("");
-    return `<section class="part"><h2><span class="num">${p + 1}</span>${part.title}</h2><div class="cols">${body}</div></section>`;
+    // One set of columns for the whole reference, with each part's heading
+    // across both, so every part's columns are balanced before the next starts.
+    return `<h2 class="part${part.newPage ? " new-page" : ""}"><span class="num">${p + 1}</span> ${part.title}</h2>${body}`;
   }).join("");
   const missing = [...found.keys()].filter((id) => !used.has(id) && !LEFT_OUT.includes(id));
   if (missing.length) throw new Error(`Appendix D has sections the player reference doesn't place: ${missing.join(", ")}. Give each a part in scripts/sheets/player-reference.mjs, or add it to LEFT_OUT.`);
@@ -134,7 +143,7 @@ export function playerReference(stamp) {
     <div class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 38 20 20 38 2 20z" fill="none" stroke="#5b36b0" stroke-width="2.6" stroke-linejoin="round"/><path d="M20 12 28 20 20 28 12 20z" fill="#d7ae4b"/></svg><div><div class="wordmark">Zi’Dara</div><div class="doc">Player reference</div></div></div>
     <p class="intro">The quick reference from the rules, for the table. Every rule’s there in full at zidara.world/rules.</p>
   </header>
-  ${html}
+  <div class="cols">${html}</div>
 </main>`;
 }
 

@@ -28,10 +28,10 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 -   Wound die (d6 → d8 → d10 → d12: ring the one you're on, a size bigger for each Catch on your Hurt track · a heal has to beat it)
 -   Aspiration (d2 → d4 → d6 → d8 → d10 → d12 · past d12: a new archetype, with a Title you name for it, and a new Aspiration at d2)
 -   Party Goal (d2 → d4 → d6 → d8 → d10 → d12 · past d12: the crew's done it, and everyone writes a new thread)
--   Set actions: Fight (melee and ranged) · Move (run, climb, jump and chase) · Sneak (unseen and unheard) · Study (look closely, know things) · Talk (charm, lies and threats), and seven more rows for set actions of your own, like Locks or Ward
+-   Set actions: Fight (melee and ranged) · Move (run, climb, jump and chase) · Sneak (unseen and unheard) · Study (look closely, know things) · Talk (charm, lies and threats), and six more rows for set actions of your own, like Locks or Ward
 -   On each row: what's on it · steps · die
 -   Steps into dice (1 step is a d2, 6 is a d12, 12 is two d12s, and 24 is four)
--   Traits (3 · two to start · each with its type, Passive · Triggered · Invoked · Per scene · Per downtime · Used, and what it does)
+-   Traits (3 · two to start · each with its type, Passive · Triggered · Invoked · Per scene · Per downtime · Used, and two lines for what it does)
 -   Kit: equipment (3 · what you wear or wield, with a weapon's properties · each piece of plain armour is a size of Armour) · utility (3 · tools and things you use up · cross it off once it's used) · a keepsake (something that matters to your character) · the bag (holds 10 · getting something out takes your action, and putting it away is free)
 -   Notes (a thread that won't fit on its bond, and whatever your archetype's holding, like a Shadow's pool or a Shifter's animal tags)
 :::
@@ -51,9 +51,11 @@ Title cards don't have a Catch line. Your Catches live on your attuned things, o
 What Aura and Resolve buy and how they come back, your archetype's +2, building a roll and your action aren't on the sheet. They're in the **player reference**, a separate four-page PDF on the [Sheets page](/sheets/). It's the [quick reference](#appendix-quick) in four parts:
 
 1.  **Making and growing a character:** making a character, Boons and Burdens, things that climb, downtime, bonds and threads, Armour and how Confidence swings, and Hurt, Blaze, Scars, healing and the wound die.
-2.  **Archetypes, Aura and the round:** the seventeen archetypes, a line each, what Aura and Resolve buy and how they come back, Catches, the round, your action, answering, letting it ride, the one defence roll, Defend, taking the hit, what it costs, and conditions.
-3.  **Rolling:** the steps ladder, set actions, building a roll, the roll, your dice and splits, and combos.
+2.  **Archetypes, Aura and the round:** the seventeen archetypes, a line each, what Aura and Resolve buy and how they come back, Catches included, the round, your action, answering, letting it ride, the one defence roll, Defend, taking the hit, what it costs, and conditions.
+3.  **Rolling:** building a roll, set actions and the steps ladder, the roll, your dice and splits, and combos.
 4.  **Threats, moving and gear:** how far, weapon properties, reading a threat, what a win does, Study, stakes and clocks, chases, what you carry, attunement and summoning.
+
+The GM's side of the quick reference stays in the book: factions, the session, the Oracle, and the round and threat budgets.
 
 ## The party sheet {#s-sheet-party}
 

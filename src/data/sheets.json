@@ -2,15 +2,15 @@
   "character-sheet": {
     "file": "/sheets/zidara-character-sheet.pdf",
     "pages": 2,
-    "kb": 260,
+    "kb": 264,
     "built": "2026-10-17",
-    "source": "887452511f9e"
+    "source": "2b9b86fb8d20"
   },
   "player-reference": {
     "file": "/sheets/zidara-player-reference.pdf",
     "pages": 4,
     "kb": 109,
     "built": "2026-10-17",
-    "source": "a56e6c2173a7"
+    "source": "07015ea44bb0"
   }
 }

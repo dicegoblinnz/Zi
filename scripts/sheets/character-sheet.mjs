@@ -26,7 +26,7 @@ const FIXED = [
   ["study", "Study", "look closely, know things"],
   ["talk", "Talk", "charm, lies and threats"],
 ];
-const OWN_ROWS = 7;
+const OWN_ROWS = 6;
 const LADDER = [["1", "d2"], ["2", "d4"], ["3", "d6"], ["4", "d8"], ["5", "d10"], ["6", "d12"], ["7", "d12+d2"], ["8", "d12+d4"], ["9", "d12+d6"], ["10", "d12+d8"], ["11", "d12+d10"], ["12", "2d12"], ["18", "3d12"], ["24", "4d12"]];
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI"];
 
@@ -78,7 +78,7 @@ function front(stamp) {
 
     <div class="stack">
       <div class="card">
-        <h3>Hurt</h3><p class="hint">Fill a bar and write its Catch, and your Confidence drops a size. The small box is Scarred, crossed out for good, and the + bars are extras.</p>
+        <h3>Hurt</h3><p class="hint">Fill a bar and write its Catch, and Confidence drops a size · the small box is Scarred</p>
         ${range(5).map(hurtBar).join("")}
         <p class="hint" style="margin-top:1.4mm"><b>Blaze:</b> every box full? Take a Hurt and declare something extraordinary.</p>
         <div class="wound"><h3>Wound die</h3>${dice("wound_die", WOUND)}<p class="hint" style="flex:1">a size bigger for each Catch · a heal has to beat it</p></div>
@@ -108,7 +108,7 @@ function front(stamp) {
     <div class="stack">
       <div class="card">
         <h3>Traits</h3><p class="hint">Passive · Triggered · Invoked · Per scene · Per downtime · Used</p>
-        ${range(3).map((i) => `<div class="trait"><div class="row">${w(`trait_${i}`)}<span class="lab">type</span>${w(`trait_${i}_type`, { cls: "short" })}</div>${w(`trait_${i}_does`, { size: 8.5 })}</div>`).join("")}
+        ${range(3).map((i) => `<div class="trait"><div class="row">${w(`trait_${i}`)}<span class="lab">type</span>${w(`trait_${i}_type`, { cls: "short" })}</div><span class="w two" data-f="trait_${i}_does" data-multi data-size="8"></span></div>`).join("")}
       </div>
       <div class="card notes" style="flex:1;display:flex;flex-direction:column">
         <h3>Notes</h3>
@@ -140,8 +140,9 @@ function back(stamp) {
     </div>`;
   const attuneCard = (a) => `
     <div class="card acard">
-      <div class="top"><span class="lab">Thing</span>${w(`attune_${a}_thing`)}<div class="stage">${STAGES.map((s) => `<span class="word" data-radio="attune_${a}_stage" data-value="${s.toLowerCase()}">${s}</span>`).join("")}</div></div>
-      <div class="three"><div><span class="lab">Material</span>${w(`attune_${a}_material`)}</div><div><span class="lab">Catch</span>${w(`attune_${a}_catch`)}</div><div><span class="lab">Burden</span>${w(`attune_${a}_burden`)}</div></div>
+      <div class="top"><span class="lab">Thing</span>${w(`attune_${a}_thing`)}</div>
+      <div class="mid"><span class="lab">Material</span>${w(`attune_${a}_material`)}<div class="stage">${STAGES.map((s) => `<span class="word" data-radio="attune_${a}_stage" data-value="${s.toLowerCase()}">${s}</span>`).join("")}</div></div>
+      <div class="pair"><div><span class="lab">Catch</span>${w(`attune_${a}_catch`)}</div><div><span class="lab">Burden</span>${w(`attune_${a}_burden`)}</div></div>
       <div class="perms">${lines(`attune_${a}_permission`, 6)}</div>
     </div>`;
   const bondCard = (b) => `

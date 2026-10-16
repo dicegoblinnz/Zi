@@ -57,8 +57,8 @@ h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); t
 
 /* Write-in spaces. Each one gets a fillable field in the PDF. */
 .w { display: block; height: var(--lh); border-bottom: 0.25mm solid var(--line); flex: 1; min-width: 0; }
-.box { display: inline-block; width: 9.5mm; height: 6.8mm; border: 0.3mm solid var(--box); border-radius: 0.8mm; flex: none; }
-.tick { display: inline-block; width: 2.9mm; height: 2.9mm; border: 0.25mm solid var(--box); border-radius: 0.3mm; flex: none; }
+.box { display: inline-block; width: 9.5mm; height: 6.2mm; border: 0.3mm solid var(--box); border-radius: 0.8mm; flex: none; }
+.tick { display: inline-block; width: 3.3mm; height: 3.3mm; border: 0.25mm solid var(--box); border-radius: 0.3mm; flex: none; }
 .hurtbox { display: inline-block; width: 5.6mm; height: 5.6mm; border: 0.35mm solid var(--box); border-radius: 0.5mm; flex: none; }
 .star {
   display: inline-block; width: 4.6mm; height: 4.6mm; flex: none;
@@ -79,8 +79,8 @@ h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); t
 /* ---------- The character sheet: two A4 pages, back to back. ---------- */
 .cs .page {
   width: 210mm; height: 297mm;
-  padding: 7.5mm 9mm 6mm;
-  display: flex; flex-direction: column; gap: 2.8mm;
+  padding: 7.5mm 9mm 5.5mm;
+  display: flex; flex-direction: column; gap: 2.5mm;
   overflow: hidden;
   break-after: page;
 }
@@ -90,9 +90,9 @@ h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); t
 .cs .ident { flex: 1; display: flex; gap: 4mm; }
 .cs .field { display: flex; flex-direction: column; gap: 0.8mm; }
 .cs .field .w { height: 6mm; flex: none; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2.8mm 4mm; }
-.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2.8mm 3.6mm; }
-.stack { display: flex; flex-direction: column; gap: 2.8mm; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm 4mm; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2.5mm 3.6mm; }
+.stack { display: flex; flex-direction: column; gap: 2.5mm; }
 .row { display: flex; align-items: center; gap: 1.6mm; }
 .cs h3 + .hint, .cs .card > .hint { margin-top: 0.8mm; }
 
@@ -106,7 +106,7 @@ h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); t
 .die-notes { display: flex; gap: 1.2mm; margin-top: 0.7mm; }
 .die-notes span { width: 8.6mm; text-align: center; font: italic 400 6pt/1 var(--body); color: var(--muted); white-space: nowrap; }
 
-.cond { display: flex; align-items: flex-end; gap: 2mm; margin-top: 0.9mm; }
+.cond { display: flex; align-items: flex-end; gap: 2mm; margin-top: 0.6mm; }
 .cond .w { height: 5.6mm; }
 
 .bar { display: flex; align-items: flex-end; gap: 1.6mm; margin-top: 1.3mm; }
@@ -127,9 +127,9 @@ h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); t
 .sa td { height: 5.3mm; padding: 0 1.4mm 0 0; border-bottom: 0.25mm solid var(--line); vertical-align: bottom; }
 .sa td .w { border: 0; height: 5mm; }
 .sa td:last-child { padding-right: 0; }
-.sa .name { width: 38mm; }
-.sa .steps { width: 11mm; }
-.sa .dicecol { width: 17mm; }
+.sa .name { width: 36mm; }
+.sa .steps { width: 10mm; }
+.sa .dicecol { width: 15mm; }
 .sa .fixed { font: 700 7.6pt/1 var(--display); letter-spacing: 0.04em; padding-bottom: 1.1mm; white-space: nowrap; }
 .sa .fixed i { font: italic 400 6.3pt/1 var(--body); letter-spacing: 0; color: var(--muted); margin-left: 1mm; }
 .sa td.steps, .sa td.dicecol, .sa th.steps, .sa th.dicecol { border-left: 0.25mm solid var(--line); padding-left: 1.2mm; text-align: center; }
@@ -141,6 +141,7 @@ h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); t
 .ladder span { display: block; font: 500 7pt/1.1 var(--body); margin-top: 0.6mm; }
 
 .trait + .trait { margin-top: 1.2mm; }
+.trait .w.two { height: 8.4mm; border: 0; background: linear-gradient(var(--line), var(--line)) 0 4.2mm / 100% 0.25mm no-repeat, linear-gradient(var(--line), var(--line)) 0 100% / 100% 0.25mm no-repeat; }
 .trait .row { align-items: flex-end; }
 .lines .w + .w { margin-top: 0; }
 .kit-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3mm; }
@@ -153,16 +154,19 @@ h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); t
 .cs .slim .wordmark { font-size: 11pt; }
 .cs .slim svg { width: 5.4mm; height: 5.4mm; }
 .cs .slim .doc { margin: 0; }
-.back { --lh: 4.9mm; }
+.back { --lh: 4.85mm; gap: 2.3mm; }
+.back .hint { margin-bottom: 1.1mm !important; }
 .tcard .top { display: flex; align-items: flex-start; gap: 1.6mm; }
 .tcard .numeral { font: 700 11pt/1 var(--display); color: var(--gold-ink); width: 6mm; padding-top: 1.2mm; }
 .tcard .w.two { height: 8.8mm; border: 0; background: linear-gradient(var(--line), var(--line)) 0 4.4mm / 100% 0.25mm no-repeat, linear-gradient(var(--line), var(--line)) 0 100% / 100% 0.25mm no-repeat; }
 .tcard .arch { display: flex; align-items: flex-end; gap: 1.6mm; }
 .tcard .perms { margin-top: 0.4mm; }
 .acard .top, .bcard .top { display: flex; align-items: flex-end; gap: 1.6mm; }
+.acard .mid { display: flex; align-items: flex-end; gap: 1.6mm; margin-top: 0.4mm; }
 .acard .stage { display: flex; gap: 0.6mm; margin-left: 1mm; }
-.acard .three { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 0 2.4mm; margin-top: 0.6mm; }
-.acard .three > div { display: flex; align-items: flex-end; gap: 1.2mm; }
+.acard .stage .word { font-size: 6.6pt; padding: 1.3mm 1.9mm; }
+.acard .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3mm; margin-top: 0.2mm; }
+.acard .pair > div { display: flex; align-items: flex-end; gap: 1.2mm; }
 .thread { display: flex; align-items: flex-end; gap: 1mm; }
 .thread .tick { margin-bottom: 0.8mm; }
 .thread .w { margin-right: 0.8mm; }
@@ -171,11 +175,11 @@ h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); t
 .ref { font: 400 9.4pt/1.32 var(--body); }
 .ref-head { display: flex; align-items: center; justify-content: space-between; gap: 8mm; padding-bottom: 2.4mm; margin-bottom: 3mm; border-bottom: 0.3mm solid var(--rule); }
 .ref-head .intro { flex: 1; max-width: 100mm; text-align: right; font: italic 400 8pt/1.3 var(--body); color: var(--muted); }
-.part + .part { margin-top: 4mm; }
-.part h2 {
+.cols h2.part {
+  column-span: all;
   display: flex; align-items: center; gap: 2.4mm;
   font: 700 11pt/1.1 var(--display); letter-spacing: 0.05em; color: var(--ink);
-  margin: 0 0 2.4mm; padding: 1.6mm 0 1.6mm 3.2mm;
+  margin: 4mm 0 2.4mm; padding: 1.6mm 0 1.6mm 3.2mm;
   break-after: avoid;
   background:
     linear-gradient(var(--gold), var(--gold)) left top / 3.2mm 0.55mm no-repeat,
@@ -184,13 +188,17 @@ h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); t
     linear-gradient(var(--gold), var(--gold)) left bottom / 0.55mm 3.2mm no-repeat;
   border-bottom: 0.25mm solid var(--rule);
 }
-.part h2 .num { font: 700 9pt/1 var(--display); color: var(--gold-ink); }
+.cols h2.part:first-child { margin-top: 0; }
+.cols h2.part .num { font: 700 9pt/1 var(--display); color: var(--gold-ink); }
 .cols { column-count: 2; column-gap: 6.5mm; column-rule: 0.25mm solid rgba(184, 137, 42, 0.35); }
 .qr { margin: 0 0 2.6mm; }
 .qr h3 { font: 700 8.6pt/1.15 var(--display); letter-spacing: 0.05em; color: var(--gold-ink); margin: 0 0 1mm; break-after: avoid; }
 .qr p { margin: 0 0 1mm; }
+.cols .span-intro { column-span: all; margin: 0 0 1.6mm; break-after: avoid; }
+.span-intro p { margin: 0; }
 .qr ul, .qr ol { margin: 0; padding: 0 0 0 3.4mm; }
-.qr li { margin: 0 0 0.9mm; }
+.qr li { margin: 0 0 0.9mm; break-inside: avoid; }
+.cols h2.part.new-page { break-before: page; margin-top: 0; }
 .qr ul { list-style: none; }
 .qr ul > li { position: relative; }
 .qr ul > li::before { content: ""; position: absolute; left: -3mm; top: 1.45mm; width: 1.3mm; height: 1.3mm; background: var(--gold); transform: rotate(45deg); }
