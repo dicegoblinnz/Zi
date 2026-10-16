@@ -2,38 +2,127 @@
 import Base from "../layouts/Base.astro";
 import book from "../generated/book.json";
 
-const welcome = book.chapters.find((c) => c.slug === "welcome");
-// The opening of the Welcome chapter is Mo introducing the game in his own words.
-const opening = (welcome?.html.match(/<p>I’m Mo\.[\s\S]*?(?=<p>Zi’Dara starts with)/) ?? [""])[0];
 const latest = book.changes.headings[0];
-const parts = book.parts.map((p) => ({ ...p, chapters: book.chapters.filter((c) => c.partNumber === p.number) }));
 const updated = book.updated
   ? new Date(book.updated).toLocaleDateString("en-NZ", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
   : null;
+// The dice ladder, drawn as each die's outline: 1 step is a d2, up to a d12 at 6.
+const ladder = [
+  { die: "d2", steps: "1 step", points: "50,28 47.1,39 39,47.1 28,50 17,47.1 8.9,39 6,28 8.9,17 17,8.9 28,6 39,8.9 47.1,17" },
+  { die: "d4", steps: "2 steps", points: "28,6 50,46 6,46" },
+  { die: "d6", steps: "3 steps", points: "9,9 47,9 47,47 9,47" },
+  { die: "d8", steps: "4 steps", points: "28,4 52,28 28,52 4,28" },
+  { die: "d10", steps: "5 steps", points: "28,4 50,24 28,52 6,24" },
+  { die: "d12", steps: "6 steps", points: "28,4 51,21 42,49 14,49 5,21" },
+];
 ---
-<Base title="Zi’Dara" current="home">
-  <main id="main" class="home frame">
-    <h1>Zi’Dara</h1>
-    <p class="tag">A tabletop roleplaying game{updated && <> · the rules as of {updated}</>}</p>
-    <div class="intro prose"><Fragment set:html={opening} /></div>
-    <div class="actions">
-      <a class="button primary" href="/rules/welcome/">Start reading</a>
-      <a class="button" href="/rules/the-archetypes/">The archetypes</a>
-      <a class="button" href="/search/">Search the rules</a>
-    </div>
-    {latest && (
-      <p class="stamp">Latest change: <a href={`/changes/#${latest.id}`}>{latest.text}</a></p>
-    )}
-    <div class="parts">
-      {parts.map((p) => (
-        <section class="part">
-          <p class="eyebrow">{p.number}</p>
-          <h2>{p.name}</h2>
-          <ol>
-            {p.chapters.map((c) => <li><a href={`/rules/${c.slug}/`}>{c.title}</a></li>)}
-          </ol>
-        </section>
-      ))}
-    </div>
+<Base title="Zi’Dara" current="home" description="A tabletop roleplaying game where the GM tells you what’s coming before anyone rolls.">
+  <main id="main" class="landing">
+    <section class="band hero frame">
+      <div class="hero-copy">
+        <p class="kicker">A tabletop roleplaying game</p>
+        <h1>The GM tells you what’s coming before anyone rolls.</h1>
+        <p class="lede">You play people who are good at what they do. Each round the GM puts every threat’s dice on the table: what it’s doing, who it’s aimed at and how hard. Your sheet’s already done the counting, so you spend the round choosing what to answer and what to let ride.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="/rules/welcome/">Read the rules</a>
+          <a class="more" href="#crew">Or pick one of the crew and play tonight</a>
+        </div>
+      </div>
+      <figure class="scene" aria-label="A telegraph, and the crew answering it">
+        <div class="card">
+          <div class="head"><span class="label">Telegraph</span><span class="small">Round 1</span></div>
+          <p class="who">The brute</p>
+          <p>He swings his club at Isolde.</p>
+          <div class="dice"><span><span class="die">d8</span><span class="small">At Isolde, and her Armour’s a d2.</span></span></div>
+        </div>
+        <div class="card answer">
+          <span class="label">Answered together</span>
+          <p>Wren puts an arrow in his arm and Bram gets his hammer under the club.</p>
+          <p class="small">Fight 5 and Fight 4 make 9 steps from two actions: a d12 and a d6.</p>
+          <div class="dice">
+            <span><span class="die">8</span><span class="small">on the d12</span></span>
+            <span><span class="die ghost">6</span><span class="small">on his d8</span></span>
+          </div>
+          <p class="verdict">Stopped. It never lands.</p>
+        </div>
+      </figure>
+    </section>
+
+    <section class="band section frame" aria-labelledby="how">
+      <h2 id="how">How it plays</h2>
+      <div class="features">
+        <div class="card feature">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          <h3>You see it coming</h3>
+          <p>A threat telegraphs with its Challenge die, and the GM never hides its size or its target. You’re never going to answer everything, so every round’s a choice.</p>
+        </div>
+        <div class="card feature">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 6h10M10 12h10M10 18h10"></path><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"></path></svg>
+          <h3>Every roll starts from a number</h3>
+          <p>Your sheet does the counting before you play. If a line’s on your set action and it fits, it’s free, and anything else that fits costs 1 Aura.</p>
+        </div>
+        <div class="card feature">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg>
+          <h3>Any world you like</h3>
+          <p>The rules don’t come with a world attached. Build your own, or start from one of the frames in the book.</p>
+        </div>
+        <div class="card feature">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2" width="11" height="20" rx="2.5"></rect><path d="M11 18h2"></path></svg>
+          <h3>Your phone at the table</h3>
+          <p>Coming next: your character on your phone, with the counting done and every roll a tap away.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="ladder-band" aria-labelledby="steps">
+      <div class="band frame">
+        <div class="ladder-copy">
+          <h2 id="steps">Steps make dice</h2>
+          <p class="muted">A set action’s steps are 1 for the action and 1 for every line on it. Then turn your steps into dice: 1 step is a d2, 2 steps a d4, and so on up to a d12 at 6.</p>
+          <p>Vesk’s Sneak is her first Title, <em>move unseen</em> and Silent Step, plus the action. That’s 4 steps, a d8.</p>
+        </div>
+        <ol class="ladder" aria-label="Steps and their dice">
+          {ladder.map((d) => (
+            <li class="card">
+              <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><polygon points={d.points}></polygon></svg>
+              <b>{d.die}</b>
+              <span>{d.steps}</span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <section id="crew" class="band section frame" aria-labelledby="crew-title">
+      <div>
+        <h2 id="crew-title">Meet the crew</h2>
+        <p class="intro">Pick one and play tonight. Take one as written, or copy one and change anything you like.</p>
+      </div>
+      <div class="crew">
+        {book.crew.map((c) => (
+          <article class="card">
+            <div class="art"><span class="die" aria-hidden="true">{c.name[0]}</span></div>
+            <div class="body">
+              <h3>{c.name}</h3>
+              <p class="title">{c.title}</p>
+              <div class="chips">{c.archetypes.map((a) => <span class="chip">{a}</span>)}</div>
+              <p class="blurb">{c.blurb}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p><a href={book.crewLink}>See their full sheets</a></p>
+    </section>
+
+    <section class="band frame">
+      <div class="card cta">
+        <div>
+          <h2>The rules are free to read</h2>
+          <p>Every chapter’s here, and it’s the master copy, so it’s always the current rules.{updated && <> Last updated {updated}.</>}</p>
+          {latest && <p><a href={`/changes/#${latest.id}`}>See what’s changed</a></p>}
+        </div>
+        <a class="button primary" href="/rules/welcome/">Read the rules</a>
+      </div>
+    </section>
   </main>
 </Base>

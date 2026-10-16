@@ -1,4 +1,13 @@
 ---
+// The site serves its own fonts, so they work offline and need nothing from Google.
+import "@fontsource/cinzel/500.css";
+import "@fontsource/cinzel/600.css";
+import "@fontsource/cinzel/700.css";
+import "@fontsource/alegreya-sans/400.css";
+import "@fontsource/alegreya-sans/400-italic.css";
+import "@fontsource/alegreya-sans/500.css";
+import "@fontsource/alegreya-sans/700.css";
+import "@fontsource/alegreya-sans/700-italic.css";
 import "../styles/site.css";
 
 interface Props {
@@ -6,7 +15,7 @@ interface Props {
   description?: string;
   current?: "home" | "rules" | "changes" | "search";
 }
-const { title, description = "The rules of Zi’Dara, a tabletop roleplaying game by Mo of Dice Goblin.", current } = Astro.props;
+const { title, description = "The rules of Zi’Dara, a tabletop roleplaying game.", current } = Astro.props;
 const pageTitle = title === "Zi’Dara" ? title : `${title} · Zi’Dara`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
@@ -21,27 +30,73 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta name="theme-color" content="#f4f5f8" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0f131b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#120d18" />
+    <script is:inline>
+      // Dark unless this browser chose light. Runs before anything paints.
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        try {
+          if (localStorage.getItem("zi-theme") === "light") {
+            root.setAttribute("data-theme", "light");
+            document.querySelector('meta[name="theme-color"]').setAttribute("content", "#f5f2f7");
+          }
+        } catch (e) {}
+      })();
+    </script>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Sans+Condensed:wght@400;500;600&display=swap" />
     <slot name="head" />
   </head>
   <body>
     <a class="skip" href="#main">Skip to the page</a>
     <header class="topbar">
-      <a class="brand" href="/">Zi’Dara</a>
+      <a class="brand" href="/">
+        <svg class="mark" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path class="edge" d="M16 2.5 L29.5 16 L16 29.5 L2.5 16 Z"></path><path class="core" d="M16 10 L22 16 L16 22 L10 16 Z"></path></svg>
+        Zi’Dara
+      </a>
       <nav class="topnav" aria-label="Site">
         <a href="/rules/" aria-current={current === "rules" ? "page" : undefined}>Rules</a>
         <a href="/changes/" aria-current={current === "changes" ? "page" : undefined}>What’s changed</a>
         <a href="/search/" aria-current={current === "search" ? "page" : undefined}>Search</a>
       </nav>
+      <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+        <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+      </button>
     </header>
     <slot />
     <footer class="site frame">
-      <p>Zi’Dara is made by Mo at Dice Goblin, Auckland. The rules here are the master copy, and they change as the game is playtested.</p>
+      <a class="brand" href="/">
+        <svg class="mark" width="20" height="20" viewBox="0 0 32 32" aria-hidden="true"><path class="edge" d="M16 2.5 L29.5 16 L16 29.5 L2.5 16 Z"></path><path class="core" d="M16 10 L22 16 L16 22 L10 16 Z"></path></svg>
+        Zi’Dara
+      </a>
+      <nav aria-label="Footer">
+        <a href="/rules/">Rules</a>
+        <a href="/changes/">What’s changed</a>
+        <a href="/search/">Search</a>
+      </nav>
     </footer>
+    <script is:inline>
+      // The light switch. The choice is remembered in this browser only.
+      (function () {
+        var root = document.documentElement;
+        var button = document.querySelector(".theme-toggle");
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (!button) return;
+        function show() {
+          var light = root.getAttribute("data-theme") === "light";
+          button.setAttribute("aria-label", light ? "Switch to dark mode" : "Switch to light mode");
+          meta.setAttribute("content", light ? "#f5f2f7" : "#120d18");
+        }
+        button.addEventListener("click", function () {
+          var light = root.getAttribute("data-theme") !== "light";
+          if (light) root.setAttribute("data-theme", "light");
+          else root.removeAttribute("data-theme");
+          try { localStorage.setItem("zi-theme", light ? "light" : "dark"); } catch (e) {}
+          show();
+        });
+        show();
+      })();
+    </script>
   </body>
 </html>

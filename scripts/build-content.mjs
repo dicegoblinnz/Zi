@@ -148,6 +148,20 @@ function render(doc, where, pageFor) {
 // Titles and part blurbs come from front matter, so curl their apostrophes here.
 const curly = (s) => (typeof s === "string" ? s.replace(/'/g, "\u2019") : s);
 
+// The ready-made crew, read straight off their sheets so the home page
+// always matches the book: name, Title, the one-line pitch and archetypes.
+function crewFrom(doc) {
+  const crew = [];
+  const sheet = /^:::sheet\[([^:\]]+): ([^\]]+)\]\n\*([^\n]+)\*\n\n\*\*Plays like:\*\* ([^\n]+)/gm;
+  for (const m of doc.body.matchAll(sheet)) {
+    const plays = m[4];
+    const archetypes = [...new Set([...plays.matchAll(/\[([^\]]+)\]\(#a-[a-z-]+\)/g)].map((a) => a[1]))];
+    const twice = archetypes.length === 1 && /\btwice\b/.test(plays);
+    crew.push({ name: m[1], title: curly(m[2]), blurb: curly(m[3]), archetypes: twice ? [`${archetypes[0]}, twice`] : archetypes });
+  }
+  return crew;
+}
+
 function textOf(node) {
   if (node.type === "text") return node.value;
   return (node.children || []).map(textOf).join("");
@@ -186,6 +200,13 @@ const chapters = docs.map((doc, i) => {
 const changesOut = render(changes, where, pageFor);
 warnings += changesOut.warnings;
 
+const crewDoc = docs.find((d) => d.body.includes("{#s-pregens}"));
+const crew = crewDoc ? crewFrom(crewDoc) : [];
+if (crew.length !== 6) {
+  console.warn(`  Expected the six crew sheets, found ${crew.length}`);
+  warnings += 1;
+}
+
 const outDir = join(ROOT, "src", "generated");
 mkdirSync(outDir, { recursive: true });
 writeFileSync(
@@ -195,6 +216,8 @@ writeFileSync(
     parts,
     chapters,
     changes: { title: curly(changes.meta.title), html: changesOut.html, headings: changesOut.headings },
+    crew,
+    crewLink: crewDoc ? `${pageFor.get(crewDoc.path)}#s-pregens` : "/rules/",
   }),
 );
 mkdirSync(join(ROOT, "public", "figures"), { recursive: true });

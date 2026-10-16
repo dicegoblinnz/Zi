@@ -3,8 +3,9 @@
 //   npm run build && node tests/check-site.mjs [screenshot-folder]
 //
 // For each page, at 320, 360, 390, 430 and 1280 wide, in light and dark:
-// no sideways scrolling, no console errors, and tap targets at least 44px
-// high in the menus. Runs axe on every page, and tries a search.
+// nothing fetched from outside the site, no sideways scrolling, no console
+// errors, and tap targets at least 44px high in the menus. Runs axe on every
+// page, tries a search and flips the light switch.
 import { createServer } from "node:http";
 import { readFile, stat } from "node:fs/promises";
 import { join, extname } from "node:path";
@@ -48,27 +49,38 @@ const WIDTHS = [320, 360, 390, 430, 1280];
 const problems = [];
 const note = (p) => { problems.push(p); console.log("  ✗ " + p); };
 
+// The site serves everything itself, fonts included, so it works offline.
+// Block anything from elsewhere, and keep a list so the checks can say what it was.
+async function sealed(context) {
+  const outside = [];
+  await context.route((url) => url.hostname !== "localhost", (route) => { outside.push(route.request().url()); return route.abort(); });
+  return outside;
+}
+
 const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
 for (const scheme of ["light", "dark"]) {
   for (const width of WIDTHS) {
     const context = await browser.newContext({ viewport: { width, height: 860 }, colorScheme: scheme });
-    // Fonts come from Google, which a sandbox may not reach. Don't count that as the site's fault.
-    await context.route(/fonts\.(googleapis|gstatic)\.com/, (route) => route.abort());
+    // The site's dark unless the visitor picked light, which the browser remembers.
+    if (scheme === "light") await context.addInitScript(() => { try { localStorage.setItem("zi-theme", "light"); } catch (e) {} });
+    const outside = await sealed(context);
     const page = await context.newPage();
     const errors = [];
-    page.on("console", (m) => { if (m.type() === "error" && !/fonts\.g|net::ERR_FAILED/.test(m.text())) errors.push(m.text()); });
+    page.on("console", (m) => { if (m.type() === "error" && !/net::ERR_FAILED/.test(m.text())) errors.push(m.text()); });
     page.on("pageerror", (e) => errors.push(String(e)));
     for (const path of PAGES) {
       errors.length = 0;
+      outside.length = 0;
       await page.goto(BASE + path, { waitUntil: "load" });
       await page.waitForSelector("main");
+      if (outside.length) note(`${path} @${width} ${scheme}: fetches from outside the site: ${[...new Set(outside)].slice(0, 3).join(", ")}`);
       const { scroll, client } = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
       if (scroll > client) note(`${path} @${width} ${scheme}: scrolls sideways (${scroll} > ${client})`);
       if (path === "/no-such-page/") errors.splice(0, errors.length, ...errors.filter((e) => !/status of 404/.test(e)));
       if (errors.length) note(`${path} @${width} ${scheme}: console errors: ${errors.join(" | ")}`);
       // Menus and buttons need room for a thumb. Links inside running text don't.
       const small = await page.evaluate(() =>
-        [...document.querySelectorAll(".topnav a, .brand, .button, .pager a, .toc-mobile > summary, .toc-mobile a")]
+        [...document.querySelectorAll(".topnav a, .brand, .button, .theme-toggle, .pager a, .toc-mobile > summary, .toc-mobile a, footer.site nav a, .hero-actions .more, .part li a")]
           .filter((el) => el.getClientRects().length && el.offsetParent !== null)
           .map((el) => ({ t: el.textContent.trim().slice(0, 30), h: Math.round(el.getBoundingClientRect().height) }))
           .filter((x) => x.h < 44),
@@ -86,7 +98,8 @@ for (const scheme of ["light", "dark"]) {
 // Accessibility, on every page, at phone width in light and desktop in dark.
 for (const [width, scheme] of [[390, "light"], [1280, "dark"]]) {
   const context = await browser.newContext({ viewport: { width, height: 860 }, colorScheme: scheme });
-  await context.route(/fonts\.(googleapis|gstatic)\.com/, (route) => route.abort());
+  if (scheme === "light") await context.addInitScript(() => { try { localStorage.setItem("zi-theme", "light"); } catch (e) {} });
+  await sealed(context);
   const page = await context.newPage();
   for (const path of PAGES) {
     await page.goto(BASE + path, { waitUntil: "load" });
@@ -101,14 +114,36 @@ for (const [width, scheme] of [[390, "light"], [1280, "dark"]]) {
 // Search finds things, and an input is big enough that phones don't zoom in.
 {
   const context = await browser.newContext({ viewport: { width: 390, height: 860 } });
+  const outside = await sealed(context);
   const page = await context.newPage();
   await page.goto(BASE + "/search/?q=wound%20die");
   await page.waitForSelector(".pagefind-ui__result", { timeout: 10000 }).catch(() => note("search: no results for 'wound die'"));
   const count = await page.locator(".pagefind-ui__result").count();
   const size = await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector("#search input")).fontSize));
   if (size < 16) note(`search: the input's text is ${size}px, under 16px`);
+  if (outside.length) note(`search: fetches from outside the site: ${[...new Set(outside)].slice(0, 3).join(", ")}`);
   if (SHOTS) await page.screenshot({ path: join(SHOTS, "search-390-light.png") });
   console.log(`search: ${count} results for "wound die"`);
+  await context.close();
+}
+
+// The light switch flips the theme, and the choice sticks from page to page.
+{
+  const context = await browser.newContext({ viewport: { width: 390, height: 860 } });
+  await sealed(context);
+  const page = await context.newPage();
+  const theme = () => page.evaluate(() => document.documentElement.getAttribute("data-theme"));
+  await page.goto(BASE + "/");
+  if (await theme()) note(`theme: starts as ${await theme()}, not dark`);
+  await page.click(".theme-toggle");
+  if ((await theme()) !== "light") note("theme: the switch didn't turn light mode on");
+  const label = await page.getAttribute(".theme-toggle", "aria-label");
+  if (label !== "Switch to dark mode") note(`theme: in light mode the switch says "${label}"`);
+  await page.goto(BASE + "/rules/conflict/");
+  if ((await theme()) !== "light") note("theme: light mode wasn't remembered on the next page");
+  await page.click(".theme-toggle");
+  if (await theme()) note("theme: the switch didn't go back to dark");
+  console.log("theme: the light switch checked");
   await context.close();
 }
 

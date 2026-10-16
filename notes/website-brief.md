@@ -13,6 +13,14 @@ Mo's answers from 16 Oct 2026, given before the redesign. Everything built for z
 - The home page depends on who's there. Newcomers get what Zi'Dara is and why it's great. Signed-in players go straight to their characters and games.
 - Silent unless someone turns sound on. A telegraph landing buzzes the phone.
 
+## The look Mo chose: Sigil
+
+- Picked on 16 Oct from three looks (Obsidian, Astral and Sigil) drawn on a design canvas.
+- Type: Cinzel for headings and Alegreya Sans for everything else. The site serves both itself, so they work offline.
+- Colours: plum-black (#120d18) under a faint gold diamond lattice, gold (#d9b45a) for buttons, corner brackets and highlights, and violet (#b596f5) for links and the mark. Light mode is a pale lilac page with darker gold and violet.
+- Shapes: gold corner brackets on cards, hexagon dice, a gold button with clipped ends, and a diamond mark (a violet outline round a gold core).
+- It starts dark. The switch in the top bar flips to light, and the browser remembers the choice.
+
 ## Who and where
 
 - For Mo's playtest groups, GMs running it at home, brand-new players and groups playing online.
