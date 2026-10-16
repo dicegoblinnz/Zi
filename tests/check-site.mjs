@@ -44,7 +44,12 @@ const PAGES = [
   "/", "/rules/", "/rules/welcome/", "/rules/the-core/", "/rules/the-archetypes/",
   "/rules/title-ideas-and-the-crew/", "/rules/conflict/", "/rules/the-bestiary/",
   "/rules/appendix-c-every-lever-in-the-game/", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
+  "/characters/", "/characters/?c=check-vesk",
 ];
+// A character saved on the phone, so a sheet gets checked like any other page.
+// Its hash is blank, so the sheet shows its "changed in the rules" note too.
+const SAVED = JSON.stringify({ v: 1, characters: [{ id: "check-vesk", crew: "vesk", name: "Vesk", hash: "", state: {} }] });
+const seed = (context) => context.addInitScript((saved) => { try { if (!localStorage.getItem("zi-characters")) localStorage.setItem("zi-characters", saved); } catch (e) {} }, SAVED);
 const WIDTHS = [320, 360, 390, 430, 1280];
 const problems = [];
 const note = (p) => { problems.push(p); console.log("  ✗ " + p); };
@@ -63,6 +68,7 @@ for (const scheme of ["light", "dark"]) {
     const context = await browser.newContext({ viewport: { width, height: 860 }, colorScheme: scheme });
     // The site's dark unless the visitor picked light, which the browser remembers.
     if (scheme === "light") await context.addInitScript(() => { try { localStorage.setItem("zi-theme", "light"); } catch (e) {} });
+    await seed(context);
     const outside = await sealed(context);
     const page = await context.newPage();
     const errors = [];
@@ -80,14 +86,14 @@ for (const scheme of ["light", "dark"]) {
       if (errors.length) note(`${path} @${width} ${scheme}: console errors: ${errors.join(" | ")}`);
       // Menus and buttons need room for a thumb. Links inside running text don't.
       const small = await page.evaluate(() =>
-        [...document.querySelectorAll(".topnav a, .brand, .button, .theme-toggle, .pager a, .toc-mobile > summary, .toc-mobile a, footer.site nav a, .hero-actions .more, .part li a")]
+        [...document.querySelectorAll(".topnav a, .brand, .button, .theme-toggle, .pager a, .toc-mobile > summary, .toc-mobile a, footer.site nav a, .hero-actions .more, .part li a, .cc button, .cc-back, .cc-own > summary")]
           .filter((el) => el.getClientRects().length && el.offsetParent !== null)
           .map((el) => ({ t: el.textContent.trim().slice(0, 30), h: Math.round(el.getBoundingClientRect().height) }))
           .filter((x) => x.h < 44),
       );
       if (width < 900 && small.length) note(`${path} @${width} ${scheme}: small tap targets: ${small.slice(0, 4).map((x) => `${x.t} (${x.h}px)`).join(", ")}`);
-      if (SHOTS && (width === 390 || width === 1280) && ["/", "/rules/the-archetypes/", "/rules/conflict/", "/changes/"].includes(path)) {
-        const name = `${path.replace(/\//g, "_") || "_"}${width}-${scheme}.png`.replace(/^_+/, "");
+      if (SHOTS && (width === 390 || width === 1280) && ["/", "/rules/the-archetypes/", "/rules/conflict/", "/changes/", "/characters/", "/characters/?c=check-vesk"].includes(path)) {
+        const name = `${path.replace(/[^a-z0-9-]+/gi, "_") || "_"}${width}-${scheme}.png`.replace(/^_+/, "");
         await page.screenshot({ path: join(SHOTS, name) });
       }
     }
@@ -99,6 +105,7 @@ for (const scheme of ["light", "dark"]) {
 for (const [width, scheme] of [[390, "light"], [1280, "dark"]]) {
   const context = await browser.newContext({ viewport: { width, height: 860 }, colorScheme: scheme });
   if (scheme === "light") await context.addInitScript(() => { try { localStorage.setItem("zi-theme", "light"); } catch (e) {} });
+  await seed(context);
   await sealed(context);
   const page = await context.newPage();
   for (const path of PAGES) {

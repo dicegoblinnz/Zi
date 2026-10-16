@@ -1,0 +1,50 @@
+---
+// The character companion: pick one of the crew and play them from your phone.
+// src/companion/app.js draws everything from the crew's sheets, which the
+// build reads straight off the rules (scripts/build-content.mjs). Characters
+// are saved on the phone, and the service worker keeps this page offline.
+import Base from "../../layouts/Base.astro";
+import book from "../../generated/book.json";
+import "../../styles/companion.css";
+
+const data = { crew: book.crew, conditions: book.companion.conditions, links: book.companion.links };
+const json = JSON.stringify(data).replace(/</g, "\\u003c");
+---
+<Base title="Characters" current="characters" description="Play one of Zi’Dara’s ready-made crew from your phone, with the counting done and every roll a tap away.">
+  <script is:inline slot="head">
+    // A link straight to a sheet hides the crew list until the sheet's drawn.
+    try { if (/[?&]c=/.test(location.search)) document.documentElement.classList.add("cc-open"); } catch (e) {}
+  </script>
+  <main id="main" class="companion frame">
+    <div id="app" class="cc">
+      <header class="cc-intro">
+        <p class="kicker">Your phone at the table</p>
+        <h1>Characters</h1>
+        <p class="lede">Pick one of the crew, give them a name and play them from your phone. The counting’s done for you, and they’re saved on this phone, signal or not.</p>
+      </header>
+      <noscript><div class="cc-note is-warn"><p>The companion needs JavaScript. The crew’s full sheets are in the <a href={book.crewLink}>rules</a>.</p></div></noscript>
+      <section class="cc-sec cc-static" aria-labelledby="cc-crew">
+        <h2 id="cc-crew">Pick from the crew</h2>
+        <div class="crew">
+          {book.crew.map((c) => (
+            <article class="card">
+              <div class="art"><span class="die" aria-hidden="true">{c.name[0]}</span></div>
+              <div class="body">
+                <h3>{c.name}</h3>
+                <p class="title">{c.title}</p>
+                <div class="chips">{c.archetypes.map((a) => <span class="chip">{a}</span>)}</div>
+                <p class="blurb">{c.blurb}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    </div>
+    <dialog id="cc-dialog" class="cc-dialog"></dialog>
+    <div id="cc-toast" class="cc-toast" role="status" aria-live="polite"></div>
+  </main>
+  <script is:inline type="application/json" id="zi-companion" set:html={json}></script>
+  <script>
+    import "../../companion/app.js";
+  </script>
+</Base>

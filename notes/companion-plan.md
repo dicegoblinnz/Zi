@@ -76,3 +76,22 @@ Mo's weekly limit is tight. Work in this chat only, read only the parts of files
 ## After this, in Mo's order
 
 Sign-in (invite-only, with Google, Discord, Apple or an emailed link), building your own character (guided, blank or random), your GM seeing sheets, then campaigns, worlds and maps, and live telegraphs.
+
+## Calls made while building it (17 Oct 2026)
+
+For Mo to check. Each one's the smallest call in the shape of the rules, and each is easy to change.
+
+1. **Aura and the +2.** A die that comes up on its top face gives 1 Aura back as soon as it's rolled. Putting the +2 (or +3) on it afterwards doesn't take that Aura away, and a die the +2 takes to its top face, or past it, never gives any.
+2. **The Mark die.** A roll can include a Mark die when the target's *Marked*. It's one more die against it, and a top face on it gives Aura to whoever rolled, like any die in the roll. The Hunter's +2 (+3 for Wren) only goes on the Mark die.
+3. **New scene ends conditions.** They fade a size every round, and the New scene button clears whatever's left, the same way Confidence and the loose boxes reset.
+4. **After downtime does a new scene as well:** Aura full, Confidence back where it starts, loose boxes clear, conditions gone, and Resolve full. A Catch on the Hurt track and Armour still take a slot each, so they stay until the player taps them.
+5. **Defend matches the rolls up for you,** so the most dice get stopped. The rules say you choose which roll blocks which, so if players should pick (to stop a *pin* rather than a bigger hit, say), that's a small change.
+6. **A Scar crosses out the last open box,** and a bar counts as full when every box in it that isn't crossed out is filled.
+7. **Clothes that fit the scene** are a "Dressed for it" button on Confidence, rather than a question at every new scene.
+8. **"Her picks" on a set action** counts as that attuned thing's first permission. So Bram's war hammer on his Fight is *fight with a war hammer*, and *knock a man off his feet* can be brought in for 1 Aura.
+9. **Bringing something in** lists the character's Titles, permissions, attuned permissions, traits that give a step, and what they carry. The ground, a threat's tag and a friend's permission share one counter, "something else that fits", at 1 Aura each.
+10. **Friends joining in** is a number the player puts in: the friend's set action steps, leaving out lines they've both got. The app can't see a friend's sheet yet.
+11. **A crew thread strained on one phone** isn't strained on the other yet, because sheets don't talk to each other until sign-in. The app says to tell them.
+12. **A sheet's hash** covers its whole block in the chapter, so any change to a crew sheet, even a typo fix, shows the "changed in the rules" note.
+
+Not in this version, and handled at the table for now: the Shadow pool, a Face's influence held over between rolls, a Leader handing steps out from the app, and the Oracle taking steps off telegraphs. Each archetype's 1 Aura is on the sheet with a button to pay it.

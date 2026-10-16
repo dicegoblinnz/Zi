@@ -1,0 +1,34 @@
+// Write dist/sw.js after the build: the service worker from scripts/sw.js,
+// with the list of files to keep on the phone and a version that changes
+// whenever any of them does. It keeps every page except the not-found page,
+// the CSS and scripts, the Latin fonts, the figures and the favicon. Search
+// (dist/pagefind/) needs a signal, so it's left out.
+import { createHash } from "node:crypto";
+import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { join, relative, sep } from "node:path";
+
+const ROOT = process.cwd();
+const DIST = join(ROOT, "dist");
+const files = [];
+(function walk(dir) {
+  for (const name of readdirSync(dir)) {
+    const path = join(dir, name);
+    if (statSync(path).isDirectory()) {
+      if (name !== "pagefind") walk(path);
+    } else files.push(path);
+  }
+})(DIST);
+
+const keep = (rel) => (/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel);
+const hash = createHash("sha1");
+const urls = [];
+for (const path of files.sort()) {
+  const rel = relative(DIST, path).split(sep).join("/");
+  if (!keep(rel)) continue;
+  hash.update(rel).update(readFileSync(path));
+  urls.push(`/${rel.replace(/(^|\/)index\.html$/, "$1")}`);
+}
+const version = hash.digest("hex").slice(0, 10);
+const source = readFileSync(join(ROOT, "scripts", "sw.js"), "utf8");
+writeFileSync(join(DIST, "sw.js"), source.replace("__VERSION__", version).replace("__PRECACHE__", JSON.stringify(urls)));
+console.log(`sw.js: ${urls.length} files kept for offline, version ${version}`);

@@ -5,7 +5,7 @@
   "scripts": {
     "content": "node scripts/build-content.mjs",
     "dev": "npm run content && astro dev",
-    "build": "npm run content && astro build && pagefind --site dist",
+    "build": "npm run content && astro build && pagefind --site dist && node scripts/build-sw.mjs",
     "preview": "npm run build && wrangler dev"
   },
   "dependencies": {

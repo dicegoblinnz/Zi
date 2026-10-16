@@ -13,7 +13,7 @@ import "../styles/site.css";
 interface Props {
   title: string;
   description?: string;
-  current?: "home" | "rules" | "changes" | "search";
+  current?: "home" | "rules" | "characters" | "changes" | "search";
 }
 const { title, description = "The rules of Zi’Dara, a tabletop roleplaying game.", current } = Astro.props;
 const pageTitle = title === "Zi’Dara" ? title : `${title} · Zi’Dara`;
@@ -56,6 +56,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       </a>
       <nav class="topnav" aria-label="Site">
         <a href="/rules/" aria-current={current === "rules" ? "page" : undefined}>Rules</a>
+        <a href="/characters/" aria-current={current === "characters" ? "page" : undefined}>Characters</a>
         <a href="/changes/" aria-current={current === "changes" ? "page" : undefined}>What’s changed</a>
         <a href="/search/" aria-current={current === "search" ? "page" : undefined}>Search</a>
       </nav>
@@ -72,6 +73,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       </a>
       <nav aria-label="Footer">
         <a href="/rules/">Rules</a>
+        <a href="/characters/">Characters</a>
         <a href="/changes/">What’s changed</a>
         <a href="/search/">Search</a>
       </nav>
@@ -97,6 +99,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         });
         show();
       })();
+      // Keep the rules and the Characters page on this phone, so they open with no signal.
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("/sw.js").catch(function () {});
+        });
+      }
     </script>
   </body>
 </html>
