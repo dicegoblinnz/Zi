@@ -131,9 +131,9 @@ button.hex.big { cursor: pointer; box-shadow: none; }
 .cc-bars { display: grid; gap: 8px; margin: 0.6rem 0; }
 .cc-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
 .cc-boxes { display: inline-flex; gap: 5px; padding: 3px; border-radius: 2px; }
-.cc-boxes .box { width: 30px; height: 30px; background: var(--surface); border: 1.5px solid var(--line); border-radius: 2px; }
-.cc-boxes .box.on { background: var(--gold); border-color: var(--gold); }
-.cc-boxes .box.x { background: repeating-linear-gradient(45deg, var(--muted) 0 2px, transparent 2px 7px); opacity: 0.6; }
+.cc-boxes .hb { width: 30px; height: 30px; background: var(--surface); border: 1.5px solid var(--line); border-radius: 2px; }
+.cc-boxes .hb.on { background: var(--gold); border-color: var(--gold); }
+.cc-boxes .hb.x { background: repeating-linear-gradient(45deg, var(--muted) 0 2px, transparent 2px 7px); opacity: 0.6; }
 .cc-bar.is-full .cc-boxes { box-shadow: 0 0 0 1px var(--gold); }
 .cc-catch { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
 

@@ -311,7 +311,7 @@ function sheetView(ch, c) {
 
   const bars = Array.from({ length: hi.bars }, (_, b) => `<div class="cc-bar${hi.full[b] ? " is-full" : ""}"><span class="cc-boxes" aria-hidden="true">${[0, 1, 2].map((j) => {
     const i = b * 3 + j;
-    return `<span class="box${i >= hi.open ? " x" : i < s.hurt ? " on" : ""}"></span>`;
+    return `<span class="hb${i >= hi.open ? " x" : i < s.hurt ? " on" : ""}"></span>`;
   }).join("")}</span>${s.catches[b] ? `<span class="cc-catch"><em>${esc(s.catches[b])}</em><button type="button" class="button sm" data-act="heal-catch" data-b="${b}">Healed in downtime</button></span>` : ""}</div>`).join("");
 
   const conds = s.conditions.map((x, i) => {
