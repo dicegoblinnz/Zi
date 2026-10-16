@@ -8,6 +8,7 @@ This repo is the master copy of the rules for **Zi'Dara**, Mo's tabletop rolepla
 - `content/changes.md`: the public change log, newest first, one entry per rules change, dated by when it went to the table.
 - `content/figures/`: SVG figures the chapters use.
 - `notes/to-confirm.md`: calls Claude made to fill gaps in Mo's rules, waiting for Mo's yes or no.
+- `notes/website-brief.md`: what Mo wants from the website (look, companions, live play, worlds, order). Read it before any site work.
 - `notes/playtest-sheets/`: Mo's "What's changed" playtest sheets (text), the primary source for each change.
 - `tools/check_terms.py`: flags retired rules words (`--links` checks every `](#id)` link against the chapters' ids).
 - `tools/voice_check.py`: flags em dashes, semicolons, exclamation marks, stiff phrases and filler, and counts contractions.
@@ -52,5 +53,5 @@ Write as Mo, teaching at the table with dice in hand. Use the `zi-voice` skill w
 - `scripts/build-content.mjs` renders the Markdown itself (unified: remark-parse, remark-gfm, remark-directive, smartypants) into `src/generated/book.json`, so it doesn't depend on Astro's Markdown pipeline. It rewrites `#id` links to the page that holds the id. Chapter URLs come from each chapter's `slug:` in its front matter, so keep slugs stable.
 - `src/pages/`: home, `/rules/` and `/rules/<slug>/`, `/changes/`, `/search/` (Pagefind, built after Astro), `404`.
 - `tests/check-site.mjs` must pass before anything goes to `main`: 320, 360, 390, 430 and 1280 wide, light and dark, no sideways scroll, no console errors, 44px tap targets, axe, and search.
-- The look is a starting look (lapis and gold, the same as the reading copy) until Mo picks one.
-- Still to come, in Mo's order: characters (accounts are invite-only), campaigns, worlds and maps, live telegraphs on phones and a table screen (Durable Objects), and offline use.
+- The look is being redesigned to the brief: a modern game screen, dark with a light switch, arcane violet and radiant gold, fully separate from Dice Goblin.
+- Still to come, in Mo's order: the new look, the character companion (accounts are invite-only), then campaigns, worlds and maps, and live telegraphs on phones and a table screen (Durable Objects). Each piece goes to Mo's playtests as soon as it's ready. Sheets and rules must work offline.
