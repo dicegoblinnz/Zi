@@ -238,7 +238,8 @@ a:focus-visible, summary:focus-visible, button:focus-visible { outline: 2px soli
 .ladder-copy .muted { color: var(--muted); }
 .ladder { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.9rem; }
 .ladder li { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; padding: 1.1rem 0.5rem; }
-.ladder svg { fill: none; stroke: var(--gold); stroke-width: 2; stroke-linejoin: round; }
+.ladder svg { fill: none; stroke: var(--bracket); stroke-width: 2; stroke-linejoin: round; }
+.ladder svg .edges { stroke-width: 1.25; opacity: 0.6; }
 .ladder b { font-size: 1.6rem; line-height: 1.2; color: var(--gold-ink); }
 .ladder span { font-size: 0.92rem; color: var(--muted); }
 .crew { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr)); gap: 1.2rem; }

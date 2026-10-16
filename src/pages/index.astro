@@ -6,14 +6,14 @@ const latest = book.changes.headings[0];
 const updated = book.updated
   ? new Date(book.updated).toLocaleDateString("en-NZ", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
   : null;
-// The dice ladder, drawn as each die's outline: 1 step is a d2, up to a d12 at 6.
+// The dice ladder, drawn as each die's outline and a few of its edges: 1 step is a d2, up to a d12 at 6.
 const ladder = [
   { die: "d2", steps: "1 step", points: "50,28 47.1,39 39,47.1 28,50 17,47.1 8.9,39 6,28 8.9,17 17,8.9 28,6 39,8.9 47.1,17" },
-  { die: "d4", steps: "2 steps", points: "28,6 50,46 6,46" },
+  { die: "d4", steps: "2 steps", points: "28,6 50,46 6,46", edges: "M28 6 L28 46" },
   { die: "d6", steps: "3 steps", points: "9,9 47,9 47,47 9,47" },
-  { die: "d8", steps: "4 steps", points: "28,4 52,28 28,52 4,28" },
-  { die: "d10", steps: "5 steps", points: "28,4 50,24 28,52 6,24" },
-  { die: "d12", steps: "6 steps", points: "28,4 51,21 42,49 14,49 5,21" },
+  { die: "d8", steps: "4 steps", points: "28,4 52,28 28,52 4,28", edges: "M4 28 L52 28" },
+  { die: "d10", steps: "5 steps", points: "28,4 50,24 28,52 6,24", edges: "M6 24 L28 32 L50 24 M28 32 L28 52" },
+  { die: "d12", steps: "6 steps", points: "28,4 51,21 42,49 14,49 5,21", edges: "M28 16.4 L39.5 24.9 L35 38.9 L21 38.9 L16.5 24.9 Z M28 16.4 L28 4 M39.5 24.9 L51 21 M35 38.9 L42 49 M21 38.9 L14 49 M16.5 24.9 L5 21" },
 ];
 ---
 <Base title="Zi’Dara" current="home" description="A tabletop roleplaying game where the GM tells you what’s coming before anyone rolls.">
@@ -84,7 +84,7 @@ const ladder = [
         <ol class="ladder" aria-label="Steps and their dice">
           {ladder.map((d) => (
             <li class="card">
-              <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><polygon points={d.points}></polygon></svg>
+              <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><polygon points={d.points}></polygon>{d.edges && <path class="edges" d={d.edges}></path>}</svg>
               <b>{d.die}</b>
               <span>{d.steps}</span>
             </li>
