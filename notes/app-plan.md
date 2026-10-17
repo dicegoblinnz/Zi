@@ -37,7 +37,7 @@ From the drill on 17 Oct 2026 (`notes/app-rework.md`). Mo's answers are in `note
 - On the roll card, lines on the set action go violet when they're on, and anything brought in for Aura goes gold, with the Aura it costs in gold at the top.
 - The intents to tap are hurt, pin and disarm, and frighten and taunt for a blow at your Confidence, or your own words. A blow whose intent starts with a condition's name (pin for *Pinned*) can land as that condition, on the blow's die.
 - Each blow that gets through has its own buttons for what it costs, and the one you tap is counted on the sheet and written on the blow. Swapping stops once a blow's paid for, so undo first to swap again.
-- Defend's match gives the lowest blow the lowest roll that stops it, so the most get stopped. When two ways stop as many, the first die added gets the bigger roll, and a swap fixes it.
+- Defend's match gives the lowest blow the lowest roll that stops it, so the most get stopped. When two blows come up the same, the first one added gets the smallest roll that stops it, and a swap changes that.
 - The Mark die sits behind "Is it Marked?", since it comes up less than the threat's die, and "Its number this round" takes the GM's number.
 - Rules on tap: Aura, Resolve, Confidence, Armour, Hurt and conditions open their buttons with the rule under them, a permission opens how permissions stack, and the Rules tab holds the rules a round needs and the conditions list. The build reads each one's opening off the chapters, up to its first example, table or subheading, rule boxes included.
 

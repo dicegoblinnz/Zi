@@ -310,6 +310,14 @@ async function play(page, crewId, name) {
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
   same(await page.textContent('.cc-stat[data-p="hurt"] .v'), "0/9", "Hurt on the play screen after the undo");
+  // An undo leaves what's been typed alone.
+  await page.click('.cc-tabs a[data-t="sheet"]');
+  await page.fill("#cc-notes", "Owes Dorrie a favour");
+  await page.click('.cc-tabs a[data-t="play"]');
+  await page.click(".cc-track .cc-undo");
+  await page.click('.cc-tabs a[data-t="sheet"]');
+  same(await page.inputValue("#cc-notes"), "Owes Dorrie a favour", "a note kept through an undo");
+  await page.click('.cc-tabs a[data-t="play"]');
   await shot(page, "7-play-screen");
   await context.close();
 }

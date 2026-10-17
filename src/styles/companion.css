@@ -81,7 +81,7 @@ button.hex.big { cursor: pointer; box-shadow: none; }
 
 /* The play screen's trackers: Aura and Resolve as pips, the dice, the Hurt
    boxes and the conditions. Each opens its buttons and its rule. */
-.cc-track { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin-top: 0.8rem; }
+.cc-track { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(44px, 1fr); gap: 6px; margin-top: 0.8rem; }
 .cc-track .cc-stat { grid-column: span 2; }
 .cc-track .t-aura { grid-column: span 3; }
 .cc-track .t-cond { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 6px 10px; padding: 6px 10px; }

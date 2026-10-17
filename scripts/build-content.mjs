@@ -590,6 +590,7 @@ const companionLinks = Object.fromEntries(
 for (const c of crew) for (const a of c.archetypeRules) if (a.id) companionLinks[a.id] = linkTo(a.id);
 for (const a of build?.archetypes ?? []) if (a.id) companionLinks[a.id] = linkTo(a.id);
 for (const idea of build?.ideas ?? []) companionLinks[idea.id] = linkTo(idea.id);
+for (const id of Object.keys(rules)) companionLinks[id] ??= linkTo(id);
 
 const outDir = join(ROOT, "src", "generated");
 mkdirSync(outDir, { recursive: true });

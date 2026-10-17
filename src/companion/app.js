@@ -129,7 +129,8 @@ function undoLast() {
   const u = lastUndo(ch);
   if (!u) return;
   undo.splice(undo.lastIndexOf(u), 1);
-  ch.state = JSON.parse(u.state);
+  // What's typed (notes, the Aspiration's words) isn't in the undo list, so it stays.
+  ch.state = { ...JSON.parse(u.state), notes: ch.state.notes, aspText: ch.state.aspText };
   if (dialog.open && roll) roll = unsnapRoll(u.roll) ?? roll;
   if (roll) roll.spinning = false;
   persist();
@@ -530,10 +531,10 @@ const stepper = (name, value, min, max, label, i = "") => `<span class="cc-step"
 function intentRow(key, size, label, presets, cls = "on", extra = "") {
   const own = roll.owns.has(key);
   const value = roll.intents[key] ?? "";
-  const name = `${label}d${size}`;
+  const name = `${label}d${size}`; // "your d6", "the Mark d10", "their d8"
   const chip = (p) => `<button type="button" class="cc-chipbtn sm" data-act="intent" data-k="${key}" data-v="${esc(p)}"${pressed(!own && value === p)}>${esc(p)}</button>`;
-  return `<div class="cc-intent">${hex(`d${size}`, cls)}<div class="cc-chips" role="group" aria-label="What the ${esc(name)} is for">${presets.map(chip).join("")}<button type="button" class="cc-chipbtn sm" data-act="intent" data-k="${key}" data-v=""${pressed(own)}>Your own</button></div>${extra}
-    ${own ? `<input class="cc-own-intent" data-in="intent" data-k="${key}" value="${esc(value)}" maxlength="40" autocomplete="off" placeholder="What it’s trying to do" aria-label="What the ${esc(name)} is for, in your words">` : ""}</div>`;
+  return `<div class="cc-intent">${hex(`d${size}`, cls)}<div class="cc-chips" role="group" aria-label="What ${esc(name)} is for">${presets.map(chip).join("")}<button type="button" class="cc-chipbtn sm" data-act="intent" data-k="${key}" data-v=""${pressed(own)}>Your own</button></div>${extra}
+    ${own ? `<input class="cc-own-intent" data-in="intent" data-k="${key}" value="${esc(value)}" maxlength="40" autocomplete="off" placeholder="What it’s trying to do" aria-label="What ${esc(name)} is for, in your words">` : ""}</div>`;
 }
 
 // The roll card. It counts as you tap: lines on the set action are free, and
@@ -548,7 +549,7 @@ function buildView(c, s) {
   }).join("");
   const name = k.extra ? (k.extra === k.act ? `${k.act.name}, twice` : `${k.act.name} and ${k.extra.name}`) : k.act.name;
   const vias = [["resolve", "1 Resolve"], ["time", "Taking my time, outside a round"], ["held", "I held my action"], ["hiding", "Coming out of hiding"], ["fired", "Cashing in fired-up Confidence"], ["trait", "A trait, condition or Boon that says so"]];
-  const dice = [...k.dice.map((size, i) => [String(i), size, ""]), ...(r.mark ? [["m", r.mark, "Mark "]] : [])];
+  const dice = [...k.dice.map((size, i) => [String(i), size, "your "]), ...(r.mark ? [["m", r.mark, "the Mark "]] : [])];
   return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${esc(name)}</h2>
       <p class="cc-dice" aria-live="polite">${k.dice.map((d) => hex(`d${d}`, "on")).join("")}${r.mark ? hex(`d${r.mark}`, "mark") : ""}<span><b>${steps(k.total)}</b>, ${diceLabel(k.dice)}${r.mark ? `, and the Mark d${r.mark}` : ""}${r.vs > 0 ? ` against their d${r.vs}` : r.vs === -1 ? ` against ${r.vsRolled}` : ""}</span></p>
       ${k.aura || k.resolve ? `<p class="cc-costs">${k.aura ? `<span class="chip is-aura">${k.aura} Aura</span>` : ""}${k.resolve ? `<span class="chip">${k.resolve} Resolve</span>` : ""}</p>` : ""}</div>
@@ -746,6 +747,7 @@ function assignBest(r) {
   }
   for (const h of hits) if (r.assign[h.j] < 0) r.assign[h.j] = spare.shift()?.i ?? -1;
   r.swap = null;
+  r.swapped = false;
 }
 
 // Which of your rolls stops which die. Ties go to you. Letting it ride, your
@@ -852,7 +854,7 @@ function defenceResult(c, s, ch) {
     ${done ? `<p class="cc-lead">${lead}</p>` : ""}
     ${canSwap ? `<p class="cc-small" role="status">${r.swap == null ? "The phone’s matched your rolls so the most get stopped. Tap Swap on two to trade their rolls." : "Now tap Swap on the other one."}</p>` : ""}
     <ul class="cc-res"${r.spinning ? ' data-act="skip"' : ""}>${hits.map(row).join("")}</ul>
-    ${done && !through && r.against === "confidence" ? `<div class="cc-row"><button type="button" class="button sm" data-act="conf-step" data-d="1"${off(s.conf >= 12)}>Confidence up a size</button></div>` : ""}
+    ${done && !through && r.against === "confidence" ? (r.lifted ? `<p class="res-paid">Confidence up to d${s.conf}</p>` : `<div class="cc-row"><button type="button" class="button sm" data-act="d-lift"${off(s.conf >= 12)}>Confidence up a size</button></div>`) : ""}
     ${done && bonuses.length ? `<div class="cc-row cc-offers">${bonuses.map((a) => `<button type="button" class="button sm" data-act="plus" data-n="${esc(a.name)}"${off(s.aura < 1 || !r.mine.some((m) => !m.plus))}>${esc(a.name)} +${a.bonus} on your ${what}: 1 Aura</button>`).join("")}</div>` : ""}
     ${r.log.length ? `<ul class="cc-log">${r.log.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>` : ""}
     <p class="cc-small">Armour d${s.armour} · Confidence d${s.conf} · ${s.hurt} of ${hurtInfo(s, c).open} boxes · ${s.aura} Aura · ${s.resolve} Resolve</p>
@@ -929,6 +931,7 @@ function renderDialog(keepFocus = true) {
   if (now && mode === ui.mode) now.scrollTop = top;
   ui.mode = mode;
   refocus(keep);
+  if (!dialog.contains(document.activeElement)) (dialog.querySelector(".dlg-body button:not(:disabled)") ?? dialog.querySelector(".dlg-foot .primary"))?.focus({ preventScroll: true });
 }
 
 function render() {
@@ -1439,6 +1442,7 @@ const ACT = {
   "reroll-all": () => reroll(roll.dice.map((_, i) => i)),
   "d-pick": (el) => plusOn(Number(el.dataset.i)),
   "d-against"(el) {
+    if (roll.against !== el.dataset.v) Object.assign(roll, { intents: {}, owns: new Set() });
     roll.against = el.dataset.v;
     roll.dconds = {};
     renderDialog();
@@ -1475,8 +1479,14 @@ const ACT = {
     roll.swap = null;
     change("swapping two rolls", () => {
       [roll.assign[first], roll.assign[j]] = [roll.assign[j], roll.assign[first]];
+      roll.swapped = true;
     }, { say: false });
   },
+  "d-lift": () => change("Confidence going up", (s) => {
+    if (roll.lifted || s.conf >= 12) return;
+    s.conf = sizeUp(s.conf);
+    roll.lifted = true;
+  }, { say: false }),
   "d-pay"(el) {
     const j = Number(el.dataset.j);
     const what = el.dataset.what;
@@ -1528,7 +1538,7 @@ function plusOn(i) {
     roll.pick = null;
     roll.log.push(`Paid 1 Aura for ${pick.name} +${pick.bonus} on the d${d.size}${d.nat + d.plus >= d.size && d.nat !== d.size ? ". The +" + pick.bonus + " took it there, so there’s no Aura back" : ""}.`);
     if (roll.kind === "action") s.last = lastOf();
-    else if (!roll.paid.some(Boolean)) assignBest(roll);
+    else if (!roll.paid.some(Boolean) && !roll.swapped) assignBest(roll);
   }, { say: false });
 }
 
