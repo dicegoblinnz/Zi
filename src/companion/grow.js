@@ -4,13 +4,14 @@
 // built character's still come from their build, and a downtime undoes like
 // anything else. Each entry adds one thing:
 //   { k: "perm", t, text, on }                 a permission on Title t
-//   { k: "swap", t, from, text, on }           a permission swapped for another
+//   { k: "swap", t, j, from, text, on }        a permission swapped for another
 //   { k: "att", a, text, on, catch, burden, up } a permission on attuned thing a
 //   { k: "trait", name, on, own }              a trait, from the list or written
 //   { k: "thread", person, text }              a new thread
 //   { k: "title", arch, text, on, perm, permOn } a new archetype and its Title
 // "on" lists the set actions a new line goes on. Every set action's steps and
-// dice are counted again at the end.
+// dice are counted again at the end. A grown line carries g, its entry's place
+// in the list, so the gold marks never take it for a rule's change.
 
 import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
 
@@ -49,18 +50,19 @@ export function grow(base, grown, B) {
   };
   const also = (note, name) => (note ? `${note} and ${name}` : name);
   let titled = false;
-  for (const g of grown) {
+  for (const [n, g] of grown.entries()) {
     if (!g || typeof g !== "object") continue;
     const text = String(g.text ?? "").trim();
     if (g.k === "perm") {
       const t = c.titles[g.t];
       if (!t || !text || t.permissions.length >= MAX_PERMS) continue;
       const key = add("permission", text, { title: t.name });
-      t.permissions.push({ text, key });
+      t.permissions.push({ text, key, g: n });
       onto(key, g.on);
     } else if (g.k === "swap") {
+      // By its words, or by its place if the rules have reworded it since.
       const t = c.titles[g.t];
-      const p = t?.permissions.find((x) => x.text === g.from);
+      const p = t?.permissions.find((x) => x.text === g.from) ?? (Number.isInteger(g.j) ? t?.permissions[g.j] : null);
       if (!p || !text) continue;
       p.text = text;
       const l = c.lines.find((x) => x.key === p.key);
@@ -79,7 +81,7 @@ export function grow(base, grown, B) {
       if (g.catch && !a.catch) a.catch = String(g.catch).trim();
       if (!text || a.permissions.length >= MAX_PERMS) continue;
       const key = add("attuned", text, { item: a.name });
-      a.permissions.push({ text, key });
+      a.permissions.push({ text, key, g: n });
       onto(key, g.on);
     } else if (g.k === "trait") {
       const name = String(g.name ?? "").trim();
@@ -88,7 +90,7 @@ export function grow(base, grown, B) {
       const own = String(g.own?.text ?? "");
       const step = r ? r.step : /\+1 step\b/.test(own);
       const key = add("trait", name, { step });
-      c.traits.push({ name, type: r?.type ?? String(g.own?.type ?? ""), html: r?.html ?? esc(own), step, aura: r ? r.aura : Number(own.match(/\bGain (\d+) Aura\b/)?.[1] ?? 0), key });
+      c.traits.push({ name, type: r?.type ?? String(g.own?.type ?? ""), html: r?.html ?? esc(own), step, aura: r ? r.aura : Number(own.match(/\bGain (\d+) Aura\b/)?.[1] ?? 0), key, g: n });
       if (step) onto(key, g.on);
       // What the trait changes, the same as the builder counts it.
       const e = r?.effects ?? {};
@@ -113,16 +115,16 @@ export function grow(base, grown, B) {
       if (!person || !text) continue;
       let p = c.threads.find((x) => x.person === person);
       if (!p) c.threads.push((p = { person, threads: [] }));
-      p.threads.push({ text, note: null, debt: false });
+      p.threads.push({ text, note: null, debt: false, g: n });
     } else if (g.k === "title") {
       if (!text) continue;
-      const t = { name: text, archetype: String(g.arch ?? ""), archetypeId: ARCH.get(g.arch)?.id ?? null, key: add("title", text), permissions: [] };
+      const t = { name: text, archetype: String(g.arch ?? ""), archetypeId: ARCH.get(g.arch)?.id ?? null, key: add("title", text), permissions: [], g: n };
       c.titles.push(t);
       onto(t.key, g.on);
       const perm = String(g.perm ?? "").trim();
       if (perm) {
         const key = add("permission", perm, { title: t.name });
-        t.permissions.push({ text: perm, key });
+        t.permissions.push({ text: perm, key, g: n });
         onto(key, g.permOn);
       }
       c.numbers.resolve += 1;

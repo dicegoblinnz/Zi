@@ -60,6 +60,37 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     }[k] ?? blank();
   }
 
+  // What the slots before this one have done, so the second builds on the
+  // first: permissions on each Title and attuned thing, a stage gone up, a
+  // Catch or Burden written, and the Aspiration's die. Resolve spent on
+  // rerolls counts across both.
+  function earlier(d, i, s) {
+    const out = { perms: {}, att: {}, up: {}, catch: {}, burden: {}, asp: s.asp, waiting: false };
+    for (const sl of d.slots.slice(0, i)) {
+      if (sl.k === "perm" && sl.text.trim()) out.perms[sl.t] = (out.perms[sl.t] ?? 0) + 1;
+      if (sl.k === "att") {
+        if (sl.text.trim()) out.att[sl.a] = (out.att[sl.a] ?? 0) + 1;
+        if (sl.up) out.up[sl.a] = true;
+        if (sl.catch.trim()) out.catch[sl.a] = sl.catch.trim();
+        if (sl.burden.trim()) out.burden[sl.a] = sl.burden.trim();
+      }
+      if (sl.k === "asp") {
+        if (!sl.dice) out.waiting = true;
+        else if (Math.max(...sl.dice) > sl.opp || sl.tie) out.asp = out.asp >= 12 ? 2 : sizeUp(out.asp);
+      }
+    }
+    return out;
+  }
+  const spent = (d) => d.slots.reduce((t, sl) => t + (sl.k === "asp" ? sl.rerolls : 0), 0);
+  // An attuned thing as it stands once the earlier slot's done.
+  function thingAt(c, d, i, j, s) {
+    const a = c.attuned[j];
+    if (!a) return null;
+    const e = earlier(d, i, s);
+    const r = attunedRoom(a);
+    return { ...a, stage: e.up[j] && r.next ? r.next : r.stage, catch: a.catch || e.catch[j] || null, burden: a.burden || e.burden[j] || null, permissions: { length: a.permissions.length + (e.att[j] ?? 0) }, wentUp: Boolean(e.up[j]) };
+  }
+
   // ---------------------------------------------------------------- drawing
 
   const toggles = (where, field, list, c) => `<div class="dt-toggles">${c.actions.map((a) => `<button type="button" class="cc-line" data-act="dt" data-do="on" data-s="${where}" data-f="${field}" data-v="${esc(a.name)}"${pressed(list.includes(a.name))}><span class="tick" aria-hidden="true"></span><span>${esc(a.name)} <small>${steps(a.steps)} now</small></span></button>`).join("")}</div>`;
@@ -68,33 +99,37 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
   const ruleBox = (key, title, id) => `<details class="cc-own" data-open="${key}"${isOpen(key) ? " open" : ""}><summary>${title}</summary><div class="cc-rule">${rule(id)}</div></details>`;
   const quickTest = () => (B.quickTest?.length ? `<details class="cc-own" data-open="dt-test"${isOpen("dt-test") ? " open" : ""}><summary>The quick test</summary><ol class="cc-rule dt-test">${B.quickTest.map((q) => `<li>${q}</li>`).join("")}</ol></details>` : "");
 
-  function aspView(sl, i, c, s) {
+  function aspView(sl, i, c, s, d) {
+    const e = earlier(d, i, s);
+    const asp = e.asp;
     const total = 1 + sl.on.length;
     const dice = stepsToDice(total);
     const groups = [["title", "Titles"], ["permission", "Permissions"], ["attuned", "Attuned"], ["trait", "Traits"], ["kit", "What you carry"]].map(([kind, title]) => {
       const list = c.lines.filter((l) => l.kind === kind && (kind !== "trait" || l.step));
       return list.length ? `<h3>${title}</h3>${list.map((l) => `<button type="button" class="cc-line" data-act="dt" data-do="on" data-s="${i}" data-f="on" data-v="${l.key}"${pressed(sl.on.includes(l.key))}${off(sl.dice)}><span class="tick" aria-hidden="true"></span><span>${lineLabel(l)}</span></button>`).join("")}` : "";
     }).join("");
-    const head = `<p class="cc-dice">${dice.map((d) => hex(`d${d}`, "on")).join("")}${hex(`d${s.asp}`, "them")}<span><b>${steps(total)}</b>, ${diceLabel(dice)}, against its d${s.asp}</span></p>`;
+    const head = `<p class="cc-dice">${dice.map((x) => hex(`d${x}`, "on")).join("")}${hex(`d${asp}`, "them")}<span><b>${steps(total)}</b>, ${diceLabel(dice)}, against its d${asp}</span></p>`;
     let body = "";
     if (sl.dice) {
       const best = Math.max(...sl.dice);
       const beat = best > sl.opp || sl.tie;
       const tie = best === sl.opp && !sl.tie;
-      const climbs = s.asp >= 12 ? "It climbs past d12 and resolves." : `It climbs to d${sizeUp(s.asp)}.`;
-      const verdict = beat ? (sl.tie ? `The crew takes the tie. ${climbs}` : `${best} against ${sl.opp}. Beat it. ${climbs}`) : tie ? `${best} against ${sl.opp}. A tie goes to the Aspiration, so it holds at d${s.asp}.` : `${best} against ${sl.opp}. It holds at d${s.asp}.`;
+      const climbs = asp >= 12 ? "It climbs past d12 and resolves." : `It climbs to d${sizeUp(asp)}.`;
+      const verdict = beat ? (sl.tie ? `The crew takes the tie. ${climbs}` : `${best} against ${sl.opp}. Beat it. ${climbs}`) : tie ? `${best} against ${sl.opp}. A tie goes to the Aspiration, so it holds at d${asp}.` : `${best} against ${sl.opp}. It holds at d${asp}.`;
       body = `<p class="cc-dice">${sl.dice.map((n, j) => hex(String(n), "on")).join("")}${hex(String(sl.opp), "them")}<span>${dice.length > 1 ? "Your best die counts. " : ""}${esc(verdict)}</span></p>
-        ${beat ? "" : `<div class="cc-row">${s.resolve > sl.rerolls ? `<button type="button" class="button sm" data-act="dt" data-do="asp-again" data-s="${i}">Spend 1 Resolve to roll yours again</button>` : ""}${tie ? `<button type="button" class="button sm" data-act="dt" data-do="asp-tie" data-s="${i}">The crew steps its Wealth down to take the tie</button>` : ""}</div>
+        ${beat ? "" : `<div class="cc-row">${s.resolve > spent(d) ? `<button type="button" class="button sm" data-act="dt" data-do="asp-again" data-s="${i}">Spend 1 Resolve to roll yours again</button>` : ""}${tie ? `<button type="button" class="button sm" data-act="dt" data-do="asp-tie" data-s="${i}">The crew steps its Wealth down to take the tie</button>` : ""}</div>
         <p class="cc-lead">There’s no Aura in downtime. Taking the tie spends the crew’s money, so ask the table first.</p>`}
-        ${beat && s.asp >= 12 ? `<h3>Your new Title</h3>
+        ${beat && asp >= 12 ? `<h3>Your new Title</h3>
           <label class="cc-field">Its archetype <select id="dt-arch-${i}" data-dt="${i}" data-f="arch"><option value="">Pick one</option>${B.archetypes.map((a) => `<option value="${esc(a.name)}"${sl.arch === a.name ? " selected" : ""}>${esc(a.name)}${c.titles.some((t) => t.archetype === a.name) ? " again" : ""}</option>`).join("")}</select></label>
           ${field(i, "text", "Name it", sl.text)}<p class="cc-lead">Set actions the Title fits</p>${toggles(i, "tOn", sl.tOn, c)}
           ${field(i, "perm", "Its permission", sl.perm)}<p class="cc-lead">Set actions the permission fits</p>${toggles(i, "pOn", sl.pOn, c)}
           <p class="cc-lead">Your Resolve goes up by one with it, and your Aspiration starts again at d2. Write the new one on the Sheet tab.</p>` : ""}`;
     } else if (sl.real) {
       body = `<div class="dt-pads">${dice.map((d, j) => `<label class="cc-field">Your d${d} <input type="number" inputmode="numeric" min="1" max="${d}" data-dt="${i}" data-f="pad" data-j="${j}" value="${esc(sl.pads[j] ?? "")}"></label>`).join("")}
-        ${sl.rerolls ? "" : `<label class="cc-field">Its d${s.asp} <input type="number" inputmode="numeric" min="1" max="${s.asp}" data-dt="${i}" data-f="padOpp" value="${esc(sl.padOpp)}"></label>`}</div>
+        ${sl.rerolls ? "" : `<label class="cc-field">Its d${asp} <input type="number" inputmode="numeric" min="1" max="${asp}" data-dt="${i}" data-f="padOpp" value="${esc(sl.padOpp)}"></label>`}</div>
         <div class="cc-row"><button type="button" class="button primary" data-act="dt" data-do="asp-call" data-s="${i}">That’s what they rolled</button></div>`;
+    } else if (e.waiting) {
+      body = `<p class="cc-lead">Roll your first slot’s Aspiration first, since this one rolls against whatever die it leaves.</p>`;
     } else {
       body = `<div class="cc-row"><button type="button" class="button primary" data-act="dt" data-do="asp-roll" data-s="${i}">Roll</button><button type="button" class="button" data-act="dt" data-do="asp-real" data-s="${i}">Roll real dice</button></div>`;
     }
@@ -102,8 +137,8 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       ${ruleBox("dt-rolls", "Rolling in downtime", "s-downtime-rolls")}${head}${sl.dice ? "" : `<details class="cc-own" data-open="dt-asp"${isOpen("dt-asp") || sl.on.length ? " open" : ""}><summary>What fits <small>${steps(total)}</small></summary>${groups}</details>`}${body}`;
   }
 
-  function attView(sl, i, c) {
-    const a = c.attuned[sl.a];
+  function attView(sl, i, c, s, d) {
+    const a = thingAt(c, d, i, sl.a, s);
     const items = c.attuned.map((x, j) => [j, esc(x.name), x.permissions.length >= MAX_PERMS]);
     if (!a) return chips(i, "a", items, sl.a, "Which attuned thing");
     const r = attunedRoom(a);
@@ -111,19 +146,18 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     const s2 = attunedRoom({ ...a, stage });
     const price = { Awakened: "a Catch", Tempered: "a Burden", Perfected: "a Burden and a Catch" };
     const full = r.n >= MAX_PERMS;
-    const atTop = r.n >= r.all;
     const extra = r.n + 1 > s2.base;
     return `${chips(i, "a", items, sl.a, "Which attuned thing")}
-      <p class="cc-lead">${esc(a.name)} is ${r.stage}, with ${r.n} permission${r.n === 1 ? "" : "s"}. ${r.stage} holds ${r.base}, and ${r.base} more with ${price[r.stage]}. ${link("attunement-stages", "The three stages")}</p>
+      <p class="cc-lead">${esc(a.name.charAt(0).toUpperCase() + a.name.slice(1))} is ${r.stage}, with ${r.n} permission${r.n === 1 ? "" : "s"}${a.wentUp ? " once your first slot’s done" : ""}. ${r.stage} holds ${r.base}, and ${r.base} more with ${price[r.stage]}. ${link("attunement-stages", "The three stages")}</p>
       ${full ? `<p class="cc-warn">Six permissions is the most anything holds.</p>` : `
-      ${atTop && r.next ? `<button type="button" class="cc-line" data-act="dt" data-do="flip" data-s="${i}" data-f="up"${pressed(sl.up)}><span class="tick" aria-hidden="true"></span><span>It’s got its material, so it goes up to ${r.next} <small>found in the story or bought</small></span></button>` : ""}
+      ${r.next && !a.wentUp ? `<button type="button" class="cc-line" data-act="dt" data-do="flip" data-s="${i}" data-f="up"${pressed(sl.up)}><span class="tick" aria-hidden="true"></span><span>It’s got its material, so it goes up to ${r.next} <small>found in the story or bought</small></span></button>` : ""}
       ${extra && !a.catch && s2.needs.includes("catch") ? field(i, "catch", `Its Catch <small>it needs one to hold more than ${s2.base}</small>`, sl.catch) : ""}
       ${extra && !a.burden && s2.needs.includes("burden") ? field(i, "burden", `Its Burden <small>a permanent cost, like <em>Bad Knee</em>, and it needs one to hold more than ${s2.base}</small>`, sl.burden) : ""}
       ${field(i, "text", "The permission", sl.text)}
       <p class="cc-lead">Write it as something the thing itself does. Put it on every set action it fits nearly every time.</p>${toggles(i, "on", sl.on, c)}`}`;
   }
 
-  function formView(sl, i, c, s) {
+  function formView(sl, i, c, s, d) {
     const n = c.numbers;
     switch (sl.k) {
       case "pressure":
@@ -138,7 +172,9 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
         return `${s.catches.length ? chips(i, "b", [...s.catches.map((x, j) => [j, `<em>${esc(x)}</em>`]), [-1, "Not mine"]], sl.b, "Your Catch to heal") : ""}<p class="cc-lead">Everyone in the crew who wants it heals a Catch on their Hurt track too, so tell them.</p>`;
       case "perm": {
         const t = c.titles[sl.t];
-        return `${chips(i, "t", c.titles.map((x, j) => [j, `<em>${esc(x.name)}</em> <small>${x.permissions.length} of ${MAX_PERMS}</small>`, x.permissions.length >= MAX_PERMS]), sl.t, "Which Title")}
+        const e = earlier(d, i, s);
+        const has = (j) => c.titles[j].permissions.length + (e.perms[j] ?? 0);
+        return `${chips(i, "t", c.titles.map((x, j) => [j, `<em>${esc(x.name)}</em> <small>${has(j)} of ${MAX_PERMS}</small>`, has(j) >= MAX_PERMS]), sl.t, "Which Title")}
           ${t ? `<p class="cc-lead">It has to fit inside <em>${esc(t.name)}</em>, and the story should say where you learned it.</p>` : ""}
           ${field(i, "text", "The permission", sl.text)}${quickTest()}
           <p class="cc-lead">Put it on every set action it fits nearly every time. Anywhere else, it’s 1 Aura to bring in.</p>${toggles(i, "on", sl.on, c)}`;
@@ -154,7 +190,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
             ${r ? `<div class="cc-rule"><p><b>${esc(r.name)}</b> <span class="chip sm">${esc(r.type)}</span></p><p>${r.html}</p></div>${r.step ? `<p class="cc-lead">It’s a step on the set actions it fits.</p>${toggles(i, "on", sl.on, c)}` : ""}` : ""}`}`;
       }
       case "asp":
-        return aspView(sl, i, c, s);
+        return aspView(sl, i, c, s, d);
       case "thread":
         return `${field(i, "person", "Who it’s with", sl.person)}${field(i, "text", "The thread", sl.text)}<p class="cc-lead">If they’re in the crew, it goes on both your sheets, so agree on it together.</p>`;
       case "get": {
@@ -165,7 +201,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
           <p class="cc-lead">Something to carry, a purse of gold, or the material an attuned thing needs for its next stage, whether it’s bought, made, won or owed.</p>`;
       }
       case "att":
-        return attView(sl, i, c);
+        return attView(sl, i, c, s, d);
       case "party":
         return `${field(i, "text", "What it’s for", sl.text)}<p class="cc-lead">Party slots wait for the party sheet, so play this one at the table: chase the Goal, work a project, move on a faction, rebuild, push a world event or help someone’s Aspiration.</p>`;
       default:
@@ -183,7 +219,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       }).join("");
       return `<fieldset class="cc-group dt-slot"><legend>${name}</legend>${groups}</fieldset>`;
     }
-    return `<fieldset class="cc-group dt-slot is-picked"><legend>${name}: ${LABEL[sl.k]}</legend>${formView(sl, i, c, s)}
+    return `<fieldset class="cc-group dt-slot is-picked"><legend>${name}: ${LABEL[sl.k]}</legend>${formView(sl, i, c, s, d)}
       <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="clear" data-s="${i}">Pick something else</button></div></fieldset>`;
   }
 
@@ -229,16 +265,17 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       const empty = (x) => !String(x ?? "").trim();
       if (!sl.k) out.push(`${which} isn’t picked yet, so it goes to waste.`);
       else if (sl.k === "perm" && empty(sl.text)) out.push(`${which} needs the new permission’s words.`);
+      else if (sl.k === "perm" && c.titles[sl.t] && c.titles[sl.t].permissions.length + (earlier(d, i, s).perms[sl.t] ?? 0) >= MAX_PERMS) out.push(`${which} would be a seventh permission on ${c.titles[sl.t].name}, and six is the most a Title holds.`);
       else if (sl.k === "trait" && (sl.own ? empty(sl.oname) : !sl.name)) out.push(`${which} needs a trait.`);
       else if (sl.k === "asp" && !sl.dice) out.push(`${which} hasn’t rolled at your Aspiration yet.`);
-      else if (sl.k === "asp" && s.asp >= 12 && (Math.max(...sl.dice) > sl.opp || sl.tie) && empty(sl.text)) out.push(`${which} needs a name for your new Title.`);
+      else if (sl.k === "asp" && earlier(d, i, s).asp >= 12 && (Math.max(...sl.dice) > sl.opp || sl.tie) && (empty(sl.text) || !sl.arch || empty(sl.perm))) out.push(`${which} needs your new Title’s archetype, its name and its permission.`);
       else if (sl.k === "thread" && (empty(sl.person) || empty(sl.text))) out.push(`${which} needs who the thread’s with, and the thread.`);
       else if (sl.k === "get" && empty(sl.text)) out.push(`${which} needs what you’re getting.`);
       else if (sl.k === "get" && roomFor(c, s, sl.where) < 1) out.push(`${which} has nowhere to put it.`);
       else if (sl.k === "att") {
-        const a = c.attuned[sl.a];
-        if (!a || empty(sl.text)) out.push(`${which} needs the attuned permission’s words.`);
-        else {
+        const a = thingAt(c, d, i, sl.a, s);
+        if (!a || (empty(sl.text) && !sl.up)) out.push(`${which} needs the attuned permission’s words.`);
+        else if (!empty(sl.text)) {
           const r = attunedRoom(a);
           const stage = sl.up && r.next ? r.next : r.stage;
           const s2 = attunedRoom({ ...a, stage, catch: a.catch || sl.catch.trim(), burden: a.burden || sl.burden.trim() });
@@ -283,7 +320,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       } else if (sl.k === "mend" && s.crossed[sl.key]) {
         delete s.crossed[sl.key];
         said.push(`${sl.key.split("|").slice(1).join("|")} is mended`);
-      } else if (sl.k === "perm" && text) {
+      } else if (sl.k === "perm" && text && c.titles[sl.t] && c.titles[sl.t].permissions.length + (earlier(d, i, s).perms[sl.t] ?? 0) < MAX_PERMS) {
         grow({ k: "perm", t: sl.t, text, on: [...sl.on] });
         said.push(`“${text}” goes on your ${ORD[sl.t] ?? ""} Title`);
       } else if (sl.k === "trait") {
@@ -311,11 +348,13 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
         s.picked.push({ where: sl.where, name: text });
         said.push(`${text} goes in ${sl.where === "bag" ? "the bag" : `your ${sl.where}`}`);
       } else if (sl.k === "att") {
-        const a = c.attuned[sl.a];
-        if (a && (text || sl.up)) {
-          grow({ k: "att", a: sl.a, text, on: [...sl.on], catch: sl.catch.trim(), burden: sl.burden.trim(), up: Boolean(sl.up) });
+        const a = thingAt(c, d, i, sl.a, s);
+        const next = a && attunedRoom(a).next;
+        const up = Boolean(sl.up && next && !a.wentUp);
+        if (a && (text || up)) {
+          grow({ k: "att", a: sl.a, text, on: [...sl.on], catch: sl.catch.trim(), burden: sl.burden.trim(), up });
           const name = a.name.charAt(0).toUpperCase() + a.name.slice(1);
-          said.push(`${name}${sl.up ? ` goes up to ${attunedRoom(a).next}` : ""}${text ? `${sl.up ? " and" : ""} gets “${text}”` : ""}`);
+          said.push(`${name}${up ? ` goes up to ${next}` : ""}${text ? `${up ? " and" : ""} gets “${text}”` : ""}`);
         }
       } else if (sl.k === "party") said.push(text ? `A slot toward ${text}` : "A slot toward the crew");
     });
@@ -324,7 +363,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       const from = t?.permissions[w.j]?.text;
       const text = w.text.trim();
       if (!from || !text || text === from) continue;
-      grow({ k: "swap", t: w.t, from, text, on: [...w.on] });
+      grow({ k: "swap", t: w.t, j: w.j, from, text, on: [...w.on] });
       said.push(`“${from}” becomes “${text}”`);
     }
     for (const key of d.mends) {
@@ -335,8 +374,19 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     return said;
   }
 
+  // A second slot's Aspiration roll was made against the die the first one
+  // left, so it's rolled again if that changes.
   function act(el, d, c, s) {
+    const basis = d.slots.map((x, j) => earlier(d, j, s).asp);
+    act1(el, d, c, s);
+    d.slots.forEach((sl, j) => {
+      if (sl.k === "asp" && (sl.dice || sl.real) && earlier(d, j, s).asp !== basis[j]) Object.assign(sl, { dice: null, opp: null, real: false, pads: [], padOpp: "", rerolls: 0, tie: false });
+    });
+  }
+
+  function act1(el, d, c, s) {
     const go = el.dataset.do;
+    const i = Number(el.dataset.s);
     const sl = el.dataset.s != null ? at(d, el.dataset.s) : null;
     const f = el.dataset.f;
     const v = el.dataset.v;
@@ -361,21 +411,22 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       if (at2 >= 0) list.splice(at2, 1);
       else list.push(v);
     } else if (go === "flip" && sl) sl[f] = !sl[f];
-    else if (go === "asp-roll" && sl) {
+    else if (go === "asp-roll" && sl && !earlier(d, i, s).waiting) {
       sl.dice = stepsToDice(1 + sl.on.length).map((size) => throwDie(size));
-      sl.opp = throwDie(s.asp);
+      sl.opp = throwDie(earlier(d, i, s).asp);
     } else if (go === "asp-real" && sl) sl.real = true;
     else if (go === "asp-call" && sl) {
       const dice = stepsToDice(1 + sl.on.length);
       const nums = dice.map((size, j) => Math.min(size, Math.max(1, Math.round(Number(sl.pads[j]) || 0))));
-      const opp = sl.rerolls ? sl.opp : Math.min(s.asp, Math.max(1, Math.round(Number(sl.padOpp) || 0)));
-      if (nums.some((x, j) => !Number(sl.pads[j])) || !opp) {
+      const asp = earlier(d, i, s).asp;
+      const opp = sl.rerolls ? sl.opp : Math.min(asp, Math.max(1, Math.round(Number(sl.padOpp) || 0)));
+      if (nums.some((x, j) => !(Number(sl.pads[j]) > 0)) || (!sl.rerolls && !(Number(sl.padOpp) > 0))) {
         d.say = "Put in every die’s number first.";
         return;
       }
       sl.dice = nums;
       sl.opp = opp;
-    } else if (go === "asp-again" && sl) {
+    } else if (go === "asp-again" && sl && s.resolve > spent(d)) {
       sl.rerolls += 1;
       if (sl.real) {
         sl.dice = null;

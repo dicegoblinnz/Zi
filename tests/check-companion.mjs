@@ -50,7 +50,8 @@ import { PDFDocument } from "pdf-lib";
 import { diceLabel, diceRange, diceShapes, stepsToDice } from "../src/companion/dice.js";
 import { checksOf, sheetOf } from "../src/companion/builder.js";
 import { fromCrew, randomBuild } from "../src/companion/ways.js";
-import { typo } from "../src/companion/marks.js";
+import { changesOf, said, typo } from "../src/companion/marks.js";
+import { grow } from "../src/companion/grow.js";
 
 const SHOTS = process.argv[2] || null;
 const problems = [];
@@ -865,7 +866,28 @@ async function round(page, dice, real = false) {
     ["Stride 5", "Stride 6", false],
     ["you can open it", "you can’t open it", false],
     ["Once per scene", "Twice per scene", false],
+    ["Stride −2", "Stride 2", false],
+    ["move unnoticed", "move noticed", false],
+    ["heal a friend", "deal a friend", false],
+    ["firespeaker", "fire speaker", true],
   ]) same(typo(a, b), want, `"${a}" to "${b}" as a typo fix`);
+
+  // What she grew keeps its own place, so a rule that puts a permission in
+  // the middle of her first Title marks only the lines from the rules.
+  {
+    const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
+    const vesk = book.crew.find((c) => c.id === "vesk");
+    const grown = [{ k: "perm", t: 0, text: "slip through a crowd", on: ["Sneak"] }, { k: "perm", t: 0, text: "climb a sheer wall", on: [] }, { k: "perm", t: 0, text: "hide in plain sight", on: [] }];
+    const two = grown.slice(0, 2);
+    const seen = said(grow(vesk, two, book.companion.build));
+    same(grow(vesk, [...grown, { k: "perm", t: 0, text: "one too many", on: [] }], book.companion.build).titles[0].permissions.length, 6, "six permissions at most on a Title");
+    const moved = JSON.parse(JSON.stringify(vesk));
+    moved.titles[0].permissions.splice(1, 0, { text: "read a guard’s rounds", key: "l99" });
+    moved.lines.push({ key: "l99", kind: "permission", label: "read a guard’s rounds", title: moved.titles[0].name });
+    const d = changesOf(seen, grow(moved, two, book.companion.build));
+    same(Object.keys(d.marks).filter((id) => /:g\d/.test(id)), [], "no gold mark on anything she grew");
+    same(Object.keys(d.marks).sort(), ["perm:0:1", "perm:0:2", "perm:0:3"], "the rule's new line and the ones it moved");
+  }
 
   const { context, page } = await phone();
   const axe = async (what) => {

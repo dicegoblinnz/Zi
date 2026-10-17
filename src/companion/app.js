@@ -12,7 +12,7 @@ import { printSheet } from "./print.js";
 import { calm, feel, setSound, soundOn, tumble } from "./feel.js";
 import { makeLearn } from "./learn.js";
 import { grow } from "./grow.js";
-import { changesOf, ownChanges, said } from "./marks.js";
+import { changesOf, ownChanges, placesOf, said } from "./marks.js";
 import { makeDowntime } from "./downtime.js";
 
 const DATA = JSON.parse(document.getElementById("zi-companion").textContent);
@@ -254,26 +254,11 @@ const goldOf = (id) => ui.gold?.marks[id] ?? null;
 // A gold mark beside a changed line, and what it said and says now under it
 // once it's tapped. On a tile or a tracker it's a corner, and the card or
 // panel it opens says old and new.
-const gold = (id, label = "") => (goldOf(id) ? `<button type="button" class="cc-gold${label ? " has-label" : ""}" data-act="gold" data-k="${esc(id)}" aria-expanded="${ui.open.has(`g-${id}`)}" aria-label="Changed in the rules. ${ui.open.has(`g-${id}`) ? "Hide" : "Show"} old and new"><span class="cc-gem" aria-hidden="true"></span>${label ? `<span aria-hidden="true">${label}</span>` : ""}</button>` : "");
+const gold = (id, label = "") => (goldOf(id) ? `<button type="button" class="cc-gold${label ? " has-label" : ""}" data-act="gold" data-k="${esc(id)}" aria-expanded="${ui.open.has(`g-${id}`)}"${label ? "" : ` aria-label="${esc(ui.gold.names[id] ?? "This line")}, changed in the rules: old and new"`}><span class="cc-gem" aria-hidden="true"></span>${label ? `<span>${label}</span>` : ""}</button>` : "");
 const wasNow = (m) => `<div class="cc-was" role="note">${m.was == null ? "<p><b>New</b> in the rules</p>" : `<p><b>Was</b> ${esc(m.was)}</p>`}<p><b>Now</b> ${esc(m.now)}</p></div>`;
 const was = (id) => (goldOf(id) && ui.open.has(`g-${id}`) ? wasNow(goldOf(id)) : "");
 const goldNow = (id) => (goldOf(id) ? wasNow(goldOf(id)) : "");
 const goldDot = (id) => (goldOf(id) ? '<span class="cc-gem is-corner" aria-hidden="true"></span><span class="sr-only">, changed in the rules</span>' : "");
-
-function goldName(id, c) {
-  const [kind, a, b] = id.split(":");
-  const nth = (i) => `your ${ORD[Number(i)]?.toLowerCase() ?? ""} Title`;
-  if (kind === "num") return { aura: "Aura", resolve: "Resolve", stride: "Stride", armour: "Armour", conf: "Confidence", hurt: "Hurt bars" }[a] ?? a;
-  if (kind === "title") return `${nth(a).replace(/^y/, "Y")}`;
-  if (kind === "perm") return `A permission on ${nth(a)}`;
-  if (kind === "trait") return c.traits[Number(a)]?.name ?? "A trait";
-  if (kind === "kit") return { equipment: "Equipment", utility: "Utility", keepsake: "Keepsake", bag: "The bag" }[a] ?? a;
-  if (kind === "att") return b == null ? c.attuned[Number(a)]?.name ?? "Something attuned" : `A permission on ${lower(c.attuned[Number(a)]?.name ?? "something attuned")}`;
-  if (kind === "thr") return `A thread with ${a}`;
-  if (kind === "asp") return "Aspiration";
-  if (kind === "trouble") return "Trouble that follows you";
-  return a ?? id;
-}
 
 function changedNote(ch, c) {
   const them = c.pronoun === "him" ? "him" : c.pronoun === "her" ? "her" : "them";
@@ -283,7 +268,7 @@ function changedNote(ch, c) {
   }
   const d = ui.gold;
   const n = Object.keys(d.marks).length;
-  const list = Object.entries(d.marks).map(([id, m]) => `<li><b>${esc(goldName(id, c))}.</b> ${m.was == null ? `New: ${esc(m.now)}` : `It was ${esc(m.was)}, and now it’s ${esc(m.now)}.`}</li>`).join("");
+  const list = Object.entries(d.marks).map(([id, m]) => `<li><b>${esc(d.names[id] ?? id)}.</b> ${m.was == null ? `New: ${esc(m.now)}` : `It was ${esc(m.was)}, and now it’s ${esc(m.now)}.`}</li>`).join("");
   return `<div class="cc-note is-gold" role="status"><p><b>Changed in the rules.</b> ${n ? `${n === 1 ? "One line" : `${n} lines`} on ${esc(ch.name)}’s sheet ${n === 1 ? "has" : "have"} changed since this phone last opened ${them}, each with a gold mark. Every number here is already the new one.` : ""}</p>
     ${d.gone.length ? `<p>Gone from the sheet: ${d.gone.map((x) => `<s>${esc(x.was)}</s>`).join(", ")}.</p>` : ""}
     ${n ? `<details class="cc-own" data-open="g-list"${ui.open.has("g-list") ? " open" : ""}><summary>Old and new</summary><ul class="cc-golds">${list}</ul></details>` : ""}
@@ -483,16 +468,17 @@ const permButton = (text, from, id = "") => `<li><button type="button" class="cc
 
 function sheetTab(ch, c) {
   const s = ch.state;
+  const at = placesOf(c);
   const her = c.pronoun === "him" ? "his" : c.pronoun === "her" ? "her" : "their";
-  const titles = c.titles.map((t, i) => `<article class="card cc-card"><p class="eyebrow">${ORD[i] ?? ""} Title · ${t.archetypeId ? link(t.archetypeId, esc(t.archetype)) : esc(t.archetype)}${gold(`title:${i}`)}</p>${was(`title:${i}`)}
-    <h3><em>${esc(t.name)}</em></h3><ul class="cc-perms">${t.permissions.map((p, j) => permButton(p.text, `${her} ${(ORD[i] ?? "").toLowerCase()} Title, ${t.name}`, `perm:${i}:${j}`)).join("")}</ul></article>`).join("");
+  const titles = c.titles.map((t, i) => `<article class="card cc-card"><p class="eyebrow">${ORD[i] ?? ""} Title · ${t.archetypeId ? link(t.archetypeId, esc(t.archetype)) : esc(t.archetype)}${gold(`title:${at.titles[i]}`)}</p>${was(`title:${at.titles[i]}`)}
+    <h3><em>${esc(t.name)}</em></h3><ul class="cc-perms">${t.permissions.map((p, j) => permButton(p.text, `${her} ${(ORD[i] ?? "").toLowerCase()} Title, ${t.name}`, `perm:${at.titles[i]}:${at.perms[i][j]}`)).join("")}</ul></article>`).join("");
   const archetypes = c.archetypeRules.map((a) => `<div class="cc-arch"><p><b>${a.id ? link(a.id, esc(a.name)) : esc(a.name)}${a.times > 1 ? `, taken ${a.times === 2 ? "twice" : `${a.times} times`}` : ""}.</b> ${a.summary}${gold(`arch:${a.name}`)}</p>${was(`arch:${a.name}`)}
     ${a.auraHtml ? `<p><b>1 Aura:</b> ${a.auraHtml}</p><button type="button" class="button sm" data-act="arch-aura" data-n="${esc(a.name)}"${off(s.aura < 1)}>Spend 1 Aura on it</button>` : ""}</div>`).join("");
 
   const traits = c.traits.map((t, i) => {
     const once = /once per scene/i.test(t.type);
     const used = Boolean(s.used[t.name]);
-    return `<div class="cc-item"><p><b>${esc(t.name)}</b> <span class="chip sm">${esc(t.type)}</span>${once && used ? ' <span class="chip sm is-used">Used this scene</span>' : ""}${gold(`trait:${i}`)}</p>${was(`trait:${i}`)}<p>${t.html}</p>
+    return `<div class="cc-item"><p><b>${esc(t.name)}</b> <span class="chip sm">${esc(t.type)}</span>${once && used ? ' <span class="chip sm is-used">Used this scene</span>' : ""}${gold(`trait:${at.traits[i]}`)}</p>${was(`trait:${at.traits[i]}`)}<p>${t.html}</p>
       ${t.aura ? `<button type="button" class="button sm" data-act="trait-aura" data-n="${esc(t.name)}"${off(once && used)}>Take ${t.aura} Aura</button>` : once ? `<button type="button" class="button sm" data-act="used" data-n="${esc(t.name)}"${pressed(used)}>${used ? "Used this scene" : "Use it"}</button>` : ""}</div>`;
   }).join("");
 
@@ -512,14 +498,14 @@ function sheetTab(ch, c) {
       <ul class="cc-things">${own.map((x) => thing(where, x)).join("")}${extra.map((p) => thing(where, p.name, p.i)).join("")}</ul></div>`;
   };
   const attuned = c.attuned.map((a, i) => `<div class="cc-item"><p><b>${esc(a.name)}</b>${a.props ? ` (${esc(a.props)})` : ""} ${a.stage ? `<span class="chip sm">${esc(a.stage)}</span>` : ""}${gold(`att:${i}`)}</p>${was(`att:${i}`)}
-    <ul class="cc-perms">${a.permissions.map((p, j) => permButton(p.text, `${lower(a.name)}, attuned`, `att:${i}:${j}`)).join("")}</ul>${a.catch ? `<p>Its Catch: <em>${esc(a.catch)}</em></p>` : ""}${a.burden ? `<p>Its Burden: <em>${esc(a.burden)}</em></p>` : ""}</div>`).join("");
+    <ul class="cc-perms">${a.permissions.map((p, j) => permButton(p.text, `${lower(a.name)}, attuned`, `att:${i}:${at.attuned[i][j]}`)).join("")}</ul>${a.catch ? `<p>Its Catch: <em>${esc(a.catch)}</em></p>` : ""}${a.burden ? `<p>Its Burden: <em>${esc(a.burden)}</em></p>` : ""}</div>`).join("");
 
   const crewNames = new Set(DATA.crew.map((x) => x.name));
   const threads = c.threads.map((p) => `<div class="cc-person"><h3>${esc(p.person)}${crewNames.has(p.person) ? ' <small>in the crew</small>' : ""}</h3><ul>${p.threads.map((t, j) => {
     const key = `${p.person}|${t.text}`;
     const st = s.threads[key];
     const note = t.note ? t.note.replace(/^(.+’s)(?=,|$)/, "$1 words").replace(/^debt$/, "a debt") : "";
-    return `<li class="cc-thread${st ? ` is-${st}` : ""}"><p><em>${esc(t.text)}</em>${note ? ` <small>(${esc(note)})</small>` : ""}${st ? ` <span class="chip sm">${st === "strained" ? "Strained" : "Snapped"}</span>` : ""}${gold(`thr:${p.person}:${j}`)}</p>${was(`thr:${p.person}:${j}`)}
+    return `<li class="cc-thread${st ? ` is-${st}` : ""}"><p><em>${esc(t.text)}</em>${note ? ` <small>(${esc(note)})</small>` : ""}${st ? ` <span class="chip sm">${st === "strained" ? "Strained" : "Snapped"}</span>` : ""}${gold(`thr:${p.person}:${at.threads[p.person][j]}`)}</p>${was(`thr:${p.person}:${at.threads[p.person][j]}`)}
       ${st === "snapped" ? "" : `<div class="cc-row"><button type="button" class="button sm" data-act="strain" data-k="${esc(key)}">${st ? "Strain it again: it snaps, +1 Resolve" : "Strain it: +1 Resolve"}</button>${st ? `<button type="button" class="button sm" data-act="mend" data-k="${esc(key)}">Mended</button>` : ""}</div>`}</li>`;
   }).join("")}</ul></div>`).join("");
 
@@ -1151,8 +1137,10 @@ function saveBuilt(build, key, discard) {
     ch.name = name;
     const now = sheetFor(ch).numbers;
     for (const [k, n] of [["aura", "aura"], ["resolve", "resolve"], ["armour", "armour"], ["conf", "confidence"]]) if (s[k] === was[n]) s[k] = now[n];
-    // What they changed in the builder is theirs, so it doesn't get a gold mark.
+    // What they changed in the builder is theirs, so it doesn't get a gold mark,
+    // and an undo from before the builder can't bring the old sheet back.
     if (s.seen) s.seen = ownChanges(s.seen, before, said(sheetFor(ch)));
+    for (let i = undo.length - 1; i >= 0; i--) if (undo[i].id === ch.id) undo.splice(i, 1);
   } else {
     const tag = Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => b.toString(36).padStart(2, "0")).join("").slice(0, 6);
     ch = { id: `own-${tag}`, crew: "own", name, made: new Date().toISOString(), hash: "own", build };
@@ -1204,6 +1192,7 @@ function finishDowntime(ch, c) {
     return renderDialog();
   }
   let message = "";
+  const last = undo[undo.length - 1];
   change("downtime", (s, was) => {
     const before = said(was);
     const happened = dt.apply(s, was, d);
@@ -1217,7 +1206,7 @@ function finishDowntime(ch, c) {
   }, { say: false });
   dt.done(ch);
   closeDialog();
-  toast(message, true);
+  toast(message || "Downtime’s done.", undo[undo.length - 1] !== last);
 }
 
 function stepRoll(name, i, d) {
