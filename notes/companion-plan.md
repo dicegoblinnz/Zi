@@ -81,7 +81,7 @@ Sign-in (invite-only, with Google, Discord, Apple or an emailed link), building 
 
 For Mo to check. Each one's the smallest call in the shape of the rules, and each is easy to change.
 
-**17 Oct, Mo:** 1 to 4 and 6 to 8 are confirmed. 5 gets a swap (below). 12 changes: typo fixes stay quiet, and each changed line gets a gold mark.
+**17 Oct, Mo:** 1 to 4, 6 to 8 and 9 to 11 are confirmed. 5 gets a swap (below). 12 changes: typo fixes stay quiet, and each changed line gets a gold mark.
 
 1. **Aura and the +2.** A die that comes up on its top face gives 1 Aura back as soon as it's rolled. Putting the +2 (or +3) on it afterwards doesn't take that Aura away, and a die the +2 takes to its top face, or past it, never gives any.
 2. **The Mark die.** A roll can include a Mark die when the target's *Marked*. It's one more die against it, and a top face on it gives Aura to whoever rolled, like any die in the roll. The Hunter's +2 (+3 for Wren) only goes on the Mark die.

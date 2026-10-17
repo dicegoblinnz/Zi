@@ -1,5 +1,6 @@
 ---
-// The character companion: pick one of the crew and play them from your phone.
+// The character companion: build your own or pick one of the crew, and play
+// them from your phone.
 // src/companion/app.js draws everything from the crew's sheets, which the
 // build reads straight off the rules (scripts/build-content.mjs). Characters
 // are saved on the phone, and the service worker keeps this page offline.
@@ -7,20 +8,20 @@ import Base from "../../layouts/Base.astro";
 import book from "../../generated/book.json";
 import "../../styles/companion.css";
 
-const data = { crew: book.crew, conditions: book.companion.conditions, links: book.companion.links };
+const data = { crew: book.crew, conditions: book.companion.conditions, links: book.companion.links, build: book.companion.build };
 const json = JSON.stringify(data).replace(/</g, "\\u003c");
 ---
-<Base title="Characters" current="characters" description="Play one of Zi’Dara’s ready-made crew from your phone, with the counting done and every roll a tap away.">
+<Base title="Characters" current="characters" description="Build your own Zi’Dara character or play one of the crew from your phone, with the counting done and every roll a tap away.">
   <script is:inline slot="head">
     // A link straight to a sheet hides the crew list until the sheet's drawn.
-    try { if (/[?&]c=/.test(location.search)) document.documentElement.classList.add("cc-open"); } catch (e) {}
+    try { if (/[?&](c=|build\b)/.test(location.search)) document.documentElement.classList.add("cc-open"); } catch (e) {}
   </script>
   <main id="main" class="companion frame">
     <div id="app" class="cc">
       <header class="cc-intro">
         <p class="kicker">Your phone at the table</p>
         <h1>Characters</h1>
-        <p class="lede">Pick one of the crew, give them a name and play them from your phone. The counting’s done for you, and they’re saved on this phone, signal or not.</p>
+        <p class="lede">Build your own or pick one of the crew, and play them from your phone. The counting’s done for you, and they’re saved on this phone, signal or not.</p>
         <p class="cc-paper">Playing on paper? Print a character sheet and the player reference from the <a href="/sheets/">Sheets page</a>.</p>
       </header>
       <noscript><div class="cc-note is-warn"><p>The companion needs JavaScript. The crew’s full sheets are in the <a href={book.crewLink}>rules</a>.</p></div></noscript>

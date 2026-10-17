@@ -398,6 +398,93 @@ function conditionsFrom(doc, inline) {
   return out;
 }
 
+// What the character builder offers, read off Building Your Character and the
+// Title ideas so it always matches the book: the Quick Build's steps, the
+// ideas, every trait and the number it changes, what you can carry, the Catch
+// ideas, the quick test, permission ideas and the Connect questions.
+function sectionOf(body, id) {
+  const m = body.match(new RegExp(`^(#{2,4}) [^\\n]*\\{#${id}\\}[^\\n]*$`, "m"));
+  if (!m) return "";
+  const rest = body.slice(m.index + m[0].length);
+  const end = rest.search(new RegExp(`^#{2,${m[1].length}} `, "m"));
+  return end === -1 ? rest : rest.slice(0, end);
+}
+const listItems = (sec) => [...sec.matchAll(/^\d+\.\s+(.+)$/gm)].map((m) => m[1].trim());
+const tableRows = (sec) => [...sec.matchAll(/^\| (.+) \|$/gm)].map((m) => m[1].split(" | ").map((x) => x.trim())).filter((r) => !/^-+$/.test(r[0])).slice(1);
+const dots = (s = "") => s.split(" · ").map((x) => x.trim()).filter(Boolean);
+
+function traitEffects(text) {
+  const e = {};
+  if (/\bAura maximum is one higher\b/i.test(text)) e.aura = 1;
+  if (/\bextra Hurt bar\b/i.test(text)) e.hurtBars = 1;
+  const move = text.match(/\+(\d+) units? of movement\b/i);
+  if (move) e.stride = Number(move[1]);
+  if (/\bcarry one more utility item\b/i.test(text)) e.utility = 1;
+  if (/\bstart every scene a size up on Confidence\b/i.test(text)) e.confidence = 1;
+  return e;
+}
+
+function buildFrom(rulesDoc, ideasDoc, archetypes, inline, warn) {
+  const ideas = [];
+  let group = "";
+  const re = /^### (.+?) \{#s-idea-[a-z-]+\}$|^:::sheet\[([^\]:]+)\]\{#(k-[a-z-]+)\}\n([\s\S]*?)\n:::$/gm;
+  for (const m of ideasDoc.body.matchAll(re)) {
+    if (m[1]) {
+      group = curly(m[1]);
+      continue;
+    }
+    const field = {};
+    for (const row of m[4].split("\n")) {
+      const f = row.match(/^\*\*([^*]+?):\*\* (.*)$/);
+      if (f) field[f[1]] = f[2].trim();
+    }
+    const arch = [...(field.Archetypes ?? field.Archetype ?? "").matchAll(/\[([^\]]+)\]\(#a-[a-z-]+\)/g)].map((a) => a[1]);
+    if (!arch.length) warn(`the ${m[2]} Title idea has no archetypes`);
+    ideas.push({
+      id: m[3], name: curly(m[2]), group, playsLike: plain(dropStop(field["Plays like"])), archetypes: arch,
+      titles: italics(field.Titles), permissions: italics(field.Permissions), traits: dots(field.Traits).map(curly),
+      beyond: dots(field["Going beyond"]).map(plain), trouble: italics(field.Trouble),
+    });
+  }
+
+  const traits = [];
+  let kind = "";
+  const list = rulesDoc.body.split(/^### The \d+ traits.*$/m)[1]?.split(/^## /m)[0] ?? "";
+  for (const m of list.matchAll(/^#### (.+?)(?: \{#[^}]+\})?$|^\| \*\*(.+?)\*\* \| (.+?) \| (.+?) \|$/gm)) {
+    if (m[1]) {
+      kind = curly(m[1]);
+      continue;
+    }
+    traits.push({
+      name: curly(m[2]), type: m[3], group: kind, html: inline(m[4]), step: /\+1 step\b/.test(m[4]),
+      aura: Number(m[4].match(/\bGain (\d+) Aura\b/)?.[1] ?? 0), effects: traitEffects(m[4]),
+    });
+  }
+  const known = new Set(traits.map((t) => t.name));
+  for (const idea of ideas) for (const t of idea.traits) if (!known.has(t)) warn(`the ${idea.name} Title idea suggests ${t}, which isn't in the traits list`);
+
+  const body = rulesDoc.body;
+  const build = {
+    quick: listItems(sectionOf(ideasDoc.body, "s-quick")).map(inline),
+    archetypes: Object.entries(archetypes).map(([name, a]) => ({ name, ...a })),
+    ideas,
+    traits,
+    items: tableRows(sectionOf(body, "the-item-list")).map((r) => ({ group: plain(r[0]), items: dots(r[1]).map(plain) })),
+    usedUp: tableRows(sectionOf(body, "consumables-20")).map((r) => ({ name: plain(r[0]), html: inline(r[1]) })),
+    keepsakes: tableRows(sectionOf(body, "keepsakes-10")).map((r) => ({ name: plain(r[0]), text: plain(r[1]) })),
+    catches: tableRows(sectionOf(body, "catches-12")).map((r) => ({ name: plain(r[1]), text: plain(r[2]) })),
+    quickTest: listItems(sectionOf(body, "the-quick-test")).map(inline),
+    permIdeas: tableRows(sectionOf(body, "permission-ideas")).map((r) => ({ for: plain(r[0]), perms: italics(r[1]) })),
+    connect: listItems(sectionOf(body, "s-connect")).map(curly),
+  };
+  const expect = { quick: 8, quickTest: 4, catches: 12, connect: 10 };
+  for (const [key, n] of Object.entries(expect)) if (build[key].length !== n) warn(`the builder expected ${n} ${key}, found ${build[key].length}`);
+  for (const [key, n] of Object.entries({ archetypes: 10, ideas: 20, traits: 40, items: 4, usedUp: 10, keepsakes: 5, permIdeas: 4 })) {
+    if (build[key].length < n) warn(`the builder found only ${build[key].length} ${key}`);
+  }
+  return build;
+}
+
 function textOf(node) {
   if (node.type === "text") return node.value;
   return (node.children || []).map(textOf).join("");
@@ -458,6 +545,10 @@ const ctx = {
 const crewDoc = docWith("{#s-pregens}");
 const crew = crewDoc ? crewFrom(crewDoc, ctx) : [];
 if (crew.length !== 6) companionWarn(`expected the six crew sheets, found ${crew.length}`);
+const buildDoc = docWith("{#s-traits}");
+const ideasDoc = docWith("{#s-quick}");
+const build = buildDoc && ideasDoc ? buildFrom(buildDoc, ideasDoc, ctx.archetypes, inline, (msg) => companionWarn(`builder: ${msg}`)) : null;
+if (!build) companionWarn("can't find Building Your Character or the Quick Build for the builder");
 const conditions = docWith("{#s-conditions-list}") ? conditionsFrom(docWith("{#s-conditions-list}"), inline) : [];
 if (conditions.length < 10) companionWarn(`found only ${conditions.length} conditions in Conflict`);
 const linkTo = (id) => {
@@ -468,10 +559,14 @@ const linkTo = (id) => {
 const companionLinks = Object.fromEntries(
   ["s-aura", "s-resolve", "s-confidence", "s-armour", "s-blaze", "s-healing", "s-conditions", "s-bonds", "s-trouble", "steps-into-dice",
     "s-splitting", "s-teamwork", "s-extra-actions", "s-going-beyond", "s-the-roll", "s-defending", "s-defend", "s-fear-gets-through",
-    "s-consequences", "s-aspiration", "s-pregens", "s-set-actions", "s-how-archetypes", "s-attunement", "s-carrying", "s-traits", "s-intents"]
+    "s-consequences", "s-aspiration", "s-pregens", "s-set-actions", "s-how-archetypes", "s-attunement", "s-carrying", "s-traits", "s-intents",
+    "s-quick", "s-title-ideas", "s-title", "s-writing-permissions", "the-quick-test", "permission-ideas", "s-step-set-actions", "s-items",
+    "the-item-list", "catches-12", "s-starting-numbers", "s-connect"]
     .map((id) => [id, linkTo(id)]),
 );
 for (const c of crew) for (const a of c.archetypeRules) if (a.id) companionLinks[a.id] = linkTo(a.id);
+for (const a of build?.archetypes ?? []) if (a.id) companionLinks[a.id] = linkTo(a.id);
+for (const idea of build?.ideas ?? []) companionLinks[idea.id] = linkTo(idea.id);
 
 const outDir = join(ROOT, "src", "generated");
 mkdirSync(outDir, { recursive: true });
@@ -484,7 +579,7 @@ writeFileSync(
     changes: { title: curly(changes.meta.title), html: changesOut.html, headings: changesOut.headings },
     crew,
     crewLink: crewDoc ? `${pageFor.get(crewDoc.path)}#s-pregens` : "/rules/",
-    companion: { conditions, links: companionLinks },
+    companion: { conditions, links: companionLinks, build },
   }),
 );
 mkdirSync(join(ROOT, "public", "figures"), { recursive: true });

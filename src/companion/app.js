@@ -6,6 +6,7 @@
 // redraws and can be undone.
 import { SIZES, diceLabel, diceRange, diceShapes, rollDie, sizeDown, sizeUp, stepsToDice } from "./dice.js";
 import { openStore } from "./store.js";
+import { hasDraft, makeBuilder, sheetOf } from "./builder.js";
 
 const DATA = JSON.parse(document.getElementById("zi-companion").textContent);
 const CREW = new Map(DATA.crew.map((c) => [c.id, c]));
@@ -43,6 +44,8 @@ const ICON = {
   back: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>',
 };
 
+const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: () => nav(""), onSave: saveBuilt });
+
 // ---------------------------------------------------------------- characters
 
 const chars = () => store.data.characters;
@@ -61,8 +64,12 @@ function fresh(c) {
 
 // Fill in anything missing and keep every number inside what the sheet allows
 // now, in case the rules changed since this was saved.
+// A character built on this phone carries its build, and its sheet's made from
+// that against the current rules. The crew's come straight off the chapter.
+const sheetFor = (ch) => (ch?.build ? sheetOf(ch, DATA.build) : CREW.get(ch?.crew) ?? null);
+
 function normal(ch) {
-  const c = ch && CREW.get(ch.crew);
+  const c = ch && sheetFor(ch);
   if (!c) return null;
   const n = c.numbers;
   const s = Object.assign(fresh(c), ch.state && typeof ch.state === "object" ? ch.state : {});
@@ -190,13 +197,14 @@ function saveNote() {
 
 function listView() {
   const mine = chars();
+  const draft = hasDraft();
   const saved = (ch) => {
-    const c = CREW.get(ch.crew);
+    const c = sheetFor(ch);
     const s = ch.state || {};
     return `<li><a class="card cc-saved" href="/characters/?c=${encodeURIComponent(ch.id)}" data-act="nav" data-id="${esc(ch.id)}">
       <span class="die" aria-hidden="true">${esc((ch.name || "?").slice(0, 1))}</span>
       <span class="cc-saved-text"><b>${esc(ch.name)}</b>
-      <small>${c ? `${esc(c.name)} · <em>${esc(c.title)}</em>` : "This sheet isn’t in the rules any more"}</small>
+      <small>${c ? `${ch.build ? "Your own" : esc(c.name)}${c.title ? ` · <em>${esc(c.title)}</em>` : ""}` : "This sheet isn’t in the rules any more"}</small>
       ${c ? `<small>Aura ${esc(s.aura ?? c.numbers.aura)} · Resolve ${esc(s.resolve ?? c.numbers.resolve)} · Confidence d${esc(s.conf ?? c.numbers.confidence)}</small>` : ""}</span></a></li>`;
   };
   const crew = (c) => `<article class="card">
@@ -206,12 +214,15 @@ function listView() {
       <p class="blurb">${esc(c.blurb)}</p>
       <button type="button" class="button primary" data-act="play" data-c="${esc(c.id)}">Play ${esc(c.name)}</button></div></article>`;
   return `<header class="cc-intro"><p class="kicker">Your phone at the table</p><h1>Characters</h1>
-    <p class="lede">Pick one of the crew, give them a name and play them from your phone. The counting’s done for you, and they’re saved on this phone, signal or not.</p>
+    <p class="lede">Build your own or pick one of the crew, and play them from your phone. The counting’s done for you, and they’re saved on this phone, signal or not.</p>
     <p class="cc-paper">Playing on paper? Print a character sheet and the player reference from the <a href="/sheets/">Sheets page</a>.</p></header>
     ${saveNote()}
     ${mine.length ? `<section class="cc-sec" aria-labelledby="cc-mine"><h2 id="cc-mine">On this phone</h2><ul class="cc-mine">${mine.map(saved).join("")}</ul></section>` : ""}
+    <section class="cc-sec" aria-labelledby="cc-own"><h2 id="cc-own">Make your own</h2>
+      <p class="cc-lead">Build a character step by step. It follows the ${link("s-quick", "Quick Build")}, with the rules for each step right there, and it’s saved on this phone as you go.</p>
+      <div class="cc-row">${draft ? `<a class="button primary" href="/characters/?build" data-act="bopen">Carry on with ${esc(draft.name || "your character")}</a><button type="button" class="button" data-act="bdrop">${ui.sure ? "Tap again to bin it" : "Start again"}</button>` : '<a class="button primary" href="/characters/?build" data-act="bopen">Build a character</a>'}</div></section>
     <section class="cc-sec" aria-labelledby="cc-crew"><h2 id="cc-crew">Pick from the crew</h2>
-      <p class="cc-lead">Six ready-made characters, straight off their sheets in the ${link("s-pregens", "rules")}. Building your own comes later.</p>
+      <p class="cc-lead">Six ready-made characters, straight off their sheets in the ${link("s-pregens", "rules")}.</p>
       <div class="crew">${DATA.crew.map(crew).join("")}</div></section>`;
 }
 
@@ -407,7 +418,7 @@ function sheetView(ch, c) {
   <section class="cc-sec" aria-labelledby="cc-about"><h2 id="cc-about">About ${esc(c.name)}</h2>
     <p>${esc(c.blurb)}</p><p><b>Plays like:</b> ${c.playsLike}</p>
     ${c.crewQs.map((x) => `<p><em>${esc(x.q)}</em> ${esc(x.a)}</p>`).join("")}
-    <p class="cc-lead">${link("s-pregens", `${esc(c.name)}’s sheet in the rules`)}</p>
+    ${c.own ? `<p class="cc-lead">Built on this phone, from the ${link("s-quick", "Quick Build")}.</p><div class="cc-row"><a class="button" href="/characters/?build=${encodeURIComponent(ch.id)}" data-act="bopen" data-key="${esc(ch.id)}">Change ${esc(ch.name)} in the builder</a></div>` : `<p class="cc-lead">${link("s-pregens", `${esc(c.name)}’s sheet in the rules`)}</p>`}
     <div class="cc-row"><button type="button" class="button danger" data-act="delete">Delete ${esc(ch.name)} from this phone</button></div></section>`;
 }
 
@@ -798,7 +809,7 @@ function render() {
   const keep = dialog.open ? null : sig(document.activeElement);
   const ch = current();
   const c = ch ? normal(ch) : null;
-  app.innerHTML = view.name !== "sheet" ? listView() : c ? sheetView(ch, c) : missingView(ch);
+  app.innerHTML = view.name === "build" ? builderView() : view.name !== "sheet" ? listView() : c ? sheetView(ch, c) : missingView(ch);
   if (dialog.open) renderDialog();
   else refocus(keep);
 }
@@ -830,13 +841,50 @@ function closeDialog(fromHistory = false) {
 }
 
 function route() {
-  const id = new URLSearchParams(location.search).get("c");
-  view = id ? { name: "sheet", id } : { name: "list" };
+  const q = new URLSearchParams(location.search);
+  const id = q.get("c");
+  const key = q.has("build") ? q.get("build") || "new" : null;
+  view = key ? { name: "build", key } : id ? { name: "sheet", id } : { name: "list" };
   ui.panel = null;
-  document.documentElement.classList.toggle("cc-open", Boolean(id));
+  ui.sure = false;
+  document.documentElement.classList.toggle("cc-open", Boolean(id || key));
   const ch = current();
-  document.title = ch ? `${ch.name} · Zi’Dara` : "Characters · Zi’Dara";
+  document.title = key ? `${key === "new" ? "Make your own" : "Change a character"} · Zi’Dara` : ch ? `${ch.name} · Zi’Dara` : "Characters · Zi’Dara";
   render();
+}
+
+// The builder, for a new character or one of yours that was built here.
+function builderView() {
+  const ch = view.key === "new" ? null : chars().find((x) => x.id === view.key && x.build);
+  if (view.key !== "new" && !ch) return missingView(null);
+  return builder.view(view.key, ch ? { ...ch.build, name: ch.name } : null);
+}
+function navBuild(key) {
+  history.pushState(null, "", key && key !== "new" ? `/characters/?build=${encodeURIComponent(key)}` : "/characters/?build");
+  route();
+  scrollTo(0, 0);
+  app.querySelector("h1")?.focus({ preventScroll: true });
+}
+function saveBuilt(build, key, discard) {
+  const name = build.name.trim() || "Nameless";
+  let ch = key === "new" ? null : chars().find((x) => x.id === key);
+  if (ch) {
+    ch.build = build;
+    ch.name = name;
+  } else {
+    const tag = Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => b.toString(36).padStart(2, "0")).join("").slice(0, 6);
+    ch = { id: `own-${tag}`, crew: "own", name, made: new Date().toISOString(), hash: "own", build };
+    ch.state = fresh(sheetFor(ch));
+    chars().push(ch);
+  }
+  normal(ch);
+  ch.saved = new Date().toISOString();
+  const kept = store.save();
+  discard();
+  history.replaceState(null, "", `/characters/?c=${encodeURIComponent(ch.id)}`);
+  route();
+  scrollTo(0, 0);
+  toast(kept ? `${name}’s saved on this phone.` : "This phone isn’t letting the site save, so they’re gone when you close the page.", false);
 }
 function nav(id) {
   history.pushState(null, "", id ? `/characters/?c=${encodeURIComponent(id)}` : "/characters/");
@@ -875,6 +923,23 @@ function stepRoll(name, i, d) {
 }
 
 const ACT = {
+  b: (el, e) => builder.act(el, e, render, () => {
+    scrollTo(0, 0);
+    app.querySelector("h1")?.focus({ preventScroll: true });
+  }),
+  bopen(el, e) {
+    e.preventDefault();
+    navBuild(el.dataset.key || "new");
+  },
+  bdrop() {
+    if (!ui.sure) {
+      ui.sure = true;
+      return render();
+    }
+    ui.sure = false;
+    builder.discard("new");
+    navBuild("new");
+  },
   nav(el, e) {
     e.preventDefault();
     nav(el.dataset.id || "");
@@ -1303,6 +1368,7 @@ document.addEventListener("change", (e) => {
 });
 
 document.addEventListener("input", (e) => {
+  if (e.target.dataset?.bin) return builder.input(e.target);
   if (e.target.dataset?.in !== "notes") return;
   const ch = current();
   if (!ch) return;
@@ -1314,6 +1380,7 @@ document.addEventListener("input", (e) => {
 document.addEventListener("toggle", (e) => {
   const key = e.target.dataset?.open;
   if (!key) return;
+  if (key.startsWith("bd-how")) builder.toggled(e.target);
   if (e.target.open) ui.open.add(key);
   else ui.open.delete(key);
 }, true);

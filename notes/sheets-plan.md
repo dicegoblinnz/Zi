@@ -64,6 +64,8 @@ Mo's weekly limit is tight. Work in this chat only, read only the parts of files
 
 ## Calls I made
 
+Mo confirmed these with the app plan on 17 Oct 2026.
+
 - **What's on each side.** Titles, attunement and bonds fill the back, so traits, the Kit (equipment, utility, keepsake and the bag) and notes went on the front with play.
 - **How many rows.** Six rows for set actions of your own (Appendix A had nine), three traits with two lines each for what they do (two to start), five Hurt bars (three, and two extras like Unyielding's), four conditions, six Titles with two lines for the Title and six permission lines each, two attunement slots with six lines each, and six bonds with four threads each. Vesk's and Bram's sheets fit, and so do all the crew's Titles, permissions and threads, Dorrie's long Title, Perfect Recall's wording and "steel from a vault door" as a material. Some traits in Building Your Character run longer than two lines, so those get written short.
 - **Armour has a "now" box** beside "full", because Armour drops as a consequence and comes back to full in downtime.

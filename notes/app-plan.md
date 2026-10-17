@@ -1,6 +1,6 @@
 # The app plan
 
-From the drill on 17 Oct 2026 (`notes/app-rework.md`). Mo's answers are in `notes/website-brief.md` under "The app rework". Waiting for Mo's yes before any building.
+From the drill on 17 Oct 2026 (`notes/app-rework.md`). Mo's answers are in `notes/website-brief.md` under "The app rework". Mo said yes on 17 Oct.
 
 ## Decisions
 
@@ -27,15 +27,15 @@ From the drill on 17 Oct 2026 (`notes/app-rework.md`). Mo's answers are in `note
 - The GM's screens are made for a tablet or laptop first, and still work on a phone.
 - Print fills the existing two-page PDF's fields on the phone.
 
-## Still to confirm
+## Confirmed with the plan
 
-Companion calls 9, 10 and 11 (`notes/companion-plan.md`) and the sheet's calls (`notes/sheets-plan.md`).
+Companion calls 9, 10 and 11 (`notes/companion-plan.md`) and the sheet's calls (`notes/sheets-plan.md`) stay as they are.
 
 ## The stages
 
 Every stage passes `tests/check-site.mjs` and `tests/check-companion.mjs`, works offline, in both themes, from 320 wide up, and ends with one independent check. "Uses" compares each stage with the companion's first version.
 
-1. **The guided builder.** Players make their own on the phone: two archetypes and Titles, two traits, permissions with the quick test, set actions that add up, what they carry, attuned things, threads, crew answers and an Aspiration. Saved on the phone, offline, and it plays in today's companion like the crew. Builds on the crew data, `dice.js` and `store.js`. Uses about two-thirds. Checked by building a character with fixed picks, its set actions against `dice.js`, a reload, offline and a roll.
+1. **The guided builder.** Built 17 Oct on the `app` branch. Players make their own on the phone: two archetypes and Titles, two traits, permissions with the quick test, set actions that add up, what they carry, attuned things, threads, crew answers and an Aspiration. Saved on the phone, offline, and it plays in today's companion like the crew. Builds on the crew data, `dice.js` and `store.js`. Uses about two-thirds. Checked by building a character with fixed picks, its set actions against `dice.js`, a reload, offline and a roll.
 2. **Print, and the other ways in.** A filled two-page sheet from any character, plus blank, from the crew and random. Builds on stage 1. Uses about a third. Checked by filling Vesk's PDF and a built character's, and a random one that passes the builder's warnings.
 3. **The play screen and the roll.** The one-handed play screen, the roll card that counts as you tap with Aura lines in gold, the threat's die, tapped-in real dice, intents, counting with undo, Defend with a swap, and rules on tap. Builds on stages 1 and 2. Uses about half. Checked by Vesk at the table, extended: a threat's die, a tap-in, a swap and an undo of Hurt.
 4. **Dice, feel and learning.** The Sigil dice, the motion, sound and buzz, and the learn-to-play round with Isolde, Wren and Bram. Builds on stage 3. Uses about half. Checked by the round played start to finish, and reduce-motion.

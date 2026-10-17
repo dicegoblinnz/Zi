@@ -1,9 +1,11 @@
 // Characters saved on this phone. One localStorage key, zi-characters, holds a
 // versioned list, kept simple so it can move into an account later:
-//   { v: 1, characters: [{ id, crew, name, made, hash, state }] }
+//   { v: 1, characters: [{ id, crew, name, made, hash, state, build? }] }
 // crew is the crew member's id, hash is their sheet's hash when this phone last
 // saw it, and state is everything the player changes in play. The sheet itself
-// is always read from the current rules, never saved here.
+// is always read from the current rules, never saved here. A character built
+// on the phone has crew "own" (so an older page still keeps it) and a build,
+// what the player chose in the builder, which builder.js turns into a sheet.
 
 const KEY = "zi-characters";
 export const VERSION = 1;

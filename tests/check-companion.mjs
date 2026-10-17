@@ -10,11 +10,16 @@
 //    Roll with fixed dice, check the Aura and the result, reload, then go
 //    offline and reload. Then a split roll with a top face and a tie, an undo,
 //    a defence roll and a new scene.
+// 5. Building your own: Vesk again, through the builder a step at a time. Her
+//    set actions and numbers have to match her sheet in the chapter. Then a
+//    roll, a reload, offline, a change in the builder, and every step at 320
+//    wide in the light, with axe on each.
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join } from "node:path";
 import { chromium } from "playwright";
+import { AxeBuilder } from "@axe-core/playwright";
 import { diceLabel, diceRange, diceShapes, stepsToDice } from "../src/companion/dice.js";
 
 const SHOTS = process.argv[2] || null;
@@ -244,6 +249,154 @@ async function play(page, crewId, name) {
   await page.click('#cc-dialog button[data-act="pick"]');
   same(await page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Under", "Beat it"], "after the +3 on the Mark die");
   has(await page.textContent("#cc-dialog .dlg-body"), "You’ve got 4 Aura", "Wren's Aura after the +3");
+  await context.close();
+}
+
+// 5. Building your own.
+{
+  const md = readFileSync("content/rules/03b-title-ideas-and-the-crew.md", "utf8");
+  const block = md.match(/^:::sheet\[Vesk: [^\]]+\]\n([\s\S]*?)\n:::$/m)[1];
+  const want = block.match(/^\*\*Set actions:\*\* (.+)$/m)[1].replace(/\.$/, "").split(" · ").map((s) => {
+    const x = s.match(/^(.+?) (\d+) \(([^)]+)\)/);
+    return [x[1], Number(x[2]), x[3]];
+  }).sort();
+  const { context, page } = await phone();
+  const axe = async (what) => {
+    const result = await new AxeBuilder({ page }).analyze();
+    for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on ${what}: ${v.id} (${v.nodes.length})`);
+  };
+  const b = (attrs) => page.click(`button[data-act="b"]${attrs}`);
+  const step = () => page.textContent(".bd-head h1");
+  const next = async (name) => {
+    await page.click(".bd-foot button.primary");
+    has(await step(), name, "the next step");
+  };
+  const tiles = async () => (await page.$$eval(".tile[data-a]", (els) => els.map((el) => [el.querySelector(".tile-name").textContent, parseInt(el.querySelector(".tile-steps").textContent, 10), el.querySelector(".tile-die").textContent]))).sort();
+
+  await page.goto(`${BASE}/characters/`);
+  await page.click('a[data-act="bopen"]');
+  has(await step(), "Archetypes", "the builder's first step");
+  for (const t of [0, 1]) {
+    await b(`[data-b="arch"][data-t="${t}"][data-v="Shadow"]`);
+    await b(`[data-b="idea"][data-t="${t}"][data-v="k-rogue"]`);
+  }
+  has(await page.textContent(".bd-body"), "Shadow twice, so your +2 is a +3", "two Shadows");
+  await shot(page, "5-builder-archetypes");
+  await next("Titles and permissions");
+  await b('[data-b="title"][data-t="0"][data-v="The best cat burglar in the city"]');
+  for (const p of ["move unseen", "run the rooftops", "pick a mechanical lock"]) await b(`[data-b="perm"][data-t="0"][data-v="${p}"]`);
+  await b('[data-b="title"][data-t="1"][data-v="Raised by the Guild"]');
+  await b('[data-b="perm"][data-t="1"][data-v="know how a lock’s built"]');
+  await page.fill("#b-t1-p1", "fight dirty with a knife");
+  await page.fill("#b-t1-p2", "find a buyer for anything");
+  await next("Traits");
+  await b('[data-b="trait"][data-v="Silent Step"]');
+  await b('[data-b="trait"][data-v="Light on my Feet"]');
+  has(await page.textContent(".bd-body .cc-note"), "picked 2 of 2", "two traits");
+  await next("Set actions");
+  await page.fill("#b-newact", "Locks");
+  await b('[data-b="addact"]');
+  const on = { t0: ["Sneak", "Move", "Locks"], "p0.0": ["Sneak"], "p0.1": ["Move"], "p0.2": ["Locks"], "p1.0": ["Locks"], "p1.1": ["Fight"], r0: ["Sneak"] };
+  for (const [l, list] of Object.entries(on)) for (const a of list) await b(`[data-b="on"][data-l="${l}"][data-a="${a}"]`);
+  has(await page.textContent('.bd-tiles .tile:has(.tile-name:text-is("Sneak"))'), "4 steps", "Sneak with her first Title, move unseen and Silent Step");
+  await shot(page, "6-builder-set-actions");
+  await next("What you carry");
+  await b('[data-b="fillany"][data-k="e"][data-v="worn leathers"]');
+  same(await page.getAttribute('[data-b="armour"][data-i="0"]', "aria-pressed"), "true", "worn leathers counted as armour");
+  await b('[data-b="fillany"][data-k="u"][data-v="Purse of gold"]');
+  await b('[data-b="fillany"][data-k="u"][data-v="Smoke bomb"]');
+  await page.fill("#b-k", "the first coin she ever stole");
+  await page.fill("#b-a0-name", "A perfect set of picks");
+  await page.fill("#b-a0-p0", "open any lock with a mechanism");
+  await b('[data-b="on"][data-l="a0.0"][data-a="Locks"]');
+  await page.fill("#b-a1-name", "A grappling line");
+  await page.fill("#b-a1-p0", "climb or swing anywhere you can throw a hook");
+  await b('[data-b="on"][data-l="a1.0"][data-a="Move"]');
+  await next("Threads");
+  const threads = [["Dorrie", "We have pulled a dozen jobs. I trust her with my life."], ["Bram", "He once carried me out of a fire. I have never said thank you."], ["The fence", "I owe a debt I would rather not discuss."]];
+  for (const [i, [who, what]] of threads.entries()) {
+    await page.fill(`#b-th${i}-person`, who);
+    await page.fill(`#b-th${i}-text`, what);
+  }
+  await next("Aspiration");
+  await page.fill("#b-asp", "Own the score of a lifetime");
+  await next("Check it and play");
+  await page.fill("#b-name", "Vesk");
+  await b('[data-b="pronoun"][data-v="her"]');
+  const nums = (await page.textContent(".bd-nums")).replace(/\s+/g, " ");
+  for (const n of ["Aura 5", "Resolve 2", "Stride 5 (Light on my Feet)", "Hurt 3 bars", "Armour d4 (worn leathers)", "Confidence d6"]) has(nums, n, "the built Vesk's numbers");
+  has(await page.textContent(".bd-body"), "Everything adds up", "nothing to flag on a finished Vesk");
+  await shot(page, "7-builder-check");
+  await b('[data-b="save"]');
+  await page.waitForSelector(".tile[data-a]");
+  same(await tiles(), want, "the built Vesk's set actions against her sheet in the chapter");
+  has(await page.textContent(".cc-head"), "Stride 5 (Light on my Feet)", "the built Vesk's stride on her sheet");
+  const saved = await page.evaluate(() => [JSON.parse(localStorage.getItem("zi-characters")).characters.at(-1), JSON.parse(localStorage.getItem("zi-drafts") || "{}")]);
+  same([saved[0].crew, saved[0].name, Boolean(saved[0].build), "new" in saved[1]], ["own", "Vesk", true, false], "the built Vesk saved, and the draft cleared");
+
+  await page.click('.tile[data-a]:has(.tile-name:text-is("Locks"))');
+  has(await page.textContent("#cc-dialog .cc-dice"), "5 steps, d10", "the built Vesk's Locks");
+  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="6"]');
+  await page.evaluate(() => window.ziCompanion.setDice([8, 5]));
+  await page.click('#cc-dialog button[data-act="go"]');
+  await page.waitForSelector("#cc-dialog .res .res-out");
+  has(await page.textContent("#cc-dialog .cc-res"), "Beat it", "her 8 against the lock's 5");
+  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
+  await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  await page.reload();
+  await page.waitForSelector(".tile[data-a]");
+  same(await tiles(), want, "the built Vesk after a reload");
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.waitForFunction(() => navigator.serviceWorker.controller !== null, null, { timeout: 15000 }).catch(() => note("the service worker never took over the page"));
+  await context.setOffline(true);
+  await page.reload();
+  await page.waitForSelector(".tile[data-a]", { timeout: 10000 }).catch(() => note("the built Vesk didn't open offline"));
+  await page.click('a[data-act="bopen"][data-key]');
+  has(await step(), "Check it and play", "changing her opens on the last step, offline");
+  await context.setOffline(false);
+
+  // Change her: Prepared instead of Light on my Feet.
+  await page.click('.bd-dot[data-s="2"]');
+  await b('[data-b="deep"]');
+  await b('[data-b="trait"][data-v="Light on my Feet"]');
+  await b('[data-b="trait"][data-v="Prepared"]');
+  await page.click('.bd-dot[data-s="4"]');
+  has(await page.textContent("#bd-ut"), "4 utility items", "Prepared gives her a fourth utility item");
+  await page.click('.bd-dot[data-s="7"]');
+  await b('[data-b="save"]');
+  await page.waitForSelector(".tile[data-a]");
+  has(await page.textContent(".cc-head"), "Stride 3", "Vesk's stride without Light on my Feet");
+  same(await page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.filter((c) => c.build).length), 1, "changing her doesn't make a second Vesk");
+
+  // A blank character saves too: the builder warns, and never blocks. Leaving
+  // keeps the draft, and the list offers to carry on with it.
+  await page.goto(`${BASE}/characters/?build`);
+  await page.click('.bd-dot[data-s="7"]');
+  has(await page.textContent(".bd-body .is-warn"), "You can save anyway", "the warnings on a blank build");
+  await page.fill("#b-name", "Kaia");
+  await page.click('.cc-back[data-b="leave"]');
+  has(await page.textContent('a[data-act="bopen"]'), "Carry on with Kaia", "a half-built character waiting on the list");
+  await page.click('a[data-act="bopen"]');
+  await b('[data-b="save"]');
+  await page.waitForSelector(".tile[data-a]");
+  same(await page.$$eval(".tile[data-a]", (els) => els.length), 5, "a blank character's five set actions");
+  has(await page.textContent(".cc-head h1"), "Kaia", "the blank character's name");
+
+  // Every step at 320 wide, dark then light, with axe.
+  await page.setViewportSize({ width: 320, height: 720 });
+  await page.click('a[data-act="bopen"][data-key]');
+  for (const theme of ["dark", "light"]) {
+    await page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+    await page.reload();
+    for (let s = 0; s < 8; s++) {
+      await page.click(`.bd-dot[data-s="${s}"]`);
+      const { scroll, client } = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
+      if (scroll > client) note(`the builder's step ${s + 1} scrolls sideways at 320 wide, ${theme} (${scroll} > ${client})`);
+      await axe(`the builder's step ${s + 1}, ${theme}`);
+    }
+  }
+  await shot(page, "8-builder-320-light");
+  console.log("builder: Vesk built step by step and checked against her sheet");
   await context.close();
 }
 
