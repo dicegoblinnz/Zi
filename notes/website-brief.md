@@ -77,3 +77,7 @@ Mo's answers in the drill from `notes/app-rework.md`, round by round.
 - The look: Sigil hex dice that spin and land with weight, and plenty of motion: cards flip, pages slide, Aura pips glow as they fill.
 - With sound on, these get a sound or a buzz: dice landing, a top face (a chime and a buzz as Aura comes back), and Hurt or a Catch filling a bar.
 - Defend: the app matches the rolls so the most dice get stopped, and the player can tap to swap two (call 5 in `notes/companion-plan.md`, confirmed with the swap added).
+- Making your own: the guided builder comes first (info bubbles, teaching as you build), then a blank sheet, from the crew and random.
+- The builder follows the Quick Build by default, and any step can open into the full build.
+- Permissions: pick from the Title idea's permissions or write your own, with the quick test beside it.
+- The builder warns but never blocks: it flags a missing permission or steps that don't add up, and saves anyway.
