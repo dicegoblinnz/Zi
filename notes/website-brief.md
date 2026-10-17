@@ -81,3 +81,7 @@ Mo's answers in the drill from `notes/app-rework.md`, round by round.
 - The builder follows the Quick Build by default, and any step can open into the full build.
 - Permissions: pick from the Title idea's permissions or write your own, with the quick test beside it.
 - The builder warns but never blocks: it flags a missing permission or steps that don't add up, and saves anyway.
+- Downtime on the phone: pick your slots, and what they bring lands on the sheet, with an undo.
+- The party sheet and the Party Goal wait for sign-in, so everyone shares one copy and there's no throwaway version first.
+- When a rule changes, each changed line on a saved character gets a gold mark. Tap it to see old and new. Typo fixes stay quiet.
+- Calls 1 to 4 and 6 to 8 in `notes/companion-plan.md` are confirmed.
