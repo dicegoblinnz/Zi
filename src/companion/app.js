@@ -980,6 +980,8 @@ function render() {
 // Pips and Hurt boxes that just filled glow as they light up. The trackers
 // remember what they showed last time, for this character.
 function glow(ch) {
+  // Behind the roll card nothing's seen, so it glows when the card closes.
+  if (dialog.open) return;
   const s = ch?.state;
   const was = ui.seen && ui.seen.id === ch?.id ? ui.seen : null;
   ui.seen = s ? { id: ch.id, aura: s.aura, resolve: s.resolve, hurt: s.hurt } : null;

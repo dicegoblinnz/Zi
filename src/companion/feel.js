@@ -25,13 +25,19 @@ function audio() {
   const AC = window.AudioContext || window.webkitAudioContext;
   if (!AC) return null;
   try {
+    if (ctx?.state === "closed") ctx = null;
     ctx ??= new AC();
-    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    if (ctx.state !== "running") ctx.resume().catch(() => {});
   } catch {
     return null;
   }
   return ctx;
 }
+// Phones only let sound start from a tap, and can pause it when the app's
+// switched away, so any tap with sound on wakes it again.
+addEventListener("pointerdown", () => {
+  if (on && ctx?.state !== "running") audio();
+}, { passive: true });
 
 // A note that dies away, and can fall in pitch as it goes.
 function tone(freq, dur, { vol = 0.2, to = freq, type = "sine", at = 0 } = {}) {
@@ -110,12 +116,15 @@ export const feel = {
   },
 };
 
-// The Sigil dice: every [data-spin] in root shows random faces while it
+// The Sigil dice: every [data-spin] in where shows random faces while it
 // tumbles, then lands on the number it was drawn with, one die after another,
 // each with a knock. done() runs once the last one's settled. The returned
-// function stops it early (a tap skips the tumble).
-export function tumble(root, done) {
-  const dice = [...root.querySelectorAll("[data-spin]")];
+// function stops it early (a tap skips the tumble). where is the element the
+// dice are in, or a function that finds it, for a page that might be drawn
+// again mid-tumble.
+export function tumble(where, done) {
+  const scope = () => (typeof where === "function" ? where() : where) ?? document.createDocumentFragment();
+  const dice = [...scope().querySelectorAll("[data-spin]")];
   const gap = dice.length > 1 ? Math.min(160, 480 / (dice.length - 1)) : 0;
   dice.forEach((el, i) => {
     el.dataset.to = el.textContent;
@@ -129,7 +138,7 @@ export function tumble(root, done) {
   const tick = () => {
     if (stopped) return;
     const t = performance.now() - started;
-    for (const el of root.querySelectorAll("[data-spin]:not(.is-landed)")) {
+    for (const el of scope().querySelectorAll("[data-spin]:not(.is-landed)")) {
       // A die drawn again mid-tumble already shows its number, so it lands now.
       if (!el.dataset.to) Object.assign(el.dataset, { to: el.textContent, at: "0" });
       if (t >= Number(el.dataset.at)) {

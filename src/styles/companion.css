@@ -379,6 +379,7 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .ln-sum { margin: 0 0 1rem; padding: 0.8rem 0.9rem 0.1rem; background: var(--surface); border: 1px solid var(--gold); border-radius: 2px; }
 .ln-dice { display: flex; gap: 8px; margin-bottom: 0.6rem; }
 .ln-roll { margin-bottom: 0.8rem; }
+.ln-card .cc-nums { grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); }
 .ln-out h3 { font-family: var(--display); font-weight: 600; font-size: 1.15rem; color: var(--gold-ink); margin: 0.4rem 0 0.4rem; }
 .ln-hurt { display: flex; align-items: center; gap: 10px; margin: 0 0 0.8rem; }
 .ln-hurt .k { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }

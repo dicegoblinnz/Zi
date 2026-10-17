@@ -124,7 +124,7 @@ export function makeLearn(k) {
     const mark = { beat: "beat", won: "won", tie: "tie", lands: "under" }[out];
     const rows = L.dice.map((d, i) => `<li class="res is-${spin ? "spin" : i === first ? mark : "none"}">${die(d.size, d.nat, "on")}<span class="res-die">d${d.size}</span>${!spin && i === first ? '<b class="res-out">Your best</b>' : ""}${!spin && d.nat === d.size ? '<span class="res-note">Top face</span>' : ""}</li>`).join("");
     const tops = L.dice.filter((d) => d.nat === d.size);
-    const topLine = tops.length ? `<p>${tops.length === 1 ? `The d${tops[0].size} came up ${tops[0].size}, its top face` : `That’s ${tops.length} top faces`}, so Wren gets ${tops.length} Aura back. Whoever rolls gets the Aura for every top face, friends’ dice included.</p>` : "";
+    const topLine = tops.length ? `<p>${tops.length === 1 ? `The d${tops[0].size} came up ${tops[0].size}, its top face` : `That’s ${tops.length} top faces`}, so Wren gets ${tops.length} Aura back. Whoever rolls gets the Aura for every top face, friends’ dice included, and if her Aura’s full she gives it to a friend in the scene.</p>` : "";
     const boxes = isolde.numbers.hurtBars * 3;
     const hurt = `<div class="ln-hurt"><span class="k">Isolde’s Hurt</span><span class="mini" aria-hidden="true">${Array.from({ length: boxes }, (_, i) => `<i${i === 0 ? ` class="on${L.fresh ? " is-new" : ""}"` : ""}></i>`).join("")}</span></div>`;
     const words = {
@@ -201,7 +201,7 @@ export function makeLearn(k) {
       Object.assign(L, { rolled: true, real: false, paid: false, lost: false, tumbling: !calm(), turn: "flip" });
       render();
       if (!L.tumbling) return landed(true);
-      stop = tumble(document.querySelector(".ln-roll"), () => {
+      stop = tumble(() => document.querySelector(".ln-roll"), () => {
         stop = null;
         landed(false);
       });
@@ -211,9 +211,9 @@ export function makeLearn(k) {
       stop = null;
       if (L.tumbling) return landed(true);
     } else if (what === "real") {
-      Object.assign(L, { pads: {}, turn: "flip" });
+      Object.assign(L, { pads: {}, turn: "flip", focus: "ln-h" });
     } else if (what === "unpad") {
-      L.pads = null;
+      Object.assign(L, { pads: null, focus: "ln-h" });
     } else if (what === "pad") {
       L.pads[el.dataset.k] = Number(el.dataset.v);
     } else if (what === "pad-done") {
