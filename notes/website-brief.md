@@ -73,3 +73,7 @@ Mo's answers in the drill from `notes/app-rework.md`, round by round.
 - The phone rolls the threat's die with yours, or you tap in the GM's number, and it calls beat, tie or under.
 - It counts everything as you play (Aura, Resolve, Hurt, Armour and conditions), with an undo.
 - Each die's intent is an optional label: tap hurt, pin or disarm, or type your own.
+- Real dice: tap in each die's number, and the phone calls the result and spots the top faces.
+- The look: Sigil hex dice that spin and land with weight, and plenty of motion: cards flip, pages slide, Aura pips glow as they fill.
+- With sound on, these get a sound or a buzz: dice landing, a top face (a chime and a buzz as Aura comes back), and Hurt or a Catch filling a bar.
+- Defend: the app matches the rolls so the most dice get stopped, and the player can tap to swap two (call 5 in `notes/companion-plan.md`, confirmed with the swap added).

@@ -85,7 +85,7 @@ For Mo to check. Each one's the smallest call in the shape of the rules, and eac
 2. **The Mark die.** A roll can include a Mark die when the target's *Marked*. It's one more die against it, and a top face on it gives Aura to whoever rolled, like any die in the roll. The Hunter's +2 (+3 for Wren) only goes on the Mark die.
 3. **New scene ends conditions.** They fade a size every round, and the New scene button clears whatever's left, the same way Confidence and the loose boxes reset.
 4. **After downtime does a new scene as well:** Aura full, Confidence back where it starts, loose boxes clear, conditions gone, and Resolve full. A Catch on the Hurt track and Armour still take a slot each, so they stay until the player taps them.
-5. **Defend matches the rolls up for you,** so the most dice get stopped. The rules say you choose which roll blocks which, so if players should pick (to stop a *pin* rather than a bigger hit, say), that's a small change.
+5. **Defend matches the rolls up for you,** so the most dice get stopped. The rules say you choose which roll blocks which, so if players should pick (to stop a *pin* rather than a bigger hit, say), that's a small change. **17 Oct, Mo:** the app matches, and the player can tap to swap two.
 6. **A Scar crosses out the last open box,** and a bar counts as full when every box in it that isn't crossed out is filled.
 7. **Clothes that fit the scene** are a "Dressed for it" button on Confidence, rather than a question at every new scene.
 8. **"Her picks" on a set action** counts as that attuned thing's first permission. So Bram's war hammer on his Fight is *fight with a war hammer*, and *knock a man off his feet* can be brought in for 1 Aura.
