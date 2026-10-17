@@ -5,7 +5,7 @@
 // blank sheet on the phone, so it works offline.
 const SHEET = "/sheets/zidara-character-sheet.pdf";
 const FIXED = ["fight", "move", "sneak", "study", "talk"];
-const NUMERALS = ["I", "II", "III", "IV", "V", "VI"];
+const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
 const PRONOUNS = { her: "she, her", him: "he, him", them: "they, them" };
 
 const textOf = (html) => new DOMParser().parseFromString(html ?? "", "text/html").body.textContent.trim();
@@ -134,18 +134,25 @@ export async function fillSheet(ch, c, s) {
   if (c.carry.keepsake) put("keepsake", s.crossed[`keepsake|${c.carry.keepsake}`] ? `${c.carry.keepsake} (used)` : c.carry.keepsake);
   lines("bag", kit("bag", c.carry.bag.items ?? []), 10);
 
-  // The paper sheet has nowhere else for trouble, clothes or a fourth trait.
+  // The paper sheet has nowhere else for trouble, clothes, a fourth trait, a
+  // seventh Title, a third attuned thing, a seventh bond or a fifth thread.
+  const noteOf = (t) => (t.note ? t.note.replace(/^(.+’s)(?=,|$)/, "$1 words").replace(/^debt$/, "a debt") : "");
+  const threadOf = (t) => (noteOf(t) ? `${t.text} (${noteOf(t)})` : t.text);
+  const strain = (p, t) => ({ strained: " (strained)", snapped: " (snapped)" })[s.threads[`${p.person}|${t.text}`]] ?? "";
   put("notes", [
     c.trouble.length ? `Trouble that follows ${them}: ${c.trouble.join(", ")}.` : "",
     n.dressed ? `Confidence starts on d${n.dressed.die} in ${n.dressed.what} when they fit the scene.` : "",
     ...c.traits.slice(3).map((t) => `${t.name} (${t.type}): ${textOf(t.html)}`),
-    ...c.attuned.filter((a) => a.burden).map((a) => `${a.name}’s Burden: ${a.burden}`),
+    ...c.titles.slice(6).map((t, i) => `Title ${NUMERALS[i + 6] ?? i + 7}, ${t.name}${t.archetype ? ` (${t.archetype})` : ""}: ${t.permissions.map((p) => p.text).join(", ") || "no permissions yet"}`),
+    ...c.attuned.slice(0, 2).filter((a) => a.burden).map((a) => `${a.name}’s Burden: ${a.burden}`),
+    ...c.attuned.slice(2).map((a) => `Attuned, ${a.props ? `${a.name} (${a.props})` : a.name}, ${a.stage || "Awakened"}${a.catch ? `, its Catch ${a.catch}` : ""}${a.burden ? `, its Burden ${a.burden}` : ""}: ${a.permissions.map((p) => p.text).join(", ")}`),
+    ...c.threads.slice(0, 6).flatMap((p) => p.threads.slice(4).map((t) => `A thread with ${p.person}: ${threadOf(t)}${strain(p, t)}`)),
+    ...c.threads.slice(6).flatMap((p) => p.threads.map((t) => `A thread with ${p.person}: ${threadOf(t)}${strain(p, t)}`)),
     s.notes,
   ].filter(Boolean).join("\n"));
 
   // The back: Titles, attuned things and bonds. A thread in someone else's
   // words says whose, the way the companion does.
-  const noteOf = (t) => (t.note ? t.note.replace(/^(.+’s)(?=,|$)/, "$1 words").replace(/^debt$/, "a debt") : "");
   c.titles.slice(0, 6).forEach((t, i) => {
     put(`title_${i + 1}`, t.name);
     put(`title_${i + 1}_archetype`, t.archetype);
@@ -162,7 +169,7 @@ export async function fillSheet(ch, c, s) {
     const at = `bond_${i + 1}`;
     put(at, p.person);
     p.threads.slice(0, 4).forEach((t, j) => {
-      put(`${at}_thread_${j + 1}`, noteOf(t) ? `${t.text} (${noteOf(t)})` : t.text);
+      put(`${at}_thread_${j + 1}`, threadOf(t));
       const st = s.threads[`${p.person}|${t.text}`];
       if (st) tick(`${at}_thread_${j + 1}_strained`);
       if (st === "snapped") tick(`${at}_thread_${j + 1}_snapped`);

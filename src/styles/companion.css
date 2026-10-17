@@ -180,6 +180,10 @@ html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px))
 .cc-last { margin: 0.8rem 0 0; padding: 0.6rem 0.8rem; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 2px; font-size: 0.95rem; }
 .cc-last .k, .cc-mine-roll .k { margin-right: 0.3rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
 .cc-scene .button { flex: 1 1 9rem; }
+/* Changing a character: by New scene and Downtime, and at the top of the Sheet tab. */
+.cc-change { overflow-wrap: anywhere; text-align: center; }
+.cc-changebar { margin: 1rem 0 0; padding-bottom: 0.6rem; border-bottom: 1px solid var(--line-soft); }
+.cc-changebar .cc-lead { margin-top: 0; }
 
 .cc-card { padding: 1rem 1.1rem; margin-bottom: 0.8rem; }
 .cc-card .eyebrow { margin: 0; }
@@ -445,7 +449,8 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .bd-slot { margin: 0.4rem 0 1rem; }
 .bd-slot > input:placeholder-shown ~ .bd-on, .bd-slot > input:placeholder-shown ~ .cc-row { display: none; }
 .bd-att input:placeholder-shown + .bd-on { display: none; }
-.bd-att:has(input[data-bin$=".catch"]:placeholder-shown) .bd-perm2 { display: none; }
+/* A second permission waits for its Catch, unless there are words in it already. */
+.bd-att:has(input[data-bin$=".catch"]:placeholder-shown) .bd-perm2:has(input:placeholder-shown) { display: none; }
 .bd-tiles { margin-top: 1rem; }
 .bd-tiles .tile { min-height: 72px; }
 .bd-nums { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0.6rem 0; padding: 0; }

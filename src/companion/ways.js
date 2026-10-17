@@ -3,40 +3,50 @@
 // anything before saving, and the builder's warnings still apply. A blank
 // sheet is just blankBuild() on one page.
 import { ACTIONS, ARMOUR, blankBuild, lineAt, normalBuild } from "./builder.js";
+import { MAX_PERMS } from "./grow.js";
 
 // A thread in someone else's words says whose ("Dorrie’s"). It's theirs to
 // keep, so it doesn't come along.
 const theirs = (t) => /’s\b/.test(t.note ?? "");
+const whoseOf = (t) => String(t.note ?? "").match(/^([^,]+’s)(?=,|$)/)?.[1] ?? "";
 
 // One of the crew as a build: their Titles, permissions, traits, set actions
 // and the lines on them, what they carry, attuned things, their own threads,
 // crew answers, Aspiration and trouble. The name's left for the player.
-export function fromCrew(c, B) {
+// With keep, it's that crew member themselves becoming your own, so nothing's
+// left behind: every Title and permission, every attuned thing at its stage,
+// every thread (the ones in a crewmate's words too), their name and blurb.
+export function fromCrew(c, B, { keep = false } = {}) {
   const b = blankBuild();
   const ref = new Map(); // a line's key on the crew sheet, and where it goes in the build
   const ideaOf = (name) => B.ideas.find((x) => x.titles.includes(name))?.id ?? "";
-  c.titles.slice(0, 2).forEach((t, i) => {
-    b.titles[i] = { arch: t.archetype, idea: ideaOf(t.name), text: t.name, on: [], perms: [0, 1, 2].map((j) => ({ text: t.permissions[j]?.text ?? "", on: [] })) };
+  (keep ? c.titles : c.titles.slice(0, 2)).forEach((t, i) => {
+    const perms = t.permissions.slice(0, keep ? MAX_PERMS : 3);
+    b.titles[i] = { arch: t.archetype, idea: ideaOf(t.name), text: t.name, on: [], perms: (keep ? perms : [0, 1, 2].map((j) => perms[j])).map((p) => ({ text: p?.text ?? "", on: [] })) };
     ref.set(t.key, `t${i}`);
-    t.permissions.slice(0, 3).forEach((p, j) => ref.set(p.key, `p${i}.${j}`));
+    perms.forEach((p, j) => ref.set(p.key, `p${i}.${j}`));
   });
   b.traits = c.traits.map((t, i) => {
     ref.set(t.key, `r${i}`);
     return { name: t.name, on: [] };
   });
   const eq = c.carry.equipment.items.slice(0, 3);
-  const ut = c.carry.utility.items.slice(0, 4);
+  const ut = c.carry.utility.items.slice(0, keep ? 8 : 4);
   eq.forEach((x, i) => Object.assign(b.equipment[i], { text: x, armour: ARMOUR.test(x) }));
-  ut.forEach((x, i) => (b.utility[i].text = x));
+  ut.forEach((x, i) => (b.utility[i] = { text: x, on: [] }));
   b.keepsake.text = c.carry.keepsake ?? "";
   b.bag = (c.carry.bag.items ?? []).join("\n");
   for (const l of c.lines.filter((x) => x.kind === "kit")) {
     const at = eq.indexOf(l.label) >= 0 ? `e${eq.indexOf(l.label)}` : ut.indexOf(l.label) >= 0 ? `u${ut.indexOf(l.label)}` : l.label === b.keepsake.text ? "k" : null;
     if (at) ref.set(l.key, at);
   }
-  c.attuned.slice(0, 2).forEach((a, i) => {
-    b.attuned[i] = { name: a.props ? `${a.name} (${a.props})` : a.name, catch: a.catch ?? "", perms: [0, 1].map((j) => ({ text: a.permissions[j]?.text ?? "", on: [] })) };
-    a.permissions.slice(0, 2).forEach((p, j) => ref.set(p.key, `a${i}.${j}`));
+  (keep ? c.attuned : c.attuned.slice(0, 2)).forEach((a, i) => {
+    const perms = a.permissions.slice(0, keep ? MAX_PERMS : 2);
+    b.attuned[i] = {
+      name: a.props ? `${a.name} (${a.props})` : a.name, stage: keep ? a.stage || "Awakened" : "Awakened", catch: a.catch ?? "", burden: keep ? a.burden ?? "" : "",
+      perms: (keep ? perms : [0, 1].map((j) => perms[j])).map((p) => ({ text: p?.text ?? "", on: [] })),
+    };
+    perms.forEach((p, j) => ref.set(p.key, `a${i}.${j}`));
   });
   b.actions = c.actions.map((a) => a.name);
   for (const a of c.actions) {
@@ -45,13 +55,18 @@ export function fromCrew(c, B) {
       if (l && !l.on.includes(a.name)) l.on.push(a.name);
     }
   }
-  const own = c.threads.flatMap((p) => p.threads.filter((t) => !theirs(t)).map((t) => ({ person: p.person, text: t.text, debt: Boolean(t.debt) })));
-  own.slice(0, 4).forEach((t, i) => (b.threads[i] = t));
+  const own = c.threads.flatMap((p) => p.threads.filter((t) => keep || !theirs(t)).map((t) => ({ person: p.person, text: t.text, debt: Boolean(t.debt), whose: keep ? whoseOf(t) : "" })));
+  if (keep) b.threads = own;
+  else own.slice(0, 4).forEach((t, i) => (b.threads[i] = t));
   b.connect = B.connect.map((q) => c.crewQs.find((x) => x.q === q)?.a ?? "");
   b.aspiration = c.aspiration.text;
   b.pronoun = c.pronoun;
   b.clothes = c.numbers.dressed?.what ?? "";
   b.trouble = [...c.trouble];
+  if (keep) {
+    b.name = c.name;
+    b.blurb = c.blurb ?? "";
+  }
   return normalBuild(b);
 }
 

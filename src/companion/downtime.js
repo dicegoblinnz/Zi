@@ -15,7 +15,7 @@ const CHOICES = [
   ["The crew", [["party", "Toward a party action"]]],
 ];
 const LABEL = Object.fromEntries(CHOICES.flatMap(([, list]) => list));
-const ORD = ["first", "second", "third", "fourth", "fifth", "sixth"];
+const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"];
 const plain = (html) => String(html ?? "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
 const tends = (c) => c.traits.some((t) => t.name === "Tend the Crew" || /\bheal a Catch on the Hurt track of everyone\b/i.test(plain(t.html)));
 const crossed = (s) => Object.keys(s.crossed).filter((k) => s.crossed[k]).map((key) => ({ key, name: key.split("|").slice(1).join("|") }));

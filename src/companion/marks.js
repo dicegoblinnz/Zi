@@ -8,7 +8,7 @@
 
 const plain = (html) => String(html ?? "").replace(/<[^>]+>/g, "").replace(/&#(\d+);/g, (m, n) => String.fromCharCode(Number(n))).replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
 const note = (x) => (x ? ` (${x})` : "");
-const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"];
+const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"];
 
 // Where each line sits. Lines from the rules count in order, and anything the
 // player grew counts by its own number (g0, g1...), so a rule that adds or

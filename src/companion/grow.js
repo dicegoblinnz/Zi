@@ -94,20 +94,20 @@ export function grow(base, grown, B) {
       if (step) onto(key, g.on);
       // What the trait changes, the same as the builder counts it.
       const e = r?.effects ?? {};
-      const n = c.numbers;
-      if (e.aura) n.aura += e.aura;
+      const num = c.numbers;
+      if (e.aura) num.aura += e.aura;
       if (e.hurtBars) {
-        n.hurtBars += e.hurtBars;
-        n.hurtNote = also(n.hurtNote, name);
+        num.hurtBars += e.hurtBars;
+        num.hurtNote = also(num.hurtNote, name);
       }
       if (e.stride) {
-        n.stride += e.stride;
-        n.strideNote = also(n.strideNote, name);
+        num.stride += e.stride;
+        num.strideNote = also(num.strideNote, name);
       }
       if (e.confidence) {
-        for (let i = 0; i < e.confidence; i++) n.confidence = sizeUp(n.confidence);
-        n.confidenceNote = also(n.confidenceNote, name);
-        if (n.dressed) n.dressed.die = sizeUp(n.confidence);
+        for (let i = 0; i < e.confidence; i++) num.confidence = sizeUp(num.confidence);
+        num.confidenceNote = also(num.confidenceNote, name);
+        if (num.dressed) num.dressed.die = sizeUp(num.confidence);
       }
       if (e.utility) c.carry.utility.max += e.utility;
     } else if (g.k === "thread") {

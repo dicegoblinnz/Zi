@@ -7,7 +7,7 @@
 import { SIZES, diceLabel, diceRange, diceShapes, rollDie, sizeDown, sizeUp, stepsToDice } from "./dice.js";
 import { openStore } from "./store.js";
 import { makeSync } from "./sync.js";
-import { hasDraft, makeBuilder, sheetOf } from "./builder.js";
+import { foldGrown, hasDraft, makeBuilder, normalBuild, sheetOf } from "./builder.js";
 import { fromCrew, randomBuild } from "./ways.js";
 import { printSheet } from "./print.js";
 import { calm, feel, setSound, soundOn, tumble } from "./feel.js";
@@ -28,7 +28,7 @@ const sync = makeSync(store, { onChange: () => {
 const app = document.getElementById("app");
 const dialog = document.getElementById("cc-dialog");
 const toastBox = document.getElementById("cc-toast");
-const ORD = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth"];
+const ORD = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth", "Eleventh", "Twelfth"];
 const RULE = DATA.rules || {};
 const TABS = [["play", "Play"], ["sheet", "Sheet"], ["rules", "Rules"]];
 // The intents a die can be tapped to, or the player writes their own.
@@ -49,6 +49,8 @@ const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (ch) => `&#${ch.charCodeA
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, Number.isFinite(Number(v)) ? Math.round(Number(v)) : lo));
 const even = (v, lo, hi) => clamp(Math.round(Number(v) / 2) * 2, lo, hi);
 const steps = (n) => `${n} step${n === 1 ? "" : "s"}`;
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const PRONOUN = { her: ["she", "her"], him: ["he", "his"], them: ["they", "their"] };
 const link = (id, text) => `<a href="${esc(LINK[id] ?? "/rules/")}">${text}</a>`;
 const hex = (text, cls = "") => `<span class="hex${cls ? ` ${cls}` : ""}">${esc(text)}</span>`;
 const off = (no) => (no ? " disabled" : "");
@@ -103,6 +105,34 @@ function sheetFor(ch) {
   grownSheets.set(ch.id, { base, json, sheet });
   return sheet;
 }
+
+// Changing a character starts from their build, or from a crew member's sheet
+// made into one that keeps everything, with what they've grown in downtime and
+// the Aspiration's words written in. Each thread and thing they carry
+// remembers what it said, so whatever's strained or crossed out follows it if
+// it's reworded. basisOf() says when any of that has changed, so a change
+// that was left part way starts again rather than losing it.
+function editBuild(ch) {
+  const crew = !ch.build && CREW.get(ch.crew);
+  if (!ch.build && !crew) return null;
+  const base = ch.build ? normalBuild(ch.build) : fromCrew(crew, DATA.build, { keep: true });
+  base.name = ch.name;
+  const b = foldGrown(base, ch.state?.grown, DATA.build);
+  if (ch.state?.aspText) b.aspiration = String(ch.state.aspText).slice(0, 160);
+  for (const t of b.threads) if (t.person.trim() && t.text.trim()) t.was = `${t.person.trim()}|${t.text.trim()}`;
+  for (const [where, list] of [["equipment", b.equipment], ["utility", b.utility], ["keepsake", [b.keepsake]]]) for (const x of list) if (x.text.trim()) x.was = `${where}|${x.text.trim()}`;
+  return b;
+}
+function basisOf(ch) {
+  const text = JSON.stringify([ch.crew, ch.name, ch.build ?? null, ch.state?.grown ?? [], ch.state?.aspText ?? ""]);
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(36);
+}
+const canChange = (ch) => Boolean(ch && (ch.build || CREW.has(ch.crew)));
 
 function normal(ch) {
   const c = ch && sheetFor(ch);
@@ -468,6 +498,9 @@ function characterView(ch, c) {
 // Sound and buzz are off until the player turns them on.
 const soundButton = () => `<button type="button" class="cc-sound" data-act="sound" aria-pressed="${soundOn()}">${soundOn() ? ICON.sound : ICON.mute}<span>Sound</span></button>`;
 
+// Changing anything on a character, any time, outside downtime too.
+const changeLink = (ch) => (canChange(ch) ? `<a class="button cc-change" href="/characters/?build=${encodeURIComponent(ch.id)}" data-act="bopen" data-key="${esc(ch.id)}">Change ${esc(ch.name)}</a>` : "");
+
 function playTab(ch, c) {
   const s = ch.state;
   const tiles = c.actions.map((a, i) => `<button type="button" class="tile card${goldOf(`act:${a.name}`) ? " is-changed" : ""}" data-act="roll" data-a="${i}"><span class="tile-name">${esc(a.name)}</span><span class="tile-die hex on">${esc(a.die)}</span><span class="tile-steps">${steps(a.steps)}${goldDot(`act:${a.name}`)}</span></button>`).join("");
@@ -475,7 +508,7 @@ function playTab(ch, c) {
   <section class="cc-sec cc-play" aria-labelledby="cc-actions"><h2 id="cc-actions" class="sr-only">Set actions</h2>
     <div class="cc-tiles">${tiles}<button type="button" class="tile card tile-defend" data-act="defence"><span class="tile-name">When it lands</span><span class="tile-sub">Armour d${s.armour} · Confidence d${s.conf}</span></button></div>
     ${lastRollView(s.last)}
-    <div class="cc-row cc-scene"><button type="button" class="button" data-act="scene">New scene</button><button type="button" class="button" data-act="downtime">Downtime</button></div>
+    <div class="cc-row cc-scene"><button type="button" class="button" data-act="scene">New scene</button><button type="button" class="button" data-act="downtime">Downtime</button>${changeLink(ch)}</div>
   </section>`;
 }
 
@@ -535,7 +568,8 @@ function sheetTab(ch, c) {
 
   const acts = c.actions.map((a) => `<li class="cc-item"><p><b>${esc(a.name)}</b> <small>${steps(a.steps)}, ${esc(a.die)}</small>${gold(`act:${a.name}`)}</p>${was(`act:${a.name}`)}
     <p class="cc-small">${a.lines.map((key) => lineOf(c, key)).filter(Boolean).map((l) => lineLabel(l)).join(", ") || "Nothing on it yet, so it’s the action on its own."}</p></li>`).join("");
-  return `<section class="cc-sec" aria-labelledby="cc-acts"><h2 id="cc-acts">Set actions</h2>
+  return `${canChange(ch) ? `<div class="cc-changebar"><p class="cc-lead">Add a Title, rewrite a permission or change anything else on ${her} sheet, whenever you like.</p><div class="cc-row">${changeLink(ch)}</div></div>` : ""}
+  <section class="cc-sec" aria-labelledby="cc-acts"><h2 id="cc-acts">Set actions</h2>
     <p class="cc-lead">Every line on a set action is a step, and the action’s one more. ${link("s-set-actions", "How set actions work")}</p><ul class="cc-list">${acts}</ul></section>
 
   <section class="cc-sec" aria-labelledby="cc-titles"><h2 id="cc-titles">Titles and permissions</h2>
@@ -574,7 +608,7 @@ function sheetTab(ch, c) {
   <section class="cc-sec" aria-labelledby="cc-about"><h2 id="cc-about">About ${esc(c.name)}</h2>
     <p>${esc(c.blurb)}</p><p><b>Plays like:</b> ${c.playsLike}</p>
     ${c.crewQs.map((x) => `<p><em>${esc(x.q)}</em> ${esc(x.a)}</p>`).join("")}
-    ${c.own ? `<p class="cc-lead">Built on this phone, from the ${link("s-quick", "Quick Build")}.</p><div class="cc-row"><a class="button" href="/characters/?build=${encodeURIComponent(ch.id)}" data-act="bopen" data-key="${esc(ch.id)}">Change ${esc(ch.name)} in the builder</a></div>` : `<p class="cc-lead">${link("s-pregens", `${esc(c.name)}’s sheet in the rules`)}</p>`}
+    ${c.own ? `<p class="cc-lead">${CREW.has(ch.from) ? `Your own now, made from ${link("s-pregens", `${esc(CREW.get(ch.from).name)}’s sheet in the rules`)}.` : `Built on this phone, from the ${link("s-quick", "Quick Build")}.`}</p>` : `<p class="cc-lead">${link("s-pregens", `${esc(c.name)}’s sheet in the rules`)}. Change ${esc(ch.name)} at the top of this tab and ${c.pronoun === "him" ? "he’s" : c.pronoun === "her" ? "she’s" : "they’re"} your own.</p>`}
     <p class="cc-lead">The two-page sheet from the <a href="/sheets/">Sheets page</a>, filled in with everything here as it stands now.</p>
     <div class="cc-row"><button type="button" class="button" data-act="print"${off(ui.printing)}>${ui.printing ? "Filling in the sheet…" : `Print ${esc(ch.name)}’s sheet`}</button></div>
     <div class="cc-row"><button type="button" class="button danger" data-act="delete">Delete ${esc(ch.name)} from this phone</button></div></section>`;
@@ -1121,6 +1155,8 @@ function route() {
   const key = q.has("build") ? q.get("build") || "new" : null;
   const learning = !key && !id && q.has("learn");
   if (view.name === "learn" && !learning) learn.stop();
+  // Leaving the builder keeps the draft, and coming back reads it again.
+  if (view.name === "build" && view.key !== key) builder.close();
   view = key ? { name: "build", key } : learning ? { name: "learn" } : id ? { name: "sheet", id } : { name: "list" };
   ui.tab = ["sheet", "rules"].includes(q.get("t")) ? q.get("t") : "play";
   ui.panel = null;
@@ -1131,11 +1167,12 @@ function route() {
   render();
 }
 
-// The builder, for a new character or one of yours that was built here.
+// The builder, for a new character or changing one on this phone, the crew
+// included. One of the crew becomes your own once a change is saved.
 function builderView() {
-  const ch = view.key === "new" ? null : chars().find((x) => x.id === view.key && x.build);
-  if (view.key !== "new" && !ch) return missingView(null);
-  return builder.view(view.key, ch ? { ...ch.build, name: ch.name } : null);
+  const ch = view.key === "new" ? null : chars().find((x) => x.id === view.key);
+  if (view.key !== "new" && !canChange(ch)) return missingView(null);
+  return builder.view(view.key, ch ? () => editBuild(ch) : null, ch ? { basis: basisOf(ch), crew: ch.build ? null : CREW.get(ch.crew).name } : {});
 }
 function navBuild(key) {
   history.pushState(null, "", key && key !== "new" ? `/characters/?build=${encodeURIComponent(key)}` : "/characters/?build");
@@ -1145,14 +1182,39 @@ function navBuild(key) {
 }
 function saveBuilt(build, key, discard) {
   const name = build.name.trim() || "Nameless";
+  // What each line said when the change began only matters until it's saved.
+  const clean = JSON.parse(JSON.stringify(build, (k, v) => (k === "was" ? undefined : v)));
   let ch = key === "new" ? null : chars().find((x) => x.id === key);
+  let became = false;
+  if (ch && !sheetFor(ch)) ch = null;
   if (ch) {
     // Anything that was full stays full when the sheet's new number is bigger.
-    const was = sheetFor(ch).numbers;
-    const before = said(sheetFor(ch));
+    normal(ch);
+    const old = sheetFor(ch);
+    const was = old.numbers;
+    const before = said(old);
     const s = ch.state;
-    ch.build = build;
+    // One of the crew becomes your own, and stops following the chapter.
+    if (!ch.build) {
+      ch.from = ch.crew;
+      ch.crew = "own";
+      ch.hash = "own";
+      became = true;
+    }
+    // Whatever's strained or crossed out follows a line that's been reworded.
+    const move = (map, from, to) => {
+      if (map && from && to && from !== to && map[from] != null && map[to] == null) {
+        map[to] = map[from];
+        delete map[from];
+      }
+    };
+    for (const t of build.threads) move(s.threads, t.was, `${t.person.trim()}|${t.text.trim()}`);
+    for (const [where, list] of [["equipment", build.equipment], ["utility", build.utility], ["keepsake", [build.keepsake]]]) for (const x of list) move(s.crossed, x.was, `${where}|${x.text.trim()}`);
+    ch.build = clean;
     ch.name = name;
+    // What they grew in downtime, and the Aspiration's words, are in the build now.
+    s.grown = [];
+    s.aspText = "";
     const now = sheetFor(ch).numbers;
     for (const [k, n] of [["aura", "aura"], ["resolve", "resolve"], ["armour", "armour"], ["conf", "confidence"]]) if (s[k] === was[n]) s[k] = now[n];
     // What they changed in the builder is theirs, so it doesn't get a gold mark,
@@ -1161,7 +1223,7 @@ function saveBuilt(build, key, discard) {
     for (let i = undo.length - 1; i >= 0; i--) if (undo[i].id === ch.id) undo.splice(i, 1);
   } else {
     const tag = Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => b.toString(36).padStart(2, "0")).join("").slice(0, 6);
-    ch = { id: `own-${tag}`, crew: "own", name, made: new Date().toISOString(), hash: "own", build };
+    ch = { id: `own-${tag}`, crew: "own", name, made: new Date().toISOString(), hash: "own", build: clean };
     ch.state = { ...fresh(sheetFor(ch)), seen: said(sheetFor(ch)) };
     sync.claim(ch);
     chars().push(ch);
@@ -1173,7 +1235,8 @@ function saveBuilt(build, key, discard) {
   history.replaceState(null, "", `/characters/?c=${encodeURIComponent(ch.id)}`);
   route();
   scrollTo(0, 0);
-  toast(kept ? `${name}’s saved ${ch.acct ? "in your account" : "on this phone"}.` : "This phone isn’t letting the site save, so they’re gone when you close the page.", false);
+  const [they, their] = PRONOUN[ch.build.pronoun] ?? PRONOUN.them;
+  toast(kept ? `${name}’s saved ${ch.acct ? "in your account" : "on this phone"}.${became ? ` ${cap(they)}${they === "they" ? "’re" : "’s"} your own now, so ${their} sheet stays as you’ve made it.` : ""}` : "This phone isn’t letting the site save, so they’re gone when you close the page.", false);
 }
 function nav(id) {
   history.pushState(null, "", id ? `/characters/?c=${encodeURIComponent(id)}` : "/characters/");
@@ -1427,7 +1490,7 @@ const ACT = {
     }
     if (s.asp >= 12) {
       s.asp = 2;
-      return "It climbs past d12 and resolves. Take a new archetype with one permission, name it with a Title, and write your new Aspiration in. It starts at d2. Building’s coming to the companion later, so put the new Title in your notes for now.";
+      return "It climbs past d12 and resolves. Take a new archetype with one permission, name it with a Title, and write your new Aspiration in. It starts at d2. Add the Title with Change, at the top of the Sheet tab.";
     }
     s.asp = sizeUp(s.asp);
     return `It climbs. Your Aspiration’s on d${s.asp}.`;

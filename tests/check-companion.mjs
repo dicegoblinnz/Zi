@@ -40,6 +40,18 @@
 //    and her Locks get gold marks with old and new, a typo fix and a
 //    punctuation fix stay quiet, what she grew in downtime isn't marked, and
 //    Got it clears the marks for good. The card and the marks pass axe.
+// 9. Changing a character, any time. Every crew member with a downtime on top
+//    folds into a build that makes the same sheet, and a seventh permission
+//    never gets in. Then Vesk from the crew: a downtime gives her Prepared (a
+//    trait from downtime used to stop her sheet opening) and a permission on
+//    Sneak, then a Hurt, 1 Aura, a strained thread and her smoke bomb used.
+//    Change, from the top of the Sheet tab, shows what downtime gave her. A
+//    third Title goes on Talk with six permissions and no seventh, a thread
+//    and the smoke bomb are reworded, and saving makes her your own with all
+//    of it kept: her Hurt and Aura, the strain and the crossing out, no gold
+//    marks, and every set action adding up through dice.js. It survives a
+//    reload and offline. A change left part way restarts after a downtime
+//    rather than losing it, and seven Titles print with the seventh in Notes.
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -48,7 +60,7 @@ import { chromium } from "playwright";
 import { AxeBuilder } from "@axe-core/playwright";
 import { PDFDocument } from "pdf-lib";
 import { diceLabel, diceRange, diceShapes, stepsToDice } from "../src/companion/dice.js";
-import { checksOf, sheetOf } from "../src/companion/builder.js";
+import { blankBuild, checksOf, foldGrown, normalBuild, sheetOf } from "../src/companion/builder.js";
 import { fromCrew, randomBuild } from "../src/companion/ways.js";
 import { changesOf, said, typo } from "../src/companion/marks.js";
 import { grow } from "../src/companion/grow.js";
@@ -464,20 +476,17 @@ async function play(page, crewId, name) {
   await page.reload();
   await page.waitForSelector(".tile[data-a]", { timeout: 10000 }).catch(() => note("the built Vesk didn't open offline"));
   await page.click('.cc-tabs a[data-t="sheet"]');
-  await page.click('a[data-act="bopen"][data-key]');
-  has(await step(), "Check it and play", "changing her opens on the last step, offline");
+  await page.click('.cc-changebar a[data-act="bopen"][data-key]');
+  has(await step(), "Change anything on her sheet", "changing her opens with everything on one page, offline");
   await context.setOffline(false);
 
   // Change her: Prepared instead of Light on my Feet.
-  await page.click('.bd-dot[data-s="2"]');
-  await b('[data-b="deep"]');
+  await b('[data-b="deep"][data-s="2"]');
   await b('[data-b="trait"][data-v="Light on my Feet"]');
   await b('[data-b="trait"][data-v="Prepared"]');
-  await page.click('.bd-dot[data-s="4"]');
   has(await page.textContent("#bd-ut"), "4 utility items", "Prepared gives her a fourth utility item");
   await b('[data-b="fillany"][data-k="e"][data-v="shield"]');
-  await page.click('.bd-dot[data-s="7"]');
-  await b('[data-b="save"]');
+  await page.click('.bd-foot button[data-b="save"]');
   await page.waitForSelector(".tile[data-a]");
   has(await page.textContent(".cc-head"), "Stride 3", "Vesk's stride without Light on my Feet");
   has(await page.textContent('.cc-stat[data-p="armour"] .v'), "d6", "her full Armour going up with a shield");
@@ -522,7 +531,8 @@ async function play(page, crewId, name) {
   // Every step at 320 wide, dark then light, with axe.
   await page.setViewportSize({ width: 320, height: 720 });
   await page.click('.cc-tabs a[data-t="sheet"]');
-  await page.click('a[data-act="bopen"][data-key]');
+  await page.click('.cc-changebar a[data-act="bopen"][data-key]');
+  await page.click('button[data-b="page"]');
   for (const theme of ["dark", "light"]) {
     await page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
     await page.reload();
@@ -1053,6 +1063,188 @@ async function round(page, dice, real = false) {
   same(await p2.$$eval(".cc-gold, .cc-note.is-gold, .cc-note", (els) => els.length), 0, "no gold marks or notes after a reload");
   await second.context.close();
   console.log("downtime: Vesk's week, undone, a second week kept offline, and a made-up rule change with gold marks");
+}
+
+// 9. Changing a character.
+{
+  const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
+  const B = book.companion.build;
+  // What downtime grew, written into a build, makes the sheet the player had.
+  const shape = (c) => ({
+    actions: c.actions.map((a) => [a.name, a.steps, a.die]),
+    numbers: ["aura", "resolve", "stride", "armour", "confidence", "hurtBars"].map((k) => c.numbers[k]),
+    titles: c.titles.map((t) => [t.name, t.archetype, t.permissions.map((p) => p.text)]),
+    traits: c.traits.map((t) => t.name),
+    attuned: c.attuned.map((a) => [a.stage, a.catch, a.permissions.map((p) => p.text)]),
+  });
+  for (const c of book.crew) {
+    const grown = [
+      { k: "perm", t: 0, text: "slip through a crowd", on: ["Sneak"] },
+      { k: "swap", t: 1, j: 1, from: c.titles[1].permissions[1].text, text: "fight dirty with anything to hand", on: ["Fight"] },
+      { k: "att", a: 1, text: "haul someone up after me", on: [], catch: "Loud", burden: "", up: false },
+      { k: "trait", name: "Prepared", on: [] },
+      { k: "title", arch: "Leader", text: "Captain of the crew", on: ["Talk"], perm: "rally a frightened crowd", permOn: ["Talk"] },
+    ];
+    const built = fromCrew(c, B, { keep: true });
+    same(shape(sheetOf({ id: `keep-${c.id}`, name: c.name, build: built }, B)), shape(c), `${c.name} made into a build that keeps everything`);
+    same(shape(sheetOf({ id: `fold-${c.id}`, name: c.name, build: foldGrown(built, grown, B) }, B)), shape(grow(c, grown, B)), `${c.name} with a downtime written into the build`);
+  }
+  const seven = blankBuild();
+  seven.titles[0].perms = Array.from({ length: 7 }, (_, i) => ({ text: `do the thing ${i + 1}`, on: [] }));
+  same(normalBuild(seven).titles[0].perms.length, 6, "a seventh permission cut from a saved build");
+
+  const { context, page } = await phone();
+  const axe = async (what) => {
+    const result = await new AxeBuilder({ page }).analyze();
+    for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on ${what}: ${v.id} (${v.nodes.length})`);
+  };
+  const b = (attrs) => page.click(`button[data-act="b"]${attrs}`);
+  const dt = (attrs) => page.click(`#cc-dialog button[data-act="dt"]${attrs}`);
+  const closed = () => page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  const tab = (t) => page.click(`.cc-tabs a[data-t="${t}"]`);
+  const tilesNow = () => page.$$eval(".tile[data-a]", (els) => els.map((el) => [el.querySelector(".tile-name").textContent, parseInt(el.querySelector(".tile-steps").textContent, 10), el.querySelector(".tile-die").textContent]));
+  const saved = () => page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.find((c) => c.name === "Vesk"));
+  const golds = () => page.$$eval(".cc-gold, .cc-gem, .cc-note.is-gold, .tile.is-changed", (els) => els.length);
+  const bram = "He once carried me out of a fire. I have never said thank you.";
+  const bramNow = "He once carried me out of a fire. I still haven’t said thank you.";
+
+  await play(page, "vesk", "Vesk");
+  // A downtime first: Prepared from the list, and a permission on Sneak.
+  await page.click('button[data-act="downtime"]');
+  await dt('[data-do="pick"][data-s="0"][data-v="trait"]');
+  await page.selectOption("#dt-trait-0", "Prepared");
+  await dt('[data-do="pick"][data-s="1"][data-v="perm"]');
+  await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "slip through a crowd");
+  await dt('[data-do="on"][data-s="1"][data-f="on"][data-v="Sneak"]');
+  await dt('[data-do="finish"]');
+  await closed();
+  same((await tilesNow()).find((t) => t[0] === "Sneak"), ["Sneak", 5, "d10"], "Sneak after a downtime");
+  await tab("sheet");
+  has(await page.textContent(".cc-page"), "You can carry one more utility item.", "Prepared from downtime on her sheet");
+  // Then play: a Hurt, 1 Aura spent, her thread with Bram strained, her smoke bomb used.
+  await page.click(`button[data-act="strain"][data-k="Bram|${bram}"]`);
+  await page.click('button[data-act="cross"][data-k="utility|a smoke bomb"]');
+  await tab("play");
+  await page.click('.cc-stat[data-p="hurt"]');
+  await page.click('button[data-act="hurt"][data-d="1"]');
+  await page.click('.cc-stat[data-p="aura"]');
+  await page.click('button[data-act="aura"][data-d="-1"]');
+
+  // The way in's on the play screen too.
+  has(await page.textContent(".cc-scene"), "Change Vesk", "Change by New scene and Downtime");
+  await tab("sheet");
+  await page.click('.cc-changebar a[data-act="bopen"]');
+  has(await page.textContent(".bd-head h1"), "Change anything on her sheet", "changing one of the crew");
+  has(await page.textContent(".cc-note"), "comes straight off the chapter for now", "the note that she'll stop following the chapter");
+  same(await page.inputValue("#b-t0-p3"), "slip through a crowd", "downtime's permission, there to change");
+  same(await page.getAttribute('.bd-trait[data-v="Prepared"]', "aria-pressed"), "true", "downtime's trait, there to change");
+  same(await page.$$eval(".bd-part > h2", (els) => els.length), 8, "every part of her sheet on one page");
+
+  // A third Title, on Talk, up to six permissions and no seventh.
+  await b('[data-b="addtitle"]');
+  await b('[data-b="arch"][data-t="2"][data-v="Leader"]');
+  await page.fill("#b-t2-text", "Captain of the crew");
+  await page.fill("#b-t2-p0", "rally a frightened crowd");
+  for (let j = 1; j < 6; j++) {
+    await b(`[data-b="addperm"][data-t="2"]`);
+    await page.fill(`#b-t2-p${j}`, ["give orders under fire", "read a room full of soldiers", "talk a crew round", "keep a ship together", "know who’s lying in my crew"][j - 1]);
+  }
+  same(await page.$$eval('[data-b="addperm"][data-t="2"]', (els) => els.length), 0, "no Add a permission at six");
+  has(await page.textContent('fieldset:has(#b-t2-text)'), "Six is the most a Title holds.", "the six-permission note");
+  await b('[data-b="deep"][data-s="1"]');
+  await page.click('fieldset:has(#b-t2-text) button[data-b="perm"]');
+  has(await page.textContent("#cc-toast"), "Six is the most a Title holds", "a seventh permission refused");
+  same(await page.$$eval('input[id^="b-t2-p"]', (els) => els.length), 6, "still six permissions on the third Title");
+  await b('[data-b="on"][data-l="t2"][data-a="Talk"]');
+  await b('[data-b="on"][data-l="p2.0"][data-a="Talk"]');
+  has(await page.textContent('.bd-part[aria-labelledby="bd-part-3"] .tile:has(.tile-name:text-is("Talk"))'), "3 steps", "Talk with the new Title and its permission");
+  // Reword downtime's permission, a thread and the smoke bomb.
+  await page.fill("#b-t0-p3", "slip through any crowd");
+  const thread = await page.$eval(`input[data-bin$=".text"][value="${bram}"]`, (el) => el.id);
+  await page.fill(`#${thread}`, bramNow);
+  const bomb = await page.$eval('input[data-bin^="u"][value="a smoke bomb"]', (el) => el.id);
+  await page.fill(`#${bomb}`, "two smoke bombs");
+  await page.setViewportSize({ width: 320, height: 720 });
+  const wide = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  if (wide > 0) note(`changing a character scrolls sideways at 320 wide (${wide}px)`);
+  await axe("changing a character at 320 wide");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.click('.bd-foot button[data-b="save"]');
+  await page.waitForSelector(".tile[data-a]");
+  has(await page.textContent("#cc-toast"), "She’s your own now", "the toast once she's your own");
+
+  // What she is now: your own, with her play kept and her sheet adding up.
+  const check = async (when) => {
+    const ch = await saved();
+    same([ch.crew, ch.from, Boolean(ch.build), ch.state.grown.length, ch.state.hurt, ch.state.aura, ch.state.threads[`Bram|${bramNow}`], ch.state.crossed["utility|two smoke bombs"]], ["own", "vesk", true, 0, 1, 4, "strained", true], `Vesk saved as your own, ${when}`);
+    same(JSON.stringify(ch.build).includes('"was"'), false, `nothing from the change left in her build, ${when}`);
+    const tiles = await tilesNow();
+    same(tiles, [["Sneak", 5, "d10"], ["Move", 4, "d8"], ["Locks", 5, "d10"], ["Fight", 2, "d4"], ["Study", 1, "d2"], ["Talk", 3, "d6"]], `her set actions, ${when}`);
+    for (const [name, steps, die] of tiles) same(die, diceLabel(stepsToDice(steps)), `${name}'s ${steps} steps through dice.js, ${when}`);
+    same([await page.textContent('.cc-stat[data-p="aura"] .v'), await page.textContent('.cc-stat[data-p="resolve"] .v'), await page.textContent('.cc-stat[data-p="hurt"] .v')], ["4/5", "3/3", "1/9"], `her Aura, Resolve and Hurt, ${when}`);
+    same(await golds(), 0, `no gold marks, ${when}`);
+    await tab("sheet");
+    const text = await page.textContent(".cc-page");
+    for (const want of ["Third Title", "Captain of the crew", "know who’s lying in my crew", "slip through any crowd", bramNow, "two smoke bombs", "made from Vesk’s sheet in the rules"]) has(text, want, `her sheet, ${when}`);
+    has(await page.textContent(`li.cc-thread:has-text("${bramNow}")`), "Strained", `the reworded thread still strained, ${when}`);
+    same(await page.getAttribute('button[data-act="cross"][data-k="utility|two smoke bombs"]', "aria-pressed"), "true", `the reworded smoke bomb still crossed out, ${when}`);
+    same(await golds(), 0, `no gold marks on the Sheet tab, ${when}`);
+    await tab("play");
+  };
+  await check("once it's saved");
+  same(await page.getAttribute(".cc-undo", "aria-label"), "Nothing to undo", "no undo back past the change");
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.reload();
+  await page.waitForSelector(".tile[data-a]");
+  await check("after a reload");
+  await page.waitForFunction(() => navigator.serviceWorker.controller !== null, null, { timeout: 15000 }).catch(() => note("the service worker never took over the page"));
+  await context.setOffline(true);
+  await page.reload();
+  await page.waitForSelector(".tile[data-a]", { timeout: 10000 }).catch(() => note("Vesk didn't open offline after the change"));
+  await check("offline");
+  await context.setOffline(false);
+
+  // A change left part way, then a downtime: it starts again from her as she
+  // is now, so what the downtime gave her is still there.
+  await tab("sheet");
+  await page.click('.cc-changebar a[data-act="bopen"]');
+  await page.fill("#b-blurb", "Left half done.");
+  await page.click('a[data-b="leave"]');
+  await tab("play");
+  await page.click('button[data-act="downtime"]');
+  await dt('[data-do="pick"][data-s="0"][data-v="perm"]');
+  await page.fill('#cc-dialog input[data-dt="0"][data-f="text"]', "case a building at a glance");
+  await dt('[data-do="pick"][data-s="1"][data-v="pressure"]');
+  await dt('[data-do="finish"]');
+  await closed();
+  await page.click('.cc-scene a[data-act="bopen"]');
+  has(await page.textContent("#cc-toast"), "starts again from her sheet as it is now", "a change left part way starting again");
+  same(await page.inputValue("#b-t0-p4"), "case a building at a glance", "the second downtime's permission, there to change");
+  same(await page.inputValue("#b-blurb"), book.crew.find((c) => c.id === "vesk").blurb, "the half-done change gone, not saved over the downtime");
+
+  // Seven Titles: the sheet calls them first to seventh, and on paper the
+  // seventh goes in Notes.
+  for (const [i, [arch, name, perm]] of [["Warrior", "Duellist of the Low Market", "win a fair fight"], ["Scholar", "Reader of old maps", "read a map nobody else can"], ["Healer", "Stitcher of the crew", "stitch a wound in the dark"], ["Bard", "Voice of the docks", "start a song a crowd joins"]].entries()) {
+    const t = 3 + i;
+    await b('[data-b="addtitle"]');
+    await b(`[data-b="arch"][data-t="${t}"][data-v="${arch}"]`);
+    await page.fill(`#b-t${t}-text`, name);
+    await page.fill(`#b-t${t}-p0`, perm);
+  }
+  await page.click('.bd-foot button[data-b="save"]');
+  await page.waitForSelector(".tile[data-a]");
+  same(await page.textContent('.cc-stat[data-p="resolve"] .v'), "7/7", "Resolve with seven Titles, full since it was full");
+  await tab("sheet");
+  has(await page.textContent(".cc-page"), "Seventh Title", "the seventh Title on her sheet");
+  same(await golds(), 0, "no gold marks with seven Titles");
+  const [download] = await Promise.all([page.waitForEvent("download"), page.click('button[data-act="print"]')]);
+  const form = (await PDFDocument.load(readFileSync(await download.path()))).getForm();
+  const get = (name) => form.getFieldMaybe(name)?.getText?.() ?? null;
+  same([get("title_3"), get("title_3_permission_6"), get("title_6"), get("title_6_permission_1")], ["Captain of the crew", "know who’s lying in my crew", "Stitcher of the crew", "stitch a wound in the dark"], "Titles III and VI on paper");
+  has(get("notes"), "Title VII, Voice of the docks (Bard): start a song a crowd joins", "the seventh Title in Notes");
+  has(get("set_talk_lines"), "Title III", "Title III on Talk on paper");
+  console.log("changing: Vesk made your own with a third Title, six permissions and no seventh, kept offline, and seven Titles printed");
+  await context.close();
 }
 
 await browser.close();
