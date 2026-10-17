@@ -85,3 +85,7 @@ Mo's answers in the drill from `notes/app-rework.md`, round by round.
 - The party sheet and the Party Goal wait for sign-in, so everyone shares one copy and there's no throwaway version first.
 - When a rule changes, each changed line on a saved character gets a gold mark. Tap it to see old and new. Typo fixes stay quiet.
 - Calls 1 to 4 and 6 to 8 in `notes/companion-plan.md` are confirmed.
+- Sign-in starts with Google and Discord (both free to set up). The emailed link and Apple can follow.
+- Mo and the GMs he picks hand out invites.
+- Before campaigns, a player shares a sheet with their GM by picking her account. She sees it read-only until they stop sharing.
+- Print my character comes with the builder: build on the phone, then print the filled two-page sheet.
