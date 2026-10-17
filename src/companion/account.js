@@ -52,11 +52,21 @@ function draw() {
   if (focus) box.querySelector(`[data-act="${focus}"]:not([disabled])`)?.focus();
 }
 
+// Why a sign-in came back, in plain words, with what the site said on the end
+// so a player can tell Mo.
+const WHY = {
+  invite_needed: "That account isn’t signed up here yet. If you’re new, you’ll need an invite link from Mo or your GM. If you’ve signed in before, use the same account you did then.",
+  state_mismatch: "That sign-in went stale. Start it again from this page.",
+  please_restart_the_process: "That sign-in went stale. Start it again from this page.",
+  access_denied: "Signing in was cancelled.",
+};
+const why = (code) => `${WHY[code] || "That didn’t sign you in. If you’ve signed in before, use the same way you did then. If you’re new, you’ll need an invite link from Mo or your GM."} <small>(It said ${esc(code || "nothing")}.)</small>`;
+
 function outView() {
   const verb = invite ? "Join" : "Sign in";
   let html = "";
   if (params.has("gone")) html += '<div class="cc-note" role="status"><p>Your account’s gone, along with everything it held.</p></div>';
-  else if (params.has("error") && !st.note) html += '<div class="cc-note is-warn" role="alert"><p>That didn’t sign you in. If you’ve signed in before, use the same way you did then. If you’re new, you’ll need an invite link from Mo or your GM.</p></div>';
+  else if (params.has("error") && !st.note) html += `<div class="cc-note is-warn" role="alert"><p>${why(params.get("error"))}</p></div>`;
   if (sync.me) html += '<div class="cc-note" role="status"><p>You’ve been signed out on this phone. Your characters are still here, and they’ll catch up with your account when you sign in again.</p></div>';
   html += `<div class="cc-row">${st.providers.map((p) => `<button type="button" class="button primary" data-act="in" data-p="${esc(p)}"${busy(`in-${p}`)}>${verb} with ${esc(NAMES[p] || p)}</button>`).join("")}</div>`;
   html += '<p class="cc-lead">An account keeps your name, your email and your characters, and nothing else. Once you’re in, you can download it all or delete it from here.</p>';

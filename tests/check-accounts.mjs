@@ -248,7 +248,7 @@ try {
   console.log("3. A second device");
   const two = await phone();
   await signIn(two.page, "kai", "discord");
-  yes((await text(two.page)).includes("2 characters are in your account"), "both characters reach the second device");
+  await until(async () => (await text(two.page)).includes("2 characters are in your account"), "both characters reaching the second device");
   await two.page.goto(`${BASE}/characters/`);
   await two.page.waitForSelector(".cc-saved");
   same(await two.page.$$eval(".cc-saved b", (els) => els.map((e) => e.textContent).sort()), ["Vesk", "Wren"], "the list on the second device");

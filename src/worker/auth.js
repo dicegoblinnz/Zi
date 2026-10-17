@@ -56,7 +56,7 @@ export async function hit(env, key, seconds) {
 async function gate(env, user, ctx, take) {
   const email = String(user.email || "").toLowerCase();
   const admin = String(env.ADMIN_EMAIL || "").trim().toLowerCase();
-  if (admin && email === admin && user.emailVerified === true) return { role: "admin" };
+  if (admin && email === admin && [true, "true", 1].includes(user.emailVerified)) return { role: "admin" };
   const code = cookieOf(ctx, "zi-invite");
   if (/^[A-Za-z0-9_-]{16,64}$/.test(code)) {
     const row = await env.DB.prepare(take
