@@ -28,7 +28,8 @@ self.addEventListener("fetch", (event) => {
   const req = event.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
-  if (url.origin !== self.location.origin || url.pathname.startsWith("/pagefind/")) return;
+  // Sign-in and accounts (/api/) always go to the site, never to a saved copy.
+  if (url.origin !== self.location.origin || url.pathname.startsWith("/pagefind/") || url.pathname.startsWith("/api/")) return;
   if (req.mode === "navigate") event.respondWith(page(req, url));
   else if (url.pathname.startsWith("/_astro/")) event.respondWith(kept(req));
   else event.respondWith(fresh(req));

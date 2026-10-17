@@ -6,6 +6,7 @@
 // redraws and can be undone.
 import { SIZES, diceLabel, diceRange, diceShapes, rollDie, sizeDown, sizeUp, stepsToDice } from "./dice.js";
 import { openStore } from "./store.js";
+import { makeSync } from "./sync.js";
 import { hasDraft, makeBuilder, sheetOf } from "./builder.js";
 import { fromCrew, randomBuild } from "./ways.js";
 import { printSheet } from "./print.js";
@@ -20,6 +21,10 @@ const CREW = new Map(DATA.crew.map((c) => [c.id, c]));
 const LINK = DATA.links;
 const COND = new Map(DATA.conditions.map((x) => [x.name, x]));
 const store = openStore();
+// Signed in, the characters in the account stay in step with it (sync.js).
+const sync = makeSync(store, { onChange: () => {
+  if (!dialog.open && !document.querySelector(".cc textarea:focus")) render();
+} });
 const app = document.getElementById("app");
 const dialog = document.getElementById("cc-dialog");
 const toastBox = document.getElementById("cc-toast");
@@ -283,6 +288,18 @@ function saveNote() {
   return "";
 }
 
+// Signing in keeps the characters in an account, on every phone (sync.js).
+function accountNote() {
+  const me = sync.me;
+  if (!me) return '<p class="cc-acct">Got an account? <a href="/account/">Sign in</a> to keep your characters on every phone you use.</p>';
+  if (sync.out) return '<div class="cc-note is-warn" role="status"><p>You’ve been signed out on this phone. Your characters are still here, and they’ll catch up with your account when you <a href="/account/">sign in</a> again.</p></div>';
+  const loose = sync.loose();
+  if (!loose.length) return `<p class="cc-acct">Signed in as ${esc(me.name)}, so your characters are on every phone you sign in on. <a href="/account/">Account</a></p>`;
+  const n = loose.length;
+  return `<div class="cc-note" role="status"><p>${n === 1 ? `${esc(loose[0].name)} is` : `${n} characters are`} only on this phone. Move them into your account to have them on every phone you sign in on.</p>
+    <div class="cc-row"><button type="button" class="button primary" data-act="movein">Move ${n === 1 ? esc(loose[0].name) : `all ${n}`} into your account</button></div></div>`;
+}
+
 function listView() {
   const mine = chars();
   const draft = hasDraft();
@@ -308,6 +325,7 @@ function listView() {
     <p class="lede">Build your own or pick one of the crew, and play them from your phone. The counting’s done for you, and they’re saved on this phone, signal or not.</p>
     <p class="cc-paper">Playing on paper? Print a character sheet and the player reference from the <a href="/sheets/">Sheets page</a>.</p></header>
     ${saveNote()}
+    ${accountNote()}
     ${mine.length ? `<section class="cc-sec" aria-labelledby="cc-mine"><h2 id="cc-mine">On this phone</h2><ul class="cc-mine">${mine.map(saved).join("")}</ul></section>` : ""}
     <section class="cc-sec" aria-labelledby="cc-learn"><h2 id="cc-learn">Learn to play</h2>
       <p class="cc-lead">New to Zi’Dara? Play one round on your phone first. The brute swings his club at Isolde, and you answer it with Wren and Bram.</p>
@@ -1145,6 +1163,7 @@ function saveBuilt(build, key, discard) {
     const tag = Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => b.toString(36).padStart(2, "0")).join("").slice(0, 6);
     ch = { id: `own-${tag}`, crew: "own", name, made: new Date().toISOString(), hash: "own", build };
     ch.state = { ...fresh(sheetFor(ch)), seen: said(sheetFor(ch)) };
+    sync.claim(ch);
     chars().push(ch);
   }
   normal(ch);
@@ -1154,7 +1173,7 @@ function saveBuilt(build, key, discard) {
   history.replaceState(null, "", `/characters/?c=${encodeURIComponent(ch.id)}`);
   route();
   scrollTo(0, 0);
-  toast(kept ? `${name}’s saved on this phone.` : "This phone isn’t letting the site save, so they’re gone when you close the page.", false);
+  toast(kept ? `${name}’s saved ${ch.acct ? "in your account" : "on this phone"}.` : "This phone isn’t letting the site save, so they’re gone when you close the page.", false);
 }
 function nav(id) {
   history.pushState(null, "", id ? `/characters/?c=${encodeURIComponent(id)}` : "/characters/");
@@ -1167,7 +1186,9 @@ function start(crewId, name) {
   if (!c) return;
   const tag = Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => b.toString(36).padStart(2, "0")).join("").slice(0, 6);
   const id = `${crewId}-${tag}`;
-  chars().push({ id, crew: crewId, name: name || c.name, made: new Date().toISOString(), hash: c.hash, state: { ...fresh(c), seen: said(c) } });
+  const ch = { id, crew: crewId, name: name || c.name, made: new Date().toISOString(), hash: c.hash, state: { ...fresh(c), seen: said(c) } };
+  sync.claim(ch);
+  chars().push(ch);
   store.save();
   ui.stopSpin?.();
   ui.stopSpin = null;
@@ -1282,9 +1303,16 @@ const ACT = {
     input?.focus();
     input?.select();
   },
+  movein(el) {
+    el.disabled = true;
+    sync.moveIn().then((n) => {
+      render();
+      toast(sync.unsent() ? "They’re in your account, and they’ll finish going up when there’s a signal." : `${n === 1 ? "It’s" : `All ${n} are`} in your account now.`, false);
+    }, () => render());
+  },
   delete() {
     const ch = current();
-    if (!ch || !confirm(`Delete ${ch.name} from this phone? You can’t get them back.`)) return;
+    if (!ch || !confirm(ch.acct ? `Delete ${ch.name}? They go from your account too, so they’re gone from every phone you sign in on. You can’t get them back.` : `Delete ${ch.name} from this phone? You can’t get them back.`)) return;
     store.data.characters = chars().filter((x) => x.id !== ch.id);
     store.save();
     builder.discard(ch.id);
@@ -1882,3 +1910,4 @@ addEventListener("storage", (e) => {
 
 if (history.state?.dlg) history.replaceState(null, "");
 route();
+sync.pull();

@@ -4,12 +4,29 @@
   // attached as a custom domain. Keep this name the same as the dashboard's.
   "name": "zi",
   "compatibility_date": "2026-10-13",
+  // Better Auth keeps track of each request with node:async_hooks.
+  "compatibility_flags": ["nodejs_compat"],
+  // Pages and files are served straight from dist/. Only /api/ (sign-in and
+  // accounts) runs the Worker, so the rest costs nothing and works as before.
+  "main": "src/worker/index.js",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "html_handling": "auto-trailing-slash"
+    "html_handling": "auto-trailing-slash",
+    "run_worker_first": ["/api/*"]
   },
+  "vars": {
+    // The hosts sign-in works on. Add a Preview's host (comma between) to sign
+    // in there too, and give Google and Discord its callback addresses.
+    "AUTH_HOSTS": "zidara.world"
+  },
+  // Accounts live in a D1 database called zi. Until it's made in the dashboard
+  // and its id goes in here, /api/ answers that sign-in isn't switched on yet.
+  // Its tables come from migrations/, applied with
+  // `npx wrangler d1 migrations apply DB --remote` (npm run deploy does it).
+  // "d1_databases": [{ "binding": "DB", "database_name": "zi", "database_id": "", "migrations_dir": "migrations" }],
   // Branches other than main build a Preview with `npx wrangler preview`,
-  // which won't run without this block. The site has no bindings, so it's empty.
+  // which won't run without this block.
   "previews": {}
 }

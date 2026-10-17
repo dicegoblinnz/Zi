@@ -31,6 +31,11 @@ async function resolve(path) {
   return null;
 }
 const server = createServer(async (req, res) => {
+  // Signed out, the Worker answers the account page like this (src/worker/index.js).
+  if (req.url.startsWith("/api/me")) {
+    res.writeHead(200, { "content-type": "application/json" });
+    return res.end(JSON.stringify({ user: null, providers: ["google", "discord"] }));
+  }
   const file = await resolve(req.url);
   if (file) {
     res.writeHead(200, { "content-type": TYPES[extname(file)] || "application/octet-stream" });
@@ -48,6 +53,7 @@ const PAGES = [
   "/rules/title-ideas-and-the-crew/", "/rules/conflict/", "/rules/the-bestiary/",
   "/rules/appendix-c-every-lever-in-the-game/", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
   "/characters/", "/characters/?c=check-vesk", "/characters/?c=check-vesk&t=sheet", "/characters/?c=check-vesk&t=rules", "/sheets/",
+  "/account/", "/account/?invite=check-invite-code-0001",
 ];
 // A character saved on the phone, so a sheet gets checked like any other page.
 // Its hash is blank, so the sheet shows its "changed in the rules" note too.

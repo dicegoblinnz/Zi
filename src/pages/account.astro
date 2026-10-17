@@ -1,0 +1,23 @@
+---
+// Signing in, invites and who's a GM. Everything here depends on who's signed
+// in, so src/companion/account.js draws it. The service worker keeps the page
+// on the phone, and with no signal it says so.
+import Base from "../layouts/Base.astro";
+import "../styles/companion.css";
+---
+<Base title="Account" description="Sign in to keep your Zi’Dara characters in your account, on every phone you use.">
+  <main id="main" class="companion frame">
+    <div id="acct" class="cc">
+      <header class="cc-intro">
+        <p class="kicker">Your characters, everywhere</p>
+        <h1>Account</h1>
+        <p class="lede">Checking whether you’re signed in…</p>
+      </header>
+      <noscript><div class="cc-note is-warn"><p>Signing in needs JavaScript.</p></div></noscript>
+    </div>
+    <div id="cc-toast" class="cc-toast" role="status" aria-live="polite"></div>
+  </main>
+  <script>
+    import "../companion/account.js";
+  </script>
+</Base>
