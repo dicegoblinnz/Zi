@@ -5,7 +5,7 @@ Stage 6 of `notes/app-plan.md` is built and checked on the `app` branch. It need
 Use the Cloudflare account that has the `zi` Worker in it. Discord waits for now (Mo, 18 Oct). It switches on later with two more secrets, `DISCORD_CLIENT_ID` and `DISCORD_CLIENT_SECRET`, and a redirect of `https://zidara.world/api/auth/callback/discord` in a Discord app.
 
 1. **The database.** Done 18 Oct: `zi`, in `wrangler.jsonc`.
-2. **The build commands.** In Workers & Pages, `zi`, Settings, Build, set the deploy command to `npm run deploy` and the non-production branch deploy command to `npm run deploy:preview`. They make the tables before each deploy. If a build says it isn't allowed to use D1, give the build's API token D1 Edit.
+2. **The build commands.** In Workers & Pages, `zi`, Settings, Build, set the deploy command to `npm run deploy` and the non-production branch deploy command to `npm run deploy:preview`. Done 18 Oct. A deploy from `main` makes the tables first. If that build says it isn't allowed to use D1, give the build's API token D1 Edit.
 3. **Google.** The client's made, and its id is in `wrangler.jsonc`. At console.cloud.google.com, in Google Auth Platform:
    - Branding: the app name Zi'Dara and a support email.
    - Audience: External, then Publish app, so any Google account can sign in. It only asks for a name and an email, so Google doesn't review it.
@@ -16,6 +16,6 @@ Use the Cloudflare account that has the `zi` Worker in it. Discord waits for now
    - `ADMIN_EMAIL`: the email on Mo's Google account. That account needs no invite and is the admin.
 5. **First sign-in.** Sign-in goes live on zidara.world when `app` is merged into `main`. Then Mo signs in at `/account/`, makes an invite link for each player under Invites, and makes someone a GM under People, so they can hand out invites too.
 
-To try it on the `app` branch's Preview before it goes to zidara.world, send Claude the Preview's address. It goes in `AUTH_HOSTS`, its callback address (the same path on that host) goes in Google, and the secrets go on the Preview too.
+Previews share the live database, so sign-in stays off on them. Trying it on a Preview first needs a second database for Previews.
 
 Opening sign-ups to everyone later is one more variable, `OPEN_SIGNUPS` set to `yes`.

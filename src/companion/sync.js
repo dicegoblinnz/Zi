@@ -9,9 +9,16 @@
 //   zi-account  who's signed in on this phone ({ id, name, role }), so a page
 //               knows with no signal. The account page sets it.
 //   zi-sync     for each character, the account's version of it and a hash of
-//               what this phone last sent or got, so it can tell who changed what.
+//               what this phone last sent or got, so it can tell who changed what,
+//               and the ones deleted here that the account hasn't heard about.
+//   zi-unsent-<account>  changes that hadn't gone up when someone else signed
+//               in on this phone, kept for when that account's back.
+//
+// Only a delete on this phone deletes from the account. A character that's
+// just missing here (the phone's list got lost) comes back down.
 const HINT = "zi-account";
 const STATE = "zi-sync";
+const STASH = "zi-unsent-";
 
 const read = (key) => {
   try {
@@ -46,8 +53,9 @@ const online = () => navigator.onLine !== false;
 export function makeSync(store, { onChange = () => {} } = {}) {
   let me = read(HINT);
   let st = read(STATE);
-  const fresh = () => ({ user: me?.id ?? null, v: {}, h: {} });
+  const fresh = () => ({ user: me?.id ?? null, v: {}, h: {}, gone: [] });
   if (!st || st.user !== (me?.id ?? null) || !st.v || !st.h) st = fresh();
+  if (!Array.isArray(st.gone)) st.gone = [];
   let out = false; // signed out on this phone, with the account's characters still here
   let timer = 0;
   let lastPull = 0;
@@ -80,9 +88,29 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     Object.assign(c, theirs);
   };
   // The account's characters leave this phone (signing out, or someone else
-  // signing in on it).
-  const drop = () => {
+  // signing in on it). Anything that hadn't gone up is kept to one side.
+  const changedHere = (c) => hash(c) !== st.h[c.id];
+  const drop = (stash = true) => {
+    const left = all().filter((c) => c.acct && c.acct === st.user && changedHere(c));
+    if (stash && st.user && (left.length || st.gone.length)) {
+      const pick = (map) => Object.fromEntries(left.filter((c) => map[c.id] != null).map((c) => [c.id, map[c.id]]));
+      write(`${STASH}${st.user}`, { characters: left, v: pick(st.v), h: pick(st.h), gone: st.gone });
+    }
     store.data.characters = all().filter((c) => !c.acct);
+    save();
+  };
+  // This phone starts keeping step with an account, picking up anything it had
+  // kept to one side for it.
+  const adopt = (user) => {
+    me = { id: user.id, name: user.name, role: user.role };
+    st = fresh();
+    const kept = read(`${STASH}${me.id}`);
+    if (!kept) return;
+    for (const c of kept.characters || []) if (!all().some((x) => x.id === c.id)) all().push({ ...c, acct: me.id });
+    Object.assign(st.v, kept.v);
+    Object.assign(st.h, kept.h);
+    st.gone = Array.isArray(kept.gone) ? kept.gone : [];
+    write(`${STASH}${me.id}`, null);
     save();
   };
 
@@ -127,8 +155,7 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     const got = await res.json();
     if (got.me?.id !== me.id) {
       drop();
-      me = got.me;
-      st = fresh();
+      adopt(got.me);
     }
     me = got.me;
     write(HINT, me);
@@ -136,6 +163,7 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     const here = new Map(mine().map((c) => [c.id, c]));
     let changed = false;
     for (const s of got.characters) {
+      if (st.gone.includes(s.id)) continue; // deleted here, and that goes up below
       const c = here.get(s.id);
       if (s.data == null) {
         if (c) {
@@ -172,11 +200,10 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     if (!me || out || !online()) return;
     clearTimeout(timer);
     timer = 0;
-    const here = new Set(mine().map((c) => c.id));
-    for (const id of Object.keys(st.v)) {
-      if (here.has(id)) continue;
+    for (const id of [...st.gone]) {
       const res = await call("DELETE", `/api/characters/${encodeURIComponent(id)}`);
       if (!res.ok) return keep();
+      st.gone = st.gone.filter((x) => x !== id);
       forgot(id);
     }
     for (const c of mine()) {
@@ -202,6 +229,15 @@ export function makeSync(store, { onChange = () => {} } = {}) {
         }
         res = await put(c, s.v);
       }
+      if (res.status === 400 || res.status === 413) {
+        // The account won't take this one (it's full, or this one's too big),
+        // so it stays on this phone instead of holding up the rest.
+        delete c.acct;
+        forgot(c.id);
+        quiet();
+        onChange();
+        continue;
+      }
       if (!res.ok) return keep();
       st.v[c.id] = (await res.json()).v;
       st.h[c.id] = h;
@@ -215,6 +251,7 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     if (!timer || !me || out) return;
     clearTimeout(timer);
     timer = 0;
+    for (const id of st.gone) fetch(`/api/characters/${encodeURIComponent(id)}`, { method: "DELETE", keepalive: true, credentials: "same-origin" }).catch(() => {});
     for (const c of mine()) {
       if (hash(c) === st.h[c.id]) continue;
       fetch(`/api/characters/${encodeURIComponent(c.id)}`, { method: "PUT", keepalive: true, credentials: "same-origin", headers: { "content-type": "application/json" }, body: JSON.stringify({ v: st.v[c.id] ?? 0, data: bare(c) }) }).catch(() => {});
@@ -240,7 +277,14 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     // Characters on this phone that aren't in an account.
     loose,
     // How many of the account's characters have changes that haven't gone up yet.
-    unsent: () => mine().filter((c) => hash(c) !== st.h[c.id]).length,
+    unsent: () => mine().filter(changedHere).length + st.gone.length,
+    // A character deleted on this phone goes from the account too.
+    gone(ch) {
+      if (me && ch?.acct === me.id && !st.gone.includes(ch.id)) {
+        st.gone.push(ch.id);
+        keep();
+      }
+    },
     // A new character goes straight into the account when someone's signed in.
     claim(ch) {
       if (me && !out) ch.acct = me.id;
@@ -251,8 +295,8 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     signedIn(user) {
       const other = me && me.id !== user.id;
       if (other) drop();
+      if (other || st.user !== user.id) adopt(user);
       me = { id: user.id, name: user.name, role: user.role };
-      if (other || st.user !== me.id) st = fresh();
       out = false;
       write(HINT, me);
       keep();
@@ -273,7 +317,7 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     // phone. Anything that couldn't go up stops it.
     async signOut() {
       await run(push);
-      if (mine().some((c) => hash(c) !== st.h[c.id])) throw new Error("unsent");
+      if (mine().some(changedHere) || st.gone.length) throw new Error("unsent");
       const res = await fetch("/api/auth/sign-out", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json" }, body: "{}" });
       if (!res.ok) throw new Error("sign-out");
       this.forget();
@@ -281,7 +325,8 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     forget() {
       clearTimeout(timer);
       timer = 0;
-      drop();
+      if (st.user) write(`${STASH}${st.user}`, null);
+      drop(false);
       me = null;
       out = false;
       st = fresh();

@@ -26,7 +26,9 @@
   },
   // Accounts live in the D1 database zi. Its tables come from migrations/,
   // applied by `npx wrangler d1 migrations apply DB --remote`, which
-  // npm run deploy and npm run deploy:preview do before each deploy.
+  // npm run deploy does before each deploy from main. Previews share this
+  // database, so they never run migrations, and sign-in stays off there until
+  // they get a database of their own.
   "d1_databases": [{ "binding": "DB", "database_name": "zi", "database_id": "8d3df3f6-384f-4aa0-8b18-e2d8540ed652", "migrations_dir": "migrations" }],
   // Branches other than main build a Preview with `npx wrangler preview`,
   // which won't run without this block.

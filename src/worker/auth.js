@@ -7,6 +7,7 @@
 import { betterAuth } from "better-auth";
 
 const DAY = 60 * 60 * 24;
+const NO_TOKENS = { accessToken: null, refreshToken: null, idToken: null, accessTokenExpiresAt: null, refreshTokenExpiresAt: null };
 const local = (host) => /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host);
 
 // The hosts sign-in works on, zidara.world first. A Preview's host can be added
@@ -25,6 +26,28 @@ function cookieOf(ctx, name) {
   return "";
 }
 
+// An invite works while it has a use left, hasn't run out, and whoever made it
+// is still Mo or one of his GMs.
+export const LIVE = `used < uses AND expiresAt > ?2 AND createdBy IN (SELECT id FROM "user" WHERE role IN ('admin', 'gm'))`;
+
+// Rate limits, kept in the limits table under an HMAC of the key, so no
+// address is ever stored. Old rows go now and then.
+const signers = new WeakMap();
+async function hmac(env, text) {
+  let key = signers.get(env);
+  if (!key) signers.set(env, (key = crypto.subtle.importKey("raw", new TextEncoder().encode(env.BETTER_AUTH_SECRET), { name: "HMAC", hash: "SHA-256" }, false, ["sign"])));
+  const sig = new Uint8Array(await crypto.subtle.sign("HMAC", await key, new TextEncoder().encode(text)));
+  return Array.from(sig.slice(0, 16), (b) => b.toString(16).padStart(2, "0")).join("");
+}
+export async function hit(env, key, seconds) {
+  const now = Date.now();
+  const row = await env.DB.prepare(`INSERT INTO limits (key, count, since) VALUES (?1, 1, ?2)
+    ON CONFLICT(key) DO UPDATE SET count = CASE WHEN since < ?3 THEN 1 ELSE count + 1 END, since = CASE WHEN since < ?3 THEN ?2 ELSE since END
+    RETURNING count, since`).bind(await hmac(env, key), now, now - seconds * 1000).first();
+  if (Math.random() < 0.01) await env.DB.prepare("DELETE FROM limits WHERE since < ?1").bind(now - 86400000).run();
+  return row;
+}
+
 // The gate, run wherever a new account's about to be made, whichever way they
 // signed in. The invite comes through the sign-in in the zi-invite cookie.
 // Better Auth asks first (take false, which only looks), so a refusal comes
@@ -37,8 +60,8 @@ async function gate(env, user, ctx, take) {
   const code = cookieOf(ctx, "zi-invite");
   if (/^[A-Za-z0-9_-]{16,64}$/.test(code)) {
     const row = await env.DB.prepare(take
-      ? "UPDATE invite SET used = used + 1 WHERE code = ?1 AND used < uses AND expiresAt > ?2 RETURNING createdBy"
-      : "SELECT createdBy FROM invite WHERE code = ?1 AND used < uses AND expiresAt > ?2").bind(code, Date.now()).first();
+      ? `UPDATE invite SET used = used + 1 WHERE code = ?1 AND ${LIVE} RETURNING createdBy`
+      : `SELECT createdBy FROM invite WHERE code = ?1 AND ${LIVE}`).bind(code, Date.now()).first();
     if (row) return { role: "member", invitedBy: row.createdBy };
   }
   if (env.OPEN_SIGNUPS === "yes") return { role: "member" };
@@ -95,7 +118,16 @@ export function optionsFor(env) {
     // Google's and Discord's tokens aren't kept, since the site never calls
     // them after sign-in.
     account: { accountLinking: { enabled: true }, updateAccountOnSignIn: false },
-    rateLimit: { enabled: true, storage: "database", window: 60, max: 60, customRules: { "/sign-in/social": { window: 60, max: 10 }, "/delete-user": { window: 60, max: 5 } } },
+    rateLimit: {
+      enabled: true, window: 60, max: 60,
+      customRules: { "/sign-in/social": { window: 60, max: 10 }, "/delete-user": { window: 60, max: 5 } },
+      customStorage: {
+        consume: async (key, rule) => {
+          const { count, since } = await hit(env, `auth:${key}`, rule.window);
+          return count <= rule.max ? { allowed: true, retryAfter: null } : { allowed: false, retryAfter: Math.max(1, Math.ceil((since + rule.window * 1000 - Date.now()) / 1000)) };
+        },
+      },
+    },
     advanced: { ipAddress: { ipAddressHeaders: ["cf-connecting-ip"] }, useSecureCookies: secure, cookiePrefix: "zi" },
     databaseHooks: {
       user: { create: { before: async (user, ctx) => {
@@ -104,7 +136,10 @@ export function optionsFor(env) {
       } } },
       // Sessions don't keep where or what they were signed in from.
       session: { create: { before: async (session) => ({ data: { ...session, ipAddress: null, userAgent: null } }) } },
-      account: { create: { before: async (account) => ({ data: { ...account, accessToken: null, refreshToken: null, idToken: null, accessTokenExpiresAt: null, refreshTokenExpiresAt: null } }) } },
+      account: {
+        create: { before: async (account) => ({ data: { ...account, ...NO_TOKENS } }) },
+        update: { before: async (account) => ({ data: { ...account, ...NO_TOKENS } }) },
+      },
     },
     telemetry: { enabled: false },
     logger: { level: "error" },

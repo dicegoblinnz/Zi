@@ -3,7 +3,7 @@
 // (Better Auth, set up in auth.js), invites, the people Mo's picked as GMs,
 // and the characters kept in an account. Every route checks who's asking on the
 // server, and nothing private goes to someone who isn't signed in.
-import { authFor, originsOf, providersOf, secureOf } from "./auth.js";
+import { LIVE, authFor, hit, originsOf, providersOf, secureOf } from "./auth.js";
 
 const HEAD = { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" };
 const json = (body, status = 200, extra = {}) => new Response(typeof body === "string" ? body : JSON.stringify(body), { status, headers: { ...HEAD, ...extra } });
@@ -44,20 +44,8 @@ async function auth(request, env, url) {
   return out;
 }
 
-async function sha(text) {
-  const bytes = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text)));
-  return Array.from(bytes.slice(0, 12), (b) => b.toString(16).padStart(2, "0")).join("");
-}
-
 // True once a key's had more than max goes in the last so many seconds.
-async function limited(env, key, max, seconds) {
-  const now = Date.now();
-  const row = await env.DB.prepare(`INSERT INTO limits (key, count, since) VALUES (?1, 1, ?2)
-    ON CONFLICT(key) DO UPDATE SET count = CASE WHEN since < ?3 THEN 1 ELSE count + 1 END, since = CASE WHEN since < ?3 THEN ?2 ELSE since END
-    RETURNING count`).bind(await sha(key), now, now - seconds * 1000).first();
-  if (Math.random() < 0.01) await env.DB.prepare("DELETE FROM limits WHERE since < ?1").bind(now - DAY).run();
-  return row.count > max;
-}
+const limited = async (env, key, max, seconds) => (await hit(env, key, seconds)).count > max;
 
 async function body(request) {
   try {
@@ -88,7 +76,18 @@ async function api(request, env, url) {
   if (method !== "GET" && !originsOf(env).includes(request.headers.get("origin"))) return fail(403, "That came from somewhere else.");
 
   if (what === "invite" && !id && method === "POST") return checkInvite(request, env);
-  const session = await authFor(env).api.getSession({ headers: request.headers });
+  // Reading the session can renew it, and the renewed cookies go back with the
+  // answer, so a player who's at the table every week stays signed in.
+  const got = await authFor(env).api.getSession({ headers: request.headers, returnHeaders: true });
+  const res = await routes(request, env, method, what, id, got.response);
+  const cookies = got.headers?.getSetCookie?.() ?? [];
+  if (!cookies.length) return res;
+  const out = new Response(res.body, res);
+  for (const c of cookies) out.headers.append("set-cookie", c);
+  return out;
+}
+
+async function routes(request, env, method, what, id, session) {
   if (what === "me" && !id && method === "GET") {
     return json({ user: session ? { ...meOf(session.user), email: session.user.email } : null, providers: providersOf(env) });
   }
@@ -127,7 +126,7 @@ async function api(request, env, url) {
 async function checkInvite(request, env) {
   if (await limited(env, `invite:${request.headers.get("cf-connecting-ip") || "here"}`, 10, 900)) return fail(429, "That’s a lot of tries. Wait a few minutes and try again.");
   const code = (await body(request))?.code;
-  const live = typeof code === "string" && CODE.test(code) && (await env.DB.prepare("SELECT 1 AS ok FROM invite WHERE code = ?1 AND used < uses AND expiresAt > ?2").bind(code, Date.now()).first());
+  const live = typeof code === "string" && CODE.test(code) && (await env.DB.prepare(`SELECT 1 AS ok FROM invite WHERE code = ?1 AND ${LIVE}`).bind(code, Date.now()).first());
   if (!live) return fail(400, "That invite link didn’t work. It might be used up or out of date, so ask whoever sent it for a new one.");
   return json({ ok: true }, 200, { "set-cookie": inviteCookie(env, code, 3600) });
 }
@@ -144,9 +143,10 @@ async function makeInvite(request, env, user) {
   if (!b) return fail(400, "That didn’t come through. Try again.");
   const live = await env.DB.prepare("SELECT COUNT(*) AS n FROM invite WHERE createdBy = ?1 AND used < uses AND expiresAt > ?2").bind(user.id, Date.now()).first();
   if (live.n >= MAX_INVITES) return fail(400, `You’ve got ${MAX_INVITES} invites waiting already. Cancel some first.`);
+  // One account, two weeks. That's what the page says, so it's all the server makes.
   const note = String(b.note ?? "").replace(/\s+/g, " ").trim().slice(0, 60) || null;
-  const uses = Math.min(10, Math.max(1, Math.round(Number(b.uses) || 1)));
-  const days = Math.min(30, Math.max(1, Math.round(Number(b.days) || 14)));
+  const uses = 1;
+  const days = 14;
   const code = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(16)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
   const now = Date.now();
   await env.DB.prepare("INSERT INTO invite (code, createdBy, note, uses, used, createdAt, expiresAt) VALUES (?1, ?2, ?3, ?4, 0, ?5, ?6)").bind(code, user.id, note, uses, now, now + days * DAY).run();
@@ -167,11 +167,14 @@ async function listPeople(env) {
   return json({ people: results.map((p) => ({ ...p, role: p.role || "member", createdAt: ms(p.createdAt) })) });
 }
 
-// Mo picks who's a GM, which lets them hand out invites. His own role stays.
+// Mo picks who's a GM, which lets them hand out invites. His own role stays,
+// and someone who's no longer a GM loses the invites they made.
 async function setRole(request, env, id) {
   const role = (await body(request))?.role;
   if (role !== "gm" && role !== "member") return fail(400, "That isn’t something Mo can make someone.");
-  const res = await env.DB.prepare(`UPDATE "user" SET role = ?1, updatedAt = ?3 WHERE id = ?2 AND COALESCE(role, 'member') != 'admin'`).bind(role, id, new Date().toISOString()).run();
+  const steps = [env.DB.prepare(`UPDATE "user" SET role = ?1, updatedAt = ?3 WHERE id = ?2 AND COALESCE(role, 'member') != 'admin'`).bind(role, id, new Date().toISOString())];
+  if (role === "member") steps.push(env.DB.prepare(`DELETE FROM invite WHERE createdBy = ?1 AND createdBy IN (SELECT id FROM "user" WHERE role = 'member')`).bind(id));
+  const [res] = await env.DB.batch(steps);
   return res.meta.changes ? json({ ok: true, role }) : fail(404, "There’s nobody like that to change.");
 }
 

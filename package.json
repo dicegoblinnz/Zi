@@ -8,7 +8,7 @@
     "build": "npm run content && astro build && pagefind --site dist && node scripts/build-sw.mjs",
     "preview": "npm run build && wrangler dev",
     "deploy": "wrangler d1 migrations apply DB --remote && wrangler deploy",
-    "deploy:preview": "wrangler d1 migrations apply DB --remote && wrangler preview",
+    "deploy:preview": "wrangler preview",
     "sheets": "node scripts/build-sheets.mjs"
   },
   "dependencies": {

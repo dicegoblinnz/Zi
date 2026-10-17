@@ -1314,6 +1314,7 @@ const ACT = {
     const ch = current();
     if (!ch || !confirm(ch.acct ? `Delete ${ch.name}? They go from your account too, so they’re gone from every phone you sign in on. You can’t get them back.` : `Delete ${ch.name} from this phone? You can’t get them back.`)) return;
     store.data.characters = chars().filter((x) => x.id !== ch.id);
+    sync.gone(ch);
     store.save();
     builder.discard(ch.id);
     nav("");

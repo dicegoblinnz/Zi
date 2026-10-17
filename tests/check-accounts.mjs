@@ -270,6 +270,24 @@ try {
   await kai.page.waitForTimeout(1500);
   await kai.context.setOffline(false);
   await until(async () => (await serverChars("kai@example.com")).some((c) => JSON.parse(c.data).state?.notes === "Owes Bram two favours"), "the offline change going up");
+  // A character deleted offline stays deleted when the signal's back.
+  const kaiId = (await user("kai@example.com")).id;
+  await kai.page.evaluate((acct) => {
+    const data = JSON.parse(localStorage.getItem("zi-characters"));
+    data.characters.push({ id: "dorrie-dddddd", crew: "dorrie", name: "Dorrie", made: new Date().toISOString(), hash: "", state: {}, acct });
+    localStorage.setItem("zi-characters", JSON.stringify(data));
+  }, kaiId);
+  await kai.page.goto(`${BASE}/characters/`);
+  await until(async () => (await serverChars("kai@example.com")).some((c) => c.id === "dorrie-dddddd"), "Dorrie going up");
+  await kai.page.goto(`${BASE}/characters/?c=dorrie-dddddd&t=sheet`);
+  await kai.context.setOffline(true);
+  await kai.page.click('[data-act="delete"]');
+  await kai.page.waitForTimeout(1200);
+  await kai.context.setOffline(false);
+  await until(async () => !(await serverChars("kai@example.com")).some((c) => c.id === "dorrie-dddddd"), "the offline delete going up");
+  await kai.page.goto(`${BASE}/characters/`);
+  await kai.page.waitForTimeout(1500);
+  same(await kai.page.$$eval(".cc-saved b", (els) => els.map((e) => e.textContent)), ["Vesk"], "Dorrie doesn't come back");
 
   // ------------------------------------------------------------ 4. who can do what
   console.log("4. Who can do what");
@@ -283,6 +301,10 @@ try {
   same((await api(kai.page, "POST", "/api/invites", { note: "Ash" })).status, 200, "a GM can make invites");
   same(JSON.parse((await api(kai.page, "GET", "/api/invites")).body).invites.map((i) => i.note), ["Ash"], "a GM sees her own invites only");
   same(JSON.parse((await api(mo.page, "GET", "/api/invites")).body).invites.length, 3, "Mo sees them all");
+  await mo.page.click('.ac-item [data-act="role"][data-role="member"]');
+  await until(async () => (await user("kai@example.com")).role === "member", "Kai no longer a GM");
+  same((await rows("SELECT COUNT(*) AS n FROM invite WHERE createdBy = ?1", kaiId))[0].n, 0, "her invites go with it");
+  same((await api(kai.page, "POST", "/api/invites", { note: "x" })).status, 403, "and she can't make more");
   const nobody = await phone();
   await nobody.page.goto(`${BASE}/account/`);
   await settled(nobody.page);
@@ -292,6 +314,9 @@ try {
   const tries = [];
   for (let i = 0; i < 12; i++) tries.push((await api(nobody.page, "POST", "/api/invite", { code: "no-such-invite-code-0000" })).status);
   yes(tries.includes(429), `the invite check's rate limit trips (${tries.join(" ")})`);
+  const keys = await rows("SELECT key FROM limits");
+  yes(keys.length > 3 && keys.every((k) => /^[0-9a-f]{32}$/.test(k.key)), "rate limits keep HMACs, not addresses (Better Auth's too)");
+  same(await rows("SELECT name FROM sqlite_master WHERE name = 'rateLimit'"), [], "no table of addresses");
 
   // ------------------------------------------------------------ 5. leaving
   console.log("5. Signing out, your data and deleting");
@@ -317,6 +342,18 @@ try {
   same(await user("kai@example.com"), null, "Kai's account is gone");
   same((await rows("SELECT COUNT(*) AS n FROM character")).map((r) => r.n), [0], "and her characters");
   same(await two.page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters") || '{"characters":[]}').characters.length), 0, "and they're gone from the phone");
+
+  // A character the account won't take stays on the phone and doesn't hold up the rest.
+  await mo.page.evaluate(() => {
+    const big = { id: "bram-eeeeee", crew: "bram", name: "Big Bram", made: new Date().toISOString(), hash: "", state: { notes: "x".repeat(210000) } };
+    const small = { id: "isolde-ffffff", crew: "isolde", name: "Isolde", made: new Date().toISOString(), hash: "", state: {} };
+    localStorage.setItem("zi-characters", JSON.stringify({ v: 1, characters: [big, small] }));
+  });
+  await mo.page.goto(`${BASE}/account/`);
+  await settled(mo.page);
+  await mo.page.click('[data-act="move"]');
+  await until(async () => (await serverChars(ADMIN)).length === 1, "Isolde going up");
+  await until(() => mo.page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.filter((c) => !c.acct).map((c) => c.name).join() === "Big Bram"), "Big Bram staying on the phone");
 
   // The account page, signed in as Mo, at 320 wide in both themes.
   for (const theme of ["dark", "light"]) {
