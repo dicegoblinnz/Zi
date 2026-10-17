@@ -2,7 +2,9 @@
 // versioned list, kept simple so it can move into an account later:
 //   { v: 1, characters: [{ id, crew, name, made, hash, state, build? }] }
 // crew is the crew member's id, hash is their sheet's hash when this phone last
-// saw it, and state is everything the player changes in play. The sheet itself
+// saw it, and state is everything the player changes in play, along with what
+// they've grown in downtime (grown) and what each line of the sheet said when
+// the phone last saw it (seen, for the gold marks). The sheet itself
 // is always read from the current rules, never saved here. A character built
 // on the phone has crew "own" (so an older page still keeps it) and a build,
 // what the player chose in the builder, which builder.js turns into a sheet.

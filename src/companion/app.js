@@ -11,6 +11,9 @@ import { fromCrew, randomBuild } from "./ways.js";
 import { printSheet } from "./print.js";
 import { calm, feel, setSound, soundOn, tumble } from "./feel.js";
 import { makeLearn } from "./learn.js";
+import { grow } from "./grow.js";
+import { changesOf, ownChanges, said } from "./marks.js";
+import { makeDowntime } from "./downtime.js";
 
 const DATA = JSON.parse(document.getElementById("zi-companion").textContent);
 const CREW = new Map(DATA.crew.map((c) => [c.id, c]));
@@ -62,6 +65,8 @@ const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => 
 
 const learn = makeLearn({ crew: CREW, esc, hex, steps, rules: RULE, ruleHtml: (id) => ruleHtml(id), isOpen: (key) => ui.open.has(key), lineOf: (c, key) => lineOf(c, key), lineLabel: (l) => lineLabel(l), throwDie, feel, tumble, calm, icon: ICON, sound: () => soundButton(), render: () => render() });
 
+const dt = makeDowntime({ B: DATA.build, esc, hex, steps, link, icon: ICON, lineLabel: (l) => lineLabel(l), throwDie, crewNames: () => new Set(DATA.crew.map((x) => x.name)), isOpen: (key) => ui.open.has(key), rule: (id) => ruleHtml(id) });
+
 const chars = () => store.data.characters;
 const current = () => (view.name === "sheet" ? chars().find((x) => x.id === view.id) ?? null : null);
 
@@ -80,7 +85,19 @@ function fresh(c) {
 // now, in case the rules changed since this was saved.
 // A character built on this phone carries its build, and its sheet's made from
 // that against the current rules. The crew's come straight off the chapter.
-const sheetFor = (ch) => (ch?.build ? sheetOf(ch, DATA.build) : CREW.get(ch?.crew) ?? null);
+// What they've grown in downtime goes on top (grow.js).
+const grownSheets = new Map();
+function sheetFor(ch) {
+  const base = ch?.build ? sheetOf(ch, DATA.build) : CREW.get(ch?.crew) ?? null;
+  const list = ch?.state?.grown;
+  if (!base || !Array.isArray(list) || !list.length) return base;
+  const json = JSON.stringify(list);
+  const hit = grownSheets.get(ch.id);
+  if (hit && hit.base === base && hit.json === json) return hit.sheet;
+  const sheet = grow(base, list, DATA.build);
+  grownSheets.set(ch.id, { base, json, sheet });
+  return sheet;
+}
 
 function normal(ch) {
   const c = ch && sheetFor(ch);
@@ -99,6 +116,8 @@ function normal(ch) {
   s.conditions = (Array.isArray(s.conditions) ? s.conditions : []).filter((x) => x && x.name).map((x) => ({ name: String(x.name), die: even(x.die, 2, 12), kind: x.kind === "for" ? "for" : "against" }));
   s.picked = (Array.isArray(s.picked) ? s.picked : []).filter((p) => p && p.name && ["equipment", "utility", "bag"].includes(p.where));
   for (const key of ["threads", "used", "crossed"]) if (!s[key] || typeof s[key] !== "object") s[key] = {};
+  s.grown = (Array.isArray(s.grown) ? s.grown : []).filter((g) => g && typeof g === "object" && typeof g.k === "string");
+  if (s.seen && typeof s.seen !== "object") delete s.seen;
   ch.state = s;
   return c;
 }
@@ -206,6 +225,71 @@ function endScene(s, c) {
   s.used = {};
 }
 
+// ---------------------------------------------------------------- gold marks
+
+// What's changed in the rules since this phone last saw a character's sheet
+// (marks.js). A character saved before the marks came in starts its list the
+// first time it opens, unless its crew sheet has changed since, and then it
+// gets the old note until the player says they've seen it. Typo fixes are
+// taken in quietly.
+function settleMarks(ch, c) {
+  const s = ch.state;
+  ui.gold = null;
+  if (!s.seen) {
+    if (ch.hash !== c.hash) return;
+    s.seen = said(c);
+    store.save();
+    return;
+  }
+  const d = changesOf(s.seen, c);
+  const real = Object.keys(d.marks).length + d.gone.length;
+  if (d.quiet.length || (!real && ch.hash !== c.hash)) {
+    for (const id of d.quiet) s.seen[id] = d.now[id];
+    if (!real) ch.hash = c.hash;
+    store.save();
+  }
+  if (real) ui.gold = d;
+}
+const goldOf = (id) => ui.gold?.marks[id] ?? null;
+// A gold mark beside a changed line, and what it said and says now under it
+// once it's tapped. On a tile or a tracker it's a corner, and the card or
+// panel it opens says old and new.
+const gold = (id, label = "") => (goldOf(id) ? `<button type="button" class="cc-gold${label ? " has-label" : ""}" data-act="gold" data-k="${esc(id)}" aria-expanded="${ui.open.has(`g-${id}`)}" aria-label="Changed in the rules. ${ui.open.has(`g-${id}`) ? "Hide" : "Show"} old and new"><span class="cc-gem" aria-hidden="true"></span>${label ? `<span aria-hidden="true">${label}</span>` : ""}</button>` : "");
+const wasNow = (m) => `<div class="cc-was" role="note">${m.was == null ? "<p><b>New</b> in the rules</p>" : `<p><b>Was</b> ${esc(m.was)}</p>`}<p><b>Now</b> ${esc(m.now)}</p></div>`;
+const was = (id) => (goldOf(id) && ui.open.has(`g-${id}`) ? wasNow(goldOf(id)) : "");
+const goldNow = (id) => (goldOf(id) ? wasNow(goldOf(id)) : "");
+const goldDot = (id) => (goldOf(id) ? '<span class="cc-gem is-corner" aria-hidden="true"></span><span class="sr-only">, changed in the rules</span>' : "");
+
+function goldName(id, c) {
+  const [kind, a, b] = id.split(":");
+  const nth = (i) => `your ${ORD[Number(i)]?.toLowerCase() ?? ""} Title`;
+  if (kind === "num") return { aura: "Aura", resolve: "Resolve", stride: "Stride", armour: "Armour", conf: "Confidence", hurt: "Hurt bars" }[a] ?? a;
+  if (kind === "title") return `${nth(a).replace(/^y/, "Y")}`;
+  if (kind === "perm") return `A permission on ${nth(a)}`;
+  if (kind === "trait") return c.traits[Number(a)]?.name ?? "A trait";
+  if (kind === "kit") return { equipment: "Equipment", utility: "Utility", keepsake: "Keepsake", bag: "The bag" }[a] ?? a;
+  if (kind === "att") return b == null ? c.attuned[Number(a)]?.name ?? "Something attuned" : `A permission on ${lower(c.attuned[Number(a)]?.name ?? "something attuned")}`;
+  if (kind === "thr") return `A thread with ${a}`;
+  if (kind === "asp") return "Aspiration";
+  if (kind === "trouble") return "Trouble that follows you";
+  return a ?? id;
+}
+
+function changedNote(ch, c) {
+  const them = c.pronoun === "him" ? "him" : c.pronoun === "her" ? "her" : "them";
+  if (!ui.gold) {
+    if (ch.state.seen || ch.hash === c.hash) return "";
+    return `<div class="cc-note" role="status"><p>${esc(c.name)}’s sheet has changed in the rules since this phone last opened it. Every number here is already the new one, so check anything you’ve picked still suits ${them}.</p><div class="cc-row"><a class="button" href="/changes/">See what’s changed</a><button type="button" class="button" data-act="seen">Got it</button></div></div>`;
+  }
+  const d = ui.gold;
+  const n = Object.keys(d.marks).length;
+  const list = Object.entries(d.marks).map(([id, m]) => `<li><b>${esc(goldName(id, c))}.</b> ${m.was == null ? `New: ${esc(m.now)}` : `It was ${esc(m.was)}, and now it’s ${esc(m.now)}.`}</li>`).join("");
+  return `<div class="cc-note is-gold" role="status"><p><b>Changed in the rules.</b> ${n ? `${n === 1 ? "One line" : `${n} lines`} on ${esc(ch.name)}’s sheet ${n === 1 ? "has" : "have"} changed since this phone last opened ${them}, each with a gold mark. Every number here is already the new one.` : ""}</p>
+    ${d.gone.length ? `<p>Gone from the sheet: ${d.gone.map((x) => `<s>${esc(x.was)}</s>`).join(", ")}.</p>` : ""}
+    ${n ? `<details class="cc-own" data-open="g-list"${ui.open.has("g-list") ? " open" : ""}><summary>Old and new</summary><ul class="cc-golds">${list}</ul></details>` : ""}
+    <div class="cc-row"><a class="button" href="/changes/">See the change log</a><button type="button" class="button" data-act="seen">Got it</button></div></div>`;
+}
+
 // ---------------------------------------------------------------- the list
 
 function saveNote() {
@@ -271,7 +355,7 @@ function trackView(ch, c, s) {
   const n = c.numbers;
   const hi = hurtInfo(s, c);
   const u = lastUndo(ch);
-  const stat = (key, label, value, extra = "") => `<button type="button" class="cc-stat t-${key}${ui.panel === key ? " is-open" : ""}" data-act="panel" data-p="${key}" aria-expanded="${ui.panel === key}" aria-controls="cc-panel"><span class="k">${label}</span>${extra}<span class="v">${value}</span></button>`;
+  const stat = (key, label, value, extra = "") => `<button type="button" class="cc-stat t-${key}${ui.panel === key ? " is-open" : ""}${goldOf(`num:${key}`) ? " is-changed" : ""}" data-act="panel" data-p="${key}" aria-expanded="${ui.panel === key}" aria-controls="cc-panel"><span class="k">${label}${goldDot(`num:${key}`)}</span>${extra}<span class="v">${value}</span></button>`;
   const boxes = `<span class="mini" aria-hidden="true">${Array.from({ length: hi.bars * 3 }, (_, i) => `<i${i >= hi.open ? ' class="x"' : i < s.hurt ? ' class="on"' : ""}></i>`).join("")}</span>`;
   const conds = s.conditions.length ? s.conditions.map((x) => `<span class="cc-tag is-${x.kind}"><em>${esc(x.name)}</em> d${x.die}</span>`).join("") : '<span class="cc-tag is-none">None on you</span>';
   return `<div class="cc-track" role="group" aria-label="Aura, Resolve, Confidence, Armour, Hurt and conditions">
@@ -279,7 +363,7 @@ function trackView(ch, c, s) {
     <button type="button" class="cc-undo" data-act="undo"${off(!u)} aria-label="${u ? `Undo ${esc(u.label)}` : "Nothing to undo"}">${ICON.undo}</button>
     ${stat("conf", "Confidence", `d${s.conf}`)}${stat("armour", "Armour", `d${s.armour}`)}${stat("hurt", "Hurt", `${s.hurt}<small>/${hi.open}</small>`, boxes)}
     ${stat("cond", "Conditions", conds)}
-  </div>${ui.panel ? `<div id="cc-panel" class="cc-panel">${panelView(ui.panel, c, s)}</div>` : ""}`;
+  </div>${ui.panel ? `<div id="cc-panel" class="cc-panel">${goldNow(`num:${ui.panel}`)}${panelView(ui.panel, c, s)}</div>` : ""}`;
 }
 
 function ring(act, from, to, now, label) {
@@ -362,9 +446,8 @@ function lastRollView(last) {
 function characterView(ch, c) {
   const s = ch.state;
   const n = c.numbers;
-  const facts = [`Stride ${n.stride}${n.strideNote ? ` (${esc(n.strideNote)})` : ""}`, `${n.hurtBars} Hurt bars${n.hurtNote ? ` (${esc(n.hurtNote)})` : ""}`];
-  const them = c.pronoun === "him" ? "him" : c.pronoun === "her" ? "her" : "them";
-  const changed = ch.hash !== c.hash ? `<div class="cc-note" role="status"><p>${esc(c.name)}’s sheet has changed in the rules since this phone last opened it. Every number here is already the new one, so check anything you’ve picked still suits ${them}.</p><div class="cc-row"><a class="button" href="/changes/">See what’s changed</a><button type="button" class="button" data-act="seen">Got it</button></div></div>` : "";
+  const facts = [`Stride ${n.stride}${n.strideNote ? ` (${esc(n.strideNote)})` : ""}${gold("num:stride")}`, `${n.hurtBars} Hurt bars${n.hurtNote ? ` (${esc(n.hurtNote)})` : ""}`];
+  const changed = changedNote(ch, c);
   const body = ui.tab === "sheet" ? sheetTab(ch, c) : ui.tab === "rules" ? rulesTab() : playTab(ch, c);
   const tabs = TABS.map(([t, label]) => `<a href="/characters/?c=${encodeURIComponent(ch.id)}${t === "play" ? "" : `&amp;t=${t}`}" data-act="tab" data-t="${t}"${ui.tab === t ? ' aria-current="page"' : ""}>${ICON[t]}<span>${label}</span></a>`).join("");
   const slide = ui.slide;
@@ -372,7 +455,7 @@ function characterView(ch, c) {
   return `<div class="cc-topbar"><a class="cc-back" href="/characters/" data-act="nav">${ICON.back}Characters</a>${soundButton()}</div>
   <header class="cc-head"><h1>${esc(ch.name)}</h1><p class="cc-title"><em>${esc(c.title)}</em></p>
     ${ui.tab === "sheet" ? `<div class="chips">${c.archetypes.map((a) => `<span class="chip">${esc(a)}</span>`).join("")}</div>` : ""}
-    <p class="cc-small">${ch.name !== c.name ? `${esc(c.name)}’s sheet, from the crew · ` : ""}${facts.join(" · ")}</p></header>
+    <p class="cc-small">${ch.name !== c.name ? `${esc(c.name)}’s sheet, from the crew · ` : ""}${facts.join(" · ")}</p>${was("num:stride")}</header>
   ${saveNote()}${changed}
   ${s.dead ? `<div class="cc-note is-warn"><p><b>${esc(ch.name)} died in play.</b> Keep the sheet to remember them, or delete them from this phone at the bottom of the Sheet tab.</p></div>` : ""}
   <div class="cc-page${slide ? ` cc-go-${slide}` : ""}">${body}</div>
@@ -384,32 +467,32 @@ const soundButton = () => `<button type="button" class="cc-sound" data-act="soun
 
 function playTab(ch, c) {
   const s = ch.state;
-  const tiles = c.actions.map((a, i) => `<button type="button" class="tile card" data-act="roll" data-a="${i}"><span class="tile-name">${esc(a.name)}</span><span class="tile-die hex on">${esc(a.die)}</span><span class="tile-steps">${steps(a.steps)}</span></button>`).join("");
+  const tiles = c.actions.map((a, i) => `<button type="button" class="tile card${goldOf(`act:${a.name}`) ? " is-changed" : ""}" data-act="roll" data-a="${i}"><span class="tile-name">${esc(a.name)}</span><span class="tile-die hex on">${esc(a.die)}</span><span class="tile-steps">${steps(a.steps)}${goldDot(`act:${a.name}`)}</span></button>`).join("");
   return `${trackView(ch, c, s)}${alertView(ch, c, s)}
   <section class="cc-sec cc-play" aria-labelledby="cc-actions"><h2 id="cc-actions" class="sr-only">Set actions</h2>
     <div class="cc-tiles">${tiles}<button type="button" class="tile card tile-defend" data-act="defence"><span class="tile-name">When it lands</span><span class="tile-sub">Armour d${s.armour} · Confidence d${s.conf}</span></button></div>
     ${lastRollView(s.last)}
-    <div class="cc-row cc-scene"><button type="button" class="button" data-act="scene">New scene</button><button type="button" class="button" data-act="downtime">After downtime</button></div>
+    <div class="cc-row cc-scene"><button type="button" class="button" data-act="scene">New scene</button><button type="button" class="button" data-act="downtime">Downtime</button></div>
   </section>`;
 }
 
 const lower = (name) => name.replace(/^(A|An|The|His|Her|Their) /, (m) => m.toLowerCase());
 
 // A permission's a button: tap it to read how permissions work.
-const permButton = (text, from) => `<li><button type="button" class="cc-perm" data-act="rule" data-r="perm" data-t="${esc(text)}" data-f="${esc(from)}"><em>${esc(text)}</em></button></li>`;
+const permButton = (text, from, id = "") => `<li><button type="button" class="cc-perm" data-act="rule" data-r="perm" data-t="${esc(text)}" data-f="${esc(from)}"><em>${esc(text)}</em></button>${id ? `${gold(id)}${was(id)}` : ""}</li>`;
 
 function sheetTab(ch, c) {
   const s = ch.state;
   const her = c.pronoun === "him" ? "his" : c.pronoun === "her" ? "her" : "their";
-  const titles = c.titles.map((t, i) => `<article class="card cc-card"><p class="eyebrow">${ORD[i] ?? ""} Title · ${t.archetypeId ? link(t.archetypeId, esc(t.archetype)) : esc(t.archetype)}</p>
-    <h3><em>${esc(t.name)}</em></h3><ul class="cc-perms">${t.permissions.map((p) => permButton(p.text, `${her} ${(ORD[i] ?? "").toLowerCase()} Title, ${t.name}`)).join("")}</ul></article>`).join("");
-  const archetypes = c.archetypeRules.map((a) => `<div class="cc-arch"><p><b>${a.id ? link(a.id, esc(a.name)) : esc(a.name)}${a.times > 1 ? `, taken ${a.times === 2 ? "twice" : `${a.times} times`}` : ""}.</b> ${a.summary}</p>
+  const titles = c.titles.map((t, i) => `<article class="card cc-card"><p class="eyebrow">${ORD[i] ?? ""} Title · ${t.archetypeId ? link(t.archetypeId, esc(t.archetype)) : esc(t.archetype)}${gold(`title:${i}`)}</p>${was(`title:${i}`)}
+    <h3><em>${esc(t.name)}</em></h3><ul class="cc-perms">${t.permissions.map((p, j) => permButton(p.text, `${her} ${(ORD[i] ?? "").toLowerCase()} Title, ${t.name}`, `perm:${i}:${j}`)).join("")}</ul></article>`).join("");
+  const archetypes = c.archetypeRules.map((a) => `<div class="cc-arch"><p><b>${a.id ? link(a.id, esc(a.name)) : esc(a.name)}${a.times > 1 ? `, taken ${a.times === 2 ? "twice" : `${a.times} times`}` : ""}.</b> ${a.summary}${gold(`arch:${a.name}`)}</p>${was(`arch:${a.name}`)}
     ${a.auraHtml ? `<p><b>1 Aura:</b> ${a.auraHtml}</p><button type="button" class="button sm" data-act="arch-aura" data-n="${esc(a.name)}"${off(s.aura < 1)}>Spend 1 Aura on it</button>` : ""}</div>`).join("");
 
-  const traits = c.traits.map((t) => {
+  const traits = c.traits.map((t, i) => {
     const once = /once per scene/i.test(t.type);
     const used = Boolean(s.used[t.name]);
-    return `<div class="cc-item"><p><b>${esc(t.name)}</b> <span class="chip sm">${esc(t.type)}</span>${once && used ? ' <span class="chip sm is-used">Used this scene</span>' : ""}</p><p>${t.html}</p>
+    return `<div class="cc-item"><p><b>${esc(t.name)}</b> <span class="chip sm">${esc(t.type)}</span>${once && used ? ' <span class="chip sm is-used">Used this scene</span>' : ""}${gold(`trait:${i}`)}</p>${was(`trait:${i}`)}<p>${t.html}</p>
       ${t.aura ? `<button type="button" class="button sm" data-act="trait-aura" data-n="${esc(t.name)}"${off(once && used)}>Take ${t.aura} Aura</button>` : once ? `<button type="button" class="button sm" data-act="used" data-n="${esc(t.name)}"${pressed(used)}>${used ? "Used this scene" : "Use it"}</button>` : ""}</div>`;
   }).join("");
 
@@ -424,19 +507,19 @@ function sheetTab(ch, c) {
     const extra = picked(where);
     const max = where === "bag" ? c.carry.bag.max : c.carry[where].max;
     const note = where === "bag" ? "" : c.carry[where].note;
-    return `<div class="cc-slot"><h3>${title} <small>${own.length + extra.length} of ${max}</small></h3>
+    return `<div class="cc-slot"><h3>${title} <small>${own.length + extra.length} of ${max}</small>${gold(`kit:${where}`)}</h3>${was(`kit:${where}`)}
       ${note && !extra.length ? `<p class="cc-lead">${esc(note[0].toUpperCase() + note.slice(1))}.</p>` : ""}
       <ul class="cc-things">${own.map((x) => thing(where, x)).join("")}${extra.map((p) => thing(where, p.name, p.i)).join("")}</ul></div>`;
   };
-  const attuned = c.attuned.map((a) => `<div class="cc-item"><p><b>${esc(a.name)}</b>${a.props ? ` (${esc(a.props)})` : ""} ${a.stage ? `<span class="chip sm">${esc(a.stage)}</span>` : ""}</p>
-    <ul class="cc-perms">${a.permissions.map((p) => permButton(p.text, `${lower(a.name)}, attuned`)).join("")}</ul>${a.catch ? `<p>Its Catch: <em>${esc(a.catch)}</em></p>` : ""}</div>`).join("");
+  const attuned = c.attuned.map((a, i) => `<div class="cc-item"><p><b>${esc(a.name)}</b>${a.props ? ` (${esc(a.props)})` : ""} ${a.stage ? `<span class="chip sm">${esc(a.stage)}</span>` : ""}${gold(`att:${i}`)}</p>${was(`att:${i}`)}
+    <ul class="cc-perms">${a.permissions.map((p, j) => permButton(p.text, `${lower(a.name)}, attuned`, `att:${i}:${j}`)).join("")}</ul>${a.catch ? `<p>Its Catch: <em>${esc(a.catch)}</em></p>` : ""}${a.burden ? `<p>Its Burden: <em>${esc(a.burden)}</em></p>` : ""}</div>`).join("");
 
   const crewNames = new Set(DATA.crew.map((x) => x.name));
-  const threads = c.threads.map((p) => `<div class="cc-person"><h3>${esc(p.person)}${crewNames.has(p.person) ? ' <small>in the crew</small>' : ""}</h3><ul>${p.threads.map((t) => {
+  const threads = c.threads.map((p) => `<div class="cc-person"><h3>${esc(p.person)}${crewNames.has(p.person) ? ' <small>in the crew</small>' : ""}</h3><ul>${p.threads.map((t, j) => {
     const key = `${p.person}|${t.text}`;
     const st = s.threads[key];
     const note = t.note ? t.note.replace(/^(.+’s)(?=,|$)/, "$1 words").replace(/^debt$/, "a debt") : "";
-    return `<li class="cc-thread${st ? ` is-${st}` : ""}"><p><em>${esc(t.text)}</em>${note ? ` <small>(${esc(note)})</small>` : ""}${st ? ` <span class="chip sm">${st === "strained" ? "Strained" : "Snapped"}</span>` : ""}</p>
+    return `<li class="cc-thread${st ? ` is-${st}` : ""}"><p><em>${esc(t.text)}</em>${note ? ` <small>(${esc(note)})</small>` : ""}${st ? ` <span class="chip sm">${st === "strained" ? "Strained" : "Snapped"}</span>` : ""}${gold(`thr:${p.person}:${j}`)}</p>${was(`thr:${p.person}:${j}`)}
       ${st === "snapped" ? "" : `<div class="cc-row"><button type="button" class="button sm" data-act="strain" data-k="${esc(key)}">${st ? "Strain it again: it snaps, +1 Resolve" : "Strain it: +1 Resolve"}</button>${st ? `<button type="button" class="button sm" data-act="mend" data-k="${esc(key)}">Mended</button>` : ""}</div>`}</li>`;
   }).join("")}</ul></div>`).join("");
 
@@ -446,7 +529,12 @@ function sheetTab(ch, c) {
     ...c.trouble.map((x) => ({ text: x, from: `trouble that follows ${c.pronoun}` })),
   ].map((b) => `<li class="cc-item"><p><em>${esc(b.text)}</em> <small>${esc(b.from)}</small></p><div class="cc-row"><button type="button" class="button sm" data-act="bite" data-big="0" aria-label="Let ${esc(b.text)} bite: +1 Aura">Let it bite: +1 Aura</button><button type="button" class="button sm" data-act="bite" data-big="1" aria-label="A big bite from ${esc(b.text)}: +1 Resolve">A big bite: +1 Resolve</button></div></li>`).join("");
 
-  return `<section class="cc-sec" aria-labelledby="cc-titles"><h2 id="cc-titles">Titles and permissions</h2>
+  const acts = c.actions.map((a) => `<li class="cc-item"><p><b>${esc(a.name)}</b> <small>${steps(a.steps)}, ${esc(a.die)}</small>${gold(`act:${a.name}`)}</p>${was(`act:${a.name}`)}
+    <p class="cc-small">${a.lines.map((key) => lineOf(c, key)).filter(Boolean).map((l) => lineLabel(l)).join(", ") || "Nothing on it yet, so it’s the action on its own."}</p></li>`).join("");
+  return `<section class="cc-sec" aria-labelledby="cc-acts"><h2 id="cc-acts">Set actions</h2>
+    <p class="cc-lead">Every line on a set action is a step, and the action’s one more. ${link("s-set-actions", "How set actions work")}</p><ul class="cc-list">${acts}</ul></section>
+
+  <section class="cc-sec" aria-labelledby="cc-titles"><h2 id="cc-titles">Titles and permissions</h2>
     <p class="cc-lead">Tap a permission to see how it counts.</p>${titles}
     <h3 class="cc-h3">${c.archetypeRules.length > 1 ? "Your archetypes" : "Your archetype"}</h3>${archetypes}</section>
 
@@ -454,7 +542,7 @@ function sheetTab(ch, c) {
 
   <section class="cc-sec" aria-labelledby="cc-kit"><h2 id="cc-kit">Kit</h2>
     ${slot("equipment", "Equipment")}${slot("utility", "Utility")}
-    ${c.carry.keepsake ? `<div class="cc-slot"><h3>Keepsake</h3><ul class="cc-things">${thing("keepsake", c.carry.keepsake)}</ul></div>` : ""}
+    ${c.carry.keepsake ? `<div class="cc-slot"><h3>Keepsake${gold("kit:keepsake")}</h3>${was("kit:keepsake")}<ul class="cc-things">${thing("keepsake", c.carry.keepsake)}</ul></div>` : ""}
     ${slot("bag", `The bag <span class="cc-small">(${esc(c.carry.bag.name)})</span>`)}
     <form class="cc-form" data-form="pickup"><label class="cc-field">Pick something up <input name="what" maxlength="60" autocomplete="off"></label>
       <label class="cc-field">It goes in <select name="where"><option value="bag">the bag</option><option value="utility">utility</option><option value="equipment">equipment</option></select></label>
@@ -467,10 +555,10 @@ function sheetTab(ch, c) {
     ${threads}</section>
 
   <section class="cc-sec" aria-labelledby="cc-trouble"><h2 id="cc-trouble">Catches and trouble</h2>
-    <p class="cc-lead">Let one bite and bring real trouble into the scene, and you take 1 Aura. A big bite that changes the scene or costs you something you wanted pays 1 Resolve instead.</p>
+    <p class="cc-lead">Let one bite and bring real trouble into the scene, and you take 1 Aura. A big bite that changes the scene or costs you something you wanted pays 1 Resolve instead.</p>${goldOf("trouble") ? `<p>${gold("trouble", "The trouble that follows you changed in the rules")}</p>${was("trouble")}` : ""}
     <ul class="cc-list">${bites}<li class="cc-item"><p>Nothing here fits? Bring real trouble on yourself in the story anyway.</p><div class="cc-row"><button type="button" class="button sm" data-act="bite" data-big="0" aria-label="Real trouble with no Catch: +1 Aura">+1 Aura</button></div></li></ul></section>
 
-  <section class="cc-sec" aria-labelledby="cc-asp"><h2 id="cc-asp">Aspiration</h2>
+  <section class="cc-sec" aria-labelledby="cc-asp"><h2 id="cc-asp">Aspiration</h2>${goldOf("asp") ? `<p>${gold("asp", "Its words changed in the rules")}</p>${was("asp")}` : ""}
     <label class="cc-field"><span class="sr-only">Your Aspiration</span><input class="cc-plain" data-in="asp-text" maxlength="120" value="${esc(s.aspText || c.aspiration.text)}" autocomplete="off"></label>
     ${ring("asp-set", 2, 12, s.asp, "Aspiration")}
     <div class="cc-row"><button type="button" class="button" data-act="asp" data-d="-1"${off(s.asp <= 2)}>A setback</button><button type="button" class="button" data-act="asp" data-d="1">It climbs</button></div>
@@ -496,6 +584,7 @@ const RULE_GROUPS = [
   ["Your numbers", ["s-aura", "s-resolve", "s-confidence", "s-armour"]],
   ["When it lands", ["s-defending", "s-defend", "s-consequences", "s-fear-gets-through", "s-blaze"]],
   ["Everything else", ["s-conditions", "s-bonds", "s-trouble", "s-aspiration"]],
+  ["Downtime", ["your-slots", "s-downtime-rolls"]],
 ];
 function rulesTab() {
   const box = (key, title, html) => `<details class="cc-rulebox" data-open="${key}"${ui.open.has(key) ? " open" : ""}><summary>${title}</summary><div class="cc-rule">${html}</div></details>`;
@@ -572,7 +661,7 @@ function buildView(c, s) {
       <p class="cc-dice" aria-live="polite">${k.dice.map((d) => hex(`d${d}`, "on")).join("")}${r.mark ? hex(`d${r.mark}`, "mark") : ""}<span><b>${steps(k.total)}</b>, ${diceLabel(k.dice)}${r.mark ? `, and the Mark d${r.mark}` : ""}${r.vs > 0 ? ` against their d${r.vs}` : r.vs === -1 ? ` against ${r.vsRolled}` : ""}</span></p>
       ${k.aura || k.resolve ? `<p class="cc-costs">${k.aura ? `<span class="chip is-aura">${k.aura} Aura</span>` : ""}${k.resolve ? `<span class="chip">${k.resolve} Resolve</span>` : ""}</p>` : ""}</div>
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
-  <div class="dlg-body">
+  <div class="dlg-body">${goldNow(`act:${k.act.name}`)}
     <fieldset class="cc-group"><legend>On your ${esc(k.extra && k.extra !== k.act ? `${k.act.name} and ${k.extra.name}` : k.act.name)}</legend>
       ${k.free.size ? `${[...k.free].map((key) => toggle(lineOf(c, key), !r.off.has(key), "off")).join("")}<p class="cc-lead">Tap a line off when it doesn’t fit this time.</p>` : '<p class="cc-lead">Nothing’s on it yet, so it’s the action on its own.</p>'}</fieldset>
     <fieldset class="cc-group"><legend>What it’s up against</legend>
@@ -929,6 +1018,7 @@ function dialogView() {
   const c = normal(ch);
   if (!c) return "";
   const s = ch.state;
+  if (roll.kind === "downtime") return dt.view(c, s, ch, roll);
   if (roll.kind === "defence") {
     if (roll.mode === "build") return defenceBuild(s);
     if (roll.mode === "pad") {
@@ -969,6 +1059,8 @@ function render() {
   const keep = dialog.open ? null : sig(document.activeElement);
   const ch = current();
   const c = ch ? normal(ch) : null;
+  if (c) settleMarks(ch, c);
+  else ui.gold = null;
   document.documentElement.classList.toggle("cc-tabbed", view.name === "sheet" && Boolean(c));
   app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
   glow(ch);
@@ -1053,15 +1145,18 @@ function saveBuilt(build, key, discard) {
   if (ch) {
     // Anything that was full stays full when the sheet's new number is bigger.
     const was = sheetFor(ch).numbers;
+    const before = said(sheetFor(ch));
     const s = ch.state;
     ch.build = build;
     ch.name = name;
     const now = sheetFor(ch).numbers;
     for (const [k, n] of [["aura", "aura"], ["resolve", "resolve"], ["armour", "armour"], ["conf", "confidence"]]) if (s[k] === was[n]) s[k] = now[n];
+    // What they changed in the builder is theirs, so it doesn't get a gold mark.
+    if (s.seen) s.seen = ownChanges(s.seen, before, said(sheetFor(ch)));
   } else {
     const tag = Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => b.toString(36).padStart(2, "0")).join("").slice(0, 6);
     ch = { id: `own-${tag}`, crew: "own", name, made: new Date().toISOString(), hash: "own", build };
-    ch.state = fresh(sheetFor(ch));
+    ch.state = { ...fresh(sheetFor(ch)), seen: said(sheetFor(ch)) };
     chars().push(ch);
   }
   normal(ch);
@@ -1084,7 +1179,7 @@ function start(crewId, name) {
   if (!c) return;
   const tag = Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => b.toString(36).padStart(2, "0")).join("").slice(0, 6);
   const id = `${crewId}-${tag}`;
-  chars().push({ id, crew: crewId, name: name || c.name, made: new Date().toISOString(), hash: c.hash, state: fresh(c) });
+  chars().push({ id, crew: crewId, name: name || c.name, made: new Date().toISOString(), hash: c.hash, state: { ...fresh(c), seen: said(c) } });
   store.save();
   ui.stopSpin?.();
   ui.stopSpin = null;
@@ -1098,6 +1193,32 @@ function start(crewId, name) {
 }
 
 // ---------------------------------------------------------------- doing things
+
+// The end of downtime: what the slots bought goes on the sheet, then it's a
+// new scene with Resolve full, all as one change with one undo. A card with
+// an empty or unfinished slot asks for a second tap first.
+function finishDowntime(ch, c) {
+  const d = roll;
+  if (!d.sure && dt.warnings(d, c, ch.state).length) {
+    d.sure = true;
+    return renderDialog();
+  }
+  let message = "";
+  change("downtime", (s, was) => {
+    const before = said(was);
+    const happened = dt.apply(s, was, d);
+    const now = sheetFor(ch);
+    endScene(s, now);
+    s.resolve = now.numbers.resolve;
+    if (s.seen) s.seen = ownChanges(s.seen, before, said(now));
+    const moved = now.actions.filter((a) => was.actions.some((x) => x.name === a.name && x.steps !== a.steps)).map((a) => `${a.name} is ${steps(a.steps)}, ${a.die}`);
+    message = `Downtime’s done. ${[...happened, ...moved].map((x) => `${x}.`).join(" ")} Resolve’s full at ${s.resolve}.`.replace(/\s+/g, " ");
+    return message;
+  }, { say: false });
+  dt.done(ch);
+  closeDialog();
+  toast(message, true);
+}
 
 function stepRoll(name, i, d) {
   const r = roll;
@@ -1180,11 +1301,17 @@ const ACT = {
     builder.discard(ch.id);
     nav("");
   },
-  seen() {
-    const ch = current();
-    const c = normal(ch);
+  // The player's seen what changed in the rules, so the gold marks go.
+  seen: () => change("seeing what’s changed", (s, c, ch) => {
+    s.seen = said(c);
     ch.hash = c.hash;
-    persist();
+    for (const key of [...ui.open]) if (key.startsWith("g-")) ui.open.delete(key);
+    return "";
+  }, { say: false }),
+  gold(el) {
+    const key = `g-${el.dataset.k}`;
+    if (ui.open.has(key)) ui.open.delete(key);
+    else ui.open.add(key);
     render();
   },
   panel(el) {
@@ -1291,11 +1418,20 @@ const ACT = {
     endScene(s, c);
     return `New scene. Aura ${s.aura}, Resolve ${s.resolve}, Confidence d${s.conf}, and the loose boxes are clear.`;
   }),
-  downtime: () => change("downtime", (s, c) => {
-    endScene(s, c);
-    s.resolve = c.numbers.resolve;
-    return `After downtime. Resolve’s full at ${s.resolve}. A Catch on your Hurt track takes a downtime slot to heal, and so does putting your Armour back to full.`;
-  }),
+  downtime() {
+    const ch = current();
+    if (!normal(ch)) return;
+    roll = dt.start(ch);
+    openDialog();
+  },
+  dt(el) {
+    const ch = current();
+    const c = normal(ch);
+    if (!c || roll?.kind !== "downtime") return;
+    if (el.dataset.do === "finish") return finishDowntime(ch, c);
+    dt.act(el, roll, c, ch.state);
+    renderDialog();
+  },
   roll: (el) => openAction(Number(el.dataset.a)),
   defence: () => openDefence(),
   used: (el) => change("using a trait", (s) => {
@@ -1690,6 +1826,11 @@ document.addEventListener("submit", (e) => {
 });
 
 document.addEventListener("change", (e) => {
+  if (e.target.dataset?.dt != null && roll?.kind === "downtime") {
+    dt.input(e.target, roll);
+    if (e.target.tagName === "SELECT") renderDialog();
+    return;
+  }
   const el = e.target.closest("[data-in]");
   if (!el) return;
   const key = el.dataset.in;
@@ -1710,6 +1851,7 @@ document.addEventListener("change", (e) => {
 
 document.addEventListener("input", (e) => {
   if (e.target.dataset?.bin) return builder.input(e.target);
+  if (e.target.dataset?.dt != null && roll?.kind === "downtime") return dt.input(e.target, roll);
   if (e.target.dataset?.in === "intent" && roll?.intents) {
     roll.intents[e.target.dataset.k] = e.target.value.slice(0, 40);
     return;

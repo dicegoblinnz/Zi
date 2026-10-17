@@ -30,6 +30,16 @@
 //    on their numbers, the roll card turns over, the tabs slide and the pips
 //    glow. Sound and buzz stay off until the switch turns them on, and then a
 //    landing, a top face, a Hurt and a bar filling each get one.
+// 8. Downtime and rule changes. Vesk's week from Downtime: one slot pays the
+//    fence, and the other gives her grappling line its Catch, Loud, and haul
+//    someone up after me, on no set action, so it's 1 Aura when it fits. An
+//    undo takes it all back. A second week puts a new permission on her
+//    Sneak (5 steps, a d10), chases her Aspiration with fixed dice, and swaps
+//    a permission, and it all survives a reload and offline. Then a made-up
+//    rule change against her saved sheet: a reworded permission, her Stride
+//    and her Locks get gold marks with old and new, a typo fix and a
+//    punctuation fix stay quiet, what she grew in downtime isn't marked, and
+//    Got it clears the marks for good. The card and the marks pass axe.
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -40,6 +50,7 @@ import { PDFDocument } from "pdf-lib";
 import { diceLabel, diceRange, diceShapes, stepsToDice } from "../src/companion/dice.js";
 import { checksOf, sheetOf } from "../src/companion/builder.js";
 import { fromCrew, randomBuild } from "../src/companion/ways.js";
+import { typo } from "../src/companion/marks.js";
 
 const SHOTS = process.argv[2] || null;
 const problems = [];
@@ -842,6 +853,184 @@ async function round(page, dice, real = false) {
   await shot(page, "vesk-motion");
   await context.close();
   console.log("feel: the dice tumble and land, the cards turn and slide, and sound waits to be turned on");
+}
+
+// 8. Downtime and rule changes.
+{
+  for (const [a, b, want] of [
+    ["know how a lock’s built", "know how a locks built", true],
+    ["Raised by the Guild", "Raised by the guild", true],
+    ["find a buyer for anythng", "find a buyer for anything", true],
+    ["run the rooftops", "run and leap the rooftops", false],
+    ["Stride 5", "Stride 6", false],
+    ["you can open it", "you can’t open it", false],
+    ["Once per scene", "Twice per scene", false],
+  ]) same(typo(a, b), want, `"${a}" to "${b}" as a typo fix`);
+
+  const { context, page } = await phone();
+  const axe = async (what) => {
+    const result = await new AxeBuilder({ page }).analyze();
+    for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on ${what}: ${v.id} (${v.nodes.length})`);
+  };
+  await play(page, "vesk", "Vesk");
+  const tileOf = (name) => page.$eval(`.tile[data-a]:has(.tile-name:text-is("${name}"))`, (el) => `${parseInt(el.querySelector(".tile-steps").textContent, 10)} ${el.querySelector(".tile-die").textContent}`);
+  const dt = (attrs) => page.click(`#cc-dialog button[data-act="dt"]${attrs}`);
+  const sheet = async () => {
+    await page.click('.cc-tabs a[data-t="sheet"]');
+    return page.textContent(".cc-page");
+  };
+  const playTab = () => page.click('.cc-tabs a[data-t="play"]');
+  const closed = () => page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+
+  // Vesk's week, from the book.
+  await page.click('button[data-act="downtime"]');
+  has(await page.textContent("#dlg-title"), "Downtime", "the downtime card");
+  await dt('[data-do="pick"][data-s="0"][data-v="pressure"]');
+  await page.fill('#cc-dialog input[data-dt="0"][data-f="text"]', "Pay the fence, every coin");
+  await dt('[data-do="pick"][data-s="1"][data-v="att"]');
+  await dt('[data-do="set"][data-s="1"][data-f="a"][data-v="1"]');
+  has(await page.textContent("#cc-dialog .dt-slot.is-picked:last-of-type"), "Awakened, with 1 permission", "the grappling line's stage");
+  await page.fill('#cc-dialog input[data-dt="1"][data-f="catch"]', "Loud");
+  await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "haul someone up after me");
+  await shot(page, "downtime-card");
+  await dt('[data-do="finish"]');
+  await closed();
+  has(await page.textContent("#cc-toast"), "Pay the fence, every coin: done.", "the week's toast");
+  has(await page.textContent("#cc-toast"), "Resolve’s full at 2.", "Resolve after downtime");
+  same(await tileOf("Move"), "4 d8", "Move after the grappling line's new permission, which isn't on it");
+  await page.click('.tile[data-a]:has(.tile-name:text-is("Move"))');
+  await page.click('#cc-dialog details[data-open="bring"] > summary');
+  same(await page.isVisible('#cc-dialog .cc-line[data-act="in"]:has-text("haul someone up after me")'), true, "haul someone up after me, brought in for 1 Aura");
+  await page.click('#cc-dialog .dlg-head button[data-act="close"]');
+  await closed();
+  let text = await sheet();
+  has(text, "haul someone up after me", "the new attuned permission on the sheet");
+  has(text, "Its Catch: Loud", "the grappling line's Catch");
+  same(await page.$$eval(".cc-gold, .cc-gem", (els) => els.length), 0, "no gold marks for what she grew");
+  await playTab();
+  same(await page.getAttribute(".cc-undo", "aria-label"), "Undo downtime", "the undo after downtime");
+  await page.click(".cc-undo");
+  text = await sheet();
+  same(text.includes("haul someone up after me") || text.includes("Its Catch: Loud"), false, "the week undone");
+
+  // A second week: a new permission on Sneak, her Aspiration, and a swap.
+  await playTab();
+  await page.click('button[data-act="downtime"]');
+  same(await page.$$eval("#cc-dialog .dt-slot.is-picked", (els) => els.length), 0, "a fresh card after a finished week");
+  await dt('[data-do="pick"][data-s="0"][data-v="perm"]');
+  await page.fill('#cc-dialog input[data-dt="0"][data-f="text"]', "slip through a crowd");
+  await page.click('#cc-dialog .dlg-head button[data-act="close"]');
+  await closed();
+  await page.click('button[data-act="downtime"]');
+  same(await page.inputValue('#cc-dialog input[data-dt="0"][data-f="text"]'), "slip through a crowd", "the card keeping its draft when it's closed");
+  await dt('[data-do="on"][data-s="0"][data-f="on"][data-v="Sneak"]');
+  await dt('[data-do="pick"][data-s="1"][data-v="asp"]');
+  await page.click('#cc-dialog details[data-open="dt-asp"] > summary');
+  await page.click('#cc-dialog .cc-line[data-do="on"][data-s="1"]:has-text("The best cat burglar")');
+  has(await page.textContent("#cc-dialog .dt-slot.is-picked:last-of-type .cc-dice"), "2 steps, d4, against its d2", "her Aspiration roll");
+  await page.evaluate(() => window.ziCompanion.setDice([3, 1]));
+  await dt('[data-do="asp-roll"][data-s="1"]');
+  has(await page.textContent("#cc-dialog .dt-slot.is-picked:last-of-type"), "Beat it. It climbs to d4.", "her Aspiration climbing");
+  await page.click('#cc-dialog details[data-open="dt-free"] > summary');
+  await dt('[data-do="swap-add"]');
+  await dt('[data-do="set"][data-s="w0"][data-f="t"][data-v="1"]');
+  await dt('[data-do="set"][data-s="w0"][data-f="j"][data-v="1"]');
+  same(await page.getAttribute('#cc-dialog .cc-line[data-s="w0"][data-v="Fight"]', "aria-pressed"), "true", "a swap starting on the old permission's set actions");
+  await page.fill('#cc-dialog input[data-dt="w0"][data-f="text"]', "fight dirty with anything to hand");
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.emulateMedia({ colorScheme: "light" });
+  same(await page.evaluate(() => document.querySelector("#cc-dialog .dlg-body").scrollWidth <= document.querySelector("#cc-dialog .dlg-body").clientWidth), true, "the downtime card at 320 wide, no sideways scroll");
+  await axe("the downtime card at 320 wide, light");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.emulateMedia({ colorScheme: "dark" });
+  await dt('[data-do="finish"]');
+  await closed();
+  has(await page.textContent("#cc-toast"), "Sneak is 5 steps, d10.", "the toast saying Sneak's new size");
+  same(await tileOf("Sneak"), "5 d10", "Sneak with its new permission");
+  same(await tileOf("Fight"), "2 d4", "Fight after the swap");
+  text = await sheet();
+  has(text, "slip through a crowd", "the new permission on the sheet");
+  has(text, "fight dirty with anything to hand", "the swapped permission");
+  same(text.includes("fight dirty with a knife"), false, "the old permission gone");
+  same(await page.textContent('.cc-ring[aria-label="Aspiration"] [aria-pressed="true"]'), "d4", "her Aspiration on d4");
+
+  // It's kept: a reload, then offline.
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.reload();
+  await page.waitForFunction(() => navigator.serviceWorker.controller !== null, null, { timeout: 15000 }).catch(() => note("the service worker never took over the page"));
+  await context.setOffline(true);
+  await page.reload();
+  await page.waitForSelector(".cc-page", { timeout: 10000 }).catch(() => note("Vesk didn't open offline"));
+  has(await page.textContent(".cc-page"), "slip through a crowd", "the new permission offline");
+  await playTab();
+  same(await tileOf("Sneak"), "5 d10", "Sneak offline");
+  await context.setOffline(false);
+  const saved = await page.evaluate(() => localStorage.getItem("zi-characters"));
+  const id = JSON.parse(saved).characters[0].id;
+  await context.close();
+
+  // A made-up rule change against her saved sheet, on a phone that hasn't got
+  // the site kept yet, so the changed rules come straight from the page.
+  const second = await phone({ serviceWorkers: "block" });
+  const p2 = second.page;
+  await second.context.route((url) => url.pathname === "/characters/", async (route) => {
+    const res = await route.fetch();
+    const html = await res.text();
+    const out = html.replace(/(<script[^>]*id="zi-companion"[^>]*>)([\s\S]*?)(<\/script>)/, (m, open, json, close) => {
+      const data = JSON.parse(json);
+      const v = data.crew.find((c) => c.id === "vesk");
+      const rename = (from, to) => {
+        for (const t of v.titles) for (const p of t.permissions) if (p.text === from) p.text = to;
+        for (const l of v.lines) if (l.label === from) l.label = to;
+      };
+      rename("run the rooftops", "run and leap the rooftops");
+      rename("know how a lock’s built", "know how a locks built");
+      v.titles[1].name = "Raised by the guild";
+      v.numbers.stride = 6;
+      const built = v.lines.find((l) => l.label === "know how a locks built").key;
+      const locks = v.actions.find((a) => a.name === "Locks");
+      locks.lines = locks.lines.filter((k) => k !== built);
+      locks.steps = 4;
+      locks.die = "d8";
+      v.hash = "madeup01";
+      return `${open}${JSON.stringify(data).replace(/</g, "\\u003c")}${close}`;
+    });
+    return route.fulfill({ response: res, body: out });
+  });
+  await p2.goto(`${BASE}/characters/`);
+  await p2.evaluate((json) => localStorage.setItem("zi-characters", json), saved);
+  await p2.goto(`${BASE}/characters/?c=${encodeURIComponent(id)}`);
+  await p2.waitForSelector(".tile[data-a]");
+  const quiet = await p2.evaluate((cid) => JSON.parse(localStorage.getItem("zi-characters")).characters.find((c) => c.id === cid).state.seen, id);
+  same([quiet["title:1"], quiet["perm:1:0"], quiet["perm:0:1"]], ["Raised by the guild (Shadow)", "know how a locks built", "run the rooftops"], "the typo fixes taken in quietly, and the real change kept for its mark");
+  has(await p2.textContent(".cc-note.is-gold"), "3 lines on Vesk’s sheet have changed", "the note for a rule change");
+  same(await p2.$eval('.tile[data-a]:has(.tile-name:text-is("Locks"))', (el) => el.classList.contains("is-changed")), true, "a gold corner on Locks");
+  same(await p2.$$eval(".tile.is-changed", (els) => els.length), 1, "only Locks changed on the play screen");
+  await p2.click('.cc-gold[data-k="num:stride"]');
+  has(await p2.textContent(".cc-head .cc-was"), "Was Stride 5 (Light on my Feet)", "Stride's old number");
+  has(await p2.textContent(".cc-head .cc-was"), "Now Stride 6 (Light on my Feet)", "Stride's new number");
+  await p2.click('.tile[data-a]:has(.tile-name:text-is("Locks"))');
+  has(await p2.textContent("#cc-dialog .cc-was"), "Was 5 steps, d10", "Locks' old size on its card");
+  has(await p2.textContent("#cc-dialog .cc-was"), "Now 4 steps, d8", "Locks' new size on its card");
+  await p2.click('#cc-dialog .dlg-head button[data-act="close"]');
+  await p2.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  await p2.click('.cc-tabs a[data-t="sheet"]');
+  const marks = await p2.$$eval(".cc-gold", (els) => els.map((el) => el.dataset.k).sort());
+  same(marks, ["act:Locks", "num:stride", "perm:0:1"], "the gold marks on the sheet");
+  await p2.click('.cc-gold[data-k="perm:0:1"]');
+  const shown = await p2.textContent('li:has(.cc-gold[data-k="perm:0:1"]) .cc-was');
+  has(shown, "Was run the rooftops", "the permission's old words");
+  has(shown, "Now run and leap the rooftops", "the permission's new words");
+  await shot(p2, "gold-marks");
+  const result = await new AxeBuilder({ page: p2 }).analyze();
+  for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on the sheet with gold marks: ${v.id} (${v.nodes.length})`);
+  await p2.click('.cc-note.is-gold button[data-act="seen"]');
+  same(await p2.$$eval(".cc-gold, .cc-note.is-gold, .tile.is-changed", (els) => els.length), 0, "no gold marks once they're seen");
+  await p2.reload();
+  await p2.waitForSelector(".cc-page");
+  same(await p2.$$eval(".cc-gold, .cc-note.is-gold, .cc-note", (els) => els.length), 0, "no gold marks or notes after a reload");
+  await second.context.close();
+  console.log("downtime: Vesk's week, undone, a second week kept offline, and a made-up rule change with gold marks");
 }
 
 await browser.close();

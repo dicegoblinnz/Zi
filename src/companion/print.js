@@ -139,6 +139,7 @@ export async function fillSheet(ch, c, s) {
     c.trouble.length ? `Trouble that follows ${them}: ${c.trouble.join(", ")}.` : "",
     n.dressed ? `Confidence starts on d${n.dressed.die} in ${n.dressed.what} when they fit the scene.` : "",
     ...c.traits.slice(3).map((t) => `${t.name} (${t.type}): ${textOf(t.html)}`),
+    ...c.attuned.filter((a) => a.burden).map((a) => `${a.name}’s Burden: ${a.burden}`),
     s.notes,
   ].filter(Boolean).join("\n"));
 

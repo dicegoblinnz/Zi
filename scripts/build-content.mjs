@@ -561,7 +561,8 @@ const blockHtml = (text) => {
 };
 const rules = {};
 for (const id of ["s-round", "s-telegraphs", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour",
-  "s-defending", "s-defend", "s-consequences", "s-fear-gets-through", "s-blaze", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "how-permissions-stack"]) {
+  "s-defending", "s-defend", "s-consequences", "s-fear-gets-through", "s-blaze", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "how-permissions-stack",
+  "your-slots", "s-downtime-rolls"]) {
   const doc = docWith(`{#${id}}`);
   const head = doc?.body.match(new RegExp(`^#{2,4} (.+?) \\{#${id}\\}`, "m"));
   const blocks = [];
@@ -584,7 +585,7 @@ const companionLinks = Object.fromEntries(
     "s-splitting", "s-teamwork", "s-extra-actions", "s-going-beyond", "s-the-roll", "s-defending", "s-defend", "s-fear-gets-through",
     "s-consequences", "s-aspiration", "s-pregens", "s-set-actions", "s-how-archetypes", "s-attunement", "s-carrying", "s-traits", "s-intents",
     "s-quick", "s-title-ideas", "s-title", "s-writing-permissions", "the-quick-test", "permission-ideas", "s-step-set-actions", "s-items",
-    "the-item-list", "catches-12", "s-starting-numbers", "s-connect"]
+    "the-item-list", "catches-12", "s-starting-numbers", "s-connect", "what-you-can-do-with-a-slot", "attunement-stages", "s-downtime-threads"]
     .map((id) => [id, linkTo(id)]),
 );
 for (const c of crew) for (const a of c.archetypeRules) if (a.id) companionLinks[a.id] = linkTo(a.id);

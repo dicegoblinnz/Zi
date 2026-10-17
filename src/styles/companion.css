@@ -333,6 +333,33 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 @media (max-width: 640px) {
   .cc-dialog { width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; border: 0; }
 }
+/* Gold marks: a line the rules changed since the phone last saw it. */
+.cc-gold { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-width: 44px; min-height: 44px; margin: -10px 0 -10px 2px; padding: 0 10px; vertical-align: middle; font-size: 0.88rem; font-weight: 700; color: var(--gold-ink); background: none; border: 0; border-radius: 2px; }
+.cc-gold.has-label { margin: 0; padding: 0 0.7rem 0 0.6rem; text-align: left; border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); }
+.cc-gold:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
+.cc-gem { flex: none; display: inline-block; width: 11px; height: 11px; background: var(--gold); transform: rotate(45deg); box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 28%, transparent); }
+.cc-gold[aria-expanded="true"] .cc-gem { background: var(--violet); box-shadow: 0 0 0 3px color-mix(in srgb, var(--violet) 28%, transparent); }
+.cc-gem.is-corner { width: 8px; height: 8px; margin-left: 8px; vertical-align: 0.12em; }
+.tile.is-changed, .cc-stat.is-changed { border-color: var(--gold); }
+.cc-was { margin: 0.35rem 0 0.7rem; padding: 0.5rem 0.75rem; font-size: 0.92rem; background: color-mix(in srgb, var(--gold) 8%, var(--surface)); border-left: 3px solid var(--gold); }
+.cc-was p { margin: 0; }
+.cc-was p + p { margin-top: 0.25rem; }
+.cc-was b { margin-right: 0.3rem; color: var(--gold-ink); }
+.cc-note.is-gold { border-color: var(--gold); }
+.cc-golds { margin: 0.5rem 0 0; padding-left: 1.1rem; }
+.cc-golds li { margin-bottom: 0.4rem; }
+
+/* Downtime: two slots, and what's free. */
+.dt-slot { padding-left: 0.8rem; border-left: 3px solid var(--line); }
+.dt-slot.is-picked { border-left-color: var(--gold); }
+.dt-slot > .cc-row:first-of-type { margin-top: 0; }
+.dt-toggles { display: grid; gap: 6px; margin-bottom: 0.6rem; }
+.dt-pads { display: flex; flex-wrap: wrap; gap: 8px; }
+.dt-pads .cc-field { flex: 0 1 7rem; }
+.dt-swap { margin-bottom: 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--line-soft); }
+.dt-test { margin: 0.4rem 0 0.6rem; padding-left: 1.3rem; border: 0; }
+.cc-dialog .cc-warn p { margin: 0 0 0.3rem; }
+
 /* Motion: the roll card turns over when it moves on, what the dice did comes
    up once they've landed, the tabs slide the way they go, and the dialog
    rises into place. */
