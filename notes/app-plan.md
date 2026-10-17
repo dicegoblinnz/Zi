@@ -30,8 +30,8 @@ From the drill on 17 Oct 2026 (`notes/app-rework.md`). Mo's answers are in `note
 - On paper, a Title on a set action is its number on the back (Title I) and an attuned thing's permission is the thing, so each row fits. Trouble, clothes that fit some scenes and any trait past the third go in Notes, since the sheet has nowhere else for them. A letter the sheet's font can't draw loses its accent (ā prints as a).
 - The blank sheet, from the crew and random open with every step on one page, and any build can switch between one page and step by step.
 - From the crew brings the crew member's own threads, not the ones in someone else's words, and leaves the name for the player.
-- Random draws from the Title ideas, the traits and items lists, and the crew's own threads and Aspirations, makes up a name, and passes every warning. Each line goes on the set action its words lean to.
-- A way in asks for a second tap before it bins a draft of a new character.
+- Random draws from the Title ideas, the traits and items lists, and the crew's own threads and Aspirations, makes up a name, and passes every warning. Each line goes on the set action its words lean to, and no set action starts past 5 steps, the crew's biggest.
+- A way in asks for a second tap before it bins a draft of a new character, and so does Roll again over changes.
 - pdf-lib only loads when someone prints, and the service worker keeps it and the blank sheet on the phone so print works offline.
 
 ## Confirmed with the plan

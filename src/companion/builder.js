@@ -306,7 +306,9 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
   let slotKey = "new";
   let d = null; // { step, deep: {}, page, way, from, build }
   let saveTimer = 0;
-  let sure = false;
+  let refreshTimer = 0;
+  let sure = false; // Roll again has been tapped once over changes
+  let rolled = ""; // the random build as it was rolled
 
   const save = () => {
     clearTimeout(saveTimer);
@@ -333,6 +335,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
     slotKey = "new";
     d = { step: 0, deep: {}, page: true, way, from, build: normalBuild(build) };
     sure = false;
+    rolled = way === "random" ? JSON.stringify(d.build) : "";
     save();
   }
   function discard(key = slotKey) {
@@ -385,9 +388,9 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
   // Every step on one page, for a blank sheet, one of the crew or random.
   function pageView() {
     const title = { blank: "A blank sheet", crew: `From ${esc(d.from || "the crew")}`, random: "Random" }[d.way] ?? "All on one page";
-    const parts = BODIES.map((body, i) => `<section class="bd-part" aria-labelledby="bd-part-${i}"><h2 id="bd-part-${i}" tabindex="-1">${STEPS[i].name}</h2>${body().replace(/<(\/?)h2\b/g, "<$1h3")}</section>`).join("");
+    const parts = BODIES.map((body, i) => `<section class="bd-part" aria-labelledby="bd-part-${i}">${part(i)}</section>`).join("");
     return `${backLink()}<header class="cc-head bd-head"><p class="kicker">${kicker()} · All on one page</p><h1 tabindex="-1">${title}</h1>
-      <div class="cc-row">${d.way === "random" ? '<button type="button" class="button" data-act="b" data-b="reroll">Roll again</button>' : ""}<button type="button" class="button" data-act="b" data-b="page">Go step by step</button></div></header>
+      <div class="cc-row">${d.way === "random" ? `<button type="button" class="button" data-act="b" data-b="reroll">${sure ? "Tap again to lose your changes" : "Roll again"}</button>` : ""}<button type="button" class="button" data-act="b" data-b="page">Go step by step</button></div></header>
       <div class="bd-body bd-page">${parts}</div>
       <div class="bd-foot"><button type="button" class="button primary" data-act="b" data-b="save">Save and play</button></div>
       <p class="cc-lead">${link("s-quick", "The Quick Build in the rules")}. Your work’s saved on this phone as you go.</p>
@@ -564,6 +567,22 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
   }
 
   const BODIES = [stepArch, stepTitles, stepTraits, stepActions, stepCarry, stepThreads, stepAsp, stepCheck];
+  const part = (i) => `<h2 id="bd-part-${i}" tabindex="-1">${STEPS[i].name}</h2>${BODIES[i]().replace(/<(\/?)h2\b/g, "<$1h3")}`;
+  // Typing on one page redraws the parts that add it all up (the set actions
+  // and the last look) after a pause, but only below where you're typing, so
+  // nothing moves under the keyboard.
+  function refreshSoon() {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => {
+      if (!d?.page) return;
+      const at = document.activeElement?.closest(".bd-part");
+      const from = at ? Number(at.getAttribute("aria-labelledby").slice("bd-part-".length)) : -1;
+      for (const i of [3, 7]) {
+        const el = i > from && document.querySelector(`.bd-part[aria-labelledby="bd-part-${i}"]`);
+        if (el) el.innerHTML = part(i);
+      }
+    }, 400);
+  }
   function view(key, from) {
     if (!d || slotKey !== (key || "new")) open(key, from);
     if (d.page) return pageView();
@@ -595,6 +614,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
     else if (["asp", "name", "blurb", "clothes", "bag"].includes(path)) x[path === "asp" ? "aspiration" : path] = v;
     else return; // newact and own.* are read when their button's tapped
     saveSoon();
+    if (d.page) refreshSoon();
   }
 
   const value = (id) => document.getElementById(id)?.value ?? "";
@@ -604,6 +624,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
     const k = el.dataset.b;
     const i = Number(el.dataset.t ?? el.dataset.i ?? 0);
     const v = el.dataset.v ?? "";
+    if (k !== "reroll") sure = false;
     if (k === "leave") {
       e.preventDefault();
       save();
@@ -625,6 +646,17 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
       render();
       return focusTop();
     }
+    if (k === "reroll") {
+      if (JSON.stringify(x) !== rolled && !sure) {
+        sure = true;
+        return render();
+      }
+      sure = false;
+      d.build = normalBuild(roll());
+      rolled = JSON.stringify(d.build);
+      save();
+      return render();
+    }
     if (k === "page") {
       d.page = !d.page;
       d.step = 0;
@@ -637,7 +669,6 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
       return onSave(normalBuild(x), slotKey, () => discard());
     }
     if (k === "deep") d.deep[el.dataset.s] = !d.deep[el.dataset.s];
-    else if (k === "reroll") d.build = normalBuild(roll());
     else if (k === "arch") {
       const t = x.titles[i];
       t.arch = t.arch === v ? "" : v;

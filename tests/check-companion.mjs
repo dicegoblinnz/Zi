@@ -442,9 +442,17 @@ async function play(page, crewId, name) {
     same(actionsOf(s), actionsOf(c), `${c.name}'s set actions, made into a build`);
     for (const k of ["aura", "resolve", "stride", "armour", "confidence", "hurtBars"]) same(s.numbers[k], c.numbers[k], `${c.name}'s ${k}, made into a build`);
   }
+  // A thousand random characters: not one warning, and nothing bigger than
+  // the crew's biggest set action, 5 steps.
   let warned = 0;
-  for (let i = 0; i < 1000; i++) if (checksOf(randomBuild(B, book.crew), B).length) warned += 1;
+  let biggest = 0;
+  for (let i = 0; i < 1000; i++) {
+    const b = randomBuild(B, book.crew);
+    if (checksOf(b, B).length) warned += 1;
+    biggest = Math.max(biggest, ...sheetOf({ id: `random-${i}`, name: b.name, build: b }, B).actions.map((a) => a.steps));
+  }
   same(warned, 0, "random characters with a warning, of 1000");
+  if (biggest > 5) note(`a random character has a set action of ${biggest} steps, more than the crew's 5`);
 
   const { context, page } = await phone();
   const axe = async (what) => {
@@ -475,7 +483,8 @@ async function play(page, crewId, name) {
     ["confidence", "d6"], ["wound_die", "d6"], ["set_sneak_lines", "Title I, move unseen, Silent Step"], ["set_sneak_steps", "4"], ["set_sneak_die", "d8"],
     ["set_1_name", "Locks"], ["set_1_steps", "5"], ["set_1_die", "d10"], ["set_talk_steps", "1"], ["title_1", "The best cat burglar in the city"], ["title_1_archetype", "Shadow"],
     ["trait_1", "Silent Step"], ["equipment_1", "worn leathers"], ["utility_2", "a smoke bomb"], ["keepsake", "the first coin she ever stole"], ["attune_1_thing", "A perfect set of picks"],
-    ["attune_1_stage", "awakened"], ["attune_1_permission_1", "open any lock with a mechanism"], ["bond_1", "Dorrie"], ["aspiration", "Own the score of a lifetime"], ["aspiration_die", "d2"],
+    ["attune_1_stage", "awakened"], ["attune_1_permission_1", "open any lock with a mechanism"], ["bond_1", "Dorrie"],
+    ["bond_1_thread_2", "We came up on the same streets. She never asks why. (Dorrie’s words)"], ["aspiration", "Own the score of a lifetime"], ["aspiration_die", "d2"],
     ["hurt_1_box_1", true], ["hurt_1_box_2", false], ["resolve_2", true], ["resolve_3", false]], "Vesk's printed sheet");
   await page.evaluate(() => navigator.serviceWorker.ready);
   await context.setOffline(true);
@@ -504,6 +513,12 @@ async function play(page, crewId, name) {
     has(await page.textContent(".bd-part:last-child"), "Everything adds up", `random character ${i}`);
     await page.click('button[data-b="reroll"]');
   }
+  await page.fill("#b-blurb", "Keeps a ledger of every slight.");
+  await page.click('button[data-b="reroll"]');
+  has(await page.textContent('button[data-b="reroll"]'), "Tap again to lose your changes", "rolling again over a change");
+  same(await page.inputValue("#b-blurb"), "Keeps a ledger of every slight.", "the change, still there after one tap");
+  await page.click('button[data-b="reroll"]');
+  same(await page.inputValue("#b-blurb"), "", "the second tap rolls again");
   const name = await page.inputValue("#b-name");
   await page.click('.bd-foot button[data-b="save"]');
   await page.waitForSelector(".tile[data-a]");
@@ -522,6 +537,8 @@ async function play(page, crewId, name) {
   has(await page.textContent(".bd-head h1"), "Archetypes", "building a character after leaving an empty blank sheet");
   await page.click('a[data-b="leave"]');
   await page.click('button[data-act="bway"][data-w="blank"]');
+  await page.fill("#b-t0-p0", "climb sheer walls");
+  await page.waitForFunction(() => document.querySelector('.bd-part[aria-labelledby="bd-part-3"]')?.textContent.includes("climb sheer walls"));
   await page.fill("#b-name", "Tui");
   await page.click('a[data-b="leave"]');
   await page.click('button[data-act="bway"][data-w="random"]');

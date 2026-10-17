@@ -89,10 +89,13 @@ export function randomBuild(B, crew, rand = Math.random) {
   const ideas = shuffle(B.ideas.filter((x) => x.titles.length && x.archetypes.some((a) => known.has(a))), rand).slice(0, 2);
   // Each line goes on the set action its words lean to, the least loaded one
   // when it leans to a few, and the least loaded of all when it doesn't say.
+  // No set action gets more than 4 lines, 5 steps, like the crew's biggest,
+  // and a line with nowhere left to go stays off them.
   const load = Object.fromEntries(ACTIONS.map((a) => [a, 0]));
-  const onto = (text, said) => {
+  const onto = (text, said, cap = 4) => {
     const fits = said ? [said] : LEANS.filter(([, re]) => re.test(text)).map(([a]) => a);
-    const pool = fits.length ? fits : ACTIONS;
+    const pool = (fits.length ? fits : ACTIONS).filter((a) => load[a] < cap);
+    if (!pool.length) return null;
     const low = Math.min(...pool.map((a) => load[a]));
     const a = pick(pool.filter((x) => load[x] === low), rand);
     load[a] += 1;
@@ -104,8 +107,8 @@ export function randomBuild(B, crew, rand = Math.random) {
     for (const p of spares) if (perms.length < 3 && !perms.includes(p)) perms.push(p);
     const t = b.titles[i];
     Object.assign(t, { arch: pick(idea.archetypes.filter((a) => known.has(a)), rand), idea: idea.id, text: pick(idea.titles, rand) });
-    perms.slice(0, 3).forEach((p, j) => (t.perms[j] = { text: p, on: [onto(p)] }));
-    t.on = [...new Set(t.perms.flatMap((p) => p.on))];
+    perms.slice(0, 3).forEach((p, j) => (t.perms[j] = { text: p, on: [onto(p, null, 3)].filter(Boolean) }));
+    t.on = [...new Set(t.perms.flatMap((p) => p.on))].filter((a) => load[a] < 4);
     for (const a of t.on) load[a] += 1;
     left.push(...perms.slice(3));
   });
@@ -116,11 +119,11 @@ export function randomBuild(B, crew, rand = Math.random) {
     const rule = B.traits.find((t) => t.name === name);
     if (!rule.step) return { name, on: [] };
     const text = rule.html.replace(/<[^>]+>/g, "");
-    return { name, on: [onto(text, ACTIONS.find((a) => new RegExp(`\\b${a}\\b`).test(text)))] };
+    return { name, on: [onto(text, ACTIONS.find((a) => new RegExp(`\\b${a}\\b`).test(text)))].filter(Boolean) };
   });
 
   const group = (g) => B.items.find((x) => x.group === g)?.items ?? [];
-  b.equipment[0] = { text: pick(group("Weapons"), rand), on: [onto("", "Fight")], armour: false };
+  b.equipment[0] = { text: pick(group("Weapons"), rand), on: [onto("", "Fight")].filter(Boolean), armour: false };
   if (rand() < 0.6) {
     const worn = pick(group("Armour & wearables"), rand);
     b.equipment[1] = { text: worn, on: [], armour: ARMOUR.test(worn) };
@@ -134,7 +137,7 @@ export function randomBuild(B, crew, rand = Math.random) {
   const unused = [...shuffle(left, rand), ...spares];
   things.forEach((name, i) => {
     const p = unused[i];
-    b.attuned[i] = { name: name.charAt(0).toUpperCase() + name.slice(1), catch: "", perms: [{ text: p, on: [onto(p)] }, { text: "", on: [] }] };
+    b.attuned[i] = { name: name.charAt(0).toUpperCase() + name.slice(1), catch: "", perms: [{ text: p, on: [onto(p)].filter(Boolean) }, { text: "", on: [] }] };
   });
 
   const threads = [];

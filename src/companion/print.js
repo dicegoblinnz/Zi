@@ -131,7 +131,7 @@ export async function fillSheet(ch, c, s) {
   const lines = (prefix, list, rows) => list.slice(0, rows).forEach((x, i) => put(`${prefix}_${i + 1}`, i === rows - 1 ? list.slice(i).join(", ") : x));
   lines("equipment", kit("equipment", c.carry.equipment.items, c.carry.equipment.note), 3);
   lines("utility", kit("utility", c.carry.utility.items, c.carry.utility.note), 3);
-  put("keepsake", c.carry.keepsake);
+  if (c.carry.keepsake) put("keepsake", s.crossed[`keepsake|${c.carry.keepsake}`] ? `${c.carry.keepsake} (used)` : c.carry.keepsake);
   lines("bag", kit("bag", c.carry.bag.items ?? []), 10);
 
   // The paper sheet has nowhere else for trouble, clothes or a fourth trait.
@@ -142,7 +142,9 @@ export async function fillSheet(ch, c, s) {
     s.notes,
   ].filter(Boolean).join("\n"));
 
-  // The back: Titles, attuned things and bonds.
+  // The back: Titles, attuned things and bonds. A thread in someone else's
+  // words says whose, the way the companion does.
+  const noteOf = (t) => (t.note ? t.note.replace(/^(.+’s)(?=,|$)/, "$1 words").replace(/^debt$/, "a debt") : "");
   c.titles.slice(0, 6).forEach((t, i) => {
     put(`title_${i + 1}`, t.name);
     put(`title_${i + 1}_archetype`, t.archetype);
@@ -159,7 +161,7 @@ export async function fillSheet(ch, c, s) {
     const at = `bond_${i + 1}`;
     put(at, p.person);
     p.threads.slice(0, 4).forEach((t, j) => {
-      put(`${at}_thread_${j + 1}`, t.debt ? `${t.text} (a debt)` : t.text);
+      put(`${at}_thread_${j + 1}`, noteOf(t) ? `${t.text} (${noteOf(t)})` : t.text);
       const st = s.threads[`${p.person}|${t.text}`];
       if (st) tick(`${at}_thread_${j + 1}_strained`);
       if (st === "snapped") tick(`${at}_thread_${j + 1}_snapped`);
