@@ -8,8 +8,10 @@
 // 3. Vesk at the table: Sneak is 4 steps, a d8. Tap off Silent Step and it's
 //    3 steps, a d6. Bring in her grappling line and it's 4 again for 1 Aura.
 //    Roll with fixed dice, check the Aura and the result, reload, then go
-//    offline and reload. Then a split roll with a top face and a tie, an undo,
-//    a defence roll and a new scene.
+//    offline and reload, and read Aura's rule and a permission's with no
+//    signal. Then a split roll with a top face and a tie, an undo, a defence
+//    roll and a new scene. Then the play screen's stage 3: a threat's die, a
+//    tap-in with an intent, Defend with a swap, and an undo of Hurt.
 // 5. Building your own: Vesk again, through the builder a step at a time. Her
 //    set actions and numbers have to match her sheet in the chapter. Then a
 //    roll, a reload, offline, a change in the builder, and every step at 320
@@ -158,6 +160,7 @@ async function play(page, crewId, name) {
   await page.click('#cc-dialog button[data-act="go"]');
   await page.waitForSelector("#cc-dialog .res .res-out");
   has(await page.textContent("#cc-dialog .cc-res"), "Beat it", "her 6 against the guard's 5");
+  has(await page.textContent("#cc-dialog .cc-them"), "Their d65", "the guard's d6 rolled with hers, and its 5");
   has(await page.textContent("#cc-dialog .dlg-body"), "You’ve got 4 Aura", "Aura after paying 1");
   await shot(page, "4-the-result");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
@@ -177,6 +180,20 @@ async function play(page, crewId, name) {
   await page.reload();
   await page.waitForSelector(".tile[data-a]", { timeout: 10000 }).catch(() => note("the sheet didn't open offline"));
   same(await aura(), "4/5", "Aura offline");
+  // Rules on tap with no signal: Aura's on the play screen, and a permission's
+  // on the sheet.
+  await page.click('.cc-stat[data-p="aura"]');
+  has(await page.textContent(".cc-panel .cc-rule"), "start every scene full", "Aura's rule on a tap, offline");
+  await page.click('.cc-stat[data-p="aura"]');
+  await page.click('.cc-tabs a[data-t="sheet"]');
+  await page.click('button.cc-perm:has-text("move unseen")');
+  has(await page.textContent("#cc-dialog"), "Every line that fits", "a permission's rule on a tap, offline");
+  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
+  await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  await page.click('.cc-tabs a[data-t="rules"]');
+  await page.click('.cc-rulebox > summary:has-text("Defend")');
+  has(await page.textContent(".cc-rulebox[open]"), "every die", "Defend on the Rules tab, offline");
+  await page.click('.cc-tabs a[data-t="play"]');
   await page.goto(`${BASE}/rules/the-core/`);
   has(await page.textContent("h1"), "The Core", "a rules page offline");
   await page.goBack();
@@ -213,6 +230,7 @@ async function play(page, crewId, name) {
   await page.click('.cc-panel button[data-act="conf"][data-v="6"]');
 
   // Warded d6 is a step on her Armour, so the d4 rolls as a d6.
+  await page.click('.cc-stat[data-p="cond"]');
   await page.selectOption('form[data-form="cond"] select[name="pick"]', "Warded");
   await page.selectOption('form[data-form="cond"] select[name="die"]', "6");
   await page.click('form[data-form="cond"] button[type="submit"]');
@@ -229,14 +247,70 @@ async function play(page, crewId, name) {
   same(await page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Gets through", "Stopped"], "two blows against one Armour roll");
   has(await page.textContent("#cc-dialog .cc-mine-roll"), "Your d6", "the Warded Armour die");
   await shot(page, "5-when-it-lands");
-  await page.click('#cc-dialog button[data-act="armour"][data-d="-1"]');
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="armour"]');
   has(await page.textContent("#cc-dialog .dlg-body"), "Armour d2", "Armour after it steps down");
+  has(await page.textContent("#cc-dialog .res-paid"), "Armour down to d2", "the blow's cost counted on it");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
 
   await page.click('button[data-act="scene"]');
   same(await aura(), "5/5", "Aura after a new scene");
   same(await page.textContent('.cc-stat[data-p="armour"] .v'), "d2", "Armour doesn't come back with a new scene");
+
+  // A tap-in: real dice for her Fight, its d4 meant to pin, against a d8. Her
+  // 4 is the d4's top face, so the Aura she spent comes back.
+  await page.click('.cc-stat[data-p="aura"]');
+  await page.click('.cc-panel button[data-act="aura"][data-d="-1"]');
+  same(await aura(), "4/5", "Aura after spending 1");
+  await tile("Fight");
+  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="8"]');
+  await page.click('#cc-dialog button[data-act="intent"][data-k="0"][data-v="Pin"]');
+  await page.click('#cc-dialog button[data-act="go-real"]');
+  has(await page.textContent("#cc-dialog .dlg-body"), "Your d4 · Pin", "the pad says what the die's for");
+  await page.click('#cc-dialog button[data-act="pad"][data-k="p0"][data-v="4"]');
+  await page.click('#cc-dialog button[data-act="pad"][data-k="opp"][data-v="3"]');
+  await page.click('#cc-dialog button[data-act="pad-done"]');
+  await page.waitForSelector("#cc-dialog .res .res-out");
+  same(await page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Beat it"], "her tapped-in 4 against their 3");
+  has(await page.textContent("#cc-dialog .res-intent"), "Pin", "the die's intent on the result");
+  has(await page.textContent("#cc-dialog .cc-res"), "Top face", "a top face spotted on a tapped-in die");
+  has(await page.textContent("#cc-dialog .dlg-body"), "You’ve got 5 Aura", "Aura back for the top face");
+  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
+  await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+
+  // Defend with a swap: two d6s, one meant to pin her. Her Armour's back to
+  // d4, and her 4 and 1 meet their 3 and 3. The phone puts the 4 on the pin,
+  // and a swap moves it onto the other blow.
+  await page.click('.cc-stat[data-p="armour"]');
+  await page.click('.cc-panel button[data-act="armour"][data-d="full"]');
+  await page.click('.tile[data-act="defence"]');
+  await page.click('#cc-dialog button[data-act="d-defend"][data-v="1"]');
+  await page.click('#cc-dialog button[data-act="d-add"][data-v="6"]');
+  await page.click('#cc-dialog button[data-act="d-add"][data-v="6"]');
+  await page.click('#cc-dialog button[data-act="intent"][data-k="d0"][data-v="Pin"]');
+  await page.evaluate(() => window.ziCompanion.setDice([4, 1, 3, 3]));
+  await page.click('#cc-dialog button[data-act="d-go"]');
+  await page.waitForSelector("#cc-dialog .res .res-out");
+  const blows = () => page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent));
+  same(await blows(), ["Stopped", "Gets through"], "the phone's match puts her 4 on the pin");
+  await page.click('#cc-dialog button[data-act="d-swap"][data-j="1"]');
+  await page.click('#cc-dialog button[data-act="d-swap"][data-j="0"]');
+  same(await blows(), ["Gets through", "Stopped"], "after swapping her 4 onto the other blow");
+  has(await page.textContent("#cc-dialog .cc-pay"), "Pinned d6", "the pin can land as Pinned d6");
+  await shot(page, "6-defend-and-swap");
+
+  // An undo of Hurt: she takes the pin as a Hurt instead, then takes it back.
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="hurt"]');
+  has(await page.textContent("#cc-dialog .dlg-body"), "1 of 9 boxes", "a Hurt from the pin");
+  has(await page.textContent("#cc-dialog .res-paid"), "Took a Hurt", "the Hurt counted on the blow");
+  await page.click('#cc-dialog .dlg-foot button[data-act="undo"]');
+  has(await page.textContent("#cc-dialog .dlg-body"), "0 of 9 boxes", "the Hurt undone");
+  same(await page.$$eval('#cc-dialog button[data-act="d-pay"]', (els) => els.length > 0), true, "the blow waiting to be paid again after the undo");
+  same(await blows(), ["Gets through", "Stopped"], "the swap still stands after the undo");
+  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
+  await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  same(await page.textContent('.cc-stat[data-p="hurt"] .v'), "0/9", "Hurt on the play screen after the undo");
+  await shot(page, "7-play-screen");
   await context.close();
 }
 
@@ -247,6 +321,7 @@ async function play(page, crewId, name) {
   await play(page, "wren");
   await page.click('.tile[data-a]:has(.tile-name:text-is("Fight"))');
   await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="8"]');
+  await page.click('#cc-dialog .cc-mark > summary');
   await page.click('#cc-dialog .cc-chipbtn[data-act="mark"][data-v="10"]');
   has(await page.textContent("#cc-dialog .cc-dice"), "5 steps, d10, and the Mark d10", "Wren's Fight with the Mark die");
   await page.evaluate(() => window.ziCompanion.setDice([5, 6, 7]));
@@ -360,6 +435,7 @@ async function play(page, crewId, name) {
   await context.setOffline(true);
   await page.reload();
   await page.waitForSelector(".tile[data-a]", { timeout: 10000 }).catch(() => note("the built Vesk didn't open offline"));
+  await page.click('.cc-tabs a[data-t="sheet"]');
   await page.click('a[data-act="bopen"][data-key]');
   has(await step(), "Check it and play", "changing her opens on the last step, offline");
   await context.setOffline(false);
@@ -398,6 +474,7 @@ async function play(page, crewId, name) {
   await page.fill("#b-name", "Tam");
   await b('[data-b="save"]');
   await page.waitForSelector(".tile[data-a]");
+  await page.click('.cc-tabs a[data-t="sheet"]');
   has(await page.textContent("#app"), "some rope", "the bag on the sheet");
 
   // A blank character saves too: the builder warns, and never blocks. Leaving
@@ -416,6 +493,7 @@ async function play(page, crewId, name) {
 
   // Every step at 320 wide, dark then light, with axe.
   await page.setViewportSize({ width: 320, height: 720 });
+  await page.click('.cc-tabs a[data-t="sheet"]');
   await page.click('a[data-act="bopen"][data-key]');
   for (const theme of ["dark", "light"]) {
     await page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
@@ -461,6 +539,7 @@ async function play(page, crewId, name) {
   };
   // Print, and read back what the PDF says, field by field.
   const print = async () => {
+    if (!(await page.isVisible('button[data-act="print"]'))) await page.click('.cc-tabs a[data-t="sheet"]');
     const [download] = await Promise.all([page.waitForEvent("download"), page.click('button[data-act="print"]')]);
     const pdf = await PDFDocument.load(readFileSync(await download.path()));
     const form = pdf.getForm();
@@ -476,6 +555,7 @@ async function play(page, crewId, name) {
   };
 
   await play(page, "vesk");
+  await page.click('.cc-stat[data-p="hurt"]');
   await page.click('button[data-act="hurt"][data-d="1"]');
   let f = await print();
   same([f.pages, f.file], [2, "vesk-zidara-sheet.pdf"], "Vesk's printed sheet");
@@ -489,7 +569,7 @@ async function play(page, crewId, name) {
   await page.evaluate(() => navigator.serviceWorker.ready);
   await context.setOffline(true);
   await page.reload();
-  await page.waitForSelector(".tile[data-a]");
+  await page.waitForSelector(".cc-tabs");
   f = await print();
   same(f.get("set_1_name"), "Locks", "Vesk's sheet printed offline");
   await context.setOffline(false);

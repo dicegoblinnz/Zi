@@ -8,7 +8,7 @@ import Base from "../../layouts/Base.astro";
 import book from "../../generated/book.json";
 import "../../styles/companion.css";
 
-const data = { crew: book.crew, conditions: book.companion.conditions, links: book.companion.links, build: book.companion.build };
+const data = { crew: book.crew, conditions: book.companion.conditions, links: book.companion.links, build: book.companion.build, rules: book.companion.rules };
 const json = JSON.stringify(data).replace(/</g, "\\u003c");
 ---
 <Base title="Characters" current="characters" description="Build your own Zi’Dara character or play one of the crew from your phone, with the counting done and every roll a tap away.">

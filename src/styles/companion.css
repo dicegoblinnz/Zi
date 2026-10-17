@@ -1,7 +1,7 @@
 /* The character companion, in the Sigil look. Phone first, from 320 wide, and
-   usable one-handed: the strip and the set action tiles sit near the top, and
-   the roll dialog keeps its buttons at the bottom. Only the Characters page
-   loads this. */
+   usable one-handed: the play screen keeps the trackers and the set action
+   tiles together, the tabs sit at the bottom, and the roll dialog keeps its
+   buttons at the bottom too. Only the Characters page loads this. */
 .companion { max-width: 46rem; margin: 0 auto; padding-block: 0.5rem 5rem; }
 .cc h1 { font-family: var(--display); font-weight: 600; font-size: clamp(2rem, 1.5rem + 2.5vw, 3rem); line-height: 1.1; letter-spacing: 0.02em; margin: 0.2rem 0 0.35rem; overflow-wrap: anywhere; }
 .cc h2 { font-family: var(--display); font-weight: 600; font-size: 1.35rem; line-height: 1.2; letter-spacing: 0.02em; margin: 0 0 0.75rem; padding-bottom: 0.45rem; background: linear-gradient(var(--gold), var(--gold)) left bottom / 3rem 1px no-repeat; }
@@ -79,11 +79,25 @@ button.hex.big { cursor: pointer; box-shadow: none; }
 .cc-note p:last-child { margin-bottom: 0; }
 .cc-note.is-warn { border-color: var(--gold); }
 
-.cc-strip {
-  position: sticky; top: 0; z-index: 10; display: flex; gap: 4px;
-  margin: 0.8rem calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 0; padding: 6px max(16px, env(safe-area-inset-left, 0px));
-  background: var(--bar-bg); backdrop-filter: blur(8px); border-block: 1px solid var(--line);
-}
+/* The play screen's trackers: Aura and Resolve as pips, the dice, the Hurt
+   boxes and the conditions. Each opens its buttons and its rule. */
+.cc-track { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; margin-top: 0.8rem; }
+.cc-track .cc-stat { grid-column: span 2; }
+.cc-track .t-aura { grid-column: span 3; }
+.cc-track .t-cond { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 6px 10px; padding: 6px 10px; }
+.cc-track .t-cond .v { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.95rem; font-weight: 600; color: var(--ink); }
+.cc-track .cc-undo { width: auto; }
+.pips, .mini { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 100%; }
+.pips i { width: 13px; height: 13px; clip-path: var(--hex); background: var(--line); }
+.pips i.on { background: var(--gold); }
+.t-resolve .pips i.on { background: var(--violet); }
+.mini { gap: 2px; }
+.mini i { width: 7px; height: 9px; border: 1px solid var(--line); border-radius: 1px; }
+.mini i.on { background: var(--gold); border-color: var(--gold); }
+.mini i.x { background: var(--muted); border-color: var(--muted); opacity: 0.5; }
+.cc-tag { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 0 0.55rem; border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 2px; }
+.cc-tag.is-for { border-left-color: var(--violet); }
+.cc-tag.is-none { border-left-color: var(--line); color: var(--muted); font-weight: 500; }
 .cc-stat {
   flex: 1 1 0; min-width: 0; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
   padding: 2px; background: var(--surface); color: var(--ink); border: 1px solid var(--line-soft); border-radius: 2px;
@@ -95,6 +109,34 @@ button.hex.big { cursor: pointer; box-shadow: none; }
 .cc-undo { flex: none; width: 44px; min-height: 52px; display: grid; place-items: center; padding: 0; background: transparent; color: var(--ink); border: 1px solid var(--line-soft); border-radius: 2px; }
 .cc-panel { margin-top: 0.6rem; padding: 0.9rem 1rem; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
 .cc-panel p { margin: 0 0 0.4rem; }
+.cc-panel .cc-conds { margin-top: 0; }
+
+/* Rules on tap, straight from the book. */
+.cc-rule { margin-top: 0.8rem; padding-top: 0.7rem; border-top: 1px solid var(--line-soft); font-size: 0.95rem; }
+.cc-rule p, .cc-panel .cc-rule p { margin: 0 0 0.55rem; }
+.cc-rule ul { margin: 0 0 0.6rem; padding-left: 1.1rem; }
+.cc-rule li { margin: 0.25rem 0; }
+.cc-rule li::marker { color: var(--gold-ink); }
+.dlg-body.cc-rule { margin: 0; padding-top: 1rem; border: 0; font-size: 1rem; }
+.cc-rulebox { margin: 0 0 8px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 2px; }
+.cc-rulebox > summary { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-height: 48px; padding: 0.3rem 0.85rem; cursor: pointer; list-style: none; font-weight: 700; }
+.cc-rulebox > summary::-webkit-details-marker { display: none; }
+.cc-rulebox > summary::after { content: "+"; flex: none; font-size: 1.3rem; color: var(--gold-ink); }
+.cc-rulebox[open] > summary::after { content: "\2212"; }
+.cc-rulebox > .cc-rule { margin: 0; padding: 0.1rem 0.85rem 0.5rem; border-top: 0; }
+.cc-rulebox h3 { margin-top: 0.6rem; }
+.cc-perm { display: inline-flex; align-items: center; min-height: 44px; padding: 0; text-align: left; color: var(--ink); background: none; border: 0; border-bottom: 1px dashed var(--line); border-radius: 0; }
+.cc-perm:hover { border-bottom-color: var(--gold); }
+.cc-perm:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+
+/* The tabs, at the bottom where a thumb reaches them. */
+.cc-tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding-bottom: env(safe-area-inset-bottom, 0px); background: var(--bar-bg); backdrop-filter: blur(8px); border-top: 1px solid var(--line); }
+.cc-tabs-in { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 46rem; margin: 0 auto; }
+.cc-tabs a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 58px; color: var(--muted); text-decoration: none; font-weight: 700; font-size: 0.85rem; }
+.cc-tabs a[aria-current="page"] { color: var(--gold-ink); box-shadow: inset 0 2px 0 var(--gold); }
+.cc-tabs a:focus-visible { outline: 2px solid var(--violet); outline-offset: -4px; }
+html.cc-tabbed body { padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
+html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
 
 .cc-play { margin-top: 1rem; }
 .cc-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -194,9 +236,15 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .cc-line > span:last-child { min-width: 0; }
 .cc-line small { display: block; font-size: 0.86rem; color: var(--muted); }
 .cc-line .tick { flex: none; width: 22px; height: 22px; display: grid; place-items: center; border: 1.5px solid var(--line); border-radius: 2px; }
-.cc-line[aria-pressed="true"] { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 9%, var(--surface)); }
-.cc-line[aria-pressed="true"] .tick { background: var(--gold); border-color: var(--gold); }
-.cc-line[aria-pressed="true"] .tick::after { content: ""; width: 10px; height: 5px; border: solid var(--on-gold); border-width: 0 0 2px 2px; transform: translateY(-1px) rotate(-45deg); }
+.cc-line[aria-pressed="true"] { border-color: var(--violet); background: color-mix(in srgb, var(--violet) 9%, var(--surface)); }
+.cc-line[aria-pressed="true"] .tick { background: var(--violet); border-color: var(--violet); }
+.cc-line[aria-pressed="true"] .tick::after { content: ""; width: 10px; height: 5px; border: solid var(--bg); border-width: 0 0 2px 2px; transform: translateY(-1px) rotate(-45deg); }
+.cc-line.is-aura[aria-pressed="true"] { border-color: var(--gold); background: color-mix(in srgb, var(--gold) 12%, var(--surface)); }
+.cc-line.is-aura[aria-pressed="true"] .tick { background: var(--gold); border-color: var(--gold); }
+.cc-line.is-aura[aria-pressed="true"] .tick::after { border-color: var(--on-gold); }
+.cc-line.is-aura[aria-pressed="true"] > span:last-child { color: var(--gold-ink); }
+.cc-stepper.is-aura { padding: 0.3rem 0.5rem; border: 1px solid var(--gold); border-radius: 2px; background: color-mix(in srgb, var(--gold) 12%, var(--surface)); }
+.chip.is-aura { color: var(--on-gold); background: var(--gold); border-color: var(--gold); }
 .cc-line[aria-pressed="false"] > span:last-child { color: var(--muted); }
 
 .cc-stepper { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; margin: 0.5rem 0; }
@@ -209,8 +257,14 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .cc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
 .cc-chipbtn { min-width: 44px; min-height: 44px; padding: 0 0.75rem; font-weight: 700; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
 .cc-chipbtn[aria-pressed="true"] { color: var(--on-gold); background: var(--gold); border-color: var(--gold); }
-.cc-incoming { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0.7rem 0 0; padding: 0; }
-.cc-incoming li { display: flex; align-items: center; gap: 2px; }
+.cc-incoming { margin: 0.7rem 0 0; }
+.cc-intent { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; padding: 8px 0; border-top: 1px solid var(--line-soft); }
+.cc-intent .cc-chips { flex: 1 1 12rem; min-width: 0; }
+.cc-own-intent { flex: 1 1 100%; }
+.hex.them { background: var(--violet); color: var(--bg); }
+.cc-mark { margin-top: 0.4rem; }
+.cc-mark > summary { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 44px; cursor: pointer; color: var(--violet); font-weight: 700; }
+.cc-mark > summary small { color: var(--muted); }
 
 .cc-res { list-style: none; display: grid; gap: 8px; margin: 0; padding: 0; }
 .res { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
@@ -223,7 +277,12 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .res.is-under .res-out { color: var(--muted); }
 .res.is-through { border-color: var(--violet); }
 .res.is-through .res-out { color: var(--ink); }
-.cc-mine-roll { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 0.8rem; }
+.cc-mine-roll, .cc-them { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 0.8rem; }
+.cc-them .k { margin-right: 0.3rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--violet); }
+.res-intent { padding: 1px 0.5rem; font-size: 0.85rem; font-weight: 700; border: 1px solid var(--line); border-radius: 2px; }
+.res-paid { flex-basis: 100%; font-weight: 700; color: var(--gold-ink); }
+.cc-pay { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.cc-swap { margin-left: auto; }
 .cc-offers { margin-top: 1rem; }
 .cc-log { margin: 1rem 0 0.4rem; padding-left: 1.1rem; font-size: 0.95rem; color: var(--muted); }
 
@@ -244,9 +303,6 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 
 @media (min-width: 560px) {
   .cc-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-@media (min-width: 641px) {
-  .cc-strip { top: var(--bar); }
 }
 @media (max-width: 640px) {
   .cc-dialog { width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; border: 0; }

@@ -551,6 +551,29 @@ const build = buildDoc && ideasDoc ? buildFrom(buildDoc, ideasDoc, ctx.archetype
 if (!build) companionWarn("can't find Building Your Character or the Quick Build for the builder");
 const conditions = docWith("{#s-conditions-list}") ? conditionsFrom(docWith("{#s-conditions-list}"), inline) : [];
 if (conditions.length < 10) companionWarn(`found only ${conditions.length} conditions in Conflict`);
+// The rules the companion shows on a tap, read off the chapters so they match
+// the book and read offline: each one's opening, up to its first example,
+// table or subheading.
+const blockHtml = (text) => {
+  const file = inlineMd.processSync(text);
+  for (const msg of file.messages) companionWarn(msg.message);
+  return String(file).trim();
+};
+const rules = {};
+for (const id of ["s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour",
+  "s-defending", "s-defend", "s-consequences", "s-fear-gets-through", "s-blaze", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "how-permissions-stack"]) {
+  const doc = docWith(`{#${id}}`);
+  const head = doc?.body.match(new RegExp(`^#{2,4} (.+?) \\{#${id}\\}`, "m"));
+  const blocks = [];
+  // A rule or note box is part of the rule, so it's kept without its fence.
+  const text = doc && head ? sectionOf(doc.body, id).replace(/^:::(?:rule|note)(?:\{[^}\n]*\})?\n([\s\S]*?)\n:::$/gm, "$1") : "";
+  for (const block of text.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean)) {
+    if (/^(#|:::|\|)/.test(block) || blocks.length >= 6) break;
+    blocks.push(block);
+  }
+  if (!blocks.length) companionWarn(`can't find the rule #${id} to show on a tap`);
+  else rules[id] = { title: curly(head[1].replace(/[*_]/g, "").replace(/^Step \d+: /, "")), html: blockHtml(blocks.join("\n\n")) };
+}
 const linkTo = (id) => {
   const target = where.get(id);
   if (!target) companionWarn(`there's no #${id} in the book to link to`);
@@ -579,7 +602,7 @@ writeFileSync(
     changes: { title: curly(changes.meta.title), html: changesOut.html, headings: changesOut.headings },
     crew,
     crewLink: crewDoc ? `${pageFor.get(crewDoc.path)}#s-pregens` : "/rules/",
-    companion: { conditions, links: companionLinks, build },
+    companion: { conditions, links: companionLinks, build, rules },
   }),
 );
 mkdirSync(join(ROOT, "public", "figures"), { recursive: true });

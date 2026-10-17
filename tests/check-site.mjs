@@ -47,7 +47,7 @@ const PAGES = [
   "/", "/rules/", "/rules/welcome/", "/rules/the-core/", "/rules/the-archetypes/",
   "/rules/title-ideas-and-the-crew/", "/rules/conflict/", "/rules/the-bestiary/",
   "/rules/appendix-c-every-lever-in-the-game/", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
-  "/characters/", "/characters/?c=check-vesk", "/sheets/",
+  "/characters/", "/characters/?c=check-vesk", "/characters/?c=check-vesk&t=sheet", "/characters/?c=check-vesk&t=rules", "/sheets/",
 ];
 // A character saved on the phone, so a sheet gets checked like any other page.
 // Its hash is blank, so the sheet shows its "changed in the rules" note too.

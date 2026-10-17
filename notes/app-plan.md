@@ -33,6 +33,13 @@ From the drill on 17 Oct 2026 (`notes/app-rework.md`). Mo's answers are in `note
 - Random draws from the Title ideas, the traits and items lists, and the crew's own threads and Aspirations, makes up a name, and passes every warning. Each line goes on the set action its words lean to, and no set action starts past 5 steps, the crew's biggest.
 - A way in asks for a second tap before it bins a draft of a new character, and so does Roll again over changes.
 - pdf-lib only loads when someone prints, and the service worker keeps it and the blank sheet on the phone so print works offline.
+- **Stage 3.** A character opens on Play, with Sheet and Rules as tabs at the bottom where a thumb reaches them. The open tab stays in the link.
+- On the roll card, lines on the set action go violet when they're on, and anything brought in for Aura goes gold, with the Aura it costs in gold at the top.
+- The intents to tap are hurt, pin and disarm, and frighten and taunt for a blow at your Confidence, or your own words. A blow whose intent starts with a condition's name (pin for *Pinned*) can land as that condition, on the blow's die.
+- Each blow that gets through has its own buttons for what it costs, and the one you tap is counted on the sheet and written on the blow. Swapping stops once a blow's paid for, so undo first to swap again.
+- Defend's match gives the lowest blow the lowest roll that stops it, so the most get stopped. When two ways stop as many, the first die added gets the bigger roll, and a swap fixes it.
+- The Mark die sits behind "Is it Marked?", since it comes up less than the threat's die, and "Its number this round" takes the GM's number.
+- Rules on tap: Aura, Resolve, Confidence, Armour, Hurt and conditions open their buttons with the rule under them, a permission opens how permissions stack, and the Rules tab holds the rules a round needs and the conditions list. The build reads each one's opening off the chapters, up to its first example, table or subheading, rule boxes included.
 
 ## Confirmed with the plan
 
@@ -44,7 +51,7 @@ Every stage passes `tests/check-site.mjs` and `tests/check-companion.mjs`, works
 
 1. **The guided builder.** Built 17 Oct on the `app` branch. Players make their own on the phone: two archetypes and Titles, two traits, permissions with the quick test, set actions that add up, what they carry, attuned things, threads, crew answers and an Aspiration. Saved on the phone, offline, and it plays in today's companion like the crew. Builds on the crew data, `dice.js` and `store.js`. Uses about two-thirds. Checked by building a character with fixed picks, its set actions against `dice.js`, a reload, offline and a roll.
 2. **Print, and the other ways in.** Built 17 Oct on the `app` branch. A filled two-page sheet from any character, plus blank, from the crew and random. Builds on stage 1. Uses about a third. Checked by filling Vesk's PDF and a built character's, and a random one that passes the builder's warnings.
-3. **The play screen and the roll.** The one-handed play screen, the roll card that counts as you tap with Aura lines in gold, the threat's die, tapped-in real dice, intents, counting with undo, Defend with a swap, and rules on tap. Builds on stages 1 and 2. Uses about half. Checked by Vesk at the table, extended: a threat's die, a tap-in, a swap and an undo of Hurt.
+3. **The play screen and the roll.** Built 17 Oct on the `app` branch. The one-handed play screen, the roll card that counts as you tap with Aura lines in gold, the threat's die, tapped-in real dice, intents, counting with undo, Defend with a swap, and rules on tap. Builds on stages 1 and 2. Uses about half. Checked by Vesk at the table, extended: a threat's die, a tap-in, a swap and an undo of Hurt.
 4. **Dice, feel and learning.** The Sigil dice, the motion, sound and buzz, and the learn-to-play round with Isolde, Wren and Bram. Builds on stage 3. Uses about half. Checked by the round played start to finish, and reduce-motion.
 5. **Downtime and rule changes.** Downtime slots on the phone, and the gold marks. Builds on stage 1. Uses about a third. Checked by a downtime for Vesk and a made-up rule change against a saved character.
 6. **Sign-in.** Google and Discord, invites from Mo and his GMs, and phone characters moving into the account. Mo sets up a Google sign-in screen and a Discord app (steps given then). Uses about two-thirds. Checked by an invite, a sign-in, a move and a second device.

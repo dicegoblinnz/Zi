@@ -20,10 +20,14 @@ const dialog = document.getElementById("cc-dialog");
 const toastBox = document.getElementById("cc-toast");
 const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ORD = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth"];
+const RULE = DATA.rules || {};
+const TABS = [["play", "Play"], ["sheet", "Sheet"], ["rules", "Rules"]];
+// The intents a die can be tapped to, or the player writes their own.
+const INTENTS = { action: ["Hurt", "Pin", "Disarm"], armour: ["Hurt", "Pin", "Disarm"], confidence: ["Frighten", "Taunt"] };
 
 let view = { name: "list" };
 let roll = null; // whatever the open dialog is working on
-const ui = { panel: null, open: new Set(), toastTimer: 0, spinTimer: 0, notesTimer: 0, mode: null };
+const ui = { panel: null, tab: "play", open: new Set(), toastTimer: 0, spinTimer: 0, notesTimer: 0, mode: null };
 const undo = [];
 
 // Tests can line up the numbers the next dice roll, in order: your dice first,
@@ -44,6 +48,9 @@ const ICON = {
   undo: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg>',
   close: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   back: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>',
+  play: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8.5 4.75v9.5L12 21.5l-8.5-4.75v-9.5z"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg>',
+  sheet: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/></svg>',
+  rules: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>',
 };
 
 const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt, roll: () => randomBuild(DATA.build, DATA.crew) });
@@ -241,13 +248,24 @@ function missingView(ch) {
     ${ch ? '<div class="cc-row"><button type="button" class="button" data-act="delete">Delete them from this phone</button></div>' : ""}</div>`;
 }
 
-function stripView(ch, c, s) {
+// A rule from the book, kept in the page so it reads offline.
+const ruleHtml = (id) => `${RULE[id]?.html ?? ""}<p class="cc-small">${link(id, RULE[id] ? `${esc(RULE[id].title)} in the rules` : "Read it in the rules")}</p>`;
+const ruleBox = (id) => `<div class="cc-rule">${ruleHtml(id)}</div>`;
+const pips = (now, max) => `<span class="pips" aria-hidden="true">${Array.from({ length: max }, (_, i) => `<i${i < now ? ' class="on"' : ""}></i>`).join("")}</span>`;
+
+// The trackers on the play screen. Tap one for its buttons and its rule.
+function trackView(ch, c, s) {
   const n = c.numbers;
+  const hi = hurtInfo(s, c);
   const u = lastUndo(ch);
-  const cell = (key, label, value, sub = "") => `<button type="button" class="cc-stat${ui.panel === key ? " is-open" : ""}" data-act="panel" data-p="${key}" aria-expanded="${ui.panel === key}" aria-controls="cc-panel"><span class="k">${label}</span><span class="v">${value}${sub ? `<small>${sub}</small>` : ""}</span></button>`;
-  return `<div class="cc-strip" role="group" aria-label="Aura, Resolve, Confidence and Armour">
-    ${cell("aura", "Aura", s.aura, `/${n.aura}`)}${cell("resolve", "Resolve", s.resolve, `/${n.resolve}`)}${cell("conf", "Confidence", `d${s.conf}`)}${cell("armour", "Armour", `d${s.armour}`)}
+  const stat = (key, label, value, extra = "") => `<button type="button" class="cc-stat t-${key}${ui.panel === key ? " is-open" : ""}" data-act="panel" data-p="${key}" aria-expanded="${ui.panel === key}" aria-controls="cc-panel"><span class="k">${label}</span>${extra}<span class="v">${value}</span></button>`;
+  const boxes = `<span class="mini" aria-hidden="true">${Array.from({ length: hi.bars * 3 }, (_, i) => `<i${i >= hi.open ? ' class="x"' : i < s.hurt ? ' class="on"' : ""}></i>`).join("")}</span>`;
+  const conds = s.conditions.length ? s.conditions.map((x) => `<span class="cc-tag is-${x.kind}"><em>${esc(x.name)}</em> d${x.die}</span>`).join("") : '<span class="cc-tag is-none">None on you</span>';
+  return `<div class="cc-track" role="group" aria-label="Aura, Resolve, Confidence, Armour, Hurt and conditions">
+    ${stat("aura", "Aura", `${s.aura}<small>/${n.aura}</small>`, pips(s.aura, n.aura))}${stat("resolve", "Resolve", `${s.resolve}<small>/${n.resolve}</small>`, pips(s.resolve, n.resolve))}
     <button type="button" class="cc-undo" data-act="undo"${off(!u)} aria-label="${u ? `Undo ${esc(u.label)}` : "Nothing to undo"}">${ICON.undo}</button>
+    ${stat("conf", "Confidence", `d${s.conf}`)}${stat("armour", "Armour", `d${s.armour}`)}${stat("hurt", "Hurt", `${s.hurt}<small>/${hi.open}</small>`, boxes)}
+    ${stat("cond", "Conditions", conds)}
   </div>${ui.panel ? `<div id="cc-panel" class="cc-panel">${panelView(ui.panel, c, s)}</div>` : ""}`;
 }
 
@@ -258,27 +276,64 @@ function ring(act, from, to, now, label) {
 function panelView(key, c, s) {
   const n = c.numbers;
   if (key === "aura") {
-    return `<p><b>Aura ${s.aura} of ${n.aura}.</b> You’re full at the start of every scene, and every top face you roll gives 1 back. ${link("s-aura", "How Aura works")}</p>
-      <div class="cc-row"><button type="button" class="button" data-act="aura" data-d="-1"${off(s.aura < 1)}>Spend 1</button><button type="button" class="button" data-act="aura" data-d="1">Get 1 back</button></div>`;
+    return `<p><b>Aura ${s.aura} of ${n.aura}.</b></p>
+      <div class="cc-row"><button type="button" class="button" data-act="aura" data-d="-1"${off(s.aura < 1)}>Spend 1</button><button type="button" class="button" data-act="aura" data-d="1">Get 1 back</button></div>${ruleBox("s-aura")}`;
   }
   if (key === "resolve") {
-    return `<p><b>Resolve ${s.resolve} of ${n.resolve}.</b> You get 1 back at the end of a scene, and all of it after downtime. ${link("s-resolve", "How Resolve works")}</p>
-      <div class="cc-row"><button type="button" class="button" data-act="resolve" data-d="-1"${off(s.resolve < 1)}>Spend 1</button><button type="button" class="button" data-act="resolve" data-d="1">Get 1 back</button></div>`;
+    return `<p><b>Resolve ${s.resolve} of ${n.resolve}.</b></p>
+      <div class="cc-row"><button type="button" class="button" data-act="resolve" data-d="-1"${off(s.resolve < 1)}>Spend 1</button><button type="button" class="button" data-act="resolve" data-d="1">Get 1 back</button></div>${ruleBox("s-resolve")}`;
   }
   if (key === "conf") {
     const start = `d${n.confidence}${n.confidenceNote ? ` (${esc(n.confidenceNote)})` : ""}`;
     const mood = s.conf === 2 ? " You’re shaken, so going at a threat costs 1 Resolve each time." : s.conf === 12 ? " You’re fired up." : "";
-    return `<p><b>Confidence d${s.conf}.</b> It starts every scene on ${start}${n.dressed ? `, or d${n.dressed.die} in ${esc(n.dressed.what)} when they fit the scene` : ""}.${mood} ${link("s-confidence", "How Confidence works")}</p>
+    return `<p><b>Confidence d${s.conf}.</b> It starts every scene on ${start}${n.dressed ? `, or d${n.dressed.die} in ${esc(n.dressed.what)} when they fit the scene` : ""}.${mood}</p>
       ${ring("conf", 2, 12, s.conf, "Confidence")}
       <div class="cc-row">
         ${n.dressed && s.conf === n.confidence ? `<button type="button" class="button" data-act="conf" data-v="${n.dressed.die}">Dressed for it: d${n.dressed.die}</button>` : ""}
         ${s.conf < 6 ? '<button type="button" class="button" data-act="breath">Take a breath</button>' : ""}
         ${s.conf === 12 ? '<button type="button" class="button" data-act="cash" data-how="action">Cash it in for an extra action</button><button type="button" class="button" data-act="cash" data-how="heal">Cash it in to clear a box</button>' : ""}
-      </div>`;
+      </div>${ruleBox("s-confidence")}`;
   }
-  return `<p><b>Armour d${s.armour}</b>${s.armour < n.armour ? `, down from d${n.armour}` : ""}${n.armourNote ? `, from ${esc(n.armourNote)}` : ""}. A purse of gold spent at a smith, or a downtime slot on upkeep, puts it back to full. ${link("s-armour", "How Armour works")}</p>
-    ${ring("armour-set", 2, n.armour, s.armour, "Armour")}
-    <div class="cc-row"><button type="button" class="button" data-act="armour" data-d="-1"${off(s.armour <= 2)}>Step it down</button><button type="button" class="button" data-act="armour" data-d="full"${off(s.armour >= n.armour)}>Back to full</button></div>`;
+  if (key === "armour") {
+    return `<p><b>Armour d${s.armour}</b>${s.armour < n.armour ? `, down from d${n.armour}` : ""}${n.armourNote ? `, from ${esc(n.armourNote)}` : ""}. A purse of gold spent at a smith, or a downtime slot on upkeep, puts it back to full.</p>
+      ${ring("armour-set", 2, n.armour, s.armour, "Armour")}
+      <div class="cc-row"><button type="button" class="button" data-act="armour" data-d="-1"${off(s.armour <= 2)}>Step it down</button><button type="button" class="button" data-act="armour" data-d="full"${off(s.armour >= n.armour)}>Back to full</button></div>${ruleBox("s-armour")}`;
+  }
+  if (key === "hurt") {
+    const hi = hurtInfo(s, c);
+    const bars = Array.from({ length: hi.bars }, (_, b) => `<div class="cc-bar${hi.full[b] ? " is-full" : ""}"><span class="cc-boxes" aria-hidden="true">${[0, 1, 2].map((j) => {
+      const i = b * 3 + j;
+      return `<span class="hb${i >= hi.open ? " x" : i < s.hurt ? " on" : ""}"></span>`;
+    }).join("")}</span>${s.catches[b] ? `<span class="cc-catch"><em>${esc(s.catches[b])}</em><button type="button" class="button sm" data-act="heal-catch" data-b="${b}">Healed in downtime</button></span>` : ""}</div>`).join("");
+    return `<p><b>${s.hurt} of ${hi.open} boxes filled</b>${s.scars ? `, ${s.scars} crossed out with Scars` : ""}. Your wound die’s a d${hi.wound}. At the end of a scene you drop back to 3 boxes for each Catch.</p>
+      <div class="cc-bars">${bars}</div>
+      ${s.scars >= hi.bars * 3 ? '<p class="cc-note is-warn">Every box is crossed out. You’re scarred out, and your next Blaze is your last.</p>' : ""}
+      <div class="cc-row"><button type="button" class="button" data-act="hurt" data-d="1">Take a Hurt</button><button type="button" class="button" data-act="hurt" data-d="-1"${off(s.hurt < 1)}>Clear a box</button>${s.scars ? '<button type="button" class="button" data-act="unscar">The story earned a Scar back</button>' : ""}</div>${ruleBox("s-blaze")}`;
+  }
+  // Conditions: each one's rule beside it, and a form to add one.
+  const conds = s.conditions.map((x, i) => {
+    const rule = COND.get(x.name);
+    const what = rule ? `One step ${x.kind === "for" ? "more" : "less"} on ${rule.passive} Spend it and ${rule.active}` : "";
+    return `<li class="cc-cond is-${x.kind}">${hex(`d${x.die}`, "on")}<div><p><b><em>${esc(x.name)}</em></b> <small>${x.kind === "for" ? "for you" : "against you"}</small></p>${what ? `<p class="cc-lead">${what}</p>` : ""}
+      <div class="cc-row"><button type="button" class="button sm" data-act="cond-down" data-i="${i}">Down a size</button><button type="button" class="button sm" data-act="cond-off" data-i="${i}">Spent or broken</button></div></div></li>`;
+  }).join("");
+  const options = ["against", "for"].map((kind) => `<optgroup label="${kind === "for" ? "For you" : "Against you"}">${DATA.conditions.filter((x) => x.kind === kind).map((x) => `<option value="${esc(x.name)}">${esc(x.name)}</option>`).join("")}</optgroup>`).join("");
+  return `${conds ? `<ul class="cc-conds">${conds}</ul><div class="cc-row"><button type="button" class="button" data-act="round">End of round: every condition down a size</button></div>` : '<p><b>Nothing on you right now.</b></p>'}
+    <form class="cc-form" data-form="cond">
+      <label class="cc-field">Add a condition <select name="pick">${options}</select></label>
+      <label class="cc-field">Its die <select name="die">${SIZES.map((d) => `<option value="${d}"${d === 6 ? " selected" : ""}>d${d}</option>`).join("")}</select></label>
+      <details class="cc-own"><summary>Or write your own</summary>
+        <label class="cc-field">Its name <input name="own" maxlength="30" autocomplete="off"></label>
+        <label class="cc-field">It’s <select name="kind"><option value="against">against you</option><option value="for">for you</option></select></label></details>
+      <button type="submit" class="button">Add it</button></form>${ruleBox("s-conditions")}`;
+}
+
+// What can't wait: a bar that needs its Catch, and a Blaze.
+function alertView(ch, c, s) {
+  const hi = hurtInfo(s, c);
+  return `${hi.needsCatch ? `<form class="cc-form cc-note" data-form="catch"><label class="cc-field">That bar’s full. Write the injury in it, like <em>cracked ribs</em> or <em>can’t stand the dark</em>. <input name="catch" maxlength="60" autocomplete="off" required></label><button type="submit" class="button primary">Write it in</button></form>` : ""}
+    ${s.blaze ? `<div class="cc-note is-warn" role="alert"><p><b>You Blaze.</b> Declare something extraordinary and it happens, no roll. From your very first Blaze you can choose for your character to die. If you don’t, they leave the scene and take a Scar, which crosses out a box for good.</p>
+      <div class="cc-row"><button type="button" class="button primary" data-act="scar">Take a Scar and leave the scene</button><button type="button" class="button" data-act="die">${esc(ch.name)} dies</button></div></div>` : ""}`;
 }
 
 function lastRollView(last) {
@@ -289,17 +344,47 @@ function lastRollView(last) {
   return `<p class="cc-last"><span class="k">Last roll</span> <b>${esc(last.name)}</b>, ${steps(last.steps)}: ${last.dice.map((d) => `${d.total} on the ${d.mark ? "Mark " : ""}d${d.size}`).join(", ")}${last.opp != null ? `, against ${last.opp}` : ""}. ${verdict}</p>`;
 }
 
-function sheetView(ch, c) {
+// A character on the phone: the play screen first, and the rest of the sheet
+// and the rules a tab away.
+function characterView(ch, c) {
   const s = ch.state;
   const n = c.numbers;
-  const her = c.pronoun === "him" ? "his" : c.pronoun === "her" ? "her" : "their";
   const facts = [`Stride ${n.stride}${n.strideNote ? ` (${esc(n.strideNote)})` : ""}`, `${n.hurtBars} Hurt bars${n.hurtNote ? ` (${esc(n.hurtNote)})` : ""}`];
-  const hi = hurtInfo(s, c);
+  const them = c.pronoun === "him" ? "him" : c.pronoun === "her" ? "her" : "them";
+  const changed = ch.hash !== c.hash ? `<div class="cc-note" role="status"><p>${esc(c.name)}’s sheet has changed in the rules since this phone last opened it. Every number here is already the new one, so check anything you’ve picked still suits ${them}.</p><div class="cc-row"><a class="button" href="/changes/">See what’s changed</a><button type="button" class="button" data-act="seen">Got it</button></div></div>` : "";
+  const body = ui.tab === "sheet" ? sheetTab(ch, c) : ui.tab === "rules" ? rulesTab() : playTab(ch, c);
+  const tabs = TABS.map(([t, label]) => `<a href="/characters/?c=${encodeURIComponent(ch.id)}${t === "play" ? "" : `&amp;t=${t}`}" data-act="tab" data-t="${t}"${ui.tab === t ? ' aria-current="page"' : ""}>${ICON[t]}<span>${label}</span></a>`).join("");
+  return `<a class="cc-back" href="/characters/" data-act="nav">${ICON.back}Characters</a>
+  <header class="cc-head"><h1>${esc(ch.name)}</h1><p class="cc-title"><em>${esc(c.title)}</em></p>
+    ${ui.tab === "sheet" ? `<div class="chips">${c.archetypes.map((a) => `<span class="chip">${esc(a)}</span>`).join("")}</div>` : ""}
+    <p class="cc-small">${ch.name !== c.name ? `${esc(c.name)}’s sheet, from the crew · ` : ""}${facts.join(" · ")}</p></header>
+  ${saveNote()}${changed}
+  ${s.dead ? `<div class="cc-note is-warn"><p><b>${esc(ch.name)} died in play.</b> Keep the sheet to remember them, or delete them from this phone at the bottom of the Sheet tab.</p></div>` : ""}
+  ${body}
+  <nav class="cc-tabs" aria-label="${esc(ch.name)}"><div class="cc-tabs-in">${tabs}</div></nav>`;
+}
 
+function playTab(ch, c) {
+  const s = ch.state;
   const tiles = c.actions.map((a, i) => `<button type="button" class="tile card" data-act="roll" data-a="${i}"><span class="tile-name">${esc(a.name)}</span><span class="tile-die hex on">${esc(a.die)}</span><span class="tile-steps">${steps(a.steps)}</span></button>`).join("");
+  return `${trackView(ch, c, s)}${alertView(ch, c, s)}
+  <section class="cc-sec cc-play" aria-labelledby="cc-actions"><h2 id="cc-actions" class="sr-only">Set actions</h2>
+    <div class="cc-tiles">${tiles}<button type="button" class="tile card tile-defend" data-act="defence"><span class="tile-name">When it lands</span><span class="tile-sub">Armour d${s.armour} · Confidence d${s.conf}</span></button></div>
+    ${lastRollView(s.last)}
+    <div class="cc-row cc-scene"><button type="button" class="button" data-act="scene">New scene</button><button type="button" class="button" data-act="downtime">After downtime</button></div>
+  </section>`;
+}
 
+const lower = (name) => name.replace(/^(A|An|The|His|Her|Their) /, (m) => m.toLowerCase());
+
+// A permission's a button: tap it to read how permissions work.
+const permButton = (text, from) => `<li><button type="button" class="cc-perm" data-act="rule" data-r="perm" data-t="${esc(text)}" data-f="${esc(from)}"><em>${esc(text)}</em></button></li>`;
+
+function sheetTab(ch, c) {
+  const s = ch.state;
+  const her = c.pronoun === "him" ? "his" : c.pronoun === "her" ? "her" : "their";
   const titles = c.titles.map((t, i) => `<article class="card cc-card"><p class="eyebrow">${ORD[i] ?? ""} Title · ${t.archetypeId ? link(t.archetypeId, esc(t.archetype)) : esc(t.archetype)}</p>
-    <h3><em>${esc(t.name)}</em></h3><ul class="cc-perms">${t.permissions.map((p) => `<li><em>${esc(p.text)}</em></li>`).join("")}</ul></article>`).join("");
+    <h3><em>${esc(t.name)}</em></h3><ul class="cc-perms">${t.permissions.map((p) => permButton(p.text, `${her} ${(ORD[i] ?? "").toLowerCase()} Title, ${t.name}`)).join("")}</ul></article>`).join("");
   const archetypes = c.archetypeRules.map((a) => `<div class="cc-arch"><p><b>${a.id ? link(a.id, esc(a.name)) : esc(a.name)}${a.times > 1 ? `, taken ${a.times === 2 ? "twice" : `${a.times} times`}` : ""}.</b> ${a.summary}</p>
     ${a.auraHtml ? `<p><b>1 Aura:</b> ${a.auraHtml}</p><button type="button" class="button sm" data-act="arch-aura" data-n="${esc(a.name)}"${off(s.aura < 1)}>Spend 1 Aura on it</button>` : ""}</div>`).join("");
 
@@ -326,20 +411,7 @@ function sheetView(ch, c) {
       <ul class="cc-things">${own.map((x) => thing(where, x)).join("")}${extra.map((p) => thing(where, p.name, p.i)).join("")}</ul></div>`;
   };
   const attuned = c.attuned.map((a) => `<div class="cc-item"><p><b>${esc(a.name)}</b>${a.props ? ` (${esc(a.props)})` : ""} ${a.stage ? `<span class="chip sm">${esc(a.stage)}</span>` : ""}</p>
-    <ul class="cc-perms">${a.permissions.map((p) => `<li><em>${esc(p.text)}</em></li>`).join("")}</ul>${a.catch ? `<p>Its Catch: <em>${esc(a.catch)}</em></p>` : ""}</div>`).join("");
-
-  const bars = Array.from({ length: hi.bars }, (_, b) => `<div class="cc-bar${hi.full[b] ? " is-full" : ""}"><span class="cc-boxes" aria-hidden="true">${[0, 1, 2].map((j) => {
-    const i = b * 3 + j;
-    return `<span class="hb${i >= hi.open ? " x" : i < s.hurt ? " on" : ""}"></span>`;
-  }).join("")}</span>${s.catches[b] ? `<span class="cc-catch"><em>${esc(s.catches[b])}</em><button type="button" class="button sm" data-act="heal-catch" data-b="${b}">Healed in downtime</button></span>` : ""}</div>`).join("");
-
-  const conds = s.conditions.map((x, i) => {
-    const rule = COND.get(x.name);
-    const what = rule ? `One step ${x.kind === "for" ? "more" : "less"} on ${rule.passive} Spend it and ${rule.active}` : "";
-    return `<li class="cc-cond is-${x.kind}">${hex(`d${x.die}`, "on")}<div><p><b><em>${esc(x.name)}</em></b> <small>${x.kind === "for" ? "for you" : "against you"}</small></p>${what ? `<p class="cc-lead">${what}</p>` : ""}
-      <div class="cc-row"><button type="button" class="button sm" data-act="cond-down" data-i="${i}">Down a size</button><button type="button" class="button sm" data-act="cond-off" data-i="${i}">Spent or broken</button></div></div></li>`;
-  }).join("");
-  const condOptions = ["against", "for"].map((kind) => `<optgroup label="${kind === "for" ? "For you" : "Against you"}">${DATA.conditions.filter((x) => x.kind === kind).map((x) => `<option value="${esc(x.name)}">${esc(x.name)}</option>`).join("")}</optgroup>`).join("");
+    <ul class="cc-perms">${a.permissions.map((p) => permButton(p.text, `${lower(a.name)}, attuned`)).join("")}</ul>${a.catch ? `<p>Its Catch: <em>${esc(a.catch)}</em></p>` : ""}</div>`).join("");
 
   const crewNames = new Set(DATA.crew.map((x) => x.name));
   const threads = c.threads.map((p) => `<div class="cc-person"><h3>${esc(p.person)}${crewNames.has(p.person) ? ' <small>in the crew</small>' : ""}</h3><ul>${p.threads.map((t) => {
@@ -351,27 +423,13 @@ function sheetView(ch, c) {
   }).join("")}</ul></div>`).join("");
 
   const bites = [
-    ...c.attuned.filter((a) => a.catch).map((a) => ({ text: a.catch, from: `the Catch on ${a.name.replace(/^(His|Her|Their) /, (m) => m.toLowerCase())}` })),
+    ...c.attuned.filter((a) => a.catch).map((a) => ({ text: a.catch, from: `the Catch on ${lower(a.name)}` })),
     ...s.catches.map((x) => ({ text: x, from: "a Catch on your Hurt track" })),
     ...c.trouble.map((x) => ({ text: x, from: `trouble that follows ${c.pronoun}` })),
   ].map((b) => `<li class="cc-item"><p><em>${esc(b.text)}</em> <small>${esc(b.from)}</small></p><div class="cc-row"><button type="button" class="button sm" data-act="bite" data-big="0" aria-label="Let ${esc(b.text)} bite: +1 Aura">Let it bite: +1 Aura</button><button type="button" class="button sm" data-act="bite" data-big="1" aria-label="A big bite from ${esc(b.text)}: +1 Resolve">A big bite: +1 Resolve</button></div></li>`).join("");
 
-  const changed = ch.hash !== c.hash ? `<div class="cc-note" role="status"><p>${esc(c.name)}’s sheet has changed in the rules since this phone last opened it. Every number here is already the new one, so check anything you’ve picked still suits ${c.pronoun === "him" ? "him" : c.pronoun === "her" ? "her" : "them"}.</p><div class="cc-row"><a class="button" href="/changes/">See what’s changed</a><button type="button" class="button" data-act="seen">Got it</button></div></div>` : "";
-
-  return `<a class="cc-back" href="/characters/" data-act="nav">${ICON.back}Characters</a>
-  <header class="cc-head"><h1>${esc(ch.name)}</h1><p class="cc-title"><em>${esc(c.title)}</em></p>
-    <div class="chips">${c.archetypes.map((a) => `<span class="chip">${esc(a)}</span>`).join("")}</div>
-    <p class="cc-small">${ch.name !== c.name ? `${esc(c.name)}’s sheet, from the crew · ` : ""}${facts.join(" · ")}</p></header>
-  ${saveNote()}${changed}
-  ${s.dead ? `<div class="cc-note is-warn"><p><b>${esc(ch.name)} died in play.</b> Keep the sheet to remember them, or delete them from this phone at the bottom of the page.</p></div>` : ""}
-  ${stripView(ch, c, s)}
-  <section class="cc-sec cc-play" aria-labelledby="cc-actions"><h2 id="cc-actions" class="sr-only">Set actions</h2>
-    <div class="cc-tiles">${tiles}<button type="button" class="tile card tile-defend" data-act="defence"><span class="tile-name">When it lands</span><span class="tile-sub">Armour d${s.armour} · Confidence d${s.conf}</span></button></div>
-    ${lastRollView(s.last)}
-    <div class="cc-row cc-scene"><button type="button" class="button" data-act="scene">New scene</button><button type="button" class="button" data-act="downtime">After downtime</button></div>
-  </section>
-
-  <section class="cc-sec" aria-labelledby="cc-titles"><h2 id="cc-titles">Titles and permissions</h2>${titles}
+  return `<section class="cc-sec" aria-labelledby="cc-titles"><h2 id="cc-titles">Titles and permissions</h2>
+    <p class="cc-lead">Tap a permission to see how it counts.</p>${titles}
     <h3 class="cc-h3">${c.archetypeRules.length > 1 ? "Your archetypes" : "Your archetype"}</h3>${archetypes}</section>
 
   <section class="cc-sec" aria-labelledby="cc-traits"><h2 id="cc-traits">Traits</h2>${traits}</section>
@@ -385,25 +443,6 @@ function sheetView(ch, c) {
       <button type="submit" class="button">Add it</button></form>
     <p class="cc-lead">Tap a thing to cross it out when it breaks or gets used up. Your attuned things are magic, and they can’t be broken.</p>
     ${c.attuned.length ? `<h3 class="cc-h3">Attuned</h3>${attuned}` : ""}</section>
-
-  <section class="cc-sec" aria-labelledby="cc-hurt"><h2 id="cc-hurt">Hurt and conditions</h2>
-    <p class="cc-small">${s.hurt} of ${hi.open} boxes filled${s.scars ? `, ${s.scars} crossed out with Scars` : ""}. Your wound die’s a d${hi.wound}. At the end of a scene you drop back to 3 boxes for each Catch. ${link("s-blaze", "How Hurt works")}</p>
-    <div class="cc-bars">${bars}</div>
-    ${hi.needsCatch ? `<form class="cc-form cc-note" data-form="catch"><label class="cc-field">That bar’s full. Write the injury in it, like <em>cracked ribs</em> or <em>can’t stand the dark</em>. <input name="catch" maxlength="60" autocomplete="off" required></label><button type="submit" class="button primary">Write it in</button></form>` : ""}
-    ${s.blaze ? `<div class="cc-note is-warn" role="alert"><p><b>You Blaze.</b> Declare something extraordinary and it happens, no roll. From your very first Blaze you can choose for your character to die. If you don’t, they leave the scene and take a Scar, which crosses out a box for good.</p>
-      <div class="cc-row"><button type="button" class="button primary" data-act="scar">Take a Scar and leave the scene</button><button type="button" class="button" data-act="die">${esc(ch.name)} dies</button></div></div>` : ""}
-    ${s.scars >= hi.bars * 3 ? '<p class="cc-note is-warn">Every box is crossed out. You’re scarred out, and your next Blaze is your last.</p>' : ""}
-    <div class="cc-row"><button type="button" class="button" data-act="hurt" data-d="1">Take a Hurt</button><button type="button" class="button" data-act="hurt" data-d="-1"${off(s.hurt < 1)}>Clear a box</button>${s.scars ? '<button type="button" class="button" data-act="unscar">The story earned a Scar back</button>' : ""}</div>
-    <h3 class="cc-h3">Conditions</h3>
-    ${conds ? `<ul class="cc-conds">${conds}</ul><div class="cc-row"><button type="button" class="button" data-act="round">End of round: every condition down a size</button></div>` : '<p class="cc-lead">Nothing on you right now.</p>'}
-    <form class="cc-form" data-form="cond">
-      <label class="cc-field">Add a condition <select name="pick">${condOptions}</select></label>
-      <label class="cc-field">Its die <select name="die">${SIZES.map((d) => `<option value="${d}"${d === 6 ? " selected" : ""}>d${d}</option>`).join("")}</select></label>
-      <details class="cc-own"><summary>Or write your own</summary>
-        <label class="cc-field">Its name <input name="own" maxlength="30" autocomplete="off"></label>
-        <label class="cc-field">It’s <select name="kind"><option value="against">against you</option><option value="for">for you</option></select></label></details>
-      <button type="submit" class="button">Add it</button></form>
-    <p class="cc-lead">${link("s-conditions", "How conditions work")}</p></section>
 
   <section class="cc-sec" aria-labelledby="cc-threads"><h2 id="cc-threads">Threads</h2>
     <p class="cc-lead">Lean on someone in the story and strain a thread for 1 Resolve. Strain it again before it’s mended and it snaps. A thread with someone in the crew is on both your sheets, so tell them when you strain it. ${link("s-bonds", "How threads work")}</p>
@@ -431,15 +470,31 @@ function sheetView(ch, c) {
     <div class="cc-row"><button type="button" class="button danger" data-act="delete">Delete ${esc(ch.name)} from this phone</button></div></section>`;
 }
 
+// The rules a player reaches for mid-round, straight from the book and kept
+// in the page, so they read with no signal.
+const RULE_GROUPS = [
+  ["Rolling", ["s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions"]],
+  ["Your numbers", ["s-aura", "s-resolve", "s-confidence", "s-armour"]],
+  ["When it lands", ["s-defending", "s-defend", "s-consequences", "s-fear-gets-through", "s-blaze"]],
+  ["Everything else", ["s-conditions", "s-bonds", "s-trouble", "s-aspiration"]],
+];
+function rulesTab() {
+  const box = (key, title, html) => `<details class="cc-rulebox" data-open="${key}"${ui.open.has(key) ? " open" : ""}><summary>${title}</summary><div class="cc-rule">${html}</div></details>`;
+  const conds = ["against", "for"].map((kind) => `<h3>${kind === "for" ? "For you" : "Against you"}</h3><ul class="cc-list">${DATA.conditions.filter((x) => x.kind === kind).map((x) => `<li class="cc-item"><p><b><em>${esc(x.name)}</em></b> One step ${kind === "for" ? "more" : "less"} on ${x.passive} Spend it and ${x.active}</p></li>`).join("")}</ul>`).join("");
+  return `<section class="cc-sec cc-rules" aria-labelledby="cc-rules-h"><h2 id="cc-rules-h">Rules on tap</h2>
+    <p class="cc-lead">Straight from the book, and they work with no signal. The whole book’s in the <a href="/rules/">rules</a>.</p>
+    ${RULE_GROUPS.map(([title, ids]) => `<h3 class="cc-h3">${title}</h3>${ids.filter((id) => RULE[id]).map((id) => box(`r-${id}`, esc(RULE[id].title), ruleHtml(id))).join("")}`).join("")}
+    <h3 class="cc-h3">Conditions</h3>${box("r-conds", "Conditions to start with", conds)}</section>`;
+}
+
 // ---------------------------------------------------------------- rolling
 
 const lineOf = (c, key) => c.lines.find((l) => l.key === key);
 const lineLabel = (l) => (l.kind === "title" ? `Title: <em>${esc(l.label)}</em>` : l.kind === "permission" ? `<em>${esc(l.label)}</em>` : l.kind === "attuned" ? `<em>${esc(l.label)}</em> <small>${esc(l.item)}</small>` : esc(l.label));
-const lower = (name) => name.replace(/^(A|An|The|His|Her|Their) /, (m) => m.toLowerCase());
 const lineName = (l) => (l.kind === "attuned" ? `${lower(l.item)} (${l.label})` : l.kind === "title" ? `your Title, ${l.label}` : l.label);
 
 function openAction(i) {
-  roll = { kind: "action", mode: "build", a: i, off: new Set(), in: new Set(), other: 0, conds: new Set(), friends: [], handed: 0, extra: -1, via: "resolve", beyond: false, count: null, shape: 0, vs: 0, vsRolled: 4, mark: 0, dice: [], opp: null, oppSize: 0, log: [], pick: null, pads: [], padOpp: false, spinning: false };
+  roll = { kind: "action", mode: "build", a: i, off: new Set(), in: new Set(), other: 0, conds: new Set(), friends: [], handed: 0, extra: -1, via: "resolve", beyond: false, count: null, shape: 0, vs: 0, vsRolled: 4, mark: 0, dice: [], opp: null, oppSize: 0, log: [], pick: null, pads: [], padOpp: false, spinning: false, intents: {}, owns: new Set() };
   openDialog();
 }
 
@@ -471,27 +526,46 @@ function counted(r, c, s) {
 
 const stepper = (name, value, min, max, label, i = "") => `<span class="cc-step"><button type="button" class="cc-stepbtn" data-act="step" data-n="${name}" data-i="${i}" data-d="-1" aria-label="${label}: one less"${off(value <= min)}>−</button><output>${value}</output><button type="button" class="cc-stepbtn" data-act="step" data-n="${name}" data-i="${i}" data-d="1" aria-label="${label}: one more"${off(value >= max)}>+</button></span>`;
 
+// A die's intent: tap one of the usual ones, or write your own.
+function intentRow(key, size, label, presets, cls = "on", extra = "") {
+  const own = roll.owns.has(key);
+  const value = roll.intents[key] ?? "";
+  const name = `${label}d${size}`;
+  const chip = (p) => `<button type="button" class="cc-chipbtn sm" data-act="intent" data-k="${key}" data-v="${esc(p)}"${pressed(!own && value === p)}>${esc(p)}</button>`;
+  return `<div class="cc-intent">${hex(`d${size}`, cls)}<div class="cc-chips" role="group" aria-label="What the ${esc(name)} is for">${presets.map(chip).join("")}<button type="button" class="cc-chipbtn sm" data-act="intent" data-k="${key}" data-v=""${pressed(own)}>Your own</button></div>${extra}
+    ${own ? `<input class="cc-own-intent" data-in="intent" data-k="${key}" value="${esc(value)}" maxlength="40" autocomplete="off" placeholder="What it’s trying to do" aria-label="What the ${esc(name)} is for, in your words">` : ""}</div>`;
+}
+
+// The roll card. It counts as you tap: lines on the set action are free, and
+// anything brought in is gold, at 1 Aura each.
 function buildView(c, s) {
   const r = roll;
   const k = counted(r, c, s);
-  const toggle = (l, on, act) => `<button type="button" class="cc-line" data-act="${act}" data-k="${l.key}"${pressed(on)}><span class="tick" aria-hidden="true"></span><span>${lineLabel(l)}</span></button>`;
+  const toggle = (l, on, act, aura = false) => `<button type="button" class="cc-line${aura ? " is-aura" : ""}" data-act="${act}" data-k="${l.key}"${pressed(on)}><span class="tick" aria-hidden="true"></span><span>${lineLabel(l)}</span></button>`;
   const groups = [["title", "Titles"], ["permission", "Permissions"], ["attuned", "Attuned"], ["trait", "Traits"], ["kit", "What you carry"]].map(([kind, title]) => {
     const list = c.lines.filter((l) => l.kind === kind && !k.free.has(l.key) && (kind !== "trait" || l.step) && !(kind === "kit" && Object.keys(s.crossed).some((x) => s.crossed[x] && x.endsWith(`|${l.label}`))));
-    return list.length ? `<h3>${title}</h3>${list.map((l) => toggle(l, r.in.has(l.key), "in")).join("")}` : "";
+    return list.length ? `<h3>${title}</h3>${list.map((l) => toggle(l, r.in.has(l.key), "in", true)).join("")}` : "";
   }).join("");
   const name = k.extra ? (k.extra === k.act ? `${k.act.name}, twice` : `${k.act.name} and ${k.extra.name}`) : k.act.name;
   const vias = [["resolve", "1 Resolve"], ["time", "Taking my time, outside a round"], ["held", "I held my action"], ["hiding", "Coming out of hiding"], ["fired", "Cashing in fired-up Confidence"], ["trait", "A trait, condition or Boon that says so"]];
+  const dice = [...k.dice.map((size, i) => [String(i), size, ""]), ...(r.mark ? [["m", r.mark, "Mark "]] : [])];
   return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${esc(name)}</h2>
-      <p class="cc-dice" aria-live="polite">${k.dice.map((d) => hex(`d${d}`, "on")).join("")}<span><b>${steps(k.total)}</b>, ${diceLabel(k.dice)}${r.mark ? `, and the Mark d${r.mark}` : ""}</span></p>
-      ${k.aura || k.resolve ? `<p class="cc-costs">${k.aura ? `<span class="chip">${k.aura} Aura</span>` : ""}${k.resolve ? `<span class="chip">${k.resolve} Resolve</span>` : ""}</p>` : ""}</div>
+      <p class="cc-dice" aria-live="polite">${k.dice.map((d) => hex(`d${d}`, "on")).join("")}${r.mark ? hex(`d${r.mark}`, "mark") : ""}<span><b>${steps(k.total)}</b>, ${diceLabel(k.dice)}${r.mark ? `, and the Mark d${r.mark}` : ""}${r.vs > 0 ? ` against their d${r.vs}` : r.vs === -1 ? ` against ${r.vsRolled}` : ""}</span></p>
+      ${k.aura || k.resolve ? `<p class="cc-costs">${k.aura ? `<span class="chip is-aura">${k.aura} Aura</span>` : ""}${k.resolve ? `<span class="chip">${k.resolve} Resolve</span>` : ""}</p>` : ""}</div>
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
   <div class="dlg-body">
     <fieldset class="cc-group"><legend>On your ${esc(k.extra && k.extra !== k.act ? `${k.act.name} and ${k.extra.name}` : k.act.name)}</legend>
       ${k.free.size ? `${[...k.free].map((key) => toggle(lineOf(c, key), !r.off.has(key), "off")).join("")}<p class="cc-lead">Tap a line off when it doesn’t fit this time.</p>` : '<p class="cc-lead">Nothing’s on it yet, so it’s the action on its own.</p>'}</fieldset>
+    <fieldset class="cc-group"><legend>What it’s up against</legend>
+      <div class="cc-chips"><button type="button" class="cc-chipbtn" data-act="vs" data-v="0"${pressed(r.vs === 0)}>Nothing to beat</button>${SIZES.map((d) => `<button type="button" class="cc-chipbtn" data-act="vs" data-v="${d}"${pressed(r.vs === d)} aria-label="Their d${d}">d${d}</button>`).join("")}<button type="button" class="cc-chipbtn" data-act="vs" data-v="-1"${pressed(r.vs === -1)}>Its number this round</button></div>
+      ${r.vs === -1 ? `<div class="cc-stepper"><span>The number to beat <small>what it already rolled this round, or the GM’s number</small></span>${stepper("vsRolled", r.vsRolled, 1, 30, "The number to beat")}</div>` : `<p class="cc-lead">Tap its die and the phone rolls it with yours. A threat rolls its defence once a round, and that roll stands for everyone who goes at it.</p>`}
+      <details class="cc-mark"${r.mark || ui.open.has("mark") ? " open" : ""} data-open="mark"><summary>Is it Marked?${r.mark ? ` <small>d${r.mark}</small>` : ""}</summary>
+        <p class="cc-small">Anyone who goes at a Marked creature rolls the Mark die too, as one more die against it.</p>
+        <div class="cc-chips" role="group" aria-label="Its Mark"><button type="button" class="cc-chipbtn" data-act="mark" data-v="0"${pressed(!r.mark)}>No Mark</button>${SIZES.map((d) => `<button type="button" class="cc-chipbtn" data-act="mark" data-v="${d}"${pressed(r.mark === d)} aria-label="Marked d${d}">d${d}</button>`).join("")}</div></details></fieldset>
     ${s.conf <= 2 ? `<fieldset class="cc-group"><legend>You’re shaken</legend><button type="button" class="cc-line" data-act="shaken"${pressed(k.shaken)}><span class="tick" aria-hidden="true"></span><span>Going at a threat costs 1 Resolve <small>in a fight or face to face, every time. Tap it off when this isn’t going at a threat.</small></span></button></fieldset>` : ""}
     <details class="cc-group" data-open="bring"${ui.open.has("bring") ? " open" : ""}><summary>Bring something in <small>1 Aura each${k.aura ? `, ${k.aura} in` : ""}</small></summary>
       <p class="cc-lead">Anything else that fits costs 1 Aura to bring in, even when it plainly fits.</p>${groups}
-      <div class="cc-stepper"><span>Something else that fits <small>the ground, a threat’s tag you know, or a friend’s permission through a thread that isn’t strained</small></span>${stepper("other", r.other, 0, 9, "Something else")}</div></details>
+      <div class="cc-stepper${r.other ? " is-aura" : ""}"><span>Something else that fits <small>the ground, a threat’s tag you know, or a friend’s permission through a thread that isn’t strained</small></span>${stepper("other", r.other, 0, 9, "Something else")}</div></details>
     ${s.conditions.length ? `<fieldset class="cc-group"><legend>Conditions on you</legend>${s.conditions.map((x) => `<button type="button" class="cc-line" data-act="cond" data-k="${esc(x.name)}"${pressed(r.conds.has(x.name))}><span class="tick" aria-hidden="true"></span><span><em>${esc(x.name)}</em> d${x.die} <small>${x.kind === "for" ? "one step more" : "one step less"}</small></span></button>`).join("")}<p class="cc-lead">Tap one on when it fits this roll.</p></fieldset>` : ""}
     <details class="cc-group" data-open="more"${ui.open.has("more") ? " open" : ""}><summary>Friends, extra actions and going beyond${r.friends.length || r.handed || k.extra || r.beyond ? " <small>in use</small>" : ""}</summary>
       <h3>Friends joining in</h3>
@@ -507,13 +581,8 @@ function buildView(c, s) {
     <fieldset class="cc-group"><legend>Your dice</legend>
       ${k.most > k.fewest ? `<div class="cc-stepper"><span>How many dice <small>${k.splits === 1 ? "your action gives you a split" : `${k.splits} splits, one for every action in the roll`}</small></span>${stepper("count", k.count, k.fewest, k.most, "How many dice")}</div>` : ""}
       ${k.shapes.length > 1 ? `<div class="cc-chips" role="group" aria-label="How your steps are shared out">${k.shapes.map((sh, i) => `<button type="button" class="cc-chipbtn" data-act="shape" data-i="${i}"${pressed(i === k.shape)}>${diceLabel(sh)}</button>`).join("")}</div>` : ""}
-      <p class="cc-lead">Give every die an intent before you roll: what it’s trying to do, and who it’s aimed at.</p></fieldset>
-    <fieldset class="cc-group"><legend>What it’s up against</legend>
-      <div class="cc-chips"><button type="button" class="cc-chipbtn" data-act="vs" data-v="0"${pressed(r.vs === 0)}>Nothing to beat</button>${SIZES.map((d) => `<button type="button" class="cc-chipbtn" data-act="vs" data-v="${d}"${pressed(r.vs === d)}>d${d}</button>`).join("")}<button type="button" class="cc-chipbtn" data-act="vs" data-v="-1"${pressed(r.vs === -1)}>A number it already rolled</button></div>
-      ${r.vs === -1 ? `<div class="cc-stepper"><span>The number to beat</span>${stepper("vsRolled", r.vsRolled, 1, 30, "The number to beat")}</div>` : ""}
-      <p class="cc-lead">A threat rolls its defence once a round, and that roll stands for everyone who goes at it.</p>
-      <p class="cc-small">Is it Marked? Anyone who goes at a Marked creature rolls the Mark die too, as one more die against it.</p>
-      <div class="cc-chips" role="group" aria-label="Its Mark"><button type="button" class="cc-chipbtn" data-act="mark" data-v="0"${pressed(!r.mark)}>No Mark</button>${SIZES.map((d) => `<button type="button" class="cc-chipbtn" data-act="mark" data-v="${d}"${pressed(r.mark === d)} aria-label="Marked d${d}">d${d}</button>`).join("")}</div></fieldset>
+      <p class="cc-lead">Give every die an intent before you roll: what it’s trying to do, and who it’s aimed at. Tap one in and it’s on the result.</p>
+      ${dice.map(([key, size, label]) => intentRow(key, size, label, INTENTS.action, key === "m" ? "mark" : "on")).join("")}</fieldset>
   </div>
   <div class="dlg-foot">${k.short ? `<p class="cc-warn" role="alert">${esc(k.short)}</p>` : ""}
     <button type="button" class="button primary" data-act="go"${off(k.short)}>Roll</button><button type="button" class="button" data-act="go-real"${off(k.short)}>Roll real dice</button></div>`;
@@ -552,8 +621,9 @@ function go(real) {
     }
     r.name = k.extra ? (k.extra === k.act ? `${k.act.name}, twice` : `${k.act.name} and ${k.extra.name}`) : k.act.name;
     r.total = k.total;
-    r.dice = k.dice.map((size) => ({ size, nat: 0, plus: 0, won: false }));
-    if (r.mark) r.dice.push({ size: r.mark, nat: 0, plus: 0, won: false, mark: true });
+    const intent = (key) => String(r.intents[key] ?? "").trim();
+    r.dice = k.dice.map((size, i) => ({ size, nat: 0, plus: 0, won: false, intent: intent(i) }));
+    if (r.mark) r.dice.push({ size: r.mark, nat: 0, plus: 0, won: false, mark: true, intent: intent("m") });
     r.oppSize = r.vs > 0 ? r.vs : 0;
     r.opp = r.vs === -1 ? r.vsRolled : null;
     r.real = real;
@@ -610,6 +680,8 @@ function resultView(c, s, ch) {
     return `<span class="hex big on">${d.nat + d.plus}</span>`;
   };
   const against = r.oppSize ? `against their d${r.oppSize}, which came up ${r.spinning ? "…" : r.opp}` : r.opp != null ? `against the ${r.opp} it already rolled` : "with nothing to beat";
+  const them = r.oppSize ? `<div class="cc-them"${r.spinning ? ' data-act="skip"' : ""}><span class="k">Their d${r.oppSize}</span><span class="hex big them"${r.spinning ? ` data-spin="${r.oppSize}"` : ""}>${r.opp}</span></div>`
+    : r.opp != null ? `<div class="cc-them"><span class="k">To beat</span>${hex(r.opp, "big them")}</div>` : "";
   const onMark = (a) => /\bMark\b/.test(a.aura);
   const bonuses = c.archetypeRules.filter((a) => a.bonus && !/\b(Armour|Confidence|friend’s)/.test(a.aura) && (!onMark(a) || r.dice.some((d) => d.mark)));
   const canReroll = s.resolve >= 1 && (r.opp == null || outs.some((o) => o === "tie" || o === "under"));
@@ -621,7 +693,7 @@ function resultView(c, s, ch) {
   return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${esc(r.name)}</h2><p class="cc-small">${steps(r.total)}, ${esc(against)}.</p></div>
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
   <div class="dlg-body">
-    <ul class="cc-res"${r.spinning ? ' data-act="skip"' : ""}>${r.dice.map((d, i) => `<li class="res is-${r.spinning ? "spin" : outs[i] ?? "none"}">${die(d, i)}<span class="res-die">${d.mark ? "Mark " : ""}d${d.size}${d.plus ? ` +${d.plus}` : ""}</span>${!r.spinning && outs[i] ? `<b class="res-out">${words[outs[i]]}</b>` : ""}${!r.spinning && d.nat === d.size ? '<span class="res-note">Top face</span>' : ""}</li>`).join("")}</ul>
+    ${them}<ul class="cc-res"${r.spinning ? ' data-act="skip"' : ""}>${r.dice.map((d, i) => `<li class="res is-${r.spinning ? "spin" : outs[i] ?? "none"}">${die(d, i)}<span class="res-die">${d.mark ? "Mark " : ""}d${d.size}${d.plus ? ` +${d.plus}` : ""}</span>${d.intent ? `<span class="res-intent">${esc(d.intent)}</span>` : ""}${!r.spinning && outs[i] ? `<b class="res-out">${words[outs[i]]}</b>` : ""}${!r.spinning && d.nat === d.size ? '<span class="res-note">Top face</span>' : ""}</li>`).join("")}</ul>
     ${r.spinning ? '<p class="cc-small">Tap the dice to skip.</p>' : ""}
     ${picking ? `<div class="cc-note" role="status"><p>${r.pick.type === "plus" ? `Tap the ${r.pick.mark ? "Mark die" : "die"} to put +${r.pick.bonus} on.` : "Tap a die to roll it again, or roll them all."}</p><div class="cc-row">${r.pick.type === "reroll" ? '<button type="button" class="button sm" data-act="reroll-all">Roll them all</button>' : ""}<button type="button" class="button sm" data-act="pick-cancel">Never mind</button></div></div>` : ""}
     ${offers ? `<div class="cc-row cc-offers">${offers}</div>` : ""}
@@ -635,7 +707,7 @@ function resultView(c, s, ch) {
 // ---------------------------------------------------------------- defending
 
 function openDefence() {
-  roll = { kind: "defence", mode: "build", against: "armour", defend: false, incoming: [], mine: [], opp: [], pick: null, log: [], spinning: false, padOpp: true, dconds: {} };
+  roll = { kind: "defence", mode: "build", against: "armour", defend: false, incoming: [], mine: [], opp: [], pick: null, log: [], spinning: false, padOpp: true, dconds: {}, intents: {}, owns: new Set(), assign: [], paid: [], swap: null };
   openDialog();
 }
 
@@ -653,22 +725,37 @@ function defenceDie(s, r) {
   return even(base + shift, 2, 12);
 }
 
-// Which of your rolls stops which die. Ties go to you. Letting it ride, your
-// one roll stands against them all. Defending, each die gets its own roll, and
-// they're matched up so the most get stopped.
-function blocks(r) {
-  const mine = r.mine.map((d, i) => ({ i, v: d.nat + d.plus }));
-  const hits = r.incoming.map((size, j) => ({ j, size, v: r.opp[j], by: null }));
-  if (!r.defend) {
-    for (const h of hits) if (mine[0] && h.v <= mine[0].v) h.by = 0;
-    return hits;
-  }
-  const spare = [...mine].sort((a, b) => a.v - b.v);
-  for (const h of [...hits].sort((a, b) => a.v - b.v)) {
+// An intent like "pin" or "frighten" is a condition when it gets through, and
+// its die is the die that placed it.
+function condOf(text) {
+  const word = String(text ?? "").trim().toLowerCase().split(/\s+/)[0].replace(/[^a-z]/g, "");
+  if (word.length < 3) return null;
+  return DATA.conditions.find((x) => x.kind === "against" && x.name.toLowerCase().startsWith(word) && x.name.length - word.length <= 3) ?? null;
+}
+
+// Defending, each die gets its own roll, and the phone matches them up so the
+// most get stopped: the lowest blow takes the lowest roll that stops it. The
+// rolls that can't stop anything go on what's left. The player can swap two.
+function assignBest(r) {
+  const spare = r.mine.map((d, i) => ({ i, v: d.nat + d.plus })).sort((a, b) => a.v - b.v);
+  const hits = r.incoming.map((size, j) => ({ j, v: r.opp[j] })).sort((a, b) => a.v - b.v);
+  r.assign = r.incoming.map(() => -1);
+  for (const h of hits) {
     const k = spare.findIndex((m) => m.v >= h.v);
-    if (k >= 0) h.by = spare.splice(k, 1)[0].i;
+    if (k >= 0) r.assign[h.j] = spare.splice(k, 1)[0].i;
   }
-  return hits;
+  for (const h of hits) if (r.assign[h.j] < 0) r.assign[h.j] = spare.shift()?.i ?? -1;
+  r.swap = null;
+}
+
+// Which of your rolls stops which die. Ties go to you. Letting it ride, your
+// one roll stands against them all.
+function blocks(r) {
+  return r.incoming.map((size, j) => {
+    const pair = r.defend ? r.assign[j] ?? -1 : 0;
+    const mine = r.mine[pair] ? r.mine[pair].nat + r.mine[pair].plus : null;
+    return { j, size, v: r.opp[j], pair, mine, by: mine != null && mine >= r.opp[j] ? pair : null, intent: String(r.intents[`d${j}`] ?? "").trim() };
+  });
 }
 
 function defenceGo(real) {
@@ -679,6 +766,7 @@ function defenceGo(real) {
     r.size = size;
     r.mine = Array.from({ length: r.defend ? r.incoming.length : 1 }, () => ({ size, nat: 0, plus: 0 }));
     r.opp = r.incoming.map(() => 0);
+    r.paid = r.incoming.map(() => "");
     r.log = [];
     r.pick = null;
     r.real = real;
@@ -695,6 +783,7 @@ function defenceGo(real) {
 }
 
 function settleDefence(s, c) {
+  assignBest(roll);
   const tops = roll.mine.filter((m) => m.nat === m.size).length;
   if (tops) roll.log.push(`${tops === 1 ? "A top face" : `${tops} top faces`} on your ${roll.against === "armour" ? "Armour" : "Confidence"}, so ${tops} Aura back.${gainAura(s, c, tops)}`);
 }
@@ -715,9 +804,21 @@ function defenceBuild(s) {
       <button type="button" class="cc-line" data-act="d-defend" data-v="1"${pressed(r.defend)}><span class="tick" aria-hidden="true"></span><span>Defend <small>a roll for every die, and it takes your action</small></span></button></fieldset>
     <fieldset class="cc-group"><legend>The dice aimed at you</legend>
       <div class="cc-chips">${SIZES.map((d) => `<button type="button" class="cc-chipbtn" data-act="d-add" data-v="${d}" aria-label="Add a d${d}">+ d${d}</button>`).join("")}</div>
-      ${r.incoming.length ? `<ul class="cc-incoming">${r.incoming.map((d, i) => `<li>${hex(`d${d}`, "on")}<button type="button" class="cc-x sm" data-act="d-del" data-i="${i}" aria-label="Take the d${d} off">${ICON.close}</button></li>`).join("")}</ul>` : '<p class="cc-lead">Add each die the GM telegraphed at you that nobody answered.</p>'}</fieldset>
+      ${r.incoming.length ? `<div class="cc-incoming">${r.incoming.map((d, j) => intentRow(`d${j}`, d, "their ", INTENTS[r.against], "them", `<button type="button" class="cc-x sm" data-act="d-del" data-i="${j}" aria-label="Take the d${d} off">${ICON.close}</button>`)).join("")}</div>
+        <p class="cc-lead">Tap what each one’s trying to do, if the GM said.</p>` : '<p class="cc-lead">Add each die the GM telegraphed at you that nobody answered.</p>'}</fieldset>
   </div>
   <div class="dlg-foot"><button type="button" class="button primary" data-act="d-go"${off(!r.incoming.length)}>Roll</button><button type="button" class="button" data-act="d-real"${off(!r.incoming.length)}>Roll real dice</button></div>`;
+}
+
+// What one that gets through costs you. Tap it and it's counted.
+function payView(h, r, s) {
+  if (r.paid[h.j]) return `<span class="res-paid">${esc(r.paid[h.j])}</span>`;
+  const cond = condOf(h.intent);
+  const b = (what, label, no = false) => `<button type="button" class="button sm" data-act="d-pay" data-j="${h.j}" data-what="${what}"${off(no)}>${label}</button>`;
+  const list = r.against === "armour"
+    ? [b("armour", "Armour down a size", s.armour <= 2), b("hurt", "Take a Hurt"), b("asp", "Aspiration down a size", s.asp <= 2)]
+    : [b("shake", "Let it shake you", s.conf <= 2), b("hurt", "Bury it: take a Hurt"), b("hold", "Hold your ground: 1 Resolve", s.resolve < 1)];
+  return `<div class="cc-pay">${cond ? b("cond", `<em>${esc(cond.name)}</em> d${h.size}`) : ""}${list.join("")}</div>`;
 }
 
 function defenceResult(c, s, ch) {
@@ -726,6 +827,8 @@ function defenceResult(c, s, ch) {
   const hits = blocks(r);
   const through = hits.filter((h) => h.by == null).length;
   const picking = r.pick && !r.spinning;
+  const done = !r.spinning && !picking;
+  const canSwap = done && r.defend && hits.length > 1 && !r.paid.some(Boolean);
   const mine = r.mine.map((m, i) => {
     const v = m.nat + m.plus;
     if (r.spinning) return `<span class="hex big on" data-spin="${m.size}">${m.nat}</span>`;
@@ -733,25 +836,38 @@ function defenceResult(c, s, ch) {
     return `<span class="hex big on">${v}</span>${m.nat === m.size ? '<span class="res-note">Top face</span>' : ""}`;
   }).join("");
   const bonuses = c.archetypeRules.filter((a) => a.bonus && new RegExp(`\\b${what}\\b`).test(a.aura));
-  const costs = r.against === "armour"
-    ? `<p class="cc-lead">${through ? `${through === 1 ? "One gets" : `${through} get`} through. The GM names what each one costs you, and you can offer another that fits.` : "Nothing gets through."}</p>
-      ${through ? `<div class="cc-row"><button type="button" class="button sm" data-act="armour" data-d="-1"${off(s.armour <= 2)}>Armour down a size</button><button type="button" class="button sm" data-act="hurt" data-d="1">Take a Hurt</button><button type="button" class="button sm" data-act="asp" data-d="-1"${off(s.asp <= 2)}>Aspiration down a size</button></div>` : ""}`
-    : through
-      ? `<p class="cc-lead">For each one that gets through, you choose.${s.conf <= 2 ? " Nothing takes your Confidence below d2, so it’s a Hurt or 1 Resolve." : ""}</p>
-        <div class="cc-row"><button type="button" class="button sm" data-act="conf-step" data-d="-1"${off(s.conf <= 2)}>Let it shake you: down a size</button><button type="button" class="button sm" data-act="hurt" data-d="1">Bury it: take a Hurt</button><button type="button" class="button sm" data-act="resolve" data-d="-1"${off(s.resolve < 1)}>Hold your ground: 1 Resolve</button></div>`
-      : `<p class="cc-lead">You stopped all of it. If that’s everything that came at your Confidence this round, it goes up a size.</p><div class="cc-row"><button type="button" class="button sm" data-act="conf-step" data-d="1"${off(s.conf >= 12)}>Confidence up a size</button></div>`;
+  const row = (h) => {
+    const out = r.spinning ? "" : `<b class="res-out">${h.by == null ? "Gets through" : "Stopped"}</b>${r.defend && h.mine != null ? `<span class="res-note">${h.by == null ? `your ${h.mine} doesn’t stop it` : `by your ${h.mine}`}</span>` : ""}`;
+    const swap = canSwap ? `<button type="button" class="cc-chipbtn sm cc-swap" data-act="d-swap" data-j="${h.j}"${pressed(r.swap === h.j)} aria-label="Swap the roll on their d${h.size}, which came up ${h.v}">Swap</button>` : "";
+    return `<li class="res is-${r.spinning ? "spin" : h.by == null ? "through" : "beat"}">${r.spinning ? `<span class="hex big them" data-spin="${h.size}">${h.v}</span>` : hex(h.v, "big them")}<span class="res-die">their d${h.size}</span>${h.intent ? `<span class="res-intent">${esc(h.intent)}</span>` : ""}${out}${swap}${done && h.by == null ? payView(h, r, s) : ""}</li>`;
+  };
+  const lead = r.against === "armour"
+    ? through ? `${through === 1 ? "One gets" : `${through} get`} through. The GM names what each one costs you, and you can offer another that fits. Tap what it costs and it’s counted.` : "Nothing gets through."
+    : through ? `For each one that gets through, you choose what it costs.${s.conf <= 2 ? " Nothing takes your Confidence below d2, so it’s a Hurt or 1 Resolve." : ""}` : "You stopped all of it. If that’s everything that came at your Confidence this round, it goes up a size.";
   return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">When it lands</h2><p class="cc-small">Your ${what}, ${r.defend ? "a roll for every die" : "one roll against the lot"}. Ties go to you.</p></div>
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
   <div class="dlg-body">
     <div class="cc-mine-roll"${r.spinning ? ' data-act="skip"' : ""}><span class="k">Your d${r.size}</span>${mine}</div>
     ${picking ? `<div class="cc-note" role="status"><p>Tap the ${what} roll to put +${r.pick.bonus} on.</p><div class="cc-row"><button type="button" class="button sm" data-act="pick-cancel">Never mind</button></div></div>` : ""}
-    <ul class="cc-res"${r.spinning ? ' data-act="skip"' : ""}>${hits.map((h) => `<li class="res is-${r.spinning ? "spin" : h.by == null ? "through" : "beat"}">${r.spinning ? `<span class="hex big" data-spin="${h.size}">${h.v}</span>` : hex(h.v, "big")}<span class="res-die">their d${h.size}</span>${r.spinning ? "" : `<b class="res-out">${h.by == null ? "Gets through" : "Stopped"}</b>${r.defend && h.by != null ? `<span class="res-note">by your ${r.mine[h.by].nat + r.mine[h.by].plus}</span>` : ""}`}</li>`).join("")}</ul>
-    ${!r.spinning && !picking && bonuses.length ? `<div class="cc-row cc-offers">${bonuses.map((a) => `<button type="button" class="button sm" data-act="plus" data-n="${esc(a.name)}"${off(s.aura < 1 || !r.mine.some((m) => !m.plus))}>${esc(a.name)} +${a.bonus} on your ${what}: 1 Aura</button>`).join("")}</div>` : ""}
-    ${r.spinning ? "" : `<h3 class="cc-h3">What it costs</h3>${costs}`}
+    ${done ? `<p class="cc-lead">${lead}</p>` : ""}
+    ${canSwap ? `<p class="cc-small" role="status">${r.swap == null ? "The phone’s matched your rolls so the most get stopped. Tap Swap on two to trade their rolls." : "Now tap Swap on the other one."}</p>` : ""}
+    <ul class="cc-res"${r.spinning ? ' data-act="skip"' : ""}>${hits.map(row).join("")}</ul>
+    ${done && !through && r.against === "confidence" ? `<div class="cc-row"><button type="button" class="button sm" data-act="conf-step" data-d="1"${off(s.conf >= 12)}>Confidence up a size</button></div>` : ""}
+    ${done && bonuses.length ? `<div class="cc-row cc-offers">${bonuses.map((a) => `<button type="button" class="button sm" data-act="plus" data-n="${esc(a.name)}"${off(s.aura < 1 || !r.mine.some((m) => !m.plus))}>${esc(a.name)} +${a.bonus} on your ${what}: 1 Aura</button>`).join("")}</div>` : ""}
     ${r.log.length ? `<ul class="cc-log">${r.log.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>` : ""}
     <p class="cc-small">Armour d${s.armour} · Confidence d${s.conf} · ${s.hurt} of ${hurtInfo(s, c).open} boxes · ${s.aura} Aura · ${s.resolve} Resolve</p>
   </div>
   <div class="dlg-foot"><button type="button" class="button" data-act="undo"${off(!lastUndo(ch))}>Undo</button><button type="button" class="button primary" data-act="close">Done</button></div>`;
+}
+
+// ---------------------------------------------------------------- rules on tap
+
+function ruleView() {
+  const r = roll;
+  return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${r.perm ? `<em>${esc(r.text)}</em>` : esc(RULE[r.id]?.title ?? "The rules")}</h2>${r.perm ? `<p class="cc-small">A permission on ${esc(r.from)}</p>` : ""}</div>
+    <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
+  <div class="dlg-body cc-rule">${r.perm ? "<p><b>It’s a step on any roll it fits.</b> On the set action you’re rolling, it’s free. Bring it into anything else for 1 Aura.</p>" : ""}${ruleHtml(r.id)}</div>
+  <div class="dlg-foot"><button type="button" class="button primary" data-act="close">Got it</button></div>`;
 }
 
 // ---------------------------------------------------------------- naming
@@ -781,20 +897,21 @@ function dialogView() {
   if (!roll) return "";
   const ch = current();
   if (roll.kind === "name") return nameView();
+  if (roll.kind === "rule") return ruleView();
   const c = normal(ch);
   if (!c) return "";
   const s = ch.state;
   if (roll.kind === "defence") {
     if (roll.mode === "build") return defenceBuild(s);
     if (roll.mode === "pad") {
-      const rows = [...roll.mine.map((m, i) => [`Your ${roll.against === "armour" ? "Armour" : "Confidence"}, a d${m.size}`, `m${i}`, m.size, m.nat]), ...roll.incoming.map((d, j) => [`Their d${d}`, `o${j}`, d, roll.opp[j]])];
+      const rows = [...roll.mine.map((m, i) => [`Your ${roll.against === "armour" ? "Armour" : "Confidence"}, a d${m.size}`, `m${i}`, m.size, m.nat]), ...roll.incoming.map((d, j) => [`Their d${d}${String(roll.intents[`d${j}`] ?? "").trim() ? ` · ${esc(String(roll.intents[`d${j}`]).trim())}` : ""}`, `o${j}`, d, roll.opp[j]])];
       return padView("When it lands", rows, roll.mine.every((m) => m.nat) && roll.opp.every(Boolean));
     }
     return defenceResult(c, s, ch);
   }
   if (roll.mode === "build") return buildView(c, s);
   if (roll.mode === "pad") {
-    const rows = roll.pads.map((i) => [`${roll.dice[i].mark ? "The Mark" : "Your"} d${roll.dice[i].size}`, `p${i}`, roll.dice[i].size, roll.dice[i].nat]);
+    const rows = roll.pads.map((i) => [`${roll.dice[i].mark ? "The Mark" : "Your"} d${roll.dice[i].size}${roll.dice[i].intent ? ` · ${esc(roll.dice[i].intent)}` : ""}`, `p${i}`, roll.dice[i].size, roll.dice[i].nat]);
     if (roll.padOpp) rows.push([`Their d${roll.oppSize}`, "opp", roll.oppSize, roll.opp ?? 0]);
     return padView(roll.name, rows, roll.pads.every((i) => roll.dice[i].nat) && (!roll.padOpp || roll.opp));
   }
@@ -818,7 +935,8 @@ function render() {
   const keep = dialog.open ? null : sig(document.activeElement);
   const ch = current();
   const c = ch ? normal(ch) : null;
-  app.innerHTML = view.name === "build" ? builderView() : view.name !== "sheet" ? listView() : c ? sheetView(ch, c) : missingView(ch);
+  document.documentElement.classList.toggle("cc-tabbed", view.name === "sheet" && Boolean(c));
+  app.innerHTML = view.name === "build" ? builderView() : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
   if (dialog.open) renderDialog();
   else refocus(keep);
 }
@@ -854,6 +972,7 @@ function route() {
   const id = q.get("c");
   const key = q.has("build") ? q.get("build") || "new" : null;
   view = key ? { name: "build", key } : id ? { name: "sheet", id } : { name: "list" };
+  ui.tab = ["sheet", "rules"].includes(q.get("t")) ? q.get("t") : "play";
   ui.panel = null;
   ui.sure = false;
   document.documentElement.classList.toggle("cc-open", Boolean(id || key));
@@ -1016,6 +1135,39 @@ const ACT = {
   panel(el) {
     ui.panel = ui.panel === el.dataset.p ? null : el.dataset.p;
     render();
+  },
+  tab(el, e) {
+    e.preventDefault();
+    const ch = current();
+    if (!ch || ui.tab === el.dataset.t) return;
+    ui.tab = el.dataset.t;
+    ui.panel = null;
+    history.replaceState(history.state, "", `/characters/?c=${encodeURIComponent(ch.id)}${ui.tab === "play" ? "" : `&t=${ui.tab}`}`);
+    render();
+    scrollTo(0, 0);
+  },
+  rule(el) {
+    roll = el.dataset.r === "perm" ? { kind: "rule", id: "how-permissions-stack", perm: true, text: el.dataset.t, from: el.dataset.f } : { kind: "rule", id: el.dataset.r };
+    openDialog();
+  },
+  intent(el) {
+    const k = el.dataset.k;
+    const v = el.dataset.v;
+    if (!v) {
+      if (roll.owns.has(k)) {
+        roll.owns.delete(k);
+        delete roll.intents[k];
+      } else {
+        roll.owns.add(k);
+        roll.intents[k] = "";
+      }
+    } else {
+      roll.owns.delete(k);
+      if (roll.intents[k] === v) delete roll.intents[k];
+      else roll.intents[k] = v;
+    }
+    renderDialog();
+    if (!v && roll.owns.has(k)) dialog.querySelector(`input[data-in="intent"][data-k="${k}"]`)?.focus();
   },
   undo: () => undoLast(),
   aura: (el) => change(Number(el.dataset.d) > 0 ? "getting 1 Aura back" : "spending 1 Aura", (s, c) => {
@@ -1300,8 +1452,63 @@ const ACT = {
     renderDialog();
   },
   "d-del"(el) {
-    roll.incoming.splice(Number(el.dataset.i), 1);
+    const i = Number(el.dataset.i);
+    const intents = {};
+    const owns = new Set();
+    roll.incoming.splice(i, 1);
+    roll.incoming.forEach((_, j) => {
+      const from = `d${j < i ? j : j + 1}`;
+      if (from in roll.intents) intents[`d${j}`] = roll.intents[from];
+      if (roll.owns.has(from)) owns.add(`d${j}`);
+    });
+    Object.assign(roll, { intents, owns });
     renderDialog();
+  },
+  // Tap Swap on one blow, then another, and they trade the rolls blocking them.
+  "d-swap"(el) {
+    const j = Number(el.dataset.j);
+    const first = roll.swap;
+    if (first == null || first === j) {
+      roll.swap = first === j ? null : j;
+      return renderDialog();
+    }
+    roll.swap = null;
+    change("swapping two rolls", () => {
+      [roll.assign[first], roll.assign[j]] = [roll.assign[j], roll.assign[first]];
+    }, { say: false });
+  },
+  "d-pay"(el) {
+    const j = Number(el.dataset.j);
+    const what = el.dataset.what;
+    const label = { cond: "a condition landing", armour: "your Armour stepping down", hurt: "taking a Hurt", asp: "a setback", shake: "Confidence dropping", hold: "holding your ground" }[what] ?? "what it cost";
+    change(label, (s, c) => {
+      const r = roll;
+      if (!r || r.paid[j]) return;
+      const size = r.incoming[j];
+      if (what === "cond") {
+        const x = condOf(r.intents[`d${j}`]);
+        if (!x) return;
+        s.conditions = s.conditions.filter((y) => y.name !== x.name);
+        s.conditions.push({ name: x.name, die: size, kind: "against" });
+        r.paid[j] = `${x.name} d${size} on you`;
+      } else if (what === "armour" && s.armour > 2) {
+        s.armour = sizeDown(s.armour);
+        r.paid[j] = `Armour down to d${s.armour}`;
+      } else if (what === "asp" && s.asp > 2) {
+        s.asp = sizeDown(s.asp);
+        r.paid[j] = `Aspiration down to d${s.asp}`;
+      } else if (what === "shake" && s.conf > 2) {
+        s.conf = sizeDown(s.conf);
+        r.paid[j] = `Confidence down to d${s.conf}`;
+      } else if (what === "hold" && s.resolve > 0) {
+        s.resolve -= 1;
+        r.paid[j] = "Held your ground for 1 Resolve";
+      } else if (what === "hurt") {
+        const said = takeHurt(s, c);
+        r.paid[j] = "Took a Hurt";
+        if (!said.startsWith("You take a Hurt")) r.log.push(said);
+      }
+    }, { say: false });
   },
   "d-go": () => defenceGo(false),
   "d-real": () => defenceGo(true),
@@ -1321,6 +1528,7 @@ function plusOn(i) {
     roll.pick = null;
     roll.log.push(`Paid 1 Aura for ${pick.name} +${pick.bonus} on the d${d.size}${d.nat + d.plus >= d.size && d.nat !== d.size ? ". The +" + pick.bonus + " took it there, so there’s no Aura back" : ""}.`);
     if (roll.kind === "action") s.last = lastOf();
+    else if (!roll.paid.some(Boolean)) assignBest(roll);
   }, { say: false });
 }
 
@@ -1417,6 +1625,10 @@ document.addEventListener("change", (e) => {
 
 document.addEventListener("input", (e) => {
   if (e.target.dataset?.bin) return builder.input(e.target);
+  if (e.target.dataset?.in === "intent" && roll?.intents) {
+    roll.intents[e.target.dataset.k] = e.target.value.slice(0, 40);
+    return;
+  }
   if (e.target.dataset?.in !== "notes") return;
   const ch = current();
   if (!ch) return;
