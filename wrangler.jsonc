@@ -19,13 +19,15 @@
   "vars": {
     // The hosts sign-in works on. Add a Preview's host (comma between) to sign
     // in there too, and give Google and Discord its callback addresses.
-    "AUTH_HOSTS": "zidara.world"
+    "AUTH_HOSTS": "zidara.world",
+    // Google's id for the site's sign-in. It isn't secret (it's in every
+    // sign-in link). The secret half, GOOGLE_CLIENT_SECRET, is a Worker secret.
+    "GOOGLE_CLIENT_ID": "157837358914-2quopnsqqo45bkcrhgnt3tld0g7oahch.apps.googleusercontent.com"
   },
-  // Accounts live in a D1 database called zi. Until it's made in the dashboard
-  // and its id goes in here, /api/ answers that sign-in isn't switched on yet.
-  // Its tables come from migrations/, applied with
-  // `npx wrangler d1 migrations apply DB --remote` (npm run deploy does it).
-  // "d1_databases": [{ "binding": "DB", "database_name": "zi", "database_id": "", "migrations_dir": "migrations" }],
+  // Accounts live in the D1 database zi. Its tables come from migrations/,
+  // applied by `npx wrangler d1 migrations apply DB --remote`, which
+  // npm run deploy and npm run deploy:preview do before each deploy.
+  "d1_databases": [{ "binding": "DB", "database_name": "zi", "database_id": "8d3df3f6-384f-4aa0-8b18-e2d8540ed652", "migrations_dir": "migrations" }],
   // Branches other than main build a Preview with `npx wrangler preview`,
   // which won't run without this block.
   "previews": {}

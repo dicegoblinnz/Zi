@@ -13,7 +13,7 @@ From the drill on 17 Oct 2026 (`notes/app-rework.md`). Mo's answers are in `note
 - **Print my character** comes with the builder.
 - **Growing.** Downtime slots on the phone update the sheet, with an undo. When a rule changes, each changed line gets a gold mark showing old and new, and typo fixes stay quiet.
 - **The party sheet and Party Goal** wait for sign-in.
-- **Sign-in.** Google and Discord first. Mo and the GMs he picks hand out invites. A player shares a sheet with their GM by picking her account.
+- **Sign-in.** Google first. Discord waits (Mo, 18 Oct), and switches on with its two secrets. Mo and the GMs he picks hand out invites. A player shares a sheet with their GM by picking her account.
 - **Live.** Telegraphs on phones are the first live piece.
 - **Extras.** The learn-to-play round is in. A roll log isn't, for now.
 - **Stages** stay small, each smaller than the companion's first version, so something new reaches the table every week. The guided builder goes first.
