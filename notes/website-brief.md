@@ -89,3 +89,7 @@ Mo's answers in the drill from `notes/app-rework.md`, round by round.
 - Mo and the GMs he picks hand out invites.
 - Before campaigns, a player shares a sheet with their GM by picking her account. She sees it read-only until they stop sharing.
 - Print my character comes with the builder: build on the phone, then print the filled two-page sheet.
+- Telegraphs on phones are the first live piece.
+- The learn-to-play round is in (the brute swings his club at Isolde, and a new player answers with Wren and Bram). A roll log isn't, for now.
+- The guided builder goes to the next playtest first.
+- Stages stay small, each smaller than the companion's first version, so something new reaches the table every week.
