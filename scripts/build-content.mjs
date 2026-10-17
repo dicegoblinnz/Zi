@@ -560,7 +560,7 @@ const blockHtml = (text) => {
   return String(file).trim();
 };
 const rules = {};
-for (const id of ["s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour",
+for (const id of ["s-round", "s-telegraphs", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour",
   "s-defending", "s-defend", "s-consequences", "s-fear-gets-through", "s-blaze", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "how-permissions-stack"]) {
   const doc = docWith(`{#${id}}`);
   const head = doc?.body.match(new RegExp(`^#{2,4} (.+?) \\{#${id}\\}`, "m"));
@@ -580,7 +580,7 @@ const linkTo = (id) => {
   return !target ? "/rules/" : target.own ? pageFor.get(target.page) : `${pageFor.get(target.page)}#${id}`;
 };
 const companionLinks = Object.fromEntries(
-  ["s-aura", "s-resolve", "s-confidence", "s-armour", "s-blaze", "s-healing", "s-conditions", "s-bonds", "s-trouble", "steps-into-dice",
+  ["s-round", "s-telegraphs", "s-answering", "s-aura", "s-resolve", "s-confidence", "s-armour", "s-blaze", "s-healing", "s-conditions", "s-bonds", "s-trouble", "steps-into-dice",
     "s-splitting", "s-teamwork", "s-extra-actions", "s-going-beyond", "s-the-roll", "s-defending", "s-defend", "s-fear-gets-through",
     "s-consequences", "s-aspiration", "s-pregens", "s-set-actions", "s-how-archetypes", "s-attunement", "s-carrying", "s-traits", "s-intents",
     "s-quick", "s-title-ideas", "s-title", "s-writing-permissions", "the-quick-test", "permission-ideas", "s-step-set-actions", "s-items",

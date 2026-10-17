@@ -22,6 +22,14 @@
 //    Hurt on it, and again offline, a character made from Vesk and printed, a
 //    random one rolled five times, saved and printed, and a blank sheet. A way
 //    in asks before it bins a draft, and one page passes axe at 320 wide.
+// 7. Dice, feel and learning. The learning round played start to finish three
+//    times: beaten, a tie won for 1 Aura with a top face, and real dice tapped
+//    in that lose, so the club lands on Isolde as a Hurt. Then offline, and
+//    axe at 320 wide in both themes. With reduce-motion the dice never tumble
+//    and nothing on the page moves. With motion on, the dice tumble and land
+//    on their numbers, the roll card turns over, the tabs slide and the pips
+//    glow. Sound and buzz stay off until the switch turns them on, and then a
+//    landing, a top face, a Hurt and a bar filling each get one.
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -89,8 +97,8 @@ await new Promise((r) => server.listen(4174, r));
 const BASE = "http://localhost:4174";
 const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
 
-async function phone() {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce", colorScheme: "dark" });
+async function phone(extra = {}) {
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: "reduce", colorScheme: "dark", ...extra });
   await context.route((url) => url.hostname !== "localhost", (route) => {
     note(`fetched from outside the site: ${route.request().url()}`);
     return route.abort();
@@ -644,6 +652,192 @@ async function play(page, crewId, name) {
   await shot(page, "9-one-page-320-light");
   console.log("print: Vesk, Kestrel from Vesk and a random character printed, and one page checked");
   await context.close();
+}
+
+// 7. Dice, feel and learning.
+const moving = (page) => page.evaluate(() => document.getAnimations().filter((a) => a.playState === "running" && a.effect?.target?.closest?.(".companion")).length);
+const card = (page) => page.textContent(".ln-card");
+// One round from the top: Wren and Bram in, then roll with these dice (the d12,
+// the d6, then the club's d8), or tap them in when real is set.
+async function round(page, dice, real = false) {
+  await page.click('button[data-do="next"]');
+  await page.click('button[data-do="pick"][data-who="wren"]');
+  await page.click('button[data-do="pick"][data-who="bram"]');
+  await page.click('button[data-do="next"]');
+  if (real) {
+    await page.click('button[data-do="real"]');
+    for (const [k, v] of [["0", dice[0]], ["1", dice[1]], ["opp", dice[2]]]) await page.click(`button[data-do="pad"][data-k="${k}"][data-v="${v}"]`);
+    await page.click('button[data-do="pad-done"]');
+  } else {
+    await page.evaluate((list) => window.ziCompanion.setDice(list), dice);
+    await page.click('button[data-do="roll"]');
+  }
+}
+{
+  const { context, page } = await phone();
+  await page.goto(`${BASE}/characters/`);
+  await page.click('a[data-act="learn"][data-do="open"]');
+  await page.waitForSelector("#ln-h");
+  same(await page.evaluate(() => document.activeElement?.id), "ln-h", "focus at the start of the round");
+  has(await card(page), "That’s a d8", "the club's telegraph");
+  has(await card(page), "A d2 against a d8 stops it 3 times in 16", "Isolde's Armour against the club");
+  await page.click('button[data-do="next"]');
+  same(await page.isDisabled('button[data-do="next"]'), true, "rolling before Wren and Bram are in");
+  same(await page.$$eval('button[data-do="pick"]', (els) => els.map((e) => e.dataset.who)), ["wren"], "Bram waiting for Wren");
+  await page.click('button[data-do="pick"][data-who="wren"]');
+  has(await card(page), "Wren’s Fight", "Wren's tile");
+  await page.click('button[data-do="pick"][data-who="bram"]');
+  has(await card(page), "5 steps and 4 steps is 9 steps", "the combo's steps");
+  has(await card(page), "and the 3 left over make a d6, so that’s a d12 and a d6", "the combo's dice");
+  await page.click('button[data-do="back"]');
+  await page.click('button[data-do="next"]');
+  same(await page.isDisabled('button[data-do="next"]'), false, "Wren and Bram still in after going back");
+  await page.click('button[data-do="next"]');
+  await page.evaluate(() => window.ziCompanion.setDice([8, 3, 6]));
+  await page.click('button[data-do="roll"]');
+  same(await page.$$eval("[data-spin]", (els) => els.length), 0, "dice tumbling with reduce-motion on");
+  same(await page.$$eval(".ln-roll .hex", (els) => els.map((e) => e.textContent)), ["6", "8", "3"], "the club's d8 and your d12 and d6");
+  has(await card(page), "Your 8 beats the brute’s 6, so the club never comes down", "a beaten club");
+  same(await page.evaluate(() => document.activeElement?.id), "ln-out", "focus on what the dice did");
+  same(await moving(page), 0, "things moving on the round with reduce-motion on");
+  await page.click('button[data-do="next"]');
+  has(await card(page), "you stopped it, so nothing lands and the round’s over", "the end of a round that was stopped");
+  await page.click('button[data-do="again"]');
+  has(await page.textContent("#ln-h"), "The GM telegraphs", "playing it again");
+  await round(page, [5, 6, 6]);
+  has(await card(page), "Your 6 ties the brute’s 6", "a tie on the club");
+  has(await card(page), "The d6 came up 6, its top face, so Wren gets 1 Aura back", "a top face in a combo");
+  same(await page.$$('button[data-do="next"]').then((b) => b.length), 0, "moving on before the tie's settled");
+  await page.click('button[data-do="win"]');
+  has(await card(page), "You pay 1 Aura, so the tie’s yours", "a tie won for 1 Aura");
+  await page.click('button[data-do="next"]');
+  await page.click('button[data-do="again"]');
+  await round(page, [3, 2, 7], true);
+  has(await card(page), "The brute’s 7 beats your best, a 3, so the club lands on Isolde at once", "real dice that lose");
+  has(await card(page), "that’s 1 of 9 boxes on Isolde’s Hurt track", "the Hurt on Isolde");
+  same(await page.$$eval(".ln-hurt .mini i.on", (els) => els.length), 1, "Isolde's Hurt boxes");
+  await page.click('button[data-do="next"]');
+  has(await card(page), "already landed on Isolde", "the end of a round that landed");
+  await page.click('a[data-act="nav"].button');
+  await page.waitForSelector('button[data-act="play"]');
+  // Offline, then 320 wide in both themes with axe on every step.
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.goto(`${BASE}/characters/?learn`);
+  await page.waitForFunction(() => navigator.serviceWorker.controller !== null, null, { timeout: 15000 }).catch(() => note("the service worker never took over the round"));
+  await context.setOffline(true);
+  await page.reload();
+  await page.waitForSelector("#ln-h", { timeout: 10000 }).catch(() => note("the round didn't open offline"));
+  await page.click('details[data-open="ln-s-telegraphs"] > summary');
+  has(await page.textContent('details[data-open="ln-s-telegraphs"]'), "what’s about to happen", "the telegraph rule offline");
+  await page.setViewportSize({ width: 320, height: 720 });
+  for (const theme of ["dark", "light"]) {
+    await page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+    await page.reload();
+    await page.waitForSelector("#ln-h");
+    const check = async (what) => {
+      const { scroll, client } = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
+      if (scroll > client) note(`the round's ${what} scrolls sideways at 320 wide, ${theme} (${scroll} > ${client})`);
+      const result = await new AxeBuilder({ page }).analyze();
+      for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on the round's ${what}, ${theme}: ${v.id} (${v.nodes.length})`);
+    };
+    await check("telegraph");
+    await page.click('button[data-do="next"]');
+    await page.click('button[data-do="pick"][data-who="wren"]');
+    await page.click('button[data-do="pick"][data-who="bram"]');
+    await check("answer");
+    await page.click('button[data-do="next"]');
+    await page.click('button[data-do="real"]');
+    await check("real dice");
+    for (const [k, v] of [["0", 2], ["1", 1], ["opp", 7]]) await page.click(`button[data-do="pad"][data-k="${k}"][data-v="${v}"]`);
+    await page.click('button[data-do="pad-done"]');
+    await check("roll");
+    await page.click('button[data-do="next"]');
+    await check("end");
+    await page.click('button[data-do="again"]');
+  }
+  await shot(page, "learn-320-light");
+  await context.close();
+  console.log("learn: the round played three ways, offline, and at 320 wide in both themes");
+}
+
+// Motion on, with the phone's sound and buzz listened to.
+{
+  const { context, page } = await phone({ reducedMotion: "no-preference" });
+  await context.addInitScript(() => {
+    window.__feel = { sounds: 0, buzz: [] };
+    const param = () => ({ value: 0, setValueAtTime() {}, exponentialRampToValueAtTime() {} });
+    const node = () => ({ connect: (n) => n });
+    window.AudioContext = class {
+      constructor() { Object.assign(this, { currentTime: 0, sampleRate: 44100, state: "running", destination: node() }); }
+      createOscillator() { return { ...node(), frequency: param(), start() { window.__feel.sounds++; }, stop() {} }; }
+      createGain() { return { ...node(), gain: param() }; }
+      createBuffer(_, len) { return { getChannelData: () => new Float32Array(len) }; }
+      createBufferSource() { return { ...node(), start() { window.__feel.sounds++; } }; }
+      createBiquadFilter() { return { ...node(), frequency: param() }; }
+      resume() { return Promise.resolve(); }
+    };
+    Object.defineProperty(Navigator.prototype, "vibrate", { configurable: true, value: (p) => (window.__feel.buzz.push(p), true) });
+  });
+  const heard = () => page.evaluate(() => JSON.parse(JSON.stringify(window.__feel)));
+  await page.goto(`${BASE}/characters/?learn`);
+  await page.waitForSelector("#ln-h");
+  same(await page.getAttribute(".cc-sound", "aria-pressed"), "false", "sound before it's turned on");
+  await round(page, [12, 4, 5]);
+  same(await page.$$eval(".ln-roll [data-spin]", (els) => els.length), 3, "the dice tumbling");
+  if (!(await moving(page))) note("the dice don't move while they tumble");
+  await page.waitForSelector("#ln-out", { timeout: 5000 }).catch(() => note("the dice never landed"));
+  same(await page.$$eval(".ln-roll .hex", (els) => els.map((e) => e.textContent)), ["5", "12", "4"], "the dice once they've landed");
+  has(await card(page), "The d12 came up 12, its top face", "a top face after a tumble");
+  same(await heard(), { sounds: 0, buzz: [] }, "sound and buzz before they're turned on");
+  await page.click(".cc-sound");
+  same(await page.getAttribute(".cc-sound", "aria-pressed"), "true", "the sound switch");
+  same(await page.evaluate(() => localStorage.getItem("zi-sound")), "on", "sound remembered");
+  await page.click('button[data-do="next"]');
+  await page.click('button[data-do="again"]');
+  await page.evaluate(() => (window.__feel = { sounds: 0, buzz: [] }));
+  await round(page, [12, 4, 5]);
+  await page.click(".ln-roll");
+  await page.waitForSelector("#ln-out", { timeout: 2000 }).catch(() => note("a tap didn't skip the tumble"));
+  let got = await heard();
+  if (!got.sounds) note("no sound with sound on");
+  has(JSON.stringify(got.buzz), "[20,50,20]", "a top face's buzz");
+  await page.click('button[data-do="next"]');
+  await page.click('button[data-do="again"]');
+  await page.evaluate(() => (window.__feel = { sounds: 0, buzz: [] }));
+  await round(page, [2, 1, 7]);
+  await page.waitForSelector("#ln-out", { timeout: 5000 });
+  got = await heard();
+  same(got.buzz, [12, 12, 12, 60], "a knock as each die lands, then a Hurt's buzz");
+  same(await page.$$eval(".ln-hurt .mini i.is-new", (els) => els.length), 1, "Isolde's Hurt glowing as it fills");
+  // On a sheet: the tabs slide, the roll card turns over, the pips glow, and
+  // a Hurt and a full bar each get their buzz.
+  await play(page, "vesk");
+  await page.click('.cc-tabs a[data-t="sheet"]');
+  same(await page.$$eval(".cc-page.cc-go-next", (els) => els.length), 1, "the Sheet tab sliding in");
+  await page.click('.cc-tabs a[data-t="play"]');
+  same(await page.$$eval(".cc-page.cc-go-back", (els) => els.length), 1, "the Play tab sliding back");
+  await page.click('.tile[data-a="0"]');
+  await page.evaluate(() => window.ziCompanion.setDice([5]));
+  await page.click('#cc-dialog button[data-act="go"]');
+  same(await page.$$eval("#cc-dialog .dlg-body.cc-flip", (els) => els.length), 1, "the roll card turning over");
+  if (!(await page.$$eval("#cc-dialog [data-spin]", (els) => els.length))) note("Vesk's dice didn't tumble");
+  await page.waitForSelector("#cc-dialog .dlg-body.cc-reveal", { timeout: 5000 }).catch(() => note("Vesk's dice never landed"));
+  same(await page.$$eval("#cc-dialog .cc-res .hex", (els) => els.map((e) => e.textContent)), ["5"], "Vesk's die once it's landed");
+  await page.click('#cc-dialog button.primary[data-act="close"]');
+  await page.click('.cc-stat[data-p="aura"]');
+  await page.click('button[data-act="aura"][data-d="-1"]');
+  await page.click('button[data-act="aura"][data-d="1"]');
+  same(await page.$$eval(".t-aura .pips i.is-new", (els) => els.length), 1, "an Aura pip glowing as it fills");
+  await page.evaluate(() => (window.__feel = { sounds: 0, buzz: [] }));
+  await page.click('.cc-stat[data-p="hurt"]');
+  await page.click('button[data-act="hurt"][data-d="1"]');
+  await page.click('button[data-act="hurt"][data-d="1"]');
+  await page.click('button[data-act="hurt"][data-d="1"]');
+  same((await heard()).buzz, [60, 60, [70, 60, 120]], "two Hurts, then a bar filling");
+  same(await page.$$eval(".t-hurt .mini i.is-new", (els) => els.length), 1, "a Hurt box glowing as it fills");
+  await shot(page, "vesk-motion");
+  await context.close();
+  console.log("feel: the dice tumble and land, the cards turn and slide, and sound waits to be turned on");
 }
 
 await browser.close();

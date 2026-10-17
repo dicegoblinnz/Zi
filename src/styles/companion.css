@@ -53,8 +53,29 @@
 .hexbtn { width: 46px; height: 46px; }
 .hexbtn:focus-visible, button.hex:focus-visible { outline: none; background: var(--violet); color: var(--bg); }
 button.hex.big { cursor: pointer; box-shadow: none; }
-.hex[data-spin] { animation: cc-tumble 0.14s linear infinite; }
-@keyframes cc-tumble { 50% { transform: rotate(10deg) scale(0.93); } }
+
+/* The Sigil dice: a darker rim round a lit face, gold for yours and violet for
+   theirs. They tumble while they roll and land one after another with some
+   weight (src/companion/feel.js). */
+.hex.big { --die: var(--panel); position: relative; isolation: isolate; background: color-mix(in srgb, var(--die) 62%, #000); }
+.hex.big::before {
+  content: ""; position: absolute; inset: 4px; z-index: -1; clip-path: var(--hex);
+  background: linear-gradient(155deg, color-mix(in srgb, var(--die) 92%, #fff), var(--die) 55%, color-mix(in srgb, var(--die) 90%, #000));
+}
+.hex.big.on { --die: var(--gold); }
+.hex.big.them { --die: var(--violet); }
+button.hex.big:focus-visible { --die: var(--violet); color: var(--bg); }
+.hex[data-spin] { animation: cc-roll 0.42s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }
+.hex[data-spin].is-landed { animation: cc-land 0.34s cubic-bezier(0.2, 0.9, 0.3, 1.25) both; }
+@keyframes cc-roll {
+  from { transform: translateY(-7px) rotateX(0deg) rotateZ(0deg) scale(1.08); }
+  to { transform: translateY(-7px) rotateX(360deg) rotateZ(240deg) scale(1.08); }
+}
+@keyframes cc-land {
+  0% { transform: translateY(-12px) rotate(-16deg) scale(1.16); filter: brightness(1.5); }
+  55% { transform: translateY(2px) rotate(4deg) scale(0.9); filter: brightness(1.2); }
+  100% { transform: none; filter: none; }
+}
 .cc-ring { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.6rem 0; }
 
 /* The list */
@@ -90,6 +111,11 @@ button.hex.big { cursor: pointer; box-shadow: none; }
 .pips, .mini { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 100%; }
 .pips i { width: 13px; height: 13px; clip-path: var(--hex); background: var(--line); }
 .pips i.on { background: var(--gold); }
+/* Pips and Hurt boxes glow as they fill. */
+.pips:has(i.is-new) { animation: cc-halo 0.9s ease-out; }
+.pips i.is-new, .mini i.is-new { animation: cc-pip 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
+@keyframes cc-pip { 0% { transform: scale(0.3); filter: brightness(2); } 60% { transform: scale(1.35); } 100% { transform: none; filter: none; } }
+@keyframes cc-halo { 0%, 100% { filter: none; } 30% { filter: drop-shadow(0 0 5px var(--gold)); } }
 .t-resolve .pips i.on { background: var(--violet); }
 .mini { gap: 2px; }
 .mini i { width: 7px; height: 9px; border: 1px solid var(--line); border-radius: 1px; }
@@ -307,10 +333,58 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 @media (max-width: 640px) {
   .cc-dialog { width: 100vw; height: 100dvh; max-height: 100dvh; margin: 0; border: 0; }
 }
+/* Motion: the roll card turns over when it moves on, what the dice did comes
+   up once they've landed, the tabs slide the way they go, and the dialog
+   rises into place. */
+.cc-dialog[open] { animation: cc-rise 0.26s cubic-bezier(0.2, 0.8, 0.3, 1); }
+.cc-flip { animation: cc-flip 0.36s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+.cc-reveal .res-out, .cc-reveal .res-note, .cc-reveal .res-paid, .cc-reveal .ln-out { animation: cc-rise 0.32s ease-out both; }
+.cc-reveal .res.is-beat, .cc-reveal .res.is-won, .cc-reveal .res.is-through { animation: cc-shine 0.7s ease-out; }
+.cc-go-next { animation: cc-from-right 0.28s cubic-bezier(0.2, 0.8, 0.3, 1) both; }
+.cc-go-back { animation: cc-from-left 0.28s cubic-bezier(0.2, 0.8, 0.3, 1) both; }
+@keyframes cc-rise { from { transform: translateY(18px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes cc-flip { from { transform: perspective(900px) rotateY(-75deg); opacity: 0.15; } to { transform: perspective(900px) rotateY(0deg); opacity: 1; } }
+@keyframes cc-shine { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 70%, transparent); } 100% { box-shadow: 0 0 0 10px transparent; } }
+@keyframes cc-from-right { from { transform: translateX(28px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes cc-from-left { from { transform: translateX(-28px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+/* The phone's reduce-motion setting stills all of it. */
 @media (prefers-reduced-motion: reduce) {
-  .hex[data-spin] { animation: none; }
+  .companion *, .companion *::before, .companion *::after, .cc-dialog[open] { animation: none !important; }
   .tile:active { transform: none; }
 }
+
+/* Sound and buzz, off until turned on. */
+.cc-topbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 0.4rem; }
+.cc-topbar .cc-back { margin-top: 0; }
+.cc-sound { display: inline-flex; align-items: center; gap: 6px; min-width: 44px; min-height: 44px; padding: 0 0.75rem; font-weight: 700; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 2px; }
+.cc-sound[aria-pressed="true"] { color: var(--gold-ink); border-color: var(--gold); }
+.cc-sound:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+
+/* The learning round. */
+.ln-dots { display: flex; gap: 6px; margin: 0.7rem 0 0; padding: 0; list-style: none; }
+.ln-dots li { width: 34px; height: 4px; background: var(--line); clip-path: polygon(3px 0, calc(100% - 3px) 0, 100% 50%, calc(100% - 3px) 100%, 3px 100%, 0 50%); }
+.ln-dots li.on { background: var(--gold); }
+.ln-card { margin-top: 1rem; padding: 1rem; }
+.ln-card > h2:focus, .ln-out h3:focus { outline: none; }
+.ln-card p { margin: 0 0 0.8rem; }
+.ln-gm { padding: 0.55rem 0.85rem; background: var(--surface); border-left: 2px solid var(--violet); }
+.ln-vs { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; margin: 1rem 0; }
+.ln-who { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.ln-arrow { margin-left: 21px; font-size: 1.3rem; line-height: 1; color: var(--gold-ink); }
+.ln-pick { margin: 0 0 1rem; }
+.ln-tile { width: 100%; }
+.ln-tile.is-in { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); }
+.ln-lines { margin: 0.45rem 0 0; padding-left: 1.1rem; font-size: 0.95rem; color: var(--muted); }
+.ln-sum { margin: 0 0 1rem; padding: 0.8rem 0.9rem 0.1rem; background: var(--surface); border: 1px solid var(--gold); border-radius: 2px; }
+.ln-dice { display: flex; gap: 8px; margin-bottom: 0.6rem; }
+.ln-roll { margin-bottom: 0.8rem; }
+.ln-out h3 { font-family: var(--display); font-weight: 600; font-size: 1.15rem; color: var(--gold-ink); margin: 0.4rem 0 0.4rem; }
+.ln-hurt { display: flex; align-items: center; gap: 10px; margin: 0 0 0.8rem; }
+.ln-hurt .k { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ln-hurt .mini i { width: 12px; height: 15px; }
+.ln-rule { margin-top: 0.4rem; }
+.ln-foot { margin-top: 1rem; }
 
 /* The builder: the Quick Build, a step at a time. */
 .bd-head h1:focus { outline: none; }

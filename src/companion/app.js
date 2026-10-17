@@ -9,6 +9,8 @@ import { openStore } from "./store.js";
 import { hasDraft, makeBuilder, sheetOf } from "./builder.js";
 import { fromCrew, randomBuild } from "./ways.js";
 import { printSheet } from "./print.js";
+import { calm, feel, setSound, soundOn, tumble } from "./feel.js";
+import { makeLearn } from "./learn.js";
 
 const DATA = JSON.parse(document.getElementById("zi-companion").textContent);
 const CREW = new Map(DATA.crew.map((c) => [c.id, c]));
@@ -18,7 +20,6 @@ const store = openStore();
 const app = document.getElementById("app");
 const dialog = document.getElementById("cc-dialog");
 const toastBox = document.getElementById("cc-toast");
-const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const ORD = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth"];
 const RULE = DATA.rules || {};
 const TABS = [["play", "Play"], ["sheet", "Sheet"], ["rules", "Rules"]];
@@ -27,7 +28,7 @@ const INTENTS = { action: ["Hurt", "Pin", "Disarm"], armour: ["Hurt", "Pin", "Di
 
 let view = { name: "list" };
 let roll = null; // whatever the open dialog is working on
-const ui = { panel: null, tab: "play", open: new Set(), toastTimer: 0, spinTimer: 0, notesTimer: 0, mode: null };
+const ui = { panel: null, tab: "play", open: new Set(), toastTimer: 0, stopSpin: null, notesTimer: 0, mode: null, slide: null, reveal: false, seen: null };
 const undo = [];
 
 // Tests can line up the numbers the next dice roll, in order: your dice first,
@@ -49,6 +50,8 @@ const ICON = {
   close: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   back: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>',
   play: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8.5 4.75v9.5L12 21.5l-8.5-4.75v-9.5z"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg>',
+  sound: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
+  mute: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
   sheet: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/></svg>',
   rules: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>',
 };
@@ -56,6 +59,8 @@ const ICON = {
 const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt, roll: () => randomBuild(DATA.build, DATA.crew) });
 
 // ---------------------------------------------------------------- characters
+
+const learn = makeLearn({ crew: CREW, esc, hex, steps, rules: RULE, ruleHtml: (id) => ruleHtml(id), isOpen: (key) => ui.open.has(key), lineOf: (c, key) => lineOf(c, key), lineLabel: (l) => lineLabel(l), throwDie, feel, tumble, calm, icon: ICON, sound: () => soundButton(), render: () => render() });
 
 const chars = () => store.data.characters;
 const current = () => (view.name === "sheet" ? chars().find((x) => x.id === view.id) ?? null : null);
@@ -120,6 +125,8 @@ function change(label, fn, { say = true } = {}) {
   if (undo.length > 60) undo.shift();
   persist();
   render();
+  const was = JSON.parse(before);
+  if (ch.state.hurt > was.hurt) (hurtInfo(ch.state, c).fullBars > hurtInfo(was, c).fullBars ? feel.bar : feel.hurt)();
   if (say && !dialog.open) toast(message || `Done: ${label}.`, true);
 }
 
@@ -131,6 +138,8 @@ function undoLast() {
   undo.splice(undo.lastIndexOf(u), 1);
   // What's typed (notes, the Aspiration's words) isn't in the undo list, so it stays.
   ch.state = { ...JSON.parse(u.state), notes: ch.state.notes, aspText: ch.state.aspText };
+  ui.stopSpin?.();
+  ui.stopSpin = null;
   if (dialog.open && roll) roll = unsnapRoll(u.roll) ?? roll;
   if (roll) roll.spinning = false;
   persist();
@@ -231,6 +240,9 @@ function listView() {
     <p class="cc-paper">Playing on paper? Print a character sheet and the player reference from the <a href="/sheets/">Sheets page</a>.</p></header>
     ${saveNote()}
     ${mine.length ? `<section class="cc-sec" aria-labelledby="cc-mine"><h2 id="cc-mine">On this phone</h2><ul class="cc-mine">${mine.map(saved).join("")}</ul></section>` : ""}
+    <section class="cc-sec" aria-labelledby="cc-learn"><h2 id="cc-learn">Learn to play</h2>
+      <p class="cc-lead">New to Zi’Dara? Play one round on your phone first. The brute swings his club at Isolde, and you answer it with Wren and Bram.</p>
+      <div class="cc-row"><a class="button${mine.length ? "" : " primary"}" href="/characters/?learn" data-act="learn" data-do="open">Play the learning round</a></div></section>
     <section class="cc-sec" aria-labelledby="cc-own"><h2 id="cc-own">Make your own</h2>
       <p class="cc-lead">Build a character step by step. It follows the ${link("s-quick", "Quick Build")}, with the rules for each step right there, and it’s saved on this phone as you go.</p>
       <div class="cc-row">${draft ? `<a class="button primary" href="/characters/?build" data-act="bopen">Carry on with ${esc(draft.name || "your character")}</a><button type="button" class="button" data-act="bdrop">${ui.sure === true ? "Tap again to bin it" : "Start again"}</button>` : '<a class="button primary" href="/characters/?build" data-act="bopen">Build a character</a>'}</div>
@@ -355,15 +367,20 @@ function characterView(ch, c) {
   const changed = ch.hash !== c.hash ? `<div class="cc-note" role="status"><p>${esc(c.name)}’s sheet has changed in the rules since this phone last opened it. Every number here is already the new one, so check anything you’ve picked still suits ${them}.</p><div class="cc-row"><a class="button" href="/changes/">See what’s changed</a><button type="button" class="button" data-act="seen">Got it</button></div></div>` : "";
   const body = ui.tab === "sheet" ? sheetTab(ch, c) : ui.tab === "rules" ? rulesTab() : playTab(ch, c);
   const tabs = TABS.map(([t, label]) => `<a href="/characters/?c=${encodeURIComponent(ch.id)}${t === "play" ? "" : `&amp;t=${t}`}" data-act="tab" data-t="${t}"${ui.tab === t ? ' aria-current="page"' : ""}>${ICON[t]}<span>${label}</span></a>`).join("");
-  return `<a class="cc-back" href="/characters/" data-act="nav">${ICON.back}Characters</a>
+  const slide = ui.slide;
+  ui.slide = null;
+  return `<div class="cc-topbar"><a class="cc-back" href="/characters/" data-act="nav">${ICON.back}Characters</a>${soundButton()}</div>
   <header class="cc-head"><h1>${esc(ch.name)}</h1><p class="cc-title"><em>${esc(c.title)}</em></p>
     ${ui.tab === "sheet" ? `<div class="chips">${c.archetypes.map((a) => `<span class="chip">${esc(a)}</span>`).join("")}</div>` : ""}
     <p class="cc-small">${ch.name !== c.name ? `${esc(c.name)}’s sheet, from the crew · ` : ""}${facts.join(" · ")}</p></header>
   ${saveNote()}${changed}
   ${s.dead ? `<div class="cc-note is-warn"><p><b>${esc(ch.name)} died in play.</b> Keep the sheet to remember them, or delete them from this phone at the bottom of the Sheet tab.</p></div>` : ""}
-  ${body}
+  <div class="cc-page${slide ? ` cc-go-${slide}` : ""}">${body}</div>
   <nav class="cc-tabs" aria-label="${esc(ch.name)}"><div class="cc-tabs-in">${tabs}</div></nav>`;
 }
+
+// Sound and buzz are off until the player turns them on.
+const soundButton = () => `<button type="button" class="cc-sound" data-act="sound" aria-pressed="${soundOn()}">${soundOn() ? ICON.sound : ICON.mute}<span>Sound</span></button>`;
 
 function playTab(ch, c) {
   const s = ch.state;
@@ -474,6 +491,7 @@ function sheetTab(ch, c) {
 // The rules a player reaches for mid-round, straight from the book and kept
 // in the page, so they read with no signal.
 const RULE_GROUPS = [
+  ["The round", ["s-round", "s-telegraphs", "s-answering"]],
   ["Rolling", ["s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions"]],
   ["Your numbers", ["s-aura", "s-resolve", "s-confidence", "s-armour"]],
   ["When it lands", ["s-defending", "s-defend", "s-consequences", "s-fear-gets-through", "s-blaze"]],
@@ -599,6 +617,7 @@ const lastOf = () => ({ name: roll.name, steps: roll.total, dice: roll.dice.map(
 // Top faces give Aura back, one each. The +2 is added later and never counts.
 function settle(s, c, which) {
   const tops = which.filter((i) => roll.dice[i].nat === roll.dice[i].size);
+  roll.tops = tops.length;
   if (tops.length) roll.log.push(`${tops.length === 1 ? `Top face on the d${roll.dice[tops[0]].size}` : `${tops.length} top faces`}, so ${tops.length} Aura back.${gainAura(s, c, tops.length)}`);
   s.last = lastOf();
 }
@@ -642,23 +661,28 @@ function go(real) {
     }
   }, { say: false });
   if (roll?.spinning) spin();
+  else if (!real && roll?.mode === "result") landed(true);
 }
 
-// A short tumble before the dice settle. A tap skips it.
+// The Sigil dice tumble and land one after another, with a knock each when
+// sound's on. A tap skips it.
 function spin() {
-  const started = performance.now();
-  clearTimeout(ui.spinTimer);
-  const tick = () => {
+  ui.stopSpin?.();
+  ui.stopSpin = tumble(dialog, () => {
+    ui.stopSpin = null;
     if (!roll?.spinning) return;
-    if (performance.now() - started > 650) {
-      roll.spinning = false;
-      renderDialog();
-      return;
-    }
-    for (const el of dialog.querySelectorAll("[data-spin]")) el.textContent = 1 + Math.floor(Math.random() * Number(el.dataset.spin));
-    ui.spinTimer = setTimeout(tick, 60);
-  };
-  tick();
+    roll.spinning = false;
+    ui.reveal = true;
+    renderDialog();
+    landed(false);
+  });
+}
+
+// The dice have settled: a knock if they were rolled with no tumble, and a
+// chime and a buzz for any top face, as the Aura comes back.
+function landed(knock) {
+  if (knock) feel.land();
+  if (roll?.tops) feel.top();
 }
 
 function padView(title, rows, ready) {
@@ -782,11 +806,13 @@ function defenceGo(real) {
     }
   }, { say: false });
   if (roll?.spinning) spin();
+  else if (!real && roll?.mode === "result") landed(true);
 }
 
 function settleDefence(s, c) {
   assignBest(roll);
   const tops = roll.mine.filter((m) => m.nat === m.size).length;
+  roll.tops = tops;
   if (tops) roll.log.push(`${tops === 1 ? "A top face" : `${tops} top faces`} on your ${roll.against === "armour" ? "Armour" : "Confidence"}, so ${tops} Aura back.${gainAura(s, c, tops)}`);
 }
 
@@ -928,7 +954,12 @@ function renderDialog(keepFocus = true) {
   dialog.innerHTML = dialogView();
   const now = dialog.querySelector(".dlg-body");
   const mode = roll ? `${roll.kind}:${roll.mode}` : null;
+  // The card turns over when the dialog moves on, and what the dice did comes
+  // up once they've landed.
   if (now && mode === ui.mode) now.scrollTop = top;
+  else if (now && ui.mode) now.classList.add("cc-flip");
+  if (now && ui.reveal) now.classList.add("cc-reveal");
+  ui.reveal = false;
   ui.mode = mode;
   refocus(keep);
   if (!dialog.contains(document.activeElement)) (dialog.querySelector(".dlg-body button:not(:disabled)") ?? dialog.querySelector(".dlg-foot .primary"))?.focus({ preventScroll: true });
@@ -939,9 +970,24 @@ function render() {
   const ch = current();
   const c = ch ? normal(ch) : null;
   document.documentElement.classList.toggle("cc-tabbed", view.name === "sheet" && Boolean(c));
-  app.innerHTML = view.name === "build" ? builderView() : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
+  app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
+  glow(ch);
   if (dialog.open) renderDialog();
   else refocus(keep);
+  if (view.name === "learn") learn.after(app);
+}
+
+// Pips and Hurt boxes that just filled glow as they light up. The trackers
+// remember what they showed last time, for this character.
+function glow(ch) {
+  const s = ch?.state;
+  const was = ui.seen && ui.seen.id === ch?.id ? ui.seen : null;
+  ui.seen = s ? { id: ch.id, aura: s.aura, resolve: s.resolve, hurt: s.hurt } : null;
+  if (!was || !s) return;
+  const lit = (sel, from, to) => [...app.querySelectorAll(sel)].slice(from, to).forEach((el) => el.classList.add("is-new"));
+  if (s.aura > was.aura) lit(".t-aura .pips i", was.aura, s.aura);
+  if (s.resolve > was.resolve) lit(".t-resolve .pips i", was.resolve, s.resolve);
+  if (s.hurt > was.hurt) lit(".t-hurt .mini i", was.hurt, s.hurt);
 }
 
 function openDialog() {
@@ -962,7 +1008,8 @@ function closeDialog(fromHistory = false) {
     history.back();
     return;
   }
-  clearTimeout(ui.spinTimer);
+  ui.stopSpin?.();
+  ui.stopSpin = null;
   dialog.close();
   dialog.innerHTML = "";
   roll = null;
@@ -974,13 +1021,15 @@ function route() {
   const q = new URLSearchParams(location.search);
   const id = q.get("c");
   const key = q.has("build") ? q.get("build") || "new" : null;
-  view = key ? { name: "build", key } : id ? { name: "sheet", id } : { name: "list" };
+  const learning = !key && !id && q.has("learn");
+  if (view.name === "learn" && !learning) learn.stop();
+  view = key ? { name: "build", key } : learning ? { name: "learn" } : id ? { name: "sheet", id } : { name: "list" };
   ui.tab = ["sheet", "rules"].includes(q.get("t")) ? q.get("t") : "play";
   ui.panel = null;
   ui.sure = false;
-  document.documentElement.classList.toggle("cc-open", Boolean(id || key));
+  document.documentElement.classList.toggle("cc-open", Boolean(id || key || learning));
   const ch = current();
-  document.title = key ? `${key === "new" ? "Make your own" : "Change a character"} · Zi’Dara` : ch ? `${ch.name} · Zi’Dara` : "Characters · Zi’Dara";
+  document.title = key ? `${key === "new" ? "Make your own" : "Change a character"} · Zi’Dara` : learning ? "Learn to play · Zi’Dara" : ch ? `${ch.name} · Zi’Dara` : "Characters · Zi’Dara";
   render();
 }
 
@@ -1035,7 +1084,8 @@ function start(crewId, name) {
   const id = `${crewId}-${tag}`;
   chars().push({ id, crew: crewId, name: name || c.name, made: new Date().toISOString(), hash: c.hash, state: fresh(c) });
   store.save();
-  clearTimeout(ui.spinTimer);
+  ui.stopSpin?.();
+  ui.stopSpin = null;
   dialog.close();
   dialog.innerHTML = "";
   roll = null;
@@ -1143,6 +1193,8 @@ const ACT = {
     e.preventDefault();
     const ch = current();
     if (!ch || ui.tab === el.dataset.t) return;
+    const at = (t) => TABS.findIndex(([key]) => key === t);
+    ui.slide = at(el.dataset.t) > at(ui.tab) ? "next" : "back";
     ui.tab = el.dataset.t;
     ui.panel = null;
     history.replaceState(history.state, "", `/characters/?c=${encodeURIComponent(ch.id)}${ui.tab === "play" ? "" : `&t=${ui.tab}`}`);
@@ -1404,17 +1456,37 @@ const ACT = {
     else if (key[0] === "o") roll.opp[Number(key.slice(1))] = v;
     renderDialog();
   },
-  "pad-done": () => change("your roll", (s, c) => {
-    roll.mode = "result";
-    if (roll.kind === "defence") settleDefence(s, c);
-    else settle(s, c, roll.pads);
-    roll.pads = [];
-    roll.padOpp = false;
-  }, { say: false }),
+  "pad-done": () => {
+    change("your roll", (s, c) => {
+      roll.mode = "result";
+      if (roll.kind === "defence") settleDefence(s, c);
+      else settle(s, c, roll.pads);
+      roll.pads = [];
+      roll.padOpp = false;
+    }, { say: false });
+    landed(false);
+  },
   skip() {
+    ui.stopSpin?.();
+    ui.stopSpin = null;
+    if (!roll?.spinning) return;
     roll.spinning = false;
-    clearTimeout(ui.spinTimer);
+    ui.reveal = true;
     renderDialog();
+    landed(true);
+  },
+  sound() {
+    setSound(!soundOn());
+    render();
+    feel.hello();
+  },
+  learn(el, e) {
+    if (el.dataset.do !== "open") return learn.act(el);
+    e.preventDefault();
+    learn.open();
+    history.pushState(null, "", "/characters/?learn");
+    route();
+    scrollTo(0, 0);
   },
   "win-tie": (el) => change("winning a tie", (s) => {
     const d = roll.dice[Number(el.dataset.i)];
@@ -1561,6 +1633,7 @@ function reroll(which) {
     }
   }, { say: false });
   if (roll?.spinning) spin();
+  else if (!roll?.real && roll?.mode === "result") landed(true);
 }
 
 document.addEventListener("click", (e) => {
