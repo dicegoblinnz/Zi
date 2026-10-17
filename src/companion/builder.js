@@ -108,19 +108,26 @@ export function numbersOf(b, B) {
   };
 }
 
-// Everything that can go on a set action, in the sheet's order.
+// Everything that can go on a set action, in the sheet's order. The builder
+// and the saved sheet both read this, so their steps always agree. A Title
+// counts once it has a name, an archetype or a permission, and an attuned
+// thing once it has a name or a permission that counts.
+const titleIn = (t) => Boolean(t.text.trim() || t.arch || t.perms.some((p) => p.text.trim()));
+const titleName = (t) => t.text.trim() || t.arch || "Untitled";
+const attunedName = (a) => a.name.trim() || "Something attuned";
 function linesOf(b, B) {
   const out = [];
   const max = numbersOf(b, B).utility;
-  b.titles.forEach((t, i) => t.text.trim() && out.push({ ref: `t${i}`, kind: "title", label: t.text.trim() }));
-  b.titles.forEach((t, i) => t.perms.forEach((p, j) => p.text.trim() && out.push({ ref: `p${i}.${j}`, kind: "permission", label: p.text.trim(), title: t.text.trim() })));
+  b.titles.forEach((t, i) => titleIn(t) && out.push({ ref: `t${i}`, kind: "title", label: titleName(t), i }));
+  b.titles.forEach((t, i) => titleIn(t) && t.perms.forEach((p, j) => p.text.trim() && out.push({ ref: `p${i}.${j}`, kind: "permission", label: p.text.trim(), i })));
   b.traits.forEach((t, i) => out.push({ ref: `r${i}`, kind: "trait", label: t.name }));
   b.equipment.forEach((x, i) => x.text.trim() && out.push({ ref: `e${i}`, kind: "kit", label: x.text.trim() }));
   b.utility.slice(0, max).forEach((x, i) => x.text.trim() && out.push({ ref: `u${i}`, kind: "kit", label: x.text.trim() }));
   if (b.keepsake.text.trim()) out.push({ ref: "k", kind: "kit", label: b.keepsake.text.trim() });
-  b.attuned.forEach((a, i) => a.perms.forEach((p, j) => p.text.trim() && (j === 0 || a.catch.trim()) && out.push({ ref: `a${i}.${j}`, kind: "attuned", label: p.text.trim(), item: a.name.trim() || "something attuned" })));
+  b.attuned.forEach((a, i) => a.perms.forEach((p, j) => p.text.trim() && (j === 0 || a.catch.trim()) && out.push({ ref: `a${i}.${j}`, kind: "attuned", label: p.text.trim(), item: attunedName(a), i })));
   return out;
 }
+const bagOf = (b) => b.bag.split("\n").map((x) => x.trim()).filter(Boolean);
 const stepsOf = (b, B, name) => 1 + linesOf(b, B).filter((l) => lineAt(b, l.ref)?.on.includes(name)).length;
 
 // The full sheet, the same shape as the crew's (scripts/build-content.mjs).
@@ -148,12 +155,12 @@ function makeSheet(ch, b, B) {
   };
   const numbers = numbersOf(b, B);
   const all = linesOf(b, B);
-  const titles = b.titles.map((t, i) => ({ t, i })).filter(({ t }) => t.text.trim() || t.arch).map(({ t, i }) => ({
-    name: t.text.trim() || t.arch, archetype: t.arch || "", archetypeId: ARCH.get(t.arch)?.id ?? null, i,
-  }));
-  for (const x of titles) x.key = add(`t${x.i}`, "title", x.name);
+  const titles = all.filter((l) => l.kind === "title").map((l) => {
+    const t = b.titles[l.i];
+    return { name: l.label, archetype: t.arch || "", archetypeId: ARCH.get(t.arch)?.id ?? null, i: l.i, key: add(l.ref, "title", l.label) };
+  });
   for (const x of titles) {
-    x.permissions = all.filter((l) => l.kind === "permission" && l.ref.startsWith(`p${x.i}.`)).map((l) => ({ text: l.label, key: add(l.ref, "permission", l.label, { title: x.name }) }));
+    x.permissions = all.filter((l) => l.kind === "permission" && l.i === x.i).map((l) => ({ text: l.label, key: add(l.ref, "permission", l.label, { title: x.name }) }));
   }
   const taken = new Map();
   for (const x of titles) if (x.archetype) taken.set(x.archetype, (taken.get(x.archetype) ?? 0) + 1);
@@ -182,14 +189,11 @@ function makeSheet(ch, b, B) {
     equipment: { items: kit.filter((l) => l.ref[0] === "e").map((l) => l.label), max: 3, note: null },
     utility: { items: kit.filter((l) => l.ref[0] === "u").map((l) => l.label), max: numbers.utility, note: null },
     keepsake: b.keepsake.text.trim() || null,
-    bag: { name: "a bag", max: 10 },
+    bag: { name: "a bag", max: 10, items: bagOf(b).slice(0, 10) },
   };
-  const attuned = b.attuned.map((a, i) => ({ a, i })).filter(({ a }) => a.name.trim() || a.perms[0].text.trim()).map(({ a, i }) => {
-    const name = a.name.trim() || "Something attuned";
-    return {
-      name, props: null, stage: "Awakened", catch: a.catch.trim() || null,
-      permissions: all.filter((l) => l.kind === "attuned" && l.ref.startsWith(`a${i}.`)).map((l) => ({ text: l.label, key: add(l.ref, "attuned", l.label, { item: name }) })),
-    };
+  const attuned = b.attuned.map((a, i) => ({ a, i, perms: all.filter((l) => l.kind === "attuned" && l.i === i) })).filter(({ a, perms }) => a.name.trim() || perms.length).map(({ a, perms }) => {
+    const name = attunedName(a);
+    return { name, props: null, stage: "Awakened", catch: a.catch.trim() || null, permissions: perms.map((l) => ({ text: l.label, key: add(l.ref, "attuned", l.label, { item: name }) })) };
   });
   const actions = b.actions.map((name) => {
     const on = [...keyOf].filter(([ref]) => lineAt(b, ref)?.on.includes(name)).map(([, key]) => key);
@@ -245,6 +249,7 @@ export function checksOf(b, B) {
     if (a.perms[1].text.trim() && !a.catch.trim()) out.push({ step: 4, text: `${cap(a.name.trim() || "Your attuned thing")} only gets a second permission with a Catch.` });
   });
   if (b.utility.slice(n.utility).some((u) => u.text.trim())) out.push({ step: 4, text: `You can carry ${n.utility} utility items, so the last one won’t go on the sheet.` });
+  if (bagOf(b).length > 10) out.push({ step: 4, text: `Your bag holds 10, so the last ${bagOf(b).length - 10} won’t go in.` });
   const room = b.threads.some((t) => t.debt) ? 4 : 3;
   const threads = b.threads.slice(0, room).filter((t) => t.person.trim() && t.text.trim()).length;
   if (threads < 3) out.push({ step: 5, text: `You’ve written ${threads} thread${threads === 1 ? "" : "s"}. You start with three.` });
@@ -271,9 +276,11 @@ function writeDrafts(all) {
     return false;
   }
 }
+const blankJson = JSON.stringify(blankBuild());
 export const hasDraft = () => {
   const d = readDrafts().new;
-  return d ? { name: str(d.build?.name, 40) } : null;
+  if (!d || JSON.stringify(normalBuild(d.build)) === blankJson) return null;
+  return { name: str(d.build?.name, 40) };
 };
 
 // ---------------------------------------------------------------- the screens
@@ -344,7 +351,8 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
   function head() {
     const i = d.step;
     const dots = STEPS.map((s, k) => `<li><button type="button" class="bd-dot${k === i ? " is-now" : ""}" data-act="b" data-b="go" data-s="${k}" aria-label="Step ${k + 1}: ${s.name}"${k === i ? ' aria-current="step"' : ""}>${k + 1}</button></li>`).join("");
-    return `<a class="cc-back" href="/characters/" data-act="b" data-b="leave">${icon.back}Characters</a>
+    const back = slotKey === "new" ? "Characters" : esc(b().name || "Back");
+    return `<a class="cc-back" href="/characters/${slotKey === "new" ? "" : `?c=${encodeURIComponent(slotKey)}`}" data-act="b" data-b="leave">${icon.back}${back}</a>
       <header class="cc-head bd-head"><p class="kicker">${slotKey === "new" ? "Make your own" : `Changing ${esc(b().name || "your character")}`} · Step ${i + 1} of 8</p>
       <h1 tabindex="-1">${STEPS[i].name}</h1><ol class="bd-dots" aria-label="Steps">${dots}</ol></header>`;
   }
@@ -353,13 +361,14 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
     const i = d.step;
     const next = i < 7 ? `<button type="button" class="button primary" data-act="b" data-b="go" data-s="${i + 1}">Next: ${STEPS[i + 1].name}</button>` : `<button type="button" class="button primary" data-act="b" data-b="save">Save and play</button>`;
     return `<div class="bd-foot">${i ? `<button type="button" class="button" data-act="b" data-b="go" data-s="${i - 1}">Back</button>` : ""}${next}</div>
-      <p class="cc-lead">${link(STEPS[i].rules, "Read this step in the rules")}. Your work’s saved on this phone as you go.</p>`;
+      <p class="cc-lead">${link(STEPS[i].rules, "Read this step in the rules")}. Your work’s saved on this phone as you go.</p>
+      ${slotKey === "new" ? "" : '<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="dropedit">Drop these changes</button></div>'}`;
   }
 
   // Step 1: two archetypes, and a Title idea for each.
   function stepArch() {
     const x = b();
-    const same = x.titles[0].arch && x.titles[0].arch === x.titles[1].arch;
+    const same = x.titles[0].arch && x.titles[0].arch === x.titles[1].arch && /^\+2\b/.test(ARCH.get(x.titles[0].arch)?.aura ?? "");
     const card = (t, i) => {
       const a = ARCH.get(t.arch);
       const fits = B.ideas.filter((idea) => d.deep[0] || !a || idea.archetypes.includes(t.arch));
@@ -409,6 +418,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
     const own = x.traits.find((t) => t.own);
     return `${how(2)}
       <p class="cc-note" role="status">You’ve picked ${x.traits.length} of 2${x.traits.length ? `: ${esc(both(x.traits.map((t) => t.name)))}` : ""}.</p>
+      ${own ? `<h2>Your own</h2><div class="bd-traits"><button type="button" class="bd-trait" data-act="b" data-b="trait" data-v="${esc(own.name)}" aria-pressed="true"><b>${esc(own.name)}</b> <small>${esc(own.own.type)}</small><span>${esc(own.own.text)}</span></button></div><p class="cc-lead">Tap it to take it off.</p>` : ""}
       ${suggested.length ? `<h2>From your Title ideas</h2><div class="bd-traits">${suggested.map((n) => card(TRAIT.get(n))).join("")}</div>` : ""}
       ${showAll ? groups.map((g) => `<h2>${esc(g || "Traits")}</h2><div class="bd-traits">${B.traits.filter((t) => t.group === g).map(card).join("")}</div>`).join("") : ""}
       ${d.deep[2] ? `<fieldset class="cc-group bd-card"><legend>Write your own</legend><p class="cc-lead">A name, a type and one line. If it changes a number, tell your GM which.</p>
@@ -416,7 +426,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
         <label class="cc-field" for="b-own-type">Type</label><select id="b-own-type" data-bin="own.type">${["Passive", "Triggered", "Invoked", "Once per scene", "Once per downtime"].map((k) => `<option${own?.own.type === k ? " selected" : ""}>${k}</option>`).join("")}</select>
         ${field("own.text", "What it does", own?.own.text ?? "", { max: 120 })}
         <div class="cc-row"><button type="button" class="button" data-act="b" data-b="own">${own ? "Update it" : "Add it"}</button></div></fieldset>` : ""}
-      ${suggested.length ? deepBtn(2, "Show all the traits") : ""}`;
+      ${deepBtn(2, suggested.length ? "Show all the traits, or write your own" : "Write your own trait")}`;
   }
 
   // Step 4: set actions. Lines from both Titles, the permissions and the traits.
@@ -540,8 +550,9 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
     else if ((m = path.match(/^t(\d)\.p(\d)$/))) x.titles[m[1]].perms[m[2]].text = v;
     else if ((m = path.match(/^([eu])(\d)$/))) {
       const item = lineAt(x, path);
+      const was = ARMOUR.test(item.text);
       item.text = v;
-      if (m[1] === "e") {
+      if (m[1] === "e" && was !== ARMOUR.test(v)) {
         item.armour = ARMOUR.test(v);
         document.querySelector(`[data-b="armour"][data-i="${m[2]}"]`)?.setAttribute("aria-pressed", String(item.armour));
       }
@@ -566,7 +577,12 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
     if (k === "leave") {
       e.preventDefault();
       save();
-      return onLeave();
+      return onLeave(slotKey);
+    }
+    if (k === "dropedit") {
+      const key = slotKey;
+      discard();
+      return onLeave(key);
     }
     if (k === "go") {
       d.step = Math.min(7, Math.max(0, Number(el.dataset.s)));
@@ -636,7 +652,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
       const kind = el.dataset.k;
       const list = kind === "e" ? x.equipment : kind === "u" ? x.utility.slice(0, numbersOf(x, B).utility) : [x.keepsake];
       const at = list.findIndex((it) => it.text.trim().toLowerCase() === v.toLowerCase());
-      if (at >= 0) list[at] = { ...list[at], text: "", on: [], ...(kind === "e" ? { armour: false } : {}) };
+      if (at >= 0) Object.assign(list[at], { text: "", on: [] }, kind === "e" ? { armour: false } : {});
       else {
         const free = kind === "k" ? 0 : list.findIndex((it) => !it.text.trim());
         if (free < 0) return toast("That’s full. Tap one to take it off, or change one by hand.", false);
@@ -656,7 +672,9 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
   function toggled(el) {
     const m = el.dataset.open?.match(/^bd-how-(\d)$/);
     if (!m || !d) return;
-    d.deep[`how${m[1]}`] = el.open;
+    const key = `how${m[1]}`;
+    if (el.open === (d.deep[key] !== false)) return;
+    d.deep[key] = el.open;
     saveSoon();
   }
 

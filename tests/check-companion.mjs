@@ -362,11 +362,34 @@ async function play(page, crewId, name) {
   await b('[data-b="trait"][data-v="Prepared"]');
   await page.click('.bd-dot[data-s="4"]');
   has(await page.textContent("#bd-ut"), "4 utility items", "Prepared gives her a fourth utility item");
+  await b('[data-b="fillany"][data-k="e"][data-v="shield"]');
   await page.click('.bd-dot[data-s="7"]');
   await b('[data-b="save"]');
   await page.waitForSelector(".tile[data-a]");
   has(await page.textContent(".cc-head"), "Stride 3", "Vesk's stride without Light on my Feet");
+  has(await page.textContent('.cc-stat[data-p="armour"] .v'), "d6", "her full Armour going up with a shield");
   same(await page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.filter((c) => c.build).length), 1, "changing her doesn't make a second Vesk");
+
+  // Opening the builder and leaving isn't a draft. Two Bloodsworn get no +3
+  // note, since there's no +2 to raise. A second tap takes a chip back off,
+  // and what's in the bag reaches the sheet.
+  await page.goto(`${BASE}/characters/?build`);
+  await page.click('.cc-back[data-b="leave"]');
+  has(await page.textContent('a[data-act="bopen"]'), "Build a character", "the list after opening the builder and leaving");
+  await page.click('a[data-act="bopen"]');
+  for (const t of [0, 1]) await b(`[data-b="arch"][data-t="${t}"][data-v="Bloodsworn"]`);
+  same(await page.$$eval(".bd-body .cc-note", (els) => els.filter((el) => /\+3/.test(el.textContent)).length), 0, "no +3 note for two Bloodsworn");
+  await page.click('.bd-dot[data-s="4"]');
+  await b('[data-b="fillany"][data-k="u"][data-v="Rations"]');
+  await b('[data-b="fillany"][data-k="u"][data-v="Rations"]');
+  same(await page.inputValue("#b-u0"), "", "a second tap on Rations takes it back off");
+  await b('[data-b="deep"]');
+  await page.fill("#b-bag", "a waterskin\nsome rope");
+  await page.click('.bd-dot[data-s="7"]');
+  await page.fill("#b-name", "Tam");
+  await b('[data-b="save"]');
+  await page.waitForSelector(".tile[data-a]");
+  has(await page.textContent("#app"), "some rope", "the bag on the sheet");
 
   // A blank character saves too: the builder warns, and never blocks. Leaving
   // keeps the draft, and the list offers to carry on with it.

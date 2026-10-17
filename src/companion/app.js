@@ -44,7 +44,7 @@ const ICON = {
   back: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>',
 };
 
-const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: () => nav(""), onSave: saveBuilt });
+const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt });
 
 // ---------------------------------------------------------------- characters
 
@@ -294,7 +294,7 @@ function sheetView(ch, c) {
   const titles = c.titles.map((t, i) => `<article class="card cc-card"><p class="eyebrow">${ORD[i] ?? ""} Title · ${t.archetypeId ? link(t.archetypeId, esc(t.archetype)) : esc(t.archetype)}</p>
     <h3><em>${esc(t.name)}</em></h3><ul class="cc-perms">${t.permissions.map((p) => `<li><em>${esc(p.text)}</em></li>`).join("")}</ul></article>`).join("");
   const archetypes = c.archetypeRules.map((a) => `<div class="cc-arch"><p><b>${a.id ? link(a.id, esc(a.name)) : esc(a.name)}${a.times > 1 ? `, taken ${a.times === 2 ? "twice" : `${a.times} times`}` : ""}.</b> ${a.summary}</p>
-    <p><b>1 Aura:</b> ${a.auraHtml}</p><button type="button" class="button sm" data-act="arch-aura" data-n="${esc(a.name)}"${off(s.aura < 1)}>Spend 1 Aura on it</button></div>`).join("");
+    ${a.auraHtml ? `<p><b>1 Aura:</b> ${a.auraHtml}</p><button type="button" class="button sm" data-act="arch-aura" data-n="${esc(a.name)}"${off(s.aura < 1)}>Spend 1 Aura on it</button>` : ""}</div>`).join("");
 
   const traits = c.traits.map((t) => {
     const once = /once per scene/i.test(t.type);
@@ -310,7 +310,7 @@ function sheetView(ch, c) {
   };
   const picked = (where) => s.picked.map((p, i) => ({ ...p, i })).filter((p) => p.where === where);
   const slot = (where, title) => {
-    const own = where === "bag" ? [] : c.carry[where].items;
+    const own = where === "bag" ? c.carry.bag.items ?? [] : c.carry[where].items;
     const extra = picked(where);
     const max = where === "bag" ? c.carry.bag.max : c.carry[where].max;
     const note = where === "bag" ? "" : c.carry[where].note;
@@ -869,8 +869,13 @@ function saveBuilt(build, key, discard) {
   const name = build.name.trim() || "Nameless";
   let ch = key === "new" ? null : chars().find((x) => x.id === key);
   if (ch) {
+    // Anything that was full stays full when the sheet's new number is bigger.
+    const was = sheetFor(ch).numbers;
+    const s = ch.state;
     ch.build = build;
     ch.name = name;
+    const now = sheetFor(ch).numbers;
+    for (const [k, n] of [["aura", "aura"], ["resolve", "resolve"], ["armour", "armour"], ["conf", "confidence"]]) if (s[k] === was[n]) s[k] = now[n];
   } else {
     const tag = Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => b.toString(36).padStart(2, "0")).join("").slice(0, 6);
     ch = { id: `own-${tag}`, crew: "own", name, made: new Date().toISOString(), hash: "own", build };
@@ -956,6 +961,7 @@ const ACT = {
     if (!ch || !confirm(`Delete ${ch.name} from this phone? You can’t get them back.`)) return;
     store.data.characters = chars().filter((x) => x.id !== ch.id);
     store.save();
+    builder.discard(ch.id);
     nav("");
   },
   seen() {
@@ -1327,7 +1333,7 @@ document.addEventListener("submit", (e) => {
     const c = normal(ch);
     if (!name || !c) return;
     const max = where === "bag" ? c.carry.bag.max : c.carry[where]?.max ?? 0;
-    const has = (where === "bag" ? 0 : c.carry[where].items.length) + ch.state.picked.filter((p) => p.where === where).length;
+    const has = (where === "bag" ? c.carry.bag.items?.length ?? 0 : c.carry[where].items.length) + ch.state.picked.filter((p) => p.where === where).length;
     if (has >= max) return toast(`There’s no room. That’s ${max} of ${max} already.`, false);
     change("picking something up", (s) => {
       s.picked.push({ where, name });
@@ -1392,6 +1398,7 @@ dialog.addEventListener("cancel", (e) => {
 dialog.addEventListener("click", (e) => {
   if (e.target === dialog) closeDialog();
 });
+addEventListener("pagehide", () => builder.flush());
 addEventListener("popstate", () => {
   if (dialog.open) closeDialog(true);
   else route();
