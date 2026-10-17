@@ -69,3 +69,7 @@ Mo's answers in the drill from `notes/app-rework.md`, round by round.
 - The slow part of a round is working out a roll.
 - Players asked for the phone to roll and say what happened, rules on tap, making their own character, and seeing the party.
 - Amazing at the table means all four: it looks like a game, there's no counting, new players learn from it, and the crew plays together live.
+- During a round the phone opens on a play screen: big set actions and the trackers, usable one-handed, with the rest of the sheet and the rules a tab away.
+- The phone rolls the threat's die with yours, or you tap in the GM's number, and it calls beat, tie or under.
+- It counts everything as you play (Aura, Resolve, Hurt, Armour and conditions), with an undo.
+- Each die's intent is an optional label: tap hurt, pin or disarm, or type your own.
