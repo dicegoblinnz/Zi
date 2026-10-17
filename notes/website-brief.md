@@ -60,3 +60,12 @@ Mo's answers from 16 Oct 2026, given before the redesign. Everything built for z
 - Worlds hold official content and GM-built worlds.
 - Rule changes come four ways: Mo tells Claude, Mo edits in the browser, playtesters leave notes, and trusted co-writers suggest edits for Mo to approve.
 - Live telegraphs run on every phone and, when wanted, on a shared table screen.
+
+## The app rework, 17 Oct
+
+Mo's answers in the drill from `notes/app-rework.md`, round by round.
+
+- At playtests so far, players used a mix of phones and paper.
+- The slow part of a round is working out a roll.
+- Players asked for the phone to roll and say what happened, rules on tap, making their own character, and seeing the party.
+- Amazing at the table means all four: it looks like a game, there's no counting, new players learn from it, and the crew plays together live.
