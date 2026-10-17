@@ -1,8 +1,9 @@
 // Write dist/sw.js after the build: the service worker from scripts/sw.js,
 // with the list of files to keep on the phone and a version that changes
 // whenever any of them does. It keeps every page except the not-found page,
-// the CSS and scripts, the Latin fonts, the figures and the favicon. Search
-// (dist/pagefind/) needs a signal, so it's left out.
+// the CSS and scripts, the Latin fonts, the figures and the favicon, and the
+// blank character sheet, which the companion fills in to print a character.
+// Search (dist/pagefind/) needs a signal, so it's left out.
 import { createHash } from "node:crypto";
 import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
@@ -19,7 +20,7 @@ const files = [];
   }
 })(DIST);
 
-const keep = (rel) => (/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel);
+const keep = (rel) => (/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf";
 const hash = createHash("sha1");
 const urls = [];
 for (const path of files.sort()) {

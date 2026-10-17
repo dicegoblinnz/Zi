@@ -297,6 +297,12 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .bd-checks { margin: 0.5rem 0 0; padding-left: 1.1rem; }
 .bd-checks li { margin: 0.5rem 0; }
 .bd-checks .button { margin-left: 0.3rem; }
+/* Every step on one page: a blank sheet, one of the crew, or random. */
+.bd-part { margin-top: 2.4rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+.bd-part:first-child { margin-top: 1rem; padding-top: 0; border-top: 0; }
+.bd-part > h2 { margin-top: 0; }
+.bd-part > h2:focus { outline: none; }
+.bd-page h3 { margin-top: 1.4rem; }
 .bd-foot { position: sticky; bottom: 0; z-index: 5; display: flex; gap: 8px; margin-top: 1.8rem; padding: 0.7rem 0; background: var(--bg); border-top: 1px solid var(--line-soft); }
 .bd-foot .button { flex: 1 1 0; min-width: 0; }
 .bd-foot .button:not(.primary) { flex: 0 0 auto; }

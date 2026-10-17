@@ -4,14 +4,16 @@
 // by "new" or by the id of the character being changed, so nothing's lost if
 // the page closes. A finished character keeps only what the player chose (its
 // build), and sheetOf() turns that into the same full sheet the crew have,
-// read against the current rules every time it opens.
+// read against the current rules every time it opens. The guided build goes a
+// step at a time, and the other ways in (a blank sheet, one of the crew, or
+// random, from ways.js) open with every step on one page.
 
 import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
 
 const KEY = "zi-drafts";
 export const ACTIONS = ["Fight", "Move", "Sneak", "Study", "Talk"];
 const ORD = ["first", "second", "third", "fourth"];
-const ARMOUR = /\b(plate|chain|mail|leathers|shield|armou?r|breastplate|hauberk|brigandine)\b/i;
+export const ARMOUR = /\b(plate|chain|mail|leathers|shield|armou?r|breastplate|hauberk|brigandine)\b/i;
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const both = (list) => (list.length > 1 ? `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}` : list[0] ?? "");
@@ -73,7 +75,7 @@ export function normalBuild(raw) {
 // Every line a set action can carry, by a reference that survives typing:
 // t0 a Title, p0.1 a permission on it, r1 a trait, e0 and u2 what you carry,
 // k the keepsake, a1.0 a permission on an attuned thing.
-function lineAt(b, ref) {
+export function lineAt(b, ref) {
   const [i, j] = ref.slice(1).split(".").map(Number);
   switch (ref[0]) {
     case "t": return b.titles[i];
@@ -285,6 +287,7 @@ export const hasDraft = () => {
 
 // ---------------------------------------------------------------- the screens
 
+const WAYS = ["blank", "crew", "random"];
 const STEPS = [
   { name: "Archetypes", rules: "s-title" },
   { name: "Titles and permissions", rules: "s-writing-permissions" },
@@ -296,19 +299,19 @@ const STEPS = [
   { name: "Check it and play", rules: "s-starting-numbers" },
 ];
 
-export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
+export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
   const ARCH = new Map(B.archetypes.map((a) => [a.name, a]));
   const IDEA = new Map(B.ideas.map((x) => [x.id, x]));
   const TRAIT = new Map(B.traits.map((t) => [t.name, t]));
   let slotKey = "new";
-  let d = null; // { step, deep: {}, build }
+  let d = null; // { step, deep: {}, page, way, from, build }
   let saveTimer = 0;
   let sure = false;
 
   const save = () => {
     clearTimeout(saveTimer);
     const all = readDrafts();
-    all[slotKey] = { step: d.step, deep: d.deep, build: d.build };
+    all[slotKey] = { step: d.step, deep: d.deep, page: d.page, way: d.way, from: d.from, build: d.build };
     writeDrafts(all);
   };
   const saveSoon = () => {
@@ -319,9 +322,18 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
     slotKey = key || "new";
     const kept = readDrafts()[slotKey];
     d = kept
-      ? { step: Math.min(7, Math.max(0, Number(kept.step) || 0)), deep: kept.deep && typeof kept.deep === "object" ? kept.deep : {}, build: normalBuild(kept.build) }
-      : { step: from ? 7 : 0, deep: {}, build: normalBuild(from ?? blankBuild()) };
+      ? { step: Math.min(7, Math.max(0, Number(kept.step) || 0)), deep: kept.deep && typeof kept.deep === "object" ? kept.deep : {}, page: Boolean(kept.page), way: WAYS.includes(kept.way) ? kept.way : "", from: str(kept.from, 40), build: normalBuild(kept.build) }
+      : { step: from ? 7 : 0, deep: {}, page: false, way: "", from: "", build: normalBuild(from ?? blankBuild()) };
     sure = false;
+  }
+  // A new character from one of the other ways in, on one page. It takes the
+  // place of any draft of a new one, so the list asks first.
+  function begin(build, way, from = "") {
+    clearTimeout(saveTimer);
+    slotKey = "new";
+    d = { step: 0, deep: {}, page: true, way, from, build: normalBuild(build) };
+    sure = false;
+    save();
   }
   function discard(key = slotKey) {
     clearTimeout(saveTimer);
@@ -341,19 +353,24 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
       : `<input id="${id}" data-bin="${path}" value="${esc(value)}" maxlength="${max}" autocomplete="off" placeholder="${esc(ph || " ")}">`;
     return `<label class="cc-field" for="${id}">${label}</label>${input}`;
   };
-  const how = (i) => `<details class="bd-how" data-open="bd-how-${i}"${d.deep[`how${i}`] === false ? "" : " open"}><summary>How this step works</summary><p>${B.quick[i]}</p></details>`;
-  const deepBtn = (i, label) => `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="deep"${pressed(d.deep[i])}>${d.deep[i] ? "Back to the quick build" : label}</button></div>`;
+  // The book's words for each step are open a step at a time, and closed on
+  // one page, where they'd bury the sheet.
+  const howOpen = (i) => (d.page ? d.deep[`how${i}`] === true : d.deep[`how${i}`] !== false);
+  const how = (i) => `<details class="bd-how" data-open="bd-how-${i}"${howOpen(i) ? " open" : ""}><summary>How this step works</summary><p>${B.quick[i]}</p></details>`;
+  const deepBtn = (i, label) => `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="deep" data-s="${i}"${pressed(d.deep[i])}>${d.deep[i] ? "Back to the quick build" : label}</button></div>`;
   const toggles = (ref, label) => {
     const l = lineAt(b(), ref);
     return `<div class="bd-on" role="group" aria-label="Set actions for ${esc(label)}">${b().actions.map((a) => chip(esc(a), `data-b="on" data-l="${ref}" data-a="${esc(a)}"`, l?.on.includes(a), "sm")).join("")}</div>`;
   };
 
+  const backLink = () => `<a class="cc-back" href="/characters/${slotKey === "new" ? "" : `?c=${encodeURIComponent(slotKey)}`}" data-act="b" data-b="leave">${icon.back}${slotKey === "new" ? "Characters" : esc(b().name || "Back")}</a>`;
+  const kicker = () => (slotKey === "new" ? "Make your own" : `Changing ${esc(b().name || "your character")}`);
+  const dropEdit = () => (slotKey === "new" ? "" : '<button type="button" class="button sm" data-act="b" data-b="dropedit">Drop these changes</button>');
+
   function head() {
     const i = d.step;
     const dots = STEPS.map((s, k) => `<li><button type="button" class="bd-dot${k === i ? " is-now" : ""}" data-act="b" data-b="go" data-s="${k}" aria-label="Step ${k + 1}: ${s.name}"${k === i ? ' aria-current="step"' : ""}>${k + 1}</button></li>`).join("");
-    const back = slotKey === "new" ? "Characters" : esc(b().name || "Back");
-    return `<a class="cc-back" href="/characters/${slotKey === "new" ? "" : `?c=${encodeURIComponent(slotKey)}`}" data-act="b" data-b="leave">${icon.back}${back}</a>
-      <header class="cc-head bd-head"><p class="kicker">${slotKey === "new" ? "Make your own" : `Changing ${esc(b().name || "your character")}`} · Step ${i + 1} of 8</p>
+    return `${backLink()}<header class="cc-head bd-head"><p class="kicker">${kicker()} · Step ${i + 1} of 8</p>
       <h1 tabindex="-1">${STEPS[i].name}</h1><ol class="bd-dots" aria-label="Steps">${dots}</ol></header>`;
   }
 
@@ -362,7 +379,19 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
     const next = i < 7 ? `<button type="button" class="button primary" data-act="b" data-b="go" data-s="${i + 1}">Next: ${STEPS[i + 1].name}</button>` : `<button type="button" class="button primary" data-act="b" data-b="save">Save and play</button>`;
     return `<div class="bd-foot">${i ? `<button type="button" class="button" data-act="b" data-b="go" data-s="${i - 1}">Back</button>` : ""}${next}</div>
       <p class="cc-lead">${link(STEPS[i].rules, "Read this step in the rules")}. Your work’s saved on this phone as you go.</p>
-      ${slotKey === "new" ? "" : '<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="dropedit">Drop these changes</button></div>'}`;
+      <div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="page">See it all on one page</button>${dropEdit()}</div>`;
+  }
+
+  // Every step on one page, for a blank sheet, one of the crew or random.
+  function pageView() {
+    const title = { blank: "A blank sheet", crew: `From ${esc(d.from || "the crew")}`, random: "Random" }[d.way] ?? "All on one page";
+    const parts = BODIES.map((body, i) => `<section class="bd-part" aria-labelledby="bd-part-${i}"><h2 id="bd-part-${i}" tabindex="-1">${STEPS[i].name}</h2>${body().replace(/<(\/?)h2\b/g, "<$1h3")}</section>`).join("");
+    return `${backLink()}<header class="cc-head bd-head"><p class="kicker">${kicker()} · All on one page</p><h1 tabindex="-1">${title}</h1>
+      <div class="cc-row">${d.way === "random" ? '<button type="button" class="button" data-act="b" data-b="reroll">Roll again</button>' : ""}<button type="button" class="button" data-act="b" data-b="page">Go step by step</button></div></header>
+      <div class="bd-body bd-page">${parts}</div>
+      <div class="bd-foot"><button type="button" class="button primary" data-act="b" data-b="save">Save and play</button></div>
+      <p class="cc-lead">${link("s-quick", "The Quick Build in the rules")}. Your work’s saved on this phone as you go.</p>
+      ${dropEdit() ? `<div class="cc-row">${dropEdit()}</div>` : ""}`;
   }
 
   // Step 1: two archetypes, and a Title idea for each.
@@ -531,13 +560,14 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
       <p class="cc-lead">In them, Confidence starts a size up when they fit the scene.</p>
       <h2>Set actions</h2>${tiles(x.actions)}
       ${trouble.length ? `<h2>Trouble that follows you</h2><p class="cc-lead">If you like. Let it cause real trouble and you take 1 Aura.</p><div class="cc-chips">${trouble.map((t) => chip(`<em>${esc(t)}</em>`, `data-b="trouble" data-v="${esc(t)}"`, x.trouble.includes(t))).join("")}</div>` : ""}
-      ${checks.length ? `<div class="cc-note is-warn"><p>A few things to look at. You can save anyway, and change them later.</p><ul class="bd-checks">${checks.map((c) => `<li>${esc(c.text)} <button type="button" class="button sm" data-act="b" data-b="go" data-s="${c.step}">Step ${c.step + 1}</button></li>`).join("")}</ul></div>` : '<p class="cc-note" role="status">Everything adds up.</p>'}`;
+      ${checks.length ? `<div class="cc-note is-warn"><p>A few things to look at. You can save anyway, and change them later.</p><ul class="bd-checks">${checks.map((c) => `<li>${esc(c.text)} <button type="button" class="button sm" data-act="b" data-b="go" data-s="${c.step}">${d.page ? STEPS[c.step].name : `Step ${c.step + 1}`}</button></li>`).join("")}</ul></div>` : '<p class="cc-note" role="status">Everything adds up.</p>'}`;
   }
 
+  const BODIES = [stepArch, stepTitles, stepTraits, stepActions, stepCarry, stepThreads, stepAsp, stepCheck];
   function view(key, from) {
     if (!d || slotKey !== (key || "new")) open(key, from);
-    const body = [stepArch, stepTitles, stepTraits, stepActions, stepCarry, stepThreads, stepAsp, stepCheck][d.step]();
-    return `${head()}<div class="bd-body">${body}</div>${foot()}`;
+    if (d.page) return pageView();
+    return `${head()}<div class="bd-body">${BODIES[d.step]()}</div>${foot()}`;
   }
 
   // Everything typed goes straight into the draft. Nothing redraws mid-word.
@@ -586,6 +616,18 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
     }
     if (k === "go") {
       d.step = Math.min(7, Math.max(0, Number(el.dataset.s)));
+      if (d.page) {
+        const h = document.getElementById(`bd-part-${d.step}`);
+        h?.scrollIntoView({ block: "start" });
+        return h?.focus({ preventScroll: true });
+      }
+      save();
+      render();
+      return focusTop();
+    }
+    if (k === "page") {
+      d.page = !d.page;
+      d.step = 0;
       save();
       render();
       return focusTop();
@@ -594,7 +636,8 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
       save();
       return onSave(normalBuild(x), slotKey, () => discard());
     }
-    if (k === "deep") d.deep[d.step] = !d.deep[d.step];
+    if (k === "deep") d.deep[el.dataset.s] = !d.deep[el.dataset.s];
+    else if (k === "reroll") d.build = normalBuild(roll());
     else if (k === "arch") {
       const t = x.titles[i];
       t.arch = t.arch === v ? "" : v;
@@ -673,10 +716,10 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast }) {
     const m = el.dataset.open?.match(/^bd-how-(\d)$/);
     if (!m || !d) return;
     const key = `how${m[1]}`;
-    if (el.open === (d.deep[key] !== false)) return;
+    if (el.open === howOpen(m[1])) return;
     d.deep[key] = el.open;
     saveSoon();
   }
 
-  return { view, act, input, toggled, open, discard, flush: () => d && save(), get step() { return d?.step ?? 0; } };
+  return { view, act, input, toggled, open, begin, discard, flush: () => d && save(), get step() { return d?.step ?? 0; } };
 }

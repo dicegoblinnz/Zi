@@ -7,6 +7,8 @@
 import { SIZES, diceLabel, diceRange, diceShapes, rollDie, sizeDown, sizeUp, stepsToDice } from "./dice.js";
 import { openStore } from "./store.js";
 import { hasDraft, makeBuilder, sheetOf } from "./builder.js";
+import { fromCrew, randomBuild } from "./ways.js";
+import { printSheet } from "./print.js";
 
 const DATA = JSON.parse(document.getElementById("zi-companion").textContent);
 const CREW = new Map(DATA.crew.map((c) => [c.id, c]));
@@ -44,7 +46,7 @@ const ICON = {
   back: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>',
 };
 
-const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt });
+const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt, roll: () => randomBuild(DATA.build, DATA.crew) });
 
 // ---------------------------------------------------------------- characters
 
@@ -207,12 +209,15 @@ function listView() {
       <small>${c ? `${ch.build ? "Your own" : esc(c.name)}${c.title ? ` · <em>${esc(c.title)}</em>` : ""}` : "This sheet isn’t in the rules any more"}</small>
       ${c ? `<small>Aura ${esc(s.aura ?? c.numbers.aura)} · Resolve ${esc(s.resolve ?? c.numbers.resolve)} · Confidence d${esc(s.conf ?? c.numbers.confidence)}</small>` : ""}</span></a></li>`;
   };
+  // The other ways in start a new character, so with a draft on the go they
+  // ask for a second tap first.
+  const way = (w, label) => `<button type="button" class="button" data-act="bway" data-w="${esc(w)}">${ui.sure === `w:${w}` ? `Tap again to bin ${esc(draft?.name || "your draft")}` : label}</button>`;
   const crew = (c) => `<article class="card">
     <div class="art"><span class="die" aria-hidden="true">${esc(c.name.slice(0, 1))}</span></div>
     <div class="body"><h3>${esc(c.name)}</h3><p class="title">${esc(c.title)}</p>
       <div class="chips">${c.archetypes.map((a) => `<span class="chip">${esc(a)}</span>`).join("")}</div>
       <p class="blurb">${esc(c.blurb)}</p>
-      <button type="button" class="button primary" data-act="play" data-c="${esc(c.id)}">Play ${esc(c.name)}</button></div></article>`;
+      <div class="cc-row"><button type="button" class="button primary" data-act="play" data-c="${esc(c.id)}">Play ${esc(c.name)}</button>${way(c.id, `Make your own from ${esc(c.name)}`)}</div></div></article>`;
   return `<header class="cc-intro"><p class="kicker">Your phone at the table</p><h1>Characters</h1>
     <p class="lede">Build your own or pick one of the crew, and play them from your phone. The counting’s done for you, and they’re saved on this phone, signal or not.</p>
     <p class="cc-paper">Playing on paper? Print a character sheet and the player reference from the <a href="/sheets/">Sheets page</a>.</p></header>
@@ -220,7 +225,9 @@ function listView() {
     ${mine.length ? `<section class="cc-sec" aria-labelledby="cc-mine"><h2 id="cc-mine">On this phone</h2><ul class="cc-mine">${mine.map(saved).join("")}</ul></section>` : ""}
     <section class="cc-sec" aria-labelledby="cc-own"><h2 id="cc-own">Make your own</h2>
       <p class="cc-lead">Build a character step by step. It follows the ${link("s-quick", "Quick Build")}, with the rules for each step right there, and it’s saved on this phone as you go.</p>
-      <div class="cc-row">${draft ? `<a class="button primary" href="/characters/?build" data-act="bopen">Carry on with ${esc(draft.name || "your character")}</a><button type="button" class="button" data-act="bdrop">${ui.sure ? "Tap again to bin it" : "Start again"}</button>` : '<a class="button primary" href="/characters/?build" data-act="bopen">Build a character</a>'}</div></section>
+      <div class="cc-row">${draft ? `<a class="button primary" href="/characters/?build" data-act="bopen">Carry on with ${esc(draft.name || "your character")}</a><button type="button" class="button" data-act="bdrop">${ui.sure === true ? "Tap again to bin it" : "Start again"}</button>` : '<a class="button primary" href="/characters/?build" data-act="bopen">Build a character</a>'}</div>
+      <p class="cc-lead">Or have the whole sheet on one page: start blank, let the dice pick everything, or start from one of the crew below.</p>
+      <div class="cc-row">${way("blank", "A blank sheet")}${way("random", "Random")}</div></section>
     <section class="cc-sec" aria-labelledby="cc-crew"><h2 id="cc-crew">Pick from the crew</h2>
       <p class="cc-lead">Six ready-made characters, straight off their sheets in the ${link("s-pregens", "rules")}.</p>
       <div class="crew">${DATA.crew.map(crew).join("")}</div></section>`;
@@ -419,6 +426,8 @@ function sheetView(ch, c) {
     <p>${esc(c.blurb)}</p><p><b>Plays like:</b> ${c.playsLike}</p>
     ${c.crewQs.map((x) => `<p><em>${esc(x.q)}</em> ${esc(x.a)}</p>`).join("")}
     ${c.own ? `<p class="cc-lead">Built on this phone, from the ${link("s-quick", "Quick Build")}.</p><div class="cc-row"><a class="button" href="/characters/?build=${encodeURIComponent(ch.id)}" data-act="bopen" data-key="${esc(ch.id)}">Change ${esc(ch.name)} in the builder</a></div>` : `<p class="cc-lead">${link("s-pregens", `${esc(c.name)}’s sheet in the rules`)}</p>`}
+    <p class="cc-lead">The two-page sheet from the <a href="/sheets/">Sheets page</a>, filled in with everything here as it stands now.</p>
+    <div class="cc-row"><button type="button" class="button" data-act="print"${off(ui.printing)}>${ui.printing ? "Filling in the sheet…" : `Print ${esc(ch.name)}’s sheet`}</button></div>
     <div class="cc-row"><button type="button" class="button danger" data-act="delete">Delete ${esc(ch.name)} from this phone</button></div></section>`;
 }
 
@@ -934,10 +943,43 @@ const ACT = {
   }),
   bopen(el, e) {
     e.preventDefault();
+    // A new character with nothing in it yet starts guided, even if an empty
+    // one-page sheet was opened and left.
+    if (!el.dataset.key && !hasDraft()) builder.discard("new");
     navBuild(el.dataset.key || "new");
   },
+  bway(el) {
+    const w = el.dataset.w;
+    if (hasDraft() && ui.sure !== `w:${w}`) {
+      ui.sure = `w:${w}`;
+      return render();
+    }
+    ui.sure = false;
+    const c = CREW.get(w);
+    if (c) builder.begin(fromCrew(c, DATA.build), "crew", c.name);
+    else if (w === "random") builder.begin(randomBuild(DATA.build, DATA.crew), "random");
+    else builder.begin(null, "blank");
+    navBuild("new");
+  },
+  async print() {
+    const ch = current();
+    const c = ch && normal(ch);
+    if (!c || ui.printing) return;
+    ui.printing = true;
+    render();
+    try {
+      await printSheet(ch, c, ch.state);
+      toast(`${ch.name}’s sheet is filled in and ready to print.`, false);
+    } catch (e) {
+      console.warn(e);
+      toast("The sheet couldn’t be filled in. Open the companion once with a signal, then try again.", false);
+    } finally {
+      ui.printing = false;
+      render();
+    }
+  },
   bdrop() {
-    if (!ui.sure) {
+    if (ui.sure !== true) {
       ui.sure = true;
       return render();
     }

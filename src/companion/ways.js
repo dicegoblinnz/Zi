@@ -1,0 +1,152 @@
+// The other ways into the builder: one of the crew to start from, or random in
+// one tap. Both make an ordinary build (builder.js), so the player can change
+// anything before saving, and the builder's warnings still apply. A blank
+// sheet is just blankBuild() on one page.
+import { ACTIONS, ARMOUR, blankBuild, lineAt, normalBuild } from "./builder.js";
+
+// A thread in someone else's words says whose ("Dorrie’s"). It's theirs to
+// keep, so it doesn't come along.
+const theirs = (t) => /’s\b/.test(t.note ?? "");
+
+// One of the crew as a build: their Titles, permissions, traits, set actions
+// and the lines on them, what they carry, attuned things, their own threads,
+// crew answers, Aspiration and trouble. The name's left for the player.
+export function fromCrew(c, B) {
+  const b = blankBuild();
+  const ref = new Map(); // a line's key on the crew sheet, and where it goes in the build
+  const ideaOf = (name) => B.ideas.find((x) => x.titles.includes(name))?.id ?? "";
+  c.titles.slice(0, 2).forEach((t, i) => {
+    b.titles[i] = { arch: t.archetype, idea: ideaOf(t.name), text: t.name, on: [], perms: [0, 1, 2].map((j) => ({ text: t.permissions[j]?.text ?? "", on: [] })) };
+    ref.set(t.key, `t${i}`);
+    t.permissions.slice(0, 3).forEach((p, j) => ref.set(p.key, `p${i}.${j}`));
+  });
+  b.traits = c.traits.map((t, i) => {
+    ref.set(t.key, `r${i}`);
+    return { name: t.name, on: [] };
+  });
+  const eq = c.carry.equipment.items.slice(0, 3);
+  const ut = c.carry.utility.items.slice(0, 4);
+  eq.forEach((x, i) => Object.assign(b.equipment[i], { text: x, armour: ARMOUR.test(x) }));
+  ut.forEach((x, i) => (b.utility[i].text = x));
+  b.keepsake.text = c.carry.keepsake ?? "";
+  b.bag = (c.carry.bag.items ?? []).join("\n");
+  for (const l of c.lines.filter((x) => x.kind === "kit")) {
+    const at = eq.indexOf(l.label) >= 0 ? `e${eq.indexOf(l.label)}` : ut.indexOf(l.label) >= 0 ? `u${ut.indexOf(l.label)}` : l.label === b.keepsake.text ? "k" : null;
+    if (at) ref.set(l.key, at);
+  }
+  c.attuned.slice(0, 2).forEach((a, i) => {
+    b.attuned[i] = { name: a.props ? `${a.name} (${a.props})` : a.name, catch: a.catch ?? "", perms: [0, 1].map((j) => ({ text: a.permissions[j]?.text ?? "", on: [] })) };
+    a.permissions.slice(0, 2).forEach((p, j) => ref.set(p.key, `a${i}.${j}`));
+  });
+  b.actions = c.actions.map((a) => a.name);
+  for (const a of c.actions) {
+    for (const key of a.lines) {
+      const l = ref.has(key) ? lineAt(b, ref.get(key)) : null;
+      if (l && !l.on.includes(a.name)) l.on.push(a.name);
+    }
+  }
+  const own = c.threads.flatMap((p) => p.threads.filter((t) => !theirs(t)).map((t) => ({ person: p.person, text: t.text, debt: Boolean(t.debt) })));
+  own.slice(0, 4).forEach((t, i) => (b.threads[i] = t));
+  b.connect = B.connect.map((q) => c.crewQs.find((x) => x.q === q)?.a ?? "");
+  b.aspiration = c.aspiration.text;
+  b.pronoun = c.pronoun;
+  b.clothes = c.numbers.dressed?.what ?? "";
+  b.trouble = [...c.trouble];
+  return normalBuild(b);
+}
+
+// ---------------------------------------------------------------- random
+
+const pick = (list, rand) => (list.length ? list[Math.floor(rand() * list.length)] : undefined);
+function shuffle(list, rand) {
+  const out = [...list];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
+
+// Which set action a line most likely helps, from its words.
+const LEANS = [
+  ["Fight", /\b(fight|blade|sword|shoot|strike|duel|disarm|brawl|parry|shield|spear|bow|axe|hammer|knife|weapon|wrestle|punch)/i],
+  ["Move", /\b(run|climb|leap|jump|swim|ride|chase|dodge|roof|balance|sprint|escape|vault|feet)/i],
+  ["Sneak", /\b(unseen|unheard|hide|sneak|slip|shadow|quiet|silent|lock|lift|purse|pocket|steal|trap|case)/i],
+  ["Talk", /\b(talk|charm|lie|persuade|convince|threaten|bargain|haggle|order|command|bluff|calm|sing|perform|crowd|friend|speak|deal|rally)/i],
+  ["Study", /\b(know|read|study|spot|notice|track|trail|remember|history|map|find|search|heal|stitch|mend|mix|fix|craft|tell|smell|weather|language)/i],
+];
+
+const FIRST = ["Ar", "Bel", "Cal", "Dor", "Ed", "Fen", "Gar", "Hal", "Is", "Jor", "Kel", "Lir", "Mar", "Nev", "Os", "Per", "Ros", "Sel", "Tam", "Ul", "Ves", "Wyn", "Yar", "Zel"];
+const LAST = ["a", "an", "ek", "el", "en", "eth", "ia", "in", "is", "o", "on", "ra", "ric", "wen", "ys"];
+
+// A whole character in one tap, from the book's own ideas, traits, items and
+// the crew's threads and Aspirations, that passes every one of the builder's
+// warnings. rand is there so a check can fix the dice.
+export function randomBuild(B, crew, rand = Math.random) {
+  const b = blankBuild();
+  const known = new Set(B.archetypes.map((a) => a.name));
+  const spares = shuffle(B.permIdeas.flatMap((g) => g.perms), rand);
+  const ideas = shuffle(B.ideas.filter((x) => x.titles.length && x.archetypes.some((a) => known.has(a))), rand).slice(0, 2);
+  // Each line goes on the set action its words lean to, the least loaded one
+  // when it leans to a few, and the least loaded of all when it doesn't say.
+  const load = Object.fromEntries(ACTIONS.map((a) => [a, 0]));
+  const onto = (text, said) => {
+    const fits = said ? [said] : LEANS.filter(([, re]) => re.test(text)).map(([a]) => a);
+    const pool = fits.length ? fits : ACTIONS;
+    const low = Math.min(...pool.map((a) => load[a]));
+    const a = pick(pool.filter((x) => load[x] === low), rand);
+    load[a] += 1;
+    return a;
+  };
+  const left = [];
+  ideas.forEach((idea, i) => {
+    const perms = shuffle(idea.permissions.filter((p) => /\s/.test(p.trim())), rand);
+    for (const p of spares) if (perms.length < 3 && !perms.includes(p)) perms.push(p);
+    const t = b.titles[i];
+    Object.assign(t, { arch: pick(idea.archetypes.filter((a) => known.has(a)), rand), idea: idea.id, text: pick(idea.titles, rand) });
+    perms.slice(0, 3).forEach((p, j) => (t.perms[j] = { text: p, on: [onto(p)] }));
+    t.on = [...new Set(t.perms.flatMap((p) => p.on))];
+    for (const a of t.on) load[a] += 1;
+    left.push(...perms.slice(3));
+  });
+
+  const suggested = [...new Set(ideas.flatMap((x) => x.traits))].filter((n) => B.traits.some((t) => t.name === n));
+  const traits = [...shuffle(suggested, rand), ...shuffle(B.traits.map((t) => t.name), rand).filter((n) => !suggested.includes(n))].slice(0, 2);
+  b.traits = traits.map((name) => {
+    const rule = B.traits.find((t) => t.name === name);
+    if (!rule.step) return { name, on: [] };
+    const text = rule.html.replace(/<[^>]+>/g, "");
+    return { name, on: [onto(text, ACTIONS.find((a) => new RegExp(`\\b${a}\\b`).test(text)))] };
+  });
+
+  const group = (g) => B.items.find((x) => x.group === g)?.items ?? [];
+  b.equipment[0] = { text: pick(group("Weapons"), rand), on: [onto("", "Fight")], armour: false };
+  if (rand() < 0.6) {
+    const worn = pick(group("Armour & wearables"), rand);
+    b.equipment[1] = { text: worn, on: [], armour: ARMOUR.test(worn) };
+  }
+  shuffle([...group("Tools"), ...B.usedUp.map((u) => u.name)], rand).slice(0, 2).forEach((x, i) => (b.utility[i] = { text: x, on: [] }));
+  b.keepsake = { text: pick(B.keepsakes, rand).name, on: [] };
+  // Attuned things are on top of what you carry, and a signature thing often
+  // makes the best one. Each gets a permission the Titles didn't use.
+  const carried = new Set([...b.equipment, ...b.utility].map((x) => x.text.toLowerCase()));
+  const things = shuffle([...group("Signature"), ...group("Foci"), ...group("Tools")], rand).filter((x) => !carried.has(x.toLowerCase())).slice(0, 2);
+  const unused = [...shuffle(left, rand), ...spares];
+  things.forEach((name, i) => {
+    const p = unused[i];
+    b.attuned[i] = { name: name.charAt(0).toUpperCase() + name.slice(1), catch: "", perms: [{ text: p, on: [onto(p)] }, { text: "", on: [] }] };
+  });
+
+  const threads = [];
+  for (const c of crew) for (const p of c.threads) for (const t of p.threads) if (!theirs(t) && !threads.some((x) => x.text === t.text)) threads.push({ person: p.person, text: t.text, debt: Boolean(t.debt) });
+  // Three different people where there are three to be had.
+  const mixed = shuffle(threads, rand);
+  const people = mixed.filter((t, i) => mixed.findIndex((x) => x.person === t.person) === i);
+  [...people, ...mixed.filter((t) => !people.includes(t))].slice(0, 3).forEach((t, i) => (b.threads[i] = t));
+  b.aspiration = pick(crew.map((c) => c.aspiration.text).filter(Boolean), rand) ?? "";
+  b.name = pick(FIRST, rand) + pick(LAST, rand);
+  b.pronoun = pick(["her", "him", "them"], rand);
+  const trouble = ideas.flatMap((x) => x.trouble);
+  if (trouble.length) b.trouble = [pick(trouble, rand)];
+  return normalBuild(b);
+}

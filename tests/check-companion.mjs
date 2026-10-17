@@ -14,13 +14,22 @@
 //    set actions and numbers have to match her sheet in the chapter. Then a
 //    roll, a reload, offline, a change in the builder, and every step at 320
 //    wide in the light, with axe on each.
+// 6. Print, and the other ways in. Every crew member made into a build has
+//    the sheet the chapter gives them, and a thousand random characters pass
+//    every one of the builder's warnings. Then Vesk's sheet printed with a
+//    Hurt on it, and again offline, a character made from Vesk and printed, a
+//    random one rolled five times, saved and printed, and a blank sheet. A way
+//    in asks before it bins a draft, and one page passes axe at 320 wide.
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join } from "node:path";
 import { chromium } from "playwright";
 import { AxeBuilder } from "@axe-core/playwright";
+import { PDFDocument } from "pdf-lib";
 import { diceLabel, diceRange, diceShapes, stepsToDice } from "../src/companion/dice.js";
+import { checksOf, sheetOf } from "../src/companion/builder.js";
+import { fromCrew, randomBuild } from "../src/companion/ways.js";
 
 const SHOTS = process.argv[2] || null;
 const problems = [];
@@ -58,7 +67,7 @@ console.log(`dice: ${rows} rows of the table checked`);
 
 // A small static server that answers the way Cloudflare's assets do.
 const DIST = join(process.cwd(), "dist");
-const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".woff2": "font/woff2" };
+const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".pdf": "application/pdf" };
 async function resolve(path) {
   const clean = decodeURIComponent(path.split("?")[0]);
   for (const candidate of [clean, join(clean, "index.html")]) {
@@ -420,6 +429,115 @@ async function play(page, crewId, name) {
   }
   await shot(page, "8-builder-320-light");
   console.log("builder: Vesk built step by step and checked against her sheet");
+  await context.close();
+}
+
+// 6. Print, and the other ways in.
+{
+  const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
+  const B = book.companion.build;
+  const actionsOf = (s) => s.actions.map((a) => [a.name, a.steps, a.die.replace(/\s/g, "")]).sort();
+  for (const c of book.crew) {
+    const s = sheetOf({ id: c.id, name: c.name, build: fromCrew(c, B) }, B);
+    same(actionsOf(s), actionsOf(c), `${c.name}'s set actions, made into a build`);
+    for (const k of ["aura", "resolve", "stride", "armour", "confidence", "hurtBars"]) same(s.numbers[k], c.numbers[k], `${c.name}'s ${k}, made into a build`);
+  }
+  let warned = 0;
+  for (let i = 0; i < 1000; i++) if (checksOf(randomBuild(B, book.crew), B).length) warned += 1;
+  same(warned, 0, "random characters with a warning, of 1000");
+
+  const { context, page } = await phone();
+  const axe = async (what) => {
+    const result = await new AxeBuilder({ page }).analyze();
+    for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on ${what}: ${v.id} (${v.nodes.length})`);
+  };
+  // Print, and read back what the PDF says, field by field.
+  const print = async () => {
+    const [download] = await Promise.all([page.waitForEvent("download"), page.click('button[data-act="print"]')]);
+    const pdf = await PDFDocument.load(readFileSync(await download.path()));
+    const form = pdf.getForm();
+    const get = (name) => {
+      const f = form.getFieldMaybe(name);
+      if (!f) return null;
+      return f.getText ? f.getText() ?? "" : f.getSelected ? f.getSelected() ?? "" : f.isChecked();
+    };
+    return { pages: pdf.getPageCount(), file: download.suggestedFilename(), get };
+  };
+  const want = (f, list, who) => {
+    for (const [name, value] of list) same(f.get(name), value, `${name} on ${who}`);
+  };
+
+  await play(page, "vesk");
+  await page.click('button[data-act="hurt"][data-d="1"]');
+  let f = await print();
+  same([f.pages, f.file], [2, "vesk-zidara-sheet.pdf"], "Vesk's printed sheet");
+  want(f, [["name", "Vesk"], ["pronouns", "she, her"], ["aura_now", "5"], ["aura_max", "5"], ["armour_full", "d4"], ["armour_now", "d4"], ["stride", "5"], ["resolve_max", "2"],
+    ["confidence", "d6"], ["wound_die", "d6"], ["set_sneak_lines", "Title I, move unseen, Silent Step"], ["set_sneak_steps", "4"], ["set_sneak_die", "d8"],
+    ["set_1_name", "Locks"], ["set_1_steps", "5"], ["set_1_die", "d10"], ["set_talk_steps", "1"], ["title_1", "The best cat burglar in the city"], ["title_1_archetype", "Shadow"],
+    ["trait_1", "Silent Step"], ["equipment_1", "worn leathers"], ["utility_2", "a smoke bomb"], ["keepsake", "the first coin she ever stole"], ["attune_1_thing", "A perfect set of picks"],
+    ["attune_1_stage", "awakened"], ["attune_1_permission_1", "open any lock with a mechanism"], ["bond_1", "Dorrie"], ["aspiration", "Own the score of a lifetime"], ["aspiration_die", "d2"],
+    ["hurt_1_box_1", true], ["hurt_1_box_2", false], ["resolve_2", true], ["resolve_3", false]], "Vesk's printed sheet");
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await context.setOffline(true);
+  await page.reload();
+  await page.waitForSelector(".tile[data-a]");
+  f = await print();
+  same(f.get("set_1_name"), "Locks", "Vesk's sheet printed offline");
+  await context.setOffline(false);
+
+  // Make your own from Vesk: everything's hers but the name.
+  await page.goto(`${BASE}/characters/`);
+  await page.click('button[data-act="bway"][data-w="vesk"]');
+  has(await page.textContent(".bd-head h1"), "From Vesk", "making your own from Vesk");
+  same(await page.$$eval(".bd-part > h2", (els) => els.length), 8, "every step on one page");
+  has(await page.textContent(".bd-body .is-warn"), "needs a name", "the one thing a copy of Vesk needs");
+  await page.fill("#b-name", "Kestrel");
+  await page.click('.bd-foot button[data-b="save"]');
+  await page.waitForSelector(".tile[data-a]");
+  f = await print();
+  want(f, [["name", "Kestrel"], ["set_sneak_steps", "4"], ["set_move_die", "d8"], ["set_1_name", "Locks"], ["set_1_die", "d10"], ["title_2_permission_2", "fight dirty with a knife"], ["attune_2_thing", "A grappling line"], ["notes", "Trouble that follows her: wanted in three districts, owes the Guild."]], "Kestrel, made from Vesk");
+
+  // Random, five times over, then saved and printed.
+  await page.goto(`${BASE}/characters/`);
+  await page.click('button[data-act="bway"][data-w="random"]');
+  for (let i = 1; i <= 5; i++) {
+    has(await page.textContent(".bd-part:last-child"), "Everything adds up", `random character ${i}`);
+    await page.click('button[data-b="reroll"]');
+  }
+  const name = await page.inputValue("#b-name");
+  await page.click('.bd-foot button[data-b="save"]');
+  await page.waitForSelector(".tile[data-a]");
+  const dice = await page.$$eval(".tile[data-a]", (els) => els.map((el) => [el.querySelector(".tile-name").textContent, el.querySelector(".tile-die").textContent]));
+  f = await print();
+  same(f.get("name"), name, "the random character's name on paper");
+  for (const [a, d] of dice.filter(([a]) => ["Fight", "Move", "Sneak", "Study", "Talk"].includes(a))) same(f.get(`set_${a.toLowerCase()}_die`), d, `the random character's ${a} on paper`);
+
+  // A blank sheet, and a draft that a way in asks before binning.
+  await page.goto(`${BASE}/characters/`);
+  await page.click('button[data-act="bway"][data-w="blank"]');
+  has(await page.textContent(".bd-head h1"), "A blank sheet", "a blank sheet");
+  has(await page.textContent(".bd-body .is-warn"), "You can save anyway", "a blank sheet's warnings");
+  await page.click('a[data-b="leave"]');
+  await page.click('a[data-act="bopen"]');
+  has(await page.textContent(".bd-head h1"), "Archetypes", "building a character after leaving an empty blank sheet");
+  await page.click('a[data-b="leave"]');
+  await page.click('button[data-act="bway"][data-w="blank"]');
+  await page.fill("#b-name", "Tui");
+  await page.click('a[data-b="leave"]');
+  await page.click('button[data-act="bway"][data-w="random"]');
+  has(await page.textContent('button[data-act="bway"][data-w="random"]'), "Tap again to bin Tui", "a way in with a draft on the go");
+  await page.click('button[data-act="bway"][data-w="random"]');
+  has(await page.textContent(".bd-head h1"), "Random", "the second tap");
+  await page.setViewportSize({ width: 320, height: 720 });
+  for (const theme of ["dark", "light"]) {
+    await page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+    await page.reload();
+    const { scroll, client } = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
+    if (scroll > client) note(`one page scrolls sideways at 320 wide, ${theme} (${scroll} > ${client})`);
+    await axe(`the builder on one page, ${theme}`);
+  }
+  await shot(page, "9-one-page-320-light");
+  console.log("print: Vesk, Kestrel from Vesk and a random character printed, and one page checked");
   await context.close();
 }
 
