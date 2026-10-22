@@ -56,6 +56,9 @@
 //    even an attuned permission pushed past its stage with Finish anyway, a
 //    thing gone up to Perfected with no Catch, a line left waiting for room,
 //    and a downtime trait, thread or Catch longer than the builder's own boxes.
+//    A downtime on another tab while a change is open isn't saved over: the
+//    change starts again from her as she is now. Printing says when Notes runs
+//    out of room, and a reworded thing in the bag stays crossed out.
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -1266,6 +1269,27 @@ async function round(page, dice, real = false) {
   same(await page.inputValue("#b-t0-p4"), "case a building at a glance", "the second downtime's permission, there to change");
   same(await page.inputValue("#b-blurb"), book.crew.find((c) => c.id === "vesk").blurb, "the half-done change gone, not saved over the downtime");
 
+  // A downtime on another tab while a change is open: saving the change
+  // doesn't wipe it, and the change starts again from her as she is now.
+  await page.fill("#b-blurb", "Changed in one tab.");
+  const other = await context.newPage();
+  other.on("pageerror", (e) => note(`page error in the second tab: ${e}`));
+  await other.goto(`${BASE}/characters/?c=${encodeURIComponent((await saved()).id)}`);
+  await other.waitForSelector(".tile[data-a]");
+  const odt = (attrs) => other.click(`#cc-dialog button[data-act="dt"]${attrs}`);
+  await other.click('button[data-act="downtime"]');
+  await odt('[data-do="pick"][data-s="0"][data-v="perm"]');
+  await other.fill('#cc-dialog input[data-dt="0"][data-f="text"]', "read a crowd at a glance");
+  await odt('[data-do="pick"][data-s="1"][data-v="pressure"]');
+  await odt('[data-do="finish"]');
+  await other.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  await other.close();
+  await page.click('.bd-foot button[data-b="save"]');
+  has(await page.textContent("#cc-toast"), "changed on another phone or tab while this was open", "saving a change after a downtime on another tab");
+  same(await page.inputValue("#b-t0-p5"), "read a crowd at a glance", "the other tab's downtime, there to change");
+  same(await page.inputValue("#b-blurb"), book.crew.find((c) => c.id === "vesk").blurb, "the change from before it, not saved over it");
+  same((await saved()).state.grown.map((g) => g.text), ["case a building at a glance", "read a crowd at a glance"], "both downtimes still on her");
+
   // Seven Titles: the sheet calls them first to seventh, and on paper the
   // seventh goes in Notes.
   for (const [i, [arch, name, perm]] of [["Warrior", "Duellist of the Low Market", "win a fair fight"], ["Scholar", "Reader of old maps", "read a map nobody else can"], ["Healer", "Stitcher of the crew", "stitch a wound in the dark"], ["Bard", "Voice of the docks", "start a song a crowd joins"]].entries()) {
@@ -1287,6 +1311,29 @@ async function round(page, dice, real = false) {
   same([get("title_3"), get("title_3_permission_6"), get("title_6"), get("title_6_permission_1")], ["Captain of the crew", "know who’s lying in my crew", "Stitcher of the crew", "stitch a wound in the dark"], "Titles III and VI on paper");
   has(get("notes"), "Title VII, Voice of the docks (Bard): start a song a crowd joins", "the seventh Title in Notes");
   has(get("set_talk_lines"), "Title III", "Title III on Talk on paper");
+  const toastSays = (re, what) => page.waitForFunction((src) => new RegExp(src).test(document.querySelector("#cc-toast")?.textContent ?? ""), re.source, { timeout: 5000 }).catch(() => note(`no toast saying ${what}`));
+  await toastSays(/ready to print/, "the sheet's ready to print");
+  same(/ran out of room/.test(await page.textContent("#cc-toast")), false, "no Notes warning when everything fits");
+  // Notes too long for the paper: print says so.
+  await page.fill("#cc-notes", long("The night at the docks went wrong from the first bell", 2400));
+  await Promise.all([page.waitForEvent("download"), page.click('button[data-act="print"]')]);
+  await toastSays(/ran out of room/, "Notes ran out of room on paper");
+
+  // A crossed-out thing in the bag stays crossed out when it's reworded.
+  await page.click('.cc-changebar a[data-act="bopen"]');
+  await b('[data-b="deep"][data-s="4"]');
+  await page.fill("#b-bag", "a coil of rope\nsome bread");
+  await page.click('.bd-foot button[data-b="save"]');
+  await page.waitForSelector(".tile[data-a]");
+  await tab("sheet");
+  await page.click('button[data-act="cross"][data-k="bag|some bread"]');
+  await page.click('.cc-changebar a[data-act="bopen"]');
+  await b('[data-b="deep"][data-s="4"]');
+  await page.fill("#b-bag", "a coil of rope\nsome stale bread");
+  await page.click('.bd-foot button[data-b="save"]');
+  await page.waitForSelector(".tile[data-a]");
+  const crossed = (await saved()).state.crossed;
+  same([crossed["bag|some stale bread"], crossed["bag|some bread"]], [true, undefined], "a reworded thing in the bag, still crossed out");
   console.log("changing: Vesk made your own with a third Title, six permissions and no seventh, kept offline, and seven Titles printed");
   await context.close();
 }

@@ -19,7 +19,7 @@ export const ACTIONS = ["Fight", "Move", "Sneak", "Study", "Talk"];
 export const MAX_TITLES = 24;
 const MAX_ATTUNED = 8;
 const MAX_THREADS = 40;
-const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth"];
+const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth", "twenty-first", "twenty-second", "twenty-third", "twenty-fourth"];
 const ord = (i) => ORD[i] ?? `${i + 1}${(i + 1) % 100 >= 11 && (i + 1) % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][(i + 1) % 10] ?? "th"}`;
 export const ARMOUR = /\b(plate|chain|mail|leathers|shield|armou?r|breastplate|hauberk|brigandine)\b/i;
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
@@ -87,6 +87,7 @@ export function normalBuild(raw) {
   b.utility = Array.from({ length: Math.max(4, Math.min(8, Array.isArray(r.utility) ? r.utility.length : 0)) }, (_, i) => fixLine(r.utility?.[i]));
   b.keepsake = fixLine(r.keepsake);
   b.bag = str(r.bag, 600);
+  if (Array.isArray(r.bagWas)) b.bagWas = r.bagWas.slice(0, 40).map((x) => str(x, 120));
   if (Array.isArray(r.attuned)) {
     b.attuned = r.attuned.slice(0, MAX_ATTUNED).map((x) => ({
       name: str(x?.name, 80), stage: STAGES.includes(x?.stage) ? x.stage : "Awakened", catch: str(x?.catch, 120), burden: str(x?.burden, 120),
@@ -908,7 +909,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
     }
     if (k === "save") {
       save();
-      return onSave(normalBuild(x), slotKey, () => discard());
+      return onSave(normalBuild(x), slotKey, () => discard(), d.basis);
     }
     if (k === "deep") d.deep[el.dataset.s] = !d.deep[el.dataset.s];
     else if (k === "arch") {

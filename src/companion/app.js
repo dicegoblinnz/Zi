@@ -28,7 +28,7 @@ const sync = makeSync(store, { onChange: () => {
 const app = document.getElementById("app");
 const dialog = document.getElementById("cc-dialog");
 const toastBox = document.getElementById("cc-toast");
-const ORD = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth", "Eleventh", "Twelfth"];
+const ORD = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth", "Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteenth", "Sixteenth", "Seventeenth", "Eighteenth", "Nineteenth", "Twentieth", "Twenty-first", "Twenty-second", "Twenty-third", "Twenty-fourth"];
 const RULE = DATA.rules || {};
 const TABS = [["play", "Play"], ["sheet", "Sheet"], ["rules", "Rules"]];
 // The intents a die can be tapped to, or the player writes their own.
@@ -121,8 +121,10 @@ function editBuild(ch) {
   if (ch.state?.aspText) b.aspiration = String(ch.state.aspText).slice(0, 160);
   for (const t of b.threads) if (t.person.trim() && t.text.trim()) t.was = `${t.person.trim()}|${t.text.trim()}`;
   for (const [where, list] of [["equipment", b.equipment], ["utility", b.utility], ["keepsake", [b.keepsake]]]) for (const x of list) if (x.text.trim()) x.was = `${where}|${x.text.trim()}`;
+  b.bagWas = bagLines(b.bag);
   return b;
 }
+const bagLines = (bag) => String(bag ?? "").split("\n").map((x) => x.trim()).filter(Boolean);
 function basisOf(ch) {
   const text = JSON.stringify([ch.crew, ch.name, ch.build ?? null, ch.state?.grown ?? [], ch.state?.aspText ?? ""]);
   let h = 0x811c9dc5;
@@ -1180,11 +1182,23 @@ function navBuild(key) {
   scrollTo(0, 0);
   app.querySelector("h1")?.focus({ preventScroll: true });
 }
-function saveBuilt(build, key, discard) {
+function saveBuilt(build, key, discard, basis) {
   const name = build.name.trim() || "Nameless";
   // What each line said when the change began only matters until it's saved.
-  const clean = JSON.parse(JSON.stringify(build, (k, v) => (k === "was" ? undefined : v)));
+  const clean = JSON.parse(JSON.stringify(build, (k, v) => (k === "was" || k === "bagWas" ? undefined : v)));
   let ch = key === "new" ? null : chars().find((x) => x.id === key);
+  // They changed somewhere else while this was open (a downtime on another
+  // phone or tab, say), so it starts again from them as they are now rather
+  // than saving over it.
+  if (ch && basis && canChange(ch) && basis !== basisOf(ch)) {
+    const [, their] = PRONOUN[sheetFor(ch)?.pronoun] ?? PRONOUN.them;
+    discard();
+    render();
+    scrollTo(0, 0);
+    app.querySelector("h1")?.focus({ preventScroll: true });
+    toast(`${ch.name}’s sheet changed on another phone or tab while this was open, so your changes here weren’t saved. It starts again from ${their} sheet as it is now.`, false);
+    return;
+  }
   let became = false;
   if (ch && !sheetFor(ch)) ch = null;
   if (ch) {
@@ -1210,6 +1224,9 @@ function saveBuilt(build, key, discard) {
     };
     for (const t of build.threads) move(s.threads, t.was, `${t.person.trim()}|${t.text.trim()}`);
     for (const [where, list] of [["equipment", build.equipment], ["utility", build.utility], ["keepsake", [build.keepsake]]]) for (const x of list) move(s.crossed, x.was, `${where}|${x.text.trim()}`);
+    // The bag's one box of lines, so a line's only followed when none were added or taken out.
+    const bagNow = bagLines(clean.bag);
+    if (Array.isArray(build.bagWas) && build.bagWas.length === bagNow.length) build.bagWas.forEach((x, i) => move(s.crossed, `bag|${x}`, `bag|${bagNow[i]}`));
     ch.build = clean;
     ch.name = name;
     // What they grew in downtime, and the Aspiration's words, are in the build now.
@@ -1336,8 +1353,8 @@ const ACT = {
     ui.printing = true;
     render();
     try {
-      await printSheet(ch, c, ch.state);
-      toast(`${ch.name}’s sheet is filled in and ready to print.`, false);
+      const { short } = await printSheet(ch, c, ch.state);
+      toast(`${ch.name}’s sheet is filled in and ready to print.${short ? " Notes ran out of room on the paper, so the end got cut off. Copy the rest in by hand from the Sheet tab." : ""}`, false);
     } catch (e) {
       console.warn(e);
       toast("The sheet couldn’t be filled in. Open the companion once with a signal, then try again.", false);

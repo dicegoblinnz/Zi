@@ -5,7 +5,7 @@
 // blank sheet on the phone, so it works offline.
 const SHEET = "/sheets/zidara-character-sheet.pdf";
 const FIXED = ["fight", "move", "sneak", "study", "talk"];
-const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
+const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII", "XXIV"];
 const PRONOUNS = { her: "she, her", him: "he, him", them: "they, them" };
 
 const textOf = (html) => new DOMParser().parseFromString(html ?? "", "text/html").body.textContent.trim();
@@ -47,7 +47,7 @@ export async function fillSheet(ch, c, s) {
   const put = (name, value) => {
     const f = form.getFieldMaybe(name);
     const text = clean(value);
-    if (!text || typeof f?.setText !== "function") return;
+    if (!text || typeof f?.setText !== "function") return true;
     f.setText(text);
     const { width, height } = f.acroField.getWidgets()[0].getRectangle();
     const room = width - 2;
@@ -57,6 +57,7 @@ export async function fillSheet(ch, c, s) {
     let size = Number(f.acroField.getDefaultAppearance()?.match(/([\d.]+) Tf/)?.[1]) || 9;
     while (size > 5 && !fits(size)) size -= 0.5;
     f.setFontSize(size);
+    return fits(size);
   };
   const tick = (name) => {
     const f = form.getFieldMaybe(name);
@@ -139,7 +140,8 @@ export async function fillSheet(ch, c, s) {
   const noteOf = (t) => (t.note ? t.note.replace(/^(.+’s)(?=,|$)/, "$1 words").replace(/^debt$/, "a debt") : "");
   const threadOf = (t) => (noteOf(t) ? `${t.text} (${noteOf(t)})` : t.text);
   const strain = (p, t) => ({ strained: " (strained)", snapped: " (snapped)" })[s.threads[`${p.person}|${t.text}`]] ?? "";
-  put("notes", [
+  // At its smallest size it still might not fit, and then print says so.
+  const roomy = put("notes", [
     c.trouble.length ? `Trouble that follows ${them}: ${c.trouble.join(", ")}.` : "",
     n.dressed ? `Confidence starts on d${n.dressed.die} in ${n.dressed.what} when they fit the scene.` : "",
     ...c.traits.slice(3).map((t) => `${t.name} (${t.type}): ${textOf(t.html)}`),
@@ -178,16 +180,17 @@ export async function fillSheet(ch, c, s) {
 
   form.updateFieldAppearances(font);
   pdf.setTitle(`${ch.name}, a Zi’Dara character`, { showInWindowTitleBar: true });
-  return { bytes: await pdf.save({ updateFieldAppearances: false }), file: `${slug(ch.name) || "character"}-zidara-sheet.pdf` };
+  return { bytes: await pdf.save({ updateFieldAppearances: false }), file: `${slug(ch.name) || "character"}-zidara-sheet.pdf`, short: !roomy };
 }
 
-// Fill the sheet and hand it over as a download.
+// Fill the sheet and hand it over as a download. It says whether Notes ran short.
 export async function printSheet(ch, c, s) {
-  const { bytes, file } = await fillSheet(ch, c, s);
+  const { bytes, file, short } = await fillSheet(ch, c, s);
   const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
   const a = Object.assign(document.createElement("a"), { href: url, download: file });
   document.body.append(a);
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 60000);
+  return { short };
 }
