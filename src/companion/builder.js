@@ -58,6 +58,9 @@ const ons = (v) => (Array.isArray(v) ? v.filter((x) => typeof x === "string").sl
 // it's reworded. It never reaches a saved character.
 const was = (x) => (typeof x?.was === "string" && x.was ? { was: x.was.slice(0, 300) } : {});
 const fixLine = (x) => ({ text: str(x?.text), on: ons(x?.on), ...was(x) });
+// An attuned permission that was on the sheet past what its thing's stage
+// holds (downtime's Finish anyway, or a crew sheet that says so) is kept on it.
+const fixAttLine = (x) => ({ ...fixLine(x), ...(x?.kept ? { kept: true } : {}) });
 const list = (v, max) => (Array.isArray(v) ? v.slice(0, max) : []);
 const atLeast = (arr, n, make) => {
   while (arr.length < n) arr.push(make());
@@ -72,7 +75,7 @@ export function normalBuild(raw) {
   const titles = list(r.titles, MAX_TITLES);
   if (titles.length) b.titles = titles.map((x) => ({ arch: str(x?.arch, 40), idea: str(x?.idea, 40), text: str(x?.text), on: ons(x?.on), perms: atLeast(list(x?.perms, MAX_PERMS).map(fixLine), 1, line) }));
   b.traits = (Array.isArray(r.traits) ? r.traits : []).filter((t) => t && str(t.name)).slice(0, 24).map((t) => ({
-    name: str(t.name, 60), on: ons(t.on), ...(t.own ? { own: { type: str(t.own.type, 30), text: str(t.own.text) } } : {}),
+    name: str(t.name, 120), on: ons(t.on), ...(t.own ? { own: { type: str(t.own.type, 120), text: str(t.own.text, 200) } } : {}),
   }));
   // The five set actions are always there, and the rest keep their order, so a
   // crew member made into a build keeps their tiles where they were.
@@ -86,13 +89,13 @@ export function normalBuild(raw) {
   b.bag = str(r.bag, 600);
   if (Array.isArray(r.attuned)) {
     b.attuned = r.attuned.slice(0, MAX_ATTUNED).map((x) => ({
-      name: str(x?.name, 80), stage: STAGES.includes(x?.stage) ? x.stage : "Awakened", catch: str(x?.catch, 80), burden: str(x?.burden, 80),
-      perms: atLeast(list(x?.perms, MAX_PERMS).map(fixLine), 2, line),
+      name: str(x?.name, 80), stage: STAGES.includes(x?.stage) ? x.stage : "Awakened", catch: str(x?.catch, 120), burden: str(x?.burden, 120),
+      perms: atLeast(list(x?.perms, MAX_PERMS).map(fixAttLine), 2, line),
     }));
   }
   let threads = Array.isArray(r.threads) ? r.threads : null;
   if (threads && old) threads = threads.slice(0, threads.some((t) => t?.debt) ? 4 : 3);
-  if (threads) b.threads = threads.slice(0, MAX_THREADS).map((t) => ({ person: str(t?.person, 60), text: str(t?.text, 200), debt: Boolean(t?.debt), whose: str(t?.whose, 40), ...was(t) }));
+  if (threads) b.threads = threads.slice(0, MAX_THREADS).map((t) => ({ person: str(t?.person, 120), text: str(t?.text, 200), debt: Boolean(t?.debt), whose: str(t?.whose, 40), ...was(t) }));
   b.connect = (Array.isArray(r.connect) ? r.connect : []).slice(0, 12).map((a) => str(a, 200));
   for (const k of ["aspiration", "name", "blurb", "clothes"]) b[k] = str(r[k], k === "name" ? 40 : 160);
   b.pronoun = ["her", "him", "them"].includes(r.pronoun) ? r.pronoun : "them";
@@ -143,15 +146,25 @@ export function numbersOf(b, B) {
 // counts once it has a name, an archetype or a permission, and an attuned
 // thing once it has a name or a permission that counts. An attuned thing
 // holds what its stage allows (Attunement's table): a permission past that
-// counts once it's got its Catch, its Burden or both.
+// counts once it's got its Catch, its Burden or both, or when it's kept,
+// because it was already on the sheet.
 const titleIn = (t) => Boolean(t.text.trim() || t.arch || t.perms.some((p) => p.text.trim()));
 const titleName = (t) => t.text.trim() || t.arch || "Untitled";
 const attunedName = (a) => a.name.trim() || "Something attuned";
 const roomOf = (a) => attunedRoom({ stage: a.stage, catch: a.catch.trim(), burden: a.burden.trim(), permissions: a.perms.filter((p) => p.text.trim()) });
-const counts = (a, j) => {
+const fits = (a, j) => {
   const r = roomOf(a);
   return j < r.base || (j < r.all && !r.missing.length);
 };
+const counts = (a, j) => Boolean(a.perms[j]?.kept) || fits(a, j);
+// Everything on a thing's lines stays on the sheet, whatever its stage holds:
+// one of the crew made into a build keeps what the chapter gives them.
+export function keepAttuned(b) {
+  for (const a of b.attuned) a.perms.forEach((p, j) => {
+    if (p.text.trim() && !fits(a, j)) p.kept = true;
+  });
+  return b;
+}
 const thingIn = (a) => Boolean(a.name.trim() || a.perms.some((p, j) => p.text.trim() && counts(a, j)));
 function linesOf(b, B) {
   const out = [];
@@ -294,6 +307,9 @@ export function checksOf(b, B, { changing = false } = {}) {
     const over = filled.filter(([, j]) => !counts(a, j));
     if (over.some(([, j]) => j >= r.all)) out.push({ step: 4, text: `${name} holds ${r.all} at ${r.stage}, so the rest stay off the sheet until it goes up a stage.` });
     else if (over.length) out.push({ step: 4, text: r.stage === "Awakened" ? `${name} only gets a second permission with a Catch.` : `${name} needs ${both(r.missing.map((x) => (x === "catch" ? "its Catch" : "its Burden")))} to hold more than ${r.base}.` });
+    const kept = filled.filter(([p, j]) => p.kept && !fits(a, j));
+    if (kept.some(([, j]) => j >= r.all)) out.push({ step: 4, text: `${name} has more on it than ${r.stage} holds. It goes up a stage once it’s got its material.` });
+    else if (kept.length) out.push({ step: 4, text: `${name} has more on it than ${r.stage} holds without ${both(r.missing.map((x) => (x === "catch" ? "its Catch" : "its Burden")))}.` });
   });
   if (b.utility.slice(n.utility).some((u) => u.text.trim())) out.push({ step: 4, text: `You can carry ${n.utility} utility items, so the last one won’t go on the sheet.` });
   if (bagOf(b).length > 10) out.push({ step: 4, text: `Your bag holds 10, so the last ${bagOf(b).length - 10} won’t go in.` });
@@ -317,21 +333,31 @@ export function foldGrown(raw, grown, B) {
   if (!Array.isArray(grown) || !grown.length) return b;
   const rule = new Map(B.traits.map((t) => [t.name, t]));
   // Empty lines aren't on the sheet, so they go first, and a grown line's
-  // place among the rest is its place on the sheet.
-  // On an attuned thing a permission's place decides whether it counts, so
-  // the empty lines only go when that leaves the same ones counting.
+  // place among the rest is its place on the sheet. On an attuned thing a
+  // permission's place decides whether it counts, so the ones on the sheet
+  // go first, what downtime grew after them, and any that were waiting for
+  // room (written in the builder past what the thing held) last, so a waiting
+  // one never takes a grown one's place. Everything that was on the sheet is
+  // kept on it at the end, even past what the thing's stage holds, since
+  // downtime's Finish anyway can put it there.
   for (const t of b.titles) t.perms = atLeast(t.perms.filter((p) => p.text.trim()), 1, line);
+  const onSheet = new Set();
+  const waiting = new Map();
   for (const a of b.attuned) {
-    const filled = a.perms.filter((p) => p.text.trim());
-    const counted = (x) => x.perms.filter((p, j) => p.text.trim() && counts(x, j)).length;
-    if (counted(a) === counted({ ...a, perms: filled })) a.perms = filled;
+    const on = a.perms.filter((p, j) => p.text.trim() && counts(a, j));
+    waiting.set(a, a.perms.filter((p, j) => p.text.trim() && !counts(a, j)));
+    for (const p of on) onSheet.add(p);
+    a.perms = on;
   }
   const titleAt = (k) => b.titles[b.titles.map((t, i) => (titleIn(t) ? i : -1)).filter((i) => i >= 0)[k]];
   const thingAt = (k) => b.attuned[b.attuned.map((a, i) => (thingIn(a) ? i : -1)).filter((i) => i >= 0)[k]];
   const onto = (perms, text, on) => {
-    const free = perms.findIndex((p) => !p.text.trim());
-    if (free >= 0) perms[free] = { text, on };
-    else if (perms.length < MAX_PERMS) perms.push({ text, on });
+    const p = { text, on };
+    const free = perms.findIndex((x) => !x.text.trim());
+    if (free >= 0) perms[free] = p;
+    else if (perms.length < MAX_PERMS) perms.push(p);
+    else return null;
+    return p;
   };
   for (const g of grown) {
     if (!g || typeof g !== "object") continue;
@@ -351,19 +377,20 @@ export function foldGrown(raw, grown, B) {
       if (g.up) a.stage = STAGES[Math.min(STAGES.length - 1, STAGES.indexOf(a.stage) + 1)];
       // At Tempered the Catch becomes the Burden, and Perfected wants a Catch again.
       if (g.burden && !a.burden.trim()) {
-        a.burden = str(String(g.burden).trim(), 80);
+        a.burden = str(String(g.burden).trim(), 120);
         if (a.stage === "Tempered") a.catch = "";
       }
-      if (g.catch && !a.catch.trim()) a.catch = str(String(g.catch).trim(), 80);
-      if (text) onto(a.perms, text, on);
+      if (g.catch && !a.catch.trim()) a.catch = str(String(g.catch).trim(), 120);
+      const p = text ? onto(a.perms, text, on) : null;
+      if (p) onSheet.add(p);
     } else if (g.k === "trait") {
-      const name = str(String(g.name ?? "").trim(), 60);
+      const name = str(String(g.name ?? "").trim(), 120);
       if (!name || b.traits.some((t) => t.name === name)) continue;
       const r = g.own ? null : rule.get(name);
       const step = r ? r.step : /\+1 step\b/.test(String(g.own?.text ?? ""));
-      b.traits.push({ name, on: step ? on : [], ...(g.own ? { own: { type: str(g.own.type, 30), text: str(g.own.text) } } : {}) });
+      b.traits.push({ name, on: step ? on : [], ...(g.own ? { own: { type: str(g.own.type, 120), text: str(g.own.text, 200) } } : {}) });
     } else if (g.k === "thread") {
-      const person = str(String(g.person ?? "").trim(), 60);
+      const person = str(String(g.person ?? "").trim(), 120);
       if (person && text) b.threads.push({ person, text: str(text, 200), debt: false, whose: "" });
     } else if (g.k === "title") {
       if (!text || b.titles.length >= MAX_TITLES) continue;
@@ -371,7 +398,14 @@ export function foldGrown(raw, grown, B) {
       b.titles.push({ arch: str(String(g.arch ?? ""), 40), idea: "", text, on, perms: [perm ? { text: perm, on: ons(g.permOn) } : line()] });
     }
   }
-  for (const a of b.attuned) atLeast(a.perms, 2, line);
+  for (const a of b.attuned) {
+    // Six is the most anything holds, so a waiting line with no room left goes.
+    a.perms = [...a.perms, ...(waiting.get(a) ?? [])].slice(0, MAX_PERMS);
+    a.perms.forEach((p, j) => {
+      if (onSheet.has(p) && !fits(a, j)) p.kept = true;
+    });
+    atLeast(a.perms, 2, line);
+  }
   return normalBuild(b);
 }
 
@@ -687,7 +721,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
         <p class="cc-small">${r.stage} holds ${r.base}, and ${r.base} more with ${PRICE[r.stage]}. ${link("attunement-stages", "The three stages")}</p>
         ${field(`a${i}.catch`, "Its Catch", a.catch, { max: 80, ph: "Wanted" })}${catches(i, a)}
         ${r.stage !== "Awakened" || a.burden.trim() ? field(`a${i}.burden`, "Its Burden <small>a cost for good, like <em>Bad Knee</em></small>", a.burden, { max: 80, ph: "Bad Knee" }) : ""}
-        ${a.perms.map((p, j) => `<div class="bd-slot">${field(`a${i}.p${j}`, `Permission ${j + 1}${p.text.trim() && !counts(a, j) ? ` <small>off the sheet ${off(j)}</small>` : ""}`, p.text, { max: 80, ph: "what the thing itself does" })}${toggles(`a${i}.${j}`, p.text || `permission ${j + 1}`)}</div>`).join("")}
+        ${a.perms.map((p, j) => `<div class="bd-slot">${field(`a${i}.p${j}`, `Permission ${j + 1}${p.text.trim() && !counts(a, j) ? ` <small>off the sheet ${off(j)}</small>` : p.text.trim() && !fits(a, j) ? ` <small>past what ${r.stage} holds</small>` : ""}`, p.text, { max: 80, ph: "what the thing itself does" })}${toggles(`a${i}.${j}`, p.text || `permission ${j + 1}`)}</div>`).join("")}
         ${a.perms.length < MAX_PERMS ? `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="addattperm" data-i="${i}">Add a permission</button></div>` : '<p class="cc-lead">Six permissions is the most anything holds.</p>'}
         ${drop(i)}</fieldset>`;
     };
@@ -802,7 +836,12 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
       }
     } else if (path === "k") x.keepsake.text = v;
     else if ((m = path.match(/^a(\d+)\.(name|catch|burden)$/))) set(x.attuned[m[1]], m[2]);
-    else if ((m = path.match(/^a(\d+)\.p(\d+)$/))) set(x.attuned[m[1]]?.perms[m[2]], "text");
+    else if ((m = path.match(/^a(\d+)\.p(\d+)$/))) {
+      const p = x.attuned[m[1]]?.perms[m[2]];
+      if (!p) return;
+      p.text = v;
+      if (!v.trim()) delete p.kept;
+    }
     else if ((m = path.match(/^th(\d+)\.(person|text)$/))) set(x.threads[m[1]], m[2]);
     else if ((m = path.match(/^cq(\d+)$/))) x.connect[m[1]] = v;
     else if (["asp", "name", "blurb", "clothes", "bag"].includes(path)) x[path === "asp" ? "aspiration" : path] = v;

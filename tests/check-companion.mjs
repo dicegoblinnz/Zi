@@ -52,6 +52,10 @@
 //    marks, and every set action adding up through dice.js. It survives a
 //    reload and offline. A change left part way restarts after a downtime
 //    rather than losing it, and seven Titles print with the seventh in Notes.
+//    What downtime grew folds back to the sheet the player had, line for line,
+//    even an attuned permission pushed past its stage with Finish anyway, a
+//    thing gone up to Perfected with no Catch, a line left waiting for room,
+//    and a downtime trait, thread or Catch longer than the builder's own boxes.
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -1088,6 +1092,46 @@ async function round(page, dice, real = false) {
     const built = fromCrew(c, B, { keep: true });
     same(shape(sheetOf({ id: `keep-${c.id}`, name: c.name, build: built }, B)), shape(c), `${c.name} made into a build that keeps everything`);
     same(shape(sheetOf({ id: `fold-${c.id}`, name: c.name, build: foldGrown(built, grown, B) }, B)), shape(grow(c, grown, B)), `${c.name} with a downtime written into the build`);
+  }
+  // Everything the player sees, by content rather than by each line's id.
+  const plain = (h) => String(h ?? "").replace(/<[^>]+>/g, "").replace(/&#(\d+);/g, (m, n) => String.fromCharCode(Number(n)));
+  const look = (c) => {
+    const label = (key) => {
+      const l = c.lines.find((x) => x.key === key);
+      return l ? `${l.kind}:${l.label}${l.item ? `@${l.item}` : ""}` : `?${key}`;
+    };
+    return {
+      numbers: c.numbers, carry: c.carry, asp: c.aspiration, trouble: c.trouble,
+      actions: c.actions.map((a) => [a.name, a.steps, a.die, a.lines.map(label).sort()]),
+      titles: c.titles.map((t) => [t.name, t.archetype, t.permissions.map((p) => p.text)]),
+      traits: c.traits.map((t) => [t.name, t.type, plain(t.html), t.step, t.aura]),
+      attuned: c.attuned.map((a) => [a.name, a.stage, a.catch ?? null, a.burden ?? null, a.permissions.map((p) => p.text)]),
+      threads: c.threads.map((p) => [p.person, p.threads.map((t) => [t.text, t.note ?? null])]),
+    };
+  };
+  const folds = (built, grown, what) => same(look(sheetOf({ id: `f-${what}`, name: built.name, build: foldGrown(built, grown, B) }, B)), look(grow(sheetOf({ id: `g-${what}`, name: built.name, build: built }, B), grown, B)), what);
+  const long = (w, n) => `${w} `.repeat(Math.ceil(n / (w.length + 1))).slice(0, n).trim();
+  for (const c of book.crew) {
+    const built = fromCrew(c, B, { keep: true });
+    const grown = [
+      { k: "att", a: 0, text: "pushed past its stage", on: ["Move"], catch: "", burden: "", up: false },
+      { k: "att", a: 1, text: "haul someone up after me", on: [], catch: long("Loud", 110), burden: "", up: false },
+      { k: "trait", name: long("Steady", 110), on: [], own: { type: long("Whenever", 100), text: long("Gain 1 Aura when the lamps go out", 190) } },
+      { k: "thread", person: long("Harbourmaster", 110), text: "She let me off once." },
+    ];
+    folds(built, grown, `${c.name} with a permission pushed past its stage and long downtime words`);
+    has(checksOf(foldGrown(built, grown, B), B, { changing: true }).map((x) => x.text).join(" "), "has more on it than Awakened holds", `${c.name}'s warning for the permission past its stage`);
+  }
+  {
+    const b = blankBuild();
+    b.name = "Tui";
+    b.attuned[0] = { name: "A black lantern", stage: "Tempered", catch: "", burden: "Bad Knee", perms: ["see the dead", "light the way home", "hold a ghost still", "burn without fuel"].map((text) => ({ text, on: [] })) };
+    folds(normalBuild(b), [{ k: "att", a: 0, text: "", on: [], catch: "", burden: "", up: true }], "a Tempered thing with four going up to Perfected with no Catch");
+    b.name = "Kel";
+    b.attuned[0] = { name: "A rope", stage: "Awakened", catch: "", burden: "", perms: [{ text: "climb anything", on: ["Move"] }, { text: "tie anyone up", on: ["Fight"] }] };
+    const grown = [{ k: "att", a: 0, text: "swing across a gap", on: ["Move"], catch: "Heavy", burden: "", up: false }];
+    folds(normalBuild(b), grown, "a line waiting for its Catch, and a downtime that gives it one");
+    same(foldGrown(normalBuild(b), grown, B).attuned[0].perms.map((p) => p.text), ["climb anything", "swing across a gap", "tie anyone up"], "the waiting line kept, after what downtime grew");
   }
   const seven = blankBuild();
   seven.titles[0].perms = Array.from({ length: 7 }, (_, i) => ({ text: `do the thing ${i + 1}`, on: [] }));

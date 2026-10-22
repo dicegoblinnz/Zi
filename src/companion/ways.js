@@ -2,7 +2,7 @@
 // one tap. Both make an ordinary build (builder.js), so the player can change
 // anything before saving, and the builder's warnings still apply. A blank
 // sheet is just blankBuild() on one page.
-import { ACTIONS, ARMOUR, blankBuild, lineAt, normalBuild } from "./builder.js";
+import { ACTIONS, ARMOUR, blankBuild, keepAttuned, lineAt, normalBuild } from "./builder.js";
 import { MAX_PERMS } from "./grow.js";
 
 // A thread in someone else's words says whose ("Dorrie’s"). It's theirs to
@@ -66,6 +66,8 @@ export function fromCrew(c, B, { keep = false } = {}) {
   if (keep) {
     b.name = c.name;
     b.blurb = c.blurb ?? "";
+    // What the chapter puts on an attuned thing stays on it.
+    return keepAttuned(normalBuild(b));
   }
   return normalBuild(b);
 }
