@@ -445,9 +445,9 @@ const n = vesk.numbers;
   .kjump a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; text-decoration: none; }
   .ksec { padding: 1.8rem 0 0.4rem; border-top: 1px solid var(--line-soft); margin-top: 1.4rem; scroll-margin-top: 8rem; }
   .ksec h2 { margin: 0 0 0.5rem; font-family: var(--display); font-weight: 600; font-size: 1.55rem; letter-spacing: 0.02em; }
-  .ksec h2 + p, .ksec h3 + p { margin-top: 0; }
-  .ksec * + h2 { margin-top: 2rem; }
-  .ksec h3 { margin: 1.6rem 0 0.5rem; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-ink); }
+  .ksec > h2 + p, .ksec > h3 + p { margin-top: 0; }
+  .ksec > * + h2 { margin-top: 2rem; }
+  .ksec > h3 { margin: 1.6rem 0 0.5rem; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-ink); }
   .note { color: var(--muted); font-size: 0.95rem; }
   .small { font-size: 0.9rem; color: var(--muted); }
   .vl { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
@@ -555,9 +555,6 @@ const n = vesk.numbers;
   .rk { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-ink); }
   .rn { font-family: var(--display); font-weight: 600; font-size: 1.05rem; }
   .rbox p { margin: 0.4rem 0; }
-  .zd-cost { white-space: nowrap; font-weight: 700; color: var(--zd-you-ink); }
-  .zd-cost .zd-aura { vertical-align: -0.15em; margin-right: 0.2em; }
-  .zd-cost .zd-chit { width: 15px; }
 
   @media (max-width: 370px) {
     .vtile { flex-direction: column; justify-content: center; text-align: center; gap: 0.35rem; padding: 0.6rem 0.4rem; }

@@ -120,6 +120,10 @@
 :root[data-theme="light"] .zd-chit.on .a, :root[data-theme="light"] .zd-gem.on .a, :root[data-theme="paper"] .zd-chit.on .a, :root[data-theme="paper"] .zd-gem.on .a { filter: none; stroke: var(--own-line); }
 :root[data-theme="paper"] .zd-chit.on .b, :root[data-theme="paper"] .zd-gem.on .b { fill: none; }
 
+/* A cost in running text: "1 Aura" with its token */
+.zd-cost { display: inline-flex; align-items: center; gap: 0.22em; white-space: nowrap; font-weight: 700; color: var(--zd-you-ink); vertical-align: bottom; }
+.zd-cost .zd-chit, .zd-cost .zd-gem { display: inline-block; width: 0.95em; height: auto; }
+
 /* The Hurt track */
 .zd-hurt { display: inline-flex; flex-wrap: wrap; gap: 8px 10px; align-items: flex-start; }
 .zd-hurt .bar { display: inline-flex; flex-direction: column; gap: 4px; }
