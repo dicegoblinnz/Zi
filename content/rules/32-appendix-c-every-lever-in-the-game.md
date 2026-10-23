@@ -123,7 +123,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | --- | --- |
 | **Your wound die** | A d2 to start. Every Hurt puts it up a size, as far as d12, and a Hurt at d12 Blazes. |
 | **More Hurts from one hit** | A vulnerability that fits it: one more each (see [Threats](#s-levers-threats)). |
-| **Shrug one off** | *Unyielding*, and the Hurt Boon: the first Hurt each scene doesn't move your wound die. The Hurt Burden: you Blaze a size sooner, on a Hurt at d10. |
+| **Shrug one off** | *Unyielding*, and the Hurt Boon: the first Hurt each scene doesn't move your wound die. [Playing alone](#s-solo-gm) does the same, so with *Unyielding* it's the first two. The Hurt Burden: you Blaze a size sooner, on a Hurt at d10. |
 | **Heal in a scene** | The Healer's heal: an action against the patient's wound die, and every die that beats it brings it down a size. It reaches one person, so split it to bring them down further, or to reach a second person you can touch. 1 Aura is +2 on one of your dice when you heal. A quick heal, for anyone: 1 Aura, one size on one person, no roll, and it still takes your action. Traits and gear that say so, like *Field Dressing*, *Healer's Hands* and a *Medical kit*. |
 | **Easier to heal** | The Heals on you Boon: heals roll against your wound die as if it were a size smaller, and with the Burden, a size bigger. With the Regen Burden, your wound die's rolled twice when someone heals you, and the higher counts. |
 | **Heal yourself** | The Regen Boon: at the end of each round, roll your wound die, and a top face brings it down a size. The Bloodsworn's Aura, with their action: a size for every 1 they spend. Fired-up Confidence, cashed in: one size. |

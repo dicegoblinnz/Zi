@@ -48,7 +48,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Debt](#s-bonds)** | A thread someone else holds and can call in. Write one of your first three as a debt and you get a fourth. |
 | **[Defence](#s-defending)** | The die rolled against an intent: a threat's Challenge die, or your Defend or Confidence. A threat rolls it once a round, and that roll stands against everyone who goes at it. Each of your defence dice stops one telegraph. |
 | **[Defend](#s-defend)** | A set action on every sheet, for keeping from getting hit, with plain armour and a shield as lines on it. Defending, as your action, counts every line on it twice when the telegraphs land, and your Confidence too. |
-| **[Downtime](#downtime)** | Between sessions. The pressures land, everyone spends their slots, and then the factions' actions are rolled. All your Resolve comes back, and your wound die clears. |
+| **[Downtime](#downtime)** | Between sessions. The pressures land, everyone spends their slots, and then the factions' actions are rolled. All your Resolve comes back, and your wound die goes back to d2, or to your Scars. |
 | **[Epilogue](#s-ending)** | At the end of a campaign, a few sentences on where each character is a year later. |
 | **[Equipment](#s-carrying)** | What you wear or wield: weapons, armour and shields. You carry 3. |
 | **[Event](#s-stakes)** | Something running on its own clock. Past d2, it happens. |

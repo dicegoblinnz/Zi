@@ -54,7 +54,7 @@ These tags say what its telegraphs can do to you.
 | **Slow** | It moves like a landslide: unstoppable and late. Anyone quick gets two moves to its one. Anyone cornered is in trouble. |
 | **Stirs the Crowd** | It speaks and the crowd moves. Every telegraph it makes can come through the people around it. Quiet the crowd and it is one voice. |
 | **Swift** | Here, then there. It picks its ground, and it is never where you left it. Pin it to one place. |
-| **Two Knives** | One knife for show, one for the kidney. It can telegraph at two people in one round. |
+| **Two Knives** | One knife for show, one for the kidney. Like *Flurry*, it can aim both at one person in a round. |
 | **Vengeful** | It remembers. Hurt it and it'll come for you, maybe not today. Make peace, or make sure. |
 | **Venom** | A scratch that burns an hour later. Its hits leave *Poisoned* behind. Know the antidote and it's only pain. |
 
@@ -244,24 +244,24 @@ These tags go on a stake, for whatever's in the way. Every win strips one, and w
 | **Watched** | Someone's looking. Deal with the watcher, or be very quiet. |
 | **Written in Code** | You have it, but you can't read it. Someone has to crack it. |
 
-## Faction strength {#faction-strength}
+## Faction assets {#faction-strength}
 
-These tags are what makes a faction strong, and a faction attack can strip one.
+These are what make a faction strong. Each one's an asset, so it needs a resource paying for it, and a Destroy ticks it off (see [Resources and Assets](#s-wealth)). Most add a step to its Power, and a relic does one thing instead, which its card spells out. A rich faction doesn't get an asset for it: it's got more resources, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*.
 
-| Tag | How it plays |
+| Asset | How it plays |
 | --- | --- |
-| **Crusading** | It believes it's right. It won't negotiate with what it opposes. |
-| **Ghost** | It's gone, or seems to be. Its people are still everywhere. |
-| **Grudge-Keeper** | It never forgets a slight. Crossing it once is enough. |
-| **Influential** | People in power listen to it. It can open doors, close them, and change laws. |
-| **Kingmaker** | It decides who rules. Everyone courts it, and nobody trusts it. |
-| **Relic** | It holds something old and powerful. Without it, it's just another power. |
-| **Rooted** | It has been here for generations. Removing it means pulling up half the city. |
-| **Secretive** | Nobody knows what it really wants. Its moves come as surprises. |
-| **Sprawling** | Too big to control itself. Its left hand doesn't know what its right is doing. |
-| **Vast** | It is everywhere. You cannot hit all of it at once. |
-| **Watchful** | It sees what happens in its territory. Moving against it quietly is hard. |
-| **Wealthy** | It can pay for anything, once. Money buys guards, silence and time. |
+| **Standing Army** | +1 Power. Soldiers, guards or muscle who turn up when it calls. A big one carries a multiplier, like *Standing Army ×3*. |
+| **Crusading** | +1 Power. It believes it's right. It won't negotiate with what it opposes. |
+| **Ghost** | +1 Power. It's gone, or seems to be. Its people are still everywhere. |
+| **Grudge-Keeper** | +1 Power. It never forgets a slight. Crossing it once is enough. |
+| **Influential** | +1 Power. People in power listen to it. It can open doors, close them, and change laws. |
+| **Kingmaker** | +1 Power. It decides who rules. Everyone courts it, and nobody trusts it. |
+| **Relic** | No Power. It holds something old and powerful, and its card says what it does, often through its Secret. Without it, it's just another power. |
+| **Rooted** | +1 Power. It's been here for generations. Removing it means pulling up half the city. |
+| **Secretive** | +1 Power. Nobody knows what it really wants. Its moves come as surprises. |
+| **Sprawling** | +1 Power. It's too big to control itself. Its left hand doesn't know what its right is doing. |
+| **Vast** | +1 Power. It's everywhere. You can't hit all of it at once. |
+| **Watchful** | +1 Power. It sees what happens in its territory. Moving against it quietly is hard. |
 
 ## Condition tags {#condition-tags}
 

@@ -205,7 +205,7 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 ## Downtime {#s-qr-downtime}
 
 -   Four pressures: personal, party, faction, world. Ignore one and it gets worse, and twice makes it a scene. Every faction's action is telegraphed at the start, and rolled after the slots.
--   Two slots each, and two for the crew. A party slot's an action for the crew. All your Resolve comes back, and your wound die clears.
+-   Two slots each, and two for the crew. A party slot's an action for the crew. All your Resolve comes back, and your wound die goes back to d2, or to your Scars.
 -   **Recover:** mend something broken. **Grow:** a new permission on a Title · a new trait or thread · chase your Aspiration · get something.
 -   **Mend a thread** you've strained by making it right with them. Downtime's one place for it, and a scene with them is the other.
 -   **Swap** a permission for another that fits your Title, or two for a Boon, and back. **Attune:** a slot for each new permission, and the material for a new stage. A soul you're carrying goes into your summoning attunement.
@@ -216,7 +216,7 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 -   Power (1 step, plus 1 for each asset that adds Power), resources, assets, Want, Agenda, Face, Secret, and three bonds: Public Sentiment, Morale and Loyalty.
 -   Every asset needs a resource paying for it, and one that isn't paid for stops counting. A spare resource hires another faction's action, buys an asset or goes in a trade.
 -   One action a downtime, telegraphed at the start: Destroy · Undermine · Obstruct · Influence · Acquire · Establish, or work its agenda (past d12, it happens). Up to three mini factions each, with two outcomes apiece.
--   The crew's party slots: the six outcomes, or Work for it. Roll the crew's Power, plus Reputations and good threads that fit, or one character's own permissions (1 step for the slot, plus what fits). Two slots count everything twice. A bigger faction's Power takes both slots.
+-   The crew's party slots: the six outcomes, Set back its agenda, or Work for it. Roll the crew's Power, plus Reputations and good threads that fit, or one character's own permissions (1 step for the slot, plus what fits). Two slots count everything twice. A bigger faction's Power takes both slots.
 -   A good thread's a step, a bad one's a vulnerability, and a strained one doesn't count.
 
 ## The session {#s-qr-session}

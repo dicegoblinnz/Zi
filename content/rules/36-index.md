@@ -145,7 +145,7 @@ updated: 2026-10-24
 -   **Leader** — [Leader](#a-leader)
 -   **Leading** — [Leader](#a-leader)
 -   **Leg** — [A Leg on the Road](#s-legs)
--   **Let it ride** — [When It Lands](#s-defending), [Answer, Defend, Take the Hit or Let It Ride](#s-answer-or-ride)
+-   **Let it ride** — [When It Lands](#s-defending), [Answer, Defend, Intercept or Let It Ride](#s-answer-or-ride)
 -   **Letting trouble bite** — [Catches and Trouble](#s-trouble), [Aura](#s-aura)
 -   **Levers** — [Appendix C](#appendix-levers)
 -   **Likely and unlikely** — [How Likely Is It?](#s-oracle-odds)
