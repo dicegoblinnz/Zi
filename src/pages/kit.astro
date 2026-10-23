@@ -13,7 +13,7 @@ import "@fontsource/alegreya-sans/800.css";
 import "../styles/site.css";
 import "../styles/kit.css";
 import book from "../generated/book.json";
-import { die, diceFor, inline, pips, aura, resolve, hurt, condition, tag, sigil, crest, telegraph, DEFS, SIGILS } from "../kit/kit.js";
+import { die, diceFor, inline, pips, aura, resolve, hurt, condition, tag, crest, telegraph, cost, DEFS, SIGILS } from "../kit/kit.js";
 import { diceLabel, stepsToDice } from "../companion/dice.js";
 
 const crew = Object.fromEntries(book.crew.map((c) => [c.id, c]));
@@ -54,7 +54,7 @@ const n = vesk.numbers;
   </head>
   <body class="kit">
     <Fragment set:html={DEFS} />
-    <div class="kbar" role="toolbar" aria-label="Look and theme">
+    <header class="kbar"><div class="kbar-in" role="toolbar" aria-label="Look and theme">
       <div class="seg" role="group" aria-label="Look">
         <button type="button" data-look="lit" aria-pressed="true">Lit</button>
         <button type="button" data-look="struck" aria-pressed="false">Struck</button>
@@ -64,7 +64,7 @@ const n = vesk.numbers;
         <button type="button" data-theme-to="light" aria-pressed="false">Light</button>
         <button type="button" data-theme-to="paper" aria-pressed="false">Paper</button>
       </div>
-    </div>
+    </div></header>
 
     <main id="main" class="kpage">
       <header class="khead">
@@ -126,7 +126,7 @@ const n = vesk.numbers;
           </div>
           <p class="verdict" aria-live="polite">Beat it</p>
           <p class="why">Her 6 beats his 5, so she’s past him.</p>
-          <div class="vaura"><span class="vl">Aura</span><span class="aura-now"><Fragment set:html={aura(4, 5)} /></span><span class="small">A top face gives 1 back.</span></div>
+          <div class="vaura"><span class="vl">Aura</span><span class="aura-now"><Fragment set:html={aura(n.aura - 1, n.aura)} /></span><span class="small">A top face gives 1 back.</span></div>
           <button type="button" class="kbtn primary" data-act="roll">Roll it</button>
         </div>
       </section>
@@ -134,7 +134,7 @@ const n = vesk.numbers;
       <!-- Dice -->
       <section id="dice" class="ksec">
         <h2>Dice</h2>
-        <p>Every line on a set action is a step, and each step fills one edge of the die. Six steps fill a d12, and the next step starts another die. So you can see a die’s size before you read it.</p>
+        <p>Every line on a set action is a step, and each step fills one edge of the die. 6 steps fill a d12, and the next step starts another die. So you can see a die’s size before you read it.</p>
         <div class="kladder">
           {[1, 2, 3, 4, 5, 6].map((s) => (
             <figure><Fragment set:html={die(s * 2)} /><figcaption><b>{s}</b> {s === 1 ? "step" : "steps"}</figcaption></figure>
@@ -188,12 +188,12 @@ const n = vesk.numbers;
         </div>
 
         <h2>Aura and Resolve</h2>
-        <p>Aura’s the small gold hexes, 5 to start every scene. Resolve’s the big diamonds, one for every Title. Both are yours to spend, so both are gold.</p>
+        <p>Aura’s the small gold hexes, {n.aura} to start every scene. Resolve’s the big diamonds, one for every Title. Both are yours to spend, so both are gold.</p>
         <div class="pairs">
-          <div><span class="vl">Full</span><Fragment set:html={aura(5, 5)} /></div>
-          <div><span class="vl">After 1 Aura</span><Fragment set:html={aura(4, 5)} /></div>
-          <div><span class="vl">Resolve</span><Fragment set:html={resolve(2, 2)} /></div>
-          <div><span class="vl">After 1 Resolve</span><Fragment set:html={resolve(1, 2)} /></div>
+          <div><span class="vl">Full</span><Fragment set:html={aura(n.aura, n.aura)} /></div>
+          <div><span class="vl">After 1 Aura</span><Fragment set:html={aura(n.aura - 1, n.aura)} /></div>
+          <div><span class="vl">Resolve</span><Fragment set:html={resolve(n.resolve, n.resolve)} /></div>
+          <div><span class="vl">After 1 Resolve</span><Fragment set:html={resolve(n.resolve - 1, n.resolve)} /></div>
         </div>
 
         <h2>Hurt</h2>
@@ -208,14 +208,14 @@ const n = vesk.numbers;
         </div>
         <p class="small" aria-live="polite" data-hurt-say>Nothing filled yet.</p>
         <p>Bram’s <i>Unyielding</i> gives him a fourth bar.</p>
-        <Fragment set:html={hurt({ bars: 4, filled: 4, catches: ["cracked ribs"] })} />
+        <Fragment set:html={hurt({ bars: crew.bram.numbers.hurtBars, filled: 4, catches: ["cracked ribs"] })} />
 
         <h2>Confidence and Armour</h2>
         <p>They’re dice like any other, so they fill the same way. Confidence swings in a scene, and Armour comes from your gear.</p>
         <div class="kladder conf">
           <figure><Fragment set:html={die(2, { label: "Confidence d2, shaken" })} /><figcaption><b>d2</b> shaken</figcaption></figure>
           <figure><Fragment set:html={die(6, { label: "Confidence d6, every scene starts here" })} /><figcaption><b>d6</b> every scene</figcaption></figure>
-          <figure><Fragment set:html={die(8, { label: "Confidence d8, Isolde's Iron Will" })} /><figcaption><b>d8</b> Iron Will</figcaption></figure>
+          <figure><Fragment set:html={die(crew.isolde.numbers.confidence, { label: `Confidence d${crew.isolde.numbers.confidence}, Isolde’s Iron Will` })} /><figcaption><b>d{crew.isolde.numbers.confidence}</b> Iron Will</figcaption></figure>
           <figure><Fragment set:html={die(12, { label: "Confidence d12, fired up" })} /><figcaption><b>d12</b> fired up</figcaption></figure>
         </div>
         <div class="kladder conf">
@@ -255,7 +255,7 @@ const n = vesk.numbers;
         <p>What it’s doing, who or what it’s aimed at, and how hard, before anyone rolls.</p>
         <div class="teles">
           <Fragment set:html={telegraph({ who: "The brute", does: "swings his club at Isolde.", at: "Isolde", atCrest: archOf(crew.isolde), d: 8 })} />
-          <Fragment set:html={telegraph({ who: "The maid on the stair", does: "slips away to wake the house.", at: "the stair", place: true, d: 4, one: "If it lands, the household clock drops two sizes." })} />
+          <Fragment set:html={telegraph({ who: "The maid on the stair", does: "slips away to wake the house.", at: "the household clock", aim: "stake", d: 4, one: "If it lands, the household clock drops two sizes." })} />
         </div>
       </section>
 
@@ -292,8 +292,8 @@ const n = vesk.numbers;
             <Fragment set:html={crest(archOf(vesk), { size: "sm", label: "Vesk" })} />
             <span class="rk">Example</span><span class="rn">Building a roll</span>
           </div>
-          <p><b>Bringing one in:</b> Vesk’s going over Lord Vane’s roof without a sound. She starts from her Sneak: her first Title, <i>move unseen</i> and Silent Step, with the action, 4 steps, <Fragment set:html={inline(8)} />. Her grappling line fits too, but it’s on her Move, not her Sneak, so bringing it in costs <span class="zd-cost"><Fragment set:html={aura(1, 1)} />1 Aura</span>. That’s 5 steps, <Fragment set:html={inline(10)} />.</p>
-          <p><b>Leaving one out:</b> Bram swings at a smuggler who’s running for the door. His Fight is his first Title, <i>hold the line</i> and his war hammer, with the action, 4 steps. He isn’t holding any line, so he leaves that one out: 3 steps, <Fragment set:html={inline(6)} />.</p>
+          <p><b>Bringing one in:</b> Vesk’s going over Lord Vane’s roof without a sound. She starts from her Sneak: her first Title, <i>move unseen</i> and Silent Step, with the action, 4 steps, a <Fragment set:html={inline(8)} />. Her grappling line fits too, but it’s on her Move, not her Sneak, so bringing it in costs <Fragment set:html={cost(1)} />. That’s 5 steps, a <Fragment set:html={inline(10)} />.</p>
+          <p><b>Leaving one out:</b> Bram swings at a smuggler who’s running for the door. His Fight is his first Title, <i>hold the line</i> and his war hammer, with the action, 4 steps. He isn’t holding any line, so he leaves that one out: 3 steps, a <Fragment set:html={inline(6)} />.</p>
         </div>
       </section>
 
@@ -386,28 +386,33 @@ const n = vesk.numbers;
       const track = document.querySelector(".hd-track");
       const conf = document.querySelector(".conf-now");
       const say = document.querySelector("[data-hurt-say]");
-      const confNow = () => Math.max(2, 6 - 2 * caught.length);
-      const drawHurt = (fresh) => {
+      let confidence = 6;
+      const drawHurt = (fresh, dropped) => {
         track.innerHTML = hurt({ bars: 3, filled, catches: caught });
         if (fresh) track.querySelectorAll("i.on")[filled - 1]?.classList.add("is-new");
-        conf.innerHTML = die(confNow(), { label: `Confidence d${confNow()}`, cls: fresh ? "is-landed" : "" });
+        conf.innerHTML = die(confidence, { label: `Confidence d${confidence}`, cls: dropped ? "is-landed" : "" });
       };
       const CATCHES = ["twisted ankle", "can’t stand the dark", "cracked ribs"];
       document.querySelector('[data-act="hurt"]').addEventListener("click", () => {
-        if (filled >= 9) { say.textContent = "Every box is full, so the next Hurt is a Blaze."; return; }
+        if (filled >= 9) { say.textContent = "Every box is full, so this Hurt’s a Blaze. She declares something extraordinary and it happens, no roll."; return; }
         filled++;
         const bar = Math.ceil(filled / 3);
         if (filled % 3 === 0 && caught.length < bar) {
           caught = [...caught, CATCHES[bar - 1]];
-          say.textContent = `Bar ${bar} is full. She writes ${CATCHES[bar - 1]} in it, and her Confidence drops to d${confNow()}.`;
-        } else say.textContent = `${filled} of 9.`;
-        drawHurt(true);
+          confidence = Math.max(2, confidence - 2);
+          say.textContent = `Bar ${bar} is full. She writes ${CATCHES[bar - 1]} in it, and her Confidence drops to d${confidence}.`;
+          drawHurt(true, true);
+        } else {
+          say.textContent = `${filled} of 9.`;
+          drawHurt(true, false);
+        }
       });
       document.querySelector('[data-act="scene"]').addEventListener("click", () => {
+        const loose = filled - caught.length * 3;
         filled = caught.length * 3;
-        say.textContent = caught.length ? `The loose boxes clear. The bar with ${caught.join(" and ")} stays full, and Confidence goes back to d6 next scene.` : "Nothing to clear.";
-        drawHurt(false);
-        conf.innerHTML = die(6, { label: "Confidence d6" });
+        confidence = 6;
+        say.textContent = !loose && !caught.length ? "Nothing to clear." : `${loose ? `${loose} loose ${loose === 1 ? "box clears" : "boxes clear"}` : "Nothing’s loose"}${caught.length ? `, the ${caught.length === 1 ? "bar" : "bars"} with ${caught.join(" and ")} ${caught.length === 1 ? "stays" : "stay"} full,` : ","} and Confidence starts the next scene on d6.`;
+        drawHurt(false, false);
       });
     </script>
   </body>
@@ -415,8 +420,9 @@ const n = vesk.numbers;
 
 <style is:global>
   .kit { padding-bottom: 4rem; }
+  .kbar-in { display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-content: space-between; }
   .kbar {
-    position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-content: space-between;
+    position: sticky; top: 0; z-index: 20;
     padding: 0.55rem max(16px, env(safe-area-inset-right, 0px)) 0.55rem max(16px, env(safe-area-inset-left, 0px));
     background: var(--bar-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
   }
@@ -424,7 +430,9 @@ const n = vesk.numbers;
   .seg button { min-height: 44px; min-width: 56px; padding: 0 0.75rem; font: 700 0.95rem/1 var(--body); color: var(--muted); background: transparent; border: 0; cursor: pointer; }
   .seg button + button { border-left: 1px solid var(--line); }
   .seg button[aria-pressed="true"] { background: var(--button); color: var(--on-gold); }
-  .seg button:focus-visible, .kbtn:focus-visible, .kjump a:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+  .kbtn:focus-visible, .kjump a:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+  .seg button:focus-visible { outline: 2px solid var(--violet); outline-offset: -4px; }
+  .seg button[aria-pressed="true"]:focus-visible, .kbtn.primary:focus-visible { outline: 2px solid var(--on-gold); outline-offset: -6px; }
   .kpage { max-width: 46rem; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px)); }
   .khead { padding: 1.6rem 0 0.6rem; }
   .khead h1 { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(2.2rem, 1.6rem + 3vw, 3.2rem); line-height: 1.05; letter-spacing: 0.02em; }
@@ -435,7 +443,7 @@ const n = vesk.numbers;
   .looks dd { margin: 0; }
   .kjump { display: flex; flex-wrap: wrap; gap: 0 1rem; }
   .kjump a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; text-decoration: none; }
-  .ksec { padding: 1.8rem 0 0.4rem; border-top: 1px solid var(--line-soft); margin-top: 1.4rem; }
+  .ksec { padding: 1.8rem 0 0.4rem; border-top: 1px solid var(--line-soft); margin-top: 1.4rem; scroll-margin-top: 8rem; }
   .ksec h2 { margin: 0 0 0.5rem; font-family: var(--display); font-weight: 600; font-size: 1.55rem; letter-spacing: 0.02em; }
   .ksec h2 + p, .ksec h3 + p { margin-top: 0; }
   .ksec * + h2 { margin-top: 2rem; }

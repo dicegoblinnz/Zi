@@ -141,11 +141,11 @@ export function sigil(name, { cls = "" } = {}) {
   return `<svg class="zd-sigil${cls ? ` ${cls}` : ""}" viewBox="0 0 24 24" aria-hidden="true">${art}</svg>`;
 }
 // A crest is the Zi'Dara mark made personal: the violet diamond, with the
-// first Title's archetype at its heart. Taken twice, the diamond's doubled.
+// first Title's archetype in the middle. Taken twice, the diamond's doubled.
 // A second archetype sits in a seal on the lower edge (big crests only).
 export function crest(archetypes, { size = "lg", label = "" } = {}) {
   const [first, ...rest] = archetypes;
-  const twice = rest.length > 0 && rest.every((a) => a === first);
+  const twice = rest.includes(first);
   const others = [...new Set(rest.filter((a) => a !== first))];
   const art = (name) => {
     if (!SIGILS[name]) throw new Error(`The kit has no sigil for the ${name} archetype. Draw one in src/kit/sigils.js.`);
@@ -163,24 +163,32 @@ export function crest(archetypes, { size = "lg", label = "" } = {}) {
     `<g class="heart" transform="${heart}">${art(first)}</g>${seal}</svg>`;
 }
 
-// A place on the map, for telegraphs aimed at somewhere rather than someone.
-const PIN = `<svg class="zd-place" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.4 C12 21.4 5 14.6 5 9.6 A7 7 0 0 1 19 9.6 C19 14.6 12 21.4 12 21.4 Z"/><circle cx="12" cy="9.6" r="2.6"/></svg>`;
+// What a telegraph's aimed at when it isn't someone: a stake (a clock, a
+// door, a getaway) or a place (only whoever's there when it lands).
+const AIMS = {
+  stake: `<svg class="zd-aim" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M12 7 V12 L15.4 14.2"/></svg>`,
+  place: `<svg class="zd-aim" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.4 C12 21.4 5 14.6 5 9.6 A7 7 0 0 1 19 9.6 C19 14.6 12 21.4 12 21.4 Z"/><circle cx="12" cy="9.6" r="2.6"/></svg>`,
+};
 
 // ── The telegraph card: what it's doing, who or what it's aimed at, how hard.
-export function telegraph({ who, does, at = "", atCrest = null, d, round = 1, place = false, one = "" }) {
-  const target = atCrest ? `${crest(atCrest, { size: "sm", label: at })}<span>At ${esc(at)}</span>` : `${PIN}<span>At ${esc(at)}</span>`;
-  return `<article class="zd-tele${place ? " at-place" : ""}">` +
+// aim: "someone" (give atCrest), "stake" or "place".
+export function telegraph({ who, does, at = "", atCrest = null, aim = atCrest ? "someone" : "stake", d, round = 1, one = "", level = 3 }) {
+  const mark = aim === "someone" && atCrest ? crest(atCrest, { size: "sm", label: at }) : AIMS[aim] || AIMS.stake;
+  const h = `h${level}`;
+  return `<article class="zd-tele at-${aim}">` +
     `<header><span class="k">Telegraph</span><span class="r">Round ${round}</span></header>` +
-    `<div class="tb">${die(d, { own: "them", label: `${who}'s d${d}` })}<div><h4>${esc(who)}</h4><p>${esc(does)}</p></div></div>` +
+    `<div class="tb">${die(d, { own: "them", label: `${who}'s d${d}` })}<div><${h}>${esc(who)}</${h}><p>${esc(does)}</p></div></div>` +
     (one ? `<p class="one"><b>Only one answer.</b> ${esc(one)}</p>` : "") +
-    `<footer><span class="at">${target}</span><span class="when">${place ? "Hits whoever's there when it lands" : "Lands at the end of the round"}</span></footer>` +
+    `<footer><span class="at">${mark}<span>At ${esc(at)}</span></span><span class="when">${aim === "place" ? "Hits whoever's there when it lands" : "Lands at the end of the round"}</span></footer>` +
     `</article>`;
 }
+
+// A cost in running text, like "1 Aura": the token, then the words.
+export const cost = (n, what = "Aura") => `<span class="zd-cost">${what === "Aura" ? CHIT.replace('class="zd-chit"', 'class="zd-chit on"') : GEM.replace('class="zd-gem"', 'class="zd-gem on"')}${n} ${esc(what)}</span>`;
 
 // The hidden bits every glow and hatch needs, once per page.
 export const DEFS = `<svg class="zd-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>` +
   `<filter id="zd-glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur in="SourceGraphic" stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>` +
   `<filter id="zd-glow-soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur in="SourceGraphic" stdDeviation="1.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>` +
-  `<radialGradient id="zd-lamp" cx="50%" cy="38%" r="70%"><stop offset="0" stop-color="#fff6d8"/><stop offset="0.55" stop-color="currentColor"/><stop offset="1" stop-color="currentColor"/></radialGradient>` +
   `<pattern id="zd-hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#fff"/><path d="M0 0 V6" stroke="#111" stroke-width="2.4"/></pattern>` +
   `</defs></svg>`;

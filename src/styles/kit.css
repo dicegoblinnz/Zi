@@ -61,7 +61,9 @@
 [data-kit="lit"] .zd-die.is-rolled .num { fill: var(--on-own); font-family: var(--display); font-size: 40px; }
 [data-kit="lit"] .zd-die.is-rolled .num.long { font-size: 34px; }
 [data-kit="lit"] .zd-die.is-top .body { stroke: var(--own); stroke-width: 2; filter: url(#zd-glow); }
-[data-kit="lit"] .zd-die.is-low { opacity: 0.42; }
+[data-kit="lit"] .zd-die.is-low .glow, [data-kit="lit"] .zd-die.is-low .edges { opacity: 0.35; }
+[data-kit="lit"] .zd-die.is-low .face { fill: var(--zd-face); stroke: var(--unlit); }
+[data-kit="lit"] .zd-die.is-low .num { fill: var(--muted); }
 [data-kit="lit"] .zd-die.is-tie .face { stroke: var(--own); stroke-width: 2.4; stroke-dasharray: 5 4; }
 :root[data-theme="light"] [data-kit="lit"] .zd-die .glow, :root[data-theme="paper"] [data-kit="lit"] .zd-die .glow,
 :root[data-theme="light"][data-kit="lit"] .zd-die .glow, :root[data-theme="paper"][data-kit="lit"] .zd-die .glow { filter: none; }
@@ -188,14 +190,14 @@
 .zd-tele .r { color: var(--muted); letter-spacing: 0.08em; }
 .zd-tele .tb { display: flex; align-items: center; gap: 0.9rem; }
 .zd-tele .tb .zd-die { --s: 62px; }
-.zd-tele h4 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.4rem; line-height: 1.1; letter-spacing: 0.02em; }
+.zd-tele h3, .zd-tele h4 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.4rem; line-height: 1.1; letter-spacing: 0.02em; }
 .zd-tele p { margin: 0.15rem 0 0; }
 .zd-tele .one { margin: 0; font-size: 0.95rem; color: var(--muted); }
 .zd-tele .one b { color: var(--ink); }
 .zd-tele footer { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.4rem 1rem; padding-top: 0.6rem; border-top: 1px solid var(--line-soft); font-size: 0.93rem; }
 .zd-tele .at { display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 700; }
 .zd-tele .when { color: var(--muted); }
-.zd-place { width: 24px; height: 24px; flex: none; fill: none; stroke: var(--zd-them-line); stroke-width: 2; stroke-linejoin: round; }
+.zd-aim { width: 24px; height: 24px; flex: none; fill: none; stroke: var(--zd-them-line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 [data-kit="lit"] .zd-tele { background: linear-gradient(color-mix(in srgb, var(--zd-them) 12%, var(--surface)), var(--surface) 4.5rem); border: 1px solid color-mix(in srgb, var(--zd-them) 45%, transparent); border-top: 2px solid var(--zd-them); border-radius: 3px; box-shadow: 0 -6px 22px -10px color-mix(in srgb, var(--zd-them) 70%, transparent); }
 [data-kit="struck"] .zd-tele { background: var(--zd-token); border: 2px solid var(--zd-them-line); border-radius: 3px; padding-top: 0; }
 [data-kit="struck"] .zd-tele header { margin: 0 -1rem; padding: 0.4rem 1rem; background: var(--zd-them); }
