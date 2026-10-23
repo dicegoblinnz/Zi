@@ -1,9 +1,50 @@
 ---
 title: "What's Changed"
 id: changes
-updated: 2026-10-17
+updated: 2026-10-24
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
+
+## 24 Oct 2026: Defend, wounds, vulnerabilities and factions {#c-2026-10-24}
+
+These came out of the 23 Oct playtests.
+
+**Defend's a set action, and the Armour die's gone.** Defend, Fight, Move, Sneak, Study and Talk are on every sheet now. Plain armour and a shield are lines on your Defend, a step each, and a piece of armour can break instead of you taking a Hurt. See [Armour](#s-armour) and [When It Lands](#s-defending).
+-   **Each die of defence stops one telegraph.** When you let it ride, you roll your Defend once and your Confidence once, and each die stops one telegraph it beats or ties. Everything else gets through. That replaces one defence roll standing against everything aimed at you.
+-   **Defending doubles it.** When you Defend, every line on your Defend counts twice, and so does your Confidence, and you can split each of them once. Defend doesn't pull an enemy's attack onto you any more. See [Defend](#s-defend).
+-   **A threat aims one die at each of you**, unless a tag like *Flurry* says it can do more. See [Telegraphs](#s-telegraphs).
+-   "Step your Armour down" is gone from the costs. See [Consequences](#s-consequences).
+
+**Intercept replaces taking the hit.** For 1 Aura and no action, you take the dice aimed at a friend within your stride, and your own defence handles them. A [Guardian](#a-guardian) intercepts for free, for every friend within his stride. See [Intercept](#s-intercept).
+
+**A permission goes on two set actions at most**, Defend included, and the same permission never goes on one set action twice. Anywhere else it's 1 Aura to bring in, and Titles, items and traits still go wherever they fit. **Single-word permissions are back**, like *Deceptive*, because the cap keeps them in check, so a permission doesn't need a doing word and how, what or where any more. Magic's still written narrow. In a combo, the same permission from two of you counts for each. See [How permissions stack](#how-permissions-stack) and [Permissions](#s-writing-permissions).
+
+**Vulnerabilities are new.** Every vulnerability that fits a hit adds a tick: one more Hurt on you, or one more win off a threat's tag. The same one never counts twice, and you've still got to win. *Prone* and *Exposed* are vulnerabilities now. See [Vulnerabilities](#s-vulnerable).
+
+**Tough's gone, and tags carry multipliers instead.** *Armour ×4* takes four wins to strip. It's usually the threat's Challenge, and it only ever counts wins, never dice. See [Multipliers](#s-tough).
+
+**Your wound die is your Hurt now**, and the Hurt track's bars and boxes are gone. It starts at d2, every Hurt puts it up a size, and a Hurt at d12 Blazes. See [Wounds, Blaze and Scars](#s-blaze).
+-   At the end of every scene you rest: roll the Confidence you finished on against your wound die, and a win brings it down a size. Downtime clears it, with no slot. That replaces the loose boxes clearing.
+-   Heals and quick heals bring it down a size. See [Healing](#s-healing).
+-   After a Blaze, the wound becomes a Scar, and a Scar's a Catch. Each one starts your wound die a size bigger, and with five, your next Blaze is your last. That replaces a Scar crossing out a box.
+-   Nothing writes a Catch on your Hurt mid-scene any more, so your Confidence doesn't drop for it.
+-   *Unyielding* and the Hurt Boon mean the first Hurt each scene doesn't move your wound die, instead of an extra bar.
+
+**Every archetype has a Resolve spend**, something big for 1 Resolve. See [1 Resolve on your mechanic](#resolve-on-your-mechanic). And:
+-   The [Bard](#a-bard)'s *Hold them* is a Defend against fear for everyone who can hear, and the song can split as often as you like. It replaces one roll that stopped all of it.
+-   The [Oracle](#a-oracle) rolls its dice as foresight and swaps those numbers into anyone's dice, friend or foe. It replaces taking steps off telegraphs.
+-   The [Hunter](#a-hunter)'s Mark jumps to another creature when its target falls.
+-   The [Guardian](#a-guardian) intercepts for free, instead of pulling every attack onto himself when he Defends.
+
+**Factions are rebuilt.** See [Factions](#factions).
+-   Four to twelve core factions, depending on the campaign, and each can make up to three [mini factions](#s-mini-factions).
+-   A faction's Power is 1 step, plus 1 for each asset that adds Power. Its resources and assets are permissions: each asset needs a resource paying for it every downtime, and a spare resource hires another faction's action. Wealth and faction tags are gone.
+-   A faction's action is one of [six outcomes](#s-faction-outcomes) (Destroy, Undermine, Obstruct, Influence, Acquire and Establish) or work on its agenda, and it's still telegraphed at the start of downtime.
+-   Every faction has [three bonds](#s-faction-bonds), Public Sentiment, Morale and Loyalty, with threads in them. A good thread's a step and a bad one's a vulnerability.
+-   Standing's gone. How a faction sees the crew is its threads toward them.
+-   The crew's on the same card, its crew tags are crew assets now, and party resources are [party holdings](#s-party-resources).
+
+**Bonds can be with factions, places and causes**, as well as people. See [Bonds and threads](#s-bonds).
 
 ## 17 Oct 2026: A two-page character sheet, and the player reference on its own {#c-2026-10-17}
 
@@ -28,9 +69,9 @@ These all came out of the playtests.
 -   Every scene starts on d6, a size up in clothes that fit. Titles and bonds don't make it bigger any more, and it doesn't come back in downtime, because it goes back to d6 at the end of every scene.
 -   Fear is a telegraph, and that's your fear check. Stop all of it and you go up a size. Take a threat down and you go up a size too.
 -   When fear, lies or pressure get through, you choose: let it shake you and drop a size, bury it and take a Hurt, or hold your ground for 1 Resolve. The GM doesn't name that cost any more. See [When fear gets through](#s-fear-gets-through).
--   Write a Catch on your Hurt track and you drop a size as well.
--   At d12 you're fired up: cash it in for an extra action or to clear a Hurt box, and you're back on d6. At d2 you're shaken, and going at a threat costs 1 Resolve each time. Take a breath (your action) to come up a size, as far as d6.
--   Confidence never goes past d12 any more. Past d12 is for Armour only.
+-   Write a Catch on your Hurt track and you drop a size as well. (Gone from 24 Oct, when the wound die replaced the Hurt track.)
+-   At d12 you're fired up: cash it in for an extra action or to clear a Hurt box, and you're back on d6. (From 24 Oct it steps your wound die down a size instead of clearing a box.) At d2 you're shaken, and going at a threat costs 1 Resolve each time. Take a breath (your action) to come up a size, as far as d6.
+-   Confidence never goes past d12 any more. Past d12 is for Armour only. (The Armour die went on 24 Oct.)
 
 **The heal die is now the wound die.** Same rule, new name. See [Healing](#s-healing).
 
@@ -41,7 +82,7 @@ These all came out of the playtests.
 -   A bond with three threads doesn't make your Confidence bigger any more.
 -   There's a guide to [playing the strain](#s-playing-the-strain) when someone strains a thread with your character.
 
-**A new archetype, the [Bard](#a-bard),** for nerve: lift the crew's Confidence, or answer all the fear coming at them with one song.
+**A new archetype, the [Bard](#a-bard),** for nerve: lift the crew's Confidence, or answer all the fear coming at them with one song. (From 24 Oct the song's a Defend for everyone who can hear, and each die stops one telegraph.)
 
 **Boons and Burdens, three rows:** the Spark row is now Resolve (+1 or −1 to your maximum), Confidence starts you a size up or down every scene, and the Going beyond Boon lets you go beyond once a scene without spending Resolve. See [Boons and Burdens](#s-boons).
 
@@ -58,7 +99,7 @@ These all came out of the playtests.
 -   **Areas** are the [Elementalist](#a-elementalist)'s, and they don't cost Aura any more. Sweep weapons still go at everyone in reach, free.
 -   **Heal rolls** are the [Healer](#a-healer)'s. A quick heal is still for everyone.
 -   **Catching souls and summoning** are the [Summoner](#a-summoner)'s. The summoning Boon's gone: take Summoner twice.
--   **Pulling more than one enemy's attack** when you Defend is the [Guardian](#a-guardian)'s. The Boon that pulled from two is gone. Anyone can still Defend and pull one.
+-   **Pulling more than one enemy's attack** when you Defend is the [Guardian](#a-guardian)'s. The Boon that pulled from two is gone. Anyone can still Defend and pull one. (On 24 Oct pulling became intercepting: 1 Aura for anyone, free for a Guardian.)
 
 **Changes for everyone:**
 -   Wards and blessings reach one person, and the second die of a split can reach another friend you can touch. Healing a group is gone. See [Wards and blessings](#s-wards).
@@ -70,29 +111,29 @@ These all came out of the playtests.
 **The game is called Zi'Dara.** This rulebook became the one master copy of the rules, and the website, the printed book and the character tools are all built from it.
 
 **Items.** See [Items](#s-items) and [What you carry](#s-carrying).
--   Plain items are just what they are. A sword counts as a line when it fits. Each piece of plain armour makes your Armour a size bigger.
+-   Plain items are just what they are. A sword counts as a line when it fits. Each piece of plain armour makes your Armour a size bigger. (From 24 Oct it's a line on your Defend.)
 -   Resources are items now. You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more.
 -   Rarity (common, rare, legendary) is gone.
 
 **Attunement.** You've got two attunement slots on top of what you carry. An attuned thing has permissions of its own and grows in three stages, Awakened, Tempered and Perfected, each needing a material. It can't be broken, and you can hand it to a friend. See [Attunement](#s-attunement).
 
-**Titles don't have Catches any more.** Catches come from attunement and from Hurt. You can still bring real trouble on yourself with no Catch written down, for 1 Aura. Banes only come on attunement now, as a Burden.
+**Titles don't have Catches any more.** Catches come from attunement and from Hurt. (From 24 Oct, from attunement and Scars.) You can still bring real trouble on yourself with no Catch written down, for 1 Aura. Banes only come on attunement now, as a Burden.
 
-**Taking the hit.** Anyone can step in front of an attack aimed at someone within their stride, free, with no defence roll. It has its own Boon and Burden, and it replaced the *Step in* Boon. See [Taking the Hit](#s-take-the-hit).
+**Taking the hit.** Anyone can step in front of an attack aimed at someone within their stride, free, with no defence roll. It has its own Boon and Burden, and it replaced the *Step in* Boon. (Intercept replaced it on 24 Oct: see [Intercept](#s-intercept).)
 
 **Summoning.** Souls of fallen creatures are caught into a summoning attunement, and you summon against their dice. This replaced the 12 Oct summoning. (On 14 Oct it became the Summoner's.) See [Summoning](#s-summoning).
 
-**Permissions need two parts:** the doing word, and how, what or where. *Deceive* is half a permission, and *deceive through actions* is a whole one. See [Permissions](#s-writing-permissions).
+**Permissions need two parts:** the doing word, and how, what or where. *Deceive* is half a permission, and *deceive through actions* is a whole one. (Single-word permissions came back on 24 Oct, with each permission on two set actions at most.) See [Permissions](#s-writing-permissions).
 
 **Splitting past a d12** was made clearer: dice past six steps are their own, and going past 6 steps gives you a split on top of your action's. See [Splitting](#s-splitting).
 
 ## 12 Oct 2026: Defend, Hurt bars, healing, Boons and Banes {#c-2026-10-12}
 
-**Defend replaces Guard**, and you roll your defence once a round. Anything being attacked rolls its defence once, and that roll stands against everything that round. Defend takes your action: roll your Armour once for every die coming at you and choose which roll blocks which, and pull one enemy's whole attack onto yourself. See [When It Lands](#s-defending) and [Defend](#s-defend).
+**Defend replaces Guard**, and you roll your defence once a round. Anything being attacked rolls its defence once, and that roll stands against everything that round. Defend takes your action: roll your Armour once for every die coming at you and choose which roll blocks which, and pull one enemy's whole attack onto yourself. (On 24 Oct each defence die started stopping one telegraph, Defending started doubling your Defend, and pulling became Intercept.) See [When It Lands](#s-defending) and [Defend](#s-defend).
 
-**Hurt is three bars of three.** Fill a bar and write a Catch in it. At the end of every scene, the loose boxes clear. From your first Blaze you can choose for your character to die, and otherwise you take a Scar, which is for the story only. See [Hurt, Blaze and Scars](#s-blaze).
+**Hurt is three bars of three.** Fill a bar and write a Catch in it. At the end of every scene, the loose boxes clear. From your first Blaze you can choose for your character to die, and otherwise you take a Scar, which is for the story only. (On 24 Oct the wound die replaced the bars, and a Scar became a Catch.) See [Wounds, Blaze and Scars](#s-blaze).
 
-**Healing happens in a scene.** A heal rolls against the patient's heal die, and a quick heal is 1 Aura for one box. Catches on your Hurt track take a downtime slot each. (On 14 Oct heal rolls became the Healer's and healing a group went. On 16 Oct the heal die became the wound die.) See [Healing](#s-healing).
+**Healing happens in a scene.** A heal rolls against the patient's heal die, and a quick heal is 1 Aura for one box. Catches on your Hurt track take a downtime slot each. (On 14 Oct heal rolls became the Healer's and healing a group went. On 16 Oct the heal die became the wound die. On 24 Oct heals started stepping the wound die down, and downtime started clearing it for free.) See [Healing](#s-healing).
 
 **Catches bite as often as you like**, 1 Aura each time, as long as it's real trouble. You got a Spark for each Title, all back every downtime. (Sparks became Resolve on 16 Oct.) The GM can give you 1 Aura when a great setup doesn't land.
 
@@ -103,7 +144,7 @@ These all came out of the playtests.
 ## 9 and 10 Oct 2026: Titles, set actions and one action a round {#c-2026-10-09}
 
 -   **Titles hold your permissions.** A new character has two Titles with three permissions each, up to six on a Title. The Title itself counts 1 on any roll it fits. See [Archetypes and Titles](#s-title).
--   **Set actions:** Fight, Move, Sneak, Study and Talk, and your own, with everything that fits counted in advance. See [Set Actions](#s-set-actions).
+-   **Set actions:** Fight, Move, Sneak, Study and Talk, and your own, with everything that fits counted in advance. (Defend joined them on 24 Oct.) See [Set Actions](#s-set-actions).
 -   **One action a round.** There's no Help action: to help, put your action into the same thing as a combo. See [Your Action](#s-actions) and [Working Together](#s-teamwork).
 -   **Bring something in** for 1 Aura: anything that isn't on your set action. That replaced stretching a permission.
 -   **Going beyond** what a permission normally does cost 1 Aura, for a sword or a spell. (1 Resolve from 16 Oct.) It replaced big magic.
@@ -124,6 +165,7 @@ The 2 Oct 2026 rulebook is where this record starts. Everything in it that isn't
 
 These are being worked out at the table. Play them as the chapters have them for now.
 
+-   **The Summoner:** it's being reworked, because it played weak. Play it as the chapter has it for now.
 -   **Traits:** where they go, now that each archetype's mechanic has taken the place of a Title's trait. Keep yours, and a new character picks two.
 -   **The Teleporter** needs a better name.
 -   **Taking the Teleporter or the Bloodsworn twice:** neither has a +2 to grow, so what you get is still to come.
@@ -131,6 +173,5 @@ These are being worked out at the table. Play them as the chapters have them for
 -   **Permissions like teleport, take an animal's form or cast illusions:** whether they still work without the archetype.
 -   **Attunement:** how many slots you can have past two, and whether six permissions is the top.
 -   **Keepsakes:** what a keepsake does.
--   **Armour:** whether it only drops when a piece breaks.
 -   **Movement:** whether it comes from permissions.
 -   **Mending a thread in downtime:** whether it takes a slot.

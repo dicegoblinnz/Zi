@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Flag rules words that the 7 to 16 Oct 2026 changes retired, and broken links.
+"""Flag rules words that the 7 Oct to 24 Oct 2026 changes retired, and broken links.
 
 Usage: python3 tools/check_terms.py [FILE.md ...]   (default: every chapter)
        add --links to check every #anchor link points at a real heading id
@@ -21,7 +21,6 @@ RETIRED = [
     ("Help action", r"\bHelp(s|ing|ed)?\b|\bhelp action\b"),
     ("Guard action", r"\bGuard(s|ing|ed)?\b(?! (of|at the|on the gate))"),
     ("two actions", r"\b(two|both|second|2) actions?\b|\byour two actions\b"),
-    ("resources", r"\bresources?\b"),
     ("item rarity", r"\b(rarity|Rare|Legendary|Common)\b"),
     ("stretch", r"\bstretch(es|ed|ing)?\b"),
     ("old names", r"\b(Insight|Truth|Limit Break|Spread|pour in)\b"),
@@ -47,6 +46,19 @@ RETIRED = [
     ("opportunity", r"\bmake an opportunity\b|\bmaking an opportunity\b"),
     ("fear check", r"\bfear checks?\b"),
     ("Confidence past d12", r"\bConfidence\b.*\bpast d12\b|\bpast d12\b.*\bConfidence\b"),
+    # 24 Oct: Defend, wounds, multipliers, factions
+    ("Armour die", r"\b(your|her|his|their|my|its) Armour\b|\bArmour (die|dice|roll|rolls|steps?|d\d+)\b|\bArmour['’]s (a|an|the|only|already) \b|\bstep(s|ped|ping)? (your |her |his |their )?Armour\b|\bArmour a size\b"),
+    ("one defence roll", r"\bone defence roll\b|\bone roll of your (Armour|Defend)\b|\bstands against everything\b"),
+    ("Hurt track", r"\bHurt (track|bars?|box|boxes)\b|\b(clear|clears|cleared|clearing|fill|fills|filled|filling) (a|one|the|that many|two|her|his|their|your|every) (box|boxes|bar|bars)\b|\bloose boxes\b|\bbars? of three\b"),
+    ("Hurt Catch", r"\bHurt Catch(es)?\b|\bCatch(es)? on (your|her|his|their) Hurt\b|\bheal(s|ed)? (a|one|each) Catch\b"),
+    ("Tough", r"\bTough\b|\bchip(s|ped|ping)?\b|\btakes? off (the number|what) it rolled\b"),
+    ("take the hit", r"\b(take|takes|took|taking) the hit\b"),
+    ("Wealth", r"\bWealth\b"),
+    ("Standing", r"\bStanding\b(?! Army)"),
+    ("party resources", r"\bparty resources?\b"),
+    ("two-part permissions", r"\btwo parts\b|\bdescribing word\b|\bonly half a permission\b"),
+    ("every set action it fits", r"\b(every|as many) set actions? it fits\b"),
+    ("old Oracle", r"\bsteps? off (the |a )?(threats['’] )?telegraphs?\b|\bshrink(ing|s)? (the )?(threats['’] )?telegraphs\b"),
 ]
 
 

@@ -6,7 +6,7 @@ order: 3.5
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook (split out of Building Your Character)
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 ## Quick Build {#s-quick}
 
@@ -17,13 +17,13 @@ Ten minutes, and you're playing.
 The quick build is the long build with most of the thinking done for you. You pick two archetypes, take what you need from the [Title ideas](#s-title-ideas), and bring the parts that make the character yours: the Titles, the people and what you want. Each step says where it's explained in full.
 
 1.  **Pick two archetypes, and a Title idea for each if you like.** Each archetype has a mechanic, something only it can do, and on most of them 1 Aura adds +2 to one die on it. You can take the same archetype twice, and then that +2 is a +3. Every Title idea says which archetypes it suits, and gives you Titles, permissions and traits to start from. See [How archetypes work](#s-how-archetypes).
-2.  **Write a Title for each, and three permissions on it.** Your Title is the name you give your archetype. Take one of the idea's examples or write your own, and make it specific: *the best blade in the city* is fine, and *the best blade in the Low Market* is better. Then take three permissions that fit inside it, so you've got six. Change the words to suit your character, or write one that isn't on the list. That's fine as long as every permission's still finished, with a doing word and how, what or where. See [Titles](#s-title) and [Permissions](#s-writing-permissions).
+2.  **Write a Title for each, and three permissions on it.** Your Title is the name you give your archetype. Take one of the idea's examples or write your own, and make it specific: *the best blade in the city* is fine, and *the best blade in the Low Market* is better. Then take three permissions that fit inside it, so you've got six. Change the words to suit your character, or write one that isn't on the list. A permission can be one word, like *Deceptive*, or a doing word and how, what or where, like *pick a mechanical lock*. See [Titles](#s-title) and [Permissions](#s-writing-permissions).
 3.  **Pick two traits.** Take them from the ideas you started from, or from [the full list](#s-traits).
-4.  **Fill in your set actions.** Fight, Move, Sneak, Study and Talk are on every sheet, and if there's something you do all the time, give it a set action of its own. Put your Titles, permissions, items and traits on every set action they fit nearly every time. A set action's steps are 1 for the action and 1 for every line on it. See [Set actions](#s-step-set-actions).
+4.  **Fill in your set actions.** Defend, Fight, Move, Sneak, Study and Talk are on every sheet, and if there's something you do all the time, give it a set action of its own. Put your Titles, items and traits on every set action they fit nearly every time, and each permission on the two it helps most. Plain armour and a shield go on your Defend. A set action's steps are 1 for the action and 1 for every line on it. See [Set actions](#s-step-set-actions).
 5.  **Take what you carry, and attune two things.** You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more. Your two attuned things start at Awakened with one permission each. If there's trouble you'd like on one, give it a Catch and it gets a second permission. See [What you carry](#s-carrying) and [Attunement](#s-attunement).
 6.  **Write three threads**: one each to two of the crew, and one to someone outside it. A thread with someone in the crew goes on both your sheets, so agree on it together. If one's a debt, you've got room for a fourth. See [Bonds and threads](#s-bonds).
 7.  **Write your Aspiration** at d2. It's one thing you want, and it climbs as you chase it. See [Aspiration](#s-aspiration).
-8.  **Check the numbers.** You've got 5 Aura, 2 Resolve (one for each Title), a stride of 3 and three Hurt bars. Armour starts at d2 and goes up a size for each piece of plain armour you wear. Confidence starts every scene on d6, a size up in clothes that fit the scene, and a trait like Iron Will can start you higher. See [Resolve](#s-resolve) and [Confidence](#s-confidence).
+8.  **Check the numbers.** You've got 5 Aura, 2 Resolve (one for each Title), a stride of 3 and a wound die at d2. Confidence starts every scene on d6, a size up in clothes that fit the scene, and a trait like Iron Will can start you higher. See [Resolve](#s-resolve), [Wounds](#s-blaze) and [Confidence](#s-confidence).
 
 :::example[Wren, the quick way]
 Wren takes Hunter twice, so her +2 is a +3. She starts both Titles from the Ranger idea, which suits a Hunter, and they're both examples off its list: *the hunter who has never lost a trail* and *an outrider from the border war*. Her first Title gets three permissions from the list, *follow any trail*, *move through the wild unseen* and *know a beast's habits*. Her second gets three that aren't on the list at all: *scout ahead of an army*, *ride hard over rough country* and *read the land for an ambush*. Her traits are their own pick, and she takes two of the Ranger's, Marksman's Eye and Sure-Footed.
@@ -42,7 +42,7 @@ Every Title is an [archetype](#s-how-archetypes), and the Title is the name you 
 A Title idea isn't a Title, and neither is an archetype. *Warrior* doesn't tell the table what you're the best at, so a Warrior still needs a Title that does, like *the best blade in the city*. Keep each Title to one role or one school. *Archmage* is too wide, so pick the school you're known for.
 
 -   **Archetypes** are the ones the idea suits. Each Title is one archetype, so where an idea suits more than one, pick the one that plays the way you want. They're suggestions, so if your Title fits a different archetype better, go with that one. What each one does is in [The Archetypes](#archetypes).
--   **Permissions** are ready to copy onto your sheet. Every one's finished, with a doing word and how, what or where, so they're also a good guide when you write your own (see [Permissions](#s-writing-permissions)).
+-   **Permissions** are ready to copy onto your sheet, and they're a good guide when you write your own (see [Permissions](#s-writing-permissions)). Each one goes on two of your set actions at most.
 -   **Traits** are three that suit the idea. You've got two traits, and you can take them from here or from [the full list](#s-traits).
 -   **Going beyond** is what this kind of character does when they push a permission past what it normally does. It costs 1 Resolve (see [Going beyond](#s-going-beyond)).
 -   **Trouble** is the kind that follows this sort of character around. Titles don't have Catches, so it isn't part of the Title, and you can bring it into a scene whenever you like. Let it cause real trouble and you take 1 Aura (see [Catches and trouble](#s-trouble)). Any of it makes a good Catch for something you [attune](#s-attunement), too.
@@ -565,13 +565,13 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Traits:** Silent Step (Passive) · Light on my Feet (Passive).
 
-**Set actions:** Sneak 4 (d8): her first Title, *move unseen*, Silent Step · Move 4 (d8): her first Title, *run the rooftops*, her grappling line · Locks 5 (d10): her first Title, *pick a mechanical lock*, *know how a lock's built*, her picks · Fight 2 (d4): *fight dirty with a knife* · Study 1 (d2) · Talk 1 (d2).
+**Set actions:** Sneak 4 (d8): her first Title, *move unseen*, Silent Step · Move 4 (d8): her first Title, *run the rooftops*, her grappling line · Locks 5 (d10): her first Title, *pick a mechanical lock*, *know how a lock's built*, her picks · Defend 2 (d4): her worn leathers · Fight 2 (d4): *fight dirty with a knife* · Study 1 (d2) · Talk 1 (d2).
 
 **Carries:** worn leathers (equipment, 1 of 3) · a purse of gold, a smoke bomb (utility, 2 of 3) · the first coin she ever stole (keepsake) · an empty bag (0 of 10).
 
 **Attuned (Awakened):** A perfect set of picks: *open any lock with a mechanism* · A grappling line: *climb or swing anywhere you can throw a hook*.
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 5 (Light on my Feet) · Armour d4 (worn leathers) · Confidence starts every scene on d6 · Hurt three bars of three.
+**Numbers:** Aura 5 · Resolve 2 · Stride 5 (Light on my Feet) · Confidence starts every scene on d6 · Wound die d2.
 
 **Threads:** Dorrie: *We have pulled a dozen jobs. I trust her with my life.* and *We came up on the same streets. She never asks why.* (Dorrie's) · Bram: *He once carried me out of a fire. I have never said thank you.* · Isolde: *She stole the book that started all this.* (Isolde's) · Wren: *I owe her for the night she hid me from the watch.* (Wren's, a debt) · The fence: *I owe a debt I would rather not discuss.* (debt)
 
@@ -593,13 +593,13 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Traits:** Silver Tongue (Once per scene) · Cold Reader (Once per scene).
 
-**Set actions:** Talk 4 (d8): her first Title, *read a room in a glance*, *make a lie sound like old news* · Pass as someone else 5 (d10): her second Title, *pass as someone I'm not*, *keep my story straight under questions*, her signet pin · Study 2 (d4): *read a room in a glance* · Fight 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
+**Set actions:** Talk 4 (d8): her first Title, *read a room in a glance*, *make a lie sound like old news* · Pass as someone else 5 (d10): her second Title, *pass as someone I'm not*, *keep my story straight under questions*, her signet pin · Study 2 (d4): *read a room in a glance* · Defend 1 (d2) · Fight 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
 
 **Carries:** court clothes (equipment, 1 of 3) · a fine bottle of wine (utility, 1 of 3) · a letter of introduction (keepsake) · an empty bag (0 of 10).
 
 **Attuned (Awakened):** A signet pin: *pass as someone who matters* · A deck of marked cards: *win any card game I sit down at*.
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Armour d2 · Confidence starts every scene on d6, or d8 in her court clothes when they fit the scene · Hurt three bars of three.
+**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Confidence starts every scene on d6, or d8 in her court clothes when they fit the scene · Wound die d2.
 
 **Threads:** Vesk: *We came up on the same streets. She never asks why.* and *We have pulled a dozen jobs. I trust her with my life.* (Vesk's) · Bram: *He thinks I sold him out on the harbour job. I did not.* and *I do not trust her, and she knows it.* (Bram's) · Isolde: *I keep her secrets at court. She keeps mine.* · Ash: *She smuggled me out of the Ember Court. I owe her my life.* (Ash's, a debt)
 
@@ -621,13 +621,13 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Traits:** Unyielding (Passive) · Intimidating Presence (Passive).
 
-**Set actions:** Fight 4 (d8): his first Title, *hold the line*, his war hammer · Talk 4 (d8): his second Title, *bark an order that gets obeyed*, Intimidating Presence · Lift and carry 3 (d6): his first Title, *lift what two men can't* · Study 2 (d4): *spot who's in charge* · Move 1 (d2) · Sneak 1 (d2).
+**Set actions:** Fight 4 (d8): his first Title, *hold the line*, his war hammer · Defend 4 (d8): his first Title, his plate armour, his shield · Talk 4 (d8): his second Title, *bark an order that gets obeyed*, Intimidating Presence · Lift and carry 3 (d6): his first Title, *lift what two men can't* · Study 2 (d4): *spot who's in charge* · Move 1 (d2) · Sneak 1 (d2).
 
 **Carries:** plate armour, a shield (equipment, 2 of 3) · a medical kit (utility, 1 of 3) · his old sergeant's stripes (keepsake) · an empty bag (0 of 10).
 
 **Attuned (Awakened):** His war hammer (Breaker): *fight with a war hammer*, plus *knock a man off his feet* for its Catch, *Marked* · His coin from home: *find my way back from anywhere*.
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Armour d6 (plate armour and a shield) · Confidence starts every scene on d6 · Hurt four bars of three (Unyielding).
+**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Confidence starts every scene on d6 · Wound die d2 (Unyielding: the first Hurt he takes each scene doesn't move it).
 
 **Threads:** Isolde: *I swore to her father I would keep her alive.* · Vesk: *He once carried me out of a fire. I have never said thank you.* (Vesk's) · Dorrie: *I do not trust her, and she knows it.* and *He thinks I sold him out on the harbour job. I did not.* (Dorrie's) · Wren: *He is the only one who can keep up with me.* (Wren's)
 
@@ -649,13 +649,13 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Traits:** Perfect Recall (Once per scene) · Iron Will (Passive).
 
-**Set actions:** Study 4 (d8): her second Title, *know the history of anything old*, Iron Will · The dead 3 (d6): her first Title, *speak with the recently dead* · Ward 3 (d6): her first Title, her chalk and salt · Talk 2 (d4): her fine coat · Fight 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
+**Set actions:** Study 4 (d8): her second Title, *know the history of anything old*, Iron Will · The dead 3 (d6): her first Title, *speak with the recently dead* · Ward 3 (d6): her first Title, her chalk and salt · Talk 2 (d4): her fine coat · Defend 1 (d2) · Fight 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
 
 **Carries:** a fine coat with silver thread (equipment, 1 of 3) · a salt packet (utility, 1 of 3) · an old letter (keepsake) · an empty bag (0 of 10).
 
 **Attuned (Awakened):** Chalk and salt: *draw a warding circle anywhere I can kneel* · A book I never finished: *find the ritual I need, given an hour*.
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Armour d2 · Confidence starts every scene on d8 (Iron Will), or d10 in her fine coat when it fits the scene · Hurt three bars of three.
+**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Confidence starts every scene on d8 (Iron Will), or d10 in her fine coat when it fits the scene · Wound die d2.
 
 **Threads:** Bram: *I swore to her father I would keep her alive.* (Bram's) · Vesk: *She stole the book that started all this.* · Dorrie: *I keep her secrets at court. She keeps mine.* (Dorrie's) · Wren: *She named the thing that took my brother.* (Wren's) · Ash: *She is the only one who is not afraid of me.* (Ash's)
 
@@ -677,13 +677,13 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Traits:** Marksman's Eye (Passive) · Sure-Footed (Passive).
 
-**Set actions:** Fight 5 (d10): her first Title, *shoot a longbow*, *hit anything I can see*, Marksman's Eye · Sneak 4 (d8): her first Title, *move through the wild unseen*, her hooded cloak · Track 4 (d8): her first Title, *follow any trail*, *know a beast's habits* · Study 3 (d6): her second Title, *read the land for an ambush* · Move 2 (d4): her second Title · Talk 1 (d2).
+**Set actions:** Fight 5 (d10): her first Title, *shoot a longbow*, *hit anything I can see*, Marksman's Eye · Sneak 4 (d8): her first Title, *move through the wild unseen*, her hooded cloak · Track 4 (d8): her first Title, *follow any trail*, *know a beast's habits* · Study 3 (d6): her second Title, *read the land for an ambush* · Move 2 (d4): her second Title · Defend 1 (d2) · Talk 1 (d2).
 
 **Carries:** no equipment yet, because her bow and cloak are attuned (0 of 3) · rations (utility, 1 of 3) · a torn map (keepsake) · her hunter's pack, empty (0 of 10).
 
 **Attuned (Awakened):** Her longbow (Long, Two-Handed): *shoot a longbow*, plus *hit anything I can see* for its Catch, *Wanted* · Her hooded cloak: *vanish into trees and shadow*.
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Armour d2 · Confidence starts every scene on d6 · Hurt three bars of three.
+**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Confidence starts every scene on d6 · Wound die d2.
 
 **Threads:** Bram: *He is the only one who can keep up with me.* · Isolde: *She named the thing that took my brother.* · Vesk: *I owe her for the night she hid me from the watch.* (debt) · Ash: *We have never agreed on anything.* (Ash's)
 
@@ -705,13 +705,13 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Traits:** Killer Instinct (Triggered) · Battle Focus (Once per scene).
 
-**Set actions:** Fight 4 (d8): her first Title, *throw fire*, her ember stone · Scare them off 5 (d10): her first Title, *throw fire*, *make a threat stick*, her ember stone · Talk 4 (d8): her second Title, *command a room*, *make a threat stick* · Study 2 (d4): *know the old courts' history* · Move 1 (d2) · Sneak 1 (d2).
+**Set actions:** Fight 4 (d8): her first Title, *throw fire*, her ember stone · Scare them off 5 (d10): her first Title, *throw fire*, *make a threat stick*, her ember stone · Talk 4 (d8): her second Title, *command a room*, *make a threat stick* · Study 2 (d4): *know the old courts' history* · Defend 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
 
 **Carries:** no equipment yet, because her coat's attuned (0 of 3) · a tinderbox, flash powder (utility, 2 of 3) · a silver locket (keepsake) · an empty bag (0 of 10).
 
 **Attuned (Awakened):** An ember stone on a chain: *call fire without a word or a gesture* · A scorched coat: *walk through fire unharmed*.
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Armour d2 · Confidence starts every scene on d6 · Hurt three bars of three.
+**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Confidence starts every scene on d6 · Wound die d2.
 
 **Threads:** Dorrie: *She smuggled me out of the Ember Court. I owe her my life.* (debt) · Isolde: *She is the only one who is not afraid of me.* · Wren: *We have never agreed on anything.*
 

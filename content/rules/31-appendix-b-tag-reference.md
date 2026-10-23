@@ -6,9 +6,9 @@ order: 31
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
-Every tag in here tells you how it shows up in the story and what it opens up for the crew. Tags don't make a threat's dice bigger. A tag only changes dice when it says so. Players who know a tag can bring it into a roll for 1 Aura.
+Every tag in here tells you how it shows up in the story and what it opens up for the crew. Tags don't make a threat's dice bigger. A tag only changes dice when it says so. Players who know a tag can bring it into a roll for 1 Aura. A tag that takes more than one win to strip carries a [multiplier](#s-tough), like *Armoured ×3*, and a tag that makes a hit hurt more is a [vulnerability](#vulnerability-tags).
 
 ## How it comes at you {#how-it-comes-at-you}
 
@@ -30,7 +30,8 @@ These tags say what its telegraphs can do to you.
 | **Fast** | It is on you before the sentence ends. It closes distance, takes the door first, gets the knife in. Slow the ground down and it loses its edge. |
 | **Fast Hands** | Your purse is lighter and you didn't feel it. It takes things mid-conversation. Watch the hands, not the face. |
 | **Faster Than You** | Whoever you are, it's faster. Racing it loses. Tricking it, blocking it or making it choose doesn't. |
-| **Fear** | It aims at Confidence, not Armour. Something in the chest goes cold. Naming what it is takes some of that away. |
+| **Fear** | It aims at Confidence, not Defend. Something in the chest goes cold. Naming what it is takes some of that away. |
+| **Flurry** | Blow after blow. It can aim two dice at one person in a round, and each one has to be stopped on its own. Get out of its reach, or put a shield in front of it. |
 | **Grapple** | It grabs and doesn't let go. Its telegraphs can leave you *Grabbed*, at the die that lands. A friend can pry you loose. |
 | **Grasping** | It wants what you're holding, and it'll take it. Its hits steal as well as hurt. |
 | **Heavy** | Big hands, big body, big lean. It shoves people through doors. It also can't climb, sneak or turn quickly. |
@@ -59,14 +60,16 @@ These tags say what its telegraphs can do to you.
 
 ## What keeps it going {#what-keeps-it-going}
 
-These tags are its health. Each one's a reason it's still standing, and when you strip them all, it falls. *Tough* works like hit points, and a few, like *Crumbling*, *Forms* and *Layered*, change how the rest works.
+These tags are its health. Each one's a reason it's still standing, and when you strip them all, it falls. A few, like *Crumbling*, *Forms* and *Layered*, change how the rest works.
+
+Any of them can carry a **multiplier** when it should take more than one win, like *Natural Armour ×6* or *Beloved ×3*. Every win ticks one off, and the GM says what's left every time, so nobody has to guess. A named one only ticks to what fits it: blades on the hide, or turning the crowd. Marked *(first)*, nothing under it can be stripped till it's gone. A spent condition that would strip a tag, like *Burning*, ticks one off, and *Piercing* still gets through *Armoured*, whatever its multiplier. An opening takes a whole tag, multiplier and all, and a weak point still ends the threat at once. There's more in [Multipliers](#s-tough).
 
 | Tag | How it plays |
 | --- | --- |
 | **A Hundred Years of This** | It's stood here a century. It knows every step of this floor. It's also very, very tired. |
 | **Anchored** | Something holds it here: an object, a vow, a body. Find the anchor and it drifts. |
 | **Ancient** | It's done this for longer than your family has had a name. It knows the old tricks. It may not know the new ones. |
-| **Armoured** | Plate, shell, hide like old leather. Blades skid off, and it is one more win to bring down. Lever it open, burn it, or hit where the armour is not. *Piercing* ignores it. |
+| **Armoured** | Plate, shell, hide like old leather. Blades skid off, and it's one more win to bring down, or as many as its multiplier says. Lever it open, burn it, or hit where the armour is not. *Piercing* ignores it. |
 | **Beloved** | People love it. Attack it openly and the crowd turns on you. Turn the crowd first. |
 | **Bound** | Something holds it to its duty. It doesn't choose to be here. Break the binding and ask what it wants. |
 | **Bound by Rules** | It must obey something: an invitation, a bargain, a name spoken three times. Learn the rule, and a single roll ends it. |
@@ -81,7 +84,7 @@ These tags are its health. Each one's a reason it's still standing, and when you
 | **Feeds** | It grows stronger on something: blood, fear, grief, attention. Starve it and it weakens. |
 | **Flies** | It's above you. You can't reach it with a sword. Bows, nets, bait and roofs can. |
 | **Forgets You** | Look away and it forgets you were there. So do you. Write things down. |
-| **Forms** | Beat one shape and it turns into another, once for *Forms (2)* and twice for *Forms (3)*. When the last tag keeping a form going is stripped, it changes instead of falling: its Tough fills back up, and the GM picks 3 to 5 tags for the new shape from its Forms list (more for a bigger change) and tells you what it's becoming. Tags you've already stripped can come back. *Forms* itself is never stripped, and its last form falls like anything else. Its weak point ends it in any shape, so Study it early. |
+| **Forms** | Beat one shape and it turns into another, once for *Forms (2)* and twice for *Forms (3)*. When the last tag keeping a form going is stripped, it changes instead of falling: its multipliers fill back up, and the GM picks 3 to 5 tags for the new shape from its Forms list (more for a bigger change) and tells you what it's becoming. Tags you've already stripped can come back. *Forms* itself is never stripped, and its last form falls like anything else. Its weak point ends it in any shape, so Study it early. |
 | **Fortified** | Walls, a gate, a good position. Getting to it is the fight. Get inside and it's ordinary. |
 | **Holds the Line** | It doesn't step back. People behind it are safe while it stands. Go around, not through. |
 | **Hollow** | There's nothing inside. Hurting it does little. What moves it is somewhere else. |
@@ -106,12 +109,28 @@ These tags are its health. Each one's a reason it's still standing, and when you
 | **Slippery** | It twists out of grips, arguments and nets. Pinning it takes two people or a clever trap. |
 | **Split** | It is in more than one place. Beat one and the others carry on. Strike them all at once. |
 | **Swarm** | Many small things. Stabbing one does nothing. Smoke, fire and walls do. |
-| **Tough** | Works like hit points. It's written with a number, like *Tough 40*, and every winning die against it takes off what it rolled. At 0 it's gone. Plain *Tough* drops to anything that hurts it, and a named one, like *Natural Armour 40* or *Beloved 20*, only to what fits it: blades on the hide, or turning the crowd. Marked *(first)*, nothing under it can be stripped till it's gone. The GM says what's left every time it drops, so nobody has to guess. A spent condition that would strip a tag, like *Burning*, takes its die's size off instead, so a d8 *Burning* takes 8, and *Piercing* still gets through a tough *Armoured*. An opening counts it as one tag, and a weak point still ends the threat at once. |
 | **Trained** | It knows how to hold a weapon and stand its ground. Nothing fancy, nothing it hasn't drilled. |
 | **Unkillable** | You can beat it. You can't kill it. It'll get up. Put it somewhere it can't get out of. |
 | **Warded** | Old marks protect it against magic and the strange: one more win to bring down. Break the ward, scuff the chalk, or come at it plainly. |
 | **Well-Connected** | Hurt it and someone important hears. It has friends in every room that matters. |
 | **Won't Back Down** | It won't back down, give ground or change its mind. Threats slide off. Respect might not. |
+
+## Vulnerabilities {#vulnerability-tags}
+
+A vulnerability makes a hit hurt more. When a win strips one of its tags or causes a Hurt, every vulnerability that fits adds one more tick. The same one never counts twice, so a thing that's really weak to fire has two different ones. Plenty are hidden, and Study finds them. There's more in [Vulnerabilities](#s-vulnerable).
+
+| Tag | How it plays |
+| --- | --- |
+| **Vulnerable to fire** | Fire finds it. Every burning hit that wins ticks once more. |
+| **Dry as Tinder** | It goes up like kindling. With *Vulnerable to fire* as well, a burning hit ticks twice more. |
+| **Brittle** | Hammers, falls and a good shove crack it. Blades don't do anything special. |
+| **Thin-Skinned** | Blades bite deep. Hammers just bruise it. |
+| **Old Wound** | Something never healed right. Go for that side, and it hurts twice. |
+| **Silver-Shy** | Silver burns it. A silver blade, a coin, a ring on a fist. |
+| **Off Balance** | It goes over easily, and once it's down, it's in trouble. |
+| **Proud** | Shame works on it. An insult in front of its people ticks once more. |
+| **Holy Ground** | On holy ground, everything hurts it more. Lure it there. |
+| **Opened** | The Warrior's, for 1 Resolve: every hit on it ticks once more till the round ends. |
 
 ## What drives it {#what-drives-it}
 
@@ -250,7 +269,7 @@ Every condition carries a die. While it lasts, it's one step for or against, and
 
 A condition you put on a friend, like a ward or a blessing, goes on one friend at the die you built, and the second die of a split can put it on another friend you can touch (see [Wards and blessings](#s-wards)).
 
-**Against you: one step less while it lasts.** *Burning* · *Bleeding* · *Poisoned* · *Exposed* · *Pinned* · *Prone* · *Staggered* · *Grabbed* · *Disarmed* · *Blinded* · *Deafened* · *Silenced* · *Frightened* · *Shaken* · *Stunned* · *Taunted* · *Charmed* · *Spotted* · *Hexed* · *Hunted*
+**Against you: one step less while it lasts** (*Prone* and *Exposed* are vulnerabilities instead). *Burning* · *Bleeding* · *Poisoned* · *Exposed* · *Pinned* · *Prone* · *Staggered* · *Grabbed* · *Disarmed* · *Blinded* · *Deafened* · *Silenced* · *Frightened* · *Shaken* · *Stunned* · *Taunted* · *Charmed* · *Spotted* · *Hexed* · *Hunted*
 
 **For you: one step more while it lasts.** *Warded* · *Heartened* · *Covered* · *Braced* · *Unseen* · *Fleet* · *Blessed* · *Inspired* · *Rallied* · *Sighted* · *Guided* · *Disguised* · *Fortunate* · *Surging*
 
@@ -258,4 +277,4 @@ Two of them move your Confidence as it swings. Spend *Heartened* and it comes ba
 
 *Unseen* gives you an extra action when you spend it. Coming out of hiding gives you one too, and with both it's still one.
 
-**The Hunter's mark.** *Marked* is a special condition only a Hunter puts on, carrying the die they won with, like *Marked d10*. It doesn't give a step and nobody spends it. Anyone who acts against whatever's *Marked* rolls the Mark die too, as one more die against it, and it fades a size every round like any condition. See [Hunter](#a-hunter).
+**The Hunter's mark.** *Marked* is a special condition only a Hunter puts on, carrying the die they won with, like *Marked d10*. It doesn't give a step and nobody spends it. Anyone who acts against whatever's *Marked* rolls the Mark die too, as one more die against it, and it fades a size every round like any condition. When what it's on falls, the Mark jumps to another creature the Hunter can see. See [Hunter](#a-hunter).
