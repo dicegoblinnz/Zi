@@ -11,6 +11,7 @@ This repo is the master copy of the rules for **Zi'Dara**, Mo's tabletop rolepla
 - `notes/website-brief.md`: what Mo wants from the website (look, companions, live play, worlds, order). Read it before any site work.
 - `notes/companion-plan.md`: the agreed first version of the character companion, and what comes after it.
 - `notes/sheets-plan.md`: the agreed plan for the fillable two-page character sheet and the separate player reference.
+- `notes/design-review.md`: Claude's look at the live site on 24 Oct (why it feels bland, and the approach), waiting for Mo to pick a direction. The plan that follows goes in `notes/design-plan.md`.
 - `notes/playtest-sheets/`: Mo's "What's changed" playtest sheets (text), the primary source for each change.
 - `tools/check_terms.py`: flags retired rules words (`--links` checks every `](#id)` link against the chapters' ids).
 - `tools/voice_check.py`: flags em dashes, semicolons, exclamation marks, stiff phrases and filler, and counts contractions.
@@ -33,6 +34,16 @@ This repo is the master copy of the rules for **Zi'Dara**, Mo's tabletop rolepla
 4. Run `python3 -I tools/check_terms.py`, `python3 -I tools/check_terms.py --links` and `python3 -I tools/voice_check.py FILE --lines` on what you changed. Add newly retired words to `RETIRED` in `check_terms.py`.
 5. If Appendix D changed, rebuild the sheets (`npm run sheets`). Then rebuild and check the site (`npm run build`, then `node tests/check-site.mjs`, which fails when a sheet's behind its sources).
 6. Work on a branch and commit. `main` is what the live site deploys from, so only merge to `main` when Mo says so.
+
+## Keeping usage low
+
+Every chat comes out of Mo's usage, so get the most done for the least.
+- One stage or piece of work per chat. Finish by giving Mo the prompt for the next one, since every step in a long chat costs more than the same step in a fresh one.
+- Grep, then read only the lines you need. Don't read long files whole (`app.js`, `builder.js`, a chapter) or re-read what you've just edited.
+- While you work, run only the part of the tests that covers your change. Run the full `tests/check-site.mjs`, `tests/check-companion.mjs` and `tests/check-accounts.mjs` once before you finish, since each full run is long.
+- Screenshots at 1x and the size of the screen, and only when you need to judge how something looks.
+- The independent check is one agent on Sonnet that reviews the diff and reports in a few hundred words, since an open-ended review can cost as much as the build.
+- Don't narrate between steps, and ask Mo only about the decisions that are his.
 
 ## The voice
 
