@@ -4,7 +4,7 @@ The design pass from `notes/design-review.md`, started 24 Oct 2026, before the a
 
 ## Step 1: the kit
 
-Built 24 Oct on the `design` branch, made from `app`. The Preview is https://design-zi.storyforgenz.workers.dev/kit/ (not linked from anywhere, and kept out of search). Waiting for Mo to pick Lit or Struck.
+Built 24 Oct on the `design` branch, made from `app`, and moved onto `app` the same day because Cloudflare wouldn't build the `zi` Worker's Preview for a new `design` branch (the `zidara` Worker built it fine, so it's something in `zi`'s build settings). The Preview is https://app-zi.storyforgenz.workers.dev/kit/, not linked from anywhere, kept out of search and out of the offline cache. Waiting for Mo to pick Lit or Struck.
 
 - `src/kit/kit.js` draws every piece as HTML, so Astro can draw it at build time and the companion on the phone: dice, steps, Aura, Resolve, the Hurt track, conditions, tags, sigils, crests and the telegraph card. `src/kit/sigils.js` has a sigil for every archetype, and the kit page stops the build when an archetype in `03a-the-archetypes.md` hasn't got one. `src/styles/kit.css` is both looks, picked by `data-kit` on the page (`lit` or `struck`), plus a Paper theme that shows what prints in one ink.
 - `src/pages/kit.astro` reads the crew off the chapter, the way the companion does, so every number on it is the book's.
