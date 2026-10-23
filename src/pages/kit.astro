@@ -1,0 +1,564 @@
+---
+// The kit, step 1 of the design pass (notes/design-plan.md): every game
+// object drawn two ways, Lit and Struck, for Mo to pick one on his phone.
+// It reads the crew off the chapter, like the companion does, so every
+// number here is the book's. Not linked from anywhere, and kept out of search.
+import "@fontsource/cinzel/600.css";
+import "@fontsource/cinzel/700.css";
+import "@fontsource/alegreya-sans/400.css";
+import "@fontsource/alegreya-sans/400-italic.css";
+import "@fontsource/alegreya-sans/700.css";
+import "@fontsource/alegreya-sans/700-italic.css";
+import "@fontsource/alegreya-sans/800.css";
+import "../styles/site.css";
+import "../styles/kit.css";
+import book from "../generated/book.json";
+import { die, diceFor, inline, pips, aura, resolve, hurt, condition, tag, sigil, crest, telegraph, DEFS, SIGILS } from "../kit/kit.js";
+import { diceLabel, stepsToDice } from "../companion/dice.js";
+
+const crew = Object.fromEntries(book.crew.map((c) => [c.id, c]));
+const archOf = (c) => c.titles.map((t) => t.archetype);
+const ARCH = book.companion.build.archetypes;
+for (const a of ARCH) if (!SIGILS[a.name]) throw new Error(`The kit has no sigil for ${a.name}. Draw one in src/kit/sigils.js.`);
+const vesk = crew.vesk;
+const lineOf = (c, key) => c.lines.find((l) => l.key === key);
+const sneak = vesk.actions.find((a) => a.name === "Sneak");
+const sneakLines = sneak.lines.map((k) => lineOf(vesk, k));
+const wren = crew.wren.actions.find((a) => a.name === "Fight");
+const bram = crew.bram.actions.find((a) => a.name === "Fight");
+const combo = wren.steps + bram.steps;
+const order = ["vesk", "dorrie", "bram", "isolde", "wren", "ash"];
+const n = vesk.numbers;
+---
+<!doctype html>
+<html lang="en-NZ" data-kit="lit">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>The kit · Zi’Dara</title>
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#120d18" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline>
+      // The look and theme this phone last had open, before anything paints.
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("js");
+        try {
+          var k = JSON.parse(localStorage.getItem("zi-kit") || "{}");
+          if (k.look === "struck") root.setAttribute("data-kit", "struck");
+          if (k.theme === "light" || k.theme === "paper") root.setAttribute("data-theme", k.theme);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="kit">
+    <Fragment set:html={DEFS} />
+    <div class="kbar" role="toolbar" aria-label="Look and theme">
+      <div class="seg" role="group" aria-label="Look">
+        <button type="button" data-look="lit" aria-pressed="true">Lit</button>
+        <button type="button" data-look="struck" aria-pressed="false">Struck</button>
+      </div>
+      <div class="seg" role="group" aria-label="Theme">
+        <button type="button" data-theme-to="dark" aria-pressed="true">Dark</button>
+        <button type="button" data-theme-to="light" aria-pressed="false">Light</button>
+        <button type="button" data-theme-to="paper" aria-pressed="false">Paper</button>
+      </div>
+    </div>
+
+    <main id="main" class="kpage">
+      <header class="khead">
+        <p class="eyebrow">The design pass · step 1 of 4</p>
+        <h1>The kit</h1>
+        <p class="lede">Every piece of the game, drawn once and shown two ways. Flip between them in the dark, in the light and on paper, at arm’s length, and pick the one that feels like your table.</p>
+        <dl class="looks">
+          <div><dt>Lit</dt><dd>Light runs along each die’s edges, and whatever’s yours glows.</dd></div>
+          <div><dt>Struck</dt><dd>Solid pieces, like tokens punched out of card, the same in the dark, the light and on paper.</dd></div>
+        </dl>
+        <nav class="kjump" aria-label="On this page">
+          <a href="#table">At the table</a><a href="#roll">The roll</a><a href="#dice">Dice</a><a href="#trackers">Aura, Resolve and Hurt</a><a href="#tags">Tags</a><a href="#telegraphs">Telegraphs</a><a href="#sigils">Sigils</a><a href="#rules">In the rules</a><a href="#pick">Picking</a>
+        </nav>
+      </header>
+
+      <!-- At the table: Vesk's play screen with the kit on it -->
+      <section id="table" class="ksec">
+        <h2>At the table</h2>
+        <p class="note">Vesk’s play screen with the kit on it. Where things sit is step 2, so judge the pieces here, not the layout.</p>
+        <div class="vphone">
+          <div class="vhead">
+            <Fragment set:html={crest(archOf(vesk), { label: `${vesk.name}’s crest: ${vesk.archetypes.join(", ")}` })} />
+            <div>
+              <p class="vname">{vesk.name}</p>
+              <p class="vtitle">{vesk.title}</p>
+              <p class="vmeta">{vesk.archetypes.join(" · ")} · Stride {n.stride}</p>
+            </div>
+          </div>
+          <div class="vtrack">
+            <div class="vt"><span class="vl">Aura</span><Fragment set:html={aura(n.aura, n.aura)} /></div>
+            <div class="vt"><span class="vl">Resolve</span><Fragment set:html={resolve(n.resolve, n.resolve)} /></div>
+            <div class="vt die-t"><span class="vl">Confidence</span><Fragment set:html={die(n.confidence, { label: `Confidence d${n.confidence}` })} /></div>
+            <div class="vt die-t"><span class="vl">Armour</span><Fragment set:html={die(n.armour, { label: `Armour d${n.armour}` })} /></div>
+            <div class="vt wide"><span class="vl">Hurt</span><Fragment set:html={hurt({ bars: n.hurtBars, filled: 0 })} /></div>
+          </div>
+          <div class="vtiles">
+            {vesk.actions.map((a) => (
+              <div class="vtile">
+                <Fragment set:html={diceFor(a.steps)} />
+                <div>
+                  <p class="tn">{a.name}</p>
+                  <p class="ts">{a.steps} {a.steps === 1 ? "step" : "steps"}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- The roll -->
+      <section id="roll" class="ksec">
+        <h2>The roll</h2>
+        <p class="note">Vesk slips past the guard on Lord Vane’s roof. Her Sneak’s {sneak.steps} steps, a {sneak.die}, against the guard’s d6.</p>
+        <div class="vroll lead">
+          <div class="vs">
+            <figure><Fragment set:html={die(8, { face: 6, label: "Vesk’s d8 came up 6" })} /><figcaption>Vesk’s d8</figcaption></figure>
+            <span class="vsx" aria-hidden="true">against</span>
+            <figure><Fragment set:html={die(6, { own: "them", face: 5, state: "low", label: "The guard’s d6 came up 5" })} /><figcaption>The guard’s d6</figcaption></figure>
+          </div>
+          <p class="verdict" aria-live="polite">Beat it</p>
+          <p class="why">Her 6 beats his 5, so she’s past him.</p>
+          <div class="vaura"><span class="vl">Aura</span><span class="aura-now"><Fragment set:html={aura(4, 5)} /></span><span class="small">A top face gives 1 back.</span></div>
+          <button type="button" class="kbtn primary" data-act="roll">Roll it</button>
+        </div>
+      </section>
+
+      <!-- Dice -->
+      <section id="dice" class="ksec">
+        <h2>Dice</h2>
+        <p>Every line on a set action is a step, and each step fills one edge of the die. Six steps fill a d12, and the next step starts another die. So you can see a die’s size before you read it.</p>
+        <div class="kladder">
+          {[1, 2, 3, 4, 5, 6].map((s) => (
+            <figure><Fragment set:html={die(s * 2)} /><figcaption><b>{s}</b> {s === 1 ? "step" : "steps"}</figcaption></figure>
+          ))}
+        </div>
+        <h3>Add a step</h3>
+        <div class="stepper">
+          <button type="button" class="kbtn" data-act="less" aria-label="One step fewer">−</button>
+          <output class="stepped" aria-live="polite"><span class="sv">5 steps, a d10</span></output>
+          <button type="button" class="kbtn" data-act="more" aria-label="One step more">+</button>
+        </div>
+        <div class="stepdice"><Fragment set:html={diceFor(5)} /></div>
+        <h3>Rolled, top face, lost and tied</h3>
+        <div class="states">
+          <figure><Fragment set:html={die(8)} /><figcaption>To roll</figcaption></figure>
+          <figure><Fragment set:html={die(8, { face: 6 })} /><figcaption>Came up 6</figcaption></figure>
+          <figure><Fragment set:html={die(8, { face: 8, state: "top", label: "A d8 on its top face, 8, so 1 Aura back" })} /><figcaption>Top face, 1 Aura back</figcaption></figure>
+          <figure><Fragment set:html={die(8, { face: 2, state: "low" })} /><figcaption>Lost</figcaption></figure>
+          <figure><Fragment set:html={die(8, { face: 5, state: "tie" })} /><figcaption>Tied</figcaption></figure>
+        </div>
+        <h3>Theirs</h3>
+        <p>The GM’s dice are violet, and they’re built from the same steps, so a d10 telegraph is 5 of her budget.</p>
+        <div class="kladder short">
+          {[2, 4, 5, 6].map((s) => (
+            <figure><Fragment set:html={die(s * 2, { own: "them" })} /><figcaption><b>{s}</b> steps</figcaption></figure>
+          ))}
+        </div>
+        <h3>Past a d12</h3>
+        <p>Wren and Bram put their Fights in together on the brute’s club: {wren.steps} steps and {bram.steps}, so {combo} steps, a {diceLabel(stepsToDice(combo))}.</p>
+        <div class="beyond"><Fragment set:html={diceFor(combo)} /></div>
+        <div class="today">
+          <span class="tl">Today</span>
+          <span class="old">d2</span><span class="old">d10</span>
+          <span class="small">Every die’s the same gold hex, so a d2 looks like a d10.</span>
+        </div>
+      </section>
+
+      <!-- Steps, Aura, Resolve, Hurt, Confidence and Armour -->
+      <section id="trackers" class="ksec">
+        <h2>Steps</h2>
+        <p>Vesk’s Sneak, line by line. Each line’s a step, the action’s one more, and they make her {sneak.die}.</p>
+        <div class="buildup">
+          <ul>
+            {sneakLines.map((l) => (
+              <li><Fragment set:html={pips(1)} /><span>{l.kind === "title" ? <>Her first Title, <i>{l.label}</i></> : l.kind === "permission" ? <i>{l.label}</i> : l.label}</span></li>
+            ))}
+            <li><Fragment set:html={pips(1)} /><span>The action</span></li>
+          </ul>
+          <span class="eq" aria-hidden="true">=</span>
+          <Fragment set:html={diceFor(sneak.steps)} />
+        </div>
+
+        <h2>Aura and Resolve</h2>
+        <p>Aura’s the small gold hexes, 5 to start every scene. Resolve’s the big diamonds, one for every Title. Both are yours to spend, so both are gold.</p>
+        <div class="pairs">
+          <div><span class="vl">Full</span><Fragment set:html={aura(5, 5)} /></div>
+          <div><span class="vl">After 1 Aura</span><Fragment set:html={aura(4, 5)} /></div>
+          <div><span class="vl">Resolve</span><Fragment set:html={resolve(2, 2)} /></div>
+          <div><span class="vl">After 1 Resolve</span><Fragment set:html={resolve(1, 2)} /></div>
+        </div>
+
+        <h2>Hurt</h2>
+        <p>Three bars of three, and a full bar gets a Catch written in it. Take a Hurt three times and Vesk’s first bar fills, she writes <i>twisted ankle</i> in it, and her Confidence drops a size.</p>
+        <div class="hurtdemo">
+          <div class="hd-track"><Fragment set:html={hurt({ bars: 3, filled: 0 })} /></div>
+          <div class="hd-conf"><span class="vl">Confidence</span><span class="conf-now"><Fragment set:html={die(6, { label: "Confidence d6" })} /></span></div>
+        </div>
+        <div class="kbtns">
+          <button type="button" class="kbtn" data-act="hurt">Take a Hurt</button>
+          <button type="button" class="kbtn" data-act="scene">End the scene</button>
+        </div>
+        <p class="small" aria-live="polite" data-hurt-say>Nothing filled yet.</p>
+        <p>Bram’s <i>Unyielding</i> gives him a fourth bar.</p>
+        <Fragment set:html={hurt({ bars: 4, filled: 4, catches: ["cracked ribs"] })} />
+
+        <h2>Confidence and Armour</h2>
+        <p>They’re dice like any other, so they fill the same way. Confidence swings in a scene, and Armour comes from your gear.</p>
+        <div class="kladder conf">
+          <figure><Fragment set:html={die(2, { label: "Confidence d2, shaken" })} /><figcaption><b>d2</b> shaken</figcaption></figure>
+          <figure><Fragment set:html={die(6, { label: "Confidence d6, every scene starts here" })} /><figcaption><b>d6</b> every scene</figcaption></figure>
+          <figure><Fragment set:html={die(8, { label: "Confidence d8, Isolde's Iron Will" })} /><figcaption><b>d8</b> Iron Will</figcaption></figure>
+          <figure><Fragment set:html={die(12, { label: "Confidence d12, fired up" })} /><figcaption><b>d12</b> fired up</figcaption></figure>
+        </div>
+        <div class="kladder conf">
+          <figure><Fragment set:html={die(crew.isolde.numbers.armour, { label: "Isolde's Armour" })} /><figcaption>Isolde</figcaption></figure>
+          <figure><Fragment set:html={die(n.armour, { label: "Vesk's Armour" })} /><figcaption>Vesk, {n.armourNote}</figcaption></figure>
+          <figure><Fragment set:html={die(crew.bram.numbers.armour, { label: "Bram's Armour" })} /><figcaption>Bram, plate and a shield</figcaption></figure>
+        </div>
+      </section>
+
+      <!-- Tags and conditions -->
+      <section id="tags" class="ksec">
+        <h2>Tags and conditions</h2>
+        <p>A condition’s a tag carrying a die, and it fades a size every round. One that’s against whoever carries it is ember, and one that’s for them is gold.</p>
+        <div class="chips">
+          <Fragment set:html={condition("Burning", 8)} />
+          <Fragment set:html={condition("Pinned", 6)} />
+          <Fragment set:html={condition("Bleeding", 4)} />
+        </div>
+        <div class="chips">
+          <Fragment set:html={condition("Warded", 8, { kind: "for" })} />
+          <Fragment set:html={condition("Unseen", 6, { kind: "for" })} />
+          <Fragment set:html={condition("Blessed", 12, { kind: "for" })} />
+        </div>
+        <p>A threat’s tags are violet, and the ones nobody’s found yet stay dashed.</p>
+        <div class="chips">
+          <Fragment set:html={tag("Reach")} />
+          <Fragment set:html={tag("Fortified")} />
+          <Fragment set:html={tag("Bound to a Place")} />
+          <Fragment set:html={tag("Old")} />
+          <Fragment set:html={tag("", { kind: "hidden" })} />
+        </div>
+      </section>
+
+      <!-- Telegraphs -->
+      <section id="telegraphs" class="ksec">
+        <h2>Telegraphs</h2>
+        <p>What it’s doing, who or what it’s aimed at, and how hard, before anyone rolls.</p>
+        <div class="teles">
+          <Fragment set:html={telegraph({ who: "The brute", does: "swings his club at Isolde.", at: "Isolde", atCrest: archOf(crew.isolde), d: 8 })} />
+          <Fragment set:html={telegraph({ who: "The maid on the stair", does: "slips away to wake the house.", at: "the stair", place: true, d: 4, one: "If it lands, the household clock drops two sizes." })} />
+        </div>
+      </section>
+
+      <!-- Sigils and crests -->
+      <section id="sigils" class="ksec">
+        <h2>Sigils and crests</h2>
+        <p>A crest is the Zi’Dara mark made personal: the violet diamond, with your first Title’s archetype in the middle. Take an archetype twice and the diamond’s doubled. A second archetype sits in a seal on its edge.</p>
+        <div class="crews">
+          {order.map((id) => (
+            <figure>
+              <Fragment set:html={crest(archOf(crew[id]), { label: `${crew[id].name}’s crest` })} />
+              <figcaption><b>{crew[id].name}</b><span>{crew[id].archetypes.join(" and ")}</span></figcaption>
+            </figure>
+          ))}
+        </div>
+        <h3>Every archetype</h3>
+        <div class="sigils">
+          {ARCH.map((a) => (
+            <figure>
+              <Fragment set:html={crest([a.name], { label: `${a.name}` })} />
+              <figcaption>{a.name}</figcaption>
+            </figure>
+          ))}
+        </div>
+        <p class="small">At telegraph size: <span class="tiny">{order.map((id) => <Fragment set:html={crest(archOf(crew[id]), { size: "sm", label: crew[id].name })} />)}</span></p>
+      </section>
+
+      <!-- In the rules -->
+      <section id="rules" class="ksec">
+        <h2>In the rules</h2>
+        <p class="note">The same pieces in the book’s own example from The Core, headed by Vesk’s crest. Tapping terms and Try it are step 3.</p>
+        <div class="rbox">
+          <div class="rhead">
+            <Fragment set:html={crest(archOf(vesk), { size: "sm", label: "Vesk" })} />
+            <span class="rk">Example</span><span class="rn">Building a roll</span>
+          </div>
+          <p><b>Bringing one in:</b> Vesk’s going over Lord Vane’s roof without a sound. She starts from her Sneak: her first Title, <i>move unseen</i> and Silent Step, with the action, 4 steps, <Fragment set:html={inline(8)} />. Her grappling line fits too, but it’s on her Move, not her Sneak, so bringing it in costs <span class="zd-cost"><Fragment set:html={aura(1, 1)} />1 Aura</span>. That’s 5 steps, <Fragment set:html={inline(10)} />.</p>
+          <p><b>Leaving one out:</b> Bram swings at a smuggler who’s running for the door. His Fight is his first Title, <i>hold the line</i> and his war hammer, with the action, 4 steps. He isn’t holding any line, so he leaves that one out: 3 steps, <Fragment set:html={inline(6)} />.</p>
+        </div>
+      </section>
+
+      <!-- Picking -->
+      <section id="pick" class="ksec">
+        <h2>Picking</h2>
+        <p><b>The same in both:</b> the edges that fill with steps, gold for yours, violet for theirs, ember for harm, the sigils and crests, and the type. Only how they’re drawn changes, so whichever you pick costs the same to build.</p>
+        <p><b>Lit</b> is the game screen from the brief, and today’s dice grow straight into it. It’s at its best in the dark, and a die landing is the best moment in the kit. In the light and on paper the glow goes and it’s clean line drawings, which print well.</p>
+        <p><b>Struck</b> reads from across the table, because a die’s size is how much of it’s filled. It looks like a board game’s pieces, and it’s the same everywhere. It’s heavier, it uses a lot more ink on paper, and it’s further from the Sigil look you picked on 16 Oct.</p>
+        <p><b>What I’d pick:</b> Lit. It looks like Zi’Dara, its dice read at every size from a word in the rules to the roll, and its paper version is the cleaner of the two.</p>
+      </section>
+    </main>
+
+    <script>
+      import { die, diceFor, aura, hurt } from "../kit/kit.js";
+      import { rollDie, stepsToDice, diceLabel } from "../companion/dice.js";
+
+      const root = document.documentElement;
+      const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const keep = () => { try { localStorage.setItem("zi-kit", JSON.stringify({ look: root.dataset.kit, theme: root.dataset.theme || "dark" })); } catch (e) {} };
+      const show = () => {
+        document.querySelectorAll("[data-look]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.look === root.dataset.kit)));
+        document.querySelectorAll("[data-theme-to]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.themeTo === (root.dataset.theme || "dark"))));
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", root.dataset.theme === "light" ? "#f5f2f7" : root.dataset.theme === "paper" ? "#ffffff" : "#120d18");
+      };
+      document.querySelectorAll("[data-look]").forEach((b) => b.addEventListener("click", () => { root.dataset.kit = b.dataset.look; keep(); show(); }));
+      document.querySelectorAll("[data-theme-to]").forEach((b) => b.addEventListener("click", () => {
+        if (b.dataset.themeTo === "dark") root.removeAttribute("data-theme");
+        else root.dataset.theme = b.dataset.themeTo;
+        keep(); show();
+      }));
+      show();
+
+      // Add a step: the die fills as the steps go on.
+      let steps = 5;
+      const out = document.querySelector(".stepped .sv");
+      const box = document.querySelector(".stepdice");
+      const draw = (from) => {
+        box.innerHTML = diceFor(steps);
+        // The new edge or piece is the last one lit on the last die.
+        if (steps > from) {
+          const d = [...box.querySelectorAll(".zd-die")].pop();
+          [...d.querySelectorAll(".e.on")].pop()?.classList.add("is-new");
+          [...d.querySelectorAll(".s.on")].pop()?.classList.add("is-new");
+        }
+        out.textContent = `${steps} ${steps === 1 ? "step" : "steps"}, ${stepsToDice(steps).length > 1 ? "" : "a "}${diceLabel(stepsToDice(steps))}`;
+      };
+      document.querySelector('[data-act="more"]').addEventListener("click", () => { if (steps < 14) { steps++; draw(steps - 1); } });
+      document.querySelector('[data-act="less"]').addEventListener("click", () => { if (steps > 1) { steps--; draw(steps + 1); } });
+
+      // The roll: Vesk's d8 against the guard's d6.
+      let veskAura = 4;
+      const rollBox = document.querySelector(".vroll");
+      const figs = rollBox.querySelectorAll(".vs figure");
+      const verdict = rollBox.querySelector(".verdict");
+      const why = rollBox.querySelector(".why");
+      const auraBox = rollBox.querySelector(".aura-now");
+      const put = (fig, html) => { fig.querySelector("svg").outerHTML = html; return fig.querySelector("svg"); };
+      rollBox.querySelector('[data-act="roll"]').addEventListener("click", async (e) => {
+        const button = e.currentTarget;
+        button.disabled = true;
+        const mine = rollDie(8), theirs = rollDie(6);
+        if (!still()) {
+          for (let i = 0; i < 7; i++) {
+            put(figs[0], die(8, { face: rollDie(8), cls: "is-spinning" }));
+            put(figs[1], die(6, { own: "them", face: rollDie(6), cls: "is-spinning" }));
+            await new Promise((r) => setTimeout(r, 70));
+          }
+        }
+        const top = mine === 8;
+        const result = mine > theirs ? "beat" : mine === theirs ? "tie" : "under";
+        put(figs[1], die(6, { own: "them", face: theirs, state: result === "beat" ? "low" : "", cls: "is-landed", label: `The guard’s d6 came up ${theirs}` }));
+        await new Promise((r) => setTimeout(r, still() ? 0 : 140));
+        put(figs[0], die(8, { face: mine, state: top ? "top" : result === "under" ? "low" : result === "tie" ? "tie" : "", cls: "is-landed", label: `Vesk’s d8 came up ${mine}` }));
+        verdict.textContent = result === "beat" ? "Beat it" : result === "tie" ? "A tie" : "Under";
+        why.textContent = result === "beat" ? `Her ${mine} beats his ${theirs}, so she’s past him.` : result === "tie" ? `${mine} each. A tie’s his, unless she pays 1 Aura to make it hers.` : `His ${theirs} beats her ${mine}. He’s seen something.`;
+        if (top && veskAura < 5) {
+          veskAura++;
+          auraBox.innerHTML = aura(veskAura, 5);
+          auraBox.querySelectorAll(".zd-chit.on")[veskAura - 1]?.classList.add("is-new");
+          why.textContent += " Her 8’s a top face, so she gets 1 Aura back.";
+        } else if (top) why.textContent += " Her 8’s a top face, and her Aura’s full, so she can give it to a friend.";
+        button.disabled = false;
+      });
+
+      // Hurt: three bars of three, and the third Hurt fills a bar.
+      let filled = 0;
+      let caught = [];
+      const track = document.querySelector(".hd-track");
+      const conf = document.querySelector(".conf-now");
+      const say = document.querySelector("[data-hurt-say]");
+      const confNow = () => Math.max(2, 6 - 2 * caught.length);
+      const drawHurt = (fresh) => {
+        track.innerHTML = hurt({ bars: 3, filled, catches: caught });
+        if (fresh) track.querySelectorAll("i.on")[filled - 1]?.classList.add("is-new");
+        conf.innerHTML = die(confNow(), { label: `Confidence d${confNow()}`, cls: fresh ? "is-landed" : "" });
+      };
+      const CATCHES = ["twisted ankle", "can’t stand the dark", "cracked ribs"];
+      document.querySelector('[data-act="hurt"]').addEventListener("click", () => {
+        if (filled >= 9) { say.textContent = "Every box is full, so the next Hurt is a Blaze."; return; }
+        filled++;
+        const bar = Math.ceil(filled / 3);
+        if (filled % 3 === 0 && caught.length < bar) {
+          caught = [...caught, CATCHES[bar - 1]];
+          say.textContent = `Bar ${bar} is full. She writes ${CATCHES[bar - 1]} in it, and her Confidence drops to d${confNow()}.`;
+        } else say.textContent = `${filled} of 9.`;
+        drawHurt(true);
+      });
+      document.querySelector('[data-act="scene"]').addEventListener("click", () => {
+        filled = caught.length * 3;
+        say.textContent = caught.length ? `The loose boxes clear. The bar with ${caught.join(" and ")} stays full, and Confidence goes back to d6 next scene.` : "Nothing to clear.";
+        drawHurt(false);
+        conf.innerHTML = die(6, { label: "Confidence d6" });
+      });
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  .kit { padding-bottom: 4rem; }
+  .kbar {
+    position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: wrap; gap: 0.5rem 0.75rem; justify-content: space-between;
+    padding: 0.55rem max(16px, env(safe-area-inset-right, 0px)) 0.55rem max(16px, env(safe-area-inset-left, 0px));
+    background: var(--bar-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+  }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 3px; overflow: hidden; }
+  .seg button { min-height: 44px; min-width: 56px; padding: 0 0.75rem; font: 700 0.95rem/1 var(--body); color: var(--muted); background: transparent; border: 0; cursor: pointer; }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--button); color: var(--on-gold); }
+  .seg button:focus-visible, .kbtn:focus-visible, .kjump a:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+  .kpage { max-width: 46rem; margin: 0 auto; padding: 0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px)); }
+  .khead { padding: 1.6rem 0 0.6rem; }
+  .khead h1 { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(2.2rem, 1.6rem + 3vw, 3.2rem); line-height: 1.05; letter-spacing: 0.02em; }
+  .khead .lede { margin: 0.6rem 0 1rem; color: var(--muted); font-size: 1.08rem; }
+  .looks { margin: 0 0 1rem; display: grid; gap: 0.5rem; }
+  .looks div { display: grid; grid-template-columns: 4.6rem 1fr; gap: 0.6rem; align-items: baseline; }
+  .looks dt { font-family: var(--display); font-weight: 700; color: var(--gold-ink); }
+  .looks dd { margin: 0; }
+  .kjump { display: flex; flex-wrap: wrap; gap: 0 1rem; }
+  .kjump a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; text-decoration: none; }
+  .ksec { padding: 1.8rem 0 0.4rem; border-top: 1px solid var(--line-soft); margin-top: 1.4rem; }
+  .ksec h2 { margin: 0 0 0.5rem; font-family: var(--display); font-weight: 600; font-size: 1.55rem; letter-spacing: 0.02em; }
+  .ksec h2 + p, .ksec h3 + p { margin-top: 0; }
+  .ksec * + h2 { margin-top: 2rem; }
+  .ksec h3 { margin: 1.6rem 0 0.5rem; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-ink); }
+  .note { color: var(--muted); font-size: 0.95rem; }
+  .small { font-size: 0.9rem; color: var(--muted); }
+  .vl { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  figure { margin: 0; }
+
+  /* Vesk's play screen */
+  .vphone { border: 1px solid var(--line-soft); border-radius: 18px; padding: 1rem 0.85rem 1rem; background: var(--bg); display: grid; gap: 1rem; max-width: 26rem; }
+  .vhead { display: flex; align-items: center; gap: 0.85rem; }
+  .vhead .zd-crest { --s: 76px; }
+  .vname { margin: 0; font-family: var(--display); font-weight: 700; font-size: 1.9rem; line-height: 1; letter-spacing: 0.03em; }
+  .vtitle { margin: 0.25rem 0 0; font-style: italic; line-height: 1.25; }
+  .vmeta { margin: 0.2rem 0 0; font-size: 0.85rem; color: var(--muted); }
+  .vtrack { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 0.8rem 0.7rem; }
+  .vt { display: grid; gap: 0.35rem; justify-items: start; min-width: 0; }
+  .vt.die-t { justify-items: center; }
+  .vt.die-t .zd-die { --s: 40px; }
+  .vt.wide { flex: 1 1 100%; }
+  .vtiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+  .vtile { display: flex; align-items: center; gap: 0.65rem; min-height: 78px; padding: 0.55rem 0.6rem; border-radius: 4px; min-width: 0; }
+  .vtile > div { min-width: 0; }
+  .vtile .zd-dice { --s: 58px; flex-direction: column; gap: 2px; flex: none; }
+  .vtile .zd-dice .zd-die + .zd-die { --s: 34px; }
+  .tn { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.15rem; line-height: 1.1; }
+  .ts { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
+  [data-kit="lit"] .vtile { background: linear-gradient(160deg, color-mix(in srgb, var(--gold) 7%, var(--surface)), var(--surface)); border: 1px solid var(--line-soft); }
+  [data-kit="struck"] .vtile { background: var(--surface); border: 2px solid var(--line); }
+  [data-kit="struck"] .tn { font-weight: 700; }
+
+  /* The roll */
+  .vroll { padding: 1.2rem 1rem 1.1rem; display: grid; justify-items: center; text-align: center; gap: 0.5rem; max-width: 26rem; }
+  .vs { display: flex; align-items: center; justify-content: center; gap: 0.9rem; }
+  .vs figure { display: grid; justify-items: center; gap: 0.35rem; }
+  .vs figure:first-child .zd-die { --s: 104px; }
+  .vs figure:last-child .zd-die { --s: 72px; }
+  .vs figcaption { font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+  .vsx { font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .verdict { margin: 0.3rem 0 0; font-family: var(--display); font-weight: 700; font-size: 2.3rem; line-height: 1.05; color: var(--gold-ink); letter-spacing: 0.03em; }
+  .why { margin: 0; max-width: 22rem; }
+  .vaura { display: flex; align-items: center; justify-content: center; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.3rem; }
+  .vaura .vl { display: inline; }
+  [data-kit="lit"] .lead { border-radius: 6px; background: radial-gradient(120% 80% at 50% 20%, color-mix(in srgb, var(--gold) 12%, var(--surface)), var(--surface) 70%); border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); box-shadow: 0 0 34px -12px color-mix(in srgb, var(--gold) 55%, transparent); }
+  [data-kit="struck"] .lead { border-radius: 4px; background: var(--surface); border: 3px solid var(--gold); }
+  [data-kit="struck"] .verdict { font-family: var(--body); font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; font-size: 2.1rem; }
+  :root[data-theme="light"] .lead, :root[data-theme="paper"] .lead { box-shadow: none; }
+  :root[data-theme="paper"] .lead, :root[data-theme="paper"] .vtile { background: #fff; }
+
+  .kbtn { min-height: 48px; min-width: 48px; padding: 0 1.2rem; font: 700 1rem/1 var(--body); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 3px; cursor: pointer; }
+  .kbtn.primary { margin-top: 0.4rem; background: var(--button); color: var(--on-gold); border-color: transparent; font-family: var(--display); letter-spacing: 0.04em; padding: 0 2rem; clip-path: var(--chamfer); }
+  .kbtn:disabled { opacity: 0.6; }
+  .kbtns { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.8rem 0 0.4rem; }
+
+  /* Dice */
+  .kladder { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.9rem 0.5rem; margin: 1rem 0; }
+  .kladder figure, .states figure { display: grid; justify-items: center; gap: 0.35rem; text-align: center; }
+  .kladder .zd-die { --s: 72px; }
+  .kladder figcaption, .states figcaption { font-size: 0.88rem; color: var(--muted); line-height: 1.25; }
+  .kladder figcaption b { color: var(--ink); }
+  .kladder.short { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .kladder.short .zd-die { --s: 60px; }
+  .kladder.conf { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .kladder.conf .zd-die { --s: 56px; }
+  .stepper { display: flex; align-items: center; gap: 0.8rem; }
+  .stepper .kbtn { font-size: 1.4rem; padding: 0; width: 52px; }
+  .stepped { font-weight: 700; font-size: 1.1rem; min-width: 9.5rem; text-align: center; }
+  .stepdice { min-height: 96px; display: flex; align-items: center; margin: 0.7rem 0 0.4rem; }
+  .stepdice .zd-dice, .beyond .zd-dice { --s: 84px; gap: 10px; }
+  .states { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.4rem; }
+  .states .zd-die { --s: 58px; }
+  .beyond { margin: 0.6rem 0 1rem; }
+  .today { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; padding: 0.7rem 0.8rem; border: 1px dashed var(--line); border-radius: 3px; }
+  .today .tl { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  .today .old { width: 44px; height: 44px; display: grid; place-items: center; background: var(--gold); color: var(--on-gold); clip-path: var(--hex); font-weight: 700; }
+  .today .small { flex: 1 1 12rem; }
+
+  /* Steps and trackers */
+  .buildup { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 0.7rem; }
+  .buildup ul { list-style: none; margin: 0; padding: 0 0.8rem 0 0; display: grid; gap: 0.45rem; border-right: 1px solid var(--line); }
+  .buildup li { display: flex; align-items: center; gap: 0.6rem; }
+  .buildup .eq { font-size: 1.6rem; color: var(--muted); }
+  .buildup .zd-dice { --s: 72px; }
+  .pairs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.9rem 1rem; }
+  .pairs > div { display: grid; gap: 0.35rem; justify-items: start; }
+  .hurtdemo { display: flex; align-items: flex-end; gap: 1.2rem; flex-wrap: wrap; margin-top: 0.6rem; min-height: 86px; }
+  .hd-conf { display: grid; gap: 0.3rem; justify-items: center; }
+  .hd-conf .zd-die { --s: 48px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 0.8rem; }
+  .teles { display: grid; gap: 1rem; }
+
+  /* Sigils */
+  .crews { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.1rem 0.5rem; margin: 1rem 0; }
+  .crews figure, .sigils figure { display: grid; justify-items: center; gap: 0.4rem; text-align: center; }
+  .crews .zd-crest { --s: 80px; }
+  .crews figcaption { display: grid; line-height: 1.25; }
+  .crews figcaption b { font-family: var(--display); font-size: 1.05rem; }
+  .crews figcaption span { font-size: 0.82rem; color: var(--muted); }
+  .sigils { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.9rem 0.4rem; }
+  .sigils .zd-crest { --s: 58px; }
+  .sigils figcaption { font-size: 0.8rem; color: var(--muted); }
+  .tiny { display: inline-flex; gap: 0.5rem; vertical-align: middle; margin-left: 0.4rem; flex-wrap: wrap; }
+
+  /* In the rules */
+  .rbox { margin: 1rem 0; padding: 1rem 1.1rem; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); }
+  .rhead { display: flex; align-items: center; gap: 0.55rem; padding-bottom: 0.55rem; margin-bottom: 0.6rem; border-bottom: 1px solid var(--line-soft); }
+  .rk { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-ink); }
+  .rn { font-family: var(--display); font-weight: 600; font-size: 1.05rem; }
+  .rbox p { margin: 0.4rem 0; }
+  .zd-cost { white-space: nowrap; font-weight: 700; color: var(--zd-you-ink); }
+  .zd-cost .zd-aura { vertical-align: -0.15em; margin-right: 0.2em; }
+  .zd-cost .zd-chit { width: 15px; }
+
+  @media (max-width: 370px) {
+    .vtile { flex-direction: column; justify-content: center; text-align: center; gap: 0.35rem; padding: 0.6rem 0.4rem; }
+    .vtile .zd-dice { --s: 52px; }
+  }
+  @media (max-width: 380px) {
+    .kladder.conf, .states { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .sigils { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .crews .zd-crest { --s: 70px; }
+    .vtrack { grid-template-columns: auto 1fr; }
+  }
+</style>
