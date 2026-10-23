@@ -307,6 +307,12 @@ export function checksOf(b, B, { changing = false } = {}) {
       if (on.length > 2) out.push({ step: 3, text: `“${p.text.trim()}” is on ${on.length} set actions. A permission goes on two at most, Defend included, so keep it on the two it helps most.` });
     }
   });
+  // An attuned thing's permissions go on two set actions at most, like any permission.
+  b.attuned.forEach((t) => t.perms.forEach((p, j) => {
+    if (!p.text.trim() || !counts(t, j)) return;
+    const on = b.actions.filter((a) => p.on.includes(a));
+    if (on.length > 2) out.push({ step: 4, text: `“${p.text.trim()}” on ${attunedName(t)} is on ${on.length} set actions. A permission goes on two at most, Defend included, so keep it on the two it helps most.` });
+  }));
   // The same permission never counts twice on one set action, even from two Titles.
   for (const a of b.actions) {
     const words = new Map();
@@ -697,7 +703,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
     const say = (l) => (l.kind === "title" ? `Title: <em>${esc(l.label)}</em>` : l.kind === "permission" || l.kind === "attuned" ? `<em>${esc(l.label)}</em>` : esc(l.label));
     // A permission on more than two set actions says so right there.
     const over = (l) => {
-      const n = l.kind === "permission" ? x.actions.filter((a) => lineAt(x, l.ref)?.on.includes(a)).length : 0;
+      const n = l.kind === "permission" || l.kind === "attuned" ? x.actions.filter((a) => lineAt(x, l.ref)?.on.includes(a)).length : 0;
       return n > 2 ? `<p class="cc-warn">It’s on ${n}. A permission goes on two at most.</p>` : "";
     };
     return rows.length ? `<ul class="bd-lines">${rows.map((l) => `<li><p>${say(l)}</p>${toggles(l.ref, l.label)}${over(l)}</li>`).join("")}</ul>` : "";

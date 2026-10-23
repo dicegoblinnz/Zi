@@ -416,7 +416,9 @@ async function play(page, crewId, name) {
 // never below d4. Bram's first Hurt a scene doesn't move his wound die
 // (Unyielding), and against three goblins his Defend counts twice: 7 steps,
 // split into two d6s and a d2, and his Guardian +2 stops the last one.
-// Characters saved with the old Hurt track and Armour open clean.
+// Dorrie Defends against fear, her d6 Confidence counting twice, and a hit
+// while she's Exposed is two Hurts. Characters saved with the old Hurt track
+// and Armour open clean.
 {
   const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
   const { context, page } = await phone();
@@ -500,6 +502,41 @@ async function play(page, crewId, name) {
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await closed();
 
+  // Fear: when Dorrie Defends, her Confidence counts twice by its steps, so
+  // her d6 is 6 steps, split into two d6s against a d10 and a d8.
+  await play(page, "dorrie", "Dorrie");
+  await page.click('.tile[data-act="defence"]');
+  await page.click('#cc-dialog button[data-act="d-against"][data-v="confidence"]');
+  has(await live(), "3 steps, d6", "Dorrie's Confidence letting it ride");
+  await page.click('#cc-dialog button[data-act="d-defend"][data-v="1"]');
+  has(await live(), "6 steps, d12", "Dorrie's Confidence counting twice");
+  await page.click('#cc-dialog button[data-act="step"][data-n="count"][data-d="1"]');
+  has(await live(), "6 steps, 2d6", "Dorrie's Confidence split into two d6s");
+  await page.click('#cc-dialog button[data-act="d-add"][data-v="10"]');
+  await page.click('#cc-dialog button[data-act="d-add"][data-v="8"]');
+  await page.evaluate(() => window.ziCompanion.setDice([5, 2, 4, 6]));
+  await page.click('#cc-dialog button[data-act="d-go"]');
+  await page.waitForSelector("#cc-dialog .res .res-out");
+  same(await outs(), ["Stopped", "Gets through"], "her 5 and 2 against the fear's 4 and 6");
+  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
+  await closed();
+  // Exposed: she's vulnerable to every hit, so one that gets through is two Hurts.
+  await page.click('.cc-stat[data-p="cond"]');
+  await page.selectOption('form[data-form="cond"] select[name="pick"]', "Exposed");
+  await page.click('form[data-form="cond"] button[type="submit"]');
+  await page.click('.tile[data-act="defence"]');
+  same(await page.getAttribute('#cc-dialog button[data-act="d-cond"][data-k="Exposed"]', "aria-pressed"), "false", "Exposed isn't a step against her Defend");
+  await page.click('#cc-dialog button[data-act="d-add"][data-v="8"]');
+  await page.evaluate(() => window.ziCompanion.setDice([1, 7]));
+  await page.click('#cc-dialog button[data-act="d-go"]');
+  await page.waitForSelector("#cc-dialog .res .res-out");
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="hurt"]');
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="vuln"]');
+  has(await page.textContent("#cc-dialog .res-paid"), "Took 2 Hurts", "one hit, two Hurts, while she's Exposed");
+  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
+  await closed();
+  same(await wound(), "d6", "Dorrie's wound die after a hit while she's Exposed");
+
   // Saved before the wound die: an old Hurt track and Armour.
   const vesk = book.crew.find((c) => c.id === "vesk");
   const seen = said(vesk);
@@ -531,7 +568,7 @@ async function play(page, crewId, name) {
   same(await page.$$eval(".tile[data-a] .tile-name", (els) => els.map((e) => e.textContent)), ["Defend", "Fight", "Move", "Sneak", "Study", "Talk"], "an old build gets Defend before Fight");
   same(await tileOf("Defend"), "2 d4", "an old build's chain shirt on her Defend");
   same(await wound(), "d2", "an old build's wound die");
-  console.log("wounds: a rest won and one rolled again, a Blaze into a Scar, Unyielding, Bram's three goblins and two old saves");
+  console.log("wounds: a rest won and one rolled again, a Blaze into a Scar, Unyielding, Bram's three goblins, Dorrie's fear and Exposed, and two old saves");
   await context.close();
 }
 

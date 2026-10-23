@@ -83,6 +83,9 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 - An ally beside the crew: its Challenge die stops one telegraph, it intercepts for free, and the crew intercept for it for 1 Aura.
 - Playing alone, only telegraph the factions you can reach. Two or three are plenty.
 - One-way threads: "it's yours, and theirs toward you is a different thread."
+- On the phone: lines brought into a defence roll for 1 Aura, and conditions, count once, even when you Defend. Broken or used-up kit comes off your set actions until it's mended. The rest roll is the Confidence die on its own, with no conditions. The Guardian's +2 shows on his Defend when he answers a telegraph with it too.
+- Old saved characters on the phone: each old Hurt box is one Hurt on the wound die, old Scars stay as Scars waiting for their Catch to be written, the old Hurt Catches go into Notes in their own words, and the Armour die's dropped (an old build's armour becomes a line on Defend).
+- Not on the phone yet: the Bard's *Hold them*, the Oracle's foresight, and *Poisoned*'s spend (you tap the lines off yourself). An intercept takes the Aura, and you add the dice you took when the telegraphs land.
 
 ## Watch at the table
 
