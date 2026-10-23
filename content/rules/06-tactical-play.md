@@ -120,7 +120,7 @@ Offering a different cost is tactics too. A Hurt puts your wound die up a size, 
 
 ## Tags Are the Battlefield {#s-tags-battlefield}
 
-You never need to ask how hurt something is. Read its tags instead. If a tag's got a [multiplier](#s-tough), like *Armour ×4*, it takes that many wins, and the GM says what's left every time one ticks off.
+You never need to ask how hurt something is. Read its tags instead. If a tag's got a [multiplier](#s-tough), like *Armoured ×4*, it takes that many wins, and the GM says what's left every time one ticks off.
 
 -   **Keeps it going**: how many wins it takes, multipliers and all. Four of them makes for a long night, so look for another way.
 -   **Comes at you**: what its telegraphs can do. Strip *Reach* and its spear stops outranging you. Strip *Commanding* and every one of its followers telegraphs a step smaller.

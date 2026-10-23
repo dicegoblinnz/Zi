@@ -117,7 +117,7 @@ Most of the time you're rolling against something that pushes back: a guard, a l
 
 A wall you need to climb or a book you've got to get through before dawn doesn't fight back, but it's still a **Challenge**, and you still roll its die and have to beat it. A Challenge is a die twice its number, so Challenge 2 is a d4 and Challenge 6 is a d12. Threats have **tags** too, like *Armoured* or *Loyal*, and your wins strip them off. A win can also leave a **condition**, like *Burning*, that carries your die. Both are in [Conflict](#s-challenges).
 
-**Whenever one of your dice rolls its highest number, its top face, you get 1 Aura back.** Every die counts on its own, area dice included. A die your archetype's +2 took to its top face, or past it, doesn't give you Aura. Small dice hit their top face more often, so you'll see players split off a tiny die they don't really need, just to fish for Aura. It still needs an intent, and it still uses one of your splits. That's smart play, and I'm all for it.
+**Whenever one of your dice rolls its highest number, its top face, you get 1 Aura back.** Every die counts on its own, area dice included. A die your archetype's +2 took to its top face, or past it, doesn't give you Aura, and nor does a number an Oracle swapped in. Small dice hit their top face more often, so you'll see players split off a tiny die they don't really need, just to fish for Aura. It still needs an intent, and it still uses one of your splits. That's smart play, and I'm all for it.
 
 ### When a miss matters {#s-miss}
 
@@ -195,7 +195,7 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 **Aura** is your character's luck and flair, the bit of soul they put into a moment when skill alone won't get them there. It pays for the small stuff.
 
 -   **You start every scene full.** Your maximum's **5**, unless something on your sheet changes it. A scene is one place and one problem, and the next one starts when that problem's sorted or the crew moves on. There's no Aura in downtime.
--   **Every top face gives you 1 back**, except a summon's, or a die your archetype's +2 took there.
+-   **Every top face gives you 1 back**, except a summon's, a die your archetype's +2 took there, or a number an Oracle swapped in.
 -   **Already full?** Give it to someone else in the scene. Aura's never wasted while a friend's nearby.
 
 **Spend 1 Aura to:**

@@ -63,7 +63,7 @@ For Catches, use the [Catch ideas](#catches-12), or write your own in the same s
 -   **Found at the bottom of a site**, in the last room, or on someone who got there first and didn't make it out.
 -   **Inherited** from a bond who dies, or from a crewmate who retires and leaves something behind.
 -   **Given by a faction that's with the crew**, one whose threads toward them are good. Handing over something it can't replace is a risk, and it only takes that risk for people it trusts.
--   **Bought from a faction.** If a faction holds the thing as one of its assets and it'll sell, which means it's got no bad thread toward the crew, the crew can spend a spare resource on it, and the thing changes hands. A material can change hands the same way. See [Spare Resources](#s-crew-wealth).
+-   **Bought from a faction.** If a faction holds the thing as one of its assets and it'll sell, which means it isn't hostile to the crew, the crew can spend a spare resource on it, and the thing changes hands. A material can change hands the same way. See [Spare Resources](#s-crew-wealth).
 -   **Won** in a duel, like Captain Marrow's rapier, or at cards.
 
 **Taking one on.** It goes in an attunement slot, so whoever takes it needs a free one, the same as when a friend hands over something they've attuned. It comes at the stage it's at, with its permissions, its Catch and its Burden, and it grows from there like anything else you've attuned.

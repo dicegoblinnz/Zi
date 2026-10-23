@@ -88,7 +88,7 @@ The crew's a faction too, on the same card as the others. It starts small, and i
 **People it relies on** The fence, the landlord, the cousin with a boat.
 :::
 
--   **Power** is muscle, reach, and how many people turn up when the crew calls. It's 1 step, plus 1 for each asset that adds Power, so a new crew's a d4. It's the die the crew rolls when it moves on a faction, plus a step for every Reputation that fits the roll, and its people are threats with a Challenge to match: a d6 Power sends Challenge 3.
+-   **Power** is muscle, reach, and how many people turn up when the crew calls. It's 1 step, plus 1 for each asset that adds Power, so a new crew's a d4. It's the die the crew rolls when it moves on a faction, plus a step for every Reputation and good thread that fits the roll, and its people are threats with a Challenge to match: a d6 Power sends Challenge 3.
 -   **Resources** are permissions for where the crew's money comes from, one line each, like *Odd jobs*. Every asset needs one paying for it, every downtime, and one that isn't paying for anything is spare (see [Spare Resources](#s-crew-wealth)). A purse of gold is still each character's own, a utility item that's worth about a month's wages.
 -   **Assets** are permissions for what the crew can do, one line each, and each one says exactly what it does. An asset that's people who'll turn up when the crew calls, like *Muscle* or *The Dock Lads*, adds Power. One with nothing paying for it stops counting till something does. There are twelve below, or write your own in the same shape.
 -   **Reputations** are what the city says about the crew, one line each: *The ones who beat the forger's court.* A Reputation works like a Title for the crew. It's a step on any crew roll it fits, and the crew earns one every time a Goal's done, and keeps them all.
@@ -123,7 +123,7 @@ Here are twelve to pick from, or write your own in the same shape. Each one need
 | **Friends at Court** | Once a downtime, the crew Influences a faction's face without spending a slot. |
 | **Influential** | Once a downtime, the crew works for a faction without spending a slot, as long as that faction's threads toward the crew aren't mostly bad. |
 | **Rooted** | Once a session, anyone in the crew being chased through the crew's own streets gets away, with no roll. |
-| **A Ship** | It's a holding the crew can sail, and a voyage on it needs no Supplies clock. |
+| **A Ship** | The crew's own ship. A voyage on it needs no Supplies clock, and while nothing's paying for it, it stays tied up in harbour. |
 | **Smugglers' Roads** | A journey on the crew's own roads starts with its first stage already behind it. |
 | **A Workshop** | Once a downtime, mend a broken item without spending a slot. |
 | **Healers** | Once a session, between two scenes, everyone in the crew steps their wound die down a size. |
@@ -133,10 +133,10 @@ Here are twelve to pick from, or write your own in the same shape. Each one need
 
 A **spare resource** is one that isn't paying for an asset. It's spent each downtime, not saved, so each spare buys one of these between one downtime and the next:
 
--   **An extra party slot** this downtime.
+-   **An extra party slot** this downtime. That one's the crew's alone, because a faction can't buy itself a second action.
 -   **A new asset of the crew's own.** It takes a party slot to build (that's Establish), and the spare pays for it from then on.
--   **Another faction's action.** Pay a faction and it spends its own action that downtime where the crew says, rolled with its own dice. A faction with a bad thread toward the crew won't take its money, and the money buys the action, not the win.
--   **An asset or a resource** from a faction that'll sell, which means one with no bad thread toward the crew. It changes hands, and an asset needs a resource paying for it from then on.
+-   **Another faction's action.** Pay a faction and it spends its own action that downtime where the crew says, rolled with its own dice. A faction that's hostile to the crew won't take its money, and the money buys the action, not the win.
+-   **An asset or a resource** from a faction that'll sell, which means one that isn't hostile to the crew. It changes hands, and an asset needs a resource paying for it from then on.
 -   **A tie** won on a downtime roll (see [Rolling in downtime](#s-downtime-rolls)).
 -   **Anything too big for a purse**, in a session: passage for twenty, a house, a magistrate's goodwill. When the money's what does it, it counts as a permission on the roll.
 

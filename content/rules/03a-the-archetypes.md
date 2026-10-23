@@ -104,7 +104,7 @@ The Bard's for nerve. You're the one keeping the crew's Confidence up, and Defen
 
 **Lift them.** Spend your action, and every friend who can hear you goes up a size of [Confidence](#s-confidence), as far as d10. The last push to d12 has to be their own.
 
-**Hold them.** When fear, lies or pressure come at you or friends who can hear you, sing, as your action. It's a [Defend](#s-defend) against fear, lies and pressure for all of you: build your song from the set action that fits, every line on it counts twice, and you can split it as many times as you like. When the telegraphs land, each of your dice stops one it beats, and ties go to you. Anything it doesn't stop still has to get past that person's own Confidence. Anyone who had all of it stopped goes up a size, as if they'd stopped it themselves.
+**Hold them.** When fear, lies or pressure come at you or friends who can hear you, sing, as your action. It's a [Defend](#s-defend) against fear, lies and pressure for all of you: build your song from the set action that fits, every line on it counts twice, and you can split it as many times as you like. When the telegraphs land, each of your dice stops one it beats, and ties go to you. Anything it doesn't stop still has to get past that person's own Confidence, rolled once the same as letting it ride, and that goes for yours too, because you're singing, not Defending. Anyone who had all of it stopped goes up a size, as if they'd stopped it themselves.
 
 :::rule
 **1 Aura:** +2 to one of your song dice.
@@ -211,7 +211,7 @@ A heal reaches one person. Split it to bring their wound down further, or to rea
 :::rule
 **1 Aura:** +2 to one of your dice when you heal.
 
-**1 Resolve:** **Pull them back.** When someone you can reach Blazes, they stay in the scene. They still take the Scar, and their wound die goes to d10, or to their Scars if that's bigger.
+**1 Resolve:** **Pull them back.** When someone you can reach Blazes, they stay in the scene. It costs no action. They still get their extraordinary moment and the choice to die, and if they live, they take the Scar and their wound die goes to d10, or to their Scars if that's bigger.
 :::
 
 :::example[Healing Vesk]

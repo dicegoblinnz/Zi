@@ -16,7 +16,7 @@ A **frame** is a ready-made kind of campaign. It tells you what the world's like
 
 You pick one together at Session Zero, and it's step 1, [the pitch](#session-zero). The GM reads out the pitch for the frame she'd like to run, or for two or three of them, and the table talks it over. A frame hands you most of the other steps as well: the tone, the first factions, the first Goal and the questions to go round the table with. That'll make Session Zero a lot quicker.
 
-[The Steeplands](#steeplands) is the book's own frame, and it's where every example in the earlier chapters happens. The five below are other worlds you can run with the same book. They're all built from the same parts in the same order, so once you've read one you'll know where to find things in the rest, and there's a checklist at the end for building your own. The faction cards are the ones from [Factions](#s-faction-board), written short: the assets that add Power go in brackets after its Power die, any other asset gets its own line saying what it does, and the last line is its threads toward the crew.
+[The Steeplands](#steeplands) is the book's own frame, and it's where every example in the earlier chapters happens. The five below are other worlds you can run with the same book. They're all built from the same parts in the same order, so once you've read one you'll know where to find things in the rest, and there's a checklist at the end for building your own. The faction cards are the ones from [Factions](#s-faction-board), written short: the assets that add Power go in brackets after its Power die, any other asset gets its own line saying what it does, and its threads toward the crew go last, when it's got any. Their threats work like the bestiary's: three telegraphs to pick from, and one die at each of the crew a round, unless a tag says more.
 
 | Frame | What you'll do most | It feels like | Pick it if… |
 | --- | --- | --- | --- |
@@ -599,7 +599,7 @@ Dorrie takes her by the chin. "Look at me, love. Not him, me." She's breaking th
 Start with *Name the thing in the fog*, at d2. Here's what to run alongside it:
 
 -   **A safe house in the Sumps.** When it's done, the crew has a lit house with a good lock where they can keep a witness alive, as a holding.
--   **Read the Lamplighters' ledgers.** When it's done, the crew gets a crew asset, *The Ledgers*: once a downtime, ask the GM where the fog fed last, and get a straight answer.
+-   **Read the Lamplighters' ledgers.** When it's done, the crew gets a crew asset, *Copies of the Ledgers*: once a downtime, ask the GM where the fog fed last, and get a straight answer. The Guild keeps *The Ledgers* itself, and the copies need a resource paying for them, like any asset.
 -   **Get the Watch off our backs.** When it's done, the Night Watch writes a good thread toward the crew, and Inspector Graves starts telling you what he left out of his reports.
 
 ### The first job {#the-first-job-2}
@@ -794,7 +794,7 @@ At supper the Dowager telegraphs: "And how is your mother, dear? Still taking in
 
 Start with *Choose the next monarch*, at d2. Here's what to run alongside it:
 
--   **A friend in the sickroom.** When it's done, one of the Queen's women is the crew's, and they get a crew asset, *An Ear in the Sickroom*: once a downtime, ask the GM one question about the Queen, and get a straight answer.
+-   **A friend in the sickroom.** When it's done, one of the Queen's women is the crew's, and they get a crew asset, *An Ear in the Sickroom*: once a downtime, ask the GM one question about the Queen, and get a straight answer. It needs a resource paying for it, like any asset.
 -   **Break the Marchetti marriage.** When it's done, the wedding's off, and House Marchetti's agenda goes with it.
 -   **The abbey's registers.** When it's done, the crew has proof of the forged pedigree, and Duke Veraine's secret is theirs to use.
 

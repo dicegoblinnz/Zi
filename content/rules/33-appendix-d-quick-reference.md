@@ -83,7 +83,7 @@ Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer
 
 -   **Answer:** your action against its dice, built from what fits how you stop it, and friends can join in. Win and it's stopped. Lose and it lands at once, with no defence roll. A tie's a loss unless you pay 1 Aura. You can answer for a friend, and if you stepped in the way and lose, it lands on you.
 -   **Let it ride:** whatever you don't answer lands at the end of the round. Roll your Defend once against the blows and your Confidence once against the fear, lies and pressure, and each die stops one telegraph it beats or ties. Everything else gets through. A defence past 6 steps is more than one die, and each one stops one.
--   **Defend:** your action. When they land, every line on your Defend counts twice, and so does your Confidence, and you can split each of them once. More dice stop more.
+-   **Defend:** your action. When they land, every line on your Defend counts twice, and so does your Confidence, and you can split each of them once. A condition's step still counts once. More dice stop more.
 -   **Intercept:** 1 Aura and no action. Take the dice aimed at a friend within your stride, and your own defence handles them. A Guardian does it free, for every friend within his stride.
 -   **One die at each of you** from each threat, unless a tag like *Flurry* says it can do more.
 -   **Running doesn't dodge.** One aimed at you lands wherever you've gone. Only one aimed at a place can be walked out of.
@@ -97,7 +97,7 @@ When it's fear, lies or pressure that got through, you choose instead (see [Conf
 
 ## Confidence {#s-qr-confidence}
 
--   **Every scene starts on d6.** Clothes that fit the scene start you a size up, and so do the Boon and traits that say so. The Burden starts you a size down. At the end of the scene you rest with it (see [Wounds](#s-qr-hurt)), then it goes back to d6, and anything that should last is a Catch.
+-   **Every scene starts on d6.** Clothes that fit the scene start you a size up, and so do the Boon and traits that say so. The Burden starts you a size down. At the end of the scene you rest with it (see [Wounds](#s-qr-hurt)), then it goes back to d6, and anything that should last is a Hurt.
 -   **Fear is a telegraph.** The GM telegraphs fear, lies and pressure at your Confidence like any attack, and you answer it, Defend or let it ride.
 -   **Up a size:** stop all of it that came at you, or take a threat down. If nothing came at you, it doesn't move. Taking a breath brings it up a size too, as far as d6.
 -   **When one gets through,** you choose, for each: let it shake you (down a size) · bury it (take a Hurt) · hold your ground (1 Resolve, and neither happens).
@@ -116,10 +116,10 @@ When it's fear, lies or pressure that got through, you choose instead (see [Conf
 ## Threats {#s-qr-threats}
 
 -   Challenge 2 (d4) nuisance · 3 (d6) a real fight · 4 (d8) capable · 5 (d10) serious · 6 (d12) the top. It defends and telegraphs with its Challenge die, and that never steps down unless a tag says so. A tag only changes dice when it says so.
--   Keeps-it-going tags are its health, and a multiplier, like *Armour ×4*, is how many wins one takes. Mook: none or one. Named: two. Boss: three or more, multipliers on the big ones, and a weak point. *(first)* means nothing under it can be stripped till it's gone. *Layered* (special encounters only): one die for every one left, rolled the first time it's attacked in a round, and the best one stands.
+-   Keeps-it-going tags are its health, and a multiplier, like *Armoured ×4*, is how many wins one takes. Mook: none or one. Named: two. Boss: three or more, multipliers on the big ones, and a weak point. *(first)* means nothing under it can be stripped till it's gone. *Layered* (special encounters only): one die for every one left, rolled the first time it's attacked in a round, and the best one stands.
 -   A win: strip a tag, or tick one off its multiplier · take it down · a condition · move it · learn something · stop a telegraph. An opening: one win ends a Mook or Named, and a Boss loses two whole tags (only its weak point ends it).
 -   **Vulnerabilities:** each one that fits a win that strips a tag or causes a Hurt adds one more tick. The same one never counts twice. *Prone* and *Exposed* are vulnerabilities, and a hidden one's a hidden tag.
--   **Forms:** when a form's last keeps-it-going tag goes, it changes. Its multipliers refill, and it takes 3 to 5 tags from its Forms list. Its weak point ends it in any form.
+-   **Forms:** when a form's last keeps-it-going tag goes, it changes. It takes 3 to 5 tags from its Forms list, and its multipliers come back on whichever of them matter most. Its weak point ends it in any form.
 -   **Round budget:** about 5 steps of telegraphs a round for each player, and one die at each of the crew from each threat. A Breather's about half, and Hard's about half again. A telegraph costs its die's steps, once for each target.
 -   **Threat budget:** 10 a character with two Titles, about 12 or 13 with three, 15 with four, 17 or 18 with five and 20 with six, then it's the GM's call. It sizes multipliers and how long a scene runs.
 
@@ -217,7 +217,7 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 -   Every asset needs a resource paying for it, and one that isn't paid for stops counting. A spare resource hires another faction's action, buys an asset or goes in a trade.
 -   One action a downtime, telegraphed at the start: Destroy · Undermine · Obstruct · Influence · Acquire · Establish, or work its agenda (past d12, it happens). Up to three mini factions each, with two outcomes apiece.
 -   The crew's party slots: the six outcomes, Set back its agenda, or Work for it. Roll the crew's Power, plus Reputations and good threads that fit, or one character's own permissions (1 step for the slot, plus what fits). Two slots count everything twice. A bigger faction's Power takes both slots.
--   A good thread's a step, a bad one's a vulnerability, and a strained one doesn't count.
+-   In its bonds, a good thread's a step, a bad one's a vulnerability, and a strained one doesn't count. Its threads toward the crew say how it sees them: mostly good is friendly, mostly bad is hostile, and anything else does business.
 
 ## The session {#s-qr-session}
 

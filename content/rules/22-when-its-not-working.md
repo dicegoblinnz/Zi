@@ -19,7 +19,7 @@ Try ignoring it first: play without it for a session.
 ## When Fights Feel Too Easy, or Too Hard {#when-fights-feel-too-easy-or-too-hard}
 
 -   **Too easy?** Check the budgets: are you actually spending the [round budget](#s-budget), and are the boss's multipliers sized to the [threat budget](#s-threat-budget)? Count the dice too: each of the crew's defence dice stops one, so one die at each of them is a fair round, and two at each, from two threats, is a hard one. Are your telegraphs aimed at stakes and clocks, or only at the crew's Defend? Add a stake the crew can't ignore.
--   **Too hard?** Run the next scene as a breather. Give the boss an obvious weak point. Make sure every threat that matters has something driving it, so fighting isn't the only way through. Check you're not stacking [vulnerabilities](#s-vulnerable) on the crew, because each one makes a hit two Hurts.
+-   **Too hard?** Run the next scene as a breather. Give the boss an obvious weak point. Make sure every threat that matters has something driving it, so fighting isn't the only way through. Check you're not stacking [vulnerabilities](#s-vulnerable) on the crew, because each one adds a Hurt to every hit it fits.
 -   **Too long?** Count the keeps-it-going tags and their multipliers. Four on every threat is a slog, and so is a multiplier on everything. Cut them, or make them findable.
 
 ## When a Player Is Checked Out {#when-a-player-is-checked-out}

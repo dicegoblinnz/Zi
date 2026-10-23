@@ -91,7 +91,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | Lever | Where it comes from |
 | --- | --- |
 | **Your defence** | Your Defend set action against blows, and your Confidence against fear, lies and pressure. Let a telegraph ride and you roll each of them once when the round ends: every die stops one telegraph it beats or ties, and everything else gets through. A defence past 6 steps is more than one die. Ties go to you. |
-| **More dice to stop with** | Defend (your action): every line on your Defend counts twice, and so does your Confidence, and you can split each of them once. The Bard's song does the same against fear for everyone who can hear. |
+| **More dice to stop with** | Defend (your action): every line on your Defend counts twice, and so does your Confidence, and you can split each of them once. A condition's step still counts once. The Bard's song counts its lines twice against fear for everyone who can hear, and splits as often as it likes. |
 | **A bigger Defend** | Every line on it: each piece of plain armour, a shield, and a Title or permission that fits (a permission's on two set actions at most). *Warded*, *Covered* (condition). *Steady Hands*, when you've had a moment to prepare. |
 | **Defend down** | Spending *Poisoned*: a d2 till the round ends. A piece of armour broken: it's a line gone till it's mended. |
 | **Take it for a friend** | Intercept: 1 Aura and no action, and any or all of the dice aimed at a friend within your stride come at you instead, for your own defence to handle. The Guardian's, free, for every friend within his stride, and 1 Aura is +2 on one of his Defend or Confidence dice. A Guardian who's a Teleporter as well reaches every friend within 10 units. A summon intercepts for free, and so do the GM's people. Answer for a friend, standing in the way. *Covered* (condition). The Intercept Burden: you can't. |
@@ -115,7 +115,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **Never below d2** | Anything that'd take it lower is a Hurt instead, or 1 Resolve to hold your ground. |
 | **Fired up** | At d12, and it never goes higher. Cash it in for an extra action, or to bring your wound die down a size, and it drops back to d6. |
 | **Shaken** | At d2. You won't go at a threat, in a fight or face to face, unless you spend 1 Resolve each time. |
-| **Back to d6** | The end of every scene, once you've rested with it. Anything that should last is a Catch. |
+| **Back to d6** | The end of every scene, once you've rested with it. Anything that should last is a Hurt. |
 
 ## Wounds and Healing {#s-levers-hurt}
 
@@ -139,7 +139,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **One roll to beat** | The first time it's attacked in a round, it rolls its Challenge, and everyone who goes at it that round has to beat that roll. A *Layered* threat rolls its dice, and its best one stands. |
 | **Strip a tag** | A win aimed at it, or one tick off its multiplier. Spending *Burning*, *Bleeding* or *Poisoned*. An *Acid vial*. |
 | **End it in one win** | An opening: its weak point, helpless, or getting around everything that keeps it going. A Boss only falls to its weak point. Any other opening strips two whole tags, multipliers and all. |
-| **Tick down a multiplier** | Every win against a tag with a multiplier, like *Armour ×4*, ticks one off, and the GM says what's left. A condition that would strip a tag ticks one off instead. |
+| **Tick down a multiplier** | Every win against a tag with a multiplier, like *Armoured ×4*, ticks one off, and the GM says what's left. A condition that would strip a tag ticks one off instead. |
 | **Hit harder** | A vulnerability: every one that fits a win that strips a tag or causes a Hurt adds one more tick. *Prone*, *Exposed* (condition). The Warrior's *Opened* (1 Resolve). A Scholar's truth with *Find the flaw* (1 Resolve). Hidden ones are hidden tags, so Study finds them. |
 | **Find a hidden tag** | Study. *Quick Study*, *Predator's Eye*. *Sighted*, *Spotted* (condition). |
 | **Turn a tag against it** | Bring it into your roll (1 Aura). |
@@ -192,7 +192,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **More on an attuned thing** | A downtime slot for every new permission, and a material for every new stage: Awakened (1, or 2 with a Catch), Tempered (2, or 4 with a Burden), Perfected (3, or 6 with a Burden and a Catch). |
 | **A new soul** | A Summoner catches one when a creature falls, and puts it into their summoning attunement in downtime. |
 | **An extra slot** | *Tireless* (once a downtime). |
-| **A bigger crew** | The Party Goal's done: a new Reputation and two picks (a new resource, a new asset, a new holding). The crew takes something big, or a faction it struck falls: one pick. A job that says so. Rebuild, back to its best. |
+| **A bigger crew** | The Party Goal's done: a new Reputation and two picks (a new resource, a new asset, a new holding). The crew takes something big, or a faction it's been fighting falls: one pick. A big job that says so pays a resource. Rebuild with a party slot: an asset or a resource the crew's lost, built back. |
 
 ### Boons and Burdens {#s-levers-boons}
 
@@ -209,7 +209,7 @@ Every Title is an archetype, and every archetype has a mechanic only it can do, 
 -   **The same archetype twice.** Its +2 becomes +3, three times it's +4, and so on.
 -   **1 Resolve, something big.** Every archetype has a Resolve spend of its own, from the Guardian shrugging off a hit to the Warrior opening a target up. Each one's in its archetype's section.
 
-Bram's Defending, so he's got two d6s and a d2, and a d10 comes at him. It lands on 5, and his best d6 comes up 4, so he spends 1 Aura to make the 4 a 6, and it's stopped. That's the d6's top face, but the +2 got it there, so there's no Aura back. If he'd taken Guardian twice, it'd be a 7.
+Bram's Defending, and a d10 comes at him. The three lines on his Defend count twice, so it's 7 steps, a d12 and a d2. The d10 lands on 9, and his d12 comes up 7, so he spends 1 Aura to make the 7 a 9. That's a tie, and ties go to him, so it's stopped. If he'd taken Guardian twice, it'd be a 10.
 
 ## Writing Your Own {#s-levers-writing}
 

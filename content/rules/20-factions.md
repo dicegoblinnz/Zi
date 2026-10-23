@@ -16,7 +16,7 @@ A **faction** is any power bigger than one person, like a noble house, a guild, 
 
 ## What a Faction Is {#s-faction-board}
 
-You write a faction once, and from then on its card does the work. Take your time building it, the way you would a character, because after that it runs on one action a downtime. A faction's card has its name and eight lines:
+You write a faction once, and from then on its card does the work. Take your time building it, the way you would a character, because after that it runs on one action a downtime. A faction's card has its name and nine lines:
 
 -   **Power:** its die. It's **1 step, plus 1 for each asset that adds Power**, so one army makes a d4 and five make a d12. It's what the faction rolls when it acts and what it defends with. Leave out an asset that doesn't fit what it's doing, the same as a line on a set action: a navy doesn't help in the mountains. Its best people are threats with a Challenge to match, so a d8 Power sends Challenge 4, and its face can go higher than that.
 -   **Resources:** permissions for where its money comes from, one line each, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*.
@@ -26,6 +26,7 @@ You write a faction once, and from then on its card does the work. Take your tim
 -   **Face:** the person the crew deals with, written as a threat.
 -   **Secret:** one hidden tag, and usually its weakness.
 -   **Bonds:** Public Sentiment, Morale and Loyalty, with their threads (see [Bonds](#s-faction-bonds)).
+-   **Threads:** its threads toward the crew, and toward other factions when they matter (see [How a Faction Sees the Crew](#s-standing)).
 
 :::sheet[The Vane Estate]
 **Power** d12: 1 step, plus *Household Guard*, *Hired Swords*, *Friends in the Courts*, *The Old Name* and *Agents Abroad*.
@@ -43,6 +44,8 @@ You write a faction once, and from then on its card does the work. Take your tim
 **Secret** *The Inkwell Is the Binding.* Break it and every soul in the collection goes free.
 
 **Bonds** Public Sentiment: *The Vanes have owned this city for three hundred years* (good). Morale: none yet. Loyalty: *The guard's been on the same pay for twenty years* (bad).
+
+**Threads** None toward the crew yet.
 :::
 
 That's six assets and seven resources, so everything's paid for and one resource is spare. Five of the assets add Power, so its Power's 1 step plus five, a d12.
@@ -64,7 +67,7 @@ The same card works at any size: factions inside a city, cities inside a country
 
 -   **An asset with nothing paying for it stops counting** till something does: no Power and no effect. The faction picks which one goes unpaid. That's how the crew pulls a faction down: burn the mine, and the army it paid for stops counting.
 -   **A spare resource**, one that isn't paying for anything, is spent each downtime, not saved. It can **hire another faction**, which spends its own action that downtime where the payer says, rolled with its own dice, and the payer keeps its action too. It can **pay for a new asset**, or it can go into a trade.
--   **Hiring needs a willing faction.** A faction with a bad thread toward the payer won't take its money, and the money buys the action, not the win.
+-   **Hiring needs a willing faction.** A faction that's hostile to the payer, with mostly bad threads toward it, won't take its money, and the money buys the action, not the win.
 -   **Building an asset** is Establish: the faction's action, and a spare resource to pay for it. **Dismantling** one frees its resource. **Selling** one moves it to the buyer, for whatever they agree. Trades between factions are agreed in the story and cost no action.
 -   **Big deals** can be paid over a few downtimes or shipped along a trade route, and then they can be stolen or stopped on the way. Only bother when the crew's involved or it makes a story.
 
@@ -174,6 +177,8 @@ Every downtime, each core faction takes **one action**, and so does each mini fa
 2.  **The crew spends its slots,** and it can move against a faction before that faction's action lands.
 3.  **Then the actions land.** Roll them.
 
+**Hiring comes first.** Before she telegraphs, the crew says who it's paying with a spare, and she decides who the factions are paying. A hired faction's telegraph is the job it was paid for, so once the actions are on the table, nobody can buy one off.
+
 -   **Its roll** is its Power, plus a step for each good thread that fits (see [Bonds](#s-faction-bonds)). One action gives it **one split**, so it can go for two things in the same job, and each die's its own outcome: take the shipment, and keep its name out of it. One can land and the other miss.
 -   **What it rolls against** is another faction's Power, rolled once the first time anyone goes at it that downtime, so everyone who goes at it after that has to beat the same roll, the same as a threat. Or it's the die of whatever it's after: its agenda, a stake, a person. Ties go to the defender, and a die it's climbing counts as the defender. If it loses, nothing happens this downtime, and it's a little angrier about it.
 -   **An action is one of the [six outcomes](#s-faction-outcomes), or work on its agenda**: its Power against the agenda's die, and beat it and it climbs one. Writing a new agenda takes its action too, and a faction can have two at once, never more. Coming for the crew takes its action as well (see [When a Faction Comes for the Crew](#s-faction-comes)).
@@ -191,7 +196,7 @@ If you don't know what a faction does, roll a d6:
 | 3 | Establishes, or writes a new agenda if it's only got one. |
 | 4 | Destroys or Undermines its worst rival. |
 | 5 | Comes for the crew. |
-| 6 | Spends a spare to hire someone. If it hasn't got a spare, it Acquires instead. |
+| 6 | Spends a spare to hire someone, and roll again for its own action. If it hasn't got a spare, it Acquires instead. |
 
 ### The Six Outcomes {#s-faction-outcomes}
 
@@ -232,6 +237,8 @@ A real service writes a good thread: a job done well, a gift, a favour returned,
 
 Most factions start with none. If the crew's already crossed one, write that as a bad thread.
 
+These threads aren't in its bonds. A good one's a step for the crew on any roll it fits, and a bad one doesn't add a tick to anything.
+
 :::example
 The Harbour Guild's only thread toward the crew is *They ask too many questions on our docks*, so it's hostile. Then the crew brings its ledgers up from a sunk barge, and it writes *They brought our ledgers up from the sunk barge.* That's one of each, so now it does business with them.
 :::
@@ -240,7 +247,7 @@ The Harbour Guild's only thread toward the crew is *They ask too many questions 
 
 When a faction's action is coming for the crew, roll a d12 as you telegraph it, so the crew knows what's coming. A faction whose threads toward the crew are mostly bad rolls on the first table, and one whose threads are mostly good rolls on the second. One with none, or as many good as bad, rolls a d2 first: on a 1 it uses the first table, and on a 2 it uses the second.
 
-It doesn't roll against the crew. Whatever comes up happens, unless the crew Obstructs it.
+It doesn't roll against the crew. Whatever comes up happens, unless the crew Obstructs it. When a faction's been paid to come for the crew, roll on the table for the payer's threads toward the crew, not its own.
 
 | d12 | Mostly bad | Mostly good |
 | --- | --- | --- |
@@ -251,7 +258,7 @@ It doesn't roll against the crew. Whatever comes up happens, unless the crew Obs
 | 5 | Its face comes to talk: a warning, a threat, an offer. | An introduction to someone useful. |
 | 6 | It hires someone: a Named threat is on the crew's trail. | Shelter: a safehouse, for as long as the crew needs it. |
 | 7 | It tells the law. | A secret about a rival faction: one of its hidden tags. |
-| 8 | It squeezes their money: one of the crew's resources is taken or stops paying, and prices double next session. | It settles a debt someone in the crew owed. |
+| 8 | It squeezes their money: it takes one of the crew's resources, and prices double next session. | It settles a debt someone in the crew owed. |
 | 9 | It spreads a story. The crew's name gets worse on every street it reaches. | Muscle: its people join in at the crew's next big scene. |
 | 10 | It takes someone on a bond. | An invitation: a party, a council, a wedding. |
 | 11 | It sets a trap. The next job isn't what it looks like. | It asks the crew to choose: us, or them. |

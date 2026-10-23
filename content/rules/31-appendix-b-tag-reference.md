@@ -62,7 +62,7 @@ These tags say what its telegraphs can do to you.
 
 These tags are its health. Each one's a reason it's still standing, and when you strip them all, it falls. A few, like *Crumbling*, *Forms* and *Layered*, change how the rest works.
 
-Any of them can carry a **multiplier** when it should take more than one win, like *Natural Armour ×6* or *Beloved ×3*. Every win ticks one off, and the GM says what's left every time, so nobody has to guess. A named one only ticks to what fits it: blades on the hide, or turning the crowd. Marked *(first)*, nothing under it can be stripped till it's gone. A spent condition that would strip a tag, like *Burning*, ticks one off, and *Piercing* still gets through *Armoured*, whatever its multiplier. An opening takes a whole tag, multiplier and all, and a weak point still ends the threat at once. There's more in [Multipliers](#s-tough).
+Any of them can carry a **multiplier** when it should take more than one win, like *Natural Armour ×6* or *Beloved ×3*. Every win ticks one off, and the GM says what's left every time, so nobody has to guess. A named one only ticks to what fits it: blades on the hide, or turning the crowd. Marked *(first)*, nothing under it can be stripped till it's gone. A spent condition that would strip a tag, like *Burning*, ticks one off, and *Piercing* still gets through *Armoured*, whatever its multiplier. An opening takes a whole tag, multiplier and all (two on a Boss), and a weak point still ends the threat at once. There's more in [Multipliers](#s-tough).
 
 | Tag | How it plays |
 | --- | --- |
@@ -84,7 +84,7 @@ Any of them can carry a **multiplier** when it should take more than one win, li
 | **Feeds** | It grows stronger on something: blood, fear, grief, attention. Starve it and it weakens. |
 | **Flies** | It's above you. You can't reach it with a sword. Bows, nets, bait and roofs can. |
 | **Forgets You** | Look away and it forgets you were there. So do you. Write things down. |
-| **Forms** | Beat one shape and it turns into another, once for *Forms (2)* and twice for *Forms (3)*. When the last tag keeping a form going is stripped, it changes instead of falling: its multipliers fill back up, and the GM picks 3 to 5 tags for the new shape from its Forms list (more for a bigger change) and tells you what it's becoming. Tags you've already stripped can come back. *Forms* itself is never stripped, and its last form falls like anything else. Its weak point ends it in any shape, so Study it early. |
+| **Forms** | Beat one shape and it turns into another, once for *Forms (2)* and twice for *Forms (3)*. When the last tag keeping a form going is stripped, it changes instead of falling: the GM picks 3 to 5 tags for the new shape from its Forms list (more for a bigger change), puts its multipliers back on whichever of them matter most, and tells you what it's becoming. Tags you've already stripped can come back. *Forms* itself is never stripped, and its last form falls like anything else. Its weak point ends it in any shape, so Study it early. |
 | **Fortified** | Walls, a gate, a good position. Getting to it is the fight. Get inside and it's ordinary. |
 | **Holds the Line** | It doesn't step back. People behind it are safe while it stands. Go around, not through. |
 | **Hollow** | There's nothing inside. Hurting it does little. What moves it is somewhere else. |
@@ -123,12 +123,12 @@ A vulnerability makes a hit hurt more. When a win strips one of its tags or caus
 | --- | --- |
 | **Vulnerable to fire** | Fire finds it. Every burning hit that wins ticks once more. |
 | **Dry as Tinder** | It goes up like kindling. With *Vulnerable to fire* as well, a burning hit ticks twice more. |
-| **Brittle** | Hammers, falls and a good shove crack it. Blades don't do anything special. |
+| **Brittle** | Hammers and hard falls crack it. Blades don't do anything special. |
 | **Thin-Skinned** | Blades bite deep. Hammers just bruise it. |
-| **Old Wound** | Something never healed right. Go for that side, and it hurts twice. |
+| **Bad Side** | An old wound never healed right. A hit on that side ticks once more. |
 | **Silver-Shy** | Silver burns it. A silver blade, a coin, a ring on a fist. |
-| **Off Balance** | It goes over easily, and once it's down, it's in trouble. |
-| **Proud** | Shame works on it. An insult in front of its people ticks once more. |
+| **Soft Underbelly** | Its belly's bare. Get underneath it, and every hit there ticks once more. |
+| **Easily Shamed** | Shame works on it. A win that shames it in front of its people ticks once more. |
 | **Holy Ground** | On holy ground, everything hurts it more. Lure it there. |
 | **Opened** | The Warrior's, for 1 Resolve: every hit on it ticks once more till the round ends. |
 
@@ -246,7 +246,7 @@ These tags go on a stake, for whatever's in the way. Every win strips one, and w
 
 ## Faction assets {#faction-strength}
 
-These are what make a faction strong. Each one's an asset, so it needs a resource paying for it, and a Destroy ticks it off (see [Resources and Assets](#s-wealth)). Most add a step to its Power, and a relic does one thing instead, which its card spells out. A rich faction doesn't get an asset for it: it's got more resources, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*.
+These are what make a faction strong. Each one's an asset, so it needs a resource paying for it, and a Destroy ticks it off (see [Resources and Assets](#s-wealth)). Most add a step to its Power, and a relic does one thing instead, which its card spells out. A rich faction doesn't get an asset for it: it's got more resources, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*. The crew's own assets are in [The Party Sheet](#s-crew-tags), and they do what they say there, even when they share a name with one of these.
 
 | Asset | How it plays |
 | --- | --- |

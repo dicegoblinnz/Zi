@@ -58,7 +58,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Fear, lies and pressure](#s-confidence)** | Telegraphs at your Confidence. Answer them, Defend or let them ride. For each one that gets through, you choose: let it shake you and drop a size, bury it and take a Hurt, or hold your ground for 1 Resolve. |
 | **[Fired up](#s-confidence)** | Confidence at d12. Cash it in for an extra action or to bring your wound die down a size, and it drops back to d6. |
 | **[Foresight](#a-oracle)** | The Oracle's: the numbers it rolled, swapped into anyone's dice before the round ends, as long as each fits the die. |
-| **[Forms](#s-unique-threats)** | A threat with two or more forms. When the last tag keeping a form going is stripped, it changes: its multipliers refill and it takes new tags. |
+| **[Forms](#s-unique-threats)** | A threat with two or more forms. When the last tag keeping a form going is stripped, it changes: it takes new tags, and its multipliers come back on the ones that matter most. |
 | **[Frame](#frames)** | A ready-made kind of campaign: a world, a tone, a board of factions and a first job. |
 | **[Gap](#chases)** | In a chase, the distance between you and what's after you. Past d2, caught. Past d12, away. |
 | **[GM move](#s-gm-moves)** | Something the world does when everyone looks at the GM. Usually a telegraph outside a round. |
@@ -90,7 +90,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Mini faction](#s-mini-factions)** | A faction another one made, up to three each. It does two of the six outcomes and nothing else, and its parent hands it one resource and one asset to start. |
 | **[Mook](#s-staying)** | Challenge 2 or 3, with none or one tag keeping it going. Falls to one good win. |
 | **[Move action](#s-movement)** | An action that rolls extra squares past your stride. Its dice add. |
-| **[Multiplier](#s-tough)** | How many wins a tag takes to strip, like *Armour ×4*. Every win ticks one off. |
+| **[Multiplier](#s-tough)** | How many wins a tag takes to strip, like *Armoured ×4*. Every win ticks one off. |
 | **[Named](#s-staying)** | Challenge 4 or 5, with two tags keeping it going. |
 | **[Odds](#s-oracle-odds)** | Before an Oracle roll, say how likely it is. Likely: two Boon dice, keep the higher. Unlikely: keep the lower. |
 | **[Opening](#s-win)** | A way to end a Mook or Named threat in one win: its weak point, helplessness, or getting around everything that keeps it going. A Boss only falls to its weak point. Any other opening strips two whole tags. |

@@ -188,9 +188,9 @@ The crew grows too. Here are the same twenty sessions, off the party sheet.
 
 **Session 13: The Candle Street Lads.** *The chandlery's trade* isn't paying for anything yet, so a party slot puts it to work, and the crew Establishes *The Candle Street Lads* (+1 Power). Its Power's a d8.
 
-**Session 14: One slot is enough now.** The Quiet Order's Power is a d8, the same as the crew's, so a single party slot can go at its Power. The crew asks its *Informants* where the Order's money comes from, and the GM tells them straight: its *Funeral Fees*. *Informants* only answers questions, so to Acquire them it's the crew's Power on its own, a d8, against the Order's d8. The crew rolls 7 and the Order rolls 4. *Funeral Fees* comes off the Order's card and onto the crew's, and since nothing needs it, it's spare. The Order had a resource to spare, so its Power stays a d8, and it writes a bad thread toward the crew: *They took our funeral fees*.
+**Session 14: One slot is enough now.** The Quiet Order's Power is a d8, the same as the crew's, so a single party slot can go at its Power. The crew asks its *Informants* where the Order's money comes from, and the GM tells them straight: its *Funerals*. *Informants* only answers questions, so to Acquire them it's the crew's Power on its own, a d8, against the Order's d8. The crew rolls 7 and the Order rolls 4. *Funerals* comes off the Order's card and onto the crew's, and since nothing needs it, it's spare. The Order had a resource to spare, so its Power stays a d8, and it writes a bad thread toward the crew: *They took our funeral fees*.
 
-**Session 15: A job that pays.** The crew puts a party slot into working for the Harbour Guild, and the Guild gives them a big job: get its ledgers back from a sunk barge. The GM says up front that a job that big pays a resource. The crew does it, the Guild hands over *Salvage Rights*, one it had spare, and it writes a good thread toward the crew: *They brought our ledgers up*.
+**Session 15: A job that pays.** The crew puts a party slot into working for the Harbour Guild, and the Guild gives them a big job: get its ledgers back from a sunk barge. The GM says up front that a job that big pays a resource. The crew does it, the Guild hands over *Shipping Shares*, one it had spare, and it writes a good thread toward the crew: *They brought our ledgers up*.
 
 **Session 18: The third Goal's done.** *Own the Low Market* climbs past d12. The crew earns *Nobody sells in the Low Market without the Lamplighters' say-so*, and picks two: a new asset, *Rooted*, with one of its spares paying for it, and a new resource, *Stall fees in the Low Market*.
 
@@ -201,7 +201,7 @@ The crew grows too. Here are the same twenty sessions, off the party sheet.
 
 **Power** d8: 1 step, plus *Four or five of us and a back room*, *Muscle* and *The Candle Street Lads*.
 
-**Resources (7)** *Odd jobs* · *Copying for the court* · *Salt Contracts* · *The chandlery's trade* · *Funeral Fees* · *Salvage Rights* · *Stall fees in the Low Market*.
+**Resources (7)** *Odd jobs* · *Copying for the court* · *Salt Contracts* · *The chandlery's trade* · *Funerals* · *Shipping Shares* · *Stall fees in the Low Market*.
 
 **Assets (5)** *Four or five of us and a back room* (+1 Power) · *Informants* · *Muscle* (+1 Power) · *The Candle Street Lads* (+1 Power) · *Rooted*.
 

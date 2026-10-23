@@ -67,7 +67,7 @@ Grid or theatre of the mind? Zi'Dara's built for a grid, but it plays fine witho
 Players who've played other roleplaying games bring habits with them, and most of them are good ones. Spend five minutes on what's different here:
 
 -   **Nobody goes first.** The GM shows you everything that's coming, then the crew acts in any order. Talk it through.
--   **Most threats don't have hit points.** They have tags, and every win strips one, so look for the weak point instead of grinding. The big ones carry multipliers, like *Armour ×4*, which takes four wins.
+-   **Most threats don't have hit points.** They have tags, and every win strips one, so look for the weak point instead of grinding. The big ones carry multipliers, like *Armoured ×4*, which takes four wins.
 -   **You roll their dice too.** The GM almost never rolls, so pick up the threat's die in another colour.
 
 There's more in [Welcome to Zi'Dara](#s-from-dnd).

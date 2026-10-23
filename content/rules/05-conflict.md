@@ -128,7 +128,7 @@ Two guards telegraph at Vesk this round, a d8 and a d6. Nobody answers either, s
 
 ### Defend {#s-defend}
 
-**Defend** takes your action. When the telegraphs land at the end of the round, **every line on your Defend counts twice, and so does your Confidence**, and you can split each of them once. More dice means more telegraphs stopped. Then you choose which die stops which.
+**Defend** takes your action. When the telegraphs land at the end of the round, **every line on your Defend counts twice, and so does your Confidence**, and you can split each of them once. More dice means more telegraphs stopped. Then you choose which die stops which. A condition's step, like *Warded*, still counts once.
 
 Confidence counts twice by its steps: a d6 is 3 steps, so it's 6 when you Defend, and you can split that into two d6s.
 
@@ -137,7 +137,7 @@ With nothing on your Defend, it's a d2 either way, so Defending won't help you a
 It's what you do when a lot's coming at you, which is often once you've [intercepted](#s-intercept) for your friends. It only covers what lands at the end of the round, though, so a failed answer still lands at once, with no defence roll.
 
 :::example[Bram Defends]
-A brute and two of his mates telegraph a d8 each at Wren. She's within Bram's stride, so he intercepts all three, which is free for a Guardian, and Defends. When they land, the three lines on his Defend (his first Title, his plate and his shield) count twice, so with the action it's 7 steps, a d12 and a d2. He uses his split to make the d12 two d6s. The d8s come up 7, 5 and 2, and Bram rolls 6, 3 and 1. He puts the 6 on the 5 and the 3 on the 2, so only the 7 gets through. If he'd let them ride, he'd have rolled his Defend once, a d8, and stopped one of them at most.
+A brute and two of his mates telegraph a d8 each at Wren. She's within Bram's stride, so he intercepts all three, which is free for a Guardian, and Defends. When they land, the three lines on his Defend (his first Title, his plate and his shield) count twice, so with the action it's 7 steps, a d12 and a d2. He uses his split to make the d12 two d6s. The d8s come up 7, 5 and 2, and Bram rolls 6, 3 and 1. He puts the 6 on the 5 and the 3 on the 2, so only the 7 gets through. The 6 is a d6's top face, so he gets 1 Aura back. If he'd let them ride, he'd have rolled his Defend once, a d8, and stopped one of them at most.
 
 Isolde's Defend is a d2, so Defending does nothing for her against blows. It still doubles her Confidence, though. Her d8 is 4 steps, which makes 8 when she Defends: a d12 and a d4. That's two telegraphs at her Confidence she can stop instead of one, or three if she splits the d12.
 :::
@@ -229,7 +229,7 @@ Threats in Zi'Dara don't have hit points. Count a threat's **keeps-it-going tags
 -   A **boss** has three or more, some hidden, a weak point, and multipliers on the big ones.
 
 :::rule{#s-layered}
-**Layered.** Special encounters stack their dice. A threat or a stake that's *Layered* rolls one Challenge die for every tag it's got left keeping it going, and its best die counts. A tag with a multiplier is still one tag here, so *Armour ×4* is one die. It rolls them the first time it's attacked in a round, and that best die stands for the rest of the round. Strip a tag and it rolls one fewer from the next round on. Save it for the doors, wards and bosses that should feel like a wall, not for every guard.
+**Layered.** Special encounters stack their dice. A threat or a stake that's *Layered* rolls one Challenge die for every tag it's got left keeping it going, and its best die counts. A tag with a multiplier is still one tag here, so *Armoured ×4* is one die. It rolls them the first time it's attacked in a round, and that best die stands for the rest of the round. Strip a tag and it rolls one fewer from the next round on. Save it for the doors, wards and bosses that should feel like a wall, not for every guard.
 :::
 
 :::example[The enchanted door]
@@ -238,9 +238,9 @@ A vault door is Challenge 4, and three tags keep it shut: *Oak*, *Iron Bars* and
 
 ### Multipliers {#s-tough}
 
-Some tags take more than one win to strip, and they carry a **multiplier**: *Armour ×4* takes four wins, *Shield ×3* takes three and *Sword ×2* takes two. A tag with no multiplier goes in one win, the same as always. Every win ticks one off, and the GM says what's left out loud: *"Armour ×2 left."* [Vulnerabilities](#s-vulnerable) tick it down faster. A multiplier never changes the threat's dice. It's only how many wins the tag takes.
+Some tags take more than one win to strip, and they carry a **multiplier**: *Armoured ×4* takes four wins, *Shield ×3* takes three and *Sword ×2* takes two. A tag with no multiplier goes in one win, the same as always. Every win ticks one off, and the GM says what's left out loud: *"Armoured ×2 left."* [Vulnerabilities](#s-vulnerable) tick it down faster. A multiplier never changes the threat's dice. It's only how many wins the tag takes.
 
--   **Most threats don't need them.** They're for bosses and the few things built to last. The usual multiplier is the threat's Challenge, more on the tag that matters most to it and less on the small stuff.
+-   **Most threats don't need them.** They're for bosses and the few things built to last. The usual multiplier is the threat's Challenge, on the tag that matters most to it. It can go higher when the whole fight's about that tag, and it's less on the small stuff.
 -   **A named tag only ticks to what fits it.** Blades and hammers tick *Natural Armour*, shaming a captain in front of his men ticks *Commanding Presence*, and bribes and threats tick a crowd that's *Loyal ×3*.
 -   **Some come first.** A tag marked *first*, like *Natural Armour ×5 (first)*, has to go before anything under it can be stripped.
 -   **Every die can tick it.** Call several dice at it, each as its own intent. It rolls its defence once that round, and every die that beats that roll ticks one off.
@@ -421,7 +421,7 @@ A **vulnerability** is something that makes a hit hurt more, like *Vulnerable to
 A vulnerability only adds to a win that's doing harm: a Hurt, or stripping a tag that keeps a threat going. It doesn't add to a win that puts a condition on something or moves it. It works the same way on the crew: one vulnerability makes a hit two Hurts, so your wound die goes up two sizes. *Prone* and *Exposed* are the usual ones, and the GM keeps the rest rare on the crew.
 
 :::example[A Warden on its back]
-The Warden's on its back, *Prone*, and Isolde's Study found it's *Dry as Tinder*. Its *Armour ×4* is untouched. Bram stands over it and his hammer wins: one tick for the hit and one for *Prone*, so it's *Armour ×2*. Then Ash throws fire from the doorway and wins too. She isn't standing over it, so *Prone* doesn't count for her, but *Dry as Tinder* does: two ticks, and the armour's gone.
+The Warden's on its back, *Prone*, and Isolde's Study found it's *Dry as Tinder*. Its *Armoured ×4* is untouched. Bram stands over it and his hammer wins: one tick for the hit and one for *Prone*, so it's *Armoured ×2*. Then Ash throws fire from the doorway and wins too. She isn't standing over it, so *Prone* doesn't count for her, but *Dry as Tinder* does: two ticks, and the armour's gone.
 :::
 
 ## Wounds, Blaze and Scars {#s-blaze}

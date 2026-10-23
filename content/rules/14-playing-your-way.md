@@ -43,7 +43,7 @@ Wren joins Bram's roll on the guard captain, so it's his Fight, 4 steps, and her
 Telegraphs come all at once, and they're the part nobody can afford to miss, so the GM writes each one on an index card as she says it: what it's doing, and its die. The die sits on the card, and the card goes in front of whoever it's aimed at (or beside the stake, place or clock). Whoever answers it, or has it land on them, picks that die up and rolls it. Then the card comes off the table.
 
 :::example[Round one, on cards]
-In the Vane manor, five cards go down: *Pin him to the wall* (d10) in front of Bram, *Spear sweep* (d8) in front of Vesk, *Spear* (d10) in front of Isolde, *Block the vault doorway* (d10) on the stake *Get the paintings out*, and *Wake the house* (d4, one answer) by the household clock. At the end of the round, Bram picks the d10 up off his card and rolls it against his Defend, a d8. It's 10 against 4, and it lands.
+In the Vane manor, five cards go down: *Pin him to the wall* (d10) in front of Bram, *Spear sweep* (d8) in front of Vesk, *Spear* (d10) in front of Isolde, *Block the vault doorway* (d10) on the stake *Get the paintings out*, and *Wake the house* (d4, one answer) by the household clock. Bram intercepts the spear, so its card slides across to him. At the end of the round he picks up both d10s off his cards and rolls them with his Defend. He Defended, so that's a d12 and a d2. The pin's 10 beats his d2's 1, and it lands.
 :::
 
 Sit where you can see the GM's face and everyone else's, at the quietest end of the room. Planning a round gets loud, so talk one at a time, and let whoever's talking finish. Online, turn the captions on if your call has them, and the GM types every telegraph into the chat as she says it.

@@ -30,7 +30,7 @@ All you need is one character, one set of dice and the Oracle, and the Oracle's 
 2.  **Build the scene** the way the GM would: one or two stakes, whatever pushes back and a clock. Ask the Oracle anything you don't know, and say [how likely](#s-oracle-odds) it is first. Play fair with yourself: if the guards are always awake at this hour, it's likely they're awake.
 3.  **Set Challenges** by rolling a d6 when you can't decide: 1–2 is Challenge 2, 3–4 is 3, 5 is 4 and 6 is 5. A boss is always 6.
 4.  **Telegraph for the world** before you act. For one character, the round budget's about 5 steps. [Running the Threats Yourself](#s-solo-threats) shows you how.
-5.  **Play it out,** and write one sentence in the log.
+5.  **Play it out,** and write one sentence in the log. The same as with a GM, the first Hurt you take each scene doesn't move your wound die, or the first two with *Unyielding*.
 6.  **Downtime,** as normal. [Downtime and Factions](#s-solo-downtime) covers the slots.
 
 Outside a round, when you'd look at the GM and wait, make a move for the world instead ([When They Look at You](#s-gm-moves)), and if nothing comes to you, roll on the Twist table in [The Oracle](#oracle).

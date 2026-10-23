@@ -11,7 +11,12 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
    - A threat with Forms gets smaller ones, about ×3 with two forms and ×2 with three, because they fill back up each time.
    - They're written for a starting crew of four. Add 1 to each for every 10 the threat budget's over 40, and take 1 off for every 10 it's under (a tag that gets to ×1 is plain). Playing alone, *Armoured ×6* is *Armoured ×3*.
    - If you meant the Challenge on every big tag, those bosses go up to ×6 and ×6.
-2. **Hiring another faction.** From your words ("every faction has one action, use their own faction to do things for you"): the hired faction spends its own action that downtime where the payer says, rolled with its own dice, and the payer keeps its own action. A faction with a bad thread toward the payer won't take the money, and the money buys the action, not the win.
+2. **Hiring another faction.** From your words ("every faction has one action, use their own faction to do things for you"): the hired faction spends its own action that downtime where the payer says, rolled with its own dice, and the payer keeps its own action. The money buys the action, not the win.
+   - Hiring comes first: the crew says who it's paying before the GM telegraphs, and a hired faction's telegraph is the job it was paid for, so nobody can buy off an action once it's on the table.
+   - A faction that's hostile to the payer (mostly bad threads toward it) won't take its money or sell to it. One that does business or is friendly will. That's the old "Neutral or better".
+   - A faction paid to come for the crew rolls on the table for the payer's threads toward the crew.
+   - The "don't know what it does?" 6 spends a spare to hire someone and rolls again for the faction's own action.
+   - A crew's spare can still buy an extra party slot, the way Wealth could. A faction can't buy itself a second action.
 3. **Defend.**
    - Confidence doubles by its steps when you Defend (a d6 is 3 steps, so 6), and each pool gets one split.
    - A defence past 6 steps is several dice, and each one stops one telegraph.
@@ -51,7 +56,10 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
    - Crew assets don't add a step to rolls they fit any more. Only Power assets count, and *Fences*, *Friends at Court*, *Influential*, *Rooted* and *A Ship* were reworded to do one thing each.
    - The crew's Establish can't make a brand-new resource. It builds an asset with a spare, makes a mini faction, or builds back what the crew lost. New resources come from a Goal, a big job, a project, or off a faction. Without this, a spare buys a slot that makes a resource, and it snowballs.
    - The crew can make mini factions too.
-   - Holdings don't need a resource paying for them.
+   - Holdings don't need a resource paying for them. *A Ship* is an asset, so while nothing's paying for it, it stays tied up in harbour.
+   - Crew assets do what they say on the crew's card, even when a faction has an asset of the same name (*Rooted*, *Influential*).
+   - *Healers* is once a session now: between two scenes, everyone in the crew steps their wound die down a size. It used to heal a Catch each in downtime.
+   - A faction's threads toward the crew aren't in its bonds: a good one's a step for the crew on a roll it fits, and a bad one adds no ticks.
    - The crew doesn't have the three faction bonds: its people are the characters, and its Reputations do the job of Public Sentiment.
    - Party resources are called **party holdings** now, so they don't clash with a faction's resources.
 9. **Archetypes.**
@@ -72,7 +80,7 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 - A broken piece of armour's mended with a downtime slot, and usually a purse of gold.
 - Attuned armour's "Armour a size bigger" lines are each a line on your Defend.
 - Burdens on attuned things that used removed rows: *Others First* is the Regen Burden, *River Cold* the Heals-on-you Burden, *Spun Thin* the Hurt Burden, and *Never Gives Ground* is "you can't Defend as your action".
-- A faction gives you things when its threads toward the crew are good. Buying from one needs a spare resource and no bad thread.
+- A faction gives you things when its threads toward the crew are good. Buying from one needs a spare resource, and it won't sell if it's hostile to you.
 - Session Zero and Building Your Own Frame start with four factions, to meet your four to twelve.
 - In Frames, the faction cards are written short: Power assets in brackets after the Power die, other assets on their own line, and threads toward the crew at the bottom. Factions that don't deal in money still have resources, whatever keeps them going (*Every Drowning*, *The Dark Gaps*). Spare resources follow the old Wealth: d12 gave two spare, d8 to d10 one, d6 and under none.
 - Old faction strength tags are Power assets now (*Watchful*, *Rooted*, *Secretive*...). *Wealthy* became resources.
@@ -83,6 +91,12 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 - An ally beside the crew: its Challenge die stops one telegraph, it intercepts for free, and the crew intercept for it for 1 Aura.
 - Playing alone, only telegraph the factions you can reach. Two or three are plenty.
 - One-way threads: "it's yours, and theirs toward you is a different thread."
+- Bonds with factions, places and causes: borrowing through a faction's thread brings in one of its assets for 1 Aura. A place or a cause has nothing to lend, but you can strain a thread with it for Resolve.
+- A Boon you'd built in that's gone now (Armour, Take the hit, Hurt Catches in downtime) goes back for its two permissions. An attuned thing whose Burden is gone takes another from the table.
+- When a threat with Forms changes, its multipliers come back on whichever of its new tags matter most.
+- Captain Marrow has *Flurry*, so her two telegraphs at whoever's facing her can land in the same round. A threat's telegraph at everyone leaves out whoever's already got one of its dice coming.
+- Lanternfall's project gives the crew *Copies of the Ledgers*, so the Lamplighters keep *The Ledgers*. That reward and *An Ear in the Sickroom* need a resource paying for them.
+- The Bard's song doesn't double anyone's own Confidence, hers included. The Healer's *Pull them back* costs no action.
 - On the phone: lines brought into a defence roll for 1 Aura, and conditions, count once, even when you Defend. Broken or used-up kit comes off your set actions until it's mended. The rest roll is the Confidence die on its own, with no conditions. The Guardian's +2 shows on his Defend when he answers a telegraph with it too.
 - Old saved characters on the phone: each old Hurt box is one Hurt on the wound die, old Scars stay as Scars waiting for their Catch to be written, the old Hurt Catches go into Notes in their own words, and the Armour die's dropped (an old build's armour becomes a line on Defend).
 - Not on the phone yet: the Bard's *Hold them*, the Oracle's foresight, and *Poisoned*'s spend (you tap the lines off yourself). An intercept takes the Aura, and you add the dice you took when the telegraphs land.
@@ -94,7 +108,7 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 - **Healers against big wounds.** A d12 wound's hard to beat with a heal.
 - **The Oracle's 1** swapped into a boss's defence roll.
 - **The Warrior's explosions against bosses.** An exploding 13 used to take 13 off Tough, and now it's one tick. If it feels flat, each explosion could add a tick.
-- **A faction buying resources** with a spare, because a bought resource pays every downtime after.
+- **A faction buying resources** with a spare, or Establishing new ones, because a new resource pays every downtime after.
 
 ## Smaller calls (16 Oct)
 

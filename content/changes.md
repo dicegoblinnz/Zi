@@ -15,7 +15,7 @@ These came out of the 23 Oct playtests.
 -   **A threat aims one die at each of you**, unless a tag like *Flurry* or *Two Knives* says it can do more. See [Telegraphs](#s-telegraphs).
 -   *Poisoned*'s spend makes your Defend a d2 till the round ends, and *Warded* and *Covered* are a step on your Defend. They used to work on your Armour.
 -   "Step your Armour down" is gone from the costs. See [Consequences](#s-consequences).
--   The Armour Boon and the Take the hit Boon are gone. Their Burdens are now "you can't Defend as your action" and "you can't intercept". See [Boons and Burdens](#s-boons).
+-   The Armour, Take the hit and Hurt Catches in downtime Boons are gone, and so are the Armour and Hurt Catches Burdens. The Defend Burden is "you can't Defend as your action" now, and the new Intercept Burden is "you can't intercept". A Boon you'd built in goes back for its two permissions, and an attuned thing whose Burden is gone takes another. See [Boons and Burdens](#s-boons).
 
 **Intercept replaces taking the hit.** For 1 Aura and no action, you take the dice aimed at a friend within your stride, and your own defence handles them. A [Guardian](#a-guardian) intercepts for free, for every friend within his stride. See [Intercept](#s-intercept).
 
@@ -23,7 +23,7 @@ These came out of the 23 Oct playtests.
 
 **Vulnerabilities are new.** Every vulnerability that fits a hit adds a tick: one more Hurt on you, or one more win off a threat's tag. The same one never counts twice, and you've still got to win. *Prone* and *Exposed* are vulnerabilities now. See [Vulnerabilities](#s-vulnerable).
 
-**Tough's gone, and tags carry multipliers instead.** *Armour ×4* takes four wins to strip. It's usually the threat's Challenge on the tag that matters most to it, and less on the rest, and it only ever counts wins, never dice. Every roll's win or lose now, because nothing takes off the number it rolled. The bestiary and the frames have theirs. See [Multipliers](#s-tough) and [Running the Game](#s-tough-gm).
+**Tough's gone, and tags carry multipliers instead.** *Armoured ×4* takes four wins to strip. It's usually the threat's Challenge on the tag that matters most to it, and less on the rest, and it only ever counts wins, never dice. Every roll's win or lose now, because nothing takes off the number it rolled. The bestiary and the frames have theirs. See [Multipliers](#s-tough) and [Running the Game](#s-tough-gm).
 
 **Your wound die is your Hurt now**, and the Hurt track's bars and boxes are gone. It starts at d2, every Hurt puts it up a size, and a Hurt at d12 Blazes. See [Wounds, Blaze and Scars](#s-blaze).
 -   At the end of every scene you rest: roll the Confidence you finished on against your wound die, and a win brings it down a size. Downtime clears it, with no slot. That replaces the loose boxes clearing, and downtime's Recover is only for mending what's broken now.
@@ -31,6 +31,7 @@ These came out of the 23 Oct playtests.
 -   After a Blaze, the wound becomes a Scar, and a Scar's a Catch. Each one starts your wound die a size bigger, and with five, your next Blaze is your last. That replaces a Scar crossing out a box.
 -   Nothing writes a Catch on your Hurt mid-scene any more, so your Confidence doesn't drop for it.
 -   *Unyielding*, the Hurt Boon and [playing alone](#s-solo-gm) mean the first Hurt each scene doesn't move your wound die, instead of an extra bar.
+-   *Tend the Crew* works on the rest now: everyone in the crew who was in the scene rolls two Confidence dice for it, and the best counts. It used to heal Catches in downtime.
 
 **Every archetype has a Resolve spend**, something big for 1 Resolve. See [1 Resolve on your mechanic](#resolve-on-your-mechanic). And:
 -   The [Bard](#a-bard)'s *Hold them* is a Defend against fear for everyone who can hear, and the song can split as often as you like. It replaces one roll that stopped all of it.
@@ -44,9 +45,9 @@ These came out of the 23 Oct playtests.
 -   A faction's action is one of [six outcomes](#s-faction-outcomes) (Destroy, Undermine, Obstruct, Influence, Acquire and Establish) or work on its agenda, and it's still telegraphed at the start of downtime. The crew's party slots get the same six, plus setting back an agenda and working for a faction.
 -   Every faction has [three bonds](#s-faction-bonds), Public Sentiment, Morale and Loyalty, with threads in them. A good thread's a step and a bad one's a vulnerability.
 -   Standing's gone. How a faction sees the crew is its threads toward them.
--   The crew's on the same card, its crew tags are crew assets now, and party resources are [party holdings](#s-party-resources).
+-   The crew's on the same card, its crew tags are [crew assets](#s-crew-tags) now, and party resources are [party holdings](#s-party-resources). Crew assets don't add a step to rolls they fit any more: each one does the one thing it says, and the ones that are people who turn up when the crew calls, like *Muscle*, add Power. *Healers* steps everyone's wound die down a size between two scenes, once a session. A spare resource can still buy the crew an extra party slot, the way Wealth could.
 
-**Bonds can be with factions, places and causes**, as well as people. See [Bonds and threads](#s-bonds).
+**Bonds can be with factions, places and causes**, as well as people. Borrowing through a thread with a faction brings in one of its assets, for 1 Aura, and a thread with a place or a cause strains for Resolve like any other. See [Bonds and threads](#s-bonds).
 
 ## 17 Oct 2026: A two-page character sheet, and the player reference on its own {#c-2026-10-17}
 

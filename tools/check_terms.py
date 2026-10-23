@@ -56,6 +56,7 @@ RETIRED = [
     ("Wealth", r"\bWealth\b"),
     ("Standing", r"\bStanding\b(?! Army)"),
     ("party resources", r"\bparty resources?\b"),
+    ("crew tag", r"\bcrew tags?\b"),
     ("two-part permissions", r"\btwo parts\b|\bdescribing word\b|\bonly half a permission\b"),
     ("every set action it fits", r"\b(every|as many) set actions? it fits\b"),
     ("old Oracle", r"\bsteps? off (the |a )?(threats['’] )?telegraphs?\b|\bshrink(ing|s)? (the )?(threats['’] )?telegraphs\b"),

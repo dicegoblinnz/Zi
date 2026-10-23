@@ -14,11 +14,11 @@ Here are forty threats you can run straight off the page, all laid out the same 
 
 Each threat gets a **Challenge**, its tags sorted into the three kinds, three telegraphs, a line to say in its voice, and one **hidden** tag the crew has to find. If a tag's marked **weak point**, breaking it ends the threat at once. Count its *keeps it going* tags, with a multiplier counting as that many, and you'll know how many wins it takes the long way: the Fallen Champion's *Relentless*, *Ancient* and *Armoured ×6* are eight.
 
-The **Telegraphs** line gives you three to read out as they're written, each with its die and what it hits. They come from the threat's own tags, so the crew can see how to answer them. Spend them from your [round budget](#s-budget) like any telegraph, and write your own as the scene needs them ([Telegraphing Well](#s-telegraphing) has the tricks). If a tag like *Ambush* makes the first one a step bigger, it's listed first. A threat aims one die at each person a round, unless a tag like *Flurry* says it can do more, so if two of its telegraphs would go at the same one of the crew, aim one of them somewhere else.
+The **Telegraphs** line gives you three to read out as they're written, each with its die and what it hits. They come from the threat's own tags, so the crew can see how to answer them. Spend them from your [round budget](#s-budget) like any telegraph, and write your own as the scene needs them ([Telegraphing Well](#s-telegraphing) has the tricks). If a tag like *Ambush* makes the first one a step bigger, it's listed first. A threat aims one die at each person a round, unless a tag like *Flurry* says it can do more, so if two of its telegraphs would go at the same one of the crew, aim one of them somewhere else, and one that goes at everyone leaves out whoever's already got one of its dice coming.
 
 Every Challenge 6 threat has a **multiplier** on at least one tag, and so do two Challenge 5s that should take a while. *Armoured ×6* takes six wins to strip: every win ticks one off, and you say what's left out loud. It only ticks to what fits it, so a hammer ticks *Armoured* and a bribe doesn't, and a [vulnerability](#s-vulnerable) that fits ticks it faster. They're written for a starting crew of four, a [threat budget](#s-threat-budget) of 40. For a bigger or more experienced crew, add 1 to each multiplier for every 10 the threat budget's over 40, and for a smaller one, take 1 off for every 10 it's under. Four characters with four Titles each have a threat budget of 60, so for them *Armoured ×6* is *Armoured ×8*, and a ×3 is a ×5. There's more in [Multipliers](#s-tough-gm), in Running the Game.
 
-When a threat with **Forms** loses its last keeps-it-going tag, it changes shape instead of falling. Its multipliers fill back up, and you pick 3 to 5 tags for its new shape from its Forms list and tell the table what it's becoming. It changes once with *Forms (2)* and twice with *Forms (3)*, and its multipliers fill back up each time, so they're smaller than a one-form boss's: about ×3 with two forms, and ×2 with three. Its weak point still ends it in any shape, and its last form falls like anything else.
+When a threat with **Forms** loses its last keeps-it-going tag, it changes shape instead of falling. You pick 3 to 5 tags for its new shape from its Forms list and tell the table what it's becoming, and its multipliers come back on whichever of the new tags matter most. It changes once with *Forms (2)* and twice with *Forms (3)*, and its multipliers come back each time, so they're smaller than a one-form boss's: about ×3 with two forms, and ×2 with three. Its weak point still ends it in any shape, and its last form falls like anything else.
 
 ## Mooks: Challenge 2–3 {#mooks-challenge-23}
 
@@ -535,7 +535,7 @@ A shape that wants to be needed.
 
 **Keeps it going** *Hollow ×2* · *Forms (2)*
 
-**Forms** When its last keeps-it-going tag goes, it changes: its multipliers fill back up and it takes 3 to 5 of these. *Charming* · *Grasping* · *Grapple* · *Fear* · *Shifting* · *Possessing* · *Calls for Help* · *Regrows* · *Feeds* · *Hollow*. Her second form is everyone she's taken, all reaching for you at once.
+**Forms** When its last keeps-it-going tag goes, it changes: it takes 3 to 5 of these, and its multiplier goes on whichever of them matters most. *Charming* · *Grasping* · *Grapple* · *Fear* · *Shifting* · *Possessing* · *Calls for Help* · *Regrows* · *Feeds* · *Hollow*. Her second form is everyone she's taken, all reaching for you at once.
 
 **Drives it** *Wants to Be Needed*
 
@@ -569,7 +569,7 @@ A duellist who's never lost, and knows it.
 
 **Challenge** 6 (d12)
 
-**Comes at you** *Faster Than You*
+**Comes at you** *Faster Than You* · *Flurry*
 
 **Keeps it going** *Relentless ×6* · *Reads a Feint* · *Slippery*
 
@@ -625,7 +625,7 @@ You don't see it, and then you do.
 
 **Keeps it going** *Not Really Here ×3* · *Out of Sight* · *Forms (2)*
 
-**Forms** When its last keeps-it-going tag goes, it changes: its multipliers fill back up and it takes 3 to 5 of these. *Hits Like a Wagon* · *Reach* · *Grapple* · *Fast* · *Fear* · *Armoured* · *Regrows* · *Relentless* · *Sees in the Dark* · *Out of Sight*. Its second form comes out of the dark, where you can see it.
+**Forms** When its last keeps-it-going tag goes, it changes: it takes 3 to 5 of these, and its multiplier goes on whichever of them matters most. *Hits Like a Wagon* · *Reach* · *Grapple* · *Fast* · *Fear* · *Armoured* · *Regrows* · *Relentless* · *Sees in the Dark* · *Out of Sight*. Its second form comes out of the dark, where you can see it.
 
 **Telegraphs** *Something breathes right behind whoever's carrying the light.* (d12, Confidence, Frightened) · *The lamps go out one by one, starting with the one furthest from the door.* (d12, the ground) · *Something in the dark goes for whoever's furthest from the light.* (d12, Defend)
 
@@ -691,7 +691,7 @@ A thing that's been ruling this land for longer than any of its records admit.
 
 **Keeps it going** *Unkillable ×2* · *Old* · *Ancient* · *Forms (3)*
 
-**Forms** When its last keeps-it-going tag goes, it changes: its multipliers fill back up and it takes 3 to 5 of these. *Possessing* · *Commanding* · *Calls for Help* · *Fear* · *Beloved* · *Politically Untouchable* · *Trained* · *Armoured* · *Ancient* · *Unkillable*. Each new form is another body, the nearest one it can take.
+**Forms** When its last keeps-it-going tag goes, it changes: it takes 3 to 5 of these, and its multiplier goes on whichever of them matters most. *Possessing* · *Commanding* · *Calls for Help* · *Fear* · *Beloved* · *Politically Untouchable* · *Trained* · *Armoured* · *Ancient* · *Unkillable*. Each new form is another body, the nearest one it can take.
 
 **Telegraphs** *It calls, and every guard in the palace starts running for the throne room.* (d12, the scene clock) · *It names whoever's closest, by the name nobody's called them in years.* (d12, Confidence, Frightened) · *It brings the iron sceptre down on whoever stands nearest the throne.* (d12, Defend)
 
