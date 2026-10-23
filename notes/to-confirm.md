@@ -8,8 +8,8 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
    - Old *Tough 40* on one tag is ×6. Plain *Tough* went onto the tag that best says why it lasts, like the Painted Knight's *A Hundred Years of This ×6*.
    - Bosses whose Tough was split 20 and 20 now have ×6 on the main tag and ×3 on the other: the Wandering Giant (*Armoured ×6*, *Mournful ×3*), the Guildmaster (*Beloved ×6*, *Deep Pockets ×3*), Redhand (*Armoured ×6 (first)*, *Feeds ×3*), the Bell Below (*The Song ×6*, *Barnacle Hide ×3*), the Hollow Gentleman (*Borrowed Faces ×6*, *Feeds ×3*) and the Queen's Champion (*Perfect Guard ×6*, *The Crowd's Favourite ×3*). That's about three wins more than they had. Redhand's ten wins the long way, four or five rounds for a crew of four.
    - The Iron Sergeant (Challenge 5) is *Armoured ×5* (it was 20).
-   - A threat with Forms gets smaller ones, about ×3 with two forms and ×2 with three, because they fill back up each time.
-   - They're written for a starting crew of four. Add 1 to each for every 10 the threat budget's over 40, and take 1 off for every 10 it's under (a tag that gets to ×1 is plain). Playing alone, *Armoured ×6* is *Armoured ×3*.
+   - A threat with Forms gets smaller ones, about ×3 with two forms and ×2 with three, because they come back each time.
+   - They're written for a starting crew of four. Add 1 to each for every 10 the threat budget's over 40, and take 1 off for every 10 it's under (a tag that gets to ×1 or less is plain). Playing alone, *Armoured ×6* is *Armoured ×3*.
    - If you meant the Challenge on every big tag, those bosses go up to ×6 and ×6.
 2. **Hiring another faction.** From your words ("every faction has one action, use their own faction to do things for you"): the hired faction spends its own action that downtime where the payer says, rolled with its own dice, and the payer keeps its own action. The money buys the action, not the win.
    - Hiring comes first: the crew says who it's paying before the GM telegraphs, and a hired faction's telegraph is the job it was paid for, so nobody can buy off an action once it's on the table.
