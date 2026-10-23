@@ -96,9 +96,10 @@ export function grow(base, grown, B) {
       const e = r?.effects ?? {};
       const num = c.numbers;
       if (e.aura) num.aura += e.aura;
-      if (e.hurtBars) {
-        num.hurtBars += e.hurtBars;
-        num.hurtNote = also(num.hurtNote, name);
+      // The first Hurt each scene that doesn't move the wound die (Unyielding).
+      if (e.shrug) {
+        num.shrug = (num.shrug ?? 0) + e.shrug;
+        num.woundNote = also(num.woundNote, name);
       }
       if (e.stride) {
         num.stride += e.stride;
@@ -145,6 +146,7 @@ export function grow(base, grown, B) {
         aura: times > 1 && aura ? aura.replace(/\+\d\b/, `+${bonus}`) : aura,
         auraHtml: times > 1 && auraHtml ? auraHtml.replace(/\+\d\b/, `+${bonus}`) : auraHtml,
         bonus: /^\+\d\b/.test(aura) ? bonus : 0,
+        resolve: r.resolve ?? "", resolveHtml: r.resolveHtml ?? "",
       };
     });
     const names = [...taken.keys()];

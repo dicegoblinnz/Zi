@@ -36,16 +36,15 @@ export function linesOf(c) {
   add("num:aura", `Aura ${n.aura}`, "Aura");
   add("num:resolve", `Resolve ${n.resolve}`, "Resolve");
   add("num:stride", `Stride ${n.stride}${note(n.strideNote)}`, "Stride");
-  add("num:armour", `Armour d${n.armour}${note(n.armourNote)}`, "Armour");
   add("num:conf", `Confidence starts every scene on d${n.confidence}${note(n.confidenceNote)}${n.dressed ? `, or d${n.dressed.die} in ${n.dressed.what} when they fit the scene` : ""}`, "Confidence");
-  add("num:hurt", `${n.hurtBars} Hurt bars${note(n.hurtNote)}`, "Hurt bars");
+  add("num:wound", `Wound die d${n.wound ?? 2}${note(n.woundNote)}`, "Wound die");
   for (const a of c.actions) add(`act:${a.name}`, `${a.steps} step${a.steps === 1 ? "" : "s"}, ${a.die}`, a.name);
   c.titles.forEach((t, i) => {
     const title = `your ${ORD[i] ?? "next"} Title`;
     add(`title:${P.titles[i]}`, `${t.name}${note(t.archetype)}`, `Your ${ORD[i] ?? "next"} Title`);
     t.permissions.forEach((p, j) => add(`perm:${P.titles[i]}:${P.perms[i][j]}`, p.text, `A permission on ${title}`));
   });
-  for (const a of c.archetypeRules) add(`arch:${a.name}`, `${plain(a.summary)}${a.aura ? ` 1 Aura: ${plain(a.auraHtml || a.aura)}` : ""}`, a.name);
+  for (const a of c.archetypeRules) add(`arch:${a.name}`, `${plain(a.summary)}${a.aura ? ` 1 Aura: ${plain(a.auraHtml || a.aura)}` : ""}${a.resolve ? ` 1 Resolve: ${plain(a.resolveHtml || a.resolve)}` : ""}`, a.name);
   c.traits.forEach((t, i) => add(`trait:${P.traits[i]}`, `${t.name}${note(t.type)}: ${plain(t.html)}`, t.name));
   const kit = c.carry;
   add("kit:equipment", `${kit.equipment.items.join(", ") || kit.equipment.note || "nothing"}, ${kit.equipment.items.length} of ${kit.equipment.max}`, "Equipment");

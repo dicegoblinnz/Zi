@@ -1,23 +1,26 @@
 // Downtime on the phone: two slots, and what they buy lands on the sheet when
 // the player finishes, with one undo for the lot. The choices are Downtime's:
 // face a pressure, recover, grow, or put a slot toward the crew. Swapping a
-// permission and mending a strained thread don't take a slot. The card's a
-// draft until it's finished, kept on the page by character (not saved), so
-// closing it and coming back keeps what's picked.
+// permission and mending a strained thread don't take a slot, and wounds
+// clear for free when it's over. The card's a draft until it's finished, kept
+// on the page by character (not saved), so closing it and coming back keeps
+// what's picked.
 
 import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
 import { MAX_PERMS, attunedRoom } from "./grow.js";
 
 const CHOICES = [
   ["Face a pressure", [["pressure", "Deal with a pressure"]]],
-  ["Recover", [["catch", "Heal a Catch"], ["armour", "Armour back to full"], ["mend", "Mend something broken"], ["tend", "Tend the crew"]]],
+  ["Recover", [["mend", "Mend something broken"]]],
   ["Grow", [["perm", "A new permission"], ["trait", "A new trait"], ["asp", "Chase your Aspiration"], ["thread", "Deepen a bond"], ["get", "Get something"], ["att", "Attune"]]],
   ["The crew", [["party", "Toward a party action"]]],
 ];
 const LABEL = Object.fromEntries(CHOICES.flatMap(([, list]) => list));
 const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth", "twenty-first", "twenty-second", "twenty-third", "twenty-fourth"];
-const plain = (html) => String(html ?? "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
-const tends = (c) => c.traits.some((t) => t.name === "Tend the Crew" || /\bheal a Catch on the Hurt track of everyone\b/i.test(plain(t.html)));
+// A permission goes on two set actions at most, Defend included.
+const MAX_ON = 2;
+// Where downtime clears the wound die to: d2, a size up for each Scar.
+const floorNow = (c, s) => Math.min(12, (c.numbers.wound ?? 2) + 2 * (Array.isArray(s.scars) ? s.scars.length : 0));
 const crossed = (s) => Object.keys(s.crossed).filter((k) => s.crossed[k]).map((key) => ({ key, name: key.split("|").slice(1).join("|") }));
 const strainedOf = (c, s) => c.threads.flatMap((p) => p.threads.map((t) => ({ key: `${p.person}|${t.text}`, person: p.person, text: t.text }))).filter((t) => s.threads[t.key] === "strained");
 const roomFor = (c, s, where) => (where === "bag" ? c.carry.bag.max - (c.carry.bag.items?.length ?? 0) : c.carry[where].max - c.carry[where].items.length) - s.picked.filter((p) => p.where === where).length;
@@ -38,10 +41,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
   const at = (d, where) => (String(where)[0] === "w" ? d.swaps[Number(String(where).slice(1))] : d.slots[Number(where)]);
 
   function can(k, c, s) {
-    if (k === "catch") return s.catches.length > 0;
-    if (k === "armour") return s.armour < c.numbers.armour;
     if (k === "mend") return crossed(s).length > 0;
-    if (k === "tend") return tends(c);
     if (k === "perm") return c.titles.some((t) => t.permissions.length < MAX_PERMS);
     if (k === "att") return c.attuned.some((a) => a.permissions.length < MAX_PERMS);
     return true;
@@ -51,8 +51,8 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     const firstTitle = Math.max(0, c.titles.findIndex((t) => t.permissions.length < MAX_PERMS));
     const firstThing = Math.max(0, c.attuned.findIndex((a) => a.permissions.length < MAX_PERMS));
     return {
-      pressure: { k, text: "" }, catch: { k, b: 0 }, armour: { k }, mend: { k, key: crossed(s)[0]?.key ?? "" },
-      tend: { k, b: s.catches.length ? 0 : -1 }, perm: { k, t: firstTitle, text: "", on: [] },
+      pressure: { k, text: "" }, mend: { k, key: crossed(s)[0]?.key ?? "" },
+      perm: { k, t: firstTitle, text: "", on: [] },
       trait: { k, name: "", own: false, oname: "", otype: "", otext: "", on: [] },
       asp: { k, on: [], dice: null, opp: null, real: false, pads: [], padOpp: "", rerolls: 0, tie: false, arch: "", text: "", perm: "", tOn: [], pOn: [] },
       thread: { k, person: "", text: "" }, get: { k, text: "", where: "bag" },
@@ -117,8 +117,8 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       const climbs = asp >= 12 ? "It climbs past d12 and resolves." : `It climbs to d${sizeUp(asp)}.`;
       const verdict = beat ? (sl.tie ? `The crew takes the tie. ${climbs}` : `${best} against ${sl.opp}. Beat it. ${climbs}`) : tie ? `${best} against ${sl.opp}. A tie goes to the Aspiration, so it holds at d${asp}.` : `${best} against ${sl.opp}. It holds at d${asp}.`;
       body = `<p class="cc-dice">${sl.dice.map((n, j) => hex(String(n), "on")).join("")}${hex(String(sl.opp), "them")}<span>${dice.length > 1 ? "Your best die counts. " : ""}${esc(verdict)}</span></p>
-        ${beat ? "" : `<div class="cc-row">${s.resolve > spent(d) ? `<button type="button" class="button sm" data-act="dt" data-do="asp-again" data-s="${i}">Spend 1 Resolve to roll yours again</button>` : ""}${tie ? `<button type="button" class="button sm" data-act="dt" data-do="asp-tie" data-s="${i}">The crew steps its Wealth down to take the tie</button>` : ""}</div>
-        <p class="cc-lead">There’s no Aura in downtime. Taking the tie spends the crew’s money, so ask the table first.</p>`}
+        ${beat ? "" : `<div class="cc-row">${s.resolve > spent(d) ? `<button type="button" class="button sm" data-act="dt" data-do="asp-again" data-s="${i}">Spend 1 Resolve to roll yours again</button>` : ""}${tie ? `<button type="button" class="button sm" data-act="dt" data-do="asp-tie" data-s="${i}">The crew spends a spare resource to take the tie</button>` : ""}</div>
+        <p class="cc-lead">There’s no Aura in downtime. Taking the tie spends one of the crew’s spare resources, so ask the table first.</p>`}
         ${beat && asp >= 12 ? `<h3>Your new Title</h3>
           <label class="cc-field">Its archetype <select id="dt-arch-${i}" data-dt="${i}" data-f="arch"><option value="">Pick one</option>${B.archetypes.map((a) => `<option value="${esc(a.name)}"${sl.arch === a.name ? " selected" : ""}>${esc(a.name)}${c.titles.some((t) => t.archetype === a.name) ? " again" : ""}</option>`).join("")}</select></label>
           ${field(i, "text", "Name it", sl.text)}<p class="cc-lead">Set actions the Title fits</p>${toggles(i, "tOn", sl.tOn, c)}
@@ -158,18 +158,11 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
   }
 
   function formView(sl, i, c, s, d) {
-    const n = c.numbers;
     switch (sl.k) {
       case "pressure":
         return `${field(i, "text", "What you’re dealing with", sl.text)}<p class="cc-lead">One slot usually settles a pressure, and the GM says if it needs two. If something pushes back, roll for it.</p>`;
-      case "catch":
-        return `${s.catches.length > 1 ? chips(i, "b", s.catches.map((x, j) => [j, `<em>${esc(x)}</em>`]), sl.b, "Which Catch") : `<p><em>${esc(s.catches[0] ?? "")}</em></p>`}<p class="cc-lead">Rub it out, and its three boxes clear.</p>`;
-      case "armour":
-        return `<p class="cc-lead">Armour goes back to d${n.armour}, at a smith, an armoury, or with a patient friend and a needle and thread.</p>`;
       case "mend":
-        return `${chips(i, "key", crossed(s).map((x) => [x.key, esc(x.name)]), sl.key, "What you’re mending")}<p class="cc-lead">Mending something usually takes a purse of gold as well.</p>`;
-      case "tend":
-        return `${s.catches.length ? chips(i, "b", [...s.catches.map((x, j) => [j, `<em>${esc(x)}</em>`]), [-1, "Not mine"]], sl.b, "Your Catch to heal") : ""}<p class="cc-lead">Everyone in the crew who wants it heals a Catch on their Hurt track too, so tell them.</p>`;
+        return `${chips(i, "key", crossed(s).map((x) => [x.key, esc(x.name)]), sl.key, "What you’re mending")}<p class="cc-lead">Mending something usually takes a purse of gold as well. Mended armour or a shield goes back on your Defend.</p>`;
       case "perm": {
         const t = c.titles[sl.t];
         const e = earlier(d, i, s);
@@ -177,7 +170,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
         return `${chips(i, "t", c.titles.map((x, j) => [j, `<em>${esc(x.name)}</em> <small>${has(j)} of ${MAX_PERMS}</small>`, has(j) >= MAX_PERMS]), sl.t, "Which Title")}
           ${t ? `<p class="cc-lead">It has to fit inside <em>${esc(t.name)}</em>, and the story should say where you learned it.</p>` : ""}
           ${field(i, "text", "The permission", sl.text)}${quickTest()}
-          <p class="cc-lead">Put it on every set action it fits nearly every time. Anywhere else, it’s 1 Aura to bring in.</p>${toggles(i, "on", sl.on, c)}`;
+          <p class="cc-lead">Put it on the two set actions it helps most, Defend included. Anywhere else, it’s 1 Aura to bring in.</p>${toggles(i, "on", sl.on, c)}`;
       }
       case "trait": {
         const have = new Set(c.traits.map((t) => t.name));
@@ -239,7 +232,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">Downtime</h2><p class="cc-small">${picked} of 2 slots picked</p></div>
       <button type="button" class="cc-x" data-act="close" aria-label="Close">${icon.close}</button></div>
     <div class="dlg-body">
-      <p class="cc-lead">Pick what each of your two slots is for, and it lands on your sheet when you finish. Your Resolve comes back, and once-per-downtime traits refresh, without costing a slot. ${link("what-you-can-do-with-a-slot", "What a slot can do")}</p>
+      <p class="cc-lead">Pick what each of your two slots is for, and it lands on your sheet when you finish. Three things don’t cost a slot: once-per-downtime traits refresh, all your Resolve comes back, and your wound die goes back to d${floorNow(c, s)}${s.scars?.length ? ", where your Scars keep it" : ""}. ${link("what-you-can-do-with-a-slot", "What a slot can do")}</p>
       ${ruleBox("dt-how", "Your slots, from the rules", "your-slots")}
       ${slotView(d, 0, c, s)}${slotView(d, 1, c, s)}
       <details class="cc-group" data-open="dt-free"${isOpen("dt-free") || d.swaps.length || d.mends.length ? " open" : ""}><summary>Without a slot <small>swaps${strained.length ? " and mending" : ""}</small></summary>
@@ -259,16 +252,18 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
 
   function warnings(d, c, s) {
     const out = [];
-    const healing = [];
+    const tooMany = (on) => on.filter((a) => c.actions.some((x) => x.name === a)).length > MAX_ON;
     d.slots.forEach((sl, i) => {
       const which = `Your ${ORD[i]} slot`;
       const empty = (x) => !String(x ?? "").trim();
       if (!sl.k) out.push(`${which} isn’t picked yet, so it goes to waste.`);
       else if (sl.k === "perm" && empty(sl.text)) out.push(`${which} needs the new permission’s words.`);
       else if (sl.k === "perm" && c.titles[sl.t] && c.titles[sl.t].permissions.length + (earlier(d, i, s).perms[sl.t] ?? 0) >= MAX_PERMS) out.push(`${which} would be a seventh permission on ${c.titles[sl.t].name}, and six is the most a Title holds.`);
+      else if (sl.k === "perm" && tooMany(sl.on)) out.push(`${which} puts the new permission on ${sl.on.length} set actions, and a permission goes on two at most.`);
       else if (sl.k === "trait" && (sl.own ? empty(sl.oname) : !sl.name)) out.push(`${which} needs a trait.`);
       else if (sl.k === "asp" && !sl.dice) out.push(`${which} hasn’t rolled at your Aspiration yet.`);
       else if (sl.k === "asp" && earlier(d, i, s).asp >= 12 && (Math.max(...sl.dice) > sl.opp || sl.tie) && (empty(sl.text) || !sl.arch || empty(sl.perm))) out.push(`${which} needs your new Title’s archetype, its name and its permission.`);
+      else if (sl.k === "asp" && sl.dice && tooMany(sl.pOn)) out.push(`${which} puts your new Title’s permission on ${sl.pOn.length} set actions, and a permission goes on two at most.`);
       else if (sl.k === "thread" && (empty(sl.person) || empty(sl.text))) out.push(`${which} needs who the thread’s with, and the thread.`);
       else if (sl.k === "get" && empty(sl.text)) out.push(`${which} needs what you’re getting.`);
       else if (sl.k === "get" && roomFor(c, s, sl.where) < 1) out.push(`${which} has nowhere to put it.`);
@@ -283,10 +278,10 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
           else if (r.n + 1 > s2.base && s2.missing.length) out.push(`${a.name} needs ${s2.missing.map((x) => (x === "catch" ? "its Catch" : "its Burden")).join(" and ")} for that permission.`);
         }
       }
-      if ((sl.k === "catch" || (sl.k === "tend" && sl.b >= 0)) && s.catches[sl.b] != null) {
-        if (healing.includes(sl.b)) out.push(`Both slots heal ${s.catches[sl.b]}.`);
-        healing.push(sl.b);
-      }
+    });
+    d.swaps.forEach((w) => {
+      const t = c.titles[w.t];
+      if (t && w.j >= 0 && w.text.trim() && tooMany(w.on)) out.push(`The swap puts “${w.text.trim()}” on ${w.on.length} set actions, and a permission goes on two at most.`);
     });
     return out;
   }
@@ -295,29 +290,12 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
   // state.grown. It returns what happened, for the toast.
   function apply(s, c, d) {
     const said = [];
-    const heal = (b) => {
-      const name = s.catches[b];
-      if (name == null) return null;
-      s.catches.splice(b, 1);
-      s.hurt = Math.max(0, s.hurt - 3);
-      return name;
-    };
-    // Heal by name, so the first slot healing one doesn't move the second's.
-    const names = d.slots.map((sl) => ((sl.k === "catch" || sl.k === "tend") && sl.b >= 0 ? s.catches[sl.b] : null));
     s.grown = Array.isArray(s.grown) ? s.grown : [];
     const grow = (g) => s.grown.push(g);
     d.slots.forEach((sl, i) => {
       const text = String(sl.text ?? "").trim();
       if (sl.k === "pressure") said.push(text ? `${text}: done` : "A pressure dealt with");
-      else if (sl.k === "catch" || sl.k === "tend") {
-        const b = names[i] == null ? -1 : s.catches.indexOf(names[i]);
-        const gone = b >= 0 ? heal(b) : null;
-        if (sl.k === "tend") said.push(`${gone ? `${gone} is healed, and e` : "E"}veryone in the crew who wants it heals a Catch`);
-        else if (gone) said.push(`${gone} is healed`);
-      } else if (sl.k === "armour") {
-        s.armour = c.numbers.armour;
-        said.push(`Armour’s back to d${s.armour}`);
-      } else if (sl.k === "mend" && s.crossed[sl.key]) {
+      else if (sl.k === "mend" && s.crossed[sl.key]) {
         delete s.crossed[sl.key];
         said.push(`${sl.key.split("|").slice(1).join("|")} is mended`);
       } else if (sl.k === "perm" && text && c.titles[sl.t] && c.titles[sl.t].permissions.length + (earlier(d, i, s).perms[sl.t] ?? 0) < MAX_PERMS) {
@@ -340,7 +318,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
           s.asp = sizeUp(s.asp);
           said.push(`Your Aspiration climbs to d${s.asp}`);
         }
-        if (sl.tie) said.push("Step the crew’s Wealth down one");
+        if (sl.tie) said.push("The crew spends a spare resource for the tie");
       } else if (sl.k === "thread" && text && sl.person.trim()) {
         grow({ k: "thread", person: sl.person.trim(), text });
         said.push(`A new thread with ${sl.person.trim()}${crewNames().has(sl.person.trim()) ? ", so tell them" : ""}`);

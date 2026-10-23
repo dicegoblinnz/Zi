@@ -15,12 +15,13 @@ import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
 import { MAX_PERMS, STAGES, attunedRoom } from "./grow.js";
 
 const KEY = "zi-drafts";
-export const ACTIONS = ["Fight", "Move", "Sneak", "Study", "Talk"];
+export const ACTIONS = ["Defend", "Fight", "Move", "Sneak", "Study", "Talk"];
 export const MAX_TITLES = 24;
 const MAX_ATTUNED = 8;
 const MAX_THREADS = 40;
 const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth", "twenty-first", "twenty-second", "twenty-third", "twenty-fourth"];
 const ord = (i) => ORD[i] ?? `${i + 1}${(i + 1) % 100 >= 11 && (i + 1) % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][(i + 1) % 10] ?? "th"}`;
+// Plain armour and a shield are lines on Defend, so they go on it as they're written in.
 export const ARMOUR = /\b(plate|chain|mail|leathers|shield|armou?r|breastplate|hauberk|brigandine)\b/i;
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -38,7 +39,7 @@ export function blankBuild() {
     titles: [blankTitle(), blankTitle()],
     traits: [],
     actions: [...ACTIONS],
-    equipment: [0, 1, 2].map(() => ({ ...line(), armour: false })),
+    equipment: [0, 1, 2].map(line),
     utility: [0, 1, 2, 3].map(line),
     keepsake: line(),
     bag: "",
@@ -77,13 +78,21 @@ export function normalBuild(raw) {
   b.traits = (Array.isArray(r.traits) ? r.traits : []).filter((t) => t && str(t.name)).slice(0, 24).map((t) => ({
     name: str(t.name, 120), on: ons(t.on), ...(t.own ? { own: { type: str(t.own.type, 120), text: str(t.own.text, 200) } } : {}),
   }));
-  // The five set actions are always there, and the rest keep their order, so a
-  // crew member made into a build keeps their tiles where they were.
+  // The six set actions are always there, and the rest keep their order, so a
+  // crew member made into a build keeps their tiles where they were. A build
+  // from before Defend was a set action gets it just before Fight.
   const named = [...new Set((Array.isArray(r.actions) ? r.actions : []).map((a) => str(a, 30).trim()).filter(Boolean))];
   const own = named.filter((a) => !ACTIONS.includes(a)).slice(0, 7);
   const kept = named.filter((a) => ACTIONS.includes(a) || own.includes(a));
+  if (kept.length && !kept.includes("Defend")) kept.splice(kept.includes("Fight") ? kept.indexOf("Fight") : kept.length, 0, "Defend");
   b.actions = [...kept, ...ACTIONS.filter((a) => !kept.includes(a))];
-  b.equipment = b.equipment.map((e, i) => ({ ...fixLine(r.equipment?.[i]), armour: Boolean(r.equipment?.[i]?.armour) }));
+  // Before 24 Oct 2026 a piece of plain armour was ticked as armour and made
+  // the Armour die a size bigger. It's a line on Defend now.
+  b.equipment = b.equipment.map((e, i) => {
+    const x = fixLine(r.equipment?.[i]);
+    if (r.equipment?.[i]?.armour && x.text.trim() && !x.on.includes("Defend")) x.on.push("Defend");
+    return x;
+  });
   b.utility = Array.from({ length: Math.max(4, Math.min(8, Array.isArray(r.utility) ? r.utility.length : 0)) }, (_, i) => fixLine(r.utility?.[i]));
   b.keepsake = fixLine(r.keepsake);
   b.bag = str(r.bag, 600);
@@ -126,18 +135,16 @@ export function numbersOf(b, B) {
   const fx = (k) => b.traits.filter((t) => !t.own).map((t) => [t.name, rule.get(t.name)?.effects?.[k] ?? 0]).filter(([, v]) => v);
   const sum = (k) => fx(k).reduce((n, [, v]) => n + v, 0);
   const who = (k) => (fx(k).length ? both(fx(k).map(([n]) => n)) : null);
-  const plates = b.equipment.filter((x) => x.text.trim() && x.armour).map((x) => x.text.trim());
-  let armour = 2;
-  for (let k = 0; k < plates.length; k++) armour = sizeUp(armour);
   let conf = 6;
   for (let k = 0; k < sum("confidence"); k++) conf = sizeUp(conf);
   return {
     aura: 5 + sum("aura"), resolve: Math.max(1, b.titles.filter((t) => t.arch || t.text.trim()).length),
     stride: 3 + sum("stride"), strideNote: who("stride"),
-    armour, armourNote: plates.length ? both(plates) : null,
     confidence: conf, confidenceNote: who("confidence"),
     dressed: b.clothes.trim() ? { die: sizeUp(conf), what: b.clothes.trim() } : null,
-    hurtBars: 3 + sum("hurtBars"), hurtNote: who("hurtBars"),
+    // The wound die starts at d2. A trait like Unyielding says how many Hurts
+    // a scene don't move it.
+    wound: 2, woundNote: who("shrug"), shrug: sum("shrug"),
     utility: 3 + sum("utility"),
   };
 }
@@ -224,6 +231,7 @@ function makeSheet(ch, b, B) {
       aura: times > 1 && rule.aura ? rule.aura.replace(/\+2\b/, `+${bonus}`) : rule.aura ?? "",
       auraHtml: times > 1 && rule.auraHtml ? rule.auraHtml.replace(/\+2\b/, `+${bonus}`) : rule.auraHtml ?? "",
       bonus: /^\+2\b/.test(rule.aura ?? "") ? bonus : 0,
+      resolve: rule.resolve ?? "", resolveHtml: rule.resolveHtml ?? "",
     };
   });
   const traits = b.traits.map((t, i) => {
@@ -293,8 +301,21 @@ export function checksOf(b, B, { changing = false } = {}) {
     const perms = t.perms.filter((p) => p.text.trim());
     if (changing && !perms.length) out.push({ step: 1, text: `${which} hasn’t got a permission.` });
     if (!changing && perms.length !== 3) out.push({ step: 1, text: `${which} has ${perms.length} permission${perms.length === 1 ? "" : "s"}. The quick build gives it three.` });
-    for (const p of perms) if (!/\s/.test(p.text.trim())) out.push({ step: 1, text: `“${p.text.trim()}” looks short. A permission needs a doing word and how, what or where.` });
+    // A permission goes on two set actions at most, Defend included.
+    for (const p of perms) {
+      const on = b.actions.filter((a) => p.on.includes(a));
+      if (on.length > 2) out.push({ step: 3, text: `“${p.text.trim()}” is on ${on.length} set actions. A permission goes on two at most, Defend included, so keep it on the two it helps most.` });
+    }
   });
+  // The same permission never counts twice on one set action, even from two Titles.
+  for (const a of b.actions) {
+    const words = new Map();
+    for (const t of b.titles) for (const p of t.perms) {
+      const w = p.text.trim();
+      if (w && titleIn(t) && p.on.includes(a)) words.set(w.toLowerCase(), [w, (words.get(w.toLowerCase())?.[1] ?? 0) + 1]);
+    }
+    for (const [w, n] of words.values()) if (n > 1) out.push({ step: 3, text: `“${w}” is on your ${a} ${n === 2 ? "twice" : `${n} times`}, and the same permission only counts once on a set action. Take one off, or use a different word.` });
+  }
   const traits = b.traits.length;
   if (!changing && traits !== 2) out.push({ step: 2, text: `You’ve got ${traits} trait${traits === 1 ? "" : "s"}. You start with two.` });
   if (!changing && !b.keepsake.text.trim()) out.push({ step: 4, text: "You haven’t got a keepsake yet." });
@@ -552,7 +573,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
     if (!meta.crew || !changing()) return "";
     const [, their, theyre] = PRO[b().pronoun] ?? PRO.them;
     const name = esc(b().name || meta.crew);
-    return `<div class="cc-note" role="status"><p>${name}’s sheet comes straight off the chapter for now, so when the rules change, ${their} sheet changes too. Save a change here and ${theyre} your own. ${cap(their)} sheet stops following the chapter, and ${their} Aura, Hurt and everything else in play stay as they are.</p></div>`;
+    return `<div class="cc-note" role="status"><p>${name}’s sheet comes straight off the chapter for now, so when the rules change, ${their} sheet changes too. Save a change here and ${theyre} your own. ${cap(their)} sheet stops following the chapter, and ${their} Aura, wound die and everything else in play stay as they are.</p></div>`;
   }
 
   function head() {
@@ -600,7 +621,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
       return `<fieldset class="cc-group bd-card"><legend>Your ${ord(i)} Title</legend>
         ${t.text.trim() ? `<p class="cc-small"><em>${esc(t.text.trim())}</em></p>` : ""}
         <p class="bd-label" id="bd-arch-${i}">Archetype</p><div class="cc-chips" role="group" aria-labelledby="bd-arch-${i}">${B.archetypes.map((r) => chip(esc(r.name), `data-b="arch" data-t="${i}" data-v="${esc(r.name)}"`, t.arch === r.name)).join("")}</div>
-        ${a ? `<div class="bd-rule"><p>${a.summary}</p>${a.auraHtml ? `<p><b>1 Aura:</b> ${a.auraHtml}</p>` : ""}<p class="cc-small">${link(a.id, `The ${esc(a.name)} in full`)}</p></div>` : ""}
+        ${a ? `<div class="bd-rule"><p>${a.summary}</p>${a.auraHtml ? `<p><b>1 Aura:</b> ${a.auraHtml}</p>` : ""}${a.resolveHtml ? `<p><b>1 Resolve:</b> ${a.resolveHtml}</p>` : ""}<p class="cc-small">${link(a.id, `The ${esc(a.name)} in full`)}</p></div>` : ""}
         ${a || d.deep[0] ? `<p class="bd-label">A Title idea, if you like</p>${fits.length ? ideaChips : `<p class="cc-lead">None of the ideas lists the ${esc(t.arch)}, so write your own Title on the next step, or open the full build to see every idea.</p>`}
         ${idea ? `<p class="cc-small">${esc(cap(idea.playsLike))}. ${link(idea.id, `The ${esc(idea.name)} idea`)}</p>` : ""}` : ""}
         ${canDrop("title") ? `<div class="cc-row">${dropBtn("title", i, "Take this Title off")}</div>` : ""}</fieldset>`;
@@ -623,7 +644,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
         ${field(`t${i}.text`, "Your Title", t.text, { ph: "Make it specific: the best blade in the Low Market", max: 80 })}
         ${idea ? `<p class="cc-small">Or take one of the idea’s:</p><div class="cc-chips">${idea.titles.map((name) => chip(esc(name), `data-b="title" data-t="${i}" data-v="${esc(name)}"`, t.text.trim() === name)).join("")}</div>` : ""}
         <p class="bd-label">${!changing() && i < 2 ? "Three permissions" : "Its permissions, up to six"}</p>
-        ${t.perms.map((p, j) => field(`t${i}.p${j}`, `Permission ${j + 1}`, p.text, { ph: "a doing word, and how, what or where", max: 80 })).join("")}
+        ${t.perms.map((p, j) => field(`t${i}.p${j}`, `Permission ${j + 1}`, p.text, { ph: "one word, or a doing word and how, what or where", max: 80 })).join("")}
         ${t.perms.length < MAX_PERMS ? `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="addperm" data-t="${i}">Add a permission</button></div>` : '<p class="cc-lead">Six is the most a Title holds.</p>'}
         ${idea ? `<p class="cc-small">Tap one of the ${esc(idea.name)} idea’s to add it, or tap it again to take it off.</p>${offer(idea.permissions)}` : ""}
         ${d.deep[1] ? B.permIdeas.map((g) => `<p class="bd-label">${esc(g.for)}</p>${offer(g.perms)}`).join("") : ""}
@@ -674,13 +695,18 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
     const x = b();
     const rows = linesOf(x, B).filter((l) => kinds.includes(l.kind));
     const say = (l) => (l.kind === "title" ? `Title: <em>${esc(l.label)}</em>` : l.kind === "permission" || l.kind === "attuned" ? `<em>${esc(l.label)}</em>` : esc(l.label));
-    return rows.length ? `<ul class="bd-lines">${rows.map((l) => `<li><p>${say(l)}</p>${toggles(l.ref, l.label)}</li>`).join("")}</ul>` : "";
+    // A permission on more than two set actions says so right there.
+    const over = (l) => {
+      const n = l.kind === "permission" ? x.actions.filter((a) => lineAt(x, l.ref)?.on.includes(a)).length : 0;
+      return n > 2 ? `<p class="cc-warn">It’s on ${n}. A permission goes on two at most.</p>` : "";
+    };
+    return rows.length ? `<ul class="bd-lines">${rows.map((l) => `<li><p>${say(l)}</p>${toggles(l.ref, l.label)}${over(l)}</li>`).join("")}</ul>` : "";
   }
   function stepActions() {
     const x = b();
     const own = x.actions.filter((a) => !ACTIONS.includes(a));
     return `${how(3)}${tiles(x.actions)}
-      <h2>What goes on each</h2><p class="cc-lead">Tap a set action under each line if it’d help nearly every time you do it. A line can go on as many as it fits.</p>
+      <h2>What goes on each</h2><p class="cc-lead">Tap the set actions each line helps nearly every time you do them. A Title or a trait goes on every one it fits, and a permission goes on two at most, Defend included, so pick the two it helps most. Plain armour and a shield go on your Defend, on the next step.</p>
       ${lineRows(["title", "permission", "trait"]) || '<p class="cc-lead">Your Titles, permissions and traits show up here once you’ve written them.</p>'}
       <h2>One of your own</h2><p class="cc-lead">Something you do all the time, like Locks or Ward, or Shoot if you’d rather keep it apart from Fight.</p>
       <div class="cc-form">${field("newact", "Its name", "", { max: 30, ph: "Locks" })}<button type="button" class="button" data-act="b" data-b="addact">Add it</button></div>
@@ -699,7 +725,6 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
       const ref = `${kind}${i}`;
       const item = lineAt(x, ref);
       return `<div class="bd-slot">${field(ref, label, item.text, { max: 60, ph: "Type it, or tap one below" })}
-        ${kind === "e" ? `<div class="cc-row">${chip("Armour a size bigger", `data-b="armour" data-i="${i}"`, item.armour, "sm")}</div>` : ""}
         ${toggles(ref, item.text || label)}</div>`;
     };
     const things = [...new Set([...x.equipment, ...x.utility, x.keepsake].map((v) => v.text.trim()).filter(Boolean))];
@@ -727,7 +752,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
         ${drop(i)}</fieldset>`;
     };
     return `${how(4)}
-      <section aria-labelledby="bd-eq"><h2 id="bd-eq">3 equipment</h2><p class="cc-lead">What you wear or wield. Each piece of plain armour makes your Armour a size bigger.</p>
+      <section aria-labelledby="bd-eq"><h2 id="bd-eq">3 equipment</h2><p class="cc-lead">What you wear or wield. Each piece of plain armour, and a shield, is a line on your Defend, so it goes on as you write it in.</p>
         ${x.equipment.map((e, i) => slot("e", i, `Equipment ${i + 1}`)).join("")}
         ${offer("e", "Weapons", group("Weapons"))}${offer("e", "Armour and wearables", group("Armour & wearables"))}</section>
       <section aria-labelledby="bd-ut"><h2 id="bd-ut">${n.utility} utility items</h2><p class="cc-lead">Tools and things you use up.</p>
@@ -780,7 +805,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
         ${field("blurb", "One line about them, if you like", x.blurb, { max: 160 })}</fieldset>
       <h2>Your numbers</h2><ul class="bd-nums">
         ${num("Aura", n.aura)}${num("Resolve", n.resolve, "one for each Title")}${num("Stride", n.stride, n.strideNote)}
-        ${num("Hurt", `${n.hurtBars} bars`, n.hurtNote)}${num("Armour", `d${n.armour}`, n.armourNote)}${num("Confidence", `d${n.confidence}`, n.confidenceNote ? `${n.confidenceNote}, every scene` : "every scene")}</ul>
+        ${num("Wound die", `d${n.wound}`, n.shrug ? `${n.woundNote}: ${n.shrug > 1 ? `the first ${n.shrug} Hurts each scene don’t` : "the first Hurt each scene doesn’t"} move it` : null)}${num("Confidence", `d${n.confidence}`, n.confidenceNote ? `${n.confidenceNote}, every scene` : "every scene")}</ul>
       ${field("clothes", "Clothes that fit some scenes, if you’ve got them", x.clothes, { max: 60, ph: "a fine coat" })}
       <p class="cc-lead">In them, Confidence starts a size up when they fit the scene.</p>
       <h2>Set actions</h2>${tiles(x.actions)}
@@ -831,9 +856,10 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
       if (!item) return;
       const was = ARMOUR.test(item.text);
       item.text = v;
+      // Armour going in puts it on Defend, and taking it out takes it off.
       if (m[1] === "e" && was !== ARMOUR.test(v)) {
-        item.armour = ARMOUR.test(v);
-        document.querySelector(`[data-b="armour"][data-i="${m[2]}"]`)?.setAttribute("aria-pressed", String(item.armour));
+        item.on = ARMOUR.test(v) ? [...new Set([...item.on, "Defend"])] : item.on.filter((a) => a !== "Defend");
+        document.querySelector(`[data-b="on"][data-l="${path}"][data-a="Defend"]`)?.setAttribute("aria-pressed", String(item.on.includes("Defend")));
       }
     } else if (path === "k") x.keepsake.text = v;
     else if ((m = path.match(/^a(\d+)\.(name|catch|burden)$/))) set(x.attuned[m[1]], m[2]);
@@ -1013,21 +1039,21 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll }) {
         const item = lineAt(x, path);
         if (!item) return;
         item.text = v;
-        if (path[0] === "e") item.armour = ARMOUR.test(v);
+        if (path[0] === "e" && ARMOUR.test(v) && !item.on.includes("Defend")) item.on.push("Defend");
       }
     } else if (k === "fillany") {
       const kind = el.dataset.k;
       const list = kind === "e" ? x.equipment : kind === "u" ? x.utility.slice(0, numbersOf(x, B).utility) : [x.keepsake];
       const at = list.findIndex((it) => it.text.trim().toLowerCase() === v.toLowerCase());
-      if (at >= 0) Object.assign(list[at], { text: "", on: [] }, kind === "e" ? { armour: false } : {});
+      if (at >= 0) Object.assign(list[at], { text: "", on: [] });
       else {
         const free = kind === "k" ? 0 : list.findIndex((it) => !it.text.trim());
         if (free < 0) return toast("That’s full. Tap one to take it off, or change one by hand.", false);
         list[free].text = v;
-        if (kind === "e") list[free].armour = ARMOUR.test(v);
+        // Plain armour and a shield are lines on Defend.
+        if (kind === "e" && ARMOUR.test(v) && !list[free].on.includes("Defend")) list[free].on.push("Defend");
       }
-    } else if (k === "armour") x.equipment[i].armour = !x.equipment[i].armour;
-    else if (k === "debt") {
+    } else if (k === "debt") {
       x.threads[i].debt = !x.threads[i].debt;
       // A debt makes room for a fourth thread in the Quick Build.
       if (!changing() && x.threads.some((t) => t.debt) && x.threads.length < 4) x.threads.push(blankThread());

@@ -1,10 +1,10 @@
 // The learning round, at /characters/?learn. The brute swings his club at
 // Isolde, and a new player answers it with Wren and Bram, the way it goes in
-// Answering a Telegraph (#s-answering). Isolde's Armour and Hurt track and
+// Answering a Telegraph (#s-answering). Isolde's Defend and wound die and
 // Wren's and Bram's Fight come off their sheets, so the round follows the
 // rules. The club is the book's own d8. Nothing in it is saved.
 
-import { stepsToDice } from "./dice.js";
+import { sizeUp, stepsToDice } from "./dice.js";
 
 const CLUB = 8;
 const STEPS = ["The GM telegraphs", "Answer it", "Roll", "That’s a round"];
@@ -39,11 +39,13 @@ function howDice(total) {
 }
 
 export function makeLearn(k) {
-  const { crew, esc, hex, steps, rules, ruleHtml, isOpen, lineOf, lineLabel, throwDie, feel, tumble, calm, sound, render } = k;
+  const { crew, esc, hex, steps, rules, ruleHtml, isOpen, lineOf, lineLabel, throwDie, feel, tumble, calm, sound, render, gauge } = k;
   const isolde = crew.get("isolde");
   const wren = crew.get("wren");
   const bram = crew.get("bram");
   const fight = (c) => c?.actions.find((a) => a.name === "Fight");
+  // Isolde's Defend, rolled when the club lands: her best die is the one that counts against it.
+  const guard = () => Math.max(...stepsToDice(isolde.actions.find((a) => a.name === "Defend")?.steps ?? 1));
   let L;
   let stop = null;
   const reset = () => {
@@ -68,12 +70,13 @@ export function makeLearn(k) {
   const btn = (what, label, cls = "", extra = "") => `<button type="button" class="button${cls ? ` ${cls}` : ""}" data-act="learn" data-do="${what}"${extra}>${label}</button>`;
 
   function stepTelegraph() {
-    const armour = isolde.numbers.armour;
-    const [x, y] = odds(armour, CLUB);
+    const die = guard();
+    const [x, y] = odds(die, CLUB);
     return `<p>Every round starts with the GM saying what’s coming, before anything’s rolled: what it’s doing, who it’s aimed at, and how hard, in dice. That’s a <b>telegraph</b>.</p>
     <p class="ln-gm"><b>GM:</b> The brute swings his club at Isolde. That’s a d${CLUB}.</p>
-    <div class="ln-vs"><div class="ln-who">${hex(`d${CLUB}`, "big them")}<span>The brute’s club</span></div><span class="ln-arrow" aria-hidden="true">↓</span><div class="ln-who">${hex(`d${armour}`, "big")}<span>Isolde’s Armour</span></div></div>
-    <p>If nobody answers it, it lands at the end of the round, and Isolde rolls her Armour against it. The club has to beat her roll to get through, and ties go to her. A d${armour} against a d${CLUB} stops it ${x} times in ${y}, so you’re going to answer it with Wren and Bram.</p>
+    <div class="ln-vs"><div class="ln-who">${hex(`d${CLUB}`, "big them")}<span>The brute’s club</span></div><span class="ln-arrow" aria-hidden="true">↓</span><div class="ln-who">${hex(`d${die}`, "big")}<span>Isolde’s Defend</span></div></div>
+    <p>If nobody answers it, it lands at the end of the round, and Isolde rolls her Defend against it. The club has to beat her roll to get through, and ties go to her. A d${die} against a d${CLUB} stops it ${x} times in ${y}, so you’re going to answer it with Wren and Bram.</p>
+    <p>Bram’s a Guardian, so he could intercept it for free and take it on his own Defend instead. This time you’re going to stop it before it lands.</p>
     ${rule("s-telegraphs")}
     <div class="cc-row ln-foot">${btn("next", "Answer it", "primary")}</div>`;
   }
@@ -125,14 +128,15 @@ export function makeLearn(k) {
     const rows = L.dice.map((d, i) => `<li class="res is-${spin ? "spin" : i === first ? mark : "none"}">${die(d.size, d.nat, "on")}<span class="res-die">d${d.size}</span>${!spin && i === first ? '<b class="res-out">Your best</b>' : ""}${!spin && d.nat === d.size ? '<span class="res-note">Top face</span>' : ""}</li>`).join("");
     const tops = L.dice.filter((d) => d.nat === d.size);
     const topLine = tops.length ? `<p>${tops.length === 1 ? `The d${tops[0].size} came up ${tops[0].size}, its top face` : `That’s ${tops.length} top faces`}, so Wren gets ${tops.length} Aura back. Whoever rolls gets the Aura for every top face, friends’ dice included, and if her Aura’s full she gives it to a friend in the scene.</p>` : "";
-    const boxes = isolde.numbers.hurtBars * 3;
-    const hurt = `<div class="ln-hurt"><span class="k">Isolde’s Hurt</span><span class="mini" aria-hidden="true">${Array.from({ length: boxes }, (_, i) => `<i${i === 0 ? ` class="on${L.fresh ? " is-new" : ""}"` : ""}></i>`).join("")}</span></div>`;
+    const from = isolde.numbers.wound ?? 2;
+    const to = sizeUp(from);
+    const hurt = `<div class="ln-hurt"><span class="k">Isolde’s wound die</span>${gauge(to, from, L.fresh)}${hex(`d${to}`, "on")}</div>`;
     const words = {
       beat: `<h3 id="ln-out" tabindex="-1">It never lands</h3><p>Your ${b} beats the brute’s ${L.opp}, so the club never comes down. Isolde’s fine, and Wren and Bram have both used their action for the round.</p>`,
       won: `<h3 id="ln-out" tabindex="-1">It never lands</h3><p>You pay 1 Aura, so the tie’s yours, and the club never comes down. Isolde’s fine, and Wren and Bram have both used their action for the round.</p>`,
       tie: `<h3 id="ln-out" tabindex="-1">A tie</h3><p>Your ${b} ties the brute’s ${L.opp}. A tie’s a loss, unless you pay 1 Aura.</p><div class="cc-row">${btn("win", "Win the tie: 1 Aura")}${btn("lose", "Let it land")}</div>`,
       lands: `<h3 id="ln-out" tabindex="-1">It lands on Isolde</h3><p>${b === L.opp ? `Your ${b} ties the brute’s ${L.opp}, and a tie’s a loss` : `The brute’s ${L.opp} beats your best, a ${b}`}, so the club lands on Isolde at once, and nobody rolls a defence against it. Answering’s a gamble, and this one didn’t pay off.</p>
-        <p>The GM names what a blow costs. Say she calls it a Hurt: that’s 1 of ${boxes} boxes on Isolde’s Hurt track.</p>${hurt}`,
+        <p>The GM names what a blow costs. Say she calls it a Hurt: Isolde’s wound die goes up a size, from d${from} to d${to}.</p>${hurt}`,
     };
     return `<div class="ln-roll"${spin ? ' data-act="learn" data-do="skip"' : ""}>
       <div class="cc-them"><span class="k">The brute’s d${CLUB}</span>${die(CLUB, L.opp, "them")}</div>

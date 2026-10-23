@@ -32,7 +32,8 @@ export function fromCrew(c, B, { keep = false } = {}) {
   });
   const eq = c.carry.equipment.items.slice(0, 3);
   const ut = c.carry.utility.items.slice(0, keep ? 8 : 4);
-  eq.forEach((x, i) => Object.assign(b.equipment[i], { text: x, armour: ARMOUR.test(x) }));
+  // Their armour's already a line on their Defend, so it comes across with the rest.
+  eq.forEach((x, i) => Object.assign(b.equipment[i], { text: x }));
   ut.forEach((x, i) => (b.utility[i] = { text: x, on: [] }));
   b.keepsake.text = c.carry.keepsake ?? "";
   b.bag = (c.carry.bag.items ?? []).join("\n");
@@ -84,10 +85,12 @@ function shuffle(list, rand) {
   return out;
 }
 
-// Which set action a line most likely helps, from its words.
+// Which set action a line most likely helps, from its words. Nothing goes on
+// Defend unless its words say it keeps you from getting hit.
 const LEANS = [
-  ["Fight", /\b(fight|blade|sword|shoot|strike|duel|disarm|brawl|parry|shield|spear|bow|axe|hammer|knife|weapon|wrestle|punch)/i],
-  ["Move", /\b(run|climb|leap|jump|swim|ride|chase|dodge|roof|balance|sprint|escape|vault|feet)/i],
+  ["Defend", /\b(dodge|parry|block|shield|armou?r|guard|duck|weave|protect|brace|hold the line)/i],
+  ["Fight", /\b(fight|blade|sword|shoot|strike|duel|disarm|brawl|spear|bow|axe|hammer|knife|weapon|wrestle|punch)/i],
+  ["Move", /\b(run|climb|leap|jump|swim|ride|chase|roof|balance|sprint|escape|vault|feet)/i],
   ["Sneak", /\b(unseen|unheard|hide|sneak|slip|shadow|quiet|silent|lock|lift|purse|pocket|steal|trap|case)/i],
   ["Talk", /\b(talk|charm|lie|persuade|convince|threaten|bargain|haggle|order|command|bluff|calm|sing|perform|crowd|friend|speak|deal|rally)/i],
   ["Study", /\b(know|read|study|spot|notice|track|trail|remember|history|map|find|search|heal|stitch|mend|mix|fix|craft|tell|smell|weather|language)/i],
@@ -109,9 +112,10 @@ export function randomBuild(B, crew, rand = Math.random) {
   // No set action gets more than 4 lines, 5 steps, like the crew's biggest,
   // and a line with nowhere left to go stays off them.
   const load = Object.fromEntries(ACTIONS.map((a) => [a, 0]));
+  const anywhere = ACTIONS.filter((a) => a !== "Defend");
   const onto = (text, said, cap = 4) => {
     const fits = said ? [said] : LEANS.filter(([, re]) => re.test(text)).map(([a]) => a);
-    const pool = (fits.length ? fits : ACTIONS).filter((a) => load[a] < cap);
+    const pool = (fits.length ? fits : anywhere).filter((a) => load[a] < cap);
     if (!pool.length) return null;
     const low = Math.min(...pool.map((a) => load[a]));
     const a = pick(pool.filter((x) => load[x] === low), rand);
@@ -119,9 +123,12 @@ export function randomBuild(B, crew, rand = Math.random) {
     return a;
   };
   const left = [];
+  // Each permission once, so the same words never sit on one set action twice.
+  const taken = new Set();
   ideas.forEach((idea, i) => {
-    const perms = shuffle(idea.permissions.filter((p) => /\s/.test(p.trim())), rand);
-    for (const p of spares) if (perms.length < 3 && !perms.includes(p)) perms.push(p);
+    const perms = shuffle(idea.permissions.filter((p) => /\s/.test(p.trim()) && !taken.has(p)), rand);
+    for (const p of spares) if (perms.length < 3 && !perms.includes(p) && !taken.has(p)) perms.push(p);
+    for (const p of perms.slice(0, 3)) taken.add(p);
     const t = b.titles[i];
     Object.assign(t, { arch: pick(idea.archetypes.filter((a) => known.has(a)), rand), idea: idea.id, text: pick(idea.titles, rand) });
     perms.slice(0, 3).forEach((p, j) => (t.perms[j] = { text: p, on: [onto(p, null, 3)].filter(Boolean) }));
@@ -140,10 +147,11 @@ export function randomBuild(B, crew, rand = Math.random) {
   });
 
   const group = (g) => B.items.find((x) => x.group === g)?.items ?? [];
-  b.equipment[0] = { text: pick(group("Weapons"), rand), on: [onto("", "Fight")].filter(Boolean), armour: false };
+  b.equipment[0] = { text: pick(group("Weapons"), rand), on: [onto("", "Fight")].filter(Boolean) };
   if (rand() < 0.6) {
+    // Plain armour and a shield are lines on Defend.
     const worn = pick(group("Armour & wearables"), rand);
-    b.equipment[1] = { text: worn, on: [], armour: ARMOUR.test(worn) };
+    b.equipment[1] = { text: worn, on: ARMOUR.test(worn) ? [onto("", "Defend")].filter(Boolean) : [] };
   }
   shuffle([...group("Tools"), ...B.usedUp.map((u) => u.name)], rand).slice(0, 2).forEach((x, i) => (b.utility[i] = { text: x, on: [] }));
   b.keepsake = { text: pick(B.keepsakes, rand).name, on: [] };
@@ -151,7 +159,7 @@ export function randomBuild(B, crew, rand = Math.random) {
   // makes the best one. Each gets a permission the Titles didn't use.
   const carried = new Set([...b.equipment, ...b.utility].map((x) => x.text.toLowerCase()));
   const things = shuffle([...group("Signature"), ...group("Foci"), ...group("Tools")], rand).filter((x) => !carried.has(x.toLowerCase())).slice(0, 2);
-  const unused = [...shuffle(left, rand), ...spares];
+  const unused = [...shuffle(left, rand), ...spares].filter((p) => !taken.has(p));
   things.forEach((name, i) => {
     const p = unused[i];
     b.attuned[i] = { name: name.charAt(0).toUpperCase() + name.slice(1), catch: "", perms: [{ text: p, on: [onto(p)].filter(Boolean) }, { text: "", on: [] }] };

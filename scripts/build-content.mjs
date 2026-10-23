@@ -219,6 +219,7 @@ function sheetFrom(name, titleText, body, block, ctx) {
       aura: times > 1 && rule.aura ? rule.aura.replace(/\+2\b/, `+${bonus}`) : rule.aura ?? "",
       auraHtml: times > 1 && rule.auraHtml ? rule.auraHtml.replace(/\+2\b/, `+${bonus}`) : rule.auraHtml ?? "",
       bonus: /^\+2\b/.test(rule.aura ?? "") ? bonus : 0,
+      resolve: rule.resolve ?? "", resolveHtml: rule.resolveHtml ?? "",
     };
   });
 
@@ -308,6 +309,9 @@ function sheetFrom(name, titleText, body, block, ctx) {
     return { name: curly(s[1]), steps, die: s[3], lines: on };
   }).filter(Boolean);
 
+  // Defend is a set action like the rest, and every sheet has one.
+  if (!actions.some((a) => a.name === "Defend")) warn("there's no Defend set action");
+
   const n = field.Numbers ?? "";
   const find = (re, what) => {
     const m = n.match(re);
@@ -315,21 +319,25 @@ function sheetFrom(name, titleText, body, block, ctx) {
     return m;
   };
   const conf = find(/Confidence starts every scene on d(\d+)(?: \(([^)]+)\))?(?:, or d(\d+) in (.+?) when (?:they fit|it fits) the scene)?/, "Confidence");
-  const hurt = find(/Hurt (\w+) bars of three(?: \(([^)]+)\))?/, "Hurt");
-  if (hurt && !COUNT[hurt[1]]) warn(`can't count "${hurt[1]}" Hurt bars`);
+  // The wound die is the Hurt track: it starts at d2, and a note in brackets
+  // says what changes it, like Bram's Unyielding.
+  const wound = find(/\bWound die d(\d+)(?: \(([^)]+)\))?/, "the wound die");
+  if (/\bArmour d\d|\bHurt \w+ bars?\b/.test(n)) warn("the numbers still have Armour or Hurt bars, and the rules have Defend and a wound die instead");
   const note = (re) => (n.match(re)?.[1] ? curly(n.match(re)[1]) : null);
+  const woundNote = wound?.[2] ? curly(wound[2]) : null;
   const numbers = {
     aura: Number(find(/\bAura (\d+)/, "Aura")?.[1] ?? 5),
     resolve: Number(find(/\bResolve (\d+)/, "Resolve")?.[1] ?? titles.length),
     stride: Number(find(/\bStride (\d+)/, "Stride")?.[1] ?? 3),
     strideNote: note(/\bStride \d+ \(([^)]+)\)/),
-    armour: Number(find(/\bArmour d(\d+)/, "Armour")?.[1] ?? 2),
-    armourNote: note(/\bArmour d\d+ \(([^)]+)\)/),
     confidence: Number(conf?.[1] ?? 6),
     confidenceNote: conf?.[2] ? curly(conf[2]) : null,
     dressed: conf?.[3] ? { die: Number(conf[3]), what: plain(conf[4]) } : null,
-    hurtBars: COUNT[hurt?.[1]] ?? 3,
-    hurtNote: hurt?.[2] ? curly(hurt[2]) : null,
+    wound: Number(wound?.[1] ?? 2),
+    woundNote,
+    // How many Hurts a scene don't move the wound die, from the sheet's note
+    // or a trait that says so (Unyielding).
+    shrug: Math.max(shrugOf(woundNote), ...traits.map((t) => shrugOf(ctx.traits[t.name]?.text))),
   };
 
   // Threads by person. A note in brackets after one says whose words it is, or
@@ -369,13 +377,19 @@ function sheetFrom(name, titleText, body, block, ctx) {
   };
 }
 
-// What each archetype does and what 1 Aura gets it, from The Archetypes.
+// What each archetype does, what 1 Aura gets it and what its 1 Resolve
+// spend is, from The Archetypes.
 function archetypesFrom(doc, inline) {
   const out = {};
   for (const m of doc.body.matchAll(/^## (.+?) \{#(a-[a-z-]+)\}\n([\s\S]*?)(?=^## |(?![\s\S]))/gm)) {
     const [, archetype, id, text] = m;
     const aura = text.match(/^\*\*1 Aura:\*\* (.+)$/m)?.[1] ?? null;
-    out[archetype] = { id, summary: inline(text.trim().split(/\n\s*\n/)[0]), aura: aura ? plain(aura) : null, auraHtml: aura ? inline(aura) : null };
+    const resolve = text.match(/^\*\*1 Resolve:\*\* (.+)$/m)?.[1] ?? null;
+    out[archetype] = {
+      id, summary: inline(text.trim().split(/\n\s*\n/)[0]),
+      aura: aura ? plain(aura) : null, auraHtml: aura ? inline(aura) : null,
+      resolve: resolve ? plain(resolve) : null, resolveHtml: resolve ? inline(resolve) : null,
+    };
   }
   return out;
 }
@@ -388,12 +402,20 @@ function traitsFrom(doc, inline) {
   return out;
 }
 
-// The conditions to start with, from Conflict, against you and for you.
+// The conditions to start with, from Conflict, against you and for you. Each
+// one's passive is a whole sentence ("One step less on anything physical.",
+// or a vulnerability like Prone's), and its active is what spending it does.
+// A table whose heading still says "Passive: one step less on…" has the
+// start of that sentence in its heading, so it's put back on.
 function conditionsFrom(doc, inline) {
   const out = [];
   for (const [kind, heading] of [["against", "Against you"], ["for", "For you"]]) {
     const table = doc.body.split(new RegExp(`^#### ${heading}.*$`, "m"))[1]?.split(/^#{2,4} /m)[0] ?? "";
-    for (const m of table.matchAll(/^\| \*\*(.+?)\*\* \| (.+?) \| (.+?) \|$/gm)) out.push({ name: curly(m[1]), kind, passive: inline(m[2]), active: inline(m[3]) });
+    const lead = table.match(/^\| Condition \| Passive: (one step (?:less|more) on)…? \|/im)?.[1];
+    for (const m of table.matchAll(/^\| \*\*(.+?)\*\* \| (.+?) \| (.+?) \|$/gm)) {
+      const passive = lead ? `${lead.charAt(0).toUpperCase()}${lead.slice(1)} ${m[2]}` : m[2];
+      out.push({ name: curly(m[1]), kind, passive: inline(passive), active: inline(m[3]) });
+    }
   }
   return out;
 }
@@ -413,10 +435,19 @@ const listItems = (sec) => [...sec.matchAll(/^\d+\.\s+(.+)$/gm)].map((m) => m[1]
 const tableRows = (sec) => [...sec.matchAll(/^\| (.+) \|$/gm)].map((m) => m[1].split(" | ").map((x) => x.trim())).filter((r) => !/^-+$/.test(r[0])).slice(1);
 const dots = (s = "") => s.split(" · ").map((x) => x.trim()).filter(Boolean);
 
+// A trait or a note that says the first Hurt (or the first two) you take each
+// scene doesn't move your wound die, like Unyielding. It's read loosely, so a
+// reworded rule still counts: how many it covers, or 0.
+function shrugOf(text = "") {
+  const m = String(text ?? "").match(/\bfirst (?:(two|three) )?Hurts?\b[^.|]*?\b(?:doesn['’]t|don['’]t|does not|do not|won['’]t|never)\b[^.|]*?\b(?:move|put|step|go|raise)/i);
+  return m ? COUNT[m[1]?.toLowerCase()] ?? 1 : 0;
+}
+
 function traitEffects(text) {
   const e = {};
   if (/\bAura maximum is one higher\b/i.test(text)) e.aura = 1;
-  if (/\bextra Hurt bar\b/i.test(text)) e.hurtBars = 1;
+  const shrug = shrugOf(text);
+  if (shrug) e.shrug = shrug;
   const move = text.match(/\+(\d+) units? of movement\b/i);
   if (move) e.stride = Number(move[1]);
   if (/\bcarry one more utility item\b/i.test(text)) e.utility = 1;
@@ -561,7 +592,7 @@ const blockHtml = (text) => {
 };
 const rules = {};
 for (const id of ["s-round", "s-telegraphs", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour",
-  "s-defending", "s-defend", "s-consequences", "s-fear-gets-through", "s-blaze", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "how-permissions-stack",
+  "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through", "s-blaze", "s-healing", "s-vulnerable", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "how-permissions-stack",
   "your-slots", "s-downtime-rolls"]) {
   const doc = docWith(`{#${id}}`);
   const head = doc?.body.match(new RegExp(`^#{2,4} (.+?) \\{#${id}\\}`, "m"));
@@ -582,7 +613,7 @@ const linkTo = (id) => {
 };
 const companionLinks = Object.fromEntries(
   ["s-round", "s-telegraphs", "s-answering", "s-aura", "s-resolve", "s-confidence", "s-armour", "s-blaze", "s-healing", "s-conditions", "s-bonds", "s-trouble", "steps-into-dice",
-    "s-splitting", "s-teamwork", "s-extra-actions", "s-going-beyond", "s-the-roll", "s-defending", "s-defend", "s-fear-gets-through",
+    "s-splitting", "s-teamwork", "s-extra-actions", "s-going-beyond", "s-the-roll", "s-defending", "s-defend", "s-intercept", "s-vulnerable", "s-fear-gets-through",
     "s-consequences", "s-aspiration", "s-pregens", "s-set-actions", "s-how-archetypes", "s-attunement", "s-carrying", "s-traits", "s-intents",
     "s-quick", "s-title-ideas", "s-title", "s-writing-permissions", "the-quick-test", "permission-ideas", "s-step-set-actions", "s-items",
     "the-item-list", "catches-12", "s-starting-numbers", "s-connect", "what-you-can-do-with-a-slot", "attunement-stages", "s-downtime-threads"]

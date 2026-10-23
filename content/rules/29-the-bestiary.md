@@ -6,19 +6,19 @@ order: 29
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 :::quote
 Here are forty threats you can run straight off the page, all laid out the same way.
 :::
 
-Each threat gets a **Challenge**, its tags sorted into the three kinds, three telegraphs, a line to say in its voice, and one **hidden** tag the crew has to find. If a tag's marked **weak point**, breaking it ends the threat at once. Count its *keeps it going* tags and you'll know how many wins it takes the long way.
+Each threat gets a **Challenge**, its tags sorted into the three kinds, three telegraphs, a line to say in its voice, and one **hidden** tag the crew has to find. If a tag's marked **weak point**, breaking it ends the threat at once. Count its *keeps it going* tags, with a multiplier counting as that many, and you'll know how many wins it takes the long way: the Fallen Champion's *Relentless*, *Ancient* and *Armoured ×6* are eight.
 
-The **Telegraphs** line gives you three to read out as they're written, each with its die and what it hits. They come from the threat's own tags, so the crew can see how to answer them. Spend them from your [round budget](#s-budget) like any telegraph, and write your own as the scene needs them ([Telegraphing Well](#s-telegraphing) has the tricks). If a tag like *Ambush* makes the first one a step bigger, it's listed first.
+The **Telegraphs** line gives you three to read out as they're written, each with its die and what it hits. They come from the threat's own tags, so the crew can see how to answer them. Spend them from your [round budget](#s-budget) like any telegraph, and write your own as the scene needs them ([Telegraphing Well](#s-telegraphing) has the tricks). If a tag like *Ambush* makes the first one a step bigger, it's listed first. A threat aims one die at each person a round, unless a tag like *Flurry* says it can do more, so if two of its telegraphs would go at the same one of the crew, aim one of them somewhere else.
 
-Every Challenge 6 threat has **Tough**, and so do two Challenge 5s that should take a while. It works like hit points: every winning die against it takes off what it rolled, and at 0 it's gone. Plain *Tough* drops to anything that hurts it, and a named one like *Armoured 40* only to what fits it. It's written for a starting crew of four, a [threat budget](#s-threat-budget) of 40, so scale it to your crew: *Tough 40* means your whole threat budget and *Tough 20* means half. Four characters with four Titles each have a threat budget of 60, so they'd be 60 and 30. There's more in [Tough](#s-tough-gm), in Running the Game.
+Every Challenge 6 threat has a **multiplier** on at least one tag, and so do two Challenge 5s that should take a while. *Armoured ×6* takes six wins to strip: every win ticks one off, and you say what's left out loud. It only ticks to what fits it, so a hammer ticks *Armoured* and a bribe doesn't, and a [vulnerability](#s-vulnerable) that fits ticks it faster. They're written for a starting crew of four, a [threat budget](#s-threat-budget) of 40. For a bigger or more experienced crew, add 1 to each multiplier for every 10 the threat budget's over 40. Four characters with four Titles each have a threat budget of 60, so for them *Armoured ×6* is *Armoured ×8*, and a ×3 is a ×5. There's more in [Multipliers](#s-tough-gm), in Running the Game.
 
-When a threat with **Forms** loses its last keeps-it-going tag, it changes shape instead of falling. Its Tough fills back up, and you pick 3 to 5 tags for its new shape from its Forms list and tell the table what it's becoming. It changes once with *Forms (2)* and twice with *Forms (3)*, and its Tough refills each time, so its Tough is split across its forms: about 20 a form with two, and 13 to 15 with three. Its weak point still ends it in any shape, and its last form falls like anything else.
+When a threat with **Forms** loses its last keeps-it-going tag, it changes shape instead of falling. Its multipliers fill back up, and you pick 3 to 5 tags for its new shape from its Forms list and tell the table what it's becoming. It changes once with *Forms (2)* and twice with *Forms (3)*, and its multipliers fill back up each time, so they're smaller than a one-form boss's: about ×3 with two forms, and ×2 with three. Its weak point still ends it in any shape, and its last form falls like anything else.
 
 ## Mooks: Challenge 2–3 {#mooks-challenge-23}
 
@@ -33,7 +33,7 @@ Uniform a size too big, lantern held low, eyes on the middle distance.
 
 **Drives it** *One of Many* · *Bored*
 
-**Telegraphs** *He holds his lantern up to the nearest face and asks what you're doing here.* (d6, Confidence) · *He puts his whistle to his lips.* (d6, an event: the watch arrives) · *He swings the lantern pole at whoever's closest.* (d6, Armour)
+**Telegraphs** *He holds his lantern up to the nearest face and asks what you're doing here.* (d6, Confidence) · *He puts his whistle to his lips.* (d6, an event: the watch arrives) · *He swings the lantern pole at whoever's closest.* (d6, Defend)
 
 **Voice** "Right. Nothing to see here, then. Move along."
 
@@ -67,7 +67,7 @@ A mastiff who's bitten before.
 
 **Drives it** *Loyal to a Name*
 
-**Telegraphs** *It clamps onto the ankle of whoever's nearest and won't let go.* (d4, Armour, Grabbed) · *It barks fit to wake the whole street.* (d4, the scene clock) · *It stands in front of its master's door, growling.* (d4, a stake)
+**Telegraphs** *It clamps onto the ankle of whoever's nearest and won't let go.* (d4, Defend, Grabbed) · *It barks fit to wake the whole street.* (d4, the scene clock) · *It stands in front of its master's door, growling.* (d4, a stake)
 
 **Voice** Nothing. It only barks.
 
@@ -85,7 +85,7 @@ A man who's stopped pretending.
 
 **Drives it** *Fragile*
 
-**Telegraphs** *He grabs whoever's nearest by the collar and asks if they're looking at him.* (d4, Confidence) · *He starts bellowing about the lot of you until the whole street turns to look.* (d4, the scene clock) · *He takes a wild swing at whoever tries to pull him off.* (d4, Armour)
+**Telegraphs** *He grabs whoever's nearest by the collar and asks if they're looking at him.* (d4, Confidence) · *He starts bellowing about the lot of you until the whole street turns to look.* (d4, the scene clock) · *He takes a wild swing at whoever tries to pull him off.* (d4, Defend)
 
 **Voice** "You looking at me? I said, you looking at me?"
 
@@ -117,7 +117,7 @@ A wall with a face.
 
 **Keeps it going** *Knows the Waterfront*
 
-**Telegraphs** *He puts his shoulder into whoever's in front of him and sends them off the pier.* (d6, Armour) · *He looms over the smallest of you and says one word.* (d6, Confidence) · *He steps into the only gap between the crates and folds his arms.* (d6, a stake)
+**Telegraphs** *He puts his shoulder into whoever's in front of him and sends them off the pier.* (d6, Defend) · *He looms over the smallest of you and says one word.* (d6, Confidence) · *He steps into the only gap between the crates and folds his arms.* (d6, a stake)
 
 **Voice** "Move."
 
@@ -135,7 +135,7 @@ A boy handed a spear three weeks ago.
 
 **Drives it** *Scared*
 
-**Telegraphs** *He jabs his spear wildly at whoever comes closest.* (d4, Armour) · *He shouts for his sergeant at the top of his voice.* (d4, the scene clock) · *He backs into the gateway with his spear levelled, shaking.* (d4, a stake)
+**Telegraphs** *He jabs his spear wildly at whoever comes closest.* (d4, Defend) · *He shouts for his sergeant at the top of his voice.* (d4, the scene clock) · *He backs into the gateway with his spear levelled, shaking.* (d4, a stake)
 
 **Voice** "Please. Please just go."
 
@@ -167,7 +167,7 @@ A mirror with a grudge.
 
 **Drives it** *Clever* · *Envious*
 
-**Telegraphs** *They tell the room why the master really kept you on.* (d6, Confidence) · *They get to the thing you came for first and lock it away.* (d6, a stake) · *They turn the master's own trick on whoever's closest.* (d6, Armour)
+**Telegraphs** *They tell the room why the master really kept you on.* (d6, Confidence) · *They get to the thing you came for first and lock it away.* (d6, a stake) · *They turn the master's own trick on whoever's closest.* (d6, Defend)
 
 **Voice** "They only kept you because you were first."
 
@@ -201,7 +201,7 @@ A killer who does it for coin.
 
 **Keeps it going** *Reads a Feint* · *Knows the Streets*
 
-**Telegraphs** *He flicks the knife you can see at whoever's facing him.* (d6, Armour) · *The knife you can't see goes for the kidney of whoever's behind him.* (d8, Armour, Bleeding) · *He whistles, and a friend on the corner puts out the street lamp.* (d8, the ground)
+**Telegraphs** *He flicks the knife you can see at whoever's facing him.* (d6, Defend) · *The knife you can't see goes for the kidney of whoever's behind him.* (d8, Defend, Bleeding) · *He whistles, and a friend on the corner puts out the street lamp.* (d8, the ground)
 
 **Voice** "Not yet. Let's see what you're really made of."
 
@@ -213,11 +213,11 @@ A soldier who never quit and never will.
 
 **Challenge** 5 (d10)
 
-**Keeps it going** *Armoured 20* · *Holds the Line*
+**Keeps it going** *Armoured ×3* · *Holds the Line*
 
 **Drives it** *Barracks Humour* · *Old Wounds*
 
-**Telegraphs** *He hacks at whoever's in front of him, short and ugly, the way he was drilled.* (d10, Armour) · *He sets his feet in the doorway, and nobody's getting past.* (d10, a stake) · *He laughs at whoever last swung at him and dares them to try again.* (d10, Confidence, Taunted)
+**Telegraphs** *He hacks at whoever's in front of him, short and ugly, the way he was drilled.* (d10, Defend) · *He sets his feet in the doorway, and nobody's getting past.* (d10, a stake) · *He laughs at whoever last swung at him and dares them to try again.* (d10, Confidence, Taunted)
 
 **Voice** "Right. Same as last time, lads."
 
@@ -235,7 +235,7 @@ A blade that's never been beaten.
 
 **Drives it** *Cannot Resist an Audience*
 
-**Telegraphs** *She darts in at whoever's nearest, faster than they can lift a blade.* (d10, Armour) · *She calls the best blade among you up the stair to face her, in front of everyone.* (d10, Confidence, Taunted) · *She takes the top step, so anyone coming up has to come one at a time.* (d10, a stake)
+**Telegraphs** *She darts in at whoever's nearest, faster than they can lift a blade.* (d10, Defend) · *She calls the best blade among you up the stair to face her, in front of everyone.* (d10, Confidence, Taunted) · *She takes the top step, so anyone coming up has to come one at a time.* (d10, a stake)
 
 **Voice** "Ooh. A real one. This is going to be fun."
 
@@ -267,7 +267,7 @@ Armour with a family crest on it.
 
 **Drives it** *Proud* · *Code of Honour*
 
-**Telegraphs** *He meets whoever answered his challenge with a full swing of his sword.* (d10, Armour) · *He slams his shield into whoever's beside him and puts them on the floor.* (d10, Armour, Prone) · *He sets himself in front of the noble with his shield raised.* (d10, a stake)
+**Telegraphs** *He meets whoever answered his challenge with a full swing of his sword.* (d10, Defend) · *He slams his shield into whoever's beside him and puts them on the floor.* (d10, Defend, Prone) · *He sets himself in front of the noble with his shield raised.* (d10, a stake)
 
 **Voice** "On your feet. I will not fight a man on his knees."
 
@@ -299,7 +299,7 @@ Patient, precise, gone before the symptoms start.
 
 **Keeps it going** *Out of Sight* · *Slippery*
 
-**Telegraphs** *They top up the glass of whoever's nearest.* (d8, Armour, Poisoned) · *They show whoever drank a little bottle of antidote and name a price.* (d8, Confidence) · *They slip out through the kitchen door while everyone's looking the other way.* (d8, a stake)
+**Telegraphs** *They top up the glass of whoever's nearest.* (d8, Defend, Poisoned) · *They show whoever drank a little bottle of antidote and name a price.* (d8, Confidence) · *They slip out through the kitchen door while everyone's looking the other way.* (d8, a stake)
 
 **Voice** "Try the wine. The vintage is excellent."
 
@@ -315,7 +315,7 @@ Faith that won't be moved.
 
 **Drives it** *Devout*
 
-**Telegraphs** *They lift one hand, and whoever's speaking loses their voice.* (d10, Confidence, Silenced) · *They pour a line of salt across the doorway, and nothing strange gets over it.* (d10, the ground) · *They crack their staff across the knuckles of whoever's working magic.* (d10, Armour)
+**Telegraphs** *They lift one hand, and whoever's speaking loses their voice.* (d10, Confidence, Silenced) · *They pour a line of salt across the doorway, and nothing strange gets over it.* (d10, the ground) · *They crack their staff across the knuckles of whoever's working magic.* (d10, Defend)
 
 **Voice** "You are not the first to ask."
 
@@ -331,7 +331,7 @@ You won't see them coming.
 
 **Keeps it going** *Out of Sight* · *Slippery*
 
-**Telegraphs** *A blade comes out of nowhere at whoever the contract names.* (d12, Armour) · *They cut the chandelier's rope.* (d10, everyone under it, Armour) · *They let whoever's guarding the target see the knife, just for a moment.* (d10, Confidence, Frightened)
+**Telegraphs** *A blade comes out of nowhere at whoever the contract names.* (d12, Defend) · *They cut the chandelier's rope.* (d10, everyone under it, Defend) · *They let whoever's guarding the target see the knife, just for a moment.* (d10, Confidence, Frightened)
 
 **Voice** Nothing. They are already gone by the time you turn.
 
@@ -347,7 +347,7 @@ Empty hands, immovable stance.
 
 **Drives it** *Kind*
 
-**Telegraphs** *They sweep the legs out from under whoever's nearest.* (d8, Armour, Prone) · *They twist the weapon out of the hand of whoever swings at them.* (d8, Armour, Disarmed) · *They ask whoever's angriest, quietly, whether they really want to do this.* (d8, Confidence)
+**Telegraphs** *They sweep the legs out from under whoever's nearest.* (d8, Defend, Prone) · *They twist the weapon out of the hand of whoever swings at them.* (d8, Defend, Disarmed) · *They ask whoever's angriest, quietly, whether they really want to do this.* (d8, Confidence)
 
 **Voice** "You do not have to do this."
 
@@ -403,7 +403,7 @@ Bigger than a hound, quieter than a thought.
 
 **Drives it** *Cowardly*
 
-**Telegraphs** *It drops out of the heather onto whoever's at the back.* (d8, Armour) · *It knocks the lantern out of the hand of whoever's carrying it.* (d6, the ground) · *Its eyes catch the firelight, right behind whoever's on watch.* (d6, Confidence, Frightened)
+**Telegraphs** *It drops out of the heather onto whoever's at the back.* (d8, Defend) · *It knocks the lantern out of the hand of whoever's carrying it.* (d6, the ground) · *Its eyes catch the firelight, right behind whoever's on watch.* (d6, Confidence, Frightened)
 
 **Voice** Nothing.
 
@@ -419,7 +419,7 @@ Something that used to be a man.
 
 **Keeps it going** *Relentless* · *Bound to the Bog* (weak point)
 
-**Telegraphs** *It wraps its arms round whoever's nearest and drags them under the water.* (d10, Armour, Grabbed) · *It hums, low, and whoever hears it takes a step towards the water.* (d10, Confidence, Charmed) · *It sinks the firm path behind the crew into the mud.* (d10, the ground)
+**Telegraphs** *It wraps its arms round whoever's nearest and drags them under the water.* (d10, Defend, Grabbed) · *It hums, low, and whoever hears it takes a step towards the water.* (d10, Confidence, Charmed) · *It sinks the firm path behind the crew into the mud.* (d10, the ground)
 
 **Voice** A low, bubbling hum.
 
@@ -435,7 +435,7 @@ Not a wolf. A decision the wolves made.
 
 **Keeps it going** *Reads a Feint* · *Knows the Territory*
 
-**Telegraphs** *It comes out of the dark at whoever strayed furthest from the fire.* (d10, Armour) · *It howls at whoever's holding the torch, and the pack answers from every side.* (d10, Confidence, Frightened) · *It sends the horses bolting off into the night.* (d10, a stake)
+**Telegraphs** *It comes out of the dark at whoever strayed furthest from the fire.* (d10, Defend) · *It howls at whoever's holding the torch, and the pack answers from every side.* (d10, Confidence, Frightened) · *It sends the horses bolting off into the night.* (d10, a stake)
 
 **Voice** Nothing. It doesn't need to speak.
 
@@ -449,9 +449,9 @@ A hill that's learned to walk, and it's confused about where it is.
 
 **Comes at you** *Hits Like a Wagon* · *Slow*
 
-**Keeps it going** *Armoured 20* · *Old* · *Mournful 20*
+**Keeps it going** *Armoured ×3* · *Old* · *Mournful ×3*
 
-**Telegraphs** *It brings both fists down on whoever's at its feet.* (d12, Armour) · *It sits down in the middle of the pass, and nothing's getting by.* (d12, a stake) · *It lets out a long, low note that makes everyone who hears it want to weep.* (d12, everyone in earshot, Confidence)
+**Telegraphs** *It brings both fists down on whoever's at its feet.* (d12, Defend) · *It sits down in the middle of the pass, and nothing's getting by.* (d12, a stake) · *It lets out a long, low note that makes everyone who hears it want to weep.* (d12, everyone in earshot, Confidence)
 
 **Voice** A low, rumbling note.
 
@@ -465,9 +465,9 @@ Riders who shouldn't be riding.
 
 **Comes at you** *Fast* · *Ride as One*
 
-**Keeps it going** *Tough 40* · *Relentless* · *Ancient* · *Bound to the Night* (weak point)
+**Keeps it going** *Relentless ×6* · *Ancient* · *Bound to the Night* (weak point)
 
-**Telegraphs** *They ride down whoever's caught in the open, all together.* (d12, Armour) · *The horn sounds right behind whoever's at the back.* (d12, Confidence, Frightened) · *A rider leans out of the saddle to snatch what the crew's carrying.* (d12, a stake)
+**Telegraphs** *They ride down whoever's caught in the open, all together.* (d12, Defend) · *The horn sounds right behind whoever's at the back.* (d12, Confidence, Frightened) · *A rider leans out of the saddle to snatch what the crew's carrying.* (d12, a stake)
 
 **Voice** A single horn. You never hear who blew it.
 
@@ -487,7 +487,7 @@ She's not crying for you.
 
 **Drives it** *Grieving*
 
-**Telegraphs** *She turns her face towards whoever's closest.* (d10, Confidence, Frightened) · *Her crying rises, and every door in the house slams shut.* (d10, a stake) · *She drifts through whoever's in her way, and the cold goes right to the bone.* (d10, Armour)
+**Telegraphs** *She turns her face towards whoever's closest.* (d10, Confidence, Frightened) · *Her crying rises, and every door in the house slams shut.* (d10, a stake) · *She drifts through whoever's in her way, and the cold goes right to the bone.* (d10, Defend)
 
 **Voice** The crying. That is the entire voice.
 
@@ -501,9 +501,9 @@ Five voices singing the same note forever.
 
 **Comes at you** *Fear*
 
-**Keeps it going** *Bound by Rules* (weak point) · *Warded 40* · *Chained* · *Ancient*
+**Keeps it going** *Bound by Rules* (weak point) · *Warded ×6* · *Chained* · *Ancient*
 
-**Telegraphs** *The five voices turn, all together, towards whoever stepped into the circle.* (d12, Confidence, Frightened) · *The note swells until whoever's speaking can't hear their own voice.* (d12, Confidence, Silenced) · *The note drives whoever's nearest back across the floor and off their feet.* (d12, Armour, Prone)
+**Telegraphs** *The five voices turn, all together, towards whoever stepped into the circle.* (d12, Confidence, Frightened) · *The note swells until whoever's speaking can't hear their own voice.* (d12, Confidence, Silenced) · *The note drives whoever's nearest back across the floor and off their feet.* (d12, Defend, Prone)
 
 **Voice** A note. Just the one note.
 
@@ -533,13 +533,13 @@ A shape that wants to be needed.
 
 **Comes at you** *Charming*
 
-**Keeps it going** *Tough 10* · *Hollow* · *Forms (2)*
+**Keeps it going** *Hollow ×2* · *Forms (2)*
 
-**Forms** When its last keeps-it-going tag goes, it changes: its Tough refills and it takes 3 to 5 of these. *Charming* · *Grasping* · *Grapple* · *Fear* · *Shifting* · *Possessing* · *Calls for Help* · *Regrows* · *Feeds* · *Hollow*. Her second form is everyone she's taken, all reaching for you at once.
+**Forms** When its last keeps-it-going tag goes, it changes: its multipliers fill back up and it takes 3 to 5 of these. *Charming* · *Grasping* · *Grapple* · *Fear* · *Shifting* · *Possessing* · *Calls for Help* · *Regrows* · *Feeds* · *Hollow*. Her second form is everyone she's taken, all reaching for you at once.
 
 **Drives it** *Wants to Be Needed*
 
-**Telegraphs** *She calls whoever's nearest by the name their mother used.* (d10, Confidence, Charmed) · *She offers to carry whoever's hurt, and her arms close round them.* (d10, Armour, Grabbed) · *Somewhere close, a child starts walking towards her.* (d10, a stake)
+**Telegraphs** *She calls whoever's nearest by the name their mother used.* (d10, Confidence, Charmed) · *She offers to carry whoever's hurt, and her arms close round them.* (d10, Defend, Grabbed) · *Somewhere close, a child starts walking towards her.* (d10, a stake)
 
 **Voice** Something like your mother's voice.
 
@@ -553,9 +553,9 @@ You keep seeing it, and you keep forgetting you saw it.
 
 **Comes at you** *Patient* · *Vengeful*
 
-**Keeps it going** *Out of Sight 40 (first)* · *Forgets You* · *Not Really Here*
+**Keeps it going** *Out of Sight ×6 (first)* · *Forgets You* · *Not Really Here*
 
-**Telegraphs** *It's right behind whoever hurt it last.* (d12, Armour) · *Whoever's at the back forgets, for a moment, who they came here with.* (d12, Confidence) · *The way out gets further away the faster you walk.* (d12, the scene clock)
+**Telegraphs** *It's right behind whoever hurt it last.* (d12, Defend) · *Whoever's at the back forgets, for a moment, who they came here with.* (d12, Confidence) · *The way out gets further away the faster you walk.* (d12, the scene clock)
 
 **Voice** Nothing you can hear.
 
@@ -571,11 +571,11 @@ A duellist who's never lost, and knows it.
 
 **Comes at you** *Faster Than You*
 
-**Keeps it going** *Tough 40* · *Reads a Feint* · *Slippery* · *Relentless*
+**Keeps it going** *Relentless ×6* · *Reads a Feint* · *Slippery*
 
 **Drives it** *Cannot Resist an Audience* · *Code of Honour*
 
-**Telegraphs** *She's past the guard of whoever's facing her before they've moved.* (d12, Armour) · *She sends the blade spinning out of the hand of whoever she's toying with.* (d12, Armour, Disarmed) · *She tells whoever's facing her, kindly, exactly where their guard is open.* (d12, Confidence, Shaken)
+**Telegraphs** *She's past the guard of whoever's facing her before they've moved.* (d12, Defend) · *She sends the blade spinning out of the hand of whoever she's toying with.* (d12, Defend, Disarmed) · *She tells whoever's facing her, kindly, exactly where their guard is open.* (d12, Confidence, Shaken)
 
 **Voice** "This is going to be delightful."
 
@@ -589,7 +589,7 @@ Everything in this city touches their hand.
 
 **Comes at you** *Silver-Tongued* · *Calls for Help*
 
-**Keeps it going** *Beloved 20* · *Deep Pockets 20* · *Politically Untouchable*
+**Keeps it going** *Beloved ×3* · *Deep Pockets ×3* · *Politically Untouchable*
 
 **Drives it** *Greedy*
 
@@ -603,13 +603,13 @@ Everything in this city touches their hand.
 :::threat[The Painted Knight]
 He's been dying in this hall for a century and he's thoroughly sick of it.
 
-**Challenge** 6 (d12) · Reforms: when it falls, it stands again at the start of the next round, with its Tough and tags back, until someone frees it.
+**Challenge** 6 (d12) · Reforms: when it falls, it stands again at the start of the next round, with its multipliers and tags back, until someone frees it.
 
 **Comes at you** *Reach*
 
-**Keeps it going** *Tough 40* · *Armoured* · *A Hundred Years of This* · *Bound* (weak point)
+**Keeps it going** *A Hundred Years of This ×6* · *Armoured* · *Bound* (weak point)
 
-**Telegraphs** *He sweeps his halberd across the hall at knee height.* (d12, everyone in reach, Armour) · *He steps on the tile he knows by heart, and the gate drops behind you.* (d12, a stake) · *He sighs and tells whoever's closest how this ends, because he's seen it a hundred times.* (d12, Confidence)
+**Telegraphs** *He sweeps his halberd across the hall at knee height.* (d12, everyone in reach, Defend) · *He steps on the tile he knows by heart, and the gate drops behind you.* (d12, a stake) · *He sighs and tells whoever's closest how this ends, because he's seen it a hundred times.* (d12, Confidence)
 
 **Voice** "...Oh. It is you again."
 
@@ -623,11 +623,11 @@ You don't see it, and then you do.
 
 **Comes at you** *Fear*
 
-**Keeps it going** *Tough 20* · *Out of Sight* · *Forms (2)* · *Not Really Here*
+**Keeps it going** *Not Really Here ×3* · *Out of Sight* · *Forms (2)*
 
-**Forms** When its last keeps-it-going tag goes, it changes: its Tough refills and it takes 3 to 5 of these. *Hits Like a Wagon* · *Reach* · *Grapple* · *Fast* · *Fear* · *Armoured* · *Regrows* · *Relentless* · *Sees in the Dark* · *Out of Sight*. Its second form comes out of the dark, where you can see it.
+**Forms** When its last keeps-it-going tag goes, it changes: its multipliers fill back up and it takes 3 to 5 of these. *Hits Like a Wagon* · *Reach* · *Grapple* · *Fast* · *Fear* · *Armoured* · *Regrows* · *Relentless* · *Sees in the Dark* · *Out of Sight*. Its second form comes out of the dark, where you can see it.
 
-**Telegraphs** *Something breathes right behind whoever's carrying the light.* (d12, Confidence, Frightened) · *The lamps go out one by one, starting with the one furthest from the door.* (d12, the ground) · *Something in the dark goes for whoever's furthest from the light.* (d12, Armour)
+**Telegraphs** *Something breathes right behind whoever's carrying the light.* (d12, Confidence, Frightened) · *The lamps go out one by one, starting with the one furthest from the door.* (d12, the ground) · *Something in the dark goes for whoever's furthest from the light.* (d12, Defend)
 
 **Voice** A sound like a language you almost know.
 
@@ -641,9 +641,9 @@ A door that's learned to walk.
 
 **Comes at you** *Reach*
 
-**Keeps it going** *Armoured 40* · *Fortified* · *Bound to a Place* (weak point) · *Old*
+**Keeps it going** *Armoured ×6* · *Fortified* · *Bound to a Place* (weak point) · *Old*
 
-**Telegraphs** *It drives its spear at whoever thinks they're out of reach.* (d12, Armour) · *It closes in to pin whoever's nearest against the wall.* (d12, Armour, Pinned) · *It plants itself in the doorway it was made to guard.* (d12, a stake)
+**Telegraphs** *It drives its spear at whoever thinks they're out of reach.* (d12, Defend) · *It closes in to pin whoever's nearest against the wall.* (d12, Defend, Pinned) · *It plants itself in the doorway it was made to guard.* (d12, a stake)
 
 **Voice** A grinding sound, like a door opening.
 
@@ -657,7 +657,7 @@ A presence heard only in dreams.
 
 **Comes at you** *Charming* · *Patient*
 
-**Keeps it going** *Bound by Rules* · *Feeds 40* · *Not Really Here*
+**Keeps it going** *Bound by Rules* · *Feeds ×6* · *Not Really Here*
 
 **Telegraphs** *Whoever's about to speak hears the words first, in their own voice, from right behind them.* (d12, Confidence, Shaken) · *The dream leaks into the house, and the doors aren't where they were.* (d12, the ground) · *It tolls, and one more sleeper in the house sinks too deep to wake.* (d12, a stake)
 
@@ -673,9 +673,9 @@ The best swordsman of a generation, on the wrong side of history.
 
 **Comes at you** *Hits Like a Wagon* · *Cornered is Worse*
 
-**Keeps it going** *Relentless* · *Ancient* · *Armoured 40*
+**Keeps it going** *Relentless* · *Ancient* · *Armoured ×6*
 
-**Telegraphs** *Their greatsword comes round hard enough to crack the wall behind whoever's facing them.* (d12, Armour) · *Cornered, they swing at everyone in reach at once.* (d12, everyone in reach, Armour) · *They lower their blade and ask whoever's leading which side they think they're on.* (d12, Confidence)
+**Telegraphs** *Their greatsword comes round hard enough to crack the wall behind whoever's facing them.* (d12, Defend) · *Cornered, they swing at everyone in reach at once.* (d12, everyone in reach, Defend) · *They lower their blade and ask whoever's leading which side they think they're on.* (d12, Confidence)
 
 **Voice** "I have been waiting for someone to be worth this."
 
@@ -689,11 +689,11 @@ A thing that's been ruling this land for longer than any of its records admit.
 
 **Comes at you** *Calls for Help* · *Fear*
 
-**Keeps it going** *Tough 15* · *Old* · *Ancient* · *Unkillable* · *Forms (3)*
+**Keeps it going** *Unkillable ×2* · *Old* · *Ancient* · *Forms (3)*
 
-**Forms** When its last keeps-it-going tag goes, it changes: its Tough refills and it takes 3 to 5 of these. *Possessing* · *Commanding* · *Calls for Help* · *Fear* · *Beloved* · *Politically Untouchable* · *Trained* · *Armoured* · *Ancient* · *Unkillable*. Each new form is another body, the nearest one it can take.
+**Forms** When its last keeps-it-going tag goes, it changes: its multipliers fill back up and it takes 3 to 5 of these. *Possessing* · *Commanding* · *Calls for Help* · *Fear* · *Beloved* · *Politically Untouchable* · *Trained* · *Armoured* · *Ancient* · *Unkillable*. Each new form is another body, the nearest one it can take.
 
-**Telegraphs** *It calls, and every guard in the palace starts running for the throne room.* (d12, the scene clock) · *It names whoever's closest, by the name nobody's called them in years.* (d12, Confidence, Frightened) · *It brings the iron sceptre down on whoever stands nearest the throne.* (d12, Armour)
+**Telegraphs** *It calls, and every guard in the palace starts running for the throne room.* (d12, the scene clock) · *It names whoever's closest, by the name nobody's called them in years.* (d12, Confidence, Frightened) · *It brings the iron sceptre down on whoever stands nearest the throne.* (d12, Defend)
 
 **Voice** "You are the first to say my name. I had forgotten it myself."
 
