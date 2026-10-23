@@ -100,11 +100,12 @@ button.hex.big:focus-visible { --die: var(--violet); color: var(--bg); }
 .cc-note p:last-child { margin-bottom: 0; }
 .cc-note.is-warn { border-color: var(--gold); }
 
-/* The play screen's trackers: Aura and Resolve as pips, the dice, the Hurt
-   boxes and the conditions. Each opens its buttons and its rule. */
+/* The play screen's trackers: Aura and Resolve as pips, Confidence, the
+   wound die as a row filling up to d12, and the conditions. Each opens its
+   buttons and its rule. */
 .cc-track { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(44px, 1fr); gap: 6px; margin-top: 0.8rem; }
 .cc-track .cc-stat { grid-column: span 2; }
-.cc-track .t-aura { grid-column: span 3; }
+.cc-track .t-aura, .cc-track .t-conf, .cc-track .t-wound { grid-column: span 3; }
 .cc-track .t-cond { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 6px 10px; padding: 6px 10px; }
 .cc-track .t-cond .v { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.95rem; font-weight: 600; color: var(--ink); }
 .cc-track .cc-undo { width: auto; }
@@ -117,10 +118,10 @@ button.hex.big:focus-visible { --die: var(--violet); color: var(--bg); }
 @keyframes cc-pip { 0% { transform: scale(0.3); filter: brightness(2); } 60% { transform: scale(1.35); } 100% { transform: none; filter: none; } }
 @keyframes cc-halo { 0%, 100% { filter: none; } 30% { filter: drop-shadow(0 0 5px var(--gold)); } }
 .t-resolve .pips i.on { background: var(--violet); }
-.mini { gap: 2px; }
-.mini i { width: 7px; height: 9px; border: 1px solid var(--line); border-radius: 1px; }
-.mini i.on { background: var(--gold); border-color: var(--gold); }
-.mini i.x { background: var(--muted); border-color: var(--muted); opacity: 0.5; }
+.mini { gap: 3px; }
+.mini i { width: 9px; height: 10px; clip-path: var(--hex); background: var(--line); }
+.mini i.on { background: var(--gold); }
+.mini i.x { background: var(--muted); opacity: 0.5; }
 .cc-tag { display: inline-flex; align-items: center; gap: 4px; min-height: 28px; padding: 0 0.55rem; border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 2px; }
 .cc-tag.is-for { border-left-color: var(--violet); }
 .cc-tag.is-none { border-left-color: var(--line); color: var(--muted); font-weight: 500; }
@@ -175,6 +176,12 @@ html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px))
 .tile-name { grid-area: name; font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.15; overflow-wrap: anywhere; }
 .tile-steps { grid-area: steps; color: var(--muted); font-size: 0.9rem; }
 .tile-die { grid-area: die; width: 50px; height: 50px; font-size: 1.05rem; }
+/* On the narrowest phones a long name like Defend keeps its word whole. */
+@media (max-width: 359px) {
+  .tile { gap: 2px 6px; padding: 10px; }
+  .tile-name { font-size: 0.95rem; }
+  .tile-die { width: 42px; height: 42px; font-size: 0.95rem; }
+}
 .tile-defend { grid-template-columns: 1fr; grid-template-areas: "name" "steps"; border-color: color-mix(in srgb, var(--violet) 60%, transparent); }
 .tile-sub { grid-area: steps; color: var(--muted); font-size: 0.9rem; }
 .cc-last { margin: 0.8rem 0 0; padding: 0.6rem 0.8rem; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 2px; font-size: 0.95rem; }
@@ -201,14 +208,10 @@ html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px))
 .cc-thing.is-out span { text-decoration: line-through; color: var(--muted); }
 .cc-thing small { display: block; font-size: 0.78rem; color: var(--muted); }
 
-.cc-bars { display: grid; gap: 8px; margin: 0.6rem 0; }
-.cc-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
-.cc-boxes { display: inline-flex; gap: 5px; padding: 3px; border-radius: 2px; }
-.cc-boxes .hb { width: 30px; height: 30px; background: var(--surface); border: 1.5px solid var(--line); border-radius: 2px; }
-.cc-boxes .hb.on { background: var(--gold); border-color: var(--gold); }
-.cc-boxes .hb.x { background: repeating-linear-gradient(45deg, var(--muted) 0 2px, transparent 2px 7px); opacity: 0.6; }
-.cc-bar.is-full .cc-boxes { box-shadow: 0 0 0 1px var(--gold); }
-.cc-catch { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+/* Something crossed out on a set action: struck through, and it can't be tapped on. */
+.cc-line.is-out { opacity: 0.75; cursor: default; }
+.cc-line.is-out s { color: var(--muted); }
+.bd-lines .cc-warn { margin-top: 0.3rem; font-size: 0.92rem; }
 
 .cc-conds { list-style: none; margin: 0.5rem 0; padding: 0; display: grid; gap: 8px; }
 .cc-cond { display: flex; align-items: flex-start; gap: 12px; padding: 0.6rem 0.75rem; background: var(--surface); border: 1px solid var(--line-soft); border-left: 3px solid var(--gold); border-radius: 2px; }
@@ -308,6 +311,9 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .res.is-through { border-color: var(--violet); }
 .res.is-through .res-out { color: var(--ink); }
 .cc-mine-roll, .cc-them { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 0.8rem; }
+/* Each of your defence dice, with its size under it, since they can differ. */
+.res-mine { display: inline-flex; flex-direction: column; align-items: center; gap: 2px; }
+.res-mine .res-die, .res-mine .res-note { font-size: 0.82rem; }
 .cc-them .k { margin-right: 0.3rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--violet); }
 .res-intent { padding: 1px 0.5rem; font-size: 0.85rem; font-weight: 700; border: 1px solid var(--line); border-radius: 2px; }
 .res-paid { flex-basis: 100%; font-weight: 700; color: var(--gold-ink); }
@@ -414,7 +420,7 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .ln-out h3 { font-family: var(--display); font-weight: 600; font-size: 1.15rem; color: var(--gold-ink); margin: 0.4rem 0 0.4rem; }
 .ln-hurt { display: flex; align-items: center; gap: 10px; margin: 0 0 0.8rem; }
 .ln-hurt .k { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.ln-hurt .mini i { width: 12px; height: 15px; }
+.ln-hurt .mini i { width: 14px; height: 16px; }
 .ln-rule { margin-top: 0.4rem; }
 .ln-foot { margin-top: 1rem; }
 

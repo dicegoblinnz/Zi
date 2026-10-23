@@ -4,7 +4,8 @@
 // only loads when someone prints, and the service worker keeps it and the
 // blank sheet on the phone, so it works offline.
 const SHEET = "/sheets/zidara-character-sheet.pdf";
-const FIXED = ["fight", "move", "sneak", "study", "talk"];
+const FIXED = ["defend", "fight", "move", "sneak", "study", "talk"];
+const SCARS = 5;
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII", "XXIV"];
 const PRONOUNS = { her: "she, her", him: "he, him", them: "they, them" };
 
@@ -71,13 +72,11 @@ export async function fillSheet(ch, c, s) {
   const n = c.numbers;
   const them = c.pronoun === "him" ? "him" : c.pronoun === "her" ? "her" : "them";
 
-  // The front: who, the numbers, Hurt, set actions, traits and kit.
+  // The front: who, the numbers, the wound die and Scars, set actions, traits and kit.
   put("name", ch.name);
   put("pronouns", PRONOUNS[c.pronoun]);
   put("aura_now", s.aura);
   put("aura_max", n.aura);
-  put("armour_full", `d${n.armour}`);
-  put("armour_now", `d${s.armour}`);
   for (let i = 1; i <= Math.min(7, s.resolve); i++) tick(`resolve_${i}`);
   put("resolve_max", n.resolve);
   put("stride", n.stride);
@@ -87,15 +86,11 @@ export async function fillSheet(ch, c, s) {
     ring(`condition_${i + 1}_die`, `d${x.die}`);
   });
 
-  // Boxes fill in order, and a Scar crosses out the small box, from the end.
-  const open = n.hurtBars * 3 - s.scars;
-  for (let i = 0; i < Math.min(15, n.hurtBars * 3); i++) {
-    const at = `hurt_${Math.floor(i / 3) + 1}`;
-    if (i >= open) tick(`${at}_scar_${(i % 3) + 1}`);
-    else if (i < s.hurt) tick(`${at}_box_${(i % 3) + 1}`);
-  }
-  s.catches.slice(0, 5).forEach((x, b) => put(`hurt_${b + 1}_catch`, x));
-  ring("wound_die", `d${Math.min(12, 6 + 2 * s.catches.length)}`);
+  // The wound die's ringed where it is, and each Scar's Catch goes on its
+  // line, the floor it sets printed beside it. One that hasn't been written
+  // yet still takes its line.
+  ring("wound_die", `d${s.wound}`);
+  s.scars.slice(0, SCARS).forEach((x, i) => put(`scar_${i + 1}`, x || "a Scar"));
   put("aspiration", s.aspText || c.aspiration.text);
   ring("aspiration_die", `d${s.asp}`);
 
@@ -107,13 +102,18 @@ export async function fillSheet(ch, c, s) {
     if (!l) return "";
     return l.kind === "title" ? `Title ${titleNo.get(key)}` : l.kind === "attuned" ? l.item : l.label;
   };
+  // Something crossed out prints as it is on the sheet, with "(broken)" after it.
+  const out = (key) => {
+    const l = c.lines.find((x) => x.key === key);
+    return l?.kind === "kit" && Object.keys(s.crossed).some((k) => s.crossed[k] && k.endsWith(`|${l.label}`));
+  };
   let row = 0;
   for (const a of c.actions) {
     const fixed = FIXED.find((f) => f === a.name.toLowerCase());
     const at = fixed ?? (row < 6 ? String(++row) : null);
     if (!at) continue;
     if (!fixed) put(`set_${at}_name`, a.name);
-    put(`set_${at}_lines`, [...new Set(a.lines.map(label).filter(Boolean))].join(", "));
+    put(`set_${at}_lines`, [...new Set(a.lines.map((key) => (label(key) && out(key) ? `${label(key)} (broken)` : label(key))).filter(Boolean))].join(", "));
     put(`set_${at}_steps`, a.steps);
     put(`set_${at}_die`, a.die);
   }
@@ -123,10 +123,10 @@ export async function fillSheet(ch, c, s) {
     put(`trait_${i + 1}_does`, textOf(t.html));
   });
 
-  // What they carry, with anything picked up in play. Used things say so, and
-  // a list too long for its lines shares the last one.
+  // What they carry, with anything picked up in play. Broken and used things
+  // say so, and a list too long for its lines shares the last one.
   const kit = (where, list, note) => {
-    const all = [...list, ...s.picked.filter((p) => p.where === where).map((p) => p.name)].map((x) => (s.crossed[`${where}|${x}`] ? `${x} (used)` : x));
+    const all = [...list, ...s.picked.filter((p) => p.where === where).map((p) => p.name)].map((x) => (s.crossed[`${where}|${x}`] ? `${x} (${where === "equipment" ? "broken" : "used"})` : x));
     return all.length || !note ? all : [note.charAt(0).toUpperCase() + note.slice(1)];
   };
   const lines = (prefix, list, rows) => list.slice(0, rows).forEach((x, i) => put(`${prefix}_${i + 1}`, i === rows - 1 ? list.slice(i).join(", ") : x));

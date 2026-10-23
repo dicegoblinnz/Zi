@@ -90,9 +90,9 @@ function measureFields() {
   });
 }
 
-// What a ticked box looks like: a filled box for Hurt, a cross for Scarred
-// and a snapped thread, a tick for a strained one, a filled star for Resolve,
-// and a ring round the die (or the stage) you're on.
+// What a ticked box looks like: a cross for a snapped thread, a tick for a
+// strained one, a filled star for Resolve, and a ring round the die (or the
+// stage) you're on.
 const STAR = "M12 1.8l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.9l-6.4 3.5 1.4-7.1-5.3-5 7.2-.9z";
 function marks(look, w, h) {
   const g = (ops) => [pushGraphicsState(), ...ops, popGraphicsState()];

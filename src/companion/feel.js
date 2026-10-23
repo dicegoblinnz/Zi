@@ -1,9 +1,9 @@
 // How the companion feels in the hand: the Sigil dice tumbling and landing,
 // and the sound and buzz. Sound and buzz stay off until the player turns them
-// on (remembered as zi-sound), and then dice landing, a top face, a Hurt and a
-// bar filling up each get one. Every sound is made on the phone, so it works
-// offline and nothing's fetched. The phone's reduce-motion setting stills the
-// tumble, and the CSS stills everything else.
+// on (remembered as zi-sound), and then dice landing, a top face, a Hurt and
+// a Hurt that takes the wound die to d12 each get one. Every sound is made on
+// the phone, so it works offline and nothing's fetched. The phone's
+// reduce-motion setting stills the tumble, and the CSS stills everything else.
 
 const KEY = "zi-sound";
 export const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -107,8 +107,8 @@ export const feel = {
     tone(115, 0.3, { vol: 0.35, to: 55, type: "triangle" });
     buzz(60);
   },
-  // A Hurt that fills a bar, so a Catch goes in.
-  bar() {
+  // A Hurt that puts the wound die on d12, or makes you Blaze.
+  heavy() {
     if (!on) return;
     tone(98, 0.45, { vol: 0.4, to: 41, type: "triangle" });
     tone(65, 0.5, { vol: 0.3, to: 33, at: 0.12 });

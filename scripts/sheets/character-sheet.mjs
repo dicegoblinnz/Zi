@@ -5,8 +5,9 @@
 // What's on it comes from Appendix A (#s-sheet-character).
 
 const DICE = ["d2", "d4", "d6", "d8", "d10", "d12"];
-const WOUND = ["d6", "d8", "d10", "d12"];
 const STAGES = ["Awakened", "Tempered", "Perfected"];
+// Five Scars, each one a size more on the wound die's floor, and the fifth makes it d12.
+const SCARS = ["d4", "d6", "d8", "d10", "d12"];
 const range = (n) => Array.from({ length: n }, (_, i) => i + 1);
 
 // Field markers. size is the typed text's size in points (0 fits it to the box).
@@ -20,6 +21,7 @@ const lines = (prefix, n, opts) => range(n).map((i) => w(`${prefix}_${i}`, opts)
 const MARK = `<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 2 38 20 20 38 2 20z" fill="none" stroke="#5b36b0" stroke-width="2.6" stroke-linejoin="round"/><path d="M20 12 28 20 20 28 12 20z" fill="#d7ae4b"/></svg>`;
 
 const FIXED = [
+  ["defend", "Defend", "dodge, parry, armour"],
   ["fight", "Fight", "melee and ranged"],
   ["move", "Move", "run, climb, jump and chase"],
   ["sneak", "Sneak", "unseen and unheard"],
@@ -31,12 +33,8 @@ const LADDER = [["1", "d2"], ["2", "d4"], ["3", "d6"], ["4", "d8"], ["5", "d10"]
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI"];
 
 function front(stamp) {
-  const hurtBar = (b) => `
-    <div class="bar${b > 3 ? " extra" : ""}">
-      <span class="n">${b > 3 ? "+" : b}</span>
-      ${range(3).map((x) => `<span class="cell"><span class="hurtbox" data-cb="hurt_${b}_box_${x}" data-look="fill"></span>${tick(`hurt_${b}_scar_${x}`, "cross")}</span>`).join("")}
-      <span class="catch"><span class="lab">Catch</span>${w(`hurt_${b}_catch`)}</span>
-    </div>`;
+  const scarRow = (i) => `
+    <div class="scar"><span class="n">${i}</span><span class="floor">${SCARS[i - 1]}</span>${w(`scar_${i}`)}</div>`;
   const ownRow = (i) => `
     <tr><td class="name">${w(`set_${i}_name`, { cls: "bare" })}</td><td>${w(`set_${i}_lines`)}</td><td class="steps">${w(`set_${i}_steps`, { align: "center" })}</td><td class="dicecol">${w(`set_${i}_die`, { align: "center" })}</td></tr>`;
   return `
@@ -53,17 +51,15 @@ function front(stamp) {
   <div class="grid2">
     <div class="stack">
       <div class="card stats">
-        <div class="statrow">
+        <div class="statrow rs">
           <div class="stat"><h3>Aura</h3><p class="hint">full every scene · 5 to start</p>
             <div class="nums"><span class="lab">now</span>${box("aura_now")}<span class="lab">max</span>${box("aura_max")}</div></div>
-          <div class="stat"><h3>Armour</h3><p class="hint">d2, a size for each piece of plain armour</p>
-            <div class="nums"><span class="lab">full</span>${box("armour_full")}<span class="lab">now</span>${box("armour_now")}</div></div>
-        </div>
-        <div class="statrow rs">
-          <div class="stat"><h3>Resolve</h3><p class="hint">a star for each Title · fill in the ones you’ve got</p>
-            <div class="nums"><div class="stars">${range(7).map((i) => `<span class="star" data-cb="resolve_${i}" data-look="star"></span>`).join("")}</div><span class="lab">max</span>${box("resolve_max")}</div></div>
           <div class="stat"><h3>Stride</h3><p class="hint">3 to start</p>
             <div class="nums">${box("stride")}</div></div>
+        </div>
+        <div class="statrow one">
+          <div class="stat"><h3>Resolve</h3><p class="hint">a star for each Title · fill in the ones you’ve got · 1 back every scene, all of it after downtime</p>
+            <div class="nums"><div class="stars">${range(7).map((i) => `<span class="star" data-cb="resolve_${i}" data-look="star"></span>`).join("")}</div><span class="lab">max</span>${box("resolve_max")}</div></div>
         </div>
         <div class="statrow one">
           <div class="stat"><h3>Confidence</h3><p class="hint">d6 at the start of every scene, a size up in clothes that fit it · back to d6 when it ends</p>
@@ -78,10 +74,12 @@ function front(stamp) {
 
     <div class="stack">
       <div class="card">
-        <h3>Hurt</h3><p class="hint">Fill a bar and write its Catch, and Confidence drops a size · the small box is Scarred</p>
-        ${range(5).map(hurtBar).join("")}
-        <p class="hint" style="margin-top:1.4mm"><b>Blaze:</b> every box full? Take a Hurt and declare something extraordinary.</p>
-        <div class="wound"><h3>Wound die</h3>${dice("wound_die", WOUND)}<p class="hint" style="flex:1">a size bigger for each Catch · a heal has to beat it</p></div>
+        <h3>Wound die</h3><p class="hint">d2 to start, and every Hurt puts it up a size · a heal has to beat it · downtime clears it to your Scars</p>
+        <div class="row woundrow">${dice("wound_die", DICE)}<span class="blaze">→ Blaze</span></div>
+        <p class="hint" style="margin-top:1.2mm"><b>Blaze:</b> a Hurt at d12. Declare something extraordinary, then die or take a Scar and leave the scene.</p>
+        <p class="hint" style="margin-top:0.4mm"><b>Rest:</b> when a scene ends, roll your Confidence against it, and beat it to bring it down a size.</p>
+        <div class="scars"><h3>Scars</h3><p class="hint">each is a Catch, and your wound die never goes below the last one · five and your next Blaze is your last</p>
+          ${range(5).map(scarRow).join("")}</div>
       </div>
       <div class="card">
         <div class="goal"><div class="row" style="align-items:flex-end"><h3>Aspiration</h3>${w("aspiration")}</div>
@@ -159,7 +157,7 @@ function back(stamp) {
 
   <section>
     <h2 class="sec">Titles</h2>
-    <p class="hint" style="margin:-0.6mm 0 1.6mm">Your Title and its archetype · I and II to start, with three permissions each, and III to VI earned in play, with one · a permission is a doing word and how, what or where · a Boon takes two lines</p>
+    <p class="hint" style="margin:-0.6mm 0 1.6mm">Your Title and its archetype · I and II to start, with three permissions each, and III to VI earned in play, with one · a permission is one word or a doing word and how, what or where, on two set actions at most · a Boon takes two lines</p>
     <div class="grid3">${range(6).map(titleCard).join("")}</div>
   </section>
 
@@ -171,7 +169,7 @@ function back(stamp) {
 
   <section>
     <h2 class="sec">Bonds</h2>
-    <p class="hint" style="margin:-0.6mm 0 1.6mm">A bond is a person, and each thread is one truth you share · tick the first box when it’s strained, and the second when it snaps</p>
+    <p class="hint" style="margin:-0.6mm 0 1.6mm">A bond’s usually a person, but it can be a faction, a place or a cause, and each thread is one truth you share · tick the first box when it’s strained, and the second when it snaps</p>
     <div class="grid2">${range(6).map(bondCard).join("")}</div>
   </section>
 
