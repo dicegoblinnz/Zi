@@ -6,7 +6,7 @@ order: 12
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 :::quote
 Downtime's the half of the game where the world decides what it's been doing while you were bleeding in a warehouse.
@@ -20,7 +20,7 @@ After **every session** there's a downtime: a week, a month, a season, however l
 
 ## The Four Pressures {#the-four-pressures}
 
-Every downtime, four pressures land on the party, and the GM names them before anyone spends a slot. The faction pressure comes from the faction turn (see [Factions](#s-faction-turn)).
+Every downtime, four pressures land on the party, and the GM names them before anyone spends a slot. The faction pressure comes from the faction turn: the GM telegraphs what every faction's doing, and the one that matters most to the crew is the pressure (see [Factions](#s-faction-turn)).
 
 -   **A personal pressure.** Something on one character's sheet, like a debt or a bond.
 -   **A party pressure.** The shared Goal.
@@ -33,7 +33,7 @@ If you ignore a pressure, it doesn't go away. It gets worse, and the GM brings i
 
 Every player gets **two personal slots**, and the crew shares **two party slots**. A player can put one of their own slots toward a party action.
 
-Two things happen without costing a slot: once-per-downtime traits refresh, and when the downtime's over, all your [Resolve](#s-resolve) comes back.
+Three things happen without costing a slot: once-per-downtime traits refresh, and when downtime's over, all your [Resolve](#s-resolve) comes back and your [wound die](#s-blaze) goes back to d2, or to your Scars.
 
 ## What You Can Do With a Slot {#what-you-can-do-with-a-slot}
 
@@ -43,14 +43,13 @@ Two things happen without costing a slot: once-per-downtime traits refresh, and 
 
 ### Recover {#recover}
 
--   **Heal a Catch on your Hurt track.** It's a slot for each one, and none of them heal for free. Rub it out, and its three boxes clear.
--   **Step your Armour back to full** at a smith, an armoury, or with a patient friend and a needle and thread.
--   **Mend something you carry that's broken**, usually for a purse of gold as well. Attuned things can't break.
--   **Tend the crew.** You'll need a trait that says so, like *Tend the Crew*. One slot heals a Catch on the Hurt track of everyone in the crew who wants it, you included.
+-   **Mend something you carry that's broken**, usually for a purse of gold as well. Armour and shields are the usual ones, after they've taken a blow for you. Attuned things can't break.
+
+Your wounds don't need a slot. They clear when downtime's over (see [Your Slots](#your-slots)).
 
 ### Grow {#grow}
 
--   **A new permission** on one of your Titles, up to six on it. It has to fit inside the Title, and the story should say where you learned it. Put it on every set action it fits nearly every time. See [Permissions](#s-writing-permissions).
+-   **A new permission** on one of your Titles, up to six on it. It has to fit inside the Title, and the story should say where you learned it. Put it on the set actions it fits nearly every time, two at most, and Defend counts as one. See [Permissions](#s-writing-permissions).
 -   **A new trait**, either from the list or written in the same shape.
 -   **Chase your Aspiration.** Roll against its die, built from whatever you're doing about it. Beat it and it climbs one. See [Aspiration](#s-aspiration).
 -   **Deepen a bond.** Write a new thread with someone. If they're in the crew, it goes on both your sheets, so agree on it together.
@@ -68,8 +67,8 @@ A party slot is an action for the crew. Two slots on the same thing count everyt
 
 -   **Chase the Goal.** Whoever does it rolls against the Goal's die: 1 step for the slot, plus everything of theirs that fits. Beat it and it climbs one. See [The Party Goal](#s-goal).
 -   **Work a project.** The same, against the project's die. See [Projects](#s-projects).
--   **Move on a faction.** Interfere with it, strike at it, deal with it or work for it. See [Factions](#s-faction-crew).
--   **Rebuild.** Step the crew's Power or Wealth back up one, never past its best.
+-   **Move on a faction.** Destroy, Undermine, Obstruct, Influence, Acquire or Establish, set back its agenda, or work for it. See [Factions](#s-faction-crew).
+-   **Rebuild.** Establish an asset or a resource the crew's lost. An asset still needs a resource paying for it. See [How the crew grows](#s-crew-grows).
 -   **Advance a world event.** Push something along, or hold it back.
 -   **Support an Aspiration.** One more roll at someone's Aspiration, built by whoever's helping.
 
@@ -80,7 +79,7 @@ Something that climbs still only climbs one step a roll, however many slots went
 Most slots just happen. When something pushes back (the fence wants his money, or the Guild's watching the smithy), roll for it like any Challenge.
 
 -   **Ties go to the defender**, every time. A die you're climbing counts as the defender.
--   **There's no Aura in downtime**, so you can't pay to win a tie. You've got two other ways out: spend 1 Resolve to roll again (your dice only), or step the crew's Wealth down one and take the tie. It's the crew's money, so ask the table first.
+-   **There's no Aura in downtime**, so you can't pay to win a tie. You've got two other ways out: spend 1 Resolve to roll again (your dice only), or spend one of the crew's spare resources and take the tie. It's the crew's money, so ask the table first.
 -   **Only the crew can do that.** A faction never rerolls, and never buys a tie.
 
 ## Mending Threads {#s-downtime-threads}
@@ -98,7 +97,7 @@ Vesk's only thread with Bram is the fire he carried her out of, and the thank-yo
 
 **GM:** Second, *party*. The vault score. Vane's hired investigators, and they've been seen in the district.
 
-**GM:** Third, *faction*. The Vane Estate is on the move. Its agenda's at d10, and it's going to push it this week.
+**GM:** Third, *faction*. The Vane Estate's working *Vane comes home*. It's at d10, and the Estate's throwing its whole d12 at it this week.
 
 **GM:** Fourth, *world*. There's a festival on the harbour this week, so the law's going to be everywhere.
 :::
@@ -112,7 +111,7 @@ Vesk's only thread with Bram is the fire he carried her out of, and the thank-yo
 
 **Isolde:** I'll put *read how a spirit's been bound* on my first Title. I've spent the week with the Warden's empty armour. My other slot goes on my Aspiration, because whoever bound that Warden knew my order's work.
 
-**Bram:** Mine get my plate back to full and heal my *cracked ribs*. Both party slots go against the Estate.
+**Bram:** The Warden's spear went through my shield, so one slot mends it. My ribs'll knit on their own, so the other goes on my Aspiration. I'm drilling the new lads at the harbour gate, where they still remember the wall. Both party slots go against the Estate.
 :::
 
 **Resolution.** Vesk's slot settles the fence. *Haul someone up after me* won't fit her Move nearly every time, so she'll bring it in for 1 Aura when it does.
@@ -121,4 +120,6 @@ Dorrie's slot is a roll at the Goal: her first Title, *read a room in a glance*,
 
 Isolde's Aspiration roll is her second Title, *know the history of anything old*, *find what I need in any library* and the slot, a d8 against its d6. It's 5 against 5, and the tie goes to the Aspiration. There's no Aura in downtime, so she spends 1 Resolve to roll again, gets 7, and it climbs to d8.
 
-Bram's ribs and his plate take a slot each. The Estate's Power is a d12 and the crew's is a d4, so the crew needs both party slots to roll against its Power, and two slots count everything twice: the crew's d4 becomes a d8, against the Estate's Power and its agenda at once. The crew rolls 5, the Power 8 and the agenda 6, so they miss both. The Estate's move goes ahead: its Power rolls 9 against its own agenda's d10, which rolls 4, so *Vane comes home* climbs to d12. And nobody touched the festival, so next session the law will be on every street.
+Bram's slot mends his shield. His wound doesn't need one: he finished last session on a d6, and it's back to d2 when downtime's over. His Aspiration roll is both his Titles, *bark an order that gets obeyed* and the slot, a d8 against its d2. It's 5 against 1, so it climbs to d4.
+
+The Estate's Power is a d12 and the crew's is a d4, so the crew needs both party slots to go at it, and two slots count everything twice: the crew's d4 becomes a d8. They Obstruct, so the d8 has to beat the Estate's d12. The crew rolls 5 and the d12 rolls 9, so the action goes ahead: 9 against the agenda's d10, which rolls 4, and *Vane comes home* climbs to d12. And nobody touched the festival, so next session the law will be on every street.

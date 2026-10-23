@@ -6,7 +6,7 @@ order: 18
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 :::quote
 Money in Zi'Dara is simple: a purse of gold is roughly a month's wages.
@@ -23,9 +23,9 @@ Money in Zi'Dara is simple: a purse of gold is roughly a month's wages.
 
 Money buys plain things, and a plain thing is just what it is. A sword's a sword: when it fits, it's a line on your roll, and it lets you do what a sword does. A finer one is still one line, so you can't pay for a step up. A weapon's properties come with the weapon, so buying a crossbow gets you *Long* and *Piercing* with it.
 
-Armour's different: each piece of plain armour you wear makes your Armour a size bigger, so Bram's plate and shield take him from a d2 to a d6. Anything more than that is [attunement](#s-attunement), and money can buy the material for an attuned thing's next stage, if somebody's selling. A [Maker](#a-maker) can give a thing tags as well, but they only last the scene.
+It's the same with armour: each piece of plain armour you wear is a line on your Defend, and so is a shield, so Bram's plate and shield are two lines, and with his first Title and the action his Defend's 4 steps, a d8. Anything more than that is [attunement](#s-attunement), and money can buy the material for an attuned thing's next stage, if somebody's selling. A [Maker](#a-maker) can give a thing tags as well, but they only last the scene.
 
-Replacing a broken item, or mending one, takes a downtime slot and usually a purse of gold. Attuned things are magic and can't break, so it's always something you carry. Some things can't be replaced, and shouldn't be. Your mother's blade isn't for sale.
+Replacing a broken item, or mending one, takes a downtime slot and usually a purse of gold. It's usually armour or a shield, because breaking one is a cost you can offer instead of a Hurt (see [Armour](#s-armour)). Attuned things are magic and can't break, so it's always something you carry. Some things can't be replaced, and shouldn't be. Your mother's blade isn't for sale.
 
 ## Attuned Things from the Story {#s-rare}
 
@@ -39,12 +39,12 @@ Every new stage needs a **material** first, found in the story or bought. It sho
 
 You write one the same way as anything you attune, with a few things to watch.
 
--   **One plain line for each permission**, with a doing word and the how, what or where: *stitch a wound closed*, *find the road, day or night, in any weather*. There's no number on it and no +1. Each one that fits is a line on your roll, the same as a permission on a Title, and the thing doesn't count again on top. When nothing's pushing back, you just do it.
+-   **One plain line for each permission**, the same as on a Title: one word for what it makes you good at, or a doing word and the how, what or where, like *stitch a wound closed* or *find the road, day or night, in any weather*. There's no number on it and no +1. Each one that fits is a line on your roll, the same as a permission on a Title, and the thing doesn't count again on top. When nothing's pushing back, you just do it.
 -   **Write permissions for different situations**, so the thing does many things rather than one thing very hard. Three permissions that all mean *fight with a sword* are one permission written three times: every swing gets 3 steps out of it, and it's no help anywhere else. The Bosun's Axe fights, and it climbs. In a fight it's 1 step, the same as a plain hand axe, and halfway up a ship's side it's a step no other axe gives you. Now and then two of a thing's permissions fit the same roll, and that's fine: both count, like any two permissions that fit.
 -   **A Catch carries one more permission, and a Burden two.** A Catch is trouble, and if the GM couldn't run with it at the table, it's too soft, so write another. A Burden comes off the list in [Boons and Burdens](#s-boons) with a name from the story, and it has to cost its owner something they use.
 -   **Weapons keep their properties for free.** A Tempered spear is still *Reach* and *Thrown*, and you don't spend a permission, a Catch or a Burden on that.
--   **Armour and Confidence lines.** A line that makes your Armour a size bigger does just that, and a Confidence line starts you every scene a size up. Either one takes a permission's place on the thing. That's how attuned armour gives you its Armour.
--   **Permissions that heal.** Only a [Healer](#a-healer) makes a heal roll, so for a Healer, a permission like *stitch a wound closed* is a line on it. For anyone else, it's a quick heal that costs no Aura, once a scene.
+-   **Defend and Confidence lines.** A Defend line is a line on your Defend, a step, the same as a piece of plain armour, and a Confidence line starts you every scene a size up. Either one takes a permission's place on the thing, and if a thing's got two Defend lines, that's two steps. That's how attuned armour goes on your Defend.
+-   **Permissions that heal.** Only a [Healer](#a-healer) makes a heal roll, so for a Healer, a permission like *stitch a wound closed* is a line on it. For anyone else, it's a quick heal that costs no Aura, once a scene: it steps someone's wound die down a size, no roll.
 
 For Catches, use the [Catch ideas](#catches-12), or write your own in the same shape: a name, and one line for what it means. Here are four more.
 
@@ -62,8 +62,8 @@ For Catches, use the [Catch ideas](#catches-12), or write your own in the same s
 -   **Taken from a boss**, like the harpoon they cut out of the thing in the bay.
 -   **Found at the bottom of a site**, in the last room, or on someone who got there first and didn't make it out.
 -   **Inherited** from a bond who dies, or from a crewmate who retires and leaves something behind.
--   **Given by a faction that's an Ally.** An Ally takes risks for the crew, and handing over something it can't replace is one of them.
--   **Bought from a faction.** If a faction holds the thing as one of its tags and it'll sell (it's Neutral or better), the crew can step its own Wealth down one, and the thing changes hands. A material can change hands the same way. See [Factions](#factions).
+-   **Given by a faction that's with the crew**, one whose threads toward them are good. Handing over something it can't replace is a risk, and it only takes that risk for people it trusts.
+-   **Bought from a faction.** If a faction holds the thing as one of its assets and it'll sell, which means it's got no bad thread toward the crew, the crew can spend a spare resource on it, and the thing changes hands. A material can change hands the same way. See [Spare Resources](#s-crew-wealth).
 -   **Won** in a duel, like Captain Marrow's rapier, or at cards.
 
 **Taking one on.** It goes in an attunement slot, so whoever takes it needs a free one, the same as when a friend hands over something they've attuned. It comes at the stage it's at, with its permissions, its Catch and its Burden, and it grows from there like anything else you've attuned.
@@ -115,7 +115,7 @@ They're written out in full, with what tempered each one. Use them as written, o
 
 **Tempered** *stitch a wound closed* · *sew something into a hem where no search will find it*
 
-**Burden** *Others First*: your Hurt Catches only heal with someone else's downtime slot.
+**Burden** *Others First*: when someone heals you, your wound die is rolled twice and the higher counts.
 
 **Adds** *know who last wore a piece of cloth*, with room for one more.
 
@@ -127,7 +127,7 @@ They're written out in full, with what tempered each one. Use them as written, o
 
 **Tempered** *light the way through fog and dark water* · *hold the dead back with its light*
 
-**Burden** *River Cold*: your wound die is a size bigger.
+**Burden** *River Cold*: heals on you roll against your wound die as if it were a size bigger.
 
 **Adds** *speak with the dead who come to its light*, with room for one more.
 
@@ -161,11 +161,11 @@ They're written out in full, with what tempered each one. Use them as written, o
 :::sheet[Corporal Tench's Brigandine]
 *A soldier's brigandine, patched by a dozen hands over thirty years. Tench's old company hands it on to the one who's earned it.*
 
-**Tempered** Armour a size bigger · *talk soldiers round like one of their own*
+**Tempered** a line on your Defend · *talk soldiers round like one of their own*
 
 **Burden** *Weighs a Ton*: your stride's 2 shorter.
 
-**Adds** Armour a size bigger again · *hold my ground, whatever tries to move me*
+**Adds** another line on your Defend · *hold my ground, whatever tries to move me*
 
 **Material** A patch of the company's colours, sewn in under the collar.
 :::
@@ -177,7 +177,7 @@ They're written out in full, with what tempered each one. Use them as written, o
 
 **Properties** Piercing
 
-**Burden** *Never Gives Ground*: you can't Defend.
+**Burden** *Never Gives Ground*: you can't Defend as your action.
 
 **Adds** *call anyone out under the old duelling code* · *read a fighter's training from the way they stand*
 
@@ -201,7 +201,7 @@ They're written out in full, with what tempered each one. Use them as written, o
 
 **Tempered** *curse someone with a thread tied round something of theirs* · *spin a fever or a poison out of someone*
 
-**Burden** *Spun Thin*: you've got one fewer Hurt bar.
+**Burden** *Spun Thin*: you Blaze a size sooner, on a Hurt at d10.
 
 **Adds** *untie any curse, if I can find the knot* · *spin a rope out of anything, strong enough to hold a man*
 
@@ -229,13 +229,13 @@ They're written out in full, with what tempered each one. Use them as written, o
 :::sheet[The Gatekeeper's Plate]
 *Plate that held a city's north gate for nine days against a siege. When the siege lifted it was still standing in the gateway, empty, and it stayed in the gatehouse a hundred years until somebody took it down.*
 
-**Perfected** Armour a size bigger · *hold a gate or a stair against anyone* · *feel it when anything bound by magic is near*
+**Perfected** a line on your Defend · *hold a gate or a stair against anyone* · *feel it when anything bound by magic is near*
 
 **Burden** *Iron Weight*: difficult ground costs you 3 a square.
 
 **Catch** *Wanted*: the city wants it back in the gatehouse, and it knows who took it.
 
-**Adds** Armour a size bigger again, with room for two more.
+**Adds** another line on your Defend, with room for two more.
 
 **Material** A stone from the gatehouse it stood in.
 :::
@@ -338,4 +338,4 @@ Then read it back the way you'd use it at the table. Every permission should be 
 
 Money buys things, but it won't buy you relationships, reputation, favours or trust. It can buy a material, if somebody's selling, but the work's still yours: every new permission on an attuned thing takes a downtime slot.
 
-The crew's own money is different again. Its **Wealth** is a die on the party sheet for what the crew can bring to bear, like a ship's passage for twenty or a magistrate's goodwill, and it's spent a step at a time. See [The Crew](#s-party-faction).
+The crew's own money is different again. It comes from the crew's **resources** on the party sheet, like *Odd jobs* when it's starting out. One that isn't paying for anything is spare, and a spare one buys what's too big for a purse, like a ship's passage for twenty or a magistrate's goodwill. See [Spare Resources](#s-crew-wealth).

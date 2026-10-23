@@ -6,7 +6,7 @@ order: 27
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 :::quote
 Twenty places you can run tonight, with the people and the secrets already in them.
@@ -60,7 +60,7 @@ Steam rolls out when the door opens, smelling of hot stone and cedar oil. Copper
 
 **Scene clock** d8: Dace's other buyer arrives, and he signs with them.
 
-**Telegraphs** *Orla raps her cane on the tiles: "Not in my house."* (d8, Confidence) · *A bath-man takes whoever's making trouble by the collar and walks them to the door.* (d6, Armour, Grabbed) · *Dace grabs his towel and heads for the changing room.* (d8, the deal)
+**Telegraphs** *Orla raps her cane on the tiles: "Not in my house."* (d8, Confidence) · *A bath-man takes whoever's making trouble by the collar and walks them to the door.* (d6, Defend, Grabbed) · *Dace grabs his towel and heads for the changing room.* (d8, the deal)
 
 **Hooks** Someone the crew needs won't meet anywhere but on neutral ground · Dace holds a debt that'll sink a friend, and he's selling it today
 
@@ -84,7 +84,7 @@ A white tower stands on a black rock, reached by a causeway at low tide and a bo
 
 **Scene clock** d8: the ship strikes the Teeth.
 
-**Telegraphs** *Abe comes up the spiral and reaches for you with his gaff hook.* (d6, Armour, Grabbed) · *Crewe swings the lamp's shutter closed.* (d8, the ship) · *A wave breaks right over the gallery.* (d8, everyone on the gallery, Armour, Staggered)
+**Telegraphs** *Abe comes up the spiral and reaches for you with his gaff hook.* (d6, Defend, Grabbed) · *Crewe swings the lamp's shutter closed.* (d8, the ship) · *A wave breaks right over the gallery.* (d8, everyone on the gallery, Defend, Staggered)
 
 **Hooks** A ship the crew cares about is due in tonight · Crewe's selling ship's goods in town, and someone wants to know where he gets them
 
@@ -108,7 +108,7 @@ It's a narrow shop, shelved to the ceiling with ticketed pledges, from wedding r
 
 **Scene clock** d8: Quill stops waiting and goes upstairs to see the master.
 
-**Telegraphs** *Jessamy, through the grille: "No ticket, no pledge."* (d6, Confidence) · *The elder Rudd grabs whoever's nearest the stair and puts them through the shelves.* (d6, Armour, Prone) · *Jessamy tips the ledger toward the stove.* (d6, the ledger) · *Quill straightens his coat and puts a foot on the bottom stair.* (d6, the scene clock)
+**Telegraphs** *Jessamy, through the grille: "No ticket, no pledge."* (d6, Confidence) · *The elder Rudd grabs whoever's nearest the stair and puts them through the shelves.* (d6, Defend, Prone) · *Jessamy tips the ledger toward the stove.* (d6, the ledger) · *Quill straightens his coat and puts a foot on the bottom stair.* (d6, the scene clock)
 
 **Hooks** Someone the crew cares about pledged something they need back · Quill's employer wants to know why the master's stopped paying
 
@@ -130,7 +130,7 @@ It's a long timber hall with antlers on every beam and a fire you could roast an
 
 **Scene clock** d10: dawn, when the horns go up and the hunt rides out.
 
-**Telegraphs** *Hawley lifts his glass: "To our guests, who'll be riding with us in the morning."* (d10, Confidence) · *A hound wakes under the table and goes for whoever's moving.* (d4, Armour) · *Garrow steps out of the shadows at the foot of the stairs.* (d8, the letters)
+**Telegraphs** *Hawley lifts his glass: "To our guests, who'll be riding with us in the morning."* (d10, Confidence) · *A hound wakes under the table and goes for whoever's moving.* (d4, Defend) · *Garrow steps out of the shadows at the foot of the stairs.* (d8, the letters)
 
 **Hooks** The crew needs something from Hawley, and this is the only place he'll see them · Piers wrote asking the crew to come, and wouldn't say why
 
@@ -152,7 +152,7 @@ Rows of gilt chairs face a rostrum under a glass roof, and every painting on the
 
 **Scene clock** d8: lot 31 comes up, and the hammer falls.
 
-**Telegraphs** *Fairweather points his hammer at you: "Is that a bid, or a cough?"* (d8, Confidence) · *Dame Hester lifts her paddle without looking round.* (d10, lot 31) · *A guard comes down the aisle and takes your elbow.* (d6, Armour, Grabbed)
+**Telegraphs** *Fairweather points his hammer at you: "Is that a bid, or a cough?"* (d8, Confidence) · *Dame Hester lifts her paddle without looking round.* (d10, lot 31) · *A guard comes down the aisle and takes your elbow.* (d6, Defend, Grabbed)
 
 **Hooks** Lot 31 was stolen from someone the crew knows · A client wants it bought quietly, and won't go over a certain price
 
@@ -174,7 +174,7 @@ Twenty hulks lie on their sides in grey mud with their ribs showing, and gulls s
 
 **Scene clock** d6: the tide's in, and anyone still out on the flats is swimming.
 
-**Telegraphs** *The mud takes your boot, then your leg.* (d6, Armour, Pinned) · *Slade comes along the walkway with an axe on his shoulder.* (d6, Armour) · *The first channel fills behind you.* (d6, the scene clock)
+**Telegraphs** *The mud takes your boot, then your leg.* (d6, Defend, Pinned) · *Slade comes along the walkway with an axe on his shoulder.* (d6, Defend) · *The first channel fills behind you.* (d6, the scene clock)
 
 **Hooks** A ship the crew knows was stolen last month · Someone wants the ghosts laid to rest, and they'll pay well · Someone the crew's after is hiding in the hulks
 
@@ -198,7 +198,7 @@ You can feel the heat from the street. Inside, a furnace three storeys high glow
 
 **Scene clock** d6: Hollin taps the furnace and the iron runs.
 
-**Telegraphs** *Hollin swings his tapping bar at whoever's closest.* (d10, Armour) · *The crane jerks and the ladle slops over the pits.* (d8, everyone by the pits, Armour, Burning) · *A founder knocks the clay plug half out of the tap hole.* (d6, the scene clock)
+**Telegraphs** *Hollin swings his tapping bar at whoever's closest.* (d10, Defend) · *The crane jerks and the ladle slops over the pits.* (d8, everyone by the pits, Defend, Burning) · *A founder knocks the clay plug half out of the tap hole.* (d6, the scene clock)
 
 **Hooks** Someone's ordered something cast here that mustn't exist · Hollin owes a friend of the crew and won't pay · Gully came to the crew frightened, and wouldn't say of what
 
@@ -242,7 +242,7 @@ There's a row of candles for footlights, a painted sky, and ropes and sandbags u
 
 **Scene clock** d8: the interval ends and the third act starts, ready or not.
 
-**Telegraphs** *Penhallow pushes you out of the wings: "You're on, darling."* (d8, Confidence) · *One of Kell's men comes down the backstage corridor with his knife held low.* (d6, Armour) · *Kell stands up in his box, and the house goes quiet.* (d10, the third act)
+**Telegraphs** *Penhallow pushes you out of the wings: "You're on, darling."* (d8, Confidence) · *One of Kell's men comes down the backstage corridor with his knife held low.* (d6, Defend) · *Kell stands up in his box, and the house goes quiet.* (d10, the third act)
 
 **Hooks** Someone's hired the crew to stop the play · The playwright's a friend who's gone missing
 
@@ -264,7 +264,7 @@ Two pairs of black oak gates hold back the water, with a stone chamber between t
 
 **Scene clock** d8: the chamber's empty, the bottom gates open, and the barge is gone downriver.
 
-**Telegraphs** *Nell swings her boat hook at whoever's on the gate beam.* (d8, Armour, into the chamber) · *Ware leans on the windlass, and the water drops away under the barge.* (d6, the scene clock) · *The horses spook and drag the towline across the path.* (d6, everyone on the towpath, Armour, Prone)
+**Telegraphs** *Nell swings her boat hook at whoever's on the gate beam.* (d8, Defend, into the chamber) · *Ware leans on the windlass, and the water drops away under the barge.* (d6, the scene clock) · *The horses spook and drag the towline across the path.* (d6, everyone on the towpath, Defend, Prone)
 
 **Hooks** Something's coming down the canal that mustn't reach the river · A body turned up in the lock last week
 
@@ -286,7 +286,7 @@ A scaffold with three nooses stands over a crowd of hundreds, eating pies and sh
 
 **Scene clock** d6: the bell's last stroke, and Pyke pulls the lever.
 
-**Telegraphs** *Captain Brandt points: "Those three. Hold them."* (d8, Armour, Grabbed) · *The crowd surges for a better look and carries you with it.* (d8, everyone in the crowd, Armour, Staggered) · *Pyke tests the lever with his boot.* (d8, the scene clock)
+**Telegraphs** *Captain Brandt points: "Those three. Hold them."* (d8, Defend, Grabbed) · *The crowd surges for a better look and carries you with it.* (d8, everyone in the crowd, Defend, Staggered) · *Pyke tests the lever with his boot.* (d8, the scene clock)
 
 **Hooks** Someone the crew cares about is on the cart · Jory knows something the crew needs, and it dies with him · Someone's paid the crew to make sure he hangs
 
@@ -308,7 +308,7 @@ The pillar's four hundred feet of bare rock, with the monastery on top like a ne
 
 **Scene clock** d8: dusk, when the basket comes up and the winch is chained till morning.
 
-**Telegraphs** *Brother Simeon lets the rope run, and the basket drops ten feet.* (d8, everyone in the basket, Confidence) · *The abbot, gently: "You came up as guests. Act like it."* (d10, Confidence) · *A gust swings the basket into the rock.* (d10, everyone in the basket, Armour)
+**Telegraphs** *Brother Simeon lets the rope run, and the basket drops ten feet.* (d8, everyone in the basket, Confidence) · *The abbot, gently: "You came up as guests. Act like it."* (d10, Confidence) · *A gust swings the basket into the rock.* (d10, everyone in the basket, Defend)
 
 **Hooks** Someone the crew's after has taken refuge on the rock · A message has to reach the abbot, who never comes down
 
@@ -332,7 +332,7 @@ It's a long whitewashed ward with thirty beds and herbs smouldering in braziers.
 
 **Scene clock** d8: the evening bell, when the ward's locked for the night with whoever's inside.
 
-**Telegraphs** *Mother Benedetta: "Touch that bed and you'll carry the fever home to your own door."* (d10, Confidence) · *An orderly hauls you off the bed by your collar.* (d6, Armour, Grabbed) · *Sister Prue backs toward the door with the keys.* (d6, the patient)
+**Telegraphs** *Mother Benedetta: "Touch that bed and you'll carry the fever home to your own door."* (d10, Confidence) · *An orderly hauls you off the bed by your collar.* (d6, Defend, Grabbed) · *Sister Prue backs toward the door with the keys.* (d6, the patient)
 
 **Hooks** Someone the crew knows was brought here sick and hasn't been heard from since · A sister smuggles out a letter asking for help
 
@@ -356,7 +356,7 @@ It's a bowl of pale stone sixty feet deep, with terraces and ladders down its si
 
 **Scene clock** d8: Price loses patience and sends the men down, willing or not.
 
-**Telegraphs** *Brennock bellows at the crew to get off his quarry.* (d8, Confidence) · *The crane's ratchet slips and the block swings.* (d8, everyone under the crane, Armour) · *A cold breath comes up out of the hole, and every lamp gutters.* (d10, everyone at the bottom, Confidence, Frightened)
+**Telegraphs** *Brennock bellows at the crew to get off his quarry.* (d8, Confidence) · *The crane's ratchet slips and the block swings.* (d8, everyone under the crane, Defend) · *A cold breath comes up out of the hole, and every lamp gutters.* (d10, everyone at the bottom, Confidence, Frightened)
 
 **Hooks** A friend of the crew was on the blasting team, and he's gone down the hole · Price hires the crew to go down when his men won't
 
@@ -378,7 +378,7 @@ It's forty wet steps down from a cellar door, and then the dark goes on further 
 
 **Scene clock** d8: the river rises, Grebe opens the sluices, and the water comes up to the vaults.
 
-**Telegraphs** *Something brushes your leg under the water, then pulls.* (d10, Armour, Grabbed) · *Mags's crew snuff their lamps and come at you from three sides.* (d6, Armour) · *Grebe hauls on the sluice wheel.* (d6, the scene clock)
+**Telegraphs** *Something brushes your leg under the water, then pulls.* (d10, Defend, Grabbed) · *Mags's crew snuff their lamps and come at you from three sides.* (d6, Defend) · *Grebe hauls on the sluice wheel.* (d6, the scene clock)
 
 **Hooks** Someone went down into the cistern and didn't come up · The city's water's gone bad, and this is where it comes from
 
@@ -400,7 +400,7 @@ Shallow pans of brine run across the marsh in rows, and smoke pours out of the b
 
 **Scene clock** d8: the salt barge comes up the channel with the owner on it.
 
-**Telegraphs** *Two wardens wade in to drag you out of the brine.* (d6, Armour, Grabbed) · *A pan boils over and the boiling-house fills with scalding steam.* (d6, everyone in the boiling-house, Armour, Burning) · *Harrow blows a whistle that carries all the way down the channel.* (d8, the scene clock)
+**Telegraphs** *Two wardens wade in to drag you out of the brine.* (d6, Defend, Grabbed) · *A pan boils over and the boiling-house fills with scalding steam.* (d6, everyone in the boiling-house, Defend, Burning) · *Harrow blows a whistle that carries all the way down the channel.* (d8, the scene clock)
 
 **Hooks** Someone the crew owes is working off a debt in the pans · The city's priests buy their salt here, and one of them wants to know why it's stopped working
 
@@ -422,7 +422,7 @@ Galleries of dark wood climb to a glass dome, with ladders on rails and books ch
 
 **Scene clock** d10: the closing bell, when the doors lock with whoever's still inside.
 
-**Telegraphs** *The shelves grind shut between you and your friends.* (d10, everyone in the aisle, Armour, Pinned) · *Shawe, without looking up: "That's been out longer than the rules allow."* (d10, Confidence) · *The rival slips a book into his sleeve and heads for the door.* (d8, the book)
+**Telegraphs** *The shelves grind shut between you and your friends.* (d10, everyone in the aisle, Defend, Pinned) · *Shawe, without looking up: "That's been out longer than the rules allow."* (d10, Confidence) · *The rival slips a book into his sleeve and heads for the door.* (d8, the book)
 
 **Hooks** The crew needs a book that's only here, and Shawe won't lend it · A scholar went in a week ago and hasn't come out
 
@@ -444,7 +444,7 @@ Snow's banked to the windowsills. Inside there's one low hall with a big fire an
 
 **Scene clock** d8: full dark, when nobody outside lives till morning.
 
-**Telegraphs** *Kasza, in the doorway: "Nobody leaves till I've seen every face."* (d6, Confidence) · *The dogs get up and stand between you and the door.* (d6, the bell on the road) · *Snow slides off the roof onto whoever's at the door.* (d8, whoever's at the door, Armour, Prone)
+**Telegraphs** *Kasza, in the doorway: "Nobody leaves till I've seen every face."* (d6, Confidence) · *The dogs get up and stand between you and the door.* (d6, the bell on the road) · *Snow slides off the roof onto whoever's at the door.* (d8, whoever's at the door, Defend, Prone)
 
 **Hooks** The storm's caught the crew on the pass too · Kasza's officer is paying the crew to make sure the deserter comes back
 
@@ -468,7 +468,7 @@ Iron cages stand round a garden, with a bear pit in the middle and an aviary lik
 
 **Scene clock** d8: Salk's guests come out for the show at the bear pit.
 
-**Telegraphs** *A handler cracks his whip at whoever's too close to the cages.* (d6, Armour, Disarmed) · *The bear rears up and roars, and every animal in the garden answers.* (d8, the scene clock) · *Salk, from the terrace: "Ida, let the tiger out. Let's see them run."* (d10, everyone in the garden, Confidence, Frightened)
+**Telegraphs** *A handler cracks his whip at whoever's too close to the cages.* (d6, Defend, Disarmed) · *The bear rears up and roars, and every animal in the garden answers.* (d8, the scene clock) · *Salk, from the terrace: "Ida, let the tiger out. Let's see them run."* (d10, everyone in the garden, Confidence, Frightened)
 
 **Hooks** Salk's business partner vanished a year ago, and his family wants answers · Salk's showing off his collection tonight, and the crew's on the guest list
 
@@ -490,7 +490,7 @@ A flat-bottomed ferry hangs on a cable across a river a quarter mile wide, and t
 
 **Scene clock** d8: the riders come out of the trees onto the landing.
 
-**Telegraphs** *Cobb plants himself in the ferry gate: "Toll first."* (d8, Confidence) · *Halfway over, the ferry lurches and the cable sings.* (d6, everyone on the ferry, Armour, Staggered) · *Horns on the road behind you, closer now.* (d8, the scene clock)
+**Telegraphs** *Cobb plants himself in the ferry gate: "Toll first."* (d8, Confidence) · *Halfway over, the ferry lurches and the cable sings.* (d6, everyone on the ferry, Defend, Staggered) · *Horns on the road behind you, closer now.* (d8, the scene clock)
 
 **Hooks** Someone's chasing the crew, and this is the only way over · Someone has to be on the far bank by morning · A cart that crossed here last month never reached the other side
 
@@ -504,9 +504,9 @@ The crew's after a brass key that a Guild clerk pledged last week, and they need
 
 She reads them the shop, camphor and sweet smell and all, and then lays the scene out. "There are two stakes. The key's in the strongroom under the back stair, and you haven't got the ticket, so *The pledge* is Challenge 3, with *Locked* and *Paperwork* in the way. If you want Jessamy's ledger too, that's Challenge 3, with *Behind the Grille* and *Written in Code*. The scene clock's a d8. When it runs out, Quill stops waiting and goes upstairs to see the master."
 
-Then she telegraphs. "Jessamy looks at Dorrie through the grille: 'No ticket, no pledge.' That's a d6 at your Confidence. The elder Rudd's going to take Bram by the collar and put him through the shelves, a d6 at your Armour, and if it lands you're on the floor. And Quill straightens his coat and puts a foot on the bottom stair. That's a d6 at the scene clock." That's 9 steps of her 20. It's a talking scene so far, so she keeps it a breather.
+Then she telegraphs. "Jessamy looks at Dorrie through the grille: 'No ticket, no pledge.' That's a d6 at your Confidence. The elder Rudd's going to take Bram by the collar and put him through the shelves, a d6 at your Defend, and if it gets through you're on the floor. And Quill straightens his coat and puts a foot on the bottom stair. That's a d6 at the scene clock." That's 9 steps of her 20. It's a talking scene so far, so she keeps it a breather.
 
-**Bram** goes first. He steps onto the bottom stair in front of Quill and fills it. That's his Fight: his Title, *hold the line* and his war hammer, held across the stair, so with the action it's 4 steps, a d8, against Quill's d6. Bram rolls 5, and Quill's d6 comes up 5 too. When you're answering, a tie's a loss unless you pay, so Bram pays 1 Aura, and Quill sits back down. That's Bram's action for the round, so the Rudd's coming at his Armour when the round ends.
+**Bram** goes first. He steps onto the bottom stair in front of Quill and fills it. That's his Fight: his Title, *hold the line* and his war hammer, held across the stair, so with the action it's 4 steps, a d8, against Quill's d6. Bram rolls 5, and Quill's d6 comes up 5 too. When you're answering, a tie's a loss unless you pay, so Bram pays 1 Aura, and Quill sits back down. That's Bram's action for the round, so the Rudd's coming at his Defend when the round ends.
 
 **Dorrie** fires Cold Reader first, which is free once a scene, and asks what Jessamy's feeling. "She's frightened, and not of you. Every time anyone goes near that stair she stops breathing." Then Dorrie leans on the counter and works on the missing ticket: the clerk sent her, and he's lost it. That's her Talk, and her Title, *read a room in a glance* and *make a lie sound like old news* all fit, so with the action it's 4 steps, a d8. She puts it on *Paperwork* and rolls the stake's d6 with it. Her d8 lands on 8, its top face, and the stake rolls 2. Jessamy writes her a new ticket. Dorrie's Aura is already full, so the top face goes to Bram and pays back his tie.
 
@@ -514,7 +514,7 @@ Then she telegraphs. "Jessamy looks at Dorrie through the grille: 'No ticket, no
 
 **Isolde**'s been at the foot of the stair since they came in, because that's where the sweet smell's strongest. She Studies the house, starting from The dead and feeling for whoever's up there. Her first Title and *speak with the recently dead* both fit, so with the action it's 3 steps, a d6. The Pledge House is Challenge 3, so she rolls its d6 too. She rolls 5, and the house rolls 4. She asks what's upstairs, and the GM gives her the hidden tag: *The Master's Been Dead a Month*. "He's up there in his chair, and he's been there four weeks. He isn't happy about what's happening to his shop."
 
-End of the round. Jessamy's d6 rolls 2 against Dorrie's Confidence d6, which rolls 5, so it doesn't land. That was everything aimed at her Confidence, so it goes up a size, to a d8. The Rudd's d6 rolls 6 against Bram's Armour d6, which rolls 3, so it does, and the GM names it: he's on the floor. Bram offers his plate instead, because he isn't leaving that stair, and the GM takes the swap. His Armour's a d4 now. Quill was answered, so the scene clock only takes its usual step, down to a d6.
+End of the round. Jessamy's d6 rolls 2 against Dorrie's Confidence d6, which rolls 5, so she stops it. That was everything aimed at her Confidence, so it goes up a size, to a d8. The Rudd's d6 rolls 6 against Bram's Defend, a d8 for his Title, his plate and his shield, which rolls 3, so it gets through, and the GM names it: he's on the floor. Bram offers his plate instead, because he isn't leaving that stair, and the GM takes the swap. It's crossed out till it's mended, so his Defend's 3 steps now, a d6. Quill was answered, so the scene clock only takes its usual step, down to a d6.
 
 That changes the whole scene. Jessamy's been giving the street its pledges back before the Rudds can sell them, and she's been terrified of exactly this. The crew knows the tag now, so any of them can bring it into a roll for 1 Aura. Next round Dorrie won't need to beat her at all. She can lean on the grille and ask, quietly, how long he's been up there.
 :::

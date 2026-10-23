@@ -6,7 +6,7 @@ order: 4
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 :::quote
 Everything the crew wants, owns and owes, out on the table where everyone can see it.
@@ -14,19 +14,19 @@ Everything the crew wants, owns and owes, out on the table where everyone can se
 
 The party sheet is two A4 sheets, printed double-sided. The front of each one is a tile of the **faction board**, and the backs are the **crew page** and the **downtime page**. Lay the tiles side by side in the middle of the table. Any edge joins any edge: two tiles make an A3 board, four make A2, and you can keep going.
 
-Each tile has six seats, one for every faction that matters, with room for its dice, its agendas, its tags, its face, its secret once you find it, and a Standing ladder. There aren't any lines printed between the seats. The crew draws its own, between any seat and any other, because the crew decides who's tied to who. If you need more seats, print the **Faction Sheet**, which is the board on one page, as many times as you like.
+Each tile has six seats, one for every faction that matters, with room for its dice, its agendas, its assets and resources, its face, its secret once you find it, and its threads. There aren't any lines printed between the seats. The crew draws its own, between any seat and any other, because the crew decides who's tied to who. If you need more seats, print the **Faction Sheet**, which is the board on one page, as many times as you like.
 
 Here's what lives on it:
 
--   **The crew.** Its name, its Reputations, its Power and Wealth, its tags, and the people it relies on, with how it grows and what its Wealth can buy.
+-   **The crew.** Its name, its Reputations, its Power, resources and assets, and the people it relies on, with how it grows and what a spare resource can buy.
 -   **The Party Goal**, and any **projects** on the go.
 -   **Aspirations.** Every player's, where everyone can see them.
--   **The faction board.** Every power that matters: its dice, its agendas, and how it sees the crew.
+-   **The faction board.** Every power that matters: its dice, its agendas, and its threads toward the crew.
 -   **What has changed.** One line for every agenda that happened.
--   **Party resources.** Things the crew owns together.
--   **Crew tags.** All twelve, so the table can pick one when the crew grows.
+-   **Party holdings.** Things the crew owns together.
+-   **Crew assets.** All twelve, so the table can pick one when the crew grows.
 
-The downtime page has the order downtime runs in, how downtime rolls work, the Standing ladder, the crew's moves on a faction, the faction turn and its d6, and what happens when a faction comes for the crew, so you don't have to look them up.
+The downtime page has the order downtime runs in, how downtime rolls work, the crew's moves on a faction, the faction turn and its d6, and what happens when a faction comes for the crew, so you don't have to look them up.
 
 ## Things That Climb {#s-climb}
 
@@ -66,86 +66,98 @@ A **project** is anything the crew, or one of them, sets out to build or bring a
 -   **Past d12, it's done**, and what you wrote happens.
 -   **Keep two or three on the go**, at most. Any more and none of them gets anywhere.
 
-Projects are how a small crew takes on a big faction. You can't go straight at the Vane Estate's Power without both party slots (see [Factions](#s-faction-crew)), but you can start *Turn the salt carters against the Estate*, and write that when it's done, the Estate's Wealth steps down one. Every slot you put into it is a slot the Estate doesn't see coming.
+Projects are how a small crew takes on a big faction. You can't go straight at the Vane Estate's Power without both party slots (see [Factions](#s-faction-crew)), but you can start *Turn the salt carters against the Estate*, and write that when it's done, the Estate loses its *Salt Contracts*. Every slot you put into it is a slot the Estate doesn't see coming.
 
 ## The Crew {#s-party-faction}
 
-The crew's a faction too. It starts small, and it grows the way a character does.
+The crew's a faction too, on the same card as the others. It starts small, and it grows the way a character does.
 
 :::sheet[A new crew]
 **Name** Whatever it gets called, once it gets called something.
 
 **Reputations** None yet.
 
-**Power** d4 · **Wealth** d4
+**Power** d4: 1 step, plus *Four or five of us and a back room*.
 
-**Tags** None yet.
+**Resources** *Odd jobs*.
 
-**Party resources** Whatever it starts the campaign with.
+**Assets** *Four or five of us and a back room* (+1 Power).
+
+**Holdings** Whatever it starts the campaign with.
 
 **People it relies on** The fence, the landlord, the cousin with a boat.
 :::
 
--   **Power** is muscle, reach, and how many people turn up when the crew calls. It's the die the crew rolls when it moves on a faction, and its people are threats with a Challenge to match: a d6 Power sends Challenge 3.
--   **Wealth** is what the crew can bring to bear with money, and it's spent a step at a time (see [Spending Wealth](#s-crew-wealth)). A purse of gold is still each character's own, a utility item that's worth about a month's wages.
+-   **Power** is muscle, reach, and how many people turn up when the crew calls. It's 1 step, plus 1 for each asset that adds Power, so a new crew's a d4. It's the die the crew rolls when it moves on a faction, plus a step for every Reputation that fits the roll, and its people are threats with a Challenge to match: a d6 Power sends Challenge 3.
+-   **Resources** are permissions for where the crew's money comes from, one line each, like *Odd jobs*. Every asset needs one paying for it, every downtime, and one that isn't paying for anything is spare (see [Spare Resources](#s-crew-wealth)). A purse of gold is still each character's own, a utility item that's worth about a month's wages.
+-   **Assets** are permissions for what the crew can do, one line each, and each one says exactly what it does. An asset that's people who'll turn up when the crew calls, like *Muscle* or *The Dock Lads*, adds Power. One with nothing paying for it stops counting till something does. There are twelve below, or write your own in the same shape.
 -   **Reputations** are what the city says about the crew, one line each: *The ones who beat the forger's court.* A Reputation works like a Title for the crew. It's a step on any crew roll it fits, and the crew earns one every time a Goal's done, and keeps them all.
--   **Crew tags** work like traits for the crew. Each one's a step on any crew roll it fits, and most do one thing as well. There are twelve below, or write your own in the same shape.
--   **Party resources** are the big things the crew owns together (see below).
+-   **Holdings** are the big things the crew owns together (see [Party Holdings](#s-party-resources)).
+
+A new crew's one resource pays for its one asset, the four or five of them and their back room, so there's nothing spare yet.
+
+The crew doesn't need the three faction [bonds](#s-faction-bonds): its people are the characters, and its Reputations do the job of Public Sentiment. Its threads with factions go on the faction board. The rest works the same as any faction's (see [Resources and Assets](#s-wealth)), and its moves on the factions are in [Factions](#s-faction-crew).
 
 ### How big it is {#s-crew-size}
+
+The die's 1 step, plus the assets that add Power, so a crew with *Muscle* as well as its back room is a d6.
 
 | Power | What the crew is |
 | --- | --- |
 | d4 | A crew with no name. Four or five people and a back room. |
 | d6 | A name, and fifty hands who'll come when they're called. |
-| d8 | A guild or a holding: a building, people on the books, a seat at some tables. |
+| d8 | A guild, or something like one: a building, people on the books, a seat at some tables. |
 | d10 | A power in the city. Other factions plan around it. |
 | d12 | One of the great powers. |
 
-### Crew tags {#s-crew-tags}
+### Crew Assets {#s-crew-tags}
 
-| Tag | A step on | And it… |
-| --- | --- | --- |
-| **Informants** | Finding out what a faction's up to. | Once a downtime, ask the GM one question about a faction, and get a straight answer. |
-| **Muscle** | A Strike, or anything that needs bodies. | Once a session, the crew's people join in for one scene, with as many steps as half its Power die (a d6 is 3). |
-| **Safehouses** | Hiding, and getting someone out of sight. | Once a downtime, one of the crew lies low, or heals a Catch on their Hurt track, without spending a slot. |
-| **Fences** | Buying and selling what shouldn't be bought or sold. | Once a downtime, someone acquires something without spending a slot. |
-| **Friends at Court** | Deals, and anything to do with the law or the nobility. | Once a downtime, the crew makes a Deal without spending a slot. |
-| **Influential** | Anything where the crew's name opens a door. | Once a downtime, the crew works for a faction that's Neutral or better without spending a slot. |
-| **Rooted** | Anything in the crew's own streets. | Once a session, anyone in the crew being chased through those streets gets away, with no roll. |
-| **A Ship** | Anything at sea or on the river. | It's a party resource the crew can sail, and a voyage on it needs no Supplies clock. |
-| **Smugglers' Roads** | Moving people or things unseen. | A journey on the crew's own roads starts with its first stage already behind it. |
-| **A Workshop** | Making and mending. | Once a downtime, mend a broken item, or step someone's Armour back to full, without spending a slot. |
-| **Healers** | Keeping people alive. | Once a downtime, everyone in the crew heals one Catch on their Hurt track without spending a slot. |
-| **Old Debts** | Calling on people. | Once a session, someone the crew once helped turns up and does one thing for them. |
+Here are twelve to pick from, or write your own in the same shape. Each one needs a resource paying for it, like any asset, and does exactly what it says.
 
-### Spending Wealth {#s-crew-wealth}
+| Asset | What it does |
+| --- | --- |
+| **Informants** | Once a downtime, ask the GM one question about a faction, and get a straight answer. |
+| **Muscle** | +1 Power, and once a session the crew's people join in for one scene, with as many steps as half its Power die (a d6 is 3). |
+| **Safehouses** | Once a downtime, one of the crew lies low without spending a slot. |
+| **Fences** | Once a downtime, one of the crew gets something through them without spending a slot. |
+| **Friends at Court** | Once a downtime, the crew Influences a faction's face without spending a slot. |
+| **Influential** | Once a downtime, the crew works for a faction without spending a slot, as long as that faction's threads toward the crew aren't mostly bad. |
+| **Rooted** | Once a session, anyone in the crew being chased through the crew's own streets gets away, with no roll. |
+| **A Ship** | It's a holding the crew can sail, and a voyage on it needs no Supplies clock. |
+| **Smugglers' Roads** | A journey on the crew's own roads starts with its first stage already behind it. |
+| **A Workshop** | Once a downtime, mend a broken item without spending a slot. |
+| **Healers** | Once a session, between two scenes, everyone in the crew steps their wound die down a size. |
+| **Old Debts** | Once a session, someone the crew once helped turns up and does one thing for them. |
 
-Spending Wealth steps it down one, and buys one of these:
+### Spare Resources {#s-crew-wealth}
+
+A **spare resource** is one that isn't paying for an asset. It's spent each downtime, not saved, so each spare buys one of these between one downtime and the next:
 
 -   **An extra party slot** this downtime.
--   **Another faction's move.** Pay a faction and it makes one move where the crew says, rolled with its own dice. A faction that's an *Enemy* won't take the crew's money.
--   **A tag or a thing** bought from a faction that'll sell, which means one that's *Neutral* or better. It changes hands: the tag's the crew's now, and a thing becomes a party resource.
+-   **A new asset of the crew's own.** It takes a party slot to build (that's Establish), and the spare pays for it from then on.
+-   **Another faction's action.** Pay a faction and it spends its own action that downtime where the crew says, rolled with its own dice. A faction with a bad thread toward the crew won't take its money, and the money buys the action, not the win.
+-   **An asset or a resource** from a faction that'll sell, which means one with no bad thread toward the crew. It changes hands, and an asset needs a resource paying for it from then on.
 -   **A tie** won on a downtime roll (see [Rolling in downtime](#s-downtime-rolls)).
 -   **Anything too big for a purse**, in a session: passage for twenty, a house, a magistrate's goodwill. When the money's what does it, it counts as a permission on the roll.
 
 ### How the crew grows {#s-crew-grows}
 
--   **When the Goal's done**, the crew earns a new Reputation and picks **two** of these: Power up one, Wealth up one, a new crew tag, or a new party resource.
--   **When it takes something big** (a building, a ship, a street) **or a faction it struck falls**, it picks one.
--   **A job can move its dice too.** A job that brings home a fortune steps its Wealth up, and the GM says so when she offers it.
--   **It shrinks** when a faction attacks it and wins: it loses a tag, or a step of Power or Wealth.
--   **Rebuild** with a party slot: step Power or Wealth back up one, never past its best.
+-   **When the Goal's done**, the crew earns a new Reputation and picks **two** of these: a new resource, a new asset (it'll need something to pay for it), or a new holding.
+-   **When it takes something big** (a building, a ship, a street) **or a faction it's been fighting falls**, it picks one.
+-   **A big job can pay a resource.** When it will, the GM says so when she offers it.
+-   **It shrinks** when a faction takes or destroys its assets or resources.
+-   **Rebuild** with a party slot. That's Establish, and it brings back an asset or a resource the crew's lost. An asset still needs something paying for it.
+-   **A brand-new resource** comes from the Goal, a big job or a project, or off a faction, by Acquiring it or buying it with a spare. Establish only builds back one the crew's lost.
 -   **It never takes a turn.** The party slots are the crew's turn.
 
 There's a whole campaign of it, from a crew with no name to a power in the Low Market, in [The Crew, Session 1 to 20](#s-crew-1-20).
 
-## Party Resources {#s-party-resources}
+## Party Holdings {#s-party-resources}
 
-Big things, like a horse, a cart, a small boat or a house, are **party resources** rather than items. The story decides whether you've got access to them, and the crew keeps track of them together. A party resource counts as a line on any roll it fits for whoever's using it: a fast horse in a chase, or a safehouse when the crew needs to disappear. It isn't on anyone's set action, so bringing it into a roll costs 1 Aura, the same as bringing in the ground.
+Big things, like a horse, a cart, a small boat or a house, are **party holdings** rather than items. The story decides whether you've got access to them, and the crew keeps track of them together. A holding counts as a line on any roll it fits for whoever's using it: a fast horse in a chase, or a safehouse when the crew needs to disappear. It isn't on anyone's set action, so bringing it into a roll costs 1 Aura, the same as bringing in the ground. A holding isn't an asset, so nothing has to pay for it.
 
 :::example
-In session 3 the crew steals a horse and cart from a Vane warehouse. It goes on the party sheet as a line: *"A horse and cart."*
+In session 3 the crew steals a horse and cart from a Vane warehouse. It goes on the party sheet as a holding: *"A horse and cart."*
 
 In session 6 they leave it in a stable and forget all about it. In session 9 they come back to the city and need to get out fast. The horse and cart are still on the party sheet, and nothing's happened to them, so they're right where the crew left them.
 :::

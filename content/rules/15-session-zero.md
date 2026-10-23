@@ -6,7 +6,7 @@ order: 15
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 :::quote
 Before you touch a die, sit down together and have one conversation.
@@ -50,9 +50,9 @@ If anyone wants to play tonight without building, they can take one of the [read
 
 ## 6. The Party Sheet {#the-party-sheet}
 
-Draw it up together. Put every Aspiration at d2 and the Party Goal at d2. Give the crew its starting dice, Power d4 and Wealth d4, and a name if you've got one. Then add your first factions, and anything the crew owns together.
+Draw it up together. Put every Aspiration at d2 and the Party Goal at d2. Give the crew its starting card, Power d4 with one resource and one asset (see [The Crew](#s-party-faction)), and a name if you've got one. Then add your first factions, and any holdings the crew starts with.
 
-The Goal is what the first arc's about, so take your time over it. A good first Goal is something the whole crew wants and can't get in one night, like *clear Dorrie's name* or *own the Low Market*. Two or three factions is plenty to start, as long as one of them wants something the crew's got.
+The Goal is what the first arc's about, so take your time over it. A good first Goal is something the whole crew wants and can't get in one night, like *clear Dorrie's name* or *own the Low Market*. Four factions is enough to start, as long as one of them wants something the crew's got.
 
 ## 7. Magic and the Strange {#magic-and-the-strange}
 
@@ -67,7 +67,7 @@ Grid or theatre of the mind? Zi'Dara's built for a grid, but it plays fine witho
 Players who've played other roleplaying games bring habits with them, and most of them are good ones. Spend five minutes on what's different here:
 
 -   **Nobody goes first.** The GM shows you everything that's coming, then the crew acts in any order. Talk it through.
--   **Most threats don't have hit points.** They have tags, and every win strips one, so look for the weak point instead of grinding. The big ones have Tough, and Tough works like hit points.
+-   **Most threats don't have hit points.** They have tags, and every win strips one, so look for the weak point instead of grinding. The big ones carry multipliers, like *Armour ×4*, which takes four wins.
 -   **You roll their dice too.** The GM almost never rolls, so pick up the threat's die in another colour.
 
 There's more in [Welcome to Zi'Dara](#s-from-dnd).

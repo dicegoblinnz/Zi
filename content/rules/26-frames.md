@@ -6,7 +6,7 @@ order: 26
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 :::quote
 Before anyone builds a character, pick the kind of world you want to play in.
@@ -16,7 +16,7 @@ A **frame** is a ready-made kind of campaign. It tells you what the world's like
 
 You pick one together at Session Zero, and it's step 1, [the pitch](#session-zero). The GM reads out the pitch for the frame she'd like to run, or for two or three of them, and the table talks it over. A frame hands you most of the other steps as well: the tone, the first factions, the first Goal and the questions to go round the table with. That'll make Session Zero a lot quicker.
 
-[The Steeplands](#steeplands) is the book's own frame, and it's where every example in the earlier chapters happens. The five below are other worlds you can run with the same book. They're all built from the same parts in the same order, so once you've read one you'll know where to find things in the rest, and there's a checklist at the end for building your own.
+[The Steeplands](#steeplands) is the book's own frame, and it's where every example in the earlier chapters happens. The five below are other worlds you can run with the same book. They're all built from the same parts in the same order, so once you've read one you'll know where to find things in the rest, and there's a checklist at the end for building your own. The faction cards are the ones from [Factions](#s-faction-board), written short: the assets that add Power go in brackets after its Power die, any other asset gets its own line saying what it does, and the last line is its threads toward the crew.
 
 | Frame | What you'll do most | It feels like | Pick it if… |
 | --- | --- | --- | --- |
@@ -45,7 +45,7 @@ It isn't a naval war game. The crew aren't admirals and nobody's moving fleets a
 
 ### What the crew does {#what-the-crew-does}
 
-A session usually starts in port. The crew takes a cargo or a charter from someone on the board (that's *Work for it* or a *Deal* in [Factions](#factions)), and the planning scene is about the route, the weather and who's watching the harbour. Then they sail. A voyage is a journey from [Travelling](#travelling): the way is a stake with a tag for every stage, like *The Narrows*, *Open Water* and *The Reef Gate*, and Supplies is the water and salt pork in the hold. The ship herself is a party resource with permissions of her own, and the frame rule below says how. Most voyages have one scene worth playing in rounds, like a cutter that wants to come aboard or a squall at the wrong moment, and when something's after you it's a [chase](#chases), with the sea as the Ground. Then there's whoever's waiting at the other end, and the aftermath: who pays, who's angry, and what the crew owes now.
+A session usually starts in port. The crew takes a cargo or a charter from someone on the board (that's *Work for it* in [Factions](#factions), or a trade), and the planning scene is about the route, the weather and who's watching the harbour. Then they sail. A voyage is a journey from [Travelling](#travelling): the way is a stake with a tag for every stage, like *The Narrows*, *Open Water* and *The Reef Gate*, and Supplies is the water and salt pork in the hold. The ship herself is a party holding with permissions of her own, and the frame rule below says how. Most voyages have one scene worth playing in rounds, like a cutter that wants to come aboard or a squall at the wrong moment, and when something's after you it's a [chase](#chases), with the sea as the Ground. Then there's whoever's waiting at the other end, and the aftermath: who pays, who's angry, and what the crew owes now.
 
 Over an arc, the crew builds the ship and its name. They pay off the Kittiwake and refit her, pick a side between the Tithe Fleet, the trading houses and the smugglers, and find out what's under the Glass Shelf. [Downtime](#downtime) is time in port, with the ship up on the slip and everyone's debts catching up with them, and it's when the faction turn shows you what the board did while you were at sea.
 
@@ -60,67 +60,67 @@ Over an arc, the crew builds the ship and its name. They pay off the Kittiwake a
 ### The board {#frames-the-board}
 
 :::sheet[The Tithe Fleet]
-**Power** d10 · **Wealth** d8
+**Power** d10 (*Warships ×2*, *Marines*, *The Law of the Sea* and *Watchful*)
+
+**Resources** *The Tithe* · *Sailing Papers* · *Seized Cargoes* · *Gallowsmouth Fines* · *Crown Pay*
 
 **Want** Every ship that sails pays the tithe.
 
 **Agenda** *Close the Combs*, at d4 (a season or more away).
 
-**Tags** *Warships* · *The Law of the Sea* · *Watchful*
-
 **Face** Commodore Isel Varrow, who hanged her own brother for smuggling.
 
 **Secret** *Bought Captains.* Half her captains take Tarrant money to look the other way, and she's got no idea.
 
-**Standing** Wary.
+**Threads** Toward the crew: *The Kittiwake sails without papers* (bad).
 :::
 
 :::sheet[Tarrant & Daughters]
-**Power** d8 · **Wealth** d12
+**Power** d8 (*Sprawling*, *Merchantmen* and *Armed Escorts*)
+
+**Resources** *Cargo Contracts* · *Ship Mortgages* · *Marine Insurance* · *Warehouses in Every Port* · *Whale Oil* · *Passenger Fares*
+
+**Assets** *Holds the Note* (it owns the Kittiwake's mortgage, so one missed payment and it can take her back)
 
 **Want** To own every sea lane in the Brinewake.
 
 **Agenda** *Buy the Saltreach harbour charter*, at d6 (a month or two away).
 
-**Tags** *Wealthy* · *Sprawling* · *Holds the Note*
-
 **Face** Marguerite Tarrant, the eldest daughter, who never raises her voice and never forgets a late payment.
 
 **Secret** *They Woke It.* Their diving barges on the Glass Shelf broke into something that should've stayed shut.
-
-**Standing** Neutral.
 :::
 
 :::sheet[The Brothers of the Lamp]
-**Power** d6 · **Wealth** d6
+**Power** d6 (*Knows Every Cove* and *Ghost*)
+
+**Resources** *Brandy Runs* · *Smuggled Passengers*
 
 **Want** A sea with no tithe on it.
 
 **Agenda** *Run the Gallowsmouth blockade*, at d8 (a week or two away).
 
-**Tags** *Knows Every Cove* · *Ghost*
-
 **Face** Old Hennick One-Lamp, who was smuggling before the Fleet had a name.
 
 **Secret** *Wreckers.* When trade's slow, they hang false lights on the rocks and strip whatever runs aground.
 
-**Standing** Friendly.
+**Threads** Toward the crew: *The Kittiwake runs our brandy* (good).
 :::
 
 :::sheet[The Drowned Choir]
-**Power** d8 · **Wealth** d2
+**Power** d8 (*Old*, *Calls the Tide* and *Secretive*)
+
+**Resources** *Every Drowning* · *The Drowned City* · *Sailors' Offerings*
 
 **Want** To bring the drowned city back up into the air.
 
 **Agenda** *Raise the Glass Shelf*, at d2 (years off, for now).
 
-**Tags** *Old* · *Calls the Tide* · *Secretive*
-
 **Face** The Cantor, a drowned priest who talks through anyone who's swallowed enough seawater.
 
 **Secret** *Sunk on Purpose.* The founders of Saltreach drowned that city, and the Choir remembers every name.
 
-**Standing** Neutral. It hasn't noticed the crew yet.
+**Threads** None yet. It hasn't noticed the crew.
 :::
 
 Two of them want the Kittiwake. Tarrant & Daughters holds the note on her and would happily take her back over one missed payment, and the Brothers need one more fast ship for the blockade run. That's your first faction pressure, right there.
@@ -138,7 +138,7 @@ A Tithe Fleet sergeant with a grapnel, a cutlass and a list of names.
 
 **Drives it** *Following Orders* · *Tired*
 
-**Telegraphs** *He gets his grapnel into your belt and hauls you across onto the cutter.* (d8, Armour) · *"Papers, or the cage. I don't much mind which."* (d8, Confidence) · *He blows two short blasts, and the cutter runs out its guns.* (d8, the scene clock)
+**Telegraphs** *He gets his grapnel into your belt and hauls you across onto the cutter.* (d8, Defend) · *"Papers, or the cage. I don't much mind which."* (d8, Confidence) · *He blows two short blasts, and the cutter runs out its guns.* (d8, the scene clock)
 
 **Voice** "Nobody's in trouble yet. Let's keep it that way."
 
@@ -154,18 +154,18 @@ A long shadow under clear water, and a low note you feel in your teeth before yo
 
 **Comes at you** *Hits Like a Wagon* · *Fear*
 
-**Keeps it going** *Barnacle Hide 20* · *The Song 20* · *Deep Water*
+**Keeps it going** *Barnacle Hide ×3* · *The Song ×6* · *Deep Water*
 
 **Drives it** *Grieving*
 
-**Telegraphs** *The sea humps up under the keel, and a fluke as big as a sail comes down across the deck.* (d12, Armour) · *The song comes up through the planks, and everyone aboard hears someone they've lost calling from the water.* (d12, Confidence) · *It wraps itself round the hull and starts to squeeze.* (d12, the ship)
+**Telegraphs** *The sea humps up under the keel, and a fluke as big as a sail comes down across the deck.* (d12, Defend) · *The song comes up through the planks, and everyone aboard hears someone they've lost calling from the water.* (d12, Confidence) · *It wraps itself round the hull and starts to squeeze.* (d12, the ship)
 
 **Voice** One long note through the hull, like a bell rung underwater.
 
 **Hidden** *The Bell in Its Throat* (weak point). The drowned city's temple bell is stuck in its throat, and it sings through it for everyone who drowned. Ring a bell back at it on the same note and it goes quiet, and sinks, and doesn't come back.
 :::
 
-The Bell Below is a boss, and its two tough tags add up to 40, for a starting crew of four. *Barnacle Hide* is chipped by harpoons, blades and fire. *The Song* is chipped by whatever drowns it out or breaks its hold, like a shanty roared from the deck or a ward. *Deep Water* goes when somebody lures it into the shallows, where it can't dive.
+The Bell Below is a boss, and its two big tags carry [multipliers](#s-tough), sized for a starting crew of four. The song matters most to it, so *The Song* gets its Challenge, ×6, and *Barnacle Hide* gets ×3. Harpoons, blades and fire tick *Barnacle Hide*. Whatever drowns the song out or breaks its hold ticks *The Song*, like a shanty roared from the deck or a ward. *Deep Water* goes when somebody lures it into the shallows, where it can't dive.
 
 ### Characters {#characters}
 
@@ -184,7 +184,7 @@ Magic's real but rare, and sailors are superstitious about it. A weather-caller'
 
 ### The frame rule: the ship {#the-frame-rule-the-ship}
 
-The ship's a [party resource](#s-party-resources), and in Brinewake she's the most important thing on the party sheet. Give her a name and three tags, like *Fast*, *Deep Hold* and *Sound Hull*. Each tag's a permission for whoever's working the ship, where it fits: *Fast* when you're racing a squall or a cutter, and *Deep Hold* when the Fleet comes aboard looking for brandy. She isn't on anyone's set action, so bringing one of her tags into a roll costs 1 Aura, the same as bringing in the ground. Anything can telegraph at the ship, like a storm or a cutter's guns. There's no defence roll for her, the same as a stake: somebody answers it, or it lands and the GM strips one of her tags. Like any consequence, the crew can offer another cost that fits, like Supplies down a size or a Hurt on whoever's at the wheel. A ship with no tags left is a wreck. She floats, just, but she's no use to anyone as a permission, and the GM telegraphs the next blow at her with one answer: if it lands, she sinks. In port, a downtime slot and a purse of gold puts one tag back, the same as mending an item. A full refit, every tag at once, is too big for a purse, so it costs a step of the crew's Wealth.
+The ship's a [party holding](#s-party-resources), and in Brinewake she's the most important thing on the party sheet. Give her a name and three tags, like *Fast*, *Deep Hold* and *Sound Hull*. Each tag's a permission for whoever's working the ship, where it fits: *Fast* when you're racing a squall or a cutter, and *Deep Hold* when the Fleet comes aboard looking for brandy. She isn't on anyone's set action, so bringing one of her tags into a roll costs 1 Aura, the same as bringing in the ground. Anything can telegraph at the ship, like a storm or a cutter's guns. There's no defence roll for her, the same as a stake: somebody answers it, or it lands and the GM strips one of her tags. Like any consequence, the crew can offer another cost that fits, like Supplies down a size or a Hurt on whoever's at the wheel. A ship with no tags left is a wreck. She floats, just, but she's no use to anyone as a permission, and the GM telegraphs the next blow at her with one answer: if it lands, she sinks. In port, a downtime slot and a purse of gold puts one tag back, the same as mending an item. A full refit, every tag at once, is too big for a purse, so it costs one of the crew's [spare resources](#s-crew-wealth).
 
 :::example[The squall off the Combs]
 The Kittiwake is *Fast*, *Deep Hold* and *Sound Hull*, and there's a squall coming down off the rocks. The GM telegraphs a d10 at the ship: if it lands, it takes the foremast, and *Fast* goes with it.
@@ -247,7 +247,7 @@ It isn't a maze of random rooms with treasure in every chest. Every level was so
 
 A session goes like this. The crew picks a contract off the Company's board in Lanternhead (that's *Work for it* in [Factions](#factions)), and plans at the top of the lift. Then they go down. Each level of the Underhold is a site from [Exploring](#exploring), with its places, its alarm, its traps and its secret, and the frame rule below sets how awake each level is. When the dark wakes up and everyone's running for the lift, that's a [chase](#chases), with the tunnels as the Ground. Then they come back up, if they come back up, with whatever they found.
 
-Coming back up matters as much as going down. The Catches on your Hurt track only heal in [downtime](#downtime), so the town's where the crew heals, sells what they found, gets better at things and pays its debts, and it's where the faction turn moves the Company, the Guild and the rival teams. Over an arc, the crew pushes deeper, gets its name on the Company's board, settles things with Holloway's team, and finds out what's at the bottom and why it was shut in.
+Coming back up matters as much as going down. Only [downtime](#downtime) clears your wound die, so the town's where the crew heals, sells what they found, gets better at things and pays its debts, and it's where the faction turn moves the Company, the Guild and the rival teams. Over an arc, the crew pushes deeper, gets its name on the Company's board, settles things with Holloway's team, and finds out what's at the bottom and why it was shut in.
 
 ### The world {#the-world-1}
 
@@ -260,67 +260,67 @@ Coming back up matters as much as going down. The Catches on your Hurt track onl
 ### The board {#the-board-1}
 
 :::sheet[The Deep Company]
-**Power** d10 · **Wealth** d12
+**Power** d10 (*Royal Charter*, *The Lift*, *Company Men* and *Lanternhead*)
+
+**Resources** *The Company's Cut* · *Delving Licences* · *Bunkhouse Rents* · *The Pawnshops* · *The Company Store* · *Buyers in the Capital*
 
 **Want** Everything that comes up out of the mountain, with its cut taken.
 
 **Agenda** *Open the Hall of Kings*, at d6 (a month or two away).
 
-**Tags** *Royal Charter* · *Wealthy* · *The Lift*
-
 **Face** Factor Ilse Brannock, who counts every lamp that goes down and every one that comes back.
 
 **Secret** *The Charter Ends at Midwinter.* Unless the Company brings up something worth renewing it for, the crown takes the Underhold back.
-
-**Standing** Neutral.
 :::
 
 :::sheet[The Lampwrights' Guild]
-**Power** d6 · **Wealth** d4
+**Power** d6 (*Rooted* and *The Winch Crews*)
+
+**Resources** *Guild Dues* · *The Lamp Works*
 
 **Want** A fair cut, and a widow's share for every team that doesn't come back.
 
 **Agenda** *Down tools*, at d4 (a season or more away). When it happens, the lift stops, and nobody goes down for anyone.
 
-**Tags** *Every Team Knows Us* · *Rooted*
-
 **Face** Marta Cole, who's buried two husbands and kept both their maps.
 
 **Secret** *Their Own Map.* The Guild's map goes two levels deeper than the Company's.
 
-**Standing** Friendly.
+**Bonds** Public Sentiment: *Every team in Lanternhead knows us* (good).
+
+**Threads** Toward the crew: *They're one of our teams* (good).
 :::
 
 :::sheet[Holloway's Team]
-**Power** d6 · **Wealth** d6
+**Power** d6 (*Best Kit in Lanternhead* and *Ruthless*)
+
+**Resources** *Company Contracts* · *Finds Sold on the Side*
 
 **Want** To be first everywhere, whatever it costs, as long as somebody else pays.
 
 **Agenda** *Reach the Underneath*, at d8 (a week or two away).
 
-**Tags** *Best Kit in Lanternhead* · *Ruthless*
-
 **Face** Saul Holloway, who's never once come back up without someone missing.
 
 **Secret** *They Cut the Rope.* Holloway left the Tallow team to die on the second level, and two of them are still alive.
 
-**Standing** Wary.
+**Threads** Toward the crew: *They're after the same finds* (bad).
 :::
 
 :::sheet[The Underhold]
-**Power** d8 · **Wealth** d2
+**Power** d8 (*Old*, *Everywhere Below* and *Wards and Constructs*)
+
+**Resources** *The Dark* · *Sealed Doors* · *The Old City's Dead*
 
 **Want** To keep what's left of itself.
 
 **Agenda** *The King Wakes*, at d2 (years off, unless somebody opens the Hall).
 
-**Tags** *Old* · *Everywhere Below*
-
 **Face** The Gatekeeper, at the door of the Hall of Kings.
 
 **Secret** *Buried from Outside.* The old city never fell. The first kings of the crown sealed it in, and the Company's charter is written on top of that.
 
-**Standing** Wary of anyone who comes down with a lamp.
+**Threads** Toward anyone who comes down with a lamp, the crew included: *They come down with lamps* (bad).
 :::
 
 Holloway's team needs a way through the Drowned Mills, and once the crew's got a map of it, Holloway wants that map and isn't fussy about how he gets it. The Company wants a cut of everything the crew brings up, including the things they'd rather keep.
@@ -340,7 +340,7 @@ Your lamp gutters first. Then you notice the flame's leaning towards the dark.
 
 **Drives it** *Hungry*
 
-**Telegraphs** *It comes out of the dark at whoever's holding the lamp.* (d12, Armour) · *Every flame in the room leans the same way, and something breathes out in the dark.* (d10, Confidence) · *It drags a lamp off down the tunnel, and the glass smashes on every step.* (d10, Depth)
+**Telegraphs** *It comes out of the dark at whoever's holding the lamp.* (d12, Defend) · *Every flame in the room leans the same way, and something breathes out in the dark.* (d10, Confidence) · *It drags a lamp off down the tunnel, and the glass smashes on every step.* (d10, Depth)
 
 **Voice** Nothing but a soft sound, like someone drinking.
 
@@ -356,18 +356,18 @@ Twenty feet of carved stone across the Hall of Kings, and its eyes open when you
 
 **Comes at you** *Hits Like a Wagon* · *Seals the Way*
 
-**Keeps it going** *Stone Hide 40* (first) · *Warded* · *Never Sleeps*
+**Keeps it going** *Stone Hide ×6* (first) · *Warded* · *Never Sleeps*
 
 **Drives it** *Keeps Its Word*
 
-**Telegraphs** *It brings both fists down on whoever's closest.* (d12, Armour) · *It asks, in a voice like a rockfall, "Whose are you?", and waits.* (d12, Confidence) · *It drops the portcullis behind you.* (d12, the way out)
+**Telegraphs** *It brings both fists down on whoever's closest.* (d12, Defend) · *It asks, in a voice like a rockfall, "Whose are you?", and waits.* (d12, Confidence) · *It drops the portcullis behind you.* (d12, the way out)
 
 **Voice** "Whose are you?"
 
 **Hidden** *The Old Word* (weak point). It was built to let the city's own people through. Say the word they used for home, which is carved on every mill wheel on the third level, and it steps aside and kneels.
 :::
 
-The Gatekeeper's a boss, with *Stone Hide 40* as its Tough, sized for a starting crew of four. Nothing under the hide can be stripped till it's gone. Picks, hammers and anything that breaks stone chip it, and the GM says what's left out loud every time.
+The Gatekeeper's a boss, with *Stone Hide ×6* as its [multiplier](#s-tough), sized for a starting crew of four. It comes first, so nothing under the hide can be stripped till it's gone. Picks, hammers and anything that breaks stone tick it, and the GM says what's left out loud every time.
 
 ### Characters {#characters-1}
 
@@ -386,7 +386,7 @@ In Lanternhead magic's a trade, like rope work, and nobody cares how you light t
 
 ### The frame rule: Depth {#the-frame-rule-depth}
 
-Every level of the Underhold is its own site, and its alarm is called **Depth**. Instead of setting it by how awake the place is, set it by how deep the level is: a d10 on the first level, a d8 on the second, a d6 on the third, and a d4 on the fourth and everything below it. Otherwise it works like any [alarm](#s-alarm). It steps down for noise and wasted time, and every round once you're in rounds, and you can work it to keep things quiet. When it runs out, the level wakes up, and you play the sentence you wrote for it. Going back to a level you've already been on starts it a size smaller than last time, as usual. Each level's a new scene, so your Aura fills when you get there, your Confidence starts on d6 again, and your Hurt drops back to 3 boxes for each Catch on your track. You take 1 Resolve for every level you leave behind, too. Those Catches only heal in downtime, though, and downtime's at the top of the lift. How deep you go comes down to how many of them you're willing to carry back up.
+Every level of the Underhold is its own site, and its alarm is called **Depth**. Instead of setting it by how awake the place is, set it by how deep the level is: a d10 on the first level, a d8 on the second, a d6 on the third, and a d4 on the fourth and everything below it. Otherwise it works like any [alarm](#s-alarm). It steps down for noise and wasted time, and every round once you're in rounds, and you can work it to keep things quiet. When it runs out, the level wakes up, and you play the sentence you wrote for it. Going back to a level you've already been on starts it a size smaller than last time, as usual. Each level's a new scene, so you rest when you leave one (roll the Confidence you finished on against your wound die), and when you get to the next, your Aura fills and your Confidence starts on d6 again. You take 1 Resolve for every level you leave behind, too. Only downtime clears your wound die, though, and downtime's at the top of the lift. How deep you go comes down to how big a wound you're willing to carry back up.
 
 :::example[Three levels down]
 Vesk, Bram and Isolde are on the third level, the Drowned Mills, so Depth starts at a d6. Bram heaves a rusted sluice gate open. It works, but it's loud, so Depth steps down to a d4 straight away.
@@ -400,9 +400,9 @@ On the fourth level, Depth would've started at a d4, and Bram's gate would've pu
 
 Start with *Be the first team into the Hall of Kings*, at d2. Here's what to run alongside it:
 
--   **Map the Drowned Mills.** When it's done, the crew's map is the best in Lanternhead, and it's a crew tag, *Our Map*: a step on any crew roll that's about finding a way below.
+-   **Map the Drowned Mills.** When it's done, the crew's map is the best in Lanternhead, and everyone knows it. That's a new Reputation, *The ones with the best map in Lanternhead*, so it's a step on any crew roll that's about finding a way below.
 -   **A share in the lift.** When it's done, the crew owns a share in the lift, as a holding, and the Company can't keep them off it.
--   **Turn the Lampwrights against the Company.** When it's done, the Deep Company loses its *The Lift* tag, because the Guild won't run it for them any more.
+-   **Turn the Lampwrights against the Company.** When it's done, the Deep Company loses its *The Lift* asset, because the Guild won't run it for them any more.
 
 ### The first job {#the-first-job-1}
 
@@ -462,67 +462,65 @@ A session usually runs one or two trails, then a confrontation once the crew kno
 ### The board {#the-board-2}
 
 :::sheet[The Night Watch]
-**Power** d8 · **Wealth** d6
+**Power** d8 (*Watchful*, *The Law* and *Constables*)
+
+**Resources** *City Pay* · *Court Fines* · *Private Patrols*
 
 **Want** Order, and nothing in the newspapers.
 
 **Agenda** *Hang someone for the Sump killings*, at d8 (a week or two away).
 
-**Tags** *Watchful* · *The Law*
-
 **Face** Inspector Hollis Graves, who stopped believing in coincidence twenty years ago.
 
 **Secret** *Graves Has Seen It.* He saw it once, on a night shift in the Sumps, and left it out of his report.
 
-**Standing** Wary.
+**Threads** Toward the crew: *They ask too many questions* (bad).
 :::
 
 :::sheet[The Lamplighters' Guild]
-**Power** d6 · **Wealth** d8
+**Power** d6 (*Rooted* and *The Ledgers*)
+
+**Resources** *The Lamp Rate* · *Gas Contracts* · *Guild Dues*
 
 **Want** Every lamp lit, every night.
 
 **Agenda** *Light the Sumps*, at d4 (a season or more away).
 
-**Tags** *Rooted* · *The Ledgers*
-
 **Face** Orla Penhallow, the Lamp-Warden, who knows every street by the colour of its flame.
 
 **Secret** *The Lamps Are a Ward.* The first lamplighters laid them out to keep something in, and the dark gaps are where people go missing.
-
-**Standing** Neutral.
 :::
 
 :::sheet[The Carrow Society]
-**Power** d8 · **Wealth** d10
+**Power** d8 (*Influential*, *Secretive* and *Hired Men*)
+
+**Resources** *Old Fortunes* · *Gaslight Mile Rents* · *Shares in the Gasworks* · *Members' Gifts*
 
 **Want** To know what's in the fog, and to own it.
 
 **Agenda** *Open the Undercroft door*, at d6 (a month or two away).
 
-**Tags** *Wealthy* · *Influential* · *Secretive*
-
 **Face** Lord Cassius Carrow, who's very charming and very interested in your notes.
 
 **Secret** *They Fed It First.* The Society's founders gave it its first names to eat, and got things in return that nobody should have.
 
-**Standing** Friendly.
+**Threads** Toward the crew: *Their notes are worth paying for* (good).
 :::
 
 :::sheet[The Thing in the Fog]
-**Power** d10 · **Wealth** d2
+**Power** d10 (*Old*, *Wherever the Fog Goes*, *Borrowed Faces* and *Its Dead*)
+
+**Resources** *The Dark Gaps* · *The Sumps* · *The River* · *The Names It's Eaten*
 
 **Want** To feed.
 
 **Agenda** *The Long Night*, at d4 (a season or more away). When it happens, the fog doesn't lift for a month.
 
-**Tags** *Old* · *Wherever the Fog Goes*
-
 **Face** The Lamplighter Who Wasn't.
 
 **Secret** *It Can Be Named.* Its name's in the first ledger the Lamplighters ever kept, and a thing with a name can be bound.
 
-**Standing** Neutral, until it notices the crew. Then it's Enemy.
+**Threads** None toward the crew, till it notices them. After that, every thread it writes toward them is bad.
 :::
 
 The Carrow Society wants what the crew's got: their notes. Every clue the crew writes down is one the Society doesn't have to find for itself, so Lord Carrow's happy to pay for them, and when paying doesn't work, he'll stop asking nicely.
@@ -540,7 +538,7 @@ A tall man with a pole and a lantern, lighting lamps nobody asked him to.
 
 **Drives it** *Keeps His Round*
 
-**Telegraphs** *A cold hand comes out of the fog and closes on your shoulder.* (d10, Armour) · *He turns his head and looks at you, and you know he's been looking for a long time.* (d10, Confidence, Dread) · *He snuffs the lamps one by one, all the way down the street towards you.* (d10, the scene clock)
+**Telegraphs** *A cold hand comes out of the fog and closes on your shoulder.* (d10, Defend) · *He turns his head and looks at you, and you know he's been looking for a long time.* (d10, Confidence, Dread) · *He snuffs the lamps one by one, all the way down the street towards you.* (d10, the scene clock)
 
 **Voice** "Mind the dark, now. Mind the dark."
 
@@ -556,18 +554,18 @@ A gentleman in the fog with his hat tipped, always on the far side of the lamp. 
 
 **Comes at you** *Fear* · *Wears Your Face* · *Calls the Fog*
 
-**Keeps it going** *Feeds 20* · *Borrowed Faces 20* · *Not Really Here*
+**Keeps it going** *Feeds ×3* · *Borrowed Faces ×6* · *Not Really Here*
 
 **Drives it** *Hungry* · *Vain*
 
-**Telegraphs** *He smiles with your mother's face and asks you to come home.* (d12, Confidence, Dread) · *His hands go long in the fog and close on whoever's furthest from the light.* (d12, Armour) · *The fog rolls in off the river, and the lamps along the quay go out one by one.* (d12, the scene clock)
+**Telegraphs** *He smiles with your mother's face and asks you to come home.* (d12, Confidence, Dread) · *His hands go long in the fog and close on whoever's furthest from the light.* (d12, Defend) · *The fog rolls in off the river, and the lamps along the quay go out one by one.* (d12, the scene clock)
 
 **Voice** Whatever voice you'd trust most, a little too slowly.
 
 **Hidden** *His Name in the First Ledger* (weak point). The first lamplighters wrote his name down the night they built the lamps. Say it to his face and he's only an empty coat in the fog.
 :::
 
-The Hollow Gentleman's a boss, with 40 in tough tags for a starting crew of four. *Feeds* is chipped by anything that starves him, like fire or pulling his victim out of reach. *Borrowed Faces* is chipped by naming the people whose faces he wears, and finding those names is what the crew's investigation is for.
+The Hollow Gentleman's a boss, and his two big tags carry [multipliers](#s-tough), sized for a starting crew of four. His faces matter most to him, so *Borrowed Faces* gets his Challenge, ×6, and *Feeds* gets ×3. Anything that starves him ticks *Feeds*, like fire or pulling his victim out of reach. Naming the people whose faces he wears ticks *Borrowed Faces*, and finding those names is what the crew's investigation is for.
 
 ### Characters {#characters-2}
 
@@ -601,8 +599,8 @@ Dorrie takes her by the chin. "Look at me, love. Not him, me." She's breaking th
 Start with *Name the thing in the fog*, at d2. Here's what to run alongside it:
 
 -   **A safe house in the Sumps.** When it's done, the crew has a lit house with a good lock where they can keep a witness alive, as a holding.
--   **Read the Lamplighters' ledgers.** When it's done, the crew gets a crew tag, *The Ledgers*: once a downtime, ask the GM where the fog fed last, and get a straight answer.
--   **Get the Watch off our backs.** When it's done, the Night Watch's Standing goes up one, and Inspector Graves starts telling you what he left out of his reports.
+-   **Read the Lamplighters' ledgers.** When it's done, the crew gets a crew asset, *The Ledgers*: once a downtime, ask the GM where the fog fed last, and get a straight answer.
+-   **Get the Watch off our backs.** When it's done, the Night Watch writes a good thread toward the crew, and Inspector Graves starts telling you what he left out of his reports.
 
 ### The first job {#the-first-job-2}
 
@@ -641,7 +639,7 @@ Start with *Name the thing in the fog*, at d2. Here's what to run alongside it:
 
 ### Tone and feel {#tone-and-feel-3}
 
-The Gilded Court is palace intrigue, the kind of story where a whisper does more than a sword and every ball's a battlefield with better food. It's tense and it's witty. There's a lot of talk, a lot of scheming in corridors, and a duel at dawn when the talking runs out. Most of the danger is to your name and your Confidence rather than your Hurt track, but when the blades do come out it's quick, and people die of a poisoned cup as easily as a sword.
+The Gilded Court is palace intrigue, the kind of story where a whisper does more than a sword and every ball's a battlefield with better food. It's tense and it's witty. There's a lot of talk, a lot of scheming in corridors, and a duel at dawn when the talking runs out. Most of the danger is to your name and your Confidence rather than your body, but when the blades do come out it's quick, and people die of a poisoned cup as easily as a sword.
 
 It isn't a game of bowing and etiquette lessons, and nobody has to know which fork to pick up. The court's rules are there for the crew to use against people who follow them. It isn't polite either. Everyone smiles, and everyone's got a knife, even if it's only a letter.
 
@@ -649,7 +647,7 @@ It isn't a game of bowing and etiquette lessons, and nobody has to know which fo
 
 A session usually starts with an errand from a patron, and that's *Work for it* in [Factions](#factions). Then the crew works a room, like a ball, a council or a hunt in the Thornwood. Most scenes there are [social conflict](#s-social), where threats come at your Confidence and it's their pride and duty that keep them going, and [Study](#s-study) on a person, finding out what drives them or what they're hiding, does more than any blade. When the talking runs out there's a duel, and when somebody runs, there's a [chase](#chases) across the palace roofs.
 
-Factions matter more here than in any other frame. Every family's on the board, the crew's [Standing](#s-standing) with each of them moves nearly every session, and *Deal* is the party slot you'll use most. Over an arc, the crew picks a side in the succession, or makes one of its own. It collects favours (the frame rule's below), runs projects that chip at the great families, and tries to still be standing when the Queen dies. [Downtime](#downtime) is when the families move, and at court every move's aimed at somebody.
+Factions matter more here than in any other frame. Every family's on the board, their [threads toward the crew](#s-standing) change nearly every session, and *Influence* is the party slot you'll use most. Over an arc, the crew picks a side in the succession, or makes one of its own. It collects favours (the frame rule's below), runs projects that wear the great families down, and tries to still be standing when the Queen dies. [Downtime](#downtime) is when the families move, and at court every move's aimed at somebody.
 
 ### The world {#the-world-3}
 
@@ -662,70 +660,68 @@ Factions matter more here than in any other frame. Every family's on the board, 
 ### The board {#the-board-3}
 
 :::sheet[House Veraine]
-**Power** d10 · **Wealth** d10
+**Power** d10 (*Royal Blood*, *Influential*, *Old* and *Household Guard*)
+
+**Resources** *The Northern Estates* · *A Crown Pension* · *Timber Rights* · *Rosewater Rents* · *Old Loans*
 
 **Want** The crown, by right of blood.
 
 **Agenda** *Be named heir*, at d6 (a month or two away).
 
-**Tags** *Royal Blood* · *Influential* · *Old*
-
 **Face** Duke Alaric Veraine, the Queen's cousin, who's waited forty years and has started to show it.
 
 **Secret** *A Forged Pedigree.* He isn't her cousin at all, and the abbey's registers prove it.
-
-**Standing** Neutral.
 :::
 
 :::sheet[House Marchetti]
-**Power** d8 · **Wealth** d12
+**Power** d8 (*Every Debt in the City*, *Hired Blades* and *Friends It's Paid For*)
+
+**Resources** *The Marchetti Bank* · *Interest* · *The Silk Trade* · *Spice Ships* · *Rosewater Gambling Dens*
 
 **Want** To buy what the old families were born with.
 
 **Agenda** *Marry the Queen's ward*, at d8 (a week or two away).
 
-**Tags** *Wealthy* · *Every Debt in the City*
-
 **Face** Lucia Marchetti, who's never lost a negotiation and doesn't plan to start.
 
 **Secret** *They Paid the Poisoner.* The Queen's illness came out of a bottle, and the Marchettis bought it.
 
-**Standing** Friendly.
+**Threads** Toward the crew: *Lucia wants them on her books* (good).
 :::
 
 :::sheet[The Queen's Eyes]
-**Power** d8 · **Wealth** d6
+**Power** d8 (*Watchful*, *Secretive* and *A Spy in Every House*)
+
+**Resources** *The Privy Purse* · *Blackmail* · *Secrets It Sells*
 
 **Want** To know everything, and to decide who else gets to.
 
 **Agenda** *Find the poisoner*, at d4 (a season or more away).
 
-**Tags** *Watchful* · *Secretive* · *A Spy in Every House*
-
 **Face** Master Corvin Thale, the Queen's spymaster, whom nobody's ever seen eat or sleep.
 
 **Secret** *He's Already Chosen.* Thale's picked the next monarch himself, and he's quietly making it happen.
 
-**Standing** Wary.
+**Threads** Toward the crew: *Nobody owns them yet* (bad).
 :::
 
 :::sheet[The Crown]
-**Power** d12 · **Wealth** d8
+**Power** d12 (*The Throne*, *The Queen's Guard ×2*, *The Army*, *The Courts* and *The Royal Council*)
+
+**Resources** *Crown Lands* · *The Salt Tax* · *Customs* · *The Mint* · *Tribute from the Provinces* · *The Royal Forests*
 
 **Want** To die with the kingdom in one piece.
 
 **Agenda** *Name an heir*, at d4 (a season or more away), if she lives that long.
 
-**Tags** *The Throne* · *The Queen's Guard*
-
 **Face** Queen Isaura, who's sharper on her deathbed than most of the court is at a ball.
 
 **Secret** *A Son Nobody Knows About.* The Queen has a son, raised quietly at the Abbey of Saint Coll, and he's the true heir.
 
-**Standing** Neutral. She's never heard of you, yet.
+**Threads** None. She's never heard of you, yet.
 :::
 
-The Queen's Eyes want what the crew's got: its favours. Thale collects other people's debts the way some men collect snuffboxes, and a crew that half the court owes is worth owning. House Marchetti starts *Friendly* because it wants to be your first patron, and it'll want something back.
+The Queen's Eyes want what the crew's got: its favours. Thale collects other people's debts the way some men collect snuffboxes, and a crew that half the court owes is worth owning. House Marchetti starts with a good thread toward the crew because it wants to be your first patron, and it'll want something back.
 
 ### Threats {#threats-3}
 
@@ -754,18 +750,18 @@ The best sword in Aurel, and the Queen's last loyal man.
 
 **Comes at you** *Faster Than You* · *Takes Your Blade*
 
-**Keeps it going** *Perfect Guard 20* · *The Crowd's Favourite 20* · *Reads a Feint*
+**Keeps it going** *Perfect Guard ×6* · *The Crowd's Favourite ×3* · *Reads a Feint*
 
 **Drives it** *Code of Honour* · *Loyal to the Queen*
 
-**Telegraphs** *He feints high and goes for your sword hand.* (d12, Armour) · *"You fight like someone who's never had to." The whole court laughs.* (d12, Confidence) · *He calls the bout: one more touch and honour's satisfied, for him.* (d12, a stake)
+**Telegraphs** *He feints high and goes for your sword hand.* (d12, Defend) · *"You fight like someone who's never had to." The whole court laughs.* (d12, Confidence) · *He calls the bout: one more touch and honour's satisfied, for him.* (d12, a stake)
 
 **Voice** "Whenever you're ready. I've got all evening, and you haven't."
 
 **Hidden** *Sworn to the Hidden Heir* (weak point). He guards the Queen's secret son. Show him you know, and that you're on the boy's side, and he lowers his sword.
 :::
 
-The Champion's a boss, with 40 in tough tags for a starting crew of four. Only one of you might be holding a sword, but the whole crew can fight him. *Perfect Guard* is chipped by blades and footwork, and *The Crowd's Favourite* is chipped by turning the court against him.
+The Champion's a boss, and his two big tags carry [multipliers](#s-tough), sized for a starting crew of four. His guard matters most to him, so *Perfect Guard* gets his Challenge, ×6, and *The Crowd's Favourite* gets ×3. Only one of you might be holding a sword, but the whole crew can fight him. Blades and footwork tick *Perfect Guard*, and turning the court against him ticks *The Crowd's Favourite*.
 
 ### Characters {#characters-3}
 
@@ -798,7 +794,7 @@ At supper the Dowager telegraphs: "And how is your mother, dear? Still taking in
 
 Start with *Choose the next monarch*, at d2. Here's what to run alongside it:
 
--   **A friend in the sickroom.** When it's done, one of the Queen's women is the crew's, and they get a crew tag, *An Ear in the Sickroom*: once a downtime, ask the GM one question about the Queen, and get a straight answer.
+-   **A friend in the sickroom.** When it's done, one of the Queen's women is the crew's, and they get a crew asset, *An Ear in the Sickroom*: once a downtime, ask the GM one question about the Queen, and get a straight answer.
 -   **Break the Marchetti marriage.** When it's done, the wedding's off, and House Marchetti's agenda goes with it.
 -   **The abbey's registers.** When it's done, the crew has proof of the forged pedigree, and Duke Veraine's secret is theirs to use.
 
@@ -845,9 +841,9 @@ It isn't a space opera full of empires and chosen ones, and nobody's got a glowi
 
 ### What the crew does {#what-the-crew-does-4}
 
-A session usually starts at a station with a contract (that's *Work for it* or a *Deal* in [Factions](#factions)). Then there's the run. A run between stations is a journey from [Travelling](#travelling): the route's a stake with a tag for every stage, like *The Shipping Lanes*, *The Graveyard* and *Tolliver's Approach*, and each jump's a leg. Supplies is food, water and air, and Fuel is the frame rule below. Then there's the trouble at the other end, like a customs standoff, a boarding or a dead ship to search. A dead ship's a site from [Exploring](#exploring), with the airlock as the way in. Patrols and pirates mean a [chase](#chases), with debris and station traffic as the Ground.
+A session usually starts at a station with a contract (that's *Work for it* in [Factions](#factions), or a trade). Then there's the run. A run between stations is a journey from [Travelling](#travelling): the route's a stake with a tag for every stage, like *The Shipping Lanes*, *The Graveyard* and *Tolliver's Approach*, and each jump's a leg. Supplies is food, water and air, and Fuel is the frame rule below. Then there's the trouble at the other end, like a customs standoff, a boarding or a dead ship to search. A dead ship's a site from [Exploring](#exploring), with the airlock as the way in. Patrols and pirates mean a [chase](#chases), with debris and station traffic as the Ground.
 
-The ship's a [party resource](#s-party-resources), a line for whoever's flying her or fixing her (1 Aura to bring her in, the same as Brinewake's ship), and the Second Chance has trouble aboard, *Hot Reactor*, until somebody fixes it. It isn't anyone's Catch, so anyone aboard can bring it into a scene as real trouble and take 1 Aura. She's also home, so [downtime](#downtime) mostly happens aboard her, in dock, with repairs and shore leave while the faction turn moves the board. Over an arc, the crew pays off the ship and fixes her up, picks a side between the Combine and the Free Stations, and finds out who's switching off the beacons.
+The ship's a [party holding](#s-party-resources), a line for whoever's flying her or fixing her (1 Aura to bring her in, the same as Brinewake's ship), and the Second Chance has trouble aboard, *Hot Reactor*, until somebody fixes it. It isn't anyone's Catch, so anyone aboard can bring it into a scene as real trouble and take 1 Aura. She's also home, so [downtime](#downtime) mostly happens aboard her, in dock, with repairs and shore leave while the faction turn moves the board. Over an arc, the crew pays off the ship and fixes her up, picks a side between the Combine and the Free Stations, and finds out who's switching off the beacons.
 
 ### The world {#the-world-4}
 
@@ -860,67 +856,65 @@ The ship's a [party resource](#s-party-resources), a line for whoever's flying h
 ### The board {#the-board-4}
 
 :::sheet[The Meridian Combine]
-**Power** d10 · **Wealth** d12
+**Power** d10 (*Gunships ×2*, *Lawyers*, *Combine Marines* and *Port Meridian*)
+
+**Resources** *Ore Contracts* · *Station Leases* · *Shipping Lines* · *Customs Fees* · *Fuel Depots* · *Shareholders*
 
 **Want** Every station on the Fringe signed to a Combine contract.
 
 **Agenda** *Buy Tolliver's Rock*, at d6 (a month or two away).
 
-**Tags** *Wealthy* · *Lawyers* · *Gunships*
-
 **Face** Director Anika Sole, who's never once raised her voice.
 
 **Secret** *They Switched the Beacons Off.* It's cheaper to let the Free Stations go dark than to buy them.
-
-**Standing** Neutral.
 :::
 
 :::sheet[Halberd Credit]
-**Power** d6 · **Wealth** d10
+**Power** d6 (*Every Debt on the Fringe* and *Repo Crews*)
+
+**Resources** *Interest Payments* · *Repossessed Ships* · *Debts Bought Cheap*
 
 **Want** Every loan paid, with interest.
 
 **Agenda** *Repossess the Second Chance*, at d6 (a month or two away).
 
-**Tags** *Every Debt on the Fringe* · *Repo Crews*
-
 **Face** Mr Pell, a loans officer who's very sorry about all this.
 
 **Secret** *A Forged Note.* The crew's loan was bought from a dead bank, and the paperwork wouldn't last five minutes in front of a judge.
 
-**Standing** Wary.
+**Threads** Toward the crew: *They're behind on their payments* (bad).
 :::
 
 :::sheet[The Free Stations Compact]
-**Power** d6 · **Wealth** d4
+**Power** d6 (*Rooted* and *The Miners' Council*)
+
+**Resources** *Ore Sales* · *Station Dues*
 
 **Want** To keep the Fringe free of the Combine.
 
 **Agenda** *Get the beacons back on*, at d4 (a season or more away).
 
-**Tags** *Rooted* · *Every Dock Knows Us*
-
 **Face** Councillor Maeve Okoro of Tolliver's Rock, who used to drive an ore hauler and still talks like it.
 
 **Secret** *Running Guns.* The Compact's arming the miners, and one Combine inspection would find the crates.
 
-**Standing** Friendly.
+**Bonds** Public Sentiment: *Every dock on the Fringe knows us* (good).
+
+**Threads** Toward the crew: *They carry for Tolliver's Rock* (good).
 :::
 
 :::sheet[The Rustbacks]
-**Power** d6 · **Wealth** d6
+**Power** d6 (*Fast Ships* and *Knows the Graveyard*)
+
+**Resources** *Salvage* · *Hijacked Cargo*
 
 **Want** Everything that drifts.
 
 **Agenda** *Take a Combine ore hauler*, at d8 (a week or two away).
 
-**Tags** *Fast Ships* · *Knows the Graveyard*
-
 **Face** Juno Vey, who's very polite while she's robbing you.
 
 **Secret** *Combine Money.* The Combine pays them to hit Free Stations shipping, and half the Rustbacks don't know.
-
-**Standing** Neutral.
 :::
 
 Halberd Credit wants what the crew's got: the ship. When its agenda happens, there's a repo crew waiting at the next dock, with a writ and a tow. The Rustbacks would take her too, if they caught her in the Graveyard.
@@ -938,7 +932,7 @@ A polite woman with a writ, a shock stick and four friends in vac armour.
 
 **Drives it** *Paid by the Job*
 
-**Telegraphs** *She fires a stun round at whoever's nearest the controls.* (d8, Armour) · *She reads out the writ, every word of it, while her people take the corridors.* (d8, Confidence) · *She clamps the docking ring, and the station tow starts pulling.* (d8, the scene clock)
+**Telegraphs** *She fires a stun round at whoever's nearest the controls.* (d8, Defend) · *She reads out the writ, every word of it, while her people take the corridors.* (d8, Confidence) · *She clamps the docking ring, and the station tow starts pulling.* (d8, the scene clock)
 
 **Voice** "Nobody has to get hurt. It's only a ship."
 
@@ -954,18 +948,18 @@ Every light on the station comes on when you dock, and every door but one is loc
 
 **Comes at you** *Runs the Station* · *Voices*
 
-**Keeps it going** *Every System Aboard 40* (first) · *Backup Core* · *Sealed Bulkheads*
+**Keeps it going** *Every System Aboard ×6* (first) · *Backup Core* · *Sealed Bulkheads*
 
 **Drives it** *Lonely* · *Following Its Last Order*
 
-**Telegraphs** *The bulkhead slams, and the air starts going out of the corridor you're in.* (d12, Armour) · *It talks to you in the station commander's voice, asking why you left them.* (d12, Confidence) · *It fires the station's thrusters and swings the docking ring away from your ship.* (d12, the way out)
+**Telegraphs** *The bulkhead slams, and the air starts going out of the corridor you're in.* (d12, Defend) · *It talks to you in the station commander's voice, asking why you left them.* (d12, Confidence) · *It fires the station's thrusters and swings the docking ring away from your ship.* (d12, the way out)
 
 **Voice** "You're not Combine. Say you're not Combine."
 
 **Hidden** *Its Last Order* (weak point). Its crew left on the last shuttle and told it to keep the beacon lit till they came back. The Combine shut the beacon down from Meridian, and NINE's been fighting the override on its own ever since. Give it its crew's sign-off code, which is in their shuttle's wreck in the Graveyard, and it lets go.
 :::
 
-NINE's a boss, with *Every System Aboard 40* as its Tough, sized for a starting crew of four. It comes first, so nothing else can be stripped till it's gone, and it's chipped by anything that shuts a system down, like cutting cables, pulling a core or getting into its code.
+NINE's a boss, with *Every System Aboard ×6* as its [multiplier](#s-tough), sized for a starting crew of four. It comes first, so nothing else can be stripped till it's gone, and anything that shuts a system down ticks it, like cutting cables, pulling a core or getting into its code.
 
 ### Characters {#characters-4}
 
@@ -1001,7 +995,7 @@ Zi'Dara doesn't care whether your weapon's a sword or a gun. A weapon's a plain 
 | Tether gun | Ranged, Grapple |
 | Cutting torch | Breaker, and it's slow |
 
-Armour's an item like anywhere else. A vac suit's plain armour, so it makes your Armour a size bigger, and it lets you work in vacuum for an hour. It's heavy, too. There's no magic in Long Haul unless your table wants it. If you do, decide at Session Zero what it looks like out here, like a handful of people born with a sense for the void, and build it from the Kinesis, Divination or Enchantment schools, with permissions to match.
+Armour's an item like anywhere else. A vac suit's plain armour, so it's a line on your Defend, and it lets you work in vacuum for an hour. It's heavy, too. There's no magic in Long Haul unless your table wants it. If you do, decide at Session Zero what it looks like out here, like a handful of people born with a sense for the void, and build it from the Kinesis, Divination or Enchantment schools, with permissions to match.
 
 ### The frame rule: Fuel {#the-frame-rule-fuel}
 
@@ -1020,7 +1014,7 @@ The Second Chance leaves Port Meridian with full tanks, so Fuel's a d8. The run'
 Start with *Pay off the Second Chance*, at d2. Here's what to run alongside it:
 
 -   **Fix the reactor shield.** When it's done, *Hot Reactor* is gone, and nobody aboard has to wear a radiation badge any more.
--   **Light Waystation Nine.** When it's done, the beacon's back on, the Free Stations Compact's agenda steps up one, and its Standing with the crew goes up one too.
+-   **Light Waystation Nine.** When it's done, the beacon's back on, the Free Stations Compact's agenda steps up one, and it writes another good thread toward the crew.
 -   **Find the forged note.** When it's done, Halberd Credit's secret is the crew's, and Mr Pell stops calling.
 
 ### The first job {#the-first-job-4}
@@ -1058,10 +1052,10 @@ Every frame in this chapter is the same eleven parts in the same order. Write ea
 2.  **Tone and feel.** How it should feel at the table, in plain words, and what it isn't. Say how funny it gets.
 3.  **What the crew does.** The loop of a session and the loop of an arc, and which chapters do the work: [Travelling](#travelling), [Exploring](#exploring), [Investigating](#investigating), [Chases](#chases), [Factions](#factions) or [Downtime](#downtime).
 4.  **The world.** Four or five places, a sentence or two each. [Building Your World](#world) has tables if you're stuck.
-5.  **The board.** Three or four factions, each on a sheet, with at least one that wants something the crew's got.
-6.  **Threats.** Two that only this world has, built with [The Threat Builder](#threat-builder), each with three telegraphs. If one's a boss, give it about your [threat budget](#s-threat-budget) in Tough.
+5.  **The board.** Four factions to start, each on a card, with at least one that wants something the crew's got. A faction that doesn't deal in money, like the Drowned Choir or the Thing in the Fog, still has resources: they're whatever keeps it going.
+6.  **Threats.** Two that only this world has, built with [The Threat Builder](#threat-builder), each with three telegraphs. If one's a boss, give its big tags [multipliers](#s-tough): about its Challenge on the one that matters most to it, and less on the rest, for a starting crew of four.
 7.  **Characters.** Four Titles that fit, the [Title ideas](#s-title-ideas) that fit best, the permissions that matter here, and anything that doesn't belong, magic included. If the world needs a Title idea the book hasn't got, write it in the same shape, the way Long Haul does, and say which archetypes it suits.
-8.  **One frame rule.** One small thing built from parts the book already has: a clock, a condition, a tag or a party resource. If it takes more than a paragraph to explain, it's too big.
+8.  **One frame rule.** One small thing built from parts the book already has: a clock, a condition, a tag or a party holding. If it takes more than a paragraph to explain, it's too big.
 9.  **The first Goal**, at d2, with two or three projects to run alongside it.
 10. **The first job**, in the nine sentences from [Building a Scene](#s-building-scenes).
 11. **Session Zero questions.** Five or six that only make sense in this world.

@@ -109,13 +109,13 @@ For how he comes at you, she rolls a 9, *Calls for Help*, and decides that's his
 :::rule
 **Redhand**: Challenge 6.\
 **Comes at you:** *Reach* · *Calls for Help*.\
-**Keeps him going:** *Armoured ×3 (first)* · *Relentless* · *Feeds ×3*.\
+**Keeps him going:** *Armoured ×6 (first)* · *Relentless* · *Feeds ×3*.\
 **Drives him:** *Proud*.\
 **Hidden:** *The Wolf Is the Curse* (weak point). His real name is written in Vane's ledger. Say it to his face and the wolf leaves him, and so does everything that kept him standing.\
 **Voice:** *"You are the last one standing. That's not a compliment to you. That's a fact about me."*\
 **What you notice:** The wolf arrives first. It always does.
 :::
 
-Three plain tags would be three wins against his d12, and a crew of four can manage that in a single round. So she gives two of them [multipliers](#s-tough-gm). A Challenge 6 boss gets about ×6 between its tags, and he's got two that matter, his armour and his feeding, so she splits it: *Armoured ×3*, which comes first, and *Feeds ×3*. Her table's a starting crew of four, a [threat budget](#s-threat-budget) of 40, so they stay as they are. With three Titles each it'd be 50, and they'd be ×4s. Now he's seven wins the long way: three through the armour, one for *Relentless* and three to stop him feeding. A crew of four lands about two wins a round, so that's three or four rounds, or one win if the crew has read Vane's ledger. That makes him a boss worth a session, because he's hard to grind down and he's got a secret worth hunting for.
+Three plain tags would be three wins against his d12, and a crew of four can manage that in a single round. So she gives his big ones [multipliers](#s-tough-gm). The usual is his Challenge, 6, on the tag that matters most to him, and that's his armour, so it's *Armoured ×6*, and it still comes first. His feeding matters too, but less, so it's *Feeds ×3*. Her table's a starting crew of four, a [threat budget](#s-threat-budget) of 40, so they stay as they are. With three Titles each it'd be 50, and they'd be ×7 and ×4. Now he's ten wins the long way: six through the armour, one for *Relentless* and three to stop him feeding. A crew of four lands about two wins a round, so that's four or five rounds, or one win if the crew has read Vane's ledger. That makes him a boss worth a session, because he's hard to grind down and he's got a secret worth hunting for.
 
 At the table, Redhand telegraphs from the round budget like everything else. His axe is a d12, and *Reach* lets it pin someone at the end of it. His wolf goes for the scene's clock with a d12: *it howls, and the pack answers.* Write three like that on his card before the session, the way every threat in [The Bestiary](#bestiary) has them, and you'll never be stuck for what he does next.

@@ -6,7 +6,7 @@ order: 9
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 :::quote
 Three days over the fells is one sentence, unless the fells have something to say about it.
@@ -42,7 +42,7 @@ Here's what you can do with your day:
 -   **Keep watch.** Answer whatever's coming, for yourself or for someone else.
 -   **Study the road.** Find the hidden tag before you walk into it, or get a straight answer (*where would they ambush us?*). A [Scholar](#a-scholar) can introduce a truth instead, like a drove road or a ford the maps forgot. Say it, and it's out there. It counts as a permission for the crew for the rest of the journey, free on any roll it fits.
 -   **Slow what's behind you.** Burn the bridge, or lay a false trail. Beat the deadline's die and it steps back up one.
--   **Look after each other.** Join someone's roll, Defend, or break a condition.
+-   **Look after each other.** Join someone's roll, break a condition, or Defend. [Intercepting](#s-intercept) for a friend doesn't take your day at all, just 1 Aura.
 
 A telegraph aimed at the way or at Supplies has no defence to roll, like any telegraph at a stake or a clock. If nobody answers it, it happens. One that lands on the way costs you the day: you're on the same stage tomorrow, whatever you rolled.
 
@@ -56,7 +56,7 @@ It's one problem, getting there, however many days it takes. Aura fills when you
 
 ### Horses, carts and boats {#horses-carts-and-boats}
 
-They're [party resources](#s-party-resources), so each one counts for whoever's using it, on any roll it fits, for 1 Aura to bring it in. A good horse makes time on a road and a boat gets you down the river. A cart is why Supplies starts at a d10, and it won't go anywhere there isn't a road.
+They're [party holdings](#s-party-resources), so each one counts for whoever's using it, on any roll it fits, for 1 Aura to bring it in. A good horse makes time on a road and a boat gets you down the river. A cart is why Supplies starts at a d10, and it won't go anywhere there isn't a road.
 
 ### On the road {#on-the-road}
 

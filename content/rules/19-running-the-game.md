@@ -249,18 +249,18 @@ Never count hits. Count the reasons it's still standing. When a player asks "how
 
 ### Multipliers {#s-tough-gm}
 
-One win, one tag is right for most threats. A boss that should last needs more than that, so give its big tags [multipliers](#s-tough): *Armoured ×6* takes six wins to strip, and every win ticks one off. A multiplier sits on a tag with a name, so only what fits it ticks it: blades and hammers tick *Natural Armour*, and shaming a captain in front of his men ticks *Commanding Presence*.
+One win, one tag is right for most threats. A boss that should last needs more than that, so give its big tags [multipliers](#s-tough): *Armoured ×6* takes six wins to strip, and every win ticks one off. Like any tag, only what fits it ticks it: blades and hammers tick *Natural Armour*, and shaming a captain in front of his men ticks *Commanding Presence*.
 
--   **Who gets them.** Mostly bosses. A Named threat that should take a while can have a small one, and so can a big obstacle: a vault door that's *Reinforced ×4*, a crowd that's *Loyal ×3*, a storm, a fire.
--   **How much.** The usual multiplier is the threat's Challenge, more on the tag that matters most to it and less on the small stuff. A boss worth a session has about ×6 between its tags: all of it on the one that matters, like the Iron Warden's *Armoured ×6*, or ×3 on each of two, like the Wandering Giant's *Armoured* and *Mournful*. That's for a starting crew of four, and [The Threat Budget](#s-threat-budget) says how to scale it.
--   **Give it things to tackle.** A multiplier makes a tag last, and its other tags are what make the fight: something to knock out of the air, a shield to break, a shout to stop. A boss with one big multiplier and two plain tags is a better fight than one with a multiplier on everything, so keep it short.
+-   **Who gets them.** Mostly bosses. A Named threat that should take a while can have one too, and so can a big obstacle: a vault door that's *Reinforced ×4*, a crowd that's *Loyal ×3*, a storm, a fire.
+-   **How much.** The usual multiplier is the threat's Challenge, on the tag that matters most to it, so the Iron Warden's armour is *Armoured ×6*. Go higher if that tag's what the whole fight's about, and lower on the rest. A Challenge 4 knight might be *Armour ×4*, *Shield ×3* and *Sword ×2*. That's for a starting crew of four, and [The Threat Budget](#s-threat-budget) says how to scale it.
+-   **Give it things to tackle.** A multiplier makes a tag last, and its other tags are what make the fight: something to knock out of the air, a shield to break, a shout to stop. Keep a plain tag or two beside the big ones, so a single good win always has something to take.
 -   **First, when it's a shell.** Mark a tag *first* when the story says you can't get at the rest until it's gone: a hide, a shield wall, a crowd of bodyguards. Leave it off when the crew should be able to go round it.
 -   **Say what each tick looks like:** plates cracking off his shoulders, or his men looking at each other. Then say what's left: *"Armoured ×2 left."*
--   **Vulnerabilities tick them faster.** Every [vulnerability](#s-vulnerable) that fits a win adds a tick to the tag the win went for, so a boss knocked *Prone* loses two off its armour to whoever's standing over it. That's the crew's reward for setting it up, so let it land.
+-   **Vulnerabilities tick them faster.** Every [vulnerability](#s-vulnerable) that fits a win adds a tick to the tag the win went for, so once a boss is knocked *Prone*, every win from whoever's standing over it takes two off its armour. That's the crew's reward for setting it up, so let it land.
 -   **Keep the way in open.** A weak point still ends it, an opening takes two whole tags off a boss, multipliers and all, and Study can find what's under the first one, so a clever crew never has to grind through the lot.
 
 :::example[Making Redhand last]
-Redhand, the boss in [The Threat Builder](#threat-builder), started as three plain tags and a weak point. Against a starting crew of four, he'd often fall in the first round. He's got two things that matter, his armour and his feeding, so the ×6 a boss gets is split between them: *Armoured ×3 (first)*, *Relentless* and *Feeds ×3*. That's seven wins the long way: three through his armour, one for *Relentless*, and three to stop him feeding. A crew of four lands about two wins a round, so most crews will spend three or four rounds on him, or one, if they've read Vane's ledger and say his name.
+Redhand, the boss in [The Threat Builder](#threat-builder), started as three plain tags and a weak point. Against a starting crew of four, he'd often fall in the first round. His Challenge is 6, and the tag that matters most is his armour, so it's *Armoured ×6 (first)*. His feeding matters too, but less, so it's *Feeds ×3*, and *Relentless* stays plain. That's ten wins the long way: six through his armour, one for *Relentless*, and three to stop him feeding. A crew of four lands about two wins a round, so most crews will spend four or five rounds on him, or one, if they've read Vane's ledger and say his name.
 :::
 
 ### Hidden tags and weak points {#hidden-tags-and-weak-points}
@@ -302,7 +302,7 @@ Your **threat budget** says how much your threats can take, and how long a scene
 | Five | 17–18 | **70** |
 | Six | 20 | **80** |
 
-The bestiary's [multipliers](#s-tough-gm) are written for a starting crew of four, a threat budget of 40. For a bigger or more experienced crew, add 1 to each multiplier for every 10 the threat budget is over 40. At 60, the Iron Warden's *Armoured ×6* is *Armoured ×8*, and the Wandering Giant's ×3s are ×5s.
+The bestiary's [multipliers](#s-tough-gm) are written for a starting crew of four, a threat budget of 40. For a bigger or more experienced crew, add 1 to each multiplier for every 10 the threat budget is over 40. At 60, the Iron Warden's *Armoured ×6* is *Armoured ×8*, and the Wandering Giant's *Mournful ×3* is *Mournful ×5*. For a smaller crew, take 1 off for every 10 it's under, and a tag that gets down to ×1 is a plain one.
 
 It's a guide, so move it to suit the table. If the crew's mixed, add up each character's share: Bram and Dorrie with two Titles each, and Vesk and Isolde with four, is 10 + 10 + 15 + 15 = 50, so every multiplier goes up 1. Past six Titles the crew's growing in ways the ladder doesn't count, like Titles filled to six permissions, Boons and attuned things at Perfected, so go by what you see at the table.
 
@@ -310,14 +310,14 @@ It's a guide, so move it to suit the table. If the crew's mixed, add up each cha
 
 Add up everything standing between the crew and done: every keeps-it-going tag on every threat that has to fall, with a multiplier counting as that many, and every tag in the way of every stake. Anything with none counts as one. Divide that by half the crew's actions a round, because not every action lands. That's roughly how many rounds the scene will take.
 
-Say it's two Wardens with four keeps-it-going tags each, and two stakes with two tags each. That's 12. Four characters with one action each is 4 a round, and half of that is 2. So it's about six rounds, or fewer if they find the weak points. Wake one of those Wardens all the way, with *Armoured ×6*, and it's 17, so more like eight or nine. If a scene looks like it'll take eight rounds, it'll drag, so I'd cut something or give it an obvious weak point.
+Say it's two Wardens with four keeps-it-going tags each, and two stakes with two tags each. That's 12. Four characters with one action each is 4 a round, and half of that is 2. So it's about six rounds, or fewer if they find the weak points. Make one of them a fully woken Warden, with *Armoured ×6*, and it's 17, so more like eight or nine. If a scene looks like it'll take eight rounds, it'll drag, so I'd cut something or give it an obvious weak point.
 
 ## Telegraphs a Round {#s-budget}
 
 Every round you've got a number of steps to telegraph with. That's your **round budget**, and it's what keeps the pressure matched to the crew.
 
 :::rule
-**Round budget: about 5 steps a round for each player.** That's about a d10 each, and that's tough enough to need cracking. Split it into smaller telegraphs at more of them to spread the party thin.
+**Round budget: about 5 steps a round for each player.** That's about a d10 each, and that's tough enough to need cracking. Split it into smaller telegraphs at more of the crew to spread them thin.
 :::
 
 With four players that's 20 steps: two d10s, a d12 and a d8, or a lot of little ones. It's a guide, so move it to suit the table: if the crew's walking through everything, push harder, and if they're drowning, ease off.
@@ -327,7 +327,7 @@ With four players that's 20 steps: two d10s, a d12 and a d8, or a lot of little 
 -   **A telegraph costs its steps.** A d10 is 5, and you take it off the budget as you say it.
 -   **Spend it on everything.** Threats, the ground, events, stakes, and anything else you decide the scene needs. A telegraph aimed at a clock or a stake is as good as one aimed at a character, and often better.
 -   **Not all of it at bodies.** One harm telegraph at each of the crew is a fair round, so at Even, spend the rest on control, position, stakes, clocks and words. Two at each, from two threats, is a hard one, and that's about right at Hard.
--   **Count the dice, not just the steps.** Every die at someone lands unless they stop it, and each of their defence dice stops one. A d4 and a d6 from two threats are fewer steps than a d12, but Bram's d8 Defend only stops one of them, so the other gets through whatever it rolled. The d12 might not get through at all.
+-   **Count the dice, not just the steps.** Every die at someone lands unless they stop it, and each of their defence dice stops one. A d4 and a d6 from two threats are fewer steps than a d12, but when Bram lets them ride, his d8 Defend only stops one of them, so the other gets through whatever it rolled. The d12 might not get through at all.
 -   **One die at each person.** A threat can telegraph at as many of the crew as the story allows, but it only aims one die at each of them, unless a tag says it can do more, like *Flurry*. To spread them thin, aim at more of them, not more dice at one.
 -   **Answered telegraphs still count.** You spent the pressure, and the crew stopping it is what it was for.
 -   **A telegraph at several targets costs its steps once for each target.** *The fire spreads, a d8 at all three on the stair* is 12 steps. That's more than half of a four-player round, so save a telegraph at everyone for the moment it matters.
@@ -511,9 +511,9 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 
 **Catches and Resolve.** Catches are the players' to let bite. When one bites, make it real trouble. A big bite pays 1 Resolve instead of 1 Aura, and that's their call. Give 1 Resolve for great roleplay, and 1 Aura when a great setup misses. When a thread strains with one of your people, play their side.
 
-**In a round.** Telegraph everything, face up, within the round budget: about 5 steps for each player, about half that for a breather and half again at Hard. Mix harm, control, position, stakes, clocks and words, about one harm telegraph each at Even. A threat aims one die at each person, unless a tag says more, and each of their defence dice stops one, so count the dice. Fear, lies and pressure are telegraphs at Confidence like any other. Let the players roll the threats' dice, once a round for each threat, let wins change things, and recognise openings.
+**In a round.** Telegraph everything, face up, within the round budget: about 5 steps for each player, about half that for a breather and half again at Hard. Mix harm, control, position, stakes, clocks and words, about one harm telegraph each at Even. A threat aims one die at each of the crew, unless a tag says more, and each of the crew's defence dice stops one, so count the dice. Fear, lies and pressure are telegraphs at Confidence like any other. Let the players roll the threats' dice, once a round for each threat, let wins change things, and recognise openings.
 
-**Threats.** Size scenes from the threat budget: 10 a character with two Titles, so that's 40 for a starting crew of four, and it climbs as they earn more. Multipliers are written for 40, so add 1 to each for every 10 over. Keep vulnerabilities on the crew rare.
+**Threats.** Size scenes from the threat budget: 10 a character with two Titles, so that's 40 for a starting crew of four, and it climbs as they earn more. Multipliers are written for 40, so add 1 to each for every 10 over, and take 1 off for every 10 under. Keep vulnerabilities on the crew rare.
 
 **Consequences.** Only when it matters. Name the cost of a blow or a miss, take a fair swap, and fail forward. When fear, lies or pressure get through, it's the player's choice: a size of Confidence, a Hurt or 1 Resolve. When a player chooses to die at a Blaze, slow right down and let them tell it.
 
@@ -521,5 +521,5 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 
 **Conditions.** Face up, with their die, and say when you'll spend them.
 
-**After.** Downtime every session. Telegraph the faction actions the crew can reach, let their slots answer, then land them. Let the world move, and remember everything.
+**After.** Downtime every session. Telegraph the faction actions the crew can reach, let the crew's slots answer, then land them. Let the world move, and remember everything.
 :::

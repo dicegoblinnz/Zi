@@ -6,7 +6,7 @@ order: 14
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 :::quote
 Some players need the table set up a bit differently, and it's usually easy to sort.
@@ -43,7 +43,7 @@ Wren joins Bram's roll on the guard captain, so it's his Fight, 4 steps, and her
 Telegraphs come all at once, and they're the part nobody can afford to miss, so the GM writes each one on an index card as she says it: what it's doing, and its die. The die sits on the card, and the card goes in front of whoever it's aimed at (or beside the stake, place or clock). Whoever answers it, or has it land on them, picks that die up and rolls it. Then the card comes off the table.
 
 :::example[Round one, on cards]
-In the Vane manor, five cards go down: *Pin him to the wall* (d10) in front of Bram, *Spear sweep* (d8) in front of Vesk, *Spear* (d10) in front of Isolde, *Block the vault doorway* (d10) on the stake *Get the paintings out*, and *Wake the house* (d4, one answer) by the household clock. At the end of the round, Bram picks the d10 up off his card and rolls it against his Armour d6, his one defence roll this round. It's 10 against 4, and it lands.
+In the Vane manor, five cards go down: *Pin him to the wall* (d10) in front of Bram, *Spear sweep* (d8) in front of Vesk, *Spear* (d10) in front of Isolde, *Block the vault doorway* (d10) on the stake *Get the paintings out*, and *Wake the house* (d4, one answer) by the household clock. At the end of the round, Bram picks the d10 up off his card and rolls it against his Defend, a d8. It's 10 against 4, and it lands.
 :::
 
 Sit where you can see the GM's face and everyone else's, at the quietest end of the room. Planning a round gets loud, so talk one at a time, and let whoever's talking finish. Online, turn the captions on if your call has them, and the GM types every telegraph into the chat as she says it.
@@ -121,7 +121,7 @@ The rules are there for the table, so if one gets in the way of someone playing,
 
 That leaves plenty of room:
 
--   **Fewer dice on the table.** A defence roll stands for the whole round, the threat's and yours, so roll it first and leave it showing (or write the number on the board), then roll the dice coming at it one at a time. Only two dice are ever down at once. Or have one person roll the threats' dice for everyone, and the GM can pick them back up for anyone who'd rather she did.
+-   **Fewer dice on the table.** A defence roll stands for the whole round, the threat's and yours, so roll it first and leave it showing (or write the number on the board), then roll the dice coming at it one at a time, writing each number down. Only your defence and one more die are ever down at once. When it's your defence, say which telegraph each of your dice stops once they've all been rolled. Or have one person roll the threats' dice for everyone, and the GM can pick them back up for anyone who'd rather she did.
 -   **Bigger dice.** Bigger in your hand, with the same number of sides.
 -   **Numbers instead of dice.** A roller on a screen, like the Player app, gives you the number with nothing to pick up or read off a die.
 -   **A friend's hands.** Someone else rolls, and you make every call.

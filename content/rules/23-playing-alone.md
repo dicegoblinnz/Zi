@@ -18,7 +18,7 @@ You can play one character with a GM, which changes a couple of numbers, or with
 
 If it's just you and a GM, the first Hurt you take each scene doesn't move your [wound die](#s-blaze), the way *Unyielding* works. If you've got *Unyielding* as well, it's the first two. The [round budget](#s-budget) doesn't change: it's about 5 steps a round for each player, so that's 5 for you. Build scenes with fewer stakes, because one character can't be in three places at once.
 
-The bestiary's [multipliers](#s-tough) are written for a starting crew of four, a [threat budget](#s-threat-budget) of 40, so scale them to yours. A bigger crew adds 1 to each multiplier for every 10 its threat budget's over 40, and on your own, take 1 off for every 10 yours is under. One character with two Titles is a threat budget of 10, so that's 3 off: *Armoured ×6* is *Armoured ×3*, and anything at ×4 or less is a plain tag.
+The bestiary's [multipliers](#s-tough) are written for a starting crew of four, a threat budget of 40, so scale them to yours the way [The Threat Budget](#s-threat-budget) says: take 1 off each for every 10 you're under. One character with two Titles is a threat budget of 10, so that's 3 off: *Armoured ×6* is *Armoured ×3*, and anything at ×4 or less is a plain tag.
 
 ## Solo Alone {#s-solo-alone}
 

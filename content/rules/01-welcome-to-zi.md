@@ -4,7 +4,7 @@ id: how-to-use
 slug: welcome
 order: 1
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 :::note
 **What you need to play.** Two to six players and a GM. Polyhedral dice (d4, d6, d8, d10 and d12), a few d2s (a coin works), and three d20s for *The Oracle*, or one d20 rolled three times. A grid map helps, but you don't need one. Paper and pencils. A session runs two to four hours.
@@ -26,14 +26,14 @@ Nobody wins or loses the way they would in a board game. A session runs a few ho
 
 ## Coming from another roleplaying game? {#s-from-dnd}
 
-You'll pick it up fast, but a few things work differently. You pick two [archetypes](#s-how-archetypes), like Guardian or Shadow, and each one has something only it can do. Then you name each one with a Title that says who you are, like *the best cat burglar in the city* for a Shadow. Everything else your character can do is a permission written on one of your Titles, so your Titles and permissions say what you're actually good at, and there's no skill list. You don't roll a d20 to see if it works either. Your die grows out of those, and your sheet has it counted before you sit down. Most threats don't have hit points. They have tags, and every win strips one, though the big ones have Tough, which works like hit points. There's no initiative. The GM shows you everything that's coming first, then everyone takes one action, in any order. If you want a proper side-by-side, there's a free guide called *Crossing Over*.
+You'll pick it up fast, but a few things work differently. You pick two [archetypes](#s-how-archetypes), like Guardian or Shadow, and each one has something only it can do. Then you name each one with a Title that says who you are, like *the best cat burglar in the city* for a Shadow. Everything else your character can do is a permission written on one of your Titles, so your Titles and permissions say what you're actually good at, and there's no skill list. You don't roll a d20 to see if it works either. Your die grows out of those, and your sheet has it counted before you sit down. Most threats don't have hit points. They have tags, and every win strips one, though the big ones carry multipliers, like *Armour ×4*, which takes four wins. There's no initiative. The GM shows you everything that's coming first, then everyone takes one action, in any order. If you want a proper side-by-side, there's a free guide called *Crossing Over*.
 
 ## What it looks like at the table {#s-at-the-table}
 
 Don't worry about the words yet. *The Core* and *Conflict* explain all of them.
 
 :::example[Over the wall]
-**GM:** Vesk, you're halfway over the manor wall. The gate guard hasn't seen you yet, but his dog's spotted Bram at the gate, and he's reaching for the bell rope. That's a d6 at the bell, and if it lands, the whole house wakes up. Bram, the dog's already coming for you. That's a d8 at your Armour.
+**GM:** Vesk, you're halfway over the manor wall. The gate guard hasn't seen you yet, but his dog's spotted Bram at the gate, and he's reaching for the bell rope. That's a d6 at the bell, and if it lands, the whole house wakes up. Bram, the dog's already coming for you. That's a d8 at your Defend.
 
 **Vesk:** He's not ringing that bell. I drop off the wall onto him from behind and drag him away from the rope. That's my Sneak: my first Title, *move unseen* and Silent Step, with the action, 4 steps. My grappling line's on my Move, so I'll pay an Aura to bring it in and swing down on it. That's 5 steps, a d10, on the bell.
 
@@ -45,13 +45,13 @@ Don't worry about the words yet. *The Core* and *Conflict* explain all of them.
 
 **Bram:** I'm getting the gate open. The dog can have a go at my plate.
 
-At the end of the round the dog's d8 rolls a 7 against Bram's Armour, a d6, which rolls a 3. It lands.
+At the end of the round the dog's d8 rolls a 7 against Bram's Defend, a d8, which rolls a 3. It lands.
 
 **GM:** It gets its teeth into your arm. Take a Hurt.
 
-**Bram:** Can it get the plate instead? Step my Armour down.
+**Bram:** That's my first one this scene, and I'm *Unyielding*, so my wound die doesn't move. I keep hauling on the gate.
 
-**GM:** Fair. Your Armour's a d4 now.
+**GM:** It hangs off your arm, and you don't even slow down.
 :::
 
 ## What's in this book {#whats-in-this-book}
