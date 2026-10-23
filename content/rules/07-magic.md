@@ -6,7 +6,7 @@ order: 7
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 :::quote
 Everyone's got a soul, and a soul can be spent.
@@ -16,7 +16,7 @@ Zi'Dara starts with *Zi*, the Sumerian word for soul. In Zi'Dara, magic is a per
 
 ## Magic Is a Permission {#s-magic}
 
--   **You need a magic permission or a magic item** to do magic at all. *Throw fire*, *change my face* and *speak with the recently dead* are permissions like any other, and they're written as narrow as any other: *throw fire*, not *fire magic*. See [Writing permissions](#s-writing-permissions).
+-   **You need a magic permission or a magic item** to do magic at all. *Throw fire*, *change my face* and *speak with the recently dead* are permissions like any other, but magic's written narrow: *throw fire*, not *fire magic*. That's because a magic permission is what lets you do that magic at all, and it does what it says for free. See [Writing permissions](#s-writing-permissions).
 -   **A school of magic is a Title**, and a Title's the name you give one of your [archetypes](#s-how-archetypes). Ash's first Title is *The last fire-speaker of the Ember Court*. That's the Fire school, and her archetype's the Elementalist. It's one school per Title, so pick the one you're known for, because *Archmage* is too wide. Every permission has to fit inside its Title, so Ash's fire-speaker can have *throw fire* and *feel every flame in a room*, and her other Title, *The Court's runaway heir*, can't.
 -   **A magic item works the same way.** Ash's ember stone is attuned, and it's got one permission: *call fire without a word or a gesture*. A magic permission on an attuned thing lets you do that magic, school or no school. See [Attunement](#s-attunement).
 -   **Every permission does what it says, for free.** Ash's Fight is her Title, *throw fire* and her ember stone, so with the action it's 4 steps, a d8, and no Aura. If *throw fire* covers it, whether it's a bolt at a man or a rope burning through, it doesn't cost a thing.
@@ -40,7 +40,7 @@ Going beyond lets your permission do the bigger thing. If something's in the way
 
 ### Area magic {#s-magic-area}
 
-A fireball that fills a room or a storm that rakes a street is an area, and areas are an [Elementalist](#a-elementalist)'s. One of your dice can be your area instead of an intent: a burst (that many squares out from a point), a cone (that long the way you face, and as wide at the end) or a line (twice as far, straight out). It takes one of your splits, and it doesn't cost Aura. Everyone the story puts in it defends against your other die, and you can always make it smaller. If it comes up short, 1 Aura puts +2 on your area die. There's more on the shapes in [Area](#s-area).
+A fireball that fills a room or a storm that rakes a street is an area, and areas are an [Elementalist](#a-elementalist)'s. One of your dice can be your area instead of an intent: a burst (that many squares out from a point), a cone (that long the way you face, and as wide at the end) or a line (twice as far, straight out). It takes one of your splits, and it doesn't cost Aura. Everyone the story puts in it defends against your other die, and you can always make it smaller. If it comes up short, 1 Aura puts +2 on your area die. If your friends are in it, 1 Resolve on the Elementalist's Sculpt makes it skip anyone you choose. There's more on the shapes in [Area](#s-area).
 
 Every other caster puts their magic on one target, or splits it: a d6 at the captain and a d4 at the rope he's cutting, or a ward on one friend and a second ward on another friend you can touch.
 
@@ -54,7 +54,7 @@ Every other caster puts their magic on one target, or splits it: a d6 at the cap
 
 A school of magic is a Title, the same as a role, so it's the name you give one of your archetypes. Here are fifteen to start from. Each one shows the archetypes it suits, a few things its permissions do for free, and what going beyond looks like, for 1 Resolve. Pick one and an archetype it suits, write your Title for it, real and specific, and choose three permissions that fit inside it. There's more on archetypes in [How archetypes work](#s-how-archetypes), and you'll find the full ideas for every school, with Titles, permissions and traits, in [Title ideas](#s-title-ideas).
 
-Where a school suits more than one archetype, pick the one that fits how you play it. Warding on a Guardian stands in front of the crew, and Warding on an Oracle shrinks what's coming before it lands.
+Where a school suits more than one archetype, pick the one that fits how you play it. Warding on a Guardian stands in front of the crew, and Warding on an Oracle sees how the dice will fall and decides who gets the good ones.
 
 | School | You might be | Suits | For free | Going beyond, for 1 Resolve |
 | --- | --- | --- | --- | --- |
@@ -78,7 +78,7 @@ A beast called up to hunt for you through the scene, or one of the dead brought 
 
 ### Writing your own school {#writing-your-own}
 
-A school's a Title, so write it like one: who you are, real and specific, and one school only. Pick the archetype it suits, and give it three permissions, each with a doing word and the part that says how, what or where. Magic's written as narrow as anything else, so it's *throw fire*, not *fire magic*. Then think about what going beyond looks like for your school, so the table knows when it's time to spend the Resolve. There's more on permissions in [Writing permissions](#s-writing-permissions).
+A school's a Title, so write it like one: who you are, real and specific, and one school only. Pick the archetype it suits, and give it three permissions. Write the magic ones narrow, a doing word and the part that says how, what or where, so it's *throw fire*, not *fire magic*. Then think about what going beyond looks like for your school, so the table knows when it's time to spend the Resolve. There's more on permissions in [Writing permissions](#s-writing-permissions).
 
 :::example[A school of your own]
 Say you want a sea-witch, and none of the fifteen fits. Your school's the tide, and your Title is *The tide-witch the fishing fleet won't sail without*. For permissions you take *calm a rough sea*, *call a wave onto a deck* and *breathe under water*. Each one's something you'd do a few times a session in a campaign at sea, and each one fits inside the Title. You want your waves to sweep a whole deck, and that's an area, so your archetype's the Elementalist. Going beyond is parting the harbour, or sinking a ship with one wave.
@@ -116,9 +116,9 @@ You start at Awakened, like anything you attune, so that's one soul, or two if y
 
 **A soul is what it was.** A caught courtier talks, a hound tracks and a Warden fights. It keeps its Challenge die, and each one rolls its own die for whatever it does.
 
-**Summons act in the round like anyone.** One hit takes a summon out, and its soul goes back to its slot, so you can call it again. Like anyone, a summon can take the hit for someone.
+**Summons act in the round like anyone.** One hit takes a summon out, and its soul goes back to its slot, so you can call it again.
 
-**Blocking.** As its action, a summon can pull the attacks aimed at someone onto itself and roll against each one. Each one it beats is stopped. The first one it loses takes it out, and any others it loses go through to whoever it's protecting.
+**Intercepting.** A summon [intercepts](#s-intercept) for free, so it doesn't cost Aura or an action. It can take the dice aimed at someone within its stride, as many as you like, and they come at it instead. When they land, it rolls its die to stop one of them, and it's got to beat it or tie. The first die that gets through takes it out, and the rest go on to whoever they were aimed at.
 
 **At the end of a scene,** roll each summon's die. On 3 or lower it goes back to its slot. They all go back at downtime.
 
@@ -127,7 +127,7 @@ Summons can't combo, and their top faces don't give Aura.
 :::example[Summoning at the table]
 Sable's a Summoner. Her Summon action is a d10, and she's got three souls: a rat swarm (d4), a hound (d6) and the harbour Warden (d8). She splits into a d6 and a d4 and goes for the two small ones. Her d4 comes up 2 against the rats' 3, so she spends 1 Aura to make it a 4, and the rats pour out. That's the d4's top face, but the +2 got it there, so there's no Aura back. Her d6 beats the hound.
 
-Next round, two dockhands come at Sable with clubs, a d6 each. The hound blocks for her: it pulls both clubs onto itself and rolls its d6 against each. It rolls 5 against the first club's 4, so that one's stopped. It rolls 2 against the second club's 3, and that's the hound out. Its soul goes back to its slot, ready to call again.
+Next round, two dockhands come at Sable with clubs, a d6 each. The hound intercepts both for her, free, so they come at it instead. When they land, the clubs come up 4 and 3, and the hound rolls its d6: 5. That beats both, but one die only stops one, so it stops the 4, and the 3 gets through. That's the hound out, and its soul goes back to its slot, ready to call again.
 
 Later the dock boss falls, and Sable spends her action catching his soul: her d10 against his Challenge 3, a d6. She rolls 7 against his 4, and his soul goes into one of her utility slots, a d6. In downtime she can put him in her attunement if there's room, or swap him for the rats.
 

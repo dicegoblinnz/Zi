@@ -6,7 +6,7 @@ order: 2
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-24
 ---
 You play someone who's properly good at something, like a thief who can open any lock in the city or a fighter nobody wants to meet in a narrow corridor. Being good means you stack the odds in your favour before anyone touches a die.
 
@@ -20,7 +20,7 @@ At the end of the day the question is simple: **did you succeed?** You roll agai
 
 You start with two **Titles**. A Title is who you are, a role or a school of magic, real and specific: *the best cat burglar in the city*, *Captain of the Guard*, *Master of Illusions*. Every Title is an **archetype** too, and the Title's the name you give it: Bram's a Guardian, and his Title is *The wall that held the harbour gate*. Each archetype has a mechanic of its own, something only it can do, and they're all in [The Archetypes](#s-how-archetypes). Your permissions go on your Titles, three on each to start and six at most, and that's where everything your character can do is written.
 
-A permission finishes *I can…*, and it's got two parts: a doing word, and how, what or where. *Fight with a sword*, *talk my way past a guard* and *climb sheer walls* are finished. *Deceive* on its own is only half a permission. *Deceive through actions* is finished, and it covers feints and misdirection when you fight or sneak, but not talking your way past someone. A good one comes up a few times a session, and it's got to fit inside its Title. Magic's as narrow as anything else: *throw fire*, not *fire magic*. There's more in [Writing permissions](#s-writing-permissions).
+A permission is something you can do, or something you're good at. It can be one word, like *Deceptive*, *Strong* or *Quick*, or a doing word with how, what or where, like *fight with a sword* or *climb sheer walls*. A wide one's fine, because a permission only goes on two of your set actions (see [How permissions stack](#how-permissions-stack)). A good one comes up a few times a session, and it's got to fit inside its Title. Magic stays narrow, though: *throw fire*, not *fire magic*, because a magic permission is what lets you do that magic at all, and it does what it says for free. There's more in [Writing permissions](#s-writing-permissions).
 
 Your Title's a step on anything it fits, and so is a plain item: a sword's a sword, so it's a step in a sword fight. An attuned thing counts through its own permissions (see [Attunement](#s-attunement)). Some traits are a step too, like Vesk's Silent Step: +1 to moving unseen. Each of these is a **line** on your sheet, the same as a permission.
 
@@ -28,25 +28,30 @@ Your Title's a step on anything it fits, and so is a plain item: a sword's a swo
 
 Every line that fits what you're doing is a **step**, and it counts once a roll.
 
--   **Everything that fits counts**, even lines that sound alike. You can have *move unseen* and *stick to the shadows*, and when you're sneaking, both count. You just can't take the same one twice.
--   **There's no cap on Titles.** Every Title that fits the moment is another step.
+-   **A permission goes on two set actions at most**, and Defend counts as one. Put each one on the two where it'll help most. Anywhere else, it's 1 Aura to bring in, the same as anything that isn't on your set action.
+-   **Titles, items and traits go on every set action they fit.** There's no cap on Titles.
+-   **The same word never counts twice.** You can take a permission more than once, on either Title, and each copy goes on two set actions of its own, but the same permission can't sit on one set action twice. To stack, use different words: *Deceptive* and *Sly* can both sit on your Fight. *Fight two at once* and *fight in tight spaces* are two different permissions, so they're fine together.
+-   **In a combo, each of you counts on your own.** Your *Deceptive* and Dorrie's are both steps, because they're two people.
 -   **Permissions don't come in levels.** One you picked up last week is worth the same 1 step as one you started with.
 
 ## Set Actions {#s-set-actions}
 
-Your sheet does the counting before you play, so every roll starts from a number. That's what **set actions** are for. **Fight**, **Move**, **Sneak**, **Study** and **Talk** are on every sheet, and you add your own for the things you do all the time, like Locks or Ward. Fight covers melee and ranged, so split it into Fight and Shoot if you like.
+Your sheet does the counting before you play, so every roll starts from a number. That's what **set actions** are for. **Defend**, **Fight**, **Move**, **Sneak**, **Study** and **Talk** are on every sheet, and you add your own for the things you do all the time, like Locks or Ward. Fight covers melee and ranged, so split it into Fight and Shoot if you like. Defend is how you keep from getting hit, by dodging, parrying, a shield or armour, and it's what you roll when the telegraphs land (see [When It Lands](#s-defending)).
 
-Put everything on a set action that fits it nearly every time: your Titles, permissions from either Title, items and traits. A permission can sit on as many set actions as it fits. **A set action's steps are 1 for the action and 1 for every line on it.** When an archetype's mechanic needs dice, you build them the same way as any roll, so a Face's influence or a Leader's order comes off whichever set action fits how you're doing it.
+Put everything on a set action that fits it nearly every time. Your Titles, items and traits go on every set action they fit, and a permission from either Title goes on two at most. Each piece of plain armour you wear is a line on your Defend, and so is a shield, the way a sword's a line on Fight. **A set action's steps are 1 for the action and 1 for every line on it**, so with nothing on it, it's 1 step, a d2. When an archetype's mechanic needs dice, you build them the same way as any roll, so a Face's influence or a Leader's order comes off whichever set action fits how you're doing it.
 
 | Vesk's set action | What's on it | Steps | Die |
 | --- | --- | --- | --- |
 | Sneak | her first Title, *move unseen*, Silent Step | 4 | d8 |
 | Move | her first Title, *run the rooftops*, her grappling line | 4 | d8 |
 | Locks | her first Title, *pick a mechanical lock*, *know how a lock's built*, her picks | 5 | d10 |
+| Defend | her worn leathers | 2 | d4 |
 | Fight | *fight dirty with a knife* | 2 | d4 |
 | Study and Talk | nothing yet | 1 | d2 |
 
-*Know how a lock's built* comes from Vesk's other Title, *Raised by the Guild*, and it sits on Locks with the rest. Your set action is *how* you're doing something, not what you're trying to get done: Dorrie's Talk gets her past the gate guard, into the harbour records and out of a fight before it starts. Filling in yours is in [Building Your Character](#s-step-set-actions).
+*Know how a lock's built* comes from Vesk's other Title, *Raised by the Guild*, and it sits on Locks with the rest. Her worn leathers are plain armour, so they're a line on her Defend. Dorrie's *read a room in a glance* is on her Talk and her Study, and that's its two, so when it'd help her pass as someone else, she brings it in for 1 Aura.
+
+Your set action is *how* you're doing something, not what you're trying to get done: Dorrie's Talk gets her past the gate guard, into the harbour records and out of a fight before it starts. Filling in yours is in [Building Your Character](#s-step-set-actions).
 
 ## Steps and Dice {#s-building-die}
 
@@ -105,10 +110,10 @@ Your die is your steps × 2, up to a d12. Every six steps gives you another d12,
 Most of the time you're rolling against something that pushes back: a guard, a lock, a magistrate, a storm. You roll your dice, you roll theirs too in another colour, and you compare. The GM almost never touches a die in Zi'Dara. She's busy running everything else.
 
 -   **Beat it** and you did it.
--   **Tie** and it goes to whoever's defending: you when something lands on your Armour or Confidence, him when you go at the guard. If you're the one acting, even to stop something coming at you, you can pay **1 Aura** to win the tie. The GM never spends Aura, and there's no Aura in downtime (see [Downtime](#s-downtime-rolls)).
+-   **Tie** and it goes to whoever's defending: you when something lands on your Defend or Confidence, him when you go at the guard. If you're the one acting, even to stop something coming at you, you can pay **1 Aura** to win the tie. The GM never spends Aura, and there's no Aura in downtime (see [Downtime](#s-downtime-rolls)).
 -   **Roll under** and you didn't. Try something else, or spend **1 Resolve** to roll again (see [Resolve](#s-resolve)).
 
-**A target rolls its defence once a round.** The first time anyone goes at a threat in a round, roll its die, and that roll stands against everyone who goes at it till the round's over. It's the same for you when the telegraphs land: one roll of your Armour against all the blows and one of your Confidence against all the pressure (see [Conflict](#s-defending)), unless you spend your action to [Defend](#s-defend).
+**A target rolls its defence once a round.** The first time anyone goes at a threat in a round, roll its die, and that roll stands against everyone who goes at it till the round's over. It's different for you when the telegraphs land: you roll your Defend once and your Confidence once, and each die stops one telegraph (see [When It Lands](#s-defending)), unless you spend your action to [Defend](#s-defend).
 
 A wall you need to climb or a book you've got to get through before dawn doesn't fight back, but it's still a **Challenge**, and you still roll its die and have to beat it. A Challenge is a die twice its number, so Challenge 2 is a d4 and Challenge 6 is a d12. Threats have **tags** too, like *Armoured* or *Loyal*, and your wins strip them off. A win can also leave a **condition**, like *Burning*, that carries your die. Both are in [Conflict](#s-challenges).
 
@@ -116,7 +121,7 @@ A wall you need to climb or a book you've got to get through before dawn doesn't
 
 ### When a miss matters {#s-miss}
 
-A miss is just a miss, unless something's pushing back or time's running out. Then it **costs** you something, a **consequence**, and **the GM names it**: your Armour, your Confidence, your body, your gear, your dreams, the crew's Goal, or the clock. If you'd rather pay something else that fits and costs about as much, offer it (see [Conflict](#s-consequences)). Picking a lock with all night and nobody around costs nothing if it goes wrong. With the guard coming up the stairs, it's a different story.
+A miss is just a miss, unless something's pushing back or time's running out. Then it **costs** you something, a **consequence**, and **the GM names it**: your body, your gear, your Confidence, your dreams, the crew's Goal, or the clock. If you'd rather pay something else that fits and costs about as much, offer it (see [Conflict](#s-consequences)). Picking a lock with all night and nobody around costs nothing if it goes wrong. With the guard coming up the stairs, it's a different story.
 
 ## Intents: What Each Die Is For {#s-intents}
 
@@ -197,6 +202,7 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 
 -   **Bring something in** that isn't on your set action, as a step on your roll: one of your own permissions, items or traits, the ground (a chandelier, a crowd, the rain), a threat's tag you know about (his pride, her greed), a Catch turned your way for a moment, or a friend's permission through a thread you share (see [Bonds and threads](#s-bonds)).
 -   **Win a tie** when you're the one acting.
+-   **Intercept** for a friend within your stride: take any of the dice aimed at them, and they come at you instead (see [Intercept](#s-intercept)). A [Guardian](#a-guardian) does it for free.
 -   **Use your archetype.** On most archetypes, 1 Aura adds +2 to one die on its mechanic. Spend it after you roll, once you know you need it. A few get something else for their Aura (see [The Archetypes](#s-how-archetypes)).
 
 1 Aura also keeps a Catch quiet this time, and pays for a quick heal (see [Healing](#s-healing)).
@@ -227,6 +233,7 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 -   **Take an extra action** this round, as its own roll or in the same roll as a combo.
 -   **Roll again.** Reroll a roll you just failed, either all your dice or just one, your choice. The threat's dice stay where they landed. It works in downtime too, where there's no Aura.
 -   **Go beyond** what a permission normally does (see [Going Beyond](#s-going-beyond)).
+-   **Use your archetype's Resolve spend.** Every archetype has one, something big, like a Guardian shrugging off a hit that got through to him (see [1 Resolve on your mechanic](#resolve-on-your-mechanic)).
 -   **Hold your ground** against fear, lies or pressure that gets through, so you don't drop a size of Confidence or take a Hurt for it.
 -   **Go at a threat when you're shaken**, with your Confidence down on a d2. It's 1 Resolve every time you do.
 
@@ -247,7 +254,7 @@ How Confidence swings during a scene, and what being shaken means, is in [Confid
 
 ## Catches and Trouble {#s-trouble}
 
-A **Catch** is trouble written on your sheet, ready to go. It comes from an attuned thing (see [Attunement](#s-attunement)) or from Hurt, the injury you write in a bar when you fill it (see [Hurt](#s-blaze)). It's got to be something that can bring real trouble into a scene, something the GM can run with. If it'd never come up, it isn't a Catch.
+A **Catch** is trouble written on your sheet, ready to go. It comes from an attuned thing (see [Attunement](#s-attunement)), or from a Scar, the wound you keep after you Blaze (see [Wounds, Blaze and Scars](#s-blaze)). It's got to be something that can bring real trouble into a scene, something the GM can run with. If it'd never come up, it isn't a Catch.
 
 Trouble's yours to bring. Letting your Catches bite is up to you, and the GM doesn't hand out trouble. She makes things go wrong in all the usual ways, like telegraphs and the cost of a miss.
 
@@ -266,7 +273,7 @@ Trouble's yours to bring. Letting your Catches bite is up to you, and the GM doe
 There's no special action for helping. To help a friend, put your action into the same thing they're doing. That's a **combo**: two or more actions going into the same thing at the same time. Add their set actions together and roll once, between you.
 
 -   **Nobody pays Aura for it**, but it has to be one thing in the story, and you've got to be able to join in from where you are. Any number of friends can join one roll.
--   **Every action in the roll gives you a split**, and lines on both count once.
+-   **Every action in the roll gives you a split.** Your own lines count once, even when the same one's on two of the set actions you've put in. The same permission from two of you counts for each, because you're two people.
 -   **Joining a friend's roll** brings your set action's steps and your action, plus any steps a Leader's handed you. Whoever rolls gets the Aura for every top face, friends' dice included.
 -   **Your own extra action** works the same way: bring in another of your set actions as a new approach, like Fight with Sneak for a sneak attack. Put it into the same set action again and it adds 1. Extra actions come from holding your action, spending 1 Resolve, coming out of hiding, cashing in your Confidence when you're fired up at d12, or a trait or the Boon that says so (see [Extra actions](#s-extra-actions)).
 
