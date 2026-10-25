@@ -162,6 +162,13 @@ const api = (page, method, path, body) => page.evaluate(async ([m, p, b]) => {
 }, [method, path, body]);
 // Sign in from the account page. It starts with ?go (or the invite) in the
 // address, so coming back to /account/ is a change.
+// The Sheet tab's parts are folds that read at a glance: open one before
+// typing or tapping in it.
+async function fold(page, key) {
+  const sel = `details[data-open="sh-${key}"]`;
+  await page.waitForSelector(sel, { state: "attached" });
+  if (!(await page.$eval(sel, (d) => d.open))) await page.click(`${sel} > summary`);
+}
 async function signIn(page, who, how, start = "/account/?go") {
   page.context().who = who;
   await page.goto(BASE + start);
@@ -254,11 +261,13 @@ try {
   same(await two.page.$$eval(".cc-saved b", (els) => els.map((e) => e.textContent).sort()), ["Vesk", "Wren"], "the list on the second device");
   yes((await text(two.page, "#app")).includes("Signed in as Kai"), "the Characters page says who's signed in");
   await two.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=sheet`);
+  await fold(two.page, "notes");
   await two.page.fill("#cc-notes", "Owes Bram a favour");
   await until(async () => (await serverChars("kai@example.com")).some((c) => JSON.parse(c.data).state?.notes === "Owes Bram a favour"), "the note going up");
   await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=sheet`);
   await until(() => kai.page.inputValue("#cc-notes").then((v) => v === "Owes Bram a favour"), "the note reaching the first phone");
   await two.page.goto(`${BASE}/characters/?c=wren-bbbbbb&t=sheet`);
+  await fold(two.page, "about");
   await two.page.click('[data-act="delete"]');
   await until(async () => (await serverChars("kai@example.com")).length === 1, "Wren going from the account");
   await kai.page.goto(`${BASE}/characters/`);
@@ -266,6 +275,7 @@ try {
   // Offline on the first phone, then the signal's back.
   await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=sheet`);
   await kai.context.setOffline(true);
+  await fold(kai.page, "notes");
   await kai.page.fill("#cc-notes", "Owes Bram two favours");
   await kai.page.waitForTimeout(1500);
   await kai.context.setOffline(false);
@@ -280,6 +290,7 @@ try {
   await kai.page.goto(`${BASE}/characters/`);
   await until(async () => (await serverChars("kai@example.com")).some((c) => c.id === "dorrie-dddddd"), "Dorrie going up");
   await kai.page.goto(`${BASE}/characters/?c=dorrie-dddddd&t=sheet`);
+  await fold(kai.page, "about");
   await kai.context.setOffline(true);
   await kai.page.click('[data-act="delete"]');
   await kai.page.waitForTimeout(1200);
