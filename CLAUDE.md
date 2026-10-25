@@ -11,6 +11,7 @@ This repo is the master copy of the rules for **Zi'Dara**, Mo's tabletop rolepla
 - `notes/website-brief.md`: what Mo wants from the website (look, companions, live play, worlds, order). Read it before any site work.
 - `notes/companion-plan.md`: the agreed first version of the character companion, and what comes after it.
 - `notes/sheets-plan.md`: the agreed plan for the fillable two-page character sheet and the separate player reference.
+- `notes/design-review.md`: Claude's look at the live site on 24 Oct (why it feels bland, and the approach). `notes/design-plan.md`: the design pass that came from it, step by step, with where each step's got to.
 - `notes/design-26oct.md`: Mo's 26 Oct asks and picks for the site (real die shapes in the Struck look, the character and the builder on a phone, the Learn deck and look-up pages, the paper sheets), and the plan for each piece.
 - `notes/playtest-sheets/`: Mo's "What's changed" playtest sheets (text), the primary source for each change.
 - `tools/check_terms.py`: flags retired rules words (`--links` checks every `](#id)` link against the chapters' ids).
@@ -34,6 +35,16 @@ This repo is the master copy of the rules for **Zi'Dara**, Mo's tabletop rolepla
 4. Run `python3 -I tools/check_terms.py`, `python3 -I tools/check_terms.py --links` and `python3 -I tools/voice_check.py FILE --lines` on what you changed. Add newly retired words to `RETIRED` in `check_terms.py`.
 5. If Appendix D changed, rebuild the sheets (`npm run sheets`). Then rebuild and check the site (`npm run build`, then `node tests/check-site.mjs`, which fails when a sheet's behind its sources).
 6. Work on a branch and commit. `main` is what the live site deploys from, so only merge to `main` when Mo says so.
+
+## Keeping usage low
+
+Every chat comes out of Mo's usage, so get the most done for the least.
+- One stage or piece of work per chat. Finish by giving Mo the prompt for the next one, since every step in a long chat costs more than the same step in a fresh one.
+- Grep, then read only the lines you need. Don't read long files whole (`app.js`, `builder.js`, a chapter) or re-read what you've just edited.
+- While you work, run only the part of the tests that covers your change. Run the full `tests/check-site.mjs`, `tests/check-companion.mjs` and `tests/check-accounts.mjs` once before you finish, since each full run is long.
+- Screenshots at 1x and the size of the screen, and only when you need to judge how something looks.
+- The independent check is one agent on Sonnet that reviews the diff and reports in a few hundred words, since an open-ended review can cost as much as the build.
+- Don't narrate between steps, and ask Mo only about the decisions that are his.
 
 ## The voice
 
@@ -69,4 +80,5 @@ Write as Mo, teaching at the table with dice in hand. Use the `zi-voice` skill w
 - `scripts/build-sw.mjs` runs last in `npm run build` and writes `dist/sw.js` from `scripts/sw.js`: a service worker that keeps every page, the fonts, the companion and the blank character sheet on the phone, so sheets, rules and printing work offline. Search needs a signal.
 - The look is Sigil, which Mo picked on 16 Oct (the details are in `notes/website-brief.md`): Cinzel headings and Alegreya Sans text, self-hosted through `@fontsource` so they work offline, plum-black with gold corner brackets and violet links. It's dark by default with a light switch (remembered as `zi-theme`), and fully separate from Dice Goblin. The colours are tokens at the top of `src/styles/site.css`, and both themes have to pass 4.5:1 contrast.
 - Branches other than `main` build a Preview with `npx wrangler preview`, which needs the empty `previews` block in `wrangler.jsonc`.
+- The kit (design step 1, on the `app` branch): `src/kit/kit.js` draws the game's objects as HTML (dice that fill an edge per step, Aura, Resolve, Hurt, conditions, tags, sigils, crests, the telegraph card), `src/kit/sigils.js` has a sigil for every archetype, and `src/styles/kit.css` holds both looks behind `data-kit`. `/kit/` shows them, read off the crew's sheets. Gold is yours, violet the GM's, ember harm.
 - Live since 17 Oct: the character companion's first version (`notes/companion-plan.md`: the six crew on phones, saved on the phone, no sign-in yet) and the printable sheets (`notes/sheets-plan.md`). Live since 18 Oct: the app plan's stages 1 to 6 (`notes/app-plan.md`: the guided builder, print and the other ways in, the play screen and the roll, dice, feel and the learning round, downtime and the gold marks, and sign-in with Google), and changing any character at any time, the crew included, with more Titles. Still to come, in Mo's order: the app plan's stages 7 and 8 (sharing and the party, telegraphs on phones), then campaigns, worlds and maps, and the table screen (Durable Objects). Each piece goes to Mo's playtests as soon as it's ready. Sheets and rules must work offline.

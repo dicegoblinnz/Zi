@@ -20,7 +20,10 @@ const files = [];
   }
 })(DIST);
 
-const keep = (rel) => (/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf";
+// The kit (/kit/) is a design board for Mo, so it stays off everyone's phone:
+// its page, its own CSS and script, and the heavy weight only it uses.
+const kitOnly = (rel) => rel.startsWith("kit/") || rel.startsWith("_astro/kit.") || /-800-normal\./.test(rel);
+const keep = (rel) => !kitOnly(rel) && ((/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf");
 const hash = createHash("sha1");
 const urls = [];
 for (const path of files.sort()) {
