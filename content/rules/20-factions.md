@@ -6,13 +6,13 @@ order: 20
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 The factions keep moving whatever the crew does, but the crew gets to choose where it stands.
 :::
 
-A **faction** is any power bigger than one person, like a noble house, a guild, a gang, a temple or the watch. Factions move whether the crew does anything or not, and every downtime, each one on the board takes an action. Most of the time the crew feels them as pressures, and sometimes they come in person.
+A **faction** is any power bigger than one person, like a noble house, a guild, a gang, a temple or the watch. Factions move whether the crew does anything or not, and every downtime, each one on the board takes one action. Most of the time the crew feels them as pressures, and sometimes they come in person.
 
 ## What a Faction Is {#s-faction-board}
 
@@ -26,7 +26,7 @@ You write a faction once, and from then on its card does the work. Take your tim
 -   **Face:** the person the crew deals with, written as a threat.
 -   **Secret:** one hidden tag, and usually its weakness.
 -   **Bonds:** Public Sentiment, Morale and Loyalty, with their threads (see [Bonds](#s-faction-bonds)).
--   **Threads:** its threads toward the crew, and toward other factions when they matter (see [How a Faction Sees the Crew](#s-standing)).
+-   **Threads:** its bond and hostile threads toward the crew, and toward other factions when they matter (see [How a Faction Sees the Crew](#s-standing)).
 
 :::sheet[The Vane Estate]
 **Power** d12: 1 step, plus *Household Guard*, *Hired Swords*, *Friends in the Courts*, *The Old Name* and *Agents Abroad*.
@@ -43,12 +43,12 @@ You write a faction once, and from then on its card does the work. Take your tim
 
 **Secret** *The Inkwell Is the Binding.* Break it and every soul in the collection goes free.
 
-**Bonds** Public Sentiment: *The Vanes have owned this city for three hundred years* (good). Morale: none yet. Loyalty: *The guard's been on the same pay for twenty years* (bad).
+**Bonds** Public Sentiment: *The Vanes have owned this city for three hundred years* (bond). Morale: none yet. Loyalty: *The guard's been on the same pay for twenty years* (hostile).
 
 **Threads** None toward the crew yet.
 :::
 
-That's six assets and seven resources, so everything's paid for and one resource is spare. Five of the assets add Power, so its Power's 1 step plus five, a d12.
+That's six assets and seven resources, so everything's paid for and there's one extra resource. Five of the assets add Power, so its Power's 1 step plus five, a d12.
 
 Four to twelve **core factions** makes a good board, depending on the campaign. With fewer the world feels small, and with more than twelve, nobody can keep track. Each core faction can make up to three [mini factions](#s-mini-factions) on top, and those don't count toward the twelve.
 
@@ -66,13 +66,13 @@ The same card works at any size: factions inside a city, cities inside a country
 **Every asset needs one resource paying for it**, every downtime. Count them when you build the faction, and again whenever something's taken, broken, built or bought. Nothing else needs counting.
 
 -   **An asset with nothing paying for it stops counting** till something does: no Power and no effect. The faction picks which one goes unpaid. That's how the crew pulls a faction down: burn the mine, and the army it paid for stops counting.
--   **A spare resource**, one that isn't paying for anything, is spent each downtime, not saved. It can **hire another faction**, which spends its own action that downtime where the payer says, rolled with its own dice, and the payer keeps its action too. It can **pay for a new asset**, or it can go into a trade.
--   **Hiring needs a willing faction.** A faction that's hostile to the payer, with mostly bad threads toward it, won't take its money, and the money buys the action, not the win.
--   **Building an asset** is Establish: the faction's action, and a spare resource to pay for it. **Dismantling** one frees its resource. **Selling** one moves it to the buyer, for whatever they agree. Trades between factions are agreed in the story and cost no action.
+-   **An extra resource**, one that isn't paying for anything, is spent each downtime, not saved. It can **hire another faction**: that faction spends its one action that downtime where the payer says, rolled with its own dice, and the payer still takes its own. It can **pay for a new asset**, or it can go into a trade.
+-   **Hiring needs a willing faction.** A faction that's hostile to the payer, with mostly hostile threads toward it, won't take its money, and the money buys the action, not the win.
+-   **Building an asset** is Establish: the faction's action, and an extra resource to pay for it. **Dismantling** one frees its resource. **Selling** one moves it to the buyer, for whatever they agree. Trades between factions are agreed in the story and cost no action.
 -   **Big deals** can be paid over a few downtimes or shipped along a trade route, and then they can be stolen or stopped on the way. Only bother when the crew's involved or it makes a story.
 
 :::example[Pulling the Estate down]
-The Vane Estate's got seven resources for six assets, so one's spare. Say the crew burns the vineyards. That's six and six, so the spare's gone, but everything's still paid for. Then they take the *River Tolls* off it, and now there are five resources for six assets. Vane picks which one goes unpaid, and he'd rather lose the mercenaries than his own guard, so it's *Hired Swords*. That's one less asset adding Power, and the Estate's a d10.
+The Vane Estate's got seven resources for six assets, so it's got one extra. Say the crew burns the vineyards. That's six and six, so the extra's gone, but everything's still paid for. Then they take the *River Tolls* off it, and now there are five resources for six assets. Vane picks which one goes unpaid, and he'd rather lose the mercenaries than his own guard, so it's *Hired Swords*. That's one less asset adding Power, and the Estate's a d10.
 :::
 
 Jobs move them too. A burned warehouse is a resource the Guild's lost, and a fortune brought home can be a new one for the crew. When a job will do that, the GM says so when she offers it, and changes the cards when it's done.
@@ -85,14 +85,14 @@ Every faction has three **bonds**, and each one asks a different question:
 -   **Morale:** will its own people keep going when it gets hard?
 -   **Loyalty:** will they stand by it, or turn?
 
-Each bond holds **threads**, one fact each, like a character's: *The Crown protected our village from famine.* A thread's good or bad for the faction.
+Each bond holds **threads**, one fact each, like a character's: *The Crown protected our village from famine.* They come in the same two kinds, too. A **bond thread** is good for the faction, and a **hostile thread** is something that's gone bad for it.
 
--   **A good thread is a step** on any roll it fits.
--   **A bad thread is a [vulnerability](#s-vulnerable).** Every hit that fits it ticks once more: when a Destroy or an Acquire wins against the faction, each bad thread that fits adds a tick.
+-   **A bond thread is a step** on any roll it fits.
+-   **A hostile thread is a [vulnerability](#s-vulnerable).** Every hit that fits it ticks once more: when a Destroy or an Acquire wins against the faction, each hostile thread that fits adds a tick.
 -   **A strained thread stops counting** till it's mended, and straining it again snaps it.
 -   **No thread at all is neutral**, so don't write one till something happens.
 
-The Vane Estate's Loyalty thread is a bad one: *The guard's been on the same pay for twenty years.* Say a Destroy wins against its *Household Guard ×2* by talking the guard into walking out. That thread fits, so the win ticks twice, and the guard's gone in one.
+The Vane Estate's Loyalty thread is a hostile one: *The guard's been on the same pay for twenty years.* Say a Destroy wins against its *Household Guard ×2* by talking the guard into walking out. That thread fits, so the win ticks twice, and the guard's gone in one.
 
 When you write them:
 
@@ -102,9 +102,9 @@ When you write them:
 -   **Using a bond isn't breaking it.** Threatening someone's family uses the bond as leverage, and it doesn't make them hate their family. Exposing a betrayal or breaking a promise is what strains or changes it.
 
 :::example[The Crown at war]
-Public Sentiment: *Promised to rebuild our town but never paid* (bad). Morale: *Our soldiers believe we can win* (good). Loyalty: *Gave our families land, but keeps breaking its promises to the regiment* (strained).
+Public Sentiment: *Promised to rebuild our town but never paid* (hostile). Morale: *Our soldiers believe we can win* (bond). Loyalty: *Gave our families land, but keeps breaking its promises to the regiment* (bond, strained).
 
-A defeat strains Morale. Abandoning the regiment snaps Loyalty and writes a bad Morale thread, and if the towns hear about it, a bad Public Sentiment one too.
+A defeat strains Morale. Abandoning the regiment snaps Loyalty and writes a hostile Morale thread, and if the towns hear about it, a hostile Public Sentiment one too.
 :::
 
 ## Building a Faction {#s-faction-build}
@@ -145,7 +145,7 @@ Then fill in its card:
 
 1.  **Pick its size** from the table in [What a Faction Is](#s-faction-board). That gives you its Power and about how many resources it has.
 2.  **Write its resources**, where its money really comes from.
-3.  **Write its assets** from how it works, and say what each one does. Most add Power, and a few do one thing instead, like a spy network or a relic. Every asset needs a resource paying for it, and any resource left over is spare.
+3.  **Write its assets** from how it works, and say what each one does. People who turn up when it calls, like soldiers or dock gangs, add Power, and the rest do one thing, like a spy network or a relic. There's a list to borrow from in [Appendix B](#faction-strength). Every asset needs a resource paying for it, and any resource left over is an extra resource.
 4.  **Count its Power:** 1 step, plus 1 for each asset that adds Power.
 5.  **Give it an agenda** from the table below, a face and its secret.
 6.  **Leave its bonds empty**, unless something's already happened that its people would remember. Write a thread for that.
@@ -171,21 +171,21 @@ An agenda [climbs](#s-climb), like the crew's Goal, and its die tells you how cl
 
 ## The Faction Turn {#s-faction-turn}
 
-Every downtime, each core faction takes **one action**, and so does each mini faction. It works like a telegraph:
+Every downtime, every faction on the board takes **one action**, and only one: each core faction, each mini faction, and the crew. Nothing buys a faction a second one. The only faction that doesn't act is a mini faction in the downtime it's made (see [Mini Factions](#s-mini-factions)). It works like a telegraph:
 
 1.  **At the start of downtime, the GM telegraphs every faction's action**: what it's doing, who or what it's aimed at, and its dice. Whichever one matters most to the crew is the faction pressure. **With a big board, only telegraph the factions the crew can reach**, and let the rest move off-screen: say what changed, with no roll.
-2.  **The crew spends its slots,** and it can move against a faction before that faction's action lands.
+2.  **The crew takes its action,** and everyone spends their personal slots. The crew can move against a faction before that faction's action lands.
 3.  **Then the actions land.** Roll them.
 
-**Hiring comes first.** Before she telegraphs, the crew says who it's paying with a spare, and she decides who the factions are paying. A hired faction's telegraph is the job it was paid for, so once the actions are on the table, nobody can buy one off.
+**Hiring comes first.** Before she telegraphs, the crew says who it's paying with an extra resource, and she decides who the factions are paying. A hired faction spends its one action on the job, and its telegraph is the job it was paid for, so once the actions are on the table, nobody can buy one off.
 
--   **Its roll** is its Power, plus a step for each good thread that fits (see [Bonds](#s-faction-bonds)). One action gives it **one split**, so it can go for two things in the same job, and each die's its own outcome: take the shipment, and keep its name out of it. One can land and the other miss.
+-   **Its roll** is its Power, plus a step for each bond thread that fits (see [Bonds](#s-faction-bonds)). One action gives it **one split**, so it can go for two things in the same job, and each die's its own outcome: take the shipment, and keep its name out of it. One can land and the other miss.
 -   **What it rolls against** is another faction's Power, rolled once the first time anyone goes at it that downtime, so everyone who goes at it after that has to beat the same roll, the same as a threat. Or it's the die of whatever it's after: its agenda, a stake, a person. Ties go to the defender, and a die it's climbing counts as the defender. If it loses, nothing happens this downtime, and it's a little angrier about it.
 -   **An action is one of the [six outcomes](#s-faction-outcomes), or work on its agenda**: its Power against the agenda's die, and beat it and it climbs one. Writing a new agenda takes its action too, and a faction can have two at once, never more. Coming for the crew takes its action as well (see [When a Faction Comes for the Crew](#s-faction-comes)).
 -   **Some actions don't need a roll**, like writing a new agenda, or Establishing with nobody in the way. They happen, unless someone Obstructs them.
 
 :::example[Two things in one job]
-The Harbour Guild's Power is a d10, 5 steps, and it's going after the Vane Estate's *Salt Contracts*. It splits: a d6 to Acquire them, and a d4 to keep its name out of it. The Estate rolls its d12 once, since it's the first time anyone's gone at it this downtime, and gets a 4. The Guild's d6 comes up 5, so the contracts are the Guild's now. Its d4 comes up 2, so the Estate knows exactly who took them, and it writes a bad thread toward the Guild.
+The Harbour Guild's Power is a d10, 5 steps, and it's going after the Vane Estate's *Salt Contracts*. It splits: a d6 to Acquire them, and a d4 to keep its name out of it. The Estate rolls its d12 once, since it's the first time anyone's gone at it this downtime, and gets a 4. The Guild's d6 comes up 5, so the contracts are the Guild's now. Its d4 comes up 2, so the Estate knows exactly who took them, and it writes a hostile thread toward the Guild.
 :::
 
 If you don't know what a faction does, roll a d6:
@@ -196,7 +196,7 @@ If you don't know what a faction does, roll a d6:
 | 3 | Establishes, or writes a new agenda if it's only got one. |
 | 4 | Destroys or Undermines its worst rival. |
 | 5 | Comes for the crew. |
-| 6 | Spends a spare to hire someone, and roll again for its own action. If it hasn't got a spare, it Acquires instead. |
+| 6 | Spends an extra resource to hire someone, and roll again for its own action. If it hasn't got one, it Acquires instead. |
 
 ### The Six Outcomes {#s-faction-outcomes}
 
@@ -205,17 +205,17 @@ Each outcome changes one thing on a card.
 | Outcome | What changes |
 | --- | --- |
 | **Destroy** | Tick one off an asset or a resource. At zero, it's gone. |
-| **Undermine** | Strain one of a faction's threads, or write a bad one. |
+| **Undermine** | Strain one of a faction's bond threads, or write a hostile one. |
 | **Obstruct** | Stop another faction's telegraphed action. It's an answer, so beat its dice. |
-| **Influence** | Write a good thread, or mend a strained one. |
+| **Influence** | Write a bond thread, or mend a strained one. |
 | **Acquire** | Take an asset or a resource. It's yours now, and an asset needs paying for like any other. |
 | **Establish** | Add an asset, a resource or a mini faction. |
 
 The outcome says what it's after, not how. The story says what a faction can reasonably try, and a win does what its outcome says and nothing more.
 
--   **A multiplier takes that many wins**, whether you're destroying the thing or taking it, and every win ticks one off. A bad thread that fits adds a tick (see [Bonds](#s-faction-bonds)). When the last one goes, it's gone, or it's yours, multiplier and all.
+-   **A multiplier takes that many wins**, whether you're destroying the thing or taking it, and every win ticks one off. A hostile thread that fits adds a tick (see [Bonds](#s-faction-bonds)). When the last one goes, it's gone, or it's yours, multiplier and all.
 -   **Obstruct goes first.** It's an answer, so it's settled before the action it's stopping lands, and a tie goes to the faction that telegraphed it.
--   **Establish** builds a new asset with a spare to pay for it, makes a [mini faction](#s-mini-factions), or adds a new resource. A new resource has to come from somewhere in the story, like a new mine, a new route or a new racket.
+-   **Establish** builds a new asset with an extra resource to pay for it, makes a [mini faction](#s-mini-factions), or adds a new resource. A new resource has to come from somewhere in the story, like a new mine, a new route or a new racket.
 
 ### When an agenda happens {#when-an-agenda-happens}
 
@@ -225,34 +225,34 @@ The outcome says what it's after, not how. The story says what a faction can rea
 
 ## How a Faction Sees the Crew {#s-standing}
 
-Factions have threads toward each other and toward the crew, one fact each, like *They brought our ledgers up from the sunk barge.* They're **one-way**: the Guild's thread toward the Estate isn't the Estate's toward the Guild. Write them as things happen.
+Factions have threads toward each other and toward the crew, one fact each, like *They brought our ledgers up from the sunk barge.* Each one's a bond thread or a hostile thread, the same as a character's. They're **one-way**: the Guild's thread toward the Estate isn't the Estate's toward the Guild. Write them as things happen.
 
 How a faction sees the crew is its threads toward them:
 
--   **Mostly good**, and it's friendly. It helps when it costs little, and it asks favours.
--   **None, or as many bad as good**, and it does business. Everything has a price.
--   **Mostly bad**, and it's hostile. It watches, and it'll hurt the crew when it's cheap to.
+-   **Mostly bond threads**, and it's friendly. It helps when it costs little, and it asks favours.
+-   **None, or as many hostile as bond**, and it does business. Everything has a price.
+-   **Mostly hostile threads**, and it's hostile. It watches, and it'll hurt the crew when it's cheap to.
 
-A real service writes a good thread: a job done well, a gift, a favour returned, or one of its enemies brought down. Costing it something it cares about writes a bad one, like an asset, a resource, or its face humiliated. A betrayal snaps every good thread it has toward the crew.
+A real service writes a bond thread: a job done well, a gift, a favour returned, or one of its enemies brought down. Costing it something it cares about writes a hostile one, like an asset, a resource, or its face humiliated. A betrayal snaps every bond thread it has toward the crew.
 
-Most factions start with none. If the crew's already crossed one, write that as a bad thread.
+Most factions start with none. If the crew's already crossed one, write that as a hostile thread.
 
-These threads aren't in its bonds. A good one's a step for the crew on any roll it fits, and a bad one doesn't add a tick to anything.
+These threads aren't in its bonds. A bond thread's a step for the crew on any roll it fits, and a hostile one doesn't add a tick to anything. A strained thread doesn't count for anything till it's whole again.
 
 :::example
-The Harbour Guild's only thread toward the crew is *They ask too many questions on our docks*, so it's hostile. Then the crew brings its ledgers up from a sunk barge, and it writes *They brought our ledgers up from the sunk barge.* That's one of each, so now it does business with them.
+The Harbour Guild's only thread toward the crew is hostile, *They ask too many questions on our docks*, so the Guild's hostile to them. Then the crew brings its ledgers up from a sunk barge, and it writes a bond thread, *They brought our ledgers up from the sunk barge.* That's one of each, so now it does business with them.
 :::
 
 ## When a Faction Comes for the Crew {#s-faction-comes}
 
-When a faction's action is coming for the crew, roll a d12 as you telegraph it, so the crew knows what's coming. A faction whose threads toward the crew are mostly bad rolls on the first table, and one whose threads are mostly good rolls on the second. One with none, or as many good as bad, rolls a d2 first: on a 1 it uses the first table, and on a 2 it uses the second.
+When a faction's action is coming for the crew, roll a d12 as you telegraph it, so the crew knows what's coming. A faction whose threads toward the crew are mostly hostile rolls on the first table, and one whose threads are mostly bond threads rolls on the second. One with none, or as many bond as hostile, rolls a d2 first: on a 1 it uses the first table, and on a 2 it uses the second.
 
 It doesn't roll against the crew. Whatever comes up happens, unless the crew Obstructs it. When a faction's been paid to come for the crew, roll on the table for the payer's threads toward the crew, not its own.
 
-| d12 | Mostly bad | Mostly good |
+| d12 | Mostly hostile threads | Mostly bond threads |
 | --- | --- | --- |
 | 1 | A price on someone's head: next session, a crew member is *Hunted*, at the faction's Power. | A job, well paid and a little dangerous. |
-| 2 | It buys someone the crew relies on: a fence, a landlord, a contact. A [thread](#s-bonds) with them snaps unless someone spends a slot to win them back. | A warning: someone's coming for you. |
+| 2 | It buys someone the crew relies on: a fence, a landlord, a contact. A [bond thread](#s-bonds) with them snaps unless someone spends a slot to win them back. | A warning: someone's coming for you. |
 | 3 | It raids or seizes one of the crew's holdings. | A gift: a purse of gold each, an item, a door opened. |
 | 4 | It frames a crew member for something it did. | A favour asked. Something small now, something big later. |
 | 5 | Its face comes to talk: a warning, a threat, an offer. | An introduction to someone useful. |
@@ -269,12 +269,13 @@ It doesn't roll against the crew. Whatever comes up happens, unless the crew Obs
 A core faction can make **up to three mini factions**: a smuggling crew the Guild runs, a company it hired for good, a cell inside the watch. A mini faction's less to run, and it puts more on the board. Mini factions don't count toward the four to twelve, and the crew can make them too, the same way.
 
 -   **Making one** is Establish: the parent's action, and the parent hands over **one of its own resources and one of its own assets**. They're the mini faction's now, so it costs twice what building an asset does.
--   **It picks two of the six outcomes**, and those are the only things it can do. It takes one action a downtime, like anyone.
+-   **A new mini faction doesn't act in the downtime it's made.** From the next one on, it takes its own action like any faction, and it's got a mind of its own: at first it mostly does what its parent wants, then it starts going its own way, and other factions can work on it too.
+-   **It picks two of the six outcomes**, and those are the only things it can do.
 -   **Its card's short:** its name, its Power (1 step, plus 1 if its asset adds Power), its resource and its asset, its two outcomes, and its Loyalty thread toward the parent.
 -   **It can't make mini factions**, and its Power doesn't add to its parent's.
 -   **Loyalty isn't obedience.** The parent can order it, pay it, threaten it or talk it round, and none of it's guaranteed. Its Loyalty thread is one the crew can strain, so turning a faction's mini faction is a job worth taking.
 
-Say the Harbour Guild makes *The Night Boats*, a smuggling crew. It hands over *Dock Fees*, one of its resources, and *Fast Boats*, an asset that adds Power, so the Guild's own Power drops a step, from a d10 to a d8.
+Say the Harbour Guild makes *The Night Boats*, a smuggling crew. It hands over *Dock Fees*, one of its resources, and *Fast Boats*, an asset that adds Power, so the Guild's own Power drops a step, from a d10 to a d8. The Night Boats sit out this downtime. From the next one they take their own action, and to start with, they'll mostly run whatever the Guild wants run.
 
 :::sheet[The Night Boats]
 **Power** d4: 1 step, plus *Fast Boats*.
@@ -285,42 +286,44 @@ Say the Harbour Guild makes *The Night Boats*, a smuggling crew. It hands over *
 
 **Outcomes** Acquire and Obstruct, and nothing else.
 
-**Loyalty** *The Guild pays better than the river ever did* (good).
+**Loyalty** *The Guild pays better than the river ever did* (bond).
 :::
 
 ## The Crew and the Factions {#s-faction-crew}
 
-The crew's a faction too, on the same card (see [The Party Sheet](#s-party-faction)), and its actions are its **two party slots** a downtime. Roll the crew's **Power**, plus a step for every Reputation and good thread that fits: when the crew goes to the Guildmaster for a favour, the Guild's good thread toward them is a step. If one character's plainly the right person for it, they can roll their own permissions instead: 1 step for the slot, plus everything that fits. **Two party slots on one move count everything twice**, and that's the crew's whole downtime gone on one thing.
+The crew's a faction too, on the same card (see [The Party Sheet](#s-party-faction)), so it takes **one action** a downtime, the same as every other faction. Roll the crew's **Power**, plus a step for every Reputation and bond thread that fits: when the crew goes to the Guildmaster for a favour, the Guild's bond thread toward them is a step. If one character's plainly the right person for it, they can roll their own permissions instead: 1 step for the action, plus everything that fits.
+
+**A player can put one of their personal slots into the crew's action**, and two slots on one move count everything twice. A personal slot can never be a second move on a faction, though, and nothing buys the crew another action (see [Downtime](#party-slots)).
 
 :::rule
-**Going at a bigger faction.** If a faction's Power is bigger than the crew's, the crew can only roll against **its Power** with both party slots on that one move. That goes for Obstructing its action too, since its dice are its Power. With one slot, go at the smaller things: one asset or resource that's out on its own, its agenda, its face, its people, or a [project](#s-projects) of your own that'll cost it something when it's done.
+**Going at a bigger faction.** If a faction's Power is bigger than the crew's, the crew can only roll against **its Power** with two slots on that one move: the crew's action, and a personal slot put into it. That goes for Obstructing its action too, since its dice are its Power. With the crew's action on its own, go at the smaller things: one asset or resource that's out on its own, its agenda, its face, its people, or a [project](#s-projects) of your own that'll cost it something when it's done.
 :::
 
-An asset or a resource that's out on its own, like a warehouse on the docks or vineyards up in the hills, only has what's guarding it: 1 step, plus each asset that adds Power and is really there. It rolls its own die. The Estate's Power is a d12, so one slot can't touch it, but only its *Hired Swords* ride out to the vineyards. That's 1 step plus the swords, 2 steps, a d4, and one slot of the crew's d4 can go at that.
+An asset or a resource that's out on its own, like a warehouse on the docks or vineyards up in the hills, only has what's guarding it: 1 step, plus each asset that adds Power and is really there. It rolls its own die. The Estate's Power is a d12, so the crew's action on its own can't touch it, but only its *Hired Swords* ride out to the vineyards. That's 1 step plus the swords, 2 steps, a d4, and the crew's d4 can go at that with its action alone.
 
 The crew's moves are the six outcomes, the same as any faction's, plus two of its own.
 
 | Move | Against | On a win |
 | --- | --- | --- |
 | **Destroy** | Its Power, or one thing out on its own. | Tick one off an asset or a resource. At zero, it's gone. |
-| **Undermine** | Its Power, or its face. | Strain one of its threads, or write a bad one. |
+| **Undermine** | Its Power, or its face. | Strain one of its bond threads, or write a hostile one. |
 | **Obstruct** | The dice it telegraphed. | Its action doesn't land this downtime. |
-| **Influence** | Its face, which is always open to one slot, or its Power. | It writes a good thread toward the crew, or mends a strained one. |
+| **Influence** | Its face, which the crew's action can always go at on its own, or its Power. | It writes a bond thread toward the crew, or mends a strained one. |
 | **Acquire** | Its Power, or one thing out on its own. | Take an asset or a resource. It's the crew's now, and an asset needs paying for like any other. |
-| **Establish** | Nothing, unless something's in the way. | A new asset paid for with a spare, a mini faction, or an asset or a resource the crew's lost, built back. New resources come another way (see [How the crew grows](#s-crew-grows)). |
+| **Establish** | Nothing, unless something's in the way. | A new asset paid for with an extra resource, a mini faction, or an asset or a resource the crew's lost, built back. New resources come another way (see [How the crew grows](#s-crew-grows)). |
 | **Set back its agenda** | Its agenda's die. | It steps back down one, never below d2. Its action still lands, unless someone Obstructs it. |
-| **Work for it** | No roll. | It gives the crew a job, which is a scene next session. Do it, and it writes a good thread toward the crew and pays: a purse of gold each, a favour, or for a big job, a resource. |
+| **Work for it** | No roll. | It gives the crew a job, which is a scene next session. Do it, and it writes a bond thread toward the crew and pays: a purse of gold each, a favour, or for a big job, a resource. |
 
-Trading's agreed in the story, so it doesn't take a slot: a favour for a favour, or a spare for something a faction will sell (see [Spare Resources](#s-crew-wealth)).
+Trading's agreed in the story, so it doesn't take the crew's action: a favour for a favour, or an extra resource for something a faction will sell (see [Extra Resources](#s-crew-wealth)).
 
-Ties go to the faction. There's no Aura in downtime, but a player can spend 1 Resolve to roll again (their own dice only), or the crew can spend a spare resource and take the tie. Only the crew gets to do that. See [Rolling in downtime](#s-downtime-rolls).
+Ties go to the faction. There's no Aura in downtime, but a player can spend 1 Resolve to roll again (their own dice only), or the crew can spend an extra resource and take the tie. Only the crew gets to do that. See [Rolling in downtime](#s-downtime-rolls).
 
-Scenes move factions too. If the crew burns a Guild warehouse in play, that's a Destroy, whatever they spent in downtime. Tick it off the Guild's card, and if the Guild knows who did it, it writes a bad thread toward the crew.
+Scenes move factions too. If the crew burns a Guild warehouse in play, that's a Destroy, and it doesn't cost the crew its action. Tick it off the Guild's card, and if the Guild knows who did it, it writes a hostile thread toward the crew.
 
 ### Factions in a scene {#factions-in-a-scene}
 
 -   **Its people** are threats with a Challenge to match its Power, and their tags can come from its assets, like *Household Guard* on the men at the Estate's gate.
--   **Its money** is its spare resources: the bribe it can offer, the price it can pay and the guards it can hire.
+-   **Its money** is its extra resources: the bribe it can offer, the price it can pay and the guards it can hire.
 -   **Its secret** can be found like any hidden tag. Once the crew knows it, they can bring it into a roll for 1 Aura, the same as any tag they know about.
 -   **Its threads toward the crew** show up in person: a friendly faction's agents join in, and a hostile one's face telegraphs.
 
@@ -329,13 +332,13 @@ The crew's own Power, resources, assets and Reputations, and how the crew grows,
 :::example[A faction turn, at the table]
 There are three factions on the board, and at the start of downtime the GM telegraphs all three.
 
-The **Vane Estate** is working *Vane comes home*, which has climbed to d10. Its *Household Guard* stays at the house, so that one doesn't count, but its other four assets that add Power do, and so does its Public Sentiment thread, *The Vanes have owned this city for three hundred years*, because the city's ready to have a Vane back. That's 1 step, four assets and a thread: 6 steps, a d12, against the agenda's d10.
+The **Vane Estate** is working *Vane comes home*, which has climbed to d10. Its *Household Guard* stays at the house, so that one doesn't count, but its other four assets that add Power do, and so does the bond thread in its Public Sentiment, *The Vanes have owned this city for three hundred years*, because the city's ready to have a Vane back. That's 1 step, four assets and a thread: 6 steps, a d12, against the agenda's d10.
 
-The **Harbour Guild**'s only thread toward the crew is bad: *They ask too many questions on our docks.* The GM doesn't know what it'll do, so she rolls the d6 and gets a 5: it comes for the crew. Its threads are mostly bad, so she rolls on the first table and gets a 7. It's going to tell the law, and its d10 is what anyone would have to beat to stop it.
+The **Harbour Guild**'s only thread toward the crew is hostile: *They ask too many questions on our docks.* The GM doesn't know what it'll do, so she rolls the d6 and gets a 5: it comes for the crew. Its threads are mostly hostile, so she rolls on the first table and gets a 7. It's going to tell the law, and its d10 is what anyone would have to beat to stop it.
 
 The **Quiet Order** writes a second agenda, *Find the painted box*, which starts at d4. Nobody's in its way, so it won't need a roll.
 
-The faction pressure is the Estate: *Vane is nearly home.* Its Power's a d12 and the crew's is a d4, so the crew can't touch it without both party slots. They put both into an Obstruct, and everything counts twice: the crew's 2 steps are 4, a d8, and it has to beat the Estate's d12. That's both party slots gone, so there's nothing left to stop the Guild with.
+The faction pressure is the Estate: *Vane is nearly home.* Its Power's a d12 and the crew's is a d4, so the crew's action can't touch it on its own. The crew Obstructs with its action, and Bram puts one of his personal slots into it as well, so everything counts twice: the crew's 2 steps are 4, a d8, and it has to beat the Estate's d12. That's the crew's one action gone, and a personal slot can't be a second move on a faction, so there's nothing left to stop the Guild with.
 
 Now the actions land. The crew rolls 7 and the Estate's d12 rolls 5, so its action's stopped, and *Vane comes home* stays at d10. Vane's carriage has turned round on the north road. The Guild tells the law, and next session the watch has the crew's names. The Order's new agenda goes on its seat at d4, next to *Bury the Vane scandal*, so it's got two now, and no room for a third.
 :::
@@ -343,7 +346,7 @@ Now the actions land. The crew rolls 7 and the Estate's d12 rolls 5, so its acti
 :::note
 **If war comes.** There aren't any war rules in Zi'Dara, because a war is a lot of factions moving at once, and the faction turn already does that. If your campaign goes to war:
 
--   Give each side a war agenda, like *take the harbour*, at a d2 or a d4. Every downtime, each side works its own and Destroys the other's assets, with its split: one die at its agenda, and one at an asset.
+-   Give each side a war agenda, like *take the harbour*, at a d2 or a d4. Every downtime, each side's one action does two things with its split: one die works its own agenda, and one Destroys an asset of the other side's.
 -   Whoever's agenda climbs past d12 first wins. A side that's lost every asset that adds Power is broken.
 -   Put the crew's scenes inside it: a raid, a parley, a rescue, a bridge to hold. Each scene the crew wins steps their side's agenda up one.
 -   Let it cost. Every downtime the war goes on, name one thing it takes: a place, a person, a holding. It doesn't give them back.

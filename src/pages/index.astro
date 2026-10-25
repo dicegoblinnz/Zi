@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import book from "../generated/book.json";
+import { recentEntries } from "../lib/whats-new.js";
 
 const latest = book.changes.headings[0];
 const updated = book.updated
@@ -27,6 +28,12 @@ const ladder = [
           <a class="button primary" href="/rules/welcome/">Read the rules</a>
           <a class="more" href="#crew">Or pick one of the crew and play tonight</a>
         </div>
+        {recentEntries.length > 0 && (
+          <a class="whats-new-line" href={`/changes/#${recentEntries[0].id}`}>
+            <span class="new-mark">New · {recentEntries[0].date}</span>
+            <span class="line-title">{recentEntries[0].title}</span>
+          </a>
+        )}
       </div>
       <figure class="scene" aria-label="A telegraph, and the crew answering it">
         <div class="card">

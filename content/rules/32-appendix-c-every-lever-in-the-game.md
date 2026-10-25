@@ -6,7 +6,7 @@ order: 32
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 A **lever** is anything that changes a result: a bigger die, a second try, a blow that lands somewhere else. Here's every one of them, and where it comes from. Use it to plan a character, to pick an archetype or a Boon, to write a trait or an item, or to answer a question at the table without making something up.
 
@@ -29,7 +29,7 @@ Where a lever comes from a trait, a condition or an item, treat those as example
 | **An area** | The Elementalist's: one of your dice can be how far instead of an intent, as a burst, a cone or a line. It takes a split and costs no Aura. A *Sweep* weapon, free, for anyone, at everyone within reach. |
 | **Reach a second friend** | A ward, a blessing or any condition you put on a friend goes on one friend, at the die you built, and the second die of a split can put it on another friend you can touch. A Healer's heal reaches a second person the same way. |
 | **Advantage** | Several dice on one intent: your best die counts. |
-| **Win a tie** | Free, when you're defending. 1 Aura, when you're acting. An Illusionist's illusion only has to meet the Challenge. *Fortunate* (condition). The Ties Boon: every tie, attacking too, with no Aura. In downtime, a spare crew resource. The Ties Burden loses every one, even defending. |
+| **Win a tie** | Free, when you're defending. 1 Aura, when you're acting. An Illusionist's illusion only has to meet the Challenge. *Fortunate* (condition). The Ties Boon: every tie, attacking too, with no Aura. In downtime, an extra crew resource. The Ties Burden loses every one, even defending. |
 | **Roll again** | 1 Resolve, on a roll you just failed: all your dice or just one, and the threat's dice stay where they landed. In downtime, 1 Resolve rolls your own dice again. *Lucky* (one die, once a scene). *Blessed* (condition, if that action fails). |
 | **+2 on a die** | 1 Aura, on most archetypes' mechanics, after you roll. It's +3 if you've taken the archetype twice, and +4 three times. A die it takes to its top face, or past it, doesn't give you Aura. See [Archetypes](#s-levers-archetypes). |
 | **Dice that add** | A Move action's dice. The archetype's +2. A Warrior's dice in a fight: a top face gives you 1 Aura, then you roll that die again and add the new number on, for as long as it keeps landing on top. |
@@ -54,7 +54,7 @@ Where a lever comes from a trait, a condition or an item, treat those as example
 | **Keep a Catch quiet** | On your own roll, 1 Aura turns a Catch your way for a moment, or keeps it quiet this time. |
 | **Traits** | Free, as often as they say. An Invoked trait costs the Aura it names. |
 | **Resolve** | As much as you've got Titles, so 2 to start, and you can't hold more. Every Title you earn brings 1 more. The Resolve Boon is +1 to your maximum, and the Burden −1. |
-| **Gain 1 Resolve** | The end of every scene. A Catch that bites in a big way, one that changes the scene or costs you something you wanted, instead of the Aura (your call when). The GM, for great roleplay, like facing your fear or keeping a promise to yourself. Straining a thread. |
+| **Gain 1 Resolve** | The end of every scene. A Catch or a hostile thread that bites in a big way, one that changes the scene or costs you something you wanted, instead of the Aura (your call when). The GM, for great roleplay, like facing your fear or keeping a promise to yourself. Straining a bond thread. |
 | **All your Resolve back** | After downtime. |
 | **Spend 1 Resolve** | An extra action this round. Reroll a roll you just failed. Go beyond what a permission normally does. Hold your ground when fear, lies or pressure get through. Go at a threat when you're shaken. Your archetype's Resolve spend. In downtime, roll your own dice again. |
 
@@ -62,11 +62,13 @@ Where a lever comes from a trait, a condition or an item, treat those as example
 
 | Lever | Where it comes from |
 | --- | --- |
-| **Borrow** | 1 Aura brings a friend's permission into your roll through a thread you share, or one of a faction's assets through a thread with it. It doesn't strain anything. You can't borrow through a strained thread until it's mended. |
-| **Strain** | Lean on them in the story, like calling in the favour, using their name, dragging them into it or using the secret, and take 1 Resolve. It's free, it doesn't take an action, and the thread's strained. A thread with someone in the crew is strained for both of you. |
+| **Two kinds** | A bond thread is something good between you, and a hostile thread is something gone bad. Either can be strained, which means nearly snapped, and with no thread at all you're neutral. |
+| **Borrow** | 1 Aura brings a friend's permission into your roll through a bond thread you share, or one of a faction's assets through a bond thread with it. It doesn't strain anything. You can't borrow through a strained thread, or a hostile one. |
+| **Strain** | Lean on them in the story, like calling in the favour, using their name, dragging them into it or using the secret, and take 1 Resolve. It's free, it doesn't take an action, and the bond thread's strained. A thread with someone in the crew is strained for both of you. |
+| **A hostile thread bites** | Like a Catch: when it brings you real trouble, take 1 Aura, or 1 Resolve for a big bite. Doing right by them strains it, and doing it again snaps it, and the grudge is over. |
 | **Mend** | Make it right with them, by roleplaying it, doing them a favour or paying them, whatever suits them. That happens in downtime or in a scene with them, not in the middle of the fight where you strained it. Then it's whole again. |
 | **Snap** | Strain it again before it's mended. You still take the Resolve, but cross the thread out. When the last thread goes, so does the bond. |
-| **New threads** | Three when you make your character, and a fourth if you write one as a debt. A Grow. Everyone writes one when the Party Goal's done. *Network* (3 when you take it, on bonds you've already got). *Charming* (one for the scene). |
+| **New threads** | Two bond threads with the crew when you make your character, from Connect, and a third if you write a hostile thread too. A Grow. Everyone writes one when the Party Goal's done. *Network* (3 when you take it, on bonds you've already got). *Charming* (one for the scene). |
 
 How a strained thread plays out at the table, from both sides, is in [Playing the strain](#s-playing-the-strain).
 
@@ -91,12 +93,12 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | Lever | Where it comes from |
 | --- | --- |
 | **Your defence** | Your Defend set action against blows, and your Confidence against fear, lies and pressure. Let a telegraph ride and you roll each of them once when the round ends: every die stops one telegraph it beats or ties, and everything else gets through. A defence past 6 steps is more than one die. Ties go to you. |
-| **More dice to stop with** | Defend (your action): every line on your Defend counts twice, and so does your Confidence, and you can split each of them once. A condition's step still counts once. The Bard's song counts its lines twice against fear for everyone who can hear, and splits as often as it likes. |
+| **More dice to stop with** | Defend (your action): every line on your Defend counts twice, and you can split it once. A condition's step still counts once, and your Confidence doesn't double. The Bard's song counts its lines twice against fear for everyone who can hear, and splits as often as it likes. |
 | **A bigger Defend** | Every line on it: each piece of plain armour, a shield, and a Title or permission that fits (a permission's on two set actions at most). *Warded*, *Covered* (condition). *Steady Hands*, when you've had a moment to prepare. |
 | **Defend down** | Spending *Poisoned*: a d2 till the round ends. A piece of armour broken: it's a line gone till it's mended. |
-| **Take it for a friend** | Intercept: 1 Aura and no action, and any or all of the dice aimed at a friend within your stride come at you instead, for your own defence to handle. The Guardian's, free, for every friend within his stride, and 1 Aura is +2 on one of his Defend or Confidence dice. A Guardian who's a Teleporter as well reaches every friend within 10 units. A summon intercepts for free, and so do the GM's people. Answer for a friend, standing in the way. *Covered* (condition). The Intercept Burden: you can't. |
+| **Take it for a friend** | Intercept: 1 Aura and no action, and any or all of the blows aimed at a friend within your stride come at you instead, for your own Defend to handle. Fear, lies and pressure can't be intercepted. The Guardian's, free, for every friend within his stride, and 1 Aura is +2 on one of his Defend or Confidence dice. A Guardian who's a Teleporter as well reaches every friend within 10 units. A summon intercepts for free, and so do the GM's people. Answer for a friend, standing in the way. *Covered* (condition). The Intercept Burden: you can't. |
 | **One die at each of you** | A threat aims one die at each person, unless a tag like *Flurry* says it can do more. |
-| **Put the blow somewhere else** | The GM names the cost. Offer another that fits and costs about as much: a Hurt, Confidence, something you carry (armour and a shield are the usual ones), your Aspiration, the Party Goal, a clock. Attuned things can't be broken. When fear, lies or pressure get through, the choice is yours (see [Confidence](#s-levers-confidence)). |
+| **Put the blow somewhere else** | The GM names the cost. Offer another that fits and costs about as much: a Hurt, Confidence, something you carry (armour and a shield are the usual ones), your Aspiration, the Party Goal, a clock. Attuned things can't be broken. When fear, lies or pressure get through, it's a size of your Confidence or 1 Resolve (see [Confidence](#s-levers-confidence)). |
 | **Cancel a Hurt** | *Warded* (condition). *Tenacious* (once a scene). *Unyielding* and the Hurt Boon (the first Hurt each scene). The Guardian's Resolve (one hit, however many Hurts it'd be). Break a tag a Maker gave the thing you're holding. Strip one of your animal tags, if you're a Shifter. |
 | **Stay where you are** | *Braced* (condition). |
 
@@ -105,16 +107,16 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | Lever | Where it comes from |
 | --- | --- |
 | **Where it starts** | d6, every scene. A size up for clothes that fit the scene, the Confidence Boon, *Iron Will*, and *Style* when your look fits. A size down for the Confidence Burden. Titles and bonds don't change it. |
-| **Fear is a telegraph** | Fear, lies and pressure come at your Confidence like any attack: answer it, Defend or let it ride. |
-| **Up a size** | Stop all the fear, lies and pressure that came at you. Take a threat down. If nothing came at you, it doesn't move. The Bard's Lift them (every friend who can hear, as far as d10, or all the way with *Crescendo*) and Hold them (anyone who had all of it stopped). *Heartened* (spend it, as far as where you started the scene). |
+| **Fear is a telegraph** | Fear, lies and pressure come at your Confidence like any attack: answer it or let it ride. Nobody can intercept it, and Defending doesn't double your Confidence, but a Bard's song can stop it for the crew. |
+| **Up a size** | Every telegraph your Defend or Confidence stops. Every action where one of your dice wins: a lock opened, a blow landed, a door held (in a combo, everyone who put an action in). The Bard's Lift them (every friend who can hear, as far as d10, or all the way with *Crescendo*) and Hold them (a size for every telegraph the song stops for a friend). *Heartened* (spend it, as far as where you started the scene). |
 | **Take a breath** | Spend your action and it comes up a size, as far as d6. |
 | **Up three sizes** | *Cool Under Pressure* (once a scene, as far as where you started the scene). |
 | **A step on the roll** | *Heartened* (condition). *Steady Hands*, when you've had a moment to prepare. |
-| **When it gets through** | You choose, for each one: let it shake you and drop a size, bury it and take a Hurt, or hold your ground and spend 1 Resolve so neither happens. |
-| **Down a size** | Letting it shake you. Spending *Shaken*. Refusing what *Charmed* asks. A miss, when that's the cost that fits. |
-| **Never below d2** | Anything that'd take it lower is a Hurt instead, or 1 Resolve to hold your ground. |
+| **When it gets through** | It drops a size, or you hold your ground for 1 Resolve. |
+| **Down a size** | Every time your wound die steps up (not when your armour or something you carry takes the blow). Every action where all your dice miss. Fear, lies or pressure getting through. Spending *Shaken*. Refusing what *Charmed* asks. A miss, when that's the cost the GM names. |
+| **Never below d2** | Fear, lies or pressure that get through on d2 are a Hurt instead, or 1 Resolve to hold your ground. Anything else leaves it on d2. |
 | **Fired up** | At d12, and it never goes higher. Cash it in for an extra action, or to bring your wound die down a size, and it drops back to d6. |
-| **Shaken** | At d2. You won't go at a threat, in a fight or face to face, unless you spend 1 Resolve each time. |
+| **Shaken** | At d2. You can't take an action at what the scene's about unless you spend 1 Resolve each time. Otherwise your action goes on pulling yourself together, back up to d4. |
 | **Back to d6** | The end of every scene, once you've rested with it. Anything that should last is a Hurt. |
 
 ## Wounds and Healing {#s-levers-hurt}
@@ -140,7 +142,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **Strip a tag** | A win aimed at it, or one tick off its multiplier. Spending *Burning*, *Bleeding* or *Poisoned*. An *Acid vial*. |
 | **End it in one win** | An opening: its weak point, helpless, or getting around everything that keeps it going. A Boss only falls to its weak point. Any other opening strips two whole tags, multipliers and all. |
 | **Tick down a multiplier** | Every win against a tag with a multiplier, like *Armoured ×4*, ticks one off, and the GM says what's left. A condition that would strip a tag ticks one off instead. |
-| **Hit harder** | A vulnerability: every one that fits a win that strips a tag or causes a Hurt adds one more tick. *Prone*, *Exposed* (condition). The Warrior's *Opened* (1 Resolve). A Scholar's truth with *Find the flaw* (1 Resolve). Hidden ones are hidden tags, so Study finds them. |
+| **Hit harder** | A vulnerability: every one that fits a win that strips a tag or causes a Hurt adds one more tick, and you choose where it goes, on the same tag or another one the hit could reach. *Prone*, *Exposed* (condition). The Warrior's *Opened* (1 Resolve). A Scholar's truth with *Find the flaw* (1 Resolve). Hidden ones are hidden tags, so Study finds them. |
 | **Find a hidden tag** | Study. *Quick Study*, *Predator's Eye*. *Sighted*, *Spotted* (condition). |
 | **Turn a tag against it** | Bring it into your roll (1 Aura). |
 | **Mark it** | The Hunter's: your action, rolled against a creature. Win and it's *Marked* at the die you won with, and anyone who acts against it rolls the Mark die too. The Hunter can spend 1 Aura for +2 on the Mark die whenever it's rolled, whoever's rolling. It fades a size a round, and when what it's on falls, it jumps to another creature the Hunter can see. |
@@ -192,7 +194,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **More on an attuned thing** | A downtime slot for every new permission, and a material for every new stage: Awakened (1, or 2 with a Catch), Tempered (2, or 4 with a Burden), Perfected (3, or 6 with a Burden and a Catch). |
 | **A new soul** | A Summoner catches one when a creature falls, and puts it into their summoning attunement in downtime. |
 | **An extra slot** | *Tireless* (once a downtime). |
-| **A bigger crew** | The Party Goal's done: a new Reputation and two picks (a new resource, a new asset, a new holding). The crew takes something big, or a faction it's been fighting falls: one pick. A big job that says so pays a resource. Rebuild with a party slot: an asset or a resource the crew's lost, built back. |
+| **A bigger crew** | The Party Goal's done: a new Reputation and two picks (a new resource, a new asset, a new holding). The crew takes something big, or a faction it's been fighting falls: one pick. A big job that says so pays a resource. Rebuild with the crew's action: an asset or a resource the crew's lost, built back. |
 
 ### Boons and Burdens {#s-levers-boons}
 
@@ -227,7 +229,7 @@ Everything in Zi'Dara is built from the same few shapes, so price new things aga
 | **A plain item** | Just what it is: a line on your roll when it fits, and it does what that thing does. A weapon brings its properties, and each piece of armour is a line on your Defend. No Catch. |
 | **A utility item you use up** | One lever, used once, with no roll. Cross it off. |
 | **A keepsake** | Something that matters to your character. It does what it would plainly do in the story, and it has no rule of its own. |
-| **An attuned thing** | Permissions of its own: 1 at Awakened, 2 at Tempered and 3 at Perfected, and as many again for a Catch, then a Burden, then both. Six at most, with one Catch and one Burden. |
+| **An attuned thing** | One to start, and more later in downtime. Permissions of its own: 1 at Awakened, 2 at Tempered and 3 at Perfected, and as many again for a Catch, then a Burden, then both. Six at most, with one Catch and one Burden. |
 | **A Boon or a Burden** | One lever off the menu, with a name from the story. A Burden has to cost something you actually use. |
 
 :::rule

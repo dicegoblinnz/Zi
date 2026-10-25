@@ -7,13 +7,14 @@
 //   { k: "swap", t, j, from, text, on }        a permission swapped for another
 //   { k: "att", a, text, on, catch, burden, up } a permission on attuned thing a
 //   { k: "trait", name, on, own }              a trait, from the list or written
-//   { k: "thread", person, text }              a new thread
+//   { k: "thread", person, text, kind }        a new thread, bond or hostile
 //   { k: "title", arch, text, on, perm, permOn } a new archetype and its Title
 // "on" lists the set actions a new line goes on. Every set action's steps and
 // dice are counted again at the end. A grown line carries g, its entry's place
 // in the list, so the gold marks never take it for a rule's change.
 
 import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
+import { threadNote } from "./threads.js";
 
 export const STAGES = ["Awakened", "Tempered", "Perfected"];
 const BASE = { Awakened: 1, Tempered: 2, Perfected: 3 };
@@ -116,7 +117,9 @@ export function grow(base, grown, B) {
       if (!person || !text) continue;
       let p = c.threads.find((x) => x.person === person);
       if (!p) c.threads.push((p = { person, threads: [] }));
-      p.threads.push({ text, note: null, debt: false, g: n });
+      // A thread grown before 26 Oct 2026 has no kind, and it's a bond thread.
+      const t = { text, kind: g.kind === "hostile" ? "hostile" : "bond", whose: null, strained: false };
+      p.threads.push({ ...t, note: threadNote(t), g: n });
     } else if (g.k === "title") {
       if (!text) continue;
       const t = { name: text, archetype: String(g.arch ?? ""), archetypeId: ARCH.get(g.arch)?.id ?? null, key: add("title", text), permissions: [], g: n };

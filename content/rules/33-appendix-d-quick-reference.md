@@ -6,7 +6,7 @@ order: 33
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 ## Building the die {#building-the-die}
 
@@ -83,8 +83,8 @@ Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer
 
 -   **Answer:** your action against its dice, built from what fits how you stop it, and friends can join in. Win and it's stopped. Lose and it lands at once, with no defence roll. A tie's a loss unless you pay 1 Aura. You can answer for a friend, and if you stepped in the way and lose, it lands on you.
 -   **Let it ride:** whatever you don't answer lands at the end of the round. Roll your Defend once against the blows and your Confidence once against the fear, lies and pressure, and each die stops one telegraph it beats or ties. Everything else gets through. A defence past 6 steps is more than one die, and each one stops one.
--   **Defend:** your action. When they land, every line on your Defend counts twice, and so does your Confidence, and you can split each of them once. A condition's step still counts once. More dice stop more.
--   **Intercept:** 1 Aura and no action. Take the dice aimed at a friend within your stride, and your own defence handles them. A Guardian does it free, for every friend within his stride.
+-   **Defend:** your action. When they land, every line on your Defend counts twice, and you can split it once. A condition's step still counts once, and your Confidence rolls as it is. More dice stop more.
+-   **Intercept:** 1 Aura and no action. Take the blows aimed at a friend within your stride, and your own Defend handles them. A Guardian does it free, for every friend within his stride, and so does a summon. Nobody can intercept fear, lies or pressure.
 -   **One die at each of you** from each threat, unless a tag like *Flurry* says it can do more.
 -   **Running doesn't dodge.** One aimed at you lands wherever you've gone. Only one aimed at a place can be walked out of.
 -   At a stake, a place or a clock there's no defence. Unanswered, it happens.
@@ -93,17 +93,17 @@ Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer
 
 A Hurt · Confidence down (for a miss, where it fits) · break something you carry, like your armour or your shield (attuned things can't break) · Aspiration down · Party Goal down · a clock ticks. You can offer another that fits and costs about as much. A specific intent happens unless you trade it for one of these. A one-answer telegraph can't be traded.
 
-When it's fear, lies or pressure that got through, you choose instead (see [Confidence](#s-qr-confidence)).
+When fear, lies or pressure get through, your Confidence drops a size instead, or 1 Resolve holds your ground (see [Confidence](#s-qr-confidence)).
 
 ## Confidence {#s-qr-confidence}
 
 -   **Every scene starts on d6.** Clothes that fit the scene start you a size up, and so do the Boon and traits that say so. The Burden starts you a size down. At the end of the scene you rest with it (see [Wounds](#s-qr-hurt)), then it goes back to d6, and anything that should last is a Hurt.
--   **Fear is a telegraph.** The GM telegraphs fear, lies and pressure at your Confidence like any attack, and you answer it, Defend or let it ride.
--   **Up a size:** stop all of it that came at you, or take a threat down. If nothing came at you, it doesn't move. Taking a breath brings it up a size too, as far as d6.
--   **When one gets through,** you choose, for each: let it shake you (down a size) · bury it (take a Hurt) · hold your ground (1 Resolve, and neither happens).
--   **Nothing takes it below d2:** anything that would is a Hurt instead, or 1 Resolve to hold your ground.
+-   **Fear is a telegraph.** The GM telegraphs fear, lies and pressure at your Confidence like any attack, and you answer it or let it ride. Nobody can intercept it, but a Bard's song can stop it for the crew.
+-   **Up a size:** for each telegraph your Defend or Confidence stops, and for each action where one of your dice wins (in a combo, everyone who put an action in). Taking a breath brings it up a size too, as far as d6.
+-   **Down a size:** each time your wound die steps up (not when your armour or kit takes the blow), for each action where all your dice miss, and when fear, lies or pressure get through, unless 1 Resolve holds your ground.
+-   **Nothing takes it below d2:** fear, lies or pressure that get through on d2 are a Hurt instead, or 1 Resolve to hold your ground, and anything else leaves it on d2.
 -   **d12, fired up:** cash it in for an extra action, or to bring your wound die down a size, and it drops back to d6. It never goes higher than d12.
--   **d2, shaken:** you won't go at a threat, in a fight or face to face, unless you spend 1 Resolve each time.
+-   **d2, shaken:** you can't take an action at what the scene's about unless you spend 1 Resolve each time. Otherwise your action goes on pulling yourself together, back up to d4.
 
 ## Wounds and healing {#s-qr-hurt}
 
@@ -118,7 +118,7 @@ When it's fear, lies or pressure that got through, you choose instead (see [Conf
 -   Challenge 2 (d4) nuisance · 3 (d6) a real fight · 4 (d8) capable · 5 (d10) serious · 6 (d12) the top. It defends and telegraphs with its Challenge die, and that never steps down unless a tag says so. A tag only changes dice when it says so.
 -   Keeps-it-going tags are its health, and a multiplier, like *Armoured ×4*, is how many wins one takes. Mook: none or one. Named: two. Boss: three or more, multipliers on the big ones, and a weak point. *(first)* means nothing under it can be stripped till it's gone. *Layered* (special encounters only): one die for every one left, rolled the first time it's attacked in a round, and the best one stands.
 -   A win: strip a tag, or tick one off its multiplier · take it down · a condition · move it · learn something · stop a telegraph. An opening: one win ends a Mook or Named, and a Boss loses two whole tags (only its weak point ends it).
--   **Vulnerabilities:** each one that fits a win that strips a tag or causes a Hurt adds one more tick. The same one never counts twice. *Prone* and *Exposed* are vulnerabilities, and a hidden one's a hidden tag.
+-   **Vulnerabilities:** each one that fits a win that strips a tag or causes a Hurt adds one more tick, and you choose where it goes: the same tag, or another one the hit could reach, so one vulnerability can strip two plain tags. The same one never counts twice. *Prone* and *Exposed* are vulnerabilities, and a hidden one's a hidden tag.
 -   **Forms:** when a form's last keeps-it-going tag goes, it changes. It takes 3 to 5 tags from its Forms list, and its multipliers come back on whichever of them matter most. Its weak point ends it in any form.
 -   **Round budget:** about 5 steps of telegraphs a round for each player, and one die at each of the crew from each threat. A Breather's about half, and Hard's about half again. A telegraph costs its die's steps, once for each target.
 -   **Threat budget:** 10 a character with two Titles, about 12 or 13 with three, 15 with four, 17 or 18 with five and 20 with six, then it's the GM's call. It sizes multipliers and how long a scene runs.
@@ -153,7 +153,7 @@ When it's fear, lies or pressure that got through, you choose instead (see [Conf
 -   **Boons:** two permission slots on a Title buy one. Burdens only come on attuned things. The menu's in [Boons and Burdens](#s-boons).
 -   **Aspiration:** starts at d2 and climbs. An action when it's within reach, or a slot. One step a roll.
 -   **Defend:** a set action like the rest, with a line for each piece of plain armour and a shield. **Confidence:** d6 at the start of every scene (see [Confidence](#s-qr-confidence)).
--   **To start:** 5 Aura, 2 Resolve (one for each Title), a stride of 3 and a wound die at d2.
+-   **To start:** 5 Aura, 2 Resolve (one for each Title), a stride of 3, a wound die at d2, one attuned thing, and two bond threads with the crew.
 
 ## The archetypes {#s-qr-archetypes}
 
@@ -163,7 +163,7 @@ On most of them, 1 Aura puts +2 on one die of the mechanic after you roll, and t
 -   **Bloodsworn:** every Hurt you take adds 3 steps to your action, and your Aura, with your action, brings your own wound die down a size for each you spend.
 -   **Elementalist:** one of your dice can be an area, a burst, a cone or a line, and it costs no Aura.
 -   **Face:** build your dice but don't roll them, and put them on a threat as influence. Roll them against one of its telegraphs before it lands, and each of its dice your best one beats does what you say.
--   **Guardian:** you intercept for free, for every friend within your stride, whoever the attacks are from.
+-   **Guardian:** you intercept blows for free, for every friend within your stride, whoever they're from.
 -   **Healer:** the only one who makes a heal roll, against the patient's wound die.
 -   **Hunter:** mark a creature, and anyone who acts against it rolls your Mark die too. When it falls, the Mark jumps to another.
 -   **Illusionist:** meet or beat the threats' Challenge, and they believe your illusion until they interact with it or try to get through it.
@@ -179,17 +179,19 @@ On most of them, 1 Aura puts +2 on one die of the mechanic after you roll, and t
 
 ## Bonds and threads {#s-qr-threads}
 
--   A bond's usually a person, but it can be a faction, a place or a cause. Each thread is one truth you share, like a debt, a rescue, a secret or a shared past. Three threads to start, and writing one as a debt earns a fourth.
--   **Borrow:** 1 Aura brings their permission into your roll (a faction's, one of its assets), and it doesn't strain anything. You can't borrow through a strained thread.
--   **Strain:** lean on them in the story and take 1 Resolve. It's free and takes no action, and the thread's strained. One with someone in the crew is strained for both of you.
+-   A bond's usually a person, but it can be a faction, a place or a cause. Each thread is one truth between you, and it's a **bond thread**, something good, or a **hostile thread**, something gone bad. Either can be strained, which means nearly snapped, and with no thread at all you're neutral.
+-   **To start:** two bond threads with the crew, from your answers in Connect. Write a hostile thread too and you can write a third bond thread, and three's the most.
+-   **Borrow** through a bond thread: 1 Aura brings their permission into your roll (a faction's, one of its assets), and it doesn't strain anything. Not while it's strained.
+-   **Strain** a bond thread: lean on them in the story and take 1 Resolve. It's free and takes no action, and the thread's strained. One with someone in the crew is strained for both of you.
 -   **Mend:** make it right with them, in downtime or in a scene with them (not the fight where you strained it), and it's whole again.
 -   **Snap:** strain it again before it's mended. You still take the Resolve, but cross the thread out. When the last one goes, so does the bond.
+-   **A hostile thread** bites like a Catch: when it brings you real trouble, 1 Aura, or 1 Resolve for a big bite. Doing right by them strains it, and doing it again snaps it.
 
 ## What you carry {#s-qr-carry}
 
 -   3 equipment (what you wear or wield), 3 utility (tools, and things you use up and cross off) and a keepsake. A bag holds 10 more. Getting something out takes your action, and putting it away's free.
 -   A plain item's a line when it fits, and each piece of plain armour, and a shield, is a line on your Defend. A purse of gold is a utility item, about a month's wages.
--   **Attunement:** 2 slots on top of what you carry, and attuned things can't break. Awakened: 1 permission, or 2 with a Catch. Tempered: 2, or 4 with a Burden. Perfected: 3, or 6 with a Burden and a Catch. Each stage needs a material, and each new permission a downtime slot.
+-   **Attunement:** one attuned thing to start, on top of what you carry, and attuned things can't break. Awakened: 1 permission, or 2 with a Catch. Tempered: 2, or 4 with a Burden. Perfected: 3, or 6 with a Burden and a Catch. Each stage needs a material, and each new permission a downtime slot.
 
 ## Summoning {#s-qr-summoning}
 
@@ -205,19 +207,19 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 ## Downtime {#s-qr-downtime}
 
 -   Four pressures: personal, party, faction, world. Ignore one and it gets worse, and twice makes it a scene. Every faction's action is telegraphed at the start, and rolled after the slots.
--   Two slots each, and two for the crew. A party slot's an action for the crew. All your Resolve comes back, and your wound die goes back to d2, or to your Scars.
+-   Two personal slots each, and the crew takes one action, like any faction. A personal slot can go into the crew's action. All your Resolve comes back, and your wound die goes back to d2, or to your Scars.
 -   **Recover:** mend something broken. **Grow:** a new permission on a Title · a new trait or thread · chase your Aspiration · get something.
 -   **Mend a thread** you've strained by making it right with them. Downtime's one place for it, and a scene with them is the other.
 -   **Swap** a permission for another that fits your Title, or two for a Boon, and back. **Attune:** a slot for each new permission, and the material for a new stage. A soul you're carrying goes into your summoning attunement.
--   Ties go to the defender. No Aura: spend 1 Resolve to roll your dice again, or a spare crew resource to take the tie.
+-   Ties go to the defender. No Aura: spend 1 Resolve to roll your dice again, or an extra crew resource to take the tie.
 
 ## Factions {#s-qr-factions}
 
 -   Power (1 step, plus 1 for each asset that adds Power), resources, assets, Want, Agenda, Face, Secret, and three bonds: Public Sentiment, Morale and Loyalty.
--   Every asset needs a resource paying for it, and one that isn't paid for stops counting. A spare resource hires another faction's action, buys an asset or goes in a trade.
--   One action a downtime, telegraphed at the start: Destroy · Undermine · Obstruct · Influence · Acquire · Establish, or work its agenda (past d12, it happens). Up to three mini factions each, with two outcomes apiece.
--   The crew's party slots: the six outcomes, Set back its agenda, or Work for it. Roll the crew's Power, plus Reputations and good threads that fit, or one character's own permissions (1 step for the slot, plus what fits). Two slots count everything twice. A bigger faction's Power takes both slots.
--   In its bonds, a good thread's a step, a bad one's a vulnerability, and a strained one doesn't count. Its threads toward the crew say how it sees them: mostly good is friendly, mostly bad is hostile, and anything else does business.
+-   Every asset needs a resource paying for it, and one that isn't paid for stops counting. An extra resource, one that isn't paying for anything, hires another faction's action, buys an asset or goes in a trade. Nothing buys a second action.
+-   One action a downtime, telegraphed at the start: Destroy · Undermine · Obstruct · Influence · Acquire · Establish, or work its agenda (past d12, it happens). Up to three mini factions each, with two outcomes apiece, and a new one sits out the downtime it's made.
+-   The crew's action: the six outcomes, Set back its agenda, or Work for it. Roll the crew's Power, plus Reputations and bond threads that fit, or one character's own permissions (1 step for the slot, plus what fits). A personal slot put into it counts everything twice, and a bigger faction's Power takes both.
+-   In its bonds, a bond thread's a step, a hostile one's a vulnerability, and a strained one doesn't count. Its threads toward the crew say how it sees them: mostly bond threads is friendly, mostly hostile is hostile, and anything else does business.
 
 ## The session {#s-qr-session}
 

@@ -171,9 +171,11 @@ h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); t
 .thread { display: flex; align-items: flex-end; gap: 1mm; }
 .thread .tick { margin-bottom: 0.8mm; }
 .thread .w { margin-right: 0.8mm; }
+.thread .kind { display: flex; flex: none; margin-right: 0.4mm; }
+.thread .kind .word { padding: 0.9mm 1.1mm; font-size: 6.2pt; color: var(--muted); }
 
 /* ---------- The player reference: Appendix D, in four parts. ---------- */
-.ref { font: 400 9.2pt/1.32 var(--body); }
+.ref { font: 400 9pt/1.3 var(--body); }
 .ref-head { display: flex; align-items: center; justify-content: space-between; gap: 8mm; padding-bottom: 2.4mm; margin-bottom: 3mm; border-bottom: 0.3mm solid var(--rule); }
 .ref-head .intro { flex: 1; max-width: 100mm; text-align: right; font: italic 400 8pt/1.3 var(--body); color: var(--muted); }
 .cols h2.part {

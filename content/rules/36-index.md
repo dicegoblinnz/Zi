@@ -6,7 +6,7 @@ order: 36
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::index-section
 ## A {#a}
@@ -25,7 +25,7 @@ updated: 2026-10-24
 -   **Area die** — [Area](#s-area), [Area magic](#s-magic-area), [Elementalist](#a-elementalist)
 -   **Armour** — [Armour](#s-armour), [Defend](#s-defend)
 -   **Aspiration** — [Aspiration](#s-aspiration)
--   **Assets, a faction's** — [Resources and assets](#s-wealth), [Crew assets](#s-crew-tags)
+-   **Assets, a faction's** — [Resources and assets](#s-wealth), [Crew assets](#s-crew-tags), [Assets to borrow from](#faction-strength)
 -   **Attunement** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
 -   **Aura** — [Aura](#s-aura), [Aura and Resolve](#s-aura-tactics)
 -   **Awakened** — [Attunement](#s-attunement)
@@ -38,6 +38,7 @@ updated: 2026-10-24
 -   **Blessings** — [Wards and blessings](#s-wards)
 -   **Bloodsworn** — [Bloodsworn](#a-bloodsworn)
 -   **Bonds** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain), [A faction's bonds](#s-faction-bonds)
+-   **Bond threads** — [Bonds and threads](#s-bonds)
 -   **Boon table** — [The Oracle](#oracle)
 -   **Boons** — [Boons and Burdens](#s-boons), [Appendix C](#s-levers-boons)
 -   **Boss** — [Tags are its health](#s-staying), [Multipliers](#s-tough-gm)
@@ -61,6 +62,7 @@ updated: 2026-10-24
 -   **Confidence** — [Confidence](#s-confidence), [When It Lands](#s-defending), [Appendix C](#s-levers-confidence)
 -   **Consequence** — [Consequences](#s-consequences)
 -   **Crew** — [The Crew](#s-party-faction), [The Crew, Session 1 to 20](#s-crew-1-20)
+-   **Crew action** — [The crew's action](#party-slots), [The Crew and the Factions](#s-faction-crew)
 -   **Crew questions** — [Connect](#s-connect)
 -   **Crew assets** — [Crew assets](#s-crew-tags)
 -   **Crew, as a faction** — [The Crew](#s-party-faction)
@@ -83,6 +85,7 @@ updated: 2026-10-24
 -   **Exploring** — [Exploring](#exploring)
 -   **Exposed** — [Conditions to start with](#s-conditions-list), [Vulnerabilities](#s-vulnerable)
 -   **Extra actions** — [Extra actions](#s-extra-actions)
+-   **Extra resources** — [Resources and assets](#s-wealth), [Extra resources](#s-crew-wealth)
 
 ## F {#f}
 
@@ -116,6 +119,7 @@ updated: 2026-10-24
 -   **Holding your ground** — [Confidence](#s-confidence)
 -   **Holdings, party** — [Party holdings](#s-party-resources)
 -   **Hook** — [The aftermath](#s-aftermath)
+-   **Hostile threads** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
 -   **Hunter** — [Hunter](#a-hunter)
 -   **Hurt** — [Wounds, Blaze and Scars](#s-blaze), [Healing](#s-healing)
 
@@ -203,7 +207,7 @@ updated: 2026-10-24
 -   **Reputation** — [The Crew](#s-party-faction)
 -   **Resolve** — [Resolve](#s-resolve), [Aura and Resolve](#s-aura-tactics), [Catches and Resolve at the Table](#s-catches-gm), [Archetypes, Resolve and Study at the Table](#s-gm-area)
 -   **Resolve spends** — [1 Resolve on your mechanic](#resolve-on-your-mechanic)
--   **Resources, a faction's** — [Resources and assets](#s-wealth), [Spare resources](#s-crew-wealth)
+-   **Resources, a faction's** — [Resources and assets](#s-wealth), [Extra resources](#s-crew-wealth)
 -   **Rest** — [Wounds, Blaze and Scars](#s-blaze)
 -   **Retiring** — [Retiring a character](#s-retiring)
 -   **Ritual** — [Rituals](#rituals)

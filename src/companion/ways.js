@@ -7,8 +7,9 @@ import { MAX_PERMS } from "./grow.js";
 
 // A thread in someone else's words says whose ("Dorrie’s"). It's theirs to
 // keep, so it doesn't come along.
-const theirs = (t) => /’s\b/.test(t.note ?? "");
-const whoseOf = (t) => String(t.note ?? "").match(/^([^,]+’s)(?=,|$)/)?.[1] ?? "";
+const theirs = (t) => Boolean(t.whose) || /’s\b/.test(t.note ?? "");
+const whoseOf = (t) => t.whose || String(t.note ?? "").match(/^([^,]+’s)(?=,|$)/)?.[1] || "";
+const kindOf = (t) => (t.kind === "hostile" ? "hostile" : "bond");
 
 // One of the crew as a build: their Titles, permissions, traits, set actions
 // and the lines on them, what they carry, attuned things, their own threads,
@@ -41,7 +42,9 @@ export function fromCrew(c, B, { keep = false } = {}) {
     const at = eq.indexOf(l.label) >= 0 ? `e${eq.indexOf(l.label)}` : ut.indexOf(l.label) >= 0 ? `u${ut.indexOf(l.label)}` : l.label === b.keepsake.text ? "k" : null;
     if (at) ref.set(l.key, at);
   }
-  (keep ? c.attuned : c.attuned.slice(0, 2)).forEach((a, i) => {
+  // A new character attunes one thing. One of the crew becoming your own
+  // keeps everything they've got.
+  (keep ? c.attuned : c.attuned.slice(0, 1)).forEach((a, i) => {
     const perms = a.permissions.slice(0, keep ? MAX_PERMS : 2);
     b.attuned[i] = {
       name: a.props ? `${a.name} (${a.props})` : a.name, stage: keep ? a.stage || "Awakened" : "Awakened", catch: a.catch ?? "", burden: keep ? a.burden ?? "" : "",
@@ -56,7 +59,7 @@ export function fromCrew(c, B, { keep = false } = {}) {
       if (l && !l.on.includes(a.name)) l.on.push(a.name);
     }
   }
-  const own = c.threads.flatMap((p) => p.threads.filter((t) => keep || !theirs(t)).map((t) => ({ person: p.person, text: t.text, debt: Boolean(t.debt), whose: keep ? whoseOf(t) : "" })));
+  const own = c.threads.flatMap((p) => p.threads.filter((t) => keep || !theirs(t)).map((t) => ({ person: p.person, text: t.text, kind: kindOf(t), whose: keep ? whoseOf(t) : "", ...(keep && t.strained ? { strained: true } : {}) })));
   if (keep) b.threads = own;
   else own.slice(0, 4).forEach((t, i) => (b.threads[i] = t));
   b.connect = B.connect.map((q) => c.crewQs.find((x) => x.q === q)?.a ?? "");
@@ -155,22 +158,38 @@ export function randomBuild(B, crew, rand = Math.random) {
   }
   shuffle([...group("Tools"), ...B.usedUp.map((u) => u.name)], rand).slice(0, 2).forEach((x, i) => (b.utility[i] = { text: x, on: [] }));
   b.keepsake = { text: pick(B.keepsakes, rand).name, on: [] };
-  // Attuned things are on top of what you carry, and a signature thing often
-  // makes the best one. Each gets a permission the Titles didn't use.
+  // One attuned thing, on top of what you carry, and a signature thing often
+  // makes the best one. It gets a permission the Titles didn't use.
   const carried = new Set([...b.equipment, ...b.utility].map((x) => x.text.toLowerCase()));
-  const things = shuffle([...group("Signature"), ...group("Foci"), ...group("Tools")], rand).filter((x) => !carried.has(x.toLowerCase())).slice(0, 2);
+  const things = shuffle([...group("Signature"), ...group("Foci"), ...group("Tools")], rand).filter((x) => !carried.has(x.toLowerCase())).slice(0, 1);
   const unused = [...shuffle(left, rand), ...spares].filter((p) => !taken.has(p));
   things.forEach((name, i) => {
     const p = unused[i];
     b.attuned[i] = { name: name.charAt(0).toUpperCase() + name.slice(1), catch: "", perms: [{ text: p, on: [onto(p)].filter(Boolean) }, { text: "", on: [] }] };
   });
 
-  const threads = [];
-  for (const c of crew) for (const p of c.threads) for (const t of p.threads) if (!theirs(t) && !threads.some((x) => x.text === t.text)) threads.push({ person: p.person, text: t.text, debt: Boolean(t.debt) });
-  // Three different people where there are three to be had.
-  const mixed = shuffle(threads, rand);
-  const people = mixed.filter((t, i) => mixed.findIndex((x) => x.person === t.person) === i);
-  [...people, ...mixed.filter((t) => !people.includes(t))].slice(0, 3).forEach((t, i) => (b.threads[i] = t));
+  // Two bond threads and a hostile one, from the crew's own, and sometimes the
+  // third bond thread the hostile one makes room for. A different person for
+  // each where there are enough to go round.
+  const pool = { bond: [], hostile: [] };
+  for (const c of crew) for (const p of c.threads) for (const t of p.threads) {
+    if (!theirs(t) && !pool.bond.some((x) => x.text === t.text) && !pool.hostile.some((x) => x.text === t.text)) pool[kindOf(t)].push({ person: p.person, text: t.text, kind: kindOf(t), whose: "" });
+  }
+  const chosen = [];
+  const take = (kind, n) => {
+    const list = shuffle(pool[kind], rand);
+    const fresh = list.filter((t) => !chosen.some((x) => x.person === t.person));
+    for (const t of [...fresh, ...list.filter((x) => !fresh.includes(x))]) {
+      if (n <= 0) break;
+      if (chosen.includes(t)) continue;
+      chosen.push(t);
+      n -= 1;
+    }
+  };
+  take("bond", 2);
+  take("hostile", 1);
+  if (chosen.some((t) => t.kind === "hostile") && rand() < 0.5) take("bond", 1);
+  b.threads = chosen.map((t) => ({ ...t }));
   b.aspiration = pick(crew.map((c) => c.aspiration.text).filter(Boolean), rand) ?? "";
   b.name = pick(FIRST, rand) + pick(LAST, rand);
   b.pronoun = pick(["her", "him", "them"], rand);

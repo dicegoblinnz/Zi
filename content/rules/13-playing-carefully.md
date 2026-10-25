@@ -6,7 +6,7 @@ order: 13
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-10-26
 ---
 :::quote
 Everything in this book assumes you're playing with people you trust.
@@ -55,7 +55,7 @@ Lines and veils can change at any time. If something comes up mid-campaign, say 
 
 Anyone can call a pause, the GM included. Stop, talk it through, and then carry on, change direction or cut to the next scene. It's a normal part of playing, so treat it like one.
 
-It's worth a pause, too, when a strained thread between two of the crew starts to feel personal. The strain's about that one truth, so play that and nothing bigger, and once it's been made right, let it go. There's more in [Playing the strain](#s-playing-the-strain).
+It's worth a pause, too, when a thread between two of the crew starts to feel personal, like a hostile one, or one that's been strained. The thread's about that one truth, so play that and nothing bigger, and once it's been made right, let it go. There's more in [Playing the strain](#s-playing-the-strain).
 
 ## After a Heavy Session {#after-a-heavy-session}
 

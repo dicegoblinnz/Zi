@@ -6,7 +6,7 @@ order: 3
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 Your whole character fits in a few plain sentences and some numbers.
@@ -19,20 +19,20 @@ Here's what you write down, step by step:
 3.  **Three permissions** on each Title.
 4.  **Your set actions:** Defend, Fight, Move, Sneak, Study and Talk, and your own, with what fits them on, and each permission on two at most.
 5.  **What you carry:** 3 equipment, 3 utility items and a keepsake, and a bag.
-6.  **Two attuned things**, which start at Awakened.
-7.  **Three threads**, spread across your bonds however you like.
-8.  **A few answers** that tie you to the rest of the crew.
+6.  **One attuned thing**, which starts at Awakened.
+7.  **Two bond threads** with the crew, or three if you write a hostile thread as well.
+8.  **A few answers** that tie you to the rest of the crew, and they're where your bond threads come from.
 9.  **An Aspiration** at d2.
 
 You start with 5 Aura, 2 Resolve (one for each Title), a stride of 3 and a wound die at d2. Defend's a set action like the others, and each piece of plain armour you wear is a line on it. Confidence starts every scene on d6, or a size up in clothes that fit the scene.
 
 In a hurry? The [Quick Build](#s-quick) gets you a character in ten minutes, or you can pick one of the [six ready-made characters](#s-pregens) and play. If you've got a character in your head but not the words for it yet, start from the [Title ideas](#s-title-ideas): example Titles, permissions and trait ideas for each archetype.
 
-**Those are your starting numbers, not limits.** You earn more Titles, traits, permissions and threads as you play, and there's no cap on Titles, traits or threads. A Title can't hold more than six permissions, though, and [what you carry](#s-carrying) has its limits.
+**Those are your starting numbers, not limits.** You earn more Titles, traits, permissions and threads as you play, you can attune more things later in downtime, and there's no cap on Titles, traits or threads. A Title can't hold more than six permissions, though, and [what you carry](#s-carrying) has its limits.
 
 ## Step 1: Archetypes and Titles {#s-title}
 
-You start with two **archetypes**. An archetype is the kind of character you are, like a Guardian, a Healer or a Shadow, and each one has a **mechanic**, something only that archetype can do. A Guardian intercepts for free for every friend within his stride, and a Hunter marks a creature so everyone who acts against it rolls her Mark die as well. There are seventeen, and you'll find them all, with what each one does, in [The Archetypes](#s-how-archetypes).
+You start with two **archetypes**. An archetype is the kind of character you are, like a Guardian, a Healer or a Shadow, and each one has a **mechanic**, something only that archetype can do. A Guardian intercepts blows for free for every friend within his stride, and a Hunter marks a creature so everyone who acts against it rolls her Mark die as well. There are seventeen, and you'll find them all, with what each one does, in [The Archetypes](#s-how-archetypes).
 
 On most of them, 1 Aura puts +2 on one die of the mechanic, once you've rolled and know you need it. **You can take the same archetype twice**, and then it's +3. Every archetype has a 1 Resolve spend as well, for something big, like a Guardian shrugging off a hit that got through to him.
 
@@ -73,7 +73,7 @@ One role or one school per Title. *Archmage* is too wide, so pick the school you
 :::sheet[Bram's first Title]
 **Title:** *The wall that held the harbour gate.*
 
-**Archetype:** Guardian. He intercepts for free, for every friend within his stride. Any time before the telegraphs land, he takes any or all of the dice aimed at them, whichever enemy they're from, and they come at him instead.
+**Archetype:** Guardian. He intercepts for free, for every friend within his stride. Any time before the telegraphs land, he takes any or all of the blows aimed at them, whichever enemy they're from, and they come at him instead. Fear, lies and pressure are inside their heads, so he can't take those.
 
 **1 Aura:** +2 to one of his Defend or Confidence dice.
 
@@ -149,7 +149,7 @@ Some traits change a number on your sheet. *Unyielding* means the first Hurt eac
 | --- | --- | --- |
 | **Reputation Precedes Me** | Passive | +1 step to any social roll where the target has heard of you. No cost. |
 | **Silver Tongue** | Once per scene | Turn a failed social roll into a success. |
-| **Charming** | Once per scene | Add a temporary thread to one of your bonds for the scene. |
+| **Charming** | Once per scene | Add a temporary bond thread to one of your bonds for the scene. |
 | **Commanding Presence** | Once per scene | A subordinate follows one order without question. |
 | **Cold Reader** | Once per scene | Ask the GM one true thing about someone's mood. She answers honestly. |
 | **Style** | Passive | Pick a signature look. When it fits the scene: +1 step, and you start the scene a size up on Confidence. |
@@ -181,7 +181,7 @@ Some traits change a number on your sheet. *Unyielding* means the first Hurt eac
 | **Cache** | Once per downtime | Retrieve any plain item you like, equipment or utility, from wherever you've stashed it. |
 | **Tireless** | Once per downtime | Take one extra downtime slot. |
 | **Scout Ahead** | Once per downtime | Add 3 ground tags to a scene in a place you've seen before. |
-| **Network** | Once per downtime | Secure a meeting with anyone. When you first take it, you also write 3 new threads, on bonds you already have. |
+| **Network** | Once per downtime | Secure a meeting with anyone. When you first take it, you also write 3 new bond threads, on bonds you already have. |
 | **Tactical Mind** | Once per scene | Point out something useful here that nobody else noticed. If it could be here, it is: a permission for the crew, this scene. No roll. |
 
 :::example[A trait firing at the table]
@@ -326,7 +326,7 @@ Plain items don't have Catches. Plate's heavy and a pistol's loud, and the story
 **What you carry:** 3 **equipment** (what you wear or wield: weapons, armour, shields), 3 **utility** items (tools and things you use up: rope, a lantern, a smoke bomb) and a **keepsake**, something that matters to your character. Your **bag** holds 10 more.
 :::
 
--   **Attuned things are on top of that.** You start with 2 attunement slots, and what you attune doesn't count towards what you carry. If both of yours are equipment, you've got 5 pieces of equipment.
+-   **Attuned things are on top of that.** You start with one attunement slot, and what you attune doesn't count towards what you carry. Bram's war hammer is attuned, so his plate armour and his shield are 2 of his 3 equipment, and he's still got room for one more.
 -   **Your bag.** Nothing in it can be used until you've pulled it out, and getting something out takes your action. Putting something away is free. What you pull out takes a place among what you carry, so if you're full, put something away first. A bag can't go inside another bag.
 -   **A purse of gold** is a utility item, about a month's wages.
 -   **Some things change a limit by one.** *Prepared* lets you carry one more utility item, and the Kit Boon and the Kit Burden make it one more item or one fewer (see [Boons and Burdens](#s-boons)).
@@ -334,7 +334,7 @@ Plain items don't have Catches. Plate's heavy and a pistol's loud, and the story
 -   **When something breaks**, it's something you carry, and armour and shields are the usual ones. Attuned things can't be broken.
 
 :::example[A hunter's pack]
-A few sessions in, Wren's longbow and her hooded cloak are both attuned, so neither counts towards what she carries. On her belt she's got rations, a waterskin and a snare kit, which is all 3 of her utility. Her keepsake's a torn map, and her hunter's pack is her bag, with a torch bundle and a coil of rope inside: 2 of 10.
+A few sessions in, Wren's attuned her hooded cloak as well as her longbow, so neither of them counts towards what she carries. On her belt she's got rations, a waterskin and a snare kit, which is all 3 of her utility. Her keepsake's a torn map, and her hunter's pack is her bag, with a torch bundle and a coil of rope inside: 2 of 10.
 
 The trail runs into a cave. Her utility's full, so she puts the snare kit away in the pack, which is free, and spends her action pulling out the torch bundle. Now she can light it.
 :::
@@ -349,8 +349,6 @@ The trail runs into a cave. Her utility's full, so she puts the snare kit away i
 **Keepsake:** A letter you never sent.
 
 **Bag:** Rations, a waterskin and a change of clothes. 3 of 10.
-
-**Attuned:** A perfect set of picks, Awakened. *Open any lock with a mechanism.*
 
 **Attuned:** The ring that was his, Awakened. *Bear a family seal.* **Catch:** *Marked.* *Pass as a Vane.*
 :::
@@ -470,13 +468,13 @@ Your **keepsake** is something that matters to your character, like a ring or an
 
 ## Step 6: Attunement {#s-attunement}
 
-When you **attune** something, it gets permissions of its own, and it'll grow with you. You start with **2 attunement slots**. What you attune starts at **Awakened**, with one permission, and you can give it its **Catch** now for a second.
+When you **attune** something, it gets permissions of its own, and it'll grow with you. You start with **one attunement slot**, so that's one attuned thing, and you can get more later in downtime. What you attune starts at **Awakened**, with one permission, and you can give it its **Catch** now for a second.
 
 Attuned things are on top of what you carry, so they don't take up your equipment or your utility. They're magic, and they can't be broken.
 
-**An attuned thing counts through its permissions.** Each of its permissions that fits is a line, the same as a permission on a Title, and the thing doesn't count again on top. Its permissions go on your set actions like any other permission, so each one goes on two at most. Vesk's picks are Awakened with *open any lock with a mechanism*, so they're 1 step on her Locks. A magic permission on an attuned thing lets you do that magic: Ash's ember stone lets her *call fire without a word or a gesture*.
+**An attuned thing counts through its permissions.** Each of its permissions that fits is a line, the same as a permission on a Title, and the thing doesn't count again on top. Its permissions go on your set actions like any other permission, so each one goes on two at most. Vesk's grappling line is Awakened with *climb or swing anywhere you can throw a hook*, so it's 1 step on her Move. A magic permission on an attuned thing lets you do that magic: Ash's ember stone lets her *call fire without a word or a gesture*.
 
-Write its permissions the way you'd write any other, and make them things the thing itself does. A set of picks opens locks.
+Write its permissions the way you'd write any other, and make them things the thing itself does. A grappling line climbs and swings.
 
 ### Three stages {#attunement-stages}
 
@@ -494,7 +492,7 @@ A **Burden** is a permanent cost from the list in [Boons and Burdens](#s-boons),
 
 **You can hand an attuned thing to a friend** with a free attunement slot. Its permissions, its Catch and its Burden go with it, and so does a Boon its Burden paid for.
 
-If you're a [Summoner](#a-summoner), your summoning attunement holds souls the way an item holds permissions, on the same three stages (see [Summoning](#s-summoning)). Some attuned things come out of the story already Tempered or Perfected, and you'll find them, and how to write your own, in [Attuned things from the story](#s-rare).
+If you're a [Summoner](#a-summoner), your summoning attunement holds souls the way an item holds permissions, on the same three stages, and it takes an attunement slot like anything else you attune (see [Summoning](#s-summoning)). Some attuned things come out of the story already Tempered or Perfected, and you'll find them, and how to write your own, in [Attuned things from the story](#s-rare).
 
 ### Catch ideas: 12 {#catches-12}
 
@@ -527,39 +525,47 @@ If she wants the bow Tempered one day, she'll need a material first, and the str
 
 Your [Aura](#s-aura) maximum is 5, unless something on your sheet changes it, and you're full at the start of every scene. Aura's for the small stuff, like bringing in something that isn't on your set action, or the +2 on your archetype's mechanic.
 
-**Resolve** is your character pushing themselves, so it pays for the big stuff, like an extra action or going beyond what a permission normally does. You've got as much as you've got Titles, so 2 to start, and you can't hold more than that. You get 1 back at the end of every scene and all of it after downtime, and there are a few other ways to earn it, like straining a thread (below). It's all in [Resolve](#s-resolve).
+**Resolve** is your character pushing themselves, so it pays for the big stuff, like an extra action or going beyond what a permission normally does. You've got as much as you've got Titles, so 2 to start, and you can't hold more than that. You get 1 back at the end of every scene and all of it after downtime, and there are a few other ways to earn it, like straining a bond thread (below). It's all in [Resolve](#s-resolve).
 
-Your stride is 3: that's how far you move each round without spending an action (see [Movement and Range](#s-movement)). Your Defend's the set action you filled in at Step 4, and Confidence starts every scene on d6. You'll find how Confidence and armour work at the end of this chapter.
+Your stride is 3: that's how far you move each round without spending an action (see [Movement and Range](#s-movement)). Your Defend's the set action you filled in at Step 4, and Confidence starts every scene on d6, then moves a size at a time as the scene goes. You'll find how Confidence and armour work at the end of this chapter.
 
 Your **wound die** is how hurt you are, and it starts at **d2**. Every Hurt you take puts it up a size, d4, d6, d8, d10, d12, and it's one die for body and mind, so a spear and a night of horrors both put it up. Take a Hurt at d12 and you Blaze. At the end of every scene you rest, which can bring it down a size, and downtime clears it. How it goes up and comes down is in [Wounds, Blaze and Scars](#s-blaze) and [Healing](#s-healing).
 
 ### Bonds and threads {#s-bonds}
 
-A **bond** is usually a person who matters to your character, someone in the crew or anyone else. It can be a faction, a place or a cause too. Each **thread** is one truth between you, like a debt, a rescue, a secret or a shared past, and the more threads you've got with someone, the deeper the bond. You start with **three threads**, spread however you like: three bonds with one each, or one bond with all three.
+A **bond** is usually a person who matters to your character, in the crew or out of it. It can be a faction, a place or a cause too. Each **thread** is one truth between you, and it's one of two kinds. A **bond thread** is something good, like a rescue, a secret you keep for each other or a shared past. A **hostile thread** is something that's gone bad, like a debt you can't pay, a grudge or a betrayal. You can have both kinds with the same person, and as many threads as the story gives you. With no thread at all, you're neutral.
 
-You can write one of them as a **debt**, and you get a fourth thread in return. A debt's a thread with a hook: someone else holds it, they can call it in, and you don't get to say no.
+Any thread can be **strained**, which means it's nearly snapped. So a single thread is always one of these: a bond, a bond strained, a hostile thread strained, or hostile, and with no thread you're neutral.
 
-:::example[Vesk's three threads]
-*Dorrie: we have pulled a dozen jobs. I trust her with my life.*
+**You start with two bond threads** with the crew, from your answers in [Connect](#s-connect). Write a hostile thread as well, with anyone, and you've got room for a third bond thread. Three bond threads is the most you start with. With two players, one of your two bond threads goes to someone outside the crew, and playing alone, both do.
 
-*Bram: he once carried me out of a fire. I have never said thank you.*
+Every thread's a hook the GM can pull, and a bond thread's something you can lean on, too:
 
-*The fence: I owe a debt I would rather not discuss.*
-:::
-
-Every thread's a hook the GM can pull, and it's something you can lean on, too:
-
--   **Borrow through a thread.** 1 Aura brings one of their permissions into your roll, the same as anything else you bring in, and it doesn't strain anything. Through a faction, it's one of its assets. A place or a cause has nothing to lend, but you can still strain a thread with it. You can't borrow through a strained thread until it's mended.
--   **Strain a thread.** Lean on them in the story, like calling in the favour, using their name, dragging them into it or using the secret, and take **1 Resolve**. It's free, it doesn't take an action, and the thread's now **strained**.
+-   **Borrow through a bond thread.** 1 Aura brings one of their permissions into your roll, the same as anything else you bring in, and it doesn't strain anything. Through a faction, it's one of its assets. A place or a cause has nothing to lend, but you can still strain a thread with it. You can't borrow through a strained thread until it's mended.
+-   **Strain a bond thread.** Lean on them in the story, like calling in the favour, using their name, dragging them into it or using the secret, and take **1 Resolve**. It's free, it doesn't take an action, and the thread's now **strained**.
 -   **Mend it.** Make it right with them, by roleplaying it, doing them a favour or paying them, whatever suits them. That happens in downtime or in a scene with them, not in the middle of the fight where you strained it. Then it's whole again.
 -   **Strain it again before it's mended and it snaps.** You still take the Resolve, but cross the thread out. When the last thread goes, so does the bond.
 
-**A thread with someone in the crew goes on both your sheets**, and it counts for both of you, so agree on it together. If either of you strains it, it's strained for both. A thread with a faction, or with someone outside the crew, only goes one way: it's yours, and theirs toward you is a different thread.
+**A hostile thread bites like a Catch.** Let it bring you real trouble and take 1 Aura, or 1 Resolve for a big bite, one that changes the scene or costs you something you wanted (see [Catches and Trouble](#s-trouble)). You can't borrow through it, and you can't strain it for Resolve. Doing right by them strains it instead, and doing right by them again snaps it, and the grudge is over. Wrong them again before it snaps, and it's whole again.
+
+:::example[Vesk's threads]
+*Dorrie: we have pulled a dozen jobs. I trust her with my life.* (bond)
+
+*Bram: he once carried me out of a fire. I have never said thank you.* (bond)
+
+*The fence: I owe a debt I would rather not discuss.* (hostile)
+
+The first two come from her answers in Connect. The fence is outside the crew, and writing a hostile thread with him gives her room for a third bond thread.
+:::
+
+**A thread with someone in the crew goes on both your sheets**, and it counts for both of you, so agree on it together. It stays in the words of whoever wrote it, and it's theirs. If either of you strains it, it's strained for both. A thread with a faction, or with someone outside the crew, only goes one way: it's yours, and theirs toward you is a different thread.
 
 New threads come from [Grow](#grow) in downtime, and when the crew's [Party Goal](#s-goal) is done, everyone writes one to someone the Goal brought into their life.
 
 :::example[Straining a thread]
-Vesk's on Vane's roof with no Resolve left. She drops the fence's name to the guard captain, who's in the fence's pocket, and takes 1 Resolve. Her thread with the fence, *I owe a debt I would rather not discuss*, is strained. After the job she brings him a cut of the haul, and it's mended.
+Vesk's on Vane's roof with no Resolve left, and the guards are coming up the stairs. She whistles down to Dorrie in the courtyard to make a fuss and pull them back down, and Dorrie does, so now Dorrie's the one with the whole household looking at her. That's leaning on their thread, *We have pulled a dozen jobs. I trust her with my life.* Vesk takes 1 Resolve, and the thread's strained on both their sheets. After the job she gives Dorrie the pick of the haul, and it's mended.
+
+Her thread with the fence, *I owe a debt I would rather not discuss*, is hostile, so she can't lean on it for Resolve. She brings the fence a cut of the haul anyway. That's doing right by him, so the thread's strained, and one more good turn will snap it and clear the debt.
 :::
 
 ### Playing the strain {#s-playing-the-strain}
@@ -568,21 +574,23 @@ This is for when someone in the crew strains a thread with your character, so it
 
 The thread gives the reason. The strain's about that one truth, so nobody has to invent a grudge.
 
-| The thread | Strained, it sounds like | It's mended when |
+| The thread | Strained, it sounds like | It's settled when |
 | --- | --- | --- |
-| A debt | "We're square now. Aren't we?" | you pay it back or do them a turn |
-| A rescue | "I can't keep pulling you out." | you save them, or finally say thank you |
-| A secret | "You swore you'd keep that." | you trust them with one of yours |
-| A shared past | "That's not who we are any more." | you go back to it together |
+| A rescue (bond) | "I can't keep pulling you out." | you save them, or finally say thank you, and it's mended |
+| A secret (bond) | "You swore you'd keep that." | you trust them with one of yours, and it's mended |
+| A shared past (bond) | "That's not who we are any more." | you go back to it together, and it's mended |
+| A debt you owe (hostile) | "Don't think this makes us square." | you pay them the rest, and it snaps |
 
 Say how it shows, and what would make it right. Play that and nothing bigger, and once they've made it right, let it go.
 
-Play it by what's left. With two or more threads still whole, it's a grumble and a "you owe me". With one, it's a real problem and you'll say so. With none, you're cold until they make it right, and one more pull snaps it.
+Play a strained bond thread by what's left between you. With two or more bond threads still whole, it's a grumble and a "you owe me". With one, it's a real problem and you'll say so. With none, you're cold until they make it right, and one more pull snaps it.
+
+A hostile thread goes the other way. It's strained because they've done right by you, so let it soften you a bit, and if they do it again, it snaps and whatever was between you is over.
 
 It never stops you working together in the moment. You still combo and still intercept for each other.
 
 :::example[Vesk and Bram]
-Vesk's thread with Bram is *He once carried me out of a fire. I have never said thank you.* She's out of Resolve on a wall and yells for him to haul her up again, so she strains it and takes 1 Resolve. Bram's player says he's starting to feel like her ladder, and she can fix it by saying thank you. It was their only thread, so none are whole now, and he's cold with her until she makes it right. At the bar afterwards she finally says it. The thread's mended, and she rewrites it now that it's said.
+Vesk's bond thread with Bram is *He once carried me out of a fire. I have never said thank you.* She's out of Resolve on a wall and yells for him to haul her up again, so she strains it and takes 1 Resolve. Bram's player says he's starting to feel like her ladder, and she can fix it by saying thank you. It was their only thread, so none are whole now, and he's cold with her until she makes it right. At the bar afterwards she finally says it. The thread's mended, and she rewrites it now that it's said.
 :::
 
 ## Step 8: Connect {#s-connect}
@@ -600,7 +608,11 @@ Before you play, tie the crew together. Go round the table with these ten questi
 9.  What job did you pull together that went badly?
 10. Why are you still with this crew?
 
-A good answer can become a thread. If it's true between you and someone else in the crew, agree on it together and it goes on both your sheets. The GM uses the rest to put you in each other's way.
+Your answers are where your threads come from. Turn two of them into your **bond threads**, and an answer that's gone bad, like business you never finished or a job that went wrong, can be your **hostile thread**. A thread with someone in the crew goes on both your sheets, so agree on it together (see [Bonds and threads](#s-bonds)). The GM uses the rest of your answers to put you in each other's way.
+
+:::example[Bram's answers]
+Bram answers three. He already knows Isolde, because he's guarded her since she was twelve, and that becomes his first bond thread: *I swore to her father I would keep her alive.* He trusts Wren most, because they held the same wall in the border war, and that's his second: *We held the same wall in the border war.* His unfinished business is with Dorrie. The harbour job went wrong and she walked away clean, so that one's gone bad, and it's his hostile thread: *I do not trust her, and she knows it.*
+:::
 
 ## Step 9: Aspiration {#s-aspiration}
 
@@ -628,10 +640,23 @@ Your Aspiration is also somewhere a consequence can land. When a blow or a failu
 
 ## Confidence {#s-confidence}
 
-**Confidence** is how you're holding up right now. It's the die you roll against fear, lies, pressure and anything else that works on the mind, and it swings up and down during a scene. It's your nerve, not your sanity.
+**Confidence** is your nerve, and it's your defence against fear, lies and pressure. It starts every scene on **d6** and moves a size at a time as the scene goes.
 
 :::rule
-**Confidence starts every scene on d6.** When the scene ends, you roll it against your wound die to rest (see [Wounds, Blaze and Scars](#s-blaze)), and then it goes back to d6. In between, it never goes below d2 or past d12.
+-   **Up a size** for every telegraph your defence stops, whether it's your Defend or your Confidence, and for every action where one of your dice beats what it was rolled against: a lock opened, a blow landed, a door held, the bell stopped before it rang.
+-   **Down a size** every time your wound die steps up, and for every action where all your dice miss. When your armour or something you carry takes the blow instead, your Confidence doesn't move.
+-   **When fear, lies or pressure get through,** it drops a size, or you hold your ground for 1 Resolve.
+-   **At d2 you're shaken.** You can't take an action at what the scene's about unless you spend 1 Resolve to do it. Otherwise your action goes on pulling yourself together, and that brings you back up to d4.
+-   **At d12 you're fired up.** Cash it in for an extra action, or to step your wound die down a size, and it drops back to d6.
+-   It never goes below d2 or above d12. When fear, lies or pressure get through and you're already on d2, it's a Hurt instead, or 1 Resolve to hold your ground. Anything else that would take it lower leaves it on d2.
+
+When the scene ends, you rest: roll the Confidence you finished on against your wound die, and if you beat it, your wound goes down a size (see [Wounds, Blaze and Scars](#s-blaze)). Then it goes back to d6, so anything that should last past the scene is a Hurt.
+:::
+
+:::example[A size at a time]
+Vesk starts the fight on d6. She goes at a guard with her Fight, a d4, and it rolls 3 against his 2, so she's on d8. At the end of the round his mate's club comes at her, a d6, and her Defend's d4 comes up 4 against its 3. It's stopped, which puts her on d10, and the 4's a top face, so she gets 1 Aura back as well.
+
+Next round she goes for the cell door with her Locks, a d10, and rolls 3 against the lock's 6. That's a miss, so she drops to d8. Then a blade gets through her Defend and her wound die steps up to d4, which takes her down to d6. If she'd offered her worn leathers instead of the Hurt, her Confidence wouldn't have moved, but her Defend would be a d2 till they're mended.
 :::
 
 ### Where it starts {#starting-confidence}
@@ -640,24 +665,28 @@ Clothes that fit the scene start you a size up, so when Vesk walks into a noble 
 
 ### How it swings {#how-confidence-swings}
 
-**Fear is a telegraph.** The GM telegraphs fear, lies and pressure like any attack, say a dragon's roar as a d10 at everyone's Confidence, and you answer it, Defend or let it ride, [the usual way](#s-answer-or-ride).
+**Fear is a telegraph.** The GM telegraphs fear, lies and pressure like any attack, say a dragon's roar as a d10 at everyone's Confidence, and you answer it or let it ride, [the usual way](#s-answer-or-ride). Let it ride and you roll your Confidence once at the end of the round, and each die stops one telegraph, the same as your Defend against blows.
 
-**For each one that gets through, you choose:** let it **shake** you and drop a size, **bury** it and take a Hurt, or **hold your ground** and spend 1 Resolve so neither happens. When a blow lands, the GM names the cost (see [Consequences](#s-consequences)), but this one's your call.
-
--   **Up a size:** stop all of it in a round, every bit of fear, lies and pressure that came at you, or take a threat down (in a combo, that's everyone who put an action in). If nothing's aimed at you, it doesn't move. A [Bard](#a-bard) can lift you with a song as well, as far as d10.
--   **Down a size:** let something shake you, or take it as the cost of a miss when the GM names it (see [Consequences](#s-consequences)).
--   **Nothing takes it below d2.** Anything that would is a Hurt instead, or 1 Resolve to hold your ground.
--   **At d12 you're fired up.** Cash it in for an extra action, or to step your wound die down a size, and it drops back to d6.
--   **At d2 you're shaken.** You won't go at a threat, in a fight or face to face, unless you spend 1 Resolve each time you do.
--   **Take a breath:** spend your action and your Confidence comes up a size, as far as d6.
--   **At the end of the scene you rest with it.** Roll the Confidence you finished on against your wound die, and if you beat it, your wound goes down a size. Then your Confidence goes back to d6. Anything that should last is a Hurt.
+-   **Defending doesn't touch your Confidence.** Defend doubles the lines on your Defend and nothing else, so against fear your Confidence rolls as it is.
+-   **Fear can't be intercepted.** It's inside your head, so nobody can step in front of it for you. Shielding the crew from fear is the [Bard](#a-bard)'s job. A Bard's song can stop it before it gets to you, which puts you up a size as if you'd stopped it yourself, and a song can lift you a size as well, as far as d10.
+-   **It's one size for an action**, however many of your dice won. If Vesk splits her Locks into a d6 for the lock and a d4 to keep it quiet and both win, she goes up one. If every die misses, it's one size down. A roll with nothing to beat, like a ward with nothing pushing back or a quick heal, doesn't move it.
+-   **In a combo**, everyone who put an action in moves with the roll.
+-   **Answering a telegraph** is an action like any other. Win and it's a size up, and that's once, even though you've stopped a telegraph as well. Lose with every die and it's a size down, and the telegraph lands at once.
+-   **Each telegraph your Defend or Confidence stops** at the end of the round is a size up. When Bram Defends and stops three blows, he goes up three sizes.
+-   **A hit that's two Hurts**, because it found a [vulnerability](#s-vulnerable), steps your wound die up twice, so it's two sizes down. If your wound die doesn't move, like on the first Hurt Bram takes each scene, because he's *Unyielding*, your Confidence doesn't either.
+-   **A Hurt at d2** leaves your Confidence on d2. The drop that comes with it doesn't turn into another Hurt.
+-   **A miss that matters** can cost you a size as well, when the GM names it as the cost, like a bluff that falls apart in front of the whole room (see [Consequences](#s-consequences)).
+-   **A specific intent**, like *Frightened* or *Taunted*, is what happens when it gets through, unless you trade it for a size of Confidence, or hold your ground for 1 Resolve.
+-   **Take a breath:** spend your action and your Confidence comes up a size, as far as d6. At d2, that's how you pull yourself together.
 
 :::example[Dorrie at the duke's ball]
-Dorrie walks into the duke's ball in her court clothes, so she starts on d8. She sees straight through the steward's lie, so she's on d10. Then the duke's sister cuts her down in front of the room, and it gets through. Dorrie doesn't want to lose her nerve now, so she buries it and takes a Hurt. Her wound die goes up from d2 to d4, and she stays on d10.
+Dorrie walks into the duke's ball in her court clothes, so she starts on d8. The steward's lie comes at her Confidence, a d6, and her d8 rolls 5 against its 3. She sees straight through it, so she's on d10. Later the duke's sister cuts her down in front of the room, a d10 at her Confidence, and Dorrie's d10 comes up 2 against its 6. It gets through. She doesn't want to lose her nerve now, so she spends 1 Resolve to hold her ground, and she stays on d10.
+
+Next round she goes to work on the duke with her Talk, 4 steps, a d8. It rolls 7 against his 4, so he's laughing at her story, and she's on d12. She's fired up, and she cashes it in straight away for an extra action, so her Confidence drops back to d6.
 :::
 
 :::example[Bram and the brute's roar]
-In a fight, a brute's roar gets through to Bram two rounds running, and both times he lets it shake him: d6 to d4, then d2. He's shaken, so he spends 1 Resolve to go at it anyway.
+Bram's down to d4 after a hard round when the brute's roar gets through his Confidence as well, so he drops to d2. He's shaken. Next round he can spend 1 Resolve to swing at the brute anyway, or spend his action pulling himself together, which brings him back up to d4. He spends the Resolve. His Fight's a d8, and it rolls 7 against the brute's 5, so the hammer lands and his Confidence comes up to d4 anyway.
 :::
 
 ## Armour {#s-armour}
@@ -675,11 +704,11 @@ Broken armour's mended in downtime, the same as anything else you carry: it take
 :::example[Armour at the table]
 Bram's Defend is his first Title, his plate armour and his shield, with the action, 4 steps, a d8.
 
-Round 1: a Warden's spear comes at him, a d8, and nobody answers it. At the end of the round he rolls his Defend and gets a 3, and the spear comes up 6, so it gets through. The GM names a Hurt. It's the first Hurt he's taken this scene, and he's *Unyielding*, so his wound die stays on d2.
+Round 1: a Warden's spear comes at him, a d8, and nobody answers it. At the end of the round he rolls his Defend and gets a 3, and the spear comes up 6, so it gets through. The GM names a Hurt. It's the first Hurt he's taken this scene, and he's *Unyielding*, so his wound die stays on d2, and his Confidence doesn't drop either.
 
-Round 3: another spear gets through, 7 against his 5, and the GM names a Hurt. Bram offers his plate instead. It's crossed out, so his Defend's his first Title and his shield now, with the action, 3 steps, a d6.
+Round 3: another spear gets through, 7 against his 5, and the GM names a Hurt. Bram offers his plate instead. It's crossed out, so his Defend's his first Title and his shield now, with the action, 3 steps, a d6. His armour took the blow, so his Confidence doesn't move.
 
-Round 4: a blow gets through, 6 against his d6's 2, and the GM names a Hurt. Bram's Aspiration has climbed to a d4, so he offers that instead and keeps his body whole, and it steps back down to d2.
+Round 4: a blow gets through, 6 against his d6's 2, and the GM names a Hurt. Bram's Aspiration has climbed to a d4, so he offers that instead and keeps his body whole, and it steps back down to d2. His wound die didn't move, so nor does his Confidence.
 
 Downtime: he spends a slot and a purse of gold at the smithy, and his plate's mended. His Defend's back to 4 steps, a d8.
 :::
@@ -768,41 +797,26 @@ He fills in her set actions with what she's got so far:
 | Study | nothing fits nearly every time | 1 | d2 |
 | Talk | nothing fits nearly every time | 1 | d2 |
 
-Locks is her own, for the thing she does all the time, and *know how a lock's built* sits on it beside her first Title's lines. Her second Title and *find a buyer for anything* don't fit any of these nearly every time, so they stay off, and when one of them fits she'll bring it in for 1 Aura. None of her permissions is on more than one set action, so the limit of two doesn't come into it yet. Defend grows in Step 5, and Move and Locks in Step 6. Her Sneak's what she hides with, so when it gets her into hiding, that d8 goes in her shadow pool.
+Locks is her own, for the thing she does all the time, and *know how a lock's built* sits on it beside her first Title's lines. Her second Title and *find a buyer for anything* don't fit any of these nearly every time, so they stay off, and when one of them fits she'll bring it in for 1 Aura. None of her permissions is on more than one set action, so the limit of two doesn't come into it yet. Defend and Locks grow in Step 5, and Move in Step 6. Her Sneak's what she hides with, so when it gets her into hiding, that d8 goes in her shadow pool.
 
 ### Step 5: What she carries {#step-4-items-three}
 
 -   **Equipment:** worn leathers. That's one piece of plain armour, so it's a line on her Defend, which makes it 2 steps, a d4. She's still got two equipment slots free.
--   **Utility:** a purse of gold and a smoke bomb, and there's room for one more.
+-   **Utility:** a purse of gold, a smoke bomb and a perfect set of picks, which is all 3. The picks are a plain item, and they're in her hands nearly every time she works a lock, so they're a line on her Locks, which makes it 5 steps, a d10.
 -   **Keepsake:** the first coin she ever stole.
 -   **Bag:** empty, and ready for whatever she lifts.
 
 ### Step 6: Attunement {#step-6-attunement}
 
-She attunes the two things she'd never sell. Both start at Awakened, with one permission each:
+She's got one thing to attune, and he picks her grappling line. It starts at Awakened, with one permission: *climb or swing anywhere you can throw a hook*.
 
--   **A perfect set of picks:** *open any lock with a mechanism*.
--   **A grappling line:** *climb or swing anywhere you can throw a hook*.
-
-He could give each one its Catch now for a second permission, but there's no trouble he wants on them yet, so he leaves it. The picks go on Locks, which makes it 5 steps, a d10. The line goes on Move: 4 steps, a d8. Neither counts towards what she carries, and neither can be broken.
+He could give it its Catch now for a second permission, but there's no trouble he wants on it yet, so he leaves it. The line goes on Move: 4 steps, a d8. It doesn't count towards what she carries, and it can't be broken.
 
 ### Step 7: Aura, Resolve, wounds and bonds {#step-6-bonds}
 
 She starts with the usual numbers: 5 Aura, 2 Resolve (one for each Title) and a wound die at d2. Her stride's 5 with Light on my Feet, her Defend's a d4 from the worn leathers, and her Confidence starts every scene on d6.
 
-He writes three threads: one each with two of the crew, and one with someone outside it. The last one's a debt, so he's got room for a fourth when he thinks of one.
-
--   *Dorrie: we have pulled a dozen jobs. I trust her with my life.*
--   *Bram: he once carried me out of a fire. I have never said thank you.*
--   *The fence: I owe a debt I would rather not discuss.*
-
-Bram's player wrote the same truth from his side, so that's one thread on both their sheets. The rest of the crew write theirs too, and three of them are with Vesk, so they go on her sheet as well, in their own words:
-
--   *Dorrie: we came up on the same streets. She never asks why.* (Dorrie's)
--   *Isolde: she stole the book that started all this.* (Isolde's)
--   *Wren: I owe her for the night she hid me from the watch.* (Wren's, a debt)
-
-That's six threads on five bonds, and two of them are with Dorrie.
+Her threads come from her answers to the crew questions, so he writes them in the next step.
 
 ### Step 8: Connect {#step-7-connect}
 
@@ -811,7 +825,19 @@ He answers two of the crew questions:
 -   *Who in the crew do you already know, and how?* Dorrie. We have pulled a dozen jobs together.
 -   *Who do you have unfinished business with?* Bram. He carried me out of a fire and I never thanked him.
 
-Now she's got a reason to be in the crew.
+Now she's got a reason to be in the crew, and both answers become her bond threads. Then he writes a hostile thread with someone outside the crew, the fence she owes, and that gives her room for a third bond thread when he thinks of one.
+
+-   *Dorrie: we have pulled a dozen jobs. I trust her with my life.* (bond)
+-   *Bram: he once carried me out of a fire. I have never said thank you.* (bond)
+-   *The fence: I owe a debt I would rather not discuss.* (hostile)
+
+Her threads with Dorrie and Bram go on their sheets as well, in her words. The rest of the crew write theirs, and three of them are with Vesk, so they go on her sheet too, in their own words:
+
+-   *Dorrie: we came up on the same streets. She never asks why.* (Dorrie's, bond)
+-   *Isolde: she stole the book that started all this.* (Isolde's, hostile)
+-   *Wren: I owe her for the night she hid me from the watch.* (Wren's, bond)
+
+That's six threads on five bonds. Two of them are with Dorrie, and Isolde's is hostile.
 
 ### Step 9: Aspiration {#step-8-aspiration}
 
@@ -830,19 +856,11 @@ Now she's got a reason to be in the crew.
 
 **Set actions:** Sneak 4 (d8) · Move 4 (d8) · Locks 5 (d10) · Defend 2 (d4) · Fight 2 (d4) · Study 1 (d2) · Talk 1 (d2).
 
-**Carries:** Worn leathers (equipment, 1 of 3) · purse of gold, smoke bomb (utility, 2 of 3) · the first coin she ever stole (keepsake) · her bag (0 of 10).
+**Carries:** worn leathers (equipment, 1 of 3) · a purse of gold, a smoke bomb, a perfect set of picks (utility, 3 of 3) · the first coin she ever stole (keepsake) · an empty bag (0 of 10).
 
-**Attuned:** A perfect set of picks (Awakened: *open any lock with a mechanism*) · a grappling line (Awakened: *climb or swing anywhere you can throw a hook*). 2 of 2.
+**Attuned (Awakened):** A grappling line: *climb or swing anywhere you can throw a hook*.
 
-**Threads with Dorrie:** *We have pulled a dozen jobs. I trust her with my life.* · *We came up on the same streets. She never asks why.* (Dorrie's)
-
-**Thread with Bram:** *He once carried me out of a fire. I have never said thank you.*
-
-**Thread with the fence:** *I owe a debt I would rather not discuss.* (a debt)
-
-**Thread with Isolde:** *She stole the book that started all this.* (Isolde's)
-
-**Thread with Wren:** *I owe her for the night she hid me from the watch.* (Wren's, a debt)
+**Threads:** Dorrie: *We have pulled a dozen jobs. I trust her with my life.* (bond) and *We came up on the same streets. She never asks why.* (Dorrie's, bond) · Bram: *He once carried me out of a fire. I have never said thank you.* (bond) · Isolde: *She stole the book that started all this.* (Isolde's, hostile) · Wren: *I owe her for the night she hid me from the watch.* (Wren's, bond) · The fence: *I owe a debt I would rather not discuss.* (hostile)
 
 **Crew:** Already knows Dorrie · Unfinished business with Bram.
 

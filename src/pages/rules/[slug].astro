@@ -2,6 +2,7 @@
 import Base from "../../layouts/Base.astro";
 import Contents from "../../components/Contents.astro";
 import book from "../../generated/book.json";
+import { markNew, newSections } from "../../lib/whats-new.js";
 
 export function getStaticPaths() {
   return book.chapters.map((chapter) => ({ params: { slug: chapter.slug }, props: { chapter } }));
@@ -9,6 +10,9 @@ export function getStaticPaths() {
 
 const { chapter } = Astro.props;
 const eyebrow = chapter.partNumber ? `${chapter.partNumber} · ${chapter.partName}` : "Zi’Dara";
+const fresh = newSections(chapter);
+const html = fresh.length ? markNew(chapter) : chapter.html;
+const latest = fresh.reduce((a, s) => (s.iso > a.iso ? s : a), fresh[0] ?? { iso: "" });
 ---
 <Base title={chapter.title} current="rules">
   <div class="with-rail frame">
@@ -26,7 +30,18 @@ const eyebrow = chapter.partNumber ? `${chapter.partNumber} · ${chapter.partNam
             <p class="eyebrow">{eyebrow}</p>
             <h1>{chapter.title}</h1>
           </header>
-          <Fragment set:html={chapter.html} />
+          {fresh.length > 0 && (
+            <aside class="whats-new" aria-labelledby="whats-new-here" data-pagefind-ignore>
+              <p class="whats-new-head" id="whats-new-here"><span class="new-mark">New</span> Changed in this chapter</p>
+              <ul>
+                {fresh.map((s) => (
+                  <li><a href={`#${s.id}`}><span>{s.name}</span><span class="when">{s.date}</span></a></li>
+                ))}
+              </ul>
+              <a class="whats-new-all" href={`/changes/#${latest.entry}`}>What changed, and what it replaced</a>
+            </aside>
+          )}
+          <Fragment set:html={html} />
         </article>
         <nav class="pager" aria-label="Chapters" data-pagefind-ignore>
           {chapter.prev && (

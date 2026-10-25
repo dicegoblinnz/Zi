@@ -6,7 +6,7 @@ order: 26
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 Before anyone builds a character, pick the kind of world you want to play in.
@@ -72,7 +72,7 @@ Over an arc, the crew builds the ship and its name. They pay off the Kittiwake a
 
 **Secret** *Bought Captains.* Half her captains take Tarrant money to look the other way, and she's got no idea.
 
-**Threads** Toward the crew: *The Kittiwake sails without papers* (bad).
+**Threads** Toward the crew: *The Kittiwake sails without papers* (hostile).
 :::
 
 :::sheet[Tarrant & Daughters]
@@ -104,7 +104,7 @@ Over an arc, the crew builds the ship and its name. They pay off the Kittiwake a
 
 **Secret** *Wreckers.* When trade's slow, they hang false lights on the rocks and strip whatever runs aground.
 
-**Threads** Toward the crew: *The Kittiwake runs our brandy* (good).
+**Threads** Toward the crew: *The Kittiwake runs our brandy* (bond).
 :::
 
 :::sheet[The Drowned Choir]
@@ -165,7 +165,7 @@ A long shadow under clear water, and a low note you feel in your teeth before yo
 **Hidden** *The Bell in Its Throat* (weak point). The drowned city's temple bell is stuck in its throat, and it sings through it for everyone who drowned. Ring a bell back at it on the same note and it goes quiet, and sinks, and doesn't come back.
 :::
 
-The Bell Below is a boss, and its two big tags carry [multipliers](#s-tough), sized for a starting crew of four. The song matters most to it, so *The Song* gets its Challenge, ×6, and *Barnacle Hide* gets ×3. Harpoons, blades and fire tick *Barnacle Hide*. Whatever drowns the song out or breaks its hold ticks *The Song*, like a shanty roared from the deck or a ward. *Deep Water* goes when somebody lures it into the shallows, where it can't dive.
+The Bell Below is a boss, and its two big tags carry [multipliers](#s-tough), sized for a starting crew of four. The song's what it is, so that's where the big one goes, *The Song ×6*, and its hide gets a smaller one, *Barnacle Hide ×3*. Harpoons, blades and fire tick *Barnacle Hide*. Whatever drowns the song out or breaks its hold ticks *The Song*, like a shanty roared from the deck or a ward. *Deep Water* goes when somebody lures it into the shallows, where it can't dive.
 
 ### Characters {#characters}
 
@@ -184,7 +184,7 @@ Magic's real but rare, and sailors are superstitious about it. A weather-caller'
 
 ### The frame rule: the ship {#the-frame-rule-the-ship}
 
-The ship's a [party holding](#s-party-resources), and in Brinewake she's the most important thing on the party sheet. Give her a name and three tags, like *Fast*, *Deep Hold* and *Sound Hull*. Each tag's a permission for whoever's working the ship, where it fits: *Fast* when you're racing a squall or a cutter, and *Deep Hold* when the Fleet comes aboard looking for brandy. She isn't on anyone's set action, so bringing one of her tags into a roll costs 1 Aura, the same as bringing in the ground. Anything can telegraph at the ship, like a storm or a cutter's guns. There's no defence roll for her, the same as a stake: somebody answers it, or it lands and the GM strips one of her tags. Like any consequence, the crew can offer another cost that fits, like Supplies down a size or a Hurt on whoever's at the wheel. A ship with no tags left is a wreck. She floats, just, but she's no use to anyone as a permission, and the GM telegraphs the next blow at her with one answer: if it lands, she sinks. In port, a downtime slot and a purse of gold puts one tag back, the same as mending an item. A full refit, every tag at once, is too big for a purse, so it costs one of the crew's [spare resources](#s-crew-wealth).
+The ship's a [party holding](#s-party-resources), and in Brinewake she's the most important thing on the party sheet. Give her a name and three tags, like *Fast*, *Deep Hold* and *Sound Hull*. Each tag's a permission for whoever's working the ship, where it fits: *Fast* when you're racing a squall or a cutter, and *Deep Hold* when the Fleet comes aboard looking for brandy. She isn't on anyone's set action, so bringing one of her tags into a roll costs 1 Aura, the same as bringing in the ground. Anything can telegraph at the ship, like a storm or a cutter's guns. There's no defence roll for her, the same as a stake: somebody answers it, or it lands and the GM strips one of her tags. Like any consequence, the crew can offer another cost that fits, like Supplies down a size or a Hurt on whoever's at the wheel. A ship with no tags left is a wreck. She floats, just, but she's no use to anyone as a permission, and the GM telegraphs the next blow at her with one answer: if it lands, she sinks. In port, a downtime slot and a purse of gold puts one tag back, the same as mending an item. A full refit, every tag at once, is too big for a purse, so it costs one of the crew's [extra resources](#s-crew-wealth).
 
 :::example[The squall off the Combs]
 The Kittiwake is *Fast*, *Deep Hold* and *Sound Hull*, and there's a squall coming down off the rocks. The GM telegraphs a d10 at the ship: if it lands, it takes the foremast, and *Fast* goes with it.
@@ -286,9 +286,9 @@ Coming back up matters as much as going down. Only [downtime](#downtime) clears 
 
 **Secret** *Their Own Map.* The Guild's map goes two levels deeper than the Company's.
 
-**Bonds** Public Sentiment: *Every team in Lanternhead knows us* (good).
+**Bonds** Public Sentiment: *Every team in Lanternhead knows us* (bond).
 
-**Threads** Toward the crew: *They're one of our teams* (good).
+**Threads** Toward the crew: *They're one of our teams* (bond).
 :::
 
 :::sheet[Holloway's Team]
@@ -304,7 +304,7 @@ Coming back up matters as much as going down. Only [downtime](#downtime) clears 
 
 **Secret** *They Cut the Rope.* Holloway left the Tallow team to die on the second level, and two of them are still alive.
 
-**Threads** Toward the crew: *They're after the same finds* (bad).
+**Threads** Toward the crew: *They're after the same finds* (hostile).
 :::
 
 :::sheet[The Underhold]
@@ -320,7 +320,7 @@ Coming back up matters as much as going down. Only [downtime](#downtime) clears 
 
 **Secret** *Buried from Outside.* The old city never fell. The first kings of the crown sealed it in, and the Company's charter is written on top of that.
 
-**Threads** Toward anyone who comes down with a lamp, the crew included: *They come down with lamps* (bad).
+**Threads** Toward anyone who comes down with a lamp, the crew included: *They come down with lamps* (hostile).
 :::
 
 Holloway's team needs a way through the Drowned Mills, and once the crew's got a map of it, Holloway wants that map and isn't fussy about how he gets it. The Company wants a cut of everything the crew brings up, including the things they'd rather keep.
@@ -474,7 +474,7 @@ A session usually runs one or two trails, then a confrontation once the crew kno
 
 **Secret** *Graves Has Seen It.* He saw it once, on a night shift in the Sumps, and left it out of his report.
 
-**Threads** Toward the crew: *They ask too many questions* (bad).
+**Threads** Toward the crew: *They ask too many questions* (hostile).
 :::
 
 :::sheet[The Lamplighters' Guild]
@@ -504,7 +504,7 @@ A session usually runs one or two trails, then a confrontation once the crew kno
 
 **Secret** *They Fed It First.* The Society's founders gave it its first names to eat, and got things in return that nobody should have.
 
-**Threads** Toward the crew: *Their notes are worth paying for* (good).
+**Threads** Toward the crew: *Their notes are worth paying for* (bond).
 :::
 
 :::sheet[The Thing in the Fog]
@@ -520,7 +520,7 @@ A session usually runs one or two trails, then a confrontation once the crew kno
 
 **Secret** *It Can Be Named.* Its name's in the first ledger the Lamplighters ever kept, and a thing with a name can be bound.
 
-**Threads** None toward the crew, till it notices them. After that, every thread it writes toward them is bad.
+**Threads** None toward the crew, till it notices them. After that, every thread it writes toward them is hostile.
 :::
 
 The Carrow Society wants what the crew's got: their notes. Every clue the crew writes down is one the Society doesn't have to find for itself, so Lord Carrow's happy to pay for them, and when paying doesn't work, he'll stop asking nicely.
@@ -565,7 +565,7 @@ A gentleman in the fog with his hat tipped, always on the far side of the lamp. 
 **Hidden** *His Name in the First Ledger* (weak point). The first lamplighters wrote his name down the night they built the lamps. Say it to his face and he's only an empty coat in the fog.
 :::
 
-The Hollow Gentleman's a boss, and his two big tags carry [multipliers](#s-tough), sized for a starting crew of four. His faces matter most to him, so *Borrowed Faces* gets his Challenge, ×6, and *Feeds* gets ×3. Anything that starves him ticks *Feeds*, like fire or pulling his victim out of reach. Naming the people whose faces he wears ticks *Borrowed Faces*, and finding those names is what the crew's investigation is for.
+The Hollow Gentleman's a boss, and his two big tags carry [multipliers](#s-tough), sized for a starting crew of four. He's his faces, so that's where the big one goes, *Borrowed Faces ×6*, and his hunger gets a smaller one, *Feeds ×3*. Anything that starves him ticks *Feeds*, like fire or pulling his victim out of reach. Naming the people whose faces he wears ticks *Borrowed Faces*, and finding those names is what the crew's investigation is for.
 
 ### Characters {#characters-2}
 
@@ -584,14 +584,14 @@ Magic's real, but most people in Lanternfall would call it a fraud or a sickness
 
 ### The frame rule: Dread {#the-frame-rule-dread}
 
-**Dread** is a condition against you, and in Lanternfall it's what the horrors put on you instead of a wound. It's dread of one thing, named when it's placed. Its passive is one step less on anything that means facing that thing: going at it, Studying it, or going first into the dark it's hiding in. Spend it, and you lose your next action, spent looking anywhere but at it. Any horror with *Fear* can telegraph Dread at your Confidence, and if it lands you're in Dread at the telegraph's die. You can trade it for a cost instead, like any intent, and with fear the cost is one of your three choices: let it shake you and drop a size, bury it and take a Hurt, or hold your ground for 1 Resolve (see [Confidence](#s-confidence)). Everything else works like any [condition](#s-conditions). It fades a size every round, the GM spends it at the end of the round and says so when she telegraphs, and anyone who can reach you can break it with an action that beats its die. A lit lamp'll fit breaking it, and so will a friend's hand on your shoulder.
+**Dread** is a condition against you, and in Lanternfall it's what the horrors put on you instead of a wound. It's dread of one thing, named when it's placed. Its passive is one step less on anything that means facing that thing: going at it, Studying it, or going first into the dark it's hiding in. Spend it, and you lose your next action, spent looking anywhere but at it. Any horror with *Fear* can telegraph Dread at your Confidence, and if it lands you're in Dread at the telegraph's die. You can trade it for a cost instead, like any intent, and with fear that's your choice of two: let it shake you and drop a size of Confidence, or hold your ground for 1 Resolve (see [Confidence](#s-confidence)). Everything else works like any [condition](#s-conditions). It fades a size every round, the GM spends it at the end of the round and says so when she telegraphs, and anyone who can reach you can break it with an action that beats its die. A lit lamp'll fit breaking it, and so will a friend's hand on your shoulder.
 
 :::example[The stare on Gallow Street]
 The GM telegraphs: "The Lamplighter turns his head and looks at Isolde. That's a d10 at her Confidence, and if it lands, she's in Dread of him. I'll spend it at the end of the round."
 
-Isolde answers it. She starts from The dead, because he's a ghost and her first Title fits, but she isn't speaking with him, so she leaves *speak with the recently dead* out. Iron Will fits too, a step on mental rolls, but it's on her Study, so bringing it in costs her 1 Aura. With the action that's 3 steps, a d6. She rolls 4, and his d10 comes up 6. A failed answer lands at once, so she's in Dread d10, and anything she does to face him is a step down while it lasts.
+Isolde answers it. She starts from The dead, because he's a ghost and her first Title fits, but she isn't speaking with him, so she leaves *speak with the recently dead* out. Iron Will fits too, a step on mental rolls, but it's on her Study, so bringing it in costs her 1 Aura. With the action that's 3 steps, a d6. She rolls 4, and his d10 comes up 6. Her only die missed, so her Confidence drops a size. A failed answer lands at once, too, so she's in Dread d10, and anything she does to face him is a step down while it lasts.
 
-Dorrie takes her by the chin. "Look at me, love. Not him, me." She's breaking the Dread, and that's her Talk. Her Title fits talking somebody round, and so does *read a room in a glance*, but there's no lie in this, so *make a lie sound like old news* stays out. With the action that's 3 steps, a d6. She rolls 5 and the Dread's d10 comes up 3, so it's gone, and Isolde's free to Study him at full strength.
+Dorrie takes her by the chin. "Look at me, love. Not him, me." She's breaking the Dread, and that's her Talk. Her Title fits talking somebody round, and so does *read a room in a glance*, but there's no lie in this, so *make a lie sound like old news* stays out. With the action that's 3 steps, a d6. She rolls 5 and the Dread's d10 comes up 3, so it's gone, and Dorrie's Confidence goes up a size for the win. Isolde's free to Study him at full strength.
 :::
 
 ### The first Goal {#the-first-goal-2}
@@ -600,7 +600,7 @@ Start with *Name the thing in the fog*, at d2. Here's what to run alongside it:
 
 -   **A safe house in the Sumps.** When it's done, the crew has a lit house with a good lock where they can keep a witness alive, as a holding.
 -   **Read the Lamplighters' ledgers.** When it's done, the crew gets a crew asset, *Copies of the Ledgers*: once a downtime, ask the GM where the fog fed last, and get a straight answer. The Guild keeps *The Ledgers* itself, and the copies need a resource paying for them, like any asset.
--   **Get the Watch off our backs.** When it's done, the Night Watch writes a good thread toward the crew, and Inspector Graves starts telling you what he left out of his reports.
+-   **Get the Watch off our backs.** When it's done, the Night Watch writes a bond thread toward the crew, and Inspector Graves starts telling you what he left out of his reports.
 
 ### The first job {#the-first-job-2}
 
@@ -647,7 +647,7 @@ It isn't a game of bowing and etiquette lessons, and nobody has to know which fo
 
 A session usually starts with an errand from a patron, and that's *Work for it* in [Factions](#factions). Then the crew works a room, like a ball, a council or a hunt in the Thornwood. Most scenes there are [social conflict](#s-social), where threats come at your Confidence and it's their pride and duty that keep them going, and [Study](#s-study) on a person, finding out what drives them or what they're hiding, does more than any blade. When the talking runs out there's a duel, and when somebody runs, there's a [chase](#chases) across the palace roofs.
 
-Factions matter more here than in any other frame. Every family's on the board, their [threads toward the crew](#s-standing) change nearly every session, and *Influence* is the party slot you'll use most. Over an arc, the crew picks a side in the succession, or makes one of its own. It collects favours (the frame rule's below), runs projects that wear the great families down, and tries to still be standing when the Queen dies. [Downtime](#downtime) is when the families move, and at court every move's aimed at somebody.
+Factions matter more here than in any other frame. Every family's on the board, their [threads toward the crew](#s-standing) change nearly every session, and *Influence* is the move the crew will make most in downtime. Over an arc, the crew picks a side in the succession, or makes one of its own. It collects favours (the frame rule's below), runs projects that wear the great families down, and tries to still be standing when the Queen dies. [Downtime](#downtime) is when the families move, and at court every move's aimed at somebody.
 
 ### The world {#the-world-3}
 
@@ -686,7 +686,7 @@ Factions matter more here than in any other frame. Every family's on the board, 
 
 **Secret** *They Paid the Poisoner.* The Queen's illness came out of a bottle, and the Marchettis bought it.
 
-**Threads** Toward the crew: *Lucia wants them on her books* (good).
+**Threads** Toward the crew: *Lucia wants them on her books* (bond).
 :::
 
 :::sheet[The Queen's Eyes]
@@ -702,7 +702,7 @@ Factions matter more here than in any other frame. Every family's on the board, 
 
 **Secret** *He's Already Chosen.* Thale's picked the next monarch himself, and he's quietly making it happen.
 
-**Threads** Toward the crew: *Nobody owns them yet* (bad).
+**Threads** Toward the crew: *Nobody owns them yet* (hostile).
 :::
 
 :::sheet[The Crown]
@@ -721,7 +721,7 @@ Factions matter more here than in any other frame. Every family's on the board, 
 **Threads** None. She's never heard of you, yet.
 :::
 
-The Queen's Eyes want what the crew's got: its favours. Thale collects other people's debts the way some men collect snuffboxes, and a crew that half the court owes is worth owning. House Marchetti starts with a good thread toward the crew because it wants to be your first patron, and it'll want something back.
+The Queen's Eyes want what the crew's got: its favours. Thale collects other people's debts the way some men collect snuffboxes, and a crew that half the court owes is worth owning. House Marchetti starts with a bond thread toward the crew because it wants to be your first patron, and it'll want something back.
 
 ### Threats {#threats-3}
 
@@ -761,7 +761,7 @@ The best sword in Aurel, and the Queen's last loyal man.
 **Hidden** *Sworn to the Hidden Heir* (weak point). He guards the Queen's secret son. Show him you know, and that you're on the boy's side, and he lowers his sword.
 :::
 
-The Champion's a boss, and his two big tags carry [multipliers](#s-tough), sized for a starting crew of four. His guard matters most to him, so *Perfect Guard* gets his Challenge, ×6, and *The Crowd's Favourite* gets ×3. Only one of you might be holding a sword, but the whole crew can fight him. Blades and footwork tick *Perfect Guard*, and turning the court against him ticks *The Crowd's Favourite*.
+The Champion's a boss, and his two big tags carry [multipliers](#s-tough), sized for a starting crew of four. His guard's what makes him the best sword in Aurel, so that's where the big one goes, *Perfect Guard ×6*, and the court's love for him gets a smaller one, *The Crowd's Favourite ×3*. Only one of you might be holding a sword, but the whole crew can fight him. Blades and footwork tick *Perfect Guard*, and turning the court against him ticks *The Crowd's Favourite*.
 
 ### Characters {#characters-3}
 
@@ -780,14 +780,14 @@ Brute force doesn't get far in the palace. There's a hundred guards, and a law a
 
 ### The frame rule: favours {#the-frame-rule-favours}
 
-At court, a thread can be a **favour**. When someone owes you, write it on your bond with them as a thread that says so, like *Lady Maud owes me for the letter.* It works like any thread. Calling it in is straining it: you take 1 Resolve, and they do one thing for you that's within their power, with no roll. The thread stays strained until you make it right with them, and if you call on it again before then, it snaps. Once you've made it right, the favour's paid: rewrite the thread as whatever's true between you now. If the GM says it's too big for one favour, make it smaller, or call in two. A favour has to come from the story, from a service you did them in a scene or a downtime slot you spent on them. The ones you owe are [debts](#s-bonds), and when somebody calls one in, you don't get to say no.
+At court, a thread can be a **favour**. When someone owes you, write it on your bond with them as a thread that says so, like *Lady Maud owes me for the letter* (bond). It works like any bond thread. Calling it in is straining it: you take 1 Resolve, and they do one thing for you that's within their power, with no roll. The thread stays strained until you make it right with them, and if you call on it again before then, it snaps. Once you've made it right, the favour's paid: rewrite the thread as whatever's true between you now. If the GM says it's too big for one favour, make it smaller, or call in two. A favour has to come from the story, from a service you did them in a scene or a downtime slot you spent on them. A favour you owe someone is a hostile [thread](#s-bonds), the way any debt is, so it bites like a Catch: let them call it in when it'll bring you real trouble, and take 1 Aura, or 1 Resolve for a big bite.
 
 :::example[Calling in Lady Maud]
-In this game Dorrie's got three threads on her bond with Lady Maud, and one of them's a favour: *Maud owes me for the letter I never sent.* She's down to 1 Resolve.
+In this game Dorrie's got three threads on her bond with Lady Maud, and one of them's a favour, a bond thread: *Maud owes me for the letter I never sent.* She's down to 1 Resolve.
 
 Dorrie needs to be in the Queen's sickroom tonight, so she calls the favour in, and Maud gets her a place among the Queen's women, with no roll. That strains the thread, so Dorrie takes 1 Resolve and she's back on 2. It stays strained until she makes it right with Maud, and at court that probably means doing her a favour back.
 
-At supper the Dowager telegraphs: "And how is your mother, dear? Still taking in laundry?" That's a d10 at Dorrie's Confidence. Her court clothes fit the scene, so she started it on a d8 instead of a d6, and she lets the telegraph ride. At the end of the round her d8 rolls 4, and the Dowager's d10 rolls 6, so it gets through. She could let it shake her down to a d6, or bury it and take a Hurt, but she's got the Resolve from Maud's favour, so she spends it and holds her ground. She's still on a d8.
+At supper the Dowager telegraphs: "And how is your mother, dear? Still taking in laundry?" That's a d10 at Dorrie's Confidence. Her court clothes fit the scene, so she started it on a d8 instead of a d6, and she lets the telegraph ride. At the end of the round her d8 rolls 4, and the Dowager's d10 rolls 6, so it gets through. She could let it shake her down to a d6, but she's got the Resolve from Maud's favour, so she spends it and holds her ground. She's still on a d8.
 :::
 
 ### The first Goal {#the-first-goal-3}
@@ -882,7 +882,7 @@ The ship's a [party holding](#s-party-resources), a line for whoever's flying he
 
 **Secret** *A Forged Note.* The crew's loan was bought from a dead bank, and the paperwork wouldn't last five minutes in front of a judge.
 
-**Threads** Toward the crew: *They're behind on their payments* (bad).
+**Threads** Toward the crew: *They're behind on their payments* (hostile).
 :::
 
 :::sheet[The Free Stations Compact]
@@ -898,9 +898,9 @@ The ship's a [party holding](#s-party-resources), a line for whoever's flying he
 
 **Secret** *Running Guns.* The Compact's arming the miners, and one Combine inspection would find the crates.
 
-**Bonds** Public Sentiment: *Every dock on the Fringe knows us* (good).
+**Bonds** Public Sentiment: *Every dock on the Fringe knows us* (bond).
 
-**Threads** Toward the crew: *They carry for Tolliver's Rock* (good).
+**Threads** Toward the crew: *They carry for Tolliver's Rock* (bond).
 :::
 
 :::sheet[The Rustbacks]
@@ -1014,7 +1014,7 @@ The Second Chance leaves Port Meridian with full tanks, so Fuel's a d8. The run'
 Start with *Pay off the Second Chance*, at d2. Here's what to run alongside it:
 
 -   **Fix the reactor shield.** When it's done, *Hot Reactor* is gone, and nobody aboard has to wear a radiation badge any more.
--   **Light Waystation Nine.** When it's done, the beacon's back on, the Free Stations Compact's agenda steps up one, and it writes another good thread toward the crew.
+-   **Light Waystation Nine.** When it's done, the beacon's back on, the Free Stations Compact's agenda steps up one, and it writes another bond thread toward the crew.
 -   **Find the forged note.** When it's done, Halberd Credit's secret is the crew's, and Mr Pell stops calling.
 
 ### The first job {#the-first-job-4}
@@ -1052,8 +1052,8 @@ Every frame in this chapter is the same eleven parts in the same order. Write ea
 2.  **Tone and feel.** How it should feel at the table, in plain words, and what it isn't. Say how funny it gets.
 3.  **What the crew does.** The loop of a session and the loop of an arc, and which chapters do the work: [Travelling](#travelling), [Exploring](#exploring), [Investigating](#investigating), [Chases](#chases), [Factions](#factions) or [Downtime](#downtime).
 4.  **The world.** Four or five places, a sentence or two each. [Building Your World](#world) has tables if you're stuck.
-5.  **The board.** Four factions to start, each on a card, with at least one that wants something the crew's got. A faction that doesn't deal in money, like the Drowned Choir or the Thing in the Fog, still has resources: they're whatever keeps it going.
-6.  **Threats.** Two that only this world has, built with [The Threat Builder](#threat-builder), each with three telegraphs. If one's a boss, give its big tags [multipliers](#s-tough): about its Challenge on the one that matters most to it, and less on the rest, for a starting crew of four.
+5.  **The board.** Four factions to start, each on a card, with at least one that wants something the crew's got. A faction that doesn't deal in money, like the Drowned Choir or the Thing in the Fog, still has resources: they're whatever keeps it going. There's a list of [assets](#faction-strength) to start from in Appendix B.
+6.  **Threats.** Two that only this world has, built with [The Threat Builder](#threat-builder), each with three telegraphs. If one's a boss, give its big tags [multipliers](#s-tough-gm), as big as it needs and where they say what it is, for a starting crew of four.
 7.  **Characters.** Four Titles that fit, the [Title ideas](#s-title-ideas) that fit best, the permissions that matter here, and anything that doesn't belong, magic included. If the world needs a Title idea the book hasn't got, write it in the same shape, the way Long Haul does, and say which archetypes it suits.
 8.  **One frame rule.** One small thing built from parts the book already has: a clock, a condition, a tag or a party holding. If it takes more than a paragraph to explain, it's too big.
 9.  **The first Goal**, at d2, with two or three projects to run alongside it.

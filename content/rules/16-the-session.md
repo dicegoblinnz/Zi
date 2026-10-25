@@ -6,7 +6,7 @@ order: 16
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 A session is one night of Zi'Dara, and it's got a shape.
@@ -67,4 +67,4 @@ The log is one sentence a session, written by a different player each time, in a
 
 ## Sharing the Spotlight {#sharing-the-spotlight}
 
-Keep a rough count of who's had a moment tonight. Before the session ends, everyone should have had at least one problem that was theirs to solve. If someone's had a quiet night, aim the next scene at their Aspiration or at someone they've got a thread with, or put something in it one of their Catches could bite on, like a forester in the market for Wren's *Wanted* longbow. Whether it bites is up to them (see [Catches and Resolve at the Table](#s-catches-gm)). There's more in [A moment for each character](#s-spotlight).
+Keep a rough count of who's had a moment tonight. Before the session ends, everyone should have had at least one problem that was theirs to solve. If someone's had a quiet night, aim the next scene at their Aspiration or at someone they've got a thread with, or put something in it one of their Catches or hostile threads could bite on, like a forester in the market for Wren's *Wanted* longbow. Whether it bites is up to them (see [Catches and Resolve at the Table](#s-catches-gm)). There's more in [A moment for each character](#s-spotlight).

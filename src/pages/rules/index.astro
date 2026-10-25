@@ -1,6 +1,7 @@
 ---
 import Base from "../../layouts/Base.astro";
 import book from "../../generated/book.json";
+import { recentEntries, isNewChapter } from "../../lib/whats-new.js";
 
 const welcome = book.chapters.filter((c) => !c.partNumber);
 const parts = book.parts.map((p) => ({ ...p, chapters: book.chapters.filter((c) => c.partNumber === p.number) }));
@@ -13,6 +14,13 @@ const parts = book.parts.map((p) => ({ ...p, chapters: book.chapters.filter((c) 
       {welcome.map((c) => <a class="button primary" href={`/rules/${c.slug}/`}>Start with {c.title}</a>)}
       <a class="button" href="/changes/">What’s changed</a>
     </div>
+    {recentEntries.length > 0 && (
+      <a class="card whats-new-strip" href={`/changes/#${recentEntries[0].id}`}>
+        <span class="new-mark">New · {recentEntries[0].date}</span>
+        <span class="strip-title">{recentEntries[0].title}</span>
+        <span class="strip-go">What changed</span>
+      </a>
+    )}
     <div class="parts">
       {parts.map((p) => (
         <section class="part">
@@ -20,7 +28,7 @@ const parts = book.parts.map((p) => ({ ...p, chapters: book.chapters.filter((c) 
           <h2>{p.name}</h2>
           <p>{p.description}</p>
           <ol>
-            {p.chapters.map((c) => <li><a href={`/rules/${c.slug}/`}>{c.title}</a></li>)}
+            {p.chapters.map((c) => <li><a href={`/rules/${c.slug}/`}>{c.title}{isNewChapter(c.slug) && <span class="new-dot" title="Something in here changed recently"><span class="visually-hidden"> (new rules)</span></span>}</a></li>)}
           </ol>
         </section>
       ))}

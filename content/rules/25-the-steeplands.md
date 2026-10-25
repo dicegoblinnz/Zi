@@ -6,7 +6,7 @@ order: 25
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 You can play Zi'Dara in any setting you like, but if you don't have a world in mind, here's one in two pages, ready to play.
@@ -32,7 +32,7 @@ The Steeplands are a rain-soaked archipelago of trade cities and old grudges. Sh
 
 Each faction's Power is 1 step, plus the assets listed with it. The Estate's got one more asset that doesn't add Power, *Relic: The Inkwell*, and its whole card, with what each asset does, is in [Factions](#s-faction-board). The Bound don't deal in money, so their resources are what holds them here.
 
-None of the four has a thread toward a new crew. The Estate writes a bad one the first time anyone asks about its paintings: *They asked about the paintings*.
+None of the four has a thread toward a new crew. The Estate writes a hostile one the first time anyone asks about its paintings: *They asked about the paintings*.
 
 ## The four cities that matter {#the-four-cities-that-matter}
 

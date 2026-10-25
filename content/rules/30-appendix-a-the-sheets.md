@@ -6,7 +6,7 @@ order: 30
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 There are three sheets: one for each character, one the whole crew shares, and a faction board you can print as often as you need.
 
@@ -21,7 +21,7 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 -   Aura (now \_\_\_ · max \_\_\_ · full every scene, and 5 unless your sheet changes it)
 -   Stride (3 to start)
 -   Resolve (a star for each Title, and one more or one fewer for the Resolve Boon or Burden: that's your maximum · fill in the ones you've got · 1 back at the end of every scene, and all of it after downtime)
--   Confidence (a row of dice from d2 to d12: ring the one you're on, and move the ring as it swings · d6 at the start of every scene, a size up in clothes that fit it · d12 is fired up, d2 is shaken · back to d6 when the scene ends)
+-   Confidence (a row of dice from d2 to d12: ring the one you're on, and move the ring as it swings · d6 at the start of every scene, a size up in clothes that fit it · up a size when one of your dice wins or you stop a telegraph, and down a size when your wound die goes up or every die misses · d2 is shaken, d12 is fired up · back to d6 when the scene ends)
 -   Conditions (4 · the die that placed it, with its size to ring)
 -   Wound die (d2 → d4 → d6 → d8 → d10 → d12 → Blaze: ring the one you're on · every Hurt puts it up a size, and a Hurt at d12 Blazes · a heal has to beat it · when a scene ends, roll your Confidence against it, and beat it to bring it down a size · downtime clears it to your Scars)
 -   Scars (5 lines, one for each Scar's Catch · beside each one, the size your wound die never goes below once you've got it, d4 for the first up to d12 for the fifth · with five, your next Blaze is your last)
@@ -41,8 +41,8 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 -   Six Titles: I and II to start, III to VI earned in play
 -   On each: the Title, the name you give your archetype · the archetype · six permission lines (three to start on I and II, one on a Title you earn later)
 -   A Boon takes two permission lines on the Title that pays for it
--   Attunement (2 slots to start, on top of what you carry · on each: the thing · Awakened, Tempered or Perfected, to ring · the material that took it there · its Catch · its Burden · six permission lines · a Summoner's summoning attunement writes its souls and their dice on those lines instead)
--   Bonds (6 · four thread lines on each · tick the first box when a thread's strained, and the second when it snaps)
+-   Attunement (two cards · you start with one thing, and attune more later in downtime, on top of what you carry · on each: the thing · Awakened, Tempered or Perfected, to ring · the material that took it there · its Catch · its Burden · six permission lines · a Summoner's summoning attunement writes its souls and their dice on those lines instead)
+-   Bonds (6 · four thread lines on each · ring each thread bond or hostile · tick the first box when it's strained, and the second when it snaps)
 :::
 
 Title cards don't have a Catch line. Your Catches live on your attuned things, on the back, and in your Scars, on the front.
@@ -66,9 +66,9 @@ Two A4 sheets, printed double-sided. The fronts are faction board tiles A and B,
 -   The crew's name
 -   Reputations (one for every Goal done · a step on any crew roll it fits)
 -   Power (d4 to start · 1 step, plus 1 for each asset that adds Power)
--   Resources (where the crew's money comes from, one line each · each one pays for an asset, and one that isn't is spare)
+-   Resources (where the crew's money comes from, one line each · each one pays for an asset, and one that isn't is an extra resource)
 -   Assets (what the crew can do, one line each, with what it does · each one needs a resource paying for it)
--   How it grows · Spare resources
+-   How it grows · What an extra resource can buy
 -   The Goal (d2 → d4 → d6 → d8 → d10 → d12 → past d12: the crew grows)
 -   Projects (what it is · what happens when it's done · d2 → d12)
 -   Aspirations (every player's, d2 → d12)
@@ -96,6 +96,6 @@ The **Faction Sheet** is the same board on one A4 page, for tables that need mor
 -   Agendas (two at most · each d2 → d12 → past d12: it happens)
 -   Face
 -   Secret
--   Bonds (Public Sentiment · Morale · Loyalty, each with its threads)
--   Threads toward the crew (mostly good and it's friendly, mostly bad and it's hostile)
+-   Bonds (Public Sentiment · Morale · Loyalty, each with its bond and hostile threads)
+-   Threads toward the crew (bond or hostile · mostly bond threads and it's friendly, mostly hostile and it's hostile, none or as many of each and it does business)
 :::

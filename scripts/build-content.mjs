@@ -21,6 +21,7 @@ import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import { visit, SKIP } from "unist-util-visit";
 import { diceLabel, stepsToDice } from "../src/companion/dice.js";
+import { threadNote } from "../src/companion/threads.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const RULES = join(ROOT, "content", "rules");
@@ -340,17 +341,19 @@ function sheetFrom(name, titleText, body, block, ctx) {
     shrug: Math.max(shrugOf(woundNote), ...traits.map((t) => shrugOf(ctx.traits[t.name]?.text))),
   };
 
-  // Threads by person. A note in brackets after one says whose words it is, or
-  // that it's a debt.
+  // Threads by person. The note in brackets after each one says what kind it
+  // is, bond or hostile, whose words it is when it's someone else's, and
+  // whether it's strained: (bond), (Dorrie's, hostile), (bond, strained).
   const threads = dropStop(field.Threads).split(" · ").filter(Boolean).map((seg) => {
     const t = seg.match(/^([^:*]+): (.+)$/);
     if (!t) {
       warn(`can't read the threads "${seg}"`);
       return null;
     }
-    const list = [...t[2].matchAll(/\*([^*]+)\*(?: \(([^)]+)\))?/g)].map((x) => ({ text: plain(x[1]), note: x[2] ? curly(x[2]) : null, debt: /\bdebt\b/.test(x[2] ?? "") }));
-    if (!list.length) warn(`no threads with ${t[1]}`);
-    return { person: curly(t[1]), threads: list };
+    const person = curly(t[1]);
+    const list = [...t[2].matchAll(/\*([^*]+)\*(?: \(([^)]+)\))?/g)].map((x) => threadFrom(plain(x[1]), x[2], (msg) => warn(`the thread with ${person}, ${msg}`)));
+    if (!list.length) warn(`no threads with ${person}`);
+    return { person, threads: list };
   }).filter(Boolean);
 
   const crewQs = [...(field.Crew ?? "").matchAll(/\*([^*]+?\?)\*\s+([^*]+)/g)].map((x) => ({ q: curly(x[1]), a: curly(x[2].trim()) }));
@@ -375,6 +378,40 @@ function sheetFrom(name, titleText, body, block, ctx) {
     aspiration: { text: curly(asp?.[1] ?? ""), die: Number(asp?.[2] ?? 2) },
     trouble: troubleLabel ? italics(field[troubleLabel]) : [],
   };
+}
+
+// One thread off a crew sheet. Its note has to say bond or hostile, and it can
+// say whose words it is and that it's strained, in that order. Anything else
+// stops the build, a debt included, since there's no debt any more.
+function threadFrom(text, raw, warn) {
+  const parts = raw ? curly(raw).split(/,\s*/) : [];
+  const whose = /’s$/.test(parts[0] ?? "") ? parts.shift() : null;
+  const kind = parts.shift();
+  const strained = parts[0] === "strained";
+  if (strained) parts.shift();
+  if (kind !== "bond" && kind !== "hostile") warn(`“${text}”, says ${raw ? `(${raw})` : "nothing in brackets"}, and every thread has to say bond or hostile`);
+  if (parts.length) warn(`“${text}”, has “${parts.join(", ")}” in its brackets, and they only take whose it is, bond or hostile, and strained`);
+  const t = { text, kind: kind === "hostile" ? "hostile" : "bond", whose, strained };
+  return { ...t, note: threadNote(t) };
+}
+
+// A thread with someone in the crew goes on both sheets, the same words and
+// the same kind, and it's in someone else's words on exactly one of them.
+function checkMirrors(crew, warn) {
+  const byName = new Map(crew.map((c) => [c.name, c]));
+  for (const c of crew) {
+    for (const p of c.threads) {
+      const other = byName.get(p.person);
+      if (!other) continue;
+      for (const t of p.threads) {
+        const back = other.threads.find((x) => x.person === c.name)?.threads.find((x) => x.text === t.text);
+        if (!back) warn(`${c.name}'s thread with ${p.person}, “${t.text}”, isn't on ${p.person}'s sheet`);
+        else if (back.kind !== t.kind) warn(`${c.name}'s thread with ${p.person}, “${t.text}”, is ${t.kind} on one sheet and ${back.kind} on the other`);
+        else if (Boolean(back.whose) === Boolean(t.whose)) warn(`${c.name}'s thread with ${p.person}, “${t.text}”, needs to say whose it is on one sheet and not the other`);
+        else if (back.strained !== t.strained) warn(`${c.name}'s thread with ${p.person}, “${t.text}”, is strained on one sheet and not the other`);
+      }
+    }
+  }
 }
 
 // What each archetype does, what 1 Aura gets it and what its 1 Resolve
@@ -576,6 +613,7 @@ const ctx = {
 const crewDoc = docWith("{#s-pregens}");
 const crew = crewDoc ? crewFrom(crewDoc, ctx) : [];
 if (crew.length !== 6) companionWarn(`expected the six crew sheets, found ${crew.length}`);
+checkMirrors(crew, companionWarn);
 const buildDoc = docWith("{#s-traits}");
 const ideasDoc = docWith("{#s-quick}");
 const build = buildDoc && ideasDoc ? buildFrom(buildDoc, ideasDoc, ctx.archetypes, inline, (msg) => companionWarn(`builder: ${msg}`)) : null;
@@ -616,7 +654,7 @@ const companionLinks = Object.fromEntries(
     "s-splitting", "s-teamwork", "s-extra-actions", "s-going-beyond", "s-the-roll", "s-defending", "s-defend", "s-intercept", "s-vulnerable", "s-fear-gets-through",
     "s-consequences", "s-aspiration", "s-pregens", "s-set-actions", "s-how-archetypes", "s-attunement", "s-carrying", "s-traits", "s-intents",
     "s-quick", "s-title-ideas", "s-title", "s-writing-permissions", "the-quick-test", "permission-ideas", "s-step-set-actions", "s-items",
-    "the-item-list", "catches-12", "s-starting-numbers", "s-connect", "what-you-can-do-with-a-slot", "attunement-stages", "s-downtime-threads"]
+    "the-item-list", "catches-12", "s-starting-numbers", "s-connect", "what-you-can-do-with-a-slot", "attunement-stages", "s-downtime-threads", "s-playing-the-strain"]
     .map((id) => [id, linkTo(id)]),
 );
 for (const c of crew) for (const a of c.archetypeRules) if (a.id) companionLinks[a.id] = linkTo(a.id);

@@ -6,7 +6,7 @@ order: 19
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 Your job is to build the players a world worth being competent in, and beating them isn't part of it.
@@ -112,7 +112,7 @@ Then Isolde finds the deed, and the GM makes another move. She reveals something
 
 ## Catches and Resolve at the Table {#s-catches-gm}
 
-Letting a Catch bite is up to the player. You've got telegraphs, the cost of a miss and every move above to make things go wrong, so leave their Catches to them, and that goes for their [Scars](#s-blaze) too, because a Scar's a Catch. When one bites, or a player drops their character in it without a Catch at all, run with it and make it real trouble: a new telegraph, a new stake, or someone who wants something. They take 1 Aura each time, as often as they like.
+Letting a Catch bite is up to the player. You've got telegraphs, the cost of a miss and every move above to make things go wrong, so leave their Catches to them. That goes for their [Scars](#s-blaze) too, because a Scar's a Catch, and for their hostile [threads](#s-bonds), which bite the same way. When one bites, or a player drops their character in it without a Catch at all, run with it and make it real trouble: a new telegraph, a new stake, or someone who wants something. They take 1 Aura each time, as often as they like.
 
 When a Catch bites big, because it changes the scene or costs them something they wanted, they can take 1 Resolve instead of the Aura. It's their call when.
 
@@ -124,7 +124,7 @@ If Wren's player had said the woman shouts for the watch and the market turns in
 
 -   **Give 1 Resolve for great roleplay**, like a character facing their fear or keeping a promise they made to themselves. It's your best way of saying *more of that*. It can't take anyone past their maximum.
 -   **Give 1 Aura when a great setup doesn't land.** There's an example in [Consequences and Failure](#s-gm-consequences).
--   **Play your NPCs' side of a thread.** When a player strains a thread with one of your people, like calling in a favour or using their name, they take 1 Resolve, and that person feels it. Play it the way [Playing the strain](#s-playing-the-strain) says: the thread gives the reason, so say how it shows and what would make it right, and play that and nothing bigger. They can mend it in downtime or in a scene with that person, but not in the middle of the fight where they strained it, and once it's mended, let it go.
+-   **Play your NPCs' side of a thread.** When a player strains a bond thread with one of your people, like calling in a favour or using their name, they take 1 Resolve, and that person feels it. Play it the way [Playing the strain](#s-playing-the-strain) says: the thread gives the reason, so say how it shows and what would make it right, and play that and nothing bigger. They can mend it in downtime or in a scene with that person, but not in the middle of the fight where they strained it, and once it's mended, let it go. A hostile thread works the other way round, and nobody strains it for Resolve. Doing right by that person strains it, and doing it again snaps it, so the grudge is over. Wrong them again before then and it's whole again.
 
 ## Building a Scene {#s-building-scenes}
 
@@ -252,15 +252,15 @@ Never count hits. Count the reasons it's still standing. When a player asks "how
 One win, one tag is right for most threats. A boss that should last needs more than that, so give its big tags [multipliers](#s-tough): *Armoured ×6* takes six wins to strip, and every win ticks one off. Like any tag, only what fits it ticks it: blades and hammers tick *Natural Armour*, and shaming a captain in front of his men ticks *Commanding Presence*.
 
 -   **Who gets them.** Mostly bosses. A Named threat that should take a while can have one too, and so can a big obstacle: a vault door that's *Reinforced ×4*, a crowd that's *Loyal ×3*, a storm, a fire.
--   **How much.** The usual multiplier is the threat's Challenge, on the tag that matters most to it, so the Iron Warden's armour is *Armoured ×6*. Go higher if that tag's what the whole fight's about, and lower on the rest. A Challenge 4 knight who's the boss of the scene might be *Armoured ×4*, *Shield ×3* and *Sword ×2*. That's for a starting crew of four, and [The Threat Budget](#s-threat-budget) says how to scale it.
+-   **How much.** A multiplier's as big as the creature needs, and where it goes says what the creature is. Its Challenge is a good place to start, then go up or down from there: a dragon's hide might be *Hide ×8*, and a dark paladin who's the villain of the whole arc might be *Plate Armour ×5* and *Shield ×3*. Keep it in proportion to who they are, and make sure it makes sense. Size them for a starting crew of four, and [The Threat Budget](#s-threat-budget) says how to scale them.
 -   **Give it things to tackle.** A multiplier makes a tag last, and its other tags are what make the fight: something to knock out of the air, a shield to break, a shout to stop. Keep a plain tag or two beside the big ones, so a single good win always has something to take.
 -   **First, when it's a shell.** Mark a tag *first* when the story says you can't get at the rest until it's gone: a hide, a shield wall, a crowd of bodyguards. Leave it off when the crew should be able to go round it.
 -   **Say what each tick looks like:** plates cracking off his shoulders, or his men looking at each other. Then say what's left: *"Armoured ×2 left."*
--   **Vulnerabilities tick them faster.** Every [vulnerability](#s-vulnerable) that fits a win adds a tick to the tag the win went for, so once a boss is knocked *Prone*, every win from whoever's standing over it takes two off its armour. That's the crew's reward for setting it up, so let it land.
+-   **A vulnerability's a big deal.** Every [vulnerability](#s-vulnerable) that fits a win adds a tick, and the player chooses where each one goes: another off the same tag, or one on another tag that keeps it going, which strips a plain one outright. It has to make sense, and a *first* tag still comes first. So once the paladin's knocked *Prone*, every win from whoever's standing over him is two ticks: two off his plate, or one off his plate and one off his shield. That's the crew's reward for setting it up, so let it land. It also means one vulnerability can strip two tags in a single hit, so a boss with one goes down a lot faster than its tags say. Give them out with care.
 -   **Keep the way in open.** A weak point still ends it, an opening takes two whole tags off a boss, multipliers and all, and Study can find what's under the first one, so a clever crew never has to grind through the lot.
 
 :::example[Making Redhand last]
-Redhand, the boss in [The Threat Builder](#threat-builder), started as three plain tags and a weak point. Against a starting crew of four, he'd often fall in the first round. His Challenge is 6, and the tag that matters most is his armour, so it's *Armoured ×6 (first)*. His feeding matters too, but less, so it's *Feeds ×3*, and *Relentless* stays plain. That's ten wins the long way: six through his armour, one for *Relentless*, and three to stop him feeding. A crew of four lands about two wins a round, so most crews will spend four or five rounds on him, or one, if they've read Vane's ledger and say his name.
+Redhand, the boss in [The Threat Builder](#threat-builder), started as three plain tags and a weak point. Against a starting crew of four, he'd often fall in the first round. His Challenge is 6, so that's where his multipliers start, and his armour's what makes him a wall, so it gets the big one: *Armoured ×6 (first)*. His feeding's part of him too, but a smaller part, so it's *Feeds ×3*, and *Relentless* stays plain. That's ten wins the long way: six through his armour, one for *Relentless*, and three to stop him feeding. A crew of four lands about two wins a round, so most crews will spend four or five rounds on him, or one, if they've read Vane's ledger and say his name.
 :::
 
 ### Hidden tags and weak points {#hidden-tags-and-weak-points}
@@ -269,7 +269,7 @@ Anything that matters should have **one hidden tag**, and every boss should have
 
 A weak point is the reward for paying attention: for studying, asking questions, remembering what the old woman in session two said. Make weak points findable, and make finding them feel like winning.
 
-A vulnerability makes a good hidden tag too, on a threat with multipliers. Once Study finds that the Warden's *Dry as Tinder*, every fire that wins on it ticks once more, and the crew starts planning around Ash.
+A vulnerability makes a good hidden tag too. Once Study finds that the Warden's *Dry as Tinder*, every fire that wins on it gets one more tick, enough to strip a second tag or take two off its armour, and the crew starts planning around Ash.
 
 ### Powers are tags {#powers-are-tags}
 
@@ -369,9 +369,11 @@ Let the threat's tags tell you what it does. *Reach* pins from a distance, *Call
 
 ### Fear is a telegraph {#s-fear-gm}
 
-Fear, lies and pressure are telegraphs like any attack, aimed at Confidence: *the brute roars at Bram, a d8 at his Confidence.* Bram can answer it, Defend or let it ride, the usual way, and that's his fear check. There isn't another one.
+Fear, lies and pressure are telegraphs like any attack, aimed at Confidence: *the brute roars at Bram, a d8 at his Confidence.* Bram can answer it or let it ride, and that's his fear check. There isn't another one. Defending won't help him, because Defend's for blows, and nobody can [intercept](#s-intercept) it for him, because it's inside his head. That's the [Bard](#a-bard)'s job: a Bard's song can stand between the whole crew and the fear.
 
-It's worth going after Confidence, because it swings up and down through a scene. Anyone who stops all the fear, lies and pressure that came at them goes up a size, and so does anyone who takes a threat down. When some gets through, they choose what it costs them (see [Consequences and Failure](#s-gm-consequences)). At d2 they're shaken, and they've got to spend 1 Resolve every time they go at a threat, in a fight or face to face. Say the roar gets through to Bram two rounds running, and both times he lets it shake him: d6 to d4, then d2. Now he's shaken, so going at the brute costs him 1 Resolve.
+It's worth going after Confidence, because at d2 they're shaken. They can't act at what the scene's about unless they spend 1 Resolve, and otherwise their action goes on pulling themselves together, which brings them back up to d4. It moves with everything they do. It goes up a size for every telegraph their defence stops and every action where one of their dice wins, and it drops a size for every step their wound die takes and every action where every die misses. When fear gets through, they choose what it costs them (see [Consequences and Failure](#s-gm-consequences)). At d12 they're fired up, and they can cash it in for an extra action or to step their wound die down.
+
+Say Bram swings at the brute and his d8 comes up 2 against its 5. That's every die he rolled missing, so his Confidence drops from d6 to d4. At the end of the round his d4 rolls 3 against the roar's 6, so it gets through, and he lets it drop again, to d2. Now he's shaken. Next round he can't go at the brute unless he spends 1 Resolve, so he pays it and swings anyway. Without the Resolve, his action would go on pulling himself together, and that'd put him back on d4.
 
 ### Aim at what they care about {#aim-at-what-they-care-about}
 
@@ -379,11 +381,11 @@ Go for the stake they're winning, the friend whose Defend is a d2, the item mark
 
 ### Pressure heavy armour {#pressure-heavy-armour}
 
-Plate and a shield are lines on Defend like anything else, so Bram's Defend is his first Title, his plate and his shield, a d8, and it grows with everything he puts on it. That's what plate's meant to do. Instead of fighting it with bigger numbers, fight it with more dice. **His d8 stops one telegraph**, so a second threat on him gets one through, however well he rolls. Now he has to choose: let it ride and pick which one the d8 stops, or spend his action Defending, so his three lines count twice and he's rolling 7 steps (a d12 and a d2, or two d6s and a d2) instead of swinging. Go for the friends beside him too, because every die he takes off them is one more his Defend has to stop, and aim at what plate does nothing for, like his Confidence, the stake behind him or the clock. Heavy armour buys time, so make them decide what to spend it on.
+Plate and a shield are lines on Defend like anything else, so Bram's Defend is his first Title, his plate and his shield, a d8, and it grows with everything he puts on it. That's what plate's meant to do. Instead of fighting it with bigger numbers, fight it with more dice. **His d8 stops one telegraph**, so a second threat on him gets one through, however well he rolls. Now he has to choose: let it ride and pick which one the d8 stops, or spend his action Defending, so his three lines count twice and he's rolling 7 steps (a d12 and a d2, or two d6s and a d2) instead of swinging. Go for the friends beside him too, because every die he takes off them is one more his Defend has to stop, and aim at what plate does nothing for, like his Confidence (Defending doesn't help that either), the stake behind him or the clock. Heavy armour buys time, so make them decide what to spend it on.
 
 ### Go easy on vulnerabilities {#go-easy-on-vulnerabilities}
 
-A [vulnerability](#s-vulnerable) on one of the crew makes a hit two Hurts, so their wound die jumps two sizes at once. *Prone* and *Exposed* are vulnerabilities already, so a telegraph that knocks Isolde flat sets up the next blow, and that's usually plenty. Keep any others rare, and put them face up like everything else.
+A [vulnerability](#s-vulnerable) on one of the crew makes a hit two Hurts, so their wound die jumps two sizes at once, and their Confidence drops two sizes with it. *Prone* and *Exposed* are vulnerabilities already, so a telegraph that knocks Isolde flat sets up the next blow, and that's usually plenty. Keep any others rare, and put them face up like everything else.
 
 ### One answer, sparingly {#one-answer-sparingly}
 
@@ -402,13 +404,13 @@ Give the wall something big to answer, the eye something hidden to find, and the
 1.  **Telegraph.** Everything goes face up and comes off the round budget. Say which telegraphs have only one answer.
 2.  **Ask what they do.** They go in whatever order they like, one action each. Let them talk and plan, but keep it moving.
 3.  **Let them roll for your side.** The first time a threat's attacked in a round, the player going at it rolls its Challenge die too, in another colour. That roll stands for the round, so everyone who goes at that threat this round has to beat it. A *Layered* threat rolls one die for every tag it's got left keeping it going, and its best die is the roll that stands. A stake works the same way. You'll hardly touch a die all round.
-4.  **Say what the win does.** The player's intent happens: strip the tag, place the condition, move the threat, reveal the secret. If they made an opening, a Mook or a Named threat falls, and a Boss loses two whole tags, multipliers and all, unless it was its weak point. On a multiplier, tick one off, plus one for every [vulnerability](#s-vulnerable) that fits, and say what's left.
-5.  **End the round.** Everything unanswered lands. Each player rolls their Defend once against the blows aimed at them, and their Confidence once against the fear, lies and pressure, and rolls the telegraphs' dice too. Each of their dice stops one telegraph it beats or ties, and they say which. The rest gets through. Anyone who [Defended](#s-defend) counts every line on their Defend twice, and their Confidence too, so they've got more dice to stop more with. For each blow that gets through, name what it costs, and take a fair swap if they offer one. For each telegraph at Confidence that gets through, the player chooses: drop a size of Confidence, take a Hurt, or spend 1 Resolve to hold their ground. Untouched events and clocks step down, and every condition steps down one size. Spend the ones you said you would.
+4.  **Say what the win does.** The player's intent happens: strip the tag, place the condition, move the threat, reveal the secret. If they made an opening, a Mook or a Named threat falls, and a Boss loses two whole tags, multipliers and all, unless it was its weak point. On a multiplier, tick one off, plus one for every [vulnerability](#s-vulnerable) that fits, wherever the player puts it, and say what's left. Whoever won goes up a size of Confidence, and anyone whose dice all missed drops one.
+5.  **End the round.** Everything unanswered lands. Each player rolls their Defend once against the blows aimed at them, and their Confidence once against the fear, lies and pressure, and rolls the telegraphs' dice too. Each of their dice stops one telegraph it beats or ties, and they say which, and every one they stop puts their Confidence up a size. The rest gets through. Anyone who [Defended](#s-defend) counts every line on their Defend twice, so they've got more dice to stop more blows with. For each blow that gets through, name what it costs, and take a fair swap if they offer one. Every step their wound die takes drops their Confidence a size, but a blow their armour or gear takes instead doesn't. For each telegraph at Confidence that gets through, the player chooses: drop a size of Confidence, or spend 1 Resolve to hold their ground. Untouched events and clocks step down, and every condition steps down one size. Spend the ones you said you would.
 6.  **Describe the new situation.** Then telegraph again.
 
 The first roll on a threat matters. If Bram goes at the captain and the captain's d8 comes up 2, everyone else in the crew knows the captain's wide open for the rest of the round.
 
-**Intercepting pulls attacks.** Anyone in the crew can [intercept](#s-intercept) for a friend within their stride, for 1 Aura and no action, and take as many of the dice aimed at that friend as they like. A [Guardian](#a-guardian) does it for free, for every friend within his stride, so to get past one, you've got to pull the crew apart. Every die he pulls onto himself is one more his own dice have to stop, though, so he'll often need to Defend as well.
+**Intercepting pulls attacks.** Anyone in the crew can [intercept](#s-intercept) for a friend within their stride, for 1 Aura and no action, and take as many of the dice aimed at that friend as they like. A [Guardian](#a-guardian) does it for free, for every friend within his stride, so to get past one, you've got to pull the crew apart. Every die he pulls onto himself is one more his own dice have to stop, though, so he'll often need to Defend as well. It only takes blows and other physical telegraphs. Fear, lies and pressure are inside someone's head, so nobody can step in front of them, and they're one way round a Guardian.
 
 **Your side can intercept too.** Your people [intercept](#s-intercept) for free: a bodyguard steps in front of the blow meant for his lord, a hound in front of its master. Say so before the player rolls. Their die has to beat his defence instead, and a win lands on him: he loses a tag, or falls if he's a mook. Use it when the story says they would.
 
@@ -430,7 +432,7 @@ When a player shoves the shielded captain off a narrow bridge, *Shield* and *For
 
 **Name the cost.** When a blow lands or a miss matters, pick a cost that fits it and the threat: a Hurt, breaking something they carry (armour and shields are the usual ones, and never an attuned thing, because those can't break), their Aspiration, the Party Goal or a clock. A miss can cost Confidence too, when it fits. A threat's tags are a good guide: *Venom* poisons, and *Grasping* takes what they carry. If the player offers a different one that fits and costs about as much, like *not the Hurt, my shield takes it*, take it. If the telegraph had one answer, it happens.
 
-**Fear, lies and pressure are the player's call.** When one gets through, they choose: let it shake them and drop a size of Confidence, bury it and take a Hurt, or hold their ground and spend 1 Resolve so neither happens. Nothing takes Confidence below d2, so at d2 it's a Hurt or 1 Resolve. If it had a specific intent, like *Frightened* or *Taunted*, that's what it does, unless they trade it for one of those three.
+**Fear, lies and pressure are the player's call.** When one gets through, they choose: let it shake them and drop a size of Confidence, or hold their ground and spend 1 Resolve so it doesn't. Nothing takes Confidence below d2, so at d2 it's a Hurt or 1 Resolve. If it had a specific intent, like *Frightened* or *Taunted*, that's what it does, unless they trade it for the size of Confidence, or hold their ground for 1 Resolve.
 
 **Fail forward.** When a miss matters outside a round, change the situation. The lock holds and the guard's footsteps are on the stair, or the magistrate refuses and now he knows your name. The Twist table in [The Oracle](#oracle) is full of these.
 
@@ -460,7 +462,7 @@ When a player shoves the shielded captain off a narrow bridge, *Shield* and *For
 :::example[Isolde's truth]
 Isolde wins her Study on the Warden and says the chalk circle it's bound to has a crack in it. A crack could be there, so now there's one, and anyone in the crew can use it this scene. If she'd said the circle was never drawn at all, that's too big, so the GM asks her for something smaller.
 
-If she spends 1 Resolve as well, her truth can be a [vulnerability](#s-vulnerable): say a hundred years has left the Warden *Rusted Through*. That could be true, so it is, and every hammer that wins on it ticks once more.
+If she spends 1 Resolve as well, her truth can be a [vulnerability](#s-vulnerable): say a hundred years has left the Warden *Rusted Through*. That could be true, so it is, and every hammer that wins on it gets one more tick.
 :::
 
 ## Quick Rulings {#s-rulings}
@@ -498,7 +500,7 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 -   **An arc is four to six sessions.** It's got a Party Goal, a faction moving against the crew, and at least one Aspiration coming to a head.
 -   **Aspirations are your map.** Every player's written down what their character wants, so build scenes that put it within reach, then make them choose between it and something else.
 -   **Titles are the milestones.** When an Aspiration resolves and a Title gets written, the campaign's turned a page, so mark it.
--   **The world grows with them.** The [threat budget](#s-threat-budget) rises with every new Title, and threats that were bosses become lieutenants. Factions notice the crew and start writing threads toward it, good and bad (see [How a Faction Sees the Crew](#s-standing)).
+-   **The world grows with them.** The [threat budget](#s-threat-budget) rises with every new Title, and threats that were bosses become lieutenants. Factions notice the crew and start writing threads toward it, bond threads and hostile ones (see [How a Faction Sees the Crew](#s-standing)).
 -   **Size the faction board to the campaign.** Four to twelve core [factions](#s-faction-board), each with up to three [mini factions](#s-mini-factions), and the same card works at any size: factions inside a city, cities inside a country, countries on the world stage. Each downtime, only telegraph the ones the crew can reach, and let the rest move off-screen: say what changed, with no roll (see [The Faction Turn](#s-faction-turn)).
 -   **Remember everything.** Bring back the maid who swore she saw a stranger, and the Warden who knelt, because a world that remembers is one worth being competent in.
 
@@ -509,17 +511,17 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 
 **At the table.** Describe, ask, say yes, and only roll when something pushes back. Be generous with permissions and consistent with rulings. When they look at you, make a move.
 
-**Catches and Resolve.** Catches are the players' to let bite. When one bites, make it real trouble. A big bite pays 1 Resolve instead of 1 Aura, and that's their call. Give 1 Resolve for great roleplay, and 1 Aura when a great setup misses. When a thread strains with one of your people, play their side.
+**Catches and Resolve.** Catches and hostile threads are the players' to let bite. When one bites, make it real trouble. A big bite pays 1 Resolve instead of 1 Aura, and that's their call. Give 1 Resolve for great roleplay, and 1 Aura when a great setup misses. When a bond thread strains with one of your people, play their side.
 
-**In a round.** Telegraph everything, face up, within the round budget: about 5 steps for each player, about half that for a breather and half again at Hard. Mix harm, control, position, stakes, clocks and words, about one harm telegraph each at Even. A threat aims one die at each of the crew, unless a tag says more, and each of the crew's defence dice stops one, so count the dice. Fear, lies and pressure are telegraphs at Confidence like any other. Let the players roll the threats' dice, once a round for each threat, let wins change things, and recognise openings.
+**In a round.** Telegraph everything, face up, within the round budget: about 5 steps for each player, about half that for a breather and half again at Hard. Mix harm, control, position, stakes, clocks and words, about one harm telegraph each at Even. A threat aims one die at each of the crew, unless a tag says more, and each of the crew's defence dice stops one, so count the dice. Fear, lies and pressure are telegraphs at Confidence like any other, and neither Defending nor intercepting helps against them. Confidence goes up a size for every win and every telegraph stopped, and down a size for every full miss and every step of the wound die. Let the players roll the threats' dice, once a round for each threat, let wins change things, and recognise openings.
 
-**Threats.** Size scenes from the threat budget: 10 a character with two Titles, so that's 40 for a starting crew of four, and it climbs as they earn more. Multipliers are written for 40, so add 1 to each for every 10 over, and take 1 off for every 10 under. Keep vulnerabilities on the crew rare.
+**Threats.** Size scenes from the threat budget: 10 a character with two Titles, so that's 40 for a starting crew of four, and it climbs as they earn more. A multiplier's as big as the creature needs, on the tag that says what it is. The bestiary's are written for 40, so add 1 to each for every 10 over, and take 1 off for every 10 under. A vulnerability can strip two tags in one hit, so give them out with care, and keep them rare on the crew.
 
-**Consequences.** Only when it matters. Name the cost of a blow or a miss, take a fair swap, and fail forward. When fear, lies or pressure get through, it's the player's choice: a size of Confidence, a Hurt or 1 Resolve. When a player chooses to die at a Blaze, slow right down and let them tell it.
+**Consequences.** Only when it matters. Name the cost of a blow or a miss, take a fair swap, and fail forward. When fear, lies or pressure get through, it's the player's choice: a size of Confidence or 1 Resolve. When a player chooses to die at a Blaze, slow right down and let them tell it.
 
 **Archetypes, Resolve, Study.** Let each archetype do its thing, let a Resolve spend be as big as it says, and say what an Elementalist's area touches. Going beyond is 1 Resolve, so put the size in the Challenge. Study finds what's there, and if a Scholar's truth could be there, it is.
 
 **Conditions.** Face up, with their die, and say when you'll spend them.
 
-**After.** Downtime every session. Telegraph the faction actions the crew can reach, let the crew's slots answer, then land them. Let the world move, and remember everything.
+**After.** Downtime every session. Telegraph the faction actions the crew can reach, let the crew answer, then land them. Let the world move, and remember everything.
 :::

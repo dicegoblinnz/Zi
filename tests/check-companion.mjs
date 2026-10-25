@@ -7,41 +7,62 @@
 //    chapter, read straight off the Markdown here rather than from book.json.
 // 3. Vesk at the table: Sneak is 4 steps, a d8. Tap off Silent Step and it's
 //    3 steps, a d6. Bring in her grappling line and it's 4 again for 1 Aura.
-//    Roll with fixed dice, check the Aura and the result, reload, then go
-//    offline and reload, and read Aura's rule and a permission's with no
-//    signal. Then a split roll with a top face and a tie, an undo, a defence
-//    roll where each die stops one, her leathers broken off her Defend, and a
-//    new scene. Then the play screen's stage 3: a threat's die, a tap-in with
-//    an intent, Defend with a split and a swap, and an undo of a Hurt.
-// 4. Wounds: the rest at the end of a scene (a win, then a tie rolled again
-//    for 1 Resolve), Bram's Unyielding first Hurt, Bram Defending against
-//    three goblins with his Guardian +2, a Blaze into a Scar with its Catch,
-//    and characters saved with the old Hurt track and Armour opening clean.
-// 5. Building your own: Vesk again, through the builder a step at a time. Her
-//    set actions and numbers have to match her sheet in the chapter. Then a
-//    roll, a reload, offline, a change in the builder, and every step at 320
-//    wide in the light, with axe on each.
+//    Roll with fixed dice, check the Aura and the result, and her Confidence
+//    going up a size for the win, reload, then go offline and reload, and read
+//    Aura's rule and a permission's with no signal. Then a split roll with a
+//    top face and a tie (one size up for the action), an undo, shaken on d2
+//    and pulling herself together, fired up on d12 and cashing it in, a
+//    defence roll where each die stops one and the one she stops puts her
+//    Confidence up, her leathers broken off her Defend with her Confidence
+//    left alone, and a new scene. Then the play screen's stage 3: a threat's
+//    die, a tap-in with an intent, Defend with a split and a swap, and an undo
+//    of a Hurt that took her Confidence down with it. Wren's full miss takes
+//    hers down, the Hunter's +3 that makes it a win puts it back up, and a
+//    miss on d2 leaves it on d2.
+//    Threads: Vesk borrows through a bond thread for 1 Aura and strains it,
+//    Dorrie stops lending once both threads are strained, one snaps and one's
+//    mended, and her hostile thread with the fence bites, strains, goes whole
+//    again and snaps.
+// 4. Wounds: two Hurts take Vesk's Confidence to d2, the rest at the end of a
+//    scene (a win, then a tie rolled again for 1 Resolve), Bram's Unyielding
+//    first Hurt leaving his Confidence alone, Bram Defending against three
+//    goblins with his Guardian +2 and his Confidence up three sizes, Dorrie's
+//    fear with no Defend and no intercept, one stopped and one through, then
+//    held for 1 Resolve, two Hurts at once while she's Exposed, a Blaze into a
+//    Scar with its Catch, and characters saved with the old Hurt track and
+//    Armour, a debt thread and two attuned things opening clean, with gold
+//    marks on the lines the rules changed.
+// 5. Building your own: Vesk again, through the builder a step at a time,
+//    with a permission's third set action refused, one attuned thing, and a
+//    thread made from a crew question. Her set actions and numbers have to
+//    match her sheet in the chapter. Then a roll, a reload, offline, a change
+//    in the builder, and every step at 320 wide in the light, with axe on each.
 // 6. Print, and the other ways in. Every crew member made into a build has
-//    the sheet the chapter gives them, and a thousand random characters pass
-//    every one of the builder's warnings. Then Vesk's sheet printed with a
-//    Hurt on it, and again offline, a character made from Vesk and printed, a
-//    random one rolled five times, saved and printed, and a blank sheet. A way
-//    in asks before it bins a draft, and one page passes axe at 320 wide.
+//    the sheet the chapter gives them, the builder's warnings for threads and
+//    attuned things, and a thousand random characters pass every one of the
+//    builder's warnings with one attuned thing and bond and hostile threads.
+//    Then Vesk's sheet printed with a Hurt and a strained thread on it, and
+//    again offline, a character made from Vesk and printed, a random one
+//    rolled five times, saved and printed, and a blank sheet. A way in asks
+//    before it bins a draft, and one page passes axe at 320 wide.
 // 7. Dice, feel and learning. The learning round played start to finish three
 //    times: beaten, a tie won for 1 Aura with a top face, and real dice tapped
-//    in that lose, so the club lands on Isolde as a Hurt. Then offline, and
+//    in that lose, so the club lands on Isolde as a Hurt, with Wren's, Bram's
+//    and Isolde's Confidence moving each time. Then offline, and
 //    axe at 320 wide in both themes. With reduce-motion the dice never tumble
 //    and nothing on the page moves. With motion on, the dice tumble and land
 //    on their numbers, the roll card turns over, the tabs slide and the pips
 //    glow. Sound and buzz stay off until the switch turns them on, and then a
 //    landing, a top face, a Hurt and the wound die reaching d12 each get one.
 // 8. Downtime and rule changes. Vesk's week from Downtime, with a Hurt on
-//    her that clears for free: one slot pays the fence, and the other gives
-//    her grappling line its Catch, Loud, and haul someone up after me, on no
-//    set action, so it's 1 Aura when it fits. Nothing offers to heal a Catch
-//    or mend Armour. An undo takes it all back. A second week puts a new permission on her
+//    her that clears for free: one slot pays the fence, which strains her
+//    hostile thread with him, and the other gives her grappling line its
+//    Catch, Loud, and haul someone up after me, on no set action, so it's 1
+//    Aura when it fits. Nothing offers to heal a Catch or mend Armour. An undo
+//    takes it all back. A second week puts a new permission on her
 //    Sneak (5 steps, a d10), chases her Aspiration with fixed dice, and swaps
-//    a permission, and it all survives a reload and offline. Then a made-up
+//    a permission, and it all survives a reload and offline. A third writes a
+//    hostile thread and takes a tie with an extra resource. Then a made-up
 //    rule change against her saved sheet: a reworded permission, her Stride
 //    and her Locks get gold marks with old and new, a typo fix and a
 //    punctuation fix stay quiet, what she grew in downtime isn't marked, and
@@ -189,6 +210,8 @@ async function play(page, crewId, name) {
   await shot(page, "2-sheet");
   const live = () => page.textContent("#cc-dialog .cc-dice");
   const aura = () => page.textContent('.cc-stat[data-p="aura"] .v');
+  const conf = () => page.textContent('.cc-stat[data-p="conf"] .v');
+  const swing = () => page.$$eval("#cc-dialog .cc-swing-head .hex", (els) => els.map((e) => e.textContent));
   const tile = (name) => page.click(`.tile[data-a]:has(.tile-name:text-is("${name}"))`);
   const tileOf = (name) => page.$eval(`.tile[data-a]:has(.tile-name:text-is("${name}"))`, (el) => `${parseInt(el.querySelector(".tile-steps").textContent, 10)} ${el.querySelector(".tile-die").textContent}`);
 
@@ -208,10 +231,14 @@ async function play(page, crewId, name) {
   has(await page.textContent("#cc-dialog .cc-res"), "Beat it", "her 6 against the guard's 5");
   has(await page.textContent("#cc-dialog .cc-them"), "Their d65", "the guard's d6 rolled with hers, and its 5");
   has(await page.textContent("#cc-dialog .dlg-body"), "You’ve got 4 Aura", "Aura after paying 1");
+  // A win puts her Confidence up a size, and the card says why.
+  same(await page.$$eval("#cc-dialog .cc-swing-head .hex", (els) => els.map((e) => e.textContent)), ["d6", "d8"], "Confidence from d6 to d8 on a win");
+  has(await page.textContent("#cc-dialog .cc-swing"), "One of your dice beat it.", "why her Confidence went up");
   await shot(page, "4-the-result");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
   same(await aura(), "4/5", "Aura on the strip after the roll");
+  same(await conf(), "d8", "Confidence on the strip after a win");
 
   await page.reload();
   await page.waitForSelector(".tile[data-a]");
@@ -265,23 +292,37 @@ async function play(page, crewId, name) {
   const outs = await page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent));
   same(outs, ["Beat it", "Tie"], "the d6 and the d4 against a 4");
   has(await page.textContent("#cc-dialog .dlg-body"), "You’ve got 5 Aura", "1 Aura back for the d4's top face");
+  // Two dice, one win: it's a size for the action, however many won.
+  same(await swing(), ["d8", "d10"], "Confidence up one size for the action");
   await page.click('#cc-dialog button[data-act="win-tie"]');
   same(await page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Beat it", "Tie, won for 1 Aura"], "after winning the tie");
   has(await page.textContent("#cc-dialog .dlg-body"), "You’ve got 4 Aura", "Aura after winning the tie");
+  same(await swing(), ["d8", "d10"], "still one size up with the tie won too");
   await page.click('#cc-dialog .dlg-foot button[data-act="undo"]');
   same(await page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Beat it", "Tie"], "after undoing the tie");
   has(await page.textContent("#cc-dialog .dlg-body"), "You’ve got 5 Aura", "Aura after the undo");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  same(await conf(), "d10", "Confidence after the Locks roll");
 
-  // Shaken on d2, going at a threat costs 1 Resolve.
+  // Shaken on d2: acting at what the scene's about costs 1 Resolve, and the
+  // tracker says so. Pulling herself together takes her action and brings
+  // her back to d4.
   await page.click('.cc-stat[data-p="conf"]');
   await page.click('.cc-panel button[data-act="conf"][data-v="2"]');
+  has(await page.textContent('.cc-stat[data-p="conf"]'), "Shaken", "the tracker on d2");
+  has(await page.textContent(".cc-panel"), "You’re shaken.", "the panel on d2");
   await tile("Fight");
-  has(await page.textContent("#cc-dialog .cc-costs"), "1 Resolve", "going at a threat while shaken");
+  has(await page.textContent("#cc-dialog .cc-costs"), "1 Resolve", "acting while shaken");
   await page.click('#cc-dialog .dlg-head button[data-act="close"]');
   await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
-  await page.click('.cc-panel button[data-act="conf"][data-v="6"]');
+  await page.click('.cc-panel button[data-act="breath"]');
+  same(await conf(), "d4", "pulling herself together, back to d4");
+  await page.click('.cc-panel button[data-act="conf"][data-v="12"]');
+  has(await page.textContent('.cc-stat[data-p="conf"]'), "Fired up", "the tracker on d12");
+  same(await page.$$eval('.cc-panel button[data-act="cash"]', (els) => els.length), 2, "cashing it in on d12, for an action or a heal");
+  await page.click('.cc-panel button[data-act="cash"][data-how="action"]');
+  same(await conf(), "d6", "cashed in, back to d6");
 
   // Warded d6 is a step on her Defend, so her 2 steps are 3, a d6.
   await page.click('.cc-stat[data-p="cond"]');
@@ -302,17 +343,24 @@ async function play(page, crewId, name) {
   same(await page.$$eval("#cc-dialog .res-note", (els) => els.map((el) => el.textContent)), ["no die left for it", "by your 3"], "which die stopped which");
   has(await page.textContent("#cc-dialog .cc-mine-roll"), "Your Defend", "the Warded Defend roll");
   has(await page.textContent("#cc-dialog .cc-mine-roll .res-die"), "d6", "the Warded Defend die");
+  // The telegraph her die stopped puts her Confidence up a size.
+  same(await swing(), ["d6", "d8"], "Confidence up for the blow she stopped");
+  has(await page.textContent("#cc-dialog .cc-swing"), "Your 3 stopped their d6", "why it went up");
   await shot(page, "5-when-it-lands");
-  // The blow breaks her leathers instead, so they're off her Defend till they're mended.
+  // The blow breaks her leathers instead, so they're off her Defend till
+  // they're mended, and her Confidence doesn't move.
   await page.click('#cc-dialog button[data-act="d-pay"][data-what="break"][data-k="equipment|worn leathers"]');
   has(await page.textContent("#cc-dialog .dlg-body"), "Defend d2", "her Defend once her leathers break");
   has(await page.textContent("#cc-dialog .res-paid"), "Worn leathers broken till it’s mended", "the blow's cost counted on it");
+  has(await page.textContent("#cc-dialog .cc-swing"), "Worn leathers took the blow, so it doesn’t move", "armour taking a blow leaves Confidence alone");
+  same(await swing(), ["d6", "d8"], "Confidence once her leathers took the blow");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
   same(await tileOf("Defend"), "1 d2", "her Defend tile with her leathers broken");
 
   await page.click('button[data-act="scene"]');
   same(await aura(), "5/5", "Aura after a new scene");
+  same(await conf(), "d6", "Confidence back to d6 in a new scene");
   same(await tileOf("Defend"), "1 d2", "her leathers still broken after a new scene");
 
   // A tap-in: real dice for her Fight, its d4 meant to pin, against a d8. Her
@@ -333,6 +381,7 @@ async function play(page, crewId, name) {
   has(await page.textContent("#cc-dialog .res-intent"), "Pin", "the die's intent on the result");
   has(await page.textContent("#cc-dialog .cc-res"), "Top face", "a top face spotted on a tapped-in die");
   has(await page.textContent("#cc-dialog .dlg-body"), "You’ve got 5 Aura", "Aura back for the top face");
+  same(await swing(), ["d6", "d8"], "Confidence up with real dice tapped in");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
 
@@ -357,23 +406,31 @@ async function play(page, crewId, name) {
   await page.waitForSelector("#cc-dialog .res .res-out");
   const blows = () => page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent));
   same(await blows(), ["Stopped", "Gets through"], "the phone's match puts her 4 on the pin");
+  same(await swing(), ["d8", "d10"], "Confidence up for the one she stopped");
   await page.click('#cc-dialog button[data-act="d-swap"][data-j="1"]');
   await page.click('#cc-dialog button[data-act="d-swap"][data-j="0"]');
   same(await blows(), ["Gets through", "Stopped"], "after swapping her 4 onto the other blow");
+  same(await swing(), ["d8", "d10"], "still one stopped after the swap");
   has(await page.textContent("#cc-dialog .cc-pay"), "Pinned d6", "the pin can land as Pinned d6");
   await shot(page, "6-defend-and-swap");
 
   // An undo of a Hurt: she takes the pin as a Hurt instead, then takes it back.
+  // The wound die going up takes her Confidence down a size.
   await page.click('#cc-dialog button[data-act="d-pay"][data-what="hurt"]');
   has(await page.textContent("#cc-dialog .dlg-body"), "Wound d4", "a Hurt from the pin puts her wound die up a size");
   has(await page.textContent("#cc-dialog .res-paid"), "Took a Hurt", "the Hurt counted on the blow");
+  same(await swing(), ["d8"], "a stop and a wound step, back where she started");
+  has(await page.textContent("#cc-dialog .cc-swing"), "The Hurt put your wound die up to d4", "why the Hurt took it down");
+  same(await page.$$eval("#cc-dialog .cc-offers, #cc-dialog .cc-swap", (els) => els.length), 0, "no swaps or +2 once something's paid for");
   await page.click('#cc-dialog .dlg-foot button[data-act="undo"]');
   has(await page.textContent("#cc-dialog .dlg-body"), "Wound d2", "the Hurt undone");
+  same(await swing(), ["d8", "d10"], "the Hurt's Confidence undone with it");
   same(await page.$$eval('#cc-dialog button[data-act="d-pay"]', (els) => els.length > 0), true, "the blow waiting to be paid again after the undo");
   same(await blows(), ["Gets through", "Stopped"], "the swap still stands after the undo");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
   same(await page.textContent('.cc-stat[data-p="wound"] .v'), "d2", "the wound die on the play screen after the undo");
+  same(await conf(), "d10", "Confidence on the play screen after the undo");
   // An undo leaves what's been typed alone.
   await page.click('.cc-tabs a[data-t="sheet"]');
   await page.fill("#cc-notes", "Owes Dorrie a favour");
@@ -400,12 +457,127 @@ async function play(page, crewId, name) {
   await page.click('#cc-dialog button[data-act="go"]');
   await page.waitForSelector("#cc-dialog .res .res-out");
   same(await page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Under", "Under"], "Wren's d10 and the Mark d10 against a 7");
+  // Every die missed, so her Confidence drops a size, and the +3 that turns
+  // it into a win puts it back up instead, in the same undo as the +3.
+  const swing = () => page.$$eval("#cc-dialog .cc-swing-head .hex", (els) => els.map((e) => e.textContent));
+  same(await swing(), ["d6", "d4"], "Confidence down a size when every die missed");
+  has(await page.textContent("#cc-dialog .cc-swing"), "Every die missed.", "why it went down");
   await page.click('#cc-dialog button[data-act="plus"]:has-text("Hunter +3 on the Mark die")');
   same(await page.$$eval('#cc-dialog button[data-act="pick"]', (els) => els.length), 1, "only the Mark die takes the Hunter's +3");
   await page.click('#cc-dialog button[data-act="pick"]');
   same(await page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Under", "Beat it"], "after the +3 on the Mark die");
   has(await page.textContent("#cc-dialog .dlg-body"), "You’ve got 4 Aura", "Wren's Aura after the +3");
+  same(await swing(), ["d6", "d8"], "Confidence up once the +3 makes it a win");
+  await page.click('#cc-dialog .dlg-foot button[data-act="undo"]');
+  await page.click('#cc-dialog button[data-act="pick-cancel"]');
+  same(await swing(), ["d6", "d4"], "the +3 undone, and the miss back with it");
+  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
+  await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  same(await page.textContent('.cc-stat[data-p="conf"] .v'), "d4", "Wren's Confidence after the miss");
+  // On d2 a miss leaves it on d2, as low as it goes, and costs nothing more.
+  await page.click('.cc-stat[data-p="conf"]');
+  await page.click('.cc-panel button[data-act="conf"][data-v="2"]');
+  await page.click('.tile[data-a]:has(.tile-name:text-is("Track"))');
+  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="8"]');
+  await page.evaluate(() => window.ziCompanion.setDice([2, 6]));
+  await page.click('#cc-dialog button[data-act="go"]');
+  await page.waitForSelector("#cc-dialog .res .res-out");
+  has(await page.textContent("#cc-dialog .cc-swing"), "Every die missed, and d2’s as low as it goes, so it stays there.", "a miss on d2");
+  same(await swing(), ["d2"], "a miss on d2 leaving it on d2");
+  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
+  await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  same([await page.textContent('.cc-stat[data-p="wound"] .v'), await page.textContent('.cc-stat[data-p="conf"] .v')], ["d2", "d2"], "Wren's wound die and Confidence after a miss on d2");
   await context.close();
+}
+
+// Threads at the table. Vesk borrows through her bond thread with Dorrie,
+// from the Sheet tab and on a roll, strains it, and can't borrow through it
+// strained. Strained twice it snaps, and mended it lends again. Her hostile
+// thread with the fence bites like a Catch, doing right by him strains it,
+// wronging him again makes it whole, and doing right by him twice snaps it.
+{
+  const { context, page } = await phone();
+  await play(page, "vesk", "Vesk");
+  // The trackers are on the play screen, so on the Sheet tab it's read off what's saved.
+  const state = () => page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.at(-1).state);
+  const aura = async () => `${(await state()).aura}/5`;
+  const resolve = async () => `${(await state()).resolve}/2`;
+  const chip = (text) => page.textContent(`li.cc-thread:has-text("${text}") .chip`);
+  const tab = (t) => page.click(`.cc-tabs a[data-t="${t}"]`);
+  const closed = () => page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  const k1 = "Dorrie|We have pulled a dozen jobs. I trust her with my life.";
+  const k2 = "Dorrie|We came up on the same streets. She never asks why.";
+  const fence = "The fence|I owe a debt I would rather not discuss.";
+  const lenders = async () => {
+    await tab("play");
+    await page.click('.tile[data-a]:has(.tile-name:text-is("Move"))');
+    await page.click('#cc-dialog details[data-open="bring"] > summary');
+    const who = await page.$$eval('#cc-dialog button[data-act="borrow"]', (els) => els.map((el) => el.dataset.k));
+    return who;
+  };
+  await page.click('.cc-stat[data-p="resolve"]');
+  await page.click('.cc-panel button[data-act="resolve"][data-d="-1"]');
+  await page.click('.cc-panel button[data-act="resolve"][data-d="-1"]');
+  await tab("sheet");
+  same(await chip("We have pulled a dozen jobs"), "Bond", "her bond thread with Dorrie to start");
+  same(await chip("I owe a debt I would rather not discuss."), "Hostile", "her hostile thread with the fence to start");
+  await page.click(`button[data-act="tborrow"][data-k="${k1}"]`);
+  has(await page.textContent("#cc-toast"), "You borrow one of Dorrie’s permissions for 1 Aura", "borrowing through a bond thread");
+  same(await aura(), "4/5", "Aura after borrowing through a thread");
+  await page.click(`button[data-act="strain"][data-k="${k1}"]`);
+  same([await chip("We have pulled a dozen jobs"), await resolve()], ["Bond, strained", "1/2"], "a bond thread strained for 1 Resolve");
+  has(await page.textContent("#cc-toast"), "Tell Dorrie’s player, so it’s strained on their sheet too.", "telling Dorrie's player");
+  same(await page.$$eval(`button[data-act="tborrow"][data-k="${k1}"]`, (els) => els.length), 0, "no borrowing through a strained thread");
+  // On a roll, Dorrie still lends through her other thread: 1 Aura and a step.
+  same((await lenders()).includes("Dorrie"), true, "Dorrie lending through the thread that isn't strained");
+  await page.click('#cc-dialog button[data-act="borrow"][data-k="Dorrie"]');
+  has(await page.textContent("#cc-dialog .cc-dice"), "5 steps, d10", "her Move with one of Dorrie’s permissions borrowed");
+  has(await page.textContent("#cc-dialog .cc-costs"), "1 Aura", "what borrowing costs on a roll");
+  await page.click('#cc-dialog .dlg-head button[data-act="close"]');
+  await closed();
+  await tab("sheet");
+  await page.click(`button[data-act="strain"][data-k="${k2}"]`);
+  const now = await lenders();
+  same([now.includes("Dorrie"), now.includes("Bram")], [false, true], "nothing through Dorrie with both strained, and Bram still lending");
+  await page.click('#cc-dialog .dlg-head button[data-act="close"]');
+  await closed();
+  await tab("sheet");
+  await page.click(`button[data-act="strain"][data-k="${k1}"]`);
+  same(await chip("We have pulled a dozen jobs"), "Snapped", "strained again before it's mended, it snaps");
+  same(await page.$$eval(`li.cc-thread.is-snapped button`, (els) => els.length), 0, "nothing to do with a snapped thread");
+  await page.click(`button[data-act="mend"][data-k="${k2}"]`);
+  same(await chip("We came up on the same streets"), "Bond", "mended, and whole again");
+  // The fence: a hostile thread bites like a Catch.
+  await page.click(`button[data-act="bite"][data-big="0"][data-k="${fence}"]`);
+  same(await aura(), "5/5", "Aura when the fence brings real trouble");
+  await page.click(`button[data-act="bite"][data-big="1"][data-k="${fence}"]`);
+  has(await page.textContent("#cc-toast"), "A big bite. Your Resolve’s already full.", "a big bite with Resolve full");
+  await page.evaluate(() => {
+    const all = JSON.parse(localStorage.getItem("zi-characters"));
+    all.characters.at(-1).state.resolve = 1;
+    localStorage.setItem("zi-characters", JSON.stringify(all));
+  });
+  await page.reload();
+  await page.waitForSelector(".cc-page");
+  await page.click(`button[data-act="bite"][data-big="1"][data-k="${fence}"]`);
+  has(await page.textContent("#cc-toast"), "A big bite. You take 1 Resolve.", "a big bite from a hostile thread");
+  same(await resolve(), "2/2", "Resolve after the big bite");
+  same(await page.$$eval(`button[data-act="strain"][data-k="${fence}"], button[data-act="tborrow"][data-k="${fence}"]`, (els) => els.length), 0, "no straining a hostile thread for Resolve, and nothing to borrow");
+  await page.click(`button[data-act="right"][data-k="${fence}"]`);
+  same(await chip("I owe a debt I would rather not discuss."), "Hostile, strained", "doing right by the fence strains it");
+  await page.click(`button[data-act="wrong"][data-k="${fence}"]`);
+  same(await chip("I owe a debt I would rather not discuss."), "Hostile", "wronging him again makes it whole");
+  await page.click(`button[data-act="right"][data-k="${fence}"]`);
+  await page.click(`button[data-act="right"][data-k="${fence}"]`);
+  same(await chip("I owe a debt I would rather not discuss."), "Snapped", "doing right by him twice snaps it");
+  has(await page.textContent("#cc-toast"), "the grudge is over", "the grudge over");
+  await page.click(".cc-tabs a[data-t=\"play\"]");
+  await page.click(".cc-track .cc-undo");
+  await tab("sheet");
+  same(await chip("I owe a debt I would rather not discuss."), "Hostile, strained", "an undo takes the snap back");
+  await shot(page, "threads");
+  await context.close();
+  console.log("threads: borrowed through and strained, snapped and mended, and a hostile thread biting, strained, whole again and snapped");
 }
 
 // 4. Wounds. Two Hurts make Vesk's wound die a d6, and at the end of the
@@ -425,6 +597,7 @@ async function play(page, crewId, name) {
   const wound = () => page.textContent('.cc-stat[data-p="wound"] .v');
   const live = () => page.textContent("#cc-dialog .cc-dice");
   const outs = () => page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent));
+  const swing = () => page.$$eval("#cc-dialog .cc-swing-head .hex", (els) => els.map((e) => e.textContent));
   const closed = () => page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
   const tileOf = (name) => page.$eval(`.tile[data-a]:has(.tile-name:text-is("${name}"))`, (el) => `${parseInt(el.querySelector(".tile-steps").textContent, 10)} ${el.querySelector(".tile-die").textContent}`);
   const hurt = async (n = 1) => {
@@ -433,9 +606,20 @@ async function play(page, crewId, name) {
   };
 
   await play(page, "vesk", "Vesk");
+  const conf = () => page.textContent('.cc-stat[data-p="conf"] .v');
   await hurt(2);
   same(await wound(), "d6", "Vesk's wound die after two Hurts");
   same(await page.$$eval(".t-wound .mini i.on", (els) => els.length), 2, "two lit on the wound die's row");
+  // Each size the wound die goes up takes her Confidence down a size.
+  same(await conf(), "d2", "two Hurts take her Confidence from d6 to d2");
+  has(await page.textContent("#cc-toast"), "Your Confidence drops to d2.", "the Hurt's toast saying so");
+  // She pulls herself together, then takes a breath, before the scene ends.
+  await page.click('.cc-stat[data-p="conf"]');
+  await page.click('.cc-panel button[data-act="breath"]');
+  await page.click('.cc-panel button[data-act="breath"]');
+  same(await conf(), "d6", "back to d4, then a breath up to d6");
+  same(await page.$$eval('.cc-panel button[data-act="breath"]', (els) => els.length), 0, "no breath to take on d6");
+  await page.click('.cc-stat[data-p="conf"]');
   await page.click('button[data-act="scene"]');
   has(await page.textContent("#dlg-title"), "End of the scene", "the rest at the end of a scene");
   has(await live(), "Your Confidence, d6, against your wound die, d6", "what the rest rolls");
@@ -447,13 +631,15 @@ async function play(page, crewId, name) {
   same(await wound(), "d4", "the wound die after a rest");
   has(await page.textContent("#cc-toast"), "You rested, and your wound’s down to d4.", "the rest's toast");
   await hurt();
+  same(await conf(), "d4", "a Hurt in the new scene takes her Confidence to d4");
   await page.click('button[data-act="scene"]');
+  has(await live(), "Your Confidence, d4, against your wound die, d6", "the rest rolling the Confidence she finished on");
   await page.evaluate(() => window.ziCompanion.setDice([3, 3]));
   await page.click('#cc-dialog button[data-act="rest-go"]');
   has(await page.textContent("#cc-dialog .dlg-body"), "a tie goes to the wound, so it stays a d6", "a rest that ties");
-  await page.evaluate(() => window.ziCompanion.setDice([6]));
+  await page.evaluate(() => window.ziCompanion.setDice([4]));
   await page.click('#cc-dialog button[data-act="rest-again"]');
-  has(await page.textContent("#cc-dialog .dlg-body"), "Your 6 beats its 3", "the rest rolled again, against the same 3");
+  has(await page.textContent("#cc-dialog .dlg-body"), "Your 4 beats its 3", "the rest rolled again, against the same 3");
   await page.click('#cc-dialog button[data-act="rest-done"]');
   await closed();
   same([await wound(), await page.textContent('.cc-stat[data-p="resolve"] .v')], ["d4", "2/2"], "the wound die and Resolve after a rest rolled again for 1 Resolve");
@@ -461,9 +647,11 @@ async function play(page, crewId, name) {
   same(await wound(), "d6", "one undo takes the rest and the new scene back");
   await page.click(".cc-track .cc-undo");
 
-  // A Hurt at d12 Blazes, and the wound becomes a Scar.
+  // A Hurt at d12 Blazes, and the wound becomes a Scar. Her Confidence
+  // stops at d2 on the way: nothing takes it lower.
   await hurt(4);
   same(await wound(), "d12", "Vesk on d12");
+  same(await conf(), "d2", "her Confidence at d2 and no lower after four more Hurts");
   await hurt();
   has(await page.textContent('form[data-form="scar"]'), "You Blaze", "a Hurt at d12 Blazes");
   await page.fill('form[data-form="scar"] input[name="scar"]', "a spear through the shoulder");
@@ -481,9 +669,11 @@ async function play(page, crewId, name) {
   await play(page, "bram", "Bram");
   await hurt();
   same(await wound(), "d2", "Bram's first Hurt this scene, which Unyielding keeps off his wound die");
-  has(await page.textContent("#cc-toast"), "doesn’t move your wound die (Unyielding)", "what Unyielding says");
+  has(await page.textContent("#cc-toast"), "doesn’t move your wound die (Unyielding), so your Confidence doesn’t move either", "what Unyielding says");
+  same(await conf(), "d6", "Bram's Confidence after a Hurt that Unyielding took");
   await hurt();
   same(await wound(), "d4", "Bram's second Hurt this scene");
+  same(await conf(), "d4", "Bram's Confidence once his wound die goes up");
   await page.click('.tile[data-act="defence"]');
   await page.click('#cc-dialog button[data-act="d-defend"][data-v="1"]');
   has(await live(), "7 steps, d12 + d2", "Bram Defending, his three lines counting twice");
@@ -495,32 +685,51 @@ async function play(page, crewId, name) {
   await page.click('#cc-dialog button[data-act="d-go"]');
   await page.waitForSelector("#cc-dialog .res .res-out");
   same(await outs(), ["Gets through", "Stopped", "Stopped"], "his 5, 4 and 2 against their 6, 4 and 1");
+  same(await swing(), ["d4", "d8"], "two stopped, two sizes up");
   await page.click('#cc-dialog button[data-act="plus"]:has-text("Guardian +2")');
   await page.click('#cc-dialog button[data-act="d-pick"][data-i="0"]');
   same(await outs(), ["Stopped", "Stopped", "Stopped"], "his Guardian +2 making the 5 a 7");
   has(await page.textContent("#cc-dialog .dlg-body"), "Nothing gets through.", "nothing gets through Bram");
+  same(await swing(), ["d4", "d10"], "Bram stopping three blows, three sizes up");
+  same(await page.$$eval("#cc-dialog .cc-swing li", (els) => els.length), 3, "a line for every blow he stopped");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await closed();
+  same(await conf(), "d10", "Bram's Confidence after his three goblins");
 
-  // Fear: when Dorrie Defends, her Confidence counts twice by its steps, so
-  // her d6 is 6 steps, split into two d6s against a d10 and a d8.
+  // Fear: Dorrie's Confidence rolls as it is, Defending or not, so her d6 is
+  // 3 steps against a d10 and a d8. Nobody can intercept fear for her.
   await play(page, "dorrie", "Dorrie");
   await page.click('.tile[data-act="defence"]');
   await page.click('#cc-dialog button[data-act="d-against"][data-v="confidence"]');
-  has(await live(), "3 steps, d6", "Dorrie's Confidence letting it ride");
-  await page.click('#cc-dialog button[data-act="d-defend"][data-v="1"]');
-  has(await live(), "6 steps, d12", "Dorrie's Confidence counting twice");
-  await page.click('#cc-dialog button[data-act="step"][data-n="count"][data-d="1"]');
-  has(await live(), "6 steps, 2d6", "Dorrie's Confidence split into two d6s");
+  has(await live(), "3 steps, d6", "Dorrie's Confidence as it is");
+  same(await page.$$eval('#cc-dialog button[data-act="d-defend"]', (els) => els.length), 0, "no Defend to double her Confidence");
+  has(await page.textContent("#cc-dialog .dlg-body"), "Your Confidence rolls as it is, whether you Defend or not.", "why there's no Defend for fear");
+  has(await page.textContent("#cc-dialog .dlg-body"), "Nobody can intercept fear, lies or pressure", "no intercepting fear");
   await page.click('#cc-dialog button[data-act="d-add"][data-v="10"]');
   await page.click('#cc-dialog button[data-act="d-add"][data-v="8"]');
-  await page.evaluate(() => window.ziCompanion.setDice([5, 2, 4, 6]));
+  await page.click('#cc-dialog button[data-act="intent"][data-k="d1"][data-v="Frighten"]');
+  await page.evaluate(() => window.ziCompanion.setDice([5, 4, 6]));
   await page.click('#cc-dialog button[data-act="d-go"]');
   await page.waitForSelector("#cc-dialog .res .res-out");
-  same(await outs(), ["Stopped", "Gets through"], "her 5 and 2 against the fear's 4 and 6");
+  same(await outs(), ["Stopped", "Gets through"], "her 5 against the fear's 4 and 6");
+  same(await swing(), ["d6", "d8"], "the fear she stopped putting her up a size");
+  const pay = await page.textContent("#cc-dialog .cc-pay");
+  for (const want of ["Frightened d8", "Confidence down a size, to d6", "Hold your ground: 1 Resolve"]) has(pay, want, "what the fear that got through can cost");
+  same(/Bury|Hurt/.test(pay), false, "no burying fear as a Hurt");
+  // Through: it takes a size of Confidence. Then held instead, for 1 Resolve.
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="shake"]');
+  same(await swing(), ["d6"], "up for the one she stopped, down for the one that got through");
+  has(await page.textContent("#cc-dialog .cc-swing"), "Their d8 got through", "why it came back down");
+  await page.click('#cc-dialog .dlg-foot button[data-act="undo"]');
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="hold"]');
+  same(await swing(), ["d6", "d8"], "holding her ground keeps it at d8");
+  has(await page.textContent("#cc-dialog .cc-swing"), "You held your ground against their d8", "the hold in the list");
+  has(await page.textContent("#cc-dialog .dlg-body"), "1 Resolve", "Resolve after holding her ground");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await closed();
-  // Exposed: she's vulnerable to every hit, so one that gets through is two Hurts.
+  same(await conf(), "d8", "Dorrie's Confidence after the fear");
+  // Exposed: she's vulnerable to every hit, so one that gets through is two
+  // Hurts, and two sizes off her Confidence.
   await page.click('.cc-stat[data-p="cond"]');
   await page.selectOption('form[data-form="cond"] select[name="pick"]', "Exposed");
   await page.click('form[data-form="cond"] button[type="submit"]');
@@ -533,19 +742,28 @@ async function play(page, crewId, name) {
   await page.click('#cc-dialog button[data-act="d-pay"][data-what="hurt"]');
   await page.click('#cc-dialog button[data-act="d-pay"][data-what="vuln"]');
   has(await page.textContent("#cc-dialog .res-paid"), "Took 2 Hurts", "one hit, two Hurts, while she's Exposed");
+  same(await swing(), ["d8", "d4"], "two Hurts at once, two sizes off her Confidence");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await closed();
   same(await wound(), "d6", "Dorrie's wound die after a hit while she's Exposed");
 
-  // Saved before the wound die: an old Hurt track and Armour.
+  // Saved before the wound die: an old Hurt track and Armour. Her sheet was
+  // seen before 26 Oct too, with two attuned things and a debt.
   const vesk = book.crew.find((c) => c.id === "vesk");
   const seen = said(vesk);
   delete seen["num:wound"];
   delete seen["act:Defend"];
   Object.assign(seen, { "num:armour": "Armour d4 (worn leathers)", "num:hurt": "3 Hurt bars" });
+  Object.assign(seen, { "att:0": "A perfect set of picks, Awakened", "att:0:0": "open any lock with a mechanism", "att:1": "A grappling line, Awakened", "att:1:0": "climb or swing anywhere you can throw a hook",
+    "thr:The fence:0": "I owe a debt I would rather not discuss. (debt)", "thr:Wren:0": "I owe her for the night she hid me from the watch. (Wren’s, a debt)" });
+  // A character built before 26 Oct: a debt thread, another thread, and two attuned things.
+  const debtBuild = { v: 2, titles: [{ arch: "Shadow", idea: "", text: "The quietest knife in the Low Market", on: ["Sneak"], perms: [{ text: "move unseen", on: ["Sneak"] }] }], traits: [], actions: ["Defend", "Fight", "Move", "Sneak", "Study", "Talk"],
+    equipment: [], utility: [], keepsake: { text: "", on: [] }, bag: "", attuned: [{ name: "A bone whistle", stage: "Awakened", catch: "", burden: "", perms: [{ text: "call a stray dog to me", on: [] }] }, { name: "A lucky coin", stage: "Awakened", catch: "", burden: "", perms: [{ text: "know which way to run", on: ["Move"] }] }],
+    threads: [{ person: "The fence", text: "I owe him for the Vane job.", debt: true, whose: "" }, { person: "Dorrie", text: "She taught me to pick a lock.", debt: false, whose: "" }], connect: [], aspiration: "Pay the fence back", name: "Kit", pronoun: "them" };
   const old = { v: 1, characters: [
     { id: "old-vesk", crew: "vesk", name: "Old Vesk", hash: vesk.hash, state: { aura: 3, resolve: 1, conf: 6, armour: 2, hurt: 4, catches: ["twisted ankle"], scars: 1, blaze: false, dead: false, conditions: [], threads: {}, used: {}, crossed: {}, picked: [], asp: 2, aspText: "", notes: "Owes the fence", last: null, seen } },
     { id: "own-old", crew: "own", name: "Tamsin", hash: "own", build: { v: 2, titles: [{ arch: "Warrior", idea: "", text: "The best blade on the docks", on: ["Fight"], perms: [{ text: "fight with a sword", on: ["Fight"] }] }], traits: [], actions: ["Fight", "Move", "Sneak", "Study", "Talk"], equipment: [{ text: "a chain shirt", on: [], armour: true }, { text: "a sword", on: ["Fight"], armour: false }], utility: [], keepsake: { text: "", on: [] }, bag: "", attuned: [], threads: [], connect: [], aspiration: "Win the duel", name: "Tamsin", pronoun: "her" }, state: { aura: 5, resolve: 1, conf: 6, armour: 4, hurt: 0, catches: [], scars: 0 } },
+    { id: "own-debt", crew: "own", name: "Kit", hash: "own", build: debtBuild, state: { aura: 5, resolve: 1, conf: 6, wound: 2, scars: [], threads: { "The fence|I owe him for the Vane job.": "strained" } } },
   ] };
   await page.evaluate((json) => localStorage.setItem("zi-characters", json), JSON.stringify(old));
   await page.goto(`${BASE}/characters/?c=old-vesk`);
@@ -568,7 +786,25 @@ async function play(page, crewId, name) {
   same(await page.$$eval(".tile[data-a] .tile-name", (els) => els.map((e) => e.textContent)), ["Defend", "Fight", "Move", "Sneak", "Study", "Talk"], "an old build gets Defend before Fight");
   same(await tileOf("Defend"), "2 d4", "an old build's chain shirt on her Defend");
   same(await wound(), "d2", "an old build's wound die");
-  console.log("wounds: a rest won and one rolled again, a Blaze into a Scar, Unyielding, Bram's three goblins, Dorrie's fear and Exposed, and two old saves");
+  // Old Vesk's threads and attuned things: what the rules changed has gold marks.
+  await page.goto(`${BASE}/characters/?c=old-vesk&t=sheet`);
+  await page.waitForSelector(".cc-page");
+  const golds = await page.$$eval(".cc-gold", (els) => els.map((el) => el.dataset.k));
+  for (const k of ["thr:The fence:0", "thr:Wren:0", "att:0", "att:0:0"]) same(golds.includes(k), true, `a gold mark on Old Vesk's ${k}`);
+  has(await page.textContent(".cc-note.is-gold"), "A grappling line, Awakened", "the attuned thing that's gone, named in the note");
+  await page.click('.cc-gold[data-k="thr:The fence:0"]');
+  const fence = await page.textContent('li.cc-thread:has(.cc-gold[data-k="thr:The fence:0"]) .cc-was');
+  has(fence, "Was I owe a debt I would rather not discuss. (debt)", "the fence's thread as it was");
+  has(fence, "Now I owe a debt I would rather not discuss. (hostile)", "the fence's thread as it is now");
+  // A built character's debt is a hostile thread now, her other thread's a
+  // bond, and both her attuned things are still there.
+  await page.goto(`${BASE}/characters/?c=own-debt&t=sheet`);
+  await page.waitForSelector(".cc-page");
+  same(await page.$$eval("li.cc-thread .chip", (els) => els.map((e) => e.textContent)), ["Hostile, strained", "Bond"], "an old debt thread, hostile and still strained, and an old thread as a bond");
+  has(await page.textContent("#app"), "A lucky coin", "an old build's second attuned thing kept");
+  has(await page.textContent("#app"), "A bone whistle", "an old build's first attuned thing kept");
+  same(await page.$$eval(".cc-note.is-warn", (els) => els.length), 0, "the old build opening clean");
+  console.log("wounds: a rest won and one rolled again, a Blaze into a Scar, Unyielding, Bram's three goblins, Dorrie's fear stopped, through and held, Exposed, and three old saves");
   await context.close();
 }
 
@@ -619,32 +855,52 @@ async function play(page, crewId, name) {
   const on = { t0: ["Sneak", "Move", "Locks"], "p0.0": ["Sneak"], "p0.1": ["Move"], "p0.2": ["Locks"], "p1.0": ["Locks"], "p1.1": ["Fight"], r0: ["Sneak"] };
   for (const [l, list] of Object.entries(on)) for (const a of list) await b(`[data-b="on"][data-l="${l}"][data-a="${a}"]`);
   has(await page.textContent('.bd-tiles .tile:has(.tile-name:text-is("Sneak"))'), "4 steps", "Sneak with her first Title, move unseen and Silent Step");
-  // A permission goes on two set actions at most: a third gets a warning, and it can still go on.
+  // A permission goes on two set actions at most: a third is refused, with
+  // why, and the rest look full until one comes off.
   await b('[data-b="on"][data-l="p0.0"][data-a="Move"]');
   same(await page.$$eval(".bd-lines .cc-warn", (els) => els.length), 0, "a permission on two set actions");
-  await b('[data-b="on"][data-l="p0.0"][data-a="Defend"]');
-  has(await page.textContent(".bd-lines .cc-warn"), "It’s on 3. A permission goes on two at most.", "a permission on three set actions");
-  for (const a of ["Move", "Defend"]) await b(`[data-b="on"][data-l="p0.0"][data-a="${a}"]`);
+  same(await page.getAttribute('[data-b="on"][data-l="p0.0"][data-a="Defend"]', "aria-disabled"), "true", "the rest look full once it's on two");
+  // It's marked unavailable but still answers a tap, to say why.
+  await page.click('button[data-act="b"][data-b="on"][data-l="p0.0"][data-a="Defend"]', { force: true });
+  same(await page.getAttribute('[data-b="on"][data-l="p0.0"][data-a="Defend"]', "aria-pressed"), "false", "a third set action refused");
+  has(await page.textContent("#cc-toast"), "“move unseen” is on two set actions already, and two’s the most a permission goes on.", "why a third is refused");
+  has(await page.textContent('.bd-tiles .tile:has(.tile-name:text-is("Defend"))'), "1 step", "Defend without move unseen on it");
+  await b('[data-b="on"][data-l="p0.0"][data-a="Move"]');
+  same(await page.getAttribute('[data-b="on"][data-l="p0.0"][data-a="Defend"]', "aria-disabled"), null, "room again once it's off one");
   same(await page.$$eval(".bd-lines .cc-warn", (els) => els.length), 0, "back on one set action");
+  // A Title or a trait goes on every set action it fits.
+  await b('[data-b="on"][data-l="r0"][data-a="Move"]');
+  await b('[data-b="on"][data-l="r0"][data-a="Locks"]');
+  same(await page.getAttribute('[data-b="on"][data-l="r0"][data-a="Locks"]', "aria-pressed"), "true", "a trait on three set actions");
+  for (const a of ["Move", "Locks"]) await b(`[data-b="on"][data-l="r0"][data-a="${a}"]`);
   await shot(page, "6-builder-set-actions");
   await next("What you carry");
   await b('[data-b="fillany"][data-k="e"][data-v="worn leathers"]');
   same(await page.getAttribute('[data-b="on"][data-l="e0"][data-a="Defend"]', "aria-pressed"), "true", "worn leathers going straight on her Defend");
   await b('[data-b="fillany"][data-k="u"][data-v="Purse of gold"]');
   await b('[data-b="fillany"][data-k="u"][data-v="Smoke bomb"]');
+  // Her picks are an ordinary utility item now, still on her Locks, and she
+  // attunes one thing: her grappling line.
+  await page.fill("#b-u2", "a perfect set of picks");
+  await b('[data-b="on"][data-l="u2"][data-a="Locks"]');
   await page.fill("#b-k", "the first coin she ever stole");
-  await page.fill("#b-a0-name", "A perfect set of picks");
-  await page.fill("#b-a0-p0", "open any lock with a mechanism");
-  await b('[data-b="on"][data-l="a0.0"][data-a="Locks"]');
-  await page.fill("#b-a1-name", "A grappling line");
-  await page.fill("#b-a1-p0", "climb or swing anywhere you can throw a hook");
-  await b('[data-b="on"][data-l="a1.0"][data-a="Move"]');
+  has(await page.textContent("#bd-at"), "Attune one thing", "one attuned thing at the start");
+  same(await page.$$eval('[data-b="addatt"], #b-a1-name', (els) => els.length), 0, "nothing offering a second attuned thing at the start");
+  await page.fill("#b-a0-name", "A grappling line");
+  await page.fill("#b-a0-p0", "climb or swing anywhere you can throw a hook");
+  await b('[data-b="on"][data-l="a0.0"][data-a="Move"]');
   await next("Threads");
-  const threads = [["Dorrie", "We have pulled a dozen jobs. I trust her with my life."], ["Bram", "He once carried me out of a fire. I have never said thank you."], ["The fence", "I owe a debt I would rather not discuss."]];
-  for (const [i, [who, what]] of threads.entries()) {
-    await page.fill(`#b-th${i}-person`, who);
-    await page.fill(`#b-th${i}-text`, what);
-  }
+  // Threads from the crew questions: an answer becomes a thread in one tap.
+  same(await page.getAttribute('details[data-open="bd-qs"]', "open"), null, "the crew questions closed until they're wanted");
+  await page.click('details[data-open="bd-qs"] > summary');
+  await page.fill("#b-cq0", "Dorrie. We have pulled a dozen jobs. I trust her with my life.");
+  await b('[data-b="fromq"][data-q="0"]');
+  same([await page.inputValue("#b-th0-person"), await page.inputValue("#b-th0-text")], ["Dorrie", "We have pulled a dozen jobs. I trust her with my life."], "an answer made into her first bond thread");
+  same(await page.$$eval(".bd-thread", (els) => els.map((el) => el.querySelector('[aria-pressed="true"]').textContent)), ["Bond", "Bond", "Hostile"], "two bond threads and a hostile one to start");
+  await page.fill("#b-th1-person", "Bram");
+  await page.fill("#b-th1-text", "He once carried me out of a fire. I have never said thank you.");
+  await page.fill("#b-th2-person", "The fence");
+  await page.fill("#b-th2-text", "I owe a debt I would rather not discuss.");
   await next("Aspiration");
   await page.fill("#b-asp", "Own the score of a lifetime");
   await next("Check it and play");
@@ -777,10 +1033,40 @@ async function play(page, crewId, name) {
     b.titles[1].perms[0].on = ["Talk"];
     has(checksOf(b, B).map((x) => x.text).join(" "), "“Deceptive” is on your Talk twice", "the same permission twice on one set action");
   }
-  // A thousand random characters: not one warning, and nothing bigger than
-  // the crew's biggest set action, 5 steps.
+  // Threads and attuned things, when building and when changing a character.
+  {
+    const said = (b, opts) => checksOf(b, B, opts).map((x) => x.text).join(" ");
+    const b = blankBuild();
+    same(b.threads.map((t) => t.kind), ["bond", "bond", "hostile"], "a blank build's threads: two bond and a hostile one");
+    same(b.attuned.length, 1, "a blank build's one attuned thing");
+    const write = (list) => (b.threads = list.map(([kind, person]) => ({ person, text: `Something true with ${person}.`, kind, whose: "" })));
+    write([["bond", "Dorrie"]]);
+    has(said(b), "You’ve written one bond thread. You start with two, with the crew.", "one bond thread");
+    write([["bond", "Dorrie"], ["bond", "Bram"]]);
+    same(/bond thread|hostile thread/.test(said(b)), false, "two bond threads and no hostile one");
+    write([["bond", "Dorrie"], ["bond", "Bram"], ["bond", "Wren"]]);
+    has(said(b), "A third bond thread comes with a hostile thread", "a third bond thread with no hostile one");
+    write([["bond", "Dorrie"], ["bond", "Bram"], ["hostile", "The fence"], ["bond", "Wren"]]);
+    same(/bond thread|hostile thread/.test(said(b)), false, "a hostile thread and the third bond thread it makes room for");
+    write([["bond", "Dorrie"], ["bond", "Bram"], ["hostile", "The fence"], ["bond", "Wren"], ["bond", "Ash"]]);
+    has(said(b), "You’ve written 4 bond threads. Three is the most you start with.", "four bond threads");
+    write([["bond", "Dorrie"], ["bond", "Bram"], ["hostile", "The fence"], ["hostile", "The Watch"]]);
+    has(said(b), "You’ve written 2 hostile threads. You start with one.", "two hostile threads to start");
+    same(/thread/.test(said(b, { changing: true })), false, "any threads at all on a character being changed");
+    b.attuned = [{ name: "A rope", stage: "Awakened", catch: "", burden: "", perms: [{ text: "climb anything", on: [] }, { text: "", on: [] }] }, { name: "A lamp", stage: "Awakened", catch: "", burden: "", perms: [{ text: "light the dark", on: [] }, { text: "", on: [] }] }];
+    has(said(b), "You’ve attuned 2 things. You start with one, and you can attune more later, in downtime.", "two attuned things to start");
+    same(/attuned 2/.test(said(b, { changing: true })), false, "two attuned things on a character being changed");
+    b.attuned = [];
+    has(said(b), "You haven’t attuned anything yet.", "nothing attuned to start");
+    // A build from before 26 Oct: a debt is a hostile thread, the rest are bond threads.
+    same(normalBuild({ v: 2, threads: [{ person: "The fence", text: "I owe him.", debt: true }, { person: "Dorrie", text: "Old friends.", debt: false }] }).threads.map((t) => t.kind), ["hostile", "bond"], "an old build's debt as a hostile thread");
+  }
+  // A thousand random characters: not one warning, nothing bigger than the
+  // crew's biggest set action, 5 steps, one attuned thing, two or three bond
+  // threads and a hostile one.
   let warned = 0;
   let biggest = 0;
+  let shapes = 0;
   for (let i = 0; i < 1000; i++) {
     const b = randomBuild(B, book.crew);
     const why = checksOf(b, B);
@@ -788,9 +1074,13 @@ async function play(page, crewId, name) {
       if (!warned) note(`a random character's warnings: ${why.map((x) => x.text).join(" | ")}`);
       warned += 1;
     }
+    const kinds = b.threads.map((t) => t.kind);
+    const bonds = kinds.filter((k) => k === "bond").length;
+    if (b.attuned.filter((a) => a.name.trim()).length !== 1 || kinds.filter((k) => k === "hostile").length !== 1 || bonds < 2 || bonds > 3) shapes += 1;
     biggest = Math.max(biggest, ...sheetOf({ id: `random-${i}`, name: b.name, build: b }, B).actions.map((a) => a.steps));
   }
   same(warned, 0, "random characters with a warning, of 1000");
+  same(shapes, 0, "random characters without one attuned thing, a hostile thread and two or three bond threads, of 1000");
   if (biggest > 5) note(`a random character has a set action of ${biggest} steps, more than the crew's 5`);
 
   const { context, page } = await phone();
@@ -818,16 +1108,20 @@ async function play(page, crewId, name) {
   await play(page, "vesk");
   await page.click('.cc-stat[data-p="wound"]');
   await page.click('button[data-act="hurt"][data-d="1"]');
+  await page.click('.cc-tabs a[data-t="sheet"]');
+  await page.click('button[data-act="strain"][data-k="Dorrie|We have pulled a dozen jobs. I trust her with my life."]');
   let f = await print();
   same([f.pages, f.file], [2, "vesk-zidara-sheet.pdf"], "Vesk's printed sheet");
   want(f, [["name", "Vesk"], ["pronouns", "she, her"], ["aura_now", "5"], ["aura_max", "5"], ["stride", "5"], ["resolve_max", "2"],
-    ["confidence", "d6"], ["wound_die", "d4"], ["scar_1", ""], ["set_sneak_lines", "Title I, move unseen, Silent Step"], ["set_sneak_steps", "4"], ["set_sneak_die", "d8"],
+    ["confidence", "d4"], ["wound_die", "d4"], ["scar_1", ""], ["set_sneak_lines", "Title I, move unseen, Silent Step"], ["set_sneak_steps", "4"], ["set_sneak_die", "d8"],
     ["set_defend_lines", "worn leathers"], ["set_defend_steps", "2"], ["set_defend_die", "d4"],
-    ["set_1_name", "Locks"], ["set_1_steps", "5"], ["set_1_die", "d10"], ["set_2_name", ""], ["set_talk_steps", "1"], ["title_1", "The best cat burglar in the city"], ["title_1_archetype", "Shadow"],
-    ["trait_1", "Silent Step"], ["equipment_1", "worn leathers"], ["utility_2", "a smoke bomb"], ["keepsake", "the first coin she ever stole"], ["attune_1_thing", "A perfect set of picks"],
-    ["attune_1_stage", "awakened"], ["attune_1_permission_1", "open any lock with a mechanism"], ["bond_1", "Dorrie"],
-    ["bond_1_thread_2", "We came up on the same streets. She never asks why. (Dorrie’s words)"], ["aspiration", "Own the score of a lifetime"], ["aspiration_die", "d2"],
-    ["resolve_2", true], ["resolve_3", false]], "Vesk's printed sheet");
+    ["set_1_name", "Locks"], ["set_1_lines", "Title I, pick a mechanical lock, know how a lock’s built, a perfect set of picks"], ["set_1_steps", "5"], ["set_1_die", "d10"], ["set_2_name", ""], ["set_talk_steps", "1"], ["title_1", "The best cat burglar in the city"], ["title_1_archetype", "Shadow"],
+    ["trait_1", "Silent Step"], ["equipment_1", "worn leathers"], ["utility_2", "a smoke bomb"], ["utility_3", "a perfect set of picks"], ["keepsake", "the first coin she ever stole"], ["attune_1_thing", "A grappling line"],
+    ["attune_1_stage", "awakened"], ["attune_1_permission_1", "climb or swing anywhere you can throw a hook"], ["attune_2_thing", ""], ["bond_1", "Dorrie"],
+    ["bond_1_thread_1", "We have pulled a dozen jobs. I trust her with my life."], ["bond_1_thread_1_kind", "bond"], ["bond_1_thread_1_strained", true], ["bond_1_thread_1_snapped", false],
+    ["bond_1_thread_2", "We came up on the same streets. She never asks why. (Dorrie’s words)"], ["bond_1_thread_2_kind", "bond"], ["bond_1_thread_2_strained", false],
+    ["bond_3", "Isolde"], ["bond_3_thread_1_kind", "hostile"], ["bond_5", "The fence"], ["bond_5_thread_1", "I owe a debt I would rather not discuss."], ["bond_5_thread_1_kind", "hostile"],
+    ["aspiration", "Own the score of a lifetime"], ["aspiration_die", "d2"], ["resolve_2", true], ["resolve_3", false]], "Vesk's printed sheet");
   for (const gone of ["armour_full", "armour_now", "hurt_1_box_1", "hurt_1_catch"]) same(f.get(gone), null, `no ${gone} on the sheet`);
   // Her leathers broken and a Scar: they print where they are now.
   await page.click('.cc-tabs a[data-t="sheet"]');
@@ -860,7 +1154,8 @@ async function play(page, crewId, name) {
   await page.click('.bd-foot button[data-b="save"]');
   await page.waitForSelector(".tile[data-a]");
   f = await print();
-  want(f, [["name", "Kestrel"], ["set_sneak_steps", "4"], ["set_move_die", "d8"], ["set_1_name", "Locks"], ["set_1_die", "d10"], ["title_2_permission_2", "fight dirty with a knife"], ["attune_2_thing", "A grappling line"], ["notes", "Trouble that follows her: wanted in three districts, owes the Guild."]], "Kestrel, made from Vesk");
+  want(f, [["name", "Kestrel"], ["set_sneak_steps", "4"], ["set_move_die", "d8"], ["set_1_name", "Locks"], ["set_1_die", "d10"], ["title_2_permission_2", "fight dirty with a knife"], ["attune_1_thing", "A grappling line"], ["attune_2_thing", ""],
+    ["bond_1", "Dorrie"], ["bond_1_thread_1_kind", "bond"], ["bond_3", "The fence"], ["bond_3_thread_1_kind", "hostile"], ["notes", "Trouble that follows her: wanted in three districts, owes the Guild."]], "Kestrel, made from Vesk");
 
   // Random, five times over, then saved and printed.
   await page.goto(`${BASE}/characters/`);
@@ -960,6 +1255,10 @@ async function round(page, dice, real = false) {
   same(await page.$$eval("[data-spin]", (els) => els.length), 0, "dice tumbling with reduce-motion on");
   same(await page.$$eval(".ln-roll .hex", (els) => els.map((e) => e.textContent)), ["6", "8", "3"], "the club's d8 and your d12 and d6");
   has(await card(page), "Your 8 beats the brute’s 6, so the club never comes down", "a beaten club");
+  // Confidence moves for everyone who put an action in, off their sheets.
+  const moved = () => page.$$eval(".ln-swing li", (els) => els.map((el) => [el.querySelector("b").textContent, ...[...el.querySelectorAll(".hex")].map((h) => h.textContent)]));
+  same(await moved(), [["Wren", "d6", "d8"], ["Bram", "d6", "d8"], ["Isolde", "d8"]], "Wren and Bram up a size for the club they stopped, and Isolde's where it was");
+  has(await card(page), "so Wren and Bram both go up a size", "why their Confidence went up");
   same(await page.evaluate(() => document.activeElement?.id), "ln-out", "focus on what the dice did");
   same(await moving(page), 0, "things moving on the round with reduce-motion on");
   await page.click('button[data-do="next"]');
@@ -971,14 +1270,18 @@ async function round(page, dice, real = false) {
   has(await card(page), "The d6 came up 6, its top face, so Wren gets 1 Aura back", "a top face in a combo");
   has(await card(page), "if her Aura’s full she gives it to a friend in the scene", "a top face with Wren's Aura full");
   same(await page.$$('button[data-do="next"]').then((b) => b.length), 0, "moving on before the tie's settled");
+  same(await page.$$eval(".ln-swing", (els) => els.length), 0, "no Confidence moving before the tie's settled");
   await page.click('button[data-do="win"]');
   has(await card(page), "You pay 1 Aura, so the tie’s yours", "a tie won for 1 Aura");
+  same(await moved(), [["Wren", "d6", "d8"], ["Bram", "d6", "d8"], ["Isolde", "d8"]], "a tie won counting as a win");
   await page.click('button[data-do="next"]');
   await page.click('button[data-do="again"]');
   await round(page, [3, 2, 7], true);
   has(await card(page), "The brute’s 7 beats your best, a 3, so the club lands on Isolde at once", "real dice that lose");
   has(await card(page), "Isolde’s wound die goes up a size, from d2 to d4", "the Hurt on Isolde");
   same(await page.$$eval(".ln-hurt .mini i.on", (els) => els.length), 1, "Isolde's wound die row");
+  same(await moved(), [["Wren", "d6", "d4"], ["Bram", "d6", "d4"], ["Isolde", "d8", "d6"]], "every die missed, and the Hurt on Isolde");
+  has(await card(page), "The Hurt put Isolde’s wound die up, so hers drops a size as well", "why Isolde's went down");
   await page.click('button[data-do="next"]');
   has(await card(page), "already landed on Isolde", "the end of a round that landed");
   await page.click('a[data-act="nav"].button');
@@ -1151,6 +1454,10 @@ async function round(page, dice, real = false) {
   };
   const playTab = () => page.click('.cc-tabs a[data-t="play"]');
   const closed = () => page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  // The card remembers "Without a slot" being opened, so it's only opened when it's shut.
+  const openFree = async () => {
+    if ((await page.getAttribute('#cc-dialog details[data-open="dt-free"]', "open")) === null) await page.click('#cc-dialog details[data-open="dt-free"] > summary');
+  };
 
   // Vesk's week, from the book, with a Hurt on her from the job before.
   await page.click('.cc-stat[data-p="wound"]');
@@ -1164,14 +1471,19 @@ async function round(page, dice, real = false) {
   await dt('[data-do="pick"][data-s="0"][data-v="pressure"]');
   await page.fill('#cc-dialog input[data-dt="0"][data-f="text"]', "Pay the fence, every coin");
   await dt('[data-do="pick"][data-s="1"][data-v="att"]');
-  await dt('[data-do="set"][data-s="1"][data-f="a"][data-v="1"]');
+  await dt('[data-do="set"][data-s="1"][data-f="a"][data-v="0"]');
   has(await page.textContent("#cc-dialog .dt-slot.is-picked:last-of-type"), "Awakened, with 1 permission", "the grappling line's stage");
   await page.fill('#cc-dialog input[data-dt="1"][data-f="catch"]', "Loud");
   await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "haul someone up after me");
+  // Paying the fence is doing right by him, so her hostile thread with him strains.
+  await openFree();
+  same(await page.$$eval('#cc-dialog button[data-do="mend"]', (els) => els.length), 0, "no bond thread strained, so nothing to mend");
+  await dt('[data-do="right"][data-v="The fence|I owe a debt I would rather not discuss."]');
   await shot(page, "downtime-card");
   await dt('[data-do="finish"]');
   await closed();
   has(await page.textContent("#cc-toast"), "Pay the fence, every coin: done.", "the week's toast");
+  has(await page.textContent("#cc-toast"), "You did right by The fence, so your hostile thread’s strained.", "the fence's thread strained by the week");
   has(await page.textContent("#cc-toast"), "Your wound die’s back to d2.", "the toast saying her wound's cleared");
   has(await page.textContent("#cc-toast"), "Resolve’s full at 2.", "Resolve after downtime");
   same(await page.textContent('.cc-stat[data-p="wound"] .v'), "d2", "her wound die after downtime");
@@ -1184,12 +1496,15 @@ async function round(page, dice, real = false) {
   let text = await sheet();
   has(text, "haul someone up after me", "the new attuned permission on the sheet");
   has(text, "Its Catch: Loud", "the grappling line's Catch");
+  const fenceChip = () => page.textContent('li.cc-thread:has-text("I owe a debt I would rather not discuss.") .chip');
+  same(await fenceChip(), "Hostile, strained", "the fence's thread after the week");
   same(await page.$$eval(".cc-gold, .cc-gem", (els) => els.length), 0, "no gold marks for what she grew");
   await playTab();
   same(await page.getAttribute(".cc-undo", "aria-label"), "Undo downtime", "the undo after downtime");
   await page.click(".cc-undo");
   text = await sheet();
   same(text.includes("haul someone up after me") || text.includes("Its Catch: Loud"), false, "the week undone");
+  same(await fenceChip(), "Hostile", "the fence's thread whole again with the week undone");
 
   // A second week: a new permission on Sneak, her Aspiration, and a swap.
   await playTab();
@@ -1209,7 +1524,7 @@ async function round(page, dice, real = false) {
   await page.evaluate(() => window.ziCompanion.setDice([3, 1]));
   await dt('[data-do="asp-roll"][data-s="1"]');
   has(await page.textContent("#cc-dialog .dt-slot.is-picked:last-of-type"), "Beat it. It climbs to d4.", "her Aspiration climbing");
-  await page.click('#cc-dialog details[data-open="dt-free"] > summary');
+  await openFree();
   await dt('[data-do="swap-add"]');
   await dt('[data-do="set"][data-s="w0"][data-f="t"][data-v="1"]');
   await dt('[data-do="set"][data-s="w0"][data-f="j"][data-v="1"]');
@@ -1245,6 +1560,32 @@ async function round(page, dice, real = false) {
   await context.setOffline(false);
   const saved = await page.evaluate(() => localStorage.getItem("zi-characters"));
   const id = JSON.parse(saved).characters[0].id;
+
+  // A third week: a slot toward the crew, then a hostile thread from Deepen a
+  // bond, and a tie on her Aspiration taken with one of the crew's extra
+  // resources.
+  await playTab();
+  await page.click('button[data-act="downtime"]');
+  await dt('[data-do="pick"][data-s="0"][data-v="party"]');
+  has(await page.textContent("#cc-dialog .dt-slot.is-picked"), "The crew gets one action a downtime", "a slot toward the crew's one action");
+  has(await page.textContent("#cc-dialog .dt-slot.is-picked"), "It can never be a second move on a faction.", "no second move on a faction");
+  await dt('[data-do="clear"][data-s="0"]');
+  await dt('[data-do="pick"][data-s="0"][data-v="thread"]');
+  await dt('[data-do="set"][data-s="0"][data-f="tkind"][data-v="hostile"]');
+  await page.fill('#cc-dialog input[data-dt="0"][data-f="person"]', "The Harbour Guild");
+  await page.fill('#cc-dialog input[data-dt="0"][data-f="text"]', "They think I sank their barge.");
+  await dt('[data-do="pick"][data-s="1"][data-v="asp"]');
+  await page.evaluate(() => window.ziCompanion.setDice([2, 2]));
+  await dt('[data-do="asp-roll"][data-s="1"]');
+  has(await page.textContent("#cc-dialog .dt-slot.is-picked:last-of-type"), "The crew spends an extra resource to take the tie", "an extra resource for the tie");
+  same(/spare/i.test(await page.textContent("#cc-dialog")), false, "nothing on the card calling it spare");
+  await dt('[data-do="asp-tie"][data-s="1"]');
+  await dt('[data-do="finish"]');
+  await closed();
+  has(await page.textContent("#cc-toast"), "A new hostile thread with The Harbour Guild.", "the new hostile thread's toast");
+  has(await page.textContent("#cc-toast"), "The crew spends an extra resource for the tie.", "the tie's toast");
+  await sheet();
+  same(await page.textContent('li.cc-thread:has-text("They think I sank their barge.") .chip'), "Hostile", "the new thread on her sheet, hostile");
   await context.close();
 
   // A made-up rule change against her saved sheet, on a phone that hasn't got
@@ -1327,7 +1668,7 @@ async function round(page, dice, real = false) {
     const grown = [
       { k: "perm", t: 0, text: "slip through a crowd", on: ["Sneak"] },
       { k: "swap", t: 1, j: 1, from: c.titles[1].permissions[1].text, text: "fight dirty with anything to hand", on: ["Fight"] },
-      { k: "att", a: 1, text: "haul someone up after me", on: [], catch: "Loud", burden: "", up: false },
+      { k: "att", a: 0, text: "haul someone up after me", on: [], catch: "Loud", burden: "", up: false },
       { k: "trait", name: "Prepared", on: [] },
       { k: "title", arch: "Leader", text: "Captain of the crew", on: ["Talk"], perm: "rally a frightened crowd", permOn: ["Talk"] },
     ];
@@ -1357,7 +1698,7 @@ async function round(page, dice, real = false) {
     const built = fromCrew(c, B, { keep: true });
     const grown = [
       { k: "att", a: 0, text: "pushed past its stage", on: ["Move"], catch: "", burden: "", up: false },
-      { k: "att", a: 1, text: "haul someone up after me", on: [], catch: long("Loud", 110), burden: "", up: false },
+      { k: "att", a: 0, text: "haul someone up after me", on: [], catch: long("Loud", 110), burden: "", up: false },
       { k: "trait", name: long("Steady", 110), on: [], own: { type: long("Whenever", 100), text: long("Gain 1 Aura when the lamps go out", 190) } },
       { k: "thread", person: long("Harbourmaster", 110), text: "She let me off once." },
     ];
@@ -1472,7 +1813,7 @@ async function round(page, dice, real = false) {
     await tab("sheet");
     const text = await page.textContent(".cc-page");
     for (const want of ["Third Title", "Captain of the crew", "know who’s lying in my crew", "slip through any crowd", bramNow, "two smoke bombs", "made from Vesk’s sheet in the rules"]) has(text, want, `her sheet, ${when}`);
-    has(await page.textContent(`li.cc-thread:has-text("${bramNow}")`), "Strained", `the reworded thread still strained, ${when}`);
+    has(await page.textContent(`li.cc-thread:has-text("${bramNow}")`), "Bond, strained", `the reworded thread still strained, ${when}`);
     same(await page.getAttribute('button[data-act="cross"][data-k="utility|two smoke bombs"]', "aria-pressed"), "true", `the reworded smoke bomb still crossed out, ${when}`);
     same(await golds(), 0, `no gold marks on the Sheet tab, ${when}`);
     await tab("play");

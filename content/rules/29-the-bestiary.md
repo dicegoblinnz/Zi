@@ -6,7 +6,7 @@ order: 29
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 Here are forty threats you can run straight off the page, all laid out the same way.
@@ -16,7 +16,7 @@ Each threat gets a **Challenge**, its tags sorted into the three kinds, three te
 
 The **Telegraphs** line gives you three to read out as they're written, each with its die and what it hits. They come from the threat's own tags, so the crew can see how to answer them. Spend them from your [round budget](#s-budget) like any telegraph, and write your own as the scene needs them ([Telegraphing Well](#s-telegraphing) has the tricks). If a tag like *Ambush* makes the first one a step bigger, it's listed first. A threat aims one die at each person a round, unless a tag like *Flurry* says it can do more, so if two of its telegraphs would go at the same one of the crew, aim one of them somewhere else, and one that goes at everyone leaves out whoever's already got one of its dice coming.
 
-Every Challenge 6 threat has a **multiplier** on at least one tag, and so do two Challenge 5s that should take a while. *Armoured ×6* takes six wins to strip: every win ticks one off, and you say what's left out loud. It only ticks to what fits it, so a hammer ticks *Armoured* and a bribe doesn't, and a [vulnerability](#s-vulnerable) that fits ticks it faster. They're written for a starting crew of four, a [threat budget](#s-threat-budget) of 40. For a bigger or more experienced crew, add 1 to each multiplier for every 10 the threat budget's over 40, and for a smaller one, take 1 off for every 10 it's under. Four characters with four Titles each have a threat budget of 60, so for them *Armoured ×6* is *Armoured ×8*, and a ×3 is a ×5. There's more in [Multipliers](#s-tough-gm), in Running the Game.
+Every Challenge 6 threat has a **multiplier** on at least one tag, and so do two Challenge 5s that should take a while. *Armoured ×6* takes six wins to strip: every win ticks one off, and you say what's left out loud. It only ticks to what fits it, so a hammer ticks *Armoured* and a bribe doesn't, and a [vulnerability](#s-vulnerable) that fits adds a tick, on the same tag or on another one the hit can reach. Each multiplier's as big as that threat needs, on the tag that says what it is, like the Iron Warden's armour or the Wandering Giant's grief. If you change a threat, change its multipliers to match. They're written for a starting crew of four, a [threat budget](#s-threat-budget) of 40. For a bigger or more experienced crew, add 1 to each multiplier for every 10 the threat budget's over 40, and for a smaller one, take 1 off for every 10 it's under. Four characters with four Titles each have a threat budget of 60, so for them *Armoured ×6* is *Armoured ×8*, and a ×3 is a ×5. There's more in [Multipliers](#s-tough-gm), in Running the Game.
 
 When a threat with **Forms** loses its last keeps-it-going tag, it changes shape instead of falling. You pick 3 to 5 tags for its new shape from its Forms list and tell the table what it's becoming, and its multipliers come back on whichever of the new tags matter most. It changes once with *Forms (2)* and twice with *Forms (3)*, and its multipliers come back each time, so they're smaller than a one-form boss's: about ×3 with two forms, and ×2 with three. Its weak point still ends it in any shape, and its last form falls like anything else.
 

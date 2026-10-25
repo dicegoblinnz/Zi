@@ -1,19 +1,21 @@
 // Downtime on the phone: two slots, and what they buy lands on the sheet when
 // the player finishes, with one undo for the lot. The choices are Downtime's:
 // face a pressure, recover, grow, or put a slot toward the crew. Swapping a
-// permission and mending a strained thread don't take a slot, and wounds
-// clear for free when it's over. The card's a draft until it's finished, kept
-// on the page by character (not saved), so closing it and coming back keeps
+// permission, mending a strained bond thread and marking that you did right
+// by someone you've a hostile thread with don't take a slot, and wounds clear
+// for free when it's over. The card's a draft until it's finished, kept on
+// the page by character (not saved), so closing it and coming back keeps
 // what's picked.
 
 import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
 import { MAX_PERMS, attunedRoom } from "./grow.js";
+import { threadKey, threadState } from "./threads.js";
 
 const CHOICES = [
   ["Face a pressure", [["pressure", "Deal with a pressure"]]],
   ["Recover", [["mend", "Mend something broken"]]],
   ["Grow", [["perm", "A new permission"], ["trait", "A new trait"], ["asp", "Chase your Aspiration"], ["thread", "Deepen a bond"], ["get", "Get something"], ["att", "Attune"]]],
-  ["The crew", [["party", "Toward a party action"]]],
+  ["The crew", [["party", "Toward the crew"]]],
 ];
 const LABEL = Object.fromEntries(CHOICES.flatMap(([, list]) => list));
 const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth", "twenty-first", "twenty-second", "twenty-third", "twenty-fourth"];
@@ -22,7 +24,13 @@ const MAX_ON = 2;
 // Where downtime clears the wound die to: d2, a size up for each Scar.
 const floorNow = (c, s) => Math.min(12, (c.numbers.wound ?? 2) + 2 * (Array.isArray(s.scars) ? s.scars.length : 0));
 const crossed = (s) => Object.keys(s.crossed).filter((k) => s.crossed[k]).map((key) => ({ key, name: key.split("|").slice(1).join("|") }));
-const strainedOf = (c, s) => c.threads.flatMap((p) => p.threads.map((t) => ({ key: `${p.person}|${t.text}`, person: p.person, text: t.text }))).filter((t) => s.threads[t.key] === "strained");
+// Every thread with where it stands now.
+const threadsOf = (c, s) => c.threads.flatMap((p) => p.threads.map((t) => ({ key: threadKey(p.person, t), person: p.person, text: t.text, kind: t.kind, sheet: t.strained, st: threadState(s, p.person, t) })));
+// A strained bond thread is what downtime mends.
+const strainedOf = (c, s) => threadsOf(c, s).filter((t) => t.kind !== "hostile" && t.st === "strained");
+// A hostile thread that's still there: doing right by them strains it, and
+// doing right by them again snaps it.
+const grudgesOf = (c, s) => threadsOf(c, s).filter((t) => t.kind === "hostile" && t.st !== "snapped");
 const roomFor = (c, s, where) => (where === "bag" ? c.carry.bag.max - (c.carry.bag.items?.length ?? 0) : c.carry[where].max - c.carry[where].items.length) - s.picked.filter((p) => p.where === where).length;
 
 export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwDie, crewNames, isOpen, rule }) {
@@ -32,7 +40,8 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
   const blank = () => ({ k: "" });
 
   function start(ch) {
-    const d = drafts.get(ch.id) ?? { kind: "downtime", id: ch.id, slots: [blank(), blank()], swaps: [], mends: [], sure: false };
+    const d = drafts.get(ch.id) ?? { kind: "downtime", id: ch.id, slots: [blank(), blank()], swaps: [], mends: [], rights: [], sure: false };
+    d.rights ??= [];
     d.sure = false;
     drafts.set(ch.id, d);
     return d;
@@ -55,7 +64,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       perm: { k, t: firstTitle, text: "", on: [] },
       trait: { k, name: "", own: false, oname: "", otype: "", otext: "", on: [] },
       asp: { k, on: [], dice: null, opp: null, real: false, pads: [], padOpp: "", rerolls: 0, tie: false, arch: "", text: "", perm: "", tOn: [], pOn: [] },
-      thread: { k, person: "", text: "" }, get: { k, text: "", where: "bag" },
+      thread: { k, person: "", text: "", tkind: "bond" }, get: { k, text: "", where: "bag" },
       att: { k, a: firstThing, text: "", on: [], catch: "", burden: "", up: false }, party: { k, text: "" },
     }[k] ?? blank();
   }
@@ -117,8 +126,8 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       const climbs = asp >= 12 ? "It climbs past d12 and resolves." : `It climbs to d${sizeUp(asp)}.`;
       const verdict = beat ? (sl.tie ? `The crew takes the tie. ${climbs}` : `${best} against ${sl.opp}. Beat it. ${climbs}`) : tie ? `${best} against ${sl.opp}. A tie goes to the Aspiration, so it holds at d${asp}.` : `${best} against ${sl.opp}. It holds at d${asp}.`;
       body = `<p class="cc-dice">${sl.dice.map((n, j) => hex(String(n), "on")).join("")}${hex(String(sl.opp), "them")}<span>${dice.length > 1 ? "Your best die counts. " : ""}${esc(verdict)}</span></p>
-        ${beat ? "" : `<div class="cc-row">${s.resolve > spent(d) ? `<button type="button" class="button sm" data-act="dt" data-do="asp-again" data-s="${i}">Spend 1 Resolve to roll yours again</button>` : ""}${tie ? `<button type="button" class="button sm" data-act="dt" data-do="asp-tie" data-s="${i}">The crew spends a spare resource to take the tie</button>` : ""}</div>
-        <p class="cc-lead">There’s no Aura in downtime. Taking the tie spends one of the crew’s spare resources, so ask the table first.</p>`}
+        ${beat ? "" : `<div class="cc-row">${s.resolve > spent(d) ? `<button type="button" class="button sm" data-act="dt" data-do="asp-again" data-s="${i}">Spend 1 Resolve to roll yours again</button>` : ""}${tie ? `<button type="button" class="button sm" data-act="dt" data-do="asp-tie" data-s="${i}">The crew spends an extra resource to take the tie</button>` : ""}</div>
+        <p class="cc-lead">There’s no Aura in downtime. Taking the tie spends one of the crew’s extra resources, so ask the table first.</p>`}
         ${beat && asp >= 12 ? `<h3>Your new Title</h3>
           <label class="cc-field">Its archetype <select id="dt-arch-${i}" data-dt="${i}" data-f="arch"><option value="">Pick one</option>${B.archetypes.map((a) => `<option value="${esc(a.name)}"${sl.arch === a.name ? " selected" : ""}>${esc(a.name)}${c.titles.some((t) => t.archetype === a.name) ? " again" : ""}</option>`).join("")}</select></label>
           ${field(i, "text", "Name it", sl.text)}<p class="cc-lead">Set actions the Title fits</p>${toggles(i, "tOn", sl.tOn, c)}
@@ -185,7 +194,8 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       case "asp":
         return aspView(sl, i, c, s, d);
       case "thread":
-        return `${field(i, "person", "Who it’s with", sl.person)}${field(i, "text", "The thread", sl.text)}<p class="cc-lead">If they’re in the crew, it goes on both your sheets, so agree on it together.</p>`;
+        return `${chips(i, "tkind", [["bond", "A bond thread"], ["hostile", "A hostile thread"]], sl.tkind ?? "bond", "What kind of thread")}
+          ${field(i, "person", "Who it’s with", sl.person)}${field(i, "text", "The thread", sl.text)}<p class="cc-lead">A bond thread or a hostile one, whichever the story’s given you. If they’re in the crew, it goes on both your sheets, so agree on it together.</p>`;
       case "get": {
         const room = roomFor(c, s, sl.where);
         return `${field(i, "text", "What you’re getting", sl.text)}
@@ -196,7 +206,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       case "att":
         return attView(sl, i, c, s, d);
       case "party":
-        return `${field(i, "text", "What it’s for", sl.text)}<p class="cc-lead">Party slots wait for the party sheet, so play this one at the table: chase the Goal, work a project, move on a faction, rebuild, push a world event or help someone’s Aspiration.</p>`;
+        return `${field(i, "text", "What it’s for", sl.text)}<p class="cc-lead">The crew gets one action a downtime, on the party sheet, so play this at the table. Put your slot into the crew’s action and two slots on one move count everything twice. Or chase the Goal, work a project or help someone’s Aspiration with it on its own. It can never be a second move on a faction.</p>`;
       default:
         return "";
     }
@@ -228,20 +238,24 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
   function view(c, s, ch, d) {
     const picked = d.slots.filter((x) => x.k).length;
     const strained = strainedOf(c, s);
+    const grudges = grudgesOf(c, s);
     const warn = d.sure ? warnings(d, c, s) : [];
+    const free = ["swaps", ...(strained.length ? ["mending"] : []), ...(grudges.length ? ["hostile threads"] : [])];
     return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">Downtime</h2><p class="cc-small">${picked} of 2 slots picked</p></div>
       <button type="button" class="cc-x" data-act="close" aria-label="Close">${icon.close}</button></div>
     <div class="dlg-body">
       <p class="cc-lead">Pick what each of your two slots is for, and it lands on your sheet when you finish. Three things don’t cost a slot: once-per-downtime traits refresh, all your Resolve comes back, and your wound die goes back to d${floorNow(c, s)}${s.scars?.length ? ", where your Scars keep it" : ""}. ${link("what-you-can-do-with-a-slot", "What a slot can do")}</p>
       ${ruleBox("dt-how", "Your slots, from the rules", "your-slots")}
       ${slotView(d, 0, c, s)}${slotView(d, 1, c, s)}
-      <details class="cc-group" data-open="dt-free"${isOpen("dt-free") || d.swaps.length || d.mends.length ? " open" : ""}><summary>Without a slot <small>swaps${strained.length ? " and mending" : ""}</small></summary>
+      <details class="cc-group" data-open="dt-free"${isOpen("dt-free") || d.swaps.length || d.mends.length || d.rights.length ? " open" : ""}><summary>Without a slot <small>${free.length > 1 ? `${free.slice(0, -1).join(", ")} and ${free[free.length - 1]}` : free[0]}</small></summary>
         <h3>Swap a permission</h3>
         <p class="cc-lead">Swap any permission for another that fits its Title, as long as it makes sense for your character.</p>
         ${d.swaps.map((w, n) => swapView(w, n, c)).join("")}
         <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="swap-add">${d.swaps.length ? "Swap another" : "Swap a permission"}</button></div>
-        ${strained.length ? `<h3>Mend a strained thread</h3><p class="cc-lead">Make it right with them, whatever suits them, and play it out at the table. ${link("s-downtime-threads", "Mending threads")}</p>
+        ${strained.length ? `<h3>Mend a strained bond thread</h3><p class="cc-lead">Make it right with them, whatever suits them, and play it out at the table. ${link("s-downtime-threads", "Mending threads")}</p>
           ${strained.map((t) => `<button type="button" class="cc-line" data-act="dt" data-do="mend" data-v="${esc(t.key)}"${pressed(d.mends.includes(t.key))}><span class="tick" aria-hidden="true"></span><span><em>${esc(t.text)}</em> <small>${esc(t.person)}</small></span></button>`).join("")}` : ""}
+        ${grudges.length ? `<h3>Did right by them</h3><p class="cc-lead">Doing right by someone you’ve a hostile thread with, like paying what you owe, strains it, and doing right by them again snaps it. Tick the ones you did right by this week.</p>
+          ${grudges.map((t) => `<button type="button" class="cc-line" data-act="dt" data-do="right" data-v="${esc(t.key)}"${pressed(d.rights.includes(t.key))}><span class="tick" aria-hidden="true"></span><span><em>${esc(t.text)}</em> <small>${esc(t.person)}, ${t.st === "strained" ? "strained, so it snaps" : "so it strains"}</small></span></button>`).join("")}` : ""}
       </details>
     </div>
     <div class="dlg-foot">${d.say ? `<p class="cc-warn" role="alert">${esc(d.say)}</p>` : ""}${warn.length ? `<div class="cc-warn" role="alert">${warn.map((x) => `<p>${esc(x)}</p>`).join("")}</div>` : ""}
@@ -318,10 +332,11 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
           s.asp = sizeUp(s.asp);
           said.push(`Your Aspiration climbs to d${s.asp}`);
         }
-        if (sl.tie) said.push("The crew spends a spare resource for the tie");
+        if (sl.tie) said.push("The crew spends an extra resource for the tie");
       } else if (sl.k === "thread" && text && sl.person.trim()) {
-        grow({ k: "thread", person: sl.person.trim(), text });
-        said.push(`A new thread with ${sl.person.trim()}${crewNames().has(sl.person.trim()) ? ", so tell them" : ""}`);
+        const kind = sl.tkind === "hostile" ? "hostile" : "bond";
+        grow({ k: "thread", person: sl.person.trim(), text, kind });
+        said.push(`A new ${kind} thread with ${sl.person.trim()}${crewNames().has(sl.person.trim()) ? ", so tell them" : ""}`);
       } else if (sl.k === "get" && text && roomFor(c, s, sl.where) > 0) {
         s.picked.push({ where: sl.where, name: text });
         said.push(`${text} goes in ${sl.where === "bag" ? "the bag" : `your ${sl.where}`}`);
@@ -344,10 +359,19 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       grow({ k: "swap", t: w.t, j: w.j, from, text, on: [...w.on] });
       said.push(`“${from}” becomes “${text}”`);
     }
+    const now = new Map(threadsOf(c, s).map((t) => [t.key, t]));
     for (const key of d.mends) {
-      if (s.threads[key] !== "strained") continue;
-      delete s.threads[key];
-      said.push(`${key.split("|")[0]}’s thread is mended`);
+      const t = now.get(key);
+      if (!t || t.kind === "hostile" || t.st !== "strained") continue;
+      if (t.sheet) s.threads[key] = "whole";
+      else delete s.threads[key];
+      said.push(`Your thread with ${t.person} is mended`);
+    }
+    for (const key of d.rights) {
+      const t = now.get(key);
+      if (!t || t.kind !== "hostile" || t.st === "snapped") continue;
+      s.threads[key] = t.st === "strained" ? "snapped" : "strained";
+      said.push(t.st === "strained" ? `You did right by ${t.person} again, so that thread snaps and the grudge is over` : `You did right by ${t.person}, so your hostile thread’s strained`);
     }
     return said;
   }
@@ -373,7 +397,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     if (go === "pick") d.slots[Number(el.dataset.s)] = fresh(v, c, s);
     else if (go === "clear") d.slots[Number(el.dataset.s)] = blank();
     else if (go === "set" && sl) {
-      sl[f] = f === "key" ? v : f === "own" ? v === "1" : Number(v);
+      sl[f] = f === "key" || f === "tkind" ? v : f === "own" ? v === "1" : Number(v);
       // A swap's set actions start where the old permission was.
       if (String(el.dataset.s)[0] === "w") {
         if (f === "t") sl.j = -1;
@@ -386,6 +410,12 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     } else if (go === "on" && sl) {
       const list = sl[f];
       const at2 = list.indexOf(v);
+      // A new permission goes on two set actions at most, the same as in the builder.
+      const perm = String(el.dataset.s)[0] === "w" || (f === "on" && (sl.k === "perm" || sl.k === "att")) || (sl.k === "asp" && f === "pOn");
+      if (at2 < 0 && perm && list.filter((a) => c.actions.some((x) => x.name === a)).length >= MAX_ON) {
+        d.say = "A permission goes on two set actions at most, so tap one of them off first.";
+        return;
+      }
       if (at2 >= 0) list.splice(at2, 1);
       else list.push(v);
     } else if (go === "flip" && sl) sl[f] = !sl[f];
@@ -413,10 +443,11 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     } else if (go === "asp-tie" && sl) sl.tie = true;
     else if (go === "swap-add") d.swaps.push({ t: 0, j: -1, text: "", on: [] });
     else if (go === "swap-off") d.swaps.splice(Number(el.dataset.s), 1);
-    else if (go === "mend") {
-      const at2 = d.mends.indexOf(v);
-      if (at2 >= 0) d.mends.splice(at2, 1);
-      else d.mends.push(v);
+    else if (go === "mend" || go === "right") {
+      const list = go === "mend" ? d.mends : d.rights;
+      const at2 = list.indexOf(v);
+      if (at2 >= 0) list.splice(at2, 1);
+      else list.push(v);
     }
   }
 

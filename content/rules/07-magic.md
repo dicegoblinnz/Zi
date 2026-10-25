@@ -6,7 +6,7 @@ order: 7
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 Everyone's got a soul, and a soul can be spent.
@@ -104,7 +104,7 @@ Only a [Summoner](#a-summoner) catches souls and summons. A Summoner catches sou
 | Tempered | 2 | 2 more with a Burden | 4 |
 | Perfected | 3 | 3 more with a Burden and a Catch | 6 |
 
-You start at Awakened, like anything you attune, so that's one soul, or two if you give it its Catch. Starting souls are d4s.
+You start at Awakened, like anything you attune, so that's one soul, or two if you give it its Catch. Starting souls are d4s. You start with one attunement slot, so if your summoning attunement's in it, that's your one attuned thing till you get more in downtime.
 
 **Your Summon dice** are a set action like any other: your Title, the permissions that fit, and the action. They're what you catch souls with, and what you call them back out with.
 
@@ -118,7 +118,7 @@ You start at Awakened, like anything you attune, so that's one soul, or two if y
 
 **Summons act in the round like anyone.** One hit takes a summon out, and its soul goes back to its slot, so you can call it again.
 
-**Intercepting.** A summon [intercepts](#s-intercept) for free, so it doesn't cost Aura or an action. It can take the dice aimed at someone within its stride, as many as you like, and they come at it instead. When they land, it rolls its die to stop one of them, and it's got to beat it or tie. The first die that gets through takes it out, and the rest go on to whoever they were aimed at.
+**Intercepting.** A summon [intercepts](#s-intercept) for free, so it doesn't cost Aura or an action. It can take the blows aimed at someone within its stride, as many as you like, and they come at it instead. Like anyone's intercept, it can't take fear, lies or pressure. When they land, it rolls its die to stop one of them, and it's got to beat it or tie. The first die that gets through takes it out, and the rest go on to whoever they were aimed at.
 
 **At the end of a scene,** roll each summon's die. On 3 or lower it goes back to its slot. They all go back at downtime.
 

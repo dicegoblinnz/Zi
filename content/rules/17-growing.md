@@ -6,7 +6,7 @@ order: 17
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 There aren't any levels in Zi'Dara. Your character grows, and you choose how.
@@ -88,7 +88,7 @@ After that it's the same as retirement, with a farewell scene. Play it at the st
 
 ## New Characters {#s-new-character}
 
-A new player joining, or a player whose character retired or died, builds at about the same progression as the rest of the crew. Answer two crew questions about how you know them, and write a thread with somebody already in the crew. It goes on both your sheets, so agree on it together. The GM puts the new character in the next scene with a reason to be there, ideally one that's already in trouble.
+A new player joining, or a player whose character retired or died, builds at about the same progression as the rest of the crew. Answer at least two of the [Connect](#s-connect) questions, naming somebody already in the crew each time, and turn two of your answers into bond threads, the same as everyone did at the start (see [Bonds and threads](#s-bonds)). A thread with someone in the crew goes on both your sheets, so agree on it together. The GM puts the new character in the next scene with a reason to be there, ideally one that's already in trouble.
 
 ## Vesk, Session 1 to 20 {#vesk-session-1-to-20}
 
@@ -103,16 +103,18 @@ Here's what growth actually looks like.
 
 **Set actions:** Sneak 4 (d8) · Move 4 (d8) · Locks 5 (d10) · Defend 2 (d4) · Fight 2 (d4) · Study 1 (d2) · Talk 1 (d2).
 
-**Attuned:** Her picks and her grappling line, both Awakened.
+**Attuned:** Her grappling line, Awakened.
 
 **Aspiration:** *Own the score of a lifetime*, d2.
 
 **Numbers:** Aura 5 · Resolve 2 · Shadow twice, so its +2 is a +3 · Confidence starts every scene on d6 · Stride 5 · Wound die d2.
 :::
 
-**Session 6: The first arc.** Her Aspiration's climbed from d2 to d12. Most downtimes, one slot went on it and the other on whatever the last job cost her. She hasn't added a permission or grown her picks, so she's the same person, just further along. That's her call.
+**Session 6: The first arc.** Her Aspiration's climbed from d2 to d12. Most downtimes, one slot went on it and the other on whatever the last job cost her. She hasn't added a permission, so she's the same person, just further along. That's her call.
 
 **Session 7: A new Title.** She robs the Vane Estate, and her Aspiration climbs past d12. That's a new archetype, and she takes Shadow a third time. She names it *The woman who has never been seen*, and gives it one permission, *leave no trace*. The Title and the permission both fit her Sneak nearly every time, so it's 6 steps now, a d12. Her Resolve maximum goes up to 3, and with Shadow three times, its +2 is a +4. She writes *Find out who the fence really is* at d2, and on her way out she takes a sliver of steel from the vault's bolt, because she knows what it's for.
+
+**Session 8: Her picks.** In downtime she attunes her picks, at Awakened, with *open any lock with a mechanism*. Their permission's the line on her Locks now, instead of the picks themselves, so it's still 5 steps, and from here on they'll grow with her.
 
 **Sessions 10 and 11: Locks.** A Grow puts *work a lock in the dark* on her first Title, and it fits her Locks nearly every time: 6 steps, a d12. Then the vault steel takes her picks to Tempered, and their second permission takes another slot: *open a lock that's held shut by magic*. That won't fit every lock, so it stays off her Locks, and on a warded door she brings it in for 1 Aura.
 
@@ -135,7 +137,7 @@ Here's what growth actually looks like.
 
 **Attuned:** Her picks, Perfected · her grappling line, Awakened.
 
-**Bonds:** She's written a new thread for each Goal the crew finished, and the old ones have all been rewritten at least once. She paid the fence off early, so she owes him nothing now.
+**Threads:** She's written a new bond thread for each Goal the crew finished, and the old ones have all been rewritten at least once. Paying the fence on time strained her hostile thread with him, and keeping his name out of it when the watch came asking snapped it, so she owes him nothing now.
 
 **Aspiration:** *Train someone who will outlive me*, d2.
 
@@ -144,7 +146,7 @@ Here's what growth actually looks like.
 
 When she retires, she writes her final Title, and it's Shadow again: *The one who walked away*.
 
-**What changed across twenty sessions:** she went from two Titles to four, from six permissions to seven and a Boon, and from Awakened picks to Perfected ones. Taking Shadow every time has made its +2 a +5. On a lock she used to roll a d10. Now it's 7 steps, a d12 and a d2, and when she brings in the picks' magic on a warded vault it's 8: a d6 for the lock, a d6 for the trap and a d4 for the alarm, all off one action.
+**What changed across twenty sessions:** she went from two Titles to four, from six permissions to seven and a Boon, and from picks she just carried to Perfected ones. Taking Shadow every time has made its +2 a +5. On a lock she used to roll a d10. Now it's 7 steps, a d12 and a d2, and when she brings in the picks' magic on a warded vault it's 8: a d6 for the lock, a d6 for the trap and a d4 for the alarm, all off one action.
 
 ## The Crew, Session 1 to 20 {#s-crew-1-20}
 
@@ -174,25 +176,25 @@ The crew grows too. Here are the same twenty sessions, off the party sheet.
 
 **Session 5: The first Goal's done.** Dorrie stands up in court, and *Clear Dorrie's name* climbs past d12. The crew earns its first Reputation, *The ones who beat the forger's court*, and picks two. It takes a new asset, *Informants*, because half the clerks in the court now owe Dorrie a drink, and a new resource to pay for it, *Copying for the court*, because the clerks have more work than hands. People start calling them the Lamplighters, after the loft they meet in, and the name sticks. The next Goal is *Free the Bound*, at d2.
 
-**Session 6: Too big to hit.** The Estate's Power is a d12, and the crew's is a d4, so going straight at it would take both party slots every downtime. Instead they start a project: *Turn the salt carters against the Estate*, at d2. When it's done, the carters haul for the Lamplighters instead, and *Salt Contracts* comes off the Estate's card and onto theirs.
+**Session 6: Too big to hit.** The Estate's Power is a d12, and the crew's is a d4, so going straight at it would take the crew's action and a personal slot every downtime. Instead they start a project: *Turn the salt carters against the Estate*, at d2. The crew's action can work it, and so can anyone's personal slot. When it's done, the carters haul for the Lamplighters instead, and *Salt Contracts* comes off the Estate's card and onto theirs.
 
-**Session 8: The carters walk.** The project climbs past d12, and *Salt Contracts* changes hands. Nothing on the crew's card needs it, so it's spare. The Estate had one resource spare, so nothing of Vane's stops counting yet, but it's got none spare now. It knows exactly where its carters went, too, so it writes a bad thread toward the crew: *They took our carters*.
+**Session 8: The carters walk.** The project climbs past d12, and *Salt Contracts* changes hands. Nothing on the crew's card needs it, so it's an extra resource. The Estate had one extra, so nothing of Vane's stops counting yet, but it hasn't got one now. It knows exactly where its carters went, too, so it writes a hostile thread toward the crew: *They took our carters*.
 
-**Session 9: Paying someone else.** The crew spends its spare to hire the Harbour Guild against the Estate, and that doesn't cost it a party slot. The Guild's got no bad thread toward the crew, so it takes the money and rolls with its own dice. Its d10 beats the Estate's d12 on the night, and it Destroys *Old Money*: the old families stop answering the Estate's letters. That leaves Vane five resources for six assets, so one of them stops counting. He picks *Hired Swords*, and his Power drops to a d10.
+**Session 9: Paying someone else.** The crew spends its extra resource to hire the Harbour Guild against the Estate, and that doesn't cost the crew its own action. The Guild's got no hostile thread toward the crew, so it takes the money, and its one action this downtime goes where the crew says, rolled with its own dice. Its d10 beats the Estate's d12 on the night, and it Destroys *Old Money*: the old families stop answering the Estate's letters. That leaves Vane five resources for six assets, so one of them stops counting. He picks *Hired Swords*, and his Power drops to a d10.
 
-**Session 10: The Estate comes for them.** Its one thread toward the crew is bad, so it rolls on the first table. It's a 3, and it seizes one of the crew's holdings: the horse and cart. The crew crosses it off.
+**Session 10: The Estate comes for them.** Its one thread toward the crew is hostile, so it rolls on the first table. It's a 3, and it seizes one of the crew's holdings: the horse and cart. The crew crosses it off.
 
-**Session 11: Muscle.** A party slot and the crew's spare, *Salt Contracts*, Establish *Muscle* (+1 Power), so the next time someone comes for the crew, there are people to stop them. Its Power's a d6 now, and nothing's spare.
+**Session 11: Muscle.** The crew's action and its extra resource, *Salt Contracts*, Establish *Muscle* (+1 Power), so the next time someone comes for the crew, there are people to stop them. Its Power's a d6 now, and it hasn't got an extra resource any more.
 
-**Session 12: The second Goal's done.** The crew breaks the Inkwell and every soul in Vane's gallery walks out, so it earns *The ones who emptied the gallery*. It picks two: the old chandlery on Candle Street, which is theirs now, cellar and all, as a holding, and its trade as a new resource, *The chandlery's trade*. *Relic: The Inkwell* comes off the Estate's card, and that frees the resource that was paying for it, so Vane puts it back on his *Hired Swords*, and his Power's a d12 again. He writes another bad thread toward the crew: *They emptied the gallery*.
+**Session 12: The second Goal's done.** The crew breaks the Inkwell and every soul in Vane's gallery walks out, so it earns *The ones who emptied the gallery*. It picks two: the old chandlery on Candle Street, which is theirs now, cellar and all, as a holding, and its trade as a new resource, *The chandlery's trade*. The next Goal is *Own the Low Market*, at d2. *Relic: The Inkwell* comes off the Estate's card, and that frees the resource that was paying for it, so Vane puts it back on his *Hired Swords*, and his Power's a d12 again. He writes another hostile thread toward the crew: *They emptied the gallery*.
 
-**Session 13: The Candle Street Lads.** *The chandlery's trade* isn't paying for anything yet, so a party slot puts it to work, and the crew Establishes *The Candle Street Lads* (+1 Power). Its Power's a d8.
+**Session 13: The Candle Street Lads.** *The chandlery's trade* isn't paying for anything yet, so the crew's action puts it to work, and the crew Establishes *The Candle Street Lads* (+1 Power). Its Power's a d8.
 
-**Session 14: One slot is enough now.** The Quiet Order's Power is a d8, the same as the crew's, so a single party slot can go at its Power. The crew asks its *Informants* where the Order's money comes from, and the GM tells them straight: its *Funerals*. *Informants* only answers questions, so to Acquire them it's the crew's Power on its own, a d8, against the Order's d8. The crew rolls 7 and the Order rolls 4. *Funerals* comes off the Order's card and onto the crew's, and since nothing needs it, it's spare. The Order had a resource to spare, so its Power stays a d8, and it writes a bad thread toward the crew: *They took our funeral fees*.
+**Session 14: The crew's action is enough now.** The Quiet Order's Power is a d8, the same as the crew's, so the crew's action can go at its Power without a personal slot in it. The crew asks its *Informants* where the Order's money comes from, and the GM tells them straight: its *Funerals*. *Informants* only answers questions, so to Acquire them it's the crew's Power on its own, a d8, against the Order's d8. The crew rolls 7 and the Order rolls 4. *Funerals* comes off the Order's card and onto the crew's, and since nothing needs it, it's an extra resource. The Order had an extra of its own, so its Power stays a d8, and it writes a hostile thread toward the crew: *They took our funeral fees*.
 
-**Session 15: A job that pays.** The crew puts a party slot into working for the Harbour Guild, and the Guild gives them a big job: get its ledgers back from a sunk barge. The GM says up front that a job that big pays a resource. The crew does it, the Guild hands over *Shipping Shares*, one it had spare, and it writes a good thread toward the crew: *They brought our ledgers up*.
+**Session 15: A job that pays.** The crew's action goes on working for the Harbour Guild, and the Guild gives them a big job: get its ledgers back from a sunk barge. The GM says up front that a job that big pays a resource. The crew does it, the Guild hands over *Shipping Shares*, one of its extra resources, and it writes a bond thread toward the crew: *They brought our ledgers up*.
 
-**Session 18: The third Goal's done.** *Own the Low Market* climbs past d12. The crew earns *Nobody sells in the Low Market without the Lamplighters' say-so*, and picks two: a new asset, *Rooted*, with one of its spares paying for it, and a new resource, *Stall fees in the Low Market*.
+**Session 18: The third Goal's done.** *Own the Low Market* climbs past d12. The crew earns *Nobody sells in the Low Market without the Lamplighters' say-so*, and picks two: a new asset, *Rooted*, with one of its extra resources paying for it, and a new resource, *Stall fees in the Low Market*.
 
 **Session 20.**
 
@@ -209,7 +211,7 @@ The crew grows too. Here are the same twenty sessions, off the party sheet.
 
 **Goal** *Break the Vane Estate for good*, d6.
 
-**The board** The Vane Estate (Power d12), with two bad threads toward the crew: *They took our carters* and *They emptied the gallery* · the Harbour Guild (Power d10), with a good one: *They brought our ledgers up* · the Quiet Order (Power d8), with a bad one: *They took our funeral fees*.
+**The board** The Vane Estate (Power d12), with two hostile threads toward the crew: *They took our carters* and *They emptied the gallery* · the Harbour Guild (Power d10), with a bond thread: *They brought our ledgers up* · the Quiet Order (Power d8), with a hostile one: *They took our funeral fees*.
 :::
 
-**What changed across twenty sessions:** the crew went from no name to three Reputations, from Power d4 to d8, and from one resource and one asset to seven resources, five assets and a building. Two of the resources are spare, so they buy the crew something every downtime. Its people are Challenge 4 now, and a single party slot can go at the Power of anything up to a d8. To Destroy something a Low Market gang owns, it rolls its Power, 4 steps, plus a step for the Reputation that says nobody sells there without them: 5 steps, a d10, from one slot. The Estate's still bigger than they are, so going at it still takes both slots, a project, or a spare and someone else's dice.
+**What changed across twenty sessions:** the crew went from no name to three Reputations, from Power d4 to d8, and from one resource and one asset to seven resources, five assets and a building. Two of the resources are extra, so they buy the crew something every downtime. Its people are Challenge 4 now, and the crew's action on its own can go at the Power of anything up to a d8. To Destroy something a Low Market gang owns, it rolls its Power, 4 steps, plus a step for the Reputation that says nobody sells there without them: 5 steps, a d10, from the crew's action alone. The Estate's still bigger than they are, so going at it still takes the crew's action and a personal slot, a project, or an extra resource and someone else's dice.

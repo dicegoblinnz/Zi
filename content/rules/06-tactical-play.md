@@ -6,7 +6,7 @@ order: 6
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 Every round's a puzzle with a clock on it, and you get to see all the pieces before you move.
@@ -101,22 +101,22 @@ How you split your steps is the most important tactical decision you make every 
 
 ## Answer, Defend, Intercept or Let It Ride {#s-answer-or-ride}
 
-You deal with every telegraph aimed at the crew in one of four ways. Fear, lies and pressure are telegraphs too, aimed at your Confidence instead of your Defend, and you answer them, Defend, intercept or let them ride the same way. Count the dice coming at you before you choose. A threat only aims one die at each of you, unless a tag like *Flurry* says it can do more, and each die of defence you roll stops one.
+You deal with every telegraph aimed at the crew in one of four ways. Fear, lies and pressure are telegraphs too, aimed at your Confidence instead of your Defend, and only two of the four work on them: answer them, or let them ride. Defending only doubles your Defend, and nobody can step in front of what's inside your head, so shielding the crew from fear is a [Bard](#a-bard)'s job. Count the dice coming at you before you choose. A threat only aims one die at each of you, unless a tag like *Flurry* says it can do more, and each die of defence you roll stops one.
 
 -   **Answer it** when it's big, when your defence is small, or when it does something no defence can stop, like raising the alarm or slamming the door. Friends can put their actions into the same answer. If a friend's Defend is a d2, answer for them. You can also answer by taking out whatever telegraphed it, or by taking away what it needs: disarm the crossbowman and his bolt never flies. See [Answering a telegraph](#s-answering).
--   **Defend** when there's more coming at you than one die can stop, or when you've pulled a lot onto yourself. It takes your action, and when the telegraphs land, every line on your Defend counts twice, and so does your Confidence, so you've got more dice to stop more with. Against blows it's only worth it with something on your Defend, because with nothing on it, it's a d2 either way. See [Defend](#s-defend).
--   **Intercept** when a friend can't afford what's coming and you can. Step in for a friend within your stride and take as many of the dice aimed at them as you like, and they come at you instead. It's 1 Aura a friend and no action, so you can still act, and a [Guardian](#a-guardian) or a summon does it for free. Your own defence handles them, one die each, so if you've taken a lot, Defend as well. See [Intercept](#s-intercept).
--   **Let it ride** when there's one die coming and your defence is bigger, or when you've got something better to do. At the end of the round you roll your Defend once against the blows and your Confidence once against the fear, lies and pressure, and each die you roll stops one telegraph it beats or ties, because ties go to you. Everything else gets through. If a blow gets through, the GM names the cost, and you can offer another that costs about as much (see [When it lands](#s-defending)). If fear, lies or pressure get through, you choose the cost yourself (see [Confidence](#s-confidence-tactics), below).
+-   **Defend** when there's more coming at you than one die can stop, or when you've pulled a lot onto yourself. It takes your action, and when the telegraphs land, every line on your Defend counts twice, so you've got more dice to stop more with. It's only worth it with something on your Defend, because with nothing on it, it's a d2 either way. See [Defend](#s-defend).
+-   **Intercept** when a friend can't afford the blow that's coming and you can. Step in for a friend within your stride and take as many of the dice aimed at them as you like, and they come at you instead. It's 1 Aura a friend and no action, so you can still act, and a [Guardian](#a-guardian) or a summon does it for free. It only works on what you can get in front of, so it's no use against fear. Your own defence handles them, one die each, so if you've taken a lot, Defend as well. See [Intercept](#s-intercept).
+-   **Let it ride** when there's one die coming and your defence is bigger, or when you've got something better to do. At the end of the round you roll your Defend once against the blows and your Confidence once against the fear, lies and pressure, and each die you roll stops one telegraph it beats or ties, because ties go to you. Everything else gets through. If a blow gets through, the GM names the cost, and you can offer another that costs about as much (see [When it lands](#s-defending)). If fear, lies or pressure get through, it's a size of Confidence, or 1 Resolve to hold your ground (see [Confidence](#s-confidence-tactics), below).
 
 :::example[Defend, or intercept]
-Two Wardens go for Isolde this round, a spear thrust and a sweep, a d10 each, and her Defend's a d2. She's within Bram's stride, and he's a Guardian, so he intercepts both for free, and he Defends. His Defend is his first Title, his plate armour and his shield, and Defending counts those three lines twice: 1 + 6 = 7 steps, a d12 and a d2. He splits the d12 into two d6s. When it lands, the d10s come up 5 and 3, and Bram rolls 5, 3 and 1. He puts the 5 on the 5 and the 3 on the 3, and ties go to him, so neither gets through.
+Two Wardens go for Isolde this round, a spear thrust and a sweep, a d10 each, and her Defend's a d2. She's within Bram's stride, and he's a Guardian, so he intercepts both for free, and he Defends. His Defend is his first Title, his plate armour and his shield, and Defending counts those three lines twice: 1 + 6 = 7 steps, a d12 and a d2. He splits the d12 into two d6s. When it lands, the d10s come up 5 and 3, and Bram rolls 5, 3 and 1. He puts the 5 on the 5 and the 3 on the 3, and ties go to him, so neither gets through, and stopping two puts his Confidence up two sizes.
 
-If he'd wanted his action for the Wardens instead, he could still intercept both for free and let them ride. Then it's his Defend rolled once, one d8, so it stops one of them at most, and the other gets through to him instead of her. If the GM names a Hurt and it's his first this scene, *Unyielding* means it won't even move his wound die.
+If he'd wanted his action for the Wardens instead, he could still intercept both for free and let them ride. Then it's his Defend rolled once, one d8, so it stops one of them at most, and the other gets through to him instead of her. If the GM names a Hurt and it's his first this scene, *Unyielding* means it won't even move his wound die, so it won't cost him any Confidence either.
 
 Anyone else can intercept too, for 1 Aura a friend, but they need the defence to back it up. Vesk could step in for Isolde, but her Defend's only her worn leathers. Defending makes it a d6, or a d4 and a d2 with her split, and that's not much against two d10s.
 :::
 
-Offering a different cost is tactics too. A Hurt puts your wound die up a size, and your rest at the end of the scene brings it down one size at most, so a bad fight follows you into the next scene. Breaking your shield or your plate keeps the blow off your body, but it's a line off your Defend till you've spent a downtime slot, and usually a purse of gold, mending it, so it makes every fight after this one harder. A step back on your Aspiration costs nothing in this fight, but it costs you something in the long game. The Party Goal belongs to everyone, so ask before you spend it. And a broken item is always something you carry, because attuned things can't break.
+Offering a different cost is tactics too. A Hurt puts your wound die up a size and your Confidence down one, and your rest at the end of the scene brings your wound down one size at most, so a bad fight follows you into the next scene. Breaking your shield or your plate keeps the blow off your body and your Confidence where it is, but it's a line off your Defend till you've spent a downtime slot, and usually a purse of gold, mending it, so it makes every fight after this one harder. A step back on your Aspiration costs nothing in this fight, but it costs you something in the long game. The Party Goal belongs to everyone, so ask before you spend it. And a broken item is always something you carry, because attuned things can't break.
 
 ## Tags Are the Battlefield {#s-tags-battlefield}
 
@@ -125,7 +125,7 @@ You never need to ask how hurt something is. Read its tags instead. If a tag's g
 -   **Keeps it going**: how many wins it takes, multipliers and all. Four of them makes for a long night, so look for another way.
 -   **Comes at you**: what its telegraphs can do. Strip *Reach* and its spear stops outranging you. Strip *Commanding* and every one of its followers telegraphs a step smaller.
 -   **Drives it**: how to end the fight without winning it. You can buy the greedy ones, let the frightened ones go, and show the loyal ones what their master really did.
--   **Vulnerable**: what makes a hit hurt more, like *Vulnerable to fire*, or *Prone* with you standing over it. Every one that fits a winning hit adds a tick, and they add up, so line them up for the big hit and aim it at the big tag. See [Vulnerabilities](#s-vulnerable).
+-   **Vulnerable**: what makes a hit hurt more, like *Vulnerable to fire*, or *Prone* with you standing over it. Every one that fits a winning hit adds a tick, they add up, and you choose where each tick goes, so one good hit can take a knight's shield and his sword at once. See [Vulnerabilities](#s-vulnerable).
 -   **Hidden**: there's always more on a boss than you can see, like a weak point or a vulnerability nobody's found yet. Spend your action on Study. It's almost never wasted.
 
 ### Openings {#openings}
@@ -149,36 +149,37 @@ A condition is a win you can save for later. Once it's on, decide whether to kee
 
 Most scenes have two or three stakes and a clock, and there are never enough actions to do everything. Crews coming from other games tend to kill everything first and then do the job, and in Zi'Dara that loses. While you're grinding through a Warden's fourth tag, the household wakes and the witness bleeds out.
 
-Every round, ask yourself: *what's this scene actually about?* Put your dice there. Send one character to hold the enemies off while the others work the stakes, and let the fight be the distraction. One intercept takes what's coming at the people doing the work, for 1 Aura a friend, and a Guardian does it for free, for every friend within his stride.
+Every round, ask yourself: *what's this scene actually about?* Put your dice there. Send one character to hold the enemies off while the others work the stakes, and let the fight be the distraction. One intercept takes the blows coming at the people doing the work, for 1 Aura a friend, and a Guardian does it for free, for every friend within his stride.
 
 ## Aura and Resolve {#s-aura-tactics}
 
 Aura's for the small stuff, and it comes back all the time. [Resolve](#s-resolve) is your character pushing themselves, so it pays for the big stuff, and it comes back slowly.
 
 -   **Spend your Aura.** It refills every scene, so a full tank at the end of a scene is Aura you never used. Spend it where it changes the die: one more line brought in turns a d8 into a d10, and that's often enough. Your archetype's +2 is the other good buy, because you pay for it after you roll, once you can see it'll make the difference.
--   **Keep one for a friend.** [Intercepting](#s-intercept) costs 1 Aura a friend and no action, so a spare Aura can move a blow off a friend with a d2 Defend and onto you.
+-   **Keep one for a friend.** [Intercepting](#s-intercept) costs 1 Aura a friend and no action, so an Aura you've kept back can move a blow off a friend with a d2 Defend and onto you.
 -   **Farm it, and share it.** Every top face is 1 Aura back, and small dice land on their top face more often. When you've got a split to spare, peel off a d2 with a small intent. If you're already full, the Aura goes to a friend in the scene.
 -   **Let trouble bite.** Let a Catch bite as often as you like, Scars included, and take 1 Aura each time. It has to bring real trouble every time, and you don't even need a Catch on your sheet: bring real trouble on yourself in the story and take 1 Aura. Do it when the scene can stand a bit more trouble.
 -   **Other ways back.** *Killer Instinct*, *Battle Focus*, and the Beat a threat and In your element Boons all bring Aura back. And when a great setup doesn't land (you planned it, it was cool, and the dice said no), the GM can give you 1 Aura.
 -   **Ties matter.** A tie on the roll that ends the fight is worth an Aura, every time.
--   **Resolve buys the big things.** You've got 1 for each Title, so 2 to start. Spend 1 to take an extra action, to reroll a roll you just failed, to go beyond what a permission normally does, to hold your ground when fear, lies or pressure get through, to go at a threat when you're shaken, or on your archetype's own spend. An extra action can turn a round: put it into a friend's roll, or into your own with another of your set actions (Fight with Sneak is a sneak attack). A reroll's best when the threat rolled low, because its dice stay where they landed. Your archetype's spend is the big version of what it does, like Bram shrugging off a hit that got through, or Wren rolling one Mark at every creature she can see, so save it for the round that decides the scene (see [1 Resolve on your mechanic](#resolve-on-your-mechanic)).
+-   **Resolve buys the big things.** You've got 1 for each Title, so 2 to start. Spend 1 to take an extra action, to reroll a roll you just failed, to go beyond what a permission normally does, to hold your ground when fear, lies or pressure get through, to take an action at what the scene's about when you're shaken, or on your archetype's own spend. An extra action can turn a round: put it into a friend's roll, or into your own with another of your set actions (Fight with Sneak is a sneak attack). A reroll's best when the threat rolled low, because its dice stay where they landed. Your archetype's spend is the big version of what it does, like Bram shrugging off a hit that got through, or Wren rolling one Mark at every creature she can see, so save it for the round that decides the scene (see [1 Resolve on your mechanic](#resolve-on-your-mechanic)).
 -   **Spend one every scene.** You get 1 Resolve back at the end of every scene and all of it after downtime, so one a scene costs you nothing. If you're out, let a Catch bite in a big way, one that changes the scene or costs you something you wanted, and take 1 Resolve instead of the Aura. Straining a thread gets you one too (see [Bonds and threads](#s-bonds)), and so can great roleplay, when the GM says so.
 
 ### Confidence {#s-confidence-tactics}
 
-[Confidence](#s-confidence) is how you're holding up right now, and it swings up and down during a scene, so play it the way you play your Aura. Every scene starts you on d6, a size up in clothes that fit, and it's back on d6 when the scene ends.
+[Confidence](#s-confidence) is how you're holding up right now, and it swings with nearly every roll, so play it the way you play your Aura. Every scene starts you on d6, a size up in clothes that fit, and it's back on d6 when the scene ends.
 
--   **Push it up.** Stop all the fear, lies and pressure that come at you in a round and it goes up a size, and taking a threat down sends it up a size too (in a combo, that's everyone who put an action in). If your Confidence is big, let one taunt ride on it. If two are coming, Defend: your Confidence counts twice by its steps, so a d6 is 6 steps, and that's two d6s with your split.
+-   **Push it up.** Every telegraph your defence stops puts it up a size, and so does every action where one of your dice wins, however many of them won. In a combo, everyone who put an action in goes up or down with the roll.
+-   **Watch what drops it.** Every size your wound die goes up costs you a size, and so does an action where every die misses, so don't split into dice that can't win. When your shield or something else you carry takes the blow instead, your Confidence doesn't move, so offering your gear keeps your nerve as well as your body.
 -   **Cash it in at d12.** At d12 you're fired up. Trade it for an extra action, or to step your wound die down a size, and you're back on d6. Don't sit on it, even when the fight's over: a sure step off your wound beats rolling for one when you rest.
--   **Choose what it costs you.** When fear, lies or pressure get through, you choose: let it shake you and drop a size, bury it and take a Hurt, or hold your ground for 1 Resolve. Dropping from d10 to d8 is cheap. Bury it when you're low, as long as your wound die can take another size.
--   **Keep off d2.** At d2 you're shaken, and every time you go at a threat it costs you 1 Resolve. When you're low, take a breath: spend your action and come back up a size, as far as d6.
+-   **Choose what fear costs you.** When fear, lies or pressure get through, you drop a size, or hold your ground for 1 Resolve. Dropping from d10 to d8 is cheap, so keep the Resolve for when you're low. If your Confidence is big, let one taunt ride on it.
+-   **Keep off d2.** At d2 you're shaken, and you can't take an action at what the scene's about unless you spend 1 Resolve. Otherwise your action goes on pulling yourself together, which brings you back to d4. When you're low but not there yet, take a breath: spend your action and come back up a size, as far as d6.
 -   **Finish high.** When the scene ends you rest: roll the Confidence you finished on against your wound die, and beat it to bring your wound down a size (see [Wounds, Blaze and Scars](#s-blaze)). The higher you finish, the better your chances, so don't let a cheap taunt shake you in the last round.
--   **A Bard steadies the crew.** A [Bard](#a-bard)'s song can Defend everyone who can hear it against fear, lies and pressure: its lines count twice, it splits as often as the Bard likes, and each die stops one telegraph. Whatever it misses still has to get past each friend's own Confidence. Or the song lifts every one of them a size, as far as d10.
+-   **A Bard shields the crew.** Nobody can step in front of fear for you, and Defending doesn't make your Confidence any bigger, so a [Bard](#a-bard)'s song is how a crew stands up to it together. It can Defend everyone who can hear it against fear, lies and pressure: its lines count twice, it splits as often as the Bard likes, and each die stops one telegraph. Every one it stops for a friend puts that friend up a size, as if their own Confidence had stopped it, and the Bard's own Confidence moves for the song like any action. Whatever it misses still has to get past each friend's own Confidence. Or the song lifts every one of them a size, as far as d10.
 
 :::example[The swing in a fight]
-A brute's roar gets through to Bram two rounds running, and both times he lets it shake him: d6 to d4, then d2. He's shaken, so he spends 1 Resolve to go at it anyway. Next round he takes a breath instead, comes back up to d4 and leaves the brute to Wren.
+Bram swings at a brute and misses, so he drops a size, d6 to d4. At the end of the round the brute's roar gets through his Confidence as well, and he lets it drop him again rather than spend Resolve, so he's on d2 and shaken. Next round he can't go at the brute unless he spends 1 Resolve. He keeps it, so his action goes on pulling himself together, and he's back up to d4. He leaves the brute to Wren.
 
-Across the room, Ash stops the one taunt aimed at her and drops two of the brute's dogs, so she's gone from d6 to d12. She's fired up, so she cashes it in for an extra action, throws fire at the brute twice, and she's back on d6.
+Across the room, Ash's fire drops one of the brute's dogs, so she's up to d8, and at the end of the round her Confidence stops the one taunt aimed at her, so she's on d10. Next round she drops the second dog, and she's on d12, fired up. She cashes it in for an extra action and she's back on d6, then she throws fire at the brute with it and wins, so she's straight back up to d8.
 :::
 
 ## Roles Come From Your Sheet {#s-roles}
@@ -264,7 +265,7 @@ That 5 is the captain's defence for the rest of the round, so anyone else who go
 **Ash:** Three's done. Two's a tie, and that goes to him unless I pay an Aura. I'll leave it. He's got Bram in front of him. **GM:** Bandit three drops his torch into the river and goes in after it.
 :::
 
-Ash's *Killer Instinct* gives her 1 Aura for taking a threat down. She's full, so it goes to Bram, who spent one on the river. Taking a threat down sends her Confidence up a size as well, d6 to d8, and Bram's went up the same way when his bandit hit the water.
+Ash's *Killer Instinct* gives her 1 Aura for taking a threat down. She's full, so it goes to Bram, who spent one on the river. Her win puts her Confidence up a size as well, d6 to d8, and Wren's and Bram's went up the same way when the crossbow and the bandit hit the water.
 
 **Vesk** has the best idea at the table.
 
@@ -277,6 +278,8 @@ Ash's *Killer Instinct* gives her 1 Aura for taking a threat down. She's full, s
 :::
 
 **End of Round 1.** The bolt, the torch and bandit one's blade all went with whatever sent them. Bram let bandit two's d6 ride, and it's the only die left coming at him, so his Defend's got it: his d8 comes up 5 against the bandit's 4, and nothing lands. Nobody worked the fire, so *The bridge burns* steps down to a d6.
+
+The blade Bram stopped puts him up another size, so he's on d10. Wren and Ash are on d8, and Vesk's still on d6, because her Move had nothing to beat.
 
 ### Round 2: The opening {#round-2-the-opening}
 
@@ -298,11 +301,11 @@ And Vesk's right behind the captain. His shield and his doorway both face the br
 **Vesk:** His d8's a 6. I've got 5 on the d12 and 8 on the d8, and that's its top face, so my Aura's back. The 8 beats his 6. **GM:** He yields. Sweating, he tells you the toll money's in the strongbox upstairs, and it can all be yours. That's his hidden tag: *Can Be Bought*.
 :::
 
-Wren and Vesk both put an action into taking the captain down, so they're both up a size of Confidence, d6 to d8. Bandit two sees his captain on his knees and remembers he's *One of Many*, so he jumps. Nobody rolls for it, because the story's already decided it, and his blade goes with him.
+Wren and Vesk both put an action into taking the captain down, so they're both up a size of Confidence: Wren's on d10, and Vesk's on d8. Bandit two sees his captain on his knees and remembers he's *One of Many*, so he jumps. Nobody rolls for it, because the story's already decided it, and his blade goes with him.
 
-That leaves the cart. Bram walks up to it with his stride and tips it in the river. His Lift and carry is his first Title and *lift what two men can't*, with the action 3 steps, and he brings in *River Below* again for 1 Aura, so it's 4 steps, a d8. He rolls 6 against the stake's d6, which comes up 2. *Blocked* is gone, there's nothing else in the way, and Ash takes the reins and drives the wagon across.
+That leaves the cart. Bram walks up to it with his stride and tips it in the river. His Lift and carry is his first Title and *lift what two men can't*, with the action 3 steps, and he brings in *River Below* again for 1 Aura, so it's 4 steps, a d8. He rolls 6 against the stake's d6, which comes up 2, and the win puts him on d12, fired up. *Blocked* is gone, there's nothing else in the way, and Ash takes the reins and drives the wagon across.
 
-**Two rounds.** Nobody on the crew got hurt. The captain had two tags keeping him going, and he fell to one win because Vesk got around both of them and Wren made it close to a sure thing. Ash's burst took her one split and no Aura, and making it smaller kept Bram and Vesk out of it. Nobody spent an action on the fire, either: it needed four rounds to drop the bridge, and the crew only needed two. And the river did more damage than any weapon.
+**Two rounds.** Nobody on the crew got hurt, and every action with something to beat won, so they all come off the bridge with more Confidence than they took onto it. The captain had two tags keeping him going, and he fell to one win because Vesk got around both of them and Wren made it close to a sure thing. Ash's burst took her one split and no Aura, and making it smaller kept Bram and Vesk out of it. Nobody spent an action on the fire, either: it needed four rounds to drop the bridge, and the crew only needed two. And the river did more damage than any weapon.
 
 ## Playing Without a Grid {#s-theatre}
 
@@ -318,6 +321,6 @@ When it matters where someone is, like who's in the doorway or who can reach the
 
 1.  **Killing everything first.** The scene has stakes, so work them.
 2.  **Splitting into dice that can't win.** A d6 and a d4 against a d10 are two long shots. Look at the defence before you split.
-3.  **Answering everything.** A failed answer lands with no defence roll at all, so let a small one ride when your Defend's big. Count them first, though: one die stops one, so when three are coming, Defend.
+3.  **Answering everything.** A failed answer lands with no defence roll at all, and if every die missed it costs you a size of Confidence too, so let a small one ride when your Defend's big. Count them first, though: one die stops one, so when three are coming, Defend.
 4.  **Never studying.** Every boss has something hidden, like a weak point or a vulnerability, and it's usually the way to win.
 5.  **Sitting on a full tank.** Aura refills every scene, and you get 1 Resolve back at the end of every one, so spend them.

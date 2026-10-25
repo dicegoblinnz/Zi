@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Flag rules words that the 7 Oct to 24 Oct 2026 changes retired, and broken links.
+"""Flag rules words that the 7 Oct to 26 Oct 2026 changes retired, and broken links.
 
 Usage: python3 tools/check_terms.py [FILE.md ...]   (default: every chapter)
        add --links to check every #anchor link points at a real heading id
@@ -57,6 +57,13 @@ RETIRED = [
     ("Standing", r"\bStanding\b(?! Army)"),
     ("party resources", r"\bparty resources?\b"),
     ("crew tag", r"\bcrew tags?\b"),
+    # 26 Oct 2026
+    ("spare resource", r"\bspare( crew)? resources?\b|\bspares\b|\b(a|the|its|one|no|two) spare\b(?! lockpick)"),
+    ("party slot", r"\bparty slots?\b"),
+    ("bury it", r"\b(bury|buries|burying) it\b"),
+    ("debt thread", r"\(debt\)|\ba debt\)|\bas a debt\b|\bfourth thread\b"),
+    ("Confidence doubled", r"(?<!n't )(?<!not )Confidence (counts|count) twice|(?<!n't )(?<!not )doubles? (your|their|her|his) Confidence|and so does your Confidence"),
+    ("intercept fear", r"(?<!nobody )(?<!Nobody )(?<!nobody can )(?<!Nobody can )(?<!n't )(?<!can't )intercept(s|ing)? (the )?(fear|lies)|works on fear"),
     ("two-part permissions", r"\btwo parts\b|\bdescribing word\b|\bonly half a permission\b"),
     ("every set action it fits", r"\b(every|as many) set actions? it fits\b"),
     ("old Oracle", r"\bsteps? off (the |a )?(threats['’] )?telegraphs?\b|\bshrink(ing|s)? (the )?(threats['’] )?telegraphs\b"),

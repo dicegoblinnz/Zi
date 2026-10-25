@@ -6,13 +6,15 @@ order: 23
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 You can play Zi'Dara solo. It's not as good as playing with a table, but it works.
 :::
 
 You can play one character with a GM, which changes a couple of numbers, or with nobody but the Oracle, which is what most of this chapter's about.
+
+Either way, make your character the usual way, apart from the threads. With no other players, there's nobody to name in the [Connect](#s-connect) questions, so both your bond threads go to people outside the crew, like a sister, an old captain or the friend who got you out of the city. A hostile thread can go to anyone, the same as at a table.
 
 ## Solo With a GM {#s-solo-gm}
 
@@ -86,9 +88,9 @@ When you're the GM and the player at once, it's easy to go soft on yourself with
 -   **When you're unsure, let the Oracle decide.** If you catch yourself weighing up what would suit your character best, stop and roll it.
 -   **Keep secrets from yourself.** Cover a threat's Hidden line with your thumb, and don't read it till you've found it, with Study, the Oracle, or because it gave itself away. If you know the [bestiary](#bestiary) by heart, roll it a new hidden tag from the tables in [The Threat Builder](#threat-builder).
 -   **Read your sheet the way the GM would.** Anything that isn't on your set action costs 1 Aura to bring in, however well it fits. And if you're making a case for why a permission would normally do something, it's going beyond, and that's 1 Resolve.
--   **Name the cost before you pick one.** When something lands, name the consequence that fits the blow, the one the GM would name. Then you can offer another that fits and costs about as much, as usual. Fear, lies and pressure are different, because there's no cost to name: when one gets through, you choose to let it shake you, bury it or hold your ground, the same as at a table (see [Confidence](#s-confidence)).
+-   **Name the cost before you pick one.** When something lands, name the consequence that fits the blow, the one the GM would name. Then you can offer another that fits and costs about as much, as usual. Fear, lies and pressure are different, because there's no cost to name: when one gets through, your Confidence drops a size, or you spend 1 Resolve to hold your ground, the same as at a table (see [Confidence](#s-confidence)).
 -   **Say when your Aspiration's within reach** while you're building the scene, once or twice a session, the way the GM would. Don't decide it halfway through a round because you need the step.
--   **Let your Catches bite, and make it real trouble**, the kind the GM would make of it. It's 1 Aura, or 1 Resolve for a big bite, and only call it big when it changes the scene or costs you something you wanted (see [Catches and Resolve at the Table](#s-catches-gm)). There's no GM to give you Resolve for great roleplay, so on your own it comes from big bites, your threads, the end of every scene and downtime.
+-   **Let your Catches and hostile threads bite, and make it real trouble**, the kind the GM would make of it. It's 1 Aura, or 1 Resolve for a big bite, and only call it big when it changes the scene or costs you something you wanted (see [Catches and Resolve at the Table](#s-catches-gm)). There's no GM to give you Resolve for great roleplay, so on your own it comes from big bites, your threads, the end of every scene and downtime.
 -   **Strain your threads honestly.** When you lean on someone for Resolve, say how the strain shows and what would make it right before you take it, and don't mend it for anything less ([Playing the strain](#s-playing-the-strain)).
 
 ## Running the Threats Yourself {#s-solo-threats}
@@ -116,7 +118,7 @@ How many it makes is down to the round budget and the story, the same as at a ta
 
 With one character it's you, your stake or your clock, and the table sorts that out. When there's more than one of you, like a crew of your own or an ally fighting beside you, go down this list and stop at the first one that fits:
 
-1.  **Whoever it hates.** A drive or a thread says so, like *Holds a Grudge* or a debt somebody wrote down.
+1.  **Whoever it hates.** A drive or a thread says so, like *Holds a Grudge* or a hostile thread somebody wrote down.
 2.  **Whoever's hurting it most**, like the one who stripped a tag off it last round.
 3.  **Whoever's nearest the stake.**
 
@@ -194,9 +196,9 @@ Say Dorrie's on her own with *Who killed Anselm?* She writes three answers. One,
 [Downtime](#downtime) runs as written, with you as the GM.
 
 -   **Name the four pressures** before you spend a slot: one off your sheet, your Goal, the one the faction turn gives you, and for the world, the d20 Prompt.
--   **The faction turn runs itself.** Roll the d6 in [The Faction Turn](#s-faction-turn) for every faction you can reach, never pick, and telegraph each action out loud, with its dice, before you spend a slot. On your own, two or three of those are plenty, and the rest move off-screen.
--   **Your slots.** You get your two personal slots, and since you're the whole crew, its two party slots as well. They work as written: the crew's Power, or your own permissions when you're plainly the right person for it (1 step for the slot plus what fits), and two slots on one move count everything twice.
--   **Downtime rolls.** Ties go to the defender, and a die you're climbing counts as the defender. There's no Aura in downtime. Spend 1 Resolve to roll again (your dice only), or spend one of the crew's spare resources to win a tie. The factions can't do either.
+-   **The faction turn runs itself.** Every faction gets one action, the same as at a table. Roll the d6 in [The Faction Turn](#s-faction-turn) for each one you can reach, never pick, and telegraph its action out loud, with its dice, before you spend a slot. On your own, two or three of those are plenty, and the rest move off-screen.
+-   **Your slots.** You get your two personal slots, and since you're the whole crew, you take the crew's one action as well. It works as written: the crew's Power, or your own permissions when you're plainly the right person for it (1 step for the action plus what fits). Put one of your personal slots into it and everything counts twice, and that's the only way you'll touch the Power of a faction bigger than the crew.
+-   **Downtime rolls.** Ties go to the defender, and a die you're climbing counts as the defender. There's no Aura in downtime. Spend 1 Resolve to roll again (your dice only), or spend one of the crew's extra resources to win a tie. The factions can't do either.
 -   **Trouble waits.** Whatever downtime stirs up lands next session, and if it's one of your Catches, you can let it bite then, in a scene, where there's Aura to take for it.
 -   **Next session might be waiting.** A pressure you've ignored twice is a scene, and so is a job a faction gave you, so skip the d20 and start there.
 
@@ -209,7 +211,8 @@ You can play two or three characters at once, which gives each of them someone t
 -   **Use the list in [Who it goes for](#s-solo-targets)**, so you don't quietly aim everything at whoever's got the best Defend.
 -   **Nobody gets the solo Hurt.** The first Hurt each scene that doesn't move the wound die is for one character on their own.
 -   **Keep their bonds honest.** When two of them want different things, let them. If you can't tell what one would do, ask the Oracle and let their threads set the odds: Wren's thread with Bram says he's the only one who can keep up with her, so if she heads up the fell, it's likely he follows. When one of them strains a thread with another, play the other side straight, by how many threads are left between them ([Playing the strain](#s-playing-the-strain)).
--   **The rest is shared as usual.** Spare Aura goes to whoever's in the scene, a thread between two of them goes on both their sheets, and in downtime each of them gets two personal slots while the crew shares two party slots.
+-   **Write their threads the way a table would.** With two of them, one of each one's two bond threads goes to someone outside the crew, the same as with two players. With three, every bond thread can stay in the crew.
+-   **The rest is shared as usual.** Aura you've no room for goes to whoever's in the scene, a thread between two of them goes on both their sheets, and in downtime each of them gets two personal slots, and the crew takes its one action.
 
 ## Keeping It Going {#s-solo-going}
 
@@ -231,19 +234,19 @@ Is anything else hunting up here? Something took the shepherd, so she calls it l
 
 **Round 1.** The d6 says 2, so it drops on her: a d8, 4 steps. That leaves 1, and it goes on the rain, a d2 at the clock. That's 5, said out loud, and fixed.
 
-Now the sheet. She's got one action, so it's the drop or the trail. Her d2 Defend won't stop much, but the first Hurt this scene won't move her wound die, and the rain's coming for the trail, so she works the trail and takes her chances with the drop. Her Track is her first Title, *follow any trail* and *know a beast's habits* (whatever she's after leaves claw marks), plus the action: 4 steps, a d8. It's 4 against the stake's 4, a tie, so she pays 1 Aura to win it and strips *Trampled by Sheep*.
+Now the sheet. She's got one action, so it's the drop or the trail. Her d2 Defend won't stop much, but the first Hurt this scene won't move her wound die, and the rain's coming for the trail, so she works the trail and takes her chances with the drop. Her Track is her first Title, *follow any trail* and *know a beast's habits* (whatever she's after leaves claw marks), plus the action: 4 steps, a d8. It's 4 against the stake's 4, a tie, so she pays 1 Aura to win it and strips *Trampled by Sheep*. That's an action won, so her Confidence goes up a size, to d8.
 
-At the end of the round the drop comes down, and she rolls her Defend against it: 1 on her d2, against 5 on the cat's d8, so it gets through. The cost that fits is a Hurt. Losing her rations would cost about as much, but she's a long way from anywhere, so she takes the Hurt, and since it's her first this scene, her wound die stays on d2. The rain lands too, and the clock steps down to a d6. She worked the stake, so it doesn't step again.
+At the end of the round the drop comes down, and she rolls her Defend against it: 1 on her d2, against 5 on the cat's d8, so it gets through. The cost that fits is a Hurt. Losing her rations would cost about as much, but she's a long way from anywhere, so she takes the Hurt, and since it's her first this scene, her wound die stays on d2. It didn't step up, so her Confidence doesn't drop either. The rain lands too, and the clock steps down to a d6. She worked the stake, so it doesn't step again.
 
 **Round 2.** The d6 says 3, the lantern, but she isn't carrying one, so she rolls again and gets 6: the eyes, a d6, 3 steps. The last 2 go on the rain, a d4 at the clock, for 5.
 
-This time she Studies it. Her Study is her second Title and *read the land for an ambush*, plus the action, 3 steps. *Know a beast's habits* fits too, but it's on her Track, not her Study, so bringing it in costs 1 Aura. That's 4 steps, a d8. It's 6 against the cat's 2, and she asks why it's on her trail instead of eating her. Off comes her thumb: *Hunting Something Else*, its weak point. It's after whatever's following her, and if she steps aside, it'll pass.
+This time she Studies it. Her Study is her second Title and *read the land for an ambush*, plus the action, 3 steps. *Know a beast's habits* fits too, but it's on her Track, not her Study, so bringing it in costs 1 Aura. That's 4 steps, a d8. It's 6 against the cat's 2, so her Confidence climbs to d10, and she asks why it's on her trail instead of eating her. Off comes her thumb: *Hunting Something Else*, its weak point. It's after whatever's following her, and if she steps aside, it'll pass.
 
 Is there a rock she can get up onto, out of its road? She wants a yes, but it's open moor, so she calls it unlikely: Fate 12, Bane 7, and two Boon dice, 15 and 9. She keeps the lower, and neither 9 nor 7 beats Fate, so it's a no.
 
-Then she reads her sheet again. She's *Sure-Footed*, so heather that would bog anyone else down is just ground to her. She steps off the trail into it on her free stride, and the cat isn't trying to stop her, so there's nothing to roll. It goes past her and away down the trail she came up, and its telegraphs go with it. That's a threat down, so her Confidence goes up a size, to d8.
+Then she reads her sheet again. She's *Sure-Footed*, so heather that would bog anyone else down is just ground to her. She steps off the trail into it on her free stride, and the cat isn't trying to stop her, so there's nothing to roll. It goes past her and away down the trail she came up, and its telegraphs go with it. Nothing was rolled, so her Confidence stays on d10.
 
-That leaves *Doubles Back*, and her action's gone, so she spends 1 Resolve on another. It's her Track again, another d8, and she rolls 8 against the stake's 5. That's a top face, so 1 Aura comes back. The tracks go on up into the hills, and she's read which way before the rain can wash them out, so the stake's hers.
+That leaves *Doubles Back*, and her action's gone, so she spends 1 Resolve on another. It's her Track again, another d8, and she rolls 8 against the stake's 5. That's a top face, so 1 Aura comes back. The tracks go on up into the hills, and she's read which way before the rain can wash them out, so the stake's hers. That's another win, and her Confidence hits d12, so she's fired up, but with the stake won there's nothing left to cash it in on.
 
 That's the scene. Her wound die never moved, so there's nothing to rest off. Her Confidence goes back to d6, and she gets 1 Resolve back, so she's on 2 again.
 

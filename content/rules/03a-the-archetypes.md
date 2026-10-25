@@ -6,7 +6,7 @@ order: 3.2
 part: "Play"
 partNumber: "Part I"
 source: Mo's playtest sheets, 14 and 16 Oct 2026
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 Every Title is an archetype, and every archetype has something only it can do.
@@ -36,7 +36,7 @@ On most archetypes, **1 Aura** adds **+2 to one die** on its mechanic. Spend it 
 The 2 goes on the number you rolled, so a 4 on a d6 becomes a 6. A Warrior's die still explodes when the +2 takes it to its top face or past it, but there's no Aura for it. Two archetypes don't get a +2 at all: the Bloodsworn steps their own wound die down, and the Teleporter opens a portal. Each section says what you'll get.
 
 :::example[Bram Defends]
-Bram's Defending, and a d10 comes at him. The three lines on his Defend count twice, so it's 7 steps, a d12 and a d2. The d10 lands on 9, and his d12 comes up 7 and his d2 a 1, so he spends 1 Aura to make the 7 a 9. That's a tie, and ties go to him, so it's stopped. If he'd taken Guardian twice, it'd be a 10.
+Bram's Defending, and a d10 comes at him. The three lines on his Defend count twice, so it's 7 steps, a d12 and a d2. The d10 lands on 9, and his d12 comes up 7 and his d2 a 1, so he spends 1 Aura to make the 7 a 9. That's a tie, and ties go to him, so it's stopped, and his Confidence goes up a size. If he'd taken Guardian twice, it'd be a 10.
 :::
 
 ### 1 Resolve on your mechanic {#resolve-on-your-mechanic}
@@ -104,7 +104,7 @@ The Bard's for nerve. You're the one keeping the crew's Confidence up, and Defen
 
 **Lift them.** Spend your action, and every friend who can hear you goes up a size of [Confidence](#s-confidence), as far as d10. The last push to d12 has to be their own.
 
-**Hold them.** When fear, lies or pressure come at you or friends who can hear you, sing, as your action. It's a [Defend](#s-defend) against fear, lies and pressure for all of you: build your song from the set action that fits, every line on it counts twice, and you can split it as many times as you like. When the telegraphs land, each of your dice stops one it beats, and ties go to you. Anything it doesn't stop still has to get past that person's own Confidence, rolled once the same as letting it ride, and that goes for yours too, because you're singing, not Defending. Anyone who had all of it stopped goes up a size, as if they'd stopped it themselves.
+**Hold them.** When fear, lies or pressure come at you or friends who can hear you, sing, as your action. It's a [Defend](#s-defend) against fear, lies and pressure for all of you: build your song from the set action that fits, every line on it counts twice, and you can split it as many times as you like. When the telegraphs land, each of your dice stops one it beats, and ties go to you. Anything it doesn't stop still has to get past that person's own Confidence, rolled once the same as letting it ride, and that goes for yours too. Every telegraph your song stops for a friend puts their Confidence up a size, as if their own defence had stopped it. Yours moves for the song once, like any other action: up a size if any of your dice stopped something, and down a size if they all missed.
 
 :::rule
 **1 Aura:** +2 to one of your song dice.
@@ -115,7 +115,7 @@ The Bard's for nerve. You're the one keeping the crew's Confidence up, and Defen
 :::example[A dragon roars]
 A dragon roars at four of you, a d10 at each one's Confidence: you, Bram, Wren and Isolde. Say you're the Bard, and you've got 3 lines on your song. You sing to hold them, so every line counts twice, and that's 1 + 6 = 7 steps. You split it four ways, so you've got a die for each roar: three d4s and a d2.
 
-The roar comes up 1 at you, 2 at Wren, 4 at Isolde and 5 at Bram. Your d4s come up 3, 3 and 1, and your d2 comes up 1. The d2 stops the 1 at you, because the tie's yours, and a 3 stops Wren's 2. You spend 1 Aura on the other 3 to make it a 5, and that stops Isolde's 4. Your last 1 can't stop Bram's 5, so the roar has to get past his own Confidence, and his d6 comes up 5. The tie's his, so nobody drops a size, and everyone goes up one.
+The roar comes up 1 at you, 2 at Wren, 4 at Isolde and 5 at Bram. Your d4s come up 3, 3 and 1, and your d2 comes up 1. The d2 stops the 1 at you, because the tie's yours, and a 3 stops Wren's 2. You spend 1 Aura on the other 3 to make it a 5, and that stops Isolde's 4. Your last 1 can't stop Bram's 5, so the roar has to get past his own Confidence, and his d6 comes up 5. The tie's his, so it's stopped too, and nobody drops a size. Wren and Isolde go up a size because your song stopped theirs, Bram goes up because his own Confidence stopped his, and you go up a size for the song.
 :::
 
 **Title ideas:** [Bard](#k-bard) · [Faith](#k-faith)
@@ -184,7 +184,7 @@ Dorrie's got a d8 of influence on the bandit captain, off her Talk (4 steps). He
 
 The Guardian stands in front of the crew and takes what's coming at them.
 
-You [intercept](#s-intercept) **for free**, for every friend within your stride. Any time before the telegraphs land, take any or all of the dice aimed at them, whichever enemy they're from, and they come at you instead. It works on fear, lies and pressure too, and your Confidence handles those. Then [Defend](#s-defend) or let it ride the usual way, and since one die stops one, if you've pulled a lot onto yourself, you'll want to Defend. To get past you, threats have to pull the crew apart.
+You [intercept](#s-intercept) **for free**, for every friend within your stride. Any time before the telegraphs land, take any or all of the blows aimed at them, whichever enemy they're from, and they come at you instead. Fear, lies and pressure are inside their heads, so nobody can step in front of those, and keeping them off the crew is a [Bard](#a-bard)'s job. Then [Defend](#s-defend) or let it ride the usual way, and since one die stops one, if you've pulled a lot onto yourself, you'll want to Defend. To get past you, threats have to pull the crew apart.
 
 If you're a Teleporter as well, you intercept for every friend within 10 units (see [Teleporter](#a-teleporter)).
 
@@ -195,7 +195,7 @@ If you're a Teleporter as well, you intercept for every friend within 10 units (
 :::
 
 :::example[Three goblins]
-Three goblins telegraph a d6 each at Vesk, Wren and Isolde, all within Bram's stride. He intercepts all three for free and Defends, so the three lines on his Defend count twice: 7 steps, a d12 and a d2. He splits the d12 into two d6s. The goblins land 6, 4 and 1, and he rolls 5, 4 and 2. The 4 holds the 4, because ties go to him, and the 2 holds the 1. His d2 landed on its top face, so that's 1 Aura back, and he spends 1 to make the 5 a 7 against the 6. Nothing gets through.
+Three goblins telegraph a d6 each at Vesk, Wren and Isolde, all within Bram's stride. He intercepts all three for free and Defends, so the three lines on his Defend count twice: 7 steps, a d12 and a d2. He splits the d12 into two d6s. The goblins land 6, 4 and 1, and he rolls 5, 4 and 2. The 4 holds the 4, because ties go to him, and the 2 holds the 1. His d2 landed on its top face, so that's 1 Aura back, and he spends 1 to make the 5 a 7 against the 6. Nothing gets through, and that's three telegraphs his defence stopped, so his Confidence goes up three sizes. If he started the round on d6, he's on d12 now, and he's fired up.
 :::
 
 **Title ideas:** [Guardian](#k-guardian) · [Warding](#k-wizard) · [Faith](#k-faith)
@@ -385,7 +385,7 @@ Catching souls and summoning are the Summoner's, and nobody else can do them. He
 -   **Catching a soul:** when a creature falls, spend your action and roll your Summon dice against its Challenge. Beat it and its soul goes into one of your utility slots. Miss and it's gone. In downtime, put it into your summoning attunement.
 -   **Summoning** takes your action, and it needs a reason in the story. Roll your Summon dice against your souls' dice, and each of your dice brings out one soul it beats. Split to go for more.
 -   **A soul is what it was.** A caught courtier talks and a hound tracks. Summons act in the round like anyone, and one hit takes one out. Its soul goes back to its slot, ready to call again.
--   **A summon intercepts for free.** It can [intercept](#s-intercept) the dice aimed at someone within its stride, and it rolls its die to stop one of them.
+-   **A summon intercepts for free.** It can [intercept](#s-intercept) the blows aimed at someone within its stride, but not fear, lies or pressure, and it rolls its die to stop one of them.
 
 :::rule
 **1 Aura:** +2 to one of your dice when you're catching or summoning. Winning a tie is another 1 Aura. Take Summoner twice for +3, three times for +4, and so on.

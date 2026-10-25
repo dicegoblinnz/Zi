@@ -1,9 +1,33 @@
 ---
 title: "What's Changed"
 id: changes
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
+
+## 26 Oct 2026: Confidence that swings, threads that turn, one action a faction {#c-2026-10-26}
+
+Mo's answers after reading the 24 Oct change.
+
+**Confidence swings with every roll now.** It still starts each scene on d6. It goes up a size for every telegraph your Defend or Confidence stops, and for every action where one of your dice wins. It goes down a size every time your wound die steps up (not when your armour or kit takes the blow), for every action where all your dice miss, and when fear, lies or pressure get through, unless 1 Resolve holds your ground. At d2 you're shaken, and you can't act at what the scene's about without 1 Resolve, so your action goes on pulling yourself together, back up to d4. That replaces Confidence going up only when you stopped all of it or took a threat down, and "bury it" is gone from what fear costs you. See [Confidence](#s-confidence).
+
+**Defend doubles your Defend, and nothing else.** Defending counts every line on your Defend twice, and your Confidence rolls as it is. It used to double your Confidence too. See [Defend](#s-defend).
+
+**Nobody can intercept fear.** Intercept takes blows, so fear, lies and pressure stay with whoever they're aimed at, and a Bard's song is what shields the crew from them. Any creature can intercept blows, a summon included. See [Intercept](#s-intercept).
+
+**A vulnerability can take another tag.** You choose where each extra tick goes: the same tag again, or another tag the hit could reach, so one vulnerability can strip two plain tags. It used to stay on the tag your die went for. See [Vulnerabilities](#s-vulnerable).
+
+**A multiplier's as big as the creature needs,** placed where it makes sense: a dragon's *Hide ×8*, a dark paladin's *Plate Armour ×5* and *Shield ×3*. That replaces "usually the Challenge on the tag that matters most". See [Multipliers](#s-tough) and [Running the Game](#s-tough-gm).
+
+**Threads are bond threads or hostile threads.** A bond thread's something good, and a hostile thread's something gone bad, like a debt or a grudge. Either can be strained, and with no thread you're neutral. A hostile thread bites like a Catch. You start with two bond threads with the crew, from your answers in Connect, and writing a hostile thread lets you write a third. That replaces three threads and a fourth for writing one as a debt, and debt's gone as a kind of thread. See [Bonds and threads](#s-bonds) and [Connect](#s-connect).
+
+**One attuned thing to start.** It used to be two. The crew have one each now, and their other things are ordinary items, still on the same set actions. See [Attunement](#s-attunement).
+
+**One action a faction, the crew included.** The crew takes one action a downtime, like any faction, instead of two party slots. A player can put a personal slot into it, and two slots on one move still count everything twice. Nothing buys a second action, so a spare can't buy the crew an extra party slot any more. See [Downtime](#party-slots) and [The Crew and the Factions](#s-faction-crew).
+-   **A spare resource is an extra resource now:** a resource that isn't paying for an asset. See [Resources and Assets](#s-wealth).
+-   **A new mini faction sits out the downtime it's made,** then acts on its own: at first it mostly does what its parent wants, then it goes its own way. See [Mini Factions](#s-mini-factions).
+-   **Factions' threads are bond and hostile threads too.** A bond thread's a step, a hostile one's a vulnerability. See [Bonds](#s-faction-bonds).
+-   **There's a list of assets to borrow from,** for a faction or the crew. See [Appendix B](#faction-strength).
 
 ## 24 Oct 2026: Defend, wounds, vulnerabilities and factions {#c-2026-10-24}
 
@@ -11,7 +35,7 @@ These came out of the 23 Oct playtests.
 
 **Defend's a set action, and the Armour die's gone.** Defend, Fight, Move, Sneak, Study and Talk are on every sheet now. Plain armour and a shield are lines on your Defend, a step each, and a piece of armour can break instead of you taking a Hurt. See [Armour](#s-armour) and [When It Lands](#s-defending).
 -   **Each die of defence stops one telegraph.** When you let it ride, you roll your Defend once and your Confidence once, and each die stops one telegraph it beats or ties. Everything else gets through. That replaces one defence roll standing against everything aimed at you.
--   **Defending doubles it.** When you Defend, every line on your Defend counts twice, and so does your Confidence, and you can split each of them once. Defend doesn't pull an enemy's attack onto you any more. See [Defend](#s-defend).
+-   **Defending doubles it.** When you Defend, every line on your Defend counts twice, and so does your Confidence, and you can split each of them once. Defend doesn't pull an enemy's attack onto you any more. See [Defend](#s-defend). (Since 26 Oct, it doesn't double your Confidence.)
 -   **A threat aims one die at each of you**, unless a tag like *Flurry* or *Two Knives* says it can do more. See [Telegraphs](#s-telegraphs).
 -   *Poisoned*'s spend makes your Defend a d2 till the round ends, and *Warded* and *Covered* are a step on your Defend. They used to work on your Armour.
 -   "Step your Armour down" is gone from the costs. See [Consequences](#s-consequences).
@@ -21,9 +45,9 @@ These came out of the 23 Oct playtests.
 
 **A permission goes on two set actions at most**, Defend included, and the same permission never goes on one set action twice. Anywhere else it's 1 Aura to bring in, and Titles, items and traits still go wherever they fit. **Single-word permissions are back**, like *Deceptive*, because the cap keeps them in check, so a permission doesn't need a doing word and how, what or where any more. Magic's still written narrow. In a combo, the same permission from two of you counts for each. See [How permissions stack](#how-permissions-stack) and [Permissions](#s-writing-permissions).
 
-**Vulnerabilities are new.** Every vulnerability that fits a hit adds a tick: one more Hurt on you, or one more win off a threat's tag. The same one never counts twice, and you've still got to win. *Prone* and *Exposed* are vulnerabilities now. See [Vulnerabilities](#s-vulnerable).
+**Vulnerabilities are new.** Every vulnerability that fits a hit adds a tick: one more Hurt on you, or one more win off a threat's tag. The same one never counts twice, and you've still got to win. (Since 26 Oct, you choose which tag each tick goes on.) *Prone* and *Exposed* are vulnerabilities now. See [Vulnerabilities](#s-vulnerable).
 
-**Tough's gone, and tags carry multipliers instead.** *Armoured ×4* takes four wins to strip. It's usually the threat's Challenge on the tag that matters most to it, and less on the rest, and it only ever counts wins, never dice. Every roll's win or lose now, because nothing takes off the number it rolled. The bestiary and the frames have theirs. See [Multipliers](#s-tough) and [Running the Game](#s-tough-gm).
+**Tough's gone, and tags carry multipliers instead.** *Armoured ×4* takes four wins to strip. It's usually the threat's Challenge on the tag that matters most to it, and less on the rest, and it only ever counts wins, never dice. (Since 26 Oct, it's as big as the creature needs.) Every roll's win or lose now, because nothing takes off the number it rolled. The bestiary and the frames have theirs. See [Multipliers](#s-tough) and [Running the Game](#s-tough-gm).
 
 **Your wound die is your Hurt now**, and the Hurt track's bars and boxes are gone. It starts at d2, every Hurt puts it up a size, and a Hurt at d12 Blazes. See [Wounds, Blaze and Scars](#s-blaze).
 -   At the end of every scene you rest: roll the Confidence you finished on against your wound die, and a win brings it down a size. Downtime clears it, with no slot. That replaces the loose boxes clearing, and downtime's Recover is only for mending what's broken now.
@@ -43,9 +67,9 @@ These came out of the 23 Oct playtests.
 -   Four to twelve core factions, depending on the campaign, and each can make up to three [mini factions](#s-mini-factions).
 -   A faction's Power is 1 step, plus 1 for each asset that adds Power. Its resources and assets are permissions: each asset needs a resource paying for it every downtime, and a spare resource hires another faction's action. Wealth and faction tags are gone.
 -   A faction's action is one of [six outcomes](#s-faction-outcomes) (Destroy, Undermine, Obstruct, Influence, Acquire and Establish) or work on its agenda, and it's still telegraphed at the start of downtime. The crew's party slots get the same six, plus setting back an agenda and working for a faction.
--   Every faction has [three bonds](#s-faction-bonds), Public Sentiment, Morale and Loyalty, with threads in them. A good thread's a step and a bad one's a vulnerability.
+-   Every faction has [three bonds](#s-faction-bonds), Public Sentiment, Morale and Loyalty, with threads in them. A good thread's a step and a bad one's a vulnerability. (Since 26 Oct they're called bond threads and hostile threads.)
 -   Standing's gone. How a faction sees the crew is its threads toward them.
--   The crew's on the same card, its crew tags are [crew assets](#s-crew-tags) now, and party resources are [party holdings](#s-party-resources). Crew assets don't add a step to rolls they fit any more: each one does the one thing it says, and the ones that are people who turn up when the crew calls, like *Muscle*, add Power. *Healers* steps everyone's wound die down a size between two scenes, once a session. A spare resource can still buy the crew an extra party slot, the way Wealth could.
+-   The crew's on the same card, its crew tags are [crew assets](#s-crew-tags) now, and party resources are [party holdings](#s-party-resources). Crew assets don't add a step to rolls they fit any more: each one does the one thing it says, and the ones that are people who turn up when the crew calls, like *Muscle*, add Power. *Healers* steps everyone's wound die down a size between two scenes, once a session. A spare resource can still buy the crew an extra party slot, the way Wealth could. (Since 26 Oct it can't, the crew takes one action a downtime, and a spare's called an extra resource.)
 
 **Bonds can be with factions, places and causes**, as well as people. Borrowing through a thread with a faction brings in one of its assets, for 1 Aura, and a thread with a place or a cause strains for Resolve like any other. See [Bonds and threads](#s-bonds).
 

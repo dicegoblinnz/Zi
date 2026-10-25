@@ -6,7 +6,7 @@ order: 31
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 Every tag in here tells you how it shows up in the story and what it opens up for the crew. Tags don't make a threat's dice bigger. A tag only changes dice when it says so. Players who know a tag can bring it into a roll for 1 Aura. A tag that takes more than one win to strip carries a [multiplier](#s-tough), like *Armoured ×3*, and a tag that makes a hit hurt more is a [vulnerability](#vulnerability-tags).
 
@@ -62,7 +62,7 @@ These tags say what its telegraphs can do to you.
 
 These tags are its health. Each one's a reason it's still standing, and when you strip them all, it falls. A few, like *Crumbling*, *Forms* and *Layered*, change how the rest works.
 
-Any of them can carry a **multiplier** when it should take more than one win, like *Natural Armour ×6* or *Beloved ×3*. Every win ticks one off, and the GM says what's left every time, so nobody has to guess. A named one only ticks to what fits it: blades on the hide, or turning the crowd. Marked *(first)*, nothing under it can be stripped till it's gone. A spent condition that would strip a tag, like *Burning*, ticks one off, and *Piercing* still gets through *Armoured*, whatever its multiplier. An opening takes a whole tag, multiplier and all (two on a Boss), and a weak point still ends the threat at once. There's more in [Multipliers](#s-tough).
+Any of them can carry a **multiplier** when it should take more than one win, like *Natural Armour ×6* or *Beloved ×3*. It's as big as the creature needs, and where it goes says what the creature is: a dragon's hide might be *Hide ×8*, and a dark paladin who's the villain of the arc might be *Plate Armour ×5* and *Shield ×3*. Every win ticks one off, and the GM says what's left every time, so nobody has to guess. A named one only ticks to what fits it: blades on the hide, or turning the crowd. Marked *(first)*, nothing under it can be stripped till it's gone. A spent condition that would strip a tag, like *Burning*, ticks one off, and *Piercing* still gets through *Armoured*, whatever its multiplier. An opening ends a Mook or a Named threat, and takes two whole tags off a Boss, multipliers and all, and a weak point still ends the threat at once. There's more in [Multipliers](#s-tough).
 
 | Tag | How it plays |
 | --- | --- |
@@ -117,20 +117,20 @@ Any of them can carry a **multiplier** when it should take more than one win, li
 
 ## Vulnerabilities {#vulnerability-tags}
 
-A vulnerability makes a hit hurt more. When a win strips one of its tags or causes a Hurt, every vulnerability that fits adds one more tick. The same one never counts twice, so a thing that's really weak to fire has two different ones. Plenty are hidden, and Study finds them. There's more in [Vulnerabilities](#s-vulnerable).
+A vulnerability makes a hit hurt more. When a win strips one of its tags or causes a Hurt, every vulnerability that fits adds one more tick, and whoever won chooses where each one goes: another off the same tag, or a tick on another tag that keeps it going, which strips a plain one outright. So one vulnerability can strip two plain tags, or take two off one multiplier. It has to make sense, so the hit has to be able to reach what it takes, and nothing under a *first* tag can go till that tag's gone. On the crew, each one's another Hurt. The same one never counts twice, so a thing that's really weak to fire has two different ones. Plenty are hidden, and Study finds them. There's more in [Vulnerabilities](#s-vulnerable).
 
 | Tag | How it plays |
 | --- | --- |
-| **Vulnerable to fire** | Fire finds it. Every burning hit that wins ticks once more. |
-| **Dry as Tinder** | It goes up like kindling. With *Vulnerable to fire* as well, a burning hit ticks twice more. |
+| **Vulnerable to fire** | Fire finds it. Every burning hit that wins gets one more tick. |
+| **Dry as Tinder** | It goes up like kindling. With *Vulnerable to fire* as well, a burning hit gets two more ticks. |
 | **Brittle** | Hammers and hard falls crack it. Blades don't do anything special. |
 | **Thin-Skinned** | Blades bite deep. Hammers just bruise it. |
-| **Bad Side** | An old wound never healed right. A hit on that side ticks once more. |
+| **Bad Side** | An old wound never healed right. A hit on that side gets one more tick. |
 | **Silver-Shy** | Silver burns it. A silver blade, a coin, a ring on a fist. |
-| **Soft Underbelly** | Its belly's bare. Get underneath it, and every hit there ticks once more. |
-| **Easily Shamed** | Shame works on it. A win that shames it in front of its people ticks once more. |
+| **Soft Underbelly** | Its belly's bare. Get underneath it, and every hit there gets one more tick. |
+| **Easily Shamed** | Shame works on it. A win that shames it in front of its people gets one more tick. |
 | **Holy Ground** | On holy ground, everything hurts it more. Lure it there. |
-| **Opened** | The Warrior's, for 1 Resolve: every hit on it ticks once more till the round ends. |
+| **Opened** | The Warrior's, for 1 Resolve: every hit on it gets one more tick till the round ends. |
 
 ## What drives it {#what-drives-it}
 
@@ -244,24 +244,72 @@ These tags go on a stake, for whatever's in the way. Every win strips one, and w
 | **Watched** | Someone's looking. Deal with the watcher, or be very quiet. |
 | **Written in Code** | You have it, but you can't read it. Someone has to crack it. |
 
-## Faction assets {#faction-strength}
+## Assets {#faction-strength}
 
-These are what make a faction strong. Each one's an asset, so it needs a resource paying for it, and a Destroy ticks it off (see [Resources and Assets](#s-wealth)). Most add a step to its Power, and a relic does one thing instead, which its card spells out. A rich faction doesn't get an asset for it: it's got more resources, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*. The crew's own assets are in [The Party Sheet](#s-crew-tags), and they do what they say there, even when they share a name with one of these.
+An asset is something a faction can do, and the crew's a faction too, so these work for either. Each one needs a resource paying for it, every downtime, and a Destroy ticks it off (see [Resources and Assets](#s-wealth)). The first lot are people who'll turn up when it calls, and each of those adds +1 Power. The rest do one thing when the story fits, exactly what they say and no more. Where one says *it*, that's whoever holds it, the crew included.
 
-| Asset | How it plays |
+Any of them can carry a multiplier when it's big. It still does the same thing, so *Standing Army ×3* is still +1 Power, but it takes three wins to destroy or to take.
+
+Take one as it's written, change it to fit, or write your own in the same shape. Whatever a card says an asset does is what it does, even when it shares a name with one here, so the Quiet Order's *Rooted* adds Power where the crew's doesn't. A rich faction doesn't get an asset for being rich: it's got more resources, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*. The twelve crew assets from [The Party Sheet](#s-crew-tags) are all here too, worded for the crew.
+
+### People who turn up {#assets-people}
+
+Each of these is +1 Power whenever it fits the roll, and its people in a scene can carry the asset as a tag, like *Household Guard* on the men at the gate.
+
+| Asset | What it does |
 | --- | --- |
-| **Standing Army** | +1 Power. Soldiers, guards or muscle who turn up when it calls. A big one carries a multiplier, like *Standing Army ×3*. |
-| **Crusading** | +1 Power. It believes it's right. It won't negotiate with what it opposes. |
-| **Ghost** | +1 Power. It's gone, or seems to be. Its people are still everywhere. |
-| **Grudge-Keeper** | +1 Power. It never forgets a slight. Crossing it once is enough. |
-| **Influential** | +1 Power. People in power listen to it. It can open doors, close them, and change laws. |
-| **Kingmaker** | +1 Power. It decides who rules. Everyone courts it, and nobody trusts it. |
-| **Relic** | No Power. It holds something old and powerful, and its card says what it does, often through its Secret. Without it, it's just another power. |
-| **Rooted** | +1 Power. It's been here for generations. Removing it means pulling up half the city. |
-| **Secretive** | +1 Power. Nobody knows what it really wants. Its moves come as surprises. |
-| **Sprawling** | +1 Power. It's too big to control itself. Its left hand doesn't know what its right is doing. |
-| **Vast** | +1 Power. It's everywhere. You can't hit all of it at once. |
-| **Watchful** | +1 Power. It sees what happens in its territory. Moving against it quietly is hard. |
+| **Muscle** | +1 Power, and once a session the crew's people join in for one scene, with as many steps as half its Power die (a d6 is 3). |
+| **Standing Army** | +1 Power. Soldiers who march when it calls. |
+| **Household Guard** | +1 Power at home. They don't leave its doors, so they're no use to anything it does further off. |
+| **Hired Swords** | +1 Power. Sellswords who go wherever it pays them to. |
+| **Dock Gangs** | +1 Power. The waterfront's hard hands, who turn up when it whistles. |
+| **Fast Boats** | +1 Power on the water. Crews who know every channel by night. |
+| **The Faithful** | +1 Power. A congregation that'll fill the street when the bells ring. |
+| **Agents Abroad** | +1 Power, and it can act anywhere on the board. |
+
+### Reach and information {#assets-reach}
+
+| Asset | What it does |
+| --- | --- |
+| **Informants** | Once a downtime, ask the GM one question about a faction, and get a straight answer. A big faction calls them a *Spy Network*. |
+| **Fences** | Once a downtime, one of the crew gets something through them without spending a slot. |
+| **Smugglers' Roads** | A journey on the crew's own roads starts with its first stage already behind it. |
+| **Lookouts** | On its own ground, nobody gets an *Ambush* or a first strike on it till the lookouts are dealt with. |
+| **Codebreakers** | Once a session, anything *Written in Code* that it's got hold of gets read, with no roll. |
+| **A Rumour Mill** | Once a downtime, a faction it names hears about something that really happened, and its threads change as if it had seen it. |
+
+### Places {#assets-places}
+
+| Asset | What it does |
+| --- | --- |
+| **Safehouses** | Once a downtime, one of the crew lies low without spending a slot. |
+| **Rooted** | Once a session, anyone in the crew being chased through the crew's own streets gets away, with no roll. |
+| **A Workshop** | Once a downtime, mend a broken item without spending a slot. |
+| **A Ship** | The crew's own ship. A voyage on it needs no Supplies clock, and while nothing's paying for it, it stays tied up in harbour. |
+| **Deep-Water Docks** | It can trade with anyone across the sea. |
+| **A Fortress** | Its people are *Fortified* while they're holding it from inside. |
+| **A Vault** | One of its resources is kept inside, and nobody can Destroy or Acquire it from downtime. Someone has to break in and do it, in a scene. |
+| **Sanctuary** | Anyone who reaches it and asks is safe there for the night, and whoever's after them stops at the door. |
+
+### Influence {#assets-influence}
+
+| Asset | What it does |
+| --- | --- |
+| **Friends at Court** | A step on any crew roll to Influence a faction's face. |
+| **Influential** | A step on any crew roll at a faction whose threads toward the crew aren't mostly hostile. |
+| **Old Debts** | Once a session, someone the crew once helped turns up and does one thing for them. |
+| **A Seat on the Council** | Its face can't be arrested, tried or hanged in the city while it holds the seat. |
+| **A Judge in Its Pocket** | Once a downtime, the law looks the other way for it. |
+| **Blackmail** | Once a session, someone it's got dirt on does one thing it asks, with no roll. |
+
+### Odd things {#assets-odd}
+
+| Asset | What it does |
+| --- | --- |
+| **Healers** | Once a session, between two scenes, everyone in the crew steps their wound die down a size. |
+| **Relic** | Something old and powerful. Its card says what it does, often through its Secret, and without it, the faction's just another power. |
+| **A Curse on Its Goods** | Anyone who steals from it is *Hexed*, at its Power, at the start of every scene till they give it back. |
+| **A Bound Spirit** | Once a session, ask it about anything that happened inside the walls it haunts, and it tells the truth. |
 
 ## Condition tags {#condition-tags}
 

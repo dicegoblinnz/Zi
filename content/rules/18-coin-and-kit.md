@@ -6,7 +6,7 @@ order: 18
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 Money in Zi'Dara is simple: a purse of gold is roughly a month's wages.
@@ -29,7 +29,7 @@ Replacing a broken item, or mending one, takes a downtime slot and usually a pur
 
 ## Attuned Things from the Story {#s-rare}
 
-Some things come out of the story already grown, like the harpoon they cut out of the thing in the bay, or a skull that won't stop talking. They're attuned things like the ones you start with, just further along: a **Tempered** thing has two permissions of its own and room for two more with a Burden, and a **Perfected** one has three and room for three more with a Burden and a Catch. The rules for attunement itself are in [Attunement](#s-attunement). Here's how materials work, how to write one of these and where they come from, then twenty you can use straight off the page or pull apart for ideas.
+Some things come out of the story already grown, like the harpoon they cut out of the thing in the bay, or a skull that won't stop talking. They're attuned things like the one you start with, just further along: a **Tempered** thing has two permissions of its own and room for two more with a Burden, and a **Perfected** one has three and room for three more with a Burden and a Catch. The rules for attunement itself are in [Attunement](#s-attunement). Here's how materials work, how to write one of these and where they come from, then twenty you can use straight off the page or pull apart for ideas.
 
 ### Materials {#s-materials}
 
@@ -62,8 +62,8 @@ For Catches, use the [Catch ideas](#catches-12), or write your own in the same s
 -   **Taken from a boss**, like the harpoon they cut out of the thing in the bay.
 -   **Found at the bottom of a site**, in the last room, or on someone who got there first and didn't make it out.
 -   **Inherited** from a bond who dies, or from a crewmate who retires and leaves something behind.
--   **Given by a faction that's with the crew**, one whose threads toward them are good. Handing over something it can't replace is a risk, and it only takes that risk for people it trusts.
--   **Bought from a faction.** If a faction holds the thing as one of its assets and it'll sell, which means it isn't hostile to the crew, the crew can spend a spare resource on it, and the thing changes hands. A material can change hands the same way. See [Spare Resources](#s-crew-wealth).
+-   **Given by a faction that's with the crew**, one whose threads toward them are mostly bond threads. Handing over something it can't replace is a risk, and it only takes that risk for people it trusts.
+-   **Bought from a faction.** If a faction holds the thing as one of its assets and it'll sell, which means it isn't hostile to the crew, the crew can spend an extra resource on it, and the thing changes hands. A material can change hands the same way. See [Extra resources](#s-crew-wealth).
 -   **Won** in a duel, like Captain Marrow's rapier, or at cards.
 
 **Taking one on.** It goes in an attunement slot, so whoever takes it needs a free one, the same as when a friend hands over something they've attuned. It comes at the stage it's at, with its permissions, its Catch and its Burden, and it grows from there like anything else you've attuned.
@@ -338,4 +338,4 @@ Then read it back the way you'd use it at the table. Every permission should be 
 
 Money buys things, but it won't buy you relationships, reputation, favours or trust. It can buy a material, if somebody's selling, but the work's still yours: every new permission on an attuned thing takes a downtime slot.
 
-The crew's own money is different again. It comes from the crew's **resources** on the party sheet, like *Odd jobs* when it's starting out. One that isn't paying for anything is spare, and a spare one buys what's too big for a purse, like a ship's passage for twenty or a magistrate's goodwill. See [Spare Resources](#s-crew-wealth).
+The crew's own money is different again. It comes from the crew's **resources** on the party sheet, like *Odd jobs* when it's starting out. One that isn't paying for an asset is an **extra resource**, and an extra buys what's too big for a purse, like a ship's passage for twenty or a magistrate's goodwill. See [Extra resources](#s-crew-wealth).

@@ -6,7 +6,7 @@ order: 2
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 You play someone who's properly good at something, like a thief who can open any lock in the city or a fighter nobody wants to meet in a narrow corridor. Being good means you stack the odds in your favour before anyone touches a die.
 
@@ -113,7 +113,9 @@ Most of the time you're rolling against something that pushes back: a guard, a l
 -   **Tie** and it goes to whoever's defending: you when something lands on your Defend or Confidence, him when you go at the guard. If you're the one acting, even to stop something coming at you, you can pay **1 Aura** to win the tie. The GM never spends Aura, and there's no Aura in downtime (see [Downtime](#s-downtime-rolls)).
 -   **Roll under** and you didn't. Try something else, or spend **1 Resolve** to roll again (see [Resolve](#s-resolve)).
 
-**A target rolls its defence once a round.** The first time anyone goes at a threat in a round, roll its die, and that roll stands against everyone who goes at it till the round's over. It's different for you when the telegraphs land: you roll your Defend once and your Confidence once, and each die stops one telegraph (see [When It Lands](#s-defending)), unless you spend your action to [Defend](#s-defend).
+**A target rolls its defence once a round.** The first time anyone goes at a threat in a round, roll its die, and that roll stands against everyone who goes at it till the round's over. It's different for you when the telegraphs land: you roll your Defend once and your Confidence once, and each die stops one telegraph (see [When It Lands](#s-defending)). Spend your action to [Defend](#s-defend) and the lines on your Defend count twice, so you've got more dice to stop blows with. Your Confidence rolls as it is.
+
+**Your Confidence moves with the dice.** It starts every scene on d6. It goes up a size for every action where one of your dice wins and for every telegraph your defence stops, and it drops a size for every action where all your dice miss and every time your wound die steps up. At d2 you're shaken, and at d12 you're fired up (see [Confidence](#s-confidence)).
 
 A wall you need to climb or a book you've got to get through before dawn doesn't fight back, but it's still a **Challenge**, and you still roll its die and have to beat it. A Challenge is a die twice its number, so Challenge 2 is a d4 and Challenge 6 is a d12. Threats have **tags** too, like *Armoured* or *Loyal*, and your wins strip them off. A win can also leave a **condition**, like *Burning*, that carries your die. Both are in [Conflict](#s-challenges).
 
@@ -137,12 +139,12 @@ Put more than one die on the **same** intent and that's **advantage**: your **be
 
 ### Past six steps: more dice, more intents {#past-six-steps-more-dice-more-intents}
 
-Every die you get past six steps can have **its own intent**, and that's what big rolls are for. Two dice at the same Warden are two chances to strip two tags. You can still stack them on one intent for advantage, but a d12 and a d4 doing two different things is nearly always worth more than a d12 with a spare.
+Every die you get past six steps can have **its own intent**, and that's what big rolls are for. Two dice at the same Warden are two chances to strip two tags. You can still stack them on one intent for advantage, but a d12 and a d4 doing two different things is nearly always worth more than the same two dice on one intent.
 
 :::example[Three d6s on the guard captain]
 Bram's holding the barricade, and the guard captain's coming over it. Bram's Fight is 4 steps, and Wren puts her action in from the gallery with her Fight, 5 steps. That's a combo, 9 steps from two actions, and Bram rolls the lot as three d6s: *one to knock the sword out of his hand, one to put him on the floor, one to make him give up.*
 
-The captain's Challenge 3, and it's the first time anyone's gone at him this round, so he rolls his d6 once: 4. The three d6s come up 5, 2 and 4. The sword goes skittering, but he keeps his feet, and the last one's a tie. Bram could pay 1 Aura to win it, but he lets it go. So the captain's disarmed, still standing, and he won't yield.
+The captain's Challenge 3, and it's the first time anyone's gone at him this round, so he rolls his d6 once: 4. The three d6s come up 5, 2 and 4. The sword goes skittering, but he keeps his feet, and the last one's a tie. Bram could pay 1 Aura to win it, but he lets it go. So the captain's disarmed, still standing, and he won't yield. One of their dice won, and they both put an action in, so Bram and Wren both go up a size of Confidence.
 :::
 
 ### Splitting: shaping your dice {#s-splitting}
@@ -152,7 +154,7 @@ You can **split** your steps into more, smaller dice. **Every action in the roll
 Your dice all go at things that belong to the same job. A fighter's steps can disarm, trip and frighten someone, because that's all part of a fight. If a die would be doing something completely different, like picking a lock in the middle of a sword fight, build it from its own action instead. There's more on shaping your dice in [Tactical Play](#s-shaping).
 
 :::example[Splitting at the study door]
-Vesk's at the study door with her Locks, 5 steps. On her own she can split once: a d6 for the lock, and a d4 to keep it quiet so the guard at the foot of the stairs hears nothing. The lock's d6 rolls a 3, and her 5 opens it. Her d4 lands on 4, a top face, so she gets 1 Aura back, and it beats the guard's 3. He never looks up.
+Vesk's at the study door with her Locks, 5 steps. On her own she can split once: a d6 for the lock, and a d4 to keep it quiet so the guard at the foot of the stairs hears nothing. The lock's d6 rolls a 3, and her 5 opens it. Her d4 lands on 4, a top face, so she gets 1 Aura back, and it beats the guard's 3. He never looks up. Both her dice won, but it's one action, so her Confidence goes up one size.
 :::
 
 ### Area: one die for how far {#s-area}
@@ -170,9 +172,9 @@ Threats use the same shapes for their areas. **Sweep** weapons go at everyone wi
 **A ward or a blessing** goes on one friend. Nothing pushes back, so you don't roll it, and the die you built becomes the condition's die on them. Split it, and the second die can put it on another friend you can touch. There's more in [Wards and blessings](#s-wards).
 
 :::example[An area at the table]
-The guardroom door opens on five men. Ash is an Elementalist, and her Scare them off is her first Title, *throw fire*, *make a threat stick* and her ember stone, with the action, 5 steps. She splits it into a d6 to scare them and a d4 for the area, and makes the d4 a burst, which doesn't cost her anything. It rolls 3, three squares out, and they're all in it. Her d6 rolls 5, once, and each man rolls his own d6 defence. Three come in under, and they run for it.
+The guardroom door opens on five men. Ash is an Elementalist, and her Scare them off is her first Title, *throw fire*, *make a threat stick* and her ember stone, with the action, 5 steps. She splits it into a d6 to scare them and a d4 for the area, and makes the d4 a burst, which doesn't cost her anything. It rolls 3, three squares out, and they're all in it. Her d6 rolls 5, once, and each man rolls his own d6 defence. Three come in under, and they run for it, so her Confidence goes up a size.
 
-With the dead coming up through the crypt floor, Isolde draws a ward. Her Ward is 3 steps, and she brings in *draw a ward the dead can't cross* for 1 Aura, because it isn't on her Ward (most of her wards aren't against the dead). That's 4 steps, and she splits it into two d4s. Nothing pushes back, so nothing's rolled. Bram's holding the stair, so the first d4 makes him *Warded d4*, and Vesk's right beside her, so the second makes her *Warded d4* too.
+With the dead coming up through the crypt floor, Isolde draws a ward. Her Ward is 3 steps, and she brings in *draw a ward the dead can't cross* for 1 Aura, because it isn't on her Ward (most of her wards aren't against the dead). That's 4 steps, and she splits it into two d4s. Nothing pushes back, so nothing's rolled, and her Confidence doesn't move. Bram's holding the stair, so the first d4 makes him *Warded d4*, and Vesk's right beside her, so the second makes her *Warded d4* too.
 :::
 
 ## Going Beyond {#s-going-beyond}
@@ -200,9 +202,9 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 
 **Spend 1 Aura to:**
 
--   **Bring something in** that isn't on your set action, as a step on your roll: one of your own permissions, items or traits, the ground (a chandelier, a crowd, the rain), a threat's tag you know about (his pride, her greed), a Catch turned your way for a moment, or a friend's permission through a thread you share (see [Bonds and threads](#s-bonds)).
+-   **Bring something in** that isn't on your set action, as a step on your roll: one of your own permissions, items or traits, the ground (a chandelier, a crowd, the rain), a threat's tag you know about (his pride, her greed), a Catch turned your way for a moment, or a friend's permission through a bond thread you share (see [Bonds and threads](#s-bonds)).
 -   **Win a tie** when you're the one acting.
--   **Intercept** for a friend within your stride: take any of the dice aimed at them, and they come at you instead (see [Intercept](#s-intercept)). A [Guardian](#a-guardian) does it for free.
+-   **Intercept** for a friend within your stride: take any of the blows aimed at them, and they come at you instead (see [Intercept](#s-intercept)). A [Guardian](#a-guardian) does it for free. Fear, lies and pressure are inside your friend's head, so nobody can step in front of those.
 -   **Use your archetype.** On most archetypes, 1 Aura adds +2 to one die on its mechanic. Spend it after you roll, once you know you need it. A few get something else for their Aura (see [The Archetypes](#s-how-archetypes)).
 
 1 Aura also keeps a Catch quiet this time, and pays for a quick heal (see [Healing](#s-healing)).
@@ -211,7 +213,7 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 
 ### Getting it back {#getting-it-back}
 
--   **Let a Catch bite**, as often as you like, and take 1 Aura each time. A big bite pays 1 Resolve instead. No Catch? Bring real trouble on yourself anyway and take 1 Aura. There's more in [Catches and Trouble](#s-trouble).
+-   **Let a Catch bite**, as often as you like, and take 1 Aura each time. A hostile thread bites the same way. A big bite pays 1 Resolve instead. No Catch? Bring real trouble on yourself anyway and take 1 Aura. There's more in [Catches and Trouble](#s-trouble).
 -   **Traits that say so**, like Ash's Killer Instinct (1 Aura when she takes a threat down) and Battle Focus (3 Aura, once a scene).
 -   **A great setup that doesn't land.** You planned it, it was cool, and the dice said no. The GM can give you 1 Aura for it.
 -   **Boons** like *Beat a threat* and *In your element* (see [Boons](#s-boons)).
@@ -234,17 +236,17 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 -   **Roll again.** Reroll a roll you just failed, either all your dice or just one, your choice. The threat's dice stay where they landed. It works in downtime too, where there's no Aura.
 -   **Go beyond** what a permission normally does (see [Going Beyond](#s-going-beyond)).
 -   **Use your archetype's Resolve spend.** Every archetype has one, something big, like a Guardian shrugging off a hit that got through to him (see [1 Resolve on your mechanic](#resolve-on-your-mechanic)).
--   **Hold your ground** against fear, lies or pressure that gets through, so you don't drop a size of Confidence or take a Hurt for it.
--   **Go at a threat when you're shaken**, with your Confidence down on a d2. It's 1 Resolve every time you do.
+-   **Hold your ground** against fear, lies or pressure that gets through, so you don't drop a size of Confidence. At d2, it saves you the Hurt instead.
+-   **Act when you're shaken**, with your Confidence down on a d2. It's 1 Resolve every time you take an action at what the scene's about.
 
 How Confidence swings during a scene, and what being shaken means, is in [Confidence](#s-confidence).
 
 **Get it back:**
 
 -   **1 at the end of every scene**, and all of it after downtime.
--   **1 for a big bite**, when your Catch changes the scene or costs you something you wanted. That's instead of the usual 1 Aura, and it's your call when (see [Catches and Trouble](#s-trouble)).
+-   **1 for a big bite**, when your Catch or a hostile thread changes the scene or costs you something you wanted. That's instead of the usual 1 Aura, and it's your call when (see [Catches and Trouble](#s-trouble)).
 -   **1 from the GM** for great roleplay, like facing your fear or keeping a promise to yourself.
--   **1 when you strain a thread**: lean on someone in the story, like calling in a favour or using their name, and the thread's strained until you mend it (see [Bonds and threads](#s-bonds)).
+-   **1 when you strain a bond thread**: lean on someone in the story, like calling in a favour or using their name, and the thread's strained until you mend it (see [Bonds and threads](#s-bonds)).
 
 :::example[Resolve at the table]
 **Going beyond:** In the Vane crypt, Isolde calls up the mason who built the vault, a hundred years dead. That's going beyond her *speak with the recently dead*, so it's 1 Resolve. She's got 2, so she's down to 1, and she'll get it back when the scene ends.
@@ -260,10 +262,11 @@ Trouble's yours to bring. Letting your Catches bite is up to you, and the GM doe
 
 -   **Let it bite**, as often as you like. Say how it causes trouble, the GM runs with it, and you take 1 Aura. Every bite has to bring real trouble.
 -   **A big bite** changes the scene or costs you something you wanted. Take **1 Resolve** for it instead of the Aura. It's your call when.
+-   **A hostile thread** bites the same way as a Catch, for 1 Aura, or 1 Resolve for a big bite (see [Bonds and threads](#s-bonds)).
 -   **No Catch?** Bring real trouble on yourself in the story anyway, and take 1 Aura.
 
 :::example[Trouble at the table]
-**No Catch:** Vesk owes the fence, and it's one of her threads. Halfway across a Guild warehouse roof, her player lets the debt bite: the fence's boy is under the drainpipe, and he wants paying tonight. The GM runs with it, and now there's a debt collector shouting under the watchman's window. Vesk takes 1 Aura.
+**A hostile thread:** Vesk owes the fence, and it's a hostile thread on her sheet. Halfway across a Guild warehouse roof, her player lets it bite: the fence's boy is under the drainpipe, and he wants paying tonight. The GM runs with it, and now there's a debt collector shouting under the watchman's window. Vesk takes 1 Aura, the same as she would for a Catch.
 
 **A big bite:** Wren's down to 1 Resolve after a reroll at the gate, and her attuned longbow has the Catch *Wanted*. At the Duke's hunt, her player lets it bite in a big way: the huntmaster knows the bow on sight, and the crew's thrown off the hunt they spent a week getting into. That costs them something they wanted, so Wren takes 1 Resolve instead of the Aura, and she's back to 2.
 :::

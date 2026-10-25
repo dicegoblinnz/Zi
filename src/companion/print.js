@@ -3,6 +3,8 @@
 // and handed over as a PDF to print or keep. Its fields stay fillable. pdf-lib
 // only loads when someone prints, and the service worker keeps it and the
 // blank sheet on the phone, so it works offline.
+import { threadState } from "./threads.js";
+
 const SHEET = "/sheets/zidara-character-sheet.pdf";
 const FIXED = ["defend", "fight", "move", "sneak", "study", "talk"];
 const SCARS = 5;
@@ -137,9 +139,10 @@ export async function fillSheet(ch, c, s) {
 
   // The paper sheet has nowhere else for trouble, clothes, a fourth trait, a
   // seventh Title, a third attuned thing, a seventh bond or a fifth thread.
-  const noteOf = (t) => (t.note ? t.note.replace(/^(.+’s)(?=,|$)/, "$1 words").replace(/^debt$/, "a debt") : "");
-  const threadOf = (t) => (noteOf(t) ? `${t.text} (${noteOf(t)})` : t.text);
-  const strain = (p, t) => ({ strained: " (strained)", snapped: " (snapped)" })[s.threads[`${p.person}|${t.text}`]] ?? "";
+  // On its own line a thread says whose words they are, and its kind is ringed.
+  const threadOf = (t) => (t.whose ? `${t.text} (${t.whose} words)` : t.text);
+  const strain = (p, t) => ({ strained: " (strained)", snapped: " (snapped)" })[threadState(s, p.person, t)] ?? "";
+  const kindOf = (t) => (t.kind === "hostile" ? "hostile" : "bond");
   // At its smallest size it still might not fit, and then print says so.
   const roomy = put("notes", [
     c.trouble.length ? `Trouble that follows ${them}: ${c.trouble.join(", ")}.` : "",
@@ -148,8 +151,8 @@ export async function fillSheet(ch, c, s) {
     ...c.titles.slice(6).map((t, i) => `Title ${NUMERALS[i + 6] ?? i + 7}, ${t.name}${t.archetype ? ` (${t.archetype})` : ""}: ${t.permissions.map((p) => p.text).join(", ") || "no permissions yet"}`),
     ...c.attuned.slice(0, 2).filter((a) => a.burden).map((a) => `${a.name}’s Burden: ${a.burden}`),
     ...c.attuned.slice(2).map((a) => `Attuned, ${a.props ? `${a.name} (${a.props})` : a.name}, ${a.stage || "Awakened"}${a.catch ? `, its Catch ${a.catch}` : ""}${a.burden ? `, its Burden ${a.burden}` : ""}: ${a.permissions.map((p) => p.text).join(", ")}`),
-    ...c.threads.slice(0, 6).flatMap((p) => p.threads.slice(4).map((t) => `A thread with ${p.person}: ${threadOf(t)}${strain(p, t)}`)),
-    ...c.threads.slice(6).flatMap((p) => p.threads.map((t) => `A thread with ${p.person}: ${threadOf(t)}${strain(p, t)}`)),
+    ...c.threads.slice(0, 6).flatMap((p) => p.threads.slice(4).map((t) => `A ${kindOf(t)} thread with ${p.person}: ${threadOf(t)}${strain(p, t)}`)),
+    ...c.threads.slice(6).flatMap((p) => p.threads.map((t) => `A ${kindOf(t)} thread with ${p.person}: ${threadOf(t)}${strain(p, t)}`)),
     s.notes,
   ].filter(Boolean).join("\n"));
 
@@ -172,8 +175,9 @@ export async function fillSheet(ch, c, s) {
     put(at, p.person);
     p.threads.slice(0, 4).forEach((t, j) => {
       put(`${at}_thread_${j + 1}`, threadOf(t));
-      const st = s.threads[`${p.person}|${t.text}`];
-      if (st) tick(`${at}_thread_${j + 1}_strained`);
+      ring(`${at}_thread_${j + 1}_kind`, kindOf(t));
+      const st = threadState(s, p.person, t);
+      if (st !== "whole") tick(`${at}_thread_${j + 1}_strained`);
       if (st === "snapped") tick(`${at}_thread_${j + 1}_snapped`);
     });
   });

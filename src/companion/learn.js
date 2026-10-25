@@ -1,10 +1,11 @@
 // The learning round, at /characters/?learn. The brute swings his club at
 // Isolde, and a new player answers it with Wren and Bram, the way it goes in
-// Answering a Telegraph (#s-answering). Isolde's Defend and wound die and
-// Wren's and Bram's Fight come off their sheets, so the round follows the
-// rules. The club is the book's own d8. Nothing in it is saved.
+// Answering a Telegraph (#s-answering). Isolde's Defend, wound die and
+// Confidence and Wren's and Bram's Fight and Confidence come off their sheets,
+// so the round follows the rules. The club is the book's own d8. Nothing in
+// it is saved.
 
-import { sizeUp, stepsToDice } from "./dice.js";
+import { sizeDown, sizeUp, stepsToDice } from "./dice.js";
 
 const CLUB = 8;
 const STEPS = ["The GM telegraphs", "Answer it", "Roll", "That’s a round"];
@@ -131,6 +132,7 @@ export function makeLearn(k) {
     const from = isolde.numbers.wound ?? 2;
     const to = sizeUp(from);
     const hurt = `<div class="ln-hurt"><span class="k">Isolde’s wound die</span>${gauge(to, from, L.fresh)}${hex(`d${to}`, "on")}</div>`;
+    const moved = out === "tie" ? "" : swings(out);
     const words = {
       beat: `<h3 id="ln-out" tabindex="-1">It never lands</h3><p>Your ${b} beats the brute’s ${L.opp}, so the club never comes down. Isolde’s fine, and Wren and Bram have both used their action for the round.</p>`,
       won: `<h3 id="ln-out" tabindex="-1">It never lands</h3><p>You pay 1 Aura, so the tie’s yours, and the club never comes down. Isolde’s fine, and Wren and Bram have both used their action for the round.</p>`,
@@ -141,8 +143,23 @@ export function makeLearn(k) {
     return `<div class="ln-roll"${spin ? ' data-act="learn" data-do="skip"' : ""}>
       <div class="cc-them"><span class="k">The brute’s d${CLUB}</span>${die(CLUB, L.opp, "them")}</div>
       <ul class="cc-res">${rows}</ul></div>
-    ${spin ? '<p class="cc-small">Tap the dice to skip.</p>' : `<div class="ln-out">${words[out]}${topLine}</div>`}
+    ${spin ? '<p class="cc-small">Tap the dice to skip.</p>' : `<div class="ln-out">${words[out]}${moved}${topLine}</div>`}
     ${spin || out === "tie" ? "" : `<div class="cc-row ln-foot">${btn("next", "Next", "primary")}</div>`}`;
+  }
+
+  // Confidence moves with the roll for everyone who put an action in: up a
+  // size when a die beat it, down a size when every die missed. A Hurt that
+  // puts Isolde's wound die up takes hers down a size too. Each one starts
+  // where their sheet says.
+  function swings(out) {
+    const won = out === "beat" || out === "won";
+    const start = (c) => c.numbers.confidence ?? 6;
+    const move = (c, d) => (d > 0 ? sizeUp(start(c)) : d < 0 ? sizeDown(start(c)) : start(c));
+    const row = (c, d) => `<li class="${d > 0 ? "is-up" : d < 0 ? "is-down" : "is-still"}"><b>${esc(c.name)}</b> ${hex(`d${start(c)}`, d ? "" : "on")}${d ? `<span class="cc-swing-to" aria-hidden="true">→</span><span class="sr-only">to</span>${hex(`d${move(c, d)}`, "on")}` : ""}</li>`;
+    const say = won
+      ? `<p>Confidence moves with the roll, for everyone who put an action in. One of your dice beat the club, so Wren and Bram both go up a size. Isolde didn’t act, and nothing landed on her, so hers stays where it is.</p>`
+      : `<p>Confidence moves with the roll, for everyone who put an action in. Every die missed, so Wren and Bram both drop a size. The Hurt put Isolde’s wound die up, so hers drops a size as well.</p>`;
+    return `${say}<div class="cc-swing ln-swing"><p class="cc-swing-head"><span class="k">Confidence</span></p><ul>${row(wren, won ? 1 : -1)}${row(bram, won ? 1 : -1)}${row(isolde, won ? 0 : -1)}</ul></div>${rule("s-confidence")}`;
   }
 
   function stepRound() {

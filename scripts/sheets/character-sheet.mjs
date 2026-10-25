@@ -6,6 +6,7 @@
 
 const DICE = ["d2", "d4", "d6", "d8", "d10", "d12"];
 const STAGES = ["Awakened", "Tempered", "Perfected"];
+const KINDS = ["bond", "hostile"];
 // Five Scars, each one a size more on the wound die's floor, and the fifth makes it d12.
 const SCARS = ["d4", "d6", "d8", "d10", "d12"];
 const range = (n) => Array.from({ length: n }, (_, i) => i + 1);
@@ -62,8 +63,8 @@ function front(stamp) {
             <div class="nums"><div class="stars">${range(7).map((i) => `<span class="star" data-cb="resolve_${i}" data-look="star"></span>`).join("")}</div><span class="lab">max</span>${box("resolve_max")}</div></div>
         </div>
         <div class="statrow one">
-          <div class="stat"><h3>Confidence</h3><p class="hint">d6 at the start of every scene, a size up in clothes that fit it · back to d6 when it ends</p>
-            <div class="row" style="margin-top:1.4mm">${dice("confidence", DICE)}<p class="hint" style="flex:1">d2 is shaken · d12 is fired up</p></div></div>
+          <div class="stat"><h3>Confidence</h3><p class="hint">d6 at the start of every scene, a size up in clothes that fit it · up a size when a die wins or you stop a telegraph · down a size when your wound die goes up or every die misses</p>
+            <div class="row" style="margin-top:1.4mm">${dice("confidence", DICE)}<p class="hint" style="flex:1">d2 is shaken · d12 is fired up · back to d6 when the scene ends</p></div></div>
         </div>
       </div>
       <div class="card">
@@ -143,10 +144,12 @@ function back(stamp) {
       <div class="pair"><div><span class="lab">Catch</span>${w(`attune_${a}_catch`)}</div><div><span class="lab">Burden</span>${w(`attune_${a}_burden`)}</div></div>
       <div class="perms">${lines(`attune_${a}_permission`, 6)}</div>
     </div>`;
+  // Each thread: its truth, bond or hostile to ring, and a box for strained
+  // and one for snapped.
   const bondCard = (b) => `
     <div class="card bcard">
       <div class="top"><span class="lab">Bond</span>${w(`bond_${b}`)}</div>
-      ${range(4).map((t) => `<div class="thread">${w(`bond_${b}_thread_${t}`, { size: 8 })}${tick(`bond_${b}_thread_${t}_strained`, "check")}${tick(`bond_${b}_thread_${t}_snapped`, "cross")}</div>`).join("")}
+      ${range(4).map((t) => `<div class="thread">${w(`bond_${b}_thread_${t}`, { size: 8 })}<span class="kind">${KINDS.map((k) => `<span class="word" data-radio="bond_${b}_thread_${t}_kind" data-value="${k}">${k}</span>`).join("")}</span>${tick(`bond_${b}_thread_${t}_strained`, "check")}${tick(`bond_${b}_thread_${t}_snapped`, "cross")}</div>`).join("")}
     </div>`;
   return `
 <section class="page back">
@@ -163,13 +166,13 @@ function back(stamp) {
 
   <section>
     <h2 class="sec">Attunement</h2>
-    <p class="hint" style="margin:-0.6mm 0 1.6mm">2 slots, on top of what you carry · ring its stage · a Summoner’s summoning attunement writes its souls and their dice on the lines</p>
+    <p class="hint" style="margin:-0.6mm 0 1.6mm">one thing to start, and more later in downtime, on top of what you carry · ring its stage · a Summoner’s summoning attunement writes its souls and their dice on the lines</p>
     <div class="grid2">${range(2).map(attuneCard).join("")}</div>
   </section>
 
   <section>
     <h2 class="sec">Bonds</h2>
-    <p class="hint" style="margin:-0.6mm 0 1.6mm">A bond’s usually a person, but it can be a faction, a place or a cause, and each thread is one truth you share · tick the first box when it’s strained, and the second when it snaps</p>
+    <p class="hint" style="margin:-0.6mm 0 1.6mm">A bond’s usually a person, but it can be a faction, a place or a cause · ring each thread bond or hostile · tick the first box when it’s strained, and the second when it snaps</p>
     <div class="grid2">${range(6).map(bondCard).join("")}</div>
   </section>
 

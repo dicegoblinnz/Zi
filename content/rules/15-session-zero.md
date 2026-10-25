@@ -6,7 +6,7 @@ order: 15
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 Before you touch a die, sit down together and have one conversation.
@@ -42,9 +42,9 @@ The GM reads [the promises](#s-gm-promises) from *Running the Game* out loud. Th
 
 ## 5. The Characters and Their Threads {#the-character-connections}
 
-Make your characters at the table, so everyone hears everyone else's archetypes and Titles as they go down. You each pick two [archetypes](#archetypes), name each one with a Title and give it three permissions, then pick two traits and fill in your set actions, what you carry and your two attuned things. Each Title gives you 1 Resolve, so that's 2 to start. [Building Your Character](#building-character) takes you through it a step at a time.
+Make your characters at the table, so everyone hears everyone else's archetypes and Titles as they go down. You each pick two [archetypes](#archetypes), name each one with a Title and give it three permissions, then pick two traits and fill in your set actions, what you carry and the one thing you attune. Each Title gives you 1 Resolve, so that's 2 to start. [Building Your Character](#building-character) takes you through it a step at a time.
 
-Then go around the table with the [ten crew questions](#s-connect). Everyone answers at least two, naming another character each time, and a good answer can become a [thread](#s-bonds). You've each got three to write, spread across your bonds however you like, and if you write one as a debt, you'll get a fourth. A thread with someone in the crew goes on both your sheets and counts for both of you, so agree on it together before it's written down. Dorrie and Isolde settle on *I keep her secrets at court. She keeps mine.* It goes on both their sheets, and if either of them strains it, it's strained for both.
+Then go around the table with the [ten crew questions](#s-connect). Everyone answers at least two, naming another character each time, and the answers are where your [threads](#s-bonds) come from. Turn two of them into your bond threads. An answer that's gone bad makes a good hostile thread, and if you write one, with anyone, you've got room for a third bond thread. A thread with someone in the crew goes on both your sheets and counts for both of you, so agree on it together before it's written down. Dorrie and Isolde settle on *I keep her secrets at court. She keeps mine.* It's Dorrie's bond thread, it goes on both their sheets, and if either of them strains it, it's strained for both.
 
 If anyone wants to play tonight without building, they can take one of the [ready-made characters](#s-pregens).
 

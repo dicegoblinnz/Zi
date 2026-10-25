@@ -6,7 +6,7 @@ order: 14
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-10-26
 ---
 :::quote
 Some players need the table set up a bit differently, and it's usually easy to sort.
@@ -75,7 +75,7 @@ The book's in plain words, and every rule term's in the [glossary](#appendix-glo
 -   **Use your own words.** You don't need the game's terms. Say what your character does, and the table turns it into steps: "I'm burning that arrow out of the air before it gets to Isolde" is an answer, and the GM says so.
 
 :::example[Wren, out loud]
-"I'm the hunter who's never lost a trail, so I can follow any trail, move through the wild unseen and know a beast's habits. I'm an outrider from the border war too: I can scout ahead of an army, ride hard over rough country and read the land for an ambush. And I can shoot a longbow, and with this one I can hit anything I can see. In this cloak I can vanish into trees and shadow."
+"I'm the hunter who's never lost a trail, so I can follow any trail, move through the wild unseen and know a beast's habits. I'm an outrider from the border war too: I can scout ahead of an army, ride hard over rough country and read the land for an ambush. And I can shoot a longbow, and with this one I can hit anything I can see. I've got a good hooded cloak too."
 :::
 
 ## Focus, Memory and Energy {#s-access-focus}
