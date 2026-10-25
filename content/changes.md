@@ -9,7 +9,7 @@ This is the record of every rules change since the 2 Oct 2026 book, newest first
 
 Mo's answers after reading the 24 Oct change.
 
-**Confidence swings with every roll now.** It still starts each scene on d6. It goes up a size for every telegraph your Defend or Confidence stops, and for every action where one of your dice wins. It goes down a size every time your wound die steps up (not when your armour or kit takes the blow), for every action where all your dice miss, and when fear, lies or pressure get through, unless 1 Resolve holds your ground. At d2 you're shaken, and you can't act at what the scene's about without 1 Resolve, so your action goes on pulling yourself together, back up to d4. That replaces Confidence going up only when you stopped all of it or took a threat down, and "bury it" is gone from what fear costs you. See [Confidence](#s-confidence).
+**Confidence swings with every roll now.** It still starts each scene on d6. It goes up a size for every telegraph your Defend or Confidence stops, and for every action where one of your dice wins. It goes down a size every time your wound die steps up (not when your armour or kit takes the blow), for every action where all your dice miss, and when fear, lies or pressure get through, unless 1 Resolve holds your ground. At d2 you're shaken, and you can't act at what the scene's about without 1 Resolve, so your action goes on pulling yourself together, back up to d4. That replaces Confidence going up only when you stopped all of it or took a threat down, and "bury it" is gone from what fear costs you. On d2, fear that gets through is a Hurt or 1 Resolve, and anything else leaves you on d2. See [Confidence](#s-confidence) and [When fear gets through](#s-fear-gets-through).
 
 **Defend doubles your Defend, and nothing else.** Defending counts every line on your Defend twice, and your Confidence rolls as it is. It used to double your Confidence too. See [Defend](#s-defend).
 
@@ -27,7 +27,8 @@ Mo's answers after reading the 24 Oct change.
 -   **A spare resource is an extra resource now:** a resource that isn't paying for an asset. See [Resources and Assets](#s-wealth).
 -   **A new mini faction sits out the downtime it's made,** then acts on its own: at first it mostly does what its parent wants, then it goes its own way. See [Mini Factions](#s-mini-factions).
 -   **Factions' threads are bond and hostile threads too.** A bond thread's a step, a hostile one's a vulnerability. See [Bonds](#s-faction-bonds).
--   **There's a list of assets to borrow from,** for a faction or the crew. See [Appendix B](#faction-strength).
+-   **There's a list of assets to borrow from,** for a faction or the crew. The people who turn up when a faction calls add Power, and the rest do one thing when the story fits. See [Appendix B](#faction-strength).
+-   ***Friends at Court* and *Influential* add a step** to the crew's rolls they fit. They used to give the crew a free move on a faction every downtime. See [Crew Assets](#s-crew-tags).
 
 ## 24 Oct 2026: Defend, wounds, vulnerabilities and factions {#c-2026-10-24}
 
