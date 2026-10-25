@@ -109,7 +109,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Question](#s-question)** | In an investigation, what the crew wants to know, written as a stake. Each tag on it is something that's hiding the answer. |
 | **[Quick heal](#s-healing)** | Anyone's: 1 Aura brings one person's wound die down a size, no roll. It still takes your action. |
 | **[Reputation](#s-party-faction)** | What the city says about the crew, in one line. A step on any crew roll it fits. One for every Goal done. |
-| **[Resolve](#s-resolve)** | Your character pushing themselves, so it pays for the big stuff: an extra action, a reroll, going beyond, holding your ground, going at a threat when you're shaken, or your archetype's Resolve spend. As much as you've got Titles. 1 back at the end of every scene, and all of it after downtime. |
+| **[Resolve](#s-resolve)** | Your character pushing themselves, so it pays for the big stuff: an extra action, a reroll, going beyond, holding your ground, acting at what the scene's about when you're shaken, or your archetype's Resolve spend. As much as you've got Titles. 1 back at the end of every scene, and all of it after downtime. |
 | **[Resolve spend](#resolve-on-your-mechanic)** | Something big each archetype does for 1 Resolve, like the Guardian shrugging off a hit. |
 | **[Resource](#s-wealth)** | A permission on a faction's card for where its money comes from, like *Silver Mine*. Each one pays for one asset every downtime, and an extra one, paying for nothing, hires another faction, buys something or goes in a trade. |
 | **[Rest](#s-blaze)** | At the end of every scene: roll the Confidence you finished on against your wound die, and a win brings it down a size. |
@@ -123,7 +123,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Shaken](#s-confidence)** | Confidence at d2. You can't take an action at what the scene's about unless you spend 1 Resolve each time, and otherwise your action goes on pulling yourself together, back up to d4. The condition *Shaken* is one step less on your Confidence, and spending it drops your Confidence a size ([Conditions](#s-conditions)). |
 | **[Site](#s-site)** | Somewhere the crew goes into and has to find its way through. One scene, with an alarm for its clock. |
 | **[Size](#s-building-die)** | One die size. Stepping down one size is a d8 becoming a d6. |
-| **[Slot](#downtime)** | A unit of downtime. Two each, and two for the crew. |
+| **[Slot](#downtime)** | A unit of downtime. You get two, and the crew takes one action, which a slot of yours can go into. |
 | **[Snap](#s-bonds)** | What a thread does when you strain it again before it's mended. You still take the Resolve, but cross the thread out. When the last one goes, so does the bond. |
 | **[Soul](#s-summoning)** | A fallen creature a Summoner's caught with their Summon dice and kept in their summoning attunement. It comes out as a summon, with its own die. |
 | **[Split](#s-splitting)** | Turning your steps into more, smaller dice. One for every action in the roll, and one more past 6 steps. |

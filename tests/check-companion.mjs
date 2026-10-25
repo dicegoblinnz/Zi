@@ -588,7 +588,7 @@ async function play(page, crewId, name) {
 // never below d4. Bram's first Hurt a scene doesn't move his wound die
 // (Unyielding), and against three goblins his Defend counts twice: 7 steps,
 // split into two d6s and a d2, and his Guardian +2 stops the last one.
-// Dorrie Defends against fear, her d6 Confidence counting twice, and a hit
+// Dorrie meets fear with her d6 Confidence as it is (no Defend against fear), and a hit
 // while she's Exposed is two Hurts. Characters saved with the old Hurt track
 // and Armour open clean.
 {

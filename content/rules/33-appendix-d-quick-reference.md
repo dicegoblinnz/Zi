@@ -65,7 +65,7 @@ updated: 2026-10-26
 ## Resolve {#s-qr-resolve}
 
 -   As much as you've got Titles, so 2 to start, and you can't hold more. The Resolve Boon makes it one more, and the Burden one fewer.
--   **Spend 1:** an extra action this round · reroll a roll you just failed · go beyond what a permission normally does · hold your ground when fear, lies or pressure get through · go at a threat when you're shaken · your archetype's Resolve spend · in downtime, roll your own dice again.
+-   **Spend 1:** an extra action this round · reroll a roll you just failed · go beyond what a permission normally does · hold your ground when fear, lies or pressure get through · act at what the scene's about when you're shaken · your archetype's Resolve spend · in downtime, roll your own dice again.
 -   **Get 1 back:** at the end of every scene · when a Catch bites in a big way, changing the scene or costing you something you wanted (instead of the Aura, and it's your call when) · when the GM rewards great roleplay, like facing your fear · when you strain a thread.
 -   All of it comes back after downtime.
 

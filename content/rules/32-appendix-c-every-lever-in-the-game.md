@@ -56,7 +56,7 @@ Where a lever comes from a trait, a condition or an item, treat those as example
 | **Resolve** | As much as you've got Titles, so 2 to start, and you can't hold more. Every Title you earn brings 1 more. The Resolve Boon is +1 to your maximum, and the Burden −1. |
 | **Gain 1 Resolve** | The end of every scene. A Catch or a hostile thread that bites in a big way, one that changes the scene or costs you something you wanted, instead of the Aura (your call when). The GM, for great roleplay, like facing your fear or keeping a promise to yourself. Straining a bond thread. |
 | **All your Resolve back** | After downtime. |
-| **Spend 1 Resolve** | An extra action this round. Reroll a roll you just failed. Go beyond what a permission normally does. Hold your ground when fear, lies or pressure get through. Go at a threat when you're shaken. Your archetype's Resolve spend. In downtime, roll your own dice again. |
+| **Spend 1 Resolve** | An extra action this round. Reroll a roll you just failed. Go beyond what a permission normally does. Hold your ground when fear, lies or pressure get through. Act at what the scene's about when you're shaken. Your archetype's Resolve spend. In downtime, roll your own dice again. |
 
 ## Threads {#s-levers-threads}
 
