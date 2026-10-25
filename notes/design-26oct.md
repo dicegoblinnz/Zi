@@ -6,6 +6,8 @@ What Mo wants, under all of it: the site easy and quick on a phone at the table,
 
 ## Piece 1: the kit, Struck, with real die shapes
 
+**Done 26 Oct**, with the character below: Struck only, every die its real shape and growing into the next, the wound die and Scars in place of the Armour die and the Hurt track, Resolve a cut gem, and `/kit/` on the 26 Oct rules.
+
 **Picked:** real die shapes in the Struck look, so a die changes shape as it grows. Mo likes the kit at https://app-zi.storyforgenz.workers.dev/kit/.
 
 - Make a branch from `main` and merge `app` into it. Strip Lit from `kit.css` (its rules start `[data-kit="lit"]`) and drop `data-kit`. Keep the Paper theme's tokens for the sheets.
@@ -33,6 +35,8 @@ The geometry, from the prototype Claude drew on 26 Oct (a 100 by 100 viewBox, ev
 ## Piece 2: the character and the builder
 
 The play screen and the sheet first, then the builder, both for a phone held in one hand.
+
+**The character's done (26 Oct).** At 390 by 844 the first set action starts 291px down (it was 478) and the Sheet tab's 1.4 screens with its folds shut (it was 7.4, and 8.2 after the 24 Oct rules). The builder's next.
 
 - **The character:** full screen without the site's header, the crest at the top, the trackers as kit pieces (Confidence and the wound die change shape as they move), the set actions as dice you can see, the roll as a moment (the dice front and centre, the counting folded behind them), and a sheet that reads at a glance before its detail. Measured on 24 Oct at 390 by 844: the first set action starts 478px down and the Sheet tab runs 7.4 screens.
 - **The builder:** one step to a screen with Back and Next always in reach, the step's own words from the book short and its help behind a tap, archetypes as sigil cards with what they play like, Title ideas as cards, permissions tapped onto set actions with each die growing as lines go on, items and the one attuned thing picked from cards, and threads written from the Connect answers as bond or hostile. Measured on 26 Oct at 390 wide: the first choice is about 1,430px down, and the step numbers wrap and leave the 8 on a line of its own.

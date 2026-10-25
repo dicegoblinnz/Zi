@@ -6,6 +6,8 @@
 // are saved on the phone, and the service worker keeps this page offline.
 import Base from "../../layouts/Base.astro";
 import book from "../../generated/book.json";
+import "@fontsource/alegreya-sans/800.css";
+import "../../styles/kit.css";
 import "../../styles/companion.css";
 
 const data = { crew: book.crew, conditions: book.companion.conditions, links: book.companion.links, build: book.companion.build, rules: book.companion.rules };
@@ -14,8 +16,11 @@ const json = JSON.stringify(data).replace(/</g, "\\u003c");
 <Base title="Characters" current="characters" description="Build your own Zi’Dara character or play one of the crew from your phone, with the counting done and every roll a tap away.">
   <script is:inline slot="head">
     // A link straight to a sheet or the learning round hides the crew list until
-    // it's drawn.
-    try { if (/[?&](c=|build\b|learn\b)/.test(location.search)) document.documentElement.classList.add("cc-open"); } catch (e) {}
+    // it's drawn, and a character opens full screen, without the site's bar.
+    try {
+      if (/[?&](c=|build\b|learn\b)/.test(location.search)) document.documentElement.classList.add("cc-open");
+      if (/[?&]c=/.test(location.search)) document.documentElement.classList.add("cc-full");
+    } catch (e) {}
   </script>
   <main id="main" class="companion frame">
     <div id="app" class="cc">

@@ -4,7 +4,7 @@ The design pass from `notes/design-review.md`, started 24 Oct 2026, before the a
 
 ## Step 1: the kit
 
-Built 24 Oct on the `design` branch, made from `app`, and moved onto `app` the same day because Cloudflare wouldn't build the `zi` Worker's Preview for a new `design` branch (the `zidara` Worker built it fine, so it's something in `zi`'s build settings). The Preview is https://app-zi.storyforgenz.workers.dev/kit/, not linked from anywhere, kept out of search and out of the offline cache. Waiting for Mo to pick Lit or Struck. The `design` branch is left behind at the kit's first version (this session couldn't delete it), so work on `app`.
+Built 24 Oct on the `design` branch, made from `app`, and moved onto `app` the same day because Cloudflare wouldn't build the `zi` Worker's Preview for a new `design` branch (the `zidara` Worker built it fine, so it's something in `zi`'s build settings). The Preview is https://app-zi.storyforgenz.workers.dev/kit/, not linked from anywhere, kept out of search and out of the offline cache. Mo picked Struck on 26 Oct, with real die shapes, and the kit and the character went live together from the `website` branch (`notes/design-26oct.md` has the plan now). The `design` branch is left behind at the kit's first version (this session couldn't delete it).
 
 - `src/kit/kit.js` draws every piece as HTML, so Astro can draw it at build time and the companion on the phone: dice, steps, Aura, Resolve, the Hurt track, conditions, tags, sigils, crests and the telegraph card. `src/kit/sigils.js` has a sigil for every archetype, and the kit page stops the build when an archetype in `03a-the-archetypes.md` hasn't got one. `src/styles/kit.css` is both looks, picked by `data-kit` on the page (`lit` or `struck`), plus a Paper theme that shows what prints in one ink.
 - `src/pages/kit.astro` reads the crew off the chapter, the way the companion does, so every number on it is the book's.
@@ -29,7 +29,7 @@ Strip the other look from `kit.css` (its rules all start `[data-kit="…"]`), dr
 
 ## Step 2: the character
 
-Next, in a fresh chat once the look's picked. Full screen without the site's header, the crest at the top, set actions as dice you can see grow, the roll as a moment (the dice front and centre, the counting folded behind them), and a Sheet tab that reads at a glance before it goes into detail. Measured on 24 Oct: on a 390 by 844 phone the first set action starts 478px down, under the site's header (105px), the name and the trackers, and the Sheet tab runs 7.4 screens.
+Done 26 Oct (`notes/design-26oct.md`, Piece 2). What was asked: Full screen without the site's header, the crest at the top, set actions as dice you can see grow, the roll as a moment (the dice front and centre, the counting folded behind them), and a Sheet tab that reads at a glance before it goes into detail. Measured on 24 Oct: on a 390 by 844 phone the first set action starts 478px down, under the site's header (105px), the name and the trackers, and the Sheet tab runs 7.4 screens.
 
 ## Steps 3 and 4
 
@@ -38,4 +38,4 @@ The rules (the objects drawn inline, terms on tap from the glossary offline, exa
 ## Open
 
 - Stage 7's call, who in the party sees what of each other's sheets, is still Mo's.
-- The Hurt track's drawn as the chapter has it, three bars of three. If it becomes a die (the wound die idea), it's a die from the same family.
+- The Hurt track became the wound die in the 24 Oct rules, and the kit draws it as a die in ember, with the Scars beside it.

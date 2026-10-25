@@ -16,6 +16,7 @@ import { grow } from "./grow.js";
 import { changesOf, ownChanges, placesOf, said } from "./marks.js";
 import { makeDowntime } from "./downtime.js";
 import { threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
+import { aura as kitAura, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
 
 const DATA = JSON.parse(document.getElementById("zi-companion").textContent);
 const CREW = new Map(DATA.crew.map((c) => [c.id, c]));
@@ -39,7 +40,7 @@ const MAX_SCARS = 5;
 
 let view = { name: "list" };
 let roll = null; // whatever the open dialog is working on
-const ui = { panel: null, tab: "play", open: new Set(), toastTimer: 0, stopSpin: null, notesTimer: 0, mode: null, slide: null, reveal: false, seen: null };
+const ui = { panel: null, tab: "play", open: new Set(), shut: new Set(), toastTimer: 0, stopSpin: null, notesTimer: 0, mode: null, slide: null, reveal: false, seen: null };
 const undo = [];
 
 // Tests can line up the numbers the next dice roll, in order: your dice first,
@@ -67,6 +68,8 @@ const ICON = {
   mute: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>',
   sheet: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 12h7M9 16h7"/></svg>',
   rules: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>',
+  sun: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  moon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
 };
 
 const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt, roll: () => randomBuild(DATA.build, DATA.crew) });
@@ -252,9 +255,10 @@ function gainResolve(s, c, n = 1) {
   return n > room ? " Your Resolve’s already full." : "";
 }
 
-// The wound die as a row of five, d4 to d12, one for each Hurt it can take
-// before a Hurt at d12 Blazes. The ones under a Scar are crossed through, and
-// any that lit up since was glow.
+// The learning round's wound die, as a row of five, d4 to d12, one for each
+// Hurt it can take before a Hurt at d12 Blazes. The ones under a Scar are
+// crossed through, and any that lit up since was glow. (A character's own
+// wound die is a kit die that grows, on the play screen.)
 const WOUNDS = [4, 6, 8, 10, 12];
 const gauge = (wound, floor, was = wound) => `<span class="mini" aria-hidden="true">${WOUNDS.map((d) => `<i${d <= floor && floor > 2 ? ' class="x"' : d <= wound ? ` class="on${d > was ? " is-new" : ""}"` : ""}></i>`).join("")}</span>`;
 
@@ -429,25 +433,33 @@ function missingView(ch) {
 // A rule from the book, kept in the page so it reads offline.
 const ruleHtml = (id) => `${RULE[id]?.html ?? ""}<p class="cc-small">${link(id, RULE[id] ? `${esc(RULE[id].title)} in the rules` : "Read it in the rules")}</p>`;
 const ruleBox = (id) => `<div class="cc-rule">${ruleHtml(id)}</div>`;
-const pips = (now, max) => `<span class="pips" aria-hidden="true">${Array.from({ length: max }, (_, i) => `<i${i < now ? ' class="on"' : ""}></i>`).join("")}</span>`;
 
-// The trackers on the play screen. Tap one for its buttons and its rule.
+// The trackers on the play screen, as the kit draws them: Confidence and the
+// wound die are dice that change shape as they move, with the Scars beside
+// the wound die, and Aura and Resolve are hexes and gems. Tap one for its
+// buttons and its rule.
+const quiet = (html) => html.replace('role="img"', 'aria-hidden="true"');
 function trackView(ch, c, s) {
   const n = c.numbers;
   const u = lastUndo(ch);
-  const stat = (key, label, value, extra = "", after = "") => `<button type="button" class="cc-stat t-${key}${ui.panel === key ? " is-open" : ""}${goldOf(`num:${key}`) ? " is-changed" : ""}" data-act="panel" data-p="${key}" aria-expanded="${ui.panel === key}" aria-controls="cc-panel"><span class="k">${label}${goldDot(`num:${key}`)}</span>${extra}<span class="v">${value}</span>${after}</button>`;
+  const stat = (key, label, body) => `<button type="button" class="cc-stat t-${key}${ui.panel === key ? " is-open" : ""}${goldOf(`num:${key}`) ? " is-changed" : ""}" data-act="panel" data-p="${key}" aria-expanded="${ui.panel === key}" aria-controls="cc-panel"><span class="k">${label}${goldDot(`num:${key}`)}</span>${body}</button>`;
   const mood = s.conf <= 2 ? '<span class="cc-mood">Shaken</span>' : s.conf >= 12 ? '<span class="cc-mood is-fired">Fired up</span>' : "";
-  const conds = s.conditions.length ? s.conditions.map((x) => `<span class="cc-tag is-${x.kind}"><em>${esc(x.name)}</em> d${x.die}</span>`).join("") : '<span class="cc-tag is-none">None on you</span>';
-  return `<div class="cc-track" role="group" aria-label="Aura, Resolve, Confidence, your wound die and conditions">
-    ${stat("aura", "Aura", `${s.aura}<small>/${n.aura}</small>`, pips(s.aura, n.aura))}${stat("resolve", "Resolve", `${s.resolve}<small>/${n.resolve}</small>`, pips(s.resolve, n.resolve))}
-    <button type="button" class="cc-undo" data-act="undo"${off(!u)} aria-label="${u ? `Undo ${esc(u.label)}` : "Nothing to undo"}">${ICON.undo}</button>
-    ${stat("conf", "Confidence", `d${s.conf}`, "", mood)}${stat("wound", "Wound die", `d${s.wound}`, gauge(s.wound, floorOf(s, c)))}
+  const conds = s.conditions.length
+    ? `<span class="v cc-conds-now">${s.conditions.map((x) => `<span class="cc-tag is-${x.kind}">${kitMini(x.die, { own: x.kind === "for" ? "you" : "harm" })}<em>${esc(x.name)}</em> <span class="sr-only">d${x.die}</span></span>`).join("")}</span>`
+    : '<span class="v cc-none">None on you</span>';
+  return `<div class="cc-track" role="group" aria-label="Confidence, your wound die, Aura, Resolve and conditions">
+    ${stat("conf", "Confidence", `<span class="v">${kitDie(s.conf, { label: `d${s.conf}` })}</span>${mood}`)}${stat("wound", "Wound die", `<span class="v">${kitDie(s.wound, { own: "harm", label: `d${s.wound}` })}</span>${kitScars(s.scars.length)}`)}
+    <button type="button" class="cc-undo" data-act="undo"${off(!u)} aria-label="${u ? `Undo ${esc(u.label)}` : "Nothing to undo"}">${ICON.undo}<span aria-hidden="true">Undo</span></button>
+    ${stat("aura", "Aura", `<span class="cc-row-in">${quiet(kitAura(s.aura, n.aura))}<span class="v">${s.aura}<small>/${n.aura}</small></span></span>`)}${stat("resolve", "Resolve", `<span class="cc-row-in">${quiet(kitResolve(s.resolve, n.resolve))}<span class="v">${s.resolve}<small>/${n.resolve}</small></span></span>`)}
     ${stat("cond", "Conditions", conds)}
   </div>${ui.panel ? `<div id="cc-panel" class="cc-panel">${goldNow(`num:${ui.panel}`)}${panelView(ui.panel, c, s)}</div>` : ""}`;
 }
 
+// A row of dice to set one straight to a size, each in its real shape, with
+// the one it's on now lit up.
 function ring(act, from, to, now, label) {
-  return `<div class="cc-ring" role="group" aria-label="${label}">${SIZES.filter((d) => d >= from && d <= to).map((d) => `<button type="button" class="hexbtn${d === now ? " on" : ""}" data-act="${act}" data-v="${d}"${pressed(d === now)}>d${d}</button>`).join("")}</div>`;
+  const own = act === "wound-set" ? "harm" : "you";
+  return `<div class="cc-ring" role="group" aria-label="${label}">${SIZES.filter((d) => d >= from && d <= to).map((d) => `<button type="button" class="cc-ringbtn" data-act="${act}" data-v="${d}"${pressed(d === now)}>${kitDie(d, { own, label: `d${d}`, state: d === now ? "top" : "" })}</button>`).join("")}</div>`;
 }
 
 function panelView(key, c, s) {
@@ -494,7 +506,7 @@ function panelView(key, c, s) {
   const conds = s.conditions.map((x, i) => {
     const rule = COND.get(x.name);
     const what = rule ? `${rule.passive} Spend it and ${rule.active}` : "";
-    return `<li class="cc-cond is-${x.kind}">${hex(`d${x.die}`, "on")}<div><p><b><em>${esc(x.name)}</em></b> <small>${x.kind === "for" ? "for you" : "against you"}</small></p>${what ? `<p class="cc-lead">${what}</p>` : ""}
+    return `<li class="cc-cond is-${x.kind}">${kitDie(x.die, { own: x.kind === "for" ? "you" : "harm", label: `d${x.die}`, cls: "cc-cond-die" })}<div><p><b><em>${esc(x.name)}</em></b> <small>${x.kind === "for" ? "for you" : "against you"}</small></p>${what ? `<p class="cc-lead">${what}</p>` : ""}
       <div class="cc-row"><button type="button" class="button sm" data-act="cond-down" data-i="${i}">Down a size</button><button type="button" class="button sm" data-act="cond-off" data-i="${i}">Spent or broken</button></div></div></li>`;
   }).join("");
   const options = ["against", "for"].map((kind) => `<optgroup label="${kind === "for" ? "For you" : "Against you"}">${DATA.conditions.filter((x) => x.kind === kind).map((x) => `<option value="${esc(x.name)}">${esc(x.name)}</option>`).join("")}</optgroup>`).join("");
@@ -532,16 +544,17 @@ function lastRollView(last) {
 function characterView(ch, c) {
   const s = ch.state;
   const n = c.numbers;
-  const facts = [`Stride ${n.stride}${n.strideNote ? ` (${esc(n.strideNote)})` : ""}${gold("num:stride")}`, ...(n.woundNote ? [`Wound die d${n.wound ?? 2} (${esc(n.woundNote)})`] : [])];
+  // What changes their wound die, like Bram's Unyielding, is named here, and
+  // the wound die's own buttons say what it does.
+  const facts = [`Stride ${n.stride}${n.strideNote ? ` (${esc(n.strideNote)})` : ""}${gold("num:stride")}`, ...(n.woundNote ? [esc(n.woundNote.split(":")[0].trim())] : [])];
   const changed = changedNote(ch, c);
   const body = ui.tab === "sheet" ? sheetTab(ch, c) : ui.tab === "rules" ? rulesTab() : playTab(ch, c);
   const tabs = TABS.map(([t, label]) => `<a href="/characters/?c=${encodeURIComponent(ch.id)}${t === "play" ? "" : `&amp;t=${t}`}" data-act="tab" data-t="${t}"${ui.tab === t ? ' aria-current="page"' : ""}>${ICON[t]}<span>${label}</span></a>`).join("");
   const slide = ui.slide;
   ui.slide = null;
-  return `<div class="cc-topbar"><a class="cc-back" href="/characters/" data-act="nav">${ICON.back}Characters</a>${soundButton()}</div>
-  <header class="cc-head"><h1>${esc(ch.name)}</h1><p class="cc-title"><em>${esc(c.title)}</em></p>
-    ${ui.tab === "sheet" ? `<div class="chips">${c.archetypes.map((a) => `<span class="chip">${esc(a)}</span>`).join("")}</div>` : ""}
-    <p class="cc-small">${ch.name !== c.name ? `${esc(c.name)}’s sheet, from the crew · ` : ""}${facts.join(" · ")}</p>${was("num:stride")}</header>
+  return `<div class="cc-topbar"><a class="cc-back" href="/characters/" data-act="nav">${ICON.back}Characters</a><div class="cc-tools">${soundButton()}${themeButton()}</div></div>
+  <header class="cc-head cc-char">${crestOf(c)}<div class="cc-who"><h1>${esc(ch.name)}</h1><p class="cc-title"><em>${esc(c.title)}</em></p>
+    <p class="cc-small">${ch.name !== c.name ? `${esc(c.name)}’s sheet, from the crew · ` : ""}${c.archetypes.map(esc).join(" · ")}${c.archetypes.length ? " · " : ""}${facts.join(" · ")}</p></div>${was("num:stride")}</header>
   ${saveNote()}${changed}
   ${s.dead ? `<div class="cc-note is-warn"><p><b>${esc(ch.name)} died in play.</b> Keep the sheet to remember them, or delete them from this phone at the bottom of the Sheet tab.</p></div>` : ""}
   <div class="cc-page${slide ? ` cc-go-${slide}` : ""}">${body}</div>
@@ -551,19 +564,49 @@ function characterView(ch, c) {
 // Sound and buzz are off until the player turns them on.
 const soundButton = () => `<button type="button" class="cc-sound" data-act="sound" aria-pressed="${soundOn()}">${soundOn() ? ICON.sound : ICON.mute}<span>Sound</span></button>`;
 
+// A character opens full screen, without the site's bar, so the light switch
+// comes with it. It's the same switch: the choice is kept as zi-theme.
+const lightOn = () => document.documentElement.getAttribute("data-theme") === "light";
+const themeButton = () => `<button type="button" class="cc-theme" data-act="theme" aria-label="${lightOn() ? "Switch to dark mode" : "Switch to light mode"}">${lightOn() ? ICON.moon : ICON.sun}</button>`;
+function flipTheme() {
+  const root = document.documentElement;
+  const light = !lightOn();
+  if (light) root.setAttribute("data-theme", "light");
+  else root.removeAttribute("data-theme");
+  try {
+    localStorage.setItem("zi-theme", light ? "light" : "dark");
+  } catch {}
+  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", light ? "#f5f2f7" : "#120d18");
+  document.querySelector(".theme-toggle")?.setAttribute("aria-label", light ? "Switch to dark mode" : "Switch to light mode");
+}
+
+// The character's crest: the Zi'Dara diamond with their first Title's
+// archetype in it, doubled for one taken twice, and a seal for a second.
+function crestOf(c) {
+  try {
+    return crest(c.titles.map((t) => t.archetype).filter(Boolean), { strict: false, label: `Crest: ${c.archetypes.join(", ") || "no archetype yet"}` });
+  } catch {
+    return "";
+  }
+}
+
 // Changing anything on a character, any time, outside downtime too.
 const changeLink = (ch) => (canChange(ch) ? `<a class="button cc-change" href="/characters/?build=${encodeURIComponent(ch.id)}" data-act="bopen" data-key="${esc(ch.id)}">Change ${esc(ch.name)}</a>` : "");
 
 function playTab(ch, c) {
   const s = ch.state;
   // Something broken or used up comes off every set action it's on, until it's mended.
+  // Each tile shows the dice it rolls, drawn in their real shapes, and past 6
+  // steps the next die sits on the first one's shoulder.
+  const diceOf = (n, own = "you") => stepsToDice(n).map((d, j) => kitDie(d, { own, hide: true, cls: j ? "is-next" : "" })).join("");
   const tiles = c.actions.map((a, i) => {
     const now = stepsNow(c, s, a);
-    return `<button type="button" class="tile card${goldOf(`act:${a.name}`) ? " is-changed" : ""}" data-act="roll" data-a="${i}"><span class="tile-name">${esc(a.name)}</span><span class="tile-die hex on">${esc(diceLabel(stepsToDice(now)))}</span><span class="tile-steps">${steps(now)}${now < a.steps ? " <small>(something’s crossed out)</small>" : ""}${goldDot(`act:${a.name}`)}</span></button>`;
+    return `<button type="button" class="tile card${goldOf(`act:${a.name}`) ? " is-changed" : ""}${now < a.steps ? " is-short" : ""}" data-act="roll" data-a="${i}"><span class="tile-dice" aria-hidden="true">${diceOf(now)}</span><span class="tile-name">${esc(a.name)}</span><span class="tile-steps">${steps(now)}${now < a.steps ? ` <small>${a.steps - now} crossed out</small>` : ""}${goldDot(`act:${a.name}`)}</span><span class="tile-die sr-only">${esc(diceLabel(stepsToDice(now)))}</span></button>`;
   }).join("");
+  const defend = stepsNow(c, s, defendOf(c));
   return `${trackView(ch, c, s)}${alertView(ch, c, s)}
   <section class="cc-sec cc-play" aria-labelledby="cc-actions"><h2 id="cc-actions" class="sr-only">Set actions</h2>
-    <div class="cc-tiles">${tiles}<button type="button" class="tile card tile-defend" data-act="defence"><span class="tile-name">When it lands</span><span class="tile-sub">Defend ${esc(diceLabel(stepsToDice(stepsNow(c, s, defendOf(c)))))} · Confidence d${s.conf}</span></button></div>
+    <div class="cc-tiles">${tiles}<button type="button" class="tile card tile-defend" data-act="defence"><span class="tile-dice" aria-hidden="true">${diceOf(defend)}</span><span class="tile-name">When it lands</span><span class="tile-sub">Defend ${esc(diceLabel(stepsToDice(defend)))} · Confidence d${s.conf}</span></button></div>
     ${lastRollView(s.last)}
     <div class="cc-row cc-scene"><button type="button" class="button" data-act="scene">New scene</button><button type="button" class="button" data-act="downtime">Downtime</button>${changeLink(ch)}</div>
   </section>`;
@@ -618,54 +661,77 @@ function sheetTab(ch, c) {
     ...c.trouble.map((x) => ({ text: x, from: `trouble that follows ${c.pronoun}` })),
   ].map((b) => `<li class="cc-item"><p><em>${esc(b.text)}</em> <small>${esc(b.from)}</small></p><div class="cc-row"><button type="button" class="button sm" data-act="bite" data-big="0" aria-label="Let ${esc(b.text)} bite: +1 Aura">Let it bite: +1 Aura</button><button type="button" class="button sm" data-act="bite" data-big="1" aria-label="A big bite from ${esc(b.text)}: +1 Resolve">A big bite: +1 Resolve</button></div></li>`).join("");
 
-  // Something crossed out is still on the set action, struck through until it's mended.
-  const acts = c.actions.map((a) => `<li class="cc-item"><p><b>${esc(a.name)}</b> <small>${steps(a.steps)}, ${esc(a.die)}${stepsNow(c, s, a) < a.steps ? `, and ${steps(stepsNow(c, s, a))} with what’s crossed out` : ""}</small>${gold(`act:${a.name}`)}</p>${was(`act:${a.name}`)}
-    <p class="cc-small">${a.lines.map((key) => lineOf(c, key)).filter(Boolean).map((l) => (isOut(s, l) ? `<s>${lineLabel(l)}</s>` : lineLabel(l))).join(", ") || "Nothing on it yet, so it’s the action on its own."}</p></li>`).join("");
-  return `${canChange(ch) ? `<div class="cc-changebar"><p class="cc-lead">Add a Title, rewrite a permission or change anything else on ${her} sheet, whenever you like.</p><div class="cc-row">${changeLink(ch)}</div></div>` : ""}
-  <section class="cc-sec" aria-labelledby="cc-acts"><h2 id="cc-acts">Set actions</h2>
-    <p class="cc-lead">Every line on a set action is a step, and the action’s one more. ${link("s-set-actions", "How set actions work")}</p><ul class="cc-list">${acts}</ul></section>
+  // The sheet at a glance, then the detail. Every part of it is a fold whose
+  // summary reads at a glance, with its buttons a tap away. A fold holding a
+  // line the rules have changed opens by itself, until it's closed.
+  const marks = Object.keys(ui.gold?.marks ?? {});
+  const marked = (...pre) => marks.some((k) => pre.some((p) => k === p || k.startsWith(`${p}:`)));
+  const fold = (key, title, glance, body, golden = false) => {
+    const id = `sh-${key}`;
+    const open = !ui.shut.has(id) && (ui.open.has(id) || golden);
+    return `<details class="cc-fold" data-open="${id}"${open ? " open" : ""}><summary><span class="cc-fold-h"><h2 class="cc-fold-t">${title}</h2>${golden ? '<span class="cc-gem" aria-hidden="true"></span><span class="sr-only">, changed in the rules</span>' : ""}</span>${glance ? `<span class="cc-fold-g">${glance}</span>` : ""}</summary><div class="cc-fold-b">${body}</div></details>`;
+  };
+  const few = (items, max) => (items.length > max ? `${items.slice(0, max).join(" · ")} <small>and ${items.length - max} more</small>` : items.join(" · "));
+  const diceAt = (n) => `<span class="cc-act-dice" aria-hidden="true">${stepsToDice(n).map((d, j) => kitDie(d, { hide: true, cls: j ? "is-next" : "" })).join("")}</span>`;
 
-  <section class="cc-sec" aria-labelledby="cc-titles"><h2 id="cc-titles">Titles and permissions</h2>
-    <p class="cc-lead">Tap a permission to see how it counts.</p>${titles}
-    <h3 class="cc-h3">${c.archetypeRules.length > 1 ? "Your archetypes" : "Your archetype"}</h3>${archetypes}</section>
+  // Each set action with its dice, and a pip for every line on it, the action
+  // included. Something crossed out is struck through until it's mended.
+  const acts = c.actions.map((a) => {
+    const now = stepsNow(c, s, a);
+    const lines = a.lines.map((key) => lineOf(c, key)).filter(Boolean);
+    return `<li class="cc-act">${diceAt(now)}<div class="cc-act-in"><p><b>${esc(a.name)}</b> <small>${steps(now)}, ${esc(diceLabel(stepsToDice(now)))}${now < a.steps ? `, ${a.steps - now} crossed out` : ""}</small>${gold(`act:${a.name}`)}</p>${was(`act:${a.name}`)}
+      <ul class="cc-act-lines">${lines.map((l) => `<li${isOut(s, l) ? ' class="is-out"' : ""}>${kitPips(1)}<span>${isOut(s, l) ? `<s>${lineLabel(l)}</s>` : lineLabel(l)}</span></li>`).join("")}<li>${kitPips(1)}<span>${lines.length ? "The action" : "The action on its own, with nothing on it yet"}</span></li></ul></div></li>`;
+  }).join("");
 
-  <section class="cc-sec" aria-labelledby="cc-traits"><h2 id="cc-traits">Traits</h2>${traits}</section>
+  // What each fold says while it's shut.
+  const actsAt = c.actions.map((a) => {
+    const now = stepsNow(c, s, a);
+    return `<span class="cc-gl">${kitMini(stepsToDice(now)[0])}<b>${esc(a.name)}</b> <small>${esc(diceLabel(stepsToDice(now)))}</small></span>`;
+  }).join("");
+  const titlesAt = c.titles.map((t) => `<span class="cc-gl-line"><em>${esc(t.name)}</em> <small>${esc(t.archetype)} · ${t.permissions.length} ${t.permissions.length === 1 ? "permission" : "permissions"}</small></span>`).join("");
+  const carried = [...c.carry.equipment.items.map((x) => ["equipment", x]), ...c.carry.utility.items.map((x) => ["utility", x]), ...(c.carry.keepsake ? [["keepsake", c.carry.keepsake]] : []), ...(c.carry.bag.items ?? []).map((x) => ["bag", x]), ...s.picked.map((p) => [p.where, p.name])]
+    .map(([where, x]) => (s.crossed[`${where}|${x}`] ? `<s>${esc(x)}</s>` : esc(x)));
+  const threadsAt = c.threads.map((p) => {
+    const states = p.threads.map((t) => ({ t, st: threadState(s, p.person, t) }));
+    const hostile = states.some((x) => x.t.kind === "hostile");
+    const worst = states.find((x) => x.st === "snapped") ?? states.find((x) => x.st === "strained");
+    return `${esc(p.person)}${hostile || worst ? ` <small>${[hostile ? "hostile" : "", worst ? worst.st : ""].filter(Boolean).join(", ")}</small>` : ""}`;
+  });
+  const bitesAt = [...c.attuned.filter((a) => a.catch).map((a) => a.catch), ...s.scars.filter(Boolean), ...c.trouble].map((x) => `<em>${esc(x)}</em>`);
+  const notesAt = String(s.notes ?? "").trim().split("\n")[0];
 
-  <section class="cc-sec" aria-labelledby="cc-kit"><h2 id="cc-kit">Kit</h2>
-    ${slot("equipment", "Equipment")}${slot("utility", "Utility")}
+  const changeBtn = canChange(ch) ? changeLink(ch) : "";
+  return `<div class="cc-changebar">${changeBtn ? `<p class="cc-lead">Add a Title, rewrite a permission or change anything else on ${her} sheet, whenever you like.</p>` : ""}<div class="cc-row">${changeBtn}<button type="button" class="button" data-act="print"${off(ui.printing)}>${ui.printing ? "Filling in the sheet…" : "Print the sheet"}</button></div></div>
+  <div class="cc-folds">
+  ${fold("acts", "Set actions", `<span class="cc-gl-wrap">${actsAt}</span>`, `<p class="cc-lead">Every line on a set action is a step, and the action’s one more. ${link("s-set-actions", "How set actions work")}</p><ul class="cc-acts">${acts}</ul>`, marked("act"))}
+  ${fold("titles", c.titles.length === 1 ? "Title and permissions" : "Titles and permissions", titlesAt, `<p class="cc-lead">Tap a permission to see how it counts.</p>${titles}
+    <h3 class="cc-h3">${c.archetypeRules.length > 1 ? "Your archetypes" : "Your archetype"}</h3>${archetypes}`, marked("title", "perm", "arch"))}
+  ${c.traits.length ? fold("traits", "Traits", few(c.traits.map((t) => esc(t.name)), 6), traits, marked("trait")) : ""}
+  ${fold("kit", "Kit", `${few(carried, 7)}${c.attuned.length ? `<span class="cc-gl-line"><small>Attuned:</small> ${c.attuned.map((a) => esc(a.name)).join(" · ")}</span>` : ""}`, `${slot("equipment", "Equipment")}${slot("utility", "Utility")}
     ${c.carry.keepsake ? `<div class="cc-slot"><h3>Keepsake${gold("kit:keepsake")}</h3>${was("kit:keepsake")}<ul class="cc-things">${thing("keepsake", c.carry.keepsake)}</ul></div>` : ""}
     ${slot("bag", `The bag <span class="cc-small">(${esc(c.carry.bag.name)})</span>`)}
     <form class="cc-form" data-form="pickup"><label class="cc-field">Pick something up <input name="what" maxlength="60" autocomplete="off"></label>
       <label class="cc-field">It goes in <select name="where"><option value="bag">the bag</option><option value="utility">utility</option><option value="equipment">equipment</option></select></label>
       <button type="submit" class="button">Add it</button></form>
     <p class="cc-lead">Tap a thing to cross it out when it breaks or gets used up, and it comes off your set actions until it’s mended. Your attuned things are magic, and they can’t be broken.</p>
-    ${c.attuned.length ? `<h3 class="cc-h3">Attuned</h3>${attuned}` : ""}</section>
-
-  <section class="cc-sec" aria-labelledby="cc-threads"><h2 id="cc-threads">Threads</h2>
-    <p class="cc-lead">A bond thread’s something good between you. Borrow one of their permissions through it for 1 Aura, or lean on them in the story and strain it for 1 Resolve. You can’t borrow through a strained one, and straining it again before it’s mended snaps it.</p>
+    ${c.attuned.length ? `<h3 class="cc-h3">Attuned</h3>${attuned}` : ""}`, marked("kit", "att"))}
+  ${fold("threads", "Threads", few(threadsAt, 5) || "None yet", `<p class="cc-lead">A bond thread’s something good between you. Borrow one of their permissions through it for 1 Aura, or lean on them in the story and strain it for 1 Resolve. You can’t borrow through a strained one, and straining it again before it’s mended snaps it.</p>
     <p class="cc-lead">A hostile thread’s something that’s gone bad, and it bites like a Catch. Doing right by them strains it, and doing right by them again snaps it. A thread with someone in the crew is on both your sheets, so tell them when it changes. ${link("s-bonds", "How threads work")}</p>
-    ${threads}</section>
-
-  <section class="cc-sec" aria-labelledby="cc-trouble"><h2 id="cc-trouble">Catches and trouble</h2>
-    <p class="cc-lead">Let one bite and bring real trouble into the scene, and you take 1 Aura. A big bite that changes the scene or costs you something you wanted pays 1 Resolve instead. Your hostile threads bite the same way, from Threads.</p>${goldOf("trouble") ? `<p>${gold("trouble", "The trouble that follows you changed in the rules")}</p>${was("trouble")}` : ""}
-    <ul class="cc-list">${bites}<li class="cc-item"><p>Nothing here fits? Bring real trouble on yourself in the story anyway.</p><div class="cc-row"><button type="button" class="button sm" data-act="bite" data-big="0" aria-label="Real trouble with no Catch: +1 Aura">+1 Aura</button></div></li></ul></section>
-
-  <section class="cc-sec" aria-labelledby="cc-asp"><h2 id="cc-asp">Aspiration</h2>${goldOf("asp") ? `<p>${gold("asp", "Its words changed in the rules")}</p>${was("asp")}` : ""}
+    ${threads}`, marked("thr"))}
+  ${fold("trouble", "Catches and trouble", few(bitesAt, 3) || "Bring real trouble on yourself for 1 Aura", `<p class="cc-lead">Let one bite and bring real trouble into the scene, and you take 1 Aura. A big bite that changes the scene or costs you something you wanted pays 1 Resolve instead. Your hostile threads bite the same way, from Threads.</p>${goldOf("trouble") ? `<p>${gold("trouble", "The trouble that follows you changed in the rules")}</p>${was("trouble")}` : ""}
+    <ul class="cc-list">${bites}<li class="cc-item"><p>Nothing here fits? Bring real trouble on yourself in the story anyway.</p><div class="cc-row"><button type="button" class="button sm" data-act="bite" data-big="0" aria-label="Real trouble with no Catch: +1 Aura">+1 Aura</button></div></li></ul>`, marked("trouble"))}
+  ${fold("asp", "Aspiration", `<span class="cc-gl">${kitMini(s.asp)}<em>${esc(s.aspText || c.aspiration.text)}</em> <small>d${s.asp}</small></span>`, `${goldOf("asp") ? `<p>${gold("asp", "Its words changed in the rules")}</p>${was("asp")}` : ""}
     <label class="cc-field"><span class="sr-only">Your Aspiration</span><input class="cc-plain" data-in="asp-text" maxlength="120" value="${esc(s.aspText || c.aspiration.text)}" autocomplete="off"></label>
     ${ring("asp-set", 2, 12, s.asp, "Aspiration")}
     <div class="cc-row"><button type="button" class="button" data-act="asp" data-d="-1"${off(s.asp <= 2)}>A setback</button><button type="button" class="button" data-act="asp" data-d="1">It climbs</button></div>
-    <p class="cc-lead">When the GM says it’s within reach, roll against its die, and if you beat it, it climbs. ${link("s-aspiration", "How Aspiration works")}</p></section>
-
-  <section class="cc-sec" aria-labelledby="cc-notes-h"><h2 id="cc-notes-h">Notes</h2>
-    <label class="sr-only" for="cc-notes">Notes</label><textarea id="cc-notes" data-in="notes" rows="5">${esc(s.notes)}</textarea></section>
-
-  <section class="cc-sec" aria-labelledby="cc-about"><h2 id="cc-about">About ${esc(c.name)}</h2>
-    <p>${esc(c.blurb)}</p><p><b>Plays like:</b> ${c.playsLike}</p>
+    <p class="cc-lead">When the GM says it’s within reach, roll against its die, and if you beat it, it climbs. ${link("s-aspiration", "How Aspiration works")}</p>`, marked("asp"))}
+  ${fold("notes", "Notes", notesAt ? esc(notesAt.length > 70 ? `${notesAt.slice(0, 68)}…` : notesAt) : "Nothing written yet", `<label class="sr-only" for="cc-notes">Notes</label><textarea id="cc-notes" data-in="notes" rows="5">${esc(s.notes)}</textarea>`)}
+  ${fold("about", `About ${esc(c.name)}`, esc(c.blurb.length > 90 ? `${c.blurb.slice(0, 88)}…` : c.blurb), `<p>${esc(c.blurb)}</p><p><b>Plays like:</b> ${c.playsLike}</p>
     ${c.crewQs.map((x) => `<p><em>${esc(x.q)}</em> ${esc(x.a)}</p>`).join("")}
     ${c.own ? `<p class="cc-lead">${CREW.has(ch.from) ? `Your own now, made from ${link("s-pregens", `${esc(CREW.get(ch.from).name)}’s sheet in the rules`)}.` : `Built on this phone, from the ${link("s-quick", "Quick Build")}.`}</p>` : `<p class="cc-lead">${link("s-pregens", `${esc(c.name)}’s sheet in the rules`)}. Change ${esc(ch.name)} at the top of this tab and ${c.pronoun === "him" ? "he’s" : c.pronoun === "her" ? "she’s" : "they’re"} your own.</p>`}
-    <p class="cc-lead">The two-page sheet from the <a href="/sheets/">Sheets page</a>, filled in with everything here as it stands now.</p>
-    <div class="cc-row"><button type="button" class="button" data-act="print"${off(ui.printing)}>${ui.printing ? "Filling in the sheet…" : `Print ${esc(ch.name)}’s sheet`}</button></div>
-    <div class="cc-row"><button type="button" class="button danger" data-act="delete">Delete ${esc(ch.name)} from this phone</button></div></section>`;
+    <p class="cc-lead">Print, at the top of this tab, fills in the two-page sheet from the <a href="/sheets/">Sheets page</a> with everything here as it stands now.</p>
+    <div class="cc-row"><button type="button" class="button danger" data-act="delete">Delete ${esc(ch.name)} from this phone</button></div>`)}
+  </div>`;
 }
 
 // A thread by its key (person|words), and the sheet it's on.
@@ -775,7 +841,7 @@ function swingRoll(s) {
 // every move.
 function swingBlock(from, to, lines, extra = "") {
   const dir = to > from ? " is-up" : to < from ? " is-down" : "";
-  return `<div class="cc-swing${dir}"><p class="cc-swing-head"><span class="k">Confidence</span>${hex(`d${from}`, to === from ? "on" : "")}${to === from ? "" : `<span class="cc-swing-to" aria-hidden="true">→</span><span class="sr-only">to</span>${hex(`d${to}`, "on")}`}</p>
+  return `<div class="cc-swing${dir}"><p class="cc-swing-head"><span class="k">Confidence</span>${kitDie(from, { label: `d${from}`, cls: to === from ? "" : "is-was" })}${to === from ? "" : `<span class="cc-swing-to" aria-hidden="true">→</span><span class="sr-only">to</span>${kitDie(to, { label: `d${to}` })}`}</p>
     ${lines.length ? `<ul>${lines.map((l) => `<li class="${l.d > 0 ? "is-up" : l.d < 0 ? "is-down" : "is-still"}"><span class="cc-swing-mark" aria-hidden="true">${l.d > 0 ? "+" : l.d < 0 ? "−" : "·"}</span><span>${l.d > 0 ? '<span class="sr-only">Up a size: </span>' : l.d < 0 ? '<span class="sr-only">Down a size: </span>' : ""}${l.text}</span></li>`).join("")}</ul>` : ""}${extra}</div>`;
 }
 
@@ -820,13 +886,17 @@ function counted(r, c, s) {
 
 const stepper = (name, value, min, max, label, i = "") => `<span class="cc-step"><button type="button" class="cc-stepbtn" data-act="step" data-n="${name}" data-i="${i}" data-d="-1" aria-label="${label}: one less"${off(value <= min)}>−</button><output>${value}</output><button type="button" class="cc-stepbtn" data-act="step" data-n="${name}" data-i="${i}" data-d="1" aria-label="${label}: one more"${off(value >= max)}>+</button></span>`;
 
+// The dice a roll card's about to roll, front and centre in its head, in
+// their real shapes: [size, whose, class]. Theirs comes after an "against".
+const liveDice = (list) => `<span class="cc-dice-row" aria-hidden="true">${list.map(([d, own, cls = ""]) => `${cls === "is-vs" ? '<span class="cc-vs">against</span>' : ""}${kitDie(d, { own, hide: true, cls })}`).join("")}</span>`;
+
 // A die's intent: tap one of the usual ones, or write your own.
 function intentRow(key, size, label, presets, cls = "on", extra = "") {
   const own = roll.owns.has(key);
   const value = roll.intents[key] ?? "";
   const name = `${label}d${size}`; // "your d6", "the Mark d10", "their d8"
   const chip = (p) => `<button type="button" class="cc-chipbtn sm" data-act="intent" data-k="${key}" data-v="${esc(p)}"${pressed(!own && value === p)}>${esc(p)}</button>`;
-  return `<div class="cc-intent">${hex(`d${size}`, cls)}<div class="cc-chips" role="group" aria-label="What ${esc(name)} is for">${presets.map(chip).join("")}<button type="button" class="cc-chipbtn sm" data-act="intent" data-k="${key}" data-v=""${pressed(own)}>Your own</button></div>${extra}
+  return `<div class="cc-intent">${kitDie(size, { own: cls === "them" ? "them" : "you", label: name, cls: "cc-intent-die" })}<div class="cc-chips" role="group" aria-label="What ${esc(name)} is for">${presets.map(chip).join("")}<button type="button" class="cc-chipbtn sm" data-act="intent" data-k="${key}" data-v=""${pressed(own)}>Your own</button></div>${extra}
     ${own ? `<input class="cc-own-intent" data-in="intent" data-k="${key}" value="${esc(value)}" maxlength="40" autocomplete="off" placeholder="What it’s trying to do" aria-label="What ${esc(name)} is for, in your words">` : ""}</div>`;
 }
 
@@ -844,7 +914,7 @@ function buildView(c, s) {
   const vias = [["resolve", "1 Resolve"], ["time", "Taking my time, outside a round"], ["held", "I held my action"], ["hiding", "Coming out of hiding"], ["fired", "Cashing in fired-up Confidence"], ["trait", "A trait, condition or Boon that says so"]];
   const dice = [...k.dice.map((size, i) => [String(i), size, "your "]), ...(r.mark ? [["m", r.mark, "the Mark "]] : [])];
   return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${esc(name)}</h2>
-      <p class="cc-dice" aria-live="polite">${k.dice.map((d) => hex(`d${d}`, "on")).join("")}${r.mark ? hex(`d${r.mark}`, "mark") : ""}<span><b>${steps(k.total)}</b>, ${diceLabel(k.dice)}${r.mark ? `, and the Mark d${r.mark}` : ""}${r.vs > 0 ? ` against their d${r.vs}` : r.vs === -1 ? ` against ${r.vsRolled}` : ""}</span></p>
+      <p class="cc-dice" aria-live="polite">${liveDice([...k.dice.map((d) => [d, "you"]), ...(r.mark ? [[r.mark, "you", "is-mark"]] : []), ...(r.vs > 0 ? [[r.vs, "them", "is-vs"]] : [])])}<span><b>${steps(k.total)}</b>, ${diceLabel(k.dice)}${r.mark ? `, and the Mark d${r.mark}` : ""}${r.vs > 0 ? ` against their d${r.vs}` : r.vs === -1 ? ` against ${r.vsRolled}` : ""}</span></p>
       ${k.aura || k.resolve ? `<p class="cc-costs">${k.aura ? `<span class="chip is-aura">${k.aura} Aura</span>` : ""}${k.resolve ? `<span class="chip">${k.resolve} Resolve</span>` : ""}</p>` : ""}</div>
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
   <div class="dlg-body">${goldNow(`act:${k.act.name}`)}
@@ -895,7 +965,10 @@ const lastOf = () => ({ name: roll.name, steps: roll.total, dice: roll.dice.map(
 function settle(s, c, which) {
   const tops = which.filter((i) => roll.dice[i].nat === roll.dice[i].size);
   roll.tops = tops.length;
-  if (tops.length) roll.log.push(`${tops.length === 1 ? `Top face on the d${roll.dice[tops[0]].size}` : `${tops.length} top faces`}, so ${tops.length} Aura back.${gainAura(s, c, tops.length)}`);
+  // A top face is part of the moment, so it's said out loud with the dice,
+  // as well as in how it counted.
+  roll.topNote = tops.length ? `${tops.length === 1 ? `Top face on the d${roll.dice[tops[0]].size}` : `${tops.length} top faces`}, so ${tops.length} Aura back.${gainAura(s, c, tops.length)}` : "";
+  if (tops.length) roll.log.push(roll.topNote);
   swingRoll(s);
   s.last = lastOf();
 }
@@ -977,14 +1050,20 @@ function resultView(c, s, ch) {
   const words = { beat: "Beat it", won: "Tie, won for 1 Aura", tie: "Tie", under: "Under" };
   const picking = r.pick && !r.spinning;
   const plusOk = (d, mark) => !d.plus && Boolean(d.mark) === mark;
+  // Each die as the kit draws it, its number on the hub: a top face lights the
+  // whole token, a lost one goes dark, and a tie's hub is dashed.
+  const stateOf = (d, o) => (d.nat === d.size && !d.plus ? "top" : o === "under" ? "low" : o === "tie" ? "tie" : "");
   const die = (d, i) => {
-    if (r.spinning) return `<span class="hex big on" data-spin="${d.size}">${d.nat}</span>`;
-    if (picking && (r.pick.type === "reroll" || plusOk(d, r.pick.mark))) return `<button type="button" class="hex big on" data-act="pick" data-i="${i}" aria-label="The d${d.size} that came up ${d.nat + d.plus}">${d.nat + d.plus}</button>`;
-    return `<span class="hex big on">${d.nat + d.plus}</span>`;
+    const v = d.nat + d.plus;
+    if (r.spinning) return kitDie(d.size, { face: d.nat, spin: true, label: `Your d${d.size}, rolling` });
+    const drawn = kitDie(d.size, { face: v, state: stateOf(d, outs[i]), label: `${d.mark ? "The Mark" : "Your"} d${d.size} came up ${v}` });
+    if (picking && (r.pick.type === "reroll" || plusOk(d, r.pick.mark))) return `<button type="button" class="cc-pickdie" data-act="pick" data-i="${i}" aria-label="The d${d.size} that came up ${v}">${drawn.replace('role="img"', 'aria-hidden="true"')}</button>`;
+    return drawn;
   };
   const against = r.oppSize ? `against their d${r.oppSize}, which came up ${r.spinning ? "…" : r.opp}` : r.opp != null ? `against the ${r.opp} it already rolled` : "with nothing to beat";
-  const them = r.oppSize ? `<div class="cc-them"${r.spinning ? ' data-act="skip"' : ""}><span class="k">Their d${r.oppSize}</span><span class="hex big them"${r.spinning ? ` data-spin="${r.oppSize}"` : ""}>${r.opp}</span></div>`
-    : r.opp != null ? `<div class="cc-them"><span class="k">To beat</span>${hex(r.opp, "big them")}</div>` : "";
+  const theyLost = outs.length > 0 && outs.every((o) => o === "beat" || o === "won");
+  const them = r.oppSize ? `<div class="cc-them"${r.spinning ? ' data-act="skip"' : ""}><span class="vs" aria-hidden="true">against</span><span class="k">Their d${r.oppSize}</span>${kitDie(r.oppSize, { own: "them", face: r.opp, spin: r.spinning, state: !r.spinning && theyLost ? "low" : "", label: r.spinning ? `Their d${r.oppSize}, rolling` : `Their d${r.oppSize} came up ${r.opp}` })}</div>`
+    : r.opp != null ? `<div class="cc-them"><span class="vs" aria-hidden="true">against</span><span class="k">To beat</span><span class="cc-tobeat">${r.opp}</span></div>` : "";
   const onMark = (a) => /\bMark\b/.test(a.aura);
   // A +2 on Defend or Confidence dice (the Guardian's) shows when the roll's your Defend.
   const guards = (a) => /\b(Armour|Defend|Confidence)\b/.test(a.aura);
@@ -996,16 +1075,22 @@ function resultView(c, s, ch) {
     ...bonuses.map((a) => `<button type="button" class="button sm" data-act="plus" data-n="${esc(a.name)}"${off(s.aura < 1 || !r.dice.some((d) => plusOk(d, onMark(a))))}>${esc(a.name)} +${a.bonus} on ${onMark(a) ? "the Mark die" : "a die"}: 1 Aura</button>`),
     canReroll ? `<button type="button" class="button sm" data-act="reroll">Roll again: 1 Resolve</button>` : "",
   ].join("");
+  const how = [
+    ...(bonuses.length && !r.spinning && !picking ? [`<p class="cc-lead">${bonuses.map((a) => `<b>${esc(a.name)}:</b> ${a.auraHtml}`).join(" ")}</p>`] : []),
+    ...(r.log.length ? [`<ul class="cc-log">${r.log.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>`] : []),
+  ].join("");
   return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${esc(r.name)}</h2><p class="cc-small">${steps(r.total)}, ${esc(against)}.</p></div>
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
-  <div class="dlg-body">
-    ${them}<ul class="cc-res"${r.spinning ? ' data-act="skip"' : ""}>${r.dice.map((d, i) => `<li class="res is-${r.spinning ? "spin" : outs[i] ?? "none"}">${die(d, i)}<span class="res-die">${d.mark ? "Mark " : ""}d${d.size}${d.plus ? ` +${d.plus}` : ""}</span>${d.intent ? `<span class="res-intent">${esc(d.intent)}</span>` : ""}${!r.spinning && outs[i] ? `<b class="res-out">${words[outs[i]]}</b>` : ""}${!r.spinning && d.nat === d.size ? '<span class="res-note">Top face</span>' : ""}</li>`).join("")}</ul>
-    ${r.spinning ? '<p class="cc-small">Tap the dice to skip.</p>' : ""}
+  <div class="dlg-body cc-moment">
+    <div class="cc-stage n${Math.min(4, r.dice.length)}">
+    <ul class="cc-res"${r.spinning ? ' data-act="skip"' : ""}>${r.dice.map((d, i) => `<li class="res is-${r.spinning ? "spin" : outs[i] ?? "none"}">${die(d, i)}<span class="res-die">${d.mark ? "Mark " : ""}d${d.size}${d.plus ? ` +${d.plus}` : ""}</span>${d.intent ? `<span class="res-intent">${esc(d.intent)}</span>` : ""}${!r.spinning && outs[i] ? `<b class="res-out">${words[outs[i]]}</b>` : ""}${!r.spinning && d.nat === d.size ? '<span class="res-note">Top face</span>' : ""}</li>`).join("")}</ul>
+    ${them}
+    ${r.spinning ? '<p class="cc-small cc-skip">Tap the dice to skip.</p>' : ""}</div>
+    ${r.topNote && !r.spinning ? `<p class="cc-topnote">${esc(r.topNote)}</p>` : ""}
     ${picking ? `<div class="cc-note" role="status"><p>${r.pick.type === "plus" ? `Tap the ${r.pick.mark ? "Mark die" : "die"} to put +${r.pick.bonus} on.` : "Tap a die to roll it again, or roll them all."}</p><div class="cc-row">${r.pick.type === "reroll" ? '<button type="button" class="button sm" data-act="reroll-all">Roll them all</button>' : ""}<button type="button" class="button sm" data-act="pick-cancel">Never mind</button></div></div>` : rollSwingView(c, s)}
     ${offers ? `<div class="cc-row cc-offers">${offers}</div>` : ""}
-    ${bonuses.length && !r.spinning && !picking ? `<p class="cc-lead">${bonuses.map((a) => `<b>${esc(a.name)}:</b> ${a.auraHtml}`).join(" ")}</p>` : ""}
-    ${r.log.length ? `<ul class="cc-log">${r.log.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>` : ""}
-    <p class="cc-small">You’ve got ${s.aura} Aura and ${s.resolve} Resolve.</p>
+    <p class="cc-small cc-left">You’ve got ${s.aura} Aura and ${s.resolve} Resolve.</p>
+    ${how && !r.spinning ? `<details class="cc-how" data-open="how"${ui.open.has("how") ? " open" : ""}><summary>How it counted</summary>${how}</details>` : ""}
   </div>
   <div class="dlg-foot"><button type="button" class="button" data-act="undo"${off(!lastUndo(ch))}>Undo</button><button type="button" class="button primary" data-act="close">Done</button></div>`;
 }
@@ -1168,7 +1253,7 @@ function defenceBuild(c, s) {
     return list.length ? `<h3>${title}</h3>${list.map((l) => lineToggle(s, l, r.in.has(l.key), "in", true)).join("")}` : "";
   }).join("");
   return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">When it lands</h2>
-      <p class="cc-dice" aria-live="polite">${p.dice.map((d) => hex(`d${d}`, "on")).join("")}<span><b>${steps(p.total)}</b>, ${diceLabel(p.dice)}, and each die stops one</span></p>
+      <p class="cc-dice" aria-live="polite">${liveDice([...p.dice.map((d) => [d, "you"]), ...r.incoming.map((d, j) => [d, "them", j ? "" : "is-vs"])])}<span><b>${steps(p.total)}</b>, ${diceLabel(p.dice)}, and each die stops one</span></p>
       ${p.aura ? `<p class="cc-costs"><span class="chip is-aura">${p.aura} Aura</span></p>` : ""}</div>
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
   <div class="dlg-body">
@@ -1231,16 +1316,17 @@ function defenceResult(c, s, ch) {
   const mine = r.mine.map((m, i) => {
     const v = m.nat + m.plus;
     const label = `<span class="res-die">d${m.size}${m.plus ? ` +${m.plus}` : ""}</span>`;
-    if (r.spinning) return `<span class="res-mine"><span class="hex big on" data-spin="${m.size}">${m.nat}</span>${label}</span>`;
-    if (picking && !m.plus) return `<span class="res-mine"><button type="button" class="hex big on" data-act="d-pick" data-i="${i}" aria-label="Your d${m.size} that came up ${v}">${v}</button>${label}</span>`;
-    return `<span class="res-mine"><span class="hex big on">${v}</span>${label}${m.nat === m.size ? '<span class="res-note">Top face</span>' : ""}</span>`;
+    if (r.spinning) return `<span class="res-mine">${kitDie(m.size, { face: m.nat, spin: true, label: `Your d${m.size}, rolling` })}${label}</span>`;
+    const drawn = kitDie(m.size, { face: v, state: m.nat === m.size && !m.plus ? "top" : "", label: `Your d${m.size} came up ${v}` });
+    if (picking && !m.plus) return `<span class="res-mine"><button type="button" class="cc-pickdie" data-act="d-pick" data-i="${i}" aria-label="Your d${m.size} that came up ${v}">${drawn.replace('role="img"', 'aria-hidden="true"')}</button>${label}</span>`;
+    return `<span class="res-mine">${drawn}${label}${m.nat === m.size ? '<span class="res-note">Top face</span>' : ""}</span>`;
   }).join("");
   const bonuses = c.archetypeRules.filter((a) => a.bonus && (blows ? /\b(Defend|Armour)\b/ : /\bConfidence\b/).test(a.aura));
   const row = (h) => {
     const note = h.by != null ? `by your ${h.mine}` : h.mine != null ? `your ${h.mine} doesn’t stop it` : "no die left for it";
     const out = r.spinning ? "" : `<b class="res-out">${h.by == null ? "Gets through" : "Stopped"}</b><span class="res-note">${note}</span>`;
     const swap = canSwap ? `<button type="button" class="cc-chipbtn sm cc-swap" data-act="d-swap" data-j="${h.j}"${pressed(r.swap === h.j)} aria-label="Swap the die on their d${h.size}, which came up ${h.v}">Swap</button>` : "";
-    return `<li class="res is-${r.spinning ? "spin" : h.by == null ? "through" : "beat"}">${r.spinning ? `<span class="hex big them" data-spin="${h.size}">${h.v}</span>` : hex(h.v, "big them")}<span class="res-die">their d${h.size}</span>${h.intent ? `<span class="res-intent">${esc(h.intent)}</span>` : ""}${out}${swap}${done && h.by == null ? payView(h, r, s, c) : ""}</li>`;
+    return `<li class="res is-${r.spinning ? "spin" : h.by == null ? "through" : "beat"}">${kitDie(h.size, { own: "them", face: h.v, spin: r.spinning, state: !r.spinning && h.by != null ? "low" : "", label: r.spinning ? `Their d${h.size}, rolling` : `Their d${h.size} came up ${h.v}` })}<span class="res-die">their d${h.size}</span>${h.intent ? `<span class="res-intent">${esc(h.intent)}</span>` : ""}${out}${swap}${done && h.by == null ? payView(h, r, s, c) : ""}</li>`;
   };
   const lead = blows
     ? through ? `${through === 1 ? "One gets" : `${through} get`} through. The GM names what each one costs you, and you can offer another that fits, like your shield breaking instead. Tap what it costs and it’s counted. A Hurt takes your Confidence down a size, and your armour or kit taking it doesn’t.` : "Nothing gets through."
@@ -1325,20 +1411,24 @@ function restView(c, s) {
   if (r.mode === "build") {
     return `${head}<div class="dlg-body">
       <p>Roll the Confidence you finished the scene on against your wound die. Beat it and your wound comes down a size, and a tie goes to the wound.</p>
-      <p class="cc-dice">${Array.from({ length: r.two ? 2 : 1 }, () => hex(`d${r.conf}`, "on")).join("")}${hex(`d${r.wound}`, "them")}<span>Your Confidence, d${r.conf}${r.two ? " twice" : ""}, against your wound die, d${r.wound}</span></p>
+      <p class="cc-dice">${liveDice([...Array.from({ length: r.two ? 2 : 1 }, () => [r.conf, "you"]), [r.wound, "harm", "is-vs"]])}<span>Your Confidence, d${r.conf}${r.two ? " twice" : ""}, against your wound die, d${r.wound}</span></p>
       <button type="button" class="cc-line" data-act="rest-two"${pressed(r.two)}><span class="tick" aria-hidden="true"></span><span>Tend the Crew: roll two, and the best counts <small>when someone in the scene has it</small></span></button>
       <p class="cc-lead">Then it’s a new scene: Aura full, 1 Resolve back and Confidence back to d${c.numbers.confidence}. ${link("s-blaze", "Wounds in the rules")}</p></div>
     <div class="dlg-foot"><button type="button" class="button primary" data-act="rest-go">Roll</button><button type="button" class="button" data-act="rest-real">Roll real dice</button></div>`;
   }
   const spin = r.spinning;
   const first = r.mine.findIndex((m) => m.nat === best);
-  const die = (size, nat, cls) => (spin ? `<span class="hex big ${cls}" data-spin="${size}">${nat}</span>` : hex(nat, `big ${cls}`));
+  const die = (size, nat, cls) => kitDie(size, { own: cls === "them" ? "harm" : "you", face: nat, spin, label: spin ? `A d${size}, rolling` : `A d${size} that came up ${nat}` });
   const verdict = won ? `Your ${best} beats its ${r.opp}, so your wound’s a d${Math.max(floorOf(s, c), sizeDown(r.wound))} for the next scene.`
     : best === r.opp ? `Your ${best} ties it, and a tie goes to the wound, so it stays a d${r.wound}.` : `Its ${r.opp} beats your ${best}, so it stays a d${r.wound}.`;
-  return `${head}<div class="dlg-body">
-    <div class="cc-them"${spin ? ' data-act="skip"' : ""}><span class="k">Your wound die, d${r.wound}</span>${die(r.wound, r.opp, "them")}</div>
-    <ul class="cc-res"${spin ? ' data-act="skip"' : ""}>${r.mine.map((m, i) => `<li class="res is-${spin ? "spin" : i === first ? (won ? "beat" : best === r.opp ? "tie" : "under") : "none"}">${die(m.size, m.nat, "on")}<span class="res-die">d${m.size}</span>${!spin && i === first && r.mine.length > 1 ? '<b class="res-out">Your best</b>' : ""}</li>`).join("")}</ul>
-    ${spin ? '<p class="cc-small">Tap the dice to skip.</p>' : `<p class="cc-lead" role="status">${esc(verdict)}</p>
+  const two = r.mine.length > 1;
+  const said = won ? (two ? "Your best beats it" : "Beats it") : best === r.opp ? (two ? "Your best ties it" : "A tie") : two ? "Your best doesn’t beat it" : "Under";
+  return `${head}<div class="dlg-body cc-moment">
+    <div class="cc-stage n${Math.min(4, r.mine.length)}">
+    <ul class="cc-res"${spin ? ' data-act="skip"' : ""}>${r.mine.map((m, i) => `<li class="res is-${spin ? "spin" : i === first ? (won ? "beat" : best === r.opp ? "tie" : "under") : "none"}">${die(m.size, m.nat, "on")}<span class="res-die">Confidence d${m.size}</span>${!spin && i === first ? `<b class="res-out">${said}</b>` : ""}</li>`).join("")}</ul>
+    <div class="cc-them is-wound"${spin ? ' data-act="skip"' : ""}><span class="vs" aria-hidden="true">against</span><span class="k">Your wound die, d${r.wound}</span>${die(r.wound, r.opp, "them")}</div>
+    ${spin ? '<p class="cc-small cc-skip">Tap the dice to skip.</p>' : ""}</div>
+    ${spin ? "" : `<p class="cc-lead cc-said" role="status">${esc(verdict)}</p>
       ${!won && resolve >= 1 ? '<div class="cc-row cc-offers"><button type="button" class="button sm" data-act="rest-again">Roll yours again: 1 Resolve</button></div>' : ""}
       ${r.rerolls ? `<ul class="cc-log"><li>Paid ${r.rerolls} Resolve to roll again.</li></ul>` : ""}`}
   </div>
@@ -1450,6 +1540,8 @@ function render() {
   if (c) settleMarks(ch, c);
   else ui.gold = null;
   document.documentElement.classList.toggle("cc-tabbed", view.name === "sheet" && Boolean(c));
+  // A character's full screen, without the site's bar.
+  document.documentElement.classList.toggle("cc-full", view.name === "sheet");
   app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
   glow(ch);
   if (dialog.open) renderDialog();
@@ -1457,21 +1549,29 @@ function render() {
   if (view.name === "learn") learn.after(app);
 }
 
-// Pips and the wound die's row glow as they light up. The trackers remember
-// what they showed last time, for this character.
+// Aura and Resolve pop in as they come back, and Confidence and the wound die
+// grow into their new shapes. The trackers remember what they showed last
+// time, for this character.
 function glow(ch) {
   // Behind the roll card nothing's seen, so it glows when the card closes.
   if (dialog.open) return;
   const s = ch?.state;
   const was = ui.seen && ui.seen.id === ch?.id ? ui.seen : null;
-  ui.seen = s ? { id: ch.id, aura: s.aura, resolve: s.resolve, wound: s.wound, conf: s.conf } : null;
+  ui.seen = s ? { id: ch.id, aura: s.aura, resolve: s.resolve, wound: s.wound, conf: s.conf, scars: s.scars.length } : null;
   if (!was || !s) return;
   const lit = (sel, from, to) => [...app.querySelectorAll(sel)].slice(from, to).forEach((el) => el.classList.add("is-new"));
-  if (s.aura > was.aura) lit(".t-aura .pips i", was.aura, s.aura);
-  if (s.resolve > was.resolve) lit(".t-resolve .pips i", was.resolve, s.resolve);
-  if (was.conf != null && s.conf !== was.conf) app.querySelector(".t-conf")?.classList.add(s.conf > was.conf ? "is-up" : "is-down");
-  // The row starts at d4, so a d2 has nothing lit.
-  if (s.wound > was.wound) lit(".t-wound .mini i", was.wound / 2 - 1, s.wound / 2 - 1);
+  if (s.aura > was.aura) lit(".t-aura .zd-chit", was.aura, s.aura);
+  if (s.resolve > was.resolve) lit(".t-resolve .zd-gem", was.resolve, s.resolve);
+  if (was.conf != null && s.conf !== was.conf) {
+    app.querySelector(".t-conf")?.classList.add(s.conf > was.conf ? "is-up" : "is-down");
+    // Confidence and the wound die grow, or shrink, into their new shapes.
+    growDie(app.querySelector(".t-conf .zd-die"), was.conf, s.conf);
+  }
+  if (s.wound !== was.wound) {
+    app.querySelector(".t-wound")?.classList.add(s.wound > was.wound ? "is-up" : "is-down");
+    growDie(app.querySelector(".t-wound .zd-die"), was.wound, s.wound);
+  }
+  if (s.scars.length > (was.scars ?? 0)) lit(".t-wound .zd-scars i", was.scars ?? 0, s.scars.length);
 }
 
 function openDialog() {
@@ -2123,6 +2223,10 @@ const ACT = {
     renderDialog();
     landed(true);
   },
+  theme() {
+    flipTheme();
+    render();
+  },
   sound() {
     setSound(!soundOn());
     render();
@@ -2435,6 +2539,11 @@ document.addEventListener("toggle", (e) => {
   if (key.startsWith("bd-how") || key === "bd-qs") builder.toggled(e.target);
   if (e.target.open) ui.open.add(key);
   else ui.open.delete(key);
+  // A Sheet tab fold the player shut stays shut, even one holding a gold mark.
+  if (key.startsWith("sh-")) {
+    if (e.target.open) ui.shut.delete(key);
+    else ui.shut.add(key);
+  }
 }, true);
 
 dialog.addEventListener("cancel", (e) => {

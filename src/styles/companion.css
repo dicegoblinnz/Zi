@@ -77,6 +77,10 @@ button.hex.big:focus-visible { --die: var(--violet); color: var(--bg); }
   100% { transform: none; filter: none; }
 }
 .cc-ring { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.6rem 0; }
+.cc-ringbtn { display: grid; place-items: center; width: 48px; height: 48px; padding: 0; background: none; border: 0; border-radius: 2px; transition: transform 140ms ease-out; }
+.cc-ringbtn .zd-die { --s: 44px; }
+.cc-ringbtn:active { transform: scale(0.94); }
+.cc-ringbtn:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
 
 /* The list */
 .cc-mine { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
@@ -88,11 +92,19 @@ button.hex.big:focus-visible { --die: var(--violet); color: var(--bg); }
 .cc .crew h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem; line-height: 1.1; letter-spacing: 0.02em; color: var(--ink); }
 .cc .crew .button { align-self: flex-start; margin-top: 0.4rem; }
 
-/* The sheet */
+/* A character, full screen: the site's bar and footer go, and the crest
+   sits at the top with the name and title beside it. */
+html.cc-full .topbar, html.cc-full footer.site { display: none; }
+html.cc-full .companion { padding-top: max(0.25rem, env(safe-area-inset-top, 0px)); }
 .cc-back { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; margin-top: 0.4rem; color: var(--violet); text-decoration: none; font-weight: 700; }
 .cc-head { margin-bottom: 0.4rem; }
-.cc-title { margin: 0; font-size: 1.1rem; }
-.cc-head .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.6rem 0 0.25rem; }
+.cc-char { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 4px 14px; margin: 0.35rem 0 0; }
+.cc-char > .zd-crest { --s: 64px; }
+.cc-char > .cc-was { grid-column: 1 / -1; }
+.cc-who { min-width: 0; }
+.cc .cc-who h1 { margin: 0; font-size: clamp(1.7rem, 1.35rem + 1.6vw, 2.4rem); line-height: 1.05; }
+.cc-title { margin: 0.15rem 0 0; font-size: 1.02rem; line-height: 1.3; }
+.cc-who .cc-small { margin: 0.2rem 0 0; font-size: 0.85rem; line-height: 1.35; }
 .chip.sm { min-height: 24px; padding: 0 0.5rem; font-size: 0.8rem; }
 .chip.is-used { color: var(--gold-ink); }
 .cc-note { margin: 1rem 0; padding: 0.8rem 1rem; background: var(--panel); border: 1px solid var(--violet); border-radius: 2px; }
@@ -100,15 +112,57 @@ button.hex.big:focus-visible { --die: var(--violet); color: var(--bg); }
 .cc-note p:last-child { margin-bottom: 0; }
 .cc-note.is-warn { border-color: var(--gold); }
 
-/* The play screen's trackers: Aura and Resolve as pips, Confidence, the
-   wound die as a row filling up to d12, and the conditions. Each opens its
-   buttons and its rule. */
-.cc-track { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(44px, 1fr); gap: 6px; margin-top: 0.8rem; }
-.cc-track .cc-stat { grid-column: span 2; }
-.cc-track .t-aura, .cc-track .t-conf, .cc-track .t-wound { grid-column: span 3; }
-.cc-track .t-cond { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; gap: 6px 10px; padding: 6px 10px; }
-.cc-track .t-cond .v { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.95rem; font-weight: 600; color: var(--ink); }
-.cc-track .cc-undo { width: auto; }
+/* The play screen's trackers, drawn by the kit: Confidence and the wound die
+   as dice that change shape, with the Scars beside the wound die, then Aura,
+   Resolve and the conditions. Each opens its buttons and its rule. Two rows,
+   so the set actions start high. */
+.cc-track { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 3fr) minmax(0, 2fr) minmax(52px, 2fr); gap: 8px; margin-top: 0.9rem; }
+.cc-track .t-conf { grid-column: 1; }
+.cc-track .t-wound { grid-column: 2 / 4; }
+.cc-track .cc-undo { grid-column: 4; }
+.cc-track .t-aura { grid-column: 1; }
+.cc-track .t-resolve { grid-column: 2; }
+.cc-track .t-cond { grid-column: 3 / 5; }
+.cc-track .t-conf, .cc-track .t-wound {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; align-items: center; justify-items: start;
+  column-gap: 8px; row-gap: 1px; min-height: 66px; padding: 7px 8px; text-align: left;
+}
+.cc-track .t-conf .v, .cc-track .t-wound .v { grid-row: 1 / span 2; grid-column: 1; display: block; }
+.cc-track .t-conf .k, .cc-track .t-wound .k { grid-column: 2; align-self: end; font-size: 0.82rem; letter-spacing: 0; text-transform: none; color: var(--ink); }
+.cc-track .t-conf .cc-mood, .cc-track .t-wound .zd-scars { grid-column: 2; align-self: start; }
+.cc-track .t-conf:not(:has(.cc-mood)) .k, .cc-track .t-wound:not(:has(.zd-scars)) .k { grid-row: 1 / span 2; align-self: center; }
+.cc-track .zd-die { --s: 50px; }
+.cc-track .t-aura, .cc-track .t-resolve, .cc-track .t-cond { align-items: flex-start; justify-content: center; gap: 4px; min-height: 56px; padding: 6px 10px; text-align: left; }
+.cc-row-in { display: flex; align-items: center; gap: 6px; max-width: 100%; }
+.cc-track .zd-aura { gap: 3px; }
+.cc-track .zd-chit { width: 15px; }
+.cc-track .zd-gem { width: 19px; height: 19px; }
+.cc-track .t-aura .v, .cc-track .t-resolve .v { font-size: 1.05rem; }
+.cc-track .t-cond .v { display: flex; flex-wrap: wrap; gap: 4px; max-width: 100%; font-size: 0.88rem; font-weight: 600; line-height: 1.2; color: var(--ink); }
+.cc-track .t-cond .cc-none { color: var(--muted); font-weight: 500; }
+.cc-track .t-cond .cc-tag { min-height: 0; padding: 1px 6px 1px 4px; gap: 3px; font-size: 0.85rem; }
+.cc-track .t-cond .zd-mini { width: 15px; height: 15px; vertical-align: -0.15em; }
+.cc-track .zd-scars i { width: 5px; height: 13px; }
+/* Narrower phones put the labels above the dice, and the narrowest give
+   Aura and Resolve a row of their own, so nothing's cut short. */
+@media (max-width: 379px) {
+  .cc-track .t-conf, .cc-track .t-wound { grid-template-rows: auto auto; row-gap: 4px; }
+  .cc-track .t-conf .k, .cc-track .t-wound .k { grid-column: 1 / -1; grid-row: 1; }
+  .cc-track .t-conf .v, .cc-track .t-wound .v { grid-column: 1; grid-row: 2; }
+  .cc-track .t-conf .cc-mood, .cc-track .t-wound .zd-scars { grid-column: 2; grid-row: 2; align-self: center; }
+  .cc-track .t-conf:not(:has(.cc-mood)) .k, .cc-track .t-wound:not(:has(.zd-scars)) .k { grid-row: 1; align-self: end; }
+  .cc-track .zd-die { --s: 42px; }
+  .cc-track .t-aura, .cc-track .t-resolve, .cc-track .t-cond { padding: 6px 7px; }
+  .cc-track .t-aura .k, .cc-track .t-resolve .k, .cc-track .t-cond .k { letter-spacing: 0.04em; }
+  .cc-track .zd-gem { width: 17px; height: 17px; }
+  .cc-track .zd-chit { width: 13px; }
+  .cc-track .v small { display: none; }
+}
+@media (max-width: 359px) {
+  .cc-track .t-aura { grid-column: 1 / 3; }
+  .cc-track .t-resolve { grid-column: 3 / 5; }
+  .cc-track .t-cond { grid-column: 1 / -1; }
+}
 .pips, .mini { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; max-width: 100%; }
 .pips i { width: 13px; height: 13px; clip-path: var(--hex); background: var(--line); }
 .pips i.on { background: var(--gold); }
@@ -129,11 +183,13 @@ button.hex.big:focus-visible { --die: var(--violet); color: var(--bg); }
   flex: 1 1 0; min-width: 0; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
   padding: 2px; background: var(--surface); color: var(--ink); border: 1px solid var(--line-soft); border-radius: 2px;
 }
-.cc-stat .k { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.72rem; font-weight: 700; color: var(--muted); }
+.cc-stat .k { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .cc-stat .v { font-size: 1.25rem; font-weight: 700; line-height: 1.1; color: var(--gold-ink); font-variant-numeric: tabular-nums; }
 .cc-stat .v small { font-size: 0.78rem; font-weight: 500; color: var(--muted); }
 .cc-stat.is-open { border-color: var(--gold); box-shadow: inset 0 -2px 0 var(--gold); }
-.cc-undo { flex: none; width: 44px; min-height: 52px; display: grid; place-items: center; padding: 0; background: transparent; color: var(--ink); border: 1px solid var(--line-soft); border-radius: 2px; }
+.cc-undo { flex: none; min-width: 44px; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 0; background: transparent; color: var(--ink); border: 1px solid var(--line-soft); border-radius: 2px; font-size: 0.72rem; font-weight: 700; }
+.cc-stat, .cc-undo, .tile, .cc-pickdie { transition: transform 140ms ease-out, border-color 140ms ease; }
+.cc-stat:active, .cc-undo:active:not(:disabled), .tile:active, .cc-pickdie:active { transform: scale(0.97); }
 .cc-panel { margin-top: 0.6rem; padding: 0.9rem 1rem; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
 .cc-panel p { margin: 0 0 0.4rem; }
 .cc-panel .cc-conds { margin-top: 0; }
@@ -165,32 +221,74 @@ button.hex.big:focus-visible { --die: var(--violet); color: var(--bg); }
 html.cc-tabbed body { padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
 html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
 
-.cc-play { margin-top: 1rem; }
-.cc-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.cc-play { margin-top: 12px; }
+.cc-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .tile {
-  display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "name die" "steps die"; align-items: center; gap: 2px 8px;
-  min-height: 84px; padding: 12px; text-align: left; color: var(--ink);
+  display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "dice name" "dice steps"; align-items: center; column-gap: 10px; row-gap: 1px;
+  min-height: 72px; padding: 8px 10px 8px 8px; text-align: left; color: var(--ink);
 }
-.tile:hover { border-color: var(--gold); }
-.tile:active { transform: translateY(1px); }
-.tile-name { grid-area: name; font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.15; overflow-wrap: anywhere; }
-.tile-steps { grid-area: steps; color: var(--muted); font-size: 0.9rem; }
-.tile-die { grid-area: die; width: 50px; height: 50px; font-size: 1.05rem; }
+@media (hover: hover) and (pointer: fine) { .tile:hover { border-color: var(--gold); } }
+.tile-dice { grid-area: dice; position: relative; display: flex; align-items: flex-end; }
+.tile-dice .zd-die { --s: 52px; }
+.tile-dice .zd-die.is-next { --s: 26px; margin-left: -14px; }
+.tile-name { grid-area: name; align-self: end; font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.15; overflow-wrap: anywhere; }
+.tile-steps { grid-area: steps; align-self: start; color: var(--muted); font-size: 0.88rem; line-height: 1.3; }
+.tile-steps small { color: var(--gold-ink); font-weight: 700; }
 /* On the narrowest phones a long name like Defend keeps its word whole. */
 @media (max-width: 359px) {
-  .tile { gap: 2px 6px; padding: 10px; }
+  .tile { column-gap: 7px; padding: 8px 6px; }
   .tile-name { font-size: 0.95rem; }
-  .tile-die { width: 42px; height: 42px; font-size: 0.95rem; }
+  .tile-dice .zd-die { --s: 44px; }
 }
-.tile-defend { grid-template-columns: 1fr; grid-template-areas: "name" "steps"; border-color: color-mix(in srgb, var(--violet) 60%, transparent); }
-.tile-sub { grid-area: steps; color: var(--muted); font-size: 0.9rem; }
+/* When it lands: the GM's telegraphs coming in, so it's edged in violet, with
+   your Defend's dice. When the set actions are an even number it gets the row
+   to itself. */
+.tile-defend { grid-template-areas: "dice name" "dice steps"; border-color: color-mix(in srgb, var(--violet) 60%, transparent); }
+.tile-defend:nth-child(odd) { grid-column: 1 / -1; }
+.tile-sub { grid-area: steps; align-self: start; color: var(--muted); font-size: 0.88rem; line-height: 1.3; }
 .cc-last { margin: 0.8rem 0 0; padding: 0.6rem 0.8rem; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 2px; font-size: 0.95rem; }
 .cc-last .k, .cc-mine-roll .k { margin-right: 0.3rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
 .cc-scene .button { flex: 1 1 9rem; }
-/* Changing a character: by New scene and Downtime, and at the top of the Sheet tab. */
+/* Changing a character: by New scene and Downtime, and at the top of the
+   Sheet tab with Print. */
 .cc-change { overflow-wrap: anywhere; text-align: center; }
-.cc-changebar { margin: 1rem 0 0; padding-bottom: 0.6rem; border-bottom: 1px solid var(--line-soft); }
-.cc-changebar .cc-lead { margin-top: 0; }
+.cc-changebar { margin: 0.9rem 0 0; }
+.cc-changebar .cc-lead { margin: 0; }
+.cc-changebar .cc-row { margin-bottom: 0; }
+.cc-changebar .button { flex: 1 1 auto; }
+
+/* The Sheet tab: every part's a fold that reads at a glance while it's shut,
+   with the detail a tap behind it. */
+.cc-folds { display: grid; gap: 8px; margin-top: 0.9rem; }
+.cc-fold { background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.cc-fold[open] { border-color: var(--line); }
+.cc-fold > summary { position: relative; display: grid; gap: 3px; min-height: 48px; padding: 10px 46px 10px 12px; cursor: pointer; list-style: none; }
+.cc-fold > summary::-webkit-details-marker { display: none; }
+.cc-fold > summary::after { content: "+"; position: absolute; top: 8px; right: 14px; font-size: 1.35rem; line-height: 1.2; color: var(--gold-ink); }
+.cc-fold[open] > summary::after { content: "\2212"; }
+.cc-fold > summary:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
+.cc-fold-h { display: flex; align-items: center; gap: 8px; }
+.cc .cc-fold-t { margin: 0; padding: 0; background: none; font-family: var(--body); font-weight: 700; font-size: 0.78rem; line-height: 1.3; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-ink); }
+.cc-fold-g { display: block; font-size: 0.95rem; line-height: 1.45; color: var(--ink); overflow-wrap: anywhere; }
+.cc-fold-g small { color: var(--muted); }
+.cc-fold[open] .cc-fold-g { display: none; }
+.cc-fold-b { padding: 0 12px 12px; }
+.cc-fold-b > :first-child { margin-top: 0; }
+.cc-gl-wrap { display: flex; flex-wrap: wrap; gap: 3px 14px; }
+.cc-gl { display: inline-flex; align-items: center; gap: 5px; }
+.cc-gl .zd-mini { width: 17px; height: 17px; }
+.cc-gl-line { display: block; }
+.cc-acts { list-style: none; margin: 0.4rem 0 0; padding: 0; }
+.cc-act { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 12px; padding: 0.7rem 0; border-top: 1px solid var(--line-soft); }
+.cc-act-dice { display: flex; align-items: flex-end; min-width: 50px; }
+.cc-act-dice .zd-die { --s: 50px; }
+.cc-act-dice .zd-die.is-next { --s: 24px; margin-left: -12px; }
+.cc-act-in p { margin: 0 0 0.3rem; }
+.cc-act-in small { color: var(--muted); }
+.cc-act-lines { list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; font-size: 0.93rem; line-height: 1.35; }
+.cc-act-lines li { display: flex; align-items: baseline; gap: 8px; }
+.cc-act-lines .zd-pips { flex: none; }
+.cc-act-lines li.is-out { color: var(--muted); }
 
 .cc-card { padding: 1rem 1.1rem; margin-bottom: 0.8rem; }
 .cc-card .eyebrow { margin: 0; }
@@ -217,6 +315,7 @@ html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px))
 .cc-cond { display: flex; align-items: flex-start; gap: 12px; padding: 0.6rem 0.75rem; background: var(--surface); border: 1px solid var(--line-soft); border-left: 3px solid var(--gold); border-radius: 2px; }
 .cc-cond.is-for { border-left-color: var(--violet); }
 .cc-cond > div { min-width: 0; }
+.cc-cond-die { --s: 40px; }
 .cc-cond p { margin: 0.1rem 0; }
 
 .cc-person { margin: 0.6rem 0 1rem; }
@@ -248,6 +347,8 @@ html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px))
 .cc-swing-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 !important; }
 .cc-swing-head .k { margin-right: 0.2rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
 .cc-swing-to { font-weight: 700; color: var(--muted); }
+.cc-swing .zd-die { --s: 38px; }
+.cc-swing .zd-die.is-was { opacity: 0.6; }
 .cc-swing .hex { width: 36px; height: 36px; font-size: 0.85rem; }
 .cc-swing .hex:not(.on) { background: var(--line); }
 .cc-swing ul { list-style: none; display: grid; gap: 4px; margin: 0.5rem 0 0; padding: 0; font-size: 0.95rem; }
@@ -262,9 +363,9 @@ html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px))
 .cc-mood { font-size: 0.68rem; font-weight: 700; line-height: 1; letter-spacing: 0.06em; text-transform: uppercase; color: var(--violet); }
 .cc-mood.is-fired { color: var(--gold-ink); }
 /* Confidence glows as it goes up, and dims a moment as it goes down. */
-.t-conf.is-up .v { animation: cc-pip 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
 .t-conf.is-up { animation: cc-halo 0.9s ease-out; }
-.t-conf.is-down .v { animation: cc-dim 0.6s ease-out both; }
+.t-wound.is-up { animation: cc-ember 0.9s ease-out; }
+@keyframes cc-ember { 0%, 100% { filter: none; } 30% { filter: drop-shadow(0 0 6px var(--zd-harm)); } }
 @keyframes cc-dim { 0% { opacity: 0.35; transform: translateY(-3px); } 100% { opacity: 1; transform: none; } }
 
 /* The roll and defence dialog: full screen on a phone */
@@ -281,6 +382,15 @@ html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px))
 .cc-live p { margin: 0.3rem 0 0; }
 .cc-dice { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .cc-dice > span:last-child { margin-left: 6px; }
+/* The dice a card's about to roll, front and centre in its head, in their
+   real shapes, with theirs after an "against". */
+.cc-dice:has(.cc-dice-row) { gap: 6px 10px; }
+.cc-dice > .cc-dice-row:first-child + span { flex-basis: 100%; margin-left: 0; }
+.cc-dice-row { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 0.3rem; }
+.cc-dice-row .zd-die { --s: 56px; }
+.cc-dice-row .zd-die.is-vs, .cc-dice-row .zd-die.is-mark, .cc-dice-row .zd-die.them, .cc-dice-row .zd-die.harm { --s: 46px; }
+.cc-vs { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.cc-intent-die { --s: 40px; }
 .cc-costs { display: flex; flex-wrap: wrap; gap: 6px; }
 .dlg-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 1rem; }
 .dlg-foot { display: flex; flex-wrap: wrap; gap: 8px; padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom, 0px)); background: var(--surface); border-top: 1px solid var(--line); }
@@ -340,6 +450,35 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .cc-mark > summary small { color: var(--muted); }
 
 .cc-res { list-style: none; display: grid; gap: 8px; margin: 0; padding: 0; }
+.res .zd-die { --s: 56px; }
+.cc-mine-roll .zd-die { --s: 64px; }
+.cc-them .zd-die { --s: 56px; }
+.cc-pickdie { display: inline-grid; padding: 0; color: inherit; background: none; border: 0; border-radius: 50%; }
+.cc-pickdie:focus-visible { outline: 2px solid var(--violet); outline-offset: 4px; }
+
+/* The roll as a moment: your dice front and centre, each with what it did
+   under it, and what it was up against below. How it counted is a tap away. */
+.cc-stage { display: grid; justify-items: center; gap: 12px; padding: 0.4rem 0 0.2rem; }
+.cc-stage .cc-res { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px 20px; width: 100%; }
+.cc-stage .res { flex-direction: column; flex-wrap: nowrap; gap: 2px; min-width: 6.5rem; padding: 0; text-align: center; background: none; border: 0; }
+.cc-stage .res .zd-die { --s: 132px; margin-bottom: 4px; }
+.cc-stage.n2 .res .zd-die { --s: 108px; }
+.cc-stage.n3 .res .zd-die { --s: 86px; }
+.cc-stage.n4 .res .zd-die { --s: 72px; }
+.cc-stage .res-out { font-weight: 800; font-size: 1.45rem; line-height: 1.1; letter-spacing: 0.04em; text-transform: uppercase; }
+.cc-stage .res-die { font-size: 0.9rem; }
+.cc-stage .cc-them { justify-content: center; margin: 0; padding: 6px 12px 6px 10px; border: 1px solid color-mix(in srgb, var(--violet) 45%, transparent); border-radius: 2px; }
+.cc-stage .cc-them .zd-die { --s: 52px; }
+.cc-stage .cc-them.is-wound { border-color: color-mix(in srgb, var(--zd-harm) 50%, transparent); }
+.cc-them.is-wound .k { color: var(--zd-harm-ink); }
+.cc-said { text-align: center; }
+.cc-them .vs { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.cc-tobeat { display: inline-grid; place-items: center; min-width: 44px; height: 44px; padding: 0 8px; font-weight: 800; font-size: 1.3rem; color: var(--zd-on-them); background: var(--zd-them); border-radius: 2px; }
+.cc-skip { margin: 0; }
+.cc-topnote { margin: 0.5rem 0 0; text-align: center; font-weight: 700; color: var(--gold-ink); }
+.cc-left { margin-top: 0.8rem; text-align: center; }
+.cc-how > summary { display: inline-flex; align-items: center; min-height: 44px; cursor: pointer; color: var(--violet); font-weight: 700; }
+.cc-how .cc-log { margin-top: 0.2rem; }
 .res { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
 .res-die { color: var(--muted); font-weight: 700; }
 .res-out { font-size: 1.1rem; }
@@ -417,6 +556,15 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .cc-flip { animation: cc-flip 0.36s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
 .cc-reveal .res-out, .cc-reveal .res-note, .cc-reveal .res-paid, .cc-reveal .ln-out { animation: cc-rise 0.32s ease-out both; }
 .cc-reveal .res.is-beat, .cc-reveal .res.is-won, .cc-reveal .res.is-through { animation: cc-shine 0.7s ease-out; }
+.cc-reveal .cc-stage .res { animation: none; }
+/* A kit die tumbling on the roll card spins like a token flipped on the
+   table, then lands with a stamp (kit.css). */
+.cc-dialog .zd-die[data-spin]:not(.is-landed) { animation: cc-flipdie 0.42s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite; }
+@keyframes cc-flipdie {
+  from { transform: translateY(-6px) perspective(400px) rotateY(0deg) scale(1.05); }
+  to { transform: translateY(-6px) perspective(400px) rotateY(360deg) scale(1.05); }
+}
+.cc-reveal .cc-topnote { animation: cc-rise 0.32s ease-out both; }
 .cc-go-next { animation: cc-from-right 0.28s cubic-bezier(0.2, 0.8, 0.3, 1) both; }
 .cc-go-back { animation: cc-from-left 0.28s cubic-bezier(0.2, 0.8, 0.3, 1) both; }
 @keyframes cc-rise { from { transform: translateY(18px); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -436,6 +584,9 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .cc-topbar .cc-back { margin-top: 0; }
 .cc-sound { display: inline-flex; align-items: center; gap: 6px; min-width: 44px; min-height: 44px; padding: 0 0.75rem; font-weight: 700; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 2px; }
 .cc-sound[aria-pressed="true"] { color: var(--gold-ink); border-color: var(--gold); }
+.cc-tools { display: flex; align-items: center; gap: 6px; }
+.cc-theme { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 2px; }
+.cc-theme:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
 .cc-sound:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
 
 /* The learning round. */

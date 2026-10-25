@@ -5,7 +5,7 @@
 // blank character sheet, which the companion fills in to print a character.
 // Search (dist/pagefind/) needs a signal, so it's left out.
 import { createHash } from "node:crypto";
-import { readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { join, relative, sep } from "node:path";
 
 const ROOT = process.cwd();
@@ -21,8 +21,14 @@ const files = [];
 })(DIST);
 
 // The kit (/kit/) is a design board for Mo, so it stays off everyone's phone:
-// its page, its own CSS and script, and the heavy weight only it uses.
-const kitOnly = (rel) => rel.startsWith("kit/") || rel.startsWith("_astro/kit.") || /-800-normal\./.test(rel);
+// its page, and any script or style only that page asks for. The companion
+// draws with the kit too, so whatever another page uses is kept, and so is
+// every Latin font, the 800 weight included, since the dice's numbers use it.
+const refs = (html) => [...html.matchAll(/(?:src|href)="\/(_astro\/[^"]+)"/g)].map((m) => m[1]);
+const kitPage = join(DIST, "kit", "index.html");
+const kitRefs = new Set(existsSync(kitPage) ? refs(readFileSync(kitPage, "utf8")) : []);
+const others = new Set(files.filter((p) => p.endsWith(".html") && p !== kitPage).flatMap((p) => refs(readFileSync(p, "utf8"))));
+const kitOnly = (rel) => rel.startsWith("kit/") || (kitRefs.has(rel) && !others.has(rel));
 const keep = (rel) => !kitOnly(rel) && ((/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf");
 const hash = createHash("sha1");
 const urls = [];

@@ -1,21 +1,19 @@
-/* The kit: the game's own objects, drawn by src/kit/kit.js.
+/* The kit: the game's own objects, drawn by src/kit/kit.js in the Struck
+   look, tokens punched out of card, the same in every theme.
    Colour does one job each. Gold is yours to roll or spend, violet is the
-   GM's and the threats', and ember is harm. Everything else is ink.
-   Two looks share every drawing: [data-kit="lit"] and [data-kit="struck"]. */
+   GM's and the threats', and ember is harm. Everything else is ink. */
 
 :root {
   --zd-you: #d9b45a; --zd-you-line: #d9b45a; --zd-you-ink: #e5c677; --zd-on-you: #1a1208;
   --zd-them: #b596f5; --zd-them-line: #b596f5; --zd-them-ink: #c6aef8; --zd-on-them: #120d18;
   --zd-harm: #ef7d5c; --zd-harm-line: #ef7d5c; --zd-harm-ink: #f39a7f; --zd-on-harm: #1c0c07;
-  --zd-body: #241b2f; --zd-face: #130e19; --zd-token: #2a2135; --zd-slot: #3b3048; --zd-slot-line: #4c405b;
-  --zd-unlit: rgba(217, 180, 90, 0.2); --zd-unlit-them: rgba(181, 150, 245, 0.22); --zd-unlit-harm: rgba(239, 125, 92, 0.28);
+  --zd-token: #2a2135; --zd-slot: #3b3048; --zd-slot-line: #5a4c6b;
 }
 :root[data-theme="light"] {
   --zd-you: #d7ae4b; --zd-you-line: #8f6a12; --zd-you-ink: #6e5110; --zd-on-you: #1a1208;
   --zd-them: #5b36b0; --zd-them-line: #47288f; --zd-them-ink: #5b36b0; --zd-on-them: #ffffff;
   --zd-harm: #b8432a; --zd-harm-line: #933219; --zd-harm-ink: #a03a22; --zd-on-harm: #ffffff;
-  --zd-body: #efe6d6; --zd-face: #fffdf8; --zd-token: #ffffff; --zd-slot: #ece5f1; --zd-slot-line: #cfc3da;
-  --zd-unlit: rgba(122, 90, 18, 0.22); --zd-unlit-them: rgba(91, 54, 176, 0.2); --zd-unlit-harm: rgba(184, 67, 42, 0.25);
+  --zd-token: #ffffff; --zd-slot: #ece5f1; --zd-slot-line: #a99bb8;
 }
 /* Paper: what it looks like printed in one ink, the way the sheets come out. */
 :root[data-theme="paper"] {
@@ -25,173 +23,110 @@
   --zd-you: #111111; --zd-you-line: #111111; --zd-you-ink: #111111; --zd-on-you: #ffffff;
   --zd-them: #6d6d6d; --zd-them-line: #6d6d6d; --zd-them-ink: #555555; --zd-on-them: #ffffff;
   --zd-harm: #111111; --zd-harm-line: #111111; --zd-harm-ink: #111111; --zd-on-harm: #ffffff;
-  --zd-body: #ffffff; --zd-face: #ffffff; --zd-token: #ffffff; --zd-slot: #ffffff; --zd-slot-line: #9a9a9a;
-  --zd-unlit: #b5b5b5; --zd-unlit-them: #c4c4c4; --zd-unlit-harm: #b5b5b5;
+  --zd-token: #ffffff; --zd-slot: #ffffff; --zd-slot-line: #9a9a9a;
   color-scheme: light;
 }
 
 /* Who it belongs to, for every piece */
 .zd-die, .zd-mini, .zd-in, .zd-pips, .zd-cond, .zd-chit, .zd-gem {
-  --own: var(--zd-you); --own-line: var(--zd-you-line); --own-ink: var(--zd-you-ink); --on-own: var(--zd-on-you); --unlit: var(--zd-unlit);
+  --own: var(--zd-you); --own-line: var(--zd-you-line); --own-ink: var(--zd-you-ink); --on-own: var(--zd-on-you);
 }
-.them { --own: var(--zd-them); --own-line: var(--zd-them-line); --own-ink: var(--zd-them-ink); --on-own: var(--zd-on-them); --unlit: var(--zd-unlit-them); }
-.harm { --own: var(--zd-harm); --own-line: var(--zd-harm-line); --own-ink: var(--zd-harm-ink); --on-own: var(--zd-on-harm); --unlit: var(--zd-unlit-harm); }
+.them { --own: var(--zd-them); --own-line: var(--zd-them-line); --own-ink: var(--zd-them-ink); --on-own: var(--zd-on-them); }
+.harm { --own: var(--zd-harm); --own-line: var(--zd-harm-line); --own-ink: var(--zd-harm-ink); --on-own: var(--zd-on-harm); }
 
-/* ── Dice ─────────────────────────────────────────────── */
-.zd-die { display: block; width: var(--s, 56px); height: auto; overflow: visible; flex: none; }
-.zd-die .num { text-anchor: middle; dominant-baseline: central; font-variant-numeric: lining-nums tabular-nums; }
+/* ── Dice: a token cut to the die's shape, its faces as solid pieces in the
+   owner's colour round a hub the same shape, and the number on the hub. */
+.zd-die, .zd-mini { --tok: var(--zd-token); --hubfill: var(--zd-token); overflow: visible; flex: none; }
+.zd-die { display: block; width: var(--s, 56px); height: var(--s, 56px); transform-origin: 50% 50%; }
+.zd-die .tok, .zd-mini .tok { fill: var(--tok); stroke: var(--zd-slot-line); stroke-width: 3.6; stroke-linejoin: round; }
+.zd-die .pc, .zd-mini .pc { fill: var(--own); }
+.zd-die .cut, .zd-mini .cut { stroke: var(--tok); stroke-width: 3.4; }
+.zd-die .hub, .zd-mini .hub { fill: var(--hubfill); stroke: var(--own-line); stroke-width: 3.4; stroke-linejoin: round; }
+.zd-die .num { font-family: var(--body); font-weight: 800; fill: var(--own-ink); text-anchor: middle; dominant-baseline: central; font-variant-numeric: lining-nums tabular-nums; }
+.zd-die.is-rolled { --hubfill: var(--own); }
+.zd-die.is-rolled .num { fill: var(--on-own); }
+.zd-die.is-top { --tok: var(--own); }
+.zd-die.is-top .pc { fill: var(--on-own); }
+.zd-die.is-low { --hubfill: var(--zd-slot); }
+.zd-die.is-low .pc { fill: var(--zd-slot); }
+.zd-die.is-low .num { fill: var(--muted); }
+.zd-die.is-tie .hub { stroke-dasharray: 6 4; }
 .zd-dice { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-.zd-mini { display: inline-block; width: 1.25em; height: auto; vertical-align: -0.24em; overflow: visible; }
+/* Under about 28px it's a mini: no number, and the strokes doubled. */
+.zd-mini { display: inline-block; width: 1.25em; height: 1.25em; vertical-align: -0.24em; }
+.zd-mini .tok { stroke-width: 7.2; }
+.zd-mini .hub, .zd-mini .cut { stroke-width: 6.8; }
 .zd-in { white-space: nowrap; }
 .zd-in b { color: var(--own-ink); margin-left: 0.15em; }
-[data-kit="lit"] .struck, [data-kit="struck"] .lit { display: none; }
+:root[data-theme="light"] .zd-die .pc, :root[data-theme="light"] .zd-mini .pc { stroke: var(--own-line); stroke-width: 1.4; stroke-linejoin: round; }
+:root[data-theme="light"] .zd-die.is-top .pc, :root[data-theme="light"] .zd-die.is-low .pc { stroke: none; }
+:root[data-theme="paper"] .them .pc, :root[data-theme="paper"] .zd-die.them.is-rolled .hub { fill: url(#zd-hatch); }
+:root[data-theme="paper"] .zd-die.them.is-rolled .num { fill: #111; paint-order: stroke; stroke: #fff; stroke-width: 7px; }
 
-/* Lit: light along the edges, a dark glass face, and the number lights it */
-[data-kit="lit"] .zd-die .body, [data-kit="lit"] .zd-mini .body { fill: var(--zd-body); }
-[data-kit="lit"] .zd-die .face { fill: var(--zd-face); stroke: var(--unlit); stroke-width: 1.4; transition: fill 0.25s ease; }
-[data-kit="lit"] .zd-mini .face { fill: var(--zd-face); }
-[data-kit="lit"] .e { stroke: var(--unlit); stroke-width: 3.4; stroke-linecap: round; }
-[data-kit="lit"] .e.on { stroke: var(--own); stroke-width: 6.6; }
-[data-kit="lit"] .zd-die .glow { filter: url(#zd-glow); }
-[data-kit="lit"] .zd-mini .e { stroke-width: 6; }
-[data-kit="lit"] .zd-mini .e.on { stroke-width: 11; }
-[data-kit="lit"] .zd-die .num { font-family: var(--body); font-weight: 700; font-size: 30px; fill: var(--own-ink); }
-[data-kit="lit"] .zd-die .num.long { font-size: 26px; }
-[data-kit="lit"] .zd-die.is-rolled .face { fill: var(--own); stroke: none; }
-[data-kit="lit"] .zd-die.is-rolled .num { fill: var(--on-own); font-family: var(--display); font-size: 40px; }
-[data-kit="lit"] .zd-die.is-rolled .num.long { font-size: 34px; }
-[data-kit="lit"] .zd-die.is-top .body { stroke: var(--own); stroke-width: 2; filter: url(#zd-glow); }
-[data-kit="lit"] .zd-die.is-low .glow, [data-kit="lit"] .zd-die.is-low .edges { opacity: 0.35; }
-[data-kit="lit"] .zd-die.is-low .face { fill: var(--zd-face); stroke: var(--unlit); }
-[data-kit="lit"] .zd-die.is-low .num { fill: var(--muted); }
-[data-kit="lit"] .zd-die.is-tie .face { stroke: var(--own); stroke-width: 2.4; stroke-dasharray: 5 4; }
-:root[data-theme="light"] [data-kit="lit"] .zd-die .glow, :root[data-theme="paper"] [data-kit="lit"] .zd-die .glow,
-:root[data-theme="light"][data-kit="lit"] .zd-die .glow, :root[data-theme="paper"][data-kit="lit"] .zd-die .glow { filter: none; }
-:root[data-theme="light"][data-kit="lit"] .e.on { stroke: var(--own-line); stroke-width: 7.2; }
-:root[data-theme="paper"][data-kit="lit"] .e.on { stroke-width: 8; }
-:root[data-theme="paper"][data-kit="lit"] .zd-die .body { fill: #fff; stroke: #d0d0d0; stroke-width: 1; }
-
-/* Struck: a token with six pieces round a hub, filled as the steps go on */
-[data-kit="struck"] .rim { fill: var(--zd-token); stroke: var(--zd-slot-line); stroke-width: 3.6; stroke-linejoin: round; }
-[data-kit="struck"] .s { fill: var(--zd-slot); }
-[data-kit="struck"] .s.on { fill: var(--own); }
-[data-kit="struck"] .hub { fill: var(--zd-token); stroke: var(--own-line); stroke-width: 3.4; stroke-linejoin: round; transition: fill 0.2s ease; }
-[data-kit="struck"] .zd-mini .rim { stroke-width: 7; }
-[data-kit="struck"] .zd-mini .hub { stroke-width: 6; }
-[data-kit="struck"] .zd-die .num { font-family: var(--body); font-weight: 800; font-size: 27px; fill: var(--own-ink); }
-[data-kit="struck"] .zd-die .num.long { font-size: 22px; }
-[data-kit="struck"] .zd-die.is-rolled .hub { fill: var(--own); }
-[data-kit="struck"] .zd-die.is-rolled .num { fill: var(--on-own); font-size: 34px; }
-[data-kit="struck"] .zd-die.is-rolled .num.long { font-size: 27px; }
-[data-kit="struck"] .zd-die.is-top .rim { fill: var(--own); }
-[data-kit="struck"] .zd-die.is-top .s.on { fill: var(--on-own); }
-[data-kit="struck"] .zd-die.is-top .hub { stroke: var(--on-own); }
-[data-kit="struck"] .zd-die.is-low .s.on, [data-kit="struck"] .zd-die.is-low .hub { fill: var(--zd-slot); }
-[data-kit="struck"] .zd-die.is-low .num { fill: var(--muted); }
-[data-kit="struck"] .zd-die.is-tie .hub { stroke-dasharray: 6 4; }
-:root[data-theme="light"][data-kit="struck"] .s { stroke: var(--zd-slot-line); stroke-width: 1.2; }
-:root[data-theme="light"][data-kit="struck"] .s.on { stroke: var(--own-line); stroke-width: 1.6; }
-:root[data-theme="paper"][data-kit="struck"] .s { stroke: var(--zd-slot-line); stroke-width: 1.4; }
-:root[data-theme="paper"][data-kit="struck"] .them .s.on, :root[data-theme="paper"][data-kit="struck"] .zd-die.them.is-rolled .hub { fill: url(#zd-hatch); stroke: #111; stroke-width: 1.6; }
-:root[data-theme="paper"][data-kit="struck"] .zd-die.them.is-rolled .num { fill: #111; paint-order: stroke; stroke: #fff; stroke-width: 7px; }
-:root[data-theme="paper"][data-kit="lit"] .them .e.on { stroke-dasharray: 7 5; stroke-linecap: butt; }
-
-/* Steps, as the pieces they become */
+/* Steps, where a set action needs them: a pip a line */
 .zd-pips { display: inline-flex; align-items: center; gap: 4px; vertical-align: middle; }
-.zd-pips i { display: block; flex: none; }
-[data-kit="lit"] .zd-pips i { width: 13px; height: 4px; border-radius: 3px; background: var(--own); box-shadow: 0 0 6px color-mix(in srgb, var(--own) 70%, transparent); }
-[data-kit="struck"] .zd-pips i { width: 13px; height: 8px; background: var(--own); clip-path: polygon(0 0, 100% 0, 78% 100%, 22% 100%); }
-:root[data-theme="light"] .zd-pips i, :root[data-theme="paper"] .zd-pips i { box-shadow: none; }
-:root[data-theme="light"][data-kit="lit"] .zd-pips i { background: var(--own-line); }
-:root[data-theme="light"][data-kit="struck"] .zd-pips i { background: var(--own-line); }
+.zd-pips i { display: block; flex: none; width: 13px; height: 8px; background: var(--own); clip-path: polygon(0 0, 100% 0, 78% 100%, 22% 100%); }
+:root[data-theme="light"] .zd-pips i { background: var(--own-line); }
 
 /* Aura and Resolve */
 .zd-aura, .zd-resolve { display: inline-flex; align-items: center; gap: 4px; }
 .zd-chit { width: 19px; height: auto; display: block; }
 .zd-gem { width: 23px; height: 23px; display: block; }
-[data-kit="lit"] .zd-chit .a, [data-kit="lit"] .zd-gem .a { fill: none; stroke: var(--unlit); stroke-width: 7; }
-[data-kit="lit"] .zd-chit .b, [data-kit="lit"] .zd-gem .b { fill: none; }
-[data-kit="lit"] .zd-chit.on .a, [data-kit="lit"] .zd-gem.on .a { fill: var(--own); stroke: var(--own); filter: url(#zd-glow-soft); }
-[data-kit="lit"] .zd-chit.on .b, [data-kit="lit"] .zd-gem.on .b { fill: rgba(255, 250, 230, 0.42); }
-[data-kit="struck"] .zd-chit .a, [data-kit="struck"] .zd-gem .a { fill: var(--zd-slot); stroke: var(--zd-slot-line); stroke-width: 7; stroke-linejoin: round; }
-[data-kit="struck"] .zd-chit .b, [data-kit="struck"] .zd-gem .b { fill: none; }
-[data-kit="struck"] .zd-chit.on .a, [data-kit="struck"] .zd-gem.on .a { fill: var(--own); stroke: var(--own-line); stroke-width: 8; }
-[data-kit="struck"] .zd-gem.on .b { fill: none; stroke: var(--on-own); stroke-width: 6; opacity: 0.55; }
-:root[data-theme="light"] .zd-chit.on .a, :root[data-theme="light"] .zd-gem.on .a, :root[data-theme="paper"] .zd-chit.on .a, :root[data-theme="paper"] .zd-gem.on .a { filter: none; stroke: var(--own-line); }
-:root[data-theme="paper"] .zd-chit.on .b, :root[data-theme="paper"] .zd-gem.on .b { fill: none; }
+.zd-chit .a, .zd-gem .a { fill: var(--zd-slot); stroke: var(--zd-slot-line); stroke-width: 7; stroke-linejoin: round; }
+.zd-chit .b, .zd-gem .b { fill: none; }
+.zd-chit.on .a, .zd-gem.on .a { fill: var(--own); stroke: var(--own-line); stroke-width: 8; }
+.zd-gem.on .b { stroke: var(--on-own); stroke-width: 5; stroke-linejoin: round; opacity: 0.5; }
+:root[data-theme="light"] .zd-chit.on .a, :root[data-theme="light"] .zd-gem.on .a, :root[data-theme="paper"] .zd-chit.on .a, :root[data-theme="paper"] .zd-gem.on .a { stroke: var(--own-line); }
 
 /* A cost in running text: "1 Aura" with its token */
 .zd-cost { display: inline-flex; align-items: center; gap: 0.22em; white-space: nowrap; font-weight: 700; color: var(--zd-you-ink); vertical-align: bottom; }
 .zd-cost .zd-chit, .zd-cost .zd-gem { display: inline-block; width: 0.95em; height: auto; }
 
-/* The Hurt track */
-.zd-hurt { display: inline-flex; flex-wrap: wrap; gap: 8px 10px; align-items: flex-start; }
-.zd-hurt .bar { display: inline-flex; flex-direction: column; gap: 4px; }
-.zd-hurt .boxes { display: inline-flex; gap: 3px; }
-.zd-hurt i { display: block; width: 20px; height: 20px; border-radius: 3px; }
-.zd-hurt em { font-size: 0.82rem; line-height: 1.2; max-width: 9em; }
-[data-kit="lit"] .zd-hurt i { background: var(--zd-face); border: 1.5px solid var(--zd-unlit-harm); }
-[data-kit="lit"] .zd-hurt i.on { background: var(--zd-harm); border-color: var(--zd-harm); box-shadow: 0 0 9px color-mix(in srgb, var(--zd-harm) 65%, transparent); }
-[data-kit="lit"] .zd-hurt .caught em { color: var(--zd-harm-ink); border-top: 1px solid var(--zd-harm); padding-top: 3px; }
-[data-kit="struck"] .zd-hurt i { background: var(--zd-slot); border: 2px solid var(--zd-slot-line); border-radius: 2px; }
-[data-kit="struck"] .zd-hurt i.on { background: var(--zd-harm); border-color: var(--zd-harm-line); }
-[data-kit="struck"] .zd-hurt .caught em { font-style: italic; font-weight: 700; color: var(--zd-on-harm); background: var(--zd-harm); padding: 2px 7px 3px; border-radius: 2px; align-self: flex-start; }
-:root[data-theme="light"] .zd-hurt i.on, :root[data-theme="paper"] .zd-hurt i.on { box-shadow: none; }
-:root[data-theme="paper"][data-kit="lit"] .zd-hurt i { border-color: #9a9a9a; }
+/* Scars, beside the wound die: a cut for each, and empty slots up to five */
+.zd-scars { display: inline-flex; align-items: center; gap: 3px; vertical-align: middle; }
+.zd-scars i { display: block; width: 5px; height: 15px; border-radius: 3px; transform: skewX(-22deg); border: 1.5px solid var(--zd-harm-line); }
+.zd-scars i.on { background: var(--zd-harm); }
+.zd-scars i:not(.on) { border-color: var(--zd-slot-line); }
 
 /* Conditions and tags */
 .zd-cond, .zd-tag { display: inline-flex; align-items: center; gap: 5px; min-height: 32px; padding: 0 11px 0 7px; font-size: 0.95rem; line-height: 1.1; border-radius: 3px; }
 .zd-tag { padding: 0 11px; }
+.zd-cond { background: var(--zd-token); border: 2px solid var(--own-line); }
 .zd-cond b { font-weight: 700; color: var(--own-ink); }
 .zd-cond em, .zd-tag em { font-style: italic; color: var(--ink); }
-.zd-cond .zd-mini { width: 22px; font-size: 1rem; }
-[data-kit="lit"] .zd-cond { background: color-mix(in srgb, var(--own) 10%, var(--surface)); border: 1px solid color-mix(in srgb, var(--own) 55%, transparent); }
-[data-kit="lit"] .zd-tag.threat { border: 1px solid color-mix(in srgb, var(--zd-them) 60%, transparent); background: color-mix(in srgb, var(--zd-them) 9%, var(--surface)); }
-[data-kit="struck"] .zd-cond { background: var(--zd-token); border: 2px solid var(--own-line); }
-[data-kit="struck"] .zd-tag.threat { background: var(--zd-token); border: 2px solid var(--zd-them-line); }
+.zd-cond .zd-mini { width: 22px; height: 22px; font-size: 1rem; }
+.zd-tag.threat { background: var(--zd-token); border: 2px solid var(--zd-them-line); }
 .zd-tag.hidden { border: 1.5px dashed var(--muted); }
 .zd-tag.hidden em { color: var(--muted); }
 
 /* Sigils and crests */
-.zd-sigil { width: var(--s, 30px); height: var(--s, 30px); display: block; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+.zd-sigil { width: var(--s, 30px); height: var(--s, 30px); display: block; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; color: var(--ink); stroke-width: 2.2; }
 .zd-sigil .dot, .zd-crest .dot { fill: currentColor; stroke: none; }
 .zd-sigil .dash, .zd-crest .dash { stroke-dasharray: 2.4 2.1; }
 .zd-crest { display: block; width: var(--s, 72px); height: var(--s, 72px); flex: none; overflow: visible; }
 .zd-crest.sm { --s: 28px; }
 .zd-crest .heart, .zd-crest .sg { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-[data-kit="lit"] .zd-sigil { color: var(--zd-you); stroke-width: 1.7; }
-[data-kit="lit"] .zd-crest .field { fill: var(--zd-face); stroke: var(--zd-them); stroke-width: 2.2; }
-[data-kit="lit"] .zd-crest .core { fill: none; stroke: var(--zd-unlit-them); stroke-width: 1; }
-[data-kit="lit"] .zd-crest .ring { fill: none; stroke: var(--zd-them); stroke-width: 1.3; }
-[data-kit="lit"] .zd-crest .heart { color: var(--zd-you); stroke: var(--zd-you); stroke-width: 1.6; filter: url(#zd-glow-soft); }
-[data-kit="lit"] .zd-crest .sf { fill: var(--zd-face); stroke: var(--zd-them); stroke-width: 1.8; }
-[data-kit="lit"] .zd-crest .sc { fill: none; }
-[data-kit="lit"] .zd-crest .sg { color: var(--zd-you); stroke: var(--zd-you); stroke-width: 2.8; }
-[data-kit="lit"] .zd-crest.sm .heart { stroke-width: 2.1; filter: none; }
-[data-kit="struck"] .zd-sigil { color: var(--ink); stroke-width: 2.2; }
-[data-kit="struck"] .zd-crest .field { fill: var(--zd-them); stroke: var(--zd-them-line); stroke-width: 1.5; }
-[data-kit="struck"] .zd-crest .core { fill: var(--zd-you); }
-[data-kit="struck"] .zd-crest .ring { fill: none; stroke: var(--zd-token); stroke-width: 2; }
-[data-kit="struck"] .zd-crest .heart { color: var(--zd-on-you); stroke: var(--zd-on-you); stroke-width: 2.2; }
-[data-kit="struck"] .zd-crest .sf { fill: var(--zd-them); stroke: var(--zd-token); stroke-width: 2.4; }
-[data-kit="struck"] .zd-crest .sc { fill: var(--zd-you); }
-[data-kit="struck"] .zd-crest .sg { color: var(--zd-on-you); stroke: var(--zd-on-you); stroke-width: 3.8; }
-[data-kit="struck"] .zd-crest.sm .heart { stroke-width: 2.8; }
-:root[data-theme="light"] .zd-crest .heart, :root[data-theme="paper"] .zd-crest .heart { filter: none; }
-:root[data-theme="light"][data-kit="lit"] .zd-crest .heart, :root[data-theme="light"][data-kit="lit"] .zd-crest .sg { stroke: var(--zd-you-line); color: var(--zd-you-line); }
-:root[data-theme="light"][data-kit="lit"] .zd-sigil { color: var(--zd-you-line); }
-:root[data-theme="paper"][data-kit="struck"] .zd-crest .field { fill: #111; }
-:root[data-theme="paper"][data-kit="struck"] .zd-crest .core { fill: #fff; }
-:root[data-theme="paper"][data-kit="struck"] .zd-crest .ring { stroke: #fff; }
-:root[data-theme="paper"][data-kit="struck"] .zd-crest .heart, :root[data-theme="paper"][data-kit="struck"] .zd-crest .sg { stroke: #111; color: #111; }
-:root[data-theme="paper"][data-kit="struck"] .zd-crest .sf { fill: #111; stroke: #fff; }
-:root[data-theme="paper"][data-kit="struck"] .zd-crest .sc { fill: #fff; }
+.zd-crest .field { fill: var(--zd-them); stroke: var(--zd-them-line); stroke-width: 1.5; }
+.zd-crest .core { fill: var(--zd-you); }
+.zd-crest .ring { fill: none; stroke: var(--zd-token); stroke-width: 2; }
+.zd-crest .heart { color: var(--zd-on-you); stroke: var(--zd-on-you); stroke-width: 2.2; }
+.zd-crest .heart-plain { fill: var(--zd-on-you); }
+.zd-crest .sf { fill: var(--zd-them); stroke: var(--zd-token); stroke-width: 2.4; }
+.zd-crest .sc { fill: var(--zd-you); }
+.zd-crest .sg { color: var(--zd-on-you); stroke: var(--zd-on-you); stroke-width: 3.8; }
+.zd-crest.sm .heart { stroke-width: 2.8; }
+:root[data-theme="paper"] .zd-crest .field { fill: #111; }
+:root[data-theme="paper"] .zd-crest .core { fill: #fff; }
+:root[data-theme="paper"] .zd-crest .ring { stroke: #fff; }
+:root[data-theme="paper"] .zd-crest .heart, :root[data-theme="paper"] .zd-crest .sg { stroke: #111; color: #111; }
+:root[data-theme="paper"] .zd-crest .sf { fill: #111; stroke: #fff; }
+:root[data-theme="paper"] .zd-crest .sc { fill: #fff; }
 
 /* The telegraph */
-.zd-tele { display: flex; flex-direction: column; gap: 0.7rem; padding: 0.85rem 1rem 0.9rem; max-width: 26rem; }
-.zd-tele header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
-.zd-tele .k { color: var(--zd-them-ink); }
-.zd-tele .r { color: var(--muted); letter-spacing: 0.08em; }
+.zd-tele { display: flex; flex-direction: column; gap: 0.7rem; padding: 0 1rem 0.9rem; max-width: 26rem; background: var(--zd-token); border: 2px solid var(--zd-them-line); border-radius: 3px; }
+.zd-tele header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin: 0 -1rem; padding: 0.4rem 1rem; background: var(--zd-them); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+.zd-tele .k, .zd-tele .r { color: var(--zd-on-them); }
+.zd-tele .r { letter-spacing: 0.08em; }
 .zd-tele .tb { display: flex; align-items: center; gap: 0.9rem; }
 .zd-tele .tb .zd-die { --s: 62px; }
 .zd-tele h3, .zd-tele h4 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.4rem; line-height: 1.1; letter-spacing: 0.02em; }
@@ -202,31 +137,17 @@
 .zd-tele .at { display: inline-flex; align-items: center; gap: 0.45rem; font-weight: 700; }
 .zd-tele .when { color: var(--muted); }
 .zd-aim { width: 24px; height: 24px; flex: none; fill: none; stroke: var(--zd-them-line); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-[data-kit="lit"] .zd-tele { background: linear-gradient(color-mix(in srgb, var(--zd-them) 12%, var(--surface)), var(--surface) 4.5rem); border: 1px solid color-mix(in srgb, var(--zd-them) 45%, transparent); border-top: 2px solid var(--zd-them); border-radius: 3px; box-shadow: 0 -6px 22px -10px color-mix(in srgb, var(--zd-them) 70%, transparent); }
-[data-kit="struck"] .zd-tele { background: var(--zd-token); border: 2px solid var(--zd-them-line); border-radius: 3px; padding-top: 0; }
-[data-kit="struck"] .zd-tele header { margin: 0 -1rem; padding: 0.4rem 1rem; background: var(--zd-them); }
-[data-kit="struck"] .zd-tele header .k, [data-kit="struck"] .zd-tele header .r { color: var(--zd-on-them); }
-:root[data-theme="paper"] .zd-tele { box-shadow: none; background: #fff; }
+:root[data-theme="paper"] .zd-tele { background: #fff; }
 
-/* ── Motion. Everything stops under reduce-motion (the last rule here). */
-@keyframes zd-ignite { from { opacity: 0.15; stroke-dasharray: 1 60; } to { opacity: 1; stroke-dasharray: 60 0; } }
-@keyframes zd-snap { 0% { transform: scale(0.3); opacity: 0; } 65% { transform: scale(1.14); opacity: 1; } 100% { transform: scale(1); } }
-@keyframes zd-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+/* ── Motion. Everything stops under reduce-motion (the last rule here, and
+   the companion's own at the bottom of its motion block). A die growing into
+   its next shape is drawn by grow() in kit.js, which checks the same setting. */
 @keyframes zd-wobble { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-9deg) scale(0.97); } 75% { transform: rotate(9deg) scale(0.97); } }
-@keyframes zd-land-lit { 0% { transform: scale(1.12); } 100% { transform: scale(1); } }
-@keyframes zd-stamp { 0% { transform: scale(1.22); } 55% { transform: scale(0.93); } 100% { transform: scale(1); } }
-@keyframes zd-halo { 0% { filter: drop-shadow(0 0 0 transparent); } 30% { filter: drop-shadow(0 0 14px var(--own)); } 100% { filter: drop-shadow(0 0 2px transparent); } }
-@keyframes zd-pop { 0% { transform: scale(0.2); opacity: 0; } 70% { transform: scale(1.25); opacity: 1; } 100% { transform: scale(1); } }
-[data-kit="lit"] .e.on.is-new { animation: zd-ignite 0.45s ease-out both; }
-[data-kit="struck"] .s.on.is-new { transform-box: fill-box; transform-origin: center; animation: zd-snap 0.34s cubic-bezier(0.2, 0.9, 0.3, 1.2) both; }
-.zd-die { transform-box: fill-box; transform-origin: center; }
-[data-kit="lit"] .zd-die.is-spinning .glow { animation: zd-flicker 0.18s linear infinite; }
-[data-kit="struck"] .zd-die.is-spinning { animation: zd-wobble 0.2s linear infinite; }
-[data-kit="lit"] .zd-die.is-landed { animation: zd-land-lit 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
-[data-kit="struck"] .zd-die.is-landed { animation: zd-stamp 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
-[data-kit="lit"] .zd-die.is-top.is-landed { animation: zd-land-lit 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.2), zd-halo 0.9s ease-out; }
-.zd-chit.is-new, .zd-gem.is-new { animation: zd-pop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
-.zd-hurt i.is-new { animation: zd-pop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.3) both; }
+@keyframes zd-stamp { 0% { transform: scale(1.18); } 55% { transform: scale(0.95); } 100% { transform: scale(1); } }
+@keyframes zd-pop { 0% { transform: scale(0.6); opacity: 0; } 70% { transform: scale(1.18); opacity: 1; } 100% { transform: scale(1); } }
+.zd-die[data-spin] { animation: zd-wobble 0.2s linear infinite; }
+.zd-die[data-spin].is-landed, .zd-die.is-landed { animation: zd-stamp 0.3s cubic-bezier(0.23, 1, 0.32, 1); }
+.zd-chit.is-new, .zd-gem.is-new, .zd-scars i.is-new { animation: zd-pop 0.4s cubic-bezier(0.23, 1, 0.32, 1) both; }
 @media (prefers-reduced-motion: reduce) {
   .kit *, .kit *::before, .kit *::after { animation: none !important; transition: none !important; }
 }

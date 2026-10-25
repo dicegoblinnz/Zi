@@ -126,8 +126,10 @@ export function tumble(where, done) {
   const scope = () => (typeof where === "function" ? where() : where) ?? document.createDocumentFragment();
   const dice = [...scope().querySelectorAll("[data-spin]")];
   const gap = dice.length > 1 ? Math.min(160, 480 / (dice.length - 1)) : 0;
+  // A kit die (an SVG) keeps its number on the hub, so that's what changes.
+  const face = (el) => el.querySelector?.(".num") ?? el;
   dice.forEach((el, i) => {
-    el.dataset.to = el.textContent;
+    el.dataset.to = face(el).textContent;
     el.dataset.at = String(Math.round(600 + i * gap));
     el.style.animationDelay = `${-Math.round(Math.random() * 400)}ms`;
   });
@@ -140,13 +142,13 @@ export function tumble(where, done) {
     const t = performance.now() - started;
     for (const el of scope().querySelectorAll("[data-spin]:not(.is-landed)")) {
       // A die drawn again mid-tumble already shows its number, so it lands now.
-      if (!el.dataset.to) Object.assign(el.dataset, { to: el.textContent, at: "0" });
+      if (!el.dataset.to) Object.assign(el.dataset, { to: face(el).textContent, at: "0" });
       if (t >= Number(el.dataset.at)) {
-        el.textContent = el.dataset.to;
+        face(el).textContent = el.dataset.to;
         el.style.animationDelay = "";
         el.classList.add("is-landed");
         feel.land();
-      } else el.textContent = String(1 + Math.floor(Math.random() * Number(el.dataset.spin)));
+      } else face(el).textContent = String(1 + Math.floor(Math.random() * Number(el.dataset.spin)));
     }
     if (t >= end) {
       stopped = true;
