@@ -57,7 +57,8 @@
 // 7b. A character in one hand: full screen with the crest at the top, the
 //    first set action high up, each set action drawn as the dice it rolls,
 //    her 8 front and centre with its top face lit, and the Sheet tab under two
-//    screens with its folds shut, with axe on all three in both themes.
+//    screens with its folds shut, with axe on all three in both themes. A
+//    Hurt with reduce-motion on swaps the wound die's shape, and nothing moves.
 // 8. Downtime and rule changes. Vesk's week from Downtime, with a Hurt on
 //    her that clears for free: one slot pays the fence, which strains her
 //    hostile thread with him, and the other gives her grappling line its
@@ -1461,6 +1462,11 @@ async function round(page, dice, real = false) {
     same(await page.$$eval(".cc-act:first-child .zd-pips", (els) => els.length), 4, `Vesk's Sneak with a pip for each of its 4 steps, ${theme}`);
     await axe(`the Sheet tab, ${theme}`);
     await shot(page, `one-hand-${theme}`);
+    // With reduce-motion on, a Hurt swaps the wound die's shape and nothing moves.
+    await page.click('.cc-tabs a[data-t="play"]');
+    await page.click('.cc-stat[data-p="wound"]');
+    await page.click('button[data-act="hurt"][data-d="1"]');
+    same([await page.getAttribute(".t-wound .zd-die", "data-d"), await page.$$eval(".t-wound .zd-die.is-grown, .t-conf .zd-die.is-grown", (els) => els.length), await moving(page)], ["4", 0, 0], `a Hurt with reduce-motion on: a d4 straight away and nothing growing, ${theme}`);
     await context.close();
   }
   console.log("one hand: the crest at the top, the set actions high up as dice, the roll as a moment and the Sheet tab at a glance, in both themes");

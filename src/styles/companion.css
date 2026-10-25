@@ -127,10 +127,11 @@ html.cc-full .companion { padding-top: max(0.25rem, env(safe-area-inset-top, 0px
   display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; align-items: center; justify-items: start;
   column-gap: 8px; row-gap: 1px; min-height: 66px; padding: 7px 8px; text-align: left;
 }
-.cc-track .t-conf .v, .cc-track .t-wound .v { grid-row: 1 / span 2; grid-column: 1; display: block; }
-.cc-track .t-conf .k, .cc-track .t-wound .k { grid-column: 2; align-self: end; font-size: 0.82rem; letter-spacing: 0; text-transform: none; color: var(--ink); }
-.cc-track .t-conf .cc-mood, .cc-track .t-wound .zd-scars { grid-column: 2; align-self: start; }
-.cc-track .t-conf:not(:has(.cc-mood)) .k, .cc-track .t-wound:not(:has(.zd-scars)) .k { grid-row: 1 / span 2; align-self: center; }
+.cc-track .t-conf > .zd-die, .cc-track .t-wound > .zd-die { grid-row: 1 / span 2; grid-column: 1; }
+.cc-track .t-conf .k, .cc-track .t-wound .k { grid-column: 2; grid-row: 1; align-self: end; font-size: 0.8rem; letter-spacing: 0; text-transform: none; }
+.cc-now { grid-column: 2; grid-row: 2; align-self: start; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+.cc-track .t-conf .v, .cc-track .t-wound .v { font-size: 1.3rem; line-height: 1.1; }
+.cc-track .t-wound .v { color: var(--zd-harm-ink); }
 .cc-track .zd-die { --s: 50px; }
 .cc-track .t-aura, .cc-track .t-resolve, .cc-track .t-cond { align-items: flex-start; justify-content: center; gap: 4px; min-height: 56px; padding: 6px 10px; text-align: left; }
 .cc-row-in { display: flex; align-items: center; gap: 6px; max-width: 100%; }
@@ -148,9 +149,8 @@ html.cc-full .companion { padding-top: max(0.25rem, env(safe-area-inset-top, 0px
 @media (max-width: 379px) {
   .cc-track .t-conf, .cc-track .t-wound { grid-template-rows: auto auto; row-gap: 4px; }
   .cc-track .t-conf .k, .cc-track .t-wound .k { grid-column: 1 / -1; grid-row: 1; }
-  .cc-track .t-conf .v, .cc-track .t-wound .v { grid-column: 1; grid-row: 2; }
-  .cc-track .t-conf .cc-mood, .cc-track .t-wound .zd-scars { grid-column: 2; grid-row: 2; align-self: center; }
-  .cc-track .t-conf:not(:has(.cc-mood)) .k, .cc-track .t-wound:not(:has(.zd-scars)) .k { grid-row: 1; align-self: end; }
+  .cc-track .t-conf > .zd-die, .cc-track .t-wound > .zd-die { grid-row: 2; }
+  .cc-now { align-self: center; }
   .cc-track .zd-die { --s: 42px; }
   .cc-track .t-aura, .cc-track .t-resolve, .cc-track .t-cond { padding: 6px 7px; }
   .cc-track .t-aura .k, .cc-track .t-resolve .k, .cc-track .t-cond .k { letter-spacing: 0.04em; }
@@ -189,7 +189,7 @@ html.cc-full .companion { padding-top: max(0.25rem, env(safe-area-inset-top, 0px
 .cc-stat.is-open { border-color: var(--gold); box-shadow: inset 0 -2px 0 var(--gold); }
 .cc-undo { flex: none; min-width: 44px; min-height: 52px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 0; background: transparent; color: var(--ink); border: 1px solid var(--line-soft); border-radius: 2px; font-size: 0.72rem; font-weight: 700; }
 .cc-stat, .cc-undo, .tile, .cc-pickdie { transition: transform 140ms ease-out, border-color 140ms ease; }
-.cc-stat:active, .cc-undo:active:not(:disabled), .tile:active, .cc-pickdie:active { transform: scale(0.97); }
+.cc-stat:active, .cc-undo:active:not(:disabled), button.tile:active, .cc-pickdie:active { transform: scale(0.97); }
 .cc-panel { margin-top: 0.6rem; padding: 0.9rem 1rem; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
 .cc-panel p { margin: 0 0 0.4rem; }
 .cc-panel .cc-conds { margin-top: 0; }
@@ -221,31 +221,47 @@ html.cc-full .companion { padding-top: max(0.25rem, env(safe-area-inset-top, 0px
 html.cc-tabbed body { padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
 html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
 
-.cc-play { margin-top: 12px; }
-.cc-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.cc-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+/* A tile, as the learning round and the builder draw it: the name and steps,
+   with a hex die beside them. */
 .tile {
-  display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "dice name" "dice steps"; align-items: center; column-gap: 10px; row-gap: 1px;
-  min-height: 72px; padding: 8px 10px 8px 8px; text-align: left; color: var(--ink);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "name die" "steps die"; align-items: center; gap: 2px 8px;
+  min-height: 84px; padding: 12px; text-align: left; color: var(--ink);
 }
 @media (hover: hover) and (pointer: fine) { .tile:hover { border-color: var(--gold); } }
+.tile-name { grid-area: name; font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.15; overflow-wrap: anywhere; }
+.tile-steps { grid-area: steps; color: var(--muted); font-size: 0.9rem; }
+.tile-die { grid-area: die; width: 50px; height: 50px; font-size: 1.05rem; }
+@media (max-width: 359px) {
+  .tile { gap: 2px 6px; padding: 10px; }
+  .tile-name { font-size: 0.95rem; }
+  .tile-die { width: 42px; height: 42px; font-size: 0.95rem; }
+}
+.tile-sub { grid-area: steps; color: var(--muted); font-size: 0.9rem; }
+
+/* The play screen's tiles: each set action with the dice it rolls, drawn by
+   the kit, its name, and its steps and dice in words. */
+.cc-play { margin-top: 12px; }
+.cc-play .cc-tiles { gap: 8px; }
+.cc-play .tile { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "dice name" "dice steps"; column-gap: 10px; row-gap: 1px; min-height: 72px; padding: 8px 10px 8px 8px; }
 .tile-dice { grid-area: dice; position: relative; display: flex; align-items: flex-end; }
 .tile-dice .zd-die { --s: 52px; }
 .tile-dice .zd-die.is-next { --s: 26px; margin-left: -14px; }
-.tile-name { grid-area: name; align-self: end; font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.15; overflow-wrap: anywhere; }
-.tile-steps { grid-area: steps; align-self: start; color: var(--muted); font-size: 0.88rem; line-height: 1.3; }
-.tile-steps small { color: var(--gold-ink); font-weight: 700; }
-/* On the narrowest phones a long name like Defend keeps its word whole. */
+.cc-play .tile-name { align-self: end; }
+.tile-says { grid-area: steps; align-self: start; color: var(--muted); font-size: 0.88rem; line-height: 1.3; }
+.tile-says .tile-steps, .tile-says .tile-die { width: auto; height: auto; font-size: inherit; }
+.tile-says .tile-die { font-weight: 700; color: var(--gold-ink); }
+.tile-says small { color: var(--gold-ink); font-weight: 700; }
 @media (max-width: 359px) {
-  .tile { column-gap: 7px; padding: 8px 6px; }
-  .tile-name { font-size: 0.95rem; }
+  .cc-play .tile { column-gap: 7px; padding: 8px 6px; }
   .tile-dice .zd-die { --s: 44px; }
 }
 /* When it lands: the GM's telegraphs coming in, so it's edged in violet, with
    your Defend's dice. When the set actions are an even number it gets the row
    to itself. */
-.tile-defend { grid-template-areas: "dice name" "dice steps"; border-color: color-mix(in srgb, var(--violet) 60%, transparent); }
-.tile-defend:nth-child(odd) { grid-column: 1 / -1; }
-.tile-sub { grid-area: steps; align-self: start; color: var(--muted); font-size: 0.88rem; line-height: 1.3; }
+.tile-defend { border-color: color-mix(in srgb, var(--violet) 60%, transparent); }
+.cc-play .tile-defend:nth-child(odd) { grid-column: 1 / -1; }
+.cc-play .tile-sub { align-self: start; font-size: 0.88rem; line-height: 1.3; }
 .cc-last { margin: 0.8rem 0 0; padding: 0.6rem 0.8rem; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 2px; font-size: 0.95rem; }
 .cc-last .k, .cc-mine-roll .k { margin-right: 0.3rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
 .cc-scene .button { flex: 1 1 9rem; }
@@ -267,8 +283,7 @@ html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px))
 .cc-fold > summary::after { content: "+"; position: absolute; top: 8px; right: 14px; font-size: 1.35rem; line-height: 1.2; color: var(--gold-ink); }
 .cc-fold[open] > summary::after { content: "\2212"; }
 .cc-fold > summary:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
-.cc-fold-h { display: flex; align-items: center; gap: 8px; }
-.cc .cc-fold-t { margin: 0; padding: 0; background: none; font-family: var(--body); font-weight: 700; font-size: 0.78rem; line-height: 1.3; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-ink); }
+.cc .cc-fold-t { display: flex; align-items: center; gap: 8px; margin: 0; padding: 0; background: none; font-family: var(--body); font-weight: 700; font-size: 0.78rem; line-height: 1.3; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-ink); }
 .cc-fold-g { display: block; font-size: 0.95rem; line-height: 1.45; color: var(--ink); overflow-wrap: anywhere; }
 .cc-fold-g small { color: var(--muted); }
 .cc-fold[open] .cc-fold-g { display: none; }
@@ -576,7 +591,7 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 /* The phone's reduce-motion setting stills all of it. */
 @media (prefers-reduced-motion: reduce) {
   .companion *, .companion *::before, .companion *::after, .cc-dialog[open] { animation: none !important; }
-  .tile:active { transform: none; }
+  .tile:active, .cc-stat:active, .cc-undo:active, .cc-pickdie:active, .cc-ringbtn:active { transform: none; }
 }
 
 /* Sound and buzz, off until turned on. */

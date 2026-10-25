@@ -435,9 +435,9 @@ const ruleHtml = (id) => `${RULE[id]?.html ?? ""}<p class="cc-small">${link(id, 
 const ruleBox = (id) => `<div class="cc-rule">${ruleHtml(id)}</div>`;
 
 // The trackers on the play screen, as the kit draws them: Confidence and the
-// wound die are dice that change shape as they move, with the Scars beside
-// the wound die, and Aura and Resolve are hexes and gems. Tap one for its
-// buttons and its rule.
+// wound die are dice that change shape as they move, with their size written
+// big beside them and the Scars beside the wound die, and Aura and Resolve are
+// hexes and gems. Tap one for its buttons and its rule.
 const quiet = (html) => html.replace('role="img"', 'aria-hidden="true"');
 function trackView(ch, c, s) {
   const n = c.numbers;
@@ -445,10 +445,10 @@ function trackView(ch, c, s) {
   const stat = (key, label, body) => `<button type="button" class="cc-stat t-${key}${ui.panel === key ? " is-open" : ""}${goldOf(`num:${key}`) ? " is-changed" : ""}" data-act="panel" data-p="${key}" aria-expanded="${ui.panel === key}" aria-controls="cc-panel"><span class="k">${label}${goldDot(`num:${key}`)}</span>${body}</button>`;
   const mood = s.conf <= 2 ? '<span class="cc-mood">Shaken</span>' : s.conf >= 12 ? '<span class="cc-mood is-fired">Fired up</span>' : "";
   const conds = s.conditions.length
-    ? `<span class="v cc-conds-now">${s.conditions.map((x) => `<span class="cc-tag is-${x.kind}">${kitMini(x.die, { own: x.kind === "for" ? "you" : "harm" })}<em>${esc(x.name)}</em> <span class="sr-only">d${x.die}</span></span>`).join("")}</span>`
+    ? `<span class="v cc-conds-now">${s.conditions.map((x) => `<span class="cc-tag is-${x.kind}">${kitMini(x.die, { own: x.kind === "for" ? "you" : "harm" })}<em>${esc(x.name)}</em> d${x.die}</span>`).join("")}</span>`
     : '<span class="v cc-none">None on you</span>';
   return `<div class="cc-track" role="group" aria-label="Confidence, your wound die, Aura, Resolve and conditions">
-    ${stat("conf", "Confidence", `<span class="v">${kitDie(s.conf, { label: `d${s.conf}` })}</span>${mood}`)}${stat("wound", "Wound die", `<span class="v">${kitDie(s.wound, { own: "harm", label: `d${s.wound}` })}</span>${kitScars(s.scars.length)}`)}
+    ${stat("conf", "Confidence", `${kitDie(s.conf, { hide: true, bare: true })}<span class="cc-now"><span class="v">d${s.conf}</span>${mood}</span>`)}${stat("wound", "Wound die", `${kitDie(s.wound, { own: "harm", hide: true, bare: true })}<span class="cc-now"><span class="v">d${s.wound}</span>${kitScars(s.scars.length)}</span>`)}
     <button type="button" class="cc-undo" data-act="undo"${off(!u)} aria-label="${u ? `Undo ${esc(u.label)}` : "Nothing to undo"}">${ICON.undo}<span aria-hidden="true">Undo</span></button>
     ${stat("aura", "Aura", `<span class="cc-row-in">${quiet(kitAura(s.aura, n.aura))}<span class="v">${s.aura}<small>/${n.aura}</small></span></span>`)}${stat("resolve", "Resolve", `<span class="cc-row-in">${quiet(kitResolve(s.resolve, n.resolve))}<span class="v">${s.resolve}<small>/${n.resolve}</small></span></span>`)}
     ${stat("cond", "Conditions", conds)}
@@ -601,7 +601,7 @@ function playTab(ch, c) {
   const diceOf = (n, own = "you") => stepsToDice(n).map((d, j) => kitDie(d, { own, hide: true, cls: j ? "is-next" : "" })).join("");
   const tiles = c.actions.map((a, i) => {
     const now = stepsNow(c, s, a);
-    return `<button type="button" class="tile card${goldOf(`act:${a.name}`) ? " is-changed" : ""}${now < a.steps ? " is-short" : ""}" data-act="roll" data-a="${i}"><span class="tile-dice" aria-hidden="true">${diceOf(now)}</span><span class="tile-name">${esc(a.name)}</span><span class="tile-steps">${steps(now)}${now < a.steps ? ` <small>${a.steps - now} crossed out</small>` : ""}${goldDot(`act:${a.name}`)}</span><span class="tile-die sr-only">${esc(diceLabel(stepsToDice(now)))}</span></button>`;
+    return `<button type="button" class="tile card${goldOf(`act:${a.name}`) ? " is-changed" : ""}${now < a.steps ? " is-short" : ""}" data-act="roll" data-a="${i}"><span class="tile-dice" aria-hidden="true">${diceOf(now)}</span><span class="tile-name">${esc(a.name)}</span><span class="tile-says"><span class="tile-steps">${steps(now)}${now < a.steps ? ` <small>${a.steps - now} crossed out</small>` : ""}</span> · <span class="tile-die">${esc(diceLabel(stepsToDice(now)))}</span>${goldDot(`act:${a.name}`)}</span></button>`;
   }).join("");
   const defend = stepsNow(c, s, defendOf(c));
   return `${trackView(ch, c, s)}${alertView(ch, c, s)}
@@ -669,7 +669,7 @@ function sheetTab(ch, c) {
   const fold = (key, title, glance, body, golden = false) => {
     const id = `sh-${key}`;
     const open = !ui.shut.has(id) && (ui.open.has(id) || golden);
-    return `<details class="cc-fold" data-open="${id}"${open ? " open" : ""}><summary><span class="cc-fold-h"><h2 class="cc-fold-t">${title}</h2>${golden ? '<span class="cc-gem" aria-hidden="true"></span><span class="sr-only">, changed in the rules</span>' : ""}</span>${glance ? `<span class="cc-fold-g">${glance}</span>` : ""}</summary><div class="cc-fold-b">${body}</div></details>`;
+    return `<details class="cc-fold" data-open="${id}"${open ? " open" : ""}><summary><h2 class="cc-fold-t">${title}${golden ? '<span class="cc-gem" aria-hidden="true"></span><span class="sr-only">, changed in the rules</span>' : ""}</h2>${glance ? `<span class="cc-fold-g">${glance}</span>` : ""}</summary><div class="cc-fold-b">${body}</div></details>`;
   };
   const few = (items, max) => (items.length > max ? `${items.slice(0, max).join(" · ")} <small>and ${items.length - max} more</small>` : items.join(" · "));
   const diceAt = (n) => `<span class="cc-act-dice" aria-hidden="true">${stepsToDice(n).map((d, j) => kitDie(d, { hide: true, cls: j ? "is-next" : "" })).join("")}</span>`;
@@ -1061,6 +1061,9 @@ function resultView(c, s, ch) {
     return drawn;
   };
   const against = r.oppSize ? `against their d${r.oppSize}, which came up ${r.spinning ? "…" : r.opp}` : r.opp != null ? `against the ${r.opp} it already rolled` : "with nothing to beat";
+  // Their die only goes dark when every one of yours beat it. With a split
+  // where one wins and one doesn't, it beat one of yours, so it stays lit,
+  // and each of your dice says how it did.
   const theyLost = outs.length > 0 && outs.every((o) => o === "beat" || o === "won");
   const them = r.oppSize ? `<div class="cc-them"${r.spinning ? ' data-act="skip"' : ""}><span class="vs" aria-hidden="true">against</span><span class="k">Their d${r.oppSize}</span>${kitDie(r.oppSize, { own: "them", face: r.opp, spin: r.spinning, state: !r.spinning && theyLost ? "low" : "", label: r.spinning ? `Their d${r.oppSize}, rolling` : `Their d${r.oppSize} came up ${r.opp}` })}</div>`
     : r.opp != null ? `<div class="cc-them"><span class="vs" aria-hidden="true">against</span><span class="k">To beat</span><span class="cc-tobeat">${r.opp}</span></div>` : "";
@@ -1609,6 +1612,8 @@ function route() {
   if (view.name === "learn" && !learning) learn.stop();
   // Leaving the builder keeps the draft, and coming back reads it again.
   if (view.name === "build" && view.key !== key) builder.close();
+  // A Sheet tab fold shut on one character opens as usual on another.
+  if (id !== (view.name === "sheet" ? view.id : null)) ui.shut.clear();
   view = key ? { name: "build", key } : learning ? { name: "learn" } : id ? { name: "sheet", id } : { name: "list" };
   ui.tab = ["sheet", "rules"].includes(q.get("t")) ? q.get("t") : "play";
   ui.panel = null;

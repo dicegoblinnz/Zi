@@ -65,7 +65,8 @@ const BODY = Object.fromEntries(SIZES.map((d) => {
 // state: "top" (its top face, so 1 Aura back), "low" (it lost) or "tie".
 // spin: it's tumbling (feel.js changes its number till it lands).
 // hide: the words are somewhere beside it, so it's only a picture.
-export function die(d, { own = "you", face = null, state = "", label = "", cls = "", spin = false, hide = false } = {}) {
+// bare: no number on the hub, for a die whose size is written big beside it.
+export function die(d, { own = "you", face = null, state = "", label = "", cls = "", spin = false, hide = false, bare = false } = {}) {
   const S = shapeOf(d);
   const size = SIZES.includes(d) ? d : SIZES.find((x) => SHAPES[x] === S);
   const rolled = face !== null && face !== undefined && face !== "";
@@ -75,7 +76,8 @@ export function die(d, { own = "you", face = null, state = "", label = "", cls =
   const fs = r1((rolled ? 38 : 27) * S.num.k * fit);
   const classes = ["zd-die", own, rolled ? "is-rolled" : "", state ? `is-${state}` : "", cls].filter(Boolean).join(" ");
   const named = hide ? 'aria-hidden="true"' : `role="img" aria-label="${esc(name)}"`;
-  return `<svg class="${classes}" viewBox="0 0 100 100" ${named} data-d="${size}"${spin ? ` data-spin="${size}"` : ""}>${BODY[size]}<text class="num" x="50" y="${S.num.y}" font-size="${fs}">${esc(text)}</text></svg>`;
+  const num = bare ? "" : `<text class="num" x="50" y="${S.num.y}" font-size="${fs}">${esc(text)}</text>`;
+  return `<svg class="${classes}" viewBox="0 0 100 100" ${named} data-d="${size}"${spin ? ` data-spin="${size}"` : ""}>${BODY[size]}${num}</svg>`;
 }
 
 // The dice a number of steps makes, straight off the table.
@@ -129,22 +131,32 @@ const WALKS = Object.fromEntries(SIZES.map((d) => [d, walk(SHAPES[d])]));
 const still = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 export function grow(svg, from, to, { ms = 320 } = {}) {
+  try {
+    return morph(svg, from, to, ms);
+  } catch {
+    return false;
+  }
+}
+function morph(svg, from, to, ms) {
   if (!svg || from === to || still() || !SHAPES[from] || !SHAPES[to]) return false;
   const tok = svg.querySelector(".tok");
   const hub = svg.querySelector(".hub");
   if (!tok || !hub) return false;
   const A = WALKS[from], B = WALKS[to], SA = SHAPES[from], SB = SHAPES[to];
-  const ends = [tok.getAttribute("d"), hub.getAttribute("d")];
+  // Where it ends is the new shape exactly, whatever the page shows now.
+  const ends = [pathOf(SB), pathOf(SB, SB.hub)];
   const line = (pts) => `M${pts.map(P).join("L")}Z`;
   // Ease-out, gentle enough that the eye follows the shape changing.
   const ease = (t) => 1 - Math.pow(1 - t, 3);
   const start = performance.now();
   svg.classList.add("is-grown");
-  svg.animate([{ transform: "scale(1)" }, { transform: "scale(1.07)", offset: 0.45 }, { transform: "scale(1)" }], { duration: ms, easing: "ease-out" });
-  svg.querySelector(".pcs")?.animate([{ opacity: 0 }, { opacity: 0, offset: 0.7 }, { opacity: 1 }], { duration: ms + 140, easing: "ease-out" });
+  if (typeof svg.animate === "function") {
+    svg.animate([{ transform: "scale(1)" }, { transform: "scale(1.07)", offset: 0.45 }, { transform: "scale(1)" }], { duration: ms, easing: "ease-out" });
+    svg.querySelector(".pcs")?.animate([{ opacity: 0 }, { opacity: 0, offset: 0.7 }, { opacity: 1 }], { duration: ms + 140, easing: "ease-out" });
+  }
   const frame = (now) => {
     if (!svg.isConnected) return;
-    const t = Math.min(1, (now - start) / ms);
+    const t = Math.min(1, Math.max(0, (now - start) / ms));
     const e = ease(t);
     if (t >= 1) {
       tok.setAttribute("d", ends[0]);
@@ -215,12 +227,12 @@ export function sigil(name, { cls = "" } = {}) {
 // The build stops on an archetype with no sigil. On the phone (strict: false)
 // one's left out instead, since a saved character can outlive an archetype.
 export function crest(archetypes, { size = "lg", label = "", strict = true } = {}) {
-  const known = strict ? archetypes : archetypes.filter((a) => SIGILS[a]);
+  const known = strict ? archetypes : archetypes.filter((a) => Object.hasOwn(SIGILS, a));
   const [first, ...rest] = known;
   const twice = rest.includes(first);
   const others = [...new Set(rest.filter((a) => a !== first))];
   const art = (name) => {
-    if (!SIGILS[name]) throw new Error(`The kit has no sigil for the ${name} archetype. Draw one in src/kit/sigils.js.`);
+    if (!Object.hasOwn(SIGILS, name)) throw new Error(`The kit has no sigil for the ${name} archetype. Draw one in src/kit/sigils.js.`);
     return SIGILS[name];
   };
   const seal = size === "lg" && others[0]
