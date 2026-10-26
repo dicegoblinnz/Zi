@@ -3,11 +3,17 @@
 // It's a <dialog class="zs"> holding one .zs-in, so focus stays inside it,
 // Esc closes it and a tap outside it does too. It slides up, follows a
 // finger dragging its top down and goes on a flick or a long enough drag.
-// Under reduce-motion it just appears and goes.
+// Opened again on its way down, it comes straight back up. Under
+// reduce-motion it just appears and goes.
 const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 const DRAWER = "cubic-bezier(0.32, 0.72, 0, 1)";
 
 const wired = new WeakSet();
+const states = new WeakMap();
+const stateOf = (dialog) => {
+  if (!states.has(dialog)) states.set(dialog, { away: null, thens: [] });
+  return states.get(dialog);
+};
 
 function settle() {
   if (!document.querySelector("dialog.zs[open]")) document.documentElement.classList.remove("zs-open");
@@ -15,9 +21,20 @@ function settle() {
 
 export function openSheet(dialog) {
   wire(dialog);
+  const state = stateOf(dialog);
+  if (state.away) {
+    const from = getComputedStyle(dialog).transform;
+    state.away.onfinish = null;
+    state.away = null;
+    state.thens = [];
+    dialog.getAnimations({ subtree: true }).forEach((a) => a.cancel());
+    delete dialog.dataset.closing;
+    dialog.style.transform = "";
+    if (!still() && from && from !== "none") dialog.animate([{ transform: from }, { transform: "translateY(0)" }], { duration: 240, easing: DRAWER });
+    return;
+  }
   if (dialog.open) return;
   dialog.getAnimations({ subtree: true }).forEach((a) => a.cancel());
-  delete dialog.dataset.closing;
   dialog.style.transform = "";
   dialog.showModal();
   document.documentElement.classList.add("zs-open");
@@ -26,26 +43,33 @@ export function openSheet(dialog) {
   fade(dialog, [0, 1], 240);
 }
 
+// Put it away, then do whatever comes next (then), once it's gone.
 export function closeSheet(dialog, then) {
-  if (!dialog.open || dialog.dataset.closing) return;
-  let gone = false;
-  const done = () => {
-    if (gone) return;
-    gone = true;
-    delete dialog.dataset.closing;
-    dialog.close();
-    dialog.getAnimations({ subtree: true }).forEach((a) => a.cancel());
-    dialog.style.transform = "";
-    settle();
-    then?.();
-  };
-  if (still()) return done();
+  const state = stateOf(dialog);
+  if (then) state.thens.push(then);
+  if (!dialog.open || still()) return finish(dialog, state);
+  if (state.away) return;
   dialog.dataset.closing = "1";
   const from = dialog.style.transform || "translateY(0)";
   const away = dialog.animate([{ transform: from }, { transform: "translateY(100%)" }], { duration: 220, easing: DRAWER, fill: "forwards" });
   fade(dialog, [1, 0], 200);
-  away.onfinish = done;
-  away.oncancel = done;
+  state.away = away;
+  away.onfinish = () => {
+    if (state.away === away) finish(dialog, state);
+  };
+}
+
+function finish(dialog, state) {
+  state.away = null;
+  delete dialog.dataset.closing;
+  if (dialog.open) dialog.close();
+  for (const a of dialog.getAnimations({ subtree: true })) {
+    a.onfinish = null;
+    a.cancel();
+  }
+  dialog.style.transform = "";
+  settle();
+  for (const then of state.thens.splice(0)) then();
 }
 
 // The backdrop fades with the sheet where the browser can animate it.
@@ -72,30 +96,37 @@ function wire(dialog) {
   drag(dialog);
 }
 
-// Drag the top of the sheet down to put it away. A quick flick does it from
-// anywhere, and a slow drag past a third of its height. Dragging up meets
-// more and more friction, and a short drag springs back.
+// Drag the top of the sheet down to put it away: past a third of its height,
+// or a flick, judged by how fast the finger's going at the end, so a slip
+// doesn't do it and a flick after a pause does. Dragging up meets more and
+// more friction, and a short drag springs back.
 function drag(dialog) {
-  let start = null;
+  let held = null;
   const handle = () => dialog.querySelector("[data-drag]");
   dialog.addEventListener("pointerdown", (e) => {
     const top = handle();
-    if (start || !e.isPrimary || !top?.contains(e.target) || e.target.closest("button, a, input")) return;
-    start = { y: e.clientY, t: performance.now(), id: e.pointerId, dy: 0 };
+    if (held || !e.isPrimary || !top?.contains(e.target) || e.target.closest("button, a, input")) return;
+    held = { y: e.clientY, id: e.pointerId, dy: 0, trail: [{ y: e.clientY, t: performance.now() }] };
     top.setPointerCapture(e.pointerId);
   });
   dialog.addEventListener("pointermove", (e) => {
-    if (!start || e.pointerId !== start.id) return;
-    const raw = e.clientY - start.y;
-    start.dy = raw >= 0 ? raw : -Math.sqrt(-raw) * 2;
-    dialog.style.transform = `translateY(${start.dy}px)`;
+    if (!held || e.pointerId !== held.id) return;
+    const raw = e.clientY - held.y;
+    held.dy = raw >= 0 ? raw : -Math.sqrt(-raw) * 2;
+    held.trail.push({ y: e.clientY, t: performance.now() });
+    if (held.trail.length > 12) held.trail.shift();
+    dialog.style.transform = `translateY(${held.dy}px)`;
   });
   const end = (e) => {
-    if (!start || e.pointerId !== start.id) return;
-    const { dy, t } = start;
-    start = null;
-    const speed = dy / Math.max(1, performance.now() - t);
-    if (dy > dialog.offsetHeight / 3 || (dy > 12 && speed > 0.11)) return closeSheet(dialog);
+    if (!held || e.pointerId !== held.id) return;
+    const { dy, trail } = held;
+    held = null;
+    const now = performance.now();
+    const recent = trail.filter((p) => now - p.t <= 80);
+    const first = recent[0] ?? trail[trail.length - 1];
+    const last = trail[trail.length - 1];
+    const speed = (last.y - first.y) / Math.max(1, last.t - first.t);
+    if (dy > dialog.offsetHeight / 3 || (dy > 24 && speed > 0.5)) return closeSheet(dialog);
     const from = dialog.style.transform;
     dialog.style.transform = "";
     if (!still() && from) dialog.animate([{ transform: from }, { transform: "translateY(0)" }], { duration: 200, easing: DRAWER });

@@ -76,7 +76,9 @@ function look(article) {
       else a.removeAttribute("aria-current");
     }
     if (carry && !carry.hidden && now && heads.indexOf(now) >= heads.findIndex((h) => h.id === carry.dataset.to)) carry.hidden = true;
-    if (now) {
+    // While Carry on reading's showing, looking over the start of the chapter
+    // doesn't lose your place: it's kept till you tap it or read past it.
+    if (now && (!carry || carry.hidden)) {
       clearTimeout(saving);
       saving = setTimeout(save, 700);
     }

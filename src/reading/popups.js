@@ -61,6 +61,7 @@ function build() {
   sheet.querySelector(".zp-back").addEventListener("click", () => {
     stack.pop();
     fill(stack[stack.length - 1]);
+    settleFocus();
   });
   sheet.querySelector(".zp-more").addEventListener("click", (e) => {
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -102,12 +103,20 @@ export function jump(hash) {
   target.scrollIntoView();
 }
 
+// What had focus (Back, or a link in the opening) is gone once the sheet's
+// filled again, so focus goes to its text, and a screen reader reads on.
+function settleFocus() {
+  sheet.querySelector(".zs-body").focus({ preventScroll: true });
+}
+
 export function showOpening(key, entry) {
   if (!sheet) build();
-  if (!sheet.open) stack.length = 0;
+  const showing = sheet.open && !sheet.dataset.closing;
+  if (!showing) stack.length = 0;
   if (stack[stack.length - 1]?.key !== key) stack.push({ key, entry });
   fill(stack[stack.length - 1]);
   openSheet(sheet);
+  if (showing) settleFocus();
 }
 
 // Links inside anything marked data-pops pop up, apart from the lists that are
@@ -127,8 +136,11 @@ export function enablePopups(options = {}) {
       e.preventDefault();
       return showOpening(key, openings[key]);
     }
+    // Not loaded yet: give it a moment, and if it's slow, the link goes to
+    // its page the usual way rather than doing nothing.
     e.preventDefault();
-    loadOpenings().then((data) => {
+    const slow = new Promise((done) => setTimeout(done, 350, null));
+    Promise.race([loadOpenings(), slow]).then((data) => {
       if (data?.[key]) showOpening(key, data[key]);
       else location.href = a.href;
     });

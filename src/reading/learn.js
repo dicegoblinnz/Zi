@@ -37,6 +37,8 @@ function run(deck) {
     bar.setAttribute("aria-valuenow", String(i + 1));
     bar.setAttribute("aria-valuetext", `Card ${i + 1} of ${total}`);
     bar.querySelector("i").style.transform = `scaleX(${(i + 1) / total})`;
+    // Back can't stay focused once it's off on the first card.
+    if (i === 0 && document.activeElement === prev) next.focus();
     prev.disabled = i === 0;
     next.textContent = i === total - 1 ? "Finish" : "Next";
     setLearn(card.id, card.dataset.title, i + 1);
@@ -44,16 +46,36 @@ function run(deck) {
     if (announce) live.textContent = `Card ${i + 1} of ${total}: ${card.dataset.title}`;
   }
 
+  // Next, Back, the arrows and the list steer to a card. While the deck
+  // slides there, the cards it passes don't count, so quick taps all land.
+  let steering = null;
+  let steerTimer = 0;
+  const arrive = () => {
+    steering = null;
+    clearTimeout(steerTimer);
+  };
   function go(i, jumpThere = false) {
     const to = Math.max(0, Math.min(total - 1, i));
-    track.scrollTo({ left: leftOf(cards[to]), behavior: jumpThere || still() ? "instant" : "smooth" });
+    const glide = !(jumpThere || still());
+    if (glide) {
+      steering = to;
+      clearTimeout(steerTimer);
+      steerTimer = setTimeout(arrive, 700);
+    }
+    track.scrollTo({ left: leftOf(cards[to]), behavior: glide ? "smooth" : "instant" });
     show(to);
   }
+  track.addEventListener("scrollend", arrive);
 
   // A swipe lands on a card, and whichever card fills most of the deck is
   // the one you're on.
   const seen = new IntersectionObserver((entries) => {
-    for (const e of entries) if (e.isIntersecting && e.intersectionRatio >= 0.6) show(cards.indexOf(e.target));
+    for (const e of entries) {
+      if (!e.isIntersecting || e.intersectionRatio < 0.6) continue;
+      const i = cards.indexOf(e.target);
+      if (steering !== null && i !== steering) continue;
+      show(i);
+    }
   }, { root: track, threshold: [0.6] });
   cards.forEach((c) => seen.observe(c));
 
@@ -101,7 +123,9 @@ function run(deck) {
   // keeps every page, so it's there offline), in a sheet over the card.
   const readBody = read.querySelector(".lr-read-text");
   const readOpen = read.querySelector(".lr-open");
+  let asked = 0;
   async function readMore(url, title, chapter) {
+    const mine = ++asked;
     read.querySelector("#lr-read-t").textContent = title;
     read.querySelector("#lr-read-c").textContent = chapter;
     readOpen.href = url;
@@ -113,10 +137,14 @@ function run(deck) {
     try {
       const res = await fetch(where.pathname);
       if (!res.ok) throw new Error(String(res.status));
-      const page = new DOMParser().parseFromString(await res.text(), "text/html");
-      readBody.replaceChildren(...sectionOf(page, decodeURIComponent(where.hash.slice(1)), where.pathname));
-      if (!readBody.childElementCount) throw new Error("no section");
+      const html = await res.text();
+      if (mine !== asked) return;
+      const page = new DOMParser().parseFromString(html, "text/html");
+      const nodes = sectionOf(page, decodeURIComponent(where.hash.slice(1)), where.pathname);
+      if (!nodes.length) throw new Error("no section");
+      readBody.replaceChildren(...nodes);
     } catch {
+      if (mine !== asked) return;
       const p = document.createElement("p");
       p.append("This section isn't on this phone yet. ", Object.assign(document.createElement("a"), { href: url, textContent: "Open it in the rules" }), ".");
       readBody.replaceChildren(p);
@@ -185,6 +213,9 @@ function sectionOf(page, id, path) {
     const section = target?.closest("section.rs");
     if (section && section.dataset.s === id) {
       nodes = [...section.children].filter((n) => !n.matches(".rs-head"));
+    } else if (target && /^H[4-6]$/.test(target.tagName)) {
+      nodes = [];
+      for (let n = target.nextElementSibling; n && !(/^H[1-6]$/.test(n.tagName) && n.tagName <= target.tagName) && !n.matches(".rs-head, section.rs"); n = n.nextElementSibling) nodes.push(n);
     } else if (target) nodes = [target.closest(".box") ?? target];
     else nodes = [];
   } else {

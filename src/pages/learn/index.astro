@@ -36,9 +36,9 @@ const ribbon = `<svg class="rs-ribbon" viewBox="0 0 24 24" width="22" height="22
     <div class="lr-track" role="region" aria-roledescription="carousel" aria-label="The cards">
       {deck.cards.map((c, i) => (
         <article class="card lr-card" id={c.id} role="group" aria-roledescription="card" aria-label={`${i + 1} of ${total}: ${c.title}`} data-title={c.title} data-section={c.section.title} data-chapter={c.chapter.title}>
-          <div class="lr-card-in" tabindex="0">
+          <div class="lr-card-in" tabindex="0" role="group" aria-labelledby={`${c.id}-t`}>
             <p class="lr-where">{c.chapter.title}</p>
-            <h2 class="lr-title">{c.title}</h2>
+            <h2 class="lr-title" id={`${c.id}-t`}>{c.title}</h2>
             <div class="lr-body" data-pops set:html={c.html} />
           </div>
           <div class="lr-card-foot">
@@ -61,10 +61,10 @@ const ribbon = `<svg class="rs-ribbon" viewBox="0 0 24 24" width="22" height="22
         } catch (e) {}
       })();
     </script>
-    <nav class="lr-foot" aria-label="Cards">
+    <div class="lr-foot" role="group" aria-label="Cards">
       <button type="button" class="button lr-prev" disabled>Back</button>
       <button type="button" class="button primary lr-next">Next</button>
-    </nav>
+    </div>
     <p class="visually-hidden lr-live" aria-live="polite"></p>
   </main>
   <dialog id="lr-cards" class="zs lr-cards" aria-labelledby="lr-cards-t">

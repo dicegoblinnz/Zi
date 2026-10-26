@@ -11,7 +11,7 @@ id: learn
 checked: 2026-10-26
 ---
 ::::card[Did you succeed?]{#l-succeed teaches=the-core}
-You play someone who's properly good at something, like a thief who can open any lock in the city. Everything they can do is a **permission**, a short line on your sheet. If it's on there you can do it, no questions asked, and every permission that fits what you're doing makes your die bigger. Then the question's simple: did you succeed? Roll against whatever's in your way, and if you beat the number, you did.
+You play someone who's properly good at something, like a thief who can open any lock in the city. Everything your character can do is a **permission**, a short line on your sheet. If it's on there you can do it, no questions asked, and every permission that fits what you're doing makes your die bigger. Then the question's simple: did you succeed? Roll against whatever's in your way, and if you beat the number, you did.
 
 :::example
 Vesk's got *pick a mechanical lock* on her sheet, so nobody asks whether she can open the strongbox. Her Locks is a d10 and the strongbox is a d6. She rolls 7 against its 4, and it's open.
@@ -27,15 +27,15 @@ Bram's first Title is *The wall that held the harbour gate*, and on it he's got 
 ::::
 
 ::::card[Every line's a step]{#l-lines teaches=how-permissions-stack}
-Your Title's a step on anything it fits, and so is a plain item: a sword's a step in a sword fight. Some traits are a step too. Each of these is a **line** on your sheet, the same as a permission. Every line that fits what you're doing is a **step**, and it counts once a roll. The same word never counts twice, so to stack, use different words.
+Your Title's a step on anything it fits, and so is a plain item: a sword's a step in a sword fight. Some traits are a step too. Each of these is a **line** on your sheet, the same as a permission. Every line that fits what you're doing is a **step**, and it counts once a roll. The same permission can't sit on one set action twice, so to stack, use different words, like *Deceptive* and *Sly*.
 
 :::example
-Vesk's going over a roof without a sound. Her first Title fits, so does *move unseen*, and so does Silent Step, her trait that's +1 to moving unseen. That's 3 steps off her sheet.
+Vesk's going over a roof without a sound. Her first Title fits, so does *move unseen*, and so does Silent Step, her trait that's +1 to moving unseen. That's 3 lines, so with the action it's 4 steps.
 :::
 ::::
 
 ::::card[Set actions]{#l-set-actions teaches=s-set-actions}
-Your sheet does the counting before you play, and that's what **set actions** are for. Defend, Fight, Move, Sneak, Study and Talk are on every sheet, and you add your own for the things you do all the time. A set action's steps are 1 for the action and 1 for every line on it. Titles and items go on every set action they fit, but a permission goes on two at most.
+Your sheet does the counting before you play, and that's what **set actions** are for. Defend, Fight, Move, Sneak, Study and Talk are on every sheet, and you add your own for the things you do all the time. A set action's steps are 1 for the action and 1 for every line on it. Titles and items go on every set action they fit, but a permission goes on two at most, and Defend counts as one.
 
 :::example
 Vesk's Locks has her first Title, *pick a mechanical lock*, *know how a lock's built* and her picks on it. That's four lines and the action, so it's 5 steps, a d10.
@@ -43,7 +43,7 @@ Vesk's Locks has her first Title, *pick a mechanical lock*, *know how a lock's b
 ::::
 
 ::::card[Building a roll]{#l-building teaches=s-building-die}
-Every roll goes the same way. Say what you're doing and how, and pick the set action that fits. Start from its steps, and leave out any line that doesn't fit this time. Anything else that fits costs 1 [Aura](#s-aura) to bring in, and it's a step. Then turn your steps into dice and roll.
+Every roll goes the same way. Say what you're doing and how, and pick the set action that fits. Start from its steps, and leave out any line that doesn't fit this time. Anything else that fits costs 1 [Aura](#s-aura) each to bring in, and each one's a step. Then turn your steps into dice and roll.
 
 :::example
 Vesk's going over Lord Vane's roof with her Sneak, 4 steps, a d8. Her grappling line fits too, but it's on her Move, so 1 Aura brings it in: 5 steps, a d10. Bram swings at a smuggler running for the door, but he isn't holding any line, so he leaves *hold the line* out: 3 steps, a d6.
@@ -51,7 +51,7 @@ Vesk's going over Lord Vane's roof with her Sneak, 4 steps, a d8. Her grappling 
 ::::
 
 ::::card[Steps into dice]{#l-dice teaches=steps-into-dice}
-Your die is your steps × 2, up to a d12, so 1 step's a d2, 4 steps a d8 and 6 steps a d12. Every six steps gives you another d12, and whatever's left over makes one more die. No die you build is ever bigger than a d12, so getting stronger means throwing more dice. With nothing on it at all, the action on its own is 1 step, a d2.
+Your die is your steps × 2, up to a d12, so 1 step's a d2, 4 steps a d8 and 6 steps a d12. Every 6 steps gives you another d12, and whatever's left over makes one more die. No die you build is ever bigger than a d12, so getting stronger means throwing more dice. With nothing on it at all, the action on its own is 1 step, a d2.
 
 :::example
 Wren's Fight is 5 steps, a d10. When Bram [barks an order](#leading-and-inspiring) and hands her 2 more steps, it's 7, so she throws a d12 and a d2.
@@ -83,7 +83,7 @@ Bram and Wren throw three d6s at the guard captain: one to disarm him, one to fl
 ::::
 
 ::::card[Splitting]{#l-splitting teaches=s-splitting}
-You can **split** your steps into more, smaller dice. Every action in the roll gives you one split, so one action can turn a d8 into two d4s, or a d2 and a d6. Dice past six steps are already separate, so they don't use up your splits. Your dice all have to go at things that belong to the same job.
+You can **split** your steps into more, smaller dice. Every action in the roll gives you one split, so one action can turn a d8 into two d4s, or a d2 and a d6. Dice past 6 steps are already separate, so they don't use up your splits. Your dice all have to go at things that belong to the same job.
 
 :::example
 Vesk's at the study door with her Locks, 5 steps, and she splits once: a d6 for the lock and a d4 to keep it quiet. The lock rolls 3 and her d6 comes up 5, so it opens. Her d4 lands on 4 against the guard's 3, and he never looks up.
@@ -115,7 +115,7 @@ Ash spends 1 Resolve and puts an extra action into her Fight. The same set actio
 ::::
 
 ::::card[Catches and trouble]{#l-catches teaches=s-trouble}
-A **Catch** is trouble written on your sheet, from an [attuned thing](#s-attunement) or a [Scar](#s-blaze). Letting it bite is up to you: say how it causes trouble, the GM runs with it, and you take 1 Aura. A big bite, one that changes the scene or costs you something you wanted, is 1 Resolve instead. A [hostile thread](#s-bonds) bites the same way, and with no Catch you can still bring real trouble on yourself for 1 Aura.
+A **Catch** is trouble written on your sheet, from an [attuned thing](#s-attunement) or a [Scar](#s-blaze). Letting it bite is up to you: say how it causes trouble, the GM runs with it, and you take 1 Aura. A big bite, one that changes the scene or costs you something you wanted, gets you 1 Resolve instead. A [hostile thread](#s-bonds) bites the same way, and with no Catch you can still bring real trouble on yourself for 1 Aura.
 
 :::example
 Vesk owes the fence. Halfway across a warehouse roof, her player lets that thread bite: the fence's boy is under the drainpipe, and he wants paying tonight. Vesk takes 1 Aura.
@@ -131,10 +131,10 @@ Vesk's at the study door with her Locks, 5 steps, and Dorrie keeps the guard tal
 ::::
 
 ::::card[Studying something]{#l-study teaches=s-study}
-**Study** is an intent like any other. Build it from whatever fits how you're looking, usually your Study set action, and roll against the target's Challenge. Win, and pick one: the GM reveals a [hidden tag](#s-hidden), or she answers one question about it truthfully. Ask something specific, like *what's holding it together?*, and that's how you find weak points.
+**Study** is an intent like any other. Build it from whatever fits how you're looking, usually your Study set action, and roll against the target's Challenge. Win, and pick one. Ask something specific, like *what's holding it together?*, and the GM reveals the [hidden tag](#s-hidden) that answers it, if there is one, which is how you find weak points. Or ask one question about it, and she answers it truthfully.
 
 :::example
-Isolde's Study is 4 steps, a d8, with *know the history of anything old* on it. She studies the old construct and rolls 6 against its 5, so she asks what's holding it together.
+Isolde's Study is 4 steps, a d8, with *know the history of anything old* on it. She studies the old construct and rolls 6 against its 5, so she asks what's holding it together and gets the hidden tag that answers it.
 :::
 ::::
 
@@ -222,12 +222,12 @@ The GM puts a Warden's spear at Isolde on the table, a d10, and the maid on the 
 A **telegraph** is the GM saying out loud what's about to happen, before anything's rolled. It always tells you what it's doing, who or what it's aimed at, and how hard, in dice. Telegraphs are honest, so the GM never hides a size or a target. A threat aims one die at each of you, unless a tag says it can do more. Running doesn't dodge a telegraph aimed at you. To stop it, [answer it](#s-answering).
 
 :::example
-"The brute's going to bring his club down on Isolde. That's a d8." Isolde's Defend is a d2, so somebody had better do something about it.
+"The brute's going to bring his club down on Isolde. That's a d8." Isolde's Defend is a d2, so Wren and Bram talk about answering it before anyone rolls.
 :::
 ::::
 
 ::::card[Your action]{#l-action teaches=s-actions}
-Every round you get **one action**. You can act with a roll from a set action, answer a telegraph, [Defend](#s-defend), move further than your stride, pull something out of your bag, break a [condition](#s-conditions) or take a breath. Your stride's free, and so are a few words and putting something away. To help a friend, put your action into what they're doing.
+Every round you get **one action**. You can act with a roll from a set action, answer a telegraph, [Defend](#s-defend), move further than your stride, lead if you're a Leader, pull something out of your bag, break a [condition](#s-conditions) or take a breath. Your stride's free, and so are a few words and putting something away. To help a friend, put your action into what they're doing.
 
 :::example
 Bram crosses the hall on his stride, which is free, and spends his action going at the guard on the door with his Fight, a d8.
@@ -326,6 +326,6 @@ The crew's got no Healer, so Dorrie spends 1 Aura and her action to bring Bram's
 After every session there's a downtime, where the world moves and you heal and grow. Every player gets two personal slots, for things like a new permission, mending armour or chasing your Aspiration. The crew gets one action between you, and a slot you put into it makes everything count twice. When downtime's over, all your Resolve comes back, and your wound die goes back to d2, or to your Scars.
 
 :::example
-Bram spends one slot and a purse of gold at the smithy to mend his plate. His other slot puts *fight two at once* on his first Title.
+Bram spends one slot at the smithy to mend his plate. His other slot puts *fight two at once* on his first Title.
 :::
 ::::

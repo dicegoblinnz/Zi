@@ -2390,6 +2390,9 @@ if (part("10")) {
     await page.click(".lr-next");
     const bar = await page.evaluate(() => document.querySelector(".lr-progress i").getAnimations().length);
     if (!bar) note("the progress bar jumped, with motion on");
+    for (let i = 0; i < 3; i += 1) await page.click(".lr-next");
+    await page.waitForTimeout(900);
+    same(await page.evaluate(() => [document.querySelector(".lr-n").textContent, document.querySelector(".lr-card:not([inert])").id]), ["5", cards[4].id], "three quick Nexts while the deck slides land three cards on");
     await context.close();
   }
 
