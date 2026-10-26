@@ -1091,6 +1091,9 @@ if (part("5b")) {
     const { context, page } = await phone({ reducedMotion: still ? "reduce" : "no-preference" });
     if (theme === "light") await page.addInitScript(() => localStorage.setItem("zi-theme", "light"));
     const axe = async (what) => {
+      // With motion on, a step's cards are still sliding in for a moment, and
+      // a card halfway in reads as low contrast, so axe waits till they've landed.
+      await page.waitForFunction(() => document.getAnimations().every((a) => a.playState !== "running" || a.effect?.getTiming?.().iterations === Infinity), null, { timeout: 3000 }).catch(() => {});
       const result = await new AxeBuilder({ page }).analyze();
       for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on ${what}: ${v.id} (${v.nodes.length})`);
     };
