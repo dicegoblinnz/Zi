@@ -26,7 +26,7 @@
 //             thread was last agreed as. Each campaign's kept apart, and it all
 //             goes when the account's characters leave the phone (sync.js).
 import { LISTS, MAX, apply, blank, moneyOf, powerOf, readable, undoOf } from "./party-sheet.js";
-import { bondId, sameName, threadState, wordsKey } from "./threads.js";
+import { bondId, mateFor, threadState, wordsKey } from "./threads.js";
 import { stepsToDice } from "./dice.js";
 import { die as kitDie, grow as growDie, mini as kitMini } from "../kit/kit.js";
 
@@ -53,6 +53,8 @@ const first = (name) => String(name || "").trim().split(/\s+/)[0] || "";
 const random = (n) => Array.from(crypto.getRandomValues(new Uint8Array(n)), (x) => (x % 36).toString(36)).join("");
 const newId = () => `${random(6)}${Date.now().toString(36).slice(-3)}`;
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+// Words someone wrote, put inside a sentence, without a full stop of their own.
+const bare = (t) => String(t ?? "").replace(/[.!?…]+$/, "");
 
 // What each list's lines are called, one and more.
 const NAMES = {
@@ -121,13 +123,18 @@ export function makeParty(d) {
     load();
     return Object.keys(st.k).find((id) => st.k[id].crew.some((m) => m.id === me() && m.character?.id === ch.id)) ?? null;
   }
-  // The character this phone's player plays in a campaign, if it's on this phone.
+  // The character this phone's player plays in a campaign, if it's on this
+  // phone. The campaign list's the freshest word on it (it changes the moment
+  // they bring someone else), and the party sheet's crew after that.
   function myCharIn(id) {
     if (!sync.me) return null;
-    const k = camp(id);
-    const charId = k.crew.find((m) => m.id === me())?.character?.id ?? d.list()?.find((x) => x.id === id && x.role === "player")?.character?.id;
+    const listed = d.list()?.find((x) => x.id === id);
+    const charId = listed ? (listed.role === "player" ? listed.character?.id : null) : camp(id).crew.find((m) => m.id === me())?.character?.id;
     return charId ? store.data.characters.find((c) => c.id === charId && c.acct === me()) ?? null : null;
   }
+  // The others in the campaign who are playing someone.
+  const matesOf = (k) => k.crew.filter((m) => m.id !== me() && m.character);
+  const mateName = (m) => m.character.name;
 
   // ------------------------------------------------------------ threads
 
@@ -136,23 +143,25 @@ export function makeParty(d) {
   // on the other sheet with theirs that this sheet hasn't got.
   function sharedOf(k, ch, c) {
     const mine = `${me()}:${ch.id}`;
+    const mates = matesOf(k);
     const out = [];
-    for (const m of k.crew) {
-      if (m.id === me() || !m.character) continue;
+    for (const m of mates) {
       const other = `${m.id}:${m.character.id}`;
       const seen = new Set();
       for (const p of c.threads) {
-        if (!sameName(p.person, m.character.name)) continue;
+        if (mateFor(p.person, mates, mateName) !== m) continue;
         for (const t of p.threads) {
           if (seen.has(wordsKey(t.text))) continue;
           seen.add(wordsKey(t.text));
           out.push({ id: bondId(mine, other, t.text), with: other, person: p.person, t, own: true, mate: m });
         }
       }
+      // Theirs go under the name this sheet already knows them by, if it does.
+      const person = c.threads.find((p) => mateFor(p.person, mates, mateName) === m)?.person ?? m.character.name;
       for (const t of m.threads ?? []) {
         if (seen.has(wordsKey(t.text))) continue;
         seen.add(wordsKey(t.text));
-        out.push({ id: bondId(mine, other, t.text), with: other, person: m.character.name, t: { text: t.text, kind: t.kind === "hostile" ? "hostile" : "bond", whose: t.whose || null, strained: t.strained === true, theirs: true }, own: false, mate: m });
+        out.push({ id: bondId(mine, other, t.text), with: other, person, t: { text: t.text, kind: t.kind === "hostile" ? "hostile" : "bond", whose: t.whose || null, strained: t.strained === true, theirs: true }, own: false, mate: m });
       }
     }
     return out;
@@ -168,15 +177,15 @@ export function makeParty(d) {
   // threads on their sheet with each of the others.
   function faceOf(k, ch, c) {
     const s = ch.state;
+    const mates = matesOf(k);
     const threads = [];
-    for (const m of k.crew) {
-      if (m.id === me() || !m.character) continue;
-      for (const p of c.threads) {
-        if (!sameName(p.person, m.character.name)) continue;
-        for (const t of p.threads) threads.push({ with: `${m.id}:${m.character.id}`, text: t.text, kind: t.kind, whose: t.whose || `${ch.name}’s`, strained: Boolean(t.strained) });
-      }
+    for (const p of c.threads) {
+      const m = mateFor(p.person, mates, mateName);
+      if (!m) continue;
+      for (const t of p.threads) threads.push({ with: `${m.id}:${m.character.id}`, text: t.text, kind: t.kind, whose: t.whose || `${ch.name}’s`, strained: Boolean(t.strained) });
     }
-    return { asp: { text: s.aspText || c.aspiration?.text || "", die: s.asp }, threads };
+    // Which character it's for, so one shared just before a switch can't land on the next.
+    return { ch: ch.id, asp: { text: s.aspText || c.aspiration?.text || "", die: s.asp }, threads };
   }
 
   // Threads moved on this phone since it last agreed with the Worker, ready to
@@ -195,32 +204,37 @@ export function makeParty(d) {
         continue;
       }
       if (base === now) continue;
-      k.out.push({ n: ++st.n, m: 1, id: x.id, with: x.with, w: x.t.text, from: base ?? null, to: now });
+      k.out.push({ n: ++st.n, m: 1, ch: ch.id, id: x.id, with: x.with, w: x.t.text, from: base ?? null, to: now });
       k.base[x.id] = now;
     }
   }
 
   // Threads the Worker has somewhere else, brought onto this character's
-  // sheet, unless there's a change of this phone's still going up.
+  // sheet, unless there's a change of this phone's still going up, or one made
+  // while the answer was on its way (that goes up next).
   function merge(id, k, ch) {
     const c = d.normal(ch);
     if (!c) return false;
-    let changed = false;
+    const changed = [];
     for (const x of sharedOf(k, ch, c)) {
       const there = k.bonds[x.id];
       if (!there || k.out.some((o) => o.m && o.id === x.id)) continue;
       const now = threadState(ch.state, x.person, x.t);
+      if (k.base[x.id] !== undefined && now !== k.base[x.id]) {
+        again[id] = true;
+        continue;
+      }
       if (there.s !== now) {
         setThread(ch.state, x.person, x.t, there.s);
-        changed = true;
+        changed.push({ person: x.person, t: x.t, to: there.s });
         const who = whoIs(k, there.by);
         const from = who === "you" ? "your other phone" : who ? `${who}’s phone` : "another phone";
         notices.push({ id, kind: "thread", text: there.s === "snapped" ? `Your thread with ${x.person} snapped, from ${from}.` : there.s === "strained" ? `Your thread with ${x.person}’s strained now, from ${from}.` : `Your thread with ${x.person}’s whole again, from ${from}.` });
       }
       k.base[x.id] = there.s;
     }
-    if (changed) d.saved(ch);
-    return changed;
+    if (changed.length) d.saved(ch, changed);
+    return changed.length > 0;
   }
 
   // ------------------------------------------------------------ the Worker
@@ -236,20 +250,20 @@ export function makeParty(d) {
     const g0 = was.goal;
     const g = now.goal;
     if (g.done && !g0.done) return `The Goal’s done. ${by} took it past d12.`;
-    if (g.text !== g0.text && g.die === 2 && !g.done && g0.done) return `${by} wrote the next Goal: ${g.text}.`;
+    if (g.text !== g0.text && g.die === 2 && !g.done && g0.done) return `${by} wrote the next Goal: ${bare(g.text)}.`;
     if (g.die !== g0.die) return `${by} ${g.die > g0.die ? "took the Goal up" : "knocked the Goal back"} to d${g.die}.`;
-    if (g.text !== g0.text) return g.text ? `${by} wrote the Goal: ${g.text}.` : `${by} rubbed out the Goal’s words.`;
-    if (now.name !== was.name) return now.name ? `${by} named the crew ${now.name}.` : `${by} rubbed out the crew’s name.`;
+    if (g.text !== g0.text) return g.text ? `${by} wrote the Goal: ${bare(g.text)}.` : `${by} rubbed out the Goal’s words.`;
+    if (now.name !== was.name) return now.name ? `${by} named the crew ${bare(now.name)}.` : `${by} rubbed out the crew’s name.`;
     for (const l of LISTS) {
       const before = new Map(was[l].map((x) => [x.id, x]));
       const after = new Map(now[l].map((x) => [x.id, x]));
       const added = now[l].find((x) => !before.has(x.id));
-      if (added) return `${by} put ${added.text} on the party sheet.`;
+      if (added) return `${by} added ${bare(added.text)} to the party sheet.`;
       const gone = was[l].find((x) => !after.has(x.id));
-      if (gone) return `${by} took ${gone.text} off the party sheet.`;
+      if (gone) return `${by} took ${bare(gone.text)} off the party sheet.`;
       if (l === "projects") {
         const moved = now.projects.find((x) => before.get(x.id) && (before.get(x.id).die !== x.die || before.get(x.id).done !== x.done));
-        if (moved) return moved.done ? `${moved.text} is done. ${by} took it past d12.` : `${by} took ${moved.text} to d${moved.die}.`;
+        if (moved) return moved.done ? `${bare(moved.text)} is done. ${by} took it past d12.` : `${by} took ${bare(moved.text)} to d${moved.die}.`;
       }
     }
     return JSON.stringify(content(was)) === JSON.stringify(content(now)) ? "" : `${by} changed the party sheet.`;
@@ -449,7 +463,7 @@ export function makeParty(d) {
       const p = doc.projects.find((x) => x.id === pid);
       if (!p) return;
       const next = docAfter(doc, [op]).projects.find((x) => x.id === pid);
-      edit(id, [op], next.done ? `${p.text} is done, so what you wrote happens.` : by === -1 ? `A setback. ${p.text} is back to d${next.die}.` : `${p.text} is at d${next.die} now.`);
+      edit(id, [op], next.done ? `${bare(p.text)} is done, so what you wrote happens.` : by === -1 ? `A setback. ${bare(p.text)} is back to d${next.die}.` : `${bare(p.text)} is at d${next.die} now.`);
     },
     die(el, id) {
       const v = Number(el.dataset.v);
@@ -474,17 +488,17 @@ export function makeParty(d) {
       }
       const item = docOf(id)[el.dataset.l]?.find((x) => x.id === el.dataset.id);
       ui.editing = "";
-      if (item) edit(id, [{ o: "drop", l: el.dataset.l, id: item.id }], `${item.text} is off the party sheet.`);
+      if (item) edit(id, [{ o: "drop", l: el.dataset.l, id: item.id }], `Off the party sheet: ${bare(item.text)}.`);
     },
     pick(el, id) {
       const a = P.assets[Number(el.dataset.i)];
       if (!a) return;
-      edit(id, [{ o: "add", l: "assets", item: { id: newId(), text: a.name, does: a.does, power: a.power } }], `${a.name} is on the party sheet.${a.power ? " It adds Power." : ""}`);
+      edit(id, [{ o: "add", l: "assets", item: { id: newId(), text: a.name, does: a.does, power: a.power } }], `On the party sheet: ${bare(a.name)}.${a.power ? " It adds Power." : ""}`);
     },
     paid(el, id) {
       const a = docOf(id).assets.find((x) => x.id === el.dataset.id);
       if (!a) return;
-      edit(id, [{ o: "edit", l: "assets", id: a.id, f: "off", v: !a.off }], a.off ? `${a.text} counts again, now something’s paying for it.` : `${a.text} stops counting till something pays for it.`);
+      edit(id, [{ o: "edit", l: "assets", id: a.id, f: "off", v: !a.off }], a.off ? `${bare(a.text)} counts again, now something’s paying for it.` : `${bare(a.text)} stops counting till something pays for it.`);
     },
     camp(el, id, e) {
       e.preventDefault();
@@ -507,14 +521,14 @@ export function makeParty(d) {
     ui.editing = "";
     if (kind === "p-name") {
       const v = text("name", MAX.name);
-      if (!edit(id, [{ o: "name", v }], v ? `The crew’s called ${v} now.` : "The crew’s got no name again.")) d.render();
+      if (!edit(id, [{ o: "name", v }], v ? `The crew’s called ${bare(v)} now.` : "The crew’s got no name again.")) d.render();
     } else if (kind === "p-goal") {
       const v = text("goal", MAX.goal);
-      if (!edit(id, [{ o: "goal", v }], v ? `The Goal: ${v}.` : "The Goal’s words are rubbed out.")) d.render();
+      if (!edit(id, [{ o: "goal", v }], v ? `The Goal: ${bare(v)}.` : "The Goal’s words are rubbed out.")) d.render();
     } else if (kind === "p-next") {
       const v = text("goal", MAX.goal);
       if (!v) return d.toast("Write the next Goal first.", false);
-      edit(id, [{ o: "next", v }], `The next Goal’s at d2: ${v}.`);
+      edit(id, [{ o: "next", v }], `The next Goal’s at d2: ${bare(v)}.`);
     } else if (kind === "p-add") {
       const l = form.dataset.l;
       if (!LISTS.includes(l)) return;
@@ -524,7 +538,7 @@ export function makeParty(d) {
       if (l === "projects") Object.assign(item, { then: text("then", MAX.then), die: Number(f.get("die")) || 2 });
       const max = l === "projects" ? MAX.projects : MAX.list;
       if (doc[l].length >= max) return d.toast(`That’s ${max} ${NAMES[l][1]} already, which is as many as the sheet holds. Take one off first.`, false);
-      if (edit(id, [{ o: "add", l, item }], `${item.text} is on the party sheet.`)) form.reset();
+      if (edit(id, [{ o: "add", l, item }], `On the party sheet: ${bare(item.text)}.`)) form.reset();
     } else if (kind === "p-line") {
       const l = form.dataset.l;
       const item = doc[l]?.find((x) => x.id === form.dataset.id);
@@ -771,7 +785,7 @@ export function makeParty(d) {
     const id = campOf(ch);
     if (!id) return null;
     const k = camp(id);
-    const mates = k.crew.filter((m) => m.id !== me() && m.character).map((m) => m.character.name);
+    const mates = matesOf(k);
     const extra = [];
     for (const x of sharedOf(k, ch, c)) {
       if (x.own) continue;
@@ -780,7 +794,7 @@ export function makeParty(d) {
       p.threads.push(x.t);
     }
     const item = d.list()?.find((x) => x.id === id);
-    return { id, name: item?.name ?? "the campaign", mate: (person) => mates.some((n) => sameName(person, n)), extra };
+    return { id, name: item?.name ?? "the campaign", mate: (person) => Boolean(mateFor(person, mates, mateName)), extra };
   }
   // A thread on the GM's look at a player's character, where the campaign
   // has it, which can be ahead of what their phone last sent.
@@ -788,7 +802,7 @@ export function makeParty(d) {
     load();
     const k = st.k[id];
     if (!k) return null;
-    const m = k.crew.find((x) => x.id !== who && x.character && sameName(person, x.character.name));
+    const m = mateFor(person, k.crew.filter((x) => x.id !== who && x.character), mateName);
     if (!m) return null;
     return k.bonds[bondId(`${who}:${charId}`, `${m.id}:${m.character.id}`, t.text)]?.s ?? null;
   }

@@ -95,7 +95,9 @@ export async function showParty(env, url, camp, user, { json }) {
 // What a player's phone shares with the crew, kept only for the character
 // they play here and only with threads to the others in it.
 function faceFrom(raw, me, members) {
-  if (!raw || typeof raw !== "object") return null;
+  // One shared for the character they played here before they brought
+  // someone else is no longer theirs to share.
+  if (!raw || typeof raw !== "object" || raw.ch !== me.characterId) return null;
   const others = new Set(members.filter((m) => m.end && m.id !== me.id).map((m) => m.end));
   const a = raw.asp && typeof raw.asp === "object" ? raw.asp : null;
   const die = Number(a?.die);
@@ -111,7 +113,8 @@ function faceFrom(raw, me, members) {
 // One thread moved from a player's phone: theirs, with someone else who's
 // playing here, from where their phone last saw it to where it is now.
 function moveThread(doc, op, me, members, user, now) {
-  if (!me?.end) return false;
+  // Only the character they're playing here now, never one they've left behind.
+  if (!me?.end || op.ch !== me.characterId) return false;
   const other = members.find((m) => m.end && m.end === op.with && m.id !== user.id);
   const w = line(op.w, 240);
   if (!other || !w || !STATES.includes(op.to) || (op.from != null && !STATES.includes(op.from))) return false;
@@ -122,6 +125,21 @@ function moveThread(doc, op, me, members, user, now) {
   if (was && was.s === s) return false;
   doc.bonds[id] = { a, b, w: was?.w || w, s, v: (was?.v ?? 0) + 1, by: user.id, at: now };
   return true;
+}
+
+// Someone's left the campaign (or been taken out, or deleted their account), so
+// their threads with the rest of the crew come off its party sheet.
+export async function dropFromParty(env, campaignId, userId) {
+  for (let tries = 0; tries < 4; tries++) {
+    const row = await partyRow(env, campaignId);
+    const raw = row ? parse(row.data) : null;
+    if (!raw?.bonds) return;
+    const gone = Object.keys(raw.bonds).filter((id) => [raw.bonds[id]?.a, raw.bonds[id]?.b].some((end) => String(end ?? "").startsWith(`${userId}:`)));
+    if (!gone.length) return;
+    for (const id of gone) delete raw.bonds[id];
+    const res = await env.DB.prepare("UPDATE party SET data = ?2, version = version + 1, updatedAt = ?3 WHERE campaignId = ?1 AND version = ?4").bind(campaignId, JSON.stringify(raw), Date.now(), row.version).run();
+    if (res.meta.changes) return;
+  }
 }
 
 export async function changeParty(request, env, camp, user, { json, fail, body }) {

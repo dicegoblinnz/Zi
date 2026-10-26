@@ -100,10 +100,21 @@ const party = makeParty({
   rule: (id) => ruleHtml(id),
   isOpen: (key) => ui.open.has(key),
   viewing: () => (view.name === "sheet" ? ui.tab : view.name),
-  // A thread moved on another phone, written into this character. Undo can't
-  // go back past it, so it never takes back someone else's move.
-  saved: (ch) => {
-    for (let i = undo.length - 1; i >= 0; i--) if (undo[i].id === ch.id) undo.splice(i, 1);
+  // Threads moved on another phone, written into this character. Each undo
+  // waiting for this character gets them too, so an undo here takes back only
+  // what was done here and never someone else's move.
+  saved: (ch, moved = []) => {
+    for (const u of undo) {
+      if (u.id !== ch.id) continue;
+      const s = JSON.parse(u.state);
+      s.threads = s.threads && typeof s.threads === "object" ? s.threads : {};
+      for (const x of moved) {
+        const key = threadKey(x.person, x.t);
+        if (x.to === (x.t.strained ? "strained" : "whole")) delete s.threads[key];
+        else s.threads[key] = x.to;
+      }
+      u.state = JSON.stringify(s);
+    }
     ch.saved = new Date().toISOString();
     store.save();
   },

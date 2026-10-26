@@ -50,6 +50,17 @@ export function sameName(person, name) {
   return Boolean(p && n) && (p === n || p === n.split(" ")[0]);
 }
 
+// The one character in a campaign a thread's with: the one with that whole
+// name, or the only one with that first name. Two with the same first name
+// (Kael Ashborn and Kael Voss) and a thread that just says Kael is with
+// neither of them, so it stays on its own sheet.
+export function mateFor(person, mates, nameOf = (m) => m) {
+  const whole = mates.filter((m) => plain(person) === plain(nameOf(m)));
+  if (whole.length) return whole.length === 1 ? whole[0] : null;
+  const firsts = mates.filter((m) => sameName(person, nameOf(m)));
+  return firsts.length === 1 ? firsts[0] : null;
+}
+
 // The words a thread's known by, however its quotes and spaces were typed.
 export const wordsKey = (text) => plain(text).replace(/[“”"]/g, "'").replace(/[.,]+$/, "");
 

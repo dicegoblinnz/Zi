@@ -9,7 +9,7 @@
 // in it, and players see each other's names. Every campaign request checks the
 // person asking against that one campaign, so nothing crosses between them.
 import { authFor, hit, originsOf, providersOf, seen } from "./auth.js";
-import { changeParty, showParty } from "./party.js";
+import { changeParty, dropFromParty, showParty } from "./party.js";
 
 const HEAD = { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" };
 const json = (body, status = 200, extra = {}) => new Response(typeof body === "string" ? body : JSON.stringify(body), { status, headers: { ...HEAD, ...extra } });
@@ -262,7 +262,9 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
     if (!gm && subId !== user.id) return gmOnly();
     if (subId === camp.gmId) return fail(400, "You’re the GM, so you can’t leave it. End it instead.");
     const res = await env.DB.prepare("DELETE FROM member WHERE campaignId = ?1 AND userId = ?2").bind(camp.id, subId).run();
-    return res.meta.changes ? json({ ok: true }) : fail(404, "They’re not in this campaign.");
+    if (!res.meta.changes) return fail(404, "They’re not in this campaign.");
+    await dropFromParty(env, camp.id, subId);
+    return json({ ok: true });
   }
   return fail(404, NOTHING);
 }

@@ -1020,7 +1020,9 @@ button.bd-tok:active { transform: scale(0.97); }
 .pt-goal-in { min-width: 0; }
 .pt-goal-words { margin: 0.25rem 0 0; font-size: 1.2rem; line-height: 1.35; overflow-wrap: anywhere; text-wrap: pretty; }
 .pt-goal .pt-form .cc-field { font-size: 0.9rem; }
-.pt-ladder { justify-content: space-between; margin: 0.9rem 0 0.3rem; }
+/* The six sizes in one row on any phone, each a full thumb wide. */
+.pt-ladder { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; justify-items: center; margin: 0.9rem 0 0.3rem; }
+.pt-ladder .cc-ringbtn { width: 100%; max-width: 52px; }
 .pt-goal .cc-lead { margin: 0.5rem 0; }
 .pt-climb { margin: 0.5rem 0 0; }
 .pt-goal .pt-how { margin: 0.6rem 0 0; }
@@ -1074,6 +1076,10 @@ button.bd-tok:active { transform: scale(0.97); }
 @keyframes pt-lit { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 60%, transparent); } 100% { box-shadow: 0 0 0 14px transparent; } }
 .pt-goal.is-new { animation-name: pt-lit-goal; }
 @keyframes pt-lit-goal { 0% { box-shadow: inset 3px 0 0 var(--gold), 0 0 0 0 color-mix(in srgb, var(--gold) 60%, transparent); } 100% { box-shadow: inset 3px 0 0 var(--gold), 0 0 0 14px transparent; } }
+@media (max-width: 400px) {
+  .pt-goal { padding-inline: 10px; }
+  .pt-ladder .cc-ringbtn .zd-die { --s: 40px; }
+}
 @media (max-width: 360px) {
   .pt-goal-top .zd-die { --s: 62px; }
   .pt-crew { grid-template-columns: minmax(0, 1fr); }

@@ -4,6 +4,7 @@
 // checked by Google or Discord. There are no passwords, since hashing one
 // safely takes more time than a free Worker gets.
 import { betterAuth } from "better-auth";
+import { dropFromParty } from "./party.js";
 
 const DAY = 60 * 60 * 24;
 const NO_TOKENS = { accessToken: null, refreshToken: null, idToken: null, accessTokenExpiresAt: null, refreshTokenExpiresAt: null };
@@ -79,9 +80,14 @@ export function optionsFor(env) {
         // everyone, and their characters go. An account still goes if the
         // campaign tables haven't reached this database yet.
         beforeDelete: async (user) => {
-          await env.DB.prepare("DELETE FROM party WHERE campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id).run().catch((err) => {
+          // The party sheets of the campaigns they run go, and their threads come
+          // off the ones they play in.
+          const missing = (err) => {
             if (!/no such table/i.test(String(err?.message))) throw err;
-          });
+          };
+          await env.DB.prepare("DELETE FROM party WHERE campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id).run().catch(missing);
+          const playing = await env.DB.prepare("SELECT campaignId FROM member WHERE userId = ?1").bind(user.id).all().catch((err) => (missing(err), { results: [] }));
+          for (const m of playing.results) await dropFromParty(env, m.campaignId, user.id).catch(missing);
           await env.DB.batch([
             env.DB.prepare("DELETE FROM member WHERE userId = ?1 OR campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id),
             env.DB.prepare("DELETE FROM campaign WHERE gmId = ?1").bind(user.id),

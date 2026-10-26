@@ -705,6 +705,11 @@ try {
   same((await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/party`, twice)).status, 200, "a change sent from a phone");
   same((await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/party`, twice)).json?.seq, 2, "and sent again, when the answer didn't get back");
   same([(await partyOf(tuesday.id))?.goal?.die, await bondOf(tuesday.id, fire)], [10, "snapped"], "counts once, and a thread with someone who isn't playing goes nowhere");
+  // Something sent for a character Sam's not playing here any more goes nowhere.
+  const samId = (await user("sam@example.com")).id;
+  const stale = await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/party`, { dev: "sams-phone-0002", ops: [{ n: 1, m: 1, ch: "bram-oldone", with: `${kaiId}:vesk-aaaaaa`, w: fire, from: "snapped", to: "whole" }], face: { ch: "bram-oldone", asp: { text: "Not Bram’s at all", die: 12 }, threads: [] } });
+  same([stale.status, await bondOf(tuesday.id, fire)], [200, "snapped"], "a mend from a character Sam's left behind doesn't land");
+  yes(!((await rows("SELECT face FROM member WHERE campaignId = ?1 AND userId = ?2", tuesday.id, samId))[0]?.face ?? "").includes("Not Bram"), "and nor does what his phone shared for them");
 
   // The Goal done: past d12 the crew earns a Reputation and writes the next
   // Goal at d2. A climb tapped by mistake comes back off with Undo.
@@ -726,9 +731,18 @@ try {
   }, "a Reputation earned and the next Goal at d2");
   await mo.page.click('.pt-climb [data-by="1"]');
   await until(async () => (await partyOf(tuesday.id))?.goal?.die === 4, "a climb");
+  await until(() => mo.page.evaluate((id) => !JSON.parse(localStorage.getItem("zi-party") || "{}").k?.[id]?.out?.length, tuesday.id), "the climb's answer back on Mo's phone");
   yes((await text(mo.page, "#cc-toast")).includes("The Goal’s at d4 now."), "a phone's own change isn't news to it");
   await mo.page.click('#cc-toast [data-act="pundo"]');
   await until(async () => (await partyOf(tuesday.id))?.goal?.die === 2, "and Undo takes it back");
+
+  // The Goal's six sizes stay in one row on the narrowest phone.
+  await kai.page.setViewportSize({ width: 320, height: 700 });
+  await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=party`);
+  await kai.page.waitForSelector(".pt-ladder");
+  same(await kai.page.$$eval(".pt-ladder .cc-ringbtn", (els) => new Set(els.map((el) => Math.round(el.getBoundingClientRect().top))).size), 1, "the Goal's sizes in one row at 320 wide");
+  await axe(kai.page, "party tab, 320");
+  await kai.page.setViewportSize({ width: 390, height: 844 });
 
   // The party sheet at 390, in both themes.
   for (const theme of ["dark", "light"]) {
@@ -812,6 +826,7 @@ try {
   same((await rows("SELECT COUNT(*) AS n FROM character WHERE userId = ?1", kaiId)).map((r) => r.n), [0], "and her characters");
   same(await rows("SELECT id FROM campaign WHERE gmId = ?1", kaiId), [], "her campaign's ended");
   same(await rows("SELECT campaignId FROM member WHERE userId = ?1 OR campaignId = ?2", kaiId, kaisTable.id), [], "she's out of Mo's, and nobody's left in hers");
+  same(Object.values((await partyOf(tuesday.id))?.bonds ?? {}).filter((b) => b.a.startsWith(`${kaiId}:`) || b.b.startsWith(`${kaiId}:`)).length, 0, "and her threads are off Tuesday Lair's party sheet");
   same((await got(zed.page, "GET", "/api/campaigns")).json?.campaigns.map((k) => k.name), ["Zed’s Night"], "Zed's left with his own");
   same(await two.page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters") || '{"characters":[]}').characters.length), 0, "and they're gone from the phone");
 

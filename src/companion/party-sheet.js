@@ -169,7 +169,10 @@ export function undoOf(doc, op) {
       return [{ o: "goal", v: doc.goal.text }];
     case "next":
       return [{ o: "goal", v: doc.goal.text }, { o: "die", v: doc.goal.die, done: doc.goal.done }];
+    // A climb comes back off as a climb the other way, so a climb someone
+    // else made since stays. A die set straight to a size goes back to where it was.
     case "climb":
+      return t ? [{ o: "climb", by: op.by === -1 ? 1 : -1, ...(op.id ? { id: op.id } : {}) }] : [];
     case "die":
       return t ? [{ o: "die", v: t.die, done: t.done, ...(op.id ? { id: op.id } : {}) }] : [];
     case "add":
