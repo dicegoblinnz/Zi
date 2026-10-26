@@ -17,6 +17,8 @@
 //               (campaigns.js). It goes when the account's characters do.
 //   zi-party    their party sheets and the threads between the crew, with any
 //               changes still to go up (party.js). It goes with them too.
+//   zi-table    their campaigns' live tables, the round's telegraphs and the
+//               answers still to go up (table.js), and that goes too.
 //
 // Only a delete on this phone deletes from the account. A character that's
 // just missing here (the phone's list got lost) comes back down.
@@ -25,6 +27,7 @@ const STATE = "zi-sync";
 const STASH = "zi-unsent-";
 const CAMPS = "zi-campaigns";
 const PARTY = "zi-party";
+const TABLE = "zi-table";
 
 const read = (key) => {
   try {
@@ -108,6 +111,7 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     // their party sheets (party.js).
     write(CAMPS, null);
     write(PARTY, null);
+    write(TABLE, null);
   };
   // This phone starts keeping step with an account, picking up anything it had
   // kept to one side for it.

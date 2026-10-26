@@ -38,10 +38,24 @@
 //    thread where the campaign has it. Nothing crosses: Vesk's thread with
 //    Kai's Dorrie, in Zed's Night, stays put, and Zed gets nothing. The party
 //    sheet passes axe at 390, in both themes, with the Goal in the first screen.
-// 6. Who can do what: only Mo sees people, a player can't reset a link, rename,
+// 6. Telegraphs on phones. Mo builds round 1 on Tuesday Lair's page, the
+//    left Warden's d10 at Vesk and the brute's d8 at Bram, and sends it. Each
+//    is on its player's play screen in a second or two, and Mo's page says
+//    it's on their phones. Kai answers on Vesk's play screen, the roll card
+//    taking the d10, and Mo sees it stopped within seconds. Sam has no signal:
+//    he answers with real dice tapped in, his phone says it goes up when
+//    there's a signal, and it reaches Mo once he's back. Mo sends the maid's
+//    fear at Vesk mid-round, then ends the round: it lands, Kai rolls When it
+//    lands with the d4 already in, and Mo sees what got through. Kai's Undo
+//    takes it back off Mo's page. Vesk's phone, wiped, gets the round back
+//    from the server. Nothing crosses: Zed gets nothing of Tuesday Lair's
+//    table, Zed's Night's is empty, Kai's Dorrie there sees no telegraphs,
+//    and a socket from another site is turned away. The round's screens pass
+//    axe at 390, in both themes.
+// 7. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
-// 7. Signing out takes the account's characters off the phone and leaves the
+// 8. Signing out takes the account's characters off the phone and leaves the
 //    phone's own. Kai downloads her data, then deletes her account: it's gone
 //    from the database, her campaign ends and she's out of Mo's. The account
 //    page passes axe at 320 wide, and the campaign screens at 390, in both
@@ -52,7 +66,8 @@ import { mkdirSync, readFileSync, readdirSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join } from "node:path";
 // Miniflare 5 takes v4-style options through its converter.
-import { Miniflare, convertV4MiniflareOptions } from "miniflare";
+import { Miniflare, convertV4MiniflareOptions, coupleWebSocket } from "miniflare";
+import { WebSocketServer } from "ws";
 import { chromium } from "playwright";
 import { AxeBuilder } from "@axe-core/playwright";
 
@@ -66,6 +81,9 @@ const same = (got, want, what) => {
 };
 const yes = (ok, what) => {
   if (!ok) note(what);
+};
+const has = (got, want, what) => {
+  if (!String(got ?? "").includes(want)) note(`${what}: "${want}" isn't in "${String(got ?? "").replace(/\s+/g, " ").slice(0, 240)}"`);
 };
 
 const PORT = 4175;
@@ -112,6 +130,8 @@ const mf = new Miniflare(convertV4MiniflareOptions({
   compatibilityDate: "2026-10-13",
   compatibilityFlags: ["nodejs_compat"],
   d1Databases: { DB: "zi-check" },
+  // The live table: a Durable Object for each campaign (src/worker/table.js).
+  durableObjects: { TABLE: { className: "Table", useSQLite: true } },
   bindings: {
     AUTH_HOSTS: `localhost:${PORT}`,
     BETTER_AUTH_SECRET: "check-secret-check-secret-check-secret-0123",
@@ -163,6 +183,23 @@ const server = createServer(async (req, res) => {
   }
   res.writeHead(200, { "content-type": TYPES[extname(full)] || "application/octet-stream" });
   res.end(await readFile(full));
+});
+// The live table's sockets go through to the Worker the same way.
+const sockets = new WebSocketServer({ noServer: true });
+server.on("upgrade", async (req, socket, head) => {
+  if (!req.url.startsWith("/api/")) return socket.destroy();
+  const headers = new Headers();
+  for (const [k, v] of Object.entries(req.headers)) headers.set(k, Array.isArray(v) ? v.join(", ") : v);
+  try {
+    const answer = await mf.dispatchFetch(`${BASE}${req.url}`, { headers, redirect: "manual" });
+    if (answer.status !== 101 || !answer.webSocket) {
+      socket.end(`HTTP/1.1 ${answer.status} No\r\nconnection: close\r\n\r\n`);
+      return;
+    }
+    sockets.handleUpgrade(req, socket, head, (ws) => coupleWebSocket(ws, answer.webSocket).catch(() => ws.terminate()));
+  } catch {
+    socket.destroy();
+  }
 });
 await new Promise((r) => server.listen(PORT, r));
 
@@ -765,8 +802,215 @@ try {
   await kai.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
   await mo.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
 
-  // ------------------------------------------------------------ 6. who can do what
-  console.log("6. Who can do what");
+  // ------------------------------------------------------------ 6. telegraphs on phones
+  console.log("6. Telegraphs on phones");
+  const tableOf = async (id, page = mo.page) => (await got(page, "GET", `/api/campaigns/${id}/table`)).json;
+  const teleOf = async (who) => (await tableOf(tuesday.id))?.rounds?.flatMap((r) => r.tele).find((t) => t.who === who) ?? null;
+  const card = (page, who) => page.locator(`li.tg:has(h3:text-is("${who}"))`);
+  const cardText = async (page, who) => ((await card(page, who).count()) ? card(page, who).first().textContent() : "");
+
+  // Kai has Vesk's play screen open, and Sam has Bram's.
+  await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa`);
+  await kai.page.waitForSelector(".cc-tiles");
+  await sam.page.goto(`${BASE}/characters/?c=bram-ssssss`);
+  await sam.page.waitForSelector(".cc-tiles");
+  same(await kai.page.$(".tg-play"), null, "no telegraphs on Vesk's play screen before there's a round");
+
+  // Mo opens Tuesday Lair: the round's at the top, above the party, and live.
+  await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
+  await mo.page.waitForSelector(".tg-sec");
+  await until(async () => Boolean(await mo.page.$(".tg-sec .tg-net.is-live")), "Mo's phone live on the table");
+  yes(await mo.page.evaluate(() => document.querySelector(".tg-sec").getBoundingClientRect().top < document.querySelector('[aria-labelledby="k-party"]').getBoundingClientRect().top), "the round sits above the party on the GM's page");
+  // He telegraphs the left Warden's d10 at Vesk, built as the card it'll be.
+  await mo.page.click('.tg-sec [data-do="compose"]');
+  await mo.page.waitForSelector(".tg-compose");
+  await mo.page.click('.tg-target:has-text("Vesk")');
+  await mo.page.click('.tg-size[data-d="10"]');
+  await mo.page.fill("#tg-who", "The left Warden");
+  await mo.page.fill("#tg-does", "Pin Vesk against the wall");
+  same(await mo.page.textContent(".tg-preview h3"), "The left Warden", "the card as it'll go out, while he types");
+  has(await mo.page.textContent(".tg-preview footer"), "At Vesk", "aimed at Vesk");
+  await shot(mo.page, "tele-compose");
+  await axe(mo.page, "telegraphing, dark");
+  await mo.page.click('#cc-dialog [data-do="save"]');
+  await mo.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  // And the brute's d8 at Bram, started with Hurt.
+  await mo.page.click('.tg-sec [data-do="compose"]');
+  await mo.page.waitForSelector(".tg-compose");
+  await mo.page.click('.tg-target:has-text("Bram")');
+  await mo.page.fill("#tg-who", "The brute");
+  await mo.page.click('.tg-size[data-d="8"]');
+  await mo.page.click('.tg-verbs [data-v="Hurt"]');
+  same(await mo.page.inputValue("#tg-does"), "Hurt Bram", "starting it with Hurt names who it's at");
+  await mo.page.fill("#tg-does", "Bring the club down on Bram");
+  await mo.page.click('#cc-dialog [data-do="save"]');
+  await mo.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  same(await mo.page.$$eval(".tg-sec li.tg.is-draft h3", (els) => els.map((e) => e.textContent)), ["The left Warden", "The brute"], "round 1, built and not sent yet");
+  same((await tableOf(tuesday.id))?.rounds?.length, 0, "nothing goes out till it's sent");
+  if (SHOTS) {
+    await mo.page.evaluate(() => document.querySelector(".tg-sec").scrollIntoView());
+    await shot(mo.page, "tele-drafts");
+  }
+  await mo.page.click('.tg-sec [data-do="send"]');
+
+  // Each one's on its player's play screen in a second or two.
+  let sentAt = Date.now();
+  await until(async () => (await cardText(kai.page, "The left Warden")).includes("Pin Vesk against the wall"), "the Warden on Vesk's play screen", 4000);
+  const vAt = Date.now() - sentAt;
+  yes(vAt < 4000, `on Vesk's play screen ${vAt}ms after it was sent`);
+  yes(Boolean(await kai.page.$('li.tg [data-do="answer"]')), "with Answer it on the card");
+  has(await text(kai.page, "#cc-toast"), "The left Warden’s telegraphing at Vesk: a d10.", "and a toast saying it's coming");
+  yes(Boolean(await kai.page.$(".tg-play .tg-row:has-text('The brute') [data-do='answer']")), "the brute at Bram's there too, face up, and Kai can answer it for him");
+  await until(async () => (await cardText(sam.page, "The brute")).includes("Bring the club down on Bram"), "the brute on Bram's play screen", 4000);
+  await until(async () => (await cardText(mo.page, "The left Warden")).includes("On Kai’s phone") && (await cardText(mo.page, "The brute")).includes("On Sam’s phone"), "Mo's page says both phones have theirs", 4000);
+  const top = await kai.page.evaluate(() => Math.round(document.querySelector('.tg-play [data-do="answer"]').getBoundingClientRect().bottom));
+  yes(top <= 844 - 70, `Answer it in Vesk's first screen (it ends at ${top}px)`);
+  await shots(kai.page, "tele-play", '.tg-play [data-do="answer"]');
+  await axe(kai.page, "a telegraph on the play screen");
+
+  // Kai answers it on Vesk's play screen: Sneak, and the roll card takes the d10.
+  await kai.page.click('.tg-play li.tg [data-do="answer"]');
+  await kai.page.waitForSelector(".tg-acts");
+  has(await kai.page.textContent("#cc-dialog .tg-pick"), "Win and it never lands", "what answering does, on the card");
+  if (SHOTS) await kai.page.waitForTimeout(500);
+  await shot(kai.page, "tele-pick");
+  await axe(kai.page, "picking the answer");
+  await kai.page.click('.tg-acts [data-do="with"]:has-text("Sneak")');
+  await kai.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="10"][aria-pressed="true"]');
+  has(await kai.page.textContent("#cc-dialog .tg-for"), "The left Warden’s d10", "the roll card says what it's answering");
+  await kai.page.evaluate(() => window.ziCompanion.setDice([7, 5]));
+  await kai.page.click('#cc-dialog [data-act="go"]');
+  await kai.page.waitForSelector("#cc-dialog .tg-verdict");
+  has(await kai.page.textContent("#cc-dialog .tg-verdict"), "Stopped. It never lands.", "her 7 beats its 5");
+  sentAt = Date.now();
+  await until(async () => (await cardText(mo.page, "The left Warden")).includes("Stopped. Vesk answered it with Sneak: 7 against its 5."), "Kai's answer on Mo's page", 4000);
+  const mAt = Date.now() - sentAt;
+  yes(mAt < 4000, `Mo sees it ${mAt}ms after she rolled, not 20 seconds`);
+  same((await teleOf("The left Warden"))?.ans?.won, true, "the table has it stopped");
+  has(await text(mo.page, "#cc-toast"), "Vesk answered the left Warden and stopped it.", "and Mo's told");
+  await until(async () => (await text(kai.page, "#cc-dialog .tg-verdict")).includes("Mo has it."), "Kai's roll card says Mo has it");
+  if (SHOTS) {
+    await kai.page.waitForTimeout(1200);
+    await shot(kai.page, "tele-answered");
+    await mo.page.evaluate(() => document.querySelector(".tg-sec").scrollIntoView());
+    await shot(mo.page, "tele-gm-live");
+  }
+  await kai.page.click('#cc-dialog .dlg-foot [data-act="close"]');
+  await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+
+  // Sam has no signal. He answers with real dice tapped in, a 3 against the
+  // brute's 6, and it waits on his phone till the signal's back.
+  await sam.context.setOffline(true);
+  await sam.page.click('.tg-play li.tg [data-do="answer"]');
+  await sam.page.waitForSelector(".tg-acts");
+  await sam.page.click('.tg-acts [data-do="with"]:has-text("Fight")');
+  await sam.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="8"][aria-pressed="true"]');
+  await sam.page.click('#cc-dialog [data-act="go-real"]');
+  await sam.page.click('#cc-dialog [data-act="pad"][data-k="p0"][data-v="3"]');
+  await sam.page.click('#cc-dialog [data-act="pad"][data-k="opp"][data-v="6"]');
+  await sam.page.click('#cc-dialog [data-act="pad-done"]');
+  await sam.page.waitForSelector("#cc-dialog .tg-verdict");
+  has(await sam.page.textContent("#cc-dialog .tg-verdict"), "It lands now, and there’s no defence against it.", "his 3 doesn't beat its 6");
+  has(await sam.page.textContent("#cc-dialog .tg-verdict"), "It goes up to Mo when you’ve got a signal.", "and it waits for a signal");
+  await sam.page.waitForTimeout(1500);
+  same((await teleOf("The brute"))?.ans ?? null, null, "nothing's reached the table yet");
+  await sam.page.click('#cc-dialog .dlg-foot [data-act="close"]');
+  has(await text(sam.page, ".tg-play"), "It goes up to Mo when you’ve got a signal.", "Bram's play screen says so too");
+  await shot(sam.page, "tele-offline");
+  await sam.context.setOffline(false);
+  await until(async () => (await teleOf("The brute"))?.ans?.real === true, "Sam's answer reaching the table once he's back", 10000);
+  await until(async () => (await cardText(mo.page, "The brute")).includes("It landed then and there. Bram’s Fight came up 3 against its 6"), "and Mo's page", 4000);
+  has(await cardText(mo.page, "The brute"), "real dice", "marked as real dice");
+
+  // Mid-round, Mo sends the maid's fear at Vesk, a d4.
+  await mo.page.click('.tg-sec [data-do="compose"]');
+  await mo.page.waitForSelector(".tg-compose");
+  has(await mo.page.textContent("#cc-dialog .dlg-foot"), "Send it now", "mid-round, it goes straight out");
+  await mo.page.click('.tg-target:has-text("Vesk")');
+  await mo.page.fill("#tg-who", "The maid");
+  await mo.page.click('.tg-size[data-d="4"]');
+  await mo.page.click('#cc-dialog [data-do="kind"][data-k="fear"]');
+  await mo.page.click('.tg-verbs [data-v="Frighten"]');
+  await mo.page.click('#cc-dialog [data-do="save"]');
+  await until(async () => (await cardText(kai.page, "The maid")).includes("Frighten Vesk"), "the maid on Vesk's play screen", 4000);
+  has(await cardText(kai.page, "The maid"), "Lands on Confidence at the end of the round", "against her Confidence");
+  // One sent at Bram by mistake comes back with a second tap, and Sam's told.
+  await mo.page.click('.tg-sec [data-do="compose"]');
+  await mo.page.waitForSelector(".tg-compose");
+  await mo.page.click('.tg-target:has-text("Bram")');
+  await mo.page.fill("#tg-who", "The cook");
+  await mo.page.click('.tg-size[data-d="2"]');
+  await mo.page.fill("#tg-does", "Throw a pan at Bram");
+  await mo.page.click('#cc-dialog [data-do="save"]');
+  await until(async () => (await cardText(sam.page, "The cook")).includes("Throw a pan"), "the cook on Bram's play screen", 4000);
+  await card(mo.page, "The cook").locator('[data-do="take"]').click();
+  await card(mo.page, "The cook").locator('[data-do="take"]').click();
+  await until(async () => !(await sam.page.$('li.tg:has(h3:text-is("The cook"))')), "the cook gone from Bram's play screen", 4000);
+  has(await text(sam.page, "#cc-toast"), "Mo took back the cook’s telegraph at Bram.", "and Sam's told");
+  same((await teleOf("The cook")), null, "and from the table");
+  // He ends the round, with a second tap. It lands on Vesk, and Kai rolls
+  // When it lands with the d4 already in.
+  await mo.page.click('.tg-sec [data-do="end"]');
+  has(await mo.page.textContent('.tg-sec [data-do="end"]'), "Tap again", "ending the round asks for a second tap");
+  await mo.page.click('.tg-sec [data-do="end"]');
+  await until(async () => Boolean(await kai.page.$('li.tg:has(h3:text-is("The maid")) [data-do="land"]')), "the maid landed on Vesk's play screen", 4000);
+  yes(await kai.page.$eval('.tile[data-act="defence"]', (el) => el.classList.contains("is-owed")), "When it lands says something's landed");
+  await kai.page.click('li.tg:has(h3:text-is("The maid")) [data-do="land"]');
+  await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
+  same(await kai.page.$eval('#cc-dialog [data-act="d-against"][data-v="confidence"]', (el) => el.getAttribute("aria-pressed")), "true", "against her Confidence");
+  same(await kai.page.$$eval("#cc-dialog .cc-incoming .zd-die", (els) => els.map((el) => el.dataset.d)), ["4"], "the maid's d4 already in");
+  if (SHOTS) await kai.page.waitForTimeout(400);
+  await shot(kai.page, "tele-land");
+  await kai.page.evaluate(() => window.ziCompanion.setDice([2, 3]));
+  await kai.page.click('#cc-dialog [data-act="d-go"]');
+  await kai.page.waitForSelector("#cc-dialog .res .res-out");
+  same(await kai.page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Gets through"], "her 2 doesn't stop its 3");
+  await kai.page.click('#cc-dialog [data-act="d-pay"][data-what="shake"]');
+  await until(async () => (await cardText(mo.page, "The maid")).includes("It got through. Vesk’s Confidence came up 2 against its 3."), "what got through, on Mo's page", 4000);
+  await until(async () => (await cardText(mo.page, "The maid")).includes("Confidence down to d6"), "and what it cost", 4000);
+  // Kai's Undo takes it back off Mo's page: first the cost, then the roll.
+  await kai.page.click('#cc-dialog .dlg-foot [data-act="undo"]');
+  await until(async () => !(await cardText(mo.page, "The maid")).includes("Confidence down"), "the cost undone on Mo's page", 4000);
+  await kai.page.click('#cc-dialog .dlg-foot [data-act="undo"]');
+  await until(async () => (await cardText(mo.page, "The maid")).includes("It landed. Vesk rolls When it lands next."), "the roll undone on Mo's page", 4000);
+  await kai.page.click("#cc-dialog .cc-x");
+  await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  has(await mo.page.textContent(".tg-sec .tg-sum"), "Over.", "round 1's over on Mo's page");
+  if (SHOTS) {
+    await mo.page.evaluate(() => document.querySelector(".tg-sec").scrollIntoView());
+    await shot(mo.page, "tele-gm-top");
+  }
+  await shots(mo.page, "tele-gm", ".tg-sec li.tg");
+  await axe(mo.page, "the round on the GM's page");
+
+  // A phone that's lost everything gets the round back from the server.
+  await kai.page.evaluate(() => localStorage.removeItem("zi-table"));
+  await kai.page.reload();
+  await until(async () => Boolean(await kai.page.$('li.tg:has(h3:text-is("The maid")) [data-do="land"]')), "the round back on Vesk's play screen from the server", 6000);
+
+  // Nothing crosses between campaigns.
+  same((await got(zed.page, "GET", `/api/campaigns/${tuesday.id}/table`)).status, 404, "Zed gets nothing of Tuesday Lair's table");
+  same((await got(zed.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "zeds-phone-0001", ops: [{ n: 1, o: "fight" }] })).status, 404, "and can't change it");
+  same((await tableOf(zedsNight.id, zed.page))?.rounds, [], "Zed's Night's table is empty");
+  same((await tableOf(tuesday.id))?.rounds?.length, 1, "Tuesday Lair's round is still there");
+  await kai.page.goto(`${BASE}/characters/?c=dorrie-eeeeee`);
+  await kai.page.waitForSelector(".cc-tiles");
+  await kai.page.waitForTimeout(800);
+  same(await kai.page.$(".tg-play"), null, "Kai's Dorrie, in Zed's Night, sees none of Tuesday Lair's telegraphs");
+  // A socket opened from another site with Mo's sign-in is turned away.
+  const cookie = (await mo.context.cookies()).map((c) => `${c.name}=${c.value}`).join("; ");
+  const { WebSocket: NodeWS } = await import("ws");
+  const tried = (origin) => new Promise((resolve) => {
+    const ws = new NodeWS(`ws://localhost:${PORT}/api/campaigns/${tuesday.id}/table`, { headers: { cookie, origin } });
+    ws.on("open", () => (ws.close(), resolve("open")));
+    ws.on("unexpected-response", (req, res) => resolve(res.statusCode));
+    ws.on("error", () => resolve("error"));
+  });
+  same(await tried(BASE), "open", "a socket from the site's own page opens");
+  same(await tried("https://elsewhere.example"), 403, "and one from another site is turned away");
+
+  // ------------------------------------------------------------ 7. who can do what
+  console.log("7. Who can do what");
   same((await api(kai.page, "GET", "/api/people")).status, 403, "a member can't see people");
   const people = (await got(mo.page, "GET", "/api/people")).json;
   same([people?.total, people?.people?.[0]?.email], [6, "zed@example.com"], "Mo sees everyone who's signed up, newest first");
@@ -798,8 +1042,8 @@ try {
   yes(keys.length > 3 && keys.every((k) => /^[0-9a-f]{32}$/.test(k.key)), "rate limits keep HMACs, not addresses (Better Auth's too)");
   same(await rows("SELECT name FROM sqlite_master WHERE name = 'rateLimit'"), [], "no table of addresses");
 
-  // ------------------------------------------------------------ 7. leaving
-  console.log("7. Signing out, your data and deleting");
+  // ------------------------------------------------------------ 8. leaving
+  console.log("8. Signing out, your data and deleting");
   // A phone-only character stays when Kai signs out on the first phone.
   await kai.page.evaluate(() => {
     const data = JSON.parse(localStorage.getItem("zi-characters"));

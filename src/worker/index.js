@@ -10,6 +10,10 @@
 // person asking against that one campaign, so nothing crosses between them.
 import { authFor, hit, originsOf, providersOf, seen } from "./auth.js";
 import { changeParty, dropFromParty, showParty } from "./party.js";
+import { tableEnd, tableLeft, tableRoute } from "./table.js";
+
+// The live table's Durable Object class, one for each campaign (table.js).
+export { Table } from "./table.js";
 
 const HEAD = { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" };
 const json = (body, status = 200, extra = {}) => new Response(typeof body === "string" ? body : JSON.stringify(body), { status, headers: { ...HEAD, ...extra } });
@@ -91,7 +95,8 @@ async function api(request, env, url) {
   const got = await authFor(env).api.getSession({ headers: request.headers, returnHeaders: true });
   const res = await routes(request, env, url, method, parts, got.response);
   const cookies = got.headers?.getSetCookie?.() ?? [];
-  if (!cookies.length) return res;
+  // A socket handed over to the live table goes back as it is.
+  if (!cookies.length || res.status === 101) return res;
   const out = new Response(res.body, res);
   for (const c of cookies) out.headers.append("set-cookie", c);
   return out;
@@ -255,6 +260,8 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
     if (method === "GET") return showParty(env, url, camp, user, { json });
     if (method === "POST") return changeParty(request, env, camp, user, { json, fail, body });
   }
+  // The live table: the round's telegraphs and how each one went (table.js).
+  if (sub === "table" && !subId) return tableRoute(request, env, method, camp, user, { json, fail, body, origins: originsOf(env), limited });
   if (sub === "link" && !subId && method === "POST") return gm ? resetLink(env, camp) : gmOnly();
   if (sub === "me" && !subId && method === "PUT") return gm ? fail(400, "You’re the GM, so you don’t bring a character.") : pickCharacter(request, env, user, camp);
   if (sub === "members" && subId && method === "DELETE") {
@@ -264,6 +271,7 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
     const res = await env.DB.prepare("DELETE FROM member WHERE campaignId = ?1 AND userId = ?2").bind(camp.id, subId).run();
     if (!res.meta.changes) return fail(404, "They’re not in this campaign.");
     await dropFromParty(env, camp.id, subId);
+    await tableLeft(env, camp.id, subId);
     return json({ ok: true });
   }
   return fail(404, NOTHING);
@@ -331,14 +339,15 @@ async function renameCampaign(request, env, user, camp) {
   return json({ name });
 }
 
-// It ends for everyone, and its party sheet goes with it. Their characters
-// are theirs, so they stay.
+// It ends for everyone, and its party sheet and live table go with it. Their
+// characters are theirs, so they stay.
 async function endCampaign(env, camp) {
   await env.DB.batch([
     env.DB.prepare("DELETE FROM party WHERE campaignId = ?1").bind(camp.id),
     env.DB.prepare("DELETE FROM member WHERE campaignId = ?1").bind(camp.id),
     env.DB.prepare("DELETE FROM campaign WHERE id = ?1").bind(camp.id),
   ]);
+  await tableEnd(env, camp.id);
   return json({ ok: true });
 }
 

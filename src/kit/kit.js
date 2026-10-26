@@ -256,15 +256,22 @@ const AIMS = {
 
 // ── The telegraph card: what it's doing, who or what it's aimed at, how hard.
 // aim: "someone" (give atCrest), "stake" or "place".
-export function telegraph({ who, does, at = "", atCrest = null, aim = atCrest ? "someone" : "stake", d, round = 1, one = "", level = 3 }) {
-  const mark = aim === "someone" && atCrest ? crest(atCrest, { size: "sm", label: at }) : AIMS[aim] || AIMS.stake;
+// Live on a phone (stage 8) it also takes: face, the number its die came up
+// once someone's rolled against it; state, where it's got to (stopped, hit,
+// landed, held or through), which a die that lost shows by going dark; when,
+// to say that instead of when it lands; extra, what goes under it; and strict,
+// false for a crest that might name an archetype the kit hasn't got.
+export function telegraph({ who, does, at = "", atCrest = null, aim = atCrest ? "someone" : "stake", d, round = 1, one = "", level = 3, face = null, state = "", when = "", extra = "", strict = true }) {
+  const mark = aim === "someone" && atCrest ? crest(atCrest, { size: "sm", label: at, strict }) : AIMS[aim] || AIMS.stake;
   const h = `h${level}`;
-  return `<article class="zd-tele at-${aim}">` +
+  const rolled = face !== null && face !== undefined;
+  const lost = state === "stopped" || state === "held";
+  return `<article class="zd-tele at-${aim}${state ? ` is-${state}` : ""}">` +
     `<header><span class="k">Telegraph</span><span class="r">Round ${round}</span></header>` +
-    `<div class="tb">${die(d, { own: "them", label: `${who}'s d${d}` })}<div><${h}>${esc(who)}</${h}><p>${esc(does)}</p></div></div>` +
+    `<div class="tb">${die(d, { own: "them", face: rolled ? face : null, state: rolled && lost ? "low" : "", label: rolled ? `${who}'s d${d}, which came up ${face}` : `${who}'s d${d}` })}<div><${h}>${esc(who)}</${h}><p>${esc(does)}</p></div></div>` +
     (one ? `<p class="one"><b>Only one answer.</b> ${esc(one)}</p>` : "") +
-    `<footer><span class="at">${mark}<span>At ${esc(at)}</span></span><span class="when">${aim === "place" ? "Hits whoever's there when it lands" : "Lands at the end of the round"}</span></footer>` +
-    `</article>`;
+    `<footer><span class="at">${mark}<span>At ${esc(at)}</span></span><span class="when">${when ? esc(when) : aim === "place" ? "Hits whoever's there when it lands" : "Lands at the end of the round"}</span></footer>` +
+    extra + `</article>`;
 }
 
 // A cost in running text, like "1 Aura": the token, then the words.

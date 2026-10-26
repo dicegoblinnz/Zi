@@ -30,7 +30,16 @@
   // database, so they never run migrations, and sign-in stays off there until
   // they get a database of their own.
   "d1_databases": [{ "binding": "DB", "database_name": "zi", "database_id": "8d3df3f6-384f-4aa0-8b18-e2d8540ed652", "migrations_dir": "migrations" }],
+  // The live table: one Durable Object for each campaign, holding its round of
+  // telegraphs in its own SQLite (src/worker/table.js). SQLite-backed objects
+  // run on the Workers Free plan. wrangler deploy applies these migrations
+  // itself, separately from D1's.
+  "durable_objects": { "bindings": [{ "name": "TABLE", "class_name": "Table" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Table"] }],
   // Branches other than main build a Preview with `npx wrangler preview`,
-  // which won't run without this block.
-  "previews": {}
+  // which won't run without this block. Each Preview gets its own live tables,
+  // and the binding has to be named again here for the Worker to see it.
+  "previews": {
+    "durable_objects": { "bindings": [{ "name": "TABLE", "class_name": "Table" }] }
+  }
 }

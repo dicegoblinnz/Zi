@@ -1088,3 +1088,121 @@ button.bd-tok:active { transform: scale(0.97); }
 @media (prefers-reduced-motion: reduce) {
   .pt .is-new, .pt-goal.is-new { animation: none; }
 }
+
+/* ── The live table (stage 8): the round's telegraphs on the GM's campaign
+   page and on the play screen of whoever each one's aimed at. Each is the
+   kit's telegraph card, with how it went written under it: gold when the crew
+   stopped it, ember when it landed, and quiet while it's still coming. */
+.tg-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; }
+.tg-head h2 { margin: 0; }
+.tg-head h2 small { font-family: var(--body); font-size: 0.95rem; font-weight: 700; letter-spacing: 0.04em; color: var(--muted); }
+.tg-net { display: inline-flex; align-items: center; gap: 7px; margin: 0; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.tg-net span { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid currentColor; }
+.tg-net.is-live { color: var(--zd-them-ink); }
+.tg-net.is-live span { background: var(--zd-them); border-color: var(--zd-them); box-shadow: 0 0 0 3px color-mix(in srgb, var(--zd-them) 25%, transparent); }
+.tg-net.is-off { text-transform: none; letter-spacing: 0; font-weight: 500; font-size: 0.92rem; }
+.tg-sum { margin: 0.35rem 0 0.7rem; }
+.tg-wait { margin: 0.3rem 0 0.6rem; font-weight: 700; color: var(--gold-ink); }
+
+.tg-list { display: grid; gap: 12px; margin: 0.6rem 0 0; padding: 0; list-style: none; }
+.tg .zd-tele { max-width: none; }
+.tg .zd-tele header .r { font-variant-numeric: tabular-nums; }
+.tg .zd-tele .tb p { overflow-wrap: anywhere; }
+/* Still to send: a card drawn in pencil. */
+.tg.is-draft .zd-tele { border-style: dashed; }
+.tg.is-draft .zd-tele header { background: var(--zd-slot); }
+.tg.is-draft .zd-tele header .k, .tg.is-draft .zd-tele header .r { color: var(--zd-them-ink); }
+/* Stopped: the threat's die has gone dark, and so has its band. */
+.zd-tele.is-stopped header, .zd-tele.is-held header { background: var(--zd-slot); }
+.zd-tele.is-stopped header .k, .zd-tele.is-stopped header .r, .zd-tele.is-held header .k, .zd-tele.is-held header .r { color: var(--muted); }
+/* Landed: harm's colour round it. */
+.zd-tele.is-hit, .zd-tele.is-landed, .zd-tele.is-through { border-color: var(--zd-harm-line); }
+.zd-tele.is-hit footer .when, .zd-tele.is-landed footer .when, .zd-tele.is-through footer .when { color: var(--zd-harm-ink); font-weight: 700; }
+.zd-tele.is-stopped footer .when, .zd-tele.is-held footer .when { color: var(--gold-ink); font-weight: 700; }
+
+/* How it went, under the card. */
+.tg-v { display: grid; gap: 6px; margin: 0; padding: 0.6rem 0.75rem; background: var(--panel); border-left: 3px solid var(--line); border-radius: 2px; }
+.tg-v p { margin: 0; font-size: 0.95rem; line-height: 1.45; }
+.tg-v.is-good { border-left-color: var(--gold); }
+.tg-v.is-good b { color: var(--gold-ink); }
+.tg-v.is-bad { border-left-color: var(--zd-harm); }
+.tg-v.is-bad b { color: var(--zd-harm-ink); }
+.tg-v.is-wait p { color: var(--muted); }
+.tg-dice { display: flex; flex-wrap: wrap; gap: 4px; }
+.tg-dice .zd-die { --s: 34px; }
+.tg-paid { display: inline-block; padding: 0 0.4rem; font-weight: 700; color: var(--zd-harm-ink); border: 1px solid color-mix(in srgb, var(--zd-harm) 55%, transparent); border-radius: 2px; }
+.tg-real { display: inline-block; padding: 0 0.35rem; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em; color: var(--muted); border: 1px solid var(--line); border-radius: 2px; }
+.tg-do { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.tg-do .button.primary { flex: 1 1 100%; min-height: 50px; }
+.tg-do .cc-small { margin: 0; }
+.tg-do .cc-warn { font-size: 0.9rem; }
+.tg-bar { margin-top: 0.9rem; }
+.tg-bar .button { flex: 1 1 10rem; }
+.tg-bar .button.primary { flex-basis: 100%; }
+
+/* Changed on someone else's phone: it glows for a moment. */
+.tg.is-lit .zd-tele { animation: tg-lit 1.4s ease-out; }
+@keyframes tg-lit { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--zd-them) 65%, transparent); } 100% { box-shadow: 0 0 0 14px transparent; } }
+
+/* Earlier this fight, a line a round. */
+.tg-past { margin-top: 1.2rem; }
+.tg-past > summary small { color: var(--muted); font-family: var(--body); font-weight: 500; }
+.tg-earlier { margin: 0.5rem 0 0; padding: 0; list-style: none; font-size: 0.93rem; }
+.tg-earlier > li { padding: 0.45rem 0; border-top: 1px solid var(--line-soft); }
+.tg-earlier ul { margin: 0.25rem 0 0; padding-left: 1.1rem; color: var(--muted); }
+
+/* On the play screen: whatever's coming at you first, then the rest of the
+   round in a line each, any of which you can answer for a friend. */
+.tg-play { margin-top: 0.6rem; margin-bottom: 1rem; padding: 12px; background: color-mix(in srgb, var(--zd-them) 7%, var(--surface)); border: 1px solid color-mix(in srgb, var(--zd-them) 45%, transparent); border-radius: 3px; }
+.tg-play .tg-head h2 { font-size: 1.15rem; }
+.tg-play > .cc-small { margin: 0.4rem 0 0; }
+.tg-play .tg-h3 { margin: 1rem 0 0.4rem; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--zd-them-ink); }
+.tg-rows { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.tg-row { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 6px 10px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.tg-row .zd-die { --s: 38px; }
+.tg-row p { margin: 0; font-size: 0.95rem; line-height: 1.35; overflow-wrap: anywhere; }
+.tg-row p small { display: block; color: var(--muted); font-size: 0.88rem; }
+.tg-row .button { grid-column: 1 / -1; }
+.tg-row.is-stopped .zd-die, .tg-row.is-held .zd-die { opacity: 0.45; }
+.tg-chip { display: inline-block; margin-left: 4px; padding: 0 0.4rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; color: var(--muted); border: 1px solid var(--line); border-radius: 2px; }
+.tg-row.is-hit .tg-chip, .tg-row.is-landed .tg-chip, .tg-row.is-through .tg-chip { color: var(--zd-harm-ink); border-color: color-mix(in srgb, var(--zd-harm) 55%, transparent); }
+.tg-row.is-stopped .tg-chip, .tg-row.is-held .tg-chip { color: var(--gold-ink); border-color: color-mix(in srgb, var(--gold) 55%, transparent); }
+.tg-point .cc-row { margin-bottom: 0; }
+.tile-defend.is-owed { border-color: var(--zd-harm-line); box-shadow: inset 3px 0 0 var(--zd-harm); }
+.tile-defend.is-owed .tile-sub { color: var(--ink); }
+
+/* Telegraphing something: the card as it'll go out, then who it's at, how
+   hard, who's doing it and what. */
+.tg-k { color: var(--zd-them-ink); font-size: 0.78rem; }
+.tg-preview { margin-bottom: 1rem; }
+.tg-preview .zd-tele { max-width: none; }
+.tg-compose input { width: 100%; }
+.tg-label { display: block; margin-bottom: 0.5rem; font-family: var(--display); font-weight: 600; font-size: 1.05rem; letter-spacing: 0.02em; color: var(--ink); }
+.tg-compose .tg-label + input { margin: 0 0 0.5rem; }
+.tg-known, .tg-verbs { margin: 0 0 1rem; }
+.tg-known small { font-weight: 500; opacity: 0.85; }
+.tg-targets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.tg-target { display: flex; align-items: center; gap: 10px; min-height: 56px; padding: 6px 10px; text-align: left; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
+.tg-target span { display: flex; flex-direction: column; min-width: 0; }
+.tg-target b { font-family: var(--display); font-weight: 600; font-size: 1rem; line-height: 1.15; overflow-wrap: anywhere; }
+.tg-target small { color: var(--muted); font-size: 0.85rem; }
+.tg-crest { flex: none; display: grid; place-items: center; }
+.tg-crest .zd-crest { width: 34px; height: 34px; }
+.tg-target[aria-pressed="true"], .tg-size[aria-pressed="true"] { border-color: var(--zd-them); background: color-mix(in srgb, var(--zd-them) 14%, var(--surface)); box-shadow: inset 0 0 0 1px var(--zd-them); }
+.tg-sizes { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.tg-size { display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 64px; padding: 6px 0 4px; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 2px; font-weight: 700; font-size: 0.85rem; }
+.tg-size .zd-die { --s: 34px; }
+@media (max-width: 359px) {
+  .tg-sizes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tg-targets { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* Answering: pick the set action, and the roll card says what it's answering. */
+.tg-pick .tg-list { margin: 0 0 0.8rem; }
+.tg-acts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0.6rem 0 1rem; }
+.tg-acts .tile { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "dice name" "dice steps"; column-gap: 10px; row-gap: 1px; min-height: 72px; padding: 8px 10px 8px 8px; }
+.tg-acts .tile-name { align-self: end; }
+.tg-for { margin: 0 0 1rem; padding: 0.55rem 0.75rem; font-size: 0.95rem; line-height: 1.4; background: color-mix(in srgb, var(--zd-them) 10%, var(--surface)); border-left: 3px solid var(--zd-them); border-radius: 2px; overflow-wrap: anywhere; }
+.tg-for .k { display: block; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--zd-them-ink); }
+.tg-verdict { margin: 0.4rem 0 0.8rem; }
+.tg-sent { margin: 0.6rem 0; font-weight: 700; color: var(--gold-ink); }

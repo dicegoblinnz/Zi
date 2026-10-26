@@ -107,6 +107,14 @@ export const feel = {
     tone(115, 0.3, { vol: 0.35, to: 55, type: "triangle" });
     buzz(60);
   },
+  // A telegraph coming at you, or landing on you: a knock and a low note, and
+  // a buzz you'll feel in your pocket.
+  tele() {
+    if (!on) return;
+    knock(0.3);
+    tone(196, 0.32, { vol: 0.16, to: 147, type: "triangle", at: 0.08 });
+    buzz([40, 70, 40]);
+  },
   // A Hurt that puts the wound die on d12, or makes you Blaze.
   heavy() {
     if (!on) return;

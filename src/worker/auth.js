@@ -5,6 +5,7 @@
 // safely takes more time than a free Worker gets.
 import { betterAuth } from "better-auth";
 import { dropFromParty } from "./party.js";
+import { tableEnd, tableLeft } from "./table.js";
 
 const DAY = 60 * 60 * 24;
 const NO_TOKENS = { accessToken: null, refreshToken: null, idToken: null, accessTokenExpiresAt: null, refreshTokenExpiresAt: null };
@@ -88,6 +89,11 @@ export function optionsFor(env) {
           await env.DB.prepare("DELETE FROM party WHERE campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id).run().catch(missing);
           const playing = await env.DB.prepare("SELECT campaignId FROM member WHERE userId = ?1").bind(user.id).all().catch((err) => (missing(err), { results: [] }));
           for (const m of playing.results) await dropFromParty(env, m.campaignId, user.id).catch(missing);
+          // The live tables of the campaigns they run go, and their phones stop
+          // hearing the ones they play in.
+          const running = await env.DB.prepare("SELECT id FROM campaign WHERE gmId = ?1").bind(user.id).all().catch((err) => (missing(err), { results: [] }));
+          for (const c of running.results) await tableEnd(env, c.id);
+          for (const m of playing.results) await tableLeft(env, m.campaignId, user.id);
           await env.DB.batch([
             env.DB.prepare("DELETE FROM member WHERE userId = ?1 OR campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id),
             env.DB.prepare("DELETE FROM campaign WHERE gmId = ?1").bind(user.id),

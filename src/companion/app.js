@@ -17,6 +17,7 @@ import { changesOf, ownChanges, placesOf, said } from "./marks.js";
 import { makeDowntime } from "./downtime.js";
 import { makeCampaigns } from "./campaigns.js";
 import { makeParty } from "./party.js";
+import { makeTable } from "./table.js";
 import { threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
 import { aura as kitAura, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
 
@@ -125,10 +126,44 @@ const party = makeParty({
   gone: (id) => camps.gone(id),
 });
 
+// Telegraphs on phones (table.js): the GM's round on her campaign's page, and
+// each telegraph on the play screen of whoever it's aimed at.
+const table = makeTable({
+  sync, store, esc, feel, icon: ICON,
+  campaign: (id) => camps.campaign(id),
+  list: () => camps.list(),
+  campOf: (ch) => party.campOf(ch),
+  normal: (ch) => normal(ch),
+  crest: (arch) => crest(arch, { size: "sm", strict: false, label: "" }),
+  current: () => current(),
+  viewId: () => view.id,
+  isOpen: (key) => ui.open.has(key),
+  rule: (id) => ruleHtml(id),
+  roll: () => roll,
+  render: () => render(),
+  quietRender: () => {
+    if (!dialog.open && !document.activeElement?.matches?.("#app input:not([type=radio]):not([type=checkbox]), #app textarea, #app select")) render();
+  },
+  toast: (m) => toast(m, false),
+  openDialog: (r) => openRoll(r),
+  renderDialog: () => renderDialog(),
+  closeDialog: () => closeDialog(),
+  // A character's set actions, as the answer picker shows them.
+  actions: (ch, c) => c.actions.map((a, i) => ({ i, name: a.name, says: `${steps(stepsNow(c, ch.state, a))} · ${diceLabel(stepsToDice(stepsNow(c, ch.state, a)))}`, dice: stepsToDice(stepsNow(c, ch.state, a)).map((d, j) => kitDie(d, { hide: true, cls: j ? "is-next" : "" })).join("") })),
+  answer: (i, tele) => openAction(i, tele),
+  defend: (pre) => openDefence(pre),
+  signedOut: () => {
+    sync.signedOutHere();
+    render();
+  },
+  gone: (id) => camps.gone(id),
+});
+
 // Campaigns: starting one, joining one from its link, and the GM's look at
 // her players' characters, drawn with the same pieces as a character here.
 const camps = makeCampaigns({
   party,
+  table,
   sync, store, esc, ICON,
   render: () => render(),
   go: (url, o) => goTo(url, o),
@@ -284,8 +319,12 @@ function persist() {
   const ch = current();
   if (ch) ch.saved = new Date().toISOString();
   store.save();
-  // A thread or the Aspiration moved here goes to the rest of the crew too.
-  if (ch) party.soon(ch);
+  // A thread or the Aspiration moved here goes to the rest of the crew too,
+  // and an answer to a telegraph, or When it lands, goes to the GM.
+  if (ch) {
+    party.soon(ch);
+    table.soon(ch);
+  }
 }
 
 const snapRoll = () => (roll ? JSON.stringify(roll, (k, v) => (v instanceof Set ? { set: [...v] } : v)) : null);
@@ -299,6 +338,7 @@ function change(label, fn, { say = true } = {}) {
   const before = JSON.stringify(ch.state);
   const rollBefore = snapRoll();
   const message = fn(ch.state, c, ch);
+  noteTable(ch.state);
   if (JSON.stringify(ch.state) === before && snapRoll() === rollBefore) return;
   undo.push({ id: ch.id, label, state: before, roll: rollBefore });
   if (undo.length > 60) undo.shift();
@@ -310,6 +350,24 @@ function change(label, fn, { say = true } = {}) {
   if ((now.blaze && !was.blaze) || (now.wound === 12 && was.wound < 12)) feel.heavy();
   else if (now.wound > was.wound || now.shrugged > (was.shrugged ?? 0)) feel.hurt();
   if (say && !dialog.open) toast(message || `Done: ${label}.`, true);
+}
+
+// A roll answering a telegraph, or When it lands for ones that landed, is
+// written into the character with the change that rolled it (table.js), so
+// it goes to the GM, and an Undo takes it back from her too.
+function noteTable(s) {
+  const r = roll;
+  if (!r || r.mode !== "result" || r.pick) return;
+  if (r.kind === "action" && r.tele) {
+    const answered = r.opp != null && r.dice.length > 0;
+    table.record(s, r.tele.camp, "a", r.tele.id, answered ? { act: r.name, steps: r.total, dice: r.dice.map((x) => ({ size: x.size, total: x.nat + x.plus, out: outcome(x) })), opp: r.opp, real: Boolean(r.real) } : null);
+  }
+  if (r.kind === "defence" && r.camp && r.teles?.some(Boolean)) {
+    for (const h of blocks(r)) {
+      const id = r.teles[h.j];
+      if (id) table.record(s, r.camp, "d", id, { stopped: h.by != null, mine: h.mine, v: h.v, paid: r.paid[h.j] || "", real: Boolean(r.real) });
+    }
+  }
 }
 
 const lastUndo = (ch) => [...undo].reverse().find((u) => u.id === ch?.id);
@@ -706,9 +764,12 @@ function playTab(ch, c) {
     return `<button type="button" class="tile card${goldOf(`act:${a.name}`) ? " is-changed" : ""}${now < a.steps ? " is-short" : ""}" data-act="roll" data-a="${i}"><span class="tile-dice" aria-hidden="true">${diceOf(now)}</span><span class="tile-name">${esc(a.name)}</span><span class="tile-says"><span class="tile-steps">${steps(now)}${now < a.steps ? ` <small>${a.steps - now} crossed out</small>` : ""}</span> · <span class="tile-die">${esc(diceLabel(stepsToDice(now)))}</span>${goldDot(`act:${a.name}`)}</span></button>`;
   }).join("");
   const defend = stepsNow(c, s, defendOf(c));
-  return `${trackView(ch, c, s)}${alertView(ch, c, s)}
+  // What landed on them at the end of a round in their campaign, waiting on this.
+  const landed = table.landedFor(ch);
+  const owed = landed ? landed.incoming.length + landed.more : 0;
+  return `${table.playCard(ch)}${trackView(ch, c, s)}${alertView(ch, c, s)}
   <section class="cc-sec cc-play" aria-labelledby="cc-actions"><h2 id="cc-actions" class="sr-only">Set actions</h2>
-    <div class="cc-tiles">${tiles}<button type="button" class="tile card tile-defend" data-act="defence"><span class="tile-dice" aria-hidden="true">${diceOf(defend)}</span><span class="tile-name">When it lands</span><span class="tile-sub">Defend ${esc(diceLabel(stepsToDice(defend)))} · Confidence d${s.conf}</span></button></div>
+    <div class="cc-tiles">${tiles}<button type="button" class="tile card tile-defend${owed ? " is-owed" : ""}" data-act="defence"><span class="tile-dice" aria-hidden="true">${diceOf(defend)}</span><span class="tile-name">When it lands</span><span class="tile-sub">${owed ? `${owed === 1 ? "One’s" : `${cap(["", "", "two", "three", "four", "five", "six"][owed] || String(owed))} have`} landed on ${esc(ch.name)} · ` : ""}Defend ${esc(diceLabel(stepsToDice(defend)))} · Confidence d${s.conf}</span></button></div>
     ${lastRollView(s.last)}
     <div class="cc-row cc-scene"><button type="button" class="button" data-act="scene">New scene</button><button type="button" class="button" data-act="downtime">Downtime</button>${changeLink(ch)}</div>
   </section>`;
@@ -929,9 +990,15 @@ const stepsNow = (c, s, a) => a.steps - outOn(c, s, a).length;
 // Every sheet has Defend. One that's lost it (an old build, say) defends on the action alone.
 const defendOf = (c) => c.actions.find((a) => a.name === "Defend") ?? { name: "Defend", steps: 1, die: "d2", lines: [] };
 
-function openAction(i) {
-  roll = { kind: "action", mode: "build", a: i, off: new Set(), in: new Set(), borrow: new Set(), other: 0, conds: new Set(), friends: [], handed: 0, extra: -1, via: "resolve", beyond: false, count: null, shape: 0, vs: 0, vsRolled: 4, mark: 0, dice: [], opp: null, oppSize: 0, log: [], pick: null, pads: [], padOpp: false, spinning: false, intents: {}, owns: new Set(), confFrom: null };
-  openDialog();
+// tele: the telegraph it's answering (table.js), whose die it's up against.
+function openAction(i, tele = null) {
+  openRoll({ kind: "action", mode: "build", a: i, off: new Set(), in: new Set(), borrow: new Set(), other: 0, conds: new Set(), friends: [], handed: 0, extra: -1, via: "resolve", beyond: false, count: null, shape: 0, vs: tele ? tele.d : 0, vsRolled: 4, mark: 0, dice: [], opp: null, oppSize: 0, log: [], pick: null, pads: [], padOpp: false, spinning: false, intents: {}, owns: new Set(), confFrom: null, tele });
+}
+// A dialog that's open already turns over to the next one.
+function openRoll(r) {
+  roll = r;
+  if (dialog.open) renderDialog(false);
+  else openDialog();
 }
 
 // Through a bond thread that's whole you can borrow one of their permissions,
@@ -1043,7 +1110,7 @@ function buildView(c, s) {
       <p class="cc-dice" aria-live="polite">${liveDice([...k.dice.map((d) => [d, "you"]), ...(r.mark ? [[r.mark, "you", "is-mark"]] : []), ...(r.vs > 0 ? [[r.vs, "them", "is-vs"]] : [])])}<span><b>${steps(k.total)}</b>, ${diceLabel(k.dice)}${r.mark ? `, and the Mark d${r.mark}` : ""}${r.vs > 0 ? ` against their d${r.vs}` : r.vs === -1 ? ` against ${r.vsRolled}` : ""}</span></p>
       ${k.aura || k.resolve ? `<p class="cc-costs">${k.aura ? `<span class="chip is-aura">${k.aura} Aura</span>` : ""}${k.resolve ? `<span class="chip">${k.resolve} Resolve</span>` : ""}</p>` : ""}</div>
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
-  <div class="dlg-body">${goldNow(`act:${k.act.name}`)}
+  <div class="dlg-body">${table.forLine(r)}${goldNow(`act:${k.act.name}`)}
     ${k.act.name === "Defend" ? '<p class="cc-note">Defending this round? There’s nothing to roll yet. When the telegraphs land, tap When it lands and pick Defend, and every line on it counts twice. Roll it here when you’re answering a telegraph by blocking or dodging it.</p>' : ""}
     ${s.conf <= 2 ? `<fieldset class="cc-group"><legend>You’re shaken</legend><button type="button" class="cc-line" data-act="shaken"${pressed(k.shaken)}><span class="tick" aria-hidden="true"></span><span>This action costs 1 Resolve <small>when it’s at what the scene’s about, so tap it off when it isn’t. Or close this and pull yourself together from the Confidence tracker instead. That takes your action and brings you back to d4.</small></span></button></fieldset>` : ""}
     <fieldset class="cc-group"><legend>On your ${esc(k.extra && k.extra !== k.act ? `${k.act.name} and ${k.extra.name}` : k.act.name)}</legend>
@@ -1216,6 +1283,7 @@ function resultView(c, s, ch) {
     ${them}
     ${r.spinning ? '<p class="cc-small cc-skip">Tap the dice to skip.</p>' : ""}</div>
     ${r.topNote && !r.spinning ? `<p class="cc-topnote">${esc(r.topNote)}</p>` : ""}
+    ${r.tele && !r.spinning && !picking && r.opp != null ? table.rollNote(r) : ""}
     ${picking ? `<div class="cc-note" role="status"><p>${r.pick.type === "plus" ? `Tap the ${r.pick.mark ? "Mark die" : "die"} to put +${r.pick.bonus} on.` : "Tap a die to roll it again, or roll them all."}</p><div class="cc-row">${r.pick.type === "reroll" ? '<button type="button" class="button sm" data-act="reroll-all">Roll them all</button>' : ""}<button type="button" class="button sm" data-act="pick-cancel">Never mind</button></div></div>` : rollSwingView(c, s)}
     ${offers ? `<div class="cc-row cc-offers">${offers}</div>` : ""}
     <p class="cc-small cc-left">You’ve got ${s.aura} Aura and ${s.resolve} Resolve.</p>
@@ -1233,9 +1301,10 @@ function resultView(c, s, ch) {
 // split. Your Confidence rolls as it is either way. Every telegraph a die
 // stops puts your Confidence up a size, and what gets through can take it
 // down: a Hurt that puts your wound die up, or fear you don't hold.
-function openDefence() {
-  roll = { kind: "defence", mode: "build", against: "blows", defend: false, incoming: [], mine: [], opp: [], pick: null, log: [], spinning: false, padOpp: true, dconds: {}, intents: {}, owns: new Set(), assign: [], paid: [], extra: {}, swap: null, off: new Set(), in: new Set(), borrow: new Set(), other: 0, count: null, shape: 0, confFrom: null, moves: [] };
-  openDialog();
+// pre: the telegraphs that landed on this character (table.js), their dice
+// and what each was doing, ready to roll against.
+function openDefence(pre = null) {
+  openRoll({ kind: "defence", mode: "build", against: pre?.against ?? "blows", defend: false, incoming: pre?.incoming ?? [], mine: [], opp: [], pick: null, log: [], spinning: false, padOpp: true, dconds: {}, intents: pre?.intents ?? {}, owns: new Set(), assign: [], paid: [], extra: {}, swap: null, off: new Set(), in: new Set(), borrow: new Set(), other: 0, count: null, shape: 0, confFrom: null, moves: [], camp: pre?.camp ?? null, teles: pre?.teles ?? [], from: pre?.from ?? {} });
 }
 
 // A condition is one step on whatever it fits, so Warded makes a d4 Defend a
@@ -1385,7 +1454,7 @@ function defenceBuild(c, s) {
       <p class="cc-dice" aria-live="polite">${liveDice([...p.dice.map((d) => [d, "you"]), ...r.incoming.map((d, j) => [d, "them", j ? "" : "is-vs"])])}<span><b>${steps(p.total)}</b>, ${diceLabel(p.dice)}, and each die stops one</span></p>
       ${p.aura ? `<p class="cc-costs"><span class="chip is-aura">${p.aura} Aura</span></p>` : ""}</div>
     <button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button></div>
-  <div class="dlg-body">
+  <div class="dlg-body">${table.landLine(r)}
     <p class="cc-lead">Whatever nobody answered lands at the end of the round. Each die you roll stops one telegraph it beats or ties, and everything else gets through. Every one you stop puts your Confidence up a size.</p>
     <fieldset class="cc-group"><legend>What’s coming at you</legend>
       <button type="button" class="cc-line" data-act="d-against" data-v="blows"${pressed(blows)}><span class="tick" aria-hidden="true"></span><span>Blows, blades, falling rocks and teeth <small>your Defend, ${esc(now)}</small></span></button>
@@ -1476,6 +1545,7 @@ function defenceResult(c, s, ch) {
     ${canSwap ? `<p class="cc-small" role="status">${r.swap == null ? "The phone’s matched your dice so the most get stopped. Tap Swap on two to trade the dice stopping them." : "Now tap Swap on the other one."}</p>` : ""}
     <ul class="cc-res"${r.spinning ? ' data-act="skip"' : ""}>${hits.map(row).join("")}</ul>
     ${swing}
+    ${done && r.camp && r.teles?.some(Boolean) ? table.rollNote(r) : ""}
     ${done && bonuses.length && !r.paid.some(Boolean) ? `<div class="cc-row cc-offers">${bonuses.map((a) => `<button type="button" class="button sm" data-act="plus" data-n="${esc(a.name)}"${off(s.aura < 1 || !r.mine.some((m) => !m.plus))}>${esc(a.name)} +${a.bonus} on your ${what}: 1 Aura</button>`).join("")}</div>` : ""}
     ${r.log.length ? `<ul class="cc-log">${r.log.map((l) => `<li>${esc(l)}</li>`).join("")}</ul>` : ""}
     <p class="cc-small">Defend ${esc(diceLabel(stepsToDice(stepsNow(c, s, defendOf(c)))))} · Confidence d${s.conf} · Wound d${s.wound} · ${s.aura} Aura · ${s.resolve} Resolve</p>
@@ -1622,6 +1692,7 @@ function dialogView() {
   if (roll.kind === "name") return nameView();
   if (roll.kind === "rule") return ruleView();
   if (roll.kind === "camp") return camps.dialog(roll);
+  if (roll.kind === "tele" || roll.kind === "tg-pick") return table.dialog(roll);
   const c = normal(ch);
   if (!c) return "";
   const s = ch.state;
@@ -1685,6 +1756,8 @@ function render() {
   // threads in step while it's open.
   party.route(view, ch);
   party.after(app);
+  // And its live table, the round's telegraphs, over a socket.
+  table.route(view, ch);
   glow(ch);
   if (dialog.open) renderDialog();
   else refocus(keep);
@@ -1955,6 +2028,7 @@ function stepRoll(name, i, d) {
 
 const ACT = {
   k: (el, e) => camps.act(el, e),
+  tg: (el, e) => table.act(el, e),
   p: (el, e) => party.act(el, e),
   pundo: () => party.undo(),
   b: (el, e) => builder.act(el, e, render, () => {
@@ -2179,7 +2253,9 @@ const ACT = {
     renderDialog();
   },
   roll: (el) => openAction(Number(el.dataset.a)),
-  defence: () => openDefence(),
+  // When it lands starts with whatever landed on this character, if they're
+  // playing in a campaign whose round has just ended.
+  defence: () => openDefence(table.landedFor(current())),
   used: (el) => change("using a trait", (s) => {
     const name = el.dataset.n;
     if (s.used[name]) delete s.used[name];
@@ -2460,6 +2536,7 @@ const ACT = {
   },
   "d-add"(el) {
     roll.incoming.push(Number(el.dataset.v));
+    roll.teles?.push(null);
     renderDialog();
   },
   "d-del"(el) {
@@ -2467,6 +2544,7 @@ const ACT = {
     const intents = {};
     const owns = new Set();
     roll.incoming.splice(i, 1);
+    roll.teles?.splice(i, 1);
     roll.incoming.forEach((_, j) => {
       const from = `d${j < i ? j : j + 1}`;
       if (from in roll.intents) intents[`d${j}`] = roll.intents[from];
@@ -2696,6 +2774,7 @@ document.addEventListener("change", (e) => {
 
 document.addEventListener("input", (e) => {
   if (e.target.dataset?.bin) return builder.input(e.target);
+  if (e.target.dataset?.tg != null && roll?.kind === "tele") return table.input(e.target, roll);
   if (e.target.dataset?.dt != null && roll?.kind === "downtime") return dt.input(e.target, roll);
   if (e.target.dataset?.in === "intent" && roll?.intents) {
     roll.intents[e.target.dataset.k] = e.target.value.slice(0, 40);

@@ -98,6 +98,7 @@ export function makeCampaigns(d) {
     st.at = Date.now();
     for (const id of Object.keys(st.camps)) if (!st.list.some((k) => k.id === id)) delete st.camps[id];
     d.party.keepOnly(st.list.map((k) => k.id));
+    d.table.keepOnly(st.list.map((k) => k.id));
     keep();
     d.render();
   }
@@ -142,6 +143,7 @@ export function makeCampaigns(d) {
     st.why[id] = "gone";
     keep();
     d.party.drop(id);
+    d.table.drop(id);
     d.render();
   }
 
@@ -237,9 +239,10 @@ export function makeCampaigns(d) {
       const partyHtml = `<section class="cc-sec" aria-labelledby="k-party"><h2 id="k-party">The party</h2>
         ${party.length ? `<ul class="cc-mine cc-party">${party.map((p) => memberCard(c, p)).join("")}</ul>` : '<p class="cc-lead">Nobody’s joined yet. When they do, their characters show up here, and you can open each one’s sheet.</p>'}</section>`;
       const sheet = d.party.sheet(id);
-      return `${head}${party.length ? partyHtml + sheet + bring : bring + partyHtml + sheet}${thisView(c)}`;
+      // The round's telegraphs come first, since they're what she taps most in a fight.
+      return `${head}${d.table.section(id)}${party.length ? partyHtml + sheet + bring : bring + partyHtml + sheet}${thisView(c)}`;
     }
-    return `${head}${youView(c, myChar)}${d.party.sheet(id)}
+    return `${head}${d.table.pointer(id)}${youView(c, myChar)}${d.party.sheet(id)}
       <section class="cc-sec" aria-labelledby="k-party"><h2 id="k-party">Who’s in it</h2>
         <ul class="cc-mine cc-names"><li class="card cc-name"><b>${esc(c.gm)}</b><small>the GM</small></li>${party.map((p) => `<li class="card cc-name"><b>${p.character ? esc(p.character.name) : "No character yet"}</b><small>${p.id === sync.me?.id ? "you" : esc(p.name)}</small></li>`).join("")}</ul></section>
       <section class="cc-sec" aria-labelledby="k-leave"><h2 id="k-leave">Leaving</h2>
@@ -735,6 +738,12 @@ export function makeCampaigns(d) {
     list() {
       load();
       return st.list;
+    },
+    // One campaign as this phone last saw it (its players, and whether this
+    // player runs it), for the live table.
+    campaign(id) {
+      load();
+      return st.camps[id] ?? null;
     },
     // Where the companion's going, so the campaigns can get ready for it.
     route(next) {
