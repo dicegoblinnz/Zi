@@ -268,8 +268,9 @@ export function makeParty(d) {
     return lit;
   }
 
-  function take(id, k, got) {
-    const was = docOf(id);
+  // was is the sheet this phone was showing before the Worker answered, with
+  // its own changes in, so only someone else's show up as news.
+  function take(id, k, got, was) {
     const hadAt = k.doc?.at ?? 0;
     // The first time this phone sees a campaign's sheet, nothing's news.
     const known = k.doc != null || k.v !== "";
@@ -327,6 +328,7 @@ export function makeParty(d) {
         return d.render();
       }
       if (!r.ok) return;
+      const was = docOf(id);
       if (Number.isInteger(r.got.seq)) k.out = k.out.filter((o) => o.n > r.got.seq);
       if (k.out.length) again[id] = true;
       if (sending && face != null) k.face = face;
@@ -335,7 +337,7 @@ export function makeParty(d) {
         keep();
         return;
       }
-      take(id, k, r.got);
+      take(id, k, r.got, was);
       if (ch) {
         merge(id, k, ch);
         // Who's in the campaign decides what goes in the face, so a crew that's
@@ -562,7 +564,7 @@ export function makeParty(d) {
     const glow = lit[id].includes(key) ? " is-new" : "";
     if (ui.editing === key) return `<li class="pt-line is-editing" data-pk="${esc(key)}">${lineForm(l, x)}</li>`;
     const body = l === "assets"
-      ? `<p><b>${esc(x.text)}</b>${x.power ? ' <span class="chip sm pt-chip">+1 Power</span>' : ""}${x.off ? ' <span class="chip sm pt-chip is-off">Nothing’s paying for it</span>' : ""}</p>${x.does ? `<p class="pt-does">${esc(x.does)}</p>` : ""}`
+      ? `<p><b>${esc(x.text)}</b>${x.power && !/^\+1 Power/.test(x.does) ? ' <span class="chip sm pt-chip">+1 Power</span>' : ""}${x.off ? ' <span class="chip sm pt-chip is-off">Nothing’s paying for it</span>' : ""}</p>${x.does ? `<p class="pt-does">${esc(x.does)}</p>` : ""}`
       : `<p>${l === "reps" ? `<em>${esc(x.text)}</em>` : esc(x.text)}</p>`;
     return `<li class="pt-line${glow}${x.off ? " is-off" : ""}" data-pk="${esc(key)}"><div class="pt-line-in">${body}${extra}</div><button type="button" class="button sm pt-change" data-act="p" data-do="edit" data-k="${esc(key)}" aria-label="Change ${esc(x.text)}">Change</button></li>`;
   }
@@ -726,7 +728,7 @@ export function makeParty(d) {
 
     const onSheet = new Set(doc.assets.map((a) => a.text.toLowerCase()));
     const pick = fold("pick", "Crew assets to pick from", "All twelve, for when the crew grows",
-      `${d.rule("s-crew-tags")}<ul class="pt-lines">${(P.assets ?? []).map((a, i) => `<li class="pt-line pt-pick"><div class="pt-line-in"><p><b>${esc(a.name)}</b>${a.power ? ' <span class="chip sm pt-chip">+1 Power</span>' : ""}</p><p class="pt-does">${esc(a.does)}</p></div>
+      `${d.rule("s-crew-tags")}<ul class="pt-lines">${(P.assets ?? []).map((a, i) => `<li class="pt-line pt-pick"><div class="pt-line-in"><p><b>${esc(a.name)}</b></p><p class="pt-does">${esc(a.does)}</p></div>
         ${onSheet.has(a.name.toLowerCase()) ? '<span class="chip sm pt-chip is-on">On the sheet</span>' : `<button type="button" class="button sm" data-act="p" data-do="pick" data-i="${i}" aria-label="Put ${esc(a.name)} on the party sheet">Add it</button>`}</li>`).join("")}</ul>`);
 
     lit[id] = [];

@@ -567,6 +567,7 @@ try {
   yes((await text(kai.page, ".pt-where")).includes("Tuesday Lair"), "the Party tab says which campaign");
   const climbAt = await kai.page.evaluate(() => Math.round(document.querySelector(".pt-climb").getBoundingClientRect().bottom));
   yes(climbAt <= 844 - 60, `the Goal's buttons in the first screen, above the tabs (they end at ${climbAt}px)`);
+  if (SHOTS) await kai.page.waitForTimeout(500);
   await shot(kai.page, "party-tab-top");
   // Kai writes the Goal and it climbs, and Mo's phone catches up on its own.
   await kai.page.fill('.pt-goal input[name="goal"]', "Clear Dorrie’s name");
@@ -725,6 +726,7 @@ try {
   }, "a Reputation earned and the next Goal at d2");
   await mo.page.click('.pt-climb [data-by="1"]');
   await until(async () => (await partyOf(tuesday.id))?.goal?.die === 4, "a climb");
+  yes((await text(mo.page, "#cc-toast")).includes("The Goal’s at d4 now."), "a phone's own change isn't news to it");
   await mo.page.click('#cc-toast [data-act="pundo"]');
   await until(async () => (await partyOf(tuesday.id))?.goal?.die === 2, "and Undo takes it back");
 
