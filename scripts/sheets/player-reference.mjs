@@ -78,6 +78,11 @@ const PAGES = [
 // The GM's side of things, which lives on the party sheet and in the GM's chapters.
 const LEFT_OUT = ["s-qr-factions", "s-qr-session", "the-oracle"];
 
+// Each section, by id. The panels and the bullet picks read a list as one
+// line to an item, so once a section's list starts, every line has to be an
+// item or a table row: a wrapped bullet or a paragraph after the list stops
+// the build rather than going missing from the reference.
+const listLine = (line) => /^(-|\d+\.)\s+/.test(line);
 function sections() {
   const text = readFileSync(join(ROOT, SOURCE), "utf8").replace(/\r\n/g, "\n");
   const front = text.match(/^---\n([\s\S]*?)\n---\n/);
@@ -88,9 +93,13 @@ function sections() {
     const [first, ...rest] = part.split("\n");
     const m = first.match(/^(.*?)\s*\{#([A-Za-z0-9_-]+)\}\s*$/);
     if (!m) throw new Error(`Appendix D: can't read the heading "${first}"`);
+    const lines = rest.filter((l) => l.trim());
+    const start = lines.findIndex(listLine);
+    const odd = start < 0 ? null : lines.slice(start).find((l) => !listLine(l) && !l.startsWith("|"));
+    if (odd) throw new Error(`Appendix D, ${m[1]}: the player reference reads each item in a list as one line, and "${odd.trim().slice(0, 50)}…" isn't one. Join it onto its item, or give it a place in scripts/sheets/player-reference.mjs.`);
     found.set(m[2], { heading: m[1], body: rest.join("\n").trim() });
   }
-  return { found };
+  return found;
 }
 
 const bullet = (line) => (/^-\s+/.test(line) ? line.replace(/^-\s+/, "") : null);
@@ -130,8 +139,9 @@ const inline = (md) => render(md).trim().replace(/^<p>([\s\S]*)<\/p>$/, "$1");
 
 // The round: its numbered steps, side by side.
 function round(section) {
-  const steps = section.body.split("\n").filter((l) => /^\d+\.\s+/.test(l)).map((l) => l.replace(/^\d+\.\s+/, ""));
-  if (steps.length < 2) throw new Error(`Appendix D, ${section.heading}: the round isn't a numbered list any more`);
+  const lines = section.body.split("\n").filter((l) => l.trim());
+  if (lines.some((l) => !/^\d+\.\s+/.test(l)) || lines.length < 2) throw new Error(`Appendix D, ${section.heading}: the round's drawn as its numbered steps, and it isn't only a numbered list any more`);
+  const steps = lines.map((l) => l.replace(/^\d+\.\s+/, ""));
   return `<section class="panel"><div class="cap"><h2>${section.heading}</h2></div><div class="round">${steps.map((s, i) => `<div><span class="n">${i + 1}</span><p>${inline(s)}</p></div>`).join("")}</div></section>`;
 }
 
@@ -164,7 +174,7 @@ function tracks(confidence, hurt) {
   const conf = SIZES.map((d) => `<div>${die(d, { hide: true })}<span>${under[d] || ""}</span></div>`).join("");
   const wound = SIZES.map((d) => `<div>${die(d, { own: "harm", hide: true })}<span>${d === 2 ? "starts here" : ""}</span></div>`).join("");
   return `<section class="panel track-panel">
-  <div class="side"><div class="cap"><h2>Confidence</h2><p>it swings with every roll</p></div><div class="trk">${conf}</div></div>
+  <div class="side"><div class="cap"><h2>Confidence</h2></div><div class="trk">${conf}</div></div>
   <div class="side"><div class="cap"><h2>Wound die</h2><p>every Hurt puts it up a size</p></div><div class="trk">${wound}<div class="end"><b>Blaze</b><span>a Hurt at d12</span></div></div></div>
 </section>`;
 }
@@ -173,10 +183,13 @@ function tracks(confidence, hurt) {
 function economy(sectionsFound) {
   const icon = { aura: svgOf(aura(1, 1)), "s-qr-resolve": svgOf(resolve(1, 1)) };
   return `<section class="panel econ">${sectionsFound.map(([id, section]) => {
-    const items = section.body.split("\n").map(bullet).filter(Boolean);
+    const lines = section.body.split("\n").filter((l) => l.trim());
+    if (lines.some((l) => bullet(l) === null)) throw new Error(`Appendix D, ${section.heading}: the panel for Aura and Resolve reads bullets only, and this section has something else in it now`);
+    const items = lines.map(bullet);
     const spend = items.find((b) => b.startsWith("**Spend 1:**"));
     const get = items.find((b) => b.startsWith("**Get 1 back:**"));
     if (!spend || !get) throw new Error(`Appendix D, ${section.heading}: there's no "Spend 1" or "Get 1 back" bullet any more`);
+    if (items.indexOf(get) !== items.indexOf(spend) + 1) throw new Error(`Appendix D, ${section.heading}: "Get 1 back" has to come straight after "Spend 1", since they're drawn side by side`);
     const list = (b, lead) => `<ul>${b.slice(lead.length).trim().replace(/\.$/, "").split(" · ").map((x) => `<li>${inline(x.charAt(0).toUpperCase() + x.slice(1))}</li>`).join("")}</ul>`;
     const before = items.slice(0, items.indexOf(spend)).map((b) => `<p>${inline(b)}</p>`).join("");
     const after = items.slice(items.indexOf(get) + 1).map((b) => `<p>${inline(b)}</p>`).join("");
@@ -208,7 +221,7 @@ function flowOf(found, list, used) {
 }
 
 export function playerReference(stamp) {
-  const { found } = sections();
+  const found = sections();
   const used = new Set();
   const get = (id) => {
     const section = found.get(id);

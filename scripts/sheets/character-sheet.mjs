@@ -186,7 +186,7 @@ function back(stamp) {
 
   <section>
     ${tab("Bonds")}
-    <p class="hint">A bond’s usually a person, but it can be a faction, a place or a cause · ring each thread bond or hostile, and tick it when it’s strained, and again when it snaps</p>
+    <p class="hint">A bond’s usually a person, but it can be a faction, a place or a cause · ring each thread bond or hostile · tick the first box when it’s strained, and the second when it snaps</p>
     <div class="grid2">${range(6).map(bondCard).join("")}</div>
   </section>
 

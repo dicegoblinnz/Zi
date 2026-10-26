@@ -260,7 +260,7 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .flow + .flow, .panel + .flow { margin-top: 3mm; }
 .qr { margin: 0 0 2.8mm; }
 .qr h2 { display: flex; align-items: center; gap: 1.6mm; font: 700 9pt/1.15 var(--display); letter-spacing: 0.05em; margin: 0 0 1.2mm; padding-bottom: 0.8mm; border-bottom: 0.25mm solid var(--ink); break-after: avoid; }
-.qr h2 .zd-mini, .qr h2 .zd-chit, .qr h2 .zd-gem, .qr h2 .zd-scars { flex: none; }
+.qr h2 .zd-mini, .qr h2 .zd-chit, .qr h2 .zd-gem { flex: none; }
 .qr h2 .zd-mini { width: 4.2mm; height: 4.2mm; }
 .qr p { margin: 0 0 1.1mm; }
 .qr ul, .qr ol { margin: 0; padding: 0 0 0 3.2mm; }
@@ -270,7 +270,6 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .qr ul > li::before { content: ""; position: absolute; left: -2.9mm; top: 1.35mm; width: 1.2mm; height: 1.2mm; background: var(--ink); transform: rotate(45deg); }
 .qr strong { font-weight: 700; }
 .qr em { font-style: italic; }
-.qr .lead { break-inside: avoid; }
 .qr table { border-collapse: collapse; margin: 1.2mm 0; break-inside: avoid; }
 .qr th, .qr td { padding: 0.4mm 3mm 0.4mm 0; border-bottom: 0.25mm solid var(--hair); text-align: left; }
 .qr th { font: 500 6.4pt/1.2 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }

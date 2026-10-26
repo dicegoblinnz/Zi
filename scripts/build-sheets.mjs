@@ -115,11 +115,13 @@ function marks(look, w, h) {
     case "check":
       return g(drawSvgPath(`M ${w * 0.18} ${h * 0.52} L ${w * 0.42} ${h * 0.78} L ${w * 0.86} ${h * 0.2}`, { x: 0, y: h, scale: 1, color: undefined, borderColor: INK, borderWidth: 1, borderLineCap: 1 }));
     case "gem": {
+      // drawSvgPath scales before it sets the line width, so the widths are
+      // in the gem's own 100 box, the same as the page's 4.6 outline.
       const s = Math.min(w, h) / 100;
       const at = { x: (w - 100 * s) / 2, y: h - (h - 100 * s) / 2, scale: s };
       return g([
-        ...drawSvgPath(GEM, { ...at, color: INK, borderColor: INK, borderWidth: 4.6 * s, borderLineCap: 1 }),
-        ...drawSvgPath(FACETS, { ...at, color: undefined, borderColor: WHITE, borderWidth: 2.6 * s, borderLineCap: 1 }),
+        ...drawSvgPath(GEM, { ...at, color: INK, borderColor: INK, borderWidth: 4.6, borderLineCap: 1 }),
+        ...drawSvgPath(FACETS, { ...at, color: undefined, borderColor: WHITE, borderWidth: 2.6, borderLineCap: 1 }),
       ]);
     }
     case "ring":
