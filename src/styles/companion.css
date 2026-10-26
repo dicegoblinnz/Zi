@@ -638,7 +638,10 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
    filling in as the archetypes go on, and Back and Next in a bar at the
    bottom, under the thumb. Everything you pick is a card cut like a kit
    token, edged in gold with a gold diamond in its corner once it's yours. */
-.cc { --bd-ease: cubic-bezier(0.23, 1, 0.32, 1); }
+.cc { --bd-ease: cubic-bezier(0.23, 1, 0.32, 1); --bd-edge: color-mix(in srgb, var(--muted) 40%, var(--zd-slot-line)); }
+/* Nothing the cursor lands on hides behind the bar or the dice above it. */
+html.cc-building { scroll-padding-bottom: calc(var(--bd-bar, 69px) + 16px); }
+html.cc-building.cc-docked { scroll-padding-bottom: calc(var(--bd-bar, 69px) + 96px); }
 html.cc-building body { padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
 html.cc-building .cc-toast { bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
 html.cc-building.cc-docked .cc-toast { bottom: calc(160px + env(safe-area-inset-bottom, 0px)); }
@@ -681,7 +684,7 @@ html.cc-building .companion { overflow-x: clip; }
    carry: the switch at the top says which, and Next walks through them. */
 .bd-switch { display: flex; flex-wrap: wrap; gap: 4px; margin: 1rem 0 0; padding: 4px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 3px; }
 .bd-seg { flex: 1 1 8.5rem; min-width: 0; display: flex; align-items: center; gap: 8px; min-height: 52px; padding: 6px 10px; text-align: left; color: var(--muted); background: transparent; border: 1.5px solid transparent; border-radius: 2px; transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease; }
-.bd-seg[aria-pressed="true"] { color: var(--ink); background: var(--zd-token); border-color: var(--zd-you-line); }
+.bd-seg[aria-current="true"] { color: var(--ink); background: var(--zd-token); border-color: var(--zd-you-line); }
 .bd-seg:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
 .bd-seg-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.2; }
 .bd-seg small { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
@@ -694,7 +697,7 @@ html.cc-building .companion { overflow-x: clip; }
 @media (max-width: 359px) { .bd-switch.is-kit .bd-seg { flex: 1 1 40%; } }
 
 /* Cards to pick, cut like the kit's tokens. */
-.bd-tok { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; text-align: left; color: var(--ink); background: var(--zd-token); border: 1.5px solid var(--zd-slot-line); border-radius: 3px; transition: transform 140ms var(--bd-ease), border-color 140ms ease, box-shadow 140ms ease; }
+.bd-tok { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 3px; width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; text-align: left; color: var(--ink); background: var(--zd-token); border: 1.5px solid var(--bd-edge); border-radius: 3px; transition: transform 140ms var(--bd-ease), border-color 140ms ease, box-shadow 140ms ease; }
 button.bd-tok:active { transform: scale(0.97); }
 @media (hover: hover) and (pointer: fine) { button.bd-tok:hover { border-color: var(--zd-you-line); } }
 .bd-tok:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
@@ -726,8 +729,8 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-chosen .bd-sig.is-on .zd-sigil { --s: 26px; }
 .bd-chosen-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .bd-chosen-text b { font-family: var(--display); font-weight: 600; font-size: 1.2rem; letter-spacing: 0.02em; }
-.bd-chosen.is-none { border-style: dashed; border-color: var(--zd-slot-line); }
-.bd-chosen.is-none .bd-sig { width: 30px; height: 30px; margin: 0 4px; border: 1.5px dashed var(--zd-slot-line); transform: rotate(45deg); }
+.bd-chosen.is-none { border-style: dashed; border-color: var(--bd-edge); }
+.bd-chosen.is-none .bd-sig { width: 30px; height: 30px; margin: 0 4px; border: 1.5px dashed var(--bd-edge); transform: rotate(45deg); }
 .bd-chosen + .bd-more { border-bottom: 0; }
 
 /* A Title's own card on the second step. */
@@ -741,8 +744,10 @@ button.bd-tok:active { transform: scale(0.97); }
 
 /* The set actions as the dice they roll, riding along at the top while
    lines go on, and each die growing into its next shape. */
-.bd-tiles.bd-rail { position: sticky; bottom: calc(69px + env(safe-area-inset-bottom, 0px)); z-index: 6; display: flex; gap: 2px; margin: 1.2rem calc(-1 * max(16px, env(safe-area-inset-right, 0px))) 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 7px max(12px, env(safe-area-inset-right, 0px)) 6px max(12px, env(safe-area-inset-left, 0px)); overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; background: var(--bar-bg); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-top: 1px solid var(--line-soft); }
+.bd-tiles.bd-rail { position: sticky; bottom: var(--bd-bar, calc(69px + env(safe-area-inset-bottom, 0px))); z-index: 6; display: flex; gap: 2px; margin: 1.2rem calc(-1 * max(16px, env(safe-area-inset-right, 0px))) 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding: 7px max(12px, env(safe-area-inset-right, 0px)) 6px max(12px, env(safe-area-inset-left, 0px)); overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; background: var(--bar-bg); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-top: 1px solid var(--line-soft); }
 @media (min-width: 46rem) { .bd-tiles.bd-rail { margin-inline: 0; border-inline: 1px solid var(--line-soft); } }
+/* A phone on its side hasn't the height for the dice and the bar both, so the dice stay where they are. */
+@media (max-height: 480px) { .bd-tiles.bd-rail { position: static; } html.cc-building.cc-docked { scroll-padding-bottom: calc(var(--bd-bar, 69px) + 16px); } }
 .bd-rail::-webkit-scrollbar { display: none; }
 .bd-rail:focus-visible { outline: 2px solid var(--violet); outline-offset: -3px; }
 .bd-rail .tile { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 1px; min-width: 40px; min-height: 0; padding: 2px 0; text-align: center; background: none; border: 0; }
@@ -753,7 +758,7 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-rail .tile-says { color: var(--muted); font-size: 0.72rem; line-height: 1.1; white-space: nowrap; }
 .bd-rail .tile-dot, .bd-rail .tile-die { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .bd-tiles.bd-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 0.8rem; }
-.bd-grid .tile { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "dice name" "dice steps"; column-gap: 10px; row-gap: 1px; min-height: 68px; padding: 8px 10px 8px 8px; background: var(--zd-token); border: 1.5px solid var(--zd-slot-line); border-radius: 3px; }
+.bd-grid .tile { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "dice name" "dice steps"; column-gap: 10px; row-gap: 1px; min-height: 68px; padding: 8px 10px 8px 8px; background: var(--zd-token); border: 1.5px solid var(--bd-edge); border-radius: 3px; }
 .bd-grid .tile-dice .zd-die { --s: 46px; }
 .bd-grid .tile-dice .zd-die.is-next { --s: 24px; margin-left: -12px; }
 .bd-grid .tile-name { align-self: end; }
@@ -779,7 +784,7 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-slot { margin: 0.5rem 0 0.9rem; }
 .bd-slot > input:placeholder-shown ~ .bd-on, .bd-slot > input:placeholder-shown ~ .cc-row { display: none; }
 .bd-slot.is-row { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: 8px; margin: 0 0 6px; }
-.bd-slot.is-row > .cc-field { display: grid; place-items: center; width: 36px; height: 48px; margin: 0; font-weight: 800; font-size: 1rem; color: var(--gold-ink); background: var(--zd-token); border: 1.5px solid var(--zd-slot-line); border-radius: 3px; }
+.bd-slot.is-row > .cc-field { display: grid; place-items: center; width: 36px; height: 48px; margin: 0; font-weight: 800; font-size: 1rem; color: var(--gold-ink); background: var(--zd-token); border: 1.5px solid var(--bd-edge); border-radius: 3px; }
 .bd-slot.is-row:has(> input:placeholder-shown) > .cc-field { border-style: dashed; color: var(--muted); }
 .bd-slot.is-row > .bd-on { grid-column: 1 / -1; margin-bottom: 0.6rem; }
 .bd-carry > h2 { margin-top: 1.4rem; }
@@ -827,7 +832,7 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-asp-f { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
 .bd-asp-f .cc-field { flex: none; margin: 0 0 4px; }
 .bd-nums { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0.6rem 0; padding: 0; }
-.bd-nums li { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0.55rem 0.7rem; background: var(--zd-token); border: 1.5px solid var(--zd-slot-line); border-radius: 3px; }
+.bd-nums li { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0.55rem 0.7rem; background: var(--zd-token); border: 1.5px solid var(--bd-edge); border-radius: 3px; }
 .bd-nums li.is-wide { grid-column: 1 / -1; }
 .bd-num-text { min-width: 0; }
 .bd-nums .k { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }

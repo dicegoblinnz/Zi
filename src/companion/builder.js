@@ -739,7 +739,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
     const at = tabOf();
     return `<div class="bd-switch" role="group" aria-label="Your Titles">${x.titles.map((t, i) => {
       const says = d.step === 1 ? t.text.trim() || "No name yet" : t.arch || "No archetype yet";
-      return `<button type="button" class="bd-seg" data-act="b" data-b="tab" data-t="${i}"${pressed(i === at)}>${t.arch ? `<span class="bd-sig">${sigilOf(t.arch)}</span>` : ""}<span class="bd-seg-text"><small>${cap(ord(i))} Title</small><b>${esc(says)}</b></span></button>`;
+      return `<button type="button" class="bd-seg" data-act="b" data-b="tab" data-t="${i}"${i === at ? ' aria-current="true"' : ""}>${t.arch ? `<span class="bd-sig">${sigilOf(t.arch)}</span>` : ""}<span class="bd-seg-text"><small>${cap(ord(i))} Title</small><b>${esc(says)}</b></span></button>`;
     }).join("")}</div>`;
   }
   const whichTitles = () => (d.page ? b().titles.map((_, i) => i) : [tabOf()]);
@@ -762,7 +762,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
     const picking = d.deep[`pick${i}`] === true || (!a && !d.page);
     const legend = `Your ${ord(i)} Title`;
     const grid = picking ? `<p class="bd-label" id="bd-archs-${i}">${a ? "Pick a different archetype" : "Pick its archetype"}</p><div class="bd-archs" role="group" aria-labelledby="bd-archs-${i}">${B.archetypes.map((r) => card("bd-arch", `data-b="arch" data-t="${i}" data-v="${esc(r.name)}"`, t.arch === r.name, `<span class="bd-sig">${sigilOf(r.name)}</span><b>${esc(r.name)}</b><span class="bd-for">${esc(r.for)}</span>`)).join("")}</div>` : "";
-    const chosen = a ? `<div class="bd-chosen" tabindex="-1"><span class="bd-sig is-on">${sigilOf(a.name)}</span><span class="bd-chosen-text"><b>${esc(a.name)}</b><span class="bd-for">${esc(a.for)}</span></span><button type="button" class="button sm" data-act="b" data-b="archopen" data-t="${i}">${picking ? "Keep it" : "Change"}</button></div>
+    const chosen = a ? `<div class="bd-chosen" tabindex="-1" role="group" aria-label="${esc(`${cap(legend.toLowerCase())}: ${a.name}`)}"><span class="bd-sig is-on">${sigilOf(a.name)}</span><span class="bd-chosen-text"><b>${esc(a.name)}</b><span class="bd-for">${esc(a.for)}</span></span><button type="button" class="button sm" data-act="b" data-b="archopen" data-t="${i}">${picking ? "Keep it" : "Change"}</button></div>
       <details class="bd-more" data-open="bd-arch-${i}"${d.deep[`archmore${i}`] === true ? " open" : ""}><summary>What the ${esc(a.name)} does</summary><p>${a.summary}</p>${a.auraHtml ? `<p><b>1 Aura:</b> ${a.auraHtml}</p>` : ""}${a.resolveHtml ? `<p><b>1 Resolve:</b> ${a.resolveHtml}</p>` : ""}<p class="cc-small">${link(a.id, `The ${esc(a.name)} in full`)}</p></details>` : "";
     const none = !a && !picking ? `<div class="bd-chosen is-none"><span class="bd-sig"></span><span class="bd-chosen-text"><b>No archetype yet</b></span><button type="button" class="button sm" data-act="b" data-b="archopen" data-t="${i}">Pick one</button></div>` : "";
     return `<fieldset class="bd-title"><legend${d.page ? "" : ' class="sr-only"'}>${legend}</legend>
@@ -795,11 +795,11 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
     return `<fieldset class="bd-title"><legend${d.page ? "" : ' class="sr-only"'}>Your ${ord(i)} Title</legend>
       <p class="bd-from">${t.arch ? `<span class="bd-sig">${sigilOf(t.arch)}</span><span>${esc(t.arch)}${idea ? `, from the ${link(idea.id, `${esc(idea.name)} idea`)}` : ""}</span>` : "<span>No archetype yet</span>"}</p>
       ${field(`t${i}.text`, "Your Title", t.text, { ph: "Make it specific: the best blade in the Low Market", max: 80 })}
-      ${idea ? `<p class="bd-label">Or one of the ${esc(idea.name)} idea’s</p><div class="bd-cards is-one">${idea.titles.map((name) => card("bd-name", `data-b="title" data-t="${i}" data-v="${esc(name)}"`, t.text.trim() === name, `<em>${esc(name)}</em>`)).join("")}</div>` : ""}
+      ${idea ? `<p class="bd-label">Or one of the ${esc(idea.name)} idea’s Titles</p><div class="bd-cards is-one">${idea.titles.map((name) => card("bd-name", `data-b="title" data-t="${i}" data-v="${esc(name)}"`, t.text.trim() === name, `<em>${esc(name)}</em>`)).join("")}</div>` : ""}
       <p class="bd-label">${!changing() && i < 2 ? "Three permissions" : "Its permissions, up to six"}</p>
       ${t.perms.map((p, j) => field(`t${i}.p${j}`, `Permission ${j + 1}`, p.text, { ph: "one word, or a doing word and how, what or where", max: 80 })).join("")}
       ${t.perms.length < MAX_PERMS ? `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="addperm" data-t="${i}">Add a permission</button></div>` : '<p class="cc-lead">Six is the most a Title holds.</p>'}
-      ${idea ? `<p class="cc-small">Tap one of the ${esc(idea.name)} idea’s to put it in, and tap it again to take it out.</p>${offer(idea.permissions)}` : ""}
+      ${idea ? `<p class="cc-small">Tap one of the ${esc(idea.name)} idea’s permissions to put it in, and tap it again to take it out.</p>${offer(idea.permissions)}` : ""}
       ${d.deep[1] ? B.permIdeas.map((g) => `<p class="bd-label">${esc(g.for)}</p>${offer(g.perms)}`).join("") : ""}
       ${canDrop("title") ? `<div class="cc-row">${dropBtn("title", i, "Take this Title off")}</div>` : ""}</fieldset>`;
   }
@@ -880,7 +880,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
     const n = numbersOf(x, B);
     const count = (list, of) => `${list.filter((v) => v.text.trim()).length} of ${of}`;
     const says = { e: count(x.equipment, 3), u: count(x.utility.slice(0, n.utility), n.utility), k: x.keepsake.text.trim() ? "Taken" : "Not yet", a: x.attuned.some((a) => a.name.trim()) ? "Attuned" : "Not yet" };
-    return `<div class="bd-switch is-kit" role="group" aria-label="What you carry">${KIT.map(([k, name]) => `<button type="button" class="bd-seg" data-act="b" data-b="kit" data-v="${k}"${pressed(k === kitOf())}><span class="bd-seg-text"><small>${says[k]}</small><b>${name}</b></span></button>`).join("")}</div>`;
+    return `<div class="bd-switch is-kit" role="group" aria-label="What you carry">${KIT.map(([k, name]) => `<button type="button" class="bd-seg" data-act="b" data-b="kit" data-v="${k}"${k === kitOf() ? ' aria-current="true"' : ""}><span class="bd-seg-text"><small>${says[k]}</small><b>${name}</b></span></button>`).join("")}</div>`;
   }
   function stepCarry() {
     const x = b();
@@ -974,8 +974,8 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
       const a = said ? answerOf(said) : null;
       const th = a ? x.threads.find((t) => t.text.trim() && t.text.trim() === a.text.trim() && t.person.trim() === a.person) : null;
       return `<details class="bd-tok bd-q" data-open="bd-q-${i}"${d.deep[`q${i}`] === true ? " open" : ""}><summary><span>${esc(q)}</span>${said ? `<small>${esc(said)}</small>` : ""}${th ? `<span class="bd-made is-${th.kind}">${th.kind === "hostile" ? "Hostile" : "Bond"} thread</span>` : ""}</summary>
-        <div class="bd-q-in">${field(`cq${i}`, "Your answer", x.connect[i] ?? "", { max: 200, ph: "Name them, then say it" })}
-        <p class="bd-label" id="bd-qk-${i}">Make it a thread</p><div class="cc-chips" role="group" aria-labelledby="bd-qk-${i}">${chip("Bond", `data-b="fromq" data-q="${i}" data-v="bond"`, th?.kind === "bond", "sm")}${chip("Hostile", `data-b="fromq" data-q="${i}" data-v="hostile"`, th?.kind === "hostile", "sm")}</div></div></details>`;
+        <div class="bd-q-in">${field(`cq${i}`, `Your answer<span class="sr-only"> to ${esc(q)}</span>`, x.connect[i] ?? "", { max: 200, ph: "Name them, then say it" })}
+        <p class="bd-label" id="bd-qk-${i}">Make it a thread</p><div class="cc-chips" role="group" aria-label="Make your answer to ${esc(q)} a thread">${chip("Bond", `data-b="fromq" data-q="${i}" data-v="bond"`, th?.kind === "bond", "sm")}${chip("Hostile", `data-b="fromq" data-q="${i}" data-v="hostile"`, th?.kind === "hostile", "sm")}</div></div></details>`;
     };
     const room = !changing() && hostile && bonds < 3 && !x.threads.some((t) => t.kind !== "hostile" && !t.person.trim() && !t.text.trim());
     const qs = `<p class="cc-lead">Answer at least two, naming someone in the crew in each, and make two of them bond threads. One that’s gone bad can be your hostile thread.</p><div class="bd-qs">${B.connect.map(question).join("")}</div>`;
@@ -1050,6 +1050,8 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
   // leaves the new die as it's drawn under reduce-motion.
   function after(root) {
     if (!d) return;
+    const foot = root?.querySelector(".bd-foot");
+    if (foot) document.documentElement.style.setProperty("--bd-bar", `${foot.offsetHeight}px`);
     const x = b();
     const now = new Map(x.actions.map((a) => [a, stepsToDice(stepsOf(x, B, a))]));
     const was = shown;
@@ -1151,12 +1153,13 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
         h?.scrollIntoView({ block: "start" });
         return h?.focus({ preventScroll: true });
       }
+      const moved = to !== d.step;
       slide = to > d.step ? "next" : to < d.step ? "back" : "";
       d.step = to;
       if (el.dataset.t != null) d.deep.tab = Number(el.dataset.t);
-      else if (to <= 1) d.deep.tab = 0;
+      else if (to <= 1 && moved) d.deep.tab = 0;
       if (el.dataset.k) d.deep.kit = el.dataset.k;
-      else if (to === 4) d.deep.kit = "e";
+      else if (to === 4 && moved) d.deep.kit = "e";
       save();
       render();
       return focusTop();
@@ -1171,7 +1174,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
         save();
         render();
         scrollTo(0, 0);
-        return document.querySelector('.bd-switch [aria-pressed="true"]')?.focus({ preventScroll: true });
+        return document.querySelector('.bd-switch [aria-current="true"]')?.focus({ preventScroll: true });
       }
       const to = d.step + (fwd ? 1 : -1);
       if (to < 0 || to > 7) return;
@@ -1225,7 +1228,8 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
       then = d.deep[`pick${i}`] ? focusIn(`[data-b="arch"][data-t="${i}"][aria-pressed="true"]`, `[data-b="arch"][data-t="${i}"]`) : focusIn(`[data-b="archopen"][data-t="${i}"]`);
     } else if (k === "arch") {
       const t = x.titles[i];
-      t.arch = t.arch === v ? "" : v;
+      // The one it's got already, tapped again, is kept.
+      t.arch = v;
       if (t.idea && !IDEA.get(t.idea)?.archetypes.includes(t.arch)) t.idea = "";
       // Picked, the cards fold away to the one picked and its Title ideas.
       if (t.arch) {
@@ -1277,11 +1281,13 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
       arr.splice(i, 1);
       if (kind === "title") {
         // The switch and the open pickers follow the Titles that are left.
-        for (let j = i; j < arr.length; j++) d.deep[`pick${j}`] = d.deep[`pick${j + 1}`];
-        delete d.deep[`pick${arr.length}`];
+        for (const key of ["pick", "archmore"]) {
+          for (let j = i; j < arr.length; j++) d.deep[`${key}${j}`] = d.deep[`${key}${j + 1}`];
+          delete d.deep[`${key}${arr.length}`];
+        }
         d.deep.tab = Math.min(tabOf(), arr.length - 1);
       }
-      then = focusIn(`[data-b="add${kind}"]`, `[data-b="tab"][aria-pressed="true"]`);
+      then = focusIn(`[data-b="add${kind}"]`, `[data-b="tab"][aria-current="true"]`);
     } else if (k === "addatt") {
       if (x.attuned.length >= MAX_ATTUNED) return;
       x.attuned.push(blankThing());
@@ -1375,6 +1381,11 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
       if (!said) return toast("Answer the question first, then make it a thread.", false);
       const { person, text } = answerOf(said);
       let at = x.threads.findIndex((t) => t.text.trim() === text.trim() && t.person.trim() === person);
+      if (at >= 0 && x.threads[at].kind === kind) {
+        Object.assign(x.threads[at], { person: "", text: "" });
+        save();
+        return render();
+      }
       if (at < 0) at = x.threads.findIndex((t) => t.kind === kind && !t.person.trim() && !t.text.trim());
       if (at < 0) at = x.threads.findIndex((t) => !t.person.trim() && !t.text.trim());
       if (at < 0) {
@@ -1403,12 +1414,10 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
     if (!d) return;
     const key = el.dataset.open ?? "";
     let m;
-    if ((m = key.match(/^bd-how-(\d)$/))) d.deep[`how${m[1]}`] = el.open;
-    else if ((m = key.match(/^bd-q-(\d+)$/))) d.deep[`q${m[1]}`] = el.open;
-    else if ((m = key.match(/^bd-arch-(\d+)$/))) d.deep[`archmore${m[1]}`] = el.open;
-    else if (key === "bd-test") d.deep.test = el.open;
-    else if (key === "bd-qs") d.deep.qs = el.open;
-    else return;
+    const name = (m = key.match(/^bd-how-(\d)$/)) ? `how${m[1]}` : (m = key.match(/^bd-q-(\d+)$/)) ? `q${m[1]}` : (m = key.match(/^bd-arch-(\d+)$/)) ? `archmore${m[1]}` : key === "bd-test" ? "test" : key === "bd-qs" ? "qs" : "";
+    // A redraw puts a fold back the way it was, which isn't a change.
+    if (!name || (d.deep[name] === true) === el.open) return;
+    d.deep[name] = el.open;
     saveSoon();
   }
 

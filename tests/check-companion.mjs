@@ -872,7 +872,7 @@ if (part("5")) {
   same(await page.$$eval('[data-b="arch"]', (els) => els.length), 0, "the archetype cards folded away to the one picked");
   await b('[data-b="idea"][data-t="0"][data-v="k-rogue"]');
   await next("Archetypes");
-  same(await page.getAttribute('.bd-seg[data-t="1"]', "aria-pressed"), "true", "Next going on to the second Title first");
+  same(await page.getAttribute('.bd-seg[data-t="1"]', "aria-current"), "true", "Next going on to the second Title first");
   await b('[data-b="arch"][data-t="1"][data-v="Shadow"]');
   await b('[data-b="idea"][data-t="1"][data-v="k-rogue"]');
   has(await page.textContent(".bd-body"), "Shadow twice, so your +2 is a +3", "two Shadows");
@@ -922,7 +922,7 @@ if (part("5")) {
   same(await page.getAttribute('[data-b="on"][data-l="e0"][data-a="Defend"]', "aria-pressed"), "true", "worn leathers going straight on her Defend");
   same(await page.getAttribute('.bd-rail .tile-dice[data-for="Defend"] .zd-die', "data-d"), "4", "Defend a d4 with her leathers on it");
   await next("What you carry");
-  same(await page.getAttribute('.bd-seg[data-v="u"]', "aria-pressed"), "true", "Next going on to her utility items");
+  same(await page.getAttribute('.bd-seg[data-v="u"]', "aria-current"), "true", "Next going on to her utility items");
   await b('[data-b="fillany"][data-k="u"][data-v="Purse of gold"]');
   await b('[data-b="fillany"][data-k="u"][data-v="Smoke bomb"]');
   // Her picks are an ordinary utility item now, still on her Locks, and she
@@ -1118,6 +1118,24 @@ if (part("5b")) {
     if (still) same(await page.evaluate(() => document.getAnimations().filter((a) => a.playState === "running" && a.effect?.target?.closest?.(".companion")).length), 0, `nothing moving under reduce-motion, ${theme}`);
     await page.waitForTimeout(400);
     await shot(page, `5b-builder-set-actions-${theme}`);
+    // axe again with things picked: a line on a set action, the archetype
+    // folded to the one picked with its Title ideas, and a crew question made
+    // into a thread.
+    await axe(`the set actions with a line on one, ${theme}`);
+    await jump(0);
+    await b('[data-b="idea"][data-t="0"][data-v="k-warrior"]');
+    await axe(`an archetype picked with its Title ideas, ${theme}`);
+    await jump(5);
+    await page.click('details[data-open="bd-q-0"] > summary');
+    await page.fill("#b-cq0", "Bram. We held the same wall.");
+    await b('[data-b="fromq"][data-q="0"][data-v="bond"]');
+    await page.click('details[data-open="bd-q-1"] > summary');
+    await page.fill("#b-cq1", "The fence. I owe him.");
+    await b('[data-b="fromq"][data-q="1"][data-v="hostile"]');
+    await axe(`crew questions made into threads, ${theme}`);
+    // A lit Bond, tapped again, takes the thread back off.
+    await b('[data-b="fromq"][data-q="0"][data-v="bond"]');
+    same([await page.inputValue("#b-th0-person"), await page.getAttribute('[data-b="fromq"][data-q="0"][data-v="bond"]', "aria-pressed")], ["", "false"], `a bond thread taken back off its question, ${theme}`);
     await context.close();
   }
   console.log("one hand: the builder full screen, the first choice high up, the steps in one line, Back and Next at the bottom, and the dice growing, in both themes");
