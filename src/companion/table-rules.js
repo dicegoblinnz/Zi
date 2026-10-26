@@ -157,9 +157,11 @@ export function apply(doc, op, who, roster, now) {
       if (last && last.id === op.round && !last.over) last.over = now;
       return yes();
     }
-    // That fight's over: the next round's round 1.
+    // That fight's over: the next round's round 1. It names the fight it's
+    // ending, so it can't end a newer one.
     case "fight": {
       if (!gm) return gmOnly();
+      if (op.fight != null && Number(op.fight) !== Number(doc.fight)) return yes();
       doc.rounds = [];
       doc.fight = (Number(doc.fight) || 1) + 1;
       return yes();

@@ -919,7 +919,8 @@ export function makeTable(d) {
         return d.render();
       }
       ui.sure = "";
-      push(d.viewId(), { o: "fight" });
+      const id = d.viewId();
+      push(id, { o: "fight", fight: local(id).fight });
       d.render();
     },
     // In the composer.
