@@ -6,7 +6,7 @@ order: 30
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-10-27
 ---
 There are three sheets: one for each character, one the whole crew shares, and a faction board you can print as often as you need.
 
@@ -20,7 +20,7 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 -   Name · Pronouns · Player
 -   Aura (now \_\_\_ · max \_\_\_ · full every scene, and 5 unless your sheet changes it)
 -   Stride (3 to start)
--   Resolve (a star for each Title, and one more or one fewer for the Resolve Boon or Burden: that's your maximum · fill in the ones you've got · 1 back at the end of every scene, and all of it after downtime)
+-   Resolve (a gem for each Title, and one more or one fewer for the Resolve Boon or Burden: that's your maximum · fill in the ones you've got · 1 back at the end of every scene, and all of it after downtime)
 -   Confidence (a row of dice from d2 to d12: ring the one you're on, and move the ring as it swings · d6 at the start of every scene, a size up in clothes that fit it · up a size when one of your dice wins or you stop a telegraph, and down a size when your wound die goes up or every die misses · d2 is shaken, d12 is fired up · back to d6 when the scene ends)
 -   Conditions (4 · the die that placed it, with its size to ring)
 -   Wound die (d2 → d4 → d6 → d8 → d10 → d12 → Blaze: ring the one you're on · every Hurt puts it up a size, and a Hurt at d12 Blazes · a heal has to beat it · when a scene ends, roll your Confidence against it, and beat it to bring it down a size · downtime clears it to your Scars)
@@ -47,12 +47,12 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 
 Title cards don't have a Catch line. Your Catches live on your attuned things, on the back, and in your Scars, on the front.
 
-What Aura and Resolve buy and how they come back, your archetype's +2 and its Resolve spend, building a roll and your action aren't on the sheet. They're in the **player reference**, a separate four-page PDF on the [Sheets page](/sheets/). It's the [quick reference](#appendix-quick) in four parts:
+What Aura and Resolve buy and how they come back, your archetype's +2 and its Resolve spend, building a roll and your action aren't on the sheet. They're in the **player reference**, a separate four-page PDF on the [Sheets page](/sheets/). It's the [quick reference](#appendix-quick) in four parts, a page each, with what you reach for most at the table first:
 
-1.  **Making and growing a character:** making a character, Defend and Boons and Burdens, things that climb, downtime, bonds and threads, how Confidence swings, and the wound die, resting, Blaze, Scars and healing.
-2.  **Archetypes, Aura and the round:** the seventeen archetypes, a line each, what Aura and Resolve buy and how they come back, Catches included, the round, your action, answering, letting it ride, where each die stops one, Defend, intercepting, what it costs, and conditions.
-3.  **Rolling:** building a roll, set actions and the steps ladder, the roll, your dice and splits, and combos.
-4.  **Threats, moving and gear:** how far, weapon properties, reading a threat, its multipliers and vulnerabilities, what a win does, Study, stakes and clocks, chases, what you carry, attunement and summoning.
+1.  **The round and rolling:** the round, your action, building a roll, set actions and the steps ladder, the roll, your dice and splits, combos, and moving, how far and weapon properties.
+2.  **Confidence, wounds and defence:** how Confidence swings, the wound die, resting, Blaze, Scars and healing, answering, letting it ride, where each die stops one, Defend, intercepting, what it costs, and conditions.
+3.  **Aura, Resolve, archetypes and threads:** what Aura and Resolve buy and how they come back, Catches included, the seventeen archetypes, a line each with its sigil, and bonds and threads.
+4.  **Your character, downtime, threats and gear:** making a character, Defend and Boons and Burdens, things that climb, downtime, reading a threat, its multipliers and vulnerabilities, what a win does, Study, stakes and clocks, chases, what you carry, attunement and summoning.
 
 The GM's side of the quick reference stays in the book: factions, the session, the Oracle, and the round and threat budgets.
 

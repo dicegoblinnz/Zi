@@ -9,7 +9,9 @@ import { fileURLToPath } from "node:url";
 
 export const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
-const shared = ["scripts/sheets/print.css", "scripts/build-sheets.mjs"];
+// Both are drawn with the kit in its Paper theme, and both draw the steps
+// ladder from the companion's dice table, so those count too.
+const shared = ["scripts/sheets/print.css", "scripts/build-sheets.mjs", "src/kit/kit.js", "src/kit/sigils.js", "src/styles/kit.css", "src/companion/dice.js"];
 export const SHEETS = {
   "character-sheet": {
     file: "zidara-character-sheet.pdf",

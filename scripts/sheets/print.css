@@ -1,16 +1,14 @@
-/* The printable sheets: white paper and dark ink, with the Sigil look in the
-   accents (Cinzel headings, Alegreya Sans text, gold corner brackets and thin
-   rules). Nothing's dark-filled, so it prints cleanly on any printer.
-   The fonts come from node_modules, added by scripts/build-sheets.mjs. */
+/* The printable sheets, in the kit's Paper theme. scripts/build-sheets.mjs
+   puts src/styles/kit.css ahead of this, with data-theme="paper" on the page,
+   so the kit's pieces (dice in their real shapes, the crest, Resolve's gems,
+   Aura's hexes and the Scars) come out exactly as they do on paper on the
+   kit page: one ink on white, so they print the same on any printer, colour
+   or not. Cinzel heads and Alegreya Sans text. Write-in lines are mid grey,
+   so pencil and typing stand out on them, and nothing you write on is
+   filled. The fonts come from node_modules, added by build-sheets.mjs. */
 :root {
-  --ink: #1d1526;
-  --muted: #5a4f66;
-  --gold: #b8892a;
-  --gold-ink: #6e5110;
-  --violet: #5b36b0;
-  --rule: rgba(184, 137, 42, 0.6);
-  --line: rgba(29, 21, 38, 0.45);
-  --box: rgba(29, 21, 38, 0.7);
+  --write: #7a7a7a;
+  --hair: #b4b4b4;
   --display: "Cinzel", Georgia, serif;
   --body: "Alegreya Sans", "Gill Sans", sans-serif;
   --lh: 5mm;
@@ -18,196 +16,313 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; background: #fff; color: var(--ink); }
 body { font: 400 8pt/1.25 var(--body); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-h1, h2, h3, h4, p { margin: 0; }
+h1, h2, h3, h4, p, ul, ol { margin: 0; }
 
-/* The brand: a violet diamond round a gold core, and the name in Cinzel. */
-.brand { display: flex; align-items: center; gap: 2.2mm; }
-.brand svg { width: 7mm; height: 7mm; flex: none; }
-.wordmark { font: 700 15pt/1 var(--display); letter-spacing: 0.08em; color: var(--gold-ink); }
-.doc { font: 500 7.5pt/1.2 var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 0.8mm; }
+/* The brand: the Zi'Dara mark (the crest with nothing in it yet) and the name. */
+.wordmark { font: 700 15pt/1 var(--display); letter-spacing: 0.08em; }
+.doc { font: 500 7pt/1.2 var(--body); letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); margin-top: 1mm; }
+.zd-crest .heart-plain { fill: var(--ink); }
 
-/* Cards: a thin gold line with gold corner brackets. */
-.card {
-  position: relative;
-  border: 0.25mm solid var(--rule);
-  padding: 2mm 2.6mm 2.2mm;
-  background:
-    linear-gradient(var(--gold), var(--gold)) left top / 3.2mm 0.55mm no-repeat,
-    linear-gradient(var(--gold), var(--gold)) left top / 0.55mm 3.2mm no-repeat,
-    linear-gradient(var(--gold), var(--gold)) right top / 3.2mm 0.55mm no-repeat,
-    linear-gradient(var(--gold), var(--gold)) right top / 0.55mm 3.2mm no-repeat,
-    linear-gradient(var(--gold), var(--gold)) left bottom / 3.2mm 0.55mm no-repeat,
-    linear-gradient(var(--gold), var(--gold)) left bottom / 0.55mm 3.2mm no-repeat,
-    linear-gradient(var(--gold), var(--gold)) right bottom / 3.2mm 0.55mm no-repeat,
-    linear-gradient(var(--gold), var(--gold)) right bottom / 0.55mm 3.2mm no-repeat;
-  background-origin: border-box;
-}
-h2.sec, .card h3 {
-  font: 700 8pt/1 var(--display);
-  letter-spacing: 0.07em;
-  color: var(--ink);
-  display: flex;
-  align-items: baseline;
-  gap: 2mm;
-}
-h2.sec { font-size: 9pt; margin: 0 0 1.6mm; }
-h2.sec::after { content: ""; flex: 1; border-bottom: 0.25mm solid var(--rule); transform: translateY(-0.6mm); }
-.hint { font: italic 400 6.6pt/1.25 var(--body); color: var(--muted); }
-.lab { font: 500 6.3pt/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+/* A heading is a tab cut out of ink with a rule running on from it. */
+.tab { display: flex; align-items: center; gap: 1.8mm; }
+.tab::after { content: ""; flex: 1 1 4mm; height: 0.4mm; background: var(--ink); order: 9; }
+.tab h2, .tab h3 { flex: none; font: 700 7.6pt/1 var(--display); letter-spacing: 0.1em; color: #fff; background: var(--ink); padding: 1.15mm 2.3mm 0.95mm; white-space: nowrap; }
+.tab .aside { order: 10; flex: none; font: italic 400 6.9pt/1 var(--body); color: var(--muted); }
+
+.hint { font: italic 400 6.9pt/1.28 var(--body); color: var(--muted); }
+.hint b { font-style: normal; font-weight: 700; color: var(--ink); }
+.lab { font: 500 6.2pt/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
 
 /* Write-in spaces. Each one gets a fillable field in the PDF. */
-.w { display: block; height: var(--lh); border-bottom: 0.25mm solid var(--line); flex: 1; min-width: 0; }
-.box { display: inline-block; width: 9.5mm; height: 6.2mm; border: 0.3mm solid var(--box); border-radius: 0.8mm; flex: none; }
-.tick { display: inline-block; width: 3.3mm; height: 3.3mm; border: 0.25mm solid var(--box); border-radius: 0.3mm; flex: none; }
-.star {
-  display: inline-block; width: 4.6mm; height: 4.6mm; flex: none;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 1.8l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.9l-6.4 3.5 1.4-7.1-5.3-5 7.2-.9z' fill='none' stroke='%236e5110' stroke-width='1.3' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-}
-/* A die to ring: a hexagon with its size in it. */
-.die {
-  display: inline-flex; align-items: center; justify-content: center; flex: none;
-  width: 8.6mm; height: 6.2mm;
-  font: 700 7.2pt/1 var(--body); color: var(--ink);
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 86 62' preserveAspectRatio='none'%3E%3Cpath d='M20 2h46l18 29-18 29H20L2 31z' fill='none' stroke='%23b8892a' stroke-width='3' stroke-linejoin='round'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-}
-.dice { display: flex; gap: 1.2mm; align-items: center; }
-.word { display: inline-flex; align-items: center; justify-content: center; padding: 1.3mm 2.1mm; font: 500 6.9pt/1 var(--body); }
+.w { display: block; height: var(--lh); border-bottom: 0.25mm solid var(--write); flex: 1; min-width: 0; }
+.box { display: inline-block; width: 10mm; height: 6.6mm; border: 0.3mm solid var(--ink); border-radius: 1mm; flex: none; background: #fff; }
+.tick { display: inline-block; width: 3.4mm; height: 3.4mm; border: 0.3mm solid var(--ink); border-radius: 0.4mm; flex: none; background: #fff; }
+
+/* A die to ring: the kit's die, its real shape, with room round it for the
+   ring. The radio sits over the whole cell, so its ring goes round the die. */
+.ring { display: inline-flex; align-items: center; justify-content: center; flex: none; width: var(--cell); height: var(--cell); }
+.ring .zd-die { width: var(--die); height: var(--die); }
+.dice { display: flex; align-items: center; }
 
 .stamp { display: flex; justify-content: space-between; font: 400 6pt/1 var(--body); color: var(--muted); letter-spacing: 0.04em; }
 
 /* ---------- The character sheet: two A4 pages, back to back. ---------- */
 .cs .page {
   width: 210mm; height: 297mm;
-  padding: 7.5mm 9mm 5.5mm;
-  display: flex; flex-direction: column; gap: 2.5mm;
+  padding: 6.5mm 8.5mm 5mm;
+  display: flex; flex-direction: column; gap: 2mm;
   overflow: hidden;
   break-after: page;
 }
 .cs .page:last-child { break-after: auto; }
 .cs .stamp { margin-top: auto; }
-.cs .head { display: flex; align-items: flex-end; gap: 7mm; padding-bottom: 2mm; border-bottom: 0.25mm solid var(--rule); }
-.cs .ident { flex: 1; display: flex; gap: 4mm; }
-.cs .field { display: flex; flex-direction: column; gap: 0.8mm; }
-.cs .field .w { height: 6mm; flex: none; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm 4mm; }
-.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2.5mm 3.6mm; }
-.stack { display: flex; flex-direction: column; gap: 2.5mm; }
 .row { display: flex; align-items: center; gap: 1.6mm; }
-.cs h3 + .hint, .cs .card > .hint { margin-top: 0.8mm; }
+.cs .tab h2, .cs .tab h3 { font-size: 7.3pt; padding: 1mm 2.1mm 0.85mm; }
+.cs .tab + .hint { margin-top: 0.9mm; }
 
-.stats .statrow { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3mm; }
-.stats .statrow + .statrow { margin-top: 2mm; padding-top: 1.8mm; border-top: 0.25mm solid rgba(184, 137, 42, 0.35); }
-.stats .statrow.rs { grid-template-columns: 1fr 21mm; }
-.stats .statrow.one { grid-template-columns: 1fr; }
-.stat .nums { display: flex; align-items: center; gap: 1.4mm; margin-top: 1.4mm; }
-.stat .nums .lab { margin-left: 0.6mm; }
-.stars { display: flex; gap: 0.7mm; align-items: center; }
-.die-notes { display: flex; gap: 1.2mm; margin-top: 0.7mm; }
-.die-notes span { width: 8.6mm; text-align: center; font: italic 400 6pt/1 var(--body); color: var(--muted); white-space: nowrap; }
+/* The head: the mark, the name big, and who's playing. */
+.head { display: flex; align-items: center; gap: 3mm; padding-bottom: 1.6mm; border-bottom: 0.4mm solid var(--ink); }
+.head .zd-crest { width: 11mm; height: 11mm; }
+.head .brand { flex: none; margin-right: 3mm; }
+.head .wordmark { font-size: 14pt; }
+.head .ident { flex: 1; display: flex; gap: 4mm; align-items: flex-end; }
+.field { display: flex; flex-direction: column; gap: 1mm; min-width: 0; }
+.field .w { flex: none; height: 6.2mm; }
+.field.name { flex: 3.2; }
+.field.name .w { height: 6.8mm; border-bottom-width: 0.35mm; border-bottom-color: var(--ink); }
 
-.cond { display: flex; align-items: flex-end; gap: 2mm; margin-top: 0.6mm; }
-.cond .w { height: 5.6mm; }
+/* Aura, Resolve and Stride in a bar under the name, since they move most.
+   Aura's boxes are the kit's hex and Resolve's the gem. */
+.pool { display: flex; align-items: stretch; border-bottom: 0.4mm solid var(--ink); margin-top: -0.6mm; }
+.pool .cell { display: flex; align-items: center; gap: 2.4mm; padding: 1.2mm 3.6mm 1.2mm 0; }
+.pool .cell + .cell { padding-left: 3.6mm; border-left: 0.25mm solid var(--hair); }
+.pool .cell:last-child { padding-right: 0; margin-left: auto; }
+.pool h2 { font: 700 9pt/1 var(--display); letter-spacing: 0.06em; }
+.pool h2 small { display: block; font: italic 400 6.4pt/1.2 var(--body); letter-spacing: 0; color: var(--muted); margin-top: 0.7mm; }
+.pool .cell:nth-child(1) h2 { width: 21mm; }
+.pool .cell:nth-child(2) h2 { width: 39mm; }
+.pool .cell:nth-child(3) h2 { width: 13mm; }
+.hex { position: relative; display: inline-block; flex: none; width: 10.6mm; height: 9.2mm; }
+.hex .zd-chit { position: absolute; inset: 0; width: 100%; height: 100%; }
+.hex .zd-chit .a { stroke: var(--ink); stroke-width: 3.2; }
+.hex .f { position: absolute; left: 2.1mm; right: 2.1mm; top: 2.2mm; bottom: 2.2mm; }
+.gems { display: flex; align-items: center; gap: 0.7mm; }
+.gem { display: inline-block; flex: none; width: 5mm; height: 5mm; }
+.gem .zd-gem { width: 100%; height: 100%; }
+.gem .zd-gem .a { stroke: var(--ink); stroke-width: 4.6; }
+.pool .box { width: 9.6mm; height: 6.4mm; }
 
-/* The wound die: a row to ring from d2 to d12, then Blaze, and five Scars,
-   each with the floor it sets. */
-.woundrow { margin-top: 1.4mm; }
-.woundrow .blaze { font: 700 7.4pt/1 var(--display); letter-spacing: 0.05em; color: var(--gold-ink); margin-left: 0.8mm; white-space: nowrap; }
-.scars { margin-top: 2mm; padding-top: 1.6mm; border-top: 0.25mm solid var(--rule); }
-.scar { display: flex; align-items: flex-end; gap: 1.6mm; margin-top: 0.2mm; }
-.scar .w { height: 4.6mm; }
-.scar .n { width: 3mm; font: 700 7pt/1 var(--display); color: var(--gold-ink); text-align: center; padding-bottom: 1mm; }
-.scar .floor { width: 6.4mm; font: italic 500 6.6pt/1 var(--body); color: var(--muted); padding-bottom: 1.1mm; white-space: nowrap; }
-.key { display: flex; gap: 3mm; align-items: center; margin-top: 1.5mm; }
-.key .row { gap: 1mm; }
+.front .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 6mm; }
 
-.goal + .goal { margin-top: 2.4mm; }
-.goal .row { margin-top: 1mm; }
+/* Confidence and the wound die: the kit's dice in a row, ringed where you are. */
+.dice.big { --die: 9.2mm; --cell: 11.6mm; }
+.track .dice { margin: 0.5mm -1.2mm 0; }
+.track .marks { display: flex; margin: -0.6mm -1.2mm 0; }
+.track .marks span { width: 11.6mm; text-align: center; font: italic 500 6.4pt/1 var(--body); color: var(--muted); }
+.track .moves { display: grid; grid-template-columns: 9mm 1fr; gap: 0.3mm 0; margin-top: 1mm; font: 400 7pt/1.22 var(--body); }
+.track .moves b { font: 700 6.2pt/1.4 var(--body); letter-spacing: 0.1em; text-transform: uppercase; }
+.track > .hint { margin-top: 0.4mm; }
+.wound .row { gap: 0; }
+.wound .blaze { display: flex; flex-direction: column; align-items: flex-start; margin-left: 1.6mm; }
+.wound .blaze b { font: 700 8.6pt/1 var(--display); letter-spacing: 0.05em; white-space: nowrap; }
+.wound .blaze span { font: italic 400 6.4pt/1.15 var(--body); color: var(--muted); margin-top: 0.7mm; white-space: nowrap; }
 
-.sa { width: 100%; border-collapse: collapse; margin-top: 1.2mm; }
-.sa th { font: 500 6.3pt/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 0 1.2mm 0.8mm 0; }
-.sa td { height: 5.3mm; padding: 0 1.4mm 0 0; border-bottom: 0.25mm solid var(--line); vertical-align: bottom; }
-.sa td .w { border: 0; height: 5mm; }
-.sa td:last-child { padding-right: 0; }
-.sa .name { width: 36mm; }
-.sa .steps { width: 10mm; }
-.sa .dicecol { width: 15mm; }
-.sa .fixed { font: 700 7.6pt/1 var(--display); letter-spacing: 0.04em; padding-bottom: 1.1mm; white-space: nowrap; }
-.sa .fixed i { font: italic 400 6.3pt/1 var(--body); letter-spacing: 0; color: var(--muted); margin-left: 1mm; }
-.sa td.steps, .sa td.dicecol, .sa th.steps, .sa th.dicecol { border-left: 0.25mm solid var(--line); padding-left: 1.2mm; text-align: center; }
-.sa td.name .w { border-right: 0.25mm dotted var(--line); }
-.ladder { display: grid; grid-template-columns: repeat(14, 1fr); margin-top: 1.8mm; border: 0.25mm solid var(--rule); }
-.ladder div { text-align: center; padding: 0.9mm 0 1mm; border-left: 0.25mm solid var(--rule); }
-.ladder div:first-child { border-left: 0; }
-.ladder b { display: block; font: 700 7pt/1 var(--display); color: var(--gold-ink); }
-.ladder span { display: block; font: 500 7pt/1.1 var(--body); margin-top: 0.6mm; }
+/* Conditions: a line and the die that placed it. */
+.dice { --die: 6.3mm; --cell: 7.7mm; }
+.cond { display: flex; align-items: center; gap: 1.2mm; }
+.cond .w { height: 5.2mm; align-self: flex-end; margin-bottom: 1.3mm; }
+.cond .dice { margin-right: -0.7mm; }
 
-.trait + .trait { margin-top: 1.2mm; }
-.trait .w.two { height: 8.4mm; border: 0; background: linear-gradient(var(--line), var(--line)) 0 4.2mm / 100% 0.25mm no-repeat, linear-gradient(var(--line), var(--line)) 0 100% / 100% 0.25mm no-repeat; }
+/* Scars, under the wound die: a cut for each, the size it holds the wound
+   die at, and its Catch. */
+.scars .rows { margin-top: 0.4mm; }
+.scar { display: flex; align-items: flex-end; gap: 1.6mm; }
+.scar .cut { flex: none; width: 1.6mm; height: 3.5mm; margin: 0 0.6mm 0.7mm 0.5mm; border: 0.3mm solid var(--ink); border-radius: 0.5mm; transform: skewX(-22deg); }
+.scar .floor { flex: none; display: flex; align-items: center; gap: 0.8mm; width: 10.6mm; padding-bottom: 0.6mm; font: 700 7pt/1 var(--body); }
+.scar .floor .zd-mini { width: 3.7mm; height: 3.7mm; }
+.scar .w { height: 4.8mm; }
+
+/* Set actions: what's on each, and room for its steps and its die. */
+.sa { width: 100%; border-collapse: collapse; margin-top: 0.8mm; table-layout: fixed; }
+.sa th { font: 500 6.1pt/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 0 0 0.6mm; }
+.sa td { height: 5.4mm; padding: 0; border-bottom: 0.25mm solid var(--write); vertical-align: bottom; }
+.sa td .w { border: 0; height: 5.2mm; }
+.sa .name { width: 37mm; }
+.sa .on { padding-left: 1.6mm; }
+.sa th.steps, .sa th.die { text-align: center; padding-left: 1.6mm; }
+.sa .steps { width: 13mm; }
+.sa .die { width: 25mm; }
+.sa td.steps, .sa td.die { border-bottom: 0; padding: 0.35mm 0 0.35mm 1.6mm; }
+.sa td.steps .w, .sa td.die .w { height: 4.7mm; border: 0.3mm solid var(--ink); border-radius: 0.9mm; }
+.sa .fixed { font: 700 8pt/1 var(--display); letter-spacing: 0.05em; padding-bottom: 1.1mm; white-space: nowrap; }
+.sa .fixed i { font: italic 400 6.4pt/1 var(--body); letter-spacing: 0; color: var(--muted); margin-left: 1mm; }
+.sa td.name .w { margin-right: 1.6mm; border-right: 0.25mm dotted var(--write); }
+
+/* Steps into dice, under the set actions: the number, the dice in their shapes and the label. */
+.ladder { display: grid; grid-template-columns: repeat(14, 1fr); margin-top: 1.6mm; border-top: 0.4mm solid var(--ink); border-bottom: 0.4mm solid var(--ink); }
+.ladder > div { display: flex; flex-direction: column; align-items: center; gap: 0.6mm; padding: 1mm 0 0.9mm; border-left: 0.25mm solid var(--hair); }
+.ladder > div:first-child { border-left: 0; }
+/* Numbers are Alegreya's, since Cinzel's 1 reads as a Title's I. */
+.ladder b { font: 800 8.6pt/1 var(--body); }
+.ladder .shapes { display: flex; gap: 0.35mm; height: 4mm; align-items: center; }
+.ladder .zd-mini { width: 4mm; height: 4mm; }
+.ladder .many .zd-mini { width: 2.9mm; height: 2.9mm; }
+.ladder span { font: 700 6.7pt/1 var(--body); letter-spacing: 0.02em; }
+
+/* Aspiration and the Party Goal: a line each and the dice it climbs. */
+.goals { display: flex; flex-direction: column; gap: 0.8mm; }
+.goal { display: flex; align-items: center; gap: 2mm; }
+.goal .chip { flex: none; width: 24mm; font: 700 7.3pt/1 var(--display); letter-spacing: 0.1em; color: #fff; background: var(--ink); padding: 1mm 2.1mm 0.85mm; white-space: nowrap; }
+.goal .w { height: 5.2mm; align-self: flex-end; margin-bottom: 1.3mm; }
+.goal .hint { flex: 0 0 47mm; }
+
+.trait + .trait { margin-top: 1.1mm; }
 .trait .row { align-items: flex-end; }
-.lines .w + .w { margin-top: 0; }
-.kit-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3mm; }
-.kit-sub { margin-top: 1.6mm; }
-.kit-sub .lab { display: block; margin-bottom: 0.2mm; }
-.notes .ruled { background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--lh) - 0.25mm), var(--line) calc(var(--lh) - 0.25mm) var(--lh)); }
+.trait .w.short { flex: 0 0 22mm; }
+.trait .w.two { height: 9mm; border: 0; background: linear-gradient(var(--write), var(--write)) 0 4.5mm / 100% 0.25mm no-repeat, linear-gradient(var(--write), var(--write)) 0 100% / 100% 0.25mm no-repeat; }
+.kit .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 4mm; }
+.kit .sub { margin-top: 1.1mm; }
+.kit .sub > .lab { display: block; margin-bottom: 0.1mm; }
+.kit .sub.row { align-items: flex-end; }
+.kit .sub.row > .lab { margin-bottom: 1mm; }
+.kit .w { height: 4.8mm; }
+.notes { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.notes .ruled { flex: 1; height: auto; min-height: calc(3 * var(--lh)); border: 0; margin-top: 0.2mm; background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--lh) - 0.25mm), var(--write) calc(var(--lh) - 0.25mm) var(--lh)); }
 
-/* The back. */
-.cs .slim { display: flex; align-items: center; justify-content: space-between; padding-bottom: 1.6mm; border-bottom: 0.25mm solid var(--rule); }
-.cs .slim .wordmark { font-size: 11pt; }
-.cs .slim svg { width: 5.4mm; height: 5.4mm; }
-.cs .slim .doc { margin: 0; }
-.back { --lh: 4.85mm; gap: 2.3mm; }
-.back .hint { margin-bottom: 1.1mm !important; }
-.tcard .top { display: flex; align-items: flex-start; gap: 1.6mm; }
-.tcard .numeral { font: 700 11pt/1 var(--display); color: var(--gold-ink); width: 6mm; padding-top: 1.2mm; }
-.tcard .w.two { height: 8.8mm; border: 0; background: linear-gradient(var(--line), var(--line)) 0 4.4mm / 100% 0.25mm no-repeat, linear-gradient(var(--line), var(--line)) 0 100% / 100% 0.25mm no-repeat; }
-.tcard .arch { display: flex; align-items: flex-end; gap: 1.6mm; }
-.tcard .perms { margin-top: 0.4mm; }
-.acard .top, .bcard .top { display: flex; align-items: flex-end; gap: 1.6mm; }
-.acard .mid { display: flex; align-items: flex-end; gap: 1.6mm; margin-top: 0.4mm; }
-.acard .stage { display: flex; gap: 0.6mm; margin-left: 1mm; }
-.acard .stage .word { font-size: 6.6pt; padding: 1.3mm 1.9mm; }
-.acard .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3mm; margin-top: 0.2mm; }
-.acard .pair > div { display: flex; align-items: flex-end; gap: 1.2mm; }
-.thread { display: flex; align-items: flex-end; gap: 1mm; }
-.thread .tick { margin-bottom: 0.8mm; }
-.thread .w { margin-right: 0.8mm; }
-.thread .kind { display: flex; flex: none; margin-right: 0.4mm; }
-.thread .kind .word { padding: 0.9mm 1.1mm; font-size: 6.2pt; color: var(--muted); }
+/* The back: who you are. */
+.slim { display: flex; align-items: center; gap: 2.4mm; padding-bottom: 1.8mm; border-bottom: 0.4mm solid var(--ink); }
+.slim .zd-crest { width: 7.4mm; height: 7.4mm; }
+.slim .wordmark { font-size: 11pt; }
+.slim .doc { margin: 0 0 0 auto; }
+.back { --lh: 4.75mm; }
+.back .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2.5mm 4mm; }
+.back .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm 5mm; }
+.back .tab + .hint { margin: 0.9mm 0 1.6mm; }
 
-/* ---------- The player reference: Appendix D, in four parts. ---------- */
-.ref { font: 400 9pt/1.3 var(--body); }
-.ref-head { display: flex; align-items: center; justify-content: space-between; gap: 8mm; padding-bottom: 2.4mm; margin-bottom: 3mm; border-bottom: 0.3mm solid var(--rule); }
-.ref-head .intro { flex: 1; max-width: 100mm; text-align: right; font: italic 400 8pt/1.3 var(--body); color: var(--muted); }
-.cols h2.part {
-  column-span: all;
-  display: flex; align-items: center; gap: 2.4mm;
-  font: 700 11pt/1.1 var(--display); letter-spacing: 0.05em; color: var(--ink);
-  margin: 4mm 0 2.4mm; padding: 1.6mm 0 1.6mm 3.2mm;
-  break-after: avoid;
+/* A card on the back: a fine frame with the kit's corner brackets in ink. */
+.card {
+  position: relative;
+  border: 0.25mm solid var(--hair);
+  padding: 1.5mm 2.6mm 1.7mm;
   background:
-    linear-gradient(var(--gold), var(--gold)) left top / 3.2mm 0.55mm no-repeat,
-    linear-gradient(var(--gold), var(--gold)) left top / 0.55mm 3.2mm no-repeat,
-    linear-gradient(var(--gold), var(--gold)) left bottom / 3.2mm 0.55mm no-repeat,
-    linear-gradient(var(--gold), var(--gold)) left bottom / 0.55mm 3.2mm no-repeat;
-  border-bottom: 0.25mm solid var(--rule);
+    linear-gradient(var(--ink), var(--ink)) left top / 3mm 0.5mm no-repeat,
+    linear-gradient(var(--ink), var(--ink)) left top / 0.5mm 3mm no-repeat,
+    linear-gradient(var(--ink), var(--ink)) right top / 3mm 0.5mm no-repeat,
+    linear-gradient(var(--ink), var(--ink)) right top / 0.5mm 3mm no-repeat,
+    linear-gradient(var(--ink), var(--ink)) left bottom / 3mm 0.5mm no-repeat,
+    linear-gradient(var(--ink), var(--ink)) left bottom / 0.5mm 3mm no-repeat,
+    linear-gradient(var(--ink), var(--ink)) right bottom / 3mm 0.5mm no-repeat,
+    linear-gradient(var(--ink), var(--ink)) right bottom / 0.5mm 3mm no-repeat;
+  background-origin: border-box;
 }
-.cols h2.part:first-child { margin-top: 0; }
-.cols h2.part .num { font: 700 9pt/1 var(--display); color: var(--gold-ink); }
-.cols { column-count: 2; column-gap: 6.5mm; column-rule: 0.25mm solid rgba(184, 137, 42, 0.35); }
-.qr { margin: 0 0 2.6mm; }
-.qr h3 { font: 700 8.6pt/1.15 var(--display); letter-spacing: 0.05em; color: var(--gold-ink); margin: 0 0 1mm; break-after: avoid; }
-.qr p { margin: 0 0 1mm; }
-.cols .span-intro { column-span: all; margin: 0 0 1.6mm; break-after: avoid; }
-.span-intro p { margin: 0; }
-.qr ul, .qr ol { margin: 0; padding: 0 0 0 3.4mm; }
-.qr li { margin: 0 0 0.9mm; break-inside: avoid; }
-.cols h2.part.new-page { break-before: page; margin-top: 0; }
+.card .row { align-items: flex-end; }
+
+/* A Title: its numeral on a diamond cut like the crest's. */
+.tcard .top { display: flex; align-items: flex-start; gap: 2mm; }
+.numeral { position: relative; flex: none; width: 8.4mm; height: 8.4mm; margin-top: 0.3mm; }
+.numeral svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.numeral b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding-top: 0.2mm; font: 700 6.6pt/1 var(--display); color: #fff; letter-spacing: 0.02em; }
+.tcard .w.two { height: 9.2mm; border: 0; background: linear-gradient(var(--write), var(--write)) 0 4.6mm / 100% 0.25mm no-repeat, linear-gradient(var(--write), var(--write)) 0 100% / 100% 0.25mm no-repeat; }
+.perms { margin-top: 0.3mm; counter-reset: p; }
+.perms .w { position: relative; }
+.perms .w::before { counter-increment: p; content: counter(p); position: absolute; left: -2.6mm; bottom: 0.6mm; font: 500 5.6pt/1 var(--body); color: var(--hair); }
+.tcard .perms, .acard .perms { padding-left: 2.6mm; }
+
+/* An attuned thing: its stage, Awakened to Perfected, to ring. */
+.stage { display: flex; align-items: center; gap: 0.2mm; }
+.stage .word { padding: 1.1mm 1.5mm; font: 500 6.9pt/1 var(--body); }
+.stage i { font: 400 6pt/1 var(--body); color: var(--hair); font-style: normal; }
+.acard .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3mm; }
+.acard .pair > div { display: flex; align-items: flex-end; gap: 1.2mm; }
+
+/* A bond: four threads, each one bond or hostile to ring, and a box for
+   strained and one for snapped. The column heads sit on the bond's own line. */
+.bcard { padding-left: 2mm; padding-right: 1.6mm; }
+.bcard .top, .thread { display: grid; grid-template-columns: 1fr 16.6mm 7.6mm 7.6mm; align-items: end; }
+.bcard .top .row { margin-right: 1.2mm; }
+.bcard .top > span { font: italic 500 6pt/1 var(--body); color: var(--muted); text-align: center; padding-bottom: 1mm; white-space: nowrap; }
+.thread .w { margin-right: 1.2mm; }
+.kind { display: flex; justify-content: center; align-items: center; height: 4.4mm; margin-bottom: 0.15mm; }
+.kind .word { padding: 0.9mm 1.35mm; font: 500 6.2pt/1 var(--body); }
+.kind i { width: 0.25mm; height: 2.6mm; background: var(--hair); }
+.thread .tick { justify-self: center; margin-bottom: 0.6mm; }
+.word { display: inline-flex; align-items: center; justify-content: center; }
+
+/* ---------- The player reference: Appendix D, a page for each part. ---------- */
+.ref .page {
+  width: 210mm; height: 297mm;
+  padding: 8mm 10mm 6mm;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  break-after: page;
+  font: 400 8.6pt/1.27 var(--body);
+}
+.ref .page:last-child { break-after: auto; }
+.ref .stamp { margin-top: 2mm; padding-top: 1.6mm; border-top: 0.25mm solid var(--hair); }
+
+/* Every page says where you are: the mark, its number and its part, and the
+   other three, so you can turn straight to the one you want. */
+.ref-head { display: flex; align-items: center; gap: 2.4mm; padding-bottom: 2.2mm; border-bottom: 0.4mm solid var(--ink); }
+.ref-head .zd-crest { width: 8mm; height: 8mm; }
+.ref-head .wordmark { font-size: 11pt; }
+.ref-head .doc { margin: 0.6mm 0 0; }
+.parts { display: flex; gap: 1mm; margin-left: auto; list-style: none; padding: 0; }
+.parts li { display: flex; align-items: center; gap: 1.2mm; padding: 1mm 1.8mm 0.9mm; border: 0.25mm solid var(--hair); font: 500 6.3pt/1 var(--body); color: var(--muted); }
+.parts li b { font: 800 7.4pt/1 var(--body); color: var(--ink); }
+.parts li.here { background: var(--ink); border-color: var(--ink); color: #fff; }
+.parts li.here b { color: #fff; }
+.ref h1 { display: flex; align-items: baseline; gap: 3mm; margin: 4mm 0 3mm; font: 700 17pt/1 var(--display); letter-spacing: 0.05em; }
+.ref h1 .num { font: 800 12pt/1 var(--body); padding: 1.2mm 2.4mm; background: var(--ink); color: #fff; align-self: center; }
+
+/* The text runs in two columns. Panels (a ladder, a track, the round) run
+   across both. */
+.flow { columns: 2; column-gap: 7mm; column-rule: 0.25mm solid var(--hair); column-fill: balance; }
+.flow + .flow, .panel + .flow { margin-top: 3mm; }
+.qr { margin: 0 0 2.8mm; }
+.qr h2 { display: flex; align-items: center; gap: 1.6mm; font: 700 9pt/1.15 var(--display); letter-spacing: 0.05em; margin: 0 0 1.2mm; padding-bottom: 0.8mm; border-bottom: 0.25mm solid var(--ink); break-after: avoid; }
+.qr h2 .zd-mini, .qr h2 .zd-chit, .qr h2 .zd-gem, .qr h2 .zd-scars { flex: none; }
+.qr h2 .zd-mini { width: 4.2mm; height: 4.2mm; }
+.qr p { margin: 0 0 1.1mm; }
+.qr ul, .qr ol { margin: 0; padding: 0 0 0 3.2mm; }
+.qr li { margin: 0 0 1mm; break-inside: avoid; }
 .qr ul { list-style: none; }
 .qr ul > li { position: relative; }
-.qr ul > li::before { content: ""; position: absolute; left: -3mm; top: 1.45mm; width: 1.3mm; height: 1.3mm; background: var(--gold); transform: rotate(45deg); }
-.qr ol { padding-left: 4mm; }
-.qr ol > li::marker { font: 700 8pt var(--display); color: var(--gold-ink); }
+.qr ul > li::before { content: ""; position: absolute; left: -2.9mm; top: 1.35mm; width: 1.2mm; height: 1.2mm; background: var(--ink); transform: rotate(45deg); }
 .qr strong { font-weight: 700; }
-.qr table { border-collapse: collapse; margin: 1.4mm 0 1.6mm; break-inside: avoid; }
-.qr th, .qr td { font-size: 8.6pt; padding: 0.4mm 3mm 0.4mm 0; border-bottom: 0.25mm solid rgba(184, 137, 42, 0.4); text-align: left; }
-.qr th { font: 500 6.6pt/1.2 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.qr em { font-style: italic; }
+.qr .lead { break-inside: avoid; }
+.qr table { border-collapse: collapse; margin: 1.2mm 0; break-inside: avoid; }
+.qr th, .qr td { padding: 0.4mm 3mm 0.4mm 0; border-bottom: 0.25mm solid var(--hair); text-align: left; }
+.qr th { font: 500 6.4pt/1.2 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+
+/* A panel across the page: the round, the steps ladder, a track. */
+.panel { break-inside: avoid; margin: 0 0 3mm; }
+.panel .cap { display: flex; align-items: baseline; gap: 2mm; margin-bottom: 1.4mm; }
+.panel .cap h2 { font: 700 9pt/1.15 var(--display); letter-spacing: 0.05em; }
+.panel .cap p { font: italic 400 7.4pt/1.2 var(--body); color: var(--muted); }
+
+/* The round: three steps, side by side. */
+.round { display: grid; grid-template-columns: repeat(3, 1fr); border: 0.4mm solid var(--ink); }
+.round > div { display: flex; gap: 2.4mm; padding: 2mm 2.6mm 2.2mm; }
+.round > div + div { border-left: 0.25mm solid var(--hair); }
+.round .n { flex: none; display: flex; align-items: center; justify-content: center; width: 6.6mm; height: 6.6mm; background: var(--ink); color: #fff; font: 800 9.5pt/1 var(--body); }
+.round p { margin: 0; font-size: 8.2pt; line-height: 1.25; }
+
+/* Steps into dice, drawn with the dice. */
+.steps-ladder { display: grid; grid-template-columns: repeat(14, 1fr); border-top: 0.4mm solid var(--ink); border-bottom: 0.4mm solid var(--ink); }
+.steps-ladder > div { display: flex; flex-direction: column; align-items: center; gap: 0.9mm; padding: 1.6mm 0 1.4mm; border-left: 0.25mm solid var(--hair); }
+.steps-ladder > div:first-child { border-left: 0; }
+.steps-ladder b { font: 800 10pt/1 var(--body); }
+.steps-ladder small { font: 500 5.8pt/1 var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: -0.4mm; }
+.steps-ladder .shapes { display: flex; gap: 0.5mm; height: 5.2mm; align-items: center; }
+.steps-ladder .zd-mini { width: 5.2mm; height: 5.2mm; }
+.steps-ladder .many .zd-mini { width: 3.6mm; height: 3.6mm; }
+.steps-ladder span { font: 700 7.6pt/1 var(--body); }
+
+/* A track: Confidence from shaken to fired up, the wound die up to Blaze. */
+.track-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0 7mm; }
+.track-panel .side { display: flex; flex-direction: column; }
+.trk { display: flex; align-items: flex-start; justify-content: space-between; padding: 1.4mm 0 1.2mm; border-top: 0.4mm solid var(--ink); border-bottom: 0.25mm solid var(--hair); }
+.trk > div { display: flex; flex-direction: column; align-items: center; gap: 0.8mm; flex: 1; }
+.trk .zd-die { width: 9mm; height: 9mm; }
+.trk span { font: italic 500 6.6pt/1.1 var(--body); color: var(--muted); text-align: center; white-space: nowrap; }
+.trk .end b { font: 700 9pt/1 var(--display); letter-spacing: 0.05em; height: 9mm; display: flex; align-items: center; }
+
+/* Aura and Resolve, side by side: what one buys and how it comes back. */
+.econ { display: grid; grid-template-columns: 1fr 1fr; gap: 0 7mm; }
+.econ .qr { margin: 0; }
+.econ h2 .zd-chit { width: 5mm; height: auto; }
+.econ h2 .zd-gem { width: 4.6mm; height: 4.6mm; }
+.econ .zd-chit .a, .econ .zd-gem .a { fill: var(--ink); stroke: var(--ink); }
+.econ .zd-gem .b { stroke: #fff; stroke-width: 5; opacity: 0.6; }
+.econ .lists { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3.4mm; margin: 0.6mm 0 1.2mm; }
+.econ .lists h3 { font: 700 6.8pt/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 0.9mm; }
+.econ .lists ul { padding-left: 2.8mm; }
+.econ .lists li { margin-bottom: 0.6mm; }
+
+/* The archetypes: each one's sigil, its name and what it does. */
+.archs { columns: 2; column-gap: 7mm; column-rule: 0.25mm solid var(--hair); }
+.arch { display: grid; grid-template-columns: 6.4mm 1fr; gap: 0 1.8mm; margin: 0 0 1.2mm; break-inside: avoid; }
+.arch .zd-crest { width: 6.4mm; height: 6.4mm; margin-top: 0.2mm; }
+.arch p { margin: 0; }
+.arch p strong { font: 700 7.9pt/1 var(--display); letter-spacing: 0.04em; }

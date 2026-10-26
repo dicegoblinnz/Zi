@@ -3,15 +3,16 @@
 //   npm run sheets
 //
 // The character sheet (two A4 pages, back to back, fillable) and the player
-// reference (Appendix D as a plain A4 PDF). Each is an HTML page drawn with
-// scripts/sheets/print.css and printed by the Playwright Chromium the site's
+// reference (Appendix D on four A4 pages). Each is an HTML page drawn with the
+// kit (src/kit/kit.js) in its Paper theme (src/styles/kit.css) and
+// scripts/sheets/print.css, and printed by the Playwright Chromium the site's
 // checks already use, so the PDFs carry the real fonts. The character sheet's
 // fields are added afterwards with pdf-lib, over the boxes the page drew.
 // Each PDF is stamped with the date and a hash of what it was built from, and
 // tests/check-site.mjs fails when that hash no longer matches.
 //
 // Workers Builds can't run Chromium, so the PDFs are committed. Rebuild them
-// whenever Appendix D or anything in scripts/sheets/ changes.
+// whenever Appendix D, the kit or anything in scripts/sheets/ changes.
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -23,7 +24,7 @@ import {
 } from "pdf-lib";
 import { ROOT, SHEETS, sourceHash } from "./sheets/sources.mjs";
 import { characterSheet } from "./sheets/character-sheet.mjs";
-import { playerReference } from "./sheets/player-reference.mjs";
+import { playerReference, REFERENCE_PAGES } from "./sheets/player-reference.mjs";
 
 const OUT = join(ROOT, "public", "sheets");
 const INK = rgb(0x1d / 255, 0x15 / 255, 0x26 / 255);
@@ -39,12 +40,16 @@ function fonts() {
   return [
     face("Cinzel", "cinzel", "cinzel-latin-700-normal.woff2", 700),
     ...[400, 500, 700].flatMap((w) => ["normal", "italic"].map((s) => face("Alegreya Sans", "alegreya-sans", `alegreya-sans-latin-${w}-${s}.woff2`, w, s))),
+    // The numbers on the kit's dice.
+    face("Alegreya Sans", "alegreya-sans", "alegreya-sans-latin-800-normal.woff2", 800),
   ].join("\n");
 }
 
+// The kit's look first, in its Paper theme, then the sheets' own.
 function page(title, body) {
+  const kit = readFileSync(join(ROOT, "src", "styles", "kit.css"), "utf8");
   const css = readFileSync(join(ROOT, "scripts", "sheets", "print.css"), "utf8");
-  return `<!doctype html><html lang="en-NZ"><head><meta charset="utf-8"><title>${title}</title><style>${fonts()}\n${css}</style></head><body>${body}</body></html>`;
+  return `<!doctype html><html lang="en-NZ" data-theme="paper"><head><meta charset="utf-8"><title>${title}</title><style>${fonts()}\n${kit}\n${css}</style></head><body>${body}</body></html>`;
 }
 
 async function print(browser, name, html, measure) {
@@ -91,9 +96,12 @@ function measureFields() {
 }
 
 // What a ticked box looks like: a cross for a snapped thread, a tick for a
-// strained one, a filled star for Resolve, and a ring round the die (or the
-// stage) you're on.
-const STAR = "M12 1.8l3.1 6.6 7.2.9-5.3 5 1.4 7.1L12 17.9l-6.4 3.5 1.4-7.1-5.3-5 7.2-.9z";
+// strained one, Resolve's gem cut solid the way the kit fills one you've got,
+// and a ring round the die (or the stage, or bond or hostile) you're on.
+// The gem's the kit's own (src/kit/kit.js), on the same 100 box.
+const GEM = "M30 10 H70 L94 37 L50 94 L6 37 Z";
+const FACETS = "M6 37 H94 M30 10 L39 37 L50 94 L61 37 L70 10";
+const WHITE = rgb(1, 1, 1);
 function marks(look, w, h) {
   const g = (ops) => [pushGraphicsState(), ...ops, popGraphicsState()];
   switch (look) {
@@ -106,12 +114,16 @@ function marks(look, w, h) {
     }
     case "check":
       return g(drawSvgPath(`M ${w * 0.18} ${h * 0.52} L ${w * 0.42} ${h * 0.78} L ${w * 0.86} ${h * 0.2}`, { x: 0, y: h, scale: 1, color: undefined, borderColor: INK, borderWidth: 1, borderLineCap: 1 }));
-    case "star": {
-      const s = Math.min(w, h) / 24;
-      return g(drawSvgPath(STAR, { x: (w - 24 * s) / 2, y: h - (h - 24 * s) / 2, scale: s, color: INK, borderColor: INK, borderWidth: 0.4 / s }));
+    case "gem": {
+      const s = Math.min(w, h) / 100;
+      const at = { x: (w - 100 * s) / 2, y: h - (h - 100 * s) / 2, scale: s };
+      return g([
+        ...drawSvgPath(GEM, { ...at, color: INK, borderColor: INK, borderWidth: 4.6 * s, borderLineCap: 1 }),
+        ...drawSvgPath(FACETS, { ...at, color: undefined, borderColor: WHITE, borderWidth: 2.6 * s, borderLineCap: 1 }),
+      ]);
     }
     case "ring":
-      return g(drawEllipse({ x: w / 2, y: h / 2, xScale: w / 2 - 1.1, yScale: h / 2 - 1.1, color: undefined, borderColor: INK, borderWidth: 1.1 }));
+      return g(drawEllipse({ x: w / 2, y: h / 2, xScale: w / 2 - 1.1, yScale: h / 2 - 1.1, color: undefined, borderColor: INK, borderWidth: 1.25 }));
     default:
       throw new Error(`no look called ${look}`);
   }
@@ -248,6 +260,7 @@ try {
     const stamp = `Player reference · built ${nice} · ${hash}`;
     const { pdf } = await print(browser, name, page(SHEETS[name].title, playerReference(stamp)), false);
     const doc = await PDFDocument.load(pdf);
+    if (doc.getPageCount() !== REFERENCE_PAGES) throw new Error(`the player reference is ${doc.getPageCount()} pages, not ${REFERENCE_PAGES}`);
     const size = await finish(doc, name, hash);
     console.log(`${SHEETS[name].file}: ${doc.getPageCount()} pages, ${Math.round(size / 1024)} KB, ${hash}`);
   }
