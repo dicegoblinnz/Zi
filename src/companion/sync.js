@@ -13,12 +13,15 @@
 //               and the ones deleted here that the account hasn't heard about.
 //   zi-unsent-<account>  changes that hadn't gone up when someone else signed
 //               in on this phone, kept for when that account's back.
+//   zi-campaigns  the account's campaigns as this phone last saw them
+//               (campaigns.js). It goes when the account's characters do.
 //
 // Only a delete on this phone deletes from the account. A character that's
 // just missing here (the phone's list got lost) comes back down.
 const HINT = "zi-account";
 const STATE = "zi-sync";
 const STASH = "zi-unsent-";
+const CAMPS = "zi-campaigns";
 
 const read = (key) => {
   try {
@@ -98,6 +101,8 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     }
     store.data.characters = all().filter((c) => !c.acct);
     save();
+    // The campaigns this phone last saw (campaigns.js) were theirs too.
+    write(CAMPS, null);
   };
   // This phone starts keeping step with an account, picking up anything it had
   // kept to one side for it.
@@ -312,6 +317,18 @@ export function makeSync(store, { onChange = () => {} } = {}) {
       for (const c of list) c.acct = me.id;
       quiet();
       return run(push).then(() => list.length);
+    },
+    // One character into the account now, for something that needs it there
+    // (joining a campaign with them). True once the account has them.
+    async keepNow(ch) {
+      if (!me || out || !ch) return false;
+      if (!ch.acct) {
+        ch.acct = me.id;
+        quiet();
+      }
+      if (ch.acct !== me.id) return false;
+      await run(push).catch(() => {});
+      return st.v[ch.id] != null && ch.acct === me.id;
     },
     // What's waiting goes up first, then the account's characters leave this
     // phone. Anything that couldn't go up stops it.

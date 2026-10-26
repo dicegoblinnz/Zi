@@ -27,7 +27,7 @@ Mo's answers from 16 Oct 2026, given before the redesign. Everything built for z
 - Players use the website in their phone's browser. No app store app.
 - Also used on the GM's laptop and tablet, and on a TV or a screen shared on a video call.
 - Sheets and rules keep working offline. Live play needs internet.
-- Sign-in with Google, Discord, Apple or an emailed link. Invite-only at first.
+- Sign-in with Google, Discord, Apple or an emailed link. Invite-only at first, and open to anyone since 27 Oct.
 
 ## The character companion
 
@@ -55,7 +55,7 @@ Mo's answers from 16 Oct 2026, given before the redesign. Everything built for z
 
 ## Already decided, 13 Oct
 
-- The rules are open to everyone. Accounts are invite-only at first.
+- The rules are open to everyone. Accounts were invite-only at first. Since 27 Oct anyone can sign up (Mo: "I'm opening up to more groups").
 - The site is the one master copy of the rules, and the book, references and character builder are built from it.
 - Worlds hold official content and GM-built worlds.
 - Rule changes come four ways: Mo tells Claude, Mo edits in the browser, playtesters leave notes, and trusted co-writers suggest edits for Mo to approve.
@@ -86,8 +86,8 @@ Mo's answers in the drill from `notes/app-rework.md`, round by round.
 - When a rule changes, each changed line on a saved character gets a gold mark. Tap it to see old and new. Typo fixes stay quiet.
 - Calls 1 to 4 and 6 to 8 in `notes/companion-plan.md` are confirmed.
 - Sign-in starts with Google and Discord (both free to set up). The emailed link and Apple can follow.
-- Mo and the GMs he picks hand out invites.
-- Before campaigns, a player shares a sheet with their GM by picking her account. She sees it read-only until they stop sharing.
+- Mo and the GMs he picks hand out invites. Retired 27 Oct: anyone signed in starts a campaign and is its GM, and players join with the campaign's join link.
+- Before campaigns, a player shares a sheet with their GM by picking her account. She sees it read-only until they stop sharing. Campaigns came first (27 Oct): a player brings a character into a campaign, and its GM sees it there.
 - Print my character comes with the builder: build on the phone, then print the filled two-page sheet.
 - Telegraphs on phones are the first live piece.
 - The learn-to-play round is in (the brute swings his club at Isolde, and a new player answers with Wren and Bram). A roll log isn't, for now.
