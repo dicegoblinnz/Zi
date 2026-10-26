@@ -1,19 +1,29 @@
 // The site's Worker. Cloudflare serves every page and file straight from dist/,
 // and only /api/ comes here (run_worker_first in wrangler.jsonc): sign-in
-// (Better Auth, set up in auth.js), invites, the people Mo's picked as GMs,
-// and the characters kept in an account. Every route checks who's asking on the
-// server, and nothing private goes to someone who isn't signed in.
-import { LIVE, authFor, hit, originsOf, providersOf, secureOf } from "./auth.js";
+// (Better Auth, set up in auth.js), the characters kept in an account,
+// campaigns, and the people who've signed up, for Mo. Every route checks who's
+// asking on the server, and nothing private goes to someone who isn't signed in.
+//
+// A campaign is its own group. Its GM and its players are the only ones who
+// see who's in it and which characters they play, the GM sees every character
+// in it, and players see each other's names. Every campaign request checks the
+// person asking against that one campaign, so nothing crosses between them.
+import { authFor, hit, originsOf, providersOf } from "./auth.js";
 
 const HEAD = { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" };
 const json = (body, status = 200, extra = {}) => new Response(typeof body === "string" ? body : JSON.stringify(body), { status, headers: { ...HEAD, ...extra } });
 const fail = (status, error) => json({ error }, status);
 const CHAR_ID = /^[a-z0-9][a-z0-9-]{0,47}$/;
+const CAMP_ID = /^[A-Za-z0-9_-]{12}$/;
 const CODE = /^[A-Za-z0-9_-]{16,64}$/;
+const USER_ID = /^[A-Za-z0-9_-]{1,64}$/;
 const MAX_TEXT = 200000;
 const MAX_CHARACTERS = 100;
-const MAX_INVITES = 50;
-const DAY = 86400000;
+const MAX_RUNNING = 20; // campaigns one GM runs
+const MAX_JOINED = 50; // campaigns one player's in
+const MAX_PLAYERS = 30; // players in one campaign
+const NAME_MAX = 40;
+const NOTHING = "There’s nothing here.";
 
 export default {
   async fetch(request, env) {
@@ -22,27 +32,15 @@ export default {
     if (!env.DB || !env.BETTER_AUTH_SECRET) return fail(503, "Sign-in isn’t switched on yet.");
     const route = url.pathname.split("/")[2] || "";
     try {
-      if (route === "auth") return await auth(request, env, url);
+      if (route === "auth") return await authFor(env).handler(request);
       return await api(request, env, url);
     } catch (err) {
-      // Only the route's name, never the path, which can hold an invite's code.
+      // Only the route's name, never the path or the body.
       console.error(`api ${route}: ${err?.message ?? err}`);
       return fail(500, "Something went wrong there. Try again in a minute.");
     }
   },
 };
-
-const inviteCookie = (env, code, age) => `zi-invite=${code}; Path=/api/auth; Max-Age=${age}; HttpOnly; SameSite=Lax${secureOf(env) ? "; Secure" : ""}`;
-
-// Better Auth's own routes. Coming back from Google or Discord, the invite's
-// done its job (or didn't work), so its cookie goes.
-async function auth(request, env, url) {
-  const res = await authFor(env).handler(request);
-  if (!url.pathname.startsWith("/api/auth/callback/")) return res;
-  const out = new Response(res.body, res);
-  out.headers.append("set-cookie", inviteCookie(env, "", 0));
-  return out;
-}
 
 // True once a key's had more than max goes in the last so many seconds.
 const limited = async (env, key, max, seconds) => (await hit(env, key, seconds)).count > max;
@@ -61,6 +59,19 @@ async function body(request) {
 const meOf = (user) => ({ id: user.id, name: user.name, role: user.role || "member" });
 const roleOf = async (env, id) => (await env.DB.prepare('SELECT role FROM "user" WHERE id = ?1').bind(id).first())?.role || "member";
 const ms = (v) => (typeof v === "number" ? v : Date.parse(v) || null);
+// Random and unguessable: a campaign's id is 9 bytes, a join link's code 12.
+const token = (bytes) => btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(bytes)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+// A campaign's name: one line, no more than 40 characters.
+const nameOf = (v) => String(v ?? "").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, NAME_MAX);
+// FNV-1a, to say whether a campaign's changed since the phone last looked.
+function stampOf(text) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(36);
+}
 
 async function api(request, env, url) {
   const method = request.method;
@@ -70,16 +81,14 @@ async function api(request, env, url) {
   } catch {
     return fail(400, "That address doesn’t look right.");
   }
-  const [what, id, more] = parts;
-  if (more !== undefined) return fail(404, "There’s nothing here.");
+  if (parts.length > 4 || (parts[0] !== "campaigns" && parts.length > 2)) return fail(404, NOTHING);
   // Changes only come from the site's own pages.
   if (method !== "GET" && !originsOf(env).includes(request.headers.get("origin"))) return fail(403, "That came from somewhere else.");
 
-  if (what === "invite" && !id && method === "POST") return checkInvite(request, env);
   // Reading the session can renew it, and the renewed cookies go back with the
   // answer, so a player who's at the table every week stays signed in.
   const got = await authFor(env).api.getSession({ headers: request.headers, returnHeaders: true });
-  const res = await routes(request, env, method, what, id, got.response);
+  const res = await routes(request, env, url, method, parts, got.response);
   const cookies = got.headers?.getSetCookie?.() ?? [];
   if (!cookies.length) return res;
   const out = new Response(res.body, res);
@@ -87,10 +96,13 @@ async function api(request, env, url) {
   return out;
 }
 
-async function routes(request, env, method, what, id, session) {
+async function routes(request, env, url, method, [what, id, sub, subId], session) {
   if (what === "me" && !id && method === "GET") {
     return json({ user: session ? { ...meOf(session.user), email: session.user.email } : null, providers: providersOf(env) });
   }
+  // A join link says which campaign it's for to anyone who has it, signed in
+  // or not, so the page can show it before they sign in.
+  if (what === "join" && !id && method === "POST") return join(request, env, session);
   if (!session) return fail(401, "Sign in first.");
   const user = session.user;
 
@@ -103,79 +115,23 @@ async function routes(request, env, method, what, id, session) {
       return method === "PUT" ? putCharacter(request, env, user, id) : dropCharacter(env, user, id);
     }
   }
-  if (what === "invites") {
-    const role = await roleOf(env, user.id);
-    if (role !== "admin" && role !== "gm") return fail(403, "Only Mo and the GMs he picks can hand out invites.");
-    if (!id && method === "GET") return listInvites(env, user, role);
-    if (!id && method === "POST") return makeInvite(request, env, user);
-    if (id && method === "DELETE") return dropInvite(env, user, role, id);
-  }
-  if (what === "people") {
+  if (what === "campaigns") return campaigns(request, env, url, method, user, id, sub, subId);
+  if (what === "people" && !id && method === "GET") {
     if ((await roleOf(env, user.id)) !== "admin") return fail(403, "Only Mo can see who’s signed up.");
-    if (!id && method === "GET") return listPeople(env);
-    if (id && method === "POST") return setRole(request, env, id);
+    return listPeople(env);
   }
-  return fail(404, "There’s nothing here.");
-}
-
-// ---------------------------------------------------------------- invites
-
-// Someone's opened an invite link and picked how to sign in. A live invite
-// rides along to Google or Discord and back in a cookie, and the account's only
-// made if it's still live then (auth.js).
-async function checkInvite(request, env) {
-  if (await limited(env, `invite:${request.headers.get("cf-connecting-ip") || "here"}`, 10, 900)) return fail(429, "That’s a lot of tries. Wait a few minutes and try again.");
-  const code = (await body(request))?.code;
-  const live = typeof code === "string" && CODE.test(code) && (await env.DB.prepare(`SELECT 1 AS ok FROM invite WHERE code = ?1 AND ${LIVE}`).bind(code, Date.now()).first());
-  if (!live) return fail(400, "That invite link didn’t work. It might be used up or out of date, so ask whoever sent it for a new one.");
-  return json({ ok: true }, 200, { "set-cookie": inviteCookie(env, code, 3600) });
-}
-
-async function listInvites(env, user, role) {
-  const all = role === "admin";
-  const { results } = await env.DB.prepare(`SELECT i.code, i.note, i.uses, i.used, i.createdAt, i.expiresAt, u.name AS by FROM invite i LEFT JOIN "user" u ON u.id = i.createdBy
-    ${all ? "" : "WHERE i.createdBy = ?1"} ORDER BY i.createdAt DESC LIMIT 100`).bind(...(all ? [] : [user.id])).all();
-  return json({ invites: results });
-}
-
-async function makeInvite(request, env, user) {
-  const b = await body(request);
-  if (!b) return fail(400, "That didn’t come through. Try again.");
-  const live = await env.DB.prepare("SELECT COUNT(*) AS n FROM invite WHERE createdBy = ?1 AND used < uses AND expiresAt > ?2").bind(user.id, Date.now()).first();
-  if (live.n >= MAX_INVITES) return fail(400, `You’ve got ${MAX_INVITES} invites waiting already. Cancel some first.`);
-  // One account, two weeks. That's what the page says, so it's all the server makes.
-  const note = String(b.note ?? "").replace(/\s+/g, " ").trim().slice(0, 60) || null;
-  const uses = 1;
-  const days = 14;
-  const code = btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(16)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-  const now = Date.now();
-  await env.DB.prepare("INSERT INTO invite (code, createdBy, note, uses, used, createdAt, expiresAt) VALUES (?1, ?2, ?3, ?4, 0, ?5, ?6)").bind(code, user.id, note, uses, now, now + days * DAY).run();
-  return json({ invite: { code, note, uses, used: 0, createdAt: now, expiresAt: now + days * DAY, by: user.name } });
-}
-
-async function dropInvite(env, user, role, code) {
-  const res = role === "admin"
-    ? await env.DB.prepare("DELETE FROM invite WHERE code = ?1").bind(code).run()
-    : await env.DB.prepare("DELETE FROM invite WHERE code = ?1 AND createdBy = ?2").bind(code, user.id).run();
-  return res.meta.changes ? json({ ok: true }) : fail(404, "That invite’s already gone.");
+  return fail(404, NOTHING);
 }
 
 // ---------------------------------------------------------------- people
 
+// Everyone who's signed up, newest first, for Mo.
 async function listPeople(env) {
-  const { results } = await env.DB.prepare(`SELECT u.id, u.name, u.email, u.role, u.createdAt, i.name AS invitedBy FROM "user" u LEFT JOIN "user" i ON i.id = u.invitedBy ORDER BY u.createdAt LIMIT 500`).all();
-  return json({ people: results.map((p) => ({ ...p, role: p.role || "member", createdAt: ms(p.createdAt) })) });
-}
-
-// Mo picks who's a GM, which lets them hand out invites. His own role stays,
-// and someone who's no longer a GM loses the invites they made.
-async function setRole(request, env, id) {
-  const role = (await body(request))?.role;
-  if (role !== "gm" && role !== "member") return fail(400, "That isn’t something Mo can make someone.");
-  const steps = [env.DB.prepare(`UPDATE "user" SET role = ?1, updatedAt = ?3 WHERE id = ?2 AND COALESCE(role, 'member') != 'admin'`).bind(role, id, new Date().toISOString())];
-  if (role === "member") steps.push(env.DB.prepare(`DELETE FROM invite WHERE createdBy = ?1 AND createdBy IN (SELECT id FROM "user" WHERE role = 'member')`).bind(id));
-  const [res] = await env.DB.batch(steps);
-  return res.meta.changes ? json({ ok: true, role }) : fail(404, "There’s nobody like that to change.");
+  const [list, count] = await env.DB.batch([
+    env.DB.prepare('SELECT name, email, role, createdAt FROM "user" ORDER BY createdAt DESC LIMIT 500'),
+    env.DB.prepare('SELECT COUNT(*) AS n FROM "user"'),
+  ]);
+  return json({ people: list.results.map((p) => ({ ...p, role: p.role || "member", createdAt: ms(p.createdAt) })), total: count.results[0].n });
 }
 
 // ---------------------------------------------------------------- characters
@@ -217,22 +173,175 @@ async function dropCharacter(env, user, id) {
   return json({ v: row?.version ?? null });
 }
 
+// One of their own characters, in their account. Only those can be played in a campaign.
+const ownCharacter = (env, user, id) => (typeof id === "string" && CHAR_ID.test(id)
+  ? env.DB.prepare("SELECT 1 AS ok FROM character WHERE userId = ?1 AND id = ?2 AND data IS NOT NULL").bind(user.id, id).first()
+  : null);
+
+// ---------------------------------------------------------------- campaigns
+
+// Opening a join link. With just its code, this says which campaign it's for
+// and who's its GM, and whether you're in it already. With a character too,
+// you join with them. The code's checked again as you go in, so a link the GM
+// reset a moment ago doesn't let anyone in.
+async function join(request, env, session) {
+  const me = session?.user ?? null;
+  if (await limited(env, `join:${request.headers.get("cf-connecting-ip") || "here"}`, 30, 900) || (me && (await limited(env, `join:${me.id}`, 30, 900)))) return fail(429, "That’s a lot of tries. Wait a few minutes and try again.");
+  const b = await body(request);
+  const code = b?.code;
+  const camp = typeof code === "string" && CODE.test(code) && (await env.DB.prepare('SELECT c.id, c.name, c.gmId, u.name AS gm FROM campaign c JOIN "user" u ON u.id = c.gmId WHERE c.code = ?1').bind(code).first());
+  if (!camp) return fail(404, "That link didn’t work. Your GM might’ve reset it, so ask them for the new one.");
+  const role = !me ? null : camp.gmId === me.id ? "gm" : (await env.DB.prepare("SELECT 1 AS ok FROM member WHERE campaignId = ?1 AND userId = ?2").bind(camp.id, me.id).first()) ? "player" : null;
+  const about = { name: camp.name, gm: camp.gm, id: role ? camp.id : null, role };
+  if (b.character === undefined || role) return json({ campaign: about });
+  if (!me) return fail(401, "Sign in first.");
+  if (!(await ownCharacter(env, me, b.character))) return fail(409, "That character isn’t in your account yet.");
+  const n = await env.DB.prepare("SELECT (SELECT COUNT(*) FROM member WHERE campaignId = ?1) AS players, (SELECT COUNT(*) FROM member WHERE userId = ?2) AS mine").bind(camp.id, me.id).first();
+  if (n.players >= MAX_PLAYERS) return fail(400, `${camp.name} has ${MAX_PLAYERS} players already, so it’s full.`);
+  if (n.mine >= MAX_JOINED) return fail(400, `You’re in ${MAX_JOINED} campaigns already. Leave one first.`);
+  const res = await env.DB.prepare("INSERT INTO member (campaignId, userId, characterId, joinedAt) SELECT id, ?2, ?3, ?4 FROM campaign WHERE id = ?1 AND code = ?5 ON CONFLICT DO NOTHING")
+    .bind(camp.id, me.id, b.character, Date.now(), code).run();
+  if (!res.meta.changes) return fail(404, "That link didn’t work. Your GM might’ve reset it, so ask them for the new one.");
+  return json({ campaign: { ...about, id: camp.id, role: "player" } });
+}
+
+async function campaigns(request, env, url, method, user, id, sub, subId) {
+  if (!id && !sub) {
+    if (method === "GET") return listCampaigns(env, user);
+    if (method === "POST") return startCampaign(request, env, user);
+    return fail(404, NOTHING);
+  }
+  if (!CAMP_ID.test(id || "")) return fail(404, NOTHING);
+  // Who's asking, against this one campaign: its GM, one of its players, or
+  // nobody. Nobody gets the same answer as a campaign that doesn't exist.
+  const camp = await env.DB.prepare(`SELECT c.id, c.name, c.code, c.gmId, u.name AS gm, CASE WHEN c.gmId = ?2 THEN 'gm' ELSE 'player' END AS role
+    FROM campaign c JOIN "user" u ON u.id = c.gmId
+    WHERE c.id = ?1 AND (c.gmId = ?2 OR EXISTS (SELECT 1 FROM member m WHERE m.campaignId = c.id AND m.userId = ?2))`).bind(id, user.id).first();
+  if (!camp) return fail(404, "You’re not in that campaign.");
+  const gm = camp.role === "gm";
+  const gmOnly = () => fail(403, "Only the GM can do that.");
+  if (method !== "GET" && (await limited(env, `write:${user.id}`, 600, 600))) return fail(429, "That’s a lot of changes at once. Give it a few minutes.");
+  if (!sub) {
+    if (method === "GET") return showCampaign(env, url, camp);
+    if (method === "PATCH") return gm ? renameCampaign(request, env, user, camp) : gmOnly();
+    if (method === "DELETE") return gm ? endCampaign(env, camp) : gmOnly();
+  }
+  if (sub === "link" && !subId && method === "POST") return gm ? resetLink(env, camp) : gmOnly();
+  if (sub === "me" && !subId && method === "PUT") return gm ? fail(400, "You’re the GM, so you don’t bring a character.") : pickCharacter(request, env, user, camp);
+  if (sub === "members" && subId && method === "DELETE") {
+    if (!USER_ID.test(subId)) return fail(404, NOTHING);
+    if (!gm && subId !== user.id) return gmOnly();
+    if (subId === camp.gmId) return fail(400, "You’re the GM, so you can’t leave it. End it instead.");
+    const res = await env.DB.prepare("DELETE FROM member WHERE campaignId = ?1 AND userId = ?2").bind(camp.id, subId).run();
+    return res.meta.changes ? json({ ok: true }) : fail(404, "They’re not in this campaign.");
+  }
+  return fail(404, NOTHING);
+}
+
+// The campaigns you run and the ones you play in, by name.
+async function listCampaigns(env, user) {
+  const { results } = await env.DB.prepare(`SELECT c.id, c.name, u.name AS gm, 'gm' AS role, NULL AS characterId, NULL AS character,
+      (SELECT COUNT(*) FROM member n WHERE n.campaignId = c.id) AS players
+    FROM campaign c JOIN "user" u ON u.id = c.gmId WHERE c.gmId = ?1
+    UNION ALL
+    SELECT c.id, c.name, u.name, 'player', m.characterId, json_extract(ch.data, '$.name'),
+      (SELECT COUNT(*) FROM member n WHERE n.campaignId = c.id)
+    FROM member m JOIN campaign c ON c.id = m.campaignId JOIN "user" u ON u.id = c.gmId
+    LEFT JOIN character ch ON ch.userId = m.userId AND ch.id = m.characterId AND ch.data IS NOT NULL
+    WHERE m.userId = ?1
+    ORDER BY 2 COLLATE NOCASE, 1`).bind(user.id).all();
+  return json({ campaigns: results.map((r) => ({ id: r.id, name: r.name, gm: r.gm, role: r.role, players: r.players, character: r.role === "player" && r.character != null ? { id: r.characterId, name: String(r.character) } : null })) });
+}
+
+async function nameTaken(env, user, name, except = "") {
+  return Boolean(await env.DB.prepare("SELECT 1 AS ok FROM campaign WHERE gmId = ?1 AND lower(name) = lower(?2) AND id != ?3").bind(user.id, name, except).first());
+}
+
+// Anyone signed in starts one, and they're its GM.
+async function startCampaign(request, env, user) {
+  if (await limited(env, `start:${user.id}`, 10, 3600)) return fail(429, "That’s a lot of new campaigns at once. Give it a while.");
+  const name = nameOf((await body(request))?.name);
+  if (!name) return fail(400, "Give it a name first.");
+  const n = await env.DB.prepare("SELECT COUNT(*) AS n FROM campaign WHERE gmId = ?1").bind(user.id).first();
+  if (n.n >= MAX_RUNNING) return fail(400, `You’re running ${MAX_RUNNING} campaigns already. End one first.`);
+  if (await nameTaken(env, user, name)) return fail(400, "You’ve already got a campaign called that.");
+  const id = token(9);
+  const code = token(12);
+  await env.DB.prepare("INSERT INTO campaign (id, name, gmId, code, createdAt) VALUES (?1, ?2, ?3, ?4, ?5)").bind(id, name, user.id, code, Date.now()).run();
+  return json({ campaign: { id, name, gm: user.name, role: "gm", players: 0, character: null, code } });
+}
+
+// Who's in it and who they're playing. The GM gets each player's character
+// whole, as their phone last sent it (less the gold marks' record of what
+// every line used to say), and the join link's code. A player gets names.
+// With ?v= the phone says what it saw last, and if nothing's changed since,
+// that's all that comes back.
+async function showCampaign(env, url, camp) {
+  const gm = camp.role === "gm";
+  const { results } = await env.DB.prepare(`SELECT m.userId AS id, u.name, m.characterId, ch.version,
+      ${gm ? "json_remove(ch.data, '$.state.seen')" : "json_extract(ch.data, '$.name')"} AS data
+    FROM member m JOIN "user" u ON u.id = m.userId
+    LEFT JOIN character ch ON ch.userId = m.userId AND ch.id = m.characterId AND ch.data IS NOT NULL
+    WHERE m.campaignId = ?1 ORDER BY m.joinedAt, m.userId`).bind(camp.id).all();
+  const v = stampOf(JSON.stringify([camp.name, camp.gm, gm ? camp.code : "", results.map((r) => [r.id, r.name, r.data == null ? "" : r.characterId, r.version ?? 0])]));
+  if (url.searchParams.get("v") === v) return json({ same: true, v });
+  const head = { id: camp.id, name: camp.name, gm: camp.gm, gmId: camp.gmId, role: camp.role, ...(gm ? { code: camp.code } : {}) };
+  const players = results.map((r) => (gm
+    ? `{"id":${JSON.stringify(r.id)},"name":${JSON.stringify(r.name)},"character":${r.data ?? "null"}}`
+    : JSON.stringify({ id: r.id, name: r.name, character: r.data == null ? null : { id: r.characterId, name: String(r.data) } })));
+  return json(`{"v":${JSON.stringify(v)},"campaign":${JSON.stringify(head)},"players":[${players.join(",")}]}`);
+}
+
+async function renameCampaign(request, env, user, camp) {
+  const name = nameOf((await body(request))?.name);
+  if (!name) return fail(400, "Give it a name first.");
+  if (await nameTaken(env, user, name, camp.id)) return fail(400, "You’ve already got a campaign called that.");
+  await env.DB.prepare("UPDATE campaign SET name = ?2 WHERE id = ?1").bind(camp.id, name).run();
+  return json({ name });
+}
+
+// It ends for everyone. Their characters are theirs, so they stay.
+async function endCampaign(env, camp) {
+  await env.DB.batch([
+    env.DB.prepare("DELETE FROM member WHERE campaignId = ?1").bind(camp.id),
+    env.DB.prepare("DELETE FROM campaign WHERE id = ?1").bind(camp.id),
+  ]);
+  return json({ ok: true });
+}
+
+// A new code, so the old link stops working. Everyone in stays in.
+async function resetLink(env, camp) {
+  const code = token(12);
+  await env.DB.prepare("UPDATE campaign SET code = ?2 WHERE id = ?1").bind(camp.id, code).run();
+  return json({ code });
+}
+
+// A player changes who they're playing here, to another of their own.
+async function pickCharacter(request, env, user, camp) {
+  const id = (await body(request))?.character;
+  if (!(await ownCharacter(env, user, id))) return fail(409, "That character isn’t in your account yet.");
+  await env.DB.prepare("UPDATE member SET characterId = ?3 WHERE campaignId = ?1 AND userId = ?2").bind(camp.id, user.id, id).run();
+  return json({ ok: true });
+}
+
 // ---------------------------------------------------------------- your data
 
-// Everything the account holds about you, as a file. Invite codes stay out.
+// Everything the account holds about you, as a file. Join links stay out.
 async function download(env, user) {
   const q = (sql) => env.DB.prepare(sql).bind(user.id);
-  const [u, accounts, chars, invites] = await env.DB.batch([
+  const [u, accounts, chars, running, playing] = await env.DB.batch([
     q('SELECT name, email, role, createdAt FROM "user" WHERE id = ?1'),
     q("SELECT providerId, createdAt FROM account WHERE userId = ?1"),
     q("SELECT data FROM character WHERE userId = ?1 AND data IS NOT NULL"),
-    q("SELECT note, uses, used, createdAt, expiresAt FROM invite WHERE createdBy = ?1"),
+    q("SELECT name, createdAt FROM campaign WHERE gmId = ?1"),
+    q(`SELECT c.name, m.joinedAt, json_extract(ch.data, '$.name') AS character FROM member m JOIN campaign c ON c.id = m.campaignId
+      LEFT JOIN character ch ON ch.userId = m.userId AND ch.id = m.characterId AND ch.data IS NOT NULL WHERE m.userId = ?1`),
   ]);
   const out = {
     account: u.results[0] ?? null,
     signIns: accounts.results.map((a) => a.providerId),
     characters: chars.results.map((c) => JSON.parse(c.data)),
-    invites: invites.results,
+    campaigns: [...running.results.map((c) => ({ name: c.name, role: "GM", started: c.createdAt })), ...playing.results.map((c) => ({ name: c.name, role: "player", joined: c.joinedAt, playing: c.character ?? null }))],
   };
   return new Response(JSON.stringify(out, null, 2), { headers: { ...HEAD, "content-disposition": 'attachment; filename="zidara-account.json"' } });
 }

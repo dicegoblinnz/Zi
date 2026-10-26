@@ -1,0 +1,19 @@
+---
+// A campaign's join link: /join/#<code>. The code rides after the #, so it
+// never reaches a server's logs, and it goes on to the Characters page, which
+// keeps it on the phone while the player signs in or makes a character
+// (src/companion/campaigns.js).
+import Base from "../layouts/Base.astro";
+---
+<Base title="Join a campaign" description="Join a Zi’Dara campaign with one of your characters.">
+  <script is:inline slot="head">
+    try {
+      location.replace("/characters/?join" + location.hash);
+    } catch (e) {}
+  </script>
+  <main id="main" class="frame">
+    <h1>Join a campaign</h1>
+    <p><a href="/characters/?join">Carry on to join it</a>.</p>
+    <noscript><p>Joining a campaign needs JavaScript.</p></noscript>
+  </main>
+</Base>

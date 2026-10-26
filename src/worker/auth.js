@@ -1,9 +1,8 @@
 // Accounts on the Zi'Dara site: Better Auth, keeping everything in the site's
-// own D1 database. People sign in with Google or Discord. Nobody gets an
-// account without an invite, unless it's Mo (the ADMIN_EMAIL secret, checked by
-// Google or Discord) or sign-ups have been opened (OPEN_SIGNUPS = "yes").
-// There are no passwords, since hashing one safely takes more time than a free
-// Worker gets.
+// own D1 database. People sign in with Google or Discord, and anyone can sign
+// up (27 Oct 2026). Mo's the admin: his address is the ADMIN_EMAIL secret,
+// checked by Google or Discord. There are no passwords, since hashing one
+// safely takes more time than a free Worker gets.
 import { betterAuth } from "better-auth";
 
 const DAY = 60 * 60 * 24;
@@ -15,20 +14,6 @@ const local = (host) => /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host);
 export const hostsOf = (env) => String(env.AUTH_HOSTS || "zidara.world").split(",").map((h) => h.trim()).filter(Boolean);
 export const originsOf = (env) => hostsOf(env).map((h) => `${local(h) ? "http" : "https"}://${h}`);
 export const secureOf = (env) => !hostsOf(env).every(local);
-
-// One cookie off the request that's making the account.
-function cookieOf(ctx, name) {
-  const raw = ctx?.request?.headers?.get("cookie") ?? ctx?.headers?.get?.("cookie") ?? "";
-  for (const part of raw.split(";")) {
-    const at = part.indexOf("=");
-    if (at > 0 && part.slice(0, at).trim() === name) return part.slice(at + 1).trim();
-  }
-  return "";
-}
-
-// An invite works while it has a use left, hasn't run out, and whoever made it
-// is still Mo or one of his GMs.
-export const LIVE = `used < uses AND expiresAt > ?2 AND createdBy IN (SELECT id FROM "user" WHERE role IN ('admin', 'gm'))`;
 
 // Rate limits, kept in the limits table under an HMAC of the key, so no
 // address is ever stored. Old rows go now and then.
@@ -48,24 +33,12 @@ export async function hit(env, key, seconds) {
   return row;
 }
 
-// The gate, run wherever a new account's about to be made, whichever way they
-// signed in. The invite comes through the sign-in in the zi-invite cookie.
-// Better Auth asks first (take false, which only looks), so a refusal comes
-// back as invite_needed. Then, making the account, the invite's use is taken in
-// one step (take true), so two people can't both take its last one.
-async function gate(env, user, ctx, take) {
+// A new account is Mo's (the admin) when Google or Discord has checked that
+// it's his address, and everyone else's is a member's.
+function roleOf(env, user) {
   const email = String(user.email || "").toLowerCase();
   const admin = String(env.ADMIN_EMAIL || "").trim().toLowerCase();
-  if (admin && email === admin && [true, "true", 1].includes(user.emailVerified)) return { role: "admin" };
-  const code = cookieOf(ctx, "zi-invite");
-  if (/^[A-Za-z0-9_-]{16,64}$/.test(code)) {
-    const row = await env.DB.prepare(take
-      ? `UPDATE invite SET used = used + 1 WHERE code = ?1 AND ${LIVE} RETURNING createdBy`
-      : `SELECT createdBy FROM invite WHERE code = ?1 AND ${LIVE}`).bind(code, Date.now()).first();
-    if (row) return { role: "member", invitedBy: row.createdBy };
-  }
-  if (env.OPEN_SIGNUPS === "yes") return { role: "member" };
-  return null;
+  return admin && email === admin && [true, "true", 1].includes(user.emailVerified) ? "admin" : "member";
 }
 
 export const providersOf = (env) => [
@@ -92,19 +65,18 @@ export function optionsFor(env) {
     socialProviders,
     user: {
       additionalFields: {
-        // admin (Mo), gm (one of the GMs he's picked, who can hand out invites) or member.
+        // admin (Mo) or member. Being a GM belongs to a campaign, not an account.
         role: { type: "string", required: false, defaultValue: "member", input: false },
-        invitedBy: { type: "string", required: false, input: false },
-      },
-      validateUserInfo: async ({ user, source }, ctx) => {
-        if (source.action === "create-user" && !(await gate(env, user, ctx, false))) return { error: "invite_needed", errorDescription: "Accounts are invite-only." };
       },
       deleteUser: {
         enabled: true,
+        // Their characters go, they leave every campaign they're in, and the
+        // campaigns they run end for everyone.
         beforeDelete: async (user) => {
           await env.DB.batch([
+            env.DB.prepare("DELETE FROM member WHERE userId = ?1 OR campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id),
+            env.DB.prepare("DELETE FROM campaign WHERE gmId = ?1").bind(user.id),
             env.DB.prepare("DELETE FROM character WHERE userId = ?1").bind(user.id),
-            env.DB.prepare("DELETE FROM invite WHERE createdBy = ?1").bind(user.id),
           ]);
         },
       },
@@ -130,10 +102,7 @@ export function optionsFor(env) {
     },
     advanced: { ipAddress: { ipAddressHeaders: ["cf-connecting-ip"] }, useSecureCookies: secure, cookiePrefix: "zi" },
     databaseHooks: {
-      user: { create: { before: async (user, ctx) => {
-        const allowed = await gate(env, user, ctx, true);
-        return allowed ? { data: { ...user, ...allowed } } : false;
-      } } },
+      user: { create: { before: async (user) => ({ data: { ...user, role: roleOf(env, user) } }) } },
       // Sessions don't keep where or what they were signed in from.
       session: { create: { before: async (session) => ({ data: { ...session, ipAddress: null, userAgent: null } }) } },
       account: {

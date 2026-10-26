@@ -13,9 +13,9 @@ Use the Cloudflare account that has the `zi` Worker in it. Discord waits for now
 4. **The secrets.** In Workers & Pages, `zi`, Settings, Variables and Secrets, Add, with the type Secret:
    - `BETTER_AUTH_SECRET`: 32 or more random characters (a password manager's generator is fine). Changing it later signs everyone out.
    - `GOOGLE_CLIENT_SECRET`: from step 3.
-   - `ADMIN_EMAIL`: the email on Mo's Google account. That account needs no invite and is the admin.
-5. **First sign-in.** Mo signs in at `/account/`, makes an invite link for each player under Invites, and makes someone a GM under People, so they can hand out invites too.
+   - `ADMIN_EMAIL`: the email on Mo's Google account. That account's the admin, and sees People on the Account page.
+5. **First sign-in.** Mo signs in at `/account/`. Since 27 Oct anyone can sign up with no invite, and anyone signed in starts a campaign from the Characters page and sends its players the join link.
 
 Previews share the live database, so sign-in stays off on them. Trying it on a Preview first needs a second database for Previews.
 
-Opening sign-ups to everyone later is one more variable, `OPEN_SIGNUPS` set to `yes`.
+The campaign tables (`migrations/0002_campaigns.sql`) go into the live database the same way as the first ones: the deploy command, `npm run deploy`, applies any migration that hasn't run before it puts the Worker out.

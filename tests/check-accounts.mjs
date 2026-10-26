@@ -1,30 +1,42 @@
-// Check sign-in and accounts (stage 6) the way players will use them.
+// Check sign-in, accounts and campaigns (stages 6 and 7) the way players and
+// GMs will use them.
 //
 //   npm run build && node tests/check-accounts.mjs
+//   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
-// way a deploy builds it. Google and Discord are stood in for: the browser's
-// trip to them comes straight back with a code, and the Worker's calls to them
-// get a made-up person.
+// way a deploy builds it, with every migration applied in order. Google and
+// Discord are stood in for: the browser's trip to them comes straight back
+// with a code, and the Worker's calls to them get a made-up person.
 //
-// 1. Mo signs in with Google with no invite (he's ADMIN_EMAIL) and makes an
-//    invite for Kai. Nobody else gets an account without one: no invite with
-//    Google or Discord, a used-up invite, or one that's run out.
-// 2. Kai has Vesk and Wren on her phone, opens the invite, joins with Discord,
-//    and moves them into her account with one tap.
+// 1. Anyone can sign up. Mo signs in with Google and he's the admin (he's
+//    ADMIN_EMAIL), and a stranger with Discord and Sam with Google get accounts
+//    with no invite. There's no invite table and no GM role left.
+// 2. Kai has Vesk and Wren on her phone, signs in with Discord, and moves them
+//    into her account with one tap.
 // 3. A second device: Kai signs in there, and both characters are waiting. A
 //    note written on one phone reaches the other, Wren deleted on one goes from
 //    both, and a change made offline goes up when the signal's back.
-// 4. Who can do what: only Mo sees people, a member can't make invites until
-//    Mo makes her a GM, and a signed-out request gets nothing private. The
-//    invite check's rate limit trips.
-// 5. Signing out takes the account's characters off the phone and leaves the
-//    phone's own. Kai downloads her data, then deletes her account, and it's
-//    gone from the database. The account page passes axe at 320 wide in both
+// 4. Campaigns. Mo starts Tuesday Lair from the Characters page and gets its
+//    link. Kai opens it and joins with Vesk. Lee, with no account, opens it,
+//    signs in and joins with Bram, made from the crew on the way. Mo sees both
+//    characters and opens Vesk's sheet, and Kai sees names only. Mo resets the
+//    link and the old one's refused, then takes Lee out. Kai runs a campaign of
+//    her own and plays Dorrie in Zed's, so she switches between three in a
+//    tap, with a different character in each one she plays in. Nothing
+//    crosses between them: Zed gets nothing from Tuesday Lair, and Mo nothing
+//    from Kai's.
+// 5. Who can do what: only Mo sees people, a player can't reset a link, rename,
+//    end a campaign or take anyone out, a signed-out request gets nothing
+//    private, and the join check's rate limit trips.
+// 6. Signing out takes the account's characters off the phone and leaves the
+//    phone's own. Kai downloads her data, then deletes her account: it's gone
+//    from the database, her campaign ends and she's out of Mo's. The account
+//    page passes axe at 320 wide, and the campaign screens at 390, in both
 //    themes.
 import { createServer } from "node:http";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join } from "node:path";
 // Miniflare 5 takes v4-style options through its converter.
@@ -47,6 +59,8 @@ const yes = (ok, what) => {
 const PORT = 4175;
 const BASE = `http://localhost:${PORT}`;
 const ADMIN = "mo@example.com";
+const SHOTS = process.env.SHOTS || "";
+if (SHOTS) mkdirSync(SHOTS, { recursive: true });
 
 // The Worker, bundled exactly as `wrangler deploy` would.
 // It goes under .wrangler/, which git ignores, since workerd only loads modules
@@ -57,10 +71,11 @@ execFileSync("npx", ["wrangler", "deploy", "--dry-run", "--outdir", out], { stdi
 // The people Google and Discord vouch for, by the code their trip comes back with.
 const PEOPLE = {
   mo: { email: ADMIN, name: "Mo" },
-  kai: { email: "kai@example.com", name: "Kai" },
+  kai: { email: "kai@example.com", name: "Kai Tane" },
   stranger: { email: "stranger@example.com", name: "Stranger" },
   sam: { email: "sam@example.com", name: "Sam" },
   zed: { email: "zed@example.com", name: "Zed" },
+  lee: { email: "lee@example.com", name: "Lee" },
 };
 const b64 = (o) => Buffer.from(JSON.stringify(o)).toString("base64url");
 async function provider(request) {
@@ -95,15 +110,18 @@ const mf = new Miniflare(convertV4MiniflareOptions({
   outboundService: provider,
 }));
 const db = await mf.getD1Database("DB");
-const sql = readFileSync("migrations/0001_accounts.sql", "utf8").split("\n").filter((l) => !l.startsWith("--")).join("\n");
-for (const statement of sql.split(";").map((s) => s.trim()).filter(Boolean)) await db.prepare(statement).run();
+// Every migration, in order, the way `wrangler d1 migrations apply` runs them.
+for (const file of readdirSync("migrations").filter((f) => f.endsWith(".sql")).sort()) {
+  const sql = readFileSync(join("migrations", file), "utf8").split("\n").filter((l) => !l.startsWith("--")).join("\n");
+  for (const statement of sql.split(";").map((s) => s.trim()).filter(Boolean)) await db.prepare(statement).run();
+}
 const rows = async (q, ...args) => (await db.prepare(q).bind(...args).all()).results;
 
 // The site, served like Cloudflare does: files from dist/, /api/ to the Worker.
 const DIST = join(process.cwd(), "dist");
 const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".pdf": "application/pdf" };
 async function file(path) {
-  const clean = decodeURIComponent(path.split("?")[0]);
+  const clean = decodeURIComponent(path.split("?")[0].split("#")[0]);
   for (const candidate of [clean, join(clean, "index.html")]) {
     try {
       const full = join(DIST, candidate);
@@ -138,8 +156,10 @@ await new Promise((r) => server.listen(PORT, r));
 
 const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
 // A phone. Its trip to Google or Discord comes straight back as whoever's set.
+// Each one has its own address, the way Cloudflare tells the Worker.
+let phones = 0;
 async function phone(saved) {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, serviceWorkers: "block" });
+  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true, serviceWorkers: "block", extraHTTPHeaders: { "cf-connecting-ip": `203.0.113.${++phones}` } });
   context.who = "";
   await context.route(/^https:\/\/(accounts\.google\.com|discord\.com)\//, (route) => {
     const u = new URL(route.request().url());
@@ -160,8 +180,14 @@ const api = (page, method, path, body) => page.evaluate(async ([m, p, b]) => {
   const res = await fetch(p, { method: m, headers: b ? { "content-type": "application/json" } : {}, body: b ? JSON.stringify(b) : undefined });
   return { status: res.status, body: await res.text() };
 }, [method, path, body]);
-// Sign in from the account page. It starts with ?go (or the invite) in the
-// address, so coming back to /account/ is a change.
+const got = async (page, method, path, body) => {
+  const r = await api(page, method, path, body);
+  try {
+    return { ...r, json: JSON.parse(r.body) };
+  } catch {
+    return { ...r, json: null };
+  }
+};
 // The Sheet tab's parts are folds that read at a glance: open one before
 // typing or tapping in it.
 async function fold(page, key) {
@@ -169,6 +195,8 @@ async function fold(page, key) {
   await page.waitForSelector(sel, { state: "attached" });
   if (!(await page.$eval(sel, (d) => d.open))) await page.click(`${sel} > summary`);
 }
+// Sign in from the account page. It starts with ?go in the address, so coming
+// back to /account/ is a change.
 async function signIn(page, who, how, start = "/account/?go") {
   page.context().who = who;
   await page.goto(BASE + start);
@@ -179,7 +207,7 @@ async function signIn(page, who, how, start = "/account/?go") {
   ]);
   await settled(page);
 }
-const user = async (email) => (await rows('SELECT id, role, invitedBy FROM "user" WHERE email = ?1', email))[0] ?? null;
+const user = async (email) => (await rows('SELECT id, role FROM "user" WHERE email = ?1', email))[0] ?? null;
 const serverChars = async (email) => rows('SELECT c.id, c.data FROM character c JOIN "user" u ON u.id = c.userId WHERE u.email = ?1 AND c.data IS NOT NULL ORDER BY c.id', email);
 const until = async (fn, what, ms = 8000) => {
   const end = Date.now() + ms;
@@ -190,10 +218,29 @@ const until = async (fn, what, ms = 8000) => {
   note(`timed out waiting for ${what}`);
   return false;
 };
+// A character put straight into an account, for someone joining by the API.
+const crewChar = (id, crew, name) => ({ v: 0, data: { id, crew, name, made: new Date().toISOString(), hash: "", state: {} } });
+const shot = async (page, name) => {
+  if (SHOTS) await page.screenshot({ path: join(SHOTS, `${name}.png`) });
+};
+// The same screen in both themes, for a look at how it reads in each.
+const shots = async (page, name, sel) => {
+  if (!SHOTS) return;
+  for (const theme of ["dark", "light"]) {
+    await page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+    await page.reload();
+    await page.waitForSelector(sel);
+    await page.waitForTimeout(300);
+    await shot(page, `${name}-${theme}`);
+  }
+  await page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+  await page.reload();
+  await page.waitForSelector(sel);
+};
 
 try {
-  // ------------------------------------------------------------ 1. the gate
-  console.log("1. Mo, the invite and the gate");
+  // ------------------------------------------------------------ 1. anyone signs up
+  console.log("1. Anyone signs up");
   const mo = await phone();
   await signIn(mo.page, "mo", "google");
   yes((await text(mo.page)).includes("Signed in as Mo"), "Mo is signed in");
@@ -201,55 +248,31 @@ try {
   yes((await rows("SELECT image FROM \"user\" WHERE email = ?1", ADMIN))[0]?.image == null, "no picture kept");
   same((await rows("SELECT accessToken, idToken, refreshToken FROM account"))[0], { accessToken: null, idToken: null, refreshToken: null }, "no provider tokens kept");
   same((await rows("SELECT ipAddress, userAgent FROM session"))[0], { ipAddress: null, userAgent: null }, "sessions don't keep where they're from");
-  await mo.page.fill("#ac-note", "Kai");
-  await mo.page.click('.ac-make button[type="submit"]');
-  await mo.page.waitForSelector("#ac-link");
-  const link = await mo.page.inputValue("#ac-link");
-  const code = new URL(link).searchParams.get("invite");
-  yes(/^[A-Za-z0-9_-]{22}$/.test(code || ""), `an invite link with a long code (${link})`);
 
   const stranger = await phone();
   await signIn(stranger.page, "stranger", "discord");
-  yes(stranger.page.url().includes("error="), "no invite with Discord comes back with an error");
-  yes((await text(stranger.page)).includes("you’ll need an invite link"), "and a plain message");
-  same(await user("stranger@example.com"), null, "no account without an invite (Discord)");
-  await signIn(stranger.page, "sam", "google");
-  same(await user("sam@example.com"), null, "no account without an invite (Google)");
+  yes((await text(stranger.page)).includes("Signed in as Stranger"), "a stranger signs up with Discord, no invite");
+  same((await user("stranger@example.com"))?.role, "member", "and they're a member");
+  const sam = await phone();
+  await signIn(sam.page, "sam", "google");
+  same((await user("sam@example.com"))?.role, "member", "Sam signs up with Google, no invite");
+  same(await rows("SELECT name FROM sqlite_master WHERE name = 'invite'"), [], "the invite table's gone");
+  same((await rows("SELECT COUNT(*) AS n FROM \"user\" WHERE role = 'gm'"))[0].n, 0, "nobody's a GM on their account");
 
-  // ------------------------------------------------------------ 2. joining and the move
-  console.log("2. Kai joins and moves her characters in");
+  // ------------------------------------------------------------ 2. Kai and the move
+  console.log("2. Kai signs up and moves her characters in");
   const made = new Date().toISOString();
   const kai = await phone([
     { id: "vesk-aaaaaa", crew: "vesk", name: "Vesk", made, hash: "", state: {} },
     { id: "wren-bbbbbb", crew: "wren", name: "Wren", made, hash: "", state: {} },
   ]);
-  await signIn(kai.page, "kai", "discord", `/account/?invite=${code}`);
-  yes((await text(kai.page)).includes("Signed in as Kai"), "Kai joins with the invite");
-  const kaiRow = await user("kai@example.com");
-  same(kaiRow && [kaiRow.role, kaiRow.invitedBy === (await user(ADMIN)).id], ["member", true], "Kai's a member, invited by Mo");
-  same((await rows("SELECT used FROM invite WHERE code = ?1", code))[0]?.used, 1, "the invite's used");
+  await signIn(kai.page, "kai", "discord");
+  yes((await text(kai.page)).includes("Signed in as Kai"), "Kai signs up with Discord");
+  same((await user("kai@example.com"))?.role, "member", "Kai's a member");
   yes((await text(kai.page)).includes("These 2 are only on this phone: Vesk, Wren"), "the move's offered");
   await kai.page.click('[data-act="move"]');
   await until(async () => (await serverChars("kai@example.com")).length === 2, "both characters in Kai's account");
   yes((await text(kai.page)).includes("2 characters are in your account"), "the page says they're in");
-
-  // A used-up invite, carried all the way to Google, still can't make an account.
-  const sam = await phone();
-  await sam.page.goto(`${BASE}/account/?invite=${code}`);
-  await settled(sam.page);
-  await sam.page.click('[data-act="in"][data-p="google"]');
-  await sam.page.waitForSelector("#acct .cc-note.is-warn");
-  yes((await text(sam.page)).includes("That invite link didn’t work"), "a used-up invite says so");
-  await sam.context.addCookies([{ name: "zi-invite", value: code, url: `${BASE}/api/auth` }]);
-  await signIn(sam.page, "sam", "google");
-  same(await user("sam@example.com"), null, "a used-up invite makes no account");
-  // And one that's run out.
-  const old = "old-invite-old-invite-0001";
-  await db.prepare("INSERT INTO invite (code, createdBy, note, uses, used, createdAt, expiresAt) VALUES (?1, ?2, 'Zed', 1, 0, ?3, ?3)").bind(old, (await user(ADMIN)).id, Date.now() - 1000).run();
-  const zed = await phone();
-  await zed.context.addCookies([{ name: "zi-invite", value: old, url: `${BASE}/api/auth` }]);
-  await signIn(zed.page, "zed", "google");
-  same(await user("zed@example.com"), null, "an invite that's run out makes no account");
 
   // ------------------------------------------------------------ 3. a second device
   console.log("3. A second device");
@@ -258,7 +281,7 @@ try {
   await until(async () => (await text(two.page)).includes("2 characters are in your account"), "both characters reaching the second device");
   await two.page.goto(`${BASE}/characters/`);
   await two.page.waitForSelector(".cc-saved");
-  same(await two.page.$$eval(".cc-saved b", (els) => els.map((e) => e.textContent).sort()), ["Vesk", "Wren"], "the list on the second device");
+  same(await two.page.$$eval("#app .cc-sec:not(#cc-camps) .cc-saved b", (els) => els.map((e) => e.textContent).sort()), ["Vesk", "Wren"], "the list on the second device");
   yes((await text(two.page, "#app")).includes("Signed in as Kai"), "the Characters page says who's signed in");
   await two.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=sheet`);
   await fold(two.page, "notes");
@@ -271,7 +294,7 @@ try {
   await two.page.click('[data-act="delete"]');
   await until(async () => (await serverChars("kai@example.com")).length === 1, "Wren going from the account");
   await kai.page.goto(`${BASE}/characters/`);
-  await until(() => kai.page.$$eval(".cc-saved b", (els) => els.map((e) => e.textContent).join()).then((t) => t === "Vesk"), "Wren going from the first phone");
+  await until(() => kai.page.$$eval("#app .cc-sec:not(#cc-camps) .cc-saved b", (els) => els.map((e) => e.textContent).join()).then((t) => t === "Vesk"), "Wren going from the first phone");
   // Offline on the first phone, then the signal's back.
   await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=sheet`);
   await kai.context.setOffline(true);
@@ -298,39 +321,185 @@ try {
   await until(async () => !(await serverChars("kai@example.com")).some((c) => c.id === "dorrie-dddddd"), "the offline delete going up");
   await kai.page.goto(`${BASE}/characters/`);
   await kai.page.waitForTimeout(1500);
-  same(await kai.page.$$eval(".cc-saved b", (els) => els.map((e) => e.textContent)), ["Vesk"], "Dorrie doesn't come back");
+  same(await kai.page.$$eval("#app .cc-sec:not(#cc-camps) .cc-saved b", (els) => els.map((e) => e.textContent)), ["Vesk"], "Dorrie doesn't come back");
 
-  // ------------------------------------------------------------ 4. who can do what
-  console.log("4. Who can do what");
-  same((await api(kai.page, "GET", "/api/people")).status, 403, "a member can't see people");
-  same((await api(kai.page, "POST", "/api/invites", { note: "x" })).status, 403, "a member can't make invites");
+  // ------------------------------------------------------------ 4. campaigns
+  console.log("4. Campaigns");
+  const moId = (await user(ADMIN)).id;
+  // Mo starts one from the Characters page.
+  await mo.page.goto(`${BASE}/characters/`);
+  await mo.page.waitForSelector('#cc-camps [data-do="start"]');
+  await mo.page.click('#cc-camps [data-do="start"]');
+  await mo.page.fill("#k-name", "  Tuesday   Lair ");
+  await Promise.all([mo.page.waitForURL(/[?&]camp=/), mo.page.click('#cc-dialog button[type="submit"]')]);
+  await mo.page.waitForSelector("#k-link");
+  same(await mo.page.textContent("#app h1"), "Tuesday Lair", "the campaign's name, tidied");
+  yes((await text(mo.page, "#app")).includes("You’re the GM"), "Mo's told he's the GM");
+  const link = await mo.page.inputValue("#k-link");
+  const code = new URL(link).hash.slice(1);
+  yes(new URL(link).pathname === "/join/" && /^[A-Za-z0-9_-]{16}$/.test(code), `a join link with a long code (${link})`);
+  const tuesday = (await rows("SELECT id, gmId, code FROM campaign WHERE name = 'Tuesday Lair'"))[0];
+  same([tuesday?.gmId, tuesday?.code], [moId, code], "Mo's its GM, and its code is the link's");
+  same((await got(mo.page, "POST", "/api/campaigns", { name: "tuesday lair" })).status, 400, "Mo can't have two called the same");
+  await shot(mo.page, "campaign-new-gm");
+
+  // Kai opens the link and joins with Vesk.
+  await kai.page.goto(link);
+  await kai.page.waitForSelector('input[name="k-pick"]');
+  same(await kai.page.textContent("#app h1"), "Tuesday Lair", "the link says which campaign it's for");
+  yes((await text(kai.page, "#app")).includes("Run by Mo"), "and who's the GM");
+  yes(!(await kai.page.url()).includes(code), "the code's gone from the address");
+  same(await kai.page.isDisabled(".cc-joinbar button[type=submit]"), true, "nothing's picked yet, so there's no joining");
+  await kai.page.click('label.cc-pick:has(input[value="vesk-aaaaaa"])');
+  same((await kai.page.textContent(".cc-joinbar button[type=submit]")).trim(), "Join with Vesk", "the button says who's going");
+  await shot(kai.page, "join-pick");
+  await Promise.all([kai.page.waitForURL(/[?&]camp=/), kai.page.click(".cc-joinbar button[type=submit]")]);
+  await kai.page.waitForSelector(".cc-names");
+  same((await rows("SELECT characterId FROM member WHERE campaignId = ?1 AND userId = ?2", tuesday.id, kaiId))[0]?.characterId, "vesk-aaaaaa", "Kai's in Tuesday Lair with Vesk");
+  yes((await text(kai.page, "#app")).includes("Playing Vesk"), "Kai's page says she's playing Vesk");
+
+  // Lee has no account. He opens the link, signs in, and brings Bram from the crew.
+  const lee = await phone();
+  lee.context.who = "lee";
+  await lee.page.goto(link);
+  await lee.page.waitForSelector('#app [data-do="in"][data-p="google"]');
+  same(await lee.page.textContent("#app h1"), "Tuesday Lair", "signed out, the link still says which campaign");
+  await shot(lee.page, "join-signed-out");
+  await Promise.all([lee.page.waitForURL((u) => u.pathname === "/characters/" && u.search.startsWith("?join")), lee.page.click('#app [data-do="in"][data-p="google"]')]);
+  await lee.page.waitForSelector('#app [data-do="crew"][data-c="bram"]');
+  same((await user("lee@example.com"))?.role, "member", "Lee's account is made on the way");
+  await lee.page.click('#app [data-do="crew"][data-c="bram"]');
+  await lee.page.fill("#cc-name", "Bram");
+  await lee.page.click('#cc-dialog button[type="submit"]');
+  await lee.page.waitForSelector('label.cc-pick:has(input:checked) b');
+  same(await lee.page.textContent("label.cc-pick:has(input:checked) b"), "Bram", "Bram comes back picked");
+  await Promise.all([lee.page.waitForURL(/[?&]camp=/), lee.page.click(".cc-joinbar button[type=submit]")]);
+  await lee.page.waitForSelector(".cc-names");
+  const leeId = (await user("lee@example.com")).id;
+  const leeBram = (await rows("SELECT characterId FROM member WHERE campaignId = ?1 AND userId = ?2", tuesday.id, leeId))[0]?.characterId;
+  yes(/^bram-/.test(leeBram || "") && (await serverChars("lee@example.com")).some((c) => c.id === leeBram), "Lee's in with Bram, and Bram's in his account");
+
+  // Mo sees both characters whole, and opens Vesk's sheet.
   await mo.page.reload();
-  await settled(mo.page);
-  await mo.page.waitForSelector(".ac-item [data-act=role]");
-  await mo.page.click('.ac-item [data-act="role"][data-role="gm"]');
-  await until(async () => (await user("kai@example.com")).role === "gm", "Kai becoming a GM");
-  same((await api(kai.page, "POST", "/api/invites", { note: "Ash" })).status, 200, "a GM can make invites");
-  same(JSON.parse((await api(kai.page, "GET", "/api/invites")).body).invites.map((i) => i.note), ["Ash"], "a GM sees her own invites only");
-  same(JSON.parse((await api(mo.page, "GET", "/api/invites")).body).invites.length, 3, "Mo sees them all");
-  await mo.page.click('.ac-item [data-act="role"][data-role="member"]');
-  await until(async () => (await user("kai@example.com")).role === "member", "Kai no longer a GM");
-  same((await rows("SELECT COUNT(*) AS n FROM invite WHERE createdBy = ?1", kaiId))[0].n, 0, "her invites go with it");
-  same((await api(kai.page, "POST", "/api/invites", { note: "x" })).status, 403, "and she can't make more");
+  await mo.page.waitForSelector(".cc-look-card");
+  await until(async () => (await mo.page.$$(".cc-look-card")).length === 2, "both players on Mo's page");
+  same(await mo.page.$$eval(".cc-look-card b", (els) => els.map((e) => e.textContent)), ["Vesk", "Bram"], "Mo's party, in the order they joined");
+  await shots(mo.page, "party-gm", ".cc-look-card");
+  await Promise.all([mo.page.waitForURL(/look=/), mo.page.click('.cc-look-card:has-text("Vesk")')]);
+  await mo.page.waitForSelector(".cc-track.is-look");
+  await shots(mo.page, "look-gm", ".cc-track.is-look");
+  same(await mo.page.textContent("#app h1"), "Vesk", "the look at Vesk");
+  yes((await text(mo.page, "#app")).includes("Kai’s character"), "it says whose character it is");
+  await mo.page.click('details[data-open="lk-notes"] > summary');
+  yes((await text(mo.page, "#app")).includes("Owes Bram two favours"), "Mo sees Vesk's notes as Kai left them");
+  same(await mo.page.$$eval("#app .cc-track button, #app .cc-tiles button", (els) => els.length), 0, "nothing on the look is there to tap and change");
+  await mo.page.click('#app .cc-topbar [data-do="back"]');
+  await mo.page.waitForSelector(".cc-look-card");
+  yes(!mo.page.url().includes("look="), "Back goes back to the party");
+
+  // Kai sees names, and no character comes to her whole.
+  const kaiView = await got(kai.page, "GET", `/api/campaigns/${tuesday.id}`);
+  same(kaiView.json?.players?.map((p) => [p.name, p.character?.name]), [["Kai Tane", "Vesk"], ["Lee", "Bram"]], "Kai sees who's in it and who they play");
+  yes(!kaiView.body.includes('"state"') && !kaiView.body.includes("favours") && !kaiView.json?.campaign?.code, "and nothing more: no sheets, no notes, no link");
+  await kai.page.reload();
+  await kai.page.waitForSelector(".cc-names");
+  await shots(kai.page, "campaign-player", ".cc-names");
+
+  // Mo resets the link, and the old one's refused.
+  await mo.page.click('#app [data-do="reset"]');
+  await mo.page.click('#app [data-do="reset"]');
+  await until(async () => (await mo.page.inputValue("#k-link")) !== link, "a new link on Mo's page");
+  const newCode = new URL(await mo.page.inputValue("#k-link")).hash.slice(1);
+  same((await rows("SELECT code FROM campaign WHERE id = ?1", tuesday.id))[0]?.code, newCode, "the new code's the one kept");
+  const zed = await phone();
+  await signIn(zed.page, "zed", "google");
+  await zed.page.goto(link);
+  await zed.page.waitForSelector("#app .cc-note.is-warn");
+  yes((await text(zed.page, "#app")).includes("That link didn’t work"), "the old link's refused, and says so");
+  await api(zed.page, "PUT", "/api/characters/ash-zzzzzz", crewChar("ash-zzzzzz", "ash", "Ash"));
+  same((await got(zed.page, "POST", "/api/join", { code, character: "ash-zzzzzz" })).status, 404, "the old code can't join anyone");
+  same(await rows("SELECT userId FROM member WHERE userId = ?1", (await user("zed@example.com")).id), [], "Zed isn't in");
+
+  // Mo takes Lee out, from Bram's page.
+  same(await mo.page.$$eval('#app .cc-party [data-do="remove"]', (els) => els.length), 0, "the party's cards have nothing to tap by mistake");
+  await Promise.all([mo.page.waitForURL(/look=/), mo.page.click('.cc-look-card:has-text("Bram")')]);
+  await mo.page.click(`#app [data-do="remove"][data-id="${leeId}"]`);
+  yes((await mo.page.textContent(`#app [data-do="remove"][data-id="${leeId}"]`)).includes("Tap again"), "taking someone out asks for a second tap");
+  await mo.page.click(`#app [data-do="remove"][data-id="${leeId}"]`);
+  await until(async () => !(await rows("SELECT 1 FROM member WHERE campaignId = ?1 AND userId = ?2", tuesday.id, leeId)).length, "Lee out of Tuesday Lair");
+  await until(async () => !mo.page.url().includes("look=") && (await mo.page.$$(".cc-look-card")).length === 1, "Mo back at the party, with Vesk left");
+  same((await got(lee.page, "GET", `/api/campaigns/${tuesday.id}`)).status, 404, "Lee gets nothing from it now");
+  same((await got(lee.page, "GET", "/api/campaigns")).json?.campaigns, [], "and it's gone from his list");
+  yes((await serverChars("lee@example.com")).some((c) => c.id === leeBram), "Bram's still Lee's");
+
+  // Kai runs one of her own, and Zed joins it with Ash.
+  const kaisTable = (await got(kai.page, "POST", "/api/campaigns", { name: "Kai’s Table" })).json?.campaign;
+  yes(kaisTable?.role === "gm" && /^[A-Za-z0-9_-]{16}$/.test(kaisTable?.code || ""), "Kai starts Kai’s Table, and she's its GM");
+  same((await got(zed.page, "POST", "/api/join", { code: kaisTable.code, character: "ash-zzzzzz" })).json?.campaign?.role, "player", "Zed joins it with Ash");
+  // Zed runs one too, and Kai plays Dorrie in it, a different character from Tuesday Lair.
+  const zedsNight = (await got(zed.page, "POST", "/api/campaigns", { name: "Zed’s Night" })).json?.campaign;
+  await api(kai.page, "PUT", "/api/characters/dorrie-eeeeee", crewChar("dorrie-eeeeee", "dorrie", "Dorrie"));
+  same((await got(kai.page, "POST", "/api/join", { code: zedsNight.code, character: "dorrie-eeeeee" })).status, 200, "Kai joins Zed’s Night with Dorrie");
+  same((await got(kai.page, "PUT", `/api/campaigns/${zedsNight.id}/me`, { character: "ash-zzzzzz" })).status, 409, "she can't bring someone else's character");
+  same((await got(kai.page, "GET", "/api/campaigns")).json?.campaigns.map((k) => [k.name, k.role, k.character?.name ?? null]),
+    [["Kai’s Table", "gm", null], ["Tuesday Lair", "player", "Vesk"], ["Zed’s Night", "player", "Dorrie"]], "Kai's three, with a different character in each one she plays in");
+
+  // She switches between them in a tap, each by its full name.
+  await kai.page.goto(`${BASE}/characters/`);
+  await kai.page.waitForSelector("#cc-camps .cc-camp");
+  await until(async () => (await kai.page.$$("#cc-camps .cc-camp")).length === 3, "Kai's three campaigns on her list");
+  await kai.page.click('#cc-camps .cc-camp:has-text("Tuesday Lair")');
+  await kai.page.waitForSelector(".cc-strip");
+  same(await kai.page.$$eval(".cc-strip-a span", (els) => els.map((e) => e.textContent)), ["Kai’s Table", "Tuesday Lair", "Zed’s Night"], "the strip names all three");
+  await kai.page.click('.cc-strip-a:has-text("Kai’s Table")');
+  await until(async () => (await kai.page.textContent("#app h1")) === "Kai’s Table", "one tap to Kai’s Table");
+  same(await kai.page.getAttribute(".cc-strip-a[aria-current]", "data-id"), kaisTable.id, "and the strip shows it's the one open");
+  await kai.page.waitForSelector(".cc-look-card");
+  yes((await text(kai.page, "#app")).includes("Ash"), "Kai sees Zed's character in her own campaign");
+  await shots(kai.page, "campaign-strip", ".cc-look-card");
+
+  // Nothing crosses between campaigns.
+  for (const [method, path, body] of [["GET", `/api/campaigns/${tuesday.id}`], ["PATCH", `/api/campaigns/${tuesday.id}`, { name: "Mine now" }], ["DELETE", `/api/campaigns/${tuesday.id}`], ["POST", `/api/campaigns/${tuesday.id}/link`], ["PUT", `/api/campaigns/${tuesday.id}/me`, { character: "ash-zzzzzz" }], ["DELETE", `/api/campaigns/${tuesday.id}/members/${kaiId}`]]) {
+    same((await got(zed.page, method, path, body)).status, 404, `Zed, in Kai's campaign, gets nothing from Tuesday Lair (${method} ${path.split("/").slice(4).join("/") || "it"})`);
+  }
+  same((await got(zed.page, "GET", "/api/campaigns")).json?.campaigns.map((k) => k.name), ["Kai’s Table", "Zed’s Night"], "Zed's list has his two and not Mo's");
+  same((await got(mo.page, "GET", `/api/campaigns/${kaisTable.id}`)).status, 404, "Mo gets nothing from Kai’s Table");
+  yes(!(await got(mo.page, "GET", `/api/campaigns/${tuesday.id}`)).body.includes("Ash"), "and Zed's character never reaches him");
+  const zedView = await got(zed.page, "GET", `/api/campaigns/${kaisTable.id}`);
+  yes(zedView.status === 200 && !zedView.body.includes("favours") && !zedView.body.includes("Dorrie") && !zedView.json?.campaign?.code, "Zed sees Kai’s Table's names, and nothing of Kai's other characters");
+  same((await rows("SELECT name FROM campaign WHERE id = ?1", tuesday.id))[0]?.name, "Tuesday Lair", "Tuesday Lair's untouched");
+
+  // ------------------------------------------------------------ 5. who can do what
+  console.log("5. Who can do what");
+  same((await api(kai.page, "GET", "/api/people")).status, 403, "a member can't see people");
+  const people = (await got(mo.page, "GET", "/api/people")).json;
+  same([people?.total, people?.people?.[0]?.email], [6, "zed@example.com"], "Mo sees everyone who's signed up, newest first");
+  same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/link`)).status, 403, "a player can't reset the link");
+  same((await got(kai.page, "PATCH", `/api/campaigns/${tuesday.id}`, { name: "Kai’s now" })).status, 403, "or rename it");
+  same((await got(kai.page, "DELETE", `/api/campaigns/${tuesday.id}`)).status, 403, "or end it");
+  same((await got(kai.page, "DELETE", `/api/campaigns/${tuesday.id}/members/${moId}`)).status, 403, "or take anyone out");
+  same((await got(mo.page, "DELETE", `/api/campaigns/${tuesday.id}/members/${moId}`)).status, 400, "the GM can't leave her own campaign");
+  same((await got(kai.page, "DELETE", `/api/campaigns/${zedsNight.id}/members/${kaiId}`)).status, 200, "a player can leave");
+  same((await got(kai.page, "GET", `/api/campaigns/${zedsNight.id}`)).status, 404, "and then she's out");
   const nobody = await phone();
   await nobody.page.goto(`${BASE}/account/`);
   await settled(nobody.page);
-  for (const path of ["/api/characters", "/api/people", "/api/invites", "/api/me/data"]) same((await api(nobody.page, "GET", path)).status, 401, `signed out, ${path}`);
+  for (const path of ["/api/characters", "/api/people", "/api/me/data", "/api/campaigns", `/api/campaigns/${tuesday.id}`]) same((await api(nobody.page, "GET", path)).status, 401, `signed out, ${path}`);
   same(JSON.parse((await api(nobody.page, "GET", "/api/me")).body).user, null, "signed out, /api/me has nobody");
   same((await api(nobody.page, "PUT", "/api/characters/vesk-aaaaaa", { v: 1, data: { id: "vesk-aaaaaa", crew: "vesk" } })).status, 401, "signed out, a character can't be written");
+  same((await got(nobody.page, "POST", "/api/campaigns", { name: "Mine" })).status, 401, "signed out, no campaigns get started");
+  const peek = await got(nobody.page, "POST", "/api/join", { code: newCode });
+  same(peek.json?.campaign, { name: "Tuesday Lair", gm: "Mo", id: null, role: null }, "signed out, a link says only which campaign and its GM");
+  same((await got(nobody.page, "POST", "/api/join", { code: newCode, character: "vesk-aaaaaa" })).status, 401, "signed out, nobody joins");
   const tries = [];
-  for (let i = 0; i < 12; i++) tries.push((await api(nobody.page, "POST", "/api/invite", { code: "no-such-invite-code-0000" })).status);
-  yes(tries.includes(429), `the invite check's rate limit trips (${tries.join(" ")})`);
+  for (let i = 0; i < 32; i++) tries.push((await api(nobody.page, "POST", "/api/join", { code: "no-such-join-code-0000" })).status);
+  yes(tries.includes(429), `the join check's rate limit trips (${tries.slice(-4).join(" ")})`);
   const keys = await rows("SELECT key FROM limits");
   yes(keys.length > 3 && keys.every((k) => /^[0-9a-f]{32}$/.test(k.key)), "rate limits keep HMACs, not addresses (Better Auth's too)");
   same(await rows("SELECT name FROM sqlite_master WHERE name = 'rateLimit'"), [], "no table of addresses");
 
-  // ------------------------------------------------------------ 5. leaving
-  console.log("5. Signing out, your data and deleting");
+  // ------------------------------------------------------------ 6. leaving
+  console.log("6. Signing out, your data and deleting");
   // A phone-only character stays when Kai signs out on the first phone.
   await kai.page.evaluate(() => {
     const data = JSON.parse(localStorage.getItem("zi-characters"));
@@ -339,19 +508,25 @@ try {
   });
   await kai.page.goto(`${BASE}/account/`);
   await settled(kai.page);
+  yes((await kai.page.evaluate(() => localStorage.getItem("zi-campaigns"))) !== null, "the phone keeps Kai's campaigns while she's signed in");
   await kai.page.click('[data-act="out"]');
   await kai.page.waitForSelector('[data-act="in"]');
   yes((await text(kai.page)).includes("Sign in with Discord"), "signed out");
   same(await kai.page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.map((c) => c.name)), ["Ash"], "the account's characters leave the phone, its own stay");
+  same(await kai.page.evaluate(() => localStorage.getItem("zi-campaigns")), null, "and so do her campaigns");
 
   const data = await two.page.evaluate(() => fetch("/api/me/data").then((r) => r.text()));
-  yes(data.includes("Owes Bram two favours") && data.includes("kai@example.com") && !data.includes(code), "the download has her account and characters, and no codes");
+  yes(data.includes("Owes Bram two favours") && data.includes("kai@example.com") && data.includes("Tuesday Lair") && data.includes("Kai’s Table"), "the download has her account, characters and campaigns");
+  yes(!data.includes(newCode) && !data.includes(kaisTable.code), "and no join links");
   await two.page.goto(`${BASE}/account/`);
   await settled(two.page);
   await two.page.click('[data-act="delete"]');
   await Promise.all([two.page.waitForURL(/gone/), two.page.click('[data-act="delete"]')]);
   same(await user("kai@example.com"), null, "Kai's account is gone");
-  same((await rows("SELECT COUNT(*) AS n FROM character")).map((r) => r.n), [0], "and her characters");
+  same((await rows("SELECT COUNT(*) AS n FROM character WHERE userId = ?1", kaiId)).map((r) => r.n), [0], "and her characters");
+  same(await rows("SELECT id FROM campaign WHERE gmId = ?1", kaiId), [], "her campaign's ended");
+  same(await rows("SELECT campaignId FROM member WHERE userId = ?1 OR campaignId = ?2", kaiId, kaisTable.id), [], "she's out of Mo's, and nobody's left in hers");
+  same((await got(zed.page, "GET", "/api/campaigns")).json?.campaigns.map((k) => k.name), ["Zed’s Night"], "Zed's left with his own");
   same(await two.page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters") || '{"characters":[]}').characters.length), 0, "and they're gone from the phone");
 
   // A character the account won't take stays on the phone and doesn't hold up the rest.
@@ -366,16 +541,45 @@ try {
   await until(async () => (await serverChars(ADMIN)).length === 1, "Isolde going up");
   await until(() => mo.page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.filter((c) => !c.acct).map((c) => c.name).join() === "Big Bram"), "Big Bram staying on the phone");
 
-  // The account page, signed in as Mo, at 320 wide in both themes.
+  // The account page, signed in as Mo, at 320 wide in both themes, and the
+  // campaign screens at 390.
+  const axe = async (page, what) => {
+    const result = await new AxeBuilder({ page }).include("main").analyze();
+    for (const v of result.violations) note(`axe (${what}): ${v.id}: ${v.help} (${v.nodes[0]?.target?.join(" ")})`);
+    same(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `no sideways scroll (${what})`);
+    const small = await page.evaluate(() => [...document.querySelectorAll("#app .button, #app .cc-back, #app .cc-theme, #app .cc-strip-a, #app summary, #app .cc-pick, #cc-dialog .button")]
+      .filter((el) => el.getClientRects().length)
+      .map((el) => ({ t: el.textContent.trim().slice(0, 30), h: Math.round(el.getBoundingClientRect().height) }))
+      .filter((x) => x.h < 44));
+    if (small.length) note(`small tap targets (${what}): ${small.slice(0, 4).map((x) => `${x.t} (${x.h}px)`).join(", ")}`);
+  };
   for (const theme of ["dark", "light"]) {
     await mo.page.setViewportSize({ width: 320, height: 800 });
     await mo.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
-    await mo.page.reload();
+    await mo.page.goto(`${BASE}/account/`);
     await settled(mo.page);
     await mo.page.waitForSelector(".ac-item");
-    const axe = await new AxeBuilder({ page: mo.page }).include("main").analyze();
-    for (const v of axe.violations) note(`axe (${theme}): ${v.id}: ${v.help}`);
-    same(await mo.page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `no sideways scroll at 320 (${theme})`);
+    await axe(mo.page, `account, 320, ${theme}`);
+    await mo.page.setViewportSize({ width: 390, height: 844 });
+    await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
+    await mo.page.waitForSelector("#k-link");
+    await axe(mo.page, `campaign, ${theme}`);
+    await shot(mo.page, `campaign-gm-${theme}`);
+    await mo.page.click('#app [data-do="qr"]');
+    await mo.page.waitForSelector("#cc-dialog .cc-qr svg");
+    yes((await mo.page.getAttribute("#cc-dialog .cc-qr", "aria-label"))?.includes("Tuesday Lair"), `the code's named for the campaign (${theme})`);
+    await mo.page.waitForTimeout(400);
+    await shot(mo.page, `campaign-qr-${theme}`);
+    await mo.page.click('#cc-dialog [data-act="close"]');
+    await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&look=${(await user("lee@example.com")).id}`);
+    await mo.page.waitForSelector("#app .cc-note");
+    yes((await text(mo.page, "#app")).includes("isn’t in the campaign any more"), `a look at someone taken out says so (${theme})`);
+    await zed.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+    await zed.page.evaluate((c) => localStorage.setItem("zi-join", JSON.stringify({ code: c, at: Date.now() })), newCode);
+    await zed.page.goto(`${BASE}/characters/?join`);
+    await zed.page.waitForSelector('input[name="k-pick"]');
+    await axe(zed.page, `joining, ${theme}`);
+    await shot(zed.page, `join-pick-${theme}`);
   }
 } catch (err) {
   note(`stopped: ${err.stack || err}`);

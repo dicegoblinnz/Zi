@@ -36,6 +36,11 @@ const server = createServer(async (req, res) => {
     res.writeHead(200, { "content-type": "application/json" });
     return res.end(JSON.stringify({ user: null, providers: ["google", "discord"] }));
   }
+  // And a join link's code like this, so joining shows how to sign in.
+  if (req.url.startsWith("/api/join")) {
+    res.writeHead(200, { "content-type": "application/json" });
+    return res.end(JSON.stringify({ campaign: { name: "Tuesday Lair", gm: "Mo", id: null, role: null } }));
+  }
   const file = await resolve(req.url);
   if (file) {
     res.writeHead(200, { "content-type": TYPES[extname(file)] || "application/octet-stream" });
@@ -53,12 +58,18 @@ const PAGES = [
   "/rules/title-ideas-and-the-crew/", "/rules/conflict/", "/rules/the-bestiary/",
   "/rules/appendix-c-every-lever-in-the-game/", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
   "/characters/", "/characters/?c=check-vesk", "/characters/?c=check-vesk&t=sheet", "/characters/?c=check-vesk&t=rules", "/characters/?build", "/sheets/",
-  "/account/", "/account/?invite=check-invite-code-0001", "/kit/",
+  "/account/", "/characters/?join", "/kit/",
 ];
 // A character saved on the phone, so a sheet gets checked like any other page.
 // Its hash is blank, so the sheet shows its "changed in the rules" note too.
+// A join link's code waits on the phone too, for joining a campaign signed out.
 const SAVED = JSON.stringify({ v: 1, characters: [{ id: "check-vesk", crew: "vesk", name: "Vesk", hash: "", state: {} }] });
-const seed = (context) => context.addInitScript((saved) => { try { if (!localStorage.getItem("zi-characters")) localStorage.setItem("zi-characters", saved); } catch (e) {} }, SAVED);
+const seed = (context) => context.addInitScript((saved) => {
+  try {
+    if (!localStorage.getItem("zi-characters")) localStorage.setItem("zi-characters", saved);
+    localStorage.setItem("zi-join", JSON.stringify({ code: "check-join-code-0001", at: Date.now() }));
+  } catch (e) {}
+}, SAVED);
 const WIDTHS = [320, 360, 390, 430, 1280];
 const problems = [];
 const note = (p) => { problems.push(p); console.log("  ✗ " + p); };

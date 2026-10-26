@@ -15,6 +15,7 @@ import { makeLearn } from "./learn.js";
 import { grow } from "./grow.js";
 import { changesOf, ownChanges, placesOf, said } from "./marks.js";
 import { makeDowntime } from "./downtime.js";
+import { makeCampaigns } from "./campaigns.js";
 import { threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
 import { aura as kitAura, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
 
@@ -79,6 +80,37 @@ const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => 
 const learn = makeLearn({ crew: CREW, esc, hex, steps, rules: RULE, ruleHtml: (id) => ruleHtml(id), isOpen: (key) => ui.open.has(key), lineOf: (c, key) => lineOf(c, key), lineLabel: (l) => lineLabel(l), throwDie, feel, tumble, calm, icon: ICON, sound: () => soundButton(), render: () => render(), gauge: (wound, floor, fresh) => gauge(wound, floor, fresh ? floor : wound) });
 
 const dt = makeDowntime({ B: DATA.build, esc, hex, steps, link, icon: ICON, lineLabel: (l) => lineLabel(l), throwDie, crewNames: () => new Set(DATA.crew.map((x) => x.name)), isOpen: (key) => ui.open.has(key), rule: (id) => ruleHtml(id) });
+
+// Campaigns: starting one, joining one from its link, and the GM's look at
+// her players' characters, drawn with the same pieces as a character here.
+const camps = makeCampaigns({
+  sync, store, esc, ICON,
+  render: () => render(),
+  go: (url, o) => goTo(url, o),
+  toast: (m) => toast(m, false),
+  openDialog: (r) => {
+    roll = r;
+    openDialog();
+    dialog.querySelector("input:not([type=radio])")?.focus();
+  },
+  renderDialog: () => renderDialog(),
+  leaveDialog: (url) => leaveDialog(url),
+  roll: () => roll,
+  tools: () => themeButton(),
+  crew: () => DATA.crew,
+  sheetFor: (ch) => sheetFor(ch),
+  normal: (ch) => normal(ch),
+  crestOf: (c) => crestOf(c),
+  newBuild: () => {
+    if (!hasDraft()) builder.discard("new");
+    navBuild("new");
+  },
+  playCrew: (id) => ACT.play({ dataset: { c: id } }),
+  look: {
+    link: (id, text) => link(id, text), steps: (n) => steps(n), crestOf: (c) => crestOf(c), stepsNow: (c, s, a) => stepsNow(c, s, a), lineOf: (c, key) => lineOf(c, key),
+    lineLabel: (l) => lineLabel(l), isOut: (s, l) => isOut(s, l), lastRollView: (last) => lastRollView(last), isOpen: (key) => ui.open.has(key),
+  },
+});
 
 const chars = () => store.data.characters;
 const current = () => (view.name === "sheet" ? chars().find((x) => x.id === view.id) ?? null : null);
@@ -373,7 +405,7 @@ function saveNote() {
 // Signing in keeps the characters in an account, on every phone (sync.js).
 function accountNote() {
   const me = sync.me;
-  if (!me) return '<p class="cc-acct">Got an account? <a href="/account/">Sign in</a> to keep your characters on every phone you use.</p>';
+  if (!me) return '<p class="cc-acct"><a href="/account/">Sign in</a> to keep your characters on every phone you use, and to start a campaign or join one.</p>';
   if (sync.out) return '<div class="cc-note is-warn" role="status"><p>You’ve been signed out on this phone. Your characters are still here, and they’ll catch up with your account when you <a href="/account/">sign in</a> again.</p></div>';
   const loose = sync.loose();
   if (!loose.length) return `<p class="cc-acct">Signed in as ${esc(me.name)}, so your characters are on every phone you sign in on. <a href="/account/">Account</a></p>`;
@@ -408,6 +440,7 @@ function listView() {
     <p class="cc-paper">Playing on paper? Print a character sheet and the player reference from the <a href="/sheets/">Sheets page</a>.</p></header>
     ${saveNote()}
     ${accountNote()}
+    ${camps.section()}
     ${mine.length ? `<section class="cc-sec" aria-labelledby="cc-mine"><h2 id="cc-mine">On this phone</h2><ul class="cc-mine">${mine.map(saved).join("")}</ul></section>` : ""}
     <section class="cc-sec" aria-labelledby="cc-learn"><h2 id="cc-learn">Learn to play</h2>
       <p class="cc-lead">New to Zi’Dara? Play one round on your phone first. The brute swings his club at Isolde, and you answer it with Wren and Bram.</p>
@@ -1495,6 +1528,7 @@ function dialogView() {
   const ch = current();
   if (roll.kind === "name") return nameView();
   if (roll.kind === "rule") return ruleView();
+  if (roll.kind === "camp") return camps.dialog(roll);
   const c = normal(ch);
   if (!c) return "";
   const s = ch.state;
@@ -1545,12 +1579,15 @@ function render() {
   document.documentElement.classList.toggle("cc-tabbed", view.name === "sheet" && Boolean(c));
   // A character's full screen, without the site's bar, and the builder's,
   // with its own bar of Back and Next at the bottom.
-  document.documentElement.classList.toggle("cc-full", view.name === "sheet" || view.name === "build");
-  app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
+  // A campaign, a look at a player's character and joining are full screen too.
+  const camping = view.name === "camp" || view.name === "look" || view.name === "join";
+  document.documentElement.classList.toggle("cc-full", view.name === "sheet" || view.name === "build" || camping);
+  app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : camping ? camps.view(view) : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
   document.documentElement.classList.toggle("cc-building", Boolean(app.querySelector(".bd-foot")));
   // With the dice in a dock above the bar, a toast sits above them both.
   document.documentElement.classList.toggle("cc-docked", Boolean(app.querySelector(".bd-rail")));
   if (view.name === "build") builder.after(app);
+  if (camping) camps.after(app);
   glow(ch);
   if (dialog.open) renderDialog();
   else refocus(keep);
@@ -1614,19 +1651,42 @@ function route() {
   const id = q.get("c");
   const key = q.has("build") ? q.get("build") || "new" : null;
   const learning = !key && !id && q.has("learn");
+  const camp = !key && !id && !learning ? q.get("camp") : null;
+  const joining = !key && !id && !learning && !camp && q.has("join");
   if (view.name === "learn" && !learning) learn.stop();
   // Leaving the builder keeps the draft, and coming back reads it again.
   if (view.name === "build" && view.key !== key) builder.close();
   // A Sheet tab fold shut on one character opens as usual on another.
   if (id !== (view.name === "sheet" ? view.id : null)) ui.shut.clear();
-  view = key ? { name: "build", key } : learning ? { name: "learn" } : id ? { name: "sheet", id } : { name: "list" };
+  view = key ? { name: "build", key } : learning ? { name: "learn" } : id ? { name: "sheet", id }
+    : camp ? (q.get("look") ? { name: "look", id: camp, who: q.get("look") } : { name: "camp", id: camp }) : joining ? { name: "join" } : { name: "list" };
   ui.tab = ["sheet", "rules"].includes(q.get("t")) ? q.get("t") : "play";
   ui.panel = null;
   ui.sure = false;
-  document.documentElement.classList.toggle("cc-open", Boolean(id || key || learning));
+  document.documentElement.classList.toggle("cc-open", Boolean(id || key || learning || camp || joining));
   const ch = current();
-  document.title = key ? `${key === "new" ? "Make your own" : "Change a character"} · Zi’Dara` : learning ? "Learn to play · Zi’Dara" : ch ? `${ch.name} · Zi’Dara` : "Characters · Zi’Dara";
+  document.title = key ? `${key === "new" ? "Make your own" : "Change a character"} · Zi’Dara` : learning ? "Learn to play · Zi’Dara" : ch ? `${ch.name} · Zi’Dara` : camp || joining ? `${camps.title(view)} · Zi’Dara` : "Characters · Zi’Dara";
+  camps.route(view);
   render();
+}
+
+// Somewhere else in the companion, as a new step in the history or in place of
+// this one. from says where it came from, for a Back that goes the same way.
+function goTo(url, { replace = false, from = null } = {}) {
+  history[replace ? "replaceState" : "pushState"](from ? { from } : null, "", url);
+  route();
+  scrollTo(0, 0);
+}
+
+// Leaving a dialog for another page: the dialog's step in the history becomes
+// that page, so Back goes to where the dialog was opened.
+function leaveDialog(url) {
+  ui.stopSpin?.();
+  ui.stopSpin = null;
+  if (dialog.open) dialog.close();
+  dialog.innerHTML = "";
+  roll = null;
+  goTo(url, { replace: Boolean(history.state?.dlg) });
 }
 
 // The builder, for a new character or changing one on this phone, the crew
@@ -1661,6 +1721,7 @@ function saveBuilt(build, key, discard, basis) {
   }
   let became = false;
   if (ch && !sheetFor(ch)) ch = null;
+  const isNew = !ch;
   if (ch) {
     // Anything that was full stays full when the sheet's new number is bigger.
     normal(ch);
@@ -1709,6 +1770,8 @@ function saveBuilt(build, key, discard, basis) {
   ch.saved = new Date().toISOString();
   const kept = store.save();
   discard();
+  // Someone made on the way into a campaign goes back there, picked.
+  if (isNew && kept && camps.made(ch)) return;
   history.replaceState(null, "", `/characters/?c=${encodeURIComponent(ch.id)}`);
   route();
   scrollTo(0, 0);
@@ -1735,6 +1798,7 @@ function start(crewId, name) {
   dialog.close();
   dialog.innerHTML = "";
   roll = null;
+  if (camps.made(ch)) return;
   history.replaceState(null, "", `/characters/?c=${encodeURIComponent(id)}`);
   route();
   scrollTo(0, 0);
@@ -1793,6 +1857,7 @@ function stepRoll(name, i, d) {
 }
 
 const ACT = {
+  k: (el, e) => camps.act(el, e),
   b: (el, e) => builder.act(el, e, render, () => {
     scrollTo(0, 0);
     app.querySelector("h1")?.focus({ preventScroll: true });
@@ -2452,6 +2517,7 @@ document.addEventListener("submit", (e) => {
   e.preventDefault();
   const f = new FormData(form);
   const kind = form.dataset.form;
+  if (kind.startsWith("k-")) return camps.submit(kind, form, f);
   if (kind === "name") return start(roll?.crew, String(f.get("name") ?? "").trim().slice(0, 40));
   // A Blaze they live through: the wound becomes a Scar, a Catch, and the
   // wound die drops back to the Scars.

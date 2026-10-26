@@ -15,12 +15,12 @@ const json = JSON.stringify(data).replace(/</g, "\\u003c");
 ---
 <Base title="Characters" current="characters" description="Build your own Zi’Dara character or play one of the crew from your phone, with the counting done and every roll a tap away.">
   <script is:inline slot="head">
-    // A link straight to a sheet or the learning round hides the crew list until
-    // it's drawn, and a character or the builder opens full screen, without the
-    // site's bar.
+    // A link straight to a sheet, the learning round, a campaign or joining one
+    // hides the crew list until it's drawn, and all but the learning round open
+    // full screen, without the site's bar.
     try {
-      if (/[?&](c=|build\b|learn\b)/.test(location.search)) document.documentElement.classList.add("cc-open");
-      if (/[?&](c=|build\b)/.test(location.search)) document.documentElement.classList.add("cc-full");
+      if (/[?&](c=|build\b|learn\b|camp=|join\b)/.test(location.search)) document.documentElement.classList.add("cc-open");
+      if (/[?&](c=|build\b|camp=|join\b)/.test(location.search)) document.documentElement.classList.add("cc-full");
     } catch (e) {}
   </script>
   <main id="main" class="companion frame">

@@ -896,3 +896,95 @@ button.bd-tok:active { transform: scale(0.97); }
 .ac-make .button { flex: none; }
 .ac-link { width: 100%; margin: 0.3rem 0 0; }
 @media (max-width: 400px) { .ac-make .cc-row { flex-wrap: wrap; } .ac-make input { flex-basis: 100%; } }
+
+/* Campaigns (campaigns.js): the list on the Characters page, a campaign with
+   its party and join link, the GM's look at a player's character, and
+   joining. Violet's the GM's colour, as it is in the kit. */
+.die.is-gm { background: var(--violet); color: var(--bg); }
+.cc-camp-head { padding-block: 0.7rem 0.25rem; }
+.cc-camp-head .lede { font-size: 1.1rem; }
+.cc-camp-head .kicker.is-gm { color: var(--violet); }
+.cc-camp-head h1 { margin-bottom: 0.2rem; }
+.cc-camp-head .cc-small { margin: 0; font-size: 0.95rem; }
+
+/* Every campaign you're in, a tap apart. It scrolls sideways on its own when
+   there are more than fit, and the one you're in is marked like a tab. */
+.cc-strip { margin: 0.5rem 0 0; }
+.cc-strip-in { display: flex; gap: 6px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; padding-bottom: 2px; }
+.cc-strip-in::-webkit-scrollbar { display: none; }
+.cc-strip-a {
+  display: inline-flex; align-items: center; gap: 6px; flex: none; max-width: min(78vw, 20rem); min-height: 44px; padding: 0 14px;
+  color: var(--ink); text-decoration: none; font-weight: 700; font-size: 0.95rem; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px;
+  transition: transform 140ms ease-out, border-color 140ms ease;
+}
+.cc-strip-a span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cc-strip-a small { flex: none; font-size: 0.72rem; letter-spacing: 0.08em; color: var(--violet); }
+.cc-strip-a[aria-current="page"] { color: var(--gold-ink); background: var(--panel); border-color: var(--line); box-shadow: inset 0 -2px 0 var(--gold); }
+.cc-strip-a:active { transform: scale(0.97); }
+.cc-strip-a:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
+@media (hover: hover) and (pointer: fine) { .cc-strip-a:hover { border-color: var(--gold); } }
+
+/* The join link, with the ways to hand it over. */
+.cc-bring { padding: 0.9rem 1rem 0.5rem; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
+.cc-bring h2 { margin-top: 0; }
+.cc-bring .ac-link { font-size: 0.95rem; }
+
+/* The party, for the GM: each player's character as a card that opens their
+   sheet, with how they're doing at a glance, and taking a player out under it. */
+.cc-party { gap: 14px; }
+.cc-member { display: grid; gap: 6px; }
+.cc-member .cc-remove { justify-self: end; }
+.cc-look-card { align-items: flex-start; }
+.cc-look-card.is-dead { opacity: 0.75; }
+.cc-mini-crest { flex: none; padding-top: 2px; }
+.cc-mini-crest .zd-crest { --s: 48px; }
+.cc-glance { display: flex; flex-wrap: wrap; gap: 3px 12px; margin-top: 4px; font-size: 0.88rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.cc-glance > span { display: inline-flex; align-items: center; gap: 4px; }
+.cc-glance .zd-mini { width: 16px; height: 16px; }
+.cc-glance .cc-tag { min-height: 24px; padding: 0 6px 0 4px; font-size: 0.85rem; }
+
+/* Who's in it, for a player. */
+.cc-names { gap: 6px; }
+.cc-name { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 2px 12px; padding: 10px 14px; }
+.cc-name b { font-family: var(--display); font-weight: 600; font-size: 1.1rem; overflow-wrap: anywhere; }
+.cc-name small { color: var(--muted); font-size: 0.9rem; }
+
+/* Picking who to bring: each character's a card, and the one picked is lit. */
+.cc-picks { margin: 0.4rem 0 0; padding: 0; border: 0; min-width: 0; }
+.cc-pick { position: relative; cursor: pointer; }
+.cc-pick input { position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+.cc-pick:has(input:checked) { border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); background-color: var(--panel); }
+.cc-pick:has(input:checked) .die { background: var(--gold); color: var(--on-gold); }
+.cc-pick:has(input:focus-visible) { outline: 2px solid var(--violet); outline-offset: 2px; }
+.cc-pick { transition: transform 140ms ease-out, border-color 140ms ease; }
+.cc-pick:active { transform: scale(0.98); }
+.cc-crewpicks .button { min-width: 5.5rem; }
+
+/* The button that joins or brings them stays under your thumb. */
+.cc-joinform h2 { margin-top: 1.4rem; }
+.cc-joinbar {
+  position: sticky; bottom: 0; z-index: 5; display: flex; flex-wrap: wrap; gap: 8px; margin: 1rem -4px 0; padding: 10px 4px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: var(--bar-bg); backdrop-filter: blur(8px); border-top: 1px solid var(--line);
+}
+.cc-joinbar .button { flex: 1 1 12rem; }
+
+/* The join link as a code to scan, black on white in both themes, so any
+   phone's camera reads it. */
+.cc-qr-body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; }
+.cc-qr { display: grid; place-items: center; width: min(76vw, 22rem); aspect-ratio: 1; padding: 10px; background: #fff; border-radius: 2px; }
+.cc-qr p { color: #1d1526; }
+.cc-qr svg { display: block; }
+.cc-qr-link { margin: 0; max-width: 100%; text-align: center; color: var(--muted); font-size: 0.9rem; overflow-wrap: anywhere; }
+
+/* The GM's look at a player's character: the play screen's trackers and set
+   actions with nothing to tap, and the sheet in folds. */
+.cc-fresh { margin: 0.5rem 0 0; }
+.cc-track.is-look .t-wound { grid-column: 2 / 5; }
+.cc-track.is-look .cc-stat:active, .cc-look-play .tile:active { transform: none; }
+@media (hover: hover) and (pointer: fine) { .cc-look-play .tile:hover { border-color: var(--line-soft); } }
+.cc-look-list { list-style: none; margin: 0.2rem 0 0.4rem; padding: 0; }
+.cc-look-list > li { padding: 0.35rem 0; border-top: 1px solid var(--line-soft); }
+.cc-look-list > li:first-child { border-top: 0; }
+.cc-look-list > li.is-out { color: var(--muted); }
+.cc-look-notes { white-space: pre-wrap; overflow-wrap: anywhere; }
+.cc-look-foot { margin-top: 1rem; }
