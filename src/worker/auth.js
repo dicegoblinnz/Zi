@@ -89,17 +89,17 @@ export function optionsFor(env) {
           await env.DB.prepare("DELETE FROM party WHERE campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id).run().catch(missing);
           const playing = await env.DB.prepare("SELECT campaignId FROM member WHERE userId = ?1").bind(user.id).all().catch((err) => (missing(err), { results: [] }));
           for (const m of playing.results) await dropFromParty(env, m.campaignId, user.id).catch(missing);
-          // The live tables of the campaigns they run go, and their phones stop
-          // hearing the ones they play in.
           const running = await env.DB.prepare("SELECT id FROM campaign WHERE gmId = ?1").bind(user.id).all().catch((err) => (missing(err), { results: [] }));
-          for (const c of running.results) await tableEnd(env, c.id);
-          for (const m of playing.results) await tableLeft(env, m.campaignId, user.id);
           await env.DB.batch([
             env.DB.prepare("DELETE FROM member WHERE userId = ?1 OR campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id),
             env.DB.prepare("DELETE FROM campaign WHERE gmId = ?1").bind(user.id),
           ]).catch((err) => {
             if (!/no such table/i.test(String(err?.message))) throw err;
           });
+          // Once they're out in D1: the live tables of the campaigns they ran
+          // go, and the ones they played in forget them.
+          for (const c of running.results) await tableEnd(env, c.id);
+          for (const m of playing.results) await tableLeft(env, m.campaignId, user.id, { erase: true });
           await env.DB.prepare("DELETE FROM character WHERE userId = ?1").bind(user.id).run();
         },
       },

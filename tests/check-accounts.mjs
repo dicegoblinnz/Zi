@@ -958,6 +958,7 @@ try {
   await kai.page.click('li.tg:has(h3:text-is("The maid")) [data-do="land"]');
   await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
   same(await kai.page.$eval('#cc-dialog [data-act="d-against"][data-v="confidence"]', (el) => el.getAttribute("aria-pressed")), "true", "against her Confidence");
+  yes(await kai.page.$eval('#cc-dialog [data-act="d-against"][data-v="blows"]', (el) => el.disabled), "and it stays that way, since the GM said it's fear");
   same(await kai.page.$$eval("#cc-dialog .cc-incoming .zd-die", (els) => els.map((el) => el.dataset.d)), ["4"], "the maid's d4 already in");
   if (SHOTS) await kai.page.waitForTimeout(400);
   await shot(kai.page, "tele-land");
@@ -1070,6 +1071,7 @@ try {
   same((await rows("SELECT COUNT(*) AS n FROM character WHERE userId = ?1", kaiId)).map((r) => r.n), [0], "and her characters");
   same(await rows("SELECT id FROM campaign WHERE gmId = ?1", kaiId), [], "her campaign's ended");
   same(await rows("SELECT campaignId FROM member WHERE userId = ?1 OR campaignId = ?2", kaiId, kaisTable.id), [], "she's out of Mo's, and nobody's left in hers");
+  yes(((await tableOf(tuesday.id))?.rounds ?? []).flatMap((r) => r.tele).every((t) => t.at.user !== kaiId && t.ans?.user !== kaiId), "and Tuesday Lair's table has forgotten her");
   same(Object.values((await partyOf(tuesday.id))?.bonds ?? {}).filter((b) => b.a.startsWith(`${kaiId}:`) || b.b.startsWith(`${kaiId}:`)).length, 0, "and her threads are off Tuesday Lair's party sheet");
   same((await got(zed.page, "GET", "/api/campaigns")).json?.campaigns.map((k) => k.name), ["Zed’s Night"], "Zed's left with his own");
   same(await two.page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters") || '{"characters":[]}').characters.length), 0, "and they're gone from the phone");

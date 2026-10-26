@@ -270,8 +270,9 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
     if (subId === camp.gmId) return fail(400, "You’re the GM, so you can’t leave it. End it instead.");
     const res = await env.DB.prepare("DELETE FROM member WHERE campaignId = ?1 AND userId = ?2").bind(camp.id, subId).run();
     if (!res.meta.changes) return fail(404, "They’re not in this campaign.");
-    await dropFromParty(env, camp.id, subId);
+    // Their phones stop hearing the table first, since that can't fail.
     await tableLeft(env, camp.id, subId);
+    await dropFromParty(env, camp.id, subId);
     return json({ ok: true });
   }
   return fail(404, NOTHING);

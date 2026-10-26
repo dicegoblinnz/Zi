@@ -63,7 +63,7 @@ export function makeTable(d) {
   let st = null;
   let ui = { sure: "", note: "" };
   // The campaign whose table this phone's watching, and its socket.
-  const net = { id: null, ws: null, open: false, tries: 0, timer: 0, beat: 0, wait: 0, failed: 0, why: "" };
+  const net = { id: null, ws: null, open: false, tries: 0, timer: 0, steady: 0, beat: 0, wait: 0, failed: 0, why: "", hold: false, parked: false };
   const busy = {};
   const again = {};
   const retry = {};
@@ -122,8 +122,11 @@ export function makeTable(d) {
 
   // ------------------------------------------------------------ the server
 
+  // A request that hangs gives up after 12 seconds, so one stuck on a bad
+  // signal doesn't hold up the rest. Sending again is safe: each change
+  // counts once.
   async function call(method, path, body) {
-    const res = await fetch(path, { method, cache: "no-store", credentials: "same-origin", headers: body ? { "content-type": "application/json" } : {}, body: body ? JSON.stringify(body) : undefined });
+    const res = await fetch(path, { method, cache: "no-store", credentials: "same-origin", signal: AbortSignal.timeout?.(12000), headers: body ? { "content-type": "application/json" } : {}, body: body ? JSON.stringify(body) : undefined });
     return { ok: res.ok, status: res.status, got: await res.json().catch(() => ({})) };
   }
   const path = (id) => `/api/campaigns/${encodeURIComponent(id)}/table`;
@@ -148,13 +151,17 @@ export function makeTable(d) {
     busy[id] = true;
     let ok = false;
     try {
-      const r = await call("POST", path(id), { dev: st.dev, ops: k.out.slice(0, MAX_OUT).map(({ at, ...op }) => op) }).catch(() => ({ ok: false, status: 0, got: {} }));
+      const batch = k.out.slice(0, MAX_OUT);
+      const last = batch[batch.length - 1].n;
+      // The phone's clock goes with them, so the server can tell when an
+      // answer was rolled, signal or not.
+      const r = await call("POST", path(id), { dev: st.dev, now: Date.now(), ops: batch.map(({ at, ...op }) => op) }).catch(() => ({ ok: false, status: 0, got: {} }));
       if (r.status === 401) return d.signedOut();
       if (r.status === 404) return d.gone(id);
       // Changes the server can't take come off this phone, with why, so they
-      // don't hold up the rest.
+      // don't hold up the rest. Any made while they were on their way stay.
       if (r.status === 400 || r.status === 413) {
-        camp(id).out = [];
+        camp(id).out = camp(id).out.filter((o) => o.n > last);
         keep();
         d.toast(r.got.error || "The round didn’t take that.");
         return d.quietRender();
@@ -277,24 +284,27 @@ export function makeTable(d) {
 
   const socketUrl = (id) => `${location.protocol === "https:" ? "wss:" : "ws:"}//${location.host}${path(id)}`;
 
+  // hold: waiting out the backoff before the next try, so a socket that keeps
+  // failing can't be retried on every redraw. parked: this socket was closed
+  // because the same person opened the table on too many phones, so it waits
+  // to be looked at again rather than knocking another one off.
   function watch(id) {
     if (net.id === id) return ensure();
     shut();
-    net.id = id;
-    net.tries = 0;
-    net.failed = 0;
-    net.why = "";
+    Object.assign(net, { id, tries: 0, failed: 0, why: "", hold: false, parked: false });
     if (!id) return;
     ensure();
     flush(id);
   }
   function shut() {
     clearTimeout(net.timer);
+    clearTimeout(net.steady);
     clearInterval(net.beat);
     clearTimeout(net.wait);
     const ws = net.ws;
     net.ws = null;
     net.open = false;
+    net.hold = false;
     if (ws) {
       try {
         ws.close(1000, "Done");
@@ -303,7 +313,7 @@ export function makeTable(d) {
   }
   function ensure() {
     // net.why: the server's said live play isn't on here, so there's no point trying.
-    if (!net.id || net.ws || net.why || !sync.me || sync.out || !online() || document.visibilityState === "hidden") return;
+    if (!net.id || net.ws || net.hold || net.parked || net.why || !sync.me || sync.out || !online() || document.visibilityState === "hidden") return;
     connect(net.id);
   }
   function connect(id) {
@@ -320,8 +330,12 @@ export function makeTable(d) {
       if (net.ws !== ws) return;
       opened = true;
       net.open = true;
-      net.tries = 0;
       net.failed = 0;
+      // The backoff starts again only once a socket's stayed up a while.
+      clearTimeout(net.steady);
+      net.steady = setTimeout(() => {
+        if (net.ws === ws) net.tries = 0;
+      }, 10000);
       beat(ws);
       flush(id);
       d.quietRender();
@@ -340,12 +354,14 @@ export function makeTable(d) {
         d.gone(id);
       }
     });
-    ws.addEventListener("close", () => {
+    ws.addEventListener("close", (e) => {
       if (net.ws !== ws) return;
       net.ws = null;
       net.open = false;
+      clearTimeout(net.steady);
       clearInterval(net.beat);
       clearTimeout(net.wait);
+      if (e.code === 4000) net.parked = true;
       // A socket that never opened might be turned away (signed out, not in
       // the campaign, live play not on here): asking plainly says which, and
       // gets the table meanwhile.
@@ -361,37 +377,51 @@ export function makeTable(d) {
     clearTimeout(net.timer);
     const ms = Math.min(30000, 1000 * 2 ** Math.min(5, net.tries));
     net.tries += 1;
-    net.timer = setTimeout(ensure, ms);
+    net.hold = true;
+    net.timer = setTimeout(() => {
+      net.hold = false;
+      ensure();
+    }, ms);
+  }
+  // A ping now, and a socket that doesn't answer in QUIET is dead.
+  function ping(ws) {
+    try {
+      ws.send("ping");
+    } catch {}
+    clearTimeout(net.wait);
+    net.wait = setTimeout(() => {
+      if (net.ws === ws) ws.close();
+    }, QUIET);
   }
   function beat(ws) {
     clearInterval(net.beat);
     net.beat = setInterval(() => {
-      if (net.ws !== ws || !net.open) return;
-      try {
-        ws.send("ping");
-      } catch {}
-      clearTimeout(net.wait);
-      net.wait = setTimeout(() => {
-        if (net.ws === ws) ws.close();
-      }, QUIET);
+      if (net.ws === ws && net.open) ping(ws);
     }, BEAT);
   }
+  // Everything waiting to go up, from every campaign.
+  function flushAll() {
+    load();
+    for (const id of Object.keys(st.k)) if (st.k[id].out.length) flush(id);
+  }
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState !== "visible" || !net.id) return;
+    if (document.visibilityState !== "visible") return;
+    net.parked = false;
     ensure();
     if (net.ws && net.open) {
-      // A phone that's been asleep might have missed a change.
+      // A phone that's been asleep might have a dead socket, or have missed a change.
+      ping(net.ws);
       try {
         net.ws.send("view");
       } catch {}
     }
-    flush(net.id);
+    flushAll();
   });
   addEventListener("online", () => {
-    load();
-    net.tries = 0;
+    clearTimeout(net.timer);
+    Object.assign(net, { tries: 0, hold: false, parked: false });
     ensure();
-    for (const id of Object.keys(st.k)) if (st.k[id].out.length) flush(id);
+    flushAll();
     d.quietRender();
   });
   addEventListener("offline", () => {
@@ -578,9 +608,9 @@ export function makeTable(d) {
     const last = current(doc);
     if (!last) return "";
     const isMine = (t) => t.at.user === me() && t.at.ch === ch.id;
-    const prev = doc.rounds.length > 1 ? doc.rounds[doc.rounds.length - 2] : null;
-    // Something from the round before that landed and still needs its roll.
-    const owed = prev ? prev.tele.filter((t) => isMine(t) && stateOf(t, prev) === "landed") : [];
+    // Anything from an earlier round that landed and still needs its roll.
+    const earlier = doc.rounds.slice(0, -1).map((r) => ({ r, list: r.tele.filter((t) => isMine(t) && stateOf(t, r) === "landed") })).filter((x) => x.list.length);
+    const owed = earlier.flatMap((x) => x.list);
     const at = last.tele.filter(isMine);
     const others = last.tele.filter((t) => !isMine(t));
     if (!at.length && !owed.length && !others.length) return "";
@@ -600,7 +630,7 @@ export function makeTable(d) {
     };
     const coming = at.some((t) => stateOf(t, last) === "coming") || owed.length;
     const head = `<div class="tg-head"><h2 id="tg-play-h">${last.over ? `Round ${last.n}’s over` : coming ? "Coming at you" : at.length ? "This round" : "Coming at the crew"}</h2>${netLine(id, k)}</div>`;
-    const owedHtml = owed.length ? `<p class="cc-small">From round ${prev.n}:</p><ol class="tg-list">${owed.map((t) => mineCard(t, prev)).join("")}</ol>` : "";
+    const owedHtml = earlier.map((x) => `<p class="cc-small">From round ${x.r.n}:</p><ol class="tg-list">${x.list.map((t) => mineCard(t, x.r)).join("")}</ol>`).join("");
     const atHtml = at.length ? `<ol class="tg-list">${at.map((t) => mineCard(t, last)).join("")}</ol>` : last.over ? "" : `<p class="cc-small">Nothing’s aimed at ${esc(ch.name)} this round.</p>`;
     const rest = others.length ? `<h3 class="tg-h3">${at.length || owed.length ? "The rest of the round" : "Coming at the crew"}</h3><ul class="tg-rows">${others.map(other).join("")}</ul>` : "";
     return `<section class="cc-sec tg-play" aria-labelledby="tg-play-h">${head}${wait}${owedHtml}${atHtml}${rest}</section>`;
@@ -612,7 +642,7 @@ export function makeTable(d) {
     const id = ch ? d.campOf(ch) : null;
     if (!id) return null;
     const doc = local(id);
-    const list = doc.rounds.slice(-2).flatMap((r) => r.tele.filter((t) => t.at.user === me() && t.at.ch === ch.id && stateOf(t, r) === "landed"));
+    const list = doc.rounds.flatMap((r) => r.tele.filter((t) => t.at.user === me() && t.at.ch === ch.id && stateOf(t, r) === "landed"));
     const blows = list.filter((t) => t.kind !== "fear");
     const fear = list.filter((t) => t.kind === "fear");
     const pick = kind === "fear" ? fear : kind === "blow" ? blows : blows.length ? blows : fear;
@@ -640,8 +670,10 @@ export function makeTable(d) {
     t.d = t.d && typeof t.d === "object" ? t.d : {};
     const keepIds = new Set(local(id).rounds.flatMap((r) => r.tele.map((x) => x.id)));
     for (const part of ["a", "d"]) for (const x of Object.keys(t[part])) if (!keepIds.has(x)) delete t[part][x];
+    // An answer keeps the time it was first rolled, so one paid for or
+    // rolled again later still says when it happened.
     if (val == null) delete t[kind][teleId];
-    else t[kind][teleId] = val;
+    else t[kind][teleId] = kind === "a" ? { ...val, t: t.a[teleId]?.t ?? Date.now() } : val;
     s.tele = t;
   }
 
@@ -663,7 +695,12 @@ export function makeTable(d) {
       const h = JSON.stringify(v);
       if (k.sent[key] === h) continue;
       const [, part, x] = key.split("|");
+      const hit = findTele(doc, x);
+      // One the table hasn't got any more is nobody's business now.
+      if (!hit) continue;
       k.sent[key] = h;
+      // The table has it already, from this player's other phone.
+      if (sameAs(hit.t, part, v, ch.id)) continue;
       k.out.push(part === "a" ? { o: "answer", id: x, ch: ch.id, a: v, n: ++st.n, at: Date.now() } : { o: "defend", id: x, ch: ch.id, r: v, n: ++st.n, at: Date.now() });
       queued = true;
     }
@@ -679,6 +716,13 @@ export function makeTable(d) {
     if (!queued) return;
     keep();
     flush(id);
+  }
+
+  // Whether the table's got this answer, or this When it lands, already.
+  function sameAs(t, part, v, chId) {
+    const dice = (list) => JSON.stringify((list ?? []).map((x) => [x.size, x.total]));
+    if (part === "a") return Boolean(t.ans && t.ans.user === me() && t.ans.ch === chId && t.ans.act === v.act && t.ans.opp === v.opp && dice(t.ans.dice) === dice(v.dice));
+    return Boolean(t.def && t.at.user === me() && t.def.stopped === v.stopped && t.def.mine === v.mine && t.def.v === v.v && t.def.paid === (v.paid || ""));
   }
 
   // What the roll card says about an answer, or a When it lands, and where it's got to.
@@ -979,9 +1023,15 @@ export function makeTable(d) {
     },
   };
 
+  let started = false;
   return {
     route(view, ch) {
       load();
+      // Whatever didn't go up last time the page was open goes now, wherever it's from.
+      if (!started && sync.me && !sync.out) {
+        started = true;
+        flushAll();
+      }
       const id = view.name === "camp" || view.name === "look" ? view.id : view.name === "sheet" && ch ? d.campOf(ch) : null;
       if (id && view.name !== "sheet") {
         if (roleIn(id) == null) return watch(null);

@@ -24,7 +24,7 @@
 // nothing, and its round is kept in the object's own SQLite, so it outlasts a
 // dropped connection, a redeploy and the object being put to sleep.
 import { DurableObject } from "cloudflare:workers";
-import { apply, blank, current, viewOf } from "../companion/table-rules.js";
+import { apply, blank, current, forget, viewOf } from "../companion/table-rules.js";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
 const MAX_OPS = 60;
@@ -114,6 +114,16 @@ export class Table extends DurableObject {
     const [client, server] = Object.values(new WebSocketPair());
     this.ctx.acceptWebSocket(server, [`u:${who.user}`]);
     server.serializeAttachment({ user: who.user, role: who.role });
+    // Checked again now it's open: someone taken out a moment ago, after the
+    // Worker checked but before this, is let go. Anyone taken out from here
+    // on is let go by left().
+    if (who.camp && this.env.DB) {
+      const still = await this.env.DB.prepare(`SELECT 1 AS ok FROM campaign c WHERE c.id = ?1 AND (c.gmId = ?2 OR EXISTS (SELECT 1 FROM member m WHERE m.campaignId = c.id AND m.userId = ?2))`).bind(who.camp, who.user).first().catch(() => ({ ok: 1 }));
+      if (!still) {
+        out(server, "Not in the campaign");
+        return new Response(null, { status: 101, webSocket: client });
+      }
+    }
     this.load();
     if (who.role === "player" && this.markSeen(new Set([who.user]), Date.now())) {
       this.doc.v += 1;
@@ -147,21 +157,29 @@ export class Table extends DurableObject {
   }
 
   // Changes from one phone, applied in order, each once.
-  async change(who, roster, dev, ops) {
+  async change(who, roster, dev, ops, phoneNow = null) {
     const doc = this.load();
     const now = Date.now();
     const was = JSON.stringify([doc.fight, doc.rounds]);
-    const high = Number(doc.seq[dev]?.n) || 0;
+    // Each phone's last change, under a key no phone can turn into anything else.
+    const key = `d:${dev}`;
+    const high = Number(doc.seq[key]?.n) || 0;
     let top = high;
     const no = [];
-    for (const op of ops) {
-      if (op.n <= high) continue;
-      top = Math.max(top, op.n);
-      const res = apply(doc, op, who, roster, now);
-      if (!res.ok) no.push({ n: op.n, o: String(op.o ?? ""), why: res.why });
+    try {
+      for (const op of ops) {
+        if (op.n <= high) continue;
+        top = Math.max(top, op.n);
+        const res = apply(doc, op, who, roster, now, { phoneNow });
+        if (!res.ok) no.push({ n: op.n, o: String(op.o ?? ""), why: res.why });
+      }
+    } catch (err) {
+      // Half a batch is never kept: the table goes back to what's stored.
+      this.doc = null;
+      throw err;
     }
     if (top > high) {
-      doc.seq[dev] = { n: top, at: now };
+      doc.seq[key] = { n: top, at: now };
       const devices = Object.entries(doc.seq);
       if (devices.length > MAX_DEVICES) for (const [d] of devices.sort((x, y) => (x[1]?.at ?? 0) - (y[1]?.at ?? 0)).slice(0, devices.length - MAX_DEVICES)) delete doc.seq[d];
     }
@@ -176,9 +194,18 @@ export class Table extends DurableObject {
     return { seq: top, no, ...viewOf(doc, who.role) };
   }
 
-  // Someone's left the campaign, or been taken out: their phones stop hearing it.
-  async left(user) {
+  // Someone's left the campaign, or been taken out: their phones stop hearing
+  // it. When their account's gone (erase), so are the telegraphs aimed at
+  // them and their name on anyone else's.
+  async left(user, { erase = false } = {}) {
     for (const ws of this.ctx.getWebSockets(`u:${user}`)) out(ws, "Not in the campaign");
+    if (!erase) return;
+    this.load();
+    if (forget(this.doc, user)) {
+      this.doc.v += 1;
+      this.save();
+      this.broadcast();
+    }
   }
 
   // The campaign's ended: everyone's phone stops hearing it, and it's gone.
@@ -209,7 +236,7 @@ export async function tableRoute(request, env, method, camp, user, { json, fail,
     // Only the site's own pages open a socket with someone's sign-in.
     if (!origins.includes(request.headers.get("origin"))) return fail(403, "That came from somewhere else.");
     if (await limited(env, `sock:${user.id}`, 240, 600)) return fail(429, "That’s a lot of reconnecting. Give it a minute.");
-    const who = JSON.stringify({ user: user.id, role: gm ? "gm" : "player" });
+    const who = JSON.stringify({ user: user.id, role: gm ? "gm" : "player", camp: camp.id });
     return tableOf(env, camp.id).fetch(new Request("https://table/socket", { headers: { upgrade: "websocket", "x-zi-who": who } }));
   }
   if (method === "GET") return json(await tableOf(env, camp.id).view({ user: user.id, role: gm ? "gm" : "player" }));
@@ -224,15 +251,17 @@ export async function tableRoute(request, env, method, camp, user, { json, fail,
     const roster = await rosterOf(env, camp.id);
     const me = gm ? null : roster.find((m) => m.user === user.id) ?? null;
     const who = { user: user.id, role: gm ? "gm" : "player", ch: me?.ch ?? null, cname: me?.cname ?? "" };
-    return json(await tableOf(env, camp.id).change(who, roster, dev, ops));
+    const phoneNow = Number.isFinite(Number(b.now)) ? Number(b.now) : null;
+    return json(await tableOf(env, camp.id).change(who, roster, dev, ops, phoneNow));
   }
   return fail(404, "There’s nothing here.");
 }
 
-// Someone's out of a campaign, so their phones stop hearing its table.
-export async function tableLeft(env, campaignId, userId) {
+// Someone's out of a campaign, so their phones stop hearing its table. When
+// their account's gone too (erase), the table forgets them.
+export async function tableLeft(env, campaignId, userId, { erase = false } = {}) {
   if (!env.TABLE) return;
-  await tableOf(env, campaignId).left(userId).catch((err) => console.error(`table left: ${err?.message ?? err}`));
+  await tableOf(env, campaignId).left(userId, { erase }).catch((err) => console.error(`table left: ${err?.message ?? err}`));
 }
 
 // A campaign's ended, so its table goes too.

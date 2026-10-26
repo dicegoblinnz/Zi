@@ -359,13 +359,14 @@ function noteTable(s) {
   const r = roll;
   if (!r || r.mode !== "result" || r.pick) return;
   if (r.kind === "action" && r.tele) {
-    const answered = r.opp != null && r.dice.length > 0;
+    // It's an answer while it's against the telegraph's die, or the number the GM rolled for it.
+    const answered = r.opp != null && r.dice.length > 0 && (r.vs === r.tele.d || r.vs === -1);
     table.record(s, r.tele.camp, "a", r.tele.id, answered ? { act: r.name, steps: r.total, dice: r.dice.map((x) => ({ size: x.size, total: x.nat + x.plus, out: outcome(x) })), opp: r.opp, real: Boolean(r.real) } : null);
   }
   if (r.kind === "defence" && r.camp && r.teles?.some(Boolean)) {
     for (const h of blocks(r)) {
       const id = r.teles[h.j];
-      if (id) table.record(s, r.camp, "d", id, { stopped: h.by != null, mine: h.mine, v: h.v, paid: r.paid[h.j] || "", real: Boolean(r.real) });
+      if (id) table.record(s, r.camp, "d", id, { on: r.against === "blows" ? "Defend" : "Confidence", stopped: h.by != null, mine: h.mine, v: h.v, paid: r.paid[h.j] || "", real: Boolean(r.real) });
     }
   }
 }
@@ -1444,6 +1445,8 @@ function defenceBuild(c, s) {
   const r = roll;
   const p = defencePool(c, s, r);
   const blows = r.against === "blows";
+  // Telegraphs that landed say whether they're blows or fear.
+  const locked = Boolean(r.teles?.some(Boolean));
   const now = diceLabel(stepsToDice(stepsNow(c, s, p.d)));
   const conds = s.conditions.map((x) => `<button type="button" class="cc-line" data-act="d-cond" data-k="${esc(x.name)}"${pressed(defenceCondOn(x, r))}><span class="tick" aria-hidden="true"></span><span><em>${esc(x.name)}</em> d${x.die} <small>${COND.get(x.name) ? esc(COND.get(x.name).passive.replace(/<[^>]+>/g, "").replace(/\.$/, "")) : x.kind === "for" ? "one step more" : "one step less"}</small></span></button>`).join("");
   const groups = [["title", "Titles"], ["permission", "Permissions"], ["attuned", "Attuned"], ["trait", "Traits"], ["kit", "What you carry"]].map(([kind, title]) => {
@@ -1457,8 +1460,8 @@ function defenceBuild(c, s) {
   <div class="dlg-body">${table.landLine(r)}
     <p class="cc-lead">Whatever nobody answered lands at the end of the round. Each die you roll stops one telegraph it beats or ties, and everything else gets through. Every one you stop puts your Confidence up a size.</p>
     <fieldset class="cc-group"><legend>What’s coming at you</legend>
-      <button type="button" class="cc-line" data-act="d-against" data-v="blows"${pressed(blows)}><span class="tick" aria-hidden="true"></span><span>Blows, blades, falling rocks and teeth <small>your Defend, ${esc(now)}</small></span></button>
-      <button type="button" class="cc-line" data-act="d-against" data-v="confidence"${pressed(!blows)}><span class="tick" aria-hidden="true"></span><span>Fear, lies and pressure <small>your Confidence, d${s.conf}</small></span></button></fieldset>
+      <button type="button" class="cc-line" data-act="d-against" data-v="blows"${pressed(blows)}${off(locked && !blows)}><span class="tick" aria-hidden="true"></span><span>Blows, blades, falling rocks and teeth <small>your Defend, ${esc(now)}</small></span></button>
+      <button type="button" class="cc-line" data-act="d-against" data-v="confidence"${pressed(!blows)}${off(locked && blows)}><span class="tick" aria-hidden="true"></span><span>Fear, lies and pressure <small>your Confidence, d${s.conf}</small></span></button>${locked ? `<p class="cc-lead">The GM said what landed, so it’s against your ${blows ? "Defend" : "Confidence"}.</p>` : ""}</fieldset>
     ${blows ? `<fieldset class="cc-group"><legend>How you take it</legend>
       <button type="button" class="cc-line" data-act="d-defend" data-v="0"${pressed(!r.defend)}><span class="tick" aria-hidden="true"></span><span>Let it ride <small>your Defend as it is</small></span></button>
       <button type="button" class="cc-line" data-act="d-defend" data-v="1"${pressed(r.defend)}><span class="tick" aria-hidden="true"></span><span>Defend <small>it took your action: every line on your Defend counts twice, and you get a split</small></span></button></fieldset>
@@ -2524,6 +2527,7 @@ const ACT = {
   "reroll-all": () => reroll(roll.dice.map((_, i) => i)),
   "d-pick": (el) => plusOn(Number(el.dataset.i)),
   "d-against"(el) {
+    if (roll.teles?.some(Boolean)) return;
     if (roll.against !== el.dataset.v) Object.assign(roll, { intents: {}, owns: new Set() });
     roll.against = el.dataset.v;
     Object.assign(roll, { dconds: {}, count: null, shape: 0 });
