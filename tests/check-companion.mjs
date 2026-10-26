@@ -98,8 +98,24 @@
 //    A downtime on another tab while a change is open isn't saved over: the
 //    change starts again from her as she is now. Printing says when Notes runs
 //    out of room, and a reworded thing in the bag stays crossed out.
+// 10. The rules on a phone. The Learn deck (content/learn.md) has 30 to 40
+//    cards of 40 to 120 words in book order, each teaching a section the book
+//    has, most with an example using the crew's real dice, and an example
+//    that names a crew member's set action and its die has them right. A
+//    made-up rules change names the card it touches, and the deck's been
+//    checked against the newest real one. At 390 by 844: the deck tapped,
+//    swiped and keyed through with its progress bar, a reload back on the same
+//    card, a bookmark kept, Read more with the whole section and Back to the
+//    card, a link on a card popping up its opening, with that Read more
+//    staying in the deck, and the list of every card. A chapter: the strip
+//    following you down, its contents, a bookmark on a section, pop-ups from a
+//    link to another chapter and one on the same page, Back inside a pop-up,
+//    Esc and a drag putting a sheet away, and Carry on reading on the chapter
+//    and the rules page. Then the deck, its pop-ups and Read more offline,
+//    nothing moving under reduce-motion and the sheet sliding up with motion
+//    on, 44px tap targets, and axe in both themes with the sheets open.
 import { createServer } from "node:http";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join } from "node:path";
 import { chromium } from "playwright";
@@ -110,6 +126,8 @@ import { blankBuild, checksOf, foldGrown, normalBuild, sheetOf } from "../src/co
 import { fromCrew, randomBuild } from "../src/companion/ways.js";
 import { changesOf, said, typo } from "../src/companion/marks.js";
 import { grow } from "../src/companion/grow.js";
+import { CARD_WORDS, CREW, DECK_SIZE, newestChange, reachOf, readCards, staleCards } from "../scripts/learn.mjs";
+import { parse as parseYaml } from "yaml";
 
 const SHOTS = process.argv[2] || null;
 // ZI_ONLY=5,5b runs only those parts, for a quick check while working on them.
@@ -2097,6 +2115,327 @@ if (part("9")) {
   same([crossed["bag|some stale bread"], crossed["bag|some bread"]], [true, undefined], "a reworded thing in the bag, still crossed out");
   console.log("changing: Vesk made your own with a third Title, six permissions and no seventh, kept offline, and seven Titles printed");
   await context.close();
+}
+
+// 10. The rules on a phone: the Learn deck, look-up chapters and pop-ups.
+if (part("10")) {
+  // The deck, read the way the build reads it.
+  const learnText = readFileSync("content/learn.md", "utf8");
+  const learnMeta = parseYaml(learnText.match(/^---\n([\s\S]*?)\n---/)[1]);
+  const { cards, problems: unread } = readCards(learnText);
+  for (const p of unread) note(`learn: ${p}`);
+  if (cards.length < DECK_SIZE[0] || cards.length > DECK_SIZE[1]) note(`learn: ${cards.length} cards, and the deck's ${DECK_SIZE[0]} to ${DECK_SIZE[1]}`);
+  for (const c of cards) if (c.words < CARD_WORDS[0] || c.words > CARD_WORDS[1]) note(`learn: “${c.title}” is ${c.words} words`);
+  const chapterDocs = readdirSync("content/rules").filter((f) => f.endsWith(".md")).map((f) => {
+    const text = readFileSync(`content/rules/${f}`, "utf8");
+    const m = text.match(/^---\n([\s\S]*?)\n---\n?/);
+    return { meta: parseYaml(m[1]), body: text.slice(m[0].length) };
+  }).sort((a, b) => Number(a.meta.order) - Number(b.meta.order));
+  const placeOf = (id) => {
+    const i = chapterDocs.findIndex((d) => d.meta.id === id || d.body.includes(`{#${id}}`));
+    return i < 0 ? null : [i, chapterDocs[i].meta.id === id ? -1 : chapterDocs[i].body.indexOf(`{#${id}}`)];
+  };
+  let behind = [-1, -1];
+  for (const c of cards) {
+    const at = placeOf(c.teaches);
+    if (!at) {
+      note(`learn: “${c.title}” teaches #${c.teaches}, and no chapter has it`);
+      continue;
+    }
+    if (at[0] < behind[0] || (at[0] === behind[0] && at[1] < behind[1])) note(`learn: “${c.title}” is out of book order`);
+    behind = at;
+  }
+  const withDice = cards.filter((c) => CREW.some((n) => c.example.includes(n)) && /\bd(2|4|6|8|10|12)\b/.test(c.example));
+  if (withDice.length < cards.length * 0.6) note(`learn: only ${withDice.length} of ${cards.length} cards have an example with the crew's dice`);
+  // Every die an example gives one of the crew's set actions is the one on their sheet.
+  const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
+  let dieChecks = 0;
+  for (const c of cards) {
+    for (const m of c.example.matchAll(/\b(Vesk|Dorrie|Bram|Isolde|Wren|Ash)['’]s ([A-Z][a-z]+(?: [a-z]+){0,2})(?:,| is) (?:(\d+) steps, )?a (d\d+)\b/g)) {
+      const action = book.crew.find((x) => x.name === m[1])?.actions.find((a) => a.name.toLowerCase() === m[2].toLowerCase());
+      if (!action) continue;
+      dieChecks += 1;
+      same([m[3] ? Number(m[3]) : action.steps, m[4]], [action.steps, action.die], `learn: “${c.title}” gives ${m[1]}'s ${m[2]}`);
+    }
+  }
+  if (dieChecks < 4) note(`learn: only ${dieChecks} set actions found in the examples to check against the crew's sheets`);
+  // A made-up change to Extra actions touches the card that teaches Your Action.
+  const reach = (id) => reachOf(chapterDocs, id);
+  same(staleCards(cards, { iso: "2099-01-01", title: "made up", links: ["s-extra-actions"] }, "2026-10-26", reach).map((c) => c.id), ["l-action"], "learn: a made-up change to Extra actions names the card that teaches Your Action");
+  same(staleCards(cards, { iso: "2026-01-01", title: "old", links: ["s-aura"] }, String(learnMeta.checked), reach).length, 0, "learn: a change from before the deck was checked names nothing");
+  const newest = newestChange(readFileSync("content/changes.md", "utf8"));
+  const behindDeck = staleCards(cards, newest, String(learnMeta.checked), reach);
+  if (behindDeck.length) note(`learn: the ${newest.iso} change touches ${behindDeck.map((c) => c.id).join(", ")}, and the deck says it was checked on ${learnMeta.checked}`);
+  same(book.learn?.cards.map((c) => c.id), cards.map((c) => c.id), "learn: the cards in book.json");
+
+  const openings = JSON.parse(readFileSync("dist/openings.json", "utf8")).s;
+  const deckAt = (page) => page.evaluate(() => ({
+    n: document.querySelector(".lr-n").textContent,
+    id: document.querySelector(".lr-card:not([inert])")?.id,
+    bar: document.querySelector(".lr-progress").getAttribute("aria-valuenow"),
+  }));
+  const waitCard = (page, n) => page.waitForFunction((n) => document.querySelector(".lr-n")?.textContent === String(n) && document.querySelectorAll(".lr-card:not([inert])").length === 1, n, { timeout: 5000 }).catch(() => {});
+  const still = (page) => page.evaluate(() => document.getAnimations().filter((a) => a.playState === "running").length);
+  const shut = (page, sel) => page.waitForFunction((sel) => !document.querySelector(`${sel}[open]`), sel, { timeout: 5000 }).catch(() => note(`${sel} didn't close`));
+  const text = async (page, sel) => (await page.textContent(sel))?.replace(/\s+/g, " ").trim() ?? "";
+  const shown = async (page, sel) => (await page.evaluate((sel) => [...document.querySelectorAll(`${sel} span, ${sel} b`)].map((x) => x.textContent).join(" "), sel)).replace(/\s+/g, " ").trim();
+  const reading = (page) => page.evaluate(() => JSON.parse(localStorage.getItem("zi-reading") || "null"));
+  const small = (page, sel) => page.evaluate((sel) => [...document.querySelectorAll(sel)]
+    .filter((el) => el.getClientRects().length && (!el.checkVisibility || el.checkVisibility()) && !el.closest("[inert]"))
+    .map((el) => ({ t: (el.getAttribute("aria-label") || el.textContent).trim().slice(0, 30), h: Math.round(el.getBoundingClientRect().height), w: Math.round(el.getBoundingClientRect().width) }))
+    .filter((x) => x.h < 44 || x.w < 44), sel);
+
+  const { context, page } = await phone({ hasTouch: true });
+  await page.goto(`${BASE}/learn/`);
+  await page.waitForSelector(".lr-card");
+  same(await deckAt(page), { n: "1", id: cards[0].id, bar: "1" }, "the deck starts on its first card");
+  same(await page.isDisabled(".lr-prev"), true, "Back on the first card");
+  await shot(page, "learn-card-dark");
+  // Tapped, keyed and swiped through.
+  await page.click(".lr-next");
+  await waitCard(page, 2);
+  same(await deckAt(page), { n: "2", id: cards[1].id, bar: "2" }, "Next goes to the second card");
+  await page.keyboard.press("ArrowRight");
+  await waitCard(page, 3);
+  same((await deckAt(page)).id, cards[2].id, "the right arrow goes on a card");
+  const cdp = await context.newCDPSession(page);
+  await cdp.send("Input.synthesizeScrollGesture", { x: 300, y: 420, xDistance: -260, yDistance: 0, gestureSourceType: "default", speed: 1600 }).catch((e) => note(`a swipe couldn't be made: ${e.message}`));
+  await waitCard(page, 4);
+  same((await deckAt(page)).id, cards[3].id, "a swipe goes on a card");
+  same(await page.evaluate(() => getComputedStyle(document.querySelector(".lr-progress i")).transform), `matrix(${4 / cards.length}, 0, 0, 1, 0, 0)`, "the progress bar a tenth of the way along on card 4");
+  same(await still(page), 0, "nothing moving in the deck under reduce-motion");
+  // It remembers the card: a reload, then the deck from the rules page.
+  await page.reload();
+  await page.waitForSelector(".lr-card");
+  same((await deckAt(page)).id, cards[3].id, "a reload stays on the same card");
+  await page.goto(`${BASE}/rules/`);
+  await page.click('a[href="/learn/"]');
+  await page.waitForSelector(".lr-card");
+  same((await deckAt(page)).n, "4", "back to the deck on the card you were on");
+  same((await reading(page))?.learn?.id, cards[3].id, "the card's kept in zi-reading");
+  // A bookmark on the card, kept.
+  await page.click(".lr-card:not([inert]) .lr-mark");
+  same(await page.getAttribute(".lr-card:not([inert]) .lr-mark", "aria-pressed"), "true", "a card bookmarked");
+  await page.reload();
+  await page.waitForSelector(".lr-card");
+  same(await page.getAttribute(".lr-card:not([inert]) .lr-mark", "aria-pressed"), "true", "a card's bookmark after a reload");
+  // Read more: the whole section, and straight back to the card.
+  const four = book.learn.cards[3];
+  await page.click(".lr-card:not([inert]) .lr-more");
+  await page.waitForSelector("#lr-read[open]");
+  await page.waitForFunction(() => document.querySelector(".lr-read-text p:not(.lr-wait), .lr-read-text li"), null, { timeout: 8000 }).catch(() => note("Read more never got its section"));
+  same(await text(page, "#lr-read-t"), four.section.title, "Read more's title is the card's section");
+  const sectionWords = (await text(page, ".lr-read-text")).split(" ").length;
+  if (sectionWords <= four.words) note(`Read more shows ${sectionWords} words, no more than the card's ${four.words}`);
+  await shot(page, "learn-read-more-dark");
+  await page.click("#lr-read .zs-foot .zs-close");
+  await shut(page, "#lr-read");
+  same((await deckAt(page)).n, "4", "Back to the card leaves you on the same card");
+  // A link on a card pops up its opening, and that one's Read more stays in the deck.
+  await page.goto(`${BASE}/learn/#l-building`);
+  await page.waitForSelector(".lr-card");
+  same((await deckAt(page)).id, "l-building", "the deck opens on the card in the address");
+  await page.click('.lr-card:not([inert]) .lr-body a[href="/rules/the-core/#s-aura"]');
+  await page.waitForSelector(".zp[open]");
+  same(await text(page, "#zp-t"), "Aura", "a card's link pops up its section");
+  has(await text(page, ".zp-text"), "luck and flair", "the pop-up's opening");
+  await shot(page, "learn-popup-dark");
+  await page.click(".zp-more");
+  await page.waitForSelector("#lr-read[open]");
+  await shut(page, ".zp");
+  same(await text(page, "#lr-read-t"), "Aura", "the pop-up's Read more opens the section in the deck");
+  same(new URL(page.url()).pathname, "/learn/", "still in the deck");
+  await page.keyboard.press("Escape");
+  await shut(page, "#lr-read");
+  // The list of every card.
+  await page.click(".lr-list");
+  await page.waitForSelector("#lr-cards[open]");
+  same(await page.getAttribute("#lr-cards a[aria-current]", "data-card"), "l-building", "the list marks the card you're on");
+  same(await page.$$eval("#lr-cards a.is-marked", (els) => els.map((a) => a.dataset.card)), [cards[3].id], "the list marks the bookmarked card");
+  await page.click('#lr-cards a[data-card="l-aura"]');
+  await shut(page, "#lr-cards");
+  same((await deckAt(page)).id, "l-aura", "a card picked from the list");
+  for (const [sel, why] of [[".lr-out, .lr-icon, .lr-foot .button, .lr-card:not([inert]) .lr-more, .lr-card:not([inert]) .lr-mark", "the deck"]]) {
+    const tiny = (await small(page, sel)).filter((x) => x.h < 44 || (x.w < 44 && !/more/i.test(x.t)));
+    if (tiny.length) note(`small tap targets in ${why}: ${JSON.stringify(tiny.slice(0, 4))}`);
+  }
+  await page.goto(`${BASE}/learn/#${cards[cards.length - 1].id}`);
+  await page.waitForSelector(".lr-card");
+  same(await text(page, ".lr-next"), "Finish", "the last card's Next says Finish");
+
+  // A chapter: the strip follows you down and opens the contents.
+  await page.goto(`${BASE}/rules/conflict/`);
+  await page.waitForSelector(".rs-strip");
+  same([await text(page, ".rs-ch"), /^\d+ sections$/.test(await text(page, ".rs-sec"))], ["Contents", true], "the strip at the top of a chapter");
+  await page.evaluate(() => document.getElementById("s-defend").scrollIntoView());
+  await page.waitForFunction(() => document.querySelector(".rs-sec").textContent === "Defend", null, { timeout: 5000 }).catch(() => {});
+  same([await text(page, ".rs-ch"), await text(page, ".rs-sec"), await page.evaluate(() => Math.round(document.querySelector(".rs-strip").getBoundingClientRect().top))], ["Conflict", "Defend", 0], "the strip followed you down to Defend");
+  const lineScale = await page.evaluate(() => new DOMMatrix(getComputedStyle(document.querySelector(".rs-line i")).transform).a);
+  if (!(lineScale > 0.05 && lineScale < 0.6)) note(`the strip's line says ${lineScale} of the way through Conflict at Defend`);
+  await shot(page, "chapter-strip-dark");
+  await page.click(".rs-where");
+  await page.waitForSelector("#rs-toc[open]");
+  same(await page.getAttribute("#rs-toc a[aria-current]", "data-s"), "s-defend", "the contents mark where you are");
+  await shot(page, "chapter-contents-dark");
+  await page.click('#rs-toc a[data-s="s-telegraphs"]');
+  await shut(page, "#rs-toc");
+  await page.waitForFunction(() => document.querySelector(".rs-sec").textContent === "Telegraphs", null, { timeout: 5000 }).catch(() => {});
+  same([await text(page, ".rs-sec"), new URL(page.url()).hash], ["Telegraphs", "#s-telegraphs"], "a section picked from the contents");
+  // A bookmark on a section, kept.
+  await page.click('section[data-s="s-telegraphs"] > .rs-head .rs-mark');
+  same(await page.getAttribute('section[data-s="s-telegraphs"] > .rs-head .rs-mark', "aria-pressed"), "true", "a section bookmarked");
+  // A pop-up from a link to another chapter, then Back inside one, then Esc.
+  const cross = await page.evaluate((keys) => [...document.querySelectorAll("article section.rs a[href^='/rules/']")].map((a) => a.getAttribute("href")).find((h) => !h.startsWith("/rules/conflict/") && keys.includes(h)), Object.keys(openings));
+  if (!cross) note("no link to another chapter with an opening in Conflict");
+  else {
+    await page.click(`article section.rs a[href="${cross}"]`);
+    await page.waitForSelector(".zp[open]");
+    same([await text(page, "#zp-t"), await page.getAttribute(".zp-more", "href"), new URL(page.url()).pathname], [openings[cross].t, cross, "/rules/conflict/"], "a link to another chapter pops up, and you stay where you were");
+    await shot(page, "chapter-popup-dark");
+    const inner = await page.evaluate((keys) => [...document.querySelectorAll(".zp-text a[href^='/rules/']")].map((a) => a.getAttribute("href")).find((h) => keys.includes(h)), Object.keys(openings));
+    if (inner) {
+      await page.click(`.zp-text a[href="${inner}"]`);
+      await page.waitForFunction((t) => document.querySelector("#zp-t").textContent === t, openings[inner].t, { timeout: 5000 }).catch(() => {});
+      same([await text(page, "#zp-t"), await page.isVisible(".zp-back")], [openings[inner].t, true], "a link inside a pop-up opens in the same sheet, with Back");
+      await page.click(".zp-back");
+      same([await text(page, "#zp-t"), await page.isVisible(".zp-back")], [openings[cross].t, false], "Back to the pop-up before");
+    }
+    await page.keyboard.press("Escape");
+    await shut(page, ".zp");
+  }
+  // One on the same page: Read more goes straight to it.
+  const here = await page.evaluate((keys) => [...document.querySelectorAll("article section.rs a[href^='#']")].map((a) => a.getAttribute("href")).find((h) => keys.includes(`/rules/conflict/${h}`)), Object.keys(openings));
+  if (!here) note("no link on the same page with an opening in Conflict");
+  else {
+    await page.click(`article section.rs a[href="${here}"]`);
+    await page.waitForSelector(".zp[open]");
+    await page.click(".zp-more");
+    await shut(page, ".zp");
+    await page.waitForFunction((h) => location.hash === h, here, { timeout: 5000 }).catch(() => {});
+    const top = await page.evaluate((id) => Math.round(document.getElementById(id).getBoundingClientRect().top), here.slice(1));
+    same([new URL(page.url()).hash, top > 40 && top < 160], [here, true], "Read more on the same page goes to the section, clear of the strip");
+  }
+  // Carry on reading: from the rules page, and on the chapter.
+  await page.evaluate(() => document.getElementById("s-intercept").scrollIntoView());
+  await page.waitForFunction(() => document.querySelector(".rs-sec").textContent === "Intercept", null, { timeout: 5000 }).catch(() => {});
+  await page.goto(`${BASE}/rules/`);
+  await page.waitForSelector(".rd:not([hidden])", { timeout: 5000 }).catch(() => note("the rules page shows nothing to carry on with"));
+  has(await shown(page, ".rd-carry"), "Carry on reading Intercept Conflict", "Carry on reading on the rules page");
+  has(await shown(page, ".rd-carry"), `Carry on learning ${book.learn.cards[cards.length - 1].title} Card ${cards.length} of ${cards.length}`, "Carry on learning on the rules page");
+  same(await page.$$eval(".rd-marks a", (as) => as.map((a) => a.getAttribute("href"))), ["/rules/conflict/#s-telegraphs", `/learn/#${cards[3].id}`], "your bookmarks on the rules page, newest first");
+  await shot(page, "rules-reading-dark");
+  await page.goto(`${BASE}/rules/conflict/`);
+  await page.waitForSelector(".rs-carry:not([hidden])", { timeout: 5000 }).catch(() => note("no Carry on reading on the chapter"));
+  has(await text(page, ".rs-carry"), "Carry on from Intercept", "Carry on reading on the chapter");
+  await page.click(".rs-carry");
+  await page.waitForFunction(() => document.querySelector(".rs-sec").textContent === "Intercept", null, { timeout: 5000 }).catch(() => {});
+  same([await text(page, ".rs-sec"), await page.isHidden(".rs-carry")], ["Intercept", true], "Carry on reading takes you there");
+  same(await page.getAttribute('section[data-s="s-telegraphs"] > .rs-head .rs-mark', "aria-pressed"), "true", "a section's bookmark on the next visit");
+  await page.click(".rs-where");
+  await page.waitForSelector("#rs-toc[open]");
+  const tinyHere = await small(page, ".rs-where, .rs-mark, #rs-toc .zs-foot .button, #rs-toc .rs-list a");
+  if (tinyHere.filter((x) => x.h < 44 || (x.w < 44 && x.h < 60)).length) note(`small tap targets on a chapter: ${JSON.stringify(tinyHere.slice(0, 4))}`);
+  same(await still(page), 0, "nothing moving with the contents open under reduce-motion");
+  await page.keyboard.press("Escape");
+  await shut(page, "#rs-toc");
+
+  // Offline: the deck, a pop-up from a card, Read more, and a chapter's pop-up.
+  await page.goto(`${BASE}/learn/`);
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.reload();
+  await page.waitForFunction(() => navigator.serviceWorker.controller !== null, null, { timeout: 15000 }).catch(() => note("the service worker never took over the deck"));
+  await page.evaluate(() => caches.keys().then((ks) => Promise.all(ks.map((k) => caches.open(k).then((c) => c.match("/openings.json")))))).then((r) => r.some(Boolean) || note("openings.json isn't kept for offline"));
+  await context.setOffline(true);
+  await page.goto(`${BASE}/learn/#l-building`);
+  await page.waitForSelector(".lr-card", { timeout: 10000 }).catch(() => note("the deck didn't open offline"));
+  await page.click('.lr-card:not([inert]) .lr-body a[href="/rules/the-core/#s-aura"]');
+  await page.waitForSelector(".zp[open]", { timeout: 8000 }).catch(() => note("a card's pop-up didn't open offline"));
+  has(await text(page, ".zp-text"), "luck and flair", "a card's pop-up offline");
+  await page.keyboard.press("Escape");
+  await shut(page, ".zp");
+  await page.click(".lr-card:not([inert]) .lr-more");
+  await page.waitForFunction(() => document.querySelector(".lr-read-text li, .lr-read-text p:not(.lr-wait)"), null, { timeout: 8000 }).catch(() => {});
+  has(await text(page, ".lr-read-text"), "Every roll goes the same way", "Read more offline");
+  await page.keyboard.press("Escape");
+  await shut(page, "#lr-read");
+  await page.click(".lr-next");
+  await waitCard(page, 6);
+  same((await deckAt(page)).n, "6", "Next offline");
+  await page.goto(`${BASE}/rules/the-core/`);
+  await page.waitForSelector(".rs-strip", { timeout: 10000 }).catch(() => note("a chapter didn't open offline"));
+  await page.click('article section.rs a[href="#how-permissions-stack"]');
+  await page.waitForSelector(".zp[open]", { timeout: 8000 }).catch(() => note("a chapter's pop-up didn't open offline"));
+  has(await text(page, ".zp-text"), "counts once a roll", "a chapter's pop-up offline");
+  await context.setOffline(false);
+  await context.close();
+
+  // With motion on, a sheet slides up, a drag puts it away, and the bar moves.
+  {
+    const { context, page } = await phone({ reducedMotion: "no-preference" });
+    await page.goto(`${BASE}/rules/the-core/`);
+    await page.waitForSelector(".rs-strip");
+    await page.evaluate(() => document.getElementById("s-aura").scrollIntoView());
+    await page.click(".rs-where");
+    const moving = await page.evaluate(() => document.querySelector("#rs-toc").getAnimations().length);
+    if (!moving) note("the contents came up without sliding, with motion on");
+    await page.waitForTimeout(450);
+    const box = await page.locator("#rs-toc .zs-top").boundingBox();
+    await page.mouse.move(box.x + box.width / 2, box.y + 10);
+    await page.mouse.down();
+    await page.mouse.move(box.x + box.width / 2, box.y + 340, { steps: 6 });
+    await page.mouse.up();
+    await shut(page, "#rs-toc");
+    await page.goto(`${BASE}/learn/`);
+    await page.waitForSelector(".lr-card");
+    await page.click(".lr-next");
+    const bar = await page.evaluate(() => document.querySelector(".lr-progress i").getAnimations().length);
+    if (!bar) note("the progress bar jumped, with motion on");
+    await context.close();
+  }
+
+  // axe on the deck, its sheets, a chapter and the rules page, in both themes,
+  // and the screenshots at 390 by 844.
+  for (const theme of ["dark", "light"]) {
+    const { context, page } = await phone({ colorScheme: theme });
+    if (theme === "light") await context.addInitScript(() => localStorage.setItem("zi-theme", "light"));
+    const axe = async (what, include) => {
+      const builder = new AxeBuilder({ page });
+      const result = await (include ? builder.include(include) : builder).analyze();
+      for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`${what}, ${theme}: axe ${v.id}: ${v.nodes[0]?.target?.join(" ")}`);
+    };
+    await page.goto(`${BASE}/learn/#l-intents`);
+    await page.waitForSelector(".lr-card");
+    await axe("the deck");
+    await shot(page, `learn-card-${theme}`);
+    await page.click(".lr-card:not([inert]) .lr-more");
+    await page.waitForFunction(() => document.querySelector(".lr-read-text li, .lr-read-text p:not(.lr-wait)"), null, { timeout: 8000 }).catch(() => {});
+    await axe("Read more", "#lr-read");
+    await shot(page, `learn-read-more-${theme}`);
+    await page.keyboard.press("Escape");
+    await shut(page, "#lr-read");
+    await page.click(".lr-list");
+    await page.waitForSelector("#lr-cards[open]");
+    await axe("the list of cards", "#lr-cards");
+    await page.keyboard.press("Escape");
+    await shut(page, "#lr-cards");
+    await page.goto(`${BASE}/rules/conflict/#s-answering`);
+    await page.waitForSelector(".rs-strip");
+    await axe("a chapter");
+    await shot(page, `chapter-strip-${theme}`);
+    await page.click('section[data-s="s-answering"] a[href="#s-intercept"]');
+    await page.waitForSelector(".zp[open]");
+    await axe("a pop-up", ".zp");
+    await shot(page, `chapter-popup-${theme}`);
+    await page.keyboard.press("Escape");
+    await shut(page, ".zp");
+    await page.click(".rs-where");
+    await page.waitForSelector("#rs-toc[open]");
+    await axe("a chapter's contents", "#rs-toc");
+    await page.keyboard.press("Escape");
+    await shut(page, "#rs-toc");
+    await context.close();
+  }
+  console.log(`reading: ${cards.length} cards checked against the chapters and the crew's sheets (${dieChecks} set actions), the deck swiped, remembered and read offline, a chapter's strip, contents, bookmarks and pop-ups, and Carry on reading`);
 }
 
 await browser.close();

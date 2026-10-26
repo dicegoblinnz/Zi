@@ -2,7 +2,8 @@
 // with the list of files to keep on the phone and a version that changes
 // whenever any of them does. It keeps every page except the not-found page,
 // the CSS and scripts, the Latin fonts, the figures and the favicon, and the
-// blank character sheet, which the companion fills in to print a character.
+// blank character sheet, which the companion fills in to print a character,
+// and openings.json, which the pop-ups read.
 // Search (dist/pagefind/) needs a signal, so it's left out.
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
@@ -29,7 +30,7 @@ const kitPage = join(DIST, "kit", "index.html");
 const kitRefs = new Set(existsSync(kitPage) ? refs(readFileSync(kitPage, "utf8")) : []);
 const others = new Set(files.filter((p) => p.endsWith(".html") && p !== kitPage).flatMap((p) => refs(readFileSync(p, "utf8"))));
 const kitOnly = (rel) => rel.startsWith("kit/") || (kitRefs.has(rel) && !others.has(rel));
-const keep = (rel) => !kitOnly(rel) && ((/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf");
+const keep = (rel) => !kitOnly(rel) && ((/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf" || rel === "openings.json");
 const hash = createHash("sha1");
 const urls = [];
 for (const path of files.sort()) {

@@ -7,8 +7,11 @@
 //   [text](#id)                 a link to any id in the book, rewritten to
 //                                the page that holds it
 // It writes src/generated/book.json and copies the figures into public/.
+// For reading on a phone it also cuts each chapter into short sections, builds
+// the Learn deck (content/learn.md) and writes public/openings.json, the
+// opening of every section a link points at, for the pop-ups.
 import { createHash } from "node:crypto";
-import { cpSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
@@ -22,6 +25,7 @@ import rehypeStringify from "rehype-stringify";
 import { visit, SKIP } from "unist-util-visit";
 import { diceLabel, stepsToDice } from "../src/companion/dice.js";
 import { threadNote } from "../src/companion/threads.js";
+import { CARD_WORDS, newestChange, reachOf, readCards, staleCards } from "./learn.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const RULES = join(ROOT, "content", "rules");
@@ -126,7 +130,9 @@ function wrapTables() {
   };
 }
 
-function render(doc, where, pageFor) {
+// A chapter comes back cut into sections, with the openings of the sections
+// in it that links point at (look) when it's one of the chapters.
+function render(doc, where, pageFor, look = null) {
   const processor = unified()
     .use(remarkParse)
     .use(remarkGfm)
@@ -145,7 +151,115 @@ function render(doc, where, pageFor) {
   visit(tree, "element", (node) => {
     if (node.tagName === "h2" && node.properties?.id) headings.push({ id: node.properties.id, text: textOf(node) });
   });
-  return { html: String(file), headings, warnings: file.messages.length };
+  if (!look) return { html: String(file), headings, warnings: file.messages.length };
+  const openings = openingsOf(tree, look, (nodes) => processor.stringify({ type: "root", children: nodes }));
+  const sections = sectioned(tree);
+  return { html: processor.stringify(tree), headings, sections, openings, warnings: file.messages.length };
+}
+
+// Look-up pages: every h2 and h3 at the top of a chapter starts a <section>
+// that runs to the next one, with the heading in a row beside its bookmark
+// (src/reading/lookup.js). It hands back the list the strip's contents show.
+const cls = (node) => node?.properties?.className ?? [];
+const el = (tagName, properties = {}, children = []) => ({ type: "element", tagName, properties, children });
+const ribbon = () => el("svg", { className: ["rs-ribbon"], viewBox: "0 0 24 24", width: 22, height: 22, ariaHidden: "true", focusable: "false" }, [
+  el("path", { d: "M7 3.5h10a1 1 0 0 1 1 1V21l-6-4.25L6 21V4.5a1 1 0 0 1 1-1z" }),
+]);
+function sectioned(tree) {
+  const out = [];
+  const list = [];
+  let h2 = null;
+  let h3 = null;
+  for (const node of tree.children) {
+    const level = node.type === "element" && node.properties?.id ? { h2: 2, h3: 3 }[node.tagName] : undefined;
+    if (!level) {
+      if (h3) h3.children.push(node);
+      else if (h2) h2.children.push(node);
+      else out.push(node);
+      continue;
+    }
+    const id = node.properties.id;
+    const text = textOf(node).trim();
+    list.push({ id, text, level });
+    const mark = el("button", { type: "button", className: ["rs-mark"], dataMark: id, ariaPressed: "false", ariaLabel: `Bookmark ${text}` }, [ribbon()]);
+    const section = el("section", { className: ["rs", `rs-${level}`], dataS: id }, [el("div", { className: ["rs-head"] }, [node, mark])]);
+    if (level === 2) {
+      h2 = section;
+      h3 = null;
+      out.push(section);
+    } else {
+      h3 = section;
+      (h2 ? h2.children : out).push(section);
+    }
+  }
+  tree.children = out;
+  return list;
+}
+
+// Pop-ups: the opening of every section a link in the book points at, up to
+// its first example, table or subheading, six paragraphs at most, the way the
+// companion's rules on tap work. A rule or note box is part of the rule, so
+// it's kept without its box, and a quote's skipped. Each one's keyed by the
+// address a link to it has, with its own links made whole and its ids taken
+// off, since it's shown on other pages.
+const isHeading = (n) => /^h[1-6]$/.test(n.tagName);
+const isBox = (n) => n.tagName === "div" && cls(n).includes("box");
+function openingBlocks(nodes) {
+  const out = [];
+  for (const n of nodes) {
+    if (n.type !== "element" || cls(n).includes("box-label") || cls(n).includes("box-quote")) continue;
+    if (isBox(n) && (cls(n).includes("box-rule") || cls(n).includes("box-note"))) {
+      out.push(...n.children.filter((c) => c.type === "element" && !cls(c).includes("box-label")));
+      continue;
+    }
+    if (isHeading(n) || n.tagName === "div" || n.tagName === "table" || n.tagName === "hr" || n.tagName === "figure") break;
+    if (n.tagName === "p" && n.children.some((c) => c.tagName === "img")) break;
+    out.push(n);
+  }
+  return out.slice(0, 6);
+}
+function openingsOf(tree, { targets, page, title, chapterId }, toHtml) {
+  const found = new Map();
+  visit(tree, "element", (node, index, parent) => {
+    const id = node.properties?.id;
+    if (id && targets.has(id) && parent) found.set(id, { node, index, parent });
+  });
+  const own = (nodes) => {
+    const copy = structuredClone(nodes);
+    for (const n of copy) visit(n, "element", (node) => {
+      delete node.properties.id;
+      const href = node.properties.href;
+      if (typeof href === "string" && href.startsWith("#")) node.properties.href = `${page}${href}`;
+    });
+    return toHtml(copy).trim();
+  };
+  const out = {};
+  if (targets.has(chapterId)) {
+    const blocks = openingBlocks(tree.children);
+    if (blocks.length) out[page] = { t: title, c: title, h: own(blocks) };
+  }
+  for (const [id, { node, index, parent }] of found) {
+    let blocks = [];
+    let name = "";
+    if (isHeading(node)) {
+      // A section that goes straight into a subheading or a place's box opens
+      // with what that says instead.
+      const after = parent.children.slice(index + 1).filter((n) => n.type === "element" && !cls(n).includes("box-quote"));
+      blocks = openingBlocks(after);
+      const first = after[0];
+      if (!blocks.length && first && isHeading(first)) blocks = openingBlocks(after.slice(1));
+      else if (!blocks.length && first && isBox(first) && !cls(first).includes("box-example")) blocks = openingBlocks(first.children);
+      name = textOf(node);
+    } else if (isBox(node)) {
+      blocks = openingBlocks(node.children);
+      const label = node.children.find((c) => cls(c).includes("box-label"));
+      const strong = node.children.find((c) => c.tagName === "p" && !cls(c).includes("box-label"))?.children.find((c) => c.tagName === "strong");
+      name = (label && textOf(label.children.find((c) => cls(c).includes("box-name")) ?? { children: [] })) || (strong ? textOf(strong) : "");
+    }
+    name = name.trim().replace(/\.$/, "");
+    if (blocks.length && name) out[`${page}#${id}`] = { t: name, c: title, h: own(blocks) };
+  }
+  return out;
 }
 
 // Titles and part blurbs come from front matter, so curl their apostrophes here.
@@ -576,17 +690,28 @@ const docs = readdirSync(RULES)
   .sort((a, b) => Number(a.meta.order) - Number(b.meta.order));
 const changes = { file: "changes.md", path: "changes.md", ...readDoc(join(ROOT, "content", "changes.md")) };
 
+const learnFile = join(ROOT, "content", "learn.md");
+const learnDoc = existsSync(learnFile) ? { file: "learn.md", path: "learn.md", ...readDoc(learnFile) } : null;
+
 const pageFor = new Map(docs.map((d) => [d.path, `/rules/${d.meta.slug}/`]));
 pageFor.set(changes.path, "/changes/");
 const where = collectIds([...docs, changes]);
 
+// Every section a link points at, from the chapters, the change log and the
+// Learn deck, gets its opening built for the pop-ups.
+const linkTargets = new Set([...docs, changes, learnDoc].filter(Boolean).flatMap((d) => [...d.body.matchAll(/\]\(#([A-Za-z0-9_-]+)\)/g)].map((m) => m[1])));
+const openings = {};
+
 let warnings = 0;
 const chapters = docs.map((doc, i) => {
-  const out = render(doc, where, pageFor);
+  const look = { targets: linkTargets, page: pageFor.get(doc.path), title: curly(doc.meta.title), chapterId: doc.meta.id };
+  const out = render(doc, where, pageFor, look);
   warnings += out.warnings;
+  Object.assign(openings, out.openings);
   const part = parts.find((p) => p.number === doc.meta.partNumber);
   return {
     slug: doc.meta.slug,
+    id: doc.meta.id,
     title: curly(doc.meta.title),
     order: Number(doc.meta.order),
     partNumber: doc.meta.partNumber ?? null,
@@ -594,6 +719,7 @@ const chapters = docs.map((doc, i) => {
     updated: doc.meta.updated ? String(doc.meta.updated) : null,
     html: out.html,
     headings: out.headings,
+    sections: out.sections,
     prev: i > 0 ? { slug: docs[i - 1].meta.slug, title: curly(docs[i - 1].meta.title) } : null,
     next: i < docs.length - 1 ? { slug: docs[i + 1].meta.slug, title: curly(docs[i + 1].meta.title) } : null,
   };
@@ -672,6 +798,65 @@ for (const a of build?.archetypes ?? []) if (a.id) companionLinks[a.id] = linkTo
 for (const idea of build?.ideas ?? []) companionLinks[idea.id] = linkTo(idea.id);
 for (const id of Object.keys(rules)) companionLinks[id] ??= linkTo(id);
 
+// The Learn deck (/learn/): the core rules as cards, read the same way the
+// tests read them (scripts/learn.mjs). A card that can't be read, or that
+// teaches a section the book hasn't got, stops the build. A card out of book
+// order or outside 40 to 120 words, and a rules change that's touched what a
+// card teaches since the deck was last checked, get a note instead, so a
+// change to the rules never waits on the deck but never leaves a card behind.
+const learnWarn = (msg) => {
+  console.warn(`  learn: ${msg}`);
+  warnings += 1;
+};
+const learnNote = (msg) => console.warn(`  learn (to check): ${msg}`);
+let learn = null;
+if (learnDoc) {
+  const { cards, problems } = readCards(learnDoc.body);
+  for (const p of problems) learnWarn(p);
+  const learnMd = unified().use(remarkParse).use(remarkGfm).use(remarkDirective).use(boxes).use(links, where, pageFor, learnDoc.path).use(remarkSmartypants).use(remarkRehype).use(rehypeStringify);
+  const chapterOf = new Map(docs.map((d, i) => [d.path, { doc: d, i, chapter: chapters[i] }]));
+  let behind = [-1, -1];
+  const out = [];
+  for (const card of cards) {
+    const target = where.get(card.teaches);
+    const home = target && chapterOf.get(target.page);
+    if (!home) {
+      learnWarn(`the card “${card.title}” teaches #${card.teaches}, and no chapter has that id`);
+      continue;
+    }
+    const { doc, i, chapter } = home;
+    const at = target.own ? [i, -1] : [i, doc.body.indexOf(`{#${card.teaches}}`)];
+    if (at[0] < behind[0] || (at[0] === behind[0] && at[1] < behind[1])) learnNote(`“${card.title}” teaches a section that comes before the card ahead of it, and the cards go in book order`);
+    behind = at;
+    if (card.words < CARD_WORDS[0] || card.words > CARD_WORDS[1]) learnNote(`“${card.title}” is ${card.words} words, and a card's ${CARD_WORDS[0]} to ${CARD_WORDS[1]}`);
+    const file = learnMd.processSync(card.text);
+    for (const msg of file.messages) learnWarn(`“${card.title}”: ${msg.message}`);
+    const head = doc.body.match(new RegExp(`^#{2,4} (.+?) \\{#${card.teaches}\\}`, "m"));
+    out.push({
+      id: card.id,
+      title: curly(card.title),
+      teaches: card.teaches,
+      html: String(file).trim(),
+      words: card.words,
+      example: Boolean(card.example),
+      chapter: { slug: chapter.slug, title: chapter.title },
+      section: { title: head ? plain(head[1]) : chapter.title, url: target.own ? pageFor.get(doc.path) : `${pageFor.get(doc.path)}#${card.teaches}` },
+    });
+  }
+  const change = newestChange(changes.body);
+  const stale = staleCards(cards, change, learnDoc.meta.checked ? String(learnDoc.meta.checked) : "", (id) => reachOf(docs, id));
+  if (stale.length) {
+    learnNote(`the ${change.title.replace(/:.*$/, "")} change touches what ${stale.length === 1 ? "this card teaches" : `these ${stale.length} cards teach`}: ${stale.map((c) => `“${c.title}” (#${c.teaches})`).join(", ")}. Check ${stale.length === 1 ? "it" : "them"} against the chapters, then set checked: ${change.iso} at the top of content/learn.md.`);
+  }
+  learn = { title: curly(learnDoc.meta.title), checked: learnDoc.meta.checked ? String(learnDoc.meta.checked) : null, cards: out };
+  console.log(`learn: ${out.length} cards`);
+}
+
+// The pop-ups' openings, one file the service worker keeps for offline.
+const none = [...linkTargets].filter((id) => where.has(id) && !Object.keys(openings).some((k) => k.endsWith(`#${id}`) || k === linkTo(id))).length;
+writeFileSync(join(ROOT, "public", "openings.json"), JSON.stringify({ v: 1, s: openings }));
+console.log(`openings.json: ${Object.keys(openings).length} sections for the pop-ups (${none} linked sections start with a table, an example or a heading, so their links open the page)`);
+
 const outDir = join(ROOT, "src", "generated");
 mkdirSync(outDir, { recursive: true });
 writeFileSync(
@@ -684,6 +869,7 @@ writeFileSync(
     crew,
     crewLink: crewDoc ? `${pageFor.get(crewDoc.path)}#s-pregens` : "/rules/",
     companion: { conditions, links: companionLinks, build, rules },
+    learn,
   }),
 );
 mkdirSync(join(ROOT, "public", "figures"), { recursive: true });

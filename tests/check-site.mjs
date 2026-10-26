@@ -49,7 +49,7 @@ await new Promise((r) => server.listen(4173, r));
 const BASE = "http://localhost:4173";
 
 const PAGES = [
-  "/", "/rules/", "/rules/welcome/", "/rules/the-core/", "/rules/the-archetypes/",
+  "/", "/rules/", "/learn/", "/rules/welcome/", "/rules/the-core/", "/rules/the-archetypes/",
   "/rules/title-ideas-and-the-crew/", "/rules/conflict/", "/rules/the-bestiary/",
   "/rules/appendix-c-every-lever-in-the-game/", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
   "/characters/", "/characters/?c=check-vesk", "/characters/?c=check-vesk&t=sheet", "/characters/?c=check-vesk&t=rules", "/characters/?build", "/sheets/",
@@ -107,13 +107,13 @@ for (const scheme of ["light", "dark"]) {
       if (errors.length) note(`${path} @${width} ${scheme}: console errors: ${errors.join(" | ")}`);
       // Menus and buttons need room for a thumb. Links inside running text don't.
       const small = await page.evaluate(() =>
-        [...document.querySelectorAll(".topnav a, .brand, .button, .theme-toggle, .pager a, .toc-mobile > summary, .toc-mobile a, footer.site nav a, .hero-actions .more, .part li a, .cc button, .cc-back, .cc-own > summary, .cc summary")]
+        [...document.querySelectorAll(".topnav a, .brand, .button, .theme-toggle, .pager a, .toc-mobile > summary, .toc-mobile a, footer.site nav a, .hero-actions .more, .part li a, .cc button, .cc-back, .cc-own > summary, .cc summary, .rs-where, .rs-mark, .rs-carry, .lr-out, .lr-icon, .lr-foot .button, .lr-more, .lr-mark, .rd-go, .rd-marks a")]
           .filter((el) => el.getClientRects().length && el.offsetParent !== null && (!el.checkVisibility || el.checkVisibility()))
           .map((el) => ({ t: el.textContent.trim().slice(0, 30), h: Math.round(el.getBoundingClientRect().height) }))
           .filter((x) => x.h < 44),
       );
       if (width < 900 && small.length) note(`${path} @${width} ${scheme}: small tap targets: ${small.slice(0, 4).map((x) => `${x.t} (${x.h}px)`).join(", ")}`);
-      if (SHOTS && (width === 390 || width === 1280) && ["/", "/rules/the-archetypes/", "/rules/conflict/", "/changes/", "/characters/", "/characters/?c=check-vesk"].includes(path)) {
+      if (SHOTS && (width === 390 || width === 1280) && ["/", "/learn/", "/rules/the-archetypes/", "/rules/conflict/", "/changes/", "/characters/", "/characters/?c=check-vesk"].includes(path)) {
         const name = `${path.replace(/[^a-z0-9-]+/gi, "_") || "_"}${width}-${scheme}.png`.replace(/^_+/, "");
         await page.screenshot({ path: join(SHOTS, name) });
       }

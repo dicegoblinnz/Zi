@@ -2,18 +2,28 @@
 import Base from "../../layouts/Base.astro";
 import book from "../../generated/book.json";
 import { recentEntries, isNewChapter } from "../../lib/whats-new.js";
+import "../../styles/reading.css";
 
 const welcome = book.chapters.filter((c) => !c.partNumber);
 const parts = book.parts.map((p) => ({ ...p, chapters: book.chapters.filter((c) => c.partNumber === p.number) }));
+const cards = book.learn?.cards.length ?? 0;
 ---
 <Base title="The Rules" current="rules" description="Every chapter of the Zi’Dara rulebook, in book order.">
   <main id="main" class="home frame">
     <h1>The Rules</h1>
     <p class="tag">Every chapter, in book order. They’re the master copy, so they’re always the current rules.</p>
     <div class="actions">
-      {welcome.map((c) => <a class="button primary" href={`/rules/${c.slug}/`}>Start with {c.title}</a>)}
+      {cards > 0 && <a class="button primary" href="/learn/">Learn the rules in {cards} cards</a>}
+      {welcome.map((c) => <a class={cards > 0 ? "button" : "button primary"} href={`/rules/${c.slug}/`}>Start with {c.title}</a>)}
       <a class="button" href="/changes/">What’s changed</a>
     </div>
+    <section class="rd" aria-label="Your reading" data-reading data-cards={cards} hidden>
+      <div class="rd-carry"></div>
+      <div class="rd-marks" hidden>
+        <h2>Your bookmarks</h2>
+        <ul></ul>
+      </div>
+    </section>
     {recentEntries.length > 0 && (
       <a class="card whats-new-strip" href={`/changes/#${recentEntries[0].id}`}>
         <span class="new-mark">New · {recentEntries[0].date}</span>
@@ -34,4 +44,7 @@ const parts = book.parts.map((p) => ({ ...p, chapters: book.chapters.filter((c) 
       ))}
     </div>
   </main>
+  <script>
+    import "../../reading/rules-home.js";
+  </script>
 </Base>

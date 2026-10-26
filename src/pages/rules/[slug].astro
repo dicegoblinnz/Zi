@@ -3,6 +3,7 @@ import Base from "../../layouts/Base.astro";
 import Contents from "../../components/Contents.astro";
 import book from "../../generated/book.json";
 import { markNew, newSections } from "../../lib/whats-new.js";
+import "../../styles/reading.css";
 
 export function getStaticPaths() {
   return book.chapters.map((chapter) => ({ params: { slug: chapter.slug }, props: { chapter } }));
@@ -13,8 +14,10 @@ const eyebrow = chapter.partNumber ? `${chapter.partNumber} · ${chapter.partNam
 const fresh = newSections(chapter);
 const html = fresh.length ? markNew(chapter) : chapter.html;
 const latest = fresh.reduce((a, s) => (s.iso > a.iso ? s : a), fresh[0] ?? { iso: "" });
+const freshIds = new Set(fresh.map((s) => s.id));
 ---
 <Base title={chapter.title} current="rules">
+  {chapter.sections.length > 1 && <script is:inline slot="head">document.documentElement.classList.add("rs-on");</script>}
   <div class="with-rail frame">
     <aside class="rail" aria-label="Contents" data-pagefind-ignore>
       <nav><Contents currentSlug={chapter.slug} headings={chapter.headings} /></nav>
@@ -25,11 +28,22 @@ const latest = fresh.reduce((a, s) => (s.iso > a.iso ? s : a), fresh[0] ?? { iso
           <summary>Contents</summary>
           <nav><Contents currentSlug={chapter.slug} headings={chapter.headings} /></nav>
         </details>
-        <article class="prose" data-pagefind-body data-pagefind-meta={`part:${chapter.partName ?? "Welcome"}`}>
+        <article class="prose" data-pagefind-body data-pagefind-meta={`part:${chapter.partName ?? "Welcome"}`} data-chapter={chapter.slug} data-title={chapter.title} data-pops>
           <header class="chapter-head">
             <p class="eyebrow">{eyebrow}</p>
             <h1>{chapter.title}</h1>
           </header>
+          {chapter.sections.length > 1 && (
+            <div class="rs-strip" data-pagefind-ignore>
+              <button type="button" class="rs-where" aria-haspopup="dialog" aria-controls="rs-toc">
+                <span class="rs-where-in"><span class="rs-ch">Contents</span><span class="rs-sec">{chapter.sections.length} sections</span></span>
+                <svg class="rs-chev" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                <span class="visually-hidden">, the chapter’s contents</span>
+              </button>
+              <span class="rs-line" aria-hidden="true"><i></i></span>
+            </div>
+          )}
+          <a class="rs-carry" href="#main" hidden data-pagefind-ignore data-no-pop>Carry on from <b></b></a>
           {fresh.length > 0 && (
             <aside class="whats-new" aria-labelledby="whats-new-here" data-pagefind-ignore>
               <p class="whats-new-head" id="whats-new-here"><span class="new-mark">New</span> Changed in this chapter</p>
@@ -54,4 +68,31 @@ const latest = fresh.reduce((a, s) => (s.iso > a.iso ? s : a), fresh[0] ?? { iso
       </div>
     </main>
   </div>
+  {chapter.sections.length > 1 && (
+    <dialog id="rs-toc" class="zs rs-toc" aria-labelledby="rs-toc-t" data-pagefind-ignore>
+      <div class="zs-in">
+        <div class="zs-top" data-drag>
+          <span class="zs-grab" aria-hidden="true"></span>
+          <div class="zs-heading">
+            <p class="zs-where">{eyebrow}</p>
+            <h2 class="zs-title" id="rs-toc-t">{chapter.title}</h2>
+          </div>
+        </div>
+        <nav class="zs-body" tabindex="-1" autofocus aria-label={`${chapter.title}, its sections`}>
+          <ol class="rs-list">
+            {chapter.sections.map((s) => (
+              <li class={`rs-l${s.level}`}><a href={`#${s.id}`} data-s={s.id}>{s.text}{freshIds.has(s.id) && <span class="new-dot" title="Changed recently"><span class="visually-hidden"> (new)</span></span>}</a></li>
+            ))}
+          </ol>
+        </nav>
+        <div class="zs-foot">
+          <a class="button" href="/rules/">All the rules</a>
+          <button type="button" class="button zs-close">Close</button>
+        </div>
+      </div>
+    </dialog>
+  )}
+  <script>
+    import "../../reading/lookup.js";
+  </script>
 </Base>

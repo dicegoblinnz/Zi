@@ -1,0 +1,115 @@
+---
+// The Learn deck: the core rules as cards, in book order, written in
+// content/learn.md and built into book.json (scripts/build-content.mjs).
+// src/reading/learn.js does the swiping, remembering and Read more. With no
+// JavaScript it's still a row of cards you can scroll, and Read more goes to
+// the section in the rules.
+import Base from "../../layouts/Base.astro";
+import book from "../../generated/book.json";
+import "../../styles/reading.css";
+
+const deck = book.learn;
+const total = deck.cards.length;
+const groups = [];
+deck.cards.forEach((c, i) => {
+  const last = groups[groups.length - 1];
+  if (last && last.slug === c.chapter.slug) last.cards.push({ ...c, n: i + 1 });
+  else groups.push({ slug: c.chapter.slug, title: c.chapter.title, cards: [{ ...c, n: i + 1 }] });
+});
+const chev = (d: string) => `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="${d}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>`;
+const ribbon = `<svg class="rs-ribbon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M7 3.5h10a1 1 0 0 1 1 1V21l-6-4.25L6 21V4.5a1 1 0 0 1 1-1z"></path></svg>`;
+---
+<Base title="Learn the rules" current="rules" description={`The core rules of Zi’Dara in ${total} cards, one idea to a card, with the crew’s real dice.`}>
+  <script is:inline slot="head">document.documentElement.classList.add("lr-on");</script>
+  <main id="main" class="lr">
+    <h1 class="visually-hidden">Learn the rules</h1>
+    <header class="lr-bar">
+      <a class="lr-out" href="/rules/"><Fragment set:html={chev("M15 5l-7 7 7 7")} />Rules</a>
+      <p class="lr-count"><span class="visually-hidden">Card </span><b class="lr-n">1</b> of {total}</p>
+      <button type="button" class="lr-icon lr-list" aria-haspopup="dialog" aria-controls="lr-cards" aria-label="Every card"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path></svg></button>
+      <button type="button" class="lr-icon lr-theme" aria-label="Switch to light mode">
+        <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+      </button>
+    </header>
+    <div class="lr-progress" role="progressbar" aria-label="Your place in the deck" aria-valuemin="1" aria-valuemax={total} aria-valuenow="1" aria-valuetext={`Card 1 of ${total}`}><i></i></div>
+    <div class="lr-track" role="region" aria-roledescription="carousel" aria-label="The cards">
+      {deck.cards.map((c, i) => (
+        <article class="card lr-card" id={c.id} role="group" aria-roledescription="card" aria-label={`${i + 1} of ${total}: ${c.title}`} data-title={c.title} data-section={c.section.title} data-chapter={c.chapter.title}>
+          <div class="lr-card-in" tabindex="0">
+            <p class="lr-where">{c.chapter.title}</p>
+            <h2 class="lr-title">{c.title}</h2>
+            <div class="lr-body" data-pops set:html={c.html} />
+          </div>
+          <div class="lr-card-foot">
+            <a class="lr-more" href={c.section.url}>Read more<span class="visually-hidden">: {c.section.title}</span><Fragment set:html={chev("M9 5l7 7-7 7")} /></a>
+            <button type="button" class="lr-mark" aria-pressed="false" aria-label={`Bookmark ${c.title}`}><Fragment set:html={ribbon} /></button>
+          </div>
+        </article>
+      ))}
+    </div>
+    <script is:inline>
+      // Straight to your card before anything's drawn: the one in the address,
+      // or the one you were on.
+      (function () {
+        try {
+          var track = document.querySelector(".lr-track");
+          var saved = JSON.parse(localStorage.getItem("zi-reading") || "null");
+          var id = location.hash.slice(1) || (saved && saved.learn && saved.learn.id);
+          var card = id && document.getElementById(id);
+          if (track && card && card.classList.contains("lr-card")) track.scrollLeft = card.offsetLeft - (track.clientWidth - card.offsetWidth) / 2;
+        } catch (e) {}
+      })();
+    </script>
+    <nav class="lr-foot" aria-label="Cards">
+      <button type="button" class="button lr-prev" disabled>Back</button>
+      <button type="button" class="button primary lr-next">Next</button>
+    </nav>
+    <p class="visually-hidden lr-live" aria-live="polite"></p>
+  </main>
+  <dialog id="lr-cards" class="zs lr-cards" aria-labelledby="lr-cards-t">
+    <div class="zs-in">
+      <div class="zs-top" data-drag>
+        <span class="zs-grab" aria-hidden="true"></span>
+        <div class="zs-heading">
+          <p class="zs-where">Learn the rules</p>
+          <h2 class="zs-title" id="lr-cards-t">Every card</h2>
+        </div>
+      </div>
+      <nav class="zs-body" tabindex="-1" autofocus aria-label="Every card">
+        {groups.map((g) => (
+          <section class="lr-cards-group">
+            <h3>{g.title}</h3>
+            <ol class="lr-cards-list">
+              {g.cards.map((c) => <li><a href={`#${c.id}`} data-card={c.id}><span class="lr-num">{c.n}</span>{c.title}</a></li>)}
+            </ol>
+          </section>
+        ))}
+      </nav>
+      <div class="zs-foot">
+        <button type="button" class="button zs-close">Close</button>
+      </div>
+    </div>
+  </dialog>
+  <dialog id="lr-read" class="zs lr-read" aria-labelledby="lr-read-t">
+    <div class="zs-in">
+      <div class="zs-top" data-drag>
+        <span class="zs-grab" aria-hidden="true"></span>
+        <div class="zs-heading">
+          <p class="zs-where" id="lr-read-c"></p>
+          <h2 class="zs-title" id="lr-read-t">The rules</h2>
+        </div>
+      </div>
+      <div class="zs-body" tabindex="-1" autofocus>
+        <div class="lr-read-text prose" data-pops></div>
+        <p class="lr-read-out"><a class="lr-more lr-open" href="/rules/">Open it in the rules<span class="visually-hidden"></span><Fragment set:html={chev("M9 5l7 7-7 7")} /></a></p>
+      </div>
+      <div class="zs-foot">
+        <button type="button" class="button primary zs-close">Back to the card</button>
+      </div>
+    </div>
+  </dialog>
+  <script>
+    import "../../reading/learn.js";
+  </script>
+</Base>

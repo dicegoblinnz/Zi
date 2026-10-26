@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Contents from "../components/Contents.astro";
 import book from "../generated/book.json";
+import "../styles/reading.css";
 
 const { title, html, headings } = book.changes;
 ---
@@ -20,7 +21,7 @@ const { title, html, headings } = book.changes;
             </ol>
           </nav>
         </details>
-        <article class="prose" data-pagefind-body>
+        <article class="prose" data-pagefind-body data-pops>
           <header class="chapter-head">
             <p class="eyebrow">The rules</p>
             <h1>{title}</h1>
@@ -30,4 +31,8 @@ const { title, html, headings } = book.changes;
       </div>
     </main>
   </div>
+  <script>
+    import { enablePopups } from "../reading/popups.js";
+    enablePopups();
+  </script>
 </Base>

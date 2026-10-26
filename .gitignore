@@ -9,3 +9,4 @@ dist/
 __pycache__/
 src/generated/
 public/figures/
+public/openings.json
