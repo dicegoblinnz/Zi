@@ -958,6 +958,9 @@ button.bd-tok:active { transform: scale(0.97); }
 .cc-pick:has(input:focus-visible) { outline: 2px solid var(--violet); outline-offset: 2px; }
 .cc-pick { transition: transform 140ms ease-out, border-color 140ms ease; }
 .cc-pick:active { transform: scale(0.98); }
+.cc-pick.is-busy { cursor: default; border-style: dashed; }
+.cc-pick.is-busy:active { transform: none; }
+.cc-pick.is-busy b { color: var(--muted); }
 .cc-crewpicks .button { min-width: 5.5rem; }
 
 /* The button that joins or brings them stays under your thumb. */

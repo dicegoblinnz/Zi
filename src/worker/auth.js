@@ -24,6 +24,11 @@ async function hmac(env, text) {
   const sig = new Uint8Array(await crypto.subtle.sign("HMAC", await key, new TextEncoder().encode(text)));
   return Array.from(sig.slice(0, 16), (b) => b.toString(16).padStart(2, "0")).join("");
 }
+// How many goes a key's had in the last so many seconds, without adding one.
+export async function seen(env, key, seconds) {
+  const row = await env.DB.prepare("SELECT count, since FROM limits WHERE key = ?1").bind(await hmac(env, key)).first();
+  return row && row.since >= Date.now() - seconds * 1000 ? row.count : 0;
+}
 export async function hit(env, key, seconds) {
   const now = Date.now();
   const row = await env.DB.prepare(`INSERT INTO limits (key, count, since) VALUES (?1, 1, ?2)
@@ -70,14 +75,17 @@ export function optionsFor(env) {
       },
       deleteUser: {
         enabled: true,
-        // Their characters go, they leave every campaign they're in, and the
-        // campaigns they run end for everyone.
+        // They leave every campaign they're in, the campaigns they run end for
+        // everyone, and their characters go. An account still goes if the
+        // campaign tables haven't reached this database yet.
         beforeDelete: async (user) => {
           await env.DB.batch([
             env.DB.prepare("DELETE FROM member WHERE userId = ?1 OR campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id),
             env.DB.prepare("DELETE FROM campaign WHERE gmId = ?1").bind(user.id),
-            env.DB.prepare("DELETE FROM character WHERE userId = ?1").bind(user.id),
-          ]);
+          ]).catch((err) => {
+            if (!/no such table/i.test(String(err?.message))) throw err;
+          });
+          await env.DB.prepare("DELETE FROM character WHERE userId = ?1").bind(user.id).run();
         },
       },
     },

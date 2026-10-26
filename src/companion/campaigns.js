@@ -252,6 +252,14 @@ export function makeCampaigns(d) {
   // A player's card for the GM: their character and how they're doing, which
   // opens their sheet.
   function memberCard(c, p) {
+    try {
+      return card(c, p);
+    } catch {
+      // A sheet this phone can't read still leaves the GM a way to take them out.
+      return `<li class="cc-member"><div class="card cc-saved"><span class="die ghost" aria-hidden="true">?</span><span class="cc-saved-text"><b>${esc(p.name)}</b><small>Their character’s sheet couldn’t be read here</small></span></div>${removeButton(p)}</li>`;
+    }
+  }
+  function card(c, p) {
     const ch = p.character ? structuredClone(p.character) : null;
     const sheet = ch ? d.normal(ch) : null;
     if (!ch || !sheet) {
@@ -289,7 +297,9 @@ export function makeCampaigns(d) {
   // ------------------------------------------------------------ picking who to bring
 
   const chars = () => store.data.characters;
-  const playingIn = (id) => (st.list || []).filter((k) => k.role === "player" && k.character?.id === id).map((k) => k.name);
+  // Where a character's playing already. They play in one campaign at a time,
+  // so what they do in one never reaches another campaign's GM.
+  const playingIn = (id) => (st.list || []).filter((k) => k.role === "player" && k.character?.id === id && !(view.name === "camp" && k.id === view.id)).map((k) => k.name);
   const pickOff = () => (!chars().some((x) => x.id === st.picking) || st.busy ? " disabled" : "");
   // The button that goes with the pick, in plain text: "Join with Vesk".
   const pickText = (yes, no) => {
@@ -300,11 +310,12 @@ export function makeCampaigns(d) {
 
   function picker(now) {
     const list = chars().filter((x) => x.id !== now);
-    if (!list.some((x) => x.id === st.picking)) st.picking = null;
+    if (!list.some((x) => x.id === st.picking && !playingIn(x.id).length)) st.picking = null;
     const row = (ch) => {
       const sheet = d.sheetFor(ch);
-      const notes = [esc(sheet?.title ?? ""), ...playingIn(ch.id).map((n) => `in ${esc(n)}`), ch.acct ? "" : "only on this phone, so it goes into your account", ch.state?.dead ? "died in play" : ""].filter(Boolean);
-      return `<li><label class="card cc-saved cc-pick"><input type="radio" name="k-pick" value="${esc(ch.id)}"${st.picking === ch.id ? " checked" : ""}>
+      const busy = playingIn(ch.id);
+      const notes = [esc(sheet?.title ?? ""), ...busy.map((n) => `playing in ${esc(n)}`), ch.acct ? "" : "only on this phone, so it goes into your account", ch.state?.dead ? "died in play" : ""].filter(Boolean);
+      return `<li><label class="card cc-saved cc-pick${busy.length ? " is-busy" : ""}"><input type="radio" name="k-pick" value="${esc(ch.id)}"${st.picking === ch.id ? " checked" : ""}${busy.length ? " disabled" : ""}>
         <span class="die ghost" aria-hidden="true">${initial(ch.name)}</span><span class="cc-saved-text"><b>${esc(ch.name)}</b><small>${notes.join(" · ")}</small></span></label></li>`;
     };
     return `${list.length ? `<fieldset class="cc-picks"><legend class="sr-only">Your characters</legend><ul class="cc-mine">${list.map(row).join("")}</ul></fieldset>` : '<p class="cc-lead">You haven’t got anyone else on this phone yet.</p>'}
@@ -759,13 +770,18 @@ export function makeCampaigns(d) {
         : k.campaign.role !== "gm" ? "Only the GM sees each character’s sheet." : "That character isn’t in the campaign any more.";
       return `${topbar(back.href, back.label)}<div class="cc-note is-warn"><p>${why}</p></div>`;
     }
-    const ch = structuredClone(p.character);
-    const c = d.normal(ch);
-    if (!c) return `${topbar(back.href, back.label)}<div class="cc-note is-warn"><p>${esc(ch.name)}’s sheet isn’t in the rules any more, so there’s nothing to show.</p></div>`;
     const who = esc(first(p.name));
+    const ch = structuredClone(p.character);
     const out = `<section class="cc-sec" aria-labelledby="lk-out"><h2 id="lk-out">${who} in ${esc(k.campaign.name)}</h2>
-      <p class="cc-lead">Take ${who} out and they’re out of ${esc(k.campaign.name)}. ${esc(ch.name)} stays theirs. The join link still works for them, so reset it too if they shouldn’t come back.</p>
+      <p class="cc-lead">Take ${who} out and they’re out of ${esc(k.campaign.name)}. Their character stays theirs. The join link still works for them, so reset it too if they shouldn’t come back.</p>
       <div class="cc-row">${removeButton(p, "button danger")}</div></section>`;
-    return lookView(ch, c, { ...d.look, esc, player: first(p.name), back, tools: d.tools(), printing: st.printing, icon: ICON, extra: out });
+    const cant = (why) => `${topbar(back.href, back.label)}<div class="cc-note is-warn"><p>${why}</p></div>${out}`;
+    try {
+      const c = d.normal(ch);
+      if (!c) return cant(`${esc(ch.name)}’s sheet isn’t in the rules any more, so there’s nothing to show.`);
+      return lookView(ch, c, { ...d.look, esc, player: first(p.name), back, tools: d.tools(), printing: st.printing, icon: ICON, extra: out });
+    } catch {
+      return cant(`${esc(String(ch?.name ?? "Their character"))}’s sheet couldn’t be read here.`);
+    }
   }
 }

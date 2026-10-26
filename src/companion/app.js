@@ -218,8 +218,21 @@ function normal(ch) {
   for (const [k, v] of Object.entries(s.threads)) if (!["strained", "snapped", "whole"].includes(v)) delete s.threads[k];
   s.grown = (Array.isArray(s.grown) ? s.grown : []).filter((g) => g && typeof g === "object" && typeof g.k === "string");
   if (s.seen && typeof s.seen !== "object") delete s.seen;
+  s.last = lastRoll(s.last);
   ch.state = s;
   return c;
+}
+
+// The last roll keeps a name and numbers only, the way the roll card saves it
+// (lastOf), so nothing else in it can reach the screen.
+function lastRoll(l) {
+  if (!l || typeof l !== "object" || !Array.isArray(l.dice)) return null;
+  const int = (v) => (Number.isFinite(Number(v)) ? Math.round(Number(v)) : 0);
+  return {
+    name: String(l.name ?? "").slice(0, 80), steps: int(l.steps),
+    dice: l.dice.slice(0, 24).map((d) => ({ size: int(d?.size), total: int(d?.total), out: ["beat", "won", "tie", "under"].includes(d?.out) ? d.out : null, mark: Boolean(d?.mark) })),
+    opp: l.opp == null ? null : int(l.opp), at: int(l.at),
+  };
 }
 
 function persist() {
@@ -564,12 +577,15 @@ function alertView(ch, c, s) {
     <div class="cc-row">${last ? "" : '<button type="submit" class="button primary">Take the Scar and leave the scene</button>'}<button type="button" class="button" data-act="die">${esc(ch.name)} dies</button></div></form>`;
 }
 
+// The last roll, from what normal() keeps of it. A GM sees her players' too
+// (look.js), so every number's made a number here before it's drawn.
 function lastRollView(last) {
-  if (!last) return "";
+  if (!last || !Array.isArray(last.dice)) return "";
+  const num = (v) => Number(v) || 0;
   const outs = last.dice.map((d) => d.out).filter(Boolean);
   const beat = outs.filter((o) => o === "beat" || o === "won").length;
-  const verdict = last.opp == null ? "" : outs.length === 1 ? { beat: "Beat it.", won: "Won the tie.", tie: "A tie.", under: "Under." }[outs[0]] : `${beat} of ${outs.length} beat it.`;
-  return `<p class="cc-last"><span class="k">Last roll</span> <b>${esc(last.name)}</b>, ${steps(last.steps)}: ${last.dice.map((d) => `${d.total} on the ${d.mark ? "Mark " : ""}d${d.size}`).join(", ")}${last.opp != null ? `, against ${last.opp}` : ""}. ${verdict}</p>`;
+  const verdict = last.opp == null ? "" : outs.length === 1 ? ({ beat: "Beat it.", won: "Won the tie.", tie: "A tie.", under: "Under." }[outs[0]] ?? "") : `${beat} of ${outs.length} beat it.`;
+  return `<p class="cc-last"><span class="k">Last roll</span> <b>${esc(last.name)}</b>, ${steps(num(last.steps))}: ${last.dice.map((d) => `${num(d.total)} on the ${d.mark ? "Mark " : ""}d${num(d.size)}`).join(", ")}${last.opp != null ? `, against ${num(last.opp)}` : ""}. ${verdict}</p>`;
 }
 
 // A character on the phone: the play screen first, and the rest of the sheet

@@ -11,7 +11,7 @@
 //
 // 1. Anyone can sign up. Mo signs in with Google and he's the admin (he's
 //    ADMIN_EMAIL), and a stranger with Discord and Sam with Google get accounts
-//    with no invite. There's no invite table and no GM role left.
+//    with no invite.
 // 2. Kai has Vesk and Wren on her phone, signs in with Discord, and moves them
 //    into her account with one tap.
 // 3. A second device: Kai signs in there, and both characters are waiting. A
@@ -256,8 +256,6 @@ try {
   const sam = await phone();
   await signIn(sam.page, "sam", "google");
   same((await user("sam@example.com"))?.role, "member", "Sam signs up with Google, no invite");
-  same(await rows("SELECT name FROM sqlite_master WHERE name = 'invite'"), [], "the invite table's gone");
-  same((await rows("SELECT COUNT(*) AS n FROM \"user\" WHERE role = 'gm'"))[0].n, 0, "nobody's a GM on their account");
 
   // ------------------------------------------------------------ 2. Kai and the move
   console.log("2. Kai signs up and moves her characters in");
@@ -397,6 +395,33 @@ try {
   await mo.page.waitForSelector(".cc-look-card");
   yes(!mo.page.url().includes("look="), "Back goes back to the party");
 
+  // Whatever's saved in a player's sheet, it's only ever words and numbers on
+  // the GM's phone, and one that can't be read still leaves her a way to take
+  // them out.
+  const veskWas = (await serverChars("kai@example.com")).find((c) => c.id === "vesk-aaaaaa").data;
+  const putVesk = async (data) => {
+    const v = (await rows("SELECT version FROM character WHERE id = 'vesk-aaaaaa'"))[0].version;
+    return (await got(kai.page, "PUT", "/api/characters/vesk-aaaaaa", { v, data })).status;
+  };
+  const sly = JSON.parse(veskWas);
+  sly.state.last = { name: "<img src=x onerror=window.__pwned=1>", steps: "<b>9</b>", dice: [{ size: "<i>", total: '<img src=x onerror="window.__pwned=2">', out: "beat" }], opp: "<svg onload=window.__pwned=3>", at: 1 };
+  same(await putVesk(sly), 200, "a last roll with markup in it is kept as it came");
+  await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&look=${kaiId}`);
+  await mo.page.waitForSelector(".cc-track.is-look .cc-last, .cc-last");
+  same(await mo.page.evaluate(() => [window.__pwned ?? null, document.querySelectorAll("#app img, #app svg[onload]").length]), [null, 0], "and on the GM's phone it's text and numbers only");
+  const broken = JSON.parse(veskWas);
+  broken.state.grown = [{ k: "perm", t: "__proto__", text: "Grown wrong" }];
+  broken.state.last = { dice: "not a list" };
+  same(await putVesk(broken), 200, "a sheet that can't be read is kept as it came");
+  await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
+  await mo.page.waitForSelector(`#app [data-do="remove"][data-id="${kaiId}"]`);
+  yes((await text(mo.page, "#app")).includes("couldn’t be read"), "the party says so, and Mo can still take Kai out");
+  await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&look=${kaiId}`);
+  await mo.page.waitForSelector(`#app [data-do="remove"][data-id="${kaiId}"]`);
+  same(await putVesk(JSON.parse(veskWas)), 200, "Vesk's put back as Kai left her");
+  await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
+  await mo.page.waitForSelector("#k-link");
+
   // Kai sees names, and no character comes to her whole.
   const kaiView = await got(kai.page, "GET", `/api/campaigns/${tuesday.id}`);
   same(kaiView.json?.players?.map((p) => [p.name, p.character?.name]), [["Kai Tane", "Vesk"], ["Lee", "Bram"]], "Kai sees who's in it and who they play");
@@ -439,7 +464,9 @@ try {
   // Zed runs one too, and Kai plays Dorrie in it, a different character from Tuesday Lair.
   const zedsNight = (await got(zed.page, "POST", "/api/campaigns", { name: "Zed’s Night" })).json?.campaign;
   await api(kai.page, "PUT", "/api/characters/dorrie-eeeeee", crewChar("dorrie-eeeeee", "dorrie", "Dorrie"));
+  same((await got(kai.page, "POST", "/api/join", { code: zedsNight.code, character: "vesk-aaaaaa" })).status, 409, "Vesk can't play in Zed’s Night while she's in Tuesday Lair");
   same((await got(kai.page, "POST", "/api/join", { code: zedsNight.code, character: "dorrie-eeeeee" })).status, 200, "Kai joins Zed’s Night with Dorrie");
+  same((await got(kai.page, "PUT", `/api/campaigns/${tuesday.id}/me`, { character: "dorrie-eeeeee" })).status, 409, "and Dorrie can't play in both");
   same((await got(kai.page, "PUT", `/api/campaigns/${zedsNight.id}/me`, { character: "ash-zzzzzz" })).status, 409, "she can't bring someone else's character");
   same((await got(kai.page, "GET", "/api/campaigns")).json?.campaigns.map((k) => [k.name, k.role, k.character?.name ?? null]),
     [["Kai’s Table", "gm", null], ["Tuesday Lair", "player", "Vesk"], ["Zed’s Night", "player", "Dorrie"]], "Kai's three, with a different character in each one she plays in");
@@ -491,9 +518,13 @@ try {
   const peek = await got(nobody.page, "POST", "/api/join", { code: newCode });
   same(peek.json?.campaign, { name: "Tuesday Lair", gm: "Mo", id: null, role: null }, "signed out, a link says only which campaign and its GM");
   same((await got(nobody.page, "POST", "/api/join", { code: newCode, character: "vesk-aaaaaa" })).status, 401, "signed out, nobody joins");
+  const table = [];
+  for (let i = 0; i < 40; i++) table.push((await api(nobody.page, "POST", "/api/join", { code: newCode })).status);
+  yes(table.every((x) => x === 200), "a whole table opening a good link on one wifi never trips the limit");
   const tries = [];
-  for (let i = 0; i < 32; i++) tries.push((await api(nobody.page, "POST", "/api/join", { code: "no-such-join-code-0000" })).status);
-  yes(tries.includes(429), `the join check's rate limit trips (${tries.slice(-4).join(" ")})`);
+  for (let i = 0; i < 24; i++) tries.push((await api(nobody.page, "POST", "/api/join", { code: "no-such-join-code-0000" })).status);
+  yes(tries.slice(0, 20).every((x) => x === 404) && tries.slice(20).every((x) => x === 429), `guessing at codes trips it after 20 misses (${tries.slice(18).join(" ")})`);
+  same((await api(nobody.page, "POST", "/api/join", { code: newCode })).status, 429, "and then that address waits, good link or not");
   const keys = await rows("SELECT key FROM limits");
   yes(keys.length > 3 && keys.every((k) => /^[0-9a-f]{32}$/.test(k.key)), "rate limits keep HMACs, not addresses (Better Auth's too)");
   same(await rows("SELECT name FROM sqlite_master WHERE name = 'rateLimit'"), [], "no table of addresses");

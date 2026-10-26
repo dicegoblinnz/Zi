@@ -8,7 +8,7 @@
 // see who's in it and which characters they play, the GM sees every character
 // in it, and players see each other's names. Every campaign request checks the
 // person asking against that one campaign, so nothing crosses between them.
-import { authFor, hit, originsOf, providersOf } from "./auth.js";
+import { authFor, hit, originsOf, providersOf, seen } from "./auth.js";
 
 const HEAD = { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" };
 const json = (body, status = 200, extra = {}) => new Response(typeof body === "string" ? body : JSON.stringify(body), { status, headers: { ...HEAD, ...extra } });
@@ -177,31 +177,54 @@ async function dropCharacter(env, user, id) {
 const ownCharacter = (env, user, id) => (typeof id === "string" && CHAR_ID.test(id)
   ? env.DB.prepare("SELECT 1 AS ok FROM character WHERE userId = ?1 AND id = ?2 AND data IS NOT NULL").bind(user.id, id).first()
   : null);
+// A character plays in one campaign at a time, so what they do in one never
+// reaches another campaign's GM. This says where they're playing, if anywhere.
+const playingIn = (env, user, id, except = "") => env.DB.prepare("SELECT c.name FROM member m JOIN campaign c ON c.id = m.campaignId WHERE m.userId = ?1 AND m.characterId = ?2 AND m.campaignId != ?3")
+  .bind(user.id, id, except).first();
+const busyWith = (where) => fail(409, `They’re playing in ${where.name} already, and a character plays in one campaign at a time. Bring someone else.`);
+// Two taps at once can both get past that check, and then the database says no
+// to the second one (member_character_idx), which comes back as null here.
+const unique = (err) => {
+  if (/UNIQUE constraint failed/i.test(String(err?.message))) return null;
+  throw err;
+};
 
 // ---------------------------------------------------------------- campaigns
 
 // Opening a join link. With just its code, this says which campaign it's for
 // and who's its GM, and whether you're in it already. With a character too,
 // you join with them. The code's checked again as you go in, so a link the GM
-// reset a moment ago doesn't let anyone in.
+// reset a moment ago doesn't let anyone in. Codes that don't work are counted
+// against the address they came from, so nobody can guess at them, while a
+// whole table joining on the shop's wifi never trips it.
+const BAD_LINK = "That link didn’t work. Your GM might’ve reset it, so ask them for the new one.";
 async function join(request, env, session) {
   const me = session?.user ?? null;
-  if (await limited(env, `join:${request.headers.get("cf-connecting-ip") || "here"}`, 30, 900) || (me && (await limited(env, `join:${me.id}`, 30, 900)))) return fail(429, "That’s a lot of tries. Wait a few minutes and try again.");
+  const misses = `join-miss:${request.headers.get("cf-connecting-ip") || "here"}`;
+  if ((await seen(env, misses, 900)) >= 20 || (me && (await limited(env, `join:${me.id}`, 60, 900)))) return fail(429, "That’s a lot of tries. Wait a few minutes and try again.");
   const b = await body(request);
   const code = b?.code;
   const camp = typeof code === "string" && CODE.test(code) && (await env.DB.prepare('SELECT c.id, c.name, c.gmId, u.name AS gm FROM campaign c JOIN "user" u ON u.id = c.gmId WHERE c.code = ?1').bind(code).first());
-  if (!camp) return fail(404, "That link didn’t work. Your GM might’ve reset it, so ask them for the new one.");
+  if (!camp) {
+    await hit(env, misses, 900);
+    return fail(404, BAD_LINK);
+  }
   const role = !me ? null : camp.gmId === me.id ? "gm" : (await env.DB.prepare("SELECT 1 AS ok FROM member WHERE campaignId = ?1 AND userId = ?2").bind(camp.id, me.id).first()) ? "player" : null;
   const about = { name: camp.name, gm: camp.gm, id: role ? camp.id : null, role };
   if (b.character === undefined || role) return json({ campaign: about });
   if (!me) return fail(401, "Sign in first.");
   if (!(await ownCharacter(env, me, b.character))) return fail(409, "That character isn’t in your account yet.");
+  const elsewhere = await playingIn(env, me, b.character);
+  if (elsewhere) return busyWith(elsewhere);
   const n = await env.DB.prepare("SELECT (SELECT COUNT(*) FROM member WHERE campaignId = ?1) AS players, (SELECT COUNT(*) FROM member WHERE userId = ?2) AS mine").bind(camp.id, me.id).first();
   if (n.players >= MAX_PLAYERS) return fail(400, `${camp.name} has ${MAX_PLAYERS} players already, so it’s full.`);
   if (n.mine >= MAX_JOINED) return fail(400, `You’re in ${MAX_JOINED} campaigns already. Leave one first.`);
-  const res = await env.DB.prepare("INSERT INTO member (campaignId, userId, characterId, joinedAt) SELECT id, ?2, ?3, ?4 FROM campaign WHERE id = ?1 AND code = ?5 ON CONFLICT DO NOTHING")
-    .bind(camp.id, me.id, b.character, Date.now(), code).run();
-  if (!res.meta.changes) return fail(404, "That link didn’t work. Your GM might’ve reset it, so ask them for the new one.");
+  const res = await env.DB.prepare("INSERT INTO member (campaignId, userId, characterId, joinedAt) SELECT id, ?2, ?3, ?4 FROM campaign WHERE id = ?1 AND code = ?5 ON CONFLICT (campaignId, userId) DO NOTHING")
+    .bind(camp.id, me.id, b.character, Date.now(), code).run().catch(unique);
+  if (!res) return busyWith(await playingIn(env, me, b.character, camp.id) ?? { name: "another campaign" });
+  // Nothing went in: they're in already (a second tap, or another tab got
+  // there first), or the link was reset a moment ago.
+  if (!res.meta.changes && !(await env.DB.prepare("SELECT 1 AS ok FROM member WHERE campaignId = ?1 AND userId = ?2").bind(camp.id, me.id).first())) return fail(404, BAD_LINK);
   return json({ campaign: { ...about, id: camp.id, role: "player" } });
 }
 
@@ -316,11 +339,15 @@ async function resetLink(env, camp) {
   return json({ code });
 }
 
-// A player changes who they're playing here, to another of their own.
+// A player changes who they're playing here, to another of their own who
+// isn't playing anywhere else.
 async function pickCharacter(request, env, user, camp) {
   const id = (await body(request))?.character;
   if (!(await ownCharacter(env, user, id))) return fail(409, "That character isn’t in your account yet.");
-  await env.DB.prepare("UPDATE member SET characterId = ?3 WHERE campaignId = ?1 AND userId = ?2").bind(camp.id, user.id, id).run();
+  const elsewhere = await playingIn(env, user, id, camp.id);
+  if (elsewhere) return busyWith(elsewhere);
+  const res = await env.DB.prepare("UPDATE member SET characterId = ?3 WHERE campaignId = ?1 AND userId = ?2").bind(camp.id, user.id, id).run().catch(unique);
+  if (!res) return busyWith(await playingIn(env, user, id, camp.id) ?? { name: "another campaign" });
   return json({ ok: true });
 }
 
@@ -329,14 +356,20 @@ async function pickCharacter(request, env, user, camp) {
 // Everything the account holds about you, as a file. Join links stay out.
 async function download(env, user) {
   const q = (sql) => env.DB.prepare(sql).bind(user.id);
-  const [u, accounts, chars, running, playing] = await env.DB.batch([
+  const [u, accounts, chars] = await env.DB.batch([
     q('SELECT name, email, role, createdAt FROM "user" WHERE id = ?1'),
     q("SELECT providerId, createdAt FROM account WHERE userId = ?1"),
     q("SELECT data FROM character WHERE userId = ?1 AND data IS NOT NULL"),
+  ]);
+  // The campaigns too, once their tables have reached this database.
+  const [running, playing] = await env.DB.batch([
     q("SELECT name, createdAt FROM campaign WHERE gmId = ?1"),
     q(`SELECT c.name, m.joinedAt, json_extract(ch.data, '$.name') AS character FROM member m JOIN campaign c ON c.id = m.campaignId
       LEFT JOIN character ch ON ch.userId = m.userId AND ch.id = m.characterId AND ch.data IS NOT NULL WHERE m.userId = ?1`),
-  ]);
+  ]).catch((err) => {
+    if (/no such table/i.test(String(err?.message))) return [{ results: [] }, { results: [] }];
+    throw err;
+  });
   const out = {
     account: u.results[0] ?? null,
     signIns: accounts.results.map((a) => a.providerId),
