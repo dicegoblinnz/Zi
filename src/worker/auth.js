@@ -79,6 +79,9 @@ export function optionsFor(env) {
         // everyone, and their characters go. An account still goes if the
         // campaign tables haven't reached this database yet.
         beforeDelete: async (user) => {
+          await env.DB.prepare("DELETE FROM party WHERE campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id).run().catch((err) => {
+            if (!/no such table/i.test(String(err?.message))) throw err;
+          });
           await env.DB.batch([
             env.DB.prepare("DELETE FROM member WHERE userId = ?1 OR campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id),
             env.DB.prepare("DELETE FROM campaign WHERE gmId = ?1").bind(user.id),

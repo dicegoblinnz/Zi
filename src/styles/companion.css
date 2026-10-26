@@ -214,7 +214,7 @@ html.cc-full .companion { padding-top: max(0.25rem, env(safe-area-inset-top, 0px
 
 /* The tabs, at the bottom where a thumb reaches them. */
 .cc-tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding-bottom: env(safe-area-inset-bottom, 0px); background: var(--bar-bg); backdrop-filter: blur(8px); border-top: 1px solid var(--line); }
-.cc-tabs-in { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 46rem; margin: 0 auto; }
+.cc-tabs-in { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); max-width: 46rem; margin: 0 auto; }
 .cc-tabs a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 58px; color: var(--muted); text-decoration: none; font-weight: 700; font-size: 0.85rem; }
 .cc-tabs a[aria-current="page"] { color: var(--gold-ink); box-shadow: inset 0 2px 0 var(--gold); }
 .cc-tabs a:focus-visible { outline: 2px solid var(--violet); outline-offset: -4px; }
@@ -991,3 +991,94 @@ button.bd-tok:active { transform: scale(0.97); }
 .cc-look-list > li.is-out { color: var(--muted); }
 .cc-look-notes { white-space: pre-wrap; overflow-wrap: anywhere; }
 .cc-look-foot { margin-top: 1rem; }
+
+/* The party sheet (party.js), on a campaign's page and a character's Party
+   tab: the Goal first, its die big with the row of sizes it climbs through and
+   the buttons under your thumb, then the crew with its name and Power, and the
+   rest of the crew page in folds that read at a glance while they're shut.
+   Gold's the crew's, as it's yours in the kit. */
+.pt-status { margin: -0.35rem 0 0.8rem; }
+.pt-where { margin: 1rem 0 0; }
+.pt-tab .pt { margin-top: 0.8rem; }
+.pt-tab .pt-status { margin-top: 0; }
+.pt-k { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-ink); }
+.pt-at { font-size: 0.95rem; letter-spacing: 0.04em; text-transform: none; color: var(--ink); font-variant-numeric: tabular-nums; }
+.pt-reword { display: inline-flex; align-items: center; min-height: 44px; padding: 0; font: inherit; font-size: 0.92rem; font-weight: 700; color: var(--violet); background: none; border: 0; text-decoration: underline; text-underline-offset: 0.18em; text-decoration-thickness: 1px; cursor: pointer; }
+.pt-reword:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.pt-rule { margin-top: 0.1rem; }
+.pt-form { display: grid; gap: 8px; margin: 0.5rem 0 0; }
+.pt-form .cc-row { margin: 0; }
+.pt-add { margin-top: 0.9rem; padding-top: 0.7rem; border-top: 1px dashed var(--line); }
+.pt-check { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 0.95rem; color: var(--ink); cursor: pointer; }
+.pt-check input { flex: none; width: 22px; height: 22px; margin: 0; accent-color: var(--gold); }
+.pt-chip { color: var(--gold-ink); }
+.pt-chip.is-off, .pt-chip.is-on { color: var(--muted); }
+
+.pt-goal { padding: 14px 14px 12px; box-shadow: inset 3px 0 0 var(--gold); }
+.pt-goal-top { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; }
+.pt-goal-top .zd-die { --s: 76px; }
+.pt-goal-in { min-width: 0; }
+.pt-goal-words { margin: 0.25rem 0 0; font-size: 1.2rem; line-height: 1.35; overflow-wrap: anywhere; text-wrap: pretty; }
+.pt-goal .pt-form .cc-field { font-size: 0.9rem; }
+.pt-ladder { justify-content: space-between; margin: 0.9rem 0 0.3rem; }
+.pt-goal .cc-lead { margin: 0.5rem 0; }
+.pt-climb { margin: 0.5rem 0 0; }
+.pt-goal .pt-how { margin: 0.6rem 0 0; }
+.pt-climb .button { flex: 1 1 9rem; }
+.pt-goal.is-done { box-shadow: inset 3px 0 0 var(--gold), inset 0 0 0 1px color-mix(in srgb, var(--gold) 40%, transparent); }
+.pt-goal.is-done > p { margin: 0.8rem 0 0.2rem; }
+.pt-steps { margin: 0.4rem 0 0.6rem; padding-left: 1.4rem; }
+.pt-steps > li { padding: 0.35rem 0; }
+.pt-steps > li::marker { color: var(--gold-ink); font-weight: 800; }
+.pt-steps p { margin: 0; }
+
+.pt-crew { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 2px 14px; margin-top: 12px; padding: 14px; }
+.pt-crew-in { min-width: 0; }
+.pt-name { margin: 0.15rem 0 0; font-family: var(--display); font-weight: 600; font-size: 1.55rem; line-height: 1.15; letter-spacing: 0.02em; overflow-wrap: anywhere; }
+.pt-name.is-none { font-size: 1.2rem; color: var(--muted); }
+.pt-crew .pt-reword { margin-top: 0.1rem; }
+.pt-power { display: grid; justify-items: center; gap: 1px; min-width: 64px; }
+.pt-power .zd-die { --s: 54px; }
+.pt-power .zd-die.is-next { --s: 30px; margin-top: -6px; }
+.pt-power-k { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.pt-power-v { font-weight: 800; line-height: 1.1; color: var(--gold-ink); font-variant-numeric: tabular-nums; }
+.pt-size { grid-column: 1 / -1; margin: 0.55rem 0 0; padding-top: 0.55rem; border-top: 1px solid var(--line-soft); font-size: 0.95rem; }
+.pt-size small { display: block; margin-top: 0.15rem; font-size: 0.88rem; color: var(--muted); }
+
+.pt-folds { margin-top: 12px; }
+.pt-lines { list-style: none; margin: 0.4rem 0 0; padding: 0; }
+.pt-line { display: flex; align-items: flex-start; gap: 10px; padding: 0.65rem 0; border-top: 1px solid var(--line-soft); }
+.pt-line.is-editing { display: block; }
+.pt-line-in { flex: 1 1 auto; min-width: 0; }
+.pt-line-in p { margin: 0; overflow-wrap: anywhere; }
+.pt-line-in .cc-row { margin: 0.45rem 0 0; }
+.pt-line.is-off b { text-decoration: line-through; color: var(--muted); }
+.pt-does { margin-top: 0.15rem !important; font-size: 0.92rem; color: var(--muted); }
+.pt-change { flex: none; }
+.pt-asp > .zd-mini { flex: none; width: 22px; height: 22px; margin-top: 3px; }
+.pt-asp small { color: var(--muted); font-weight: 500; }
+.pt-pick .button, .pt-pick .pt-chip { flex: none; }
+.pt-money { margin: 0.5rem 0; padding: 0.5rem 0.75rem; font-size: 0.92rem; background: var(--panel); border-left: 3px solid var(--line); border-radius: 2px; }
+.pt-money.is-short { border-left-color: var(--gold); }
+.pt-project { padding: 0.75rem 0; border-top: 1px solid var(--line-soft); }
+.pt-project-top { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 12px; }
+.pt-project-top .zd-die { --s: 46px; }
+.pt-project .cc-row { margin: 0.55rem 0 0; }
+.pt-project.is-done .pt-does { color: var(--ink); }
+.pt-rules h4 { margin: 0.9rem 0 0.3rem; font-size: 0.95rem; color: var(--gold-ink); }
+.pt-rules h4:first-child { margin-top: 0.2rem; }
+.pt-rules ul { padding-left: 1.2rem; }
+
+/* Changed on someone else's phone: it glows gold for a moment. */
+.pt .is-new { animation: pt-lit 1.4s ease-out; }
+@keyframes pt-lit { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--gold) 60%, transparent); } 100% { box-shadow: 0 0 0 14px transparent; } }
+.pt-goal.is-new { animation-name: pt-lit-goal; }
+@keyframes pt-lit-goal { 0% { box-shadow: inset 3px 0 0 var(--gold), 0 0 0 0 color-mix(in srgb, var(--gold) 60%, transparent); } 100% { box-shadow: inset 3px 0 0 var(--gold), 0 0 0 14px transparent; } }
+@media (max-width: 360px) {
+  .pt-goal-top .zd-die { --s: 62px; }
+  .pt-crew { grid-template-columns: minmax(0, 1fr); }
+  .pt-power { grid-auto-flow: column; justify-content: start; align-items: center; gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pt .is-new, .pt-goal.is-new { animation: none; }
+}

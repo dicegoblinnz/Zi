@@ -16,6 +16,7 @@ import { grow } from "./grow.js";
 import { changesOf, ownChanges, placesOf, said } from "./marks.js";
 import { makeDowntime } from "./downtime.js";
 import { makeCampaigns } from "./campaigns.js";
+import { makeParty } from "./party.js";
 import { threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
 import { aura as kitAura, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
 
@@ -34,6 +35,8 @@ const toastBox = document.getElementById("cc-toast");
 const ORD = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth", "Eleventh", "Twelfth", "Thirteenth", "Fourteenth", "Fifteenth", "Sixteenth", "Seventeenth", "Eighteenth", "Nineteenth", "Twentieth", "Twenty-first", "Twenty-second", "Twenty-third", "Twenty-fourth"];
 const RULE = DATA.rules || {};
 const TABS = [["play", "Play"], ["sheet", "Sheet"], ["rules", "Rules"]];
+// A character playing in a campaign gets the party sheet a tab away too.
+const tabsOf = (ch) => (party.campOf(ch) ? [["play", "Play"], ["sheet", "Sheet"], ["party", "Party"], ["rules", "Rules"]] : TABS);
 // The intents a die can be tapped to, or the player writes their own.
 const INTENTS = { action: ["Hurt", "Pin", "Disarm"], blows: ["Hurt", "Pin", "Disarm"], confidence: ["Frighten", "Taunt"] };
 // Five Scars and you're scarred out: the wound die never goes below d12.
@@ -71,6 +74,7 @@ const ICON = {
   rules: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>',
   sun: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
   moon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
+  party: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21V3.5"/><path d="M6 4h12l-3 4.5 3 4.5H6"/></svg>',
 };
 
 const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt, roll: () => randomBuild(DATA.build, DATA.crew), tools: () => themeButton() });
@@ -81,9 +85,39 @@ const learn = makeLearn({ crew: CREW, esc, hex, steps, rules: RULE, ruleHtml: (i
 
 const dt = makeDowntime({ B: DATA.build, esc, hex, steps, link, icon: ICON, lineLabel: (l) => lineLabel(l), throwDie, crewNames: () => new Set(DATA.crew.map((x) => x.name)), isOpen: (key) => ui.open.has(key), rule: (id) => ruleHtml(id) });
 
+// The party sheet on every phone in a campaign, and threads between the crew
+// kept in step on both their phones (party.js).
+const party = makeParty({
+  sync, store, esc, P: DATA.party,
+  list: () => camps.list(),
+  normal: (ch) => normal(ch),
+  render: () => render(),
+  quietRender: () => {
+    if (!dialog.open && !document.activeElement?.matches?.("#app input:not([type=radio]):not([type=checkbox]), #app textarea, #app select")) render();
+  },
+  toast: (m, u) => toast(m, u),
+  go: (url, o) => goTo(url, o),
+  rule: (id) => ruleHtml(id),
+  isOpen: (key) => ui.open.has(key),
+  viewing: () => (view.name === "sheet" ? ui.tab : view.name),
+  // A thread moved on another phone, written into this character. Undo can't
+  // go back past it, so it never takes back someone else's move.
+  saved: (ch) => {
+    for (let i = undo.length - 1; i >= 0; i--) if (undo[i].id === ch.id) undo.splice(i, 1);
+    ch.saved = new Date().toISOString();
+    store.save();
+  },
+  signedOut: () => {
+    sync.signedOutHere();
+    render();
+  },
+  gone: (id) => camps.gone(id),
+});
+
 // Campaigns: starting one, joining one from its link, and the GM's look at
 // her players' characters, drawn with the same pieces as a character here.
 const camps = makeCampaigns({
+  party,
   sync, store, esc, ICON,
   render: () => render(),
   go: (url, o) => goTo(url, o),
@@ -239,6 +273,8 @@ function persist() {
   const ch = current();
   if (ch) ch.saved = new Date().toISOString();
   store.save();
+  // A thread or the Aspiration moved here goes to the rest of the crew too.
+  if (ch) party.soon(ch);
 }
 
 const snapRoll = () => (roll ? JSON.stringify(roll, (k, v) => (v instanceof Set ? { set: [...v] } : v)) : null);
@@ -282,8 +318,10 @@ function undoLast() {
   if (!dialog.open) toast(`Undone: ${u.label}.`, false);
 }
 
+// canUndo is true for the character's own Undo, or the name of another one
+// (the party sheet's is "pundo").
 function toast(message, canUndo) {
-  toastBox.innerHTML = `<p>${esc(message)}</p>${canUndo ? '<button type="button" class="button" data-act="undo">Undo</button>' : ""}`;
+  toastBox.innerHTML = `<p>${esc(message)}</p>${canUndo ? `<button type="button" class="button" data-act="${canUndo === true ? "undo" : esc(canUndo)}">Undo</button>` : ""}`;
   toastBox.classList.add("show");
   clearTimeout(ui.toastTimer);
   ui.toastTimer = setTimeout(() => toastBox.classList.remove("show"), 6000);
@@ -597,8 +635,12 @@ function characterView(ch, c) {
   // the wound die's own buttons say what it does.
   const facts = [`Stride ${n.stride}${n.strideNote ? ` (${esc(n.strideNote)})` : ""}${gold("num:stride")}`, ...(n.woundNote ? [esc(n.woundNote.split(":")[0].trim())] : [])];
   const changed = changedNote(ch, c);
-  const body = ui.tab === "sheet" ? sheetTab(ch, c) : ui.tab === "rules" ? rulesTab() : playTab(ch, c);
-  const tabs = TABS.map(([t, label]) => `<a href="/characters/?c=${encodeURIComponent(ch.id)}${t === "play" ? "" : `&amp;t=${t}`}" data-act="tab" data-t="${t}"${ui.tab === t ? ' aria-current="page"' : ""}>${ICON[t]}<span>${label}</span></a>`).join("");
+  const list = tabsOf(ch);
+  // A link to the Party tab, on a phone that hasn't found the campaign yet,
+  // shows Play until it does.
+  const tab = list.some(([t]) => t === ui.tab) ? ui.tab : "play";
+  const body = tab === "sheet" ? sheetTab(ch, c) : tab === "rules" ? rulesTab() : tab === "party" ? party.tabView(ch) : playTab(ch, c);
+  const tabs = list.map(([t, label]) => `<a href="/characters/?c=${encodeURIComponent(ch.id)}${t === "play" ? "" : `&amp;t=${t}`}" data-act="tab" data-t="${t}"${tab === t ? ' aria-current="page"' : ""}>${ICON[t]}<span>${label}</span></a>`).join("");
   const slide = ui.slide;
   ui.slide = null;
   return `<div class="cc-topbar"><a class="cc-back" href="/characters/" data-act="nav">${ICON.back}Characters</a><div class="cc-tools">${soundButton()}${themeButton()}</div></div>
@@ -701,8 +743,13 @@ function sheetTab(ch, c) {
   const attuned = c.attuned.map((a, i) => `<div class="cc-item"><p><b>${esc(a.name)}</b>${a.props ? ` (${esc(a.props)})` : ""} ${a.stage ? `<span class="chip sm">${esc(a.stage)}</span>` : ""}${gold(`att:${i}`)}</p>${was(`att:${i}`)}
     <ul class="cc-perms">${a.permissions.map((p, j) => permButton(p.text, `${lower(a.name)}, attuned`, `att:${i}:${at.attuned[i][j]}`)).join("")}</ul>${a.catch ? `<p>Its Catch: <em>${esc(a.catch)}</em></p>` : ""}${a.burden ? `<p>Its Burden: <em>${esc(a.burden)}</em></p>` : ""}</div>`).join("");
 
+  // In a campaign, a thread with someone else in it is on both their phones,
+  // and one that's only on the other sheet shows here too, in their words.
+  const pt = party.threadsOf(ch, c);
   const crewNames = new Set(DATA.crew.map((x) => x.name));
-  const threads = c.threads.map((p) => `<div class="cc-person"><h3>${esc(p.person)}${crewNames.has(p.person) ? ' <small>in the crew</small>' : ""}</h3><ul>${p.threads.map((t, j) => threadRow(p, t, at.threads[p.person][j], s)).join("")}</ul></div>`).join("");
+  const inCrew = (person) => (pt ? pt.mate(person) : crewNames.has(person));
+  const people = allThreads(ch, c, pt);
+  const threads = people.map((p) => `<div class="cc-person"><h3>${esc(p.person)}${inCrew(p.person) ? ' <small>in the crew</small>' : ""}</h3><ul>${p.threads.map((t, j) => threadRow(p, t, t.theirs ? `x${j}` : at.threads[p.person]?.[j] ?? `x${j}`, s)).join("")}</ul></div>`).join("");
 
   const bites = [
     ...c.attuned.filter((a) => a.catch).map((a) => ({ text: a.catch, from: `the Catch on ${lower(a.name)}` })),
@@ -740,7 +787,7 @@ function sheetTab(ch, c) {
   const titlesAt = c.titles.map((t) => `<span class="cc-gl-line"><em>${esc(t.name)}</em> <small>${esc(t.archetype)} · ${t.permissions.length} ${t.permissions.length === 1 ? "permission" : "permissions"}</small></span>`).join("");
   const carried = [...c.carry.equipment.items.map((x) => ["equipment", x]), ...c.carry.utility.items.map((x) => ["utility", x]), ...(c.carry.keepsake ? [["keepsake", c.carry.keepsake]] : []), ...(c.carry.bag.items ?? []).map((x) => ["bag", x]), ...s.picked.map((p) => [p.where, p.name])]
     .map(([where, x]) => (s.crossed[`${where}|${x}`] ? `<s>${esc(x)}</s>` : esc(x)));
-  const threadsAt = c.threads.map((p) => {
+  const threadsAt = people.map((p) => {
     const states = p.threads.map((t) => ({ t, st: threadState(s, p.person, t) }));
     const hostile = states.some((x) => x.t.kind === "hostile");
     const worst = states.find((x) => x.st === "snapped") ?? states.find((x) => x.st === "strained");
@@ -765,7 +812,7 @@ function sheetTab(ch, c) {
     <p class="cc-lead">Tap a thing to cross it out when it breaks or gets used up, and it comes off your set actions until it’s mended. Your attuned things are magic, and they can’t be broken.</p>
     ${c.attuned.length ? `<h3 class="cc-h3">Attuned</h3>${attuned}` : ""}`, marked("kit", "att"))}
   ${fold("threads", "Threads", few(threadsAt, 5) || "None yet", `<p class="cc-lead">A bond thread’s something good between you. Borrow one of their permissions through it for 1 Aura, or lean on them in the story and strain it for 1 Resolve. You can’t borrow through a strained one, and straining it again before it’s mended snaps it.</p>
-    <p class="cc-lead">A hostile thread’s something that’s gone bad, and it bites like a Catch. Doing right by them strains it, and doing right by them again snaps it. A thread with someone in the crew is on both your sheets, so tell them when it changes. ${link("s-bonds", "How threads work")}</p>
+    <p class="cc-lead">A hostile thread’s something that’s gone bad, and it bites like a Catch. Doing right by them strains it, and doing right by them again snaps it. ${pt ? `A thread with someone in the crew is on both your sheets, and in ${esc(pt.name)} it’s on both your phones too, so straining it, mending it or snapping it on one does it on the other.` : "A thread with someone in the crew is on both your sheets, so tell them when it changes."} ${link("s-bonds", "How threads work")}</p>
     ${threads}`, marked("thr"))}
   ${fold("trouble", "Catches and trouble", few(bitesAt, 3) || "Bring real trouble on yourself for 1 Aura", `<p class="cc-lead">Let one bite and bring real trouble into the scene, and you take 1 Aura. A big bite that changes the scene or costs you something you wanted pays 1 Resolve instead. Your hostile threads bite the same way, from Threads.</p>${goldOf("trouble") ? `<p>${gold("trouble", "The trouble that follows you changed in the rules")}</p>${was("trouble")}` : ""}
     <ul class="cc-list">${bites}<li class="cc-item"><p>Nothing here fits? Bring real trouble on yourself in the story anyway.</p><div class="cc-row"><button type="button" class="button sm" data-act="bite" data-big="0" aria-label="Real trouble with no Catch: +1 Aura">+1 Aura</button></div></li></ul>`, marked("trouble"))}
@@ -783,9 +830,21 @@ function sheetTab(ch, c) {
   </div>`;
 }
 
+// A character's threads by bond, and in a campaign the ones that are only on
+// someone else's sheet with them, under the same name.
+function allThreads(ch, c, pt = party.threadsOf(ch, c)) {
+  if (!pt?.extra.length) return c.threads;
+  const out = c.threads.map((p) => ({ ...p, threads: [...p.threads] }));
+  for (const x of pt.extra) {
+    const p = out.find((y) => y.person === x.person);
+    if (p) p.threads.push(...x.threads);
+    else out.push({ person: x.person, threads: [...x.threads] });
+  }
+  return out;
+}
 // A thread by its key (person|words), and the sheet it's on.
 function threadAt(c, key) {
-  for (const p of c.threads) for (const t of p.threads) if (threadKey(p.person, t) === key) return { person: p.person, t };
+  for (const p of allThreads(current(), c)) for (const t of p.threads) if (threadKey(p.person, t) === key) return { person: p.person, t };
   return null;
 }
 // Whole again: back to how the sheet has it, or marked whole when the sheet says strained.
@@ -794,7 +853,13 @@ function setWhole(s, found) {
   if (found.t.strained) s.threads[key] = "whole";
   else delete s.threads[key];
 }
-const tellCrew = (person, how) => (DATA.crew.some((x) => x.name === person) ? ` Tell ${person}’s player, so it’s ${how} on their sheet too.` : "");
+// Who else needs to know. In a campaign, someone else in it sees it on their
+// phone, and out of one, a thread with one of the crew needs saying out loud.
+const tellCrew = (person, how, c) => {
+  const pt = c ? party.threadsOf(current(), c) : null;
+  if (pt) return !pt.mate(person) ? "" : navigator.onLine === false ? ` It goes to ${person}’s phone when you’ve got a signal.` : ` It’s ${how} on ${person}’s sheet too.`;
+  return DATA.crew.some((x) => x.name === person) ? ` Tell ${person}’s player, so it’s ${how} on their sheet too.` : "";
+};
 
 // One thread on the Sheet tab: its truth, whose words they are, where it sits
 // from bond to hostile, and what you can do with it. A bond thread lends a
@@ -861,7 +926,8 @@ function openAction(i) {
 // Through a bond thread that's whole you can borrow one of their permissions,
 // or one of a faction's assets, for 1 Aura. A strained or snapped thread
 // lends nothing, and nor does a hostile one.
-const lendersOf = (c, s) => c.threads.filter((p) => p.threads.some((t) => t.kind !== "hostile" && threadState(s, p.person, t) === "whole")).map((p) => p.person);
+// In a campaign that includes a thread that's only on the other one's sheet.
+const lendersOf = (c, s) => [...new Set(allThreads(current(), c).filter((p) => p.threads.some((t) => t.kind !== "hostile" && threadState(s, p.person, t) === "whole")).map((p) => p.person))];
 const borrowedIn = (c, s, r) => [...(r.borrow ?? [])].filter((p) => lendersOf(c, s).includes(p));
 function borrowGroup(c, s, r) {
   const lenders = lendersOf(c, s);
@@ -1604,6 +1670,10 @@ function render() {
   document.documentElement.classList.toggle("cc-docked", Boolean(app.querySelector(".bd-rail")));
   if (view.name === "build") builder.after(app);
   if (camping) camps.after(app);
+  // A campaign, or a character playing in one, keeps its party sheet and
+  // threads in step while it's open.
+  party.route(view, ch);
+  party.after(app);
   glow(ch);
   if (dialog.open) renderDialog();
   else refocus(keep);
@@ -1676,7 +1746,7 @@ function route() {
   if (id !== (view.name === "sheet" ? view.id : null)) ui.shut.clear();
   view = key ? { name: "build", key } : learning ? { name: "learn" } : id ? { name: "sheet", id }
     : camp ? (q.get("look") ? { name: "look", id: camp, who: q.get("look") } : { name: "camp", id: camp }) : joining ? { name: "join" } : { name: "list" };
-  ui.tab = ["sheet", "rules"].includes(q.get("t")) ? q.get("t") : "play";
+  ui.tab = ["sheet", "rules", "party"].includes(q.get("t")) ? q.get("t") : "play";
   ui.panel = null;
   ui.sure = false;
   document.documentElement.classList.toggle("cc-open", Boolean(id || key || learning || camp || joining));
@@ -1874,6 +1944,8 @@ function stepRoll(name, i, d) {
 
 const ACT = {
   k: (el, e) => camps.act(el, e),
+  p: (el, e) => party.act(el, e),
+  pundo: () => party.undo(),
   b: (el, e) => builder.act(el, e, render, () => {
     scrollTo(0, 0);
     app.querySelector("h1")?.focus({ preventScroll: true });
@@ -1905,7 +1977,7 @@ const ACT = {
     ui.printing = true;
     render();
     try {
-      const { short } = await printSheet(ch, c, ch.state);
+      const { short } = await printSheet(ch, c, ch.state, { goal: party.goalOf(ch) });
       toast(`${ch.name}’s sheet is filled in and ready to print.${short ? " Notes ran out of room on the paper, so the end got cut off. Copy the rest in by hand from the Sheet tab." : ""}`, false);
     } catch (e) {
       console.warn(e);
@@ -1972,7 +2044,7 @@ const ACT = {
     e.preventDefault();
     const ch = current();
     if (!ch || ui.tab === el.dataset.t) return;
-    const at = (t) => TABS.findIndex(([key]) => key === t);
+    const at = (t) => tabsOf(ch).findIndex(([key]) => key === t);
     ui.slide = at(el.dataset.t) > at(ui.tab) ? "next" : "back";
     ui.tab = el.dataset.t;
     ui.panel = null;
@@ -2181,13 +2253,13 @@ const ACT = {
     if (st === "snapped") return "";
     const snapped = st === "strained";
     s.threads[el.dataset.k] = snapped ? "snapped" : "strained";
-    return `${snapped ? "It snaps, so it’s crossed out." : "Strained."} You take 1 Resolve.${gainResolve(s, c)}${tellCrew(found.person, snapped ? "crossed out" : "strained")}`;
+    return `${snapped ? "It snaps, so it’s crossed out." : "Strained."} You take 1 Resolve.${gainResolve(s, c)}${tellCrew(found.person, snapped ? "crossed out" : "strained", c)}`;
   }),
   mend: (el) => change("mending a thread", (s, c) => {
     const found = threadAt(c, el.dataset.k);
     if (!found) return "";
     setWhole(s, found);
-    return `Mended. It’s whole again.${tellCrew(found.person, "whole")}`;
+    return `Mended. It’s whole again.${tellCrew(found.person, "whole", c)}`;
   }),
   // A hostile thread: doing right by them strains it, and doing right by them
   // again snaps it, and the grudge is over. Wronging them again first makes
@@ -2198,13 +2270,13 @@ const ACT = {
     const st = threadState(s, found.person, found.t);
     if (st === "snapped") return "";
     s.threads[el.dataset.k] = st === "strained" ? "snapped" : "strained";
-    return `${st === "strained" ? "You did right by them again, so it snaps, and the grudge is over." : "You did right by them, so it’s strained. Do it again and it snaps."}${tellCrew(found.person, st === "strained" ? "crossed out" : "strained")}`;
+    return `${st === "strained" ? "You did right by them again, so it snaps, and the grudge is over." : "You did right by them, so it’s strained. Do it again and it snaps."}${tellCrew(found.person, st === "strained" ? "crossed out" : "strained", c)}`;
   }),
   wrong: (el) => change("wronging them again", (s, c) => {
     const found = threadAt(c, el.dataset.k);
     if (!found || found.t.kind !== "hostile") return "";
     setWhole(s, found);
-    return `You wronged them again, so it’s whole.${tellCrew(found.person, "whole")}`;
+    return `You wronged them again, so it’s whole.${tellCrew(found.person, "whole", c)}`;
   }),
   // Borrowing through a bond thread, away from the roll card.
   tborrow: (el) => change("borrowing through a thread", (s, c) => {
@@ -2534,6 +2606,7 @@ document.addEventListener("submit", (e) => {
   const f = new FormData(form);
   const kind = form.dataset.form;
   if (kind.startsWith("k-")) return camps.submit(kind, form, f);
+  if (kind.startsWith("p-")) return party.submit(kind, form, f);
   if (kind === "name") return start(roll?.crew, String(f.get("name") ?? "").trim().slice(0, 40));
   // A Blaze they live through: the wound becomes a Scar, a Catch, and the
   // wound die drops back to the Scars.

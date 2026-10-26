@@ -97,6 +97,7 @@ export function makeCampaigns(d) {
     st.list = r.got.campaigns || [];
     st.at = Date.now();
     for (const id of Object.keys(st.camps)) if (!st.list.some((k) => k.id === id)) delete st.camps[id];
+    d.party.keepOnly(st.list.map((k) => k.id));
     keep();
     d.render();
   }
@@ -125,16 +126,23 @@ export function makeCampaigns(d) {
       keep();
       return quietRender();
     }
-    if (r.status === 404) {
-      delete st.camps[id];
-      if (st.list) st.list = st.list.filter((k) => k.id !== id);
-      st.why[id] = "gone";
-      keep();
-      d.render();
-    } else if (!have && !st.why[id]) {
+    if (r.status === 404) return gone(id);
+    if (!have && !st.why[id]) {
       st.why[id] = "net";
       d.render();
     }
+  }
+
+  // A campaign this phone's player isn't in any more goes from the phone,
+  // its party sheet too, and the page says so.
+  function gone(id) {
+    load();
+    delete st.camps[id];
+    if (st.list) st.list = st.list.filter((k) => k.id !== id);
+    st.why[id] = "gone";
+    keep();
+    d.party.drop(id);
+    d.render();
   }
 
   // The session's run out: the phone says so, like it does for characters.
@@ -228,9 +236,10 @@ export function makeCampaigns(d) {
       const bring = bringView(c);
       const partyHtml = `<section class="cc-sec" aria-labelledby="k-party"><h2 id="k-party">The party</h2>
         ${party.length ? `<ul class="cc-mine cc-party">${party.map((p) => memberCard(c, p)).join("")}</ul>` : '<p class="cc-lead">Nobody’s joined yet. When they do, their characters show up here, and you can open each one’s sheet.</p>'}</section>`;
-      return `${head}${party.length ? partyHtml + bring : bring + partyHtml}${thisView(c)}`;
+      const sheet = d.party.sheet(id);
+      return `${head}${party.length ? partyHtml + sheet + bring : bring + partyHtml + sheet}${thisView(c)}`;
     }
-    return `${head}${youView(c, myChar)}
+    return `${head}${youView(c, myChar)}${d.party.sheet(id)}
       <section class="cc-sec" aria-labelledby="k-party"><h2 id="k-party">Who’s in it</h2>
         <ul class="cc-mine cc-names"><li class="card cc-name"><b>${esc(c.gm)}</b><small>the GM</small></li>${party.map((p) => `<li class="card cc-name"><b>${p.character ? esc(p.character.name) : "No character yet"}</b><small>${p.id === sync.me?.id ? "you" : esc(p.name)}</small></li>`).join("")}</ul></section>
       <section class="cc-sec" aria-labelledby="k-leave"><h2 id="k-leave">Leaving</h2>
@@ -633,7 +642,7 @@ export function makeCampaigns(d) {
       st.printing = true;
       d.render();
       try {
-        const { short } = await printSheet(ch, c, ch.state);
+        const { short } = await printSheet(ch, c, ch.state, { goal: d.party.goalIn(view.id) });
         d.toast(`${ch.name}’s sheet is filled in and ready to print.${short ? " Notes ran out of room on the paper, so the end got cut off." : ""}`);
       } catch {
         d.toast("The sheet couldn’t be filled in. Open the companion once with a signal, then try again.");
@@ -721,6 +730,12 @@ export function makeCampaigns(d) {
 
   return {
     section,
+    gone,
+    // The campaigns this phone last saw, for the party sheet.
+    list() {
+      load();
+      return st.list;
+    },
     // Where the companion's going, so the campaigns can get ready for it.
     route(next) {
       const was = view;
@@ -779,7 +794,10 @@ export function makeCampaigns(d) {
     try {
       const c = d.normal(ch);
       if (!c) return cant(`${esc(ch.name)}’s sheet isn’t in the rules any more, so there’s nothing to show.`);
-      return lookView(ch, c, { ...d.look, esc, player: first(p.name), back, tools: d.tools(), printing: st.printing, icon: ICON, extra: out });
+      // Where a thread with someone else in the campaign has got to, which can
+      // be ahead of what this player's phone last sent.
+      const bond = (person, t) => d.party.bondFor(v.id, p.id, ch.id, person, t);
+      return lookView(ch, c, { ...d.look, esc, player: first(p.name), back, tools: d.tools(), printing: st.printing, icon: ICON, extra: out, bond });
     } catch {
       return cant(`${esc(String(ch?.name ?? "Their character"))}’s sheet couldn’t be read here.`);
     }

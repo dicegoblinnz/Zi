@@ -14,7 +14,7 @@ const PRONOUNS = { her: "she, her", him: "he, him", them: "they, them" };
 const textOf = (html) => new DOMParser().parseFromString(html ?? "", "text/html").body.textContent.trim();
 const slug = (s) => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
-export async function fillSheet(ch, c, s) {
+export async function fillSheet(ch, c, s, { goal = null } = {}) {
   const [{ PDFDocument, StandardFonts }, blank] = await Promise.all([
     import("pdf-lib"),
     fetch(SHEET).then((res) => {
@@ -95,6 +95,11 @@ export async function fillSheet(ch, c, s) {
   s.scars.slice(0, SCARS).forEach((x, i) => put(`scar_${i + 1}`, x || "a Scar"));
   put("aspiration", s.aspText || c.aspiration.text);
   ring("aspiration_die", `d${s.asp}`);
+  // In a campaign, the Party Goal's where the party sheet has it.
+  if (goal?.text) {
+    put("party_goal", goal.done ? `${goal.text} (done)` : goal.text);
+    ring("party_goal_die", `d${goal.die}`);
+  }
 
   // A Title on a set action is its number on the back, and an attuned thing's
   // permission is the thing, so each row stays short.
@@ -188,8 +193,8 @@ export async function fillSheet(ch, c, s) {
 }
 
 // Fill the sheet and hand it over as a download. It says whether Notes ran short.
-export async function printSheet(ch, c, s) {
-  const { bytes, file, short } = await fillSheet(ch, c, s);
+export async function printSheet(ch, c, s, extra = {}) {
+  const { bytes, file, short } = await fillSheet(ch, c, s, extra);
   const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
   const a = Object.assign(document.createElement("a"), { href: url, download: file });
   document.body.append(a);

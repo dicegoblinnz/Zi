@@ -26,10 +26,22 @@
 //    tap, with a different character in each one she plays in. Nothing
 //    crosses between them: Zed gets nothing from Tuesday Lair, and Mo nothing
 //    from Kai's.
-// 5. Who can do what: only Mo sees people, a player can't reset a link, rename,
+// 5. The party sheet and threads. Sam joins Tuesday Lair with Bram. It starts
+//    as a new crew, from the book, and Vesk gets a Party tab. Kai writes the
+//    Goal and climbs it, and Mo's phone catches up on its own. Mo puts Muscle
+//    on and Power's a d6 on Kai's phone. Sam, with no signal, adds a holding
+//    and climbs the Goal while Kai climbs it too, and both count once he's
+//    back. A project climbs from another phone, and everyone's Aspiration is
+//    there. Kai strains Vesk's thread with Bram and it's strained on Sam's
+//    Bram, Sam mends it on his, and two strains that cross snap it. A thread
+//    only on Vesk's sheet shows on Bram's in her words. Mo's look has the
+//    thread where the campaign has it. Nothing crosses: Vesk's thread with
+//    Kai's Dorrie, in Zed's Night, stays put, and Zed gets nothing. The party
+//    sheet passes axe at 390, in both themes, with the Goal in the first screen.
+// 6. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
-// 6. Signing out takes the account's characters off the phone and leaves the
+// 7. Signing out takes the account's characters off the phone and leaves the
 //    phone's own. Kai downloads her data, then deletes her account: it's gone
 //    from the database, her campaign ends and she's out of Mo's. The account
 //    page passes axe at 320 wide, and the campaign screens at 390, in both
@@ -236,6 +248,17 @@ const shots = async (page, name, sel) => {
   await page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
   await page.reload();
   await page.waitForSelector(sel);
+};
+// axe, no sideways scroll and 44px tap targets.
+const axe = async (page, what) => {
+  const result = await new AxeBuilder({ page }).include("main").analyze();
+  for (const v of result.violations) note(`axe (${what}): ${v.id}: ${v.help} (${v.nodes[0]?.target?.join(" ")})`);
+  same(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `no sideways scroll (${what})`);
+  const small = await page.evaluate(() => [...document.querySelectorAll("#app .button, #app .cc-back, #app .cc-theme, #app .cc-strip-a, #app summary, #app .cc-pick, #app .cc-perm, #app .cc-ringbtn, #cc-dialog .button")]
+    .filter((el) => el.getClientRects().length)
+    .map((el) => ({ t: el.textContent.trim().slice(0, 30), h: Math.round(el.getBoundingClientRect().height) }))
+    .filter((x) => x.h < 44));
+  if (small.length) note(`small tap targets (${what}): ${small.slice(0, 4).map((x) => `${x.t} (${x.h}px)`).join(", ")}`);
 };
 
 try {
@@ -496,8 +519,238 @@ try {
   yes(zedView.status === 200 && !zedView.body.includes("favours") && !zedView.body.includes("Dorrie") && !zedView.json?.campaign?.code, "Zed sees Kai’s Table's names, and nothing of Kai's other characters");
   same((await rows("SELECT name FROM campaign WHERE id = ?1", tuesday.id))[0]?.name, "Tuesday Lair", "Tuesday Lair's untouched");
 
-  // ------------------------------------------------------------ 5. who can do what
-  console.log("5. Who can do what");
+  // ------------------------------------------------------------ 5. the party sheet and threads
+  console.log("5. The party sheet and threads between the crew");
+  const BOOK = JSON.parse(readFileSync(join("src", "generated", "book.json"), "utf8"));
+  const sheetOf = (id) => BOOK.crew.find((c) => c.id === id);
+  // Vesk's thread with Bram's on both their sheets, and hers with Dorrie's too.
+  const fire = sheetOf("vesk").threads.find((p) => p.person === "Bram").threads[0].text;
+  const jobs = sheetOf("vesk").threads.find((p) => p.person === "Dorrie").threads[0].text;
+  const partyOf = async (id) => JSON.parse((await rows("SELECT data FROM party WHERE campaignId = ?1", id))[0]?.data ?? "null");
+  const bondOf = async (id, words) => Object.values((await partyOf(id))?.bonds ?? {}).find((b) => b.w === words)?.s ?? null;
+  // A phone coming back into view checks the campaign straight away.
+  const nudge = (page) => page.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
+  async function ptFold(page, key) {
+    const sel = `.pt details[data-open="pt-${key}"]`;
+    await page.waitForSelector(sel, { state: "attached" });
+    if (!(await page.$eval(sel, (d) => d.open))) await page.click(`${sel} > summary`);
+  }
+  // Where a thread's got to on the Sheet tab, by bond and words.
+  const chipOf = (page, person, words) => page.evaluate(([who, w]) => {
+    for (const p of document.querySelectorAll(".cc-person")) {
+      if (p.querySelector("h3")?.firstChild?.textContent.trim() !== who) continue;
+      for (const li of p.querySelectorAll(".cc-thread")) if (li.querySelector("em")?.textContent === w) return li.querySelector(".cc-thread-st .chip")?.textContent ?? null;
+    }
+    return null;
+  }, [person, words]);
+
+  // Sam joins with Bram, so Kai's Vesk and Sam's Bram are in Tuesday Lair together.
+  await api(sam.page, "PUT", "/api/characters/bram-ssssss", crewChar("bram-ssssss", "bram", "Bram"));
+  same((await got(sam.page, "POST", "/api/join", { code: newCode, character: "bram-ssssss" })).json?.campaign?.role, "player", "Sam joins Tuesday Lair with Bram");
+  await sam.page.goto(`${BASE}/characters/`);
+  await until(async () => (await sam.page.$$("#cc-camps .cc-camp")).length === 1, "Tuesday Lair on Sam's list");
+  await until(async () => (await sam.page.$$eval("#app .cc-sec:not(#cc-camps) .cc-saved b", (els) => els.map((e) => e.textContent))).includes("Bram"), "Bram on Sam's phone");
+
+  // Mo's got the campaign open, and the party sheet starts as a new crew, from the book.
+  await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
+  await mo.page.waitForSelector(".pt-goal");
+  yes((await text(mo.page, ".pt")).includes(BOOK.companion.party.start.res[0].text), "a new crew's starting card, from the book");
+  same(await mo.page.textContent(".pt-power-v"), "d4", "Power d4 to start");
+  same(await partyOf(tuesday.id), null, "and nothing's written to the campaign till someone changes it");
+
+  // Vesk gets a Party tab, since she's playing in a campaign.
+  await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa`);
+  await kai.page.waitForSelector('.cc-tabs [data-t="party"]');
+  same(await kai.page.$$eval(".cc-tabs a span", (els) => els.map((e) => e.textContent)), ["Play", "Sheet", "Party", "Rules"], "Vesk's tabs");
+  await kai.page.click('.cc-tabs [data-t="party"]');
+  await kai.page.waitForSelector(".pt-goal");
+  yes((await text(kai.page, ".pt-where")).includes("Tuesday Lair"), "the Party tab says which campaign");
+  const climbAt = await kai.page.evaluate(() => Math.round(document.querySelector(".pt-climb").getBoundingClientRect().bottom));
+  yes(climbAt <= 844 - 60, `the Goal's buttons in the first screen, above the tabs (they end at ${climbAt}px)`);
+  await shot(kai.page, "party-tab-top");
+  // Kai writes the Goal and it climbs, and Mo's phone catches up on its own.
+  await kai.page.fill('.pt-goal input[name="goal"]', "Clear Dorrie’s name");
+  await kai.page.click('.pt-goal button[type="submit"]');
+  await kai.page.waitForSelector(".pt-goal-words");
+  await kai.page.click('.pt-climb [data-by="1"]');
+  await until(async () => (await partyOf(tuesday.id))?.goal?.die === 4, "the Goal at d4 in the campaign");
+  same((await partyOf(tuesday.id))?.goal?.text, "Clear Dorrie’s name", "in Kai's words");
+  await until(async () => (await mo.page.textContent(".pt-goal")).includes("Clear Dorrie’s name") && (await mo.page.textContent(".pt-at")) === "d4", "the Goal reaching Mo's phone in 20 seconds", 26000);
+  await shots(mo.page, "party-gm", ".pt-goal");
+
+  // Mo puts Muscle on from the twelve, and Power's a d6 on Kai's phone.
+  await ptFold(mo.page, "pick");
+  await mo.page.click('.pt [data-do="pick"][aria-label*="Muscle"]');
+  await until(async () => (await partyOf(tuesday.id))?.assets?.some((a) => a.text === "Muscle" && a.power), "Muscle on the sheet");
+  await nudge(kai.page);
+  await until(async () => (await kai.page.textContent(".pt-power-v")) === "d6", "Power d6 on Kai's phone");
+  await ptFold(kai.page, "assets");
+  yes((await text(kai.page, ".pt")).includes("one asset isn’t paid for"), "and one asset isn't paid for");
+
+  // Sam's phone has no signal. He adds a horse and cart and climbs the Goal,
+  // while Kai climbs it too, and both count once he's back.
+  await sam.page.goto(`${BASE}/characters/?c=bram-ssssss&t=party`);
+  await sam.page.waitForSelector(".pt-goal-words");
+  await sam.context.setOffline(true);
+  await ptFold(sam.page, "holdings");
+  await sam.page.fill('.pt form[data-l="holdings"] input[name="text"]', "A horse and cart");
+  await sam.page.click('.pt form[data-l="holdings"] button[type="submit"]');
+  await sam.page.click('.pt-climb [data-by="1"]');
+  same(await sam.page.textContent(".pt-at"), "d6", "offline, Sam's phone shows his climb straight away");
+  yes((await text(sam.page, ".pt-status")).includes("when you’ve got a signal"), "and says his changes go up when there's a signal");
+  await kai.page.click('.pt-climb [data-by="1"]');
+  await until(async () => (await partyOf(tuesday.id))?.goal?.die === 6, "Kai's climb");
+  await sam.context.setOffline(false);
+  await until(async () => (await partyOf(tuesday.id))?.goal?.die === 8, "both climbs counting once Sam's back");
+  yes((await partyOf(tuesday.id))?.holdings?.some((h) => h.text === "A horse and cart"), "and the horse and cart's on the sheet");
+  await until(async () => (await sam.page.textContent(".pt-at")) === "d8", "d8 on Sam's phone");
+  same((await rows("SELECT version FROM party WHERE campaignId = ?1", tuesday.id))[0].version > 0, true, "the party sheet's kept in the campaign");
+
+  // A project, climbed from another phone.
+  await ptFold(mo.page, "projects");
+  await mo.page.fill('.pt form[data-l="projects"] input[name="text"]', "Turn the salt carters against the Estate");
+  await mo.page.fill('.pt form[data-l="projects"] input[name="then"]', "The Estate loses its Salt Contracts");
+  await mo.page.click('.pt form[data-l="projects"] button[type="submit"]');
+  await until(async () => (await partyOf(tuesday.id))?.projects?.length === 1, "Mo's project on the sheet");
+  await nudge(sam.page);
+  await ptFold(sam.page, "projects");
+  await sam.page.waitForSelector('.pt-project [data-by="1"]');
+  await sam.page.click('.pt-project [data-by="1"]');
+  await until(async () => (await partyOf(tuesday.id))?.projects?.[0]?.die === 4, "the project climbing from Sam's phone");
+
+  // Every player's Aspiration, where everyone can see it.
+  await nudge(kai.page);
+  await ptFold(kai.page, "asps");
+  await until(async () => (await text(kai.page, ".pt")).includes(sheetOf("bram").aspiration.text), "Bram's Aspiration on Kai's party sheet");
+  yes((await text(kai.page, ".pt")).includes(sheetOf("vesk").aspiration.text), "beside Vesk's");
+  await shots(kai.page, "party-tab", ".pt-goal");
+
+  // Kai strains Vesk's thread with Bram, and it's strained on Sam's Bram.
+  await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=sheet`);
+  await fold(kai.page, "threads");
+  yes((await kai.page.textContent('.cc-person:has(button[data-k^="Bram|"]) h3')).includes("in the crew"), "Bram's in the crew in Tuesday Lair");
+  yes(!(await kai.page.textContent('.cc-person:has(button[data-k^="Dorrie|"]) h3')).includes("in the crew"), "and Dorrie, who isn't in it, isn't");
+  await kai.page.click(`button[data-act="strain"][data-k="Bram|${fire}"]`);
+  yes((await text(kai.page, "#cc-toast")).includes("strained on Bram’s sheet too"), "the toast says it's on Bram's sheet too");
+  await until(async () => (await bondOf(tuesday.id, fire)) === "strained", "strained in the campaign");
+  await sam.page.goto(`${BASE}/characters/?c=bram-ssssss&t=sheet`);
+  await fold(sam.page, "threads");
+  await until(async () => (await chipOf(sam.page, "Vesk", fire)) === "Bond, strained", "strained on Sam's Bram");
+  // Sam mends it on his, and it's whole on Kai's.
+  await sam.page.click(`button[data-act="mend"][data-k="Vesk|${fire}"]`);
+  await until(async () => (await bondOf(tuesday.id, fire)) === "whole", "mended in the campaign");
+  await nudge(kai.page);
+  await until(async () => (await chipOf(kai.page, "Bram", fire)) === "Bond", "whole again on Kai's Vesk");
+  yes((await text(kai.page, "#cc-toast")).includes("whole again, from Sam’s phone"), "and Kai's told where it came from");
+  // Two strains that cross snap it, the same as at the table.
+  await sam.context.setOffline(true);
+  await sam.page.click(`button[data-act="strain"][data-k="Vesk|${fire}"]`);
+  await kai.page.click(`button[data-act="strain"][data-k="Bram|${fire}"]`);
+  await until(async () => (await bondOf(tuesday.id, fire)) === "strained", "Kai's strain");
+  await sam.context.setOffline(false);
+  await until(async () => (await bondOf(tuesday.id, fire)) === "snapped", "snapped once Sam's back");
+  await until(async () => (await chipOf(sam.page, "Vesk", fire)) === "Snapped", "snapped on Sam's Bram");
+  await nudge(kai.page);
+  await until(async () => (await chipOf(kai.page, "Bram", fire)) === "Snapped", "and on Kai's Vesk");
+
+  // A thread only on Vesk's sheet, grown in downtime, shows on Bram's in her
+  // words, and straining it there strains it on hers.
+  const ladder = "He still owes me for the ladder.";
+  await kai.page.evaluate((words) => {
+    const data = JSON.parse(localStorage.getItem("zi-characters"));
+    const v = data.characters.find((c) => c.id === "vesk-aaaaaa");
+    v.state.grown = [...(v.state.grown || []), { k: "thread", person: "Bram", text: words, kind: "bond" }];
+    v.saved = new Date().toISOString();
+    localStorage.setItem("zi-characters", JSON.stringify(data));
+  }, ladder);
+  await kai.page.reload();
+  await fold(kai.page, "threads");
+  await until(async () => ((await rows("SELECT face FROM member WHERE campaignId = ?1 AND userId = ?2", tuesday.id, kaiId))[0]?.face ?? "").includes("the ladder"), "Vesk's new thread shared with the crew");
+  await nudge(sam.page);
+  await until(async () => (await chipOf(sam.page, "Vesk", ladder)) === "Bond", "on Sam's Bram, under Vesk");
+  yes((await sam.page.textContent(`.cc-thread:has(button[data-k="Vesk|${ladder}"])`)).includes("Vesk’s words"), "in Vesk's words");
+  await sam.page.click(`button[data-act="strain"][data-k="Vesk|${ladder}"]`);
+  await until(async () => (await bondOf(tuesday.id, ladder)) === "strained", "Sam strains it");
+  await nudge(kai.page);
+  await until(async () => (await chipOf(kai.page, "Bram", ladder)) === "Bond, strained", "strained on Kai's Vesk too");
+  const samGets = (await got(sam.page, "GET", `/api/campaigns/${tuesday.id}/party`)).json;
+  same(samGets?.crew?.find((m) => m.id === kaiId)?.threads?.map((t) => t.text).sort(), [fire, ladder].sort(), "Sam gets Vesk's threads with Bram, and none of her others");
+
+  // Mo's look at Vesk has the thread with Bram where the campaign has it.
+  await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&look=${kaiId}`);
+  await mo.page.waitForSelector(".cc-track.is-look");
+  await mo.page.click('details[data-open="lk-threads"] > summary');
+  await until(async () => (await text(mo.page, '.cc-person:has(h3:text-is("Bram"))')).includes("Snapped"), "Mo's look shows it snapped");
+
+  // Nothing crosses. Kai's Dorrie plays in Zed's Night, so Vesk straining their
+  // thread leaves Dorrie's alone, and Zed gets nothing of Tuesday Lair's.
+  await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=sheet`);
+  await fold(kai.page, "threads");
+  await kai.page.click(`button[data-act="strain"][data-k="Dorrie|${jobs}"]`);
+  await kai.page.waitForTimeout(1500);
+  same(await bondOf(tuesday.id, jobs), null, "a thread with someone who isn't in the campaign stays on Vesk's sheet");
+  yes(!((await rows("SELECT face FROM member WHERE campaignId = ?1 AND userId = ?2", tuesday.id, kaiId))[0]?.face ?? "").includes("dozen jobs"), "and never leaves her phone for Tuesday Lair");
+  await kai.page.goto(`${BASE}/characters/?c=dorrie-eeeeee&t=sheet`);
+  await fold(kai.page, "threads");
+  same(await chipOf(kai.page, "Vesk", jobs), "Bond", "Kai's Dorrie, in Zed's Night, still has it whole");
+  await kai.page.click('.cc-tabs [data-t="party"]');
+  await kai.page.waitForSelector(".pt-goal");
+  yes((await text(kai.page, ".pt-where")).includes("Zed’s Night") && !(await text(kai.page, ".pt")).includes("Clear Dorrie’s name"), "Dorrie's Party tab is Zed's Night's own");
+  same(await partyOf(zedsNight.id), null, "and Zed's Night's sheet is untouched");
+  same((await got(zed.page, "GET", `/api/campaigns/${tuesday.id}/party`)).status, 404, "Zed gets nothing of Tuesday Lair's party sheet");
+  same((await got(zed.page, "POST", `/api/campaigns/${tuesday.id}/party`, { dev: "zeds-phone-0001", ops: [{ n: 1, o: "name", v: "Mine now" }] })).status, 404, "and can't change it");
+  same((await partyOf(tuesday.id))?.name, "", "Tuesday Lair's crew still has no name");
+  const twice = { dev: "sams-phone-0001", ops: [{ n: 1, m: 1, with: `${moId}:nobody`, w: fire, from: null, to: "whole" }, { n: 2, o: "climb", by: 1 }] };
+  same((await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/party`, twice)).status, 200, "a change sent from a phone");
+  same((await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/party`, twice)).json?.seq, 2, "and sent again, when the answer didn't get back");
+  same([(await partyOf(tuesday.id))?.goal?.die, await bondOf(tuesday.id, fire)], [10, "snapped"], "counts once, and a thread with someone who isn't playing goes nowhere");
+
+  // The Goal done: past d12 the crew earns a Reputation and writes the next
+  // Goal at d2. A climb tapped by mistake comes back off with Undo.
+  await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
+  await mo.page.waitForSelector(".pt-goal-words");
+  await mo.page.click('.pt-ladder [data-v="12"]');
+  await until(async () => (await mo.page.textContent(".pt-at")) === "d12", "the Goal set straight to d12");
+  await mo.page.click('.pt-climb [data-by="1"]');
+  await mo.page.waitForSelector(".pt-goal.is-done");
+  yes((await text(mo.page, ".pt-goal")).includes("The crew’s done it."), "past d12, the crew's done it");
+  await shot(mo.page, "party-goal-done");
+  await mo.page.fill('.pt-goal form[data-l="reps"] input[name="text"]', "The ones who beat the forger’s court.");
+  await mo.page.click('.pt-goal form[data-l="reps"] button[type="submit"]');
+  await mo.page.fill('.pt-goal form[data-form="p-next"] input[name="goal"]', "Free the Bound");
+  await mo.page.click('.pt-goal form[data-form="p-next"] button[type="submit"]');
+  await until(async () => {
+    const p = await partyOf(tuesday.id);
+    return p?.goal?.text === "Free the Bound" && p.goal.die === 2 && !p.goal.done && p.reps.some((r) => r.text === "The ones who beat the forger’s court.");
+  }, "a Reputation earned and the next Goal at d2");
+  await mo.page.click('.pt-climb [data-by="1"]');
+  await until(async () => (await partyOf(tuesday.id))?.goal?.die === 4, "a climb");
+  await mo.page.click('#cc-toast [data-act="pundo"]');
+  await until(async () => (await partyOf(tuesday.id))?.goal?.die === 2, "and Undo takes it back");
+
+  // The party sheet at 390, in both themes.
+  for (const theme of ["dark", "light"]) {
+    await kai.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=party`);
+    await kai.page.waitForSelector(".pt-goal-words");
+    for (const key of ["assets", "projects", "asps"]) await ptFold(kai.page, key);
+    await axe(kai.page, `party tab, ${theme}`);
+    if (SHOTS) {
+      await kai.page.evaluate(() => document.querySelector(".pt-crew").scrollIntoView());
+      await shot(kai.page, `party-crew-${theme}`);
+      await kai.page.evaluate(() => document.querySelector('details[data-open="pt-projects"]').scrollIntoView());
+      await shot(kai.page, `party-folds-${theme}`);
+    }
+    await mo.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+    await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
+    await mo.page.waitForSelector(".pt-goal-words");
+    await axe(mo.page, `party sheet on the campaign, ${theme}`);
+  }
+  await kai.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+  await mo.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+
+  // ------------------------------------------------------------ 6. who can do what
+  console.log("6. Who can do what");
   same((await api(kai.page, "GET", "/api/people")).status, 403, "a member can't see people");
   const people = (await got(mo.page, "GET", "/api/people")).json;
   same([people?.total, people?.people?.[0]?.email], [6, "zed@example.com"], "Mo sees everyone who's signed up, newest first");
@@ -529,8 +782,8 @@ try {
   yes(keys.length > 3 && keys.every((k) => /^[0-9a-f]{32}$/.test(k.key)), "rate limits keep HMACs, not addresses (Better Auth's too)");
   same(await rows("SELECT name FROM sqlite_master WHERE name = 'rateLimit'"), [], "no table of addresses");
 
-  // ------------------------------------------------------------ 6. leaving
-  console.log("6. Signing out, your data and deleting");
+  // ------------------------------------------------------------ 7. leaving
+  console.log("7. Signing out, your data and deleting");
   // A phone-only character stays when Kai signs out on the first phone.
   await kai.page.evaluate(() => {
     const data = JSON.parse(localStorage.getItem("zi-characters"));
@@ -574,16 +827,6 @@ try {
 
   // The account page, signed in as Mo, at 320 wide in both themes, and the
   // campaign screens at 390.
-  const axe = async (page, what) => {
-    const result = await new AxeBuilder({ page }).include("main").analyze();
-    for (const v of result.violations) note(`axe (${what}): ${v.id}: ${v.help} (${v.nodes[0]?.target?.join(" ")})`);
-    same(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `no sideways scroll (${what})`);
-    const small = await page.evaluate(() => [...document.querySelectorAll("#app .button, #app .cc-back, #app .cc-theme, #app .cc-strip-a, #app summary, #app .cc-pick, #cc-dialog .button")]
-      .filter((el) => el.getClientRects().length)
-      .map((el) => ({ t: el.textContent.trim().slice(0, 30), h: Math.round(el.getBoundingClientRect().height) }))
-      .filter((x) => x.h < 44));
-    if (small.length) note(`small tap targets (${what}): ${small.slice(0, 4).map((x) => `${x.t} (${x.h}px)`).join(", ")}`);
-  };
   for (const theme of ["dark", "light"]) {
     await mo.page.setViewportSize({ width: 320, height: 800 });
     await mo.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);

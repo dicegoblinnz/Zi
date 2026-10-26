@@ -9,6 +9,7 @@
 // in it, and players see each other's names. Every campaign request checks the
 // person asking against that one campaign, so nothing crosses between them.
 import { authFor, hit, originsOf, providersOf, seen } from "./auth.js";
+import { changeParty, showParty } from "./party.js";
 
 const HEAD = { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" };
 const json = (body, status = 200, extra = {}) => new Response(typeof body === "string" ? body : JSON.stringify(body), { status, headers: { ...HEAD, ...extra } });
@@ -249,6 +250,11 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
     if (method === "PATCH") return gm ? renameCampaign(request, env, user, camp) : gmOnly();
     if (method === "DELETE") return gm ? endCampaign(env, camp) : gmOnly();
   }
+  // The party sheet's the whole crew's, so the GM and every player can change it.
+  if (sub === "party" && !subId) {
+    if (method === "GET") return showParty(env, url, camp, user, { json });
+    if (method === "POST") return changeParty(request, env, camp, user, { json, fail, body });
+  }
   if (sub === "link" && !subId && method === "POST") return gm ? resetLink(env, camp) : gmOnly();
   if (sub === "me" && !subId && method === "PUT") return gm ? fail(400, "You’re the GM, so you don’t bring a character.") : pickCharacter(request, env, user, camp);
   if (sub === "members" && subId && method === "DELETE") {
@@ -323,9 +329,11 @@ async function renameCampaign(request, env, user, camp) {
   return json({ name });
 }
 
-// It ends for everyone. Their characters are theirs, so they stay.
+// It ends for everyone, and its party sheet goes with it. Their characters
+// are theirs, so they stay.
 async function endCampaign(env, camp) {
   await env.DB.batch([
+    env.DB.prepare("DELETE FROM party WHERE campaignId = ?1").bind(camp.id),
     env.DB.prepare("DELETE FROM member WHERE campaignId = ?1").bind(camp.id),
     env.DB.prepare("DELETE FROM campaign WHERE id = ?1").bind(camp.id),
   ]);

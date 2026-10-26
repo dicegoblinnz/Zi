@@ -80,12 +80,15 @@ export function lookView(ch, c, x) {
   const attuned = c.attuned.map((a) => `<div class="cc-item"><p><b>${esc(a.name)}</b>${a.stage ? ` <span class="chip sm">${esc(a.stage)}</span>` : ""}</p><ul class="cc-look-list">${a.permissions.map((p) => `<li><em>${esc(p.text)}</em></li>`).join("")}</ul>${a.catch ? `<p>Its Catch: <em>${esc(a.catch)}</em></p>` : ""}${a.burden ? `<p>Its Burden: <em>${esc(a.burden)}</em></p>` : ""}</div>`).join("");
   const kit = `${slot("equipment", "Equipment")}${slot("utility", "Utility")}${c.carry.keepsake ? `<h3 class="cc-h3">Keepsake</h3><ul class="cc-look-list">${thing("keepsake", c.carry.keepsake)}</ul>` : ""}${slot("bag", `The bag <span class="cc-small">(${esc(c.carry.bag.name)})</span>`)}${c.attuned.length ? `<h3 class="cc-h3">Attuned</h3>${attuned}` : ""}`;
 
+  // In a campaign, a thread with someone else in it is wherever the campaign
+  // has it, which can be ahead of what this player's phone last sent.
+  const stateOf = (person, t) => x.bond?.(person, t) ?? threadState(s, person, t);
   const threads = c.threads.map((p) => `<div class="cc-person"><h3>${esc(p.person)}</h3><ul class="cc-look-list">${p.threads.map((t) => {
-    const st = threadState(s, p.person, t);
+    const st = stateOf(p.person, t);
     return `<li class="cc-thread is-${t.kind === "hostile" ? "hostile" : "bond"} is-${st}"><p><em>${esc(t.text)}</em>${t.whose ? ` <small>(${esc(t.whose)} words)</small>` : ""} <span class="chip sm">${threadLabel(t, st)}</span></p></li>`;
   }).join("")}</ul></div>`).join("");
   const threadsAt = c.threads.map((p) => {
-    const states = p.threads.map((t) => ({ t, st: threadState(s, p.person, t) }));
+    const states = p.threads.map((t) => ({ t, st: stateOf(p.person, t) }));
     const hostile = states.some((y) => y.t.kind === "hostile");
     const worst = states.find((y) => y.st === "snapped") ?? states.find((y) => y.st === "strained");
     return `${esc(p.person)}${hostile || worst ? ` <small>${[hostile ? "hostile" : "", worst ? worst.st : ""].filter(Boolean).join(", ")}</small>` : ""}`;

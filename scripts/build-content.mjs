@@ -575,6 +575,30 @@ function conditionsFrom(doc, inline) {
   return out;
 }
 
+// The party sheet's (the companion's, for a campaign), read off The Party
+// Sheet so it always matches the book: a new crew's starting card, the twelve
+// crew assets with what each one does, what each size of Power means, and the
+// book's own ideas for a Goal and a Reputation. Anything it can't read stops
+// the build.
+function partyFrom(doc, warn) {
+  const card = doc.body.match(/^:::sheet\[A new crew\][^\n]*\n([\s\S]*?)^:::$/m)?.[1] ?? "";
+  const field = (name) => card.match(new RegExp(`^\\*\\*${name}\\*\\* (.+)$`, "m"))?.[1] ?? "";
+  const italics = (s) => [...s.matchAll(/(?<!\*)\*([^*]+)\*(?!\*)(?: \(([^)]+)\))?/g)];
+  const res = italics(field("Resources")).map((m, i) => ({ id: `new-res-${i + 1}`, text: curly(m[1]) }));
+  const assets = italics(field("Assets")).map((m, i) => ({ id: `new-asset-${i + 1}`, text: curly(m[1]), does: curly(m[2] ?? ""), power: /\+1 Power/.test(m[2] ?? "") }));
+  const people = plain(field("People it relies on"));
+  if (!res.length || !assets.length || !people) warn("can't read the new crew's starting card (its Resources, Assets and People it relies on) in The Party Sheet");
+  const twelve = tableRows(sectionOf(doc.body, "s-crew-tags")).map((r) => ({ name: plain(r[0]), does: plain(r[1] ?? ""), power: /\+1 Power/.test(r[1] ?? "") }));
+  if (twelve.length !== 12) warn(`expected the twelve crew assets in Crew Assets, found ${twelve.length}`);
+  const sizes = Object.fromEntries(tableRows(sectionOf(doc.body, "s-crew-size")).map((r) => [Number(r[0].replace(/^d/, "")), plain(r[1] ?? "")]).filter(([d, text]) => d && text));
+  if (Object.keys(sizes).length !== 5) warn(`expected Power's five sizes, d4 to d12, in How big it is, found ${Object.keys(sizes).length}`);
+  const goals = italics(sectionOf(doc.body, "s-goal").split(/\n\s*\n/).find((p) => /\blike \*/.test(p)) ?? "").map((m) => curly(m[1]));
+  if (!goals.length) warn("can't find the ideas for a Goal (like *clear Dorrie's name*) in The Party Goal");
+  const rep = curly(sectionOf(doc.body, "s-party-faction").match(/\*\*Reputations\*\*[^\n]*?\*([^*]+)\*/)?.[1] ?? "");
+  if (!rep) warn("can't find the example Reputation in The Crew");
+  return { start: { res, assets }, people, assets: twelve, sizes, goals, rep };
+}
+
 // What the character builder offers, read off Building Your Character and the
 // Title ideas so it always matches the book: the Quick Build's steps, the
 // ideas, every trait and the number it changes, what you can carry, the Catch
@@ -756,6 +780,9 @@ const build = buildDoc && ideasDoc ? buildFrom(buildDoc, ideasDoc, ctx.archetype
 if (!build) companionWarn("can't find Building Your Character or the Quick Build for the builder");
 const conditions = docWith("{#s-conditions-list}") ? conditionsFrom(docWith("{#s-conditions-list}"), inline) : [];
 if (conditions.length < 10) companionWarn(`found only ${conditions.length} conditions in Conflict`);
+const partyDoc = docWith("{#s-party-faction}");
+const party = partyDoc ? partyFrom(partyDoc, (msg) => companionWarn(`party sheet: ${msg}`)) : null;
+if (!party) companionWarn("can't find The Party Sheet for the party sheet");
 // The rules the companion shows on a tap, read off the chapters so they match
 // the book and read offline: each one's opening, up to its first example,
 // table or subheading.
@@ -767,7 +794,7 @@ const blockHtml = (text) => {
 const rules = {};
 for (const id of ["s-round", "s-telegraphs", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour",
   "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through", "s-blaze", "s-healing", "s-vulnerable", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "how-permissions-stack",
-  "your-slots", "s-downtime-rolls"]) {
+  "your-slots", "s-downtime-rolls", "s-goal", "s-climb", "s-projects", "s-crew-size", "s-crew-tags", "s-crew-wealth", "s-crew-grows", "s-party-resources"]) {
   const doc = docWith(`{#${id}}`);
   const head = doc?.body.match(new RegExp(`^#{2,4} (.+?) \\{#${id}\\}`, "m"));
   const blocks = [];
@@ -868,7 +895,7 @@ writeFileSync(
     changes: { title: curly(changes.meta.title), html: changesOut.html, headings: changesOut.headings },
     crew,
     crewLink: crewDoc ? `${pageFor.get(crewDoc.path)}#s-pregens` : "/rules/",
-    companion: { conditions, links: companionLinks, build, rules },
+    companion: { conditions, links: companionLinks, build, rules, party },
     learn,
   }),
 );
