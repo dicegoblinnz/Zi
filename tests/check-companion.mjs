@@ -1088,6 +1088,13 @@ if (part("5b")) {
     const first = await page.$eval('[data-b="arch"]', (el) => Math.round(el.getBoundingClientRect().top + scrollY));
     if (first > 420) note(`the first archetype card starts ${first}px down at 390 by 844, ${theme}`);
     same(await page.$$eval(".bd-progress li", (els) => new Set(els.map((el) => Math.round(el.getBoundingClientRect().top))).size), 1, `the eight steps in one line, ${theme}`);
+    // The steps a tap away from the bar close with Escape, or a tap anywhere else.
+    await page.click(".bd-jump > summary");
+    await page.keyboard.press("Escape");
+    same(await page.$eval(".bd-jump", (el) => [el.open, document.activeElement === el.querySelector("summary")]), [false, true], `Escape closing the steps, ${theme}`);
+    await page.click(".bd-jump > summary");
+    await page.click(".bd-lead");
+    same(await page.$eval(".bd-jump", (el) => el.open), false, `a tap elsewhere closing the steps, ${theme}`);
     for (let s = 0; s < 8; s++) {
       if (s) await jump(s);
       const bar = await page.$eval(".bd-foot", (el) => [getComputedStyle(el).position, Math.round(innerHeight - el.getBoundingClientRect().bottom)]);

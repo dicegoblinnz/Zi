@@ -540,6 +540,21 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
   let slide = ""; // "next" or "back": the way the next screen comes in
   let shown = null; // each set action's dice as last drawn, so a change grows them
 
+  // The steps a tap away from the bar close again with a tap anywhere else,
+  // or Escape, which puts the cursor back on them.
+  if (typeof document !== "undefined") {
+    document.addEventListener("click", (e) => {
+      const menu = document.querySelector(".bd-jump[open]");
+      if (menu && !menu.contains(e.target)) menu.removeAttribute("open");
+    });
+    document.addEventListener("keydown", (e) => {
+      const menu = e.key === "Escape" && document.querySelector(".bd-jump[open]");
+      if (!menu) return;
+      menu.removeAttribute("open");
+      menu.querySelector("summary")?.focus();
+    });
+  }
+
   const changing = () => slotKey !== "new";
   const save = () => {
     clearTimeout(saveTimer);

@@ -1549,7 +1549,7 @@ function render() {
   app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
   document.documentElement.classList.toggle("cc-building", Boolean(app.querySelector(".bd-foot")));
   // With the dice in a dock above the bar, a toast sits above them both.
-  document.documentElement.classList.toggle("cc-docked", Boolean(app.querySelector(".bd-body:not(.bd-page) .bd-rail")));
+  document.documentElement.classList.toggle("cc-docked", Boolean(app.querySelector(".bd-rail")));
   if (view.name === "build") builder.after(app);
   glow(ch);
   if (dialog.open) renderDialog();
