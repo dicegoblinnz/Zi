@@ -72,7 +72,7 @@ const ICON = {
   moon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
 };
 
-const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt, roll: () => randomBuild(DATA.build, DATA.crew) });
+const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt, roll: () => randomBuild(DATA.build, DATA.crew), tools: () => themeButton() });
 
 // ---------------------------------------------------------------- characters
 
@@ -1543,9 +1543,14 @@ function render() {
   if (c) settleMarks(ch, c);
   else ui.gold = null;
   document.documentElement.classList.toggle("cc-tabbed", view.name === "sheet" && Boolean(c));
-  // A character's full screen, without the site's bar.
-  document.documentElement.classList.toggle("cc-full", view.name === "sheet");
+  // A character's full screen, without the site's bar, and the builder's,
+  // with its own bar of Back and Next at the bottom.
+  document.documentElement.classList.toggle("cc-full", view.name === "sheet" || view.name === "build");
   app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
+  document.documentElement.classList.toggle("cc-building", Boolean(app.querySelector(".bd-foot")));
+  // With the dice in a dock above the bar, a toast sits above them both.
+  document.documentElement.classList.toggle("cc-docked", Boolean(app.querySelector(".bd-body:not(.bd-page) .bd-rail")));
+  if (view.name === "build") builder.after(app);
   glow(ch);
   if (dialog.open) renderDialog();
   else refocus(keep);
@@ -2541,7 +2546,7 @@ document.addEventListener("input", (e) => {
 document.addEventListener("toggle", (e) => {
   const key = e.target.dataset?.open;
   if (!key) return;
-  if (key.startsWith("bd-how") || key === "bd-qs") builder.toggled(e.target);
+  if (key.startsWith("bd-")) builder.toggled(e.target);
   if (e.target.open) ui.open.add(key);
   else ui.open.delete(key);
   // A Sheet tab fold the player shut stays shut, even one holding a gold mark.

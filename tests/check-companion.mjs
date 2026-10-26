@@ -1,6 +1,7 @@
 // Check the character companion the way a player uses it at the table.
 //
 //   npm run build && node tests/check-companion.mjs [screenshot-folder]
+//   ZI_ONLY=5,5b node tests/check-companion.mjs runs only those parts.
 //
 // 1. Steps into dice match the table in The Core, splits included.
 // 2. Every crew member's set actions on the phone match their sheet in the
@@ -32,11 +33,17 @@
 //    Scar with its Catch, and characters saved with the old Hurt track and
 //    Armour, a debt thread and two attuned things opening clean, with gold
 //    marks on the lines the rules changed.
-// 5. Building your own: Vesk again, through the builder a step at a time,
-//    with a permission's third set action refused, one attuned thing, and a
-//    thread made from a crew question. Her set actions and numbers have to
-//    match her sheet in the chapter. Then a roll, a reload, offline, a change
-//    in the builder, and every step at 320 wide in the light, with axe on each.
+// 5. Building your own: Vesk again, through the builder a step to a screen,
+//    a Title at a time and what she carries a part at a time, with a
+//    permission's third set action refused, one attuned thing, and threads
+//    made from the crew questions. Her set actions and numbers have to match
+//    her sheet in the chapter. Then a roll, a reload, offline, a change in the
+//    builder, and every step at 320 wide in the light, with axe on each.
+// 5b. The builder on a phone held in one hand: full screen with the crest at
+//    the top, the first choice high up, the eight steps in one line, Back and
+//    Next in the bar at the bottom on every step, and a die growing into its
+//    next shape as a line goes on, or swapping straight away under
+//    reduce-motion. axe on every step, dark and light.
 // 6. Print, and the other ways in. Every crew member made into a build has
 //    the sheet the chapter gives them, the builder's warnings for threads and
 //    attuned things, and a thousand random characters pass every one of the
@@ -105,6 +112,10 @@ import { changesOf, said, typo } from "../src/companion/marks.js";
 import { grow } from "../src/companion/grow.js";
 
 const SHOTS = process.argv[2] || null;
+// ZI_ONLY=5,5b runs only those parts, for a quick check while working on them.
+// Before anything goes to main, the whole file runs.
+const ONLY = process.env.ZI_ONLY ? new Set(process.env.ZI_ONLY.split(",").map((x) => x.trim())) : null;
+const part = (n) => !ONLY || ONLY.has(n);
 const problems = [];
 const note = (p) => {
   problems.push(p);
@@ -196,7 +207,7 @@ async function play(page, crewId, name) {
 }
 
 // 2. The crew's set actions, read off their sheets in the chapter.
-{
+if (part("2")) {
   const md = readFileSync("content/rules/03b-title-ideas-and-the-crew.md", "utf8");
   const sheets = [...md.matchAll(/^:::sheet\[([^:\]]+): [^\]]+\]\n([\s\S]*?)\n:::$/gm)].map((m) => ({
     name: m[1],
@@ -219,7 +230,7 @@ async function play(page, crewId, name) {
 }
 
 // 3. Vesk at the table.
-{
+if (part("3")) {
   const { context, page } = await phone();
   await page.goto(`${BASE}/characters/`);
   await shot(page, "1-characters");
@@ -463,7 +474,7 @@ async function play(page, crewId, name) {
 
 // Wren goes at a Marked Warden: her Fight's d10 and the Mark d10 against its d8.
 // Both come in under, and her Hunter's +3 on the Mark die makes the 6 a 9.
-{
+if (part("3")) {
   const { context, page } = await phone();
   await play(page, "wren");
   await page.click('.tile[data-a]:has(.tile-name:text-is("Fight"))');
@@ -513,7 +524,7 @@ async function play(page, crewId, name) {
 // strained. Strained twice it snaps, and mended it lends again. Her hostile
 // thread with the fence bites like a Catch, doing right by him strains it,
 // wronging him again makes it whole, and doing right by him twice snaps it.
-{
+if (part("3")) {
   const { context, page } = await phone();
   await play(page, "vesk", "Vesk");
   // The trackers are on the play screen, so on the Sheet tab it's read off what's saved.
@@ -609,7 +620,7 @@ async function play(page, crewId, name) {
 // Dorrie meets fear with her d6 Confidence as it is (no Defend against fear), and a hit
 // while she's Exposed is two Hurts. Characters saved with the old Hurt track
 // and Armour open clean.
-{
+if (part("4")) {
   const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
   const { context, page } = await phone();
   const wound = () => page.textContent('.cc-stat[data-p="wound"] .v');
@@ -827,7 +838,7 @@ async function play(page, crewId, name) {
 }
 
 // 5. Building your own.
-{
+if (part("5")) {
   const md = readFileSync("content/rules/03b-title-ideas-and-the-crew.md", "utf8");
   const block = md.match(/^:::sheet\[Vesk: [^\]]+\]\n([\s\S]*?)\n:::$/m)[1];
   const want = block.match(/^\*\*Set actions:\*\* (.+)$/m)[1].replace(/\.$/, "").split(" · ").map((s) => {
@@ -845,20 +856,32 @@ async function play(page, crewId, name) {
     await page.click(".bd-foot button.primary");
     has(await step(), name, "the next step");
   };
+  // Every step's a tap away, from the bar.
+  const jump = async (s) => {
+    await page.click(".bd-jump > summary");
+    await page.click(`.bd-dot[data-s="${s}"]`);
+  };
   const tiles = async () => (await page.$$eval(".tile[data-a]", (els) => els.map((el) => [el.querySelector(".tile-name").textContent, parseInt(el.querySelector(".tile-steps").textContent, 10), el.querySelector(".tile-die").textContent]))).sort();
 
   await page.goto(`${BASE}/characters/`);
   await page.click('a[data-act="bopen"]');
   has(await step(), "Archetypes", "the builder's first step");
-  for (const t of [0, 1]) {
-    await b(`[data-b="arch"][data-t="${t}"][data-v="Shadow"]`);
-    await b(`[data-b="idea"][data-t="${t}"][data-v="k-rogue"]`);
-  }
+  // A Title at a time: its archetype from the cards, then a Title idea, and
+  // Next goes on to the second Title before the next step.
+  await b('[data-b="arch"][data-t="0"][data-v="Shadow"]');
+  same(await page.$$eval('[data-b="arch"]', (els) => els.length), 0, "the archetype cards folded away to the one picked");
+  await b('[data-b="idea"][data-t="0"][data-v="k-rogue"]');
+  await next("Archetypes");
+  same(await page.getAttribute('.bd-seg[data-t="1"]', "aria-pressed"), "true", "Next going on to the second Title first");
+  await b('[data-b="arch"][data-t="1"][data-v="Shadow"]');
+  await b('[data-b="idea"][data-t="1"][data-v="k-rogue"]');
   has(await page.textContent(".bd-body"), "Shadow twice, so your +2 is a +3", "two Shadows");
+  same(await page.$$eval(".bd-head .zd-crest.twice", (els) => els.length), 1, "the crest at the top doubled for Shadow twice");
   await shot(page, "5-builder-archetypes");
   await next("Titles and permissions");
   await b('[data-b="title"][data-t="0"][data-v="The best cat burglar in the city"]');
   for (const p of ["move unseen", "run the rooftops", "pick a mechanical lock"]) await b(`[data-b="perm"][data-t="0"][data-v="${p}"]`);
+  await next("Titles and permissions");
   await b('[data-b="title"][data-t="1"][data-v="Raised by the Guild"]');
   await b('[data-b="perm"][data-t="1"][data-v="know how a lock’s built"]');
   await page.fill("#b-t1-p1", "fight dirty with a knife");
@@ -873,6 +896,7 @@ async function play(page, crewId, name) {
   const on = { t0: ["Sneak", "Move", "Locks"], "p0.0": ["Sneak"], "p0.1": ["Move"], "p0.2": ["Locks"], "p1.0": ["Locks"], "p1.1": ["Fight"], r0: ["Sneak"] };
   for (const [l, list] of Object.entries(on)) for (const a of list) await b(`[data-b="on"][data-l="${l}"][data-a="${a}"]`);
   has(await page.textContent('.bd-tiles .tile:has(.tile-name:text-is("Sneak"))'), "4 steps", "Sneak with her first Title, move unseen and Silent Step");
+  same(await page.getAttribute('.bd-rail .tile-dice[data-for="Sneak"] .zd-die', "data-d"), "8", "Sneak drawn as the d8 it rolls");
   // A permission goes on two set actions at most: a third is refused, with
   // why, and the rest look full until one comes off.
   await b('[data-b="on"][data-l="p0.0"][data-a="Move"]');
@@ -893,32 +917,44 @@ async function play(page, crewId, name) {
   for (const a of ["Move", "Locks"]) await b(`[data-b="on"][data-l="r0"][data-a="${a}"]`);
   await shot(page, "6-builder-set-actions");
   await next("What you carry");
+  // What she carries, a part at a time, picked from cards.
   await b('[data-b="fillany"][data-k="e"][data-v="worn leathers"]');
   same(await page.getAttribute('[data-b="on"][data-l="e0"][data-a="Defend"]', "aria-pressed"), "true", "worn leathers going straight on her Defend");
+  same(await page.getAttribute('.bd-rail .tile-dice[data-for="Defend"] .zd-die', "data-d"), "4", "Defend a d4 with her leathers on it");
+  await next("What you carry");
+  same(await page.getAttribute('.bd-seg[data-v="u"]', "aria-pressed"), "true", "Next going on to her utility items");
   await b('[data-b="fillany"][data-k="u"][data-v="Purse of gold"]');
   await b('[data-b="fillany"][data-k="u"][data-v="Smoke bomb"]');
   // Her picks are an ordinary utility item now, still on her Locks, and she
   // attunes one thing: her grappling line.
   await page.fill("#b-u2", "a perfect set of picks");
   await b('[data-b="on"][data-l="u2"][data-a="Locks"]');
+  await next("What you carry");
   await page.fill("#b-k", "the first coin she ever stole");
+  await next("What you carry");
   has(await page.textContent("#bd-at"), "Attune one thing", "one attuned thing at the start");
   same(await page.$$eval('[data-b="addatt"], #b-a1-name', (els) => els.length), 0, "nothing offering a second attuned thing at the start");
   await page.fill("#b-a0-name", "A grappling line");
   await page.fill("#b-a0-p0", "climb or swing anywhere you can throw a hook");
   await b('[data-b="on"][data-l="a0.0"][data-a="Move"]');
   await next("Threads");
-  // Threads from the crew questions: an answer becomes a thread in one tap.
-  same(await page.getAttribute('details[data-open="bd-qs"]', "open"), null, "the crew questions closed until they're wanted");
-  await page.click('details[data-open="bd-qs"] > summary');
-  await page.fill("#b-cq0", "Dorrie. We have pulled a dozen jobs. I trust her with my life.");
-  await b('[data-b="fromq"][data-q="0"]');
-  same([await page.inputValue("#b-th0-person"), await page.inputValue("#b-th0-text")], ["Dorrie", "We have pulled a dozen jobs. I trust her with my life."], "an answer made into her first bond thread");
+  // Threads from the crew questions: each one's a card, and an answer
+  // becomes a bond thread or a hostile one in a tap.
   same(await page.$$eval(".bd-thread", (els) => els.map((el) => el.querySelector('[aria-pressed="true"]').textContent)), ["Bond", "Bond", "Hostile"], "two bond threads and a hostile one to start");
+  same(await page.$$eval("details.bd-q[open]", (els) => els.length), 0, "the crew questions shut until one's wanted");
+  await page.click('details[data-open="bd-q-0"] > summary');
+  await page.fill("#b-cq0", "Dorrie. We have pulled a dozen jobs. I trust her with my life.");
+  await b('[data-b="fromq"][data-q="0"][data-v="bond"]');
+  same([await page.inputValue("#b-th0-person"), await page.inputValue("#b-th0-text")], ["Dorrie", "We have pulled a dozen jobs. I trust her with my life."], "an answer made into her first bond thread");
+  has(await page.textContent('details[data-open="bd-q-0"] > summary'), "Bond thread", "the question saying it's a bond thread now");
   await page.fill("#b-th1-person", "Bram");
   await page.fill("#b-th1-text", "He once carried me out of a fire. I have never said thank you.");
-  await page.fill("#b-th2-person", "The fence");
-  await page.fill("#b-th2-text", "I owe a debt I would rather not discuss.");
+  await page.click('details[data-open="bd-q-1"] > summary');
+  await page.fill("#b-cq1", "The fence. I owe a debt I would rather not discuss.");
+  await b('[data-b="fromq"][data-q="1"][data-v="hostile"]');
+  same([await page.inputValue("#b-th2-person"), await page.inputValue("#b-th2-text")], ["The fence", "I owe a debt I would rather not discuss."], "an answer gone bad made into her hostile thread");
+  same(await page.$$eval(".bd-thread", (els) => els.map((el) => el.querySelector('[aria-pressed="true"]').textContent)), ["Bond", "Bond", "Hostile", "Bond"], "a hostile thread making room for a third bond thread");
+  await shot(page, "5-builder-threads");
   await next("Aspiration");
   await page.fill("#b-asp", "Own the score of a lifetime");
   await next("Check it and play");
@@ -977,15 +1013,18 @@ async function play(page, crewId, name) {
   await page.click('.cc-back[data-b="leave"]');
   has(await page.textContent('a[data-act="bopen"]'), "Build a character", "the list after opening the builder and leaving");
   await page.click('a[data-act="bopen"]');
-  for (const t of [0, 1]) await b(`[data-b="arch"][data-t="${t}"][data-v="Bloodsworn"]`);
+  await b('[data-b="arch"][data-t="0"][data-v="Bloodsworn"]');
+  await next("Archetypes");
+  await b('[data-b="arch"][data-t="1"][data-v="Bloodsworn"]');
   same(await page.$$eval(".bd-body .cc-note", (els) => els.filter((el) => /\+3/.test(el.textContent)).length), 0, "no +3 note for two Bloodsworn");
-  await page.click('.bd-dot[data-s="4"]');
+  await jump(4);
+  await b('[data-b="kit"][data-v="u"]');
   await b('[data-b="fillany"][data-k="u"][data-v="Rations"]');
   await b('[data-b="fillany"][data-k="u"][data-v="Rations"]');
   same(await page.inputValue("#b-u0"), "", "a second tap on Rations takes it back off");
   await b('[data-b="deep"]');
   await page.fill("#b-bag", "a waterskin\nsome rope");
-  await page.click('.bd-dot[data-s="7"]');
+  await jump(7);
   await page.fill("#b-name", "Tam");
   await b('[data-b="save"]');
   await page.waitForSelector(".tile[data-a]");
@@ -995,7 +1034,7 @@ async function play(page, crewId, name) {
   // A blank character saves too: the builder warns, and never blocks. Leaving
   // keeps the draft, and the list offers to carry on with it.
   await page.goto(`${BASE}/characters/?build`);
-  await page.click('.bd-dot[data-s="7"]');
+  await jump(7);
   has(await page.textContent(".bd-body .is-warn"), "You can save anyway", "the warnings on a blank build");
   await page.fill("#b-name", "Kaia");
   await page.click('.cc-back[data-b="leave"]');
@@ -1015,7 +1054,7 @@ async function play(page, crewId, name) {
     await page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
     await page.reload();
     for (let s = 0; s < 8; s++) {
-      await page.click(`.bd-dot[data-s="${s}"]`);
+      await jump(s);
       const { scroll, client } = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
       if (scroll > client) note(`the builder's step ${s + 1} scrolls sideways at 320 wide, ${theme} (${scroll} > ${client})`);
       await axe(`the builder's step ${s + 1}, ${theme}`);
@@ -1026,8 +1065,59 @@ async function play(page, crewId, name) {
   await context.close();
 }
 
+// 5b. The builder on a phone held in one hand.
+if (part("5b")) {
+  for (const theme of ["dark", "light"]) {
+    // Motion on in the dark and off in the light, so both get looked at.
+    const still = theme === "light";
+    const { context, page } = await phone({ reducedMotion: still ? "reduce" : "no-preference" });
+    if (theme === "light") await page.addInitScript(() => localStorage.setItem("zi-theme", "light"));
+    const axe = async (what) => {
+      const result = await new AxeBuilder({ page }).analyze();
+      for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on ${what}: ${v.id} (${v.nodes.length})`);
+    };
+    const b = (attrs) => page.click(`button[data-act="b"]${attrs}`);
+    const jump = async (s) => {
+      await page.click(".bd-jump > summary");
+      await page.click(`.bd-dot[data-s="${s}"]`);
+    };
+    await page.goto(`${BASE}/characters/?build`);
+    await page.waitForSelector(".bd-head h1");
+    same(await page.isVisible(".topbar"), false, `the site's bar off the builder, ${theme}`);
+    if (!(await page.$(".bd-head .zd-crest"))) note(`no crest at the top of the builder, ${theme}`);
+    const first = await page.$eval('[data-b="arch"]', (el) => Math.round(el.getBoundingClientRect().top + scrollY));
+    if (first > 420) note(`the first archetype card starts ${first}px down at 390 by 844, ${theme}`);
+    same(await page.$$eval(".bd-progress li", (els) => new Set(els.map((el) => Math.round(el.getBoundingClientRect().top))).size), 1, `the eight steps in one line, ${theme}`);
+    for (let s = 0; s < 8; s++) {
+      if (s) await jump(s);
+      const bar = await page.$eval(".bd-foot", (el) => [getComputedStyle(el).position, Math.round(innerHeight - el.getBoundingClientRect().bottom)]);
+      same(bar, ["fixed", 0], `Back and Next at the bottom of the screen on step ${s + 1}, ${theme}`);
+      const small = await page.$$eval(".bd-foot button, .bd-foot summary", (els) => els.filter((el) => el.checkVisibility() && (el.getBoundingClientRect().height < 44 || el.getBoundingClientRect().width < 44)).length);
+      same(small, 0, `the bar's buttons 44px or more on step ${s + 1}, ${theme}`);
+      const wide = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      if (wide > 0) note(`step ${s + 1} scrolls sideways at 390 wide, ${theme} (${wide}px)`);
+      await axe(`the builder's step ${s + 1} at 390 by 844, ${theme}`);
+    }
+    await shot(page, `5b-builder-check-${theme}`);
+    // A line going on grows its set action's die into its next shape: Fight
+    // goes from a coin to a triangle with a Title on it.
+    await jump(0);
+    await b('[data-b="arch"][data-t="0"][data-v="Warrior"]');
+    await jump(3);
+    same(await page.getAttribute('.bd-rail .tile-dice[data-for="Fight"] .zd-die', "data-d"), "2", `Fight a d2 with nothing on it, ${theme}`);
+    await b('[data-b="on"][data-l="t0"][data-a="Fight"]');
+    const grown = await page.$eval('.bd-rail .tile-dice[data-for="Fight"] .zd-die', (el) => [el.dataset.d, el.classList.contains("is-grown")]);
+    same(grown, ["4", !still], `Fight a d4 with the Title on it, ${still ? "swapped straight away under reduce-motion" : "growing into it"}, ${theme}`);
+    if (still) same(await page.evaluate(() => document.getAnimations().filter((a) => a.playState === "running" && a.effect?.target?.closest?.(".companion")).length), 0, `nothing moving under reduce-motion, ${theme}`);
+    await page.waitForTimeout(400);
+    await shot(page, `5b-builder-set-actions-${theme}`);
+    await context.close();
+  }
+  console.log("one hand: the builder full screen, the first choice high up, the steps in one line, Back and Next at the bottom, and the dice growing, in both themes");
+}
+
 // 6. Print, and the other ways in.
-{
+if (part("6")) {
   const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
   const B = book.companion.build;
   const actionsOf = (s) => s.actions.map((a) => [a.name, a.steps, a.die.replace(/\s/g, "")]).sort();
@@ -1246,7 +1336,7 @@ async function round(page, dice, real = false) {
     await page.click('button[data-do="roll"]');
   }
 }
-{
+if (part("7")) {
   const { context, page } = await phone();
   await page.goto(`${BASE}/characters/`);
   await page.click('a[data-act="learn"][data-do="open"]');
@@ -1348,7 +1438,7 @@ async function round(page, dice, real = false) {
 }
 
 // Motion on, with the phone's sound and buzz listened to.
-{
+if (part("7")) {
   const { context, page } = await phone({ reducedMotion: "no-preference" });
   await context.addInitScript(() => {
     window.__feel = { sounds: 0, buzz: [] };
@@ -1429,7 +1519,7 @@ async function round(page, dice, real = false) {
 // the top, the first set action high up, each set action drawn as the dice it
 // rolls, the roll as a moment, and the Sheet tab at a glance. axe on the play
 // screen, a roll and the Sheet tab, dark and light.
-{
+if (part("7b")) {
   for (const theme of ["dark", "light"]) {
     const { context, page } = await phone();
     if (theme === "light") await page.addInitScript(() => localStorage.setItem("zi-theme", "light"));
@@ -1473,7 +1563,7 @@ async function round(page, dice, real = false) {
 }
 
 // 8. Downtime and rule changes.
-{
+if (part("8")) {
   for (const [a, b, want] of [
     ["know how a lock’s built", "know how a locks built", true],
     ["Raised by the Guild", "Raised by the guild", true],
@@ -1718,7 +1808,7 @@ async function round(page, dice, real = false) {
 }
 
 // 9. Changing a character.
-{
+if (part("9")) {
   const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
   const B = book.companion.build;
   // What downtime grew, written into a build, makes the sheet the player had.

@@ -415,15 +415,19 @@ function checkMirrors(crew, warn) {
 }
 
 // What each archetype does, what 1 Aura gets it and what its 1 Resolve
-// spend is, from The Archetypes.
+// spend is, from The Archetypes, and what it's for, from the table in Picking
+// Your Archetypes (the builder's archetype cards say it).
 function archetypesFrom(doc, inline) {
   const out = {};
+  const picking = sectionOf(doc.body, "s-picking-archetypes").split(/^### /m)[0];
+  const forLine = new Map(tableRows(picking).map((r) => [plain(r[0]), plain(r[1] ?? "")]));
   for (const m of doc.body.matchAll(/^## (.+?) \{#(a-[a-z-]+)\}\n([\s\S]*?)(?=^## |(?![\s\S]))/gm)) {
     const [, archetype, id, text] = m;
     const aura = text.match(/^\*\*1 Aura:\*\* (.+)$/m)?.[1] ?? null;
     const resolve = text.match(/^\*\*1 Resolve:\*\* (.+)$/m)?.[1] ?? null;
+    if (!forLine.get(archetype)) companionWarn(`the ${archetype} archetype isn't in the table in Picking Your Archetypes, so its card in the builder has nothing to say what it's for`);
     out[archetype] = {
-      id, summary: inline(text.trim().split(/\n\s*\n/)[0]),
+      id, summary: inline(text.trim().split(/\n\s*\n/)[0]), for: forLine.get(archetype) ?? "",
       aura: aura ? plain(aura) : null, auraHtml: aura ? inline(aura) : null,
       resolve: resolve ? plain(resolve) : null, resolveHtml: resolve ? inline(resolve) : null,
     };
@@ -532,8 +536,14 @@ function buildFrom(rulesDoc, ideasDoc, archetypes, inline, warn) {
   for (const idea of ideas) for (const t of idea.traits) if (!known.has(t)) warn(`the ${idea.name} Title idea suggests ${t}, which isn't in the traits list`);
 
   const body = rulesDoc.body;
+  // Each Quick Build step's first sentence is what the builder says on that
+  // step's screen, and the rest is its help, behind a tap.
+  const leadOf = (s) => {
+    const m = s.match(/^(.+?\.(?:\*\*)?)\s+(\S[\s\S]*)$/);
+    return m ? { lead: inline(m[1].replace(/\*\*/g, "")), more: inline(m[2]) } : { lead: inline(s.replace(/\*\*/g, "")), more: "" };
+  };
   const build = {
-    quick: listItems(sectionOf(ideasDoc.body, "s-quick")).map(inline),
+    quick: listItems(sectionOf(ideasDoc.body, "s-quick")).map(leadOf),
     archetypes: Object.entries(archetypes).map(([name, a]) => ({ name, ...a })),
     ideas,
     traits,

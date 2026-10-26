@@ -36,7 +36,9 @@ The geometry, from the prototype Claude drew on 26 Oct (a 100 by 100 viewBox, ev
 
 The play screen and the sheet first, then the builder, both for a phone held in one hand.
 
-**The character's done (26 Oct).** At 390 by 844 the first set action starts 291px down (it was 478) and the Sheet tab's 1.4 screens with its folds shut (it was 7.4, and 8.2 after the 24 Oct rules). The builder's next.
+**The character's done (26 Oct).** At 390 by 844 the first set action starts 291px down (it was 478) and the Sheet tab's 1.4 screens with its folds shut (it was 7.4, and 8.2 after the 24 Oct rules).
+
+**The builder's done (26 Oct).** At 390 by 844 the first archetype card starts 367px down (it was about 1,430), every step's first choice is between 264 and 521px down, the eight steps sit in one line, and Back and Next are in a bar at the bottom on every step. Change and the other ways in use the same pieces on one page, and the set actions are kit dice in a dock above the bar.
 
 - **The character:** full screen without the site's header, the crest at the top, the trackers as kit pieces (Confidence and the wound die change shape as they move), the set actions as dice you can see, the roll as a moment (the dice front and centre, the counting folded behind them), and a sheet that reads at a glance before its detail. Measured on 24 Oct at 390 by 844: the first set action starts 478px down and the Sheet tab runs 7.4 screens.
 - **The builder:** one step to a screen with Back and Next always in reach, the step's own words from the book short and its help behind a tap, archetypes as sigil cards with what they play like, Title ideas as cards, permissions tapped onto set actions with each die growing as lines go on, items and the one attuned thing picked from cards, and threads written from the Connect answers as bond or hostile. Measured on 26 Oct at 390 wide: the first choice is about 1,430px down, and the step numbers wrap and leave the 8 on a line of its own.
