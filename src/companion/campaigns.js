@@ -764,7 +764,7 @@ export function makeCampaigns(d) {
     if (!c) return `${topbar(back.href, back.label)}<div class="cc-note is-warn"><p>${esc(ch.name)}’s sheet isn’t in the rules any more, so there’s nothing to show.</p></div>`;
     const who = esc(first(p.name));
     const out = `<section class="cc-sec" aria-labelledby="lk-out"><h2 id="lk-out">${who} in ${esc(k.campaign.name)}</h2>
-      <p class="cc-lead">Take ${who} out and they’re out of ${esc(k.campaign.name)}. ${esc(ch.name)} stays theirs.</p>
+      <p class="cc-lead">Take ${who} out and they’re out of ${esc(k.campaign.name)}. ${esc(ch.name)} stays theirs. The join link still works for them, so reset it too if they shouldn’t come back.</p>
       <div class="cc-row">${removeButton(p, "button danger")}</div></section>`;
     return lookView(ch, c, { ...d.look, esc, player: first(p.name), back, tools: d.tools(), printing: st.printing, icon: ICON, extra: out });
   }

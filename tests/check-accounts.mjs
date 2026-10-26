@@ -223,6 +223,20 @@ const crewChar = (id, crew, name) => ({ v: 0, data: { id, crew, name, made: new 
 const shot = async (page, name) => {
   if (SHOTS) await page.screenshot({ path: join(SHOTS, `${name}.png`) });
 };
+// The same screen in both themes, for a look at how it reads in each.
+const shots = async (page, name, sel) => {
+  if (!SHOTS) return;
+  for (const theme of ["dark", "light"]) {
+    await page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+    await page.reload();
+    await page.waitForSelector(sel);
+    await page.waitForTimeout(300);
+    await shot(page, `${name}-${theme}`);
+  }
+  await page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+  await page.reload();
+  await page.waitForSelector(sel);
+};
 
 try {
   // ------------------------------------------------------------ 1. anyone signs up
@@ -370,10 +384,10 @@ try {
   await mo.page.waitForSelector(".cc-look-card");
   await until(async () => (await mo.page.$$(".cc-look-card")).length === 2, "both players on Mo's page");
   same(await mo.page.$$eval(".cc-look-card b", (els) => els.map((e) => e.textContent)), ["Vesk", "Bram"], "Mo's party, in the order they joined");
-  await shot(mo.page, "campaign-gm");
+  await shots(mo.page, "party-gm", ".cc-look-card");
   await Promise.all([mo.page.waitForURL(/look=/), mo.page.click('.cc-look-card:has-text("Vesk")')]);
   await mo.page.waitForSelector(".cc-track.is-look");
-  await shot(mo.page, "look-gm");
+  await shots(mo.page, "look-gm", ".cc-track.is-look");
   same(await mo.page.textContent("#app h1"), "Vesk", "the look at Vesk");
   yes((await text(mo.page, "#app")).includes("Kai’s character"), "it says whose character it is");
   await mo.page.click('details[data-open="lk-notes"] > summary');
@@ -389,7 +403,7 @@ try {
   yes(!kaiView.body.includes('"state"') && !kaiView.body.includes("favours") && !kaiView.json?.campaign?.code, "and nothing more: no sheets, no notes, no link");
   await kai.page.reload();
   await kai.page.waitForSelector(".cc-names");
-  await shot(kai.page, "campaign-player");
+  await shots(kai.page, "campaign-player", ".cc-names");
 
   // Mo resets the link, and the old one's refused.
   await mo.page.click('#app [data-do="reset"]');
@@ -442,7 +456,7 @@ try {
   same(await kai.page.getAttribute(".cc-strip-a[aria-current]", "data-id"), kaisTable.id, "and the strip shows it's the one open");
   await kai.page.waitForSelector(".cc-look-card");
   yes((await text(kai.page, "#app")).includes("Ash"), "Kai sees Zed's character in her own campaign");
-  await shot(kai.page, "campaign-strip");
+  await shots(kai.page, "campaign-strip", ".cc-look-card");
 
   // Nothing crosses between campaigns.
   for (const [method, path, body] of [["GET", `/api/campaigns/${tuesday.id}`], ["PATCH", `/api/campaigns/${tuesday.id}`, { name: "Mine now" }], ["DELETE", `/api/campaigns/${tuesday.id}`], ["POST", `/api/campaigns/${tuesday.id}/link`], ["PUT", `/api/campaigns/${tuesday.id}/me`, { character: "ash-zzzzzz" }], ["DELETE", `/api/campaigns/${tuesday.id}/members/${kaiId}`]]) {
