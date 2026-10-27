@@ -156,6 +156,9 @@ const table = makeTable({
   closeDialog: () => closeDialog(),
   // The twenty places, for the GM's scene.
   places: DATA.places ?? [],
+  // The telegraphs on one of her place pages, for the composer when that
+  // place is on the table (places.js).
+  pageTeles: (id, pid) => world.docIn(id)?.pages?.find((p) => p.id === pid)?.teles ?? [],
   // A change to the character that's open, saved and undoable like any other.
   change: (label, fn) => change(label, fn),
   // A change to one of this phone's characters the table turned down: no undo.

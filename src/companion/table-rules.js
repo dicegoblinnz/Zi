@@ -21,26 +21,48 @@
 //                  else    something else: act says what (Defend, a set action)
 //     held       a stake's or an event's die, rolled once a round: { ref: n }
 //     moved      what the end of the round stepped down: [{ ref, from, to, out }]
-//   a telegraph  { id, who, does, d, kind, one, at, sent, seen, ans, def, icp }
+//   a telegraph  { id, who, does, d, kind, one, at, sent, seen, ans, def, icp,
+//                  fx, did, there }
 //     who and does  who's telegraphing and what it's doing, in the GM's words
 //     d             how hard: its die
 //     kind          "blow" (Defend stops it) or "fear" (fear, lies and
 //                   pressure, against Confidence)
 //     one           what happens if it lands, when it's only got one answer
-//     at            { user, ch, name, player, arch }: the character it's
-//                   aimed at, who plays them, and their crest
+//     at            who or what it's aimed at. One of the crew: { user, ch,
+//                   name, player, arch }, the character, who plays them and
+//                   their crest. Or the scene, with k: { k: "stake" or
+//                   "event", ref, name }, a stake or an event (the scene clock
+//                   included) by its id, or { k: "place", name, where }, a
+//                   part of the place ("everyone in the crowd", and where's
+//                   "in the crowd")
 //     seen          when it reached the player's phone, or 0
 //     ans           how someone answered it: { user, ch, name, act, steps,
 //                   dice, opp, real, won, at, late }, or null
 //     def           their When it lands, once it's landed: { stopped, mine,
 //                   v, paid, real, at }, or null
 //     icp           a friend who intercepted it, so it comes at them when it
-//                   lands: { user, ch, name, free, at }. Fear can't be.
-//   the scene    { ground, stakes, events }, face up on every phone
+//                   lands: { user, ch, name, free, at }. Fear can't be, and
+//                   nor can one at the scene.
+//     fx            at a stake or an event, what it does if it lands: { tag }
+//                   a new tag in the stake's way, or { by } its clock (an
+//                   event's die, or a stake's clock) down that many sizes
+//     did           what it did when it landed, so it comes off again if it
+//                   turns out it didn't: { tag }, { from, to, out } or
+//                   { none } when there was nothing to do it to
+//     there         at a place, who's in it, by "user|ch": { name, in, at,
+//                   gm, def }. Everyone playing's in it when it goes out, and
+//                   each player says whether they're still in it. It lands on
+//                   whoever's in it, and each of them rolls When it lands
+//                   (def), the same as one aimed at them.
+//   the scene    { ground, stakes, events, place }, face up on every phone
+//     place        { id, name, page }: the place it came from, for its
+//                  telegraphs: one of Twenty Places, or one of the GM's place
+//                  pages (page: true, its id in the world), or null
 //     ground       { id, name, text }: something in the place to use
 //     a stake      { id, name, c, tags, clock, out, note }: what the crew's
 //                  after, a Challenge, a tag for each thing in the way
-//                  ({ name, gone }), and a clock die, or 0. out: won or lost
+//                  ({ name, gone, by }, by: the telegraph that put it
+//                  there), and a clock die, or 0. out: won or lost
 //     an event     { id, name, what, d, scene, out }: running on its own die,
 //                  and what happens when it steps past d2. scene: it's the
 //                  scene clock. out: done
@@ -49,15 +71,18 @@
 // telegraph spends it. Win the answer and it's stopped. Lose it and it lands
 // at once, with no defence. Intercepting costs no action. Whatever nobody
 // answered lands at the end of the round, and whoever it's aimed at (or
-// whoever intercepted it) rolls When it lands. A stake's tags go a win at a
-// time, and an event's slowed or driven by beating its die. At the end of the
-// round, every clock and event nobody worked steps down a size, and past d2
-// the stake's lost or the event happens.
+// whoever intercepted it) rolls When it lands. One at a stake or a clock has
+// no defence: anyone can answer it, and if it lands, it does what it said.
+// One at a place lands on whoever's in it when it lands, so getting out gets
+// you clear. A stake's tags go a win at a time, and an event's slowed or
+// driven by beating its die. At the end of the round, what landed on the
+// scene does what it said first, then every clock and event nobody worked
+// steps down a size, and past d2 the stake's lost or the event happens.
 
 import { applyTurn, forgetTurn, isTurnOp, turnView } from "./turn-rules.js";
 
 export const SIZES = [2, 4, 6, 8, 10, 12];
-export const MAX = { who: 60, does: 140, one: 140, name: 60, act: 60, paid: 80, tele: 24, rounds: 12, more: 4, list: 6, ground: 8, stakes: 6, events: 6, tags: 8, text: 140 };
+export const MAX = { who: 60, does: 140, one: 140, name: 60, act: 60, paid: 80, tele: 24, rounds: 12, more: 4, list: 6, ground: 8, stakes: 6, events: 6, tags: 8, text: 140, tag: 80 };
 // Where an extra action can come from (Extra actions, in Conflict).
 export const MORE = ["resolve", "held", "hiding", "fired", "trait"];
 export const ONCE = ["held", "hiding", "fired"];
@@ -75,7 +100,7 @@ const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 // "The left Warden" in the middle of a sentence.
 export const lower = (name) => String(name ?? "").replace(/^(A|An|The|His|Her|Their|Its) /, (m) => m.toLowerCase());
 
-export const blankScene = () => ({ ground: [], stakes: [], events: [] });
+export const blankScene = () => ({ ground: [], stakes: [], events: [], place: null });
 // turn is the faction turn of the downtime that's on, and last what changed
 // in the one before (turn-rules.js).
 export const blank = () => ({ v: 0, fight: 1, rounds: [], scene: blankScene(), turn: null, last: null });
@@ -84,6 +109,7 @@ export const current = (doc) => doc?.rounds?.[doc.rounds.length - 1] ?? null;
 export function fresh(doc) {
   if (!doc.scene || typeof doc.scene !== "object") doc.scene = blankScene();
   for (const k of ["ground", "stakes", "events"]) if (!Array.isArray(doc.scene[k])) doc.scene[k] = [];
+  if (!doc.scene.place || typeof doc.scene.place !== "object") doc.scene.place = null;
   for (const r of doc.rounds ?? []) {
     if (!r.acts || typeof r.acts !== "object") r.acts = {};
     if (!r.held || typeof r.held !== "object") r.held = {};
@@ -120,6 +146,55 @@ export const joinersOf = (round, id) => Object.entries(round?.acts ?? {}).flatMa
 // Whether anyone worked a stake or an event this round.
 export const workedIn = (round, ref) => Object.values(round?.acts ?? {}).some((a) => (a.list ?? []).some((x) => x.k === "work" && x.ref === ref));
 
+// Aimed at a stake or an event (the scene clock's one), with no defence, or
+// at a part of the place, landing on whoever's in it.
+export const onScene = (t) => t?.at?.k === "stake" || t?.at?.k === "event";
+export const atPlace = (t) => t?.at?.k === "place";
+// What it's aimed at, mid-sentence: one of the crew by name, the scene's
+// pieces the way the scene says them (the deal, the scene clock).
+export const atName = (t) => (t?.at?.k ? lower(t.at.name) : t?.at?.name ?? "");
+
+// A part of the place, the way the GM says it: "everyone on the gallery", or
+// just "on the gallery". where's the part after everyone, so the phone can
+// ask "On the gallery?". Without a word for where, it's at.
+export function placeOf(text) {
+  const s = line(text, MAX.name);
+  if (!s) return null;
+  const m = s.match(/^(everyone|anyone|whoever['’]s)\s+(.+)$/i);
+  const where = (m ? m[2] : s).replace(/^(the|a|an) /i, (x) => `at ${x.toLowerCase()}`);
+  return { name: m ? s.replace(/^[A-Z]/, (c) => c.toLowerCase()) : `everyone ${where}`, where };
+}
+
+// Where one at a place has got to for one of the crew (key, "user|ch"):
+// stopped or hit by an answer, coming, then once the round's over, clear
+// (they weren't in it), landed (When it lands still to roll), held or through.
+export function stateFor(t, round, key) {
+  if (t.ans?.won) return "stopped";
+  const p = t.there?.[key];
+  if (t.ans) return p?.in ? "hit" : "clear";
+  if (!round?.over) return "coming";
+  if (!p?.in) return "clear";
+  if (!p.def) return "landed";
+  return p.def.stopped ? "held" : "through";
+}
+// Everyone a place's telegraph is on: whoever's in it.
+export const inIt = (t) => Object.entries(t.there ?? {}).filter(([, p]) => p.in).map(([key, p]) => ({ key, user: key.split("|")[0], ch: key.split("|")[1], ...p }));
+
+// What one at a stake or an event does if it lands, said as the end of "If it
+// lands, …": a new tag in the way (its own words, or the one the GM named),
+// or the clock dropping.
+export function fxSaid(t) {
+  const name = lower(t?.at?.name ?? "it");
+  if (!onScene(t) || !t.fx) return "";
+  if (t.fx.tag) {
+    const norm = (s) => String(s ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+    const own = norm(t.fx.tag) === norm(`${t.who} ${t.does}`) || norm(t.fx.tag) === norm(t.does);
+    return own ? `it’s a new tag in the way of ${name}` : `“${t.fx.tag}” goes in the way of ${name}`;
+  }
+  const sizes = t.fx.by === 2 ? "two sizes" : "a size";
+  return t.at.k === "stake" ? `${name}’s clock drops ${sizes}` : `${name} drops ${sizes}`;
+}
+
 // A telegraph by its id, in any round the table's still got.
 export function findTele(doc, id) {
   for (const round of doc?.rounds ?? []) {
@@ -133,30 +208,64 @@ export function findTele(doc, id) {
 // stopped (an answer won), hit (an answer lost, so it landed then and there,
 // with no defence), landed (the round ended with nobody answering it, and
 // When it lands is still to roll), held (When it lands stopped it) or through.
+// One at a stake or an event that lands is through: it did what it said. One
+// at a place is landed while anyone in it's still to roll, held when every
+// one of them stopped it, and clear when nobody was in it.
 export function stateOf(t, round) {
   if (t.ans?.won) return "stopped";
   if (t.ans) return "hit";
   if (!round?.over) return "coming";
+  if (onScene(t)) return "through";
+  if (atPlace(t)) {
+    const on = inIt(t);
+    if (!on.length) return "clear";
+    if (on.some((p) => !p.def)) return "landed";
+    return on.every((p) => p.def.stopped) ? "held" : "through";
+  }
   if (t.def) return t.def.stopped ? "held" : "through";
   return "landed";
 }
 
 // A telegraph the GM sent, aimed at someone playing in the campaign (roster:
-// { user, name, ch, cname } for each), or null if it doesn't make sense.
-export function teleFrom(x, roster, now) {
+// { user, name, ch, cname } for each) or at the scene (doc's), or null if it
+// doesn't make sense, or { why } when what it's aimed at isn't there.
+export function teleFrom(x, roster, now, doc = null) {
   if (!x || typeof x !== "object" || !ID.test(String(x.id ?? ""))) return null;
   const who = line(x.who, MAX.who);
   const does = line(x.does, MAX.does);
   const d = Number(x.d);
   if (!who || !does || !SIZES.includes(d)) return null;
+  const base = { id: String(x.id), who, does, d, kind: x.kind === "fear" ? "fear" : "blow", one: line(x.one, MAX.one), sent: now, seen: 0, ans: null, def: null };
+  const k = x.at?.k;
+  // A stake or an event on the scene, and what it does if it lands. A stake
+  // gets a new tag in its way, or its clock drops when it's got one.
+  if (k === "stake" || k === "event") {
+    const hit = findEl(doc, String(x.at.ref ?? ""));
+    if (!hit || hit.kind !== k) return { why: "What it was aimed at has gone from the scene." };
+    const el = hit.el;
+    if (el.out) return { why: `${cap(lower(el.name))}’s settled already, so there’s nothing for it to do.` };
+    const by = Number(x.fx?.by) === 2 ? 2 : 1;
+    let fx;
+    if (k === "event" || (x.fx?.by != null && el.clock)) fx = { by };
+    else {
+      const tag = line(x.fx?.tag, MAX.tag).replace(/,/g, "").trim();
+      if (!tag) return { why: "Say what goes in its way if it lands." };
+      fx = { tag };
+    }
+    return { ...base, kind: "blow", one: "", at: { k, ref: el.id, name: el.name }, fx };
+  }
+  // A part of the place: everyone playing's in it when it goes out.
+  if (k === "place") {
+    const p = placeOf(x.at.name);
+    if (!p) return null;
+    const there = {};
+    for (const m of roster ?? []) if (m.ch) there[keyOf(m.user, m.ch)] = { name: line(m.cname, MAX.name) || "Someone", in: 1, at: now };
+    return { ...base, at: { k, name: p.name, where: p.where }, there };
+  }
   const m = (roster ?? []).find((p) => p.ch && p.user === x.at?.user && p.ch === x.at?.ch);
-  if (!m) return null;
+  if (!m) return { why: "Whoever it was aimed at isn’t playing here now." };
   const arch = (Array.isArray(x.at?.arch) ? x.at.arch : []).slice(0, 4).map((a) => line(a, 24)).filter((a) => ARCH.test(a));
-  return {
-    id: String(x.id), who, does, d, kind: x.kind === "fear" ? "fear" : "blow", one: line(x.one, MAX.one),
-    at: { user: m.user, ch: m.ch, name: line(m.cname, MAX.name) || "Someone", player: first(m.name), arch },
-    sent: now, seen: 0, ans: null, def: null,
-  };
+  return { ...base, at: { user: m.user, ch: m.ch, name: line(m.cname, MAX.name) || "Someone", player: first(m.name), arch } };
 }
 
 // An answer roll from the phone: the set action, its dice and what the
@@ -199,7 +308,7 @@ export function elFrom(x) {
   if (x.t === "stake") {
     const c = num(x.c, 1, 6);
     if (c == null) return null;
-    const tags = (Array.isArray(x.tags) ? x.tags : []).slice(0, MAX.tags).map((g) => ({ name: line(typeof g === "string" ? g : g?.name, MAX.name), gone: g?.gone ? 1 : 0 })).filter((g) => g.name);
+    const tags = (Array.isArray(x.tags) ? x.tags : []).slice(0, MAX.tags).map((g) => ({ name: line(typeof g === "string" ? g : g?.name, MAX.tag), gone: g?.gone ? 1 : 0, ...(ID.test(String(g?.by ?? "")) ? { by: String(g.by) } : {}) })).filter((g) => g.name);
     const clock = SIZES.includes(Number(x.clock)) ? Number(x.clock) : 0;
     return { id, t: "stake", name, c, tags, clock, out: ["won", "lost"].includes(x.out) ? x.out : "", note: line(x.note, MAX.text) };
   }
@@ -292,10 +401,105 @@ function stepBack(round, el) {
   } else el[k] = Math.min(12, el[k] + (m.from - m.to));
   round.moved.splice(i, 1);
 }
-// The end of a round: whatever nobody worked steps down.
+// One at a stake or an event lands, and does what it said: a new tag in the
+// stake's way, or its clock (an event's die) down a size or two, and past d2
+// the stake's lost or the event happens. Nothing happens to one that's
+// settled or gone. What it did is kept on the telegraph, with late when it
+// landed after the round's end had stepped the clocks down.
+function land(doc, t, late = false) {
+  const hit = findEl(doc, t.at.ref);
+  const el = hit && hit.kind !== "ground" ? hit.el : null;
+  const was = late ? { late: 1 } : {};
+  if (!el || el.out) {
+    t.did = { none: el ? el.out : "gone", ...was };
+    return;
+  }
+  if (t.fx?.tag) {
+    if (el.tags.length >= MAX.tags) {
+      t.did = { none: "full", ...was };
+      return;
+    }
+    el.tags.push({ name: t.fx.tag, gone: 0, by: t.id });
+    t.did = { tag: t.fx.tag, ...was };
+    return;
+  }
+  const k = el.t === "stake" ? "clock" : "d";
+  if (!el[k]) {
+    t.did = { none: "clock", ...was };
+    return;
+  }
+  const from = el[k];
+  let v = from;
+  let out = "";
+  for (let i = 0; i < (t.fx?.by === 2 ? 2 : 1); i++) {
+    if (v <= 2) {
+      out = el.t === "stake" ? "lost" : "done";
+      break;
+    }
+    v -= 2;
+  }
+  if (out) {
+    el.out = out;
+    if (el.t === "stake") el.clock = 0;
+  } else el[k] = v;
+  t.did = { from, to: out ? 0 : v, out, ...was };
+}
+// What it did comes off. Closed by it, it's back where it was. Otherwise it's
+// up by what it took, so whatever else moved it still counts.
+function unlandRaw(doc, t) {
+  const did = t.did;
+  delete t.did;
+  if (!did || did.none) return;
+  const hit = findEl(doc, t.at.ref);
+  const el = hit && hit.kind !== "ground" ? hit.el : null;
+  if (!el) return;
+  if (did.tag) {
+    const i = el.tags.findIndex((g) => g.by === t.id);
+    const j = i >= 0 ? i : el.tags.findIndex((g) => g.name === did.tag && !g.by);
+    if (j >= 0) el.tags.splice(j, 1);
+    // What's left in its way might all be gone now.
+    if (!el.out && el.tags.length && el.tags.every((g) => g.gone)) el.out = "won";
+    return;
+  }
+  const k = el.t === "stake" ? "clock" : "d";
+  if (did.out) {
+    if (el.out === did.out) {
+      el.out = "";
+      el[k] = did.from;
+    }
+  } else el[k] = Math.min(12, el[k] + (did.from - did.to));
+}
+// It didn't land after all. One that landed before the round's end stepped
+// the clocks down comes off from under that step: the step's undone, what it
+// did comes off, and the step goes again (if nobody worked it), so the clock
+// ends where it would have been without it.
+function unland(doc, round, t) {
+  const hit = findEl(doc, t.at.ref);
+  const el = hit && hit.kind !== "ground" ? hit.el : null;
+  const under = Boolean(round.over && el && t.did && !t.did.late && !t.did.none);
+  if (under) stepBack(round, el);
+  unlandRaw(doc, t);
+  if (under && !workedIn(round, el.id)) stepDown(round, el);
+}
+// Whether one at a stake or an event has landed (an answer lost, or the round
+// over with nobody answering it), and what it did on the scene to match. end:
+// it's the end of the round landing it, before the clocks step down.
+function settle(doc, round, t, { end = false } = {}) {
+  if (!onScene(t)) return;
+  const landed = t.ans ? !t.ans.won : Boolean(round.over);
+  if (landed && !t.did) land(doc, t, Boolean(round.over) && !end);
+  else if (!landed && t.did) unland(doc, round, t);
+}
+// What the end of the round landed on a piece of the scene, before its clocks
+// stepped down: a late roll from the round comes before these.
+const endLandings = (round, el) => round.tele.filter((t) => onScene(t) && !t.ans && t.did && !t.did.late && t.at.ref === el.id);
+
+// The end of a round: whatever landed on the scene does what it said, then
+// whatever nobody worked steps down.
 function endRound(doc, round, now) {
   round.over = now;
   round.moved = [];
+  for (const t of round.tele) settle(doc, round, t, { end: true });
   // In the order the scene's laid out: the scene clock, the stakes, then the events.
   const order = [...doc.scene.events.filter((e) => e.scene), ...doc.scene.stakes, ...doc.scene.events.filter((e) => !e.scene)];
   for (const el of order) if (!workedIn(round, el.id)) stepDown(round, el);
@@ -313,36 +517,45 @@ function doWork(doc, round, x) {
   const held = round.held[el.id];
   const won = x.roll.dice.some((d) => d.total > held || (d.total === held && d.out === "won"));
   const y = { ...x, roll: { ...x.roll, won }, did: null };
-  // Worked late, after the round ended: it didn't step down after all.
+  // Worked late, after the round ended: it didn't step down after all, and
+  // what the end of the round landed on it lands after this roll.
+  const after = round.over ? endLandings(round, el) : [];
   if (round.over) stepBack(round, el);
-  if (!won || el.out) return y;
-  if (hit.kind === "stake") {
-    const tag = el.tags.find((g) => !g.gone && g.name === x.aim) ?? el.tags.find((g) => !g.gone);
-    y.did = {};
-    if (tag) {
-      tag.gone = 1;
-      y.did.tag = tag.name;
+  for (const t of after) unlandRaw(doc, t);
+  if (won && !el.out) {
+    if (hit.kind === "stake") {
+      const tag = el.tags.find((g) => !g.gone && g.name === x.aim) ?? el.tags.find((g) => !g.gone);
+      y.did = {};
+      if (tag) {
+        tag.gone = 1;
+        y.did.tag = tag.name;
+      }
+      if (el.tags.every((g) => g.gone)) {
+        el.out = "won";
+        y.did.won = 1;
+      }
+    } else {
+      y.did = { d: el.d };
+      if (x.aim === "drive") {
+        if (el.d <= 2) {
+          el.out = "done";
+          y.did.out = 1;
+        } else el.d -= 2;
+      } else el.d = sizeUp(el.d);
+      y.did.to = el.d;
     }
-    if (el.tags.every((g) => g.gone)) {
-      el.out = "won";
-      y.did.won = 1;
-    }
-  } else {
-    y.did = { d: el.d };
-    if (x.aim === "drive") {
-      if (el.d <= 2) {
-        el.out = "done";
-        y.did.out = 1;
-      } else el.d -= 2;
-    } else el.d = sizeUp(el.d);
-    y.did.to = el.d;
   }
+  for (const t of after) land(doc, t);
   return y;
 }
 function undoWork(doc, round, x) {
   const hit = findEl(doc, x.ref);
   if (!hit || hit.kind === "ground") return;
   const el = hit.el;
+  // What the end of the round landed on it comes off first, and goes again
+  // once the roll's undone.
+  const after = round.over ? endLandings(round, el) : [];
+  for (const t of after) unlandRaw(doc, t);
   if (x.did?.tag) {
     const tag = el.tags.find((g) => g.name === x.did.tag);
     if (tag) tag.gone = 0;
@@ -358,6 +571,7 @@ function undoWork(doc, round, x) {
     } else if (x.did.to != null) el.d = Math.max(2, Math.min(12, el.d - (x.did.to - x.did.d)));
     else el.d = x.did.d;
   }
+  for (const t of after) land(doc, t);
   // Taken back after the round ended, with nobody else at it: it steps down.
   if (round.over && !workedIn(round, el.id)) stepDown(round, el);
 }
@@ -382,8 +596,8 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
       if (doc.rounds.some((r) => r.id === op.id)) return yes();
       const tele = [];
       for (const x of (Array.isArray(op.tele) ? op.tele : []).slice(0, MAX.tele)) {
-        const t = teleFrom(x, roster, now);
-        if (t && !tele.some((y) => y.id === t.id) && !findTele(doc, t.id)) tele.push(t);
+        const t = teleFrom(x, roster, now, doc);
+        if (t && !t.why && !tele.some((y) => y.id === t.id) && !findTele(doc, t.id)) tele.push(t);
       }
       // A round with nothing telegraphed still runs the scene's clocks.
       const scene = [...doc.scene.stakes, ...doc.scene.events].some((el) => !el.out);
@@ -397,9 +611,9 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
     // The round can change while someone's still got an action.
     case "add": {
       if (!gm) return gmOnly();
-      const t = teleFrom(op.tele, roster, now);
-      if (!t) return no("That telegraph didn’t go out. Whoever it was aimed at isn’t playing here now.");
-      if (findTele(doc, t.id)) return yes();
+      if (findTele(doc, op.tele?.id)) return yes();
+      const t = teleFrom(op.tele, roster, now, doc);
+      if (!t || t.why) return no(`That telegraph didn’t go out. ${t?.why ?? "It didn’t make sense."}`);
       if (!last || last.over) return no("That round’s over, so it didn’t go out. Send it in the next one.");
       if (last.tele.length >= MAX.tele) return no(`A round holds ${MAX.tele} telegraphs at most.`);
       last.tele.push(t);
@@ -436,10 +650,13 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
       if (!hit) return no("That telegraph’s gone. The GM took it back or started a new fight.");
       const t = hit.t;
       const mine = Boolean(t.ans && t.ans.user === who.user && t.ans.ch === who.ch);
+      // What landed on the scene stands once the next round's started.
+      if (onScene(t) && hit.round !== last) return no(`Round ${hit.round.n}’s gone by, so what landed on ${atName(t)} stands. Tell the GM.`);
       if (t.ans && !mine) return no(`${t.ans.name} answered ${lower(t.who)} first.`);
-      if (t.def) return no("It’s landed already.");
+      if (t.def || inIt(t).some((p) => p.def)) return no("It’s landed already.");
       if (op.a == null) {
         if (mine) t.ans = null;
+        settle(doc, hit.round, t);
         return yes();
       }
       const a = answerFrom(op.a);
@@ -459,6 +676,8 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
       const counted = new Set((Array.isArray(op.a.with) ? op.a.with : []).slice(0, 8).map((x) => keyOf(x?.user, x?.ch)));
       const joined = joinersOf(hit.round, t.id).filter((j) => counted.has(keyOf(j.user, j.ch)) && !(j.user === who.user && j.ch === who.ch));
       t.ans = { user: who.user, ch: who.ch, name: line(who.cname, MAX.name) || "Someone", ...a, ...(joined.length ? { with: joined.map((j) => ({ user: j.user, ch: j.ch, name: line(j.name, MAX.name) || "Someone", act: j.act, steps: j.steps })) } : {}), at: rolled, late: hit.round.over && rolled > hit.round.over + (timed ? 2000 : 0) ? 1 : 0 };
+      // At a stake or an event: lost, it does what it said then and there.
+      settle(doc, hit.round, t);
       return yes();
     }
     case "defend": {
@@ -467,18 +686,27 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
       const hit = findTele(doc, op.id);
       if (!hit) return no("That telegraph’s gone. The GM started a new fight.");
       const t = hit.t;
-      const on = landsOn(t);
-      if (on.user !== who.user || on.ch !== who.ch) return no(t.icp && t.at.user === who.user && t.at.ch === who.ch ? `${t.icp.name} took that one for you.` : "That one wasn’t aimed at you.");
+      if (onScene(t)) return no(`That one was at ${atName(t)}, so there’s no defence against it.`);
+      // At a place, each of the crew who was in it rolls their own.
+      const mine = atPlace(t) ? t.there?.[keyOf(who.user, who.ch)] : null;
+      if (atPlace(t)) {
+        if (!mine?.in) return no(`You weren’t ${t.at.where} when it landed.`);
+      } else {
+        const on = landsOn(t);
+        if (on.user !== who.user || on.ch !== who.ch) return no(t.icp && t.at.user === who.user && t.at.ch === who.ch ? `${t.icp.name} took that one for you.` : "That one wasn’t aimed at you.");
+      }
       if (!hit.round.over || t.ans) return no("That one didn’t land on you at the end of the round.");
       if (op.r == null) {
-        t.def = null;
+        if (mine) delete mine.def;
+        else t.def = null;
         return yes();
       }
       const r = defenceFrom(op.r);
       if (!r) return no("That roll didn’t make sense.");
       if (r.v > t.d) return no(`That roll was against a ${r.v}, and ${lower(t.who)}’s d${t.d} can’t roll that.`);
       if ((r.on === "Confidence") !== (t.kind === "fear")) return no(t.kind === "fear" ? `${cap(lower(t.who))} was fear, so it’s against Confidence.` : `${cap(lower(t.who))} was a blow, so it’s against Defend.`);
-      t.def = { ...r, at: now };
+      if (mine) mine.def = { ...r, at: now };
+      else t.def = { ...r, at: now };
       return yes();
     }
     // Intercept: a friend's telegraph comes at you instead, for 1 Aura (free
@@ -490,6 +718,7 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
       const hit = findTele(doc, op.id);
       if (!hit) return no("That telegraph’s gone. The GM took it back or started a new fight.");
       const t = hit.t;
+      if (t.at?.k) return op.off ? yes() : no("You can only step in front of one that’s aimed at a friend.");
       const mine = Boolean(t.icp && t.icp.user === who.user && t.icp.ch === who.ch);
       if (op.off) {
         if (!mine) return yes();
@@ -509,6 +738,31 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
       if (t.ans) return no(`${t.ans.name} answered ${lower(t.who)} already.`);
       if (t.icp) return no(`${t.icp.name} took ${lower(t.who)} first.`);
       t.icp = { user: who.user, ch: who.ch, name: line(who.cname, MAX.name) || "Someone", free: op.free === true, paid: op.paid !== false, at: now };
+      return yes();
+    }
+    // At a place: whether a character's in it. Each player says for their own
+    // while the round's on, and getting out gets them clear. The GM can put
+    // anyone in or out by hand, till they've rolled When it lands for it.
+    case "there": {
+      const hit = findTele(doc, op.id);
+      if (!hit) return no("That telegraph’s gone. The GM took it back or started a new fight.");
+      const t = hit.t;
+      if (!atPlace(t)) return no("That one isn’t aimed at a place.");
+      const user = gm ? String(op.user ?? "") : who.user;
+      const ch = String(op.ch ?? "");
+      if (!gm && (!who.ch || ch !== who.ch)) return no("That was for someone you’re not playing here now.");
+      const key = keyOf(user, ch);
+      const p = (roster ?? []).find((x) => x.ch && x.user === user && x.ch === ch);
+      const was = t.there?.[key];
+      if (!p && !was) return no("They’re not playing here now.");
+      const name = was?.name ?? (line(p.cname, MAX.name) || "Someone");
+      const into = op.in === true;
+      if (Boolean(was?.in) === into) return yes();
+      if (was?.def) return no(gm ? `${name} rolled When it lands for it already.` : "You’ve rolled When it lands for it already.");
+      if (t.ans && !t.ans.won) return no(`It landed then and there, on whoever was ${t.at.where}.`);
+      if (hit.round.over && !gm) return no(`Round ${hit.round.n}’s over, so it landed on whoever was ${t.at.where}. Tell the GM.`);
+      t.there = t.there && typeof t.there === "object" ? t.there : {};
+      t.there[key] = { name, in: into ? 1 : 0, at: now, ...(gm ? { gm: 1 } : {}) };
       return yes();
     }
     // What someone spent their actions on this round, all of it at once, as
@@ -543,12 +797,13 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
           if (!hit || (a.k === "ground") !== (hit.kind === "ground")) return no("That’s gone from the scene.");
           // Settled, unless it was the end of this round that settled it and
           // this roll's from the round, turning up late.
-          const closed = round.over && round.moved.some((m) => m.ref === hit.el.id && m.out);
+          const landedHere = round.over ? endLandings(round, hit.el) : [];
+          const closed = round.over && (round.moved.some((m) => m.ref === hit.el.id && m.out) || landedHere.some((t) => t.did.out));
           if (a.k === "work" && hit.el.out && !closed) return no(`${cap(lower(hit.el.name))}’s settled already.`);
           // Once its die's rolled this round, everyone's judged against that.
           // Before, the roll has to be one its die could make: late, the die
           // it had before the round ended.
-          const die = Math.max(dieOf(hit.el), round.over ? round.moved.find((m) => m.ref === hit.el.id)?.from ?? 0 : 0);
+          const die = Math.max(dieOf(hit.el), round.over ? round.moved.find((m) => m.ref === hit.el.id)?.from ?? 0 : 0, ...landedHere.map((t) => (hit.el.t === "event" ? t.did.from ?? 0 : 0)));
           if (a.k === "work" && round.held[hit.el.id] == null && a.roll.opp > die) return no(`That roll was against a ${a.roll.opp}, and ${lower(hit.el.name)}’s d${die} can’t roll that.`);
         }
       }
@@ -591,9 +846,14 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
       for (const k of ["ground", "stakes", "events"]) doc.scene[k] = doc.scene[k].filter((x) => x.id !== op.id);
       return yes();
     }
+    // Cleared, or cleared for a place whose pieces follow: one of the book's,
+    // or one of her place pages on the World screen (page).
     case "clear": {
       if (!gm) return gmOnly();
       doc.scene = blankScene();
+      const id = String(op.place?.id ?? "");
+      const page = op.place?.page === true;
+      if (page ? ID.test(id) : /^s-place-[a-z-]{1,40}$/.test(id)) doc.scene.place = { id, name: line(op.place.name, MAX.name), ...(page ? { page: true } : {}) };
       return yes();
     }
   }
@@ -620,6 +880,12 @@ export function forget(doc, user) {
       if (t.icp?.user === user) {
         delete t.icp;
         changed = true;
+      }
+      for (const key of Object.keys(t.there ?? {})) {
+        if (key.startsWith(`${user}|`)) {
+          delete t.there[key];
+          changed = true;
+        }
       }
     }
     for (const key of Object.keys(r.acts ?? {})) {

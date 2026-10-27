@@ -1,9 +1,14 @@
 // Telegraphs on phones (stage 8 in notes/app-plan.md). The GM builds the
 // round's telegraphs on her campaign's page, each one the kit's telegraph card
-// aimed at one of the crew, and sends them. Each lands on its player's play
-// screen, where they answer it with the roll card taking its die, or let it
-// land and roll When it lands once the round's over. However it goes, it's on
-// the GM's page a moment later, round by round.
+// aimed at one of the crew or at the scene (a stake, the scene clock or
+// another event, or a part of the place), and sends them. One at someone lands
+// on their play screen, where they answer it with the roll card taking its
+// die, or let it land and roll When it lands once the round's over. One at a
+// stake or a clock is on every phone for anyone to answer, and does what it
+// said if it lands. One at a place asks each player whether they're in it,
+// and lands on whoever is. However it goes, it's on the GM's page a moment
+// later, round by round. A place from Twenty Places brings its own
+// telegraphs, ready to send.
 //
 // The round lives in the campaign's table on the server (src/worker/table.js,
 // with the rules in table-rules.js), and while a campaign or a character
@@ -22,8 +27,9 @@
 //             builds it. Each campaign's
 //             kept apart, and it all goes when the account's characters leave
 //             the phone (sync.js).
-import { MAX, ONCE, SIZES, actSaid, apply, blankScene, current, dieOf, findEl, findTele, fresh, joinersOf, keyOf, landsOn, lower, spentBy, stateOf, workedIn } from "./table-rules.js";
+import { MAX, ONCE, SIZES, actSaid, apply, atName, atPlace, blankScene, current, dieOf, findEl, findTele, fresh, fxSaid, inIt, joinersOf, keyOf, landsOn, lower, onScene, placeOf, spentBy, stateFor, stateOf, workedIn } from "./table-rules.js";
 import { turnNews } from "./turn-rules.js";
+import { curlyQuotes, readAim, whoAndDoes } from "./aims.js";
 import { die as kitDie, tag as kitTag, telegraph as kitTele } from "../kit/kit.js";
 
 const KEY = "zi-table";
@@ -59,6 +65,8 @@ const andList = (xs) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join("
 // What a telegraph's trying to do, said by the GM: these start the line, and
 // the defence roll reads the first word as a condition when it gets through.
 const INTENTS = { blow: ["Hurt", "Pin", "Disarm"], fear: ["Frighten", "Taunt"] };
+// A place's pin, drawn the way the kit's telegraph card draws it.
+const PIN = `<svg class="zd-aim" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.4 C12 21.4 5 14.6 5 9.6 A7 7 0 0 1 19 9.6 C19 14.6 12 21.4 12 21.4 Z"/><circle cx="12" cy="9.6" r="2.6"/></svg>`;
 
 export function makeTable(d) {
   const { esc, sync, store, feel } = d;
@@ -243,6 +251,10 @@ export function makeTable(d) {
     for (const round of now.rounds) {
       for (const t of round.tele) {
         const old = before.get(t.id);
+        if (t.at.k) {
+          sceneNews(t, round, old, { id, gm, mine, said, k, now, out });
+          continue;
+        }
         const at = mine && t.at.user === me() && t.at.ch === mine.id;
         const s = stateOf(t, round);
         const sWas = old ? stateOf(old.t, old.r) : null;
@@ -292,7 +304,11 @@ export function makeTable(d) {
       const ids = new Set(now.rounds.flatMap((r) => r.tele.map((t) => t.id)));
       for (const r of was.rounds) {
         if (!now.rounds.some((x) => x.id === r.id)) continue;
-        for (const t of r.tele) if (!ids.has(t.id) && t.at.user === me() && t.at.ch === mine.id) out.push(`${cap(gmName(id))} took back ${lower(t.who)}’s telegraph at ${mine.name}.`);
+        for (const t of r.tele) {
+          if (ids.has(t.id)) continue;
+          if (t.at.user === me() && t.at.ch === mine.id) out.push(`${cap(gmName(id))} took back ${lower(t.who)}’s telegraph at ${mine.name}.`);
+          else if (atPlace(t) && t.there?.[keyOf(me(), mine.id)]?.in) out.push(`${cap(gmName(id))} took back ${lower(t.who)}, at ${t.at.name}.`);
+        }
       }
     }
     // The faction turn, in downtime (turn.js). Nothing's news the first time
@@ -304,6 +320,67 @@ export function makeTable(d) {
     }
     if (k.said.length > 120) k.said = k.said.slice(-120);
     return out;
+  }
+  // News of one at the scene. At a stake or a clock: what it did when it
+  // landed, on every phone. At a place: it's coming at a player while they're
+  // in it, then how it went for them, and for the GM, who got in or out of it
+  // and how each of them got on.
+  function sceneNews(t, round, old, { id, gm, mine, said, k, now, out }) {
+    const by = t.ans && t.ans.user !== me() ? t.ans.name : null;
+    const s = stateOf(t, round);
+    const sWas = old ? stateOf(old.t, old.r) : null;
+    if (old && s !== sWas) {
+      lit.add(t.id);
+      if (gm && s === "stopped") out.push(`${t.ans.name} answered ${lower(t.who)} and stopped it.`);
+      else if (gm && s === "hit") out.push(`${t.ans.name} answered ${lower(t.who)}, and it landed.`);
+    }
+    if (onScene(t)) {
+      if (old && t.did && !old.t.did) {
+        lit.add(t.id);
+        out.push(`${cap(lower(t.who))} landed: ${didSaid(t, now)}.`);
+      }
+      return;
+    }
+    const key = mine ? keyOf(me(), mine.id) : "";
+    const p = key ? t.there?.[key] : null;
+    if (!gm && p) {
+      const ms = stateFor(t, round, key);
+      const msWas = old ? stateFor(old.t, old.r, key) : null;
+      if (!said.has(t.id) && ms === "coming") {
+        if (p.in) {
+          out.push(`${cap(lower(t.who))}, a d${t.d} at ${t.at.name}. You’re in it unless you say you’re out.`);
+          out.buzz = true;
+        }
+        k.said.push(t.id);
+        lit.add(t.id);
+        return;
+      }
+      // The GM put them in or out of it by hand.
+      const w = old?.t.there?.[key];
+      if (w && Boolean(w.in) !== Boolean(p.in) && p.gm) {
+        lit.add(t.id);
+        out.push(`${cap(gmName(id))} says ${mine.name}’s ${p.in ? "" : "not "}${t.at.where}.`);
+      }
+      if (!old || ms === msWas) return;
+      if (ms === "landed") {
+        out.push(`${cap(lower(t.who))} landed on ${mine.name}. Roll When it lands.`);
+        out.buzz = true;
+      } else if (by && ms === "hit") out.push(`${by} answered ${lower(t.who)}, and it landed on ${mine.name} then and there.`);
+      else if (by && ms === "stopped") out.push(`${by} answered ${lower(t.who)} and stopped it.`);
+      return;
+    }
+    if (!gm || !old) return;
+    for (const [key2, q] of Object.entries(t.there ?? {})) {
+      const w = old.t.there?.[key2];
+      if (w && Boolean(w.in) !== Boolean(q.in) && !q.gm) {
+        lit.add(t.id);
+        out.push(q.in ? `${q.name}’s ${t.at.where}.` : `${q.name}’s not ${t.at.where} any more.`);
+      }
+      if (q.def && !w?.def) {
+        lit.add(t.id);
+        out.push(q.def.stopped ? `${q.name} stopped ${lower(t.who)} when it landed.` : `${cap(lower(t.who))} got through to ${q.name}.`);
+      }
+    }
   }
 
   // The character this phone's player plays in a campaign, if it's here.
@@ -480,9 +557,43 @@ export function makeTable(d) {
   const realNote = (x) => (x?.real ? ' <span class="tg-real">real dice</span>' : "");
   const diceRow = (a) => `<span class="tg-dice" aria-hidden="true">${a.dice.map((x) => kitDie(x.size, { face: x.total, hide: true, state: x.out === "under" || x.out === "tie" ? "low" : "" })).join("")}</span>`;
 
+  // ------------------------------------------------------------ at the scene
+  // The kit card's mark for what it's at: the crew's crest, a clock face for a
+  // stake or an event, and a pin for a place.
+  const aimOf = (t) => (onScene(t) ? "stake" : atPlace(t) ? "place" : "someone");
+  // What goes on the card's Only one answer line. One at a stake or an event
+  // says what it does if it lands.
+  function oneOf(t) {
+    if (!onScene(t)) return t.one ?? "";
+    if (t.fx && "tag" in t.fx && !t.fx.tag) return "If it lands, there’s a new tag in its way.";
+    return t.fx ? `If it lands, ${fxSaid(t)}.` : "";
+  }
+  // Where one at a place has got to for this phone's character, or where any
+  // other telegraph's got to.
+  const stateHere = (t, round, chId) => (atPlace(t) ? stateFor(t, round, keyOf(me(), chId)) : stateOf(t, round));
+  // What one at a stake or an event did when it landed, in a sentence. doc's
+  // the table, for the scene as it is now.
+  function didSaid(t, doc) {
+    const did = t.did;
+    if (!did) return "";
+    const el = findEl(doc, t.at.ref)?.el;
+    const name = lower(el?.name ?? t.at.name);
+    if (did.none) {
+      return { won: `the crew had ${name} already, so it did nothing`, lost: `${name} was lost already, so it did nothing`, done: `${name} had happened already, so it did nothing`, full: `${name} can’t hold another tag, so it did nothing`, clock: `${name} hasn’t got a clock to drop, so it did nothing` }[did.none] ?? `${name}’s gone from the scene, so it did nothing`;
+    }
+    if (did.tag) return fxSaid({ ...t, fx: { tag: did.tag } }).replace(/ goes in the way /, " is in the way ").replace(/^it’s a new tag/, "there’s a new tag");
+    if (did.out === "lost") return `${name}’s clock ran out, so it’s lost`;
+    if (did.out === "done") return el?.scene ? `the scene clock’s run out${el.what ? `: ${String(el.what).replace(/[.\s]+$/, "")}` : ""}` : `${name} happened${el?.what ? `: ${String(el.what).replace(/[.\s]+$/, "")}` : ""}`;
+    return el?.t === "stake" ? `${name}’s clock dropped to d${did.to}` : `${name} dropped to d${did.to}`;
+  }
+  // Everyone a telegraph at a place landed on, by name.
+  const namesIn = (t) => andList(inIt(t).map((p) => p.name));
+
   // How one telegraph went, for the GM (forGm) or for the player whose phone it
   // is (mine: it's aimed at their character).
-  function verdict(t, round, { forGm = false, mine = false, ch = null } = {}) {
+  function verdict(t, round, { forGm = false, mine = false, ch = null, doc = null } = {}) {
+    if (onScene(t)) return sceneVerdict(t, round, { forGm, ch, doc });
+    if (atPlace(t)) return placeVerdict(t, round, { forGm, ch });
     const s = stateOf(t, round);
     const you = !forGm && t.ans && t.ans.user === me() && ch && t.ans.ch === ch.id;
     const what = t.kind === "fear" ? "Confidence" : "Defend";
@@ -523,13 +634,63 @@ export function makeTable(d) {
     }
     return "";
   }
-
-  // A telegraph drawn with the kit, with where it's got to under it.
-  function card(t, round, extra = "", { lit: on = false } = {}) {
+  // Who answered it and how, the same for one at the scene as for anyone.
+  function answered(t, ch, forGm) {
+    const you = !forGm && t.ans && ch && t.ans.user === me() && t.ans.ch === ch.id;
+    const withWho = t.ans?.with?.length ? `, with ${andList(t.ans.with.map((w) => (ch && w.user === me() && w.ch === ch.id ? "you" : w.name)))} in it,` : "";
+    const late = forGm && t.ans?.late ? ' <span class="tg-real">after the round ended</span>' : "";
+    return { you, withWho, late };
+  }
+  // One at a stake or an event: stopped, or it did what it said.
+  function sceneVerdict(t, round, { forGm, ch, doc }) {
     const s = stateOf(t, round);
-    const face = t.ans ? t.ans.opp : t.def ? t.def.v : null;
-    const when = s === "coming" ? (t.kind === "fear" ? "Lands on Confidence at the end of the round" : "") : { stopped: "Stopped", hit: "Landed", landed: "Landed", held: "Landed, and stopped", through: "Landed, and got through" }[s];
-    return `<li class="tg${on ? " is-lit" : ""}" data-tg="${esc(t.id)}">${kitTele({ who: t.who, does: t.does, at: t.at.name, atCrest: t.at.arch ?? [], d: t.d, round: round.n, one: t.one, face, state: s === "coming" ? "" : s, when, extra, strict: false })}</li>`;
+    const did = cap(didSaid(t, doc ?? { scene: blankScene() }));
+    const { you, withWho, late } = answered(t, ch, forGm);
+    if (s === "stopped") return `<div class="tg-v is-good">${diceRow(t.ans)}<p><b>Stopped.</b> ${esc(you ? "You" : t.ans.name)} answered it${esc(withWho)} with ${esc(t.ans.act)}: ${bestOf(t.ans)} against its ${t.ans.opp}.${realNote(t.ans)}${late}</p></div>`;
+    if (s === "hit") return `<div class="tg-v is-bad">${diceRow(t.ans)}<p><b>It landed then and there.</b> ${esc(you ? "Your" : `${t.ans.name}’s`)} ${esc(t.ans.act)}${esc(withWho)} came up ${bestOf(t.ans)} against its ${t.ans.opp}.${did ? ` ${esc(did)}.` : ""}${realNote(t.ans)}${late}</p></div>`;
+    if (s === "through") return `<div class="tg-v is-bad"><p><b>It landed.</b>${did ? ` ${esc(did)}.` : ""}</p></div>`;
+    return "";
+  }
+  // One at a place: who was in it, and how each of them got on. For a player,
+  // just their own.
+  function placeVerdict(t, round, { forGm, ch }) {
+    const s = stateOf(t, round);
+    const what = t.kind === "fear" ? "Confidence" : "Defend";
+    const { you, withWho, late } = answered(t, ch, forGm);
+    if (s === "stopped") return `<div class="tg-v is-good">${diceRow(t.ans)}<p><b>Stopped.</b> ${esc(you ? "You" : t.ans.name)} answered it${esc(withWho)} with ${esc(t.ans.act)}: ${bestOf(t.ans)} against its ${t.ans.opp}.${realNote(t.ans)}${late}</p></div>`;
+    if (forGm) {
+      if (s === "hit") {
+        const on = inIt(t);
+        return `<div class="tg-v is-bad">${diceRow(t.ans)}<p><b>It landed then and there.</b> ${esc(t.ans.name)}’s ${esc(t.ans.act)}${esc(withWho)} came up ${bestOf(t.ans)} against its ${t.ans.opp}, ${on.length ? `so it hit ${esc(namesIn(t))} with no defence. Say what it costs.` : `but nobody was ${esc(t.at.where)}.`}${realNote(t.ans)}${late}</p></div>`;
+      }
+      if (s === "coming") return "";
+      if (s === "clear") return `<div class="tg-v is-good"><p><b>It landed on nobody.</b> Nobody was ${esc(t.at.where)}.</p></div>`;
+      const lines = inIt(t).map((p) => {
+        if (!p.def) return `${esc(p.name)} rolls When it lands next.`;
+        if (p.def.stopped) return `${esc(p.name)} stopped it when it landed: ${p.def.mine} against its ${p.def.v}.${realNote(p.def)}`;
+        return `It got through to ${esc(p.name)}: ${p.def.mine == null ? `no die left on their ${what}` : `${p.def.mine} against its ${p.def.v}`}.${p.def.paid ? ` <span class="tg-paid">${esc(p.def.paid)}</span>` : ""}${realNote(p.def)}`;
+      });
+      return `<div class="tg-v ${s === "held" ? "is-good" : "is-bad"}"><p><b>It landed on ${esc(namesIn(t))}.</b></p>${lines.map((x) => `<p>${x}</p>`).join("")}</div>`;
+    }
+    const ms = ch ? stateFor(t, round, keyOf(me(), ch.id)) : s;
+    const p = ch ? t.there?.[keyOf(me(), ch.id)] : null;
+    if (ms === "hit") return `<div class="tg-v is-bad">${diceRow(t.ans)}<p><b>It landed then and there.</b> ${esc(you ? "Your" : `${t.ans.name}’s`)} ${esc(t.ans.act)}${esc(withWho)} came up ${bestOf(t.ans)} against its ${t.ans.opp}, so it hit you with no defence. The GM says what it costs.${realNote(t.ans)}</p></div>`;
+    if (ms === "clear") return `<div class="tg-v is-good"><p><b>It missed you.</b> ${round?.over || t.ans ? "You were out of it when it landed." : "You’re out of it."}</p></div>`;
+    if (ms === "landed") return `<div class="tg-v is-bad"><p><b>It landed on you.</b> Roll When it lands, against your ${what}.</p></div>`;
+    if (ms === "held") return `<div class="tg-v is-good"><p><b>Stopped when it landed.</b> Your ${what} came up ${p.def.mine} against its ${p.def.v}.${realNote(p.def)}</p></div>`;
+    if (ms === "through") return `<div class="tg-v is-bad"><p><b>It got through.</b> ${p.def.mine == null ? `There was no die left on your ${what} for it.` : `Your ${what} came up ${p.def.mine} against its ${p.def.v}.`}${p.def.paid ? ` <span class="tg-paid">${esc(p.def.paid)}</span>` : ""}${realNote(p.def)}</p></div>`;
+    return "";
+  }
+
+  // A telegraph drawn with the kit, with where it's got to under it. ch: the
+  // character whose phone it is, so one at a place shows how it went for them.
+  function card(t, round, extra = "", { lit: on = false, ch = null } = {}) {
+    const s = ch ? stateHere(t, round, ch.id) : stateOf(t, round);
+    const mine = ch && atPlace(t) ? t.there?.[keyOf(me(), ch.id)] : null;
+    const face = t.ans ? t.ans.opp : t.def ? t.def.v : mine?.def ? mine.def.v : null;
+    const coming = t.kind === "fear" ? (atPlace(t) ? "Hits whoever’s there, against Confidence" : "Lands on Confidence at the end of the round") : atPlace(t) ? "Hits whoever’s there when it lands" : "";
+    const when = s === "coming" ? (onScene(t) ? "" : coming) : { stopped: "Stopped", hit: "Landed", landed: "Landed", held: "Landed, and stopped", through: onScene(t) ? "Landed" : "Landed, and got through", clear: ch ? "Landed, and missed you" : "Landed on nobody" }[s];
+    return `<li class="tg${on ? " is-lit" : ""}" data-tg="${esc(t.id)}">${kitTele({ who: t.who, does: t.does, at: atName(t), atCrest: t.at.k ? null : t.at.arch ?? [], aim: aimOf(t), d: t.d, round: round.n, one: oneOf(t), face, state: s === "coming" ? "" : s, when, extra, strict: false })}</li>`;
   }
   const takeLit = (id) => {
     const on = lit.has(id);
@@ -539,15 +700,16 @@ export function makeTable(d) {
 
   // How a round's going, in a line.
   function tally(round) {
-    const n = { stopped: 0, through: 0, rolling: 0, coming: 0 };
+    const n = { stopped: 0, through: 0, rolling: 0, coming: 0, clear: 0 };
     for (const t of round.tele) {
       const s = stateOf(t, round);
       if (s === "stopped" || s === "held") n.stopped += 1;
       else if (s === "coming") n.coming += 1;
       else if (s === "landed") n.rolling += 1;
+      else if (s === "clear") n.clear += 1;
       else n.through += 1;
     }
-    const parts = [n.stopped && `${words(n.stopped)} stopped`, n.through && `${words(n.through)} got through`, n.rolling && `${words(n.rolling)} still to roll When it lands`, n.coming && `${words(n.coming)} still coming`].filter(Boolean);
+    const parts = [n.stopped && `${words(n.stopped)} stopped`, n.through && `${words(n.through)} got through`, n.clear && `${words(n.clear)} landed on nobody`, n.rolling && `${words(n.rolling)} still to roll When it lands`, n.coming && `${words(n.coming)} still coming`].filter(Boolean);
     return `${cap(plural(round.tele.length, "telegraph", "telegraphs"))}${parts.length ? `: ${andList(parts)}` : ""}.`;
   }
 
@@ -558,8 +720,8 @@ export function makeTable(d) {
   const moreName = (k) => ({ resolve: "1 Resolve", held: "held last round", hiding: "out of hiding", fired: "fired-up Confidence", trait: "a trait or a Boon" })[k] ?? k;
   const isAt = (x, chId) => Boolean(x && x.user === me() && x.ch === chId);
   // Everything that lands on this character: aimed at them and nobody took
-  // it, or taken by them for a friend.
-  const landsHere = (t, chId) => isAt(landsOn(t), chId);
+  // it, taken by them for a friend, or at a place they're in.
+  const landsHere = (t, chId) => (atPlace(t) ? Boolean(t.there?.[keyOf(me(), chId)]?.in) : isAt(landsOn(t), chId));
   const outcome = (won) => (won ? "stopped" : "it landed");
 
   // One thing someone spent an action on, in a line. you: it's this phone's.
@@ -648,6 +810,7 @@ export function makeTable(d) {
   function sceneGlance(doc) {
     const p = sceneParts(doc);
     const bits = [];
+    if (p.any && doc.scene.place?.name) bits.push(doc.scene.place.name);
     for (const e of p.clocks) bits.push(e.out ? "the scene clock’s run out" : `scene clock d${e.d}`);
     if (p.stakes.length) bits.push(plural(p.stakes.length, "stake", "stakes"));
     if (p.events.length) bits.push(plural(p.events.length, "event", "events"));
@@ -708,26 +871,64 @@ export function makeTable(d) {
   // ------------------------------------------------------------ the GM's round
 
   const sure = (key, yes, no) => (ui.sure === key ? yes : no);
+  // A telegraph she's building, as it'll go out: what it's at, named the way
+  // the scene names it now.
+  function asSent(id, t) {
+    const k = t.at?.k;
+    if (k === "stake" || k === "event") return { ...t, at: { ...t.at, name: findEl(local(id), t.at.ref)?.el.name ?? "something that’s gone" } };
+    if (k === "place") return t;
+    const p = rosterOf(id).find((x) => x.user === t.at?.user && x.ch === t.at?.ch);
+    return { ...t, at: { ...(t.at ?? {}), name: p?.cname ?? "someone who’s gone", arch: t.at?.arch ?? [] } };
+  }
+  // Whether one she's built can still go out: whoever it's at is playing here,
+  // or whatever it's at is still on the scene and not settled.
+  function draftOk(id, t) {
+    const k = t.at?.k;
+    if (k === "stake" || k === "event") {
+      const hit = findEl(local(id), t.at.ref);
+      return Boolean(hit && hit.kind === k && !hit.el.out);
+    }
+    if (k === "place") return true;
+    return rosterOf(id).some((p) => p.user === t.at?.user && p.ch === t.at?.ch);
+  }
   // The round she's building, as cards.
   function draftCard(id, t, n) {
-    const p = rosterOf(id).find((x) => x.user === t.at?.user && x.ch === t.at?.ch);
-    const extra = `<div class="tg-do"><button type="button" class="button sm" data-act="tg" data-do="edit" data-id="${esc(t.id)}">Change it</button><button type="button" class="button sm" data-act="tg" data-do="drop" data-id="${esc(t.id)}">Take it off</button>${p ? "" : '<p class="cc-warn">Whoever this was aimed at isn’t playing here now.</p>'}</div>`;
-    return `<li class="tg is-draft">${kitTele({ who: t.who, does: t.does, at: p?.cname ?? "someone who’s gone", atCrest: t.at?.arch ?? [], d: t.d, round: n, one: t.one, when: t.kind === "fear" ? "Lands on Confidence at the end of the round" : "", extra, strict: false })}</li>`;
+    const v = asSent(id, t);
+    const warn = draftOk(id, t) ? "" : t.at?.k ? "What this was aimed at has gone from the scene, or it’s settled." : "Whoever this was aimed at isn’t playing here now.";
+    const extra = `<div class="tg-do"><button type="button" class="button sm" data-act="tg" data-do="edit" data-id="${esc(t.id)}">Change it</button><button type="button" class="button sm" data-act="tg" data-do="drop" data-id="${esc(t.id)}">Take it off</button>${warn ? `<p class="cc-warn">${warn}</p>` : ""}</div>`;
+    const when = atPlace(v) ? (t.kind === "fear" ? "Hits whoever’s there, against Confidence" : "Hits whoever’s there when it lands") : t.kind === "fear" && !onScene(v) ? "Lands on Confidence at the end of the round" : "";
+    return `<li class="tg is-draft">${kitTele({ who: t.who, does: t.does, at: atName(v), atCrest: v.at.k ? null : v.at.arch, aim: aimOf(v), d: t.d, round: n, one: oneOf(v), when, extra, strict: false })}</li>`;
   }
 
   // The GM's live cards: who's got it, and how each one went.
   function gmCard(id, t, round, live) {
     const s = stateOf(t, round);
-    let extra = verdict(t, round, { forGm: true });
+    let extra = verdict(t, round, { forGm: true, doc: local(id) });
     if (s === "coming") {
       const queued = waiting(id, (o) => o.o === "round" || o.o === "add");
-      const where = queued ? `Goes to ${esc(t.at.player || t.at.name)}’s phone when you’ve got a signal.` : t.seen ? `On ${esc(t.at.player || t.at.name)}’s phone.` : `Not on ${esc(t.at.player || t.at.name)}’s phone yet. It’ll get there when ${esc(t.at.player || "they")} opens ${esc(t.at.name)} or the campaign.`;
+      const scene = Boolean(t.at.k);
+      const where = scene ? (queued ? "Goes to every phone when you’ve got a signal." : "On every phone.")
+        : queued ? `Goes to ${esc(t.at.player || t.at.name)}’s phone when you’ve got a signal.` : t.seen ? `On ${esc(t.at.player || t.at.name)}’s phone.` : `Not on ${esc(t.at.player || t.at.name)}’s phone yet. It’ll get there when ${esc(t.at.player || "they")} opens ${esc(t.at.name)} or the campaign.`;
       const took = t.icp ? ` ${esc(t.icp.name)}’s taking it for ${esc(t.at.name)}${t.icp.free ? ", free" : t.icp.paid === false ? " on the same Aura" : ", for 1 Aura"}, so it lands on ${esc(t.icp.name)}.` : "";
       const ins = joinersOf(round, t.id);
       const inOn = ins.length ? ` ${ins.length === 1 ? `${esc(ins[0].name)}’s put an action` : `${esc(andList(ins.map((j) => j.name)))} have put their actions`} into whoever answers it.` : "";
-      extra = `<div class="tg-v is-wait"><p>${where}${took}${inOn}</p>${live && !t.icp ? `<div class="tg-do"><button type="button" class="button sm" data-act="tg" data-do="take" data-id="${esc(t.id)}">${sure(`take-${t.id}`, "Tap again to take it back", "Take it back")}</button></div>` : ""}</div>`;
-    }
+      const lands = onScene(t) ? " Anyone can answer it." : atPlace(t) ? ` Each of them says whether they’re ${esc(t.at.where)}, and it lands on whoever is.` : "";
+      extra = `<div class="tg-v is-wait"><p>${where}${lands}${took}${inOn}</p>${atPlace(t) ? thereChips(id, t, round) : ""}${live && !t.icp ? `<div class="tg-do"><button type="button" class="button sm" data-act="tg" data-do="take" data-id="${esc(t.id)}">${sure(`take-${t.id}`, "Tap again to take it back", "Take it back")}</button></div>` : ""}</div>`;
+    } else if (atPlace(t) && round.over && !t.ans && s !== "held" && s !== "through") extra += thereChips(id, t, round);
     return card(t, round, extra, { lit: takeLit(t.id) });
+  }
+  // Who's in a place, on the GM's card, each a tap to put them in or out by
+  // hand: for what the story does that the phones don't. Not once they've
+  // rolled When it lands.
+  function thereChips(id, t, round) {
+    const people = new Map(Object.entries(t.there ?? {}));
+    for (const p of rosterOf(id)) if (!people.has(keyOf(p.user, p.ch))) people.set(keyOf(p.user, p.ch), { name: p.cname, in: 0 });
+    if (!people.size) return "";
+    const chips = [...people].map(([key, p]) => {
+      const [user, ch] = key.split("|");
+      return `<button type="button" class="cc-chipbtn sm" data-act="tg" data-do="gthere" data-id="${esc(t.id)}" data-user="${esc(user)}" data-ch="${esc(ch)}"${pressedAttr(Boolean(p.in))}${p.def ? " disabled" : ""} aria-label="${esc(p.name)}, ${p.in ? `${esc(t.at.where)}` : "out of it"}">${esc(p.name)}</button>`;
+    }).join("");
+    return `<div class="tg-there"><p class="tg-q">${esc(cap(t.at.where))}?</p><div class="cc-chips" role="group" aria-label="${esc(`Who’s ${t.at.where}`)}">${chips}</div><p class="cc-small">${round.over ? "Not right? Tap someone to put them in or out." : "Tap someone to put them in or out by hand."}</p></div>`;
   }
 
   // The round on the GM's campaign page, at the top, since it's what she taps
@@ -768,7 +969,7 @@ export function makeTable(d) {
     // Earlier rounds of this fight, a line each.
     const earlier = doc.rounds.slice(0, building || !last ? doc.rounds.length : -1).reverse();
     const past = earlier.length ? `<details class="cc-group tg-past" data-open="tg-past"${d.isOpen("tg-past") ? " open" : ""}><summary>Earlier this fight <small>${earlier.length === 1 ? `round ${earlier[0].n}` : `rounds ${earlier[earlier.length - 1].n} to ${earlier[0].n}`}</small></summary>
-      <ul class="tg-earlier">${earlier.map((r) => `<li><b>Round ${r.n}</b> ${tally(r)}<ul>${r.tele.map((t) => `<li>${esc(cap(t.who))}’s d${t.d} at ${esc(t.at.name)}: ${esc(pastLine(t, r))}</li>`).join("")}</ul></li>`).join("")}</ul></details>` : "";
+      <ul class="tg-earlier">${earlier.map((r) => `<li><b>Round ${r.n}</b> ${tally(r)}<ul>${r.tele.map((t) => `<li>${esc(cap(t.who))}’s d${t.d} at ${esc(atName(t))}: ${esc(pastLine(t, r, doc))}</li>`).join("")}</ul></li>`).join("")}</ul></details>` : "";
     return `<section class="cc-sec tg-sec" aria-labelledby="tg-h">${body}${ui.note ? `<div class="cc-note is-warn" role="alert"><p>${esc(ui.note)}</p></div>` : ""}${gmScene(id, doc, last)}${past}</section>`;
   }
   // A round can go out with nothing telegraphed, when the scene's got something running.
@@ -781,8 +982,10 @@ export function makeTable(d) {
     }).filter(Boolean);
     return said.length ? ` ${esc(said.join(" "))}` : "";
   }
-  function pastLine(t, round) {
+  function pastLine(t, round, doc) {
     const s = stateOf(t, round);
+    if (onScene(t) && (s === "hit" || s === "through")) return `${s === "hit" ? `${t.ans?.name}’s answer lost, so it landed` : "landed"}${t.did ? `, and ${didSaid(t, doc)}` : ""}`;
+    if (atPlace(t) && s !== "stopped" && s !== "coming") return s === "clear" ? "landed on nobody" : s === "hit" ? `${t.ans?.name}’s answer lost, so it landed on ${namesIn(t) || "nobody"}` : `landed on ${namesIn(t)}${s === "landed" ? ", When it lands not all rolled" : s === "held" ? ", and stopped" : ", and got through"}`;
     return { stopped: `stopped by ${t.ans?.name}`, hit: `${t.ans?.name}’s answer lost, so it landed`, landed: "landed, When it lands not rolled", held: "landed, and stopped", through: `got through${t.def?.paid ? ` (${t.def.paid.toLowerCase()})` : ""}`, coming: "still coming" }[s];
   }
 
@@ -795,9 +998,9 @@ export function makeTable(d) {
     const last = current(doc);
     if (!last) return "";
     const at = last.tele.filter((t) => landsHere(t, ch.id));
-    const open = at.filter((t) => ["coming", "landed"].includes(stateOf(t, last)));
+    const open = at.filter((t) => ["coming", "landed"].includes(stateHere(t, last, ch.id)));
     if (!open.length) return "";
-    const coming = open.filter((t) => stateOf(t, last) === "coming").length;
+    const coming = open.filter((t) => stateHere(t, last, ch.id) === "coming").length;
     const text = coming ? `Round ${last.n}: ${plural(coming, "telegraph’s", "telegraphs are")} coming at ${esc(ch.name)}.` : `Round ${last.n}’s over and ${words(open.length)} landed on ${esc(ch.name)}.`;
     return `<div class="cc-note tg-point" role="status"><p>${text} ${coming ? (coming === 1 ? "Answer it" : "Answer them") : "Roll When it lands"} on ${esc(ch.name)}’s play screen.</p></div>`;
   }
@@ -816,10 +1019,12 @@ export function makeTable(d) {
     const scene = sceneParts(doc);
     if (!last && !scene.any) return "";
     const live = Boolean(last && !last.over);
-    // Aimed at them, or one they took for a friend.
-    const isMine = (t) => isAt(t.at, ch.id) || isAt(t.icp, ch.id);
+    const key = keyOf(me(), ch.id);
+    // Aimed at them, one they took for a friend, or one at a place they were
+    // in when it went out (it stays put while they get in and out of it).
+    const isMine = (t) => isAt(t.at, ch.id) || isAt(t.icp, ch.id) || Boolean(atPlace(t) && t.there?.[key]);
     // Anything from an earlier round that landed on them and still needs its roll.
-    const earlier = doc.rounds.slice(0, -1).map((r) => ({ r, list: r.tele.filter((t) => landsHere(t, ch.id) && stateOf(t, r) === "landed") })).filter((x) => x.list.length);
+    const earlier = doc.rounds.slice(0, -1).map((r) => ({ r, list: r.tele.filter((t) => landsHere(t, ch.id) && stateHere(t, r, ch.id) === "landed") })).filter((x) => x.list.length);
     const owed = earlier.flatMap((x) => x.list);
     const at = last ? last.tele.filter(isMine) : [];
     const others = last ? last.tele.filter((t) => !isMine(t)) : [];
@@ -833,6 +1038,7 @@ export function makeTable(d) {
     const joined = (t) => rec.list.some((a) => a.k === "join" && a.ref === t.id);
     const answerBtn = (t, label, primary = false) => (can && !joined(t) ? `<button type="button" class="button${primary ? " primary" : " sm"}" data-act="tg" data-do="answer" data-id="${esc(t.id)}">${label}</button>` : "");
     const mineCard = (t, round) => {
+      if (atPlace(t)) return placeCard(t, round);
       const s = stateOf(t, round);
       let extra = verdict(t, round, { mine: landsHere(t, ch.id), ch });
       if (s === "coming") {
@@ -844,29 +1050,48 @@ export function makeTable(d) {
       if (s === "landed" && landsHere(t, ch.id)) extra += `<div class="tg-do"><button type="button" class="button primary" data-act="tg" data-do="land" data-k="${t.kind}">When it lands</button></div>`;
       return card(t, round, extra, { lit: takeLit(t.id) });
     };
+    // One at a place: whether they're in it, said with a tap, and getting out
+    // gets them clear. It lands on them only if they're still in it.
+    const placeCard = (t, round) => {
+      const s = stateFor(t, round, key);
+      const inNow = Boolean(t.there?.[key]?.in);
+      let extra = verdict(t, round, { ch });
+      if (s === "coming") {
+        const say = inNow ? `You’re ${esc(t.at.where)}, so it lands on you at the end of the round. ${can && !joined(t) ? "Answer it, or get out of there and it can’t touch you." : "Get out of there and it can’t touch you."}` : "You’re out of it, so it can’t touch you.";
+        extra = `<div class="tg-in"><p class="tg-q" id="tg-q-${esc(t.id)}">${esc(cap(t.at.where))}?</p><div class="tg-in-btns" role="group" aria-labelledby="tg-q-${esc(t.id)}"><button type="button" class="cc-chipbtn" data-act="tg" data-do="there" data-id="${esc(t.id)}" data-v="1"${pressedAttr(inNow)}>I’m in it</button><button type="button" class="cc-chipbtn" data-act="tg" data-do="there" data-id="${esc(t.id)}" data-v="0"${pressedAttr(!inNow)}>I’m out of it</button></div></div>
+          <div class="tg-do">${answerBtn(t, "Answer it", inNow)}<p class="cc-small">${say}</p></div>`;
+      }
+      if (s === "landed") extra += `<div class="tg-do"><button type="button" class="button primary" data-act="tg" data-do="land" data-k="${t.kind}">When it lands</button></div>`;
+      return card(t, round, extra, { lit: takeLit(t.id), ch });
+    };
     // A friend's: answer it for them, put your action into whoever does, or
     // take it for them (blows only, since fear's inside their head).
     const takeBtn = (t) => {
-      if (!live || t.kind === "fear" || t.ans || t.icp || isAt(t.at, ch.id)) return "";
+      if (!live || t.at.k || t.kind === "fear" || t.ans || t.icp || isAt(t.at, ch.id)) return "";
       const free = guardianOf(c);
       const paid = !free && paidFor(doc, last, ch.id, t.at);
       const label = free ? "Take it, free" : paid ? "Take it, already paid" : "Take it: 1 Aura";
       return `<button type="button" class="button sm" data-act="tg" data-do="icp" data-id="${esc(t.id)}"${!free && !paid && ch.state.aura < 1 ? " disabled" : ""}>${label}</button>`;
     };
+    // Everyone else's, a row each. One at a stake or a clock is anyone's to
+    // answer, and says what it does if it lands, then what it did.
     const other = (t) => {
       const s = stateOf(t, last);
-      const state = { coming: "", stopped: "Stopped", hit: "Landed", landed: "Landed", held: "Stopped when it landed", through: "Got through" }[s];
+      const scene = onScene(t);
+      const state = { coming: "", stopped: "Stopped", hit: "Landed", landed: "Landed", held: "Stopped when it landed", through: scene ? "Landed" : "Got through", clear: "Landed on nobody" }[s];
       const ins = joinersOf(last, t.id).filter((j) => !(j.user === me() && j.ch === ch.id));
       const chips = [t.icp ? `${t.icp.name}’s taking it` : "", ins.length && s === "coming" ? `${andList(ins.map((j) => j.name))} ${ins.length === 1 ? "is" : "are"} in on it` : ""].filter(Boolean).map((x) => `<span class="tg-chip">${esc(x)}</span>`).join("");
-      const btns = s === "coming" ? (joined(t) ? `<span class="tg-chip is-mine">You’re in on it</span><button type="button" class="button sm" data-act="tg" data-do="unact" data-a="${esc(rec.list.find((a) => a.k === "join" && a.ref === t.id).id)}">Take it back</button>` : `${answerBtn(t, `Answer it for ${esc(t.at.name)}`)}${can ? `<button type="button" class="button sm" data-act="tg" data-do="join" data-id="${esc(t.id)}">Put your action in</button>` : ""}${takeBtn(t)}`) : "";
-      return `<li class="tg-row${s === "coming" ? "" : ` is-${s}`}">${kitDie(t.d, { own: "them", hide: true })}<p><b>${esc(t.who)}</b> at ${esc(t.at.name)} <small>${esc(t.does)}</small>${state ? ` <span class="tg-chip">${state}</span>` : ""}${chips}</p>${btns ? `<div class="tg-row-do">${btns}</div>` : ""}</li>`;
+      const btns = s === "coming" ? (joined(t) ? `<span class="tg-chip is-mine">You’re in on it</span><button type="button" class="button sm" data-act="tg" data-do="unact" data-a="${esc(rec.list.find((a) => a.k === "join" && a.ref === t.id).id)}">Take it back</button>` : `${answerBtn(t, t.at.k ? "Answer it" : `Answer it for ${esc(t.at.name)}`)}${can ? `<button type="button" class="button sm" data-act="tg" data-do="join" data-id="${esc(t.id)}">Put your action in</button>` : ""}${takeBtn(t)}`) : "";
+      const fx = scene ? (s === "coming" ? `If it lands, ${fxSaid(t)}.` : t.did ? `${cap(didSaid(t, doc))}.` : "") : "";
+      return `<li class="tg-row${s === "coming" ? "" : ` is-${s}`}${scene ? " is-scene" : ""}">${kitDie(t.d, { own: "them", hide: true })}<p><b>${esc(t.who)}</b> at ${esc(atName(t))} <small>${esc(t.does)}</small>${fx ? `<small class="tg-fx">${esc(fx)}</small>` : ""}${state ? ` <span class="tg-chip">${state}</span>` : ""}${chips}</p>${btns ? `<div class="tg-row-do">${btns}</div>` : ""}</li>`;
     };
-    const coming = at.some((t) => stateOf(t, last) === "coming" && landsHere(t, ch.id)) || owed.length;
+    const coming = at.some((t) => stateHere(t, last, ch.id) === "coming" && landsHere(t, ch.id)) || owed.length;
     const title = !last ? "The scene" : last.over ? `Round ${last.n}’s over` : coming ? "Coming at you" : at.length ? "This round" : `Round ${last.n}`;
     const head = `<div class="tg-head"><h2 id="tg-play-h">${title}</h2>${netLine(id, k)}</div>`;
     const owedHtml = earlier.map((x) => `<p class="cc-small">From round ${x.r.n}:</p><ol class="tg-list">${x.list.map((t) => mineCard(t, x.r)).join("")}</ol>`).join("");
     const atHtml = !last ? "" : at.length ? `<ol class="tg-list">${at.map((t) => mineCard(t, last)).join("")}</ol>` : last.over ? "" : `<p class="cc-small">Nothing’s aimed at ${esc(ch.name)} this round.</p>`;
-    const rest = others.length ? `<h3 class="tg-h3">${at.length || owed.length ? "The rest of the round" : "Coming at the crew"}</h3><ul class="tg-rows">${others.map(other).join("")}</ul>` : "";
+    const restTitle = at.length || owed.length ? "The rest of the round" : others.every((t) => !t.at.k) ? "Coming at the crew" : others.every((t) => t.at.k) ? "At the scene" : "The rest of the round";
+    const rest = others.length ? `<h3 class="tg-h3">${restTitle}</h3><ul class="tg-rows">${others.map(other).join("")}</ul>` : "";
     const sceneHtml = scene.any ? `<details class="tg-scenefold" data-open="tg-scene"${d.isOpen("tg-scene") || (live && can && !at.length) ? " open" : ""}><summary><h3 class="sc-k">The scene</h3> <small>${esc(sceneGlance(doc))}</small></summary>${sceneList(id, doc, { round: last, live, can })}</details>` : "";
     return `<section class="cc-sec tg-play" aria-labelledby="tg-play-h">${head}${wait}${owedHtml}${atHtml}${last ? actionPanel(ch, id, doc, last) : ""}${rest}${sceneHtml}</section>`;
   }
@@ -877,7 +1102,7 @@ export function makeTable(d) {
     const id = ch ? d.campOf(ch) : null;
     if (!id) return null;
     const doc = local(id);
-    const list = doc.rounds.flatMap((r) => r.tele.filter((t) => landsHere(t, ch.id) && stateOf(t, r) === "landed").map((t) => ({ ...t, round: r })));
+    const list = doc.rounds.flatMap((r) => r.tele.filter((t) => landsHere(t, ch.id) && stateHere(t, r, ch.id) === "landed").map((t) => ({ ...t, round: r })));
     const blows = list.filter((t) => t.kind !== "fear");
     const fear = list.filter((t) => t.kind === "fear");
     const pick = kind === "fear" ? fear : kind === "blow" ? blows : blows.length ? blows : fear;
@@ -985,7 +1210,8 @@ export function makeTable(d) {
       const bare = (list) => JSON.stringify((list ?? []).map((y) => [y.id, y.k, y.ref ?? "", y.act, y.aim ?? "", dice(y.roll?.dice), y.roll?.opp ?? null]));
       return Boolean(a) && JSON.stringify(a.more) === JSON.stringify(v.more ?? []) && bare(a.list) === bare(v.list);
     }
-    return Boolean(t.def && landsOn(t).user === me() && t.def.stopped === v.stopped && t.def.mine === v.mine && t.def.v === v.v && t.def.paid === (v.paid || ""));
+    const def = atPlace(t) ? t.there?.[keyOf(me(), chId)]?.def : landsOn(t).user === me() ? t.def : null;
+    return Boolean(def && def.stopped === v.stopped && def.mine === v.mine && def.v === v.v && def.paid === (v.paid || ""));
   }
 
   // What the roll card says about an answer, or a When it lands, and where it's got to.
@@ -1027,7 +1253,9 @@ export function makeTable(d) {
     });
     const won = outs.some((o) => o === "beat" || o === "won");
     const tie = !won && outs.includes("tie");
-    const said = won ? "<b>Stopped.</b> It never lands." : tie ? "<b>A tie’s a loss</b>, so it lands now, unless you win the tie for 1 Aura." : "<b>It lands now</b>, and there’s no defence against it. The GM says what it costs.";
+    const aim = r.tele?.aim ?? "";
+    const lands = aim === "stake" || aim === "event" ? `<b>It lands now</b>, and ${esc(r.tele.fx)}.` : aim === "place" ? `<b>It lands now</b> on whoever’s ${esc(r.tele.where)}, with no defence. The GM says what it costs.` : "<b>It lands now</b>, and there’s no defence against it. The GM says what it costs.";
+    const said = won ? "<b>Stopped.</b> It never lands." : tie ? "<b>A tie’s a loss</b>, so it lands now, unless you win the tie for 1 Aura." : lands;
     return `<div class="tg-v ${won ? "is-good" : "is-bad"} tg-verdict"><p>${said}</p><p class="cc-small" role="status">${esc(sent)}</p></div>`;
   }
 
@@ -1051,8 +1279,72 @@ export function makeTable(d) {
 
   // ------------------------------------------------------------ the dialogs
 
-  // Telegraphing something: the card as it'll go out, then who it's from, who
-  // it's at, how hard and what it's doing.
+  // The composer's fields as the telegraph they'll make, with what it's aimed
+  // at named the way the scene names it.
+  function fromFields(id, f) {
+    const k = f.at?.k;
+    const t = { who: f.who.trim(), does: f.does.trim(), d: f.d, kind: f.kind === "fear" ? "fear" : "blow", one: f.one.trim() };
+    if (k === "stake" || k === "event") {
+      const el = findEl(local(id), f.at.ref)?.el ?? null;
+      Object.assign(t, { kind: "blow", one: "", at: { k, ref: f.at.ref, name: el?.name ?? "something that’s gone" } });
+      t.fx = k === "event" || (f.fx === "clock" && el?.clock) ? { by: f.by === 2 ? 2 : 1 } : { tag: f.tag.replace(/,/g, "").trim().slice(0, MAX.tag) };
+    } else if (k === "place") {
+      const p = placeOf(f.where);
+      t.at = { k, name: p?.name ?? "everyone where it lands", where: p?.where ?? "where it lands" };
+    } else {
+      const p = rosterOf(id).find((x) => x.user === f.at?.user && x.ch === f.at?.ch);
+      t.at = p ? { user: p.user, ch: p.ch, name: p.cname, arch: crestOf(id, p) ?? [] } : null;
+    }
+    return t;
+  }
+  // The card as it'll go out, while she builds it.
+  function previewOf(id, f, n) {
+    const t = fromFields(id, f);
+    const shown = { ...t, who: t.who || "Who’s telegraphing", does: t.does || "What it’s doing" };
+    const when = atPlace(t) ? (t.kind === "fear" ? "Hits whoever’s there, against Confidence" : "Hits whoever’s there when it lands") : t.kind === "fear" && !onScene(t) ? "Lands on Confidence at the end of the round" : "";
+    return kitTele({ who: shown.who, does: shown.does, at: t.at ? atName(shown) : "who or what it’s aimed at", atCrest: t.at?.k ? null : t.at?.arch ?? [], aim: t.at ? aimOf(t) : "someone", d: f.d || 6, round: n, one: t.at ? oneOf(shown) : t.one, when, strict: false });
+  }
+  // The place on the scene's own telegraphs, each with what it's aimed at
+  // found on the scene as it is: its stake (if she kept it on), the scene
+  // clock, a part of the place, or one of the crew. A place from Twenty Places
+  // has the book's, read by the build. One of her place pages has its own,
+  // read here the same way (aims.js), and one she's written that doesn't say
+  // what it's at waits for her to aim it.
+  function pageTeles(id, sp, doc) {
+    const stakes = doc.scene.stakes.map((x) => x.name);
+    return (d.pageTeles?.(id, sp.id) ?? []).filter((t) => SIZES.includes(Number(t.d)) && String(t.text ?? "").trim()).map((t) => {
+      const line = curlyQuotes(String(t.text).replace(/\*/g, "").replace(/\s+/g, " ").trim());
+      const a = readAim(t.at, stakes, line);
+      return { line, ...whoAndDoes(line, sp.name), d: Number(t.d), ...(a.why ? { kind: /\bConfidence\b/.test(String(t.at ?? "")) ? "fear" : "blow", aim: "crew", one: "" } : a) };
+    });
+  }
+  function bookTeles(id) {
+    const doc = local(id);
+    const sp = doc.scene.place;
+    const place = sp?.page ? { name: sp.name, tele: pageTeles(id, sp, doc) } : (d.places ?? []).find((p) => p.id === sp?.id);
+    if (!place) return { place: null, list: [] };
+    const list = [];
+    (place.tele ?? []).forEach((b, i) => {
+      if (b.aim === "stake") {
+        const el = doc.scene.stakes.find((s) => s.name === b.stake && !s.out);
+        if (el) list.push({ ...b, i, ref: el.id, at: lower(el.name) });
+      } else if (b.aim === "clock") {
+        const el = doc.scene.events.find((e) => e.scene && !e.out);
+        if (el) list.push({ ...b, i, ref: el.id, at: lower(el.name) });
+      } else list.push({ ...b, i, at: b.aim === "place" ? b.place : "one of the crew" });
+    });
+    return { place, list };
+  }
+  // How the book's telegraph goes, under its words.
+  function bookSays(b) {
+    const against = b.aim === "crew" || b.aim === "place" ? `, against ${b.kind === "fear" ? "Confidence" : "Defend"}` : "";
+    const lands = b.aim === "stake" ? " · a new tag in its way if it lands" : b.aim === "clock" ? " · it drops a size if it lands" : b.one ? ` · ${b.one}` : "";
+    return `d${b.d} at ${b.at}${against}${lands}`;
+  }
+
+  // Telegraphing something: the card as it'll go out, then the place's own
+  // telegraphs if one from the book's on the scene, who or what it's at, how
+  // hard, who's doing it and what.
   function composerView(r) {
     const id = r.camp;
     const f = r.f;
@@ -1060,34 +1352,69 @@ export function makeTable(d) {
     const doc = local(id);
     const last = current(doc);
     const n = r.live ? last?.n ?? 1 : (last && !last.over ? last.n : (last?.n ?? 0) + 1);
-    const target = roster.find((p) => p.user === f.at?.user && p.ch === f.at?.ch) ?? null;
+    const k = f.at?.k ?? "";
+    const target = k ? null : roster.find((p) => p.user === f.at?.user && p.ch === f.at?.ch) ?? null;
+    const el = k === "stake" || k === "event" ? findEl(doc, f.at.ref)?.el ?? null : null;
     const known = threatsOf(id);
-    const preview = kitTele({ who: f.who || "Who’s telegraphing", does: f.does || "What it’s doing", at: target?.cname ?? "who it’s aimed at", atCrest: crestOf(id, target) ?? [], d: f.d || 6, round: n, one: f.one, when: f.kind === "fear" ? "Lands on Confidence at the end of the round" : "", strict: false });
     const pressed = (on) => ` aria-pressed="${on ? "true" : "false"}"`;
     const verbs = INTENTS[f.kind === "fear" ? "fear" : "blow"];
+    const book = r.edit ? { place: null, list: [] } : bookTeles(id);
+    const bookHtml = book.list.length ? `<div class="tg-book"><p class="tg-tlabel">From ${esc(book.place.name)}</p><ul class="tg-booklist">${book.list.map((b) => `<li><button type="button" class="tg-bookt" data-act="tg" data-do="book" data-i="${b.i}"${pressed(f.book === b.i)}>${kitDie(b.d, { own: "them", hide: true, bare: true })}<span><span class="tg-bookline">${esc(b.line)}</span><small>${esc(bookSays(b))}</small></span></button></li>`).join("")}</ul></div>` : "";
+    // The scene: its open stakes, the scene clock and the events, and a place.
+    const s = doc.scene;
+    const open = [...s.events.filter((e) => e.scene), ...s.stakes, ...s.events.filter((e) => !e.scene)].filter((x) => !x.out);
+    const sceneBtn = (x) => {
+      const stake = x.t === "stake";
+      const kind = stake ? "stake" : "event";
+      const sub = stake ? `stake, a d${dieOf(x)}${x.clock ? `, clock d${x.clock}` : ""}` : x.scene && /^(the )?scene clock$/i.test(x.name.trim()) ? `d${x.d}` : `${x.scene ? "scene clock" : "event"}, d${x.d}`;
+      return `<button type="button" class="tg-target is-scene" data-act="tg" data-do="tgt" data-k="${kind}" data-ref="${esc(x.id)}"${pressed(k === kind && f.at.ref === x.id)}>${kitDie(stake ? dieOf(x) : x.d, { own: x.scene ? "harm" : "them", hide: true, bare: true })}<span><b>${esc(x.name)}</b><small>${esc(sub)}</small></span></button>`;
+    };
+    const placeBtn = `<button type="button" class="tg-target is-scene" data-act="tg" data-do="tgt" data-k="place"${pressed(k === "place")}>${PIN}<span><b>A place</b><small>whoever’s in it</small></span></button>`;
+    // What it does if it lands, by what it's at.
+    let fx = "";
+    if (k === "stake") {
+      const clock = Boolean(el?.clock);
+      const byClock = clock && f.fx === "clock";
+      fx = `<fieldset class="cc-group"><legend>If it lands</legend>
+        <button type="button" class="cc-line" data-act="tg" data-do="fx" data-v="tag"${pressed(!byClock)}><span class="tick" aria-hidden="true"></span><span>A new tag in its way <small>one more thing to strip before it’s the crew’s</small></span></button>
+        ${!byClock ? `<label class="tg-label" for="tg-tag">What goes in its way</label><input id="tg-tag" data-tg="tag" maxlength="${MAX.tag}" autocomplete="off" placeholder="Gone to Change" value="${esc(f.tag)}">` : ""}
+        ${clock ? `<button type="button" class="cc-line" data-act="tg" data-do="fx" data-v="clock"${pressed(byClock)}><span class="tick" aria-hidden="true"></span><span>Its clock drops <small>on top of its step at the end of the round</small></span></button>` : ""}
+        ${byClock ? sizesHtml(f.by) : ""}</fieldset>`;
+    } else if (k === "event") {
+      fx = `<fieldset class="cc-group"><legend>If it lands <small>it drops on top of its step at the end of the round</small></legend>${sizesHtml(f.by)}</fieldset>`;
+    } else if (k === "place") {
+      fx = `<label class="tg-label" for="tg-where">Where it lands</label><input id="tg-where" data-tg="where" maxlength="${MAX.name}" autocomplete="off" placeholder="on the burning stair" value="${esc(f.where)}">
+        <p class="cc-small tg-hint">Everyone’s in it when it goes out, and each player says on their phone if they’re not. Getting out gets them clear.</p>`;
+    }
+    const crewOrPlace = !k || k === "place";
     return `<div class="dlg-head"><div class="cc-live"><p class="kicker tg-k">Round ${n}${r.live ? " · on now" : ""}</p><h2 id="dlg-title">${r.edit ? "Change the telegraph" : "Telegraph"}</h2></div>
       <button type="button" class="cc-x" data-act="close" aria-label="Close">${d.icon.close}</button></div>
     <div class="dlg-body tg-compose">
-      <div class="tg-preview" aria-hidden="true">${preview}</div>
-      <fieldset class="cc-group"><legend>Who it’s aimed at</legend>
-        <div class="tg-targets">${roster.map((p) => `<button type="button" class="tg-target" data-act="tg" data-do="at" data-user="${esc(p.user)}" data-ch="${esc(p.ch)}"${pressed(target === p)}>${crestHtml(id, p)}<span><b>${esc(p.cname)}</b><small>${esc(first(p.name))}</small></span></button>`).join("")}</div></fieldset>
+      <div class="tg-preview" aria-hidden="true">${previewOf(id, f, n)}</div>
+      ${bookHtml}
+      <fieldset class="cc-group"><legend>Who or what it’s aimed at</legend>
+        ${roster.length ? `<p class="tg-tlabel">The crew</p><div class="tg-targets">${roster.map((p) => `<button type="button" class="tg-target" data-act="tg" data-do="at" data-user="${esc(p.user)}" data-ch="${esc(p.ch)}"${pressed(target === p)}>${crestHtml(id, p)}<span><b>${esc(p.cname)}</b><small>${esc(first(p.name))}</small></span></button>`).join("")}</div>` : ""}
+        <p class="tg-tlabel">The scene</p><div class="tg-targets">${open.map(sceneBtn).join("")}${placeBtn}</div></fieldset>
+      ${fx}
       <fieldset class="cc-group"><legend>How hard</legend>
         <div class="tg-sizes">${SIZES.map((x) => `<button type="button" class="tg-size" data-act="tg" data-do="d" data-d="${x}"${pressed(f.d === x)} aria-label="A d${x}">${kitDie(x, { own: "them", hide: true, bare: true })}<span>d${x}</span></button>`).join("")}</div></fieldset>
       <label class="tg-label" for="tg-who">Who’s telegraphing</label>
       <input id="tg-who" data-tg="who" maxlength="${MAX.who}" autocomplete="off" placeholder="The left Warden" value="${esc(f.who)}">
       ${known.length ? `<div class="cc-chips tg-known" role="group" aria-label="Who’s telegraphed already">${known.map((x) => `<button type="button" class="cc-chipbtn sm" data-act="tg" data-do="who" data-who="${esc(x.who)}" data-d="${x.d}"${pressed(f.who === x.who)}>${esc(x.who)} <small>d${x.d}</small></button>`).join("")}</div>` : ""}
       <label class="tg-label" for="tg-does">What it’s doing</label>
-      <input id="tg-does" data-tg="does" maxlength="${MAX.does}" autocomplete="off" placeholder="${esc(target ? `Pin ${target.cname} against the wall` : "Pin her against the wall")}" value="${esc(f.does)}">
-      <div class="cc-chips tg-verbs" role="group" aria-label="Start it with">${verbs.map((v) => `<button type="button" class="cc-chipbtn sm" data-act="tg" data-do="verb" data-v="${v}">${v}${target ? ` ${esc(target.cname)}` : ""}</button>`).join("")}</div>
-      <fieldset class="cc-group"><legend>What lands</legend>
-        <button type="button" class="cc-line" data-act="tg" data-do="kind" data-k="blow"${pressed(f.kind !== "fear")}><span class="tick" aria-hidden="true"></span><span>A blow <small>blades, falling rocks and teeth, stopped by their Defend</small></span></button>
-        <button type="button" class="cc-line" data-act="tg" data-do="kind" data-k="fear"${pressed(f.kind === "fear")}><span class="tick" aria-hidden="true"></span><span>Fear, lies or pressure <small>against their Confidence</small></span></button></fieldset>
+      <input id="tg-does" data-tg="does" maxlength="${MAX.does}" autocomplete="off" placeholder="${esc(target ? `Pin ${target.cname} against the wall` : k === "stake" ? "Head for the door with it" : k === "event" ? "Bring word the watch is coming" : k === "place" ? "Bring the stair down in flames" : "Pin her against the wall")}" value="${esc(f.does)}">
+      ${!k ? `<div class="cc-chips tg-verbs" role="group" aria-label="Start it with">${verbs.map((v) => `<button type="button" class="cc-chipbtn sm" data-act="tg" data-do="verb" data-v="${v}">${v}${target ? ` ${esc(target.cname)}` : ""}</button>`).join("")}</div>` : ""}
+      ${crewOrPlace ? `<fieldset class="cc-group"><legend>What lands</legend>
+        <button type="button" class="cc-line" data-act="tg" data-do="kind" data-k="blow"${pressed(f.kind !== "fear")}><span class="tick" aria-hidden="true"></span><span>A blow <small>blades, falling rocks and teeth, stopped by ${k === "place" ? "each one’s" : "their"} Defend</small></span></button>
+        <button type="button" class="cc-line" data-act="tg" data-do="kind" data-k="fear"${pressed(f.kind === "fear")}><span class="tick" aria-hidden="true"></span><span>Fear, lies or pressure <small>against ${k === "place" ? "each one’s" : "their"} Confidence</small></span></button></fieldset>
       <details class="cc-group" data-open="tg-one"${f.one || d.isOpen("tg-one") ? " open" : ""}><summary>Only one answer? <small>what happens if it lands</small></summary>
-        <label class="cc-field" for="tg-one">If it lands</label><input id="tg-one" data-tg="one" maxlength="${MAX.one}" autocomplete="off" placeholder="The household clock drops two sizes" value="${esc(f.one)}"></details>
+        <label class="cc-field" for="tg-one">If it lands</label><input id="tg-one" data-tg="one" maxlength="${MAX.one}" autocomplete="off" placeholder="The household clock drops two sizes" value="${esc(f.one)}"></details>` : `<p class="cc-small tg-hint">There’s no defence against it. Anyone can answer it with their action, and if nobody does, it does what it said when the round ends.</p>`}
       ${r.live ? `<p class="cc-small">It goes out now. The round can change while someone’s still got an action to answer it with.</p>` : ""}
     </div>
     <div class="dlg-foot">${r.err ? `<p class="cc-warn" role="alert">${esc(r.err)}</p>` : ""}<button type="button" class="button primary" data-act="tg" data-do="save">${r.edit ? "Save it" : r.live ? "Send it now" : "Add it to the round"}</button></div>`;
   }
+  // How many sizes a clock drops if it lands.
+  const sizesHtml = (by) => `<div class="cc-chips" role="group" aria-label="How far it drops"><button type="button" class="cc-chipbtn" data-act="tg" data-do="by" data-v="1"${pressedAttr(by !== 2)}>A size</button><button type="button" class="cc-chipbtn" data-act="tg" data-do="by" data-v="2"${pressedAttr(by === 2)}>Two sizes</button></div>`;
 
   // Who's telegraphed already this fight, newest first, with the die they used.
   function threatsOf(id) {
@@ -1126,14 +1453,17 @@ export function makeTable(d) {
         <div class="dlg-body"><p class="cc-lead">That telegraph’s gone. The GM might have taken it back.</p></div>`;
     }
     const t = hit.t;
-    const forOther = !(t.at.user === me() && t.at.ch === ch.id);
+    const forOther = !t.at.k && !(t.at.user === me() && t.at.ch === ch.id);
     const ins = friendsIn(doc, hit, ch);
     const combo = ins.length ? `<p class="cc-lead"><b>${ins.length === 1 ? `${esc(ins[0].name)}’s` : `${esc(andList(ins.map((j) => j.name)))} are`} in on it</b>, so ${ins.reduce((n, j) => n + j.steps, 0)} more steps go into your roll as a combo.</p>` : "";
+    const lead = onScene(t) ? `Pick the set action that fits the way you’re stopping it. Win and it never lands. Lose and it lands now, and ${esc(fxSaid(t))}.`
+      : atPlace(t) ? `Pick the set action that fits the way you’re stopping it. Win and it never lands, on anyone. Lose and it lands now on whoever’s ${esc(t.at.where)}, with no defence.`
+        : `Pick the set action that fits the way you’re stopping it: dodge it, block it, talk them down, or get your shot in first. Win and it never lands. Lose and it lands now, with no defence.${forOther ? ` If you put yourself in the way and lose, it lands on you.` : ""}`;
     return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${forOther ? `Answer it for ${esc(t.at.name)}` : "Answer it"}</h2><p class="cc-small">Spend your action on it.</p></div>
       <button type="button" class="cc-x" data-act="close" aria-label="Close">${d.icon.close}</button></div>
     <div class="dlg-body tg-pick">
       <ol class="tg-list">${card(t, hit.round)}</ol>
-      ${combo}<p class="cc-lead">Pick the set action that fits the way you’re stopping it: dodge it, block it, talk them down, or get your shot in first. Win and it never lands. Lose and it lands now, with no defence.${forOther ? ` If you put yourself in the way and lose, it lands on you.` : ""}</p>
+      ${combo}<p class="cc-lead">${lead}</p>
       <div class="tg-acts">${d.actions(ch, c).map((a) => `<button type="button" class="tile card tg-act" data-act="tg" data-do="with" data-a="${a.i}"><span class="tile-dice" aria-hidden="true">${a.dice}</span><span class="tile-name">${esc(a.name)}</span><span class="tile-says">${esc(a.says)}</span></button>`).join("")}</div>
       <details class="cc-group" data-open="tg-rule"${d.isOpen("tg-rule") ? " open" : ""}><summary>How answering works</summary><div class="cc-rule">${d.rule("s-answering")}</div></details>
     </div>`;
@@ -1218,7 +1548,7 @@ export function makeTable(d) {
     if (f.t === "stake") {
       body = `${field("name", "What the crew’s after", "Dace’s satchel")}
         <fieldset class="cc-group"><legend>Its Challenge <small>a die twice the number</small></legend><div class="cc-chips">${[1, 2, 3, 4, 5, 6].map((x) => `<button type="button" class="cc-chipbtn" data-act="tg" data-do="sc-c" data-v="${x}"${pressedAttr(f.c === x)}>${x} <small>d${2 * x}</small></button>`).join("")}</div></fieldset>
-        ${field("tags", "What’s in the way <small>a tag for each, with commas</small>", "Locked, Guarded", 200)}
+        ${field("tags", "What’s in the way <small>a tag for each, with commas</small>", "Locked, Guarded", 600)}
         <fieldset class="cc-group"><legend>A clock on it? <small>it steps down every round nobody works it</small></legend>${sizes("sc-clock", f.clock, "No clock")}</fieldset>
         ${field("note", "A note <small>where it is, or what it’s for</small>", "it’s in the changing-room cupboards", MAX.text)}`;
     } else if (f.t === "event") {
@@ -1378,17 +1708,15 @@ export function makeTable(d) {
       if (key === "else") r.text = el.value;
       return;
     }
-    if (!["who", "does", "one"].includes(key)) return;
+    if (!["who", "does", "one", "tag", "where"].includes(key)) return;
     r.f[key] = el.value;
     r.err = "";
     const box = el.closest(".dlg-body")?.querySelector(".tg-preview");
     if (!box) return;
-    const id = r.camp;
-    const target = rosterOf(id).find((p) => p.user === r.f.at?.user && p.ch === r.f.at?.ch) ?? null;
-    const doc = local(id);
+    const doc = local(r.camp);
     const last = current(doc);
     const n = r.live ? last?.n ?? 1 : (last && !last.over ? last.n : (last?.n ?? 0) + 1);
-    box.innerHTML = kitTele({ who: r.f.who || "Who’s telegraphing", does: r.f.does || "What it’s doing", at: target?.cname ?? "who it’s aimed at", atCrest: crestOf(id, target) ?? [], d: r.f.d || 6, round: n, one: r.f.one, when: r.f.kind === "fear" ? "Lands on Confidence at the end of the round" : "", strict: false });
+    box.innerHTML = previewOf(r.camp, r.f, n);
   }
 
   // A new telegraph, or a draft to change, or one written already somewhere
@@ -1397,8 +1725,11 @@ export function makeTable(d) {
     const doc = local(id);
     const last = current(doc);
     const live = Boolean(last && !last.over) && !draft;
-    const f = draft ? { who: draft.who, does: draft.does, d: draft.d, kind: draft.kind, one: draft.one ?? "", at: draft.at ? { user: draft.at.user, ch: draft.at.ch } : null }
-      : { who: "", does: "", d: 0, kind: "blow", one: "", at: null };
+    const base = { who: "", does: "", d: 0, kind: "blow", one: "", at: null, fx: "tag", tag: "", by: 1, where: "", book: -1 };
+    const f = draft ? { ...base, who: draft.who, does: draft.does, d: draft.d, kind: draft.kind, one: draft.one ?? "" } : base;
+    if (draft?.at?.k === "stake" || draft?.at?.k === "event") Object.assign(f, { at: { k: draft.at.k, ref: draft.at.ref }, fx: draft.fx?.by && draft.at.k === "stake" ? "clock" : "tag", tag: draft.fx?.tag ?? "", by: draft.fx?.by === 2 ? 2 : 1 });
+    else if (draft?.at?.k === "place") Object.assign(f, { at: { k: "place" }, where: draft.at.where ?? "" });
+    else if (draft?.at) f.at = { user: draft.at.user, ch: draft.at.ch };
     // The one she telegraphed last, ready to go again.
     if (!draft) {
       const known = given ? null : threatsOf(id)[0];
@@ -1406,28 +1737,60 @@ export function makeTable(d) {
       if (given) Object.assign(f, { who: String(given.who ?? "").slice(0, MAX.who), does: String(given.does ?? "").slice(0, MAX.does), d: SIZES.includes(given.d) ? given.d : 0, kind: given.kind === "fear" ? "fear" : "blow" });
       const roster = rosterOf(id);
       if (roster.length === 1) f.at = { user: roster[0].user, ch: roster[0].ch };
+      if (given?.text && given.at != null) aimGiven(id, f, given);
     }
     ui.sure = "";
     d.openDialog({ kind: "tele", camp: id, live, edit: draft?.id ?? null, f, err: "" });
   }
 
+  // One written on a page, aimed the way it says: at a stake or the scene
+  // clock that's on the table, or a part of the place, and then it reads like
+  // the book's own, who and what they do. One at someone, or at something
+  // that isn't on the table, waits for her to aim it.
+  function aimGiven(id, f, given) {
+    const doc = local(id);
+    const line = curlyQuotes(String(given.text).replace(/\*/g, "").replace(/\s+/g, " ").trim());
+    const a = readAim(given.at, doc.scene.stakes.filter((x) => !x.out).map((x) => x.name), line);
+    if (a.why || a.aim === "crew") return;
+    if (a.aim === "stake") {
+      const el = doc.scene.stakes.find((x) => x.name === a.stake && !x.out);
+      if (!el) return;
+      Object.assign(f, { at: { k: "stake", ref: el.id }, fx: "tag", tag: a.tag });
+    } else if (a.aim === "clock") {
+      const el = doc.scene.events.find((e) => e.scene && !e.out);
+      if (!el) return;
+      f.at = { k: "event", ref: el.id };
+    } else f.at = { k: "place" };
+    if (a.aim === "place") f.where = placeOf(a.place)?.where ?? "";
+    const wd = whoAndDoes(line, f.who || given.page || "");
+    Object.assign(f, { who: wd.who.slice(0, MAX.who), does: wd.does.slice(0, MAX.does), kind: a.kind, one: a.one ?? "" });
+  }
+
   function save(r) {
     const id = r.camp;
     const f = r.f;
-    const roster = rosterOf(id);
-    const target = roster.find((p) => p.user === f.at?.user && p.ch === f.at?.ch) ?? null;
-    const err = !f.who.trim() ? "Say who’s telegraphing." : !target ? "Pick who it’s aimed at." : !f.d ? "Pick its die." : !f.does.trim() ? "Say what it’s doing." : "";
+    const k = f.at?.k;
+    const made = fromFields(id, f);
+    const target = k ? null : rosterOf(id).find((p) => p.user === f.at?.user && p.ch === f.at?.ch) ?? null;
+    const gone = (k === "stake" || k === "event") && !draftOk(id, { at: { k, ref: f.at.ref } });
+    const err = !f.who.trim() ? "Say who’s telegraphing."
+      : !k && !target ? "Pick who or what it’s aimed at."
+        : gone ? "That’s gone from the scene, or it’s settled. Pick something else."
+          : k === "stake" && made.fx?.tag === "" ? "Say what goes in its way if it lands."
+            : k === "place" && !placeOf(f.where) ? "Say where it lands."
+              : !f.d ? "Pick its die." : !f.does.trim() ? "Say what it’s doing." : "";
     if (err) {
       r.err = err;
       return d.renderDialog();
     }
-    const t = { id: r.edit || newId(), who: f.who.trim().slice(0, MAX.who), does: f.does.trim().slice(0, MAX.does), d: f.d, kind: f.kind === "fear" ? "fear" : "blow", one: f.one.trim().slice(0, MAX.one), at: { user: target.user, ch: target.ch, arch: crestOf(id, target) ?? [] } };
-    const k = camp(id);
+    const at = k === "stake" || k === "event" ? { k, ref: f.at.ref } : k === "place" ? { k, name: made.at.name, where: made.at.where } : { user: target.user, ch: target.ch, arch: crestOf(id, target) ?? [] };
+    const t = { id: r.edit || newId(), who: f.who.trim().slice(0, MAX.who), does: f.does.trim().slice(0, MAX.does), d: f.d, kind: made.kind, one: made.one.slice(0, MAX.one), at, ...(made.fx ? { fx: made.fx } : {}) };
+    const kept = camp(id);
     if (r.live) push(id, { o: "add", tele: t });
     else {
-      const i = k.drafts.findIndex((x) => x.id === t.id);
-      if (i >= 0) k.drafts[i] = t;
-      else k.drafts.push(t);
+      const i = kept.drafts.findIndex((x) => x.id === t.id);
+      if (i >= 0) kept.drafts[i] = t;
+      else kept.drafts.push(t);
       keep();
     }
     d.closeDialog();
@@ -1451,11 +1814,10 @@ export function makeTable(d) {
     send: () => {
       const id = d.viewId();
       const k = camp(id);
-      const roster = rosterOf(id);
-      const ok = k.drafts.filter((t) => roster.some((p) => p.user === t.at?.user && p.ch === t.at?.ch));
+      const ok = k.drafts.filter((t) => draftOk(id, t));
       const scene = sceneParts(local(id));
       if (!ok.length && (k.drafts.length || !(scene.stakes.length + scene.events.length + scene.clocks.length))) {
-        ui.note = k.drafts.length ? "Nobody it’s aimed at is playing here now. Change them, or take them off." : "Telegraph something, or put the scene on the table, first.";
+        ui.note = k.drafts.length ? "None of these can go out: whoever or whatever they’re aimed at isn’t here now. Change them, or take them off." : "Telegraph something, or put the scene on the table, first.";
         return d.render();
       }
       ui.note = "";
@@ -1506,6 +1868,61 @@ export function makeTable(d) {
       r.err = "";
       d.renderDialog();
     },
+    // Aimed at the scene: a stake, the scene clock or an event, or a place.
+    tgt: (el) => {
+      const r = d.roll();
+      const k = el.dataset.k;
+      r.f.at = k === "place" ? { k } : { k, ref: el.dataset.ref };
+      r.err = "";
+      d.renderDialog();
+      if (k === "place" && !r.f.where) document.getElementById("tg-where")?.focus({ preventScroll: true });
+    },
+    fx: (el) => {
+      const r = d.roll();
+      r.f.fx = el.dataset.v === "clock" ? "clock" : "tag";
+      r.err = "";
+      d.renderDialog();
+    },
+    by: (el) => {
+      const r = d.roll();
+      r.f.by = Number(el.dataset.v) === 2 ? 2 : 1;
+      d.renderDialog();
+    },
+    // One of the place's own telegraphs, from the book: everything filled in,
+    // and one at the crew waits for her to pick who.
+    book: (el) => {
+      const r = d.roll();
+      const b = bookTeles(r.camp).list.find((x) => x.i === Number(el.dataset.i));
+      if (!b) return;
+      Object.assign(r.f, { who: b.who, does: b.does, d: b.d, kind: b.kind, one: b.one ?? "", book: b.i });
+      if (b.aim === "stake") Object.assign(r.f, { at: { k: "stake", ref: b.ref }, fx: "tag", tag: b.tag, by: 1 });
+      else if (b.aim === "clock") Object.assign(r.f, { at: { k: "event", ref: b.ref }, by: 1 });
+      else if (b.aim === "place") Object.assign(r.f, { at: { k: "place" }, where: placeOf(b.place)?.where ?? "" });
+      else if (r.f.at?.k) {
+        const roster = rosterOf(r.camp);
+        r.f.at = roster.length === 1 ? { user: roster[0].user, ch: roster[0].ch } : null;
+      }
+      r.err = "";
+      d.renderDialog();
+    },
+    // A player says whether they're in a place it's aimed at.
+    there: (el) => {
+      const ch = d.current();
+      const id = ch ? d.campOf(ch) : null;
+      const hit = id ? findTele(local(id), el.dataset.id) : null;
+      if (!hit || !atPlace(hit.t)) return;
+      push(id, { o: "there", id: hit.t.id, ch: ch.id, in: el.dataset.v === "1" });
+      d.render();
+    },
+    // The GM puts someone in or out of it by hand.
+    gthere: (el) => {
+      const id = d.viewId();
+      const hit = findTele(local(id), el.dataset.id);
+      if (!hit || !atPlace(hit.t)) return;
+      const was = hit.t.there?.[keyOf(el.dataset.user, el.dataset.ch)];
+      push(id, { o: "there", id: hit.t.id, user: el.dataset.user, ch: el.dataset.ch, in: !was?.in });
+      d.render();
+    },
     d: (el) => {
       const r = d.roll();
       r.f.d = Number(el.dataset.d);
@@ -1543,7 +1960,7 @@ export function makeTable(d) {
       if (!hit || !ch) return;
       const t = hit.t;
       const ins = friendsIn(local(r.camp), hit, ch).map((j) => ({ user: j.user, ch: j.ch, name: j.name, steps: j.steps }));
-      d.answer(Number(el.dataset.a), { camp: r.camp, id: t.id, d: t.d, who: t.who, does: t.does, atName: t.at.name, mine: t.at.user === me() && t.at.ch === ch.id, ...(ins.length ? { with: ins } : {}) });
+      d.answer(Number(el.dataset.a), { camp: r.camp, id: t.id, d: t.d, who: t.who, does: t.does, atName: atName(t), mine: isAt(t.at, ch.id), aim: t.at.k ?? "", fx: fxSaid(t), where: t.at.where ?? "", ...(ins.length ? { with: ins } : {}) });
     },
     land: (el) => {
       const pre = landedFor(d.current(), el.dataset.k === "fear" ? "fear" : "blow");
@@ -1704,7 +2121,7 @@ export function makeTable(d) {
       const hit = findEl(local(d.viewId()), el.dataset.el);
       if (!hit) return;
       const e = hit.el;
-      const f = e.t === "stake" ? { t: "stake", name: e.name, c: e.c, tags: e.tags.map((g) => g.name).join(", "), clock: e.clock, note: e.note, gone: e.tags.filter((g) => g.gone).map((g) => g.name), out: e.out } : e.t === "event" ? { t: "event", name: e.name, what: e.what, d: e.d, scene: e.scene, out: e.out } : { t: "ground", name: e.name, text: e.text };
+      const f = e.t === "stake" ? { t: "stake", name: e.name, c: e.c, tags: e.tags.map((g) => g.name).join(", "), clock: e.clock, note: e.note, gone: e.tags.filter((g) => g.gone).map((g) => g.name), by: Object.fromEntries(e.tags.filter((g) => g.by).map((g) => [g.name, g.by])), out: e.out } : e.t === "event" ? { t: "event", name: e.name, what: e.what, d: e.d, scene: e.scene, out: e.out } : { t: "ground", name: e.name, text: e.text };
       d.openDialog({ kind: "tg-el", camp: d.viewId(), edit: e.id, f, err: "" });
     },
     "sc-c": (el) => setF("c", Number(el.dataset.v)),
@@ -1720,7 +2137,8 @@ export function makeTable(d) {
         return d.renderDialog();
       }
       const tags = String(f.tags ?? "").split(",").map((x) => x.trim()).filter(Boolean).slice(0, MAX.tags);
-      const got = tags.map((g) => ({ name: g, gone: (f.gone ?? []).includes(g) ? 1 : 0 }));
+      // A tag a telegraph put there keeps saying so, as long as it's kept its name.
+      const got = tags.map((g) => ({ name: g, gone: (f.gone ?? []).includes(g) ? 1 : 0, ...(f.by?.[g] ? { by: f.by[g] } : {}) }));
       // Won stays won while nothing new's in the way, and lost stays lost
       // unless she's given it a clock again.
       const out = f.out === "won" ? (got.every((g) => g.gone) ? "won" : "") : f.out === "lost" ? (f.clock ? "" : "lost") : "";
@@ -1789,12 +2207,15 @@ export function makeTable(d) {
   // place of whatever scene was there. A place in the book, or one of the
   // GM's own pages on her World screen (places.js).
   function setScene(id, p) {
-    push(id, { o: "clear" });
+    // Which place it is, so its telegraphs are ready in the composer: one of
+    // the book's, or one of her pages (places.js says which).
+    const place = p.place ?? (/^s-place-/.test(String(p.id ?? "")) ? { id: p.id, name: p.name } : null);
+    push(id, { o: "clear", ...(place ? { place } : {}) });
     for (const g of p.ground) putEl(id, { id: newId(), t: "ground", name: g.name, text: g.text });
     for (const s of p.stakes) putEl(id, { id: newId(), t: "stake", name: s.name, c: s.c, tags: s.tags.map((x) => ({ name: x, gone: 0 })), clock: 0, note: s.note, out: "" });
     if (p.clock) putEl(id, { id: newId(), t: "event", name: "The scene clock", what: p.clock.what, d: p.clock.d, scene: true, out: "" });
     const bits = [p.ground.length ? "its ground" : "", p.stakes.length ? plural(p.stakes.length, "stake", "stakes") : "", p.clock ? `the scene clock on d${p.clock.d}` : ""].filter(Boolean);
-    d.toast(`${p.name} is on the table: ${bits.join(", ").replace(/, ([^,]*)$/, " and $1")}.`);
+    d.toast(`${p.name} is on the table: ${bits.join(", ").replace(/, ([^,]*)$/, " and $1")}.${place && (p.tele ?? p.teles ?? []).length ? " Its telegraphs are ready when you telegraph." : ""}`);
   }
   // The composer's chips for a piece of the scene.
   function setF(key, v) {

@@ -1325,6 +1325,38 @@ button.bd-tok:active { transform: scale(0.97); }
   .tg-sizes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .tg-targets { grid-template-columns: minmax(0, 1fr); }
 }
+/* The crew and the scene, each under its own small label. A piece of the
+   scene shows its die where one of the crew shows a crest. */
+.tg-tlabel { margin: 0.2rem 0 0.4rem; font-family: var(--body); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--zd-them-ink); }
+.tg-targets + .tg-tlabel { margin-top: 0.9rem; }
+.tg-target.is-scene .zd-die { --s: 34px; flex: none; }
+.tg-target .zd-aim { width: 30px; height: 30px; flex: none; }
+.tg-hint { margin: 0 0 1rem; }
+/* The place's own telegraphs from the book: a tap fills the card in. */
+.tg-book { margin: 0 0 1rem; }
+.tg-booklist { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.tg-bookt { width: 100%; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px; min-height: 56px; padding: 8px 12px 8px 10px; text-align: left; color: var(--ink); background: var(--surface); border: 1px solid color-mix(in srgb, var(--zd-them) 40%, var(--line)); border-radius: 2px; }
+.tg-bookt .zd-die { --s: 36px; }
+.tg-bookt > span { display: grid; gap: 3px; min-width: 0; }
+.tg-bookline { font-size: 0.97rem; line-height: 1.35; font-style: italic; overflow-wrap: anywhere; }
+.tg-bookt small { color: var(--muted); font-size: 0.85rem; line-height: 1.3; }
+.tg-bookt:hover { border-color: var(--zd-them); }
+.tg-bookt:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.tg-bookt[aria-pressed="true"] { border-color: var(--zd-them); background: color-mix(in srgb, var(--zd-them) 14%, var(--surface)); box-shadow: inset 3px 0 0 var(--zd-them); }
+/* Aimed at a place: in it or out of it, a tap either way, full width for a
+   thumb. */
+.tg-in { display: grid; gap: 6px; margin: 0; padding: 0.6rem 0.75rem; background: var(--panel); border-left: 3px solid var(--zd-them); border-radius: 2px; }
+.tg-q { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.02rem; line-height: 1.2; overflow-wrap: anywhere; }
+.tg-in-btns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.tg-in-btns .cc-chipbtn { min-height: 48px; padding: 0 0.5rem; }
+.tg-in + .tg-do { margin-top: 8px; }
+/* What one at a stake or a clock does if it lands, and then what it did. */
+.tg-row p small.tg-fx { margin-top: 2px; color: var(--zd-them-ink); font-weight: 600; }
+.tg-row.is-through.is-scene p small.tg-fx, .tg-row.is-hit.is-scene p small.tg-fx { color: var(--zd-harm-ink); }
+/* Who's in a place, on the GM's card: a tap to put them in or out. */
+.tg-there { display: grid; gap: 6px; margin-top: 4px; }
+.tg-v .tg-there .tg-q { color: var(--ink); font-size: 0.98rem; }
+.tg-there .cc-small { margin: 0; }
 
 /* Answering: pick the set action, and the roll card says what it's answering. */
 .tg-pick .tg-list { margin: 0 0 0.8rem; }

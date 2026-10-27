@@ -3,6 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -52,6 +53,13 @@
 //    table, Zed's Night's is empty, Kai's Dorrie there sees no telegraphs,
 //    and a socket from another site is turned away. The round's screens pass
 //    axe at 390, in both themes.
+//    6b plays the Copper Baths' scene on the round, and 6c telegraphs at it:
+//    Mo sends Dace at the deal straight from the place's own telegraphs, the
+//    pipes at everyone in the hot room and a runner at the scene clock. Bram
+//    gets out of the hot room and Mo's card says so. Sam answers the runner
+//    and loses, so the scene clock drops then and there. The round ends: the
+//    deal's new tag is on every phone, the pipes land on Vesk alone, and she
+//    rolls When it lands for them with the bath-man from round 2.
 // 7. The world: the faction board. Mo opens Tuesday Lair's World screen from
 //    its page and brings in Brinewake's board, four cards matching the
 //    chapter, then the Steeplands with the Vane Estate's whole card. The
@@ -103,7 +111,9 @@
 //    then who's here, and its Secret only on a second tap. Orla's name links
 //    on Kai's phone only once she's shown. Kai can't change it. A telegraph
 //    off the page opens the round's composer with Orla's d8, and the page puts
-//    its ground, stakes and scene clock on the live table. With no signal,
+//    its ground, stakes and scene clock on the live table, with its own
+//    telegraphs ready in the composer and Dace's off the page coming aimed at
+//    the deal. With no signal,
 //    Vesk's World tab still has the Copper Baths. A made-up book change gets a
 //    note Mo takes, keeping his own note, and a typo fix in Dace's goes in quietly.
 //    Nothing crosses to Zed's Night. The World screen, a place, a person and
@@ -147,6 +157,7 @@ const PORT = 4175;
 const BASE = `http://localhost:${PORT}`;
 const ADMIN = "mo@example.com";
 const SHOTS = process.env.SHOTS || "";
+const UPTO = process.env.ZI_UPTO || "";
 if (SHOTS) mkdirSync(SHOTS, { recursive: true });
 
 // The Worker, bundled exactly as `wrangler deploy` would.
@@ -1282,6 +1293,139 @@ try {
   has(await text(kai.page, ".tg-scenefold"), "Nobody engaged it, so it stepped down to d6.", "the scene clock says why it moved");
   await shotsAt(mo.page, "scene-gm-over", ".tg-scene");
 
+  // ------------------------------------------------------------ 6c. telegraphs at the scene
+  console.log("6c. Telegraphs at the scene");
+  const book = JSON.parse(readFileSync(join("src", "generated", "book.json"), "utf8")).companion.places.find((p) => p.id === "s-place-copper-baths");
+  same(book.tele.map((t) => [t.who, t.d, t.aim, t.stake ?? t.place ?? "", t.one]), [["Orla", 8, "crew", "", ""], ["A bath-man", 6, "crew", "", "Grabbed"], ["Dace", 8, "stake", "The deal", ""]], "the Copper Baths' three telegraphs, read off the chapter");
+  same((await sceneOf()).place, { id: "s-place-copper-baths", name: "The Copper Baths" }, "the scene knows it's the Copper Baths");
+  has(await text(kai.page, ".tg-scenefold > summary"), "The Copper Baths", "and so does Vesk's fold");
+  // Round 3. Mo telegraphs Dace straight out of the book, ready to send.
+  await mo.page.click('.tg-sec [data-do="compose"]');
+  await mo.page.waitForSelector(".tg-compose .tg-book");
+  has(await text(mo.page, ".tg-book .tg-tlabel"), "From The Copper Baths", "the composer has the place's own telegraphs");
+  same(await mo.page.$$eval(".tg-bookline", (els) => els.map((e) => e.textContent)), book.tele.map((t) => t.line), "all three, as the book has them");
+  has(await text(mo.page, '.tg-bookt[data-i="2"] small'), "d8 at the deal · a new tag in its way if it lands", "Dace's is at the deal");
+  await mo.page.click('.tg-bookt[data-i="2"]');
+  await mo.page.waitForSelector('.tg-bookt[data-i="2"][aria-pressed="true"]');
+  same([await mo.page.inputValue("#tg-who"), await mo.page.inputValue("#tg-does"), await mo.page.inputValue("#tg-tag")], ["Dace", "grabs his towel and heads for the changing room.", "Dace grabs his towel and heads for the changing room"], "a tap fills it all in");
+  same(await mo.page.getAttribute('.tg-target.is-scene:has(b:text-is("The deal"))', "aria-pressed"), "true", "aimed at the deal");
+  has(await text(mo.page, ".tg-preview footer"), "At the deal", "the card's at the deal");
+  has(await text(mo.page, ".tg-preview .one"), "If it lands, it’s a new tag in the way of the deal.", "and says what it does if it lands");
+  same(await mo.page.$('#cc-dialog [data-do="kind"]'), null, "there's no blow or fear for one with no defence");
+  if (SHOTS) {
+    await mo.page.evaluate(() => document.querySelector("#cc-dialog .dlg-body").scrollTo(0, 0));
+    await mo.page.waitForTimeout(400);
+  }
+  await shot(mo.page, "scene-tele-book");
+  await axe(mo.page, "telegraphing from the place's own");
+  await mo.page.click('#cc-dialog [data-do="save"]');
+  await mo.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  // One at a place: the pipes burst in the hot room.
+  await mo.page.click('.tg-sec [data-do="compose"]');
+  await mo.page.waitForSelector(".tg-compose");
+  await mo.page.click('.tg-target[data-do="tgt"][data-k="place"]');
+  await mo.page.waitForSelector("#tg-where");
+  await mo.page.fill("#tg-where", "in the hot room");
+  await mo.page.fill("#tg-who", "The pipes");
+  await mo.page.click('.tg-size[data-d="6"]');
+  await mo.page.fill("#tg-does", "burst and fill the hot room with steam.");
+  has(await text(mo.page, ".tg-preview footer"), "At everyone in the hot room", "the card's at everyone in the hot room");
+  has(await text(mo.page, ".tg-preview footer"), "Hits whoever’s there when it lands", "and hits whoever's there");
+  if (SHOTS) await mo.page.waitForTimeout(400);
+  await shot(mo.page, "scene-tele-place");
+  await axe(mo.page, "telegraphing at a place");
+  await mo.page.click('#cc-dialog [data-do="save"]');
+  await mo.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  // And one at the scene clock: a runner, bringing word.
+  await mo.page.click('.tg-sec [data-do="compose"]');
+  await mo.page.waitForSelector(".tg-compose");
+  await mo.page.click('.tg-target.is-scene:has(b:text-is("The scene clock"))');
+  await mo.page.waitForSelector('#cc-dialog [data-do="by"][data-v="1"][aria-pressed="true"]');
+  await mo.page.fill("#tg-who", "A runner");
+  await mo.page.click('.tg-size[data-d="6"]');
+  await mo.page.fill("#tg-does", "brings word the other buyer’s on his way.");
+  has(await text(mo.page, ".tg-preview .one"), "If it lands, the scene clock drops a size.", "the scene clock drops a size if it lands");
+  await mo.page.click('#cc-dialog [data-do="save"]');
+  await mo.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  same(await mo.page.$$eval(".tg-sec li.tg.is-draft footer .at", (els) => els.map((e) => e.textContent.trim())), ["At the deal", "At everyone in the hot room", "At the scene clock"], "round 3, built: the deal, the hot room and the scene clock");
+  await mo.page.click('.tg-sec [data-do="send"]');
+  await until(async () => (await teleOf("A runner"))?.at?.k === "event", "round 3 on the table", 4000);
+  same([(await teleOf("Dace")).at.name, (await teleOf("Dace")).fx], ["The deal", { tag: "Dace grabs his towel and heads for the changing room" }], "Dace's at the deal, with its new tag if it lands");
+  same(Object.entries((await teleOf("The pipes")).there).map(([k, p]) => [k.split("|")[1], p.in]).sort(), [["bram-ssssss", 1], ["vesk-aaaaaa", 1]], "and everyone playing's in the hot room when it goes out");
+
+  // On Vesk's and Bram's phones: the hot room's coming at them, and the rest's anyone's.
+  await until(async () => (await cardText(kai.page, "The pipes")).includes("You’re in the hot room, so it lands on you at the end of the round."), "the pipes on Vesk's play screen, in the hot room", 4000);
+  await until(async () => (await cardText(sam.page, "The pipes")).includes("You’re in the hot room"), "and on Bram's", 4000);
+  same(await card(kai.page, "The pipes").locator('[data-do="there"][data-v="1"]').getAttribute("aria-pressed"), "true", "I'm in it, to start with");
+  has(await text(kai.page, ".tg-play .tg-head h2"), "Coming at you", "it's coming at Vesk");
+  has(await row(kai.page, "Dace").textContent(), "If it lands, it’s a new tag in the way of the deal.", "Dace's row says what it does if it lands");
+  same(await row(kai.page, "Dace").locator('[data-do="answer"]').textContent(), "Answer it", "and anyone can answer it");
+  same(await row(kai.page, "Dace").locator('[data-do="icp"]').count(), 0, "but nobody can take it for anyone");
+  // Bram gets out of the hot room, and Mo's card says so.
+  await card(sam.page, "The pipes").locator('[data-do="there"][data-v="0"]').click();
+  const thereOf = async (who, ch) => Object.entries((await teleOf(who))?.there ?? {}).find(([k]) => k.endsWith(`|${ch}`))?.[1] ?? null;
+  await until(async () => (await thereOf("The pipes", "bram-ssssss"))?.in === 0, "Bram out of the hot room, on the table", 4000);
+  has(await cardText(sam.page, "The pipes"), "You’re out of it, so it can’t touch you.", "Bram's clear of it");
+  await until(async () => (await mo.page.getAttribute('li.tg:has(h3:text-is("The pipes")) .tg-there [data-ch="bram-ssssss"]', "aria-pressed").catch(() => "")) === "false", "Mo's card has Bram out of it", 4000);
+  same(await mo.page.getAttribute('li.tg:has(h3:text-is("The pipes")) .tg-there [data-ch="vesk-aaaaaa"]', "aria-pressed"), "true", "and Vesk still in");
+  // Bram answers the runner and loses: the scene clock drops then and there.
+  await row(sam.page, "A runner").locator('[data-do="answer"]').click();
+  await sam.page.waitForSelector(".tg-acts");
+  has(await text(sam.page, "#cc-dialog .tg-pick"), "Lose and it lands now, and the scene clock drops a size.", "answering says what losing does");
+  await sam.page.click('.tg-acts [data-do="with"]:has-text("Fight")');
+  await sam.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="6"][aria-pressed="true"]');
+  await sam.page.evaluate(() => window.ziCompanion.setDice([1, 5]));
+  await sam.page.click('#cc-dialog [data-act="go"]');
+  await sam.page.waitForSelector("#cc-dialog .tg-verdict");
+  has(await text(sam.page, "#cc-dialog .tg-verdict"), "It lands now, and the scene clock drops a size.", "his 1 doesn't beat its 5");
+  await until(async () => (await sceneOf())?.events[0].d === 4, "the scene clock down to d4 then and there", 4000);
+  await sam.page.click('#cc-dialog .dlg-foot [data-act="close"]');
+  await sam.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  await until(async () => (await cardText(mo.page, "A runner")).includes("It landed then and there."), "Mo's page says it landed then and there", 4000);
+  has(await cardText(mo.page, "A runner"), "The scene clock dropped to d4.", "and what it did");
+  await shotsAt(kai.page, "scene-tele-play", ".tg-play");
+  await shotsAt(kai.page, "scene-tele-rows", ".tg-play .tg-rows");
+  await axe(kai.page, "the hot room coming at Vesk");
+  await shotsAt(mo.page, "scene-tele-gm", ".tg-sec");
+  await axe(mo.page, "the round at the scene, on the GM's page");
+
+  // Round 3 ends: Dace gets his new tag in the deal's way on every phone, the
+  // clocks step down, and the hot room lands on Vesk alone.
+  await mo.page.click('.tg-sec [data-do="end"]');
+  await mo.page.click('.tg-sec [data-do="end"]');
+  const daceId = (await teleOf("Dace")).id;
+  await until(async () => Boolean((await sceneOf())?.stakes[0].tags.some((g) => g.by === daceId)), "Dace's new tag in the deal's way", 4000);
+  same((await sceneOf()).stakes[0].tags.map((g) => g.name), ["Someone Must Agree", "Wanted By Others", "Dace grabs his towel and heads for the changing room"], "the deal's tags, with Dace's at the end");
+  same((await sceneOf()).events[0].d, 2, "and the scene clock steps down at the end of the round too");
+  await until(async () => (await cardText(mo.page, "Dace")).includes("It landed. There’s a new tag in the way of the deal."), "Mo's page says what Dace's did", 4000);
+  if (!(await kai.page.$eval(".tg-scenefold", (el) => el.open))) await kai.page.click(".tg-scenefold > summary");
+  await until(async () => (await piece(kai.page, "The deal").textContent()).includes("Dace grabs his towel and heads for the changing room"), "the new tag on Vesk's phone", 4000);
+  if (!(await sam.page.$eval(".tg-scenefold", (el) => el.open))) await sam.page.click(".tg-scenefold > summary");
+  await until(async () => (await piece(sam.page, "The deal").textContent()).includes("Dace grabs his towel and heads for the changing room"), "and on Bram's", 4000);
+  await until(async () => (await cardText(sam.page, "The pipes")).includes("It missed you. You were out of it when it landed."), "Bram got out, so the pipes missed him", 4000);
+  await shotsAt(sam.page, "scene-tele-missed", `.tg-play li.tg[data-tg="${(await teleOf("The pipes")).id}"]`);
+  await until(async () => Boolean(await kai.page.$('li.tg:has(h3:text-is("The pipes")) [data-do="land"]')), "the pipes landed on Vesk", 4000);
+  has(await cardText(mo.page, "The pipes"), "It landed on Vesk.", "Mo's page says who it landed on");
+  // Vesk rolls When it lands for the bath-man from round 2 and the pipes at once.
+  await kai.page.click('li.tg:has(h3:text-is("The pipes")) [data-do="land"]');
+  await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
+  same(await kai.page.$$eval("#cc-dialog .cc-incoming .zd-die", (els) => els.map((el) => el.dataset.d)), ["8", "6"], "the bath-man's d8 and the pipes' d6 in, together");
+  await kai.page.evaluate(() => window.ziCompanion.setDice([4, 7, 2]));
+  await kai.page.click('#cc-dialog [data-act="d-go"]');
+  await kai.page.waitForSelector("#cc-dialog .res .res-out");
+  await until(async () => (await cardText(mo.page, "The pipes")).includes("Vesk stopped it when it landed: 4 against its 2."), "her 4 stops the pipes, on Mo's page", 4000);
+  await kai.page.click("#cc-dialog .cc-x");
+  await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  same(await mo.page.$$eval('li.tg:has(h3:text-is("The pipes")) .tg-there', (els) => els.length), 0, "once everyone in it's rolled, there's nobody to put in or out");
+  await shotsAt(mo.page, "scene-tele-gm-over", ".tg-sec");
+  await axe(mo.page, "round 3 over, on the GM's page");
+  // Nobody else gets any of it.
+  same((await got(zed.page, "GET", `/api/campaigns/${tuesday.id}/table`)).status, 404, "Zed gets nothing of Tuesday Lair's table");
+  same((await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "sams-tablet-0002", now: Date.now(), ops: [{ n: 1, o: "there", id: (await teleOf("The pipes")).id, ch: "vesk-aaaaaa", in: false }] })).json?.no?.[0]?.why, "That was for someone you’re not playing here now.", "and Sam can't take Vesk out of the hot room");
+
+  // ZI_UPTO=6c stops here, for a quicker look while working on the live table.
+  rest: {
+  if (UPTO === "6c") break rest;
   // ------------------------------------------------------------ 7. the world
   // Mo's Tuesday Lair, with Kai playing Vesk in it, and Zed's Night next door.
   async function checkWorld() {
@@ -2031,6 +2175,14 @@ try {
     const sc = await sceneOf();
     same(sc.stakes.map((x) => [x.name, x.c, x.tags.map((g) => g.name), x.note]), [["The deal", 4, ["Someone Must Agree", "Wanted By Others"], "Dace signs with the crew, or with someone else"], ["Dace’s satchel", 3, ["Locked", "Guarded"], "it’s in the changing-room cupboards"]], "its stakes off the page, with what's in the way");
     same([sc.ground.map((g) => g.name).join(", "), sc.events.find((e) => e.scene)?.what], ["Steam, The House Rule, The Hot Pool", "Dace’s other buyer arrives, and he signs with them"], "its ground and its scene clock");
+    same(sc.place, { id: bathsId, name: "The Copper Baths", page: true }, "the table knows it's Mo's Copper Baths");
+    // While it's on the table, its own telegraphs are ready in the composer,
+    // and Dace's off the page comes aimed at the deal.
+    await mo.page.click('details[data-open^="wb-teles-"] [data-do="ptele"] >> nth=2');
+    await mo.page.waitForSelector("#cc-dialog .tg-compose .tg-book");
+    has(await text(mo.page, "#cc-dialog .tg-book .tg-tlabel"), "From The Copper Baths", "the page's telegraphs in the composer");
+    same([await mo.page.inputValue("#tg-who"), await mo.page.inputValue("#tg-tag"), await mo.page.getAttribute('.tg-target.is-scene:has(b:text-is("The deal"))', "aria-pressed")], ["Dace", "Dace grabs his towel and heads for the changing room", "true"], "Dace's comes aimed at the deal, with its new tag if it lands");
+    await mo.page.click("#cc-dialog .cc-x");
 
     // With no signal, Vesk's World tab still has the Copper Baths.
     await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa`);
@@ -2208,6 +2360,7 @@ try {
     await zed.page.waitForSelector('input[name="k-pick"]');
     await axe(zed.page, `joining, ${theme}`);
     await shot(zed.page, `join-pick-${theme}`);
+  }
   }
 } catch (err) {
   note(`stopped: ${err.stack || err}`);

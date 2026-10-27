@@ -319,9 +319,10 @@ export function makePlaces(w) {
     let body = `<p class="wp-text">${L.rich(x.text, p.id)}</p>`;
     let more = "";
     if (l === "teles") {
-      const aim = /\b(Defend|Confidence)\b/.test(x.at);
       body = `<div class="wp-tele">${kitMini(x.d, { own: "them" })}<div class="pt-line-in"><p class="wp-text"><em>${L.rich(x.text, p.id)}</em></p><p class="pt-does">d${x.d}, ${esc(x.at)}</p></div></div>`;
-      if (gm && aim && d.tele) more = `<button type="button" class="button sm" data-act="w" data-do="ptele" data-id="${esc(p.id)}" data-lid="${esc(x.id)}">Telegraph it</button>`;
+      // Any of them, since the live table takes one at a stake, the scene
+      // clock or a part of the place too.
+      if (gm && d.tele) more = `<button type="button" class="button sm" data-act="w" data-do="ptele" data-id="${esc(p.id)}" data-lid="${esc(x.id)}">Telegraph it</button>`;
     }
     if (!gm) return `<li class="pt-line"><div class="pt-line-in">${body}</div></li>`;
     return `<li class="pt-line"><div class="pt-line-in">${body}</div><div class="cc-row wb-line-row">${more}<button type="button" class="button sm" data-act="w" data-do="edit" data-k="${esc(key)}" aria-label="Change ${esc(flat(x.text).slice(0, 40))}">Change</button></div></li>`;
@@ -396,7 +397,9 @@ export function makePlaces(w) {
     const stakes = p.stakes.map((x) => x.text.match(/^\*([^*]+)\*,?\s*Challenge ([1-6])(?::\s*(.+?))?(?:\s*\(([^)]+)\))?$/)).filter(Boolean)
       .map((m) => ({ name: m[1].trim().slice(0, 60), c: Number(m[2]), tags: [...(m[3] ?? "").matchAll(/\*([^*]+)\*/g)].map((t) => t[1].trim()).slice(0, 8), note: (m[4] ?? "").trim().slice(0, 140) })).slice(0, 6);
     const clock = p.clockD ? { d: p.clockD, what: flat(p.clock).replace(/\.$/, "").slice(0, 140) } : null;
-    return { name: p.name, ground, stakes, clock };
+    // Which page it is, so the composer has its telegraphs ready while it's
+    // on the table (table.js).
+    return { name: p.name, ground, stakes, clock, place: { id: p.id, name: p.name, page: true }, teles: p.teles ?? [] };
   }
 
   function pageView(id, pid) {
@@ -673,7 +676,9 @@ export function makePlaces(w) {
         const here = p.here.map((x) => flat(x.text)).join(" ");
         who = doc.pages.find((q) => q.kind === "person" && q.name.split(/\s+/).includes(lead) && here.includes(q.name))?.name ?? who;
       }
-      d.tele(id, { who: who.slice(0, 60), does: `${flat(t.text)}${cond.length ? ` (${cond.join(", ")})` : ""}`.slice(0, 140), d: t.d, kind: /\bConfidence\b/.test(t.at) ? "fear" : "blow" });
+      // Its words and what it's aimed at go too, so one at a stake, the scene
+      // clock or a part of the place comes aimed there (table.js).
+      d.tele(id, { who: who.slice(0, 60), does: `${flat(t.text)}${cond.length ? ` (${cond.join(", ")})` : ""}`.slice(0, 140), d: t.d, kind: /\bConfidence\b/.test(t.at) ? "fear" : "blow", text: flat(t.text), at: t.at, page: p.name });
     },
   };
 
