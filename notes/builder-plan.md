@@ -210,7 +210,7 @@ Every stage uses this, pasted into a fresh chat.
 ```
 Zi'Dara: the next stage of the world builder.
 
-Read only CLAUDE.md, then notes/builder-plan.md down to the end of Writing tables, and the stage you're building: the first one not marked built. If its Needs aren't all built, stop and tell me. Don't go through old chats or search the web. Grep, then read only the lines you need: never app.js, builder.js, campaigns.js, party.js, table.js, world.js or a chapter whole.
+Read only CLAUDE.md, then notes/builder-plan.md down to the end of Writing tables, and the stage you're building: the first one not marked built. If its Needs aren't all built, stop and tell me. If website has commits that aren't on main yet, another chat may still be on this stage, so stop and tell me. Don't go through old chats or search the web. Grep, then read only the lines you need: never app.js, builder.js, campaigns.js, party.js, table.js, world.js or a chapter whole.
 
 Ask me only the questions that are mine, all in one go, before you build.
 
