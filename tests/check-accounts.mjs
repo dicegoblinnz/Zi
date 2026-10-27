@@ -2675,6 +2675,7 @@ try {
     same((await fetchPic(zed.page, picPath)).status, 404, "Zed can't get Tuesday Lair's picture");
     same((await upload(zed.page, tuesday.id)).status, 404, "or put one up there");
     same((await upload(kai.page, tuesday.id)).status, 403, "and Kai, a player, can't put one up");
+    same((await upload(mo.page, tuesday.id, 5000, 100)).status, 400, "a picture wider than 4096, sent without her phone shrinking it, is turned away");
     same((await playerWorld(zed.page, zedsNight.id))?.maps, [], "Zed's Night has no maps");
     same((await playerWorld(kai.page, zedsNight.id))?.maps, [], "and Kai gets none there");
     // Kai runs Kai's Table, and its map's under it.

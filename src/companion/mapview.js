@@ -52,6 +52,8 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
   let pins = [];
   let tapTimer = 0;
   let dragged = false;
+  // A glide or a zoom that a finger stopped part way, which settles once it's lifted.
+  let cut = false;
   // A spot to go to that was asked for before the map had a size.
   let pending = null;
   // How much of the bottom the bar covers, so the whole map shows above it.
@@ -214,6 +216,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     dragged = false;
     if (e.pointerType === "mouse" && e.button !== 0) return;
     if (e.target.closest(".wm-pin") && e.pointerType === "mouse") return;
+    cut = Boolean(anim);
     stop();
     box = el.getBoundingClientRect();
     // A first finger starts afresh, whatever an interrupted gesture left.
@@ -291,8 +294,10 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     if (e.pointerId !== g.id) return;
     const was = g;
     g = null;
-    if (cancelled) return was.moved ? settle() : undefined;
+    if (cancelled) return was.moved || cut ? settle() : undefined;
     if (!was.moved) {
+      // A tap that stopped it gliding: back inside its edges.
+      if (cut && was.kind !== "zoom") settle();
       if (was.kind === "zoom") {
         lastTap = null;
         // The second tap of a double tap on a pin doesn't open it again.
@@ -319,6 +324,13 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
   }
   el.addEventListener("pointerup", (e) => up(e));
   el.addEventListener("pointercancel", (e) => up(e, true));
+  // A pin's tap stops a tap on the map just before it closing the card it opens.
+  el.addEventListener("click", (e) => {
+    if (e.target.closest?.(".wm-pin")) {
+      clearTimeout(tapTimer);
+      tapTimer = 0;
+    }
+  });
   // A drag that started on a pin doesn't open it.
   el.addEventListener("click", (e) => {
     if (!dragged) return;
@@ -364,6 +376,8 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     if (!r.width || !r.height) return;
     if (r.width === W && r.height === H) return;
     const mid = placed ? { ix: (W / 2 - x) / s, iy: (vis() / 2 - y) / s } : null;
+    // The whole map stays the whole map when the phone turns.
+    const wasWhole = placed && s <= fitS() * 1.01;
     [W, H] = [r.width, r.height];
     if (!placed) {
       placed = true;
@@ -376,7 +390,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
         [x, y] = hard(s, W / 2 - fx * w * s, vis() / 2 - fy * h * s);
       }
     } else {
-      s = clamp(s, minS(), maxS());
+      s = wasWhole ? fitS() : clamp(s, minS(), maxS());
       [x, y] = hard(s, W / 2 - mid.ix * s, vis() / 2 - mid.iy * s);
     }
     paint();

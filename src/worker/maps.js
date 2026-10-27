@@ -21,6 +21,8 @@ import { MMAX, isKey, mapsOf } from "../companion/maps.js";
 
 const PIC_MAX = 8 * 1024 * 1024;
 const THUMB_MAX = 400 * 1024;
+// The small copy's longest side: her phone makes them 640.
+const THUMB_SIDE = 1600;
 // Pictures a campaign keeps, counting ones on their way off.
 const MAX_PICS = MMAX.maps * 2;
 const DAY = 24 * 3600000;
@@ -31,7 +33,7 @@ const dir = (campId) => `maps/${campId}/`;
 const token = (bytes) => btoa(String.fromCharCode(...crypto.getRandomValues(new Uint8Array(bytes)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
 // What a picture is, from its first bytes: a JPEG, a WebP or a PNG, or nothing.
-function kindOf(buf) {
+export function kindOf(buf) {
   const b = new Uint8Array(buf, 0, Math.min(12, buf.byteLength));
   const at = (i, s) => [...s].every((c, j) => b[i + j] === c.charCodeAt(0));
   if (b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff) return "image/jpeg";
@@ -39,6 +41,45 @@ function kindOf(buf) {
   if (at(0, "RIFF") && at(8, "WEBP")) return "image/webp";
   return null;
 }
+
+// A picture's width and height, read from its first bytes the way its kind
+// writes them, or null if they can't be read. A picture that's small to send
+// but huge across would freeze a phone that opens it, so the size is checked
+// here and not taken on trust.
+export function sizeOf(buf, type) {
+  const b = new Uint8Array(buf);
+  const be = (i) => (b[i] << 8) | b[i + 1];
+  const le = (i, n) => [...b.slice(i, i + n)].reduceRight((v, x) => v * 256 + x, 0);
+  if (type === "image/png") return b.length >= 24 ? { w: new DataView(buf).getUint32(16), h: new DataView(buf).getUint32(20) } : null;
+  if (type === "image/webp") {
+    const chunk = String.fromCharCode(...b.slice(12, 16));
+    if (chunk === "VP8 " && b.length >= 30) return { w: le(26, 2) & 0x3fff, h: le(28, 2) & 0x3fff };
+    if (chunk === "VP8L" && b.length >= 25) {
+      const n = le(21, 4);
+      return { w: (n % 16384) + 1, h: (Math.floor(n / 16384) % 16384) + 1 };
+    }
+    if (chunk === "VP8X" && b.length >= 30) return { w: le(24, 3) + 1, h: le(27, 3) + 1 };
+    return null;
+  }
+  // A JPEG: the size in its first frame header, past whatever comes before it.
+  let i = 2;
+  while (i + 9 < b.length) {
+    if (b[i] !== 0xff) return null;
+    const m = b[i + 1];
+    if (m === 0xff) {
+      i += 1;
+      continue;
+    }
+    if (m === 0x01 || (m >= 0xd0 && m <= 0xd8)) {
+      i += 2;
+      continue;
+    }
+    if (m >= 0xc0 && m <= 0xcf && m !== 0xc4 && m !== 0xc8 && m !== 0xcc) return { h: be(i + 5), w: be(i + 7) };
+    i += 2 + be(i + 2);
+  }
+  return null;
+}
+const fits = (sz, side) => Boolean(sz && sz.w >= 1 && sz.h >= 1 && sz.w <= side && sz.h <= side);
 
 // The world's bin: pictures that have come off it lately, by key and when.
 export function binOf(v) {
@@ -87,7 +128,10 @@ async function mapsIn(env, campId) {
 export async function putPicture(request, env, camp, user, { json, fail, limited }) {
   if (!env.MAPS) return fail(503, "Maps aren’t switched on here yet.");
   if (await limited(env, `map:${user.id}`, 40, 3600)) return fail(429, "That’s a lot of pictures at once. Give it a while.");
-  if (Number(request.headers.get("content-length") || 0) > PIC_MAX + THUMB_MAX + 65536) return fail(413, "That picture’s too big to put up.");
+  // Its size up front, so nothing's read that's too big to keep.
+  const length = Number(request.headers.get("content-length"));
+  if (!Number.isFinite(length) || length <= 0) return fail(411, "That didn’t look like a picture.");
+  if (length > PIC_MAX + THUMB_MAX + 65536) return fail(413, "That picture’s too big to put up.");
   let form = null;
   try {
     form = await request.formData();
@@ -100,6 +144,7 @@ export async function putPicture(request, env, camp, user, { json, fail, limited
   const type = kindOf(picBytes);
   const small = kindOf(thumbBytes);
   if (!type || !small) return fail(400, "That isn’t a picture the site can show. Try a photo, a JPEG or a PNG.");
+  if (!fits(sizeOf(picBytes, type), MMAX.side) || !fits(sizeOf(thumbBytes, small), THUMB_SIDE)) return fail(400, `That picture’s bigger than a map can be, ${MMAX.side} across. Put it up from the World screen, which shrinks it first.`);
 
   // Pictures nothing in the world uses any more go first: ones put up over a
   // day ago that never got onto a map (her phone lost its signal on the way

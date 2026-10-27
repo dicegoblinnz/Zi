@@ -22,8 +22,8 @@
 import { MMAX, findMap, labelOf, shownToCrew, targetOf } from "./maps.js";
 import { findPage } from "./pages.js";
 import { makeViewer } from "./mapview.js";
+import { CACHE } from "./mapcache.js";
 
-const CACHE = "zi-maps";
 const SORT = (t) => String(t ?? "").replace(/^(The|A|An) /i, "").toLowerCase();
 const flat = (t) => String(t ?? "").replace(/\*/g, "");
 const KIND = { p: "Page", place: "Place", person: "Person", f: "Faction", name: "Pin" };
@@ -914,11 +914,4 @@ export function makeMaps(w) {
     },
     count: (doc) => doc.maps.length,
   };
-}
-
-// Signing out: every map's picture comes off the phone.
-export function forgetMaps() {
-  try {
-    caches.delete(CACHE).catch(() => {});
-  } catch {}
 }

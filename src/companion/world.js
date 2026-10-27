@@ -28,6 +28,7 @@ import { typo } from "./marks.js";
 import { die as kitDie, mini as kitMini } from "../kit/kit.js";
 import { makePlaces } from "./places.js";
 import { makeMaps } from "./mapsui.js";
+import { forgetMapsOf, keepMapsOf } from "./mapcache.js";
 
 const KEY = "zi-world";
 const POLL = 15000;
@@ -1144,15 +1145,19 @@ export function makeWorld(d) {
       if (v.m) return M.title(v.id, v.m);
       return `The world · ${nameOf(v.id)}`;
     },
+    // A campaign that's gone (ended, or they're not in it now) takes its
+    // maps' pictures off the phone too.
     drop(id) {
       load();
       delete st.k[id];
       keep();
+      forgetMapsOf(id);
     },
     keepOnly(ids) {
       load();
       for (const id of Object.keys(st.k)) if (!ids.includes(id)) delete st.k[id];
       keep();
+      keepMapsOf(ids);
     },
   };
 }
