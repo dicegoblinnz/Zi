@@ -19,3 +19,12 @@ Use the Cloudflare account that has the `zi` Worker in it. Discord waits for now
 Previews share the live database, so sign-in stays off on them. Trying it on a Preview first needs a second database for Previews.
 
 The campaign tables (`migrations/0002_campaigns.sql`) go into the live database the same way as the first ones: the deploy command, `npm run deploy`, applies any migration that hasn't run before it puts the Worker out.
+
+## Maps
+
+Stage 4 of `notes/worlds-plan.md` keeps the GM's map pictures in R2, bound to the Worker as `MAPS` in `wrangler.jsonc`. The bucket has to be there before the `maps` branch goes to `main`, or the deploy stops at it (and so does the branch's Preview).
+
+1. **The bucket.** In the Cloudflare account that has the `zi` Worker, R2 Object Storage, Create bucket, named `zi-maps`. Pick Oceania for its location if it offers it. Leave public access off: nothing reaches it but the Worker.
+2. **The build.** If the build says it isn't allowed to use R2, give the build's API token Workers R2 Storage Edit, the same way it got D1 Edit.
+
+Previews share the bucket, the way they share the database. Ending a campaign takes its pictures out of it.

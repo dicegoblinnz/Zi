@@ -11,6 +11,8 @@
 import { authFor, hit, originsOf, providersOf, seen } from "./auth.js";
 import { changeParty, dropFromParty, showParty } from "./party.js";
 import { changeWorld, showWorld } from "./world.js";
+import { getPicture, putPicture } from "./maps.js";
+import { picturesEnd } from "./pictures.js";
 import { tableEnd, tableLeft, tableRoute } from "./table.js";
 
 // The live table's Durable Object class, one for each campaign (table.js).
@@ -267,6 +269,12 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
     if (method === "GET") return showWorld(env, url, camp, user, { json });
     if (method === "POST") return gm ? changeWorld(request, env, camp, user, { json, fail, body }) : gmOnly();
   }
+  // The pictures behind its maps (maps.js): the GM puts one up, and everyone
+  // in the campaign gets the ones the crew's been shown.
+  if (sub === "maps" && subId) {
+    if (method === "GET") return getPicture(request, env, url, camp, subId, { fail });
+    if (method === "POST") return gm ? putPicture(request, env, url, camp, user, subId, { json, fail, limited }) : gmOnly();
+  }
   // The live table: the round's telegraphs and how each one went (table.js).
   if (sub === "table" && !subId) return tableRoute(request, env, method, camp, user, { json, fail, body, origins: originsOf(env), limited });
   if (sub === "link" && !subId && method === "POST") return gm ? resetLink(env, camp) : gmOnly();
@@ -347,8 +355,8 @@ async function renameCampaign(request, env, user, camp) {
   return json({ name });
 }
 
-// It ends for everyone, and its party sheet, world and live table go with it.
-// Their characters are theirs, so they stay.
+// It ends for everyone, and its party sheet, world, map pictures and live table
+// go with it. Their characters are theirs, so they stay.
 async function endCampaign(env, camp) {
   await env.DB.batch([
     env.DB.prepare("DELETE FROM party WHERE campaignId = ?1").bind(camp.id),
@@ -357,6 +365,7 @@ async function endCampaign(env, camp) {
     env.DB.prepare("DELETE FROM campaign WHERE id = ?1").bind(camp.id),
   ]);
   await tableEnd(env, camp.id);
+  await picturesEnd(env, camp.id);
   return json({ ok: true });
 }
 

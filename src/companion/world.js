@@ -1,9 +1,10 @@
 // A campaign's world on every phone in it: the faction board (stage 1 of
-// notes/worlds-plan.md), then its places and people (stage 3, places.js).
+// notes/worlds-plan.md), then its places and people (stage 3, places.js), and
+// its maps (stage 4, maps.js).
 //
 // The World screen's off a campaign's page (/characters/?camp=<id>&world, and
-// &f=<faction> for one faction's page or &p=<page> for a place's or a
-// person's), and a character playing in a campaign
+// &f=<faction> for one faction's page, &p=<page> for a place's or a
+// person's, or &m=<map> for a map), and a character playing in a campaign
 // has it on its World tab. The board's the crew's own card from the party
 // sheet, then every faction as a card. Only the GM changes it. Her changes go
 // to the Worker (src/worker/world.js) as soon as there's a signal, numbered, so
@@ -25,6 +26,7 @@ import { BONDS, MAX, OUTCOMES, PARTS, apply, blank, find, minisOf, moneyOf, read
 import { diceLabel, rollDie, stepsToDice } from "./dice.js";
 import { typo } from "./marks.js";
 import { die as kitDie, mini as kitMini } from "../kit/kit.js";
+import { makeMaps } from "./maps.js";
 import { makePlaces } from "./places.js";
 
 const KEY = "zi-world";
@@ -139,7 +141,8 @@ export function makeWorld(d) {
       }
     }
     const pages = P.news(id, was, now);
-    return { said: [...said, ...pages.said], keys: [...keys, ...pages.keys] };
+    const maps = M.news(id, was, now);
+    return { said: [...said, ...pages.said, ...maps.said], keys: [...keys, ...pages.keys, ...maps.keys] };
   }
 
   function take(id, k, got) {
@@ -148,6 +151,8 @@ export function makeWorld(d) {
     k.v = typeof got.v === "string" ? got.v : "";
     k.role = got.role === "gm" || got.role === "player" ? got.role : k.role;
     k.at = Date.now();
+    // Pictures of maps this phone can't see any more go from it.
+    M.prune(id);
     if (k.role !== "gm" && was && k.doc) {
       const news = newsOf(id, was, readable(structuredClone(k.doc)));
       if (news.said.length) {
@@ -228,7 +233,14 @@ export function makeWorld(d) {
     clearTimeout(soonTimers[id]);
     soonTimers[id] = setTimeout(() => syncNow(id), ms);
   }
+  // Not in the middle of a drag or a pinch on a map, though: it's drawn
+  // once that's let go.
+  let held = null;
   function show(id) {
+    if (M.holding()) {
+      held = id;
+      return;
+    }
     const say = notices.splice(0).filter((x) => x.id === id && watching === id).map((x) => x.text);
     d.quietRender();
     if (say.length) d.toast(say.slice(-2).join(" "), false);
@@ -581,6 +593,7 @@ export function makeWorld(d) {
     const id = form.closest("[data-wb]")?.dataset.wb;
     if (!id) return;
     if (kind.startsWith("w-pg-")) return P.submit(kind, form, f, id);
+    if (kind.startsWith("w-mp-")) return M.submit(kind, form, f, id);
     const doc = docOf(id);
     const fac = form.dataset.f ? find(doc, form.dataset.f) : null;
     const text = (name, max = MAX.line) => String(f.get(name) ?? "").replace(/\s+/g, " ").trim().slice(0, max);
@@ -725,6 +738,8 @@ export function makeWorld(d) {
     },
     lit: (id) => lit[id] ?? [],
     unlit: (id) => unlit(id),
+    // The maps a page is pinned on (maps.js).
+    onMaps: (id, t) => M.onMaps(id, t),
     // The book's places and people have reached the phone: typo fixes go in,
     // and the screen's drawn again with them.
     bookLoaded: () => {
@@ -733,6 +748,29 @@ export function makeWorld(d) {
     },
   });
   Object.assign(ACT, P.ACT);
+
+  // Maps (maps.js): her pictures with their pins, under places and people
+  // and full screen, with their taps and forms going through here.
+  const M = makeMaps({
+    d, esc, edit, docOf, isGm, camp, gmName, online, newId, bare, plural, topbar,
+    fold: (key, title, glance, body) => fold(key, title, glance, body),
+    lit: (id) => lit[id] ?? [],
+    backOf: (id) => P.backOf(id),
+    // A picture's gone up: the world the Worker sent back with it.
+    took: (id, got) => {
+      take(id, camp(id), got);
+      keep();
+      show(id);
+    },
+    // A drag or a pinch let go: anything that came in meanwhile is drawn.
+    idle: () => {
+      if (held == null) return;
+      const id = held;
+      held = null;
+      show(id);
+    },
+  });
+  Object.assign(ACT, M.ACT);
 
   // The crew's own card, at the top of the board: the party sheet's.
   function crewCard(id) {
@@ -1043,7 +1081,7 @@ export function makeWorld(d) {
       <div class="cc-row"><button type="button" class="button danger" data-act="w" data-do="gone" data-f="${esc(f.id)}">${sure(`gone-${f.id}`, "Tap again to take it off the board", "Take it off the board")}</button></div></section>`
       : hidden ? `<p class="cc-small wb-more">There’s more to ${esc(f.name)} you haven’t found out yet.</p>` : "";
     if (!gm) lit[id] = [];
-    return `${top}<div class="wb" data-wb="${esc(id)}">${head}${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${showCard}${bookNote}<div class="cc-folds wb-parts">${parts.join("")}</div>${P.factionMentions(id, f, doc)}${end}</div>`;
+    return `${top}<div class="wb" data-wb="${esc(id)}">${head}${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${showCard}${bookNote}<div class="cc-folds wb-parts">${parts.join("")}</div>${P.factionMentions(id, f, doc)}${M.onMaps(id, { kind: "f", id: f.id })}${end}</div>`;
   }
 
   // ------------------------------------------------------------ the screens
@@ -1055,12 +1093,13 @@ export function makeWorld(d) {
     }
     if (v.f) return factionView(v.id, v.f);
     if (v.p) return P.pageView(v.id, v.p);
+    if (v.m) return M.view(v.id, v.m, v);
     const gm = isGm(v.id);
     return `${topbar(`/characters/?camp=${encodeURIComponent(v.id)}`, nameOf(v.id))}
       <header class="cc-camp-head wb-head"><p class="kicker${gm ? " is-gm" : ""}">The world</p><h1>${esc(nameOf(v.id))}</h1>${gm ? "" : `<p class="cc-small">What ${esc(gmName(v.id))}’s shown the crew so far.</p>`}</header>
       ${d.turnSection?.(v.id) ?? ""}
       <section class="cc-sec wb-sec" data-wb="${esc(v.id)}" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(v.id)}</section>
-      ${P.sections(v.id)}${gm ? "" : unlit(v.id)}`;
+      ${P.sections(v.id)}${M.section(v.id)}${gm ? "" : unlit(v.id)}`;
   }
   // What's just been shown lights up once, then it's like the rest.
   function unlit(id) {
@@ -1075,7 +1114,7 @@ export function makeWorld(d) {
     return `<div class="wb-tab" data-wb="${esc(id)}"><p class="cc-small pt-where">${esc(ch.name)} plays in <a href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">${esc(nameOf(id))}</a>. This is what ${esc(gmName(id))}’s shown the crew of its world.</p>
       ${d.turnSection?.(id) ?? ""}
       <section class="cc-sec wb-sec" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(id)}</section>
-      ${P.sections(id)}${unlit(id)}</div>`;
+      ${P.sections(id)}${M.section(id)}${unlit(id)}</div>`;
   }
 
   // The way in from the campaign's page, with a glance at the board.
@@ -1086,8 +1125,9 @@ export function makeWorld(d) {
     const gm = isGm(id);
     const n = doc.factions.length;
     const { places, people } = P.count(doc);
-    const shown = doc.factions.filter((f) => f.shown.card).length + doc.pages.filter((p) => p.shown.page).length;
-    const all = [n ? plural(n, "faction", "factions") : "", places.length ? plural(places.length, "place", "places") : "", people.length ? plural(people.length, "person", "people") : ""].filter(Boolean).join(", ").replace(/, ([^,]*)$/, " and $1");
+    const maps = M.count(doc);
+    const shown = doc.factions.filter((f) => f.shown.card).length + doc.pages.filter((p) => p.shown.page).length + M.shownCount(doc);
+    const all = [n ? plural(n, "faction", "factions") : "", places.length ? plural(places.length, "place", "places") : "", people.length ? plural(people.length, "person", "people") : "", maps ? plural(maps, "map", "maps") : ""].filter(Boolean).join(", ").replace(/, ([^,]*)$/, " and $1");
     const glance = gm
       ? all ? `${all} in the world, ${shown ? `${shown} shown to the crew` : "none shown to the crew yet"}.` : "Nothing in the world yet. Bring in a board, a place or a threat from the book, or make your own."
       : all ? `${esc(gmName(id))}’s shown the crew ${all}.` : k.at ? `${esc(gmName(id))} hasn’t shown the crew any of the world yet.` : "Whatever the crew’s been shown of the world.";
@@ -1098,6 +1138,7 @@ export function makeWorld(d) {
 
   // What's just been shown to a player lights up for a moment.
   function after(app) {
+    M.after(app);
     const el = app.querySelector(".wb-card");
     if (!el) return;
     if (el.dataset.glow) el.classList.add("is-new");
@@ -1119,17 +1160,20 @@ export function makeWorld(d) {
     title(v) {
       if (v.f) return find(docOf(v.id), v.f)?.name ?? "A faction";
       if (v.p) return P.title(v.id, v.p);
+      if (v.m) return M.title(v.id, v.m);
       return `The world · ${nameOf(v.id)}`;
     },
     drop(id) {
       load();
       delete st.k[id];
       keep();
+      M.keepCampaigns(Object.keys(st.k));
     },
     keepOnly(ids) {
       load();
       for (const id of Object.keys(st.k)) if (!ids.includes(id)) delete st.k[id];
       keep();
+      M.keepCampaigns(ids);
     },
   };
 }

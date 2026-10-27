@@ -36,10 +36,17 @@
   // itself, separately from D1's.
   "durable_objects": { "bindings": [{ "name": "TABLE", "class_name": "Table" }] },
   "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Table"] }],
+  // The GM's map pictures (src/worker/maps.js): one R2 object each, in a folder
+  // for each campaign, put up and handed out only through the Worker, never
+  // public. The bucket has to be made in this account before the first deploy
+  // that has this (notes/sign-in-setup.md, Maps).
+  "r2_buckets": [{ "binding": "MAPS", "bucket_name": "zi-maps" }],
   // Branches other than main build a Preview with `npx wrangler preview`,
   // which won't run without this block. Each Preview gets its own live tables,
-  // and the binding has to be named again here for the Worker to see it.
+  // and the bindings have to be named again here for the Worker to see them.
+  // Previews share the map pictures' bucket, the way they share the database.
   "previews": {
-    "durable_objects": { "bindings": [{ "name": "TABLE", "class_name": "Table" }] }
+    "durable_objects": { "bindings": [{ "name": "TABLE", "class_name": "Table" }] },
+    "r2_buckets": [{ "binding": "MAPS", "bucket_name": "zi-maps" }]
   }
 }

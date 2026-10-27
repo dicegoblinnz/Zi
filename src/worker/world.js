@@ -1,7 +1,8 @@
 // A campaign's world, for one campaign (notes/worlds-plan.md): its faction
-// board, and its places and people (pages.js). index.js has already checked that whoever's asking is this
-// campaign's GM or one of its players, and nothing here reads or changes
-// anything but this campaign's world.
+// board, its places and people (pages.js) and its maps (maps-rules.js).
+// index.js has already checked that whoever's asking is this campaign's GM or
+// one of its players, and nothing here reads or changes anything but this
+// campaign's world.
 //
 //   GET  /api/campaigns/<id>/world?v=   the world: the whole of it for the GM,
 //        and for a player only what the crew's been shown (forPlayer() in
@@ -11,6 +12,7 @@
 //        Each change carries a number that goes up on that phone, so a change
 //        sent twice (the signal dropped before the answer came back) counts once.
 import { apply, blank, forPlayer, readable } from "../companion/board.js";
+import { dropPictures } from "./pictures.js";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
 const MAX_CHANGES = 200;
@@ -62,10 +64,12 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
   let row = null;
   let top = 0;
   let doc = null;
+  let files = new Set();
   for (let tries = 0; ; tries++) {
     row = await worldRow(env, camp.id);
     const raw = row ? parse(row.data) ?? {} : {};
     doc = readable(raw);
+    files = new Set(doc.maps.map((m) => m.file));
     // Kept with no prototype, so no phone's id can be anything but an entry.
     const seq = Object.assign(Object.create(null), raw.seq && typeof raw.seq === "object" ? raw.seq : {});
     const high = Number(seq[dev]?.n) || 0;
@@ -81,7 +85,10 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
         changed = apply(doc, op) || changed;
       } catch {}
     }
-    if (top === high) break;
+    if (top === high) {
+      files = new Set();
+      break;
+    }
     if (changed) {
       doc.by = user.id;
       doc.at = now;
@@ -101,6 +108,32 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
     // A change from her other phone got in first, so these go on top of it.
     if (tries >= 5) return fail(503, "The board’s being changed from somewhere else too. Try again in a moment.");
   }
+  // A map that's gone out of the world takes its picture with it.
+  await dropPictures(env, camp.id, [...files].filter((f) => !doc.maps.some((m) => m.file === f)));
   // The world as it now stands, without reading it back again.
   return json({ seq: top, ...viewOf(camp, row, doc), role: camp.role });
+}
+
+// A change the Worker makes itself (a map's picture going up, maps.js), made
+// the same careful way as hers: read it, change it, and write it only if
+// nothing else got in first. fn changes the world and says how that went,
+// { ok, status, error, ... }, and the world as it now stands comes back with it.
+export async function worldWith(env, camp, user, fn) {
+  for (let tries = 0; tries < 6; tries++) {
+    const row = await worldRow(env, camp.id);
+    const raw = row ? parse(row.data) ?? {} : {};
+    const doc = readable(raw);
+    const said = fn(doc);
+    if (!said?.ok) return said ?? { ok: false };
+    const now = Date.now();
+    doc.by = user.id;
+    doc.at = now;
+    const text = JSON.stringify({ ...doc, seq: raw.seq && typeof raw.seq === "object" ? raw.seq : {} });
+    if (text.length > MAX_DOC) return { ok: false, status: 413, error: "The world’s full. Take something off it first." };
+    const res = row
+      ? await env.DB.prepare("UPDATE world SET data = ?2, version = version + 1, updatedAt = ?3 WHERE campaignId = ?1 AND version = ?4").bind(camp.id, text, now, row.version).run()
+      : await env.DB.prepare("INSERT INTO world (campaignId, data, version, updatedAt) VALUES (?1, ?2, 1, ?3) ON CONFLICT DO NOTHING").bind(camp.id, text, now).run();
+    if (res.meta.changes) return { ...said, view: viewOf(camp, { data: text, version: (row?.version ?? 0) + 1 }, doc) };
+  }
+  return { ok: false, status: 503, error: "The world’s being changed from somewhere else too. Try again in a moment." };
 }

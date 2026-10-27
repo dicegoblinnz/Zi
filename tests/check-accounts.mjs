@@ -118,6 +118,21 @@
 //    note Mo takes, keeping his own note, and a typo fix in Dace's goes in quietly.
 //    Nothing crosses to Zed's Night. The World screen, a place, a person and
 //    the World tab pass axe at 390, in both themes.
+// 9b. Maps and her pins. Mo puts up the Steeplands from a phone photo, shrunk
+//    to 2560 by 1920 on his phone and kept in R2 in Tuesday Lair's own folder.
+//    He drops a pin on the point in the middle that opens the Copper Baths,
+//    zooms, drags and pinches, the pins staying on their spots, and taps the
+//    old mill in. The Copper Baths' pin opens its page, and the page says it's
+//    on the Steeplands. Kai gets nothing, not even the picture, till Mo shows
+//    the crew the map, then only the pins he's shown: the old mill stays off
+//    her phone, and the warehouse that opens Casimir Dace opens him only once
+//    he's shown. On Vesk's World tab she opens the map and the Copper Baths
+//    from its pin, and with no signal the map still opens. Hidden again, its
+//    picture goes from her phone. Kai can't change it or put a picture up. A
+//    new picture keeps the pins, a pin taken off comes back with Undo, a map
+//    taken out takes its picture, and so does ending a campaign. Nothing
+//    crosses to Zed. The World screen, a map and the World tab pass axe at
+//    390, in both themes.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -200,6 +215,8 @@ const mf = new Miniflare(convertV4MiniflareOptions({
   d1Databases: { DB: "zi-check" },
   // The live table: a Durable Object for each campaign (src/worker/table.js).
   durableObjects: { TABLE: { className: "Table", useSQLite: true } },
+  // The GM's map pictures (src/worker/maps.js).
+  r2Buckets: { MAPS: "zi-maps" },
   bindings: {
     AUTH_HOSTS: `localhost:${PORT}`,
     BETTER_AUTH_SECRET: "check-secret-check-secret-check-secret-0123",
@@ -2250,6 +2267,381 @@ try {
   }
   console.log("9. Places and people");
   await checkPlaces();
+
+  // ------------------------------------------------------------ 9b. maps and her pins
+  async function checkMaps() {
+    const worldOf = async (id) => JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", id))[0]?.data ?? "null");
+    const mapsIn = async (id = tuesday.id) => (await worldOf(id))?.maps ?? [];
+    const pageId = async (name) => (await worldOf(tuesday.id)).pages.find((p) => p.name === name)?.id;
+    const playerWorld = async (page = kai.page, id = tuesday.id) => (await got(page, "GET", `/api/campaigns/${id}/world`));
+    const bucket = await mf.getR2Bucket("MAPS");
+    const keys = async (prefix = "c/") => (await bucket.list({ prefix })).objects.map((o) => o.key);
+    const h1 = (page) => page.textContent("#app h1").catch(() => "");
+    const sheetH = (page) => page.textContent(".wm-sheet h2").catch(() => "");
+    const toWorld = async (page) => {
+      await page.goto(`${BASE}/characters/?camp=${tuesday.id}&world`);
+      await page.waitForSelector(".wb-crew");
+    };
+    const layer = (page) => page.$eval(".wm-layer", (el) => {
+      const m = el.style.transform.match(/translate3d\(([-\d.e]+)px,\s*([-\d.e]+)px,\s*0(?:px)?\)\s*scale\(([-\d.e]+)\)/);
+      return m ? { tx: Number(m[1]), ty: Number(m[2]), s: Number(m[3]) } : null;
+    });
+    const stageBox = (page) => page.$eval(".wm-stage", (e) => {
+      const r = e.getBoundingClientRect();
+      return { x: r.left, y: r.top, w: r.width, h: r.height };
+    });
+    // A pin's tip, on the screen.
+    const tipOf = (page, pid) => page.$eval(`.wm-pin[data-pin="${pid}"]`, (el) => {
+      const r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.bottom };
+    });
+    const onSpot = async (page, pin, m, what) => {
+      const [t, b, tip] = [await layer(page), await stageBox(page), await tipOf(page, pin.id)];
+      const want = { x: b.x + t.tx + pin.x * m.w * t.s, y: b.y + t.ty + pin.y * m.h * t.s };
+      yes(Math.abs(tip.x - want.x) < 1.5 && Math.abs(tip.y - want.y) < 1.5, `${what}: the pin's tip at ${tip.x.toFixed(1)}, ${tip.y.toFixed(1)}, its spot at ${want.x.toFixed(1)}, ${want.y.toFixed(1)}`);
+    };
+    // A picture drawn on a phone, as base64.
+    const draw = (page, w, h, type, words) => page.evaluate(async ([w, h, type, words]) => {
+      const c = document.createElement("canvas");
+      c.width = w;
+      c.height = h;
+      const g = c.getContext("2d");
+      g.fillStyle = "#e9dcc0";
+      g.fillRect(0, 0, w, h);
+      // A camera's grain, so it's as heavy as a photo.
+      for (let i = 0; i < 4000; i++) {
+        g.fillStyle = `rgba(${90 + (i % 60)}, ${70 + (i % 40)}, 40, 0.25)`;
+        g.fillRect((i * 7919) % w, (i * 104729) % h, 3 + (i % 9), 3 + (i % 7));
+      }
+      g.strokeStyle = "#5b4630";
+      g.lineWidth = w / 220;
+      g.beginPath();
+      g.moveTo(w * 0.07, h * 0.86);
+      g.bezierCurveTo(w * 0.3, h * 0.6, w * 0.55, h * 0.8, w * 0.94, h * 0.2);
+      g.stroke();
+      g.fillStyle = "#3a6a8a";
+      g.beginPath();
+      g.ellipse(w * 0.25, h * 0.3, w * 0.15, h * 0.12, 0.3, 0, Math.PI * 2);
+      g.fill();
+      g.fillStyle = "#222";
+      g.font = `bold ${Math.round(h / 19)}px serif`;
+      g.fillText(words, w * 0.32, h * 0.5);
+      const blob = await new Promise((done) => c.toBlob(done, type, 0.92));
+      const b = new Uint8Array(await blob.arrayBuffer());
+      let out = "";
+      for (let i = 0; i < b.length; i += 0x8000) out += String.fromCharCode(...b.subarray(i, i + 0x8000));
+      return btoa(out);
+    }, [w, h, type, words]);
+    const upload = (page, id, mid, b64, type, name = "") => page.evaluate(async ([id, mid, b64, type, name]) => {
+      const body = Uint8Array.from(atob(b64), (ch) => ch.charCodeAt(0));
+      const res = await fetch(`/api/campaigns/${id}/maps/${mid}${name ? `?name=${encodeURIComponent(name)}` : ""}`, { method: "POST", headers: { "content-type": type }, body });
+      return { status: res.status, json: await res.json().catch(() => null) };
+    }, [id, mid, b64, type, name]);
+    // What's open at the bottom of a map goes, so its bar's back.
+    const shut = async (page) => {
+      if (await page.$(".wm-sheet")) await page.click('[data-do="mclose"]');
+    };
+    const kaiCache = () => kai.page.evaluate(async () => (await (await caches.open("zi-maps")).keys()).map((r) => new URL(r.url).pathname));
+
+    // Mo opens the world: no maps yet, and it says so.
+    await toWorld(mo.page);
+    has(await text(mo.page, "#wm-h + p"), "No maps yet", "no maps yet, and it says so");
+    // He puts one up from a phone photo, 4032 by 3024 the way a phone takes them.
+    const photo = Buffer.from(await draw(mo.page, 4032, 3024, "image/jpeg", "The Steeplands"), "base64");
+    await mo.page.click('details[data-open="wb-mup"] > summary');
+    await mo.page.fill('form[data-form="w-mp-up"] input[name="name"]', "The Steeplands");
+    await mo.page.setInputFiles('form[data-form="w-mp-up"] input[name="pic"]', { name: "IMG_2041.jpg", mimeType: "image/jpeg", buffer: photo });
+    await mo.page.click('form[data-form="w-mp-up"] button[type="submit"]');
+    await until(async () => (await h1(mo.page)) === "The Steeplands", "the map's screen once it's up", 30000);
+    let map = (await mapsIn())[0];
+    same([map?.name, map?.w, map?.h, map?.shown, map?.pins.length], ["The Steeplands", 2560, 1920, false, 0], "the Steeplands in the world, shrunk to 2560 by 1920, and hidden");
+    yes(map && map.bytes < photo.length, `and smaller than the photo (${map?.bytes} bytes, from ${photo.length})`);
+    same(await keys(), [`c/${tuesday.id}/${map.file}`], "its picture in R2, in Tuesday Lair's own folder");
+    await mo.page.waitForSelector(".wm-stage.is-ready");
+    same(await mo.page.$eval(".wm-img", (i) => [i.naturalWidth, i.naturalHeight]), [2560, 1920], "the picture on Mo's phone");
+
+    // A pin on the point in the middle, opening the Copper Baths.
+    const bathsId = await pageId("The Copper Baths");
+    await mo.page.click('[data-do="madd"]');
+    await mo.page.waitForSelector(".wm-stage.is-placing");
+    await shot(mo.page, "map-placing");
+    await mo.page.click('[data-do="mput"]');
+    await mo.page.selectOption('form[data-form="w-mp-pin"] select[name="to"]', `p:${bathsId}`);
+    await mo.page.click('form[data-form="w-mp-pin"] button[type="submit"]');
+    await until(async () => (await mapsIn())[0]?.pins.length === 1, "the Copper Baths' pin on the server");
+    map = (await mapsIn())[0];
+    const pBaths = map.pins[0];
+    same([pBaths.label, pBaths.to, pBaths.shown, Math.abs(pBaths.x - 0.5) < 0.005, Math.abs(pBaths.y - 0.5) < 0.005], ["", { k: "p", id: bathsId }, false, true, true], "it opens the Copper Baths, it's hidden, and it's where the point was");
+    has(await sheetH(mo.page), "The Copper Baths", "its card's open, named for what it opens");
+    has(await text(mo.page, ".wm-sheet"), "Only you see this pin", "and only Mo sees it");
+    await mo.page.click('[data-do="mclose"]');
+    await onSpot(mo.page, pBaths, map, "all of it on screen");
+
+    // He zooms in with the button, drags it along and pinches in, and the pin
+    // stays on its spot.
+    const fit = (await layer(mo.page)).s;
+    await mo.page.click('[data-do="mzoom"][data-z="in"]');
+    await mo.page.waitForTimeout(400);
+    const zoomed = await layer(mo.page);
+    yes(Math.abs(zoomed.s / fit - 1.6) < 0.01, `the zoom button goes in (${(zoomed.s / fit).toFixed(2)} times)`);
+    const box = await stageBox(mo.page);
+    await mo.page.mouse.move(box.x + box.w / 2, box.y + box.h / 2);
+    await mo.page.mouse.down();
+    await mo.page.mouse.move(box.x + box.w / 2 - 80, box.y + box.h / 2, { steps: 8 });
+    await mo.page.mouse.up();
+    await mo.page.waitForTimeout(400);
+    const dragged = await layer(mo.page);
+    yes(Math.abs(dragged.tx - (zoomed.tx - 80)) < 1 && Math.abs(dragged.ty - zoomed.ty) < 1, `a drag moves it (${zoomed.tx.toFixed(1)} to ${dragged.tx.toFixed(1)})`);
+    await mo.page.evaluate(() => {
+      const el = document.querySelector(".wm-stage");
+      const r = el.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const ev = (type, id, x) => el.dispatchEvent(new PointerEvent(type, { pointerId: id, clientX: x, clientY: cy, bubbles: true, cancelable: true, pointerType: "touch", isPrimary: id === 11 }));
+      ev("pointerdown", 11, cx - 40);
+      ev("pointerdown", 12, cx + 40);
+      for (let k = 1; k <= 5; k++) {
+        ev("pointermove", 11, cx - 40 - k * 16);
+        ev("pointermove", 12, cx + 40 + k * 16);
+      }
+      ev("pointerup", 11, cx - 120);
+      ev("pointerup", 12, cx + 120);
+    });
+    await mo.page.waitForTimeout(400);
+    const pinched = await layer(mo.page);
+    yes(Math.abs(pinched.s / dragged.s - 3) < 0.02, `a pinch goes in three times as far (${(pinched.s / dragged.s).toFixed(2)})`);
+    const keptPoint = (t) => ((box.w / 2 - t.tx) / t.s);
+    yes(Math.abs(keptPoint(pinched) - keptPoint(dragged)) < 1, "keeping what's under the fingers where it is");
+    await onSpot(mo.page, pBaths, map, "zoomed in");
+
+    // The old mill: in placing, a tap on the map puts it there.
+    await mo.page.click('[data-do="madd"]');
+    const t = await layer(mo.page);
+    const tap = { x: 70, y: Math.round(box.h * 0.3) };
+    await mo.page.mouse.click(box.x + tap.x, box.y + tap.y);
+    await mo.page.waitForSelector('form[data-form="w-mp-pin"]');
+    yes(Boolean(await mo.page.$(".wm-pin.is-draft")), "the new pin shows where it's going");
+    await mo.page.fill('form[data-form="w-mp-pin"] input[name="label"]', "The old mill");
+    await mo.page.click('form[data-form="w-mp-pin"] button[type="submit"]');
+    await until(async () => (await mapsIn())[0]?.pins.length === 2, "the old mill on the server");
+    map = (await mapsIn())[0];
+    const pMill = map.pins.find((p) => p.label === "The old mill");
+    const want = { x: (tap.x - t.tx) / t.s / 2560, y: (tap.y - t.ty) / t.s / 1920 };
+    yes(pMill && Math.abs(pMill.x - want.x) < 0.001 && Math.abs(pMill.y - want.y) < 0.001, `the old mill where he tapped (${pMill?.x}, ${pMill?.y}, for ${want.x.toFixed(4)}, ${want.y.toFixed(4)})`);
+    // And the warehouse, which opens Casimir Dace, who the crew hasn't been shown.
+    const daceId = await pageId("Casimir Dace");
+    await mo.page.click('[data-do="mclose"]');
+    await mo.page.click('[data-do="madd"]');
+    await mo.page.mouse.click(box.x + box.w - 90, box.y + Math.round(box.h * 0.25));
+    await mo.page.selectOption('form[data-form="w-mp-pin"] select[name="to"]', `p:${daceId}`);
+    await mo.page.fill('form[data-form="w-mp-pin"] input[name="label"]', "The warehouse");
+    await mo.page.click('form[data-form="w-mp-pin"] button[type="submit"]');
+    await until(async () => (await mapsIn())[0]?.pins.length === 3, "the warehouse on the server");
+    map = (await mapsIn())[0];
+    const pWare = map.pins.find((p) => p.label === "The warehouse");
+    has(await text(mo.page, ".wm-sheet"), "It opens Casimir Dace for them once you’ve shown them who they are", "its card says the crew can't open Dace yet");
+
+    // The Copper Baths' pin opens its page, and the page says it's on the
+    // Steeplands, then takes him back to it with the pin open.
+    await mo.page.click('[data-do="mclose"]');
+    await mo.page.click('[data-do="mlist"]');
+    await mo.page.click(`.wm-li[data-pin="${pBaths.id}"]`);
+    await mo.page.waitForTimeout(400);
+    has(await sheetH(mo.page), "The Copper Baths", "the list of pins goes to the Copper Baths");
+    await mo.page.click(".wm-open");
+    await until(async () => (await h1(mo.page)) === "The Copper Baths", "the Copper Baths' page from its pin");
+    has(await text(mo.page, ".cc-back"), "The Steeplands", "with Back to the Steeplands");
+    has(await text(mo.page, ".wm-on"), "The Steeplands", "its page says it's on the Steeplands");
+    has(await text(mo.page, ".wm-on"), "Only you see it there", "where only Mo sees it");
+    await mo.page.click(".wm-on li a");
+    await until(async () => (await h1(mo.page)) === "The Steeplands", "back on the Steeplands");
+    await mo.page.waitForSelector(".wm-sheet");
+    has(await sheetH(mo.page), "The Copper Baths", "with the Copper Baths' pin open");
+
+    // Kai gets nothing, not even the picture, till Mo shows the crew the map.
+    same((await playerWorld()).json?.world?.maps, [], "Kai's phone gets no maps");
+    same((await api(kai.page, "GET", `/api/campaigns/${tuesday.id}/maps/${map.id}?v=${map.file}`)).status, 404, "or its picture");
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector(".wb-tab .wp-tok");
+    same(await kai.page.$("#wm-h"), null, "and Vesk's World tab has no maps");
+    await mo.page.click('[data-do="mclose"]');
+    await mo.page.click('[data-do="mset"]');
+    await mo.page.click('[data-do="mshow"]');
+    await until(async () => (await playerWorld()).json?.world?.maps?.length === 1, "the Steeplands on Kai's phone");
+    let kw = (await playerWorld()).json.world.maps[0];
+    same([kw.name, kw.w, kw.h, kw.pins], ["The Steeplands", 2560, 1920, []], "the map, and none of its pins yet");
+    const pic = await kai.page.evaluate(async (u) => {
+      const res = await fetch(u);
+      return { status: res.status, type: res.headers.get("content-type"), size: (await res.arrayBuffer()).byteLength };
+    }, `/api/campaigns/${tuesday.id}/maps/${map.id}?v=${map.file}`);
+    same([pic.status, /^image\/(webp|jpeg)$/.test(pic.type), pic.size], [200, true, map.bytes], "its picture's hers now");
+    // Then the Copper Baths' pin and the warehouse, and the old mill stays his.
+    for (const pid of [pBaths.id, pWare.id]) {
+      await shut(mo.page);
+      await mo.page.click('[data-do="mlist"]');
+      await mo.page.click(`.wm-li[data-pin="${pid}"]`);
+      await mo.page.click(`[data-do="mpinshow"][data-pin="${pid}"]`);
+      await mo.page.waitForTimeout(300);
+    }
+    await until(async () => (await playerWorld()).json?.world?.maps?.[0]?.pins.length === 2, "two pins on Kai's phone");
+    let raw = (await playerWorld()).body;
+    kw = JSON.parse(raw).world.maps[0];
+    const kBaths = kw.pins.find((p) => p.id === pBaths.id);
+    const kWare = kw.pins.find((p) => p.id === pWare.id);
+    same([kBaths?.label, kBaths?.to], ["The Copper Baths", { k: "p", id: bathsId }], "the Copper Baths' pin opens its page, since the crew's been shown it");
+    same([kWare?.label, kWare?.to], ["The warehouse", null], "the warehouse doesn't open Dace, since they haven't");
+    yes(!raw.includes("old mill") && !raw.includes(pMill.id), "the old mill stays off Kai's phone");
+
+    // On Vesk's World tab, Kai opens the map and the Copper Baths from its pin.
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector("#wm-h");
+    has(await text(kai.page, ".wm-tok"), "The Steeplands", "the Steeplands on Vesk's World tab");
+    await kai.page.click(".wm-tok-a");
+    await until(async () => (await h1(kai.page)) === "The Steeplands", "the map on Kai's phone");
+    await kai.page.waitForSelector(".wm-stage.is-ready");
+    same(await kai.page.$$eval(".wm-pin", (els) => els.map((e) => e.dataset.pin).sort()), [pBaths.id, pWare.id].sort(), "with the two pins she's been shown");
+    yes(!(await kai.page.content()).includes("old mill"), "and nothing of the old mill");
+    await kai.page.click(`.wm-pin[data-pin="${pWare.id}"]`);
+    has(await text(kai.page, ".wm-sheet"), "That’s all the crew’s been shown about it so far", "the warehouse has nothing behind it yet");
+    same(await kai.page.$(".wm-sheet .wm-open"), null, "and no way into Dace");
+    await kai.page.click('[data-do="mclose"]');
+    await kai.page.click(`.wm-pin[data-pin="${pBaths.id}"]`);
+    await kai.page.click(".wm-open");
+    await until(async () => (await h1(kai.page)) === "The Copper Baths", "the Copper Baths' page from its pin, on Kai's phone");
+    has(await text(kai.page, ".wm-on"), "The Steeplands", "and it says it's on the Steeplands");
+    // Mo shows the crew Dace from the warehouse's own card, and it opens him.
+    await shut(mo.page);
+    await mo.page.click('[data-do="mlist"]');
+    await mo.page.click(`.wm-li[data-pin="${pWare.id}"]`);
+    has(await mo.page.textContent(`[data-do="mtshow"][data-pin="${pWare.id}"]`), "Show them Casimir Dace too", "the warehouse's card offers Dace too");
+    await mo.page.click(`[data-do="mtshow"][data-pin="${pWare.id}"]`);
+    await until(async () => (await playerWorld()).json?.world?.maps?.[0]?.pins.find((p) => p.id === pWare.id)?.to?.id === daceId, "the warehouse opening Dace once he's shown");
+    yes((await worldOf(tuesday.id)).pages.find((p) => p.id === daceId)?.shown.page, "and Dace is shown to the crew");
+    same(await mo.page.$(`[data-do="mtshow"][data-pin="${pWare.id}"]`), null, "so the card stops offering him");
+
+    // With no signal, the map Kai's seen still opens.
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector(".wm-tok-a");
+    await kai.context.setOffline(true);
+    await kai.page.click(".wm-tok-a");
+    await until(async () => (await h1(kai.page)) === "The Steeplands", "the map with no signal");
+    await kai.page.waitForSelector(".wm-stage.is-ready", { timeout: 5000 }).catch(() => {});
+    same(await kai.page.$eval(".wm-img", (i) => i.naturalWidth), 2560, "its picture opens with no signal");
+    same(await kai.page.$$eval(".wm-pin", (els) => els.length), 2, "and its pins");
+    await kai.context.setOffline(false);
+    yes(!(await kai.page.evaluate(() => localStorage.getItem("zi-world"))).includes("old mill"), "the old mill isn't kept on her phone either");
+
+    // Kai can't change it, or put up a picture.
+    same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "kais-phone-0011", ops: [{ n: 1, o: "m-pin-show", id: map.id, pin: pMill.id, v: true }] })).status, 403, "Kai can't show herself the old mill");
+    const small = await draw(mo.page, 1200, 900, "image/png", "Steeplands, again");
+    same((await upload(kai.page, tuesday.id, "kais-map01", small, "image/png", "Mine")).status, 403, "or put up a map");
+    same((await upload(mo.page, tuesday.id, "notapic01", btoa("<svg xmlns='http://www.w3.org/2000/svg'></svg>"), "image/png", "Sneaky")).status, 415, "and the Worker only takes pictures it can read");
+
+    // Hidden again, its picture goes from Kai's phone.
+    yes((await kaiCache()).some((p) => p.startsWith(`/api/campaigns/${tuesday.id}/maps/`)), "Kai's phone kept the picture");
+    await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&world&m=${map.id}`);
+    await mo.page.waitForSelector(".wm-stage");
+    await mo.page.click('[data-do="mset"]');
+    await mo.page.click('[data-do="mshow"]');
+    await until(async () => (await playerWorld()).json?.world?.maps?.length === 0, "the Steeplands hidden from Kai");
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector(".wb-tab .wp-tok");
+    await until(async () => !(await kaiCache()).some((p) => p.startsWith(`/api/campaigns/${tuesday.id}/maps/`)), "the picture gone from Kai's phone");
+    await mo.page.click('[data-do="mshow"]');
+    await until(async () => (await playerWorld()).json?.world?.maps?.length === 1, "and shown again");
+
+    // A new picture keeps the pins, and the old picture goes.
+    const was = map.file;
+    await mo.page.setInputFiles('form[data-form="w-mp-pic"] input[name="pic"]', { name: "steeplands.png", mimeType: "image/png", buffer: Buffer.from(small, "base64") });
+    await mo.page.click('form[data-form="w-mp-pic"] button[type="submit"]');
+    await until(async () => (await mapsIn())[0]?.file !== was, "the new picture up", 20000);
+    map = (await mapsIn())[0];
+    same([map.w, map.h, map.pins.length, map.shown], [1200, 900, 3, true], "the new picture, 1200 by 900, with its three pins and still shown");
+    same(await keys(), [`c/${tuesday.id}/${map.file}`], "and only the new picture in R2");
+    await mo.page.waitForSelector(".wm-stage.is-ready");
+    same(await mo.page.$eval(".wm-img", (i) => i.naturalWidth), 1200, "on Mo's phone straight away");
+
+    // A pin taken off comes back with Undo.
+    await shut(mo.page);
+    await mo.page.click('[data-do="mlist"]');
+    await mo.page.click(`.wm-li[data-pin="${pMill.id}"]`);
+    await mo.page.click(`[data-do="munpin"][data-pin="${pMill.id}"]`);
+    has(await mo.page.textContent(`[data-do="munpin"][data-pin="${pMill.id}"]`), "Tap again", "taking a pin off takes a second tap");
+    await mo.page.click(`[data-do="munpin"][data-pin="${pMill.id}"]`);
+    await until(async () => (await mapsIn())[0]?.pins.length === 2, "the old mill off the map");
+    await mo.page.click('#cc-toast [data-act="wundo"]');
+    await until(async () => (await mapsIn())[0]?.pins.some((p) => p.id === pMill.id), "and back with Undo");
+
+    // From a page: Orla's has Pin it on the Steeplands, which opens the map
+    // ready to place her, and her page says she's on it once she is.
+    const orlaId = await pageId("Orla Strand");
+    await toWorld(mo.page);
+    await mo.page.click('.wp-tok-a:has(b.wp-tok-n:text-is("Orla Strand"))');
+    await until(async () => (await h1(mo.page)) === "Orla Strand", "Orla's page");
+    has(await text(mo.page, ".wm-put"), "Pin it on The Steeplands", "Orla's page offers to pin her on the Steeplands");
+    await mo.page.click(".wm-put a");
+    await mo.page.waitForSelector(".wm-stage.is-placing");
+    await mo.page.click('[data-do="mput"]');
+    same(await mo.page.$eval('form[data-form="w-mp-pin"] select[name="to"]', (el) => el.value), `p:${orlaId}`, "with Orla picked already");
+    await mo.page.click('form[data-form="w-mp-pin"] button[type="submit"]');
+    await until(async () => (await mapsIn())[0]?.pins.some((p) => p.to?.id === orlaId), "Orla's pin on the server");
+    await mo.page.click(".wm-open");
+    await until(async () => (await h1(mo.page)) === "Orla Strand", "Orla's page from her pin");
+    has(await text(mo.page, ".wm-on"), "The Steeplands", "and it says she's on the Steeplands");
+
+    // Nothing crosses: Zed can't get Tuesday Lair's map, and Zed's Night has none.
+    same((await api(zed.page, "GET", `/api/campaigns/${tuesday.id}/maps/${map.id}?v=${map.file}`)).status, 404, "Zed can't get Tuesday Lair's map");
+    same((await got(zed.page, "GET", `/api/campaigns/${zedsNight.id}/world`)).json?.world?.maps, [], "and Zed's Night has no maps");
+    same((await got(kai.page, "GET", `/api/campaigns/${zedsNight.id}/world`)).json?.world?.maps, [], "nor does Kai's Dorrie there");
+
+    // A map taken out takes its picture with it, and so does ending a campaign.
+    const under = await upload(mo.page, tuesday.id, "under-baths1", small, "image/png", "Under the Copper Baths");
+    same([under.status, under.json?.world?.maps?.length], [200, 2], "a second map put up straight from the phone");
+    const underFile = (await mapsIn()).find((m) => m.id === "under-baths1")?.file;
+    await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&world&m=under-baths1`);
+    await mo.page.waitForSelector(".wm-stage");
+    await mo.page.click('[data-do="mset"]');
+    await mo.page.click('[data-do="mgone"]');
+    has(await mo.page.textContent('[data-do="mgone"]'), "Tap again", "taking a map out takes a second tap");
+    await mo.page.click('[data-do="mgone"]');
+    await until(async () => (await mapsIn()).length === 1, "the second map out of the world");
+    await until(async () => !(await keys()).includes(`c/${tuesday.id}/${underFile}`), "and its picture out of R2");
+    const spare = (await got(mo.page, "POST", "/api/campaigns", { name: "Spare Night" })).json?.campaign;
+    same((await upload(mo.page, spare.id, "spare-map01", small, "image/png", "Spare")).status, 200, "a map in Spare Night");
+    same((await keys(`c/${spare.id}/`)).length, 1, "its picture in its own folder");
+    same((await got(mo.page, "DELETE", `/api/campaigns/${spare.id}`)).status, 200, "Spare Night ends");
+    same(await keys(`c/${spare.id}/`), [], "and its picture goes with it");
+
+    // The World screen, a map and the World tab, at 390 in both themes.
+    for (const theme of ["dark", "light"]) {
+      for (const p of [mo.page, kai.page]) await p.evaluate((x) => localStorage.setItem("zi-theme", x), theme);
+      await toWorld(mo.page);
+      await mo.page.waitForSelector("#wm-h");
+      await axe(mo.page, `maps on the World screen, ${theme}`);
+      await mo.page.$eval("#wm-h", (el) => el.scrollIntoView());
+      await shot(mo.page, `map-world-${theme}`);
+      await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&world&m=${map.id}&pin=${pBaths.id}`);
+      await mo.page.waitForSelector(".wm-stage.is-ready");
+      await mo.page.waitForSelector(".wm-sheet");
+      await mo.page.waitForTimeout(300);
+      await axe(mo.page, `a map with a pin open, ${theme}`);
+      same(await mo.page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1), true, `the map fills the screen and no more (${theme})`);
+      await shot(mo.page, `map-gm-${theme}`);
+      await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+      await kai.page.waitForSelector("#wm-h");
+      await axe(kai.page, `maps on the World tab, ${theme}`);
+      await kai.page.$eval("#wm-h", (el) => el.scrollIntoView());
+      await kai.page.waitForTimeout(200);
+      await shot(kai.page, `map-tab-${theme}`);
+      await kai.page.click(".wm-tok-a");
+      await kai.page.waitForSelector(".wm-stage.is-ready");
+      await axe(kai.page, `a map on Kai's phone, ${theme}`);
+      await shot(kai.page, `map-player-${theme}`);
+    }
+    for (const p of [mo.page, kai.page]) await p.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+  }
+  console.log("9b. Maps and her pins");
+  await checkMaps();
 
   // ------------------------------------------------------------ 10. who can do what
   console.log("10. Who can do what");

@@ -1689,3 +1689,125 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
   .ft-fac:active { transform: none; }
 }
 .ft-done-note { margin: 0; padding: 0.45rem 0.7rem; font-weight: 700; color: var(--gold-ink); background: color-mix(in srgb, var(--gold) 10%, var(--surface)); border-left: 3px solid var(--gold); border-radius: 2px; overflow-wrap: anywhere; }
+
+/* ── Maps (stage 4 of notes/worlds-plan.md): the GM's pictures under places
+   and people, and each one full screen, the map filling everything under its
+   name, with the zoom by the right thumb and the bar along the bottom. Her
+   pins are violet drops punched out of card, a hidden one on a dashed edge,
+   and they stay the same size however far in the map goes. */
+.wm-sec { margin-top: 1.6rem; }
+.wm-toks { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.wm-tok-a { grid-template-columns: 64px minmax(0, 1fr); align-items: center; }
+.wm-thumb { display: grid; place-items: center; width: 64px; height: 64px; overflow: hidden; color: var(--zd-them-ink); background: var(--zd-slot); border: 1.5px solid var(--zd-them-line); border-radius: 3px; }
+.wm-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.wm-tok-in { display: grid; gap: 2px; min-width: 0; }
+.wm-tok-n { font-family: var(--display); font-weight: 600; font-size: 1.15rem; line-height: 1.2; letter-spacing: 0.01em; overflow-wrap: anywhere; }
+.wm-tok-w { font-size: 0.95rem; line-height: 1.35; color: var(--muted); }
+.wm-tok.is-new .wb-tok-a { animation: wb-lit 1.6s ease-out; }
+.wm-file input[type="file"] { width: 100%; min-height: 44px; font: inherit; font-size: 0.92rem; color: var(--muted); }
+.wm-file input[type="file"]::file-selector-button { min-height: 44px; margin-right: 0.8rem; padding: 0 1rem; font: inherit; font-weight: 700; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 2px; cursor: pointer; }
+.wm-up:empty { display: none; }
+.wm-up { font-weight: 700; color: var(--gold-ink); }
+.wm-on { margin-top: 1.6rem; }
+.wm-put { margin-top: 0.6rem; }
+
+/* One map, full screen. */
+html.cc-mapping .companion { padding-bottom: 0; }
+html.cc-mapping { overscroll-behavior: none; }
+.wm { display: flex; flex-direction: column; height: calc(100dvh - max(0.25rem, env(safe-area-inset-top, 0px))); min-height: 26rem; }
+.wm-head { padding-block: 0.2rem 0.5rem; }
+.wm-head .kicker { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--zd-them-ink); }
+.wm-head h1 { margin: 0.05rem 0 0; font-size: clamp(1.45rem, 1.2rem + 1.4vw, 2.1rem); }
+.wm-frame { position: relative; flex: 1; min-height: 0; margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px))); overflow: hidden; background: var(--zd-slot); border-top: 1px solid var(--line); }
+@media (min-width: 46rem) {
+  .wm-frame { margin: 0 0 12px; border: 1px solid var(--line); border-radius: 3px; }
+}
+.wm-stage { position: absolute; inset: 0; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: grab; outline: none; }
+.wm-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--violet); }
+.wm-stage.is-moving { cursor: grabbing; }
+.wm-layer { position: absolute; left: 0; top: 0; transform-origin: 0 0; }
+.wm-stage.is-moving .wm-layer { will-change: transform; }
+.wm-img { display: block; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 180ms ease-out; }
+.wm-stage.is-ready .wm-img { opacity: 1; }
+.wm-pins { position: absolute; inset: 0; }
+.wm-msg { position: absolute; left: 16px; right: 16px; top: 40%; display: grid; justify-items: center; gap: 8px; text-align: center; color: var(--muted); pointer-events: none; }
+.wm-msg p { margin: 0; max-width: 22rem; font-size: 0.95rem; line-height: 1.4; }
+.wm-msg .button { pointer-events: auto; }
+.wm-stage.is-ready .wm-msg { display: none; }
+
+/* A pin: its tip is the spot. The drop's 30 by 38, and the tap reaches 44. */
+.wm-pin { position: absolute; display: block; width: 30px; height: 38px; margin: 0; padding: 0; color: var(--zd-them-ink); background: none; border: 0; transform: translate(-50%, -100%) scale(var(--inv, 1)); transform-origin: 50% 100%; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.wm-pin::after { content: ""; position: absolute; inset: -6px -7px -2px; }
+.wm-pin:focus-visible { outline: none; }
+.wm-pin:focus-visible .wm-drop { stroke: var(--violet); stroke-width: 3.5; }
+.wm-mk { display: block; overflow: visible; filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.55)); }
+.wm-drop { fill: var(--zd-token); stroke: var(--zd-them-line); stroke-width: 2.4; }
+.wm-in { fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.wm-dot { fill: currentColor; stroke: none; }
+.wm-pin-l { position: absolute; left: 50%; top: calc(100% + 3px); max-width: 11em; padding: 1px 6px; overflow: hidden; font-size: 0.78rem; font-weight: 700; line-height: 1.35; white-space: nowrap; text-overflow: ellipsis; color: var(--ink); background: color-mix(in srgb, var(--surface) 92%, transparent); border: 1px solid var(--zd-them-line); border-radius: 2px; transform: translateX(-50%); pointer-events: none; }
+.wm-stage.is-crowded .wm-pin:not(.is-on) .wm-pin-l { display: none; }
+.wm-pin.is-hidden .wm-drop { stroke-dasharray: 4 3; }
+.wm-pin.is-hidden .wm-mk { opacity: 0.86; }
+.wm-pin.is-hidden .wm-pin-l { color: var(--muted); border-style: dashed; }
+.wm-pin.is-on .wm-drop { fill: var(--zd-them); }
+.wm-pin.is-on .wm-in { stroke: var(--zd-on-them); }
+.wm-pin.is-on .wm-dot { fill: var(--zd-on-them); }
+.wm-pin.is-on { z-index: 2; }
+.wm-pin.is-moving { opacity: 0.4; }
+.wm-pin.is-draft { pointer-events: none; z-index: 3; }
+.wm-pin.is-draft .wm-drop { fill: var(--zd-them); }
+.wm-pin.is-draft .wm-dot { fill: var(--zd-on-them); }
+
+/* Placing a pin: the point in the middle of the map is where it goes. */
+.wm-cross { position: absolute; left: 50%; top: 50%; display: none; width: 30px; height: 38px; color: var(--zd-on-them); transform: translate(-50%, -100%); pointer-events: none; }
+.wm-cross .wm-drop { fill: var(--zd-them); stroke: var(--zd-token); }
+.wm-cross .wm-dot { fill: var(--zd-on-them); }
+.wm-cross::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; margin-left: -5px; border: 2px solid var(--zd-them-line); border-radius: 50%; background: color-mix(in srgb, var(--zd-token) 60%, transparent); }
+.wm-stage.is-placing .wm-cross { display: block; }
+.wm-stage.is-placing { cursor: crosshair; }
+
+/* The zoom, by the right thumb, and the bar along the bottom. */
+.wm-zoom { position: absolute; right: max(10px, env(safe-area-inset-right, 0px)); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 2; display: grid; gap: 6px; }
+/* On a map the bar's along the bottom and what's open sits over it, so a
+   toast comes in at the top of the map instead. */
+html.cc-mapping .cc-toast { top: calc(env(safe-area-inset-top, 0px) + 8.5rem); bottom: auto; transform: translate(-50%, -14px); opacity: 0; transition: transform 0.2s ease, opacity 0.2s ease, visibility 0.2s; }
+html.cc-mapping .cc-toast.show { transform: translate(-50%, 0); opacity: 1; }
+.wm-frame.is-placing .wm-zoom { bottom: calc(132px + env(safe-area-inset-bottom, 0px)); }
+.wm-z { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 2px; box-shadow: 0 2px 8px rgb(0 0 0 / 0.3); }
+.wm-z:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wm-bar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; padding: 18px 10px calc(10px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--bg) 88%, transparent) 40%); }
+.cc .wm-bar .button { display: inline-flex; align-items: center; gap: 6px; padding: 0 0.8rem; font-size: 0.9rem; box-shadow: 0 2px 10px rgb(0 0 0 / 0.25); }
+.cc .wm-bar .button.primary { padding: 0 1rem; }
+.wm-n { min-width: 1.4em; padding: 0 4px; font-size: 0.8rem; text-align: center; color: var(--zd-on-them); background: var(--zd-them); border-radius: 2px; }
+.wm-bar.is-placing { flex-direction: column; align-items: stretch; gap: 6px; }
+.wm-hint { margin: 0; text-align: center; font-size: 0.92rem; font-weight: 700; line-height: 1.35; color: var(--ink); text-shadow: 0 1px 2px var(--bg); }
+.wm-bar-row { display: flex; justify-content: center; gap: 8px; }
+
+/* What's open at the bottom: a pin, a pin being placed or changed, the list
+   of pins, or the map's own settings. */
+.wm-sheet { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; max-height: min(64%, 32rem); overflow: auto; overscroll-behavior: contain; padding: 10px 14px calc(14px + env(safe-area-inset-bottom, 0px)); background: var(--panel); border-top: 2px solid var(--zd-them-line); box-shadow: 0 -8px 30px rgb(0 0 0 / 0.35); animation: wm-up 200ms cubic-bezier(0.2, 0.8, 0.3, 1); touch-action: pan-y; }
+@keyframes wm-up { from { transform: translateY(18px); opacity: 0; } to { transform: none; opacity: 1; } }
+.wm-sheet-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.cc .wm-sheet-top h2 { margin: 0; padding: 0; background: none; font-size: 1.25rem; overflow-wrap: anywhere; }
+.wm-what { margin: 0.1rem 0 0.4rem; }
+.wm-sheet .wb-show { margin: 0.6rem 0; }
+.wm-acts { margin-bottom: 0; }
+.wm-shows { margin: 0.4rem 0 0; }
+.wm-form .cc-field input, .wm-form .cc-field select { width: 100%; }
+.wm-form + .wm-form { margin-top: 0.8rem; padding-top: 0.6rem; border-top: 1px solid var(--line-soft); }
+.wm-list { display: grid; gap: 4px; margin: 0.4rem 0 0; padding: 0; list-style: none; }
+.wm-li { display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 10px; width: 100%; min-height: 48px; padding: 4px 8px; text-align: left; color: var(--ink); background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.wm-li.is-on { border-color: var(--zd-them-line); }
+.wm-li:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wm-li-m { color: var(--zd-them-ink); }
+.wm-li-m .wm-mk { width: 24px; height: 30px; filter: none; }
+.wm-li-n { font-weight: 700; overflow-wrap: anywhere; }
+@media (max-height: 520px) and (orientation: landscape) {
+  .wm-head .kicker { display: none; }
+  .wm-head h1 { font-size: 1.2rem; }
+  .wm { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wm-sheet { animation: none; }
+  .wm-img { transition: none; }
+}

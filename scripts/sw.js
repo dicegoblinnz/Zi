@@ -19,7 +19,9 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
-    for (const key of await caches.keys()) if (key.startsWith("zi-") && key !== CACHE) await caches.delete(key);
+    // The map pictures a phone's opened (src/companion/maps.js) aren't the
+    // site's, so a new version leaves them be.
+    for (const key of await caches.keys()) if (key.startsWith("zi-") && key !== CACHE && key !== "zi-maps") await caches.delete(key);
     await self.clients.claim();
   })());
 });
