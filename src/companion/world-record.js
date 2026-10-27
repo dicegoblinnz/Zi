@@ -28,6 +28,8 @@
 //   { o: "wb-drop", lid }        a line off it
 //   { o: "wb-show", v }          the history shown to the crew, or hidden again
 
+// One request carries 200,000 characters (MAX_TEXT in src/worker/index.js),
+// so on a big board Done sends the record on its own, after the factions.
 export const BMAX = { lines: 80, text: 400, dealt: 150000, depth: 8, list: 256, words: 600 };
 const REGIONS = ["town", "city", "country", "world", "stars"];
 const DIALS = ["tense", "strange", "rich", "ruled"];

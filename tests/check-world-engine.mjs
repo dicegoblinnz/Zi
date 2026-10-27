@@ -110,6 +110,8 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
   const plain = (r) => (typeof r === "string" ? r : { ...r, strange: false });
   broken("too few strange Secrets", (s) => ((s.core.secrets = s.core.secrets.map(plain)), (s.eras.dusk.secrets = s.eras.dusk.secrets.map(plain))), "of the 3 strange Secrets it needs", { minimums: true });
   same(compileTables(copy(base), BOOK, { minimums: false }).problems, [], "the made-up pack, read and checked");
+  broken("too few agendas for the first faction built", (s) => (s.core.agendas = s.core.agendas.filter((a) => /\{(rival|res|asset)\}/.test(a.text)).concat([{ text: "Take {seat}.", die: 4 }])), "three that only aim at a seat");
+  broken("a fallback agenda that needs another faction", (s) => (s.core.fallbacks.agenda = { text: "Take {seat} from {rival}.", die: 4 }), "fallbacks.agenda aims only at a seat");
   broken("a row written twice", (s) => s.eras.dusk.seats.push({ ...s.eras.dusk.seats[2] }), "says the same as eras/dusk.yaml seats row 3");
   // A row keeps its id when rows are added round it, so a world built from
   // last week's tables still knows which rows it holds.
@@ -138,6 +140,7 @@ for (const era of Object.keys(T.eras).filter((e) => T.packs[`era:${e}`])) {
 }
 const BOARDS = 200;
 let dealtCount = 0;
+let lastNamed = 0;
 const started = Date.now();
 for (const g of groups) {
   let fallbacks = 0;
@@ -199,12 +202,16 @@ for (const g of groups) {
       for (const t of f.threads) if (!Number.isInteger(t.to) || t.to === i || t.to >= C.factions.length) fail(`${who}: a thread toward nobody`);
     });
     if (C.seats.length !== n + 2 || C.seats.filter((s) => s.held < 0).length !== 2) fail(`${seed}: ${C.seats.length} seats for ${n} factions`);
+    // Agendas and Secrets aim at the whole board, the last faction dealt too.
+    const L = n - 1;
+    if (W.factions.some((f, j) => j !== L && (f.agenda?.at?.rival === L || f.agenda?.at?.res?.j === L || f.agenda?.at?.asset?.j === L || f.secret?.at === L))) lastNamed++;
   }
   yes(fallbacks * 20 < BOARDS, `${g.what}: ${fallbacks} of ${BOARDS} boards needed a fallback, and that's 1 in 20 or more`);
   if (firstFail) note(`${g.what}: ${firstFail}`);
   console.log(`2. ${g.what}: ${BOARDS} boards, ${fallbacks} with a fallback`);
 }
 console.log(`   ${dealtCount} boards dealt twice each in ${((Date.now() - started) / 1000).toFixed(1)}s`);
+yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's agenda or Secret on only ${lastNamed} of ${dealtCount} boards`);
 
 // 3. Dealing one step again.
 {
@@ -282,6 +289,39 @@ console.log(`   ${dealtCount} boards dealt twice each in ${((Date.now() - starte
     const fake = away ? null : { ...T, packs: { ...T.packs, [`twist:${twisted.twist}`]: { ...tp, fits: tp.fits.slice(1) } } };
     const where = away ?? T.packs[`era:${twisted.era}`].fits.find((r) => !fake.packs[`twist:${twisted.twist}`].fits.includes(r));
     yes(!canDeal(fake ?? T, { region: where, era: twisted.era, twist: twisted.twist }), `${twisted.name} can't be dealt at ${where}, where its twist's pack doesn't go`);
+  }
+  // An agenda aimed at another faction's resource keeps its card when that
+  // faction's resources are dealt again, and aims at one of the new ones,
+  // on a dozen boards.
+  {
+    let cases = 0;
+    for (let b = 0; b < 400 && cases < 12; b++) {
+      const D = dealWorld(T, { recipe: g.recipe, seed: newSeed(T, rngOf("aim", b)), factions: 8 });
+      const i = D.factions.findIndex((f) => f.agenda?.at?.res);
+      if (i < 0) continue;
+      cases++;
+      const j = D.factions[i].agenda.at.res.j;
+      const ids = D.factions.map((f) => f.agenda.id);
+      redeal(T, D, `f:${j}:res`);
+      D.factions.forEach((f, k) => k !== j && same(f.agenda.id, ids[k], `${D.seed}: dealing faction ${j + 1}'s resources again keeps faction ${k + 1}'s agenda`));
+      const at = D.factions[i].agenda?.at?.res;
+      yes(at && at.j !== i && D.factions[at.j]?.res?.some((r) => r.id === at.id), `${D.seed}: and the one aimed at them aims at one of theirs now`);
+    }
+    same(cases, 12, "a dozen boards with an agenda aimed at another faction's resource");
+  }
+  // After the block check's fix, dealing something else again leaves the
+  // needs as they were, on six boards.
+  {
+    let cases = 0;
+    for (let b = 0; b < 800 && cases < 6; b++) {
+      const B = dealWorld(T, { recipe: g.recipe, seed: newSeed(T, rngOf("block", b)), factions: 5 + (b % 8) });
+      if (!B.fixes.some((f) => f.k === "block") || !B.checks.every((c) => c.ok)) continue;
+      cases++;
+      const needs = JSON.stringify(B.needs);
+      redeal(T, B, `f:${B.n - 1}:name`);
+      same(JSON.stringify(B.needs), needs, `${B.seed}: dealing a name again after the block check's fix leaves the needs as they were`);
+    }
+    same(cases, 6, "six boards the block check dealt again");
   }
   console.log("3. dealing a step again changes it and what's after it on the card, and nothing else");
 }

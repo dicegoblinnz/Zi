@@ -43,6 +43,11 @@ export const REGIONS = ["town", "city", "country", "world", "stars"];
 export const SIZES = ["small", "local", "city", "great"];
 export const DIALS = ["tense", "strange", "rich", "ruled"];
 export const STEPS = ["seat", "size", "type", "exc", "method", "want", "res", "assets", "agenda", "face", "secret", "name"];
+// Dealing goes round the factions twice: up to their assets, then the rest,
+// so an agenda or a Secret can aim at any faction on the board, not just the
+// ones dealt before it.
+const EARLY = STEPS.slice(0, STEPS.indexOf("agenda"));
+const LATE = STEPS.slice(STEPS.indexOf("agenda"));
 export const QUESTIONS = ["holds", "runs", "notices"];
 export const CHECKS = ["whole", "power", "rival", "block", "secret", "unique", "aims", "strange"];
 // The bags no two factions share a row from till the bag's empty, and the
@@ -627,16 +632,19 @@ export function dealRest(T, W, { finish = true } = {}) {
   if (!W.tension) W.tension = options(T, W, "tension", 1)[0] ?? null;
   W.dials = dialsOf(W);
   for (let k = 0; k < W.s; k++) if (!W.seats[k]) W.seats[k] = options(T, W, `seat:${k}`, 1)[0] ?? null;
-  for (let i = 0; i < W.n; i++) dealFaction(T, W, i);
+  for (let i = 0; i < W.n; i++) dealFaction(T, W, i, EARLY);
+  for (let i = 0; i < W.n; i++) dealFaction(T, W, i, LATE);
   if (!finish) return W;
   if (!W.web) dealWeb(T, W);
   if (!W.needs) dealNeeds(T, W);
   if (!W.checks) runChecks(T, W);
   return W;
 }
-function dealFaction(T, W, i) {
+function dealFaction(T, W, i, steps = STEPS) {
   const f = W.factions[i];
-  for (const step of STEPS) {
+  // A card with a hole in its first half waits for the whole check.
+  if (steps === LATE && EARLY.some((s) => s !== "exc" && f[s] == null)) return;
+  for (const step of steps) {
     if (step === "exc" ? f.exc !== undefined : f[step] != null) continue;
     f[step] = options(T, W, `f:${i}:${step}`, 1)[0] ?? null;
     if (f[step] == null && step !== "exc") break;
@@ -723,7 +731,7 @@ function extrasOf(W, j) {
 const needsOf = (W) => Math.max(W.n >= 5 ? 1 : 0, Math.round(W.n * NEEDS[W.dials.tense]));
 function dealNeeds(T, W, { only = null } = {}) {
   W.needs = [];
-  const rand = randOf(W, "needs", only ?? "");
+  const rand = randOf(W, "needs");
   const count = needsOf(W);
   const order = shuffle(
     W.factions.map((_, i) => i),
@@ -743,13 +751,13 @@ function dealNeeds(T, W, { only = null } = {}) {
         const fit = fitOf(r, card, board);
         return { w: weightOf(W, r, fit), r, fit };
       });
-    const [c] = draw(cands, rngOf(W.seed, "need", i, W.tries.needs ?? 0, only ?? ""));
+    const [c] = draw(cands, rngOf(W.seed, "need", i, W.tries.needs ?? 0));
     if (!c) continue;
     const need = { i, asset: assetOf(T, c.r, becauseOf(T, c.fit.src)), by: null, tie: null, at: {} };
     // Whoever's got the extra resource, a faction already blocking one less likely.
     const blocking = (j) => W.needs.filter((x) => x.by === j).length;
     const holders = W.factions.map((_, j) => (j !== i && extrasOf(W, j) > 0 ? { w: 1 / (1 + 3 * blocking(j)), j } : null)).filter(Boolean);
-    const by = draw(holders, rngOf(W.seed, "block", i, W.tries.needs ?? 0, only ?? ""))[0]?.j ?? null;
+    const by = draw(holders, rngOf(W.seed, "block", i, W.tries.needs ?? 0))[0]?.j ?? null;
     if (by != null) {
       const fresh = new Set(W.needs.map((x) => x.tie?.id).filter(Boolean));
       const t = tieFor(T, W, ["blocked"], null, by, i, fresh, rngOf(W.seed, "blocked", i, W.tries.needs ?? 0));
@@ -843,6 +851,24 @@ function mendAims(W, i) {
   for (const t of W.web ?? []) if (t.a === i) mend(t, `${t.a}-${t.b}`);
   for (const n of W.needs ?? []) if (n.by === i) mend(n, `need-${n.i}`);
 }
+// An agenda whose aim's gone (another faction's resource or asset dealt
+// again) keeps its card, locked or not, and finds something else to aim at,
+// on the same faction if it can.
+function reaim(W, i, t) {
+  const ag = W.factions[i].agenda;
+  if (!ag?.aims?.length || own(ag)) return false;
+  const rand = rngOf(W.seed, `f:${i}:agenda`, W.tries[`f:${i}:agenda`] ?? 0, "aim", t);
+  const at = { ...(ag.at ?? {}) };
+  for (const a of ag.aims) {
+    if (aimOk(W, i, { aims: [a], at })) continue;
+    const j = at[a]?.j;
+    const list = (a === "res" || a === "asset") && j != null && j !== i ? (W.factions[j]?.[a === "res" ? "res" : "assets"] ?? []) : [];
+    if (list.length) at[a] = { j, id: pick(list, rand).id };
+    else Object.assign(at, aimOf(W, i, [a], rand));
+  }
+  ag.at = at;
+  return aimOk(W, i, ag);
+}
 function fix(T, W, key, t) {
   if (key === "whole") {
     // The first step a card's missing, dealt again, and the rest after it.
@@ -885,7 +911,9 @@ function fix(T, W, key, t) {
     });
   } else if (key === "aims") {
     W.factions.forEach((f, i) => {
-      if (!own(f.agenda) && !aimOk(W, i, f.agenda)) redealStep(T, W, i, "agenda", null, key, t);
+      if (own(f.agenda) || aimOk(W, i, f.agenda)) return;
+      if (reaim(W, i, t)) W.fixes.push({ k: key, path: `f:${i}:agenda`, t, aim: true });
+      else redealStep(T, W, i, "agenda", null, key, t);
     });
   } else if (key === "strange") {
     // Only a Secret or a name, since nothing else on the card reads them, and
