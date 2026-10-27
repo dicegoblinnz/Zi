@@ -17,7 +17,7 @@ Most of the time the game's just a conversation. The GM describes what's going o
 ## The Round {#s-round}
 
 1.  **The GM telegraphs.** Everything that's coming this round goes on the table, face up: what it's doing, who it's aimed at, and how hard, in dice.
-2.  **The players act**, in any order they like, one action each. Talk it through and make a plan. There's no initiative.
+2.  **The players act**, in any order they like, one action each. You can spend yours answering one telegraph, put it into a friend's answer, or spend it on something else, like going at a threat or working a stake. Talk it through and make a plan. There's no initiative.
 3.  **The round ends.** Every telegraph nobody answered **lands**. Clocks and events nobody worked step down, and every condition steps down one size. Then the GM telegraphs the next round.
 
 Everything else in this chapter is what happens inside a round.

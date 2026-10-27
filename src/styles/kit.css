@@ -107,6 +107,9 @@
 .zd-tag.threat { background: var(--zd-token); border: 2px solid var(--zd-them-line); }
 .zd-tag.hidden { border: 1.5px dashed var(--muted); }
 .zd-tag.hidden em { color: var(--muted); }
+/* Gone: struck off, the way you'd cross it out on paper. */
+.zd-tag.gone { background: transparent; border: 2px dashed var(--line); }
+.zd-tag.gone em { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 2px; }
 
 /* Sigils and crests */
 .zd-sigil { width: var(--s, 30px); height: var(--s, 30px); display: block; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; color: var(--ink); stroke-width: 2.2; }

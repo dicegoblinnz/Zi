@@ -76,7 +76,7 @@ Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer
 ## The round {#s-qr-round}
 
 1.  **The GM telegraphs** everything, face up: what, at whom, how hard.
-2.  **Players act**, in any order, one action each.
+2.  **Players act**, in any order, one action each: answer one telegraph, put your action into a friend's answer, or spend it on something else.
 3.  **The round ends.** Unanswered telegraphs land, clocks and events nobody worked step down, and so does every condition.
 
 ## Telegraphs and defence {#telegraphs-and-defence}

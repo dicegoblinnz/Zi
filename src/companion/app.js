@@ -153,9 +153,22 @@ const table = makeTable({
   openDialog: (r) => openRoll(r),
   renderDialog: () => renderDialog(),
   closeDialog: () => closeDialog(),
+  // The twenty places, for the GM's scene.
+  places: DATA.places ?? [],
+  // A change to the character that's open, saved and undoable like any other.
+  change: (label, fn) => change(label, fn),
+  // A change to one of this phone's characters the table turned down: no undo.
+  mutate: (id, fn) => {
+    const ch = store.data.characters.find((x) => x.id === id);
+    if (!ch || !normal(ch)) return;
+    fn(ch.state);
+    store.save();
+    if (!dialog.open) render();
+  },
   // A character's set actions, as the answer picker shows them.
-  actions: (ch, c) => c.actions.map((a, i) => ({ i, name: a.name, says: `${steps(stepsNow(c, ch.state, a))} · ${diceLabel(stepsToDice(stepsNow(c, ch.state, a)))}`, dice: stepsToDice(stepsNow(c, ch.state, a)).map((d, j) => kitDie(d, { hide: true, cls: j ? "is-next" : "" })).join("") })),
+  actions: (ch, c) => c.actions.map((a, i) => ({ i, name: a.name, n: stepsNow(c, ch.state, a), says: `${steps(stepsNow(c, ch.state, a))} · ${diceLabel(stepsToDice(stepsNow(c, ch.state, a)))}`, dice: stepsToDice(stepsNow(c, ch.state, a)).map((d, j) => kitDie(d, { hide: true, cls: j ? "is-next" : "" })).join("") })),
   answer: (i, tele) => openAction(i, tele),
+  work: (i, w) => openAction(i, null, w),
   defend: (pre) => openDefence(pre),
   signedOut: () => {
     sync.signedOutHere();
@@ -413,7 +426,14 @@ function noteTable(s) {
   if (r.kind === "action" && r.tele) {
     // It's an answer while it's against the telegraph's die, or the number the GM rolled for it.
     const answered = r.opp != null && r.dice.length > 0 && (r.vs === r.tele.d || r.vs === -1);
-    table.record(s, r.tele.camp, "a", r.tele.id, answered ? { act: r.name, steps: r.total, dice: r.dice.map((x) => ({ size: x.size, total: x.nat + x.plus, out: outcome(x) })), opp: r.opp, real: Boolean(r.real) } : null);
+    // Whoever put their action in, while their steps are still in it.
+    const with_ = r.friends.length ? (r.tele.with ?? []).map((w) => ({ user: w.user, ch: w.ch })) : [];
+    table.record(s, r.tele.camp, "a", r.tele.id, answered ? { act: r.name, steps: r.total, dice: r.dice.map((x) => ({ size: x.size, total: x.nat + x.plus, out: outcome(x) })), opp: r.opp, real: Boolean(r.real), ...(with_.length ? { with: with_ } : {}) } : null);
+  }
+  // A roll at a stake or an event on the live table's scene is an action.
+  if (r.kind === "action" && r.work) {
+    const worked = r.opp != null && r.dice.length > 0 && (r.vs === r.work.d || r.vs === -1);
+    table.noteWork(s, r, worked ? { id: r.work.actId, k: "work", ref: r.work.ref, act: r.name, steps: r.total, roll: { dice: r.dice.map((x) => ({ size: x.size, total: x.nat + x.plus, out: outcome(x) })), opp: r.opp, real: Boolean(r.real) }, aim: r.work.aim } : null);
   }
   if (r.kind === "defence" && r.camp && r.teles?.some(Boolean)) {
     for (const h of blocks(r)) {
@@ -1055,9 +1075,12 @@ const stepsNow = (c, s, a) => a.steps - outOn(c, s, a).length;
 // Every sheet has Defend. One that's lost it (an old build, say) defends on the action alone.
 const defendOf = (c) => c.actions.find((a) => a.name === "Defend") ?? { name: "Defend", steps: 1, die: "d2", lines: [] };
 
-// tele: the telegraph it's answering (table.js), whose die it's up against.
-function openAction(i, tele = null) {
-  openRoll({ kind: "action", mode: "build", a: i, off: new Set(), in: new Set(), borrow: new Set(), other: 0, conds: new Set(), friends: [], handed: 0, extra: -1, via: "resolve", beyond: false, count: null, shape: 0, vs: tele ? tele.d : 0, vsRolled: 4, mark: 0, dice: [], opp: null, oppSize: 0, log: [], pick: null, pads: [], padOpp: false, spinning: false, intents: {}, owns: new Set(), confFrom: null, tele });
+// tele: the telegraph it's answering (table.js), whose die it's up against,
+// with whoever's put their action in (with), whose steps go in as friends'.
+// work: a stake or an event on the live table's scene, and its die, or the
+// number it already rolled this round (held), which stands.
+function openAction(i, tele = null, work = null) {
+  openRoll({ kind: "action", mode: "build", a: i, off: new Set(), in: new Set(), borrow: new Set(), other: 0, conds: new Set(), friends: (tele?.with ?? []).map((w) => w.steps), handed: 0, extra: -1, via: "resolve", beyond: false, count: null, shape: 0, vs: tele ? tele.d : work ? (work.held != null ? -1 : work.d) : 0, vsRolled: work?.held ?? 4, work, mark: 0, dice: [], opp: null, oppSize: 0, log: [], pick: null, pads: [], padOpp: false, spinning: false, intents: {}, owns: new Set(), confFrom: null, tele });
 }
 // A dialog that's open already turns over to the next one.
 function openRoll(r) {
@@ -1348,7 +1371,7 @@ function resultView(c, s, ch) {
     ${them}
     ${r.spinning ? '<p class="cc-small cc-skip">Tap the dice to skip.</p>' : ""}</div>
     ${r.topNote && !r.spinning ? `<p class="cc-topnote">${esc(r.topNote)}</p>` : ""}
-    ${r.tele && !r.spinning && !picking && r.opp != null ? table.rollNote(r) : ""}
+    ${(r.tele || r.work) && !r.spinning && !picking && r.opp != null ? table.rollNote(r) : ""}
     ${picking ? `<div class="cc-note" role="status"><p>${r.pick.type === "plus" ? `Tap the ${r.pick.mark ? "Mark die" : "die"} to put +${r.pick.bonus} on.` : "Tap a die to roll it again, or roll them all."}</p><div class="cc-row">${r.pick.type === "reroll" ? '<button type="button" class="button sm" data-act="reroll-all">Roll them all</button>' : ""}<button type="button" class="button sm" data-act="pick-cancel">Never mind</button></div></div>` : rollSwingView(c, s)}
     ${offers ? `<div class="cc-row cc-offers">${offers}</div>` : ""}
     <p class="cc-small cc-left">You’ve got ${s.aura} Aura and ${s.resolve} Resolve.</p>
@@ -1369,7 +1392,7 @@ function resultView(c, s, ch) {
 // pre: the telegraphs that landed on this character (table.js), their dice
 // and what each was doing, ready to roll against.
 function openDefence(pre = null) {
-  openRoll({ kind: "defence", mode: "build", against: pre?.against ?? "blows", defend: false, incoming: pre?.incoming ?? [], mine: [], opp: [], pick: null, log: [], spinning: false, padOpp: true, dconds: {}, intents: pre?.intents ?? {}, owns: new Set(), assign: [], paid: [], extra: {}, swap: null, off: new Set(), in: new Set(), borrow: new Set(), other: 0, count: null, shape: 0, confFrom: null, moves: [], camp: pre?.camp ?? null, teles: pre?.teles ?? [], from: pre?.from ?? {} });
+  openRoll({ kind: "defence", mode: "build", against: pre?.against ?? "blows", defend: Boolean(pre?.defend), incoming: pre?.incoming ?? [], mine: [], opp: [], pick: null, log: [], spinning: false, padOpp: true, dconds: {}, intents: pre?.intents ?? {}, owns: new Set(), assign: [], paid: [], extra: {}, swap: null, off: new Set(), in: new Set(), borrow: new Set(), other: 0, count: null, shape: 0, confFrom: null, moves: [], camp: pre?.camp ?? null, teles: pre?.teles ?? [], from: pre?.from ?? {} });
 }
 
 // A condition is one step on whatever it fits, so Warded makes a d4 Defend a
@@ -1764,7 +1787,7 @@ function dialogView() {
   if (roll.kind === "name") return nameView();
   if (roll.kind === "rule") return ruleView();
   if (roll.kind === "camp") return camps.dialog(roll);
-  if (roll.kind === "tele" || roll.kind === "tg-pick") return table.dialog(roll);
+  if (roll.kind === "tele" || String(roll.kind).startsWith("tg-")) return table.dialog(roll);
   const c = normal(ch);
   if (!c) return "";
   const s = ch.state;
@@ -2884,7 +2907,7 @@ document.addEventListener("change", (e) => {
 
 document.addEventListener("input", (e) => {
   if (e.target.dataset?.bin) return builder.input(e.target);
-  if (e.target.dataset?.tg != null && roll?.kind === "tele") return table.input(e.target, roll);
+  if (e.target.dataset?.tg != null && ["tele", "tg-el", "tg-else"].includes(roll?.kind)) return table.input(e.target, roll);
   if (e.target.dataset?.dt != null && roll?.kind === "downtime") return dt.input(e.target, roll);
   if (e.target.dataset?.in === "intent" && roll?.intents) {
     roll.intents[e.target.dataset.k] = e.target.value.slice(0, 40);

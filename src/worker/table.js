@@ -24,7 +24,7 @@
 // nothing, and its round is kept in the object's own SQLite, so it outlasts a
 // dropped connection, a redeploy and the object being put to sleep.
 import { DurableObject } from "cloudflare:workers";
-import { apply, blank, current, forget, viewOf } from "../companion/table-rules.js";
+import { apply, blank, current, forget, fresh, viewOf } from "../companion/table-rules.js";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
 const MAX_OPS = 60;
@@ -59,6 +59,8 @@ export class Table extends DurableObject {
     } catch {}
     this.doc = doc && Array.isArray(doc.rounds) ? doc : { ...blank(), seq: {} };
     if (!this.doc.seq || typeof this.doc.seq !== "object") this.doc.seq = {};
+    // A table from before the scene and the round's actions gets them.
+    fresh(this.doc);
     return this.doc;
   }
 
@@ -160,7 +162,7 @@ export class Table extends DurableObject {
   async change(who, roster, dev, ops, phoneNow = null) {
     const doc = this.load();
     const now = Date.now();
-    const was = JSON.stringify([doc.fight, doc.rounds]);
+    const was = JSON.stringify([doc.fight, doc.rounds, doc.scene]);
     // Each phone's last change, under a key no phone can turn into anything else.
     const key = `d:${dev}`;
     const high = Number(doc.seq[key]?.n) || 0;
@@ -187,7 +189,7 @@ export class Table extends DurableObject {
     const people = this.here();
     if (who.role === "player") people.add(who.user);
     this.markSeen(people, now);
-    const changed = JSON.stringify([doc.fight, doc.rounds]) !== was;
+    const changed = JSON.stringify([doc.fight, doc.rounds, doc.scene]) !== was;
     if (changed) doc.v += 1;
     if (changed || top > high) this.save();
     if (changed) this.broadcast();

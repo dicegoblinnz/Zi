@@ -765,6 +765,34 @@ function sheetCard(name, body, warn) {
   return cardOf(name, lines, warn);
 }
 
+// The twenty places, for the GM to put on the live table's scene: each one's
+// ground, its stakes with what's in the way, and its scene clock, read off
+// its card. The build stops if a card can't be read.
+function placesFrom(doc, warn) {
+  const out = [];
+  for (const m of doc.body.matchAll(/^## (.+?) \{#(s-place-[a-z-]+)\}\n+:::place\n([\s\S]*?)\n:::$/gm)) {
+    const name = curly(m[1]);
+    const field = {};
+    for (const row of m[3].split("\n")) {
+      const f = row.match(/^\*\*([^*]+?)\*\* (.*)$/);
+      if (f) field[f[1]] = f[2].trim();
+    }
+    const ground = dots(dropStop(field["The ground"] ?? "")).map((seg) => seg.match(/^\*([^*]+)\*:\s*(.+)$/)).map((g) => (g ? { name: plain(g[1]), text: plain(g[2]) } : null));
+    const stakes = dots(dropStop(field.Stakes ?? "")).map((seg) => {
+      const s = seg.match(/^\*([^*]+)\*, Challenge (\d): (.+?)(?: \(([^)]+)\))?$/);
+      return s ? { name: plain(s[1]), c: Number(s[2]), tags: italics(s[3]), note: s[4] ? plain(s[4]) : "" } : null;
+    });
+    const clock = (field["Scene clock"] ?? "").match(/^d(\d+): (.+?)\.?$/);
+    if (!ground.length || ground.some((g) => !g) || !stakes.length || stakes.some((s) => !s || !s.tags.length) || !clock || ![2, 4, 6, 8, 10, 12].includes(Number(clock[1]))) {
+      warn(`can't read ${name}'s ground, stakes or scene clock`);
+      continue;
+    }
+    out.push({ id: m[2], name, ground, stakes, clock: { d: Number(clock[1]), what: plain(clock[2]) } });
+  }
+  if (out.length !== 20) warn(`expected twenty places, found ${out.length}`);
+  return out;
+}
+
 function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, warn) {
   // The cards and the sizes in Factions, and Building a Faction's tables.
   const sheets = new Map([...factionsDoc.body.matchAll(/^:::sheet\[([^\]]+)\][^\n]*\n([\s\S]*?)^:::$/gm)].map((m) => [m[1], m[2]]));
@@ -1019,6 +1047,10 @@ if (conditions.length < 10) companionWarn(`found only ${conditions.length} condi
 const partyDoc = docWith("{#s-party-faction}");
 const party = partyDoc ? partyFrom(partyDoc, (msg) => companionWarn(`party sheet: ${msg}`)) : null;
 if (!party) companionWarn("can't find The Party Sheet for the party sheet");
+// The twenty places, for the live table's scene.
+const placesDoc = docWith("{#s-place-copper-baths}");
+const places = placesDoc ? placesFrom(placesDoc, (msg) => companionWarn(`places: ${msg}`)) : [];
+if (!placesDoc) companionWarn("can't find the Twenty Places for the live table's scene");
 // The faction board's official content: the boards to bring in, Building a
 // Faction's tables and Appendix B's assets.
 const worldDocs = { factionsDoc: docWith("{#s-faction-build}"), steepDoc: docWith("{#the-four-great-powers}"), framesDoc: docWith("{#s-frame-brinewake}"), assetsDoc: docWith("{#faction-strength}") };
@@ -1137,7 +1169,7 @@ writeFileSync(
     changes: { title: curly(changes.meta.title), html: changesOut.html, headings: changesOut.headings },
     crew,
     crewLink: crewDoc ? `${pageFor.get(crewDoc.path)}#s-pregens` : "/rules/",
-    companion: { conditions, links: companionLinks, build, rules, party, worlds },
+    companion: { conditions, links: companionLinks, build, rules, party, worlds, places },
     learn,
   }),
 );

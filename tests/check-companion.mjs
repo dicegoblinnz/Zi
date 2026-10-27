@@ -4,6 +4,13 @@
 //   ZI_ONLY=5,5b node tests/check-companion.mjs runs only those parts.
 //
 // 1. Steps into dice match the table in The Core, splits included.
+// 1b. The live table's rules, as the server and every phone apply them: one
+//    action a round (an answer, a friend's answer or something else, and an
+//    extra one only with where it came from), intercepts for blows only and
+//    never your own, a combo's steps in one answer, a stake's die rolled once
+//    a round, and at the end of a round the clocks and events nobody worked
+//    stepping down, a late roll from the round stepping one back, the scene
+//    clock running out and a stake lost and one won.
 // 2. Every crew member's set actions on the phone match their sheet in the
 //    chapter, read straight off the Markdown here rather than from book.json.
 // 3. Vesk at the table: Sneak is 3 steps, a d6. Tap off move unseen and it's
@@ -134,6 +141,7 @@ import { fromCrew, randomBuild } from "../src/companion/ways.js";
 import { changesOf, said, typo } from "../src/companion/marks.js";
 import { grow } from "../src/companion/grow.js";
 import { CARD_WORDS, CREW, DECK_SIZE, newestChange, reachOf, readCards, staleCards } from "../scripts/learn.mjs";
+import * as T from "../src/companion/table-rules.js";
 import { parse as parseYaml } from "yaml";
 
 const SHOTS = process.argv[2] || null;
@@ -173,6 +181,93 @@ if (!diceShapes(9, 3).map(diceLabel).includes("d8 + d6 + d4")) note("9 steps fro
 same(diceShapes(8, 2)[0], [12, 4], "8 steps on two dice starts from the table's d12 and d4");
 same(diceRange(1, 3), { fewest: 1, most: 1 }, "a d2 can't split");
 console.log(`dice: ${rows} rows of the table checked`);
+
+// 1b. The live table's rules (table-rules.js), the ones the server and every
+// phone apply: one action a round, intercepts, combos, and the scene's
+// stakes, clocks and events stepping down at the end of a round nobody
+// worked them, the way The Round and Stakes, Clocks and Events have it.
+if (part("1b")) {
+  const roster = [{ user: "kai", name: "Kai", ch: "vesk", cname: "Vesk" }, { user: "sam", name: "Sam", ch: "bram", cname: "Bram" }, { user: "lee", name: "Lee", ch: "isolde", cname: "Isolde" }];
+  const gm = { user: "mo", role: "gm", ch: null, cname: "" };
+  const kai = { user: "kai", role: "player", ch: "vesk", cname: "Vesk" };
+  const sam = { user: "sam", role: "player", ch: "bram", cname: "Bram" };
+  const lee = { user: "lee", role: "player", ch: "isolde", cname: "Isolde" };
+  const doc = T.blank();
+  let now = 1000;
+  const ap = (op, who, extra = {}) => T.apply(doc, op, who, roster, now, extra);
+  const ok = (op, who, what, extra) => same(ap(op, who, extra), { ok: true }, what);
+  const not = (op, who, what, extra) => same(ap(op, who, extra).ok, false, what);
+  const r1 = () => doc.rounds[0];
+  // The Copper Baths, cut down: the satchel with a clock on it, the other buyer as the scene clock, and the Hot Pool.
+  ok({ o: "put", el: { id: "stake-satchel", t: "stake", name: "Dace’s satchel", c: 3, tags: ["Locked", "Guarded"], clock: 6 } }, gm, "a stake with a clock on it");
+  ok({ o: "put", el: { id: "event-buyer", t: "event", name: "The other buyer", what: "Dace signs with them", d: 4, scene: true } }, gm, "a scene clock");
+  ok({ o: "put", el: { id: "ground-pool", t: "ground", name: "The Hot Pool", text: "shove someone in" } }, gm, "the ground");
+  not({ o: "put", el: { id: "stake-satchel", t: "stake", name: "Mine now", c: 3 } }, kai, "a player can't change the scene");
+  ok({ o: "round", id: "round-one-01", tele: [{ id: "tele-club-01", who: "The brute", does: "Club Isolde", d: 8, kind: "blow", at: { user: "lee", ch: "isolde" } }, { id: "tele-roar-01", who: "The brute", does: "Roar at Isolde", d: 6, kind: "fear", at: { user: "lee", ch: "isolde" } }, { id: "tele-spear-1", who: "A guard", does: "Spear Vesk", d: 6, kind: "blow", at: { user: "kai", ch: "vesk" } }] }, gm, "round 1 goes out");
+  // Intercept: blows only, one taker, never your own.
+  not({ o: "icp", id: "tele-roar-01", ch: "bram", free: true }, sam, "fear's inside her head, so nobody takes it for her");
+  ok({ o: "icp", id: "tele-club-01", ch: "bram", free: true }, sam, "Bram takes the club for Isolde, free since he's a Guardian");
+  not({ o: "icp", id: "tele-club-01", ch: "vesk" }, kai, "and Vesk can't take it as well");
+  not({ o: "icp", id: "tele-spear-1", ch: "vesk" }, kai, "nor take her own");
+  // One action: Vesk answers the spear, so working the satchel needs another.
+  ok({ o: "answer", id: "tele-spear-1", ch: "vesk", a: { act: "Sneak", steps: 3, dice: [{ size: 6, total: 5 }], opp: 4, t: 990 } }, kai, "Vesk answers the spear", { phoneNow: 1000 });
+  const work = (id, total, opp, aim = "Locked", t = 995) => ({ id, k: "work", ref: "stake-satchel", act: "Locks", steps: 5, t, roll: { dice: [{ size: 10, total }], opp }, aim });
+  not({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: [], list: [work("act-vesk-01", 8, 4)] } }, kai, "her answer's her action, so she can't work the satchel too", { phoneNow: 1000 });
+  ok({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["resolve"], list: [work("act-vesk-01", 8, 4)] } }, kai, "with 1 Resolve for an extra action, she can", { phoneNow: 1000 });
+  same(doc.scene.stakes[0].tags.map((g) => g.gone), [1, 0], "her Locks, 8 against its 4, takes Locked");
+  same(r1().held["stake-satchel"], 4, "and the satchel's 4 stands for the round");
+  ok({ o: "acts", round: "round-one-01", ch: "bram", x: { more: [], list: [{ id: "act-bram-01", k: "work", ref: "stake-satchel", act: "Lift and carry", steps: 3, t: 996, roll: { dice: [{ size: 6, total: 4 }], opp: 2 }, aim: "Guarded" }] } }, sam, "Bram goes at it too", { phoneNow: 1000 });
+  same(r1().acts["sam|bram"].list[0].roll.won, false, "his 4 ties the 4 that stands, and a tie's a loss");
+  ok({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["resolve"], list: [] } }, kai, "Vesk takes her roll back", { phoneNow: 1000 });
+  same(doc.scene.stakes[0].tags.map((g) => g.gone), [0, 0], "and Locked's back in the way");
+  ok({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["resolve"], list: [work("act-vesk-02", 9, 4, "Guarded")] } }, kai, "she rolls it again, going for Guarded", { phoneNow: 1000 });
+  same(doc.scene.stakes[0].tags.map((g) => g.gone), [0, 1], "and Guarded's gone");
+  // A combo: Isolde puts her action into whoever answers the archer.
+  ok({ o: "add", tele: { id: "tele-arrow-1", who: "The archer", does: "Shoot Bram", d: 10, kind: "blow", at: { user: "sam", ch: "bram" } } }, gm, "the archer, mid-round");
+  ok({ o: "acts", round: "round-one-01", ch: "isolde", x: { more: [], list: [{ id: "act-isol-01", k: "join", ref: "tele-arrow-1", act: "Ward", steps: 3, t: 997 }] } }, lee, "Isolde puts her Ward into whoever answers the archer", { phoneNow: 1000 });
+  not({ o: "answer", id: "tele-arrow-1", ch: "isolde", a: { act: "Ward", steps: 3, dice: [{ size: 6, total: 5 }], opp: 3 } }, lee, "so she can't answer it as well");
+  not({ o: "answer", id: "tele-arrow-1", ch: "bram", a: { act: "Fight", steps: 7, dice: [{ size: 12, total: 11 }], opp: 9, with: [{ user: "lee", ch: "isolde" }] } }, sam, "Bram's spent his action on the satchel");
+  ok({ o: "acts", round: "round-one-01", ch: "bram", x: { more: [], list: [] } }, sam, "he takes it back", { phoneNow: 1000 });
+  ok({ o: "answer", id: "tele-arrow-1", ch: "bram", a: { act: "Fight", steps: 7, dice: [{ size: 12, total: 11 }], opp: 9, with: [{ user: "lee", ch: "isolde" }] } }, sam, "and answers the archer with Isolde's steps in");
+  same(r1().tele.find((t) => t.id === "tele-arrow-1").ans.with.map((w) => w.name), ["Isolde"], "Isolde's in his answer");
+  not({ o: "acts", round: "round-one-01", ch: "isolde", x: { more: [], list: [] } }, lee, "and once it's rolled, she can't take hers back", { phoneNow: 1000 });
+  same(T.spentBy(r1(), "sam", "bram"), { used: 1, have: 1 }, "Bram's one action is his answer");
+  not({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["resolve"], list: [work("act-vesk-02", 9, 4, "Guarded"), { id: "act-vesk-03", k: "else", act: "Defend", t: 998 }] } }, kai, "three actions on one extra is too many", { phoneNow: 1000 });
+  // The round ends: what nobody worked steps down, and the club lands on Bram.
+  now = 2000;
+  ok({ o: "end", round: "round-one-01" }, gm, "round 1 ends");
+  same([doc.scene.stakes[0].clock, doc.scene.events[0].d], [6, 2], "the satchel was worked, so its clock stays on d6, and the buyer's down to d2");
+  same(r1().moved, [{ ref: "event-buyer", from: 4, to: 2, out: "" }], "and the round says what moved");
+  same(T.landsOn(r1().tele[0]).user, "sam", "the club was aimed at Isolde, but it lands on Bram, who took it");
+  not({ o: "defend", id: "tele-club-01", ch: "isolde", r: { on: "Defend", stopped: false, mine: null, v: 6 } }, lee, "so Isolde doesn't roll When it lands for it");
+  ok({ o: "defend", id: "tele-club-01", ch: "bram", r: { on: "Defend", stopped: true, mine: 7, v: 6 } }, sam, "Bram does");
+  // Isolde's roll at the buyer, done in the round with no signal, turns up late: it never stepped down.
+  ok({ o: "acts", round: "round-one-01", ch: "isolde", x: { more: ["held"], list: [{ id: "act-isol-01", k: "join", ref: "tele-arrow-1", act: "Ward", steps: 3, t: 997 }, { id: "act-isol-02", k: "work", ref: "event-buyer", act: "Talk", steps: 2, t: 1500, roll: { dice: [{ size: 4, total: 1 }], opp: 3 }, aim: "slow" }] } }, lee, "Isolde's roll at the buyer, done in the round, turns up late", { phoneNow: 2001 });
+  same([doc.scene.events[0].d, r1().moved.length], [4, 0], "so the buyer never stepped down");
+  not({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["resolve"], list: [work("act-vesk-02", 9, 4, "Guarded"), { id: "act-vesk-09", k: "else", act: "Move", t: 2500 }] } }, kai, "one done after the round ended doesn't count", { phoneNow: 2600 });
+  // Rounds with only the scene: the buyer arrives, then the satchel's lost.
+  ok({ o: "round", id: "round-two-02", tele: [] }, gm, "a round with nothing telegraphed, since the scene's running");
+  now = 3000;
+  ok({ o: "end", round: "round-two-02" }, gm, "round 2 ends");
+  same([doc.scene.events[0].d, doc.scene.stakes[0].clock], [2, 4], "the buyer's on d2 and the satchel's clock on d4");
+  ok({ o: "round", id: "round-three3", tele: [] }, gm, "round 3");
+  now = 4000;
+  ok({ o: "end", round: "round-three3" }, gm, "round 3 ends");
+  same([doc.scene.events[0].out, doc.scene.stakes[0].clock], ["done", 2], "past d2, the buyer arrives, and the satchel's clock is on d2");
+  ok({ o: "round", id: "round-four-4", tele: [] }, gm, "round 4");
+  ok({ o: "end", round: "round-four-4" }, gm, "round 4 ends");
+  same([doc.scene.stakes[0].out, doc.scene.stakes[0].clock], ["lost", 0], "and past d2, the satchel's lost");
+  // A stake with one thing in the way, won in one go.
+  ok({ o: "put", el: { id: "stake-deal-1", t: "stake", name: "The deal", c: 4, tags: ["Someone Must Agree"] } }, gm, "the deal");
+  ok({ o: "round", id: "round-five-5", tele: [] }, gm, "round 5");
+  ok({ o: "acts", round: "round-five-5", ch: "vesk", x: { more: [], list: [{ id: "act-v5-0001", k: "work", ref: "stake-deal-1", act: "Talk", steps: 4, t: 0, roll: { dice: [{ size: 8, total: 8 }], opp: 3 }, aim: "" }] } }, kai, "Vesk talks Dace round");
+  same(doc.scene.stakes.find((s) => s.id === "stake-deal-1").out, "won", "and the deal's the crew's");
+  same(Object.keys(T.viewOf(doc, "player")), ["v", "fight", "rounds", "scene"], "every phone gets the scene with the rounds");
+  T.forget(doc, "sam");
+  same(r1().tele.find((t) => t.id === "tele-club-01").icp, undefined, "Sam's intercept goes when his account does");
+  same(Object.keys(r1().acts).some((k) => k.startsWith("sam|")), false, "and so does what he spent his actions on");
+  console.log("the live table's rules checked");
+}
 
 // A small static server that answers the way Cloudflare's assets do.
 const DIST = join(process.cwd(), "dist");

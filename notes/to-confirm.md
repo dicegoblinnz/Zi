@@ -2,6 +2,24 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
+## 27 Oct: the scene on the live table
+
+You asked for one action a round on the phones, intercepting on the phone, and the scene on the round. The book had most of it, so these are the calls the app made where it didn't say. None of them changes a rule in the book, and The Round now says the one-action choice plainly.
+
+1. **What counts as your action.** Answering one telegraph, putting it into a friend's answer, or something else: working a stake, engaging an event, using the ground, Defend, Move, taking a breath, a set action or anything you type in. Your stride and intercepting don't use it. Once it's spent, the phone puts the buttons away, and the table turns down a second one sent from another phone.
+2. **Another action says where it came from**, from the book's list: 1 Resolve (the phone takes it), holding last round's, coming out of hiding, d12 Confidence (it drops to d6) or a trait or a Boon.
+3. **A combo goes in when the answer's rolled.** Whoever answers rolls with the steps of everyone who's put their action in by then, and they all move a size with that roll, up or down, each on their own phone. Once it's rolled, nobody can take theirs back. Putting your action into a telegraph means you can't answer that same one, and if nobody answers it, your action's still spent.
+4. **Intercepting on the phone.** It's on a friend's blow, any time before it lands: 1 Aura for each friend a round, free for a Guardian, and never fear. One person takes each telegraph. Giving it back before it lands gives the Aura back, and the GM can't take back one that somebody's taken (they give it back first). Staying within your stride is down to the table, since the phone can't see the map.
+5. **A stake's die is rolled once a round**, the first time anyone goes at it, and everyone that round has to beat that roll, the same as a threat's defence. An event's die works the same way when someone engages it.
+6. **Working it means rolling at it that round**, win or lose, so it doesn't step down. Using the ground doesn't work anything.
+7. **A win takes the tag you went for**, or the next one if that's gone, and the last one wins the stake. A win on an event slows it a size or drives it a size, and driven past d2, it happens.
+8. **The end of the round** steps the scene clock first, then the stakes' clocks, then the events, a size each, and past d2 a stake's lost and an event happens. A roll made in the round that turns up after it ended (no signal) still counts, and steps it back up.
+9. **A round with only the scene.** The GM can start one with nothing telegraphed when a stake or an event's still running, so the clocks keep moving.
+10. **The GM can move it by hand**: tick a tag off or put it back, step any die up or down, and change or take off any piece, for what the story does that the dice don't.
+11. **One scene clock.** Making another one the scene clock makes the old one an ordinary event.
+12. **A place from Twenty Places** goes on whole, its ground, both stakes and its scene clock, in place of the scene that's on (the phone says so first). The chapter says to pick the stake that matters to your crew, so the GM takes off the one she doesn't want.
+13. **Telegraphs at a stake or the scene clock** aren't on the phones yet. The GM telegraphs at characters, and steps the scene by hand when one aimed at it lands.
+
 ## 27 Oct: traits, gear and bonds
 
 1. **How each trait went passive.** Every trait's now Passive (always on) or Triggered (fires by itself), and none of them is a step. Where one was a step or something you chose to fire, here's what it does now:
