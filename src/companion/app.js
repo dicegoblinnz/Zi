@@ -171,6 +171,8 @@ const world = makeWorld({
   sync, esc, W: DATA.worlds, icon: ICON,
   // The faction turn, at the top of the World screen and tab (turn.js).
   turnSection: (id) => turn.section(id),
+  // A telegraph off a place's or a person's page, onto the live table's round.
+  tele: (id, f) => table.composeFrom(id, f),
   turnGlance: (id) => turn.glance(id),
   list: () => camps.list(),
   campaign: (id) => camps.campaign(id),
@@ -1950,7 +1952,7 @@ function route() {
   // A Sheet tab fold shut on one character opens as usual on another.
   if (id !== (view.name === "sheet" ? view.id : null)) ui.shut.clear();
   view = key ? { name: "build", key } : learning ? { name: "learn" } : id ? { name: "sheet", id }
-    : camp ? (q.get("look") ? { name: "look", id: camp, who: q.get("look") } : q.has("world") ? { name: "world", id: camp, f: q.get("f") || "" } : { name: "camp", id: camp }) : joining ? { name: "join" } : { name: "list" };
+    : camp ? (q.get("look") ? { name: "look", id: camp, who: q.get("look") } : q.has("world") ? { name: "world", id: camp, f: q.get("f") || "", p: q.get("p") || "" } : { name: "camp", id: camp }) : joining ? { name: "join" } : { name: "list" };
   ui.tab = ["sheet", "rules", "party", "world"].includes(q.get("t")) ? q.get("t") : "play";
   ui.panel = null;
   ui.sure = false;

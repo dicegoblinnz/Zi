@@ -876,7 +876,9 @@ export function makeTable(d) {
     box.innerHTML = kitTele({ who: r.f.who || "Who’s telegraphing", does: r.f.does || "What it’s doing", at: target?.cname ?? "who it’s aimed at", atCrest: crestOf(id, target) ?? [], d: r.f.d || 6, round: n, one: r.f.one, when: r.f.kind === "fear" ? "Lands on Confidence at the end of the round" : "", strict: false });
   }
 
-  function compose(id, draft = null) {
+  // A new telegraph, or a draft to change, or one written already somewhere
+  // else (a place's or a person's page) for her to aim and send.
+  function compose(id, draft = null, given = null) {
     const doc = local(id);
     const last = current(doc);
     const live = Boolean(last && !last.over) && !draft;
@@ -884,8 +886,9 @@ export function makeTable(d) {
       : { who: "", does: "", d: 0, kind: "blow", one: "", at: null };
     // The one she telegraphed last, ready to go again.
     if (!draft) {
-      const known = threatsOf(id)[0];
+      const known = given ? null : threatsOf(id)[0];
       if (known) Object.assign(f, { who: known.who, d: known.d });
+      if (given) Object.assign(f, { who: String(given.who ?? "").slice(0, MAX.who), does: String(given.does ?? "").slice(0, MAX.does), d: SIZES.includes(given.d) ? given.d : 0, kind: given.kind === "fear" ? "fear" : "blow" });
       const roster = rosterOf(id);
       if (roster.length === 1) f.at = { user: roster[0].user, ch: roster[0].ch };
     }
@@ -1050,6 +1053,7 @@ export function makeTable(d) {
     section,
     pointer,
     playCard,
+    composeFrom: (id, f) => compose(id, null, f),
     // For the faction turn (turn.js), which is kept with the table.
     local: (id) => local(id),
     push: (id, op) => push(id, op),

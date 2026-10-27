@@ -1,12 +1,12 @@
-// A campaign's world, for one campaign (stage 1 of notes/worlds-plan.md): its
-// faction board. index.js has already checked that whoever's asking is this
+// A campaign's world, for one campaign (notes/worlds-plan.md): its faction
+// board, and its places and people (pages.js). index.js has already checked that whoever's asking is this
 // campaign's GM or one of its players, and nothing here reads or changes
 // anything but this campaign's world.
 //
-//   GET  /api/campaigns/<id>/world?v=   the board: the whole of it for the GM,
+//   GET  /api/campaigns/<id>/world?v=   the world: the whole of it for the GM,
 //        and for a player only what the crew's been shown (forPlayer() in
-//        board.js), so nothing they haven't been shown ever reaches their
-//        phone. With ?v= and nothing they'd see has changed, only { same: true }.
+//        board.js, with pagesForPlayer() in pages.js), so nothing they haven't
+//        been shown ever reaches their phone. With ?v= and nothing they'd see has changed, only { same: true }.
 //   POST /api/campaigns/<id>/world      the GM's changes from one phone: { dev, ops }.
 //        Each change carries a number that goes up on that phone, so a change
 //        sent twice (the signal dropped before the answer came back) counts once.
@@ -14,7 +14,8 @@ import { apply, blank, forPlayer, readable } from "../companion/board.js";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
 const MAX_CHANGES = 200;
-const MAX_DOC = 400000;
+// Twenty Places and the whole Bestiary brought in fit with room to spare.
+const MAX_DOC = 700000;
 const MAX_DEVICES = 64;
 
 // FNV-1a, to say whether anything's changed since the phone last looked.
@@ -39,8 +40,8 @@ const worldRow = (env, id) => env.DB.prepare("SELECT data, version FROM world WH
 // The board as this one person gets it, and its stamp. A player's stamp is
 // made from what they get, so a change to something they haven't been shown
 // doesn't even tell them something changed.
-function viewOf(camp, row) {
-  const doc = row ? readable(parse(row.data)) : blank();
+function viewOf(camp, row, known = null) {
+  const doc = known ?? (row ? readable(parse(row.data)) : blank());
   const world = camp.role === "gm" ? doc : forPlayer(doc);
   return { world, v: stampOf(camp.role === "gm" ? `gm:${row?.version ?? 0}` : `player:${JSON.stringify(world)}`) };
 }
@@ -60,10 +61,11 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
   const ops = b.ops.filter((x) => x && typeof x === "object" && Number.isInteger(x.n) && x.n > 0).sort((x, y) => x.n - y.n);
   let row = null;
   let top = 0;
+  let doc = null;
   for (let tries = 0; ; tries++) {
     row = await worldRow(env, camp.id);
     const raw = row ? parse(row.data) ?? {} : {};
-    const doc = readable(raw);
+    doc = readable(raw);
     // Kept with no prototype, so no phone's id can be anything but an entry.
     const seq = Object.assign(Object.create(null), raw.seq && typeof raw.seq === "object" ? raw.seq : {});
     const high = Number(seq[dev]?.n) || 0;
@@ -84,7 +86,7 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
     const devices = Object.entries(seq);
     if (devices.length > MAX_DEVICES) for (const [d] of devices.sort((x, y) => (x[1]?.at ?? 0) - (y[1]?.at ?? 0)).slice(0, devices.length - MAX_DEVICES)) delete seq[d];
     const text = JSON.stringify({ ...doc, seq });
-    if (text.length > MAX_DOC) return fail(413, "The board’s full. Take something off it first.");
+    if (text.length > MAX_DOC) return fail(413, "The world’s full. Take something off it first.");
     const res = row
       ? await env.DB.prepare("UPDATE world SET data = ?2, version = version + 1, updatedAt = ?3 WHERE campaignId = ?1 AND version = ?4").bind(camp.id, text, now, row.version).run()
       : await env.DB.prepare("INSERT INTO world (campaignId, data, version, updatedAt) VALUES (?1, ?2, 1, ?3) ON CONFLICT DO NOTHING").bind(camp.id, text, now).run();
@@ -95,5 +97,6 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
     // A change from her other phone got in first, so these go on top of it.
     if (tries >= 5) return fail(503, "The board’s being changed from somewhere else too. Try again in a moment.");
   }
-  return json({ seq: top, ...viewOf(camp, row), role: camp.role });
+  // The world as it now stands, without reading it back again.
+  return json({ seq: top, ...viewOf(camp, row, doc), role: camp.role });
 }

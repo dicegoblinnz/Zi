@@ -845,6 +845,182 @@ function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, wa
   return { boards, build, sizes, assets, turn, link: `${pageFor.get(factionsDoc.path)}#s-faction-board` };
 }
 
+// Places and people (stage 3 of notes/worlds-plan.md), read off the chapters
+// so they always match the book: Twenty Places, with every named person in
+// them, the Bestiary's threats, Building Your World's tables for places,
+// people and hooks, the Threat Builder's, and what each tag in Appendix B
+// does. It goes in its own file, public/world-book.json, which only the World
+// screen fetches and the service worker keeps. A place or threat the page
+// can't hold stops the build. Each carries a hash, so a GM who brought it in
+// hears when the book changes it.
+const PLACE_LINES = new Set(["Who's here", "The ground", "Stakes", "Scene clock", "Telegraphs", "Hooks", "Elsewhere", "Secret"]);
+const THREAT_LINES = new Set(["Challenge", "Comes at you", "Keeps it going", "Drives it", "Forms", "Telegraphs", "Voice", "Hidden"]);
+function pagesFrom({ placesDoc, worldDoc, threatDoc, bestiaryDoc, tagsDoc }, pageFor, warn) {
+  // Words as the book has them, keeping *italics* for tags, with curly quotes.
+  const smart = (s = "") => curly(s).replace(/(^|[\s([{—–-])"/g, "$1“").replace(/"/g, "”");
+  const words = (s = "") => smart(s.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/\*\*/g, "").replace(/\s*\n\s*/g, " ").trim());
+  const items = (s = "") => (s ? s.split(" · ").map((x) => words(x)).filter(Boolean) : []);
+  const labelled = (name, paras, known) => {
+    const out = {};
+    for (const p of paras) {
+      const m = p.match(/^\*\*([^*]+)\*\* ([\s\S]+)$/);
+      if (!m) warn(`${name} has a paragraph a page can't place: ${p.slice(0, 60)}`);
+      else if (!known.has(m[1])) warn(`${name} has a line a page can't hold yet: ${m[1]}`);
+      else out[m[1]] = m[2].replace(/\s*\n\s*/g, " ").trim();
+    }
+    return out;
+  };
+  const teleOf = (name, s) => {
+    const m = s.match(/^\*(.+)\* \(d(\d+), ([^)]+)\)$/);
+    if (!m || ![2, 4, 6, 8, 10, 12].includes(Number(m[2]))) warn(`${name} has a telegraph a page can't read: ${s.slice(0, 60)}`);
+    return m ? { text: smart(m[1]), d: Number(m[2]), at: smart(m[3]) } : null;
+  };
+  const secretOf = (name, s = "") => {
+    const m = s.match(/^\*([^*]+)\*(?: \((weak point)\))?\.?\s*([\s\S]*)$/);
+    if (!m) warn(`can't read ${name}'s Secret (like *Every Word Is Sold*. The rest of it)`);
+    return m ? { secret: smart(dropStop(m[1])), more: words(m[3]), weak: Boolean(m[2]) } : { secret: "", more: "", weak: false };
+  };
+  const stamp = (card) => {
+    card.h = hashOf(JSON.stringify(card));
+    card.at = BUILT;
+    return card;
+  };
+
+  // What each tag does, from Appendix B, and its name as the book writes it.
+  const tags = [];
+  const tagNamed = new Map();
+  for (const [id, kind] of [["how-it-comes-at-you", "comes"], ["what-keeps-it-going", "keeps"], ["vulnerability-tags", "weak"], ["what-drives-it", "drives"]]) {
+    const rows = tableRows(sectionOf(tagsDoc.body, id));
+    if (rows.length < 6) warn(`can't read Appendix B's tags under ${id}`);
+    for (const r of rows) {
+      const name = plain(r[0]);
+      if (!name || tagNamed.has(name.toLowerCase())) continue;
+      const t = { name, kind, does: smart(plain(r[1] ?? "")) };
+      tags.push(t);
+      tagNamed.set(name.toLowerCase(), t);
+    }
+  }
+  const canon = (s) => {
+    const t = dropStop(plain(s));
+    return tagNamed.get(t.toLowerCase())?.name ?? tagNamed.get(t.split(", ")[0].toLowerCase())?.name ?? capFirst(t.split(", ")[0]);
+  };
+  const tagsIn = (s = "", kind = "") => marked(s).map((m) => ({ ...timesOf(m.name), kind }));
+
+  // Building Your World's tables, and the Threat Builder's.
+  const rolls = (sec, n, what) => {
+    const rows = (tablesOf(sec)[0]?.rows ?? []).map((r) => smart(dropStop(plain(r[1] ?? ""))));
+    if (rows.length !== n || rows.some((x) => !x)) warn(`expected the d${n} table for ${what}`);
+    return rows;
+  };
+  const [wants, hiding] = tablesOf(sectionOf(worldDoc.body, "people")).map((t) => t.rows.map((r) => smart(dropStop(plain(r[1] ?? "")))));
+  if (wants?.length !== 12 || hiding?.length !== 12) warn("expected the two d12 tables in People, what they want and what they're hiding");
+  const tagTables = tablesOf(sectionOf(threatDoc.body, "its-tags"));
+  const tagTable = (head) => (tagTables.find((t) => t.head[1] === head)?.rows ?? []).map((r) => canon(r[1] ?? ""));
+  const what = (tablesOf(sectionOf(threatDoc.body, "what-it-is"))[0]?.rows ?? []).map((r) => {
+    const m = r[1].match(/^\*\*(.+?)\*\*:\s*(.+)$/);
+    const twice = /^Roll twice$/i.test(m?.[1] ?? "");
+    const start = twice ? [] : italics(r[3] ?? "").join(", ").split(", ").map((x) => x.trim()).filter(Boolean);
+    return {
+      name: curly(m?.[1] ?? ""), is: smart(dropStop(plain(m?.[2] ?? ""))), ch: Number(r[2]) || 0,
+      tags: start.filter((x) => /^[A-Z]/.test(x)).map((x) => ({ ...timesOf(x), kind: "" })),
+      also: capFirst(start.filter((x) => !/^[A-Z]/.test(x)).join(", ").replace(/^and /, "")),
+      twice,
+    };
+  });
+  const tables = {
+    complication: rolls(sectionOf(worldDoc.body, "s-world-places"), 12, "a place's complication"),
+    want: wants ?? [],
+    hiding: hiding ?? [],
+    trouble: rolls(sectionOf(worldDoc.body, "hooks"), 20, "hooks"),
+    what,
+    comes: tagTable("How it comes at you"),
+    keeps: tagTable("What keeps it going"),
+    drives: tagTable("What drives it"),
+  };
+  if (what.length !== 20 || !what[19]?.twice || what.slice(0, 19).some((w) => !w.name || !w.ch || !w.tags.length)) warn("expected the d20 table of what a threat is, each with its Challenge and tags, ending with Roll twice");
+  for (const k of ["comes", "keeps", "drives"]) if (tables[k].length !== 12) warn(`expected the d12 table of tags for ${k} in Its Tags`);
+
+  // The Bestiary: every threat, by the part of the chapter it's in.
+  const threats = [];
+  for (const sec of bestiaryDoc.body.split(/^(?=## )/m)) {
+    const head = sec.match(/^## ([^:{]+?)(?::[^{]*)? \{#([a-z0-9-]+)\}/);
+    const group = curly(head?.[1] ?? "");
+    for (const m of sec.matchAll(/^:::threat\[([^\]]+)\]\n([\s\S]*?)^:::$/gm)) {
+      const name = curly(m[1]);
+      const paras = m[2].split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+      const lead = paras.filter((p) => !p.startsWith("**"));
+      const L = labelled(name, paras.filter((p) => p.startsWith("**")), THREAT_LINES);
+      const ch = (L.Challenge ?? "").match(/^(\d) \(d(\d+)\)(?: · (.+))?$/);
+      if (!ch || Number(ch[2]) !== 2 * Number(ch[1])) warn(`can't read ${name}'s Challenge (like 3 (d6))`);
+      const card = {
+        key: keyOf(name), kind: "person", name, line: words(lead[0] ?? ""), ch: Number(ch?.[1]) || 0, look: words(lead[1] ?? ""),
+        tags: [...tagsIn(L["Comes at you"], "comes"), ...tagsIn(L["Keeps it going"], "keeps"), ...tagsIn(L["Drives it"], "drives")],
+        rules: [ch?.[3] ? words(ch[3]) : "", L.Forms ? `Forms: ${words(L.Forms)}` : ""].filter(Boolean).join(" "),
+        teles: items(L.Telegraphs).map((t) => teleOf(name, t)).filter(Boolean),
+        voice: words(L.Voice ?? ""),
+        ...secretOf(name, L.Hidden),
+        group,
+      };
+      if (lead.length < 1 || lead.length > 2) warn(`${name} should open with who it is, and what you notice first if it says`);
+      if (!card.tags.length || !card.teles.length || !card.voice) warn(`can't read ${name}'s tags, telegraphs or voice`);
+      if (!head) warn(`${name} isn't under one of the Bestiary's headings`);
+      stamp(card);
+      card.link = `${pageFor.get(bestiaryDoc.path)}#${head?.[2] ?? ""}`;
+      threats.push(card);
+    }
+  }
+  if (threats.length < 30) warn(`expected the Bestiary's threats, found ${threats.length}`);
+  const threatNamed = (n) => threats.find((t) => keyOf(t.name) === keyOf(n) || keyOf(t.name) === keyOf(`The ${n}`)) ?? null;
+
+  // Twenty Places, with the named people in each one's Who's here.
+  const PERSON = /^\*([^*]+)\*(?:,\s*(.+?)|\s+(of\s.+?))?\s*\(Challenge (\d)(?::\s*(.+?)|,\s*the Bestiary['’]s ([^)]+))\)$/;
+  const places = [];
+  for (const m of placesDoc.body.matchAll(/^## (.+?) \{#(s-place-[a-z-]+)\}\s*\n+:::place\n([\s\S]*?)^:::$/gm)) {
+    const name = curly(m[1]);
+    const paras = m[3].split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+    const first = (paras[0] ?? "").match(/^(.+?) \(Challenge (\d)\)\.$/);
+    if (!first) warn(`can't read ${name}'s first line (what it is, then its Challenge in brackets)`);
+    const lead = paras.slice(1).filter((p) => !p.startsWith("**"));
+    const L = labelled(name, paras.slice(1).filter((p) => p.startsWith("**")), PLACE_LINES);
+    const clock = (L["Scene clock"] ?? "").match(/^d(\d+): (.+)$/);
+    if (!clock) warn(`can't read ${name}'s scene clock (like d8: what happens)`);
+    const people = [];
+    for (const entry of (L["Who's here"] ?? "").split(" · ")) {
+      const p = entry.trim().match(PERSON);
+      if (!p) continue;
+      const pname = curly(p[1]);
+      const from = p[6] ? threatNamed(curly(p[6])) : null;
+      if (p[6] && !from) warn(`${pname} in ${name} is the Bestiary's ${p[6]}, but the Bestiary hasn't got one`);
+      const { key: _k, name: _n, line: _l, ch: _c, group: _g, h: _h, at: _a, link: _li, ...threat } = from ?? {};
+      people.push(stamp({
+        key: keyOf(pname), kind: "person", name: pname, line: words(p[2] ?? p[3] ?? ""), ch: Number(p[4]),
+        look: "", tags: p[5] ? italics(p[5]).map((t) => ({ ...timesOf(t), kind: "" })) : [], rules: "", teles: [], voice: "", secret: "", more: "", weak: false,
+        ...threat,
+      }));
+    }
+    const card = {
+      key: m[2].replace(/^s-place-/, ""), kind: "place", name, line: smart(first?.[1] ?? ""), ch: Number(first?.[2]) || 0, look: words(lead[0] ?? ""),
+      here: items(L["Who's here"]), ground: items(L["The ground"]), stakes: items(L.Stakes),
+      clockD: Number(clock?.[1]) || 0, clock: words(clock?.[2] ?? ""),
+      teles: items(L.Telegraphs).map((t) => teleOf(name, t)).filter(Boolean),
+      hooks: items(L.Hooks), elsewhere: words(L.Elsewhere ?? ""),
+      ...secretOf(name, L.Secret),
+    };
+    if (lead.length !== 1) warn(`${name} should have one paragraph of what it's like between its first line and Who's here`);
+    if (!card.here.length || !card.ground.length || !card.stakes.length || !card.teles.length) warn(`can't read who's here, the ground, the stakes or the telegraphs in ${name}`);
+    stamp(card);
+    card.people = people;
+    card.link = `${pageFor.get(placesDoc.path)}#${m[2]}`;
+    places.push(card);
+  }
+  if (places.length !== 20) warn(`expected Twenty Places' twenty places, found ${places.length}`);
+
+  return {
+    v: 1, places, threats, tables, tags,
+    links: { places: pageFor.get(placesDoc.path), bestiary: pageFor.get(bestiaryDoc.path), world: pageFor.get(worldDoc.path), threat: `${pageFor.get(threatDoc.path)}#building-a-threat`, tags: pageFor.get(tagsDoc.path) },
+  };
+}
+
 // What the character builder offers, read off Building Your Character and the
 // Title ideas so it always matches the book: the Quick Build's steps, the
 // ideas, every trait and the number it changes, what you can carry, the Catch
@@ -1044,6 +1220,11 @@ if (!party) companionWarn("can't find The Party Sheet for the party sheet");
 const worldDocs = { factionsDoc: docWith("{#s-faction-build}"), steepDoc: docWith("{#the-four-great-powers}"), framesDoc: docWith("{#s-frame-brinewake}"), assetsDoc: docWith("{#faction-strength}") };
 const worlds = Object.values(worldDocs).every(Boolean) ? worldsFrom(worldDocs, pageFor, (msg) => companionWarn(`board: ${msg}`)) : null;
 if (!worlds) companionWarn("can't find Factions, the Steeplands, Frames or Appendix B's assets for the faction board");
+// Places and people: Twenty Places, the Bestiary, and the tables to make
+// your own, in their own file for the World screen.
+const pageDocs = { placesDoc: docWith("{#s-place-copper-baths}"), worldDoc: docWith("{#s-world-places}"), threatDoc: docWith("{#its-tags}"), bestiaryDoc: docWith(":::threat[The Watchman]"), tagsDoc: docWith("{#what-drives-it}") };
+const worldBook = Object.values(pageDocs).every(Boolean) ? pagesFrom(pageDocs, pageFor, (msg) => companionWarn(`places and people: ${msg}`)) : null;
+if (!worldBook) companionWarn("can't find Twenty Places, Building Your World, the Threat Builder, the Bestiary or Appendix B's tags for places and people");
 // The rules the companion shows on a tap, read off the chapters so they match
 // the book and read offline: each one's opening, up to its first example,
 // table or subheading.
@@ -1146,6 +1327,11 @@ if (learnDoc) {
 const none = [...linkTargets].filter((id) => where.has(id) && !Object.keys(openings).some((k) => k.endsWith(`#${id}`) || k === linkTo(id))).length;
 writeFileSync(join(ROOT, "public", "openings.json"), JSON.stringify({ v: 1, s: openings }));
 console.log(`openings.json: ${Object.keys(openings).length} sections for the pop-ups (${none} linked sections start with a table, an example or a heading, so their links open the page)`);
+// The places, people and tables the World screen brings in, kept offline too.
+if (worldBook) {
+  writeFileSync(join(ROOT, "public", "world-book.json"), JSON.stringify(worldBook));
+  console.log(`world-book.json: ${worldBook.places.length} places with ${worldBook.places.reduce((n, p) => n + p.people.length, 0)} people in them, ${worldBook.threats.length} threats and ${worldBook.tags.length} tags`);
+}
 
 const outDir = join(ROOT, "src", "generated");
 mkdirSync(outDir, { recursive: true });

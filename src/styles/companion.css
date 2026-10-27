@@ -1365,6 +1365,69 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
   .wb-tok-a:active, .wb-tile-a:active { transform: none; }
 }
 
+/* ── Places and people (stage 3 of notes/worlds-plan.md): pages under the
+   board, each one a card with its parts in folds, the same as a faction's.
+   They're the GM's, so violet, and a part only she sees says so on a dashed
+   badge. A name that links to another page reads as a link in the words. */
+.wp-sec { margin-top: 1.6rem; }
+.wp-find { margin: 1.4rem 0 0; }
+.wp-find input { width: 100%; }
+.wp-toks { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.wp-tok[hidden] { display: none; }
+.wp-tok-die { display: flex; flex-direction: column; align-items: center; padding-top: 2px; }
+.wp-tok-die .zd-die { --s: 48px; }
+.wp-tok-in { display: grid; gap: 2px; min-width: 0; }
+.wp-tok-n { font-family: var(--display); font-weight: 600; font-size: 1.15rem; line-height: 1.2; letter-spacing: 0.01em; overflow-wrap: anywhere; }
+.wp-tok-w { font-size: 0.95rem; line-height: 1.35; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.wp-tok.is-new .wb-tok-a { animation: wb-lit 1.6s ease-out; }
+.wp-mark { display: grid; place-items: center; width: 44px; height: 44px; color: var(--zd-them-ink); border: 1.5px solid var(--zd-them-line); border-radius: 3px; }
+.wp-mark svg { width: 24px; height: 24px; }
+.wp-bring-top { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 12px; }
+.wp-bring-die .zd-die { --s: 40px; }
+.wp-bring h4 { margin: 0 0 0.2rem; }
+.wp-group { margin: 1rem 0 0.1rem; font-size: 0.95rem; color: var(--zd-them-ink); }
+.pt-line.wp-pick { align-items: center; gap: 10px; }
+.wp-pick-die { flex: none; display: grid; place-items: center; width: 26px; }
+.wp-pick-die .zd-mini { width: 22px; height: 22px; }
+.wp-pick small { font-weight: 400; color: var(--muted); }
+.wp-new textarea { min-height: 4.5rem; }
+.wp-new .cc-field input, .wp-new .cc-field select, .wp-new .cc-field textarea { width: 100%; }
+.wp-line { margin: 0.3rem 0 0; font-size: 1.05rem; line-height: 1.4; color: var(--muted); overflow-wrap: anywhere; }
+.wp-card .wb-card-top { margin-bottom: 0.8rem; }
+.wp-look p, div.wp-words p, .wp-secret p { margin: 0 0 0.6rem; line-height: 1.5; overflow-wrap: anywhere; }
+.wp-look p:last-child, div.wp-words p:last-child, .wp-secret p:last-child { margin-bottom: 0.2rem; }
+.wp-look { font-size: 1.04rem; }
+p.wp-words, .wp-text { margin: 0; line-height: 1.45; overflow-wrap: anywhere; }
+.wp-aka { margin: 0.5rem 0 0; }
+.wb-badge.wp-hers { color: var(--muted); }
+.wp-tele { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 10px; }
+.wp-tele .zd-mini { width: 22px; height: 22px; margin-top: 2px; }
+.wp-clock { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; margin: 0 0 0.3rem; }
+.wp-clock .zd-die { --s: 46px; }
+.wp-clock p { margin: 0; line-height: 1.45; }
+.wp-ch { margin: 0 0 0.2rem; }
+.wp-ch p { margin: 0; line-height: 1.45; }
+.wp-tags h3, .wp-sub { margin: 0.8rem 0 0.25rem; font-size: 0.95rem; color: var(--zd-them-ink); }
+.wp-tag-row { display: flex; flex-wrap: wrap; gap: 6px 8px; }
+.wp-tagbtn { display: inline-flex; align-items: center; min-height: 44px; padding: 0; font: inherit; color: inherit; background: none; border: 0; border-radius: 3px; cursor: pointer; }
+.wp-tagbtn[aria-pressed="true"] .zd-tag { box-shadow: 0 0 0 2px var(--gold); }
+.wp-tags .wb-editing { margin-top: 0.4rem; }
+.wp-what { margin-top: 0.8rem; }
+.wp-what dl { display: grid; gap: 10px; margin: 0.5rem 0 0; }
+.wp-what dt { font-weight: 800; }
+.wp-what dd { margin: 0.1rem 0 0; color: var(--muted); line-height: 1.4; }
+.wp-face { display: flex; }
+.wp-ment { margin-top: 1.4rem; }
+.wp-ment h2 { font-size: 1.05rem; }
+.wp-ment-list { display: grid; gap: 0; margin: 0.2rem 0 0; padding: 0; list-style: none; }
+.wp-ment-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 0 8px; }
+.wp-ment-list small { color: var(--muted); }
+.wb a.wl, .wp a.wl { color: var(--violet); font-weight: 600; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+@media (max-width: 360px) {
+  .wp-tok-die .zd-die { --s: 40px; }
+  .wp-tok-a { grid-template-columns: 42px minmax(0, 1fr); }
+}
+
 /* ── The faction turn (stage 2 of notes/worlds-plan.md): each downtime from
    the board, at the top of the World screen and the World tab. The factions'
    pieces are violet like the board's, the crew's action is gold, and the

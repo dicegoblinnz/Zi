@@ -1,8 +1,9 @@
-// A campaign's world on every phone in it, starting with the faction board
-// (stage 1 of notes/worlds-plan.md).
+// A campaign's world on every phone in it: the faction board (stage 1 of
+// notes/worlds-plan.md), then its places and people (stage 3, places.js).
 //
 // The World screen's off a campaign's page (/characters/?camp=<id>&world, and
-// &f=<faction> for one faction's page), and a character playing in a campaign
+// &f=<faction> for one faction's page or &p=<page> for a place's or a
+// person's), and a character playing in a campaign
 // has it on its World tab. The board's the crew's own card from the party
 // sheet, then every faction as a card. Only the GM changes it. Her changes go
 // to the Worker (src/worker/world.js) as soon as there's a signal, numbered, so
@@ -24,6 +25,7 @@ import { BONDS, MAX, OUTCOMES, PARTS, apply, blank, find, minisOf, moneyOf, read
 import { diceLabel, rollDie, stepsToDice } from "./dice.js";
 import { typo } from "./marks.js";
 import { die as kitDie, mini as kitMini } from "../kit/kit.js";
+import { makePlaces } from "./places.js";
 
 const KEY = "zi-world";
 const POLL = 15000;
@@ -136,7 +138,8 @@ export function makeWorld(d) {
         keys.push(f.id);
       }
     }
-    return { said, keys };
+    const pages = P.news(id, was, now);
+    return { said: [...said, ...pages.said], keys: [...keys, ...pages.keys] };
   }
 
   function take(id, k, got) {
@@ -412,6 +415,7 @@ export function makeWorld(d) {
       const news = bookNews(f);
       if (news && !news.real.length) ops.push(...news.quietOps, news.book);
     }
+    ops.push(...P.quiet(doc));
     if (ops.length) edit(id, ops, "", { undoable: false, quiet: true });
   }
 
@@ -576,6 +580,7 @@ export function makeWorld(d) {
   function submit(kind, form, f) {
     const id = form.closest("[data-wb]")?.dataset.wb;
     if (!id) return;
+    if (kind.startsWith("w-p")) return P.submit(kind, form, f, id);
     const doc = docOf(id);
     const fac = form.dataset.f ? find(doc, form.dataset.f) : null;
     const text = (name, max = MAX.line) => String(f.get(name) ?? "").replace(/\s+/g, " ").trim().slice(0, max);
@@ -707,6 +712,28 @@ export function makeWorld(d) {
   // Whether the crew's seen this part, as a badge in its heading (the GM's).
   const badge = (f, p) => `<span class="wb-badge${f.shown.card && f.shown[p] ? " is-on" : ""}">${f.shown.card && f.shown[p] ? "Shown" : "Hidden"}</span>`;
 
+  // Places and people (places.js), drawn under the board and on pages of
+  // their own, with their taps and forms going through here.
+  const P = makePlaces({
+    d, esc, edit, docOf, isGm, camp, gmName, status, online, newId, bare, plural, keyOf, fold, part, topbar,
+    ui: () => ui,
+    setSure: (k) => {
+      ui.sure = k;
+    },
+    setEditing: (k) => {
+      ui.editing = k;
+    },
+    lit: (id) => lit[id] ?? [],
+    unlit: (id) => unlit(id),
+    // The book's places and people have reached the phone: typo fixes go in,
+    // and the screen's drawn again with them.
+    bookLoaded: () => {
+      if (watching && isGm(watching)) quietBook(watching);
+      d.quietRender();
+    },
+  });
+  Object.assign(ACT, P.ACT);
+
   // The crew's own card, at the top of the board: the party sheet's.
   function crewCard(id) {
     const c = d.crewIn(id);
@@ -761,7 +788,6 @@ export function makeWorld(d) {
     const say = status(id);
     if (!gm) {
       const none = !k.at && online() ? '<p class="cc-lead">Opening the board…</p>' : !order.length ? `<p class="cc-lead">${esc(gmName(id))} hasn’t shown you any of the world yet. The factions you find out about show up here, with whatever you’ve found out about each one.</p>` : "";
-      lit[id] = [];
       return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${crewCard(id)}${list}${none}`;
     }
     const shownCount = doc.factions.filter((f) => f.shown.card).length;
@@ -876,10 +902,9 @@ export function makeWorld(d) {
     const gm = isGm(id);
     const doc = docOf(id);
     const f = find(doc, fid);
-    // A player who came from a character's World tab goes back to it.
-    const from = String(history.state?.from ?? "");
-    const tab = /^\/characters\/\?c=[^&]+&t=world$/.test(from);
-    const top = topbar(tab ? from : `/characters/?camp=${encodeURIComponent(id)}&world`, tab ? "The world" : "The board");
+    // Back to the World tab or the page she came from, or the board.
+    const [back, backLabel] = P.backOf(id, "The board");
+    const top = topbar(back, backLabel);
     if (!f) {
       return `${top}<header class="cc-camp-head"><p class="kicker">Faction</p><h1>Not on the board</h1></header>
         <div class="cc-note is-warn"><p>${camp(id).at || !online() ? "That faction isn’t on the board any more, or the crew hasn’t been shown it." : "Opening the board…"}</p></div>`;
@@ -888,6 +913,8 @@ export function makeWorld(d) {
     const dice = powerDice(f);
     const steps = stepsOf(f);
     const money = moneyOf(f);
+    // Names on the card link to the pages and factions they name.
+    const rich = P.richFor(id, doc);
     const standing = standingOf(f);
     const say = status(id);
 
@@ -900,7 +927,7 @@ export function makeWorld(d) {
         <label class="cc-field">Want, the thing it always wants <input name="want" maxlength="${MAX.words}" autocomplete="off" value="${esc(f.want)}"></label>
         <label class="cc-field">Face, the person the crew deals with <input name="face" maxlength="${MAX.words}" autocomplete="off" value="${esc(f.face)}"></label>
         <div class="cc-row"><button type="submit" class="button primary">Save</button><button type="button" class="button" data-act="w" data-do="cancel">Cancel</button></div></form>`
-      : `<dl class="wb-words">${f.want ? `<div><dt>Want</dt><dd><em>${esc(f.want)}</em></dd></div>` : ""}${f.face ? `<div><dt>Face</dt><dd>${esc(f.face)}</dd></div>` : ""}</dl>
+      : `<dl class="wb-words">${f.want ? `<div><dt>Want</dt><dd><em>${rich(f.want, f.id)}</em></dd></div>` : ""}${f.face ? `<div><dt>Face</dt><dd>${rich(f.face, f.id)}${gm ? P.faceOf(id, f, doc) : ""}</dd></div>` : ""}</dl>
         ${gm ? `<button type="button" class="pt-reword" data-act="w" data-do="edit" data-k="${esc(wordsKey)}">Change its name, Want and Face</button>` : ""}`;
     const powerShown = gm || f.shown.power;
     const head = `<header class="cc-camp-head wb-head"><p class="kicker is-gm">${f.mini ? `Mini faction${maker ? ` of ${esc(maker)}` : ""}` : "Faction"}</p><h1>${esc(f.name)}</h1>${f.about ? `<p class="cc-small">${esc(f.about)}</p>` : ""}</header>
@@ -1016,7 +1043,7 @@ export function makeWorld(d) {
       <div class="cc-row"><button type="button" class="button danger" data-act="w" data-do="gone" data-f="${esc(f.id)}">${sure(`gone-${f.id}`, "Tap again to take it off the board", "Take it off the board")}</button></div></section>`
       : hidden ? `<p class="cc-small wb-more">There’s more to ${esc(f.name)} you haven’t found out yet.</p>` : "";
     if (!gm) lit[id] = [];
-    return `${top}<div class="wb" data-wb="${esc(id)}">${head}${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${showCard}${bookNote}<div class="cc-folds wb-parts">${parts.join("")}</div>${end}</div>`;
+    return `${top}<div class="wb" data-wb="${esc(id)}">${head}${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${showCard}${bookNote}<div class="cc-folds wb-parts">${parts.join("")}</div>${P.factionMentions(id, f, doc)}${end}</div>`;
   }
 
   // ------------------------------------------------------------ the screens
@@ -1027,11 +1054,18 @@ export function makeWorld(d) {
       return `${topbar("/characters/", "Characters")}<header class="cc-camp-head"><p class="kicker">The world</p><h1>${esc(nameOf(v.id))}</h1></header><div class="cc-note is-warn"><p>Sign in to see your campaigns. <a href="/account/">Sign in</a></p></div>`;
     }
     if (v.f) return factionView(v.id, v.f);
+    if (v.p) return P.pageView(v.id, v.p);
     const gm = isGm(v.id);
     return `${topbar(`/characters/?camp=${encodeURIComponent(v.id)}`, nameOf(v.id))}
       <header class="cc-camp-head wb-head"><p class="kicker${gm ? " is-gm" : ""}">The world</p><h1>${esc(nameOf(v.id))}</h1>${gm ? "" : `<p class="cc-small">What ${esc(gmName(v.id))}’s shown the crew so far.</p>`}</header>
       ${d.turnSection?.(v.id) ?? ""}
-      <section class="cc-sec wb-sec" data-wb="${esc(v.id)}" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(v.id)}</section>`;
+      <section class="cc-sec wb-sec" data-wb="${esc(v.id)}" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(v.id)}</section>
+      ${P.sections(v.id)}${gm ? "" : unlit(v.id)}`;
+  }
+  // What's just been shown lights up once, then it's like the rest.
+  function unlit(id) {
+    lit[id] = [];
+    return "";
   }
 
   // The World tab of a character who's playing in a campaign.
@@ -1040,7 +1074,8 @@ export function makeWorld(d) {
     if (!id) return `<div class="cc-note"><p>${esc(ch.name)} isn’t playing in a campaign on this phone.</p></div>`;
     return `<div class="wb-tab" data-wb="${esc(id)}"><p class="cc-small pt-where">${esc(ch.name)} plays in <a href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">${esc(nameOf(id))}</a>. This is what ${esc(gmName(id))}’s shown the crew of its world.</p>
       ${d.turnSection?.(id) ?? ""}
-      <section class="cc-sec wb-sec" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(id)}</section></div>`;
+      <section class="cc-sec wb-sec" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(id)}</section>
+      ${P.sections(id)}${unlit(id)}</div>`;
   }
 
   // The way in from the campaign's page, with a glance at the board.
@@ -1050,10 +1085,12 @@ export function makeWorld(d) {
     const doc = docOf(id);
     const gm = isGm(id);
     const n = doc.factions.length;
-    const shown = doc.factions.filter((f) => f.shown.card).length;
+    const { places, people } = P.count(doc);
+    const shown = doc.factions.filter((f) => f.shown.card).length + doc.pages.filter((p) => p.shown.page).length;
+    const all = [n ? plural(n, "faction", "factions") : "", places.length ? plural(places.length, "place", "places") : "", people.length ? plural(people.length, "person", "people") : ""].filter(Boolean).join(", ").replace(/, ([^,]*)$/, " and $1");
     const glance = gm
-      ? n ? `${plural(n, "faction", "factions")} on the board, ${shown ? `${shown} shown to the crew` : "none shown to the crew yet"}.` : "Nothing on the board yet. Bring in a board from the book, or make your own."
-      : n ? `${esc(gmName(id))}’s shown the crew ${plural(n, "faction", "factions")}.` : k.at ? `${esc(gmName(id))} hasn’t shown the crew any of the world yet.` : "Whatever the crew’s been shown of the world.";
+      ? all ? `${all} in the world, ${shown ? `${shown} shown to the crew` : "none shown to the crew yet"}.` : "Nothing in the world yet. Bring in a board, a place or a threat from the book, or make your own."
+      : all ? `${esc(gmName(id))}’s shown the crew ${all}.` : k.at ? `${esc(gmName(id))} hasn’t shown the crew any of the world yet.` : "Whatever the crew’s been shown of the world.";
     const turn = d.turnGlance?.(id) ?? "";
     return `<section class="cc-sec wb-tile" aria-labelledby="wb-tile-${esc(id)}"><a class="card wb-tile-a" href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">
       <span class="wb-tile-mark" aria-hidden="true">${d.icon.world}</span><span class="wb-tile-in"><h2 id="wb-tile-${esc(id)}">The world</h2><span class="cc-small">${turn ? `<b class="wb-tile-turn">${esc(turn)}</b> ` : ""}${glance}</span></span></a></section>`;
@@ -1081,6 +1118,7 @@ export function makeWorld(d) {
     edit: (id, ops, say, o) => edit(id, ops, say, o),
     title(v) {
       if (v.f) return find(docOf(v.id), v.f)?.name ?? "A faction";
+      if (v.p) return P.title(v.id, v.p);
       return `The world · ${nameOf(v.id)}`;
     },
     drop(id) {
