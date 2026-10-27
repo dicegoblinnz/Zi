@@ -114,6 +114,9 @@ export function rub(b, w, h, ax, ay, zx, zy, r, cover) {
   const { gw, gh } = gridOf(w, h);
   const cw = w / gw;
   const ch = h / gh;
+  // Zoomed right in, a small brush still reaches every square the thumb
+  // crosses, however quick the rub.
+  r = Math.max(r, Math.hypot(cw, ch) / 2);
   const i0 = clamp(Math.floor((Math.min(ax, zx) - r) / cw), 0, gw - 1);
   const i1 = clamp(Math.floor((Math.max(ax, zx) + r) / cw), 0, gw - 1);
   const j0 = clamp(Math.floor((Math.min(ay, zy) - r) / ch), 0, gh - 1);
@@ -140,7 +143,8 @@ export function rub(b, w, h, ax, ay, zx, zy, r, cover) {
       if (qx * qx + qy * qy <= r * r) set(i, j);
     }
   }
-  set(clamp(Math.floor(zx / cw), 0, gw - 1), clamp(Math.floor(zy / ch), 0, gh - 1));
+  // A thumb off the edge of the picture rubs nothing there.
+  if (zx >= 0 && zx < w && zy >= 0 && zy < h) set(Math.floor(zx / cw), Math.floor(zy / ch));
   return changed;
 }
 

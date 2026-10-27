@@ -152,11 +152,14 @@
 //    it's the only picture Kai can get. The Copper Baths' pin comes out from
 //    under the fog and Lord Vane's stays hidden, on Kai's phone in a moment,
 //    told by the live table, with a note. He rubs the fog back over the Copper
-//    Baths, and Undo lifts it again. With no signal, Kai's map opens with the
+//    Baths, and Undo lifts it again. Fog back over what the crew's picture
+//    shows takes it off Kai's phone straight away, and that picture can't go
+//    back on. With no signal, Kai's map opens with the
 //    crew's picture and its fog. Nothing crosses: Zed gets no picture, Kai
 //    can't change the fog or send up a crew's picture, a crew's picture has to
 //    be the map's size and for a map under the fog, and his own picture can't
-//    be passed off as the crew's. The fog's card, Mo's map with the fog's bar
+//    be passed off as the crew's. A new picture turned on its side comes in
+//    all covered. The fog's card, Mo's map with the fog's bar
 //    and Kai's map pass axe at 390, in both themes. Taking the fog off gives
 //    Kai the whole map back, with the pins.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
@@ -178,7 +181,7 @@ import { Miniflare, convertV4MiniflareOptions, coupleWebSocket } from "miniflare
 import { WebSocketServer } from "ws";
 import { chromium } from "playwright";
 import { stepsToDice } from "../src/companion/dice.js";
-import { coveredShare, fogBits, fogFull, gridOf, spotCovered } from "../src/companion/maps.js";
+import { coveredShare, fogBits, fogFull, fogText, gridOf, spotCovered } from "../src/companion/maps.js";
 import { AxeBuilder } from "@axe-core/playwright";
 
 const problems = [];
@@ -2886,6 +2889,28 @@ try {
     await until(async () => ((await kaiWorld()).json?.world?.maps?.[0]?.pins ?? []).length === 1, "and the pin's back on Kai's phone");
     await mo.page.click('[data-do="mfogtool"][data-t="lift"]');
 
+    // Fog brushed back over what the crew's picture shows takes that picture
+    // off them straight away, before Mo's phone has made another, and a
+    // crew's picture that shows what's been covered since can't go back on.
+    const open = await caughtUp();
+    const worldPath = `/api/campaigns/${tuesday.id}/world`;
+    const bathsCovered = (() => {
+      const b = fogBits(open.fog.c, map.w, map.h);
+      const { gw, gh } = gridOf(map.w, map.h);
+      const k = Math.min(gh - 1, Math.floor(baths.y * gh)) * gw + Math.min(gw - 1, Math.floor(baths.x * gw));
+      b[k >> 3] |= 1 << (k & 7);
+      return fogText(b);
+    })();
+    await got(mo.page, "POST", worldPath, { dev: "mos-check-0011", ops: [{ n: 1, o: "m-fog", id: map.id, v: bathsCovered }] });
+    same((await steep()).fog.crew, null, "fog brushed back over what the crew's picture shows takes it off them straight away");
+    km = (await kaiWorld()).json.world.maps[0];
+    same([km.key, km.pins.length], ["", 0], "so Kai gets fog and nothing else till Mo's phone makes another");
+    same((await fetchPic(kai.page, `/api/campaigns/${tuesday.id}/maps/${map.id}?k=${open.fog.crew.k}`)).status, 404, "and the old crew's picture isn't hers to get");
+    await got(mo.page, "POST", worldPath, { dev: "mos-check-0011", ops: [{ n: 2, o: "m-crew", id: map.id, key: open.fog.crew.k, c: open.fog.c }] });
+    same((await steep()).fog.crew, null, "a crew's picture that shows what's been covered since can't go back on");
+    await got(mo.page, "POST", worldPath, { dev: "mos-check-0011", ops: [{ n: 3, o: "m-fog", id: map.id, v: open.fog.c }] });
+    await until(caughtUp, "Mo's phone makes the crew's picture again", 45000);
+
     // With no signal, Kai's map opens with the crew's picture and its fog.
     m = await caughtUp();
     const crewNow = `/api/campaigns/${tuesday.id}/maps/${map.id}?k=${m.fog.crew.k}`;
@@ -2923,6 +2948,25 @@ try {
     const before = (await steep()).fog.crew.k;
     await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "mos-check-0010", ops: [{ n: 1, o: "m-crew", id: map.id, key: map.key, c: fogFull(map.w, map.h, false) }] });
     same((await steep()).fog.crew.k, before, "and Mo's own picture can't be passed off as the crew's");
+    // A new picture turned on its side comes in all under the fog, since the
+    // old fog doesn't fit it.
+    const putPic = (w, h) => mo.page.evaluate(async ([c, w, h]) => {
+      const cv = document.createElement("canvas");
+      cv.width = w;
+      cv.height = h;
+      cv.getContext("2d").fillRect(0, 0, w, h);
+      const blob = await new Promise((r) => cv.toBlob(r, "image/jpeg", 0.8));
+      const form = new FormData();
+      form.append("pic", blob, "map");
+      form.append("thumb", blob, "thumb");
+      return (await (await fetch(`/api/campaigns/${c}/maps`, { method: "POST", body: form })).json()).key;
+    }, [tuesday.id, w, h]);
+    const [wideKey, tallKey] = [await putPic(1200, 800), await putPic(800, 1200)];
+    const sketch = { id: "fog-sketch", name: "Sideways sketch", key: wideKey, w: 1200, h: 800, of: "", fog: { c: fogFull(1200, 800, false) } };
+    await got(mo.page, "POST", worldPath, { dev: "mos-check-0012", ops: [{ n: 1, o: "m-new", m: sketch }, { n: 2, o: "m-pic", id: sketch.id, key: tallKey, w: 800, h: 1200 }] });
+    const turned = (await worldOf()).maps.find((x) => x.id === sketch.id);
+    same([turned?.w, turned?.h, turned?.fog?.c === fogFull(800, 1200), turned?.fog?.crew], [800, 1200, true, null], "a new picture turned on its side comes in all under the fog");
+    await got(mo.page, "POST", worldPath, { dev: "mos-check-0012", ops: [{ n: 3, o: "m-gone", id: sketch.id }] });
 
     // The screens at 390, in both themes: Mo's map with the fog's bar, and Kai's.
     for (const theme of ["dark", "light"]) {

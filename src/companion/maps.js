@@ -126,6 +126,20 @@ export function spotCovered(b, w, h, x, y) {
   const { gw, gh } = gridOf(w, h);
   return squareCovered(b, gw, Math.min(gw - 1, Math.max(0, Math.floor(x * gw))), Math.min(gh - 1, Math.max(0, Math.floor(y * gh))));
 }
+// Whether fog a covers any square that fog b leaves uncovered.
+export function coversMore(a, b, w, h) {
+  const x = fogBits(a, w, h);
+  const y = fogBits(b, w, h);
+  if (!x || !y) return true;
+  for (let i = 0; i < x.length; i++) if (x[i] & ~y[i]) return true;
+  return false;
+}
+// Whether two pictures' fogs are laid out the same, so one's fog fits the other.
+const sameGrid = (w1, h1, w2, h2) => {
+  const a = gridOf(w1, h1);
+  const b = gridOf(w2, h2);
+  return a.gw === b.gw && a.gh === b.gh;
+};
 // How much of it's covered, from 0 to 1.
 export function coveredShare(c, w, h) {
   const b = fogBits(c, w, h);
@@ -216,10 +230,11 @@ export function applyMap(doc, op) {
       const w = side(op.w);
       const h = side(op.h);
       if (!m || !isKey(op.key) || !w || !h) return false;
-      Object.assign(m, { key: op.key, w, h });
       // The crew's picture was made from the old one, so her phone makes
-      // another, and a fog that doesn't fit the new picture covers all of it.
-      if (m.fog) m.fog = { c: tidyFog(m.fog.c, w, h) ?? fogFull(w, h), crew: null };
+      // another. The fog stays if the new picture's laid out the same, and
+      // otherwise (one turned on its side, say) covers all of it.
+      if (m.fog) m.fog = { c: sameGrid(m.w, m.h, w, h) ? tidyFog(m.fog.c, w, h) ?? fogFull(w, h) : fogFull(w, h), crew: null };
+      Object.assign(m, { key: op.key, w, h });
       break;
     }
     case "m-fog": {
@@ -231,14 +246,18 @@ export function applyMap(doc, op) {
       }
       const c = tidyFog(op.v, m.w, m.h);
       if (!c) return false;
-      // All of it covered again: the crew sees none of it, picture and all.
-      m.fog = { c, crew: c === fogFull(m.w, m.h) ? null : m.fog?.crew ?? null };
+      // Fog back over anything the crew's picture shows takes that picture
+      // off them straight away, so they see fog till her phone's made
+      // another. Only uncovering more keeps it till then.
+      const crew = m.fog?.crew;
+      m.fog = { c, crew: crew && c !== fogFull(m.w, m.h) && !coversMore(c, crew.c, m.w, m.h) ? crew : null };
       break;
     }
     case "m-crew": {
-      // Never her own picture, or any other map's.
+      // Never her own picture, or any other map's, and never one that shows
+      // a square she's covered since it was made.
       const c = m?.fog && isKey(op.key) ? tidyFog(op.c, m.w, m.h) : null;
-      if (!c || doc.maps.some((x) => x.key === op.key || (x !== m && x.fog?.crew?.k === op.key))) return false;
+      if (!c || coversMore(m.fog.c, c, m.w, m.h) || doc.maps.some((x) => x.key === op.key || (x !== m && x.fog?.crew?.k === op.key))) return false;
       m.fog.crew = { k: op.key, c };
       break;
     }

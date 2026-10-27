@@ -20,10 +20,11 @@
 // A picture comes off when she takes its map down or puts another picture on
 // it. The world keeps its key in a bin for a day after (binned(), from
 // world.js), so Undo can put the map back with its picture, and after that
-// the picture goes. A crew's picture that's been made again only waits long
-// enough for a phone that's part way through fetching it, since her phone
-// makes another whenever it's needed. Ending a campaign takes every picture
-// it had (mapsEnd()).
+// the picture goes. A crew's picture that's been made again only stays long
+// enough for a phone that's already fetching it to finish (a phone that asks
+// for it after that gets nothing, and the new one at its next look), since
+// her phone makes another whenever it's needed. Ending a campaign takes every
+// picture it had (mapsEnd()).
 import { MMAX, isKey, keysOf, mapsOf } from "../companion/maps.js";
 
 const PIC_MAX = 8 * 1024 * 1024;
@@ -118,7 +119,7 @@ async function listAll(env, campId) {
   const out = [];
   let cursor;
   do {
-    const page = await env.MAPS.list({ prefix: dir(campId), limit: 1000, cursor });
+    const page = await env.MAPS.list({ prefix: dir(campId), limit: 1000, cursor, include: ["customMetadata"] });
     out.push(...page.objects);
     cursor = page.truncated ? page.cursor : undefined;
   } while (cursor);
@@ -175,8 +176,9 @@ export async function putPicture(request, env, camp, user, { json, fail, limited
   }
   const used = new Set(keysOf({ maps }).keys());
   for (const b of bin) if (now - b.at <= DAY) used.add(b.k);
-  // A crew's picture in the bin is on its way off in minutes, so it doesn't
-  // count against what a world holds, and one whose minutes are up goes now.
+  // A crew's picture that isn't on its map (one in the bin, on its way off
+  // in minutes, or one whose map never got it) doesn't count against what a
+  // world holds, and one in the bin whose minutes are up goes now.
   const going = new Set(bin.filter((b) => b.c).map((b) => b.k));
   const listed = await listAll(env, camp.id);
   const old = [];
@@ -184,14 +186,15 @@ export async function putPicture(request, env, camp, user, { json, fail, limited
   for (const o of listed) {
     const k = o.key.slice(dir(camp.id).length).replace(/\.t$/, "");
     if (!used.has(k) && (now - o.uploaded.getTime() > DAY || going.has(k))) old.push(o.key);
-    else if (!o.key.endsWith(".t") && !going.has(k)) kept++;
+    else if (!o.key.endsWith(".t") && !going.has(k) && (used.has(k) || !o.customMetadata?.crew)) kept++;
   }
   for (let i = 0; i < old.length; i += 1000) await env.MAPS.delete(old.slice(i, i + 1000));
   if (kept >= MAX_PICS) return fail(409, "That’s as many pictures as a world holds. Take a map down first.");
 
   const key = token(12);
-  await env.MAPS.put(`${dir(camp.id)}${key}`, picBytes, { httpMetadata: { contentType: type } });
-  await env.MAPS.put(`${dir(camp.id)}${key}.t`, thumbBytes, { httpMetadata: { contentType: small } });
+  const customMetadata = forId ? { crew: "1" } : undefined;
+  await env.MAPS.put(`${dir(camp.id)}${key}`, picBytes, { httpMetadata: { contentType: type }, customMetadata });
+  await env.MAPS.put(`${dir(camp.id)}${key}.t`, thumbBytes, { httpMetadata: { contentType: small }, customMetadata });
   return json({ key });
 }
 

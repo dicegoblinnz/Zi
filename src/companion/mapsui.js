@@ -138,15 +138,32 @@ export function makeMaps(w) {
     // Her phone makes the crew's picture of any map whose fog's moved on
     // since its last one (a rub that went up with no signal, an Undo).
     if (isGm(id)) for (const m of doc.maps) if (behind(m)) crewSoon(id, m.id, 1200);
+    // A picture that's had a new one put in its place (the crew's, each time
+    // she uncovers more) stays on the phone till the new one's on it, so a
+    // signal that drops in between doesn't leave the map with neither. Any
+    // other picture the world doesn't have any more comes off straight away.
     const c = await box();
-    if (c) for (const req of await c.keys().catch(() => [])) if (req.url.startsWith(full(base)) && !mine.has(req.url.slice(location.origin.length))) await c.delete(req).catch(() => {});
+    const mapOfReq = (req) => decodeURIComponent(req.url.slice(full(base).length).split("?")[0]);
+    const later = new Set();
+    if (c) {
+      for (const req of await c.keys().catch(() => [])) {
+        if (!req.url.startsWith(full(base)) || mine.has(req.url.slice(location.origin.length))) continue;
+        if (pics.some((m) => m.id === mapOfReq(req))) later.add(req);
+        else await c.delete(req).catch(() => {});
+      }
+    }
     for (const [src, url] of urls) {
       if (!src.startsWith(base) || mine.has(src) || view?.src === src) continue;
       URL.revokeObjectURL(url);
       urls.delete(src);
     }
     if (!online() || navigator.connection?.saveData) return;
-    for (const m of pics) fetching = fetching.then(() => picture(addr(id, m, true))).then(() => stash(addr(id, m)));
+    for (const m of pics) {
+      fetching = fetching.then(() => picture(addr(id, m, true))).then(() => stash(addr(id, m))).then(async () => {
+        if (!c || !(await c.match(full(addr(id, m))).catch(() => null))) return;
+        for (const req of later) if (mapOfReq(req) === m.id) await c.delete(req).catch(() => {});
+      });
+    }
     fetching = fetching.then(() => thumbs());
   }
   // The fog over a map's small picture, drawn once for each fog and colour
@@ -543,11 +560,14 @@ export function makeMaps(w) {
       }
       const r = await send(id, pic, thumb, () => {}, mid);
       if (r.status === 401) return d.signedOut?.();
+      // The fog's come off it while it went up: nothing to do.
+      if (!findMap(docOf(id), mid)?.fog) return;
       if (r.status !== 200 || !r.got.key) {
-        trouble = r.status === 409 ? "" : r.got.error || "That didn’t reach the crew. It’ll try again in a moment.";
+        trouble = r.got.error || "That didn’t reach the crew. It’ll try again in a moment.";
+        // The world's full of pictures, or too many in an hour: a longer wait.
+        if ([409, 413, 429].includes(r.status)) job.wait = Date.now() + 60000;
         return;
       }
-      if (!findMap(docOf(id), mid)?.fog) return;
       edit(id, [{ o: "m-crew", id: mid, key: r.got.key, c }], "", { undoable: false, quiet: true });
     } catch {
       trouble = "That didn’t reach the crew. It’ll try again in a moment.";
@@ -555,7 +575,7 @@ export function makeMaps(w) {
       job.busy = false;
       job.say = trouble;
       // Something went wrong: another go in a little while, not straight away.
-      if (trouble) job.wait = Date.now() + 15000;
+      if (trouble) job.wait = Math.max(job.wait, Date.now() + 15000);
       if (job.again || trouble) {
         job.again = false;
         crewSoon(id, mid, trouble ? 15000 : 200);
@@ -648,12 +668,24 @@ export function makeMaps(w) {
       },
       end() {
         const m = mapNow();
-        const c = b ? fogText(b) : "";
+        const was = before ? fogBits(before, m?.w ?? 0, m?.h ?? 0) : null;
+        const rubbed = b;
         stop();
-        if (!m?.fog || !c || c === before) return;
+        if (!m?.fog || !rubbed || !was) return;
+        // Only the squares this rub changed go on the fog as it stands now,
+        // so anything that came in from her other phone mid-rub stays.
+        const now = fogBits(m.fog.c, m.w, m.h);
+        if (!now) return;
+        const latest = m.fog.c;
+        for (let i = 0; i < now.length; i++) {
+          const moved = was[i] ^ rubbed[i];
+          now[i] = (now[i] & ~moved) | (rubbed[i] & moved);
+        }
+        const c = fogText(now);
+        if (c === latest) return;
         const k = fogKey(id, mid);
         const back = rubs.get(k) ?? [];
-        back.push(before);
+        back.push(latest);
         if (back.length > 40) back.shift();
         rubs.set(k, back);
         view.fog = null;
