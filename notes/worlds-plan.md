@@ -81,4 +81,4 @@ Every stage passes `tests/check-site.mjs`, `tests/check-companion.mjs` and `test
 6. **The crew's pins and notes.** Players drop their own pins and notes on a map, and the whole crew sees them. Builds on stage 4. Checked by a pin dropped on one phone reaching the others, the GM taking one off, and nothing reaching another campaign.
 7. **Timelines and family trees.** From the brief. Builds on stage 3.
 
-After that, in Mo's order: the table screen, on the same Durable Object as the live table.
+The table screen, on the same Durable Object as the live table, was built 27 Oct on the `website` branch, so stage 4 (maps and her pins) is next.

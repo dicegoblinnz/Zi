@@ -2,6 +2,18 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
+## 27 Oct: the table screen
+
+You asked for the round, the scene and the crew on a shared screen, opened from a link with its own code, showing only what the crew sees. These are the calls the app made where you didn't say. None of them is a rule.
+
+1. **The code's 12 letters and numbers**, with no 0, O, 1, I or L, so the GM can read it off her phone and type it on a TV at zidara.world/table. The link works too, for a laptop or a call.
+2. **The crew go by their characters' names and crests.** Nobody's own name is on it, since it might be up on the shop's TV.
+3. **One round at a time.** Once the next round's on, the one before is gone from the screen, even if someone's still to roll When it lands for it. Their phone still has it.
+4. **The faction turn isn't on it at all**, not even what the crew can see of it. It's the round, the scene and the crew.
+5. **Stopped counts** whatever didn't hurt anyone: answered and won, stopped when it landed, or one at a place with nobody in it. Landed counts the rest.
+6. **Resetting the code blanks every screen on the old one** straight away, and it says the link was reset.
+7. **Up to eight screens** can show one table at once, so a ninth stops the oldest.
+
 ## 27 Oct: telegraphs at the scene
 
 You asked for telegraphs at a stake, the scene clock or a place, with a place's own telegraphs from Twenty Places ready to send. The book had the rules, so these are the calls the app made where it didn't say. None of them changes a rule in the book.

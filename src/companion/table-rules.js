@@ -4,7 +4,8 @@
 // it land and rolls When it lands once the round's over. The table's Durable
 // Object (src/worker/table.js) keeps it and applies every change with these
 // rules, and the phone uses the same ones to show its own changes before
-// they've gone up.
+// they've gone up. What each phone gets is viewOf() at the bottom, and the
+// table screen's is screenOf(), built for it alone.
 //
 //   a round      { id, n, at, over, tele, acts, held, moved }   over is when it ended, or 0
 //     acts       what each of the crew spent their actions on, by "user|ch":
@@ -905,4 +906,83 @@ export function forget(doc, user) {
 export function viewOf(doc, role) {
   const rounds = role === "gm" ? doc.rounds : doc.rounds.slice(-2);
   return { v: doc.v, fight: doc.fight, rounds: JSON.parse(JSON.stringify(rounds)), scene: JSON.parse(JSON.stringify(doc.scene ?? blankScene())), ...turnView(doc, role) };
+}
+
+// What the table screen gets (/table/, src/companion/table-screen.js): the
+// round that's on, one at a time, the scene, and the crew with what each of
+// them has done this round. It's built a field at a time out of what's face
+// up for the crew, rather than cut down from a phone's view, so nothing added
+// to the table later can reach a screen unless it's put here: none of the
+// faction turn, nobody's account or ids, and nothing of the GM's. The crew go
+// by their place in the list (k). meta comes from the Worker: the campaign's
+// name, and the crew in the order they joined, { key: "user|ch", name, crew,
+// arch, grown }, where crew is who they started as from the book (or "own"),
+// arch the archetypes their own build's Titles have, and grown the ones
+// they've grown in downtime, for their crest.
+export function screenOf(doc, meta = null) {
+  const crew = (Array.isArray(meta?.crew) ? meta.crew : []).slice(0, 40);
+  const idx = new Map(crew.map((c, i) => [c.key, i]));
+  const kOf = (user, ch) => idx.get(keyOf(user, ch)) ?? null;
+  const round = current(doc);
+  const s = doc?.scene ?? blankScene();
+  const dice = (a) => (a?.dice ?? []).map((x) => ({ size: x.size, total: x.total, out: x.out }));
+  const answer = (a) => (a ? { k: kOf(a.user, a.ch), name: a.name, act: a.act, dice: dice(a), opp: a.opp, won: Boolean(a.won), with: (a.with ?? []).map((w) => w.name) } : null);
+  const defence = (x) => (x ? { mine: x.mine ?? null, v: x.v, stopped: Boolean(x.stopped) } : null);
+  const tele = (t) => {
+    const out = { id: t.id, who: t.who, does: t.does, d: t.d, kind: t.kind, one: t.one ?? "", at: atName(t), state: stateOf(t, round), ans: answer(t.ans) };
+    if (onScene(t)) {
+      const el = findEl(doc, t.at.ref)?.el;
+      // What it does if it lands, said the way every phone says it.
+      Object.assign(out, { aim: "stake", on: t.at.k, ifLands: fxSaid(t) });
+      if (t.did) out.did = { none: t.did.none ?? "", tag: t.did.tag ?? "", to: t.did.to ?? null, out: t.did.out ?? "", clock: Boolean(el?.scene), what: el?.what ?? "" };
+    } else if (atPlace(t)) {
+      Object.assign(out, { aim: "place", where: t.at.where ?? "", there: Object.entries(t.there ?? {}).map(([key, p]) => ({ k: idx.get(key) ?? null, name: p.name, in: Boolean(p.in), def: defence(p.def) })) });
+    } else {
+      Object.assign(out, { aim: "someone", k: kOf(t.at.user, t.at.ch), arch: (Array.isArray(t.at.arch) ? t.at.arch : []).slice(0, 4), icp: t.icp ? { k: kOf(t.icp.user, t.icp.ch), name: t.icp.name, free: Boolean(t.icp.free) } : null, def: defence(t.def) });
+    }
+    return out;
+  };
+  // Who's at a piece of the scene this round, and what the end of the round did to it.
+  const at = (ref, kind) => (round ? Object.entries(round.acts ?? {}).filter(([, a]) => (a.list ?? []).some((x) => x.k === kind && x.ref === ref)).map(([key, a]) => ({ k: idx.get(key) ?? null, name: a.name ?? "" })) : []);
+  const moved = (ref) => {
+    const m = (round?.moved ?? []).find((x) => x.ref === ref);
+    return m ? { from: m.from, to: m.to, out: m.out ?? "" } : null;
+  };
+  const scene = {
+    place: s.place?.name ? line(s.place.name, MAX.name) : "",
+    stakes: s.stakes.map((el) => ({ id: el.id, name: el.name, c: el.c, d: dieOf(el), tags: el.tags.map((g) => ({ name: g.name, gone: Boolean(g.gone) })), clock: el.clock || 0, out: el.out || "", note: el.note || "", roll: round?.held?.[el.id] ?? null, at: at(el.id, "work"), moved: moved(el.id) })),
+    events: s.events.map((el) => ({ id: el.id, name: el.name, what: el.what || "", d: el.d, scene: Boolean(el.scene), out: el.out || "", roll: round?.held?.[el.id] ?? null, at: at(el.id, "work"), moved: moved(el.id) })),
+    ground: s.ground.map((el) => ({ id: el.id, name: el.name, text: el.text || "", at: at(el.id, "ground") })),
+  };
+  const people = crew.map((c) => {
+    const [user, ch] = String(c.key).split("|");
+    const a = round?.acts?.[c.key];
+    const acts = [];
+    if (round) {
+      for (const t of round.tele) if (t.ans && t.ans.user === user && t.ans.ch === ch) acts.push({ k: "answer", who: t.who, act: t.ans.act, won: Boolean(t.ans.won) });
+      for (const x of a?.list ?? []) {
+        if (x.k === "join") {
+          const t = round.tele.find((y) => y.id === x.ref);
+          const rolled = Boolean(t?.ans?.with?.some((w) => w.user === user && w.ch === ch));
+          acts.push({ k: "join", who: t?.who ?? "", act: x.act, by: rolled ? t.ans.name : "", won: rolled ? Boolean(t.ans.won) : null });
+        } else if (x.k === "work") {
+          const el = findEl(doc, x.ref)?.el;
+          acts.push({ k: "work", name: el?.name ?? "", ev: el?.t === "event", act: x.act, aim: x.aim ?? "", won: Boolean(x.roll?.won), did: x.did ? { tag: x.did.tag ?? "", won: Boolean(x.did.won), to: x.did.to ?? null, out: Boolean(x.did.out) } : null });
+        } else if (x.k === "ground") {
+          acts.push({ k: "ground", name: findEl(doc, x.ref)?.el?.name ?? "", act: x.act });
+        } else acts.push({ k: "else", act: actSaid(x) });
+      }
+      for (const t of round.tele) if (t.icp && t.icp.user === user && t.icp.ch === ch) acts.push({ k: "took", who: t.who, for: t.at.name, free: Boolean(t.icp.free) });
+    }
+    const spent = round && !round.over ? spentBy(round, user, ch) : null;
+    return { name: c.name, crew: c.crew ?? "", arch: c.arch ?? [], grown: c.grown ?? [], acts, more: [...(a?.more ?? [])], left: spent ? Math.max(0, spent.have - spent.used) : null };
+  });
+  return {
+    v: doc?.v ?? 0,
+    fight: doc?.fight ?? 1,
+    name: line(meta?.name, MAX.name),
+    round: round ? { n: round.n, over: Boolean(round.over), tele: round.tele.map(tele) } : null,
+    scene,
+    crew: people,
+  };
 }

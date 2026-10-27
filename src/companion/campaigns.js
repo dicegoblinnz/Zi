@@ -210,6 +210,12 @@ export function makeCampaigns(d) {
   }
 
   const linkOf = (code) => `${location.origin}/join/#${code}`;
+  // The table screen's code is 12 letters and numbers, read off this phone in
+  // fours and typed on a TV, or opened straight from its link.
+  const fours = (code, sep = " ") => (String(code ?? "").match(/.{1,4}/g) ?? []).join(sep);
+  const screenLink = (code) => `${location.origin}/table/#${fours(code, "-")}`;
+  const screenTile = () => `<div class="cc-sec wb-tile ts-tile"><button type="button" class="card wb-tile-a" data-act="k" data-do="screen" aria-haspopup="dialog">
+      <span class="wb-tile-mark" aria-hidden="true">${ICON.screen}</span><span class="wb-tile-in"><span class="ts-tile-n">The table screen</span><span class="cc-small">Put the round up on a TV, a laptop or a call, where the whole table can see it.</span></span></button></div>`;
   const sure = (key, yes, no) => (st.sure === key ? yes : no);
   const off = (what) => (st.busy ? ` disabled${st.busy === what ? ' aria-busy="true"' : ""}` : "");
   const warn = () => (st.note ? `<div class="cc-note is-warn" role="alert"><p>${esc(st.note)}</p></div>` : "");
@@ -242,7 +248,7 @@ export function makeCampaigns(d) {
         ${party.length ? `<ul class="cc-mine cc-party">${party.map((p) => memberCard(c, p)).join("")}</ul>` : '<p class="cc-lead">Nobody’s joined yet. When they do, their characters show up here, and you can open each one’s sheet.</p>'}</section>`;
       const sheet = d.party.sheet(id);
       // The round's telegraphs come first, since they're what she taps most in a fight.
-      return `${head}${d.table.section(id)}${d.world.tile(id)}${party.length ? partyHtml + sheet + bring : bring + partyHtml + sheet}${thisView(c)}`;
+      return `${head}${d.table.section(id)}${screenTile()}${d.world.tile(id)}${party.length ? partyHtml + sheet + bring : bring + partyHtml + sheet}${thisView(c)}`;
     }
     return `${head}${d.table.pointer(id)}${youView(c, myChar)}${d.world.tile(id)}${d.party.sheet(id)}
       <section class="cc-sec" aria-labelledby="k-party"><h2 id="k-party">Who’s in it</h2>
@@ -459,6 +465,22 @@ export function makeCampaigns(d) {
           <p class="cc-qr-link">${esc(linkOf(k.code).replace(/^https?:\/\//, ""))}</p></div>
         <div class="dlg-foot"><button type="button" class="button primary" data-act="close">Done</button></div>`;
     }
+    // The table screen: its code to type on a TV, its link, and a reset.
+    if (roll.what === "screen") {
+      const k = st.camps[roll.id]?.campaign;
+      if (!k) return "";
+      const share = typeof navigator.share === "function";
+      const body = !k.screen
+        ? `<p class="cc-lead"${roll.error ? ' role="alert"' : ""}>${esc(roll.error || "Making the screen’s code…")}</p>`
+        : `<div class="ts-give"><p class="cc-small">On the screen, go to</p><p class="ts-give-at">${esc(location.host)}/table</p><p class="cc-small">and type in</p><p class="ts-give-code">${esc(fours(k.screen))}</p></div>
+          <p class="cc-lead">Or open its link on whatever’s showing it.</p>
+          <div class="cc-row"><a class="button" href="${esc(screenLink(k.screen))}" target="_blank" rel="noopener">Open it here</a>${share ? '<button type="button" class="button" data-act="k" data-do="screenShare">Share the link</button>' : ""}<button type="button" class="button" data-act="k" data-do="screenCopy">Copy the link</button></div>
+          <p class="cc-lead">Link getting around? Reset it and the old one stops working, and any screen showing it goes blank till it gets the new code.</p>
+          <div class="cc-row"><button type="button" class="button" data-act="k" data-do="screenReset"${off("screenReset")}>${sure("screenReset", "Tap again to reset it", "Reset the screen’s link")}</button></div>`;
+      return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">The table screen</h2><p class="cc-small">${esc(k.name)}’s round, up where everyone can see it.</p></div>${close}</div>
+        <div class="dlg-body"><p class="cc-lead">It doesn’t sign in, and it only ever shows what the crew sees: the telegraphs, the scene and what everyone’s done this round. Your notes, the Secrets and anything you haven’t shown the crew stay with you.</p>${body}</div>
+        <div class="dlg-foot"><button type="button" class="button primary" data-act="close">Done</button></div>`;
+    }
     return "";
   }
 
@@ -562,6 +584,49 @@ export function makeCampaigns(d) {
       keep();
       d.render();
       d.toast("That’s a new link. The old one won’t work any more.");
+    },
+    // The table screen. Its code's made the first time she opens it.
+    async screen() {
+      const k = at()?.campaign;
+      if (!k) return;
+      const open = (error = "") => d.openDialog({ kind: "camp", what: "screen", id: k.id, error });
+      open();
+      if (k.screen) return;
+      if (!online()) return open("Making the screen’s code needs a signal. Try again when you’ve got one.");
+      const r = await tryCall("POST", `/api/campaigns/${encodeURIComponent(k.id)}/screen`);
+      if (!r.ok || !r.got?.screen) return open(r.got?.error || "That didn’t make the screen’s code. Try again in a minute.");
+      k.screen = r.got.screen;
+      at().v = "";
+      keep();
+      d.renderDialog();
+    },
+    async screenCopy() {
+      const k = at()?.campaign;
+      if (!k?.screen) return;
+      try {
+        await navigator.clipboard.writeText(screenLink(k.screen));
+        d.toast("Copied. Open it on the screen.");
+      } catch {
+        d.toast(`The code’s ${fours(k.screen)}.`);
+      }
+    },
+    screenShare() {
+      const k = at()?.campaign;
+      if (k?.screen) navigator.share({ title: `${k.name}’s table screen`, text: `${k.name}’s table screen on Zi’Dara`, url: screenLink(k.screen) }).catch(() => {});
+    },
+    async screenReset() {
+      const k = at()?.campaign;
+      if (!k?.screen || !twice("screenReset")) return;
+      st.busy = "screenReset";
+      d.render();
+      const r = await tryCall("POST", `/api/campaigns/${encodeURIComponent(k.id)}/screen`);
+      if (!r.ok || !r.got?.screen) return fail(r, "That didn’t reset the screen’s link. Try again in a minute.");
+      st.busy = "";
+      k.screen = r.got.screen;
+      at().v = "";
+      keep();
+      d.render();
+      d.toast("That’s a new code. Any screen on the old one’s gone blank.");
     },
     async remove(el) {
       const k = at();

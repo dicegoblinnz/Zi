@@ -1,0 +1,35 @@
+---
+// The table screen: /table/#<code>. A campaign's live table up on a TV, a
+// laptop or a screen shared on a call, for the whole table: the round's
+// telegraphs, the scene and the crew. It doesn't sign in. The code comes off
+// the GM's phone (The table screen, on her campaign's page) and rides after
+// the #, so it never reaches a server's logs, and the screen only ever gets
+// what the crew sees (src/companion/table-screen.js). It's full screen with
+// no site bar, kept out of search, and left off phones (scripts/build-sw.mjs).
+import Base from "../layouts/Base.astro";
+import book from "../generated/book.json";
+import "@fontsource/alegreya-sans/800.css";
+import "../styles/kit.css";
+import "../styles/table-screen.css";
+
+// The six crew's archetypes, for the crests of anyone who started as one of them.
+const crew = Object.fromEntries(book.crew.map((c) => [c.id, c.titles.map((t) => t.archetype).filter(Boolean)]));
+const json = JSON.stringify({ crew }).replace(/</g, "\\u003c");
+---
+<Base title="The table screen" description="Put a Zi’Dara round up where the whole table can see it, on a TV, a laptop or a screen shared on a call.">
+  <meta slot="head" name="robots" content="noindex" />
+  <script is:inline slot="head">
+    try {
+      document.documentElement.classList.add("ts-on");
+    } catch (e) {}
+  </script>
+  <main id="main" class="ts">
+    <div id="ts" class="ts-app">
+      <noscript><p class="ts-warn">The table screen needs JavaScript.</p></noscript>
+    </div>
+  </main>
+  <script is:inline type="application/json" id="zi-screen" set:html={json}></script>
+  <script>
+    import "../companion/table-screen.js";
+  </script>
+</Base>

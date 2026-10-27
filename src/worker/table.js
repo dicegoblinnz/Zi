@@ -23,19 +23,48 @@
 // phone, which the object answers without waking up. An idle table costs
 // nothing, and its round is kept in the object's own SQLite, so it outlasts a
 // dropped connection, a redeploy and the object being put to sleep.
+//
+// The table screen (a TV, a laptop or a screen shared on a call) never signs
+// in. It opens with the campaign's screen code, which index.js hands here
+// before it looks at anyone's session:
+//
+//   GET  /api/screen/<code>   a WebSocket that gets the screen's view and then
+//        every change, or with no Upgrade, the view once. The view's
+//        screenOf() in table-rules.js, built for the screen alone, and
+//        nothing comes back up from a screen. The GM makes a new code with
+//        POST /api/campaigns/<id>/screen, and every screen on the old one is
+//        told and let go.
 import { DurableObject } from "cloudflare:workers";
-import { apply, blank, current, forget, fresh, viewOf } from "../companion/table-rules.js";
+import { apply, blank, current, forget, fresh, screenOf, viewOf } from "../companion/table-rules.js";
+import { hit, seen } from "./auth.js";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
 const MAX_OPS = 60;
 const MAX_DEVICES = 64;
 // Phones one person keeps open on one table. Past that, the oldest closes.
 const MAX_SOCKETS = 6;
+// Table screens open on one table at once. Past that, the oldest closes.
+const MAX_SCREENS = 8;
+// A table screen's code: 12 of these, read off the GM's phone and typed on a
+// TV, so there's nothing that looks like something else (no 0 or O, no 1, I
+// or L). That's about 59 bits, and wrong codes count against where they
+// came from.
+const SCREEN_ABC = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+const SCREEN = /^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{12}$/;
+export function screenCode() {
+  let code = "";
+  while (code.length < 12) {
+    // 248 is eight lots of 31, so every letter's as likely as the next.
+    for (const b of crypto.getRandomValues(new Uint8Array(16))) if (b < 248 && code.length < 12) code += SCREEN_ABC[b % 31];
+  }
+  return code;
+}
 
-// A phone that's not in the campaign any more is told so, then let go.
-function out(ws, why) {
+// A phone that's not in the campaign any more is told so, then let go. A
+// table screen's told why (reset or ended), so it can say so.
+function out(ws, why, key = "") {
   try {
-    ws.send(JSON.stringify({ t: "out" }));
+    ws.send(JSON.stringify(key ? { t: "out", why: key } : { t: "out" }));
     ws.close(4404, why);
   } catch {}
 }
@@ -44,6 +73,7 @@ export class Table extends DurableObject {
   constructor(ctx, env) {
     super(ctx, env);
     this.doc = null;
+    this.meta = null;
     // The phones' heartbeat, answered without waking the object.
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair("ping", "pong"));
   }
@@ -63,11 +93,42 @@ export class Table extends DurableObject {
     fresh(this.doc);
     this.doc.turn ??= null;
     this.doc.last ??= null;
+    const meta = sql.exec("SELECT v FROM kv WHERE k = 'meta'").toArray()[0];
+    try {
+      this.meta = meta ? JSON.parse(meta.v) : null;
+    } catch {
+      this.meta = null;
+    }
     return this.doc;
   }
 
   save() {
     this.ctx.storage.sql.exec("INSERT OR REPLACE INTO kv (k, v) VALUES ('doc', ?)", JSON.stringify(this.doc));
+  }
+
+  // The campaign's name and its crew, for the table screen, from the Worker
+  // whenever it's got them (a change from a phone, or a screen opening), and
+  // kept with the table so a screen still has them after the object's slept.
+  // True when they've changed.
+  keepMeta(meta) {
+    if (!meta || typeof meta !== "object") return false;
+    const next = JSON.stringify(meta);
+    if (next === JSON.stringify(this.meta ?? null)) return false;
+    this.meta = meta;
+    this.ctx.storage.sql.exec("INSERT OR REPLACE INTO kv (k, v) VALUES ('meta', ?)", next);
+    return true;
+  }
+
+  // Every table screen open on this table gets the screen's view.
+  toScreens() {
+    const screens = this.ctx.getWebSockets("screen");
+    if (!screens.length) return;
+    const view = JSON.stringify({ t: "view", ...screenOf(this.doc, this.meta) });
+    for (const ws of screens) {
+      try {
+        ws.send(view);
+      } catch {}
+    }
   }
 
   // Everyone with a phone open on this table right now.
@@ -90,24 +151,58 @@ export class Table extends DurableObject {
   }
 
   // Every phone gets the table as its owner sees it: the GM the whole fight,
-  // a player the round that's on and the one before.
+  // a player the round that's on and the one before. A table screen gets the
+  // screen's view.
   broadcast() {
     const gm = JSON.stringify({ t: "view", ...viewOf(this.doc, "gm") });
     const player = JSON.stringify({ t: "view", ...viewOf(this.doc, "player") });
     for (const ws of this.ctx.getWebSockets()) {
+      const role = ws.deserializeAttachment()?.role;
+      if (role === "screen") continue;
       try {
-        ws.send(ws.deserializeAttachment()?.role === "gm" ? gm : player);
+        ws.send(role === "gm" ? gm : player);
       } catch {}
     }
+    this.toScreens();
   }
 
-  // A phone's socket, handed over by the Worker with who it is.
+  // A table screen's socket, handed over by the Worker with the code it
+  // opened with and the campaign's name and crew.
+  async screen(who) {
+    const theirs = this.ctx.getWebSockets("screen");
+    for (const ws of theirs.slice(0, Math.max(0, theirs.length - (MAX_SCREENS - 1)))) {
+      try {
+        ws.close(4000, "Opened somewhere else");
+      } catch {}
+    }
+    const [client, server] = Object.values(new WebSocketPair());
+    this.ctx.acceptWebSocket(server, ["screen"]);
+    server.serializeAttachment({ role: "screen", code: who.code });
+    // Checked again now it's open: a code reset a moment ago, after the
+    // Worker checked but before this, doesn't get the table.
+    if (who.camp && this.env.DB) {
+      const still = await this.env.DB.prepare("SELECT 1 AS ok FROM campaign WHERE id = ?1 AND screen = ?2").bind(who.camp, who.code).first().catch(() => ({ ok: 1 }));
+      if (!still) {
+        out(server, "The screen's link was reset", "reset");
+        return new Response(null, { status: 101, webSocket: client });
+      }
+    }
+    this.load();
+    this.keepMeta(who.meta);
+    server.send(JSON.stringify({ t: "view", ...screenOf(this.doc, this.meta) }));
+    return new Response(null, { status: 101, webSocket: client });
+  }
+
+  // A phone's socket, handed over by the Worker with who it is, or a table
+  // screen's (its names can be any letters, so that header's URI-encoded).
   async fetch(request) {
     if (request.headers.get("upgrade") !== "websocket") return new Response(null, { status: 426 });
     let who = null;
     try {
-      who = JSON.parse(request.headers.get("x-zi-who") || "null");
+      const screen = request.headers.get("x-zi-screen");
+      who = screen ? { ...JSON.parse(decodeURIComponent(screen)), role: "screen" } : JSON.parse(request.headers.get("x-zi-who") || "null");
     } catch {}
+    if (who?.role === "screen") return SCREEN.test(String(who.code ?? "")) ? this.screen(who) : new Response(null, { status: 400 });
     if (!who?.user || !["gm", "player"].includes(who.role)) return new Response(null, { status: 400 });
     const theirs = this.ctx.getWebSockets(`u:${who.user}`);
     for (const ws of theirs.slice(0, Math.max(0, theirs.length - (MAX_SOCKETS - 1)))) {
@@ -139,11 +234,13 @@ export class Table extends DurableObject {
     return new Response(null, { status: 101, webSocket: client });
   }
 
-  // A phone that says anything but ping gets the table again.
+  // A phone that says anything but ping gets the table again, and so does a
+  // table screen.
   async webSocketMessage(ws, message) {
     if (message === "ping") return ws.send("pong");
     const a = ws.deserializeAttachment();
-    ws.send(JSON.stringify({ t: "view", ...viewOf(this.load(), a?.role === "gm" ? "gm" : "player") }));
+    const doc = this.load();
+    ws.send(JSON.stringify({ t: "view", ...(a?.role === "screen" ? screenOf(doc, this.meta) : viewOf(doc, a?.role === "gm" ? "gm" : "player")) }));
   }
 
   async webSocketClose() {}
@@ -160,9 +257,18 @@ export class Table extends DurableObject {
     return viewOf(this.doc, who.role);
   }
 
-  // Changes from one phone, applied in order, each once.
-  async change(who, roster, dev, ops, phoneNow = null) {
+  // The screen's view once, for a table screen whose socket won't connect.
+  async screenView(meta) {
+    this.load();
+    if (this.keepMeta(meta)) this.toScreens();
+    return screenOf(this.doc, this.meta);
+  }
+
+  // Changes from one phone, applied in order, each once. meta's the
+  // campaign's name and crew, for the table screen.
+  async change(who, roster, dev, ops, phoneNow = null, meta = null) {
     const doc = this.load();
+    const crewChanged = this.keepMeta(meta);
     const now = Date.now();
     const was = JSON.stringify([doc.fight, doc.rounds, doc.scene, doc.turn ?? null, doc.last ?? null]);
     // Each phone's last change, under a key no phone can turn into anything else.
@@ -195,27 +301,37 @@ export class Table extends DurableObject {
     if (changed) doc.v += 1;
     if (changed || top > high) this.save();
     if (changed) this.broadcast();
+    else if (crewChanged) this.toScreens();
     return { seq: top, no, ...viewOf(doc, who.role) };
   }
 
   // Someone's left the campaign, or been taken out: their phones stop hearing
-  // it. When their account's gone (erase), so are the telegraphs aimed at
-  // them and their name on anyone else's.
+  // it, and they're off the table screen's crew. When their account's gone
+  // (erase), so are the telegraphs aimed at them and their name on anyone
+  // else's.
   async left(user, { erase = false } = {}) {
     for (const ws of this.ctx.getWebSockets(`u:${user}`)) out(ws, "Not in the campaign");
-    if (!erase) return;
     this.load();
-    if (forget(this.doc, user)) {
+    const crew = Array.isArray(this.meta?.crew) ? this.meta.crew : [];
+    const gone = crew.some((c) => String(c.key).startsWith(`${user}|`)) && this.keepMeta({ ...this.meta, crew: crew.filter((c) => !String(c.key).startsWith(`${user}|`)) });
+    if (erase && forget(this.doc, user)) {
       this.doc.v += 1;
       this.save();
       this.broadcast();
-    }
+    } else if (gone) this.toScreens();
+  }
+
+  // The screen's code was reset: every table screen on another code is told
+  // and let go.
+  async screenOff(keep) {
+    for (const ws of this.ctx.getWebSockets("screen")) if (ws.deserializeAttachment()?.code !== keep) out(ws, "The screen's link was reset", "reset");
   }
 
   // The campaign's ended: everyone's phone stops hearing it, and it's gone.
   async end() {
-    for (const ws of this.ctx.getWebSockets()) out(ws, "The campaign ended");
+    for (const ws of this.ctx.getWebSockets()) out(ws, "The campaign ended", ws.deserializeAttachment()?.role === "screen" ? "ended" : "");
     this.doc = null;
+    this.meta = null;
     await this.ctx.storage.deleteAll();
   }
 }
@@ -224,14 +340,36 @@ export class Table extends DurableObject {
 
 const tableOf = (env, id) => env.TABLE.getByName(`table:${id}`);
 
-// Everyone in the campaign who's playing someone: who they are and who they play.
+// Everyone in the campaign who's playing someone, in the order they joined:
+// who they are and who they play, and for the table screen's crests, who
+// their character started as from the book (or "own"), the archetypes on
+// their own build's Titles and the ones they've grown in downtime.
 async function rosterOf(env, id) {
-  const { results } = await env.DB.prepare(`SELECT m.userId AS user, u.name, m.characterId AS ch, json_extract(ch.data, '$.name') AS cname
+  const { results } = await env.DB.prepare(`SELECT m.userId AS user, u.name, m.characterId AS ch, json_extract(ch.data, '$.name') AS cname,
+      json_extract(ch.data, '$.crew') AS crew,
+      (SELECT json_group_array(json_extract(t.value, '$.arch')) FROM json_each(ch.data, '$.build.titles') t WHERE t.type = 'object') AS built,
+      (SELECT json_group_array(json_extract(g.value, '$.arch')) FROM json_each(ch.data, '$.state.grown') g WHERE CASE WHEN g.type = 'object' THEN json_extract(g.value, '$.k') = 'title' ELSE 0 END) AS grown
     FROM member m JOIN "user" u ON u.id = m.userId
     LEFT JOIN character ch ON ch.userId = m.userId AND ch.id = m.characterId AND ch.data IS NOT NULL
-    WHERE m.campaignId = ?1`).bind(id).all();
-  return results.filter((m) => m.ch && m.cname != null).map((m) => ({ user: String(m.user), name: String(m.name ?? ""), ch: String(m.ch), cname: String(m.cname) }));
+    WHERE m.campaignId = ?1 ORDER BY m.joinedAt, m.userId`).bind(id).all();
+  return results.filter((m) => m.ch && m.cname != null).map((m) => ({ user: String(m.user), name: String(m.name ?? ""), ch: String(m.ch), cname: String(m.cname), crew: String(m.crew ?? ""), built: archsOf(m.built), grown: archsOf(m.grown) }));
 }
+// An archetype's name, the way the crest reads it.
+const ARCH = /^[A-Za-z][A-Za-z' -]{0,23}$/;
+function archsOf(json) {
+  try {
+    const list = JSON.parse(json || "[]");
+    return Array.isArray(list) ? list.filter((a) => typeof a === "string" && ARCH.test(a)).slice(0, 8) : [];
+  } catch {
+    return [];
+  }
+}
+// What the table screen knows about the campaign: its name, and its crew by
+// their characters' names, never their accounts' (table-rules.js, screenOf()).
+const metaOf = (camp, roster) => ({
+  name: String(camp.name ?? ""),
+  crew: roster.map((m) => ({ key: `${m.user}|${m.ch}`, name: m.cname.slice(0, 60), crew: /^[a-z]{1,24}$/.test(m.crew) ? m.crew : "", arch: m.built, grown: m.grown })),
+});
 
 export async function tableRoute(request, env, method, camp, user, { json, fail, body, origins, limited }) {
   if (!env.TABLE) return fail(503, "Live play isn’t switched on here yet.");
@@ -256,9 +394,41 @@ export async function tableRoute(request, env, method, camp, user, { json, fail,
     const me = gm ? null : roster.find((m) => m.user === user.id) ?? null;
     const who = { user: user.id, role: gm ? "gm" : "player", ch: me?.ch ?? null, cname: me?.cname ?? "" };
     const phoneNow = Number.isFinite(Number(b.now)) ? Number(b.now) : null;
-    return json(await tableOf(env, camp.id).change(who, roster, dev, ops, phoneNow));
+    return json(await tableOf(env, camp.id).change(who, roster, dev, ops, phoneNow, metaOf(camp, roster)));
   }
   return fail(404, "There’s nothing here.");
+}
+
+// A table screen, opened with its code and no sign-in. Codes that don't work
+// count against the address they came from, the way join links do, so
+// nobody can guess at them.
+const BAD_SCREEN = "That code didn’t work. Your GM might’ve reset it, so ask them for the new one.";
+export async function screenRoute(request, env, code, { json, fail, origins, limited }) {
+  if (!env.TABLE) return fail(503, "Live play isn’t switched on here yet.");
+  const misses = `screen-miss:${request.headers.get("cf-connecting-ip") || "here"}`;
+  if ((await seen(env, misses, 900)) >= 20) return fail(429, "That’s a lot of tries. Wait a few minutes and try again.");
+  const want = String(code ?? "").toUpperCase();
+  const camp = SCREEN.test(want) && (await env.DB.prepare("SELECT id, name FROM campaign WHERE screen = ?1").bind(want).first());
+  if (!camp) {
+    await hit(env, misses, 900);
+    return fail(404, BAD_SCREEN);
+  }
+  const meta = metaOf(camp, await rosterOf(env, camp.id));
+  if ((request.headers.get("upgrade") || "").toLowerCase() === "websocket") {
+    // Only the site's own pages open a screen's socket.
+    if (!origins.includes(request.headers.get("origin"))) return fail(403, "That came from somewhere else.");
+    if (await limited(env, `sock:screen:${camp.id}`, 120, 600)) return fail(429, "That’s a lot of reconnecting. Give it a minute.");
+    const who = encodeURIComponent(JSON.stringify({ code: want, camp: camp.id, meta }));
+    return tableOf(env, camp.id).fetch(new Request("https://table/socket", { headers: { upgrade: "websocket", "x-zi-screen": who } }));
+  }
+  if (await limited(env, `screen:${camp.id}`, 400, 600)) return fail(429, "That’s a lot of looking. Give it a minute.");
+  return json(await tableOf(env, camp.id).screenView(meta));
+}
+
+// The screen's code was reset, so every screen on the old one goes.
+export async function tableScreenOff(env, campaignId, keep) {
+  if (!env.TABLE) return;
+  await tableOf(env, campaignId).screenOff(keep).catch((err) => console.error(`table screen off: ${err?.message ?? err}`));
 }
 
 // Someone's out of a campaign, so their phones stop hearing its table. When
