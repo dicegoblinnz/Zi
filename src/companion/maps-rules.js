@@ -209,9 +209,10 @@ export function putMap(doc, { id, name, file, w, h, bytes, at }) {
 }
 
 // The maps as a player gets them: only the ones the crew's been shown, and on
-// each only the pins it's been shown. A pin's name comes with it, but what it
-// opens only once the crew's been shown that too, so a player's phone never
-// learns there's a page behind a pin till it can open it.
+// each only the pins it's been shown. A pin's own name comes with it, and
+// what it opens (and that name, when it hasn't got its own) only once the
+// crew's been shown that too, so a player's phone never learns there's a page
+// behind a pin, or its name, till it can open it.
 export function mapsForPlayer(doc) {
   const pages = new Map((doc.pages ?? []).map((p) => [p.id, p]));
   const facs = new Map((doc.factions ?? []).map((f) => [f.id, f]));
@@ -231,7 +232,8 @@ export function mapsForPlayer(doc) {
     shown: true,
     pins: m.pins.filter((p) => p.shown).map((p) => {
       const t = target(p.to);
-      return { id: p.id, x: p.x, y: p.y, label: p.label || t?.name || "", to: openToCrew(t) ? p.to : null, shown: true };
+      const open = openToCrew(t);
+      return { id: p.id, x: p.x, y: p.y, label: p.label || (open ? t.name : ""), to: open ? p.to : null, shown: true };
     }),
   }));
 }

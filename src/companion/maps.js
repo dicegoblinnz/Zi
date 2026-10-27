@@ -60,7 +60,6 @@ export function makeMaps(w) {
   // Each picture this phone has open, as a blob: address, by its address.
   const blobs = new Map();
   const loading = new Map();
-  let holding = false;
   let up = null;
 
   function fresh() {
@@ -347,10 +346,10 @@ export function makeMaps(w) {
 
   function pinHtml(id, m, pin, doc, gm) {
     const t = targetOf(doc, pin.to);
-    const name = labelOf(doc, pin) || "A pin";
-    const say = `${name}${t && t.name !== name ? `, ${t.name}` : ""}${gm && !(m.shown && pin.shown) ? ", only you see it" : ""}`;
+    const name = labelOf(doc, pin);
+    const say = `${name || "A pin with no name yet"}${t && t.name !== name ? `, ${t.name}` : ""}${gm && !(m.shown && pin.shown) ? ", only you see it" : ""}`;
     const cls = [gm && !pin.shown ? "is-hidden" : "", ui.pin === pin.id && ui.panel ? "is-on" : "", ui.mode === "move" && ui.pin === pin.id ? "is-moving" : ""].filter(Boolean).join(" ");
-    return `<button type="button" class="wm-pin ${cls}" style="left:${(pin.x * 100).toFixed(3)}%;top:${(pin.y * 100).toFixed(3)}%" data-act="w" data-do="mpin" data-pin="${esc(pin.id)}" aria-label="${esc(say)}">${markOf(kindOf(t))}<span class="wm-pin-l" aria-hidden="true">${esc(name)}</span></button>`;
+    return `<button type="button" class="wm-pin ${cls}" style="left:${(pin.x * 100).toFixed(3)}%;top:${(pin.y * 100).toFixed(3)}%" data-act="w" data-do="mpin" data-pin="${esc(pin.id)}" aria-label="${esc(say)}">${markOf(kindOf(t))}${name ? `<span class="wm-pin-l" aria-hidden="true">${esc(name)}</span>` : ""}</button>`;
   }
 
   function pinsHtml(id, m, doc, gm) {
@@ -366,16 +365,21 @@ export function makeMaps(w) {
   // and her taps.
   function pinSheet(id, m, pin, doc, gm) {
     const t = targetOf(doc, pin.to);
-    const name = labelOf(doc, pin) || "A pin";
+    const name = labelOf(doc, pin) || (gm ? "A pin" : "Something’s here");
     const open = t && (gm || openToCrew(t)) ? `<a class="button primary wm-open" href="${esc(targetHref(id, t))}" data-act="w" data-do="nav">Open ${esc(t.name)}</a>` : "";
     const what = t ? `<p class="cc-small wm-what">${kindWord(t)}${t.name !== name ? `, ${esc(t.name)}` : ""}</p>` : "";
     if (!gm) {
       return sheet(esc(name), `${what}${open ? `<div class="cc-row">${open}</div>` : "<p class=\"cc-small\">That’s all the crew’s been shown about it so far.</p>"}`);
     }
-    const crew = t ? (openToCrew(t) ? `, and it opens ${esc(t.name)} for them` : `. It opens ${esc(t.name)} for them once you’ve shown them ${t.kind === "p" && t.page.kind === "person" ? "who they are" : "that"}`) : "";
+    // What the crew sees of it: its own name, or the name of what it opens
+    // once they've been shown that, and till then no name at all.
+    const them = t && t.kind === "p" && t.page.kind === "person" ? "who they are" : "that";
+    const how = pin.label
+      ? `as <b>${esc(pin.label)}</b>${t ? (openToCrew(t) ? `, and it opens ${esc(t.name)} for them` : `. It opens ${esc(t.name)} for them once you’ve shown them ${them}`) : ""}`
+      : !t ? "with no name" : openToCrew(t) ? `as <b>${esc(t.name)}</b>, and it opens it for them` : `with no name till you’ve shown them ${esc(t.name)}, then it takes that name and opens it for them`;
     const seen = pin.shown
-      ? `The crew can see this pin${m.shown ? "" : " once you show them the map"}. They see it as <b>${esc(name)}</b>${crew}.`
-      : `Only you see this pin. Shown, the crew sees it as <b>${esc(name)}</b>${crew}.`;
+      ? `The crew can see this pin${m.shown ? "" : " once you show them the map"}. They see it ${how}.`
+      : `Only you see this pin. Shown, the crew sees it ${how}.`;
     // What it opens, shown to the crew from here too, so a pin and its page
     // can go out together without leaving the map.
     const also = t && !openToCrew(t) ? `<button type="button" class="button sm" data-act="w" data-do="mtshow" data-pin="${esc(pin.id)}">Show them ${esc(t.name)}${pin.shown ? " too" : ""}</button>` : "";
@@ -487,6 +491,13 @@ export function makeMaps(w) {
       el.classList.add("is-ready");
       v.msg.textContent = "";
     });
+    // A picture that won't open comes off this phone, so trying again
+    // fetches it fresh.
+    v.img.addEventListener("error", () => {
+      if (!v.img.src || V !== v) return;
+      forget(srcOf(v.id, { id: v.mid, file: v.file }));
+      stuck(v, '<p>The map didn’t open.</p><button type="button" class="button sm" data-act="w" data-do="mretry">Try again</button>');
+    });
     bind(v);
     v.ro = new ResizeObserver(() => relayout(v));
     v.ro.observe(el);
@@ -515,12 +526,26 @@ export function makeMaps(w) {
         v.img.src = r.src;
         return;
       }
-      v.el.classList.add("is-stuck");
-      v.msg.innerHTML = r.fail === "offline"
-        ? "<p>No signal, and this phone hasn’t opened this map before. It opens once there’s a signal.</p>"
-        : r.fail === "gone" ? "<p>That map’s picture isn’t there any more.</p>"
-        : '<p>The map didn’t open.</p><button type="button" class="button sm" data-act="w" data-do="mretry">Try again</button>';
+      if (r.fail === "offline") return stuck(v, "<p>No signal, and this phone hasn’t opened this map before. It opens once there’s a signal.</p>");
+      if (r.fail !== "gone") return stuck(v, '<p>The map didn’t open.</p><button type="button" class="button sm" data-act="w" data-do="mretry">Try again</button>');
+      // Its picture's changed since this phone looked, most likely: the
+      // world again, and the new one opens. If it's still this one, it's gone.
+      v.msg.innerHTML = "<p>That map’s got a new picture. Opening it…</p>";
+      Promise.resolve(w.refresh?.(v.id)).finally(() => {
+        if (V === v && v.file === file && !v.ready) stuck(v, "<p>That map’s picture isn’t there any more.</p>");
+      });
     });
+  }
+  function stuck(v, html) {
+    v.el.classList.add("is-stuck");
+    v.msg.innerHTML = html;
+  }
+  // A picture off this phone, from memory and the cache.
+  function forget(url) {
+    const src = blobs.get(url);
+    if (src) URL.revokeObjectURL(src);
+    blobs.delete(url);
+    cacheOpen().then((c) => c?.delete(url)).catch(() => {});
   }
 
   const fitOf = (v) => Math.min(v.W / v.w, v.H / v.h);
@@ -694,8 +719,13 @@ export function makeMaps(w) {
     el.addEventListener("pointerdown", (e) => {
       if (e.pointerType === "mouse" && e.button !== 0) return;
       if (e.target.closest(".wm-msg")) return;
+      // A first finger starts afresh, whatever a lost gesture left behind.
+      if (e.isPrimary) {
+        pts.clear();
+        g = null;
+      }
       stop(v);
-      holding = true;
+      d.holdRenders?.(true);
       pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
       if (pts.size === 1) {
         g = { kind: "pan", x0: e.clientX, y0: e.clientY, tx0: v.tx, ty0: v.ty, on: e.target, caught: false };
@@ -747,11 +777,17 @@ export function makeMaps(w) {
       if (moved > 6) swallow = true;
       else if (was && e.type === "pointerup" && !was.on?.closest?.(".wm-pin")) tap(rel({ x: e.clientX, y: e.clientY }));
       settle(v);
-      holding = false;
-      w.idle();
+      d.holdRenders?.(false);
     };
     el.addEventListener("pointerup", end);
     el.addEventListener("pointercancel", end);
+    // A finger let go off the map (the bar, or past the edge) still ends it.
+    addEventListener("pointerup", end, true);
+    addEventListener("pointercancel", end, true);
+    v.unbind = () => {
+      removeEventListener("pointerup", end, true);
+      removeEventListener("pointercancel", end, true);
+    };
     // The click at the end of a drag that started on a pin isn't a tap on it.
     el.addEventListener("click", (e) => {
       if (!swallow) return;
@@ -782,7 +818,7 @@ export function makeMaps(w) {
       clearTimeout(tapTimer);
       // A tap on the map itself, away from the pins, puts away what's open.
       tapTimer = setTimeout(() => {
-        if (ui.panel && ui.panel !== "form" && V === v) {
+        if (ui.panel && ui.panel !== "form" && V === v && !pts.size) {
           ui.panel = "";
           ui.pin = "";
           d.render();
@@ -831,7 +867,7 @@ export function makeMaps(w) {
       ui.mode = "";
       if (!pin) return d.render();
       ui.panel = "pin";
-      edit(id, [{ o: "m-pin", id: m.id, pin: { ...pin, ...at } }], "Moved.");
+      if (!edit(id, [{ o: "m-pin", id: m.id, pin: { ...pin, ...at } }], "Moved.")) d.render();
       return;
     }
     Object.assign(ui, { mode: "", draft: at, panel: "form", form: "new", pin: "" });
@@ -856,6 +892,7 @@ export function makeMaps(w) {
     if (!V || V.key !== `${id}:${mid}`) {
       if (V?.placed) remember(V);
       V?.ro.disconnect();
+      V?.unbind?.();
       V = viewer(id, m);
     }
     if (V.file !== m.file) load(V, m);
@@ -1005,7 +1042,9 @@ export function makeMaps(w) {
     mretry() {
       if (!V) return;
       const m = findMap(docOf(V.id), V.mid);
-      if (m) load(V, m);
+      if (!m) return;
+      V.img.removeAttribute("src");
+      load(V, m);
     },
   };
 
@@ -1059,7 +1098,6 @@ export function makeMaps(w) {
     news,
     ACT,
     submit,
-    holding: () => holding,
     title: (id, mid) => findMap(docOf(id), mid)?.name ?? "A map",
     count: (doc) => (doc.maps ?? []).length,
     shownCount: (doc) => (doc.maps ?? []).filter((m) => m.shown).length,

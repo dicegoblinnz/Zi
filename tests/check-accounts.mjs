@@ -2428,6 +2428,12 @@ try {
     const pMill = map.pins.find((p) => p.label === "The old mill");
     const want = { x: (tap.x - t.tx) / t.s / 2560, y: (tap.y - t.ty) / t.s / 1920 };
     yes(pMill && Math.abs(pMill.x - want.x) < 0.001 && Math.abs(pMill.y - want.y) < 0.001, `the old mill where he tapped (${pMill?.x}, ${pMill?.y}, for ${want.x.toFixed(4)}, ${want.y.toFixed(4)})`);
+    // Move it, then put it straight back where it was: its card comes back.
+    await mo.page.click(`[data-do="mmove"][data-pin="${pMill.id}"]`);
+    await mo.page.waitForSelector(".wm-stage.is-placing");
+    await mo.page.waitForTimeout(400);
+    await mo.page.click('[data-do="mput"]');
+    await until(async () => !(await mo.page.$(".wm-stage.is-placing")) && (await sheetH(mo.page)) === "The old mill", "the old mill's card back after a move that went nowhere");
     // And the warehouse, which opens Casimir Dace, who the crew hasn't been shown.
     const daceId = await pageId("Casimir Dace");
     await mo.page.click('[data-do="mclose"]');
@@ -2475,6 +2481,12 @@ try {
       return { status: res.status, type: res.headers.get("content-type"), size: (await res.arrayBuffer()).byteLength };
     }, `/api/campaigns/${tuesday.id}/maps/${map.id}?v=${map.file}`);
     same([pic.status, /^image\/(webp|jpeg)$/.test(pic.type), pic.size], [200, true, map.bytes], "its picture's hers now");
+    const again = await kai.page.evaluate(async (u) => {
+      const first = await fetch(u, { cache: "no-store" });
+      const res = await fetch(u, { cache: "no-store", headers: { "if-none-match": first.headers.get("etag") } });
+      return [first.headers.get("etag") ? "etag" : "none", res.status];
+    }, `/api/campaigns/${tuesday.id}/maps/${map.id}?v=${map.file}`);
+    same(again, ["etag", 304], "and asked for again with its tag, the Worker says she's got it");
     // Then the Copper Baths' pin and the warehouse, and the old mill stays his.
     for (const pid of [pBaths.id, pWare.id]) {
       await shut(mo.page);
@@ -2557,6 +2569,7 @@ try {
     await until(async () => (await mapsIn())[0]?.file !== was, "the new picture up", 20000);
     map = (await mapsIn())[0];
     same([map.w, map.h, map.pins.length, map.shown], [1200, 900, 3, true], "the new picture, 1200 by 900, with its three pins and still shown");
+    same((await api(kai.page, "GET", `/api/campaigns/${tuesday.id}/maps/${map.id}?v=${was}`)).status, 404, "the old picture's address gets nothing, so a phone that's behind looks again");
     same(await keys(), [`c/${tuesday.id}/${map.file}`], "and only the new picture in R2");
     await mo.page.waitForSelector(".wm-stage.is-ready");
     same(await mo.page.$eval(".wm-img", (i) => i.naturalWidth), 1200, "on Mo's phone straight away");
@@ -2588,6 +2601,25 @@ try {
     await mo.page.click(".wm-open");
     await until(async () => (await h1(mo.page)) === "Orla Strand", "Orla's page from her pin");
     has(await text(mo.page, ".wm-on"), "The Steeplands", "and it says she's on the Steeplands");
+
+    // A pin with no name of its own, opening someone the crew hasn't been
+    // shown, reaches Kai's phone with no name and nothing to open.
+    same((await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "mos-maps-check01", ops: [{ n: 1, o: "p-new", p: { id: "ruddbros1", kind: "person", name: "The Rudd brothers", line: "Owed money by half the docks", shown: {} } }] })).status, 200, "the Rudd brothers in the world, hidden");
+    await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&world&m=${map.id}`);
+    await mo.page.waitForSelector(".wm-stage.is-ready");
+    await mo.page.click('[data-do="madd"]');
+    await mo.page.click('[data-do="mput"]');
+    await mo.page.selectOption('form[data-form="w-mp-pin"] select[name="to"]', "p:ruddbros1");
+    await mo.page.click('form[data-form="w-mp-pin"] button[type="submit"]');
+    await until(async () => (await mapsIn())[0]?.pins.some((p) => p.to?.id === "ruddbros1"), "the Rudd brothers' pin on the server");
+    const pRudd = (await mapsIn())[0].pins.find((p) => p.to?.id === "ruddbros1");
+    has(await text(mo.page, ".wm-sheet"), "with no name till you’ve shown them The Rudd brothers", "its card says the crew sees it with no name till then");
+    await mo.page.click(`[data-do="mpinshow"][data-pin="${pRudd.id}"]`);
+    await until(async () => (await playerWorld()).json?.world?.maps?.[0]?.pins.some((p) => p.id === pRudd.id), "the Rudd brothers' pin on Kai's phone");
+    raw = (await playerWorld()).body;
+    const kRudd = JSON.parse(raw).world.maps[0].pins.find((p) => p.id === pRudd.id);
+    same([kRudd?.label, kRudd?.to], ["", null], "with no name and nothing to open");
+    yes(!raw.includes("Rudd"), "and nothing of the Rudd brothers on Kai's phone");
 
     // Nothing crosses: Zed can't get Tuesday Lair's map, and Zed's Night has none.
     same((await api(zed.page, "GET", `/api/campaigns/${tuesday.id}/maps/${map.id}?v=${map.file}`)).status, 404, "Zed can't get Tuesday Lair's map");

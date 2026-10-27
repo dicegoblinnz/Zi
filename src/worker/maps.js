@@ -10,7 +10,8 @@
 //   GET  /api/campaigns/<id>/maps/<map>?v=      the picture: for the GM, and
 //        for a player once the crew's been shown that map. Anyone else gets
 //        the same 404 as a map that isn't there. v is the picture's file, so
-//        a phone can keep it for good, and a new picture gets a new address.
+//        a phone can keep it for good, a new picture gets a new address, and
+//        an old address gets a 404.
 //
 // The Worker works out what the picture is and how big from the picture
 // itself, never from what the phone says, and only takes a JPEG, a PNG or a
@@ -95,11 +96,17 @@ export async function putPicture(request, env, url, camp, user, mapId, { json, f
   await env.MAPS.put(pictureKey(camp.id, file), bytes, { httpMetadata: { contentType: TYPES[pic.kind] }, customMetadata: { map: mapId, by: user.id } });
   // Then the map in the world, the same careful way a change goes in. If it
   // can't go in, the picture doesn't stay either.
-  const done = await worldWith(env, camp, user, (doc) => {
-    const r = putMap(doc, { id: mapId, name, file, w: pic.w, h: pic.h, bytes: bytes.length, at: Date.now() });
-    if (r.full) return { ok: false, status: 409, error: `That’s ${MMAX.maps} maps, which is as many as a world holds. Take one out first.` };
-    return r.ok ? r : { ok: false, status: 400, error: "That didn’t look like a map." };
-  });
+  let done;
+  try {
+    done = await worldWith(env, camp, user, (doc) => {
+      const r = putMap(doc, { id: mapId, name, file, w: pic.w, h: pic.h, bytes: bytes.length, at: Date.now() });
+      if (r.full) return { ok: false, status: 409, error: `That’s ${MMAX.maps} maps, which is as many as a world holds. Take one out first.` };
+      return r.ok ? r : { ok: false, status: 400, error: "That didn’t look like a map." };
+    });
+  } catch (err) {
+    await dropPictures(env, camp.id, [file]);
+    throw err;
+  }
   if (!done.ok) {
     await dropPictures(env, camp.id, [file]);
     return fail(done.status ?? 400, done.error ?? "That didn’t go up.");
@@ -115,9 +122,13 @@ export async function getPicture(request, env, url, camp, mapId, { fail }) {
   const row = await env.DB.prepare("SELECT json_extract(data, '$.maps') AS maps FROM world WHERE campaignId = ?1").bind(camp.id).first();
   const m = row?.maps ? findMap({ maps: mapsOf(parse(row.maps)) }, mapId) : null;
   if (!m || (camp.role !== "gm" && !m.shown)) return fail(404, NOT_THERE);
+  // An older picture than the map has now: the phone's behind, so it hears
+  // that and looks at the world again, rather than keeping this one as that.
+  const v = url.searchParams.get("v");
+  if (v && v !== m.file) return fail(404, NOT_THERE);
   const obj = await env.MAPS.get(pictureKey(camp.id, m.file), { onlyIf: request.headers });
   if (!obj) return fail(404, NOT_THERE);
-  const kept = url.searchParams.get("v") === m.file;
+  const kept = v === m.file;
   const headers = new Headers({
     "content-type": TYPES[m.file.split(".").pop()] ?? "application/octet-stream",
     "cache-control": kept ? "private, max-age=31536000, immutable" : "private, no-cache",

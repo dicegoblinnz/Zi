@@ -93,14 +93,26 @@ const dt = makeDowntime({ B: DATA.build, esc, hex, steps, link, icon: ICON, line
 
 // The party sheet on every phone in a campaign, and threads between the crew
 // kept in step on both their phones (party.js).
+// A redraw nobody asked for (a change from another phone, or the live table):
+// not while they're typing or in the roll card, and not in the middle of a
+// drag or a pinch on a map, which gets it once it's let go.
+let mapHeld = false;
+let mapMissed = false;
+function quietly() {
+  if (dialog.open || document.activeElement?.matches?.("#app input:not([type=radio]):not([type=checkbox]), #app textarea, #app select")) return;
+  if (mapHeld) {
+    mapMissed = true;
+    return;
+  }
+  render();
+}
+
 const party = makeParty({
   sync, store, esc, P: DATA.party,
   list: () => camps.list(),
   normal: (ch) => normal(ch),
   render: () => render(),
-  quietRender: () => {
-    if (!dialog.open && !document.activeElement?.matches?.("#app input:not([type=radio]):not([type=checkbox]), #app textarea, #app select")) render();
-  },
+  quietRender: () => quietly(),
   toast: (m, u) => toast(m, u),
   go: (url, o) => goTo(url, o),
   rule: (id) => ruleHtml(id),
@@ -147,9 +159,7 @@ const table = makeTable({
   rule: (id) => ruleHtml(id),
   roll: () => roll,
   render: () => render(),
-  quietRender: () => {
-    if (!dialog.open && !document.activeElement?.matches?.("#app input:not([type=radio]):not([type=checkbox]), #app textarea, #app select")) render();
-  },
+  quietRender: () => quietly(),
   toast: (m) => toast(m, false),
   openDialog: (r) => openRoll(r),
   renderDialog: () => renderDialog(),
@@ -204,8 +214,14 @@ const world = makeWorld({
   isOpen: (key) => ui.open.has(key),
   viewing: () => (view.name === "sheet" ? ui.tab : view.name),
   render: () => render(),
-  quietRender: () => {
-    if (!dialog.open && !document.activeElement?.matches?.("#app input:not([type=radio]):not([type=checkbox]), #app textarea, #app select")) render();
+  quietRender: () => quietly(),
+  // A finger on a map (maps.js): quiet redraws wait till it's let go.
+  holdRenders: (on) => {
+    mapHeld = on;
+    if (!on && mapMissed) {
+      mapMissed = false;
+      quietly();
+    }
   },
   toast: (m, u) => toast(m, u),
   go: (url, o) => goTo(url, o),

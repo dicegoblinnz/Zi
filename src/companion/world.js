@@ -233,14 +233,7 @@ export function makeWorld(d) {
     clearTimeout(soonTimers[id]);
     soonTimers[id] = setTimeout(() => syncNow(id), ms);
   }
-  // Not in the middle of a drag or a pinch on a map, though: it's drawn
-  // once that's let go.
-  let held = null;
   function show(id) {
-    if (M.holding()) {
-      held = id;
-      return;
-    }
     const say = notices.splice(0).filter((x) => x.id === id && watching === id).map((x) => x.text);
     d.quietRender();
     if (say.length) d.toast(say.slice(-2).join(" "), false);
@@ -762,13 +755,8 @@ export function makeWorld(d) {
       keep();
       show(id);
     },
-    // A drag or a pinch let go: anything that came in meanwhile is drawn.
-    idle: () => {
-      if (held == null) return;
-      const id = held;
-      held = null;
-      show(id);
-    },
+    // Fetch it again now (a picture that's changed since this phone looked).
+    refresh: (id) => syncNow(id),
   });
   Object.assign(ACT, M.ACT);
 

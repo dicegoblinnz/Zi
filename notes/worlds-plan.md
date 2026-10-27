@@ -77,7 +77,7 @@ From Mo's 27 Oct answer (all three: her pictures with pins, the crew's pins and 
 - Her phone shrinks a picture to 2560 pixels on its long side and draws it again before it goes up, as a WebP or else a JPEG. That keeps it small, and it leaves off where a photo was taken.
 - A world holds 12 maps and a map 80 pins.
 - Showing the crew a map shows its picture and nothing on it. Each pin takes its own tap. A shown pin shows its name, and what it opens opens for the crew only once they've been shown that page or faction, so a player's phone never learns there's a page behind a pin till it can open it.
-- A pin with no name of its own takes the name of what it opens, the same on her phone and the crew's, and her pin's card says what the crew sees.
+- A pin with no name of its own takes the name of what it opens, but on the crew's phones only once they've been shown that, so showing a pin never gives away a hidden name. Till then they see a pin with no name. Her pin's card says what the crew sees, and has Show them that too, so a pin and its page can go out together without leaving the map.
 - A pin opens a place, a person or a faction, since a faction's got a page too.
 - She places a pin with the point in the middle, moving the map under it with one thumb, or by tapping the spot. Moving a pin works the same way.
 - A new picture for a map keeps its name, its pins where they were on the picture, and what the crew's been shown.
@@ -86,6 +86,7 @@ From Mo's 27 Oct answer (all three: her pictures with pins, the crew's pins and 
 - It zooms in to three times what fits, or a picture pixel and a quarter to a screen pixel, whichever's further.
 - A page or a faction's page says which maps it's on, and on her phone it has Pin it on a map.
 - Previews share the bucket, the way they share the database.
+- From the independent check (27 Oct): a quiet redraw waits while a finger's on the map, and a finger let go anywhere ends the drag, so a gesture can't be left half done. A picture that won't open comes off the phone so trying again fetches it fresh. A phone still on an older picture's address gets a 404 and looks at the world again. A picture whose map couldn't go into the world never stays in R2.
 - Still to do: maps stay in the order they went up, and a map can't go on the table screen yet (that comes with the table screen).
 
 ## The stages
