@@ -599,6 +599,181 @@ function partyFrom(doc, warn) {
   return { start: { res, assets }, people, assets: twelve, sizes, goals, rep };
 }
 
+// The faction board's official content (stage 1 of notes/worlds-plan.md), read
+// off the chapters so it always matches the book: the Steeplands' board, with
+// the Vane Estate's whole card from Factions, every frame's board, Building a
+// Faction's tables and sizes, and Appendix B's assets. Every Power the book
+// prints has to add up (1 step, plus each asset that adds Power), and a card
+// the board can't read stops the build. Each card carries a hash, so a GM who
+// brought it in hears when the book changes it.
+const CARD_LINES = new Set(["Power", "Resources", "Resource", "Assets", "Asset", "Want", "Agenda", "Face", "Secret", "Bonds", "Threads"]);
+const BOND_GROUPS = { "Public Sentiment": "pub", Morale: "mor", Loyalty: "loy" };
+const keyOf = (name) => plain(name).toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
+const capFirst = (s = "") => s.charAt(0).toUpperCase() + s.slice(1);
+const firstSentence = (s = "") => s.match(/^.+?[.?](?=\s|$)/)?.[0] ?? s;
+function hashOf(text) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return (h >>> 0).toString(36);
+}
+// Every table in a section, each as its header and its rows.
+function tablesOf(sec) {
+  const out = [];
+  let rows = null;
+  for (const l of sec.split("\n")) {
+    const m = l.match(/^\| (.+) \|$/);
+    if (!m) {
+      rows = null;
+      continue;
+    }
+    const cells = m[1].split(" | ").map((x) => x.trim());
+    if (cells.every((c) => /^-+$/.test(c))) continue;
+    if (!rows) out.push((rows = { head: cells, rows: [] }));
+    else rows.rows.push(cells);
+  }
+  return out;
+}
+// An italic name with a multiplier, like *Warships ×2*.
+const timesOf = (t) => {
+  const m = t.match(/^(.*?) ×(\d+)$/);
+  return m ? { text: curly(m[1].trim()), x: Number(m[2]) } : { text: curly(t.trim()), x: 1 };
+};
+const marked = (s = "") => [...s.matchAll(/(?<!\*)\*([^*]+)\*(?!\*)(?: \(([^)]+)\))?/g)].map((m) => ({ name: m[1], paren: m[2] ?? "" }));
+const threadsIn = (s = "") => [...s.matchAll(/\*([^*]+)\* \((bond|hostile)(?:, (strained))?\)/g)].map((m) => ({ text: curly(dropStop(m[1])), kind: m[2], s: m[3] ? "strained" : "whole" }));
+
+// One faction's card, from the lines on a :::sheet (a frame's board, or the
+// whole cards in Factions) or a row of the Steeplands' board.
+function cardOf(name, { power = "", res = "", assets = "", want = "", agenda = "", face = "", secret = "", bonds = "", threads = "" }, warn) {
+  const stated = Number(power.match(/^d(\d+)/)?.[1]) || 0;
+  const list = new Map();
+  for (const a of marked(assets)) {
+    const t = timesOf(a.name);
+    list.set(t.text, { ...t, does: curly(a.paren), power: /\+1 Power/.test(a.paren) });
+  }
+  for (const a of marked(power.replace(/^d\d+:?\s*/, ""))) {
+    const t = timesOf(a.name);
+    const had = list.get(t.text);
+    if (had) had.power = true;
+    else list.set(t.text, { ...t, does: "", power: true });
+  }
+  const card = {
+    key: keyOf(name),
+    name: curly(name),
+    want: curly(plain(want)),
+    face: curly(plain(face)),
+    secret: "",
+    more: "",
+    note: "",
+    res: marked(res).map((m) => timesOf(m.name)),
+    assets: [...list.values()].map(({ text, x, does, power: p }) => ({ text, does, power: p, x })),
+    agendas: [],
+    pub: [],
+    mor: [],
+    loy: [],
+    threads: threadsIn(threads),
+  };
+  const steps = 1 + card.assets.filter((a) => a.power).length;
+  const dice = stepsToDice(steps);
+  if (!stated || dice.length !== 1 || dice[0] !== stated) warn(`${name}'s Power says d${stated || "?"}, but 1 step plus ${steps - 1} assets that add Power makes ${diceLabel(dice)}`);
+  if (!card.res.length) warn(`can't read ${name}'s resources`);
+  if (!card.want) warn(`can't read what ${name} wants`);
+  if (!card.face) warn(`can't read ${name}'s face`);
+  const ag = agenda.match(/^\*([^*]+)\*,? (?:at )?d(\d+)(?: \([^)]*\))?[.,]?\s*(.*)$/);
+  if (ag) card.agendas.push({ text: curly(ag[1]), die: Number(ag[2]), then: curly(capFirst(plain(ag[3]))) });
+  else warn(`can't read ${name}'s agenda (like *Close the Combs*, at d4)`);
+  const sec = secret.match(/^\*([^*]+)\*\s*(.*)$/);
+  if (sec) Object.assign(card, { secret: curly(dropStop(sec[1])), more: curly(plain(sec[2])) });
+  else if (secret) {
+    // A secret written plain, like the Steeplands' board: its first sentence
+    // is the tag.
+    const one = firstSentence(plain(secret));
+    Object.assign(card, { secret: curly(dropStop(one)), more: curly(plain(secret).slice(one.length).trim()) });
+  } else warn(`can't read ${name}'s secret`);
+  for (const part of bonds.split(/(?=Public Sentiment:|Morale:|Loyalty:)/)) {
+    const g = part.match(/^(Public Sentiment|Morale|Loyalty):/)?.[1];
+    if (g) card[BOND_GROUPS[g]] = threadsIn(part);
+    else if (part.trim()) warn(`can't read ${name}'s bonds: ${part.trim()}`);
+  }
+  // Where the threads line says more than its threads toward the crew, like
+  // "None yet. It hasn't noticed the crew.", it goes in the GM's note.
+  const rest = plain(threads.replace(/\*[^*]+\* \((?:bond|hostile)(?:, strained)?\)/g, "").replace(/^Toward the crew:\s*/, "")).replace(/[.:\s]+$/, "");
+  if (threads && (card.threads.length ? rest : (threads.match(/[.?]\s/g) ?? []).length >= 1)) card.note = curly(`Threads: ${plain(threads)}`);
+  card.h = hashOf(JSON.stringify(card));
+  return card;
+}
+
+function sheetCard(name, body, warn) {
+  const lines = {};
+  for (const m of body.matchAll(/^\*\*([A-Za-z ]+)\*\* (.+)$/gm)) {
+    if (!CARD_LINES.has(m[1])) warn(`${name}'s card has a line the board can't hold yet: ${m[1]}`);
+    lines[m[1].toLowerCase().replace(/^resources?$/, "res").replace(/^asset$/, "assets")] = m[2].trim();
+  }
+  return cardOf(name, lines, warn);
+}
+
+function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, warn) {
+  // The cards and the sizes in Factions, and Building a Faction's tables.
+  const sheets = new Map([...factionsDoc.body.matchAll(/^:::sheet\[([^\]]+)\][^\n]*\n([\s\S]*?)^:::$/gm)].map((m) => [m[1], m[2]]));
+  const sizeTable = tablesOf(sectionOf(factionsDoc.body, "s-faction-board")).find((t) => /^How big$/i.test(t.head[0]));
+  const sizes = (sizeTable?.rows ?? []).map((r) => ({ size: plain(r[0]), power: plain(r[1]), res: plain(r[2]), eg: plain(r[3]) }));
+  if (sizes.length !== 4) warn(`expected the four sizes of faction in What a Faction Is, found ${sizes.length}`);
+  const [what, how] = tablesOf(sectionOf(factionsDoc.body, "s-faction-build"));
+  const rolls = (t, a, b) => (t?.rows ?? []).map((r) => ({ [a]: curly(dropStop(plain(r[1] ?? ""))), [b]: curly(plain(r[2] ?? "")) }));
+  const build = {
+    what: rolls(what, "is", "wants"),
+    how: rolls(how, "works", "secret"),
+    agendas: (tablesOf(sectionOf(factionsDoc.body, "s-agendas"))[0]?.rows ?? []).map((r) => ({ text: curly(dropStop(plain(r[1] ?? ""))), die: Number(String(r[2]).replace(/^d/, "")) })),
+  };
+  if (build.what.length !== 12 || build.how.length !== 12) warn("expected Building a Faction's two d12 tables (what it is and wants, how it works and its secret)");
+  if (build.agendas.length !== 12 || build.agendas.some((a) => ![2, 4, 6, 8, 10, 12].includes(a.die))) warn("expected the twelve agendas, each with the die it starts at, in Agendas");
+
+  // The Steeplands: its board's a table, and the Estate's whole card is in Factions.
+  const boards = [];
+  const steepTable = tablesOf(sectionOf(steepDoc.body, "the-board"))[0];
+  const steep = [];
+  for (const r of steepTable?.rows ?? []) {
+    const name = plain(r[0].match(/\*\*([^*]+)\*\*/)?.[1] ?? "");
+    const want = capFirst(r[0].match(/Wants ([^.]+\.)/)?.[1] ?? "");
+    const face = capFirst(r[0].match(/Face: ([^.]+)\./)?.[1] ?? "");
+    const row = cardOf(name, { power: r[1], res: r[2], want, agenda: r[3], face, secret: r[4] }, warn);
+    const whole = sheets.get(name);
+    if (whole) {
+      const card = sheetCard(name, whole, warn);
+      if (stepsToDice(1 + card.assets.filter((a) => a.power).length).join() !== stepsToDice(1 + row.assets.filter((a) => a.power).length).join()) warn(`${name}'s Power on the Steeplands' board doesn't match its whole card in Factions`);
+      steep.push(card);
+    } else steep.push(row);
+  }
+  if (steep.length !== 4) warn(`expected the Steeplands' four great powers on its board, found ${steep.length}`);
+  const opening = steepDoc.body.replace(/^:::quote[\s\S]*?^:::$/m, "").split(/\n\s*\n/).map((p) => p.trim()).find((p) => p && !p.startsWith("#"));
+  boards.push({ id: "steeplands", name: "The Steeplands", kind: "A world in two pages", pitch: curly(firstSentence(plain(opening ?? ""))), link: `${pageFor.get(steepDoc.path)}#the-board`, cards: steep });
+
+  // Every frame's board.
+  for (const m of framesDoc.body.matchAll(/^## (.+?) \{#(s-frame-[a-z-]+)\}$/gm)) {
+    if (m[2] === "s-frame-own") continue;
+    const sec = sectionOf(framesDoc.body, m[2]);
+    const pitch = sec.match(/### The pitch[^\n]*\n+:::example[^\n]*\n([^\n]+)/)?.[1] ?? "";
+    const boardSec = sec.match(/### The board[^\n]*\n([\s\S]*?)(?=^### |$(?![\s\S]))/m)?.[1] ?? "";
+    const cards = [...boardSec.matchAll(/^:::sheet\[([^\]]+)\][^\n]*\n([\s\S]*?)^:::$/gm)].map((s) => sheetCard(curly(s[1]), s[2], warn));
+    if (cards.length < 2) warn(`can't find ${m[1]}'s board`);
+    if (!pitch) warn(`can't find ${m[1]}'s pitch`);
+    boards.push({ id: m[2].replace(/^s-frame-/, ""), name: curly(m[1]), kind: "A frame", pitch: curly(firstSentence(plain(pitch).replace(/^["“]/, ""))), link: `${pageFor.get(framesDoc.path)}#${m[2]}`, cards });
+  }
+  if (boards.length < 6) warn(`expected the Steeplands and five frames to bring in, found ${boards.length}`);
+
+  // Appendix B's assets, to pick from.
+  const assets = [];
+  for (const [id, power] of [["assets-people", true], ["assets-reach", false], ["assets-places", false], ["assets-influence", false], ["assets-odd", false]]) {
+    const group = curly(assetsDoc.body.match(new RegExp(`^### (.+?) \\{#${id}\\}`, "m"))?.[1] ?? "");
+    const rows = tablesOf(sectionOf(assetsDoc.body, id))[0]?.rows ?? [];
+    if (!group || !rows.length) warn(`can't read Appendix B's ${id.replace("assets-", "")} assets`);
+    for (const r of rows) assets.push({ group, text: curly(plain(r[0])), does: curly(plain(r[1] ?? "")), power: power || /\+1 Power/.test(r[1] ?? "") });
+  }
+  return { boards, build, sizes, assets, link: `${pageFor.get(factionsDoc.path)}#s-faction-board` };
+}
+
 // What the character builder offers, read off Building Your Character and the
 // Title ideas so it always matches the book: the Quick Build's steps, the
 // ideas, every trait and the number it changes, what you can carry, the Catch
@@ -783,6 +958,11 @@ if (conditions.length < 10) companionWarn(`found only ${conditions.length} condi
 const partyDoc = docWith("{#s-party-faction}");
 const party = partyDoc ? partyFrom(partyDoc, (msg) => companionWarn(`party sheet: ${msg}`)) : null;
 if (!party) companionWarn("can't find The Party Sheet for the party sheet");
+// The faction board's official content: the boards to bring in, Building a
+// Faction's tables and Appendix B's assets.
+const worldDocs = { factionsDoc: docWith("{#s-faction-build}"), steepDoc: docWith("{#the-four-great-powers}"), framesDoc: docWith("{#s-frame-brinewake}"), assetsDoc: docWith("{#faction-strength}") };
+const worlds = Object.values(worldDocs).every(Boolean) ? worldsFrom(worldDocs, pageFor, (msg) => companionWarn(`board: ${msg}`)) : null;
+if (!worlds) companionWarn("can't find Factions, the Steeplands, Frames or Appendix B's assets for the faction board");
 // The rules the companion shows on a tap, read off the chapters so they match
 // the book and read offline: each one's opening, up to its first example,
 // table or subheading.
@@ -794,7 +974,8 @@ const blockHtml = (text) => {
 const rules = {};
 for (const id of ["s-round", "s-telegraphs", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour",
   "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through", "s-blaze", "s-healing", "s-vulnerable", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "s-good-aspiration", "how-permissions-stack",
-  "your-slots", "s-downtime-rolls", "s-goal", "s-good-goal", "s-climb", "s-projects", "s-crew-size", "s-crew-tags", "s-crew-wealth", "s-crew-grows", "s-party-resources"]) {
+  "your-slots", "s-downtime-rolls", "s-goal", "s-good-goal", "s-climb", "s-projects", "s-crew-size", "s-crew-tags", "s-crew-wealth", "s-crew-grows", "s-party-resources",
+  "s-faction-board", "s-wealth", "s-faction-bonds", "s-agendas", "when-an-agenda-happens", "s-standing", "s-mini-factions", "s-faction-build"]) {
   const doc = docWith(`{#${id}}`);
   const head = doc?.body.match(new RegExp(`^#{2,4} (.+?) \\{#${id}\\}`, "m"));
   const blocks = [];
@@ -895,7 +1076,7 @@ writeFileSync(
     changes: { title: curly(changes.meta.title), html: changesOut.html, headings: changesOut.headings },
     crew,
     crewLink: crewDoc ? `${pageFor.get(crewDoc.path)}#s-pregens` : "/rules/",
-    companion: { conditions, links: companionLinks, build, rules, party },
+    companion: { conditions, links: companionLinks, build, rules, party, worlds },
     learn,
   }),
 );

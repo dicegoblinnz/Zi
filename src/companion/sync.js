@@ -19,6 +19,8 @@
 //               changes still to go up (party.js). It goes with them too.
 //   zi-table    their campaigns' live tables, the round's telegraphs and the
 //               answers still to go up (table.js), and that goes too.
+//   zi-world    their campaigns' worlds, the faction boards and the GM's
+//               changes still to go up (world.js), and that goes as well.
 //
 // Only a delete on this phone deletes from the account. A character that's
 // just missing here (the phone's list got lost) comes back down.
@@ -28,6 +30,7 @@ const STASH = "zi-unsent-";
 const CAMPS = "zi-campaigns";
 const PARTY = "zi-party";
 const TABLE = "zi-table";
+const WORLD = "zi-world";
 
 const read = (key) => {
   try {
@@ -112,6 +115,7 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     write(CAMPS, null);
     write(PARTY, null);
     write(TABLE, null);
+    write(WORLD, null);
   };
   // This phone starts keeping step with an account, picking up anything it had
   // kept to one side for it.

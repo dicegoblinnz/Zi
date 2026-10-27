@@ -52,14 +52,30 @@
 //    table, Zed's Night's is empty, Kai's Dorrie there sees no telegraphs,
 //    and a socket from another site is turned away. The round's screens pass
 //    axe at 390, in both themes.
-// 7. Who can do what: only Mo sees people, a player can't reset a link, rename,
+// 7. The world: the faction board. Mo opens Tuesday Lair's World screen from
+//    its page and brings in Brinewake's board, four cards matching the
+//    chapter, then the Steeplands with the Vane Estate's whole card. The
+//    book's example: the vineyards burned, the tolls taken and Hired Swords
+//    unpaid make the Estate a d10. The Household Guard ×2 takes two wins, and
+//    Undo puts one back. Vane comes home climbs past d12. The Harbour Guild
+//    makes the Night Boats, dropping to a d8. Kai's phone gets nothing till
+//    Mo shows the crew the Tithe Fleet, then its Power, and its Secret only
+//    on a second tap, and a thread toward a faction she hasn't been shown
+//    stays off her phone. Kai can't change the board. Mo's change with no
+//    signal goes up once he's back, and counts once. A made-up change to the
+//    book gets a note he takes, and a typo fix goes in quietly. Nothing
+//    crosses: Zed gets nothing, Zed's Night's board is empty, and Kai's Dorrie
+//    there sees none of it. With no signal, Vesk's World tab still has what
+//    Kai's seen. The World screen, a faction's page and the World tab pass
+//    axe at 390, in both themes.
+// 8. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
-// 8. Signing out takes the account's characters off the phone and leaves the
+// 9. Signing out takes the account's characters off the phone and leaves the
 //    phone's own. Kai downloads her data, then deletes her account: it's gone
-//    from the database, her campaign ends and she's out of Mo's. The account
-//    page passes axe at 320 wide, and the campaign screens at 390, in both
-//    themes.
+//    from the database, her campaign ends with its board and she's out of
+//    Mo's. The account page passes axe at 320 wide, and the campaign screens
+//    at 390, in both themes.
 import { createServer } from "node:http";
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, readdirSync } from "node:fs";
@@ -598,7 +614,7 @@ try {
   // Vesk gets a Party tab, since she's playing in a campaign.
   await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa`);
   await kai.page.waitForSelector('.cc-tabs [data-t="party"]');
-  same(await kai.page.$$eval(".cc-tabs a span", (els) => els.map((e) => e.textContent)), ["Play", "Sheet", "Party", "Rules"], "Vesk's tabs");
+  same(await kai.page.$$eval(".cc-tabs a span", (els) => els.map((e) => e.textContent)), ["Play", "Sheet", "Party", "World", "Rules"], "Vesk's tabs");
   await kai.page.click('.cc-tabs [data-t="party"]');
   await kai.page.waitForSelector(".pt-goal");
   yes((await text(kai.page, ".pt-where")).includes("Tuesday Lair"), "the Party tab says which campaign");
@@ -1029,8 +1045,249 @@ try {
   same(await tried(BASE), "open", "a socket from the site's own page opens");
   same(await tried("https://elsewhere.example"), 403, "and one from another site is turned away");
 
-  // ------------------------------------------------------------ 7. who can do what
-  console.log("7. Who can do what");
+  // ------------------------------------------------------------ 7. the world
+  // Mo's Tuesday Lair, with Kai playing Vesk in it, and Zed's Night next door.
+  async function checkWorld() {
+    const W = JSON.parse(readFileSync(join("src", "generated", "book.json"), "utf8")).companion.worlds;
+    const brine = W.boards.find((b) => b.id === "brinewake");
+    const [fleet, tarrant] = brine.cards;
+    const worldOf = async (id) => JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", id))[0]?.data ?? "null");
+    const factionIn = async (id, name) => (await worldOf(id))?.factions.find((f) => f.name === name) ?? null;
+    // Every faction in the book is one die: 1 step, plus its assets that add Power.
+    const powerOf = (card) => `d${2 * (1 + card.assets.filter((a) => a.power).length)}`;
+    const playerWorld = async (page = kai.page, id = tuesday.id) => (await got(page, "GET", `/api/campaigns/${id}/world`)).json?.world;
+    const tok = (name) => `.wb-tok-a:has(b.wb-tok-n:text-is("${name}"))`;
+    const line = (words) => `.pt-line:not(.pt-pick):has(b:text-is("${words}"))`;
+    async function wbFold(page, key) {
+      const sel = `details[data-open^="wb-${key}-"]`;
+      await page.waitForSelector(sel, { state: "attached" });
+      if (!(await page.$eval(sel, (el) => el.open))) await page.click(`${sel} > summary`);
+    }
+    const toBoard = async (page) => {
+      await page.goto(`${BASE}/characters/?camp=${tuesday.id}&world`);
+      await page.waitForSelector(".wb-crew");
+    };
+    const openFaction = async (page, name) => {
+      await page.click(tok(name));
+      await until(async () => (await page.textContent("#app h1").catch(() => "")) === name, `${name}'s page`);
+    };
+    const power = (page) => page.textContent(".wb-card-v");
+
+    // Mo opens Tuesday Lair's world from its page, and the board's empty but
+    // for the crew's own card.
+    await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
+    await mo.page.waitForSelector(".wb-tile-a");
+    await mo.page.click(".wb-tile-a");
+    await mo.page.waitForSelector(".wb-crew");
+    has(await text(mo.page, "#app"), "Nothing on the board yet", "an empty board says so");
+    // He brings in Brinewake's board: its four cards, each as the chapter has it.
+    await mo.page.click('details[data-open="wb-bring"] > summary');
+    await mo.page.click('[data-do="bring"][data-b="brinewake"]');
+    await until(async () => (await mo.page.$$(".wb-tok")).length === 4, "Brinewake's four factions on the board");
+    same(await mo.page.$$eval(".wb-tok-n", (els) => els.map((e) => e.textContent)), brine.cards.map((c) => c.name), "Brinewake's factions, in the book's order");
+    same(await mo.page.$$eval(".wb-tok-die", (els) => els.map((e) => e.getAttribute("aria-label"))), brine.cards.map((c) => `Power ${powerOf(c)}`), "each one's Power counted from its assets, the way the chapter has it");
+    await until(async () => (await worldOf(tuesday.id))?.factions.length === 4, "the board on the server");
+    yes((await worldOf(tuesday.id)).factions.every((f) => !Object.values(f.shown ?? {}).some(Boolean)), "with nothing shown to the crew");
+    same((await playerWorld())?.factions, [], "so Kai's phone gets none of it");
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector(".wb-tab .wb-crew");
+    await until(async () => (await text(kai.page, ".wb-tab")).includes("hasn’t shown you any of the world yet"), "Vesk's World tab, with nothing shown yet");
+
+    // The Steeplands too, on a second tap since there's a board already, with
+    // the Vane Estate's whole card from Factions.
+    await mo.page.click('[data-do="bring"][data-b="steeplands"]');
+    has(await mo.page.textContent('[data-do="bring"][data-b="steeplands"]'), "Tap again", "a second board takes a second tap");
+    await mo.page.click('[data-do="bring"][data-b="steeplands"]');
+    await until(async () => (await mo.page.$$(".wb-tok")).length === 8, "the Steeplands' four on the board too");
+    await openFaction(mo.page, "The Vane Estate");
+    same(await power(mo.page), "d12", "the Estate's a d12");
+    await wbFold(mo.page, "assets");
+    has(await text(mo.page, "#app"), "Relic: The Inkwell", "with its relic, off its whole card");
+    await wbFold(mo.page, "bonds");
+    has(await text(mo.page, "#app"), "The guard’s been on the same pay for twenty years", "and its Loyalty thread");
+
+    // The book's example: burn the vineyards, take the tolls, and Vane picks
+    // Hired Swords to go unpaid. That's a d10.
+    await wbFold(mo.page, "res");
+    await mo.page.click(`${line("Vineyards")} [data-do="tick"]`);
+    await mo.page.waitForSelector(line("Vineyards"), { state: "detached" });
+    await mo.page.click(`${line("River Tolls")} [data-do="edit"]`);
+    await mo.page.selectOption('form[data-form="w-line"] select[name="give"]', { label: "The Harbour Guild" });
+    await mo.page.click('form[data-form="w-line"] button[type="submit"]');
+    await mo.page.waitForSelector(line("River Tolls"), { state: "detached" });
+    has(await text(mo.page, ".pt-money.is-short"), "one asset isn’t", "five resources for six assets, so one's unpaid");
+    same(await power(mo.page), "d12", "and it's still a d12 till Vane picks");
+    await wbFold(mo.page, "power");
+    await mo.page.click(`details[data-open^="wb-power-"] ${line("Hired Swords")} [data-do="paid"]`);
+    await until(async () => (await power(mo.page)) === "d10", "the Estate a d10 with Hired Swords unpaid");
+    await until(async () => {
+      const [vane, guild] = [await factionIn(tuesday.id, "The Vane Estate"), await factionIn(tuesday.id, "The Harbour Guild")];
+      return vane && !vane.res.some((r) => r.text === "Vineyards" || r.text === "River Tolls") && vane.assets.find((a) => a.text === "Hired Swords")?.off === true && guild?.res.some((r) => r.text === "River Tolls");
+    }, "the vineyards gone, the tolls the Guild's and the swords unpaid, on the server");
+
+    // The Household Guard ×2 takes two wins, and Undo puts one back.
+    await mo.page.click(`${line("Household Guard")} [data-do="tick"]`);
+    await until(async () => (await mo.page.getAttribute(`${line("Household Guard")} .wb-ticks`, "aria-label").catch(() => "")) === "1 of 2 left", "one win ticks one off the Household Guard");
+    same(await power(mo.page), "d10", "and it still counts");
+    await mo.page.click(`${line("Household Guard")} [data-do="tick"]`);
+    await mo.page.waitForSelector(line("Household Guard"), { state: "detached" });
+    same(await power(mo.page), "d8", "the second win takes it, and the Estate's a d8");
+    await mo.page.click('#cc-toast [data-act="wundo"]');
+    await until(async () => (await power(mo.page)) === "d10", "Undo puts the Guard back, a d10 again");
+    same(await mo.page.getAttribute(`${line("Household Guard")} .wb-ticks`, "aria-label"), "1 of 2 left", "with one tick left on it");
+
+    // Vane comes home climbs past d12, and it's happened.
+    await wbFold(mo.page, "agenda");
+    for (let i = 0; i < 4; i++) await mo.page.click('details[data-open^="wb-agenda-"] [data-do="climb"][data-by="1"]');
+    await until(async () => (await text(mo.page, 'details[data-open^="wb-agenda-"]')).includes("It’s happened"), "Vane comes home happening past d12");
+    has(await text(mo.page, 'details[data-open^="wb-agenda-"]'), "The world changes", "with the book's steps for when an agenda happens");
+
+    // The Harbour Guild makes the Night Boats, handing over Dock Fees and Fast Boats.
+    await toBoard(mo.page);
+    await openFaction(mo.page, "The Harbour Guild");
+    same(await power(mo.page), "d10", "the Guild's a d10");
+    await wbFold(mo.page, "minis");
+    const mini = 'form[data-form="w-mini"]';
+    await mo.page.fill(`${mini} input[name="name"]`, "The Night Boats");
+    await mo.page.selectOption(`${mini} select[name="res"]`, { label: "Dock Fees" });
+    await mo.page.selectOption(`${mini} select[name="asset"]`, { label: "Fast Boats (+1 Power)" });
+    await mo.page.check(`${mini} input[name="out-Acquire"]`);
+    await mo.page.check(`${mini} input[name="out-Obstruct"]`);
+    await mo.page.fill(`${mini} input[name="loy"]`, "The Guild pays better than the river ever did");
+    await mo.page.click(`${mini} button[type="submit"]`);
+    await until(async () => (await mo.page.textContent("#app h1").catch(() => "")) === "The Night Boats", "the Night Boats' page");
+    same(await power(mo.page), "d4", "the Night Boats are a d4: 1 step, plus Fast Boats");
+    has(await text(mo.page, ".wb-head"), "Mini faction of The Harbour Guild", "made by the Guild");
+    await toBoard(mo.page);
+    same(await mo.page.$$eval(".wb-tok.is-mini .wb-tok-n", (els) => els.map((e) => e.textContent)), ["The Night Boats"], "the Night Boats sit under the Guild");
+    same(await mo.page.getAttribute(`${tok("The Harbour Guild")} .wb-tok-die`, "aria-label"), "Power d8", "and the Guild's a d8 without its Fast Boats");
+
+    // Showing the crew. The Tithe Fleet first, then its Power, and Vesk's World
+    // tab has each one on its own.
+    await openFaction(mo.page, "The Tithe Fleet");
+    await mo.page.click('[data-do="show"][data-p="card"]');
+    await until(async () => (await playerWorld())?.factions?.length === 1, "the Tithe Fleet on the server for Kai");
+    const first = (await playerWorld()).factions[0];
+    same([first.name, first.want, first.face, first.secret, first.res.length, first.assets.length, first.agendas.length, first.threads.length], [fleet.name, fleet.want, fleet.face, "", 0, 0, 0, 0], "Kai gets its name, Want and Face, and nothing else");
+    await nudge(kai.page);
+    await until(async () => (await kai.page.$$(".wb-tok")).length === 1, "the Tithe Fleet on Vesk's World tab");
+    same(await kai.page.getAttribute(".wb-tok-die", "aria-label"), "Power not known", "with its Power not known yet");
+    await wbFold(mo.page, "power");
+    await mo.page.click('details[data-open^="wb-power-"] [data-do="show"][data-p="power"]');
+    await until(async () => (await playerWorld())?.factions?.[0]?.assets.length === fleet.assets.filter((a) => a.power).length, "its Power assets on the server for Kai");
+    await nudge(kai.page);
+    await until(async () => (await kai.page.getAttribute(".wb-tok-die", "aria-label").catch(() => "")) === `Power ${powerOf(fleet)}`, "its Power on Vesk's World tab");
+    // Its Secret takes a second tap, and never reaches Kai's phone till then.
+    await wbFold(mo.page, "secret");
+    await mo.page.click('details[data-open^="wb-secret-"] [data-do="show"][data-p="secret"]');
+    await mo.page.waitForTimeout(900);
+    same((await factionIn(tuesday.id, "The Tithe Fleet"))?.shown?.secret, false, "one tap doesn't show the Secret");
+    yes(!JSON.stringify(await playerWorld()).includes(fleet.secret), "and it isn't on Kai's phone");
+    await mo.page.click('details[data-open^="wb-secret-"] [data-do="show"][data-p="secret"]');
+    await until(async () => (await playerWorld())?.factions?.[0]?.secret === fleet.secret, "the second tap shows it");
+    // A thread toward a faction the crew hasn't been shown stays off Kai's phone.
+    await wbFold(mo.page, "threads");
+    const tf = 'details[data-open^="wb-threads-"] form[data-form="w-add"]';
+    await mo.page.fill(`${tf} input[name="text"]`, "Tarrant money buys our captains");
+    await mo.page.check(`${tf} input[value="hostile"]`);
+    await mo.page.selectOption(`${tf} select[name="to"]`, { label: "Tarrant & Daughters" });
+    await mo.page.click(`${tf} button[type="submit"]`);
+    await mo.page.click('details[data-open^="wb-threads-"] [data-do="show"][data-p="threads"]');
+    await until(async () => (await playerWorld())?.factions?.[0]?.threads?.length > 0, "the Fleet's threads on the server for Kai");
+    same((await playerWorld()).factions[0].threads.map((t) => t.text), fleet.threads.map((t) => t.text), "only its thread toward the crew, not the one toward Tarrant & Daughters");
+    // Kai can't change the board.
+    const fleetId = (await factionIn(tuesday.id, "The Tithe Fleet")).id;
+    same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "kais-phone-0001", ops: [{ n: 1, o: "show", id: fleetId, p: "agenda", v: true }] })).status, 403, "Kai can't change the board");
+
+    // With no signal, Mo's change waits on his phone, and goes up once he's
+    // back, counted once.
+    await wbFold(mo.page, "res");
+    await mo.context.setOffline(true);
+    const rf = 'details[data-open^="wb-res-"] form[data-form="w-add"]';
+    await mo.page.fill(`${rf} input[name="text"]`, "Wreck Salvage");
+    await mo.page.click(`${rf} button[type="submit"]`);
+    await until(async () => (await text(mo.page, "#app")).includes("goes up when you’ve got a signal"), "Mo's phone saying it'll go up");
+    yes(!(await factionIn(tuesday.id, "The Tithe Fleet")).res.some((r) => r.text === "Wreck Salvage"), "and it hasn't yet");
+    await mo.context.setOffline(false);
+    await until(async () => (await factionIn(tuesday.id, "The Tithe Fleet")).res.some((r) => r.text === "Wreck Salvage"), "Wreck Salvage on the server once Mo's back");
+    const kept = await mo.page.evaluate(() => JSON.parse(localStorage.getItem("zi-world")));
+    const salvage = (await factionIn(tuesday.id, "The Tithe Fleet")).res.find((r) => r.text === "Wreck Salvage");
+    await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: kept.dev, ops: [{ n: kept.n, o: "add", id: fleetId, l: "res", item: { ...salvage, id: "salvage-two" } }] });
+    same((await factionIn(tuesday.id, "The Tithe Fleet")).res.filter((r) => r.text === "Wreck Salvage").length, 1, "and a change sent twice counts once");
+
+    // A made-up change to the book. The Tithe Fleet came in from an older one,
+    // with another Want and a resource the book's since dropped, and Tarrant &
+    // Daughters' Face had a typo.
+    const doc = await worldOf(tuesday.id);
+    const old = doc.factions.find((f) => f.name === "The Tithe Fleet");
+    old.want = "Every ship pays.";
+    old.res.push({ id: "harbour-dues", text: "Old Harbour Dues", x: 1, left: 1 });
+    old.book = { ...old.book, h: "older", was: { ...old.book.was, want: "Every ship pays.", res: [...old.book.was.res, { text: "Old Harbour Dues", x: 1 }] } };
+    const td = doc.factions.find((f) => f.name === "Tarrant & Daughters");
+    const typoFace = td.face.replace("Marguerite", "Margeurite");
+    td.face = typoFace;
+    td.book = { ...td.book, h: "older", was: { ...td.book.was, face: typoFace } };
+    await db.prepare("UPDATE world SET data = ?2, version = version + 1 WHERE campaignId = ?1").bind(tuesday.id, JSON.stringify(doc)).run();
+    await mo.page.reload();
+    await mo.page.waitForSelector(".wb-book");
+    has(await text(mo.page, ".wb-book"), "The book’s changed The Tithe Fleet since you brought it in", "a note on the Fleet's page");
+    has(await text(mo.page, ".wb-book"), "Every ship pays", "saying what its Want was");
+    has(await text(mo.page, ".wb-book"), "Old Harbour Dues", "and the resource that's gone");
+    await mo.page.click('.wb-book [data-take="1"]');
+    await until(async () => {
+      const f = await factionIn(tuesday.id, "The Tithe Fleet");
+      return f.want === fleet.want && !f.res.some((r) => r.text === "Old Harbour Dues") && f.res.some((r) => r.text === "Wreck Salvage") && f.book.h === fleet.h;
+    }, "the book's Want taken, Old Harbour Dues gone and Wreck Salvage kept");
+    same(await mo.page.$(".wb-book"), null, "and the note's gone");
+    await until(async () => (await factionIn(tuesday.id, "Tarrant & Daughters"))?.face === tarrant.face, "the typo fix in Tarrant & Daughters' Face going in quietly");
+
+    // Nothing crosses between campaigns.
+    same((await got(zed.page, "GET", `/api/campaigns/${tuesday.id}/world`)).status, 404, "Zed gets nothing of Tuesday Lair's world");
+    same((await got(zed.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "zeds-phone-0001", ops: [{ n: 1, o: "gone", id: fleetId }] })).status, 404, "and can't change it");
+    same((await playerWorld(zed.page, zedsNight.id))?.factions, [], "Zed's Night's board is empty");
+    same((await playerWorld(kai.page, zedsNight.id))?.factions, [], "and Kai gets nothing on it");
+    await kai.page.goto(`${BASE}/characters/?c=dorrie-eeeeee&t=world`);
+    await kai.page.waitForSelector(".wb-tab .wb-crew");
+    await kai.page.waitForTimeout(700);
+    yes(!(await text(kai.page, "#app")).includes("Tithe Fleet"), "Kai's Dorrie, in Zed's Night, sees nothing of Tuesday Lair's world");
+    // Kai's own campaign has a board too, for when she deletes her account.
+    same((await got(kai.page, "POST", `/api/campaigns/${kaisTable.id}/world`, { dev: "kais-phone-0002", ops: [{ n: 1, o: "new", f: { id: "rustbacks", name: "The Rustbacks", want: "To keep flying." } }] })).json?.world?.factions?.length, 1, "Kai puts a faction on her own campaign's board");
+
+    // With no signal, Vesk's World tab still has what Kai's seen.
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa`);
+    await kai.page.waitForSelector('.cc-tabs [data-t="world"]');
+    await kai.context.setOffline(true);
+    await kai.page.click('.cc-tabs [data-t="world"]');
+    await kai.page.waitForSelector(".wb-tab .wb-tok");
+    has(await text(kai.page, ".wb-tab"), "The Tithe Fleet", "the Tithe Fleet's still on Vesk's World tab with no signal");
+    has(await text(kai.page, ".wb-tab"), "No signal, so this is the board as it was", "and it says it's how it was");
+    await kai.context.setOffline(false);
+
+    // The World screen, a faction's page and the World tab, at 390 in both themes.
+    for (const theme of ["dark", "light"]) {
+      for (const p of [mo.page, kai.page]) await p.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await toBoard(mo.page);
+      await axe(mo.page, `the board, ${theme}`);
+      await shot(mo.page, `world-board-${theme}`);
+      await openFaction(mo.page, "The Tithe Fleet");
+      await wbFold(mo.page, "power");
+      await axe(mo.page, `a faction's page, ${theme}`);
+      await shot(mo.page, `world-faction-${theme}`);
+      await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+      await kai.page.waitForSelector(".wb-tab .wb-tok");
+      await axe(kai.page, `the World tab, ${theme}`);
+      await shot(kai.page, `world-tab-${theme}`);
+      await openFaction(kai.page, "The Tithe Fleet");
+      await axe(kai.page, `a faction on Kai's phone, ${theme}`);
+      await shot(kai.page, `world-faction-player-${theme}`);
+    }
+    for (const p of [mo.page, kai.page]) await p.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+  }
+  console.log("7. The world: the faction board");
+  await checkWorld();
+
+  // ------------------------------------------------------------ 8. who can do what
+  console.log("8. Who can do what");
   same((await api(kai.page, "GET", "/api/people")).status, 403, "a member can't see people");
   const people = (await got(mo.page, "GET", "/api/people")).json;
   same([people?.total, people?.people?.[0]?.email], [6, "zed@example.com"], "Mo sees everyone who's signed up, newest first");
@@ -1062,8 +1319,8 @@ try {
   yes(keys.length > 3 && keys.every((k) => /^[0-9a-f]{32}$/.test(k.key)), "rate limits keep HMACs, not addresses (Better Auth's too)");
   same(await rows("SELECT name FROM sqlite_master WHERE name = 'rateLimit'"), [], "no table of addresses");
 
-  // ------------------------------------------------------------ 8. leaving
-  console.log("8. Signing out, your data and deleting");
+  // ------------------------------------------------------------ 9. leaving
+  console.log("9. Signing out, your data and deleting");
   // A phone-only character stays when Kai signs out on the first phone.
   await kai.page.evaluate(() => {
     const data = JSON.parse(localStorage.getItem("zi-characters"));
@@ -1090,6 +1347,7 @@ try {
   same((await rows("SELECT COUNT(*) AS n FROM character WHERE userId = ?1", kaiId)).map((r) => r.n), [0], "and her characters");
   same(await rows("SELECT id FROM campaign WHERE gmId = ?1", kaiId), [], "her campaign's ended");
   same(await rows("SELECT campaignId FROM member WHERE userId = ?1 OR campaignId = ?2", kaiId, kaisTable.id), [], "she's out of Mo's, and nobody's left in hers");
+  same(await rows("SELECT campaignId FROM world WHERE campaignId = ?1", kaisTable.id), [], "and her campaign's board went with it");
   yes(((await tableOf(tuesday.id))?.rounds ?? []).flatMap((r) => r.tele).every((t) => t.at.user !== kaiId && t.ans?.user !== kaiId), "and Tuesday Lair's table has forgotten her");
   same(Object.values((await partyOf(tuesday.id))?.bonds ?? {}).filter((b) => b.a.startsWith(`${kaiId}:`) || b.b.startsWith(`${kaiId}:`)).length, 0, "and her threads are off Tuesday Lair's party sheet");
   same((await got(zed.page, "GET", "/api/campaigns")).json?.campaigns.map((k) => k.name), ["Zed’s Night"], "Zed's left with his own");

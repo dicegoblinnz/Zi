@@ -1208,3 +1208,134 @@ button.bd-tok:active { transform: scale(0.97); }
 .tg-for .k { display: block; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--zd-them-ink); }
 .tg-verdict { margin: 0.4rem 0 0.8rem; }
 .tg-sent { margin: 0.6rem 0; font-weight: 700; color: var(--gold-ink); }
+
+/* The world (stage 1 of notes/worlds-plan.md): the World screen off a
+   campaign's page and the World tab. The board's the GM's, so its pieces are
+   violet, the crew's own card is gold, and anything only she can see sits on
+   a dashed edge. */
+.wb-k { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--zd-them-ink); }
+.wb-head .kicker { color: var(--zd-them-ink); }
+.wb-sum { margin: -0.2rem 0 0.8rem; }
+.wb-badge { display: inline-flex; align-items: center; min-height: 20px; padding: 0 6px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); border: 1.5px dashed var(--muted); border-radius: 2px; }
+.wb-badge.is-on { color: var(--zd-on-them); background: var(--zd-them); border: 1.5px solid var(--zd-them); }
+.cc-fold-t .wb-badge { margin-left: 8px; vertical-align: 2px; }
+.wb-stand { display: inline-flex; align-items: center; min-height: 24px; padding: 0 8px; font-size: 0.8rem; font-weight: 700; color: var(--muted); border: 1px solid var(--line); border-radius: 2px; }
+.wb-stand.is-friendly { color: var(--gold-ink); border-color: color-mix(in srgb, var(--gold) 55%, transparent); }
+.wb-stand.is-hostile { color: var(--zd-harm-ink); border-color: color-mix(in srgb, var(--zd-harm) 60%, transparent); }
+.wb-unknown { display: grid; place-items: center; width: 44px; height: 44px; font-family: var(--display); font-size: 1.3rem; font-weight: 700; color: var(--muted); border: 1.5px dashed var(--muted); border-radius: 3px; }
+
+/* The crew's card, at the top of the board. */
+.wb-crew { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 4px 12px; margin: 0 0 12px; padding: 12px 14px; box-shadow: inset 3px 0 0 var(--gold); }
+.wb-crew-die { display: flex; align-items: center; gap: 4px; }
+.wb-crew-die .zd-die { --s: 44px; }
+.wb-crew-die .zd-die.is-next { --s: 26px; }
+.wb-crew-in { min-width: 0; }
+.wb-crew .wb-k { color: var(--gold-ink); }
+.wb-crew-n { margin: 0.1rem 0 0; font-family: var(--display); font-weight: 600; font-size: 1.1rem; line-height: 1.2; overflow-wrap: anywhere; }
+.wb-crew-n small { font-family: var(--body); font-size: 0.9rem; font-weight: 800; color: var(--gold-ink); }
+.wb-crew .cc-small { margin: 0.1rem 0 0; }
+.wb-crew-a { grid-column: 2; justify-self: start; }
+
+/* Each faction on the board: a punched token, a glance and a tap to its page. */
+.wb-toks { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.wb-tok-a { display: grid; grid-template-columns: 52px minmax(0, 1fr); align-items: start; gap: 12px; padding: 12px 14px 12px 12px; color: var(--ink); text-decoration: none; box-shadow: inset 3px 0 0 var(--zd-them-line); transition: transform 140ms ease-out; }
+.wb-tok-a:active { transform: scale(0.985); }
+.wb-tok-a:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wb-tok-die { display: flex; flex-direction: column; align-items: center; gap: 2px; padding-top: 2px; }
+.wb-tok-die .zd-die { --s: 48px; }
+.wb-tok-die .zd-die.is-next { --s: 26px; }
+.wb-tok-in { display: grid; gap: 2px; min-width: 0; }
+.wb-tok-n { font-family: var(--display); font-weight: 600; font-size: 1.15rem; line-height: 1.2; letter-spacing: 0.01em; overflow-wrap: anywhere; }
+.wb-tok-w { font-style: italic; font-size: 0.95rem; line-height: 1.35; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.wb-tok-m { margin-top: 4px; font-size: 0.9rem; }
+.wb-tok-m .zd-mini { width: 16px; height: 16px; }
+.wb-tok.is-mini { position: relative; margin-left: 22px; }
+.wb-tok.is-mini::before { content: ""; position: absolute; left: -13px; top: -8px; bottom: 50%; width: 10px; border-left: 1.5px solid var(--zd-them-line); border-bottom: 1.5px solid var(--zd-them-line); border-bottom-left-radius: 4px; opacity: 0.7; }
+.wb-tok.is-mini .wb-tok-a { grid-template-columns: 40px minmax(0, 1fr); padding-block: 10px; }
+.wb-tok.is-mini .wb-tok-die .zd-die { --s: 38px; }
+.wb-tok.is-mini .wb-tok-n { font-size: 1.02rem; }
+.wb-tok.is-new .wb-tok-a, .wb-card.is-new { animation: wb-lit 1.6s ease-out; }
+@keyframes wb-lit { 0% { box-shadow: inset 3px 0 0 var(--zd-them-line), 0 0 0 0 color-mix(in srgb, var(--zd-them) 65%, transparent); } 100% { box-shadow: inset 3px 0 0 var(--zd-them-line), 0 0 0 16px transparent; } }
+
+/* What she can bring in or add. */
+.wb-adds { margin-top: 1.1rem; }
+.wb-brings { display: grid; gap: 10px; margin: 0.6rem 0 0; padding: 0; list-style: none; }
+.wb-bring { padding: 12px 14px; }
+.wb-bring h4 { margin: 0.15rem 0 0.25rem; font-family: var(--display); font-weight: 600; font-size: 1.15rem; }
+.wb-bring p { margin: 0; }
+.wb-bring .cc-small { margin-top: 0.35rem; }
+.wb-bring .cc-row { align-items: center; margin-bottom: 0; }
+.wb-new .cc-field input, .wb-new .cc-field select { width: 100%; }
+.wb-sizes ul { margin: 0.4rem 0 0; padding-left: 1.1rem; font-size: 0.92rem; }
+.wb-sizes small { color: var(--muted); }
+
+/* One faction's page. */
+.wb-card { margin: 0.4rem 0 0.8rem; padding: 14px; box-shadow: inset 3px 0 0 var(--zd-them-line); }
+.wb-card-top { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 6px 14px; }
+.wb-card-top .wb-stand { grid-column: 1 / -1; justify-self: start; }
+.wb-card-die { display: flex; align-items: center; gap: 4px; }
+.wb-card-die .zd-die { --s: 72px; }
+.wb-card-die .zd-die.is-next { --s: 34px; }
+.wb-card-die .wb-unknown { width: 64px; height: 64px; font-size: 1.8rem; }
+.wb-card-p p { margin: 0; }
+.wb-card-v { font-size: 1.5rem; font-weight: 800; line-height: 1.1; color: var(--zd-them-ink); font-variant-numeric: tabular-nums; }
+.wb-words { display: grid; gap: 8px; margin: 0.9rem 0 0.2rem; }
+.wb-words div { display: grid; grid-template-columns: 4.2rem minmax(0, 1fr); gap: 8px; align-items: baseline; }
+.wb-words dt { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.wb-words dd { margin: 0; font-size: 1.02rem; line-height: 1.4; overflow-wrap: anywhere; }
+.wb-show { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin: 0 0 0.8rem; padding: 8px 10px; background: var(--panel); border: 1.5px dashed var(--muted); border-radius: 2px; }
+.wb-show p { margin: 0; flex: 1 1 12rem; }
+.wb-show .button { flex: none; }
+.wb-show.is-on { border: 1.5px solid var(--zd-them-line); background: color-mix(in srgb, var(--zd-them) 10%, var(--panel)); }
+.wb-show-card { padding: 10px 12px; }
+.wb-show-card p { font-size: 0.95rem; }
+p.wb-show { display: block; border-style: dashed; color: var(--muted); }
+.wb-book ul { margin: 0.3rem 0 0.6rem; padding-left: 1.1rem; }
+.wb-book li { margin: 0.2rem 0; overflow-wrap: anywhere; }
+.wb-book small { color: var(--muted); }
+.wb-parts { margin-top: 0.4rem; }
+.wb-ticks { display: flex; gap: 4px; margin: 0.3rem 0 0.1rem; }
+.wb-ticks i { display: block; width: 14px; height: 14px; border: 1.5px solid var(--zd-them-line); border-radius: 2px; transform: rotate(45deg) scale(0.8); }
+.wb-ticks i.is-on { background: var(--zd-them); }
+.wb-line-row { flex-basis: 100%; margin: 0.45rem 0 0 !important; }
+.pt-line:has(.wb-line-row) { flex-wrap: wrap; }
+.wb-chip { color: var(--zd-them-ink); }
+.wb-chip.is-strained { color: var(--gold-ink); }
+.wb-chip.is-snapped { color: var(--zd-harm-ink); }
+.wb-thread em { font-size: 1.02rem; }
+.wb-thread small { color: var(--muted); }
+.wb-kind-mark { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
+.wb-thread.is-hostile .wb-kind-mark { color: var(--zd-harm-ink); }
+.wb-thread.is-snapped em { text-decoration: line-through; color: var(--muted); }
+.wb-bond + .wb-bond { margin-top: 0.9rem; }
+.wb-bond h3 { margin: 0.5rem 0 0.1rem; font-size: 0.95rem; color: var(--zd-them-ink); }
+.wb-secret { margin: 0.2rem 0 0.4rem; font-size: 1.05rem; line-height: 1.45; }
+.wb-agenda .zd-die { --s: 46px; }
+.wb-kind, .wb-outs { display: grid; gap: 0; margin: 0; padding: 0; border: 0; min-width: 0; }
+.wb-kind legend, .wb-outs legend { padding: 0; margin-bottom: 2px; font-size: 0.92rem; color: var(--muted); }
+.wb-outs { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 10px; }
+.wb-outs legend { grid-column: 1 / -1; }
+.wb-picks h3 { margin: 0.8rem 0 0.1rem; font-size: 0.95rem; color: var(--zd-them-ink); }
+.wb-more { margin-top: 1.2rem; font-style: italic; }
+
+/* The way in, on the campaign's page. */
+.wb-tile { margin-top: 1.4rem; }
+.wb-tile-a { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; padding: 12px 14px; color: var(--ink); text-decoration: none; box-shadow: inset 3px 0 0 var(--zd-them-line); transition: transform 140ms ease-out; }
+.wb-tile-a:active { transform: scale(0.985); }
+.wb-tile-a:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wb-tile-mark { display: grid; place-items: center; width: 44px; height: 44px; color: var(--zd-them-ink); border: 1.5px solid var(--zd-them-line); border-radius: 3px; }
+.wb-tile-mark svg { width: 24px; height: 24px; }
+.wb-tile-in { display: grid; gap: 2px; min-width: 0; }
+.wb-tile h2 { margin: 0; font-size: 1.2rem; }
+.wb-tile .cc-small { margin: 0; }
+.wb-tab .wb-sec { margin-top: 0.8rem; }
+.wb-tab .wb-sec > h2 { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+@media (max-width: 360px) {
+  .wb-tok-a { grid-template-columns: 42px minmax(0, 1fr); gap: 10px; padding-inline: 10px; }
+  .wb-tok-die .zd-die { --s: 40px; }
+  .wb-card-die .zd-die { --s: 60px; }
+  .wb-outs { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wb-tok-a:active, .wb-tile-a:active { transform: none; }
+}

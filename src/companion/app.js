@@ -18,6 +18,7 @@ import { makeDowntime } from "./downtime.js";
 import { makeCampaigns } from "./campaigns.js";
 import { makeParty } from "./party.js";
 import { makeTable } from "./table.js";
+import { makeWorld } from "./world.js";
 import { threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
 import { aura as kitAura, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
 
@@ -37,7 +38,7 @@ const ORD = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", 
 const RULE = DATA.rules || {};
 const TABS = [["play", "Play"], ["sheet", "Sheet"], ["rules", "Rules"]];
 // A character playing in a campaign gets the party sheet a tab away too.
-const tabsOf = (ch) => (party.campOf(ch) ? [["play", "Play"], ["sheet", "Sheet"], ["party", "Party"], ["rules", "Rules"]] : TABS);
+const tabsOf = (ch) => (party.campOf(ch) ? [["play", "Play"], ["sheet", "Sheet"], ["party", "Party"], ["world", "World"], ["rules", "Rules"]] : TABS);
 // The intents a die can be tapped to, or the player writes their own.
 const INTENTS = { action: ["Hurt", "Pin", "Disarm"], blows: ["Hurt", "Pin", "Disarm"], confidence: ["Frighten", "Taunt"] };
 // Five Scars and you're scarred out: the wound die never goes below d12.
@@ -76,6 +77,8 @@ const ICON = {
   sun: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
   moon: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
   party: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21V3.5"/><path d="M6 4h12l-3 4.5 3 4.5H6"/></svg>',
+  // A folded map, for the world.
+  world: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3.5 6.2v13.6L9 17.6l6 2.4 5.5-2.2V4.2L15 6.4z"/><path d="M9 4v13.6M15 6.4V20"/></svg>',
 };
 
 const builder = makeBuilder({ B: DATA.build, link, icon: ICON, rule: (id) => ruleHtml(id), toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt, roll: () => randomBuild(DATA.build, DATA.crew), tools: () => themeButton() });
@@ -160,11 +163,38 @@ const table = makeTable({
   gone: (id) => camps.gone(id),
 });
 
+// A campaign's world, starting with the faction board (world.js): the World
+// screen off a campaign's page, and the World tab of a character in one.
+const world = makeWorld({
+  sync, esc, W: DATA.worlds, icon: ICON,
+  list: () => camps.list(),
+  campaign: (id) => camps.campaign(id),
+  campOf: (ch) => party.campOf(ch),
+  crewIn: (id) => party.crewIn(id),
+  peek: (id) => party.peek(id),
+  tools: () => themeButton(),
+  rule: (id) => ruleHtml(id),
+  isOpen: (key) => ui.open.has(key),
+  viewing: () => (view.name === "sheet" ? ui.tab : view.name),
+  render: () => render(),
+  quietRender: () => {
+    if (!dialog.open && !document.activeElement?.matches?.("#app input:not([type=radio]):not([type=checkbox]), #app textarea, #app select")) render();
+  },
+  toast: (m, u) => toast(m, u),
+  go: (url, o) => goTo(url, o),
+  signedOut: () => {
+    sync.signedOutHere();
+    render();
+  },
+  gone: (id) => camps.gone(id),
+});
+
 // Campaigns: starting one, joining one from its link, and the GM's look at
 // her players' characters, drawn with the same pieces as a character here.
 const camps = makeCampaigns({
   party,
   table,
+  world,
   sync, store, esc, ICON,
   render: () => render(),
   go: (url, o) => goTo(url, o),
@@ -710,7 +740,7 @@ function characterView(ch, c) {
   // A link to the Party tab, on a phone that hasn't found the campaign yet,
   // shows Play until it does.
   const tab = list.some(([t]) => t === ui.tab) ? ui.tab : "play";
-  const body = tab === "sheet" ? sheetTab(ch, c) : tab === "rules" ? rulesTab() : tab === "party" ? party.tabView(ch) : playTab(ch, c);
+  const body = tab === "sheet" ? sheetTab(ch, c) : tab === "rules" ? rulesTab() : tab === "party" ? party.tabView(ch) : tab === "world" ? world.tabView(ch) : playTab(ch, c);
   const tabs = list.map(([t, label]) => `<a href="/characters/?c=${encodeURIComponent(ch.id)}${t === "play" ? "" : `&amp;t=${t}`}" data-act="tab" data-t="${t}"${tab === t ? ' aria-current="page"' : ""}>${ICON[t]}<span>${label}</span></a>`).join("");
   const slide = ui.slide;
   ui.slide = null;
@@ -1749,9 +1779,9 @@ function render() {
   // A character's full screen, without the site's bar, and the builder's,
   // with its own bar of Back and Next at the bottom.
   // A campaign, a look at a player's character and joining are full screen too.
-  const camping = view.name === "camp" || view.name === "look" || view.name === "join";
+  const camping = view.name === "camp" || view.name === "look" || view.name === "join" || view.name === "world";
   document.documentElement.classList.toggle("cc-full", view.name === "sheet" || view.name === "build" || camping);
-  app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : camping ? camps.view(view) : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
+  app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : view.name === "world" ? world.view(view) : camping ? camps.view(view) : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
   document.documentElement.classList.toggle("cc-building", Boolean(app.querySelector(".bd-foot")));
   // With the dice in a dock above the bar, a toast sits above them both.
   document.documentElement.classList.toggle("cc-docked", Boolean(app.querySelector(".bd-rail")));
@@ -1763,6 +1793,9 @@ function render() {
   party.after(app);
   // And its live table, the round's telegraphs, over a socket.
   table.route(view, ch);
+  // And its world, on the World screen or a World tab.
+  world.route(view, ch);
+  world.after(app);
   glow(ch);
   if (dialog.open) renderDialog();
   else refocus(keep);
@@ -1834,13 +1867,13 @@ function route() {
   // A Sheet tab fold shut on one character opens as usual on another.
   if (id !== (view.name === "sheet" ? view.id : null)) ui.shut.clear();
   view = key ? { name: "build", key } : learning ? { name: "learn" } : id ? { name: "sheet", id }
-    : camp ? (q.get("look") ? { name: "look", id: camp, who: q.get("look") } : { name: "camp", id: camp }) : joining ? { name: "join" } : { name: "list" };
-  ui.tab = ["sheet", "rules", "party"].includes(q.get("t")) ? q.get("t") : "play";
+    : camp ? (q.get("look") ? { name: "look", id: camp, who: q.get("look") } : q.has("world") ? { name: "world", id: camp, f: q.get("f") || "" } : { name: "camp", id: camp }) : joining ? { name: "join" } : { name: "list" };
+  ui.tab = ["sheet", "rules", "party", "world"].includes(q.get("t")) ? q.get("t") : "play";
   ui.panel = null;
   ui.sure = false;
   document.documentElement.classList.toggle("cc-open", Boolean(id || key || learning || camp || joining));
   const ch = current();
-  document.title = key ? `${key === "new" ? "Make your own" : "Change a character"} · Zi’Dara` : learning ? "Learn to play · Zi’Dara" : ch ? `${ch.name} · Zi’Dara` : camp || joining ? `${camps.title(view)} · Zi’Dara` : "Characters · Zi’Dara";
+  document.title = key ? `${key === "new" ? "Make your own" : "Change a character"} · Zi’Dara` : learning ? "Learn to play · Zi’Dara" : ch ? `${ch.name} · Zi’Dara` : view.name === "world" ? `${world.title(view)} · Zi’Dara` : camp || joining ? `${camps.title(view)} · Zi’Dara` : "Characters · Zi’Dara";
   camps.route(view);
   render();
 }
@@ -2036,6 +2069,8 @@ const ACT = {
   tg: (el, e) => table.act(el, e),
   p: (el, e) => party.act(el, e),
   pundo: () => party.undo(),
+  w: (el, e) => world.act(el, e),
+  wundo: () => world.undo(),
   b: (el, e) => builder.act(el, e, render, () => {
     scrollTo(0, 0);
     app.querySelector("h1")?.focus({ preventScroll: true });
@@ -2702,6 +2737,7 @@ document.addEventListener("submit", (e) => {
   const kind = form.dataset.form;
   if (kind.startsWith("k-")) return camps.submit(kind, form, f);
   if (kind.startsWith("p-")) return party.submit(kind, form, f);
+  if (kind.startsWith("w-")) return world.submit(kind, form, f);
   if (kind === "name") return start(roll?.crew, String(f.get("name") ?? "").trim().slice(0, 40));
   // A Blaze they live through: the wound becomes a Scar, a Catch, and the
   // wound die drops back to the Scars.

@@ -81,12 +81,13 @@ export function optionsFor(env) {
         // everyone, and their characters go. An account still goes if the
         // campaign tables haven't reached this database yet.
         beforeDelete: async (user) => {
-          // The party sheets of the campaigns they run go, and their threads come
-          // off the ones they play in.
+          // The party sheets and worlds of the campaigns they run go, and their
+          // threads come off the ones they play in.
           const missing = (err) => {
             if (!/no such table/i.test(String(err?.message))) throw err;
           };
           await env.DB.prepare("DELETE FROM party WHERE campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id).run().catch(missing);
+          await env.DB.prepare("DELETE FROM world WHERE campaignId IN (SELECT id FROM campaign WHERE gmId = ?1)").bind(user.id).run().catch(missing);
           const playing = await env.DB.prepare("SELECT campaignId FROM member WHERE userId = ?1").bind(user.id).all().catch((err) => (missing(err), { results: [] }));
           for (const m of playing.results) await dropFromParty(env, m.campaignId, user.id).catch(missing);
           const running = await env.DB.prepare("SELECT id FROM campaign WHERE gmId = ?1").bind(user.id).all().catch((err) => (missing(err), { results: [] }));

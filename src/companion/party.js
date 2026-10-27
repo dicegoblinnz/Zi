@@ -835,6 +835,16 @@ export function makeParty(d) {
       return id ? docOf(id).goal : null;
     },
     goalIn: (id) => docOf(id).goal,
+    // The crew's own card, for the top of the faction board (world.js).
+    crewIn(id) {
+      const doc = docOf(id);
+      return { name: doc.name, steps: powerOf(doc), reps: doc.reps.length, assets: doc.assets.length, money: moneyOf(doc) };
+    },
+    // The party sheet fetched once, for a screen that shows the crew's card
+    // without keeping the sheet in step.
+    peek(id) {
+      soon(id, 50);
+    },
     // A character's been saved here, so anything it changed in a campaign
     // goes up a moment later.
     soon(ch) {

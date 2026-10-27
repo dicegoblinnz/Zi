@@ -10,6 +10,7 @@
 // person asking against that one campaign, so nothing crosses between them.
 import { authFor, hit, originsOf, providersOf, seen } from "./auth.js";
 import { changeParty, dropFromParty, showParty } from "./party.js";
+import { changeWorld, showWorld } from "./world.js";
 import { tableEnd, tableLeft, tableRoute } from "./table.js";
 
 // The live table's Durable Object class, one for each campaign (table.js).
@@ -260,6 +261,12 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
     if (method === "GET") return showParty(env, url, camp, user, { json });
     if (method === "POST") return changeParty(request, env, camp, user, { json, fail, body });
   }
+  // The world, starting with its faction board (world.js). Everyone in the
+  // campaign sees what the crew's been shown, and only the GM changes it.
+  if (sub === "world" && !subId) {
+    if (method === "GET") return showWorld(env, url, camp, user, { json });
+    if (method === "POST") return gm ? changeWorld(request, env, camp, user, { json, fail, body }) : gmOnly();
+  }
   // The live table: the round's telegraphs and how each one went (table.js).
   if (sub === "table" && !subId) return tableRoute(request, env, method, camp, user, { json, fail, body, origins: originsOf(env), limited });
   if (sub === "link" && !subId && method === "POST") return gm ? resetLink(env, camp) : gmOnly();
@@ -340,11 +347,12 @@ async function renameCampaign(request, env, user, camp) {
   return json({ name });
 }
 
-// It ends for everyone, and its party sheet and live table go with it. Their
-// characters are theirs, so they stay.
+// It ends for everyone, and its party sheet, world and live table go with it.
+// Their characters are theirs, so they stay.
 async function endCampaign(env, camp) {
   await env.DB.batch([
     env.DB.prepare("DELETE FROM party WHERE campaignId = ?1").bind(camp.id),
+    env.DB.prepare("DELETE FROM world WHERE campaignId = ?1").bind(camp.id),
     env.DB.prepare("DELETE FROM member WHERE campaignId = ?1").bind(camp.id),
     env.DB.prepare("DELETE FROM campaign WHERE id = ?1").bind(camp.id),
   ]);
