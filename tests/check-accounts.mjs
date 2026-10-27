@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -60,6 +60,16 @@
 //    and loses, so the scene clock drops then and there. The round ends: the
 //    deal's new tag is on every phone, the pipes land on Vesk alone, and she
 //    rolls When it lands for them with the bath-man from round 2.
+//    6d puts it on the table screen: Mo opens it from Tuesday Lair's page and
+//    gets its code, and a TV signed in to nothing types it in and has round 3
+//    as it ended (one stopped, two landed, Vesk in the hot room and Bram out
+//    of it, the Copper Baths and the crew), with nobody's account, name or
+//    ids in what it gets, fitting a TV and a laptop in both themes. Round 4
+//    comes up live, and so does Vesk stopping Orla, then Mo resets the link:
+//    the TV says so and goes blank, the old code's refused and the new one
+//    brings it back. A socket from another site and twenty guessed codes are
+//    turned away. Parts 8, 9 and 11 check it never gets the faction turn, a
+//    page's note, telegraphs or Secret, or anyone who's left.
 // 7. The world: the faction board. Mo opens Tuesday Lair's World screen from
 //    its page and brings in Brinewake's board, four cards matching the
 //    chapter, then the Steeplands with the Vane Estate's whole card. The
@@ -1443,6 +1453,129 @@ try {
   // ZI_UPTO=6c stops here, for a quicker look while working on the live table.
   rest: {
   if (UPTO === "6c") break rest;
+  // ------------------------------------------------------------ 6d. the table screen
+  console.log("6d. The table screen");
+  // Mo opens it from Tuesday Lair's page, and that's when its code's made.
+  await mo.page.click('[data-do="screen"]');
+  await mo.page.waitForSelector("#cc-dialog .ts-give-code");
+  let tvCode = (await mo.page.textContent("#cc-dialog .ts-give-code")).replace(/\s+/g, "");
+  const fours = (code, sep) => code.match(/.{4}/g).join(sep);
+  same((await rows("SELECT screen FROM campaign WHERE id = ?1", tuesday.id))[0]?.screen, tvCode, "the screen's code is made the first time Mo opens it");
+  yes(/^[ABCDEFGHJKMNPQRSTUVWXYZ23456789]{12}$/.test(tvCode), `12 letters and numbers, none that look like another (${tvCode})`);
+  has(await text(mo.page, "#cc-dialog .ts-give"), `localhost:${PORT}/table`, "the dialog says where to go on the screen");
+  same(await mo.page.getAttribute('#cc-dialog a[href*="/table/#"]', "href"), `${BASE}/table/#${fours(tvCode, "-")}`, "and its link opens the table screen");
+  await shot(mo.page, "screen-give");
+  await axe(mo.page, "the table screen's code on Mo's phone");
+  await mo.page.click('#cc-dialog .dlg-foot [data-act="close"]');
+  await mo.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/screen`)).status, 403, "Kai can't make or reset the screen's code");
+
+  // A TV at the shop, signed in to nothing, has round 3 the way it ended.
+  const tvContext = await browser.newContext({ viewport: { width: 1920, height: 1080 }, serviceWorkers: "block", extraHTTPHeaders: { "cf-connecting-ip": "198.51.100.7" } });
+  const tv = { context: tvContext, page: await tvContext.newPage() };
+  tv.page.on("pageerror", (e) => note(`table screen page error: ${e.message}`));
+  await tv.page.goto(`${BASE}/table/`);
+  await tv.page.waitForSelector("#ts-code");
+  await axe(tv.page, "the table screen waiting for its code");
+  await tv.page.fill("#ts-code", fours(tvCode.toLowerCase(), " "));
+  await tv.page.click('.ts-form [type="submit"]');
+  await tv.page.waitForSelector(".ts-rhead h2", { timeout: 6000 });
+  same(new URL(tv.page.url()).hash, `#${fours(tvCode, "-")}`, "the code typed in any old way, and it's after the # in the TV's address");
+  same(await text(tv.page, ".ts-title h1"), "Tuesday Lair", "the TV has Tuesday Lair's table");
+  same(await text(tv.page, ".ts-rhead h2"), "Round 3", "round 3, the way it ended");
+  same(await tv.page.$$eval(".ts-tally li", (els) => els.map((e) => e.textContent.trim())), ["1 stopped", "2 landed"], "one stopped and two landed, at a glance");
+  const tvCard = (who) => tv.page.locator(`.ts-tg:has(h3:text-is("${who}"))`);
+  same([await tvCard("Dace").locator(".ts-vw").textContent(), await tvCard("Dace").locator(".ts-vl").textContent()], ["Landed", "There’s a new tag in the way of the deal."], "Dace landed, with what it did");
+  same(await tvCard("The pipes").locator(".ts-vw").textContent(), "Stopped when it landed", "the pipes landed, and Vesk stopped them");
+  has(await tvCard("The pipes").locator(".ts-v").textContent(), "Vesk stopped it: 4 against its 2.", "with her roll");
+  same([await tvCard("The pipes").locator(".ts-chip:not(.is-out)").allTextContents(), await tvCard("The pipes").locator(".ts-chip.is-out").allTextContents()], [["Vesk"], ["Bram"]], "Vesk in the hot room, and Bram out of it");
+  same(await tvCard("A runner").locator(".ts-vw").textContent(), "Landed then and there", "the runner landed then and there");
+  same(await tvCard("A runner").locator(".ts-vl").allTextContents(), ["Bram’s Fight came up 1 against its 5.", "The scene clock dropped to d4."], "with Bram's roll and what it did");
+  same(await tvCard("A runner").locator(".ts-vd .zd-die").count(), 1, "and Bram's die, big");
+  same(await text(tv.page, ".ts-scene h2"), "The Copper Baths", "the scene's the Copper Baths");
+  same(await tv.page.getAttribute(".ts-clock .zd-die", "data-d"), "2", "with its scene clock on a d2");
+  same(await tv.page.locator(".ts-el.is-stake:has(.ts-eln:text-is('The deal')) .zd-tag").allTextContents(), ["Someone Must Agree", "Wanted By Others", "Dace grabs his towel and heads for the changing room"], "and what's in the deal's way, Dace's tag too");
+  same(await tv.page.$$eval(".ts-p .ts-pn", (els) => els.map((e) => e.textContent)), ["Vesk", "Bram"], "the crew, in the order they joined");
+  same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Bram")) .ts-pa li').allTextContents(), ["Answering a runner with Fight: it landed"], "and what Bram did this round");
+  // It only ever has what the crew sees, and none of the table's workings.
+  const screenJson = async () => (await got(tv.page, "GET", `/api/screen/${tvCode}`)).json;
+  const tvJson = await screenJson();
+  const tvRaw = JSON.stringify(tvJson);
+  const keysIn = (o, out = new Set()) => {
+    if (o && typeof o === "object") for (const [k, v] of Object.entries(o)) (Array.isArray(o) || out.add(k), keysIn(v, out));
+    return out;
+  };
+  same(Object.keys(tvJson).sort(), ["crew", "fight", "name", "round", "scene", "v"], "the screen gets the round, the scene and the crew");
+  same([...keysIn(tvJson)].filter((k) => ["user", "ch", "player", "seq", "turn", "last", "seen", "sent", "code", "screen", "email"].includes(k)), [], "and none of the table's own workings");
+  const joinCode = (await rows("SELECT code FROM campaign WHERE id = ?1", tuesday.id))[0].code;
+  yes([kaiId, samId, tuesday.gmId, joinCode, "Kai Tane", "@example.com"].every((x) => !tvRaw.includes(x)), "nobody's account, name or email, and not the join link");
+  // From across the room: it fits a TV and a laptop without scrolling, in both themes.
+  const fits = () => tv.page.evaluate(() => document.documentElement.scrollHeight <= innerHeight + 1 && document.documentElement.scrollWidth <= innerWidth);
+  same(await fits(), true, "round 3 fits the TV without scrolling");
+  await axe(tv.page, "the table screen on a TV");
+  await shots(tv.page, "screen-tv", ".ts-rhead");
+  await tv.page.setViewportSize({ width: 1280, height: 720 });
+  await tv.page.waitForTimeout(250);
+  same(await fits(), true, "and a laptop");
+  await axe(tv.page, "the table screen on a laptop");
+  await shots(tv.page, "screen-laptop", ".ts-rhead");
+  await tv.page.setViewportSize({ width: 1920, height: 1080 });
+
+  // Round 4, live off the same table: it's on the TV the moment Mo sends it,
+  // and so is Vesk stopping it, with no reload.
+  await tv.page.waitForSelector(".ts-rhead");
+  await tv.page.evaluate(() => (window.zsMark = 1));
+  const mo4 = { dev: "mos-laptop-screen-01", now: Date.now() };
+  same((await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/table`, { ...mo4, ops: [{ n: 1, o: "round", id: "round-tv-0004", tele: [{ id: "tele-tv-00001", who: "Orla Strand", does: "looks Vesk up and down and asks who let her in.", d: 8, kind: "fear", at: { user: kaiId, ch: "vesk-aaaaaa", arch: ["Shadow", "Shadow"] } }] }] })).json?.no, [], "Mo sends round 4");
+  await until(async () => (await text(tv.page, ".ts-rhead h2")) === "Round 4", "round 4 on the TV in a second or two", 4000);
+  same(await tv.page.$$eval(".ts-tally li", (els) => els.map((e) => e.textContent.trim())), ["1 coming"], "one coming");
+  has(await tvCard("Orla Strand").textContent(), "At Vesk", "Orla's at Vesk");
+  has(await tvCard("Orla Strand").textContent(), "Lands on Confidence at the end of the round", "and it's fear, so it's on her Confidence");
+  same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Vesk")) .ts-pl').textContent(), "One action left", "Vesk's still got her action");
+  same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "kais-phone-screen-1", now: Date.now(), ops: [{ n: 1, o: "answer", id: "tele-tv-00001", ch: "vesk-aaaaaa", a: { act: "Talk", steps: 2, dice: [{ size: 6, total: 6 }], opp: 3 } }] })).json?.no, [], "Kai answers it");
+  await until(async () => (await tvCard("Orla Strand").locator(".ts-vw").count()) && (await tvCard("Orla Strand").locator(".ts-vw").textContent()) === "Stopped", "Stopped on the TV", 4000);
+  same(await tvCard("Orla Strand").locator(".ts-vl").textContent(), "Vesk answered it with Talk: 6 against its 3.", "with Vesk's roll");
+  same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Vesk")) .ts-pa li').allTextContents(), ["Answering Orla Strand with Talk: stopped"], "and what Vesk did");
+  same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Vesk")) .ts-pl').textContent(), "Done this round", "with her action spent");
+  same(await tv.page.evaluate(() => window.zsMark), 1, "all without a reload");
+  await shot(tv.page, "screen-tv-live");
+  same((await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/table`, { ...mo4, ops: [{ n: 2, o: "end", round: "round-tv-0004" }] })).json?.no, [], "Mo ends round 4");
+  await until(async () => (await text(tv.page, ".ts-rstate")).includes("It’s over"), "round 4 over on the TV", 4000);
+  has(await text(tv.page, ".ts-clock"), "It’s happened: Dace’s other buyer arrives, and he signs with them.", "and the scene clock's run out, since nobody worked it");
+
+  // Mo resets the link: the TV goes blank and says why, the old code's
+  // refused, and the new one brings it back.
+  await mo.page.click('[data-do="screen"]');
+  await mo.page.waitForSelector("#cc-dialog .ts-give-code");
+  await mo.page.click('#cc-dialog [data-do="screenReset"]');
+  has(await text(mo.page, '#cc-dialog [data-do="screenReset"]'), "Tap again", "resetting takes a second tap");
+  await mo.page.click('#cc-dialog [data-do="screenReset"]');
+  await until(async () => (await mo.page.textContent("#cc-dialog .ts-give-code")).replace(/\s+/g, "") !== tvCode, "a new code on Mo's phone", 4000);
+  const oldCode = tvCode;
+  tvCode = (await mo.page.textContent("#cc-dialog .ts-give-code")).replace(/\s+/g, "");
+  await mo.page.click('#cc-dialog .dlg-foot [data-act="close"]');
+  await until(async () => (await tv.page.$(".ts-warn")) && (await text(tv.page, ".ts-warn")).includes("reset the screen’s link"), "the TV says the link was reset", 4000);
+  same(await tv.page.$(".ts-round"), null, "and it's not showing the table any more");
+  same((await got(tv.page, "GET", `/api/screen/${oldCode}`)).status, 404, "the old code's refused");
+  await tv.page.fill("#ts-code", tvCode);
+  await tv.page.click('.ts-form [type="submit"]');
+  await tv.page.waitForSelector(".ts-rhead h2", { timeout: 6000 });
+  same(await text(tv.page, ".ts-rhead h2"), "Round 4", "the new code brings the table back");
+  await shots(tv.page, "screen-reset", ".ts-rhead");
+  // A socket from another site is turned away, and guessing at codes trips
+  // the limit on that address.
+  same((await mf.dispatchFetch(`${BASE}/api/screen/${tvCode}`, { headers: { upgrade: "websocket", origin: "https://elsewhere.example", "cf-connecting-ip": "198.51.100.8" } })).status, 403, "a table screen's socket from another site is turned away");
+  const guesser = await browser.newContext({ extraHTTPHeaders: { "cf-connecting-ip": "198.51.100.66" } });
+  const guess = await guesser.newPage();
+  await guess.goto(`${BASE}/table/`);
+  const guesses = await guess.evaluate(async () => {
+    const out = [];
+    for (let i = 0; i < 21; i++) out.push((await fetch(`/api/screen/${"ABCDEFGHJKM" + "NPQRSTUVWXYZ"[i % 12]}`)).status);
+    return out;
+  });
+  same([guesses.slice(0, 20).every((s) => s === 404), guesses[20]], [true, 429], "twenty wrong codes from one address, then it waits");
+  await guesser.close();
+  if (UPTO === "6d") break rest;
   // ------------------------------------------------------------ 7. the world
   // Mo's Tuesday Lair, with Kai playing Vesk in it, and Zed's Night next door.
   async function checkWorld() {
@@ -1827,6 +1960,8 @@ try {
     same(await kai.page.$eval(".wb-tab .ft-act .k", (el) => el.textContent), "Faction pressure", "the faction pressure first");
     const kt = await turnOf(kai.page);
     same([kt.acts.length, kt.acts.some((a) => a.f === tarrant.id), kt.acts.find((a) => a.f === guild.id).vs.d.length], [5, false, 0], "the off-screen one never reaches her, and nor does what the Guild's up against");
+    const tvTurn = JSON.stringify(await screenJson());
+    yes(tvTurn.includes("Tuesday Lair") && !tvTurn.includes("Tarrant") && !tvTurn.includes(tarrant.id) && !tvTurn.includes(guild.id) && !/"(turn|last)"/.test(tvTurn), "the table screen gets none of the faction turn, off-screen or not");
     await until(async () => (await factionIn("The Harbour Guild"))?.shown.card && (await factionIn("The Vane Estate"))?.shown.card, "the factions in a telegraph shown to the crew");
     same([(await factionIn("The Harbour Guild")).shown.power, (await factionIn("Tarrant & Daughters")).shown.card, (await factionIn("The Quiet Order")).shown.card], [false, false, false], "only their cards: not their Power, the off-screen one or one that's doing nothing");
 
@@ -2193,6 +2328,8 @@ try {
     same(sc.stakes.map((x) => [x.name, x.c, x.tags.map((g) => g.name), x.note]), [["The deal", 4, ["Someone Must Agree", "Wanted By Others"], "Dace signs with the crew, or with someone else"], ["Dace’s satchel", 3, ["Locked", "Guarded"], "it’s in the changing-room cupboards"]], "its stakes off the page, with what's in the way");
     same([sc.ground.map((g) => g.name).join(", "), sc.events.find((e) => e.scene)?.what], ["Steam, The House Rule, The Hot Pool", "Dace’s other buyer arrives, and he signs with them"], "its ground and its scene clock");
     same(sc.place, { id: bathsId, name: "The Copper Baths", page: true }, "the table knows it's Mo's Copper Baths");
+    const tvPlace = JSON.stringify(await screenJson());
+    yes(tvPlace.includes("Dace’s satchel") && !tvPlace.includes(bathsId) && !tvPlace.includes("Rudd brothers") && !tvPlace.includes("raps her cane") && !tvPlace.includes("Every Word Is Sold") && !tvPlace.includes("Casimir"), "the table screen has its scene, and none of Mo's note, the page's telegraphs, its Secret or who's in it");
     // While it's on the table, its own telegraphs are ready in the composer,
     // and Dace's off the page comes aimed at the deal.
     await mo.page.click('details[data-open^="wb-teles-"] [data-do="ptele"] >> nth=2');
@@ -2738,6 +2875,7 @@ try {
   same(await rows("SELECT campaignId FROM member WHERE userId = ?1 OR campaignId = ?2", kaiId, kaisTable.id), [], "she's out of Mo's, and nobody's left in hers");
   same(await rows("SELECT campaignId FROM world WHERE campaignId = ?1", kaisTable.id), [], "and her campaign's board went with it");
   yes(((await tableOf(tuesday.id))?.rounds ?? []).flatMap((r) => r.tele).every((t) => t.at.user !== kaiId && t.ans?.user !== kaiId && t.icp?.user !== kaiId), "and Tuesday Lair's table has forgotten her");
+  await until(async () => (await tv.page.$$eval(".ts-p .ts-pn", (els) => els.map((e) => e.textContent))).join() === "Bram", "Vesk off the table screen's crew, on the TV, once Kai's gone", 4000);
   yes(((await tableOf(tuesday.id))?.rounds ?? []).every((r) => !Object.keys(r.acts ?? {}).some((k) => k.startsWith(`${kaiId}|`))), "and what she spent her actions on");
   same(Object.values((await partyOf(tuesday.id))?.bonds ?? {}).filter((b) => b.a.startsWith(`${kaiId}:`) || b.b.startsWith(`${kaiId}:`)).length, 0, "and her threads are off Tuesday Lair's party sheet");
   same((await got(zed.page, "GET", "/api/campaigns")).json?.campaigns.map((k) => k.name), ["Zed’s Night"], "Zed's left with his own");

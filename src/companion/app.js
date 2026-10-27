@@ -81,6 +81,8 @@ const ICON = {
   party: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21V3.5"/><path d="M6 4h12l-3 4.5 3 4.5H6"/></svg>',
   // A folded map, for the world.
   world: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3.5 6.2v13.6L9 17.6l6 2.4 5.5-2.2V4.2L15 6.4z"/><path d="M9 4v13.6M15 6.4V20"/></svg>',
+  // A screen on its stand, for the table screen.
+  screen: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="19" height="12.5" rx="1.5"/><path d="M8.5 20.5h7M12 16.5v4"/></svg>',
 };
 
 const builder = makeBuilder({ B: DATA.build, link, icon: ICON, rule: (id) => ruleHtml(id), toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt, roll: () => randomBuild(DATA.build, DATA.crew), tools: () => themeButton() });
@@ -91,8 +93,6 @@ const learn = makeLearn({ crew: CREW, esc, hex, steps, rules: RULE, ruleHtml: (i
 
 const dt = makeDowntime({ B: DATA.build, esc, hex, steps, link, icon: ICON, lineLabel: (l) => lineLabel(l), throwDie, crewNames: () => new Set(DATA.crew.map((x) => x.name)), isOpen: (key) => ui.open.has(key), rule: (id) => ruleHtml(id) });
 
-// The party sheet on every phone in a campaign, and threads between the crew
-// kept in step on both their phones (party.js).
 // A redraw nobody asked for (a change from another phone, or the live table):
 // not while they're typing or in the roll card, and not in the middle of a
 // drag or a pinch on a map, which gets it once it's let go.
@@ -107,6 +107,8 @@ function quietly() {
   render();
 }
 
+// The party sheet on every phone in a campaign, and threads between the crew
+// kept in step on both their phones (party.js).
 const party = makeParty({
   sync, store, esc, P: DATA.party,
   list: () => camps.list(),

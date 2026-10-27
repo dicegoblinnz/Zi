@@ -59,6 +59,8 @@ const PAGES = [
   "/rules/appendix-c-every-lever-in-the-game/", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
   "/characters/", "/characters/?c=check-vesk", "/characters/?c=check-vesk&t=sheet", "/characters/?c=check-vesk&t=rules", "/characters/?build", "/sheets/",
   "/account/", "/characters/?join", "/kit/",
+  // The table screen with no code yet, and with one that can't be right.
+  "/table/", "/table/#not-a-code",
 ];
 // A character saved on the phone, so a sheet gets checked like any other page.
 // Its hash is blank, so the sheet shows its "changed in the rules" note too.

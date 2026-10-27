@@ -87,7 +87,7 @@ From Mo's 27 Oct answer (all three: her pictures with pins, the crew's pins and 
 - A page or a faction's page says which maps it's on, and on her phone it has Pin it on a map.
 - Previews share the bucket, the way they share the database.
 - From the independent check (27 Oct): a quiet redraw waits while a finger's on the map, and a finger let go anywhere ends the drag, so a gesture can't be left half done. A picture that won't open comes off the phone so trying again fetches it fresh. A phone still on an older picture's address gets a 404 and looks at the world again. A picture whose map couldn't go into the world never stays in R2.
-- Still to do: maps stay in the order they went up, and a map can't go on the table screen yet (that comes with the table screen).
+- Still to do: maps stay in the order they went up, and a map can't go up on the table screen yet.
 
 ## The stages
 
@@ -101,4 +101,4 @@ Every stage passes `tests/check-site.mjs`, `tests/check-companion.mjs` and `test
 6. **The crew's pins and notes.** Players drop their own pins and notes on a map, and the whole crew sees them. Builds on stage 4. Checked by a pin dropped on one phone reaching the others, the GM taking one off, and nothing reaching another campaign.
 7. **Timelines and family trees.** From the brief. Builds on stage 3.
 
-After that, in Mo's order: the table screen, on the same Durable Object as the live table.
+The table screen, on the same Durable Object as the live table, was built 27 Oct on the `website` branch, so stage 4 (maps and her pins) is next.
