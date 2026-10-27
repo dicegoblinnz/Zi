@@ -1030,6 +1030,7 @@ export function makeWorld(d) {
     const gm = isGm(v.id);
     return `${topbar(`/characters/?camp=${encodeURIComponent(v.id)}`, nameOf(v.id))}
       <header class="cc-camp-head wb-head"><p class="kicker${gm ? " is-gm" : ""}">The world</p><h1>${esc(nameOf(v.id))}</h1>${gm ? "" : `<p class="cc-small">What ${esc(gmName(v.id))}’s shown the crew so far.</p>`}</header>
+      ${d.turnSection?.(v.id) ?? ""}
       <section class="cc-sec wb-sec" data-wb="${esc(v.id)}" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(v.id)}</section>`;
   }
 
@@ -1038,6 +1039,7 @@ export function makeWorld(d) {
     const id = d.campOf(ch);
     if (!id) return `<div class="cc-note"><p>${esc(ch.name)} isn’t playing in a campaign on this phone.</p></div>`;
     return `<div class="wb-tab" data-wb="${esc(id)}"><p class="cc-small pt-where">${esc(ch.name)} plays in <a href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">${esc(nameOf(id))}</a>. This is what ${esc(gmName(id))}’s shown the crew of its world.</p>
+      ${d.turnSection?.(id) ?? ""}
       <section class="cc-sec wb-sec" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(id)}</section></div>`;
   }
 
@@ -1052,8 +1054,9 @@ export function makeWorld(d) {
     const glance = gm
       ? n ? `${plural(n, "faction", "factions")} on the board, ${shown ? `${shown} shown to the crew` : "none shown to the crew yet"}.` : "Nothing on the board yet. Bring in a board from the book, or make your own."
       : n ? `${esc(gmName(id))}’s shown the crew ${plural(n, "faction", "factions")}.` : k.at ? `${esc(gmName(id))} hasn’t shown the crew any of the world yet.` : "Whatever the crew’s been shown of the world.";
+    const turn = d.turnGlance?.(id) ?? "";
     return `<section class="cc-sec wb-tile" aria-labelledby="wb-tile-${esc(id)}"><a class="card wb-tile-a" href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">
-      <span class="wb-tile-mark" aria-hidden="true">${d.icon.world}</span><span class="wb-tile-in"><h2 id="wb-tile-${esc(id)}">The world</h2><span class="cc-small">${glance}</span></span></a></section>`;
+      <span class="wb-tile-mark" aria-hidden="true">${d.icon.world}</span><span class="wb-tile-in"><h2 id="wb-tile-${esc(id)}">The world</h2><span class="cc-small">${turn ? `<b class="wb-tile-turn">${esc(turn)}</b> ` : ""}${glance}</span></span></a></section>`;
   }
 
   // What's just been shown to a player lights up for a moment.
@@ -1072,6 +1075,10 @@ export function makeWorld(d) {
     submit,
     route,
     undo,
+    // For the faction turn (turn.js): the board as this phone has it, and the
+    // GM's changes to it.
+    docIn: (id) => docOf(id),
+    edit: (id, ops, say, o) => edit(id, ops, say, o),
     title(v) {
       if (v.f) return find(docOf(v.id), v.f)?.name ?? "A faction";
       return `The world · ${nameOf(v.id)}`;

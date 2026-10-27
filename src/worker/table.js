@@ -59,6 +59,9 @@ export class Table extends DurableObject {
     } catch {}
     this.doc = doc && Array.isArray(doc.rounds) ? doc : { ...blank(), seq: {} };
     if (!this.doc.seq || typeof this.doc.seq !== "object") this.doc.seq = {};
+    // A table from before the faction turn.
+    this.doc.turn ??= null;
+    this.doc.last ??= null;
     return this.doc;
   }
 
@@ -160,7 +163,7 @@ export class Table extends DurableObject {
   async change(who, roster, dev, ops, phoneNow = null) {
     const doc = this.load();
     const now = Date.now();
-    const was = JSON.stringify([doc.fight, doc.rounds]);
+    const was = JSON.stringify([doc.fight, doc.rounds, doc.turn ?? null, doc.last ?? null]);
     // Each phone's last change, under a key no phone can turn into anything else.
     const key = `d:${dev}`;
     const high = Number(doc.seq[key]?.n) || 0;
@@ -187,7 +190,7 @@ export class Table extends DurableObject {
     const people = this.here();
     if (who.role === "player") people.add(who.user);
     this.markSeen(people, now);
-    const changed = JSON.stringify([doc.fight, doc.rounds]) !== was;
+    const changed = JSON.stringify([doc.fight, doc.rounds, doc.turn ?? null, doc.last ?? null]) !== was;
     if (changed) doc.v += 1;
     if (changed || top > high) this.save();
     if (changed) this.broadcast();

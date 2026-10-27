@@ -19,11 +19,15 @@
 //   { o: "drop", l, id }              a line off the sheet
 //
 // The lists are reps (Reputations), res (resources), assets, projects,
-// holdings and people. Two changes that cross both land: two climbs make two,
-// and a line added on one phone and another on the next are both there.
+// holdings, people and changed (What has changed: a line for every agenda that
+// happened, from the faction turn). Two changes that cross both land: two
+// climbs make two, and a line added on one phone and another on the next are
+// both there.
 
-export const MAX = { name: 60, goal: 160, line: 120, asset: 60, does: 240, then: 160, list: 24, projects: 6 };
-export const LISTS = ["reps", "res", "assets", "projects", "holdings", "people"];
+export const MAX = { name: 60, goal: 160, line: 120, asset: 60, does: 240, then: 160, list: 24, projects: 6, changed: 60 };
+export const LISTS = ["reps", "res", "assets", "projects", "holdings", "people", "changed"];
+// How many lines a list holds.
+const most = (l) => (l === "projects" ? MAX.projects : l === "changed" ? MAX.changed : MAX.list);
 const ID = /^[a-z0-9-]{2,24}$/;
 
 // One line of words: no line breaks or control characters, no doubled spaces.
@@ -35,7 +39,7 @@ const size = (v) => {
 };
 
 export function blank() {
-  return { made: false, name: "", goal: { text: "", die: 2, done: false }, reps: [], res: [], assets: [], projects: [], holdings: [], people: [], bonds: {}, by: null, at: 0 };
+  return { made: false, name: "", goal: { text: "", die: 2, done: false }, reps: [], res: [], assets: [], projects: [], holdings: [], people: [], changed: [], bonds: {}, by: null, at: 0 };
 }
 
 // A line on one of the lists, tidied, or null if it can't go on.
@@ -51,11 +55,11 @@ function itemOf(l, x) {
     const die = size(x.die) ?? 2;
     return text ? { id, text, then: line(x.then, MAX.then), die, done: x.done === true && die === 12 } : null;
   }
-  const text = line(x.text, MAX.line);
+  const text = line(x.text, l === "changed" ? MAX.then : MAX.line);
   return text ? { id, text } : null;
 }
 // The parts of a line that can be changed on their own.
-const FIELDS = { reps: ["text"], res: ["text"], assets: ["text", "does", "power", "off"], projects: ["text", "then"], holdings: ["text"], people: ["text"] };
+const FIELDS = { reps: ["text"], res: ["text"], assets: ["text", "does", "power", "off"], projects: ["text", "then"], holdings: ["text"], people: ["text"], changed: ["text"] };
 
 // A sheet as it came from somewhere else, tidied so nothing in it is anything
 // but words and numbers in the right places.
@@ -68,7 +72,7 @@ export function readable(raw) {
   doc.goal = { text: line(g.text, MAX.goal), die: size(g.die) ?? 2, done: g.done === true && size(g.die) === 12 };
   for (const l of LISTS) {
     const seen = new Set();
-    doc[l] = (Array.isArray(raw[l]) ? raw[l] : []).map((x) => itemOf(l, x)).filter((x) => x && !seen.has(x.id) && seen.add(x.id)).slice(0, l === "projects" ? MAX.projects : MAX.list);
+    doc[l] = (Array.isArray(raw[l]) ? raw[l] : []).map((x) => itemOf(l, x)).filter((x) => x && !seen.has(x.id) && seen.add(x.id)).slice(0, most(l));
   }
   if (raw.bonds && typeof raw.bonds === "object") {
     for (const [id, b] of Object.entries(raw.bonds)) {
@@ -133,7 +137,7 @@ export function apply(doc, op) {
       if (!LISTS.includes(op.l)) return false;
       const list = doc[op.l];
       const item = itemOf(op.l, op.item);
-      if (!item || list.some((x) => x.id === item.id) || list.length >= (op.l === "projects" ? MAX.projects : MAX.list)) return false;
+      if (!item || list.some((x) => x.id === item.id) || list.length >= most(op.l)) return false;
       const at = Number.isInteger(op.at) && op.at >= 0 && op.at < list.length ? op.at : list.length;
       list.splice(at, 0, item);
       break;
