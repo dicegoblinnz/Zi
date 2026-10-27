@@ -15,17 +15,17 @@ Money in Zi'Dara is simple: a purse of gold is roughly a month's wages.
 ## What you can afford {#what-you-can-afford}
 
 -   **Nothing worth tracking.** A meal, a bed for the night or a round of drinks.
--   **A purse of gold.** It's one of your utility items, and it covers a bribe to a mid-level official, a good set of tools or a horse.
--   **Several purses of gold.** A quality weapon, real armour or passage on a ship.
--   **A small fortune.** A ship or a house.
+-   **A purse of gold.** It's one of your utility items, and it covers a bribe to a mid-level official, a good set of tools, a horse or a piece of Common armour.
+-   **Several purses of gold.** A quality weapon, a piece of Fine armour or passage on a ship.
+-   **A small fortune.** A ship, a house or a piece of Masterwork armour, if you can find a smith who makes it.
 
 ## Upgrading gear {#upgrading-gear}
 
 Money buys plain things, and a plain thing is just what it is. A sword's a sword: when it fits, it's a line on your roll, and it lets you do what a sword does. A finer one is still one line, so you can't pay for a step up. A weapon's properties come with the weapon, so buying a crossbow gets you *Long* and *Piercing* with it.
 
-It's the same with armour: each piece of plain armour you wear is a line on your Defend, and so is a shield, so Bram's plate and shield are two lines, and with his first Title and the action his Defend's 4 steps, a d8. Anything more than that is [attunement](#s-attunement), and money can buy the material for an attuned thing's next stage, if somebody's selling. A [Maker](#a-maker) can give a thing tags as well, but they only last the scene.
+It's the same with armour: each piece of plain armour you wear is a line on your Defend, and so is a shield, so Bram's plate and shield are two lines, and with his first Title and the action his Defend's 4 steps, a d8. Money buys quality, though: a Fine piece takes two blows for you before it breaks, and a Masterwork one takes three, but it's still one line (see [Quality](#s-armour-quality)). Anything more than that is [attunement](#s-attunement), and money can buy the material for an attuned thing's next stage, if somebody's selling. A [Maker](#a-maker) can give a thing tags as well, but they only last the scene.
 
-Replacing a broken item, or mending one, takes a downtime slot and usually a purse of gold. It's usually armour or a shield, because breaking one is a cost you can offer instead of a Hurt (see [Armour](#s-armour)). Attuned things are magic and can't break, so it's always something you carry. Some things can't be replaced, and shouldn't be. Your mother's blade isn't for sale.
+Replacing a broken item, or mending one, takes a downtime slot and usually a purse of gold. It's usually armour or a shield, because a box on one is a cost you can offer instead of a Hurt (see [Armour](#s-armour)), and a piece with boxes ticked is mended the same way, every box at once. Attuned things are magic and can't break, so it's always something you carry. Some things can't be replaced, and shouldn't be. Your mother's blade isn't for sale.
 
 ## Attuned Things from the Story {#s-rare}
 

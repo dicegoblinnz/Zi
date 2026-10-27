@@ -166,6 +166,10 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .kit .sub.row { align-items: flex-end; }
 .kit .sub.row > .lab { margin-bottom: 1mm; }
 .kit .w { height: 4.8mm; }
+/* Each equipment line has three boxes for armour's blows */
+.kit .eq { display: flex; align-items: flex-end; gap: 1.2mm; }
+.kit .eq .boxes { display: flex; flex: none; gap: 0.7mm; margin-bottom: 0.45mm; }
+.kit .eq .tick { width: 3.1mm; height: 3.1mm; }
 .notes { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .notes .ruled { flex: 1; height: auto; min-height: calc(3 * var(--lh)); border: 0; margin-top: 0.2mm; background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--lh) - 0.25mm), var(--write) calc(var(--lh) - 0.25mm) var(--lh)); }
 

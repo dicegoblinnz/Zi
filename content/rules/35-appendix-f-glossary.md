@@ -21,7 +21,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Arc](#s-campaigns)** | Four to six sessions around one Party Goal. |
 | **[Archetype](#archetypes)** | What every Title is: one of seventeen, each with permissions and a mechanic only it can do. They're the Bard, Bloodsworn, Elementalist, Face, Guardian, Healer, Hunter, Illusionist, Leader, Maker, Oracle, Scholar, Shadow, Shifter, Summoner, Teleporter and Warrior. On most, 1 Aura puts +2 on one die of the mechanic, and +3 if you've taken it twice, and each has a Resolve spend too. |
 | **[Area die](#s-area)** | The Elementalist's: one die that says how far your roll reaches instead of an intent, a burst, a cone or a line twice as long. It takes a split and costs no Aura. Threats have areas too. |
-| **[Armour](#s-armour)** | Plate, leathers or a shield. Each piece is a line on your Defend, and one can break instead of you taking a Hurt. |
+| **[Armour](#s-armour)** | Plate, leathers, a shield or a helmet. Each piece is a line on your Defend, and it can take a blow instead of you taking a Hurt, ticking one of its boxes. |
 | **[Aspiration](#s-aspiration)** | What your character wants: one thing, and you'd know the day it's done (see [A good Aspiration](#s-good-aspiration)). Starts at d2 and climbs. Past d12 you get what you were after, and a new archetype, with a Title you name for it. |
 | **[Asset](#s-wealth)** | A permission on a faction's card for what it can do, like *Standing Army* (+1 Power). It needs a resource paying for it every downtime, or it stops counting. |
 | **[Attunement](#s-attunement)** | One attuned thing to start, on top of what you carry. An attuned thing has permissions of its own, grows in three stages, and can't be broken. |
@@ -33,6 +33,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Bond thread](#s-bonds)** | A thread that's something good between you, like a rescue, a secret you keep for each other or a shared past. Borrow one of their permissions through it for 1 Aura, or strain it for 1 Resolve. |
 | **[Boon](#s-boons)** | A permanent upgrade, like +2 stride, or the first Hurt each scene not moving your wound die. It costs two permission slots on one of your Titles, and you can swap it back in downtime. |
 | **[Boss](#s-staying)** | Challenge 6, three or more tags keeping it going, multipliers on the big ones, and a weak point. |
+| **[Boxes](#s-armour-quality)** | How many blows a piece of armour can take for you: 1 for Common, 2 for Fine and 3 for Masterwork. It breaks when the last one's ticked. |
 | **[Break](#s-conditions)** | Spending an action to beat a condition's die and end it. |
 | **[Bring something in](#s-aura)** | 1 Aura: something that fits but isn't on your set action counts on your roll. One of your own permissions, items or traits, the ground, a tag you know, a Catch, or a friend's permission through a thread. |
 | **[Burden](#s-boons)** | A permanent downside, like −2 stride. It only ever comes on an attuned thing, where it pays for two more permissions, or for a Boon for you. |
@@ -106,6 +107,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Pressure](#downtime)** | One of the four things pushing on the crew each downtime: personal, party, faction, world. |
 | **[Project](#s-projects)** | Something the crew sets out to build or bring about. Starts at d2 and climbs. Past d12, what you wrote happens. |
 | **[Pursuer](#chases)** | In a chase, whatever's after you, on a die. Past d2, it's shaken off. |
+| **[Quality](#s-armour-quality)** | What a piece of armour, a shield or a helmet is: Common, Fine or Masterwork, with 1, 2 or 3 boxes. |
 | **[Question](#s-question)** | In an investigation, what the crew wants to know, written as a stake. Each tag on it is something that's hiding the answer. |
 | **[Quick heal](#s-healing)** | Anyone's: 1 Aura brings one person's wound die down a size, no roll. It still takes your action. |
 | **[Reputation](#s-party-faction)** | What the city says about the crew, in one line. A step on any crew roll it fits. One for every Goal done. |

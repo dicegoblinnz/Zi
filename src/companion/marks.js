@@ -6,6 +6,8 @@
 // the punctuation or an accent changed, and never a number or a word like
 // "not" or "more".
 
+import { nameOf } from "./armour.js";
+
 const plain = (html) => String(html ?? "").replace(/<[^>]+>/g, "").replace(/&#(\d+);/g, (m, n) => String.fromCharCode(Number(n))).replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
 const note = (x) => (x ? ` (${x})` : "");
 const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth", "twenty-first", "twenty-second", "twenty-third", "twenty-fourth"];
@@ -47,7 +49,8 @@ export function linesOf(c) {
   for (const a of c.archetypeRules) add(`arch:${a.name}`, `${plain(a.summary)}${a.aura ? ` 1 Aura: ${plain(a.auraHtml || a.aura)}` : ""}${a.resolve ? ` 1 Resolve: ${plain(a.resolveHtml || a.resolve)}` : ""}`, a.name);
   c.traits.forEach((t, i) => add(`trait:${P.traits[i]}`, `${t.name}${note(t.type)}: ${plain(t.html)}`, t.name));
   const kit = c.carry;
-  add("kit:equipment", `${kit.equipment.items.join(", ") || kit.equipment.note || "nothing"}, ${kit.equipment.items.length} of ${kit.equipment.max}`, "Equipment");
+  // Armour says its quality first, so a quality the rules change is marked too.
+  add("kit:equipment", `${kit.equipment.items.map((x) => nameOf(c, "equipment", x)).join(", ") || kit.equipment.note || "nothing"}, ${kit.equipment.items.length} of ${kit.equipment.max}`, "Equipment");
   add("kit:utility", `${kit.utility.items.join(", ") || kit.utility.note || "nothing"}, ${kit.utility.items.length} of ${kit.utility.max}`, "Utility");
   if (kit.keepsake) add("kit:keepsake", kit.keepsake, "Keepsake");
   add("kit:bag", `${kit.bag.name}${kit.bag.items?.length ? `: ${kit.bag.items.join(", ")}` : ""}`, "The bag");

@@ -10,20 +10,31 @@
 import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
 import { MAX_PERMS, attunedRoom } from "./grow.js";
 import { threadKey, threadState } from "./threads.js";
+import { isBroken, keyOf, many, mend, nameOf, pieceAt, tickedOf, worn, yours } from "./armour.js";
 
 const CHOICES = [
   ["Face a pressure", [["pressure", "Deal with a pressure"]]],
-  ["Recover", [["mend", "Mend something broken"]]],
+  ["Recover", [["mend", "Mend something"]]],
   ["Grow", [["perm", "A new permission"], ["trait", "A new trait"], ["asp", "Chase your Aspiration"], ["thread", "Deepen a bond"], ["get", "Get something"], ["att", "Attune"]]],
   ["The crew", [["party", "Toward the crew"]]],
 ];
 const LABEL = Object.fromEntries(CHOICES.flatMap(([, list]) => list));
+const cap = (x) => x.charAt(0).toUpperCase() + x.slice(1);
 const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth", "twenty-first", "twenty-second", "twenty-third", "twenty-fourth"];
 // A permission goes on two set actions at most, Defend included.
 const MAX_ON = 2;
 // Where downtime clears the wound die to: d2, a size up for each Scar.
 const floorNow = (c, s) => Math.min(12, (c.numbers.wound ?? 2) + 2 * (Array.isArray(s.scars) ? s.scars.length : 0));
-const crossed = (s) => Object.keys(s.crossed).filter((k) => s.crossed[k]).map((key) => ({ key, name: key.split("|").slice(1).join("|") }));
+// What a slot can mend: anything crossed out, and a piece of armour with
+// boxes ticked, every box at once.
+function crossed(c, s) {
+  const out = Object.keys(s.crossed).filter((k) => s.crossed[k]).map((key) => {
+    const [where, ...rest] = key.split("|");
+    return { key, name: nameOf(c, where, rest.join("|")), note: "" };
+  });
+  for (const a of worn(c, s)) if (!isBroken(s, a)) out.push({ key: keyOf(a), name: nameOf(c, "equipment", a.name), note: `${tickedOf(s, a)} of ${a.boxes} ${a.boxes === 1 ? "box" : "boxes"} ticked` });
+  return out;
+}
 // Every thread with where it stands now.
 const threadsOf = (c, s) => c.threads.flatMap((p) => p.threads.map((t) => ({ key: threadKey(p.person, t), person: p.person, text: t.text, kind: t.kind, sheet: t.strained, st: threadState(s, p.person, t) })));
 // A strained bond thread is what downtime mends.
@@ -50,7 +61,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
   const at = (d, where) => (String(where)[0] === "w" ? d.swaps[Number(String(where).slice(1))] : d.slots[Number(where)]);
 
   function can(k, c, s) {
-    if (k === "mend") return crossed(s).length > 0;
+    if (k === "mend") return crossed(c, s).length > 0;
     if (k === "perm") return c.titles.some((t) => t.permissions.length < MAX_PERMS);
     if (k === "att") return c.attuned.some((a) => a.permissions.length < MAX_PERMS);
     return true;
@@ -60,7 +71,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     const firstTitle = Math.max(0, c.titles.findIndex((t) => t.permissions.length < MAX_PERMS));
     const firstThing = Math.max(0, c.attuned.findIndex((a) => a.permissions.length < MAX_PERMS));
     return {
-      pressure: { k, text: "" }, mend: { k, key: crossed(s)[0]?.key ?? "" },
+      pressure: { k, text: "" }, mend: { k, key: crossed(c, s)[0]?.key ?? "" },
       perm: { k, t: firstTitle, text: "", on: [] },
       trait: { k, name: "", own: false, oname: "", otype: "", otext: "", on: [] },
       asp: { k, on: [], dice: null, opp: null, real: false, pads: [], padOpp: "", rerolls: 0, tie: false, arch: "", text: "", perm: "", tOn: [], pOn: [] },
@@ -171,7 +182,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       case "pressure":
         return `${field(i, "text", "What you’re dealing with", sl.text)}<p class="cc-lead">One slot usually settles a pressure, and the GM says if it needs two. If something pushes back, roll for it.</p>`;
       case "mend":
-        return `${chips(i, "key", crossed(s).map((x) => [x.key, esc(x.name)]), sl.key, "What you’re mending")}<p class="cc-lead">Mending something usually takes a purse of gold as well. Mended armour or a shield goes back on your Defend.</p>`;
+        return `${chips(i, "key", crossed(c, s).map((x) => [x.key, `${esc(x.name)}${x.note ? ` <small>${esc(x.note)}</small>` : ""}`]), sl.key, "What you’re mending")}<p class="cc-lead">Mending something usually takes a purse of gold as well. Mended armour goes back on your Defend, and every box on it’s clear. ${link("recovering-armour", "Broken armour")}</p>`;
       case "perm": {
         const t = c.titles[sl.t];
         const e = earlier(d, i, s);
@@ -309,9 +320,11 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     d.slots.forEach((sl, i) => {
       const text = String(sl.text ?? "").trim();
       if (sl.k === "pressure") said.push(text ? `${text}: done` : "A pressure dealt with");
-      else if (sl.k === "mend" && s.crossed[sl.key]) {
-        delete s.crossed[sl.key];
-        said.push(`${sl.key.split("|").slice(1).join("|")} is mended`);
+      else if (sl.k === "mend" && (s.crossed[sl.key] || s.boxes?.[sl.key])) {
+        const [where, ...rest] = sl.key.split("|");
+        const a = pieceAt(c, sl.key);
+        mend(s, sl.key);
+        said.push(a ? `${cap(yours(a, { quality: true }))} ${many(a) ? "are" : "is"} mended, every box clear` : `${nameOf(c, where, rest.join("|"))} is mended`);
       } else if (sl.k === "perm" && text && c.titles[sl.t] && c.titles[sl.t].permissions.length + (earlier(d, i, s).perms[sl.t] ?? 0) < MAX_PERMS) {
         grow({ k: "perm", t: sl.t, text, on: [...sl.on] });
         said.push(`“${text}” goes on your ${ORD[sl.t] ?? ""} Title`);

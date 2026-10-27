@@ -23,7 +23,7 @@ updated: 2026-10-27
 -   **Archetypes** — [The Archetypes](#archetypes), [How Archetypes Work](#s-how-archetypes), [Picking Your Archetypes](#s-picking-archetypes), [Archetypes and Titles](#s-title), [Archetypes, Resolve and Study at the Table](#s-gm-area)
 -   **Arcs** — [Campaigns](#s-campaigns), [Between Arcs](#s-arcs)
 -   **Area die** — [Area](#s-area), [Area magic](#s-magic-area), [Elementalist](#a-elementalist)
--   **Armour** — [Armour](#s-armour), [Defend](#s-defend)
+-   **Armour** — [Armour](#s-armour), [Quality](#s-armour-quality), [Broken Armour](#recovering-armour), [Defend](#s-defend)
 -   **Aspiration** — [Aspiration](#s-aspiration), [A good Aspiration](#s-good-aspiration)
 -   **Assets, a faction's** — [Resources and assets](#s-wealth), [Crew assets](#s-crew-tags), [Assets to borrow from](#faction-strength)
 -   **Attunement** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
@@ -42,6 +42,7 @@ updated: 2026-10-27
 -   **Boon table** — [The Oracle](#oracle)
 -   **Boons** — [Boons and Burdens](#s-boons), [Appendix C](#s-levers-boons)
 -   **Boss** — [Tags are its health](#s-staying), [Multipliers](#s-tough-gm)
+-   **Boxes, armour's** — [Quality](#s-armour-quality)
 -   **Bring something in** — [Aura](#s-aura)
 -   **Budget** — [Telegraphs a Round](#s-budget), [The Threat Budget](#s-threat-budget)
 -   **Burdens** — [Boons and Burdens](#s-boons), [Attunement](#s-attunement)
@@ -114,6 +115,7 @@ updated: 2026-10-27
 
 -   **Healer** — [Healer](#a-healer)
 -   **Healing** — [Healing](#s-healing), [Healer](#a-healer)
+-   **Helmets** — [Armour](#s-armour), [Quality](#s-armour-quality)
 -   **Hidden tag** — [Hidden tags and weak points](#s-hidden)
 -   **Hiding** — [Extra actions](#s-extra-actions), [Shadow](#a-shadow)
 -   **Holding your ground** — [Confidence](#s-confidence)
@@ -162,6 +164,7 @@ updated: 2026-10-27
 -   **Magic** — [Magic](#magic), [Schools of Magic](#s-schools)
 -   **Maker** — [Maker](#a-maker)
 -   **Marked** — [Hunter](#a-hunter), [Marked](#s-marked)
+-   **Masterwork** — [Quality](#s-armour-quality)
 -   **Material** — [Attunement](#s-attunement)
 -   **Mini factions** — [Mini factions](#s-mini-factions)
 -   **Mending a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain), [Mending Threads](#s-downtime-threads)
@@ -194,6 +197,7 @@ updated: 2026-10-27
 
 ## Q {#q}
 
+-   **Quality, armour's** — [Quality](#s-armour-quality), [Upgrading gear](#upgrading-gear)
 -   **Question, investigation** — [The Question](#s-question)
 -   **Quick Build** — [Quick Build](#s-quick)
 -   **Quick heal** — [Healing](#s-healing)

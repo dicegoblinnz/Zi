@@ -204,6 +204,16 @@ export function scars(n, { max = MAX_SCARS, slots = false } = {}) {
   return `<span class="zd-scars harm" role="img" aria-label="${n} ${n === 1 ? "Scar" : "Scars"}${slots ? ` of ${max}` : ""}">${marks}</span>`;
 }
 
+// ── Armour's boxes: one for every blow a piece can take for you, 1 Common,
+// 2 Fine and 3 Masterwork. Each one's a plate cut from the card, yours till
+// it's ticked, and a ticked one's ember, the blow it took.
+const PLATE = `<svg class="zd-plate" viewBox="0 0 100 100" aria-hidden="true"><polygon class="a" points="24,7 76,7 93,24 93,76 76,93 24,93 7,76 7,24"/><path class="b" d="M31 69 L69 31"/></svg>`;
+export const plate = (on = false) => (on ? PLATE.replace('class="zd-plate"', 'class="zd-plate on"') : PLATE);
+export function boxes(ticked, max, { label = "" } = {}) {
+  const plates = Array.from({ length: max }, (_, i) => plate(i < ticked)).join("");
+  return `<span class="zd-boxes" role="img" aria-label="${esc(label || `${ticked} of ${max} ${max === 1 ? "box" : "boxes"} ticked`)}">${plates}</span>`;
+}
+
 // A condition is a tag carrying a die. Against you is ember, for you is gold.
 export function condition(name, d, { kind = "against" } = {}) {
   const own = kind === "against" ? "harm" : "you";

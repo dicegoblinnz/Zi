@@ -279,6 +279,26 @@ const dropStop = (s = "") => s.trim().replace(/\.$/, "");
 // Split on the commas that aren't inside *italics*.
 const commaList = (s) => s.split(/,\s*(?=(?:[^*]*\*[^*]*\*)*[^*]*$)/).map((x) => x.trim()).filter(Boolean);
 
+// Armour's quality, from the table in Quality: Common, Fine and Masterwork,
+// with 1, 2 and 3 boxes. A tier is its place in the table, so a saved
+// character keeps its armour's quality if a name changes.
+function qualitiesFrom(doc, warn) {
+  const out = tableRows(sectionOf(doc?.body ?? "", "s-armour-quality")).map((r, i) => ({ tier: i + 1, name: plain(r[0]), boxes: Number(r[1]), text: plain(r[2] ?? "") }));
+  if (out.length !== 3 || out.some((q) => !(q.boxes >= 1))) warn(`armour should have three qualities, each with its boxes, and Quality has ${out.map((q) => `${q.name} ${q.boxes}`).join(", ") || "none"}`);
+  return out;
+}
+// "Fine plate armour" is plate armour, Fine, and "a Common shield" is a
+// shield, Common.
+function qualityOf(text, qualities = []) {
+  const art = text.match(/^(a|an|the|her|his|their) /i)?.[0] ?? "";
+  const rest = text.slice(art.length);
+  const q = qualities.find((x) => rest.startsWith(`${x.name} `));
+  if (!q) return null;
+  const noun = rest.slice(q.name.length + 1);
+  const a = /^an? $/i.test(art) ? (/^[aeiou]/i.test(noun) ? "an " : "a ") : art;
+  return { name: `${a}${noun}`, tier: q.tier };
+}
+
 function crewFrom(doc, ctx) {
   const crew = [];
   for (const m of doc.body.matchAll(/^:::sheet\[([^:\]]+): ([^\]]+)\]\n([\s\S]*?)\n:::$/gm)) {
@@ -352,7 +372,15 @@ function sheetFrom(name, titleText, body, block, ctx) {
   });
 
   // What they carry: equipment and utility (n of 3), a keepsake, and the bag.
+  // A piece of armour says its quality first (Fine plate armour, a Common
+  // shield), and its name's kept without it.
   const carry = { equipment: { items: [], max: 3, note: null }, utility: { items: [], max: 3, note: null }, keepsake: null, bag: { name: "a bag", max: 10 } };
+  const quality = new Map();
+  const kitName = (kind, text) => {
+    const q = kind === "equipment" ? qualityOf(text, ctx.qualities) : null;
+    if (q) quality.set(q.name, q.tier);
+    return q ? q.name : text;
+  };
   for (const seg of dropStop(field.Carries).split(" · ").filter(Boolean)) {
     const c = seg.match(/^(.+) \(([^()]+)\)$/);
     const info = c?.[2] ?? "";
@@ -367,7 +395,7 @@ function sheetFrom(name, titleText, body, block, ctx) {
     else {
       if (max) carry[kind].max = max;
       if (/^no /.test(c[1])) carry[kind].note = plain(c[1]);
-      else carry[kind].items = c[1].split(", ").map(plain);
+      else carry[kind].items = c[1].split(", ").map((x) => kitName(kind, plain(x)));
     }
   }
   for (const item of [...carry.equipment.items, ...carry.utility.items, ...(carry.keepsake ? [carry.keepsake] : [])]) line("kit", item);
@@ -426,6 +454,19 @@ function sheetFrom(name, titleText, body, block, ctx) {
 
   // Defend is a set action like the rest, and every sheet has one.
   if (!actions.some((a) => a.name === "Defend")) warn("there's no Defend set action");
+
+  // Armour: every piece of equipment on Defend, with the quality it's written
+  // with, and its boxes from the table in Quality.
+  const armour = [];
+  for (const key of actions.find((a) => a.name === "Defend")?.lines ?? []) {
+    const l = lines.find((x) => x.key === key);
+    if (l?.kind !== "kit" || !carry.equipment.items.includes(l.label)) continue;
+    const tier = quality.get(l.label);
+    const q = ctx.qualities[(tier ?? 0) - 1];
+    if (!q) warn(`${l.label} is on Defend, so it's armour, and it needs its quality first: ${ctx.qualities.map((x) => x.name).join(", ")}`);
+    else armour.push({ name: l.label, tier, quality: q.name, boxes: q.boxes });
+  }
+  for (const item of quality.keys()) if (!armour.some((a) => a.name === item)) warn(`${item} has a quality, but it isn't on Defend, and only armour has one`);
 
   const n = field.Numbers ?? "";
   const find = (re, what) => {
@@ -488,7 +529,7 @@ function sheetFrom(name, titleText, body, block, ctx) {
     hash: createHash("sha1").update(block).digest("hex").slice(0, 8),
     pronoun: troubleLabel?.split(" ").pop() ?? "them",
     playsLike: ctx.inline(plays),
-    titles, archetypeRules: archetypes, traits, actions, lines, carry, attuned, numbers, threads, crewQs,
+    titles, archetypeRules: archetypes, traits, actions, lines, carry, armour, attuned, numbers, threads, crewQs,
     aspiration: { text: curly(asp?.[1] ?? ""), die: Number(asp?.[2] ?? 2) },
     trouble: troubleLabel ? italics(field[troubleLabel]) : [],
   };
@@ -948,6 +989,7 @@ const ctx = {
   inline,
   archetypes: docWith("{#s-how-archetypes}") ? archetypesFrom(docWith("{#s-how-archetypes}"), inline) : {},
   traits: docWith("{#s-traits}") ? traitsFrom(docWith("{#s-traits}"), inline) : {},
+  qualities: qualitiesFrom(docWith("{#s-armour-quality}"), (msg) => companionWarn(msg)),
 };
 const crewDoc = docWith("{#s-pregens}");
 const crew = crewDoc ? crewFrom(crewDoc, ctx) : [];
@@ -957,6 +999,7 @@ const buildDoc = docWith("{#s-traits}");
 const ideasDoc = docWith("{#s-quick}");
 const build = buildDoc && ideasDoc ? buildFrom(buildDoc, ideasDoc, ctx.archetypes, inline, (msg) => companionWarn(`builder: ${msg}`)) : null;
 if (!build) companionWarn("can't find Building Your Character or the Quick Build for the builder");
+else build.qualities = ctx.qualities;
 const conditions = docWith("{#s-conditions-list}") ? conditionsFrom(docWith("{#s-conditions-list}"), inline) : [];
 if (conditions.length < 10) companionWarn(`found only ${conditions.length} conditions in Conflict`);
 const partyDoc = docWith("{#s-party-faction}");
@@ -976,7 +1019,7 @@ const blockHtml = (text) => {
   return String(file).trim();
 };
 const rules = {};
-for (const id of ["s-round", "s-telegraphs", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour",
+for (const id of ["s-round", "s-telegraphs", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour", "s-armour-quality",
   "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through", "s-blaze", "s-healing", "s-vulnerable", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "s-good-aspiration", "how-permissions-stack",
   "your-slots", "s-downtime-rolls", "s-goal", "s-good-goal", "s-climb", "s-projects", "s-crew-size", "s-crew-tags", "s-crew-wealth", "s-crew-grows", "s-party-resources",
   "s-faction-board", "s-wealth", "s-faction-bonds", "s-agendas", "when-an-agenda-happens", "s-standing", "s-mini-factions", "s-faction-build"]) {
@@ -998,7 +1041,7 @@ const linkTo = (id) => {
   return !target ? "/rules/" : target.own ? pageFor.get(target.page) : `${pageFor.get(target.page)}#${id}`;
 };
 const companionLinks = Object.fromEntries(
-  ["s-round", "s-telegraphs", "s-answering", "s-aura", "s-resolve", "s-confidence", "s-armour", "s-blaze", "s-healing", "s-conditions", "s-bonds", "s-trouble", "steps-into-dice",
+  ["s-round", "s-telegraphs", "s-answering", "s-aura", "s-resolve", "s-confidence", "s-armour", "s-armour-quality", "recovering-armour", "s-blaze", "s-healing", "s-conditions", "s-bonds", "s-trouble", "steps-into-dice",
     "s-splitting", "s-teamwork", "s-extra-actions", "s-going-beyond", "s-the-roll", "s-defending", "s-defend", "s-intercept", "s-vulnerable", "s-fear-gets-through",
     "s-consequences", "s-aspiration", "s-pregens", "s-set-actions", "s-how-archetypes", "s-attunement", "s-carrying", "s-traits", "s-intents",
     "s-quick", "s-title-ideas", "s-title", "s-writing-permissions", "the-quick-test", "permission-ideas", "s-step-set-actions", "s-items",

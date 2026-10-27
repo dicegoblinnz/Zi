@@ -5,6 +5,20 @@ updated: 2026-10-27
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
 
+## 27 Oct 2026: Armour's quality, and a box for every blow {#c-2026-10-27-armour}
+
+**Armour, shields and helmets have a quality now: Common, Fine or Masterwork.** That's how many boxes the piece has, 1, 2 or 3, and every blow it takes for you ticks one. It's still a line on your Defend till its last box is ticked, and then it breaks. So the more you wear, the more blows you can take. Before, a piece broke the first time it took a blow for you. Quality doesn't add a step: a Masterwork shield's one line, the same as a Common one. See [Armour](#s-armour), [Quality](#s-armour-quality) and [Consequences](#s-consequences).
+
+**A helmet's armour like any other:** a line on your Defend, one of your equipment, and a quality with its boxes. It's in the [item list](#the-item-list) now. The item list's fine sword is a sword, so it doesn't read as a quality.
+
+**A hit that's two Hurts is two boxes**, on one piece or two, or one box and a Hurt.
+
+**You start with Common, and one piece can be Fine.** Bram's plate is Fine, with two boxes, and his shield and Vesk's leathers are Common, with one each. See [What you carry](#s-carrying) and [the crew](#s-pregens).
+
+**A slot in downtime mends one piece, every box on it**, broken or not, usually for a purse of gold, the same as mending something broken. A Workshop does it without a slot. See [Recover](#recover).
+
+**What it costs:** Common armour's a purse of gold, Fine's several, and Masterwork's a small fortune, if you can find a smith who makes it. Before, real armour was several purses. See [What you can afford](#what-you-can-afford) and [Upgrading gear](#upgrading-gear).
+
 ## 27 Oct 2026: A good Aspiration, and a good Goal {#c-2026-10-27}
 
 **When your Aspiration resolves, you get what you were after**, as well as the new archetype and its Title. Before, that was only in Vesk's example. See [Aspiration](#s-aspiration).
@@ -44,7 +58,7 @@ Mo's answers after reading the 24 Oct change.
 
 These came out of the 23 Oct playtests.
 
-**Defend's a set action, and the Armour die's gone.** Defend, Fight, Move, Sneak, Study and Talk are on every sheet now. Plain armour and a shield are lines on your Defend, a step each, and a piece of armour can break instead of you taking a Hurt. See [Armour](#s-armour) and [When It Lands](#s-defending).
+**Defend's a set action, and the Armour die's gone.** Defend, Fight, Move, Sneak, Study and Talk are on every sheet now. Plain armour and a shield are lines on your Defend, a step each, and a piece of armour can break instead of you taking a Hurt. (From 27 Oct a piece has a quality, and it takes a blow a box at a time.) See [Armour](#s-armour) and [When It Lands](#s-defending).
 -   **Each die of defence stops one telegraph.** When you let it ride, you roll your Defend once and your Confidence once, and each die stops one telegraph it beats or ties. Everything else gets through. That replaces one defence roll standing against everything aimed at you.
 -   **Defending doubles it.** When you Defend, every line on your Defend counts twice, and so does your Confidence, and you can split each of them once. Defend doesn't pull an enemy's attack onto you any more. See [Defend](#s-defend). (Since 26 Oct, it doesn't double your Confidence.)
 -   **A threat aims one die at each of you**, unless a tag like *Flurry* or *Two Knives* says it can do more. See [Telegraphs](#s-telegraphs).

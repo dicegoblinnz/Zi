@@ -320,6 +320,17 @@ html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px))
 .cc-thing { min-height: 44px; max-width: 100%; padding: 0.3rem 0.8rem; text-align: left; color: var(--ink); background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
 .cc-thing.is-out span { text-decoration: line-through; color: var(--muted); }
 .cc-thing small { display: block; font-size: 0.78rem; color: var(--muted); }
+/* A piece of armour takes the whole row: the piece with its quality under
+   its name, and a plate to tap for every blow it can take, on the right
+   where the thumb is. Tapping the piece breaks it or mends it outright. */
+.cc-armour { flex-basis: 100%; align-items: stretch; }
+.cc-armour .cc-thing { flex: 1 1 auto; min-width: 0; }
+.cc-armour .cc-thing small { color: var(--gold-ink); font-weight: 700; letter-spacing: 0.04em; }
+.cc-armour .cc-thing.is-out small { color: var(--muted); }
+.cc-boxes { display: flex; flex: none; align-items: center; padding: 0 3px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.cc-box { display: grid; place-items: center; width: 44px; min-height: 44px; padding: 0; background: none; border: 0; border-radius: 2px; cursor: pointer; }
+.cc-box .zd-plate { width: 22px; height: 22px; }
+.cc-box:focus-visible { outline: 2px solid var(--gold); outline-offset: -3px; }
 
 /* Something crossed out on a set action: struck through, and it can't be tapped on. */
 .cc-line.is-out { opacity: 0.75; cursor: default; }
@@ -512,6 +523,11 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .res-intent { padding: 1px 0.5rem; font-size: 0.85rem; font-weight: 700; border: 1px solid var(--line); border-radius: 2px; }
 .res-paid { flex-basis: 100%; font-weight: 700; color: var(--gold-ink); }
 .cc-pay { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+/* Armour taking the blow shows the boxes it's got, so you can see what's left
+   before you tap. */
+.cc-pay .button { display: inline-flex; align-items: center; gap: 8px; }
+.cc-pay .zd-plate { width: 15px; height: 15px; }
+.cc-more p { flex-basis: 100%; margin: 0.2rem 0 0; }
 .cc-swap { margin-left: auto; }
 .cc-offers { margin-top: 1rem; }
 .cc-log { margin: 1rem 0 0.4rem; padding-left: 1.1rem; font-size: 0.95rem; color: var(--muted); }
@@ -788,6 +804,13 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-slot.is-row > .cc-field { display: grid; place-items: center; width: 36px; height: 48px; margin: 0; font-weight: 800; font-size: 1rem; color: var(--gold-ink); background: var(--zd-token); border: 1.5px solid var(--bd-edge); border-radius: 3px; }
 .bd-slot.is-row:has(> input:placeholder-shown) > .cc-field { border-style: dashed; color: var(--muted); }
 .bd-slot.is-row > .bd-on { grid-column: 1 / -1; margin-bottom: 0.6rem; }
+/* A piece of armour's quality, under where it goes: each choice shows the
+   boxes it gives you. */
+.bd-slot.is-row > .bd-quality { grid-column: 1 / -1; margin: -0.2rem 0 0.8rem; }
+.bd-quality .bd-label { margin-top: 0.2rem; }
+.bd-quality .bd-label small { font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--muted); }
+.bd-qual { display: inline-flex; align-items: center; gap: 8px; }
+.bd-qual[aria-pressed="true"] .zd-plate .a { fill: var(--on-gold); stroke: var(--on-gold); }
 .bd-carry > h2 { margin-top: 1.4rem; }
 .bd-items { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
 .bd-items.is-wide { grid-template-columns: 1fr; }

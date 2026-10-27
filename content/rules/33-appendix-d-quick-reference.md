@@ -91,7 +91,7 @@ Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer
 
 ## Consequences: the GM names one {#consequences-the-gm-names-one}
 
-A Hurt · Confidence down (for a miss, where it fits) · break something you carry, like your armour or your shield (attuned things can't break) · Aspiration down · Party Goal down · a clock ticks. You can offer another that fits and costs about as much. A specific intent happens unless you trade it for one of these. A one-answer telegraph can't be traded.
+A Hurt · Confidence down (for a miss, where it fits) · a box on your armour, shield or helmet, or something else you carry breaks (attuned things can't break) · Aspiration down · Party Goal down · a clock ticks. You can offer another that fits and costs about as much. A specific intent happens unless you trade it for one of these. A one-answer telegraph can't be traded.
 
 When fear, lies or pressure get through, your Confidence drops a size instead, or 1 Resolve holds your ground (see [Confidence](#s-qr-confidence)).
 
@@ -152,7 +152,7 @@ When fear, lies or pressure get through, your Confidence drops a size instead, o
 -   **Permissions:** one word, like *Deceptive*, or a doing word and how, what or where, like *climb sheer walls*. It's 1 step on a roll it fits, once a roll, and it goes on two set actions at most. You need a magic permission or a magic item to do magic at all, and magic's written narrow.
 -   **Boons:** two permission slots on a Title buy one. Burdens only come on attuned things. The menu's in [Boons and Burdens](#s-boons).
 -   **Aspiration:** starts at d2 and climbs. An action when it's within reach, or a slot. One step a roll.
--   **Defend:** a set action like the rest, with a line for each piece of plain armour and a shield. **Confidence:** d6 at the start of every scene (see [Confidence](#s-qr-confidence)).
+-   **Defend:** a set action like the rest, with a line for each piece of plain armour, a shield and a helmet. **Confidence:** d6 at the start of every scene (see [Confidence](#s-qr-confidence)).
 -   **To start:** 5 Aura, 2 Resolve (one for each Title), a stride of 3, a wound die at d2, one attuned thing, and two bond threads with the crew.
 
 ## The archetypes {#s-qr-archetypes}
@@ -190,7 +190,8 @@ On most of them, 1 Aura puts +2 on one die of the mechanic after you roll, and t
 ## What you carry {#s-qr-carry}
 
 -   3 equipment (what you wear or wield), 3 utility (tools, and things you use up and cross off) and a keepsake. A bag holds 10 more. Getting something out takes your action, and putting it away's free.
--   A plain item's a line when it fits, and each piece of plain armour, and a shield, is a line on your Defend. A purse of gold is a utility item, about a month's wages.
+-   A plain item's a line when it fits, and each piece of plain armour, a shield and a helmet, is a line on your Defend. A purse of gold is a utility item, about a month's wages.
+-   **Armour's quality:** Common has 1 box, Fine 2 and Masterwork 3. A blow it takes for you ticks one, a hit that's two Hurts ticks two, and it breaks when the last one goes. It counts on your Defend till then. You start with Common, and one piece can be Fine.
 -   **Attunement:** one attuned thing to start, on top of what you carry, and attuned things can't break. Awakened: 1 permission, or 2 with a Catch. Tempered: 2, or 4 with a Burden. Perfected: 3, or 6 with a Burden and a Catch. Each stage needs a material, and each new permission a downtime slot.
 
 ## Summoning {#s-qr-summoning}
@@ -208,7 +209,7 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 
 -   Four pressures: personal, party, faction, world. Ignore one and it gets worse, and twice makes it a scene. Every faction's action is telegraphed at the start, and rolled after the slots.
 -   Two personal slots each, and the crew takes one action, like any faction. A personal slot can go into the crew's action. All your Resolve comes back, and your wound die goes back to d2, or to your Scars.
--   **Recover:** mend something broken. **Grow:** a new permission on a Title · a new trait or thread · chase your Aspiration · get something.
+-   **Recover:** mend something broken, or a piece of armour with boxes ticked. **Grow:** a new permission on a Title · a new trait or thread · chase your Aspiration · get something.
 -   **Mend a thread** you've strained by making it right with them. Downtime's one place for it, and a scene with them is the other.
 -   **Swap** a permission for another that fits your Title, or two for a Boon, and back. **Attune:** a slot for each new permission, and the material for a new stage. A soul you're carrying goes into your summoning attunement.
 -   Ties go to the defender. No Aura: spend 1 Resolve to roll your dice again, or an extra crew resource to take the tie.

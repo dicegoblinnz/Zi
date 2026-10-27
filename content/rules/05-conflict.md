@@ -124,7 +124,7 @@ At d2 you're shaken and at d12 you're fired up, and what both of those do is in 
 :::example[One roll against two blows]
 Two guards telegraph at Vesk this round, a d8 and a d6. Nobody answers either, so she lets them ride. At the end of the round she rolls her Defend once, a d4 for her worn leathers, and gets a 3. The d8 rolls 6 and the d6 rolls 3. Her 3 stops the d6, because the tie's hers, and the d8 gets through. If she'd rolled a 1, both would have.
 
-Stopping the d6 puts her Confidence up a size, from d6 to d8. The GM names a Hurt for the d8, though, so her wound die goes up to a d4 and her Confidence comes straight back down to d6. If she'd offered her leathers instead, it'd have stayed on d8, but she'd have lost a line off her Defend.
+Stopping the d6 puts her Confidence up a size, from d6 to d8. The GM names a Hurt for the d8, though, so her wound die goes up to a d4 and her Confidence comes straight back down to d6. If she'd offered her leathers instead, it'd have stayed on d8, but they're Common, so that was their one box, and she'd have lost a line off her Defend.
 :::
 
 :::rule{#s-past-d12}
@@ -173,7 +173,7 @@ When a telegraph lands on you, or when a miss costs you something because it mat
 
 -   **Take a Hurt.** Your wound die goes up a size, and your Confidence drops a size with it. If your wound die's already a d12, you Blaze. See [Wounds, Blaze and Scars](#s-blaze).
 -   **Step your Confidence down** one size, for a miss where it fits, like a bluff that falls apart in front of the whole room.
--   **Break an item.** Something you carry breaks: cross it out until it's mended. Armour and shields are the usual ones. Your attuned things are magic, and they can't be broken. Your Confidence doesn't move when something you carry takes it.
+-   **Your armour takes it, or something breaks.** A piece of armour, a shield or a helmet ticks one of its boxes, and it breaks when the last one's ticked (see [Armour](#s-armour)). Anything else you carry just breaks: cross it out until it's mended. Your attuned things are magic, and they can't be broken. Your Confidence doesn't move when something you carry takes it.
 -   **Step your Aspiration back down** one size, never below d2. The blow costs you your dream instead of your body.
 -   **Step the Party Goal back down** one size, never below d2.
 -   **Tick a clock**: step one of the scene's clocks, or one of the campaign's, down one.

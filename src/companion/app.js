@@ -20,7 +20,8 @@ import { makeParty } from "./party.js";
 import { makeTable } from "./table.js";
 import { makeWorld } from "./world.js";
 import { threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
-import { aura as kitAura, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
+import { boxesSaid, isBroken, itS, keyOf, leftOf, nameOf, pieceAt, piecesOf, setTicked, standing, tick as tickBox, tickedOf, yours } from "./armour.js";
+import { aura as kitAura, boxes as kitBoxes, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, plate as kitPlate, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
 
 const DATA = JSON.parse(document.getElementById("zi-companion").textContent);
 const CREW = new Map(DATA.crew.map((c) => [c.id, c]));
@@ -235,7 +236,7 @@ function fresh(c) {
   return {
     aura: n.aura, resolve: n.resolve, conf: n.confidence,
     wound: n.wound ?? 2, scars: [], shrugged: 0, blaze: false, dead: false,
-    conditions: [], threads: {}, used: {}, crossed: {}, picked: [],
+    conditions: [], threads: {}, used: {}, crossed: {}, boxes: {}, picked: [],
     asp: c.aspiration.die, aspText: "", notes: "", last: null,
   };
 }
@@ -324,7 +325,15 @@ function normal(ch) {
   s.dead = Boolean(s.dead);
   s.conditions = (Array.isArray(s.conditions) ? s.conditions : []).filter((x) => x && x.name).map((x) => ({ name: String(x.name), die: even(x.die, 2, 12), kind: x.kind === "for" ? "for" : "against" }));
   s.picked = (Array.isArray(s.picked) ? s.picked : []).filter((p) => p && p.name && ["equipment", "utility", "bag"].includes(p.where));
-  for (const key of ["threads", "used", "crossed"]) if (!s[key] || typeof s[key] !== "object") s[key] = {};
+  for (const key of ["threads", "used", "crossed", "boxes"]) if (!s[key] || typeof s[key] !== "object") s[key] = {};
+  // Boxes ticked on a piece of armour that's still on their sheet and hasn't
+  // broken. A broken one's crossed out instead (armour.js).
+  for (const [k, v] of Object.entries(s.boxes)) {
+    const a = pieceAt(c, k);
+    if (!a || s.crossed[k] || !(Number(v) >= 1)) delete s.boxes[k];
+    else s.boxes[k] = Math.min(a.boxes - 1, Math.round(Number(v)));
+    if (s.boxes[k] === 0) delete s.boxes[k];
+  }
   // A thread in play is strained, snapped, or whole again after the sheet said strained.
   for (const [k, v] of Object.entries(s.threads)) if (!["strained", "snapped", "whole"].includes(v)) delete s.threads[k];
   s.grown = (Array.isArray(s.grown) ? s.grown : []).filter((g) => g && typeof g === "object" && typeof g.k === "string");
@@ -832,6 +841,14 @@ function sheetTab(ch, c) {
   const thing = (where, name, i = -1) => {
     const key = `${where}|${name}`;
     const out = Boolean(s.crossed[key]);
+    // A piece of armour has its quality, and a box to tap for every blow it
+    // can take. Tapping the piece itself breaks it or mends it outright.
+    const a = where === "equipment" && i < 0 ? pieceAt(c, key) : null;
+    if (a) {
+      const ticked = tickedOf(s, a);
+      const marks = Array.from({ length: a.boxes }, (_, j) => `<button type="button" class="cc-box" data-act="box" data-k="${esc(key)}" data-n="${j + 1}"${pressed(j < ticked)} aria-label="${esc(cap(name))}, box ${j + 1} of ${a.boxes}">${kitPlate(j < ticked)}</button>`).join("");
+      return `<li class="cc-thing-row cc-armour"><button type="button" class="cc-thing${out ? " is-out" : ""}" data-act="cross" data-k="${esc(key)}"${pressed(out)} aria-label="${esc(nameOf(c, where, name))}: ${out ? "broken, tap to mend it" : `${boxesSaid(s, a)}, tap to break it`}"><span>${esc(name)}</span><small>${esc(a.quality)}${out ? ", broken" : ""}</small></button><span class="cc-boxes" role="group" aria-label="${esc(cap(name))}’s boxes, ${ticked} of ${a.boxes} ticked">${marks}</span></li>`;
+    }
     return `<li class="cc-thing-row"><button type="button" class="cc-thing${out ? " is-out" : ""}" data-act="cross" data-k="${esc(key)}"${pressed(out)} aria-label="${esc(name)}: ${out ? "crossed out, tap to bring it back" : "tap to cross it out"}"><span>${esc(name)}</span>${out ? "<small>crossed out</small>" : ""}</button>${i >= 0 ? `<button type="button" class="cc-x sm" data-act="drop" data-i="${i}" aria-label="Take ${esc(name)} off the sheet">${ICON.close}</button>` : ""}</li>`;
   };
   const picked = (where) => s.picked.map((p, i) => ({ ...p, i })).filter((p) => p.where === where);
@@ -890,7 +907,7 @@ function sheetTab(ch, c) {
   }).join("");
   const titlesAt = c.titles.map((t) => `<span class="cc-gl-line"><em>${esc(t.name)}</em> <small>${esc(t.archetype)} · ${t.permissions.length} ${t.permissions.length === 1 ? "permission" : "permissions"}</small></span>`).join("");
   const carried = [...c.carry.equipment.items.map((x) => ["equipment", x]), ...c.carry.utility.items.map((x) => ["utility", x]), ...(c.carry.keepsake ? [["keepsake", c.carry.keepsake]] : []), ...(c.carry.bag.items ?? []).map((x) => ["bag", x]), ...s.picked.map((p) => [p.where, p.name])]
-    .map(([where, x]) => (s.crossed[`${where}|${x}`] ? `<s>${esc(x)}</s>` : esc(x)));
+    .map(([where, x]) => (s.crossed[`${where}|${x}`] ? `<s>${esc(nameOf(c, where, x))}</s>` : esc(nameOf(c, where, x))));
   const threadsAt = people.map((p) => {
     const states = p.threads.map((t) => ({ t, st: threadState(s, p.person, t) }));
     const hostile = states.some((x) => x.t.kind === "hostile");
@@ -913,7 +930,7 @@ function sheetTab(ch, c) {
     <form class="cc-form" data-form="pickup"><label class="cc-field">Pick something up <input name="what" maxlength="60" autocomplete="off"></label>
       <label class="cc-field">It goes in <select name="where"><option value="bag">the bag</option><option value="utility">utility</option><option value="equipment">equipment</option></select></label>
       <button type="submit" class="button">Add it</button></form>
-    <p class="cc-lead">Tap a thing to cross it out when it breaks or gets used up, and it comes off your set actions until it’s mended. Your attuned things are magic, and they can’t be broken.</p>
+    <p class="cc-lead">Tap a thing to cross it out when it breaks or gets used up, and it comes off your set actions until it’s mended. ${piecesOf(c).length ? "Your armour ticks a box for every blow it takes for you, and breaks when the last one goes. " : ""}Your attuned things are magic, and they can’t be broken. ${link("s-armour-quality", "How armour’s boxes work")}</p>
     ${c.attuned.length ? `<h3 class="cc-h3">Attuned</h3>${attuned}` : ""}`, marked("kit", "att"))}
   ${fold("threads", "Threads", few(threadsAt, 5) || "None yet", `<p class="cc-lead">A bond thread’s something good between you. Borrow one of their permissions through it for 1 Aura, or lean on them in the story and strain it for 1 Resolve. You can’t borrow through a strained one, and straining it again before it’s mended snaps it.</p>
     <p class="cc-lead">A hostile thread’s something that’s gone bad, and it bites like a Catch. Doing right by them strains it, and doing right by them again snaps it. ${pt ? `A thread with someone in the crew is on both your sheets, and in ${esc(pt.name)} it’s on both your phones too, so straining it, mending it or snapping it on one does it on the other.` : "A thread with someone in the crew is on both your sheets, so tell them when it changes."} ${link("s-bonds", "How threads work")}</p>
@@ -996,7 +1013,7 @@ const RULE_GROUPS = [
   ["The round", ["s-round", "s-telegraphs", "s-answering"]],
   ["Rolling", ["s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions"]],
   ["Your numbers", ["s-aura", "s-resolve", "s-confidence"]],
-  ["When it lands", ["s-defending", "s-defend", "s-intercept", "s-armour", "s-consequences", "s-fear-gets-through"]],
+  ["When it lands", ["s-defending", "s-defend", "s-intercept", "s-armour", "s-armour-quality", "s-consequences", "s-fear-gets-through"]],
   ["Wounds", ["s-blaze", "s-healing", "s-vulnerable"]],
   ["Everything else", ["s-conditions", "s-bonds", "s-trouble", "s-aspiration", "s-good-aspiration"]],
   ["Downtime", ["your-slots", "s-downtime-rolls"]],
@@ -1515,24 +1532,27 @@ function defenceBuild(c, s) {
   <div class="dlg-foot">${p.short ? `<p class="cc-warn" role="alert">${esc(p.short)}</p>` : ""}<button type="button" class="button primary" data-act="d-go"${off(!r.incoming.length || p.short)}>Roll</button><button type="button" class="button" data-act="d-real"${off(!r.incoming.length || p.short)}>Roll real dice</button></div>`;
 }
 
-// What one that gets through costs you. Tap it and it's counted. A blow can
-// break something you wear or wield instead, and a vulnerability on you makes
-// a Hurt one more.
+// What one that gets through costs you. Tap it and it's counted. Your armour
+// can take a blow instead, a box at a time, with its boxes beside it, and
+// anything else you wear or wield can break instead. A vulnerability on you
+// makes a hit two Hurts, so a Hurt or a box, one more for each.
 function payView(h, r, s, c) {
   const vulns = vulnsOn(s);
+  const b = (what, label, no = false, extra = "") => `<button type="button" class="button sm" data-act="d-pay" data-j="${h.j}" data-what="${what}"${extra}${off(no)}>${label}</button>`;
+  const box = (a, what) => b(what, `<span>Put it on ${esc(yours(a))}</span>${kitBoxes(tickedOf(s, a), a.boxes, { label: boxesSaid(s, a) })}`, false, ` data-k="${esc(keyOf(a))}"`);
   if (r.paid[h.j]) {
-    const more = /Hurt/.test(r.paid[h.j]) && (r.extra[h.j] ?? 0) < vulns.length && !s.blaze;
-    return `<span class="res-paid">${esc(r.paid[h.j])}</span>${more ? `<div class="cc-pay"><button type="button" class="button sm" data-act="d-pay" data-j="${h.j}" data-what="vuln">One more Hurt: you’re ${esc(vulns[r.extra[h.j] ?? 0])}</button></div>` : ""}`;
+    const more = r.harm?.[h.j] && (r.extra[h.j] ?? 0) < vulns.length && !s.blaze;
+    return `<span class="res-paid">${esc(r.paid[h.j])}</span>${more ? `<div class="cc-pay cc-more"><p class="cc-small">It’s one more, since you’re ${esc(vulns[r.extra[h.j] ?? 0])}.</p>${b("vuln", "Another Hurt")}${r.against === "blows" ? standing(c, s).map((a) => box(a, "vbox")).join("") : ""}</div>` : ""}`;
   }
   const cond = condOf(h.intent);
-  const b = (what, label, no = false, extra = "") => `<button type="button" class="button sm" data-act="d-pay" data-j="${h.j}" data-what="${what}"${extra}${off(no)}>${label}</button>`;
   // The Guardian's Resolve: one hit that gets through does nothing.
   const guard = c.archetypeRules.find((a) => /\bgets through to you does nothing\b/i.test(a.resolve ?? ""));
-  const gear = [...c.carry.equipment.items, ...s.picked.filter((x) => x.where === "equipment").map((x) => x.name)].filter((x) => !s.crossed[`equipment|${x}`]);
+  const pieces = piecesOf(c);
+  const gear = [...c.carry.equipment.items, ...s.picked.filter((x) => x.where === "equipment").map((x) => x.name)].filter((x) => !s.crossed[`equipment|${x}`] && !pieces.some((a) => a.name === x));
   // Fear that gets through drops your Confidence a size, or 1 Resolve holds
   // your ground. On d2 it can't drop, so it's a Hurt instead.
   const list = r.against === "blows"
-    ? [b("hurt", "Take a Hurt"), ...gear.map((x) => b("break", `Break ${esc(x)}`, false, ` data-k="${esc(`equipment|${x}`)}"`)), b("asp", "Aspiration down a size", s.asp <= 2), ...(guard ? [b("nothing", `It does nothing: 1 Resolve, ${esc(guard.name)}`, s.resolve < 1)] : [])]
+    ? [b("hurt", "Take a Hurt"), ...standing(c, s).map((a) => box(a, "box")), ...gear.map((x) => b("break", `Break ${esc(x)}`, false, ` data-k="${esc(`equipment|${x}`)}"`)), b("asp", "Aspiration down a size", s.asp <= 2), ...(guard ? [b("nothing", `It does nothing: 1 Resolve, ${esc(guard.name)}`, s.resolve < 1)] : [])]
     : [b("shake", s.conf <= 2 ? "A Hurt instead, since you’re on d2" : `Confidence down a size, to d${sizeDown(s.conf)}`), b("hold", "Hold your ground: 1 Resolve", s.resolve < 1)];
   return `<div class="cc-pay">${cond ? b("cond", `<span><em>${esc(cond.name)}</em> d${h.size}</span>`) : ""}${list.join("")}</div>`;
 }
@@ -1562,7 +1582,7 @@ function defenceResult(c, s, ch) {
     return `<li class="res is-${r.spinning ? "spin" : h.by == null ? "through" : "beat"}">${kitDie(h.size, { own: "them", face: h.v, spin: r.spinning, state: !r.spinning && h.by != null ? "low" : "", label: r.spinning ? `Their d${h.size}, rolling` : `Their d${h.size} came up ${h.v}` })}<span class="res-die">their d${h.size}</span>${h.intent ? `<span class="res-intent">${esc(h.intent)}</span>` : ""}${out}${swap}${done && h.by == null ? payView(h, r, s, c) : ""}</li>`;
   };
   const lead = blows
-    ? through ? `${through === 1 ? "One gets" : `${through} get`} through. The GM names what each one costs you, and you can offer another that fits, like your shield breaking instead. Tap what it costs and it’s counted. A Hurt takes your Confidence down a size, and your armour or kit taking it doesn’t.` : "Nothing gets through."
+    ? through ? `${through === 1 ? "One gets" : `${through} get`} through. The GM names what each one costs you, and you can offer another that fits, like your shield taking it instead. Tap what it costs and it’s counted. A Hurt takes your Confidence down a size, and your armour or kit taking it doesn’t.` : "Nothing gets through."
     : through ? `Each one that gets through drops your Confidence a size, or you hold your ground for 1 Resolve.${hits.some((h) => h.by == null && condOf(h.intent)) ? " One meant to do something, like frighten you, does that instead, unless you trade it for one of those." : ""}${s.conf <= 2 ? " You’re on d2, so a drop’s a Hurt instead." : ""}` : "Nothing gets through.";
   // How Confidence moved: up a size for each one stopped, then whatever paying
   // for the rest did to it.
@@ -1953,6 +1973,8 @@ function saveBuilt(build, key, discard, basis) {
     };
     for (const t of build.threads) move(s.threads, t.was, `${t.person.trim()}|${t.text.trim()}`);
     for (const [where, list] of [["equipment", build.equipment], ["utility", build.utility], ["keepsake", [build.keepsake]]]) for (const x of list) move(s.crossed, x.was, `${where}|${x.text.trim()}`);
+    // A piece of armour's ticked boxes follow it too.
+    if (s.boxes) for (const x of build.equipment) move(s.boxes, x.was, `equipment|${x.text.trim()}`);
     // The bag's one box of lines, so a line's only followed when none were added or taken out.
     const bagNow = bagLines(clean.bag);
     if (Array.isArray(build.bagWas) && build.bagWas.length === bagNow.length) build.bagWas.forEach((x, i) => move(s.crossed, `bag|${x}`, `bag|${bagNow[i]}`));
@@ -2318,11 +2340,22 @@ const ACT = {
     s.resolve -= 1;
     return `Spent 1 Resolve on your ${el.dataset.n}. Resolve’s ${s.resolve}.`;
   }),
-  cross: (el) => change("crossing something out", (s) => {
+  cross: (el) => change("crossing something out", (s, c) => {
     const key = el.dataset.k;
+    const a = pieceAt(c, key);
+    if (a) return setTicked(s, a, isBroken(s, a) ? 0 : a.boxes) ? `${cap(yours(a, { quality: true }))}: ${itS(a)} broken till ${itS(a)} mended.` : `${cap(yours(a, { quality: true }))}: mended, every box clear.`;
     if (s.crossed[key]) delete s.crossed[key];
     else s.crossed[key] = true;
     return s.crossed[key] ? "Crossed out until it’s mended or replaced." : "It’s back.";
+  }),
+  // A box on a piece of armour: tap one to tick it and every box before it,
+  // or a ticked one to clear it and every box after it.
+  box: (el) => change("a box on your armour", (s, c) => {
+    const a = pieceAt(c, el.dataset.k);
+    if (!a) return "";
+    const n = Number(el.dataset.n);
+    const to = setTicked(s, a, n <= tickedOf(s, a) ? n - 1 : n);
+    return to >= a.boxes ? `That’s the last box on ${yours(a, { quality: true })}, so ${itS(a)} broken till ${itS(a)} mended.` : `${cap(yours(a, { quality: true }))}: ${boxesSaid(s, a)}.`;
   }),
   drop: (el) => change("taking something off", (s) => {
     s.picked.splice(Number(el.dataset.i), 1);
@@ -2612,10 +2645,11 @@ const ACT = {
   "d-pay"(el) {
     const j = Number(el.dataset.j);
     const what = el.dataset.what;
-    const label = { cond: "a condition landing", break: "something breaking", hurt: "taking a Hurt", vuln: "another Hurt", nothing: "1 Resolve on a hit", asp: "a setback", shake: "Confidence dropping", hold: "holding your ground" }[what] ?? "what it cost";
+    const label = { cond: "a condition landing", break: "something breaking", box: "your armour taking it", vbox: "your armour taking one more", hurt: "taking a Hurt", vuln: "another Hurt", nothing: "1 Resolve on a hit", asp: "a setback", shake: "Confidence dropping", hold: "holding your ground" }[what] ?? "what it cost";
     change(label, (s, c) => {
       const r = roll;
-      if (!r || (r.paid[j] && what !== "vuln")) return;
+      if (!r || (r.paid[j] && what !== "vuln" && what !== "vbox")) return;
+      r.harm ??= {};
       const size = r.incoming[j];
       const from = s.conf;
       const wound = s.wound;
@@ -2640,11 +2674,25 @@ const ACT = {
         const thing = key.split("|").slice(1).join("|");
         r.paid[j] = `${cap(thing)} broken till it’s mended`;
         r.moves.push({ d: 0, text: `${esc(cap(thing))} took the blow, so it doesn’t move` });
+      } else if (what === "box" || what === "vbox") {
+        // A piece of armour takes it on a box, and its last box breaks it,
+        // so it's off your Defend till it's mended. A vulnerability's one
+        // more, on this piece or another.
+        const a = pieceAt(c, el.dataset.k);
+        if (!a || r.against !== "blows" || leftOf(s, a) < 1 || (what === "vbox" && (!r.harm[j] || (r.extra[j] ?? 0) >= vulnsOn(s).length))) return;
+        const n = tickBox(s, a);
+        const last = n >= a.boxes;
+        if (what === "vbox") {
+          r.extra[j] = (r.extra[j] ?? 0) + 1;
+          r.paid[j] = `${r.paid[j]}, and ${yours(a)} took one more${last ? `, so ${itS(a)} broken too` : `: ${n} of ${a.boxes} ticked`}`;
+        } else r.paid[j] = last ? `${cap(yours(a))} took it, and ${itS(a)} broken till ${itS(a)} mended` : `${cap(yours(a))} took it: ${n} of ${a.boxes} boxes ticked`;
+        r.harm[j] = true;
+        r.moves.push({ d: 0, text: `${esc(cap(yours(a)))} took the blow, so it doesn’t move` });
       } else if (what === "vuln") {
         // A vulnerability makes the same hit one more Hurt.
-        if (!/Hurt/.test(r.paid[j] ?? "")) return;
+        if (!r.harm[j] || (r.extra[j] ?? 0) >= vulnsOn(s).length) return;
         r.extra[j] = (r.extra[j] ?? 0) + 1;
-        r.paid[j] = `Took ${r.extra[j] + 1} Hurts`;
+        r.paid[j] = /^Took (a|\d+) Hurts?$/.test(r.paid[j] ?? "") ? `Took ${Number(r.paid[j].match(/\d+/)?.[0] ?? 1) + 1} Hurts` : `${r.paid[j]}, and a Hurt`;
         hurt(`The Hurt for being ${esc(vulnsOn(s)[r.extra[j] - 1] ?? "vulnerable")}`);
       } else if (what === "nothing" && s.resolve > 0) {
         s.resolve -= 1;
@@ -2660,6 +2708,7 @@ const ACT = {
           r.moves.push({ d: -1, text: `Their d${size} got through` });
         } else {
           r.paid[j] = "A Hurt, since you’re on d2";
+          r.harm[j] = true;
           hurt(`The Hurt from their d${size}`);
         }
       } else if (what === "hold" && s.resolve > 0) {
@@ -2668,6 +2717,7 @@ const ACT = {
         if (r.against !== "blows") r.moves.push({ d: 0, text: `You held your ground against their d${size}` });
       } else if (what === "hurt") {
         r.paid[j] = "Took a Hurt";
+        r.harm[j] = true;
         hurt("The Hurt");
       }
     }, { say: false });

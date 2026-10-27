@@ -2,6 +2,21 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 26 Oct ones in `2026-10-26-chat-decisions.md`).
 
+## 27 Oct: armour's quality and boxes
+
+You asked for three qualities, each taking 1, 2 or 3 blows before it breaks, on shields, armour and maybe helmets. They're **Common**, **Fine** and **Masterwork**, in [Armour](#s-armour) and [Quality](#s-armour-quality). These are the calls that filled the gaps:
+
+1. **It counts till it breaks.** A piece with a box ticked is still a line on your Defend, and it only comes off when the last box goes.
+2. **One blow, one box.** A blow that gets through ticks one box, and a hit that's two Hurts (a vulnerability) ticks two, on one piece or two, or one box and a Hurt.
+3. **Mending.** A downtime slot, and usually a purse of gold, mends one piece, every box on it, broken or not, the same as mending something broken. A Workshop does it without a slot.
+4. **Helmets** are armour like any other: a line on Defend, one of your 3 equipment, and a quality with its boxes. They're in the item list now.
+5. **Attuned things still can't break**, so attuned armour hasn't got boxes and can't take a blow for you.
+6. **Quality doesn't add a step.** A Masterwork piece is one line on Defend, the same as a Common one. Upgrading gear already said a finer thing is still one line.
+7. **What you start with.** Common, and one piece can be Fine, so the builder warns about a second Fine piece or a Masterwork one at the start (it never stops you). Bram's plate is the crew's one Fine piece, and his shield and Vesk's leathers are Common. Nobody else in the crew wears armour.
+8. **What it costs.** It follows the money list: Common armour's a purse of gold, Fine's several purses, and Masterwork's a small fortune. Before, "real armour" was several purses.
+9. **A sword, not a fine sword.** The item list's *Fine sword* and the written item example's *a fine sword* are just a sword now, since Fine is a quality and weapons haven't got one.
+10. **Other things you carry still break outright** when they take a blow for you, like a sword snapping. Only armour, shields and helmets have boxes.
+
 ## 27 Oct: a good Aspiration and a good Goal
 
 You asked for examples after a player wrote an Aspiration and a Goal too big to say yes to (*stop the spymaster and stop the return of the queen*, and *be the center of the world and create treaties that can't be broken*). They're in [A good Aspiration](#s-good-aspiration) and [A good Goal](#s-good-goal), and these are the calls in them:

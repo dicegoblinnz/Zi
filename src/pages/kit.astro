@@ -14,8 +14,9 @@ import "@fontsource/alegreya-sans/800.css";
 import "../styles/site.css";
 import "../styles/kit.css";
 import book from "../generated/book.json";
-import { die, diceFor, inline, pips, aura, resolve, scars, condition, tag, crest, telegraph, cost, DEFS, SIGILS, SHAPES, SIZES } from "../kit/kit.js";
+import { die, diceFor, inline, pips, aura, resolve, scars, boxes, condition, tag, crest, telegraph, cost, DEFS, SIGILS, SHAPES, SIZES } from "../kit/kit.js";
 import { diceLabel, stepsToDice } from "../companion/dice.js";
+import { withQuality } from "../companion/armour.js";
 
 const crew = Object.fromEntries(book.crew.map((c) => [c.id, c]));
 const archOf = (c) => c.titles.map((t) => t.archetype);
@@ -248,7 +249,7 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
       <!-- Defend -->
       <section id="defend" class="ksec">
         <h2>Defend</h2>
-        <p>Defend’s a set action like the rest, and plain armour and a shield are lines on it, a step each. Bram’s plate and shield, his first Title and the action make his Defend {bramDefend.steps} steps, a {bramDefend.die}. When he spends his action to Defend, every line counts twice: {doubled} steps, a {diceLabel(stepsToDice(doubled))}, and each die stops one telegraph.</p>
+        <p>Defend’s a set action like the rest, and plain armour, a shield and a helmet are lines on it, a step each. Bram’s plate and shield, his first Title and the action make his Defend {bramDefend.steps} steps, a {bramDefend.die}. When he spends his action to Defend, every line counts twice: {doubled} steps, a {diceLabel(stepsToDice(doubled))}, and each die stops one telegraph.</p>
         <div class="defends">
           <div class="dfn">
             <ul>
@@ -266,6 +267,11 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
           </div>
         </div>
         <p class="small">Vesk’s is her worn leathers and the action, {veskDefend.steps} steps, a <Fragment set:html={inline(Number(veskDefend.die.slice(1)))} />.</p>
+        <p>Every piece of armour has a box for every blow it can take for you, from its quality: Common 1, Fine 2 and Masterwork 3. A ticked box is ember, and the last one breaks it.</p>
+        <div class="chips">
+          {crew.bram.armour.map((a) => <span class="armourline"><span>{withQuality(a.name, a.quality)}</span><Fragment set:html={boxes(0, a.boxes, { label: `${a.boxes} ${a.boxes === 1 ? "box" : "boxes"}, none ticked` })} /></span>)}
+          <span class="armourline"><span>His plate, after a blow</span><Fragment set:html={boxes(1, crew.bram.armour[0]?.boxes ?? 2)} /></span>
+        </div>
       </section>
 
       <!-- Tags and conditions -->
@@ -610,6 +616,8 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
   .wd .zd-scars i { width: 7px; height: 22px; }
   .scarline { display: inline-flex; align-items: center; gap: 0.6rem; }
   .scarline .zd-die { --s: 44px; }
+  .armourline { display: inline-flex; align-items: center; gap: 0.6rem; }
+  .armourline .zd-plate { width: 20px; height: 20px; }
 
   .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.4rem 0 0.8rem; }
   .teles { display: grid; gap: 1rem; }

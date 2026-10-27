@@ -88,6 +88,15 @@
 .zd-scars i.on { background: var(--zd-harm); }
 .zd-scars i:not(.on) { border-color: var(--zd-slot-line); }
 
+/* Armour's boxes: a plate for every blow a piece can take, yours till it's
+   ticked, and ember with a cut through it once it has */
+.zd-boxes { display: inline-flex; align-items: center; gap: 4px; vertical-align: middle; }
+.zd-plate { display: block; flex: none; width: 17px; height: 17px; overflow: visible; }
+.zd-plate .a { fill: var(--zd-token); stroke: var(--zd-you-line); stroke-width: 9; stroke-linejoin: round; }
+.zd-plate .b { fill: none; stroke: none; }
+.zd-plate.on .a { fill: var(--zd-harm); stroke: var(--zd-harm-line); }
+.zd-plate.on .b { stroke: var(--zd-on-harm); stroke-width: 11; stroke-linecap: round; }
+
 /* Conditions and tags */
 .zd-cond, .zd-tag { display: inline-flex; align-items: center; gap: 5px; min-height: 32px; padding: 0 11px 0 7px; font-size: 0.95rem; line-height: 1.1; border-radius: 3px; }
 .zd-tag { padding: 0 11px; }

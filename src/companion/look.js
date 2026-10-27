@@ -3,7 +3,8 @@
 // in folds that read at a glance, and print. It's drawn the same way as the
 // player's own screen, from what their phone last sent to their account.
 import { diceLabel, stepsToDice } from "./dice.js";
-import { aura as kitAura, die as kitDie, mini as kitMini, pips as kitPips, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
+import { aura as kitAura, boxes as kitBoxes, die as kitDie, mini as kitMini, pips as kitPips, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
+import { boxesSaid, nameOf, pieceAt, tickedOf } from "./armour.js";
 import { threadLabel, threadState } from "./threads.js";
 
 const PRONOUN = { her: ["she", "her"], him: ["he", "his"], them: ["they", "their"] };
@@ -69,14 +70,20 @@ export function lookView(ch, c, x) {
   const traits = c.traits.map((t) => `<div class="cc-item"><p><b>${esc(t.name)}</b> <span class="chip sm">${esc(t.type)}</span>${s.used[t.name] ? ' <span class="chip sm is-used">Used this scene</span>' : ""}</p><p>${t.html}</p></div>`).join("");
 
   const crossed = (where, name) => Boolean(s.crossed[`${where}|${name}`]);
-  const thing = (where, name) => `<li${crossed(where, name) ? ' class="is-out"' : ""}>${crossed(where, name) ? `<s>${esc(name)}</s> <small>crossed out</small>` : esc(name)}</li>`;
+  // Armour says its quality, with its boxes as they are.
+  const thing = (where, name) => {
+    const a = where === "equipment" ? pieceAt(c, `${where}|${name}`) : null;
+    const shown = esc(nameOf(c, where, name));
+    const boxes = a ? ` ${kitBoxes(tickedOf(s, a), a.boxes, { label: boxesSaid(s, a) })}` : "";
+    return `<li${crossed(where, name) ? ' class="is-out"' : ""}>${crossed(where, name) ? `<s>${shown}</s> <small>${a ? "broken" : "crossed out"}</small>` : shown}${boxes}</li>`;
+  };
   const picked = (where) => s.picked.filter((p) => p.where === where).map((p) => p.name);
   const slot = (where, title) => {
     const list = [...(where === "bag" ? c.carry.bag.items ?? [] : c.carry[where].items), ...picked(where)];
     return list.length ? `<h3 class="cc-h3">${title}</h3><ul class="cc-look-list">${list.map((y) => thing(where, y)).join("")}</ul>` : "";
   };
   const carried = [...c.carry.equipment.items.map((y) => ["equipment", y]), ...c.carry.utility.items.map((y) => ["utility", y]), ...(c.carry.keepsake ? [["keepsake", c.carry.keepsake]] : []), ...(c.carry.bag.items ?? []).map((y) => ["bag", y]), ...s.picked.map((p) => [p.where, p.name])]
-    .map(([where, y]) => (crossed(where, y) ? `<s>${esc(y)}</s>` : esc(y)));
+    .map(([where, y]) => (crossed(where, y) ? `<s>${esc(nameOf(c, where, y))}</s>` : esc(nameOf(c, where, y))));
   const attuned = c.attuned.map((a) => `<div class="cc-item"><p><b>${esc(a.name)}</b>${a.stage ? ` <span class="chip sm">${esc(a.stage)}</span>` : ""}</p><ul class="cc-look-list">${a.permissions.map((p) => `<li><em>${esc(p.text)}</em></li>`).join("")}</ul>${a.catch ? `<p>Its Catch: <em>${esc(a.catch)}</em></p>` : ""}${a.burden ? `<p>Its Burden: <em>${esc(a.burden)}</em></p>` : ""}</div>`).join("");
   const kit = `${slot("equipment", "Equipment")}${slot("utility", "Utility")}${c.carry.keepsake ? `<h3 class="cc-h3">Keepsake</h3><ul class="cc-look-list">${thing("keepsake", c.carry.keepsake)}</ul>` : ""}${slot("bag", `The bag <span class="cc-small">(${esc(c.carry.bag.name)})</span>`)}${c.attuned.length ? `<h3 class="cc-h3">Attuned</h3>${attuned}` : ""}`;
 

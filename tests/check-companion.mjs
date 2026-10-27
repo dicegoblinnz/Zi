@@ -24,6 +24,13 @@
 //    Dorrie stops lending once both threads are strained, one snaps and one's
 //    mended, and her hostile thread with the fence bites, strains, goes whole
 //    again and snaps.
+// 3c. Bram's armour (27 Oct): his Fine plate's two boxes and his Common
+//    shield's one, on the Sheet tab and When it lands. A blow on his plate
+//    ticks a box and leaves it on his Defend, a box tapped back and forth on
+//    the Sheet tab, a hit that's two Hurts while he's Exposed put on his plate
+//    and his shield, both broken off his Defend, an undo, a reload, and
+//    downtime mending the plate, every box clear. Then the Sheet tab and the
+//    card at 390 by 844 in both themes, with 44px boxes and axe.
 // 4. Wounds: two Hurts take Vesk's Confidence to d2, the rest at the end of a
 //    scene (a win, then a tie rolled again for 1 Resolve), Bram's Unyielding
 //    first Hurt leaving his Confidence alone, Bram Defending against three
@@ -393,12 +400,16 @@ if (part("3")) {
   same(await swing(), ["d6", "d8"], "Confidence up for the blow she stopped");
   has(await page.textContent("#cc-dialog .cc-swing"), "Your 3 stopped their d6", "why it went up");
   await shot(page, "5-when-it-lands");
-  // The blow breaks her leathers instead, so they're off her Defend till
-  // they're mended, and her Confidence doesn't move.
-  await page.click('#cc-dialog button[data-act="d-pay"][data-what="break"][data-k="equipment|worn leathers"]');
+  // Her leathers are Common, so they take the blow on their one box and
+  // break, and they're off her Defend till they're mended. Her Confidence
+  // doesn't move. Armour takes a box, so it's never offered to break outright.
+  has(await page.textContent('#cc-dialog button[data-what="box"][data-k="equipment|worn leathers"]'), "Put it on your worn leathers", "her leathers offered to take the blow");
+  same(await page.$$eval('#cc-dialog button[data-what="box"][data-k="equipment|worn leathers"] .zd-plate', (els) => els.length), 1, "her Common leathers' one box beside them");
+  same(await page.$$eval('#cc-dialog button[data-what="break"][data-k="equipment|worn leathers"]', (els) => els.length), 0, "no breaking her leathers outright");
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="box"][data-k="equipment|worn leathers"]');
   has(await page.textContent("#cc-dialog .dlg-body"), "Defend d2", "her Defend once her leathers break");
-  has(await page.textContent("#cc-dialog .res-paid"), "Worn leathers broken till it’s mended", "the blow's cost counted on it");
-  has(await page.textContent("#cc-dialog .cc-swing"), "Worn leathers took the blow, so it doesn’t move", "armour taking a blow leaves Confidence alone");
+  has(await page.textContent("#cc-dialog .res-paid"), "Your worn leathers took it, and they’re broken till they’re mended", "the blow's cost counted on it");
+  has(await page.textContent("#cc-dialog .cc-swing"), "Your worn leathers took the blow, so it doesn’t move", "armour taking a blow leaves Confidence alone");
   same(await swing(), ["d6", "d8"], "Confidence once her leathers took the blow");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
   await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
@@ -638,6 +649,120 @@ if (part("3")) {
 // Dorrie meets fear with her d6 Confidence as it is (no Defend against fear), and a hit
 // while she's Exposed is two Hurts. Characters saved with the old Hurt track
 // and Armour open clean.
+// 3c. Bram's armour.
+if (part("3c")) {
+  const { context, page } = await phone();
+  await play(page, "bram", "Bram");
+  const state = () => page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.at(-1).state);
+  const tileOf = (name) => page.$eval(`.tile[data-a]:has(.tile-name:text-is("${name}"))`, (el) => `${parseInt(el.querySelector(".tile-steps").textContent, 10)} ${el.querySelector(".tile-die").textContent}`);
+  const closed = () => page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  const sheetTab = async () => {
+    await page.click('.cc-tabs a[data-t="sheet"]');
+    await openFold(page, "kit");
+  };
+  const boxes = (key) => page.$$eval(`.cc-armour .cc-box[data-k="${key}"]`, (els) => els.map((el) => el.getAttribute("aria-pressed")));
+  const axe = async (what) => {
+    const result = await new AxeBuilder({ page }).analyze();
+    for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on ${what}: ${v.id} (${v.nodes.length})`);
+  };
+  same(await tileOf("Defend"), "4 d8", "Bram's Defend with his plate and shield");
+
+  // The Sheet tab: each piece with its quality and a box for every blow.
+  await sheetTab();
+  has(await page.textContent('details[data-open="sh-kit"] > summary'), "Fine plate armour", "his plate's quality at a glance");
+  has(await page.textContent('.cc-armour:has([data-k="equipment|plate armour"]) .cc-thing'), "Fine", "his plate's quality on its row");
+  same(await boxes("equipment|plate armour"), ["false", "false"], "his Fine plate's two boxes");
+  same(await boxes("equipment|a shield"), ["false"], "his Common shield's one box");
+  await page.click('.cc-box[data-k="equipment|plate armour"][data-n="2"]');
+  same(await boxes("equipment|plate armour"), ["true", "true"], "the second box ticks the first with it");
+  has(await page.textContent("#cc-toast"), "That’s the last box on your Fine plate armour, so it’s broken till it’s mended.", "the toast when it breaks");
+  same((await state()).crossed["equipment|plate armour"], true, "his plate broken once both boxes are ticked");
+  await page.click('.cc-box[data-k="equipment|plate armour"][data-n="2"]');
+  same(await boxes("equipment|plate armour"), ["true", "false"], "tapping a ticked box clears it");
+  same([(await state()).crossed["equipment|plate armour"], (await state()).boxes["equipment|plate armour"]], [undefined, 1], "his plate whole again with one box ticked");
+  await page.click('.cc-box[data-k="equipment|plate armour"][data-n="1"]');
+  same(await boxes("equipment|plate armour"), ["false", "false"], "and the first, clear again");
+
+  // A blow gets through and his plate takes it: one of its two boxes, and
+  // it's still on his Defend, so that's still a d8.
+  await page.click('.cc-tabs a[data-t="play"]');
+  await page.click('.tile[data-act="defence"]');
+  await page.click('#cc-dialog button[data-act="d-add"][data-v="8"]');
+  await page.evaluate(() => window.ziCompanion.setDice([3, 6]));
+  await page.click('#cc-dialog button[data-act="d-go"]');
+  await page.waitForSelector("#cc-dialog .res .res-out");
+  same(await page.$$eval('#cc-dialog button[data-act="d-pay"][data-what="box"]', (els) => els.map((el) => [el.dataset.k, el.querySelectorAll(".zd-plate").length])), [["equipment|plate armour", 2], ["equipment|a shield", 1]], "his plate and shield offered, with their boxes");
+  await page.locator("#cc-dialog .cc-pay").first().scrollIntoViewIfNeeded();
+  await shot(page, "armour-pay");
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="box"][data-k="equipment|plate armour"]');
+  has(await page.textContent("#cc-dialog .res-paid"), "Your plate armour took it: 1 of 2 boxes ticked", "his plate taking the blow");
+  has(await page.textContent("#cc-dialog .cc-swing"), "Your plate armour took the blow, so it doesn’t move", "his Confidence left alone");
+  has(await page.textContent("#cc-dialog .dlg-body"), "Defend d8", "his plate still on his Defend with a box ticked");
+  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
+  await closed();
+  same(await tileOf("Defend"), "4 d8", "his Defend tile with one box ticked");
+
+  // Exposed: a hit that gets through is two Hurts, so two boxes, his plate's
+  // last and his shield's, and both break.
+  await page.click('.cc-stat[data-p="cond"]');
+  await page.selectOption('form[data-form="cond"] select[name="pick"]', "Exposed");
+  await page.click('form[data-form="cond"] button[type="submit"]');
+  await page.click('.tile[data-act="defence"]');
+  await page.click('#cc-dialog button[data-act="d-add"][data-v="8"]');
+  await page.evaluate(() => window.ziCompanion.setDice([2, 7]));
+  await page.click('#cc-dialog button[data-act="d-go"]');
+  await page.waitForSelector("#cc-dialog .res .res-out");
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="box"][data-k="equipment|plate armour"]');
+  has(await page.textContent("#cc-dialog .cc-more"), "It’s one more, since you’re Exposed.", "the vulnerability's one more");
+  same(await page.$$eval('#cc-dialog .cc-more button[data-act="d-pay"]', (els) => els.map((el) => el.dataset.what + (el.dataset.k ? `:${el.dataset.k}` : ""))), ["vuln", "vbox:equipment|a shield"], "another Hurt, or his shield, for the one more");
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="vbox"][data-k="equipment|a shield"]');
+  has(await page.textContent("#cc-dialog .res-paid"), "Your plate armour took it, and it’s broken till it’s mended, and your shield took one more, so it’s broken too", "both pieces taking the hit that's two Hurts");
+  has(await page.textContent("#cc-dialog .dlg-body"), "Defend d4", "his Defend with his plate and shield broken");
+  same((await state()).wound, 2, "his wound die never moved");
+  await shot(page, "armour-when-it-lands");
+  await page.click('#cc-dialog .dlg-foot button[data-act="undo"]');
+  same(await page.$$eval('#cc-dialog .cc-more button[data-act="d-pay"]', (els) => els.length), 2, "the one more waiting again after an undo");
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="vbox"][data-k="equipment|a shield"]');
+  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
+  await closed();
+  same(await tileOf("Defend"), "2 d4", "his Defend tile with his plate and shield broken");
+  await page.reload();
+  await page.waitForSelector(".tile[data-a]");
+  same(await tileOf("Defend"), "2 d4", "both still broken after a reload");
+
+  // Downtime: one slot mends his plate, both boxes clear, and it's back on
+  // his Defend. The shield waits for another slot.
+  await page.click('button[data-act="downtime"]');
+  const dt = (attrs) => page.click(`#cc-dialog button[data-act="dt"]${attrs}`);
+  await dt('[data-do="pick"][data-s="0"][data-v="mend"]');
+  same(await page.$$eval('#cc-dialog button[data-do="set"][data-s="0"][data-f="key"]', (els) => els.map((el) => el.dataset.v)), ["equipment|plate armour", "equipment|a shield"], "his plate and shield to mend");
+  await dt('[data-do="set"][data-s="0"][data-f="key"][data-v="equipment|plate armour"]');
+  await dt('[data-do="pick"][data-s="1"][data-v="pressure"]');
+  await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "Answer the captain's letter");
+  await dt('[data-do="finish"]');
+  await closed();
+  has(await page.textContent("#cc-toast"), "Your Fine plate armour is mended, every box clear", "the toast for his mended plate");
+  same(await tileOf("Defend"), "3 d6", "his Defend with his plate mended and his shield still broken");
+  await sheetTab();
+  same(await boxes("equipment|plate armour"), ["false", "false"], "his plate's boxes clear after downtime");
+  same(await boxes("equipment|a shield"), ["true"], "his shield still broken");
+
+  // In one hand, in both themes: every box 44px, nothing sideways, and axe.
+  await page.evaluate(() => document.getElementById("cc-toast")?.classList.remove("show"));
+  await page.evaluate(() => document.querySelector(".cc-armour")?.scrollIntoView({ block: "center" }));
+  for (const theme of ["dark", "light"]) {
+    await page.emulateMedia({ colorScheme: theme });
+    await page.evaluate((t) => document.documentElement.setAttribute("data-theme", t), theme);
+    const small = await page.$$eval(".cc-armour button", (els) => els.filter((el) => { const r = el.getBoundingClientRect(); return r.width < 44 || r.height < 44; }).length);
+    same(small, 0, `armour's buttons 44px or more, ${theme}`);
+    same(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, `no sideways scroll on the Sheet tab, ${theme}`);
+    await axe(`Bram's kit, ${theme}`);
+    await shot(page, `armour-sheet-${theme}`);
+  }
+  await context.close();
+  console.log("armour: Bram's plate and shield a box at a time, two Hurts, an undo and downtime");
+}
+
 if (part("4")) {
   const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
   const { context, page } = await phone();
@@ -939,6 +1064,14 @@ if (part("5")) {
   await b('[data-b="fillany"][data-k="e"][data-v="worn leathers"]');
   same(await page.getAttribute('[data-b="on"][data-l="e0"][data-a="Defend"]', "aria-pressed"), "true", "worn leathers going straight on her Defend");
   same(await page.getAttribute('.bd-rail .tile-dice[data-for="Defend"] .zd-die', "data-d"), "4", "Defend a d4 with her leathers on it");
+  // Armour picks its quality, each with the boxes it gives, and it's Common
+  // to start. Fine and back again.
+  const qualities = () => page.$$eval(".bd-quality .bd-qual", (els) => els.map((el) => [el.textContent.trim(), el.getAttribute("aria-pressed"), el.querySelectorAll(".zd-plate").length]));
+  same(await qualities(), [["Common", "true", 1], ["Fine", "false", 2], ["Masterwork", "false", 3]], "her leathers' quality, Common to start");
+  await b('[data-b="quality"][data-i="0"][data-v="2"]');
+  same((await qualities()).map((q) => q[1]), ["false", "true", "false"], "her leathers made Fine");
+  await b('[data-b="quality"][data-i="0"][data-v="1"]');
+  same((await qualities()).map((q) => q[1]), ["true", "false", "false"], "and Common again, like her sheet");
   await next("What you carry");
   same(await page.getAttribute('.bd-seg[data-v="u"]', "aria-current"), "true", "Next going on to her utility items");
   await b('[data-b="fillany"][data-k="u"][data-v="Purse of gold"]');
@@ -1028,8 +1161,15 @@ if (part("5")) {
   await b('[data-b="trait"][data-v="Prepared"]');
   has(await page.textContent("#bd-ut"), "4 utility items", "Prepared gives her a fourth utility item");
   await b('[data-b="fillany"][data-k="e"][data-v="shield"]');
+  // She's found a Masterwork shield, and a character being changed can have one.
+  await b('[data-b="quality"][data-i="1"][data-v="3"]');
   await page.click('.bd-foot button[data-b="save"]');
   await page.waitForSelector(".tile[data-a]");
+  await page.click('.cc-tabs a[data-t="sheet"]');
+  await openFold(page, "kit");
+  same(await page.$$eval('.cc-box[data-k="equipment|shield"]', (els) => els.length), 3, "her Masterwork shield's three boxes");
+  has(await page.textContent('details[data-open="sh-kit"] > summary'), "Masterwork shield", "her shield's quality at a glance");
+  await page.click('.cc-tabs a[data-t="play"]');
   has(await page.textContent(".cc-head"), "Stride 3", "Vesk's stride without Light on my Feet");
   has(await page.textContent('.tile[data-a]:has(.tile-name:text-is("Defend"))'), "3 steps", "her Defend going up with a shield");
   same(await page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.filter((c) => c.build).length), 1, "changing her doesn't make a second Vesk");
@@ -1182,6 +1322,23 @@ if (part("6")) {
     same(actionsOf(s), actionsOf(c), `${c.name}'s set actions, made into a build`);
     for (const k of ["aura", "resolve", "stride", "wound", "shrug", "confidence"]) same(s.numbers[k], c.numbers[k], `${c.name}'s ${k}, made into a build`);
     same(checksOf(fromCrew(c, B, { keep: true }), B, { changing: true }).map((x) => x.text), [], `${c.name}'s sheet, with nothing to warn about`);
+    same(s.armour, c.armour, `${c.name}'s armour and its quality, made into a build`);
+  }
+  same(B.qualities.map((q) => [q.name, q.boxes]), [["Common", 1], ["Fine", 2], ["Masterwork", 3]], "armour's three qualities, read off Quality");
+  same(book.crew.find((c) => c.id === "bram").armour.map((a) => [a.name, a.quality, a.boxes]), [["plate armour", "Fine", 2], ["a shield", "Common", 1]], "Bram's armour off his sheet");
+  // What you start with is Common, and one piece can be Fine. A character
+  // being changed can have whatever they've found.
+  {
+    const said = (b, opts) => checksOf(b, B, opts).map((x) => x.text).join(" ");
+    const b = fromCrew(book.crew.find((c) => c.id === "bram"), B);
+    same(/Fine|Masterwork/.test(said(b)), false, "Bram's Fine plate, the one piece that can be Fine");
+    b.equipment[1].q = 2;
+    has(said(b), "You’ve got 2 Fine pieces. What you start with is Common, and one piece can be Fine.", "two Fine pieces to start");
+    b.equipment[1].q = 3;
+    has(said(b), "Masterwork armour comes from play.", "a Masterwork piece to start");
+    same(/Fine|Masterwork/.test(said(b, { changing: true })), false, "Masterwork on a character being changed");
+    same(sheetOf({ id: "q", name: "Q", build: b }, B).armour.map((a) => [a.name, a.boxes]), [["plate armour", 2], ["a shield", 3]], "a Masterwork shield's three boxes");
+    same(normalBuild({ v: 2, equipment: [{ text: "a helmet", on: ["Defend"], q: 7 }] }).equipment[0].q, undefined, "a quality that isn't one, back to Common");
   }
   // A permission on three set actions gets a warning, a one-word permission
   // doesn't, and nor does the same word on two Titles, as long as it's never
@@ -1280,7 +1437,7 @@ if (part("6")) {
     ["confidence", "d4"], ["wound_die", "d4"], ["scar_1", ""], ["set_sneak_lines", "Title I, move unseen, Silent Step"], ["set_sneak_steps", "4"], ["set_sneak_die", "d8"],
     ["set_defend_lines", "worn leathers"], ["set_defend_steps", "2"], ["set_defend_die", "d4"],
     ["set_1_name", "Locks"], ["set_1_lines", "Title I, pick a mechanical lock, know how a lock’s built, a perfect set of picks"], ["set_1_steps", "5"], ["set_1_die", "d10"], ["set_2_name", ""], ["set_talk_steps", "1"], ["title_1", "The best cat burglar in the city"], ["title_1_archetype", "Shadow"],
-    ["trait_1", "Silent Step"], ["equipment_1", "worn leathers"], ["utility_2", "a smoke bomb"], ["utility_3", "a perfect set of picks"], ["keepsake", "the first coin she ever stole"], ["attune_1_thing", "A grappling line"],
+    ["trait_1", "Silent Step"], ["equipment_1", "Common worn leathers"], ["equipment_1_box_1", false], ["equipment_1_box_2", false], ["utility_2", "a smoke bomb"], ["utility_3", "a perfect set of picks"], ["keepsake", "the first coin she ever stole"], ["attune_1_thing", "A grappling line"],
     ["attune_1_stage", "awakened"], ["attune_1_permission_1", "climb or swing anywhere you can throw a hook"], ["attune_2_thing", ""], ["bond_1", "Dorrie"],
     ["bond_1_thread_1", "We have pulled a dozen jobs. I trust her with my life."], ["bond_1_thread_1_kind", "bond"], ["bond_1_thread_1_strained", true], ["bond_1_thread_1_snapped", false],
     ["bond_1_thread_2", "We came up on the same streets. She never asks why. (Dorrie’s words)"], ["bond_1_thread_2_kind", "bond"], ["bond_1_thread_2_strained", false],
@@ -1298,7 +1455,7 @@ if (part("6")) {
   await page.reload();
   await page.waitForSelector(".cc-tabs");
   f = await print();
-  want(f, [["wound_die", "d6"], ["scar_1", "a spear through the shoulder"], ["scar_2", ""], ["set_defend_lines", "worn leathers (broken)"], ["equipment_1", "worn leathers (broken)"]], "Vesk's sheet with her leathers broken and a Scar");
+  want(f, [["wound_die", "d6"], ["scar_1", "a spear through the shoulder"], ["scar_2", ""], ["set_defend_lines", "worn leathers (broken)"], ["equipment_1", "Common worn leathers (broken)"], ["equipment_1_box_1", true], ["equipment_1_box_2", false]], "Vesk's sheet with her leathers broken and a Scar");
   await inFold(page, 'button[data-act="cross"][data-k="equipment|worn leathers"]');
   await page.evaluate(() => navigator.serviceWorker.ready);
   await context.setOffline(true);

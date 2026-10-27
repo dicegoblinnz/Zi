@@ -15,7 +15,7 @@
 import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
 import { MAX_PERMS, STAGES, attunedRoom } from "./grow.js";
 import { threadNote } from "./threads.js";
-import { SIGILS, aura as kitAura, crest, die as kitDie, grow as growDie, resolve as kitResolve, sigil } from "../kit/kit.js";
+import { SIGILS, aura as kitAura, boxes as kitBoxes, crest, die as kitDie, grow as growDie, resolve as kitResolve, sigil } from "../kit/kit.js";
 
 const KEY = "zi-drafts";
 export const ACTIONS = ["Defend", "Fight", "Move", "Sneak", "Study", "Talk"];
@@ -24,8 +24,12 @@ const MAX_ATTUNED = 8;
 const MAX_THREADS = 40;
 const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth", "twenty-first", "twenty-second", "twenty-third", "twenty-fourth"];
 const ord = (i) => ORD[i] ?? `${i + 1}${(i + 1) % 100 >= 11 && (i + 1) % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][(i + 1) % 10] ?? "th"}`;
-// Plain armour and a shield are lines on Defend, so they go on it as they're written in.
-export const ARMOUR = /\b(plate|chain|mail|leathers|shield|armou?r|breastplate|hauberk|brigandine)\b/i;
+// Plain armour, a shield and a helmet are lines on Defend, so they go on it as
+// they're written in.
+export const ARMOUR = /\b(plate|chain|mail|leathers|shield|armou?r|breastplate|hauberk|brigandine|helm|helmet)\b/i;
+// A piece of armour's quality is its tier in the book's table (1 Common, 2
+// Fine, 3 Masterwork), kept on its equipment line as q.
+export const tierOf = (x) => ([1, 2, 3].includes(Number(x?.q)) ? Number(x.q) : 1);
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const both = (list) => (list.length > 1 ? `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}` : list[0] ?? "");
@@ -102,6 +106,7 @@ export function normalBuild(raw) {
   b.equipment = b.equipment.map((e, i) => {
     const x = fixLine(r.equipment?.[i]);
     if (r.equipment?.[i]?.armour && x.text.trim() && !x.on.includes("Defend")) x.on.push("Defend");
+    if (tierOf(r.equipment?.[i]) > 1) x.q = tierOf(r.equipment[i]);
     return x;
   });
   b.utility = Array.from({ length: Math.max(4, Math.min(8, Array.isArray(r.utility) ? r.utility.length : 0)) }, (_, i) => fixLine(r.utility?.[i]));
@@ -262,6 +267,13 @@ function makeSheet(ch, b, B) {
   });
   const kit = all.filter((l) => l.kind === "kit");
   for (const l of kit) add(l.ref, "kit", l.label);
+  // Every piece of equipment on Defend is armour, with its quality's boxes.
+  const qualities = B.qualities ?? [];
+  const armour = kit.filter((l) => l.ref[0] === "e" && lineAt(b, l.ref)?.on.includes("Defend")).map((l) => {
+    const tier = tierOf(lineAt(b, l.ref));
+    const q = qualities[tier - 1] ?? { name: ["Common", "Fine", "Masterwork"][tier - 1], boxes: tier };
+    return { name: l.label, tier, quality: q.name, boxes: q.boxes };
+  });
   const carry = {
     equipment: { items: kit.filter((l) => l.ref[0] === "e").map((l) => l.label), max: 3, note: null },
     utility: { items: kit.filter((l) => l.ref[0] === "u").map((l) => l.label), max: numbers.utility, note: null },
@@ -299,7 +311,7 @@ function makeSheet(ch, b, B) {
     pronoun: b.pronoun,
     playsLike: esc(plays.join(", and ") || both(names) || "your own"),
     titles: titles.map(({ name, archetype, archetypeId, key, permissions }) => ({ name, archetype, archetypeId, key, permissions })),
-    archetypeRules, traits, actions, lines, carry, attuned, numbers, threads,
+    archetypeRules, traits, actions, lines, carry, armour, attuned, numbers, threads,
     crewQs: B.connect.map((q, i) => ({ q, a: (b.connect[i] ?? "").trim() })).filter((x) => x.a),
     aspiration: { text: b.aspiration.trim(), die: 2 },
     trouble: b.trouble,
@@ -368,6 +380,14 @@ export function checksOf(b, B, { changing = false } = {}) {
     if (kept.some(([, j]) => j >= r.all)) out.push({ step: 4, kit: "a", text: `${name} has more on it than ${r.stage} holds. It goes up a stage once it’s got its material.` });
     else if (kept.length) out.push({ step: 4, kit: "a", text: `${name} has more on it than ${r.stage} holds without ${both(r.missing.map((x) => (x === "catch" ? "its Catch" : "its Burden")))}.` });
   });
+  // What you start with is Common, and one piece can be Fine.
+  if (!changing) {
+    const armour = b.equipment.filter((e) => e.text.trim() && e.on.includes("Defend"));
+    const name = (tier) => B.qualities?.[tier - 1]?.name ?? ["Common", "Fine", "Masterwork"][tier - 1];
+    const better = armour.filter((e) => tierOf(e) > 1);
+    if (armour.some((e) => tierOf(e) > 2)) out.push({ step: 4, kit: "e", text: `${name(3)} armour comes from play. What you start with is ${name(1)}, and one piece can be ${name(2)}.` });
+    else if (better.length > 1) out.push({ step: 4, kit: "e", text: `You’ve got ${better.length} ${name(2)} pieces. What you start with is ${name(1)}, and one piece can be ${name(2)}.` });
+  }
   if (b.utility.slice(n.utility).some((u) => u.text.trim())) out.push({ step: 4, kit: "u", text: `You can carry ${n.utility} utility items, so the last one won’t go on the sheet.` });
   if (bagOf(b).length > 10) out.push({ step: 4, kit: "u", text: `Your bag holds 10, so the last ${bagOf(b).length - 10} won’t go in.` });
   // Two bond threads with the crew to start. A hostile thread lets you write a
@@ -892,11 +912,14 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const offer = (kind, label, list) => `<p class="bd-label">${label}</p><div class="bd-items${list.some((v) => v.say) ? " is-wide" : ""}">${list.map((v) => card("bd-item", `data-b="fillany" data-k="${kind}" data-v="${esc(v.name)}"`, has.has(v.name.toLowerCase()), `<b>${esc(cap(v.name))}</b>${v.say ? `<span class="bd-for">${v.say}</span>` : ""}`)).join("")}</div>`;
     const plain = (list) => list.map((name) => ({ name }));
     // A slot's a numbered row to type in, or to fill from the cards below.
+    // A piece of armour (anything on Defend) picks its quality, with the
+    // boxes each one gives it.
+    const quality = (i, item) => `<div class="bd-quality" role="group" aria-labelledby="bd-q-${i}"><p class="bd-label" id="bd-q-${i}">How good is it? <small>a box for every blow it can take for you</small></p><div class="cc-chips">${(B.qualities ?? []).map((q) => chip(`<span>${esc(q.name)}</span>${kitBoxes(0, q.boxes, { label: `${q.boxes} ${q.boxes === 1 ? "box" : "boxes"}` })}`, `data-b="quality" data-i="${i}" data-v="${q.tier}"`, tierOf(item) === q.tier, "bd-qual")).join("")}</div></div>`;
     const slot = (kind, i, label) => {
       const ref = `${kind}${i}`;
       const item = lineAt(x, ref);
       return `<div class="bd-slot is-row">${field(ref, `<span class="sr-only">${label} </span>${i + 1}`, item.text, { max: 60, ph: "Type it, or pick a card below" })}
-        ${toggles(ref, item.text || `${label} ${i + 1}`)}</div>`;
+        ${toggles(ref, item.text || `${label} ${i + 1}`)}${kind === "e" && item.text.trim() && item.on.includes("Defend") ? quality(i, item) : ""}</div>`;
     };
     const things = [...new Set([...x.equipment, ...x.utility, x.keepsake].map((v) => v.text.trim()).filter(Boolean))];
     // Something you carry, or a signature thing: the book says one often
@@ -926,7 +949,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
         ${drop(i)}</fieldset>`;
     };
     const parts = {
-      e: `<section class="bd-carry" aria-labelledby="bd-eq"><h2 id="bd-eq">3 equipment</h2><p class="cc-lead">What you wear or wield. Plain armour and a shield go on your Defend as you take them.</p>
+      e: `<section class="bd-carry" aria-labelledby="bd-eq"><h2 id="bd-eq">3 equipment</h2><p class="cc-lead">What you wear or wield. Plain armour, a shield and a helmet go on your Defend as you take them. ${changing() ? "Each piece is Common, Fine or Masterwork." : "Each piece is Common, and one can be Fine."} ${link("s-armour-quality", "Armour’s quality")}</p>
         ${x.equipment.map((e, i) => slot("e", i, "Equipment")).join("")}
         ${offer("e", "Weapons", plain(group("Weapons")))}${offer("e", "Armour and wearables", plain(group("Armour & wearables")))}</section>`,
       u: `<section class="bd-carry" aria-labelledby="bd-ut"><h2 id="bd-ut">${n.utility} utility items</h2><p class="cc-lead">Tools and things you use up.</p>
@@ -1304,6 +1327,11 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       then = focusIn(`#b-a${i}-p${perms.length - 1}`);
     } else if (k === "stage") {
       if (x.attuned[i] && STAGES.includes(v)) x.attuned[i].stage = v;
+    } else if (k === "quality") {
+      const e = x.equipment[i];
+      if (!e || ![1, 2, 3].includes(Number(v))) return;
+      if (Number(v) > 1) e.q = Number(v);
+      else delete e.q;
     } else if (k === "addthread") {
       if (x.threads.length >= MAX_THREADS) return;
       x.threads.push(blankThread());

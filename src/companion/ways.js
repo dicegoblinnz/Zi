@@ -33,8 +33,12 @@ export function fromCrew(c, B, { keep = false } = {}) {
   });
   const eq = c.carry.equipment.items.slice(0, 3);
   const ut = c.carry.utility.items.slice(0, keep ? 8 : 4);
-  // Their armour's already a line on their Defend, so it comes across with the rest.
-  eq.forEach((x, i) => Object.assign(b.equipment[i], { text: x }));
+  // Their armour's already a line on their Defend, so it comes across with the
+  // rest, and keeps its quality.
+  eq.forEach((x, i) => {
+    const tier = c.armour?.find((a) => a.name === x)?.tier ?? 1;
+    Object.assign(b.equipment[i], { text: x }, tier > 1 ? { q: tier } : {});
+  });
   ut.forEach((x, i) => (b.utility[i] = { text: x, on: [] }));
   b.keepsake.text = c.carry.keepsake ?? "";
   b.bag = (c.carry.bag.items ?? []).join("\n");
@@ -152,7 +156,7 @@ export function randomBuild(B, crew, rand = Math.random) {
   const group = (g) => B.items.find((x) => x.group === g)?.items ?? [];
   b.equipment[0] = { text: pick(group("Weapons"), rand), on: [onto("", "Fight")].filter(Boolean) };
   if (rand() < 0.6) {
-    // Plain armour and a shield are lines on Defend.
+    // Plain armour, a shield and a helmet are lines on Defend, and Common.
     const worn = pick(group("Armour & wearables"), rand);
     b.equipment[1] = { text: worn, on: ARMOUR.test(worn) ? [onto("", "Defend")].filter(Boolean) : [] };
   }

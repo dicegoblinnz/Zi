@@ -203,10 +203,10 @@ The brute's roar takes Bram down to d2, so he's shaken. He spends 1 Resolve to s
 ::::
 
 ::::card[Armour]{#l-armour teaches=s-armour}
-Armour hasn't got a die of its own. Each piece of plain armour you wear is a line on your Defend, and so is a shield. When a blow gets through, your armour can take it instead of you: *not the Hurt, my shield takes it.* The piece is crossed out till it's mended, and your Confidence doesn't move.
+Each piece of plain armour you wear is a line on your Defend, and so is a shield or a helmet. When a blow gets through, your armour can take it instead of you: *not the Hurt, my shield takes it.* Each piece is **Common**, **Fine** or **Masterwork**, with 1, 2 or 3 boxes, and every blow it takes ticks one. It counts on your Defend till the last one goes, and then it's broken till it's mended. Your Confidence doesn't move.
 
 :::example
-Bram's Defend is his first Title, his plate and his shield, so with the action it's 4 steps, a d8. A spear gets through and he offers his plate instead of the Hurt, so his Defend's 3 steps, a d6, till it's mended.
+Bram's Fine plate and Common shield are on his Defend, a d8. A spear gets through and he puts it on his plate. That's one of its two boxes, and he's still on a d8.
 :::
 ::::
 
@@ -267,7 +267,7 @@ The brute's club is coming down at Isolde, and her Defend's a d2. Vesk's right b
 ::::
 
 ::::card[Consequences]{#l-cost teaches=s-consequences}
-When a blow gets through, the GM names what it costs you, picking one that fits. It might be a **Hurt**, which puts your wound die up a size and your Confidence down one. It might be a broken item, your [Aspiration](#s-aspiration) or the [Party Goal](#s-goal) stepping back down, or a [clock](#s-stakes). You can offer another that fits and costs about as much.
+When a blow gets through, the GM names what it costs you, picking one that fits. It might be a **Hurt**, which puts your wound die up a size and your Confidence down one. It might be a box on your [armour](#s-armour), something you carry breaking, your [Aspiration](#s-aspiration) or the [Party Goal](#s-goal) stepping back down, or a [clock](#s-stakes). You can offer another that fits and costs about as much.
 
 :::example
 A guard's blade gets through, and the GM names a Hurt for Vesk. Her Aspiration's on d4, so she offers that instead, and it steps back down to d2.

@@ -43,7 +43,7 @@ Three things happen without costing a slot: once-per-downtime traits refresh, an
 
 ### Recover {#recover}
 
--   **Mend something you carry that's broken**, usually for a purse of gold as well. Armour and shields are the usual ones, after they've taken a blow for you. Attuned things can't break.
+-   **Mend something you carry that's broken**, usually for a purse of gold as well. Armour, shields and helmets are the usual ones, after they've taken a blow for you, and a piece with boxes ticked that hasn't broken is mended the same way, every box on it at once. Attuned things can't break.
 
 Your wounds don't need a slot. They clear when downtime's over (see [Your Slots](#your-slots)).
 

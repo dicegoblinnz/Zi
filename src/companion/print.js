@@ -4,6 +4,7 @@
 // only loads when someone prints, and the service worker keeps it and the
 // blank sheet on the phone, so it works offline.
 import { threadState } from "./threads.js";
+import { nameOf, piecesOf, tickedOf } from "./armour.js";
 
 const SHEET = "/sheets/zidara-character-sheet.pdf";
 const FIXED = ["defend", "fight", "move", "sneak", "study", "talk"];
@@ -131,13 +132,20 @@ export async function fillSheet(ch, c, s, { goal = null } = {}) {
   });
 
   // What they carry, with anything picked up in play. Broken and used things
-  // say so, and a list too long for its lines shares the last one.
+  // say so, and a list too long for its lines shares the last one. Armour
+  // says its quality first, and each of its ticked boxes is ticked beside it.
   const kit = (where, list, note) => {
-    const all = [...list, ...s.picked.filter((p) => p.where === where).map((p) => p.name)].map((x) => (s.crossed[`${where}|${x}`] ? `${x} (${where === "equipment" ? "broken" : "used"})` : x));
+    const all = [...list, ...s.picked.filter((p) => p.where === where).map((p) => p.name)].map((x) => (s.crossed[`${where}|${x}`] ? `${nameOf(c, where, x)} (${where === "equipment" ? "broken" : "used"})` : nameOf(c, where, x)));
     return all.length || !note ? all : [note.charAt(0).toUpperCase() + note.slice(1)];
   };
   const lines = (prefix, list, rows) => list.slice(0, rows).forEach((x, i) => put(`${prefix}_${i + 1}`, i === rows - 1 ? list.slice(i).join(", ") : x));
   lines("equipment", kit("equipment", c.carry.equipment.items, c.carry.equipment.note), 3);
+  const worn = [...c.carry.equipment.items, ...s.picked.filter((p) => p.where === "equipment").map((p) => p.name)];
+  worn.slice(0, 3).forEach((x, i) => {
+    const a = piecesOf(c).find((p) => p.name === x);
+    if (!a || (i === 2 && worn.length > 3)) return;
+    for (let j = 1; j <= Math.min(3, tickedOf(s, a)); j++) tick(`equipment_${i + 1}_box_${j}`);
+  });
   lines("utility", kit("utility", c.carry.utility.items, c.carry.utility.note), 3);
   if (c.carry.keepsake) put("keepsake", s.crossed[`keepsake|${c.carry.keepsake}`] ? `${c.carry.keepsake} (used)` : c.carry.keepsake);
   lines("bag", kit("bag", c.carry.bag.items ?? []), 10);

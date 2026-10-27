@@ -284,7 +284,7 @@ Each of these is +1 Power whenever it fits the roll, and its people in a scene c
 | --- | --- |
 | **Safehouses** | Once a downtime, one of the crew lies low without spending a slot. |
 | **Rooted** | Once a session, anyone in the crew being chased through the crew's own streets gets away, with no roll. |
-| **A Workshop** | Once a downtime, mend a broken item without spending a slot. |
+| **A Workshop** | Once a downtime, mend a broken item, or a piece of armour with boxes ticked, without spending a slot. |
 | **A Ship** | The crew's own ship. A voyage on it needs no Supplies clock, and while nothing's paying for it, it stays tied up in harbour. |
 | **Deep-Water Docks** | It can trade with anyone across the sea. |
 | **A Fortress** | Its people are *Fortified* while they're holding it from inside. |

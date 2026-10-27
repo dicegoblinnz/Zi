@@ -316,7 +316,7 @@ Two Grows later, Bram's added *fight two at once* and *fight in tight spaces* to
 
 **Plain items are just what they are.** A sword's a sword. It counts as a line when it fits, so it's a step on your roll, and it lets you do what a sword does. A rope lets you climb down a well, and a lantern lets you see what's at the bottom.
 
-**Each piece of plain armour you wear is a line on your Defend**, and so is a shield, the way a sword's a line on Fight. Bram wears plate armour and carries a shield, so that's two lines on his Defend, and with his first Title and the action it's 4 steps, a d8. How armour works, and breaking it, is in [Armour](#s-armour).
+**Each piece of plain armour you wear is a line on your Defend**, and so is a shield or a helmet, the way a sword's a line on Fight. Bram wears plate armour and carries a shield, so that's two lines on his Defend, and with his first Title and the action it's 4 steps, a d8. Write each piece's quality beside it, Common, Fine or Masterwork, with a box for every blow it can take for you: 1, 2 or 3. What you start with is Common, and one piece can be Fine, like Bram's plate. How armour works, and breaking it, is in [Armour](#s-armour).
 
 Plain items don't have Catches. Plate's heavy and a pistol's loud, and the story knows it, but trouble like *Loud* and *Fragile* only goes on [attuned things](#s-attunement). Things you use up, like a smoke bomb or an antidote, are utility items you cross off once they're used.
 
@@ -331,7 +331,7 @@ Plain items don't have Catches. Plate's heavy and a pistol's loud, and the story
 -   **A purse of gold** is a utility item, about a month's wages.
 -   **Some things change a limit by one.** *Prepared* lets you carry one more utility item, and the Kit Boon and the Kit Burden make it one more item or one fewer (see [Boons and Burdens](#s-boons)).
 -   **Past the limit**, it goes in your bag or it stays behind.
--   **When something breaks**, it's something you carry, and armour and shields are the usual ones. Attuned things can't be broken.
+-   **When something breaks**, it's something you carry. Armour, shields and helmets take a blow a box at a time, and break when the last box goes (see [Armour](#s-armour)). Attuned things can't be broken.
 
 :::example[A hunter's pack]
 A few sessions in, Wren's attuned her hooded cloak as well as her longbow, so neither of them counts towards what she carries. On her belt she's got rations, a waterskin and a snare kit, which is all 3 of her utility. Her keepsake's a torn map, and her hunter's pack is her bag, with a torch bundle and a coil of rope inside: 2 of 10.
@@ -342,7 +342,7 @@ The trail runs into a cave. Her utility's full, so she puts the snare kit away i
 ### What a written item looks like {#what-a-written-item-looks-like}
 
 :::sheet
-**Equipment:** A fine sword · a spear (*Reach, Thrown*) · worn leathers (a line on Defend).
+**Equipment:** A sword · a spear (*Reach, Thrown*) · Common worn leathers (a line on Defend, 1 box).
 
 **Utility:** A lantern · 50 feet of rope · a smoke bomb.
 
@@ -353,7 +353,7 @@ The trail runs into a cave. Her utility's full, so she puts the snare kit away i
 **Attuned:** The ring that was his, Awakened. *Bear a family seal.* **Catch:** *Marked.* *Pass as a Vane.*
 :::
 
-That's all an item is: one line, and for an attuned thing, its permissions. There aren't any hidden properties, and there's no "+1 to hit". A plain sword counts 1 when it fits, a piece of plain armour is a line on your Defend, and rope lets you use rope.
+That's all an item is: one line, and for an attuned thing, its permissions. There aren't any hidden properties, and there's no "+1 to hit". A plain sword counts 1 when it fits, a piece of plain armour is a line on your Defend with its boxes, and rope lets you use rope.
 
 ### Weapons and their properties {#s-weapon-props}
 
@@ -403,12 +403,12 @@ How far a bow or a thrown weapon reaches is the story's call, and the properties
 
 ### The item list {#the-item-list}
 
-Weapons, armour and anything else you wear or wield are equipment. Tools and things you use up are utility items. A signature thing often makes the best keepsake, or the best thing to attune.
+Weapons, armour and anything else you wear or wield are equipment. Tools and things you use up are utility items. A signature thing often makes the best keepsake, or the best thing to attune. Armour, shields and helmets are Common, Fine or Masterwork (see [Quality](#s-armour-quality)).
 
 | Group | Examples |
 | --- | --- |
-| **Weapons** | Fine sword · war hammer · longbow · crossbow · throwing knives · dagger · staff · spear · whip · net · improvised weapon |
-| **Armour & wearables** | Plate armour · chain shirt · worn leathers · shield · fine coat · cloak with hood · travel boots · gloves · belt with pouches · signet pin |
+| **Weapons** | Sword · war hammer · longbow · crossbow · throwing knives · dagger · staff · spear · whip · net · improvised weapon |
+| **Armour & wearables** | Plate armour · chain shirt · worn leathers · helmet · shield · fine coat · cloak with hood · travel boots · gloves · belt with pouches · signet pin |
 | **Tools** | Perfect set of picks · grappling hook and line · 50 feet of rope · crowbar · lantern · spyglass · tinderbox · hammer and pitons · small mirror |
 | **Foci** | Ember stone · carved staff · book of workings · holy symbol · bone flute · silver bell · chalk and salt |
 | **Personal** | Journal · quill and ink · set of dice · deck of cards · musical instrument · well-loved book · bedroll · backpack · bag · sling bag |
@@ -709,26 +709,45 @@ Bram's down to d4 after a hard round when the brute's roar gets through his Conf
 
 ## Armour {#s-armour}
 
-Armour hasn't got a die of its own. Each piece of plain armour you wear, like worn leathers, a chain shirt or plate, is a line on your [Defend](#s-step-set-actions), a step each, and so is a shield, the way a sword's a line on Fight. Vesk's worn leathers make her Defend 2 steps, a d4. Bram's plate and shield are two lines, and with his first Title and the action, his Defend's 4 steps, a d8.
+Armour hasn't got a die of its own. Each piece of plain armour you wear, like worn leathers, a chain shirt, plate or a helmet, is a line on your [Defend](#s-step-set-actions), a step each, and so is a shield, the way a sword's a line on Fight. Vesk's worn leathers make her Defend 2 steps, a d4. Bram's plate and shield are two lines, and with his first Title and the action, his Defend's 4 steps, a d8.
 
 When the telegraphs land and you let them ride, you roll your Defend once, and its die stops one blow it beats or ties (see [When It Lands](#s-defending)). A Defend past 6 steps is more than one die, like any roll, and each of those dice stops one (see [Past 6 steps](#s-past-d12)). Spend your action to [Defend](#s-defend) and every line on it counts twice: Bram's three lines make 1 + 6 = 7 steps, a d12 and a d2. A condition that says so, like *Warded* or a spent *Poisoned*, changes your Defend too (see [Conditions to start with](#s-conditions-list)).
 
-**When a blow gets through, your armour can take it instead.** Breaking an item is one of the costs you can offer when the GM names a Hurt: *not the Hurt, my shield takes it* (see [Consequences](#s-consequences)). The piece is crossed out until it's mended, and it isn't a line on your Defend till then. Attuned things are magic, and they can't be broken.
+**When a blow gets through, your armour can take it instead.** It's one of the costs you can offer when the GM names a Hurt: *not the Hurt, my shield takes it* (see [Consequences](#s-consequences)). How many blows a piece can take for you is down to its quality.
+
+### Quality {#s-armour-quality}
+
+Every piece of armour, every shield and every helmet has a **quality**: **Common**, **Fine** or **Masterwork**. That's how many boxes it's got, 1, 2 or 3, and each blow it takes for you ticks one. When the last one's ticked, it breaks.
+
+| Quality | Boxes | What it is |
+| --- | --- | --- |
+| **Common** | 1 | What most people wear, and what a guard's issued. |
+| **Fine** | 2 | Made well, by someone who knew what they were doing. |
+| **Masterwork** | 3 | The best a smith can make, and you won't see much of it. |
+
+So the more you wear, the more blows you can take. Bram's plate is Fine and his shield's Common, so that's three blows between them before they're both gone, and Vesk's Common leathers can take one.
+
+-   **It counts till it breaks.** A piece with a box ticked is still a line on your Defend. When its last box goes, it's crossed out until it's mended, and it isn't a line on your Defend till then.
+-   **Quality doesn't add a step.** A Masterwork shield is one line on your Defend, the same as a Common one.
+-   **A hit that's two Hurts**, because it found a [vulnerability](#s-vulnerable), is two boxes. Put them on one piece or two, or tick one and take the other as a Hurt.
+-   **A helmet's armour like any other.** It's a line on your Defend and one of your equipment, and it's got a quality and boxes like the rest.
+-   **What you start with is Common**, and one piece can be Fine. Better comes from play: buy it (see [Upgrading gear](#upgrading-gear)), or take it off someone who won't be needing it.
+-   **Attuned things are magic**, and they can't be broken, so attuned armour hasn't got boxes, and it can't take a blow for you.
 
 ### Broken Armour {#recovering-armour}
 
-Broken armour's mended in downtime, the same as anything else you carry: it takes a downtime slot, and usually a purse of gold as well (see [Recover](#recover)).
+Broken armour's mended in downtime, the same as anything else you carry: it takes a downtime slot, and usually a purse of gold as well (see [Recover](#recover)). A piece with boxes ticked that hasn't broken yet is mended the same way, every box on it at once.
 
 :::example[Armour at the table]
-Bram's Defend is his first Title, his plate armour and his shield, with the action, 4 steps, a d8.
+Bram's Defend is his first Title, his plate armour and his shield, with the action, 4 steps, a d8. His plate's Fine, so it's got two boxes, and his shield's Common, with one.
 
 Round 1: a Warden's spear comes at him, a d8, and nobody answers it. At the end of the round he rolls his Defend and gets a 3, and the spear comes up 6, so it gets through. The GM names a Hurt. It's the first Hurt he's taken this scene, and he's *Unyielding*, so his wound die stays on d2, and his Confidence doesn't drop either.
 
-Round 3: another spear gets through, 7 against his 5, and the GM names a Hurt. Bram offers his plate instead. It's crossed out, so his Defend's his first Title and his shield now, with the action, 3 steps, a d6. His armour took the blow, so his Confidence doesn't move.
+Round 3: another spear gets through, 7 against his 5, and the GM names a Hurt. Bram offers his plate instead and ticks one of its two boxes. It's still a line on his Defend, so that's still a d8, and his armour took the blow, so his Confidence doesn't move.
 
-Round 4: a blow gets through, 6 against his d6's 2, and the GM names a Hurt. Bram's Aspiration has climbed to a d4, so he offers that instead and keeps his body whole, and it steps back down to d2. His wound die didn't move, so nor does his Confidence.
+Round 4: a blow gets through, 6 against his 2, and the GM names a Hurt. Bram offers his plate again, and that's its last box, so it breaks. His Defend's his first Title and his shield now, with the action, 3 steps, a d6. The shield's still got its box for the next one.
 
-Downtime: he spends a slot and a purse of gold at the smithy, and his plate's mended. His Defend's back to 4 steps, a d8.
+Downtime: he spends a slot and a purse of gold at the smithy, and his plate's mended, both boxes clear. His Defend's back to 4 steps, a d8.
 :::
 
 ## Boons and Burdens {#s-boons}
@@ -819,7 +838,7 @@ Locks is her own, for the thing she does all the time, and *know how a lock's bu
 
 ### Step 5: What she carries {#step-4-items-three}
 
--   **Equipment:** worn leathers. That's one piece of plain armour, so it's a line on her Defend, which makes it 2 steps, a d4. She's still got two equipment slots free.
+-   **Equipment:** worn leathers. That's one piece of plain armour, so it's a line on her Defend, which makes it 2 steps, a d4. They're Common, so they've got one box, and they'll take one blow for her before they break. She's still got two equipment slots free.
 -   **Utility:** a purse of gold, a smoke bomb and a perfect set of picks, which is all 3. The picks are a plain item, and they're in her hands nearly every time she works a lock, so they're a line on her Locks, which makes it 5 steps, a d10.
 -   **Keepsake:** the first coin she ever stole.
 -   **Bag:** empty, and ready for whatever she lifts.
