@@ -3,6 +3,7 @@
 // card has a bookmark, and Read more brings up the whole section in a sheet,
 // with Back to the card to put it away. Links on a card, or in Read more,
 // pop up their section's opening, and that one's Read more stays in the deck.
+import { addTags, enableBlocks, wireBlocks } from "./blocks.js";
 import { enablePopups, loadOpenings } from "./popups.js";
 import { closeSheet, openSheet } from "./sheet.js";
 import { isMarked, learnAt, setLearn, toggleMark } from "./store.js";
@@ -142,7 +143,9 @@ function run(deck) {
       const page = new DOMParser().parseFromString(html, "text/html");
       const nodes = sectionOf(page, decodeURIComponent(where.hash.slice(1)), where.pathname);
       if (!nodes.length) throw new Error("no section");
+      addTags(page.getElementById("tag-info"));
       readBody.replaceChildren(...nodes);
+      wireBlocks(readBody);
     } catch {
       if (mine !== asked) return;
       const p = document.createElement("p");
@@ -160,6 +163,7 @@ function run(deck) {
   enablePopups({
     onMore: (key) => loadEntry(key).then((entry) => readMore(key, entry?.t ?? "The rules", entry?.c ?? "")),
   });
+  enableBlocks();
 
   // The list of every card, with where you are and your bookmarks marked.
   deck.querySelector(".lr-list")?.addEventListener("click", () => {
@@ -201,9 +205,9 @@ async function loadEntry(key) {
 }
 
 // One section off a chapter page: its own heading's left off (the sheet's
-// title says it), the bookmarks are left behind, ids come off, and links
-// inside it are made whole so they pop up from here. A chapter's own address
-// is its opening, before the first section.
+// title says it), the bookmarks are left behind, ids come off (and whatever
+// pointed at them), and links inside it are made whole so they pop up from
+// here. A chapter's own address is its opening, before the first section.
 function sectionOf(page, id, path) {
   const article = page.querySelector("article[data-chapter]");
   if (!article) return [];
@@ -219,12 +223,18 @@ function sectionOf(page, id, path) {
     } else if (target) nodes = [target.closest(".box") ?? target];
     else nodes = [];
   } else {
-    nodes = [...article.children].filter((n) => !n.matches("header, .rs-strip, .rs-carry, .whats-new, section.rs"));
+    const track = article.querySelector(".rd-track") ?? article;
+    const opening = track.querySelector(':scope > section[data-s="opening"]');
+    nodes = opening ? [...opening.children] : [...track.children].filter((n) => !n.matches("header, .hub, .whats-new, section.rs"));
   }
   return nodes.map((n) => {
     const copy = document.importNode(n, true);
     copy.querySelectorAll(".rs-mark, .new-mark").forEach((x) => x.remove());
     for (const x of [copy, ...copy.querySelectorAll("[id]")]) x.removeAttribute?.("id");
+    for (const x of [copy, ...copy.querySelectorAll("[aria-controls], [aria-labelledby]")]) {
+      x.removeAttribute?.("aria-controls");
+      x.removeAttribute?.("aria-labelledby");
+    }
     for (const a of copy.querySelectorAll('a[href^="#"]')) a.setAttribute("href", `${path}${a.getAttribute("href")}`);
     return copy;
   });

@@ -16,7 +16,7 @@ These drop into any campaign and any kind of world, so rename them, move them an
 
 To use one, read the entry, pick the stake that matters to your crew, and put the scene clock on the table. Then let the secret come out through Study, through asking the right person, and through paying attention to what's out of place. Every secret has at least two ways in, so if the crew misses one, they'll find another.
 
--   **The place has a Challenge**, in brackets at the end of its first line, the same as a [site](#s-site). It's what you roll against to Study the place, and it's the die the place telegraphs with when the floor gives way or the alarm goes up.
+-   **The place has a Challenge**, the same as a [site](#s-site). It's what you roll against to Study the place, and it's the die the place telegraphs with when the floor gives way or the alarm goes up.
 -   **Who's here** gives everyone a Challenge and the tags that matter most, and they're all in the [Tag Reference](#appendix-tags). People telegraph with their own Challenge dice.
 -   **Telegraphs** are a starting point, so add your own. They come out of your [round budget](#s-budget) like any others. One aimed at a stake has no defence, and if nobody answers it, it does what it said, which usually means a new tag in the way. One aimed at the scene clock steps it down one if it lands, on top of its usual step at the end of the round.
 -   **Every place has something for everyone**: a fight, someone to talk round, somewhere to sneak, something to work out and something for magic. Check your crew's sheets and point those at the right people (see [A moment for each character](#s-spotlight)).

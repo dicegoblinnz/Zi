@@ -124,13 +124,21 @@
 //    swiped and keyed through with its progress bar, a reload back on the same
 //    card, a bookmark kept, Read more with the whole section and Back to the
 //    card, a link on a card popping up its opening, with that Read more
-//    staying in the deck, and the list of every card. A chapter: the strip
-//    following you down, its contents, a bookmark on a section, pop-ups from a
-//    link to another chapter and one on the same page, Back inside a pop-up,
-//    Esc and a drag putting a sheet away, and Carry on reading on the chapter
-//    and the rules page. Then the deck, its pop-ups and Read more offline,
-//    nothing moving under reduce-motion and the sheet sliding up with motion
-//    on, 44px tap targets, and axe in both themes with the sheets open.
+//    staying in the deck, and the list of every card. A chapter: it opens on
+//    its contents, a row opens a section on its own with the bar saying where
+//    you are, Next, a swipe each way, a short drag springing back and the
+//    arrow keys, Contents, Back and Forward, an address with a subsection in
+//    it, bookmarks from the bar and a subsection, what's read and where you're
+//    up to on the contents, pop-ups from a link to another chapter and one in
+//    the same chapter, Back inside a pop-up, Esc and a drag putting a sheet
+//    away, the first section's Before and the last's Next, and Carry on
+//    reading on the chapter and the rules page. Twenty Places: a card for
+//    every place, Roll a d20, a place's tabs (tapped and keyed), its Secret
+//    sealed, and a tag saying what it does. Then the deck, its pop-ups and
+//    Read more offline, nothing moving under reduce-motion and a section and
+//    a sheet sliding in with motion on, 44px tap targets, and axe in both
+//    themes on the deck, a section, its contents, a pop-up, a place's tabs,
+//    threats and the crew's sheets.
 import { createServer } from "node:http";
 import { readdirSync, readFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -2581,7 +2589,7 @@ if (part("9")) {
   await context.close();
 }
 
-// 10. The rules on a phone: the Learn deck, look-up chapters and pop-ups.
+// 10. The rules on a phone: the Learn deck, chapters a section at a time, places and pop-ups.
 if (part("10")) {
   // The deck, read the way the build reads it.
   const learnText = readFileSync("content/learn.md", "utf8");
@@ -2731,32 +2739,78 @@ if (part("10")) {
   await page.waitForSelector(".lr-card");
   same(await text(page, ".lr-next"), "Finish", "the last card's Next says Finish");
 
-  // A chapter: the strip follows you down and opens the contents.
+  // A chapter on a phone opens on its contents: a row for every section, and
+  // tapping one opens it on its own, with the bar along the top.
+  const chapterOf = (slug) => book.chapters.find((c) => c.slug === slug);
+  const conflict = chapterOf("conflict");
+  const rowsOf = conflict.hub.rows;
+  const at = (id) => rowsOf.findIndex((r) => r.id === id);
+  const view = (page) => page.evaluate(() => ({
+    open: document.documentElement.classList.contains("rd-open"),
+    hub: !!document.querySelector(".hub")?.checkVisibility(),
+    on: [...document.querySelectorAll(".rd-track > section")].filter((s) => s.checkVisibility()).map((s) => s.dataset.s),
+    title: document.querySelector(".rd-title")?.textContent ?? "",
+    count: document.querySelector(".rd-count")?.textContent ?? "",
+    hash: location.hash,
+  }));
+  const opened = (page, id) => page.waitForFunction((id) => document.documentElement.classList.contains("rd-open") && document.querySelector(".rd-track > section.is-on")?.dataset.s === id, id, { timeout: 5000 }).catch(() => note(`the section ${id} never opened`));
+  const contents = (page) => page.waitForFunction(() => !document.documentElement.classList.contains("rd-open") && document.querySelector(".hub")?.checkVisibility(), null, { timeout: 5000 }).catch(() => note("the contents never came back"));
+  // A finger across the first paragraph that's on the screen.
+  const swipe = async (dx) => {
+    const y = await page.evaluate(() => {
+      const p = [...document.querySelectorAll(".rd-track > section.is-on p")].find((x) => { const r = x.getBoundingClientRect(); return r.top > 90 && r.bottom < innerHeight - 20; });
+      const r = p?.getBoundingClientRect();
+      return r ? Math.round(r.top + r.height / 2) : 500;
+    });
+    const x0 = dx < 0 ? 340 : 50;
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchStart", touchPoints: [{ x: x0, y }] });
+    for (let i = 1; i <= 8; i += 1) await cdp.send("Input.dispatchTouchEvent", { type: "touchMove", touchPoints: [{ x: x0 + (dx * i) / 8, y }] });
+    await cdp.send("Input.dispatchTouchEvent", { type: "touchEnd", touchPoints: [] });
+  };
   await page.goto(`${BASE}/rules/conflict/`);
-  await page.waitForSelector(".rs-strip");
-  same([await text(page, ".rs-ch"), /^\d+ sections$/.test(await text(page, ".rs-sec"))], ["Contents", true], "the strip at the top of a chapter");
-  await page.evaluate(() => document.getElementById("s-defend").scrollIntoView());
-  await page.waitForFunction(() => document.querySelector(".rs-sec").textContent === "Defend", null, { timeout: 5000 }).catch(() => {});
-  same([await text(page, ".rs-ch"), await text(page, ".rs-sec"), await page.evaluate(() => Math.round(document.querySelector(".rs-strip").getBoundingClientRect().top))], ["Conflict", "Defend", 0], "the strip followed you down to Defend");
-  const lineScale = await page.evaluate(() => new DOMMatrix(getComputedStyle(document.querySelector(".rs-line i")).transform).a);
-  if (!(lineScale > 0.05 && lineScale < 0.6)) note(`the strip's line says ${lineScale} of the way through Conflict at Defend`);
-  await shot(page, "chapter-strip-dark");
-  await page.click(".rs-where");
-  await page.waitForSelector("#rs-toc[open]");
-  same(await page.getAttribute("#rs-toc a[aria-current]", "data-s"), "s-defend", "the contents mark where you are");
+  await page.waitForSelector(".hub-row");
+  const first = await view(page);
+  same([first.open, first.hub, first.on, await page.locator(".hub-row").count()], [false, true, [], rowsOf.length + (conflict.hub.opening ? 1 : 0)], "Conflict opens on its contents, a row for every section");
+  has(await text(page, ".hub-meta"), `${rowsOf.length} sections`, "the contents say how many sections");
   await shot(page, "chapter-contents-dark");
-  await page.click('#rs-toc a[data-s="s-telegraphs"]');
-  await shut(page, "#rs-toc");
-  await page.waitForFunction(() => document.querySelector(".rs-sec").textContent === "Telegraphs", null, { timeout: 5000 }).catch(() => {});
-  same([await text(page, ".rs-sec"), new URL(page.url()).hash], ["Telegraphs", "#s-telegraphs"], "a section picked from the contents");
-  // A bookmark on a section, kept.
-  await page.click('section[data-s="s-telegraphs"] > .rs-head .rs-mark');
-  same(await page.getAttribute('section[data-s="s-telegraphs"] > .rs-head .rs-mark', "aria-pressed"), "true", "a section bookmarked");
+  const lands = at("s-defending");
+  await page.click('.hub-row[data-s="s-defending"] a');
+  await opened(page, "s-defending");
+  same(await view(page), { open: true, hub: false, on: ["s-defending"], title: "When It Lands", count: `${lands + 1} of ${rowsOf.length}`, hash: "#s-defending" }, "a row opens its section on its own, with where you are in the bar");
+  same(await page.evaluate(() => {
+    const pages = [...document.querySelectorAll(".rd-track > section")].filter((s) => s.dataset.skip !== "true");
+    return [document.activeElement?.id, [...document.querySelectorAll(".rd-segs i")].findIndex((i) => i.classList.contains("cur")) === pages.findIndex((s) => s.classList.contains("is-on")), document.querySelector(".rd-top").getBoundingClientRect().top];
+  }), ["s-defending", true, 0], "the section's heading has focus, and the bar's at the top with its place marked");
+  await shot(page, "chapter-section-dark");
+  // Next, a swipe each way, and the arrow keys.
+  const next = rowsOf[lands + 1];
+  same(await text(page, ".rd-next b"), next.title, "Next says what's next");
+  await page.click(".rd-next");
+  await opened(page, next.id);
+  same([(await view(page)).title, (await view(page)).hash], [next.title, `#${next.id}`], "Next goes to the next section");
+  await swipe(-240);
+  await opened(page, rowsOf[lands + 2].id);
+  same((await view(page)).title, rowsOf[lands + 2].title, "a swipe to the left goes on a section");
+  await swipe(240);
+  await opened(page, next.id);
+  same((await view(page)).title, next.title, "a swipe to the right goes back one");
+  await page.keyboard.press("ArrowLeft");
+  await opened(page, "s-defending");
+  await swipe(-30);
+  await page.waitForTimeout(300);
+  same((await view(page)).title, "When It Lands", "the left arrow goes back one, and a short drag springs back");
+  same(await still(page), 0, "nothing moving between sections under reduce-motion");
+  same((await reading(page))?.done?.conflict?.includes("s-defending"), true, "a section read past is kept as read");
+  // Bookmarks: the section's from the bar, and a subsection's by its heading.
+  await page.click(".rd-mark");
+  same(await page.getAttribute(".rd-mark", "aria-pressed"), "true", "a section bookmarked from the bar");
+  await page.click('.rs-mark[data-mark="s-defend"]');
+  same(await page.getAttribute('.rs-mark[data-mark="s-defend"]', "aria-pressed"), "true", "a subsection bookmarked");
   // A pop-up from a link to another chapter, then Back inside one, then Esc.
-  const cross = await page.evaluate((keys) => [...document.querySelectorAll("article section.rs a[href^='/rules/']")].map((a) => a.getAttribute("href")).find((h) => !h.startsWith("/rules/conflict/") && keys.includes(h)), Object.keys(openings));
-  if (!cross) note("no link to another chapter with an opening in Conflict");
+  const cross = await page.evaluate((keys) => [...document.querySelectorAll(".rd-track > section.is-on a[href^='/rules/']")].map((a) => a.getAttribute("href")).find((h) => !h.startsWith("/rules/conflict/") && keys.includes(h)), Object.keys(openings));
+  if (!cross) note("no link to another chapter with an opening in When It Lands");
   else {
-    await page.click(`article section.rs a[href="${cross}"]`);
+    await page.click(`.rd-track > section.is-on a[href="${cross}"]`);
     await page.waitForSelector(".zp[open]");
     same([await text(page, "#zp-t"), await page.getAttribute(".zp-more", "href"), new URL(page.url()).pathname], [openings[cross].t, cross, "/rules/conflict/"], "a link to another chapter pops up, and you stay where you were");
     await shot(page, "chapter-popup-dark");
@@ -2771,41 +2825,118 @@ if (part("10")) {
     await page.keyboard.press("Escape");
     await shut(page, ".zp");
   }
-  // One on the same page: Read more goes straight to it.
-  const here = await page.evaluate((keys) => [...document.querySelectorAll("article section.rs a[href^='#']")].map((a) => a.getAttribute("href")).find((h) => keys.includes(`/rules/conflict/${h}`)), Object.keys(openings));
-  if (!here) note("no link on the same page with an opening in Conflict");
-  else {
-    await page.click(`article section.rs a[href="${here}"]`);
-    await page.waitForSelector(".zp[open]");
-    await page.click(".zp-more");
-    await shut(page, ".zp");
-    await page.waitForFunction((h) => location.hash === h, here, { timeout: 5000 }).catch(() => {});
-    const top = await page.evaluate((id) => Math.round(document.getElementById(id).getBoundingClientRect().top), here.slice(1));
-    same([new URL(page.url()).hash, top > 40 && top < 160], [here, true], "Read more on the same page goes to the section, clear of the strip");
-  }
-  // Carry on reading: from the rules page, and on the chapter.
-  await page.evaluate(() => document.getElementById("s-intercept").scrollIntoView());
-  await page.waitForFunction(() => document.querySelector(".rs-sec").textContent === "Intercept", null, { timeout: 5000 }).catch(() => {});
+  // One in the same chapter: Read more opens its section, clear of the bar,
+  // and Back comes back.
+  await page.click('.rd-track > section.is-on a[href="#s-consequences"]');
+  await page.waitForSelector(".zp[open]");
+  await page.click(".zp-more");
+  await shut(page, ".zp");
+  await opened(page, "s-consequences");
+  const top = await page.evaluate(() => Math.round(document.getElementById("s-consequences").getBoundingClientRect().top));
+  same([new URL(page.url()).hash, top > 60 && top < 160], ["#s-consequences", true], "Read more in the same chapter opens that section, clear of the bar");
+  await page.goBack();
+  await opened(page, "s-defending");
+  // Contents goes back to the contents, which show what's read, what's
+  // bookmarked and where you're up to, and Back and Forward go between them.
+  await page.click(".rd-back");
+  await contents(page);
+  same([(await view(page)).hash, await page.evaluate(() => document.activeElement?.closest(".hub-row")?.dataset.s)], ["", "s-defending"], "Contents goes back to the contents, on the row you were reading");
+  const marked = await page.evaluate(() => ["is-done", "is-marked", "is-here"].map((c) => [...document.querySelectorAll(`.hub-row.${c}`)].map((r) => r.dataset.s)));
+  same([["s-defending", "s-consequences"].every((id) => marked[0].includes(id)), marked[1], marked[2]], [true, ["s-defending"], ["s-defending"]], "the contents show what's read, what's bookmarked and where you're up to");
+  await shot(page, "chapter-contents-read-dark");
+  await page.goForward();
+  await opened(page, "s-defending");
+  await page.goBack();
+  await contents(page);
+  same((await view(page)).hash, "", "Forward and Back between a section and the contents");
+  // An address with a subsection in it opens its section there. Carry on
+  // reading: from the rules page, and on the chapter's contents.
+  await page.goto(`${BASE}/rules/conflict/#s-intercept`);
+  await opened(page, "s-defending");
+  const icept = await page.evaluate(() => Math.round(document.getElementById("s-intercept").getBoundingClientRect().top));
+  same([(await view(page)).title, icept > 60 && icept < 160], ["When It Lands", true], "an address with a subsection opens its section there");
   await page.goto(`${BASE}/rules/`);
   await page.waitForSelector(".rd:not([hidden])", { timeout: 5000 }).catch(() => note("the rules page shows nothing to carry on with"));
   has(await shown(page, ".rd-carry"), "Carry on reading Intercept Conflict", "Carry on reading on the rules page");
   has(await shown(page, ".rd-carry"), `Carry on learning ${book.learn.cards[cards.length - 1].title} Card ${cards.length} of ${cards.length}`, "Carry on learning on the rules page");
-  same(await page.$$eval(".rd-marks a", (as) => as.map((a) => a.getAttribute("href"))), ["/rules/conflict/#s-telegraphs", `/learn/#${cards[3].id}`], "your bookmarks on the rules page, newest first");
+  same(await page.$$eval(".rd-marks a", (as) => as.map((a) => a.getAttribute("href"))), ["/rules/conflict/#s-defend", "/rules/conflict/#s-defending", `/learn/#${cards[3].id}`], "your bookmarks on the rules page, newest first");
   await shot(page, "rules-reading-dark");
   await page.goto(`${BASE}/rules/conflict/`);
-  await page.waitForSelector(".rs-carry:not([hidden])", { timeout: 5000 }).catch(() => note("no Carry on reading on the chapter"));
-  has(await text(page, ".rs-carry"), "Carry on from Intercept", "Carry on reading on the chapter");
-  await page.click(".rs-carry");
-  await page.waitForFunction(() => document.querySelector(".rs-sec").textContent === "Intercept", null, { timeout: 5000 }).catch(() => {});
-  same([await text(page, ".rs-sec"), await page.isHidden(".rs-carry")], ["Intercept", true], "Carry on reading takes you there");
-  same(await page.getAttribute('section[data-s="s-telegraphs"] > .rs-head .rs-mark', "aria-pressed"), "true", "a section's bookmark on the next visit");
-  await page.click(".rs-where");
-  await page.waitForSelector("#rs-toc[open]");
-  const tinyHere = await small(page, ".rs-where, .rs-mark, #rs-toc .zs-foot .button, #rs-toc .rs-list a");
-  if (tinyHere.filter((x) => x.h < 44 || (x.w < 44 && x.h < 60)).length) note(`small tap targets on a chapter: ${JSON.stringify(tinyHere.slice(0, 4))}`);
-  same(await still(page), 0, "nothing moving with the contents open under reduce-motion");
-  await page.keyboard.press("Escape");
-  await shut(page, "#rs-toc");
+  await page.waitForSelector(".hub-carry:not([hidden])", { timeout: 5000 }).catch(() => note("no Carry on reading on the chapter"));
+  has(await text(page, ".hub-carry"), "Carry on reading Intercept", "Carry on reading on the chapter's contents");
+  await page.click(".hub-carry");
+  await opened(page, "s-defending");
+  const tiny = await small(page, ".rd-back, .rd-mark, .rd-foot a, .rd-track > section.is-on .rs-mark, .rd-track > section.is-on .zd-tele button");
+  await page.click(".rd-back");
+  await contents(page);
+  tiny.push(...(await small(page, ".hub-row a, .hub-carry, .pager a")));
+  if (tiny.length) note(`small tap targets on a chapter: ${JSON.stringify(tiny.slice(0, 4))}`);
+  // The first section's Before goes back to the contents, and the last's Next
+  // to the next chapter.
+  await page.goto(`${BASE}/rules/conflict/#${rowsOf[0].id}`);
+  await opened(page, rowsOf[0].id);
+  same(await text(page, ".rd-prev"), conflict.hub.opening ? "Before Opening" : "Back to Contents", "the first section's Before");
+  await page.click(".rd-prev");
+  if (!conflict.hub.opening) await contents(page);
+  await page.goto(`${BASE}/rules/conflict/#${rowsOf.at(-1).id}`);
+  await opened(page, rowsOf.at(-1).id);
+  same([await text(page, ".rd-next"), await page.getAttribute(".rd-next", "href")], [`Next chapter ${conflict.next.title}`, `/rules/${conflict.next.slug}/`], "the last section's Next is the next chapter");
+  // An address that can't be read is the contents, and a chapter whose script
+  // never comes is one page you can read.
+  await page.goto(`${BASE}/rules/conflict/#%E0%A4%A`);
+  await contents(page);
+  {
+    const { context, page } = await phone();
+    await context.route((url) => url.pathname.startsWith("/_astro/") && url.pathname.endsWith(".js"), (route) => route.abort());
+    await page.goto(`${BASE}/rules/conflict/#s-defending`);
+    await page.waitForLoadState("load");
+    same(await page.evaluate(() => [document.documentElement.classList.contains("rd-on"), document.querySelectorAll(".rd-track > section.rs")[3]?.checkVisibility()]), [false, true], "with no script, a chapter's one page with every section");
+    await context.close();
+  }
+
+  // A place: its number, its dice and its parts as tabs, a tag that says
+  // what it does, and Roll a d20 on Twenty Places.
+  const places = chapterOf("twenty-places");
+  await page.goto(`${BASE}/rules/twenty-places/`);
+  await page.waitForSelector(".hub-place");
+  same(await page.locator(".hub-place").count(), 20, "Twenty Places has a card for every place");
+  await page.evaluate(() => (Math.random = () => 0.31));
+  await page.click(".hub-d20");
+  await page.waitForSelector(".hub-rolled.on a", { timeout: 5000 }).catch(() => note("Roll a d20 never landed"));
+  const rolled = places.hub.rows.find((r) => r.place?.n === 7);
+  same([await text(page, ".hub-rolled .n"), await text(page, ".hub-rolled a"), await page.getAttribute(".hub-place.is-rolled", "data-s")], ["7", rolled.title, rolled.id], "Roll a d20 picks out the place");
+  await shot(page, "places-rolled-dark");
+  await page.click(".hub-rolled a");
+  await opened(page, rolled.id);
+  await page.goto(`${BASE}/rules/twenty-places/#s-place-copper-baths`);
+  await opened(page, "s-place-copper-baths");
+  const tabs = () => page.evaluate(() => {
+    const pl = document.querySelector(".rd-track > section.is-on .pl");
+    return { tab: pl.querySelector(".pl-tab[aria-selected='true']").dataset.tab, panels: [...pl.querySelectorAll(".pl-panel")].filter((p) => p.checkVisibility()).map((p) => p.dataset.tab) };
+  });
+  same([await text(page, ".rd-count"), await text(page, ".is-on .pl-n"), await tabs()], ["1 of 21", "1", { tab: "scene", panels: ["scene"] }], "the Copper Baths opens on its scene, number 1");
+  await shot(page, "place-scene-dark");
+  await page.click('.is-on .pl-tab[data-tab="tele"]');
+  same(await tabs(), { tab: "tele", panels: ["tele"] }, "the Telegraphs tab");
+  same(await page.locator(".is-on .pl-panel.on .tele").count(), 3, "the Copper Baths' three telegraphs, as cards");
+  await shot(page, "place-telegraphs-dark");
+  await page.keyboard.press("ArrowRight");
+  same([await tabs(), await page.evaluate(() => document.activeElement?.dataset.tab)], [{ tab: "prep", panels: ["prep"] }, "prep"], "the right arrow on the tabs goes to Prep");
+  await page.click('.is-on .pl-tab[data-tab="secret"]');
+  same(await page.$eval(".is-on .pl-panel.on details.seal", (d) => d.open), false, "the Secret's sealed till it's opened");
+  await page.click(".is-on .pl-panel.on details.seal > summary");
+  has(await text(page, ".is-on .pl-panel.on .secret"), "Every Word Is Sold", "the Secret opens in a tap");
+  await page.click('.is-on .pl-tab[data-tab="scene"]');
+  const tag = await page.$eval(".is-on .pl-panel.on button.tag[data-tag]", (b) => b.dataset.tag);
+  const tagged = JSON.parse(readFileSync("public/world-book.json", "utf8")).tags.find((t) => t.name === tag);
+  await page.click(`.is-on .pl-panel.on button.tag[data-tag="${tag}"]`);
+  same([await page.getAttribute(`.is-on .pl-panel.on button.tag[data-tag="${tag}"]`, "aria-expanded"), (await text(page, ".is-on .tagx")).includes(tagged?.does?.slice(0, 30) ?? "?")], ["true", true], `${tag} says what it does`);
+  await shot(page, "place-tag-dark");
+  await page.click(`.is-on .pl-panel.on button.tag[data-tag="${tag}"]`);
+  same(await page.locator(".is-on .tagx").count(), 0, "tapped again, it's put away");
+  await page.click(".rd-back");
+  await contents(page);
+  same((await view(page)).hash, "", "Contents from a section opened by its address");
 
   // Offline: the deck, a pop-up from a card, Read more, and a chapter's pop-up.
   await page.goto(`${BASE}/learn/`);
@@ -2830,29 +2961,39 @@ if (part("10")) {
   await waitCard(page, 6);
   same((await deckAt(page)).n, "6", "Next offline");
   await page.goto(`${BASE}/rules/the-core/`);
-  await page.waitForSelector(".rs-strip", { timeout: 10000 }).catch(() => note("a chapter didn't open offline"));
-  await page.click('article section.rs a[href="#how-permissions-stack"]');
+  await page.waitForSelector(".hub-row", { timeout: 10000 }).catch(() => note("a chapter didn't open offline"));
+  await page.click('.hub-row[data-s="s-permissions"] a');
+  await opened(page, "s-permissions");
+  await page.click('.rd-track > section.is-on a[href="#how-permissions-stack"]');
   await page.waitForSelector(".zp[open]", { timeout: 8000 }).catch(() => note("a chapter's pop-up didn't open offline"));
   has(await text(page, ".zp-text"), "counts once a roll", "a chapter's pop-up offline");
   await context.setOffline(false);
   await context.close();
 
-  // With motion on, a sheet slides up, a drag puts it away, and the bar moves.
+  // With motion on, the next section slides in, a sheet slides up, a drag
+  // puts it away, and the bar moves.
   {
     const { context, page } = await phone({ reducedMotion: "no-preference" });
-    await page.goto(`${BASE}/rules/the-core/`);
-    await page.waitForSelector(".rs-strip");
-    await page.evaluate(() => document.getElementById("s-aura").scrollIntoView());
-    await page.click(".rs-where");
-    const moving = await page.evaluate(() => document.querySelector("#rs-toc").getAnimations().length);
-    if (!moving) note("the contents came up without sliding, with motion on");
+    await page.goto(`${BASE}/rules/the-core/#s-permissions`);
+    await page.waitForSelector(".rd-track > section.is-on");
+    await page.click(".rd-next");
+    const sliding = await page.evaluate(() => document.querySelector(".rd-track > section.is-on").getAnimations().length);
+    if (!sliding) note("the next section came in without sliding, with motion on");
+    await page.waitForTimeout(400);
+    await page.click(".rd-prev");
+    await page.waitForFunction(() => document.querySelector(".rd-track > section.is-on")?.dataset.s === "s-permissions", null, { timeout: 5000 }).catch(() => note("Before didn't go back to Permissions"));
+    await page.waitForTimeout(400);
+    await page.click('.rd-track > section.is-on a[href="#how-permissions-stack"]');
+    await page.waitForSelector(".zp[open]");
+    const moving = await page.evaluate(() => document.querySelector(".zp").getAnimations().length);
+    if (!moving) note("a pop-up came up without sliding, with motion on");
     await page.waitForTimeout(450);
-    const box = await page.locator("#rs-toc .zs-top").boundingBox();
+    const box = await page.locator(".zp .zs-top").boundingBox();
     await page.mouse.move(box.x + box.width / 2, box.y + 10);
     await page.mouse.down();
     await page.mouse.move(box.x + box.width / 2, box.y + 340, { steps: 6 });
     await page.mouse.up();
-    await shut(page, "#rs-toc");
+    await shut(page, ".zp");
     await page.goto(`${BASE}/learn/`);
     await page.waitForSelector(".lr-card");
     await page.click(".lr-next");
@@ -2890,23 +3031,42 @@ if (part("10")) {
     await page.keyboard.press("Escape");
     await shut(page, "#lr-cards");
     await page.goto(`${BASE}/rules/conflict/#s-answering`);
-    await page.waitForSelector(".rs-strip");
-    await axe("a chapter");
-    await shot(page, `chapter-strip-${theme}`);
+    await page.waitForSelector(".rd-track > section.is-on");
+    await axe("a chapter's section");
+    await shot(page, `chapter-section-${theme}`);
     await page.click('section[data-s="s-answering"] a[href="#s-intercept"]');
     await page.waitForSelector(".zp[open]");
     await axe("a pop-up", ".zp");
     await shot(page, `chapter-popup-${theme}`);
     await page.keyboard.press("Escape");
     await shut(page, ".zp");
-    await page.click(".rs-where");
-    await page.waitForSelector("#rs-toc[open]");
-    await axe("a chapter's contents", "#rs-toc");
-    await page.keyboard.press("Escape");
-    await shut(page, "#rs-toc");
+    await page.click(".rd-back");
+    await page.waitForSelector(".hub-row");
+    await axe("a chapter's contents");
+    await shot(page, `chapter-contents-${theme}`);
+    await page.goto(`${BASE}/rules/twenty-places/`);
+    await page.waitForSelector(".hub-place");
+    await axe("Twenty Places' contents");
+    await shot(page, `places-${theme}`);
+    await page.goto(`${BASE}/rules/twenty-places/#s-place-copper-baths`);
+    await page.waitForSelector(".rd-track > section.is-on .pl");
+    await page.click(".is-on .pl-panel.on button.tag[data-tag]");
+    await axe("a place, with a tag open");
+    await shot(page, `place-scene-${theme}`);
+    for (const t of ["tele", "prep", "secret"]) {
+      await page.click(`.is-on .pl-tab[data-tab="${t}"]`);
+      await axe(`a place's ${t} tab`);
+    }
+    await page.goto(`${BASE}/rules/the-bestiary/#${chapterOf("the-bestiary").hub.rows[0].id}`);
+    await page.waitForSelector(".rd-track > section.is-on .box-threat");
+    await axe("a page of threats");
+    await shot(page, `threats-${theme}`);
+    await page.goto(`${BASE}/rules/title-ideas-and-the-crew/#s-pregens`);
+    await page.waitForSelector(".rd-track > section.is-on .box-sheet");
+    await axe("the crew's sheets");
     await context.close();
   }
-  console.log(`reading: ${cards.length} cards checked against the chapters and the crew's sheets (${dieChecks} set actions), the deck swiped, remembered and read offline, a chapter's strip, contents, bookmarks and pop-ups, and Carry on reading`);
+  console.log(`reading: ${cards.length} cards checked against the chapters and the crew's sheets (${dieChecks} set actions), the deck swiped, remembered and read offline, a chapter's contents and its sections a page at a time (swiped, keyed, Back and Forward), bookmarks, what's read and where you're up to, pop-ups, Carry on reading, and a place's tabs, tags and Roll a d20`);
 }
 
 await browser.close();

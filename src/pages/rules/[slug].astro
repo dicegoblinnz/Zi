@@ -3,60 +3,170 @@ import Base from "../../layouts/Base.astro";
 import Contents from "../../components/Contents.astro";
 import book from "../../generated/book.json";
 import { markNew, newSections } from "../../lib/whats-new.js";
+import { die } from "../../kit/kit.js";
+import "../../styles/kit.css";
 import "../../styles/reading.css";
 
 export function getStaticPaths() {
   return book.chapters.map((chapter) => ({ params: { slug: chapter.slug }, props: { chapter } }));
 }
 
+// A chapter opens on its contents (Mo's 28 Oct pick, notes/reading-28oct.md):
+// its opening, Carry on reading, and a row for every section, or a card for
+// every place. On a phone a section opens on its own, and you swipe from one
+// to the next (src/reading/lookup.js). On a laptop it's one page with the
+// contents down the side. The glossary and the index have no sections, so
+// they're one page everywhere.
 const { chapter } = Astro.props;
 const eyebrow = chapter.partNumber ? `${chapter.partNumber} · ${chapter.partName}` : "Zi’Dara";
 const fresh = newSections(chapter);
 const html = fresh.length ? markNew(chapter) : chapter.html;
 const latest = fresh.reduce((a, s) => (s.iso > a.iso ? s : a), fresh[0] ?? { iso: "" });
 const freshIds = new Set(fresh.map((s) => s.id));
+const hub = chapter.hub;
+const rows = hub?.rows ?? [];
+const reads = rows.length > 0;
+const places = rows.some((r) => r.place);
+const subsOf = (subs) => (subs.length > 6 ? [...subs.slice(0, 5), `and ${subs.length - 5} more`] : subs);
+const tagInfo = Object.keys(chapter.tags ?? {}).length ? JSON.stringify({ tags: chapter.tags, links: book.tagLinks }).replace(/</g, "\\u003c") : null;
+const minutes = hub?.minutes ?? 1;
 ---
 <Base title={chapter.title} current="rules">
-  {chapter.sections.length > 1 && <script is:inline slot="head">document.documentElement.classList.add("rs-on");</script>}
+  {reads && (
+    <script is:inline slot="head">
+      // On a phone a chapter opens on its contents, or straight on the section
+      // in its address, before anything paints. If the reader never starts (its
+      // script didn't load, or something broke), it's one page again.
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("rs-on");
+        if (window.matchMedia && matchMedia("(max-width: 900px)").matches) {
+          root.classList.add("rd-on");
+          var h = location.hash;
+          if (h && h.length > 1 && h !== "#main") root.classList.add("rd-open");
+        }
+        addEventListener("load", function () {
+          if (!root.classList.contains("rd-live")) root.classList.remove("rd-on", "rd-open");
+        });
+      })();
+    </script>
+  )}
   <div class="with-rail frame">
     <aside class="rail" aria-label="Contents" data-pagefind-ignore>
       <nav><Contents currentSlug={chapter.slug} headings={chapter.headings} /></nav>
     </aside>
     <main id="main" class="reading">
+      {reads && (
+        <header class="rd-top" data-pagefind-ignore>
+          <div class="rd-row">
+            <a class="rd-back" href={`/rules/${chapter.slug}/`} data-no-pop>
+              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+              <span class="visually-hidden">Contents of {chapter.title}</span>
+            </a>
+            <div class="rd-where">
+              <p class="rd-ch"><span>{chapter.title}</span>{" "}<span class="rd-count"></span></p>
+              <p class="rd-title"></p>
+            </div>
+            <button type="button" class="rd-mark" aria-pressed="false" aria-label="Bookmark this section">
+              <svg class="rs-ribbon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false"><path d="M7 3.5h10a1 1 0 0 1 1 1V21l-6-4.25L6 21V4.5a1 1 0 0 1 1-1z"></path></svg>
+            </button>
+          </div>
+          <span class="rd-segs" aria-hidden="true"></span>
+        </header>
+      )}
       <div class="page">
-        <details class="toc-mobile" data-pagefind-ignore>
-          <summary>Contents</summary>
-          <nav><Contents currentSlug={chapter.slug} headings={chapter.headings} /></nav>
-        </details>
+        {!reads && (
+          <details class="toc-mobile" data-pagefind-ignore>
+            <summary>Contents</summary>
+            <nav><Contents currentSlug={chapter.slug} headings={chapter.headings} /></nav>
+          </details>
+        )}
         <article class="prose" data-pagefind-body data-pagefind-meta={`part:${chapter.partName ?? "Welcome"}`} data-chapter={chapter.slug} data-title={chapter.title} data-pops>
           <header class="chapter-head">
             <p class="eyebrow">{eyebrow}</p>
             <h1>{chapter.title}</h1>
           </header>
-          {chapter.sections.length > 1 && (
-            <div class="rs-strip" data-pagefind-ignore>
-              <button type="button" class="rs-where" aria-haspopup="dialog" aria-controls="rs-toc">
-                <span class="rs-where-in"><span class="rs-ch">Contents</span><span class="rs-sec">{chapter.sections.length} sections</span></span>
-                <svg class="rs-chev" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                <span class="visually-hidden">, the chapter’s contents</span>
-              </button>
-              <span class="rs-line" aria-hidden="true"><i></i></span>
-            </div>
+          {reads && (
+            <nav class="hub" aria-label={`${chapter.title}: its sections`} data-pagefind-ignore>
+              {hub.quote && <p class="hub-quote">{hub.quote}</p>}
+              {hub.lead && <div class="hub-lead" set:html={hub.lead} />}
+              <p class="hub-meta">
+                <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg>{rows.length} {places ? "entries" : rows.length === 1 ? "section" : "sections"}</span>
+                <span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>About {minutes} {minutes === 1 ? "minute" : "minutes"} to read</span>
+              </p>
+              <a class="hub-carry" href="#" hidden data-no-pop>
+                <span><span class="eyebrow">Carry on reading</span>{" "}<b></b></span>
+                <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+              </a>
+              {places && (
+                <div class="hub-roll">
+                  <button type="button" class="button primary hub-d20" hidden>
+                    <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l8.5 4.9v9.2L12 21.5l-8.5-4.9V7.4z"/><path d="M12 2.5L7 14h10z"/><path d="M7 14l5 7.5 5-7.5"/></svg>
+                    Roll a d20
+                  </button>
+                  <p class="hub-rolled" role="status"></p>
+                </div>
+              )}
+              {fresh.length > 0 && (
+                <aside class="whats-new" aria-labelledby="whats-new-here">
+                  <p class="whats-new-head" id="whats-new-here"><span class="new-mark">New</span> Changed in this chapter</p>
+                  <ul>
+                    {fresh.map((s) => (
+                      <li><a href={`#${s.id}`}><span>{s.name}</span><span class="when">{s.date}</span></a></li>
+                    ))}
+                  </ul>
+                  <a class="whats-new-all" href={`/changes/#${latest.entry}`}>What changed, and what it replaced</a>
+                </aside>
+              )}
+              <ol class:list={["hub-list", { "hub-places": places }]}>
+                {hub.opening && (
+                  <li class="hub-row hub-open" data-s="opening">
+                    <a href="#opening" data-no-pop>
+                      <span class="k" aria-hidden="true"><svg class="ic" viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg></span>
+                      <span class="hub-t"><b>Opening</b>{" "}<span class="hub-f">{places ? "How to use them, and the d20 table" : "Before the first section"}</span></span>
+                      <span class="hub-st" aria-hidden="true"></span>
+                    </a>
+                  </li>
+                )}
+                {rows.map((r, i) =>
+                  r.place ? (
+                    <li class="hub-row hub-place" data-s={r.id} data-n={r.place.n}>
+                      <a href={`#${r.id}`} data-no-pop>
+                        <span class="k" aria-hidden="true">{r.place.n}</span>
+                        <span class="hub-t">
+                          <b>{r.title}{freshIds.has(r.id) && <span class="new-dot" title="Changed recently"><span class="visually-hidden"> (new)</span></span>}</b>
+                          {r.first && <>{" "}<span class="hub-f">{r.first}</span></>}
+                          {r.place.who.length > 0 && <>{" "}<span class="hub-who">{r.place.who.join(" · ")}</span></>}
+                        </span>
+                        <span class="hub-die"><Fragment set:html={die(r.place.d, { own: "them", label: `Challenge ${r.place.d / 2}` })} /></span>
+                        <span class="hub-st" aria-hidden="true"></span>
+                      </a>
+                    </li>
+                  ) : (
+                    <li class:list={["hub-row", { "hub-sub": r.level === 3 }]} data-s={r.id}>
+                      <a href={`#${r.id}`} data-no-pop>
+                        <span class="k" aria-hidden="true">{i + 1}</span>
+                        <span class="hub-t">
+                          <b>{r.title}{freshIds.has(r.id) && <span class="new-dot" title="Changed recently"><span class="visually-hidden"> (new)</span></span>}</b>
+                          {r.first && <>{" "}<span class="hub-f">{r.first}</span></>}
+                          {r.subs.length > 0 && <>{" "}<span class="hub-subs">{subsOf(r.subs).map((s) => <><span>{s}</span>{" "}</>)}</span></>}
+                        </span>
+                        <span class="hub-st" aria-hidden="true"></span>
+                      </a>
+                    </li>
+                  ),
+                )}
+              </ol>
+            </nav>
           )}
-          <a class="rs-carry" href="#main" hidden data-pagefind-ignore data-no-pop>Carry on from <b></b></a>
-          {fresh.length > 0 && (
-            <aside class="whats-new" aria-labelledby="whats-new-here" data-pagefind-ignore>
-              <p class="whats-new-head" id="whats-new-here"><span class="new-mark">New</span> Changed in this chapter</p>
-              <ul>
-                {fresh.map((s) => (
-                  <li><a href={`#${s.id}`}><span>{s.name}</span><span class="when">{s.date}</span></a></li>
-                ))}
-              </ul>
-              <a class="whats-new-all" href={`/changes/#${latest.entry}`}>What changed, and what it replaced</a>
-            </aside>
-          )}
-          <Fragment set:html={html} />
+          <div class="rd-track" set:html={html} />
         </article>
+        {reads && (
+          <nav class="rd-foot" aria-label="Sections" data-pagefind-ignore>
+            <a class="rd-prev" href="#" data-no-pop><span>Before</span>{" "}<b></b></a>
+            <a class="rd-next" href="#" data-no-pop><span>Next</span>{" "}<b></b></a>
+          </nav>
+        )}
         <nav class="pager" aria-label="Chapters" data-pagefind-ignore>
           {chapter.prev && (
             <a class="prev" href={`/rules/${chapter.prev.slug}/`}><span>Before</span>{chapter.prev.title}</a>
@@ -66,32 +176,10 @@ const freshIds = new Set(fresh.map((s) => s.id));
           )}
         </nav>
       </div>
+      {reads && <p class="rd-peek" aria-hidden="true"><span></span>{" "}<b></b></p>}
     </main>
   </div>
-  {chapter.sections.length > 1 && (
-    <dialog id="rs-toc" class="zs rs-toc" aria-labelledby="rs-toc-t" data-pagefind-ignore>
-      <div class="zs-in">
-        <div class="zs-top" data-drag>
-          <span class="zs-grab" aria-hidden="true"></span>
-          <div class="zs-heading">
-            <p class="zs-where">{eyebrow}</p>
-            <h2 class="zs-title" id="rs-toc-t">{chapter.title}</h2>
-          </div>
-        </div>
-        <nav class="zs-body" tabindex="-1" autofocus aria-label={`${chapter.title}, its sections`}>
-          <ol class="rs-list">
-            {chapter.sections.map((s) => (
-              <li class={`rs-l${s.level}`}><a href={`#${s.id}`} data-s={s.id}>{s.text}{freshIds.has(s.id) && <span class="new-dot" title="Changed recently"><span class="visually-hidden"> (new)</span></span>}</a></li>
-            ))}
-          </ol>
-        </nav>
-        <div class="zs-foot">
-          <a class="button" href="/rules/">All the rules</a>
-          <button type="button" class="button zs-close">Close</button>
-        </div>
-      </div>
-    </dialog>
-  )}
+  {tagInfo && <script type="application/json" id="tag-info" set:html={tagInfo} />}
   <script>
     import "../../reading/lookup.js";
   </script>

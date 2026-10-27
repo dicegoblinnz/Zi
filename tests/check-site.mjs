@@ -2,7 +2,8 @@
 //
 //   npm run build && node tests/check-site.mjs [screenshot-folder]
 //
-// For each page, at 320, 360, 390, 430 and 1280 wide, in light and dark:
+// For each page, at 320, 360, 390, 430 and 1280 wide, in light and dark (a
+// chapter with a section in its address opens that section on a phone):
 // nothing fetched from outside the site, no sideways scrolling, no console
 // errors, and tap targets at least 44px high in the menus. Runs axe on every
 // page, tries a search and flips the light switch. Checks the printable
@@ -55,8 +56,8 @@ const BASE = "http://localhost:4173";
 
 const PAGES = [
   "/", "/rules/", "/learn/", "/rules/welcome/", "/rules/the-core/", "/rules/the-archetypes/",
-  "/rules/title-ideas-and-the-crew/", "/rules/conflict/", "/rules/the-bestiary/",
-  "/rules/appendix-c-every-lever-in-the-game/", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
+  "/rules/title-ideas-and-the-crew/", "/rules/conflict/", "/rules/the-bestiary/", "/rules/twenty-places/#s-place-copper-baths",
+  "/rules/appendix-c-every-lever-in-the-game/", "/rules/conflict/#s-defending", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
   "/characters/", "/characters/?c=check-vesk", "/characters/?c=check-vesk&t=sheet", "/characters/?c=check-vesk&t=rules", "/characters/?build", "/sheets/",
   "/account/", "/characters/?join", "/kit/",
   // The table screen with no code yet, and with one that can't be right.
@@ -120,7 +121,7 @@ for (const scheme of ["light", "dark"]) {
       if (errors.length) note(`${path} @${width} ${scheme}: console errors: ${errors.join(" | ")}`);
       // Menus and buttons need room for a thumb. Links inside running text don't.
       const small = await page.evaluate(() =>
-        [...document.querySelectorAll(".topnav a, .brand, .button, .theme-toggle, .pager a, .toc-mobile > summary, .toc-mobile a, footer.site nav a, .hero-actions .more, .part li a, .cc button, .cc-back, .cc-own > summary, .cc summary, .rs-where, .rs-mark, .rs-carry, .lr-out, .lr-icon, .lr-foot .button, .lr-more, .lr-mark, .rd-go, .rd-marks a")]
+        [...document.querySelectorAll(".topnav a, .brand, .button, .theme-toggle, .pager a, .toc-mobile > summary, .toc-mobile a, footer.site nav a, .hero-actions .more, .part li a, .cc button, .cc-back, .cc-own > summary, .cc summary, .rs-mark, .hub-row a, .hub-carry, .rd-back, .rd-mark, .rd-foot a, .pl-tab, .seal > summary, .lr-out, .lr-icon, .lr-foot .button, .lr-more, .lr-mark, .rd-go, .rd-marks a")]
           .filter((el) => el.getClientRects().length && el.offsetParent !== null && (!el.checkVisibility || el.checkVisibility()))
           .map((el) => ({ t: el.textContent.trim().slice(0, 30), h: Math.round(el.getBoundingClientRect().height) }))
           .filter((x) => x.h < 44),
