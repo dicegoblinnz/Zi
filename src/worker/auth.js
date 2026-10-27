@@ -5,6 +5,7 @@
 // safely takes more time than a free Worker gets.
 import { betterAuth } from "better-auth";
 import { dropFromParty } from "./party.js";
+import { mapsEnd } from "./maps.js";
 import { tableEnd, tableLeft } from "./table.js";
 
 const DAY = 60 * 60 * 24;
@@ -97,9 +98,10 @@ export function optionsFor(env) {
           ]).catch((err) => {
             if (!/no such table/i.test(String(err?.message))) throw err;
           });
-          // Once they're out in D1: the live tables of the campaigns they ran
-          // go, and the ones they played in forget them.
+          // Once they're out in D1: the live tables and map pictures of the
+          // campaigns they ran go, and the tables they played at forget them.
           for (const c of running.results) await tableEnd(env, c.id);
+          for (const c of running.results) await mapsEnd(env, c.id);
           for (const m of playing.results) await tableLeft(env, m.campaignId, user.id, { erase: true });
           await env.DB.prepare("DELETE FROM character WHERE userId = ?1").bind(user.id).run();
         },

@@ -20,6 +20,7 @@
 // draws the pages and handles their taps and forms, through the helpers
 // world.js hands it.
 import { PLISTS, PMAX, findPage, linker, mentionsOf, pageCardOf } from "./pages.js";
+import { findMap } from "./maps.js";
 import { typo } from "./marks.js";
 import { die as kitDie, mini as kitMini, tag as kitTag } from "../kit/kit.js";
 
@@ -295,10 +296,11 @@ export function makePlaces(w) {
   function backOf(id, home = "The world") {
     const from = String(history.state?.from ?? "");
     if (/^\/characters\/\?c=[^&]+&t=world$/.test(from)) return [from, "The world"];
-    const m = from.match(/^\/characters\/\?camp=([^&]+)&world&(p|f)=([^&]+)$/);
+    const m = from.match(/^\/characters\/\?camp=([^&]+)&world&(p|f|m)=([^&]+)(?:&pin=[^&]+)?$/);
     if (m && decodeURIComponent(m[1]) === id) {
       const doc = docOf(id);
-      const name = m[2] === "p" ? findPage(doc, decodeURIComponent(m[3]))?.name : doc.factions.find((f) => f.id === decodeURIComponent(m[3]))?.name;
+      const key = decodeURIComponent(m[3]);
+      const name = m[2] === "p" ? findPage(doc, key)?.name : m[2] === "m" ? findMap(doc, key)?.name : doc.factions.find((f) => f.id === key)?.name;
       if (name) return [from, name];
     }
     return [`/characters/?camp=${encodeURIComponent(id)}&world`, home];
@@ -488,7 +490,7 @@ export function makePlaces(w) {
       <div class="cc-row"><button type="button" class="button danger" data-act="w" data-do="pgone" data-id="${esc(p.id)}">${sure(`pgone-${p.id}`, "Tap again to take it out of the world", "Take it out of the world")}</button></div></section>`
       : hiddenParts ? `<p class="cc-small wb-more">There’s more to ${esc(p.name)} you haven’t found out yet.</p>` : "";
     if (!gm) w.unlit(id);
-    return `${top}<div class="wb wp" data-wb="${esc(id)}">${head}${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${showCard}${onTable}${bookNote}<div class="cc-folds wb-parts">${parts.join("")}</div>${elsewhere}${end}</div>`;
+    return `${top}<div class="wb wp" data-wb="${esc(id)}">${head}${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${showCard}${onTable}${bookNote}<div class="cc-folds wb-parts">${parts.join("")}</div>${elsewhere}${w.onMaps?.(id, { k: "p", id: p.id }) ?? ""}${end}</div>`;
   }
 
   // On a faction's page, her way to make its Face a person of their own: from

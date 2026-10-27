@@ -21,9 +21,13 @@
 //               answers still to go up (table.js), and that goes too.
 //   zi-world    their campaigns' worlds, the faction boards and the GM's
 //               changes still to go up (world.js), and that goes as well.
+//   zi-maps     (a cache, not localStorage) the pictures of their campaigns'
+//               maps (mapsui.js), and that goes too.
 //
 // Only a delete on this phone deletes from the account. A character that's
 // just missing here (the phone's list got lost) comes back down.
+import { forgetMaps } from "./mapsui.js";
+
 const HINT = "zi-account";
 const STATE = "zi-sync";
 const STASH = "zi-unsent-";
@@ -116,6 +120,7 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     write(PARTY, null);
     write(TABLE, null);
     write(WORLD, null);
+    forgetMaps();
   };
   // This phone starts keeping step with an account, picking up anything it had
   // kept to one side for it.

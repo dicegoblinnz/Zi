@@ -42,8 +42,10 @@
 // the same way.
 //
 // The world's places and people are kept here too, as doc.pages (stage 3,
-// pages.js), and a change whose o starts with "p-" is one of theirs.
+// pages.js), and a change whose o starts with "p-" is one of theirs. So are
+// its maps, as doc.maps (stage 4, maps.js), with changes starting "m-".
 
+import { applyMap, isMapOp, mapsForPlayer, mapsOf, undoMap } from "./maps.js";
 import { applyPage, isPageOp, pagesForPlayer, pagesOf, undoPage } from "./pages.js";
 
 export const MAX = { name: 60, line: 120, words: 240, note: 600, factions: 48, list: 16, agendas: 2, minis: 3, x: 9 };
@@ -71,7 +73,7 @@ const size = (v) => {
 const isId = (v) => ID.test(String(v ?? ""));
 
 export function blank() {
-  return { factions: [], pages: [], by: null, at: 0 };
+  return { factions: [], pages: [], maps: [], by: null, at: 0 };
 }
 
 // A line on one of a card's lists, tidied, or null if it can't go on.
@@ -143,6 +145,7 @@ export function readable(raw) {
   // A mini faction's maker has to be on the board, and not a mini faction itself.
   for (const f of doc.factions) if (f.parent && f.parent !== "crew" && !doc.factions.some((p) => p.id === f.parent && !p.mini)) f.parent = null;
   doc.pages = pagesOf(raw.pages);
+  doc.maps = mapsOf(raw.maps);
   doc.by = typeof raw.by === "string" ? raw.by : null;
   doc.at = Number(raw.at) || 0;
   return doc;
@@ -155,6 +158,7 @@ export const minisOf = (doc, id) => doc.factions.filter((f) => f.mini && f.paren
 export function apply(doc, op) {
   if (!op || typeof op !== "object") return false;
   if (isPageOp(op)) return applyPage(doc, op);
+  if (isMapOp(op)) return applyMap(doc, op);
   // A faction's change only touches the factions, so only they're compared,
   // which keeps a big world quick on the Worker.
   const was = JSON.stringify(doc.factions);
@@ -305,6 +309,7 @@ export function apply(doc, op) {
 // What puts a change back, worked out from the board before it's made.
 export function undoOf(doc, op) {
   if (isPageOp(op)) return undoPage(doc, op);
+  if (isMapOp(op)) return undoMap(doc, op);
   const f = op.id ? find(doc, op.id) : null;
   const copy = (x) => JSON.parse(JSON.stringify(x));
   const item = f && op.l && Array.isArray(f[op.l]) ? f[op.l].find((x) => x.id === (op.lid ?? op.item?.id)) : null;
@@ -418,6 +423,7 @@ export function forPlayer(doc) {
       };
     }),
     pages: pagesForPlayer(doc),
+    maps: mapsForPlayer(doc),
     by: null,
     at: 0,
   };

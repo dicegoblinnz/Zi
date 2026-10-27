@@ -1,5 +1,6 @@
 // A campaign's world, for one campaign (notes/worlds-plan.md): its faction
-// board, and its places and people (pages.js). index.js has already checked that whoever's asking is this
+// board, its places and people (pages.js) and its maps (maps.js, with their
+// pictures in src/worker/maps.js). index.js has already checked that whoever's asking is this
 // campaign's GM or one of its players, and nothing here reads or changes
 // anything but this campaign's world.
 //
@@ -10,7 +11,11 @@
 //   POST /api/campaigns/<id>/world      the GM's changes from one phone: { dev, ops }.
 //        Each change carries a number that goes up on that phone, so a change
 //        sent twice (the signal dropped before the answer came back) counts once.
+//        A picture a change takes off a map goes in the world's bin for a day,
+//        so Undo can put it back, then off the bucket (binned() in maps.js).
 import { apply, blank, forPlayer, readable } from "../companion/board.js";
+import { keysOf } from "../companion/maps.js";
+import { binned, dropPictures } from "./maps.js";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
 const MAX_CHANGES = 200;
@@ -62,10 +67,12 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
   let row = null;
   let top = 0;
   let doc = null;
+  let gone = [];
   for (let tries = 0; ; tries++) {
     row = await worldRow(env, camp.id);
     const raw = row ? parse(row.data) ?? {} : {};
     doc = readable(raw);
+    const had = keysOf(doc);
     // Kept with no prototype, so no phone's id can be anything but an entry.
     const seq = Object.assign(Object.create(null), raw.seq && typeof raw.seq === "object" ? raw.seq : {});
     const high = Number(seq[dev]?.n) || 0;
@@ -89,7 +96,9 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
     seq[dev] = { n: top, at: now };
     const devices = Object.entries(seq);
     if (devices.length > MAX_DEVICES) for (const [d] of devices.sort((x, y) => (x[1]?.at ?? 0) - (y[1]?.at ?? 0)).slice(0, devices.length - MAX_DEVICES)) delete seq[d];
-    const text = JSON.stringify({ ...doc, seq });
+    const pics = binned(raw.bin, had, doc, now);
+    gone = pics.gone;
+    const text = JSON.stringify({ ...doc, seq, bin: pics.bin });
     if (text.length > MAX_DOC) return fail(413, "The world’s full. Take something off it first.");
     const res = row
       ? await env.DB.prepare("UPDATE world SET data = ?2, version = version + 1, updatedAt = ?3 WHERE campaignId = ?1 AND version = ?4").bind(camp.id, text, now, row.version).run()
@@ -101,6 +110,8 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
     // A change from her other phone got in first, so these go on top of it.
     if (tries >= 5) return fail(503, "The board’s being changed from somewhere else too. Try again in a moment.");
   }
+  // Pictures a day in the bin come off the bucket, now the world's let them go.
+  if (gone.length) await dropPictures(env, camp.id, gone).catch((err) => console.error(`maps bin: ${err?.message ?? err}`));
   // The world as it now stands, without reading it back again.
   return json({ seq: top, ...viewOf(camp, row, doc), role: camp.role });
 }

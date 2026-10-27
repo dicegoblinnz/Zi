@@ -1577,6 +1577,148 @@ p.wp-words, .wp-text { margin: 0; line-height: 1.45; overflow-wrap: anywhere; }
   .wp-tok-a { grid-template-columns: 42px minmax(0, 1fr); }
 }
 
+/* ── Maps (stage 4 of notes/worlds-plan.md): under places and people, and each
+   one full screen. The map fills the screen under its name on the same ground
+   as the rest of the site, moved and zoomed in one hand, with everything to tap
+   along the bottom in reach of a thumb. Pins are the GM's, so violet, and one
+   only she can see sits on a dashed edge, the same as her badges. */
+.wm-sec { margin-top: 1.6rem; }
+.wm-toks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: 10px; margin: 0; padding: 0; list-style: none; }
+.wm-tok-a { display: flex; flex-direction: column; height: 100%; padding: 0; color: var(--ink); text-decoration: none; overflow: hidden; transition: transform 140ms ease-out; }
+.wm-tok-a:active { transform: scale(0.985); }
+.wm-tok-a:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wm-thumb { display: grid; place-items: center; aspect-ratio: 2 / 1; overflow: hidden; background: color-mix(in srgb, var(--zd-them) 10%, var(--panel)); border-bottom: 1px solid var(--line-soft); }
+.wm-thumb img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.wm-thumb-mark { color: var(--zd-them-ink); opacity: 0.75; }
+.wm-thumb-mark svg { width: 32px; height: 32px; }
+.wm-tok-in { display: grid; gap: 2px; flex: 1; padding: 10px 14px 12px; box-shadow: inset 3px 0 0 var(--zd-them-line); }
+.wm-tok-n { font-family: var(--display); font-weight: 600; font-size: 1.15rem; line-height: 1.2; letter-spacing: 0.01em; overflow-wrap: anywhere; }
+.wm-tok-w { font-size: 0.95rem; line-height: 1.35; color: var(--muted); }
+.wm-tok.is-new .wm-tok-a { animation: wb-lit 1.6s ease-out; }
+.wm-choose { position: relative; display: inline-flex; align-items: center; gap: 8px; overflow: hidden; cursor: pointer; }
+/* The picker itself, see-through over the whole button, so a tap anywhere on it opens the phone's photos. */
+.cc .wm-choose input { position: absolute; inset: 0; width: 100%; height: 100%; min-height: 0; margin: 0; padding: 0; opacity: 0; border: 0; cursor: pointer; }
+.wm-choose svg { width: 20px; height: 20px; }
+.wm-choose:focus-within { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wm-draft-pic { display: grid; place-items: center; margin: 0.2rem 0 0.4rem; padding: 6px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 3px; }
+.wm-draft-pic img { display: block; width: 100%; height: auto; max-height: 42vh; object-fit: contain; }
+.wm-draft-tools .button svg { width: 18px; height: 18px; margin-right: 6px; }
+.wm-draft-form .cc-field input, .wm-draft-form .cc-field select { width: 100%; }
+.wm-busy { margin: 0.4rem 0 0; font-weight: 700; color: var(--zd-them-ink); font-variant-numeric: tabular-nums; }
+.wm-err { margin: 0.6rem 0 0; }
+
+/* A map, full screen: its name at the top, the map under it to the bottom of
+   the screen, and nothing behind it scrolls. */
+html.cc-map, html.cc-map body { overflow: hidden; overscroll-behavior: none; }
+.wm-screen { position: fixed; inset: 0; z-index: 25; display: flex; flex-direction: column; background: var(--bg); }
+.wm-top { flex: none; width: 100%; max-width: 46rem; margin: 0 auto; padding: max(0.25rem, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 0.55rem max(16px, env(safe-area-inset-left, 0px)); }
+.wm-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; margin-top: 0.15rem; }
+.wm-title { flex: 1 1 11rem; min-width: 0; }
+.wm-head .kicker { display: flex; align-items: center; gap: 8px; color: var(--zd-them-ink); }
+.wm-head h1 { margin: 0.1rem 0 0; font-size: clamp(1.3rem, 5.6vw, 1.75rem); line-height: 1.15; overflow-wrap: anywhere; }
+.wm-show { flex: none; }
+.wm-status { margin: 0.35rem 0 0; }
+.wm-body {
+  position: relative; flex: 1; min-height: 0; overflow: hidden; border-top: 1px solid var(--line);
+  background-color: var(--bg);
+  background-image: repeating-linear-gradient(45deg, var(--pattern) 0 1px, transparent 1px 28px), repeating-linear-gradient(-45deg, var(--pattern) 0 1px, transparent 1px 28px);
+}
+.wm-stage { position: absolute; inset: 0; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: grab; outline: none; }
+.wm-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--violet); }
+.wm-stage.is-moving { cursor: grabbing; }
+.wm-layer { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+.wm-stage.is-empty .wm-layer { background: color-mix(in srgb, var(--zd-them) 12%, transparent); }
+.cc .wm-pic { display: block; width: 100%; height: 100%; max-width: none; pointer-events: none; -webkit-user-drag: none; }
+.wm-pins { position: absolute; inset: 0; pointer-events: none; }
+
+/* A pin: a violet drop with what it is on it, its point on the spot, and its
+   name beside it on a card. Names that would sit on each other go quiet till
+   there's room. */
+.cc .wm-pin { position: absolute; left: 0; top: 0; display: block; width: 44px; height: 44px; margin: -41px 0 0 -22px; padding: 0; color: var(--zd-on-them); background: none; border: 0; pointer-events: auto; -webkit-tap-highlight-color: transparent; }
+.wm-pin-head { position: absolute; left: 7px; top: 4px; display: grid; place-items: center; width: 30px; height: 30px; background: var(--zd-them); border: 2px solid color-mix(in srgb, var(--zd-on-them) 80%, transparent); border-radius: 50% 50% 50% 3px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45); transform: rotate(-45deg); transition: transform 160ms ease-out; }
+.wm-pin-head svg { width: 15px; height: 15px; transform: rotate(45deg); }
+.wm-pin-n { position: absolute; left: 37px; top: 8px; max-width: 10.5rem; padding: 1px 7px 2px; font-size: 0.8rem; font-weight: 700; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); background: color-mix(in srgb, var(--surface) 92%, transparent); border: 1px solid color-mix(in srgb, var(--zd-them) 55%, transparent); border-radius: 2px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); }
+.wm-pin.is-quiet .wm-pin-n { display: none; }
+.wm-pin.is-hidden .wm-pin-head { color: var(--zd-them-ink); background: var(--surface); border: 2px dashed var(--zd-them-line); }
+.wm-pin.is-hidden .wm-pin-n { color: var(--muted); border-style: dashed; }
+.wm-pin.is-on { z-index: 2; }
+.wm-pin.is-on .wm-pin-head { transform: rotate(-45deg) scale(1.15); box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--ink), 0 2px 8px rgba(0, 0, 0, 0.45); }
+.wm-pin.is-on .wm-pin-n { border-color: var(--ink); }
+.cc .wm-pin:focus-visible { outline: none; }
+.wm-pin:focus-visible .wm-pin-head { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--violet); }
+.wm-pin.is-new .wm-pin-head { animation: wm-lit 1.4s ease-out 2; }
+@keyframes wm-lit { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--zd-them) 75%, transparent), 0 2px 6px rgba(0, 0, 0, 0.45); } 100% { box-shadow: 0 0 0 16px transparent, 0 2px 6px rgba(0, 0, 0, 0.45); } }
+.wm-stage.is-placing .wm-pin { opacity: 0.55; }
+.wm-stage.is-placing .wm-pin.is-lifted { opacity: 0.2; }
+
+/* Dropping a pin: the cross in the middle that the map moves under. */
+.wm-cross { position: absolute; left: 50%; top: calc((100% - var(--wm-pad, 0px)) / 2); width: 48px; height: 48px; margin: -24px 0 0 -24px; pointer-events: none; }
+.wm-cross[hidden] { display: none; }
+.wm-cross::before, .wm-cross::after { content: ""; position: absolute; background: var(--zd-them); box-shadow: 0 0 0 1.5px var(--zd-on-them); }
+.wm-cross::before { left: 0; top: 23px; width: 48px; height: 2px; }
+.wm-cross::after { left: 23px; top: 0; width: 2px; height: 48px; }
+.wm-cross i { position: absolute; left: 14px; top: 14px; width: 20px; height: 20px; border: 2px solid var(--zd-them); border-radius: 50%; box-shadow: 0 0 0 1.5px var(--zd-on-them), inset 0 0 0 1.5px var(--zd-on-them); }
+
+/* Zoom, on the right where a thumb reaches, and the bar along the bottom. */
+.wm-zoom { position: absolute; right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(78px + env(safe-area-inset-bottom, 0px)); z-index: 2; display: grid; background: var(--bar-bg); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--line); border-radius: 3px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.28); }
+.cc .wm-z { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: var(--ink); background: none; border: 0; }
+.wm-z + .wm-z { border-top: 1px solid var(--line-soft); }
+.wm-z svg { width: 20px; height: 20px; }
+.wm-z:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
+.wm-note { position: absolute; top: 10px; left: 50%; z-index: 2; max-width: calc(100% - 24px); margin: 0; padding: 6px 12px; font-size: 0.9rem; line-height: 1.35; text-align: center; color: var(--ink); background: var(--bar-bg); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--line); border-radius: 2px; transform: translateX(-50%); }
+.wm-note[hidden] { display: none; }
+.wm-bar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 14px max(12px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)); background: linear-gradient(to top, var(--bar-bg) 55%, transparent); pointer-events: none; }
+.wm-bar-row { display: flex; gap: 8px; max-width: 32rem; margin: 0 auto; pointer-events: auto; }
+.wm-bar .button { flex: none; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25); }
+.wm-bar .button.primary { flex: 1; }
+.wm-bar .button svg { width: 18px; height: 18px; margin-right: 6px; }
+.wm-pins-btn b { margin-left: 6px; font-variant-numeric: tabular-nums; color: var(--zd-them-ink); }
+.wm-hint { max-width: 32rem; margin: 0 auto 8px; padding: 6px 12px; font-size: 0.92rem; font-weight: 700; text-align: center; color: var(--ink); background: var(--bar-bg); border: 1px solid var(--zd-them-line); border-radius: 2px; pointer-events: auto; }
+.wm-body.is-placing .wm-zoom { bottom: calc(124px + env(safe-area-inset-bottom, 0px)); }
+
+/* A pin's card, the list of pins and picking what a pin opens: over the map,
+   in from the bottom, the map still showing round them. */
+.wm-card, .wm-panel { position: absolute; left: max(10px, env(safe-area-inset-left, 0px)); right: max(10px, env(safe-area-inset-right, 0px)); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 4; max-width: 32rem; margin: 0 auto; padding: 12px 14px 14px; box-shadow: inset 3px 0 0 var(--zd-them-line), 0 10px 32px rgba(0, 0, 0, 0.42); }
+.wm-panel { top: 10px; overflow-y: auto; overscroll-behavior: contain; }
+.wm-card.is-fresh, .wm-panel.is-fresh { animation: wm-up 240ms cubic-bezier(0.32, 0.72, 0, 1); }
+@keyframes wm-up { from { transform: translateY(18px); opacity: 0; } }
+.wm-card-top { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; }
+.wm-panel .wm-card-top { grid-template-columns: minmax(0, 1fr) auto; }
+.wm-card-mark, .wm-row-mark { display: grid; place-items: center; width: 40px; height: 40px; color: var(--zd-on-them); background: var(--zd-them); border-radius: 50%; }
+.wm-card-mark svg { width: 20px; height: 20px; }
+.wm-card-mark.is-hidden, .wm-row-mark.is-hidden { color: var(--zd-them-ink); background: var(--surface); border: 2px dashed var(--zd-them-line); }
+.wm-card-t { min-width: 0; }
+.wm-card-t .wb-k { gap: 6px; }
+.wm-card-n { margin: 0.1rem 0 0; font-family: var(--display); font-weight: 600; font-size: 1.2rem; line-height: 1.2; overflow-wrap: anywhere; }
+.wm-card-say { margin: 0.6rem 0 0; }
+.wm-card .cc-row { margin: 0.6rem 0 0; }
+.wm-card-more .button { font-size: 0.82rem; padding-inline: 0.8rem; }
+.wm-name { margin-top: 0.6rem; }
+.wm-name .cc-field input, .wm-panel .cc-field input, .wm-panel .cc-field select { width: 100%; }
+.wm-panel-t { margin: 0; font-size: 1.15rem; }
+.wm-panel-t small { margin-left: 6px; font-family: var(--body); font-size: 0.9rem; font-weight: 700; color: var(--muted); }
+.wm-panel-h2 { margin: 1.3rem 0 0.3rem; padding-top: 1rem; font-size: 1.05rem; border-top: 1px solid var(--line-soft); }
+.wm-panel-h3 { margin: 1rem 0 0.3rem; font-size: 0.95rem; color: var(--zd-them-ink); }
+.wm-gone { margin-top: 1.2rem; }
+.wm-rows, .wm-picks { display: grid; gap: 4px; margin: 0.6rem 0 0; padding: 0; list-style: none; }
+.wm-picks { max-height: 38vh; overflow-y: auto; overscroll-behavior: contain; }
+.wm-picks li[hidden] { display: none; }
+.cc .wm-row { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 10px; width: 100%; min-height: 52px; padding: 6px 10px; text-align: left; color: var(--ink); background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.wm-row:hover { border-color: var(--zd-them); }
+.wm-row:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
+.wm-row-mark { width: 32px; height: 32px; }
+.wm-row-mark svg { width: 16px; height: 16px; }
+.wm-row-in { display: grid; min-width: 0; }
+.wm-row-in b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wm-row-in small { font-size: 0.85rem; color: var(--muted); }
+.wm-justname { margin-top: 0.9rem; padding-top: 0.8rem; border-top: 1px solid var(--line-soft); }
+.wm-justname .cc-field input, .wm-pick .cc-field input { width: 100%; }
+@media (prefers-reduced-motion: reduce) {
+  .wm-tok-a:active { transform: none; }
+  .wm-card.is-fresh, .wm-panel.is-fresh, .wm-pin.is-new .wm-pin-head { animation: none; }
+  .wm-pin-head { transition: none; }
+}
+
 /* ── The faction turn (stage 2 of notes/worlds-plan.md): each downtime from
    the board, at the top of the World screen and the World tab. The factions'
    pieces are violet like the board's, the crew's action is gold, and the

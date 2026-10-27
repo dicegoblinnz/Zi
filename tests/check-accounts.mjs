@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, or 9b)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -128,12 +128,29 @@
 //    note Mo takes, keeping his own note, and a typo fix in Dace's goes in quietly.
 //    Nothing crosses to Zed's Night. The World screen, a place, a person and
 //    the World tab pass axe at 390, in both themes.
+//    9b. Maps and her pins. Mo puts up the Steeplands from a 6000 by 4500
+//    phone photo that came out sideways: his phone turns it and shrinks it to
+//    4096 on its longest side, with a small copy, and both are in the bucket
+//    under Tuesday Lair. Kai gets nothing of it, not even its picture. Mo drops
+//    a pin on the Copper Baths, one that's only a name (smoke on the ridge)
+//    and one on Lord Aldous Vane, whose page the crew hasn't been shown. He
+//    shows the crew the map and two of the pins: Kai gets the Copper Baths,
+//    which opens its page, and Lord Vane by name only, and the hidden pin never
+//    reaches her phone. She moves and zooms it in one hand (a double tap, a
+//    double tap held and slid, a drag and a pinch). The Copper Baths' page
+//    says it's on the map and opens the map at its pin. With no signal, the
+//    map Kai's seen opens with its picture. A map taken down goes in the bin,
+//    Undo brings it back with its picture, and a day after it's gone from the
+//    bucket. Nothing crosses: Zed gets no picture, nobody but the GM puts one
+//    up, and Zed's Night has no maps. The World screen, a map with a pin's
+//    card and the list of pins, and Kai's map pass axe at 390, in both themes.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
 // 11. Signing out takes the account's characters off the phone and leaves the
-//    phone's own. Kai downloads her data, then deletes her account: it's gone
-//    from the database, her campaign ends with its board and she's out of
+//    phone's own, and the maps' pictures go too. Kai downloads her data, then
+//    deletes her account: it's gone from the database, her campaign ends with
+//    its board and its map's pictures, and she's out of
 //    Mo's. The account page passes axe at 320 wide, and the campaign screens
 //    at 390, in both themes.
 import { createServer } from "node:http";
@@ -210,6 +227,8 @@ const mf = new Miniflare(convertV4MiniflareOptions({
   d1Databases: { DB: "zi-check" },
   // The live table: a Durable Object for each campaign (src/worker/table.js).
   durableObjects: { TABLE: { className: "Table", useSQLite: true } },
+  // Maps' pictures (src/worker/maps.js).
+  r2Buckets: { MAPS: "zi-check-maps" },
   bindings: {
     AUTH_HOSTS: `localhost:${PORT}`,
     BETTER_AUTH_SECRET: "check-secret-check-secret-check-secret-0123",
@@ -220,6 +239,7 @@ const mf = new Miniflare(convertV4MiniflareOptions({
   outboundService: provider,
 }));
 const db = await mf.getD1Database("DB");
+const r2 = await mf.getR2Bucket("MAPS");
 // Every migration, in order, the way `wrangler d1 migrations apply` runs them.
 for (const file of readdirSync("migrations").filter((f) => f.endsWith(".sql")).sort()) {
   const sql = readFileSync(join("migrations", file), "utf8").split("\n").filter((l) => !l.startsWith("--")).join("\n");
@@ -230,6 +250,18 @@ const rows = async (q, ...args) => (await db.prepare(q).bind(...args).all()).res
 // The site, served like Cloudflare does: files from dist/, /api/ to the Worker.
 const DIST = join(process.cwd(), "dist");
 const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".pdf": "application/pdf" };
+// The map's picture objects under a campaign, in the bucket.
+const picsOf = async (campId) => (await r2.list({ prefix: `maps/${campId}/` })).objects.map((o) => o.key);
+// Fingers on the screen, the way a phone sends them, for the map's gestures:
+// each step is a touch event with its points, then a pause.
+async function fingers(page, steps) {
+  const cdp = await page.context().newCDPSession(page);
+  for (const [type, points, wait = 16] of steps) {
+    await cdp.send("Input.dispatchTouchEvent", { type, touchPoints: points.map(([x, y], id) => ({ x, y, id })) });
+    await page.waitForTimeout(wait);
+  }
+  await cdp.detach();
+}
 async function file(path) {
   const clean = decodeURIComponent(path.split("?")[0].split("#")[0]);
   for (const candidate of [clean, join(clean, "index.html")]) {
@@ -368,7 +400,9 @@ const shots = async (page, name, sel) => {
 const axe = async (page, what) => {
   const result = await new AxeBuilder({ page }).include("main").analyze();
   for (const v of result.violations) note(`axe (${what}): ${v.id}: ${v.help} (${v.nodes[0]?.target?.join(" ")})`);
-  same(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `no sideways scroll (${what})`);
+  // A phone zooms out to fit anything too wide, so the page has to be no
+  // wider than the screen as well as no wider than itself.
+  same(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth && innerWidth <= screen.width), true, `no sideways scroll (${what})`);
   const small = await page.evaluate(() => [...document.querySelectorAll("#app .button, #app .cc-back, #app .cc-theme, #app .cc-strip-a, #app summary, #app .cc-pick, #app .cc-perm, #app .cc-ringbtn, #cc-dialog .button")]
     .filter((el) => el.getClientRects().length)
     .map((el) => ({ t: el.textContent.trim().slice(0, 30), h: Math.round(el.getBoundingClientRect().height) }))
@@ -2388,6 +2422,303 @@ try {
   console.log("9. Places and people");
   await checkPlaces();
 
+  // ------------------------------------------------------------ 9b. maps and her pins
+  async function checkMaps() {
+    const worldOf = async (id = tuesday.id) => JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", id))[0]?.data ?? "null");
+    const mapIn = async (name, id = tuesday.id) => (await worldOf(id))?.maps?.find((m) => m.name === name) ?? null;
+    const playerWorld = async (page = kai.page, id = tuesday.id) => (await got(page, "GET", `/api/campaigns/${id}/world`)).json?.world ?? null;
+    const h1 = (page) => page.textContent("#app h1").catch(() => "");
+    const toWorld = async (page) => {
+      await page.goto(`${BASE}/characters/?camp=${tuesday.id}&world`);
+      await page.waitForSelector(".wb-crew");
+    };
+    // A picture, as the phone gets it: its status, type and size.
+    const fetchPic = (page, path) => page.evaluate(async (p) => {
+      const r = await fetch(p, { cache: "no-store" });
+      return { status: r.status, type: r.headers.get("content-type"), size: (await r.arrayBuffer()).byteLength };
+    }, path);
+    // A picture put up straight through the Worker, for the checks that don't
+    // need the screens.
+    const upload = (page, campId, w = 1200, h = 800) => page.evaluate(async ([c, w, h]) => {
+      const cv = document.createElement("canvas");
+      cv.width = w;
+      cv.height = h;
+      const g = cv.getContext("2d");
+      g.fillStyle = "#cfe3ea";
+      g.fillRect(0, 0, w, h);
+      g.fillStyle = "#2d4a57";
+      g.fillRect(w * 0.1, h * 0.6, w * 0.8, h * 0.1);
+      const blob = await new Promise((r) => cv.toBlob(r, "image/jpeg", 0.8));
+      const f = new FormData();
+      f.append("pic", blob, "map");
+      f.append("thumb", blob, "thumb");
+      const r = await fetch(`/api/campaigns/${c}/maps`, { method: "POST", body: f });
+      return { status: r.status, json: await r.json().catch(() => null) };
+    }, [campId, w, h]);
+    const layerOf = (page) => page.$eval(".wm-layer", (el) => {
+      const m = el.style.transform.match(/translate3d\(([-+\d.e]+)px, ([-+\d.e]+)px, 0(?:px)?\) scale\(([-+\d.e]+)\)/);
+      return m ? { x: Number(m[1]), y: Number(m[2]), s: Number(m[3]) } : null;
+    });
+    const stageBox = async (page) => (await page.$(".wm-stage")).boundingBox();
+    const pinSel = (name) => `.wm-pin[aria-label^="${name},"]`;
+    const picLoaded = (page) => page.$eval(".wm-pic", (img) => img.complete && img.naturalWidth > 0 && img.src.startsWith("blob:")).catch(() => false);
+
+    // Mo opens Tuesday Lair's world: no maps yet.
+    await toWorld(mo.page);
+    has(await text(mo.page, "#wm-h + p"), "No maps yet", "no maps yet, and it says so");
+
+    // He puts up the Steeplands from a phone photo, 6000 by 4500, that came
+    // out sideways, so he turns it before it goes up.
+    const photo = await mo.page.evaluate(async () => {
+      const c = document.createElement("canvas");
+      c.width = 6000;
+      c.height = 4500;
+      const g = c.getContext("2d");
+      g.fillStyle = "#e8dcc2";
+      g.fillRect(0, 0, 6000, 4500);
+      g.strokeStyle = "#3a2e22";
+      g.lineWidth = 16;
+      for (let i = 0; i < 30; i++) {
+        g.beginPath();
+        g.moveTo((i * 997) % 6000, (i * 613) % 4500);
+        g.bezierCurveTo((i * 1301) % 6000, (i * 271) % 4500, (i * 401) % 6000, (i * 1777) % 4500, (i * 2003) % 6000, (i * 919) % 4500);
+        g.stroke();
+      }
+      g.fillStyle = "#3a2e22";
+      g.font = "bold 260px serif";
+      g.fillText("THE STEEPLANDS", 500, 700);
+      const b = await new Promise((r) => c.toBlob(r, "image/jpeg", 0.9));
+      const buf = new Uint8Array(await b.arrayBuffer());
+      let out = "";
+      for (let i = 0; i < buf.length; i += 0x8000) out += String.fromCharCode(...buf.subarray(i, i + 0x8000));
+      return btoa(out);
+    });
+    await mo.page.click('details[data-open="wb-mput"] > summary');
+    await mo.page.setInputFiles('details[data-open="wb-mput"] input[data-wmfile]', { name: "IMG_2034.jpg", mimeType: "image/jpeg", buffer: Buffer.from(photo, "base64") });
+    await mo.page.waitForSelector(".wm-draft-pic img", { timeout: 20000 });
+    const across = await mo.page.$eval(".wm-draft-pic img", (img) => img.naturalWidth > img.naturalHeight);
+    const before = await mo.page.getAttribute(".wm-draft-pic img", "src");
+    await mo.page.click('[data-do="mturn"]');
+    await until(async () => (await mo.page.getAttribute(".wm-draft-pic img", "src").catch(() => before)) !== before, "the picture turned");
+    yes(across && (await mo.page.$eval(".wm-draft-pic img", (img) => img.naturalHeight > img.naturalWidth)), "Turn it turns the picture a quarter");
+    await shot(mo.page, "map-draft");
+    await mo.page.fill('input[data-wmdraft="name"]', "The Steeplands");
+    await mo.page.click('form[data-form="w-map-new"] button[type="submit"]');
+    await until(async () => (await h1(mo.page)) === "The Steeplands", "the Steeplands' map screen, once it's up", 30000);
+    await until(async () => Boolean(await mapIn("The Steeplands")), "the Steeplands on the server");
+    const map = await mapIn("The Steeplands");
+    same([map.w, map.h, map.shown, map.pins.length], [3072, 4096, false, 0], "turned and shrunk to 4096 on its longest side, hidden, no pins");
+    const pics = await picsOf(tuesday.id);
+    same(pics.sort(), [`maps/${tuesday.id}/${map.key}`, `maps/${tuesday.id}/${map.key}.t`].sort(), "the picture and its small copy in the bucket, under Tuesday Lair");
+    const big = await r2.head(`maps/${tuesday.id}/${map.key}`);
+    const small = await r2.head(`maps/${tuesday.id}/${map.key}.t`);
+    yes(big.size < 8 * 1024 * 1024 && small.size < 400 * 1024 && /^image\/(webp|jpeg)$/.test(big.httpMetadata?.contentType || ""), `a picture that's quick to send (${Math.round(big.size / 1024)} KB, ${big.httpMetadata?.contentType}), and a small one (${Math.round(small.size / 1024)} KB)`);
+    await until(() => picLoaded(mo.page), "the picture on Mo's map screen");
+    const picPath = `/api/campaigns/${tuesday.id}/maps/${map.id}?k=${map.key}`;
+
+    // Kai's phone gets nothing of it, not even the picture.
+    same((await playerWorld())?.maps, [], "Kai's phone gets no maps");
+    same((await fetchPic(kai.page, picPath)).status, 404, "and the picture isn't hers to get");
+
+    // Mo drops a pin on the Copper Baths, in the middle of the map.
+    await mo.page.click('[data-do="mdrop"]');
+    await mo.page.waitForSelector(".wm-cross:not([hidden])");
+    await shot(mo.page, "map-placing");
+    await mo.page.click('[data-do="mplace"]');
+    await mo.page.waitForSelector(".wm-pick");
+    await mo.page.fill(".wm-pick input[data-wmfind]", "copper");
+    same(await mo.page.$$eval(".wm-picks li:not([hidden]) b", (els) => els.map((e) => e.textContent)), ["The Copper Baths"], "finding it by typing");
+    await mo.page.click('.wm-picks button:has(b:text-is("The Copper Baths"))');
+    await until(async () => (await mapIn("The Steeplands"))?.pins.length === 1, "the Copper Baths pin on the server");
+    const bathsPin = (await mapIn("The Steeplands")).pins[0];
+    same([bathsPin.to?.k, Math.abs(bathsPin.x - 0.5) < 0.01, Math.abs(bathsPin.y - 0.5) < 0.01, bathsPin.shown], ["p", true, true, false], "a pin on the Copper Baths where the cross was, hidden");
+    has(await text(mo.page, ".wm-card"), "Only you can see this pin", "its card says only he can see it");
+
+    // One that's only a name, somewhere else: he zooms in and moves the map
+    // under the cross with his thumb first.
+    await mo.page.click('[data-do="mdrop"]');
+    await mo.page.waitForSelector(".wm-cross:not([hidden])");
+    await mo.page.click('[data-do="mzoom"][data-z="in"]');
+    await mo.page.waitForTimeout(400);
+    let sb = await stageBox(mo.page);
+    const cx = sb.x + sb.width / 2;
+    const cy = sb.y + sb.height / 2;
+    const drag = (dx, dy) => fingers(mo.page, [["touchStart", [[cx, cy]]], ["touchMove", [[cx + dx * 0.3, cy + dy * 0.3]]], ["touchMove", [[cx + dx * 0.7, cy + dy * 0.7]]], ["touchMove", [[cx + dx, cy + dy]], 120], ["touchEnd", [], 400]]);
+    await drag(-70, -40);
+    await mo.page.click('[data-do="mplace"]');
+    await mo.page.fill('form[data-form="w-map-name"] input[name="name"]', "smoke on the ridge");
+    await mo.page.click('form[data-form="w-map-name"] button[type="submit"]');
+    await until(async () => (await mapIn("The Steeplands"))?.pins.length === 2, "the smoke pin on the server");
+    const smoke = (await mapIn("The Steeplands")).pins.find((p) => p.name === "smoke on the ridge");
+    yes(smoke && smoke.to === null && smoke.x > 0.5 && smoke.y > 0.5, `a pin that's only a name, further along and down (${smoke?.x}, ${smoke?.y})`);
+    // And one on Lord Aldous Vane, whose page the crew hasn't been shown, up
+    // and to the left.
+    await mo.page.click('[data-do="mdrop"]');
+    await drag(180, 120);
+    await mo.page.click('[data-do="mplace"]');
+    await mo.page.fill(".wm-pick input[data-wmfind]", "vane");
+    await mo.page.click('.wm-picks button:has(b:text-is("Lord Aldous Vane"))');
+    await until(async () => (await mapIn("The Steeplands"))?.pins.length === 3, "the Vane pin on the server");
+
+    // He shows the crew the map: Kai gets it with no pins yet, and its picture.
+    await mo.page.click(".wm-show");
+    await until(async () => (await playerWorld())?.maps?.length === 1, "the map on Kai's phone");
+    same((await playerWorld()).maps[0].pins, [], "with none of the pins yet");
+    const kaiPic = await fetchPic(kai.page, picPath);
+    same([kaiPic.status, kaiPic.size], [200, big.size], "and its picture's hers to get now");
+    same((await fetchPic(kai.page, `/api/campaigns/${tuesday.id}/maps/${map.id}?k=AAAAAAAAAAAAAAAA`)).status, 404, "but not by a key that isn't its picture");
+
+    // Then two of the pins: the Copper Baths, whose page she's seen, and Lord
+    // Vane, whose page she hasn't. Back to the whole map first, card shut.
+    await mo.page.click('.wm-card [data-do="mclose"]');
+    await mo.page.click('[data-do="mzoom"][data-z="whole"]');
+    await mo.page.waitForTimeout(450);
+    await mo.page.click(pinSel("The Copper Baths"));
+    await mo.page.click('.wm-card [data-do="mpinshow"]');
+    await mo.page.click(pinSel("Lord Aldous Vane"));
+    await mo.page.click('.wm-card [data-do="mpinshow"]');
+    await until(async () => (await playerWorld())?.maps?.[0]?.pins?.length === 2, "two pins on Kai's phone");
+    has(await text(mo.page, ".wm-card"), "They can open it once you’ve shown them Lord Aldous Vane too", "Mo's card says the crew only sees Vane's name");
+    const kw = await got(kai.page, "GET", `/api/campaigns/${tuesday.id}/world`);
+    const kpins = kw.json.world.maps[0].pins;
+    same(kpins.map((p) => [p.name, p.to?.k ?? null]).sort(), [["Lord Aldous Vane", null], ["The Copper Baths", "p"]], "the Copper Baths opens its page, and Lord Vane's only a name");
+    yes(!kw.body.includes("smoke on the ridge") && !kw.body.includes(smoke.id), "the hidden pin never reaches Kai's phone");
+    same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "kais-phone-0011", ops: [{ n: 1, o: "m-pinset", id: map.id, pid: smoke.id, f: "shown", v: true }] })).status, 403, "Kai can't show herself the hidden pin");
+
+    // On Vesk's World tab, Kai opens the map and its pins.
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector(".wb-tab .wm-tok");
+    same(await kai.page.$$eval(".wb-tab .wm-tok-n", (els) => els.map((e) => e.textContent)), ["The Steeplands"], "the Steeplands on Vesk's World tab");
+    await kai.page.click(".wm-tok-a");
+    await until(async () => (await h1(kai.page)) === "The Steeplands", "the map on Kai's phone");
+    await until(() => picLoaded(kai.page), "with its picture");
+    same(await kai.page.$$eval(".wm-pin", (els) => els.length), 2, "and the two pins she's been shown");
+    await kai.page.tap(pinSel("The Copper Baths"));
+    await kai.page.waitForSelector(".wm-card");
+    await kai.page.click('.wm-card a[data-do="nav"]');
+    await until(async () => (await h1(kai.page)) === "The Copper Baths", "the pin opens the Copper Baths' page");
+    has(await text(kai.page, ".cc-back"), "The Steeplands", "and Back goes to the map");
+    await kai.page.click(".cc-back");
+    await until(async () => (await h1(kai.page)) === "The Steeplands", "back on the map");
+    await kai.page.tap(pinSel("Lord Aldous Vane"));
+    await kai.page.waitForSelector(".wm-card");
+    has(await text(kai.page, ".wm-card"), "That’s all you know about it so far", "Lord Vane's pin is his name and nothing more");
+    same(await kai.page.$('.wm-card a[data-do="nav"]'), null, "with nothing to open");
+    await kai.page.click('.wm-card [data-do="mclose"]');
+
+    // One hand: a double tap zooms in where it's tapped, a double tap held
+    // and slid up zooms back out, a drag moves it and two fingers pinch it.
+    sb = await stageBox(kai.page);
+    const kx = sb.x + sb.width / 2;
+    const ky = sb.y + sb.height * 0.75;
+    const whole = await layerOf(kai.page);
+    await fingers(kai.page, [["touchStart", [[kx, ky]]], ["touchEnd", [], 60], ["touchStart", [[kx, ky]]], ["touchEnd", [], 500]]);
+    const zoomed = await layerOf(kai.page);
+    yes(zoomed.s > whole.s * 2.2, `a double tap zooms in (${whole.s.toFixed(3)} to ${zoomed.s.toFixed(3)})`);
+    await fingers(kai.page, [["touchStart", [[kx, ky]]], ["touchEnd", [], 60], ["touchStart", [[kx, ky]], 40], ["touchMove", [[kx, ky - 30]]], ["touchMove", [[kx, ky - 70]]], ["touchMove", [[kx, ky - 110]], 60], ["touchEnd", [], 450]]);
+    const out = await layerOf(kai.page);
+    yes(out.s < zoomed.s * 0.8, `a double tap held and slid up zooms out (${zoomed.s.toFixed(3)} to ${out.s.toFixed(3)})`);
+    await fingers(kai.page, [["touchStart", [[kx - 30, ky], [kx + 30, ky]]], ["touchMove", [[kx - 45, ky], [kx + 45, ky]]], ["touchMove", [[kx - 60, ky], [kx + 60, ky]], 40], ["touchEnd", [], 500]]);
+    const pinched = await layerOf(kai.page);
+    yes(pinched.s > out.s * 1.5, `two fingers pinch it bigger (${out.s.toFixed(3)} to ${pinched.s.toFixed(3)})`);
+    await fingers(kai.page, [["touchStart", [[kx, ky - 100]]], ["touchMove", [[kx + 30, ky - 80]]], ["touchMove", [[kx + 60, ky - 60]]], ["touchMove", [[kx + 80, ky - 50]], 40], ["touchEnd", [], 700]]);
+    const moved = await layerOf(kai.page);
+    yes(moved.x > pinched.x + 40 && moved.y > pinched.y + 20 && Math.abs(moved.s - pinched.s) < 1e-6, `a drag moves it (${JSON.stringify(pinched)} to ${JSON.stringify(moved)})`);
+    await kai.page.click('[data-do="mzoom"][data-z="whole"]');
+    await kai.page.waitForTimeout(450);
+    yes(Math.abs((await layerOf(kai.page)).s - whole.s) < 1e-3, "The whole map shows it all again");
+
+    // The Copper Baths' page says it's on the map, and opens the map at its pin.
+    await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&world&p=${encodeURIComponent(bathsPin.to.id)}`);
+    await mo.page.waitForSelector(".wm-on");
+    has(await text(mo.page, ".wm-on"), "The Steeplands", "the Copper Baths' page says it's on the Steeplands");
+    await mo.page.click(".wm-on a");
+    await until(async () => (await h1(mo.page)) === "The Steeplands", "the map, from the page");
+    await mo.page.waitForSelector(".wm-card");
+    has(await text(mo.page, ".wm-card-n"), "The Copper Baths", "opened at the Copper Baths' pin, with its card up");
+
+    // With no signal, the map Kai's seen opens with its picture.
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector(".wb-tab .wm-tok");
+    await until(() => kai.page.evaluate(async (p) => Boolean(await (await caches.open("zi-maps")).match(new URL(p, location.origin).href)), picPath), "the picture kept on Kai's phone");
+    await kai.context.setOffline(true);
+    await kai.page.click(".wm-tok-a");
+    await until(async () => (await h1(kai.page)) === "The Steeplands", "the map with no signal");
+    await until(() => picLoaded(kai.page), "its picture with no signal");
+    same(await kai.page.$$eval(".wm-pin", (els) => els.length), 2, "and its pins");
+    await kai.context.setOffline(false);
+
+    // A map taken down goes in the bin, Undo brings it back with its picture,
+    // and a day in the bin later it's gone from the bucket.
+    const up = await upload(mo.page, tuesday.id);
+    same(up.status, 200, "a second picture put up");
+    const harbour = { id: "harbour-map", name: "Harbour sketch", key: up.json?.key, w: 1200, h: 800, of: "" };
+    const send = (n, op) => got(mo.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "mos-check-0009", ops: [{ n, ...op }] });
+    await send(1, { o: "m-new", m: harbour });
+    await send(2, { o: "m-gone", id: harbour.id });
+    same((await worldOf()).bin?.map((b) => b.k), [harbour.key], "taking it down puts its picture in the bin");
+    yes((await picsOf(tuesday.id)).includes(`maps/${tuesday.id}/${harbour.key}`), "and the picture's still in the bucket");
+    await send(3, { o: "m-new", m: harbour });
+    same((await worldOf()).bin, [], "Undo puts it back, out of the bin");
+    same((await fetchPic(mo.page, `/api/campaigns/${tuesday.id}/maps/${harbour.id}?k=${harbour.key}`)).status, 200, "with its picture");
+    await send(4, { o: "m-gone", id: harbour.id });
+    const doc = await worldOf();
+    doc.bin = doc.bin.map((b) => ({ ...b, at: b.at - 2 * 24 * 3600 * 1000 }));
+    await db.prepare("UPDATE world SET data = ?2, version = version + 1 WHERE campaignId = ?1").bind(tuesday.id, JSON.stringify(doc)).run();
+    await send(5, { o: "m-set", id: map.id, f: "name", v: "The Steeplands" });
+    same((await picsOf(tuesday.id)).filter((k) => k.includes(harbour.key)), [], "a day in the bin later, its picture's gone from the bucket");
+    same((await worldOf()).bin, [], "and the bin's empty");
+    same((await picsOf(tuesday.id)).length, 2, "the Steeplands' picture's still there");
+
+    // Nothing crosses: Zed gets no picture, nobody but the GM puts one up,
+    // and Zed's Night has no maps.
+    same((await fetchPic(zed.page, picPath)).status, 404, "Zed can't get Tuesday Lair's picture");
+    same((await upload(zed.page, tuesday.id)).status, 404, "or put one up there");
+    same((await upload(kai.page, tuesday.id)).status, 403, "and Kai, a player, can't put one up");
+    same((await playerWorld(zed.page, zedsNight.id))?.maps, [], "Zed's Night has no maps");
+    same((await playerWorld(kai.page, zedsNight.id))?.maps, [], "and Kai gets none there");
+    // Kai runs Kai's Table, and its map's under it.
+    const kt = await upload(kai.page, kaisTable.id);
+    same(kt.status, 200, "Kai puts a map up in her own campaign");
+    await got(kai.page, "POST", `/api/campaigns/${kaisTable.id}/world`, { dev: "kais-phone-0012", ops: [{ n: 1, o: "m-new", m: { id: "kais-map", name: "The Undercroft", key: kt.json?.key, w: 1200, h: 800 } }] });
+    same((await picsOf(kaisTable.id)).length, 2, "its pictures under Kai's Table");
+    same((await fetchPic(mo.page, `/api/campaigns/${kaisTable.id}/maps/kais-map?k=${kt.json?.key}`)).status, 404, "and Mo can't get them");
+
+    // The World screen, a map with a pin's card and the list of pins, and
+    // Kai's map, at 390 in both themes.
+    for (const theme of ["dark", "light"]) {
+      for (const p of [mo.page, kai.page]) await p.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await toWorld(mo.page);
+      await mo.page.click('details[data-open="wb-mput"] > summary');
+      await mo.page.waitForSelector(".wm-tok img");
+      await axe(mo.page, `maps on the World screen, ${theme}`);
+      await shot(mo.page, `world-maps-${theme}`);
+      await mo.page.click(".wm-tok-a");
+      await mo.page.waitForSelector(".wm-stage");
+      await until(() => picLoaded(mo.page), `the map's picture, ${theme}`);
+      await mo.page.click(pinSel("The Copper Baths"));
+      await mo.page.waitForSelector(".wm-card");
+      await axe(mo.page, `a map with a pin's card, ${theme}`);
+      await shot(mo.page, `map-card-${theme}`);
+      await mo.page.click('[data-do="mpanel"]');
+      await mo.page.waitForSelector(".wm-panel");
+      await axe(mo.page, `a map's pins, ${theme}`);
+      await shot(mo.page, `map-pins-${theme}`);
+      await kai.page.goto(`${BASE}/characters/?camp=${tuesday.id}&world&m=${map.id}`);
+      await kai.page.waitForSelector(".wm-stage");
+      await until(() => picLoaded(kai.page), `Kai's map's picture, ${theme}`);
+      await kai.page.tap(pinSel("The Copper Baths"));
+      await kai.page.waitForSelector(".wm-card");
+      await axe(kai.page, `a map on Kai's phone, ${theme}`);
+      await shot(kai.page, `map-player-${theme}`);
+    }
+    for (const p of [mo.page, kai.page]) await p.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+  }
+  console.log("9b. Maps and her pins");
+  await checkMaps();
+  // ZI_UPTO=9b stops here, for a quicker look while working on maps.
+  if (UPTO === "9b") break rest;
+
   // ------------------------------------------------------------ 10. who can do what
   console.log("10. Who can do what");
   same((await api(kai.page, "GET", "/api/people")).status, 403, "a member can't see people");
@@ -2437,6 +2768,7 @@ try {
   yes((await text(kai.page)).includes("Sign in with Discord"), "signed out");
   same(await kai.page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.map((c) => c.name)), ["Ash"], "the account's characters leave the phone, its own stay");
   same(await kai.page.evaluate(() => localStorage.getItem("zi-campaigns")), null, "and so do her campaigns");
+  same(await kai.page.evaluate(() => caches.has("zi-maps")), false, "and the maps' pictures");
 
   const data = await two.page.evaluate(() => fetch("/api/me/data").then((r) => r.text()));
   yes(data.includes("Owes Bram two favours") && data.includes("kai@example.com") && data.includes("Tuesday Lair") && data.includes("Kai’s Table"), "the download has her account, characters and campaigns");
@@ -2450,6 +2782,7 @@ try {
   same(await rows("SELECT id FROM campaign WHERE gmId = ?1", kaiId), [], "her campaign's ended");
   same(await rows("SELECT campaignId FROM member WHERE userId = ?1 OR campaignId = ?2", kaiId, kaisTable.id), [], "she's out of Mo's, and nobody's left in hers");
   same(await rows("SELECT campaignId FROM world WHERE campaignId = ?1", kaisTable.id), [], "and her campaign's board went with it");
+  same(await picsOf(kaisTable.id), [], "and its map's pictures");
   yes(((await tableOf(tuesday.id))?.rounds ?? []).flatMap((r) => r.tele).every((t) => t.at.user !== kaiId && t.ans?.user !== kaiId && t.icp?.user !== kaiId), "and Tuesday Lair's table has forgotten her");
   await until(async () => (await tv.page.$$eval(".ts-p .ts-pn", (els) => els.map((e) => e.textContent))).join() === "Bram", "Vesk off the table screen's crew, on the TV, once Kai's gone", 4000);
   yes(((await tableOf(tuesday.id))?.rounds ?? []).every((r) => !Object.keys(r.acts ?? {}).some((k) => k.startsWith(`${kaiId}|`))), "and what she spent her actions on");

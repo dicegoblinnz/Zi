@@ -19,7 +19,9 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil((async () => {
-    for (const key of await caches.keys()) if (key.startsWith("zi-") && key !== CACHE) await caches.delete(key);
+    // The maps' pictures (zi-maps) are the account's, kept by the Characters
+    // page itself, so a new version of the site leaves them be.
+    for (const key of await caches.keys()) if (key.startsWith("zi-") && key !== CACHE && key !== "zi-maps") await caches.delete(key);
     await self.clients.claim();
   })());
 });

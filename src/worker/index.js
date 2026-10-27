@@ -13,6 +13,7 @@
 import { authFor, hit, originsOf, providersOf, seen } from "./auth.js";
 import { changeParty, dropFromParty, showParty } from "./party.js";
 import { changeWorld, showWorld } from "./world.js";
+import { getPicture, mapsEnd, putPicture } from "./maps.js";
 import { screenCode, screenRoute, tableEnd, tableLeft, tableRoute, tableScreenOff } from "./table.js";
 
 // The live table's Durable Object class, one for each campaign (table.js).
@@ -272,6 +273,12 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
     if (method === "GET") return showWorld(env, url, camp, user, { json });
     if (method === "POST") return gm ? changeWorld(request, env, camp, user, { json, fail, body }) : gmOnly();
   }
+  // A map's picture (maps.js): the GM puts them up, and her players get a
+  // map's picture once she's shown the crew the map.
+  if (sub === "maps") {
+    if (!subId && method === "POST") return gm ? putPicture(request, env, camp, user, { json, fail, limited }) : gmOnly();
+    if (subId && method === "GET") return getPicture(url, env, camp, subId, { fail });
+  }
   // The live table: the round's telegraphs and how each one went (table.js).
   if (sub === "table" && !subId) return tableRoute(request, env, method, camp, user, { json, fail, body, origins: originsOf(env), limited });
   if (sub === "link" && !subId && method === "POST") return gm ? resetLink(env, camp) : gmOnly();
@@ -353,8 +360,8 @@ async function renameCampaign(request, env, user, camp) {
   return json({ name });
 }
 
-// It ends for everyone, and its party sheet, world and live table go with it.
-// Their characters are theirs, so they stay.
+// It ends for everyone, and its party sheet, world, maps and live table go
+// with it. Their characters are theirs, so they stay.
 async function endCampaign(env, camp) {
   await env.DB.batch([
     env.DB.prepare("DELETE FROM party WHERE campaignId = ?1").bind(camp.id),
@@ -363,6 +370,7 @@ async function endCampaign(env, camp) {
     env.DB.prepare("DELETE FROM campaign WHERE id = ?1").bind(camp.id),
   ]);
   await tableEnd(env, camp.id);
+  await mapsEnd(env, camp.id);
   return json({ ok: true });
 }
 
