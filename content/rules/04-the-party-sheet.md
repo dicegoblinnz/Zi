@@ -135,7 +135,7 @@ Here are twelve to pick from. There are plenty more in [Appendix B](#faction-str
 | **Rooted** | Once a session, anyone in the crew being chased through the crew's own streets gets away, with no roll. |
 | **A Ship** | The crew's own ship. A voyage on it needs no Supplies clock, and while nothing's paying for it, it stays tied up in harbour. |
 | **Smugglers' Roads** | A journey on the crew's own roads starts with its first stage already behind it. |
-| **A Workshop** | Once a downtime, mend a broken item without spending a slot. |
+| **A Workshop** | Once a downtime, mend a broken item, or a piece of armour with boxes ticked, without spending a slot. |
 | **Healers** | Once a session, between two scenes, everyone in the crew steps their wound die down a size. |
 | **Old Debts** | Once a session, someone the crew once helped turns up and does one thing for them. |
 

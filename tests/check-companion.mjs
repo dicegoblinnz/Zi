@@ -408,7 +408,7 @@ if (part("3")) {
   same(await page.$$eval('#cc-dialog button[data-what="break"][data-k="equipment|worn leathers"]', (els) => els.length), 0, "no breaking her leathers outright");
   await page.click('#cc-dialog button[data-act="d-pay"][data-what="box"][data-k="equipment|worn leathers"]');
   has(await page.textContent("#cc-dialog .dlg-body"), "Defend d2", "her Defend once her leathers break");
-  has(await page.textContent("#cc-dialog .res-paid"), "Your worn leathers took it, and they’re broken till they’re mended", "the blow's cost counted on it");
+  has(await page.textContent("#cc-dialog .res-paid"), "Your worn leathers took it and broke", "the blow's cost counted on it");
   has(await page.textContent("#cc-dialog .cc-swing"), "Your worn leathers took the blow, so it doesn’t move", "armour taking a blow leaves Confidence alone");
   same(await swing(), ["d6", "d8"], "Confidence once her leathers took the blow");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
@@ -695,7 +695,7 @@ if (part("3c")) {
   await page.locator("#cc-dialog .cc-pay").first().scrollIntoViewIfNeeded();
   await shot(page, "armour-pay");
   await page.click('#cc-dialog button[data-act="d-pay"][data-what="box"][data-k="equipment|plate armour"]');
-  has(await page.textContent("#cc-dialog .res-paid"), "Your plate armour took it: 1 of 2 boxes ticked", "his plate taking the blow");
+  has(await page.textContent("#cc-dialog .res-paid"), "Your plate armour took it: 1 of 2 ticked", "his plate taking the blow");
   has(await page.textContent("#cc-dialog .cc-swing"), "Your plate armour took the blow, so it doesn’t move", "his Confidence left alone");
   has(await page.textContent("#cc-dialog .dlg-body"), "Defend d8", "his plate still on his Defend with a box ticked");
   await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
@@ -716,7 +716,8 @@ if (part("3c")) {
   has(await page.textContent("#cc-dialog .cc-more"), "It’s one more, since you’re Exposed.", "the vulnerability's one more");
   same(await page.$$eval('#cc-dialog .cc-more button[data-act="d-pay"]', (els) => els.map((el) => el.dataset.what + (el.dataset.k ? `:${el.dataset.k}` : ""))), ["vuln", "vbox:equipment|a shield"], "another Hurt, or his shield, for the one more");
   await page.click('#cc-dialog button[data-act="d-pay"][data-what="vbox"][data-k="equipment|a shield"]');
-  has(await page.textContent("#cc-dialog .res-paid"), "Your plate armour took it, and it’s broken till it’s mended, and your shield took one more, so it’s broken too", "both pieces taking the hit that's two Hurts");
+  has(await page.textContent("#cc-dialog .res-paid"), "Your plate armour took it and broke, and your shield took one more and broke", "both pieces taking the hit that's two Hurts");
+  same((await page.textContent("#cc-dialog .res-paid")).length <= 80, true, "short enough for the GM's phone to keep whole");
   has(await page.textContent("#cc-dialog .dlg-body"), "Defend d4", "his Defend with his plate and shield broken");
   same((await state()).wound, 2, "his wound die never moved");
   await shot(page, "armour-when-it-lands");

@@ -1541,8 +1541,10 @@ function payView(h, r, s, c) {
   const b = (what, label, no = false, extra = "") => `<button type="button" class="button sm" data-act="d-pay" data-j="${h.j}" data-what="${what}"${extra}${off(no)}>${label}</button>`;
   const box = (a, what) => b(what, `<span>Put it on ${esc(yours(a))}</span>${kitBoxes(tickedOf(s, a), a.boxes, { label: boxesSaid(s, a) })}`, false, ` data-k="${esc(keyOf(a))}"`);
   if (r.paid[h.j]) {
-    const more = r.harm?.[h.j] && (r.extra[h.j] ?? 0) < vulns.length && !s.blaze;
-    return `<span class="res-paid">${esc(r.paid[h.j])}</span>${more ? `<div class="cc-pay cc-more"><p class="cc-small">It’s one more, since you’re ${esc(vulns[r.extra[h.j] ?? 0])}.</p>${b("vuln", "Another Hurt")}${r.against === "blows" ? standing(c, s).map((a) => box(a, "vbox")).join("") : ""}</div>` : ""}`;
+    // A Blaze ends it for your body, but your armour can still take one more.
+    const boxes = r.against === "blows" ? standing(c, s) : [];
+    const more = r.harm?.[h.j] && (r.extra[h.j] ?? 0) < vulns.length && (!s.blaze || boxes.length);
+    return `<span class="res-paid">${esc(r.paid[h.j])}</span>${more ? `<div class="cc-pay cc-more"><p class="cc-small">It’s one more, since you’re ${esc(vulns[r.extra[h.j] ?? 0])}.</p>${s.blaze ? "" : b("vuln", "Another Hurt")}${boxes.map((a) => box(a, "vbox")).join("")}</div>` : ""}`;
   }
   const cond = condOf(h.intent);
   // The Guardian's Resolve: one hit that gets through does nothing.
@@ -2682,10 +2684,11 @@ const ACT = {
         if (!a || r.against !== "blows" || leftOf(s, a) < 1 || (what === "vbox" && (!r.harm[j] || (r.extra[j] ?? 0) >= vulnsOn(s).length))) return;
         const n = tickBox(s, a);
         const last = n >= a.boxes;
+        // Kept short, since the GM's phone keeps 80 letters of it.
         if (what === "vbox") {
           r.extra[j] = (r.extra[j] ?? 0) + 1;
-          r.paid[j] = `${r.paid[j]}, and ${yours(a)} took one more${last ? `, so ${itS(a)} broken too` : `: ${n} of ${a.boxes} ticked`}`;
-        } else r.paid[j] = last ? `${cap(yours(a))} took it, and ${itS(a)} broken till ${itS(a)} mended` : `${cap(yours(a))} took it: ${n} of ${a.boxes} boxes ticked`;
+          r.paid[j] = `${r.paid[j]}, and ${yours(a)} took one more${last ? " and broke" : ` (${n} of ${a.boxes})`}`;
+        } else r.paid[j] = last ? `${cap(yours(a))} took it and broke` : `${cap(yours(a))} took it: ${n} of ${a.boxes} ticked`;
         r.harm[j] = true;
         r.moves.push({ d: 0, text: `${esc(cap(yours(a)))} took the blow, so it doesn’t move` });
       } else if (what === "vuln") {

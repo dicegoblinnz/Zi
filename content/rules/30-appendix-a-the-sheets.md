@@ -31,7 +31,7 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 -   On each row: what's on it · steps · die
 -   Steps into dice (1 step is a d2, 6 is a d12, 12 is two d12s, and 24 is four)
 -   Traits (3 · two to start · each with its type, Passive · Triggered · Invoked · Per scene · Per downtime · Used, and two lines for what it does)
--   Kit: equipment (3 · what you wear or wield, with a weapon's properties · each piece of plain armour, a shield and a helmet, is a line on your Defend, written with its quality and three boxes beside it, 1 Common, 2 Fine and 3 Masterwork, to tick a blow at a time) · utility (3 · tools and things you use up · cross it off once it's used) · a keepsake (something that matters to your character) · the bag (holds 10 · getting something out takes your action, and putting it away is free)
+-   Kit: equipment (3 · what you wear or wield, with a weapon's properties · each piece of plain armour, a shield and a helmet, is a line on your Defend, written with its quality first and three boxes beside it, ticked a blow at a time, and it breaks on the first box if it's Common, the second if it's Fine and the third if it's Masterwork) · utility (3 · tools and things you use up · cross it off once it's used) · a keepsake (something that matters to your character) · the bag (holds 10 · getting something out takes your action, and putting it away is free)
 -   Notes (a thread that won't fit on its bond, and whatever your archetype's holding, like a Shadow's pool or a Shifter's animal tags)
 :::
 

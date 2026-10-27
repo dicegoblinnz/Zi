@@ -408,7 +408,7 @@ Weapons, armour and anything else you wear or wield are equipment. Tools and thi
 | Group | Examples |
 | --- | --- |
 | **Weapons** | Sword · war hammer · longbow · crossbow · throwing knives · dagger · staff · spear · whip · net · improvised weapon |
-| **Armour & wearables** | Plate armour · chain shirt · worn leathers · helmet · shield · fine coat · cloak with hood · travel boots · gloves · belt with pouches · signet pin |
+| **Armour & wearables** | Plate armour · chain shirt · worn leathers · helmet · shield · good coat · cloak with hood · travel boots · gloves · belt with pouches · signet pin |
 | **Tools** | Perfect set of picks · grappling hook and line · 50 feet of rope · crowbar · lantern · spyglass · tinderbox · hammer and pitons · small mirror |
 | **Foci** | Ember stone · carved staff · book of workings · holy symbol · bone flute · silver bell · chalk and salt |
 | **Personal** | Journal · quill and ink · set of dice · deck of cards · musical instrument · well-loved book · bedroll · backpack · bag · sling bag |
@@ -717,7 +717,7 @@ When the telegraphs land and you let them ride, you roll your Defend once, and i
 
 ### Quality {#s-armour-quality}
 
-Every piece of armour, every shield and every helmet has a **quality**: **Common**, **Fine** or **Masterwork**. That's how many boxes it's got, 1, 2 or 3, and each blow it takes for you ticks one. When the last one's ticked, it breaks.
+Every piece of armour, every shield and every helmet has a **quality**: **Common**, **Fine** or **Masterwork**. That's how many boxes it's got, 1, 2 or 3, and each blow it takes for you ticks one. It's still a line on your Defend till the last one's ticked, and then it breaks.
 
 | Quality | Boxes | What it is |
 | --- | --- | --- |
@@ -727,7 +727,7 @@ Every piece of armour, every shield and every helmet has a **quality**: **Common
 
 So the more you wear, the more blows you can take. Bram's plate is Fine and his shield's Common, so that's three blows between them before they're both gone, and Vesk's Common leathers can take one.
 
--   **It counts till it breaks.** A piece with a box ticked is still a line on your Defend. When its last box goes, it's crossed out until it's mended, and it isn't a line on your Defend till then.
+-   **When the last box goes**, it's crossed out until it's mended, and it isn't a line on your Defend till then.
 -   **Quality doesn't add a step.** A Masterwork shield is one line on your Defend, the same as a Common one.
 -   **A hit that's two Hurts**, because it found a [vulnerability](#s-vulnerable), is two boxes. Put them on one piece or two, or tick one and take the other as a Hurt.
 -   **A helmet's armour like any other.** It's a line on your Defend and one of your equipment, and it's got a quality and boxes like the rest.

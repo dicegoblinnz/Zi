@@ -123,7 +123,7 @@ function front(stamp) {
       ${range(3).map((i) => `<div class="trait"><div class="row">${w(`trait_${i}`)}<span class="lab">type</span>${w(`trait_${i}_type`, { cls: "short" })}</div><span class="w two" data-f="trait_${i}_does" data-multi data-size="8"></span></div>`).join("")}
     </section>
     <section class="blk kit">
-      ${tab("Kit", "armour: its quality first, and tick a box a blow · Common 1 · Fine 2 · Masterwork 3")}
+      ${tab("Kit", "armour: its quality first · tick a box a blow · it breaks on box 1 if Common, 2 if Fine, 3 if Masterwork")}
       <div class="cols">
         <div class="sub"><span class="lab">Equipment · what you wear or wield</span>${range(3).map((i) => `<div class="eq">${w(`equipment_${i}`)}<span class="boxes">${range(3).map((j) => tick(`equipment_${i}_box_${j}`, "check")).join("")}</span></div>`).join("")}</div>
         <div class="sub"><span class="lab">Utility · cross it off once it’s used</span>${lines("utility", 3)}</div>

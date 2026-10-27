@@ -9,7 +9,7 @@ This is the record of every rules change since the 2 Oct 2026 book, newest first
 
 **Armour, shields and helmets have a quality now: Common, Fine or Masterwork.** That's how many boxes the piece has, 1, 2 or 3, and every blow it takes for you ticks one. It's still a line on your Defend till its last box is ticked, and then it breaks. So the more you wear, the more blows you can take. Before, a piece broke the first time it took a blow for you. Quality doesn't add a step: a Masterwork shield's one line, the same as a Common one. See [Armour](#s-armour), [Quality](#s-armour-quality) and [Consequences](#s-consequences).
 
-**A helmet's armour like any other:** a line on your Defend, one of your equipment, and a quality with its boxes. It's in the [item list](#the-item-list) now. The item list's fine sword is a sword, so it doesn't read as a quality.
+**A helmet's armour like any other:** a line on your Defend, one of your equipment, and a quality with its boxes. It's in the [item list](#the-item-list) now. The item list's fine sword is a sword, and its fine coat is a good coat, so neither reads as a quality.
 
 **A hit that's two Hurts is two boxes**, on one piece or two, or one box and a Hurt.
 

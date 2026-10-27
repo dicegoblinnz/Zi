@@ -14,7 +14,7 @@ You asked for three qualities, each taking 1, 2 or 3 blows before it breaks, on 
 6. **Quality doesn't add a step.** A Masterwork piece is one line on Defend, the same as a Common one. Upgrading gear already said a finer thing is still one line.
 7. **What you start with.** Common, and one piece can be Fine, so the builder warns about a second Fine piece or a Masterwork one at the start (it never stops you). Bram's plate is the crew's one Fine piece, and his shield and Vesk's leathers are Common. Nobody else in the crew wears armour.
 8. **What it costs.** It follows the money list: Common armour's a purse of gold, Fine's several purses, and Masterwork's a small fortune. Before, "real armour" was several purses.
-9. **A sword, not a fine sword.** The item list's *Fine sword* and the written item example's *a fine sword* are just a sword now, since Fine is a quality and weapons haven't got one.
+9. **A sword, not a fine sword.** The item list's *Fine sword* and the written item example's *a fine sword* are just a sword now, and its *fine coat* is a *good coat*, since Fine is a quality and only armour has one. Isolde's coat with silver thread is still fine.
 10. **Other things you carry still break outright** when they take a blow for you, like a sword snapping. Only armour, shields and helmets have boxes.
 
 ## 27 Oct: a good Aspiration and a good Goal

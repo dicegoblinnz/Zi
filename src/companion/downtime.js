@@ -182,7 +182,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       case "pressure":
         return `${field(i, "text", "What you’re dealing with", sl.text)}<p class="cc-lead">One slot usually settles a pressure, and the GM says if it needs two. If something pushes back, roll for it.</p>`;
       case "mend":
-        return `${chips(i, "key", crossed(c, s).map((x) => [x.key, `${esc(x.name)}${x.note ? ` <small>${esc(x.note)}</small>` : ""}`]), sl.key, "What you’re mending")}<p class="cc-lead">Mending something usually takes a purse of gold as well. Mended armour goes back on your Defend, and every box on it’s clear. ${link("recovering-armour", "Broken armour")}</p>`;
+        return `${chips(i, "key", crossed(c, s).map((x) => [x.key, `${esc(x.name)}${x.note ? ` <small>${esc(x.note)}</small>` : ""}`]), sl.key, "What you’re mending")}<p class="cc-lead">Mending something usually takes a purse of gold as well. Mended armour goes back on your Defend, with every box clear. ${link("recovering-armour", "Broken armour")}</p>`;
       case "perm": {
         const t = c.titles[sl.t];
         const e = earlier(d, i, s);
