@@ -457,6 +457,8 @@ export function makeTable(d) {
         m = JSON.parse(e.data);
       } catch {}
       if (m?.t === "view") take(id, m);
+      // What the crew sees of the maps has changed: the World screen looks again (world.js).
+      if (m?.t === "world") dispatchEvent(new CustomEvent("zi-world", { detail: id }));
       // Taken out, or the campaign's ended.
       if (m?.t === "out") {
         shut();

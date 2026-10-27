@@ -10,6 +10,10 @@
 //
 // The viewer's element lives on while the screen's drawn again around it
 // (mapsui.js puts it back in its place), so where it's been moved to stays put.
+//
+// Under the fog (stage 5) there's a fog layer over the picture, and while she's
+// rubbing it, one finger rubs instead of moving the map (brush()). Two fingers
+// still move and zoom it, and so do the zoom buttons and the keys.
 
 const TAP_MOVE = 10; // how far a finger can wander and still be a tap
 const DOUBLE_MS = 300;
@@ -33,11 +37,16 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
   el.setAttribute("aria-roledescription", "map");
   el.setAttribute("aria-label", label);
   if (how) el.setAttribute("aria-describedby", how);
-  el.innerHTML = '<div class="wm-layer" aria-hidden="true"><img class="wm-pic" alt="" draggable="false" decoding="async"></div><div class="wm-pins"></div><div class="wm-cross" aria-hidden="true" hidden><i></i></div>';
+  el.innerHTML = '<div class="wm-layer" aria-hidden="true"><img class="wm-pic" alt="" draggable="false" decoding="async"><canvas class="wm-fog" hidden></canvas></div><div class="wm-pins"></div><div class="wm-cross" aria-hidden="true" hidden><i></i></div><div class="wm-ring" aria-hidden="true" hidden></div>';
   const layer = el.firstElementChild;
   const img = layer.firstElementChild;
+  const fogEl = layer.querySelector(".wm-fog");
   const pinsEl = el.querySelector(".wm-pins");
   const cross = el.querySelector(".wm-cross");
+  const ring = el.querySelector(".wm-ring");
+  // While she's rubbing the fog: { r() the brush's size on the screen,
+  // start(x, y), move(x, y) and end() in the picture's pixels, cancel() }.
+  let brushing = null;
   layer.style.width = `${w}px`;
   layer.style.height = `${h}px`;
 
@@ -210,6 +219,15 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
   let lastTap = null;
   let box = null;
   const local = (e) => ({ x: e.clientX - box.left, y: e.clientY - box.top });
+  // A finger rubbing the fog: what it's over on the picture, with the ring
+  // that shows how wide it rubs round it.
+  function rubAt(p, phase) {
+    const r = brushing.r();
+    ring.style.width = ring.style.height = `${r * 2}px`;
+    ring.style.transform = `translate3d(${p.x - r}px, ${p.y - r}px, 0)`;
+    ring.hidden = false;
+    brushing[phase]((p.x - x) / s, (p.y - y) / s);
+  }
 
   el.addEventListener("pointerdown", (e) => {
     // Whatever's pressed now is a new tap, whatever the last one was.
@@ -225,6 +243,13 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     if (ptrs.size === 1) {
       const p = ptrs.get(e.pointerId);
       const now = performance.now();
+      if (brushing) {
+        clearTimeout(tapTimer);
+        lastTap = null;
+        g = { kind: "brush", id: e.pointerId, moved: true };
+        el.setPointerCapture?.(e.pointerId);
+        return rubAt(p, "start");
+      }
       const second = lastTap && now - lastTap.t < DOUBLE_MS && Math.hypot(p.x - lastTap.x, p.y - lastTap.y) < DOUBLE_GAP;
       if (second) clearTimeout(tapTimer);
       g = { kind: second ? "zoom" : "pan", id: e.pointerId, sx: p.x, sy: p.y, from: { s, x, y }, moved: false, trail: [{ ...p, t: now }], at: second ? { x: lastTap.x, y: lastTap.y } : null };
@@ -232,6 +257,11 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
       const [a, b] = [...ptrs.values()];
       clearTimeout(tapTimer);
       lastTap = null;
+      // A second finger mid-rub moves the map instead, and that rub's taken back.
+      if (g?.kind === "brush") {
+        ring.hidden = true;
+        brushing?.cancel();
+      }
       g = { kind: "pinch", d0: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), mid: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 }, from: { s, x, y }, moved: true };
       el.classList.add("is-moving");
       for (const id of ptrs.keys()) el.setPointerCapture?.(id);
@@ -242,6 +272,10 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     if (!ptrs.has(e.pointerId) || !g) return;
     const p = local(e);
     ptrs.set(e.pointerId, p);
+    if (g.kind === "brush") {
+      if (e.pointerId === g.id && brushing) rubAt(p, "move");
+      return;
+    }
     if (g.kind === "pinch") {
       if (ptrs.size < 2) return;
       const [a, b] = [...ptrs.values()];
@@ -279,6 +313,15 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     const p = ptrs.get(e.pointerId);
     ptrs.delete(e.pointerId);
     if (!g) return;
+    if (g.kind === "brush") {
+      if (e.pointerId !== g.id) return;
+      g = null;
+      dragged = true;
+      ring.hidden = true;
+      if (cancelled) brushing?.cancel();
+      else brushing?.end();
+      return;
+    }
     if (g.kind === "pinch") {
       if (ptrs.size === 1) {
         // One finger still down carries on moving it, from where it is now.
@@ -434,6 +477,22 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     placing(on) {
       cross.hidden = !on;
       el.classList.toggle("is-placing", on);
+    },
+    // The fog's layer over the picture (mapsui.js draws it).
+    fog: () => fogEl,
+    // How many of the screen's pixels to one of the picture's, right now.
+    scale: () => s,
+    // Rubbing the fog: one finger rubs (handler, see brushing above) instead
+    // of moving the map, or null to go back to moving it.
+    brush(handler) {
+      if (handler === brushing) return;
+      if (g?.kind === "brush") {
+        g = null;
+        brushing?.cancel();
+      }
+      brushing = handler;
+      ring.hidden = true;
+      el.classList.toggle("is-brushing", Boolean(handler));
     },
     // The bar along the bottom covers this much of the map.
     pad(px) {

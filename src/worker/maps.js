@@ -8,24 +8,33 @@
 //        picture (pic) and a small one for lists (thumb), both already shrunk
 //        on her phone. It answers the picture's key, which her phone then puts
 //        on a map in the world.
+//   POST /api/campaigns/<id>/maps?for=<map>   the crew's picture of a map
+//        under the fog (stage 5), made on her phone with every covered square
+//        painted over, the same size as the map's own picture.
 //   GET  /api/campaigns/<id>/maps/<map>?k=<key>   a map's picture (&t=1 for
 //        the small one), for the GM, or for a player once she's shown the crew
 //        that map. The key has to be the map's picture now, so a phone that's
-//        behind gets nothing rather than the wrong picture.
+//        behind gets nothing rather than the wrong picture. While a map's under
+//        the fog, the only picture a player gets is the crew's.
 //
 // A picture comes off when she takes its map down or puts another picture on
 // it. The world keeps its key in a bin for a day after (binned(), from
 // world.js), so Undo can put the map back with its picture, and after that
-// the picture goes. Ending a campaign takes every picture it had (mapsEnd()).
-import { MMAX, isKey, mapsOf } from "../companion/maps.js";
+// the picture goes. A crew's picture that's been made again only waits long
+// enough for a phone that's part way through fetching it, since her phone
+// makes another whenever it's needed. Ending a campaign takes every picture
+// it had (mapsEnd()).
+import { MMAX, isKey, keysOf, mapsOf } from "../companion/maps.js";
 
 const PIC_MAX = 8 * 1024 * 1024;
 const THUMB_MAX = 400 * 1024;
 // The small copy's longest side: her phone makes them 640.
 const THUMB_SIDE = 1600;
-// Pictures a campaign keeps, counting ones on their way off.
-const MAX_PICS = MMAX.maps * 2;
+// Pictures a campaign keeps, counting ones on their way off: each map's own,
+// the crew's under the fog, and the ones in the bin.
+const MAX_PICS = MMAX.maps * 3;
 const DAY = 24 * 3600000;
+const CREW_GRACE = 10 * 60000;
 const MAP_ID = /^[a-z0-9-]{2,24}$/;
 const NOTHING = "That map isn’t here, or it’s got a new picture since.";
 
@@ -81,18 +90,21 @@ export function sizeOf(buf, type) {
 }
 const fits = (sz, side) => Boolean(sz && sz.w >= 1 && sz.h >= 1 && sz.w <= side && sz.h <= side);
 
-// The world's bin: pictures that have come off it lately, by key and when.
+// The world's bin: pictures that have come off it lately, by key and when,
+// and whether each was a crew's picture (c).
 export function binOf(v) {
-  return (Array.isArray(v) ? v : []).filter((x) => x && isKey(x.k) && Number.isFinite(x.at)).slice(-200).map((x) => ({ k: x.k, at: x.at }));
+  return (Array.isArray(v) ? v : []).filter((x) => x && isKey(x.k) && Number.isFinite(x.at)).slice(-200).map((x) => ({ k: x.k, at: x.at, ...(x.c ? { c: 1 } : {}) }));
 }
 
 // After a change to the world: pictures it no longer uses go in the bin, and
 // ones that have been in it for a day come out to be taken off the bucket.
-// had is the world's pictures before the change, doc the world after it.
+// had is the world's pictures before the change (keysOf()), doc the world
+// after it. A crew's picture goes in as if it's been there all but ten
+// minutes of the day.
 export function binned(rawBin, had, doc, now) {
-  const has = new Set(doc.maps.map((m) => m.key));
+  const has = keysOf(doc);
   const bin = binOf(rawBin).filter((b) => !has.has(b.k));
-  for (const k of had) if (!has.has(k) && !bin.some((b) => b.k === k)) bin.push({ k, at: now });
+  for (const [k, kind] of had) if (!has.has(k) && !bin.some((b) => b.k === k)) bin.push(kind === "crew" ? { k, at: now - DAY + CREW_GRACE, c: 1 } : { k, at: now });
   return { bin: bin.filter((b) => now - b.at <= DAY), gone: bin.filter((b) => now - b.at > DAY).map((b) => b.k) };
 }
 
@@ -127,7 +139,11 @@ async function mapsIn(env, campId) {
 // Only the GM gets here (index.js turns anyone else away).
 export async function putPicture(request, env, camp, user, { json, fail, limited }) {
   if (!env.MAPS) return fail(503, "Maps aren’t switched on here yet.");
-  if (await limited(env, `map:${user.id}`, 40, 3600)) return fail(429, "That’s a lot of pictures at once. Give it a while.");
+  // The crew's picture of a map under the fog goes up each time she
+  // uncovers some, so there's room for a lot more of those in an hour.
+  const forId = new URL(request.url).searchParams.get("for") ?? "";
+  if (forId && !MAP_ID.test(forId)) return fail(404, NOTHING);
+  if (await limited(env, forId ? `mapfog:${user.id}` : `map:${user.id}`, forId ? 600 : 40, 3600)) return fail(429, "That’s a lot of pictures at once. Give it a while.");
   // Its size up front, so nothing's read that's too big to keep.
   const length = Number(request.headers.get("content-length"));
   if (!Number.isFinite(length) || length <= 0) return fail(411, "That didn’t look like a picture.");
@@ -144,22 +160,31 @@ export async function putPicture(request, env, camp, user, { json, fail, limited
   const type = kindOf(picBytes);
   const small = kindOf(thumbBytes);
   if (!type || !small) return fail(400, "That isn’t a picture the site can show. Try a photo, a JPEG or a PNG.");
-  if (!fits(sizeOf(picBytes, type), MMAX.side) || !fits(sizeOf(thumbBytes, small), THUMB_SIDE)) return fail(400, `That picture’s bigger than a map can be, ${MMAX.side} across. Put it up from the World screen, which shrinks it first.`);
+  const size = sizeOf(picBytes, type);
+  if (!fits(size, MMAX.side) || !fits(sizeOf(thumbBytes, small), THUMB_SIDE)) return fail(400, `That picture’s bigger than a map can be, ${MMAX.side} across. Put it up from the World screen, which shrinks it first.`);
 
   // Pictures nothing in the world uses any more go first: ones put up over a
   // day ago that never got onto a map (her phone lost its signal on the way
   // and never got it back), and ones that have been in the bin for a day.
   const now = Date.now();
   const { maps, bin } = await mapsIn(env, camp.id);
-  const used = new Set(maps.map((m) => m.key));
+  if (forId) {
+    const m = maps.find((x) => x.id === forId);
+    if (!m?.fog) return fail(409, "That map isn’t under the fog any more.");
+    if (size.w !== m.w || size.h !== m.h) return fail(400, "That picture isn’t the same size as the map’s.");
+  }
+  const used = new Set(keysOf({ maps }).keys());
   for (const b of bin) if (now - b.at <= DAY) used.add(b.k);
+  // A crew's picture in the bin is on its way off in minutes, so it doesn't
+  // count against what a world holds, and one whose minutes are up goes now.
+  const going = new Set(bin.filter((b) => b.c).map((b) => b.k));
   const listed = await listAll(env, camp.id);
   const old = [];
   let kept = 0;
   for (const o of listed) {
     const k = o.key.slice(dir(camp.id).length).replace(/\.t$/, "");
-    if (!used.has(k) && now - o.uploaded.getTime() > DAY) old.push(o.key);
-    else if (!o.key.endsWith(".t")) kept++;
+    if (!used.has(k) && (now - o.uploaded.getTime() > DAY || going.has(k))) old.push(o.key);
+    else if (!o.key.endsWith(".t") && !going.has(k)) kept++;
   }
   for (let i = 0; i < old.length; i += 1000) await env.MAPS.delete(old.slice(i, i + 1000));
   if (kept >= MAX_PICS) return fail(409, "That’s as many pictures as a world holds. Take a map down first.");
@@ -170,12 +195,16 @@ export async function putPicture(request, env, camp, user, { json, fail, limited
   return json({ key });
 }
 
-// The GM's for any map in the world, and a player's for a map the crew's been shown.
+// The GM's for any map in the world, and a player's for a map the crew's been
+// shown. Under the fog a player only ever gets the crew's picture, never hers.
 export async function getPicture(url, env, camp, mapId, { fail }) {
   if (!env.MAPS || !MAP_ID.test(mapId)) return fail(404, NOTHING);
   const m = (await mapsIn(env, camp.id)).maps.find((x) => x.id === mapId);
-  if (!m || (camp.role !== "gm" && !m.shown) || m.key !== url.searchParams.get("k")) return fail(404, NOTHING);
-  const obj = await env.MAPS.get(`${dir(camp.id)}${m.key}${url.searchParams.get("t") === "1" ? ".t" : ""}`);
+  const k = url.searchParams.get("k") ?? "";
+  const crew = m?.fog ? m.fog.crew?.k ?? "" : m?.key;
+  const ok = m && isKey(k) && (camp.role === "gm" ? k === m.key || k === crew : m.shown && k === crew);
+  if (!ok) return fail(404, NOTHING);
+  const obj = await env.MAPS.get(`${dir(camp.id)}${k}${url.searchParams.get("t") === "1" ? ".t" : ""}`);
   if (!obj) return fail(404, "That picture isn’t here any more.");
   // Her phone keeps it for no signal itself (mapsui.js), so nothing in
   // between keeps a copy.

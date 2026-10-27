@@ -11,7 +11,7 @@
 // campaign's GM and, once she's shown the crew the map, its players
 // (src/worker/maps.js).
 //
-// A map: { id, name, key, w, h, of, shown, pins }
+// A map: { id, name, key, w, h, of, shown, pins, fog? }
 //   key     the picture's name in the bucket, made by the Worker
 //   w, h    the picture's size in pixels, so the pins sit right before it's in
 //   of      the place's page it's a map of, or ""
@@ -24,6 +24,11 @@
 //                  own (smoke on the ridge), or "" for the name of what it opens
 //           shown  the crew's been shown it: its name, and what it opens once
 //                  she's shown them that too
+//   fog     only on a map she's covered (stage 5): { c, crew }
+//           c      which of its squares are covered, as she's rubbed it
+//           crew   { k, c }: the crew's own picture (k), made on her phone with
+//                  every covered square painted over, and the fog it was made
+//                  with (c), or null till her phone's made one
 //
 // A change (its o starts with "m-"):
 //   { o: "m-new", m, at? }             a map in the world
@@ -34,6 +39,12 @@
 //   { o: "m-pin", id, pin, at? }       a pin on it
 //   { o: "m-unpin", id, pid }          a pin off it
 //   { o: "m-pinset", id, pid, f, v }   one part of a pin: at ({ x, y }), to, name or shown
+//   { o: "m-fog", id, v }              the fog as she's rubbed it, or null to take it off
+//   { o: "m-crew", id, key, c }        the crew's picture, made with the fog c
+//
+// The crew never gets her picture of a map that's under the fog. They get the
+// crew's picture and the fog it was made with, so what their phone shows and
+// what's in the picture always match, and a pin only once its spot's uncovered.
 import { findPage } from "./pages.js";
 
 // A picture's longest side is 4096 pixels (Mo, 27 Oct), which is about the
@@ -54,6 +65,86 @@ const side = (v) => (Number.isInteger(v) && v >= 1 && v <= MMAX.side ? v : 0);
 const frac = (v) => (typeof v === "number" && Number.isFinite(v) ? Math.round(Math.min(1, Math.max(0, v)) * 10000) / 10000 : null);
 const toOf = (v) => (v && typeof v === "object" && (v.k === "p" || v.k === "f") && isId(v.id) ? { k: v.k, id: v.id } : null);
 
+// ------------------------------------------------------------ the fog
+//
+// The fog's a grid laid over the picture, FOG squares along its longest side
+// and as many along the other as keeps them square. Each square's covered or
+// not, kept as a bit (1 is covered), eight to a byte with the first square in
+// the lowest bit, written out in base64. On the biggest picture a square's 32
+// pixels across, so a thumb rubs a few away at a time.
+export const FOG = 128;
+
+export function gridOf(w, h) {
+  const long = Math.max(w, h, 1);
+  return { gw: Math.max(1, Math.min(w, Math.round((FOG * w) / long))), gh: Math.max(1, Math.min(h, Math.round((FOG * h) / long))) };
+}
+const bytesOf = (gw, gh) => Math.ceil((gw * gh) / 8);
+const spareOf = (gw, gh) => (gw * gh) % 8;
+
+// The fog's squares as bytes, or null if it isn't a fog for a picture this
+// size. The bits past the last square are always 0, so a fog's only ever
+// written one way, and two that cover the same squares read the same.
+export function fogBits(c, w, h) {
+  if (typeof c !== "string" || c.length > 8192) return null;
+  const { gw, gh } = gridOf(w, h);
+  let s = "";
+  try {
+    s = atob(c);
+  } catch {
+    return null;
+  }
+  if (s.length !== bytesOf(gw, gh)) return null;
+  const b = new Uint8Array(s.length);
+  for (let i = 0; i < s.length; i++) b[i] = s.charCodeAt(i);
+  const spare = spareOf(gw, gh);
+  if (spare) b[b.length - 1] &= (1 << spare) - 1;
+  return b;
+}
+export function fogText(b) {
+  let s = "";
+  for (let i = 0; i < b.length; i += 4096) s += String.fromCharCode(...b.subarray(i, i + 4096));
+  return btoa(s);
+}
+// A fog over all of the picture, or (on false) none of it.
+export function fogFull(w, h, on = true) {
+  const { gw, gh } = gridOf(w, h);
+  const b = new Uint8Array(bytesOf(gw, gh));
+  if (on) {
+    b.fill(255);
+    const spare = spareOf(gw, gh);
+    if (spare) b[b.length - 1] = (1 << spare) - 1;
+  }
+  return fogText(b);
+}
+const tidyFog = (c, w, h) => {
+  const b = fogBits(c, w, h);
+  return b ? fogText(b) : null;
+};
+// Whether square (i, j) is covered, and whether a spot (x and y from 0 to 1) is.
+export const squareCovered = (b, gw, i, j) => ((b[(j * gw + i) >> 3] >> ((j * gw + i) & 7)) & 1) === 1;
+export function spotCovered(b, w, h, x, y) {
+  const { gw, gh } = gridOf(w, h);
+  return squareCovered(b, gw, Math.min(gw - 1, Math.max(0, Math.floor(x * gw))), Math.min(gh - 1, Math.max(0, Math.floor(y * gh))));
+}
+// How much of it's covered, from 0 to 1.
+export function coveredShare(c, w, h) {
+  const b = fogBits(c, w, h);
+  if (!b) return 1;
+  const { gw, gh } = gridOf(w, h);
+  let n = 0;
+  for (const x of b) for (let v = x; v; v &= v - 1) n++;
+  return n / (gw * gh);
+}
+
+// A map's fog, tidied, or null for a map that isn't covered at all. A fog
+// that doesn't fit the picture covers all of it, so nothing shows by mistake.
+function fogOf(raw, w, h) {
+  if (!raw || typeof raw !== "object") return null;
+  const c = tidyFog(raw.c, w, h) ?? fogFull(w, h);
+  const crew = raw.crew && typeof raw.crew === "object" && isKey(raw.crew.k) ? tidyFog(raw.crew.c, w, h) : null;
+  return { c, crew: crew ? { k: raw.crew.k, c: crew } : null };
+}
+
 // A pin, tidied, or null if it can't go on. One that opens nothing needs a name.
 function pinOf(raw) {
   if (!raw || typeof raw !== "object" || !isId(raw.id)) return null;
@@ -69,14 +160,18 @@ function pinOf(raw) {
 // A map as it came from somewhere else, tidied so nothing in it is anything
 // but words and numbers in the right places.
 export function mapOf(raw) {
-  if (!raw || typeof raw !== "object" || !isId(raw.id) || !isKey(raw.key)) return null;
+  if (!raw || typeof raw !== "object" || !isId(raw.id)) return null;
   const name = one(raw.name, MMAX.name);
   const w = side(raw.w);
   const h = side(raw.h);
   if (!name || !w || !h) return null;
+  const fog = fogOf(raw.fog, w, h);
+  // A crew's map that's still all under the fog hasn't got a picture yet.
+  const key = isKey(raw.key) ? raw.key : "";
+  if (!key && !fog) return null;
   const seen = new Set();
   const pins = (Array.isArray(raw.pins) ? raw.pins : []).map(pinOf).filter((p) => p && !seen.has(p.id) && seen.add(p.id)).slice(0, MMAX.pins);
-  return { id: raw.id, name, key: raw.key, w, h, of: isId(raw.of) ? raw.of : "", shown: raw.shown === true, pins };
+  return { id: raw.id, name, key, w, h, of: isId(raw.of) ? raw.of : "", shown: raw.shown === true, pins, ...(fog ? { fog } : {}) };
 }
 
 export function mapsOf(raw) {
@@ -96,7 +191,10 @@ export function applyMap(doc, op) {
   switch (op.o) {
     case "m-new": {
       const n = mapOf(op.m);
-      if (!n || findMap(doc, n.id) || doc.maps.length >= MMAX.maps) return false;
+      if (!n || !n.key || findMap(doc, n.id) || doc.maps.length >= MMAX.maps) return false;
+      // Her phone makes the crew's picture again, since one from before
+      // (a map taken down and put back) may have gone from the bucket.
+      if (n.fog) n.fog.crew = null;
       const at = Number.isInteger(op.at) && op.at >= 0 && op.at <= doc.maps.length ? op.at : doc.maps.length;
       doc.maps.splice(at, 0, n);
       return true;
@@ -119,6 +217,29 @@ export function applyMap(doc, op) {
       const h = side(op.h);
       if (!m || !isKey(op.key) || !w || !h) return false;
       Object.assign(m, { key: op.key, w, h });
+      // The crew's picture was made from the old one, so her phone makes
+      // another, and a fog that doesn't fit the new picture covers all of it.
+      if (m.fog) m.fog = { c: tidyFog(m.fog.c, w, h) ?? fogFull(w, h), crew: null };
+      break;
+    }
+    case "m-fog": {
+      if (!m) return false;
+      if (op.v === null) {
+        if (!m.fog) return false;
+        delete m.fog;
+        break;
+      }
+      const c = tidyFog(op.v, m.w, m.h);
+      if (!c) return false;
+      // All of it covered again: the crew sees none of it, picture and all.
+      m.fog = { c, crew: c === fogFull(m.w, m.h) ? null : m.fog?.crew ?? null };
+      break;
+    }
+    case "m-crew": {
+      // Never her own picture, or any other map's.
+      const c = m?.fog && isKey(op.key) ? tidyFog(op.c, m.w, m.h) : null;
+      if (!c || doc.maps.some((x) => x.key === op.key || (x !== m && x.fog?.crew?.k === op.key))) return false;
+      m.fog.crew = { k: op.key, c };
       break;
     }
     case "m-show":
@@ -176,6 +297,9 @@ export function undoMap(doc, op) {
     case "m-pinset":
       if (!pin) return [];
       return [{ o: "m-pinset", id: m.id, pid: pin.id, f: op.f, v: op.f === "at" ? { x: pin.x, y: pin.y } : op.f === "to" ? copy(pin.to) : pin[op.f] }];
+    // Her phone makes the crew's picture again for the fog that's back.
+    case "m-fog":
+      return m ? [{ o: "m-fog", id: m.id, v: m.fog ? m.fog.c : null }] : [];
     default:
       return [];
   }
@@ -196,20 +320,36 @@ export function shownToCrew(doc, to) {
 // The pin's name as the crew sees it: her name for it, or the name of what it opens.
 export const labelOf = (doc, pin) => pin.name || targetOf(doc, pin.to)?.name || "";
 
-// Every picture the world's maps use, for the Worker's tidying.
-export const keysOf = (doc) => new Set((doc.maps ?? []).map((m) => m.key));
+// Every picture the world's maps use, for the Worker's tidying: each map's
+// own ("map"), and the crew's of one under the fog ("crew").
+export function keysOf(doc) {
+  const out = new Map();
+  for (const m of doc.maps ?? []) {
+    out.set(m.key, "map");
+    if (m.fog?.crew) out.set(m.fog.crew.k, "crew");
+  }
+  return out;
+}
 
 // ------------------------------------------------------------ what the crew sees
 
 // The maps as a player gets them: only the ones the crew's been shown, and on
 // each only the pins she's shown, by the name the crew knows them by. A pin
 // only says what it opens once the crew's been shown that too, and a map only
-// says which place it's of once they've been shown the place.
+// says which place it's of once they've been shown the place. Under the fog
+// it's the crew's picture and the fog that was made with (all of it covered,
+// with no picture, till her phone's made one), and a pin's only there once
+// its spot's uncovered.
 export function mapsForPlayer(doc) {
-  return (doc.maps ?? []).filter((m) => m.shown).map((m) => ({
-    id: m.id, name: m.name, key: m.key, w: m.w, h: m.h,
-    of: m.of && findPage(doc, m.of)?.shown.page ? m.of : "",
-    shown: true,
-    pins: m.pins.filter((p) => p.shown).map((p) => ({ id: p.id, x: p.x, y: p.y, to: shownToCrew(doc, p.to) ? { ...p.to } : null, name: labelOf(doc, p), shown: true })).filter((p) => p.name),
-  }));
+  return (doc.maps ?? []).filter((m) => m.shown).map((m) => {
+    const seen = m.fog ? m.fog.crew?.c ?? fogFull(m.w, m.h) : null;
+    const b = seen ? fogBits(seen, m.w, m.h) : null;
+    return {
+      id: m.id, name: m.name, key: m.fog ? m.fog.crew?.k ?? "" : m.key, w: m.w, h: m.h,
+      of: m.of && findPage(doc, m.of)?.shown.page ? m.of : "",
+      shown: true,
+      pins: m.pins.filter((p) => p.shown && !(seen && (!b || spotCovered(b, m.w, m.h, p.x, p.y)))).map((p) => ({ id: p.id, x: p.x, y: p.y, to: shownToCrew(doc, p.to) ? { ...p.to } : null, name: labelOf(doc, p), shown: true })).filter((p) => p.name),
+      ...(seen ? { fog: { c: seen, crew: null } } : {}),
+    };
+  });
 }

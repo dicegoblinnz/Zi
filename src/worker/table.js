@@ -368,6 +368,20 @@ export class Table extends DurableObject {
     for (const ws of this.ctx.getWebSockets("screen")) if (ws.deserializeAttachment()?.code !== keep) out(ws, "The screen's link was reset", "reset");
   }
 
+  // What the crew sees of the campaign's maps has changed (world.js): every
+  // phone on the table fetches the world again, and gets only what it's
+  // allowed to see. The message says nothing else, and a table screen, which
+  // never shows the world, isn't told.
+  async worldMoved() {
+    const msg = JSON.stringify({ t: "world" });
+    for (const ws of this.ctx.getWebSockets()) {
+      if (ws.deserializeAttachment()?.role === "screen") continue;
+      try {
+        ws.send(msg);
+      } catch {}
+    }
+  }
+
   // The campaign's ended: everyone's phone stops hearing it, and it's gone.
   async end() {
     for (const ws of this.ctx.getWebSockets()) out(ws, "The campaign ended", ws.deserializeAttachment()?.role === "screen" ? "ended" : "");
@@ -498,6 +512,12 @@ export async function tableScreenOff(env, campaignId, keep) {
 export async function tableLeft(env, campaignId, userId, { erase = false } = {}) {
   if (!env.TABLE) return;
   await tableOf(env, campaignId).left(userId, { erase }).catch((err) => console.error(`table left: ${err?.message ?? err}`));
+}
+
+// What the crew sees of the maps has changed, so the phones look again.
+export async function tableWorld(env, campaignId) {
+  if (!env.TABLE) return;
+  await tableOf(env, campaignId).worldMoved().catch((err) => console.error(`table world: ${err?.message ?? err}`));
 }
 
 // A campaign's ended, so its table goes too.

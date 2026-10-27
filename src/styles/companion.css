@@ -1676,6 +1676,55 @@ html.cc-map, html.cc-map body { overflow: hidden; overscroll-behavior: none; }
 .wm-hint { max-width: 32rem; margin: 0 auto 8px; padding: 6px 12px; font-size: 0.92rem; font-weight: 700; text-align: center; color: var(--ink); background: var(--bar-bg); border: 1px solid var(--zd-them-line); border-radius: 2px; pointer-events: auto; }
 .wm-body.is-placing .wm-zoom { bottom: calc(124px + env(safe-area-inset-bottom, 0px)); }
 
+/* The fog (stage 5). On the crew's phones it's solid, in the fog's own colour,
+   over the crew's picture, soft only where it thins out over what's been
+   uncovered. On hers it's her violet and see-through, so she can read what's
+   under it, and her pins under it go faint. */
+:root { --wm-fog: #3b3148; }
+:root[data-theme="light"] { --wm-fog: #bcb2c8; }
+.wm-fog { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+.wm-fog[hidden] { display: none; }
+.wm-fog.is-gm { opacity: 0.5; }
+.wm-fog.is-going { transition: opacity 900ms ease-out; }
+.wm-fog.is-going.is-gone { opacity: 0; }
+.wm-stage.is-brushing { cursor: crosshair; }
+.wm-stage.is-brushing .wm-pin { pointer-events: none; }
+.wm-ring { position: absolute; left: 0; top: 0; border: 2px solid var(--zd-them); border-radius: 50%; box-shadow: 0 0 0 1.5px var(--zd-on-them), inset 0 0 0 1.5px var(--zd-on-them); pointer-events: none; will-change: transform; }
+.wm-ring[hidden] { display: none; }
+.wm-pin.is-fogged { opacity: 0.6; }
+.wm-pin.is-fogged.is-on { opacity: 1; }
+.wb-badge.is-fog { margin-left: 4px; color: var(--zd-them-ink); border: 1.5px solid var(--zd-them-line); }
+
+/* Rubbing it: what her finger does, how wide, Undo and Done, all in reach of
+   the thumb holding the phone, with what the crew can see above them. */
+.wm-fog-hint { display: grid; gap: 2px; padding: 7px 12px 8px; font-weight: 400; }
+.wm-fog-hint p { margin: 0; }
+.wm-fog-hint b { font-weight: 700; }
+.wm-crew { font-size: 0.84rem; line-height: 1.35; color: var(--muted); }
+.wm-bar.is-fog .wm-bar-row + .wm-bar-row { margin-top: 8px; }
+.wm-bar .wm-fog-tools { gap: 0; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25); }
+.cc .wm-bar .wm-seg { flex: 1 1 0; min-width: 0; padding: 0 0.4rem; border-radius: 0; box-shadow: none; }
+.cc .wm-seg + .wm-seg { margin-left: -1px; }
+.cc .wm-seg[aria-pressed="true"] { position: relative; z-index: 1; color: var(--zd-on-them); background: var(--zd-them); border-color: var(--zd-them); }
+.wm-sizes { display: flex; flex: none; background: var(--surface); border: 1px solid var(--line); border-radius: 2px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25); }
+.cc .wm-size { display: grid; place-items: center; width: 46px; height: 44px; padding: 0; color: var(--muted); background: none; border: 0; }
+.cc .wm-size + .wm-size { border-left: 1px solid var(--line-soft); }
+.cc .wm-size[aria-pressed="true"] { color: var(--zd-them-ink); background: color-mix(in srgb, var(--zd-them) 18%, transparent); }
+.cc .wm-size:disabled { opacity: 0.4; }
+.cc .wm-size:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
+.wm-size svg { width: 22px; height: 22px; }
+.wm-body.is-fog .wm-zoom { bottom: calc(200px + env(safe-area-inset-bottom, 0px)); }
+.wm-thumb { position: relative; }
+.wm-thumb-fog { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.wm-thumb-fog.is-gm { opacity: 0.5; }
+/* On the narrowest phones the bar's buttons close up so three fit a row. */
+@media (max-width: 359px) {
+  .cc .wm-bar .button { padding: 0 0.7rem; }
+  .cc .wm-bar .button.primary { padding: 0 1rem; }
+  .cc .wm-bar .button svg { margin-right: 4px; }
+  .cc .wm-bar .wm-seg svg { display: none; }
+}
+
 /* A pin's card, the list of pins and picking what a pin opens: over the map,
    in from the bottom, the map still showing round them. */
 .wm-card, .wm-panel { position: absolute; left: max(10px, env(safe-area-inset-left, 0px)); right: max(10px, env(safe-area-inset-right, 0px)); bottom: calc(76px + env(safe-area-inset-bottom, 0px)); z-index: 4; max-width: 32rem; margin: 0 auto; padding: 12px 14px 14px; box-shadow: inset 3px 0 0 var(--zd-them-line), 0 10px 32px rgba(0, 0, 0, 0.42); }
@@ -1716,6 +1765,7 @@ html.cc-map, html.cc-map body { overflow: hidden; overscroll-behavior: none; }
 @media (prefers-reduced-motion: reduce) {
   .wm-tok-a:active { transform: none; }
   .wm-card.is-fresh, .wm-panel.is-fresh, .wm-pin.is-new .wm-pin-head { animation: none; }
+  .wm-fog.is-going { transition: none; }
   .wm-pin-head { transition: none; }
 }
 

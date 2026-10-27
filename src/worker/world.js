@@ -13,9 +13,13 @@
 //        sent twice (the signal dropped before the answer came back) counts once.
 //        A picture a change takes off a map goes in the world's bin for a day,
 //        so Undo can put it back, then off the bucket (binned() in maps.js).
+//        When what the crew sees of the maps has changed (fog she's lifted, a
+//        map or a pin she's shown), every phone on the campaign's live table
+//        is told to look again, so it's there in a moment (tableWorld()).
 import { apply, blank, forPlayer, readable } from "../companion/board.js";
-import { keysOf } from "../companion/maps.js";
+import { keysOf, mapsForPlayer } from "../companion/maps.js";
 import { binned, dropPictures } from "./maps.js";
+import { tableWorld } from "./table.js";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
 const MAX_CHANGES = 200;
@@ -68,11 +72,13 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
   let top = 0;
   let doc = null;
   let gone = [];
+  let crewMaps = false;
   for (let tries = 0; ; tries++) {
     row = await worldRow(env, camp.id);
     const raw = row ? parse(row.data) ?? {} : {};
     doc = readable(raw);
     const had = keysOf(doc);
+    const crewSaw = JSON.stringify(mapsForPlayer(doc));
     // Kept with no prototype, so no phone's id can be anything but an entry.
     const seq = Object.assign(Object.create(null), raw.seq && typeof raw.seq === "object" ? raw.seq : {});
     const high = Number(seq[dev]?.n) || 0;
@@ -105,6 +111,7 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
       : await env.DB.prepare("INSERT INTO world (campaignId, data, version, updatedAt) VALUES (?1, ?2, 1, ?3) ON CONFLICT DO NOTHING").bind(camp.id, text, now).run();
     if (res.meta.changes) {
       row = { data: text, version: (row?.version ?? 0) + 1 };
+      crewMaps = changed && JSON.stringify(mapsForPlayer(doc)) !== crewSaw;
       break;
     }
     // A change from her other phone got in first, so these go on top of it.
@@ -112,6 +119,7 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
   }
   // Pictures a day in the bin come off the bucket, now the world's let them go.
   if (gone.length) await dropPictures(env, camp.id, gone).catch((err) => console.error(`maps bin: ${err?.message ?? err}`));
+  if (crewMaps) await tableWorld(env, camp.id);
   // The world as it now stands, without reading it back again.
   return json({ seq: top, ...viewOf(camp, row, doc), role: camp.role });
 }

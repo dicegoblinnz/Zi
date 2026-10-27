@@ -19,10 +19,20 @@
 // service worker leaves that cache alone, a picture the crew's no longer
 // shown comes off the phone the next time the world comes in, and signing
 // out takes the lot (sync.js).
-import { MMAX, findMap, labelOf, shownToCrew, targetOf } from "./maps.js";
+//
+// Fog (stage 5): she covers a map, all of it or bits, and rubs it away with a
+// finger as the crew explores (Uncover), or back on (Cover). Each rub goes in
+// the world as the fog she's rubbed (m-fog), and when she stops, her phone
+// makes the crew's own picture, every covered square painted over (fog.js),
+// sends it up and puts it on the map (m-crew). That's the only picture the
+// crew ever gets of a map under the fog, with the fog it was made with, so
+// what's under the fog never reaches their phones, not even in the picture.
+// A pin she's shown stays off their phones till its spot's uncovered.
+import { MMAX, coveredShare, findMap, fogBits, fogFull, fogText, labelOf, shownToCrew, spotCovered, targetOf } from "./maps.js";
 import { findPage } from "./pages.js";
 import { makeViewer } from "./mapview.js";
 import { CACHE } from "./mapcache.js";
+import { crewCanvas, drawFog, rub } from "./fog.js";
 
 const SORT = (t) => String(t ?? "").replace(/^(The|A|An) /i, "").toLowerCase();
 const flat = (t) => String(t ?? "").replace(/\*/g, "");
@@ -39,18 +49,33 @@ const MARK = {
   whole: svg('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>'),
   pin: svg('<path d="M12 21s-6.5-6.1-6.5-11a6.5 6.5 0 0 1 13 0c0 4.9-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>'),
   turn: svg('<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/>'),
+  fog: svg('<path d="M7 18.5h10.2a4.2 4.2 0 0 0 .5-8.4 6 6 0 0 0-11.5 1.6A3.5 3.5 0 0 0 7 18.5z" fill="currentColor"/>'),
+  lift: svg('<path d="M7 18.5h10.2a4.2 4.2 0 0 0 .5-8.4 6 6 0 0 0-11.5 1.6A3.5 3.5 0 0 0 7 18.5z" stroke-dasharray="2.6 2.4"/>'),
+  move: svg('<path d="M12 3v18M3 12h18"/><path d="m9 6 3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/>'),
+  undo: svg('<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>'),
+  big: svg('<circle cx="12" cy="12" r="7" fill="currentColor" stroke="none"/>'),
+  small: svg('<circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>'),
 };
+// How wide a thumb rubs the fog, on the screen.
+const BRUSH = { big: 34, small: 13 };
 
 export function makeMaps(w) {
   const { d, esc, edit, docOf, isGm, camp, gmName, status, online, newId, bare, plural } = w;
   // What's open on the map screen: the pin whose card's up, the list of pins,
   // and dropping, moving or picking for a pin.
-  let ui = { at: "", pin: "", panel: false, placing: null, picking: null, naming: "", focus: "", asked: "", lit: [] };
+  let ui = { at: "", pin: "", panel: false, placing: null, picking: null, naming: "", focus: "", asked: "", lit: [], fog: false, fogAsk: false };
   // A picture on its way up: { id, map, src, w, h, turn, name, of, preview, busy, pct, error }
   let draft = null;
   // The map on screen, kept through the screen being drawn again around it.
   let view = null;
   let find = "";
+  // Rubbing the fog: what her finger does (move, lift or cover) and how wide,
+  // kept from one map to the next.
+  const brush = { tool: "lift", size: "big" };
+  // Each map's fog before each of her last rubs, for Undo, by campaign:map.
+  const rubs = new Map();
+  // Each map's crew's picture being made: { timer, busy, again, say, wait }.
+  const crews = new Map();
 
   // ------------------------------------------------------------ the pictures, kept on the phone
 
@@ -106,8 +131,13 @@ export function makeMaps(w) {
   let fetching = Promise.resolve();
   async function got(id) {
     const doc = docOf(id);
-    const mine = new Set(doc.maps.flatMap((m) => [addr(id, m), addr(id, m, true)]));
+    // A crew's map that's all under the fog has no picture yet.
+    const pics = doc.maps.filter((m) => m.key);
+    const mine = new Set(pics.flatMap((m) => [addr(id, m), addr(id, m, true)]));
     const base = `/api/campaigns/${encodeURIComponent(id)}/maps/`;
+    // Her phone makes the crew's picture of any map whose fog's moved on
+    // since its last one (a rub that went up with no signal, an Undo).
+    if (isGm(id)) for (const m of doc.maps) if (behind(m)) crewSoon(id, m.id, 1200);
     const c = await box();
     if (c) for (const req of await c.keys().catch(() => [])) if (req.url.startsWith(full(base)) && !mine.has(req.url.slice(location.origin.length))) await c.delete(req).catch(() => {});
     for (const [src, url] of urls) {
@@ -116,20 +146,60 @@ export function makeMaps(w) {
       urls.delete(src);
     }
     if (!online() || navigator.connection?.saveData) return;
-    for (const m of doc.maps) fetching = fetching.then(() => picture(addr(id, m, true))).then(() => stash(addr(id, m)));
+    for (const m of pics) fetching = fetching.then(() => picture(addr(id, m, true))).then(() => stash(addr(id, m)));
     fetching = fetching.then(() => thumbs());
   }
-  // Small pictures on the World screen fill in as they come.
+  // The fog over a map's small picture, drawn once for each fog and colour
+  // and copied after, since the World screen's drawn again often.
+  const thumbFogs = new Map();
+  function thumbFog(id, m) {
+    const colour = fogColour(id);
+    const k = `${m.fog.c}|${colour}`;
+    let f = thumbFogs.get(fogKey(id, m.id));
+    if (f?.k !== k) {
+      f = { k, cv: document.createElement("canvas") };
+      drawFog(f.cv, fogBits(m.fog.c, m.w, m.h), m.w, m.h, colour, 2);
+      thumbFogs.set(fogKey(id, m.id), f);
+    }
+    return f;
+  }
+  // Small pictures on the World screen fill in as they come, with the fog
+  // over any that are covered.
   function thumbs() {
-    for (const el of document.querySelectorAll("#app [data-thumb]")) {
-      const src = el.dataset.thumb;
-      if (urls.has(src)) {
-        if (!el.querySelector("img")) el.innerHTML = `<img src="${urls.get(src)}" alt="">`;
+    for (const el of document.querySelectorAll("#app [data-fog]")) {
+      const [id, mid] = el.dataset.fog.split(":");
+      const m = findMap(docOf(id), mid);
+      let cv = el.querySelector(".wm-thumb-fog");
+      if (!m?.fog) {
+        cv?.remove();
         continue;
       }
-      picture(src).then((url) => {
-        if (url && el.isConnected && !el.querySelector("img")) el.innerHTML = `<img src="${url}" alt="">`;
-      });
+      if (!cv) {
+        cv = document.createElement("canvas");
+        cv.className = `wm-thumb-fog${isGm(id) ? " is-gm" : ""}`;
+        el.append(cv);
+      }
+      const f = thumbFog(id, m);
+      if (cv.dataset.k === f.k) continue;
+      cv.width = f.cv.width;
+      cv.height = f.cv.height;
+      cv.getContext("2d").drawImage(f.cv, 0, 0);
+      cv.dataset.k = f.k;
+    }
+    for (const el of document.querySelectorAll("#app [data-thumb]")) {
+      const src = el.dataset.thumb;
+      if (!src) continue;
+      // In under the fog's layer, if it's got one.
+      const put = (url) => {
+        if (!url || !el.isConnected || el.querySelector("img")) return;
+        el.querySelector(".wm-thumb-mark")?.remove();
+        el.insertAdjacentHTML("afterbegin", `<img src="${url}" alt="">`);
+      };
+      if (urls.has(src)) {
+        put(urls.get(src));
+        continue;
+      }
+      picture(src).then(put);
     }
   }
 
@@ -159,11 +229,11 @@ export function makeMaps(w) {
   function token(id, m, gm, lit) {
     const shownN = m.pins.filter((p) => p.shown).length;
     const glance = m.pins.length ? `${plural(m.pins.length, "pin", "pins")}${gm ? `, ${shownN ? `${shownN} shown to the crew` : "none shown yet"}` : ""}` : "No pins yet";
-    const src = addr(id, m, true);
+    const src = m.key ? addr(id, m, true) : "";
     const pic = urls.has(src) ? `<img src="${urls.get(src)}" alt="">` : `<span class="wm-thumb-mark">${MARK.map}</span>`;
-    const badge = gm ? `<span class="wb-k"><span class="wb-badge${m.shown ? " is-on" : ""}">${m.shown ? "Shown" : "Hidden"}</span></span>` : "";
+    const badge = gm ? `<span class="wb-k"><span class="wb-badge${m.shown ? " is-on" : ""}">${m.shown ? "Shown" : "Hidden"}</span>${m.fog ? '<span class="wb-badge is-fog">Fog</span>' : ""}</span>` : "";
     return `<li class="wm-tok${lit ? " is-new" : ""}"><a class="card wm-tok-a" href="${esc(mapHref(id, m))}" data-act="w" data-do="nav">
-      <span class="wm-thumb" data-thumb="${esc(src)}">${pic}</span>
+      <span class="wm-thumb" data-thumb="${esc(src)}"${m.fog ? ` data-fog="${esc(`${id}:${m.id}`)}"` : ""}>${pic}</span>
       <span class="wm-tok-in">${badge}<b class="wm-tok-n">${esc(m.name)}</b><span class="wm-tok-w">${glance}</span></span></a></li>`;
   }
 
@@ -292,10 +362,10 @@ export function makeMaps(w) {
 
   // Up it goes: the picture and its small copy to the Worker, then the map
   // (or its new picture) in the world.
-  function send(id, pic, thumb, onPct) {
+  function send(id, pic, thumb, onPct, forMap = "") {
     return new Promise((ok) => {
       const x = new XMLHttpRequest();
-      x.open("POST", `/api/campaigns/${encodeURIComponent(id)}/maps`);
+      x.open("POST", `/api/campaigns/${encodeURIComponent(id)}/maps${forMap ? `?for=${encodeURIComponent(forMap)}` : ""}`);
       x.withCredentials = true;
       x.timeout = 120000;
       x.upload.onprogress = (e) => e.lengthComputable && onPct(Math.round((e.loaded / e.total) * 100));
@@ -360,7 +430,10 @@ export function makeMaps(w) {
     await keep(addr(id, { ...m, key }, true), thumb);
     dropDraft();
     if (dr.map) {
+      // The fog from before might not fit the new picture.
+      rubs.delete(fogKey(id, m.id));
       edit(id, [{ o: "m-pic", id: m.id, key, w: size.w, h: size.h }], "The new picture’s up. The pins are where they were on it.");
+      if (findMap(docOf(id), m.id)?.fog) crewSoon(id, m.id);
       return;
     }
     edit(id, [{ o: "m-new", m: { ...m, shown: false, pins: [] } }], `${bare(name)} is up. Only you can see it till you show the crew.`);
@@ -388,6 +461,215 @@ export function makeMaps(w) {
     for (const li of document.querySelectorAll("#app .wm-picks li")) li.hidden = words.length > 0 && !words.every((x) => li.dataset.find.includes(x));
   };
 
+  // ------------------------------------------------------------ the fog
+
+  const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // The fog's colour in the theme that's on: the GM's violet on her phone,
+  // see-through over her picture (companion.css), and the fog's own, solid,
+  // on the crew's.
+  const fogColour = (id) => getComputedStyle(document.documentElement).getPropertyValue(isGm(id) ? "--zd-them" : "--wm-fog").trim() || "#2b2433";
+  const fogKey = (id, mid) => `${id}:${mid}`;
+  // Whether the crew's picture is behind the fog she's rubbed. All of it
+  // covered needs no picture, since the crew sees none of it.
+  const behind = (m) => Boolean(m?.fog && m.fog.c !== fogFull(m.w, m.h) && m.fog.crew?.c !== m.fog.c);
+  // How much of it she's uncovered, in words.
+  function howMuch(m) {
+    const off = 1 - coveredShare(m.fog.c, m.w, m.h);
+    if (off <= 0) return "All of it’s under the fog.";
+    if (off >= 1) return "None of it’s covered yet.";
+    const pct = Math.min(99, Math.max(1, Math.round(off * 100)));
+    return `About ${pct}% of it’s uncovered.`;
+  }
+
+  // What the crew can see of it, under the fog's bar on her phone.
+  function crewSay(id, m) {
+    if (!m.shown) return "The crew can’t see this map till you show it to them.";
+    if (!behind(m)) return m.fog.c === fogFull(m.w, m.h) ? "The crew sees fog and nothing else." : "The crew sees what you’ve uncovered.";
+    if (!online()) return "No signal. The crew sees it once you’ve got one.";
+    return crews.get(fogKey(id, m.id))?.say || "The crew sees it in a moment.";
+  }
+  const sayFog = (id) => {
+    const el = document.querySelector("#app [data-crewsay]");
+    if (!el || !ui.at) return;
+    const on = here();
+    if (el && on.id === id && on.m?.fog) el.textContent = crewSay(id, on.m);
+  };
+
+  function crewSoon(id, mid, ms = 700) {
+    const k = fogKey(id, mid);
+    const job = crews.get(k) ?? { timer: 0, busy: false, again: false, say: "", wait: 0 };
+    crews.set(k, job);
+    clearTimeout(job.timer);
+    job.timer = setTimeout(() => crewMake(id, mid), Math.max(ms, job.wait - Date.now()));
+  }
+  // Her phone makes the crew's picture of the fog as it stands, sends it up
+  // and puts it on the map, one at a time for each map. If she rubs more
+  // while it's going, another goes straight after.
+  async function crewMake(id, mid) {
+    const job = crews.get(fogKey(id, mid));
+    const m = findMap(docOf(id), mid);
+    if (!job || !isGm(id) || !behind(m)) return;
+    if (!online()) return sayFog(id);
+    if (job.busy) {
+      job.again = true;
+      return;
+    }
+    job.busy = true;
+    job.say = "";
+    let trouble = "";
+    try {
+      const c = m.fog.c;
+      const url = await picture(addr(id, m));
+      if (!url) {
+        trouble = "Your picture of this map hasn’t come through yet, so the crew’s picture has to wait.";
+        return;
+      }
+      const im = new Image();
+      im.src = url;
+      await im.decode();
+      const big = crewCanvas(im, m.w, m.h, fogBits(c, m.w, m.h));
+      const small = document.createElement("canvas");
+      const k = Math.min(1, 640 / Math.max(m.w, m.h));
+      small.width = Math.max(1, Math.round(m.w * k));
+      small.height = Math.max(1, Math.round(m.h * k));
+      const g = small.getContext("2d");
+      g.imageSmoothingQuality = "high";
+      g.drawImage(big, 0, 0, small.width, small.height);
+      const [pic, thumb] = [await squeeze(big, 8 * 1024 * 1024), await squeeze(small, 380 * 1024)];
+      big.width = big.height = small.width = small.height = 0;
+      if (!pic || !thumb) {
+        trouble = "This phone couldn’t make the crew’s picture. Try a smaller map.";
+        return;
+      }
+      const r = await send(id, pic, thumb, () => {}, mid);
+      if (r.status === 401) return d.signedOut?.();
+      if (r.status !== 200 || !r.got.key) {
+        trouble = r.status === 409 ? "" : r.got.error || "That didn’t reach the crew. It’ll try again in a moment.";
+        return;
+      }
+      if (!findMap(docOf(id), mid)?.fog) return;
+      edit(id, [{ o: "m-crew", id: mid, key: r.got.key, c }], "", { undoable: false, quiet: true });
+    } catch {
+      trouble = "That didn’t reach the crew. It’ll try again in a moment.";
+    } finally {
+      job.busy = false;
+      job.say = trouble;
+      // Something went wrong: another go in a little while, not straight away.
+      if (trouble) job.wait = Date.now() + 15000;
+      if (job.again || trouble) {
+        job.again = false;
+        crewSoon(id, mid, trouble ? 15000 : 200);
+      }
+      sayFog(id);
+    }
+  }
+
+  // The fog over the map on screen. It's drawn again only when the fog or
+  // its colours have changed, and never from under her finger mid-rub.
+  let rubbing = false;
+  function paintFog(id, m) {
+    if (!view || rubbing) return;
+    const cv = view.v.fog();
+    const c = m.fog?.c ?? "";
+    const gm = isGm(id);
+    const colour = c ? fogColour(id) : "";
+    const k = `${c}|${colour}|${gm}`;
+    if (view.fog === k) return;
+    view.fog = k;
+    cv.hidden = !c;
+    cv.classList.toggle("is-gm", gm);
+    if (c) drawFog(cv, fogBits(c, m.w, m.h), m.w, m.h, colour);
+  }
+  const decoded = async (url) => {
+    try {
+      const im = new Image();
+      im.src = url;
+      await im.decode();
+    } catch {}
+  };
+  // A new picture in, and the fog that goes with it at the same moment. On
+  // the crew's phones the fog that's lifted fades off as it goes.
+  function swap(id, m, src, url) {
+    const cv = view.v.fog();
+    let ghost = null;
+    if (!isGm(id) && view.fog && !view.fog.startsWith(`${m.fog?.c ?? ""}|`) && !cv.hidden && cv.width && !still()) {
+      ghost = document.createElement("canvas");
+      ghost.width = cv.width;
+      ghost.height = cv.height;
+      ghost.className = "wm-fog is-going";
+      ghost.getContext("2d").drawImage(cv, 0, 0);
+      cv.after(ghost);
+    }
+    view.src = src;
+    view.v.show(url);
+    paintFog(id, m);
+    if (ghost) {
+      requestAnimationFrame(() => requestAnimationFrame(() => ghost.classList.add("is-gone")));
+      setTimeout(() => ghost.remove(), 1200);
+    }
+  }
+
+  // Her finger on the map while she's rubbing: each move rubs the fog off or
+  // on under it, and when she lifts it, the fog as it now stands goes in the
+  // world and her phone makes the crew's picture of it.
+  function rubber(id, mid) {
+    let b = null;
+    let before = "";
+    let last = null;
+    let raf = 0;
+    const mapNow = () => findMap(docOf(id), mid);
+    const redraw = () => {
+      raf = 0;
+      const m = mapNow();
+      if (b && m && view) drawFog(view.v.fog(), b, m.w, m.h, fogColour(id));
+    };
+    const stop = () => {
+      b = null;
+      rubbing = false;
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    };
+    return {
+      r: () => BRUSH[brush.size],
+      start(x, y) {
+        const m = mapNow();
+        if (!m?.fog) return;
+        before = m.fog.c;
+        b = fogBits(before, m.w, m.h);
+        rubbing = Boolean(b);
+        last = { x, y };
+        this.move(x, y);
+      },
+      move(x, y) {
+        const m = mapNow();
+        if (!b || !m || !view) return;
+        if (rub(b, m.w, m.h, last.x, last.y, x, y, BRUSH[brush.size] / view.v.scale(), brush.tool === "cover")) raf ||= requestAnimationFrame(redraw);
+        last = { x, y };
+      },
+      end() {
+        const m = mapNow();
+        const c = b ? fogText(b) : "";
+        stop();
+        if (!m?.fog || !c || c === before) return;
+        const k = fogKey(id, mid);
+        const back = rubs.get(k) ?? [];
+        back.push(before);
+        if (back.length > 40) back.shift();
+        rubs.set(k, back);
+        view.fog = null;
+        edit(id, [{ o: "m-fog", id: mid, v: c }], "", { undoable: false, quiet: true });
+        crewSoon(id, mid);
+        d.render();
+      },
+      cancel() {
+        stop();
+        if (view) view.fog = null;
+        const m = mapNow();
+        if (m) paintFog(id, m);
+      },
+    };
+  }
+
   // ------------------------------------------------------------ a map, full screen
 
   // A card or a list slides up the first time it's drawn, and not again each
@@ -413,14 +695,16 @@ export function makeMaps(w) {
     return [`/characters/?camp=${encodeURIComponent(id)}&world`, "The world"];
   }
 
-  // A pin on the map, as the viewer draws it.
-  function pinDraw(id, doc, gm, lit) {
+  // A pin on the map, as the viewer draws it. On her phone, a pin that's
+  // under the fog is drawn faint, since the crew can't see it yet.
+  function pinDraw(id, doc, gm, lit, under = () => false) {
     return (p) => {
       const pin = p.pin;
       const k = kindOf(doc, pin);
       const name = labelOf(doc, pin) || "A pin";
-      const cls = `wm-pin is-${k}${gm && !pin.shown ? " is-hidden" : ""}${ui.pin === pin.id ? " is-on" : ""}${lit.includes(pin.id) ? " is-new" : ""}${ui.placing?.pid === pin.id ? " is-lifted" : ""}`;
-      const say = `${name}, ${kindName(k).toLowerCase()}${gm ? (pin.shown ? ", shown to the crew" : ", hidden from the crew") : ""}`;
+      const fogged = gm && under(pin);
+      const cls = `wm-pin is-${k}${gm && !pin.shown ? " is-hidden" : ""}${fogged ? " is-fogged" : ""}${ui.pin === pin.id ? " is-on" : ""}${lit.includes(pin.id) ? " is-new" : ""}${ui.placing?.pid === pin.id ? " is-lifted" : ""}`;
+      const say = `${name}, ${kindName(k).toLowerCase()}${gm ? (pin.shown ? ", shown to the crew" : ", hidden from the crew") : ""}${fogged ? ", under the fog" : ""}`;
       return { cls, html: `<span class="wm-pin-head">${MARK[k]}</span><span class="wm-pin-n">${esc(name)}</span>`, attrs: { "data-act": "w", "data-do": "mpin", "data-pid": pin.id, "aria-label": say, "aria-pressed": String(ui.pin === pin.id) } };
     };
   }
@@ -443,7 +727,9 @@ export function makeMaps(w) {
     if (pin.name && t) lines.push(`The crew calls it <em>${esc(pin.name)}</em>, and it opens ${esc(t.name)}.`);
     else if (!t && pin.to) lines.push("What it opened isn’t in the world any more.");
     else if (!t) lines.push("It doesn’t open anything yet.");
-    lines.push(!pin.shown ? "Only you can see this pin." : t && !shownToCrew(doc, pin.to) ? `The crew sees its name. They can open it once you’ve shown them ${esc(t.name)} too.` : "The crew can see this pin.");
+    const fb = m.fog ? fogBits(m.fog.c, m.w, m.h) : null;
+    const fogged = Boolean(fb && spotCovered(fb, m.w, m.h, pin.x, pin.y));
+    lines.push(!pin.shown ? "Only you can see this pin." : fogged ? "It’s under the fog, so the crew won’t see it till you uncover that spot." : t && !shownToCrew(doc, pin.to) ? `The crew sees its name. They can open it once you’ve shown them ${esc(t.name)} too.` : "The crew can see this pin.");
     const naming = ui.naming === pin.id ? `<form class="cc-form pt-form wm-name" data-form="w-map-pinname">
         <label class="cc-field">What the crew calls it <input name="name" maxlength="${MMAX.name}" autocomplete="off" value="${esc(pin.name)}" placeholder="like smoke on the ridge"${t ? "" : " required"}></label>
         ${t ? `<p class="cc-small">Leave it blank and it goes by ${esc(t.name)}.</p>` : ""}
@@ -471,12 +757,19 @@ export function makeMaps(w) {
       const places = doc.pages.filter((p) => p.kind === "place").sort((a, b) => SORT(a.name).localeCompare(SORT(b.name)));
       const sure = w.ui().sure === `mgone-${m.id}`;
       const dr = draft?.id === id && draft.map === m.id ? draft : null;
+      const sureOff = w.ui().sure === `mfogoff-${m.id}`;
+      const fog = m.fog
+        ? `<h3 class="wm-panel-h3">Fog</h3><p class="cc-small">${howMuch(m)} ${esc(crewSay(id, m))}</p>
+          <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="mfogrub">${MARK.lift}Rub the fog</button><button type="button" class="button" data-act="w" data-do="mfogall">Cover all of it again</button></div>
+          <div class="cc-row"><button type="button" class="button${sureOff ? " danger" : ""}" data-act="w" data-do="mfogoff">${sureOff ? "Tap again to take the fog off" : "Take the fog off"}</button></div>`
+        : `<h3 class="wm-panel-h3">Fog</h3><p class="cc-small">Cover it, then rub the fog away as the crew explores.</p><div class="cc-row"><button type="button" class="button" data-act="w" data-do="mfog">${MARK.fog}Cover it with fog</button></div>`;
       mine = `<h2 class="wm-panel-h2">This map</h2>
         <form class="cc-form pt-form" data-form="w-map-set">
           <label class="cc-field">Its name <input name="name" maxlength="${MMAX.name}" autocomplete="off" required value="${esc(m.name)}"></label>
           ${places.length ? `<label class="cc-field">A map of <select name="of"><option value="">Nowhere in particular</option>${places.map((p) => `<option value="${esc(p.id)}"${m.of === p.id ? " selected" : ""}>${esc(p.name)}</option>`).join("")}</select></label>` : ""}
           <div class="cc-row"><button type="submit" class="button">Save</button></div></form>
-        <h3 class="wm-panel-h3">A new picture</h3>${dr ? draftBody(id, doc, dr) : `<p class="cc-small">For when you’ve drawn more of it. The pins stay where they are on the picture.</p><div class="cc-row">${chooser(id, "Choose a new picture", m.id)}</div>`}
+        ${fog}
+        <h3 class="wm-panel-h3">A new picture</h3>${dr ? draftBody(id, doc, dr) : `<p class="cc-small">For when you’ve drawn more of it. The pins stay where they are on the picture${m.fog ? ", and so does the fog if it’s the same shape" : ""}.</p><div class="cc-row">${chooser(id, "Choose a new picture", m.id)}</div>`}
         <div class="cc-row wm-gone"><button type="button" class="button danger" data-act="w" data-do="mgone">${sure ? "Tap again to take it down" : "Take the map down"}</button></div>`;
     }
     return `<section class="wm-panel card${fresh("panel", m.id)}" aria-labelledby="wm-panel-h"><div class="wm-card-top"><h2 id="wm-panel-h" class="wm-panel-t">${m.pins.length ? `Pins <small>${m.pins.length}</small>` : "Pins"}</h2><button type="button" class="cc-x" data-act="w" data-do="mpanel" aria-label="Close">${d.icon.close}</button></div>
@@ -497,13 +790,39 @@ export function makeMaps(w) {
         <div class="cc-row"><button type="submit" class="button primary">Pin it</button></div></form></section>`;
   }
 
+  // Covering a map: all of it, to rub away as they explore, or none of it,
+  // to rub onto bits they haven't found.
+  function fogAsk(m) {
+    const seen = m.shown ? " The crew’s seen this map already, so the fog only hides it from here on." : "";
+    return `<section class="wm-card card${fresh("fog", m.id)}" aria-labelledby="wm-fog-h"><div class="wm-card-top"><span class="wm-card-mark is-fog">${MARK.fog}</span>
+      <div class="wm-card-t"><p class="wb-k">Fog</p><h2 class="wm-card-n" id="wm-fog-h">Cover it with fog</h2></div>
+      <button type="button" class="cc-x" data-act="w" data-do="mfogx" aria-label="Close">${d.icon.close}</button></div>
+      <p class="cc-small wm-card-say">The crew only sees what you’ve uncovered, and you rub the fog away as they explore. A pin under it stays hidden till you uncover its spot, even one you’ve shown them.${seen}</p>
+      <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="mfogon" data-v="all">Cover all of it</button><button type="button" class="button" data-act="w" data-do="mfogon" data-v="none">Brush some on</button></div></section>`;
+  }
+  // The fog's bar along the bottom while she's rubbing it: what her finger
+  // does, how wide, Undo and Done, with what the crew can see.
+  function fogBar(id, m) {
+    const tool = (t, label) => `<button type="button" class="button wm-seg" data-act="w" data-do="mfogtool" data-t="${t}" aria-pressed="${brush.tool === t}">${MARK[{ move: "move", lift: "lift", cover: "fog" }[t]]}${label}</button>`;
+    const size = (s, label) => `<button type="button" class="wm-size" data-act="w" data-do="mfogsize" data-s="${s}" aria-pressed="${brush.size === s}" aria-label="${label}"${brush.tool === "move" ? " disabled" : ""}>${MARK[s]}</button>`;
+    const how = { move: "Drag to move the map.", lift: "Rub away the fog where they’ve been.", cover: "Rub the fog back over what they shouldn’t see." }[brush.tool];
+    const more = brush.tool === "move" ? " Pick Uncover to rub it away." : " Two fingers move the map.";
+    const backs = rubs.get(fogKey(id, m.id))?.length ?? 0;
+    return `<div class="wm-bar is-fog">
+      <div class="wm-hint wm-fog-hint"><p><b>${how}</b>${more}</p><p class="wm-crew" role="status" data-crewsay>${esc(crewSay(id, m))}</p></div>
+      <div class="wm-bar-row wm-fog-tools" role="group" aria-label="What your finger does">${tool("move", "Move")}${tool("lift", "Uncover")}${tool("cover", "Cover")}</div>
+      <div class="wm-bar-row"><div class="wm-sizes" role="group" aria-label="How wide it rubs">${size("big", "Big brush")}${size("small", "Small brush")}</div>
+        <button type="button" class="button" data-act="w" data-do="mfogundo"${backs ? "" : " disabled"}>${MARK.undo}Undo</button>
+        <button type="button" class="button primary" data-act="w" data-do="mfogdone">Done</button></div></div>`;
+  }
+
   function mapView(id, mid, focus) {
     const gm = isGm(id);
     const doc = docOf(id);
     const m = findMap(doc, mid);
     const at = `${id}:${mid}`;
     if (ui.at !== at) {
-      ui = { at, pin: "", panel: false, placing: null, picking: null, naming: "", focus: "", asked: "", lit: [] };
+      ui = { at, pin: "", panel: false, placing: null, picking: null, naming: "", focus: "", asked: "", lit: [], fog: false, fogAsk: false };
       find = "";
     }
     // Opened from a page's pin: that pin, once.
@@ -521,22 +840,28 @@ export function makeMaps(w) {
     const say = status(id);
     const showBtn = gm ? `<button type="button" class="button sm${m.shown ? "" : " primary"} wm-show" data-act="w" data-do="mshow" aria-pressed="${m.shown}">${m.shown ? "Hide it from the crew" : "Show the crew"}</button>` : "";
     const placing = ui.placing;
+    // The fog's gone from under her (Undo, or her other phone took it off).
+    if (!m.fog) ui.fog = false;
+    if (m.fog) ui.fogAsk = false;
+    const fogging = gm && ui.fog && !placing;
     const bar = placing
       ? `<div class="wm-bar is-placing"><p class="wm-hint" role="status">Move the map till the spot’s under the cross.</p><div class="wm-bar-row"><button type="button" class="button" data-act="w" data-do="mcancel">Cancel</button><button type="button" class="button primary" data-act="w" data-do="mplace">${placing.pid ? "Put it here" : "Pin it here"}</button></div></div>`
-      : `<div class="wm-bar"><div class="wm-bar-row"><button type="button" class="button wm-pins-btn" data-act="w" data-do="mpanel" aria-expanded="${ui.panel}">Pins${m.pins.length ? ` <b>${m.pins.length}</b>` : ""}</button>${gm ? `<button type="button" class="button primary" data-act="w" data-do="mdrop"${m.pins.length >= MMAX.pins ? " disabled" : ""}>${MARK.pin}Drop a pin</button>` : ""}</div></div>`;
+      : fogging ? fogBar(id, m)
+      : `<div class="wm-bar"><div class="wm-bar-row"><button type="button" class="button wm-pins-btn" data-act="w" data-do="mpanel" aria-expanded="${ui.panel}">Pins${m.pins.length ? ` <b>${m.pins.length}</b>` : ""}</button>${gm ? `<button type="button" class="button wm-fog-btn" data-act="w" data-do="mfog" aria-expanded="${ui.fogAsk}">${MARK.fog}Fog</button><button type="button" class="button primary" data-act="w" data-do="mdrop"${m.pins.length >= MMAX.pins ? " disabled" : ""}>${MARK.pin}Drop a pin</button>` : ""}</div></div>`;
     const zoom = `<div class="wm-zoom" role="group" aria-label="Zoom"><button type="button" class="wm-z" data-act="w" data-do="mzoom" data-z="in" aria-label="Zoom in">${MARK.plus}</button><button type="button" class="wm-z" data-act="w" data-do="mzoom" data-z="out" aria-label="Zoom out">${MARK.minus}</button><button type="button" class="wm-z" data-act="w" data-do="mzoom" data-z="whole" aria-label="The whole map">${MARK.whole}</button></div>`;
-    const overlay = ui.picking ? picker(id, doc) : ui.panel ? panel(id, doc, m, gm) : placing ? "" : card(id, doc, m, gm);
+    const overlay = ui.picking ? picker(id, doc) : ui.panel ? panel(id, doc, m, gm) : placing || fogging ? "" : ui.fogAsk && gm ? fogAsk(m) : card(id, doc, m, gm);
     if (!overlay) up = "";
     // A pin that's just been shown lights up once.
     ui.lit = w.lit(id).slice();
     if (!gm) w.unlit(id);
+    const fogBadge = gm && m.fog ? ' <span class="wb-badge is-fog">Fog</span>' : "";
     return `<div class="wm-screen" data-wb="${esc(id)}">
       <div class="wm-top">${top}
-        <header class="wm-head"><div class="wm-title"><p class="kicker${gm ? " is-gm" : ""}">Map${gm ? ` <span class="wb-badge${m.shown ? " is-on" : ""}">${m.shown ? "Shown" : "Hidden"}</span>` : ""}</p><h1>${esc(m.name)}</h1></div>${showBtn}</header>
+        <header class="wm-head"><div class="wm-title"><p class="kicker${gm ? " is-gm" : ""}">Map${gm ? ` <span class="wb-badge${m.shown ? " is-on" : ""}">${m.shown ? "Shown" : "Hidden"}</span>${fogBadge}` : ""}</p><h1>${esc(m.name)}</h1></div>${showBtn}</header>
         ${say ? `<p class="cc-small pt-status wm-status">${say}</p>` : ""}</div>
-      <div class="wm-body${placing ? " is-placing" : ""}">
+      <div class="wm-body${placing ? " is-placing" : ""}${fogging ? " is-fog" : ""}">
         <div class="wm-slot" data-map="${esc(at)}"></div>
-        <p class="sr-only" id="wm-how">Drag to move it. Double tap to zoom in, or double tap and hold, then slide down to zoom in and up to zoom out. With a keyboard, the arrow keys move it, plus and minus zoom, and 0 shows the whole map.</p>
+        <p class="sr-only" id="wm-how">${fogging && brush.tool !== "move" ? "One finger rubs the fog, and two fingers move the map. Pick Move to drag it with one." : "Drag to move it. Double tap to zoom in, or double tap and hold, then slide down to zoom in and up to zoom out."} With a keyboard, the arrow keys move it, plus and minus zoom, and 0 shows the whole map.</p>
         <p class="wm-note" data-wmnote hidden></p>
         ${zoom}${overlay}${bar}
       </div></div>`;
@@ -546,6 +871,7 @@ export function makeMaps(w) {
   // still kept on the phone).
   function drop() {
     if (!view) return;
+    rubbing = false;
     view.v.destroy();
     if (view.src && urls.has(view.src)) {
       URL.revokeObjectURL(urls.get(view.src));
@@ -577,7 +903,10 @@ export function makeMaps(w) {
     const m = findMap(doc, mid);
     if (!m) return;
     const gm = isGm(id);
-    const key = `${id}:${mid}:${m.key}:${m.w}x${m.h}`;
+    // The viewer lasts while the map's the same size, so a new picture (the
+    // crew's as she uncovers more, or a new one of hers) goes in where it's
+    // been moved to.
+    const key = `${id}:${mid}:${m.w}x${m.h}`;
     if (view?.key !== key) {
       drop();
       const v = makeViewer({
@@ -593,49 +922,74 @@ export function makeMaps(w) {
           }
         },
       });
-      view = { key, v, src: "", draw: null };
+      view = { key, v, src: "", draw: null, fog: null, loading: "" };
     }
     slot.replaceWith(view.v.el);
     view.v.el.setAttribute("aria-label", m.name);
-    view.draw = pinDraw(id, doc, gm, ui.lit);
+    // Her pins under the fog, which the crew won't see till their spot's uncovered.
+    const under = gm && m.fog ? fogBits(m.fog.c, m.w, m.h) : null;
+    view.draw = pinDraw(id, doc, gm, ui.lit, under ? (pin) => spotCovered(under, m.w, m.h, pin.x, pin.y) : () => false);
     view.v.pins(m.pins.map((pin) => ({ id: pin.id, x: pin.x, y: pin.y, pin, rank: (ui.pin === pin.id ? 4 : 0) + (pin.shown ? 1 : 0), always: ui.pin === pin.id })));
     view.v.placing(Boolean(ui.placing));
+    // The same rubber each time the screen's drawn, so a rub that's going
+    // carries on through it.
+    const rubOn = gm && ui.fog && m.fog && brush.tool !== "move";
+    if (rubOn && !view.rub) view.rub = rubber(id, m.id);
+    view.v.brush(rubOn ? view.rub : null);
     // The bar along the bottom covers the bottom of the map, so the whole map
     // shows above it.
     const row = app.querySelector(".wm-bar-row");
     if (row) view.v.pad(view.v.el.getBoundingClientRect().bottom - row.getBoundingClientRect().top + 10);
     // The picture: the phone's copy if it's got one, the small one first if
-    // the big one's still coming.
-    const big = addr(id, m);
+    // the big one's still coming. A crew's map that's all under the fog has
+    // no picture yet, only fog.
+    const big = m.key ? addr(id, m) : "";
     const note = app.querySelector("[data-wmnote]");
     const say = (t) => {
       if (!note) return;
       note.hidden = !t;
       note.textContent = t;
     };
-    if (urls.has(big)) {
-      view.src = big;
-      view.v.show(urls.get(big));
-    } else {
+    if (!big) {
+      view.src = "";
+      view.v.show("");
+      paintFog(id, m);
+      say("It’s all under the fog for now.");
+    } else if (view.src === big) {
+      paintFog(id, m);
+    } else if (urls.has(big)) {
+      swap(id, m, big, urls.get(big));
+    } else if (view.loading !== big) {
+      // Whatever's up stays up till the new one's in, so the fog never lifts
+      // off a picture that isn't there yet.
       const small = addr(id, m, true);
-      view.v.show(urls.get(small) ?? "");
-      say(online() ? "Opening the map…" : "");
+      if (!view.src) {
+        view.v.show(urls.get(small) ?? "");
+        // Opening it: its fog straight away. One that's all under the fog
+        // keeps that till the crew's picture is in, then the fog lifts off it.
+        if (!view.fog) paintFog(id, m);
+        say(online() ? "Opening the map…" : "");
+      }
+      view.loading = big;
       const was = view.key;
-      Promise.all([picture(small), picture(big)]).then(([s, b]) => {
-        if (view?.key !== was) return;
+      Promise.all([view.src ? null : picture(small), picture(big)]).then(async ([s, b]) => {
+        if (view?.key !== was || view.loading !== big) return;
+        view.loading = "";
         const live = document.querySelector("#app [data-wmnote]");
         const put = (t) => {
           if (!live) return;
           live.hidden = !t;
           live.textContent = t;
         };
-        if (b) {
-          view.src = big;
-          view.v.show(b);
+        const now = findMap(docOf(id), mid);
+        if (b && now && now.key && addr(id, now) === big) {
+          await decoded(b);
+          if (view?.key !== was) return;
+          swap(id, now, big, b);
           return put("");
         }
-        if (s) view.v.show(s);
-        put(online() ? "The picture didn’t come through. Try again in a moment." : "No signal, and this phone hasn’t got this map’s picture yet.");
+        if (s && !view.src) view.v.show(s);
+        if (!b) put(online() ? "The picture didn’t come through. Try again in a moment." : "No signal, and this phone hasn’t got this map’s picture yet.");
       });
     }
     // Opened from a page's pin: straight to it, with its card up.
@@ -809,6 +1163,80 @@ export function makeMaps(w) {
       edit(id, [{ o: "m-gone", id: m.id }], `${bare(m.name)} is down.`);
       d.go(`/characters/?camp=${encodeURIComponent(id)}&world`, { replace: true });
     },
+    // Fog: rubbing it if the map's covered, or asking how to cover it.
+    mfog() {
+      const { m } = here();
+      if (!m) return;
+      Object.assign(ui, { pin: "", panel: false, naming: "", placing: null, picking: null });
+      if (m.fog) ui.fog = true;
+      else ui.fogAsk = !ui.fogAsk;
+      w.setSure("");
+      d.render();
+    },
+    mfogx() {
+      ui.fogAsk = false;
+      d.render();
+      requestAnimationFrame(() => document.querySelector("#app .wm-fog-btn")?.focus({ preventScroll: true }));
+    },
+    mfogon(el) {
+      const { id, m } = here();
+      if (!m || m.fog) return;
+      const all = el.dataset.v === "all";
+      ui.fogAsk = false;
+      ui.fog = true;
+      brush.tool = all ? "lift" : "cover";
+      rubs.delete(fogKey(id, m.id));
+      edit(id, [{ o: "m-fog", id: m.id, v: fogFull(m.w, m.h, all) }], all ? `${bare(m.name)} is under the fog. Rub it away where the crew goes.` : "The fog’s ready. Rub it over what the crew hasn’t found yet.");
+      crewSoon(id, m.id);
+    },
+    mfogtool(el) {
+      brush.tool = ["move", "lift", "cover"].includes(el.dataset.t) ? el.dataset.t : "lift";
+      d.render();
+    },
+    mfogsize(el) {
+      brush.size = el.dataset.s === "small" ? "small" : "big";
+      d.render();
+    },
+    mfogundo() {
+      const { id, m } = here();
+      const back = m ? rubs.get(fogKey(id, m.id)) : null;
+      if (!m?.fog || !back?.length) return;
+      const c = back.pop();
+      if (view) view.fog = null;
+      edit(id, [{ o: "m-fog", id: m.id, v: c }], "", { undoable: false, quiet: true });
+      crewSoon(id, m.id);
+      d.render();
+    },
+    mfogdone() {
+      ui.fog = false;
+      d.render();
+      requestAnimationFrame(() => document.querySelector("#app .wm-fog-btn")?.focus({ preventScroll: true }));
+    },
+    mfogrub() {
+      ui.panel = false;
+      ui.fog = true;
+      d.render();
+    },
+    mfogall() {
+      const { id, m } = here();
+      if (!m?.fog) return;
+      ui.panel = false;
+      rubs.delete(fogKey(id, m.id));
+      edit(id, [{ o: "m-fog", id: m.id, v: fogFull(m.w, m.h) }], "All of it’s under the fog again.");
+    },
+    mfogoff() {
+      const { id, m } = here();
+      if (!m?.fog) return;
+      const key = `mfogoff-${m.id}`;
+      if (w.ui().sure !== key) {
+        w.setSure(key);
+        return d.render();
+      }
+      ui.panel = false;
+      ui.fog = false;
+      rubs.delete(fogKey(id, m.id));
+      edit(id, [{ o: "m-fog", id: m.id, v: null }], m.shown ? "The fog’s off. The crew can see all of it." : "The fog’s off.");
+    },
     mturn() {
       if (!draft?.src || draft.busy) return;
       draft.turn = (draft.turn + 1) % 4;
@@ -858,6 +1286,8 @@ export function makeMaps(w) {
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape" || !document.querySelector("#app .wm-screen") || document.querySelector("dialog[open]")) return;
     if (ui.picking || ui.placing) ACT.mcancel();
+    else if (ui.fog) ACT.mfogdone();
+    else if (ui.fogAsk) ACT.mfogx();
     else if (ui.naming) ACT.mnameoff();
     else if (ui.panel) ACT.mpanel();
     else if (ui.pin) ACT.mclose();
@@ -880,7 +1310,18 @@ export function makeMaps(w) {
     return rows.length ? `<section class="cc-sec wp-ment wm-on" aria-labelledby="wm-on-h"><h2 id="wm-on-h">${rows.length === 1 ? "On the map" : "On the maps"}</h2><ul class="wp-ment-list">${rows.join("")}</ul></section>` : "";
   }
 
-  // What's new for a player: a map they've just been shown, or a pin on one.
+  // The light switch: the fog's drawn again in the other theme's colours.
+  new MutationObserver(() => {
+    if (view) view.fog = null;
+    if (view && document.querySelector("#app .wm-screen")) {
+      const { id, m } = here();
+      if (m) paintFog(id, m);
+    }
+    thumbs();
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  // What's new for a player: a map they've just been shown, a pin on one, or
+  // fog she's lifted off one, put on one or taken off.
   function news(id, was, now) {
     const said = [];
     const keys = [];
@@ -892,6 +1333,9 @@ export function makeMaps(w) {
         keys.push(m.id);
         continue;
       }
+      if (m.fog && !b.fog) said.push(`${gmName(id)} put ${bare(m.name)} under fog.`);
+      else if (!m.fog && b.fog) said.push(`${gmName(id)} took the fog off ${bare(m.name)}.`);
+      else if (m.fog && b.fog && b.w === m.w && b.h === m.h && coveredShare(m.fog.c, m.w, m.h) < coveredShare(b.fog.c, b.w, b.h)) said.push(`${gmName(id)} uncovered more of ${bare(m.name)}.`);
       const fresh = m.pins.filter((p) => !b.pins.some((q) => q.id === p.id));
       if (fresh.length === 1) said.push(`There’s a new pin on ${bare(m.name)}: ${bare(fresh[0].name)}.`);
       else if (fresh.length > 1) said.push(`There are ${fresh.length} new pins on ${bare(m.name)}.`);

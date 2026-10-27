@@ -273,6 +273,11 @@ export function makeWorld(d) {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible" && watching) syncNow(watching);
   });
+  // The live table says the crew's maps have changed (fog she's lifted, a
+  // pin she's shown), so it's on this phone in a moment, not at the next look.
+  addEventListener("zi-world", (e) => {
+    if (e.detail && e.detail === watching) soon(e.detail, 150);
+  });
   addEventListener("storage", (e) => {
     if (e.key === KEY) st = null;
   });

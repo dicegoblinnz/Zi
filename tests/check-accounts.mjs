@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, or 9b)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b or 9c)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -144,6 +144,21 @@
 //    bucket. Nothing crosses: Zed gets no picture, nobody but the GM puts one
 //    up, and Zed's Night has no maps. The World screen, a map with a pin's
 //    card and the list of pins, and Kai's map pass axe at 390, in both themes.
+//    9c. Fog she lifts. Mo covers the Steeplands: Kai's phone gets fog and no
+//    picture, and the map's own picture, and the pins he's shown, are off it.
+//    He rubs the fog off the Copper Baths with a small brush and a strip lower
+//    down with a big one, and his phone makes the crew's picture: every
+//    covered square of it is painted over, the uncovered ones match his, and
+//    it's the only picture Kai can get. The Copper Baths' pin comes out from
+//    under the fog and Lord Vane's stays hidden, on Kai's phone in a moment,
+//    told by the live table, with a note. He rubs the fog back over the Copper
+//    Baths, and Undo lifts it again. With no signal, Kai's map opens with the
+//    crew's picture and its fog. Nothing crosses: Zed gets no picture, Kai
+//    can't change the fog or send up a crew's picture, a crew's picture has to
+//    be the map's size and for a map under the fog, and his own picture can't
+//    be passed off as the crew's. The fog's card, Mo's map with the fog's bar
+//    and Kai's map pass axe at 390, in both themes. Taking the fog off gives
+//    Kai the whole map back, with the pins.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -163,6 +178,7 @@ import { Miniflare, convertV4MiniflareOptions, coupleWebSocket } from "miniflare
 import { WebSocketServer } from "ws";
 import { chromium } from "playwright";
 import { stepsToDice } from "../src/companion/dice.js";
+import { coveredShare, fogBits, fogFull, gridOf, spotCovered } from "../src/companion/maps.js";
 import { AxeBuilder } from "@axe-core/playwright";
 
 const problems = [];
@@ -2719,6 +2735,232 @@ try {
   await checkMaps();
   // ZI_UPTO=9b stops here, for a quicker look while working on maps.
   if (UPTO === "9b") break rest;
+
+  // ------------------------------------------------------------ 9c. fog she lifts
+  async function checkFog() {
+    const worldOf = async (id = tuesday.id) => JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", id))[0]?.data ?? "null");
+    const steep = async () => (await worldOf())?.maps?.find((m) => m.name === "The Steeplands") ?? null;
+    const kaiWorld = async () => got(kai.page, "GET", `/api/campaigns/${tuesday.id}/world`);
+    const h1 = (page) => page.textContent("#app h1").catch(() => "");
+    const fetchPic = (page, path) => page.evaluate(async (p) => {
+      const r = await fetch(p, { cache: "no-store" });
+      return { status: r.status, size: (await r.arrayBuffer()).byteLength };
+    }, path);
+    const layerOf = (page) => page.$eval(".wm-layer", (el) => {
+      const m = el.style.transform.match(/translate3d\(([-+\d.e]+)px, ([-+\d.e]+)px, 0(?:px)?\) scale\(([-+\d.e]+)\)/);
+      return m ? { x: Number(m[1]), y: Number(m[2]), s: Number(m[3]) } : null;
+    });
+    const picLoaded = (page) => page.$eval(".wm-pic", (img) => img.complete && img.naturalWidth > 0 && img.src.startsWith("blob:")).catch(() => false);
+    const map = await steep();
+    const mapUrl = `${BASE}/characters/?camp=${tuesday.id}&world&m=${map.id}`;
+    const picPath = `/api/campaigns/${tuesday.id}/maps/${map.id}?k=${map.key}`;
+    const baths = map.pins.find((p) => p.to?.k === "p" && p.shown);
+    const vane = map.pins.find((p) => p.shown && p !== baths);
+    // A rub with a finger across the map, from one spot on the picture to
+    // another (each from 0 to 1), the way a phone sends it.
+    const rubAcross = async (from, to, steps = 6) => {
+      const L = await layerOf(mo.page);
+      const sb = await (await mo.page.$(".wm-stage")).boundingBox();
+      const at = ([fx, fy]) => [sb.x + L.x + fx * map.w * L.s, sb.y + L.y + fy * map.h * L.s];
+      const pts = Array.from({ length: steps + 1 }, (_, i) => at([from[0] + ((to[0] - from[0]) * i) / steps, from[1] + ((to[1] - from[1]) * i) / steps]));
+      await fingers(mo.page, [["touchStart", [pts[0]]], ...pts.slice(1).map((p) => ["touchMove", [p], 24]), ["touchEnd", [], 120]]);
+    };
+    // The crew's picture caught up with the fog Mo's rubbed.
+    const caughtUp = async () => {
+      const m = await steep();
+      return m?.fog?.crew && m.fog.crew.c === m.fog.c ? m : null;
+    };
+
+    // Mo opens the Steeplands and covers it, all of it.
+    await mo.page.goto(mapUrl);
+    await mo.page.waitForSelector(".wm-stage");
+    await until(() => picLoaded(mo.page), "the Steeplands on Mo's phone");
+    await mo.page.click('[data-do="mfog"]');
+    await mo.page.waitForSelector("#wm-fog-h");
+    has(await text(mo.page, ".wm-card"), "stays hidden till you uncover its spot", "the fog's card says a pin under it stays hidden");
+    has(await text(mo.page, ".wm-card"), "only hides it from here on", "and that the crew's seen this map already");
+    await axe(mo.page, "the fog's card");
+    await shot(mo.page, "fog-card");
+    await mo.page.click('[data-do="mfogon"][data-v="all"]');
+    await until(async () => (await steep())?.fog?.c === fogFull(map.w, map.h), "the Steeplands all under the fog on the server");
+    same((await steep()).fog.crew, null, "with no crew's picture, since they see none of it");
+    await mo.page.waitForSelector(".wm-bar.is-fog");
+    yes(await mo.page.$eval(".wm-fog", (c) => !c.hidden && c.classList.contains("is-gm") && c.width > 0), "Mo sees his fog over the map, see-through in his violet");
+    let kw = await kaiWorld();
+    let km = kw.json?.world?.maps?.[0];
+    same([km?.key, km?.fog?.c === fogFull(map.w, map.h), km?.pins], ["", true, []], "Kai's phone gets the map all under the fog, with no picture and none of the pins");
+    yes(!kw.body.includes(map.key), "the map's own picture's key is off Kai's phone");
+    same((await fetchPic(kai.page, picPath)).status, 404, "and Kai can't get its picture any more");
+    same((await fetchPic(kai.page, `${picPath}&t=1`)).status, 404, "or its small one");
+
+    // Kai has the map open, on the live table with the World screen.
+    await kai.page.goto(mapUrl);
+    await kai.page.waitForSelector(".wm-stage");
+    await until(async () => (await kai.page.textContent("[data-wmnote]").catch(() => "")).includes("all under the fog"), "Kai's map says it's all under the fog");
+    yes(await kai.page.$eval(".wm-fog", (c) => !c.hidden && !c.classList.contains("is-gm")), "and Kai sees solid fog");
+    await until(() => kai.page.evaluate(async (p) => !(await (await caches.open("zi-maps")).match(new URL(p, location.origin).href)), picPath), "the map's own picture gone from Kai's phone");
+    await kai.page.evaluate(() => {
+      window.zdNudges = 0;
+      addEventListener("zi-world", () => window.zdNudges++);
+    });
+
+    // Mo rubs the fog off the Copper Baths with the small brush, and a strip
+    // lower down with the big one.
+    await mo.page.click('[data-do="mfogsize"][data-s="small"]');
+    await rubAcross([baths.x - 0.04, baths.y], [baths.x + 0.04, baths.y]);
+    await mo.page.click('[data-do="mfogsize"][data-s="big"]');
+    await rubAcross([0.3, 0.8], [0.7, 0.84]);
+    await until(caughtUp, "the crew's picture of the fog he's rubbed on the server", 30000);
+    let m = await caughtUp();
+    let bits = fogBits(m.fog.c, map.w, map.h);
+    same([spotCovered(bits, map.w, map.h, baths.x, baths.y), spotCovered(bits, map.w, map.h, vane.x, vane.y)], [false, true], "the Copper Baths uncovered, and Lord Vane still under the fog");
+    const share = coveredShare(m.fog.c, map.w, map.h);
+    yes(share > 0.6 && share < 0.99, `most of it still covered (${Math.round(share * 100)}%)`);
+    yes(m.fog.crew.k !== map.key && (await picsOf(tuesday.id)).includes(`maps/${tuesday.id}/${m.fog.crew.k}`), "the crew's picture is a picture of its own, in the bucket");
+    has(await text(mo.page, "[data-crewsay]"), "The crew sees what you’ve uncovered", "Mo's bar says the crew can see it");
+
+    // On Kai's phone in a moment: the crew's picture, and the Copper Baths'
+    // pin out from under the fog, told by the live table.
+    const kaiPins = () => kai.page.$$eval(".wm-pin", (els) => els.map((e) => e.getAttribute("aria-label").split(",")[0]));
+    await until(async () => JSON.stringify(await kaiPins()) === '["The Copper Baths"]', "the Copper Baths' pin on Kai's map, and no other", 6000);
+    yes(await kai.page.evaluate(() => window.zdNudges > 0), "Kai's phone was told by the live table, not left to its next look");
+    await until(() => picLoaded(kai.page), "the crew's picture on Kai's map");
+    await until(async () => (await text(kai.page, "#cc-toast").catch(() => "")).includes("uncovered more of The Steeplands"), "a note on Kai's phone that Mo uncovered more of it");
+    kw = await kaiWorld();
+    km = kw.json.world.maps[0];
+    same([km.key, km.fog.c === m.fog.c, km.pins.map((p) => p.name)], [m.fog.crew.k, true, ["The Copper Baths"]], "Kai's phone gets the crew's picture, the fog it was made with, and only the pin that's uncovered");
+    yes(!kw.body.includes(map.key) && !kw.body.includes(vane.id), "never the map's own picture or Lord Vane's pin");
+    same((await fetchPic(kai.page, picPath)).status, 404, "and Kai still can't get Mo's picture");
+
+    // What's still covered never reaches Kai's phone, not even in the picture:
+    // every covered square of the crew's picture is painted over, and the
+    // uncovered ones match Mo's.
+    const { gw, gh } = gridOf(map.w, map.h);
+    const centres = [];
+    for (let j = 0; j < gh; j++) for (let i = 0; i < gw; i++) centres.push([i, j, Math.floor(((i + 0.5) * map.w) / gw), Math.floor(((j + 0.5) * map.h) / gh)]);
+    const read = (page, path, spots) => page.evaluate(async ([p, s]) => {
+      const bmp = await createImageBitmap(await (await fetch(p, { cache: "no-store" })).blob());
+      const cv = new OffscreenCanvas(bmp.width, bmp.height);
+      const g = cv.getContext("2d");
+      g.drawImage(bmp, 0, 0);
+      const d = g.getImageData(0, 0, bmp.width, bmp.height).data;
+      return { w: bmp.width, h: bmp.height, px: s.map(([x, y]) => [d[(y * bmp.width + x) * 4], d[(y * bmp.width + x) * 4 + 1], d[(y * bmp.width + x) * 4 + 2]]) };
+    }, [path, spots]);
+    const crewPath = `/api/campaigns/${tuesday.id}/maps/${map.id}?k=${m.fog.crew.k}`;
+    const theirs = await read(kai.page, crewPath, centres.map((c) => [c[2], c[3]]));
+    const his = await read(mo.page, picPath, centres.map((c) => [c[2], c[3]]));
+    same([theirs.w, theirs.h], [map.w, map.h], "the crew's picture is the map's size");
+    const fill = [0x2b, 0x24, 0x33];
+    const off = (a, b) => Math.max(...a.map((v, k) => Math.abs(v - b[k])));
+    let worst = 0;
+    let shown = 0;
+    let matched = 0;
+    let plain = 0;
+    centres.forEach(([i, j], k) => {
+      const idx = j * gw + i;
+      if ((bits[idx >> 3] >> (idx & 7)) & 1) {
+        worst = Math.max(worst, off(theirs.px[k], fill));
+        if (off(his.px[k], fill) > 40) plain++;
+      } else {
+        shown++;
+        if (off(theirs.px[k], his.px[k]) <= 28) matched++;
+      }
+    });
+    yes(worst <= 18 && plain > 1000, `every covered square of the crew's picture is painted over (off by ${worst} at most, over ${plain} squares that aren't, on Mo's)`);
+    yes(shown > 100 && matched / shown > 0.95, `and the uncovered ones are Mo's map (${matched} of ${shown})`);
+
+    // He rubs the fog back over the Copper Baths, and Undo lifts it again.
+    await mo.page.click('[data-do="mfogtool"][data-t="cover"]');
+    await mo.page.click('[data-do="mfogsize"][data-s="small"]');
+    await rubAcross([baths.x - 0.05, baths.y], [baths.x + 0.05, baths.y]);
+    await until(async () => {
+      const n = await caughtUp();
+      return n && spotCovered(fogBits(n.fog.c, map.w, map.h), map.w, map.h, baths.x, baths.y);
+    }, "the Copper Baths covered again, crew's picture and all", 30000);
+    await until(async () => ((await kaiWorld()).json?.world?.maps?.[0]?.pins ?? [1]).length === 0, "the Copper Baths' pin off Kai's phone again");
+    await mo.page.click('[data-do="mfogundo"]');
+    await until(async () => {
+      const n = await caughtUp();
+      return n && !spotCovered(fogBits(n.fog.c, map.w, map.h), map.w, map.h, baths.x, baths.y);
+    }, "Undo lifts it again", 30000);
+    await until(async () => ((await kaiWorld()).json?.world?.maps?.[0]?.pins ?? []).length === 1, "and the pin's back on Kai's phone");
+    await mo.page.click('[data-do="mfogtool"][data-t="lift"]');
+
+    // With no signal, Kai's map opens with the crew's picture and its fog.
+    m = await caughtUp();
+    const crewNow = `/api/campaigns/${tuesday.id}/maps/${map.id}?k=${m.fog.crew.k}`;
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector(".wb-tab .wm-tok");
+    await until(() => kai.page.evaluate(async (p) => Boolean(await (await caches.open("zi-maps")).match(new URL(p, location.origin).href)), crewNow), "the crew's picture kept on Kai's phone");
+    yes(await kai.page.$eval(".wm-thumb-fog", (c) => c.width > 0).catch(() => false), "the map's small picture on the World tab has its fog over it");
+    await kai.context.setOffline(true);
+    await kai.page.click(".wm-tok-a");
+    await until(async () => (await h1(kai.page)) === "The Steeplands", "the covered map with no signal");
+    await until(() => picLoaded(kai.page), "its crew's picture with no signal");
+    yes(await kai.page.$eval(".wm-fog", (c) => !c.hidden && c.width > 0), "and its fog");
+    same(await kai.page.$$eval(".wm-pin", (els) => els.length), 1, "with the one pin that's uncovered");
+    yes(!(await kai.page.evaluate(async (p) => Boolean(await (await caches.open("zi-maps")).match(new URL(p, location.origin).href)), picPath)), "and Mo's own picture nowhere on Kai's phone");
+    await kai.context.setOffline(false);
+
+    // Nothing crosses.
+    same((await fetchPic(zed.page, crewNow)).status, 404, "Zed can't get the crew's picture");
+    same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "kais-phone-0013", ops: [{ n: 1, o: "m-fog", id: map.id, v: null }] })).status, 403, "Kai can't take the fog off");
+    const upload = (page, campId, forMap, w, h) => page.evaluate(async ([c, f, w, h]) => {
+      const cv = document.createElement("canvas");
+      cv.width = w;
+      cv.height = h;
+      cv.getContext("2d").fillRect(0, 0, w, h);
+      const blob = await new Promise((r) => cv.toBlob(r, "image/jpeg", 0.8));
+      const form = new FormData();
+      form.append("pic", blob, "map");
+      form.append("thumb", blob, "thumb");
+      const r = await fetch(`/api/campaigns/${c}/maps?for=${f}`, { method: "POST", body: form });
+      return r.status;
+    }, [campId, forMap, w, h]);
+    same(await upload(kai.page, tuesday.id, map.id, 300, 400), 403, "or send up a crew's picture");
+    same(await upload(mo.page, tuesday.id, map.id, 300, 400), 400, "a crew's picture that isn't the map's size is turned away");
+    same(await upload(kai.page, kaisTable.id, "kais-map", 1200, 800), 409, "and so is one for a map that isn't under the fog");
+    const before = (await steep()).fog.crew.k;
+    await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "mos-check-0010", ops: [{ n: 1, o: "m-crew", id: map.id, key: map.key, c: fogFull(map.w, map.h, false) }] });
+    same((await steep()).fog.crew.k, before, "and Mo's own picture can't be passed off as the crew's");
+
+    // The screens at 390, in both themes: Mo's map with the fog's bar, and Kai's.
+    for (const theme of ["dark", "light"]) {
+      for (const p of [mo.page, kai.page]) await p.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await mo.page.goto(mapUrl);
+      await mo.page.waitForSelector(".wm-stage");
+      await until(() => picLoaded(mo.page), `Mo's map, ${theme}`);
+      await mo.page.click('[data-do="mfog"]');
+      await mo.page.waitForSelector(".wm-bar.is-fog");
+      await axe(mo.page, `rubbing the fog, ${theme}`);
+      await shot(mo.page, `fog-gm-${theme}`);
+      await mo.page.click('[data-do="mfogdone"]');
+      await kai.page.goto(mapUrl);
+      await kai.page.waitForSelector(".wm-stage");
+      await until(() => picLoaded(kai.page), `Kai's covered map, ${theme}`);
+      await axe(kai.page, `a covered map on Kai's phone, ${theme}`);
+      await shot(kai.page, `fog-player-${theme}`);
+    }
+    for (const p of [mo.page, kai.page]) await p.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+
+    // Taking the fog off gives Kai the whole map back, with the pins.
+    await mo.page.goto(mapUrl);
+    await mo.page.waitForSelector(".wm-stage");
+    await mo.page.click('[data-do="mpanel"]');
+    await mo.page.waitForSelector(".wm-panel");
+    has(await text(mo.page, ".wm-panel"), "% of it’s uncovered", "the map's list says how much of it's uncovered");
+    await mo.page.click('[data-do="mfogoff"]');
+    await mo.page.click('[data-do="mfogoff"]');
+    await until(async () => !(await steep())?.fog, "the fog off on the server");
+    kw = await kaiWorld();
+    km = kw.json.world.maps[0];
+    same([km.key, "fog" in km, km.pins.map((p) => p.name).sort()], [map.key, false, ["Lord Aldous Vane", "The Copper Baths"]], "Kai gets the map's own picture back, with both pins");
+    yes((await picsOf(tuesday.id)).includes(`maps/${tuesday.id}/${m.fog.crew.k}`), "the crew's picture waits a few minutes in the bin, for a phone part way through fetching it");
+  }
+  console.log("9c. Fog she lifts");
+  await checkFog();
+  // ZI_UPTO=9c stops here, for a quicker look while working on the fog.
+  if (UPTO === "9c") break rest;
 
   // ------------------------------------------------------------ 10. who can do what
   console.log("10. Who can do what");
