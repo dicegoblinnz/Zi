@@ -1489,8 +1489,13 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
 .wb-tile .cc-small { margin: 0; }
 /* The table screen's way in, under the round, and its code to type on a TV */
 .ts-tile { margin-top: 1rem; }
-.ts-tile .wb-tile-a { width: 100%; text-align: left; font: inherit; cursor: pointer; box-shadow: inset 3px 0 0 var(--zd-you-line); }
-.ts-tile .wb-tile-mark { color: var(--gold-ink); border-color: var(--zd-you-line); }
+.ts-tile-a { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; width: 100%; padding: 12px 14px; font: inherit; text-align: left; color: var(--ink); cursor: pointer; box-shadow: inset 3px 0 0 var(--zd-you-line); transition: transform 140ms ease-out; }
+.ts-tile-a:active { transform: scale(0.985); }
+.ts-tile-a:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.ts-tile-mark { display: grid; place-items: center; width: 44px; height: 44px; color: var(--gold-ink); border: 1.5px solid var(--zd-you-line); border-radius: 3px; }
+.ts-tile-mark svg { width: 24px; height: 24px; }
+.ts-tile-in { display: grid; gap: 2px; min-width: 0; }
+.ts-tile .cc-small { margin: 0; }
 .ts-tile-n { font-family: var(--display); font-weight: 600; font-size: 1.2rem; line-height: 1.2; letter-spacing: 0.02em; }
 .ts-give { display: grid; justify-items: center; gap: 0.15rem; margin: 0.9rem 0 0.6rem; padding: 1rem 0.75rem 1.1rem; text-align: center; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
 .ts-give .cc-small { margin: 0; }
@@ -1505,7 +1510,7 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
   .wb-outs { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wb-tok-a:active, .wb-tile-a:active { transform: none; }
+  .wb-tok-a:active, .wb-tile-a:active, .ts-tile-a:active { transform: none; }
 }
 
 /* ── Places and people (stage 3 of notes/worlds-plan.md): pages under the

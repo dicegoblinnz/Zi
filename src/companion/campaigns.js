@@ -214,8 +214,8 @@ export function makeCampaigns(d) {
   // fours and typed on a TV, or opened straight from its link.
   const fours = (code, sep = " ") => (String(code ?? "").match(/.{1,4}/g) ?? []).join(sep);
   const screenLink = (code) => `${location.origin}/table/#${fours(code, "-")}`;
-  const screenTile = () => `<div class="cc-sec wb-tile ts-tile"><button type="button" class="card wb-tile-a" data-act="k" data-do="screen" aria-haspopup="dialog">
-      <span class="wb-tile-mark" aria-hidden="true">${ICON.screen}</span><span class="wb-tile-in"><span class="ts-tile-n">The table screen</span><span class="cc-small">Put the round up on a TV, a laptop or a call, where the whole table can see it.</span></span></button></div>`;
+  const screenTile = () => `<div class="cc-sec ts-tile"><button type="button" class="card ts-tile-a" data-act="k" data-do="screen" aria-haspopup="dialog">
+      <span class="ts-tile-mark" aria-hidden="true">${ICON.screen}</span><span class="ts-tile-in"><span class="ts-tile-n">The table screen</span><span class="cc-small">Put the round up on a TV, a laptop or a call, where the whole table can see it.</span></span></button></div>`;
   const sure = (key, yes, no) => (st.sure === key ? yes : no);
   const off = (what) => (st.busy ? ` disabled${st.busy === what ? ' aria-busy="true"' : ""}` : "");
   const warn = () => (st.note ? `<div class="cc-note is-warn" role="alert"><p>${esc(st.note)}</p></div>` : "");
@@ -593,7 +593,7 @@ export function makeCampaigns(d) {
       open();
       if (k.screen) return;
       if (!online()) return open("Making the screen’s code needs a signal. Try again when you’ve got one.");
-      const r = await tryCall("POST", `/api/campaigns/${encodeURIComponent(k.id)}/screen`);
+      const r = await tryCall("POST", `/api/campaigns/${encodeURIComponent(k.id)}/screen`, {});
       if (!r.ok || !r.got?.screen) return open(r.got?.error || "That didn’t make the screen’s code. Try again in a minute.");
       k.screen = r.got.screen;
       at().v = "";
@@ -619,7 +619,7 @@ export function makeCampaigns(d) {
       if (!k?.screen || !twice("screenReset")) return;
       st.busy = "screenReset";
       d.render();
-      const r = await tryCall("POST", `/api/campaigns/${encodeURIComponent(k.id)}/screen`);
+      const r = await tryCall("POST", `/api/campaigns/${encodeURIComponent(k.id)}/screen`, { reset: true });
       if (!r.ok || !r.got?.screen) return fail(r, "That didn’t reset the screen’s link. Try again in a minute.");
       st.busy = "";
       k.screen = r.got.screen;

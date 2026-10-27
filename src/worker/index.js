@@ -275,7 +275,7 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
   // The live table: the round's telegraphs and how each one went (table.js).
   if (sub === "table" && !subId) return tableRoute(request, env, method, camp, user, { json, fail, body, origins: originsOf(env), limited });
   if (sub === "link" && !subId && method === "POST") return gm ? resetLink(env, camp) : gmOnly();
-  if (sub === "screen" && !subId && method === "POST") return gm ? newScreen(env, camp) : gmOnly();
+  if (sub === "screen" && !subId && method === "POST") return gm ? newScreen(request, env, camp) : gmOnly();
   if (sub === "me" && !subId && method === "PUT") return gm ? fail(400, "You’re the GM, so you don’t bring a character.") : pickCharacter(request, env, user, camp);
   if (sub === "members" && subId && method === "DELETE") {
     if (!USER_ID.test(subId)) return fail(404, NOTHING);
@@ -373,18 +373,27 @@ async function resetLink(env, camp) {
   return json({ code });
 }
 
-// The table screen's code: a new one the first time she opens it, and a new
-// one whenever she resets it, so the old link stops working and every screen
-// showing it goes.
-async function newScreen(env, camp) {
+// The table screen's code: made the first time she opens it, and the one
+// that's there whenever she opens it again, from any of her phones. Only a
+// reset ({ reset: true }) makes a new one, so the old link stops working and
+// every screen showing it goes.
+async function newScreen(request, env, camp) {
+  const reset = (await body(request))?.reset === true;
+  if (camp.screen && !reset) return json({ screen: camp.screen });
   for (let tries = 0; tries < 3; tries++) {
     const screen = screenCode();
-    const ok = await env.DB.prepare("UPDATE campaign SET screen = ?2 WHERE id = ?1").bind(camp.id, screen).run().then(() => true, (err) => (/UNIQUE/i.test(String(err?.message)) ? false : Promise.reject(err)));
-    if (!ok) continue;
+    const res = await env.DB.prepare(`UPDATE campaign SET screen = ?2 WHERE id = ?1${reset ? "" : " AND screen IS NULL"}`).bind(camp.id, screen).run().catch((err) => (/UNIQUE/i.test(String(err?.message)) ? null : Promise.reject(err)));
+    if (!res) continue;
+    if (!res.meta.changes) {
+      // Another of her phones made one a moment ago, so that's the one.
+      const made = (await env.DB.prepare("SELECT screen FROM campaign WHERE id = ?1").bind(camp.id).first())?.screen;
+      if (made) return json({ screen: made });
+      continue;
+    }
     await tableScreenOff(env, camp.id, screen);
     return json({ screen });
   }
-  return fail(500, "That didn’t make a new code. Try again in a minute.");
+  return fail(500, "That didn’t make the screen’s code. Try again in a minute.");
 }
 
 // A player changes who they're playing here, to another of their own who

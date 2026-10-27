@@ -977,8 +977,9 @@ export function screenOf(doc, meta = null) {
     const spent = round && !round.over ? spentBy(round, user, ch) : null;
     return { name: c.name, crew: c.crew ?? "", arch: c.arch ?? [], grown: c.grown ?? [], acts, more: [...(a?.more ?? [])], left: spent ? Math.max(0, spent.have - spent.used) : null };
   });
+  // No version: the table's own moves on with the GM's hidden changes too,
+  // so the Durable Object gives each view the screen's own (screenNow()).
   return {
-    v: doc?.v ?? 0,
     fight: doc?.fight ?? 1,
     name: line(meta?.name, MAX.name),
     round: round ? { n: round.n, over: Boolean(round.over), tele: round.tele.map(tele) } : null,

@@ -5,9 +5,10 @@
 // of them has done this round, in both themes.
 //
 // It never signs in. The code from the GM's phone (The table screen, on her
-// campaign's page) rides after the #, so it never reaches a server's logs,
-// and the Worker answers it with screenOf() from table-rules.js, which is
-// only ever what the crew sees. Nothing goes back up but ping and view.
+// campaign's page) rides after the # in the page's address, and the screen
+// asks /api/screen/<code> for the table with it. The Worker answers with
+// screenOf() from table-rules.js, which is only ever what the crew sees, and
+// nothing goes back up but ping and view.
 //
 // While it's showing, it keeps the screen awake, hides the pointer when it's
 // still, shrinks everything to fit a landscape screen rather than scroll,
@@ -66,8 +67,10 @@ const best = (a) => Math.max(...a.dice.filter((x) => x.out === "beat" || x.out =
 const withWho = (a) => (a.with?.length ? `, with ${andList(a.with)} in it,` : "");
 const against = (t) => (t.kind === "fear" ? "Confidence" : "Defend");
 // Archetypes for someone's crest: the book's for one of the crew, their own
-// build's otherwise, and whatever they've grown in downtime.
-const archOf = (p) => (p ? [...(CREW[p.crew] ?? p.arch ?? []), ...(p.grown ?? [])] : []);
+// build's otherwise, and whatever they've grown in downtime. A character can
+// say it's anyone, so only the crew's own names count.
+const list = (x) => (Array.isArray(x) ? x.filter((a) => typeof a === "string") : []);
+const archOf = (p) => (p ? [...list(Object.hasOwn(CREW, p.crew) ? CREW[p.crew] : p.arch), ...list(p.grown)] : []);
 const crestOf = (arch) => kitCrest(arch, { size: "sm", strict: false });
 
 // What one at a stake or an event did when it landed, in a sentence.
@@ -183,7 +186,7 @@ function entry() {
     bad: st.note || "That code didn’t work. Your GM might’ve reset it, so ask them for the new one.",
     reset: "Your GM reset the screen’s link, so this one’s stopped. Type the new code in to carry on.",
     ended: "That campaign’s ended, so there’s nothing more to show.",
-    many: "The table’s up on eight screens already, so this one’s stopped. Close one of the others and open it again.",
+    many: "Another screen opened, and the table only goes on eight at once, so this one stopped. Open it again to bring it back.",
     off: st.note || "Live play isn’t switched on here yet.",
   }[st.why] ?? st.note;
   const opening = st.code && !st.why;
@@ -289,9 +292,17 @@ function screen(v) {
 
 function render() {
   const v = st.view;
+  let html;
+  try {
+    html = v ? screen(v) : entry();
+  } catch (err) {
+    // A view this page can't draw leaves the last one up, rather than a blank screen.
+    console.warn(`table screen: ${err?.message ?? err}`);
+    return;
+  }
   document.title = v?.name ? `${v.name} · The table screen · Zi’Dara` : "The table screen · Zi’Dara";
   const focused = document.activeElement?.id === "ts-code";
-  app.innerHTML = v ? screen(v) : entry();
+  app.innerHTML = html;
   document.documentElement.classList.toggle("ts-live", Boolean(v));
   if (focused) document.getElementById("ts-code")?.focus();
   // What each telegraph was, so the next view can tell what's new and what's moved.
