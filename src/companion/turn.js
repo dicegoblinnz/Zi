@@ -1235,10 +1235,12 @@ export function makeTurn(d) {
     landall(el, id) {
       // In order, each one rolled against the board as the last left it, so a
       // Power rolled once stands for the rest.
+      const tried = new Set();
       for (let guard = 0; guard < MAX.acts; guard++) {
         const t = turnOf(id);
-        const next = t ? landOrder(t).find((a) => readyToLand(t, a)) : null;
+        const next = t ? landOrder(t).find((a) => readyToLand(t, a) && !tried.has(a.id)) : null;
         if (!next) break;
+        tried.add(next.id);
         land(id, next.id);
       }
       ui.spin = null;
