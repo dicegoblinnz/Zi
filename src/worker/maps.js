@@ -23,8 +23,7 @@ const PIC_MAX = 8 * 1024 * 1024;
 const THUMB_MAX = 400 * 1024;
 // Pictures a campaign keeps, counting ones on their way off.
 const MAX_PICS = MMAX.maps * 2;
-const HOUR = 3600000;
-const DAY = 24 * HOUR;
+const DAY = 24 * 3600000;
 const MAP_ID = /^[a-z0-9-]{2,24}$/;
 const NOTHING = "That map isn’t here, or it’s got a new picture since.";
 
@@ -102,9 +101,9 @@ export async function putPicture(request, env, camp, user, { json, fail, limited
   const small = kindOf(thumbBytes);
   if (!type || !small) return fail(400, "That isn’t a picture the site can show. Try a photo, a JPEG or a PNG.");
 
-  // Pictures nothing in the world uses any more go first: ones put up over an
-  // hour ago that never got onto a map (her phone lost its signal on the
-  // way), and ones that have been in the bin for more than a day.
+  // Pictures nothing in the world uses any more go first: ones put up over a
+  // day ago that never got onto a map (her phone lost its signal on the way
+  // and never got it back), and ones that have been in the bin for a day.
   const now = Date.now();
   const { maps, bin } = await mapsIn(env, camp.id);
   const used = new Set(maps.map((m) => m.key));
@@ -114,7 +113,7 @@ export async function putPicture(request, env, camp, user, { json, fail, limited
   let kept = 0;
   for (const o of listed) {
     const k = o.key.slice(dir(camp.id).length).replace(/\.t$/, "");
-    if (!used.has(k) && now - o.uploaded.getTime() > HOUR) old.push(o.key);
+    if (!used.has(k) && now - o.uploaded.getTime() > DAY) old.push(o.key);
     else if (!o.key.endsWith(".t")) kept++;
   }
   for (let i = 0; i < old.length; i += 1000) await env.MAPS.delete(old.slice(i, i + 1000));
