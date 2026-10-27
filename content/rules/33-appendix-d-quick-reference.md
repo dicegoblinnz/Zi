@@ -14,7 +14,7 @@ updated: 2026-10-26
 -   Anything else that fits is 1 Aura each to bring in. Going beyond what a permission normally does is 1 Resolve, sword or spell.
 -   Two sides a step, up to a d12. Past 6 steps, build a second die the same way. Nothing fits, not even a Title? It's a d2.
 -   After you roll, 1 Aura puts your archetype's +2 on one die of its mechanic, if you need it.
--   Every sheet has Defend, Fight, Move, Sneak, Study and Talk, and you add your own, like Locks or Ward. Titles, items and traits go on every one they fit nearly every time. A permission goes on two at most, Defend included, and the same one never goes on one set action twice.
+-   Every sheet has Defend, Fight, Move, Sneak, Study and Talk, and you add your own, like Locks or Ward. Titles go on every one they fit nearly every time. A permission goes on two at most, Defend included, and the same one never goes on one set action twice. A plain item goes on one, and a trait never goes on any.
 
 | Steps | Dice |
 | --- | --- |
@@ -60,7 +60,7 @@ updated: 2026-10-26
 -   Up to your maximum, 5 to start. You're full every scene, and there's none in downtime.
 -   **Spend 1:** bring something in, a friend's permission through a thread too · keep a Catch quiet, or turn it your way · win a tie when you're acting · what 1 Aura gets your archetype · a quick heal · intercept for a friend within your stride.
 -   **Get 1 back:** every top face · letting a Catch bite, as often as you like, as long as it's real trouble · bringing real trouble on yourself with no Catch · a great setup that didn't land, if the GM says so · traits and Boons that say so.
--   Traits are free, as often as they say, unless they say they cost Aura.
+-   Traits are free, and they're never a step, so you never bring one in.
 
 ## Resolve {#s-qr-resolve}
 
@@ -148,7 +148,7 @@ When fear, lies or pressure get through, your Confidence drops a size instead, o
 ## Your character {#your-character}
 
 -   **Archetypes and Titles:** two to start. Each one gets a Title you name for it and three permissions, six at most, and the Title counts 1 where it fits. You can take the same archetype twice. The new one you get past d12 on your Aspiration starts with one permission.
--   **Traits:** two, on their own, and Grow can give you more.
+-   **Traits:** two, and Grow can give you more. Each one's passive: always on, or it fires by itself when something happens. It's never a step and never goes on a set action.
 -   **Permissions:** one word, like *Deceptive*, or a doing word and how, what or where, like *climb sheer walls*. It's 1 step on a roll it fits, once a roll, and it goes on two set actions at most. You need a magic permission or a magic item to do magic at all, and magic's written narrow.
 -   **Boons:** two permission slots on a Title buy one. Burdens only come on attuned things. The menu's in [Boons and Burdens](#s-boons).
 -   **Aspiration:** starts at d2 and climbs. An action when it's within reach, or a slot. One step a roll.
@@ -179,7 +179,7 @@ On most of them, 1 Aura puts +2 on one die of the mechanic after you roll, and t
 
 ## Bonds and threads {#s-qr-threads}
 
--   A bond's usually a person, but it can be a faction, a place or a cause. Each thread is one truth between you, and it's a **bond thread**, something good, or a **hostile thread**, something gone bad. Either can be strained, which means nearly snapped, and with no thread at all you're neutral.
+-   A bond's usually a person, but it can be a faction, a place or a cause. Each thread is one truth between you, and it's a **bond thread**, something good, or a **hostile thread**, something gone bad. Either can be strained, which means nearly snapped, and with no thread at all you're neutral. Each person's one bond, with all your threads with them under it.
 -   **To start:** two bond threads with the crew, from your answers in Connect. Write a hostile thread too and you can write a third bond thread, and three's the most.
 -   **Borrow** through a bond thread: 1 Aura brings their permission into your roll (a faction's, one of its assets), and it doesn't strain anything. Not while it's strained.
 -   **Strain** a bond thread: lean on them in the story and take 1 Resolve. It's free and takes no action, and the thread's strained. One with someone in the crew is strained for both of you.
@@ -190,7 +190,7 @@ On most of them, 1 Aura puts +2 on one die of the mechanic after you roll, and t
 ## What you carry {#s-qr-carry}
 
 -   3 equipment (what you wear or wield), 3 utility (tools, and things you use up and cross off) and a keepsake. A bag holds 10 more. Getting something out takes your action, and putting it away's free.
--   A plain item's a line when it fits, and each piece of plain armour, a shield and a helmet, is a line on your Defend. A purse of gold is a utility item, about a month's wages.
+-   A plain item's a line on one set action, the one it helps most, and anywhere else it's 1 Aura to bring in. Each piece of plain armour, a shield and a helmet, is a line on your Defend. An attuned thing's permissions go on two set actions each. A purse of gold is a utility item, about a month's wages.
 -   **Armour's quality:** Common has 1 box, Fine 2 and Masterwork 3. A blow it takes for you ticks one, a hit that's two Hurts ticks two, and it breaks when the last one goes. It counts on your Defend till then. You start with Common, and one piece can be Fine.
 -   **Attunement:** one attuned thing to start, on top of what you carry, and attuned things can't break. Awakened: 1 permission, or 2 with a Catch. Tempered: 2, or 4 with a Burden. Perfected: 3, or 6 with a Burden and a Catch. Each stage needs a material, and each new permission a downtime slot.
 

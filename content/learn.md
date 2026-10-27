@@ -27,15 +27,15 @@ Bram's first Title is *The wall that held the harbour gate*, and on it he's got 
 ::::
 
 ::::card[Every line's a step]{#l-lines teaches=how-permissions-stack}
-Your Title's a step on anything it fits, and so is a plain item: a sword's a step in a sword fight. Some traits are a step too. Each of these is a **line** on your sheet, the same as a permission. Every line that fits what you're doing is a **step**, and it counts once a roll. The same permission can't sit on one set action twice, so to stack, use different words, like *Deceptive* and *Sly*.
+Your Title's a step on anything it fits, and so is a plain item: a sword's a step in a sword fight. Each of these is a **line** on your sheet, the same as a permission. A trait never is. Every line that fits what you're doing is a **step**, and it counts once a roll. The same permission can't sit on one set action twice, so to stack, use different words, like *Deceptive* and *Sly*.
 
 :::example
-Vesk's going over a roof without a sound. Her first Title fits, so does *move unseen*, and so does Silent Step, her trait that's +1 to moving unseen. That's 3 lines, so with the action it's 4 steps.
+Vesk's going over a roof without a sound. Her first Title fits, and so does *move unseen*. That's 2 lines, so with the action it's 3 steps. Silent Step's a trait, so it doesn't count.
 :::
 ::::
 
 ::::card[Set actions]{#l-set-actions teaches=s-set-actions}
-Your sheet does the counting before you play, and that's what **set actions** are for. Defend, Fight, Move, Sneak, Study and Talk are on every sheet, and you add your own for the things you do all the time. A set action's steps are 1 for the action and 1 for every line on it. Titles and items go on every set action they fit, but a permission goes on two at most, and Defend counts as one.
+Your sheet does the counting before you play, and that's what **set actions** are for. Defend, Fight, Move, Sneak, Study and Talk are on every sheet, and you add your own for the things you do all the time. A set action's steps are 1 for the action and 1 for every line on it. Titles go on every set action they fit, a permission goes on two at most, with Defend counting as one, and a plain item goes on one.
 
 :::example
 Vesk's Locks has her first Title, *pick a mechanical lock*, *know how a lock's built* and her picks on it. That's four lines and the action, so it's 5 steps, a d10.
@@ -46,7 +46,7 @@ Vesk's Locks has her first Title, *pick a mechanical lock*, *know how a lock's b
 Every roll goes the same way. Say what you're doing and how, and pick the set action that fits. Start from its steps, and leave out any line that doesn't fit this time. Anything else that fits costs 1 [Aura](#s-aura) each to bring in, and each one's a step. Then turn your steps into dice and roll.
 
 :::example
-Vesk's going over Lord Vane's roof with her Sneak, 4 steps, a d8. Her grappling line fits too, but it's on her Move, so 1 Aura brings it in: 5 steps, a d10. Bram swings at a smuggler running for the door, but he isn't holding any line, so he leaves *hold the line* out: 3 steps, a d6.
+Vesk's going over Lord Vane's roof with her Sneak, 3 steps, a d6. Her grappling line fits too, but it's on her Move, so 1 Aura brings it in: 4 steps, a d8. Bram swings at a smuggler running for the door, but he isn't holding any line, so he leaves *hold the line* out: 3 steps, a d6.
 :::
 ::::
 
@@ -54,7 +54,7 @@ Vesk's going over Lord Vane's roof with her Sneak, 4 steps, a d8. Her grappling 
 Your die is your steps × 2, up to a d12, so 1 step's a d2, 4 steps a d8 and 6 steps a d12. Every 6 steps gives you another d12, and whatever's left over makes one more die. No die you build is ever bigger than a d12, so getting stronger means throwing more dice. With nothing on it at all, the action on its own is 1 step, a d2.
 
 :::example
-Wren's Fight is 5 steps, a d10. When Bram [barks an order](#leading-and-inspiring) and hands her 2 more steps, it's 7, so she throws a d12 and a d2.
+Wren's Fight is 4 steps, a d8. When Bram [barks an order](#leading-and-inspiring) and hands her all 3 of his steps, it's 7, so she throws a d12 and a d2.
 :::
 ::::
 
@@ -134,7 +134,7 @@ Vesk's at the study door with her Locks, 5 steps, and Dorrie keeps the guard tal
 **Study** is an intent like any other. Build it from whatever fits how you're looking, usually your Study set action, and roll against the target's Challenge. Win, and pick one. Ask something specific, like *what's holding it together?*, and the GM reveals the [hidden tag](#s-hidden) that answers it, if there is one, which is how you find weak points. Or ask one question about it, and she answers it truthfully.
 
 :::example
-Isolde's Study is 4 steps, a d8, with *know the history of anything old* on it. She studies the old construct and rolls 6 against its 5, so she asks what's holding it together and gets the hidden tag that answers it.
+Isolde's Study is 3 steps, a d6, with *know the history of anything old* on it. She studies the old construct and rolls 5 against its 4, so she asks what's holding it together and gets the hidden tag that answers it.
 :::
 ::::
 
@@ -142,12 +142,12 @@ Isolde's Study is 4 steps, a d8, with *know the history of anything old* on it. 
 Every Title is an **archetype** too, like Guardian or Shadow, and each archetype has a mechanic only it can do. A [Guardian](#a-guardian) intercepts for free for every friend within his stride. On most archetypes, 1 Aura puts +2 on one die of the mechanic, once you've rolled and know you need it, and the same archetype twice makes it +3. A die the +2 takes to its top face, or past it, doesn't give you Aura back.
 
 :::example
-Vesk's a Shadow twice over, so 1 Aura gets her +3 to hide. Her Sneak's d8 comes up 5 against the cellar guard's 7, and the +3 makes it 8, so he walks right past.
+Vesk's a Shadow twice over, so 1 Aura gets her +3 to hide. Her Sneak's d6 comes up 5 against the cellar guard's 7, and the +3 makes it 8, so he walks right past.
 :::
 ::::
 
 ::::card[What you carry]{#l-carry teaches=s-carrying}
-You carry 3 **equipment** (what you wear or wield), 3 **utility** items (tools and things you use up) and a **keepsake**, and your **bag** holds 10 more. [Attuned things](#s-attunement) are on top of all that. Nothing in your bag can be used till you've pulled it out, which takes your action, but putting something away is free. Plain items are just what they are, so a sword's a step when it fits.
+You carry 3 **equipment** (what you wear or wield), 3 **utility** items (tools and things you use up) and a **keepsake**, and your **bag** holds 10 more. [Attuned things](#s-attunement) are on top of all that. Nothing in your bag can be used till you've pulled it out, which takes your action, but putting something away is free. Plain items are just what they are: a sword's a step on the one set action you put it on.
 
 :::example
 A few sessions in, Wren's utility is full when the trail runs into a cave. She puts her snare kit away in her pack for free, and spends her action pulling out the torch bundle.
@@ -163,10 +163,10 @@ Vesk's grappling line is Awakened with *climb or swing anywhere you can throw a 
 ::::
 
 ::::card[Bonds and threads]{#l-threads teaches=s-bonds}
-A **bond** is usually someone who matters to your character, and each **thread** is one truth between you. A bond thread's something good, like a rescue or a shared past. A hostile thread's something gone bad, like a debt or a grudge. Any thread can be strained, which means it's nearly snapped. You start with two bond threads with the crew, and writing a hostile one gives you room for a third bond thread.
+A **bond** is usually someone who matters to your character, and each **thread** is one truth between you. A bond thread's something good, like a rescue or a shared past. A hostile thread's something gone bad, like a debt or a grudge. Any thread can be strained, which means it's nearly snapped. Each person's one bond, with all your threads with them under it. You start with two bond threads with the crew, and writing a hostile one gives you room for a third bond thread.
 
 :::example
-Vesk's bond thread with Bram is *He once carried me out of a fire. I have never said thank you.* Her thread with the fence, *I owe a debt I would rather not discuss*, is hostile.
+Vesk's bond with Dorrie holds two threads, one in her words and one in Dorrie's. Her thread with the fence, *I owe a debt I would rather not discuss*, is hostile.
 :::
 ::::
 
@@ -238,7 +238,7 @@ Bram crosses the hall on his stride, which is free, and spends his action going 
 To **answer** a telegraph, spend your action and build a roll from the set action that fits how you're stopping it, then roll against its dice. Win and it's stopped. Lose and it lands at once, with no defence roll, and a tie's a loss unless you pay 1 Aura. You can answer for someone else, and friends can put their actions in.
 
 :::example
-The brute's club is coming at Isolde, a d8. Wren puts an arrow in his arm and Bram gets his hammer under the club, 9 steps between them, a d12 and a d6. The club rolls 6 and the d12 comes up 8, so it never lands.
+The brute's club is coming at Isolde, a d8. Wren puts an arrow in his arm and Bram gets his hammer under the club, 8 steps between them, a d12 and a d4. The club rolls 6 and the d12 comes up 8, so it never lands.
 :::
 ::::
 

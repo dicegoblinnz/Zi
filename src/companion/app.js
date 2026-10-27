@@ -19,7 +19,7 @@ import { makeCampaigns } from "./campaigns.js";
 import { makeParty } from "./party.js";
 import { makeTable } from "./table.js";
 import { makeWorld } from "./world.js";
-import { threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
+import { bondKey, threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
 import { boxesSaid, isBroken, itS, keyOf, leftOf, nameOf, pieceAt, piecesOf, setTicked, standing, tick as tickBox, tickedOf, yours } from "./armour.js";
 import { aura as kitAura, boxes as kitBoxes, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, plate as kitPlate, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
 
@@ -336,6 +336,18 @@ function normal(ch) {
   }
   // A thread in play is strained, snapped, or whole again after the sheet said strained.
   for (const [k, v] of Object.entries(s.threads)) if (!["strained", "snapped", "whole"].includes(v)) delete s.threads[k];
+  // Each person's one bond, however their name was typed (27 Oct 2026), so a
+  // thread strained under another spelling stays strained under the bond's.
+  const byBond = new Map();
+  for (const p of c.threads) for (const t of p.threads) byBond.set(`${bondKey(p.person)}|${t.text}`, threadKey(p.person, t));
+  for (const [k, v] of Object.entries(s.threads)) {
+    const bar = k.indexOf("|");
+    const now = bar > 0 ? byBond.get(`${bondKey(k.slice(0, bar))}|${k.slice(bar + 1)}`) : null;
+    if (now && now !== k && !(now in s.threads)) {
+      s.threads[now] = v;
+      delete s.threads[k];
+    }
+  }
   s.grown = (Array.isArray(s.grown) ? s.grown : []).filter((g) => g && typeof g === "object" && typeof g.k === "string");
   if (s.seen && typeof s.seen !== "object") delete s.seen;
   s.last = lastRoll(s.last);
@@ -493,7 +505,7 @@ function healOne(s, c) {
 }
 
 // The end of a scene: Aura's full, 1 Resolve back, Confidence back to where it
-// starts, conditions end, once-per-scene traits reset and so does Unyielding's
+// starts, conditions end, traits that fire once a scene are ready again, and so is Unyielding's
 // first Hurt. The rest roll comes first (restView). A Blaze that's still
 // waiting stays until the player chooses.
 function endScene(s, c) {
@@ -831,11 +843,14 @@ function sheetTab(ch, c) {
     ${a.auraHtml ? `<p><b>1 Aura:</b> ${a.auraHtml}</p><button type="button" class="button sm" data-act="arch-aura" data-n="${esc(a.name)}"${off(s.aura < 1)}>Spend 1 Aura on it</button>` : ""}
     ${a.resolveHtml ? `<p><b>1 Resolve:</b> ${a.resolveHtml}</p><button type="button" class="button sm" data-act="arch-resolve" data-n="${esc(a.name)}"${off(s.resolve < 1)}>Spend 1 Resolve on it</button>` : ""}</div>`).join("");
 
+  // A trait does its thing by itself (27 Oct 2026). One that fires once a
+  // scene gets ticked off when it goes off, and one that gives Aura has a
+  // button to take it.
   const traits = c.traits.map((t, i) => {
-    const once = /once per scene/i.test(t.type);
+    const once = Boolean(t.once);
     const used = Boolean(s.used[t.name]);
-    return `<div class="cc-item"><p><b>${esc(t.name)}</b> <span class="chip sm">${esc(t.type)}</span>${once && used ? ' <span class="chip sm is-used">Used this scene</span>' : ""}${gold(`trait:${at.traits[i]}`)}</p>${was(`trait:${at.traits[i]}`)}<p>${t.html}</p>
-      ${t.aura ? `<button type="button" class="button sm" data-act="trait-aura" data-n="${esc(t.name)}"${off(once && used)}>Take ${t.aura} Aura</button>` : once ? `<button type="button" class="button sm" data-act="used" data-n="${esc(t.name)}"${pressed(used)}>${used ? "Used this scene" : "Use it"}</button>` : ""}</div>`;
+    return `<div class="cc-item"><p><b>${esc(t.name)}</b> <span class="chip sm">${esc(t.type)}</span>${once && used ? ' <span class="chip sm is-used">Gone off this scene</span>' : ""}${gold(`trait:${at.traits[i]}`)}</p>${was(`trait:${at.traits[i]}`)}<p>${t.html}</p>
+      ${t.aura ? `<button type="button" class="button sm" data-act="trait-aura" data-n="${esc(t.name)}"${off(once && used)}>Take ${t.aura} Aura</button>` : once ? `<button type="button" class="button sm" data-act="used" data-n="${esc(t.name)}"${pressed(used)}>${used ? "Gone off this scene" : "It’s gone off"}</button>` : ""}</div>`;
   }).join("");
 
   const thing = (where, name, i = -1) => {
@@ -958,7 +973,7 @@ function allThreads(ch, c, pt = party.threadsOf(ch, c)) {
   if (!pt?.extra.length) return c.threads;
   const out = c.threads.map((p) => ({ ...p, threads: [...p.threads] }));
   for (const x of pt.extra) {
-    const p = out.find((y) => y.person === x.person);
+    const p = out.find((y) => bondKey(y.person) === bondKey(x.person));
     if (p) p.threads.push(...x.threads);
     else out.push({ person: x.person, threads: [...x.threads] });
   }
@@ -1149,8 +1164,8 @@ function buildView(c, s) {
   const r = roll;
   const k = counted(r, c, s);
   const toggle = (l, on, act, aura = false) => lineToggle(s, l, on, act, aura);
-  const groups = [["title", "Titles"], ["permission", "Permissions"], ["attuned", "Attuned"], ["trait", "Traits"], ["kit", "What you carry"]].map(([kind, title]) => {
-    const list = c.lines.filter((l) => l.kind === kind && !k.free.has(l.key) && (kind !== "trait" || l.step) && !(kind === "kit" && Object.keys(s.crossed).some((x) => s.crossed[x] && x.endsWith(`|${l.label}`))));
+  const groups = [["title", "Titles"], ["permission", "Permissions"], ["attuned", "Attuned"], ["kit", "What you carry"]].map(([kind, title]) => {
+    const list = c.lines.filter((l) => l.kind === kind && !k.free.has(l.key) && !(kind === "kit" && Object.keys(s.crossed).some((x) => s.crossed[x] && x.endsWith(`|${l.label}`))));
     return list.length ? `<h3>${title}</h3>${list.map((l) => toggle(l, r.in.has(l.key), "in", true)).join("")}` : "";
   }).join("");
   const name = k.extra ? (k.extra === k.act ? `${k.act.name}, twice` : `${k.act.name} and ${k.extra.name}`) : k.act.name;
@@ -1498,8 +1513,8 @@ function defenceBuild(c, s) {
   const locked = Boolean(r.teles?.some(Boolean));
   const now = diceLabel(stepsToDice(stepsNow(c, s, p.d)));
   const conds = s.conditions.map((x) => `<button type="button" class="cc-line" data-act="d-cond" data-k="${esc(x.name)}"${pressed(defenceCondOn(x, r))}><span class="tick" aria-hidden="true"></span><span><em>${esc(x.name)}</em> d${x.die} <small>${COND.get(x.name) ? esc(COND.get(x.name).passive.replace(/<[^>]+>/g, "").replace(/\.$/, "")) : x.kind === "for" ? "one step more" : "one step less"}</small></span></button>`).join("");
-  const groups = [["title", "Titles"], ["permission", "Permissions"], ["attuned", "Attuned"], ["trait", "Traits"], ["kit", "What you carry"]].map(([kind, title]) => {
-    const list = c.lines.filter((l) => l.kind === kind && !p.d.lines.includes(l.key) && (kind !== "trait" || l.step) && !isOut(s, l));
+  const groups = [["title", "Titles"], ["permission", "Permissions"], ["attuned", "Attuned"], ["kit", "What you carry"]].map(([kind, title]) => {
+    const list = c.lines.filter((l) => l.kind === kind && !p.d.lines.includes(l.key) && !isOut(s, l));
     return list.length ? `<h3>${title}</h3>${list.map((l) => lineToggle(s, l, r.in.has(l.key), "in", true)).join("")}` : "";
   }).join("");
   return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">When it lands</h2>
@@ -2320,16 +2335,16 @@ const ACT = {
   // When it lands starts with whatever landed on this character, if they're
   // playing in a campaign whose round has just ended.
   defence: () => openDefence(table.landedFor(current())),
-  used: (el) => change("using a trait", (s) => {
+  used: (el) => change("a trait going off", (s) => {
     const name = el.dataset.n;
     if (s.used[name]) delete s.used[name];
     else s.used[name] = true;
-    return s.used[name] ? `${name}’s used for this scene.` : `${name}’s ready again.`;
+    return s.used[name] ? `${name}’s gone off for this scene.` : `${name}’s ready again.`;
   }),
   "trait-aura": (el) => change("a trait’s Aura", (s, c) => {
     const t = c.traits.find((x) => x.name === el.dataset.n);
     if (!t) return "";
-    if (/once per scene/i.test(t.type)) s.used[t.name] = true;
+    if (t.once) s.used[t.name] = true;
     return `${t.name}: ${t.aura} Aura.${gainAura(s, c, t.aura)}`;
   }),
   "arch-aura": (el) => change(`1 Aura on your ${el.dataset.n}`, (s) => {

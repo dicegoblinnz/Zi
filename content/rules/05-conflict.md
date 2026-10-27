@@ -70,7 +70,7 @@ Now and then you'll get more than one action in a round:
 -   **Spend 1 Resolve** for an extra action this round. See [Resolve](#s-resolve).
 -   **Come out of hiding.** Whoever you are, coming out of hiding gives you an extra action. It's one extra action, even if you're *Unseen* as well.
 -   **Cash in your Confidence.** At d12 you're fired up, and you can cash it in for an extra action. Your Confidence drops back to d6. See [Confidence](#s-confidence).
--   **A trait that says so**, once a scene: *Second Wind* gives you an extra action, and *Fast* gives you a free Move action.
+-   **A trait that says so.** *Second Wind* gives you one the first time your wound die steps up each scene, and *Fast* gives you a free Move action in the first round of every scene.
 -   **The Extra action Boon** gives you one extra action a scene. See [Boons and Burdens](#s-boons).
 
 An extra action can be its own roll, or it can go into the same roll as a combo. Put it into the same set action again and that's 1 more step. Put a different set action in and it brings its lines with it as a new approach, like Fight with Sneak for a sneak attack, and anything that's on both counts once.
@@ -80,7 +80,7 @@ An extra action can be its own roll, or it can go into the same roll as a combo.
 
 **Resolve:** Ash spends 1 Resolve for an extra action and puts it into her Fight as well, so it's 5 steps instead of 4.
 
-**Out of hiding:** Vesk's been up in the rafters since the guards came in. She drops on the one below her, and coming out of hiding gives her an extra action. She puts it in with her action as a new approach, her Sneak and her Fight together. Nothing's on both, so that's 4 + 2 = 6 steps, a d12, for one knife out of the dark.
+**Out of hiding:** Vesk's been up in the rafters since the guards came in. She drops on the one below her, and coming out of hiding gives her an extra action. She puts it in with her action as a new approach, her Sneak and her Fight together. Nothing's on both, so that's 3 + 2 = 5 steps, a d10, for one knife out of the dark.
 :::
 
 You can't keep your action back to use later in *this* round once the telegraphs start landing, because there are no last-moment reactions in Zi'Dara. Everything you might react to is already on the table, so you deal with it on your turn.
@@ -100,7 +100,7 @@ Answering's a gamble. It lets you throw everything you've got at a problem inste
 -   **Telegraphs aimed at a stake, a place or a clock** have no defence to roll. If nobody answers them, they happen.
 
 :::example[Answering together]
-The brute telegraphs his club at Isolde, a d8, and her Defend's a d2. Wren answers it for her with an arrow into his arm, and Bram puts his action into the same thing, getting his hammer under the club. Wren's Fight is 5 steps and Bram's is 4, so that's 9 steps from two actions, a d12 and a d6, and they put both on the club. It rolls 6 and the d12 comes up 8, so it never lands, and since they both put an action in, Wren and Bram both go up a size of Confidence. If they'd lost, it'd have landed on Isolde there and then, and they'd both have dropped a size.
+The brute telegraphs his club at Isolde, a d8, and her Defend's a d2. Wren answers it for her with an arrow into his arm, and Bram puts his action into the same thing, getting his hammer under the club. Wren's Fight is 4 steps and Bram's is 4, so that's 8 steps from two actions, a d12 and a d4, and they put both on the club. It rolls 6 and the d12 comes up 8, so it never lands, and since they both put an action in, Wren and Bram both go up a size of Confidence. If they'd lost, it'd have landed on Isolde there and then, and they'd both have dropped a size.
 :::
 
 ## When It Lands {#s-defending}
@@ -412,7 +412,7 @@ Isolde's got nothing to beat, so she doesn't roll. Her Ward is her Title and her
 **The Mark jumps.** When a *Marked* creature falls, the Mark moves to another creature the Hunter can see, with the die it had.
 
 :::example[Marked]
-Wren marks the Warden with her Fight, a d10, and wins, so it's *Marked d10*. Bram swings at it with his d8 and rolls the Mark d10 with it. Next round it's *Marked d8*, and when it falls, the Mark jumps to the second Warden, still a d8.
+Wren marks the Warden with her Fight, a d8, and wins, so it's *Marked d8*. Bram swings at it with his d8 and rolls the Mark d8 with it. Next round it's *Marked d6*, and when it falls, the Mark jumps to the second Warden, still a d6.
 :::
 
 ## Vulnerabilities {#s-vulnerable}
@@ -483,7 +483,7 @@ Next round she's still on d6, and Bram's right beside you on a d4. You split you
 
 **Quick heal.** Anyone can do this one. Pay 1 Aura to step one person's wound die down a size, no roll. It still takes your action. It's how a crew with no Healer gets by: Dorrie can't stitch a wound, but she can spend the Aura and her action to bring Bram's wound die down from a d6 to a d4.
 
-**Traits and gear that say they heal** still work the way they're written, because none of them is a heal roll. *Field Dressing* is a quick heal without the Aura (see [Traits](#s-traits)), and so is a medical kit.
+**Traits and gear that say they heal** still work the way they're written, because none of them is a heal roll. *Field Dressing* takes the Aura off your first quick heal each scene (see [Traits](#s-traits)), and a medical kit's a quick heal without the Aura.
 
 A few archetypes have their own way past a Hurt. A [Bloodsworn](#a-bloodsworn) can spend Aura and their action to step their own wound die down, a size for each Aura, whoever's holding a [Maker](#a-maker)'s item can break one of its tags instead of taking a Hurt, and a [Shifter](#a-shifter) can strip an animal tag instead. A ward takes a Hurt instead of you as well, and cashing in fired-up Confidence steps your wound die down a size (see [Confidence](#s-confidence)).
 
@@ -500,15 +500,15 @@ Your Confidence swings in an argument the same as it does in a fight (see [When 
 :::example[A social conflict, played out]
 A few sessions in, Dorrie's trying to talk a magistrate into releasing Vesk from a cell before the Vane Estate's lawyers arrive in the morning. Isolde's come along as her clerk. The magistrate is *The Honest Magistrate*, Challenge 5. *Duty-bound* and *Wary* keep him going, and one hidden tag drives him. Dorrie's in her court clothes, and they fit a hearing, so her Confidence starts the scene on d8.
 
-**Round 1.** The GM telegraphs: *"Show me the law that lets her walk."* That's a d10 at Dorrie's Confidence. Dorrie answers it, and Isolde puts her action into the same thing. Isolde digs up a harbour statute nobody's used in forty years, and Dorrie swears the court leaned on it only last spring. Dorrie's Talk is 4 steps and Isolde's Study is 4, so that's 8 steps from two actions, a d12 and a d4. The d12 goes on the answer, and the d4 goes straight at *Wary*.
+**Round 1.** *Cold Reader* went off the moment Dorrie first spoke to him, and the GM's word for his mood was *bitter*, so she wants to know who at. The GM telegraphs: *"Show me the law that lets her walk."* That's a d10 at Dorrie's Confidence. Dorrie answers it, and Isolde puts her action into the same thing. Isolde digs up a harbour statute nobody's used in forty years, and Dorrie swears the court leaned on it only last spring. Dorrie's Talk is 4 steps and Isolde's Study is 3, so that's 7 steps from two actions, a d12 and a d2. The d12 goes on the answer, and the d2 goes on Study: what's he so bitter about?
 
-The telegraph rolls 4 and the d12 rolls 9, so it's stopped. The magistrate's d10 rolls 7 against the d4's 3, so *Wary* holds, and he's not ready to trust her. One of their dice won, though, and that's enough to make it a win: Dorrie's Confidence goes up a size, to d10, and Isolde's goes up with it, because she put an action in. Then Dorrie fires *Cold Reader* (free, once per scene, one true thing about his mood), and the GM reveals the hidden tag: *Hates the Vane Estate.*
+The telegraph rolls 4 and the d12 rolls 9, so it's stopped. The magistrate's d10 rolls 1 against the d2's 2, so the Study wins too, and that's the d2's top face, so Dorrie gets 1 Aura back. The GM reveals the hidden tag: *Hates the Vane Estate.* Their dice won, and that's a win: Dorrie's Confidence goes up a size, to d10, and Isolde's goes up with it, because she put an action in.
 
 **Round 2.** *Duty-bound* comes into play, and he reaches for the bell to call the captain of the watch. That's a d10 aimed at the stake, and it's got one answer: if it lands, the hearing's over for tonight.
 
-Dorrie pays 1 Aura to bring *Hates the Vane Estate* in: "You know who wants her kept in here, don't you?" That's her Talk and the tag, 5 steps. Isolde joins in again with her Study, reciting every time the Vane Estate's bent the harbour law, so it's 9 steps from two actions. They share them out as a d10 for the bell and a d8 for *Duty-bound*.
+Dorrie pays 1 Aura to bring *Hates the Vane Estate* in: "You know who wants her kept in here, don't you?" That's her Talk and the tag, 5 steps. Isolde joins in again with her Study, reciting every time the Vane Estate's bent the harbour law, so it's 8 steps from two actions. They share them out as a d10 for the bell and a d6 for *Duty-bound*.
 
-The bell's d10 rolls 5 and theirs rolls 10, a top face, so the bell's stopped and Dorrie gets her Aura back. Against *Duty-bound* he rolls his d10 once for the round, and it's a 3. The d8 rolls 7, so it's stripped, and now only *Wary* keeps him going. Both dice won, and that's still one size, however many win: Dorrie's on d12, and she's fired up.
+The bell's d10 rolls 5 and theirs rolls 10, a top face, so the bell's stopped and Dorrie gets her Aura back. Against *Duty-bound* he rolls his d10 once for the round, and it's a 3. The d6 rolls 5, so it's stripped, and now only *Wary* keeps him going. Both dice won, and that's still one size, however many win: Dorrie's on d12, and she's fired up.
 
 **Round 3.** He wavers: *"And why should I trust you?"* That's a d10 at her Confidence, and she's on d12, so she lets it ride. She goes at *Wary* instead, with her Talk and the tag again for 1 Aura, 5 steps, a d10. Her d10 beats his, 9 to 8. *Wary* is gone, and with it his last reason to say no. He releases Vesk on her own recognizance.
 
@@ -562,11 +562,11 @@ That's 5 + 4 + 5 + 5 + 2 = 21 steps, about what four players get, and it's five 
 **Isolde** studies the right Warden.
 
 :::example
-**Isolde:** My Study is my scholar's Title, *know the history of anything old* and *Iron Will*, so that's 4 steps with the action. This binding's my order's work, though, so I'll bring my other Title in for 1 Aura. That's 5. I'll split it: a d6 for what's holding it together, and a d4 for what else it's hiding.
+**Isolde:** My Study is my scholar's Title and *know the history of anything old*, so that's 3 steps with the action. This binding's my order's work, though, so I'll bring my other Title in for 1 Aura. That's 4. I'll split it: a d6 for what's holding it together, and a d2 for what else it's hiding.
 
 **GM:** Nobody's gone at it yet this round, so roll its d10 too. Whatever it rolls stands till the round's over.
 
-**Isolde:** It's a 3. My d6 is a 5, and the d4 comes up 4, its top face, so that's my Aura back.
+**Isolde:** It's a 1. My d6 is a 5, and the d2 comes up 2, its top face, so that's my Aura back.
 
 **GM:** Both beat it. *Bound to a Place* is its weak point. There's a sigil cut into the floor under each Warden, and if you break the sigil, it falls. Its hidden tag is *A Person Inside*. Someone was built into that armour a hundred years ago.
 :::
@@ -574,7 +574,7 @@ That's 5 + 4 + 5 + 5 + 2 = 21 steps, about what four players get, and it's five 
 That changes the whole fight, because now nobody has to grind through four tags. Isolde isn't done, either.
 
 :::example
-**Isolde:** I'm spending 1 Resolve for an extra action, and I'm putting a ward on Vesk. My Ward is my Title and my chalk and salt, 3 steps.
+**Isolde:** I'm spending 1 Resolve for an extra action, and I'm putting a ward on Vesk. My Ward is my Title and my chalk and salt's *draw a warding circle anywhere I can kneel*, 3 steps.
 
 **GM:** Nothing's pushing back on a ward, so there's nothing to roll. Vesk's *Warded d6*, and that's a step more on her Defend while it lasts.
 :::
@@ -590,7 +590,7 @@ A ward reaches one friend. Isolde could have split it and put the second die on 
 
 **Dorrie:** 6, and her d4's a 3. **GM:** She comes down, shaking, and she's staying.
 
-**Dorrie:** I'll fire *Cold Reader*. What's she feeling? **GM:** Terror. She saw Bram's face on the stair. That's the hidden tag on *Leave no trace*: *A Servant Saw Bram*.
+**Dorrie:** *Cold Reader* went off when I spoke to her. What's she feeling? **GM:** Terror. She saw Bram's face on the stair. That's the hidden tag on *Leave no trace*: *A Servant Saw Bram*.
 :::
 
 **Vesk** doesn't bother with the Wardens. She goes for the stake.

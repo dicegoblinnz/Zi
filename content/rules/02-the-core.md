@@ -22,14 +22,15 @@ You start with two **Titles**. A Title is who you are, a role or a school of mag
 
 A permission is something you can do, or something you're good at. It can be one word, like *Deceptive*, *Strong* or *Quick*, or a doing word with how, what or where, like *fight with a sword* or *climb sheer walls*. A wide one's fine, because a permission only goes on two of your set actions (see [How permissions stack](#how-permissions-stack)). A good one comes up a few times a session, and it's got to fit inside its Title. Magic stays narrow, though: *throw fire*, not *fire magic*, because a magic permission is what lets you do that magic at all, and it does what it says for free. There's more in [Writing permissions](#s-writing-permissions).
 
-Your Title's a step on anything it fits, and so is a plain item: a sword's a sword, so it's a step in a sword fight. An attuned thing counts through its own permissions (see [Attunement](#s-attunement)). Some traits are a step too, like Vesk's Silent Step: +1 to moving unseen. Each of these is a **line** on your sheet, the same as a permission.
+Your Title's a step on anything it fits, and so is a plain item: a sword's a sword, so it's a step in a sword fight. An attuned thing counts through its own permissions (see [Attunement](#s-attunement)). Each of these is a **line** on your sheet, the same as a permission. Your traits never are: a trait's never a step, and it only does what its line says (see [Traits](#s-traits)).
 
 ### How permissions stack {#how-permissions-stack}
 
 Every line that fits what you're doing is a **step**, and it counts once a roll.
 
 -   **A permission goes on two set actions at most**, and Defend counts as one. Put each one on the two where it'll help most. Anywhere else, it's 1 Aura to bring in, the same as anything that isn't on your set action.
--   **Titles, items and traits go on every set action they fit.** There's no cap on Titles.
+-   **Titles go on every set action they fit.** There's no cap on Titles.
+-   **A plain item goes on one set action**, the one where it'll help most. Anywhere else, it's 1 Aura to bring in.
 -   **The same word never counts twice.** You can take a permission more than once, on either Title, and each copy goes on two set actions of its own, but the same permission can't sit on one set action twice. To stack, use different words: *Deceptive* and *Sly* can both sit on your Fight. *Fight two at once* and *fight in tight spaces* are two different permissions, so they're fine together.
 -   **In a combo, each of you counts on your own.** Your *Deceptive* and Dorrie's are both steps, because they're two people.
 -   **Permissions don't come in levels.** One you picked up last week is worth the same 1 step as one you started with.
@@ -38,18 +39,18 @@ Every line that fits what you're doing is a **step**, and it counts once a roll.
 
 Your sheet does the counting before you play, so every roll starts from a number. That's what **set actions** are for. **Defend**, **Fight**, **Move**, **Sneak**, **Study** and **Talk** are on every sheet, and you add your own for the things you do all the time, like Locks or Ward. Fight covers melee and ranged, so split it into Fight and Shoot if you like. Defend is how you keep from getting hit, by dodging, parrying, a shield or armour, and it's what you roll when the telegraphs land (see [When It Lands](#s-defending)).
 
-Put everything on a set action that fits it nearly every time. Your Titles, items and traits go on every set action they fit, and a permission from either Title goes on two at most. Each piece of plain armour you wear is a line on your Defend, and so is a shield, the way a sword's a line on Fight. **A set action's steps are 1 for the action and 1 for every line on it**, so with nothing on it, it's 1 step, a d2. When an archetype's mechanic needs dice, you build them the same way as any roll, so a Face's influence or a Leader's order comes off whichever set action fits how you're doing it.
+Put everything on a set action that fits it nearly every time. Your Titles go on every set action they fit, a permission goes on two at most, from a Title or an attuned thing, and a plain item goes on one. Each piece of plain armour you wear is a line on your Defend, and so is a shield, the way a sword's a line on Fight. Traits don't go on set actions at all. **A set action's steps are 1 for the action and 1 for every line on it**, so with nothing on it, it's 1 step, a d2. When an archetype's mechanic needs dice, you build them the same way as any roll, so a Face's influence or a Leader's order comes off whichever set action fits how you're doing it.
 
 | Vesk's set action | What's on it | Steps | Die |
 | --- | --- | --- | --- |
-| Sneak | her first Title, *move unseen*, Silent Step | 4 | d8 |
-| Move | her first Title, *run the rooftops*, her grappling line | 4 | d8 |
+| Sneak | her first Title, *move unseen* | 3 | d6 |
+| Move | her first Title, *run the rooftops*, *climb or swing anywhere you can throw a hook* | 4 | d8 |
 | Locks | her first Title, *pick a mechanical lock*, *know how a lock's built*, her picks | 5 | d10 |
 | Defend | her worn leathers | 2 | d4 |
 | Fight | *fight dirty with a knife* | 2 | d4 |
 | Study and Talk | nothing yet | 1 | d2 |
 
-*Know how a lock's built* comes from Vesk's other Title, *Raised by the Guild*, and it sits on Locks with the rest. Her worn leathers are plain armour, so they're a line on her Defend. Dorrie's *read a room in a glance* is on her Talk and her Study, and that's its two, so when it'd help her pass as someone else, she brings it in for 1 Aura.
+*Know how a lock's built* comes from Vesk's other Title, *Raised by the Guild*, and it sits on Locks with the rest. *Climb or swing anywhere you can throw a hook* is her grappling line's permission, so it could go on one more set action. Her worn leathers are plain armour, so they're a line on her Defend, and that's the one set action they go on. Dorrie's *read a room in a glance* is on her Talk and her Study, and that's its two, so when it'd help her pass as someone else, she brings it in for 1 Aura.
 
 Your set action is *how* you're doing something, not what you're trying to get done: Dorrie's Talk gets her past the gate guard, into the harbour records and out of a fight before it starts. Filling in yours is in [Building Your Character](#s-step-set-actions).
 
@@ -67,9 +68,9 @@ Every roll goes the same way:
 6.  Roll. Then, if you need it, spend 1 Aura on your archetype's +2 (see [The Archetypes](#s-how-archetypes)).
 
 :::example[Building a roll]
-**Bringing one in:** Vesk's going over Lord Vane's roof without a sound. She starts from her Sneak: her first Title, *move unseen* and Silent Step, with the action, 4 steps, a d8. Her grappling line fits too, but it's on her Move, not her Sneak, so bringing it in costs 1 Aura. That's 5 steps, a d10.
+**Bringing one in:** Vesk's going over Lord Vane's roof without a sound. She starts from her Sneak: her first Title and *move unseen*, with the action, 3 steps, a d6. Her grappling line fits too, but its permission's on her Move, not her Sneak, so bringing it in costs 1 Aura. That's 4 steps, a d8.
 
-**Leaving one out:** Bram swings at a smuggler who's running for the door. His Fight is his first Title, *hold the line* and his war hammer, with the action, 4 steps. He isn't holding any line, so he leaves that one out: 3 steps, a d6.
+**Leaving one out:** Bram swings at a smuggler who's running for the door. His Fight is his first Title, *hold the line* and his war hammer's *fight with a war hammer*, with the action, 4 steps. He isn't holding any line, so he leaves that one out: 3 steps, a d6.
 :::
 
 :::rule
@@ -141,10 +142,10 @@ Put more than one die on the **same** intent and that's **advantage**: your **be
 
 Every die you get past six steps can have **its own intent**, and that's what big rolls are for. Two dice at the same Warden are two chances to strip two tags. You can still stack them on one intent for advantage, but a d12 and a d4 doing two different things is nearly always worth more than the same two dice on one intent.
 
-:::example[Three d6s on the guard captain]
-Bram's holding the barricade, and the guard captain's coming over it. Bram's Fight is 4 steps, and Wren puts her action in from the gallery with her Fight, 5 steps. That's a combo, 9 steps from two actions, and Bram rolls the lot as three d6s: *one to knock the sword out of his hand, one to put him on the floor, one to make him give up.*
+:::example[Three dice on the guard captain]
+Bram's holding the barricade, and the guard captain's coming over it. Bram's Fight is 4 steps, and Wren puts her action in from the gallery with her Fight, 4 steps. That's a combo, 8 steps from two actions, and Bram rolls the lot as two d6s and a d4: *a d6 to knock the sword out of his hand, the d4 to put him on the floor, a d6 to make him give up.*
 
-The captain's Challenge 3, and it's the first time anyone's gone at him this round, so he rolls his d6 once: 4. The three d6s come up 5, 2 and 4. The sword goes skittering, but he keeps his feet, and the last one's a tie. Bram could pay 1 Aura to win it, but he lets it go. So the captain's disarmed, still standing, and he won't yield. One of their dice won, and they both put an action in, so Bram and Wren both go up a size of Confidence.
+The captain's Challenge 3, and it's the first time anyone's gone at him this round, so he rolls his d6 once: 4. Their dice come up 5, 2 and 4. The sword goes skittering, but he keeps his feet, and the last one's a tie. Bram could pay 1 Aura to win it, but he lets it go. So the captain's disarmed, still standing, and he won't yield. One of their dice won, and they both put an action in, so Bram and Wren both go up a size of Confidence.
 :::
 
 ### Splitting: shaping your dice {#s-splitting}
@@ -202,26 +203,26 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 
 **Spend 1 Aura to:**
 
--   **Bring something in** that isn't on your set action, as a step on your roll: one of your own permissions, items or traits, the ground (a chandelier, a crowd, the rain), a threat's tag you know about (his pride, her greed), a Catch turned your way for a moment, or a friend's permission through a bond thread you share (see [Bonds and threads](#s-bonds)).
+-   **Bring something in** that isn't on your set action, as a step on your roll: one of your own permissions or items, the ground (a chandelier, a crowd, the rain), a threat's tag you know about (his pride, her greed), a Catch turned your way for a moment, or a friend's permission through a bond thread you share (see [Bonds and threads](#s-bonds)).
 -   **Win a tie** when you're the one acting.
 -   **Intercept** for a friend within your stride: take any of the blows aimed at them, and they come at you instead (see [Intercept](#s-intercept)). A [Guardian](#a-guardian) does it for free. Fear, lies and pressure are inside your friend's head, so nobody can step in front of those.
 -   **Use your archetype.** On most archetypes, 1 Aura adds +2 to one die on its mechanic. Spend it after you roll, once you know you need it. A few get something else for their Aura (see [The Archetypes](#s-how-archetypes)).
 
 1 Aura also keeps a Catch quiet this time, and pays for a quick heal (see [Healing](#s-healing)).
 
-**Traits are free**, as often as they say, unless they say they cost Aura. A once-per-scene trait works once a scene, and that's it. You only pay for a trait when you bring it in as a step and it isn't on your set action.
+**Traits are free.** A trait's never a step, so there's nothing to bring in, and it does what its line says every time it applies.
 
 ### Getting it back {#getting-it-back}
 
 -   **Let a Catch bite**, as often as you like, and take 1 Aura each time. A hostile thread bites the same way. A big bite pays 1 Resolve instead. No Catch? Bring real trouble on yourself anyway and take 1 Aura. There's more in [Catches and Trouble](#s-trouble).
--   **Traits that say so**, like Ash's Killer Instinct (1 Aura when she takes a threat down) and Battle Focus (3 Aura, once a scene).
+-   **Traits that say so**, like Ash's Killer Instinct (1 Aura when she takes a threat down) and Battle Focus (3 Aura the first time she runs out each scene).
 -   **A great setup that doesn't land.** You planned it, it was cool, and the dice said no. The GM can give you 1 Aura for it.
 -   **Boons** like *Beat a threat* and *In your element* (see [Boons](#s-boons)).
 
 :::example[Aura at one table]
 **Spent:** There's a chandelier over the corridor. Bram pays 1 Aura to bring it down on the Warden, and the chandelier's a step on his roll.
 
-**On her archetype:** Vesk's a Shadow twice over, so 1 Aura gets her +3 on her roll to hide. She ducks behind the wine racks in Vane's cellar with her Sneak, a d8, and it comes up 5 against the cellar guard's 7. She spends 1 Aura to make it an 8, and he walks right past. That's the d8's top face, but the +3 got it there, so there's no Aura back.
+**On her archetype:** Vesk's a Shadow twice over, so 1 Aura gets her +3 on her roll to hide. She ducks behind the wine racks in Vane's cellar with her Sneak, a d6, and it comes up 5 against the cellar guard's 7. She spends 1 Aura to make it an 8, and he walks right past. That's past the d6's top face, but the +3 got it there, so there's no Aura back.
 
 **Got back:** Crossing the market, Vesk's player says a watch sergeant knows her face from the posters. The GM has him shout for the watch, and Vesk takes 1 Aura.
 :::
@@ -283,7 +284,7 @@ There's no special action for helping. To help a friend, put your action into th
 :::example[Back at the study door]
 Vesk's at the study door with her Locks, 5 steps. Dorrie joins in, keeping the guard talking at the foot of the stairs, and adds her Talk, 4 steps. That's 9 steps from two actions. Two actions give them two splits, and going past 6 steps gives them a third, but they only need two: a d8 for the lock, a d6 to keep it quiet and a d4 to keep the guard talking.
 
-The next night Vesk's held her action for a round, so she's got two, and she puts them together: her Sneak, 4 steps, and her Fight, 2. Nothing's on both, so it's 6 steps, a d12, for one knife out of the dark.
+The next night Vesk's held her action for a round, so she's got two, and she puts them together: her Sneak, 3 steps, and her Fight, 2. Nothing's on both, so it's 5 steps, a d10, for one knife out of the dark.
 :::
 
 ### Leading and inspiring {#leading-and-inspiring}
@@ -291,7 +292,7 @@ The next night Vesk's held her action for a round, so she's got two, and she put
 Only a [Leader](#a-leader) leads. An order or a rallying song is an action: build it from your set action, then hand its steps out however you like to friends who can hear or see you. They add them to their own rolls this round, and those steps don't have to fit. Steps you're handed don't give you a split. A lead can be a combo too, with friends putting their actions in before you hand it out.
 
 :::example[Bram barks orders]
-Bram's second Title, *A sergeant who lost his stripes*, is a Leader. He barks orders from the doorway with his Talk: that Title, *bark an order that gets obeyed* and Intimidating Presence, with the action, 4 steps. He gives 2 to Vesk and 2 to Wren, so this round Vesk's Sneak goes from a d8 to a d12, and Wren's Fight is 7 steps, a d12 and a d2.
+Bram's second Title, *A sergeant who lost his stripes*, is a Leader. He barks orders from the doorway with his Talk: that Title and *bark an order that gets obeyed*, with the action, 3 steps. He gives 2 to Vesk and 1 to Wren, so this round Vesk's Sneak goes from a d6 to a d10, and Wren's Fight is 5 steps, a d10.
 :::
 
 ## Studying Something {#s-study}

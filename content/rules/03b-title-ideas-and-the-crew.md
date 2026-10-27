@@ -18,8 +18,8 @@ The quick build is the long build with most of the thinking done for you. You pi
 
 1.  **Pick two archetypes, and a Title idea for each if you like.** Each archetype has a mechanic, something only it can do, and on most of them 1 Aura adds +2 to one die on it. You can take the same archetype twice, and then that +2 is a +3. Every Title idea says which archetypes it suits, and gives you Titles, permissions and traits to start from. See [How archetypes work](#s-how-archetypes).
 2.  **Write a Title for each, and three permissions on it.** Your Title is the name you give your archetype. Take one of the idea's examples or write your own, and make it specific: *the best blade in the city* is fine, and *the best blade in the Low Market* is better. Then take three permissions that fit inside it, so you've got six. Change the words to suit your character, or write one that isn't on the list. A permission can be one word, like *Deceptive*, or a doing word and how, what or where, like *pick a mechanical lock*. See [Titles](#s-title) and [Permissions](#s-writing-permissions).
-3.  **Pick two traits.** Take them from the ideas you started from, or from [the full list](#s-traits).
-4.  **Fill in your set actions.** Defend, Fight, Move, Sneak, Study and Talk are on every sheet, and if there's something you do all the time, give it a set action of its own. Put your Titles, items and traits on every set action they fit nearly every time, and each permission on the two it helps most, never twice on the same one. Plain armour, a shield and a helmet go on your Defend. A set action's steps are 1 for the action and 1 for every line on it. See [Set actions](#s-step-set-actions).
+3.  **Pick two traits.** A trait's never a step, so it does its one thing without going on a set action. Take them from the ideas you started from, or from [the full list](#s-traits).
+4.  **Fill in your set actions.** Defend, Fight, Move, Sneak, Study and Talk are on every sheet, and if there's something you do all the time, give it a set action of its own. Put your Titles on every set action they fit nearly every time, each permission on the two it helps most, never twice on the same one, and each plain item on the one it helps most. Plain armour, a shield and a helmet go on your Defend. A set action's steps are 1 for the action and 1 for every line on it. See [Set actions](#s-step-set-actions).
 5.  **Take what you carry, and attune one thing.** You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more. Armour, a shield or a helmet is Common, with 1 box, and one piece can be Fine, with 2. Your attuned thing starts at Awakened with one permission. If there's trouble you'd like on it, give it a Catch and it gets a second permission. You can attune more later, in downtime. See [What you carry](#s-carrying) and [Attunement](#s-attunement).
 6.  **Write your threads.** Answer at least two of the [ten crew questions](#s-connect), and turn two of your answers into **bond threads** with the crew, something good between you. A thread with someone in the crew goes on both your sheets, so agree on it together. Write a **hostile thread** as well, with anyone, and you can write a third bond thread. With two players, one of your bond threads goes to someone outside the crew, and playing alone, both do. See [Bonds and threads](#s-bonds).
 7.  **Write your Aspiration** at d2. It's one thing you want, and it climbs as you chase it. Past d12 you get it, so make it something you'd know the day it's done: *be a hero again* is too vague, and *earn back the rank they stripped from me* is better. See [Aspiration](#s-aspiration) and [A good Aspiration](#s-good-aspiration).
@@ -28,9 +28,9 @@ The quick build is the long build with most of the thinking done for you. You pi
 :::example[Wren, the quick way]
 Wren takes Hunter twice, so her +2 is a +3. She starts both Titles from the Ranger idea, which suits a Hunter, and they're both examples off its list: *the hunter who has never lost a trail* and *an outrider from the border war*. Her first Title gets three permissions from the list, *follow any trail*, *move through the wild unseen* and *know a beast's habits*. Her second gets three that aren't on the list at all: *scout ahead of an army*, *ride hard over rough country* and *read the land for an ambush*. Her traits are their own pick, and she takes two of the Ranger's, Marksman's Eye and Sure-Footed.
 
-Her Track is her first Title, *follow any trail* and *know a beast's habits*, so with the action that's 4 steps, a d8. She attunes her longbow with *shoot a longbow*, and gives it the Catch *Wanted* for a second permission, *hit anything I can see*. Both go on her Fight with her first Title and Marksman's Eye, and that's 5 steps, a d10.
+Her Track is her first Title, *follow any trail* and *know a beast's habits*, so with the action that's 4 steps, a d8. She attunes her longbow with *shoot a longbow*, and gives it the Catch *Wanted* for a second permission, *hit anything I can see*. Both go on her Fight with her first Title, and that's 4 steps, a d8.
 
-Say she marks the Warden with her Fight and wins, so it's *Marked d10*. Bram swings at it, and his d8 comes up 4 and the Mark die 6, against the Warden's 7. Wren spends 1 Aura to make the Mark die a 9, so Bram's hammer gets through. Her whole sheet's [further down](#s-pregens).
+Say she marks the Warden with her Fight and wins, so it's *Marked d8*. Bram swings at it, and his d8 comes up 4 and the Mark die 6, against the Warden's 7. Wren spends 1 Aura to make the Mark die a 9, so Bram's hammer gets through. Her whole sheet's [further down](#s-pregens).
 :::
 
 A quick-built character is every bit as real as one built the long way, and everything about it grows the same way. In more of a hurry than that? Take one of the [six ready-made characters](#s-pregens) and play.
@@ -403,7 +403,7 @@ A school is the one kind of magic you're known for. You need a magic permission 
 
 **Permissions:** *ward a friend against harm* · *bar a door with a sigil* · *feel a ward before I touch it* · *unpick a small ward* · *keep a spirit out of a room* · *know when a ward's been broken* · *know every way into a building* · *spot a thief's mark*
 
-**Traits:** Steady Hands · Iron Will · Prepared Mind
+**Traits:** Steady Hands · Iron Will · Tactical Mind
 
 **Going beyond:** seal a room so nothing gets in or out · unpick a ward someone powerful made
 
@@ -546,7 +546,7 @@ Pick one and play tonight.
 
 These are the same six you can choose in the Player Companion app. Take one as written, or copy one and change anything you like. They're the crew as they start out. The examples elsewhere in this book sometimes show them later in their careers, with more Titles, more permissions and new tricks.
 
-Each of them has two archetypes, with a Title for each built from a [Title idea](#s-title-ideas), and a few permissions of their own. The archetype's in brackets after each Title. Their set actions are already counted. The number's the steps, then the die, then what's on it, and the action itself is the 1 that isn't written down: Vesk's Sneak is her first Title, *move unseen* and Silent Step, plus the action, so it's 4 steps, a d8.
+Each of them has two archetypes, with a Title for each built from a [Title idea](#s-title-ideas), and a few permissions of their own. The archetype's in brackets after each Title. Their set actions are already counted. The number's the steps, then the die, then what's on it, and the action itself is the 1 that isn't written down: Vesk's Sneak is her first Title and *move unseen*, plus the action, so it's 3 steps, a d6. An attuned thing's permissions are written in italics on a set action like any other permission, and a trait's never on one.
 
 They've each got one attuned thing, at Awakened, and Wren's longbow and Bram's war hammer have each taken a Catch for a second permission. Everyone's got room for more in what they carry, so pick things up in play, or fill the gaps from [What you carry](#s-carrying) before you start. A piece of armour's [quality](#s-armour-quality) comes first, so Bram's Fine plate armour has two boxes, and his Common shield has one.
 
@@ -563,9 +563,9 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Second Title:** *Raised by the Guild* (Shadow). Permissions: *know how a lock's built*, *fight dirty with a knife*, *find a buyer for anything*.
 
-**Traits:** Silent Step (Passive) · Light on my Feet (Passive).
+**Traits:** Silent Step (Triggered) · Light on my Feet (Passive).
 
-**Set actions:** Sneak 4 (d8): her first Title, *move unseen*, Silent Step · Move 4 (d8): her first Title, *run the rooftops*, her grappling line · Locks 5 (d10): her first Title, *pick a mechanical lock*, *know how a lock's built*, her picks · Defend 2 (d4): her worn leathers · Fight 2 (d4): *fight dirty with a knife* · Study 1 (d2) · Talk 1 (d2).
+**Set actions:** Sneak 3 (d6): her first Title, *move unseen* · Move 4 (d8): her first Title, *run the rooftops*, *climb or swing anywhere you can throw a hook* · Locks 5 (d10): her first Title, *pick a mechanical lock*, *know how a lock's built*, her picks · Defend 2 (d4): her worn leathers · Fight 2 (d4): *fight dirty with a knife* · Study 1 (d2) · Talk 1 (d2).
 
 **Carries:** Common worn leathers (equipment, 1 of 3) · a purse of gold, a smoke bomb, a perfect set of picks (utility, 3 of 3) · the first coin she ever stole (keepsake) · an empty bag (0 of 10).
 
@@ -591,9 +591,9 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Second Title:** *The woman with a hundred names* (Shadow). Permissions: *pass as someone I'm not*, *forge a letter in any hand*, *keep my story straight under questions*.
 
-**Traits:** Silver Tongue (Once per scene) · Cold Reader (Once per scene).
+**Traits:** Silver Tongue (Triggered) · Cold Reader (Triggered).
 
-**Set actions:** Talk 4 (d8): her first Title, *read a room in a glance*, *make a lie sound like old news* · Pass as someone else 5 (d10): her second Title, *pass as someone I'm not*, *keep my story straight under questions*, her signet pin · Study 2 (d4): *read a room in a glance* · Defend 1 (d2) · Fight 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
+**Set actions:** Talk 4 (d8): her first Title, *read a room in a glance*, *make a lie sound like old news* · Pass as someone else 5 (d10): her second Title, *pass as someone I'm not*, *keep my story straight under questions*, *pass as someone who matters* · Study 2 (d4): *read a room in a glance* · Defend 1 (d2) · Fight 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
 
 **Carries:** court clothes (equipment, 1 of 3) · a fine bottle of wine, a deck of marked cards (utility, 2 of 3) · a letter of introduction (keepsake) · an empty bag (0 of 10).
 
@@ -621,7 +621,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Traits:** Unyielding (Passive) · Intimidating Presence (Passive).
 
-**Set actions:** Fight 4 (d8): his first Title, *hold the line*, his war hammer · Defend 4 (d8): his first Title, his plate armour, his shield · Talk 4 (d8): his second Title, *bark an order that gets obeyed*, Intimidating Presence · Lift and carry 3 (d6): his first Title, *lift what two men can't* · Study 2 (d4): *spot who's in charge* · Move 1 (d2) · Sneak 1 (d2).
+**Set actions:** Fight 4 (d8): his first Title, *hold the line*, *fight with a war hammer* · Defend 4 (d8): his first Title, his plate armour, his shield · Talk 3 (d6): his second Title, *bark an order that gets obeyed* · Lift and carry 3 (d6): his first Title, *lift what two men can't* · Study 2 (d4): *spot who's in charge* · Move 1 (d2) · Sneak 1 (d2).
 
 **Carries:** Fine plate armour, a Common shield (equipment, 2 of 3) · a medical kit, his coin from home (utility, 2 of 3) · his old sergeant's stripes (keepsake) · an empty bag (0 of 10).
 
@@ -647,9 +647,9 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Second Title:** *A scholar of forbidden texts* (Scholar). Permissions: *know the history of anything old*, *find what I need in any library*, *read dead languages*.
 
-**Traits:** Perfect Recall (Once per scene) · Iron Will (Passive).
+**Traits:** Perfect Recall (Passive) · Iron Will (Passive).
 
-**Set actions:** Study 4 (d8): her second Title, *know the history of anything old*, Iron Will · The dead 3 (d6): her first Title, *speak with the recently dead* · Ward 3 (d6): her first Title, her chalk and salt · Talk 2 (d4): her fine coat · Defend 1 (d2) · Fight 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
+**Set actions:** Study 3 (d6): her second Title, *know the history of anything old* · The dead 3 (d6): her first Title, *speak with the recently dead* · Ward 3 (d6): her first Title, *draw a warding circle anywhere I can kneel* · Talk 2 (d4): her fine coat · Defend 1 (d2) · Fight 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
 
 **Carries:** a fine coat with silver thread (equipment, 1 of 3) · a salt packet, a book she never finished (utility, 2 of 3) · an old letter (keepsake) · an empty bag (0 of 10).
 
@@ -677,7 +677,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Traits:** Marksman's Eye (Passive) · Sure-Footed (Passive).
 
-**Set actions:** Fight 5 (d10): her first Title, *shoot a longbow*, *hit anything I can see*, Marksman's Eye · Sneak 4 (d8): her first Title, *move through the wild unseen*, her hooded cloak · Track 4 (d8): her first Title, *follow any trail*, *know a beast's habits* · Study 3 (d6): her second Title, *read the land for an ambush* · Move 2 (d4): her second Title · Defend 1 (d2) · Talk 1 (d2).
+**Set actions:** Fight 4 (d8): her first Title, *shoot a longbow*, *hit anything I can see* · Sneak 4 (d8): her first Title, *move through the wild unseen*, her hooded cloak · Track 4 (d8): her first Title, *follow any trail*, *know a beast's habits* · Study 3 (d6): her second Title, *read the land for an ambush* · Move 2 (d4): her second Title · Defend 1 (d2) · Talk 1 (d2).
 
 **Carries:** her hooded cloak (equipment, 1 of 3) · rations (utility, 1 of 3) · a torn map (keepsake) · her hunter's pack, empty (0 of 10).
 
@@ -703,9 +703,9 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Second Title:** *The Court's runaway heir* (Face). Permissions: *know the old courts' history*, *carry myself like royalty*, *command a room*.
 
-**Traits:** Killer Instinct (Triggered) · Battle Focus (Once per scene).
+**Traits:** Killer Instinct (Triggered) · Battle Focus (Triggered).
 
-**Set actions:** Fight 4 (d8): her first Title, *throw fire*, her ember stone · Scare them off 5 (d10): her first Title, *throw fire*, *make a threat stick*, her ember stone · Talk 4 (d8): her second Title, *command a room*, *make a threat stick* · Study 2 (d4): *know the old courts' history* · Defend 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
+**Set actions:** Fight 4 (d8): her first Title, *throw fire*, *call fire without a word or a gesture* · Scare them off 5 (d10): her first Title, *throw fire*, *make a threat stick*, *call fire without a word or a gesture* · Talk 4 (d8): her second Title, *command a room*, *make a threat stick* · Study 2 (d4): *know the old courts' history* · Defend 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
 
 **Carries:** a scorched coat (equipment, 1 of 3) · a tinderbox, flash powder (utility, 2 of 3) · a silver locket (keepsake) · an empty bag (0 of 10).
 

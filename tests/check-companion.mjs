@@ -6,8 +6,8 @@
 // 1. Steps into dice match the table in The Core, splits included.
 // 2. Every crew member's set actions on the phone match their sheet in the
 //    chapter, read straight off the Markdown here rather than from book.json.
-// 3. Vesk at the table: Sneak is 4 steps, a d8. Tap off Silent Step and it's
-//    3 steps, a d6. Bring in her grappling line and it's 4 again for 1 Aura.
+// 3. Vesk at the table: Sneak is 3 steps, a d6. Tap off move unseen and it's
+//    2 steps, a d4. Bring in her grappling line and it's 3 again for 1 Aura.
 //    Roll with fixed dice, check the Aura and the result, and her Confidence
 //    going up a size for the win, reload, then go offline and reload, and read
 //    Aura's rule and a permission's with no signal. Then a split roll with a
@@ -70,7 +70,7 @@
 //    landing, a top face, a Hurt and the wound die reaching d12 each get one.
 // 7b. A character in one hand: full screen with the crest at the top, the
 //    first set action high up, each set action drawn as the dice it rolls,
-//    her 8 front and centre with its top face lit, and the Sheet tab under two
+//    her 6 front and centre with its top face lit, and the Sheet tab under two
 //    screens with its folds shut, with axe on all three in both themes. A
 //    Hurt with reduce-motion on swaps the wound die's shape, and nothing moves.
 // 8. Downtime and rule changes. Vesk's week from Downtime, with a Hurt on
@@ -79,7 +79,7 @@
 //    Catch, Loud, and haul someone up after me, on no set action, so it's 1
 //    Aura when it fits. Nothing offers to heal a Catch or mend Armour. An undo
 //    takes it all back. A second week puts a new permission on her
-//    Sneak (5 steps, a d10), chases her Aspiration with fixed dice, and swaps
+//    Sneak (4 steps, a d8), chases her Aspiration with fixed dice, and swaps
 //    a permission, and it all survives a reload and offline. A third writes a
 //    hostile thread and takes a tie with an extra resource. Then a made-up
 //    rule change against her saved sheet: a reworded permission, her Stride
@@ -269,20 +269,23 @@ if (part("3")) {
   const tileOf = (name) => page.$eval(`.tile[data-a]:has(.tile-name:text-is("${name}"))`, (el) => `${parseInt(el.querySelector(".tile-steps").textContent, 10)} ${el.querySelector(".tile-die").textContent}`);
 
   await tile("Sneak");
-  has(await live(), "4 steps, d8", "Sneak to start with");
-  await page.click('#cc-dialog .cc-line[data-act="off"]:has-text("Silent Step")');
-  has(await live(), "3 steps, d6", "Sneak without Silent Step");
+  has(await live(), "3 steps, d6", "Sneak to start with");
+  // Her traits never show here: a trait's never a step.
+  same(await page.$$eval('#cc-dialog .cc-line[data-act="off"]', (els) => els.some((el) => /Silent Step/.test(el.textContent))), false, "Silent Step isn't a line on her Sneak");
+  await page.click('#cc-dialog .cc-line[data-act="off"]:has-text("move unseen")');
+  has(await live(), "2 steps, d4", "Sneak without move unseen");
   await page.click('#cc-dialog summary:has-text("Bring something in")');
+  same(await page.$$eval('#cc-dialog .cc-line[data-act="in"]', (els) => els.some((el) => /Silent Step|Light on my Feet/.test(el.textContent))), false, "no trait to bring in");
   await page.click('#cc-dialog .cc-line[data-act="in"]:has-text("grappling line")');
-  has(await live(), "4 steps, d8", "Sneak with her grappling line brought in");
+  has(await live(), "3 steps, d6", "Sneak with her grappling line brought in");
   has(await page.textContent("#cc-dialog .cc-costs"), "1 Aura", "the cost of bringing it in");
   await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="6"]');
   await shot(page, "3-building-a-roll");
-  await page.evaluate(() => window.ziCompanion.setDice([6, 5]));
+  await page.evaluate(() => window.ziCompanion.setDice([5, 4]));
   await page.click('#cc-dialog button[data-act="go"]');
   await page.waitForSelector("#cc-dialog .res .res-out");
-  has(await page.textContent("#cc-dialog .cc-res"), "Beat it", "her 6 against the guard's 5");
-  has(await page.textContent("#cc-dialog .cc-them"), "Their d65", "the guard's d6 rolled with hers, and its 5");
+  has(await page.textContent("#cc-dialog .cc-res"), "Beat it", "her 5 against the guard's 4");
+  has(await page.textContent("#cc-dialog .cc-them"), "Their d64", "the guard's d6 rolled with hers, and its 4");
   has(await page.textContent("#cc-dialog .dlg-body"), "You’ve got 4 Aura", "Aura after paying 1");
   // A win puts her Confidence up a size, and the card says why.
   same(await page.$$eval("#cc-dialog .cc-swing-head .zd-die", (els) => els.map((e) => e.textContent)), ["d6", "d8"], "Confidence from d6 to d8 on a win");
@@ -296,7 +299,7 @@ if (part("3")) {
   await page.reload();
   await page.waitForSelector(".tile[data-a]");
   same(await aura(), "4/5", "Aura after a reload");
-  has(await page.textContent(".cc-last"), "6 on the d8, against 5. Beat it.", "the last roll after a reload");
+  has(await page.textContent(".cc-last"), "5 on the d6, against 4. Beat it.", "the last roll after a reload");
 
   // Offline: once the service worker has the site, a reload still works.
   await page.evaluate(() => navigator.serviceWorker.ready);
@@ -501,7 +504,7 @@ if (part("3")) {
   await context.close();
 }
 
-// Wren goes at a Marked Warden: her Fight's d10 and the Mark d10 against its d8.
+// Wren goes at a Marked Warden: her Fight's d8 and the Mark d10 against its d8.
 // Both come in under, and her Hunter's +3 on the Mark die makes the 6 a 9.
 if (part("3")) {
   const { context, page } = await phone();
@@ -510,11 +513,11 @@ if (part("3")) {
   await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="8"]');
   await page.click('#cc-dialog .cc-mark > summary');
   await page.click('#cc-dialog .cc-chipbtn[data-act="mark"][data-v="10"]');
-  has(await page.textContent("#cc-dialog .cc-dice"), "5 steps, d10, and the Mark d10", "Wren's Fight with the Mark die");
+  has(await page.textContent("#cc-dialog .cc-dice"), "4 steps, d8, and the Mark d10", "Wren's Fight with the Mark die");
   await page.evaluate(() => window.ziCompanion.setDice([5, 6, 7]));
   await page.click('#cc-dialog button[data-act="go"]');
   await page.waitForSelector("#cc-dialog .res .res-out");
-  same(await page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Under", "Under"], "Wren's d10 and the Mark d10 against a 7");
+  same(await page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Under", "Under"], "Wren's d8 and the Mark d10 against a 7");
   // Every die missed, so her Confidence drops a size, and the +3 that turns
   // it into a win puts it back up instead, in the same undo as the +3.
   const swing = () => page.$$eval("#cc-dialog .cc-swing-head .zd-die", (els) => els.map((e) => e.textContent));
@@ -1037,10 +1040,12 @@ if (part("5")) {
   await next("Set actions");
   await page.fill("#b-newact", "Locks");
   await b('[data-b="addact"]');
-  const on = { t0: ["Sneak", "Move", "Locks"], "p0.0": ["Sneak"], "p0.1": ["Move"], "p0.2": ["Locks"], "p1.0": ["Locks"], "p1.1": ["Fight"], r0: ["Sneak"] };
+  // Her traits never go on a set action: a trait's never a step.
+  same(await page.$$eval('[data-b="on"][data-l^="r"]', (els) => els.length), 0, "no trait to put on a set action");
+  const on = { t0: ["Sneak", "Move", "Locks"], "p0.0": ["Sneak"], "p0.1": ["Move"], "p0.2": ["Locks"], "p1.0": ["Locks"], "p1.1": ["Fight"] };
   for (const [l, list] of Object.entries(on)) for (const a of list) await b(`[data-b="on"][data-l="${l}"][data-a="${a}"]`);
-  has(await page.textContent('.bd-tiles .tile:has(.tile-name:text-is("Sneak"))'), "4 steps", "Sneak with her first Title, move unseen and Silent Step");
-  same(await page.getAttribute('.bd-rail .tile-dice[data-for="Sneak"] .zd-die', "data-d"), "8", "Sneak drawn as the d8 it rolls");
+  has(await page.textContent('.bd-tiles .tile:has(.tile-name:text-is("Sneak"))'), "3 steps", "Sneak with her first Title and move unseen");
+  same(await page.getAttribute('.bd-rail .tile-dice[data-for="Sneak"] .zd-die', "data-d"), "6", "Sneak drawn as the d6 it rolls");
   // A permission goes on two set actions at most: a third is refused, with
   // why, and the rest look full until one comes off.
   await b('[data-b="on"][data-l="p0.0"][data-a="Move"]');
@@ -1054,17 +1059,18 @@ if (part("5")) {
   await b('[data-b="on"][data-l="p0.0"][data-a="Move"]');
   same(await page.getAttribute('[data-b="on"][data-l="p0.0"][data-a="Defend"]', "aria-disabled"), null, "room again once it's off one");
   same(await page.$$eval(".bd-lines .cc-warn", (els) => els.length), 0, "back on one set action");
-  // A Title or a trait goes on every set action it fits.
-  await b('[data-b="on"][data-l="r0"][data-a="Move"]');
-  await b('[data-b="on"][data-l="r0"][data-a="Locks"]');
-  same(await page.getAttribute('[data-b="on"][data-l="r0"][data-a="Locks"]', "aria-pressed"), "true", "a trait on three set actions");
-  for (const a of ["Move", "Locks"]) await b(`[data-b="on"][data-l="r0"][data-a="${a}"]`);
   await shot(page, "6-builder-set-actions");
   await next("What you carry");
   // What she carries, a part at a time, picked from cards.
   await b('[data-b="fillany"][data-k="e"][data-v="worn leathers"]');
   same(await page.getAttribute('[data-b="on"][data-l="e0"][data-a="Defend"]', "aria-pressed"), "true", "worn leathers going straight on her Defend");
   same(await page.getAttribute('.bd-rail .tile-dice[data-for="Defend"] .zd-die', "data-d"), "4", "Defend a d4 with her leathers on it");
+  // A plain thing goes on one set action, so tapping another moves it there.
+  const leathersOn = () => page.$$eval('[data-b="on"][data-l="e0"][aria-pressed="true"]', (els) => els.map((el) => el.dataset.a));
+  await b('[data-b="on"][data-l="e0"][data-a="Fight"]');
+  same(await leathersOn(), ["Fight"], "her leathers moved to Fight, and off her Defend");
+  await b('[data-b="on"][data-l="e0"][data-a="Defend"]');
+  same(await leathersOn(), ["Defend"], "and back on her Defend, alone");
   // Armour picks its quality, each with the boxes it gives, and it's Common
   // to start. Fine and back again.
   const qualities = () => page.$$eval(".bd-quality .bd-qual", (els) => els.map((el) => [el.textContent.trim(), el.getAttribute("aria-pressed"), el.querySelectorAll(".zd-plate").length]));
@@ -1106,6 +1112,16 @@ if (part("5")) {
   await b('[data-b="fromq"][data-q="1"][data-v="hostile"]');
   same([await page.inputValue("#b-th2-person"), await page.inputValue("#b-th2-text")], ["The fence", "I owe a debt I would rather not discuss."], "an answer gone bad made into her hostile thread");
   same(await page.$$eval(".bd-thread", (els) => els.map((el) => el.querySelector('[aria-pressed="true"]').textContent)), ["Bond", "Bond", "Hostile", "Bond"], "a hostile thread making room for a third bond thread");
+  // Each person's one bond: another thread with Dorrie goes in her card, not a
+  // new one with her name on it again, and it comes off with one tap while
+  // it's empty.
+  const bonds = () => page.$$eval(".bd-bond", (els) => els.map((el) => [el.querySelector("legend").textContent, el.querySelectorAll(".bd-thread").length]));
+  same(await bonds(), [["Dorrie", 1], ["Bram", 1], ["The fence", 1], ["Someone new", 1]], "a bond for each person");
+  await b('[data-b="addthreadto"][data-i="0"]');
+  same(await bonds(), [["Dorrie", 2], ["Bram", 1], ["The fence", 1], ["Someone new", 1]], "a second thread with Dorrie in her bond");
+  same(await page.evaluate(() => document.activeElement?.id), "b-th4-text", "the new thread ready to write");
+  await b('[data-b="dropthread"][data-i="4"]');
+  same(await bonds(), [["Dorrie", 1], ["Bram", 1], ["The fence", 1], ["Someone new", 1]], "the empty thread taken back off");
   await shot(page, "5-builder-threads");
   await next("Aspiration");
   // Past d12 you get it, so the book's tests for a good one are open under it.
@@ -1383,6 +1399,27 @@ if (part("6")) {
     // A build from before 26 Oct: a debt is a hostile thread, the rest are bond threads.
     same(normalBuild({ v: 2, threads: [{ person: "The fence", text: "I owe him.", debt: true }, { person: "Dorrie", text: "Old friends.", debt: false }] }).threads.map((t) => t.kind), ["hostile", "bond"], "an old build's debt as a hostile thread");
   }
+  // From 27 Oct 2026: a trait's never on a set action, a plain thing's on
+  // one, and each person's one bond, however their name was typed.
+  {
+    const old = normalBuild({
+      v: 2, actions: ["Defend", "Fight", "Move", "Sneak", "Study", "Talk"],
+      traits: [{ name: "Silent Step", on: ["Sneak", "Move"] }, { name: "Prepared Mind", on: [] }, { name: "Mine", on: ["Talk"], own: { type: "Once per scene", text: "+1 step to talking" } }],
+      equipment: [{ text: "a fine sword", on: ["Fight", "Defend"] }, { text: "plate armour", on: ["Fight", "Defend"] }],
+      utility: [{ text: "rope", on: ["Move", "Sneak"] }], keepsake: { text: "a coin", on: ["Talk"] },
+      threads: [{ person: "Dorrie", text: "One.", kind: "bond" }, { person: "dorrie ", text: "Two.", kind: "bond" }, { person: "Bram", text: "Three.", kind: "hostile" }],
+    });
+    same(old.traits.map((t) => t.on.length), [0, 0, 0], "an old build's traits off every set action");
+    same([old.equipment[0].on, old.equipment[1].on, old.utility[0].on, old.keepsake.on], [["Fight"], ["Defend"], ["Move"], ["Talk"]], "an old build's plain things on one set action each, its armour on Defend");
+    same(sheetOf({ id: "old-27", name: "Old", build: old }, B).threads.map((p) => [p.person, p.threads.length]), [["Dorrie", 2], ["Bram", 1]], "two spellings of Dorrie, and one bond");
+    const said = checksOf(old, B, { changing: true }).map((x) => x.text).join(" ");
+    has(said, "Prepared Mind isn’t one of the traits any more", "a trait the list hasn't got now");
+    has(said, "Mine is written as Once per scene", "one of your own, of a type traits don't come in now");
+    const vesk = book.crew.find((c) => c.id === "vesk");
+    const grown = grow(vesk, [{ k: "thread", person: "dorrie", text: "She taught me the roofs.", kind: "bond" }], B);
+    same(grown.threads.filter((x) => x.person === "Dorrie").map((x) => x.threads.length), [3], "a thread from downtime with dorrie goes under Vesk's bond with Dorrie");
+    same(grown.threads.length, vesk.threads.length, "and no new bond for her");
+  }
   // A thousand random characters: not one warning, nothing bigger than the
   // crew's biggest set action, 5 steps, one attuned thing, two or three bond
   // threads and a hostile one.
@@ -1435,7 +1472,7 @@ if (part("6")) {
   let f = await print();
   same([f.pages, f.file], [2, "vesk-zidara-sheet.pdf"], "Vesk's printed sheet");
   want(f, [["name", "Vesk"], ["pronouns", "she, her"], ["aura_now", "5"], ["aura_max", "5"], ["stride", "5"], ["resolve_max", "2"],
-    ["confidence", "d4"], ["wound_die", "d4"], ["scar_1", ""], ["set_sneak_lines", "Title I, move unseen, Silent Step"], ["set_sneak_steps", "4"], ["set_sneak_die", "d8"],
+    ["confidence", "d4"], ["wound_die", "d4"], ["scar_1", ""], ["set_sneak_lines", "Title I, move unseen"], ["set_sneak_steps", "3"], ["set_sneak_die", "d6"],
     ["set_defend_lines", "worn leathers"], ["set_defend_steps", "2"], ["set_defend_die", "d4"],
     ["set_1_name", "Locks"], ["set_1_lines", "Title I, pick a mechanical lock, know how a lock’s built, a perfect set of picks"], ["set_1_steps", "5"], ["set_1_die", "d10"], ["set_2_name", ""], ["set_talk_steps", "1"], ["title_1", "The best cat burglar in the city"], ["title_1_archetype", "Shadow"],
     ["trait_1", "Silent Step"], ["equipment_1", "Common worn leathers"], ["equipment_1_box_1", false], ["equipment_1_box_2", false], ["utility_2", "a smoke bomb"], ["utility_3", "a perfect set of picks"], ["keepsake", "the first coin she ever stole"], ["attune_1_thing", "A grappling line"],
@@ -1476,7 +1513,7 @@ if (part("6")) {
   await page.click('.bd-foot button[data-b="save"]');
   await page.waitForSelector(".tile[data-a]");
   f = await print();
-  want(f, [["name", "Kestrel"], ["set_sneak_steps", "4"], ["set_move_die", "d8"], ["set_1_name", "Locks"], ["set_1_die", "d10"], ["title_2_permission_2", "fight dirty with a knife"], ["attune_1_thing", "A grappling line"], ["attune_2_thing", ""],
+  want(f, [["name", "Kestrel"], ["set_sneak_steps", "3"], ["set_move_die", "d8"], ["set_1_name", "Locks"], ["set_1_die", "d10"], ["title_2_permission_2", "fight dirty with a knife"], ["attune_1_thing", "A grappling line"], ["attune_2_thing", ""],
     ["bond_1", "Dorrie"], ["bond_1_thread_1_kind", "bond"], ["bond_3", "The fence"], ["bond_3_thread_1_kind", "hostile"], ["notes", "Trouble that follows her: wanted in three districts, owes the Guild."]], "Kestrel, made from Vesk");
 
   // Random, five times over, then saved and printed.
@@ -1535,7 +1572,7 @@ if (part("6")) {
 const moving = (page) => page.evaluate(() => document.getAnimations().filter((a) => a.playState === "running" && a.effect?.target?.closest?.(".companion")).length);
 const card = (page) => page.textContent(".ln-card");
 // One round from the top: Wren and Bram in, then roll with these dice (the d12,
-// the d6, then the club's d8), or tap them in when real is set.
+// the d4, then the club's d8), or tap them in when real is set.
 async function round(page, dice, real = false) {
   await page.click('button[data-do="next"]');
   await page.click('button[data-do="pick"][data-who="wren"]');
@@ -1566,8 +1603,8 @@ if (part("7")) {
   await page.click('button[data-do="pick"][data-who="wren"]');
   has(await card(page), "Wren’s Fight", "Wren's tile");
   await page.click('button[data-do="pick"][data-who="bram"]');
-  has(await card(page), "5 steps and 4 steps is 9 steps", "the combo's steps");
-  has(await card(page), "and the 3 left over make a d6, so that’s a d12 and a d6", "the combo's dice");
+  has(await card(page), "4 steps and 4 steps is 8 steps", "the combo's steps");
+  has(await card(page), "and the 2 left over make a d4, so that’s a d12 and a d4", "the combo's dice");
   await page.click('button[data-do="back"]');
   await page.click('button[data-do="next"]');
   same(await page.isDisabled('button[data-do="next"]'), false, "Wren and Bram still in after going back");
@@ -1575,7 +1612,7 @@ if (part("7")) {
   await page.evaluate(() => window.ziCompanion.setDice([8, 3, 6]));
   await page.click('button[data-do="roll"]');
   same(await page.$$eval("[data-spin]", (els) => els.length), 0, "dice tumbling with reduce-motion on");
-  same(await page.$$eval(".ln-roll .hex", (els) => els.map((e) => e.textContent)), ["6", "8", "3"], "the club's d8 and your d12 and d6");
+  same(await page.$$eval(".ln-roll .hex", (els) => els.map((e) => e.textContent)), ["6", "8", "3"], "the club's d8 and your d12 and d4");
   has(await card(page), "Your 8 beats the brute’s 6, so the club never comes down", "a beaten club");
   // Confidence moves for everyone who put an action in, off their sheets.
   const moved = () => page.$$eval(".ln-swing li", (els) => els.map((el) => [el.querySelector("b").textContent, ...[...el.querySelectorAll(".hex")].map((h) => h.textContent)]));
@@ -1587,9 +1624,9 @@ if (part("7")) {
   has(await card(page), "you stopped it, so nothing lands and the round’s over", "the end of a round that was stopped");
   await page.click('button[data-do="again"]');
   has(await page.textContent("#ln-h"), "The GM telegraphs", "playing it again");
-  await round(page, [5, 6, 6]);
+  await round(page, [6, 4, 6]);
   has(await card(page), "Your 6 ties the brute’s 6", "a tie on the club");
-  has(await card(page), "The d6 came up 6, its top face, so Wren gets 1 Aura back", "a top face in a combo");
+  has(await card(page), "The d4 came up 4, its top face, so Wren gets 1 Aura back", "a top face in a combo");
   has(await card(page), "if her Aura’s full she gives it to a friend in the scene", "a top face with Wren's Aura full");
   same(await page.$$('button[data-do="next"]').then((b) => b.length), 0, "moving on before the tie's settled");
   same(await page.$$eval(".ln-swing", (els) => els.length), 0, "no Confidence moving before the tie's settled");
@@ -1673,11 +1710,11 @@ if (part("7")) {
   await page.goto(`${BASE}/characters/?learn`);
   await page.waitForSelector("#ln-h");
   same(await page.getAttribute(".cc-sound", "aria-pressed"), "false", "sound before it's turned on");
-  await round(page, [12, 4, 5]);
+  await round(page, [12, 3, 5]);
   same(await page.$$eval(".ln-roll [data-spin]", (els) => els.length), 3, "the dice tumbling");
   if (!(await moving(page))) note("the dice don't move while they tumble");
   await page.waitForSelector("#ln-out", { timeout: 5000 }).catch(() => note("the dice never landed"));
-  same(await page.$$eval(".ln-roll .hex", (els) => els.map((e) => e.textContent)), ["5", "12", "4"], "the dice once they've landed");
+  same(await page.$$eval(".ln-roll .hex", (els) => els.map((e) => e.textContent)), ["5", "12", "3"], "the dice once they've landed");
   has(await card(page), "The d12 came up 12, its top face", "a top face after a tumble");
   same(await heard(), { sounds: 0, buzz: [] }, "sound and buzz before they're turned on");
   await page.click(".cc-sound");
@@ -1710,12 +1747,12 @@ if (part("7")) {
   await page.click('.cc-stat[data-p="aura"]');
   await page.click('button[data-act="aura"][data-d="-1"]');
   await page.click('.tile[data-a="0"]');
-  await page.evaluate(() => window.ziCompanion.setDice([8]));
+  await page.evaluate(() => window.ziCompanion.setDice([6]));
   await page.click('#cc-dialog button[data-act="go"]');
   same(await page.$$eval("#cc-dialog .dlg-body.cc-flip", (els) => els.length), 1, "the roll card turning over");
   if (!(await page.$$eval("#cc-dialog [data-spin]", (els) => els.length))) note("Vesk's dice didn't tumble");
   await page.waitForSelector("#cc-dialog .dlg-body.cc-reveal", { timeout: 5000 }).catch(() => note("Vesk's dice never landed"));
-  same(await page.$$eval("#cc-dialog .cc-res .zd-die", (els) => els.map((e) => e.textContent)), ["8"], "Vesk's die once it's landed");
+  same(await page.$$eval("#cc-dialog .cc-res .zd-die", (els) => els.map((e) => e.textContent)), ["6"], "Vesk's die once it's landed");
   same(await page.$$eval(".t-aura .zd-chit.is-new", (els) => els.length), 0, "an Aura hex popping in behind the roll card");
   await page.click('#cc-dialog button.primary[data-act="close"]');
   same(await page.$$eval(".t-aura .zd-chit.is-new", (els) => els.length), 1, "the top face's Aura hex popping in as the card closes");
@@ -1746,15 +1783,15 @@ if (part("7b")) {
     if (!(await page.$(".cc-head .zd-crest"))) note(`no crest at the top of Vesk's sheet, ${theme}`);
     const top = await page.$eval(".tile[data-a]", (el) => Math.round(el.getBoundingClientRect().top + scrollY));
     if (top > 340) note(`the first set action starts ${top}px down at 390 by 844, ${theme}`);
-    same(await page.$$eval(".tile[data-a] .tile-dice .zd-die", (els) => els.map((e) => e.dataset.d)), ["8", "8", "10", "4", "4", "2", "2"], `Vesk's set actions drawn as the dice they roll, ${theme}`);
+    same(await page.$$eval(".tile[data-a] .tile-dice .zd-die", (els) => els.map((e) => e.dataset.d)), ["6", "8", "10", "4", "4", "2", "2"], `Vesk's set actions drawn as the dice they roll, ${theme}`);
     same([await page.getAttribute(".t-conf .zd-die", "data-d"), await page.getAttribute(".t-wound .zd-die", "data-d")], ["6", "2"], `Confidence a square and the wound die a coin, ${theme}`);
     await axe(`the play screen, ${theme}`);
     await page.click('.tile[data-a="0"]');
     await page.click('#cc-dialog button[data-act="vs"][data-v="6"]');
-    await page.evaluate(() => window.ziCompanion.setDice([8, 3]));
+    await page.evaluate(() => window.ziCompanion.setDice([6, 3]));
     await page.click('#cc-dialog button[data-act="go"]');
     await page.waitForSelector("#cc-dialog .res .res-out");
-    same(await page.$eval("#cc-dialog .cc-stage .res .zd-die", (el) => [el.dataset.d, el.textContent, el.classList.contains("is-top")]), ["8", "8", true], `her 8 on the d8, front and centre with its top face lit, ${theme}`);
+    same(await page.$eval("#cc-dialog .cc-stage .res .zd-die", (el) => [el.dataset.d, el.textContent, el.classList.contains("is-top")]), ["6", "6", true], `her 6 on the d6, front and centre with its top face lit, ${theme}`);
     same(await page.$eval("#cc-dialog .cc-them .zd-die", (el) => el.classList.contains("is-low")), true, `the guard's 3 drawn as lost, ${theme}`);
     await axe(`a roll, ${theme}`);
     await page.click('#cc-dialog button.primary[data-act="close"]');
@@ -1763,7 +1800,7 @@ if (part("7b")) {
     if (tall > 2) note(`the Sheet tab runs ${tall.toFixed(1)} screens with its folds shut, ${theme}`);
     same(await page.$$eval("details.cc-fold[open]", (els) => els.length), 0, `the Sheet tab's folds shut to start, ${theme}`);
     await openFold(page, "acts");
-    same(await page.$$eval(".cc-act:first-child .zd-pips", (els) => els.length), 4, `Vesk's Sneak with a pip for each of its 4 steps, ${theme}`);
+    same(await page.$$eval(".cc-act:first-child .zd-pips", (els) => els.length), 3, `Vesk's Sneak with a pip for each of its 3 steps, ${theme}`);
     await axe(`the Sheet tab, ${theme}`);
     await shot(page, `one-hand-${theme}`);
     // With reduce-motion on, a Hurt swaps the wound die's shape and nothing moves.
@@ -1907,8 +1944,8 @@ if (part("8")) {
   await page.emulateMedia({ colorScheme: "dark" });
   await dt('[data-do="finish"]');
   await closed();
-  has(await page.textContent("#cc-toast"), "Sneak is 5 steps, d10.", "the toast saying Sneak's new size");
-  same(await tileOf("Sneak"), "5 d10", "Sneak with its new permission");
+  has(await page.textContent("#cc-toast"), "Sneak is 4 steps, d8.", "the toast saying Sneak's new size");
+  same(await tileOf("Sneak"), "4 d8", "Sneak with its new permission");
   same(await tileOf("Fight"), "2 d4", "Fight after the swap");
   text = await sheet();
   has(text, "slip through a crowd", "the new permission on the sheet");
@@ -1925,7 +1962,7 @@ if (part("8")) {
   await page.waitForSelector(".cc-page", { timeout: 10000 }).catch(() => note("Vesk didn't open offline"));
   has(await page.textContent(".cc-page"), "slip through a crowd", "the new permission offline");
   await playTab();
-  same(await tileOf("Sneak"), "5 d10", "Sneak offline");
+  same(await tileOf("Sneak"), "4 d8", "Sneak offline");
   await context.setOffline(false);
   const saved = await page.evaluate(() => localStorage.getItem("zi-characters"));
   const id = JSON.parse(saved).characters[0].id;
@@ -1941,6 +1978,9 @@ if (part("8")) {
   await dt('[data-do="clear"][data-s="0"]');
   await dt('[data-do="pick"][data-s="0"][data-v="thread"]');
   await dt('[data-do="set"][data-s="0"][data-f="tkind"][data-v="hostile"]');
+  // Each person's one bond: Deepen a bond offers hers to pick, or someone new.
+  same(await page.$$eval('#cc-dialog [data-do="set"][data-s="0"][data-f="person"]', (els) => els.map((el) => el.dataset.v)), ["Dorrie", "Bram", "Isolde", "Wren", "The fence"], "Deepen a bond offering her bonds to pick from");
+  has(await page.textContent("#cc-dialog .dt-slot.is-picked"), "Or someone new", "or someone new");
   await page.fill('#cc-dialog input[data-dt="0"][data-f="person"]', "The Harbour Guild");
   await page.fill('#cc-dialog input[data-dt="0"][data-f="text"]', "They think I sank their barge.");
   await dt('[data-do="pick"][data-s="1"][data-v="asp"]');
@@ -2114,7 +2154,7 @@ if (part("9")) {
   await dt('[data-do="on"][data-s="1"][data-f="on"][data-v="Sneak"]');
   await dt('[data-do="finish"]');
   await closed();
-  same((await tilesNow()).find((t) => t[0] === "Sneak"), ["Sneak", 5, "d10"], "Sneak after a downtime");
+  same((await tilesNow()).find((t) => t[0] === "Sneak"), ["Sneak", 4, "d8"], "Sneak after a downtime");
   await tab("sheet");
   has(await page.textContent(".cc-page"), "You can carry one more utility item.", "Prepared from downtime on her sheet");
   // Then play: a Hurt, 1 Aura spent, her thread with Bram strained, her smoke bomb used.
@@ -2176,7 +2216,7 @@ if (part("9")) {
     same([ch.crew, ch.from, Boolean(ch.build), ch.state.grown.length, ch.state.wound, ch.state.aura, ch.state.threads[`Bram|${bramNow}`], ch.state.crossed["utility|two smoke bombs"]], ["own", "vesk", true, 0, 4, 4, "strained", true], `Vesk saved as your own, ${when}`);
     same(JSON.stringify(ch.build).includes('"was"'), false, `nothing from the change left in her build, ${when}`);
     const tiles = await tilesNow();
-    same(tiles, [["Sneak", 5, "d10"], ["Move", 4, "d8"], ["Locks", 5, "d10"], ["Defend", 2, "d4"], ["Fight", 2, "d4"], ["Study", 1, "d2"], ["Talk", 3, "d6"]], `her set actions, ${when}`);
+    same(tiles, [["Sneak", 4, "d8"], ["Move", 4, "d8"], ["Locks", 5, "d10"], ["Defend", 2, "d4"], ["Fight", 2, "d4"], ["Study", 1, "d2"], ["Talk", 3, "d6"]], `her set actions, ${when}`);
     for (const [name, steps, die] of tiles) same(die, diceLabel(stepsToDice(steps)), `${name}'s ${steps} steps through dice.js, ${when}`);
     same([await page.textContent('.cc-stat[data-p="aura"] .v'), await page.textContent('.cc-stat[data-p="resolve"] .v'), await page.textContent('.cc-stat[data-p="wound"] .v')], ["4/5", "3/3", "d4"], `her Aura, Resolve and wound die, ${when}`);
     same(await golds(), 0, `no gold marks, ${when}`);
@@ -2377,12 +2417,16 @@ if (part("10")) {
   same(await page.evaluate(() => getComputedStyle(document.querySelector(".lr-progress i")).transform), `matrix(${4 / cards.length}, 0, 0, 1, 0, 0)`, "the progress bar a tenth of the way along on card 4");
   same(await still(page), 0, "nothing moving in the deck under reduce-motion");
   // It remembers the card: a reload, then the deck from the rules page.
+  // The card's in the page before the deck's script has run, so wait for the
+  // deck to say where it is before reading it.
   await page.reload();
   await page.waitForSelector(".lr-card");
+  await waitCard(page, 4);
   same((await deckAt(page)).id, cards[3].id, "a reload stays on the same card");
   await page.goto(`${BASE}/rules/`);
   await page.click('a[href="/learn/"]');
   await page.waitForSelector(".lr-card");
+  await waitCard(page, 4);
   same((await deckAt(page)).n, "4", "back to the deck on the card you were on");
   same((await reading(page))?.learn?.id, cards[3].id, "the card's kept in zi-reading");
   // A bookmark on the card, kept.

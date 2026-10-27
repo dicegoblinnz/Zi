@@ -88,25 +88,20 @@ One role or one school per Title. *Archmage* is too wide, so pick the school you
 
 ## Step 2: Traits {#s-traits}
 
-A **trait** is something always true of you, with one effect, like *Silent Step: +1 to moving unseen*. You pick yours from the list below, and they aren't tied to either Title. A permission is a step on any roll it fits, but a trait only does what its line says.
+A **trait** is something always true of you, with one effect, like *Unyielding: the first Hurt you take each scene doesn't move your wound die*. You've got two. You pick them from the list below, and they aren't tied to either Title.
 
-:::note
-Traits are being reworked. Until that's done, you've got two.
-:::
+A trait's never a step. It doesn't go on a set action, you can't bring one in for Aura, and you never have to decide to use it. It just does what its line says, every time it applies. Your steps come from your Titles, your permissions and what you carry.
 
-Traits are free, and they don't cost an action unless the trait says so. Every trait has a **type** and an **effect**, and you write them down together.
+Every trait has a **type** and an **effect**, and you write them down together.
 
 ### Trait types {#trait-types}
 
--   **Passive.** It's always on, with no cost and no trigger.
--   **Triggered.** It fires by itself when something specific happens, and the trait says what.
--   **Invoked.** It costs Aura to fire, as the trait says. None of the traits below is Invoked, so if you want one that costs something every time it fires, you'll have to write it yourself.
--   **Once per scene.** It fires once per scene for free, and not again until the next one. A few say *per person*, which means once for each person in the scene.
--   **Once per downtime.** It fires once between sessions.
+-   **Passive.** It's always on.
+-   **Triggered.** It fires by itself when something specific happens, and the trait says what. A few only fire the first time each scene.
 
-### The 49 traits {#the-48-traits}
+### The 47 traits {#the-48-traits}
 
-Pick two, or write your own in the same shape: a name, a type and one line. You'll pick up more in play.
+Pick two, or write your own in the same shape: a name, a type and one line. Whatever you write, it can't be a step, and it can't be something you choose to fire. You'll pick up more in play.
 
 Some traits change a number on your sheet. *Unyielding* means the first Hurt each scene doesn't move your wound die, *Prepared* lets you carry one more utility item, and *Light on my Feet* adds 2 to your stride (how far you move each round for free). If you write your own, say which number it changes.
 
@@ -115,18 +110,18 @@ Some traits change a number on your sheet. *Unyielding* means the first Hurt eac
 | Trait | Type | Effect |
 | --- | --- | --- |
 | **Unyielding** | Passive | The first Hurt you take each scene doesn't move your wound die. |
-| **Battle Focus** | Once per scene | Gain 3 Aura. |
+| **Battle Focus** | Triggered | The first time your Aura runs out each scene, gain 3 Aura. |
 | **Killer Instinct** | Triggered | Gain 1 Aura when you take a threat down. |
-| **Duelist** | Passive | +1 step when fighting one-on-one. |
-| **Pack Fighter** | Passive | +1 step when fighting alongside an ally. |
-| **Never Unarmed** | Once per scene | You have a weapon on you, whatever anyone searched. No Aura, no roll. |
-| **Marksman's Eye** | Passive | +1 step with ranged weapons if you haven't moved this round. |
-| **Ready Hand** | Passive | Once per round, pulling something out of your bag costs no action. |
-| **Tenacious** | Once per scene | When a Hurt would make you Blaze, it doesn't. Take the blow somewhere else, or shrug it off. |
-| **Field Dressing** | Once per scene | Spend your action to step the wound die of someone within reach down a size. No roll, and no Aura. |
-| **Healer's Hands** | Once per scene, per person | Spend your action to step the wound die of someone within reach down a size. No roll, and no Aura. You can do it once for each person in the scene, yourself included. |
-| **Tend the Crew** | Once per scene | When the scene ends, everyone in the crew who was in it rolls two Confidence dice for their rest, and the best counts. |
-| **Predator's Eye** | Once per scene | Ask the GM whether a threat has a weak point, and where. She answers honestly. |
+| **Duelist** | Passive | When you're fighting someone one-on-one, you win ties without paying Aura. |
+| **Pack Fighter** | Passive | When a friend's action and yours go into the same roll, it wins ties without paying Aura. |
+| **Never Unarmed** | Passive | You've always got a knife hidden on you, whatever anyone searched. |
+| **Marksman's Eye** | Passive | If you haven't moved this round, your shots win ties without paying Aura. |
+| **Ready Hand** | Passive | Once a round, pulling something out of your bag costs no action. |
+| **Tenacious** | Triggered | The first time each scene a Hurt would make you Blaze, it doesn't, and your wound die stays at d12. |
+| **Field Dressing** | Passive | Your first quick heal each scene costs no Aura. |
+| **Healer's Hands** | Passive | Your quick heals cost no Aura, once a scene for each person, yourself included. |
+| **Tend the Crew** | Triggered | When a scene you were in ends, everyone in the crew who was in it rolls two Confidence dice for their rest, and the best counts. |
+| **Predator's Eye** | Triggered | The first time you go at a threat each scene, the GM tells you whether it's got a weak point, and where. |
 
 #### Movement {#movement}
 
@@ -134,62 +129,60 @@ Some traits change a number on your sheet. *Unyielding* means the first Hurt eac
 | --- | --- | --- |
 | **Light on my Feet** | Passive | +2 units of movement per round. |
 | **Sure-Footed** | Passive | Ignore difficult ground. |
-| **Fast** | Once per scene | Take a Move action without spending an action. |
-| **Acrobatic** | Once per scene | Treat a fall as a safe landing, and move 3 units immediately after. |
-| **Silent Step** | Passive | Your movement makes no sound. +1 step to moving unseen. |
-| **Sprinter** | Once per scene | Your Move action's die counts as its highest face. (Not a top face: no Aura.) |
-| **Nimble** | Passive | +1 step to escape a grapple or restraint. |
-| **Second Wind** | Once per scene | Take an extra action. |
-| **Lucky** | Once per scene | Reroll one of your dice. Only one die: it doesn't reroll a full split. |
-| **Focused** | Once per scene | After you roll, one of your dice counts as its highest face. (Not a top face: no Aura.) |
+| **Fast** | Triggered | In the first round of every scene, you get a Move action that costs no action. |
+| **Acrobatic** | Triggered | The first time you fall each scene, it's a safe landing, and you move 3 units straight after. |
+| **Silent Step** | Triggered | Coming out of hiding gives you 1 Aura, as well as your extra action. |
+| **Sprinter** | Passive | When you take a Move action, your stride counts twice that round. |
+| **Nimble** | Passive | *Grabbed* and *Pinned* fade two sizes a round on you, not one. |
+| **Second Wind** | Triggered | The first time your wound die steps up each scene, you get an extra action. |
+| **Lucky** | Triggered | The first time each scene you roll a 1 on one of your own dice, roll it again. |
+| **Focused** | Triggered | On your first roll each scene, your lowest die counts as its highest face. It isn't a top face, so there's no Aura for it. |
 
 #### Social {#social}
 
 | Trait | Type | Effect |
 | --- | --- | --- |
-| **Reputation Precedes Me** | Passive | +1 step to any social roll where the target has heard of you. No cost. |
-| **Silver Tongue** | Once per scene | Turn a failed social roll into a success. |
-| **Charming** | Once per scene | Add a temporary bond thread to one of your bonds for the scene. |
-| **Commanding Presence** | Once per scene | A subordinate follows one order without question. |
-| **Cold Reader** | Once per scene | Ask the GM one true thing about someone's mood. She answers honestly. |
-| **Style** | Passive | Pick a signature look. When it fits the scene: +1 step, and you start the scene a size up on Confidence. |
-| **Showstopper** | Once per scene | Draw a crowd's attention where you want it. |
-| **Intimidating Presence** | Passive | +1 step to threats and coercion. |
-| **Diplomat** | Once per scene | Two hostile parties will hear you out before acting. |
-| **Host** | Once per downtime | Someone you've hosted owes you a small favour. |
+| **Reputation Precedes Me** | Passive | In a scene where people know who you are, you start a size up on Confidence. |
+| **Silver Tongue** | Triggered | The first social roll you fail each scene succeeds anyway. |
+| **Charming** | Triggered | The first time each scene you win a social roll against someone you haven't got a bond with, you've got a bond thread with them for the scene. |
+| **Commanding Presence** | Passive | Anyone who answers to you follows your orders without a roll, unless the order would get them killed. |
+| **Cold Reader** | Triggered | The first time you speak with someone in a scene, the GM tells you their mood in a word. |
+| **Style** | Passive | Clothes that fit the scene start you two sizes up on Confidence, not one. |
+| **Showstopper** | Passive | While a crowd's watching you, a friend in it can go into hiding without a roll. |
+| **Intimidating Presence** | Passive | When you're threatening someone, you win ties without paying Aura. |
+| **Diplomat** | Passive | Two sides about to fight always hear you out first, so nobody starts it before you've had your say. |
+| **Host** | Triggered | Every downtime, someone you've hosted owes you a small favour. |
 
 #### Mental {#mental}
 
 | Trait | Type | Effect |
 | --- | --- | --- |
-| **Iron Will** | Passive | You start every scene a size up on Confidence. +1 step to mental rolls. |
-| **Steady Hands** | Passive | +1 step to Defend or Confidence when you've had a moment to prepare. |
-| **Hard to Lie To** | Once per scene | Ask the GM if someone's lying. She answers honestly. |
-| **Perfect Recall** | Once per scene | Recall a detail from a scene you were in. The GM tells you it exactly, and it counts as a permission once. |
-| **Quick Study** | Once per scene | The GM reveals one of a threat's hidden tags. No roll. |
-| **Prepared Mind** | Once per scene | Reach back to something small you prepared: a rope left on the wall, a note tucked where you'd need it. It was there all along. |
-| **Cool Under Pressure** | Once per scene | Your Confidence comes back up three sizes, as far as where it started the scene. |
+| **Iron Will** | Passive | You start every scene a size up on Confidence. |
+| **Steady Hands** | Passive | Being shaken doesn't stop you: at d2 you can still act at what the scene's about without spending Resolve. |
+| **Hard to Lie To** | Triggered | The first time each scene someone lies to your face, the GM tells you it's a lie. |
+| **Perfect Recall** | Passive | You remember everything you've seen and heard, and the GM tells you anything from a scene you were in, exactly as it was. |
+| **Quick Study** | Triggered | The first time you face a threat each scene, the GM tells you one of its hidden tags. |
+| **Cool Under Pressure** | Triggered | The first time you're shaken each scene, your Confidence comes straight back to where it started the scene. |
 | **Deep Well** | Passive | Your Aura maximum is one higher. |
 
 #### Preparation {#preparation}
 
 | Trait | Type | Effect |
 | --- | --- | --- |
-| **I Have the Thing** | Once per scene | Pull out a utility item you packed all along, wherever you are. Cross off a purse of gold for it. |
+| **I Have the Thing** | Passive | Your bag's always got the plain utility item you need. Pulling it out still takes your action, and you cross off a purse of gold for it. |
 | **Prepared** | Passive | You can carry one more utility item. |
-| **Contingency** | Once per downtime | Write a plan down in secret. Once, in any later scene, reveal it: it was in place all along. |
-| **Cache** | Once per downtime | Retrieve any plain item you like, equipment or utility, from wherever you've stashed it. |
-| **Tireless** | Once per downtime | Take one extra downtime slot. |
-| **Scout Ahead** | Once per downtime | Add 3 ground tags to a scene in a place you've seen before. |
-| **Network** | Once per downtime | Secure a meeting with anyone. When you first take it, you also write 3 new bond threads, on bonds you already have. |
-| **Tactical Mind** | Once per scene | Point out something useful here that nobody else noticed. If it could be here, it is: a permission for the crew, this scene. No roll. |
+| **Cache** | Triggered | At the start of every downtime, take any plain item you like from your stash, equipment or utility. |
+| **Tireless** | Passive | You get three downtime slots, not two. |
+| **Scout Ahead** | Triggered | The first scene each session in a place you've seen before has 3 more ground tags, ones you spotted last time. |
+| **Network** | Triggered | When you take it, write 3 new bond threads, on bonds you've already got. |
+| **Tactical Mind** | Triggered | The first time you look a place over each scene, the GM tells you one useful thing about it that nobody else has noticed. |
 
 :::example[A trait firing at the table]
-Dorrie's at a noble's table, trying to talk her way into the vault room. The noble's steward is cold and won't budge, so Dorrie's player has a look at her sheet.
+Dorrie's at a noble's table, trying to talk her way into the vault room. The noble's steward is cold and won't budge, and the moment she speaks to him, *Cold Reader* fires: the GM tells her his mood in a word: frightened. Dorrie guesses it's his master he's scared of, and leans on that.
 
-*Cold Reader* is once per scene, so she fires it and asks the GM one true thing about his mood. The GM says he's frightened of his master, and Dorrie leans on that. It's her Talk: her first Title, *read a room in a glance* and *make a lie sound like old news*, with the action, 4 steps. *Talk my way past a door* fits too, but it isn't on her Talk, so she brings it in for 1 Aura. That's 5 steps, a d10. She rolls a 6 and the steward's d8 rolls a 3, so she's in.
+It's her Talk: her first Title, *read a room in a glance* and *make a lie sound like old news*, with the action, 4 steps. *Talk my way past a door* fits too, but it isn't on her Talk, so she brings it in for 1 Aura. That's 5 steps, a d10. She rolls a 6 and the steward's d8 rolls a 3, so she's in.
 
-Then she pushes her luck and asks for the key. This time it's just her Talk, a d8, and it rolls a 2 against his 7. She fires *Silver Tongue* (it's once per scene too) and the failed roll becomes a success. The steward hands her the key and never quite knows why.
+Then she pushes her luck and asks for the key. This time it's just her Talk, a d8, and it rolls a 2 against his 7. It's the first social roll she's failed this scene, so *Silver Tongue* fires and it succeeds anyway. The steward hands her the key and never quite knows why.
 :::
 
 ## Step 3: Permissions {#s-writing-permissions}
@@ -202,7 +195,7 @@ A **permission** is something your character can do, or something they're good a
 | --- | --- | --- |
 | Title | who you are, a name | *The best cat burglar in the city* |
 | Permission | something you can do or you're good at, and a step when it fits | *pick a mechanical lock* · *Deceptive* |
-| Trait | something always true of you, with one effect | *Silent Step: +1 to moving unseen* |
+| Trait | something always true of you, with one effect, and never a step | *Unyielding: the first Hurt each scene doesn't move your wound die* |
 | Catch | trouble the GM can run with, from an attuned thing or a Scar | *Wanted* · *a spear through the shoulder* |
 
 If what you've written reads like a name, like *Combat master*, it's a Title. If it's something you can do, like *pick a mechanical lock*, or one word for what you're good at, like *Deceptive*, it's a permission. A trait comes off the list in Step 2, or it's one you've written in the same shape, and it does exactly what its line says.
@@ -289,32 +282,32 @@ A few to start from, sorted by what they're for. The [Title ideas](#s-title-idea
 
 Now fill in your [set actions](#s-set-actions). **Defend**, **Fight**, **Move**, **Sneak**, **Study** and **Talk** are on every sheet, and you add your own for the things you do all the time, like Locks or Ward. Defend is how you keep from getting hit, by dodging, parrying, a shield or armour, and it's what you roll when the telegraphs land. If you'd rather keep shooting apart from swinging, split Fight into Fight and Shoot.
 
-Go down your sheet one line at a time: your two Titles, your six permissions and your traits. For each one, ask whether it'd help nearly every time you do that set action. If it would, it goes on. A Title or a trait can go on as many set actions as it fits like that, but **a permission goes on two at most**, so put each one on the two where it'll help most, and Defend counts as one of them. Lines from both Titles can share one. Then count it up: 1 for the action and 1 for every line, and write the die next to it. If nothing fits a set action, it's 1 step, a d2.
+Go down your sheet one line at a time: your two Titles and your six permissions. For each one, ask whether it'd help nearly every time you do that set action. If it would, it goes on. A Title can go on as many set actions as it fits like that, but **a permission goes on two at most**, so put each one on the two where it'll help most, and Defend counts as one of them. Your traits don't go on set actions at all, because a trait's never a step. Lines from both Titles can share one. Then count it up: 1 for the action and 1 for every line, and write the die next to it. If nothing fits a set action, it's 1 step, a d2.
 
 :::rule
-**A set action's steps:** 1 for the action, and 1 for every line on it. A permission goes on two set actions at most, and anything else that fits a roll costs 1 Aura to bring in.
+**A set action's steps:** 1 for the action, and 1 for every line on it. Titles go on every set action they fit, a permission on two at most and a plain item on one. Anything else that fits a roll costs 1 Aura to bring in.
 :::
 
 | Bram's set action | What's on it | Steps | Die |
 | --- | --- | --- | --- |
-| Fight | his first Title, *hold the line*, his war hammer | 4 | d8 |
+| Fight | his first Title, *hold the line*, *fight with a war hammer* | 4 | d8 |
 | Defend | his first Title, his plate armour, his shield | 4 | d8 |
-| Talk | his second Title, *bark an order that gets obeyed*, Intimidating Presence | 4 | d8 |
+| Talk | his second Title, *bark an order that gets obeyed* | 3 | d6 |
 | Lift and carry | his first Title, *lift what two men can't* | 3 | d6 |
 | Study | *spot who's in charge* | 2 | d4 |
 | Move and Sneak | nothing fits nearly every time | 1 | d2 |
 
-*Bark an order that gets obeyed* is on Bram's second Title, *A sergeant who lost his stripes*, so that's the Title his Talk counts. That Title's a Leader, and when he leads, he builds the order from his Talk like any other roll. His war hammer's in nearly every fight he gets into, so it goes on Fight too. His plate armour and his shield are plain armour, so they're two lines on his Defend, and his first Title fits it nearly every time as well. He leaves *guard one person* off, because it only fits now and then, and brings it in for 1 Aura when it does.
+*Bark an order that gets obeyed* is on Bram's second Title, *A sergeant who lost his stripes*, so that's the Title his Talk counts. That Title's a Leader, and when he leads, he builds the order from his Talk like any other roll. His war hammer's attuned, and its *fight with a war hammer* fits nearly every fight he gets into, so it goes on Fight too. His plate armour and his shield are plain armour, so they're two lines on his Defend, and that's the one set action each of them goes on. His first Title fits his Defend nearly every time as well. He leaves *guard one person* off, because it only fits now and then, and brings it in for 1 Aura when it does. His traits, Unyielding and Intimidating Presence, don't go on anything. They just do what they say.
 
-Make a set action of your own when a few of your lines all point at one thing you do a lot, the way Bram's first Title and *lift what two men can't* make Lift and carry. You don't have to fill every set action, and you'll come back to them as you pick items and attune things in the next two steps. An item goes on every set action it fits nearly every time, and an attuned thing's permissions go on two at most, like any other permission. How a roll starts from your set action is in [Set actions](#s-set-actions).
+Make a set action of your own when a few of your lines all point at one thing you do a lot, the way Bram's first Title and *lift what two men can't* make Lift and carry. You don't have to fill every set action, and you'll come back to them as you pick items and attune things in the next two steps. A plain item goes on one set action, the one where it'll help most, and an attuned thing's permissions go on two at most, like any other permission. How a roll starts from your set action is in [Set actions](#s-set-actions).
 
 :::example[A set action of your own]
-Two Grows later, Bram's added *fight two at once* and *fight in tight spaces* to his first Title. They don't fit every fight, so he makes a set action for the thing he does best, Hold the door: his first Title, *hold the line*, both new permissions and his hammer. In a doorway with two guards coming, that's 6 steps off one action, a d12. *Hold the line*'s on his Fight already, so Hold the door is its second set action, and that's as far as it goes.
+Two Grows later, Bram's added *fight two at once* and *fight in tight spaces* to his first Title. They don't fit every fight, so he makes a set action for the thing he does best, Hold the door: his first Title, *hold the line*, both new permissions and *fight with a war hammer*. In a doorway with two guards coming, that's 6 steps off one action, a d12. *Hold the line* and *fight with a war hammer* are on his Fight already, so Hold the door is the second set action for each of them, and that's as far as they go.
 :::
 
 ## Step 5: Items and what you carry {#s-items}
 
-**Plain items are just what they are.** A sword's a sword. It counts as a line when it fits, so it's a step on your roll, and it lets you do what a sword does. A rope lets you climb down a well, and a lantern lets you see what's at the bottom.
+**Plain items are just what they are.** A sword's a sword. It's a line on the one set action you put it on, so it's a step on your roll there, and it lets you do what a sword does. Anywhere else it fits, it's 1 Aura to bring in. A rope lets you climb down a well, and a lantern lets you see what's at the bottom.
 
 **Each piece of plain armour you wear is a line on your Defend**, and so is a shield or a helmet, the way a sword's a line on Fight. Bram wears plate armour and carries a shield, so that's two lines on his Defend, and with his first Title and the action it's 4 steps, a d8. Write each piece's quality beside it, Common, Fine or Masterwork, with a box for every blow it can take for you: 1, 2 or 3. What you start with is Common, and one piece can be Fine, like Bram's plate. How armour works, and breaking it, is in [Armour](#s-armour).
 
@@ -353,11 +346,11 @@ The trail runs into a cave. Her utility's full, so she puts the snare kit away i
 **Attuned:** The ring that was his, Awakened. *Bear a family seal.* **Catch:** *Marked.* *Pass as a Vane.*
 :::
 
-That's all an item is: one line, and for an attuned thing, its permissions. There aren't any hidden properties, and there's no "+1 to hit". A plain sword counts 1 when it fits, a piece of plain armour is a line on your Defend with its boxes, and rope lets you use rope.
+That's all an item is: one line, and for an attuned thing, its permissions. There aren't any hidden properties, and there's no "+1 to hit". A plain sword counts 1 on the set action it's on, a piece of plain armour is a line on your Defend with its boxes, and rope lets you use rope.
 
 ### Weapons and their properties {#s-weapon-props}
 
-A weapon's a plain item, so it counts 1 on a roll it fits, like anything else. Its **properties** say what it lets you do that bare hands can't. They're what make a spear a spear, and they come free with the weapon.
+A weapon's a plain item, so it counts 1 on the set action it's on, like anything else. Its **properties** say what it lets you do that bare hands can't. They're what make a spear a spear, and they come free with the weapon.
 
 | Property | What it does |
 | --- | --- |
@@ -446,7 +439,7 @@ The corridor's filling up with Iron Wardens. Vesk pulls a *smoke bomb* from her 
 
 She throws it and the GM marks the smoke on the map. Everything the Wardens aim into it comes in a step weaker. Bram drags Isolde out of the corridor, Vesk follows, and the smoke bomb gets crossed off her sheet.
 
-Later in the same fight the smoke's gone and Vesk could use another, but there's nobody in a vault to buy one from. If she had *I Have the Thing*, she'd cross off her purse of gold and pull out a second smoke bomb she'd packed all along.
+Later in the same fight the smoke's gone and Vesk could use another, but there's nobody in a vault to buy one from. If she had *I Have the Thing*, she'd cross off her purse of gold and spend her action pulling a second smoke bomb out of her bag, because she'd packed it all along.
 :::
 
 ### Keepsakes: 10 {#keepsakes-10}
@@ -514,7 +507,7 @@ A **Catch** is trouble that comes with an attuned thing. (The other Catches on y
 | 12 | **Delicate** | A 1 on any die where it's used makes it dormant until the end of the scene. |
 
 :::example[Wren's longbow]
-Wren attunes her longbow when she makes her character. It's Awakened with one permission, *shoot a longbow*. She gives it its Catch now, *Wanted* (the Duke's foresters want it back, and they know she's got it), and that buys it a second permission: *hit anything I can see*. Both go on her Fight, with her first Title and Marksman's Eye, so with the action that's 5 steps, a d10.
+Wren attunes her longbow when she makes her character. It's Awakened with one permission, *shoot a longbow*. She gives it its Catch now, *Wanted* (the Duke's foresters want it back, and they know she's got it), and that buys it a second permission: *hit anything I can see*. Both go on her Fight, with her first Title, so with the action that's 4 steps, a d8. Each of them could go on one more set action, but nothing else she does fits them nearly every time.
 
 In the market at Thornby, Wren's player lets *Wanted* bite: one of the foresters knows the bow, and the GM has him follow her out of the market with two friends. Wren takes 1 Aura.
 
@@ -534,6 +527,8 @@ Your **wound die** is how hurt you are, and it starts at **d2**. Every Hurt you 
 ### Bonds and threads {#s-bonds}
 
 A **bond** is usually a person who matters to your character, in the crew or out of it. It can be a faction, a place or a cause too. Each **thread** is one truth between you, and it's one of two kinds. A **bond thread** is something good, like a rescue, a secret you keep for each other or a shared past. A **hostile thread** is something that's gone bad, like a debt you can't pay, a grudge or a betrayal. You can have both kinds with the same person, and as many threads as the story gives you. With no thread at all, you're neutral.
+
+**Each person's one bond.** Write their name once, and every thread you've got with them goes under it. A second thread with Dorrie goes under Dorrie, not on a new line with her name on it again.
 
 Any thread can be **strained**, which means it's nearly snapped. So a single thread is always one of these: a bond, a bond strained, a hostile thread strained, or hostile, and with no thread you're neutral.
 
@@ -679,7 +674,7 @@ Next round she goes for the cell door with her Locks, a d10, and rolls 3 against
 
 ### Where it starts {#starting-confidence}
 
-Clothes that fit the scene start you a size up, so when Vesk walks into a noble house in a servant's uniform, she's on d8. A trait that says so, like *Iron Will*, starts you a size up too, and so does the Confidence Boon. The Confidence Burden starts you a size down.
+Clothes that fit the scene start you a size up, so when Vesk walks into a noble house in a servant's uniform, she's on d8. A trait that says so, like *Iron Will*, starts you a size up too, and so does the Confidence Boon, and with *Style* the right clothes are two sizes up, not one. The Confidence Burden starts you a size down.
 
 ### How it swings {#how-confidence-swings}
 
@@ -808,8 +803,10 @@ For the second Title he asks himself where she learned it all, and writes *Raise
 
 He picks two from the list:
 
--   **Silent Step** (Passive). Her movement makes no sound, and she gets +1 step to moving unseen.
+-   **Silent Step** (Triggered). Coming out of hiding gives her 1 Aura, as well as her extra action.
 -   **Light on my Feet** (Passive). +2 units of movement, so her stride's 5.
+
+Neither of them goes on a set action. They just do what they say.
 
 ### Step 3: Permissions {#step-3-permissions}
 
@@ -826,7 +823,7 @@ He fills in her set actions with what she's got so far:
 
 | Set action | What's on it | Steps | Die |
 | --- | --- | --- | --- |
-| Sneak | her first Title, *move unseen*, Silent Step | 4 | d8 |
+| Sneak | her first Title, *move unseen* | 3 | d6 |
 | Move | her first Title, *run the rooftops* | 3 | d6 |
 | Locks | her first Title, *pick a mechanical lock*, *know how a lock's built* | 4 | d8 |
 | Defend | nothing yet | 1 | d2 |
@@ -834,7 +831,7 @@ He fills in her set actions with what she's got so far:
 | Study | nothing fits nearly every time | 1 | d2 |
 | Talk | nothing fits nearly every time | 1 | d2 |
 
-Locks is her own, for the thing she does all the time, and *know how a lock's built* sits on it beside her first Title's lines. Her second Title and *find a buyer for anything* don't fit any of these nearly every time, so they stay off, and when one of them fits she'll bring it in for 1 Aura. None of her permissions is on more than one set action, so the limit of two doesn't come into it yet. Defend and Locks grow in Step 5, and Move in Step 6. Her Sneak's what she hides with, so when it gets her into hiding, that d8 goes in her shadow pool.
+Locks is her own, for the thing she does all the time, and *know how a lock's built* sits on it beside her first Title's lines. Her second Title and *find a buyer for anything* don't fit any of these nearly every time, so they stay off, and when one of them fits she'll bring it in for 1 Aura. None of her permissions is on more than one set action, so the limit of two doesn't come into it yet. Defend and Locks grow in Step 5, and Move in Step 6. Her Sneak's what she hides with, so when it gets her into hiding, that d6 goes in her shadow pool.
 
 ### Step 5: What she carries {#step-4-items-three}
 
@@ -847,7 +844,7 @@ Locks is her own, for the thing she does all the time, and *know how a lock's bu
 
 She's got one thing to attune, and he picks her grappling line. It starts at Awakened, with one permission: *climb or swing anywhere you can throw a hook*.
 
-He could give it its Catch now for a second permission, but there's no trouble he wants on it yet, so he leaves it. The line goes on Move: 4 steps, a d8. It doesn't count towards what she carries, and it can't be broken.
+He could give it its Catch now for a second permission, but there's no trouble he wants on it yet, so he leaves it. Its permission goes on Move: 4 steps, a d8. It doesn't count towards what she carries, and it can't be broken.
 
 ### Step 7: Aura, Resolve, wounds and bonds {#step-6-bonds}
 
@@ -874,7 +871,7 @@ Her threads with Dorrie and Bram go on their sheets as well, in her words. The r
 -   *Isolde: she stole the book that started all this.* (Isolde's, hostile)
 -   *Wren: I owe her for the night she hid me from the watch.* (Wren's, bond)
 
-That's six threads on five bonds. Two of them are with Dorrie, and Isolde's is hostile.
+That's six threads on five bonds. Both of Dorrie's go under her name, on the one bond, and Isolde's is hostile.
 
 ### Step 9: Aspiration {#step-8-aspiration}
 
@@ -887,11 +884,11 @@ That's six threads on five bonds. Two of them are with Dorrie, and Isolde's is h
 
 **Archetype:** Shadow, twice. The dice she hides with go in her shadow pool, and 1 Aura on her roll to hide or a shadow die is +3.
 
-**Traits:** Silent Step (Passive) · Light on my Feet (Passive).
+**Traits:** Silent Step (Triggered) · Light on my Feet (Passive).
 
 **Permissions:** *move unseen*, *run the rooftops*, *pick a mechanical lock* (first Title) · *know how a lock's built*, *fight dirty with a knife*, *find a buyer for anything* (second Title).
 
-**Set actions:** Sneak 4 (d8) · Move 4 (d8) · Locks 5 (d10) · Defend 2 (d4) · Fight 2 (d4) · Study 1 (d2) · Talk 1 (d2).
+**Set actions:** Sneak 3 (d6) · Move 4 (d8) · Locks 5 (d10) · Defend 2 (d4) · Fight 2 (d4) · Study 1 (d2) · Talk 1 (d2).
 
 **Carries:** worn leathers (equipment, 1 of 3) · a purse of gold, a smoke bomb, a perfect set of picks (utility, 3 of 3) · the first coin she ever stole (keepsake) · an empty bag (0 of 10).
 

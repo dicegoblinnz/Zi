@@ -25,6 +25,7 @@ import rehypeStringify from "rehype-stringify";
 import { visit, SKIP } from "unist-util-visit";
 import { diceLabel, stepsToDice } from "../src/companion/dice.js";
 import { threadNote } from "../src/companion/threads.js";
+import { traitInfo } from "../src/companion/grow.js";
 import { CARD_WORDS, newestChange, reachOf, readCards, staleCards } from "./learn.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -358,17 +359,15 @@ function sheetFrom(name, titleText, body, block, ctx) {
     };
   });
 
+  // Traits are passive (27 Oct 2026): never a step, so never a line on a set
+  // action. Each one's type has to be the list's.
   const traits = dropStop(field.Traits).split(" · ").filter(Boolean).map((s) => {
     const t = s.match(/^(.+?) \(([^)]+)\)$/);
     const traitName = curly(t ? t[1] : s);
     const rule = ctx.traits[traitName];
     if (!rule) warn(`there's no trait called ${traitName} in the list`);
-    const step = /\+1 step\b/.test(rule?.text ?? "");
-    return {
-      name: traitName, type: t?.[2] ?? rule?.type ?? "", html: rule?.html ?? "", step,
-      aura: Number(rule?.text.match(/\bGain (\d+) Aura\b/)?.[1] ?? 0),
-      key: line("trait", traitName, { step }),
-    };
+    else if (t && t[2] !== rule.type) warn(`${traitName} says (${t[2]}), but it's ${rule.type} in the list`);
+    return { name: traitName, type: t?.[2] ?? rule?.type ?? "", html: rule?.html ?? "", ...traitInfo(rule?.text) };
   });
 
   // What they carry: equipment and utility (n of 3), a keepsake, and the bag.
@@ -423,8 +422,7 @@ function sheetFrom(name, titleText, body, block, ctx) {
     let m;
     if ((m = text.match(/^(?:her|his|their) (\w+) Title$/))) return titles[ORDINAL[m[1]]]?.key;
     if ((m = text.match(/^\*([^*]+)\*$/))) return lines.find((l) => (l.kind === "permission" || l.kind === "attuned") && l.label === plain(m[1]))?.key;
-    const trait = lines.find((l) => l.kind === "trait" && l.label === curly(text));
-    if (trait) return trait.key;
+    if (traits.some((t) => t.name === curly(text))) return "trait";
     if ((m = text.match(/^(?:her|his|their) (.+)$/))) {
       const core = plain(m[1]).toLowerCase();
       const thing = attuned.find((a) => a.name.toLowerCase().includes(core));
@@ -443,7 +441,8 @@ function sheetFrom(name, titleText, body, block, ctx) {
     const on = [];
     for (const text of s[4] ? commaList(s[4]) : []) {
       const key = lineFor(text);
-      if (key) on.push(key);
+      if (key === "trait") warn(`${text} is a trait, on ${s[1]}, and a trait's never a step, so it never goes on a set action`);
+      else if (key) on.push(key);
       else warn(`can't tell what "${text}" is, on ${s[1]}`);
     }
     const die = diceLabel(stepsToDice(steps));
@@ -454,6 +453,13 @@ function sheetFrom(name, titleText, body, block, ctx) {
 
   // Defend is a set action like the rest, and every sheet has one.
   if (!actions.some((a) => a.name === "Defend")) warn("there's no Defend set action");
+  // A permission, on a Title or an attuned thing, goes on two set actions at
+  // most, and a plain thing they carry goes on one (27 Oct 2026).
+  for (const l of lines) {
+    const on = actions.filter((a) => a.lines.includes(l.key)).map((a) => a.name);
+    const most = l.kind === "kit" ? 1 : l.kind === "permission" || l.kind === "attuned" ? 2 : Infinity;
+    if (on.length > most) warn(`${l.label} is on ${on.join(", ")}, and ${l.kind === "kit" ? "a plain thing goes on one set action" : "a permission goes on two at most"}`);
+  }
 
   // Armour: every piece of equipment on Defend, with the quality it's written
   // with, and its boxes from the table in Quality.
@@ -851,8 +857,16 @@ function traitEffects(text) {
   if (move) e.stride = Number(move[1]);
   if (/\bcarry one more utility item\b/i.test(text)) e.utility = 1;
   if (/\bstart every scene a size up on Confidence\b/i.test(text)) e.confidence = 1;
+  // Style: clothes that fit start you two sizes up, not one.
+  if (/\bclothes that fit the scene start you two sizes up\b/i.test(text)) e.dressed = 1;
+  // Tireless: three downtime slots, not two.
+  if (/\bthree downtime slots\b/i.test(text)) e.slots = 1;
   return e;
 }
+
+// A trait's Passive or Triggered (27 Oct 2026), and what else the phone needs
+// to know about it is traitInfo, in src/companion/grow.js.
+const TRAIT_TYPES = ["Passive", "Triggered"];
 
 function buildFrom(rulesDoc, ideasDoc, archetypes, inline, warn) {
   const ideas = [];
@@ -885,10 +899,10 @@ function buildFrom(rulesDoc, ideasDoc, archetypes, inline, warn) {
       kind = curly(m[1]);
       continue;
     }
-    traits.push({
-      name: curly(m[2]), type: m[3], group: kind, html: inline(m[4]), step: /\+1 step\b/.test(m[4]),
-      aura: Number(m[4].match(/\bGain (\d+) Aura\b/)?.[1] ?? 0), effects: traitEffects(m[4]),
-    });
+    // A trait's passive (27 Oct 2026): Passive or Triggered, and never a step.
+    if (!TRAIT_TYPES.includes(m[3])) warn(`the trait ${m[2]} is ${m[3]}, and a trait's ${TRAIT_TYPES.join(" or ")}`);
+    if (/\bsteps?\b/i.test(m[4].replace(/\bsteps? (up|down)\b/gi, ""))) warn(`the trait ${m[2]} talks about steps, and a trait's never a step`);
+    traits.push({ name: curly(m[2]), type: m[3], group: kind, html: inline(m[4]), ...traitInfo(m[4]), effects: traitEffects(m[4]) });
   }
   const known = new Set(traits.map((t) => t.name));
   for (const idea of ideas) for (const t of idea.traits) if (!known.has(t)) warn(`the ${idea.name} Title idea suggests ${t}, which isn't in the traits list`);

@@ -1,4 +1,4 @@
-// Downtime on the phone: two slots, and what they buy lands on the sheet when
+// Downtime on the phone: two slots (three with Tireless), and what they buy lands on the sheet when
 // the player finishes, with one undo for the lot. The choices are Downtime's:
 // face a pressure, recover, grow, or put a slot toward the crew. Swapping a
 // permission, mending a strained bond thread and marking that you did right
@@ -9,7 +9,7 @@
 
 import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
 import { MAX_PERMS, attunedRoom } from "./grow.js";
-import { threadKey, threadState } from "./threads.js";
+import { bondKey, threadKey, threadState } from "./threads.js";
 import { isBroken, keyOf, many, mend, nameOf, pieceAt, tickedOf, worn, yours } from "./armour.js";
 
 const CHOICES = [
@@ -73,7 +73,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     return {
       pressure: { k, text: "" }, mend: { k, key: crossed(c, s)[0]?.key ?? "" },
       perm: { k, t: firstTitle, text: "", on: [] },
-      trait: { k, name: "", own: false, oname: "", otype: "", otext: "", on: [] },
+      trait: { k, name: "", own: false, oname: "", otype: "Passive", otext: "" },
       asp: { k, on: [], dice: null, opp: null, real: false, pads: [], padOpp: "", rerolls: 0, tie: false, arch: "", text: "", perm: "", tOn: [], pOn: [] },
       thread: { k, person: "", text: "", tkind: "bond" }, get: { k, text: "", where: "bag" },
       att: { k, a: firstThing, text: "", on: [], catch: "", burden: "", up: false }, party: { k, text: "" },
@@ -124,8 +124,8 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     const asp = e.asp;
     const total = 1 + sl.on.length;
     const dice = stepsToDice(total);
-    const groups = [["title", "Titles"], ["permission", "Permissions"], ["attuned", "Attuned"], ["trait", "Traits"], ["kit", "What you carry"]].map(([kind, title]) => {
-      const list = c.lines.filter((l) => l.kind === kind && (kind !== "trait" || l.step));
+    const groups = [["title", "Titles"], ["permission", "Permissions"], ["attuned", "Attuned"], ["kit", "What you carry"]].map(([kind, title]) => {
+      const list = c.lines.filter((l) => l.kind === kind);
       return list.length ? `<h3>${title}</h3>${list.map((l) => `<button type="button" class="cc-line" data-act="dt" data-do="on" data-s="${i}" data-f="on" data-v="${l.key}"${pressed(sl.on.includes(l.key))}${off(sl.dice)}><span class="tick" aria-hidden="true"></span><span>${lineLabel(l)}</span></button>`).join("")}` : "";
     }).join("");
     const head = `<p class="cc-dice">${dice.map((x) => hex(`d${x}`, "on")).join("")}${hex(`d${asp}`, "them")}<span><b>${steps(total)}</b>, ${diceLabel(dice)}, against its d${asp}</span></p>`;
@@ -174,7 +174,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       ${extra && !a.catch && s2.needs.includes("catch") ? field(i, "catch", `Its Catch <small>it needs one to hold more than ${s2.base}</small>`, sl.catch) : ""}
       ${extra && !a.burden && s2.needs.includes("burden") ? field(i, "burden", `Its Burden <small>a permanent cost, like <em>Bad Knee</em>, and it needs one to hold more than ${s2.base}</small>`, sl.burden) : ""}
       ${field(i, "text", "The permission", sl.text)}
-      <p class="cc-lead">Write it as something the thing itself does. Put it on every set action it fits nearly every time.</p>${toggles(i, "on", sl.on, c)}`}`;
+      <p class="cc-lead">Write it as something the thing itself does. Like any permission, put it on the two set actions it helps most, Defend included.</p>${toggles(i, "on", sl.on, c)}`}`;
   }
 
   function formView(sl, i, c, s, d) {
@@ -197,16 +197,22 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
         const r = B.traits.find((t) => t.name === sl.name);
         const groups = [...new Set(B.traits.map((t) => t.group))];
         return `${chips(i, "own", [["0", "From the list"], ["1", "Write your own"]], sl.own ? "1" : "0", "Where it comes from")}
-          ${sl.own ? `${field(i, "oname", "Its name", sl.oname)}${field(i, "otype", "When it works <small>like Passive, or Once per scene</small>", sl.otype)}${field(i, "otext", "What it does", sl.otext)}
-            <p class="cc-lead">Write it in the same shape as the list’s. If it gives +1 step, put it on the set actions it fits.</p>${toggles(i, "on", sl.on, c)}`
+          ${sl.own ? `${field(i, "oname", "Its name", sl.oname)}${chips(i, "otype", [["Passive", "Passive"], ["Triggered", "Triggered"]], sl.otype, "When it works")}${field(i, "otext", "What it does", sl.otext)}
+            <p class="cc-lead">Write it in the same shape as the list’s. Passive is always on, and Triggered fires by itself when something happens. It can’t be a step, or something you choose to fire.</p>`
             : `<label class="cc-field">The trait <select id="dt-trait-${i}" data-dt="${i}" data-f="name"><option value="">Pick a trait</option>${groups.map((g) => `<optgroup label="${esc(g)}">${B.traits.filter((t) => t.group === g && !have.has(t.name)).map((t) => `<option value="${esc(t.name)}"${t.name === sl.name ? " selected" : ""}>${esc(t.name)}</option>`).join("")}</optgroup>`).join("")}</select></label>
-            ${r ? `<div class="cc-rule"><p><b>${esc(r.name)}</b> <span class="chip sm">${esc(r.type)}</span></p><p>${r.html}</p></div>${r.step ? `<p class="cc-lead">It’s a step on the set actions it fits.</p>${toggles(i, "on", sl.on, c)}` : ""}` : ""}`}`;
+            ${r ? `<div class="cc-rule"><p><b>${esc(r.name)}</b> <span class="chip sm">${esc(r.type)}</span></p><p>${r.html}</p></div><p class="cc-lead">It does its one thing by itself, and never goes on a set action.</p>` : ""}`}`;
       }
       case "asp":
         return aspView(sl, i, c, s, d);
-      case "thread":
+      case "thread": {
+        // Someone you've already got a bond with, or someone new. Either
+        // way it goes under their one bond.
+        const people = c.threads.map((p) => p.person);
+        const mine = people.find((p) => bondKey(p) === bondKey(sl.person));
         return `${chips(i, "tkind", [["bond", "A bond thread"], ["hostile", "A hostile thread"]], sl.tkind ?? "bond", "What kind of thread")}
-          ${field(i, "person", "Who it’s with", sl.person)}${field(i, "text", "The thread", sl.text)}<p class="cc-lead">A bond thread or a hostile one, whichever the story’s given you. If they’re in the crew, it goes on both your sheets, so agree on it together.</p>`;
+          ${people.length ? `<p class="cc-lead">Who it’s with: one of your bonds, or someone new.</p>${chips(i, "person", people.map((p) => [p, esc(p)]), mine ?? "", "Who it’s with")}` : ""}
+          ${field(i, "person", people.length ? "Or someone new" : "Who it’s with", mine ? "" : sl.person)}${field(i, "text", "The thread", sl.text)}<p class="cc-lead">A bond thread or a hostile one, whichever the story’s given you. It goes under your bond with them. If they’re in the crew, it goes on both your sheets, so agree on it together.</p>`;
+      }
       case "get": {
         const room = roomFor(c, s, sl.where);
         return `${field(i, "text", "What you’re getting", sl.text)}
@@ -247,17 +253,21 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
   }
 
   function view(c, s, ch, d) {
+    // Two slots, or three with Tireless.
+    const n = Math.max(2, Number(c.numbers.slots) || 2);
+    while (d.slots.length < n) d.slots.push(blank());
+    if (d.slots.length > n) d.slots.length = n;
     const picked = d.slots.filter((x) => x.k).length;
     const strained = strainedOf(c, s);
     const grudges = grudgesOf(c, s);
     const warn = d.sure ? warnings(d, c, s) : [];
     const free = ["swaps", ...(strained.length ? ["mending"] : []), ...(grudges.length ? ["hostile threads"] : [])];
-    return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">Downtime</h2><p class="cc-small">${picked} of 2 slots picked</p></div>
+    return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">Downtime</h2><p class="cc-small">${picked} of ${n} slots picked</p></div>
       <button type="button" class="cc-x" data-act="close" aria-label="Close">${icon.close}</button></div>
     <div class="dlg-body">
-      <p class="cc-lead">Pick what each of your two slots is for, and it lands on your sheet when you finish. Three things don’t cost a slot: once-per-downtime traits refresh, all your Resolve comes back, and your wound die goes back to d${floorNow(c, s)}${s.scars?.length ? ", where your Scars keep it" : ""}. ${link("what-you-can-do-with-a-slot", "What a slot can do")}</p>
+      <p class="cc-lead">Pick what each of your ${n === 2 ? "two" : n === 3 ? "three" : n} slots is for, and it lands on your sheet when you finish. Two things don’t cost a slot: all your Resolve comes back, and your wound die goes back to d${floorNow(c, s)}${s.scars?.length ? ", where your Scars keep it" : ""}. ${link("what-you-can-do-with-a-slot", "What a slot can do")}</p>
       ${ruleBox("dt-how", "Your slots, from the rules", "your-slots")}
-      ${slotView(d, 0, c, s)}${slotView(d, 1, c, s)}
+      ${d.slots.map((_, i) => slotView(d, i, c, s)).join("")}
       <details class="cc-group" data-open="dt-free"${isOpen("dt-free") || d.swaps.length || d.mends.length || d.rights.length ? " open" : ""}><summary>Without a slot <small>${free.length > 1 ? `${free.slice(0, -1).join(", ")} and ${free[free.length - 1]}` : free[0]}</small></summary>
         <h3>Swap a permission</h3>
         <p class="cc-lead">Swap any permission for another that fits its Title, as long as it makes sense for your character.</p>
@@ -331,7 +341,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
       } else if (sl.k === "trait") {
         const name = (sl.own ? sl.oname : sl.name).trim();
         if (name) {
-          grow(sl.own ? { k: "trait", name, on: [...sl.on], own: { type: sl.otype.trim(), text: sl.otext.trim() } } : { k: "trait", name, on: [...sl.on] });
+          grow(sl.own ? { k: "trait", name, own: { type: sl.otype.trim() || "Passive", text: sl.otext.trim() } } : { k: "trait", name });
           said.push(`${name} is yours`);
         }
       } else if (sl.k === "asp" && sl.dice) {
@@ -410,7 +420,7 @@ export function makeDowntime({ B, esc, hex, steps, link, icon, lineLabel, throwD
     if (go === "pick") d.slots[Number(el.dataset.s)] = fresh(v, c, s);
     else if (go === "clear") d.slots[Number(el.dataset.s)] = blank();
     else if (go === "set" && sl) {
-      sl[f] = f === "key" || f === "tkind" ? v : f === "own" ? v === "1" : Number(v);
+      sl[f] = f === "key" || f === "tkind" || f === "person" || f === "otype" ? v : f === "own" ? v === "1" : Number(v);
       // A swap's set actions start where the old permission was.
       if (String(el.dataset.s)[0] === "w") {
         if (f === "t") sl.j = -1;

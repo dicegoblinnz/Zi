@@ -19,6 +19,19 @@ This is the record of every rules change since the 2 Oct 2026 book, newest first
 
 **What it costs:** Common armour's a purse of gold, Fine's several, and Masterwork's a small fortune, if you can find a smith who makes it. Before, real armour was several purses. See [What you can afford](#what-you-can-afford) and [Upgrading gear](#upgrading-gear).
 
+## 27 Oct 2026: Traits are passive, gear goes on one set action, one bond a person {#c-2026-10-27-traits}
+
+Mo's calls in chat.
+
+**Traits are passive.** A trait's never a step now. It doesn't go on a set action, you can't [bring one in](#s-aura) for Aura, and you never choose to use one. It's **Passive**, always on, or **Triggered**, firing by itself when something happens, and a few only fire the first time each scene. That replaces traits as lines on your set actions, like Vesk's Silent Step on her Sneak, and the Invoked, once-a-scene and once-a-downtime traits. See [Traits](#s-traits).
+-   **Every trait that was a step or something you fired is rewritten.** The ones that were a step win ties instead, like *Duelist* and *Marksman's Eye*, and the ones you fired go off by themselves, like *Silver Tongue* on the first social roll you fail each scene, *Cold Reader* the first time you speak with someone, and *Battle Focus* the first time your Aura runs out. *Second Wind* and *Fast* still give you [extra actions](#s-extra-actions), by themselves. *Tireless* is three [downtime slots](#your-slots), and *Style* makes clothes that fit two sizes up. *Prepared Mind* and *Contingency* are gone. See [The 47 traits](#the-48-traits).
+-   **The crew's numbers moved with it.** Vesk's Sneak is 3 steps, a d6, Bram's Talk 3, a d6, Isolde's Study 3, a d6, and Wren's Fight 4, a d8. See [the six ready-made characters](#s-pregens).
+-   **Writing your own:** a passive trait or a triggered one, never a step. See [Writing Your Own](#s-levers-writing).
+
+**A plain item goes on one set action,** the one where it helps most, and anywhere else it fits it's 1 Aura to bring in. That replaces items going on every set action they fit. It's every plain thing you carry, utility items and the keepsake included. An attuned thing's permissions go on two set actions each, like a Title's, and the crew's sheets name them now, like Bram's *fight with a war hammer*, instead of the thing. See [How permissions stack](#how-permissions-stack), [Set Actions](#s-set-actions), [Step 4](#s-step-set-actions) and [Items](#s-items).
+
+**Each person's one bond.** Write their name once, and every thread you've got with them goes under it, including a new one from downtime. See [Bonds and threads](#s-bonds).
+
 ## 27 Oct 2026: A good Aspiration, and a good Goal {#c-2026-10-27}
 
 **When your Aspiration resolves, you get what you were after**, as well as the new archetype and its Title. Before, that was only in Vesk's example. See [Aspiration](#s-aspiration).
@@ -68,7 +81,7 @@ These came out of the 23 Oct playtests.
 
 **Intercept replaces taking the hit.** For 1 Aura and no action, you take the dice aimed at a friend within your stride, and your own defence handles them. A [Guardian](#a-guardian) intercepts for free, for every friend within his stride. See [Intercept](#s-intercept).
 
-**A permission goes on two set actions at most**, Defend included, and the same permission never goes on one set action twice. Anywhere else it's 1 Aura to bring in, and Titles, items and traits still go wherever they fit. **Single-word permissions are back**, like *Deceptive*, because the cap keeps them in check, so a permission doesn't need a doing word and how, what or where any more. Magic's still written narrow. In a combo, the same permission from two of you counts for each. See [How permissions stack](#how-permissions-stack) and [Permissions](#s-writing-permissions).
+**A permission goes on two set actions at most**, Defend included, and the same permission never goes on one set action twice. Anywhere else it's 1 Aura to bring in, and Titles, items and traits still go wherever they fit. (Since 27 Oct, a plain item goes on one set action and a trait on none.) **Single-word permissions are back**, like *Deceptive*, because the cap keeps them in check, so a permission doesn't need a doing word and how, what or where any more. Magic's still written narrow. In a combo, the same permission from two of you counts for each. See [How permissions stack](#how-permissions-stack) and [Permissions](#s-writing-permissions).
 
 **Vulnerabilities are new.** Every vulnerability that fits a hit adds a tick: one more Hurt on you, or one more win off a threat's tag. The same one never counts twice, and you've still got to win. (Since 26 Oct, you choose which tag each tick goes on.) *Prone* and *Exposed* are vulnerabilities now. See [Vulnerabilities](#s-vulnerable).
 
@@ -144,7 +157,7 @@ These all came out of the playtests.
 -   The sixteen: Bloodsworn, Elementalist, Face, Guardian, Healer, Hunter, Illusionist, Leader, Maker, Oracle, Scholar, Shadow, Shifter, Summoner, Teleporter and Warrior. (The Bard came on 16 Oct.)
 -   On most of them, 1 Aura adds +2 to one die on the mechanic, after you roll. Take the archetype twice and it's +3.
 -   Every Title idea now says which archetypes it suits. See [Title Ideas](#s-title-ideas).
--   Keep the traits you've got. Where traits go now is still being worked out.
+-   Keep the traits you've got. Where traits go now is still being worked out. (Since 27 Oct, every trait's passive and never a step.)
 
 **Some things everyone used to do now belong to one archetype:**
 -   **Leading** is the [Leader](#a-leader)'s. Anyone can still put their action into a friend's roll.
@@ -163,7 +176,7 @@ These all came out of the playtests.
 **The game is called Zi'Dara.** This rulebook became the one master copy of the rules, and the website, the printed book and the character tools are all built from it.
 
 **Items.** See [Items](#s-items) and [What you carry](#s-carrying).
--   Plain items are just what they are. A sword counts as a line when it fits. Each piece of plain armour makes your Armour a size bigger. (From 24 Oct it's a line on your Defend.)
+-   Plain items are just what they are. A sword counts as a line when it fits. Each piece of plain armour makes your Armour a size bigger. (From 24 Oct it's a line on your Defend, and from 27 Oct a plain item goes on one set action.)
 -   Resources are items now. You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more.
 -   Rarity (common, rare, legendary) is gone.
 
@@ -218,7 +231,6 @@ The 2 Oct 2026 rulebook is where this record starts. Everything in it that isn't
 These are being worked out at the table. Play them as the chapters have them for now.
 
 -   **The Summoner:** it's being reworked, because it played weak. Play it as the chapter has it for now.
--   **Traits:** where they go, now that each archetype's mechanic has taken the place of a Title's trait. Keep yours, and a new character picks two.
 -   **The Teleporter** needs a better name.
 -   **Taking the Teleporter or the Bloodsworn twice:** neither has a +2 to grow, so what you get is still to come.
 -   **The Shifter:** where you find your animal tags in the first place.

@@ -35,7 +35,7 @@ When you act against a threat, you roll its die too, in another colour, so you c
 -   **No grid, if the grid's hard to see.** Use the bands from [Playing Without a Grid](#s-theatre) instead.
 
 :::example[One die at a time]
-Wren joins Bram's roll on the guard captain, so it's his Fight, 4 steps, and hers, 5. That's 9 steps from two actions, and they make it three d6s: one to knock his sword away, one to floor him and one to make him give up. The captain's Challenge 3, and his d6 only gets rolled once this round, so Bram's player rolls it first and leaves it showing: a 4. Then he calls all three and rolls his d6s one at a time, saying each one out loud. The sword's 5 against 4, and it goes skittering. The floor's 2 against 4, so the captain keeps his feet. Giving up is 4 against 4, and Bram lets the tie go.
+Wren joins Bram's roll on the guard captain, so it's his Fight, 4 steps, and hers, 4. That's 8 steps from two actions, and they make it two d6s and a d4: a d6 to knock his sword away, the d4 to floor him and a d6 to make him give up. The captain's Challenge 3, and his d6 only gets rolled once this round, so Bram's player rolls it first and leaves it showing: a 4. Then he calls all three and rolls his dice one at a time, saying each one out loud. The sword's 5 against 4, and it goes skittering. The floor's 2 against 4, so the captain keeps his feet. Giving up is 4 against 4, and Bram lets the tie go.
 :::
 
 ## Hearing {#s-access-hearing}

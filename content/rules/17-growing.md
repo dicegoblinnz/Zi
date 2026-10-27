@@ -101,7 +101,7 @@ Here's what growth actually looks like.
 :::sheet[Vesk: The best cat burglar in the city]
 **Titles:** The best cat burglar in the city (Shadow) · Raised by the Guild (Shadow), with three permissions each.
 
-**Set actions:** Sneak 4 (d8) · Move 4 (d8) · Locks 5 (d10) · Defend 2 (d4) · Fight 2 (d4) · Study 1 (d2) · Talk 1 (d2).
+**Set actions:** Sneak 3 (d6) · Move 4 (d8) · Locks 5 (d10) · Defend 2 (d4) · Fight 2 (d4) · Study 1 (d2) · Talk 1 (d2).
 
 **Attuned:** Her grappling line, Awakened.
 
@@ -112,7 +112,7 @@ Here's what growth actually looks like.
 
 **Session 6: The first arc.** Her Aspiration's climbed from d2 to d12. Most downtimes, one slot went on it and the other on whatever the last job cost her. She hasn't added a permission, so she's the same person, just further along. That's her call.
 
-**Session 7: A new Title.** She robs the Vane Estate, and her Aspiration climbs past d12. That's a new archetype, and she takes Shadow a third time. She names it *The woman who has never been seen*, and gives it one permission, *leave no trace*. The Title and the permission both fit her Sneak nearly every time, so it's 6 steps now, a d12. Her Resolve maximum goes up to 3, and with Shadow three times, its +2 is a +4. She writes *Find out who the fence really is* at d2, and on her way out she takes a sliver of steel from the vault's bolt, because she knows what it's for.
+**Session 7: A new Title.** She robs the Vane Estate, and her Aspiration climbs past d12. That's a new archetype, and she takes Shadow a third time. She names it *The woman who has never been seen*, and gives it one permission, *leave no trace*. The Title and the permission both fit her Sneak nearly every time, so it's 5 steps now, a d10. Her Resolve maximum goes up to 3, and with Shadow three times, its +2 is a +4. She writes *Find out who the fence really is* at d2, and on her way out she takes a sliver of steel from the vault's bolt, because she knows what it's for.
 
 **Session 8: Her picks.** In downtime she attunes her picks, at Awakened, with *open any lock with a mechanism*. Their permission's the line on her Locks now, instead of the picks themselves, so it's still 5 steps, and from here on they'll grow with her.
 
@@ -133,7 +133,7 @@ Here's what growth actually looks like.
 
 **Permissions:** Four on her first Title, one on each of the others, and *Up the Walls* in two slots on her second.
 
-**Set actions:** Sneak 6 (d12) · Locks 7 (d12 and d2) · Move 4 (d8) · Defend 2 (d4) · Fight 1 (d2) · Study 1 (d2) · Talk 1 (d2).
+**Set actions:** Sneak 5 (d10) · Locks 7 (d12 and d2) · Move 4 (d8) · Defend 2 (d4) · Fight 1 (d2) · Study 1 (d2) · Talk 1 (d2).
 
 **Attuned:** Her picks, Perfected · her grappling line, Awakened.
 

@@ -6,7 +6,9 @@
 //   { k: "perm", t, text, on }                 a permission on Title t
 //   { k: "swap", t, j, from, text, on }        a permission swapped for another
 //   { k: "att", a, text, on, catch, burden, up } a permission on attuned thing a
-//   { k: "trait", name, on, own }              a trait, from the list or written
+//   { k: "trait", name, own }                  a trait, from the list or written
+//                                              (never on a set action: a trait's
+//                                              never a step, 27 Oct 2026)
 //   { k: "thread", person, text, kind }        a new thread, bond or hostile
 //   { k: "title", arch, text, on, perm, permOn } a new archetype and its Title
 // "on" lists the set actions a new line goes on. Every set action's steps and
@@ -14,7 +16,7 @@
 // in the list, so the gold marks never take it for a rule's change.
 
 import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
-import { threadNote } from "./threads.js";
+import { bondName, threadNote } from "./threads.js";
 
 export const STAGES = ["Awakened", "Tempered", "Perfected"];
 const BASE = { Awakened: 1, Tempered: 2, Perfected: 3 };
@@ -32,6 +34,26 @@ export function attunedRoom(a) {
 }
 
 const both = (list) => (list.length > 1 ? `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}` : list[0] ?? "");
+
+// What the phone needs to know about a trait besides its words, the same for
+// the build (scripts/build-content.mjs), the builder and here: the Aura it
+// gives when it fires (Killer Instinct's 1, Battle Focus's 3, Silent Step's
+// 1), and whether it only fires the first time each scene, so the play screen
+// can tick it off. Unyielding's first Hurt has its own tracker on the wound die.
+const SHRUG = /\bfirst (?:(?:two|three) )?Hurts?\b[^.|]*?\b(?:doesn['’]t|don['’]t|does not|do not|won['’]t|never)\b[^.|]*?\b(?:move|put|step|go|raise)/i;
+export function traitInfo(text = "") {
+  const t = String(text ?? "").replace(/<[^>]+>/g, "");
+  return {
+    aura: Number(t.match(/\b(?:gain|gives you) (\d+) Aura\b/i)?.[1] ?? 0),
+    once: /\bfirst\b[^|]*?\beach scene\b/i.test(t) && !SHRUG.test(t),
+  };
+}
+// A size up, n times, as far as d12.
+export const upBy = (die, n) => {
+  let d = die;
+  for (let i = 0; i < n; i++) d = sizeUp(d);
+  return d;
+};
 
 export function grow(base, grown, B) {
   if (!base || !Array.isArray(grown) || !grown.length) return base;
@@ -89,10 +111,8 @@ export function grow(base, grown, B) {
       if (!name || c.traits.some((t) => t.name === name)) continue;
       const r = g.own ? null : rule.get(name);
       const own = String(g.own?.text ?? "");
-      const step = r ? r.step : /\+1 step\b/.test(own);
-      const key = add("trait", name, { step });
-      c.traits.push({ name, type: r?.type ?? String(g.own?.type ?? ""), html: r?.html ?? esc(own), step, aura: r ? r.aura : Number(own.match(/\bGain (\d+) Aura\b/)?.[1] ?? 0), key, g: n });
-      if (step) onto(key, g.on);
+      // A trait's never a step, so it never goes on a set action.
+      c.traits.push({ name, type: r?.type ?? String(g.own?.type ?? ""), html: r?.html ?? esc(own), ...(r ? { aura: r.aura, once: r.once } : traitInfo(own)), g: n });
       // What the trait changes, the same as the builder counts it.
       const e = r?.effects ?? {};
       const num = c.numbers;
@@ -109,11 +129,16 @@ export function grow(base, grown, B) {
       if (e.confidence) {
         for (let i = 0; i < e.confidence; i++) num.confidence = sizeUp(num.confidence);
         num.confidenceNote = also(num.confidenceNote, name);
-        if (num.dressed) num.dressed.die = sizeUp(num.confidence);
       }
+      // Style: clothes that fit start you two sizes up, not one.
+      if (e.dressed) num.dressedUp = (num.dressedUp ?? 0) + e.dressed;
+      if ((e.confidence || e.dressed) && num.dressed) num.dressed.die = upBy(num.confidence, 1 + (num.dressedUp ?? 0));
       if (e.utility) c.carry.utility.max += e.utility;
+      // Tireless: three downtime slots, not two.
+      if (e.slots) num.slots = (num.slots ?? 2) + e.slots;
     } else if (g.k === "thread") {
-      const person = String(g.person ?? "").trim();
+      // Each person's one bond, however their name was typed this time.
+      const person = bondName(c.threads.map((x) => x.person), g.person);
       if (!person || !text) continue;
       let p = c.threads.find((x) => x.person === person);
       if (!p) c.threads.push((p = { person, threads: [] }));
