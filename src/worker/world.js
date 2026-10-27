@@ -1,11 +1,12 @@
-// A campaign's world, for one campaign (stage 1 of notes/worlds-plan.md): its
-// faction board. index.js has already checked that whoever's asking is this
+// A campaign's world, for one campaign (notes/worlds-plan.md): its faction
+// board (stage 1), and its places and people (stage 3). index.js has already checked that whoever's asking is this
 // campaign's GM or one of its players, and nothing here reads or changes
 // anything but this campaign's world.
 //
-//   GET  /api/campaigns/<id>/world?v=   the board: the whole of it for the GM,
+//   GET  /api/campaigns/<id>/world?v=   the world: the whole of it for the GM,
 //        and for a player only what the crew's been shown (forPlayer() in
-//        board.js), so nothing they haven't been shown ever reaches their
+//        board.js, and pagesForPlayer() in pages.js), so nothing they haven't
+//        been shown, and none of her part of a page, ever reaches their
 //        phone. With ?v= and nothing they'd see has changed, only { same: true }.
 //   POST /api/campaigns/<id>/world      the GM's changes from one phone: { dev, ops }.
 //        Each change carries a number that goes up on that phone, so a change
@@ -14,7 +15,8 @@ import { apply, blank, forPlayer, readable } from "../companion/board.js";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
 const MAX_CHANGES = 200;
-const MAX_DOC = 400000;
+// Places and people live in it too, so there's room for them.
+const MAX_DOC = 600000;
 const MAX_DEVICES = 64;
 
 // FNV-1a, to say whether anything's changed since the phone last looked.
@@ -55,7 +57,7 @@ export async function showWorld(env, url, camp, user, { json }) {
 export async function changeWorld(request, env, camp, user, { json, fail, body }) {
   const b = await body(request);
   const dev = String(b?.dev ?? "");
-  if (!b || !DEV.test(dev) || !Array.isArray(b.ops)) return fail(400, "That didn’t look like a change to the board.");
+  if (!b || !DEV.test(dev) || !Array.isArray(b.ops)) return fail(400, "That didn’t look like a change to the world.");
   if (b.ops.length > MAX_CHANGES) return fail(413, "That’s a lot of changes at once. Send them a few at a time.");
   const ops = b.ops.filter((x) => x && typeof x === "object" && Number.isInteger(x.n) && x.n > 0).sort((x, y) => x.n - y.n);
   let row = null;
@@ -84,7 +86,7 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
     const devices = Object.entries(seq);
     if (devices.length > MAX_DEVICES) for (const [d] of devices.sort((x, y) => (x[1]?.at ?? 0) - (y[1]?.at ?? 0)).slice(0, devices.length - MAX_DEVICES)) delete seq[d];
     const text = JSON.stringify({ ...doc, seq });
-    if (text.length > MAX_DOC) return fail(413, "The board’s full. Take something off it first.");
+    if (text.length > MAX_DOC) return fail(413, "The world’s full. Take something off it first.");
     const res = row
       ? await env.DB.prepare("UPDATE world SET data = ?2, version = version + 1, updatedAt = ?3 WHERE campaignId = ?1 AND version = ?4").bind(camp.id, text, now, row.version).run()
       : await env.DB.prepare("INSERT INTO world (campaignId, data, version, updatedAt) VALUES (?1, ?2, 1, ?3) ON CONFLICT DO NOTHING").bind(camp.id, text, now).run();
@@ -93,7 +95,7 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
       break;
     }
     // A change from her other phone got in first, so these go on top of it.
-    if (tries >= 5) return fail(503, "The board’s being changed from somewhere else too. Try again in a moment.");
+    if (tries >= 5) return fail(503, "The world’s being changed from somewhere else too. Try again in a moment.");
   }
   return json({ seq: top, ...viewOf(camp, row), role: camp.role });
 }

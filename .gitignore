@@ -10,3 +10,4 @@ __pycache__/
 src/generated/
 public/figures/
 public/openings.json
+public/world-book.json

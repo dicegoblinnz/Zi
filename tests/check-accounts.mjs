@@ -92,6 +92,23 @@
 //    nothing of Tuesday Lair's, and Kai's Dorrie in Zed's Night sees no
 //    downtime. The World screen and tab, mid-turn, pass axe at 390 in both
 //    themes.
+// 8b. Places and people. Mo brings in the Copper Baths from Twenty Places:
+//    the place, and Orla Strand, Casimir Dace and Old Tamsin, each linked to
+//    it and written as a threat off the book, Orla with her telegraph his
+//    alone, and the bath-men in his part. Names in its Secret link to their
+//    pages, and a tag says what it does on a tap. The Vane Estate's Face gets
+//    a page in a tap, Lord Aldous Vane, linked to the Estate, whose Face links
+//    to him from then on, and he's written as a threat on the Threat Builder.
+//    Hesper Vole's rolled off Building Your World's tables. Mo shows the crew
+//    the Copper Baths and Orla: Kai gets what the crew sees and the link
+//    between them, none of his part, then how Orla fights without her
+//    telegraphs, and the Secret only on a second tap, with Tamsin's name not
+//    a link since Kai hasn't been shown her. Kai can't change a page. A hook
+//    made with no signal goes up once. The Copper Baths' scene goes on the
+//    live table from its page. A made-up book change gets a note he takes,
+//    keeping his hook. Nothing crosses to Zed's Night, and Vesk's World tab
+//    opens Orla's page with no signal. The screens pass axe at 390 in both
+//    themes.
 // 9. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -1855,6 +1872,252 @@ try {
   }
   console.log("8. The faction turn");
   await checkTurn();
+
+  // ------------------------------------------------------------ 8b. places and people
+  async function checkPages() {
+    const WB = JSON.parse(readFileSync(join("dist", "world-book.json"), "utf8"));
+    const baths = WB.places.find((p) => p.key === "s-place-copper-baths");
+    const [orla] = baths.people;
+    const worldOf = async (id) => JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", id))[0]?.data ?? "null");
+    const pageIn = async (name, id = tuesday.id) => (await worldOf(id))?.pages?.find((p) => p.name === name) ?? null;
+    const playerWorld = async (page = kai.page, id = tuesday.id) => (await got(page, "GET", `/api/campaigns/${id}/world`)).json?.world;
+    const tok = (name) => `.wp-tok .wb-tok-a:has(b.wb-tok-n:text-is("${name}"))`;
+    const h1Is = (page, name) => until(async () => (await page.textContent("#app h1").catch(() => "")) === name, `${name}'s page`);
+    async function pFold(page, key) {
+      const sel = `details[data-open^="wb-${key}-"]`;
+      await page.waitForSelector(sel, { state: "attached" });
+      if (!(await page.$eval(sel, (el) => el.open))) await page.click(`${sel} > summary`);
+    }
+    const toWorld = async (page) => {
+      await page.goto(`${BASE}/characters/?camp=${tuesday.id}&world`);
+      await page.waitForSelector("#wp-place");
+    };
+
+    // Mo's World screen has Places and People under the board, empty, with a
+    // strip to jump down to them.
+    await toWorld(mo.page);
+    has(await text(mo.page, "#wp-place"), "No places yet", "Places, empty");
+    has(await text(mo.page, "#wp-person"), "Nobody yet", "and People");
+    same(await mo.page.$$eval(".wp-jumps .chip", (els) => els.map((e) => e.textContent)), ["The board", "Places", "People"], "the strip to jump down the screen");
+
+    // He brings in the Copper Baths from Twenty Places: the place, and its
+    // three named people, each linked to it and written as a threat.
+    await mo.page.click('details[data-open="wb-pbring"] > summary');
+    await mo.page.click(`[data-do="pbring"][data-k="${baths.key}"]`);
+    await until(async () => (await mo.page.$$(".wp-tok")).length === 4, "the Copper Baths and its three people in the world");
+    same(await mo.page.$$eval("#wp-person .wb-tok-n", (els) => els.map((e) => e.textContent)), baths.people.map((p) => p.name), "Orla Strand, Casimir Dace and Old Tamsin, the book's three");
+    has(await text(mo.page, "#wp-person"), "At The Copper Baths", "each one at the Copper Baths");
+    await until(async () => (await worldOf(tuesday.id))?.pages?.length === 4, "the four pages on the server");
+    const doc0 = await worldOf(tuesday.id);
+    const bathsId = doc0.pages.find((p) => p.name === "The Copper Baths").id;
+    same(doc0.links.filter((l) => l.includes(bathsId)).length, 3, "each person linked to the place");
+    yes(doc0.pages.every((p) => !Object.values(p.shown).some(Boolean)), "with nothing shown to the crew");
+    same((await playerWorld())?.pages, [], "so Kai's phone gets none of it");
+
+    // The place's page: what the crew would see, its Secret, and his part with
+    // its Challenge, its hooks and the bath-men.
+    await mo.page.click(tok("The Copper Baths"));
+    await h1Is(mo.page, "The Copper Baths");
+    has(await text(mo.page, ".wp-card"), "Steam rolls out when the door opens", "what the crew sees there, off the book");
+    await pFold(mo.page, "psecret");
+    has(await text(mo.page, "#app"), "Every Word Is Sold", "its Secret");
+    same(await mo.page.$$eval('details[data-open^="wb-psecret-"] .wp-link', (els) => els.map((e) => e.textContent)), ["Orla", "Tamsin", "Orla"], "the names in its Secret link to their pages");
+    await pFold(mo.page, "phers");
+    const hers = await text(mo.page, 'details[data-open^="wb-phers-"]');
+    has(hers, "Challenge3", "his part has its Challenge");
+    has(hers, "four bath-men", "and the bath-men, who aren't named");
+    has(hers, baths.hooks[0], "and its hooks");
+    await pFold(mo.page, "plinks");
+    same(await mo.page.$$eval('details[data-open^="wb-plinks-"] .wp-chip', (els) => els.map((e) => e.textContent)), baths.people.map((p) => p.name), "linked to its three people");
+
+    // Orla's page, from the place's: how she fights, with her telegraph his alone.
+    await mo.page.click('details[data-open^="wb-plinks-"] .wp-chip:text-is("Orla Strand")');
+    await h1Is(mo.page, "Orla Strand");
+    await pFold(mo.page, "pthreat");
+    has(await text(mo.page, ".wp-c"), `Challenge${orla.threat.c}`, "Orla's Challenge, off the book");
+    same(await mo.page.$$eval(".wp-tags .zd-tag em", (els) => els.map((e) => e.textContent)), orla.threat.tags.map((t) => t.text), "and her tags");
+    has(await text(mo.page, ".wp-tags"), "Keeps it going", "in the kinds the Threat Builder sorts them into");
+    await mo.page.click(".wp-tag > summary");
+    has(await text(mo.page, ".wp-tag[open]"), WB.tags[orla.threat.tags[0].text].does, "a tap on a tag says what it does, from Appendix B");
+    has(await text(mo.page, ".wp-teles"), "Orla raps her cane", "her telegraph, which only he sees");
+    await mo.page.click(".cc-back");
+    await h1Is(mo.page, "The Copper Baths");
+
+    // A person linked from a faction's Face: Lord Aldous Vane gets a page in a
+    // tap from the Vane Estate's card, and the Face links to it.
+    await toWorld(mo.page);
+    await mo.page.click(`.wb-tok-a:has(b.wb-tok-n:text-is("The Vane Estate"))`);
+    await h1Is(mo.page, "The Vane Estate");
+    has(await mo.page.textContent('[data-do="pface"]'), "A page for Lord Aldous Vane", "the Estate's Face can have a page");
+    await mo.page.click('[data-do="pface"]');
+    await h1Is(mo.page, "Lord Aldous Vane");
+    has(await text(mo.page, ".wp-about"), "The collector", "who he is, off the Face");
+    await pFold(mo.page, "plinks");
+    has(await text(mo.page, 'details[data-open^="wb-plinks-"]'), "The Vane Estate", "linked to the Estate");
+    // Written as a threat, rolled on the Threat Builder.
+    await pFold(mo.page, "pthreat");
+    await mo.page.click('[data-do="pthreatroll"]');
+    await mo.page.waitForSelector(".wp-c");
+    await until(async () => (await pageIn("Lord Aldous Vane"))?.threat, "his threat on the server");
+    const vane = await pageIn("Lord Aldous Vane");
+    yes(vane?.threat?.c >= 2 && vane.threat.c <= 6, `a Challenge off the Threat Builder (${vane?.threat?.c})`);
+    yes(["comes", "keeps", "drives"].every((k) => vane.threat.tags.some((t) => t.part === k)) && vane.threat.tags.filter((t) => t.part === "keeps").length >= 2, "a named threat's tags: one way it comes at you, two keeping it going and something driving it");
+    await mo.page.click(".cc-back");
+    await h1Is(mo.page, "The Vane Estate");
+    yes(await mo.page.$('.wb-words .wp-link:text-is("Lord Aldous Vane")'), "the Estate's Face links to his page now");
+    same(await mo.page.$('[data-do="pface"]'), null, "and doesn't offer another");
+    await pFold(mo.page, "plinks");
+    has(await text(mo.page, 'details[data-open^="wb-plinks-"]'), "Lord Aldous Vane", "the Estate's places and people have him");
+
+    // A person of his own, rolled off Building Your World's tables.
+    await toWorld(mo.page);
+    await mo.page.click('details[data-open="wb-pnew-person"] > summary');
+    await mo.page.click('[data-do="prollnew"][data-kind="person"]');
+    const form = 'form[data-form="w-pnew"][data-kind="person"]';
+    const rolled = { want: await mo.page.inputValue(`${form} input[name="want"]`), secret: await mo.page.inputValue(`${form} input[name="secret"]`) };
+    yes(WB.tables.want.includes(rolled.want) && WB.tables.hiding.includes(rolled.secret), "what they want and what they're hiding, rolled on the book's d12s");
+    await mo.page.fill(`${form} input[name="name"]`, "Hesper Vole");
+    await mo.page.fill(`${form} input[name="about"]`, "The Guild’s night clerk");
+    await mo.page.click(`${form} button[type="submit"]`);
+    await h1Is(mo.page, "Hesper Vole");
+    await until(async () => (await pageIn("Hesper Vole"))?.want === rolled.want, "Hesper's page on the server, with what she wants");
+
+    // He shows the crew the Copper Baths and Orla. Kai gets what the crew
+    // would see, and nothing of his part.
+    await toWorld(mo.page);
+    for (const name of ["The Copper Baths", "Orla Strand"]) {
+      await mo.page.click(tok(name));
+      await h1Is(mo.page, name);
+      await mo.page.click('.wb-show-card [data-do="pshow"]');
+      await until(async () => (await pageIn(name))?.shown.page === true, `${name} shown to the crew`);
+      await mo.page.click(".cc-back");
+      await mo.page.waitForSelector("#wp-place");
+    }
+    const kw = await playerWorld();
+    same(kw?.pages?.map((p) => p.name), ["The Copper Baths", "Orla Strand"], "Kai's phone gets the Copper Baths and Orla, and nobody else");
+    const kb = kw.pages[0];
+    same([kb.note, kb.hooks.length, kb.c, kb.secret, kb.more, kb.comp], ["", 0, 0, "", "", ""], "and none of his part, and not the Secret");
+    same(kb.text, baths.text, "but what the crew sees there");
+    same(kw.pages[1].threat, null, "and not how Orla fights");
+    same(kw.links.length, 1, "with the link between them, since both are shown");
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector(".wb-tab .wp-tok");
+    same(await kai.page.$$eval(".wb-tab .wp-tok .wb-tok-n", (els) => els.map((e) => e.textContent)), ["The Copper Baths", "Orla Strand"], "Vesk's World tab has them");
+    await kai.page.click(tok("The Copper Baths"));
+    await h1Is(kai.page, "The Copper Baths");
+    has(await text(kai.page, "#app"), "There’s more to The Copper Baths you haven’t found out yet", "Kai's told there's more");
+    yes(!(await text(kai.page, "#app")).includes("bath-men") && !(await kai.page.$('details[data-open^="wb-phers-"]')), "and his part's nowhere on her phone");
+    // How Orla fights, then the Secret on a second tap.
+    await mo.page.click(tok("Orla Strand"));
+    await h1Is(mo.page, "Orla Strand");
+    await pFold(mo.page, "pthreat");
+    await mo.page.click('[data-do="pshow"][data-k="threat"]');
+    await until(async () => (await playerWorld())?.pages?.[1]?.threat?.c === orla.threat.c, "Orla's Challenge on Kai's phone");
+    const ot = (await playerWorld()).pages[1].threat;
+    same([ot.tags.map((t) => t.text), ot.tele, ot.voice], [orla.threat.tags.map((t) => t.text), [], ""], "with her tags, and not her telegraphs or voice");
+    await mo.page.click(".cc-back");
+    await mo.page.click(tok("The Copper Baths"));
+    await h1Is(mo.page, "The Copper Baths");
+    await pFold(mo.page, "psecret");
+    await mo.page.click('[data-do="pshow"][data-k="secret"]');
+    has(await mo.page.textContent('[data-do="pshow"][data-k="secret"]'), "Tap again", "the Secret takes a second tap");
+    same((await playerWorld()).pages[0].secret, "", "and isn't shown till then");
+    await mo.page.click('[data-do="pshow"][data-k="secret"]');
+    await until(async () => (await playerWorld())?.pages?.[0]?.secret === baths.secret, "the Secret on Kai's phone");
+    await kai.page.reload();
+    await h1Is(kai.page, "The Copper Baths");
+    await until(async () => (await text(kai.page, "#app")).includes("Every Word Is Sold"), "the Secret on Kai's page");
+    same(await kai.page.$$eval(".wb-secret .wp-link", (els) => els.map((e) => e.textContent)), ["Orla", "Orla"], "Orla's name links on Kai's phone, and Tamsin's doesn't, since she hasn't been shown");
+    // Kai can't change pages.
+    same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "kais-phone-0009", ops: [{ n: 1, o: "pset", id: bathsId, f: "name", v: "Kai’s Baths" }] })).status, 403, "Kai's change to a page is turned away");
+
+    // A hook with no signal goes up once he's back, and counts once.
+    await pFold(mo.page, "phers");
+    await mo.context.setOffline(true);
+    await mo.page.fill('form[data-form="w-phook"] input[name="text"]', "Dace owes the Guild more than he’s letting on");
+    await mo.page.click('form[data-form="w-phook"] button[type="submit"]');
+    await mo.page.waitForSelector('.wp-hooks .pt-line:has-text("Dace owes the Guild")');
+    await mo.context.setOffline(false);
+    await mo.page.evaluate(() => dispatchEvent(new Event("online")));
+    await until(async () => (await pageIn("The Copper Baths"))?.hooks.filter((h) => h.text.startsWith("Dace owes")).length === 1, "the hook made with no signal, on the server once");
+
+    // Its scene on the live table, in place of the one that's there.
+    await mo.page.click('[data-do="ptable"]');
+    // With a scene on already, it takes a second tap.
+    if ((await mo.page.textContent('[data-do="ptable"]').catch(() => "")).includes("Tap again")) await mo.page.click('[data-do="ptable"]');
+    await until(async () => {
+      const sc = (await got(mo.page, "GET", `/api/campaigns/${tuesday.id}/table`)).json?.scene;
+      return sc?.stakes?.length === 2 && sc.stakes.every((s) => s.tags.every((g) => !g.gone)) && sc.events?.some((e) => e.scene && e.d === 8);
+    }, "the Copper Baths' scene fresh on the table: its two stakes untouched and its d8 scene clock");
+
+    // A made-up change to the book: the Copper Baths was brought in with
+    // another line for what it is.
+    const doc1 = await worldOf(tuesday.id);
+    const pb = doc1.pages.find((p) => p.id === bathsId);
+    pb.about = "A steam house.";
+    pb.book = { ...pb.book, h: "older", was: { ...pb.book.was, about: "A steam house." } };
+    await db.prepare("UPDATE world SET data = ?2, version = version + 1 WHERE campaignId = ?1").bind(tuesday.id, JSON.stringify(doc1)).run();
+    await mo.page.reload();
+    await mo.page.waitForSelector(".wb-book");
+    has(await text(mo.page, ".wb-book"), "The book’s changed The Copper Baths since you brought it in", "a note on its page");
+    await mo.page.click('.wb-book [data-take="1"]');
+    await until(async () => {
+      const p = await pageIn("The Copper Baths");
+      return p?.about === baths.about && p.book.h === baths.h && p.hooks.some((h) => h.text.startsWith("Dace owes"));
+    }, "the book's line taken, and his hook kept");
+
+    // Nothing crosses between campaigns.
+    same((await got(zed.page, "GET", `/api/campaigns/${tuesday.id}/world`)).status, 404, "Zed gets nothing of Tuesday Lair's places and people");
+    same((await playerWorld(zed.page, zedsNight.id))?.pages, [], "Zed's Night has no pages");
+    same((await playerWorld(kai.page, zedsNight.id))?.pages, [], "and Kai gets none on it");
+    await kai.page.goto(`${BASE}/characters/?c=dorrie-eeeeee&t=world`);
+    await kai.page.waitForSelector(".wb-tab");
+    await kai.page.waitForTimeout(700);
+    yes(!(await text(kai.page, "#app")).includes("Copper Baths"), "Kai's Dorrie, in Zed's Night, sees nothing of Tuesday Lair's places");
+
+    // With no signal, Vesk's World tab still has them, and the page opens.
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa`);
+    await kai.page.waitForSelector('.cc-tabs [data-t="world"]');
+    await kai.context.setOffline(true);
+    await kai.page.click('.cc-tabs [data-t="world"]');
+    await kai.page.waitForSelector(".wb-tab .wp-tok");
+    await kai.page.click(tok("Orla Strand"));
+    await h1Is(kai.page, "Orla Strand");
+    has(await text(kai.page, ".wp-c"), `Challenge${orla.threat.c}`, "Orla's page opens with no signal, with how she fights");
+    await kai.context.setOffline(false);
+
+    // The World screen, a place, a person and the World tab, at 390 in both themes.
+    for (const theme of ["dark", "light"]) {
+      for (const p of [mo.page, kai.page]) await p.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await toWorld(mo.page);
+      await axe(mo.page, `places and people, ${theme}`);
+      await mo.page.evaluate(() => document.getElementById("wp-place").scrollIntoView());
+      await shot(mo.page, `world-pages-${theme}`);
+      await mo.page.click(tok("The Copper Baths"));
+      await h1Is(mo.page, "The Copper Baths");
+      await pFold(mo.page, "phers");
+      await axe(mo.page, `a place, ${theme}`);
+      await shot(mo.page, `world-place-${theme}`);
+      await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&world`);
+      await mo.page.waitForSelector("#wp-person");
+      await mo.page.click(tok("Lord Aldous Vane"));
+      await h1Is(mo.page, "Lord Aldous Vane");
+      await pFold(mo.page, "pthreat");
+      await axe(mo.page, `a person, ${theme}`);
+      await shot(mo.page, `world-person-${theme}`);
+      await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+      await kai.page.waitForSelector(".wb-tab .wp-tok");
+      await axe(kai.page, `the World tab with places, ${theme}`);
+      await kai.page.click(tok("Orla Strand"));
+      await h1Is(kai.page, "Orla Strand");
+      await pFold(kai.page, "pthreat");
+      await axe(kai.page, `a person on Kai's phone, ${theme}`);
+      await shot(kai.page, `world-person-player-${theme}`);
+    }
+    for (const p of [mo.page, kai.page]) await p.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+  }
+  console.log("8b. Places and people");
+  await checkPages();
 
   // ------------------------------------------------------------ 9. who can do what
   console.log("9. Who can do what");

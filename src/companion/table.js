@@ -1778,14 +1778,19 @@ export function makeTable(d) {
       const p = d.places?.[Number(el.dataset.i)];
       const id = d.roll()?.camp;
       if (!p || !id) return;
-      push(id, { o: "clear" });
-      for (const g of p.ground) putEl(id, { id: newId(), t: "ground", name: g.name, text: g.text });
-      for (const s of p.stakes) putEl(id, { id: newId(), t: "stake", name: s.name, c: s.c, tags: s.tags.map((x) => ({ name: x, gone: 0 })), clock: 0, note: s.note, out: "" });
-      putEl(id, { id: newId(), t: "event", name: "The scene clock", what: p.clock.what, d: p.clock.d, scene: true, out: "" });
       d.closeDialog();
-      d.toast(`${p.name} is on the table: its ground, ${plural(p.stakes.length, "stake", "stakes")} and the scene clock on d${p.clock.d}.`);
+      placeScene(id, p);
     },
   };
+  // One of the book's twenty places on the table: its ground, its stakes and
+  // its scene clock, in place of whatever scene was on.
+  function placeScene(id, p) {
+    push(id, { o: "clear" });
+    for (const g of p.ground) putEl(id, { id: newId(), t: "ground", name: g.name, text: g.text });
+    for (const s of p.stakes) putEl(id, { id: newId(), t: "stake", name: s.name, c: s.c, tags: s.tags.map((x) => ({ name: x, gone: 0 })), clock: 0, note: s.note, out: "" });
+    putEl(id, { id: newId(), t: "event", name: "The scene clock", what: p.clock.what, d: p.clock.d, scene: true, out: "" });
+    d.toast(`${p.name} is on the table: its ground, ${plural(p.stakes.length, "stake", "stakes")} and the scene clock on d${p.clock.d}.`);
+  }
   // The composer's chips for a piece of the scene.
   function setF(key, v) {
     const r = d.roll();
@@ -1829,6 +1834,13 @@ export function makeTable(d) {
     pointer,
     playCard,
     catchUp,
+    // A place's page puts its scene on the table (places.js), and asks first
+    // whether there's a scene on already.
+    sceneFrom(id, key) {
+      const p = (d.places ?? []).find((x) => x.id === key);
+      if (p) placeScene(id, p);
+    },
+    sceneOn: (id) => sceneParts(local(id)).any,
     // For the faction turn (turn.js), which is kept with the table.
     local: (id) => local(id),
     push: (id, op) => push(id, op),

@@ -1467,6 +1467,72 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
   .wb-tok-a:active, .wb-tile-a:active { transform: none; }
 }
 
+/* ── Places and people (stage 3 of notes/worlds-plan.md): a page for each,
+   under the board, with a part of each for the GM alone. */
+.wp-jumps { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.7rem; }
+.wp-jumps .chip { min-height: 44px; padding: 0 0.9rem; font: inherit; font-size: 0.92rem; font-weight: 700; cursor: pointer; }
+.wp-jumps .chip:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wp-sec { margin-top: 1.6rem; scroll-margin-top: 1rem; }
+.wp-sec > h2 { scroll-margin-top: 1rem; }
+.wp-mark { display: grid; place-items: center; width: 44px; height: 44px; color: var(--zd-them-ink); border: 1.5px solid var(--zd-them-line); border-radius: 3px; }
+.wp-tok.is-person .wp-mark { border-radius: 50%; }
+.wp-where { display: block; margin-top: 2px; color: var(--muted); }
+.wp-h3 { margin: 1rem 0 0.2rem; font-size: 0.95rem; color: var(--zd-them-ink); }
+.wp-bring h4 { margin-top: 0; }
+.wp-card .wp-text p { margin: 0 0 0.6rem; font-size: 1.02rem; line-height: 1.5; overflow-wrap: anywhere; }
+.wp-card .wp-text p:last-child { margin-bottom: 0.2rem; }
+.wp-card .wb-words { margin-top: 0.6rem; }
+.wp-about { overflow-wrap: anywhere; }
+.wp-link { color: var(--violet); font-weight: 700; text-decoration: underline; text-underline-offset: 0.16em; text-decoration-thickness: 1px; }
+.wp-link:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wp .wb-secret p { margin: 0 0 0.5rem; }
+.wp-note p, .wp-scene p { margin: 0 0 0.5rem; overflow-wrap: anywhere; }
+.wp-note { margin: 0.2rem 0 0.4rem; padding: 10px 12px; background: var(--panel); border-left: 3px solid var(--zd-them-line); }
+.wp-hooks, .wp-scene { margin-top: 1rem; }
+.wp-hooks h3, .wp-scene h3, .wp-linked h3, .wp-hers-b h3 { margin: 0.6rem 0 0.2rem; font-size: 0.95rem; color: var(--zd-them-ink); }
+.wp-hers-b h3 small { font-weight: 400; color: var(--muted); }
+/* How a person fights: the Challenge die, then the tags in their kinds. */
+.wp-threat { display: grid; gap: 10px; margin: 0.2rem 0 0.4rem; }
+.wp-c { display: flex; align-items: center; gap: 12px; }
+.wp-c .zd-die { --s: 56px; }
+.wp-c p { display: grid; margin: 0; line-height: 1.15; }
+.wp-c b { font-size: 1.5rem; font-weight: 800; color: var(--zd-them-ink); font-variant-numeric: tabular-nums; }
+.wp-c small { color: var(--muted); }
+.wp-tags { display: grid; gap: 8px; margin: 0; }
+.wp-tags div { display: grid; gap: 4px; }
+.wp-tags dt { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.wp-tags dd { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; align-items: center; }
+.wp-tag { display: inline-flex; flex-direction: column; max-width: 100%; }
+.wp-tag > summary { display: inline-flex; align-items: center; gap: 4px; min-height: 44px; list-style: none; cursor: pointer; }
+.wp-tag > summary::-webkit-details-marker { display: none; }
+.wp-tag > summary:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wp-tag > summary .zd-tag::after { content: "?"; margin-left: 6px; font-style: normal; font-size: 0.8rem; font-weight: 800; color: var(--muted); }
+.wp-tag[open] > summary .zd-tag::after { content: "×"; }
+.wp-tag > p { margin: 0 0 0.3rem; padding: 6px 10px; font-size: 0.92rem; line-height: 1.4; background: var(--panel); border-left: 2px solid var(--zd-them-line); }
+.wp-tag small { color: var(--muted); }
+.wp-x { font-weight: 800; color: var(--zd-them-ink); }
+.wp-teles { margin: 0.2rem 0 0; padding-left: 1.1rem; }
+.wp-teles li { margin: 0.25rem 0; overflow-wrap: anywhere; }
+.wp-voice { margin: 0; font-style: italic; }
+.wp-trow { display: grid; gap: 4px; margin: 0; padding: 8px 10px; min-width: 0; border: 1.5px dashed var(--line); border-radius: 2px; }
+.wp-trow-in { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 0.8fr) minmax(0, 1fr); gap: 8px; }
+.wp-tform .cc-field input, .wp-tform .cc-field select, .wp-tform .cc-field textarea { width: 100%; }
+/* What it's linked to. */
+.wp-linked + .wp-linked { margin-top: 0.4rem; }
+.wp-links { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.wp-links li { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; min-height: 44px; overflow-wrap: anywhere; }
+.wp-links small { color: var(--muted); }
+.wp-chip { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; color: var(--violet); text-decoration: underline; text-underline-offset: 0.16em; text-decoration-thickness: 1px; }
+.wp-chip:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wp-unlink { margin-left: auto; }
+.wp-named { font-style: italic; }
+.wp-face { margin-left: 4px; }
+.wb-tab.has-pages .wb-sec > h2 { position: static; width: auto; height: auto; margin: 1.4rem 0 0.4rem; overflow: visible; clip: auto; white-space: normal; }
+@media (max-width: 360px) {
+  .wp-trow-in { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .wp-trow-in .cc-field:last-child { grid-column: 1 / -1; }
+}
+
 /* ── The faction turn (stage 2 of notes/worlds-plan.md): each downtime from
    the board, at the top of the World screen and the World tab. The factions'
    pieces are violet like the board's, the crew's action is gold, and the

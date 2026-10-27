@@ -40,6 +40,11 @@
 //
 // A board out of the book comes in as one "new" for each card, so it's undone
 // the same way.
+//
+// The world's places and people (stage 3) are kept beside the factions, as
+// pages and the links between them, and their changes are in pages.js.
+
+import { PAGE_OPS, applyPage, linksTo, pagesForPlayer, pagesOf, undoPage } from "./pages.js";
 
 export const MAX = { name: 60, line: 120, words: 240, note: 600, factions: 48, list: 16, agendas: 2, minis: 3, x: 9 };
 export const PARTS = ["power", "res", "assets", "agenda", "bonds", "threads", "secret"];
@@ -66,7 +71,7 @@ const size = (v) => {
 const isId = (v) => ID.test(String(v ?? ""));
 
 export function blank() {
-  return { factions: [], by: null, at: 0 };
+  return { factions: [], pages: [], links: [], by: null, at: 0 };
 }
 
 // A line on one of a card's lists, tidied, or null if it can't go on.
@@ -137,6 +142,7 @@ export function readable(raw) {
   doc.factions = (Array.isArray(raw.factions) ? raw.factions : []).map(factionOf).filter((f) => f && !seen.has(f.id) && seen.add(f.id)).slice(0, MAX.factions);
   // A mini faction's maker has to be on the board, and not a mini faction itself.
   for (const f of doc.factions) if (f.parent && f.parent !== "crew" && !doc.factions.some((p) => p.id === f.parent && !p.mini)) f.parent = null;
+  Object.assign(doc, pagesOf(raw, doc.factions));
   doc.by = typeof raw.by === "string" ? raw.by : null;
   doc.at = Number(raw.at) || 0;
   return doc;
@@ -148,6 +154,7 @@ export const minisOf = (doc, id) => doc.factions.filter((f) => f.mini && f.paren
 // One change, made to doc. It says whether anything changed.
 export function apply(doc, op) {
   if (!op || typeof op !== "object") return false;
+  if (PAGE_OPS.has(op.o)) return applyPage(doc, op);
   const was = JSON.stringify(doc);
   const f = op.id ? find(doc, op.id) : null;
   switch (op.o) {
@@ -167,6 +174,7 @@ export function apply(doc, op) {
       if (!f) return false;
       doc.factions = doc.factions.filter((x) => x !== f);
       for (const x of doc.factions) if (x.parent === f.id) x.parent = null;
+      doc.links = doc.links.filter(([a, b]) => a !== f.id && b !== f.id);
       break;
     }
     case "mini": {
@@ -295,6 +303,7 @@ export function apply(doc, op) {
 
 // What puts a change back, worked out from the board before it's made.
 export function undoOf(doc, op) {
+  if (PAGE_OPS.has(op?.o)) return undoPage(doc, op);
   const f = op.id ? find(doc, op.id) : null;
   const copy = (x) => JSON.parse(JSON.stringify(x));
   const item = f && op.l && Array.isArray(f[op.l]) ? f[op.l].find((x) => x.id === (op.lid ?? op.item?.id)) : null;
@@ -302,7 +311,7 @@ export function undoOf(doc, op) {
     case "new":
       return op.f?.id ? [{ o: "gone", id: op.f.id }] : [];
     case "gone":
-      return f ? [{ o: "new", f: copy(f), at: doc.factions.indexOf(f), kids: minisOf(doc, f.id).map((x) => x.id) }] : [];
+      return f ? [{ o: "new", f: copy(f), at: doc.factions.indexOf(f), kids: minisOf(doc, f.id).map((x) => x.id) }, ...linksTo(doc, f.id).map((b) => ({ o: "link", a: f.id, b }))] : [];
     case "mini": {
       if (!f || !op.f?.id) return [];
       const back = [{ o: "gone", id: op.f.id }];
@@ -379,6 +388,7 @@ export function standingOf(f) {
 // only the parts of each that it's been shown. Nothing else leaves the Worker.
 // Power's shown with the assets that add it, and the rest of the assets on
 // their own. A thread toward a faction the crew hasn't been shown stays hidden.
+// Places and people go the same way (pagesForPlayer() in pages.js).
 export function forPlayer(doc) {
   const seen = new Set(doc.factions.filter((f) => f.shown.card).map((f) => f.id));
   return {
@@ -407,6 +417,7 @@ export function forPlayer(doc) {
         book: null,
       };
     }),
+    ...pagesForPlayer(doc, seen),
     by: null,
     at: 0,
   };

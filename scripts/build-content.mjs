@@ -873,6 +873,277 @@ function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, wa
   return { boards, build, sizes, assets, turn, link: `${pageFor.get(factionsDoc.path)}#s-faction-board` };
 }
 
+// ------------------------------------------------------------ places and people
+// Places and people (stage 3 of notes/worlds-plan.md): everything a GM can
+// bring in or roll for a page of her world, read off the chapters into
+// public/world-book.json. The companion reads it when a World screen opens,
+// and the service worker keeps it for offline. The build stops if a chapter
+// changes shape.
+
+// Words the way a page shows them: links undone, quotes and apostrophes
+// curled, and the book's italics kept.
+const pageWords = (s = "") => curly(s.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/"([^"\n]*)"/g, "“$1”").replace(/\s+/g, " ").trim());
+// Honorifics that aren't what anyone calls a person on their own.
+const HONORIFICS = /^(Old|Young|Big|Little|Lord|Lady|Dame|Sir|Master|Madam|Mister|Mr|Mrs|Ms|Mother|Sister|Brother|Father|Abbot|Abbess|Captain|Sergeant|Widow|Commodore|Factor|Inspector|Duke|Duchess|Queen|King|Prince|Princess|Director|Councillor|Doctor|Dr|Saint)$/;
+
+// What else a person's called, so their name links wherever a page says it:
+// their first and last names, without an honorific. A name that starts with
+// "The" is a group's, and keeps its whole name.
+function akaOf(name) {
+  if (/^the\b/i.test(name)) return [];
+  const w = name.split(/\s+/).filter(Boolean);
+  while (w.length > 1 && HONORIFICS.test(w[0])) w.shift();
+  if (w.length === 1) return w[0] === name ? [] : [w[0]];
+  return [...new Set([w[0], w[w.length - 1]])];
+}
+
+// One of a threat's tags: *Armoured ×6 (first)*, *Bound to the Bog* (weak
+// point) or *Forms (2)*.
+function threatTag(raw, part) {
+  const m = plain(raw).match(/^(.+?)(?: ×(\d+))?(?: \(([^)]+)\))?$/);
+  if (!m) return null;
+  if (m[3] && /^\d+$/.test(m[3])) return { text: curly(`${m[1].trim()} (${m[3]})`), x: m[2] ? Number(m[2]) : 1, part, note: "" };
+  return { text: curly(m[1].trim()), x: m[2] ? Number(m[2]) : 1, part, note: m[3] ? curly(m[3]) : "" };
+}
+
+// A threat the way the Bestiary and the frames write one: what it is, what
+// you notice, its Challenge, its tags in the three kinds, its telegraphs, its
+// voice, its hidden tag and its Forms.
+const THREAT_LINES = { "Comes at you": "comes", "Keeps it going": "keeps", "Drives it": "drives" };
+function threatOf(name, body, key, group, warn) {
+  const lines = {};
+  const paras = [];
+  for (const p of body.split(/\n\s*\n/).map((x) => x.trim()).filter(Boolean)) {
+    const f = p.match(/^\*\*([A-Za-z' ]+)\*\* ([\s\S]+)$/);
+    if (f) lines[f[1]] = f[2].replace(/\s+/g, " ").trim();
+    else paras.push(p);
+  }
+  for (const k of Object.keys(lines)) if (!["Challenge", "Telegraphs", "Voice", "Hidden", "Forms", ...Object.keys(THREAT_LINES)].includes(k)) warn(`${name} has a line a page can't hold yet: ${k}`);
+  const c = Number(lines.Challenge?.match(/^(\d)\b/)?.[1]);
+  if (!c || c > 6) warn(`can't read ${name}'s Challenge`);
+  const tags = [];
+  for (const [label, part] of Object.entries(THREAT_LINES)) {
+    // A line with no tags on it, like a mook's "Nothing. One good win.", has
+    // none of that kind.
+    for (const seg of dots(lines[label] ?? "").filter((x) => x.includes("*"))) {
+      const t = threatTag(seg, part);
+      if (t) tags.push(t);
+      else warn(`can't read ${name}'s tag ${seg}`);
+    }
+  }
+  if (!tags.length) warn(`can't read ${name}'s tags`);
+  const hid = (lines.Hidden ?? "").match(/^\*([^*]+)\*(?: \(([^)]+)\))?\.?\s*(.*)$/);
+  if (!hid) warn(`can't read ${name}'s hidden tag`);
+  return {
+    key, group, name: curly(name),
+    about: pageWords(paras[0] ?? ""), text: pageWords(paras.slice(1).join(" ")),
+    want: "", secret: hid ? curly(`${dropStop(hid[1])}${hid[2] ? ` (${hid[2]})` : ""}`) : "", more: hid ? pageWords(hid[3]) : "",
+    threat: { c: c || 1, tags, tele: dots(lines.Telegraphs ?? "").map(pageWords), voice: pageWords(lines.Voice ?? ""), forms: pageWords(lines.Forms ?? "") },
+  };
+}
+const threatsIn = (body, group, warn) => [...body.matchAll(/^:::threat\[([^\]]+)\][^\n]*\n([\s\S]*?)^:::$/gm)].map((m) => threatOf(m[1], m[2], `${group.key}/${keyOf(m[1])}`, group.name, warn));
+
+// Who's here in one of Twenty Places: each one named in italics is a person
+// with their Challenge and tags, the rest stay with the place.
+function whoIn(text, warn, place, bestiary) {
+  const people = [];
+  const crowd = [];
+  const aboutOf = (phrase, name, many) => {
+    let p = phrase.replace(/^[,\s]+|[,\s]+$/g, "");
+    if (!p) return "";
+    // Captain Ilse Brandt of the watch is the captain of the watch.
+    if (/^of /.test(p)) {
+      const hon = [];
+      for (const w of name.split(/\s+/)) {
+        if (!HONORIFICS.test(w)) break;
+        hon.push(w);
+      }
+      return curly(`${hon.length ? hon.join(" ") : name} ${p}.`);
+    }
+    if (many && /^(his|her|their) /.test(p)) p = `one of ${p}`;
+    p = p.replace(/^and /, "with ").replace(/^who['’]s (\w+)/, (_, w) => (/ing$/.test(w) ? `is ${w}` : `has ${w}`)).replace(/^who /, "");
+    return curly(`${capFirst(p)}.`);
+  };
+  for (const seg of dots(text)) {
+    const m = seg.match(/^(.*?) \(Challenge (\d)(?:: ([^)]*?))?(?:, the Bestiary['’]s ([^)]+))?\)(.*)$/);
+    if (!m) {
+      warn(`can't read who's in ${place}: ${seg}`);
+      continue;
+    }
+    const [, pre, cs, tagText = "", beast = "", post = ""] = m;
+    const c = Number(cs);
+    const tags = italics(tagText);
+    const names = italics(pre);
+    const among = post.match(/^, among them \*([^*]+)\*,? (.+)$/);
+    const though = [...post.matchAll(/though (\w+) \*([^*]+)\*/g)];
+    if (!names.length) {
+      crowd.push(pageWords(`${pre} (Challenge ${c}${tagText ? `: ${tagText}` : ""}${beast ? `, the Bestiary’s ${beast}` : ""})`));
+      if (among) people.push({ name: curly(among[1]), about: aboutOf(among[2], among[1]), c, tags: [] });
+      continue;
+    }
+    const lead = pre.slice(0, pre.indexOf(`*${names[0]}*`));
+    const rest = pre.replace(/\*[^*]+\*/g, "").replace(/\s+and\s*$/, "");
+    for (const name of names) {
+      const own = though.filter((t) => t[1] === name.split(" ")[0]).map((t) => plain(t[2]));
+      const beastly = beast ? bestiary.find((b) => keyOf(b.name) === keyOf(`The ${beast}`) || keyOf(b.name) === keyOf(beast)) : null;
+      if (beast && !beastly) warn(`${place}'s ${name} is the Bestiary's ${beast}, but the Bestiary hasn't got one`);
+      people.push({ name: curly(name), about: aboutOf(names.length > 1 ? lead : rest, name, names.length > 1), c, tags: [...tags, ...own], beast: beastly });
+    }
+  }
+  return { people, crowd };
+}
+
+function worldBookFrom({ worldDoc, placesDoc, threatDoc, bestiaryDoc, tagsDoc, steepDoc, framesDoc }, pageFor, warn) {
+  const link = (doc, id) => `${pageFor.get(doc.path)}${id ? `#${id}` : ""}`;
+  const rowsOf = (t) => (t?.rows ?? []).map((r) => curly(dropStop(plain(r[1] ?? ""))));
+
+  // Building Your World's tables: a place's complication, what a person wants
+  // and what they're hiding, and the trouble that makes a hook.
+  const [comp] = tablesOf(sectionOf(worldDoc.body, "s-world-places"));
+  const [want, hiding] = tablesOf(sectionOf(worldDoc.body, "people"));
+  const [hooks] = tablesOf(sectionOf(worldDoc.body, "hooks"));
+  const tables = { comp: rowsOf(comp), want: rowsOf(want), hiding: rowsOf(hiding), hooks: rowsOf(hooks) };
+  if (tables.comp.length !== 12 || tables.want.length !== 12 || tables.hiding.length !== 12 || tables.hooks.length !== 20) warn("expected Building Your World's d12s for a place's complication and what a person wants and hides, and its d20 of hooks");
+
+  // Appendix B: every threat tag, the kind it is and how it plays.
+  const tags = {};
+  for (const [id, part] of [["how-it-comes-at-you", "comes"], ["what-keeps-it-going", "keeps"], ["vulnerability-tags", "weak"], ["what-drives-it", "drives"]]) {
+    const rows = tablesOf(sectionOf(tagsDoc.body, id))[0]?.rows ?? [];
+    if (rows.length < 8) warn(`can't read Appendix B's ${id.replace(/-/g, " ")}`);
+    for (const r of rows) {
+      const name = curly(plain(r[0]));
+      if (name && !tags[name]) tags[name] = { part, does: pageWords(r[1] ?? "") };
+    }
+  }
+  const tagKey = new Map(Object.keys(tags).map((t) => [keyOf(t), t]));
+  // A tag as Appendix B names it, if it's there.
+  const named = (t) => tagKey.get(keyOf(t)) ?? curly(t);
+  const partOf = (t) => tags[named(t)]?.part ?? "";
+
+  // The Threat Builder's tables: what it is, and its tags in the three kinds.
+  const whatT = tablesOf(sectionOf(threatDoc.body, "what-it-is"))[0];
+  const what = (whatT?.rows ?? []).map((r) => {
+    const m = r[1].match(/^\*\*([^*]+)\*\*:?\s*(.*)$/);
+    const start = italics(r[3] ?? "").join(", ").split(/,\s*/).filter(Boolean);
+    const twice = !Number(r[2]);
+    return {
+      name: curly(capFirst(plain(m?.[1] ?? r[1]))), text: curly(capFirst(plain(m?.[2] ?? ""))), c: Number(r[2]) || 0, twice,
+      tags: twice ? [] : start.filter((t) => !/^and /.test(t)).map((t) => named(t)), note: twice ? "" : curly(capFirst(start.filter((t) => /^and /.test(t)).map((t) => t.replace(/^and /, "")).join(", "))),
+    };
+  });
+  if (what.length !== 20 || what.some((w) => !w.twice && (!w.c || !w.tags.length))) warn("expected the Threat Builder's d20 of what it is, each with its Challenge and the tags it starts with");
+  const tagTables = tablesOf(sectionOf(threatDoc.body, "its-tags"));
+  const kind = (head) => (tagTables.find((t) => new RegExp(head, "i").test(t.head[1] ?? ""))?.rows ?? []).map((r) => named(dropStop(plain(r[1] ?? "")).replace(/,? with a Forms list$/, "")));
+  const builder = { what, comes: kind("comes at you"), keeps: kind("keeps it going"), drives: kind("drives it") };
+  if (builder.comes.length !== 12 || builder.keeps.length !== 12 || builder.drives.length !== 12) warn("expected the Threat Builder's three d12s of tags: how it comes at you, what keeps it going and what drives it");
+
+  // The book's threats to start a person from: the Bestiary's forty, in its
+  // groups, and each frame's.
+  const threats = [];
+  for (const m of bestiaryDoc.body.matchAll(/^## (.+?) \{#([a-z0-9-]+)\}$/gm)) {
+    const got = threatsIn(sectionOf(bestiaryDoc.body, m[2]), { key: "bestiary", name: `The Bestiary: ${curly(m[1])}` }, warn);
+    threats.push(...got.map((t) => ({ ...t, link: link(bestiaryDoc, m[2]) })));
+  }
+  if (threats.length !== 40) warn(`expected the Bestiary's forty threats, found ${threats.length}`);
+  const bestiary = [...threats];
+  for (const m of framesDoc.body.matchAll(/^## (.+?) \{#(s-frame-[a-z-]+)\}$/gm)) {
+    if (m[2] === "s-frame-own") continue;
+    const sec = sectionOf(framesDoc.body, m[2]);
+    const th = sec.match(/### Threats[^\n]*\n([\s\S]*?)(?=^### |$(?![\s\S]))/m)?.[1] ?? "";
+    const got = threatsIn(th, { key: m[2].replace(/^s-frame-/, ""), name: curly(m[1]) }, warn);
+    if (!got.length) warn(`can't find ${m[1]}'s threats`);
+    threats.push(...got.map((t) => ({ ...t, link: link(framesDoc, m[2]) })));
+  }
+  // A tag the book doesn't sort, like the frames' *Sea Legs*, is sorted by
+  // Appendix B where it can be.
+  for (const t of threats) for (const g of t.threat.tags) g.text = named(g.text);
+
+  // Twenty Places, each with its people.
+  const places = [];
+  for (const m of placesDoc.body.matchAll(/^## (.+?) \{#(s-place-[a-z-]+)\}\n+:::place\n([\s\S]*?)\n:::$/gm)) {
+    const name = curly(m[1]);
+    const key = m[2];
+    const paras = m[3].split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+    const field = {};
+    for (const p of paras) {
+      const f = p.match(/^\*\*([^*]+?)\*\* ([\s\S]*)$/);
+      if (f) field[f[1]] = f[2].replace(/\s+/g, " ").trim();
+    }
+    const [first, seen] = paras.filter((p) => !p.startsWith("**"));
+    const head = (first ?? "").match(/^(.+?) \(Challenge (\d)\)\.?$/);
+    const sec = (field.Secret ?? "").match(/^\*([^*]+)\*\.?\s*(.*)$/);
+    if (!head || !seen || !sec || !field["Who's here"] || !field.Telegraphs) {
+      warn(`can't read ${name}'s first line, what the crew sees, its Secret, who's here or its telegraphs`);
+      continue;
+    }
+    const who = whoIn(field["Who's here"], warn, name, bestiary);
+    // Each one's also called by their first or last name, unless someone else
+    // here is too.
+    const akas = who.people.map((p) => akaOf(p.name));
+    const count = new Map();
+    for (const a of akas.flat()) count.set(a, (count.get(a) ?? 0) + 1);
+    const people = who.people.map((p, i) => {
+      const aka = akas[i].filter((a) => count.get(a) === 1 && !who.people.some((q) => q.name === a));
+      // One the place says is a threat out of the Bestiary is that threat whole.
+      const { about = "", text: seen = "", secret = "", more = "", threat = null } = p.beast ?? {};
+      const base = threat
+        ? { about, text: [about, seen].filter(Boolean).join(" "), want: "", secret, more, threat: { ...threat, c: p.c, tags: threat.tags.map((t) => ({ ...t })), tele: [...threat.tele] } }
+        : { about: "", text: "", want: "", secret: "", more: "", threat: { c: p.c, tags: p.tags.map((t) => ({ text: named(t), x: 1, part: partOf(t), note: "" })), tele: [], voice: "", forms: "" } };
+      return { key: `${key}/${keyOf(p.name)}`, name: p.name, ...base, about: p.about || base.about, aka };
+    });
+    // A telegraph that names one of them is theirs. The rest stay with the place.
+    const others = [];
+    for (const t of dots(field.Telegraphs).map(pageWords)) {
+      const said = people.filter((p) => [p.name, ...p.aka].some((n) => new RegExp(`(?<![\\p{L}\\p{N}])${n.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\p{L}\\p{N}])`, "u").test(t)));
+      if (said.length === 1 && !said[0].threat.tele.includes(t)) said[0].threat.tele.push(t);
+      else if (said.length !== 1) others.push(t);
+    }
+    const note = [
+      who.crowd.length ? `**Also here** ${who.crowd.join(" · ")}` : "",
+      others.length ? `**Other telegraphs** ${others.join(" · ")}` : "",
+      field.Elsewhere ? `**Elsewhere** ${pageWords(field.Elsewhere)}` : "",
+    ].filter(Boolean).join("\n");
+    places.push({
+      key, name, about: curly(`${pageWords(head[1])}.`), text: pageWords(seen), c: Number(head[2]),
+      secret: curly(dropStop(sec[1])), more: pageWords(sec[2]), hooks: dots(field.Hooks ?? "").map(pageWords), note, scene: key,
+      link: link(placesDoc, key), people,
+    });
+  }
+  if (places.length !== 20) warn(`expected twenty places with their people, found ${places.length}`);
+  if (places.some((p) => !p.people.length)) warn(`can't find anyone named in ${places.filter((p) => !p.people.length).map((p) => p.name).join(", ")}`);
+
+  // The Steeplands' four cities and every frame's world, each a place.
+  const placesOf = (sec, id) => [...sec.matchAll(/^-\s+\*\*([^*]+?)\.?\*\*\s+(.+)$/gm)].map((m) => {
+    const all = pageWords(m[2]);
+    const one = firstSentence(all);
+    return { key: `${id}/${keyOf(m[1])}`, name: curly(m[1].replace(/\.$/, "")), about: one, text: all.slice(one.length).trim() };
+  });
+  const worlds = [{ id: "steeplands", name: "The Steeplands", link: link(steepDoc, "the-four-cities-that-matter"), places: placesOf(sectionOf(steepDoc.body, "the-four-cities-that-matter"), "steeplands") }];
+  if (worlds[0].places.length !== 4) warn(`expected the Steeplands' four cities, found ${worlds[0].places.length}`);
+  for (const m of framesDoc.body.matchAll(/^## (.+?) \{#(s-frame-[a-z-]+)\}$/gm)) {
+    if (m[2] === "s-frame-own") continue;
+    const sec = sectionOf(framesDoc.body, m[2]);
+    const at = sec.match(/^### The world \{#([a-z0-9-]+)\}/m);
+    const got = at ? placesOf(sectionOf(framesDoc.body, at[1]), m[2].replace(/^s-frame-/, "")) : [];
+    if (got.length < 3) warn(`can't find ${m[1]}'s places, in The world`);
+    worlds.push({ id: m[2].replace(/^s-frame-/, ""), name: curly(m[1]), link: link(framesDoc, at?.[1] ?? m[2]), places: got });
+  }
+
+  // Everything that comes in gets the book's hash and this build's time, so
+  // a page she brought in can tell when the book's changed it.
+  const stamp = (x) => Object.assign(x, { h: hashOf(JSON.stringify({ ...x, link: undefined, people: undefined })), at: BUILT });
+  for (const p of places) {
+    stamp(p);
+    p.people.forEach(stamp);
+  }
+  for (const w of worlds) w.places.forEach(stamp);
+  threats.forEach(stamp);
+  return {
+    v: 1, at: BUILT, tables, builder, tags, places, worlds, threats,
+    links: { world: link(worldDoc), places: link(placesDoc), threats: link(threatDoc), bestiary: link(bestiaryDoc), tags: link(tagsDoc) },
+  };
+}
+
 // What the character builder offers, read off Building Your Character and the
 // Title ideas so it always matches the book: the Quick Build's steps, the
 // ideas, every trait and the number it changes, what you can carry, the Catch
@@ -1076,6 +1347,11 @@ if (!placesDoc) companionWarn("can't find the Twenty Places for the live table's
 const worldDocs = { factionsDoc: docWith("{#s-faction-build}"), steepDoc: docWith("{#the-four-great-powers}"), framesDoc: docWith("{#s-frame-brinewake}"), assetsDoc: docWith("{#faction-strength}") };
 const worlds = Object.values(worldDocs).every(Boolean) ? worldsFrom(worldDocs, pageFor, (msg) => companionWarn(`board: ${msg}`)) : null;
 if (!worlds) companionWarn("can't find Factions, the Steeplands, Frames or Appendix B's assets for the faction board");
+// Places and people: what a GM brings in or rolls for a page, written to its
+// own file at the end, since only a World screen reads it.
+const bookDocs = { worldDoc: docWith("{#s-world-places}"), placesDoc, threatDoc: docWith("{#building-a-threat-start-to-finish}"), bestiaryDoc: docWith("{#mooks-challenge-23}"), tagsDoc: docWith("{#how-it-comes-at-you}"), steepDoc: docWith("{#the-four-cities-that-matter}"), framesDoc: worldDocs.framesDoc };
+const worldBook = Object.values(bookDocs).every(Boolean) ? worldBookFrom(bookDocs, pageFor, (msg) => companionWarn(`places and people: ${msg}`)) : null;
+if (!worldBook) companionWarn("can't find Building Your World, Twenty Places, the Threat Builder, the Bestiary, Appendix B's tags, the Steeplands or Frames for places and people");
 // The rules the companion shows on a tap, read off the chapters so they match
 // the book and read offline: each one's opening, up to its first example,
 // table or subheading.
@@ -1089,7 +1365,7 @@ for (const id of ["s-round", "s-telegraphs", "s-answering", "s-the-roll", "s-int
   "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through", "s-blaze", "s-healing", "s-vulnerable", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "s-good-aspiration", "how-permissions-stack",
   "your-slots", "s-downtime-rolls", "s-goal", "s-good-goal", "s-climb", "s-projects", "s-crew-size", "s-crew-tags", "s-crew-wealth", "s-crew-grows", "s-party-resources",
   "s-faction-board", "s-wealth", "s-faction-bonds", "s-agendas", "when-an-agenda-happens", "s-standing", "s-mini-factions", "s-faction-build",
-  "s-faction-turn", "s-faction-outcomes", "s-faction-comes", "s-faction-crew", "party-slots"]) {
+  "s-faction-turn", "s-faction-outcomes", "s-faction-comes", "s-faction-crew", "party-slots", "building-a-threat", "s-hidden"]) {
   const doc = docWith(`{#${id}}`);
   const head = doc?.body.match(new RegExp(`^#{2,4} (.+?) \\{#${id}\\}`, "m"));
   const blocks = [];
@@ -1177,6 +1453,11 @@ if (learnDoc) {
 // The pop-ups' openings, one file the service worker keeps for offline.
 const none = [...linkTargets].filter((id) => where.has(id) && !Object.keys(openings).some((k) => k.endsWith(`#${id}`) || k === linkTo(id))).length;
 writeFileSync(join(ROOT, "public", "openings.json"), JSON.stringify({ v: 1, s: openings }));
+// Places and people's book, which the companion reads when a World screen opens.
+if (worldBook) {
+  writeFileSync(join(ROOT, "public", "world-book.json"), JSON.stringify(worldBook));
+  console.log(`world-book.json: ${worldBook.places.length} places with ${worldBook.places.reduce((n, p) => n + p.people.length, 0)} people, ${worldBook.worlds.reduce((n, w) => n + w.places.length, 0)} places from the Steeplands and the frames, ${worldBook.threats.length} threats and ${Object.keys(worldBook.tags).length} tags`);
+}
 console.log(`openings.json: ${Object.keys(openings).length} sections for the pop-ups (${none} linked sections start with a table, an example or a heading, so their links open the page)`);
 
 const outDir = join(ROOT, "src", "generated");
