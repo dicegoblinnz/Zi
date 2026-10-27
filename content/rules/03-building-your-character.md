@@ -6,7 +6,7 @@ order: 3
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-10-27
 ---
 :::quote
 Your whole character fits in a few plain sentences and some numbers.
@@ -637,6 +637,24 @@ Your Aspiration is also somewhere a consequence can land. When a blow or a failu
 
 **Session 7:** She robs the Vane Estate. Her last roll is at the vault itself, her d10 against the Aspiration's d12. It's 9 against 9, and she pays 1 Aura to take the tie. It climbs past d12 and resolves. Vesk takes a third archetype and names it *The woman who has never been seen*, with one permission, and her Resolve maximum's 3 now. Her new Aspiration, *Find out who the fence really is*, starts at d2.
 :::
+
+### A good Aspiration {#s-good-aspiration}
+
+When your Aspiration climbs past d12, you get it, so write one you could actually get. Vesk's took her seven sessions, which is about the size to aim for. A good one passes all four of these:
+
+-   **It's one thing.** It can take a few steps, the way Wren has to find the thing before she can put it down, but it's one aim. If you want two things, write the first, and the other can be your next Aspiration.
+-   **You'd know the day it's done.** There's a moment you could point at, like Vesk walking out of the vault or Bram getting his rank back. *Be rich* hasn't got one, so when it climbs past d12, nobody knows what you've got.
+-   **It's about someone or something in the world.** That's what lets the GM put it within reach. Dorrie's *Get a seat at the table that ruined my family* points at the people who did it, so the GM knows who to put in her way.
+-   **The story goes on after it.** You get it, and then everyone else gets to react. Leave out words like *never* and *can't*, because they ask for something to stay true for the rest of the campaign.
+
+Here's what too big looks like, next to what the crew wrote:
+
+-   *Be the best thief there's ever been* has no day it's done. *Own the score of a lifetime* is one job, and Vesk will know it when she's pulled it.
+-   *Be a hero again* could mean anything. *Earn back the rank they stripped from me* says what Bram's after and who has to give it back.
+-   *Bring my order back* is a whole campaign. *Find out who burned my order's library* is where Isolde starts.
+-   *Kill the thing that took my brother and make sure it never happens again* is two things, and the second one never ends. *Find the thing that took my brother, and put it down* keeps the first.
+
+If yours is too big or too vague, the GM says so, and you work it out together before it goes on your sheet. Usually that means keeping the first piece of it, and the rest makes a good next Aspiration for when this one resolves.
 
 ## Confidence {#s-confidence}
 

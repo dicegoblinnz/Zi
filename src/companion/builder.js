@@ -525,7 +525,7 @@ const PRICE = { Awakened: "a Catch", Tempered: "a Burden", Perfected: "a Burden 
 // A link inside a card would be a link inside a button, so cards keep the words only.
 const unlink = (html) => String(html ?? "").replace(/<a [^>]*>|<\/a>/g, "");
 
-export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools = () => "" }) {
+export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule = () => "", tools = () => "" }) {
   const ARCH = new Map(B.archetypes.map((a) => [a.name, a]));
   const IDEA = new Map(B.ideas.map((x) => [x.id, x]));
   const TRAIT = new Map(B.traits.map((t) => [t.name, t]));
@@ -986,9 +986,13 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
       ${x.threads.length < MAX_THREADS ? '<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addthread">Add a thread</button></div>' : ""}`;
   }
 
-  // Step 7: one thing you want, at d2.
+  // Step 7: one thing you want, at d2. Past d12 you get it, so the book's
+  // tests for a good one sit under it, open on a new character until they're
+  // shut, and shut when changing one.
+  const goodOpen = () => d.deep.good ?? !changing();
   function stepAsp() {
-    return `<div class="bd-asp">${changing() ? "" : `<span class="bd-asp-die">${kitDie(2, { label: "Your Aspiration starts at d2" })}</span>`}<div class="bd-asp-f">${field("asp", changing() ? "Your Aspiration <small>its die’s on the Sheet tab</small>" : "Your Aspiration", b().aspiration, { max: 120, ph: "Own the score of a lifetime" })}</div></div>`;
+    return `<div class="bd-asp">${changing() ? "" : `<span class="bd-asp-die">${kitDie(2, { label: "Your Aspiration starts at d2" })}</span>`}<div class="bd-asp-f">${field("asp", changing() ? "Your Aspiration <small>its die’s on the Sheet tab</small>" : "Your Aspiration", b().aspiration, { max: 120, ph: "Own the score of a lifetime" })}</div></div>
+      <details class="bd-more bd-good" data-open="bd-good"${goodOpen() ? " open" : ""}><summary>What makes a good Aspiration</summary><div class="cc-rule">${rule("s-good-aspiration")}</div></details>`;
   }
 
   // Step 8: the numbers in the kit's pieces, a name, and a last look.
@@ -1414,9 +1418,9 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, tools
     if (!d) return;
     const key = el.dataset.open ?? "";
     let m;
-    const name = (m = key.match(/^bd-how-(\d)$/)) ? `how${m[1]}` : (m = key.match(/^bd-q-(\d+)$/)) ? `q${m[1]}` : (m = key.match(/^bd-arch-(\d+)$/)) ? `archmore${m[1]}` : key === "bd-test" ? "test" : key === "bd-qs" ? "qs" : "";
+    const name = (m = key.match(/^bd-how-(\d)$/)) ? `how${m[1]}` : (m = key.match(/^bd-q-(\d+)$/)) ? `q${m[1]}` : (m = key.match(/^bd-arch-(\d+)$/)) ? `archmore${m[1]}` : key === "bd-test" ? "test" : key === "bd-qs" ? "qs" : key === "bd-good" ? "good" : "";
     // A redraw puts a fold back the way it was, which isn't a change.
-    if (!name || (d.deep[name] === true) === el.open) return;
+    if (!name || (name === "good" ? goodOpen() : d.deep[name] === true) === el.open) return;
     d.deep[name] = el.open;
     saveSoon();
   }

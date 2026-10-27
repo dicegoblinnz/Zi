@@ -6,7 +6,7 @@ order: 3.5
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook (split out of Building Your Character)
-updated: 2026-10-26
+updated: 2026-10-27
 ---
 ## Quick Build {#s-quick}
 
@@ -22,7 +22,7 @@ The quick build is the long build with most of the thinking done for you. You pi
 4.  **Fill in your set actions.** Defend, Fight, Move, Sneak, Study and Talk are on every sheet, and if there's something you do all the time, give it a set action of its own. Put your Titles, items and traits on every set action they fit nearly every time, and each permission on the two it helps most, never twice on the same one. Plain armour and a shield go on your Defend. A set action's steps are 1 for the action and 1 for every line on it. See [Set actions](#s-step-set-actions).
 5.  **Take what you carry, and attune one thing.** You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more. Your attuned thing starts at Awakened with one permission. If there's trouble you'd like on it, give it a Catch and it gets a second permission. You can attune more later, in downtime. See [What you carry](#s-carrying) and [Attunement](#s-attunement).
 6.  **Write your threads.** Answer at least two of the [ten crew questions](#s-connect), and turn two of your answers into **bond threads** with the crew, something good between you. A thread with someone in the crew goes on both your sheets, so agree on it together. Write a **hostile thread** as well, with anyone, and you can write a third bond thread. With two players, one of your bond threads goes to someone outside the crew, and playing alone, both do. See [Bonds and threads](#s-bonds).
-7.  **Write your Aspiration** at d2. It's one thing you want, and it climbs as you chase it. See [Aspiration](#s-aspiration).
+7.  **Write your Aspiration** at d2. It's one thing you want, and it climbs as you chase it. Past d12 you get it, so make it something you'd know the day it's done: *be a hero again* is too vague, and *earn back the rank they stripped from me* is better. See [Aspiration](#s-aspiration) and [A good Aspiration](#s-good-aspiration).
 8.  **Check the numbers.** You've got 5 Aura, 2 Resolve (one for each Title), a stride of 3 and a wound die at d2. Confidence starts every scene on d6, a size up in clothes that fit the scene, and a trait like Iron Will can start you higher. Then it swings a size at a time: up when you win a roll or stop a telegraph, and down when you're hurt or miss with every die. See [Resolve](#s-resolve), [Wounds](#s-blaze) and [Confidence](#s-confidence).
 
 :::example[Wren, the quick way]

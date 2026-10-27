@@ -8,7 +8,7 @@ id: learn
 # The cards teach the chapters and never change a rule. When a rules change
 # touches a section a card teaches, the build names the cards. Check them
 # against the chapters, then set checked to that change's date.
-checked: 2026-10-26
+checked: 2026-10-27
 ---
 ::::card[Did you succeed?]{#l-succeed teaches=the-core}
 You play someone who's properly good at something, like a thief who can open any lock in the city. Everything your character can do is a **permission**, a short line on your sheet. If it's on there you can do it, no questions asked, and every permission that fits what you're doing makes your die bigger. Then the question's simple: did you succeed? Roll against whatever's in your way, and if you beat the number, you did.
@@ -179,7 +179,7 @@ Vesk's on Vane's roof with no Resolve left, so she whistles for Dorrie to pull t
 ::::
 
 ::::card[Your Aspiration]{#l-aspiration teaches=s-aspiration}
-Your **Aspiration** is one thing you want. It starts at d2 and climbs as you chase it: when something you do really moves it along, roll against its die, and beat it to climb one. A setback steps it back down, never below d2. When it climbs past d12, it resolves: you take a new archetype, name it with a Title, and write a new Aspiration at d2.
+Your **Aspiration** is one thing you want. It starts at d2 and climbs as you chase it: when something you do really moves it along, roll against its die, and beat it to climb one. A setback steps it back down, never below d2. When it climbs past d12, it resolves: you get it, take a new archetype, name it with a Title, and write a new Aspiration at d2. So make it one thing you'd know the day it's done.
 
 :::example
 Vesk's *Own the score of a lifetime* is on d2 when she cracks a strongbox in the Low Market. Her Locks, a d10, rolls 7 against its 1, so it climbs to d4.

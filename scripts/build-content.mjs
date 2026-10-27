@@ -793,8 +793,8 @@ const blockHtml = (text) => {
 };
 const rules = {};
 for (const id of ["s-round", "s-telegraphs", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour",
-  "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through", "s-blaze", "s-healing", "s-vulnerable", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "how-permissions-stack",
-  "your-slots", "s-downtime-rolls", "s-goal", "s-climb", "s-projects", "s-crew-size", "s-crew-tags", "s-crew-wealth", "s-crew-grows", "s-party-resources"]) {
+  "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through", "s-blaze", "s-healing", "s-vulnerable", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "s-good-aspiration", "how-permissions-stack",
+  "your-slots", "s-downtime-rolls", "s-goal", "s-good-goal", "s-climb", "s-projects", "s-crew-size", "s-crew-tags", "s-crew-wealth", "s-crew-grows", "s-party-resources"]) {
   const doc = docWith(`{#${id}}`);
   const head = doc?.body.match(new RegExp(`^#{2,4} (.+?) \\{#${id}\\}`, "m"));
   const blocks = [];

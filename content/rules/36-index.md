@@ -6,7 +6,7 @@ order: 36
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-10-27
 ---
 :::index-section
 ## A {#a}
@@ -24,7 +24,7 @@ updated: 2026-10-26
 -   **Arcs** — [Campaigns](#s-campaigns), [Between Arcs](#s-arcs)
 -   **Area die** — [Area](#s-area), [Area magic](#s-magic-area), [Elementalist](#a-elementalist)
 -   **Armour** — [Armour](#s-armour), [Defend](#s-defend)
--   **Aspiration** — [Aspiration](#s-aspiration)
+-   **Aspiration** — [Aspiration](#s-aspiration), [A good Aspiration](#s-good-aspiration)
 -   **Assets, a faction's** — [Resources and assets](#s-wealth), [Crew assets](#s-crew-tags), [Assets to borrow from](#faction-strength)
 -   **Attunement** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
 -   **Aura** — [Aura](#s-aura), [Aura and Resolve](#s-aura-tactics)
@@ -105,7 +105,7 @@ updated: 2026-10-26
 
 -   **Glossary** — [Appendix F](#appendix-glossary)
 -   **GM moves** — [When They Look at You](#s-gm-moves)
--   **Goal, party** — [The Party Goal](#s-goal)
+-   **Goal, party** — [The Party Goal](#s-goal), [A good Goal](#s-good-goal)
 -   **Going beyond** — [Going Beyond](#s-going-beyond)
 -   **Growing** — [Growing](#growing)
 -   **Guardian** — [Guardian](#a-guardian)

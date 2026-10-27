@@ -602,14 +602,18 @@ try {
   await kai.page.click('.cc-tabs [data-t="party"]');
   await kai.page.waitForSelector(".pt-goal");
   yes((await text(kai.page, ".pt-where")).includes("Tuesday Lair"), "the Party tab says which campaign");
-  const climbAt = await kai.page.evaluate(() => Math.round(document.querySelector(".pt-climb").getBoundingClientRect().bottom));
-  yes(climbAt <= 844 - 60, `the Goal's buttons in the first screen, above the tabs (they end at ${climbAt}px)`);
+  // With no Goal yet, the book's tests for a good one are open under its words.
+  yes(await kai.page.$eval(".pt-goal .pt-good", (el) => el.open), "what makes a good Goal open while there's no Goal");
+  has(await text(kai.page, ".pt-goal .pt-good"), "Own the Low Market", "a good Goal's examples, from the book");
   if (SHOTS) await kai.page.waitForTimeout(500);
   await shot(kai.page, "party-tab-top");
   // Kai writes the Goal and it climbs, and Mo's phone catches up on its own.
   await kai.page.fill('.pt-goal input[name="goal"]', "Clear Dorrie’s name");
   await kai.page.click('.pt-goal button[type="submit"]');
   await kai.page.waitForSelector(".pt-goal-words");
+  same(await kai.page.$$(".pt-goal .pt-good").then((x) => x.length), 0, "the tests for a good Goal gone once it's written");
+  const climbAt = await kai.page.evaluate(() => Math.round(document.querySelector(".pt-climb").getBoundingClientRect().bottom));
+  yes(climbAt <= 844 - 60, `the Goal's buttons in the first screen, above the tabs (they end at ${climbAt}px)`);
   await kai.page.click('.pt-climb [data-by="1"]');
   await until(async () => (await partyOf(tuesday.id))?.goal?.die === 4, "the Goal at d4 in the campaign");
   same((await partyOf(tuesday.id))?.goal?.text, "Clear Dorrie’s name", "in Kai's words");
@@ -733,7 +737,14 @@ try {
   same(await chipOf(kai.page, "Vesk", jobs), "Bond", "Kai's Dorrie, in Zed's Night, still has it whole");
   await kai.page.click('.cc-tabs [data-t="party"]');
   await kai.page.waitForSelector(".pt-goal");
-  yes((await text(kai.page, ".pt-where")).includes("Zed’s Night") && !(await text(kai.page, ".pt")).includes("Clear Dorrie’s name"), "Dorrie's Party tab is Zed's Night's own");
+  // The book's tests for a good Goal are open, with Dorrie's as an example, so
+  // they're left out of what's looked through.
+  const zedsOwn = await kai.page.$eval(".pt", (el) => {
+    const c = el.cloneNode(true);
+    for (const x of c.querySelectorAll(".pt-good")) x.remove();
+    return c.textContent;
+  });
+  yes((await text(kai.page, ".pt-where")).includes("Zed’s Night") && !zedsOwn.includes("Clear Dorrie’s name"), "Dorrie's Party tab is Zed's Night's own");
   same(await partyOf(zedsNight.id), null, "and Zed's Night's sheet is untouched");
   same((await got(zed.page, "GET", `/api/campaigns/${tuesday.id}/party`)).status, 404, "Zed gets nothing of Tuesday Lair's party sheet");
   same((await got(zed.page, "POST", `/api/campaigns/${tuesday.id}/party`, { dev: "zeds-phone-0001", ops: [{ n: 1, o: "name", v: "Mine now" }] })).status, 404, "and can't change it");

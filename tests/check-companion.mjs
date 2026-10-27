@@ -974,6 +974,10 @@ if (part("5")) {
   same(await page.$$eval(".bd-thread", (els) => els.map((el) => el.querySelector('[aria-pressed="true"]').textContent)), ["Bond", "Bond", "Hostile", "Bond"], "a hostile thread making room for a third bond thread");
   await shot(page, "5-builder-threads");
   await next("Aspiration");
+  // Past d12 you get it, so the book's tests for a good one are open under it.
+  same(await page.$eval('details[data-open="bd-good"]', (el) => el.open), true, "what makes a good Aspiration open on a new character");
+  has(await page.textContent('details[data-open="bd-good"]'), "Earn back the rank they stripped from me", "a good Aspiration's examples, from the book");
+  await shot(page, "5-builder-aspiration");
   await page.fill("#b-asp", "Own the score of a lifetime");
   await next("Check it and play");
   await page.fill("#b-name", "Vesk");
@@ -1967,6 +1971,7 @@ if (part("9")) {
   same(await page.inputValue("#b-t0-p3"), "slip through a crowd", "downtime's permission, there to change");
   same(await page.getAttribute('.bd-trait[data-v="Prepared"]', "aria-pressed"), "true", "downtime's trait, there to change");
   same(await page.$$eval(".bd-part > h2", (els) => els.length), 8, "every part of her sheet on one page");
+  same(await page.$eval('details[data-open="bd-good"]', (el) => el.open), false, "what makes a good Aspiration shut when changing her");
 
   // A third Title, on Talk, up to six permissions and no seventh.
   await b('[data-b="addtitle"]');

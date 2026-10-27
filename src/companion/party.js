@@ -616,6 +616,13 @@ export function makeParty(d) {
     return `<div class="cc-ring pt-ladder" role="group" aria-label="Set the Goal’s die">${SIZES.map((s) => `<button type="button" class="cc-ringbtn" data-act="p" data-do="die" data-v="${s}"${s === g.die && !g.done ? ' aria-pressed="true"' : ' aria-pressed="false"'}>${kitDie(s, { label: `d${s}`, state: s === g.die ? "top" : s > g.die ? "low" : "" })}</button>`).join("")}</div>`;
   }
 
+  // What makes a good Goal, from the book, under wherever the words are
+  // written: open while there's no Goal yet, until someone shuts it.
+  function goodGoal(first) {
+    const open = d.isOpen("pt-good") || (first && !d.isShut?.("pt-good"));
+    return `<details class="cc-rulebox pt-good" data-open="pt-good" data-shut${open ? " open" : ""}><summary>What makes a good Goal</summary><div class="cc-rule">${d.rule("s-good-goal")}</div></details>`;
+  }
+
   function goalView(id, doc, k) {
     const g = doc.goal;
     const glow = lit[id].includes("goal") ? " is-new" : "";
@@ -635,13 +642,14 @@ export function makeParty(d) {
           <li><p>It picks two: a new resource, a new asset (it’ll need something paying for it) or a new holding. They go on below.</p></li>
           <li><p>Everyone writes a new thread, to someone the Goal brought into their life. It goes on their own sheet, with Change on the Sheet tab.</p></li>
           <li><p>Then write the next Goal, at d2.</p>
-            <form class="cc-form pt-form" data-form="p-next"><label class="cc-field">The next Goal <input name="goal" maxlength="${MAX.goal}" autocomplete="off" required></label><div class="cc-row"><button type="submit" class="button primary">Start it at d2</button></div></form></li>
+            <form class="cc-form pt-form" data-form="p-next"><label class="cc-field">The next Goal <input name="goal" maxlength="${MAX.goal}" autocomplete="off" required></label><div class="cc-row"><button type="submit" class="button primary">Start it at d2</button></div></form>${goodGoal(true)}</li>
         </ol>
         <div class="cc-row"><button type="button" class="button" data-act="p" data-do="climb" data-by="-1">Not done yet</button></div></div>`;
     }
     return `<div class="pt-goal card${glow}" data-pk="goal">
       <div class="pt-goal-top"><span class="pt-goal-die">${kitDie(g.die, { hide: true })}</span><div class="pt-goal-in"><p class="pt-k">The Party Goal <span class="pt-at">d${g.die}</span></p>${words}
         ${g.text && !editing ? `<button type="button" class="pt-reword" data-act="p" data-do="edit" data-k="goal">Change its words</button>` : ""}</div></div>
+      ${!g.text || editing ? goodGoal(!g.text) : ""}
       ${ladder(g)}
       <div class="cc-row pt-climb"><button type="button" class="button" data-act="p" data-do="climb" data-by="-1"${g.die <= 2 ? " disabled" : ""}>A setback</button><button type="button" class="button primary" data-act="p" data-do="climb" data-by="1">${g.die >= 12 ? "It climbs past d12" : "It climbs"}</button></div>
       <p class="cc-lead pt-how">When the GM says it’s within reach, roll against its die, and if you beat it, it climbs.</p>${ruleLink("s-goal", "How the Goal works")}</div>`;

@@ -1,6 +1,15 @@
-# For Mo: calls to confirm (26 Oct 2026)
+# For Mo: calls to confirm (27 Oct 2026)
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 26 Oct ones in `2026-10-26-chat-decisions.md`).
+
+## 27 Oct: a good Aspiration and a good Goal
+
+You asked for examples after a player wrote an Aspiration and a Goal too big to say yes to (*stop the spymaster and stop the return of the queen*, and *be the center of the world and create treaties that can't be broken*). They're in [A good Aspiration](#s-good-aspiration) and [A good Goal](#s-good-goal), and these are the calls in them:
+
+1. **The four tests.** It's one thing (a few steps are fine, the way Wren finds the thing before she puts it down), you'd know the day it's done, it's about someone or something in the world, and the story goes on after it, so no *never* or *can't*.
+2. **The size.** An Aspiration's about Vesk's size (seven sessions), and a Goal's one arc, four to six sessions. A Goal should be something everyone at the table has a reason to chase.
+3. **Who decides.** When one's too big or too vague, the GM says so, and the table works it out before it goes on the sheet, usually by keeping the first piece. The rest is the next Aspiration, or where the campaign's heading.
+4. **The examples** are the crew's own Aspirations, each next to a version that's too big (*be the best thief there's ever been*, *be a hero again*, *bring my order back*, and Wren's with *make sure it never happens again* on the end), and for Goals, *rule the city*, *keep the harbour safe*, and *bring peace to the Steeplands, with treaties nobody can break* next to *get the Harbour Guild and the Vane Estate to sign a truce*. Your player's own words aren't in the book.
 
 ## 26 Oct: the ones that matter most
 

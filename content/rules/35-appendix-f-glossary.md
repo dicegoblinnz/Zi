@@ -6,7 +6,7 @@ order: 35
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-10-27
 ---
 Here are the rule terms in the book, one line each, and each one links to its rule.
 
@@ -22,7 +22,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Archetype](#archetypes)** | What every Title is: one of seventeen, each with permissions and a mechanic only it can do. They're the Bard, Bloodsworn, Elementalist, Face, Guardian, Healer, Hunter, Illusionist, Leader, Maker, Oracle, Scholar, Shadow, Shifter, Summoner, Teleporter and Warrior. On most, 1 Aura puts +2 on one die of the mechanic, and +3 if you've taken it twice, and each has a Resolve spend too. |
 | **[Area die](#s-area)** | The Elementalist's: one die that says how far your roll reaches instead of an intent, a burst, a cone or a line twice as long. It takes a split and costs no Aura. Threats have areas too. |
 | **[Armour](#s-armour)** | Plate, leathers or a shield. Each piece is a line on your Defend, and one can break instead of you taking a Hurt. |
-| **[Aspiration](#s-aspiration)** | What your character wants. Starts at d2 and climbs. Past d12, a new archetype, with a Title you name for it. |
+| **[Aspiration](#s-aspiration)** | What your character wants: one thing, and you'd know the day it's done (see [A good Aspiration](#s-good-aspiration)). Starts at d2 and climbs. Past d12 you get it, and a new archetype, with a Title you name for it. |
 | **[Asset](#s-wealth)** | A permission on a faction's card for what it can do, like *Standing Army* (+1 Power). It needs a resource paying for it every downtime, or it stops counting. |
 | **[Attunement](#s-attunement)** | One attuned thing to start, on top of what you carry. An attuned thing has permissions of its own, grows in three stages, and can't be broken. |
 | **[Aura](#s-aura)** | Your luck and flair, for the small stuff. Up to your maximum, full every scene. It brings things in, keeps a Catch quiet, wins a tie when you're acting, and pays for your archetype's +2 and a quick heal. 1 back on every top face, and every time you let a Catch bite. |
@@ -64,7 +64,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Frame](#frames)** | A ready-made kind of campaign: a world, a tone, a board of factions and a first job. |
 | **[Gap](#chases)** | In a chase, the distance between you and what's after you. Past d2, caught. Past d12, away. |
 | **[GM move](#s-gm-moves)** | Something the world does when everyone looks at the GM. Usually a telegraph outside a round. |
-| **[Goal](#s-goal)** | What the whole crew is after this arc. Starts at d2 and climbs. Past d12, the crew has done it, it grows, and everyone writes a new thread. |
+| **[Goal](#s-goal)** | What the whole crew is after this arc: one thing they could get done in four to six sessions (see [A good Goal](#s-good-goal)). Starts at d2 and climbs. Past d12, the crew has done it, it grows, and everyone writes a new thread. |
 | **[Going beyond](#s-going-beyond)** | Pushing a permission past what it normally does, like phasing through a wall. 1 Resolve, for a sword or a spell. If you have to make a case for why it's normal, it's going beyond. |
 | **[Ground](#the-ground)** | Tags on the place itself. Bring one into your roll for 1 Aura. In a chase, the die for the way ahead. |
 | **[Harmony](#oracle)** | An Oracle reading: two of the three dice match. |

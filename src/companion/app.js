@@ -78,7 +78,7 @@ const ICON = {
   party: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21V3.5"/><path d="M6 4h12l-3 4.5 3 4.5H6"/></svg>',
 };
 
-const builder = makeBuilder({ B: DATA.build, link, icon: ICON, toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt, roll: () => randomBuild(DATA.build, DATA.crew), tools: () => themeButton() });
+const builder = makeBuilder({ B: DATA.build, link, icon: ICON, rule: (id) => ruleHtml(id), toast: (m, u) => toast(m, u), onLeave: (key) => nav(key && key !== "new" ? key : ""), onSave: saveBuilt, roll: () => randomBuild(DATA.build, DATA.crew), tools: () => themeButton() });
 
 // ---------------------------------------------------------------- characters
 
@@ -100,6 +100,7 @@ const party = makeParty({
   go: (url, o) => goTo(url, o),
   rule: (id) => ruleHtml(id),
   isOpen: (key) => ui.open.has(key),
+  isShut: (key) => ui.shut.has(key),
   viewing: () => (view.name === "sheet" ? ui.tab : view.name),
   // Threads moved on another phone, written into this character. Each undo
   // waiting for this character gets them too, so an undo here takes back only
@@ -893,7 +894,8 @@ function sheetTab(ch, c) {
     <label class="cc-field"><span class="sr-only">Your Aspiration</span><input class="cc-plain" data-in="asp-text" maxlength="120" value="${esc(s.aspText || c.aspiration.text)}" autocomplete="off"></label>
     ${ring("asp-set", 2, 12, s.asp, "Aspiration")}
     <div class="cc-row"><button type="button" class="button" data-act="asp" data-d="-1"${off(s.asp <= 2)}>A setback</button><button type="button" class="button" data-act="asp" data-d="1">It climbs</button></div>
-    <p class="cc-lead">When the GM says it’s within reach, roll against its die, and if you beat it, it climbs. ${link("s-aspiration", "How Aspiration works")}</p>`, marked("asp"))}
+    <p class="cc-lead">When the GM says it’s within reach, roll against its die, and if you beat it, it climbs. ${link("s-aspiration", "How Aspiration works")}</p>
+    <details class="cc-rulebox" data-open="asp-good"${ui.open.has("asp-good") ? " open" : ""}><summary>What makes a good Aspiration</summary><div class="cc-rule">${ruleHtml("s-good-aspiration")}</div></details>`, marked("asp"))}
   ${fold("notes", "Notes", notesAt ? esc(notesAt.length > 70 ? `${notesAt.slice(0, 68)}…` : notesAt) : "Nothing written yet", `<label class="sr-only" for="cc-notes">Notes</label><textarea id="cc-notes" data-in="notes" rows="5">${esc(s.notes)}</textarea>`)}
   ${fold("about", `About ${esc(c.name)}`, esc(c.blurb.length > 90 ? `${c.blurb.slice(0, 88)}…` : c.blurb), `<p>${esc(c.blurb)}</p><p><b>Plays like:</b> ${c.playsLike}</p>
     ${c.crewQs.map((x) => `<p><em>${esc(x.q)}</em> ${esc(x.a)}</p>`).join("")}
@@ -966,7 +968,7 @@ const RULE_GROUPS = [
   ["Your numbers", ["s-aura", "s-resolve", "s-confidence"]],
   ["When it lands", ["s-defending", "s-defend", "s-intercept", "s-armour", "s-consequences", "s-fear-gets-through"]],
   ["Wounds", ["s-blaze", "s-healing", "s-vulnerable"]],
-  ["Everything else", ["s-conditions", "s-bonds", "s-trouble", "s-aspiration"]],
+  ["Everything else", ["s-conditions", "s-bonds", "s-trouble", "s-aspiration", "s-good-aspiration"]],
   ["Downtime", ["your-slots", "s-downtime-rolls"]],
 ];
 function rulesTab() {
@@ -2798,8 +2800,9 @@ document.addEventListener("toggle", (e) => {
   if (key.startsWith("bd-")) builder.toggled(e.target);
   if (e.target.open) ui.open.add(key);
   else ui.open.delete(key);
-  // A Sheet tab fold the player shut stays shut, even one holding a gold mark.
-  if (key.startsWith("sh-")) {
+  // A Sheet tab fold the player shut stays shut, even one holding a gold mark,
+  // and so does any other fold that's open until it's shut (data-shut).
+  if (key.startsWith("sh-") || e.target.hasAttribute("data-shut")) {
     if (e.target.open) ui.shut.delete(key);
     else ui.shut.add(key);
   }

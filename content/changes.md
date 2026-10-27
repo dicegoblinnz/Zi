@@ -1,9 +1,17 @@
 ---
 title: "What's Changed"
 id: changes
-updated: 2026-10-26
+updated: 2026-10-27
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
+
+## 27 Oct 2026: A good Aspiration, and a good Goal {#c-2026-10-27}
+
+**What makes a good Aspiration is in the book now.** Past d12 you get what it says, so a good one passes four tests: it's one thing, you'd know the day it's done, it's about someone or something in the world, and the story goes on after it, with no *never* or *can't*. Vesk's took her seven sessions, which is about the size to aim for, and the crew's are the examples, each next to a version that's too big. Before, the book only said it's one thing you want. See [A good Aspiration](#s-good-aspiration).
+
+**The Party Goal works the same way**, at the size of one arc (four to six sessions), and it should be something everyone at the table has a reason to chase. *Own the Low Market* is one arc of *rule the city*. See [A good Goal](#s-good-goal).
+
+**The GM says when one's too big or too vague**, and you work it out together before it goes on the sheet, usually by keeping its first piece. The rest makes a good next Aspiration, or it's where the campaign's heading. Before, the book didn't say who decides.
 
 ## 26 Oct 2026: Confidence that swings, threads that turn, one action a faction {#c-2026-10-26}
 
