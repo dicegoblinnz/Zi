@@ -30,6 +30,8 @@ For Mo to say otherwise.
 - The Steeplands' Vane Estate comes in with its whole card from Factions, since that's where the book keeps it.
 - A faction can have a line saying what it is (*A merchant guild that works through money*), from Building a Faction's first tables, and a note only the GM sees. Where a book card says something the board can't hold, like *None yet. It hasn't noticed the crew*, it goes in that note.
 
+- From the independent check (27 Oct): changes go up in batches the Worker takes, and after one it can't take, one at a time, so only that one's lost. Changes left waiting on a phone go up as soon as any page of the companion opens. A phone still on an older build never offers its older book as news. An agenda's shown with what happens when it does, since that's how the book writes it.
+
 ## The stages
 
 Every stage passes `tests/check-site.mjs`, `tests/check-companion.mjs` and `tests/check-accounts.mjs`, keeps each campaign's world to itself on the server, works offline for whatever the phone's seen, in both themes, from 320 wide up, and ends with one independent check.
