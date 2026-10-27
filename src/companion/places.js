@@ -388,6 +388,17 @@ export function makePlaces(w) {
     return `${body}${gm ? reword(key, p.secret ? "Change its Secret" : "Write one") : ""}`;
   }
 
+  // Her place as the live table's scene: each piece of ground written as a tag
+  // with what it does, each stake with its Challenge, what's in the way and
+  // what it's for, and the scene clock, the way Twenty Places writes them.
+  function sceneFrom(p) {
+    const ground = p.ground.map((x) => x.text.match(/^\*([^*]+)\*(?::\s*(.+))?$/)).filter(Boolean).map((m) => ({ name: m[1].trim().slice(0, 60), text: flat(m[2] ?? "").trim().slice(0, 140) })).slice(0, 8);
+    const stakes = p.stakes.map((x) => x.text.match(/^\*([^*]+)\*,?\s*Challenge ([1-6])(?::\s*(.+?))?(?:\s*\(([^)]+)\))?$/)).filter(Boolean)
+      .map((m) => ({ name: m[1].trim().slice(0, 60), c: Number(m[2]), tags: [...(m[3] ?? "").matchAll(/\*([^*]+)\*/g)].map((t) => t[1].trim()).slice(0, 8), note: (m[4] ?? "").trim().slice(0, 140) })).slice(0, 6);
+    const clock = p.clockD ? { d: p.clockD, what: flat(p.clock).replace(/\.$/, "").slice(0, 140) } : null;
+    return { name: p.name, ground, stakes, clock };
+  }
+
   function pageView(id, pid) {
     const gm = isGm(id);
     const doc = docOf(id);
@@ -425,6 +436,7 @@ export function makePlaces(w) {
     const showCard = gm ? `<div class="wb-show wb-show-card${p.shown.page ? " is-on" : ""}"><p>${p.shown.page ? (place ? "The crew can see it: its name, what it is, its Challenge and what it’s like inside, and whatever else you’ve shown them." : "The crew can see them: who they are and what you notice first, and whatever else you’ve shown them.") : `The crew can’t see ${place ? "it" : "them"} yet. Show ${place ? "it" : "them"} when the crew finds out ${place ? "it’s there" : "who they are"}.`}</p>
       <button type="button" class="button${p.shown.page ? "" : " primary"}" data-act="w" data-do="pshow" data-id="${esc(p.id)}" data-p="page" aria-pressed="${p.shown.page}">${p.shown.page ? `Hide ${place ? "it" : "them"} from the crew` : `Show the crew ${esc(p.name)}`}</button></div>` : "";
 
+    const onTable = gm && place && d.scene ? `<div class="wb-show wp-table"><p>When the crew’s here, its ground, stakes and scene clock go on the live table, face up on every phone.</p><button type="button" class="button" data-act="w" data-do="pscene" data-id="${esc(p.id)}">${sure(`pscene-${p.id}`, "Tap again to put it in place of what’s there", "Put it on the table")}</button></div>` : "";
     const nw = gm ? pageNews(p) : null;
     const bookNote = nw?.real.length ? `<div class="cc-note is-gold wb-book" role="status"><p><b>The book’s changed ${esc(p.name)} since you brought ${place ? "it" : "them"} in.</b></p><ul>${nw.real.map((x) => `<li>${x}</li>`).join("")}</ul>
       <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="pbook" data-id="${esc(p.id)}" data-take="1">Take the book’s changes</button><button type="button" class="button" data-act="w" data-do="pbook" data-id="${esc(p.id)}" data-take="0">Keep mine</button></div>
@@ -473,7 +485,7 @@ export function makePlaces(w) {
       <div class="cc-row"><button type="button" class="button danger" data-act="w" data-do="pgone" data-id="${esc(p.id)}">${sure(`pgone-${p.id}`, "Tap again to take it out of the world", "Take it out of the world")}</button></div></section>`
       : hiddenParts ? `<p class="cc-small wb-more">There’s more to ${esc(p.name)} you haven’t found out yet.</p>` : "";
     if (!gm) w.unlit(id);
-    return `${top}<div class="wb wp" data-wb="${esc(id)}">${head}${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${showCard}${bookNote}<div class="cc-folds wb-parts">${parts.join("")}</div>${elsewhere}${end}</div>`;
+    return `${top}<div class="wb wp" data-wb="${esc(id)}">${head}${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${showCard}${onTable}${bookNote}<div class="cc-folds wb-parts">${parts.join("")}</div>${elsewhere}${end}</div>`;
   }
 
   // On a faction's page, her way to make its Face a person of their own: from
@@ -628,6 +640,22 @@ export function makePlaces(w) {
       const t = BOOK?.threats.find((x) => keyOf(x.name) === keyOf(name) || keyOf(x.name) === keyOf(`The ${name}`));
       const p = t ? fromBook(t, "bestiary", t.key) : { id: newId(), kind: "person", name, line: rest, shown: {} };
       if (edit(id, [{ o: "p-new", p }], t ? `${bare(t.name)}’s in your world, from the Bestiary, and ${bare(f.name)}’s Face links to them.` : `${bare(name)} has a page now, and ${bare(f.name)}’s Face links to it. Write them as a threat if they need it.`)) goTo(id, p.id);
+    },
+    // Her place onto the live table's scene, in place of what's there, which
+    // takes a second tap if there's anything there already.
+    pscene(el, id) {
+      const p = findPage(docOf(id), el.dataset.id);
+      if (!p || !d.scene) return;
+      const sc = sceneFrom(p);
+      if (!sc.ground.length && !sc.stakes.length && !sc.clock) return d.toast("There’s nothing on it for the table yet. Give it ground, stakes or a scene clock first.", false);
+      const now = d.sceneOf?.(id);
+      if (now && (now.ground.length || now.stakes.length || now.events.length) && ui().sure !== `pscene-${p.id}`) {
+        w.setSure(`pscene-${p.id}`);
+        return d.render();
+      }
+      w.setSure("");
+      d.scene(id, sc);
+      d.render();
     },
     // One of her telegraphs, onto the round, through the live table's own
     // card: she picks who it's aimed at and sends it.

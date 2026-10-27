@@ -102,7 +102,8 @@
 //    and what it's like, with his note and its telegraphs never on her phone,
 //    then who's here, and its Secret only on a second tap. Orla's name links
 //    on Kai's phone only once she's shown. Kai can't change it. A telegraph
-//    off the page opens the round's composer with Orla's d8. With no signal,
+//    off the page opens the round's composer with Orla's d8, and the page puts
+//    its ground, stakes and scene clock on the live table. With no signal,
 //    Vesk's World tab still has the Copper Baths. A made-up book change gets a
 //    note Mo takes, keeping his own note, and a typo fix in Dace's goes in quietly.
 //    Nothing crosses to Zed's Night. The World screen, a place, a person and
@@ -1085,6 +1086,202 @@ try {
   same(await tried(BASE), "open", "a socket from the site's own page opens");
   same(await tried("https://elsewhere.example"), 403, "and one from another site is turned away");
 
+  // ------------------------------------------------------------ 6b. the scene, and one action each
+  console.log("6b. The scene, and one action a round");
+  const sceneOf = async () => (await tableOf(tuesday.id))?.scene ?? null;
+  const piece = (page, name) => page.locator(`.sc-el:has(.sc-n:text-is("${name}"))`);
+  const row = (page, who) => page.locator(`.tg-play .tg-row:has(b:text-is("${who}"))`);
+  const stateIn = (page, id) => page.evaluate((c) => JSON.parse(localStorage.getItem("zi-characters")).characters.find((x) => x.id === c)?.state, id);
+  // Each theme, scrolled to the part that matters.
+  const shotsAt = async (page, name, sel) => {
+    if (!SHOTS) return;
+    for (const theme of ["dark", "light"]) {
+      await page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await page.reload();
+      await page.waitForSelector(sel);
+      await page.evaluate((s) => document.querySelector(s).scrollIntoView({ block: "start" }), sel);
+      await page.waitForTimeout(300);
+      await shot(page, `${name}-${theme}`);
+    }
+    await page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+    await page.reload();
+    await page.waitForSelector(sel);
+  };
+
+  // Mo puts the Copper Baths on the table, straight out of Twenty Places.
+  await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
+  await mo.page.waitForSelector(".tg-scene");
+  has(await text(mo.page, ".tg-scene"), "Put the scene on the table, and every phone sees it", "an empty scene says what it's for");
+  await mo.page.click('.tg-scene [data-do="sc-place"]');
+  await mo.page.waitForSelector(".sc-places");
+  same(await mo.page.$$eval(".sc-place", (els) => els.length), 20, "the book's twenty places to pick from");
+  await mo.page.click('.sc-place:has(b:text-is("The Copper Baths"))');
+  await until(async () => {
+    const s = await sceneOf();
+    return s?.stakes.length === 2 && s?.events.length === 1 && s?.ground.length === 3;
+  }, "the Copper Baths on the table");
+  const baths = await sceneOf();
+  same(baths.stakes.map((s) => [s.name, s.c, s.tags.map((g) => g.name)]), [["The deal", 4, ["Someone Must Agree", "Wanted By Others"]], ["Dace’s satchel", 3, ["Locked", "Guarded"]]], "its two stakes, as the chapter has them");
+  same([baths.events[0].scene, baths.events[0].d, baths.events[0].what], [true, 8, "Dace’s other buyer arrives, and he signs with them"], "its scene clock");
+  same(baths.ground.map((g) => g.name), ["Steam", "The House Rule", "The Hot Pool"], "and its ground");
+  // He gives the deal a clock, a d6, and puts an event on: more bath-men on the way.
+  await piece(mo.page, "The deal").locator('[data-do="sc-edit"]').click();
+  await mo.page.waitForSelector('#cc-dialog [data-do="sc-clock"]');
+  await mo.page.click('#cc-dialog [data-do="sc-clock"][data-v="6"]');
+  await mo.page.click('#cc-dialog [data-do="sc-save"]');
+  await until(async () => (await sceneOf())?.stakes[0].clock === 6, "the deal's clock on the table");
+  await mo.page.click('.tg-scene [data-do="sc-new"][data-t="event"]');
+  await mo.page.waitForSelector("#sc-name");
+  await mo.page.fill("#sc-name", "More bath-men");
+  await mo.page.fill("#sc-what", "four more bath-men come in off the street");
+  await mo.page.click('#cc-dialog [data-do="sc-d"][data-v="6"]');
+  if (SHOTS) await mo.page.waitForTimeout(400);
+  await shot(mo.page, "scene-event");
+  await axe(mo.page, "putting an event on");
+  await mo.page.click('#cc-dialog [data-do="sc-save"]');
+  await until(async () => (await sceneOf())?.events.length === 2, "the event on the table");
+  same(await mo.page.$$eval(".tg-scene .sc-el .sc-n", (els) => els.map((e) => e.textContent)), ["The scene clock", "The deal", "Dace’s satchel", "More bath-men"], "the scene clock first, then the stakes and the event");
+  // Steam's no use to anyone tonight, so he takes it off, with a second tap.
+  await mo.page.click('.sc-ground:has(b:text-is("Steam")) [data-do="sc-edit"]');
+  await mo.page.click('#cc-dialog [data-do="sc-off"]');
+  has(await text(mo.page, '#cc-dialog [data-do="sc-off"]'), "Tap again", "taking it off asks for a second tap");
+  await mo.page.click('#cc-dialog [data-do="sc-off"]');
+  await until(async () => (await sceneOf())?.ground.map((g) => g.name).join() === "The House Rule,The Hot Pool", "Steam off the table");
+  await shotsAt(mo.page, "scene-gm", ".tg-scene");
+  await axe(mo.page, "the scene on the GM's page");
+
+  // Every phone sees it.
+  await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa`);
+  await kai.page.waitForSelector(".cc-tiles");
+  await until(async () => Boolean(await kai.page.$(".tg-scenefold")), "the scene on Vesk's play screen");
+  has(await text(kai.page, ".tg-scenefold > summary"), "scene clock d8 · two stakes · one event · the ground", "it reads at a glance, folded");
+  await sam.page.goto(`${BASE}/characters/?c=bram-ssssss`);
+  await sam.page.waitForSelector(".cc-tiles");
+  await until(async () => Boolean(await sam.page.$(".tg-scenefold")), "and on Bram's");
+
+  // Round 2: the attendant at Vesk and a bath-man at Bram.
+  const teleRound = async (at, who, die, does) => {
+    await mo.page.click('.tg-sec [data-do="compose"]');
+    await mo.page.waitForSelector(".tg-compose");
+    await mo.page.click(`.tg-target:has-text("${at}")`);
+    await mo.page.fill("#tg-who", who);
+    await mo.page.click(`.tg-size[data-d="${die}"]`);
+    await mo.page.fill("#tg-does", does);
+    await mo.page.click('#cc-dialog [data-do="save"]');
+    await mo.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  };
+  await teleRound("Vesk", "The attendant", 6, "Shove Vesk into the hot pool");
+  await teleRound("Bram", "A bath-man", 8, "Walk Bram to the door by the collar");
+  await mo.page.click('.tg-sec [data-do="send"]');
+  await until(async () => (await cardText(kai.page, "The attendant")).includes("Shove Vesk"), "round 2 on Vesk's play screen", 4000);
+  await until(async () => (await cardText(sam.page, "A bath-man")).includes("Walk Bram"), "and on Bram's", 4000);
+  has(await text(kai.page, ".tg-yours"), "Your action’s still yours.", "Vesk's action's hers to spend");
+
+  // Vesk takes the bath-man for Bram: 1 Aura and no action, and it'll land on her.
+  const vAura = (await stateIn(kai.page, "vesk-aaaaaa")).aura;
+  same(await row(kai.page, "A bath-man").locator('[data-do="icp"]').textContent(), "Take it: 1 Aura", "Vesk can take Bram's for 1 Aura");
+  same(await row(sam.page, "The attendant").locator('[data-do="icp"]').textContent(), "Take it, free", "and Bram's a Guardian, so he'd take one for free");
+  await row(kai.page, "A bath-man").locator('[data-do="icp"]').click();
+  await until(async () => (await teleOf("A bath-man"))?.icp?.ch === "vesk-aaaaaa", "Vesk taking the bath-man, on the table", 4000);
+  same((await stateIn(kai.page, "vesk-aaaaaa")).aura, vAura - 1, "for 1 Aura");
+  has(await cardText(kai.page, "A bath-man"), "You took it for Bram, so it comes at you when it lands.", "it's on Vesk's card now");
+  await until(async () => (await cardText(mo.page, "A bath-man")).includes("Vesk’s taking it for Bram, for 1 Aura, so it lands on Vesk."), "Mo's page says so", 4000);
+  await until(async () => (await cardText(sam.page, "A bath-man")).includes("Vesk’s taking it for you, so it lands on Vesk."), "and Bram's", 4000);
+  has(await text(kai.page, ".tg-yours"), "Your action’s still yours.", "and it didn't cost Vesk her action");
+
+  // Bram puts his action into whoever answers the attendant, and it's spent.
+  await row(sam.page, "The attendant").locator('[data-do="join"]').click();
+  await sam.page.waitForSelector('#cc-dialog [data-do="jwith"]');
+  has(await text(sam.page, "#cc-dialog"), "It’s a combo: one roll between you.", "putting your action in says it's a combo");
+  if (SHOTS) await sam.page.waitForTimeout(400);
+  await shot(sam.page, "scene-join");
+  await axe(sam.page, "putting your action in");
+  await sam.page.click('#cc-dialog [data-do="jwith"]:has-text("Fight")');
+  await sam.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  has(await text(sam.page, ".tg-yours"), "Your action’s spent this round.", "Bram's action's spent");
+  has(await text(sam.page, ".tg-yours"), "Fight into whoever answers the attendant", "and his phone says on what");
+  same(await row(sam.page, "The attendant").locator(".tg-chip.is-mine").count(), 1, "the attendant's row says he's in on it");
+  same(await sam.page.$$eval('.tg-play [data-do="answer"], .tg-play [data-do="join"], .tg-play [data-do="else"], .tg-play [data-do="work"]', (els) => els.length), 0, "and there's nothing left to spend it on");
+  await until(async () => (await cardText(mo.page, "The attendant")).includes("Bram’s put an action into whoever answers it."), "Mo's page has Bram in on it", 4000);
+  await until(async () => (await text(mo.page, ".tg-crew")).includes("Fight into whoever answers the attendant"), "and so do the crew's lines", 4000);
+  // A second phone of Sam's can't spend it again.
+  const bathMan = await teleOf("A bath-man");
+  const again = await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "sams-tablet-0001", now: Date.now(), ops: [{ n: 1, o: "answer", ch: "bram-ssssss", id: bathMan.id, a: { act: "Fight", steps: 4, dice: [{ size: 8, total: 7, out: "beat" }], opp: 3, real: false } }] });
+  has(again.json?.no?.[0]?.why, "You’ve spent your action this round", "the table won't take a second action from another phone");
+
+  // Kai looks at Something else, then answers the attendant with Sneak and Bram's Fight in it.
+  await kai.page.click('.tg-yours [data-do="else"]');
+  await kai.page.waitForSelector("#cc-dialog .tg-else");
+  has(await text(kai.page, "#cc-dialog .tg-else"), "Work Dace’s satchel", "the scene's in Something else");
+  if (SHOTS) await kai.page.waitForTimeout(400);
+  await shot(kai.page, "scene-else");
+  await axe(kai.page, "something else");
+  await kai.page.click("#cc-dialog .dlg-head .cc-x");
+  await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  const bConf = (await stateIn(sam.page, "bram-ssssss")).conf;
+  await kai.page.click('.tg-play li.tg:has(h3:text-is("The attendant")) [data-do="answer"]');
+  await kai.page.waitForSelector(".tg-acts");
+  has(await text(kai.page, "#cc-dialog .tg-pick"), "Bram’s in on it, so 4 more steps go into your roll as a combo.", "the answer says Bram's in on it");
+  await kai.page.click('.tg-acts [data-do="with"]:has-text("Sneak")');
+  await kai.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="6"][aria-pressed="true"]');
+  has(await text(kai.page, "#cc-dialog"), "Friend 1’s steps", "Bram's steps are in the roll");
+  await kai.page.evaluate(() => window.ziCompanion.setDice([9, 1, 4]));
+  await kai.page.click('#cc-dialog [data-act="go"]');
+  await kai.page.waitForSelector("#cc-dialog .tg-verdict");
+  has(await text(kai.page, "#cc-dialog .tg-verdict"), "Stopped. It never lands.", "her d12's 9 beats its 4");
+  await until(async () => (await teleOf("The attendant"))?.ans?.with?.[0]?.ch === "bram-ssssss", "the table has Bram in Vesk's answer", 4000);
+  await until(async () => (await stateIn(sam.page, "bram-ssssss")).conf === Math.min(12, bConf + 2), "Bram's Confidence moving up with the win", 6000);
+  await until(async () => (await text(sam.page, ".tg-yours")).includes("In on the attendant with Vesk: stopped"), "and his phone says how it went", 4000);
+  await kai.page.click('#cc-dialog .dlg-foot [data-act="close"]');
+  await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  has(await text(kai.page, ".tg-yours"), "Your action’s spent this round.", "Vesk's action's spent on it");
+  same(await kai.page.$$eval('.tg-play [data-do="answer"], .tg-play [data-do="join"]', (els) => els.length), 0, "so she can't answer anything else");
+
+  // 1 Resolve for another, on Dace's satchel: her Locks takes Locked.
+  const vResolve = (await stateIn(kai.page, "vesk-aaaaaa")).resolve;
+  await kai.page.click(".tg-more > summary");
+  await kai.page.click('.tg-more [data-do="more"][data-k="resolve"]');
+  await until(async () => (await text(kai.page, ".tg-yours")).includes("One more action to spend this round."), "an extra action for 1 Resolve");
+  same((await stateIn(kai.page, "vesk-aaaaaa")).resolve, vResolve - 1, "that cost her 1 Resolve");
+  if (!(await kai.page.$eval(".tg-scenefold", (el) => el.open))) await kai.page.click(".tg-scenefold > summary");
+  await piece(kai.page, "Dace’s satchel").locator('[data-do="work"]').click();
+  await kai.page.waitForSelector('#cc-dialog [data-do="wwith"]');
+  same(await kai.page.$eval('#cc-dialog [data-do="aim"][data-v="Locked"]', (el) => el.getAttribute("aria-pressed")), "true", "going for Locked first");
+  if (SHOTS) await kai.page.waitForTimeout(400);
+  await shot(kai.page, "scene-work");
+  await axe(kai.page, "working a stake");
+  await kai.page.click('#cc-dialog [data-do="wwith"]:has-text("Locks")');
+  await kai.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="6"][aria-pressed="true"]');
+  await kai.page.evaluate(() => window.ziCompanion.setDice([7, 3]));
+  await kai.page.click('#cc-dialog [data-act="go"]');
+  await kai.page.waitForSelector("#cc-dialog .tg-verdict");
+  has(await text(kai.page, "#cc-dialog .tg-verdict"), "You beat it. Locked’s gone.", "7 against its 3");
+  await until(async () => (await sceneOf())?.stakes[1].tags.map((g) => g.gone).join() === "1,0", "Locked gone from the satchel on the table", 4000);
+  await kai.page.click('#cc-dialog .dlg-foot [data-act="close"]');
+  await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  has(await text(kai.page, ".tg-yours"), "Working Dace’s satchel with Locks: Locked gone", "her phone says what the second one went on");
+  await until(async () => (await piece(mo.page, "Dace’s satchel").locator('.sc-tag[aria-pressed="true"]').count()) === 1, "Locked struck off on Mo's page", 4000);
+  await until(async () => (await mo.page.$$eval('.tg-crewlist li:has(b:text-is("Vesk")) .tg-did', (els) => els.map((e) => e.textContent)).catch(() => [])).join(" | ") === "Answering the attendant with Sneak: stopped | Working Dace’s satchel with Locks: Locked gone | Took a bath-man for Bram", "and the crew's lines have all three of Vesk's", 4000);
+  has(await text(mo.page, ".tg-crew"), "An extra action: 1 Resolve", "with where the extra one came from");
+  await shotsAt(kai.page, "scene-play", ".tg-play");
+  await shotsAt(kai.page, "scene-yours", ".tg-yours");
+  await axe(kai.page, "the round and the scene on the play screen");
+  await shotsAt(mo.page, "scene-crew", ".tg-crew");
+
+  // Mo ends round 2. Whatever nobody worked steps down, and the bath-man lands on Vesk.
+  await mo.page.click('.tg-sec [data-do="end"]');
+  await mo.page.click('.tg-sec [data-do="end"]');
+  await until(async () => {
+    const s = await sceneOf();
+    return s?.events[0].d === 6 && s?.stakes[0].clock === 4 && s?.events[1].d === 4;
+  }, "the scene clock, the deal's clock and the bath-men stepped down", 4000);
+  same((await sceneOf()).stakes[1].clock, 0, "the satchel's got no clock, so nothing moves");
+  await until(async () => (await text(mo.page, ".tg-sec .tg-sum")).includes("The scene clock stepped down to d6. The deal’s clock stepped down to d4. More bath-men stepped down to d4."), "Mo's page says what moved", 4000);
+  await until(async () => Boolean(await kai.page.$('li.tg:has(h3:text-is("A bath-man")) [data-do="land"]')), "the bath-man landed on Vesk", 4000);
+  await until(async () => (await cardText(sam.page, "A bath-man")).includes("It landed on Vesk. Vesk took it for you."), "and Bram's told", 4000);
+  has(await text(kai.page, ".tg-scenefold"), "Nobody engaged it, so it stepped down to d6.", "the scene clock says why it moved");
+  await shotsAt(mo.page, "scene-gm-over", ".tg-scene");
+
   // ------------------------------------------------------------ 7. the world
   // Mo's Tuesday Lair, with Kai playing Vesk in it, and Zed's Night next door.
   async function checkWorld() {
@@ -1825,6 +2022,15 @@ try {
     same([await mo.page.inputValue("#tg-who"), await mo.page.inputValue("#tg-does"), await mo.page.getAttribute('.tg-size[data-d="8"]', "aria-pressed"), await mo.page.getAttribute('.cc-line[data-k="fear"]', "aria-pressed")],
       ["Orla Strand", baths.teles[0].text, "true", "true"], "the composer opens with Orla, her cane, a d8 and Confidence");
     await mo.page.click("#cc-dialog .cc-x");
+    // And the whole place onto the live table's scene from its page: its
+    // ground, its stakes and its scene clock, the way Mo's got them.
+    const sceneOf = async () => (await got(mo.page, "GET", `/api/campaigns/${tuesday.id}/table`)).json?.scene;
+    await mo.page.click('[data-do="pscene"]');
+    if ((await mo.page.textContent('[data-do="pscene"]')).includes("Tap again")) await mo.page.click('[data-do="pscene"]');
+    await until(async () => { const sc = await sceneOf(); return sc?.ground.length === 3 && sc?.stakes.length === 2 && sc?.events.some((e) => e.scene && e.d === 8); }, "the Copper Baths on the table from its page");
+    const sc = await sceneOf();
+    same(sc.stakes.map((x) => [x.name, x.c, x.tags.map((g) => g.name), x.note]), [["The deal", 4, ["Someone Must Agree", "Wanted By Others"], "Dace signs with the crew, or with someone else"], ["Dace’s satchel", 3, ["Locked", "Guarded"], "it’s in the changing-room cupboards"]], "its stakes off the page, with what's in the way");
+    same([sc.ground.map((g) => g.name).join(", "), sc.events.find((e) => e.scene)?.what], ["Steam, The House Rule, The Hot Pool", "Dace’s other buyer arrives, and he signs with them"], "its ground and its scene clock");
 
     // With no signal, Vesk's World tab still has the Copper Baths.
     await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa`);
@@ -1955,7 +2161,8 @@ try {
   same(await rows("SELECT id FROM campaign WHERE gmId = ?1", kaiId), [], "her campaign's ended");
   same(await rows("SELECT campaignId FROM member WHERE userId = ?1 OR campaignId = ?2", kaiId, kaisTable.id), [], "she's out of Mo's, and nobody's left in hers");
   same(await rows("SELECT campaignId FROM world WHERE campaignId = ?1", kaisTable.id), [], "and her campaign's board went with it");
-  yes(((await tableOf(tuesday.id))?.rounds ?? []).flatMap((r) => r.tele).every((t) => t.at.user !== kaiId && t.ans?.user !== kaiId), "and Tuesday Lair's table has forgotten her");
+  yes(((await tableOf(tuesday.id))?.rounds ?? []).flatMap((r) => r.tele).every((t) => t.at.user !== kaiId && t.ans?.user !== kaiId && t.icp?.user !== kaiId), "and Tuesday Lair's table has forgotten her");
+  yes(((await tableOf(tuesday.id))?.rounds ?? []).every((r) => !Object.keys(r.acts ?? {}).some((k) => k.startsWith(`${kaiId}|`))), "and what she spent her actions on");
   same(Object.values((await partyOf(tuesday.id))?.bonds ?? {}).filter((b) => b.a.startsWith(`${kaiId}:`) || b.b.startsWith(`${kaiId}:`)).length, 0, "and her threads are off Tuesday Lair's party sheet");
   same((await got(zed.page, "GET", "/api/campaigns")).json?.campaigns.map((k) => k.name), ["Zed’s Night"], "Zed's left with his own");
   same(await two.page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters") || '{"characters":[]}').characters.length), 0, "and they're gone from the phone");
