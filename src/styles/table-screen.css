@@ -1,0 +1,206 @@
+/* The table screen (/table/, src/companion/table-screen.js): the live round
+   on a TV, a laptop or a screen shared on a call, read from across the room.
+   The root's size follows the screen. On a landscape screen it's all one
+   screen with no scrolling: the round and the crew are in rem, so the root
+   shrinks a step at a time till they fit (--ts-fit), and the scene down the
+   right is in em, so it shrinks on its own (--ts-sfit) however long it gets.
+   The kit draws the cards, dice, tags and crests, and colour keeps its one
+   job each: gold is the crew's, violet the GM's and her threats', ember harm. */
+
+html.ts-on { font-size: calc(clamp(16px, 0.9vw + 0.75vh, 40px) * var(--ts-fit, 1)); scroll-padding-top: 0; }
+html.ts-on .topbar, html.ts-on footer.site { display: none; }
+html.ts-on body { font-size: 1rem; line-height: 1.45; }
+html.ts-live.ts-still, html.ts-live.ts-still * { cursor: none; }
+
+.ts, .ts-app { min-height: 100vh; min-height: 100dvh; }
+.ts-app {
+  display: flex; flex-direction: column; gap: 1rem;
+  padding: max(0.9rem, env(safe-area-inset-top, 0px)) max(1.4rem, env(safe-area-inset-right, 0px)) max(1.1rem, env(safe-area-inset-bottom, 0px)) max(1.4rem, env(safe-area-inset-left, 0px));
+}
+.ts h1, .ts h2, .ts h3, .ts h4 { text-wrap: balance; }
+
+/* ── The bar: whose table it is, the signal, and the switches */
+.ts-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1.4rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--line); }
+.ts-brand { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; font-family: var(--display); font-weight: 600; font-size: 1rem; letter-spacing: 0.04em; color: var(--muted); text-decoration: none; white-space: nowrap; }
+.ts-brand .mark { width: 1.35rem; height: 1.35rem; }
+.ts-brand:hover { color: var(--ink); }
+.ts-title { display: flex; flex-direction: column; min-width: 0; padding-left: 1.4rem; border-left: 1px solid var(--line); }
+.ts-title h1 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.55rem; line-height: 1.1; letter-spacing: 0.02em; overflow-wrap: anywhere; }
+.ts-k { margin: 0; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-ink); }
+.ts-net { display: inline-flex; align-items: center; gap: 0.5rem; margin: 0; font-weight: 700; font-size: 0.95rem; color: var(--zd-harm-ink); }
+.ts-dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--zd-harm); flex: none; }
+.ts-tools { display: flex; gap: 0.5rem; margin-left: auto; }
+.ts-tool { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; min-width: 44px; min-height: 44px; padding: 0; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 2px; cursor: pointer; }
+.ts-tool:hover { border-color: var(--gold); }
+.ts-tool svg { width: 1.25rem; height: 1.25rem; }
+
+/* ── The layout: the round, the scene, then the crew, down a phone */
+.ts-main { flex: 1; display: grid; gap: 1.2rem 1.5rem; grid-template-columns: minmax(0, 1fr); grid-template-areas: "round" "scene" "crew"; align-content: start; }
+.ts-round { grid-area: round; min-width: 0; }
+.ts-scene { grid-area: scene; min-width: 0; }
+.ts-crew { grid-area: crew; min-width: 0; }
+/* A landscape screen is one screen, with the scene down the right-hand side
+   and the crew under the round. table-screen.js asks the same question. */
+@media (min-width: 900px) and (min-height: 480px) and (min-aspect-ratio: 6/5) {
+  .ts-app { height: 100vh; height: 100dvh; min-height: 0; }
+  .ts-main { min-height: 0; grid-template-rows: minmax(0, 1fr) auto; grid-template-areas: "round" "crew"; align-content: stretch; }
+  .ts-main.has-scene { grid-template-columns: minmax(0, 1fr) minmax(17rem, 28%); grid-template-areas: "round scene" "crew scene"; }
+  .ts-round { overflow: hidden; }
+  .ts-scene { align-self: start; max-height: 100%; overflow: hidden; }
+  .ts-scene.is-tall { overflow-y: auto; }
+  /* A round too big for one screen scrolls instead. */
+  html.ts-tall .ts-app { height: auto; min-height: 100vh; }
+  html.ts-tall .ts-round { overflow: visible; }
+  html.ts-tall .ts-scene { max-height: none; }
+}
+
+/* ── The round */
+.ts-rhead { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.1rem; margin-bottom: 1rem; }
+.ts-rhead h2 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 2.5rem; line-height: 1; letter-spacing: 0.03em; }
+.ts-tally { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0; padding: 0; list-style: none; }
+.ts-tally li { display: inline-flex; align-items: baseline; gap: 0.35rem; padding: 0.15rem 0.75rem 0.2rem; font-size: 1.05rem; font-weight: 700; line-height: 1.3; border: 2px solid; border-radius: 2px; }
+.ts-tally b { font-size: 1.4rem; font-variant-numeric: lining-nums tabular-nums; }
+.ts-tally .is-coming { color: var(--zd-them-ink); border-color: var(--zd-them-line); }
+.ts-tally .is-good { color: var(--zd-on-you); background: var(--zd-you); border-color: var(--zd-you-line); }
+.ts-tally .is-bad { color: var(--zd-on-harm); background: var(--zd-harm); border-color: var(--zd-harm-line); }
+.ts-rstate { margin: 0; font-size: 1.1rem; color: var(--muted); }
+
+/* The fewer telegraphs, the bigger each one: a lone one's a hero card. */
+.ts-teles {
+  --tg-who: 1.7rem; --tg-does: 1.12rem; --tg-one: 1rem; --tg-die: 4.6rem; --tg-vw: 1.55rem; --tg-vl: 1.02rem; --tg-vd: 3rem;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr)); gap: 1rem 1.1rem; margin: 0; padding: 0; list-style: none; align-items: stretch;
+}
+.ts-teles[data-n="1"] { --tg-who: 2.6rem; --tg-does: 1.55rem; --tg-one: 1.25rem; --tg-die: 7.4rem; --tg-vw: 2.5rem; --tg-vl: 1.35rem; --tg-vd: 4.6rem; grid-template-columns: minmax(0, 52rem); }
+.ts-teles[data-n="2"] { --tg-who: 2.05rem; --tg-does: 1.3rem; --tg-one: 1.1rem; --tg-die: 5.8rem; --tg-vw: 1.95rem; --tg-vl: 1.15rem; --tg-vd: 3.7rem; }
+.ts-tg { display: flex; min-width: 0; }
+/* On a landscape screen each card lies on its side with its die down the
+   left, two or three to a row (four with no scene beside them), so a round
+   of six still fits on one screen. */
+@media (min-width: 900px) and (min-height: 480px) and (min-aspect-ratio: 6/5) {
+  .ts-teles[data-n="2"], .ts-teles[data-n="4"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ts-teles[data-n="3"], .ts-teles[data-n="5"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .ts-main:not(.has-scene) .ts-teles[data-n="5"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .ts-tg .zd-tele {
+    display: grid; gap: 0 1.1rem; align-content: stretch;
+    grid-template-columns: var(--tg-die) minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto auto 1fr;
+    grid-template-areas: "head head" "die text" "die one" "die foot" "die there" "band band";
+  }
+  .ts-tg .zd-tele > header { grid-area: head; }
+  .ts-tg .zd-tele > .tb { display: contents; }
+  .ts-tg .zd-tele > .tb > .zd-die { grid-area: die; align-self: start; margin-top: 0.8rem; }
+  .ts-tg .zd-tele > .tb > div { grid-area: text; margin-top: 0.75rem; }
+  .ts-tg .zd-tele > .one { grid-area: one; margin-top: 0.5rem; }
+  .ts-tg .zd-tele > footer { grid-area: foot; margin-top: 0.6rem; }
+  .ts-tg .zd-tele > .ts-there { grid-area: there; margin-top: 0.6rem; }
+  .ts-tg .zd-tele > .ts-v { grid-area: band; align-self: end; margin-top: 0.85rem; }
+}
+
+/* The kit's telegraph card, grown to be read across the room */
+.ts-tg .zd-tele { flex: 1; max-width: none; gap: 0.85rem; padding: 0 1.15rem 1.05rem; border-width: 3px; }
+.ts-tg .zd-tele header { margin: 0 -1.15rem; padding: 0.3rem 1.15rem; font-size: 0.78rem; }
+.ts-tg .zd-tele .tb { gap: 1rem; }
+.ts-tg .zd-tele .tb .zd-die { --s: var(--tg-die); }
+.ts-tg .zd-tele h3 { font-size: var(--tg-who); line-height: 1.08; }
+.ts-tg .zd-tele .tb p { margin-top: 0.3rem; font-size: var(--tg-does); line-height: 1.3; }
+.ts-tg .zd-tele .one { font-size: var(--tg-one); line-height: 1.3; }
+.ts-tg .zd-tele footer { font-size: 1.02rem; padding-top: 0.7rem; }
+.ts-tg .zd-tele .at { gap: 0.55rem; }
+.ts-tg .zd-crest.sm { --s: 2.2rem; }
+.ts-tg .zd-aim { width: 1.7rem; height: 1.7rem; }
+/* Once it's settled, the band says how it went, so the card goes quiet. */
+.ts-tg:not(.is-coming) .zd-tele { border-color: var(--zd-slot-line); }
+.ts-tg:not(.is-coming) .zd-tele .when { display: none; }
+
+/* How it went: a band across the foot of the card */
+.ts-v { display: flex; align-items: center; justify-content: space-between; gap: 0.6rem 1rem; margin: auto -1.15rem -1.05rem; padding: 0.8rem 1.15rem 0.9rem; }
+.ts-v.is-good { color: var(--zd-on-you); background: var(--zd-you); }
+.ts-v.is-bad { color: var(--zd-on-harm); background: var(--zd-harm); }
+.ts-vt { min-width: 0; }
+.ts .ts-vw { margin: 0; font-family: var(--display); font-weight: 700; font-size: var(--tg-vw); line-height: 1.05; letter-spacing: 0.05em; text-transform: uppercase; overflow-wrap: anywhere; }
+.ts .ts-vl { margin: 0.3rem 0 0; font-size: var(--tg-vl); line-height: 1.3; font-weight: 500; }
+.ts-vd { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 0.4rem; flex: none; max-width: 45%; }
+.ts-vd .zd-die { --s: var(--tg-vd); }
+
+/* Who's in a place, on one line where there's room */
+.ts-there { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.5rem; }
+.ts .ts-tk { margin: 0; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.ts-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0.6rem 0 0; padding: 0; list-style: none; }
+.ts-chip { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.2rem 0.75rem 0.2rem 0.3rem; font-size: 1.1rem; font-weight: 700; border: 2px solid var(--zd-you-line); border-radius: 2px; }
+.ts-chip.is-out { color: var(--muted); border-style: dashed; border-color: var(--zd-slot-line); }
+.ts-chip.is-out .zd-crest { opacity: 0.55; }
+.ts-chip .zd-crest.sm { --s: 1.8rem; }
+
+/* Nothing on yet */
+.ts-wait { display: grid; place-content: center; gap: 0.6rem; min-height: 40vh; height: 100%; padding: 2rem; text-align: center; border: 1px dashed var(--line); border-radius: 2px; }
+.ts-wait.is-small { min-height: 0; height: auto; padding: 1.4rem; }
+.ts .ts-wait-k { margin: 0; font-family: var(--display); font-weight: 600; font-size: 2.6rem; line-height: 1.1; }
+.ts .ts-wait-l { margin: 0; font-size: 1.25rem; color: var(--muted); max-width: 30em; }
+
+/* ── The scene, in em so it can shrink on its own to fit down the side */
+.ts-scene { display: flex; flex-direction: column; gap: 0.65em; padding: 0.95em 1em 1.05em; font-size: calc(1rem * var(--ts-sfit, 1)); }
+.ts-scene .ts-k { font-size: 0.72em; }
+.ts-scene .ts-k.is-harm { color: var(--zd-harm-ink); }
+.ts-shead h2 { margin: 0.1em 0 0; font-family: var(--display); font-weight: 600; font-size: 1.75em; line-height: 1.1; }
+.ts .ts-sub { margin: 0.4em 0 0; font-size: 0.8em; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.ts-clock { display: flex; align-items: center; gap: 0.9em; padding: 0.75em 0.85em; background: var(--zd-token); border: 3px solid var(--zd-harm-line); border-radius: 2px; }
+.ts-clock .zd-die { --s: 4.5em; }
+.ts-els { display: grid; gap: 0.55em; margin: 0; padding: 0; list-style: none; }
+.ts-el { display: grid; gap: 0.45em; padding: 0.65em 0.8em; background: var(--zd-token); border: 2px solid var(--zd-them-line); border-radius: 2px; }
+.ts-el-top { display: flex; align-items: center; gap: 0.8em; }
+.ts-el .zd-die { --s: 3.3em; }
+.ts-elb { display: grid; gap: 0.15em; min-width: 0; flex: 1; }
+.ts .ts-eln { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.35em; line-height: 1.12; overflow-wrap: anywhere; }
+.ts .ts-esub, .ts .ts-ewhat { margin: 0; font-size: 1em; line-height: 1.3; color: var(--muted); }
+.ts .ts-ewhat { color: var(--ink); }
+.ts .ts-est { margin: 0; font-size: 1em; line-height: 1.3; font-weight: 700; color: var(--gold-ink); }
+.ts-eclock { display: flex; flex-direction: column; align-items: center; gap: 0.1em; flex: none; }
+.ts-eclock .zd-die { --s: 2.6em; }
+.ts-eclock small { font-size: 0.75em; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--zd-harm-ink); }
+.ts-tags { display: flex; flex-wrap: wrap; gap: 0.4em; }
+.ts-scene .zd-tag { min-height: 2em; padding: 0 0.7em; font-size: 1.05em; }
+.ts-el.is-won, .ts-clock.is-done { border-color: var(--zd-you-line); }
+.ts-el.is-lost, .ts-el.is-done { border-color: var(--zd-harm-line); }
+.ts-ground { display: grid; gap: 0.4em; margin: 0; padding: 0; list-style: none; }
+.ts-ground li { display: grid; gap: 0.05em; padding: 0.4em 0.75em; background: var(--panel); border-left: 3px solid var(--gold); }
+.ts-gn { font-weight: 700; font-size: 1.12em; }
+.ts-gt { color: var(--muted); font-size: 1em; line-height: 1.3; }
+.ts-gw { color: var(--gold-ink); font-size: 0.95em; font-weight: 700; }
+
+/* ── The crew, a row of them under the round */
+.ts-people { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr)); gap: 0.65rem; margin: 0; padding: 0; list-style: none; }
+.ts-p { display: flex; align-items: flex-start; gap: 0.65rem; padding: 0.65rem 0.8rem; }
+.ts-pc { flex: none; }
+.ts-pc .zd-crest.sm { --s: 2.5rem; }
+.ts-pb { min-width: 0; }
+.ts .ts-pn { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.3rem; line-height: 1.1; overflow-wrap: anywhere; }
+.ts-pa { display: grid; gap: 0.15rem; margin: 0.25rem 0 0; padding: 0; list-style: none; font-size: 0.98rem; line-height: 1.28; }
+.ts .ts-pq { margin: 0.25rem 0 0; color: var(--muted); font-size: 0.98rem; }
+.ts .ts-pl { margin: 0.3rem 0 0; font-size: 0.9rem; font-weight: 700; color: var(--gold-ink); }
+.ts-p.is-done .ts-pl { color: var(--muted); }
+
+/* ── No code yet, or one that didn't work */
+.ts-entry-wrap { flex: 1; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; padding-block: 1rem 2rem; }
+.ts-entry { display: flex; flex-direction: column; gap: 1rem; width: min(100%, 38rem); padding: clamp(1.25rem, 4vw, 2.25rem); }
+.ts-entry h1 { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.7rem); line-height: 1.1; letter-spacing: 0.02em; }
+.ts-entry .lede { font-size: 1.1rem; }
+.ts-form { display: grid; gap: 0.5rem; }
+.ts-form label { font-weight: 700; }
+.ts-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.ts-input { flex: 1 1 13rem; width: 100%; min-width: 0; min-height: 3rem; padding: 0 0.9rem; font: 700 1.45rem/1 var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
+.ts-input:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.ts-form .button { min-height: 3rem; }
+.ts .ts-hint { margin: 0; font-size: 0.98rem; color: var(--muted); }
+.ts .ts-warn { margin: 0; padding: 0.7rem 0.9rem; font-weight: 700; background: var(--panel); border-left: 3px solid var(--zd-harm-line); }
+.ts .ts-opening { margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--gold-ink); }
+
+/* ── Motion: a new telegraph comes in, and once it's settled the band wipes
+   across the foot of the card and its word stamps down. Nothing moves under
+   reduce-motion. */
+@keyframes ts-in { from { opacity: 0; transform: translateY(0.6rem) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes ts-wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@media (prefers-reduced-motion: no-preference) {
+  .ts-tg.is-new { animation: ts-in 0.42s cubic-bezier(0.23, 1, 0.32, 1) both; animation-delay: calc(var(--i, 0) * 70ms); }
+  .ts-tg.is-moved .ts-v { animation: ts-wipe 0.34s cubic-bezier(0.23, 1, 0.32, 1); }
+  .ts-tg.is-moved .ts-vw { transform-origin: left center; animation: zd-stamp 0.32s cubic-bezier(0.23, 1, 0.32, 1); }
+}

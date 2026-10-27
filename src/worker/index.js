@@ -8,10 +8,12 @@
 // see who's in it and which characters they play, the GM sees every character
 // in it, and players see each other's names. Every campaign request checks the
 // person asking against that one campaign, so nothing crosses between them.
+// The one way in without signing in is a table screen's code, which only
+// ever gets what the crew sees of that campaign's live table (table.js).
 import { authFor, hit, originsOf, providersOf, seen } from "./auth.js";
 import { changeParty, dropFromParty, showParty } from "./party.js";
 import { changeWorld, showWorld } from "./world.js";
-import { tableEnd, tableLeft, tableRoute } from "./table.js";
+import { screenCode, screenRoute, tableEnd, tableLeft, tableRoute, tableScreenOff } from "./table.js";
 
 // The live table's Durable Object class, one for each campaign (table.js).
 export { Table } from "./table.js";
@@ -88,6 +90,9 @@ async function api(request, env, url) {
     return fail(400, "That address doesn’t look right.");
   }
   if (parts.length > 4 || (parts[0] !== "campaigns" && parts.length > 2)) return fail(404, NOTHING);
+  // A table screen opens with its own code and never signs in, so nobody's
+  // session is looked at (table.js).
+  if (parts[0] === "screen") return parts.length === 2 && method === "GET" ? screenRoute(request, env, parts[1], { json, fail, origins: originsOf(env), limited }) : fail(404, NOTHING);
   // Changes only come from the site's own pages.
   if (method !== "GET" && !originsOf(env).includes(request.headers.get("origin"))) return fail(403, "That came from somewhere else.");
 
@@ -244,7 +249,7 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
   if (!CAMP_ID.test(id || "")) return fail(404, NOTHING);
   // Who's asking, against this one campaign: its GM, one of its players, or
   // nobody. Nobody gets the same answer as a campaign that doesn't exist.
-  const camp = await env.DB.prepare(`SELECT c.id, c.name, c.code, c.gmId, u.name AS gm, CASE WHEN c.gmId = ?2 THEN 'gm' ELSE 'player' END AS role
+  const camp = await env.DB.prepare(`SELECT c.id, c.name, c.code, c.screen, c.gmId, u.name AS gm, CASE WHEN c.gmId = ?2 THEN 'gm' ELSE 'player' END AS role
     FROM campaign c JOIN "user" u ON u.id = c.gmId
     WHERE c.id = ?1 AND (c.gmId = ?2 OR EXISTS (SELECT 1 FROM member m WHERE m.campaignId = c.id AND m.userId = ?2))`).bind(id, user.id).first();
   if (!camp) return fail(404, "You’re not in that campaign.");
@@ -270,6 +275,7 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
   // The live table: the round's telegraphs and how each one went (table.js).
   if (sub === "table" && !subId) return tableRoute(request, env, method, camp, user, { json, fail, body, origins: originsOf(env), limited });
   if (sub === "link" && !subId && method === "POST") return gm ? resetLink(env, camp) : gmOnly();
+  if (sub === "screen" && !subId && method === "POST") return gm ? newScreen(request, env, camp) : gmOnly();
   if (sub === "me" && !subId && method === "PUT") return gm ? fail(400, "You’re the GM, so you don’t bring a character.") : pickCharacter(request, env, user, camp);
   if (sub === "members" && subId && method === "DELETE") {
     if (!USER_ID.test(subId)) return fail(404, NOTHING);
@@ -330,9 +336,9 @@ async function showCampaign(env, url, camp) {
     FROM member m JOIN "user" u ON u.id = m.userId
     LEFT JOIN character ch ON ch.userId = m.userId AND ch.id = m.characterId AND ch.data IS NOT NULL
     WHERE m.campaignId = ?1 ORDER BY m.joinedAt, m.userId`).bind(camp.id).all();
-  const v = stampOf(JSON.stringify([camp.name, camp.gm, gm ? camp.code : "", results.map((r) => [r.id, r.name, r.data == null ? "" : r.characterId, r.version ?? 0])]));
+  const v = stampOf(JSON.stringify([camp.name, camp.gm, gm ? camp.code : "", gm ? camp.screen ?? "" : "", results.map((r) => [r.id, r.name, r.data == null ? "" : r.characterId, r.version ?? 0])]));
   if (url.searchParams.get("v") === v) return json({ same: true, v });
-  const head = { id: camp.id, name: camp.name, gm: camp.gm, gmId: camp.gmId, role: camp.role, ...(gm ? { code: camp.code } : {}) };
+  const head = { id: camp.id, name: camp.name, gm: camp.gm, gmId: camp.gmId, role: camp.role, ...(gm ? { code: camp.code, screen: camp.screen ?? null } : {}) };
   const players = results.map((r) => (gm
     ? `{"id":${JSON.stringify(r.id)},"name":${JSON.stringify(r.name)},"character":${r.data ?? "null"}}`
     : JSON.stringify({ id: r.id, name: r.name, character: r.data == null ? null : { id: r.characterId, name: String(r.data) } })));
@@ -365,6 +371,29 @@ async function resetLink(env, camp) {
   const code = token(12);
   await env.DB.prepare("UPDATE campaign SET code = ?2 WHERE id = ?1").bind(camp.id, code).run();
   return json({ code });
+}
+
+// The table screen's code: made the first time she opens it, and the one
+// that's there whenever she opens it again, from any of her phones. Only a
+// reset ({ reset: true }) makes a new one, so the old link stops working and
+// every screen showing it goes.
+async function newScreen(request, env, camp) {
+  const reset = (await body(request))?.reset === true;
+  if (camp.screen && !reset) return json({ screen: camp.screen });
+  for (let tries = 0; tries < 3; tries++) {
+    const screen = screenCode();
+    const res = await env.DB.prepare(`UPDATE campaign SET screen = ?2 WHERE id = ?1${reset ? "" : " AND screen IS NULL"}`).bind(camp.id, screen).run().catch((err) => (/UNIQUE/i.test(String(err?.message)) ? null : Promise.reject(err)));
+    if (!res) continue;
+    if (!res.meta.changes) {
+      // Another of her phones made one a moment ago, so that's the one.
+      const made = (await env.DB.prepare("SELECT screen FROM campaign WHERE id = ?1").bind(camp.id).first())?.screen;
+      if (made) return json({ screen: made });
+      continue;
+    }
+    await tableScreenOff(env, camp.id, screen);
+    return json({ screen });
+  }
+  return fail(500, "That didn’t make the screen’s code. Try again in a minute.");
 }
 
 // A player changes who they're playing here, to another of their own who

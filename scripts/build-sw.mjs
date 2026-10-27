@@ -22,16 +22,18 @@ const files = [];
   }
 })(DIST);
 
-// The kit (/kit/) is a design board for Mo, so it stays off everyone's phone:
-// its page, and any script or style only that page asks for. The companion
-// draws with the kit too, so whatever another page uses is kept, and so is
-// every Latin font, the 800 weight included, since the dice's numbers use it.
+// Two pages stay off everyone's phone: the kit (/kit/), a design board for
+// Mo, and the table screen (/table/), which goes on a TV or a laptop and
+// needs a signal anyway. That's each page, and any script or style only
+// those pages ask for. The companion draws with the kit too, so whatever
+// another page uses is kept, and so is every Latin font, the 800 weight
+// included, since the dice's numbers use it.
 const refs = (html) => [...html.matchAll(/(?:src|href)="\/(_astro\/[^"]+)"/g)].map((m) => m[1]);
-const kitPage = join(DIST, "kit", "index.html");
-const kitRefs = new Set(existsSync(kitPage) ? refs(readFileSync(kitPage, "utf8")) : []);
-const others = new Set(files.filter((p) => p.endsWith(".html") && p !== kitPage).flatMap((p) => refs(readFileSync(p, "utf8"))));
-const kitOnly = (rel) => rel.startsWith("kit/") || (kitRefs.has(rel) && !others.has(rel));
-const keep = (rel) => !kitOnly(rel) && ((/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf" || rel === "openings.json" || rel === "world-book.json");
+const offPages = ["kit", "table"].map((name) => join(DIST, name, "index.html"));
+const offRefs = new Set(offPages.filter((p) => existsSync(p)).flatMap((p) => refs(readFileSync(p, "utf8"))));
+const others = new Set(files.filter((p) => p.endsWith(".html") && !offPages.includes(p)).flatMap((p) => refs(readFileSync(p, "utf8"))));
+const offOnly = (rel) => rel.startsWith("kit/") || rel.startsWith("table/") || (offRefs.has(rel) && !others.has(rel));
+const keep = (rel) => !offOnly(rel) && ((/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf" || rel === "openings.json" || rel === "world-book.json");
 const hash = createHash("sha1");
 const urls = [];
 for (const path of files.sort()) {
