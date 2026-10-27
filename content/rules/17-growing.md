@@ -6,7 +6,7 @@ order: 17
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-10-27
 ---
 :::quote
 There aren't any levels in Zi'Dara. Your character grows, and you choose how.
@@ -22,7 +22,7 @@ Every session ends in a [downtime](#downtime), and you choose what your two slot
 
 ## What changes over an arc {#what-changes-over-an-arc}
 
--   **An Aspiration resolves.** You gain a new archetype, with a Title you name for it, and growth doesn't get any bigger than that. See [Archetypes and Titles](#s-title).
+-   **An Aspiration resolves.** You get what you were after, and you gain a new archetype, with a Title you name for it, and growth doesn't get any bigger than that. See [Archetypes and Titles](#s-title).
 -   **Your Titles fill up**, a permission at a time, and your attuned things go up a stage.
 -   **The crew grows**, the way a character does. See [The Crew](#s-party-faction), and [The Crew, Session 1 to 20](#s-crew-1-20) below.
 -   **Your bonds grow.** When the Party Goal's done, everyone writes a new thread, with someone the Goal brought into their life.
@@ -61,8 +61,8 @@ A campaign changes shape as the crew gets better. The dice keep pace on their ow
 An arc is four to six sessions around one Party Goal. When the Goal climbs past d12, play the moment out, let the crew grow and write everyone's new threads, then take ten minutes before you write the next one.
 
 -   Go round the table: what did everyone enjoy, and what do they want more of?
--   Check every Aspiration. If someone's gone off theirs, rewrite it.
--   Write the next Goal together, at d2, and let it come out of what just happened.
+-   Check every Aspiration. If someone's gone off theirs, rewrite it (see [A good Aspiration](#s-good-aspiration)).
+-   Write the next Goal together, at d2, and let it come out of what just happened. It's one arc's worth (see [A good Goal](#s-good-goal)).
 
 ## Ending a Campaign {#s-ending}
 

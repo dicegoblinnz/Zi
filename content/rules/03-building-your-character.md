@@ -622,7 +622,7 @@ Your **Aspiration** is one thing you want. It starts at **d2** and climbs as you
 -   **One step a roll.** However many dice you put on it, one roll moves it one step at most. More dice is advantage, and your best die counts.
 -   **A setback** steps it back down one, never below d2.
 
-When it climbs past d12, it **resolves**: you take a new archetype with one permission, name it with a Title, and write a new Aspiration at d2. Another Title puts your Resolve maximum up by 1 as well.
+When it climbs past d12, it **resolves**: you get what you were after, and you take a new archetype with one permission, name it with a Title, and write a new Aspiration at d2. Another Title puts your Resolve maximum up by 1 as well.
 
 Your Aspiration is also somewhere a consequence can land. When a blow or a failure costs you, you can step your Aspiration back down instead of taking it on your body or your gear, so the fight costs you your dream instead of your skin. You can't do it while it's at d2.
 
@@ -640,14 +640,14 @@ Your Aspiration is also somewhere a consequence can land. When a blow or a failu
 
 ### A good Aspiration {#s-good-aspiration}
 
-When your Aspiration climbs past d12, you get it, so write one you could actually get. Vesk's took her seven sessions, which is about the size to aim for. A good one passes all four of these:
+When your Aspiration climbs past d12, you get what you wrote, so make it something you could have in an arc or two. Vesk's first one took her seven sessions. A good one passes all four of these:
 
--   **It's one thing.** It can take a few steps, the way Wren has to find the thing before she can put it down, but it's one aim. If you want two things, write the first, and the other can be your next Aspiration.
+-   **It's one thing.** Wren has to find the thing before she can put it down, and Ash will either burn the Ember Court down or take it back, but each of them is after one thing. If you want two things, write the first, and the other can be your next Aspiration.
 -   **You'd know the day it's done.** There's a moment you could point at, like Vesk walking out of the vault or Bram getting his rank back. *Be rich* hasn't got one, so when it climbs past d12, nobody knows what you've got.
 -   **It's about someone or something in the world.** That's what lets the GM put it within reach. Dorrie's *Get a seat at the table that ruined my family* points at the people who did it, so the GM knows who to put in her way.
--   **The story goes on after it.** You get it, and then everyone else gets to react. Leave out words like *never* and *can't*, because they ask for something to stay true for the rest of the campaign.
+-   **The story goes on after it.** You get it, and then everyone else gets to react. *Never get caught again* would mean nothing could ever catch Vesk, so leave out words like *never* and *can't*.
 
-Here's what too big looks like, next to what the crew wrote:
+Each of these has a version that's too big or too vague, then what the crew wrote:
 
 -   *Be the best thief there's ever been* has no day it's done. *Own the score of a lifetime* is one job, and Vesk will know it when she's pulled it.
 -   *Be a hero again* could mean anything. *Earn back the rank they stripped from me* says what Bram's after and who has to give it back.

@@ -605,8 +605,16 @@ try {
   // With no Goal yet, the book's tests for a good one are open under its words.
   yes(await kai.page.$eval(".pt-goal .pt-good", (el) => el.open), "what makes a good Goal open while there's no Goal");
   has(await text(kai.page, ".pt-goal .pt-good"), "Own the Low Market", "a good Goal's examples, from the book");
+  const writeAt = await kai.page.evaluate(() => Math.round(document.querySelector('.pt-goal button[type="submit"]').getBoundingClientRect().bottom));
+  yes(writeAt <= 844 - 60, `the Goal's words and Write it in in the first screen, above the tabs (they end at ${writeAt}px)`);
   if (SHOTS) await kai.page.waitForTimeout(500);
   await shot(kai.page, "party-tab-top");
+  // Shut, it stays shut when the tab's drawn again.
+  await kai.page.click(".pt-goal .pt-good > summary");
+  await kai.page.click('.cc-tabs [data-t="play"]');
+  await kai.page.click('.cc-tabs [data-t="party"]');
+  await kai.page.waitForSelector(".pt-goal .pt-good");
+  same(await kai.page.$eval(".pt-goal .pt-good", (el) => el.open), false, "what makes a good Goal still shut once it's been shut");
   // Kai writes the Goal and it climbs, and Mo's phone catches up on its own.
   await kai.page.fill('.pt-goal input[name="goal"]', "Clear Dorrie’s name");
   await kai.page.click('.pt-goal button[type="submit"]');

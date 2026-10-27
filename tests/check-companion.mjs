@@ -978,6 +978,12 @@ if (part("5")) {
   same(await page.$eval('details[data-open="bd-good"]', (el) => el.open), true, "what makes a good Aspiration open on a new character");
   has(await page.textContent('details[data-open="bd-good"]'), "Earn back the rank they stripped from me", "a good Aspiration's examples, from the book");
   await shot(page, "5-builder-aspiration");
+  // Shut, it stays shut when the step's drawn again.
+  await page.click('details[data-open="bd-good"] > summary');
+  await next("Check it and play");
+  await b('[data-b="back"]');
+  has(await step(), "Aspiration", "back to the Aspiration step");
+  same(await page.$eval('details[data-open="bd-good"]', (el) => el.open), false, "what makes a good Aspiration still shut once it's been shut");
   await page.fill("#b-asp", "Own the score of a lifetime");
   await next("Check it and play");
   await page.fill("#b-name", "Vesk");

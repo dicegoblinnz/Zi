@@ -617,10 +617,13 @@ export function makeParty(d) {
   }
 
   // What makes a good Goal, from the book, under wherever the words are
-  // written: open while there's no Goal yet, until someone shuts it.
+  // written. While there's no Goal yet it's open till someone shuts it, and
+  // when its words are being changed it's shut till someone opens it. The two
+  // have their own keys, since a fold drawn open counts as opened.
   function goodGoal(first) {
-    const open = d.isOpen("pt-good") || (first && !d.isShut?.("pt-good"));
-    return `<details class="cc-rulebox pt-good" data-open="pt-good" data-shut${open ? " open" : ""}><summary>What makes a good Goal</summary><div class="cc-rule">${d.rule("s-good-goal")}</div></details>`;
+    const k = first ? "pt-good-new" : "pt-good";
+    const open = first ? !d.isShut?.(k) : d.isOpen(k);
+    return `<details class="cc-rulebox pt-good" data-open="${k}"${first ? " data-shut" : ""}${open ? " open" : ""}><summary>What makes a good Goal</summary><div class="cc-rule">${d.rule("s-good-goal")}</div></details>`;
   }
 
   function goalView(id, doc, k) {

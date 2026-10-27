@@ -59,13 +59,13 @@ The Goal is what the crew's after this arc, like *clear Dorrie's name*, *free th
 
 ### A good Goal {#s-good-goal}
 
-When the Goal climbs past d12, the crew's done it, and they get whatever it says. So write one they can get done in one arc, four to six sessions, and one everyone at the table has a reason to chase. Everything that makes [a good Aspiration](#s-good-aspiration) makes a good Goal too: it's one thing, you'd know the day it's done, it's about someone or something in the world, and the story goes on after it.
+When the Goal climbs past d12, the crew's done it, and they get whatever it says. So write one they can get done in one arc, and make it something the whole crew wants. Everything that makes [a good Aspiration](#s-good-aspiration) makes a good Goal too: it's one thing, you'd know the day it's done, it's about someone or something in the world, and the story goes on after it.
 
 -   *Rule the city* is a whole campaign. *Own the Low Market* is one arc of it.
 -   *Keep the harbour safe* never ends. *Clear Dorrie's name* is done the day she wins in court.
 -   *Bring peace to the Steeplands, with treaties nobody can break* is every city at once, and it's meant to last forever. *Get the Harbour Guild and the Vane Estate to sign a truce* fits in an arc, and whether the truce holds is the next story.
 
-A Goal that's too big is usually where the campaign's heading, so keep it in mind and make its first piece the Goal. If the table writes one that's too big or too vague, the GM says so, and you work it out together before it goes on the party sheet.
+A Goal that's too big is usually where the campaign's heading. Say it out loud so the GM can build toward it, and make its first piece the Goal. If the table writes one that's too big or too vague, the GM says so, and you work it out together before it goes on the party sheet.
 
 ## Projects {#s-projects}
 

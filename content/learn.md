@@ -179,7 +179,7 @@ Vesk's on Vane's roof with no Resolve left, so she whistles for Dorrie to pull t
 ::::
 
 ::::card[Your Aspiration]{#l-aspiration teaches=s-aspiration}
-Your **Aspiration** is one thing you want. It starts at d2 and climbs as you chase it: when something you do really moves it along, roll against its die, and beat it to climb one. A setback steps it back down, never below d2. When it climbs past d12, it resolves: you get it, take a new archetype, name it with a Title, and write a new Aspiration at d2. So make it one thing you'd know the day it's done.
+Your **Aspiration** is one thing you want. It starts at d2 and climbs as you chase it: when something you do really moves it along, roll against its die, and beat it to climb one. A setback steps it back down, never below d2. When it climbs past d12, it resolves: you get what you were after, take a new archetype, name it with a Title, and write a new Aspiration at d2. So make it something you'd know the day it's done.
 
 :::example
 Vesk's *Own the score of a lifetime* is on d2 when she cracks a strongbox in the Low Market. Her Locks, a d10, rolls 7 against its 1, so it climbs to d4.
