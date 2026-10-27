@@ -4,7 +4,7 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 
 ## 28 Oct: only people add Power
 
-You said Power comes only from people who turn up (stage 1 of `notes/builder-plan.md`). These are the calls Claude made putting it through the book.
+You said Power comes only from people who turn up (stage 1 of `notes/builder-plan.md`). These are the calls Claude made putting it through the book. You said yes to playtesting them as they are (28 Oct), with any changes after.
 
 1. **Who counts as people:** anyone or anything that comes when a faction calls, so the dead it raises, people it's wearing and things it's made count, and so do lawyers. The Thing in the Fog's *Its Dead* and the Meridian Combine's *Lawyers* still add Power.
 2. **Keeping a die.** Where a faction plainly had more people than its card said, the asset that wasn't people became them, and the die stayed. The Vane Estate's *Friends in the Courts* and *The Old Name* are *The Courts' Bailiffs* and *Old Retainers*, so it's still a d12 and every example on it adds up. It's lost *Friends in the Courts*' once a downtime the law looks the other way, since a seventh asset would leave it no extra resource and break the examples in Factions. The Harbour Guild's d10 and the Quiet Order's d8 stay too, since Factions and Growing use them.

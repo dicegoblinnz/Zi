@@ -156,7 +156,7 @@ For every stage that writes or changes tables.
 
 Each stage reaches Mo's playtests within a week. Table packs and the founding take turns, so there's one set of tables for him to judge at a time.
 
-1. **Power from people who turn up** (a rule). Needs nothing.
+1. **Power from people who turn up** (a rule). Needs nothing. *Built 28 Oct 2026.*
    - Change the rule all the way, as Changing a rule in CLAUDE.md says: only people who turn up add Power.
    - It's bigger than to-confirm 10's eight. Grep every Power line in Factions, the Steeplands and Frames: about thirty assets that aren't people add Power, from *Watchful* and *Many Souls* to *Rooted*, *Influential*, *The Law*, *The Old Name* and *Friends in the Courts*. Appendix B also says the Quiet Order's *Rooted* adds Power. Where a faction plainly has the people, rewrite the asset as people who turn up and keep its die. Where it doesn't, make it an asset that does one thing and let the die drop.
    - Keep the Vane Estate's d12 if it can be done honestly, since the book's examples and `tests/check-accounts.mjs` run on it.
