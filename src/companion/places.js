@@ -319,9 +319,10 @@ export function makePlaces(w) {
     let body = `<p class="wp-text">${L.rich(x.text, p.id)}</p>`;
     let more = "";
     if (l === "teles") {
-      const aim = /\b(Defend|Confidence)\b/.test(x.at);
       body = `<div class="wp-tele">${kitMini(x.d, { own: "them" })}<div class="pt-line-in"><p class="wp-text"><em>${L.rich(x.text, p.id)}</em></p><p class="pt-does">d${x.d}, ${esc(x.at)}</p></div></div>`;
-      if (gm && aim && d.tele) more = `<button type="button" class="button sm" data-act="w" data-do="ptele" data-id="${esc(p.id)}" data-lid="${esc(x.id)}">Telegraph it</button>`;
+      // Any of them, since the live table takes one at a stake, the scene
+      // clock or a part of the place too.
+      if (gm && d.tele) more = `<button type="button" class="button sm" data-act="w" data-do="ptele" data-id="${esc(p.id)}" data-lid="${esc(x.id)}">Telegraph it</button>`;
     }
     if (!gm) return `<li class="pt-line"><div class="pt-line-in">${body}</div></li>`;
     return `<li class="pt-line"><div class="pt-line-in">${body}</div><div class="cc-row wb-line-row">${more}<button type="button" class="button sm" data-act="w" data-do="edit" data-k="${esc(key)}" aria-label="Change ${esc(flat(x.text).slice(0, 40))}">Change</button></div></li>`;
