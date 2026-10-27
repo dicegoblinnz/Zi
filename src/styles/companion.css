@@ -1222,7 +1222,7 @@ button.bd-tok:active { transform: scale(0.97); }
 /* Who's done what this round, on the GM's page, a line each. */
 .tg-h3 { margin: 1rem 0 0.4rem; font-family: var(--body); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--zd-them-ink); }
 .tg-crew { margin-top: 1rem; }
-.tg-crew .tg-h3 { margin-top: 0; }
+.tg-sec .tg-h3 { margin: 0 0 0.4rem; font-size: 0.8rem; color: var(--zd-them-ink); }
 .tg-crewlist { margin: 0; padding: 0; list-style: none; }
 .tg-crewlist li { padding: 0.5rem 0; border-top: 1px solid var(--line-soft); font-size: 0.95rem; line-height: 1.4; overflow-wrap: anywhere; }
 .tg-crewlist li:last-child { border-bottom: 1px solid var(--line-soft); }

@@ -161,8 +161,9 @@ const table = makeTable({
   // A change to one of this phone's characters the table turned down: no undo.
   mutate: (id, fn) => {
     const ch = store.data.characters.find((x) => x.id === id);
-    if (!ch || !normal(ch)) return;
-    fn(ch.state);
+    const c = ch ? normal(ch) : null;
+    if (!c) return;
+    fn(ch.state, c);
     store.save();
     if (!dialog.open) render();
   },

@@ -22,7 +22,7 @@
 //             builds it. Each campaign's
 //             kept apart, and it all goes when the account's characters leave
 //             the phone (sync.js).
-import { MAX, SIZES, apply, blankScene, current, dieOf, findEl, findTele, fresh, joinersOf, keyOf, landsOn, lower, spentBy, stateOf, workedIn } from "./table-rules.js";
+import { MAX, ONCE, SIZES, actSaid, apply, blankScene, current, dieOf, findEl, findTele, fresh, joinersOf, keyOf, landsOn, lower, spentBy, stateOf, workedIn } from "./table-rules.js";
 import { turnNews } from "./turn-rules.js";
 import { die as kitDie, tag as kitTag, telegraph as kitTele } from "../kit/kit.js";
 
@@ -177,11 +177,11 @@ export function makeTable(d) {
       const kk = camp(id);
       // Why anything this phone sent didn't count. Taking back an answer to a
       // telegraph that's gone says nothing.
-      const backs = new Set(kk.out.filter((o) => (o.o === "answer" && o.a == null) || (o.o === "defend" && o.r == null) || (o.o === "icp" && o.off) || (o.o === "acts" && o.x == null)).map((o) => o.n));
+      const backs = new Set(kk.out.filter((o) => (o.o === "answer" && o.a == null) || (o.o === "defend" && o.r == null) || (o.o === "acts" && o.x == null)).map((o) => o.n));
       const said = (r.got.no ?? []).filter((x) => x.why && !backs.has(x.n));
       // An intercept or an action the table wouldn't take comes off the
       // character, and an intercept's Aura comes back.
-      const turned = (r.got.no ?? []).map((x) => batch.find((o) => o.n === x.n)).filter((o) => o && ((o.o === "icp" && !o.off) || (o.o === "acts" && o.x != null)));
+      const turned = (r.got.no ?? []).map((x) => batch.find((o) => o.n === x.n)).filter((o) => o && (o.o === "icp" || (o.o === "acts" && o.x != null)));
       if (Number.isInteger(r.got.seq)) kk.out = kk.out.filter((o) => o.n > r.got.seq);
       if (said.length) d.toast(said.map((x) => x.why).slice(-2).join(" "));
       take(id, r.got);
@@ -497,8 +497,9 @@ export function makeTable(d) {
       const whose = you ? "Your" : `${t.ans.name}’s`;
       // Answered by whoever it was aimed at, it hit them. Answered for a
       // friend, it might've hit whoever got in the way, and the GM says which.
-      const own = t.ans.user === t.at.user && t.ans.ch === t.at.ch;
-      const hit = own ? `so it hit ${esc(mine ? "you" : t.at.name)} with no defence.${forGm ? " Say what it costs." : mine ? " The GM says what it costs." : ""}` : `so it landed with no defence.${forGm ? " Say who it hit and what it costs." : " The GM says who it hit."}`;
+      const at = landsOn(t);
+      const own = t.ans.user === at.user && t.ans.ch === at.ch;
+      const hit = own ? `so it hit ${esc(mine ? "you" : at.name)} with no defence.${forGm ? " Say what it costs." : mine ? " The GM says what it costs." : ""}` : `so it landed with no defence.${forGm ? " Say who it hit and what it costs." : " The GM says who it hit."}`;
       return `<div class="tg-v is-bad">${diceRow(t.ans)}<p><b>It landed then and there.</b> ${esc(whose)} ${esc(t.ans.act)}${esc(withWho)} came up ${bestOf(t.ans)} against its ${t.ans.opp}, ${hit}${realNote(t.ans)}${forGm && t.ans.late ? ' <span class="tg-real">after the round ended</span>' : ""}</p></div>`;
     }
     // Who it lands on: whoever intercepted it, or whoever it's aimed at.
@@ -578,7 +579,7 @@ export function makeTable(d) {
       return `${el?.t === "event" ? "engaging" : "working"} ${name} with ${a.act}: ${did}`;
     }
     if (a.k === "ground") return `using ${lower(el?.name ?? "the ground")}${a.act ? `, with ${a.act}` : ""}`;
-    return lower(a.act);
+    return actSaid(a);
   }
   // Everything one of the crew's done this round, answers first.
   function doneBy(doc, round, user, ch) {
@@ -620,7 +621,7 @@ export function makeTable(d) {
     const moved = round?.over ? round.moved?.find((m) => m.ref === el.id) : null;
     // How it works, for the players. The GM only gets what's happening.
     const how = gm ? "" : stake ? (el.clock ? "Its clock steps down at the end of every round nobody works it." : "Every win takes one thing in its way.") : "It steps down a size at the end of every round nobody engages it.";
-    const state = el.out === "won" ? "The crew’s got it." : el.out === "lost" ? "Lost. The clock ran out." : el.out === "done" ? `It’s happened${el.what ? `: ${esc(el.what)}` : "."}` : who.length ? (round?.over ? `${esc(andList(who))} ${stake ? "worked" : "engaged"} it in round ${round.n}${held != null ? `, and its d${die} came up ${held}` : ""}.` : `${esc(andList(who))} ${who.length === 1 ? "is" : "are"} at it this round${held != null ? `, and its d${die} came up ${held}, which stands` : ""}.`) : moved ? `Nobody ${stake ? "worked" : "engaged"} it, so ${stake ? "its clock" : "it"} stepped down to d${moved.to}.` : how;
+    const state = el.out === "won" ? "The crew’s got it." : el.out === "lost" ? "Lost. The clock ran out." : el.out === "done" ? `It’s happened${el.what ? `: ${esc(el.what)}` : "."}` : who.length ? (round?.over ? `${esc(andList(who))} ${stake ? "worked" : "engaged"} it in round ${round.n}${held != null ? `, and its die came up ${held}` : ""}.` : `${esc(andList(who))} ${who.length === 1 ? "is" : "are"} at it this round${held != null ? `, and its die came up ${held}, which stands` : ""}.`) : moved ? `Nobody ${stake ? "worked" : "engaged"} it, so ${stake ? "its clock" : "it"} stepped down to d${moved.to}.` : how;
     const tags = stake ? `<div class="sc-tags">${el.tags.map((g, i) => (gm ? `<button type="button" class="sc-tag" data-act="tg" data-do="sc-tag" data-el="${esc(el.id)}" data-i="${i}"${pressedAttr(Boolean(g.gone))} aria-label="${esc(g.name)}${g.gone ? ", gone, tap to put it back" : ", tap when it’s gone"}">${kitTag(g.name, { kind: g.gone ? "threat gone" : "threat" })}</button>` : kitTag(g.name, { kind: g.gone ? "threat gone" : "threat" }))).join("")}</div>` : "";
     const clock = stake && el.clock ? `<span class="sc-clock">${kitDie(el.clock, { own: "harm", hide: true, label: `Its clock, d${el.clock}` })}<small>clock</small></span>` : "";
     // The GM's: step its die (or a stake's clock) by hand, or change it.
@@ -674,7 +675,7 @@ export function makeTable(d) {
     if (!roster.length) return "";
     const rows = roster.map((p) => {
       const done = doneBy(doc, round, p.user, p.ch);
-      const took = round.tele.filter((t) => t.icp && t.icp.user === p.user && t.icp.ch === p.ch).map((t) => `took ${lower(t.who)} for ${t.at.name}${t.icp.free ? ", free" : ""}`);
+      const took = round.tele.filter((t) => t.icp && t.icp.user === p.user && t.icp.ch === p.ch).map((t) => `took ${lower(t.who)} for ${t.at.name}${t.icp.free ? ", free" : t.icp.paid === false ? " on the same Aura" : ""}`);
       const extra = done.more.length ? `<small>${done.more.length === 1 ? "An extra action" : `${cap(words(done.more.length))} extra actions`}: ${esc(done.more.map(moreName).join(", "))}</small>` : "";
       const said = [...done.lines, ...took];
       return `<li><b>${esc(p.cname)}</b>${said.length ? said.map((x) => `<span class="tg-did">${esc(cap(x))}</span>`).join("") : '<span class="tg-did tg-none">Hasn’t acted yet</span>'}${extra}</li>`;
@@ -699,7 +700,7 @@ export function makeTable(d) {
     const head = left > 0 ? (sp.used ? `<b>${left === 1 ? "One more action" : `${cap(words(left))} more actions`}</b> to spend this round.` : "<b>Your action’s still yours.</b> Answer one telegraph, put it into a friend’s answer, or do something else.") : `<b>${sp.have === 1 ? "Your action’s spent" : "Your actions are spent"}</b> this round.`;
     const more = rec.more.length ? `<p class="cc-small">${sp.have === 2 ? "An extra action" : `${cap(words(rec.more.length))} extra actions`} from ${esc(andList(rec.more.map(moreName)))}.</p>` : "";
     const canFire = s.conf >= 12;
-    const extra = `<details class="tg-more" data-open="tg-more"${d.isOpen("tg-more") ? " open" : ""}><summary>Got another action?</summary><div class="cc-chips">${MORES.filter(([k]) => k !== "fired" || canFire).map(([k, label]) => `<button type="button" class="cc-chipbtn sm" data-act="tg" data-do="more" data-k="${k}"${k === "resolve" && s.resolve < 1 ? " disabled" : ""}>${esc(label)}</button>`).join("")}</div><p class="cc-small">Holding your action last round, coming out of hiding, 1 Resolve, d12 Confidence or a trait that says so.</p></details>`;
+    const extra = `<details class="tg-more" data-open="tg-more"${d.isOpen("tg-more") ? " open" : ""}><summary>Got another action?</summary><div class="cc-chips">${MORES.filter(([k]) => k !== "fired" || canFire).map(([k, label]) => `<button type="button" class="cc-chipbtn sm" data-act="tg" data-do="more" data-k="${k}"${(k === "resolve" && s.resolve < 1) || (ONCE.includes(k) && rec.more.includes(k)) ? " disabled" : ""}>${esc(label)}</button>`).join("")}</div><p class="cc-small">Holding your action last round, coming out of hiding, 1 Resolve, d12 Confidence or a trait that says so.</p></details>`;
     return `<div class="tg-yours" role="group" aria-label="Your action this round"><p class="tg-yours-head">${head}</p>${answers || backs ? `<ul class="tg-done">${answers}${backs}</ul>` : ""}${more}
       ${left > 0 ? `<div class="cc-row"><button type="button" class="button" data-act="tg" data-do="else">Something else</button></div>` : ""}${extra}</div>`;
   }
@@ -721,7 +722,7 @@ export function makeTable(d) {
     if (s === "coming") {
       const queued = waiting(id, (o) => o.o === "round" || o.o === "add");
       const where = queued ? `Goes to ${esc(t.at.player || t.at.name)}’s phone when you’ve got a signal.` : t.seen ? `On ${esc(t.at.player || t.at.name)}’s phone.` : `Not on ${esc(t.at.player || t.at.name)}’s phone yet. It’ll get there when ${esc(t.at.player || "they")} opens ${esc(t.at.name)} or the campaign.`;
-      const took = t.icp ? ` ${esc(t.icp.name)}’s taking it for ${esc(t.at.name)}${t.icp.free ? ", free" : ", for 1 Aura"}, so it lands on ${esc(t.icp.name)}.` : "";
+      const took = t.icp ? ` ${esc(t.icp.name)}’s taking it for ${esc(t.at.name)}${t.icp.free ? ", free" : t.icp.paid === false ? " on the same Aura" : ", for 1 Aura"}, so it lands on ${esc(t.icp.name)}.` : "";
       const ins = joinersOf(round, t.id);
       const inOn = ins.length ? ` ${ins.length === 1 ? `${esc(ins[0].name)}’s put an action` : `${esc(andList(ins.map((j) => j.name)))} have put their actions`} into whoever answers it.` : "";
       extra = `<div class="tg-v is-wait"><p>${where}${took}${inOn}</p>${live && !t.icp ? `<div class="tg-do"><button type="button" class="button sm" data-act="tg" data-do="take" data-id="${esc(t.id)}">${sure(`take-${t.id}`, "Tap again to take it back", "Take it back")}</button></div>` : ""}</div>`;
@@ -905,11 +906,11 @@ export function makeTable(d) {
   function record(s, id, kind, key, val) {
     if (!id || !key) return;
     const t = s.tele && typeof s.tele === "object" && s.tele.c === id ? s.tele : { c: id, a: {}, d: {} };
-    for (const part of ["a", "d", "i", "x"]) t[part] = t[part] && typeof t[part] === "object" ? t[part] : {};
+    for (const part of ["a", "d", "i", "x", "w"]) t[part] = t[part] && typeof t[part] === "object" ? t[part] : {};
     const doc = local(id);
     const keepIds = new Set(doc.rounds.flatMap((r) => r.tele.map((x) => x.id)));
     const keepRounds = new Set(doc.rounds.map((r) => r.id));
-    for (const part of ["a", "d", "i"]) for (const x of Object.keys(t[part])) if (!keepIds.has(x)) delete t[part][x];
+    for (const part of ["a", "d", "i", "w"]) for (const x of Object.keys(t[part])) if (!keepIds.has(x)) delete t[part][x];
     for (const x of Object.keys(t.x)) if (!keepRounds.has(x)) delete t.x[x];
     // An answer keeps the time it was first rolled, so one paid for or
     // rolled again later still says when it happened.
@@ -968,7 +969,7 @@ export function makeTable(d) {
   function opFor(part, x, ch, v) {
     if (part === "a") return { o: "answer", id: x, ch, a: v };
     if (part === "d") return { o: "defend", id: x, ch, r: v };
-    if (part === "i") return v ? { o: "icp", id: x, ch, free: Boolean(v.free) } : { o: "icp", id: x, ch, off: true };
+    if (part === "i") return v ? { o: "icp", id: x, ch, free: Boolean(v.free), paid: Boolean(v.paid) } : { o: "icp", id: x, ch, off: true };
     return { o: "acts", round: x, ch, x: v };
   }
 
@@ -978,7 +979,7 @@ export function makeTable(d) {
     const dice = (list) => JSON.stringify((list ?? []).map((x) => [x.size, x.total]));
     const t = hit.t ?? hit;
     if (part === "a") return Boolean(t.ans && t.ans.user === me() && t.ans.ch === chId && t.ans.act === v.act && t.ans.opp === v.opp && dice(t.ans.dice) === dice(v.dice));
-    if (part === "i") return Boolean(t.icp && t.icp.user === me() && t.icp.ch === chId);
+    if (part === "i") return Boolean(t.icp && t.icp.user === me() && t.icp.ch === chId && Boolean(t.icp.free) === Boolean(v.free) && Boolean(t.icp.paid) === Boolean(v.paid));
     if (part === "x") {
       const a = hit.acts?.[keyOf(me(), chId)];
       const bare = (list) => JSON.stringify((list ?? []).map((y) => [y.id, y.k, y.ref ?? "", y.act, y.aim ?? "", dice(y.roll?.dice), y.roll?.opp ?? null]));
@@ -994,12 +995,27 @@ export function makeTable(d) {
     if (r.work) {
       const queuedW = camp(id).out.some((o) => o.o === "acts");
       const sentW = queuedW ? (online() ? `Sending it to ${gmName(id)}…` : `It goes up to ${gmName(id)} when you’ve got a signal.`) : `${gmName(id)} has it.`;
-      const won = r.dice.some((x) => {
+      // Once the table has it, it's the table's call: someone else's roll at
+      // it might have got there first, and that's the number that stands.
+      const doc = local(id);
+      const round = doc.rounds.find((x) => x.id === r.work.round);
+      const ch = d.current();
+      const judged = ch ? round?.acts?.[keyOf(me(), ch.id)]?.list?.find((a) => a.id === r.work.actId) : null;
+      const el = findEl(doc, r.work.ref)?.el;
+      const stood = round?.held?.[r.work.ref];
+      const won = judged?.roll ? Boolean(judged.roll.won) : r.dice.some((x) => {
         const v = x.nat + x.plus;
         return v > r.opp || (v === r.opp && x.won);
       });
-      const said = won ? (r.work.event ? `<b>You beat it.</b> It ${r.work.aim === "drive" ? "steps down" : "steps back up"} a size.` : `<b>You beat it.</b> ${r.work.aim ? `<em>${esc(r.work.aim)}</em>’s gone.` : "One thing in its way’s gone."}`) : `<b>It held.</b>${r.work.event || findEl(local(id), r.work.ref)?.el?.clock ? " You worked it, though, so it doesn’t step down this round." : ""}`;
-      return `<div class="tg-v ${won ? "is-good" : "is-bad"} tg-verdict"><p>${said}</p><p class="cc-small" role="status">${esc(sentW)}</p></div>`;
+      const did = judged?.did;
+      const gone = did?.tag || r.work.aim;
+      const first = judged && stood != null && stood !== r.opp ? ` Someone got to it first this round, and its die came up ${stood}, so that’s the number you had to beat.` : "";
+      const said = won
+        ? r.work.event
+          ? did?.out ? `<b>You beat it.</b> It happens${el?.what ? `: ${esc(String(el.what).replace(/[.\s]+$/, ""))}.` : "."}` : `<b>You beat it.</b> It ${r.work.aim === "drive" ? "steps down" : "steps back up"} a size.`
+          : did?.won ? `<b>You beat it.</b> ${gone ? `<em>${esc(gone)}</em> was the last thing in its way` : "Nothing’s in its way now"}, so it’s the crew’s.` : `<b>You beat it.</b> ${gone ? `<em>${esc(gone)}</em>’s gone.` : "One thing in its way’s gone."}`
+        : `<b>It held.</b>${r.work.event || el?.clock ? " You worked it, though, so it doesn’t step down this round." : ""}`;
+      return `<div class="tg-v ${won ? "is-good" : "is-bad"} tg-verdict"><p>${said}${first}</p><p class="cc-small" role="status">${esc(sentW)}</p></div>`;
     }
     const gm = gmName(id);
     const queued = camp(id).out.some((o) => o.o === "answer" || o.o === "defend");
@@ -1245,40 +1261,74 @@ export function makeTable(d) {
   // A turned-down intercept comes off with its Aura back, and turned-down
   // actions go back to what the table has.
   function undoTurned(id, o) {
-    d.mutate(o.ch, (s) => {
-      if (o.o === "icp") {
+    d.mutate(o.ch, (s, c) => {
+      const hit = o.o === "icp" ? findTele(local(id), o.id) : null;
+      if (o.o === "icp" && o.off) {
+        // A give-back the table wouldn't take, since it had landed: it's
+        // still theirs, and so is what they paid for it.
+        const t = hit?.t;
+        if (!t?.icp || !isAt(t.icp, o.ch) || s.tele?.i?.[o.id]) return;
+        const paid = !t.icp.free && t.icp.paid !== false;
+        record(s, id, "i", o.id, { free: Boolean(t.icp.free), paid: paid ? 1 : 0 });
+        if (paid) s.aura = Math.max(0, s.aura - 1);
+      } else if (o.o === "icp") {
         const was = s.tele?.c === id ? s.tele.i?.[o.id] : null;
         if (!was) return;
-        const hit = findTele(local(id), o.id);
         const still = was.paid && hit ? hit.round.tele.find((t) => t.id !== o.id && s.tele.i?.[t.id] && t.at.user === hit.t.at.user && t.at.ch === hit.t.at.ch) : null;
         if (still) s.tele.i[still.id] = { ...s.tele.i[still.id], paid: 1 };
-        else if (was.paid) s.aura += 1;
+        else if (was.paid) s.aura = Math.min(c.numbers.aura, s.aura + 1);
         record(s, id, "i", o.id, null);
       } else {
         const round = local(id).rounds.find((r) => r.id === o.round);
         const has = round?.acts?.[keyOf(me(), o.ch)];
+        // An extra action the table didn't take gives back what it cost.
+        const kept = [...(has?.more ?? [])];
+        for (const m of o.x?.more ?? []) {
+          const i = kept.indexOf(m);
+          if (i >= 0) kept.splice(i, 1);
+          else if (m === "resolve") s.resolve = Math.min(c.numbers.resolve, s.resolve + 1);
+          else if (m === "fired" && s.conf === 6) s.conf = 12;
+        }
         record(s, id, "x", o.round, has ? { more: [...has.more], list: has.list.map(({ did, at, late, ...a }) => ({ ...a, ...(a.roll ? { roll: { dice: a.roll.dice, opp: a.roll.opp, real: a.roll.real } } : {}) })) } : null);
       }
     });
   }
 
   // Someone else rolled an answer this character put their action into: they
-  // move with it, up a size for a win and down a size for a miss, once.
+  // move with it, up a size for a win and down a size for a miss. How far it
+  // moved them is kept in the character (state.tele.w, by telegraph), so when
+  // that answer's taken back or rolled again, the move goes back or changes
+  // with it.
   function catchUp(ch) {
     const id = ch ? d.campOf(ch) : null;
     if (!id || roleIn(id) !== "player" || d.current()?.id !== ch.id) return;
-    const k = camp(id);
     const doc = local(id);
-    const due = doc.rounds.flatMap((r) => r.tele.filter((t) => t.ans && t.ans.user !== me() && t.ans.with?.some((w) => isAt(w, ch.id)) && !k.said.includes(`combo:${t.id}`)));
-    if (!due.length) return;
-    for (const t of due) k.said.push(`combo:${t.id}`);
-    keep();
+    const had = ch.state.tele?.c === id ? ch.state.tele.w ?? {} : {};
+    const sig = (a) => `${a.won ? 1 : 0}:${a.opp}:${(a.dice ?? []).map((x) => x.total).join(",")}`;
+    const want = new Map();
+    for (const r of doc.rounds) for (const t of r.tele) if (t.ans && t.ans.user !== me() && t.ans.with?.some((w) => isAt(w, ch.id))) want.set(t.id, t);
+    const ids = new Set(doc.rounds.flatMap((r) => r.tele.map((t) => t.id)));
+    const before = new Set(camp(id).said.filter((x) => x.startsWith("combo:")).map((x) => x.slice(6)));
+    const moved = [...want.values()].filter((t) => had[t.id]?.sig !== sig(t.ans) && !(before.has(t.id) && !had[t.id]));
+    const back = Object.keys(had).filter((x) => ids.has(x) && !want.has(x));
+    if (!moved.length && !back.length) return;
     d.change("moving with a friend’s answer", (s) => {
       const said = [];
-      for (const t of due) {
+      const clamp = (n) => Math.max(2, Math.min(12, n));
+      for (const x of back) {
+        const was = s.tele?.w?.[x];
+        if (!was) continue;
+        s.conf = clamp(s.conf - was.by);
+        record(s, id, "w", x, null);
+        said.push(`That answer with you in it was taken back, so you’re on d${s.conf}.`);
+      }
+      for (const t of moved) {
+        const was = s.tele?.c === id ? s.tele.w?.[t.id] : null;
+        if (was) s.conf = clamp(s.conf - was.by);
         const from = s.conf;
         s.conf = t.ans.won ? Math.min(12, from + 2) : Math.max(2, from - 2);
-        said.push(`${t.ans.name} answered ${lower(t.who)} with you in it, ${t.ans.won ? "and stopped it" : "and every die missed"}, so you’re ${s.conf === from ? `still on d${from}` : `on d${s.conf}`}.`);
+        record(s, id, "w", t.id, { sig: sig(t.ans), by: s.conf - from });
+        said.push(`${t.ans.name} ${was ? "rolled it again" : `answered ${lower(t.who)} with you in it`}, ${t.ans.won ? "and stopped it" : "and every die missed"}, so you’re ${s.conf === from ? `still on d${from}` : `on d${s.conf}`}.`);
       }
       return said.join(" ");
     });
@@ -1562,7 +1612,7 @@ export function makeTable(d) {
       const id = ch ? d.campOf(ch) : null;
       if (id) d.openDialog({ kind: "tg-else", camp: id, text: "" });
     },
-    other: (el) => otherAct(el.dataset.v),
+    other: (el) => otherAct(el.dataset.v, true, ["Defend", "Move"].includes(el.dataset.v)),
     "other-text": () => {
       const text = String(d.roll()?.text ?? "").trim();
       if (!text) return document.getElementById("tg-else-text")?.focus();
@@ -1573,7 +1623,7 @@ export function makeTable(d) {
       const c = ch ? d.normal(ch) : null;
       const a = c ? d.actions(ch, c).find((x) => x.i === Number(el.dataset.a)) : null;
       if (!a) return;
-      otherAct(a.name, false);
+      otherAct(a.name, false, true);
       d.answer(a.i, null);
     },
     unact: (el) => {
@@ -1595,7 +1645,7 @@ export function makeTable(d) {
       const k = el.dataset.k;
       if (!last || last.over || !MORES.some(([x]) => x === k)) return;
       spend(ch, id, last.id, "an extra action", (rec, s) => {
-        if (rec.more.length >= MAX.more) return false;
+        if (rec.more.length >= MAX.more || (ONCE.includes(k) && rec.more.includes(k))) return false;
         if (k === "resolve") {
           if (s.resolve < 1) return false;
           s.resolve -= 1;
@@ -1630,13 +1680,13 @@ export function makeTable(d) {
       const id = ch ? d.campOf(ch) : null;
       const hit = id ? findTele(local(id), el.dataset.id) : null;
       if (!hit || hit.round.over) return;
-      d.change("giving it back", (s) => {
+      d.change("giving it back", (s, c) => {
         const was = s.tele?.c === id ? s.tele.i?.[hit.t.id] : null;
         if (!was) return "";
         // Still taking another one for the same friend, it carries the Aura now.
         const still = was.paid ? hit.round.tele.find((t) => t.id !== hit.t.id && s.tele.i?.[t.id] && t.at.user === hit.t.at.user && t.at.ch === hit.t.at.ch) : null;
         if (still) s.tele.i[still.id] = { ...s.tele.i[still.id], paid: 1 };
-        else if (was.paid) s.aura += 1;
+        else if (was.paid) s.aura = Math.min(c.numbers.aura, s.aura + 1);
         record(s, id, "i", hit.t.id, null);
         return `It’s back on ${hit.t.at.name}.${was.paid && !still ? ` Your Aura’s back too: ${s.aura}.` : ""}`;
       });
@@ -1667,7 +1717,11 @@ export function makeTable(d) {
         return d.renderDialog();
       }
       const tags = String(f.tags ?? "").split(",").map((x) => x.trim()).filter(Boolean).slice(0, MAX.tags);
-      const el = f.t === "stake" ? { id: r.edit || newId(), t: "stake", name, c: f.c, tags: tags.map((g) => ({ name: g, gone: (f.gone ?? []).includes(g) ? 1 : 0 })), clock: f.clock || 0, note: String(f.note ?? "").trim(), out: f.out && tags.length ? "" : f.out ?? "" }
+      const got = tags.map((g) => ({ name: g, gone: (f.gone ?? []).includes(g) ? 1 : 0 }));
+      // Won stays won while nothing new's in the way, and lost stays lost
+      // unless she's given it a clock again.
+      const out = f.out === "won" ? (got.every((g) => g.gone) ? "won" : "") : f.out === "lost" ? (f.clock ? "" : "lost") : "";
+      const el = f.t === "stake" ? { id: r.edit || newId(), t: "stake", name, c: f.c, tags: got, clock: f.clock || 0, note: String(f.note ?? "").trim(), out }
         : f.t === "event" ? { id: r.edit || newId(), t: "event", name, what: String(f.what ?? "").trim(), d: f.d, scene: Boolean(f.scene), out: f.out ?? "" }
           : { id: r.edit || newId(), t: "ground", name, text: String(f.text ?? "").trim() };
       putEl(r.camp, el);
@@ -1741,7 +1795,7 @@ export function makeTable(d) {
     d.renderDialog();
   }
   // Something else, said in words or picked: their action this round.
-  function otherAct(what, close = true) {
+  function otherAct(what, close = true, set = false) {
     const ch = d.current();
     const id = ch ? d.campOf(ch) : null;
     const last = id ? current(local(id)) : null;
@@ -1749,8 +1803,8 @@ export function makeTable(d) {
     if (leftFor(ch, id, last) < 1) return d.toast("Your action’s spent this round. Got another one? Open Got another action and say where it came from.");
     if (close) d.closeDialog();
     spend(ch, id, last.id, "your action", (rec) => {
-      rec.list.push({ id: newId(), k: "else", act: what, t: Date.now() });
-      return what === "Defend" ? "You’re Defending this round. When the telegraphs land, every line on your Defend counts twice." : `Your action’s on ${lower(what)}.`;
+      rec.list.push({ id: newId(), k: "else", act: what, ...(set ? { set: true } : {}), t: Date.now() });
+      return what === "Defend" ? "You’re Defending this round. When the telegraphs land, every line on your Defend counts twice." : `Your action’s on ${actSaid({ act: what, set })}.`;
     });
   }
 

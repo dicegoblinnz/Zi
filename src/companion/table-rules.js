@@ -60,6 +60,7 @@ export const SIZES = [2, 4, 6, 8, 10, 12];
 export const MAX = { who: 60, does: 140, one: 140, name: 60, act: 60, paid: 80, tele: 24, rounds: 12, more: 4, list: 6, ground: 8, stakes: 6, events: 6, tags: 8, text: 140 };
 // Where an extra action can come from (Extra actions, in Conflict).
 export const MORE = ["resolve", "held", "hiding", "fired", "trait"];
+export const ONCE = ["held", "hiding", "fired"];
 const ID = /^[A-Za-z0-9_-]{6,32}$/;
 // An archetype's name, as the crest draws it.
 const ARCH = /^[A-Za-z][A-Za-z' -]{0,23}$/;
@@ -219,6 +220,7 @@ function actFrom(x) {
   const out = { id: String(x.id), k, act: line(x.act, MAX.act), steps: num(x.steps, 1, 99) ?? 1, t: num(x.t, 0, 1e15) ?? 0 };
   if (k === "else") {
     if (!out.act) return null;
+    if (x.set === true) out.set = true;
   } else {
     if (!ID.test(String(x.ref ?? ""))) return null;
     out.ref = String(x.ref);
@@ -233,7 +235,10 @@ function actFrom(x) {
 }
 function actsFrom(x) {
   if (!x || typeof x !== "object") return null;
-  const more = (Array.isArray(x.more) ? x.more : []).filter((m) => MORE.includes(m)).slice(0, MAX.more);
+  // Holding last round's, coming out of hiding and cashing in d12 Confidence
+  // give one each. Resolve and traits can give more.
+  const more = [];
+  for (const m of Array.isArray(x.more) ? x.more : []) if (MORE.includes(m) && (ONCE.includes(m) ? !more.includes(m) : true) && more.length < MAX.more) more.push(m);
   const list = [];
   for (const y of (Array.isArray(x.list) ? x.list : []).slice(0, MAX.list)) {
     const a = actFrom(y);
@@ -248,8 +253,11 @@ function saidOf(a, doc) {
   if (a.k === "join") return "putting it into a friend’s answer";
   if (a.k === "work") return `working ${lower(el?.name ?? "the scene")}`;
   if (a.k === "ground") return `using ${lower(el?.name ?? "the ground")}`;
-  return lower(a.act);
+  return actSaid(a);
 }
+// Something else, mid-sentence: a set action keeps its capital (Defend,
+// Sneak), and anything else doesn't (taking a breath, pull the rope out).
+export const actSaid = (a) => (a.set || /^[A-Z][A-Z]/.test(a.act ?? "") ? String(a.act ?? "") : String(a.act ?? "").replace(/^[A-Z]/, (m) => m.toLowerCase()));
 
 // A clock or an event steps down a size, and past d2 the stake's lost or the
 // event happens. It's kept in the round, so a roll that turns up late can put
@@ -275,9 +283,13 @@ function stepBack(round, el) {
   const i = round.moved.findIndex((m) => m.ref === el.id);
   if (i < 0) return;
   const m = round.moved[i];
-  if (el.t === "stake") el.clock = m.from;
-  else el.d = m.from;
-  el.out = "";
+  const k = el.t === "stake" ? "clock" : "d";
+  // Closed by that step: it's back where it was. Otherwise up by what that
+  // step took, so a later round's step still counts.
+  if (m.out) {
+    if (el.out === m.out) el.out = "";
+    el[k] = m.from;
+  } else el[k] = Math.min(12, el[k] + (m.from - m.to));
   round.moved.splice(i, 1);
 }
 // The end of a round: whatever nobody worked steps down.
@@ -323,6 +335,7 @@ function doWork(doc, round, x) {
         y.did.out = 1;
       } else el.d -= 2;
     } else el.d = sizeUp(el.d);
+    y.did.to = el.d;
   }
   return y;
 }
@@ -334,10 +347,16 @@ function undoWork(doc, round, x) {
     const tag = el.tags.find((g) => g.name === x.did.tag);
     if (tag) tag.gone = 0;
   }
-  if (x.did?.won && el.out === "won") el.out = "";
+  // Something's back in the way, so it isn't won, whoever's roll won it.
+  if (el.out === "won" && (x.did?.won || el.tags.some((g) => !g.gone))) {
+    el.out = "";
+    for (const a of Object.values(round.acts)) for (const y of a.list ?? []) if (y.ref === el.id && y.did?.won) delete y.did.won;
+  }
   if (x.did?.d != null) {
-    el.d = x.did.d;
-    if (x.did.out) el.out = "";
+    if (x.did.out) {
+      if (el.out === "done") el.out = "";
+    } else if (x.did.to != null) el.d = Math.max(2, Math.min(12, el.d - (x.did.to - x.did.d)));
+    else el.d = x.did.d;
   }
   // Taken back after the round ended, with nobody else at it: it steps down.
   if (round.over && !workedIn(round, el.id)) stepDown(round, el);
@@ -367,7 +386,7 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
         if (t && !tele.some((y) => y.id === t.id) && !findTele(doc, t.id)) tele.push(t);
       }
       // A round with nothing telegraphed still runs the scene's clocks.
-      const scene = doc.scene.stakes.length + doc.scene.events.length > 0;
+      const scene = [...doc.scene.stakes, ...doc.scene.events].some((el) => !el.out);
       if (!tele.length && !scene) return no("There’s nobody in the campaign for that round to go to.");
       // The next round starts once the last one's over.
       if (last && !last.over) endRound(doc, last, now);
@@ -473,16 +492,23 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
       const t = hit.t;
       const mine = Boolean(t.icp && t.icp.user === who.user && t.icp.ch === who.ch);
       if (op.off) {
-        if (mine && !hit.round.over && !t.def) delete t.icp;
+        if (!mine) return yes();
+        if (hit.round.over || t.def) return no(`${cap(lower(t.who))} landed on you already, so it’s yours.`);
+        delete t.icp;
         return yes();
       }
-      if (mine) return yes();
-      if (hit.round.over) return no(`Round ${hit.round.n}’s over, so ${lower(t.who)} landed where it was aimed.`);
+      // Already theirs: it's only whether it's paid for that changes.
+      if (mine) {
+        t.icp.free = op.free === true;
+        t.icp.paid = op.paid !== false;
+        return yes();
+      }
+      if (hit.round.over) return no(`Round ${hit.round.n}’s over, so it’s too late to take ${lower(t.who)}.`);
       if (t.kind === "fear") return no("Nobody can intercept fear, lies or pressure. It’s inside their head.");
       if (t.at.user === who.user && t.at.ch === who.ch) return no("That one’s aimed at you already.");
       if (t.ans) return no(`${t.ans.name} answered ${lower(t.who)} already.`);
       if (t.icp) return no(`${t.icp.name} took ${lower(t.who)} first.`);
-      t.icp = { user: who.user, ch: who.ch, name: line(who.cname, MAX.name) || "Someone", free: op.free === true, at: now };
+      t.icp = { user: who.user, ch: who.ch, name: line(who.cname, MAX.name) || "Someone", free: op.free === true, paid: op.paid !== false, at: now };
       return yes();
     }
     // What someone spent their actions on this round, all of it at once, as
@@ -510,21 +536,26 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
         if (a.k === "join") {
           const t = round.tele.find((x) => x.id === a.ref);
           if (!t) return no("That telegraph’s gone. The GM took it back.");
-          if (t.ans) return no(`${t.ans.name} rolled ${lower(t.who)} already.`);
+          if (t.ans) return no(`${t.ans.name} answered ${lower(t.who)} already, so it’s too late to put your action in.`);
           if (added.some((b) => b !== a && b.k === "join" && b.ref === a.ref) || kept.some((b) => b.k === "join" && b.ref === a.ref)) return no("You’re in on that one already.");
         } else {
           const hit = findEl(doc, a.ref);
           if (!hit || (a.k === "ground") !== (hit.kind === "ground")) return no("That’s gone from the scene.");
-          if (a.k === "work" && hit.el.out) return no(`${cap(lower(hit.el.name))}’s settled already.`);
-          // Late, it was rolled against the die it had before the round ended.
+          // Settled, unless it was the end of this round that settled it and
+          // this roll's from the round, turning up late.
+          const closed = round.over && round.moved.some((m) => m.ref === hit.el.id && m.out);
+          if (a.k === "work" && hit.el.out && !closed) return no(`${cap(lower(hit.el.name))}’s settled already.`);
+          // Once its die's rolled this round, everyone's judged against that.
+          // Before, the roll has to be one its die could make: late, the die
+          // it had before the round ended.
           const die = Math.max(dieOf(hit.el), round.over ? round.moved.find((m) => m.ref === hit.el.id)?.from ?? 0 : 0);
-          if (a.k === "work" && a.roll.opp > die) return no(`That roll was against a ${a.roll.opp}, and ${lower(hit.el.name)}’s d${die} can’t roll that.`);
+          if (a.k === "work" && round.held[hit.el.id] == null && a.roll.opp > die) return no(`That roll was against a ${a.roll.opp}, and ${lower(hit.el.name)}’s d${die} can’t roll that.`);
         }
       }
       // Someone counted in an answer is in it.
       for (const a of gone) {
         const t = a.k === "join" ? round.tele.find((x) => x.id === a.ref) : null;
-        if (t?.ans?.with?.some((w) => w.user === who.user && w.ch === who.ch)) return no(`${t.ans.name} rolled ${lower(t.who)} with you in it, so it stays.`);
+        if (t?.ans?.with?.some((w) => w.user === who.user && w.ch === who.ch)) return no(`${t.ans.name} answered ${lower(t.who)} with you in it, so it stays.`);
       }
       const sp = spentBy({ ...round, acts: { [key]: next } }, who.user, who.ch);
       if (sp.used > sp.have) return no(sp.have === 1 ? "You’ve got one action this round. Got another? Say where it came from." : `You’ve got ${sp.have} actions this round, and that’s more.`);

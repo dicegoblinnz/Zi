@@ -266,6 +266,43 @@ if (part("1b")) {
   T.forget(doc, "sam");
   same(r1().tele.find((t) => t.id === "tele-club-01").icp, undefined, "Sam's intercept goes when his account does");
   same(Object.keys(r1().acts).some((k) => k.startsWith("sam|")), false, "and so does what he spent his actions on");
+
+  // From the independent check: rolls and Undos that cross each other.
+  const doc2 = T.blank();
+  const ap2 = (op, who, extra = {}) => T.apply(doc2, op, who, roster, now, extra);
+  const ok2 = (op, who, what, extra) => same(ap2(op, who, extra), { ok: true }, what);
+  const not2 = (op, who, what, extra) => same(ap2(op, who, extra).ok, false, what);
+  const r = () => doc2.rounds[doc2.rounds.length - 1];
+  const at = (id, ref, act, total, opp, aim, t = 0) => ({ id, k: "work", ref, act, steps: 3, t, roll: { dice: [{ size: 6, total }], opp }, aim });
+  ok2({ o: "put", el: { id: "event-watch1", t: "event", name: "The watch", what: "the watch comes in", d: 8 } }, gm, "the watch, a d8");
+  ok2({ o: "put", el: { id: "stake-door01", t: "stake", name: "The door", c: 3, tags: ["Locked", "Barred"] } }, gm, "the door, Locked and Barred");
+  ok2({ o: "round", id: "round-a-0001", tele: [] }, gm, "a round with only the scene");
+  ok2({ o: "acts", round: "round-a-0001", ch: "vesk", x: { more: [], list: [at("act-watch-v1", "event-watch1", "Sneak", 8, 7, "drive")] } }, kai, "Vesk drives the watch, 8 against its 7");
+  same(doc2.scene.events[0].d, 6, "and it's down to d6");
+  ok2({ o: "acts", round: "round-a-0001", ch: "bram", x: { more: [], list: [at("act-watch-b1", "event-watch1", "Talk", 6, 7, "slow")] } }, sam, "Bram's roll at it is judged against the 7 that stands, though it's only a d6 now");
+  same(r().acts["sam|bram"].list[0].roll.won, false, "and his 6 doesn't beat it");
+  ok2({ o: "acts", round: "round-a-0001", ch: "isolde", x: { more: [], list: [at("act-door-i1", "stake-door01", "Ward", 6, 2, "Locked")] } }, lee, "Isolde takes Locked off the door");
+  ok2({ o: "acts", round: "round-a-0001", ch: "bram", x: { more: ["resolve"], list: [at("act-watch-b1", "event-watch1", "Talk", 6, 7, "slow"), at("act-door-b2", "stake-door01", "Lift and carry", 5, 2, "Barred")] } }, sam, "Bram, with 1 Resolve, takes Barred, the last thing in its way");
+  same(doc2.scene.stakes[0].out, "won", "so the door's won");
+  ok2({ o: "acts", round: "round-a-0001", ch: "isolde", x: { more: [], list: [] } }, lee, "Isolde takes hers back");
+  same([doc2.scene.stakes[0].tags.map((g) => g.gone), doc2.scene.stakes[0].out], [[0, 1], ""], "Locked's back in the way, so it isn't won any more");
+  same(r().acts["sam|bram"].list[1].did?.won, undefined, "and Bram's roll doesn't say it won it");
+  ok2({ o: "acts", round: "round-a-0001", ch: "vesk", x: { more: ["held", "held", "hiding"], list: [at("act-watch-v1", "event-watch1", "Sneak", 8, 7, "drive")] } }, kai, "Vesk says she held last round twice");
+  same(r().acts["kai|vesk"].more, ["held", "hiding"], "and it counts once");
+  now = 5000;
+  ok2({ o: "end", round: "round-a-0001" }, gm, "the round ends");
+  // A late roll from the round saves what its end just closed.
+  ok2({ o: "put", el: { id: "stake-gate01", t: "stake", name: "The gate", c: 2, tags: ["Chained"], clock: 2 } }, gm, "the gate, on a d2 clock");
+  ok2({ o: "round", id: "round-b-0002", tele: [] }, gm, "the next round");
+  now = 6000;
+  ok2({ o: "end", round: "round-b-0002" }, gm, "it ends with nobody at the gate");
+  same(doc2.scene.stakes[1].out, "lost", "so the gate's lost");
+  ok2({ o: "acts", round: "round-b-0002", ch: "vesk", x: { more: [], list: [at("act-gate-v1", "stake-gate01", "Locks", 5, 3, "Chained", 5500)] } }, kai, "but Vesk's roll at it, from the round, turns up late", { phoneNow: 6100 });
+  same([doc2.scene.stakes[1].out, doc2.scene.stakes[1].clock], ["won", 2], "and wins it: it was never lost");
+  // A round with nothing telegraphed needs something in the scene still running.
+  const doc3 = T.blank();
+  same(T.apply(doc3, { o: "put", el: { id: "stake-done01", t: "stake", name: "The ledger", c: 2, tags: [{ name: "Locked", gone: 1 }], out: "won" } }, gm, roster, now), { ok: true }, "a stake that's won already");
+  same(T.apply(doc3, { o: "round", id: "round-d-0004", tele: [] }, gm, roster, now).ok, false, "is nothing to start a round with");
   console.log("the live table's rules checked");
 }
 
