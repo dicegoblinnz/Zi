@@ -64,6 +64,7 @@ const NAMES = {
   projects: ["project", "projects"],
   holdings: ["holding", "holdings"],
   people: ["person the crew relies on", "people the crew relies on"],
+  changed: ["line on What has changed", "lines on What has changed"],
 };
 
 export function makeParty(d) {
@@ -532,11 +533,11 @@ export function makeParty(d) {
     } else if (kind === "p-add") {
       const l = form.dataset.l;
       if (!LISTS.includes(l)) return;
-      const item = { id: newId(), text: text("text", l === "assets" ? MAX.asset : MAX.line) };
+      const item = { id: newId(), text: text("text", l === "assets" ? MAX.asset : l === "changed" ? MAX.then : MAX.line) };
       if (!item.text) return d.toast("Write it in first.", false);
       if (l === "assets") Object.assign(item, { does: text("does", MAX.does), power: f.get("power") === "on" });
       if (l === "projects") Object.assign(item, { then: text("then", MAX.then), die: Number(f.get("die")) || 2 });
-      const max = l === "projects" ? MAX.projects : MAX.list;
+      const max = l === "projects" ? MAX.projects : l === "changed" ? MAX.changed : MAX.list;
       if (doc[l].length >= max) return d.toast(`That’s ${max} ${NAMES[l][1]} already, which is as many as the sheet holds. Take one off first.`, false);
       if (edit(id, [{ o: "add", l, item }], `On the party sheet: ${bare(item.text)}.`)) form.reset();
     } else if (kind === "p-line") {
@@ -547,7 +548,7 @@ export function makeParty(d) {
       const put = (field, v) => {
         if (v !== item[field]) ops.push({ o: "edit", l, id: item.id, f: field, v });
       };
-      put("text", text("text", l === "assets" ? MAX.asset : MAX.line));
+      put("text", text("text", l === "assets" ? MAX.asset : l === "changed" ? MAX.then : MAX.line));
       if (l === "assets") {
         put("does", text("does", MAX.does));
         put("power", f.get("power") === "on");
@@ -593,7 +594,7 @@ export function makeParty(d) {
           <label class="cc-field">Its die <select name="die">${SIZES.map((s) => `<option value="${s}"${s === x.die ? " selected" : ""}>d${s}</option>`).join("")}</select></label>`
         : "";
     return `<form class="cc-form pt-form" data-form="p-line" data-l="${l}" data-id="${esc(x.id)}">
-      <label class="cc-field">${words} <input name="text" maxlength="${l === "assets" ? MAX.asset : MAX.line}" autocomplete="off" required value="${esc(x.text)}"></label>${extra}
+      <label class="cc-field">${words} <input name="text" maxlength="${l === "assets" ? MAX.asset : l === "changed" ? MAX.then : MAX.line}" autocomplete="off" required value="${esc(x.text)}"></label>${extra}
       <div class="cc-row"><button type="submit" class="button primary">Save</button><button type="button" class="button" data-act="p" data-do="cancel">Cancel</button>
       <button type="button" class="button danger" data-act="p" data-do="drop" data-l="${l}" data-id="${esc(x.id)}">${sure ? "Tap again to take it off" : "Take it off the sheet"}</button></div></form>`;
   }
@@ -607,7 +608,7 @@ export function makeParty(d) {
           <p class="cc-small">If the crew’s already partway there, start it higher: a d6, or a d10 when one more push would do it.</p>`
         : "";
     return `<form class="cc-form pt-form pt-add" data-form="p-add" data-l="${l}">
-      <label class="cc-field">${label} <input name="text" maxlength="${l === "assets" ? MAX.asset : MAX.line}" autocomplete="off"${hint ? ` placeholder="${esc(hint)}"` : ""}></label>${extra}
+      <label class="cc-field">${label} <input name="text" maxlength="${l === "assets" ? MAX.asset : l === "changed" ? MAX.then : MAX.line}" autocomplete="off"${hint ? ` placeholder="${esc(hint)}"` : ""}></label>${extra}
       <div class="cc-row"><button type="submit" class="button">Add it</button></div></form>`;
   }
 
@@ -751,6 +752,10 @@ export function makeParty(d) {
       `<p class="cc-lead">The people the crew leans on${P.people ? `, like ${esc(P.people.charAt(0).toLowerCase() + P.people.slice(1))}` : "."}</p>
       ${list("people", doc.people)}${addForm("people", "Someone the crew relies on", "")}`, listLit("people"));
 
+    const changed = fold("changed", "What has changed", doc.changed.length ? few(doc.changed.slice().reverse().map((x) => esc(x.text)), 1) : none,
+      `<p class="cc-lead">A line for every agenda that happened. When one does, the world changes, and the GM says how in one sentence. They go on here from the faction turn, and you can write one in too.</p>
+      ${list("changed", doc.changed)}${addForm("changed", "What changed", "The Vanes are back in the city")}`, listLit("changed"));
+
     const onSheet = new Set(doc.assets.map((a) => a.text.toLowerCase()));
     const pick = fold("pick", "Crew assets to pick from", "All twelve, for when the crew grows",
       `${d.rule("s-crew-tags")}<ul class="pt-lines">${(P.assets ?? []).map((a, i) => `<li class="pt-line pt-pick"><div class="pt-line-in"><p><b>${esc(a.name)}</b></p><p class="pt-does">${esc(a.does)}</p></div>
@@ -761,7 +766,7 @@ export function makeParty(d) {
       <h2 id="pt-h-${esc(id)}"${tab ? ' class="sr-only"' : ""}>The party sheet</h2>${status ? `<p class="cc-small pt-status">${status}</p>` : ""}
       ${goalView(id, doc, k)}
       ${crew}
-      <div class="cc-folds pt-folds">${reps}${res}${assets}${grows}${projects}${aspsFold}${holdings}${people}${pick}</div>
+      <div class="cc-folds pt-folds">${reps}${res}${assets}${grows}${projects}${aspsFold}${holdings}${people}${changed}${pick}</div>
       ${tab ? "" : `<p class="cc-small">Everyone in the campaign can change it, and it changes on every phone in it.</p>`}</section>`;
   }
 
@@ -835,6 +840,10 @@ export function makeParty(d) {
       return id ? docOf(id).goal : null;
     },
     goalIn: (id) => docOf(id).goal,
+    // For the faction turn (turn.js): the sheet as this phone has it, and a
+    // change to it from there.
+    docIn: (id) => docOf(id),
+    edit: (id, ops, say, o) => edit(id, ops, say, o),
     // The crew's own card, for the top of the faction board (world.js).
     crewIn(id) {
       const doc = docOf(id);

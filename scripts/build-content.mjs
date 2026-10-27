@@ -850,7 +850,27 @@ function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, wa
     if (!group || !rows.length) warn(`can't read Appendix B's ${id.replace("assets-", "")} assets`);
     for (const r of rows) assets.push({ group, text: curly(plain(r[0])), does: curly(plain(r[1] ?? "")), power: power || /\+1 Power/.test(r[1] ?? "") });
   }
-  return { boards, build, sizes, assets, link: `${pageFor.get(factionsDoc.path)}#s-faction-board` };
+  // The faction turn (stage 2): the d6 for when she doesn't know what a
+  // faction does, the six outcomes, both d12 tables for when one comes for the
+  // crew, and the crew's moves on a faction.
+  const turnTables = tablesOf(sectionOf(factionsDoc.body, "s-faction-turn"));
+  const d6 = turnTables.find((t) => /^d6$/i.test(t.head[0]));
+  const does = (d6?.rows ?? []).map((r) => {
+    const [from, to] = plain(r[0]).split(/[–-]/).map((x) => Number(x.trim()));
+    return { from, to: to || from, text: curly(plain(r[1] ?? "")) };
+  });
+  if (does.length < 5 || does[0].from !== 1 || does[does.length - 1].to !== 6 || does.some((x, i) => i && x.from !== does[i - 1].to + 1)) warn("expected the d6 for what a faction does, from 1 to 6, in The Faction Turn");
+  const outcomes = (turnTables.find((t) => /^Outcome$/i.test(t.head[0]))?.rows ?? []).map((r) => ({ name: plain(r[0]), text: curly(plain(r[1] ?? "")) }));
+  if (outcomes.map((o) => o.name).join() !== "Destroy,Undermine,Obstruct,Influence,Acquire,Establish") warn("expected the six outcomes, in order, in The Six Outcomes");
+  const comesTable = tablesOf(sectionOf(factionsDoc.body, "s-faction-comes")).find((t) => /^d12$/i.test(t.head[0]));
+  const comes = (comesTable?.rows ?? []).map((r) => ({ n: Number(plain(r[0])), hostile: curly(plain(r[1] ?? "")), bond: curly(plain(r[2] ?? "")) }));
+  if (comes.length !== 12 || comes.some((x, i) => x.n !== i + 1 || !x.hostile || !x.bond)) warn("expected both d12 tables, hostile and bond, in When a Faction Comes for the Crew");
+  const movesTable = tablesOf(sectionOf(factionsDoc.body, "s-faction-crew")).find((t) => /^Move$/i.test(t.head[0]));
+  const moves = (movesTable?.rows ?? []).map((r) => ({ name: plain(r[0]), against: curly(plain(r[1] ?? "")), win: curly(plain(r[2] ?? "")) }));
+  if (moves.length !== 8 || moves[6]?.name !== "Set back its agenda" || moves[7]?.name !== "Work for it") warn("expected the crew's eight moves on a faction, ending with Set back its agenda and Work for it, in The Crew and the Factions");
+  const turn = { does, outcomes, comes, moves };
+
+  return { boards, build, sizes, assets, turn, link: `${pageFor.get(factionsDoc.path)}#s-faction-board` };
 }
 
 // What the character builder offers, read off Building Your Character and the
@@ -1068,7 +1088,8 @@ const rules = {};
 for (const id of ["s-round", "s-telegraphs", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour", "s-armour-quality",
   "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through", "s-blaze", "s-healing", "s-vulnerable", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "s-good-aspiration", "how-permissions-stack",
   "your-slots", "s-downtime-rolls", "s-goal", "s-good-goal", "s-climb", "s-projects", "s-crew-size", "s-crew-tags", "s-crew-wealth", "s-crew-grows", "s-party-resources",
-  "s-faction-board", "s-wealth", "s-faction-bonds", "s-agendas", "when-an-agenda-happens", "s-standing", "s-mini-factions", "s-faction-build"]) {
+  "s-faction-board", "s-wealth", "s-faction-bonds", "s-agendas", "when-an-agenda-happens", "s-standing", "s-mini-factions", "s-faction-build",
+  "s-faction-turn", "s-faction-outcomes", "s-faction-comes", "s-faction-crew", "party-slots"]) {
   const doc = docWith(`{#${id}}`);
   const head = doc?.body.match(new RegExp(`^#{2,4} (.+?) \\{#${id}\\}`, "m"));
   const blocks = [];

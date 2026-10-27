@@ -54,6 +54,8 @@
 // round, every clock and event nobody worked steps down a size, and past d2
 // the stake's lost or the event happens.
 
+import { applyTurn, forgetTurn, isTurnOp, turnView } from "./turn-rules.js";
+
 export const SIZES = [2, 4, 6, 8, 10, 12];
 export const MAX = { who: 60, does: 140, one: 140, name: 60, act: 60, paid: 80, tele: 24, rounds: 12, more: 4, list: 6, ground: 8, stakes: 6, events: 6, tags: 8, text: 140 };
 // Where an extra action can come from (Extra actions, in Conflict).
@@ -73,7 +75,9 @@ const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 export const lower = (name) => String(name ?? "").replace(/^(A|An|The|His|Her|Their|Its) /, (m) => m.toLowerCase());
 
 export const blankScene = () => ({ ground: [], stakes: [], events: [] });
-export const blank = () => ({ v: 0, fight: 1, rounds: [], scene: blankScene() });
+// turn is the faction turn of the downtime that's on, and last what changed
+// in the one before (turn-rules.js).
+export const blank = () => ({ v: 0, fight: 1, rounds: [], scene: blankScene(), turn: null, last: null });
 export const current = (doc) => doc?.rounds?.[doc.rounds.length - 1] ?? null;
 // A table from before the scene and the round's actions gets them.
 export function fresh(doc) {
@@ -348,6 +352,7 @@ const gmOnly = () => no("Only the GM can do that.");
 // clock when it sent the batch, to tell when an answer was rolled.
 export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
   fresh(doc);
+  if (isTurnOp(op)) return applyTurn(doc, op, who, roster, now);
   const gm = who?.role === "gm";
   const last = current(doc);
   switch (op?.o) {
@@ -567,7 +572,7 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
 // Someone's deleted their account: the telegraphs aimed at them go, and their
 // answers to anyone else's stay as how it went, but not who answered.
 export function forget(doc, user) {
-  let changed = false;
+  let changed = forgetTurn(doc, user);
   for (const r of doc.rounds) {
     const kept = r.tele.filter((t) => t.at.user !== user);
     if (kept.length !== r.tele.length) changed = true;
@@ -602,5 +607,5 @@ export function forget(doc, user) {
 // round). Telegraphs are face up, so everyone sees them all.
 export function viewOf(doc, role) {
   const rounds = role === "gm" ? doc.rounds : doc.rounds.slice(-2);
-  return { v: doc.v, fight: doc.fight, rounds: JSON.parse(JSON.stringify(rounds)), scene: JSON.parse(JSON.stringify(doc.scene ?? blankScene())) };
+  return { v: doc.v, fight: doc.fight, rounds: JSON.parse(JSON.stringify(rounds)), scene: JSON.parse(JSON.stringify(doc.scene ?? blankScene())), ...turnView(doc, role) };
 }

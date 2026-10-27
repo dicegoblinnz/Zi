@@ -19,6 +19,7 @@ import { makeCampaigns } from "./campaigns.js";
 import { makeParty } from "./party.js";
 import { makeTable } from "./table.js";
 import { makeWorld } from "./world.js";
+import { makeTurn } from "./turn.js";
 import { bondKey, threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
 import { boxesSaid, isBroken, itS, keyOf, leftOf, nameOf, pieceAt, piecesOf, setTicked, standing, tick as tickBox, tickedOf, yours } from "./armour.js";
 import { aura as kitAura, boxes as kitBoxes, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, plate as kitPlate, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
@@ -181,6 +182,9 @@ const table = makeTable({
 // screen off a campaign's page, and the World tab of a character in one.
 const world = makeWorld({
   sync, esc, W: DATA.worlds, icon: ICON,
+  // The faction turn, at the top of the World screen and tab (turn.js).
+  turnSection: (id) => turn.section(id),
+  turnGlance: (id) => turn.glance(id),
   list: () => camps.list(),
   campaign: (id) => camps.campaign(id),
   campOf: (ch) => party.campOf(ch),
@@ -201,6 +205,46 @@ const world = makeWorld({
     render();
   },
   gone: (id) => camps.gone(id),
+});
+
+// The faction turn, each downtime from the board (turn.js), kept with the
+// campaign's live table so it reaches every phone as it happens.
+const turn = makeTurn({
+  sync, esc, W: DATA.worlds, icon: ICON,
+  table: () => table,
+  world: () => world,
+  party: () => party,
+  isOpen: (key) => ui.open.has(key),
+  roll: () => roll,
+  render: () => render(),
+  renderDialog: () => renderDialog(),
+  openDialog: (r) => openRoll(r),
+  closeDialog: () => closeDialog(),
+  toast: (m, u) => toast(m, u),
+  calm: () => calm(),
+  tumble: (where, done) => tumble(where, done),
+  // A character on this phone, by id, and 1 of its Resolve spent to roll the
+  // crew's dice again (Rolling in downtime).
+  character: (id) => {
+    const ch = chars().find((x) => x.id === id);
+    return ch ? { resolve: Number(ch.state?.resolve) || 0 } : null;
+  },
+  spendResolve: (id) => {
+    const ch = chars().find((x) => x.id === id);
+    if (!ch || !(ch.state?.resolve > 0)) return false;
+    if (current()?.id === ch.id) {
+      change("spending 1 Resolve to roll the crew’s action again", (s) => {
+        s.resolve -= 1;
+        return `Resolve’s ${s.resolve}.`;
+      }, { say: false });
+      return true;
+    }
+    ch.state.resolve -= 1;
+    ch.saved = new Date().toISOString();
+    store.save();
+    party.soon(ch);
+    return true;
+  },
 });
 
 // Campaigns: starting one, joining one from its link, and the GM's look at
@@ -1788,6 +1832,7 @@ function dialogView() {
   if (roll.kind === "rule") return ruleView();
   if (roll.kind === "camp") return camps.dialog(roll);
   if (roll.kind === "tele" || String(roll.kind).startsWith("tg-")) return table.dialog(roll);
+  if (String(roll.kind).startsWith("ft-")) return turn.dialog(roll);
   const c = normal(ch);
   if (!c) return "";
   const s = ch.state;
@@ -1856,6 +1901,7 @@ function render() {
   // And its world, on the World screen or a World tab.
   world.route(view, ch);
   world.after(app);
+  turn.after(app);
   glow(ch);
   if (dialog.open) renderDialog();
   else refocus(keep);
@@ -2132,6 +2178,7 @@ const ACT = {
   p: (el, e) => party.act(el, e),
   pundo: () => party.undo(),
   w: (el, e) => world.act(el, e),
+  ft: (el, e) => turn.act(el, e),
   wundo: () => world.undo(),
   b: (el, e) => builder.act(el, e, render, () => {
     scrollTo(0, 0);
@@ -2829,6 +2876,7 @@ document.addEventListener("submit", (e) => {
   if (kind.startsWith("k-")) return camps.submit(kind, form, f);
   if (kind.startsWith("p-")) return party.submit(kind, form, f);
   if (kind.startsWith("w-")) return world.submit(kind, form, f);
+  if (kind.startsWith("ft-")) return turn.submit(kind, form, f);
   if (kind === "name") return start(roll?.crew, String(f.get("name") ?? "").trim().slice(0, 40));
   // A Blaze they live through: the wound becomes a Scar, a Catch, and the
   // wound die drops back to the Scars.
@@ -2908,6 +2956,7 @@ document.addEventListener("change", (e) => {
 document.addEventListener("input", (e) => {
   if (e.target.dataset?.bin) return builder.input(e.target);
   if (e.target.dataset?.tg != null && ["tele", "tg-el", "tg-else"].includes(roll?.kind)) return table.input(e.target, roll);
+  if (e.target.dataset?.ft != null && String(roll?.kind).startsWith("ft-")) return turn.input(e.target, roll);
   if (e.target.dataset?.dt != null && roll?.kind === "downtime") return dt.input(e.target, roll);
   if (e.target.dataset?.in === "intent" && roll?.intents) {
     roll.intents[e.target.dataset.k] = e.target.value.slice(0, 40);

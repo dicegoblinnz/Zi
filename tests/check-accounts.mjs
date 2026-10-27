@@ -68,10 +68,34 @@
 //    there sees none of it. With no signal, Vesk's World tab still has what
 //    Kai's seen. The World screen, a faction's page and the World tab pass
 //    axe at 390, in both themes.
-// 8. Who can do what: only Mo sees people, a player can't reset a link, rename,
+// 8. The faction turn. Mo starts Tuesday Lair's first downtime from its World
+//    screen and it's on Kai's and Sam's phones in seconds. Kai pays the
+//    Brothers of the Lamp with the crew's extra resource. Mo picks the
+//    factions' actions: the book's Two things in one job (the Harbour Guild's
+//    d6 to Acquire the Vane Estate's Salt Contracts and a d4 to keep its name
+//    out of it), the Estate writing a new agenda as the faction pressure, the
+//    Lamp's job, the Drowned Choir working an agenda at d12, the Tithe Fleet
+//    coming for the crew on a real 7, and Tarrant & Daughters off-screen. He
+//    telegraphs them, which shows the crew the factions in them, and the
+//    off-screen one never reaches a player. Kai picks the crew's action, an
+//    Obstruct against the Estate, and she's told the Estate's too big for the
+//    crew's action alone, so Sam, with no signal, puts Bram's slot in, which
+//    goes up once he's back and counts everything twice. Kai rolls real dice
+//    and stops the Estate. Then the landing, Obstructs first: the Estate's
+//    d12 rolls a 4, the Guild's d6 a 5 and its d4 a 2, so the contracts are
+//    the Guild's and the Estate writes a hostile thread toward it, and the
+//    Lamp has to beat that same 4. The Choir's agenda happens, which goes on
+//    the party sheet under What has changed, and it writes its next one. The
+//    downtime ends with what changed on every phone. A second downtime: the
+//    crew Establishes a mini faction of its own from its party sheet. A
+//    player can't change the factions' actions, and nothing crosses: Zed gets
+//    nothing of Tuesday Lair's, and Kai's Dorrie in Zed's Night sees no
+//    downtime. The World screen and tab, mid-turn, pass axe at 390 in both
+//    themes.
+// 9. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
-// 9. Signing out takes the account's characters off the phone and leaves the
+// 10. Signing out takes the account's characters off the phone and leaves the
 //    phone's own. Kai downloads her data, then deletes her account: it's gone
 //    from the database, her campaign ends with its board and she's out of
 //    Mo's. The account page passes axe at 320 wide, and the campaign screens
@@ -85,6 +109,7 @@ import { extname, join } from "node:path";
 import { Miniflare, convertV4MiniflareOptions, coupleWebSocket } from "miniflare";
 import { WebSocketServer } from "ws";
 import { chromium } from "playwright";
+import { stepsToDice } from "../src/companion/dice.js";
 import { AxeBuilder } from "@axe-core/playwright";
 
 const problems = [];
@@ -1482,8 +1507,346 @@ try {
   console.log("7. The world: the faction board");
   await checkWorld();
 
-  // ------------------------------------------------------------ 8. who can do what
-  console.log("8. Who can do what");
+  // ------------------------------------------------------------ 8. the faction turn
+  async function checkTurn() {
+    const worldOf = async (id) => JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", id))[0]?.data ?? "null");
+    const partyOf = async (id) => JSON.parse((await rows("SELECT data FROM party WHERE campaignId = ?1", id))[0]?.data ?? "null");
+    const factionIn = async (name) => (await worldOf(tuesday.id))?.factions.find((f) => f.name === name) ?? null;
+    const tableOf = async (page, id = tuesday.id) => (await got(page, "GET", `/api/campaigns/${id}/table`)).json;
+    const turnOf = async (page = mo.page) => (await tableOf(page))?.turn ?? null;
+    const dlg = "#cc-dialog";
+    const toWorld = async (page) => {
+      await page.goto(`${BASE}/characters/?camp=${tuesday.id}&world`);
+      await page.waitForSelector(".ft");
+    };
+    const toTab = async (page, ch) => {
+      await page.goto(`${BASE}/characters/?c=${ch}&t=world`);
+      await page.waitForSelector(".wb-tab");
+    };
+    const inDlg = async (page, sel) => {
+      await page.waitForSelector(`${dlg} ${sel}`);
+      await page.click(`${dlg} ${sel}`);
+    };
+    const actOf = async (fid) => (await turnOf())?.acts.find((a) => a.f === fid) ?? null;
+    const tall = async (page, name) => {
+      if (SHOTS) await page.screenshot({ path: join(SHOTS, `${name}.png`), fullPage: true });
+    };
+
+    // The board as the book's example has it: the Relic goes unpaid instead
+    // of Hired Swords, so the Estate's a d12 again, and the Guild buys new
+    // boats, so it's a d10. The crew's been shown the Brothers of the Lamp, a
+    // friend, and the Drowned Choir's agenda is any day now.
+    const vane = await factionIn("The Vane Estate");
+    const guild = await factionIn("The Harbour Guild");
+    const lamp = await factionIn("The Brothers of the Lamp");
+    const choir = await factionIn("The Drowned Choir");
+    const fleet = await factionIn("The Tithe Fleet");
+    const tarrant = await factionIn("Tarrant & Daughters");
+    const quiet = await factionIn("The Quiet Order");
+    const salt = vane.res.find((r) => r.text === "Salt Contracts");
+    const rents = vane.res.find((r) => r.text === "Low Market Rents");
+    const setup = [
+      { o: "edit", id: vane.id, l: "assets", lid: vane.assets.find((a) => a.text === "Hired Swords").id, f: "off", v: false },
+      { o: "edit", id: vane.id, l: "assets", lid: vane.assets.find((a) => /Inkwell/.test(a.text)).id, f: "off", v: true },
+      { o: "add", id: guild.id, l: "assets", item: { id: "new-boats", text: "New Boats", does: "", power: true, x: 1 } },
+      { o: "show", id: lamp.id, p: "card", v: true },
+      { o: "show", id: lamp.id, p: "threads", v: true },
+      { o: "die", id: choir.id, lid: choir.agendas[0].id, v: 12 },
+    ].map((op, i) => ({ ...op, n: i + 1 }));
+    same((await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "turn-setup-01", ops: setup })).status, 200, "the board set up the way the book's example has it");
+    same([stepsToDice(1 + (await factionIn("The Vane Estate")).assets.filter((a) => a.power && !a.off).length).join(), stepsToDice(1 + (await factionIn("The Harbour Guild")).assets.filter((a) => a.power && !a.off).length).join()], ["12", "10"], "the Estate's a d12 and the Guild's a d10");
+    // And the crew's got an extra resource to spend.
+    const sheet0 = await partyOf(tuesday.id);
+    const need = Math.max(0, sheet0.assets.filter((a) => !a.off).length + 1 - sheet0.res.length);
+    if (need) same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/party`, { dev: "turn-setup-02", ops: Array.from({ length: need }, (_, i) => ({ o: "add", l: "res", item: { id: `funds-${i}x`, text: ["Funerals", "Shipping Shares", "Stall fees"][i] }, n: i + 1 })) })).status, 200, "the crew with an extra resource");
+
+    // Mo starts the downtime from the World screen, and it's on Kai's phone in seconds.
+    await toWorld(mo.page);
+    has(await text(mo.page, ".ft"), "Every faction on the board takes one action a downtime", "the World screen says what downtime does");
+    await toTab(kai.page, "vesk-aaaaaa");
+    same(await kai.page.$(".wb-tab .ft"), null, "with no downtime on, Vesk's World tab has nothing of it");
+    await mo.page.click('.ft [data-do="start"]');
+    await mo.page.waitForSelector(".ft-steps");
+    has(await text(mo.page, ".ft"), "Downtime 1", "the first downtime");
+    await kai.page.waitForSelector(".wb-tab .ft-steps", { timeout: 6000 });
+    has(await text(kai.page, ".wb-tab .ft"), "Hiring comes first", "and Kai's phone has it in seconds");
+
+    // Kai pays the Brothers of the Lamp with the crew's extra resource.
+    await kai.page.click('.ft [data-do="hire"][data-by="crew"]');
+    same(await kai.page.$(`${dlg} [data-do="taker"][data-f="${fleet.id}"]`), null, "the Tithe Fleet's hostile to the crew, so it won't take the crew's money");
+    await inDlg(kai.page, `[data-do="taker"][data-f="${lamp.id}"]`);
+    await kai.page.fill(`${dlg} #ft-job`, "Raid the Vane barges");
+    await inDlg(kai.page, '[data-do="savehire"]');
+    await until(async () => (await turnOf())?.hires.some((h) => h.by === "crew" && h.to === lamp.id), "the crew's hire on the table");
+    has(await text(kai.page, ".ft"), "That’s the crew’s extra resources spent", "that's the crew's extra spent");
+
+    // Mo picks the factions' actions.
+    await until(async () => (await text(mo.page, ".ft")).includes("Brothers of the Lamp"), "the hire on Mo's phone");
+    await mo.page.click('.ft [data-do="step"][data-s="tele"]');
+    await mo.page.waitForSelector(".ft-facs");
+    await tall(mo.page, "turn-tele");
+    const pick = async (f) => {
+      await mo.page.click(`.ft-fac[data-f="${f.id}"]`);
+      await mo.page.waitForSelector(`${dlg} [data-do="what"]`);
+    };
+    // The Harbour Guild: two things in one job.
+    await pick(guild);
+    await inDlg(mo.page, '[data-do="what"][data-w="Acquire"]');
+    await inDlg(mo.page, `[data-do="tf"][data-f="${vane.id}"]`);
+    await inDlg(mo.page, `[data-do="item"][data-id="${salt.id}"]`);
+    await inDlg(mo.page, '[data-do="split"]');
+    await inDlg(mo.page, '[data-do="splits"][data-s="2"]');
+    await mo.page.fill(`${dlg} #ft-splitfor`, "Keep its name out of it");
+    has(await text(mo.page, `${dlg} .ft-total`), "5 steps, d6 + d4", "the Guild's 5 steps, split into a d6 and a d4");
+    await tall(mo.page, "turn-dlg-act");
+    await inDlg(mo.page, '[data-do="saveact"]');
+    await until(async () => (await actOf(guild.id))?.split?.d === 4, "the Guild's action on the table");
+    const g0 = await actOf(guild.id);
+    same([g0.what, g0.main.join(), g0.split.for, g0.vs.k, g0.vs.d.join(), g0.at.name], ["Acquire", "6", "Keep its name out of it", "power", "12", "The Vane Estate’s Salt Contracts"], "Acquire the Salt Contracts with a d6, and a d4 to keep its name out of it, against the Estate's d12");
+    // The Estate writes a new agenda, and it's the faction pressure.
+    await pick(vane);
+    await inDlg(mo.page, '[data-do="what"][data-w="write"]');
+    await mo.page.fill(`${dlg} #ft-agenda`, "Find the painted box");
+    await inDlg(mo.page, '[data-do="agd"][data-d="4"]');
+    await inDlg(mo.page, '[data-do="pressure"]');
+    await inDlg(mo.page, '[data-do="saveact"]');
+    // The Lamp's job, as the crew paid for it.
+    await pick(lamp);
+    has(await text(mo.page, dlg), "Raid the Vane barges", "the Lamp's job, as the crew paid for it");
+    await inDlg(mo.page, '[data-do="what"][data-w="Destroy"]');
+    await inDlg(mo.page, `[data-do="tf"][data-f="${vane.id}"]`);
+    await inDlg(mo.page, `[data-do="item"][data-id="${rents.id}"]`);
+    same(await mo.page.inputValue(`${dlg} #ft-does`), "Raid the Vane barges", "its telegraph is the job it was paid for");
+    await inDlg(mo.page, '[data-do="saveact"]');
+    // The Drowned Choir works its agenda, at d12.
+    await pick(choir);
+    await inDlg(mo.page, '[data-do="what"][data-w="agenda"]');
+    await inDlg(mo.page, '[data-do="saveact"]');
+    // The Tithe Fleet comes for the crew: mostly hostile, so the first table, and a real 7.
+    await pick(fleet);
+    await inDlg(mo.page, '[data-do="what"][data-w="comes"]');
+    has(await text(mo.page, dlg), "mostly hostile, so it’s the first table", "the Fleet rolls on the hostile table");
+    await inDlg(mo.page, '[data-do="d12n"][data-n="7"]');
+    has(await text(mo.page, `${dlg} .ft-comes`), "It tells the law.", "a 7: it tells the law");
+    await inDlg(mo.page, '[data-do="saveact"]');
+    // Tarrant & Daughters, off-screen.
+    await pick(tarrant);
+    await inDlg(mo.page, '[data-do="what"][data-w="Establish"]');
+    await mo.page.fill(`${dlg} #ft-est`, "A second warehouse");
+    await inDlg(mo.page, '[data-do="off"]');
+    await inDlg(mo.page, '[data-do="saveact"]');
+    await until(async () => (await turnOf())?.acts.length === 6, "six actions picked");
+    const t1 = await turnOf();
+    same(t1.pressure, t1.acts.find((a) => a.f === vane.id).id, "the Estate's new agenda is the faction pressure");
+    same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "kai-sneaky-01", ops: [{ o: "ft-drop", id: g0.id, n: 1 }] })).json?.no?.[0]?.why, "Only the GM can do that.", "Kai can't change the factions' actions");
+    same((await turnOf(kai.page))?.acts, [], "and nothing's on her phone till they're telegraphed");
+
+    // He telegraphs them: a second tap, and the factions in them are shown to the crew.
+    await mo.page.click('.ft [data-do="send"]');
+    has(await text(mo.page, ".ft .tg-bar"), "Tap again", "telegraphing takes a second tap");
+    await mo.page.click('.ft [data-do="send"]');
+    await kai.page.waitForSelector(".wb-tab .ft-act", { timeout: 6000 });
+    await until(async () => (await kai.page.$$(".wb-tab .ft-act")).length === 5, "five telegraphs on Kai's phone");
+    same(await kai.page.$eval(".wb-tab .ft-act .k", (el) => el.textContent), "Faction pressure", "the faction pressure first");
+    const kt = await turnOf(kai.page);
+    same([kt.acts.length, kt.acts.some((a) => a.f === tarrant.id), kt.acts.find((a) => a.f === guild.id).vs.d.length], [5, false, 0], "the off-screen one never reaches her, and nor does what the Guild's up against");
+    await until(async () => (await factionIn("The Harbour Guild"))?.shown.card && (await factionIn("The Vane Estate"))?.shown.card, "the factions in a telegraph shown to the crew");
+    same([(await factionIn("The Harbour Guild")).shown.power, (await factionIn("Tarrant & Daughters")).shown.card, (await factionIn("The Quiet Order")).shown.card], [false, false, false], "only their cards: not their Power, the off-screen one or one that's doing nothing");
+
+    // Kai picks the crew's action: stop the Estate. It's too big for the crew's action alone.
+    await kai.page.click('.ft [data-do="crew"]');
+    await inDlg(kai.page, '[data-do="move"][data-m="Obstruct"]');
+    await inDlg(kai.page, `[data-do="coact"][data-id="${t1.acts.find((a) => a.f === vane.id).id}"]`);
+    has(await text(kai.page, `${dlg} .cc-warn`), "bigger than the crew’s", "she's told the Estate's Power is bigger than the crew's");
+    await tall(kai.page, "turn-dlg-crew");
+    await inDlg(kai.page, '[data-do="savecrew"]');
+    await until(async () => (await turnOf())?.crew?.move === "Obstruct", "the crew's action on the table");
+    await kai.page.waitForSelector(".ft-crew [data-do='roll']");
+    // Sam's phone has the downtime. Then he loses his signal, puts Bram's slot
+    // in, and it goes up once he's back.
+    await toTab(sam.page, "bram-ssssss");
+    await sam.page.waitForSelector(".wb-tab .ft-crew [data-do='slot']");
+    await sam.context.setOffline(true);
+    await sam.page.click('.cc-tabs [data-t="play"]');
+    await sam.page.click('.cc-tabs [data-t="world"]');
+    await sam.page.waitForSelector(".wb-tab .ft-crew [data-do='slot']");
+    has(await text(sam.page, ".wb-tab .ft"), "No signal, so this is the downtime as it was", "with no signal, Bram's World tab has the downtime as it was");
+    await sam.page.click(".ft-crew [data-do='slot']");
+    has(await text(sam.page, ".ft"), "goes up when you’ve got a signal", "his slot goes up when there's a signal");
+    await sam.context.setOffline(false);
+    await sam.page.evaluate(() => dispatchEvent(new Event("online")));
+    await until(async () => (await turnOf())?.crew?.slot?.name === "Bram", "Bram's slot in, once Sam's back");
+    await until(async () => (await text(kai.page, ".ft-crew")).includes("Bram put a personal slot in"), "Kai's phone says so");
+    has(await text(kai.page, ".ft-crew"), "6 steps, d12", "and everything counts twice: 6 steps, a d12");
+    // Kai rolls real dice: the crew's 9 against the Estate's 5.
+    await kai.page.click(".ft-crew [data-do='real']");
+    await inDlg(kai.page, '[data-do="realn"][data-i="0"][data-n="9"]');
+    await inDlg(kai.page, '[data-do="realn"][data-i="1"][data-n="5"]');
+    await inDlg(kai.page, '[data-do="saveroll"]');
+    await until(async () => (await turnOf())?.acts.find((a) => a.f === vane.id)?.stop?.won === true, "the Estate stopped");
+    has(await text(kai.page, ".ft-crew"), "It worked", "Kai's phone says it worked");
+    await until(async () => (await text(mo.page, ".ft")).includes("stopped it"), "and Mo's says the crew stopped the Estate");
+    await mo.page.click('.ft-crew [data-do="out"]');
+    await inDlg(mo.page, '[data-do="saveout"]');
+
+    // The landing. The Guild: the Estate's d12 rolls a 4, the Guild's d6 a 5 and its d4 a 2.
+    await mo.page.click('.ft [data-do="step"][data-s="land"]');
+    await mo.page.waitForSelector(`.ft-act[data-ftk="${g0.id}"] [data-do="real"]`);
+    await mo.page.click(`.ft-act[data-ftk="${g0.id}"] [data-do="real"]`);
+    same(await mo.page.$$eval(`${dlg} legend`, (els) => els.map((e) => e.textContent)), ["The Harbour Guild’s d6", "The Harbour Guild’s d4 for “Keep its name out of it”", "The Vane Estate’s Power, a d12"], "the Guild's two dice and the Estate's Power");
+    await inDlg(mo.page, '[data-do="realn"][data-i="0"][data-n="5"]');
+    await inDlg(mo.page, '[data-do="realn"][data-i="1"][data-n="2"]');
+    await inDlg(mo.page, '[data-do="realn"][data-i="2"][data-n="4"]');
+    await inDlg(mo.page, '[data-do="saveroll"]');
+    await until(async () => (await actOf(guild.id))?.won, "the Guild's action landed");
+    const g1 = await actOf(guild.id);
+    same([g1.won.main, g1.won.split, (await turnOf()).power[vane.id].v.join()], [true, false, "4"], "the contracts are the Guild's, but the Estate knows who took them");
+    // Its changes, in a tap: the contracts move, and the Estate writes a hostile thread toward the Guild.
+    await mo.page.click(`.ft-act[data-ftk="${g0.id}"] [data-do="out"]`);
+    await inDlg(mo.page, `[data-do="take"][data-id="${salt.id}"]`);
+    await until(async () => (await factionIn("The Harbour Guild"))?.res.some((r) => r.text === "Salt Contracts") && !(await factionIn("The Vane Estate"))?.res.some((r) => r.text === "Salt Contracts"), "the Salt Contracts the Guild's now, on the server");
+    await inDlg(mo.page, '[data-do="form"][data-k="hostile"]');
+    await mo.page.fill(`${dlg} .ft-form input[name="text"]`, "They took our salt");
+    await mo.page.click(`${dlg} .ft-form button[type="submit"]`);
+    await until(async () => (await factionIn("The Vane Estate"))?.threads.some((x) => x.to === guild.id && x.kind === "hostile" && x.text === "They took our salt"), "the Estate's hostile thread toward the Guild");
+    await tall(mo.page, "turn-dlg-out");
+    await mo.page.fill(`${dlg} #ft-line`, "The Harbour Guild took the Salt Contracts, and the Estate knows exactly who did it.");
+    await inDlg(mo.page, '[data-do="saveout"]');
+    // The Lamp goes at the Estate too, and has to beat that same 4: real dice, just its own.
+    const l0 = await actOf(lamp.id);
+    await mo.page.click(`.ft-act[data-ftk="${l0.id}"] [data-do="real"]`);
+    same(await mo.page.$$eval(`${dlg} legend`, (els) => els.map((e) => e.textContent)), ["The Brothers of the Lamp’s d6"], "the Estate's Power rolled once already, so it's only the Lamp's die");
+    await inDlg(mo.page, '[data-do="realn"][data-i="0"][data-n="6"]');
+    await inDlg(mo.page, '[data-do="saveroll"]');
+    await until(async () => (await actOf(lamp.id))?.won?.main === true, "the Lamp's 6 beats the Estate's 4");
+    await mo.page.click(`.ft-act[data-ftk="${l0.id}"] [data-do="out"]`);
+    await inDlg(mo.page, `[data-do="tick"][data-id="${rents.id}"]`);
+    await until(async () => !(await factionIn("The Vane Estate"))?.res.some((r) => r.text === "Low Market Rents"), "the rents gone");
+    await inDlg(mo.page, '[data-do="saveout"]');
+    // The Choir's agenda happens: the world changes on the party sheet, and it writes the next.
+    const c0 = await actOf(choir.id);
+    await mo.page.click(`.ft-act[data-ftk="${c0.id}"] [data-do="real"]`);
+    await inDlg(mo.page, '[data-do="realn"][data-i="0"][data-n="8"]');
+    await inDlg(mo.page, '[data-do="realn"][data-i="1"][data-n="3"]');
+    await inDlg(mo.page, '[data-do="saveroll"]');
+    await until(async () => (await actOf(choir.id))?.won?.main === true, "the Choir beats its agenda's d12");
+    await mo.page.click(`.ft-act[data-ftk="${c0.id}"] [data-do="out"]`);
+    await inDlg(mo.page, '[data-do="climb"]');
+    await until(async () => (await factionIn("The Drowned Choir"))?.agendas[0]?.done === true, "past d12, the agenda's happened");
+    await mo.page.waitForSelector(`${dlg} .ft-happened`);
+    await inDlg(mo.page, '[data-do="form"][data-k="changed"]');
+    await mo.page.fill(`${dlg} .ft-form input[name="text"]`, "The Glass Shelf has risen out of the bay");
+    await mo.page.click(`${dlg} .ft-form button[type="submit"]`);
+    await until(async () => (await partyOf(tuesday.id))?.changed?.some((x) => x.text === "The Glass Shelf has risen out of the bay."), "the world's change on the party sheet");
+    await inDlg(mo.page, '[data-do="form"][data-k="next"]');
+    await mo.page.fill(`${dlg} .ft-form input[name="text"]`, "Sing the city under");
+    await mo.page.selectOption(`${dlg} .ft-form select[name="die"]`, "2");
+    await mo.page.click(`${dlg} .ft-form button[type="submit"]`);
+    await until(async () => { const a = (await factionIn("The Drowned Choir"))?.agendas ?? []; return a.length === 1 && a[0].text === "Sing the city under" && a[0].die === 2; }, "its next agenda, in place of the one that happened");
+    await inDlg(mo.page, '[data-do="saveout"]');
+    // The Fleet's comes for the crew, and Tarrant's moves off-screen.
+    for (const f of [fleet, tarrant]) {
+      const a = await actOf(f.id);
+      await mo.page.click(`.ft-act[data-ftk="${a.id}"] [data-do="land"]`);
+      await until(async () => (await actOf(f.id))?.won, `${f.name}'s happened`);
+      await mo.page.click(`.ft-act[data-ftk="${a.id}"] [data-do="out"]`);
+      await inDlg(mo.page, '[data-do="saveout"]');
+    }
+    const est = await actOf(vane.id);
+    await mo.page.click(`.ft-act[data-ftk="${est.id}"] [data-do="done"]`);
+
+    // The World screen and tab, mid-turn, at 390 in both themes.
+    for (const theme of ["dark", "light"]) {
+      for (const p of [mo.page, kai.page]) await p.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await toWorld(mo.page);
+      await axe(mo.page, `the faction turn, ${theme}`);
+      await tall(mo.page, `turn-gm-${theme}`);
+      await toTab(kai.page, "vesk-aaaaaa");
+      await kai.page.waitForSelector(".wb-tab .ft-act");
+      await axe(kai.page, `the faction turn on the World tab, ${theme}`);
+      await tall(kai.page, `turn-player-${theme}`);
+    }
+    for (const p of [mo.page, kai.page]) await p.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+
+    // He ends it, and what changed is on every phone.
+    await toWorld(mo.page);
+    await mo.page.click('.ft [data-do="end"]');
+    await mo.page.click('.ft [data-do="end"]');
+    await until(async () => (await turnOf()) === null, "the downtime over");
+    const last = (await tableOf(kai.page))?.last;
+    same(last?.said.map((x) => x.text), [
+      "The crew stopped the Vane Estate’s action.",
+      "The Harbour Guild took the Salt Contracts, and the Estate knows exactly who did it.",
+      "The Brothers of the Lamp hit the Vane Estate’s Low Market Rents.",
+      "The Glass Shelf has risen out of the bay.",
+      "The Tithe Fleet came for the crew: it tells the law.",
+      "Tarrant & Daughters built something new: a second warehouse.",
+    ], "what changed, a line each, the way Mo said it or the phone put it, and the Choir's in the words he gave the world's change");
+    await toTab(kai.page, "vesk-aaaaaa");
+    await kai.page.waitForSelector(".wb-tab .ft-last");
+    has(await text(kai.page, ".wb-tab .ft-last"), "What changed last downtime", "on Kai's phone");
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=party`);
+    await kai.page.waitForSelector('details[data-open="pt-changed"]');
+    has(await text(kai.page, 'details[data-open="pt-changed"]'), "The Glass Shelf has risen out of the bay.", "and the Choir's agenda on the party sheet, under What has changed");
+
+    // A second downtime: the crew Establishes a mini faction of its own.
+    await toWorld(mo.page);
+    await mo.page.click('.ft [data-do="start"]');
+    await until(async () => (await turnOf())?.n === 2, "the second downtime");
+    await mo.page.click('.ft [data-do="step"][data-s="tele"]');
+    await mo.page.click(`.ft-fac[data-f="${quiet.id}"]`);
+    await inDlg(mo.page, '[data-do="what"][data-w="Establish"]');
+    await mo.page.fill(`${dlg} #ft-est`, "A new chapel");
+    await inDlg(mo.page, '[data-do="off"]');
+    await inDlg(mo.page, '[data-do="saveact"]');
+    await until(async () => (await turnOf())?.acts.length === 1, "the Order's action");
+    await mo.page.click('.ft [data-do="send"]');
+    await mo.page.click('.ft [data-do="send"]');
+    await until(async () => (await turnOf())?.sent > 0, "telegraphed");
+    await toTab(kai.page, "vesk-aaaaaa");
+    await kai.page.waitForSelector(".ft [data-do='crew']");
+    has(await text(kai.page, ".ft"), "No faction’s doing anything the crew can see coming", "everything off-screen, so the crew sees nothing coming");
+    await kai.page.click(".ft [data-do='crew']");
+    await inDlg(kai.page, '[data-do="move"][data-m="Establish"]');
+    await kai.page.fill(`${dlg} #ft-est`, "The Lamp Boys, a mini faction of our own");
+    await inDlg(kai.page, '[data-do="savecrew"]');
+    await kai.page.waitForSelector(".ft-crew [data-do='roll']");
+    await kai.page.click(".ft-crew [data-do='roll']");
+    await until(async () => (await turnOf())?.crew?.won?.main === true, "the crew's Establish happens");
+    const sheet1 = await partyOf(tuesday.id);
+    await mo.page.waitForSelector('.ft-crew [data-do="out"]');
+    await mo.page.click('.ft-crew [data-do="out"]');
+    await inDlg(mo.page, '[data-do="form"][data-k="mini"]');
+    await mo.page.fill(`${dlg} .ft-form input[name="name"]`, "The Lamp Boys");
+    await mo.page.selectOption(`${dlg} .ft-form select[name="res"]`, sheet1.res[sheet1.res.length - 1].id);
+    await mo.page.selectOption(`${dlg} .ft-form select[name="asset"]`, sheet1.assets[0].id);
+    await mo.page.check(`${dlg} .ft-form input[name="out-Acquire"]`);
+    await mo.page.check(`${dlg} .ft-form input[name="out-Obstruct"]`);
+    await mo.page.fill(`${dlg} .ft-form input[name="loy"]`, "The crew looks after its own");
+    await mo.page.click(`${dlg} .ft-form button[type="submit"]`);
+    await until(async () => (await factionIn("The Lamp Boys"))?.parent === "crew", "the crew's mini faction on the board");
+    const boys = await factionIn("The Lamp Boys");
+    same([boys.mini, boys.outs.join(), boys.res.length, boys.assets.length, boys.loy[0]?.text, boys.shown.card], [true, "Obstruct,Acquire", 1, 1, "The crew looks after its own", true], "its two outcomes, the resource and asset the crew handed over, its Loyalty thread, and the crew sees it");
+    await until(async () => { const s = await partyOf(tuesday.id); return s.res.length === sheet1.res.length - 1 && s.assets.length === sheet1.assets.length - 1; }, "and they're off the party sheet");
+    await inDlg(mo.page, '[data-do="saveout"]');
+    await mo.page.click('.ft [data-do="step"][data-s="land"]');
+    await mo.page.click('.ft [data-do="end"]');
+    await mo.page.click('.ft [data-do="end"]');
+    await until(async () => (await turnOf()) === null && (await tableOf(mo.page))?.last?.n === 2, "the second downtime over");
+
+    // Nothing crosses.
+    same((await got(zed.page, "GET", `/api/campaigns/${tuesday.id}/table`)).status, 404, "Zed gets nothing of Tuesday Lair's downtime");
+    const zn = await tableOf(kai.page, zedsNight.id);
+    same([zn?.turn ?? null, zn?.last ?? null], [null, null], "and Zed's Night has no downtime of its own");
+    await kai.page.goto(`${BASE}/characters/?c=dorrie-eeeeee&t=world`);
+    await kai.page.waitForSelector(".wb-tab");
+    same(await kai.page.$(".wb-tab .ft"), null, "so Kai's Dorrie there sees none of it");
+  }
+  console.log("8. The faction turn");
+  await checkTurn();
+
+  // ------------------------------------------------------------ 9. who can do what
+  console.log("9. Who can do what");
   same((await api(kai.page, "GET", "/api/people")).status, 403, "a member can't see people");
   const people = (await got(mo.page, "GET", "/api/people")).json;
   same([people?.total, people?.people?.[0]?.email], [6, "zed@example.com"], "Mo sees everyone who's signed up, newest first");
@@ -1516,7 +1879,7 @@ try {
   same(await rows("SELECT name FROM sqlite_master WHERE name = 'rateLimit'"), [], "no table of addresses");
 
   // ------------------------------------------------------------ 9. leaving
-  console.log("9. Signing out, your data and deleting");
+  console.log("10. Signing out, your data and deleting");
   // A phone-only character stays when Kai signs out on the first phone.
   await kai.page.evaluate(() => {
     const data = JSON.parse(localStorage.getItem("zi-characters"));

@@ -219,6 +219,8 @@ html.cc-full .companion { padding-top: max(0.25rem, env(safe-area-inset-top, 0px
 .cc-tabs a[aria-current="page"] { color: var(--gold-ink); box-shadow: inset 0 2px 0 var(--gold); }
 .cc-tabs a:focus-visible { outline: 2px solid var(--violet); outline-offset: -4px; }
 html.cc-tabbed body { padding-bottom: calc(60px + env(safe-area-inset-bottom, 0px)); }
+/* Whatever's brought into view, by a tap, a link or the keyboard, stops above the tabs. */
+html.cc-tabbed { scroll-padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)); }
 html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
 
 .cc-tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -1464,3 +1466,130 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
 @media (prefers-reduced-motion: reduce) {
   .wb-tok-a:active, .wb-tile-a:active { transform: none; }
 }
+
+/* ── The faction turn (stage 2 of notes/worlds-plan.md): each downtime from
+   the board, at the top of the World screen and the World tab. The factions'
+   pieces are violet like the board's, the crew's action is gold, and the
+   steps run along the top so whoever's holding the phone can see where it's
+   got to. Telegraphs are the kit's card, the faction pressure in harm's
+   colour since it's what matters most to the crew. */
+.ft { margin: 0.4rem 0 1.4rem; padding: 14px 14px 16px; background: color-mix(in srgb, var(--zd-them) 6%, var(--surface)); border: 1px solid color-mix(in srgb, var(--zd-them) 42%, transparent); border-radius: 3px; }
+.ft.is-idle { background: var(--surface); border-color: var(--line); }
+.ft > h2, .ft-head h2 { margin: 0; font-size: 1.25rem; }
+.ft-head h2 small { font-family: var(--body); font-size: 0.95rem; font-weight: 700; letter-spacing: 0.03em; color: var(--muted); }
+.ft .cc-lead { margin: 0.5rem 0 0.8rem; }
+.ft .pt-status { margin: 0.2rem 0 0.4rem; }
+.ft-go { width: 100%; min-height: 50px; }
+.ft-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 0.75rem 0 0.2rem; padding: 0; list-style: none; }
+.ft-step::before { content: ""; display: block; height: 4px; border-radius: 2px; background: var(--line); }
+.ft-step.is-past::before { background: color-mix(in srgb, var(--zd-them) 50%, var(--line)); }
+.ft-step.is-on::before { background: var(--zd-them); }
+.ft-step-b { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; padding: 0 2px; font: inherit; font-size: 0.8rem; font-weight: 700; line-height: 1.15; text-align: center; color: var(--muted); background: none; border: 0; border-radius: 2px; }
+.ft-step.is-on .ft-step-b { color: var(--zd-them-ink); }
+button.ft-step-b { cursor: pointer; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; }
+button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
+.ft-h3 { margin: 1.1rem 0 0.45rem; font-family: var(--body); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--zd-them-ink); }
+.ft-h3 small { margin-left: 6px; font-size: 0.88rem; letter-spacing: 0.02em; text-transform: none; color: var(--muted); }
+.ft-sum { margin: 0 0 0.6rem; }
+.ft .tg-do { margin-top: 0.6rem; }
+.ft .tg-do .button:not(.primary) { flex: 1 1 10rem; min-height: 46px; }
+.ft-wait { margin: 0.4rem 0 0; font-weight: 700; color: var(--zd-them-ink); }
+
+/* Who's been paid: the crew's, and for her, the factions'. */
+.ft-hires { display: grid; gap: 8px; margin: 0 0 0.4rem; padding: 0; list-style: none; }
+.ft-hire { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px 10px; padding: 10px 12px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; box-shadow: inset 3px 0 0 var(--zd-them-line); }
+.ft-hire-in { min-width: 0; }
+.ft-hire p { margin: 0; overflow-wrap: anywhere; }
+.ft-hire p small { color: var(--muted); }
+.ft-hire .button { min-height: 44px; }
+
+/* Every faction, a tap to pick its action: dashed till it's picked. */
+.ft-facs { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.ft-fac { display: grid; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: 12px; width: 100%; padding: 10px 12px; font: inherit; text-align: left; color: var(--ink); border-style: dashed; box-shadow: inset 3px 0 0 var(--zd-them-line); cursor: pointer; transition: transform 140ms ease-out; }
+.ft-fac.is-set { border-style: solid; box-shadow: inset 3px 0 0 var(--zd-them); }
+.ft-fac:active { transform: scale(0.985); }
+.ft-fac:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.ft-fac-die { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.ft-fac-die .zd-die { --s: 44px; }
+.ft-fac-die .zd-die.is-next { --s: 24px; }
+.ft-fac-in { display: grid; gap: 2px; min-width: 0; }
+.ft-fac-n { font-family: var(--display); font-weight: 600; font-size: 1.1rem; line-height: 1.2; overflow-wrap: anywhere; }
+.ft-fac-a { font-size: 0.95rem; line-height: 1.35; color: var(--muted); overflow-wrap: anywhere; }
+.ft-fac.is-set .ft-fac-a { color: var(--ink); }
+.ft-tag { display: inline-flex; align-items: center; min-height: 20px; padding: 0 6px; font-size: 0.66rem; letter-spacing: 0.08em; color: var(--zd-on-them); background: var(--zd-them); border-radius: 2px; }
+.tg-target .ft-fac-die .zd-die { --s: 34px; }
+
+/* A faction's action, telegraphed. */
+.ft .zd-tele, .ft-dlg .zd-tele { max-width: none; }
+.ft-dice { display: flex; flex: none; align-items: center; gap: 4px; }
+.zd-tele .tb .ft-dice .zd-die { --s: 56px; }
+.zd-tele .tb .ft-dice .zd-die + .zd-die { --s: 40px; }
+.ft-tele .tb > div { min-width: 0; }
+.ft-tele .tb p { overflow-wrap: anywhere; }
+.ft-split { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 0; font-size: 0.92rem; color: var(--muted); overflow-wrap: anywhere; }
+.ft-split .zd-die { --s: 22px; }
+.ft-act.is-pressure .zd-tele { border-color: var(--zd-harm-line); }
+.ft-act.is-pressure .zd-tele header { background: var(--zd-harm); }
+.ft-act.is-pressure .zd-tele .k, .ft-act.is-pressure .zd-tele .r { color: var(--zd-on-harm); }
+.ft-act.is-off .zd-tele { border-style: dashed; }
+.ft-act.is-off .zd-tele header { background: var(--zd-slot); }
+.ft-act.is-off .zd-tele .k, .ft-act.is-off .zd-tele .r { color: var(--zd-them-ink); }
+.ft-act .tg-v { margin-top: 6px; }
+.ft-offs { margin-top: 0.8rem; }
+
+/* The crew's action: gold, since it's the crew's. */
+.ft-crew { margin-top: 1rem; padding: 12px 14px 14px; box-shadow: inset 3px 0 0 var(--gold); }
+.ft-crew .ft-h3 { margin-top: 0; color: var(--gold-ink); }
+.ft-crew-tb { display: flex; align-items: center; gap: 12px; margin: 0.2rem 0 0.4rem; }
+.ft-crew-tb .ft-dice .zd-die { --s: 52px; }
+.ft-crew-tb .ft-dice .zd-die + .zd-die { --s: 38px; }
+.ft-crew-tb > div { min-width: 0; }
+.ft-crew-does { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.15rem; line-height: 1.2; overflow-wrap: anywhere; }
+.ft-crew .cc-small { margin: 0.2rem 0 0; }
+.ft-slot { margin: 0.5rem 0 0; font-size: 0.95rem; }
+.ft-slot.is-on { font-weight: 700; color: var(--gold-ink); }
+
+.ft-vs { font-weight: 700; }
+.ft-crew .tg-v { margin-top: 0.6rem; }
+.ft-crew .cc-warn { margin: 0.5rem 0 0; font-size: 0.92rem; }
+
+/* What changed, a line each. */
+.ft-said { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.ft-said li { padding: 0.5rem 0.7rem; font-size: 0.97rem; line-height: 1.4; background: var(--surface); border-left: 3px solid var(--zd-them-line); border-radius: 2px; overflow-wrap: anywhere; }
+.ft-say { margin-top: 0.8rem; }
+.ft-say input { width: 100%; }
+.ft-last { margin-top: 0.6rem; }
+.wb-tile-turn { color: var(--zd-them-ink); }
+
+/* In the dialogs. */
+.ft-dlg .cc-group { margin-bottom: 1rem; }
+.ft-dlg input:not([type=checkbox]):not([type=radio]) { width: 100%; }
+.ft-dlg .tg-label { margin-top: 0.4rem; }
+.ft-dlg .tg-for { margin-top: 0.2rem; }
+.ft-comes { margin: 0.4rem 0 0.6rem; padding: 0.5rem 0.75rem; background: color-mix(in srgb, var(--zd-them) 10%, var(--surface)); border-left: 3px solid var(--zd-them); border-radius: 2px; overflow-wrap: anywhere; }
+.ft-nums { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.ft-num { min-height: 46px; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.ft-total { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 0.6rem 0; font-weight: 700; }
+.ft-total .zd-die { --s: 34px; }
+.ft-total .zd-die.is-next { --s: 26px; }
+.ft-total span { margin-left: 4px; }
+.ft-stepper { display: flex; align-items: center; gap: 10px; margin: 0.4rem 0 0.6rem; }
+.ft-stepper .button { min-width: 46px; min-height: 46px; font-size: 1.2rem; }
+.ft-stepper b { min-width: 5.5rem; text-align: center; }
+.ft-chgs { display: grid; gap: 8px; }
+.ft-chg { justify-content: flex-start; width: 100%; min-height: 48px; text-align: left; white-space: normal; }
+.ft-chg small { margin-left: 4px; font-weight: 500; color: var(--muted); }
+.ft-form { padding: 10px 12px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 2px; }
+.ft-form .cc-field input, .ft-form .cc-field select { width: 100%; }
+.ft-happened { display: grid; gap: 8px; padding: 10px 12px; background: color-mix(in srgb, var(--zd-them) 8%, var(--surface)); border: 1px solid color-mix(in srgb, var(--zd-them) 40%, transparent); border-radius: 2px; }
+.ft-happened .cc-lead { margin: 0; }
+@media (max-width: 359px) {
+  .ft { padding-inline: 12px; }
+  .ft-step-b { font-size: 0.74rem; }
+  .ft-nums { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .zd-tele .tb .ft-dice .zd-die { --s: 46px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ft-fac:active { transform: none; }
+}
+.ft-done-note { margin: 0; padding: 0.45rem 0.7rem; font-weight: 700; color: var(--gold-ink); background: color-mix(in srgb, var(--gold) 10%, var(--surface)); border-left: 3px solid var(--gold); border-radius: 2px; overflow-wrap: anywhere; }

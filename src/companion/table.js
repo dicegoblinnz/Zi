@@ -23,6 +23,7 @@
 //             kept apart, and it all goes when the account's characters leave
 //             the phone (sync.js).
 import { MAX, SIZES, apply, blankScene, current, dieOf, findEl, findTele, fresh, joinersOf, keyOf, landsOn, lower, spentBy, stateOf, workedIn } from "./table-rules.js";
+import { turnNews } from "./turn-rules.js";
 import { die as kitDie, tag as kitTag, telegraph as kitTele } from "../kit/kit.js";
 
 const KEY = "zi-table";
@@ -113,7 +114,7 @@ export function makeTable(d) {
   // server's, with whatever's still to go up on top.
   function local(id) {
     const k = camp(id);
-    const doc = fresh({ v: k.view?.v ?? 0, fight: k.view?.fight ?? 1, rounds: structuredClone(k.view?.rounds ?? []), scene: structuredClone(k.view?.scene ?? blankScene()) });
+    const doc = fresh({ v: k.view?.v ?? 0, fight: k.view?.fight ?? 1, rounds: structuredClone(k.view?.rounds ?? []), scene: structuredClone(k.view?.scene ?? blankScene()), turn: structuredClone(k.view?.turn ?? null), last: structuredClone(k.view?.last ?? null) });
     const who = whoIn(id);
     const roster = rosterOf(id);
     for (const op of k.out) apply(doc, op, who, roster, op.at || Date.now());
@@ -217,8 +218,8 @@ export function makeTable(d) {
     if (!got || !Array.isArray(got.rounds)) return;
     const k = camp(id);
     if (k.view && Number(got.v) < Number(k.view.v) && got.fight === k.view.fight) return;
-    const was = k.view ? { v: k.view.v, fight: k.view.fight, rounds: k.view.rounds, scene: k.view.scene } : null;
-    k.view = { v: Number(got.v) || 0, fight: Number(got.fight) || 1, rounds: got.rounds, scene: got.scene && typeof got.scene === "object" ? got.scene : blankScene() };
+    const was = k.view ? { v: k.view.v, fight: k.view.fight, rounds: k.view.rounds, scene: k.view.scene, turn: k.view.turn ?? null, last: k.view.last ?? null } : null;
+    k.view = { v: Number(got.v) || 0, fight: Number(got.fight) || 1, rounds: got.rounds, scene: got.scene && typeof got.scene === "object" ? got.scene : blankScene(), turn: got.turn ?? null, last: got.last ?? null };
     k.at = Date.now();
     net.why = "";
     const said = news(id, k, was, k.view);
@@ -293,6 +294,13 @@ export function makeTable(d) {
         if (!now.rounds.some((x) => x.id === r.id)) continue;
         for (const t of r.tele) if (!ids.has(t.id) && t.at.user === me() && t.at.ch === mine.id) out.push(`${cap(gmName(id))} took back ${lower(t.who)}’s telegraph at ${mine.name}.`);
       }
+    }
+    // The faction turn, in downtime (turn.js). Nothing's news the first time
+    // a phone sees the table.
+    if (was) {
+      const ft = turnNews(was, now, { gm, me: me() });
+      out.push(...ft.lines);
+      if (ft.buzz) out.buzz = true;
     }
     if (k.said.length > 120) k.said = k.said.slice(-120);
     return out;
@@ -1755,7 +1763,8 @@ export function makeTable(d) {
         started = true;
         flushAll();
       }
-      const id = view.name === "camp" || view.name === "look" ? view.id : view.name === "sheet" && ch ? d.campOf(ch) : null;
+      // The World screen too, for the faction turn.
+      const id = view.name === "camp" || view.name === "look" || view.name === "world" ? view.id : view.name === "sheet" && ch ? d.campOf(ch) : null;
       if (ch && view.name === "sheet") setTimeout(() => catchUp(ch), 0);
       if (id && view.name !== "sheet") {
         if (roleIn(id) == null) return watch(null);
@@ -1766,6 +1775,15 @@ export function makeTable(d) {
     pointer,
     playCard,
     catchUp,
+    // For the faction turn (turn.js), which is kept with the table.
+    local: (id) => local(id),
+    push: (id, op) => push(id, op),
+    whoIn: (id) => whoIn(id),
+    roleIn: (id) => roleIn(id),
+    rosterOf: (id) => rosterOf(id),
+    gmName: (id) => gmName(id),
+    waiting: (id) => camp(id).out.length,
+    seenAt: (id) => camp(id).at,
     landedFor,
     dialog,
     input,
