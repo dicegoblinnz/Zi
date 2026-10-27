@@ -396,7 +396,9 @@ export function makePlaces(w) {
     const stakes = p.stakes.map((x) => x.text.match(/^\*([^*]+)\*,?\s*Challenge ([1-6])(?::\s*(.+?))?(?:\s*\(([^)]+)\))?$/)).filter(Boolean)
       .map((m) => ({ name: m[1].trim().slice(0, 60), c: Number(m[2]), tags: [...(m[3] ?? "").matchAll(/\*([^*]+)\*/g)].map((t) => t[1].trim()).slice(0, 8), note: (m[4] ?? "").trim().slice(0, 140) })).slice(0, 6);
     const clock = p.clockD ? { d: p.clockD, what: flat(p.clock).replace(/\.$/, "").slice(0, 140) } : null;
-    return { name: p.name, ground, stakes, clock };
+    // Which page it is, so the composer has its telegraphs ready while it's
+    // on the table (table.js).
+    return { name: p.name, ground, stakes, clock, place: { id: p.id, name: p.name, page: true }, teles: p.teles ?? [] };
   }
 
   function pageView(id, pid) {
@@ -673,7 +675,9 @@ export function makePlaces(w) {
         const here = p.here.map((x) => flat(x.text)).join(" ");
         who = doc.pages.find((q) => q.kind === "person" && q.name.split(/\s+/).includes(lead) && here.includes(q.name))?.name ?? who;
       }
-      d.tele(id, { who: who.slice(0, 60), does: `${flat(t.text)}${cond.length ? ` (${cond.join(", ")})` : ""}`.slice(0, 140), d: t.d, kind: /\bConfidence\b/.test(t.at) ? "fear" : "blow" });
+      // Its words and what it's aimed at go too, so one at a stake, the scene
+      // clock or a part of the place comes aimed there (table.js).
+      d.tele(id, { who: who.slice(0, 60), does: `${flat(t.text)}${cond.length ? ` (${cond.join(", ")})` : ""}`.slice(0, 140), d: t.d, kind: /\bConfidence\b/.test(t.at) ? "fear" : "blow", text: flat(t.text), at: t.at, page: p.name });
     },
   };
 

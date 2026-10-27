@@ -26,6 +26,7 @@ import { visit, SKIP } from "unist-util-visit";
 import { diceLabel, stepsToDice } from "../src/companion/dice.js";
 import { threadNote } from "../src/companion/threads.js";
 import { traitInfo } from "../src/companion/grow.js";
+import { curlyQuotes, readAim, whoAndDoes } from "../src/companion/aims.js";
 import { CARD_WORDS, newestChange, reachOf, readCards, staleCards } from "./learn.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -765,9 +766,38 @@ function sheetCard(name, body, warn) {
   return cardOf(name, lines, warn);
 }
 
+// A place's telegraphs, ready for the GM to send: who and what, its die, and
+// what it's aimed at, which is one of the crew when it only says Defend or
+// Confidence, one of the place's stakes, the scene clock, or a part of the
+// place (everyone on the gallery, whoever's at the door). Whatever comes after
+// Defend or Confidence is what it does if it lands (Grabbed). One at a stake
+// puts a new tag in its way if it lands: the one in italics after the stake,
+// if the book names one, or the telegraph's own words.
+function placeTeles(name, field, stakes, warn) {
+  const out = [];
+  for (const seg of dots(field)) {
+    const m = seg.match(/^\*(.+)\* \((d\d+), (.+)\)$/);
+    const d = Number(m?.[2]?.slice(1));
+    if (!m || ![2, 4, 6, 8, 10, 12].includes(d)) {
+      warn(`can't read one of ${name}'s telegraphs: ${seg}`);
+      continue;
+    }
+    const sentence = m[1].trim();
+    const line = curlyQuotes(curly(sentence));
+    const a = readAim(m[3], stakes, line);
+    if (a.why) {
+      warn(`one of ${name}'s telegraphs can't go on the table: ${a.why} (${seg})`);
+      continue;
+    }
+    const t = { line, ...whoAndDoes(sentence, name), d, ...a };
+    out.push(t);
+  }
+  return out;
+}
+
 // The twenty places, for the GM to put on the live table's scene: each one's
-// ground, its stakes with what's in the way, and its scene clock, read off
-// its card. The build stops if a card can't be read.
+// ground, its stakes with what's in the way, its scene clock and its
+// telegraphs, read off its card. The build stops if a card can't be read.
 function placesFrom(doc, warn) {
   const out = [];
   for (const m of doc.body.matchAll(/^## (.+?) \{#(s-place-[a-z-]+)\}\n+:::place\n([\s\S]*?)\n:::$/gm)) {
@@ -787,7 +817,9 @@ function placesFrom(doc, warn) {
       warn(`can't read ${name}'s ground, stakes or scene clock`);
       continue;
     }
-    out.push({ id: m[2], name, ground, stakes, clock: { d: Number(clock[1]), what: plain(clock[2]) } });
+    const tele = placeTeles(name, field.Telegraphs ?? "", stakes, warn);
+    if (!tele.length) warn(`${name} has no telegraphs the table can read`);
+    out.push({ id: m[2], name, ground, stakes, clock: { d: Number(clock[1]), what: plain(clock[2]) }, tele });
   }
   if (out.length !== 20) warn(`expected twenty places, found ${out.length}`);
   return out;

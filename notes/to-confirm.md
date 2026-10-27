@@ -2,6 +2,22 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
+## 27 Oct: telegraphs at the scene
+
+You asked for telegraphs at a stake, the scene clock or a place, with a place's own telegraphs from Twenty Places ready to send. The book had the rules, so these are the calls the app made where it didn't say. None of them changes a rule in the book.
+
+1. **What one at a stake does if it lands.** A new tag in its way, which the GM names when she telegraphs it, the way a telegraph's honest about what it does. Twenty Places doesn't name the tag, so the app starts it off as the telegraph's own words (Dace grabs his towel and heads for the changing room), and she can change it before she sends it. If you'd like each one named in the book, put it after the stake in italics, like (d8, the deal, *Gone to Change*), and the app takes it from there. A stake with a clock can lose a size off its clock instead.
+2. **What one at a clock does if it lands.** The scene clock, or any other event, drops a size, or two if she says so (the maid and the household clock, in Telegraphs). That's on top of its usual step at the end of the round.
+3. **The end of the round** lands what's on the scene first, then steps down the clocks nobody worked. So Pyke's lever on a d6 scene clock that nobody engages leaves it on a d2.
+4. **A lost answer** does what it said then and there. One rolled in the round that turns up after it ended (no signal) still counts, so a win takes the new tag back off the stake, or puts the clock back up.
+5. **Settled first.** One at a stake that's won or lost, or an event that's happened, doesn't go out. If it's settled by the time it lands, it does nothing.
+6. **Who's in a place.** Everyone playing's in it when it goes out, and each player says on their phone if they're not, or when they get out. The phone can't see the map, so that's down to the table, the same as your stride. Once the round's over, it's landed on whoever was in it.
+7. **The GM can put anyone in or out by hand**, till they've rolled When it lands for it, for what the story does that the phones don't.
+8. **Everyone in a place rolls When it lands for it**, against Defend or Confidence, the way Twenty Places has it (Defend, Staggered). Answering a Telegraph says one aimed at a place has no defence to roll, so the app reads that as the place itself. Worth a look: it could say one at a stake or a clock has no defence, and one at a place lands on whoever's in it.
+9. **Anyone can answer one at a place.** A win stops it for everyone, and a loss lands it then and there on everyone in it, with no defence.
+10. **Nobody intercepts one at the scene.** Intercepting is for one aimed at a friend.
+11. **A place's own telegraphs.** One at the crew waits for the GM to pick who. One at a stake only shows while that stake's on the scene, so the one you took off takes its telegraph with it. Whatever comes after Defend or Confidence (Grabbed, Staggered) goes on the card as its only answer.
+
 ## 27 Oct: the scene on the live table
 
 You asked for one action a round on the phones, intercepting on the phone, and the scene on the round. The book had most of it, so these are the calls the app made where it didn't say. None of them changes a rule in the book, and The Round now says the one-action choice plainly.
@@ -18,7 +34,7 @@ You asked for one action a round on the phones, intercepting on the phone, and t
 10. **The GM can move it by hand**: tick a tag off or put it back, step any die up or down, and change or take off any piece, for what the story does that the dice don't.
 11. **One scene clock.** Making another one the scene clock makes the old one an ordinary event.
 12. **A place from Twenty Places** goes on whole, its ground, both stakes and its scene clock, in place of the scene that's on (the phone says so first). The chapter says to pick the stake that matters to your crew, so the GM takes off the one she doesn't want.
-13. **Telegraphs at a stake or the scene clock** aren't on the phones yet. The GM telegraphs at characters, and steps the scene by hand when one aimed at it lands.
+13. **Telegraphs at a stake or the scene clock** are on the phones now, with places too (the calls are above).
 
 ## 27 Oct: traits, gear and bonds
 
