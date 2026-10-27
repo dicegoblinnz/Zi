@@ -11,7 +11,7 @@
 // the Learn deck (content/learn.md) and writes public/openings.json, the
 // opening of every section a link points at, for the pop-ups.
 import { createHash } from "node:crypto";
-import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
@@ -28,6 +28,7 @@ import { threadNote } from "../src/companion/threads.js";
 import { traitInfo } from "../src/companion/grow.js";
 import { curlyQuotes, readAim, whoAndDoes } from "../src/companion/aims.js";
 import { CARD_WORDS, newestChange, reachOf, readCards, staleCards } from "./learn.mjs";
+import { bookFor, compileTables, readTablesDir } from "./world-tables.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const RULES = join(ROOT, "content", "rules");
@@ -1432,6 +1433,26 @@ console.log(`openings.json: ${Object.keys(openings).length} sections for the pop
 if (worldBook) {
   writeFileSync(join(ROOT, "public", "world-book.json"), JSON.stringify(worldBook));
   console.log(`world-book.json: ${worldBook.places.length} places with ${worldBook.places.reduce((n, p) => n + p.people.length, 0)} people in them, ${worldBook.threats.length} threats and ${worldBook.tags.length} tags`);
+}
+// The world builder's tables (notes/builder-plan.md), read off
+// content/world-tables/ by scripts/world-tables.mjs and checked against the
+// book, for the World screen to deal from and the service worker to keep.
+// Until the tables are written, there's no file.
+const tablesDir = join(ROOT, "content", "world-tables");
+const tablesOut = join(ROOT, "public", "world-tables.json");
+if (existsSync(join(tablesDir, "core.yaml"))) {
+  const { src, problems: unread } = readTablesDir(tablesDir);
+  const { tables, problems } = worlds && worldBook ? compileTables(src, bookFor(worlds, worldBook)) : { tables: null, problems: ["can't check them without the faction board and the Threat Builder from the book"] };
+  for (const p of [...unread, ...problems]) companionWarn(`world tables: ${p}`);
+  if (tables) {
+    tables.at = BUILT;
+    writeFileSync(tablesOut, JSON.stringify(tables));
+    const packs = Object.values(tables.packs);
+    console.log(`world-tables.json: ${packs.filter((p) => p.kind === "era").length} eras and ${packs.filter((p) => p.kind === "twist").length} twists to deal from`);
+  } else rmSync(tablesOut, { force: true });
+} else {
+  rmSync(tablesOut, { force: true });
+  console.log("world-tables.json: no tables yet (content/world-tables/), so the world builder has nothing to deal from");
 }
 
 const outDir = join(ROOT, "src", "generated");

@@ -1,0 +1,41 @@
+# The made-up pack's regions (tests only, never shipped).
+town:
+  name: Town
+  faction: a gang, a guild or a big family
+  seat: a street, a mill or a square
+  mini: a handful of people with one job
+  sizes: { small: a street, local: a quarter, city: half the town, great: the whole town }
+  d6: [passage, trade, craft, belief, crime, office]
+  pressure: the next town over, wanting a cut
+city:
+  name: City
+  faction: a house, a guild or a church
+  seat: a district, a gate or a hall
+  mini: a crew with one job
+  sizes: { small: a street, local: a district, city: the city, great: the city and its lands }
+  d6: [passage, trade, office, belief, crime, knowledge]
+  pressure: the crown, wanting its due
+country:
+  name: Country
+  faction: a duke, an order or a guild across the land
+  seat: a town, a pass or a fortress
+  mini: a town's worth of people
+  sizes: { small: a village, local: a town, city: a shire, great: the whole country }
+  d6: [passage, land, office, belief, trade, wonder]
+  pressure: the kingdom over the border
+world:
+  name: World
+  faction: a kingdom, a church or a company
+  seat: a country, a sea or a mountain range
+  mini: a colony or a fleet
+  sizes: { small: a city, local: a province, city: a kingdom, great: half the world }
+  d6: [land, trade, belief, office, wonder, passage]
+  pressure: something from beyond the edge of the map
+stars:
+  name: Stars
+  faction: a company, a fleet or a world's government
+  seat: a station, a world or a jump route
+  mini: a ship and its crew
+  sizes: { small: a ship, local: a station, city: a world, great: a whole system }
+  d6: [passage, trade, labour, office, knowledge, wonder]
+  pressure: the core worlds, wanting control

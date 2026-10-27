@@ -3,8 +3,9 @@
 // whenever any of them does. It keeps every page except the not-found page,
 // the CSS and scripts, the Latin fonts, the figures and the favicon, and the
 // blank character sheet, which the companion fills in to print a character,
-// and openings.json, which the pop-ups read, and world-book.json, the places
-// and people the World screen brings in.
+// and openings.json, which the pop-ups read, world-book.json, the places
+// and people the World screen brings in, and world-tables.json, the tables
+// the world builder deals from.
 // Search (dist/pagefind/) needs a signal, so it's left out.
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
@@ -33,7 +34,7 @@ const offPages = ["kit", "table"].map((name) => join(DIST, name, "index.html"));
 const offRefs = new Set(offPages.filter((p) => existsSync(p)).flatMap((p) => refs(readFileSync(p, "utf8"))));
 const others = new Set(files.filter((p) => p.endsWith(".html") && !offPages.includes(p)).flatMap((p) => refs(readFileSync(p, "utf8"))));
 const offOnly = (rel) => rel.startsWith("kit/") || rel.startsWith("table/") || (offRefs.has(rel) && !others.has(rel));
-const keep = (rel) => !offOnly(rel) && ((/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf" || rel === "openings.json" || rel === "world-book.json");
+const keep = (rel) => !offOnly(rel) && ((/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf" || rel === "openings.json" || rel === "world-book.json" || rel === "world-tables.json");
 const hash = createHash("sha1");
 const urls = [];
 for (const path of files.sort()) {

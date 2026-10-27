@@ -1,0 +1,220 @@
+# The made-up pack's era (tests only, never shipped).
+fits: [town, city]
+
+seats:
+  - { text: The Long Ford, role: passage, tags: [river, road], notice: Toll chains rattle across the water all night. }
+  - { text: Saltgate Market, role: trade, tags: [market], notice: Everyone shouts prices and nobody pays them. }
+  - { text: The Old Mill, role: craft, tags: [river], notice: "The wheel never stops, even on feast days." }
+  - { text: "Saint Orla's", role: belief, tags: [holy], notice: "Bells, and a queue of the sick." }
+  - { text: The Rookery, role: crime, tags: [poor], notice: "Every window's watching you." }
+  - { text: The Moot Hall, role: office, tags: [law], sizes: [city, great], notice: Clerks with ink up to their elbows. }
+  - { text: The Archive Tower, role: knowledge, tags: [old], notice: Candles burning in every window till dawn. }
+  - { text: The Hiring Yard, role: labour, tags: [poor], notice: "Men waiting by the wall for a day's work." }
+  - { text: The Barrow Fields, role: land, tags: [old], notice: "Sheep grazing on the old kings' graves." }
+  - { text: The Iron Pits, role: ground, tags: [mine], notice: "Smoke, and men who don't look up." }
+  - { text: The Bridge Inn, role: passage, tags: [road], regions: [town], notice: "Everyone stops here, and the landlord knows them all." }
+  - { text: The Tanyards, role: craft, tags: [poor], regions: [town], notice: The smell gets into your clothes for days. }
+  - { text: The Common, role: land, regions: [town], notice: "Geese, washing lines and a gallows." }
+  - { text: The Chapel Steps, role: belief, tags: [holy, poor], regions: [town], notice: Beggars who know the priest by name. }
+  - { text: The Weeping Stone, role: wonder, tags: [old], regions: [town], rare: true, strange: true, notice: "It's wet even in a drought." }
+  - { text: The Harbour Wall, role: passage, tags: [coast], regions: [city], notice: "Ships three deep, waiting for a berth." }
+  - { text: The Exchange, role: trade, tags: [wealth, market], regions: [city], notice: Gold changing hands without a word said. }
+  - { text: The Citadel, role: office, tags: [war, law], regions: [city], sizes: [great], notice: Banners on every tower and guards at every gate. }
+  - { text: The Undercroft, role: crime, tags: [secret], regions: [city], notice: Tunnels nobody admits are there. }
+  - { text: The Glass Garden, role: wonder, tags: [old], regions: [city], rare: true, strange: true, notice: "Flowers that don't grow anywhere else." }
+
+resources:
+  - { text: "Tolls at {seat}", role: passage, tags: [road] }
+  - { text: Ferry fares, role: passage, tags: [river] }
+  - { text: Road taxes, role: passage, tags: [road] }
+  - { text: Rents from tenant farms, role: land }
+  - { text: Wool from the downs, role: land }
+  - { text: Grain from the lowlands, role: land }
+  - { text: Fees for passing through its streets, role: ground }
+  - { text: Rents on its street stalls, role: ground, tags: [market] }
+  - { text: Stone from its quarry, role: ground, tags: [mine] }
+  - { text: Ironwork orders, role: craft, tags: [mine] }
+  - { text: Cloth from the looms, role: craft }
+  - { text: Glass for the rich, role: craft, tags: [wealth] }
+  - { text: Shares in the river barges, role: trade, tags: [river] }
+  - { text: Market stalls, role: trade, tags: [market] }
+  - { text: Spice contracts, role: trade, tags: [wealth] }
+  - { text: "Offerings at {seat}", role: belief, tags: [holy] }
+  - { text: "Pilgrims' coin", role: belief, tags: [holy] }
+  - { text: Burial fees, role: belief }
+  - { text: Court fines, role: office, tags: [law] }
+  - { text: "The crown's stipend", role: office, tags: [law] }
+  - { text: Licence fees, role: office }
+  - { text: Copying fees, role: knowledge }
+  - { text: Maps it sells, role: knowledge }
+  - { text: Secrets it sells, role: knowledge, tags: [secret] }
+  - { text: A cut of every hire, role: labour, tags: [poor] }
+  - { text: Dock work, role: labour, tags: [river] }
+  - { text: Gang wages, role: labour }
+  - { text: Smuggling runs, role: crime, tags: [secret] }
+  - { text: Stolen goods, role: crime }
+  - { text: A gambling den, role: crime, tags: [poor] }
+  - { text: "Relic-seekers' coin", role: wonder, tags: [old] }
+  - { text: Charms for the desperate, role: wonder, tags: [poor] }
+  - { text: A spring that cures, role: wonder, tags: [old], rare: true, strange: true }
+
+assets:
+  - { text: Men-at-arms, role: standing-army, tags: [war] }
+  - { text: The town militia, role: standing-army }
+  - { text: The house guard, role: household-guard }
+  - { text: Hired swords, role: hired-swords }
+  - { text: Sellswords from the south, role: hired-swords, tags: [war] }
+  - { text: The village levy, role: levies, tags: [land] }
+  - { text: The bargemen, role: dock-gangs, tags: [river] }
+  - { text: Fast skiffs, role: fast-boats, tags: [river] }
+  - { text: Street toughs, role: toughs, tags: [poor] }
+  - { text: The bruisers, role: toughs }
+  - { text: An angry crowd, role: mob, tags: [poor] }
+  - { text: The watch, role: constables, tags: [law] }
+  - { text: Bailiffs, role: bailiffs, tags: [law] }
+  - { text: The faithful, role: faithful, tags: [holy] }
+  - { text: Guild apprentices, role: guild-hands }
+  - { text: Cousins and uncles, role: kin, tags: [blood] }
+  - { text: The sworn brothers, role: sworn-members, tags: [secret] }
+  - { text: Agents in the capital, role: agents-abroad }
+  - { text: The risen dead, role: thralls, tags: [old], rare: true, strange: true }
+  - { text: A web of informers, role: informants, tags: [secret] }
+  - { text: Lookouts on the walls, role: lookouts }
+  - { text: A cipher clerk, role: codebreakers, tags: [secret] }
+  - { text: The tavern gossips, role: rumour-mill }
+  - { text: Deep-water quays, role: deep-water-docks, needs: [coast] }
+  - { text: A walled keep, role: fortress, tags: [war] }
+  - { text: A strongroom, role: vault, tags: [wealth] }
+  - { text: Sanctuary at the altar, role: sanctuary, tags: [holy] }
+  - { text: A council seat, role: seat-on-the-council, tags: [law] }
+  - { text: A judge it owns, role: judge-in-its-pocket, tags: [law] }
+  - { text: "Letters it shouldn't have", role: blackmail, tags: [secret] }
+  - { text: "The saint's bones", role: relic, tags: [holy] }
+  - { text: Cursed goods, role: curse-on-its-goods, rare: true, strange: true }
+  - { text: A walled-in ghost, role: bound-spirit, tags: [old], rare: true, strange: true }
+  - { text: Safe rooms, role: safehouses }
+  - { text: A forge, role: workshop, tags: [mine] }
+  - { text: A merchant cog, role: ship, tags: [coast] }
+  - { text: Herb-women, role: healers }
+  - { text: Hidden paths, role: smugglers-roads, tags: [forest] }
+  - { text: Old favours owed, role: old-debts }
+  - { text: Friends at court, role: friends-at-court, tags: [law] }
+  - { text: A fence or two, role: fences, tags: [crime] }
+  - { text: Deep roots, role: rooted }
+  - { text: Influence, role: influential }
+
+types:
+  - { text: A baronial house, role: house, sizes: [city, great], leans: [land, household-guard], tags: [blood] }
+  - { text: An old landed family, role: house, sizes: [local, city, great], leans: [land, levies] }
+  - { text: A merchant company, role: traders, sizes: [local, city, great], leans: [trade, hired-swords] }
+  - { text: Toll-takers, role: traders, sizes: [small, local, city], leans: [passage], tags: [road] }
+  - { text: A street gang, role: crooks, sizes: [small, local, city], leans: [crime, toughs] }
+  - { text: A smuggling ring, role: crooks, sizes: [small, local, city], leans: [crime, passage, fast-boats] }
+  - { text: A temple, role: faith, sizes: [local, city, great], leans: [belief, faithful], tags: [holy] }
+  - { text: "A hermit's followers", role: faith, sizes: [small, local], leans: [belief] }
+  - { text: The magistrates, role: office, sizes: [local, city, great], leans: [office, bailiffs], tags: [law] }
+  - { text: The tax house, role: office, sizes: [local, city], leans: [office, constables] }
+  - { text: A secret lodge, role: society, sizes: [small, local, city], leans: [knowledge, sworn-members], tags: [secret] }
+  - { text: A circle of poisoners, role: society, sizes: [small, local], leans: [crime, sworn-members] }
+  - { text: A mercenary company, role: soldiers, sizes: [local, city, great], leans: [hired-swords, standing-army], tags: [war] }
+  - { text: The old garrison, role: soldiers, sizes: [city, great], leans: [standing-army, fortress] }
+  - { text: "The smiths' guild", role: makers, sizes: [local, city], leans: [craft, guild-hands] }
+  - { text: The weavers, role: makers, sizes: [small, local, city], leans: [craft, guild-hands] }
+  - { text: A family business, role: family, sizes: [small, local, city], leans: [kin, trade] }
+  - { text: A clan of carters, role: family, sizes: [small, local], leans: [kin, passage] }
+  - { text: Rebels in the hills, role: rebels, sizes: [small, local, city], leans: [mob, toughs], tags: [hill] }
+  - { text: "A peasants' league", role: rebels, sizes: [small, local], leans: [mob, land] }
+  - { text: The archivists, role: keepers, sizes: [small, local, city], leans: [knowledge, informants] }
+  - { text: Relic hunters, role: keepers, sizes: [small, local], leans: [wonder, relic] }
+  - { text: Something under the hill, role: old, sizes: [local, city, great], leans: [wonder, thralls], rare: true, strange: true }
+  - { text: A witch in the woods, role: old, sizes: [small, local], leans: [wonder], tags: [forest] }
+
+methods:
+  - { text: Tolls and tariffs., tags: [road], leans: [passage] }
+  - { text: Old oaths., leans: [kin] }
+  - { text: Blood feuds., tags: [blood], leans: [kin, toughs] }
+  - { text: Hedge-magic., rare: true, strange: true, leans: [wonder] }
+
+secrets:
+  - { tag: It poisoned the old baron, ways: ["The baron's physician", A bottle in its cellar] }
+  - { tag: "Its money comes from {rival}", ways: [Its account books, A courier who talks] }
+  - { tag: "It sold the town to {rival}", more: The papers are signed already., ways: [A clerk at the Moot Hall, "{rival}'s strongroom"] }
+  - { tag: "{rival} has its founder's letters", ways: [A forger who copied them, "The founder's widow"] }
+  - { tag: Its saint is a fraud, ways: ["The saint's grave", An old monk who knows] }
+  - { tag: It hides the sick in its cellars, tags: [plague], ways: [Coughing behind a door, A cart that comes at night] }
+  - { tag: Its walls are hollow, ways: [A mason it never paid, Plans in the archive] }
+  - { tag: It talks to the dead, rare: true, strange: true, ways: [Candles at midnight, A medium it pays] }
+
+exceptions:
+  - { text: "A river town that won't trade", when: [river], drops: [trade], reason: because the last barge brought the plague }
+  - { text: "A temple that won't take offerings", when: [holy], drops: [belief], reason: because its priest swore a vow of poverty }
+  - { text: "A market that won't sell to strangers", when: [market], drops: [passage], reason: because the last stranger robbed it blind }
+  - { text: "A mine that won't dig", when: [mine], drops: [ground, labour], reason: because the deep shaft killed forty men }
+  - { text: "A court that won't hang anyone", when: [law], drops: [constables, bailiffs], reason: because its judge watched an innocent hang }
+  - { text: "Old money that won't spend", when: [wealth], drops: [hired-swords], reason: "because the founder's will forbids it" }
+
+names:
+  factions:
+    - { text: House Harrow, role: house }
+    - { text: House Morrow, role: house }
+    - { text: The Dunleys of Ashby, role: house }
+    - { text: "The {seat} Company", role: traders }
+    - { text: Brack and Sons, role: traders }
+    - { text: The Salt Combine, role: traders }
+    - { text: The Rook Boys, role: crooks }
+    - { text: The Night Hands, role: crooks }
+    - { text: The Grey Knives, role: crooks }
+    - { text: The Order of Orla, role: faith }
+    - { text: The Quiet Brothers, role: faith }
+    - { text: The Lamp Sisters, role: faith }
+    - { text: "The Court of {seat}", role: office }
+    - { text: The Tithe House, role: office }
+    - { text: The Watch Office, role: office }
+    - { text: The Glass Lodge, role: society }
+    - { text: The Ninth Hour, role: society }
+    - { text: The Pale Circle, role: society }
+    - { text: The Iron Company, role: soldiers }
+    - { text: The Free Company, role: soldiers }
+    - { text: The Old Guard, role: soldiers }
+    - { text: "The Smiths of {seat}", role: makers }
+    - { text: The Loom Guild, role: makers }
+    - { text: The Carrows, role: family }
+    - { text: The Fennicks, role: family }
+    - { text: The Hill Men, role: rebels }
+    - { text: The Free League, role: rebels }
+    - { text: The Ink Brothers, role: keepers }
+    - { text: "The Keepers of {seat}", role: keepers }
+    - { text: The Thing Below, role: old }
+    - { text: The Green Lady, role: old }
+    - The Lantern Club
+  people:
+    - Agnes Harrow
+    - Tomas Brack
+    - Wilm Dunley
+    - Edda Rook
+    - Piet Salter
+    - Ines Carrow
+    - Bran Ashby
+    - Hild Morrow
+    - Osric Fennick
+    - Mabel Quill
+    - Jory Flint
+    - Sabine Orme
+    - Cuthbert Lane
+    - Elske Ward
+    - Godric Hale
+    - Nell Tanner
+    - Ruth Ivers
+    - Anselm Crane
+    - Wenna Pike
+    - Lorcan Reed
+    - Tilda Marsh
+    - Edwin Sable
+    - Agathe Moor
+    - Pell Corran
+    - Ysolde Grey
+    - Hamon Black
+    - Berta Rowe
+    - Fenn Weller
+    - Maud Cresset
+    - Simeon Lark

@@ -1,0 +1,46 @@
+# The made-up pack's twist (tests only, never shipped). Every row's strange.
+fits: [town, city]
+
+seats:
+  - { text: The Starfall Crater, role: wonder, tags: [old], notice: "Nothing grows within a stone's throw of it." }
+  - { text: The Mirror Pool, role: wonder, notice: "Your reflection's a moment late." }
+  - { text: The Singing Well, role: belief, tags: [holy], notice: You can hear it from three streets away. }
+
+resources:
+  - { text: Starmetal from the crater, role: wonder, tags: [old] }
+  - { text: Fortunes told, role: wonder }
+  - { text: Blessed water, role: belief, tags: [holy] }
+  - { text: Ghost-lantern oil, role: craft }
+
+assets:
+  - { text: The walking dead, role: thralls, tags: [old] }
+  - { text: A bottled spirit, role: bound-spirit }
+  - { text: A star-touched crown, role: relic, tags: [old] }
+
+types:
+  - { text: A coven, role: society, sizes: [small, local, city], leans: [wonder, sworn-members] }
+  - { text: Star-readers, role: keepers, sizes: [small, local, city], leans: [wonder, knowledge] }
+  - { text: A dragon in the hills, role: old, sizes: [city, great], leans: [wonder, thralls], tags: [hill] }
+
+methods:
+  - { text: Glamours and oaths., leans: [wonder] }
+  - { text: Blood magic., tags: [blood] }
+
+secrets:
+  - { tag: Its founder sold her name to the fog, ways: [A name nobody can say, The fog that follows her] }
+  - { tag: "It made {rival} with a spell", ways: ["{rival}'s founding day", An old spellbook] }
+  - { tag: Its luck is borrowed, ways: [A debt to something old, Luck running out at last] }
+
+exceptions:
+  - { text: "A witch that won't do magic", when: [old], drops: [wonder], reason: because the last spell took her sight }
+  - { text: "A holy well that won't heal", when: [holy], drops: [healers], reason: because someone drowned in it }
+
+names:
+  factions:
+    - { text: The Silver Coven, role: society }
+    - { text: The Star Readers, role: keepers }
+    - { text: The Wyrm, role: old }
+  people:
+    - Mother Gorse
+    - Selene Ash
+    - The Lantern Man

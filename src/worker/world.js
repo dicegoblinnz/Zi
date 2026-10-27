@@ -6,8 +6,10 @@
 //
 //   GET  /api/campaigns/<id>/world?v=   the world: the whole of it for the GM,
 //        and for a player only what the crew's been shown (forPlayer() in
-//        board.js, with pagesForPlayer() in pages.js), so nothing they haven't
-//        been shown ever reaches their phone. With ?v= and nothing they'd see has changed, only { same: true }.
+//        board.js, with pagesForPlayer() in pages.js and buildForPlayer() in
+//        world-record.js, which never hands them the seed or anything the
+//        world builder dealt), so nothing they haven't been shown ever
+//        reaches their phone. With ?v= and nothing they'd see has changed, only { same: true }.
 //   POST /api/campaigns/<id>/world      the GM's changes from one phone: { dev, ops }.
 //        Each change carries a number that goes up on that phone, so a change
 //        sent twice (the signal dropped before the answer came back) counts once.

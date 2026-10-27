@@ -1,0 +1,177 @@
+# A small made-up pack for tests/check-world-engine.mjs and
+# scripts/deal-world.mjs, so the engine can be checked before the real tables
+# are written (stage 3 of notes/builder-plan.md). It's never shipped, and none
+# of its words reach a table.
+seeds: [ash, lantern, ford, salt, crow, ember, mill, gate, rook, briar, tide, flint, moss, bell, iron, wren]
+tags: [river, coast, hill, road, market, holy, mine, forest, old, wealth, poor, law, blood, secret, plague, war]
+keeps:
+  passage: Roads, rivers and the tolls on them
+  land: Fields, herds and estates
+  ground: Turf held by whoever holds it
+  craft: Workshops and the hands in them
+  trade: Buying, selling and shipping
+  belief: Shrines, offerings and the faithful
+  office: Seats of law and rule
+  knowledge: Books, records and secrets kept
+  labour: Gangs of workers for hire
+  crime: Theft, smuggling and protection
+  wonder: Old and strange things
+types:
+  house: A ruling house
+  traders: Traders
+  crooks: Crooks
+  faith: A faith
+  office: An office of the crown
+  society: A secret society
+  soldiers: Soldiers
+  makers: Makers
+  family: A family
+  rebels: Rebels
+  keepers: Keepers of old things
+  old: Something old
+sizes: { small: 2, local: 4, city: 3, great: 1 }
+templates:
+  about: "{type}. It works through {method}."
+  face: "{name}, {threat}"
+  ways: "Ways in: {one}, or {two}."
+because:
+  seat: because it sits on {thing}
+  type: because it's {thing}
+  method: because it works through {thing}
+  want: because it wants {thing}
+  answer: because {thing}
+  tension: because {thing}
+  region: ""
+
+wants:
+  - { text: "More: money, land, trade.", tags: [wealth] }
+  - { text: To keep what it has., offers: [{ bond: loy, kind: hostile, text: The guards haven't had a rise in years }] }
+  - { text: Revenge on a rival., tags: [blood] }
+  - One thing, a relic or a document.
+  - { text: To be respected., tags: [law] }
+  - { text: To hide what it did., tags: [secret] }
+  - { text: To change the law., tags: [law] }
+  - { text: To break another faction., tags: [war] }
+  - { text: To protect its own., tags: [blood] }
+  - To be free of a master.
+  - { text: To bring something back., tags: [old] }
+  - { text: To end something for good., tags: [war] }
+
+methods:
+  - { text: Money., tags: [wealth], leans: [trade, hired-swords] }
+  - { text: Violence., tags: [war], leans: [toughs, standing-army] }
+  - { text: The law., tags: [law], leans: [office, bailiffs, constables] }
+  - { text: Secrets and blackmail., tags: [secret], leans: [blackmail, informants] }
+  - { text: Faith., tags: [holy], leans: [belief, faithful] }
+  - Favours and debts.
+  - { text: Spies., tags: [secret], leans: [informants, agents-abroad] }
+  - { text: Fear., leans: [toughs] }
+  - Charm, parties and gifts.
+  - Patience.
+  - Other people's hands.
+  - { text: Magic or something stranger., tags: [old], rare: true, strange: true }
+
+secrets:
+  - { tag: It's broke, more: The money ran out a year ago., ways: [The books don't add up, Its creditors are getting loud] }
+  - { tag: Its leader isn't who they say, more: The real one died abroad., ways: [A letter from home, Someone who knew the dead one] }
+  - { tag: A rival inside wants the top seat, ways: [Whispers in its hall, A meeting nobody admits to] }
+  - { tag: One crime would end it, more: Nobody's found the body yet., ways: [A grave that's too fresh, A witness who left town] }
+  - { tag: Everything depends on one person, ways: [Watch who it protects, See who it can't replace] }
+  - { tag: "It owes {rival}", more: The debt's older than anyone there., ways: [An old ledger, "A visit from {rival}"] }
+  - { tag: Its people are unpaid and angry, ways: [Talk to its guards, Count who's left this month] }
+  - { tag: It believes a lie, ways: [Its founding story, The one who told it] }
+  - { tag: "It's spying for {rival}", ways: [Letters that go out at night, "A face seen at {rival}'s door"] }
+  - { tag: An old promise binds it, ways: [A promise carved over its door, The family it was made to] }
+  - { tag: It's much smaller than it looks, ways: [Count its people, Watch its gates at night] }
+  - { tag: It's already dying, ways: [Its sick, Its empty rooms] }
+  - { tag: Something hungry sleeps under it, more: It feeds it once a year., ways: [The yearly feast, The cellar nobody goes in], rare: true, strange: true }
+
+agendas:
+  - { text: "Take over {rival}'s business.", die: 6 }
+  - { text: "Buy the people who run {seat}.", die: 8 }
+  - { text: "Move something nobody should see through {seat}.", die: 10 }
+  - { text: "Find what was lost at {seat}.", die: 4 }
+  - { text: "Silence a witness against {rival}.", die: 8 }
+  - { text: "Win a charter for {seat}.", die: 6 }
+  - { text: "Bring someone home to {seat}.", die: 6 }
+  - { text: "Move in on {seat}.", die: 4 }
+  - { text: "Break {rival} for good.", die: 2 }
+  - { text: "Hold a festival at {seat}.", die: 6 }
+  - { text: "Hunt down whoever runs {res}.", die: 8 }
+  - { text: "Take {asset} off its keepers.", die: 4 }
+  - { text: "Seize {res} for itself.", die: 6 }
+  - { text: "Wake what sleeps under {seat}.", die: 2, rare: true, strange: true }
+
+asking:
+  holds:
+    - { text: The river trade holds it together., tags: [river, market], dials: { rich: 1 } }
+    - { text: Fear of the old war holds it together., tags: [war], dials: { tense: 1 } }
+    - { text: The temple holds it together., tags: [holy] }
+    - { text: Blood and old families hold it together., tags: [blood], dials: { ruled: 1 } }
+    - { text: "Nothing much, and it's coming apart.", dials: { tense: 1, ruled: -1 } }
+    - { text: The mines keep everyone fed., tags: [mine], dials: { rich: 1 } }
+  runs:
+    - { text: The old families run it., tags: [blood], dials: { ruled: 1 } }
+    - { text: The guilds run it., tags: [market] }
+    - { text: "Nobody runs it, really.", dials: { ruled: -1 } }
+    - { text: The crown runs it from far away., tags: [law] }
+    - { text: The priests run it., tags: [holy] }
+    - { text: Whoever's got the most swords., tags: [war], dials: { tense: 1 } }
+  notices:
+    - { text: The smell of the tanneries., tags: [poor] }
+    - { text: "Bells, all day long.", tags: [holy] }
+    - { text: Boats on every bank., tags: [river] }
+    - { text: Soldiers on every corner., tags: [war], dials: { tense: 1 } }
+    - { text: How rich the rich are., tags: [wealth], dials: { rich: 1 } }
+    - { text: The fog that never lifts., tags: [old], dials: { strange: 1 } }
+
+tension:
+  - { text: Two powers circle the same prize., dials: { tense: 1 } }
+  - { text: Old money and new money despise each other., tags: [wealth] }
+  - { text: A wound from a past disaster that never healed., tags: [plague] }
+  - { text: Prosperity built on something unmentioned., tags: [secret] }
+  - { text: The law and the people who keep order aren't the same., tags: [law] }
+  - { text: A resource running out., dials: { rich: -1 } }
+  - { text: An outside power buying the place up., tags: [wealth] }
+  - { text: A truce one move from breaking., tags: [war], dials: { tense: 1 } }
+  - { text: Faith and authority pulling apart., tags: [holy] }
+  - { text: The people who built it are being pushed out., tags: [poor] }
+  - { text: A death no one has answered for., tags: [blood] }
+  - { text: It's a refuge for people the world wants gone., dials: { strange: 1 } }
+
+ties:
+  - { kind: rival, text: "{b} wants what's ours", back: "{b} has what's ours" }
+  - { kind: rival, text: "{b} burned our warehouse", back: "{b} called us arsonists" }
+  - { kind: rival, text: "{b} stole our best people" }
+  - { kind: rival, text: "{b} laughs at us in the market" }
+  - { kind: ally, text: "{b} stood with us when it counted" }
+  - { kind: ally, text: "{b} marries into our family" }
+  - { kind: debt, text: "{b} owes us for {res}", back: "We owe {b} for {res}" }
+  - { kind: debt, text: "{b} still hasn't paid for {res}", back: "We never paid {b} for {res}" }
+  - { kind: wildcard, bond: bond, text: "{b} saved our founder's life" }
+  - { kind: wildcard, bond: bond, text: "{b} keeps our secrets" }
+  - { kind: wildcard, bond: hostile, text: "{b} knows too much about us" }
+  - { kind: wildcard, bond: hostile, text: "{b} has been asking about {seat}" }
+  - { kind: blocked, text: "{b} gets nothing from us" }
+  - { kind: blocked, text: "{b} can whistle for {res}" }
+
+faces:
+  house: [commander, champion, duellist]
+  traders: [operator, hired-blade]
+  crooks: [brute, operator, pack]
+  faith: [zealot, crowd]
+  office: [commander, warden]
+  society: [operator, sorcerer, turncoat]
+  soldiers: [commander, champion, brute]
+  makers: [construct, warden]
+  family: [brute, duellist]
+  rebels: [crowd, zealot, pack]
+  keepers: [warden, sorcerer]
+  old: [old-power, horror, thing-in-the-dark]
+
+fallbacks:
+  secret: { tag: "It works for {rival}", more: It always has., ways: [Follow its money, "Watch {rival}'s back door"] }
+  strange: { tag: Its founder never died, more: She's still in the cellar., ways: [The cellar door, Her portrait's eyes] }
+  agenda: { text: "Take {seat}.", die: 4 }
+  block: { kind: blocked, text: "{b} gets nothing from us, ever" }
+  rival: { kind: rival, text: "{b} stands in our way" }
