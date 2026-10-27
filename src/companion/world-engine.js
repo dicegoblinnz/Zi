@@ -171,18 +171,20 @@ export function poolOf(T, recipe) {
 }
 
 // Which recipes the tables can deal: an era with its pack in the region, and
-// a twist only if its pack's there too.
+// a twist only if its pack fits the region too, so a genre never deals
+// without its twist.
 export function canDeal(T, { region, era, twist = null }) {
   const e = T.packs[`era:${era}`];
   if (!REGIONS.includes(region) || !e || !e.fits.includes(region)) return false;
-  return !twist || Boolean(T.packs[`twist:${twist}`]);
+  return !twist || Boolean(T.packs[`twist:${twist}`]?.fits.includes(region));
 }
 
-// A new world, with nothing dealt. dials, if they're given, are fixed, and
-// the asking doesn't move them.
+// A new world, with nothing dealt: four to twelve factions (the plan's call
+// on board size). dials, if they're given, are fixed, and the asking doesn't
+// move them.
 export function start(T, { recipe, dials = null, seed, factions = 6 }) {
   if (!canDeal(T, recipe)) throw new Error(`the tables can't deal ${recipe.era}${recipe.twist ? ` with ${recipe.twist}` : ""} at ${recipe.region}`);
-  const n = Math.max(2, Math.min(12, Math.floor(factions)));
+  const n = Math.max(4, Math.min(12, Math.floor(Number(factions) || 6)));
   const fixed = dials ? Object.fromEntries(DIALS.map((k) => [k, clamp(dials[k] ?? 1)])) : null;
   return {
     v: 1,

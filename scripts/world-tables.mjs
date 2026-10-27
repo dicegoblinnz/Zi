@@ -71,6 +71,7 @@
 // sizes and leans), methods, secrets, exceptions, wants (if it adds any) and
 // names (factions and people). A twist pack adds its rows to the same roles,
 // and every row in it is strange.
+import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
@@ -189,7 +190,21 @@ export function compileTables(src, book, { minimums = true } = {}) {
   for (const t of ownTags) if (!isKey(t)) bad("core.yaml", `tags has one that isn't a tag: ${t}`);
   const known = new Set([...ownTags, ...KEEPS, ...TYPES, ...assetKeys, ...REGIONS]);
 
-  let n = 0;
+  // A row's id comes from where it's written and its own words, so it stays
+  // the same when rows are added, taken out or moved round it, and a world
+  // built from last week's tables still knows which rows it holds. Two rows
+  // with the same words in the same table are one row written twice.
+  const ids = new Map();
+  const idOf = (kind, where, r, text) => {
+    const home = where.replace(/ row \d+$/, "");
+    const said = (text || (typeof r.tag === "string" ? r.tag : "")).toLowerCase().replace(/\s+/g, " ").trim();
+    const key = `${home}|${r.role ?? ""}|${said}`;
+    let id = `${kind}-${createHash("sha1").update(key).digest("hex").slice(0, 10)}`;
+    while (ids.has(id) && ids.get(id).key !== key) id += "x";
+    if (ids.has(id) && said) bad(where, `says the same as ${ids.get(id).where}`);
+    ids.set(id, { key, where });
+    return id;
+  };
   function rowOf(raw, where, kind, { strange = false, regionsOk = REGIONS } = {}) {
     const spec = TABLES[kind];
     const r = typeof raw === "string" ? { text: raw } : raw;
@@ -206,7 +221,7 @@ export function compileTables(src, book, { minimums = true } = {}) {
       for (const t of v) if (!known.has(t)) bad(where, `${field} has a tag it doesn't know: ${t}`);
       return v.filter((t) => known.has(t));
     };
-    const row = { id: `${kind}-${++n}`, text, tags: tagList("tags"), needs: tagList("needs"), out: tagList("out"), leans: tagList("leans"), w: r.rare === true ? 1 : 10, strange: strange || r.strange === true };
+    const row = { id: idOf(kind, where, r, text), text, tags: tagList("tags"), needs: tagList("needs"), out: tagList("out"), leans: tagList("leans"), w: r.rare === true ? 1 : 10, strange: strange || r.strange === true };
     if (r.role != null) {
       const ok = spec.role === "keep" ? KEEPS : spec.role === "type" ? TYPES : spec.role === "asset" ? assetKeys : [];
       if (!ok.includes(r.role)) bad(where, `has a role it doesn't know: ${r.role}`);

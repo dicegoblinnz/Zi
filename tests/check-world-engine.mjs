@@ -32,7 +32,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { apply, blank, forPlayer, readable, undoOf } from "../src/companion/board.js";
-import { BAGS, cardsOf, dealWorld, lock, newSeed, options, recordOf, redeal, rngOf, SIZES } from "../src/companion/world-engine.js";
+import { BAGS, canDeal, cardsOf, dealWorld, lock, newSeed, options, recordOf, redeal, rngOf, SIZES, start } from "../src/companion/world-engine.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 
@@ -97,18 +97,31 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
   broken("too few people who turn up", (s) => (s.eras.dusk.assets = s.eras.dusk.assets.slice(0, 6)), "of the 12 people who turn up it needs", { minimums: true });
   broken("too few exceptions", (s) => s.eras.dusk.exceptions.pop(), "needs six exceptions", { minimums: true });
   same(compileTables(copy(base), BOOK, { minimums: false }).problems, [], "the made-up pack, read and checked");
-  console.log("1. the tables' checks catch a missing file, unreadable rows, unknown tags, unfilled slots and too few names");
+  broken("a row written twice", (s) => s.eras.dusk.seats.push({ ...s.eras.dusk.seats[2] }), "says the same as eras/dusk.yaml seats row 3");
+  // A row keeps its id when rows are added round it, so a world built from
+  // last week's tables still knows which rows it holds.
+  {
+    const idsOf = (t) => Object.fromEntries(["seats", "resources", "assets", "types", "secrets", "names"].flatMap((k) => (k === "names" ? t.packs["era:dusk"].names.people : t.packs["era:dusk"][k]).map((r) => [`${k}|${r.text || r.tag}`, r.id])));
+    const was = idsOf(compileTables(copy(base), BOOK, { minimums: false }).tables);
+    const more = copy(base);
+    more.eras.dusk.seats.unshift({ text: "The New Bridge", role: "passage", notice: "Fresh mortar and a toll nobody pays yet." });
+    more.core.wants.unshift("To be first at everything.");
+    more.eras.dusk.names.people.unshift("Hal Mercer");
+    const now = idsOf(compileTables(more, BOOK, { minimums: false }).tables);
+    same(Object.keys(was).filter((k) => now[k] !== was[k]), [], "rows added at the top leave every other row's id as it was");
+  }
+  console.log("1. the tables' checks catch a missing file, unreadable rows, unknown tags, unfilled slots, rows written twice and too few names, and a row keeps its id");
 }
 
 // 2. Boards, by the hundred.
 const named = Object.values(T.genres).filter((g) => T.packs[`era:${g.era}`] && (!g.twist || T.packs[`twist:${g.twist}`]));
 yes(named.length > 0, "the tables cover a named genre");
 const groups = [];
-for (const g of named) for (const region of T.packs[`era:${g.era}`].fits) groups.push({ what: `${g.name} at ${region}`, recipe: { region, era: g.era, twist: g.twist } });
+for (const g of named) for (const region of T.packs[`era:${g.era}`].fits) if (canDeal(T, { region, era: g.era, twist: g.twist })) groups.push({ what: `${g.name} at ${region}`, recipe: { region, era: g.era, twist: g.twist } });
 for (const era of Object.keys(T.eras).filter((e) => T.packs[`era:${e}`])) {
   const fits = T.packs[`era:${era}`].fits;
   const region = fits.includes("city") ? "city" : fits[0];
-  for (const twist of [null, ...Object.keys(T.twists).filter((t) => T.packs[`twist:${t}`])]) groups.push({ what: `the mix ${era}${twist ? ` and ${twist}` : ""} at ${region}`, recipe: { region, era, twist } });
+  for (const twist of [null, ...Object.keys(T.twists).filter((t) => T.packs[`twist:${t}`])]) if (canDeal(T, { region, era, twist })) groups.push({ what: `the mix ${era}${twist ? ` and ${twist}` : ""} at ${region}`, recipe: { region, era, twist } });
 }
 const BOARDS = 200;
 let dealtCount = 0;
@@ -201,6 +214,16 @@ console.log(`   ${dealtCount} boards dealt twice each in ${((Date.now() - starte
   same(new Set(cards.map((c) => c.id)).size, cards.length, "a screen's three cards are three different ones");
   if (!W.fixes.some((f) => f.path === `f:${last}:type`)) same(cards[0]?.id, W.factions[last].type.id, "and the first is what dealing picks");
   same(SIZES, ["small", "local", "city", "great"], "the four sizes");
+  // Four to twelve factions, and a genre never deals where its twist can't.
+  same([2, 13, "x"].map((n) => start(T, { recipe: g.recipe, seed: "ash-lantern-ford", factions: n }).n), [4, 12, 6], "a board's four to twelve factions");
+  const twisted = named.find((x) => x.twist);
+  if (twisted) {
+    const tp = T.packs[`twist:${twisted.twist}`];
+    const away = T.packs[`era:${twisted.era}`].fits.find((r) => !tp.fits.includes(r));
+    const fake = away ? null : { ...T, packs: { ...T.packs, [`twist:${twisted.twist}`]: { ...tp, fits: tp.fits.slice(1) } } };
+    const where = away ?? T.packs[`era:${twisted.era}`].fits.find((r) => !fake.packs[`twist:${twisted.twist}`].fits.includes(r));
+    yes(!canDeal(fake ?? T, { region: where, era: twisted.era, twist: twisted.twist }), `${twisted.name} can't be dealt at ${where}, where its twist's pack doesn't go`);
+  }
   console.log("3. dealing a step again changes it and what's after it on the card, and nothing else");
 }
 

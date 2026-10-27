@@ -148,6 +148,7 @@ For every stage that writes or changes tables.
 - Every role has at least four names for each region its pack fits, people who turn up at least twelve, and every type at least two for each size. The build checks it.
 - Six exceptions to a pack, each breaking the logic with a reason. One Secret in three names another faction, and every Secret has two ways in a player could find.
 - Historical eras get invented names with a real feel, and the modern ones everyday names from many places.
+- A line with a faction's name in a slot reads right whether the name's one or many, so the name never does something in the present tense: past tense, or the name after the verb (*the Hill Men stole our barges*, *we owe the Hill Men*, never *the Hill Men laughs at us*).
 - Draft the whole pack in one go, deal at least twenty boards on `/deal/`, and fix what repeats or reads flat before Mo sees it.
 
 `/deal/` (from stage 3) shows every table and deals sample boards from the current ones, a tap at a time, for any region and genre, kept out of search and off phones like `/kit/`. It's where Mo reads and judges a pack.
