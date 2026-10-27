@@ -64,7 +64,8 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
     row = await worldRow(env, camp.id);
     const raw = row ? parse(row.data) ?? {} : {};
     const doc = readable(raw);
-    const seq = raw.seq && typeof raw.seq === "object" ? raw.seq : {};
+    // Kept with no prototype, so no phone's id can be anything but an entry.
+    const seq = Object.assign(Object.create(null), raw.seq && typeof raw.seq === "object" ? raw.seq : {});
     const high = Number(seq[dev]?.n) || 0;
     top = high;
     const now = Date.now();

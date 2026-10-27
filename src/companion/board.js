@@ -19,8 +19,9 @@
 //   threads   toward the crew or another faction: [{ id, text, kind, s, to }]
 //   shown     what the crew's been shown: card (its name, what it is, Want and
 //             Face), then power, res, assets, agenda, bonds, threads and secret
-//   book      where it came from, if it's out of the book: { from, key, h, was },
-//             was being the book's card as it was brought in
+//   book      where it came from, if it's out of the book: { from, key, h, at, was },
+//             was being the book's card as it was brought in, h its hash and at
+//             when the build that had it was made
 //
 // A change is one of these:
 //   { o: "new", f, at?, kids? }        a faction on the board (kids: mini factions it made, back to it)
@@ -35,7 +36,7 @@
 //   { o: "climb", id, lid, by }        an agenda up or down one: past d12 it's happened
 //   { o: "die", id, lid, v, done? }    an agenda set straight to a size
 //   { o: "move", id, l, lid, to, at? } a resource or an asset goes to another faction
-//   { o: "book", id, card, h }         the book's card she's now seen (with her pick made in changes before it)
+//   { o: "book", id, card, h, at }     the book's card she's now seen (with her pick made in changes before it)
 //
 // A board out of the book comes in as one "new" for each card, so it's undone
 // the same way.
@@ -105,7 +106,7 @@ export function cardOf(raw) {
 function bookOf(b) {
   if (!b || typeof b !== "object") return null;
   const was = cardOf(b.was);
-  return was ? { from: line(b.from, 40), key: line(b.key, 60), h: line(b.h, 20), was } : null;
+  return was ? { from: line(b.from, 40), key: line(b.key, 60), h: line(b.h, 20), at: whole(b.at, 0, Number.MAX_SAFE_INTEGER, 0), was } : null;
 }
 
 // A faction as it came from somewhere else, tidied so nothing in it is
@@ -196,7 +197,7 @@ export function apply(doc, op) {
         f.outs = [...new Set(op.v.filter((o) => OUTCOMES.includes(o)))].slice(0, 2);
         break;
       }
-      if (!(op.f in WORDS)) return false;
+      if (!Object.hasOwn(WORDS, op.f)) return false;
       const v = line(op.v, WORDS[op.f]);
       if (op.f === "name" && !v) return false;
       f[op.f] = v;
@@ -283,7 +284,7 @@ export function apply(doc, op) {
     case "book": {
       const card = cardOf(op.card);
       if (!f?.book || !card) return false;
-      f.book = { ...f.book, h: line(op.h, 20), was: card };
+      f.book = { ...f.book, h: line(op.h, 20), at: whole(op.at, 0, Number.MAX_SAFE_INTEGER, f.book.at), was: card };
       break;
     }
     default:
@@ -343,7 +344,7 @@ export function undoOf(doc, op) {
     case "move":
       return item ? [{ o: "move", id: op.to, l: op.l, lid: item.id, to: f.id, at: f[op.l].indexOf(item) }, ...(op.l === "assets" && item.off ? [{ o: "edit", id: f.id, l: "assets", lid: item.id, f: "off", v: true }] : [])] : [];
     case "book":
-      return f?.book ? [{ o: "book", id: f.id, card: copy(f.book.was), h: f.book.h }] : [];
+      return f?.book ? [{ o: "book", id: f.id, card: copy(f.book.was), h: f.book.h, at: f.book.at }] : [];
     default:
       return [];
   }

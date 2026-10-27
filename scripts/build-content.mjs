@@ -606,6 +606,7 @@ function partyFrom(doc, warn) {
 // prints has to add up (1 step, plus each asset that adds Power), and a card
 // the board can't read stops the build. Each card carries a hash, so a GM who
 // brought it in hears when the book changes it.
+const BUILT = Date.now();
 const CARD_LINES = new Set(["Power", "Resources", "Resource", "Assets", "Asset", "Want", "Agenda", "Face", "Secret", "Bonds", "Threads"]);
 const BOND_GROUPS = { "Public Sentiment": "pub", Morale: "mor", Loyalty: "loy" };
 const keyOf = (name) => plain(name).toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
@@ -702,6 +703,9 @@ function cardOf(name, { power = "", res = "", assets = "", want = "", agenda = "
   const rest = plain(threads.replace(/\*[^*]+\* \((?:bond|hostile)(?:, strained)?\)/g, "").replace(/^Toward the crew:\s*/, "")).replace(/[.:\s]+$/, "");
   if (threads && (card.threads.length ? rest : (threads.match(/[.?]\s/g) ?? []).length >= 1)) card.note = curly(`Threads: ${plain(threads)}`);
   card.h = hashOf(JSON.stringify(card));
+  // When this build was made, so a phone still on an older one never takes
+  // its older book for news.
+  card.at = BUILT;
   return card;
 }
 

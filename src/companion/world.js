@@ -167,23 +167,40 @@ export function makeWorld(d) {
       const k = camp(id);
       const sending = k.out.length > 0;
       const path = `/api/campaigns/${encodeURIComponent(id)}/world`;
-      const r = await call(sending ? "POST" : "GET", sending ? path : `${path}${k.v ? `?v=${encodeURIComponent(k.v)}` : ""}`, sending ? { dev: st.dev, ops: k.out.slice(0, 200) } : null).catch(() => ({ ok: false, status: 0, got: {} }));
+      // Changes go up in batches the Worker takes, and after one it couldn't,
+      // one at a time, so only that one's lost.
+      const batch = [];
+      let size = 0;
+      for (const o of k.out) {
+        size += JSON.stringify(o).length;
+        if (batch.length && (size > 100000 || batch.length >= 200 || k.solo)) break;
+        batch.push(o);
+      }
+      const r = await call(sending ? "POST" : "GET", sending ? path : `${path}${k.v ? `?v=${encodeURIComponent(k.v)}` : ""}`, sending ? { dev: st.dev, ops: batch } : null).catch(() => ({ ok: false, status: 0, got: {} }));
       if (r.status === 401) return d.signedOut();
       if (r.status === 404) {
         delete st.k[id];
         keep();
         return d.gone(id);
       }
-      // Changes the Worker can't take (the board's full, or it's not hers to
-      // change any more) come off this phone, with why, so they don't hold up
-      // the rest.
+      // A change the Worker can't take (the board's full) comes off this
+      // phone, with why, so it doesn't hold up the rest. In a batch it's found
+      // by sending them one at a time. If the board's not hers to change any
+      // more, none of them can go.
       if (sending && (r.status === 400 || r.status === 403 || r.status === 413)) {
-        k.out = [];
+        if (r.status !== 403 && batch.length > 1) {
+          k.solo = true;
+          again[id] = true;
+          return;
+        }
+        k.out = r.status === 403 ? [] : k.out.filter((o) => o !== batch[0]);
         keep();
         d.toast(r.got.error || "The board didn’t take that.", false);
+        if (k.out.length) again[id] = true;
         return d.render();
       }
       if (!r.ok) return;
+      if (sending && !k.out.some((o) => o.n > batch[batch.length - 1].n)) delete k.solo;
       if (Number.isInteger(r.got.seq)) k.out = k.out.filter((o) => o.n > r.got.seq);
       if (k.out.length) again[id] = true;
       if (r.got.same) {
@@ -216,8 +233,15 @@ export function makeWorld(d) {
 
   // The campaign a view's about: the World screen's, a World tab's, or the
   // campaign page's (fetched once there, for its glance).
+  let started = false;
   function route(view, ch) {
     load();
+    // Changes left waiting on this phone go up as soon as any page of the
+    // companion opens, not only that campaign's.
+    if (!started && sync.me) {
+      started = true;
+      for (const id of Object.keys(st.k)) if (st.k[id].out.length) soon(id, 800);
+    }
     const tab = view.name === "sheet" && ch && d.viewing() === "world" ? d.campOf(ch) : null;
     const id = view.name === "world" ? view.id : tab;
     const campId = view.name === "camp" ? view.id : null;
@@ -231,6 +255,8 @@ export function makeWorld(d) {
     if (!id) return;
     syncNow(id);
     d.peek(id);
+    // A typo the book's fixed since she last looked goes in quietly.
+    if (isGm(id)) quietBook(id);
     timer = setInterval(() => {
       if (document.visibilityState === "visible") syncNow(id);
     }, POLL);
@@ -267,8 +293,8 @@ export function makeWorld(d) {
       undos.push({ id, ops: back });
       if (undos.length > 30) undos.shift();
     }
-    ui.sure = "";
     if (!quiet) {
+      ui.sure = "";
       d.render();
       if (say) d.toast(say, back.length && undoable ? "wundo" : false);
     }
@@ -286,12 +312,12 @@ export function makeWorld(d) {
   // nothing shown to the crew yet.
   function fromCard(card, from) {
     const ids = (l, more = {}) => (card[l] ?? []).map((x) => ({ ...x, id: newId(), ...more }));
-    const { h, ...was } = card;
+    const { h, at, ...was } = card;
     return {
       id: newId(), name: card.name, about: "", want: card.want, face: card.face, secret: card.secret, more: card.more, note: card.note,
       res: ids("res").map((x) => ({ ...x, left: x.x })), assets: ids("assets").map((x) => ({ ...x, left: x.x, off: false })),
       agendas: ids("agendas", { done: false }), pub: ids("pub"), mor: ids("mor"), loy: ids("loy"), threads: ids("threads", { to: "crew" }),
-      shown: {}, book: { from, key: card.key, h, was },
+      shown: {}, book: { from, key: card.key, h, at, was },
     };
   }
   const boardOf = (from) => W.boards.find((b) => b.id === from) ?? null;
@@ -303,7 +329,8 @@ export function makeWorld(d) {
   // the book's old ones.
   function bookNews(f) {
     const now = bookCard(f);
-    if (!now || !f.book || now.h === f.book.h) return null;
+    // A phone on an older build than the one that last saw the card says nothing.
+    if (!now || !f.book || now.h === f.book.h || (now.at ?? 0) < (f.book.at ?? 0)) return null;
     const was = f.book.was;
     const real = [];
     const quiet = [];
@@ -373,8 +400,8 @@ export function makeWorld(d) {
       }
       if (said.length) real.push(`${LIST_NAMES[l]}: ${said.join(", ")}`);
     }
-    const { h, ...card } = now;
-    return { real, realOps, quietOps, book: { o: "book", id: f.id, card, h } };
+    const { h, at, ...card } = now;
+    return { real, realOps, quietOps, book: { o: "book", id: f.id, card, h, at } };
   }
   // Typo fixes and changes that don't touch her card go in without a word.
   function quietBook(id) {
@@ -757,7 +784,7 @@ export function makeWorld(d) {
         <div class="cc-row">${all ? '<span class="chip sm pt-chip is-on">On your board</span>' : `<button type="button" class="button${doc.factions.length ? "" : " primary"}" data-act="w" data-do="bring" data-b="${esc(b.id)}">${sure(`bring-${b.id}`, `Tap again to add ${n ? "the rest" : `its ${b.cards.length}`}`, n ? "Bring in the rest" : "Bring in its board")}</button>`}
         <a class="pt-reword" href="${esc(b.link)}">Read it in the book</a></div></li>`;
     }).join("");
-    return fold("bring", "Bring in a board from the book", doc.factions.length ? "The Steeplands and the five frames" : `${W.boards.length} ready to go`, `<p class="cc-lead">Each one comes in as its factions’ cards, the way the book writes them, and they’re yours to change from then on. If the book changes one later, you’ll get a note and you pick which to keep.</p><ul class="wb-brings">${cards}</ul>`);
+    return fold("bring", "Bring in a board from the book", doc.factions.length ? "The Steeplands and the five frames" : `${W.boards.length} ready to go`, `<p class="cc-lead">Each one comes in as its factions’ cards, the way the book writes them, and they’re yours to change from then on. If the book changes one later, you’ll get a note and you pick which to keep. They’re in the book for anyone to read, so change whatever you’d rather keep a surprise.</p><ul class="wb-brings">${cards}</ul>`);
   }
 
   function newFold(id, doc) {
