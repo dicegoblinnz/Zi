@@ -112,7 +112,7 @@ Over an arc, the crew builds the ship and its name. They pay off the Kittiwake a
 
 **Resources** *Every Drowning* · *The Drowned City* · *Sailors' Offerings*
 
-**Assets** *Calls the Tide* (once a downtime, it holds one channel through the Combs shut, or open, till the next downtime)
+**Assets** *Calls the Tide* (once a downtime, it holds one channel in the Combs shut or open till the next downtime)
 
 **Want** To bring the drowned city back up into the air.
 
@@ -266,7 +266,7 @@ Coming back up matters as much as going down. Only [downtime](#downtime) clears 
 
 **Resources** *The Company's Cut* · *Delving Licences* · *Bunkhouse Rents* · *The Pawnshops* · *The Company Store* · *Buyers in the Capital*
 
-**Assets** *Royal Charter* (once a downtime, it pulls one team's licence till the next downtime) · *The Lift* (it says who rides it, and a team it keeps off climbs down the old way, so every level starts its Depth a size smaller)
+**Assets** *Royal Charter* (once a downtime, it pulls one team's licence, and that team can't go down till the next downtime) · *The Lift* (a team it keeps off the lift climbs down the old way, so every level starts its Depth a size smaller)
 
 **Want** Everything that comes up out of the mountain, with its cut taken.
 
@@ -680,7 +680,7 @@ Factions matter more here than in any other frame. Every family's on the board, 
 
 **Resources** *The Northern Estates* · *A Crown Pension* · *Timber Rights* · *Rosewater Rents* · *Old Loans*
 
-**Assets** *Royal Blood* (its face can't be arrested, tried or hanged by anyone but the crown) · *Influential* (its face can't be refused an audience with the Queen)
+**Assets** *Royal Blood* (while its pedigree stands, its face can't be arrested, tried or hanged by anyone but the crown) · *Influential* (its face can't be refused an audience with the Queen)
 
 **Want** The crown, by right of blood.
 
@@ -696,7 +696,7 @@ Factions matter more here than in any other frame. Every family's on the board, 
 
 **Resources** *The Marchetti Bank* · *Interest* · *The Silk Trade* · *Spice Ships* · *Rosewater Gambling Dens*
 
-**Assets** *Friends It's Paid For* (once a downtime, someone at court it's paid does one thing it asks, with no roll)
+**Assets** *Friends It's Paid For* (once a downtime, someone at court outside the crew who's taken its money does one thing it asks, with no roll)
 
 **Want** To buy what the old families were born with.
 
@@ -898,7 +898,7 @@ The ship's a [party holding](#s-party-resources), a line for whoever's flying he
 
 **Resources** *Interest Payments* · *Repossessed Ships* · *Debts Bought Cheap*
 
-**Assets** *Every Debt on the Fringe* (once a session, someone who owes it does one thing it asks, with no roll)
+**Assets** *Every Debt on the Fringe* (once a downtime, someone outside the crew who owes it does one thing it asks, with no roll)
 
 **Want** Every loan paid, with interest.
 

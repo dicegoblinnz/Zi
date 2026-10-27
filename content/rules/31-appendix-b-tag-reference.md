@@ -250,11 +250,11 @@ An asset is something a faction can do, and the crew's a faction too, so these w
 
 Any of them can carry a multiplier when it's big. It still does the same thing, so *Standing Army ×3* is still +1 Power, but it takes three wins to destroy or to take.
 
-Take one as it's written, change it to fit, or write your own in the same shape. Whatever a card says an asset does is what it does, even when it shares a name with one here, but it only adds Power if it's people. A rich faction doesn't get an asset for being rich: it's got more resources, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*. The twelve crew assets from [The Party Sheet](#s-crew-tags) are all here too, worded for the crew.
+Take one as it's written, change it to fit, or write your own in the same shape. Whatever a card says an asset does is what it does, even when it shares a name with one here. It only adds Power if it's people. A rich faction doesn't get an asset for being rich: it's got more resources, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*. The twelve crew assets from [The Party Sheet](#s-crew-tags) are all here too, worded for the crew.
 
 ### People who turn up {#assets-people}
 
-Each of these is +1 Power whenever it fits the roll, and its people in a scene can carry the asset as a tag, like *Household Guard* on the men at the gate. Anyone who comes when it calls counts, so the Bound's trapped souls count the same as the Vane Estate's guard.
+Each of these is +1 Power whenever it fits the roll, and its people in a scene can carry the asset as a tag, like *Household Guard* on the men at the gate. Anyone or anything that comes when it calls counts, so the dead the Thing in the Fog calls up count the same as the Vane Estate's guard.
 
 | Asset | What it does |
 | --- | --- |

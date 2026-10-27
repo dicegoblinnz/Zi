@@ -11,10 +11,10 @@ Mo's call in chat.
 
 **A faction's Power comes only from people who'll turn up when it calls**, like soldiers, dock gangs, a congregation or the dead it raises. Nothing else adds Power now, so a charter, a throne or an old name is an asset that does one thing. Before, a card could have anything add Power, like the Quiet Order's *Rooted* or the Harbour Guild's *Watchful*. See [What a Faction Is](#s-faction-board) and [People who turn up](#assets-people).
 
-**Every faction card in the book that had something else adding Power is redone.** Where the faction plainly had the people, that asset's people now and its die hasn't moved: the Steeplands' four, the Tithe Fleet, Tarrant & Daughters, the Brothers of the Lamp, the Lampwrights' Guild, the Meridian Combine, the Free Stations Compact and the Rustbacks. The Vane Estate's still a d12, with *The Courts' Bailiffs* and *Old Retainers* where *Friends in the Courts* and *The Old Name* were. See [the Steeplands' board](#the-board).
+**Every faction card in the book that had something else adding Power is redone.** Where the faction plainly had the people, that asset became people and the die stayed: the Steeplands' four, the Tithe Fleet, Tarrant & Daughters, the Brothers of the Lamp, the Lampwrights' Guild, the Meridian Combine, the Free Stations Compact and the Rustbacks. The Vane Estate's still a d12, with *The Courts' Bailiffs* and *Old Retainers* where *Friends in the Courts* and *The Old Name* were. See [the Steeplands' board](#the-board).
 
 **Where it didn't, the asset does one thing now and the die's smaller:**
--   **Brinewake:** the Drowned Choir's a d6, and *Calls the Tide* holds a channel through the Combs shut or open. See [its board](#frames-the-board).
+-   **Brinewake:** the Drowned Choir's a d6, and *Calls the Tide* holds a channel in the Combs shut or open. See [its board](#frames-the-board).
 -   **The Deep Company:** the Company's a d6, with its *Royal Charter* and *The Lift* to keep a team out, and Holloway's Team and the Underhold are d4s. See [its board](#the-board-1).
 -   **Lanternfall:** the Night Watch and the Lamplighters' Guild are d4s, and the Carrow Society and the Thing in the Fog are d6s. See [its board](#the-board-2).
 -   **The Gilded Court:** Houses Veraine and Marchetti and the Queen's Eyes are d6s, and the Crown's a d10. See [its board](#the-board-3).

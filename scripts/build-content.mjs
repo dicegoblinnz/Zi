@@ -658,6 +658,8 @@ const BUILT = Date.now();
 const CARD_LINES = new Set(["Power", "Resources", "Resource", "Assets", "Asset", "Want", "Agenda", "Face", "Secret", "Bonds", "Threads"]);
 const BOND_GROUPS = { "Public Sentiment": "pub", Morale: "mor", Loyalty: "loy" };
 const keyOf = (name) => plain(name).toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
+// An asset's name for matching one in Appendix B, whatever its apostrophes.
+const nameKey = (name) => plain(name).toLowerCase().replace(/[’']/g, "'").trim();
 const capFirst = (s = "") => s.charAt(0).toUpperCase() + s.slice(1);
 const firstSentence = (s = "") => s.match(/^.+?[.?](?=\s|$)/)?.[0] ?? s;
 function hashOf(text) {
@@ -881,18 +883,21 @@ function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, wa
     const rows = tablesOf(sectionOf(assetsDoc.body, id))[0]?.rows ?? [];
     if (!group || !rows.length) warn(`can't read Appendix B's ${id.replace("assets-", "")} assets`);
     for (const r of rows) {
-      if (!power && /\+1 Power/.test(r[1] ?? "")) warn(`Appendix B's ${plain(r[0])} says +1 Power, but only people who turn up add Power, so it goes under People who turn up or does one thing`);
-      assets.push({ group, text: curly(plain(r[0])), does: curly(plain(r[1] ?? "")), power });
+      const says = r[1] ?? "";
+      if (power && !/^\+1 Power\b/.test(says)) warn(`Appendix B's ${plain(r[0])} is under People who turn up, so it starts with +1 Power`);
+      if (!power && /[+]\d+ Power|\badds? Power\b/i.test(says)) warn(`Appendix B's ${plain(r[0])} adds Power, but only people who turn up add Power, so it goes under People who turn up or does one thing`);
+      assets.push({ group, text: curly(plain(r[0])), does: curly(plain(says)), power });
     }
   }
   // Only people who turn up add Power (28 Oct), so a card's asset with the
   // same name as one of Appendix B's adds Power exactly when Appendix B's does,
-  // and no card can make Rooted or Influential add Power again.
-  const people = new Map(assets.map((a) => [a.text.toLowerCase(), a.power]));
+  // and no card can make Rooted or Influential add Power again. A name that
+  // isn't in Appendix B is the card's own, and only its die's checked.
+  const adds = new Map(assets.map((a) => [nameKey(a.text), a.power]));
   for (const b of boards) {
     for (const c of b.cards) {
       for (const a of c.assets) {
-        const p = people.get(a.text.toLowerCase());
+        const p = adds.get(nameKey(a.text));
         if (p === undefined || p === a.power) continue;
         warn(a.power ? `${c.name}'s ${a.text} adds Power, but it isn't people in Appendix B, and only people who turn up add Power` : `${c.name}'s ${a.text} is people in Appendix B, so it adds Power on the card too`);
       }
@@ -1306,6 +1311,16 @@ if (!placesDoc) companionWarn("can't find the Twenty Places for the live table's
 const worldDocs = { factionsDoc: docWith("{#s-faction-build}"), steepDoc: docWith("{#the-four-great-powers}"), framesDoc: docWith("{#s-frame-brinewake}"), assetsDoc: docWith("{#faction-strength}") };
 const worlds = Object.values(worldDocs).every(Boolean) ? worldsFrom(worldDocs, pageFor, (msg) => companionWarn(`board: ${msg}`)) : null;
 if (!worlds) companionWarn("can't find Factions, the Steeplands, Frames or Appendix B's assets for the faction board");
+// The crew's twelve assets are in Appendix B too, worded for the crew, so
+// each one adds Power exactly when Appendix B's does.
+if (party && worlds) {
+  const adds = new Map(worlds.assets.map((a) => [nameKey(a.text), a.power]));
+  for (const a of party.assets) {
+    const p = adds.get(nameKey(a.name));
+    if (p === undefined) companionWarn(`party sheet: the crew's ${a.name} isn't in Appendix B's assets, where the twelve crew assets are too`);
+    else if (p !== a.power) companionWarn(`party sheet: the crew's ${a.name} ${a.power ? "adds" : "doesn't add"} Power, but Appendix B's ${p ? "does" : "doesn't"}`);
+  }
+}
 // Places and people: Twenty Places, the Bestiary, and the tables to make
 // your own, in their own file for the World screen.
 const pageDocs = { placesDoc, worldDoc: docWith("{#s-world-places}"), threatDoc: docWith("{#its-tags}"), bestiaryDoc: docWith(":::threat[The Watchman]"), tagsDoc: docWith("{#what-drives-it}") };
