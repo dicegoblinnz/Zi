@@ -52,6 +52,9 @@ For Mo to say otherwise.
 - **After the founding,** what the table built in the open is shown to the crew. Secrets, the old powers' agendas and everything from her pass stay hidden.
 - **Names** are dealt from each genre's lists, three at a time, or typed.
 - **No builder skill.** Writing tables, below, does the job one would, so it doesn't take a slot.
+- **A card's people always reach its die** (stage 2). If they can't, because it's too few resources to pay for them, the die comes down to the one they reach and the size with it.
+- **There's always a trade to block** (stage 2). When nobody's got a resource to spare, one faction's dealt as many resources as its size holds, and one's left over.
+- **Deal again** never gives a step the card it had while there's another, never touches a locked step, and a new seat deals the card on it again from its size, bar what's locked. A changed answer moves the dials for what's dealt next and leaves what's dealt alone.
 
 ## How a stage goes
 
@@ -145,7 +148,7 @@ For every stage that writes or changes tables.
 - Mo's voice through `zi-voice`: plain, concrete and specific, contractions, NZ spelling, and never em dashes, semicolons or exclamation marks. Names one to four words, lines up to twelve.
 - Every entry earns its place: it gives someone a reason to act, a hook or a rule, never just colour.
 - No two entries in a table say the same thing, no phrase repeats across a pack, and nothing's named after a real company, church, person, place or game.
-- Every role has at least four names for each region its pack fits, people who turn up at least twelve, and every type at least two for each size. The build checks it.
+- Every role has at least four names for each region its pack fits (faction names for each kind of faction too), people who turn up at least twelve, faction names and people's names at least twelve each, every type at least two for each size, and three strange Secrets with core's. The build checks it.
 - Six exceptions to a pack, each breaking the logic with a reason. One Secret in three names another faction, and every Secret has two ways in a player could find.
 - Historical eras get invented names with a real feel, and the modern ones everyday names from many places.
 - A line with a faction's name in a slot reads right whether the name's one or many, so the name never does something in the present tense: past tense, or the name after the verb (*the Hill Men stole our barges*, *we owe the Hill Men*, never *the Hill Men laughs at us*).

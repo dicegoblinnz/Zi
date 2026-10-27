@@ -1539,10 +1539,11 @@ if (worldBook) {
 // The world builder's tables (notes/builder-plan.md), read off
 // content/world-tables/ by scripts/world-tables.mjs and checked against the
 // book, for the World screen to deal from and the service worker to keep.
-// Until the tables are written, there's no file.
+// Until the folder's there, there's no file. Once it is, a file missing
+// from it stops the build like any other problem.
 const tablesDir = join(ROOT, "content", "world-tables");
 const tablesOut = join(ROOT, "public", "world-tables.json");
-if (existsSync(join(tablesDir, "core.yaml"))) {
+if (existsSync(tablesDir)) {
   const { src, problems: unread } = readTablesDir(tablesDir);
   const { tables, problems } = worlds && worldBook ? compileTables(src, bookFor(worlds, worldBook)) : { tables: null, problems: ["can't check them without the faction board and the Threat Builder from the book"] };
   for (const p of [...unread, ...problems]) companionWarn(`world tables: ${p}`);

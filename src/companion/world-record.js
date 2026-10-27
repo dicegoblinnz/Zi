@@ -17,14 +17,18 @@
 //   shown    whether the crew's been shown the history
 //
 // A change (its o starts with "wb-"):
-//   { o: "wb-set", b }           the record, whole (Done writes it in one go)
+//   { o: "wb-set", b }           the record, whole (Done writes it in one go,
+//                                as a POST of its own, since a twelve-faction
+//                                record's most of what one POST carries). One
+//                                whose dealt is more than a world holds is
+//                                turned down whole, never kept without it.
 //   { o: "wb-gone" }             the record off the world
 //   { o: "wb-line", item, at? }  a line of history
 //   { o: "wb-edit", lid, v }     a line's words
 //   { o: "wb-drop", lid }        a line off it
 //   { o: "wb-show", v }          the history shown to the crew, or hidden again
 
-export const BMAX = { lines: 80, text: 400, dealt: 150000, depth: 8, list: 64, words: 600 };
+export const BMAX = { lines: 80, text: 400, dealt: 150000, depth: 8, list: 256, words: 600 };
 const REGIONS = ["town", "city", "country", "world", "stars"];
 const DIALS = ["tense", "strange", "rich", "ruled"];
 const ID = /^[a-z0-9-]{2,24}$/;
@@ -87,48 +91,49 @@ export function buildOf(raw) {
 
 // One change, made to doc. It says whether anything changed.
 export function applyBuild(doc, op) {
-  const was = JSON.stringify(doc.build ?? null);
   const b = doc.build;
   const find = (lid) => b?.history.find((x) => x.id === lid) ?? null;
   switch (op.o) {
     case "wb-set": {
       const next = buildOf(op.b);
-      if (!next) return false;
+      const meant = op.b?.dealt && typeof op.b.dealt === "object" && !Array.isArray(op.b.dealt);
+      if (!next || (meant && !next.dealt)) return false;
+      if (b && JSON.stringify(next) === JSON.stringify(b)) return false;
       doc.build = next;
-      break;
+      return true;
     }
     case "wb-gone":
+      if (!b) return false;
       doc.build = null;
-      break;
+      return true;
     case "wb-line": {
       const item = lineOf(op.item);
       const into = b ?? buildOf({});
       if (!item || into.history.some((x) => x.id === item.id) || into.history.length >= BMAX.lines) return false;
       into.history.splice(whole(op.at, 0, into.history.length, into.history.length), 0, item);
       doc.build = into;
-      break;
+      return true;
     }
     case "wb-edit": {
       const l = find(op.lid);
       const v = line(op.v, BMAX.text);
-      if (!l || !v) return false;
+      if (!l || !v || l.text === v) return false;
       l.text = v;
-      break;
+      return true;
     }
     case "wb-drop": {
       const l = find(op.lid);
       if (!l) return false;
       b.history.splice(b.history.indexOf(l), 1);
-      break;
+      return true;
     }
     case "wb-show":
-      if (!b) return false;
+      if (!b || b.shown === (op.v === true)) return false;
       b.shown = op.v === true;
-      break;
+      return true;
     default:
       return false;
   }
-  return JSON.stringify(doc.build ?? null) !== was;
 }
 
 // What puts a change back, worked out from the record before it's made.

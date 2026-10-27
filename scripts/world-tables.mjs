@@ -165,8 +165,10 @@ export function readTablesDir(dir) {
 }
 
 // The tables, read and checked against the book. minimums is the plan's
-// "every role has at least four names for each region its pack fits", which
-// the shipped packs have to meet. The engine's own check runs a small
+// "every role has at least four names for each region its pack fits", with
+// twelve faction names and twelve people's names for each region (one for
+// every faction on the biggest board) and three strange Secrets with core's,
+// which the shipped packs have to meet. The engine's own check runs a small
 // made-up pack without it.
 export function compileTables(src, book, { minimums = true } = {}) {
   const problems = [];
@@ -513,6 +515,22 @@ export function compileTables(src, book, { minimums = true } = {}) {
                 if (c < 2) bad(file, `${region} has ${c} of the 2 types it needs for ${role} at ${size}`);
               }
             }
+          }
+          for (const region of fits) {
+            // A name for every faction on the biggest board, a Face's name
+            // for each too, and four names for every kind of faction.
+            const names = pack.names.factions.filter((r) => fit(r, region));
+            if (names.length < 12) bad(file, `${region} has ${names.length} of the 12 faction names it needs`);
+            for (const role of TYPES) {
+              const c = names.filter((r) => !r.role || r.role === role).length;
+              if (c < 4) bad(file, `${region} has ${c} of the 4 faction names it needs for ${role}`);
+            }
+            const people = pack.names.people.filter((r) => fit(r, region)).length;
+            if (people < 12) bad(file, `${region} has ${people} of the 12 people's names it needs`);
+            // Every board gets its strange thing from a Secret, so there are
+            // a few to deal however low the dial is.
+            const strange = [...out.core.secrets, ...pack.secrets].filter((r) => r.strange && fit(r, region)).length;
+            if (strange < 3) bad(file, `${region} has ${strange} of the 3 strange Secrets it needs (core.yaml's and its own)`);
           }
           const rivals = pack.secrets.filter((s) => s.rival).length;
           if (pack.secrets.length && rivals * 3 < pack.secrets.length) bad(file, `one Secret in three names another faction, and ${rivals} of ${pack.secrets.length} do`);

@@ -8,8 +8,10 @@
 //
 // 1. The tables' checks: a missing file, a row it can't read, a tag it
 //    doesn't know, a slot nothing fills, a role with too few names, a Secret
-//    without its two ways in and an agenda with nothing to aim at are each a
-//    problem, and the tables themselves have none.
+//    without its two ways in, an agenda with nothing to aim at and a row
+//    written twice are each a problem, and so are too few faction names,
+//    people's names or strange Secrets. A row keeps its id when rows are
+//    added round it, and the tables themselves have no problems.
 // 2. 200 boards in every region for every named genre the packs cover, and
 //    200 for every mix at one region: the same seed deals the same board, the
 //    checks pass with a fallback in under 1 board in 20, no bag gives the same
@@ -18,21 +20,28 @@
 //    every asset paid for bar its needs, nobody holding two of the same
 //    people, no two factions with the same asset that does one thing, a
 //    rival each, every agenda aimed at something on the board, a seat each
-//    and two to spare, and every slot filled).
+//    and two to spare, and every slot filled). A bag only gives a row twice
+//    once it's run out, and says so.
 // 3. Dealing one step again: the next card in its own stream, never the one
-//    it had, every other faction and every earlier step as they were, and a
-//    locked step left alone when one before it's dealt again. A screen's
-//    three cards are different, and the first is what dealing picks.
+//    it had, every other faction and every earlier step as they were, a
+//    locked step left alone when one before it's dealt again, and a locked
+//    step never dealt again itself. A screen's three cards are different,
+//    and the first is what dealing picks, a Face's too. A new seat deals the
+//    card sitting on it again from its size, dealing the rest can stop short
+//    of the web and the checks, a board's four to twelve factions, a genre
+//    never deals where its twist's pack doesn't go, and a world picks up from
+//    its record just as it was.
 // 4. The build's record (world-record.js, through board.js): written whole,
 //    lines of history, shown, undone, junk tidied, what was dealt kept within
-//    a world's size, and a player getting the history once it's shown, and
-//    never the seed or anything dealt.
+//    a world's size, one too big turned down whole, a twelve-faction record
+//    well inside one change, and a player getting the history once it's
+//    shown, and never the seed or anything dealt.
 // 5. scripts/deal-world.mjs deals a board as text, the same for the same seed.
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { apply, blank, forPlayer, readable, undoOf } from "../src/companion/board.js";
-import { BAGS, canDeal, cardsOf, dealWorld, lock, newSeed, options, recordOf, redeal, rngOf, SIZES, start } from "../src/companion/world-engine.js";
+import { BAGS, CHECKS, canDeal, cardsOf, choose, dealRest, dealWorld, lock, newSeed, options, recordOf, redeal, resume, rngOf, SIZES, start } from "../src/companion/world-engine.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 
@@ -96,6 +105,10 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
   broken("too few names for a role", () => {}, "of the 4 seats it needs for", { minimums: true });
   broken("too few people who turn up", (s) => (s.eras.dusk.assets = s.eras.dusk.assets.slice(0, 6)), "of the 12 people who turn up it needs", { minimums: true });
   broken("too few exceptions", (s) => s.eras.dusk.exceptions.pop(), "needs six exceptions", { minimums: true });
+  broken("too few faction names", (s) => (s.eras.dusk.names.factions = s.eras.dusk.names.factions.slice(0, 5)), "of the 12 faction names it needs", { minimums: true });
+  broken("too few people's names", (s) => (s.eras.dusk.names.people = s.eras.dusk.names.people.slice(0, 5)), "of the 12 people's names it needs", { minimums: true });
+  const plain = (r) => (typeof r === "string" ? r : { ...r, strange: false });
+  broken("too few strange Secrets", (s) => ((s.core.secrets = s.core.secrets.map(plain)), (s.eras.dusk.secrets = s.eras.dusk.secrets.map(plain))), "of the 3 strange Secrets it needs", { minimums: true });
   same(compileTables(copy(base), BOOK, { minimums: false }).problems, [], "the made-up pack, read and checked");
   broken("a row written twice", (s) => s.eras.dusk.seats.push({ ...s.eras.dusk.seats[2] }), "says the same as eras/dusk.yaml seats row 3");
   // A row keeps its id when rows are added round it, so a world built from
@@ -142,12 +155,15 @@ for (const g of groups) {
     dealtCount++;
     if (JSON.stringify(recordOf(dealWorld(T, opts))) !== JSON.stringify(recordOf(W))) fail(`${seed} dealt two different boards`);
     if (W.fallbacks.length) fallbacks++;
+    if (W.checks.map((c) => c.k).join() !== CHECKS.join()) fail(`${seed}: the checks that ran were ${W.checks.map((c) => c.k).join(", ")}`);
     for (const c of W.checks) if (!c.ok) fail(`${seed}: the ${c.k} check still fails`);
-    // No bag gives the same row twice.
+    // No bag gives the same row twice till it's run out, and then it says so.
     for (const [bag, step] of Object.entries(BAGS)) {
-      const ids = step === "seat" ? W.seats.map((s) => s?.id) : W.factions.map((f) => (step === "face" ? f.face?.nameId : f[step]?.id));
-      const got = ids.filter(Boolean);
-      if (new Set(got).size !== got.length) fail(`${seed}: the ${bag} bag gave the same row twice`);
+      const picks = (step === "seat" ? W.seats : W.factions.map((f) => f[step])).filter((p) => p && !p.own);
+      const idOf = (p) => (step === "face" ? p.nameId : p.id);
+      const fresh = picks.filter((p) => !p.again).map(idOf);
+      if (new Set(fresh).size !== fresh.length) fail(`${seed}: the ${bag} bag gave the same row twice before it ran out`);
+      if (new Set(picks.map(idOf)).size !== picks.length && !picks.some((p) => p.again)) fail(`${seed}: the ${bag} bag gave a row twice without saying so`);
     }
     // Every step that needs a because has one.
     const picks = [...W.seats, ...W.factions.flatMap((f) => [f.type, f.method, f.want, f.agenda, f.secret, ...(f.res ?? []), ...(f.assets ?? [])]), ...(W.needs ?? []).map((x) => x.asset)];
@@ -214,8 +230,51 @@ console.log(`   ${dealtCount} boards dealt twice each in ${((Date.now() - starte
   same(new Set(cards.map((c) => c.id)).size, cards.length, "a screen's three cards are three different ones");
   if (!W.fixes.some((f) => f.path === `f:${last}:type`)) same(cards[0]?.id, W.factions[last].type.id, "and the first is what dealing picks");
   same(SIZES, ["small", "local", "city", "great"], "the four sizes");
+  // A Face: three different people, the first being what dealing picks, and
+  // a new one when it's dealt again.
+  const faces = options(T, W, `f:${last}:face`, 3);
+  same(new Set(faces.map((c) => c.nameId)).size, faces.length, "a Face's three cards are three different people");
+  same(faces[0], W.factions[last].face, "and the first is the Face dealing picked");
+  const face = W.factions[last].face;
+  redeal(T, W, `f:${last}:face`);
+  yes(W.factions[last].face.nameId !== face.nameId, "dealing a Face again gives someone else");
+  same(options(T, W, `f:${last}:face`, 3)[0], W.factions[last].face, "and the first of its cards is still the one it's got");
+  // A locked step isn't dealt again.
+  const want = W.factions[1].want;
+  const tries = W.tries["f:1:want"] ?? 0;
+  lock(W, "f:1:want");
+  redeal(T, W, "f:1:want");
+  same([W.factions[1].want, W.tries["f:1:want"] ?? 0], [want, tries], "a locked Want stays when it's dealt again");
+  // Picking up from the record.
+  const back = resume(T, recordOf(W));
+  same(recordOf(back), recordOf(W), "a world picks up from its record just as it was");
+  redeal(T, back, "f:4:agenda");
+  redeal(T, W, "f:4:agenda");
+  same(recordOf(back), recordOf(W), "and deals the same from there");
+  // A new seat deals the card on it again, bar what's locked.
+  const k = W.factions[0].seat.k;
+  const seat = options(T, W, `seat:${k}`, 3).find((c) => c.id !== W.seats[k].id);
+  const name = W.factions[0].name;
+  lock(W, "f:0:name");
+  choose(T, W, `seat:${k}`, seat);
+  same([W.factions[0].seat?.k, W.factions[0].type, W.factions[0].name], [k, null, name], "a new seat clears the card on it from its size, bar what's locked");
+  same([W.web, W.needs, W.checks], [null, null, null], "and the web, the needs and the checks");
+  dealRest(T, W, { finish: false });
+  yes(W.factions[0].type != null && W.web === null && W.checks === null, "dealing the rest can stop short of the web and the checks");
+  dealRest(T, W);
+  yes(W.web != null && W.checks?.length === CHECKS.length, "and finishing deals them");
+  // A card whose people can't reach its die comes down to the die they reach.
+  const low = dealWorld(T, { recipe: g.recipe, seed: "rook-gate-ash", factions: 5 });
+  low.factions[0].size = { size: "great", die: 12 };
+  low.factions[0].res = low.factions[0].res.slice(0, 1);
+  low.checks = null;
+  dealRest(T, low);
+  const lf = low.factions[0];
+  const steps = 1 + lf.assets.filter((a) => a.power).length;
+  yes(lf.size.die === 2 * steps && BOOK.sizes[lf.size.size].lo <= lf.size.die && lf.size.die <= BOOK.sizes[lf.size.size].hi && low.fallbacks.includes("power"), `a great faction with one resource comes down to a d${2 * steps} (got a ${lf.size.size} d${lf.size.die})`);
   // Four to twelve factions, and a genre never deals where its twist can't.
   same([2, 13, "x"].map((n) => start(T, { recipe: g.recipe, seed: "ash-lantern-ford", factions: n }).n), [4, 12, 6], "a board's four to twelve factions");
+  same([2, 13].map((n) => start(T, { recipe: g.recipe, seed: "ash-lantern-ford", factions: n }).s), [6, 14], "and two more seats than factions");
   const twisted = named.find((x) => x.twist);
   if (twisted) {
     const tp = T.packs[`twist:${twisted.twist}`];
@@ -269,13 +328,15 @@ console.log(`   ${dealtCount} boards dealt twice each in ${((Date.now() - starte
   apply(junk, { o: "wb-set", b: { dealt: { lines: Array.from({ length: 60 }, () => "x".repeat(4000)) } } });
   yes(JSON.stringify(junk.build.dealt).length <= BMAX.dealt, "and stays within what a world holds");
   const big = blank();
-  apply(big, { o: "wb-set", b: { dealt: { a: Array.from({ length: 60 }, () => Array.from({ length: 60 }, () => "y".repeat(500))) } } });
-  same(big.build.dealt, null, "a record that's too big keeps nothing of what was dealt");
+  same(apply(big, { o: "wb-set", b: { dealt: { a: Array.from({ length: 60 }, () => Array.from({ length: 60 }, () => "y".repeat(500))) } } }), false, "a record too big for a world is turned down");
+  same(big.build, null, "whole, not kept without what was dealt");
   same(apply(blank(), { o: "wb-show", v: true }), false, "showing a history that isn't there changes nothing");
   const W12 = dealWorld(T, { recipe: groups[0].recipe, seed: "tide-iron-rook", factions: 12 });
   const whole12 = blank();
   apply(whole12, { o: "wb-set", b: { recipe: W12.recipe, dials: W12.dials, seed: W12.seed, dealt: recordOf(W12) } });
   same(whole12.build.dealt, recordOf(W12), "a twelve-faction board's record is kept whole");
+  const size12 = JSON.stringify({ o: "wb-set", b: whole12.build }).length;
+  yes(size12 * 5 < BMAX.dealt * 3, `and it's well inside what a world holds (${size12} of ${BMAX.dealt})`);
   console.log("4. the build's record: written whole, a line at a time, shown, undone, tidied, and kept from players");
 }
 
