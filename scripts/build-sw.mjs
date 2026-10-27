@@ -23,17 +23,18 @@ const files = [];
   }
 })(DIST);
 
-// Two pages stay off everyone's phone: the kit (/kit/), a design board for
-// Mo, and the table screen (/table/), which goes on a TV or a laptop and
+// Three pages stay off everyone's phone: the kit (/kit/), a design board for
+// Mo, the world builder's tables and sample boards (/deal/), where he judges
+// them, and the table screen (/table/), which goes on a TV or a laptop and
 // needs a signal anyway. That's each page, and any script or style only
 // those pages ask for. The companion draws with the kit too, so whatever
 // another page uses is kept, and so is every Latin font, the 800 weight
 // included, since the dice's numbers use it.
 const refs = (html) => [...html.matchAll(/(?:src|href)="\/(_astro\/[^"]+)"/g)].map((m) => m[1]);
-const offPages = ["kit", "table"].map((name) => join(DIST, name, "index.html"));
+const offPages = ["kit", "deal", "table"].map((name) => join(DIST, name, "index.html"));
 const offRefs = new Set(offPages.filter((p) => existsSync(p)).flatMap((p) => refs(readFileSync(p, "utf8"))));
 const others = new Set(files.filter((p) => p.endsWith(".html") && !offPages.includes(p)).flatMap((p) => refs(readFileSync(p, "utf8"))));
-const offOnly = (rel) => rel.startsWith("kit/") || rel.startsWith("table/") || (offRefs.has(rel) && !others.has(rel));
+const offOnly = (rel) => rel.startsWith("kit/") || rel.startsWith("deal/") || rel.startsWith("table/") || (offRefs.has(rel) && !others.has(rel));
 const keep = (rel) => !offOnly(rel) && ((/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf" || rel === "openings.json" || rel === "world-book.json" || rel === "world-tables.json");
 const hash = createHash("sha1");
 const urls = [];

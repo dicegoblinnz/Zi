@@ -170,9 +170,13 @@ export function readTablesDir(dir) {
 // every faction on the biggest board) and three strange Secrets with core's,
 // which the shipped packs have to meet. The engine's own check runs a small
 // made-up pack without it.
-export function compileTables(src, book, { minimums = true } = {}) {
+export function compileTables(raw, book, { minimums = true } = {}) {
   const problems = [];
   const bad = (where, what) => problems.push(`${where}: ${what}`);
+  // The YAML's written with plain apostrophes, and every word it shows on
+  // the site gets the curly one the rest of the site uses.
+  const curly = (v) => (typeof v === "string" ? v.replace(/'/g, "’") : Array.isArray(v) ? v.map(curly) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, curly(x)])) : v);
+  const src = curly(raw);
   const core = src?.core;
   const regionsSrc = src?.regions;
   const genresSrc = src?.genres;

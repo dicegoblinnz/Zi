@@ -55,6 +55,12 @@ For Mo to say otherwise.
 - **A card's people always reach its die** (stage 2). If they can't, because it's too few resources to pay for them, the die comes down to the one they reach and the size with it.
 - **There's always a trade to block** (stage 2). When nobody's got a resource to spare, one faction's dealt as many resources as its size holds, and one's left over.
 - **Deal again** never gives a step the card it had while there's another, never touches a locked step, and a new seat deals the card on it again from its size, bar what's locked. A changed answer moves the dials for what's dealt next and leaves what's dealt alone.
+- **The core keeps the book's rows** (stage 3): Building a Faction's wants, how it works and its secrets, and the tension, word for word, with two agendas to each of the book's, at its die. A Secret's written the way the book's cards write one, a hidden tag in capitals and a line, and resources and assets are named the way the cards name them.
+- **Plain Medieval's strange things are the deniable kind** (stage 3): saints, curses, old graves, things nobody can explain. The Magic pack makes them real.
+- **What fits counts** (stage 3): a row's weight goes up three times over for each thing on its card it fits and half that for each on the board, a type that leans to its seat's keep counts eight times over (so about three factions in four live off their seat), and a faction's next resource after its seat's, its first people and its first asset are ones it leans to.
+- **A step dealt again reads only the steps before it** (stage 3), so a type's three cards never lean on the method and Want it had.
+- **A Face is one of the threats core gives its kind of faction** (stage 3), never the pack or the swarm for a guild.
+- **A specific name needs its kind's tags** (stage 3): the Hammermen need `metal`, the Wool Staplers `cloth`, Coyle's Barges a river, so names and types agree. `metal`, `cloth` and `stone` are core's tags for that.
 
 ## How a stage goes
 

@@ -1,0 +1,99 @@
+---
+// /deal/: every table the world builder deals from, and boards dealt from
+// them a tap at a time, for any region and genre (stage 3 of
+// notes/builder-plan.md). It's where Mo reads and judges a pack. The board's
+// in the address, so a link brings the same one back. Not linked from
+// anywhere, and kept out of search and off phones like /kit/.
+import Base from "../layouts/Base.astro";
+import "@fontsource/alegreya-sans/800.css";
+import "../styles/kit.css";
+import "../styles/deal.css";
+
+const REGIONS = [
+  ["town", "Town"],
+  ["city", "City"],
+  ["country", "Country"],
+  ["world", "World"],
+  ["stars", "Stars"],
+];
+---
+<Base title="Deal a world" description="The world builder's tables, and boards dealt from them.">
+  <meta slot="head" name="robots" content="noindex" />
+  <main id="main" class="deal frame">
+    <header class="dl-head">
+      <p class="eyebrow">The world builder</p>
+      <h1>Deal a world</h1>
+      <p class="dl-lede">Every table the builder deals from, and boards dealt from them a tap at a time. Nothing here's saved. The address keeps the board, so a link brings the same one back.</p>
+    </header>
+
+    <div class="dl-tabs" role="tablist" aria-label="What to look at">
+      <button type="button" role="tab" id="tab-boards" aria-selected="true" aria-controls="boards">Boards</button>
+      <button type="button" role="tab" id="tab-tables" aria-selected="false" aria-controls="tables" tabindex="-1">Tables</button>
+    </div>
+
+    <section id="boards" class="dl-panel" role="tabpanel" aria-labelledby="tab-boards">
+      <form class="dl-set" id="set" autocomplete="off">
+        <fieldset class="dl-regions">
+          <legend>Region</legend>
+          <div class="dl-seg">
+            {REGIONS.map(([id, name]) => (
+              <label>
+                <input type="radio" name="region" value={id} checked={id === "town"} />
+                <span>{name}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <div class="dl-row">
+          <label class="dl-field">
+            <span>Genre</span>
+            <select id="genre"></select>
+          </label>
+          <div class="dl-field">
+            <span id="count-label">Factions</span>
+            <div class="dl-step" role="group" aria-labelledby="count-label">
+              <button type="button" data-n="-1" aria-label="One fewer faction">−</button>
+              <output id="count" aria-live="polite">6</output>
+              <button type="button" data-n="1" aria-label="One more faction">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="dl-row dl-mix" id="mix" hidden>
+          <label class="dl-field">
+            <span>Era</span>
+            <select id="era"></select>
+          </label>
+          <label class="dl-field">
+            <span>Twist</span>
+            <select id="twist"></select>
+          </label>
+        </div>
+        <label class="dl-field dl-seedfield">
+          <span>Seed</span>
+          <input id="seed" type="text" spellcheck="false" autocapitalize="none" maxlength="40" aria-describedby="seed-hint" />
+          <small id="seed-hint">Type one to deal it again, or leave it and Deal gives a new one.</small>
+        </label>
+      </form>
+      <div id="board" class="dl-board" aria-live="polite">
+        <p class="dl-wait">Getting the tables…</p>
+      </div>
+    </section>
+
+    <section id="tables" class="dl-panel" role="tabpanel" aria-labelledby="tab-tables" hidden>
+      <label class="dl-field dl-find">
+        <span>Find a row</span>
+        <input id="find" type="search" spellcheck="false" autocapitalize="none" placeholder="tolls, the Old Bridge, rival…" />
+      </label>
+      <p class="dl-found" id="found" aria-live="polite"></p>
+      <div id="tables-body"></div>
+    </section>
+
+    <div class="dl-bar" id="bar">
+      <button type="button" class="button primary dl-deal" id="deal" disabled>Deal</button>
+    </div>
+  </main>
+</Base>
+
+<script>
+  import "../deal/deal.js";
+</script>

@@ -1,0 +1,171 @@
+/* /deal/: the world builder's tables and boards dealt from them, for Mo to
+   judge on his phone with one hand. One column, the Deal button at the
+   thumb, a faction drawn the way the World screen will hold one. Violet is
+   the GM's here, like everywhere: factions, their dice and their Secrets. */
+.deal { max-width: 46rem; margin: 0 auto; padding-top: 1.6rem; padding-bottom: 0; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.dl-head h1 { font-family: var(--display); font-weight: 600; font-size: clamp(2rem, 1.5rem + 2vw, 2.8rem); line-height: 1.1; letter-spacing: 0.02em; margin: 0; }
+.dl-lede { margin: 0.5rem 0 1.2rem; color: var(--muted); max-width: 38rem; text-wrap: pretty; }
+
+/* The two tabs, full width on a phone. */
+.dl-tabs { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--line); border-radius: 2px; margin-bottom: 1rem; background: var(--surface); }
+.dl-tabs button { min-height: 48px; border: 0; background: transparent; color: var(--muted); font: inherit; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.85rem; cursor: pointer; }
+.dl-tabs button + button { border-left: 1px solid var(--line); }
+.dl-tabs button[aria-selected="true"] { color: var(--ink); background: var(--panel); box-shadow: inset 0 -2px 0 var(--gold); }
+.dl-tabs button:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
+
+/* What to deal. */
+.dl-set { display: grid; gap: 0.85rem; margin-bottom: 1.4rem; }
+.dl-set fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
+.dl-set legend, .dl-field > span { display: block; margin-bottom: 0.3rem; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-ink); }
+.dl-seg { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 2px; background: var(--surface); }
+.dl-seg label { position: relative; display: grid; place-items: center; min-height: 48px; cursor: pointer; font-weight: 500; font-size: 0.95rem; color: var(--muted); }
+.dl-seg label + label { border-left: 1px solid var(--line-soft); }
+.dl-seg input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.dl-seg label:has(input:checked) { color: var(--on-gold); background: var(--button); font-weight: 700; }
+.dl-seg label:has(input:disabled) { color: var(--muted); opacity: 0.55; cursor: not-allowed; text-decoration: line-through; text-decoration-color: var(--line); }
+.dl-seg label:has(input:focus-visible) { outline: 2px solid var(--violet); outline-offset: -3px; }
+.dl-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.75rem; align-items: end; }
+.dl-mix { grid-template-columns: 1fr 1fr; }
+.dl-mix[hidden] { display: none; }
+.dl-field { display: block; min-width: 0; }
+.dl-field select, .dl-field input {
+  width: 100%; min-height: 48px; padding: 0 0.75rem; border: 1px solid var(--line); border-radius: 2px;
+  background: var(--surface); color: var(--ink); font: inherit; font-size: 1rem;
+}
+.dl-field select:focus-visible, .dl-field input:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
+.dl-field small { display: block; margin-top: 0.3rem; color: var(--muted); font-size: 0.85rem; line-height: 1.35; }
+.dl-seedfield input { font-family: var(--display); font-weight: 600; letter-spacing: 0.04em; }
+.dl-step { display: grid; grid-template-columns: 48px 2.6rem 48px; align-items: center; border: 1px solid var(--line); border-radius: 2px; background: var(--surface); }
+.dl-step button { min-height: 48px; border: 0; background: transparent; color: var(--ink); font: inherit; font-size: 1.4rem; line-height: 1; cursor: pointer; }
+.dl-step button:disabled { color: var(--muted); opacity: 0.45; cursor: not-allowed; }
+.dl-step button:focus-visible { outline: 2px solid var(--violet); outline-offset: -3px; }
+.dl-step output { text-align: center; font-weight: 800; font-size: 1.15rem; font-variant-numeric: tabular-nums; }
+
+/* The Deal button, sticky at the bottom where a thumb reaches it. */
+.dl-bar {
+  position: sticky; bottom: 0; z-index: 5; display: flex; justify-content: center;
+  margin: 1.5rem calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 0;
+  padding: 0.7rem max(16px, env(safe-area-inset-right, 0px)) max(0.7rem, env(safe-area-inset-bottom, 0px));
+  background: var(--bar-bg); border-top: 1px solid var(--line); backdrop-filter: blur(6px);
+}
+.dl-bar[hidden] { display: none; }
+.dl-deal { width: min(100%, 22rem); min-height: 52px; font-size: 1.05rem; font-weight: 700; letter-spacing: 0.04em; }
+.dl-deal:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.dl-wait { color: var(--muted); font-style: italic; }
+
+/* A board. */
+.dl-world { display: grid; gap: 1.6rem; }
+.dl-world-head { padding: 1rem 1.1rem 1.1rem; display: grid; gap: 0.55rem; }
+.dl-seed { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(1.35rem, 1.1rem + 1.2vw, 1.75rem); letter-spacing: 0.04em; line-height: 1.2; display: flex; flex-wrap: wrap; gap: 0 0.4rem; }
+.dl-seed i { color: var(--gold); font-style: normal; }
+.dl-recipe { margin: 0; color: var(--muted); }
+.dl-dials { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.35rem 1.1rem; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.dl-dials li { display: inline-flex; align-items: center; gap: 0.4rem; }
+.dl-pips { display: inline-flex; gap: 3px; }
+.dl-pips i { width: 9px; height: 9px; transform: rotate(45deg); border: 1.5px solid var(--violet); }
+.dl-pips i.on { background: var(--violet); }
+.dl-copy { justify-self: start; min-height: 44px; }
+
+.dl-sec h2, .dl-part { font-family: var(--display); font-weight: 600; font-size: 1.3rem; letter-spacing: 0.03em; margin: 0 0 0.7rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--line); }
+
+.dl-ask { margin: 0; display: grid; gap: 0.6rem; }
+.dl-ask dt, .dl-tension span, .dl-lines dt { font-weight: 700; font-size: 0.74rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--gold-ink); }
+.dl-ask dd { margin: 0.1rem 0 0; }
+.dl-tension { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 0.8rem; align-items: center; margin-top: 0.9rem; }
+.dl-tension .zd-die { width: 56px; height: 56px; }
+.dl-tension p { margin: 0; }
+.dl-tension span { display: block; }
+
+.dl-seats { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.5rem; }
+.dl-seats li { padding: 0.65rem 0.8rem; border: 1px solid var(--line-soft); border-left: 3px solid var(--gold); border-radius: 2px; background: var(--surface); }
+.dl-seats li.strange { border-left-color: var(--violet); }
+.dl-seats p { margin: 0; }
+.dl-seatname { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.6rem; }
+.dl-keep { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.dl-notice { color: var(--ink); font-style: italic; }
+.dl-held { font-size: 0.9rem; color: var(--muted); }
+
+/* A faction's card. */
+.dl-factions { display: grid; gap: 1rem; }
+.dl-fac { padding: 1rem 1.05rem 1.1rem; scroll-margin-top: calc(var(--bar) + 0.8rem); }
+.dl-fac:target { box-shadow: 0 0 0 2px var(--violet); }
+.dl-fac-head { display: grid; grid-template-columns: minmax(0, 1fr) 60px; gap: 0.6rem; align-items: start; }
+.dl-fac-head .zd-die { width: 60px; height: 60px; }
+.dl-fac h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.25rem; line-height: 1.2; letter-spacing: 0.02em; text-wrap: balance; }
+.dl-size { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.92rem; }
+.dl-about { margin: 0.8rem 0 0; font-weight: 500; }
+.dl-break { margin: 0.7rem 0 0; padding: 0.5rem 0.7rem; border-left: 3px solid var(--zd-harm); background: var(--panel); border-radius: 2px; }
+.dl-break b { display: block; font-size: 0.74rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--zd-harm-ink); }
+.dl-lines { margin: 0.9rem 0 0; display: grid; gap: 0.7rem; }
+.dl-lines dd { margin: 0.15rem 0 0; }
+.dl-lines dd > p { margin: 0; }
+.why { display: block; margin-top: 0.15rem; font-size: 0.86rem; font-style: italic; color: var(--muted); }
+.why::first-letter { text-transform: lowercase; }
+
+.dl-chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.dl-chip { display: inline-flex; flex-direction: column; justify-content: center; min-height: 36px; padding: 0.3rem 0.65rem; border: 1px solid var(--line); border-radius: 2px; background: var(--panel); line-height: 1.25; }
+.dl-chipname { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.2rem 0.45rem; font-style: italic; }
+.dl-chip.people { border-color: var(--violet); }
+.dl-plus { font-style: normal; font-weight: 800; font-size: 0.8rem; color: var(--on-gold); background: var(--violet); padding: 0 0.35rem; border-radius: 2px; }
+:root[data-theme="light"] .dl-plus { color: #fff; }
+.dl-chip.need { border-style: dashed; background: transparent; }
+.dl-note, .dl-does { font-style: normal; font-size: 0.8rem; color: var(--muted); }
+.dl-chip .why { font-size: 0.8rem; margin-top: 0.05rem; }
+.dl-extra { margin: 0.35rem 0 0; font-size: 0.88rem; color: var(--muted); }
+
+.dl-agenda { display: flex; align-items: center; gap: 0.55rem; margin: 0; }
+.dl-agenda .zd-die { width: 36px; height: 36px; }
+.dl-tags { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.35rem !important; }
+.dl-secret { padding: 0.5rem 0.7rem; border: 1px dashed var(--violet); border-radius: 2px; }
+.dl-secret p { margin: 0; }
+.dl-secret em { font-weight: 700; }
+.dl-secret p + p { margin-top: 0.2rem; color: var(--muted); font-size: 0.95rem; }
+.dl-offers, .dl-threads { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.4rem; }
+.dl-threads li, .dl-offers li { padding-left: 0.75rem; border-left: 3px solid var(--gold); }
+.dl-threads li.hostile, .dl-offers li.hostile { border-left-color: var(--zd-harm); }
+.dl-to { display: block; font-size: 0.82rem; color: var(--muted); }
+.dl-threads em { font-style: italic; }
+
+.dl-checks { margin: 0; color: var(--muted); font-size: 0.92rem; text-align: center; }
+
+/* Every table. */
+.dl-find { margin-bottom: 0.4rem; }
+.dl-found { min-height: 1.4em; margin: 0 0 0.8rem; color: var(--muted); font-size: 0.92rem; }
+.dl-partsec + .dl-partsec { margin-top: 1.8rem; }
+.dl-partsec[hidden] { display: none; }
+.dl-tnote { margin: -0.3rem 0 0.7rem; color: var(--muted); font-size: 0.92rem; }
+.dl-table { margin: 0 0 0.45rem; border: 1px solid var(--line); border-radius: 2px; background: var(--surface); }
+.dl-table[hidden] { display: none; }
+.dl-table > summary { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; min-height: 48px; padding: 0 0.9rem; cursor: pointer; font-weight: 700; list-style: none; }
+.dl-table > summary::-webkit-details-marker { display: none; }
+.dl-table > summary::after { content: ""; width: 9px; height: 9px; flex: none; margin-left: 0.2rem; border-right: 2px solid var(--gold); border-bottom: 2px solid var(--gold); transform: rotate(45deg) translateY(-3px); transition: transform 160ms ease; }
+.dl-table[open] > summary::after { transform: rotate(225deg) translate(-2px, -1px); }
+.dl-table > summary > span:first-child { flex: 1; }
+.dl-count { font-weight: 500; font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.dl-table > .dl-tnote { margin: 0; padding: 0 0.9rem 0.6rem; }
+.dl-rows { list-style: none; margin: 0; padding: 0 0.9rem 0.7rem; display: grid; gap: 0; }
+.dl-rows > li { padding: 0.45rem 0; border-top: 1px solid var(--line-soft); }
+.dl-rows > li[hidden] { display: none; }
+.dl-rows > li:first-child { border-top: 0; }
+.dl-rows > li.dl-group { padding-top: 0.9rem; font-weight: 700; font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-ink); border-top: 0; }
+.dl-group small { display: block; margin-top: 0.15rem; font-weight: 400; font-size: 0.85rem; letter-spacing: 0; text-transform: none; color: var(--muted); }
+.dl-w { display: block; }
+.dl-meta { display: block; font-size: 0.8rem; color: var(--muted); letter-spacing: 0.01em; }
+.dl-sub { display: block; font-size: 0.92rem; color: var(--ink); font-style: italic; }
+.dl-seeds { font-family: var(--display); letter-spacing: 0.04em; line-height: 1.9; }
+
+@media (min-width: 900px) {
+  .deal { max-width: 72rem; }
+  .dl-set { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); align-items: end; }
+  .dl-set .dl-regions { grid-column: 1 / -1; }
+  .dl-seedfield small { display: none; }
+  .dl-factions { grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr)); align-items: start; }
+  .dl-seats { grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); }
+  #tables { max-width: 46rem; margin: 0 auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dl-table > summary::after { transition: none; }
+}

@@ -60,6 +60,8 @@ const PAGES = [
   "/rules/appendix-c-every-lever-in-the-game/", "/rules/conflict/#s-defending", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
   "/characters/", "/characters/?c=check-vesk", "/characters/?c=check-vesk&t=sheet", "/characters/?c=check-vesk&t=rules", "/characters/?build", "/sheets/",
   "/account/", "/characters/?join", "/kit/",
+  // The world builder's tables, a board and every table, and the biggest board there is.
+  "/deal/", "/deal/?region=world&genre=medieval&factions=12&seed=ash-lantern-ford",
   // The table screen with no code yet, and with one that can't be right.
   "/table/", "/table/#not-a-code",
 ];

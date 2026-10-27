@@ -233,9 +233,12 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   redeal(T, W, "f:3:type");
   same(W.factions[3].secret, secret, "a locked Secret stays when the type before it's dealt again");
   const last = W.n - 1;
-  const cards = options(T, W, `f:${last}:type`, 3);
+  // On a board nothing's been dealt again on, since dealing another
+  // faction's type again changes what's left in the bag.
+  const fresh = dealWorld(T, { recipe: g.recipe, seed: "ash-lantern-ford", factions: 6 });
+  const cards = options(T, fresh, `f:${last}:type`, 3);
   same(new Set(cards.map((c) => c.id)).size, cards.length, "a screen's three cards are three different ones");
-  if (!W.fixes.some((f) => f.path === `f:${last}:type`)) same(cards[0]?.id, W.factions[last].type.id, "and the first is what dealing picks");
+  if (!fresh.fixes.some((f) => f.path === `f:${last}:type`)) same(cards[0]?.id, fresh.factions[last].type.id, "and the first is what dealing picks");
   same(SIZES, ["small", "local", "city", "great"], "the four sizes");
   // A Face: three different people, the first being what dealing picks, and
   // a new one when it's dealt again.

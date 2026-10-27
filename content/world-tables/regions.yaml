@@ -1,0 +1,45 @@
+# The five regions. Each says what a faction, a seat and a mini faction are at
+# that size, the region's words for the four sizes, the keep role each face of
+# a d6 picks for the founding's dice pool, and what pressure from one size up
+# looks like. Every pack's words sit inside these, so they're the same in
+# every genre.
+town:
+  name: Town
+  faction: "a gang, a guild or a big family"
+  seat: "a street, a building or a square"
+  mini: "a handful of people with one job"
+  sizes: { small: "a street", local: "a quarter", city: "half the town", great: "the whole town" }
+  d6: [passage, trade, craft, belief, office, crime]
+  pressure: "the lord the land belongs to, wanting a bigger cut"
+city:
+  name: City
+  faction: "an old family, a guild, a gang or a church"
+  seat: "a district, a gate or a hall"
+  mini: "a crew that does one thing"
+  sizes: { small: "a street", local: "a district", city: "the city", great: "the city and the land round it" }
+  d6: [passage, trade, office, belief, crime, knowledge]
+  pressure: "whoever rules the country, wanting its due"
+country:
+  name: Country
+  faction: "a great house, an order or a guild across the land"
+  seat: "a town, a pass, a forest or a fortress"
+  mini: "a village's worth of people"
+  sizes: { small: "a village", local: "a town", city: "a city and its lands", great: "the whole country" }
+  d6: [passage, land, ground, belief, office, trade]
+  pressure: "the country next door, watching for weakness"
+world:
+  name: World
+  faction: "a kingdom, a church or a league of traders"
+  seat: "a country, a sea or a mountain range"
+  mini: "a colony, a fleet or a city"
+  sizes: { small: "a city", local: "a province", city: "a kingdom", great: "half the world" }
+  d6: [land, trade, belief, office, passage, wonder]
+  pressure: "something from past the edge of the map"
+stars:
+  name: Stars
+  faction: "a company, a fleet or a world's government"
+  seat: "a station, a world or a route between them"
+  mini: "a ship and its crew"
+  sizes: { small: "a ship", local: "a station", city: "a world", great: "a whole system" }
+  d6: [passage, trade, labour, office, knowledge, wonder]
+  pressure: "the core worlds, wanting control"
