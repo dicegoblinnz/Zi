@@ -580,7 +580,7 @@ export function makeWorld(d) {
   function submit(kind, form, f) {
     const id = form.closest("[data-wb]")?.dataset.wb;
     if (!id) return;
-    if (kind.startsWith("w-p")) return P.submit(kind, form, f, id);
+    if (kind.startsWith("w-pg-")) return P.submit(kind, form, f, id);
     const doc = docOf(id);
     const fac = form.dataset.f ? find(doc, form.dataset.f) : null;
     const text = (name, max = MAX.line) => String(f.get(name) ?? "").replace(/\s+/g, " ").trim().slice(0, max);

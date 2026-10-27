@@ -1956,11 +1956,11 @@ try {
     await openPageFrom(mo.page, "Lord Aldous Vane");
     await wpFold(mo.page, "threat");
     await mo.page.click('.wp-ch [data-do="edit"]');
-    await mo.page.selectOption('form[data-form="w-pch"] select[name="ch"]', "5");
-    await mo.page.click('form[data-form="w-pch"] button[type="submit"]');
-    await mo.page.fill('form[data-form="w-padd"][data-l="tags"] input[name="text"]', "Proud");
-    await mo.page.selectOption('form[data-form="w-padd"][data-l="tags"] select[name="kind"]', "drives");
-    await mo.page.click('form[data-form="w-padd"][data-l="tags"] button[type="submit"]');
+    await mo.page.selectOption('form[data-form="w-pg-ch"] select[name="ch"]', "5");
+    await mo.page.click('form[data-form="w-pg-ch"] button[type="submit"]');
+    await mo.page.fill('form[data-form="w-pg-add"][data-l="tags"] input[name="text"]', "Proud");
+    await mo.page.selectOption('form[data-form="w-pg-add"][data-l="tags"] select[name="kind"]', "drives");
+    await mo.page.click('form[data-form="w-pg-add"][data-l="tags"] button[type="submit"]');
     await until(async () => { const v = await pageIn("Lord Aldous Vane"); return v?.ch === 5 && v.tags.some((t) => t.text === "Proud" && t.kind === "drives"); }, "Lord Vane at Challenge 5, Proud");
     has(await text(mo.page, ".wp-what"), "Proud", "and what Proud does, from Appendix B");
 
@@ -1970,8 +1970,8 @@ try {
     await openPageFrom(mo.page, "The Copper Baths");
     await wpFold(mo.page, "note");
     await mo.page.click('details[data-open^="wb-note-"] [data-do="edit"]');
-    await mo.page.fill('form[data-form="w-pset"][data-f="note"] textarea', "Orla owes the Rudd brothers more than she lets on.");
-    await mo.page.click('form[data-form="w-pset"][data-f="note"] button[type="submit"]');
+    await mo.page.fill('form[data-form="w-pg-set"][data-f="note"] textarea', "Orla owes the Rudd brothers more than she lets on.");
+    await mo.page.click('form[data-form="w-pg-set"][data-f="note"] button[type="submit"]');
     await until(async () => (await pageIn("The Copper Baths"))?.note.includes("Rudd brothers"), "Mo's note saved");
     await mo.page.click('.wb-show-card [data-do="pshow"]');
     await until(async () => (await playerWorld()).json?.world?.pages?.length === 1, "Kai's phone gets the Copper Baths");

@@ -1502,6 +1502,7 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
 p.wp-words, .wp-text { margin: 0; line-height: 1.45; overflow-wrap: anywhere; }
 .wp-aka { margin: 0.5rem 0 0; }
 .wb-badge.wp-hers { color: var(--muted); }
+.wb-show.wp-table { border: 1px solid var(--line); background: var(--surface); }
 .wp-tele { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 10px; }
 .wp-tele .zd-mini { width: 22px; height: 22px; margin-top: 2px; }
 .wp-clock { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 12px; margin: 0 0 0.3rem; }

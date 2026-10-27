@@ -206,7 +206,7 @@ export function apply(doc, op) {
         f.outs = [...new Set(op.v.filter((o) => OUTCOMES.includes(o)))].slice(0, 2);
         break;
       }
-      if (!Object.hasOwn(WORDS, op.f)) return false;
+      if (typeof op.f !== "string" || !Object.hasOwn(WORDS, op.f)) return false;
       const v = line(op.v, WORDS[op.f]);
       if (op.f === "name" && !v) return false;
       f[op.f] = v;

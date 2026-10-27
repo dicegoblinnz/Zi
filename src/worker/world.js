@@ -75,7 +75,11 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
     for (const op of ops) {
       if (op.n <= high) continue;
       top = Math.max(top, op.n);
-      changed = apply(doc, op) || changed;
+      // A change that can't be read is skipped, and still counted, so it
+      // can't hold up the ones behind it on her phone.
+      try {
+        changed = apply(doc, op) || changed;
+      } catch {}
     }
     if (top === high) break;
     if (changed) {

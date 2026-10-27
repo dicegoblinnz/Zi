@@ -56,7 +56,7 @@ Mo's answers (27 Oct): names link themselves (any page's or faction's name writt
 
 - Places and people are pages kept in the world beside the board, in the same document, so they're checked on the server, numbered per phone and kept offline the same way, and only the GM changes them.
 - A person's Secret is their hidden tag, the way a faction's is (Hide one, in Building a Threat), so the hidden tag goes to the crew with the Secret, on a second tap, the same as a faction's Secret.
-- A place brought in from Twenty Places brings every named person in its Who's here as a page of their own, with their Challenge and tags. A group (four bath-men) stays a line in Who's here. Someone the place says is the Bestiary's (Mister Quill, the Debt Collector) comes with that threat's tags, telegraphs, voice and hidden tag. Someone already in the world by that name isn't brought in twice.
+- A place brought in from Twenty Places brings every named person in its Who's here as a page of their own, with their Challenge and tags. A group (four bath-men) stays a line in Who's here, and someone named with their group (*Mags Tolley* and four smugglers) is a page of their own, with four smugglers as who they're with. Someone the place says is the Bestiary's (Mister Quill, the Debt Collector) comes with that threat's tags, telegraphs, voice and hidden tag. Someone already in the world by that name isn't brought in twice.
 - The Bestiary's threats can be brought in too, each as a person written as a threat, since that's the quickest way to one, and the Steeplands' Harbour Guild's Face is the Bestiary's Guildmaster.
 - A faction's Face offers a page for its person in a tap: the Bestiary's, if it has one by that name, or a new page named from the Face, with the rest of the Face as who they are.
 - A name that starts with The also links without it when what's left is two words or more (Harbour Guild), and The, A or An can start lowercase in a sentence. Each name links the first time it's in a part and never to the page it's on. A link to a page the crew hasn't been shown stays plain words on a player's phone, since their phone doesn't know the page is there. Every page and faction lists where else it comes up.
@@ -67,6 +67,7 @@ Mo's answers (27 Oct): names link themselves (any page's or faction's name writt
 - What each of a person's tags does, off Appendix B, sits under their tags.
 - The book's places, people and tables are in their own file (`public/world-book.json`) that the World screen fetches when it needs it and the service worker keeps, since a player's phone doesn't need them on every page.
 - A world holds 240 pages, and the whole of Twenty Places and the Bestiary fit with room to spare.
+- From the independent check (27 Oct): the build stops on a named person in a Who's here it can't read, a change that isn't words and numbers where they belong is turned away, the Worker skips a change it can't read so it can't hold up the ones behind it, and names link without a lookbehind, so the links (and a faction's page) work on older iPhones. Hiding a page and showing it again brings back the parts the crew had been shown, the same as a faction.
 
 ## The stages
 

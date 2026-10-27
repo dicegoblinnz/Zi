@@ -66,23 +66,26 @@ export const isPageOp = (op) => typeof op?.o === "string" && op.o.startsWith("p-
 // so reading a big world back stays quick on the Worker.
 const PLAIN = /^[\x20-\x7e\u00a0-\u024f\u2010-\u2026\u00d7]*$/;
 const PLAIN_PARAS = /^[\n\x20-\x7e\u00a0-\u024f\u2010-\u2026\u00d7]*$/;
+// Words are words, a number becomes its digits, and anything else is nothing.
+const str = (v) => (typeof v === "string" ? v : typeof v === "number" && Number.isFinite(v) ? String(v) : "");
 const one = (v, max) => {
   if (typeof v === "string" && v.length <= max && PLAIN.test(v) && !/\s\s|^\s|\s$/.test(v)) return v;
-  return String(v ?? "").normalize("NFC").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
+  return str(v).normalize("NFC").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
 };
 // Words that keep their paragraphs: a line break stays, and no more than one
 // blank line between paragraphs.
 const paras = (v, max) => {
   if (typeof v === "string" && v.length <= max && PLAIN_PARAS.test(v) && !/\n\n\n| \n|\n | {2}|^\s|\s$/.test(v)) return v;
-  return String(v ?? "").normalize("NFC").replace(/\r\n?/g, "\n").replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, " ").split("\n").map((l) => l.replace(/\s+/g, " ").trim()).join("\n").replace(/\n{3,}/g, "\n\n").trim().slice(0, max);
+  return str(v).normalize("NFC").replace(/\r\n?/g, "\n").replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, " ").split("\n").map((l) => l.replace(/\s+/g, " ").trim()).join("\n").replace(/\n{3,}/g, "\n\n").trim().slice(0, max);
 };
+const num = (v) => (typeof v === "number" ? v : typeof v === "string" && v.trim() ? Number(v) : NaN);
 const whole = (v, lo, hi, or) => {
-  const n = Number(v);
+  const n = num(v);
   return Number.isInteger(n) && n >= lo && n <= hi ? n : or;
 };
-const isId = (v) => ID.test(String(v ?? ""));
-const dieOr = (v, or) => (DICE.includes(Number(v)) ? Number(v) : or);
-const akaOf = (v) => [...new Set((Array.isArray(v) ? v : String(v ?? "").split(",")).map((x) => one(x, PMAX.name)).filter(Boolean))].slice(0, PMAX.aka);
+const isId = (v) => typeof v === "string" && ID.test(v);
+const dieOr = (v, or) => (DICE.includes(num(v)) ? num(v) : or);
+const akaOf = (v) => [...new Set((Array.isArray(v) ? v : str(v).split(",")).map((x) => one(x, PMAX.name)).filter(Boolean))].slice(0, PMAX.aka);
 
 // A line on one of a page's lists, tidied, or null if it can't go on.
 function itemOf(l, x) {
@@ -164,7 +167,7 @@ export function applyPage(doc, op) {
       doc.pages.splice(doc.pages.indexOf(p), 1);
       return true;
     case "p-set": {
-      if (!p) return false;
+      if (!p || typeof op.f !== "string") return false;
       if (Object.hasOwn(LINES, op.f)) {
         const v = one(op.v, LINES[op.f]);
         if (op.f === "name" && !v) return false;
@@ -190,7 +193,7 @@ export function applyPage(doc, op) {
     }
     case "p-edit": {
       const it = list?.find((x) => x.id === op.lid);
-      if (!it || op.f === "id" || !Object.hasOwn(it, op.f)) return false;
+      if (!it || typeof op.f !== "string" || op.f === "id" || !Object.hasOwn(it, op.f)) return false;
       if ((op.f === "d" && !DICE.includes(Number(op.v))) || (op.f === "x" && whole(op.v, 1, PMAX.x, 0) === 0) || (op.f === "kind" && !TAG_KINDS.includes(op.v))) return false;
       const next = itemOf(op.l, { ...it, [op.f]: op.v });
       if (!next) return false;
@@ -304,7 +307,9 @@ export function linker(doc, hrefOf) {
     for (const a of p.aka ?? []) put(a, entry);
   }
   const names = [...by.keys()].sort((a, b) => b.length - a.length);
-  const re = names.length ? new RegExp(`(?<![\\p{L}\\p{N}])(?:${names.map(pattern).join("|")})(?![\\p{L}\\p{N}])`, "gu") : null;
+  // The name and what's just before it (the start, or anything but a letter
+  // or digit), since older phones can't look behind.
+  const re = names.length ? new RegExp(`(^|[^\\p{L}\\p{N}])(${names.map(pattern).join("|")})(?![\\p{L}\\p{N}])`, "gu") : null;
   const at = (m) => by.get(keyName(m)) ?? null;
 
   // Words with their links: each name linked the first time it's in them,
@@ -318,11 +323,12 @@ export function linker(doc, hrefOf) {
       let last = 0;
       if (re) {
         for (const m of s.matchAll(re)) {
-          const e = at(m[0]);
+          const e = at(m[2]);
           if (!e || used.has(e.id)) continue;
           used.add(e.id);
-          out += `${esc(s.slice(last, m.index))}<a class="wl" href="${esc(hrefOf(e))}" data-act="w" data-do="nav">${esc(m[0])}</a>`;
-          last = m.index + m[0].length;
+          const start = m.index + m[1].length;
+          out += `${esc(s.slice(last, start))}<a class="wl" href="${esc(hrefOf(e))}" data-act="w" data-do="nav">${esc(m[2])}</a>`;
+          last = start + m[2].length;
         }
       }
       out += esc(s.slice(last));
@@ -348,7 +354,7 @@ export function mentionsOf(doc, target) {
     if (rest) names.push(rest);
   }
   if (!names.length) return [];
-  const re = new RegExp(`(?<![\\p{L}\\p{N}])(?:${names.map((n) => pattern(keyName(n))).join("|")})(?![\\p{L}\\p{N}])`, "u");
+  const re = new RegExp(`(?:^|[^\\p{L}\\p{N}])(?:${names.map((n) => pattern(keyName(n))).join("|")})(?![\\p{L}\\p{N}])`, "u");
   const out = [];
   for (const f of doc.factions ?? []) if (f.id !== target.id && re.test(textOf(f))) out.push({ kind: "f", id: f.id, name: f.name });
   for (const p of doc.pages ?? []) if (p.id !== target.id && re.test(textOf(p))) out.push({ kind: "p", id: p.id, name: p.name, page: p });

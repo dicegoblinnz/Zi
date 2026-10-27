@@ -266,7 +266,7 @@ export function makePlaces(w) {
 
   function newPlace() {
     const B = BOOK;
-    return w.fold("pnew-place", "A place of your own", "Written by you, with the book’s table to roll on", `<form class="cc-form pt-form wp-new" data-form="w-pnew" data-kind="place">
+    return w.fold("pnew-place", "A place of your own", "Written by you, with the book’s table to roll on", `<form class="cc-form pt-form wp-new" data-form="w-pg-new" data-kind="place">
       <label class="cc-field">Its name <input name="name" maxlength="${PMAX.name}" autocomplete="off" required></label>
       ${field("line", "What it is", "", PMAX.line, ' placeholder="like A bathhouse where the city’s deals get made"')}
       <label class="cc-field">Its Challenge, to Study it and the die it telegraphs with <select name="ch">${chOptions(3)}</select></label>
@@ -278,7 +278,7 @@ export function makePlaces(w) {
   function newPerson() {
     const B = BOOK;
     const what = B ? B.tables.what.map((x, i) => `<option value="${i}">${esc(x.name)}${x.ch ? `, Challenge ${x.ch}` : ""}</option>`).join("") : "";
-    return w.fold("pnew-person", "Someone of your own", "With the book’s tables, and as a threat if they need one", `<form class="cc-form pt-form wp-new" data-form="w-pnew" data-kind="person">
+    return w.fold("pnew-person", "Someone of your own", "With the book’s tables, and as a threat if they need one", `<form class="cc-form pt-form wp-new" data-form="w-pg-new" data-kind="person">
       <label class="cc-field">Their name <input name="name" maxlength="${PMAX.name}" autocomplete="off" required></label>
       ${field("line", "Who they are", "", PMAX.line, ' placeholder="like the moneylender"')}
       ${area("look", "What you notice first", "", PMAX.look, 2)}
@@ -332,12 +332,12 @@ export function makePlaces(w) {
   function lineForm(p, l, x) {
     const del = `<button type="button" class="button danger" data-act="w" data-do="pdrop" data-id="${esc(p.id)}" data-l="${l}" data-lid="${esc(x.id)}">${sure(`pdrop-${x.id}`, "Tap again to take it off", "Take it off")}</button>`;
     const extra = l === "tags" ? `${kindSelect(x.kind)}${timesSelect(x.x)}` : l === "teles" ? `<label class="cc-field">Its die ${dieSelect("d", x.d)}</label>${field("at", "What it’s aimed at", x.at, PMAX.name, ' placeholder="like Defend, or a stake"')}` : "";
-    return `<form class="cc-form pt-form" data-form="w-pline" data-id="${esc(p.id)}" data-l="${l}" data-lid="${esc(x.id)}">
+    return `<form class="cc-form pt-form" data-form="w-pg-line" data-id="${esc(p.id)}" data-l="${l}" data-lid="${esc(x.id)}">
       <label class="cc-field">Its words <input name="text" maxlength="${l === "tags" ? PMAX.name : PMAX.item}" autocomplete="off" required value="${esc(x.text)}"></label>${extra}${saveRow(del)}</form>`;
   }
   function addForm(p, l, label, { list = "", roll = "" } = {}) {
     const extra = l === "tags" ? `${kindSelect()}${timesSelect()}` : l === "teles" ? `<label class="cc-field">Its die ${dieSelect("d", p.ch > 0 ? dieOf(p.ch) : 6)}</label>${field("at", "What it’s aimed at", "", PMAX.name, ' placeholder="like Defend, or a stake"')}` : "";
-    return `<form class="cc-form pt-form pt-add" data-form="w-padd" data-id="${esc(p.id)}" data-l="${l}">
+    return `<form class="cc-form pt-form pt-add" data-form="w-pg-add" data-id="${esc(p.id)}" data-l="${l}">
       <label class="cc-field">${label} <input name="text" maxlength="${l === "tags" ? PMAX.name : PMAX.item}" autocomplete="off"${list ? ` list="${list}"` : ""}></label>${extra}
       <div class="cc-row"><button type="submit" class="button">Add it</button>${roll}</div></form>`;
   }
@@ -348,7 +348,7 @@ export function makePlaces(w) {
   // One word part: what she wrote, with Change (hers), or the form.
   function wordPart(p, f, label, gm, L, { max = PMAX.words, longer = false, place = "" } = {}) {
     const key = ek(p, f);
-    if (gm && ui().editing === key) return `<form class="cc-form pt-form wb-editing" data-form="w-pset" data-id="${esc(p.id)}" data-f="${f}">${longer ? area("v", label, p[f], max, 4) : field("v", label, p[f], max, place ? ` placeholder="${esc(place)}"` : "")}${saveRow()}</form>`;
+    if (gm && ui().editing === key) return `<form class="cc-form pt-form wb-editing" data-form="w-pg-set" data-id="${esc(p.id)}" data-f="${f}">${longer ? area("v", label, p[f], max, 4) : field("v", label, p[f], max, place ? ` placeholder="${esc(place)}"` : "")}${saveRow()}</form>`;
     const body = p[f] ? (longer ? `<div class="wp-words">${L.block(p[f], p.id)}</div>` : `<p class="wp-words">${L.rich(p[f], p.id)}</p>`) : '<p class="cc-small">Nothing yet.</p>';
     return `${body}${gm ? reword(key, p[f] ? "Change it" : "Write it") : ""}`;
   }
@@ -357,7 +357,7 @@ export function makePlaces(w) {
   // groups, and what each tag does from Appendix B.
   function threatBody(id, p, gm, L) {
     const key = ek(p, "ch");
-    const chForm = gm && ui().editing === key ? `<form class="cc-form pt-form wb-editing" data-form="w-pch" data-id="${esc(p.id)}"><label class="cc-field">Their Challenge <select name="ch">${chOptions(p.ch)}</select></label>${saveRow()}</form>` : "";
+    const chForm = gm && ui().editing === key ? `<form class="cc-form pt-form wb-editing" data-form="w-pg-ch" data-id="${esc(p.id)}"><label class="cc-field">Their Challenge <select name="ch">${chOptions(p.ch)}</select></label>${saveRow()}</form>` : "";
     const head = chForm || `<div class="wp-ch">${p.ch > 0 ? `<p><b>${chLabel(p.ch)}</b>. They telegraph with their Challenge die.</p>` : '<p class="cc-small">No Challenge yet.</p>'}${gm ? reword(key, p.ch ? "Change it" : "Give them one") : ""}</div>`;
     const groups = TAG_HEADS.map(([k, label]) => {
       const tags = p.tags.filter((t) => t.kind === k);
@@ -381,7 +381,7 @@ export function makePlaces(w) {
   function secretBody(p, gm, L) {
     const key = ek(p, "secret");
     if (gm && ui().editing === key) {
-      return `<form class="cc-form pt-form wb-editing" data-form="w-psecret" data-id="${esc(p.id)}">${field("secret", "Its Secret, the hidden tag", p.secret, PMAX.secret)}${area("more", "The rest of it", p.more, PMAX.more, 4)}
+      return `<form class="cc-form pt-form wb-editing" data-form="w-pg-secret" data-id="${esc(p.id)}">${field("secret", "Its Secret, the hidden tag", p.secret, PMAX.secret)}${area("more", "The rest of it", p.more, PMAX.more, 4)}
         <label class="pt-check"><input type="checkbox" name="weak"${p.weak ? " checked" : ""}> It’s the weak point</label>${saveRow()}</form>`;
     }
     const body = p.secret ? `<div class="wb-secret wp-secret"><p><em>${esc(p.secret)}</em>${p.weak ? " (weak point)" : ""}.</p>${L.block(p.more, p.id)}</div>` : '<p class="cc-small">No Secret written yet.</p>';
@@ -419,7 +419,7 @@ export function makePlaces(w) {
     // Challenge (a place's) and what it's like or what you notice first.
     const wordsKey = ek(p, "words");
     const words = gm && ui().editing === wordsKey
-      ? `<form class="cc-form pt-form wb-editing" data-form="w-pwords" data-id="${esc(p.id)}">
+      ? `<form class="cc-form pt-form wb-editing" data-form="w-pg-words" data-id="${esc(p.id)}">
         <label class="cc-field">${place ? "Its name" : "Their name"} <input name="name" maxlength="${PMAX.name}" autocomplete="off" required value="${esc(p.name)}"></label>
         ${field("aka", "Other names, if the crew might call them something else", p.aka.join(", "), PMAX.name * PMAX.aka, ' placeholder="like Orla, with commas between"')}
         ${field("line", place ? "What it is" : "Who they are", p.line, PMAX.line)}
@@ -427,7 +427,7 @@ export function makePlaces(w) {
         ${area("look", place ? "What it’s like inside" : "What you notice first", p.look, PMAX.look, 4)}${saveRow()}</form>`
       : `${p.look ? `<div class="wp-look">${L.block(p.look, p.id)}</div>` : gm ? `<p class="cc-small">${place ? "Nothing yet about what it’s like inside." : "Nothing yet about what you notice first."}</p>` : ""}
         ${p.aka.length ? `<p class="cc-small wp-aka">Also called ${p.aka.map((a) => esc(a)).join(", ")}</p>` : ""}
-        ${gm ? reword(wordsKey, place ? "Change its name, what it is and what it’s like" : "Change their name, who they are and what you notice") : ""}`;
+        ${gm ? reword(wordsKey, place ? "Change its name and what it says" : "Change their name and what it says") : ""}`;
     const card = gm || p.look || p.aka.length || (p.ch > 0 && chShown);
     const head = `<header class="cc-camp-head wb-head"><p class="kicker is-gm">${place ? "Place" : "Person"}</p><h1>${esc(p.name)}</h1>${p.line ? `<p class="wp-line">${L.rich(p.line, p.id)}${place && !/[.?!”]$/.test(p.line) ? "." : ""}</p>` : ""}</header>
       ${card ? `<div class="wb-card card wp-card" data-glow="${w.lit(id).includes(p.id) ? "1" : ""}">
@@ -452,7 +452,7 @@ export function makePlaces(w) {
       if (gm || p.shown.clock) {
         const key = ek(p, "clock");
         const body = gm && ui().editing === key
-          ? `<form class="cc-form pt-form wb-editing" data-form="w-pclock" data-id="${esc(p.id)}"><label class="cc-field">Its die ${dieSelect("clockD", p.clockD, true)}</label>${field("clock", "What happens when it runs out", p.clock, PMAX.words)}${saveRow()}</form>`
+          ? `<form class="cc-form pt-form wb-editing" data-form="w-pg-clock" data-id="${esc(p.id)}"><label class="cc-field">Its die ${dieSelect("clockD", p.clockD, true)}</label>${field("clock", "What happens when it runs out", p.clock, PMAX.words)}${saveRow()}</form>`
           : `${p.clockD || p.clock ? `<div class="wp-clock">${p.clockD ? kitDie(p.clockD, { own: "them", hide: true }) : ""}<p>${p.clockD ? `<b>d${p.clockD}</b> ` : ""}${L.rich(p.clock, p.id)}</p></div>` : '<p class="cc-small">No scene clock yet.</p>'}${gm ? reword(key, p.clockD ? "Change it" : "Give it one") : ""}`;
         parts.push(fold(`clock-${p.id}`, "Scene clock", p.clockD ? `d${p.clockD}${p.clock ? `: ${esc(flat(p.clock).slice(0, 60))}${p.clock.length > 60 ? "…" : ""}` : ""}` : "None", `${show("clock")}<p class="cc-lead">A die on the whole scene, face up from the start. It steps down, and past d2 the scene turns.</p>${body}`, gm ? badge(p, "clock") : ""));
       }
@@ -684,7 +684,7 @@ export function makePlaces(w) {
     const text = (name, max = PMAX.words) => String(f.get(name) ?? "").replace(/\s+/g, " ").trim().slice(0, max);
     const long = (name, max) => String(f.get(name) ?? "").replace(/\r\n?/g, "\n").trim().slice(0, max);
     w.setEditing("");
-    if (kind === "w-pnew") {
+    if (kind === "w-pg-new") {
       const pk = form.dataset.kind === "person" ? "person" : "place";
       const name = text("name", PMAX.name);
       if (!name) return d.toast(pk === "place" ? "Give it a name first." : "Give them a name first.", false);
@@ -713,26 +713,26 @@ export function makePlaces(w) {
       const real = ops.filter((op) => JSON.stringify(op.v) !== JSON.stringify(op.f === "aka" ? p.aka : p[op.f]));
       if (!real.length || !edit(id, real, say)) d.render();
     };
-    if (kind === "w-pwords") {
+    if (kind === "w-pg-words") {
       const name = text("name", PMAX.name);
       if (!name) return d.toast(p.kind === "place" ? "It needs a name." : "They need a name.", false);
       const ops = [{ o: "p-set", id: p.id, f: "name", v: name }, { o: "p-set", id: p.id, f: "aka", v: text("aka", PMAX.name * PMAX.aka).split(",").map((x) => x.trim()).filter(Boolean) }, { o: "p-set", id: p.id, f: "line", v: text("line", PMAX.line) }, { o: "p-set", id: p.id, f: "look", v: long("look", PMAX.look) }];
       if (p.kind === "place") ops.push({ o: "p-set", id: p.id, f: "ch", v: Number(f.get("ch")) || 0 });
       return changed(ops, `${bare(name)}’s changed.`);
     }
-    if (kind === "w-pset") {
+    if (kind === "w-pg-set") {
       const k = form.dataset.f;
       if (!["want", "twist", "voice", "elsewhere", "rules", "note"].includes(k)) return d.render();
       const v = ["rules", "note"].includes(k) ? long("v", k === "note" ? PMAX.note : PMAX.rules) : text("v", k === "elsewhere" ? PMAX.elsewhere : PMAX.words);
       return changed([{ o: "p-set", id: p.id, f: k, v }], k === "note" ? "Your note’s saved. Only you see it." : `Changed on ${bare(p.name)}.`);
     }
-    if (kind === "w-pclock") return changed([{ o: "p-set", id: p.id, f: "clockD", v: Number(f.get("clockD")) || 0 }, { o: "p-set", id: p.id, f: "clock", v: text("clock") }], `${bare(p.name)}’s scene clock is changed.`);
-    if (kind === "w-psecret") return changed([{ o: "p-set", id: p.id, f: "secret", v: text("secret", PMAX.secret).replace(/[.!?]+$/, "") }, { o: "p-set", id: p.id, f: "more", v: long("more", PMAX.more) }, { o: "p-set", id: p.id, f: "weak", v: f.get("weak") === "on" }], `${bare(p.name)}’s Secret is changed.`);
-    if (kind === "w-pch") return changed([{ o: "p-set", id: p.id, f: "ch", v: Number(f.get("ch")) || 0 }], `${bare(p.name)}’s Challenge is changed.`);
+    if (kind === "w-pg-clock") return changed([{ o: "p-set", id: p.id, f: "clockD", v: Number(f.get("clockD")) || 0 }, { o: "p-set", id: p.id, f: "clock", v: text("clock") }], `${bare(p.name)}’s scene clock is changed.`);
+    if (kind === "w-pg-secret") return changed([{ o: "p-set", id: p.id, f: "secret", v: text("secret", PMAX.secret).replace(/[.!?]+$/, "") }, { o: "p-set", id: p.id, f: "more", v: long("more", PMAX.more) }, { o: "p-set", id: p.id, f: "weak", v: f.get("weak") === "on" }], `${bare(p.name)}’s Secret is changed.`);
+    if (kind === "w-pg-ch") return changed([{ o: "p-set", id: p.id, f: "ch", v: Number(f.get("ch")) || 0 }], `${bare(p.name)}’s Challenge is changed.`);
     const l = form.dataset.l;
     if (!PLISTS[p.kind].includes(l)) return d.render();
     const max = l === "tags" ? PMAX.name : PMAX.item;
-    if (kind === "w-padd") {
+    if (kind === "w-pg-add") {
       const words = text("text", max);
       if (!words) return d.toast("Write it in first.", false);
       if (p[l].length >= PMAX.list) return d.toast(`That’s ${PMAX.list} already, which is as many as a page holds.`, false);
@@ -742,7 +742,7 @@ export function makePlaces(w) {
       if (edit(id, [{ o: "p-add", id: p.id, l, item: it }], `On ${bare(p.name)} now.`)) form.reset();
       return;
     }
-    if (kind === "w-pline") {
+    if (kind === "w-pg-line") {
       const x = p[l].find((y) => y.id === form.dataset.lid);
       if (!x) return d.render();
       const words = text("text", max);
