@@ -211,7 +211,7 @@ ties:
   - { kind: ally, text: "{b} kept our people fed in the hungry year", back: "We fed {b}'s people in the hungry year" }
   - { kind: debt, text: "{b} took a share of {res} on credit", back: "We took a share of {res} from {b} on credit" }
   - { kind: debt, text: "{b} lent us money when nobody else would", back: "We lent {b} money when nobody else would" }
-  - { kind: debt, text: "{b} paid our ransom once", back: "We paid {b}'s ransom once, and they haven't forgotten" }
+  - { kind: debt, text: "{b} paid our ransom once", back: "We paid {b}'s ransom once, and it hasn't forgotten" }
   - { kind: debt, text: "We still owe {b} for the roof over our heads", back: "We built for {b} on a handshake" }
   - { kind: wildcard, bond: bond, text: "{b} saved our founder's life" }
   - { kind: wildcard, bond: bond, text: "{b} kept our secret when it could've sold it" }

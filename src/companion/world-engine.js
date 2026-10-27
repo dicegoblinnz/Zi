@@ -163,7 +163,7 @@ export function fill(tpl, vals) {
     if (at > 0) s = typeof v === "object" && v.name ? s.replace(/^The /, "the ") : s.replace(/^(The|A|An) /, (x) => x.toLowerCase()).replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase());
     // A name that already has its The after one doesn't take a second
     // (The {seat} Company on the Old Bridge is the Old Bridge Company).
-    if (/\b[Tt]he $/.test(tpl.slice(Math.max(0, at - 4), at))) s = s.replace(/^[Tt]he /, "");
+    if (/(^|[^\p{L}])[Tt]he $/u.test(String(tpl).slice(0, at))) s = s.replace(/^[Tt]he /, "");
     if (!poss) return s;
     if (/['’]s$/.test(s)) return s;
     return /s$/.test(s) ? s + poss[0] : s + poss;
@@ -435,10 +435,18 @@ function candidates(T, W, path, { only = null } = {}) {
     const can = (aim) => aim === "seat" || (aim === "rival" && others.length) || (aim === "res" && others.some((j) => W.factions[j].res?.length)) || (aim === "asset" && others.some((j) => W.factions[j].assets?.length));
     return pool(P.agendas.filter((r) => r.aims.every(can)), "agenda").map((x) => ofRow(x, { die: x.r.die, aims: x.r.aims }));
   }
+  // A name's one to four words the way it reads on the card, its seat and
+  // all, so there's never a Lords of the Street of Smiths.
   if (b === "name") {
     const kind = f.type?.role;
-    const mine = P.names.filter((r) => !r.role || r.role === kind);
-    return pool(mine.length ? mine : P.names, "name").map((x) => ofRow(x, { why: "", by: null }));
+    const seat = card.seat ? { text: card.seat.text, name: true } : "";
+    const short = (r) => fill(r.text, { seat }).split(/\s+/).filter(Boolean).length <= 4;
+    const mine = (r) => !r.role || r.role === kind;
+    for (const test of [(r) => mine(r) && short(r), short, mine, () => true]) {
+      const got = pool(P.names.filter(test), "name");
+      if (got.length) return got.map((x) => ofRow(x, { why: "", by: null }));
+    }
+    return [];
   }
   return [];
 }
@@ -491,9 +499,9 @@ function dealAssets(T, W, i, rand, { only = null } = {}) {
   const rows = P.assets.filter((r) => fits(r, card, board));
   const out = [];
   const leaned = (r) => card.leans.has(r.role);
-  const one = (power, only = null) => {
+  const one = (power, test = null) => {
     const cands = rows
-      .filter((r) => r.power === power && !out.some((o) => o.role === r.role) && (power || !held.has(r.role)) && (!only || only(r)))
+      .filter((r) => r.power === power && !out.some((o) => o.role === r.role) && (power || !held.has(r.role)) && (!test || test(r)))
       .map((r) => {
         const fit = fitOf(r, card, board);
         return { w: weightOf(W, r, fit) * (elsewhere.has(r.id) ? USED : 1), r, fit };

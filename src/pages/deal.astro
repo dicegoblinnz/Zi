@@ -43,6 +43,7 @@ const REGIONS = [
               </label>
             ))}
           </div>
+          <small class="dl-hint" id="region-hint"></small>
         </fieldset>
         <div class="dl-row">
           <label class="dl-field">
@@ -74,7 +75,8 @@ const REGIONS = [
           <small id="seed-hint">Type one to deal it again, or leave it and Deal gives a new one.</small>
         </label>
       </form>
-      <div id="board" class="dl-board" aria-live="polite">
+      <p class="visually-hidden" id="dealt" role="status"></p>
+      <div id="board" class="dl-board">
         <p class="dl-wait">Getting the tables…</p>
       </div>
     </section>

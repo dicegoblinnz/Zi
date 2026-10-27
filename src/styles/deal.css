@@ -35,7 +35,8 @@
   background: var(--surface); color: var(--ink); font: inherit; font-size: 1rem;
 }
 .dl-field select:focus-visible, .dl-field input:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
-.dl-field small { display: block; margin-top: 0.3rem; color: var(--muted); font-size: 0.85rem; line-height: 1.35; }
+.dl-field small, .dl-hint { display: block; margin-top: 0.3rem; color: var(--muted); font-size: 0.85rem; line-height: 1.35; }
+.dl-hint[hidden] { display: none; }
 .dl-seedfield input { font-family: var(--display); font-weight: 600; letter-spacing: 0.04em; }
 .dl-step { display: grid; grid-template-columns: 48px 2.6rem 48px; align-items: center; border: 1px solid var(--line); border-radius: 2px; background: var(--surface); }
 .dl-step button { min-height: 48px; border: 0; background: transparent; color: var(--ink); font: inherit; font-size: 1.4rem; line-height: 1; cursor: pointer; }
@@ -155,7 +156,8 @@
 .dl-w { display: block; }
 .dl-meta { display: block; font-size: 0.8rem; color: var(--muted); letter-spacing: 0.01em; }
 .dl-sub { display: block; font-size: 0.92rem; color: var(--ink); font-style: italic; }
-.dl-seeds { font-family: var(--display); letter-spacing: 0.04em; line-height: 1.9; }
+.dl-rows.dl-seeds { display: flex; flex-wrap: wrap; gap: 0.15rem 1rem; padding-top: 0.3rem; }
+.dl-seeds > li { border-top: 0; padding: 0.2rem 0; font-family: var(--display); letter-spacing: 0.04em; }
 
 @media (min-width: 900px) {
   .deal { max-width: 72rem; }

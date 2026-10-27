@@ -63,25 +63,32 @@ const genreName = (r) => {
 
 // ── The controls.
 function drawControls() {
+  const none = [];
   for (const input of $$('input[name="region"]')) {
-    const any = Object.values(T.genres).some((g) => dealsAt(g, input.value)) || Object.keys(T.eras).some((era) => canDeal(T, { region: input.value, era }));
+    const any = Object.keys(T.eras).some((era) => canDeal(T, { region: input.value, era }));
     input.disabled = !any;
     input.checked = input.value === want.region;
-    input.closest("label").title = any ? "" : "Nothing deals here till its packs are in";
+    if (!any) none.push(T.regions[input.value]?.name ?? input.value);
   }
+  const hint = $("#region-hint");
+  hint.hidden = !none.length;
+  hint.textContent = none.length === 1 ? `${none[0]} has nothing to deal till its packs are in.` : none.length ? `${none.slice(0, -1).join(", ")} and ${none.at(-1)} have nothing to deal till their packs are in.` : "";
   const genre = $("#genre");
   genre.innerHTML =
     Object.values(T.genres)
       .map((g) => `<option value="${esc(g.id)}"${dealsAt(g, want.region) ? "" : " disabled"}>${esc(g.name)}${dealsAt(g, want.region) ? "" : " (not in yet)"}</option>`)
       .join("") + `<option value="${MIX}">Mix your own</option>`;
+  // A genre that doesn't deal at the region gives way to one that does. Where
+  // nothing deals at all it stays as it is, so the next region deals it.
+  const anyHere = Object.keys(T.eras).some((era) => canDeal(T, { region: want.region, era }));
   if (want.genre !== MIX && !(T.genres[want.genre] && dealsAt(T.genres[want.genre], want.region))) {
-    want.genre = Object.values(T.genres).find((g) => dealsAt(g, want.region))?.id ?? MIX;
+    want.genre = Object.values(T.genres).find((g) => dealsAt(g, want.region))?.id ?? (anyHere ? MIX : T.genres[want.genre] ? want.genre : "medieval");
   }
   genre.value = want.genre;
   const mix = want.genre === MIX;
   $("#mix").hidden = !mix;
   if (mix) {
-    if (!want.era || !T.eras[want.era]) want.era = Object.keys(T.eras).find((era) => canDeal(T, { region: want.region, era })) ?? Object.keys(T.eras)[0];
+    if (!want.era || !canDeal(T, { region: want.region, era: want.era })) want.era = Object.keys(T.eras).find((era) => canDeal(T, { region: want.region, era })) ?? (T.eras[want.era] ? want.era : Object.keys(T.eras)[0]);
     $("#era").innerHTML = Object.entries(T.eras)
       .map(([id, name]) => `<option value="${esc(id)}"${canDeal(T, { region: want.region, era: id }) ? "" : " disabled"}>${esc(name)}${canDeal(T, { region: want.region, era: id }) ? "" : " (not in yet)"}</option>`)
       .join("");
@@ -166,7 +173,7 @@ function drawFaction(W, C, f, i, reg, seat) {
   const assets = f.assets.map((a, k) => {
     const pick = a.off ? null : w.assets?.[k];
     const cls = a.off ? "dl-chip need" : a.power ? "dl-chip people" : "dl-chip";
-    const note = a.off ? `<span class="dl-note">a need, with nothing paying for it</span>` : a.power ? `<span class="dl-plus" aria-label="adds 1 Power">+1</span>` : "";
+    const note = a.off ? `<span class="dl-note">a need, with nothing paying for it</span>` : a.power ? `<span class="dl-plus">+1 Power</span>` : "";
     return `<li class="${cls}"><span class="dl-chipname">${esc(a.text)}${note}</span>${!a.power && a.does ? `<span class="dl-does">${esc(a.does)}</span>` : ""}${why(pick)}</li>`;
   });
   const ag = f.agendas[0];
@@ -199,7 +206,17 @@ const cap = (s) => String(s ?? "").charAt(0).toUpperCase() + String(s ?? "").sli
 // ── Dealing.
 function deal({ fresh = true } = {}) {
   const r = recipe();
-  if (!r || !canDeal(T, r)) return;
+  // The board says why there's nothing on it, and a screen reader hears a
+  // line about the deal rather than the whole board again.
+  const say = (line) => ($("#dealt").textContent = line);
+  if (!r || !canDeal(T, r)) {
+    const reg = T.regions[want.region]?.name ?? want.region;
+    const line = !r ? "Pick a genre to deal." : Object.keys(T.eras).some((era) => canDeal(T, { region: r.region, era })) ? `Nothing deals at ${reg} for ${genreName(r)} till its packs are in.` : `Nothing deals at ${reg} till its packs are in.`;
+    $("#board").innerHTML = `<p class="dl-wait">${esc(line)}</p>`;
+    say(line);
+    drawButton();
+    return;
+  }
   const typed = $("#seed").value.trim();
   const seed = typed && typed !== shown?.seed ? typed : fresh || !want.seed ? newSeed(T) : want.seed;
   try {
@@ -209,8 +226,10 @@ function deal({ fresh = true } = {}) {
     $("#seed").value = W.seed;
     writeAddress();
     drawBoard(W);
+    say(`Dealt ${W.seed}: ${genreName(r)} at ${T.regions[r.region].name}, ${want.n} factions.`);
   } catch (err) {
     $("#board").innerHTML = `<p class="dl-wait">That one wouldn’t deal: ${esc(err.message)}</p>`;
+    say("That one wouldn’t deal.");
   }
   drawButton();
 }
@@ -232,8 +251,8 @@ const meta = (r, { role = true } = {}) => {
   return bits.length ? `<span class="dl-meta">${esc(bits.join(" · "))}</span>` : "";
 };
 const row = (words, r, sub = "", opts) => `<li><span class="dl-w">${esc(words)}</span>${r ? meta(r, opts) : ""}${sub ? `<span class="dl-sub">${sub}</span>` : ""}</li>`;
-const table = (title, items, { open = false, note = "", count = items.filter((x) => !x.includes("dl-group")).length } = {}) =>
-  `<details class="dl-table"${open ? " open" : ""}><summary><span>${esc(title)}</span><span class="dl-count" data-of="${count}">${count}</span></summary>${note ? `<p class="dl-tnote">${esc(note)}</p>` : ""}<ul class="dl-rows">${items.join("")}</ul></details>`;
+const table = (title, items, { open = false, note = "", cls = "", count = items.filter((x) => !x.includes("dl-group")).length } = {}) =>
+  `<details class="dl-table"${open ? " open" : ""}><summary><span>${esc(title)}</span><span class="dl-count" data-of="${count}">${count}</span></summary>${note ? `<p class="dl-tnote">${esc(note)}</p>` : ""}<ul class="dl-rows${cls ? ` ${cls}` : ""}">${items.join("")}</ul></details>`;
 const byRole = (rows, names) => {
   const out = new Map();
   for (const r of rows) out.set(r.role, [...(out.get(r.role) ?? []), r]);
@@ -244,7 +263,7 @@ function drawTables() {
   const core = T.core;
   const parts = [];
   parts.push(`</section><section class="dl-partsec"><h2 class="dl-part">The core</h2><p class="dl-tnote">Everything that isn’t genre, the same on every board. The wants, how it works, the Secrets, the agendas and the tension are Building a Faction’s and Building Your World’s own rows.</p>`);
-  parts.push(table("Seed words", [`<li class="dl-seeds">${core.seeds.map(esc).join(" · ")}</li>`], { count: core.seeds.length }));
+  parts.push(table("Seed words", core.seeds.map((w) => `<li>${esc(w)}</li>`), { cls: "dl-seeds" }));
   parts.push(table("Keeps", Object.entries(T.keeps).map(([k, v]) => row(k, null, esc(v)))));
   parts.push(table("Kinds of faction", Object.entries(T.types).map(([k, v]) => row(v, null, esc(k)))));
   parts.push(table("Sizes", Object.entries(core.sizes).map(([k, v]) => row(cap(k), null, `comes up ${v} in ${Object.values(core.sizes).reduce((a, b) => a + b, 0)}`))));
@@ -303,11 +322,17 @@ function drawTables() {
   $("#tables-body").innerHTML = `${parts.join("").replace(/^<\/section>/, "")}</section>`;
 }
 
-// Find a row: every table with one that matches opens, and the rest close.
+// Find a row: every table with one that matches opens, and the rest close,
+// till it's cleared and they're back the way they were.
 function find(q) {
   const words = q.trim().toLowerCase().replace(/[’']/g, "'");
   let hits = 0;
   for (const d of $$("#tables-body details")) {
+    if (words && d.dataset.was == null) d.dataset.was = d.open ? "open" : "";
+    if (!words && d.dataset.was != null) {
+      d.open = d.dataset.was === "open";
+      delete d.dataset.was;
+    }
     let mine = 0;
     for (const li of $$(".dl-rows > li", d)) {
       const hit = !words || li.textContent.toLowerCase().replace(/[’']/g, "'").includes(words);
@@ -343,17 +368,29 @@ function show(tab) {
   $("#boards").hidden = tables;
   $("#tables").hidden = !tables;
   $("#bar").hidden = tables;
-  if (tables && !$("#tables-body").childElementCount) drawTables();
+  if (tables && T && !$("#tables-body").childElementCount) drawTables();
 }
 
 async function boot() {
   readAddress();
+  const tabs = [$("#tab-boards"), $("#tab-tables")];
+  tabs.forEach((t, k) => {
+    t.addEventListener("click", () => show(k ? "tables" : "boards"));
+    t.addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      const next = tabs[(k + 1) % 2];
+      next.focus();
+      show(next === tabs[1] ? "tables" : "boards");
+    });
+  });
   try {
     const res = await fetch("/world-tables.json");
     if (!res.ok) throw new Error(String(res.status));
     T = await res.json();
   } catch {
-    $("#board").innerHTML = `<p class="dl-wait">There aren’t any tables to deal from yet.</p>`;
+    const none = `<p class="dl-wait">There aren’t any tables to deal from yet.</p>`;
+    $("#board").innerHTML = none;
+    $("#tables-body").innerHTML = none;
     return;
   }
   drawControls();
@@ -392,16 +429,6 @@ async function boot() {
       copy.textContent = "Copy it from the address bar";
     }
     setTimeout(() => (copy.textContent = "Copy the link"), 2000);
-  });
-  const tabs = [$("#tab-boards"), $("#tab-tables")];
-  tabs.forEach((t, k) => {
-    t.addEventListener("click", () => show(k ? "tables" : "boards"));
-    t.addEventListener("keydown", (e) => {
-      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-      const next = tabs[(k + 1) % 2];
-      next.focus();
-      show(next === tabs[1] ? "tables" : "boards");
-    });
   });
   let timer = 0;
   $("#find").addEventListener("input", (e) => {

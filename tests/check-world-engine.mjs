@@ -101,6 +101,8 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
   broken("a name that's too long", (s) => s.eras.dusk.names.people.push("Anne Marie Louise de la Tour"), "a name's one to four words");
   broken("a tension table that isn't a d12", (s) => s.core.tension.pop(), "tension is a d12");
   broken("a threat the Threat Builder hasn't got", (s) => (s.core.faces.house = ["dragon"]), "a threat the Threat Builder hasn't got: dragon");
+  broken("a tie's other side that's too long", (s) => s.core.ties.push({ kind: "rival", text: "{b} took our mill", back: "We took the mill from {b} on a wet night in the spring" }), "a line's twelve words at most: We took");
+  broken("a kind of faction with too few Faces", (s) => (s.core.faces.house = ["commander", "champion"]), "faces needs three threats for house", { minimums: true });
   broken("a pack genres.yaml hasn't got", (s) => (s.eras.dawn = { fits: ["town"] }), "hasn't got an era called dawn");
   broken("too few names for a role", () => {}, "of the 4 seats it needs for", { minimums: true });
   broken("too few people who turn up", (s) => (s.eras.dusk.assets = s.eras.dusk.assets.slice(0, 6)), "of the 12 people who turn up it needs", { minimums: true });
@@ -179,6 +181,7 @@ for (const g of groups) {
     C.factions.forEach((f, i) => {
       const who = `${seed}, ${f.name || `faction ${i + 1}`}`;
       if (!f.name || !f.about || !f.want || !f.face || !f.secret || !f.agendas.length) fail(`${who} is missing part of its card`);
+      if (f.name.split(/\s+/).length > 4) fail(`${who}: a name's one to four words, its seat and all`);
       const size = BOOK.sizes[f.size];
       if (!size || f.die < size.lo || f.die > size.hi) fail(`${who}: a ${f.size} faction with a d${f.die}`);
       if (f.die !== 2 * f.steps) fail(`${who}: its d${f.die} isn't 1 step plus its people who turn up (${f.steps} steps)`);

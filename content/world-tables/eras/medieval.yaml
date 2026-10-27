@@ -355,7 +355,7 @@ assets:
   - { text: "The House Guard", role: household-guard, out: [rebels, society, keepers] }
   - { text: "Sworn Retainers", role: household-guard, tags: [blood], out: [rebels, society, keepers] }
   - { text: "Liveried Men", role: household-guard, tags: [wealth], out: [rebels, society, keepers] }
-  - { text: "The Lord's Bodyguard", role: household-guard, tags: [crown], out: [rebels, society, keepers] }
+  - { text: "The Lord's Bodyguard", role: household-guard, tags: [crown], out: [traders, crooks, faith, society, makers, rebels, keepers, old] }
   - { text: "Sellswords", role: hired-swords, tags: [war] }
   - { text: "Free Lances", role: hired-swords }
   - { text: "Hired Spears", role: hired-swords }

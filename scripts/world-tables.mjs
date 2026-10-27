@@ -315,6 +315,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
       }
       row.back = typeof r.back === "string" ? r.back.trim() : "";
       slots(row.back, "back");
+      if (words(row.back) > 12) bad(where, `a line's twelve words at most: ${row.back}`);
       if (!slotsIn(text).includes("b")) bad(where, "needs {b}, the faction it's toward");
     }
     return row;
@@ -383,6 +384,9 @@ export function compileTables(raw, book, { minimums = true } = {}) {
       return threatKeys.includes(x);
     });
   }
+  // A Face is dealt as three cards, so each kind of faction needs three
+  // threats to be one of.
+  if (minimums) for (const k of TYPES) if ((faces[k]?.length ?? 0) < 3) bad("core.yaml", `faces needs three threats for ${k}, found ${faces[k]?.length ?? 0}`);
   const fallbacks = {};
   for (const [k, kind] of Object.entries(FALLBACKS)) {
     if (core.fallbacks?.[k] == null) {
