@@ -1,0 +1,45 @@
+# The five regions (notes/builder-plan.md): what a faction, a seat and a
+# mini faction are at that size, the region's words for the four sizes (the
+# rules keep their names, and the builder shows these), which keep role each
+# face of a d6 picks for the founding's dice pool, and what pressure from one
+# size up looks like. Every region has all eleven keep roles.
+town:
+  name: Town
+  faction: a big family, a gang, a guild or a congregation
+  seat: a street, a mill, a bridge or the square
+  mini: a handful of people with one job
+  sizes: { small: a street, local: a few streets, city: half the town, great: the whole town }
+  d6: [passage, trade, craft, belief, land, office]
+  pressure: a bigger town nearby, wanting a cut
+city:
+  name: City
+  faction: a guild, a house, a gang or a temple
+  seat: a district, a gate, a dock or a hall
+  mini: a crew with one job
+  sizes: { small: a street or two, local: a district, city: the whole city, great: the city and far beyond }
+  d6: [passage, trade, office, belief, crime, craft]
+  pressure: a power beyond the walls, wanting its due
+country:
+  name: Country
+  faction: a noble house, an order, a city or a guild across the land
+  seat: a town, a pass, a valley or a fortress
+  mini: a town's worth of people
+  sizes: { small: a village, local: a town, city: a province, great: the whole country }
+  d6: [land, passage, office, belief, trade, ground]
+  pressure: a neighbour over the border, wanting land
+world:
+  name: World
+  faction: a kingdom, an empire, a church or a trading company
+  seat: a country, a sea, a mountain range or a great city
+  mini: a colony, a fleet or a city that went its own way
+  sizes: { small: a city, local: a province, city: a kingdom, great: half the world }
+  d6: [land, trade, passage, belief, office, wonder]
+  pressure: something from beyond the edge of the map
+stars:
+  name: Stars
+  faction: a company, a fleet or a world's government
+  seat: a station, a world, a moon or a jump route
+  mini: a ship and its crew
+  sizes: { small: a ship, local: a station, city: a world, great: a whole system }
+  d6: [passage, trade, labour, office, knowledge, wonder]
+  pressure: the core worlds, wanting control

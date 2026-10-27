@@ -51,8 +51,9 @@
 //   tension     the twelve tensions, in order, for the roll
 //   ties        between factions: kind rival, ally, debt, wildcard (with bond:
 //               bond or hostile) or blocked, written from {a}'s side toward {b}
-//   faces       for a type role, the Threat Builder's threats its face is
-//               likeliest to be (by key, like commander or old-power)
+//   faces       for a type role, the Threat Builder's threats its Face can be
+//               (by key, like commander or old-power), three at least, and
+//               a Face is never anything else
 //   fallbacks   what goes in when a check still fails after three deals:
 //               secret, strange, agenda, block and rival, each a row
 //   founding    the founding's questions and acts (from stage 7)
@@ -68,9 +69,10 @@
 // region, so Add a faction fits a frame she brought in).
 //
 // A pack: fits (the regions it fits), seats, resources, assets, types (with
-// sizes and leans), methods, secrets, exceptions, wants (if it adds any) and
-// names (factions and people). A twist pack adds its rows to the same roles,
-// and every row in it is strange.
+// sizes and leans), methods, secrets, exceptions, wants (if it adds any),
+// names (factions and people) and faces (threats it adds to core's for a
+// type role, if any). A twist pack adds its rows to the same roles, and
+// every row in it is strange.
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -371,14 +373,23 @@ export function compileTables(src, book, { minimums = true } = {}) {
   const ties = rows(core.ties, "core.yaml ties", "ties");
   for (const k of TIES) if (!ties.some((t) => t.kind === k)) bad("core.yaml", `ties needs at least one ${k}`);
   for (const b of ["bond", "hostile"]) if (!ties.some((t) => t.kind === "wildcard" && t.bond === b)) bad("core.yaml", `ties needs a wildcard that's ${b}`);
-  const faces = {};
-  for (const [k, v] of Object.entries(core.faces ?? {})) {
-    if (!TYPES.includes(k)) bad("core.yaml", `faces has a type role it doesn't know: ${k}`);
-    faces[k] = list(v).filter((x) => {
-      if (!threatKeys.includes(x)) bad("core.yaml", `faces.${k} has a threat the Threat Builder hasn't got: ${x}`);
-      return threatKeys.includes(x);
-    });
-  }
+  // The threats a Face can be, by the kind of faction it fronts. A pack can
+  // add to them (a twist with magic brings the sorcerer), and a Face is only
+  // ever one of the threats listed for its kind, so each needs three, one
+  // for each of a screen's cards.
+  const facesOf = (src, file) => {
+    const out = {};
+    for (const [k, v] of Object.entries(src ?? {})) {
+      if (!TYPES.includes(k)) bad(file, `faces has a type role it doesn't know: ${k}`);
+      out[k] = list(v).filter((x) => {
+        if (!threatKeys.includes(x)) bad(file, `faces.${k} has a threat the Threat Builder hasn't got: ${x}`);
+        return threatKeys.includes(x);
+      });
+    }
+    return out;
+  };
+  const faces = facesOf(core.faces, "core.yaml");
+  if (minimums) for (const k of TYPES) if (new Set(faces[k] ?? []).size < 3) bad("core.yaml", `faces.${k} needs at least three threats, one for each of a screen's cards`);
   const fallbacks = {};
   for (const [k, kind] of Object.entries(FALLBACKS)) {
     if (core.fallbacks?.[k] == null) {
@@ -491,7 +502,8 @@ export function compileTables(src, book, { minimums = true } = {}) {
         pack[field] = rows(p[field], `${file} ${field}`, table, opts);
       }
       pack.names = { factions: rows(p.names?.factions, `${file} names.factions`, "factions", opts), people: rows(p.names?.people, `${file} names.people`, "people", opts) };
-      for (const k of Object.keys(p)) if (!["fits", "seats", "resources", "assets", "types", "methods", "secrets", "exceptions", "wants", "names"].includes(k)) bad(file, `has a part it doesn't know: ${k}`);
+      pack.faces = facesOf(p.faces, file);
+      for (const k of Object.keys(p)) if (!["fits", "seats", "resources", "assets", "types", "methods", "secrets", "exceptions", "wants", "names", "faces"].includes(k)) bad(file, `has a part it doesn't know: ${k}`);
       if (minimums) {
         if (pack.exceptions.length < 6) bad(file, `needs six exceptions, found ${pack.exceptions.length}`);
         if (kind === "era") {

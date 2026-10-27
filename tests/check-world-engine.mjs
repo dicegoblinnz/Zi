@@ -21,7 +21,10 @@
 //    people, no two factions with the same asset that does one thing, a
 //    rival each, every agenda aimed at something on the board, a seat each
 //    and two to spare, and every slot filled). A bag only gives a row twice
-//    once it's run out, and says so.
+//    once it's run out, and says so. A Face is only ever one of the threats
+//    its kind of faction lists, an agenda aimed at an asset aims at
+//    something that can change hands, and on the real tables most factions
+//    lean to their seat's keep and most methods suit their kind.
 // 3. Dealing one step again: the next card in its own stream, never the one
 //    it had, every other faction and every earlier step as they were, a
 //    locked step left alone when one before it's dealt again, and a locked
@@ -41,7 +44,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { apply, blank, forPlayer, readable, undoOf } from "../src/companion/board.js";
-import { BAGS, CHECKS, canDeal, cardsOf, choose, dealRest, dealWorld, lock, newSeed, options, recordOf, redeal, resume, rngOf, SIZES, start } from "../src/companion/world-engine.js";
+import { AIM_AT, BAGS, CHECKS, canDeal, cardsOf, choose, dealRest, dealWorld, lock, newSeed, options, poolOf, recordOf, redeal, resume, rngOf, SIZES, start } from "../src/companion/world-engine.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 
@@ -141,6 +144,9 @@ for (const era of Object.keys(T.eras).filter((e) => T.packs[`era:${e}`])) {
 const BOARDS = 200;
 let dealtCount = 0;
 let lastNamed = 0;
+// The educated guesses, counted over every board: a type that leans to its
+// seat's keep, and a method that suits its kind of faction.
+const guess = { n: 0, seat: 0, method: 0 };
 const started = Date.now();
 for (const g of groups) {
   let fallbacks = 0;
@@ -197,6 +203,17 @@ for (const g of groups) {
       seatsHeld.add(f.seat);
       const ag = W.factions[i].agenda;
       for (const aim of ag?.aims ?? []) if (ag.at?.[aim] == null) fail(`${who}: its agenda doesn't aim at a ${aim}`);
+      // An agenda aimed at an asset aims at something that can change hands.
+      const aimed = ag?.at?.asset ? W.factions[ag.at.asset.j]?.assets?.find((x) => x.id === ag.at.asset.id) : null;
+      if (aimed && (aimed.power || !AIM_AT.has(aimed.role))) fail(`${who}: its agenda aims at ${aimed.text}, which can't change hands`);
+      // A Face is only ever one of the threats listed for its kind.
+      const wf = W.factions[i];
+      const listed = poolOf(T, W.recipe).faces[wf.type?.role] ?? [];
+      if (listed.length && !listed.includes(wf.face?.threat)) fail(`${who}: its Face is ${wf.face?.threatName}, which ${wf.type?.role} doesn't list`);
+      const seatRow = W.seats[wf.seat?.k];
+      guess.n++;
+      if (seatRow && [...(wf.type?.tags ?? []), ...(wf.type?.leans ?? [])].includes(seatRow.role)) guess.seat++;
+      if ([...(wf.method?.tags ?? []), ...(wf.method?.leans ?? [])].includes(wf.type?.role)) guess.method++;
       const words = [f.name, f.about, f.want, f.face, f.secret, f.more, ...f.res.map((r) => r.text), ...f.assets.map((a) => a.text), ...f.agendas.map((a) => a.text), ...f.threads.map((t) => t.text)];
       for (const w of words) if (/[{}]/.test(w)) fail(`${who}: a slot nobody filled in "${w}"`);
       for (const t of f.threads) if (!Number.isInteger(t.to) || t.to === i || t.to >= C.factions.length) fail(`${who}: a thread toward nobody`);
@@ -212,6 +229,15 @@ for (const g of groups) {
 }
 console.log(`   ${dealtCount} boards dealt twice each in ${((Date.now() - started) / 1000).toFixed(1)}s`);
 yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's agenda or Secret on only ${lastNamed} of ${dealtCount} boards`);
+// Mo's educated guesses (notes/builder-plan.md): most factions lean to their
+// seat's keep, and most methods suit their kind. The real tables deal about 64
+// and 83 in 100. A pack that drops below these needs leans written, not luck.
+if (real) {
+  const pc = (x) => Math.round((100 * x) / guess.n);
+  yes(pc(guess.seat) >= 55, `only ${pc(guess.seat)} in 100 factions lean to their seat's keep`);
+  yes(pc(guess.method) >= 75, `only ${pc(guess.method)} in 100 methods suit their kind of faction`);
+  console.log(`   ${pc(guess.seat)} in 100 factions lean to their seat's keep, and ${pc(guess.method)} in 100 methods suit their kind`);
+}
 
 // 3. Dealing one step again.
 {

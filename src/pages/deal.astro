@@ -1,0 +1,30 @@
+---
+// /deal/: where Mo judges the world builder's tables (stage 3 of
+// notes/builder-plan.md). It shows every table the builder deals from, and
+// deals sample boards from them a tap at a time, for any region and genre,
+// with the same engine the World screen will use. The address holds the
+// board (?r=town&g=medieval&n=6&s=ash-lantern-ford), so a board can be sent
+// in a message and dealt again just as it was. It's kept out of search and
+// off phones (scripts/build-sw.mjs), and it needs a signal for the tables.
+import Base from "../layouts/Base.astro";
+import "@fontsource/alegreya-sans/800.css";
+import "../styles/kit.css";
+import "../styles/world-deal.css";
+---
+<Base title="The world builder's tables" description="Every table Zi’Dara’s world builder deals from, and sample boards dealt from them.">
+  <meta slot="head" name="robots" content="noindex" />
+  <main id="main" class="wd">
+    <header class="wd-head">
+      <p class="eyebrow">The world builder</p>
+      <h1>Deal a world</h1>
+      <p class="wd-lede">Every table the world builder deals from, and boards dealt from them, a tap at a time. Pick a region and a genre, then deal.</p>
+    </header>
+    <div id="wd" class="wd-app" aria-live="polite">
+      <p class="wd-wait">Getting the tables…</p>
+      <noscript><p class="wd-warn">Dealing needs JavaScript.</p></noscript>
+    </div>
+  </main>
+  <script>
+    import "../companion/world-deal.js";
+  </script>
+</Base>

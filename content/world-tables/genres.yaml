@@ -1,0 +1,34 @@
+# The eras and twists, and the genres the menu shows by name (a genre's an
+# era and maybe a twist, Calls Claude made in notes/builder-plan.md). A genre
+# deals once its era's pack is in eras/ and its twist's in twists/, and
+# shows as coming till then. Mix your own takes any era with any twist.
+# A frame's mix goes in with the last pack it needs.
+eras:
+  ancient: Ancient
+  medieval: Medieval
+  renaissance: Renaissance
+  industrial: Industrial
+  modern: Modern
+  near-future: Near future
+  far-future: Far future
+twists:
+  magic: Magic
+  steam: Steam
+  chrome: Chrome
+  ruin: Ruin
+  dread: Dread
+genres:
+  fantasy: { name: Fantasy, era: medieval, twist: magic }
+  medieval: { name: Medieval, era: medieval }
+  renaissance: { name: Renaissance, era: renaissance }
+  modern: { name: Modern, era: modern }
+  steampunk: { name: Steampunk, era: industrial, twist: steam }
+  cyberpunk: { name: Cyberpunk, era: near-future, twist: chrome }
+  futuristic: { name: Futuristic, era: far-future }
+  mythic: { name: Mythic, era: ancient, twist: magic }
+  gothic-horror: { name: Gothic horror, era: industrial, twist: dread }
+  urban-fantasy: { name: Urban fantasy, era: modern, twist: magic }
+  post-apocalyptic: { name: Post-apocalyptic, era: modern, twist: ruin }
+  dark-fantasy: { name: Dark fantasy, era: medieval, twist: dread }
+  space-fantasy: { name: Space fantasy, era: far-future, twist: magic }
+frames: {}

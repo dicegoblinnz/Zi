@@ -64,7 +64,22 @@ const NEEDS = [1 / 4, 1 / 3, 1 / 2];
 const HOSTILE = [1 / 3, 1 / 2, 2 / 3];
 const EXTRA = [0.3, 0.5, 0.7];
 const EXCEPTION = 1 / 6;
-const FIT = 1.5;
+// A row's weight goes up this much for each thing on the card or the board it
+// fits, up to three. A type that leans to its seat's keep is three times
+// likelier again, since where a faction sits says most about what it is, and
+// a method or a Want that suits its kind of faction is likelier again too,
+// since what it is says most about how it works.
+const FIT = 3;
+const SEAT = 3;
+const KIND = { method: 4, want: 3 };
+// A method, a Want, a resource or an asset that fits nothing on the card or
+// the board is a quarter as likely, so how a faction works, its money and its
+// people mostly come from what it is.
+const MISS = 0.25;
+// A faction's assets and how it works come from what it is, never the board's
+// mood: a town where faith and the law are pulling apart doesn't hand a gang
+// the beadles.
+const NO_BOARD = { tags: new Map() };
 const USED = 0.2;
 
 // Randomness: a stream for each step, from the seed and the step's path.
@@ -181,6 +196,8 @@ export function poolOf(T, recipe) {
     exceptions: from("exceptions"),
     names: packs.flatMap((p) => p.names.factions).filter(fits),
     people: packs.flatMap((p) => p.names.people).filter(fits),
+    // The threats a Face can be, by its kind: core's and whatever its packs add.
+    faces: Object.fromEntries(Object.keys(T.types ?? {}).map((k) => [k, [...new Set([...(T.core.faces?.[k] ?? []), ...packs.flatMap((p) => p.faces?.[k] ?? [])])]])),
   };
   byKey.set(key, pool);
   return pool;
@@ -290,17 +307,21 @@ function fits(row, card, board) {
   if (card && [row.role, ...row.tags].some((t) => t && card.drops.has(t))) return false;
   return true;
 }
+// What a row is (its role and tags) fits what the card is, what it leans to,
+// and the board. What a row leans to fits only what the card and the board
+// are, since two rows leaning the same way says nothing about each other.
+// What a row is underneath counts twice: a resource from a keep the faction
+// leans to fits better than one that shares a passing tag with it.
 function fitOf(row, card, board) {
   let matches = 0;
   let src = null;
-  for (const k of [row.role, ...row.tags, ...row.leans]) {
-    if (!k) continue;
-    const s = card?.tags.get(k) ?? card?.leans.get(k) ?? board.tags.get(k);
-    if (s) {
-      matches++;
-      src ??= s;
-    }
-  }
+  const add = (s, n) => {
+    if (!s) return;
+    matches += n;
+    src ??= s;
+  };
+  for (const k of [row.role, ...row.tags]) if (k) add(card?.tags.get(k) ?? card?.leans.get(k) ?? board.tags.get(k), k === row.role ? 2 : 1);
+  for (const k of row.leans) add(card?.tags.get(k) ?? board.tags.get(k), 1);
   return { matches: Math.min(matches, 3), src };
 }
 function weightOf(W, row, fit) {
@@ -377,11 +398,23 @@ function candidates(T, W, path, { only = null } = {}) {
     return SIZES.map((size) => ({ w: T.core.sizes[size] * (seat?.sizes?.includes(size) ? 3 : 1), size }));
   }
   const pool = (rows, step) => keep(bagged(rows.filter((r) => fits(r, card, board)), usedBy(W, step, i)));
+  // How a faction works comes from what it is. The board steers which kinds
+  // of faction turn up and what they want, not how a shrine goes about things.
   const ofRow = ({ r, again }, extra = {}) => {
-    const fit = fitOf(r, card, board);
+    const fit = fitOf(r, card, b === "method" ? NO_BOARD : board);
     return of(r, fit, { again, ...becauseOf(T, fit.src), ...extra });
   };
-  if (b === "type" || b === "method" || b === "want") return pool(b === "type" ? P.types : b === "method" ? P.methods : P.wants, b).map((x) => ofRow(x));
+  if (b === "type" || b === "method" || b === "want") {
+    const keep = b === "type" ? card.seat?.role : null;
+    const kind = b !== "type" ? f.type?.role : null;
+    return pool(b === "type" ? P.types : b === "method" ? P.methods : P.wants, b).map((x) => {
+      const o = ofRow(x);
+      if (b !== "type" && !o.by) o.w *= MISS;
+      if (keep && [...x.r.tags, ...x.r.leans].includes(keep)) o.w *= SEAT;
+      if (kind && [...x.r.tags, ...x.r.leans].includes(kind)) o.w *= KIND[b];
+      return o;
+    });
+  }
   if (b === "exc") {
     // An exception's never dealt twice: with none fresh, there isn't one.
     const used = usedBy(W, "exc", i);
@@ -393,13 +426,18 @@ function candidates(T, W, path, { only = null } = {}) {
   }
   if (b === "agenda") {
     const others = dealt(W, i);
-    const can = (aim) => aim === "seat" || (aim === "rival" && others.length) || (aim === "res" && others.some((j) => W.factions[j].res?.length)) || (aim === "asset" && others.some((j) => W.factions[j].assets?.length));
+    const can = (aim) => aim === "seat" || (aim === "rival" && others.length) || (aim === "res" && others.some((j) => W.factions[j].res?.length)) || (aim === "asset" && others.some((j) => W.factions[j].assets?.some(aimable)));
     return pool(P.agendas.filter((r) => r.aims.every(can)), "agenda").map((x) => ofRow(x, { die: x.r.die, aims: x.r.aims }));
   }
   if (b === "name") {
+    // A name reads only what the faction is and where it sits, so the
+    // Bellfounders are bellfounders, whatever the board's mood or how they
+    // work.
     const kind = f.type?.role;
+    const is = new Set([card.seat?.role, ...(card.seat?.tags ?? []), f.type?.role, ...(f.type?.tags ?? [])].filter(Boolean));
+    const named = (r) => (!card.size || !r.sizes || r.sizes.includes(card.size)) && r.needs.every((t) => is.has(t)) && !r.out.some((t) => is.has(t));
     const mine = P.names.filter((r) => !r.role || r.role === kind);
-    return pool(mine.length ? mine : P.names, "name").map((x) => ofRow(x, { why: "", by: null }));
+    return keep(bagged((mine.length ? mine : P.names).filter(named), usedBy(W, "name", i))).map((x) => ofRow(x, { why: "", by: null }));
   }
   return [];
 }
@@ -427,7 +465,7 @@ function dealRes(T, W, i, rand, { only = null } = {}) {
       .filter((r) => !out.some((o) => o.id === r.id) && filter(r))
       .map((r) => {
         const fit = fitOf(r, card, board);
-        return { w: weightOf(W, r, fit) * (elsewhere.has(r.id) ? USED : 1), r, fit };
+        return { w: weightOf(W, r, fit) * (elsewhere.has(r.id) ? USED : 1) * (fit.matches ? 1 : MISS), r, fit };
       });
     const [c] = draw(cands, rand);
     if (!c) return false;
@@ -442,7 +480,7 @@ function dealRes(T, W, i, rand, { only = null } = {}) {
 function dealAssets(T, W, i, rand, { only = null } = {}) {
   const f = W.factions[i];
   const P = poolOf(T, W.recipe);
-  const board = boardOf(T, W);
+  const board = NO_BOARD;
   const card = cardOf(W, i);
   const people = Math.max(0, Math.min(f.size.die / 2 - 1, f.res?.length ?? 0));
   const held = heldRoles(W, i);
@@ -454,7 +492,7 @@ function dealAssets(T, W, i, rand, { only = null } = {}) {
       .filter((r) => r.power === power && !out.some((o) => o.role === r.role) && (power || !held.has(r.role)))
       .map((r) => {
         const fit = fitOf(r, card, board);
-        return { w: weightOf(W, r, fit) * (elsewhere.has(r.id) ? USED : 1), r, fit };
+        return { w: weightOf(W, r, fit) * (elsewhere.has(r.id) ? USED : 1) * (fit.matches ? 1 : MISS), r, fit };
       });
     const [c] = draw(cands, rand);
     if (!c) return false;
@@ -483,6 +521,13 @@ function heldRoles(W, but) {
   return roles;
 }
 
+// An agenda aimed at another faction's asset aims at something that can change
+// hands: a place, a ship, a strongroom, a relic, a road, a spy ring, a seat
+// on the council or the letters in its blackmail. Never its people (you can
+// take a keep, but not somebody's in-laws), and never what it is to others
+// (its good name, or the favours it's owed).
+export const AIM_AT = new Set(["workshop", "ship", "deep-water-docks", "fortress", "vault", "relic", "smugglers-roads", "codebreakers", "safehouses", "sanctuary", "informants", "blackmail", "seat-on-the-council"]);
+const aimable = (x) => !x.power && AIM_AT.has(x.role);
 // The board so far for an agenda's aim or a Secret's rival: a seat (free ones
 // likelier), another faction, or one of theirs.
 function aimOf(W, i, aims, rand) {
@@ -497,7 +542,7 @@ function aimOf(W, i, aims, rand) {
     } else if (a === "rival") out.rival = pick(others, rand);
     else {
       const list = a === "res" ? "res" : "assets";
-      const all = others.flatMap((j) => (W.factions[j][list] ?? []).filter((x) => x.id).map((x) => ({ j, id: x.id })));
+      const all = others.flatMap((j) => (W.factions[j][list] ?? []).filter((x) => x.id && (a === "res" || aimable(x))).map((x) => ({ j, id: x.id })));
       out[a] = pick(all, rand);
     }
   }
@@ -548,15 +593,17 @@ export function options(T, W, path, n = 3, opts = {}) {
   return cands.map((c) => keepOf(c));
 }
 // A face: a name from the pack and one of the Threat Builder's threats, at
-// the Challenge its Power sends. The threats and the names have a stream each,
-// so the first card's the same however many are drawn.
+// the Challenge its Power sends. The threat's one the tables list for its kind
+// of faction (any of them, if they list none), so a guild's Face is never a
+// swarm. The threats and the names have a stream each, so the first card's
+// the same however many are drawn.
 function faces(T, W, i, path, n, not) {
   const f = W.factions[i];
   const P = poolOf(T, W.recipe);
-  const likely = new Set(T.core.faces[f.type?.role] ?? []);
+  const listed = new Set(P.faces?.[f.type?.role] ?? []);
   const tries = W.tries[path] ?? 0;
   const threats = draw(
-    T.book.threats.map((t) => ({ w: likely.has(t.key) ? 5 : 1, t })),
+    T.book.threats.filter((t) => !listed.size || listed.has(t.key)).map((t) => ({ w: 1, t })),
     rngOf(W.seed, path, tries, "threat"),
     n,
   );
@@ -738,7 +785,7 @@ function dealNeeds(T, W, { only = null } = {}) {
     rand,
   ).sort((x, y) => extrasOf(W, x) - extrasOf(W, y));
   const P = poolOf(T, W.recipe);
-  const board = boardOf(T, W);
+  const board = NO_BOARD;
   for (const i of order) {
     if (W.needs.length >= count) break;
     if (W.locks[`f:${i}:assets`] || (W.factions[i].assets ?? []).some(own) || !W.factions[i].type) continue;
@@ -862,7 +909,7 @@ function reaim(W, i, t) {
   for (const a of ag.aims) {
     if (aimOk(W, i, { aims: [a], at })) continue;
     const j = at[a]?.j;
-    const list = (a === "res" || a === "asset") && j != null && j !== i ? (W.factions[j]?.[a === "res" ? "res" : "assets"] ?? []) : [];
+    const list = (a === "res" || a === "asset") && j != null && j !== i ? (W.factions[j]?.[a === "res" ? "res" : "assets"] ?? []).filter((x) => a === "res" || aimable(x)) : [];
     if (list.length) at[a] = { j, id: pick(list, rand).id };
     else Object.assign(at, aimOf(W, i, [a], rand));
   }
