@@ -1,15 +1,18 @@
-// A campaign's world on every phone in it, starting with the faction board
-// (stage 1 of notes/worlds-plan.md).
+// A campaign's world on every phone in it: the faction board (stage 1 of
+// notes/worlds-plan.md) and the faction turn each downtime (stage 2, drawn by
+// turn-view.js).
 //
 // The World screen's off a campaign's page (/characters/?camp=<id>&world, and
 // &f=<faction> for one faction's page), and a character playing in a campaign
 // has it on its World tab. The board's the crew's own card from the party
-// sheet, then every faction as a card. Only the GM changes it. Her changes go
-// to the Worker (src/worker/world.js) as soon as there's a signal, numbered, so
-// nothing's lost with no signal and nothing counts twice. Everything starts
-// hidden from the crew: she shows them a faction in a tap, then each part of
-// it in its own tap, and a player's phone only ever gets what's been shown.
-// Players' phones check for anything new every 15 seconds while it's open.
+// sheet, then every faction as a card. Only the GM changes the board, and a
+// player changes the crew's side of the faction turn. Changes go to the Worker
+// (src/worker/world.js) as soon as there's a signal, numbered, so nothing's
+// lost with no signal and nothing counts twice. Everything starts hidden from
+// the crew: she shows them a faction in a tap, then each part of it in its own
+// tap, and a player's phone only ever gets what's been shown and the
+// telegraphs she's sent. Phones check for anything new every 15 seconds while
+// it's open, and every few seconds while a faction turn's going.
 //
 // A faction she brought in from the book remembers the book's card as it was,
 // so when the book changes it she gets a note and picks: take the book's
@@ -20,13 +23,17 @@
 //             its board as the Worker last sent it and any changes still to go
 //             up. Each campaign's kept apart, and it all goes when the
 //             account's characters leave the phone (sync.js).
-import { BONDS, MAX, OUTCOMES, PARTS, apply, blank, find, minisOf, moneyOf, readable, standingOf, stepsOf, undoOf } from "./board.js";
+import { BONDS, MAX, OUTCOMES, PARTS, find, minisOf, moneyOf, readable as readableBoard, standingOf, stepsOf } from "./board.js";
+import { applyAll, applyMine, blank, bornNow, playerTurnOf, readable, undoAll } from "./turn.js";
+import { makeTurnView } from "./turn-view.js";
 import { diceLabel, rollDie, stepsToDice } from "./dice.js";
 import { typo } from "./marks.js";
 import { die as kitDie, mini as kitMini } from "../kit/kit.js";
 
 const KEY = "zi-world";
 const POLL = 15000;
+// While a faction turn's going, the phone checks this often instead.
+const LIVE = 4000;
 const SIZES = [2, 4, 6, 8, 10, 12];
 
 const read = (key) => {
@@ -72,6 +79,17 @@ export function makeWorld(d) {
   const again = {};
   // What's just been shown to a player, lit for one redraw.
   const lit = {};
+  // The faction turn's screens (turn-view.js).
+  const tv = makeTurnView({
+    d, esc, W,
+    docOf: (id) => docOf(id),
+    isGm: (id) => isGm(id),
+    gmName: (id) => gmName(id),
+    edit: (...a) => edit(...a),
+    party: (id, ops, say) => partyEdit(id, ops, say),
+    fold: (...a) => fold(...a),
+    ruleLink: (...a) => ruleLink(...a),
+  });
 
   // ------------------------------------------------------------ kept on the phone
 
@@ -97,13 +115,27 @@ export function makeWorld(d) {
   const nameOf = (id) => item(id)?.name ?? d.campaign(id)?.campaign?.name ?? "the campaign";
   const gmName = (id) => first(item(id)?.gm ?? d.campaign(id)?.campaign?.gm ?? "") || "Your GM";
 
-  // The board as everyone will see it once this phone's changes are in.
+  // The world as everyone will see it once this phone's changes are in. A
+  // player's phone keeps it the way the Worker sent it, and puts the crew's own
+  // changes on top.
+  const whoIn = (id) => ({ role: isGm(id) ? "gm" : "player" });
+  const ctxOf = (id) => ({ now: Date.now(), extra: d.crewIn(id)?.money?.extra, power: d.crewIn(id)?.steps });
   function docOf(id) {
     const k = camp(id);
+    if (!isGm(id)) {
+      const doc = k.doc ? { ...readableBoard(structuredClone(k.doc)), turn: playerTurnOf(structuredClone(k.doc.turn ?? null)) } : blank();
+      for (const o of k.out) applyMine(doc, o);
+      return doc;
+    }
     const doc = k.doc ? readable(structuredClone(k.doc)) : blank();
-    for (const o of k.out) apply(doc, o);
+    for (const o of k.out) applyAll(doc, o, whoIn(id), ctxOf(id));
     return doc;
   }
+  // A faction turn that's going, on this phone.
+  const live = (id) => {
+    const t = docOf(id).turn;
+    return Boolean(t && t.step !== "done");
+  };
 
   // ------------------------------------------------------------ in step with the Worker
 
@@ -136,17 +168,24 @@ export function makeWorld(d) {
         keys.push(f.id);
       }
     }
+    const t0 = was.turn;
+    const t = now.turn;
+    if (t && (t0?.id !== t.id || t0.step !== t.step)) {
+      const tele = t.acts.filter((a) => a.by !== "crew").length;
+      const said1 = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"][tele] ?? String(tele);
+      said.push(t.step === "hire" ? `Downtime ${t.n}’s faction turn has started. Hiring comes first.` : t.step === "tele" ? `${gmName(id)}’s telegraphed ${said1} ${tele === 1 ? "faction’s action" : "factions’ actions"} for downtime ${t.n}. The crew picks its action now.` : t.step === "land" ? "The faction turn’s actions are landing." : `Downtime ${t.n}’s faction turn is done.`);
+    }
     return { said, keys };
   }
 
   function take(id, k, got) {
-    const was = k.doc ? readable(structuredClone(k.doc)) : null;
+    const was = k.doc ? { ...readableBoard(structuredClone(k.doc)), turn: structuredClone(k.doc.turn ?? null) } : null;
     k.doc = got.world ?? null;
     k.v = typeof got.v === "string" ? got.v : "";
     k.role = got.role === "gm" || got.role === "player" ? got.role : k.role;
     k.at = Date.now();
     if (k.role !== "gm" && was && k.doc) {
-      const news = newsOf(id, was, readable(structuredClone(k.doc)));
+      const news = newsOf(id, { ...was, turn: playerTurnOf(was.turn ?? null) }, { ...readableBoard(structuredClone(k.doc)), turn: playerTurnOf(structuredClone(k.doc.turn ?? null)) });
       if (news.said.length) {
         lit[id] = news.keys;
         notices.push({ id, text: news.said.slice(-2).join(" ") });
@@ -200,6 +239,10 @@ export function makeWorld(d) {
         return d.render();
       }
       if (!r.ok) return;
+      if (sending && Array.isArray(r.got.refused) && r.got.refused.length) {
+        const why = [...new Set(r.got.refused.map((x) => String(x?.why ?? "")).filter(Boolean))];
+        if (why.length) d.toast(why.slice(-2).join(" "), false);
+      }
       if (sending && !k.out.some((o) => o.n > batch[batch.length - 1].n)) delete k.solo;
       if (Number.isInteger(r.got.seq)) k.out = k.out.filter((o) => o.n > r.got.seq);
       if (k.out.length) again[id] = true;
@@ -252,14 +295,21 @@ export function makeWorld(d) {
     timer = 0;
     watching = id;
     ui = { editing: "", sure: "", note: "" };
+    tv.reset();
     if (!id) return;
     syncNow(id);
     d.peek(id);
     // A typo the book's fixed since she last looked goes in quietly.
     if (isGm(id)) quietBook(id);
     timer = setInterval(() => {
-      if (document.visibilityState === "visible") syncNow(id);
-    }, POLL);
+      if (document.visibilityState !== "visible") return;
+      const k = camp(id);
+      if (live(id) || Date.now() - (k.at || 0) >= POLL - 500) {
+        syncNow(id);
+        // The crew's resources come off the party sheet, so it's kept in step too.
+        if (live(id)) d.peek(id);
+      }
+    }, LIVE);
   }
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible" && watching) syncNow(watching);
@@ -275,22 +325,31 @@ export function makeWorld(d) {
 
   // ------------------------------------------------------------ changing it
 
-  function edit(id, ops, say, { undoable = true, quiet = false } = {}) {
+  // party: changes to the party sheet that go with these (a crew mini faction
+  // takes a resource and an asset off it, an agenda that happened goes on it),
+  // undone with them.
+  function edit(id, ops, say, { undoable = true, quiet = false, party = null } = {}) {
     const k = camp(id);
+    const gm = isGm(id);
     let doc = docOf(id);
     const did = [];
     const back = [];
     for (const op of ops) {
-      const before = undoable ? undoOf(doc, op) : [];
-      if (!apply(doc, op)) continue;
+      const before = undoable ? undoAll(doc, op) : [];
+      const r = gm ? applyAll(doc, op, whoIn(id), ctxOf(id)) : { ok: applyMine(doc, op), changed: true };
+      if (!r.ok || r.changed === false) {
+        if (r.why && !quiet) d.toast(r.why, false);
+        continue;
+      }
       did.push(op);
       back.unshift(...before);
     }
     if (!did.length) return false;
     for (const op of did) k.out.push({ ...op, n: ++st.n });
     keep();
-    if (undoable && back.length) {
-      undos.push({ id, ops: back });
+    const partyBack = party?.length ? d.partyChange(id, party) : null;
+    if (undoable && (back.length || partyBack?.length)) {
+      undos.push({ id, ops: back, party: partyBack });
       if (undos.length > 30) undos.shift();
     }
     if (!quiet) {
@@ -301,11 +360,25 @@ export function makeWorld(d) {
     soon(id);
     return true;
   }
+  function partyEdit(id, ops, say) {
+    const back = d.partyChange(id, ops);
+    if (!back) return false;
+    undos.push({ id, ops: [], party: back });
+    if (undos.length > 30) undos.shift();
+    d.render();
+    if (say) d.toast(say, "wundo");
+    return true;
+  }
   function undo() {
     const u = undos.pop();
     if (!u) return;
     ui.editing = "";
-    if (edit(u.id, u.ops, "", { undoable: false })) d.toast("Put back.", false);
+    const put = u.ops.length ? edit(u.id, u.ops, "", { undoable: false }) : false;
+    if (u.party?.length) d.partyChange(u.id, u.party);
+    if (put || u.party?.length) {
+      d.render();
+      d.toast("Put back.", false);
+    }
   }
 
   // A card out of the book, as a faction on the board with ids of its own and
@@ -565,6 +638,7 @@ export function makeWorld(d) {
   function act(el, e) {
     if (el.dataset.do === "undo") return undo();
     const id = el.closest("[data-wb]")?.dataset.wb ?? el.dataset.c;
+    if (el.dataset.do?.startsWith("t-")) return id ? tv.act(el, id, e) : undefined;
     if (!ACT[el.dataset.do]) return;
     if (el.tagName === "A") {
       if (e?.metaKey || e?.ctrlKey || e?.shiftKey) return;
@@ -576,6 +650,7 @@ export function makeWorld(d) {
   function submit(kind, form, f) {
     const id = form.closest("[data-wb]")?.dataset.wb;
     if (!id) return;
+    if (kind.startsWith("w-t")) return tv.submit(kind, form, f, id);
     const doc = docOf(id);
     const fac = form.dataset.f ? find(doc, form.dataset.f) : null;
     const text = (name, max = MAX.line) => String(f.get(name) ?? "").replace(/\s+/g, " ").trim().slice(0, max);
@@ -632,7 +707,7 @@ export function makeWorld(d) {
       const loy = text("loy");
       const mid = newId();
       const ok = edit(id, [{ o: "mini", id: fac.id, res: String(f.get("res") ?? ""), asset: String(f.get("asset") ?? ""), f: {
-        id: mid, name, about: "", want: "", face: "", secret: "", more: "", outs,
+        id: mid, name, about: "", want: "", face: "", secret: "", more: "", outs, born: bornNow(doc),
         loy: loy ? [{ id: newId(), text: bare(loy), kind: f.get("kind") === "hostile" ? "hostile" : "bond", s: "whole" }] : [],
         res: [], assets: [], agendas: [], pub: [], mor: [], threads: [], shown: {},
       } }], `${bare(fac.name)} made ${bare(name)}. It sits out this downtime, and takes its own action from the next.`);
@@ -753,22 +828,24 @@ export function makeWorld(d) {
     const k = camp(id);
     const order = [];
     for (const f of doc.factions) {
-      if (f.mini && f.parent && f.parent !== "crew" && find(doc, f.parent)) continue;
+      if (f.mini && f.parent && (f.parent === "crew" || find(doc, f.parent))) continue;
       order.push(f);
       if (!f.mini) order.push(...minisOf(doc, f.id));
     }
+    const ours = doc.factions.filter((f) => f.mini && f.parent === "crew");
     const list = order.length ? `<ul class="wb-toks">${order.map((f) => token(id, f, doc, gm)).join("")}</ul>` : "";
+    const crewList = ours.length ? `<ul class="wb-toks wb-ours" aria-label="The crew’s own mini factions">${ours.map((f) => token(id, f, doc, gm)).join("")}</ul>` : "";
     const say = status(id);
     if (!gm) {
       const none = !k.at && online() ? '<p class="cc-lead">Opening the board…</p>' : !order.length ? `<p class="cc-lead">${esc(gmName(id))} hasn’t shown you any of the world yet. The factions you find out about show up here, with whatever you’ve found out about each one.</p>` : "";
       lit[id] = [];
-      return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${crewCard(id)}${list}${none}`;
+      return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${crewCard(id)}${crewList}${list}${none}`;
     }
     const shownCount = doc.factions.filter((f) => f.shown.card).length;
     const lead = order.length
       ? `<p class="cc-small wb-sum">${plural(doc.factions.length, "faction", "factions")} on the board, ${shownCount ? `${shownCount} shown to the crew` : "none of them shown to the crew yet"}.</p>`
       : '<p class="cc-lead">Nothing on the board yet. Bring in a board from the book, or start with a faction of your own. Nothing on it shows on your players’ phones till you show it to them.</p>';
-    return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${lead}${crewCard(id)}${list}
+    return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${lead}${crewCard(id)}${crewList}${list}
       <div class="cc-folds wb-adds">${bringFold(id, doc)}${newFold(id, doc)}</div>
       <p class="cc-small">${ruleLink("s-faction-board", "What a faction is")} ${ruleLink("s-faction-build", "Building a faction")}</p>`;
   }
@@ -1030,6 +1107,7 @@ export function makeWorld(d) {
     const gm = isGm(v.id);
     return `${topbar(`/characters/?camp=${encodeURIComponent(v.id)}`, nameOf(v.id))}
       <header class="cc-camp-head wb-head"><p class="kicker${gm ? " is-gm" : ""}">The world</p><h1>${esc(nameOf(v.id))}</h1>${gm ? "" : `<p class="cc-small">What ${esc(gmName(v.id))}’s shown the crew so far.</p>`}</header>
+      ${tv.section(v.id)}
       <section class="cc-sec wb-sec" data-wb="${esc(v.id)}" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(v.id)}</section>`;
   }
 
@@ -1038,6 +1116,7 @@ export function makeWorld(d) {
     const id = d.campOf(ch);
     if (!id) return `<div class="cc-note"><p>${esc(ch.name)} isn’t playing in a campaign on this phone.</p></div>`;
     return `<div class="wb-tab" data-wb="${esc(id)}"><p class="cc-small pt-where">${esc(ch.name)} plays in <a href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">${esc(nameOf(id))}</a>. This is what ${esc(gmName(id))}’s shown the crew of its world.</p>
+      ${tv.section(id)}
       <section class="cc-sec wb-sec" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(id)}</section></div>`;
   }
 
@@ -1052,8 +1131,9 @@ export function makeWorld(d) {
     const glance = gm
       ? n ? `${plural(n, "faction", "factions")} on the board, ${shown ? `${shown} shown to the crew` : "none shown to the crew yet"}.` : "Nothing on the board yet. Bring in a board from the book, or make your own."
       : n ? `${esc(gmName(id))}’s shown the crew ${plural(n, "faction", "factions")}.` : k.at ? `${esc(gmName(id))} hasn’t shown the crew any of the world yet.` : "Whatever the crew’s been shown of the world.";
+    const turn = tv.glance(id);
     return `<section class="cc-sec wb-tile" aria-labelledby="wb-tile-${esc(id)}"><a class="card wb-tile-a" href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">
-      <span class="wb-tile-mark" aria-hidden="true">${d.icon.world}</span><span class="wb-tile-in"><h2 id="wb-tile-${esc(id)}">The world</h2><span class="cc-small">${glance}</span></span></a></section>`;
+      <span class="wb-tile-mark" aria-hidden="true">${d.icon.world}</span><span class="wb-tile-in"><h2 id="wb-tile-${esc(id)}">The world</h2><span class="cc-small">${glance}</span>${turn ? `<span class="cc-small wb-tile-turn">${esc(turn)}</span>` : ""}</span></a></section>`;
   }
 
   // What's just been shown to a player lights up for a moment.
@@ -1070,6 +1150,11 @@ export function makeWorld(d) {
     after,
     act,
     submit,
+    // A form on the World screen that changes as it's filled in.
+    change(el) {
+      const id = el.closest("[data-wb]")?.dataset.wb;
+      return id ? tv.change(el, id) : false;
+    },
     route,
     undo,
     title(v) {

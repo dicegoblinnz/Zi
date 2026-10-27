@@ -64,6 +64,7 @@ const NAMES = {
   projects: ["project", "projects"],
   holdings: ["holding", "holdings"],
   people: ["person the crew relies on", "people the crew relies on"],
+  changed: ["line on What has changed", "lines on What has changed"],
 };
 
 export function makeParty(d) {
@@ -532,7 +533,7 @@ export function makeParty(d) {
     } else if (kind === "p-add") {
       const l = form.dataset.l;
       if (!LISTS.includes(l)) return;
-      const item = { id: newId(), text: text("text", l === "assets" ? MAX.asset : MAX.line) };
+      const item = { id: newId(), text: text("text", l === "assets" ? MAX.asset : l === "changed" ? MAX.goal : MAX.line) };
       if (!item.text) return d.toast("Write it in first.", false);
       if (l === "assets") Object.assign(item, { does: text("does", MAX.does), power: f.get("power") === "on" });
       if (l === "projects") Object.assign(item, { then: text("then", MAX.then), die: Number(f.get("die")) || 2 });
@@ -547,7 +548,7 @@ export function makeParty(d) {
       const put = (field, v) => {
         if (v !== item[field]) ops.push({ o: "edit", l, id: item.id, f: field, v });
       };
-      put("text", text("text", l === "assets" ? MAX.asset : MAX.line));
+      put("text", text("text", l === "assets" ? MAX.asset : l === "changed" ? MAX.goal : MAX.line));
       if (l === "assets") {
         put("does", text("does", MAX.does));
         put("power", f.get("power") === "on");
@@ -751,6 +752,10 @@ export function makeParty(d) {
       `<p class="cc-lead">The people the crew leans on${P.people ? `, like ${esc(P.people.charAt(0).toLowerCase() + P.people.slice(1))}` : "."}</p>
       ${list("people", doc.people)}${addForm("people", "Someone the crew relies on", "")}`, listLit("people"));
 
+    const changed = fold("changed", "What has changed", doc.changed.length ? few(doc.changed.map((x) => esc(x.text)), 2) : "Nothing yet",
+      `<p class="cc-lead">A line for every faction’s agenda that’s happened: how the world’s changed, in one sentence. The GM writes it when it happens.</p>
+      ${list("changed", doc.changed)}${addForm("changed", "Something that’s changed in the world", "")}`, listLit("changed"));
+
     const onSheet = new Set(doc.assets.map((a) => a.text.toLowerCase()));
     const pick = fold("pick", "Crew assets to pick from", "All twelve, for when the crew grows",
       `${d.rule("s-crew-tags")}<ul class="pt-lines">${(P.assets ?? []).map((a, i) => `<li class="pt-line pt-pick"><div class="pt-line-in"><p><b>${esc(a.name)}</b></p><p class="pt-does">${esc(a.does)}</p></div>
@@ -761,7 +766,7 @@ export function makeParty(d) {
       <h2 id="pt-h-${esc(id)}"${tab ? ' class="sr-only"' : ""}>The party sheet</h2>${status ? `<p class="cc-small pt-status">${status}</p>` : ""}
       ${goalView(id, doc, k)}
       ${crew}
-      <div class="cc-folds pt-folds">${reps}${res}${assets}${grows}${projects}${aspsFold}${holdings}${people}${pick}</div>
+      <div class="cc-folds pt-folds">${reps}${res}${assets}${grows}${projects}${aspsFold}${holdings}${people}${changed}${pick}</div>
       ${tab ? "" : `<p class="cc-small">Everyone in the campaign can change it, and it changes on every phone in it.</p>`}</section>`;
   }
 
@@ -835,10 +840,28 @@ export function makeParty(d) {
       return id ? docOf(id).goal : null;
     },
     goalIn: (id) => docOf(id).goal,
-    // The crew's own card, for the top of the faction board (world.js).
+    // The crew's own card, for the top of the faction board (world.js), and
+    // its resources and assets, for a mini faction of its own.
     crewIn(id) {
       const doc = docOf(id);
-      return { name: doc.name, steps: powerOf(doc), reps: doc.reps.length, assets: doc.assets.length, money: moneyOf(doc) };
+      return { name: doc.name, steps: powerOf(doc), reps: doc.reps.length, assets: doc.assets.length, money: moneyOf(doc), res: doc.res, list: doc.assets };
+    },
+    // Changes from the faction turn (world.js): a line on What has changed,
+    // and a resource and an asset handed to a mini faction of the crew's own.
+    // They go up like any change here, and what puts them back comes back, for
+    // the world's Undo.
+    change(id, ops) {
+      const before = docOf(id);
+      const test = docOf(id);
+      const did = ops.filter((op) => apply(test, op));
+      if (!did.length) return null;
+      const back = did.flatMap((op, i) => undoOf(i ? docAfter(before, did.slice(0, i)) : before, op)).reverse();
+      const kk = camp(id);
+      if (!kk.doc?.made && !kk.out.some((o) => o.o === "start")) kk.out.push({ n: ++st.n, o: "start", res: P.start.res, assets: P.start.assets });
+      for (const op of did) kk.out.push({ ...op, n: ++st.n });
+      keep();
+      soon(id);
+      return back;
     },
     // The party sheet fetched once, for a screen that shows the crew's card
     // without keeping the sheet in step.

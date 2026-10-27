@@ -171,6 +171,7 @@ const world = makeWorld({
   campaign: (id) => camps.campaign(id),
   campOf: (ch) => party.campOf(ch),
   crewIn: (id) => party.crewIn(id),
+  partyChange: (id, ops) => party.change(id, ops),
   peek: (id) => party.peek(id),
   tools: () => themeButton(),
   rule: (id) => ruleHtml(id),
@@ -2806,6 +2807,8 @@ document.addEventListener("submit", (e) => {
 });
 
 document.addEventListener("change", (e) => {
+  // The faction turn's forms ask for what fits what's been picked.
+  if (e.target.closest?.("#app form[data-form^='w-t']") && world.change(e.target)) return;
   if (e.target.dataset?.dt != null && roll?.kind === "downtime") {
     dt.input(e.target, roll);
     if (e.target.tagName === "SELECT") renderDialog();

@@ -68,10 +68,33 @@
 //    there sees none of it. With no signal, Vesk's World tab still has what
 //    Kai's seen. The World screen, a faction's page and the World tab pass
 //    axe at 390, in both themes.
-// 8. Who can do what: only Mo sees people, a player can't reset a link, rename,
+// 8. The faction turn. First the rules, off the book's own examples: Two things
+//    in one job (the Guild's d6 and d4 against the Estate's d12 rolling a 4),
+//    the week's Obstruct with Bram's slot in (the crew's d4 a d8), a tie going
+//    to the faction that telegraphed it and taken with an extra resource, and
+//    hiring (the Tithe Fleet won't take the crew's money). Then a downtime on
+//    three phones. Mo starts it, and Kai's phone has it. Kai tries to pay the
+//    Tithe Fleet and it won't take the crew's money, so she pays the Brothers
+//    of the Lamp. Mo gets every faction's action ready: the Guild's Two things
+//    in one job, the Fleet working Close the Combs, the Brothers' Obstruct for
+//    the crew, the Order coming for the crew and the Estate's new agenda
+//    off-screen. He sends them, and Kai's phone has four telegraphs and none of
+//    the Estate's. Sam, with no signal, picks the crew's action: the Order's d8
+//    is bigger than the crew, so it takes Bram's slot in, and it goes up once
+//    he's back. The actions land with real dice: the contracts are the Guild's
+//    and the Estate knows who took them, the Brothers lose and Close the Combs
+//    climbs, and the crew ties the Order and rolls again for 1 Resolve to stop
+//    it. Mo puts each outcome on the cards in a tap. A second downtime: Close
+//    the Combs happens and goes on the party sheet, under What has changed, on
+//    Kai's phone too, and the crew Establishes a mini faction of its own,
+//    handing it a resource and an asset off the party sheet. Kai can't set a
+//    faction's action or roll its dice, and nothing crosses: Zed gets nothing
+//    and Zed's Night has no turn. The faction turn on the World screen and the
+//    World tab passes axe at 390, in both themes.
+// 9. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
-// 9. Signing out takes the account's characters off the phone and leaves the
+// 10. Signing out takes the account's characters off the phone and leaves the
 //    phone's own. Kai downloads her data, then deletes her account: it's gone
 //    from the database, her campaign ends with its board and she's out of
 //    Mo's. The account page passes axe at 320 wide, and the campaign screens
@@ -1286,8 +1309,443 @@ try {
   console.log("7. The world: the faction board");
   await checkWorld();
 
-  // ------------------------------------------------------------ 8. who can do what
-  console.log("8. Who can do what");
+  // ------------------------------------------------------------ 8. the faction turn
+  async function checkTurn() {
+    const T = await import("../src/companion/turn.js");
+    const B = await import("../src/companion/board.js");
+    const W = JSON.parse(readFileSync(join("src", "generated", "book.json"), "utf8")).companion.worlds;
+    const gmWho = { role: "gm" };
+    const plWho = { role: "player" };
+    // A board from the book, for the rules on their own.
+    let n = 0;
+    const lid = () => `l${(++n).toString(36).padStart(3, "0")}`;
+    const boardFrom = (id) => {
+      const doc = T.blank();
+      for (const c of W.boards.find((b) => b.id === id).cards) {
+        T.applyAll(doc, { o: "new", f: { ...c, id: c.key.slice(0, 24), shown: {}, ...Object.fromEntries(["res", "assets", "agendas", "pub", "mor", "loy"].map((l) => [l, c[l].map((x) => ({ ...x, id: lid() }))])), threads: c.threads.map((x) => ({ ...x, id: lid(), to: "crew" })) } }, gmWho);
+      }
+      return doc;
+    };
+    const ok = (r, what) => yes(r.ok, `${what}${r.why ? `: ${r.why}` : ""}`);
+
+    // Two things in one job: the Guild's d10 splits into a d6 to Acquire the
+    // Salt Contracts and a d4 to keep its name out of it. The Estate rolls its
+    // d12 once, a 4. The d6 comes up 5 and the d4 comes up 2.
+    const steep = boardFrom("steeplands");
+    const vane = B.find(steep, "the-vane-estate");
+    const guild = B.find(steep, "the-harbour-guild");
+    same([B.stepsOf(vane), B.stepsOf(guild)], [6, 5], "the rules: the Estate's a d12 and the Guild's a d10");
+    ok(T.applyAll(steep, { o: "t-start", id: "rules-one" }, gmWho, { now: 1 }), "the rules: a faction turn starts");
+    const salt = vane.res.find((r) => r.text === "Salt Contracts");
+    ok(T.applyAll(steep, { o: "t-act", id: "rules-one", a: { by: guild.id, what: "out", out: "Acquire", act: undefined, to: vane.id, thing: { l: "res", lid: salt.id }, vs: "power", split: 3, p2: "quiet" } }, gmWho), "the rules: the Guild's job");
+    same(T.partsFor(steep, steep.turn.acts[0]).map((p) => p.dice), [[6], [4]], "the rules: the Guild's split, a d6 and a d4");
+    yes(!T.applyAll(steep, { o: "t-roll", id: "rules-one", by: guild.id, r: [[{ d: 6, v: 5 }], [{ d: 4, v: 2 }]] }, gmWho).ok, "the rules: nothing rolls till the actions land");
+    T.applyAll(steep, { o: "t-step", id: "rules-one", v: "land" }, gmWho);
+    ok(T.applyAll(steep, { o: "t-roll", id: "rules-one", by: guild.id, r: [[{ d: 6, v: 5 }], [{ d: 4, v: 2 }]], def: { f: vane.id, r: [{ d: 12, v: 4 }] } }, gmWho), "the rules: the Guild rolls, and the Estate's d12 with it");
+    same(T.resultsOf(steep).get(guild.id).parts.map((p) => p.st), ["won", "lost"], "the rules: the contracts are the Guild's, and the Estate knows who took them");
+    yes(!T.applyAll(steep, { o: "t-roll", id: "rules-one", by: guild.id, r: [[{ d: 6, v: 6 }], [{ d: 4, v: 4 }]] }, plWho).ok, "the rules: a player can't roll a faction's dice");
+    // Everyone who goes at the Estate after that has to beat the same 4.
+    ok(T.applyAll(steep, { o: "t-act", id: "rules-one", a: { by: "crew", what: "out", out: "Destroy", to: vane.id, vs: "power", power: 2, slot: true } }, gmWho), "the rules: the GM sets the crew's action while they land");
+    ok(T.applyAll(steep, { o: "t-roll", id: "rules-one", by: "crew", r: [[{ d: 8, v: 4 }]], def: { f: vane.id, r: [{ d: 12, v: 11 }] } }, plWho), "the rules: the crew rolls at the Estate's Power");
+    same([steep.turn.def[vane.id][0].v, T.resultsOf(steep).get("crew").parts[0].st], [4, "tie"], "the rules: the Estate's 4 stands for everyone after, so the crew's 4 ties it");
+    // The week: Vane comes home at d10, with its Household Guard left out and
+    // its Public Sentiment thread a step, so 6 steps, a d12. The crew's d4
+    // can't Obstruct it alone, and with Bram's slot in it's a d8. It rolls 5
+    // against the d12's 9, which then beats the agenda's 4.
+    const week = boardFrom("steeplands");
+    const v2 = B.find(week, "the-vane-estate");
+    T.applyAll(week, { o: "die", id: v2.id, lid: v2.agendas[0].id, v: 10 }, gmWho);
+    T.applyAll(week, { o: "t-start", id: "rules-two" }, gmWho);
+    T.applyAll(week, { o: "t-act", id: "rules-two", a: { by: v2.id, what: "agenda", ag: v2.agendas[0].id, left: [v2.assets.find((a) => a.text === "Household Guard").id], fits: [v2.pub[0].id] } }, gmWho);
+    same(T.partsFor(week, week.turn.acts[0]).map((p) => p.dice), [[12]], "the rules: 1 step, four assets and a thread make the Estate's d12");
+    T.applyAll(week, { o: "t-step", id: "rules-two", v: "tele" }, gmWho);
+    const obstruct = { by: "crew", what: "out", out: "Obstruct", act: v2.id, power: 2 };
+    yes(!T.applyAll(week, { o: "t-act", id: "rules-two", a: obstruct }, plWho).ok, "the rules: the crew's d4 alone can't Obstruct a d12");
+    ok(T.applyAll(week, { o: "t-act", id: "rules-two", a: { ...obstruct, slot: true, slotBy: "Bram" } }, plWho), "the rules: with Bram's slot in, it can");
+    same(T.partsFor(week, week.turn.acts[1]).map((p) => p.dice), [[8]], "the rules: two slots count everything twice, so the crew's d4 is a d8");
+    T.applyAll(week, { o: "t-step", id: "rules-two", v: "land" }, gmWho);
+    T.applyAll(week, { o: "t-roll", id: "rules-two", by: "crew", r: [[{ d: 8, v: 5 }]], at: [[{ d: 12, v: 9 }]] }, plWho);
+    T.applyAll(week, { o: "t-roll", id: "rules-two", by: v2.id, r: [[{ d: 12, v: 9 }]], vr: [{ d: 10, v: 4 }] }, gmWho);
+    let res = T.resultsOf(week);
+    same([res.get("crew").parts[0].st, res.get(v2.id).parts[0].st], ["lost", "won"], "the rules: 5 against the d12's 9, so it goes ahead, and 9 beats the agenda's 4");
+    // A tie goes to the faction that telegraphed it, and an extra resource takes it.
+    T.applyAll(week, { o: "t-roll", id: "rules-two", by: v2.id, r: [[{ d: 12, v: 8 }]], vr: [{ d: 10, v: 4 }] }, gmWho);
+    T.applyAll(week, { o: "t-roll", id: "rules-two", by: "crew", again: true, r: [[{ d: 8, v: 8 }]] }, plWho);
+    same(T.resultsOf(week).get("crew").parts[0].st, "tie", "the rules: a tie goes to the faction that telegraphed it");
+    yes(!T.applyAll(week, { o: "t-tie", id: "rules-two", p: 0, v: true }, plWho, { extra: 0 }).ok, "the rules: no extra resource, no tie");
+    ok(T.applyAll(week, { o: "t-tie", id: "rules-two", p: 0, v: true }, plWho, { extra: 1 }), "the rules: an extra resource takes the tie");
+    same(T.resultsOf(week).get(v2.id).stopped, "crew", "the rules: and the Estate's action is stopped");
+    // Hiring: the Tithe Fleet's hostile to the crew, and won't take its money.
+    const brine = boardFrom("brinewake");
+    T.applyAll(brine, { o: "t-start", id: "rules-three" }, gmWho);
+    yes(!T.applyAll(brine, { o: "t-hire", id: "rules-three", h: { id: "hire-z", by: "crew", to: "the-tithe-fleet" } }, plWho, { extra: 1 }).ok, "the rules: a player can't pay a faction the crew hasn't been shown");
+    for (const f of brine.factions) T.applyAll(brine, { o: "show", id: f.id, p: "card", v: true }, gmWho);
+    same(T.applyAll(brine, { o: "t-hire", id: "rules-three", h: { id: "hire-a", by: "crew", to: "the-tithe-fleet" } }, plWho, { extra: 1 }).why, "The Tithe Fleet won’t take the crew’s money. It’s hostile to you.", "the rules: a hostile faction won't take the crew's money");
+    ok(T.applyAll(brine, { o: "t-hire", id: "rules-three", h: { id: "hire-b", by: "crew", to: "the-brothers-of-the-lamp" } }, plWho, { extra: 1 }), "the rules: the Brothers will");
+    yes(!T.applyAll(brine, { o: "t-hire", id: "rules-three", h: { id: "hire-c", by: "crew", to: "the-drowned-choir" } }, plWho, { extra: 1 }).ok, "the rules: one extra resource pays for one hire");
+
+    // ---------------------------------------------------------- on three phones
+    const worldOf = async (id = tuesday.id) => JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", id))[0]?.data ?? "null");
+    const factionIn = async (name) => (await worldOf())?.factions.find((f) => f.name === name) ?? null;
+    const turnIn = async () => (await worldOf())?.turn ?? null;
+    const playerWorld = async (page = kai.page, id = tuesday.id) => (await got(page, "GET", `/api/campaigns/${id}/world`)).json?.world;
+    const partyOf = async () => JSON.parse((await rows("SELECT data FROM party WHERE campaignId = ?1", tuesday.id))[0]?.data ?? "null");
+    const ids = {};
+    for (const name of ["The Vane Estate", "The Harbour Guild", "The Quiet Order", "The Tithe Fleet", "The Brothers of the Lamp"]) ids[name] = (await factionIn(name)).id;
+    const row = (name) => `.wt-row:has(.wt-row-n:text-is("${name}"))`;
+    const card = (name) => `.wt-tele:has(h4:text-is("${name}"))`;
+    const toWorld = async (page = mo.page) => {
+      await page.goto(`${BASE}/characters/?camp=${tuesday.id}&world`);
+      await page.waitForSelector(".wb-crew");
+    };
+    const toTab = async (page, ch) => {
+      await page.goto(`${BASE}/characters/?c=${ch}&t=world`);
+      await page.waitForSelector(".wb-tab .wb-crew");
+    };
+    // The phone's dice, fixed: the next rolls come up these faces, in order.
+    const fixDice = (page, faces) => page.evaluate((f) => {
+      window.__faces = [...(window.__faces ?? []), ...f];
+      if (window.__fixed) return;
+      window.__fixed = true;
+      const real = crypto.getRandomValues.bind(crypto);
+      crypto.getRandomValues = (arr) => {
+        if (arr instanceof Uint32Array && window.__faces.length) {
+          arr[0] = window.__faces.shift() - 1;
+          return arr;
+        }
+        return real(arr);
+      };
+    }, faces);
+    // One faction's action, set on Mo's phone: what it does, then the rest.
+    async function setAct(name, fill) {
+      await mo.page.click(`${row(name)} [data-do="t-edit"]`);
+      await mo.page.waitForSelector(`${row(name)} form[data-form="w-tact"]`);
+      await fill(`${row(name)} form[data-form="w-tact"]`);
+      await mo.page.click(`${row(name)} form[data-form="w-tact"] button[type="submit"]`);
+      await mo.page.waitForSelector(`${row(name)} form[data-form="w-tact"]`, { state: "detached" });
+    }
+    const pick = async (form, field, label) => {
+      await mo.page.selectOption(`${form} select[name="${field}"]`, label ? { label } : undefined);
+      await mo.page.waitForTimeout(80);
+    };
+
+    // Ready for the book's example: Hired Swords paid for again, so the Estate's
+    // a d12, and a bond thread on the Guild that fits its job, a step on its d8.
+    await toWorld();
+    await mo.page.click(`.wb-tok-a:has(b.wb-tok-n:text-is("The Vane Estate"))`);
+    await mo.page.waitForSelector(".wb-card");
+    await mo.page.click('details[data-open^="wb-power-"] > summary');
+    await mo.page.click(`details[data-open^="wb-power-"] .pt-line:has(b:text-is("Hired Swords")) [data-do="paid"]`);
+    await until(async () => (await mo.page.textContent(".wb-card-v")) === "d12", "the Estate a d12 again");
+    await toWorld();
+    await mo.page.click(`.wb-tok-a:has(b.wb-tok-n:text-is("The Harbour Guild"))`);
+    await mo.page.waitForSelector(".wb-card");
+    await mo.page.click('details[data-open^="wb-bonds-"] > summary');
+    const pubForm = 'details[data-open^="wb-bonds-"] form[data-form="w-add"][data-l="pub"]';
+    await mo.page.fill(`${pubForm} input[name="text"]`, "The docks trust the Guild’s scales");
+    await mo.page.click(`${pubForm} button[type="submit"]`);
+    await until(async () => (await factionIn("The Harbour Guild"))?.pub.length === 1, "the Guild's Public Sentiment thread on the server");
+    // The Brothers of the Lamp shown to the crew, and two more resources on the
+    // party sheet, so the crew's got an extra one.
+    await toWorld();
+    await mo.page.click(`.wb-tok-a:has(b.wb-tok-n:text-is("The Brothers of the Lamp"))`);
+    await mo.page.click('[data-do="show"][data-p="card"]');
+    await until(async () => (await factionIn("The Brothers of the Lamp"))?.shown.card === true, "the Brothers shown to the crew");
+    await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/party`, { dev: "sams-phone-0101", ops: [{ n: 1, o: "add", l: "res", item: { id: "salvage", text: "Salvage rights" } }, { n: 2, o: "add", l: "res", item: { id: "harbour-work", text: "Harbour work" } }] });
+    const crewMoney = (await partyOf());
+    same([crewMoney.res.length, crewMoney.assets.length], [3, 2], "three resources for two assets on the party sheet, so one's extra");
+
+    // Mo starts downtime 1's faction turn, and Kai's phone has it.
+    await toWorld();
+    await mo.page.click('[data-do="t-start"]');
+    await until(async () => (await turnIn())?.step === "hire", "downtime 1's faction turn on the server");
+    has(await text(mo.page, ".wt"), "Hiring comes first", "Mo's phone opens on hiring");
+    await toTab(kai.page, "vesk-aaaaaa");
+    await until(async () => (await text(kai.page, ".wb-tab")).includes("Downtime 1: the faction turn"), "the faction turn on Vesk's World tab");
+    await until(async () => (await text(kai.page, ".wt")).includes("The crew’s got one extra resource this downtime"), "the crew's extra resource on Kai's phone");
+    // The Tithe Fleet won't take the crew's money, and the Brothers will.
+    const hireForm = '.wt form[data-form="w-thire"]';
+    await kai.page.selectOption(`${hireForm} select[name="to"]`, { label: "The Tithe Fleet" });
+    await kai.page.fill(`${hireForm} input[name="text"]`, "Look the other way");
+    await kai.page.click(`${hireForm} button[type="submit"]`);
+    await until(async () => (await text(kai.page, "#cc-toast")).includes("won’t take the crew’s money"), "Kai's phone saying the Fleet won't take it");
+    yes(!(await turnIn()).hires.length, "and nobody's hired on the server");
+    await until(async () => (await kai.page.$(hireForm)) && (await kai.page.$$(`${hireForm} option`)).length === 2, "the hiring form back on Kai's phone");
+    await kai.page.selectOption(`${hireForm} select[name="to"]`, { label: "The Brothers of the Lamp" });
+    await kai.page.fill(`${hireForm} input[name="text"]`, "Stop the Fleet closing the Combs");
+    await kai.page.click(`${hireForm} button[type="submit"]`);
+    await until(async () => (await turnIn())?.hires.some((h) => h.by === "crew" && h.to === ids["The Brothers of the Lamp"]), "the crew paying the Brothers, on the server");
+
+    // Mo gets every faction's action ready.
+    await nudge(mo.page);
+    await until(async () => (await text(mo.page, row("The Brothers of the Lamp"))).includes("The crew’s paying it"), "Mo's phone showing the crew's paying the Brothers");
+    await setAct("The Harbour Guild", async (form) => {
+      await pick(form, "what", "Acquire");
+      await pick(form, "to", "The Vane Estate");
+      await pick(form, "thing", "Salt Contracts (resource)");
+      await mo.page.check(`${form} input[name^="fit-"]`);
+      await mo.page.waitForTimeout(80);
+      await mo.page.check(`${form} input[name="split"]`);
+      await mo.page.waitForTimeout(80);
+      await pick(form, "first", "d6 and d4");
+      await mo.page.check(`${form} input[name="shown"]`);
+    });
+    has(await text(mo.page, row("The Harbour Guild")), "Acquire: the Vane Estate’s Salt Contracts, and keeps its name out of it", "the Guild's job, the book's way");
+    has(await text(mo.page, row("The Harbour Guild")), "d6 and d4", "with its d6 and its d4");
+    await setAct("The Tithe Fleet", async () => {});
+    has(await text(mo.page, row("The Tithe Fleet")), "Works its agenda, Close the Combs, at d4", "the Fleet working Close the Combs, its own agenda being where it starts");
+    await setAct("The Brothers of the Lamp", async (form) => {
+      await pick(form, "what", "Obstruct");
+      await mo.page.selectOption(`${form} select[name="act"]`, ids["The Tithe Fleet"]);
+      await mo.page.waitForTimeout(80);
+      await mo.page.check(`${form} input[name="shown"]`);
+    });
+    await setAct("The Vane Estate", async (form) => {
+      await pick(form, "what", "Writes a new agenda");
+      await mo.page.fill(`${form} input[name="nt"]`, "Buy back the vineyards");
+    });
+    has(await text(mo.page, row("The Vane Estate")), "Off-screen", "the Estate's new agenda kept off-screen");
+    await setAct("The Quiet Order", async (form) => {
+      await pick(form, "what", "Comes for the crew");
+      await mo.page.check(`${form} input[name="shown"]`);
+    });
+    await until(async () => (await turnIn())?.acts.filter((a) => a.by !== "crew").length === 5, "five factions' actions on the server");
+    const order = (await turnIn()).acts.find((a) => a.by === ids["The Quiet Order"]);
+    yes(order?.table?.r >= 1 && order.table.d2 >= 1, "the Order's d12 rolled as it's telegraphed, after a d2, since it's got no threads toward the crew");
+    same((await playerWorld()).turn.acts.filter((a) => a.by !== "crew").length, 0, "nothing's on Kai's phone till Mo sends them");
+
+    // He sends them: a second tap, since four factions have no action.
+    await mo.page.click('[data-do="t-step"][data-v="tele"]');
+    has(await mo.page.textContent('[data-do="t-step"][data-v="tele"]'), "Tap again", "a second tap, with factions doing nothing");
+    await mo.page.click('[data-do="t-step"][data-v="tele"]');
+    await until(async () => (await turnIn())?.step === "tele", "the telegraphs out, on the server");
+    yes((await factionIn("The Quiet Order")).shown.card && (await factionIn("The Harbour Guild")).shown.card, "the factions named in the telegraphs shown to the crew");
+    const sent = await playerWorld();
+    same(sent.turn.acts.filter((a) => a.by !== "crew").map((a) => a.byName).sort(), ["The Brothers of the Lamp", "The Harbour Guild", "The Quiet Order", "The Tithe Fleet"], "Kai gets the four telegraphs");
+    yes(!JSON.stringify(sent).includes("Buy back the vineyards"), "and nothing of the Estate's action, off-screen");
+    yes(!JSON.stringify(sent.turn).includes("left") && !sent.turn.acts.some((a) => a.fits), "nor how Mo counted any faction's dice");
+    await nudge(kai.page);
+    await until(async () => (await kai.page.$$(".wt-tele")).length >= 4, "four telegraphs on Vesk's World tab");
+    has(await text(kai.page, card("The Harbour Guild")), "Acquire: the Vane Estate’s Salt Contracts, and keeps its name out of it", "the Guild's telegraph on Kai's phone");
+    same(await kai.page.getAttribute(card("The Harbour Guild"), "aria-label"), "The Harbour Guild: d6 and d4, against d12", "with its dice and the Estate's d12");
+    has(await text(kai.page, card("The Quiet Order")), "d12:", "and the Order's roll on the table, so the crew knows what's coming");
+
+    // Sam, with no signal, picks the crew's action: Obstruct the Order. Its d8's
+    // bigger than the crew's d6, so it takes Bram's slot in.
+    await toTab(sam.page, "bram-ssssss");
+    await until(async () => (await sam.page.$$(".wt-tele")).length >= 4, "the telegraphs on Bram's World tab");
+    await sam.context.setOffline(true);
+    await sam.page.click('.wt [data-do="t-edit"][data-k="crew"]');
+    const crewForm = '.wt form[data-form="w-tcrew"]';
+    await sam.page.selectOption(`${crewForm} select[name="what"]`, { label: "Obstruct" });
+    await sam.page.waitForTimeout(80);
+    await sam.page.selectOption(`${crewForm} select[name="act"]`, { label: "The Quiet Order: comes for the crew" });
+    await sam.page.waitForTimeout(80);
+    has(await text(sam.page, crewForm), "bigger than the crew", "Sam's phone saying the Order's too big for the crew's action alone");
+    yes(await sam.page.$eval(`${crewForm} button[type="submit"]`, (b) => b.disabled), "so it can't be saved like that");
+    await sam.page.check(`${crewForm} input[name="slot"]`);
+    await sam.page.waitForTimeout(80);
+    await sam.page.fill(`${crewForm} input[name="slotBy"]`, "Bram");
+    await sam.page.click(`${crewForm} button[type="submit"]`);
+    await until(async () => (await text(sam.page, ".wt")).includes("Bram’s personal slot’s in"), "the crew's action on Sam's phone, with no signal");
+    has(await text(sam.page, ".wb-tab"), "goes up when you’ve got a signal", "and it says it goes up when there's a signal");
+    yes(!(await turnIn()).acts.some((a) => a.by === "crew"), "it hasn't gone up yet");
+    await sam.context.setOffline(false);
+    await until(async () => (await turnIn())?.acts.find((a) => a.by === "crew")?.slot === true, "the crew's action on the server once Sam's back");
+    same(T.partsFor(T.readable(await worldOf()), (await turnIn()).acts.find((a) => a.by === "crew")).map((p) => p.dice), [[12]], "the crew's d6 with Bram's slot in, a d12");
+    await nudge(kai.page);
+    await until(async () => (await text(kai.page, ".wt-crew")).includes("Obstructs the Quiet Order’s action"), "the crew's action on Kai's phone");
+    // Kai can't set a faction's action or roll its dice.
+    same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "kais-phone-0101", ops: [{ n: 1, o: "t-act", id: (await turnIn()).id, a: { by: ids["The Tithe Fleet"], what: "comes" } }] })).status, 403, "Kai can't set a faction's action");
+    same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "kais-phone-0101", ops: [{ n: 2, o: "t-roll", id: (await turnIn()).id, by: ids["The Tithe Fleet"], r: [[{ d: 10, v: 10 }]] }] })).status, 403, "or roll its dice");
+
+    // The actions land.
+    await nudge(mo.page);
+    await until(async () => (await text(mo.page, ".wt-crew")).includes("Obstructs the Quiet Order’s action"), "the crew's action on Mo's phone");
+    await mo.page.click('[data-do="t-step"][data-v="land"]');
+    await until(async () => (await turnIn())?.step === "land", "the actions landing, on the server");
+    has(await text(mo.page, ".wt"), "Obstructs first", "Obstructs first");
+    // Real dice, tapped in: the Guild's 5 and 2, and the Estate's d12 a 4.
+    const realIn = async (name, faces) => {
+      await mo.page.click(`${card(name)} [data-do="t-real"]`);
+      const form = `${card(name)} form[data-form="w-treal"]`;
+      await mo.page.waitForSelector(form);
+      for (const [k, v] of Object.entries(faces)) await mo.page.selectOption(`${form} select[name="${k}"]`, String(v));
+      await mo.page.click(`${form} button[type="submit"]`);
+      await mo.page.waitForSelector(form, { state: "detached" });
+    };
+    await realIn("The Harbour Guild", { "r-0-0": 5, "r-1-0": 2, "def-0": 4 });
+    has(await text(mo.page, card("The Harbour Guild")), "5 beats 4: it wins", "Two things in one job: the d6's 5 beats the Estate's 4");
+    has(await text(mo.page, card("The Harbour Guild")), "2 against 4: the Vane Estate knows exactly who did it", "and the d4's 2 doesn't");
+    // The Fleet's d10 a 6 against Close the Combs' d4 a 3, and the Brothers' d6 a 4 against its 6.
+    await realIn("The Tithe Fleet", { "r-0-0": 6, "vr-0": 3 });
+    await realIn("The Brothers of the Lamp", { "r-0-0": 4 });
+    has(await text(mo.page, card("The Brothers of the Lamp")), "4 against 6", "the Brothers lose to the Fleet's 6");
+    has(await text(mo.page, card("The Tithe Fleet")), "6 beats 3: the agenda climbs", "so Close the Combs climbs");
+    // Sam rolls the crew's dice: a 5, and the Order's d8 a 5 too. A tie goes to
+    // the Order, and the crew's extra resource paid the Brothers, so he rolls
+    // again for 1 Resolve: a 9.
+    await nudge(sam.page);
+    await until(async () => (await sam.page.$('.wt [data-do="t-roll"][data-by="crew"]')) != null, "Roll the crew's dice on Sam's phone");
+    await fixDice(sam.page, [5, 5]);
+    await sam.page.click('.wt [data-do="t-roll"][data-by="crew"]');
+    await until(async () => (await text(sam.page, ".wt-tele.is-crew")).includes("5 ties 5"), "a tie on Sam's phone");
+    has(await text(sam.page, ".wt-tele.is-crew"), "a tie goes to the Quiet Order", "and it goes to the Order");
+    yes(await sam.page.$eval('.wt [data-do="t-tie"]', (b) => b.disabled), "the crew's extra resource is spent, so it can't take the tie");
+    await fixDice(sam.page, [9]);
+    await sam.page.click('.wt [data-do="t-again"]');
+    await until(async () => (await text(sam.page, ".wt-tele.is-crew")).includes("9 beats 5"), "9 beats the Order's 5 on Sam's phone");
+    await until(async () => T.resultsOf(T.readable(await worldOf())).get(ids["The Quiet Order"])?.stopped === "crew", "the Order's action stopped, on the server");
+    same((await turnIn()).acts.find((a) => a.by === "crew").again, 1, "and the crew rolled again once");
+    await nudge(kai.page);
+    await until(async () => (await text(kai.page, card("The Quiet Order"))).includes("Stopped"), "the Order's action stopped on Kai's phone");
+
+    // Mo puts it all on the cards: the contracts move, the Estate knows, Close
+    // the Combs climbs and the Estate's new agenda goes on its card.
+    await nudge(mo.page);
+    await until(async () => (await text(mo.page, card("The Quiet Order"))).includes("Stopped"), "the Order stopped on Mo's phone");
+    yes(!(await mo.page.$('[data-do="t-rollall"]')), "every faction's dice are rolled");
+    await mo.page.click(`${card("The Harbour Guild")} form[data-form="w-tout"] button[type="submit"]`);
+    await mo.page.fill(`${card("The Harbour Guild")} form[data-form="w-tknow"] input[name="text"]`, "Took our Salt Contracts");
+    await mo.page.click(`${card("The Harbour Guild")} form[data-form="w-tknow"] button[type="submit"]`);
+    await mo.page.click(`${card("The Tithe Fleet")} [data-do="t-climb"]`);
+    await mo.page.click(`${card("The Vane Estate")} [data-do="t-newag"]`);
+    await until(async () => {
+      const [v, g, f] = [await factionIn("The Vane Estate"), await factionIn("The Harbour Guild"), await factionIn("The Tithe Fleet")];
+      return !v.res.some((r) => r.text === "Salt Contracts") && g.res.some((r) => r.text === "Salt Contracts") && v.threads.some((t) => t.to === g.id && t.kind === "hostile" && t.text === "Took our Salt Contracts") && f.agendas[0].die === 6 && v.agendas.some((a) => a.text === "Buy back the vineyards" && a.die === 6);
+    }, "the contracts the Guild's, the Estate's thread toward it, Close the Combs at d6 and Buy back the vineyards on the Estate's card");
+    await mo.page.click('[data-do="t-step"][data-v="done"]');
+    await until(async () => (await turnIn())?.step === "done", "downtime 1 done, in one tap since it's all on the cards");
+    await nudge(kai.page);
+    await until(async () => (await text(kai.page, ".wt")).includes("Downtime 1: how it went"), "how it went on Kai's phone");
+    yes(!JSON.stringify(await playerWorld()).includes("Buy back the vineyards"), "the Estate's off-screen action never reached Kai's phone");
+
+    // Downtime 2: Close the Combs happens and goes on the party sheet, and the
+    // crew makes a mini faction of its own.
+    const fleetAg = (await factionIn("The Tithe Fleet")).agendas[0];
+    await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "mos-phone-0101", ops: [{ n: 1, o: "die", id: ids["The Tithe Fleet"], lid: fleetAg.id, v: 12 }] });
+    await toWorld();
+    await mo.page.click('[data-do="t-start"]');
+    await until(async () => (await turnIn())?.n === 2, "downtime 2's faction turn");
+    await setAct("The Tithe Fleet", async () => {});
+    await mo.page.click('[data-do="t-step"][data-v="tele"]');
+    await mo.page.click('[data-do="t-step"][data-v="tele"]');
+    await until(async () => (await turnIn())?.step === "tele", "downtime 2's telegraphs out");
+    await toTab(kai.page, "vesk-aaaaaa");
+    await until(async () => (await kai.page.$('.wt [data-do="t-edit"][data-k="crew"]')) != null, "the crew's action on Kai's phone to pick");
+    await kai.page.click('.wt [data-do="t-edit"][data-k="crew"]');
+    await kai.page.selectOption(`${crewForm} select[name="what"]`, { label: "Establish" });
+    await kai.page.waitForTimeout(80);
+    await kai.page.fill(`${crewForm} input[name="about"]`, "A crew of our own on the Kittiwake");
+    await kai.page.click(`${crewForm} button[type="submit"]`);
+    await until(async () => (await turnIn())?.acts.find((a) => a.by === "crew")?.out === "Establish", "the crew Establishing, on the server");
+    await nudge(mo.page);
+    await until(async () => (await text(mo.page, ".wt-crew")).includes("Establishes"), "the crew's Establish on Mo's phone");
+    await mo.page.click('[data-do="t-step"][data-v="land"]');
+    await until(async () => (await turnIn())?.step === "land", "downtime 2 landing");
+    await realIn("The Tithe Fleet", { "r-0-0": 7, "vr-0": 2 });
+    await mo.page.click(`${card("The Tithe Fleet")} [data-do="t-climb"]`);
+    await mo.page.waitForSelector(`${card("The Tithe Fleet")} form[data-form="w-tchanged"]`);
+    await mo.page.fill(`${card("The Tithe Fleet")} form[data-form="w-tchanged"] input[name="text"]`, "Nobody sails the Combs without the Fleet’s papers now");
+    await mo.page.click(`${card("The Tithe Fleet")} form[data-form="w-tchanged"] button[type="submit"]`);
+    await until(async () => (await partyOf())?.changed?.some((x) => x.text === "Nobody sails the Combs without the Fleet’s papers now"), "Close the Combs on the party sheet, under What has changed");
+    yes((await factionIn("The Tithe Fleet")).agendas[0].done, "it's happened, on the Fleet's card");
+    // The crew's mini faction, handed Salvage rights and Muscle.
+    await mo.page.waitForSelector('form[data-form="w-tcmini"]');
+    const cm = 'form[data-form="w-tcmini"]';
+    await mo.page.fill(`${cm} input[name="name"]`, "The Kittiwake’s Lads");
+    await mo.page.selectOption(`${cm} select[name="res"]`, { label: "Salvage rights" });
+    await mo.page.selectOption(`${cm} select[name="asset"]`, { label: "Muscle (+1 Power)" });
+    await mo.page.check(`${cm} input[name="out-Acquire"]`);
+    await mo.page.check(`${cm} input[name="out-Obstruct"]`);
+    await mo.page.fill(`${cm} input[name="loy"]`, "We owe the crew our boat");
+    await mo.page.click(`${cm} button[type="submit"]`);
+    await until(async () => (await worldOf()).factions.some((f) => f.name === "The Kittiwake’s Lads" && f.mini && f.parent === "crew" && f.born === 2 && f.assets[0]?.text === "Muscle" && f.res[0]?.text === "Salvage rights"), "the Kittiwake's Lads on the board, the crew's own");
+    await until(async () => {
+      const p = await partyOf();
+      return !p.res.some((r) => r.text === "Salvage rights") && !p.assets.some((a) => a.text === "Muscle");
+    }, "Salvage rights and Muscle off the party sheet");
+    await mo.page.click('[data-do="t-step"][data-v="done"]');
+    await until(async () => (await turnIn())?.step === "done", "downtime 2 done");
+    await toWorld();
+    same(await mo.page.$$eval(".wb-ours .wb-tok-n", (els) => els.map((e) => e.textContent)), ["The Kittiwake’s Lads"], "the crew's mini faction under its card on the board");
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=party`);
+    await kai.page.waitForSelector('details[data-open="pt-changed"]');
+    await until(async () => (await text(kai.page, 'details[data-open="pt-changed"]')).includes("Nobody sails the Combs"), "What has changed on Vesk's Party tab");
+
+    // Nothing crosses between campaigns.
+    same((await got(zed.page, "GET", `/api/campaigns/${tuesday.id}/world`)).status, 404, "Zed gets nothing of Tuesday Lair's faction turn");
+    same((await got(zed.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "zeds-phone-0101", ops: [{ n: 1, o: "t-start", id: "zeds-turn" }] })).status, 404, "and can't start one");
+    same((await playerWorld(zed.page, zedsNight.id))?.turn ?? null, null, "Zed's Night has no faction turn");
+    same((await playerWorld(kai.page, zedsNight.id))?.turn ?? null, null, "and Kai's Dorrie sees none there");
+
+    // The faction turn at 390, in both themes: Mo's World screen landing, and
+    // Kai's World tab with the telegraphs.
+    await toWorld();
+    await mo.page.click('[data-do="t-start"]');
+    await until(async () => (await turnIn())?.n === 3, "downtime 3's faction turn");
+    // Close the Combs has happened, so the Fleet's form starts on its next
+    // agenda, and won't save till it's written.
+    await mo.page.click(`${row("The Tithe Fleet")} [data-do="t-edit"]`);
+    same(await mo.page.$eval(`${row("The Tithe Fleet")} select[name="what"]`, (el) => el.value), "new", "the Fleet's form starts on writing its next agenda");
+    await mo.page.click(`${row("The Tithe Fleet")} form[data-form="w-tact"] button[type="submit"]`);
+    await until(async () => (await text(mo.page, "#cc-toast")).includes("Write its new agenda first"), "and asks for it first");
+    await mo.page.click('[data-do="t-cancel"]');
+    await setAct("The Quiet Order", async () => {});
+    await setAct("The Harbour Guild", async (form) => {
+      await pick(form, "what", "Undermine");
+      await pick(form, "to", "The Vane Estate");
+    });
+    for (const theme of ["dark", "light"]) {
+      for (const p of [mo.page, kai.page]) await p.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await toWorld();
+      await mo.page.click(`${row("The Harbour Guild")} [data-do="t-edit"]`);
+      await mo.page.waitForSelector(`${row("The Harbour Guild")} form[data-form="w-tact"]`);
+      await axe(mo.page, `the faction turn, getting the actions ready, ${theme}`);
+      await shot(mo.page, `turn-gm-${theme}`);
+      await mo.page.click('[data-do="t-cancel"]');
+    }
+    await mo.page.click('[data-do="t-step"][data-v="tele"]');
+    await mo.page.click('[data-do="t-step"][data-v="tele"]');
+    await until(async () => (await turnIn())?.step === "tele", "downtime 3's telegraphs out");
+    for (const theme of ["dark", "light"]) {
+      for (const p of [mo.page, kai.page]) await p.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await toTab(kai.page, "vesk-aaaaaa");
+      await kai.page.waitForSelector(".wt-tele");
+      await kai.page.click('.wt [data-do="t-edit"][data-k="crew"]');
+      await axe(kai.page, `the faction turn on the World tab, ${theme}`);
+      await shot(kai.page, `turn-tab-${theme}`);
+    }
+    await mo.page.click('[data-do="t-step"][data-v="land"]');
+    await mo.page.click('[data-do="t-step"][data-v="land"]');
+    await until(async () => (await turnIn())?.step === "land", "downtime 3 landing");
+    for (const theme of ["dark", "light"]) {
+      for (const p of [mo.page, kai.page]) await p.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await toWorld();
+      await mo.page.waitForSelector(".wt-tele");
+      await axe(mo.page, `the actions landing, ${theme}`);
+      await shot(mo.page, `turn-land-${theme}`);
+    }
+    for (const p of [mo.page, kai.page]) await p.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+    // Roll the factions' dice in one tap: the Guild's d8 a 7 against the
+    // Estate's d12 a 3, then the Order's d8 a 5 against its agenda's d8 a 2.
+    await toWorld();
+    await fixDice(mo.page, [7, 3, 5, 2]);
+    await mo.page.click('[data-do="t-rollall"]');
+    await until(async () => (await text(mo.page, card("The Harbour Guild"))).includes("7 beats 3: it wins"), "the Guild's Undermine winning, rolled in one tap");
+    has(await text(mo.page, card("The Quiet Order")), "5 beats 2: the agenda climbs", "and the Order's agenda work, rolled with it");
+    // The Undermine strains the Estate's Public Sentiment thread.
+    await mo.page.click(`${card("The Harbour Guild")} [data-do="t-strain"]`);
+    await mo.page.click(`${card("The Quiet Order")} [data-do="t-climb"]`);
+    await until(async () => (await factionIn("The Vane Estate"))?.pub[0]?.s === "strained" && (await factionIn("The Quiet Order"))?.agendas[0]?.die === 10, "the Estate's thread strained and Bury the Vane scandal at d10");
+    await mo.page.click('[data-do="t-step"][data-v="done"]');
+    await until(async () => (await turnIn())?.step === "done", "downtime 3 done");
+  }
+  console.log("8. The faction turn");
+  await checkTurn();
+
+  // ------------------------------------------------------------ 9. who can do what
+  console.log("9. Who can do what");
   same((await api(kai.page, "GET", "/api/people")).status, 403, "a member can't see people");
   const people = (await got(mo.page, "GET", "/api/people")).json;
   same([people?.total, people?.people?.[0]?.email], [6, "zed@example.com"], "Mo sees everyone who's signed up, newest first");
@@ -1319,8 +1777,8 @@ try {
   yes(keys.length > 3 && keys.every((k) => /^[0-9a-f]{32}$/.test(k.key)), "rate limits keep HMACs, not addresses (Better Auth's too)");
   same(await rows("SELECT name FROM sqlite_master WHERE name = 'rateLimit'"), [], "no table of addresses");
 
-  // ------------------------------------------------------------ 9. leaving
-  console.log("9. Signing out, your data and deleting");
+  // ------------------------------------------------------------ 10. leaving
+  console.log("10. Signing out, your data and deleting");
   // A phone-only character stays when Kai signs out on the first phone.
   await kai.page.evaluate(() => {
     const data = JSON.parse(localStorage.getItem("zi-characters"));

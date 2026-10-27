@@ -1,16 +1,23 @@
-// A campaign's world, for one campaign (stage 1 of notes/worlds-plan.md): its
-// faction board. index.js has already checked that whoever's asking is this
-// campaign's GM or one of its players, and nothing here reads or changes
-// anything but this campaign's world.
+// A campaign's world, for one campaign (notes/worlds-plan.md): its faction
+// board, and the faction turn each downtime. index.js has already checked that
+// whoever's asking is this campaign's GM or one of its players, and nothing
+// here reads or changes anything but this campaign's world (and, for the
+// crew's extra resources, its party sheet).
 //
-//   GET  /api/campaigns/<id>/world?v=   the board: the whole of it for the GM,
-//        and for a player only what the crew's been shown (forPlayer() in
-//        board.js), so nothing they haven't been shown ever reaches their
-//        phone. With ?v= and nothing they'd see has changed, only { same: true }.
-//   POST /api/campaigns/<id>/world      the GM's changes from one phone: { dev, ops }.
-//        Each change carries a number that goes up on that phone, so a change
-//        sent twice (the signal dropped before the answer came back) counts once.
-import { apply, blank, forPlayer, readable } from "../companion/board.js";
+//   GET  /api/campaigns/<id>/world?v=   the world: the whole of it for the GM,
+//        and for a player only what the crew's been shown and the telegraphs
+//        she's sent (forPlayer() in turn.js), so nothing they haven't been
+//        shown ever reaches their phone. With ?v= and nothing they'd see has
+//        changed, only { same: true }.
+//   POST /api/campaigns/<id>/world      changes from one phone: { dev, ops }.
+//        The GM's can be anything. A player's can only be the crew's side of
+//        the faction turn (crewOp()), and a batch with anything else in it is
+//        turned away whole. Each change carries a number that goes up on that
+//        phone, so a change sent twice (the signal dropped before the answer
+//        came back) counts once. A change the rules won't take comes back in
+//        refused, with why, so the phone can say.
+import { readable as readableParty, moneyOf as partyMoney, powerOf as partyPower } from "../companion/party-sheet.js";
+import { applyAll, blank, crewOp, forPlayer, readable, spendOp } from "../companion/turn.js";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
 const MAX_CHANGES = 200;
@@ -51,15 +58,28 @@ export async function showWorld(env, url, camp, user, { json }) {
   return json({ v, world, role: camp.role });
 }
 
-// Only the GM gets here (index.js turns anyone else away).
+// The crew off its party sheet: its extra resources (what it can spend on
+// hiring a faction or taking a tie this downtime) and its Power in steps (so
+// the crew's action rolls the crew's real Power, whatever a phone says).
+async function crewOf(env, id) {
+  const row = await env.DB.prepare("SELECT data FROM party WHERE campaignId = ?1").bind(id).first();
+  const doc = readableParty(row ? parse(row.data) : null);
+  // A sheet nobody's touched yet is the book's new crew: a d4.
+  return { extra: row ? partyMoney(doc).extra : 0, power: row && doc.made ? partyPower(doc) : 2 };
+}
+
 export async function changeWorld(request, env, camp, user, { json, fail, body }) {
   const b = await body(request);
   const dev = String(b?.dev ?? "");
   if (!b || !DEV.test(dev) || !Array.isArray(b.ops)) return fail(400, "That didn’t look like a change to the board.");
   if (b.ops.length > MAX_CHANGES) return fail(413, "That’s a lot of changes at once. Send them a few at a time.");
   const ops = b.ops.filter((x) => x && typeof x === "object" && Number.isInteger(x.n) && x.n > 0).sort((x, y) => x.n - y.n);
+  const who = { role: camp.role === "gm" ? "gm" : "player", user: user.id };
+  if (who.role !== "gm" && !ops.every(crewOp)) return fail(403, "Only the GM can do that.");
+  const crew = ops.some((op) => spendOp(op) || (op.o === "t-act" && op.a?.by === "crew")) ? await crewOf(env, camp.id) : null;
   let row = null;
   let top = 0;
+  let refused = [];
   for (let tries = 0; ; tries++) {
     row = await worldRow(env, camp.id);
     const raw = row ? parse(row.data) ?? {} : {};
@@ -70,10 +90,13 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
     top = high;
     const now = Date.now();
     let changed = false;
+    refused = [];
     for (const op of ops) {
       if (op.n <= high) continue;
       top = Math.max(top, op.n);
-      changed = apply(doc, op) || changed;
+      const r = applyAll(doc, op, who, { now, extra: crew?.extra, power: crew?.power });
+      if (r.changed) changed = true;
+      if (!r.ok && r.why) refused.push({ n: op.n, why: r.why });
     }
     if (top === high) break;
     if (changed) {
@@ -95,5 +118,5 @@ export async function changeWorld(request, env, camp, user, { json, fail, body }
     // A change from her other phone got in first, so these go on top of it.
     if (tries >= 5) return fail(503, "The board’s being changed from somewhere else too. Try again in a moment.");
   }
-  return json({ seq: top, ...viewOf(camp, row), role: camp.role });
+  return json({ seq: top, refused, ...viewOf(camp, row), role: camp.role });
 }

@@ -781,7 +781,16 @@ function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, wa
     if (!group || !rows.length) warn(`can't read Appendix B's ${id.replace("assets-", "")} assets`);
     for (const r of rows) assets.push({ group, text: curly(plain(r[0])), does: curly(plain(r[1] ?? "")), power: power || /\+1 Power/.test(r[1] ?? "") });
   }
-  return { boards, build, sizes, assets, link: `${pageFor.get(factionsDoc.path)}#s-faction-board` };
+  // The faction turn (stage 2): the d6 for when the GM doesn't know what a
+  // faction does, and both tables for when a faction comes for the crew. The
+  // phone works out what each d6 row means by its place, so the rows have to
+  // stay in the book's order.
+  const d6 = (tablesOf(sectionOf(factionsDoc.body, "s-faction-turn")).find((t) => /^d6$/i.test(t.head[0]))?.rows ?? []).map((r) => ({ roll: plain(r[0]), text: curly(plain(r[1] ?? "")) }));
+  if (d6.length !== 5 || !/^1.2$/.test(d6[0]?.roll ?? "") || d6.slice(1).some((r, i) => r.roll !== String(i + 3))) warn(`expected the faction turn's d6 as five rows, 1–2 then 3 to 6, found ${d6.map((r) => r.roll).join(", ") || "none"}`);
+  const comesTable = tablesOf(sectionOf(factionsDoc.body, "s-faction-comes"))[0];
+  const comes = { hostile: (comesTable?.rows ?? []).map((r) => curly(plain(r[1] ?? ""))), bond: (comesTable?.rows ?? []).map((r) => curly(plain(r[2] ?? ""))) };
+  if (comes.hostile.length !== 12 || comes.bond.length !== 12 || !/hostile/i.test(comesTable?.head[1] ?? "") || !/bond/i.test(comesTable?.head[2] ?? "")) warn("expected When a Faction Comes for the Crew's two d12 columns, mostly hostile threads then mostly bond threads");
+  return { boards, build, sizes, assets, turn: { d6, comes }, link: `${pageFor.get(factionsDoc.path)}#s-faction-board` };
 }
 
 // What the character builder offers, read off Building Your Character and the
@@ -993,7 +1002,8 @@ const rules = {};
 for (const id of ["s-round", "s-telegraphs", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions", "s-aura", "s-resolve", "s-confidence", "s-armour",
   "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through", "s-blaze", "s-healing", "s-vulnerable", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "s-good-aspiration", "how-permissions-stack",
   "your-slots", "s-downtime-rolls", "s-goal", "s-good-goal", "s-climb", "s-projects", "s-crew-size", "s-crew-tags", "s-crew-wealth", "s-crew-grows", "s-party-resources",
-  "s-faction-board", "s-wealth", "s-faction-bonds", "s-agendas", "when-an-agenda-happens", "s-standing", "s-mini-factions", "s-faction-build"]) {
+  "s-faction-board", "s-wealth", "s-faction-bonds", "s-agendas", "when-an-agenda-happens", "s-standing", "s-mini-factions", "s-faction-build",
+  "s-faction-turn", "s-faction-outcomes", "s-faction-comes", "s-faction-crew"]) {
   const doc = docWith(`{#${id}}`);
   const head = doc?.body.match(new RegExp(`^#{2,4} (.+?) \\{#${id}\\}`, "m"));
   const blocks = [];

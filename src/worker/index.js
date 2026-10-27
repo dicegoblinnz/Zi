@@ -261,11 +261,13 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
     if (method === "GET") return showParty(env, url, camp, user, { json });
     if (method === "POST") return changeParty(request, env, camp, user, { json, fail, body });
   }
-  // The world, starting with its faction board (world.js). Everyone in the
-  // campaign sees what the crew's been shown, and only the GM changes it.
+  // The world: its faction board and the faction turn (world.js). Everyone in
+  // the campaign sees what the crew's been shown. Only the GM changes the
+  // board, and a player changes the crew's side of the faction turn and
+  // nothing else, which world.js checks change by change.
   if (sub === "world" && !subId) {
     if (method === "GET") return showWorld(env, url, camp, user, { json });
-    if (method === "POST") return gm ? changeWorld(request, env, camp, user, { json, fail, body }) : gmOnly();
+    if (method === "POST") return changeWorld(request, env, camp, user, { json, fail, body });
   }
   // The live table: the round's telegraphs and how each one went (table.js).
   if (sub === "table" && !subId) return tableRoute(request, env, method, camp, user, { json, fail, body, origins: originsOf(env), limited });

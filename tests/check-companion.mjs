@@ -2319,6 +2319,8 @@ if (part("10")) {
   }
   await page.goto(`${BASE}/learn/#${cards[cards.length - 1].id}`);
   await page.waitForSelector(".lr-card");
+  // The deck opens on the card it remembers, then goes to the one in the address.
+  await page.waitForFunction((id) => document.querySelector(".lr-card:not([inert])")?.id === id, cards[cards.length - 1].id, { timeout: 4000 }).catch(() => {});
   same(await text(page, ".lr-next"), "Finish", "the last card's Next says Finish");
 
   // A chapter: the strip follows you down and opens the contents.

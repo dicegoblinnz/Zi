@@ -2,6 +2,17 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
+## 27 Oct: the faction turn on phones
+
+The website now runs the faction turn the way Factions writes it (`notes/worlds-plan.md`, stage 2). The book didn't say what happens in these few spots, so the site does the smallest thing in the shape of the rules. Nothing in the book's changed for them, so if you say yes, Claude can write them into Factions as well.
+
+1. **An Obstruct against a split action** has to beat its highest die, and stops all of it. "Beat its dice" read plainly, so a split isn't easier to stop.
+2. **Two Obstructs at each other** can't stop each other, so both go ahead.
+3. **The crew can take a tie on its Obstruct** with an extra resource, the same as any of the crew's downtime rolls.
+4. **Setting back an agenda** goes at the one the faction's working on, when it's got two and the crew doesn't say which.
+5. **Nobody can Obstruct the crew's action,** since it's never telegraphed, and the crew can only Obstruct what's been telegraphed to it, so an off-screen action can't be stopped.
+6. **A faction that's lost something to a Destroy or an Acquire knows who did it,** and writes a hostile thread toward them, unless the action split to keep its name out of it. Then that die decides. That's the book's "unless it hurts them directly".
+
 ## 27 Oct: traits, gear and bonds
 
 1. **How each trait went passive.** Every trait's now Passive (always on) or Triggered (fires by itself), and none of them is a step. Where one was a step or something you chose to fire, here's what it does now:

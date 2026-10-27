@@ -11,7 +11,8 @@
 //   secret    its Secret's tag, and more, the rest of it
 //   note      the GM's own, never shown to the crew
 //   mini      a mini faction, made by parent (another faction's id, or "crew"),
-//             with outs, the two outcomes it can do
+//             with outs, the two outcomes it can do, and born, the downtime it
+//             was made in (it sits that one out, turn.js)
 //   res       [{ id, text, x, left }]  x is its multiplier, left the ticks it's got
 //   assets    [{ id, text, does, power, x, left, off }]  off: nothing's paying for it
 //   agendas   [{ id, text, die, done, then }]  two at most, then is what the book adds
@@ -35,7 +36,8 @@
 //   { o: "tick", id, l, lid, by }      a win ticks one off (by 1, and the last takes it off), or one comes back
 //   { o: "climb", id, lid, by }        an agenda up or down one: past d12 it's happened
 //   { o: "die", id, lid, v, done? }    an agenda set straight to a size
-//   { o: "move", id, l, lid, to, at? } a resource or an asset goes to another faction
+//   { o: "move", id, l, lid, to, at?, full? } a resource or an asset goes to another faction
+//                                      (full: taken, multiplier and all, so its ticks are back)
 //   { o: "book", id, card, h, at }     the book's card she's now seen (with her pick made in changes before it)
 //
 // A board out of the book comes in as one "new" for each card, so it's undone
@@ -118,6 +120,7 @@ export function factionOf(raw) {
   if (!f.name) return null;
   f.mini = raw.mini === true;
   f.parent = f.mini && (raw.parent === "crew" || isId(raw.parent)) && raw.parent !== raw.id ? raw.parent : null;
+  f.born = f.mini ? whole(raw.born, 0, 9999, 0) : 0;
   f.outs = f.mini && Array.isArray(raw.outs) ? [...new Set(raw.outs.filter((o) => OUTCOMES.includes(o)))].slice(0, 2) : [];
   for (const l of LISTS) {
     const seen = new Set();
@@ -278,7 +281,8 @@ export function apply(doc, op) {
       if (!item || to[op.l].some((x) => x.id === item.id) || to[op.l].length >= MAX.list) return false;
       f[op.l] = f[op.l].filter((x) => x !== item);
       const at = Number.isInteger(op.at) && op.at >= 0 && op.at < to[op.l].length ? op.at : to[op.l].length;
-      to[op.l].splice(at, 0, op.l === "assets" ? { ...item, off: false } : item);
+      const moved = { ...item, ...(op.full === true ? { left: item.x } : {}) };
+      to[op.l].splice(at, 0, op.l === "assets" ? { ...moved, off: false } : moved);
       break;
     }
     case "book": {
@@ -341,8 +345,11 @@ export function undoOf(doc, op) {
       const a = f?.agendas.find((x) => x.id === op.lid);
       return a ? [{ o: "die", id: f.id, lid: a.id, v: a.die, done: a.done }] : [];
     }
+    // Taken whole, its ticks go back to where they were once it's home.
     case "move":
-      return item ? [{ o: "move", id: op.to, l: op.l, lid: item.id, to: f.id, at: f[op.l].indexOf(item) }, ...(op.l === "assets" && item.off ? [{ o: "edit", id: f.id, l: "assets", lid: item.id, f: "off", v: true }] : [])] : [];
+      return item ? [{ o: "move", id: op.to, l: op.l, lid: item.id, to: f.id, at: f[op.l].indexOf(item) },
+        ...(op.l === "assets" && item.off ? [{ o: "edit", id: f.id, l: "assets", lid: item.id, f: "off", v: true }] : []),
+        ...(op.full === true ? Array.from({ length: item.x - item.left }, () => ({ o: "tick", id: f.id, l: op.l, lid: item.id, by: 1 })) : [])] : [];
     case "book":
       return f?.book ? [{ o: "book", id: f.id, card: copy(f.book.was), h: f.book.h, at: f.book.at }] : [];
     default:

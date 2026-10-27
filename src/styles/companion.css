@@ -1330,11 +1330,106 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
 .wb-tile .cc-small { margin: 0; }
 .wb-tab .wb-sec { margin-top: 0.8rem; }
 .wb-tab .wb-sec > h2 { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+/* The crew's own mini factions, under its card, and the turn on the way in. */
+.wb-ours { margin: -4px 0 12px; }
+.wb-ours .wb-tok-a { box-shadow: inset 3px 0 0 var(--gold); }
+.wb-ours .wb-tok.is-mini::before { border-color: var(--gold); }
+.wb-tile-turn { color: var(--zd-them-ink) !important; font-weight: 700; }
+
+/* The faction turn (turn-view.js): the GM's list of actions and her forms,
+   the telegraphs on everyone's phones, and the actions landing. */
+.wt { margin-bottom: 1.6rem; }
+.wt > h2 { margin-bottom: 0.4rem; }
+.wt-steps { display: flex; gap: 4px; margin: 0 0 0.9rem; padding: 0; list-style: none; counter-reset: wt; }
+.wt-steps li { flex: 1 1 0; min-width: 0; padding: 6px 4px 5px; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; text-align: center; color: var(--muted); border-bottom: 3px solid var(--line-soft); }
+.wt-steps li.is-done { color: var(--zd-them-ink); border-color: var(--zd-them-line); }
+.wt-steps li.is-on { color: var(--ink); border-color: var(--zd-them); }
+.wt-h3 { margin: 1.3rem 0 0.3rem; font-size: 1.1rem; }
+.wt-h4 { margin: 1rem 0 0.2rem; font-size: 0.95rem; color: var(--zd-them-ink); }
+.wt-hire, .wt-crew { margin-top: 0.4rem; }
+.wt-hire > p:not(.cc-small) { margin: 0.4rem 0; font-weight: 700; }
+.wt-rows, .wt-teles { display: grid; gap: 10px; margin: 0.4rem 0 0; padding: 0; list-style: none; }
+.wt-row { padding: 12px 14px; box-shadow: inset 3px 0 0 var(--zd-them-line); }
+.wt-row.is-editing { box-shadow: inset 3px 0 0 var(--zd-them); }
+.wt-row-top { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 12px; align-items: start; }
+.wt-row-die { display: flex; flex-direction: column; align-items: center; gap: 2px; padding-top: 2px; }
+.wt-row-die .zd-die { --s: 42px; }
+.wt-row-die .zd-die.is-next { --s: 24px; }
+.wt-row-in { display: grid; gap: 2px; min-width: 0; }
+.wt-row-in p { margin: 0; overflow-wrap: anywhere; }
+.wt-row .wb-k .wb-badge { margin-left: 2px; }
+.wt-row-n { font-family: var(--display); font-weight: 600; font-size: 1.1rem; line-height: 1.2; overflow-wrap: anywhere; }
+.wt-row-a { font-size: 0.97rem; }
+.wt-row-a small { color: var(--zd-them-ink); font-weight: 700; }
+.wt-row .cc-row { margin: 0.5rem 0 0; }
+.wt-hired { font-size: 0.9rem; color: var(--gold-ink); }
+.wt-form { margin-top: 0.7rem; padding-top: 0.7rem; border-top: 1px solid var(--line-soft); }
+.wt-form .cc-field select, .wt-form .cc-field input { width: 100%; }
+.wt-checks { display: grid; gap: 0; margin: 0; padding: 0; border: 0; min-width: 0; }
+.wt-checks legend { padding: 0; margin-bottom: 2px; font-size: 0.92rem; color: var(--muted); }
+.wt-checks .cc-small { margin: 0.3rem 0 0; }
+.wt-preview { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 10px; background: var(--panel); border-radius: 2px; }
+.wt-preview .zd-die { --s: 46px; }
+.wt-preview .zd-die.is-next { --s: 28px; }
+.wt-preview .cc-small { margin-left: auto; }
+.wt-and { font-weight: 800; color: var(--muted); }
+.wt-warn { color: var(--gold-ink); }
+.wt-d6 { margin: 0; }
+.wt-go { margin-top: 1.1rem; padding-top: 0.8rem; border-top: 1px solid var(--line-soft); }
+.wt-go .cc-small { margin: 0 0 0.5rem; }
+.wt-go .button { margin-right: 6px; }
+
+/* A telegraph from the faction turn: the kit's card, with a die for each
+   part of a split and what it's against beside them. */
+.wt-tele { max-width: none; }
+.wt-tele .tb { align-items: flex-start; }
+.wt-tele h4 { font-size: 1.25rem; overflow-wrap: anywhere; }
+.wt-tele .tb p { overflow-wrap: anywhere; }
+.wt-col { display: grid; gap: 6px; justify-items: start; flex: none; max-width: 46%; }
+.wt-dice { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.wt-part { display: inline-flex; align-items: center; gap: 3px; }
+.wt-tele .tb .wt-dice .zd-die { --s: 50px; }
+.wt-tele .tb .wt-dice .zd-die.is-next { --s: 30px; }
+.wt-vs { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.wt-vs small { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.wt-tele .tb .wt-vs .zd-die { --s: 36px; }
+.wt-split, .wt-bits { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 0; font-size: 0.9rem; color: var(--muted); }
+.wt-comes { margin: 0; font-size: 0.97rem; }
+.wt-tele .wt-hired { margin: 0; }
+.wt-res { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.wt-res li { padding: 6px 10px; font-weight: 700; background: var(--panel); border-left: 3px solid var(--line); border-radius: 2px; }
+.wt-res li.is-won, .wt-res li.is-free { border-color: var(--zd-them); }
+.wt-res li.is-lost, .wt-res li.is-tie, .wt-res li.is-stopped { color: var(--muted); }
+.wt-tele.is-crew { border-color: var(--gold); }
+.wt-tele.is-crew header { background: var(--gold); }
+.wt-tele.is-crew .k, .wt-tele.is-crew .r { color: var(--on-gold); }
+.wt-tele.is-crew .wt-res li.is-won { border-color: var(--gold); }
+.wt-tele.is-off { border-style: dashed; }
+.wt-tele.is-stopped h4, .wt-tele.is-held h4 { color: var(--muted); }
+.wt-land { display: grid; gap: 8px; padding-top: 0.6rem; border-top: 1px solid var(--line-soft); }
+.wt-land .cc-row, .wt-land .cc-small { margin: 0; }
+.wt-out { display: grid; gap: 8px; margin: 0; }
+.wt-out p { margin: 0; }
+.wt-out .cc-field input, .wt-out .cc-field select { width: 100%; }
+.wt-outs { margin: 0; }
+.wt-put { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0; }
+.wt-put small { color: var(--muted); }
+.wt-pads { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px; }
+.wt-pads-k { flex-basis: 100%; font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+.wt-pad { flex: 0 1 5.2rem; }
+.wt-pad select { width: 100%; }
+.wt-happened { margin: 0; }
+.wt-happened .pt-form { margin-top: 0.3rem; }
+.wt-sum { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.wt-sum li { overflow-wrap: anywhere; }
+.wt-sum small { display: block; color: var(--muted); }
 @media (max-width: 360px) {
   .wb-tok-a { grid-template-columns: 42px minmax(0, 1fr); gap: 10px; padding-inline: 10px; }
   .wb-tok-die .zd-die { --s: 40px; }
   .wb-card-die .zd-die { --s: 60px; }
   .wb-outs { grid-template-columns: minmax(0, 1fr); }
+  .wt-tele .tb .wt-dice .zd-die { --s: 42px; }
+  .wt-col { max-width: 40%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .wb-tok-a:active, .wb-tile-a:active { transform: none; }
