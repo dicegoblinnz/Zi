@@ -16,7 +16,7 @@
 import { BONDS, OUTCOMES, find, minisOf, moneyOf, standingOf, stepsOf } from "./board.js";
 import { diceLabel, rollDie, stepsToDice } from "./dice.js";
 import { lower } from "./table-rules.js";
-import { MAX, STEPS, allDice, allFaces, best, crewDice, crewResult, crewSteps, defOf, diceOf, landed, rolled, shapeOf, spentOf, stateOfAct } from "./turn-rules.js";
+import { MAX, STEPS, allDice, allFaces, best, crewDice, crewResult, crewSteps, defOf, diceOf, landed, powerAt, rolled, shapeOf, spentOf, stateOfAct } from "./turn-rules.js";
 import { die as kitDie } from "../kit/kit.js";
 
 const SIZES = [2, 4, 6, 8, 10, 12];
@@ -182,8 +182,10 @@ export function makeTurn(d) {
 
   function facRow(id, t, f) {
     const a = t.acts.find((x) => x.f === f.id);
-    const hired = t.hires.find((h) => h.to === f.id);
-    const tags = [a?.off ? "Off-screen" : "", a && t.pressure === a.id ? "Faction pressure" : "", hired ? `Paid by ${hired.byName === "The crew" ? "the crew" : hired.byName}` : ""].filter(Boolean);
+    const paid = t.hires.filter((h) => h.to === f.id);
+    const hired = paid[0] ?? null;
+    // Paid twice: the crew can't see who else paid, so she sorts it out.
+    const tags = [a?.off ? "Off-screen" : "", a && t.pressure === a.id ? "Faction pressure" : "", paid.length ? `Paid by ${andList(paid.map((h) => (h.by === "crew" ? "the crew" : h.byName)))}` : ""].filter(Boolean);
     return `<li><button type="button" class="card ft-fac${a ? " is-set" : ""}" data-act="ft" data-do="pick" data-f="${esc(f.id)}">
       <span class="ft-fac-die" aria-hidden="true">${them(powerOf(f))}</span>
       <span class="ft-fac-in"><span class="wb-k">${f.mini ? "Mini faction" : "Faction"}${tags.map((x) => ` <span class="ft-tag">${esc(x)}</span>`).join("")}</span><b class="ft-fac-n">${esc(f.name)}</b>
@@ -246,7 +248,7 @@ export function makeTurn(d) {
     const def = defOf(t, a);
     const nameOf = (f) => (f === "crew" ? crewName(id) : find(boardOf(id), f)?.name ?? "");
     const mine2 = a.main.length > 1 ? `Its best die came up ${best(a.faces.main)}` : `Its d${a.main[0]} came up ${a.faces.main[0]}`;
-    const theirs = a.vs.k === "power" ? `${poss(lower(nameOf(a.vs.f) || "its"))} ${diceLabel(t.power[a.vs.f]?.d ?? a.vs.d)} came up ${def}`
+    const theirs = a.vs.k === "power" ? `${poss(lower(nameOf(a.vs.f) || "its"))} ${diceLabel(powerAt(t, a.vs.f)?.d ?? a.vs.d)} came up ${def}`
       : a.vs.k === "act" ? `${poss(lower(nameOf(a.vs.f) || "its"))} dice came up ${def}`
       : a.what === "agenda" ? `the agenda’s d${a.vs.d[0]} came up ${def}` : `the d${a.vs.d[0]} it was up against came up ${def}`;
     const main = `${mine2}, and ${theirs}, so ${a.won.main ? "it worked" : "it didn’t land, and it’s a little angrier about it"}.`;
@@ -290,12 +292,13 @@ export function makeTurn(d) {
 
   function crewVs(id, t, c, gm) {
     const vs = c.vs;
-    if (vs.k === "none") return "No roll. It happens.";
+    if (vs.k === "none" && vs.set) return "No roll. It happens.";
+    if (vs.k === "none") return gm ? "Say whether anyone’s in the way. If nobody is, it happens." : `Waiting on ${esc(gmName(id))} to say whether anyone’s in the way.`;
     if (vs.k === "act") {
       const a = t.acts.find((x) => x.id === vs.act);
       return `Against ${a ? poss(lower(a.name)) : "its"} ${diceLabel(vs.d)}. Ties go to the faction.`;
     }
-    const kept = vs.k === "power" ? t.power[vs.f] : null;
+    const kept = vs.k === "power" ? powerAt(t, vs.f) : null;
     if (kept) return `Against its Power, ${diceLabel(kept.d)}, which came up ${best(kept.v)} already this downtime. That roll stands.`;
     if (vs.set) return `Against ${diceLabel(vs.d)}. Ties go to whoever’s defending.`;
     return gm ? "Say what it’s up against, and the crew can roll." : `Waiting on ${esc(gmName(id))} to say what it’s up against.`;
@@ -340,9 +343,9 @@ export function makeTurn(d) {
     let foot = "";
     if (!rolled(c)) {
       const ready = c.vs.set;
-      foot = `<div class="tg-do">${gm && !ready ? btn("vs", "Say what it’s up against", { cls: "button primary" }) : ""}
+      foot = `<div class="tg-do">${gm && !ready ? btn("vs", c.move === "Establish" ? "Say whether anyone’s in the way" : "Say what it’s up against", { cls: "button primary" }) : ""}
         ${can && ready ? `${btn("roll", c.vs.k === "none" ? "It happens" : "Roll it", { cls: "button primary" })}${c.vs.k === "none" ? "" : btn("real", "Real dice", { attrs: ' data-x="crew"' })}` : ""}
-        ${can ? btn("crew", "Change it", { cls: "button" }) : ""}${gm && ready && c.vs.k !== "act" && c.vs.k !== "none" ? btn("vs", "Change what it’s up against") : ""}</div>`;
+        ${can ? btn("crew", "Change it", { cls: "button" }) : ""}${gm && ready && c.vs.k !== "act" && (c.vs.k !== "none" || c.move === "Establish") ? btn("vs", "Change what it’s up against") : ""}</div>`;
     } else if (c.done == null) {
       const tied = c.faces && ((best(c.faces.main) === def && !c.tie.main) || (c.faces.split != null && c.faces.split === def && !c.tie.split));
       const lostAny = c.faces && (!c.won.main || c.won.split === false);
@@ -382,7 +385,7 @@ export function makeTurn(d) {
   function blockedBy(t, a) {
     const crew = t.crew?.move === "Obstruct" && t.crew.vs.act === a.id && !rolled(t.crew) ? t.crew : null;
     if (crew) return "The crew’s trying to stop it, so the crew rolls first.";
-    const by = t.acts.find((x) => x.what === "Obstruct" && !x.off && x.vs.act === a.id && !rolled(x));
+    const by = t.acts.find((x) => x.what === "Obstruct" && !x.off && x.vs.act === a.id && !landed(x));
     return by ? `${by.name}’s trying to stop it, so that goes first.` : "";
   }
   const readyToLand = (t, a) => !landed(a) && a.done == null && !blockedBy(t, a);
@@ -841,15 +844,17 @@ export function makeTurn(d) {
     const c = t?.crew;
     if (!c) return closed();
     const f = c.at.f && c.at.f !== "crew" ? find(boardOf(id), c.at.f) : null;
-    const kept = c.vs.k === "power" ? t.power[c.vs.f] : null;
+    const kept = c.vs.k === "power" ? powerAt(t, c.vs.f) : null;
     const suggest = c.at.part === "power" && f ? powerOf(f) : c.at.part === "agenda" && f ? (() => {
       const ag = f.agendas.find((x) => x.id === c.at.lid) ?? f.agendas.find((x) => !x.done);
       return ag ? [ag.die] : null;
     })() : null;
     const thing = c.at.part === "thing" && f ? 1 + f.assets.filter((a) => a.power && !a.off).length : null;
-    return `${head("What it’s up against", `Downtime ${t.n} · the crew’s action`)}
+    const est = c.move === "Establish";
+    return `${head(est ? "Is anyone in the way?" : "What it’s up against", `Downtime ${t.n} · the crew’s action`)}
       <div class="dlg-body ft-dlg tg-compose">
-        <p class="tg-for"><span class="k">The crew’s going at</span>${esc(c.at.name || "something")}: ${esc(c.does)}.</p>
+        <p class="tg-for"><span class="k">${est ? "The crew’s building" : "The crew’s going at"}</span>${esc(est ? c.does : c.at.name || "something")}${est ? "" : `: ${esc(c.does)}`}.</p>
+        ${est ? `<div class="tg-do">${btn("vsd", "Nobody’s in the way, so it happens", { cls: "button primary", attrs: ' data-k="none" data-d=""' })}</div><p class="cc-small">Or pick the die of whatever’s in the way.</p>` : ""}
         ${kept ? `<p class="cc-lead">${esc(f?.name ?? "Its")} Power came up ${best(kept.v)} on its ${diceLabel(kept.d)} already this downtime, and that roll stands.</p>` : ""}
         ${suggest && !kept ? `<div class="tg-do">${btn("vsd", `${c.at.part === "power" ? "Its Power" : "Its agenda"}, ${diceLabel(suggest)}`, { cls: "button primary", attrs: ` data-d="${suggest.join(",")}" data-k="${c.at.part === "power" ? "power" : "die"}"` })}</div><p class="cc-small">Or pick another die.</p>` : ""}
         ${thing && !kept ? `<p class="cc-small">One thing out on its own only has what’s guarding it: 1 step, plus each asset that adds Power and is really there. With every one there, that’s ${diceLabel(stepsToDice(thing))}.</p>` : ""}
@@ -874,7 +879,7 @@ export function makeTurn(d) {
       if (dice.split) rows.push({ key: "s", label: `${crew ? "The crew’s" : poss(it.name)} d${dice.split} for “${it.split.for}”`, size: dice.split, v: 0 });
     }
     const vs = it.vs;
-    if (vs.k === "power" && !t.power[vs.f]) vs.d.forEach((d2, i) => rows.push({ key: `v${i}`, label: `${vs.f === "crew" ? "The crew’s" : poss(boardOf(id).factions.find((f) => f.id === vs.f)?.name ?? "Its")} Power, a d${d2}`, size: d2, v: 0 }));
+    if (vs.k === "power" && !powerAt(t, vs.f)) vs.d.forEach((d2, i) => rows.push({ key: `v${i}`, label: `${vs.f === "crew" ? "The crew’s" : poss(boardOf(id).factions.find((f) => f.id === vs.f)?.name ?? "Its")} Power, a d${d2}`, size: d2, v: 0 }));
     if (vs.k === "die") vs.d.forEach((d2, i) => rows.push({ key: `v${i}`, label: `What it’s up against, a d${d2}`, size: d2, v: 0 }));
     if (vs.k === "act") {
       const target = t.acts.find((a) => a.id === vs.act);
@@ -904,7 +909,7 @@ export function makeTurn(d) {
     const out = {};
     if (!it.faces) out.faces = { main: dice.main.map((s, i) => got(`m${i}`, s)), split: dice.split ? got("s", dice.split) : null };
     const vs = it.vs;
-    if ((vs.k === "power" && !t.power[vs.f]) || vs.k === "die") out.vsFaces = vs.d.map((s, i) => got(`v${i}`, s));
+    if ((vs.k === "power" && !powerAt(t, vs.f)) || vs.k === "die") out.vsFaces = vs.d.map((s, i) => got(`v${i}`, s));
     if (vs.k === "act") {
       const target = t.acts.find((a) => a.id === vs.act);
       if (target && !target.faces) {
@@ -948,6 +953,10 @@ export function makeTurn(d) {
     }
     return "";
   }
+
+  // The line she starts from: nothing for one that moved off-screen, since
+  // that's only news if she says so.
+  const lineFor = (id, t, x) => (x.off ? "" : lineOf(id, t, x));
 
   const ago = (die) => ({ 2: "years off", 4: "a season or more away", 6: "a month or two away", 8: "a week or two away", 10: "days away", 12: "any day now" })[die] ?? "";
 
@@ -1055,7 +1064,7 @@ export function makeTurn(d) {
     const title = crew ? "The crew’s action" : x.name;
     const summary = crew ? `<p class="tg-for"><span class="k">${esc(MOVE_NAMES[x.move] ?? x.move)}</span>${esc(x.does)}${x.won && x.vs.k !== "none" ? `: ${esc(crewResult(x))}` : ""}.</p>` : `<ol class="tg-list">${actCard(id, t, x, true)}</ol>`;
     const changesHtml = changes(id, t, x, r);
-    const line = r.line ?? lineOf(id, t, x);
+    const line = r.line ?? lineFor(id, t, x);
     return `${head(title, `Downtime ${t.n} · what changes`)}
       <div class="dlg-body ft-dlg">${summary}
         ${changesHtml ? `<fieldset class="cc-group"><legend>${x.won?.main || x.vs.k === "none" || (!crew && !x.roll) ? "On the cards" : "Nothing changes, unless they know"}</legend><div class="ft-chgs">${changesHtml}</div><p class="cc-small">Each change is made as you tap it, with Undo if you need it.</p></fieldset>` : ""}
@@ -1221,10 +1230,14 @@ export function makeTurn(d) {
       const c = t?.crew;
       const place = mine(id);
       if (!c?.faces || !place) return;
-      if (!d.spendResolve(place.ch)) return d.toast(`${place.cname} hasn’t got any Resolve to spend.`, false);
       const dice = crewDice(c);
+      const op = { o: "ft-again", faces: { main: dice.main.map((s) => rollDie(s)), split: dice.split ? rollDie(dice.split) : null } };
+      // The Resolve's only spent on a roll the table will take.
+      const ok = T().check(id, op);
+      if (!ok.ok) return d.toast(ok.why || "That can’t be rolled again now.", false);
+      if (!d.spendResolve(place.ch)) return d.toast(`${place.cname} hasn’t got any Resolve to spend.`, false);
       ui.spin = "crew";
-      push(id, { o: "ft-again", faces: { main: dice.main.map((s) => rollDie(s)), split: dice.split ? rollDie(dice.split) : null } });
+      push(id, op);
     },
     tie(el, id) {
       push(id, { o: "ft-tie", which: el.dataset.w === "split" ? "split" : "main" });
@@ -1391,6 +1404,11 @@ export function makeTurn(d) {
       return "closed";
     },
     vsd(el, r) {
+      if (el.dataset.k === "none") {
+        push(r.camp, { o: "ft-vs", k: "none" });
+        d.closeDialog();
+        return "closed";
+      }
       const dice = String(el.dataset.d).split(",").map(Number).filter((x) => SIZES.includes(x));
       if (!dice.length) return;
       push(r.camp, { o: "ft-vs", d: dice, ...(el.dataset.k ? { k: el.dataset.k } : {}) });
@@ -1417,7 +1435,7 @@ export function makeTurn(d) {
       const t = turnOf(id);
       const x = r.x === "crew" ? t?.crew : t?.acts.find((a) => a.id === r.x);
       if (!x) return;
-      push(id, { o: "ft-done", id: r.x, line: String(r.line ?? lineOf(id, t, x)).trim() });
+      push(id, { o: "ft-done", id: r.x, line: String(r.line ?? lineFor(id, t, x)).trim() });
       d.closeDialog();
       return "closed";
     },

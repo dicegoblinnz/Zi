@@ -1750,6 +1750,12 @@ try {
       await mo.page.click(`.ft-act[data-ftk="${a.id}"] [data-do="land"]`);
       await until(async () => (await actOf(f.id))?.won, `${f.name}'s happened`);
       await mo.page.click(`.ft-act[data-ftk="${a.id}"] [data-do="out"]`);
+      if (f === tarrant) {
+        // Off-screen, so it's only news if he says so.
+        await mo.page.waitForSelector(`${dlg} #ft-line`);
+        same(await mo.page.inputValue(`${dlg} #ft-line`), "", "an off-screen action starts with no line");
+        await mo.page.fill(`${dlg} #ft-line`, "Tarrant & Daughters have a second warehouse on the docks.");
+      }
       await inDlg(mo.page, '[data-do="saveout"]');
     }
     const est = await actOf(vane.id);
@@ -1780,7 +1786,7 @@ try {
       "The Brothers of the Lamp hit the Vane Estate’s Low Market Rents.",
       "The Glass Shelf has risen out of the bay.",
       "The Tithe Fleet came for the crew: it tells the law.",
-      "Tarrant & Daughters built something new: a second warehouse.",
+      "Tarrant & Daughters have a second warehouse on the docks.",
     ], "what changed, a line each, the way Mo said it or the phone put it, and the Choir's in the words he gave the world's change");
     await toTab(kai.page, "vesk-aaaaaa");
     await kai.page.waitForSelector(".wb-tab .ft-last");
@@ -1810,6 +1816,11 @@ try {
     await inDlg(kai.page, '[data-do="move"][data-m="Establish"]');
     await kai.page.fill(`${dlg} #ft-est`, "The Lamp Boys, a mini faction of our own");
     await inDlg(kai.page, '[data-do="savecrew"]');
+    await until(async () => (await turnOf())?.crew?.move === "Establish", "the crew's Establish on the table");
+    same((await turnOf())?.crew?.vs?.set, false, "Mo says whether anyone's in the way, not Kai's phone");
+    await toWorld(mo.page);
+    await mo.page.click('.ft-crew [data-do="vs"]');
+    await inDlg(mo.page, '[data-do="vsd"][data-k="none"]');
     await kai.page.waitForSelector(".ft-crew [data-do='roll']");
     await kai.page.click(".ft-crew [data-do='roll']");
     await until(async () => (await turnOf())?.crew?.won?.main === true, "the crew's Establish happens");
