@@ -163,7 +163,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
    - Keep the Vane Estate's d12 if it can be done honestly, since the book's examples and `tests/check-accounts.mjs` run on it.
    - A GM's own asset on the World screen adds Power only when she marks it as people who turn up (`board.js` counts any asset marked `power`).
    - Send Mo, in one message, Appendix B's assets as they'll stand and every card that changed. He's never seen the list (to-confirm 8), and every genre names its assets after it, so his cuts happen here.
-2. **The engine.** Needs 1.
+2. **The engine.** Needs 1. *Built 28 Oct 2026.*
    - The YAML's shape in `content/world-tables/`, read into `public/world-tables.json` with the build's checks, the engine, and `src/companion/world-record.js` with the Worker's checks on `doc.build`.
    - `scripts/deal-world.mjs` deals boards as text for a recipe and a seed. `tests/check-world-engine.mjs` deals 200 boards in every region for every named genre the packs cover, and every mix at one region: the same seed deals the same board, the checks pass with fallbacks in under 1 board in 20, no bag gives the same row twice in a board, and every step that needs a because has one. Until stage 3, it runs on a small made-up pack kept with the tests, never shipped.
 3. **The core and Medieval** (tables). Needs 2.
