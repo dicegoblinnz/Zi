@@ -404,26 +404,28 @@ function stepBack(round, el) {
 // One at a stake or an event lands, and does what it said: a new tag in the
 // stake's way, or its clock (an event's die) down a size or two, and past d2
 // the stake's lost or the event happens. Nothing happens to one that's
-// settled or gone. What it did is kept on the telegraph.
-function land(doc, t) {
+// settled or gone. What it did is kept on the telegraph, with late when it
+// landed after the round's end had stepped the clocks down.
+function land(doc, t, late = false) {
   const hit = findEl(doc, t.at.ref);
   const el = hit && hit.kind !== "ground" ? hit.el : null;
+  const was = late ? { late: 1 } : {};
   if (!el || el.out) {
-    t.did = { none: el ? el.out : "gone" };
+    t.did = { none: el ? el.out : "gone", ...was };
     return;
   }
   if (t.fx?.tag) {
     if (el.tags.length >= MAX.tags) {
-      t.did = { none: "full" };
+      t.did = { none: "full", ...was };
       return;
     }
     el.tags.push({ name: t.fx.tag, gone: 0, by: t.id });
-    t.did = { tag: t.fx.tag };
+    t.did = { tag: t.fx.tag, ...was };
     return;
   }
   const k = el.t === "stake" ? "clock" : "d";
   if (!el[k]) {
-    t.did = { none: "clock" };
+    t.did = { none: "clock", ...was };
     return;
   }
   const from = el[k];
@@ -440,12 +442,11 @@ function land(doc, t) {
     el.out = out;
     if (el.t === "stake") el.clock = 0;
   } else el[k] = v;
-  t.did = { from, to: out ? 0 : v, out };
+  t.did = { from, to: out ? 0 : v, out, ...was };
 }
-// It didn't land after all: what it did comes off. Closed by it, it's back
-// where it was. Otherwise it's up by what it took, so whatever else moved it
-// still counts.
-function unland(doc, t) {
+// What it did comes off. Closed by it, it's back where it was. Otherwise it's
+// up by what it took, so whatever else moved it still counts.
+function unlandRaw(doc, t) {
   const did = t.did;
   delete t.did;
   if (!did || did.none) return;
@@ -468,21 +469,37 @@ function unland(doc, t) {
     }
   } else el[k] = Math.min(12, el[k] + (did.from - did.to));
 }
+// It didn't land after all. One that landed before the round's end stepped
+// the clocks down comes off from under that step: the step's undone, what it
+// did comes off, and the step goes again (if nobody worked it), so the clock
+// ends where it would have been without it.
+function unland(doc, round, t) {
+  const hit = findEl(doc, t.at.ref);
+  const el = hit && hit.kind !== "ground" ? hit.el : null;
+  const under = Boolean(round.over && el && t.did && !t.did.late && !t.did.none);
+  if (under) stepBack(round, el);
+  unlandRaw(doc, t);
+  if (under && !workedIn(round, el.id)) stepDown(round, el);
+}
 // Whether one at a stake or an event has landed (an answer lost, or the round
-// over with nobody answering it), and what it did on the scene to match.
-function settle(doc, round, t) {
+// over with nobody answering it), and what it did on the scene to match. end:
+// it's the end of the round landing it, before the clocks step down.
+function settle(doc, round, t, { end = false } = {}) {
   if (!onScene(t)) return;
   const landed = t.ans ? !t.ans.won : Boolean(round.over);
-  if (landed && !t.did) land(doc, t);
-  else if (!landed && t.did) unland(doc, t);
+  if (landed && !t.did) land(doc, t, Boolean(round.over) && !end);
+  else if (!landed && t.did) unland(doc, round, t);
 }
+// What the end of the round landed on a piece of the scene, before its clocks
+// stepped down: a late roll from the round comes before these.
+const endLandings = (round, el) => round.tele.filter((t) => onScene(t) && !t.ans && t.did && !t.did.late && t.at.ref === el.id);
 
 // The end of a round: whatever landed on the scene does what it said, then
 // whatever nobody worked steps down.
 function endRound(doc, round, now) {
   round.over = now;
   round.moved = [];
-  for (const t of round.tele) settle(doc, round, t);
+  for (const t of round.tele) settle(doc, round, t, { end: true });
   // In the order the scene's laid out: the scene clock, the stakes, then the events.
   const order = [...doc.scene.events.filter((e) => e.scene), ...doc.scene.stakes, ...doc.scene.events.filter((e) => !e.scene)];
   for (const el of order) if (!workedIn(round, el.id)) stepDown(round, el);
@@ -500,36 +517,45 @@ function doWork(doc, round, x) {
   const held = round.held[el.id];
   const won = x.roll.dice.some((d) => d.total > held || (d.total === held && d.out === "won"));
   const y = { ...x, roll: { ...x.roll, won }, did: null };
-  // Worked late, after the round ended: it didn't step down after all.
+  // Worked late, after the round ended: it didn't step down after all, and
+  // what the end of the round landed on it lands after this roll.
+  const after = round.over ? endLandings(round, el) : [];
   if (round.over) stepBack(round, el);
-  if (!won || el.out) return y;
-  if (hit.kind === "stake") {
-    const tag = el.tags.find((g) => !g.gone && g.name === x.aim) ?? el.tags.find((g) => !g.gone);
-    y.did = {};
-    if (tag) {
-      tag.gone = 1;
-      y.did.tag = tag.name;
+  for (const t of after) unlandRaw(doc, t);
+  if (won && !el.out) {
+    if (hit.kind === "stake") {
+      const tag = el.tags.find((g) => !g.gone && g.name === x.aim) ?? el.tags.find((g) => !g.gone);
+      y.did = {};
+      if (tag) {
+        tag.gone = 1;
+        y.did.tag = tag.name;
+      }
+      if (el.tags.every((g) => g.gone)) {
+        el.out = "won";
+        y.did.won = 1;
+      }
+    } else {
+      y.did = { d: el.d };
+      if (x.aim === "drive") {
+        if (el.d <= 2) {
+          el.out = "done";
+          y.did.out = 1;
+        } else el.d -= 2;
+      } else el.d = sizeUp(el.d);
+      y.did.to = el.d;
     }
-    if (el.tags.every((g) => g.gone)) {
-      el.out = "won";
-      y.did.won = 1;
-    }
-  } else {
-    y.did = { d: el.d };
-    if (x.aim === "drive") {
-      if (el.d <= 2) {
-        el.out = "done";
-        y.did.out = 1;
-      } else el.d -= 2;
-    } else el.d = sizeUp(el.d);
-    y.did.to = el.d;
   }
+  for (const t of after) land(doc, t);
   return y;
 }
 function undoWork(doc, round, x) {
   const hit = findEl(doc, x.ref);
   if (!hit || hit.kind === "ground") return;
   const el = hit.el;
+  // What the end of the round landed on it comes off first, and goes again
+  // once the roll's undone.
+  const after = round.over ? endLandings(round, el) : [];
+  for (const t of after) unlandRaw(doc, t);
   if (x.did?.tag) {
     const tag = el.tags.find((g) => g.name === x.did.tag);
     if (tag) tag.gone = 0;
@@ -545,6 +571,7 @@ function undoWork(doc, round, x) {
     } else if (x.did.to != null) el.d = Math.max(2, Math.min(12, el.d - (x.did.to - x.did.d)));
     else el.d = x.did.d;
   }
+  for (const t of after) land(doc, t);
   // Taken back after the round ended, with nobody else at it: it steps down.
   if (round.over && !workedIn(round, el.id)) stepDown(round, el);
 }
@@ -623,6 +650,8 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
       if (!hit) return no("That telegraph’s gone. The GM took it back or started a new fight.");
       const t = hit.t;
       const mine = Boolean(t.ans && t.ans.user === who.user && t.ans.ch === who.ch);
+      // What landed on the scene stands once the next round's started.
+      if (onScene(t) && hit.round !== last) return no(`Round ${hit.round.n}’s gone by, so what landed on ${atName(t)} stands. Tell the GM.`);
       if (t.ans && !mine) return no(`${t.ans.name} answered ${lower(t.who)} first.`);
       if (t.def || inIt(t).some((p) => p.def)) return no("It’s landed already.");
       if (op.a == null) {
@@ -768,12 +797,13 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
           if (!hit || (a.k === "ground") !== (hit.kind === "ground")) return no("That’s gone from the scene.");
           // Settled, unless it was the end of this round that settled it and
           // this roll's from the round, turning up late.
-          const closed = round.over && round.moved.some((m) => m.ref === hit.el.id && m.out);
+          const landedHere = round.over ? endLandings(round, hit.el) : [];
+          const closed = round.over && (round.moved.some((m) => m.ref === hit.el.id && m.out) || landedHere.some((t) => t.did.out));
           if (a.k === "work" && hit.el.out && !closed) return no(`${cap(lower(hit.el.name))}’s settled already.`);
           // Once its die's rolled this round, everyone's judged against that.
           // Before, the roll has to be one its die could make: late, the die
           // it had before the round ended.
-          const die = Math.max(dieOf(hit.el), round.over ? round.moved.find((m) => m.ref === hit.el.id)?.from ?? 0 : 0);
+          const die = Math.max(dieOf(hit.el), round.over ? round.moved.find((m) => m.ref === hit.el.id)?.from ?? 0 : 0, ...landedHere.map((t) => (hit.el.t === "event" ? t.did.from ?? 0 : 0)));
           if (a.k === "work" && round.held[hit.el.id] == null && a.roll.opp > die) return no(`That roll was against a ${a.roll.opp}, and ${lower(hit.el.name)}’s d${die} can’t roll that.`);
         }
       }

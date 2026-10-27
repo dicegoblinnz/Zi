@@ -383,22 +383,46 @@ if (part("1b")) {
   ok4({ o: "end", round: "round-sc-002" }, gm, "round 2 ends");
   same([doc4.scene.stakes[1].out, tele4("tele-bag-002").did], ["lost", { from: 2, to: 0, out: "lost" }], "it drops past d2 and the satchel's lost");
   ok4({ o: "answer", id: "tele-bag-002", ch: "bram", a: { act: "Fight", steps: 4, dice: [{ size: 8, total: 8 }], opp: 2, t: 7900 } }, sam, "Bram's answer from the round turns up late, and it won", { phoneNow: 8050 });
-  same([doc4.scene.stakes[1].out, doc4.scene.stakes[1].clock], ["", 2], "so the satchel's back on d2");
+  same([doc4.scene.stakes[1].out, doc4.scene.stakes[1].clock], ["lost", 0], "but its clock was on d2 with nobody working it, so the end of the round loses it anyway");
   // Settled, or gone: there's nothing for one to do.
   ok4({ o: "put", el: { ...deal(), tags: deal().tags.map((g) => ({ ...g, gone: 1 })), out: "won" } }, gm, "the crew wins the deal");
   same(T.apply(doc4, { o: "add", tele: { ...dace, id: "tele-late-03" } }, gm, roster, now).why, "That telegraph didn’t go out. The deal’s settled already, so there’s nothing for it to do.", "one at a stake that's won doesn't go out");
   // A GM's edit to the stake keeps whose tag it is.
-  ok4({ o: "round", id: "round-sc-003", tele: [{ ...runner, id: "tele-run-003", at: { k: "event", ref: "event-clock4" }, fx: { by: 2 } }, { ...dace, id: "tele-tag-003", at: { k: "stake", ref: "stake-bag-04" }, fx: { tag: "In the cupboard" } }] }, gm, "round 3");
+  ok4({ o: "put", el: { id: "stake-cupb-03", t: "stake", name: "The cupboard", c: 2, tags: ["Locked"] } }, gm, "the changing-room cupboard");
+  ok4({ o: "round", id: "round-sc-003", tele: [{ ...runner, id: "tele-run-003", at: { k: "event", ref: "event-clock4" }, fx: { by: 2 } }, { ...dace, id: "tele-tag-003", at: { k: "stake", ref: "stake-cupb-03" }, fx: { tag: "Behind the towels" } }] }, gm, "round 3");
   now = 9000;
   ok4({ o: "end", round: "round-sc-003" }, gm, "round 3 ends");
   same([clock4().out, T.findTele(doc4, "tele-run-003").t.did], ["done", { from: 2, to: 0, out: "done" }], "the runner's drops the scene clock past d2, and it's run out");
-  ok4({ o: "put", el: { ...doc4.scene.stakes[1], note: "behind the towels" } }, gm, "the GM changes the satchel's note");
-  same(doc4.scene.stakes[1].tags.find((g) => g.name === "In the cupboard")?.by, "tele-tag-003", "and the new tag still says where it came from");
+  const cupboard = () => doc4.scene.stakes.find((x) => x.id === "stake-cupb-03");
+  ok4({ o: "put", el: { ...cupboard(), note: "in the changing room" } }, gm, "the GM changes the cupboard's note");
+  same(cupboard().tags.find((g) => g.name === "Behind the towels")?.by, "tele-tag-003", "and the new tag still says where it came from");
   ok4({ o: "answer", id: "tele-tag-003", ch: "isolde", a: { act: "Ward", steps: 3, dice: [{ size: 6, total: 6 }], opp: 2, t: 8800 } }, lee, "Isolde's late answer stopped it", { phoneNow: 9050 });
-  same(doc4.scene.stakes[1].tags.map((g) => g.name), ["Locked"], "so the tag comes off");
+  same(cupboard().tags.map((g) => g.name), ["Locked"], "so the tag comes off");
   same(T.viewOf(doc4, "player").rounds.flatMap((r) => r.tele).find((t) => t.id === "tele-run-003")?.did?.out, "done", "every phone sees what it did");
   T.forget(doc4, "kai");
   same(Object.keys(T.findTele(doc4, "tele-steam-4")?.t.there ?? {}), ["sam|bram", "lee|isolde"], "Kai's out of the hot room when her account goes");
+
+  // From the independent check: late answers and rolls that cross what the
+  // end of the round landed on the scene.
+  const doc5 = T.blank();
+  const ap5 = (op, who, extra = {}) => T.apply(doc5, op, who, roster, now, extra);
+  const ok5 = (op, who, what, extra) => same(ap5(op, who, extra), { ok: true }, what);
+  const vault = () => doc5.scene.stakes.find((x) => x.id === "stake-vault5");
+  const cellar = () => doc5.scene.stakes.find((x) => x.id === "stake-cell05");
+  ok5({ o: "put", el: { id: "stake-vault5", t: "stake", name: "The vault", c: 3, tags: ["Locked", "Barred"], clock: 4 } }, gm, "the vault, on a d4 clock");
+  ok5({ o: "put", el: { id: "stake-cell05", t: "stake", name: "The cellar", c: 2, tags: ["Locked"], clock: 2 } }, gm, "the cellar, on a d2 clock");
+  const guard5 = (id, ref) => ({ id, who: "The guard", does: "Locks up for the night", d: 6, at: { k: "stake", ref }, fx: { by: 1 } });
+  ok5({ o: "round", id: "round-v-0001", tele: [guard5("tele-vault-5", "stake-vault5"), guard5("tele-cell-05", "stake-cell05")] }, gm, "the guard at both clocks");
+  now = 10000;
+  ok5({ o: "end", round: "round-v-0001" }, gm, "the round ends with nobody answering");
+  same([vault().out, vault().clock], ["lost", 0], "the guard takes the vault to d2, then its clock steps past d2");
+  same(cellar().out, "lost", "and the guard takes the cellar past d2 on his own");
+  ok5({ o: "answer", id: "tele-vault-5", ch: "vesk", a: { act: "Sneak", steps: 3, dice: [{ size: 6, total: 6 }], opp: 2, t: 9500 } }, kai, "Vesk's answer from the round turns up late, and stops the guard at the vault", { phoneNow: 10050 });
+  same([vault().out, vault().clock], ["", 2], "so the vault's only lost its usual step, and it's still on d2");
+  ok5({ o: "acts", round: "round-v-0001", ch: "bram", x: { more: [], list: [{ id: "act-cell-b1", k: "work", ref: "stake-cell05", act: "Lift and carry", steps: 3, t: 9600, roll: { dice: [{ size: 6, total: 5 }], opp: 1 }, aim: "Locked" }] } }, sam, "Bram's roll at the cellar from the round turns up late too", { phoneNow: 10060 });
+  same([cellar().out, T.findTele(doc5, "tele-cell-05").t.did?.none], ["won", "won"], "it counts before the guard: the cellar's the crew's, and the guard found it won");
+  ok5({ o: "round", id: "round-v-0002", tele: [] }, gm, "the next round");
+  same(ap5({ o: "answer", id: "tele-cell-05", ch: "isolde", a: { act: "Ward", steps: 3, dice: [{ size: 6, total: 6 }], opp: 2, t: 9700 } }, lee, { phoneNow: 10100 }).why, "Round 1’s gone by, so what landed on the cellar stands. Tell the GM.", "once the next round's on, what landed on the scene stands");
   console.log("the live table's rules checked");
 }
 
