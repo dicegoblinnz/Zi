@@ -44,6 +44,16 @@ export function enableBlocks() {
     const tag = e.target.closest?.("button.tag[data-tag]");
     if (tag) explain(tag);
   });
+  // On paper every part's there, Secrets too, and they're sealed again after.
+  let sealed = [];
+  addEventListener("beforeprint", () => {
+    sealed = [...document.querySelectorAll("details.seal:not([open])")];
+    for (const d of sealed) d.open = true;
+  });
+  addEventListener("afterprint", () => {
+    for (const d of sealed) d.open = false;
+    sealed = [];
+  });
   document.addEventListener("keydown", (e) => {
     const tab = e.target.closest?.(".pl-tab");
     if (!tab || e.altKey || e.ctrlKey || e.metaKey) return;

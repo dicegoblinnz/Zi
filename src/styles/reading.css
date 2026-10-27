@@ -90,7 +90,7 @@ html.zs-open { overflow: hidden; }
 .hub-d20 { justify-self: start; gap: 0.55rem; cursor: pointer; }
 .hub-d20[hidden] { display: none; }
 .hub-d20 .ic { width: 20px; height: 20px; }
-.hub-rolled { display: none; }
+.hub-rolled:not(.on) { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .hub-rolled.on { display: flex; align-items: center; gap: 0.9rem; margin: 0; padding: 0.55rem 0.95rem; background: var(--panel); border: 1px solid var(--gold); border-radius: 3px; }
 .hub-rolled .n { flex: none; min-width: 2ch; font-family: var(--display); font-weight: 600; font-size: 2.1rem; line-height: 1; text-align: center; color: var(--gold-ink); font-variant-numeric: tabular-nums; }
 .hub-rolled .n.is-rolling { color: var(--muted); }
@@ -149,7 +149,7 @@ html.zs-open { overflow: hidden; }
 .rd-on:not(.rd-open) .rd-track { display: none; }
 .rd-on .rd-track > * { display: none; }
 .rd-on .rd-track > .is-on,
-.rd-on.rd-open:not(.rd-live) .rd-track > :target,
+.rd-on.rd-open:not(.rd-live) .rd-track > :target { display: block; }
 .rd-on.rd-open:not(.rd-live) .rd-track > :has(:target) { display: block; }
 .rd-on.rd-open .hub, .rd-on.rd-open .chapter-head, .rd-on.rd-open .topbar, .rd-on.rd-open footer.site, .rd-on.rd-open .pager { display: none; }
 .rd-on.rd-open { --rd-h: calc(61px + env(safe-area-inset-top, 0px)); scroll-padding-top: calc(var(--rd-h) + 12px); }

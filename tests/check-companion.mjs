@@ -2881,6 +2881,18 @@ if (part("10")) {
   await page.goto(`${BASE}/rules/conflict/#${rowsOf.at(-1).id}`);
   await opened(page, rowsOf.at(-1).id);
   same([await text(page, ".rd-next"), await page.getAttribute(".rd-next", "href")], [`Next chapter ${conflict.next.title}`, `/rules/${conflict.next.slug}/`], "the last section's Next is the next chapter");
+  // An address that can't be read is the contents, and a chapter whose script
+  // never comes is one page you can read.
+  await page.goto(`${BASE}/rules/conflict/#%E0%A4%A`);
+  await contents(page);
+  {
+    const { context, page } = await phone();
+    await context.route((url) => url.pathname.startsWith("/_astro/") && url.pathname.endsWith(".js"), (route) => route.abort());
+    await page.goto(`${BASE}/rules/conflict/#s-defending`);
+    await page.waitForLoadState("load");
+    same(await page.evaluate(() => [document.documentElement.classList.contains("rd-on"), document.querySelectorAll(".rd-track > section.rs")[3]?.checkVisibility()]), [false, true], "with no script, a chapter's one page with every section");
+    await context.close();
+  }
 
   // A place: its number, its dice and its parts as tabs, a tag that says
   // what it does, and Roll a d20 on Twenty Places.

@@ -23,7 +23,14 @@ const article = document.querySelector("article[data-chapter]");
 if (article) {
   enablePopups();
   enableBlocks();
-  if (article.querySelector(".hub")) reader(article);
+  if (article.querySelector(".hub")) {
+    try {
+      reader(article);
+    } catch (e) {
+      document.documentElement.classList.remove("rd-on", "rd-open", "rd-live");
+      throw e;
+    }
+  }
 }
 
 function reader(article) {
@@ -67,7 +74,10 @@ function reader(article) {
   // Which section an address opens, and what in it to go to. An address
   // inside the opening the contents already show is the contents.
   function resolve(hash) {
-    const id = hash && hash.length > 1 ? decodeURIComponent(hash.slice(1)) : "";
+    let id = "";
+    try {
+      id = hash && hash.length > 1 ? decodeURIComponent(hash.slice(1)) : "";
+    } catch {}
     if (!id) return { i: -1 };
     const direct = pages.findIndex((p) => p.dataset.s === id);
     if (direct >= 0) return { i: direct, target: null };
@@ -134,6 +144,15 @@ function reader(article) {
     for (const [id, li] of rows) {
       li.classList.toggle("is-done", read.has(id));
       li.classList.toggle("is-here", id === hereId);
+      // What the tick and the ribbon say, for a screen reader.
+      const said = [read.has(id) && "read", isMarked({ k: "sec", slug, id }) && "bookmarked"].filter(Boolean).join(", ");
+      let sr = li.querySelector(".hub-sr");
+      if (said && !sr) {
+        sr = document.createElement("span");
+        sr.className = "hub-sr visually-hidden";
+        li.querySelector(".hub-t").append(sr);
+      }
+      if (sr) sr.textContent = said ? ` (${said})` : "";
       const tag = li.querySelector(".hub-here");
       if (id === hereId && !tag) {
         const t = document.createElement("span");
@@ -163,6 +182,7 @@ function reader(article) {
       p.style.opacity = "";
     }
     root.classList.add("rd-open");
+    fit();
     const hash = `#${target?.id || page.dataset.s}`;
     if (how === "push") history.pushState({ rd: 1, hub: fromHub }, "", hash);
     else if (how === "replace") history.replaceState({ ...(history.state ?? {}), rd: 1 }, "", hash);
@@ -189,6 +209,13 @@ function reader(article) {
     keep(target?.matches?.("h2[id], h3[id]") ? target.id : page.dataset.s, target?.matches?.("h2[id], h3[id]") ? nameOf(target) : titleOf(page), true);
     look();
   }
+  // The bar's as tall as its text makes it, so the section starts under it.
+  function fit() {
+    const h = bar.offsetHeight;
+    if (h) root.style.setProperty("--rd-h", `${h}px`);
+  }
+  addEventListener("resize", () => at >= 0 && fit());
+
   function label(a, href, kind, name) {
     a.href = href;
     a.querySelector("span").textContent = kind;
@@ -471,10 +498,14 @@ function reader(article) {
         const num = document.createElement("b");
         num.className = "n";
         num.textContent = String(n);
+        num.setAttribute("aria-hidden", "true");
         const words = document.createElement("span");
         const eyebrow = document.createElement("span");
         eyebrow.className = "eyebrow";
-        eyebrow.textContent = "You rolled";
+        const said = document.createElement("span");
+        said.className = "visually-hidden";
+        said.textContent = ` ${n}:`;
+        eyebrow.append("You rolled", said);
         const go = document.createElement("a");
         go.href = `#${card.dataset.s}`;
         go.dataset.noPop = "";
@@ -494,6 +525,7 @@ function reader(article) {
         if (++k > 6) return land();
         const num = document.createElement("b");
         num.className = "n is-rolling";
+        num.setAttribute("aria-hidden", "true");
         num.textContent = String(1 + Math.floor(Math.random() * 20));
         out.replaceChildren(num);
         out.classList.add("on");

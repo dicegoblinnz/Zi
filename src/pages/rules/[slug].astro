@@ -35,7 +35,8 @@ const minutes = hub?.minutes ?? 1;
   {reads && (
     <script is:inline slot="head">
       // On a phone a chapter opens on its contents, or straight on the section
-      // in its address, before anything paints.
+      // in its address, before anything paints. If the reader never starts (its
+      // script didn't load, or something broke), it's one page again.
       (function () {
         var root = document.documentElement;
         root.classList.add("rs-on");
@@ -44,6 +45,9 @@ const minutes = hub?.minutes ?? 1;
           var h = location.hash;
           if (h && h.length > 1 && h !== "#main") root.classList.add("rd-open");
         }
+        addEventListener("load", function () {
+          if (!root.classList.contains("rd-live")) root.classList.remove("rd-on", "rd-open");
+        });
       })();
     </script>
   )}

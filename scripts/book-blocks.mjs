@@ -339,14 +339,21 @@ export function diceCells() {
   };
 }
 
-// A rule box that starts with its name in bold has it set as a title.
+// A rule box that starts with its name in bold, a short sentence of its own
+// ("**No arguing at the table.** If a line's…"), has it set as a title. A
+// label run into its line ("**1 Aura:** +2…", "**The Unbinding**: to free…")
+// stays where it is.
 export function ruleNames() {
   return (tree) => {
     visit(tree, "element", (box) => {
       if (box.tagName !== "div" || !cls(box).includes("box-rule")) return;
       const first = box.children.find((c) => c.type === "element" && !cls(c).includes("box-label"));
-      const lead = first?.tagName === "p" ? first.children[0] : null;
-      if (lead?.type === "element" && lead.tagName === "strong") lead.properties.className = [...cls(lead), "rule-name"];
+      const [lead, next] = first?.tagName === "p" ? first.children : [];
+      if (lead?.type !== "element" || lead.tagName !== "strong") return;
+      const name = textOf(lead).trim();
+      const after = next?.type === "text" ? next.value : "";
+      if (!/[.?!]$/.test(name) || name.length > 64 || (after.trim() && !/^\s+[A-Z0-9“‘"']/.test(after))) return;
+      lead.properties.className = [...cls(lead), "rule-name"];
     });
   };
 }

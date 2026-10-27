@@ -103,7 +103,11 @@ export const setJump = (fn) => {
 };
 export function jump(hash) {
   if (onJump?.(hash)) return;
-  const target = hash && document.getElementById(decodeURIComponent(hash.slice(1)));
+  let id = "";
+  try {
+    id = decodeURIComponent((hash ?? "").slice(1));
+  } catch {}
+  const target = id && document.getElementById(id);
   if (!target) return window.scrollTo(0, 0);
   history.pushState(null, "", hash);
   target.scrollIntoView();
