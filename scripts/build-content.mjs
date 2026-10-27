@@ -1554,7 +1554,8 @@ if (existsSync(join(tablesDir, "core.yaml"))) {
   } else rmSync(tablesOut, { force: true });
 } else {
   rmSync(tablesOut, { force: true });
-  console.log("world-tables.json: no tables yet (content/world-tables/), so the world builder has nothing to deal from");
+  if (existsSync(tablesDir)) companionWarn("world tables: content/world-tables/ has no core.yaml, so the world builder has nothing to deal from");
+  else console.log("world-tables.json: no tables yet (content/world-tables/), so the world builder has nothing to deal from");
 }
 
 const outDir = join(ROOT, "src", "generated");

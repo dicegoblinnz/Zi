@@ -387,7 +387,7 @@ export function compileTables(src, book, { minimums = true } = {}) {
     if (!row) continue;
     if (k === "secret" && !row.rival) bad("core.yaml", "fallbacks.secret has to name another faction with {rival}");
     if (k === "strange") row.strange = true;
-    if (k === "agenda" && !row.aims?.includes("seat")) bad("core.yaml", "fallbacks.agenda aims at a seat with {seat}, since there's always one");
+    if (k === "agenda" && !(row.aims?.length && row.aims.every((x) => x === "seat"))) bad("core.yaml", "fallbacks.agenda aims only at a seat with {seat}, since there's always one");
     if (k === "block" && row.kind !== "blocked") bad("core.yaml", "fallbacks.block is a tie of kind blocked");
     if (k === "rival" && row.kind !== "rival") bad("core.yaml", "fallbacks.rival is a tie of kind rival");
     fallbacks[k] = row;
@@ -409,7 +409,10 @@ export function compileTables(src, book, { minimums = true } = {}) {
     founding: core.founding ?? null,
   };
   for (const k of ["wants", "methods", "secrets", "agendas"]) if (out.core[k].length < 12) bad("core.yaml", `${k} needs at least twelve, found ${out.core[k].length}`);
-  if (!out.core.agendas.some((a) => a.aims.includes("seat"))) bad("core.yaml", "agendas needs one that aims at a seat, for the first faction on a board");
+  // The first faction dealt on a board has nobody else to aim at, so it needs
+  // three cards that only aim at a seat.
+  const seatOnly = out.core.agendas.filter((a) => a.aims.length && a.aims.every((x) => x === "seat")).length;
+  if (seatOnly < 3) bad("core.yaml", `agendas needs three that only aim at a seat, for the first faction on a board, and has ${seatOnly}`);
 
   // regions.yaml
   for (const r of REGIONS) {

@@ -34,6 +34,11 @@ export const REGIONS = ["town", "city", "country", "world", "stars"];
 export const SIZES = ["small", "local", "city", "great"];
 export const DIALS = ["tense", "strange", "rich", "ruled"];
 export const STEPS = ["seat", "size", "type", "exc", "method", "want", "res", "assets", "agenda", "face", "secret", "name"];
+// Dealing it all goes round the factions twice: up to their assets, then the
+// rest, so an agenda or a Secret can aim at any faction on the board, not
+// just the ones dealt before it.
+const EARLY = STEPS.slice(0, STEPS.indexOf("agenda"));
+const LATE = STEPS.slice(STEPS.indexOf("agenda"));
 export const QUESTIONS = ["holds", "runs", "notices"];
 export const CHECKS = ["rival", "block", "secret", "unique", "aims", "strange"];
 // The bags no two factions share a row from till the bag's empty, and the
@@ -553,6 +558,7 @@ export function choose(T, W, path, value) {
     f[b] = value;
     for (const step of STEPS.slice(STEPS.indexOf(b) + 1)) if (!W.locks[`f:${a}:${step}`]) f[step] = step === "exc" ? undefined : null;
   }
+  W.just = path;
   W.dials = dialsOf(W);
   W.web = null;
   W.needs = null;
@@ -562,11 +568,17 @@ export function lock(W, path, on = true) {
   if (on) W.locks[path] = true;
   else delete W.locks[path];
 }
-// Deal one step again: the next card in its stream.
+// Deal one step again: the next card in its stream that isn't the one it had
+// (a set, a Face or a roll included), unless six goes can't find one.
+const sameAs = (p) => (p == null ? "" : Array.isArray(p) ? p.map((x) => x.id).join("|") : p.nameId ? `${p.nameId}|${p.threat}` : String(p.id ?? p.k ?? `${p.size}|${p.die}`));
 export function redeal(T, W, path) {
   const was = pickAt(W, path);
-  W.tries[path] = (W.tries[path] ?? 0) + 1;
-  const [first] = options(T, W, path, 1, { not: was?.id ?? was?.k ?? was?.size ?? null });
+  let first = null;
+  for (let go = 0; go < 6; go++) {
+    W.tries[path] = (W.tries[path] ?? 0) + 1;
+    [first] = options(T, W, path, 1, { not: was?.id ?? was?.k ?? was?.size ?? null });
+    if (was == null || path.endsWith(":exc") || sameAs(first) !== sameAs(was)) break;
+  }
   choose(T, W, path, first ?? null);
   return dealRest(T, W);
 }
@@ -586,22 +598,38 @@ export function dealRest(T, W) {
   if (!W.tension) W.tension = options(T, W, "tension", 1)[0];
   W.dials = dialsOf(W);
   for (let k = 0; k < W.s; k++) if (!W.seats[k]) W.seats[k] = options(T, W, `seat:${k}`, 1)[0] ?? null;
-  for (let i = 0; i < W.n; i++) dealFaction(T, W, i);
+  for (let i = 0; i < W.n; i++) dealFaction(T, W, i, EARLY);
+  for (let i = 0; i < W.n; i++) dealFaction(T, W, i, LATE);
   if (!W.web) dealWeb(T, W);
   if (!W.needs) dealNeeds(T, W);
   if (!W.checks) runChecks(T, W);
   return W;
 }
-function dealFaction(T, W, i) {
+function dealFaction(T, W, i, steps = STEPS) {
   const f = W.factions[i];
-  for (const step of STEPS) {
+  for (const step of steps) {
+    // Everything after a card's seat and size reads them.
+    if (step !== "seat" && step !== "size" && (!f.seat || !f.size)) break;
     const path = `f:${i}:${step}`;
     if (step === "exc" ? f.exc !== undefined : f[step] != null) continue;
-    const got = options(T, W, path, 1)[0];
-    f[step] = got ?? null;
-    if (f[step] == null && step !== "exc") break;
+    f[step] = options(T, W, path, 1)[0] ?? null;
+    // When nothing fits, an agenda or a Secret takes core.yaml's fallback,
+    // so the card's Face and name still get dealt.
+    if (f[step] == null && step === "agenda") f.agenda = fallbackAgenda(T, W, i);
+    if (f[step] == null && step === "secret") f.secret = fallbackSecret(T, W, i);
   }
   f.offers = offersOf(W, i);
+}
+// core.yaml's fallbacks, as a card's pick.
+function fallbackAgenda(T, W, i) {
+  const F = T.core.fallbacks.agenda;
+  return { ...keepOf({ id: F.id, text: F.text, die: F.die, aims: ["seat"], why: "" }), at: aimOf(W, i, ["seat"], rngOf(W.seed, "fallback", "aims", i)) };
+}
+function fallbackSecret(T, W, i, strange = false) {
+  const others = dealt(W, i);
+  const F = strange || (T.core.fallbacks.secret.rival && !others.length && !T.core.fallbacks.strange.rival) ? T.core.fallbacks.strange : T.core.fallbacks.secret;
+  const at = F.rival && others.length ? (others.includes((i + 1) % W.n) ? (i + 1) % W.n : others[0]) : null;
+  return { ...keepOf({ id: F.id, tag: F.tag, text: F.tag, more: F.more, ways: F.ways, rival: F.rival, strange: strange || F.strange, why: "" }), at };
 }
 // Bond threads the card says have already happened, as cards to keep or
 // swipe away, at most two.
@@ -680,7 +708,7 @@ function extrasOf(W, j) {
 const needsOf = (W) => Math.max(W.n >= 5 ? 1 : 0, Math.round(W.n * NEEDS[W.dials.tense]));
 function dealNeeds(T, W, { only = null } = {}) {
   W.needs = [];
-  const rand = randOf(W, "needs", only ?? "");
+  const rand = randOf(W, "needs");
   const count = needsOf(W);
   const order = shuffle(
     W.factions.map((_, i) => i),
@@ -690,7 +718,7 @@ function dealNeeds(T, W, { only = null } = {}) {
   const board = boardOf(T, W);
   for (const i of order) {
     if (W.needs.length >= count) break;
-    if (W.locks[`f:${i}:assets`] && only !== "block") continue;
+    if (isHeld(W, `f:${i}:assets`) && only !== "block") continue;
     const card = cardOf(W, i);
     const held = heldRoles(W, i);
     const mine = new Set((W.factions[i].assets ?? []).map((a) => a.role));
@@ -700,13 +728,13 @@ function dealNeeds(T, W, { only = null } = {}) {
         const fit = fitOf(r, card, board);
         return { w: weightOf(W, r, fit), r, fit };
       });
-    const [c] = draw(cands, rngOf(W.seed, "need", i, W.tries.needs ?? 0, only ?? ""));
+    const [c] = draw(cands, rngOf(W.seed, "need", i, W.tries.needs ?? 0));
     if (!c) continue;
     const need = { i, asset: assetOf(T, c.r, becauseOf(T, c.fit.src)), by: null, tie: null, at: {} };
     // Whoever's got the extra resource, a faction already blocking one less likely.
     const blocking = (j) => W.needs.filter((x) => x.by === j).length;
     const holders = W.factions.map((_, j) => (j !== i && extrasOf(W, j) > 0 ? { w: 1 / (1 + 3 * blocking(j)), j } : null)).filter(Boolean);
-    const by = draw(holders, rngOf(W.seed, "block", i, W.tries.needs ?? 0, only ?? ""))[0]?.j ?? null;
+    const by = draw(holders, rngOf(W.seed, "block", i, W.tries.needs ?? 0))[0]?.j ?? null;
     if (by != null) {
       const rows = T.core.ties.filter((x) => x.kind === "blocked");
       const fresh = rows.filter((x) => !W.needs.some((y) => y.tie?.id === x.id));
@@ -763,9 +791,12 @@ function runChecks(T, W) {
   }
   W.checks = CHECKS.map((k) => ({ k, ok: passes(T, W, k) }));
 }
+// What the checks leave alone: a step she's locked, and the one she's just
+// picked or dealt again, so Deal again always shows her something new.
+const isHeld = (W, path) => Boolean(W.locks[path]) || W.just === path;
 // The faction a check deals again, picked from those it's still free to.
 function freeFaction(W, step, key, t, ok = () => true) {
-  const free = W.factions.map((f, i) => (!W.locks[`f:${i}:${step}`] && ok(f, i) ? i : null)).filter((i) => i !== null);
+  const free = W.factions.map((f, i) => (!isHeld(W, `f:${i}:${step}`) && ok(f, i) ? i : null)).filter((i) => i !== null);
   return pick(free, rngOf(W.seed, "fix", key, t));
 }
 function redealStep(T, W, i, step, only, key, t) {
@@ -775,6 +806,34 @@ function redealStep(T, W, i, step, only, key, t) {
   if (got === undefined || (got === null && step !== "exc")) return false;
   W.factions[i][step] = got;
   if (step === "assets") W.factions[i].offers = offersOf(W, i);
+  W.fixes.push({ k: key, path, t });
+  return true;
+}
+// An agenda whose aim's gone (another faction's resource or asset dealt
+// again) keeps its card and finds something else to aim at, on the same
+// faction if it can.
+function reaim(W, i, t) {
+  const ag = W.factions[i].agenda;
+  if (!ag?.aims?.length) return false;
+  const rand = rngOf(W.seed, `f:${i}:agenda`, W.tries[`f:${i}:agenda`] ?? 0, "aim", t);
+  const at = { ...(ag.at ?? {}) };
+  for (const a of ag.aims) {
+    if (aimOk(W, i, { aims: [a], at })) continue;
+    const j = at[a]?.j;
+    const list = (a === "res" || a === "asset") && j != null && j !== i ? (W.factions[j]?.[a === "res" ? "res" : "assets"] ?? []) : [];
+    if (list.length) at[a] = { j, id: pick(list, rand).id };
+    else Object.assign(at, aimOf(W, i, [a], rand));
+  }
+  ag.at = at;
+  return aimOk(W, i, ag);
+}
+// A seat nobody holds, dealt again, which nothing on a card reads.
+function redealSeat(T, W, k, only, key, t) {
+  const path = `seat:${k}`;
+  W.tries[path] = (W.tries[path] ?? 0) + 1;
+  const got = options(T, W, path, 1, { only })[0];
+  if (!got) return false;
+  W.seats[k] = got;
   W.fixes.push({ k: key, path, t });
   return true;
 }
@@ -802,19 +861,25 @@ function fix(T, W, key, t) {
     const seen = new Set();
     W.factions.forEach((f, i) => {
       for (const a of (f.assets ?? []).filter((x) => !x.power)) {
-        if (seen.has(a.role) && !W.locks[`f:${i}:assets`]) redealStep(T, W, i, "assets", null, key, t);
+        if (seen.has(a.role) && !isHeld(W, `f:${i}:assets`)) redealStep(T, W, i, "assets", null, key, t);
         seen.add(a.role);
       }
     });
   } else if (key === "aims") {
     W.factions.forEach((f, i) => {
-      if (!aimOk(W, i, f.agenda) && !W.locks[`f:${i}:agenda`]) redealStep(T, W, i, "agenda", null, key, t);
+      if (aimOk(W, i, f.agenda)) return;
+      if (reaim(W, i, t)) W.fixes.push({ k: key, path: `f:${i}:agenda`, t, aim: true });
+      else if (!isHeld(W, `f:${i}:agenda`)) redealStep(T, W, i, "agenda", null, key, t);
     });
   } else if (key === "strange") {
-    const step = ["secret", "method", "type", "want", "name"][(t - 1) % 5];
+    // A seat nobody holds first, then a Secret, since nothing else on a card
+    // reads either of them, so no other step has to be dealt again.
+    const taken = new Set(W.factions.map((f) => f.seat?.k));
+    const free = W.seats.map((s, k) => (s && !taken.has(k) && !isHeld(W, `seat:${k}`) ? k : null)).filter((k) => k !== null);
+    if (t === 1 && free.length && redealSeat(T, W, pick(free, rngOf(W.seed, "fix", key, t)), "strange", key, t)) return;
     const rivals = W.factions.filter((f) => f.secret?.at != null).length;
-    const i = freeFaction(W, step, key, t, (f) => step !== "secret" || f.secret?.at == null || rivals > 1);
-    if (i != null) redealStep(T, W, i, step, "strange", key, t);
+    const i = freeFaction(W, "secret", key, t, (f) => f.secret?.at == null || rivals > 1);
+    if (i != null) redealStep(T, W, i, "secret", "strange", key, t);
   }
 }
 function fallback(T, W, key) {
@@ -829,28 +894,37 @@ function fallback(T, W, key) {
     const need = W.needs?.[0];
     if (!need) {
       W.fallbacks.pop();
-      W.fallbacks.push("block (no need on the board)");
       return;
     }
     const by = W.factions.map((f, j) => ({ j, n: f.res?.length ?? 0 })).filter((x) => x.j !== need.i).sort((x, y) => y.n - x.n)[0]?.j ?? near(need.i);
     Object.assign(need, { by, tie: tieOf(F.block), at: aimsOfTie(W, F.block, by, need.i, rngOf(W.seed, "fallback", "block")) });
   } else if (key === "secret") {
-    const i = freeFaction(W, "secret", "fallback", 0, (f, j) => dealt(W, j).length > 0) ?? W.n - 1;
-    W.factions[i].secret = { ...keepOf({ id: F.secret.id, tag: F.secret.tag, text: F.secret.tag, more: F.secret.more, ways: F.secret.ways, rival: true, strange: F.secret.strange, why: "" }), at: near(i) === i ? null : near(i) };
-  } else if (key === "unique") {
-    const seen = new Set();
-    for (const f of W.factions) {
-      f.assets = (f.assets ?? []).filter((a) => a.power || (!seen.has(a.role) && seen.add(a.role)));
+    const i = freeFaction(W, "secret", "fallback", 0, (f, j) => dealt(W, j).length > 0);
+    if (i == null) {
+      W.fallbacks.pop();
+      return;
     }
+    W.factions[i].secret = fallbackSecret(T, W, i);
+  } else if (key === "unique") {
+    // The factions she's locked keep theirs, and the others give theirs up.
+    const seen = new Set();
+    const locked = (i) => isHeld(W, `f:${i}:assets`);
+    W.factions.forEach((f, i) => locked(i) && (f.assets ?? []).forEach((a) => !a.power && seen.add(a.role)));
+    W.factions.forEach((f, i) => {
+      if (!locked(i)) f.assets = (f.assets ?? []).filter((a) => a.power || (!seen.has(a.role) && seen.add(a.role)));
+    });
   } else if (key === "aims") {
     W.factions.forEach((f, i) => {
-      if (!aimOk(W, i, f.agenda)) f.agenda = { ...keepOf({ id: F.agenda.id, text: F.agenda.text, die: F.agenda.die, aims: ["seat"], why: "" }), at: aimOf(W, i, ["seat"], rngOf(W.seed, "fallback", "aims", i)) };
+      if (!aimOk(W, i, f.agenda) && !isHeld(W, `f:${i}:agenda`)) f.agenda = fallbackAgenda(T, W, i);
     });
   } else if (key === "strange") {
     const rivals = W.factions.filter((f) => f.secret?.at != null).length;
-    const i = W.factions.findIndex((f, j) => !W.locks[`f:${j}:secret`] && (f.secret?.at == null || rivals > 1));
-    const at = i < 0 ? W.n - 1 : i;
-    W.factions[at].secret = { ...keepOf({ id: F.strange.id, tag: F.strange.tag, text: F.strange.tag, more: F.strange.more, ways: F.strange.ways, rival: F.strange.rival, strange: true, why: "" }), at: F.strange.rival ? near(at) : null };
+    const i = W.factions.findIndex((f, j) => !isHeld(W, `f:${j}:secret`) && (f.secret?.at == null || rivals > 1));
+    if (i < 0) {
+      W.fallbacks.pop();
+      return;
+    }
+    W.factions[i].secret = fallbackSecret(T, W, i, true);
   }
 }
 
@@ -878,7 +952,7 @@ export function cardsOf(T, W) {
   };
   const assetText = (j, id) => {
     const a = (W.factions[j]?.assets ?? []).find((x) => x.id === id);
-    return a ? fill(a.text, { seat: seatName(j) }) : "";
+    return a ? { text: fill(a.text, { seat: seatName(j) }), name: true } : "";
   };
   const factions = W.factions.map((f, i) => {
     const seat = seatName(i);
@@ -902,7 +976,7 @@ export function cardsOf(T, W) {
       }
     }
     for (const n of W.needs ?? []) {
-      if (n.by === i && n.tie) threads.push({ text: fill(n.tie.text, { a: asName(i), b: asName(n.i), res: n.at?.res ? resText(i, n.at.res) : "", seat: "" }), kind: "hostile", s: "whole", to: n.i });
+      if (n.by === i && n.tie) threads.push({ text: fill(n.tie.text, { a: asName(i), b: asName(n.i), res: n.at?.res ? resText(i, n.at.res) : "", seat: n.at?.seat != null && W.seats[n.at.seat] ? { text: W.seats[n.at.seat].text, name: true } : seatName(n.i) }), kind: "hostile", s: "whole", to: n.i });
     }
     const secret = f.secret;
     const rival = secret?.at != null ? asName(secret.at) : "";
@@ -937,15 +1011,18 @@ export function cardsOf(T, W) {
 }
 
 // What was dealt, as doc.build keeps it: plain words and numbers, nothing of
-// the tables but what the picks hold.
+// the tables but what the picks hold, and whole enough that fromRecord()
+// makes it a world to deal from again (Add a faction, or a build carried on).
 export function recordOf(W) {
   return JSON.parse(
     JSON.stringify({
       v: 1,
       seed: W.seed,
       recipe: W.recipe,
+      n: W.n,
+      s: W.s,
       dials: W.dials,
-      fixed: Boolean(W.fixed),
+      fixed: W.fixed ?? null,
       asking: W.asking,
       tension: W.tension,
       seats: W.seats,
@@ -959,4 +1036,14 @@ export function recordOf(W) {
       locks: W.locks,
     }),
   );
+}
+export function fromRecord(rec) {
+  const W = JSON.parse(JSON.stringify(rec));
+  W.n = W.factions.length;
+  W.s = W.seats.length;
+  W.fixed = W.fixed && typeof W.fixed === "object" ? W.fixed : null;
+  for (const k of ["tries", "locks"]) W[k] = W[k] && typeof W[k] === "object" ? W[k] : {};
+  for (const k of ["fixes", "fallbacks"]) W[k] = Array.isArray(W[k]) ? W[k] : [];
+  for (const f of W.factions) if (!Array.isArray(f.offers)) f.offers = [];
+  return W;
 }

@@ -24,14 +24,15 @@
 //   { o: "wb-drop", lid }        a line off it
 //   { o: "wb-show", v }          the history shown to the crew, or hidden again
 
-export const BMAX = { lines: 80, text: 400, dealt: 150000, depth: 8, list: 64, words: 600 };
+// dealt's cap leaves room in one request for the board Done sends with it (a
+// twelve-faction world comes to about a third of it).
+export const BMAX = { lines: 80, text: 400, dealt: 100000, depth: 8, list: 128, keys: 256, words: 600 };
 const REGIONS = ["town", "city", "country", "world", "stars"];
 const DIALS = ["tense", "strange", "rich", "ruled"];
 const ID = /^[a-z0-9-]{2,24}$/;
 const KEY = /^[A-Za-z0-9_:-]{1,32}$/;
 const SEED = /^[a-z]{2,12}(?:-[a-z]{2,12}){2}$/;
 const TABLE_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const NOT_KEYS = new Set(["__proto__", "constructor", "prototype"]);
 
 export const isBuildOp = (op) => typeof op?.o === "string" && op.o.startsWith("wb-");
 const str = (v) => (typeof v === "string" ? v : "");
@@ -52,7 +53,7 @@ function plainOf(v, depth = 0) {
   if (Array.isArray(v)) return v.slice(0, BMAX.list).map((x) => plainOf(x, depth + 1));
   if (typeof v === "object") {
     const out = {};
-    for (const [k, x] of Object.entries(v).slice(0, BMAX.list)) if (KEY.test(k) && !NOT_KEYS.has(k)) out[k] = plainOf(x, depth + 1);
+    for (const [k, x] of Object.entries(v).slice(0, BMAX.keys)) if (KEY.test(k) && !(k in Object.prototype) && k !== "prototype") out[k] = plainOf(x, depth + 1);
     return out;
   }
   return null;
@@ -92,8 +93,10 @@ export function applyBuild(doc, op) {
   const find = (lid) => b?.history.find((x) => x.id === lid) ?? null;
   switch (op.o) {
     case "wb-set": {
+      // A record whose dealt is too big or isn't a record goes in whole or
+      // not at all, so Done never saves half a build.
       const next = buildOf(op.b);
-      if (!next) return false;
+      if (!next || (op.b.dealt != null && !next.dealt)) return false;
       doc.build = next;
       break;
     }

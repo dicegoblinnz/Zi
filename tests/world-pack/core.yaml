@@ -154,6 +154,7 @@ ties:
   - { kind: wildcard, bond: hostile, text: "{b} has been asking about {seat}" }
   - { kind: blocked, text: "{b} gets nothing from us" }
   - { kind: blocked, text: "{b} can whistle for {res}" }
+  - { kind: blocked, text: "{b} won't see a coin of ours at {seat}" }
 
 faces:
   house: [commander, champion, duellist]

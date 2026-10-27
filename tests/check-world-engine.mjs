@@ -32,7 +32,8 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { apply, blank, forPlayer, readable, undoOf } from "../src/companion/board.js";
-import { BAGS, canDeal, cardsOf, dealWorld, lock, newSeed, options, recordOf, redeal, rngOf, SIZES, start } from "../src/companion/world-engine.js";
+import { BAGS, canDeal, cardsOf, choose, dealRest, dealWorld, fromRecord, lock, newSeed, options, pickAt, poolOf, recordOf, redeal, rngOf, SIZES, start } from "../src/companion/world-engine.js";
+import { buildOf } from "../src/companion/world-record.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 
@@ -97,6 +98,8 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
   broken("too few people who turn up", (s) => (s.eras.dusk.assets = s.eras.dusk.assets.slice(0, 6)), "of the 12 people who turn up it needs", { minimums: true });
   broken("too few exceptions", (s) => s.eras.dusk.exceptions.pop(), "needs six exceptions", { minimums: true });
   same(compileTables(copy(base), BOOK, { minimums: false }).problems, [], "the made-up pack, read and checked");
+  broken("too few agendas for the first faction", (s) => (s.core.agendas = s.core.agendas.filter((a) => !/\{seat\}/.test(a.text) || /\{(rival|res|asset)\}/.test(a.text)).concat([{ text: "Take {seat}.", die: 4 }])), "three that only aim at a seat");
+  broken("a fallback agenda that needs another faction", (s) => (s.core.fallbacks.agenda = { text: "Take {seat} from {rival}.", die: 4 }), "fallbacks.agenda aims only at a seat");
   broken("a row written twice", (s) => s.eras.dusk.seats.push({ ...s.eras.dusk.seats[2] }), "says the same as eras/dusk.yaml seats row 3");
   // A row keeps its id when rows are added round it, so a world built from
   // last week's tables still knows which rows it holds.
@@ -125,6 +128,7 @@ for (const era of Object.keys(T.eras).filter((e) => T.packs[`era:${e}`])) {
 }
 const BOARDS = 200;
 let dealtCount = 0;
+let lastNamed = 0;
 const started = Date.now();
 for (const g of groups) {
   let fallbacks = 0;
@@ -180,15 +184,24 @@ for (const g of groups) {
       for (const aim of ag?.aims ?? []) if (ag.at?.[aim] == null) fail(`${who}: its agenda doesn't aim at a ${aim}`);
       const words = [f.name, f.about, f.want, f.face, f.secret, f.more, ...f.res.map((r) => r.text), ...f.assets.map((a) => a.text), ...f.agendas.map((a) => a.text), ...f.threads.map((t) => t.text)];
       for (const w of words) if (/[{}]/.test(w)) fail(`${who}: a slot nobody filled in "${w}"`);
+      for (const w of words) if (/\s[.,]|\s\s|^\s|\s$/.test(w)) fail(`${who}: a slot filled with nothing in "${w}"`);
+      // An asset in an agenda keeps its capitals, bar a leading The.
+      const aa = ag?.at?.asset;
+      const held = aa ? W.factions[aa.j].assets.find((x) => x.id === aa.id) : null;
+      if (held && !/\{/.test(held.text) && !f.agendas[0].text.includes(held.text.replace(/^The /, "the "))) fail(`${who}: "${f.agendas[0].text}" doesn't keep the words of ${held.text}`);
       for (const t of f.threads) if (!Number.isInteger(t.to) || t.to === i || t.to >= C.factions.length) fail(`${who}: a thread toward nobody`);
     });
     if (C.seats.length !== n + 2 || C.seats.filter((s) => s.held < 0).length !== 2) fail(`${seed}: ${C.seats.length} seats for ${n} factions`);
+    // Agendas and Secrets aim at the whole board, the last faction dealt too.
+    const L = n - 1;
+    if (W.factions.some((f, j) => j !== L && (f.agenda?.at?.rival === L || f.agenda?.at?.res?.j === L || f.agenda?.at?.asset?.j === L || f.secret?.at === L))) lastNamed++;
   }
   yes(fallbacks * 20 < BOARDS, `${g.what}: ${fallbacks} of ${BOARDS} boards needed a fallback, and that's 1 in 20 or more`);
   if (firstFail) note(`${g.what}: ${firstFail}`);
   console.log(`2. ${g.what}: ${BOARDS} boards, ${fallbacks} with a fallback`);
 }
 console.log(`   ${dealtCount} boards dealt twice each in ${((Date.now() - started) / 1000).toFixed(1)}s`);
+yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's agenda or Secret on only ${lastNamed} of ${dealtCount} boards`);
 
 // 3. Dealing one step again.
 {
@@ -199,6 +212,7 @@ console.log(`   ${dealtCount} boards dealt twice each in ${((Date.now() - starte
   redeal(T, W, "f:2:method");
   yes(W.factions[2].method.id !== was, "dealing a method again gives a different card");
   for (const i of [0, 1, 3, 4, 5]) for (const step of ["seat", "size", "type", "method", "want", "res", "assets", "face", "secret", "name"]) same(W.factions[i][step], before.factions[i][step], `dealing faction 3's method again leaves faction ${i + 1}'s ${step} alone`);
+  for (const i of [0, 1, 3, 4, 5]) same(W.factions[i].agenda.id, before.factions[i].agenda.id, `and faction ${i + 1}'s agenda, if not always what it aims at`);
   for (const step of ["seat", "size", "type"]) same(W.factions[2][step], before.factions[2][step], `and faction 3's ${step}, which comes before it`);
   same(W.seats, before.seats, "and the seats");
   same(W.asking, before.asking, "and the asking");
@@ -214,6 +228,65 @@ console.log(`   ${dealtCount} boards dealt twice each in ${((Date.now() - starte
   same(new Set(cards.map((c) => c.id)).size, cards.length, "a screen's three cards are three different ones");
   if (!W.fixes.some((f) => f.path === `f:${last}:type`)) same(cards[0]?.id, W.factions[last].type.id, "and the first is what dealing picks");
   same(SIZES, ["small", "local", "city", "great"], "the four sizes");
+  // Deal again never hands back what a step had.
+  {
+    const D = dealWorld(T, { recipe: g.recipe, seed: "fern-hollow-kite", factions: 6 });
+    const keyOf = (p) => JSON.stringify(Array.isArray(p) ? p.map((x) => x.id) : p?.nameId ? [p.nameId, p.threat] : (p?.id ?? p?.k ?? p));
+    for (const path of ["tension", "ask:holds", "seat:0", "f:1:type", "f:1:res", "f:1:assets", "f:1:agenda", "f:1:face", "f:1:secret", "f:1:name"]) {
+      for (let go = 0; go < 4; go++) {
+        const was = keyOf(pickAt(D, path));
+        redeal(T, D, path);
+        yes(keyOf(pickAt(D, path)) !== was, `dealing ${path} again gave back the same card`);
+      }
+    }
+  }
+  // An agenda aimed at another faction's resource keeps its card when that
+  // faction's resources are dealt again, and aims at one of the new ones.
+  {
+    let found = null;
+    for (let b = 0; b < 300 && !found; b++) {
+      const D = dealWorld(T, { recipe: g.recipe, seed: newSeed(T, rngOf("aim", b)), factions: 8 });
+      const i = D.factions.findIndex((f) => f.agenda?.at?.res);
+      if (i >= 0) found = { D, i };
+    }
+    yes(found, "a board with an agenda aimed at another faction's resource");
+    if (found) {
+      const { D, i } = found;
+      const j = D.factions[i].agenda.at.res.j;
+      const ids = D.factions.map((f) => f.agenda.id);
+      redeal(T, D, `f:${j}:res`);
+      D.factions.forEach((f, k) => k !== j && same(f.agenda.id, ids[k], `dealing faction ${j + 1}'s resources again keeps faction ${k + 1}'s agenda`));
+      const at = D.factions[i].agenda.at.res;
+      yes(at.j !== i && D.factions[at.j].res.some((r) => r.id === at.id), "and the one aimed at them aims at one of theirs now");
+    }
+  }
+  // After a block fix, dealing something else again leaves the needs alone.
+  {
+    let B = null;
+    for (let b = 0; b < 400 && !B; b++) {
+      const D = dealWorld(T, { recipe: g.recipe, seed: newSeed(T, rngOf("block", b)), factions: 4 + (b % 9) });
+      if (D.fixes.some((f) => f.k === "block") && D.checks.every((c) => c.ok)) B = D;
+    }
+    yes(B, "a board the block check dealt again");
+    if (B) {
+      const needs = JSON.stringify(B.needs);
+      redeal(T, B, `f:${B.n - 1}:name`);
+      same(JSON.stringify(B.needs), needs, "dealing a name again after the block check's fix leaves the needs as they were");
+    }
+  }
+  // The fallbacks never write over what she's locked.
+  {
+    const D = dealWorld(T, { recipe: g.recipe, seed: "slate-crow-weir", factions: 4 });
+    const plain = poolOf(T, D.recipe).secrets.filter((r) => !r.rival);
+    D.factions.forEach((_, i) => {
+      const r = plain[i];
+      choose(T, D, `f:${i}:secret`, { id: r.id, text: r.tag, tag: r.tag, more: r.more, ways: [...r.ways], rival: false, strange: r.strange, why: "", by: null, at: null });
+      lock(D, `f:${i}:secret`);
+    });
+    dealRest(T, D);
+    same(D.factions.map((f) => f.secret.id), plain.slice(0, 4).map((r) => r.id), "four locked Secrets that name nobody stay as she locked them");
+    yes(!D.checks.find((c) => c.k === "secret").ok && !D.fallbacks.includes("secret"), "and the check says so rather than writing over one");
+  }
   // Four to twelve factions, and a genre never deals where its twist can't.
   same([2, 13, "x"].map((n) => start(T, { recipe: g.recipe, seed: "ash-lantern-ford", factions: n }).n), [4, 12, 6], "a board's four to twelve factions");
   const twisted = named.find((x) => x.twist);
@@ -261,7 +334,8 @@ console.log(`   ${dealtCount} boards dealt twice each in ${((Date.now() - starte
   same(readable(copy(doc)).build, doc.build, "it comes back the same from the Worker");
   // Junk, tidied.
   const junk = blank();
-  apply(junk, { o: "wb-set", b: { recipe: { region: "mars", era: "<b>x</b>", twist: 7 }, dials: { tense: 9, rich: 2 }, seed: "not a seed", dealt: "nope", history: [{ id: "BAD ID", text: "x" }, { id: "ok-1", text: "  a \u0000  b  " }, { id: "ok-1", text: "twice" }], shown: "yes" } });
+  same(apply(blank(), { o: "wb-set", b: { seed: "ash-lantern-ford", dealt: "nope" } }), false, "a record whose dealt isn't a record doesn't go in");
+  apply(junk, { o: "wb-set", b: { recipe: { region: "mars", era: "<b>x</b>", twist: 7 }, dials: { tense: 9, rich: 2 }, seed: "not a seed", history: [{ id: "BAD ID", text: "x" }, { id: "ok-1", text: "  a \u0000  b  " }, { id: "ok-1", text: "twice" }], shown: "yes" } });
   same(junk.build, { recipe: { region: "", era: "", twist: null }, dials: { tense: 1, strange: 1, rich: 2, ruled: 1 }, seed: "", dealt: null, history: [{ id: "ok-1", text: "a b", age: 0 }], shown: false, at: 0 }, "junk in a record is tidied");
   apply(junk, { o: "wb-set", b: { dealt: JSON.parse('{"__proto__": {"bad": 1}, "fine": [1, "two", {"three": null}]}') } });
   yes(!Object.prototype.hasOwnProperty.call(junk.build.dealt, "__proto__") && junk.build.dealt.bad === undefined && ({}).bad === undefined, "what was dealt can't reach past itself");
@@ -269,13 +343,30 @@ console.log(`   ${dealtCount} boards dealt twice each in ${((Date.now() - starte
   apply(junk, { o: "wb-set", b: { dealt: { lines: Array.from({ length: 60 }, () => "x".repeat(4000)) } } });
   yes(JSON.stringify(junk.build.dealt).length <= BMAX.dealt, "and stays within what a world holds");
   const big = blank();
-  apply(big, { o: "wb-set", b: { dealt: { a: Array.from({ length: 60 }, () => Array.from({ length: 60 }, () => "y".repeat(500))) } } });
-  same(big.build.dealt, null, "a record that's too big keeps nothing of what was dealt");
+  same(apply(big, { o: "wb-set", b: { dealt: { a: Array.from({ length: 60 }, () => Array.from({ length: 60 }, () => "y".repeat(500))) } } }), false, "a record that's too big doesn't go in");
+  same(big.build, null, "and nothing of it does");
   same(apply(blank(), { o: "wb-show", v: true }), false, "showing a history that isn't there changes nothing");
   const W12 = dealWorld(T, { recipe: groups[0].recipe, seed: "tide-iron-rook", factions: 12 });
   const whole12 = blank();
   apply(whole12, { o: "wb-set", b: { recipe: W12.recipe, dials: W12.dials, seed: W12.seed, dealt: recordOf(W12) } });
   same(whole12.build.dealt, recordOf(W12), "a twelve-faction board's record is kept whole");
+  yes(JSON.stringify(recordOf(W12)).length * 2 < BMAX.dealt, "with room to spare");
+  // A record made into a world again deals on the same as the world it came
+  // from, after seventy steps dealt again.
+  const paths = [...W12.factions.flatMap((_, i) => ["name", "secret", "face", "agenda"].map((st) => `f:${i}:${st}`)), ...W12.seats.map((_, k) => `seat:${k}`), "ask:holds", "ask:runs", "ask:notices", "tension", "f:0:want", "f:1:want", "f:2:want", "f:3:want"];
+  for (const p of paths) redeal(T, W12, p);
+  yes(Object.keys(W12.tries).length >= 70, "seventy steps dealt again");
+  const kept = buildOf({ dealt: recordOf(W12) }).dealt;
+  same(kept, recordOf(W12), "and the record keeps every one of them");
+  const back = fromRecord(kept);
+  same(recordOf(back), recordOf(W12), "a record made into a world again is the same world");
+  redeal(T, back, "f:5:method");
+  redeal(T, W12, "f:5:method");
+  same(recordOf(back), recordOf(W12), "and deals on the same as the one it came from");
+  const fixedW = dealWorld(T, { recipe: groups[0].recipe, seed: "tide-iron-rook", factions: 5, dials: { tense: 2, strange: 0, rich: 2, ruled: 0 } });
+  const fixedBack = fromRecord(recordOf(fixedW));
+  redeal(T, fixedBack, "ask:holds");
+  same(fixedBack.dials, { tense: 2, strange: 0, rich: 2, ruled: 0 }, "and dials that were fixed stay fixed");
   console.log("4. the build's record: written whole, a line at a time, shown, undone, tidied, and kept from players");
 }
 
