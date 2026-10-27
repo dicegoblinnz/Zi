@@ -6,7 +6,7 @@ order: 31
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-10-28
 ---
 Every tag in here tells you how it shows up in the story and what it opens up for the crew. Tags don't make a threat's dice bigger. A tag only changes dice when it says so. Players who know a tag can bring it into a roll for 1 Aura. A tag that takes more than one win to strip carries a [multiplier](#s-tough), like *Armoured ×3*, and a tag that makes a hit hurt more is a [vulnerability](#vulnerability-tags).
 
@@ -246,15 +246,15 @@ These tags go on a stake, for whatever's in the way. Every win strips one, and w
 
 ## Assets {#faction-strength}
 
-An asset is something a faction can do, and the crew's a faction too, so these work for either. Each one needs a resource paying for it, every downtime, and a Destroy ticks it off (see [Resources and Assets](#s-wealth)). The first lot are people who'll turn up when it calls, and each of those adds +1 Power. The rest do one thing when the story fits, exactly what they say and no more. Where one says *it*, that's whoever holds it, the crew included.
+An asset is something a faction can do, and the crew's a faction too, so these work for either. Each one needs a resource paying for it, every downtime, and a Destroy ticks it off (see [Resources and Assets](#s-wealth)). The first lot are people who'll turn up when it calls, and each of those adds +1 Power. Nothing else adds Power, however big or old the faction is. The rest do one thing when the story fits, exactly what they say and no more. Where one says *it*, that's whoever holds it, the crew included.
 
 Any of them can carry a multiplier when it's big. It still does the same thing, so *Standing Army ×3* is still +1 Power, but it takes three wins to destroy or to take.
 
-Take one as it's written, change it to fit, or write your own in the same shape. Whatever a card says an asset does is what it does, even when it shares a name with one here, so the Quiet Order's *Rooted* adds Power where the crew's doesn't. A rich faction doesn't get an asset for being rich: it's got more resources, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*. The twelve crew assets from [The Party Sheet](#s-crew-tags) are all here too, worded for the crew.
+Take one as it's written, change it to fit, or write your own in the same shape. Whatever a card says an asset does is what it does, even when it shares a name with one here, but it only adds Power if it's people. A rich faction doesn't get an asset for being rich: it's got more resources, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*. The twelve crew assets from [The Party Sheet](#s-crew-tags) are all here too, worded for the crew.
 
 ### People who turn up {#assets-people}
 
-Each of these is +1 Power whenever it fits the roll, and its people in a scene can carry the asset as a tag, like *Household Guard* on the men at the gate.
+Each of these is +1 Power whenever it fits the roll, and its people in a scene can carry the asset as a tag, like *Household Guard* on the men at the gate. Anyone who comes when it calls counts, so the Bound's trapped souls count the same as the Vane Estate's guard.
 
 | Asset | What it does |
 | --- | --- |
@@ -262,10 +262,20 @@ Each of these is +1 Power whenever it fits the roll, and its people in a scene c
 | **Standing Army** | +1 Power. Soldiers who march when it calls. |
 | **Household Guard** | +1 Power at home. They don't leave its doors, so they're no use to anything it does further off. |
 | **Hired Swords** | +1 Power. Sellswords who go wherever it pays them to. |
-| **Dock Gangs** | +1 Power. The waterfront's hard hands, who turn up when it whistles. |
+| **Levies** | +1 Power. Tenants and old retainers off its lands, who'll leave the fields and march for it. |
+| **Warships** | +1 Power on the water. Fighting ships with the crews to sail them. |
 | **Fast Boats** | +1 Power on the water. Crews who know every channel by night. |
+| **Dock Gangs** | +1 Power. The waterfront's hard hands, who turn up when it whistles. |
+| **Toughs** | +1 Power. Street lads who'll break whatever it points at. |
+| **A Mob** | +1 Power. A crowd that's angry enough to take the street when it calls. |
+| **Constables** | +1 Power. The watch's own, with clubs and a warrant. |
+| **Bailiffs** | +1 Power. Men with the law's paper, who come for whatever it's owed. |
 | **The Faithful** | +1 Power. A congregation that'll fill the street when the bells ring. |
+| **Guild Hands** | +1 Power. Journeymen and apprentices, who down tools and turn out together. |
+| **Kin** | +1 Power. Cousins and in-laws, who drop everything when the family calls. |
+| **Sworn Members** | +1 Power. People who'd never admit they belong, and turn up masked when it calls. |
 | **Agents Abroad** | +1 Power, and it can act anywhere on the board. |
+| **Thralls** | +1 Power. The dead it raises or the living it owns, who come whenever it calls. |
 
 ### Reach and information {#assets-reach}
 

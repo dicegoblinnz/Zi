@@ -6,7 +6,7 @@ order: 20
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-10-28
 ---
 :::quote
 The factions keep moving whatever the crew does, but the crew gets to choose where it stands.
@@ -18,7 +18,7 @@ A **faction** is any power bigger than one person, like a noble house, a guild, 
 
 You write a faction once, and from then on its card does the work. Take your time building it, the way you would a character, because after that it runs on one action a downtime. A faction's card has its name and nine lines:
 
--   **Power:** its die. It's **1 step, plus 1 for each asset that adds Power**, so one army makes a d4 and five make a d12. It's what the faction rolls when it acts and what it defends with. Leave out an asset that doesn't fit what it's doing, the same as a line on a set action: a navy doesn't help in the mountains. Its best people are threats with a Challenge to match, so a d8 Power sends Challenge 4, and its face can go higher than that.
+-   **Power:** its die. It's **1 step, plus 1 for each lot of people who'll turn up when it calls**, so one army makes a d4 and five lots of people make a d12. Nothing else adds Power: a charter or an old name is an asset that does one thing. It's what the faction rolls when it acts and what it defends with. Leave out an asset that doesn't fit what it's doing, the same as a line on a set action: a navy doesn't help in the mountains. Its best people are threats with a Challenge to match, so a d8 Power sends Challenge 4, and its face can go higher than that.
 -   **Resources:** permissions for where its money comes from, one line each, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*.
 -   **Assets:** permissions for what it can do, one line each, and every one says exactly what it does: *Standing Army* (+1 Power), *Spy Network* (once a downtime, ask the GM one question about another faction), *Deep-Water Docks* (it can trade with anyone across the sea). Don't read in anything an asset doesn't say. Big ones carry a multiplier, like *Standing Army ×3*, and take that many wins to destroy or to take.
 -   **Want:** one sentence, the thing it always wants.
@@ -29,11 +29,11 @@ You write a faction once, and from then on its card does the work. Take your tim
 -   **Threads:** its bond and hostile threads toward the crew, and toward other factions when they matter (see [How a Faction Sees the Crew](#s-standing)).
 
 :::sheet[The Vane Estate]
-**Power** d12: 1 step, plus *Household Guard*, *Hired Swords*, *Friends in the Courts*, *The Old Name* and *Agents Abroad*.
+**Power** d12: 1 step, plus *Household Guard*, *Hired Swords*, *The Courts' Bailiffs*, *Old Retainers* and *Agents Abroad*.
 
 **Resources** *Vineyards* · *River Tolls* · *Low Market Rents* · *The Vane Bank* · *Salt Contracts* · *Old Money* · *The Collection's Buyers*
 
-**Assets** *Household Guard ×2* (+1 Power) · *Hired Swords* (+1 Power) · *Friends in the Courts* (+1 Power, and once a downtime the law looks the other way) · *The Old Name* (+1 Power) · *Agents Abroad* (+1 Power, and it can act anywhere on the board) · *Relic: The Inkwell* (see its Secret)
+**Assets** *Household Guard ×2* (+1 Power) · *Hired Swords* (+1 Power) · *The Courts' Bailiffs* (+1 Power) · *Old Retainers* (+1 Power) · *Agents Abroad* (+1 Power, and it can act anywhere on the board) · *Relic: The Inkwell* (see its Secret)
 
 **Want** To keep everything that's his.
 
@@ -145,8 +145,8 @@ Then fill in its card:
 
 1.  **Pick its size** from the table in [What a Faction Is](#s-faction-board). That gives you its Power and about how many resources it has.
 2.  **Write its resources**, where its money really comes from.
-3.  **Write its assets** from how it works, and say what each one does. People who turn up when it calls, like soldiers or dock gangs, add Power, and the rest do one thing, like a spy network or a relic. There's a list to borrow from in [Appendix B](#faction-strength). Every asset needs a resource paying for it, and any resource left over is an extra resource.
-4.  **Count its Power:** 1 step, plus 1 for each asset that adds Power.
+3.  **Write its assets** from how it works, and say what each one does. People who turn up when it calls, like soldiers or dock gangs, add Power, and nothing else does. The rest do one thing, like a spy network or a relic. There's a list to borrow from in [Appendix B](#faction-strength). Every asset needs a resource paying for it, and any resource left over is an extra resource.
+4.  **Count its Power:** 1 step, plus 1 for each lot of people.
 5.  **Give it an agenda** from the table below, a face and its secret.
 6.  **Leave its bonds empty**, unless something's already happened that its people would remember. Write a thread for that.
 

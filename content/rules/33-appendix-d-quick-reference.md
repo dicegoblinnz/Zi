@@ -6,7 +6,7 @@ order: 33
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-10-28
 ---
 ## Building the die {#building-the-die}
 
@@ -216,7 +216,7 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 
 ## Factions {#s-qr-factions}
 
--   Power (1 step, plus 1 for each asset that adds Power), resources, assets, Want, Agenda, Face, Secret, and three bonds: Public Sentiment, Morale and Loyalty.
+-   Power (1 step, plus 1 for each lot of people who turn up when it calls), resources, assets, Want, Agenda, Face, Secret, and three bonds: Public Sentiment, Morale and Loyalty.
 -   Every asset needs a resource paying for it, and one that isn't paid for stops counting. An extra resource, one that isn't paying for anything, hires another faction's action, buys an asset or goes in a trade. Nothing buys a second action.
 -   One action a downtime, telegraphed at the start: Destroy · Undermine · Obstruct · Influence · Acquire · Establish, or work its agenda (past d12, it happens). Up to three mini factions each, with two outcomes apiece, and a new one sits out the downtime it's made.
 -   The crew's action: the six outcomes, Set back its agenda, or Work for it. Roll the crew's Power, plus Reputations and bond threads that fit, or one character's own permissions (1 step for the slot, plus what fits). A personal slot put into it counts everything twice, and a bigger faction's Power takes both.

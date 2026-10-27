@@ -6,7 +6,7 @@ order: 30
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-27
+updated: 2026-10-28
 ---
 There are three sheets: one for each character, one the whole crew shares, and a faction board you can print as often as you need.
 
@@ -65,7 +65,7 @@ Two A4 sheets, printed double-sided. The fronts are faction board tiles A and B,
 
 -   The crew's name
 -   Reputations (one for every Goal done · a step on any crew roll it fits)
--   Power (d4 to start · 1 step, plus 1 for each asset that adds Power)
+-   Power (d4 to start · 1 step, plus 1 for each lot of people who turn up)
 -   Resources (where the crew's money comes from, one line each · each one pays for an asset, and one that isn't is an extra resource)
 -   Assets (what the crew can do, one line each, with what it does · each one needs a resource paying for it)
 -   How it grows · What an extra resource can buy
@@ -89,7 +89,7 @@ The **Faction Sheet** is the same board on one A4 page, for tables that need mor
 **Zi'Dara: Faction seat**
 
 -   Faction
--   Power (1 step, plus 1 for each asset that adds Power)
+-   Power (1 step, plus 1 for each lot of people who turn up)
 -   Resources (one line each)
 -   Assets (one line each, with what it does)
 -   Want

@@ -880,7 +880,23 @@ function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, wa
     const group = curly(assetsDoc.body.match(new RegExp(`^### (.+?) \\{#${id}\\}`, "m"))?.[1] ?? "");
     const rows = tablesOf(sectionOf(assetsDoc.body, id))[0]?.rows ?? [];
     if (!group || !rows.length) warn(`can't read Appendix B's ${id.replace("assets-", "")} assets`);
-    for (const r of rows) assets.push({ group, text: curly(plain(r[0])), does: curly(plain(r[1] ?? "")), power: power || /\+1 Power/.test(r[1] ?? "") });
+    for (const r of rows) {
+      if (!power && /\+1 Power/.test(r[1] ?? "")) warn(`Appendix B's ${plain(r[0])} says +1 Power, but only people who turn up add Power, so it goes under People who turn up or does one thing`);
+      assets.push({ group, text: curly(plain(r[0])), does: curly(plain(r[1] ?? "")), power });
+    }
+  }
+  // Only people who turn up add Power (28 Oct), so a card's asset with the
+  // same name as one of Appendix B's adds Power exactly when Appendix B's does,
+  // and no card can make Rooted or Influential add Power again.
+  const people = new Map(assets.map((a) => [a.text.toLowerCase(), a.power]));
+  for (const b of boards) {
+    for (const c of b.cards) {
+      for (const a of c.assets) {
+        const p = people.get(a.text.toLowerCase());
+        if (p === undefined || p === a.power) continue;
+        warn(a.power ? `${c.name}'s ${a.text} adds Power, but it isn't people in Appendix B, and only people who turn up add Power` : `${c.name}'s ${a.text} is people in Appendix B, so it adds Power on the card too`);
+      }
+    }
   }
   // The faction turn (stage 2): the d6 for when she doesn't know what a
   // faction does, the six outcomes, both d12 tables for when one comes for the

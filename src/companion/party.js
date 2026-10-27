@@ -588,7 +588,7 @@ export function makeParty(d) {
     const words = l === "assets" ? "What it’s called" : l === "projects" ? "What it is" : "Its words";
     const extra = l === "assets"
       ? `<label class="cc-field">What it does <input name="does" maxlength="${MAX.does}" autocomplete="off" value="${esc(x.does)}"></label>
-        <label class="pt-check"><input type="checkbox" name="power"${x.power ? " checked" : ""}> It adds Power (people who turn up when the crew calls)</label>`
+        <label class="pt-check"><input type="checkbox" name="power"${x.power ? " checked" : ""}> It’s people who turn up when the crew calls (+1 Power)</label>`
       : l === "projects"
         ? `<label class="cc-field">What happens when it’s done <input name="then" maxlength="${MAX.then}" autocomplete="off" value="${esc(x.then)}"></label>
           <label class="cc-field">Its die <select name="die">${SIZES.map((s) => `<option value="${s}"${s === x.die ? " selected" : ""}>d${s}</option>`).join("")}</select></label>`
@@ -601,7 +601,7 @@ export function makeParty(d) {
   function addForm(l, label, hint) {
     const extra = l === "assets"
       ? `<label class="cc-field">What it does <input name="does" maxlength="${MAX.does}" autocomplete="off"></label>
-        <label class="pt-check"><input type="checkbox" name="power"> It adds Power (people who turn up when the crew calls)</label>`
+        <label class="pt-check"><input type="checkbox" name="power"> It’s people who turn up when the crew calls (+1 Power)</label>`
       : l === "projects"
         ? `<label class="cc-field">What happens when it’s done <input name="then" maxlength="${MAX.then}" autocomplete="off"></label>
           <label class="cc-field">Start it at <select name="die">${SIZES.slice(0, 5).map((s) => `<option value="${s}">d${s}</option>`).join("")}</select></label>

@@ -6,7 +6,7 @@ order: 26
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-10-28
 ---
 :::quote
 Before anyone builds a character, pick the kind of world you want to play in.
@@ -16,7 +16,7 @@ A **frame** is a ready-made kind of campaign. It tells you what the world's like
 
 You pick one together at Session Zero, and it's step 1, [the pitch](#session-zero). The GM reads out the pitch for the frame she'd like to run, or for two or three of them, and the table talks it over. A frame hands you most of the other steps as well: the tone, the first factions, the first Goal and the questions to go round the table with. That'll make Session Zero a lot quicker.
 
-[The Steeplands](#steeplands) is the book's own frame, and it's where every example in the earlier chapters happens. The five below are other worlds you can run with the same book. They're all built from the same parts in the same order, so once you've read one you'll know where to find things in the rest, and there's a checklist at the end for building your own. The faction cards are the ones from [Factions](#s-faction-board), written short: the assets that add Power go in brackets after its Power die, any other asset gets its own line saying what it does, and its threads toward the crew go last, when it's got any. Their threats work like the bestiary's: three telegraphs to pick from, and one die at each of the crew a round, unless a tag says more.
+[The Steeplands](#steeplands) is the book's own frame, and it's where every example in the earlier chapters happens. The five below are other worlds you can run with the same book. They're all built from the same parts in the same order, so once you've read one you'll know where to find things in the rest, and there's a checklist at the end for building your own. The faction cards are the ones from [Factions](#s-faction-board), written short: the people who add Power go in brackets after its Power die, any other asset gets its own line saying what it does, and its threads toward the crew go last, when it's got any. Their threats work like the bestiary's: three telegraphs to pick from, and one die at each of the crew a round, unless a tag says more.
 
 | Frame | What you'll do most | It feels like | Pick it if… |
 | --- | --- | --- | --- |
@@ -60,7 +60,7 @@ Over an arc, the crew builds the ship and its name. They pay off the Kittiwake a
 ### The board {#frames-the-board}
 
 :::sheet[The Tithe Fleet]
-**Power** d10 (*Warships ×2*, *Marines*, *The Law of the Sea* and *Watchful*)
+**Power** d10 (*Warships ×2*, *Marines*, *Tithe Men* and *Revenue Cutters*)
 
 **Resources** *The Tithe* · *Sailing Papers* · *Seized Cargoes* · *Gallowsmouth Fines* · *Crown Pay*
 
@@ -76,7 +76,7 @@ Over an arc, the crew builds the ship and its name. They pay off the Kittiwake a
 :::
 
 :::sheet[Tarrant & Daughters]
-**Power** d8 (*Sprawling*, *Merchantmen* and *Armed Escorts*)
+**Power** d8 (*Factors in Every Port*, *Merchantmen* and *Armed Escorts*)
 
 **Resources** *Cargo Contracts* · *Ship Mortgages* · *Marine Insurance* · *Warehouses in Every Port* · *Whale Oil* · *Passenger Fares*
 
@@ -92,7 +92,7 @@ Over an arc, the crew builds the ship and its name. They pay off the Kittiwake a
 :::
 
 :::sheet[The Brothers of the Lamp]
-**Power** d6 (*Knows Every Cove* and *Ghost*)
+**Power** d6 (*Lamp Crews* and *The Cove Villages*)
 
 **Resources** *Brandy Runs* · *Smuggled Passengers*
 
@@ -108,9 +108,11 @@ Over an arc, the crew builds the ship and its name. They pay off the Kittiwake a
 :::
 
 :::sheet[The Drowned Choir]
-**Power** d8 (*Old*, *Calls the Tide* and *Secretive*)
+**Power** d6 (*The Drowned* and *Its Mouths*)
 
 **Resources** *Every Drowning* · *The Drowned City* · *Sailors' Offerings*
+
+**Assets** *Calls the Tide* (once a downtime, it holds one channel through the Combs shut, or open, till the next downtime)
 
 **Want** To bring the drowned city back up into the air.
 
@@ -260,9 +262,11 @@ Coming back up matters as much as going down. Only [downtime](#downtime) clears 
 ### The board {#the-board-1}
 
 :::sheet[The Deep Company]
-**Power** d10 (*Royal Charter*, *The Lift*, *Company Men* and *Lanternhead*)
+**Power** d6 (*Company Men* and *The Store's Debtors*)
 
 **Resources** *The Company's Cut* · *Delving Licences* · *Bunkhouse Rents* · *The Pawnshops* · *The Company Store* · *Buyers in the Capital*
+
+**Assets** *Royal Charter* (once a downtime, it pulls one team's licence till the next downtime) · *The Lift* (it says who rides it, and a team it keeps off climbs down the old way, so every level starts its Depth a size smaller)
 
 **Want** Everything that comes up out of the mountain, with its cut taken.
 
@@ -274,7 +278,7 @@ Coming back up matters as much as going down. Only [downtime](#downtime) clears 
 :::
 
 :::sheet[The Lampwrights' Guild]
-**Power** d6 (*Rooted* and *The Winch Crews*)
+**Power** d6 (*Lamp Works Hands* and *The Winch Crews*)
 
 **Resources** *Guild Dues* · *The Lamp Works*
 
@@ -292,9 +296,11 @@ Coming back up matters as much as going down. Only [downtime](#downtime) clears 
 :::
 
 :::sheet[Holloway's Team]
-**Power** d6 (*Best Kit in Lanternhead* and *Ruthless*)
+**Power** d4 (*Holloway's Delvers*)
 
 **Resources** *Company Contracts* · *Finds Sold on the Side*
+
+**Assets** *Best Kit in Lanternhead* (every level it goes down to starts its Depth a size bigger)
 
 **Want** To be first everywhere, whatever it costs, as long as somebody else pays.
 
@@ -308,9 +314,11 @@ Coming back up matters as much as going down. Only [downtime](#downtime) clears 
 :::
 
 :::sheet[The Underhold]
-**Power** d8 (*Old*, *Everywhere Below* and *Wards and Constructs*)
+**Power** d4 (*Constructs*)
 
 **Resources** *The Dark* · *Sealed Doors* · *The Old City's Dead*
+
+**Assets** *Everywhere Below* (it can act anywhere below the Upper Galleries) · *Old* (nothing down there surprises it, so nobody gets an *Ambush* or a first strike on it below the Upper Galleries)
 
 **Want** To keep what's left of itself.
 
@@ -462,9 +470,11 @@ A session usually runs one or two trails, then a confrontation once the crew kno
 ### The board {#the-board-2}
 
 :::sheet[The Night Watch]
-**Power** d8 (*Watchful*, *The Law* and *Constables*)
+**Power** d4 (*Constables*)
 
 **Resources** *City Pay* · *Court Fines* · *Private Patrols*
+
+**Assets** *Informers* (once a downtime, it finds out where anyone it names was on any one night) · *The Law* (anyone it arrests sits in the cells till the next downtime, unless someone gets them out in a scene)
 
 **Want** Order, and nothing in the newspapers.
 
@@ -478,9 +488,11 @@ A session usually runs one or two trails, then a confrontation once the crew kno
 :::
 
 :::sheet[The Lamplighters' Guild]
-**Power** d6 (*Rooted* and *The Ledgers*)
+**Power** d4 (*Lamplighters*)
 
 **Resources** *The Lamp Rate* · *Gas Contracts* · *Guild Dues*
+
+**Assets** *The Ledgers* (once a downtime, it knows where the fog fed last)
 
 **Want** Every lamp lit, every night.
 
@@ -492,9 +504,11 @@ A session usually runs one or two trails, then a confrontation once the crew kno
 :::
 
 :::sheet[The Carrow Society]
-**Power** d8 (*Influential*, *Secretive* and *Hired Men*)
+**Power** d6 (*Sworn Members* and *Hired Men*)
 
 **Resources** *Old Fortunes* · *Gaslight Mile Rents* · *Shares in the Gasworks* · *Members' Gifts*
+
+**Assets** *A Judge in Its Pocket* (once a downtime, the law looks the other way for it)
 
 **Want** To know what's in the fog, and to own it.
 
@@ -508,9 +522,11 @@ A session usually runs one or two trails, then a confrontation once the crew kno
 :::
 
 :::sheet[The Thing in the Fog]
-**Power** d10 (*Old*, *Wherever the Fog Goes*, *Borrowed Faces* and *Its Dead*)
+**Power** d6 (*Borrowed Faces* and *Its Dead*)
 
 **Resources** *The Dark Gaps* · *The Sumps* · *The River* · *The Names It's Eaten*
+
+**Assets** *Wherever the Fog Goes* (it can act anywhere the fog reaches) · *Old* (nothing binds or banishes it but its own name)
 
 **Want** To feed.
 
@@ -660,9 +676,11 @@ Factions matter more here than in any other frame. Every family's on the board, 
 ### The board {#the-board-3}
 
 :::sheet[House Veraine]
-**Power** d10 (*Royal Blood*, *Influential*, *Old* and *Household Guard*)
+**Power** d6 (*Household Guard* and *Northern Levies*)
 
 **Resources** *The Northern Estates* · *A Crown Pension* · *Timber Rights* · *Rosewater Rents* · *Old Loans*
+
+**Assets** *Royal Blood* (its face can't be arrested, tried or hanged by anyone but the crown) · *Influential* (its face can't be refused an audience with the Queen)
 
 **Want** The crown, by right of blood.
 
@@ -674,9 +692,11 @@ Factions matter more here than in any other frame. Every family's on the board, 
 :::
 
 :::sheet[House Marchetti]
-**Power** d8 (*Every Debt in the City*, *Hired Blades* and *Friends It's Paid For*)
+**Power** d6 (*Debt Collectors* and *Hired Blades*)
 
 **Resources** *The Marchetti Bank* · *Interest* · *The Silk Trade* · *Spice Ships* · *Rosewater Gambling Dens*
+
+**Assets** *Friends It's Paid For* (once a downtime, someone at court it's paid does one thing it asks, with no roll)
 
 **Want** To buy what the old families were born with.
 
@@ -690,9 +710,11 @@ Factions matter more here than in any other frame. Every family's on the board, 
 :::
 
 :::sheet[The Queen's Eyes]
-**Power** d8 (*Watchful*, *Secretive* and *A Spy in Every House*)
+**Power** d6 (*A Spy in Every House* and *Agents Abroad*)
 
 **Resources** *The Privy Purse* · *Blackmail* · *Secrets It Sells*
+
+**Assets** *Codebreakers* (once a session, anything *Written in Code* that it's got hold of gets read, with no roll)
 
 **Want** To know everything, and to decide who else gets to.
 
@@ -706,9 +728,11 @@ Factions matter more here than in any other frame. Every family's on the board, 
 :::
 
 :::sheet[The Crown]
-**Power** d12 (*The Throne*, *The Queen's Guard ×2*, *The Army*, *The Courts* and *The Royal Council*)
+**Power** d10 (*The Queen's Guard ×2*, *The Army*, *Bailiffs* and *Provincial Levies*)
 
 **Resources** *Crown Lands* · *The Salt Tax* · *Customs* · *The Mint* · *Tribute from the Provinces* · *The Royal Forests*
+
+**Assets** *The Throne* (whoever sits on it names the heir, and no court can say otherwise)
 
 **Want** To die with the kingdom in one piece.
 
@@ -856,7 +880,7 @@ The ship's a [party holding](#s-party-resources), a line for whoever's flying he
 ### The board {#the-board-4}
 
 :::sheet[The Meridian Combine]
-**Power** d10 (*Gunships ×2*, *Lawyers*, *Combine Marines* and *Port Meridian*)
+**Power** d10 (*Gunships ×2*, *Lawyers*, *Combine Marines* and *Station Security*)
 
 **Resources** *Ore Contracts* · *Station Leases* · *Shipping Lines* · *Customs Fees* · *Fuel Depots* · *Shareholders*
 
@@ -870,9 +894,11 @@ The ship's a [party holding](#s-party-resources), a line for whoever's flying he
 :::
 
 :::sheet[Halberd Credit]
-**Power** d6 (*Every Debt on the Fringe* and *Repo Crews*)
+**Power** d4 (*Repo Crews*)
 
 **Resources** *Interest Payments* · *Repossessed Ships* · *Debts Bought Cheap*
+
+**Assets** *Every Debt on the Fringe* (once a session, someone who owes it does one thing it asks, with no roll)
 
 **Want** Every loan paid, with interest.
 
@@ -886,7 +912,7 @@ The ship's a [party holding](#s-party-resources), a line for whoever's flying he
 :::
 
 :::sheet[The Free Stations Compact]
-**Power** d6 (*Rooted* and *The Miners' Council*)
+**Power** d6 (*Free Station Dockhands* and *The Miners' Council*)
 
 **Resources** *Ore Sales* · *Station Dues*
 
@@ -904,7 +930,7 @@ The ship's a [party holding](#s-party-resources), a line for whoever's flying he
 :::
 
 :::sheet[The Rustbacks]
-**Power** d6 (*Fast Ships* and *Knows the Graveyard*)
+**Power** d6 (*Fast Ships* and *Salvage Crews*)
 
 **Resources** *Salvage* · *Hijacked Cargo*
 

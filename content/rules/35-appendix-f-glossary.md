@@ -6,7 +6,7 @@ order: 35
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-27
+updated: 2026-10-28
 ---
 Here are the rule terms in the book, one line each, and each one links to its rule.
 
@@ -23,7 +23,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Area die](#s-area)** | The Elementalist's: one die that says how far your roll reaches instead of an intent, a burst, a cone or a line twice as long. It takes a split and costs no Aura. Threats have areas too. |
 | **[Armour](#s-armour)** | Plate, leathers, a shield or a helmet. Each piece is a line on your Defend, and it can take a blow instead of you taking a Hurt, ticking one of its boxes. |
 | **[Aspiration](#s-aspiration)** | What your character wants: one thing, and you'd know the day it's done (see [A good Aspiration](#s-good-aspiration)). Starts at d2 and climbs. Past d12 you get what you were after, and a new archetype, with a Title you name for it. |
-| **[Asset](#s-wealth)** | A permission on a faction's card for what it can do, like *Standing Army* (+1 Power). It needs a resource paying for it every downtime, or it stops counting. |
+| **[Asset](#s-wealth)** | A permission on a faction's card for what it can do. People who turn up, like *Standing Army*, add +1 Power, and the rest do one thing. It needs a resource paying for it every downtime, or it stops counting. |
 | **[Attunement](#s-attunement)** | One attuned thing to start, on top of what you carry. An attuned thing has permissions of its own, grows in three stages, and can't be broken. |
 | **[Aura](#s-aura)** | Your luck and flair, for the small stuff. Up to your maximum, full every scene. It brings things in, keeps a Catch quiet, wins a tie when you're acting, and pays for your archetype's +2 and a quick heal. 1 back on every top face, and every time you let a Catch bite. |
 | **[Awakened](#s-attunement)** | An attuned thing's first stage: 1 permission, and 1 more with a Catch. |
@@ -103,7 +103,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Party holdings](#s-party-resources)** | Big things the crew owns together, like a horse and cart or a house. A line on any roll they fit, for 1 Aura. |
 | **[Perfected](#s-attunement)** | An attuned thing's third stage: 3 permissions, and 3 more with a Burden and a Catch. Six at most. |
 | **[Permission](#s-permissions)** | Something your character can do, or one word for what they're good at, like *climb sheer walls* or *Deceptive*. It lives on a Title, goes on two set actions at most, and it's 1 step on a roll it fits. |
-| **[Power](#s-faction-board)** | A faction's muscle, on a die: 1 step, plus 1 for each asset that adds Power. The crew has one too. |
+| **[Power](#s-faction-board)** | A faction's muscle, on a die: 1 step, plus 1 for each lot of people who turn up when it calls. Nothing else adds Power. The crew has one too. |
 | **[Pressure](#downtime)** | One of the four things pushing on the crew each downtime: personal, party, faction, world. |
 | **[Project](#s-projects)** | Something the crew sets out to build or bring about. Starts at d2 and climbs. Past d12, what you wrote happens. |
 | **[Pursuer](#chases)** | In a chase, whatever's after you, on a die. Past d2, it's shaken off. |

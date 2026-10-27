@@ -6,7 +6,7 @@ order: 36
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-27
+updated: 2026-10-28
 ---
 :::index-section
 ## A {#a}
@@ -192,6 +192,7 @@ updated: 2026-10-27
 -   **Planning scene** — [The planning scene](#s-planning)
 -   **Player reference** — [Appendix A](#s-sheet-character)
 -   **Playing Carefully** — [Playing Carefully](#playing-carefully)
+-   **Power, a faction's** — [What a Faction Is](#s-faction-board), [People who turn up](#assets-people), [The Crew](#s-party-faction)
 -   **Projects** — [Projects](#s-projects)
 -   **Prone** — [Conditions to start with](#s-conditions-list), [Vulnerabilities](#s-vulnerable)
 

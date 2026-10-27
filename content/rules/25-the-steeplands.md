@@ -6,7 +6,7 @@ order: 25
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-10-28
 ---
 :::quote
 You can play Zi'Dara in any setting you like, but if you don't have a world in mind, here's one in two pages, ready to play.
@@ -25,12 +25,12 @@ The Steeplands are a rain-soaked archipelago of trade cities and old grudges. Sh
 
 | Faction | Power | Resources | Agenda | Secret |
 | --- | --- | --- | --- | --- |
-| **The Vane Estate** · Wants to keep everything that's his. Face: Lord Aldous Vane. | d12: *Household Guard ×2* · *Hired Swords* · *Friends in the Courts* · *The Old Name* · *Agents Abroad* | *Vineyards* · *River Tolls* · *Low Market Rents* · *The Vane Bank* · *Salt Contracts* · *Old Money* · *The Collection's Buyers* | *Vane comes home*, d6 | The Inkwell is the binding. Break it and every soul goes free. |
-| **The Harbour Guild** · Wants every ship to pay. Face: the Guildmaster. | d10: *Sprawling* · *Watchful* · *Fast Boats* · *Dock Gangs* | *Dock Fees* · *Warehouse Rents* · *Smuggling Runs* · *Shipping Shares* · *Loans to Captains* · *The Fish Market* | *Buy the harbour court*, d6 | One bad year. The fortune is paper. |
-| **The Quiet Order** · Wants nothing to change. Face: a priest of the Order. | d8: *Rooted* · *Secretive* · *Influential* | *Funerals* · *Temple Lands* · *Offerings* · *Burial Plots* | *Bury the Vane scandal*, d8 | It sold Vane the rite that binds the souls. |
-| **The Bound** · Wants to be free. Face: the Painted Knight. | d6: *Ghost* · *Many Souls* | *The Paintings* · *The Statues* | *Wake*, d2 | Not all of them were victims. |
+| **The Vane Estate** · Wants to keep everything that's his. Face: Lord Aldous Vane. | d12: *Household Guard ×2* · *Hired Swords* · *The Courts' Bailiffs* · *Old Retainers* · *Agents Abroad* | *Vineyards* · *River Tolls* · *Low Market Rents* · *The Vane Bank* · *Salt Contracts* · *Old Money* · *The Collection's Buyers* | *Vane comes home*, d6 | The Inkwell is the binding. Break it and every soul goes free. |
+| **The Harbour Guild** · Wants every ship to pay. Face: the Guildmaster. | d10: *Captains in Its Debt* · *Warehouse Watchmen* · *Fast Boats* · *Dock Gangs* | *Dock Fees* · *Warehouse Rents* · *Smuggling Runs* · *Shipping Shares* · *Loans to Captains* · *The Fish Market* | *Buy the harbour court*, d6 | One bad year. The fortune is paper. |
+| **The Quiet Order** · Wants nothing to change. Face: a priest of the Order. | d8: *The Faithful* · *Gravediggers* · *Thistle's Novices* | *Funerals* · *Temple Lands* · *Offerings* · *Burial Plots* | *Bury the Vane scandal*, d8 | It sold Vane the rite that binds the souls. |
+| **The Bound** · Wants to be free. Face: the Painted Knight. | d6: *The Painted* · *The Ones in Marble* | *The Paintings* · *The Statues* | *Wake*, d2 | Not all of them were victims. |
 
-Each faction's Power is 1 step, plus the assets listed with it. The Estate's got one more asset that doesn't add Power, *Relic: The Inkwell*, and its whole card, with what each asset does, is in [Factions](#s-faction-board). The Bound don't deal in money, so their resources are what holds them here.
+Each faction's Power is 1 step, plus the people listed with it. The Estate's got one more asset that doesn't add Power, *Relic: The Inkwell*, and its whole card, with what each asset does, is in [Factions](#s-faction-board). The Bound don't deal in money, so their resources are what holds them here. Their souls can't leave the collection, so they only add Power in Marrow.
 
 None of the four has a thread toward a new crew. The Estate writes a hostile one the first time anyone asks about its paintings: *They asked about the paintings*.
 

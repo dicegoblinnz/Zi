@@ -1010,7 +1010,7 @@ export function makeTurn(d) {
       out.push(threadForm("bond", "bond", crew ? "It writes a bond thread toward the crew" : "Write a bond thread"));
     }
     if (move === "Establish") {
-      out.push(form("asset", crew ? "A new asset on the party sheet" : "A new asset", `<label class="cc-field">What it’s called <input name="text" maxlength="60" autocomplete="off" required></label><label class="cc-field">What it does <input name="does" maxlength="240" autocomplete="off"></label><label class="pt-check"><input type="checkbox" name="power"> It adds Power</label>`));
+      out.push(form("asset", crew ? "A new asset on the party sheet" : "A new asset", `<label class="cc-field">What it’s called <input name="text" maxlength="60" autocomplete="off" required></label><label class="cc-field">What it does <input name="does" maxlength="240" autocomplete="off"></label><label class="pt-check"><input type="checkbox" name="power"> It’s people who turn up when ${crew ? "the crew calls" : "it calls"} (+1 Power)</label>`));
       out.push(form("res", crew ? "A resource the crew lost, built back" : "A new resource", `<label class="cc-field">What it is <input name="text" maxlength="60" autocomplete="off" required placeholder="A new mine, a new route or a new racket"></label>`));
       const maker = crew ? null : find(doc, x.f);
       const res = crew ? sheet.res : maker?.res ?? [];
@@ -1030,7 +1030,7 @@ export function makeTurn(d) {
       if (ag?.done) {
         out.push(`<div class="ft-happened"><p class="cc-lead"><b>${esc(bare(ag.text))} happened.</b> Three things follow. ${ruleLink("when-an-agenda-happens", "When an agenda happens")}</p>
           ${form("changed", "The world changes: say how, on the party sheet", `<label class="cc-field">How, in one sentence <input name="text" maxlength="160" autocomplete="off" required placeholder="The Vanes are back in the city"></label>`)}
-          ${form("asset", "It grows: a new asset", `<label class="cc-field">What it’s called <input name="text" maxlength="60" autocomplete="off" required></label><label class="cc-field">What it does <input name="does" maxlength="240" autocomplete="off"></label><label class="pt-check"><input type="checkbox" name="power"> It adds Power</label>`)}
+          ${form("asset", "It grows: a new asset", `<label class="cc-field">What it’s called <input name="text" maxlength="60" autocomplete="off" required></label><label class="cc-field">What it does <input name="does" maxlength="240" autocomplete="off"></label><label class="pt-check"><input type="checkbox" name="power"> It’s people who turn up when ${crew ? "the crew calls" : "it calls"} (+1 Power)</label>`)}
           ${form("res", "Or a new resource", `<label class="cc-field">What it is <input name="text" maxlength="60" autocomplete="off" required></label>`)}
           ${form("next", "It writes a new agenda", `<label class="cc-field">What it wants next <input name="text" maxlength="120" autocomplete="off" required></label><label class="cc-field">Where it starts <select name="die">${SIZES.map((s) => `<option value="${s}">d${s}, ${ago(s)}</option>`).join("")}</select></label>`)}</div>`);
       }

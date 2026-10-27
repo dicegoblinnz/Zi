@@ -8,7 +8,7 @@ id: learn
 # The cards teach the chapters and never change a rule. When a rules change
 # touches a section a card teaches, the build names the cards. Check them
 # against the chapters, then set checked to that change's date.
-checked: 2026-10-27
+checked: 2026-10-28
 ---
 ::::card[Did you succeed?]{#l-succeed teaches=the-core}
 You play someone who's properly good at something, like a thief who can open any lock in the city. Everything your character can do is a **permission**, a short line on your sheet. If it's on there you can do it, no questions asked, and every permission that fits what you're doing makes your die bigger. Then the question's simple: did you succeed? Roll against whatever's in your way, and if you beat the number, you did.

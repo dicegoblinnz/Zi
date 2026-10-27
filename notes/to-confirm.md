@@ -1,6 +1,17 @@
-# For Mo: calls to confirm (27 Oct 2026)
+# For Mo: calls to confirm (28 Oct 2026)
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
+
+## 28 Oct: only people add Power
+
+You said Power comes only from people who turn up (stage 1 of `notes/builder-plan.md`). These are the calls Claude made putting it through the book.
+
+1. **Who counts as people:** anyone or anything that comes when a faction calls, so the dead it raises, people it's wearing and things it's made count, and so do lawyers. The Thing in the Fog's *Its Dead* and the Meridian Combine's *Lawyers* still add Power.
+2. **Keeping a die.** Where a faction plainly had more people than its card said, the asset that wasn't people became them, and the die stayed. The Vane Estate's *Friends in the Courts* and *The Old Name* are *The Courts' Bailiffs* and *Old Retainers*, so it's still a d12 and every example on it adds up. The Harbour Guild's d10 and the Quiet Order's d8 stay too, since Factions, Downtime and Growing use them.
+3. **Dropping a die.** Where it wasn't people, it's an asset that does one thing now, in Appendix B's shape, and the die's smaller. That's eleven of the frames' factions, listed in the change log. *Old* does something different on the Underhold (nobody ambushes it below) and the Thing in the Fog (only its name binds it).
+4. **The Bound's souls only add Power in Marrow,** since they can't leave the collection.
+5. **Ten more people in Appendix B,** so every kind of faction in Building a Faction has people of its own for the world builder: *Levies*, *Warships*, *Toughs*, *A Mob*, *Constables*, *Bailiffs*, *Guild Hands*, *Kin*, *Sworn Members* and *Thralls*.
+6. **The build checks it:** a card's asset that shares its name with one in Appendix B adds Power only if Appendix B's does, and nothing outside People who turn up can say +1 Power.
 
 ## 27 Oct: the table screen
 
@@ -118,7 +129,7 @@ You asked for examples after a player wrote an Aspiration and a Goal too big to 
 7. **Hirelings.** A company the crew hires for good is a mini faction, so it sits out the downtime it's made like any other.
 8. **The assets list.** Appendix B has about thirty assets now, grouped, each saying what it does. People who turn up are +1 Power, and the rest do one thing when the story fits. Every one of them is Claude's, so cut or change any.
 9. **Friends at Court and Influential** each gave the crew a free move on a faction every downtime, which your "one action, no exception" rules out. Now *Friends at Court* is a step on any crew roll to Influence a faction's face, and *Influential* is a step on any crew roll at a faction whose threads toward the crew aren't mostly hostile. They're the only crew assets that add a step, so if you'd rather they didn't, they could be once-a-session favours instead.
-10. **Power from assets.** The new list gives Power only to people who turn up, and says an asset does whatever its card says. So the Frames' and the Steeplands' faction cards keep their Power dice, though some of their Power assets aren't people (*Watchful*, *Old*, *Royal Charter*, *The Law of the Sea*, *Sprawling*, *Secretive*, *Ghost*, *Many Souls*). If you want Power only from people, those cards get redone and their Power dice drop, the Guild's d10 among them.
+10. **Power from assets.** The new list gives Power only to people who turn up, and says an asset does whatever its card says. So the Frames' and the Steeplands' faction cards keep their Power dice, though some of their Power assets aren't people (*Watchful*, *Old*, *Royal Charter*, *The Law of the Sea*, *Sprawling*, *Secretive*, *Ghost*, *Many Souls*). If you want Power only from people, those cards get redone and their Power dice drop, the Guild's d10 among them. You said only people on 28 Oct, and the cards are redone (28 Oct, above).
 
 ## 26 Oct: smaller calls
 

@@ -6,7 +6,7 @@ order: 4
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-27
+updated: 2026-10-28
 ---
 :::quote
 Everything the crew wants, owns and owes, out on the table where everyone can see it.
@@ -98,9 +98,9 @@ The crew's a faction too, on the same card as the others. It starts small, and i
 **People it relies on** The fence, the landlord, the cousin with a boat.
 :::
 
--   **Power** is muscle, reach, and how many people turn up when the crew calls. It's 1 step, plus 1 for each asset that adds Power, so a new crew's a d4. It's the die the crew rolls when it moves on a faction, plus a step for every Reputation and bond thread that fits the roll, and its people are threats with a Challenge to match: a d6 Power sends Challenge 3.
+-   **Power** is the crew's muscle, how many people turn up when it calls. It's 1 step, plus 1 for each asset that adds Power, so a new crew's a d4. It's the die the crew rolls when it moves on a faction, plus a step for every Reputation and bond thread that fits the roll, and its people are threats with a Challenge to match: a d6 Power sends Challenge 3.
 -   **Resources** are permissions for where the crew's money comes from, one line each, like *Odd jobs*. Every asset needs one paying for it, every downtime, and one that isn't paying for anything is an extra resource (see [Extra Resources](#s-crew-wealth)). A purse of gold is still each character's own, a utility item that's worth about a month's wages.
--   **Assets** are permissions for what the crew can do, one line each, and each one says exactly what it does. An asset that's people who'll turn up when the crew calls, like *Muscle* or *The Dock Lads*, adds Power. One with nothing paying for it stops counting till something does. There are twelve below, or write your own in the same shape.
+-   **Assets** are permissions for what the crew can do, one line each, and each one says exactly what it does. An asset that's people who'll turn up when the crew calls, like *Muscle* or *The Dock Lads*, adds Power, and nothing else does. One with nothing paying for it stops counting till something does. There are twelve below, or write your own in the same shape.
 -   **Reputations** are what the city says about the crew, one line each: *The ones who beat the forger's court.* A Reputation works like a Title for the crew. It's a step on any crew roll it fits, and the crew earns one every time a Goal's done, and keeps them all.
 -   **Holdings** are the big things the crew owns together (see [Party Holdings](#s-party-resources)).
 

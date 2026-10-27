@@ -882,7 +882,7 @@ export function makeWorld(d) {
     const del = `<button type="button" class="button danger" data-act="w" data-do="drop" data-f="${esc(f.id)}" data-l="${l}" data-lid="${esc(x.id)}">${sure(`drop-${x.id}`, "Tap again to take it off", "Take it off the card")}</button>`;
     const extra = l === "res" ? `${timesField(x)}${giveTo(f, doc)}`
       : l === "assets" ? `<label class="cc-field">What it does <input name="does" maxlength="${MAX.words}" autocomplete="off" value="${esc(x.does)}"></label>
-        <label class="pt-check"><input type="checkbox" name="power"${x.power ? " checked" : ""}> It adds Power (people who turn up when it calls)</label>
+        <label class="pt-check"><input type="checkbox" name="power"${x.power ? " checked" : ""}> It’s people who turn up when it calls (+1 Power)</label>
         <label class="pt-check"><input type="checkbox" name="off"${x.off ? " checked" : ""}> Nothing’s paying for it</label>${timesField(x)}${giveTo(f, doc)}`
       : l === "agendas" ? `<label class="cc-field">Its die <select name="die">${SIZES.map((s) => `<option value="${s}"${s === x.die ? " selected" : ""}>d${s}, ${ago(s)}</option>`).join("")}</select></label>
         <label class="cc-field">What happens when it does <input name="then" maxlength="${MAX.words}" autocomplete="off" value="${esc(x.then)}"></label>`
@@ -896,7 +896,7 @@ export function makeWorld(d) {
   function addForm(f, l, label, doc) {
     const extra = l === "res" ? timesField()
       : l === "assets" ? `<label class="cc-field">What it does <input name="does" maxlength="${MAX.words}" autocomplete="off" placeholder="like once a downtime, the law looks the other way"></label>
-        <label class="pt-check"><input type="checkbox" name="power"> It adds Power (people who turn up when it calls)</label>${timesField()}`
+        <label class="pt-check"><input type="checkbox" name="power"> It’s people who turn up when it calls (+1 Power)</label>${timesField()}`
       : l === "agendas" ? `<label class="cc-field">It starts at <select name="die">${SIZES.map((s) => `<option value="${s}"${s === 6 ? " selected" : ""}>d${s}, ${ago(s)}</option>`).join("")}</select></label>`
       : `${kindField()}${l === "threads" ? toField(f, doc) : ""}`;
     return `<form class="cc-form pt-form pt-add" data-form="w-add" data-f="${esc(f.id)}" data-l="${l}">
@@ -979,7 +979,7 @@ export function makeWorld(d) {
     if (gm || f.shown.power) {
       const adds = powerAssets.filter((a) => !a.off).length;
       parts.push(part(`power-${f.id}`, "Power", `${diceLabel(dice)} <small>· ${adds ? `1 step, plus ${plural(adds, "asset", "assets")} that add Power` : "1 step, and nothing adding Power"}</small>`,
-        `${gm ? shower(f, "power") : ""}<p class="cc-lead">What it rolls when it acts and defends with: 1 step, plus each asset that adds Power and has something paying for it.</p>${moneyLine}${list("assets", powerAssets)}${gm ? addForm(f, "assets", "Someone who turns up when it calls", doc).replace('name="power">', 'name="power" checked>') : ""}`,
+        `${gm ? shower(f, "power") : ""}<p class="cc-lead">What it rolls when it acts and defends with: 1 step, plus 1 for each lot of people who turn up when it calls and have something paying for them.</p>${moneyLine}${list("assets", powerAssets)}${gm ? addForm(f, "assets", "Someone who turns up when it calls", doc).replace('name="power">', 'name="power" checked>') : ""}`,
         gm ? badge(f, "power") : ""));
     }
     if (gm || f.shown.res) {

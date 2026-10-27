@@ -2074,7 +2074,7 @@ try {
     // The Choir's agenda happens: the world changes on the party sheet, and it writes the next.
     const c0 = await actOf(choir.id);
     await mo.page.click(`.ft-act[data-ftk="${c0.id}"] [data-do="real"]`);
-    await inDlg(mo.page, '[data-do="realn"][data-i="0"][data-n="8"]');
+    await inDlg(mo.page, '[data-do="realn"][data-i="0"][data-n="6"]');
     await inDlg(mo.page, '[data-do="realn"][data-i="1"][data-n="3"]');
     await inDlg(mo.page, '[data-do="saveroll"]');
     await until(async () => (await actOf(choir.id))?.won?.main === true, "the Choir beats its agenda's d12");
