@@ -95,7 +95,8 @@
 // 8b. Places and people. Mo brings in the Copper Baths from Twenty Places:
 //    the place, and Orla Strand, Casimir Dace and Old Tamsin, each linked to
 //    it and written as a threat off the book, Orla with her telegraph his
-//    alone, and the bath-men in his part. Names in its Secret link to their
+//    alone, and the bath-men in his part, then Brinewake's five places at
+//    once. Names in the Copper Baths' Secret link to their
 //    pages, and a tag says what it does on a tap. The Vane Estate's Face gets
 //    a page in a tap, Lord Aldous Vane, linked to the Estate, whose Face links
 //    to him from then on, and he's written as a threat on the Threat Builder.
@@ -1913,6 +1914,10 @@ try {
     same(doc0.links.filter((l) => l.includes(bathsId)).length, 3, "each person linked to the place");
     yes(doc0.pages.every((p) => !Object.values(p.shown).some(Boolean)), "with nothing shown to the crew");
     same((await playerWorld())?.pages, [], "so Kai's phone gets none of it");
+    // A frame's places come in a world at a time.
+    await mo.page.click('[data-do="pworld"][data-b="brinewake"]');
+    await until(async () => (await mo.page.$$("#wp-place .wp-tok")).length === 6, "Brinewake's five places in the world too");
+    has(await text(mo.page, "#wp-place"), WB.worlds.find((x) => x.id === "brinewake").places[0].about, "Saltreach, with what it is off the book");
 
     // The place's page: what the crew would see, its Secret, and his part with
     // its Challenge, its hooks and the bath-men.

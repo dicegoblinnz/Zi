@@ -1041,7 +1041,7 @@ function worldBookFrom({ worldDoc, placesDoc, threatDoc, bestiaryDoc, tagsDoc, s
   // groups, and each frame's.
   const threats = [];
   for (const m of bestiaryDoc.body.matchAll(/^## (.+?) \{#([a-z0-9-]+)\}$/gm)) {
-    const got = threatsIn(sectionOf(bestiaryDoc.body, m[2]), { key: "bestiary", name: `The Bestiary: ${curly(m[1])}` }, warn);
+    const got = threatsIn(sectionOf(bestiaryDoc.body, m[2]), { key: "bestiary", name: `${curly(m[1])}, in the Bestiary` }, warn);
     threats.push(...got.map((t) => ({ ...t, link: link(bestiaryDoc, m[2]) })));
   }
   if (threats.length !== 40) warn(`expected the Bestiary's forty threats, found ${threats.length}`);
@@ -1050,7 +1050,7 @@ function worldBookFrom({ worldDoc, placesDoc, threatDoc, bestiaryDoc, tagsDoc, s
     if (m[2] === "s-frame-own") continue;
     const sec = sectionOf(framesDoc.body, m[2]);
     const th = sec.match(/### Threats[^\n]*\n([\s\S]*?)(?=^### |$(?![\s\S]))/m)?.[1] ?? "";
-    const got = threatsIn(th, { key: m[2].replace(/^s-frame-/, ""), name: curly(m[1]) }, warn);
+    const got = threatsIn(th, { key: m[2].replace(/^s-frame-/, ""), name: curly(`${m[1]}'s threats`) }, warn);
     if (!got.length) warn(`can't find ${m[1]}'s threats`);
     threats.push(...got.map((t) => ({ ...t, link: link(framesDoc, m[2]) })));
   }
