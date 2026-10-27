@@ -31,9 +31,9 @@ If you ignore a pressure, it doesn't go away. It gets worse, and the GM brings i
 
 ## Your Slots {#your-slots}
 
-Every player gets **two personal slots**. The crew gets **one action**, the same as every faction on the board, and nothing buys it another. Put one of your personal slots into the crew's action and everything counts twice. A personal slot can also chase the Goal, work a project or support an Aspiration on its own, but it can never be a second move on a faction.
+Every player gets **two personal slots**, or three with *Tireless*. The crew gets **one action**, the same as every faction on the board, and nothing buys it another. Put one of your personal slots into the crew's action and everything counts twice. A personal slot can also chase the Goal, work a project or support an Aspiration on its own, but it can never be a second move on a faction.
 
-Three things happen without costing a slot: once-per-downtime traits refresh, and when downtime's over, all your [Resolve](#s-resolve) comes back and your [wound die](#s-blaze) goes back to d2, or to your Scars.
+Two things happen without costing a slot: when downtime's over, all your [Resolve](#s-resolve) comes back and your [wound die](#s-blaze) goes back to d2, or to your Scars. A trait that fires every downtime, like *Host* or *Cache*, does it by itself.
 
 ## What You Can Do With a Slot {#what-you-can-do-with-a-slot}
 
@@ -50,9 +50,9 @@ Your wounds don't need a slot. They clear when downtime's over (see [Your Slots]
 ### Grow {#grow}
 
 -   **A new permission** on one of your Titles, up to six on it. It has to fit inside the Title, and the story should say where you learned it. Put it on the set actions it fits nearly every time, two at most, and Defend counts as one. See [Permissions](#s-writing-permissions).
--   **A new trait**, either from the list or written in the same shape.
+-   **A new trait**, either from the list or written in the same shape. Like every trait, it never goes on a set action.
 -   **Chase your Aspiration.** Roll against its die, built from whatever you're doing about it. Beat it and it climbs one. See [Aspiration](#s-aspiration).
--   **Deepen a bond.** Write a new thread with someone, a bond thread or a hostile one, whichever the story's given you. If they're in the crew, it goes on both your sheets, so agree on it together.
+-   **Deepen a bond.** Write a new thread with someone, a bond thread or a hostile one, whichever the story's given you. If you've already got a bond with them, it goes under that one. If they're in the crew, it goes on both your sheets, so agree on it together.
 -   **Get something** the story can give you, whether it's bought, made, won or owed: something to carry, a purse of gold, or the material an attuned thing needs for its next stage.
 
 **Swapping.** In downtime you can also swap any of your permissions for others that fit your Title, as long as it makes sense for your character. Two permissions on one Title can go for a Boon the same way, and a Boon can go back for two (see [Boons and Burdens](#s-boons)). Wren's crew works the city now, so she swaps *ride hard over rough country* for *scout a building before we go in*.

@@ -913,12 +913,12 @@ try {
   await kai.page.click('.tg-acts [data-do="with"]:has-text("Sneak")');
   await kai.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="10"][aria-pressed="true"]');
   has(await kai.page.textContent("#cc-dialog .tg-for"), "The left Warden’s d10", "the roll card says what it's answering");
-  await kai.page.evaluate(() => window.ziCompanion.setDice([7, 5]));
+  await kai.page.evaluate(() => window.ziCompanion.setDice([5, 4]));
   await kai.page.click('#cc-dialog [data-act="go"]');
   await kai.page.waitForSelector("#cc-dialog .tg-verdict");
-  has(await kai.page.textContent("#cc-dialog .tg-verdict"), "Stopped. It never lands.", "her 7 beats its 5");
+  has(await kai.page.textContent("#cc-dialog .tg-verdict"), "Stopped. It never lands.", "her 5 beats its 4");
   sentAt = Date.now();
-  await until(async () => (await cardText(mo.page, "The left Warden")).includes("Stopped. Vesk answered it with Sneak: 7 against its 5."), "Kai's answer on Mo's page", 4000);
+  await until(async () => (await cardText(mo.page, "The left Warden")).includes("Stopped. Vesk answered it with Sneak: 5 against its 4."), "Kai's answer on Mo's page", 4000);
   const mAt = Date.now() - sentAt;
   yes(mAt < 4000, `Mo sees it ${mAt}ms after she rolled, not 20 seconds`);
   same((await teleOf("The left Warden"))?.ans?.won, true, "the table has it stopped");

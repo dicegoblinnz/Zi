@@ -27,10 +27,8 @@ export function fromCrew(c, B, { keep = false } = {}) {
     ref.set(t.key, `t${i}`);
     perms.forEach((p, j) => ref.set(p.key, `p${i}.${j}`));
   });
-  b.traits = c.traits.map((t, i) => {
-    ref.set(t.key, `r${i}`);
-    return { name: t.name, on: [] };
-  });
+  // A trait's never a step, so it never goes on a set action.
+  b.traits = c.traits.map((t) => ({ name: t.name, on: [] }));
   const eq = c.carry.equipment.items.slice(0, 3);
   const ut = c.carry.utility.items.slice(0, keep ? 8 : 4);
   // Their armour's already a line on their Defend, so it comes across with the rest.
@@ -88,7 +86,8 @@ function shuffle(list, rand) {
   return out;
 }
 
-// Which set action a line most likely helps, from its words. Nothing goes on
+// Which set action a line most likely helps, from its words. A plain thing
+// goes on one, and a permission on two at most. Nothing goes on
 // Defend unless its words say it keeps you from getting hit.
 const LEANS = [
   ["Defend", /\b(dodge|parry|block|shield|armou?r|guard|duck|weave|protect|brace|hold the line)/i],
@@ -142,12 +141,8 @@ export function randomBuild(B, crew, rand = Math.random) {
 
   const suggested = [...new Set(ideas.flatMap((x) => x.traits))].filter((n) => B.traits.some((t) => t.name === n));
   const traits = [...shuffle(suggested, rand), ...shuffle(B.traits.map((t) => t.name), rand).filter((n) => !suggested.includes(n))].slice(0, 2);
-  b.traits = traits.map((name) => {
-    const rule = B.traits.find((t) => t.name === name);
-    if (!rule.step) return { name, on: [] };
-    const text = rule.html.replace(/<[^>]+>/g, "");
-    return { name, on: [onto(text, ACTIONS.find((a) => new RegExp(`\\b${a}\\b`).test(text)))].filter(Boolean) };
-  });
+  // A trait's never a step, so it never goes on a set action.
+  b.traits = traits.map((name) => ({ name, on: [] }));
 
   const group = (g) => B.items.find((x) => x.group === g)?.items ?? [];
   b.equipment[0] = { text: pick(group("Weapons"), rand), on: [onto("", "Fight")].filter(Boolean) };

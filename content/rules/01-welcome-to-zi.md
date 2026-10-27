@@ -35,11 +35,11 @@ Don't worry about the words yet. *The Core* and *Conflict* explain all of them.
 :::example[Over the wall]
 **GM:** Vesk, you're halfway over the manor wall. The gate guard hasn't seen you yet, but his dog's spotted Bram at the gate, and he's reaching for the bell rope. That's a d6 at the bell, and if it lands, the whole house wakes up. Bram, the dog's already coming for you. That's a d8 at your Defend.
 
-**Vesk:** He's not ringing that bell. I drop off the wall onto him from behind and drag him away from the rope. That's my Sneak: my first Title, *move unseen* and Silent Step, with the action, 4 steps. My grappling line's on my Move, so I'll pay an Aura to bring it in and swing down on it. That's 5 steps, a d10, on the bell.
+**Vesk:** He's not ringing that bell. I drop off the wall onto him from behind and drag him away from the rope. That's my Sneak: my first Title and *move unseen*, with the action, 3 steps. My grappling line's on my Move, so I'll pay an Aura to bring it in and swing down on it. That's 4 steps, a d8, on the bell.
 
 **GM:** Fair enough. Roll his d6 as well.
 
-**Vesk:** 10 on the d10. That's a top face, so I get my Aura straight back. His d6 is a 5.
+**Vesk:** 8 on the d8. That's a top face, so I get my Aura straight back. His d6 is a 5.
 
 **GM:** You land on him before his hand's on the rope. Nobody's heard a thing.
 

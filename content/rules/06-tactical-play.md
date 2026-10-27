@@ -71,7 +71,7 @@ Bram's stride is 3. He moves 3 units for free, then spends his action on a Move.
 
 ## Weapons and What They Let You Do {#s-weapons-tactics}
 
-A plain weapon is just what it is. It counts as a line whenever it fits, so it's a step on your roll, and it lets you do what that weapon does: a sword cuts, and a spear keeps them back. An attuned weapon counts through its own permissions instead. Wren's longbow is *shoot a longbow* and *hit anything I can see*, and the bow doesn't count again on top.
+A plain weapon is just what it is. It's a line on the one set action you put it on, usually Fight, so it's a step on your roll there, and anywhere else it fits it's 1 Aura to bring in. It lets you do what that weapon does: a sword cuts, and a spear keeps them back. An attuned weapon counts through its own permissions instead. Wren's longbow is *shoot a longbow* and *hit anything I can see*, and the bow doesn't count again on top.
 
 Weapons also come with **properties**, free with the weapon. They're the things a weapon lets you do that bare hands can't. The full list is in [Weapon properties](#s-weapon-props). At the table they sort into four jobs:
 
@@ -187,7 +187,7 @@ Across the room, Ash's fire drops one of the brute's dogs, so she's up to d8, an
 Every crew finds its roles, and every character plays a few. Each of your [archetypes](#s-how-archetypes) gives you something only it can do, and your biggest set actions show what you do all the time, so look at both and you'll see your roles.
 
 -   **The wall.** Plate and a shield on your Defend, and *hold the line* on your Fight. You intercept, Defend and hold the narrow place, and if you're a [Guardian](#a-guardian), you intercept for free, for every friend within your stride. That's Bram.
--   **The blade.** One big set action for hurting things. You strip tags, take openings and end things. A [Warrior](#a-warrior)'s dice explode in a fight, and a [Bloodsworn](#a-bloodsworn) gets 3 more steps for every Hurt they take. Wren's Fight is a d10.
+-   **The blade.** One big set action for hurting things. You strip tags, take openings and end things. A [Warrior](#a-warrior)'s dice explode in a fight, and a [Bloodsworn](#a-bloodsworn) gets 3 more steps for every Hurt they take. Wren's Fight is her biggest, a d8.
 -   **The hunter.** You pick the target, and the crew piles in. A [Hunter](#a-hunter) marks it, and everyone who goes at it rolls the Mark die as well, as one more die against it. When it falls, the Mark jumps to another creature you can see. That's Wren.
 -   **The opener.** Your split goes on a second intent: disarm, trip, blind or expose. You put conditions on threats for the blade to spend, and *Prone* and *Exposed* are [vulnerabilities](#s-vulnerable), so every hit they fit ticks once more.
 -   **The keeper.** Wards and blessings, on one friend or two with a split. You put conditions on friends and keep their wound dice small, and if you're a [Healer](#a-healer), you heal them in the middle of a scene. That's what Isolde's Ward is for. She's an [Oracle](#a-oracle) as well, so she can roll her foresight before anything lands, then swap a low number into a threat's die or a high one into a friend's.
@@ -232,11 +232,11 @@ The crew looks at the map. There are four problems, and one action each to spend
 **Wren** goes first, from her rock.
 
 :::example
-**Wren:** I haven't moved, so *Marksman's Eye* counts. My Fight's my first Title, my bow's *shoot a longbow* and *hit anything I can see*, and the Eye. With the action that's 5 steps, a d10. The captain's 11 squares away across the water, which is *Far*, and a longbow reaches Far. I'm shooting the crossbow out of his hands.
+**Wren:** My Fight's my first Title and my bow's *shoot a longbow* and *hit anything I can see*. With the action that's 4 steps, a d8. I haven't moved, so *Marksman's Eye* gives me any tie. The captain's 11 squares away across the water, which is *Far*, and a longbow reaches Far. I'm shooting the crossbow out of his hands.
 
 **GM:** Nobody's gone at him yet this round, so roll his d8 with yours.
 
-**Wren:** 8, and his d8's a 5. **GM:** The crossbow spins off the toll-house porch into the water, and his bolt at Ash never flies.
+**Wren:** 7, and his d8's a 5. **GM:** The crossbow spins off the toll-house porch into the water, and his bolt at Ash never flies.
 :::
 
 That 5 is the captain's defence for the rest of the round, so anyone else who goes at him before it ends has to beat it. Wren's answered the bolt without rolling an answer. She took away what it needed instead.
@@ -289,16 +289,16 @@ The blade Bram stopped puts him up another size, so he's on d10. Wren and Ash ar
 
 That's 4 + 3 = 7 steps. The GM's still got about 20, but there's nothing left worth spending them on, which means you're winning.
 
-And Vesk's right behind the captain. His shield and his doorway both face the bridge, so she's around everything that keeps him going, and that's an opening. The next win against him takes him out, whatever he's got left. Her Sneak on its own is a d8 against his d8, though, and that's a coin toss.
+And Vesk's right behind the captain. His shield and his doorway both face the bridge, so she's around everything that keeps him going, and that's an opening. The next win against him takes him out, whatever he's got left. Her Sneak on its own is a d6 against his d8, though, and that's worse than a coin toss.
 
 :::example
-**Wren:** I'm in. I've got an arrow on the string, aimed at his face. "Don't." I still haven't moved, so it's my Fight again, 5 steps.
+**Wren:** I'm in. I've got an arrow on the string, aimed at his face. "Don't." I still haven't moved, so it's my Fight again, 4 steps, and *Marksman's Eye* takes any tie.
 
-**Vesk:** And my knife's at his back. My Sneak's my first Title, *move unseen* and Silent Step, with the action 4 steps. I'll bring in *fight dirty with a knife* for 1 Aura, so 5. With Wren's 5 that's 10 steps between us, a d12 and a d8, and they both go on "yield, now", so it's advantage.
+**Vesk:** And my knife's at his back. My Sneak's my first Title and *move unseen*, with the action 3 steps. I'll bring in *fight dirty with a knife* for 1 Aura, so 4. With Wren's 4 that's 8 steps between us, a d12 and a d4, and they both go on "yield, now", so it's advantage.
 
 **GM:** Roll his d8.
 
-**Vesk:** His d8's a 6. I've got 5 on the d12 and 8 on the d8, and that's its top face, so my Aura's back. The 8 beats his 6. **GM:** He yields. Sweating, he tells you the toll money's in the strongbox upstairs, and it can all be yours. That's his hidden tag: *Can Be Bought*.
+**Vesk:** His d8's a 6. I've got 8 on the d12 and 4 on the d4, and that's the d4's top face, so my Aura's back. The 8 beats his 6. **GM:** He yields. Sweating, he tells you the toll money's in the strongbox upstairs, and it can all be yours. That's his hidden tag: *Can Be Bought*.
 :::
 
 Wren and Vesk both put an action into taking the captain down, so they're both up a size of Confidence: Wren's on d10, and Vesk's on d8. Bandit two sees his captain on his knees and remembers he's *One of Many*, so he jumps. Nobody rolls for it, because the story's already decided it, and his blade goes with him.

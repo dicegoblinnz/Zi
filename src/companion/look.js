@@ -66,7 +66,7 @@ export function lookView(ch, c, x) {
     <ul class="cc-look-list">${t.permissions.map((p) => `<li><em>${esc(p.text)}</em></li>`).join("")}</ul></div>`).join("");
   const titlesAt = c.titles.map((t) => `<span class="cc-gl-line"><em>${esc(t.name)}</em> <small>${esc(t.archetype)} · ${t.permissions.length} ${t.permissions.length === 1 ? "permission" : "permissions"}</small></span>`).join("");
 
-  const traits = c.traits.map((t) => `<div class="cc-item"><p><b>${esc(t.name)}</b> <span class="chip sm">${esc(t.type)}</span>${s.used[t.name] ? ' <span class="chip sm is-used">Used this scene</span>' : ""}</p><p>${t.html}</p></div>`).join("");
+  const traits = c.traits.map((t) => `<div class="cc-item"><p><b>${esc(t.name)}</b> <span class="chip sm">${esc(t.type)}</span>${s.used[t.name] ? ' <span class="chip sm is-used">Gone off this scene</span>' : ""}</p><p>${t.html}</p></div>`).join("");
 
   const crossed = (where, name) => Boolean(s.crossed[`${where}|${name}`]);
   const thing = (where, name) => `<li${crossed(where, name) ? ' class="is-out"' : ""}>${crossed(where, name) ? `<s>${esc(name)}</s> <small>crossed out</small>` : esc(name)}</li>`;

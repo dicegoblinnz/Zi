@@ -29,12 +29,12 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Awakened](#s-attunement)** | An attuned thing's first stage: 1 permission, and 1 more with a Catch. |
 | **[Bag](#s-carrying)** | Holds 10 things on top of what you carry. Getting something out takes your action, and putting it away is free. |
 | **[Blaze](#s-blaze)** | Taking a Hurt with your wound die at d12. Something extraordinary happens, no roll. Then you can choose to die, or leave the scene and take a Scar. |
-| **[Bond](#s-bonds)** | A person who matters to your character, in the crew or not, or a faction, a place or a cause. Each thread is one truth between you, a bond thread or a hostile one, and you can have as many as the story gives you. A faction has three bonds of its own: [Public Sentiment, Morale and Loyalty](#s-faction-bonds). |
+| **[Bond](#s-bonds)** | A person who matters to your character, in the crew or not, or a faction, a place or a cause. Each person's one bond, and every thread you've got with them goes under it. Each thread is one truth between you, a bond thread or a hostile one, and you can have as many as the story gives you. A faction has three bonds of its own: [Public Sentiment, Morale and Loyalty](#s-faction-bonds). |
 | **[Bond thread](#s-bonds)** | A thread that's something good between you, like a rescue, a secret you keep for each other or a shared past. Borrow one of their permissions through it for 1 Aura, or strain it for 1 Resolve. |
 | **[Boon](#s-boons)** | A permanent upgrade, like +2 stride, or the first Hurt each scene not moving your wound die. It costs two permission slots on one of your Titles, and you can swap it back in downtime. |
 | **[Boss](#s-staying)** | Challenge 6, three or more tags keeping it going, multipliers on the big ones, and a weak point. |
 | **[Break](#s-conditions)** | Spending an action to beat a condition's die and end it. |
-| **[Bring something in](#s-aura)** | 1 Aura: something that fits but isn't on your set action counts on your roll. One of your own permissions, items or traits, the ground, a tag you know, a Catch, or a friend's permission through a thread. |
+| **[Bring something in](#s-aura)** | 1 Aura: something that fits but isn't on your set action counts on your roll. One of your own permissions or items, the ground, a tag you know, a Catch, or a friend's permission through a thread. |
 | **[Burden](#s-boons)** | A permanent downside, like −2 stride. It only ever comes on an attuned thing, where it pays for two more permissions, or for a Boon for you. |
 | **[Catch](#s-trouble)** | Trouble that's ready to go: on an attuned thing, or a Scar. Let it bite for 1 Aura, as often as you like, as long as it's real trouble. |
 | **[Challenge](#s-challenges)** | The die something defends with: 2 (d4) to 6 (d12). It never steps down, unless a tag like *Crumbling* says so. |
@@ -51,7 +51,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Defend](#s-defend)** | A set action on every sheet, for keeping from getting hit, with plain armour and a shield as lines on it. Defending, as your action, counts every line on it twice when the telegraphs land. |
 | **[Downtime](#downtime)** | Between sessions. The pressures land, everyone spends their slots, and then the factions' actions are rolled. All your Resolve comes back, and your wound die goes back to d2, or to your Scars. |
 | **[Epilogue](#s-ending)** | At the end of a campaign, a few sentences on where each character is a year later. |
-| **[Equipment](#s-carrying)** | What you wear or wield: weapons, armour and shields. You carry 3. |
+| **[Equipment](#s-carrying)** | What you wear or wield: weapons, armour and shields. You carry 3. Each plain one's a line on one set action. |
 | **[Event](#s-stakes)** | Something running on its own clock. Past d2, it happens. |
 | **[Extra action](#s-extra-actions)** | One on top of your one a round: from holding your action, 1 Resolve, coming out of hiding, fired-up Confidence, a trait that says so, or the Boon. Its own roll, or the same one as a combo. |
 | **[Extra resource](#s-wealth)** | A resource that isn't paying for an asset. It's spent each downtime, not saved: it hires another faction, pays for a new asset, goes in a trade, or takes the crew a tie. |
@@ -118,7 +118,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Scar](#s-blaze)** | Your wound, after a Blaze, written as a Catch. Your wound die never goes below a size for each one, and with five, your next Blaze is your last. |
 | **[Scene](#s-aura)** | One place and one problem. Aura refills and Confidence starts on d6 when a new one starts, and you get 1 Resolve back when it ends. |
 | **[Scene clock](#s-scene-clock)** | A die on the whole scene. It steps down every round. Past d2, the scene turns. |
-| **[Set action](#s-set-actions)** | A row on your sheet, like Defend, Fight or Sneak, with everything that fits it nearly every time already counted: 1 for the action, and 1 for every line. |
+| **[Set action](#s-set-actions)** | A row on your sheet, like Defend, Fight or Sneak, with everything that fits it nearly every time already counted: 1 for the action, and 1 for every line. A Title goes on every one it fits, a permission on two at most and a plain item on one. |
 | **[Shadow pool](#a-shadow)** | A Shadow's: the dice you rolled to get into hiding, to add to any roll after that, as dice or as steps. Each one's gone once you use it. |
 | **[Shaken](#s-confidence)** | Confidence at d2. You can't take an action at what the scene's about unless you spend 1 Resolve each time, and otherwise your action goes on pulling yourself together, back up to d4. The condition *Shaken* is one step less on your Confidence, and spending it drops your Confidence a size ([Conditions](#s-conditions)). |
 | **[Site](#s-site)** | Somewhere the crew goes into and has to find its way through. One scene, with an alarm for its clock. |
@@ -146,7 +146,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Title idea](#s-title-ideas)** | A place to start a Title: twenty-nine roles and schools, each with the archetypes it suits, and permissions, traits and going-beyond ideas to pick from. |
 | **[Top face](#s-the-roll)** | A die's highest number. 1 Aura back, unless your archetype's +2 took it there, it's a summon's, or an Oracle swapped it in. A Warrior's explodes. |
 | **[Trail](#s-trails)** | A way to something hidden: a person who knows, a place that shows it, or a thing that proves it. Leave three. |
-| **[Trait](#s-traits)** | Something you are, with one effect. You start with two, on their own, and you can grow more. Passive, triggered, invoked, once a scene or once a downtime. |
+| **[Trait](#s-traits)** | Something always true of you, with one effect. You start with two, and you can grow more. Passive (always on) or triggered (it fires by itself). Never a step, and never on a set action. |
 | **[Trouble](#s-trouble)** | Something going wrong for you that the GM can run with. You bring it yourself, by letting a Catch bite or with no Catch at all, and take 1 Aura for it. |
 | **[Utility](#s-carrying)** | Tools and things you use up, like rope, a lantern or a smoke bomb. You carry 3, and cross off what you use. |
 | **[Vulnerability](#s-vulnerable)** | Something that makes a hit hurt more, like *Prone* or *Vulnerable to fire*. Each one that fits a win that does harm adds a tick, and you choose where it goes, so one can strip two plain tags. The same one never counts twice. |

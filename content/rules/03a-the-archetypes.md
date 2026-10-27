@@ -235,7 +235,7 @@ Spend your action and roll against a creature to mark it. Win and it's ***Marked
 :::
 
 :::example[Marking the Warden]
-Wren marks the Warden with a d10, her Fight, and wins, so it's *Marked d10*. Bram swings at it with his d8 and rolls the Mark d10 with it. Next round it's *Marked d8*. When the Warden falls, the Mark jumps to the guard captain behind it, and he's *Marked d8*.
+Wren marks the Warden with a d8, her Fight, and wins, so it's *Marked d8*. Bram swings at it with his d8 and rolls the Mark d8 with it. Next round it's *Marked d6*. When the Warden falls, the Mark jumps to the guard captain behind it, and he's *Marked d6*.
 
 Wren's taken Hunter twice, so her 1 Aura puts +3 on the Mark die.
 :::
@@ -273,7 +273,7 @@ Only a Leader leads. An order or a rallying song is an action: build it from you
 :::
 
 :::example[Orders from the doorway]
-Bram barks orders from the doorway, 4 steps off his Talk, and gives 2 to Vesk and 2 to Wren. Vesk's Sneak goes from a d8 to a d12. She rolls 6 against the guard's 7, so Bram spends 1 Aura and she's on 8.
+Bram barks orders from the doorway, 3 steps off his Talk, and gives 2 to Vesk and 1 to Wren. Vesk's Sneak goes from a d6 to a d10. She rolls 6 against the guard's 7, so Bram spends 1 Aura and she's on 8.
 :::
 
 **Title ideas:** [Captain](#k-captain) · [Courtier](#k-courtier) · [Sailor](#k-sailor)
@@ -331,7 +331,7 @@ Everyone's [Study](#s-study) finds a hidden tag or a straight answer. When you w
 :::
 
 :::example[The crack in the circle]
-Isolde turns her Study on the Warden. It's 4 steps, a d8, and she rolls 5 against its 6, so she spends 1 Aura and it's a 7. She's won her Study, and she says the chalk circle it's bound to has a crack in it. Now it does, and anyone in the crew can use that this scene.
+Isolde turns her Study on the Warden. It's 3 steps, a d6, and she rolls 5 against its 6, so she spends 1 Aura and it's a 7. She's won her Study, and she says the chalk circle it's bound to has a crack in it. Now it does, and anyone in the crew can use that this scene.
 :::
 
 **Title ideas:** [Scholar](#k-scholar) · [Investigator](#k-investigator)
@@ -351,7 +351,7 @@ Coming out of hiding gives you an [extra action](#s-extra-actions), the same as 
 :::
 
 :::example[In the rafters]
-Vesk slips into the rafters with her Sneak, a d8, and gets away with it, so the d8 goes in her pool. Later the steward's lying to her face, and she adds it to her Talk, because she saw him pocket the letter from up there. Her Talk's 1 step, so she takes the d8 as 4 steps, and that's 5: a d10.
+Vesk slips into the rafters with her Sneak, a d6, and gets away with it, so the d6 goes in her pool. Later the steward's lying to her face, and she adds it to her Talk, because she saw him pocket the letter from up there. Her Talk's 1 step, so she takes the d6 as 3 steps, and that's 4: a d8.
 :::
 
 **Title ideas:** [Rogue](#k-rogue) · [Face](#k-face) · [Streetwise](#k-streetwise) · [Veil](#k-veil)

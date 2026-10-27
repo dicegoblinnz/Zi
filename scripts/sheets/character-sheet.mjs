@@ -119,7 +119,7 @@ function front(stamp) {
 
   <div class="grid">
     <section class="blk">
-      ${tab("Traits", "Passive · Triggered · Invoked · Per scene · Per downtime · Used")}
+      ${tab("Traits", "Passive or Triggered · never a step")}
       ${range(3).map((i) => `<div class="trait"><div class="row">${w(`trait_${i}`)}<span class="lab">type</span>${w(`trait_${i}_type`, { cls: "short" })}</div><span class="w two" data-f="trait_${i}_does" data-multi data-size="8"></span></div>`).join("")}
     </section>
     <section class="blk kit">

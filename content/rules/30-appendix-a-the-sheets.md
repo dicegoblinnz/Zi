@@ -30,7 +30,7 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 -   Set actions: Defend (dodge, parry, armour) · Fight (melee and ranged) · Move (run, climb, jump and chase) · Sneak (unseen and unheard) · Study (look closely, know things) · Talk (charm, lies and threats), and six more rows for set actions of your own, like Locks or Ward
 -   On each row: what's on it · steps · die
 -   Steps into dice (1 step is a d2, 6 is a d12, 12 is two d12s, and 24 is four)
--   Traits (3 · two to start · each with its type, Passive · Triggered · Invoked · Per scene · Per downtime · Used, and two lines for what it does)
+-   Traits (3 · two to start · each with its type, Passive or Triggered, and two lines for what it does · never a step, so they don't go on set actions)
 -   Kit: equipment (3 · what you wear or wield, with a weapon's properties · each piece of plain armour, and a shield, is a line on your Defend) · utility (3 · tools and things you use up · cross it off once it's used) · a keepsake (something that matters to your character) · the bag (holds 10 · getting something out takes your action, and putting it away is free)
 -   Notes (a thread that won't fit on its bond, and whatever your archetype's holding, like a Shadow's pool or a Shifter's animal tags)
 :::

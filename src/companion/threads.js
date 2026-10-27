@@ -61,6 +61,28 @@ export function mateFor(person, mates, nameOf = (m) => m) {
   return firsts.length === 1 ? firsts[0] : null;
 }
 
+// Each person's one bond (27 Oct 2026): every thread with them goes under the
+// one name, however it was typed ("dorrie" and "Dorrie " are Dorrie). bondKey
+// is the name a bond's known by, and bondsOf puts a list of threads, each with
+// its own person, into bonds in the order they first come up. A thread with
+// no name yet is a bond of its own until it gets one.
+export const bondKey = (person) => plain(person).replace(/[“”"]/g, "'");
+export function bondsOf(threads, personOf = (t) => t.person) {
+  const out = [];
+  const seen = new Map();
+  threads.forEach((t, i) => {
+    const person = String(personOf(t) ?? "").trim();
+    const key = bondKey(person);
+    if (key && seen.has(key)) return seen.get(key).items.push({ t, i });
+    const g = { key, person, items: [{ t, i }] };
+    if (key) seen.set(key, g);
+    out.push(g);
+  });
+  return out;
+}
+// The spelling a bond already has, so a new thread with "dorrie" joins Dorrie.
+export const bondName = (people, person) => people.find((p) => bondKey(p) && bondKey(p) === bondKey(person)) ?? String(person ?? "").trim();
+
 // The words a thread's known by, however its quotes and spaces were typed.
 export const wordsKey = (text) => plain(text).replace(/[“”"]/g, "'").replace(/[.,]+$/, "");
 

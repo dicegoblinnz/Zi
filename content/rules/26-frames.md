@@ -391,7 +391,7 @@ Every level of the Underhold is its own site, and its alarm is called **Depth**.
 :::example[Three levels down]
 Vesk, Bram and Isolde are on the third level, the Drowned Mills, so Depth starts at a d6. Bram heaves a rusted sluice gate open. It works, but it's loud, so Depth steps down to a d4 straight away.
 
-Vesk spends her action easing it shut behind them, the way they found it, without a sound. That's her Sneak: her Title, *move unseen* and Silent Step, so with the action it's 4 steps, a d8. She rolls 5, and Depth's d4 comes up 3, so it steps back up to a d6.
+Vesk spends her action easing it shut behind them, the way they found it, without a sound. That's her Sneak: her Title and *move unseen*, so with the action it's 3 steps, a d6. She rolls 5, and Depth's d4 comes up 3, so it steps back up to a d6.
 
 On the fourth level, Depth would've started at a d4, and Bram's gate would've put it at a d2 before anyone could do a thing about it.
 :::
@@ -589,7 +589,7 @@ Magic's real, but most people in Lanternfall would call it a fraud or a sickness
 :::example[The stare on Gallow Street]
 The GM telegraphs: "The Lamplighter turns his head and looks at Isolde. That's a d10 at her Confidence, and if it lands, she's in Dread of him. I'll spend it at the end of the round."
 
-Isolde answers it. She starts from The dead, because he's a ghost and her first Title fits, but she isn't speaking with him, so she leaves *speak with the recently dead* out. Iron Will fits too, a step on mental rolls, but it's on her Study, so bringing it in costs her 1 Aura. With the action that's 3 steps, a d6. She rolls 4, and his d10 comes up 6. Her only die missed, so her Confidence drops a size. A failed answer lands at once, too, so she's in Dread d10, and anything she does to face him is a step down while it lasts.
+Isolde answers it. She starts from The dead, because he's a ghost and her first Title fits, but she isn't speaking with him, so she leaves *speak with the recently dead* out. With the action that's 2 steps, a d4. She rolls 3, and his d10 comes up 6. Her only die missed, so her Confidence drops a size. A failed answer lands at once, too, so she's in Dread d10, and anything she does to face him is a step down while it lasts.
 
 Dorrie takes her by the chin. "Look at me, love. Not him, me." She's breaking the Dread, and that's her Talk. Her Title fits talking somebody round, and so does *read a room in a glance*, but there's no lie in this, so *make a lie sound like old news* stays out. With the action that's 3 steps, a d6. She rolls 5 and the Dread's d10 comes up 3, so it's gone, and Dorrie's Confidence goes up a size for the win. Isolde's free to Study him at full strength.
 :::

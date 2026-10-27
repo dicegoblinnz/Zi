@@ -105,7 +105,7 @@ The crew's in the Vane archive looking for a deed, and Dorrie's player asks if a
 
 She shows danger coming: "Keys in the front door. The night clerk's back early. That's a d6, and if nobody deals with it, he sees the light under the door."
 
-Vesk answers it. She pinches out the lamp and steps behind the door. That's her Sneak: her first Title, *move unseen* and Silent Step, with the action 4 steps, a d8. She rolls 5 and the clerk's d6 rolls 3. He walks past, humming.
+Vesk answers it. She pinches out the lamp and steps behind the door. That's her Sneak: her first Title and *move unseen*, with the action 3 steps, a d6. She rolls 5 and the clerk's d6 rolls 3. He walks past, humming.
 
 Then Isolde finds the deed, and the GM makes another move. She reveals something they won't like: it was signed over to the Harbour Guild a week ago.
 :::

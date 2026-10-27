@@ -1,7 +1,9 @@
 // The character builder: the Quick Build from the rules, one step to a screen
 // on a phone held in one hand, with the book's own words for each step. It
-// warns but never blocks, bar two things: six permissions is the most a Title
-// holds, and a permission goes on two set actions at most.
+// warns but never blocks, bar three things: six permissions is the most a
+// Title holds, a permission goes on two set actions at most, and a plain thing
+// you carry goes on one (tapping another moves it). Traits never go on a set
+// action, because a trait's never a step (27 Oct 2026).
 // Drafts are saved on the phone as you go, in one localStorage key, zi-drafts,
 // by "new" or by the id of the character being changed, so nothing's lost if
 // the page closes. A finished character keeps only what the player chose (its
@@ -12,9 +14,9 @@
 // character opens on one page too, with everything on their sheet, as many
 // Titles as they've earned, and whatever they grew in downtime (foldGrown).
 
-import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
-import { MAX_PERMS, STAGES, attunedRoom } from "./grow.js";
-import { threadNote } from "./threads.js";
+import { diceLabel, stepsToDice } from "./dice.js";
+import { MAX_PERMS, STAGES, attunedRoom, traitInfo, upBy } from "./grow.js";
+import { bondKey, bondName, bondsOf, threadNote } from "./threads.js";
 import { SIGILS, aura as kitAura, crest, die as kitDie, grow as growDie, resolve as kitResolve, sigil } from "../kit/kit.js";
 
 const KEY = "zi-drafts";
@@ -39,8 +41,19 @@ const blankThing = () => ({ name: "", stage: "Awakened", catch: "", burden: "", 
 // when it's in a crewmate's words, and strained only when a crew sheet says
 // so: what happens in play is kept in the character's state.
 const blankThread = (kind = "bond") => ({ person: "", text: "", kind, whose: "" });
-// A permission goes on two set actions at most, Defend included.
+// A permission goes on two set actions at most, Defend included, and a plain
+// thing you carry goes on one.
 export const MAX_ON = 2;
+const isKit = (ref) => /^(?:[eu]\d|k$)/.test(ref);
+// A trait's Passive (always on) or Triggered (it fires by itself).
+export const TRAIT_TYPES = ["Passive", "Triggered"];
+// A plain thing on more than one set action, from before 27 Oct 2026, keeps
+// the one it went on first, or Defend if it's armour.
+function oneOn(x, actions) {
+  const on = x.on.filter((a) => actions.includes(a));
+  if (on.length < 2) return on;
+  return [ARMOUR.test(x.text) && on.includes("Defend") ? "Defend" : on[0]];
+}
 export function blankBuild() {
   return {
     v: 2,
@@ -86,8 +99,10 @@ export function normalBuild(raw) {
   const old = !(Number(r.v) >= 2);
   const titles = list(r.titles, MAX_TITLES);
   if (titles.length) b.titles = titles.map((x) => ({ arch: str(x?.arch, 40), idea: str(x?.idea, 40), text: str(x?.text), on: ons(x?.on), perms: atLeast(list(x?.perms, MAX_PERMS).map(fixLine), 1, line) }));
+  // A trait never goes on a set action, whatever a build from before 27 Oct
+  // 2026 had it on.
   b.traits = (Array.isArray(r.traits) ? r.traits : []).filter((t) => t && str(t.name)).slice(0, 24).map((t) => ({
-    name: str(t.name, 120), on: ons(t.on), ...(t.own ? { own: { type: str(t.own.type, 120), text: str(t.own.text, 200) } } : {}),
+    name: str(t.name, 120), on: [], ...(t.own ? { own: { type: str(t.own.type, 120), text: str(t.own.text, 200) } } : {}),
   }));
   // The six set actions are always there, and the rest keep their order, so a
   // crew member made into a build keeps their tiles where they were. A build
@@ -106,6 +121,7 @@ export function normalBuild(raw) {
   });
   b.utility = Array.from({ length: Math.max(4, Math.min(8, Array.isArray(r.utility) ? r.utility.length : 0)) }, (_, i) => fixLine(r.utility?.[i]));
   b.keepsake = fixLine(r.keepsake);
+  for (const x of [...b.equipment, ...b.utility, b.keepsake]) x.on = oneOn(x, b.actions);
   b.bag = str(r.bag, 600);
   if (Array.isArray(r.bagWas)) b.bagWas = r.bagWas.slice(0, 40).map((x) => str(x, 120));
   if (Array.isArray(r.attuned)) {
@@ -127,8 +143,9 @@ export function normalBuild(raw) {
 }
 
 // Every line a set action can carry, by a reference that survives typing:
-// t0 a Title, p0.1 a permission on it, r1 a trait, e0 and u2 what you carry,
-// k the keepsake, a1.0 a permission on an attuned thing.
+// t0 a Title, p0.1 a permission on it, e0 and u2 what you carry, k the
+// keepsake, a1.0 a permission on an attuned thing. r1 is a trait, which is
+// never a line.
 export function lineAt(b, ref) {
   const [i, j] = ref.slice(1).split(".").map(Number);
   switch (ref[0]) {
@@ -148,13 +165,16 @@ export function numbersOf(b, B) {
   const fx = (k) => b.traits.filter((t) => !t.own).map((t) => [t.name, rule.get(t.name)?.effects?.[k] ?? 0]).filter(([, v]) => v);
   const sum = (k) => fx(k).reduce((n, [, v]) => n + v, 0);
   const who = (k) => (fx(k).length ? both(fx(k).map(([n]) => n)) : null);
-  let conf = 6;
-  for (let k = 0; k < sum("confidence"); k++) conf = sizeUp(conf);
+  const conf = upBy(6, sum("confidence"));
   return {
     aura: 5 + sum("aura"), resolve: Math.max(1, b.titles.filter((t) => t.arch || t.text.trim()).length),
     stride: 3 + sum("stride"), strideNote: who("stride"),
     confidence: conf, confidenceNote: who("confidence"),
-    dressed: b.clothes.trim() ? { die: sizeUp(conf), what: b.clothes.trim() } : null,
+    // Clothes that fit start you a size up, and two with Style.
+    dressed: b.clothes.trim() ? { die: upBy(conf, 1 + sum("dressed")), what: b.clothes.trim() } : null,
+    ...(sum("dressed") ? { dressedUp: sum("dressed") } : {}),
+    // Two downtime slots, and three with Tireless.
+    ...(sum("slots") ? { slots: 2 + sum("slots") } : {}),
     // The wound die starts at d2. A trait like Unyielding says how many Hurts
     // a scene don't move it.
     wound: 2, woundNote: who("shrug"), shrug: sum("shrug"),
@@ -192,7 +212,6 @@ function linesOf(b, B) {
   const max = numbersOf(b, B).utility;
   b.titles.forEach((t, i) => titleIn(t) && out.push({ ref: `t${i}`, kind: "title", label: titleName(t), i }));
   b.titles.forEach((t, i) => titleIn(t) && t.perms.forEach((p, j) => p.text.trim() && out.push({ ref: `p${i}.${j}`, kind: "permission", label: p.text.trim(), i })));
-  b.traits.forEach((t, i) => out.push({ ref: `r${i}`, kind: "trait", label: t.name }));
   b.equipment.forEach((x, i) => x.text.trim() && out.push({ ref: `e${i}`, kind: "kit", label: x.text.trim() }));
   b.utility.slice(0, max).forEach((x, i) => x.text.trim() && out.push({ ref: `u${i}`, kind: "kit", label: x.text.trim() }));
   if (b.keepsake.text.trim()) out.push({ ref: "k", kind: "kit", label: b.keepsake.text.trim() });
@@ -251,14 +270,11 @@ function makeSheet(ch, b, B) {
       resolve: rule.resolve ?? "", resolveHtml: rule.resolveHtml ?? "",
     };
   });
-  const traits = b.traits.map((t, i) => {
+  // A trait's never a step, so it's never one of the sheet's lines.
+  const traits = b.traits.map((t) => {
     const rule = t.own ? null : TRAIT.get(t.name);
     const text = t.own?.text ?? "";
-    const step = rule ? rule.step : /\+1 step\b/.test(text);
-    return {
-      name: t.name, type: rule?.type ?? t.own?.type ?? "", html: rule?.html ?? esc(text), step,
-      aura: rule ? rule.aura : Number(text.match(/\bGain (\d+) Aura\b/)?.[1] ?? 0), key: add(`r${i}`, "trait", t.name, { step }),
-    };
+    return { name: t.name, type: rule?.type ?? t.own?.type ?? "", html: rule?.html ?? esc(text), ...(rule ? { aura: rule.aura, once: rule.once } : traitInfo(text)) };
   });
   const kit = all.filter((l) => l.kind === "kit");
   for (const l of kit) add(l.ref, "kit", l.label);
@@ -276,17 +292,16 @@ function makeSheet(ch, b, B) {
     const on = [...keyOf].filter(([ref]) => lineAt(b, ref)?.on.includes(name)).map(([, key]) => key);
     return { name, steps: on.length + 1, die: diceLabel(stepsToDice(on.length + 1)), lines: on };
   });
-  // Each thread says bond or hostile, and whose it is when it's in someone
-  // else's words, the way the crew's do.
-  const threads = [];
-  for (const th of b.threads) {
-    const person = th.person.trim();
-    if (!person || !th.text.trim()) continue;
-    let g = threads.find((x) => x.person === person);
-    if (!g) threads.push((g = { person, threads: [] }));
-    const t = { text: th.text.trim(), kind: th.kind, whose: th.whose.trim() || null, strained: Boolean(th.strained) };
-    g.threads.push({ ...t, note: threadNote(t) });
-  }
+  // Each person's one bond, with every thread with them under it, however
+  // the name was typed. Each thread says bond or hostile, and whose it is when
+  // it's in someone else's words, the way the crew's do.
+  const threads = bondsOf(b.threads.filter((th) => th.person.trim() && th.text.trim())).map((g) => ({
+    person: g.person,
+    threads: g.items.map(({ t: th }) => {
+      const t = { text: th.text.trim(), kind: th.kind, whose: th.whose.trim() || null, strained: Boolean(th.strained) };
+      return { ...t, note: threadNote(t) };
+    }),
+  }));
   const plays = [...new Set(b.titles.map((t) => IDEA.get(t.idea)?.playsLike).filter(Boolean))];
   const names = [...taken.keys()];
   delete numbers.utility;
@@ -350,6 +365,14 @@ export function checksOf(b, B, { changing = false } = {}) {
   }
   const traits = b.traits.length;
   if (!changing && traits !== 2) out.push({ step: 2, text: `You’ve got ${traits} trait${traits === 1 ? "" : "s"}. You start with two.` });
+  // A trait the list doesn't have any more, or one of your own of a type
+  // traits don't come in now: Passive or Triggered, and never a step.
+  const known = new Set(B.traits.map((t) => t.name));
+  for (const t of b.traits) {
+    if (!t.own && !known.has(t.name)) out.push({ step: 2, text: `${t.name} isn’t one of the traits any more. Take it off and pick another, or write it as your own.` });
+    else if (t.own && !TRAIT_TYPES.includes(t.own.type)) out.push({ step: 2, text: `${t.name} is ${t.own.type ? `written as ${t.own.type}` : "written with no type"}. A trait’s Passive or Triggered, and never a step, so give it one of those.` });
+    else if (t.own && /\bsteps?\b/i.test(t.own.text.replace(/\bsteps? (up|down)\b/gi, ""))) out.push({ step: 2, text: `${t.name} talks about a step, and a trait’s never a step. Write what it does some other way.` });
+  }
   if (!changing && !b.keepsake.text.trim()) out.push({ step: 4, kit: "k", text: "You haven’t got a keepsake yet." });
   // One attuned thing to start. More come later, in downtime, so a saved
   // character can have as many as they've earned.
@@ -391,7 +414,6 @@ export function checksOf(b, B, { changing = false } = {}) {
 export function foldGrown(raw, grown, B) {
   const b = normalBuild(raw);
   if (!Array.isArray(grown) || !grown.length) return b;
-  const rule = new Map(B.traits.map((t) => [t.name, t]));
   // Empty lines aren't on the sheet, so they go first, and a grown line's
   // place among the rest is its place on the sheet. On an attuned thing a
   // permission's place decides whether it counts, so the ones on the sheet
@@ -446,11 +468,10 @@ export function foldGrown(raw, grown, B) {
     } else if (g.k === "trait") {
       const name = str(String(g.name ?? "").trim(), 120);
       if (!name || b.traits.some((t) => t.name === name)) continue;
-      const r = g.own ? null : rule.get(name);
-      const step = r ? r.step : /\+1 step\b/.test(String(g.own?.text ?? ""));
-      b.traits.push({ name, on: step ? on : [], ...(g.own ? { own: { type: str(g.own.type, 120), text: str(g.own.text, 200) } } : {}) });
+      b.traits.push({ name, on: [], ...(g.own ? { own: { type: str(g.own.type, 120), text: str(g.own.text, 200) } } : {}) });
     } else if (g.k === "thread") {
-      const person = str(String(g.person ?? "").trim(), 120);
+      // A new thread goes under the bond with that person, if there's one.
+      const person = str(bondName(b.threads.map((t) => t.person), g.person), 120);
       if (person && text) b.threads.push({ person, text: str(text, 200), kind: g.kind === "hostile" ? "hostile" : "bond", whose: "" });
     } else if (g.k === "title") {
       if (!text || b.titles.length >= MAX_TITLES) continue;
@@ -633,11 +654,12 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
   // rest a tap away, remembered open once it's been opened.
   const how = (i) => (B.quick[i]?.more ? `<details class="bd-how" data-open="bd-how-${i}"${d.deep[`how${i}`] === true ? " open" : ""}><summary>How this step works</summary><p>${B.quick[i].more}</p></details>` : "");
   // A permission's on two set actions at most, so once it's on two the rest
-  // look full, and tapping one says why it won't go on.
+  // look full, and tapping one says why it won't go on. A plain thing you
+  // carry goes on one, so tapping another moves it there.
   const toggles = (ref, label) => {
     const l = lineAt(b(), ref);
     const full = isPerm(ref) && onCount(b(), l) >= MAX_ON;
-    return `<div class="bd-on" role="group" aria-label="Set actions for ${esc(label)}">${b().actions.map((a) => {
+    return `<div class="bd-on" role="group" aria-label="${isKit(ref) ? "The set action" : "Set actions"} for ${esc(label)}">${b().actions.map((a) => {
       const on = Boolean(l?.on.includes(a));
       return chip(esc(a), `data-b="on" data-l="${ref}" data-a="${esc(a)}"${full && !on ? ' aria-disabled="true"' : ""}`, on, `sm${full && !on ? " is-full" : ""}`);
     }).join("")}</div>`;
@@ -819,13 +841,14 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const owns = x.traits.filter((t) => t.own);
     const own = owns.length === 1 ? owns[0] : null;
     return `<p class="cc-note bd-count-note" role="status">You’ve picked ${x.traits.length}${changing() ? "" : " of 2"}${x.traits.length ? `: ${esc(both(x.traits.map((t) => t.name)))}` : ""}.</p>
+      <p class="cc-lead">A trait does its one thing by itself. It’s never a step, so it doesn’t go on a set action.</p>
       ${owns.length ? `<h2>Your own</h2><div class="bd-cards">${owns.map((o) => card("bd-trait", `data-b="trait" data-v="${esc(o.name)}"`, true, `<b>${esc(o.name)} <small>${esc(o.own.type)}</small></b><span class="bd-for">${esc(o.own.text)}</span>`)).join("")}</div><p class="cc-lead">Tap one to take it off.</p>` : ""}
       ${mine.length ? `<h2>Yours</h2><div class="bd-cards">${mine.map((t) => (TRAIT.has(t.name) ? one(TRAIT.get(t.name)) : card("bd-trait", `data-b="trait" data-v="${esc(t.name)}"`, true, `<b>${esc(t.name)}</b>`))).join("")}</div>` : ""}
       ${suggested.length ? `<h2>From your Title ideas</h2><div class="bd-cards">${suggested.map((n) => one(TRAIT.get(n))).join("")}</div>` : ""}
       ${showAll ? groups.map((g) => `<h2>${esc(g || "Traits")}</h2><div class="bd-cards">${B.traits.filter((t) => t.group === g).map(one).join("")}</div>`).join("") : ""}
-      ${d.deep[2] ? `<fieldset class="bd-box"><legend>Write your own</legend><p class="cc-lead">A name, a type and one line. If it changes a number, tell your GM which.${owns.length > 1 ? " Give it the name of one of yours to reword that one." : ""}</p>
+      ${d.deep[2] ? `<fieldset class="bd-box"><legend>Write your own</legend><p class="cc-lead">A name, a type and one line. Passive is always on, and Triggered fires by itself when something happens. It can’t be a step, or something you choose to fire. If it changes a number, tell your GM which.${owns.length > 1 ? " Give it the name of one of yours to reword that one." : ""}</p>
         ${field("own.name", "Name", own?.name ?? "", { max: 40 })}
-        <label class="cc-field" for="b-own-type">Type</label><select id="b-own-type" data-bin="own.type">${["Passive", "Triggered", "Invoked", "Once per scene", "Once per downtime"].map((k) => `<option${own?.own.type === k ? " selected" : ""}>${k}</option>`).join("")}</select>
+        <label class="cc-field" for="b-own-type">Type</label><select id="b-own-type" data-bin="own.type">${TRAIT_TYPES.map((k) => `<option${own?.own.type === k ? " selected" : ""}>${k}</option>`).join("")}</select>
         ${field("own.text", "What it does", own?.own.text ?? "", { max: 120 })}
         <div class="cc-row"><button type="button" class="button" data-act="b" data-b="own">${own ? "Update it" : "Add it"}</button>${own ? '<button type="button" class="button" data-act="b" data-b="own" data-v="new">Add it as another</button>' : ""}</div></fieldset>` : ""}
       <div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="deep" data-s="2"${pressed(d.deep[2])}>${d.deep[2] ? "Just the ones from your ideas" : suggested.length ? "Every trait, or write your own" : "Write your own trait"}</button></div>`;
@@ -842,13 +865,13 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       return `<div class="tile" role="listitem"><span class="tile-dice" data-for="${esc(a)}" aria-hidden="true">${dice.map((n, j) => kitDie(n, { hide: true, cls: j ? "is-next" : "" })).join("")}</span><span class="tile-name">${esc(a)}</span><span class="tile-says"><span class="tile-steps">${s} step${s === 1 ? "" : "s"}</span><span class="tile-dot">, </span><span class="tile-die">${diceLabel(dice)}</span></span></div>`;
     }).join("")}</div>`;
   }
-  // Each Title with its permissions under it, then the traits, and a chip for
-  // every set action on each.
+  // Each Title with its permissions under it, and a chip for every set
+  // action on each.
   function lineRows(kinds) {
     const x = b();
     const rank = (l) => (l.kind === "title" ? l.i * 2 : l.kind === "permission" ? l.i * 2 + 1 : 1e4);
     const rows = linesOf(x, B).filter((l) => kinds.includes(l.kind)).sort((p, q) => rank(p) - rank(q));
-    const say = (l) => (l.kind === "title" ? `<small>${cap(ord(l.i))} Title</small><em>${esc(l.label)}</em>` : l.kind === "permission" ? `<em>${esc(l.label)}</em>` : `<small>Trait</small><span>${esc(l.label)}</span>`);
+    const say = (l) => (l.kind === "title" ? `<small>${cap(ord(l.i))} Title</small><em>${esc(l.label)}</em>` : `<em>${esc(l.label)}</em>`);
     const count = (l) => {
       if (!isPerm(l.ref)) return "";
       const n = onCount(x, lineAt(x, l.ref));
@@ -861,12 +884,12 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     };
     return rows.length ? `<ul class="bd-lines">${rows.map((l) => `<li class="bd-line is-${l.kind}"><p class="bd-line-say">${say(l)}${count(l)}</p>${toggles(l.ref, l.label)}${over(l)}</li>`).join("")}</ul>` : "";
   }
-  // Step 4: lines from every Title, the permissions and the traits.
+  // Step 4: lines from every Title and its permissions. Traits never go on.
   function stepActions() {
     const x = b();
     const own = x.actions.filter((a) => !ACTIONS.includes(a));
-    return `<p class="cc-lead">Tap a set action to put a line on it, and watch its die grow. A Title or a trait goes on every one it fits, and a permission on two at most, Defend included.</p>
-      ${lineRows(["title", "permission", "trait"]) || '<p class="cc-lead">Your Titles, permissions and traits show up here once you’ve written them.</p>'}
+    return `<p class="cc-lead">Tap a set action to put a line on it, and watch its die grow. A Title goes on every one it fits, and a permission on two at most, Defend included. Your traits don’t go on any.</p>
+      ${lineRows(["title", "permission"]) || '<p class="cc-lead">Your Titles and permissions show up here once you’ve written them.</p>'}
       <h2>One of your own</h2><p class="cc-lead">Something you do all the time, like Locks or Ward, or Shoot if you’d rather keep it apart from Fight.</p>
       <div class="cc-form">${field("newact", "Its name", "", { max: 30, ph: "Locks" })}<button type="button" class="button" data-act="b" data-b="addact">Add it</button></div>
       ${own.length ? `<div class="cc-chips">${own.map((a) => `<button type="button" class="cc-chipbtn" data-act="b" data-b="dropact" data-a="${esc(a)}" aria-label="Take off ${esc(a)}">${esc(a)} ×</button>`).join("")}</div>` : ""}
@@ -926,10 +949,10 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
         ${drop(i)}</fieldset>`;
     };
     const parts = {
-      e: `<section class="bd-carry" aria-labelledby="bd-eq"><h2 id="bd-eq">3 equipment</h2><p class="cc-lead">What you wear or wield. Plain armour and a shield go on your Defend as you take them.</p>
+      e: `<section class="bd-carry" aria-labelledby="bd-eq"><h2 id="bd-eq">3 equipment</h2><p class="cc-lead">What you wear or wield. Each one goes on the one set action it helps most, and plain armour and a shield go on your Defend as you take them.</p>
         ${x.equipment.map((e, i) => slot("e", i, "Equipment")).join("")}
         ${offer("e", "Weapons", plain(group("Weapons")))}${offer("e", "Armour and wearables", plain(group("Armour & wearables")))}</section>`,
-      u: `<section class="bd-carry" aria-labelledby="bd-ut"><h2 id="bd-ut">${n.utility} utility items</h2><p class="cc-lead">Tools and things you use up.</p>
+      u: `<section class="bd-carry" aria-labelledby="bd-ut"><h2 id="bd-ut">${n.utility} utility items</h2><p class="cc-lead">Tools and things you use up. One goes on a set action only if it’s in your hands nearly every time, and then on one.</p>
         ${x.utility.slice(0, n.utility).map((u, i) => slot("u", i, "Utility")).join("")}
         ${offer("u", "Tools", plain(group("Tools")))}${offer("u", "Foci", plain(group("Foci")))}${offer("u", "Things you use up", B.usedUp.map((u) => ({ name: u.name, say: unlink(u.html) })))}
         ${d.deep[4] ? `<h2 id="bd-bag">Your bag</h2>${field("bag", "Up to 10 more things, one a line", x.bag, { area: true, max: 600 })}` : ""}
@@ -946,33 +969,48 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
   }
 
   // Step 6: the ten crew questions as cards, each answer made into a bond
-  // thread or a hostile one in a tap, and the threads they make: two bond
-  // threads with the crew, a hostile thread with anyone, and a third bond
-  // thread with it. A saved character keeps every thread they've got, the
-  // ones in a crewmate's words included.
+  // thread or a hostile one in a tap, and your bonds: one card a person, with
+  // every thread you've got with them inside it, so the same name's never
+  // written twice (27 Oct 2026). Two bond threads with the crew to start, a
+  // hostile thread with anyone, and a third bond thread with it. A saved
+  // character keeps every thread they've got, the ones in a crewmate's words
+  // included.
   // "Dorrie. We have pulled a dozen jobs together." is a thread with Dorrie.
   const answerOf = (said) => {
     const m = said.match(/^([^.,:;!?]{1,40}?)[.,:]\s+(\S[\s\S]*)$/);
     const person = m && m[1].trim().split(/\s+/).length <= 4 ? m[1].trim() : "";
     return { person, text: (person ? m[2].trim() : said).slice(0, 200) };
   };
+  // Each bond's Who with box is its first thread's (th0.person), and typing in
+  // it renames every thread in the bond, as they were drawn. Nothing redraws
+  // mid-word, so the bonds drawn are the ones being typed into.
+  let bondsDrawn = new Map();
   function stepThreads() {
     const x = b();
     const { bonds, hostile } = threadCount(x);
-    const row = (t, i) => {
+    const groups = bondsOf(x.threads);
+    bondsDrawn = new Map(groups.map((g) => [g.items[0].i, g.items.map((it) => it.i)]));
+    const thread = (t, i, k, n) => {
       const bond = t.kind !== "hostile";
-      return `<fieldset class="bd-box bd-thread is-${bond ? "bond" : "hostile"}"><legend>Thread ${i + 1}</legend>${t.whose.trim() ? `<p class="cc-small">In ${esc(t.whose.trim())} words.</p>` : ""}
-      <div class="cc-chips" role="group" aria-label="Thread ${i + 1}, what kind">${chip("Bond", `data-b="kind" data-i="${i}" data-v="bond"`, bond, "sm")}${chip("Hostile", `data-b="kind" data-i="${i}" data-v="hostile"`, !bond, "sm")}</div>
-      ${field(`th${i}.person`, "Who with", t.person, { max: 60, ph: bond ? "someone in the crew" : "anyone, in the crew or out of it" })}
-      ${field(`th${i}.text`, "What’s true between you", t.text, { max: 200, ph: bond ? "a rescue, a secret you keep for each other, a shared past" : "a debt you can’t pay, a grudge, a betrayal" })}
-      ${canDrop("thread") ? `<div class="cc-row">${dropBtn("thread", i, "Take it off")}</div>` : ""}</fieldset>`;
+      return `<div class="bd-thread is-${bond ? "bond" : "hostile"}">${t.whose.trim() ? `<p class="cc-small">In ${esc(t.whose.trim())} words.</p>` : ""}
+        <div class="cc-chips" role="group" aria-label="Thread ${i + 1}, what kind">${chip("Bond", `data-b="kind" data-i="${i}" data-v="bond"`, bond, "sm")}${chip("Hostile", `data-b="kind" data-i="${i}" data-v="hostile"`, !bond, "sm")}</div>
+        ${field(`th${i}.text`, `What’s true between you${n > 1 ? ` <small>thread ${k + 1} of ${n}</small>` : ""}`, t.text, { max: 200, ph: bond ? "a rescue, a secret you keep for each other, a shared past" : "a debt you can’t pay, a grudge, a betrayal" })}
+        ${canDrop("thread") ? `<div class="cc-row">${dropBtn("thread", i, n > 1 ? "Take this thread off" : "Take it off")}</div>` : ""}</div>`;
+    };
+    const bondCard = (g) => {
+      const first = g.items[0].i;
+      const bond = g.items.some(({ t }) => t.kind !== "hostile");
+      return `<fieldset class="bd-box bd-bond"><legend>${g.person ? esc(g.person) : "Someone new"}</legend>
+        ${field(`th${first}.person`, "Who with", g.person, { max: 60, ph: bond ? "someone in the crew" : "anyone, in the crew or out of it" })}
+        ${g.items.map(({ t, i }, k) => thread(t, i, k, g.items.length)).join("")}
+        ${g.person && x.threads.length < MAX_THREADS ? `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="addthreadto" data-i="${first}">Another thread with ${esc(g.person)}</button></div>` : ""}</fieldset>`;
     };
     // Each question's a card. Opened, it takes the answer and makes it a
     // thread, and once it's one it says which.
     const question = (q, i) => {
       const said = String(x.connect[i] ?? "").trim();
       const a = said ? answerOf(said) : null;
-      const th = a ? x.threads.find((t) => t.text.trim() && t.text.trim() === a.text.trim() && t.person.trim() === a.person) : null;
+      const th = a ? x.threads.find((t) => t.text.trim() && t.text.trim() === a.text.trim() && bondKey(t.person) === bondKey(a.person)) : null;
       return `<details class="bd-tok bd-q" data-open="bd-q-${i}"${d.deep[`q${i}`] === true ? " open" : ""}><summary><span>${esc(q)}</span>${said ? `<small>${esc(said)}</small>` : ""}${th ? `<span class="bd-made is-${th.kind}">${th.kind === "hostile" ? "Hostile" : "Bond"} thread</span>` : ""}</summary>
         <div class="bd-q-in">${field(`cq${i}`, `Your answer<span class="sr-only"> to ${esc(q)}</span>`, x.connect[i] ?? "", { max: 200, ph: "Name them, then say it" })}
         <p class="bd-label" id="bd-qk-${i}">Make it a thread</p><div class="cc-chips" role="group" aria-label="Make your answer to ${esc(q)} a thread">${chip("Bond", `data-b="fromq" data-q="${i}" data-v="bond"`, th?.kind === "bond", "sm")}${chip("Hostile", `data-b="fromq" data-q="${i}" data-v="hostile"`, th?.kind === "hostile", "sm")}</div></div></details>`;
@@ -980,10 +1018,11 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const room = !changing() && hostile && bonds < 3 && !x.threads.some((t) => t.kind !== "hostile" && !t.person.trim() && !t.text.trim());
     const qs = `<p class="cc-lead">Answer at least two, naming someone in the crew in each, and make two of them bond threads. One that’s gone bad can be your hostile thread.</p><div class="bd-qs">${B.connect.map(question).join("")}</div>`;
     return `${changing() ? `<details class="bd-more" data-open="bd-qs"${d.deep.qs === true ? " open" : ""}><summary>The ten crew questions</summary>${qs}</details>` : `<h2 id="bd-qs-h">The crew questions</h2>${qs}`}
-      <h2 id="bd-th-h">Your threads</h2>
-      ${x.threads.map(row).join("")}
+      <h2 id="bd-th-h">Your bonds</h2>
+      <p class="cc-lead">Each person’s one bond, with every thread you’ve got with them under it.</p>
+      ${groups.map(bondCard).join("")}
       ${room ? '<p class="cc-note" role="status">You’ve written a hostile thread, so you’ve got room for a third bond thread.</p>' : ""}
-      ${x.threads.length < MAX_THREADS ? '<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addthread">Add a thread</button></div>' : ""}`;
+      ${x.threads.length < MAX_THREADS ? '<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addthread">A bond with someone new</button></div>' : ""}`;
   }
 
   // Step 7: one thing you want, at d2. Past d12 you get it, so the book's
@@ -1087,10 +1126,11 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       if (!item) return;
       const was = ARMOUR.test(item.text);
       item.text = v;
-      // Armour going in puts it on Defend, and taking it out takes it off.
+      // Armour going in puts it on Defend, the one set action it goes on, and
+      // taking it out takes it off.
       if (m[1] === "e" && was !== ARMOUR.test(v)) {
-        item.on = ARMOUR.test(v) ? [...new Set([...item.on, "Defend"])] : item.on.filter((a) => a !== "Defend");
-        document.querySelector(`[data-b="on"][data-l="${path}"][data-a="Defend"]`)?.setAttribute("aria-pressed", String(item.on.includes("Defend")));
+        item.on = ARMOUR.test(v) ? ["Defend"] : item.on.filter((a) => a !== "Defend");
+        for (const btn of document.querySelectorAll(`[data-b="on"][data-l="${path}"]`)) btn.setAttribute("aria-pressed", String(item.on.includes(btn.dataset.a)));
       }
     } else if (path === "k") x.keepsake.text = v;
     else if ((m = path.match(/^a(\d+)\.(name|catch|burden)$/))) set(x.attuned[m[1]], m[2]);
@@ -1100,7 +1140,8 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       p.text = v;
       if (!v.trim()) delete p.kept;
     }
-    else if ((m = path.match(/^th(\d+)\.(person|text)$/))) set(x.threads[m[1]], m[2]);
+    else if ((m = path.match(/^th(\d+)\.person$/))) for (const j of bondsDrawn.get(Number(m[1])) ?? [Number(m[1])]) set(x.threads[j], "person");
+    else if ((m = path.match(/^th(\d+)\.text$/))) set(x.threads[m[1]], "text");
     else if ((m = path.match(/^cq(\d+)$/))) x.connect[m[1]] = v;
     else if (["asp", "name", "blurb", "clothes", "bag"].includes(path)) x[path === "asp" ? "aspiration" : path] = v;
     else return; // newact and own.* are read when their button's tapped
@@ -1277,7 +1318,8 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       const arr = kind === "title" ? x.titles : kind === "att" ? x.attuned : x.threads;
       const it = arr[i];
       if (!it || !canDrop(kind)) return;
-      const full = kind === "title" ? titleIn(it) : kind === "att" ? Boolean(it.name.trim() || it.perms.some((p) => p.text.trim())) : Boolean(it.person.trim() || it.text.trim());
+      // A thread's words are what's lost. Its name's the bond's, unless it's the only thread in it.
+      const full = kind === "title" ? titleIn(it) : kind === "att" ? Boolean(it.name.trim() || it.perms.some((p) => p.text.trim())) : Boolean(it.text.trim() || (it.person.trim() && !arr.some((t, j) => j !== i && bondKey(t.person) === bondKey(it.person))));
       if (full && armed !== `${kind}${i}`) {
         dropping = `${kind}${i}`;
         return render();
@@ -1308,6 +1350,12 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       if (x.threads.length >= MAX_THREADS) return;
       x.threads.push(blankThread());
       then = focusIn(`#b-th${x.threads.length - 1}-person`);
+    } else if (k === "addthreadto") {
+      // Another thread with someone you've already got a bond with goes under it.
+      const who = x.threads[i]?.person.trim();
+      if (!who || x.threads.length >= MAX_THREADS) return;
+      x.threads.push({ ...blankThread(), person: who });
+      then = focusIn(`#b-th${x.threads.length - 1}-text`);
     } else if (k === "trait") {
       const at = x.traits.findIndex((t) => t.name === v);
       if (at >= 0) x.traits.splice(at, 1);
@@ -1326,6 +1374,11 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       if (v === "new" && same >= 0) return toast(`${name} is already one of your traits.`, false);
       if (at >= 0) x.traits[at] = { ...x.traits[at], name, own };
       else x.traits.push({ name, on: [], own });
+    } else if (k === "on" && isKit(el.dataset.l)) {
+      // A plain thing you carry goes on one set action, so tapping another moves it.
+      const l = lineAt(x, el.dataset.l);
+      if (!l) return;
+      l.on = l.on.includes(el.dataset.a) ? [] : [el.dataset.a];
     } else if (k === "on") {
       const l = lineAt(x, el.dataset.l);
       if (!l) return;
@@ -1357,7 +1410,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
         const item = lineAt(x, path);
         if (!item) return;
         item.text = v;
-        if (path[0] === "e" && ARMOUR.test(v) && !item.on.includes("Defend")) item.on.push("Defend");
+        if (path[0] === "e" && ARMOUR.test(v)) item.on = ["Defend"];
       }
     } else if (k === "fillany") {
       const kind = el.dataset.k;
@@ -1368,8 +1421,8 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
         const free = kind === "k" ? 0 : list.findIndex((it) => !it.text.trim());
         if (free < 0) return toast("That’s full. Tap one to take it off, or change one by hand.", false);
         list[free].text = v;
-        // Plain armour and a shield are lines on Defend.
-        if (kind === "e" && ARMOUR.test(v) && !list[free].on.includes("Defend")) list[free].on.push("Defend");
+        // Plain armour and a shield are lines on Defend, and that's the one set action they go on.
+        if (kind === "e" && ARMOUR.test(v)) list[free].on = ["Defend"];
       }
     } else if (k === "kind") {
       if (!x.threads[i]) return;
@@ -1383,8 +1436,10 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       const kind = v === "hostile" ? "hostile" : "bond";
       const said = String(x.connect[q] ?? "").trim();
       if (!said) return toast("Answer the question first, then make it a thread.", false);
-      const { person, text } = answerOf(said);
-      let at = x.threads.findIndex((t) => t.text.trim() === text.trim() && t.person.trim() === person);
+      const answer = answerOf(said);
+      const person = bondName(x.threads.map((t) => t.person), answer.person);
+      const { text } = answer;
+      let at = x.threads.findIndex((t) => t.text.trim() === text.trim() && bondKey(t.person) === bondKey(person));
       if (at >= 0 && x.threads[at].kind === kind) {
         Object.assign(x.threads[at], { person: "", text: "" });
         save();

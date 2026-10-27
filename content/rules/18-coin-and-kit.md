@@ -21,7 +21,7 @@ Money in Zi'Dara is simple: a purse of gold is roughly a month's wages.
 
 ## Upgrading gear {#upgrading-gear}
 
-Money buys plain things, and a plain thing is just what it is. A sword's a sword: when it fits, it's a line on your roll, and it lets you do what a sword does. A finer one is still one line, so you can't pay for a step up. A weapon's properties come with the weapon, so buying a crossbow gets you *Long* and *Piercing* with it.
+Money buys plain things, and a plain thing is just what it is. A sword's a sword: it's a line on the one set action you put it on, and it lets you do what a sword does. A finer one is still one line, so you can't pay for a step up. A weapon's properties come with the weapon, so buying a crossbow gets you *Long* and *Piercing* with it.
 
 It's the same with armour: each piece of plain armour you wear is a line on your Defend, and so is a shield, so Bram's plate and shield are two lines, and with his first Title and the action his Defend's 4 steps, a d8. Anything more than that is [attunement](#s-attunement), and money can buy the material for an attuned thing's next stage, if somebody's selling. A [Maker](#a-maker) can give a thing tags as well, but they only last the scene.
 
