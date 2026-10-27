@@ -238,7 +238,7 @@ Bram crosses the hall on his stride, which is free, and spends his action going 
 To **answer** a telegraph, spend your action and build a roll from the set action that fits how you're stopping it, then roll against its dice. Win and it's stopped. Lose and it lands at once, with no defence roll, and a tie's a loss unless you pay 1 Aura. You can answer for someone else, and friends can put their actions in.
 
 :::example
-The brute's club is coming at Isolde, a d8. Wren puts an arrow in his arm and Bram gets his hammer under the club, 9 steps between them, a d12 and a d6. The club rolls 6 and the d12 comes up 8, so it never lands.
+The brute's club is coming at Isolde, a d8. Wren puts an arrow in his arm and Bram gets his hammer under the club, 8 steps between them, a d12 and a d4. The club rolls 6 and the d12 comes up 8, so it never lands.
 :::
 ::::
 

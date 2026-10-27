@@ -160,7 +160,7 @@ Some traits change a number on your sheet. *Unyielding* means the first Hurt eac
 | **Iron Will** | Passive | You start every scene a size up on Confidence. |
 | **Steady Hands** | Passive | Being shaken doesn't stop you: at d2 you can still act at what the scene's about without spending Resolve. |
 | **Hard to Lie To** | Triggered | The first time each scene someone lies to your face, the GM tells you it's a lie. |
-| **Perfect Recall** | Passive | You remember everything you've seen and heard. Ask the GM about any scene you were in, and she tells you exactly. |
+| **Perfect Recall** | Passive | You remember everything you've seen and heard, and the GM tells you anything from a scene you were in, exactly as it was. |
 | **Quick Study** | Triggered | The first time you face a threat each scene, the GM tells you one of its hidden tags. |
 | **Cool Under Pressure** | Triggered | The first time you're shaken each scene, your Confidence comes straight back to where it started the scene. |
 | **Deep Well** | Passive | Your Aura maximum is one higher. |

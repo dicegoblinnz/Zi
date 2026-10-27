@@ -2259,12 +2259,16 @@ if (part("10")) {
   same(await page.evaluate(() => getComputedStyle(document.querySelector(".lr-progress i")).transform), `matrix(${4 / cards.length}, 0, 0, 1, 0, 0)`, "the progress bar a tenth of the way along on card 4");
   same(await still(page), 0, "nothing moving in the deck under reduce-motion");
   // It remembers the card: a reload, then the deck from the rules page.
+  // The card's in the page before the deck's script has run, so wait for the
+  // deck to say where it is before reading it.
   await page.reload();
   await page.waitForSelector(".lr-card");
+  await waitCard(page, 4);
   same((await deckAt(page)).id, cards[3].id, "a reload stays on the same card");
   await page.goto(`${BASE}/rules/`);
   await page.click('a[href="/learn/"]');
   await page.waitForSelector(".lr-card");
+  await waitCard(page, 4);
   same((await deckAt(page)).n, "4", "back to the deck on the card you were on");
   same((await reading(page))?.learn?.id, cards[3].id, "the card's kept in zi-reading");
   // A bookmark on the card, kept.
