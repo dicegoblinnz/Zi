@@ -1058,6 +1058,8 @@ export function makeTable(d) {
     rosterOf: (id) => rosterOf(id),
     gmName: (id) => gmName(id),
     waiting: (id) => camp(id).out.length,
+    // Whether a change would be taken, tried on the table as this phone has it.
+    check: (id, op) => apply(local(id), op, whoIn(id), rosterOf(id), Date.now()),
     seenAt: (id) => camp(id).at,
     landedFor,
     dialog,

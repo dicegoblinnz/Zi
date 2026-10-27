@@ -39,7 +39,8 @@
 //     comes   { t, n, text }: the d12 she rolled as she telegraphed it
 //     faces   { main, split }: what its dice came up, rolled once, for an
 //             Obstruct against it and for its landing alike
-//     stop    { by, won }: an Obstruct against it, once that's rolled
+//     stop    { by, won }: an Obstruct against it, once that's rolled, and
+//             stops, each one's result, so one that stopped it stands
 //     won     { main, split } once it's landed, and done, its line once
 //             she's made its changes on the cards ("" when it's nobody's news)
 //   the crew's action  { id, move, at, does, how, who, steps, fits, split,
@@ -51,8 +52,9 @@
 //     vs      as an act's, with set: whether it's known yet. The GM says what
 //             it's up against, unless it's a telegraphed action's dice or a
 //             die on the party sheet.
-//     again   who spent 1 Resolve to roll it again, and tie, which intents an
-//             extra resource bought the tie for
+//     again   who spent 1 Resolve to roll it again, tie, which intents an
+//             extra resource bought the tie for on this roll, and paid, how
+//             many extras ties have cost the crew
 import { stepsToDice } from "./dice.js";
 
 export const STEPS = ["hire", "tele", "crew", "land"];
@@ -76,6 +78,9 @@ const whole = (v, lo, hi) => {
 const isFid = (v) => FID.test(String(v ?? ""));
 const sizes = (v, most = 6) => (Array.isArray(v) && v.length <= most && v.every((x) => SIZES.includes(Number(x))) ? v.map(Number) : null);
 export const best = (xs) => Math.max(0, ...xs.filter((x) => Number.isFinite(x)));
+// A faction's Power as rolled this downtime, looked up only among what's been
+// rolled, so no id a phone sends can reach anything else.
+export const powerAt = (t, f) => (t?.power && Object.hasOwn(t.power, f) ? t.power[f] : null);
 const clone = (x) => (x == null ? x : JSON.parse(JSON.stringify(x)));
 
 const yes = () => ({ ok: true });
@@ -216,15 +221,20 @@ function crewFrom(x, t, who, roster) {
   let vs;
   if (move === "Obstruct") vs = vsOf({ k: "act", act: at.act }, t, null);
   else if (move === "Work for it" || move === "Else") vs = { k: "none", f: null, d: [], set: true };
-  else {
+  else if (move === "Goal" || move === "Project") {
+    // The Goal's and a project's die are on the party sheet, so anyone can say them.
+    const d = sizes(x.vs?.d, 1);
+    vs = d?.length ? { k: "die", f: null, d, set: true } : null;
+  } else {
     vs = vsOf(x.vs, t, null);
-    // The Goal's and a project's die are on the party sheet, so anyone can
-    // say them. Anything else she says, since it might be on the card of
-    // something the crew hasn't been shown.
-    if (vs && vs.k !== "none" && !gm && move !== "Goal" && move !== "Project") vs = { ...vs, d: [], set: false };
-    if (vs && vs.k === "none" && !gm && move !== "Establish") vs = null;
+    if (vs?.k === "act") vs = null;
+    // Anything else she says, since it might be on the card of something the
+    // crew hasn't been shown. Establishing too: she says whether anyone's in
+    // the way.
+    if (vs && !gm) vs = { ...vs, d: [], set: false };
+    if (vs?.k === "none" && move !== "Establish") vs = null;
     // A Power that's been rolled this downtime stands, so that's known.
-    const kept = vs?.k === "power" ? t.power[vs.f] : null;
+    const kept = vs?.k === "power" ? powerAt(t, vs.f) : null;
     if (kept) vs = { ...vs, d: [...kept.d], set: true };
   }
   if (!vs) return null;
@@ -234,7 +244,7 @@ function crewFrom(x, t, who, roster) {
     // Whether there's room to split it is worked out with the slot, which can
     // go in after (crewDice()).
     split: splitOf(x.split, MAX.steps * 2),
-    slot: null, vs, faces: null, vsFaces: null, real: false, by: null, again: [], tie: { main: false, split: false }, won: null, done: null,
+    slot: null, vs, faces: null, vsFaces: null, real: false, by: null, again: [], tie: { main: false, split: false }, paid: 0, won: null, done: null,
   };
 }
 
@@ -242,6 +252,13 @@ function crewFrom(x, t, who, roster) {
 
 export const rolled = (x) => x?.won != null;
 export const landed = (a) => rolled(a) || a?.stop?.won === true;
+// Whatever's gone at an action to stop it, each one's result kept, so one
+// that stopped it isn't undone by another that didn't.
+function setStop(target, by, won) {
+  target.stops = { ...(target.stops ?? {}), [by]: won === true };
+  const winner = Object.keys(target.stops).find((k) => target.stops[k] === true);
+  target.stop = winner ? { by: winner, won: true } : { by, won: false };
+}
 // An action's state: planned (not telegraphed yet), coming, stopped, won,
 // lost (it landed and missed), or done.
 export function stateOfAct(a, t) {
@@ -254,7 +271,7 @@ export function stateOfAct(a, t) {
 export function defOf(t, x) {
   if (!x?.vs) return null;
   if (x.vs.k === "power") {
-    const p = t.power?.[x.vs.f];
+    const p = powerAt(t, x.vs.f);
     return p ? best(p.v) : null;
   }
   if (x.vs.k === "act") {
@@ -265,9 +282,20 @@ export function defOf(t, x) {
   return null;
 }
 // The extra resources the crew's spent this downtime: a faction paid, and a tie.
-export const spentOf = (t) => (t ? t.hires.filter((h) => h.by === "crew").length + (t.crew ? Number(t.crew.tie.main) + Number(t.crew.tie.split) : 0) : 0);
+export const spentOf = (t) => (t ? t.hires.filter((h) => h.by === "crew").length + (Number(t.crew?.paid) || 0) : 0);
 // Who's going at what: an Obstruct against an action has to be settled first.
-const stoppers = (t, a) => [...t.acts.filter((x) => x.what === "Obstruct" && !x.off && x.vs.act === a.id), ...(t.crew?.move === "Obstruct" && t.crew.vs.act === a.id ? [t.crew] : [])];
+export const stoppers = (t, a) => [...t.acts.filter((x) => x.what === "Obstruct" && !x.off && x.vs.act === a.id), ...(t.crew?.move === "Obstruct" && t.crew.vs.act === a.id ? [t.crew] : [])];
+// An Obstruct that would end up stopping itself, through a chain of others.
+function loops(t, a) {
+  const seen = new Set();
+  for (let x = a; x?.what === "Obstruct" && x.vs?.act; ) {
+    if (seen.has(x.id)) return true;
+    seen.add(x.id);
+    x = x.vs.act === a.id ? a : t.acts.find((y) => y.id === x.vs.act);
+    if (x === a || x?.f === a.f) return true;
+  }
+  return false;
+}
 
 // ------------------------------------------------------------ the changes
 
@@ -289,7 +317,7 @@ function defend(t, x, op) {
     return { def: best(allFaces(target.faces)), target };
   }
   if (vs.k === "power") {
-    const kept = t.power[vs.f];
+    const kept = powerAt(t, vs.f);
     if (kept) return { def: best(kept.v) };
     const v = rollFor(vs.d, op.vsFaces);
     if (!v) return { why: "That roll for its Power didn’t make sense." };
@@ -329,7 +357,8 @@ export function applyTurn(doc, op, who, roster, now) {
       if (!gm && !me) return notIn();
       if (t.hires.some((x) => x.id === h.id)) return yes();
       if (t.hires.length >= MAX.hires) return no("That’s as much hiring as one downtime holds.");
-      if (t.hires.some((x) => x.to === h.to)) return no(`${h.toName}’s been paid already. It’s only got the one action.`);
+      // Who a faction paid is hers to know, so the crew only hears about its own.
+      if (t.hires.some((x) => x.to === h.to && (gm || x.by === "crew"))) return no(`${h.toName}’s been paid already. It’s only got the one action.`);
       t.hires.push(h);
       return yes();
     }
@@ -354,6 +383,10 @@ export function applyTurn(doc, op, who, roster, now) {
       if (t.acts.some((x) => x.f === a.f && x.id !== a.id)) return no(`${a.name}’s got its action already. Nothing buys a faction a second one.`);
       if (!old && t.acts.length >= MAX.acts) return no("That’s as many actions as one downtime holds.");
       if (a.what === "Obstruct" && a.vs.act && act(a.vs.act)?.f === a.f) return no("A faction can’t stop its own action.");
+      if (a.what === "Obstruct" && loops(t, a)) return no("Those two would only stop each other. Pick another action for one of them.");
+      // An action someone's trying to stop keeps its dice, and stays where the crew can see it.
+      const by = old ? stoppers(t, old)[0] : null;
+      if (by && (a.off || allDice(a).join() !== allDice(old).join())) return no(`${by.name ?? "The crew"}’s trying to stop it, so its dice stay as they are and it stays in sight. Change that first.`);
       if (old) t.acts[t.acts.indexOf(old)] = a;
       else t.acts.push(a);
       if (a.off && t.pressure === a.id) t.pressure = null;
@@ -434,10 +467,17 @@ export function applyTurn(doc, op, who, roster, now) {
       const c = t?.crew;
       if (!c) return no("There’s no crew action yet.");
       if (rolled(c)) return no("The crew’s action has been rolled already.");
-      if (c.vs.k === "act" || c.vs.k === "none") return no("Nothing to say there. It’s worked out already.");
+      if (c.vs.k === "act" || (c.vs.k === "none" && c.move !== "Establish")) return no("Nothing to say there. It’s worked out already.");
+      // Establishing with nobody in the way doesn't roll.
+      if (op.k === "none") {
+        if (c.move !== "Establish") return no("That needs something to roll against.");
+        c.vs = { k: "none", f: null, d: [], set: true };
+        return yes();
+      }
       const d = sizes(op.d, 4);
       if (!d || !d.length) return no("Pick what it’s up against.");
-      const k = op.k === "power" || op.k === "die" ? op.k : c.vs.k;
+      const k = op.k === "power" || op.k === "die" ? op.k : c.vs.k === "none" ? "die" : c.vs.k;
+      if (k === "power" && !c.vs.f) return no("That needs a faction to roll its Power.");
       c.vs = { ...c.vs, k, d, set: true };
       return yes();
     }
@@ -461,7 +501,7 @@ export function applyTurn(doc, op, who, roster, now) {
       c.real = op.real === true;
       c.by = { user: who.user, name: gm ? "The GM" : line(who.cname, MAX.name) || "Someone" };
       c.won = judge(faces, got.def, c.tie);
-      if (got.target) got.target.stop = { by: "crew", won: c.won.main };
+      if (got.target) setStop(got.target, "crew", c.won.main);
       return yes();
     }
     case "ft-again": {
@@ -469,16 +509,18 @@ export function applyTurn(doc, op, who, roster, now) {
       if (gm) return no("Resolve’s a player’s to spend.");
       if (!me) return notIn();
       if (!c || !c.faces || c.done != null) return no("There’s nothing of the crew’s to roll again.");
+      if (c.won.main && c.won.split !== false) return no("The crew’s roll worked, so there’s nothing to roll again.");
+      const target = c.vs.k === "act" ? act(c.vs.act) : null;
+      if (target && rolled(target)) return no(`${target.name}’s action has landed already, so the crew’s roll stands.`);
       const faces = facesFor(crewDice(c), op.faces);
       if (!faces) return no("That roll didn’t fit the crew’s dice.");
       if (c.again.length >= 6) return no("That’s a lot of Resolve. The roll stands.");
       c.faces = faces;
       c.again.push({ user: me.user, name: line(me.cname, MAX.name) || "Someone" });
+      // A tie bought for the last roll doesn't carry over to this one.
+      c.tie = { main: false, split: false };
       c.won = judge(faces, defOf(t, c), c.tie);
-      if (c.vs.k === "act") {
-        const target = act(c.vs.act);
-        if (target && !rolled(target)) target.stop = { by: "crew", won: c.won.main };
-      }
+      if (target) setStop(target, "crew", c.won.main);
       return yes();
     }
     case "ft-tie": {
@@ -490,12 +532,12 @@ export function applyTurn(doc, op, who, roster, now) {
       const face = which === "split" ? c.faces.split : best(c.faces.main);
       if (face !== def) return no("That one wasn’t a tie.");
       if (c.tie[which]) return yes();
+      const target = c.vs.k === "act" ? act(c.vs.act) : null;
+      if (target && rolled(target)) return no(`${target.name}’s action has landed already, so the crew’s roll stands.`);
       c.tie[which] = true;
+      c.paid = (Number(c.paid) || 0) + 1;
       c.won = judge(c.faces, def, c.tie);
-      if (c.vs.k === "act" && which === "main") {
-        const target = act(c.vs.act);
-        if (target && !rolled(target)) target.stop = { by: "crew", won: c.won.main };
-      }
+      if (target && which === "main") setStop(target, "crew", c.won.main);
       return yes();
     }
     case "ft-land": {
@@ -506,13 +548,14 @@ export function applyTurn(doc, op, who, roster, now) {
       if (rolled(a)) return yes();
       if (a.stop?.won) return no(`${a.name}’s action was stopped, so it doesn’t land.`);
       // Obstructs go first: anything going at this one is settled before it lands.
-      const first = stoppers(t, a).find((x) => !rolled(x));
+      const first = stoppers(t, a).find((x) => !landed(x));
       if (first) return no(first === t.crew ? "The crew’s trying to stop it, so the crew rolls first." : `${first.name}’s trying to stop it, so that goes first.`);
       if (a.off || !a.roll) {
         a.won = { main: true, split: a.split ? true : null };
         return yes();
       }
-      if (!a.faces) {
+      const fresh = !a.faces;
+      if (fresh) {
         const f = facesFor(shapeOf(a), op.faces);
         if (!f) return no(`That roll didn’t fit ${a.name}’s dice.`);
         a.faces = f;
@@ -520,11 +563,11 @@ export function applyTurn(doc, op, who, roster, now) {
       }
       const got = defend(t, a, op);
       if (got.why) {
-        if (!a.stop) a.faces = null;
+        if (fresh) a.faces = null;
         return no(got.why);
       }
       a.won = judge(a.faces, got.def);
-      if (got.target) got.target.stop = { by: a.id, won: a.won.main };
+      if (got.target) setStop(got.target, a.id, a.won.main);
       return yes();
     }
     case "ft-done": {
@@ -593,14 +636,19 @@ export function turnView(doc, role) {
   const shown = t.sent ? t.acts.filter((a) => !a.off) : [];
   const ours = new Set(t.hires.filter((h) => h.by === "crew").map((h) => h.id));
   const seen = new Set();
+  const seenIds = new Set(shown.map((a) => a.id));
   const acts = shown.map((a) => {
     const out = clone(a);
     out.job = ours.has(a.job) ? a.job : null;
+    // An Obstruct aimed at something the crew can't see gives none of it away.
+    if (a.vs.k === "act" && !seenIds.has(a.vs.act)) out.vs = { k: "act", f: null, act: null, d: [], set: true };
+    delete out.stops;
     if (!rolled(a) && a.vs.k !== "act") out.vs = { ...a.vs, d: [] };
     if (a.vs.k === "power" && rolled(a)) seen.add(a.vs.f);
     return out;
   });
   const crew = clone(t.crew);
+  if (crew?.vs.k === "act" && !seenIds.has(crew.vs.act)) crew.vs = { k: "act", f: null, act: null, d: [], set: true };
   if (crew?.vs.k === "power" && (crew.vs.set || rolled(crew))) seen.add(crew.vs.f);
   return {
     turn: {

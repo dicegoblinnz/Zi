@@ -1614,6 +1614,11 @@ try {
     await inDlg(kai.page, '[data-do="move"][data-m="Establish"]');
     await kai.page.fill(`${dlg} #ft-est`, "The Lamp Boys, a mini faction of our own");
     await inDlg(kai.page, '[data-do="savecrew"]');
+    await until(async () => (await turnOf())?.crew?.move === "Establish", "the crew's Establish on the table");
+    same((await turnOf())?.crew?.vs?.set, false, "Mo says whether anyone's in the way, not Kai's phone");
+    await toWorld(mo.page);
+    await mo.page.click('.ft-crew [data-do="vs"]');
+    await inDlg(mo.page, '[data-do="vsd"][data-k="none"]');
     await kai.page.waitForSelector(".ft-crew [data-do='roll']");
     await kai.page.click(".ft-crew [data-do='roll']");
     await until(async () => (await turnOf())?.crew?.won?.main === true, "the crew's Establish happens");
