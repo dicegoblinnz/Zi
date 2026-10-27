@@ -28,6 +28,7 @@ import { threadNote } from "../src/companion/threads.js";
 import { traitInfo } from "../src/companion/grow.js";
 import { curlyQuotes, readAim, whoAndDoes } from "../src/companion/aims.js";
 import { CARD_WORDS, newestChange, reachOf, readCards, staleCards } from "./learn.mjs";
+import { diceCells, exampleCrews, ruleNames, statBlocks } from "./book-blocks.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const RULES = join(ROOT, "content", "rules");
@@ -133,19 +134,25 @@ function wrapTables() {
 }
 
 // A chapter comes back cut into sections, with the openings of the sections
-// in it that links point at (look) when it's one of the chapters.
-function render(doc, where, pageFor, look = null) {
+// in it that links point at (look) when it's one of the chapters, and what
+// its contents page shows (hub). Places, threats and sheets are drawn as
+// their parts (scripts/book-blocks.mjs), with what each tag does (blocks).
+function render(doc, where, pageFor, look = null, { blocks = {}, crew = [] } = {}) {
   const processor = unified()
     .use(remarkParse)
     .use(remarkGfm)
     .use(remarkDirective)
     .use(boxes)
     .use(headingIds)
+    .use(statBlocks, blocks)
     .use(links, where, pageFor, doc.path)
     .use(remarkSmartypants)
     .use(remarkRehype)
     .use(wrapTables)
-    .use(rehypeStringify);
+    .use(diceCells)
+    .use(ruleNames)
+    .use(exampleCrews, crew)
+    .use(rehypeStringify, { allowDangerousHtml: true });
   const file = processor.processSync({ value: doc.body, path: doc.path });
   for (const msg of file.messages) console.warn(`  ${doc.file}: ${msg.message}`);
   const headings = [];
@@ -154,9 +161,12 @@ function render(doc, where, pageFor, look = null) {
     if (node.tagName === "h2" && node.properties?.id) headings.push({ id: node.properties.id, text: textOf(node) });
   });
   if (!look) return { html: String(file), headings, warnings: file.messages.length };
-  const openings = openingsOf(tree, look, (nodes) => processor.stringify({ type: "root", children: nodes }));
+  const toHtml = (nodes) => processor.stringify({ type: "root", children: nodes });
+  const openings = openingsOf(tree, look, toHtml);
+  const minutes = Math.max(1, Math.round(textOf(tree).split(/\s+/).filter(Boolean).length / 230));
   const sections = sectioned(tree);
-  return { html: processor.stringify(tree), headings, sections, openings, warnings: file.messages.length };
+  const hub = hubOf(tree, file.data.places ?? {}, blocks.places, toHtml);
+  return { html: processor.stringify(tree), headings, sections, openings, hub: { ...hub, minutes }, tags: file.data.tags ?? {}, warnings: file.messages.length };
 }
 
 // Look-up pages: every h2 and h3 at the top of a chapter starts a <section>
@@ -170,6 +180,7 @@ const ribbon = () => el("svg", { className: ["rs-ribbon"], viewBox: "0 0 24 24",
 function sectioned(tree) {
   const out = [];
   const list = [];
+  const lead = [];
   let h2 = null;
   let h3 = null;
   for (const node of tree.children) {
@@ -177,6 +188,7 @@ function sectioned(tree) {
     if (!level) {
       if (h3) h3.children.push(node);
       else if (h2) h2.children.push(node);
+      else if (!out.length) lead.push(node);
       else out.push(node);
       continue;
     }
@@ -194,8 +206,73 @@ function sectioned(tree) {
       (h2 ? h2.children : out).push(section);
     }
   }
-  tree.children = out;
+  // What comes before the first heading is the chapter's opening, its own
+  // page in the reader (src/reading/lookup.js). A chapter with no headings
+  // (the glossary, the index) is left as it is.
+  const opens = lead.some((n) => n.type === "element");
+  tree.children = out.length && opens ? [el("section", { className: ["rs", "rs-open"], id: "opening", dataS: "opening", ariaLabel: "Opening" }, lead), ...out] : [...lead, ...out];
   return list;
+}
+
+// A chapter's contents page: its opening's quote and first paragraph, and a
+// row for every section, with its first sentence and what's in it (its
+// subsections, or the threats and sheets in it), and for a place, its d20
+// number, the die of its Challenge and who's there. The opening's a row of
+// its own when there's more to it than the contents page shows.
+const clip = (s, n = 150) => (s.length > n ? `${s.slice(0, n).replace(/\s+\S*$/, "")}…` : s);
+function hubOf(tree, placeCards, d20 = new Map(), toHtml) {
+  const rows = [];
+  let opening = null;
+  const nameOfBox = (n) => textOf(n.children.find((c) => cls(c).includes("box-label"))?.children.find((c) => cls(c).includes("box-name")) ?? { children: [] }).trim();
+  const firstLine = (sec) => {
+    for (const n of sec.children) {
+      if (n.type !== "element" || cls(n).includes("rs-head")) continue;
+      if (n.tagName === "p") {
+        const t = textOf(n).replace(/\s+/g, " ").trim();
+        if (t) return clip(firstSentence(t));
+        continue;
+      }
+      break;
+    }
+    return "";
+  };
+  for (const sec of tree.children) {
+    if (sec.type !== "element" || sec.tagName !== "section") continue;
+    if (cls(sec).includes("rs-open")) {
+      opening = sec;
+      continue;
+    }
+    const id = sec.properties.dataS;
+    const title = textOf(sec.children[0]?.children?.[0] ?? { children: [] }).trim();
+    const subs = sec.children.filter((n) => n.tagName === "section").map((s) => textOf(s.children[0]?.children?.[0] ?? { children: [] }).trim());
+    const named = [];
+    visit(sec, "element", (n) => {
+      if (isBox(n) && (cls(n).includes("box-threat") || cls(n).includes("box-sheet"))) {
+        const name = nameOfBox(n);
+        if (name) named.push(name);
+      }
+    });
+    const card = placeCards[id];
+    rows.push({
+      id, title, level: cls(sec).includes("rs-3") ? 3 : 2,
+      first: card ? curly(d20.get(id)?.line ?? "") : firstLine(sec),
+      subs: subs.length ? subs : named,
+      place: card ? { n: card.n, d: card.ch * 2, who: card.who.map((w) => curly(w)) } : null,
+    });
+  }
+  let quote = "";
+  let lead = "";
+  let more = false;
+  if (opening) {
+    const blocks = opening.children.filter((n) => n.type === "element");
+    const q = blocks[0] && cls(blocks[0]).includes("box-quote") ? blocks.shift() : null;
+    if (q) quote = textOf(q).replace(/\s+/g, " ").trim();
+    if (blocks[0]?.tagName === "p") lead = toHtml([blocks.shift()]).trim();
+    more = blocks.length > 0;
+    // All of it's on the contents page, so the reader leaves it out.
+    if (!more) opening.properties.dataSkip = "true";
+  }
+  return { quote, lead, opening: more, rows };
 }
 
 // Pop-ups: the opening of every section a link in the book points at, up to
@@ -220,6 +297,16 @@ function openingBlocks(nodes) {
   }
   return out.slice(0, 6);
 }
+// A place or a threat drawn as a block opens with what it is and what it's like.
+function lookOf(box) {
+  const what = box.children.find((c) => cls(c).includes("pl-what") || cls(c).includes("th-what"));
+  let look = null;
+  visit(box, "element", (n) => {
+    if (!look && cls(n).includes("pl-look")) look = n;
+  });
+  return [what, ...(look?.children ?? []).filter((c) => c.tagName === "p" && !cls(c).includes("eyebrow"))].filter(Boolean);
+}
+const isDrawn = (n) => isBox(n) && (cls(n).includes("pl") || cls(n).includes("th"));
 function openingsOf(tree, { targets, page, title, chapterId }, toHtml) {
   const found = new Map();
   visit(tree, "element", (node, index, parent) => {
@@ -250,10 +337,11 @@ function openingsOf(tree, { targets, page, title, chapterId }, toHtml) {
       blocks = openingBlocks(after);
       const first = after[0];
       if (!blocks.length && first && isHeading(first)) blocks = openingBlocks(after.slice(1));
+      else if (!blocks.length && first && isDrawn(first)) blocks = lookOf(first);
       else if (!blocks.length && first && isBox(first) && !cls(first).includes("box-example")) blocks = openingBlocks(first.children);
       name = textOf(node);
     } else if (isBox(node)) {
-      blocks = openingBlocks(node.children);
+      blocks = isDrawn(node) ? lookOf(node) : openingBlocks(node.children);
       const label = node.children.find((c) => cls(c).includes("box-label"));
       const strong = node.children.find((c) => c.tagName === "p" && !cls(c).includes("box-label"))?.children.find((c) => c.tagName === "strong");
       name = (label && textOf(label.children.find((c) => cls(c).includes("box-name")) ?? { children: [] })) || (strong ? textOf(strong) : "");
@@ -1244,29 +1332,6 @@ const linkTargets = new Set([...docs, changes, learnDoc].filter(Boolean).flatMap
 const openings = {};
 
 let warnings = 0;
-const chapters = docs.map((doc, i) => {
-  const look = { targets: linkTargets, page: pageFor.get(doc.path), title: curly(doc.meta.title), chapterId: doc.meta.id };
-  const out = render(doc, where, pageFor, look);
-  warnings += out.warnings;
-  Object.assign(openings, out.openings);
-  const part = parts.find((p) => p.number === doc.meta.partNumber);
-  return {
-    slug: doc.meta.slug,
-    id: doc.meta.id,
-    title: curly(doc.meta.title),
-    order: Number(doc.meta.order),
-    partNumber: doc.meta.partNumber ?? null,
-    partName: part?.name ?? null,
-    updated: doc.meta.updated ? String(doc.meta.updated) : null,
-    html: out.html,
-    headings: out.headings,
-    sections: out.sections,
-    prev: i > 0 ? { slug: docs[i - 1].meta.slug, title: curly(docs[i - 1].meta.title) } : null,
-    next: i < docs.length - 1 ? { slug: docs[i + 1].meta.slug, title: curly(docs[i + 1].meta.title) } : null,
-  };
-});
-const changesOut = render(changes, where, pageFor);
-warnings += changesOut.warnings;
 
 // The character companion's data: the crew's full sheets, plus the rules it
 // shows beside them, all rendered with the book's own links.
@@ -1326,6 +1391,43 @@ if (party && worlds) {
 const pageDocs = { placesDoc, worldDoc: docWith("{#s-world-places}"), threatDoc: docWith("{#its-tags}"), bestiaryDoc: docWith(":::threat[The Watchman]"), tagsDoc: docWith("{#what-drives-it}") };
 const worldBook = Object.values(pageDocs).every(Boolean) ? pagesFrom(pageDocs, pageFor, (msg) => companionWarn(`places and people: ${msg}`)) : null;
 if (!worldBook) companionWarn("can't find Twenty Places, Building Your World, the Threat Builder, the Bestiary or Appendix B's tags for places and people");
+
+// What the chapters draw (scripts/book-blocks.mjs) needs: what each tag in
+// Appendix B does and where it is, each place's number and line on Twenty
+// Places' d20 table, and the crew's archetypes, for their crests by an example.
+const tagInfo = new Map((worldBook?.tags ?? []).map((t) => [t.name.toLowerCase(), t]));
+const tagLinks = Object.fromEntries([["comes", "how-it-comes-at-you"], ["keeps", "what-keeps-it-going"], ["weak", "vulnerability-tags"], ["drives", "what-drives-it"]]
+  .map(([k, id]) => [k, pageDocs.tagsDoc ? `${pageFor.get(pageDocs.tagsDoc.path)}#${id}` : "/rules/"]));
+const d20 = new Map([...(placesDoc?.body ?? "").matchAll(/^\| (\d+) \| \[[^\]]+\]\(#(s-place-[a-z-]+)\) \| (.+?) \|$/gm)].map((m) => [m[2], { n: Number(m[1]), line: m[3] }]));
+if (placesDoc && d20.size !== 20) companionWarn(`expected Twenty Places' d20 table to list twenty places, found ${d20.size}`);
+const drawn = { blocks: { tags: tagInfo, places: d20 }, crew: crew.map((c) => ({ name: c.name, arch: c.titles.map((t) => t.archetype).filter(Boolean) })) };
+
+const chapters = docs.map((doc, i) => {
+  const look = { targets: linkTargets, page: pageFor.get(doc.path), title: curly(doc.meta.title), chapterId: doc.meta.id };
+  const out = render(doc, where, pageFor, look, drawn);
+  warnings += out.warnings;
+  Object.assign(openings, out.openings);
+  const part = parts.find((p) => p.number === doc.meta.partNumber);
+  return {
+    slug: doc.meta.slug,
+    id: doc.meta.id,
+    title: curly(doc.meta.title),
+    order: Number(doc.meta.order),
+    partNumber: doc.meta.partNumber ?? null,
+    partName: part?.name ?? null,
+    updated: doc.meta.updated ? String(doc.meta.updated) : null,
+    html: out.html,
+    headings: out.headings,
+    sections: out.sections,
+    hub: out.hub,
+    tags: Object.keys(out.tags).length ? out.tags : null,
+    prev: i > 0 ? { slug: docs[i - 1].meta.slug, title: curly(docs[i - 1].meta.title) } : null,
+    next: i < docs.length - 1 ? { slug: docs[i + 1].meta.slug, title: curly(docs[i + 1].meta.title) } : null,
+  };
+});
+const changesOut = render(changes, where, pageFor);
+warnings += changesOut.warnings;
+
 // The rules the companion shows on a tap, read off the chapters so they match
 // the book and read offline: each one's opening, up to its first example,
 // table or subheading.
@@ -1445,6 +1547,7 @@ writeFileSync(
     changes: { title: curly(changes.meta.title), html: changesOut.html, headings: changesOut.headings },
     crew,
     crewLink: crewDoc ? `${pageFor.get(crewDoc.path)}#s-pregens` : "/rules/",
+    tagLinks,
     companion: { conditions, links: companionLinks, build, rules, party, worlds, places },
     learn,
   }),

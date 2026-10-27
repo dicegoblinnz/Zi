@@ -6,15 +6,16 @@
 //     last: { slug, id, t, c, at },            the newest place you read
 //     places: { [slug]: { id, t, at } },        where you're up to in each chapter
 //     marks: [{ k: "sec", slug, id, t, c, at }, { k: "card", id, t, at }],
-//     learn: { id, t, n, at } }                 the card you're on in the deck
+//     learn: { id, t, n, at },                  the card you're on in the deck
+//     done: { [slug]: [id] } }                  the sections you've read to the end
 const KEY = "zi-reading";
 
 function read() {
   try {
     const data = JSON.parse(localStorage.getItem(KEY) || "null");
-    if (data && data.v === 1) return { places: {}, marks: [], ...data };
+    if (data && data.v === 1) return { places: {}, marks: [], done: {}, ...data };
   } catch {}
-  return { v: 1, last: null, places: {}, marks: [], learn: null };
+  return { v: 1, last: null, places: {}, marks: [], learn: null, done: {} };
 }
 
 function write(data) {
@@ -54,5 +55,16 @@ export const learnAt = () => read().learn;
 export function setLearn(id, t, n) {
   const data = read();
   data.learn = { id, t, n, at: Date.now() };
+  write(data);
+}
+
+// The sections of a chapter you've read to the end, for its contents.
+export const doneIn = (slug) => read().done?.[slug] ?? [];
+
+export function setDone(slug, id) {
+  const data = read();
+  const list = data.done[slug] ?? [];
+  if (list.includes(id)) return;
+  data.done[slug] = [...list, id];
   write(data);
 }

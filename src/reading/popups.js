@@ -95,8 +95,14 @@ function more(key) {
 }
 
 // Straight to a section on this page, even one you've been to already, so
-// Back in the browser comes back to where you were.
+// Back in the browser comes back to where you were. A chapter read a section
+// at a time on a phone opens that section instead (setJump, from lookup.js).
+let onJump = null;
+export const setJump = (fn) => {
+  onJump = fn;
+};
 export function jump(hash) {
+  if (onJump?.(hash)) return;
   const target = hash && document.getElementById(decodeURIComponent(hash.slice(1)));
   if (!target) return window.scrollTo(0, 0);
   history.pushState(null, "", hash);
