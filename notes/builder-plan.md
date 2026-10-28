@@ -22,6 +22,7 @@ Mo's calls (27 and 28 Oct):
 - **Maps:** the faction web, a map sketched during the build, and her own picture with pins.
 - **Power comes only from people who turn up** (28 Oct). Stage 1 makes it true across the book.
 - **Fantasy next** (28 Oct, once he'd judged Medieval). Magic's tables come before building alone, so Fantasy deals as soon as it can.
+- **Magic's a known craft, and it's people only** (28 Oct). Everyone knows magic's real: wards, charms and healing are trades, rituals and bound souls stay behind closed doors, and about a faction in three runs on it. There are monsters, spirits, the dead and old things like dragons, and no other peoples.
 
 ## Calls Claude made
 
@@ -62,6 +63,10 @@ For Mo to say otherwise.
 - **A step dealt again reads only the steps before it** (stage 3), so a type's three cards never lean on the method and Want it had.
 - **A Face is one of the threats core gives its kind of faction** (stage 3), never the pack or the swarm for a guild.
 - **A specific name needs its kind's tags** (stage 3): the Hammermen need `metal`, the Wool Staplers `cloth`, Coyle's Barges a river, so names and types agree. `metal`, `cloth` and `stone` are core's tags for that.
+- **A magic row that only makes sense for a magic faction needs magic** (stage 4): its seat or kind has to carry the `magic` tag already, so a world's magic gathers on the factions that run on it, and the trades anyone could profit from stay open.
+- **A kind of faction can say its Face** (stage 4): a type row's `faces` are the three threats its Face is likeliest to be, instead of core's for its kind, so a coven's is likeliest a sorcerer.
+- **The Steeplands are Fantasy at Country with how strange at 0, and the Deep Company's Fantasy at Town** (stage 4): the Steeplands are an archipelago of trade cities where magic sits quietly, and the Deep Company's a company town over the old city. A frame's keyed by its board's id in the book and can set the dials the book gives it, and Add a faction deals at them.
+- **A twist's rows are written for the eras that deal it so far** (stage 4): Magic's are Medieval's. The stage that brings the next era to deal with Magic (Renaissance in a mix, then Modern for Urban fantasy) writes Magic's rows for it, and gives a row that only fits some eras a field saying which, a change to the tables and the engine.
 
 ## How a stage goes
 
@@ -179,7 +184,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
 3. **The core and Medieval** (tables). Needs 2. *Built 28 Oct 2026.*
    - `core.yaml`, the five regions in `regions.yaml`, `genres.yaml`, and the Medieval era, so Medieval deals.
    - `/deal/`, where Mo judges them.
-4. **Magic** (tables), so Fantasy deals, with the Steeplands' and the Deep Company's mixes. Needs 3.
+4. **Magic** (tables), so Fantasy deals, with the Steeplands' and the Deep Company's mixes. Needs 3. *Built 28 Oct 2026.*
 5. **Building alone.** Needs 3.
    - Build the world and Add a faction on the World screen, as the brief says, without the crew step: the setup, the asking, the ground, each faction's screens, the web and the checks, and Done, with Lock, Deal again, Write my own, Undo, Deal the rest and Deal it all. Genres without their packs show as coming.
    - A new part of `tests/check-accounts.mjs`: a Medieval world built alone with the signal dropping halfway, a faction added to a frame's board brought in from the book, and a player never getting `doc.build`.
