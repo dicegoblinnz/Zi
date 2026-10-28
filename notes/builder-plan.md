@@ -21,6 +21,7 @@ Mo's calls (27 and 28 Oct):
 - **Every character** leaves with a friend and a foe among the factions.
 - **Maps:** the faction web, a map sketched during the build, and her own picture with pins.
 - **Power comes only from people who turn up** (28 Oct). Stage 1 makes it true across the book.
+- **Fantasy next** (28 Oct, once he'd judged Medieval). Magic's tables come before building alone, so Fantasy deals as soon as it can.
 
 ## Calls Claude made
 
@@ -175,37 +176,37 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
 2. **The engine.** Needs 1. *Built 28 Oct 2026.*
    - The YAML's shape in `content/world-tables/`, read into `public/world-tables.json` with the build's checks, the engine, and `src/companion/world-record.js` with the Worker's checks on `doc.build`.
    - `scripts/deal-world.mjs` deals boards as text for a recipe and a seed. `tests/check-world-engine.mjs` deals 200 boards in every region for every named genre the packs cover, and every mix at one region: the same seed deals the same board, the checks pass with fallbacks in under 1 board in 20, no bag gives the same row twice in a board, and every step that needs a because has one. Until stage 3, it runs on a small made-up pack kept with the tests, never shipped.
-3. **The core and Medieval** (tables). Needs 2.
+3. **The core and Medieval** (tables). Needs 2. *Built 28 Oct 2026.*
    - `core.yaml`, the five regions in `regions.yaml`, `genres.yaml`, and the Medieval era, so Medieval deals.
    - `/deal/`, where Mo judges them.
-4. **Building alone.** Needs 3.
+4. **Magic** (tables), so Fantasy deals, with the Steeplands' and the Deep Company's mixes. Needs 3.
+5. **Building alone.** Needs 3.
    - Build the world and Add a faction on the World screen, as the brief says, without the crew step: the setup, the asking, the ground, each faction's screens, the web and the checks, and Done, with Lock, Deal again, Write my own, Undo, Deal the rest and Deal it all. Genres without their packs show as coming.
    - A new part of `tests/check-accounts.mjs`: a Medieval world built alone with the signal dropping halfway, a faction added to a frame's board brought in from the book, and a player never getting `doc.build`.
-5. **Magic** (tables), so Fantasy deals, with the Steeplands' and the Deep Company's mixes. Needs 3.
-6. **The web and the crew.** Needs 4.
+6. **The web and the crew.** Needs 5.
    - The faction web on the World screen and tab, as the brief says.
    - The crew step in building alone: a friend and a foe for each character in the campaign, written as those factions' threads toward the crew and named for the character, so standing counts them. The check for a faction that wants something the crew's got joins the rest.
 7. **The founding: the room and the asking.** Needs 6.
    - `doc.found` on the live table, as the brief says: she sets it up from her campaign page and opens it, players join from their World tab, turns go round, each age has its clock, and every phone stays in step, with a poor signal handled the way telegraphs handle it. Then the asking, with the dials set and the tension rolled.
    - A new part of `tests/check-accounts.mjs` plays it on three phones.
-8. **Renaissance** (tables), with the Gilded Court's and Brinewake's mixes. Needs 5.
+8. **Renaissance** (tables), with the Gilded Court's and Brinewake's mixes. Needs 4.
 9. **The founding: the ground and the founding.** Needs 7.
    - The dice pool for the seats, then her old powers, then the founders in reverse order with their questions, cards and threads, as the brief says.
 10. **Industrial and Steam** (tables), so Steampunk deals. Needs 3.
 11. **The founding: the strife.** Needs 9.
     - The tokens and the acts as the brief lists them, a raid rolled Power against Power, the old powers' acts dealt on her phone, the agendas climbing, the end, and a line of history for every act.
-12. **Modern** (tables), so Modern and Urban fantasy deal. Needs 5.
+12. **Modern** (tables), so Modern and Urban fantasy deal. Needs 4.
 13. **The founding: her pass and the hand-over.** Needs 11.
     - Her pass on her phone alone, the crew's friends and foes, the first job named, and the one tap that writes it all into the world, as the brief says, with How it came to be on the World screen.
 14. **Near future and Chrome** (tables), so Cyberpunk deals. Needs 3.
 15. **The sketch.** Needs 13.
     - Seats placed on a blank map in the ground, in both ways of building, made into one of the world's maps with a pin at each seat when the build's done, as the brief says.
-16. **Far future and the Stars** (tables), so Futuristic and Space fantasy deal, with Long Haul's mix. Needs 5.
+16. **Far future and the Stars** (tables), so Futuristic and Space fantasy deal, with Long Haul's mix. Needs 4.
 17. **The founding on the table screen.** Needs 13.
     - While the founding's on, the table screen shows the clock, the seats, the web growing and the history, built a field at a time in `screenOf()` like the rest of it, and never anything of hers.
 18. **Ruin and Dread** (tables), so Post-apocalyptic, Gothic horror and Dark fantasy deal, with Lanternfall's mix. Needs 10 and 12.
-19. **Ancient** (tables), so Ancient and Mythic deal. Needs 5.
-20. **When an agenda happens,** the builder deals its next agenda and its new asset or resource as cards to keep or swipe away, from the board as it stands then. Needs 4.
+19. **Ancient** (tables), so Ancient and Mythic deal. Needs 4.
+20. **When an agenda happens,** the builder deals its next agenda and its new asset or resource as cards to keep or swipe away, from the board as it stands then. Needs 5.
 
 Later, when Mo says so: the paper version (the tables and both ways of building, printed), and the Oracle checking a guess before it's written (*the river city trades with the hold*, at Likely).
 
