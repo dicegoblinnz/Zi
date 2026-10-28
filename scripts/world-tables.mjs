@@ -67,8 +67,8 @@
 //
 // genres.yaml: eras and twists (each id with its name), genres (each id with
 // name, era and twist if it has one) and frames (each frame's era, twist and
-// region, by the id of its board in the book, like deep-company, so Add a
-// faction fits a board she brought in).
+// region, and any dials the book sets, 0 to 2, by the id of its board in the
+// book, like deep-company, so Add a faction fits a board she brought in).
 //
 // A pack: fits (the regions it fits), seats, resources, assets, types (with
 // sizes and leans), methods, secrets, exceptions, wants (if it adds any) and
@@ -487,7 +487,16 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     const board = (book.boards ?? []).find((b) => b.id === k);
     if (!board) bad(where, `isn't one of the book's boards to bring in, by its id: ${(book.boards ?? []).map((b) => b.id).join(", ")}`);
     else if (!f || !out.eras[f.era] || (f.twist != null && !out.twists[f.twist]) || !REGIONS.includes(f.region)) bad(where, "needs an era, a region and maybe a twist that genres.yaml has");
-    else out.frames[k] = { name: board.name, era: f.era, twist: f.twist ?? null, region: f.region };
+    else {
+      // The dials a faction added to the board deals at, when the book says
+      // how the world sits: magic stays quiet in the Steeplands.
+      const dials = {};
+      for (const [d, v] of Object.entries(f.dials ?? {})) {
+        if (!DIALS.includes(d) || ![0, 1, 2].includes(v)) bad(where, `has a dial it can't set: ${d} ${v}`);
+        else dials[d] = v;
+      }
+      out.frames[k] = { name: board.name, era: f.era, twist: f.twist ?? null, region: f.region, dials };
+    }
   }
 
   // The packs.

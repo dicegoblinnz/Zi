@@ -109,6 +109,7 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
   broken("a type with too few Faces of its own", (s) => (s.twists.glimmer.types[0].faces = ["sorcerer", "sorcerer", "operator"]), "faces needs three threats, since a Face is dealt as three cards");
   broken("a frame that isn't one of the book's boards", (s) => (s.genres.frames["far-isles"] = { era: "dusk", region: "town" }), "frames.far-isles: isn't one of the book's boards to bring in");
   broken("a frame whose packs aren't in", (s) => (s.genres.frames["deep-company"].region = "country"), "frames.deep-company: can't deal at country till its packs are in");
+  broken("a frame with a dial it can't set", (s) => (s.genres.frames["deep-company"].dials = { strange: 3 }), "frames.deep-company: has a dial it can't set: strange 3");
   broken("a pack genres.yaml hasn't got", (s) => (s.eras.dawn = { fits: ["town"] }), "hasn't got an era called dawn");
   broken("too few names for a role", () => {}, "of the 4 seats it needs for", { minimums: true });
   broken("too few people who turn up", (s) => (s.eras.dusk.assets = s.eras.dusk.assets.slice(0, 6)), "of the 12 people who turn up it needs", { minimums: true });

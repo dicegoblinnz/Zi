@@ -17,50 +17,50 @@ seats:
   # Town: a street, a building or a square.
   - { text: "The Warded Bridge", role: passage, tags: [magic, river, road], regions: [town], notice: "Try crossing without paying, and your feet won't move." }
   - { text: "The Witch's Ferry", role: passage, tags: [magic, river], regions: [town], notice: "The ferrywoman takes a penny, or a year off your life." }
-  - { text: "The Green Witch's Acre", role: land, tags: [grain, magic], regions: [town], notice: "Three harvests a year off the same strip of ground." }
+  - { text: "The Green Witch's Acre", role: land, tags: [grain, magic], regions: [town], notice: "Three harvests every year from the same strip of ground." }
   - { text: "The Witchstone Pit", role: ground, tags: [magic, mine, stone], regions: [town], notice: "Blue stone that hums whenever someone casts a spell nearby." }
-  - { text: "Sigil Street", role: craft, tags: [guild, magic], regions: [town], notice: "A sigil over every door, and a queue at the busiest shop." }
+  - { text: "Sigil Street", role: craft, tags: [guild, magic], regions: [town], notice: "A sigil over every door, with a queue outside the busiest shop." }
   - { text: "The Lamp-Maker's", role: craft, tags: [magic], regions: [town], notice: "Lamps in the window that haven't needed oil in years." }
   - { text: "Charm Lane", role: trade, tags: [magic, market], regions: [town], notice: "Charms on strings in every window, and half of them work." }
   - { text: "The Crutch Shrine", role: belief, tags: [holy, magic], regions: [town], notice: "Fifty crutches nailed to the wall, left by people who walked home." }
   - { text: "The Speaking Gallows", role: office, tags: [law, magic], regions: [town], notice: "The hanged get asked who helped them, and they answer." }
   - { text: "The Penny Library", role: knowledge, tags: [magic], regions: [town], notice: "Spell-books lent by the hour, and a man to watch you read." }
-  - { text: "The Grey Mill", role: labour, tags: [grain, magic, old], regions: [town], notice: "It grinds from dusk to dawn, and nobody's seen who works it." }
-  - { text: "The Swan's Back Room", role: crime, tags: [magic, secret], regions: [town], notice: "Curses sold by the ounce, and every buyer gives a false name." }
+  - { text: "The Grey Mill", role: labour, tags: [grain, magic, old], regions: [town], notice: "It grinds from dusk to dawn with the miller fast asleep." }
+  - { text: "The Swan's Back Room", role: crime, tags: [magic, secret], regions: [town], notice: "Curses sold by the ounce to buyers who all give false names." }
   - { text: "The Dancing Stones", role: wonder, tags: [magic, old], regions: [town], notice: "They've moved again since last market day." }
-  - { text: "The Sealed Shop", role: wonder, tags: [magic, secret], regions: [town, city], notice: "Shut since its owner vanished, and somebody's still ringing up the till." }
+  - { text: "The Sealed Shop", role: wonder, tags: [magic, secret], regions: [town, city], notice: "Shut since its owner vanished, though the till still rings up sales." }
 
   # City: a district, a gate or a hall.
   - { text: "The Lamp Gate", role: passage, tags: [magic, wall], regions: [city], notice: "The gate-lamps burn red for anyone carrying a curse." }
   - { text: "The Tide Stair", role: passage, tags: [coast, magic], regions: [city], notice: "A stair to a jetty that's gone again by morning." }
-  - { text: "The Glasshouses", role: land, tags: [magic, wealth], regions: [city], notice: "Fruit out of season, grown under glass by a witch's light." }
+  - { text: "The Glasshouses", role: land, tags: [magic, wealth], regions: [city], notice: "Peaches in midwinter, grown under glass by a witch's light." }
   - { text: "The Undercroft Seams", role: ground, tags: [magic, mine, stone], regions: [city], notice: "Miners in the cellars, cutting out stone that holds a spell." }
   - { text: "The Spellwrights' Hall", role: craft, tags: [guild, magic], regions: [city], notice: "The guild's mark is on every ward sold in the city." }
-  - { text: "The Golem Yards", role: craft, tags: [magic, stone], regions: [city], notice: "Timber stacked by things that don't breathe, and a master shouting names." }
-  - { text: "The Bottle Market", role: trade, tags: [magic, market], regions: [city], notice: "Bottles of every colour, and a man who tastes each one first." }
+  - { text: "The Golem Yards", role: craft, tags: [magic, stone], regions: [city], notice: "Timber stacked by things that don't breathe, while a master shouts names." }
+  - { text: "The Bottle Market", role: trade, tags: [magic, market], regions: [city], notice: "Bottles of every colour, tasted first by a man with a twitch." }
   - { text: "The Weather Exchange", role: trade, tags: [coast, magic, market], regions: [city], notice: "Captains bidding for a fair wind, sold corked in a jar." }
   - { text: "The Mending Hall", role: belief, tags: [holy, magic], regions: [city], notice: "The sick go in one door, and most walk out the other." }
   - { text: "The Licensing House", role: office, tags: [law, magic, market], regions: [city], notice: "Every charm-seller in the city queues here for a stamped licence." }
-  - { text: "The Court of Truths", role: office, tags: [law, magic], regions: [city], notice: "A seer sits beside the judge, and nobody lies to her twice." }
-  - { text: "The Reading Halls", role: knowledge, tags: [magic], regions: [city], notice: "Black-gowned students, and a fire in the east wing that won't die." }
-  - { text: "The Night Docks", role: labour, tags: [coast, magic, old], regions: [city], notice: "Dead hands unload the ships at night, and someone collects their pay." }
-  - { text: "The Burned Quarter", role: crime, tags: [magic, poor], regions: [city], notice: "Burned black by a mage's mistake, and nobody's licensed down here." }
+  - { text: "The Court of Truths", role: office, tags: [law, magic], regions: [city], notice: "The seer beside the judge hears every lie in the room." }
+  - { text: "The Reading Halls", role: knowledge, tags: [magic], regions: [city], notice: "Students in black hurry past an east wing that won't stop burning." }
+  - { text: "The Night Docks", role: labour, tags: [coast, magic, old], regions: [city], notice: "Dead hands unload the night ships for a living master's wage." }
+  - { text: "The Burned Quarter", role: crime, tags: [magic, poor], regions: [city], notice: "A mage's mistake burned it black, so the unlicensed moved in." }
   - { text: "The Mirror Hall", role: wonder, tags: [magic, old], regions: [city], notice: "Every mirror shows the room the way it was a year ago." }
   - { text: "The Portrait Gallery", role: wonder, tags: [magic, wealth], regions: [city], notice: "The portraits blink, and the curator says it's the light." }
 
   # Country: a town, a pass, a forest or a fortress.
   - { text: "The Witchwood Road", role: passage, tags: [forest, magic, road], regions: [country], notice: "The road through the trees goes somewhere new every week." }
-  - { text: "The Sigil Pass", role: passage, tags: [hill, magic, road], regions: [country], notice: "A ward stretched across the road, and a toll-house to lift it." }
+  - { text: "The Sigil Pass", role: passage, tags: [hill, magic, road], regions: [country], notice: "A ward stretched across the road, lifted only at the toll-house." }
   - { text: "The Storm Coast", role: passage, tags: [coast, magic], regions: [country], notice: "Ships pay the storm-witches, or they don't get round the point." }
-  - { text: "The Charmed Vale", role: land, tags: [grain, magic], regions: [country], notice: "Fields that never flood, and a witch's sign cut in every gatepost." }
+  - { text: "The Charmed Vale", role: land, tags: [grain, magic], regions: [country], notice: "Fields that never flood, with a witch's sign cut in every gatepost." }
   - { text: "The Blue Quarries", role: ground, tags: [hill, magic, mine, stone], regions: [country], notice: "The quarrymen glow faintly after a long day's cutting." }
   - { text: "Brightforge", role: craft, tags: [magic, metal], regions: [country], notice: "Blades that never dull, sold at three times the price." }
   - { text: "The Moonfair", role: trade, tags: [magic, market], regions: [country], notice: "A fair at every full moon, never in the same field twice." }
   - { text: "The Answering Hill", role: belief, tags: [hill, holy, magic], regions: [country], notice: "Pray at the top and you'll get your answer, if you live." }
-  - { text: "The Glass Keep", role: office, tags: [crown, magic, war], regions: [country], notice: "A fortress with no gate, and its soldiers come and go anyway." }
-  - { text: "Quillmere", role: knowledge, tags: [magic], regions: [country], notice: "Students in every lodging, and landladies who know a spell or two." }
-  - { text: "The Bone Fields", role: labour, tags: [magic, old, war], regions: [country], notice: "An old battlefield, and a necromancer who rents out its dead." }
-  - { text: "The Blind Mile", role: crime, tags: [magic, road], regions: [country], notice: "Purses go missing on it, and nobody ever sees the thief." }
+  - { text: "The Glass Keep", role: office, tags: [crown, magic, war], regions: [country], notice: "A fortress with no gate, though its soldiers come and go anyway." }
+  - { text: "Quillmere", role: knowledge, tags: [magic], regions: [country], notice: "Students in every lodging, with landladies who know a spell or two." }
+  - { text: "The Bone Fields", role: labour, tags: [magic, old, war], regions: [country], notice: "An old battlefield where a necromancer rents out the dead." }
+  - { text: "The Blind Mile", role: crime, tags: [magic, road], regions: [country], notice: "Travellers reach the far end lighter, without ever seeing a thief." }
   - { text: "The Dragon's Fell", role: wonder, tags: [hill, magic, old], regions: [country], notice: "Burned rock for a mile, and sheep left out as rent." }
   - { text: "The Sleeping Wood", role: wonder, tags: [forest, magic, old], regions: [country], notice: "Woodcutters lie down in it for a nap and wake up old." }
 
@@ -68,16 +68,16 @@ seats:
   - { text: "The Ember Sea", role: passage, tags: [coast, magic], regions: [world], notice: "Ships cross it under wards, and the wards don't always hold." }
   - { text: "The Spirit Road", role: passage, tags: [magic, old, road], regions: [world], notice: "The dead walk this road too, and they don't give way." }
   - { text: "The Blessed Lands", role: land, tags: [grain, holy, magic], regions: [world], notice: "A whole country that hasn't had a bad harvest in a century." }
-  - { text: "The Glass Desert", role: ground, tags: [magic, wild], regions: [world], notice: "Sand turned to glass by something that fell, and the glass sells." }
+  - { text: "The Glass Desert", role: ground, tags: [magic, wild], regions: [world], notice: "Miles of sand fused into glass, sold off by the cartload." }
   - { text: "The Enchanters' Coast", role: craft, tags: [coast, magic], regions: [world], notice: "Every blade and lock made here is enchanted, and priced like it." }
   - { text: "The Charm Ports", role: trade, tags: [coast, magic, market], regions: [world], notice: "Philtres and bottled storms, sold by the crate off the quay." }
-  - { text: "The Saints' Kingdom", role: belief, tags: [crown, holy, magic], regions: [world], notice: "Its kings are healers, and the sick cross the world to them." }
+  - { text: "The Saints' Kingdom", role: belief, tags: [crown, holy, magic], regions: [world], notice: "The sick cross the world to be touched by its healer-kings." }
   - { text: "The Sigil Empire", role: office, tags: [crown, law, magic], regions: [world], notice: "Every law's written as a ward, and breaking one burns." }
   - { text: "The College Isles", role: knowledge, tags: [coast, magic], regions: [world], notice: "An island for every college, and every college spying on the rest." }
-  - { text: "The Clay Kingdom", role: labour, tags: [magic, stone], regions: [world], notice: "Golems work the fields, and the people have forgotten how." }
+  - { text: "The Clay Kingdom", role: labour, tags: [magic, stone], regions: [world], notice: "Golems work the fields for people who've forgotten how." }
   - { text: "The Drifting Isles", role: crime, tags: [coast, magic], regions: [world], notice: "Pirate islands that won't stay where the maps put them." }
   - { text: "The Dragons' Spine", role: wonder, tags: [hill, magic, old], regions: [world], notice: "Mountains where three dragons sleep, and one's started stirring." }
-  - { text: "The Grey Waste", role: wonder, tags: [magic, old, wild], regions: [world], notice: "Where the last great ritual went wrong, and nothing grows back." }
+  - { text: "The Grey Waste", role: wonder, tags: [magic, old, wild], regions: [world], notice: "Where the last great ritual went wrong, nothing's grown back." }
 
 # Where the keep comes from, as the book's cards write a resource. The trades
 # anyone could profit from are open, and the rest need magic.
@@ -297,18 +297,18 @@ wants:
 secrets:
   - { tag: "Spent Its Soul", more: "Its leader's used up every scrap of her soul on spells.", ways: ["She hasn't slept or dreamed in years", "Her face doesn't show in mirrors"], tags: [magic] }
   - { tag: "Every Spell Costs Someone", more: "Its mages never pay for their magic, because their servants do.", ways: ["Servants who age too fast", "Who falls sick after a big spell"], needs: [magic], tags: [magic, poor] }
-  - { tag: "{rival}'s Ghost Is Ours", more: "The spirit {rival} listens to has always worked for it.", ways: ["{rival}'s séance room", "A second voice under the ghost's"], tags: [magic, old] }
+  - { tag: "{rival}'s Ghost Is Ours", more: "The spirit that whispers to {rival} has always worked for it.", ways: ["{rival}'s séance room", "A second voice under the ghost's"], tags: [magic, old] }
   - { tag: "Cursed {rival}", more: "The bad luck dogging {rival} for years is its doing.", ways: ["A hex-doll under {rival}'s floor", "The witch it paid and never thanked"], tags: [magic, secret] }
-  - { tag: "The Familiar Gives the Orders", more: "Its leader's cat makes every decision, and he just nods.", ways: ["Orders given with nobody else in the room", "A cat at every meeting"], tags: [magic] }
+  - { tag: "The Cat Decides", more: "Its leader's cat makes every decision, and he just nods.", ways: ["Orders given with nobody else in the room", "A cat at every meeting"], tags: [magic] }
   - { tag: "Made, Not Born", more: "Its leader's a construct, and he doesn't know it.", ways: ["A seam behind his ear", "The workshop that made him"], tags: [magic] }
   - { tag: "Pays the Dragon", more: "It feeds the dragon to burn its enemies' fields.", ways: ["Herds driven up the mountain at night", "Only its rivals ever get burned"], tags: [old], rare: true }
   - { tag: "Stolen from {rival}", more: "Its great spell-book came out of {rival}'s library.", ways: ["{rival}'s mark, scraped off the binding", "The thief, still drinking in town"], tags: [magic, secret] }
-  - { tag: "The Dead Do the Work", more: "Half its workers died years ago, and they're still at it.", ways: ["They never eat or drink", "The smell in hot weather"], tags: [magic, old] }
-  - { tag: "The Guest in the Cellar", more: "What it summoned for one job never went home.", ways: ["Scratching under the floor at night", "The summoner who went missing"], tags: [magic, old] }
-  - { tag: "{rival} Holds Its Soul", more: "Its leader's soul is locked in {rival}'s vault.", ways: ["{rival}'s vault-keeper", "Its leader goes pale at {rival}'s name"], tags: [magic, debt] }
-  - { tag: "The Ward Keeps Something In", more: "The great ward was never there to keep anything out.", ways: ["Which way the sigils face", "The first warden's diary"], needs: [magic], tags: [magic, wall] }
+  - { tag: "Worked by the Dead", more: "Half its workers died years ago, and they're still at it.", ways: ["They never eat or drink", "The smell in hot weather"], tags: [magic, old] }
+  - { tag: "The Guest Downstairs", more: "What it summoned for one job never went home.", ways: ["Scratching under the floor at night", "The summoner who went missing"], tags: [magic, old] }
+  - { tag: "Soul Held by {rival}", more: "Its leader's soul is locked in {rival}'s vault.", ways: ["{rival}'s vault-keeper", "Its leader goes pale at {rival}'s name"], tags: [magic, debt] }
+  - { tag: "The Ward Faces Inward", more: "The great ward's there to hold something in, and always was.", ways: ["Which way the sigils face", "The first warden's diary"], needs: [magic], tags: [magic, wall] }
   - { tag: "Burned the Old Masters", more: "It set the fire that put it in charge.", ways: ["The one apprentice who got out", "Scorch marks in its founder's old room"], tags: [magic, blood] }
-  - { tag: "A Charm That Never Worked", more: "Its famous protection's a fake, and it's just been lucky.", ways: ["A ward-maker who checked it", "The one night it failed"], tags: [magic] }
+  - { tag: "The Charm's a Fake", more: "Its famous protection's a fake, and it's just been lucky.", ways: ["A ward-maker who checked it", "The one night it failed"], tags: [magic] }
   - { tag: "Taught {rival} Everything", more: "{rival}'s best mage is its runaway apprentice, and owes it.", ways: ["The apprentice's old indenture", "A spell nobody outside it should know"], needs: [magic], tags: [magic] }
 
 # Each breaks the logic on purpose, with its reason.
@@ -320,7 +320,7 @@ exceptions:
   - { text: "It won't heal anyone", when: [faith, magic], drops: [healers], reason: "because its saint asks a price nobody should pay" }
   - { text: "It won't open its books to anyone", when: [keepers, magic], drops: [knowledge], gives: [secret], reason: "because the last reader let something out of one" }
   - { text: "It won't work for the crown", when: [magic, soldiers], drops: [office, crown], reason: "because the crown hanged its first captain as a witch" }
-  - { text: "It won't ward the city", when: [magic, makers], drops: [office], gives: [debt], reason: "because the council still owes for the last one" }
+  - { text: "It won't make wards for the council", when: [guild, magic, makers], drops: [office], gives: [debt], reason: "because the council still owes for the last one" }
 
 names:
   factions:
@@ -364,7 +364,7 @@ names:
     - { text: "The Free Souls", role: rebels, needs: [magic, old] }
     - { text: "The Green Banners", role: rebels, needs: [magic, war] }
     - { text: "The Old College", role: keepers, needs: [magic] }
-    - { text: "The Inkbound", role: keepers, needs: [magic] }
+    - { text: "The Black Gowns", role: keepers, needs: [magic] }
     - { text: "The Open Eye", role: keepers, needs: [magic] }
     - { text: "The Night Library", role: keepers, needs: [magic] }
     - { text: "The Hill King", role: old, needs: [hill, magic] }

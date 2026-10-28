@@ -308,7 +308,8 @@ function drawTables() {
     ),
   );
   const frames = Object.entries(T.frames ?? {});
-  if (frames.length) parts.push(table("The book’s boards", frames.map(([k, f]) => row(f.name ?? k, null, esc(`${genreName(f)} at ${T.regions[f.region]?.name ?? f.region}, for a faction added to it`)))));
+  const setDials = (f) => Object.entries(f.dials ?? {}).map(([k, v]) => `${DIAL_NAMES[k] ?? k} ${v} of 2`);
+  if (frames.length) parts.push(table("The book’s boards", frames.map(([k, f]) => row(f.name ?? k, null, esc([`${genreName(f)} at ${T.regions[f.region]?.name ?? f.region}`, ...setDials(f)].join(" · ") + ", for a faction added to it")))));
   for (const pack of Object.values(T.packs)) {
     parts.push(`</section><section class="dl-partsec"><h2 class="dl-part">${esc(pack.name)}</h2><p class="dl-tnote">${esc(`${pack.kind === "era" ? "An era" : "A twist"}, at ${pack.fits.map((x) => T.regions[x].name).join(", ")}.`)}</p>`);
     for (const region of pack.fits) {
