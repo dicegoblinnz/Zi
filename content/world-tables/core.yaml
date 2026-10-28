@@ -6,7 +6,7 @@
 
 seeds: [ash, lantern, ford, salt, crow, ember, mill, gate, rook, briar, tide, flint, moss, bell, iron, thorn, hollow, copper, gull, heron, kettle, lark, marsh, oak, pike, quill, raven, rust, sable, slate, smoke, sorrel, stag, stone, tallow, tar, thistle, vale, willow, wolf, yarrow, amber, anchor, barrow, beacon, bramble, candle, cinder, clay, coal, cobble, dusk, fallow, fern, gorse, hearth, hound, ivy, juniper, keel, linden, mallow, needle, nettle, otter, pebble, reed, rowan, saffron, sedge, sparrow, spindle, tinder, umber, vellum, wick, yew]
 
-tags: [river, coast, hill, forest, marsh, road, wall, wild, market, wealth, poor, mine, grain, metal, cloth, stone, debt, guild, law, crown, war, blood, holy, old, secret, plague, foreign]
+tags: [river, coast, hill, forest, marsh, road, wall, wild, market, wealth, poor, mine, grain, metal, cloth, stone, debt, guild, law, crown, war, blood, holy, old, secret, plague, foreign, magic]
 
 keeps:
   passage: "Where people and goods pass through, and what it costs them"
@@ -79,7 +79,7 @@ methods:
   - { text: "Charm, parties, gifts.", tags: [wealth, crown], leans: [influential, friends-at-court] }
   - { text: "Patience.", tags: [old, land], leans: [rooted, old-debts, vault] }
   - { text: "Other people's hands.", tags: [secret, wealth], leans: [hired-swords, blackmail, judge-in-its-pocket] }
-  - { text: "Magic, or something stranger.", tags: [old], rare: true, strange: true, leans: [wonder, bound-spirit, relic] }
+  - { text: "Magic, or something stranger.", tags: [old, magic], rare: true, strange: true, leans: [wonder, bound-spirit, relic] }
 
 # Building a Faction's Its secret, row for row, then a few more. The tag's the
 # hidden tag itself, written the way the book's cards write one.

@@ -244,6 +244,10 @@ const meta = (r, { role = true } = {}) => {
   if (r.needs?.length) bits.push(`needs ${r.needs.join(" and ")}`);
   if (r.out?.length) bits.push(`never with ${r.out.join(", ")}`);
   if (r.leans?.length) bits.push(`leans to ${r.leans.map((l) => T.book.assets[l]?.name ?? l).join(", ")}`);
+  if (r.faces?.length) {
+    const who = r.faces.map((x) => (T.book.threats.find((t) => t.key === x)?.name ?? x).toLowerCase());
+    bits.push(`its Face is ${who.length > 1 ? `${who.slice(0, -1).join(", ")} or ${who.at(-1)}` : who[0]}`);
+  }
   if (r.die) bits.push(`d${r.die}`);
   if (r.dials && Object.keys(r.dials).length) bits.push(Object.entries(r.dials).map(([k, v]) => `${v > 0 ? "more" : "less"} ${k}`).join(", "));
   if (r.w === 1) bits.push("rare");
@@ -303,6 +307,8 @@ function drawTables() {
       { open: true },
     ),
   );
+  const frames = Object.entries(T.frames ?? {});
+  if (frames.length) parts.push(table("The book’s boards", frames.map(([k, f]) => row(f.name ?? k, null, esc(`${genreName(f)} at ${T.regions[f.region]?.name ?? f.region}, for a faction added to it`)))));
   for (const pack of Object.values(T.packs)) {
     parts.push(`</section><section class="dl-partsec"><h2 class="dl-part">${esc(pack.name)}</h2><p class="dl-tnote">${esc(`${pack.kind === "era" ? "An era" : "A twist"}, at ${pack.fits.map((x) => T.regions[x].name).join(", ")}.`)}</p>`);
     for (const region of pack.fits) {

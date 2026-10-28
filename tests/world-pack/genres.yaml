@@ -7,4 +7,4 @@ genres:
   dusk: { name: Dusk, era: dusk }
   glimmering-dusk: { name: Glimmering Dusk, era: dusk, twist: glimmer }
 frames:
-  test-frame: { era: dusk, twist: glimmer, region: city }
+  deep-company: { era: dusk, twist: glimmer, region: city }

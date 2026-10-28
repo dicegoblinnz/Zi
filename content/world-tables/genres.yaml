@@ -31,4 +31,8 @@ genres:
   post-apocalyptic: { name: Post-apocalyptic, era: modern, twist: ruin }
   dark-fantasy: { name: Dark fantasy, era: medieval, twist: dread }
   space-fantasy: { name: Space fantasy, era: far-future, twist: magic }
-frames: {}
+frames:
+  # The book's own world: an archipelago of trade cities, so Country.
+  steeplands: { era: medieval, twist: magic, region: country }
+  # Lanternhead and the city under the mountain: a company town.
+  deep-company: { era: medieval, twist: magic, region: town }

@@ -10,8 +10,10 @@
 //    doesn't know, a slot nothing fills, a role with too few names, a Secret
 //    without its two ways in, an agenda with nothing to aim at and a row
 //    written twice are each a problem, and so are too few faction names,
-//    people's names or strange Secrets. A row keeps its id when rows are
-//    added round it, and the tables themselves have no problems.
+//    people's names or strange Secrets, a type's own Faces that aren't three
+//    of the Threat Builder's, and a frame that isn't one of the book's boards
+//    or can't deal yet. A row keeps its id when rows are added round it, and
+//    the tables themselves have no problems.
 // 2. 200 boards in every region for every named genre the packs cover, and
 //    200 for every mix at one region: the same seed deals the same board, the
 //    checks pass with a fallback in under 1 board in 20, no bag gives the same
@@ -19,9 +21,9 @@
 //    card adds up (Power from people who turn up and the die its size picked,
 //    every asset paid for bar its needs, nobody holding two of the same
 //    people, no two factions with the same asset that does one thing, a
-//    rival each, every agenda aimed at something on the board, a seat each
-//    and two to spare, and every slot filled). A bag only gives a row twice
-//    once it's run out, and says so.
+//    rival each, every agenda aimed at something on the board, a Face its
+//    kind of faction can be, a seat each and two to spare, and every slot
+//    filled). A bag only gives a row twice once it's run out, and says so.
 // 3. Dealing one step again: the next card in its own stream, never the one
 //    it had, every other faction and every earlier step as they were, a
 //    locked step left alone when one before it's dealt again, and a locked
@@ -41,7 +43,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { apply, blank, forPlayer, readable, undoOf } from "../src/companion/board.js";
-import { BAGS, CHECKS, canDeal, cardsOf, choose, dealRest, dealWorld, lock, newSeed, options, recordOf, redeal, resume, rngOf, SIZES, start } from "../src/companion/world-engine.js";
+import { BAGS, CHECKS, canDeal, cardsOf, choose, dealRest, dealWorld, lock, newSeed, options, poolOf, recordOf, redeal, resume, rngOf, SIZES, start } from "../src/companion/world-engine.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 
@@ -103,6 +105,10 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
   broken("a threat the Threat Builder hasn't got", (s) => (s.core.faces.house = ["dragon"]), "a threat the Threat Builder hasn't got: dragon");
   broken("a tie's other side that's too long", (s) => s.core.ties.push({ kind: "rival", text: "{b} took our mill", back: "We took the mill from {b} on a wet night in the spring" }), "a line's twelve words at most: We took");
   broken("a kind of faction with too few Faces", (s) => (s.core.faces.house = ["commander", "champion"]), "faces needs three threats for house", { minimums: true });
+  broken("a type's own Face the Threat Builder hasn't got", (s) => (s.twists.glimmer.types[0].faces = ["dragon", "sorcerer", "operator"]), "faces has a threat the Threat Builder hasn't got: dragon");
+  broken("a type with too few Faces of its own", (s) => (s.twists.glimmer.types[0].faces = ["sorcerer", "sorcerer", "operator"]), "faces needs three threats, since a Face is dealt as three cards");
+  broken("a frame that isn't one of the book's boards", (s) => (s.genres.frames["far-isles"] = { era: "dusk", region: "town" }), "frames.far-isles: isn't one of the book's boards to bring in");
+  broken("a frame whose packs aren't in", (s) => (s.genres.frames["deep-company"].region = "country"), "frames.deep-company: can't deal at country till its packs are in");
   broken("a pack genres.yaml hasn't got", (s) => (s.eras.dawn = { fits: ["town"] }), "hasn't got an era called dawn");
   broken("too few names for a role", () => {}, "of the 4 seats it needs for", { minimums: true });
   broken("too few people who turn up", (s) => (s.eras.dusk.assets = s.eras.dusk.assets.slice(0, 6)), "of the 12 people who turn up it needs", { minimums: true });
@@ -200,6 +206,11 @@ for (const g of groups) {
       seatsHeld.add(f.seat);
       const ag = W.factions[i].agenda;
       for (const aim of ag?.aims ?? []) if (ag.at?.[aim] == null) fail(`${who}: its agenda doesn't aim at a ${aim}`);
+      // A Face is one of the threats its type's own row gives, or its kind's.
+      const type = W.factions[i].type;
+      const own = type?.id ? poolOf(T, g.recipe).types.find((r) => r.id === type.id)?.faces : null;
+      const kinds = own?.length ? own : T.core.faces[type?.role] ?? [];
+      if (kinds.length && !kinds.includes(W.factions[i].face?.threat)) fail(`${who}: its Face is ${W.factions[i].face?.threat}, which isn't one its kind of faction can be`);
       const words = [f.name, f.about, f.want, f.face, f.secret, f.more, ...f.res.map((r) => r.text), ...f.assets.map((a) => a.text), ...f.agendas.map((a) => a.text), ...f.threads.map((t) => t.text)];
       for (const w of words) if (/[{}]/.test(w)) fail(`${who}: a slot nobody filled in "${w}"`);
       for (const t of f.threads) if (!Number.isInteger(t.to) || t.to === i || t.to >= C.factions.length) fail(`${who}: a thread toward nobody`);

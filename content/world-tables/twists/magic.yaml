@@ -1,0 +1,392 @@
+# Magic: the twist that makes Medieval into Fantasy (and, once their eras are
+# in, Mythic, Urban fantasy and Space fantasy). Everyone knows magic's real
+# (Mo's pick, 28 Oct). Wards, charms and healing are trades with shops, guilds
+# and licences, and the big magic (rituals, bound souls, summoning and the
+# dead) stays behind closed doors. It's people only: monsters, spirits, the
+# dead and old things like dragons, but no other peoples. The rows lean on the
+# book's own magic: the schools, the five kinds of practitioner in Magic in
+# the World, souls that can be spent, and summoning. Every row's strange, so
+# the "how strange" dial sets how often they come up, and at the middle dial
+# about a faction in three runs on magic. A row tagged magic makes the magic
+# rows after it likelier on its card, and one that needs magic only goes to a
+# faction whose seat or kind is magic already, so a wool guild doesn't sell
+# familiars. Written for Medieval, the only era so far.
+fits: [town, city, country, world]
+
+seats:
+  # Town: a street, a building or a square.
+  - { text: "The Warded Bridge", role: passage, tags: [magic, river, road], regions: [town], notice: "Try crossing without paying, and your feet won't move." }
+  - { text: "The Witch's Ferry", role: passage, tags: [magic, river], regions: [town], notice: "The ferrywoman takes a penny, or a year off your life." }
+  - { text: "The Green Witch's Acre", role: land, tags: [grain, magic], regions: [town], notice: "Three harvests a year off the same strip of ground." }
+  - { text: "The Witchstone Pit", role: ground, tags: [magic, mine, stone], regions: [town], notice: "Blue stone that hums whenever someone casts a spell nearby." }
+  - { text: "Sigil Street", role: craft, tags: [guild, magic], regions: [town], notice: "A sigil over every door, and a queue at the busiest shop." }
+  - { text: "The Lamp-Maker's", role: craft, tags: [magic], regions: [town], notice: "Lamps in the window that haven't needed oil in years." }
+  - { text: "Charm Lane", role: trade, tags: [magic, market], regions: [town], notice: "Charms on strings in every window, and half of them work." }
+  - { text: "The Crutch Shrine", role: belief, tags: [holy, magic], regions: [town], notice: "Fifty crutches nailed to the wall, left by people who walked home." }
+  - { text: "The Speaking Gallows", role: office, tags: [law, magic], regions: [town], notice: "The hanged get asked who helped them, and they answer." }
+  - { text: "The Penny Library", role: knowledge, tags: [magic], regions: [town], notice: "Spell-books lent by the hour, and a man to watch you read." }
+  - { text: "The Grey Mill", role: labour, tags: [grain, magic, old], regions: [town], notice: "It grinds from dusk to dawn, and nobody's seen who works it." }
+  - { text: "The Swan's Back Room", role: crime, tags: [magic, secret], regions: [town], notice: "Curses sold by the ounce, and every buyer gives a false name." }
+  - { text: "The Dancing Stones", role: wonder, tags: [magic, old], regions: [town], notice: "They've moved again since last market day." }
+  - { text: "The Sealed Shop", role: wonder, tags: [magic, secret], regions: [town, city], notice: "Shut since its owner vanished, and somebody's still ringing up the till." }
+
+  # City: a district, a gate or a hall.
+  - { text: "The Lamp Gate", role: passage, tags: [magic, wall], regions: [city], notice: "The gate-lamps burn red for anyone carrying a curse." }
+  - { text: "The Tide Stair", role: passage, tags: [coast, magic], regions: [city], notice: "A stair to a jetty that's gone again by morning." }
+  - { text: "The Glasshouses", role: land, tags: [magic, wealth], regions: [city], notice: "Fruit out of season, grown under glass by a witch's light." }
+  - { text: "The Undercroft Seams", role: ground, tags: [magic, mine, stone], regions: [city], notice: "Miners in the cellars, cutting out stone that holds a spell." }
+  - { text: "The Spellwrights' Hall", role: craft, tags: [guild, magic], regions: [city], notice: "The guild's mark is on every ward sold in the city." }
+  - { text: "The Golem Yards", role: craft, tags: [magic, stone], regions: [city], notice: "Timber stacked by things that don't breathe, and a master shouting names." }
+  - { text: "The Bottle Market", role: trade, tags: [magic, market], regions: [city], notice: "Bottles of every colour, and a man who tastes each one first." }
+  - { text: "The Weather Exchange", role: trade, tags: [coast, magic, market], regions: [city], notice: "Captains bidding for a fair wind, sold corked in a jar." }
+  - { text: "The Mending Hall", role: belief, tags: [holy, magic], regions: [city], notice: "The sick go in one door, and most walk out the other." }
+  - { text: "The Licensing House", role: office, tags: [law, magic, market], regions: [city], notice: "Every charm-seller in the city queues here for a stamped licence." }
+  - { text: "The Court of Truths", role: office, tags: [law, magic], regions: [city], notice: "A seer sits beside the judge, and nobody lies to her twice." }
+  - { text: "The Reading Halls", role: knowledge, tags: [magic], regions: [city], notice: "Black-gowned students, and a fire in the east wing that won't die." }
+  - { text: "The Night Docks", role: labour, tags: [coast, magic, old], regions: [city], notice: "Dead hands unload the ships at night, and someone collects their pay." }
+  - { text: "The Burned Quarter", role: crime, tags: [magic, poor], regions: [city], notice: "Burned black by a mage's mistake, and nobody's licensed down here." }
+  - { text: "The Mirror Hall", role: wonder, tags: [magic, old], regions: [city], notice: "Every mirror shows the room the way it was a year ago." }
+  - { text: "The Portrait Gallery", role: wonder, tags: [magic, wealth], regions: [city], notice: "The portraits blink, and the curator says it's the light." }
+
+  # Country: a town, a pass, a forest or a fortress.
+  - { text: "The Witchwood Road", role: passage, tags: [forest, magic, road], regions: [country], notice: "The road through the trees goes somewhere new every week." }
+  - { text: "The Sigil Pass", role: passage, tags: [hill, magic, road], regions: [country], notice: "A ward stretched across the road, and a toll-house to lift it." }
+  - { text: "The Storm Coast", role: passage, tags: [coast, magic], regions: [country], notice: "Ships pay the storm-witches, or they don't get round the point." }
+  - { text: "The Charmed Vale", role: land, tags: [grain, magic], regions: [country], notice: "Fields that never flood, and a witch's sign cut in every gatepost." }
+  - { text: "The Blue Quarries", role: ground, tags: [hill, magic, mine, stone], regions: [country], notice: "The quarrymen glow faintly after a long day's cutting." }
+  - { text: "Brightforge", role: craft, tags: [magic, metal], regions: [country], notice: "Blades that never dull, sold at three times the price." }
+  - { text: "The Moonfair", role: trade, tags: [magic, market], regions: [country], notice: "A fair at every full moon, never in the same field twice." }
+  - { text: "The Answering Hill", role: belief, tags: [hill, holy, magic], regions: [country], notice: "Pray at the top and you'll get your answer, if you live." }
+  - { text: "The Glass Keep", role: office, tags: [crown, magic, war], regions: [country], notice: "A fortress with no gate, and its soldiers come and go anyway." }
+  - { text: "Quillmere", role: knowledge, tags: [magic], regions: [country], notice: "Students in every lodging, and landladies who know a spell or two." }
+  - { text: "The Bone Fields", role: labour, tags: [magic, old, war], regions: [country], notice: "An old battlefield, and a necromancer who rents out its dead." }
+  - { text: "The Blind Mile", role: crime, tags: [magic, road], regions: [country], notice: "Purses go missing on it, and nobody ever sees the thief." }
+  - { text: "The Dragon's Fell", role: wonder, tags: [hill, magic, old], regions: [country], notice: "Burned rock for a mile, and sheep left out as rent." }
+  - { text: "The Sleeping Wood", role: wonder, tags: [forest, magic, old], regions: [country], notice: "Woodcutters lie down in it for a nap and wake up old." }
+
+  # World: a country, a sea or a mountain range.
+  - { text: "The Ember Sea", role: passage, tags: [coast, magic], regions: [world], notice: "Ships cross it under wards, and the wards don't always hold." }
+  - { text: "The Spirit Road", role: passage, tags: [magic, old, road], regions: [world], notice: "The dead walk this road too, and they don't give way." }
+  - { text: "The Blessed Lands", role: land, tags: [grain, holy, magic], regions: [world], notice: "A whole country that hasn't had a bad harvest in a century." }
+  - { text: "The Glass Desert", role: ground, tags: [magic, wild], regions: [world], notice: "Sand turned to glass by something that fell, and the glass sells." }
+  - { text: "The Enchanters' Coast", role: craft, tags: [coast, magic], regions: [world], notice: "Every blade and lock made here is enchanted, and priced like it." }
+  - { text: "The Charm Ports", role: trade, tags: [coast, magic, market], regions: [world], notice: "Philtres and bottled storms, sold by the crate off the quay." }
+  - { text: "The Saints' Kingdom", role: belief, tags: [crown, holy, magic], regions: [world], notice: "Its kings are healers, and the sick cross the world to them." }
+  - { text: "The Sigil Empire", role: office, tags: [crown, law, magic], regions: [world], notice: "Every law's written as a ward, and breaking one burns." }
+  - { text: "The College Isles", role: knowledge, tags: [coast, magic], regions: [world], notice: "An island for every college, and every college spying on the rest." }
+  - { text: "The Clay Kingdom", role: labour, tags: [magic, stone], regions: [world], notice: "Golems work the fields, and the people have forgotten how." }
+  - { text: "The Drifting Isles", role: crime, tags: [coast, magic], regions: [world], notice: "Pirate islands that won't stay where the maps put them." }
+  - { text: "The Dragons' Spine", role: wonder, tags: [hill, magic, old], regions: [world], notice: "Mountains where three dragons sleep, and one's started stirring." }
+  - { text: "The Grey Waste", role: wonder, tags: [magic, old, wild], regions: [world], notice: "Where the last great ritual went wrong, and nothing grows back." }
+
+# Where the keep comes from, as the book's cards write a resource. The trades
+# anyone could profit from are open, and the rest need magic.
+resources:
+  - { text: "Ward Tolls", role: passage, tags: [magic, road] }
+  - { text: "Safe-Passage Charms", role: passage, tags: [magic, road] }
+  - { text: "Storm Money", role: passage, tags: [coast, magic], needs: [magic] }
+  - { text: "Witch-Grown Harvests", role: land, tags: [grain, magic] }
+  - { text: "Herds the Wolves Won't Touch", role: land, tags: [magic, wild] }
+  - { text: "Fruit Out of Season", role: land, tags: [magic, wealth] }
+  - { text: "Witchstone", role: ground, tags: [magic, mine, stone] }
+  - { text: "Dragon Glass", role: ground, tags: [magic, old, wild] }
+  - { text: "Sky-Iron", role: ground, tags: [magic, metal] }
+  - { text: "Ward-Making", role: craft, tags: [guild, magic], needs: [magic] }
+  - { text: "Potions and Philtres", role: craft, tags: [magic], needs: [magic] }
+  - { text: "Everlasting Lamps", role: craft, tags: [magic], needs: [magic] }
+  - { text: "Spell-Cut Blades", role: craft, tags: [magic, metal], needs: [magic] }
+  - { text: "The Charm Trade", role: trade, tags: [magic, market] }
+  - { text: "Bottled Winds", role: trade, tags: [coast, magic, market] }
+  - { text: "Familiars for Sale", role: trade, tags: [magic, market], needs: [magic] }
+  - { text: "Healing Fees", role: belief, tags: [holy, magic], needs: [magic] }
+  - { text: "Blessings at the Door", role: belief, tags: [holy, magic], needs: [holy] }
+  - { text: "Gifts from the Healed", role: belief, tags: [holy, magic], needs: [magic] }
+  - { text: "Spell Licences", role: office, tags: [law, magic] }
+  - { text: "Truth-Sayers' Fees", role: office, tags: [law, magic], needs: [magic] }
+  - { text: "The Ward Tax", role: office, tags: [crown, magic, wall] }
+  - { text: "Spell-Books", role: knowledge, tags: [magic], needs: [magic] }
+  - { text: "Fees from Would-Be Mages", role: knowledge, tags: [magic], needs: [magic] }
+  - { text: "Prophecies for Kings", role: knowledge, tags: [crown, magic], needs: [magic] }
+  - { text: "Hiring Out the Dead", role: labour, tags: [magic, old], needs: [magic] }
+  - { text: "Golem Labour", role: labour, tags: [magic, stone], needs: [magic] }
+  - { text: "Bound Servants", role: labour, tags: [debt, magic], needs: [magic] }
+  - { text: "Curses for Hire", role: crime, tags: [magic, secret], needs: [magic] }
+  - { text: "Stolen Spell-Books", role: crime, tags: [magic, secret] }
+  - { text: "Forged Wards", role: crime, tags: [law, magic] }
+  - { text: "Unlicensed Potions", role: crime, tags: [magic, poor] }
+  - { text: "Souls Bought and Sold", role: crime, tags: [magic, old, secret], needs: [magic] }
+  - { text: "Séances", role: wonder, tags: [magic, old], needs: [magic] }
+  - { text: "Relics That Work", role: wonder, tags: [holy, magic] }
+  - { text: "The Dragon's Hoard", role: wonder, tags: [magic, old, wealth], rare: true }
+
+# Appendix B's assets, by the names Magic gives them. A relic says what it
+# does, since its card has to.
+assets:
+  - { text: "Clay Men", role: muscle, tags: [magic, stone], needs: [magic] }
+  - { text: "Battle-Mages", role: standing-army, tags: [magic, war], needs: [magic], out: [crooks, society, makers, family, keepers] }
+  - { text: "The Ward-Knights", role: standing-army, tags: [crown, magic, war], regions: [country, world], out: [crooks, society, makers, family, keepers] }
+  - { text: "Guards in Charmed Mail", role: household-guard, tags: [magic], out: [rebels, society, keepers] }
+  - { text: "Soul-Bound Guards", role: household-guard, tags: [magic, old], needs: [magic], out: [rebels, society, keepers] }
+  - { text: "Hired Mages", role: hired-swords, tags: [magic, war] }
+  - { text: "Spellswords", role: hired-swords, tags: [magic, war] }
+  - { text: "Storm Galleys", role: warships, tags: [coast, magic], needs: [coast], out: [faith, keepers] }
+  - { text: "Fog Boats", role: fast-boats, tags: [magic, river], needs: [river], out: [faith, keepers] }
+  - { text: "Lads with Charms On", role: toughs, tags: [magic, poor], out: [faith, keepers] }
+  - { text: "The Charmed Crowd", role: mob, tags: [magic], needs: [magic], out: [office, soldiers, house] }
+  - { text: "The Ward Watch", role: constables, tags: [law, magic, wall], out: [crooks, rebels, society, keepers, makers, faith, soldiers] }
+  - { text: "Oath-Bailiffs", role: bailiffs, tags: [law, magic], out: [crooks, rebels, society] }
+  - { text: "The Healed", role: faithful, tags: [holy, magic], out: [crooks, soldiers, makers, traders] }
+  - { text: "The Saint's Own", role: faithful, tags: [holy, magic], out: [crooks, soldiers, makers, traders] }
+  - { text: "Sigil Apprentices", role: guild-hands, tags: [guild, magic], needs: [magic], out: [house, faith, office, soldiers, old] }
+  - { text: "Cousins with the Gift", role: kin, tags: [blood, magic], out: [faith, office] }
+  - { text: "The Coven", role: sworn-members, tags: [magic, secret], needs: [magic], out: [office, traders] }
+  - { text: "Initiates", role: sworn-members, tags: [magic, secret], needs: [magic], out: [office, traders] }
+  - { text: "Far-Walkers", role: agents-abroad, tags: [magic], needs: [magic] }
+  - { text: "Familiars in Every Port", role: agents-abroad, tags: [coast, magic], needs: [magic] }
+  - { text: "The Risen Dead", role: thralls, tags: [magic, old], needs: [magic], out: [rebels] }
+  - { text: "The Spellbound", role: thralls, tags: [magic], needs: [magic], out: [rebels] }
+  - { text: "Bought Souls", role: thralls, tags: [debt, magic], needs: [magic], out: [rebels, society] }
+  - { text: "Talking Crows", role: informants, tags: [magic, wild] }
+  - { text: "A Paid Seer", role: informants, tags: [magic] }
+  - { text: "Scrying Bowls", role: informants, tags: [magic, secret], needs: [magic] }
+  - { text: "A Fence for Charms", role: fences, tags: [magic, secret] }
+  - { text: "Shadow Paths", role: smugglers-roads, tags: [magic, secret], needs: [magic] }
+  - { text: "The Old Ways", role: smugglers-roads, tags: [hill, magic, old] }
+  - { text: "Ward-Bells", role: lookouts, tags: [magic, wall] }
+  - { text: "Eyes in the Mirrors", role: lookouts, tags: [magic, secret], needs: [magic] }
+  - { text: "Rune-Readers", role: codebreakers, tags: [magic, old] }
+  - { text: "Walls with Ears", role: rumour-mill, tags: [magic, secret], needs: [magic] }
+  - { text: "Dream-Sendings", role: rumour-mill, tags: [magic], needs: [magic] }
+  - { text: "Rooms That Aren't There", role: safehouses, tags: [magic, secret], needs: [magic] }
+  - { text: "Streets That Shift", role: rooted, tags: [magic, old] }
+  - { text: "The Enchanting Room", role: workshop, tags: [magic], needs: [magic] }
+  - { text: "A Sigil-Forge", role: workshop, tags: [magic, metal], needs: [magic] }
+  - { text: "A Ghost Ship", role: ship, tags: [coast, magic, old], needs: [coast, magic] }
+  - { text: "The Doorless Tower", role: fortress, tags: [magic] }
+  - { text: "Spell-Proof Walls", role: fortress, tags: [magic, wall] }
+  - { text: "The Blood-Locked Vault", role: vault, tags: [blood, magic] }
+  - { text: "A Ring of Salt", role: sanctuary, tags: [magic, old] }
+  - { text: "The Hallowed Circle", role: sanctuary, tags: [holy, magic] }
+  - { text: "The Court Wizard's Ear", role: friends-at-court, tags: [crown, magic] }
+  - { text: "Known to Every Witch", role: influential, tags: [magic], needs: [magic] }
+  - { text: "Witches Who Owe It", role: old-debts, tags: [magic] }
+  - { text: "The Council's Mage", role: seat-on-the-council, tags: [law, magic] }
+  - { text: "A Charmed Judge", role: judge-in-its-pocket, tags: [law, magic] }
+  - { text: "Gossip from the Grave", role: blackmail, tags: [magic, old], needs: [magic] }
+  - { text: "A Bone-Setting Witch", role: healers, tags: [magic, poor] }
+  - { text: "Healing Hands", role: healers, tags: [holy, magic] }
+  - { text: "The Drowned Bell", role: relic, tags: [coast, magic, old], does: "Rung, it calls the drowned up out of the water." }
+  - { text: "A Dragon's Egg", role: relic, tags: [magic, old], does: "It's still warm, and its mother wants it back.", rare: true }
+  - { text: "The Book of Names", role: relic, tags: [magic, secret], does: "Every true name in the land, and someone's torn a page out." }
+  - { text: "The Saint's Lantern", role: relic, tags: [holy, magic], does: "Nothing dead can come into its light." }
+  - { text: "The Ember Crown", role: relic, tags: [crown, magic], does: "Whoever wears it can't be burned, and holds the throne." }
+  - { text: "The Thief's Rot", role: curse-on-its-goods, tags: [magic] }
+  - { text: "The Black Thumb", role: curse-on-its-goods, tags: [magic, old] }
+  - { text: "Hexed Locks", role: curse-on-its-goods, tags: [magic, secret] }
+  - { text: "The Chained Ghost", role: bound-spirit, tags: [magic, old] }
+  - { text: "The House Hob", role: bound-spirit, tags: [magic, old] }
+  - { text: "A Bound Familiar", role: bound-spirit, tags: [magic], needs: [magic] }
+
+# What it is. A magic faction's Face is likelier a sorcerer than core's
+# threats for its kind, so most of these say their own.
+types:
+  # A noble house.
+  - { text: "A lord with witch's blood", role: house, sizes: [small, local], regions: [town, city, country], tags: [blood, magic], leans: [kin, household-guard, wonder], faces: [sorcerer, duellist, commander] }
+  - { text: "A house that's kept a wizard for three generations", role: house, sizes: [local, city], regions: [town, city, country], tags: [crown, magic], leans: [friends-at-court, household-guard, knowledge], faces: [sorcerer, commander, operator] }
+  - { text: "The mage-lords of the high towers", role: house, sizes: [city, great], regions: [country, world], tags: [crown, magic], leans: [standing-army, fortress, knowledge], faces: [sorcerer, commander, champion] }
+  - { text: "A storm-king's line", role: house, sizes: [city, great], regions: [world], tags: [coast, crown, magic], leans: [warships, passage, standing-army], faces: [sorcerer, commander, champion] }
+  - { text: "A royal line with the healing touch", role: house, sizes: [city, great], regions: [world], tags: [crown, holy, magic], leans: [faithful, healers, standing-army], faces: [champion, commander, zealot] }
+  - { text: "A sorcerer-queen's empire", role: house, sizes: [great], regions: [world], tags: [crown, magic], leans: [standing-army, agents-abroad, office], faces: [sorcerer, commander, champion] }
+
+  # A merchant guild.
+  - { text: "The charm-sellers' guild", role: traders, sizes: [local, city], regions: [town, city, country], tags: [guild, magic, market], leans: [trade, guild-hands, craft], faces: [operator, sorcerer, hired-blade] }
+  - { text: "A potion merchant and her runners", role: traders, sizes: [small, local], regions: [town, city, country], tags: [magic, market], leans: [trade, craft, informants], faces: [operator, sorcerer, turncoat] }
+  - { text: "A company that sells the weather", role: traders, sizes: [local, city, great], regions: [city, country, world], tags: [coast, magic, market], needs: [coast], leans: [trade, passage, fast-boats], faces: [sorcerer, operator, commander] }
+  - { text: "Spell-book dealers", role: traders, sizes: [small, local], regions: [town, city], tags: [magic, market], leans: [knowledge, trade, codebreakers], faces: [operator, turncoat, sorcerer] }
+  - { text: "A league of ports that ship enchanted goods", role: traders, sizes: [city, great], regions: [world], tags: [coast, magic, market], leans: [trade, warships, agents-abroad], faces: [operator, commander, sorcerer] }
+
+  # A street gang.
+  - { text: "A gang that sells curses", role: crooks, sizes: [small, local], regions: [town, city], tags: [magic, secret], leans: [crime, curse-on-its-goods, blackmail], faces: [sorcerer, operator, brute] }
+  - { text: "Thieves who walk through walls", role: crooks, sizes: [small, local], regions: [town, city, country], tags: [magic, secret], leans: [crime, safehouses, fences], faces: [sorcerer, hired-blade, operator] }
+  - { text: "Smugglers running potions past the licence men", role: crooks, sizes: [local, city], regions: [city, country, world], tags: [coast, magic], leans: [crime, smugglers-roads, fast-boats], faces: [operator, hired-blade, sorcerer] }
+  - { text: "Highwaymen who ride in their own fog", role: crooks, sizes: [small, local], regions: [country], tags: [magic, road], leans: [crime, smugglers-roads, lookouts], faces: [hired-blade, operator, sorcerer] }
+  - { text: "Sea-raiders who can call a storm on a fleet", role: crooks, sizes: [local, city], regions: [world], tags: [coast, magic], leans: [crime, warships, smugglers-roads], faces: [commander, hired-blade, sorcerer] }
+
+  # A temple or an order.
+  - { text: "A Quiet Order of menders", role: faith, sizes: [small, local], regions: [town, city, country], tags: [holy, magic], leans: [healers, belief, sanctuary], faces: [warden, zealot, sorcerer] }
+  - { text: "A temple where prayers get answered", role: faith, sizes: [local, city], regions: [town, city, country], tags: [holy, magic], leans: [belief, faithful, healers], faces: [zealot, warden, sorcerer] }
+  - { text: "An order that lays ghosts, for a fee", role: faith, sizes: [small, local], regions: [town, city, country], tags: [holy, magic, old], leans: [belief, sanctuary, bound-spirit], faces: [warden, zealot, sorcerer] }
+  - { text: "Holy warriors who carry their saint's fire", role: faith, sizes: [city, great], regions: [country, world], tags: [holy, magic, war], leans: [standing-army, faithful, fortress], faces: [champion, zealot, commander] }
+  - { text: "A church that sends miracle-workers to every kingdom", role: faith, sizes: [city, great], regions: [world], tags: [holy, magic], leans: [belief, faithful, healers], faces: [zealot, commander, sorcerer] }
+  - { text: "A faith whose living saints still heal", role: faith, sizes: [local, city], regions: [world], tags: [holy, magic], leans: [belief, faithful, healers], faces: [zealot, warden, sorcerer] }
+
+  # A crown office.
+  - { text: "A licence office that hunts witches working without one", role: office, sizes: [local, city], regions: [town, city, country], tags: [law, magic], leans: [constables, office, informants], faces: [zealot, commander, warden] }
+  - { text: "The crown's wizard and her clerks", role: office, sizes: [small, local], regions: [town, city, country], tags: [crown, magic], leans: [office, friends-at-court, knowledge], faces: [sorcerer, operator, turncoat] }
+  - { text: "The royal wardens who keep the great wards", role: office, sizes: [city, great], regions: [city, country, world], tags: [crown, magic, wall], leans: [office, fortress, lookouts], faces: [warden, sorcerer, commander] }
+  - { text: "A court that takes the dead as witnesses", role: office, sizes: [small, local], regions: [town, city, country], tags: [law, magic, old], leans: [office, informants, blackmail], faces: [warden, operator, sorcerer] }
+  - { text: "The witch-courts of the north", role: office, sizes: [city, great], regions: [world], tags: [law, magic], leans: [office, constables, informants], faces: [zealot, warden, sorcerer] }
+
+  # A secret society.
+  - { text: "A coven that meets in the old chapel", role: society, sizes: [small, local], regions: [town, city, country], tags: [magic, secret], leans: [sworn-members, wonder, curse-on-its-goods], faces: [sorcerer, operator, turncoat] }
+  - { text: "A ring that deals in souls", role: society, sizes: [small, local], regions: [town, city, country], tags: [magic, old, secret], leans: [thralls, vault, blackmail], faces: [sorcerer, operator, turncoat] }
+  - { text: "A circle of summoners", role: society, sizes: [small, local, city], regions: [town, city, country], tags: [magic, old, secret], leans: [bound-spirit, sworn-members, thralls], faces: [sorcerer, horror, operator] }
+  - { text: "Mages who pass for a merchants' guild", role: society, sizes: [local, city], regions: [city, country, world], tags: [magic, secret, wealth], leans: [sworn-members, trade, friends-at-court], faces: [sorcerer, operator, duellist] }
+  - { text: "A league of covens across the kingdoms", role: society, sizes: [local, city], regions: [world], tags: [magic, secret], leans: [sworn-members, agents-abroad, wonder], faces: [sorcerer, operator, turncoat] }
+
+  # A mercenary company.
+  - { text: "A company of battle-mages, paid by the season", role: soldiers, sizes: [local, city], regions: [city, country, world], tags: [magic, war], leans: [hired-swords, standing-army, lookouts], faces: [sorcerer, commander, champion] }
+  - { text: "A sellsword company that keeps a storm-witch", role: soldiers, sizes: [small, local], regions: [town, city, country], tags: [coast, magic, war], leans: [hired-swords, fast-boats, warships], faces: [commander, sorcerer, champion] }
+  - { text: "Witch-hunters who'll go wherever they're paid", role: soldiers, sizes: [small, local], tags: [magic, war], leans: [hired-swords, informants, toughs], faces: [zealot, hired-blade, commander] }
+
+  # A craft guild.
+  - { text: "The ward-makers' guild", role: makers, sizes: [local, city], regions: [town, city, country], tags: [guild, magic], leans: [craft, guild-hands, workshop], faces: [warden, sorcerer, operator] }
+  - { text: "An alchemist and her apprentices", role: makers, sizes: [small, local], regions: [town, city, country], tags: [magic], leans: [craft, workshop, healers], faces: [sorcerer, operator, warden] }
+  - { text: "Golem-makers who sell their work by the dozen", role: makers, sizes: [small, local, city], tags: [magic, stone], leans: [craft, muscle, workshop], faces: [construct, sorcerer, warden] }
+  - { text: "Smiths who forge a spell into every blade", role: makers, sizes: [small, local], regions: [town, city, country], tags: [magic, metal], leans: [craft, lookouts, fortress], faces: [warden, sorcerer, brute] }
+
+  # A family business.
+  - { text: "A family of born witches", role: family, sizes: [small, local], regions: [town, city, country], tags: [blood, magic], leans: [kin, healers, wonder], faces: [sorcerer, duellist, operator] }
+  - { text: "Hedge-witches, a mother and her daughters", role: family, sizes: [small], regions: [town, country], tags: [magic, poor], leans: [healers, kin, land], faces: [sorcerer, brute, operator] }
+  - { text: "Undertakers who talk to the dead", role: family, sizes: [small, local], regions: [town, city, country], tags: [magic, old], leans: [belief, informants, blackmail], faces: [operator, sorcerer, warden] }
+  - { text: "A family whose daughters sit beside every throne", role: family, sizes: [local, city], regions: [world], tags: [blood, crown, magic], leans: [kin, friends-at-court, agents-abroad], faces: [sorcerer, operator, duellist] }
+
+  # Rebels.
+  - { text: "Witches without a licence, and proud of it", role: rebels, sizes: [small, local], regions: [town, city, country], tags: [magic, poor], leans: [sworn-members, safehouses, mob], faces: [zealot, sorcerer, predator] }
+  - { text: "The dead who broke their binding", role: rebels, sizes: [small, local], regions: [town, city, country], tags: [magic, old], leans: [mob, thralls, safehouses], faces: [zealot, horror, crowd] }
+  - { text: "Peasants rising behind a hedge-mage", role: rebels, sizes: [local, city], regions: [city, country, world], tags: [magic, poor, war], leans: [mob, sworn-members, lookouts], faces: [zealot, sorcerer, commander] }
+  - { text: "Souls trapped in a lord's collection", role: rebels, sizes: [small, local], regions: [town, city, country], tags: [magic, old, secret], leans: [bound-spirit, relic, informants], faces: [horror, zealot, turncoat] }
+  - { text: "Thralls who threw off their masters' spell", role: rebels, sizes: [local, city], regions: [world], tags: [magic, poor], leans: [mob, sworn-members, fortress], faces: [zealot, champion, crowd] }
+
+  # Collectors, scholars, keepers of old things.
+  - { text: "A college of the Book-Bound", role: keepers, sizes: [local, city, great], regions: [city, country, world], tags: [magic], leans: [knowledge, codebreakers, relic], faces: [sorcerer, warden, turncoat] }
+  - { text: "Seers who sell the future", role: keepers, sizes: [small, local], tags: [magic], leans: [informants, wonder, knowledge], faces: [sorcerer, operator, turncoat] }
+  - { text: "The keepers of a sealed library", role: keepers, sizes: [small, local], regions: [town, city, country], tags: [magic, old, secret], leans: [knowledge, vault, lookouts], faces: [warden, sorcerer, construct] }
+  - { text: "Collectors of spells nobody's allowed to cast", role: keepers, sizes: [small, local, city], regions: [city, country, world], tags: [magic, secret], leans: [vault, relic, knowledge], faces: [warden, sorcerer, operator] }
+
+  # Something old that wears a human face.
+  - { text: "A dragon wearing a human shape", role: old, sizes: [city, great], regions: [country, world], tags: [hill, magic, old], leans: [vault, wonder, thralls], faces: [old-power, sorcerer, predator] }
+  - { text: "A dead sorcerer who never stopped working", role: old, sizes: [local, city], regions: [town, city, country], tags: [magic, old], leans: [thralls, knowledge, vault], faces: [sorcerer, old-power, horror] }
+  - { text: "Something summoned that was never sent back", role: old, sizes: [small, local, city], regions: [town, city, country], tags: [magic, old, secret], leans: [sworn-members, blackmail, bound-spirit], faces: [horror, old-power, thing-in-the-dark] }
+  - { text: "A witch who's lived three lives in borrowed bodies", role: old, sizes: [local, city], regions: [town, city, country], tags: [blood, magic, old], leans: [kin, healers, wonder], faces: [sorcerer, old-power, turncoat] }
+  - { text: "The river's spirit, in the shape of an old woman", role: old, sizes: [small, local], regions: [town, country], tags: [magic, old, river], leans: [passage, bound-spirit, wonder], faces: [old-power, predator, sorcerer] }
+  - { text: "A sleeper under the mountains, and the priests who feed it", role: old, sizes: [local, city], regions: [world], tags: [hill, magic, old], leans: [faithful, wonder, thralls], faces: [old-power, zealot, horror] }
+
+methods:
+  - { text: "Wards and sigils.", tags: [magic], needs: [magic], leans: [fortress, lookouts, vault] }
+  - { text: "Hexes on anyone who crosses it.", tags: [magic, secret], needs: [magic], leans: [curse-on-its-goods, blackmail] }
+  - { text: "Bargains with the dead.", tags: [magic, old], needs: [magic], leans: [thralls, informants, bound-spirit] }
+  - { text: "Knowing what's coming.", tags: [magic], needs: [magic], leans: [informants, knowledge] }
+  - { text: "Borrowed faces and false voices.", tags: [magic, secret], needs: [magic], leans: [safehouses, blackmail, informants] }
+  - { text: "A word in the right ear, with a charm on it.", tags: [magic], needs: [magic], leans: [influential, friends-at-court] }
+  - { text: "Miracles, and the bill afterwards.", tags: [holy, magic], needs: [holy, magic], leans: [faithful, healers, belief] }
+  - { text: "Fire, when talking doesn't work.", tags: [magic, war], needs: [magic], leans: [standing-army, hired-swords] }
+  - { text: "Spirits on a short leash.", tags: [magic, old], needs: [magic], leans: [bound-spirit, thralls] }
+
+wants:
+  - { text: "The spell that died with its founder.", tags: [magic, old], needs: [magic], leans: [knowledge, relic] }
+  - { text: "Its people's souls back from whoever holds them.", tags: [debt, magic], needs: [magic], leans: [vault, trade], offers: [{ bond: loy, kind: hostile, text: "Half of us were sold, and we know who signed" }] }
+  - { text: "Every witch in the land working under its licence.", tags: [law, magic], needs: [magic], leans: [office, constables] }
+  - { text: "Magic out of its streets, for good.", tags: [law], offers: [{ bond: pub, kind: bond, text: "People feel safer with us around" }], out: [magic] }
+  - { text: "The gold under the dragon.", tags: [old, wealth], leans: [wonder, vault], rare: true }
+  - { text: "A cure for the curse on its blood.", tags: [blood, magic], needs: [magic], leans: [healers, knowledge], offers: [{ bond: mor, kind: bond, text: "We're cursed together, so we stick together" }] }
+  - { text: "Whatever's behind the sealed door.", tags: [old], leans: [relic, knowledge] }
+
+# Hidden tags, the way the book's cards write one. One in three names another
+# faction, and every one has two ways in.
+secrets:
+  - { tag: "Spent Its Soul", more: "Its leader's used up every scrap of her soul on spells.", ways: ["She hasn't slept or dreamed in years", "Her face doesn't show in mirrors"], tags: [magic] }
+  - { tag: "Every Spell Costs Someone", more: "Its mages never pay for their magic, because their servants do.", ways: ["Servants who age too fast", "Who falls sick after a big spell"], needs: [magic], tags: [magic, poor] }
+  - { tag: "{rival}'s Ghost Is Ours", more: "The spirit {rival} listens to has always worked for it.", ways: ["{rival}'s séance room", "A second voice under the ghost's"], tags: [magic, old] }
+  - { tag: "Cursed {rival}", more: "The bad luck dogging {rival} for years is its doing.", ways: ["A hex-doll under {rival}'s floor", "The witch it paid and never thanked"], tags: [magic, secret] }
+  - { tag: "The Familiar Gives the Orders", more: "Its leader's cat makes every decision, and he just nods.", ways: ["Orders given with nobody else in the room", "A cat at every meeting"], tags: [magic] }
+  - { tag: "Made, Not Born", more: "Its leader's a construct, and he doesn't know it.", ways: ["A seam behind his ear", "The workshop that made him"], tags: [magic] }
+  - { tag: "Pays the Dragon", more: "It feeds the dragon to burn its enemies' fields.", ways: ["Herds driven up the mountain at night", "Only its rivals ever get burned"], tags: [old], rare: true }
+  - { tag: "Stolen from {rival}", more: "Its great spell-book came out of {rival}'s library.", ways: ["{rival}'s mark, scraped off the binding", "The thief, still drinking in town"], tags: [magic, secret] }
+  - { tag: "The Dead Do the Work", more: "Half its workers died years ago, and they're still at it.", ways: ["They never eat or drink", "The smell in hot weather"], tags: [magic, old] }
+  - { tag: "The Guest in the Cellar", more: "What it summoned for one job never went home.", ways: ["Scratching under the floor at night", "The summoner who went missing"], tags: [magic, old] }
+  - { tag: "{rival} Holds Its Soul", more: "Its leader's soul is locked in {rival}'s vault.", ways: ["{rival}'s vault-keeper", "Its leader goes pale at {rival}'s name"], tags: [magic, debt] }
+  - { tag: "The Ward Keeps Something In", more: "The great ward was never there to keep anything out.", ways: ["Which way the sigils face", "The first warden's diary"], needs: [magic], tags: [magic, wall] }
+  - { tag: "Burned the Old Masters", more: "It set the fire that put it in charge.", ways: ["The one apprentice who got out", "Scorch marks in its founder's old room"], tags: [magic, blood] }
+  - { tag: "A Charm That Never Worked", more: "Its famous protection's a fake, and it's just been lucky.", ways: ["A ward-maker who checked it", "The one night it failed"], tags: [magic] }
+  - { tag: "Taught {rival} Everything", more: "{rival}'s best mage is its runaway apprentice, and owes it.", ways: ["The apprentice's old indenture", "A spell nobody outside it should know"], needs: [magic], tags: [magic] }
+
+# Each breaks the logic on purpose, with its reason.
+exceptions:
+  - { text: "It won't cast another spell", when: [magic, society], drops: [wonder, bound-spirit], reason: "because a spell once took its founder's sight" }
+  - { text: "It won't raise its own dead", when: [magic, family], drops: [thralls], reason: "because grandmother came back wrong" }
+  - { text: "It won't trade in charms any more", when: [magic, traders], drops: [trade], gives: [debt], reason: "because a charm it sold killed a child" }
+  - { text: "It won't have a mage in the house", when: [house, magic], drops: [magic], reason: "because its last wizard poisoned the heir" }
+  - { text: "It won't heal anyone", when: [faith, magic], drops: [healers], reason: "because its saint asks a price nobody should pay" }
+  - { text: "It won't open its books to anyone", when: [keepers, magic], drops: [knowledge], gives: [secret], reason: "because the last reader let something out of one" }
+  - { text: "It won't work for the crown", when: [magic, soldiers], drops: [office, crown], reason: "because the crown hanged its first captain as a witch" }
+  - { text: "It won't ward the city", when: [magic, makers], drops: [office], gives: [debt], reason: "because the council still owes for the last one" }
+
+names:
+  factions:
+    - { text: "House Emberly", role: house, needs: [magic] }
+    - { text: "The Stormcrowns", role: house, needs: [coast, magic] }
+    - { text: "House Wychcombe", role: house, needs: [magic] }
+    - { text: "The Witch-Lords", role: house, needs: [magic] }
+    - { text: "The Bottle Merchants", role: traders, needs: [magic] }
+    - { text: "Goodwind and Daughters", role: traders, needs: [coast, magic] }
+    - { text: "The Charm Exchange", role: traders, needs: [magic] }
+    - { text: "The Silver Cauldron", role: traders, needs: [magic] }
+    - { text: "The Hex Boys", role: crooks, needs: [magic] }
+    - { text: "The Quiet Fingers", role: crooks, needs: [magic] }
+    - { text: "The Fog Riders", role: crooks, needs: [magic, road] }
+    - { text: "Old Mother Grimble's Lot", role: crooks, needs: [magic] }
+    - { text: "Saint Ebrin's Menders", role: faith, needs: [magic] }
+    - { text: "The Ghost-Layers", role: faith, needs: [magic, old] }
+    - { text: "The Hallowed Flame", role: faith, needs: [magic] }
+    - { text: "The Hearth Order", role: faith, needs: [magic] }
+    - { text: "The Witch-Finders", role: office, needs: [law, magic] }
+    - { text: "The Seal Wardens", role: office, needs: [magic, wall] }
+    - { text: "The Court of Sigils", role: office, needs: [law, magic] }
+    - { text: "The Wizard's Office", role: office, needs: [crown, magic] }
+    - { text: "The Thorn Coven", role: society, needs: [magic] }
+    - { text: "The Ninefold Sisters", role: society, needs: [magic] }
+    - { text: "The Candle-Keepers", role: society, needs: [magic] }
+    - { text: "The Soul Market", role: society, needs: [magic, old] }
+    - { text: "The Burning Company", role: soldiers, needs: [magic] }
+    - { text: "The Thunderers", role: soldiers, needs: [magic] }
+    - { text: "The Hexbreakers", role: soldiers, needs: [magic] }
+    - { text: "The Wardwrights", role: makers, needs: [guild, magic] }
+    - { text: "The Clay Masters", role: makers, needs: [magic, stone] }
+    - { text: "The Enchanters' Guild", role: makers, needs: [magic] }
+    - { text: "The Spell-Smiths", role: makers, needs: [magic, metal] }
+    - { text: "The Pettibone Women", role: family, needs: [magic] }
+    - { text: "The Gravecotts", role: family, needs: [magic] }
+    - { text: "The Wickens", role: family, needs: [magic] }
+    - { text: "The Rookleys", role: family, needs: [magic] }
+    - { text: "The Unlicensed", role: rebels, needs: [magic, poor] }
+    - { text: "The Woken Dead", role: rebels, needs: [magic, old] }
+    - { text: "The Free Souls", role: rebels, needs: [magic, old] }
+    - { text: "The Green Banners", role: rebels, needs: [magic, war] }
+    - { text: "The Old College", role: keepers, needs: [magic] }
+    - { text: "The Inkbound", role: keepers, needs: [magic] }
+    - { text: "The Open Eye", role: keepers, needs: [magic] }
+    - { text: "The Night Library", role: keepers, needs: [magic] }
+    - { text: "The Hill King", role: old, needs: [hill, magic] }
+    - { text: "The Smiling Guest", role: old, needs: [magic, secret] }
+    - { text: "The Late Master", role: old, needs: [magic] }
+    - { text: "The River Mother", role: old, needs: [magic, river] }
+  people:
+    - Mother Wendle
+    - Hester Crake
+    - Corvin Lathe
+    - Mabyn Strake
+    - Bethan Fenwick
+    - Edwin Tull
+    - Rowena Wych
+    - Lambert Greave
+    - Merrin Faulk
+    - Elspeth Dunning
+    - Hugh Marbury
+    - Magda Thursby
+    - Wenna Cardew
+    - Matthias Morrow
+    - Constance Rue
+    - Ottilie Sward
+    - Absalom Venn
+    - Nan Hesketh

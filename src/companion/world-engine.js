@@ -610,8 +610,10 @@ function faces(T, W, i, path, n, not) {
   const f = W.factions[i];
   const P = poolOf(T, W.recipe);
   // Only the threats core.yaml gives its kind of faction, when it gives some,
-  // so a guild's face is never the pack or the swarm.
-  const likely = new Set(T.core.faces[f.type?.role] ?? []);
+  // so a guild's face is never the pack or the swarm, or the ones its type's
+  // own row gives, so a coven's is likeliest a sorcerer.
+  const own = f.type?.id ? P.types.find((r) => r.id === f.type.id)?.faces : null;
+  const likely = new Set(own?.length ? own : T.core.faces[f.type?.role] ?? []);
   const tries = W.tries[path] ?? 0;
   const threats = draw(
     (likely.size ? T.book.threats.filter((t) => likely.has(t.key)) : T.book.threats).map((t) => ({ w: 1, t })),

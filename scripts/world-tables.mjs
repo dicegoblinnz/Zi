@@ -30,7 +30,9 @@
 //            swipe away: [{ bond: pub | mor | loy, kind: bond | hostile, text }]
 // and what its own table needs: a seat's notice (what a stranger notices
 // there), a Secret's tag, more and its two ways in, an agenda's die, an
-// exception's when, drops and reason, an answer's dials, a tie's kind.
+// exception's when, drops and reason, an answer's dials, a tie's kind. A type
+// can have faces too, three of the Threat Builder's threats its Face is
+// likeliest to be, when they aren't the ones core gives its kind.
 //
 // core.yaml:
 //   seeds       words a seed's made of, three to a seed (ash-lantern-ford)
@@ -65,7 +67,8 @@
 //
 // genres.yaml: eras and twists (each id with its name), genres (each id with
 // name, era and twist if it has one) and frames (each frame's era, twist and
-// region, so Add a faction fits a frame she brought in).
+// region, by the id of its board in the book, like deep-company, so Add a
+// faction fits a board she brought in).
 //
 // A pack: fits (the regions it fits), seats, resources, assets, types (with
 // sizes and leans), methods, secrets, exceptions, wants (if it adds any) and
@@ -104,7 +107,7 @@ const TABLES = {
   seats: { extra: ["notice"], slots: [], name: true, role: "keep" },
   resources: { extra: [], slots: ["seat"], role: "keep" },
   assets: { extra: ["does"], slots: ["seat"], name: true, role: "asset" },
-  types: { extra: [], slots: [], role: "type" },
+  types: { extra: ["faces"], slots: [], role: "type" },
   methods: { extra: [], slots: [] },
   wants: { extra: [], slots: [] },
   secrets: { extra: ["tag", "more", "ways"], slots: ["rival", "seat"], noText: true },
@@ -137,7 +140,9 @@ export function bookFor(worlds, worldBook) {
   const threats = (worldBook?.tables?.what ?? [])
     .filter((w) => !w.twice && w.name)
     .map((w) => ({ key: keyOf(w.name), name: w.name, is: w.is, ch: w.ch, tags: (w.tags ?? []).map((t) => ({ text: t.text, x: t.x ?? 1 })) }));
-  return { sizes, assets, threats };
+  // The boards a GM brings in from the book, which a frame's mix is keyed by.
+  const boards = (worlds?.boards ?? []).map((b) => ({ id: b.id, name: b.name }));
+  return { sizes, assets, threats, boards };
 }
 
 // Every file in the folder, read and parsed. A file that can't be parsed is a
@@ -271,6 +276,14 @@ export function compileTables(raw, book, { minimums = true } = {}) {
       if (words(row.does) > 12) bad(where, `a line's twelve words at most: ${row.does}`);
     }
     if (kind === "assets" && row.role) row.power = book.assets[row.role]?.power === true;
+    // A Face is dealt as three cards, so a type's own faces are three at least.
+    if (kind === "types" && r.faces != null) {
+      row.faces = [...new Set(list(r.faces))].filter((x) => {
+        if (!threatKeys.includes(x)) bad(where, `faces has a threat the Threat Builder hasn't got: ${x}`);
+        return threatKeys.includes(x);
+      });
+      if (row.faces.length < 3) bad(where, "faces needs three threats, since a Face is dealt as three cards");
+    }
     if (kind === "secrets") {
       row.tag = typeof r.tag === "string" ? r.tag.trim() : "";
       row.more = typeof r.more === "string" ? r.more.trim() : "";
@@ -471,8 +484,10 @@ export function compileTables(raw, book, { minimums = true } = {}) {
   }
   for (const [k, f] of Object.entries(genresSrc.frames ?? {})) {
     const where = `genres.yaml frames.${k}`;
-    if (!f || !out.eras[f.era] || (f.twist != null && !out.twists[f.twist]) || !REGIONS.includes(f.region)) bad(where, "needs an era, a region and maybe a twist that genres.yaml has");
-    else out.frames[k] = { era: f.era, twist: f.twist ?? null, region: f.region };
+    const board = (book.boards ?? []).find((b) => b.id === k);
+    if (!board) bad(where, `isn't one of the book's boards to bring in, by its id: ${(book.boards ?? []).map((b) => b.id).join(", ")}`);
+    else if (!f || !out.eras[f.era] || (f.twist != null && !out.twists[f.twist]) || !REGIONS.includes(f.region)) bad(where, "needs an era, a region and maybe a twist that genres.yaml has");
+    else out.frames[k] = { name: board.name, era: f.era, twist: f.twist ?? null, region: f.region };
   }
 
   // The packs.
@@ -549,6 +564,12 @@ export function compileTables(raw, book, { minimums = true } = {}) {
       }
       out.packs[`${kind}:${id}`] = pack;
     }
+  }
+  // A frame's mix goes in with the last pack it needs, so Add a faction on a
+  // board brought in from the book always has something to deal.
+  for (const [k, f] of Object.entries(out.frames)) {
+    const deals = (kind, id) => id == null || Boolean(out.packs[`${kind}:${id}`]?.fits.includes(f.region));
+    if (!deals("era", f.era) || !deals("twist", f.twist)) bad(`genres.yaml frames.${k}`, `can't deal at ${f.region} till its packs are in, and a frame's mix goes in with the last one it needs`);
   }
   return { tables: problems.length ? null : out, problems };
 }

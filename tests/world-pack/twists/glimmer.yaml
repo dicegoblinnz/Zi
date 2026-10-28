@@ -18,7 +18,7 @@ assets:
   - { text: A star-touched crown, role: relic, tags: [old] }
 
 types:
-  - { text: A coven, role: society, sizes: [small, local, city], leans: [wonder, sworn-members] }
+  - { text: A coven, role: society, sizes: [small, local, city], leans: [wonder, sworn-members], faces: [sorcerer, operator, horror] }
   - { text: Star-readers, role: keepers, sizes: [small, local, city], leans: [wonder, knowledge] }
   - { text: A dragon in the hills, role: old, sizes: [city, great], leans: [wonder, thralls], tags: [hill] }
 
