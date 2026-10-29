@@ -32,6 +32,7 @@ types:
 sizes: { small: 2, local: 4, city: 3, great: 1 }
 templates:
   about: "{type}. It works through {method}."
+  seat: "It sits on {seat}."
   face: "{name}, {threat}"
   ways: "Ways in: {one}, or {two}."
 because:

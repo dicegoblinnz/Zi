@@ -40,7 +40,8 @@
 //   keeps       the eleven keep roles, each with a line saying what it is
 //   types       the twelve type roles, the same
 //   sizes       how often each size comes up: { small, local, city, great }
-//   templates   about ({type}, {method}), face ({name}, {threat}), ways ({one}, {two})
+//   templates   about ({type}, {method}), seat ({seat}, where it sits, after
+//               what it is), face ({name}, {threat}), ways ({one}, {two})
 //   because     why a step went the way it did, one line for each thing that
 //               can steer it (seat, type, method, want, answer, tension,
 //               region), with {thing} for what it was. An empty line says the
@@ -361,7 +362,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     sizes[s] = v > 0 ? v : 1;
   }
   const templates = {};
-  for (const [k, slots] of [["about", ["type", "method"]], ["face", ["name", "threat"]], ["ways", ["one", "two"]]]) {
+  for (const [k, slots] of [["about", ["type", "method"]], ["seat", ["seat"]], ["face", ["name", "threat"]], ["ways", ["one", "two"]]]) {
     const v = core.templates?.[k];
     if (typeof v !== "string" || !v.trim()) bad("core.yaml", `templates needs ${k}`);
     else {

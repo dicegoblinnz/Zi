@@ -21,6 +21,8 @@
 //               answers still to go up (table.js), and that goes too.
 //   zi-world    their campaigns' worlds, the faction boards and the GM's
 //               changes still to go up (world.js), and that goes as well.
+//   zi-make     a world she's building, or a faction she's adding, that
+//               isn't on the board yet (world-make.js), and that goes too.
 //   zi-maps     (a cache, not localStorage) the pictures of their campaigns'
 //               maps (mapsui.js, mapcache.js), and that goes too.
 //
@@ -35,6 +37,7 @@ const CAMPS = "zi-campaigns";
 const PARTY = "zi-party";
 const TABLE = "zi-table";
 const WORLD = "zi-world";
+const MAKE = "zi-make";
 
 const read = (key) => {
   try {
@@ -120,6 +123,7 @@ export function makeSync(store, { onChange = () => {} } = {}) {
     write(PARTY, null);
     write(TABLE, null);
     write(WORLD, null);
+    write(MAKE, null);
     forgetMaps();
   };
   // This phone starts keeping step with an account, picking up anything it had

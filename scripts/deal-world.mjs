@@ -66,7 +66,7 @@ export function boardText(T, W) {
     const w = W.factions[i];
     say();
     say(`${i + 1}. ${f.name}: ${f.size}, d${f.die} (${f.steps} ${f.steps === 1 ? "step" : "steps"}), on ${C.seats.find((s) => s.k === f.seat)?.name ?? "-"}`);
-    say(`   ${f.about}${w.type?.why ? `  [${w.type.why}]` : ""}`);
+    say(`   ${[f.about, f.sits].filter(Boolean).join(" ")}${w.type?.why ? `  [${w.type.why}]` : ""}`);
     if (f.exception) say(`   Breaks the logic: ${f.exception.text}, ${f.exception.reason}`);
     say(`   Wants: ${f.want}${w.want?.why ? `  [${w.want.why}]` : ""}`);
     const extra = f.res.length - f.assets.filter((a) => !a.off).length;

@@ -58,7 +58,8 @@ export const BONDS = [["pub", "Public Sentiment"], ["mor", "Morale"], ["loy", "L
 export const LISTS = ["res", "assets", "agendas", "pub", "mor", "loy", "threads"];
 export const OUTCOMES = ["Destroy", "Undermine", "Obstruct", "Influence", "Acquire", "Establish"];
 export const STATES = ["whole", "strained", "snapped"];
-const WORDS = { name: MAX.name, about: MAX.line, want: MAX.words, face: MAX.words, secret: MAX.line, more: MAX.words, note: MAX.note };
+// What it is can carry where it sits too, the way the world builder writes it.
+const WORDS = { name: MAX.name, about: MAX.words, want: MAX.words, face: MAX.words, secret: MAX.line, more: MAX.words, note: MAX.note };
 const FIELDS = { res: ["text", "x"], assets: ["text", "does", "power", "x", "off"], agendas: ["text", "then"], pub: ["text", "kind", "s"], mor: ["text", "kind", "s"], loy: ["text", "kind", "s"], threads: ["text", "kind", "s", "to"] };
 const ID = /^[a-z0-9-]{2,24}$/;
 

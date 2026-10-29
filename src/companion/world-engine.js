@@ -33,11 +33,21 @@
 // A pick she writes herself is { own: true, text } and is kept as she wrote
 // it: no check deals it again.
 //
-// The screens (stage 4) use options() for a step's three cards, choose() to
-// put one on, lock(), redeal() for Deal again, dealRest(T, W, { finish:
-// false }) to deal what's still empty, and dealRest() or dealWorld() to finish
-// the board: the web, the needs and the checks. cardsOf() is the board as
-// board.js keeps it, recordOf() what was dealt and resume() a world from it.
+// The screens (world-make.js) use options() for a step's three cards,
+// preview() for a card's words, choose() to put one on, lock(), redeal() for
+// Deal again, redealFaction() for dealing what a faction hasn't got locked
+// again, dealRest(T, W, { finish: false }) to deal what's still empty, and
+// dealRest() or dealWorld() to finish the board: the web, the needs and the
+// checks. cardsOf() is the board as board.js keeps it, recordOf() what was
+// dealt and resume() a world from it.
+//
+// Adding a faction to a board that's already there (startAdd()), the board's
+// own factions come in held, ahead of the new one (W.add, and W.held of
+// them), and so do the seats a build dealt that are on the board as places
+// (W.hs of them), with one new seat after them. A held faction or seat is
+// read for aims, rivals, ties and the bags, and never dealt, checked or
+// changed. The new one gets a rival among them, and an ally or a debt, and
+// an agenda only aims at what's on the board.
 
 export const REGIONS = ["town", "city", "country", "world", "stars"];
 export const SIZES = ["small", "local", "city", "great"];
@@ -241,9 +251,72 @@ export function start(T, { recipe, dials = null, seed, factions = 6 }) {
 const clamp = (v) => Math.max(0, Math.min(2, Math.round(Number(v) || 0)));
 const blankFaction = () => ({ seat: null, size: null, type: null, exc: undefined, method: null, want: null, res: null, assets: null, agenda: null, face: null, secret: null, name: null, offers: [] });
 
+// A world for adding factions to a board that's there (Add a faction): the
+// board's factions held, ahead of add new ones, and the seats a build dealt
+// that are places on the board, with one new seat after them. A held
+// faction: { name, about, res: [{ id, text }], assets: [{ id, text, power }],
+// seat (a held seat's index, or null), picks (what a build dealt it, when
+// the board has its record: rows by step, for the bags and the tags) }. The
+// build's asking and tension, when there's one, steer it the way they did
+// the board, and its dials (or a frame's) are fixed.
+export function startAdd(T, { recipe, dials = null, seed, held = [], seats = [], asking = null, tension = null, add = 1 }) {
+  const W = start(T, { recipe, dials: dials ?? { tense: 1, strange: 1, rich: 1, ruled: 1 }, seed });
+  const hs = seats.filter(Boolean).length;
+  W.add = true;
+  W.held = held.length;
+  W.hs = hs;
+  W.n = held.length + Math.max(1, Math.min(4, Math.floor(Number(add) || 1)));
+  W.s = hs + 1;
+  W.seats = [...seats.filter(Boolean).map((s) => copyOf(s)), null];
+  W.factions = [...held.map((h) => heldOf(h, hs)), ...Array.from({ length: W.n - held.length }, () => blankFaction())];
+  for (const q of QUESTIONS) W.asking[q] = asking?.[q] ? copyOf(asking[q]) : null;
+  W.tension = tension ? copyOf(tension) : null;
+  return W;
+}
+const copyOf = (x) => JSON.parse(JSON.stringify(x));
+function heldOf(h, hs) {
+  const p = h.picks && typeof h.picks === "object" ? h.picks : {};
+  const row = (s) => (p[s] && typeof p[s] === "object" ? copyOf(p[s]) : null);
+  const words = (v) => String(v ?? "").trim();
+  return {
+    ...blankFaction(),
+    held: true,
+    seat: Number.isInteger(h.seat) && h.seat >= 0 && h.seat < hs ? { k: h.seat } : null,
+    exc: null,
+    // Counted as dealt, so it can be a rival or have its things aimed at.
+    type: row("type") ?? { own: true, text: words(h.about) || words(h.name) },
+    method: row("method"),
+    want: row("want"),
+    res: (Array.isArray(h.res) ? h.res : []).filter((r) => r?.id && words(r.text)).map((r) => ({ id: String(r.id), text: words(r.text), role: r.role ?? null, tags: Array.isArray(r.tags) ? [...r.tags] : [] })),
+    assets: (Array.isArray(h.assets) ? h.assets : []).filter((a) => a?.id && words(a.text)).map((a) => ({ id: String(a.id), text: words(a.text), role: a.role ?? null, power: a.power === true, does: words(a.does) })),
+    agenda: row("agenda"),
+    face: row("face"),
+    secret: row("secret"),
+    name: { ...(row("name") ?? {}), own: true, text: words(h.name) },
+  };
+}
+const adding = (W) => W.add === true;
+const fresh = (W) => W.factions.map((_, i) => i).filter((i) => !W.factions[i].held);
+// A step on a held faction or seat, which never changes.
+function isHeld(W, path) {
+  const [head, a] = path.split(":");
+  if (head === "f") return Boolean(W.factions[Number(a)]?.held);
+  return head === "seat" && adding(W) && Number(a) < W.hs;
+}
+
 // A world from what was dealt (recordOf()), to carry on with.
 export function resume(T, rec) {
-  const W = start(T, { recipe: rec.recipe, dials: rec.fixed ?? null, seed: rec.seed, factions: rec.n });
+  const W = start(T, { recipe: rec.recipe, dials: rec.fixed ?? null, seed: rec.seed, factions: rec.add ? 4 : rec.n });
+  if (rec.add) {
+    const int = (v, lo) => Math.max(lo, Math.floor(Number(v) || 0));
+    W.add = true;
+    W.held = int(rec.held, 0);
+    W.hs = int(rec.hs, 0);
+    W.n = int(rec.n, W.held + 1);
+    W.s = int(rec.s, W.hs + 1);
+    W.seats = Array.from({ length: W.s }, () => null);
+    W.factions = Array.from({ length: W.n }, () => blankFaction());
+  }
   for (const k of ["tries", "locks", "not"]) W[k] = rec[k] && typeof rec[k] === "object" ? { ...rec[k] } : {};
   for (const q of QUESTIONS) W.asking[q] = rec.asking?.[q] ?? null;
   W.tension = rec.tension ?? null;
@@ -373,6 +446,10 @@ function bagged(rows, used) {
 }
 const dealt = (W, i) => W.factions.map((f, j) => (j !== i && f.type ? j : null)).filter((j) => j !== null);
 const own = (p) => Boolean(p?.own);
+// A seat an agenda can aim at: not its own, and when it's being added to a
+// board, one that's on it (a held seat), never the new one nobody holds.
+const seatToAim = (W, i, k) => k !== W.factions[i]?.seat?.k && (!adding(W) || k < W.hs);
+const nameKey = (t) => String(t ?? "").toLowerCase().replace(/[’']/g, "'").replace(/^the\s+/, "").replace(/\s+/g, " ").trim();
 
 // A step's candidates, each { w, ...the pick }.
 function candidates(T, W, path, { only = null } = {}) {
@@ -432,7 +509,8 @@ function candidates(T, W, path, { only = null } = {}) {
   }
   if (b === "agenda") {
     const others = dealt(W, i);
-    const can = (aim) => aim === "seat" || (aim === "rival" && others.length) || (aim === "res" && others.some((j) => W.factions[j].res?.length)) || (aim === "asset" && others.some((j) => W.factions[j].assets?.length));
+    const seats = W.seats.some((s, k) => s && seatToAim(W, i, k));
+    const can = (aim) => (aim === "seat" && seats) || (aim === "rival" && others.length) || (aim === "res" && others.some((j) => W.factions[j].res?.length)) || (aim === "asset" && others.some((j) => W.factions[j].assets?.length));
     return pool(P.agendas.filter((r) => r.aims.every(can)), "agenda").map((x) => ofRow(x, { die: x.r.die, aims: x.r.aims }));
   }
   // A name's one to four words the way it reads on the card, its seat and
@@ -442,8 +520,11 @@ function candidates(T, W, path, { only = null } = {}) {
     const seat = card.seat ? { text: card.seat.text, name: true } : "";
     const short = (r) => fill(r.text, { seat }).split(/\s+/).filter(Boolean).length <= 4;
     const mine = (r) => !r.role || r.role === kind;
+    // Never a name a faction on the board's already got.
+    const taken = new Set(W.factions.filter((x, j) => j !== i && x.name?.own).map((x) => nameKey(x.name.text)));
+    const free = (r) => !taken.has(nameKey(fill(r.text, { seat })));
     for (const test of [(r) => mine(r) && short(r), short, mine, () => true]) {
-      const got = pool(P.names.filter(test), "name");
+      const got = pool(P.names.filter((r) => free(r) && test(r)), "name");
       if (got.length) return got.map((x) => ofRow(x, { why: "", by: null }));
     }
     return [];
@@ -548,7 +629,7 @@ function aimOf(W, i, aims, rand) {
     if (a === "seat") {
       const taken = new Set(W.factions.map((f) => f.seat?.k));
       const mine = W.factions[i].seat?.k;
-      const seats = W.seats.map((s, k) => (s && k !== mine ? { w: taken.has(k) ? 1 : 2, k } : null)).filter(Boolean);
+      const seats = W.seats.map((s, k) => (s && seatToAim(W, i, k) ? { w: taken.has(k) ? 1 : 2, k } : null)).filter(Boolean);
       out.seat = draw(seats, rand)[0]?.k ?? mine ?? 0;
     } else if (a === "rival") out.rival = pick(others, rand);
     else {
@@ -639,20 +720,25 @@ function faces(T, W, i, path, n, not) {
 // Put a pick on a step. A faction's later steps that aren't locked are dealt
 // again, since they read the card so far, and so are those of the faction
 // sitting on a seat that changes. An answer that changes moves the dials for
-// what's dealt from then on, and leaves what's dealt as it is.
-export function choose(T, W, path, value) {
+// what's dealt from then on, and leaves what's dealt as it is. keep leaves
+// the later steps alone, for her own changes to a set she's been dealt (a
+// resource or an asset added or taken off). A held faction or seat never
+// changes.
+export function choose(T, W, path, value, { keep = false } = {}) {
   const [head, a, b] = path.split(":");
   const clear = (i, from) => {
     for (const step of STEPS.slice(STEPS.indexOf(from) + 1)) if (!W.locks[`f:${i}:${step}`]) W.factions[i][step] = step === "exc" ? undefined : null;
   };
+  if (head === "seat" && adding(W) && Number(a) < W.hs) return;
+  if (head === "f" && W.factions[Number(a)]?.held) return;
   if (head === "ask") W.asking[a] = value;
   else if (head === "tension") W.tension = value;
   else if (head === "seat") {
     W.seats[Number(a)] = value;
-    W.factions.forEach((f, i) => f.seat?.k === Number(a) && clear(i, "seat"));
+    W.factions.forEach((f, i) => !f.held && f.seat?.k === Number(a) && clear(i, "seat"));
   } else if (head === "f") {
     W.factions[Number(a)][b] = value;
-    clear(Number(a), b);
+    if (!keep) clear(Number(a), b);
   }
   W.dials = dialsOf(W);
   W.web = null;
@@ -664,17 +750,49 @@ export function lock(W, path, on = true) {
   else delete W.locks[path];
 }
 // Deal one step again: the next card in its stream, never the one it had
-// while there's another. A locked step stays as it is.
-export function redeal(T, W, path, { finish = true } = {}) {
-  if (W.locks[path]) return W;
+// while there's another. A locked step stays as it is. rest: false leaves
+// what's still to deal alone, for a screen that deals as she gets to it.
+export function redeal(T, W, path, { finish = true, rest = true } = {}) {
+  if (W.locks[path] || isHeld(W, path)) return W;
   const was = keyOfPick(pickAt(W, path));
   W.tries[path] = (W.tries[path] ?? 0) + 1;
   if (was != null) W.not[path] = was;
   else delete W.not[path];
   const [first] = options(T, W, path, 1);
   choose(T, W, path, first ?? null);
+  return rest ? dealRest(T, W, { finish }) : W;
+}
+// Every step on one faction's card dealt again but what she's locked or
+// written herself, each to a card it hasn't had: "locking what she likes and
+// dealing the rest again".
+export function redealFaction(T, W, i, { finish = false } = {}) {
+  const f = W.factions[i];
+  if (!f || f.held) return W;
+  for (const step of STEPS) {
+    const path = `f:${i}:${step}`;
+    if (W.locks[path] || own(f[step]) || (Array.isArray(f[step]) && f[step].some(own))) continue;
+    const was = keyOfPick(f[step]);
+    W.tries[path] = (W.tries[path] ?? 0) + 1;
+    if (was != null) W.not[path] = was;
+    else delete W.not[path];
+    f[step] = step === "exc" ? undefined : null;
+  }
+  W.web = null;
+  W.needs = null;
+  W.checks = null;
   return dealRest(T, W, { finish });
 }
+// What tells two picks apart, for a screen's hand of cards: a row's id, a
+// seat's place, a size, a Face's name, or her own words.
+export const pickKey = (p) => (p?.own ? `own:${p.text ?? p.tag ?? p.size ?? ""}` : keyOfPick(p));
+
+// The tension at a real roll of the d12, tapped in.
+export function tensionAt(T, roll) {
+  const k = Math.floor(Number(roll));
+  const r = T.core.tension[k - 1];
+  return r ? { ...keepOf({ id: r.id, text: r.text, tags: r.tags, dials: r.dials, strange: r.strange, why: "" }), roll: k } : null;
+}
+
 // The pick a step's got now.
 export function pickAt(W, path) {
   const [head, a, b] = path.split(":");
@@ -688,12 +806,15 @@ export function pickAt(W, path) {
 // Every step still to deal, in order. Finishing deals the web, the needs and
 // the checks too, before anyone sees the board.
 export function dealRest(T, W, { finish = true } = {}) {
-  for (const q of QUESTIONS) if (!W.asking[q]) W.asking[q] = options(T, W, `ask:${q}`, 1)[0] ?? null;
-  if (!W.tension) W.tension = options(T, W, "tension", 1)[0] ?? null;
+  // Adding to a board, the asking's the board's own, or there isn't one.
+  if (!adding(W)) {
+    for (const q of QUESTIONS) if (!W.asking[q]) W.asking[q] = options(T, W, `ask:${q}`, 1)[0] ?? null;
+    if (!W.tension) W.tension = options(T, W, "tension", 1)[0] ?? null;
+  }
   W.dials = dialsOf(W);
   for (let k = 0; k < W.s; k++) if (!W.seats[k]) W.seats[k] = options(T, W, `seat:${k}`, 1)[0] ?? null;
-  for (let i = 0; i < W.n; i++) dealFaction(T, W, i, EARLY);
-  for (let i = 0; i < W.n; i++) dealFaction(T, W, i, LATE);
+  for (const i of fresh(W)) dealFaction(T, W, i, EARLY);
+  for (const i of fresh(W)) dealFaction(T, W, i, LATE);
   if (!finish) return W;
   if (!W.web) dealWeb(T, W);
   if (!W.needs) dealNeeds(T, W);
@@ -732,6 +853,7 @@ function offersOf(W, i) {
 // ally or a debt in the one after, and a wildcard in the one after that,
 // skipped on boards of four or five, where it comes back round.
 function dealWeb(T, W) {
+  if (adding(W)) return dealTies(T, W);
   const rand = randOf(W, "web");
   const ring = shuffle(
     W.factions.map((_, i) => i),
@@ -762,6 +884,27 @@ function dealWeb(T, W) {
   }
   W.web = web;
 }
+// Adding to a board: each new faction's rival is one of the factions already
+// there, and its ally or debt another, when there's one, each a thread both
+// ways like the ring's.
+function dealTies(T, W) {
+  const web = [];
+  const used = new Set();
+  const there = W.factions.map((_, j) => j).filter((j) => W.factions[j].held);
+  for (const a of fresh(W)) {
+    const order = shuffle(there, rngOf(W.seed, "web", a, W.tries.web ?? 0));
+    [["rival"], ["ally", "debt"]].forEach((kinds, s) => {
+      const b = order[s];
+      if (b == null) return;
+      const key = `${b}-${a}`;
+      const t = tieFor(T, W, kinds, null, a, b, used, rngOf(W.seed, "tie", key, W.tries.web ?? 0));
+      if (!t) return;
+      used.add(t.id);
+      web.push({ a, b, kind: t.kind, tie: tieOf(t), at: aimsOfTie(W, t, a, b, rngOf(W.seed, "tie-at", key, W.tries.web ?? 0)) });
+    });
+  }
+  W.web = web;
+}
 // A tie for a pair: one whose slots the pair can fill, fresh while there's one.
 function tieFor(T, W, kinds, bond, a, b, used, rand) {
   const can = (t) => {
@@ -788,15 +931,13 @@ function extrasOf(W, j) {
   const f = W.factions[j];
   return Math.max(0, (f.res?.length ?? 0) - (f.assets?.length ?? 0));
 }
-const needsOf = (W) => Math.max(W.n >= 5 ? 1 : 0, Math.round(W.n * NEEDS[W.dials.tense]));
+// Adding to a board, each new faction has its own chance of one, as tense says.
+const needsOf = (W) => (adding(W) ? fresh(W).filter((i) => rngOf(W.seed, "need-of", i, W.tries.needs ?? 0)() < NEEDS[W.dials.tense]).length : Math.max(W.n >= 5 ? 1 : 0, Math.round(W.n * NEEDS[W.dials.tense])));
 function dealNeeds(T, W, { only = null } = {}) {
   W.needs = [];
   const rand = randOf(W, "needs");
   const count = needsOf(W);
-  const order = shuffle(
-    W.factions.map((_, i) => i),
-    rand,
-  ).sort((x, y) => extrasOf(W, x) - extrasOf(W, y));
+  const order = shuffle(fresh(W), rand).sort((x, y) => extrasOf(W, x) - extrasOf(W, y));
   const P = poolOf(T, W.recipe);
   const board = boardOf(T, W);
   for (const i of order) {
@@ -846,10 +987,15 @@ const powerOk = (W, i) => {
   if (!f.size || !f.assets || lockedOrOwn(W, i, "size") || lockedOrOwn(W, i, "assets") || f.assets.some(own)) return true;
   return f.size.die === 2 * (1 + f.assets.filter((a) => a.power).length);
 };
+// Adding to a board, only the new factions are checked, and the board-wide
+// checks (a blocked trade, a Secret naming another faction, something
+// strange) are the board's own business.
 function passes(T, W, key) {
-  if (key === "whole") return W.factions.every((f) => STEPS.every((s) => s === "exc" || f[s] != null));
-  if (key === "power") return W.factions.every((_, i) => powerOk(W, i));
-  if (key === "rival") return W.factions.every((_, i) => (W.web ?? []).some((t) => t.kind === "rival" && (t.a === i || t.b === i)));
+  const mine = fresh(W);
+  if (adding(W) && ["block", "secret", "strange"].includes(key)) return true;
+  if (key === "whole") return mine.every((i) => STEPS.every((s) => s === "exc" || W.factions[i][s] != null));
+  if (key === "power") return mine.every((i) => powerOk(W, i));
+  if (key === "rival") return (adding(W) && !W.held) || mine.every((i) => (W.web ?? []).some((t) => t.kind === "rival" && (t.a === i || t.b === i)));
   if (key === "block") return W.n < 5 || (W.needs ?? []).some((n) => n.by != null && n.by !== n.i && extrasOf(W, n.by) > 0);
   if (key === "secret") return W.factions.some((f) => f.secret?.at != null || (own(f.secret) && f.secret.rival));
   if (key === "unique") {
@@ -860,7 +1006,7 @@ function passes(T, W, key) {
     }
     return true;
   }
-  if (key === "aims") return W.factions.every((f, i) => own(f.agenda) || aimOk(W, i, f.agenda));
+  if (key === "aims") return mine.every((i) => own(W.factions[i].agenda) || aimOk(W, i, W.factions[i].agenda));
   if (key === "strange") return strangeCount(W) > 0;
   return true;
 }
@@ -868,7 +1014,7 @@ function aimOk(W, i, ag) {
   if (!ag?.aims?.length) return false;
   return ag.aims.every((a) => {
     const v = ag.at?.[a];
-    if (a === "seat") return Number.isInteger(v) && Boolean(W.seats[v]);
+    if (a === "seat") return Number.isInteger(v) && Boolean(W.seats[v]) && (!adding(W) || v < W.hs);
     if (a === "rival") return Number.isInteger(v) && v !== i && Boolean(W.factions[v]?.type);
     const list = a === "res" ? "res" : "assets";
     return Boolean(v) && v.j !== i && (W.factions[v.j]?.[list] ?? []).some((x) => x.id === v.id);
@@ -885,7 +1031,7 @@ function runChecks(T, W) {
 }
 // A faction a check can deal again, from those it's free to.
 function freeFaction(W, step, key, t, ok = () => true) {
-  const free = W.factions.map((f, i) => (!lockedOrOwn(W, i, step) && ok(f, i) ? i : null)).filter((i) => i !== null);
+  const free = W.factions.map((f, i) => (!f.held && !lockedOrOwn(W, i, step) && ok(f, i) ? i : null)).filter((i) => i !== null);
   return pick(free, rngOf(W.seed, "fix", key, t));
 }
 function redealStep(T, W, i, step, only, key, t) {
@@ -932,14 +1078,12 @@ function reaim(W, i, t) {
 function fix(T, W, key, t) {
   if (key === "whole") {
     // The first step a card's missing, dealt again, and the rest after it.
-    W.factions.forEach((f, i) => {
-      const step = STEPS.find((s) => s !== "exc" && f[s] == null);
+    for (const i of fresh(W)) {
+      const step = STEPS.find((s) => s !== "exc" && W.factions[i][s] == null);
       if (step && redealStep(T, W, i, step, null, key, t)) dealFaction(T, W, i);
-    });
+    }
   } else if (key === "power") {
-    W.factions.forEach((_, i) => {
-      if (!powerOk(W, i)) redealStep(T, W, i, "assets", null, key, t);
-    });
+    for (const i of fresh(W)) if (!powerOk(W, i)) redealStep(T, W, i, "assets", null, key, t);
   } else if (key === "rival") {
     W.tries.web = (W.tries.web ?? 0) + 1;
     dealWeb(T, W);
@@ -963,18 +1107,22 @@ function fix(T, W, key, t) {
     const i = freeFaction(W, "secret", key, t, (f, j) => dealt(W, j).length > 0);
     if (i != null) redealStep(T, W, i, "secret", "rival", key, t);
   } else if (key === "unique") {
+    // The board's own factions first, since theirs are what they are.
     const seen = new Set((W.needs ?? []).map((n) => n.asset.role));
-    W.factions.forEach((f, i) => {
-      const roles = (f.assets ?? []).filter((a) => !a.power && a.role && !own(a)).map((a) => a.role);
-      if (roles.some((r) => seen.has(r))) redealStep(T, W, i, "assets", null, key, t);
-      for (const r of (W.factions[i].assets ?? []).filter((a) => !a.power && a.role).map((a) => a.role)) seen.add(r);
-    });
+    const roles = (i) => (W.factions[i].assets ?? []).filter((a) => !a.power && a.role).map((a) => a.role);
+    for (const i of W.factions.map((_, j) => j).filter((j) => W.factions[j].held)) for (const r of roles(i)) seen.add(r);
+    for (const i of fresh(W)) {
+      const f = W.factions[i];
+      if ((f.assets ?? []).filter((a) => !a.power && a.role && !own(a)).some((a) => seen.has(a.role))) redealStep(T, W, i, "assets", null, key, t);
+      for (const r of roles(i)) seen.add(r);
+    }
   } else if (key === "aims") {
-    W.factions.forEach((f, i) => {
-      if (own(f.agenda) || aimOk(W, i, f.agenda)) return;
+    for (const i of fresh(W)) {
+      const f = W.factions[i];
+      if (own(f.agenda) || aimOk(W, i, f.agenda)) continue;
       if (reaim(W, i, t)) W.fixes.push({ k: key, path: `f:${i}:agenda`, t, aim: true });
       else redealStep(T, W, i, "agenda", null, key, t);
-    });
+    }
   } else if (key === "strange") {
     // Only a Secret or a name, since nothing else on the card reads them, and
     // never the only Secret naming another faction.
@@ -986,20 +1134,21 @@ function fix(T, W, key, t) {
 }
 function fallback(T, W, key) {
   const F = T.core.fallbacks;
-  const near = (i) => (i + 1) % W.n;
+  // Adding to a board, the one next to a new faction is one already there.
+  const near = (i) => (adding(W) && W.held ? i % W.held : (i + 1) % W.n);
   const used = () => W.fallbacks.push(key);
   if (key === "power") {
     // The die comes down to the people it's got, and the size with it.
     W.factions.forEach((f, i) => {
-      if (powerOk(W, i)) return;
+      if (f.held || powerOk(W, i)) return;
       const die = Math.min(12, 2 * (1 + f.assets.filter((a) => a.power).length));
       const size = [...SIZES].reverse().find((s) => T.book.sizes[s].lo <= die && die <= T.book.sizes[s].hi) ?? f.size.size;
       f.size = { size, die };
       used();
     });
   } else if (key === "rival") {
-    W.factions.forEach((_, i) => {
-      if ((W.web ?? []).some((t) => t.kind === "rival" && (t.a === i || t.b === i))) return;
+    W.factions.forEach((f, i) => {
+      if (f.held || (W.web ?? []).some((t) => t.kind === "rival" && (t.a === i || t.b === i))) return;
       W.web.push({ a: i, b: near(i), kind: "rival", tie: tieOf(F.rival), at: aimsOfTie(W, F.rival, i, near(i), rngOf(W.seed, "fallback", i)) });
       used();
     });
@@ -1016,15 +1165,19 @@ function fallback(T, W, key) {
     used();
   } else if (key === "unique") {
     const seen = new Set((W.needs ?? []).map((n) => n.asset.role));
+    for (const f of W.factions) if (f.held) for (const a of f.assets ?? []) if (!a.power && a.role) seen.add(a.role);
     W.factions.forEach((f, i) => {
-      if (lockedOrOwn(W, i, "assets")) return;
+      if (f.held || lockedOrOwn(W, i, "assets")) return;
       const before = (f.assets ?? []).length;
       f.assets = (f.assets ?? []).filter((a) => a.power || !a.role || own(a) || (!seen.has(a.role) && seen.add(a.role)));
       if (f.assets.length !== before) used();
     });
   } else if (key === "aims") {
     W.factions.forEach((f, i) => {
-      if (own(f.agenda) || aimOk(W, i, f.agenda) || lockedOrOwn(W, i, "agenda")) return;
+      if (f.held || own(f.agenda) || aimOk(W, i, f.agenda) || lockedOrOwn(W, i, "agenda")) return;
+      // Adding to a board with no seat on it to aim at, there's nothing for
+      // the fallback to take.
+      if (!W.seats.some((s, k) => s && seatToAim(W, i, k))) return;
       f.agenda = { ...keepOf({ id: F.agenda.id, text: F.agenda.text, die: F.agenda.die, aims: ["seat"], why: "" }), at: aimOf(W, i, ["seat"], rngOf(W.seed, "fallback", "aims", i)) };
       used();
     });
@@ -1080,31 +1233,40 @@ export function cardsOf(T, W) {
       if (t.a !== i && t.b !== i) continue;
       const other = t.a === i ? t.b : t.a;
       const vals = (me, them) => ({ a: asName(me), b: asName(them), res: t.at?.res ? resText(t.a, t.at.res) : "", seat: seatAt(t.at?.seat) });
+      // Each thread says which tie it's from (tie), the web's by its pair, so
+      // a screen can leave one off.
+      const tie = `w:${t.a}-${t.b}`;
       if (t.kind === "wildcard") {
-        if (t.a === i) threads.push({ text: fill(t.tie.text, vals(i, other)), kind: t.tie.bond, s: "whole", to: other });
+        if (t.a === i) threads.push({ text: fill(t.tie.text, vals(i, other)), kind: t.tie.bond, s: "whole", to: other, tie });
       } else {
         const words = t.a === i ? t.tie.text : t.tie.back || t.tie.text;
-        threads.push({ text: fill(words, vals(i, other)), kind: t.kind === "rival" ? "hostile" : "bond", s: "whole", to: other });
+        threads.push({ text: fill(words, vals(i, other)), kind: t.kind === "rival" ? "hostile" : "bond", s: "whole", to: other, tie });
       }
     }
     for (const n of W.needs ?? []) {
-      if (n.by === i && n.tie) threads.push({ text: fill(n.tie.text, { a: asName(i), b: asName(n.i), res: n.at?.res ? resText(i, n.at.res) : "", seat: seatAt(n.at?.seat) }), kind: "hostile", s: "whole", to: n.i });
+      if (n.by === i && n.tie) threads.push({ text: fill(n.tie.text, { a: asName(i), b: asName(n.i), res: n.at?.res ? resText(i, n.at.res) : "", seat: seatAt(n.at?.seat) }), kind: "hostile", s: "whole", to: n.i, tie: `n:${n.i}` });
     }
     const secret = f.secret;
     const rival = secret?.at != null ? asName(secret.at) : "";
     const wayOf = (w) => ({ text: fill(w, { rival, seat }), name: /^\{/.test(w) });
     const ways = secret?.ways?.length === 2 ? fill(T2.ways, { one: wayOf(secret.ways[0]), two: wayOf(secret.ways[1]) }) : "";
+    // Her own Face is her words, with no threat behind it till she gives it one.
+    const ownFace = own(f.face);
     return {
+      held: f.held === true,
       seat: f.seat?.k ?? null,
       size: f.size?.size ?? null,
       die: f.size?.die ?? null,
       steps: 1 + (f.assets ?? []).filter((a) => a.power).length,
       name: nameOf(i),
-      about: f.type && f.method ? fill(T2.about, { type: f.type.text, method: f.method.text }) : "",
+      about: f.type && f.method ? fill(T2.about, { type: f.type.text, method: f.method.text }) : f.type && own(f.type) && !f.held ? fill(f.type.text, {}) : "",
+      // Where it sits, a line to go after what it is, so the seat's name on
+      // its card links to the seat's page.
+      sits: seat && T2.seat ? fill(T2.seat, { seat }) : "",
       want: f.want ? fill(f.want.text, {}) : "",
-      face: f.face ? fill(T2.face, { name: { text: f.face.name, name: true }, threat: f.face.threatName }) : "",
-      ch: f.face?.ch ?? null,
-      threat: f.face ? { key: f.face.threat, name: f.face.threatName, is: f.face.is, tags: f.face.tags } : null,
+      face: f.face ? (ownFace ? String(f.face.text ?? "").trim() : fill(T2.face, { name: { text: f.face.name, name: true }, threat: f.face.threatName })) : "",
+      ch: ownFace ? null : f.face?.ch ?? null,
+      threat: f.face && !ownFace ? { key: f.face.threat, name: f.face.threatName, is: f.face.is, tags: f.face.tags } : null,
       secret: secret ? fill(secret.tag ?? secret.text, { rival, seat }) : "",
       more: secret ? [secret.more ? fill(secret.more, { rival, seat }) : "", ways].filter(Boolean).join(" ") : "",
       res: (f.res ?? []).map((r) => ({ text: fill(r.text, { seat }), x: 1 })),
@@ -1122,6 +1284,36 @@ export function cardsOf(T, W) {
   return { factions, seats };
 }
 
+// A card's words, the way the board will have them with this pick on its
+// step, for a screen's three cards before one's on: each with its because,
+// whether it's strange, dealt again from a bag that ran out, or hers.
+export function preview(T, W, path, pick) {
+  if (!pick) return null;
+  const [head, a, b] = path.split(":");
+  const base = { why: pick.why ?? "", strange: Boolean(pick.strange), again: Boolean(pick.again), own: Boolean(pick.own) };
+  if (head === "ask" || head === "tension") return { ...base, text: fill(pick.text, {}), dials: pick.dials ?? {}, roll: pick.roll ?? null };
+  if (head === "seat") return { ...base, name: fill(pick.text, {}), role: pick.role ?? "", notice: pick.notice ?? "" };
+  if (head !== "f") return null;
+  const i = Number(a);
+  if (b === "seat") {
+    const s = W.seats[pick.k];
+    return { ...base, k: pick.k, name: s ? fill(s.text, {}) : "", role: s?.role ?? "", notice: s?.notice ?? "", strange: Boolean(s?.strange), own: Boolean(s?.own), fresh: adding(W) && pick.k >= W.hs };
+  }
+  if (b === "size") return { ...base, size: pick.size, word: T.regions[W.recipe.region]?.sizes?.[pick.size] ?? "", die: pick.die };
+  if (b === "type" || b === "method" || b === "want") return { ...base, text: fill(pick.text, {}) };
+  if (b === "exc") return { ...base, text: pick.text ?? "", reason: pick.reason ?? "" };
+  const W2 = { ...W, factions: W.factions.map((f, j) => (j === i ? { ...f, [b]: pick } : f)) };
+  const C = cardsOf(T, W2).factions[i];
+  const item = (x, k, list) => ({ text: list[k]?.text ?? "", why: x?.why ?? "", strange: Boolean(x?.strange), own: Boolean(x?.own) });
+  if (b === "res") return { ...base, items: pick.map((x, k) => item(x, k, C.res)) };
+  if (b === "assets") return { ...base, items: pick.map((x, k) => ({ ...item(x, k, C.assets), does: C.assets[k]?.does ?? "", power: C.assets[k]?.power === true })) };
+  if (b === "agenda") return { ...base, text: C.agendas[0]?.text ?? "", die: pick.die ?? null };
+  if (b === "face") return { ...base, text: C.face, ch: C.ch, threat: C.threat };
+  if (b === "secret") return { ...base, tag: C.secret, more: C.more };
+  if (b === "name") return { ...base, text: C.name };
+  return null;
+}
+
 // What was dealt, as doc.build keeps it: plain words and numbers, nothing of
 // the tables but what the picks hold, and all resume() needs to carry on.
 export function recordOf(W) {
@@ -1130,6 +1322,7 @@ export function recordOf(W) {
       v: 1,
       seed: W.seed,
       recipe: W.recipe,
+      ...(adding(W) ? { add: true, held: W.held, hs: W.hs } : {}),
       n: W.n,
       s: W.s,
       fixed: W.fixed,

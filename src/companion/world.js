@@ -13,6 +13,10 @@
 // it in its own tap, and a player's phone only ever gets what's been shown.
 // Players' phones check for anything new every 15 seconds while it's open.
 //
+// The world builder (world-make.js) is off the World screen too: Build the
+// world on an empty board and Add a faction on any board, on its own screen
+// (&make=world or &make=add), and Done puts what it dealt on the board here.
+//
 // A faction she brought in from the book remembers the book's card as it was,
 // so when the book changes it she gets a note and picks: take the book's
 // changes, or keep hers. Typo fixes go in quietly.
@@ -28,6 +32,7 @@ import { typo } from "./marks.js";
 import { die as kitDie, mini as kitMini } from "../kit/kit.js";
 import { makePlaces } from "./places.js";
 import { makeMaps } from "./mapsui.js";
+import { makeWorldMake } from "./world-make.js";
 import { forgetMapsOf, keepMapsOf } from "./mapcache.js";
 
 const KEY = "zi-world";
@@ -593,6 +598,7 @@ export function makeWorld(d) {
     if (!id) return;
     if (kind.startsWith("w-pg-")) return P.submit(kind, form, f, id);
     if (kind.startsWith("w-map-")) return M.submit(kind, form, f, id);
+    if (kind.startsWith("w-mk-")) return K.submit(kind, form, f, id);
     const doc = docOf(id);
     const fac = form.dataset.f ? find(doc, form.dataset.f) : null;
     const text = (name, max = MAX.line) => String(f.get(name) ?? "").replace(/\s+/g, " ").trim().slice(0, max);
@@ -623,7 +629,7 @@ export function makeWorld(d) {
       const name = text("name", MAX.name);
       if (!name) return d.toast("It needs a name.", false);
       const ops = [];
-      for (const [k, max] of [["name", MAX.name], ["about", MAX.line], ["want", MAX.words], ["face", MAX.words]]) {
+      for (const [k, max] of [["name", MAX.name], ["about", MAX.words], ["want", MAX.words], ["face", MAX.words]]) {
         const v = text(k, max);
         if (v !== fac[k]) ops.push({ o: "set", id: fac.id, f: k, v });
       }
@@ -757,7 +763,9 @@ export function makeWorld(d) {
       d.quietRender();
     },
   });
-  Object.assign(ACT, P.ACT, M.ACT);
+  // The world builder (world-make.js): its screens, and its way in on the board.
+  const K = makeWorldMake({ d, esc, sync, edit, docOf, isGm, newId, plural, status: (id) => status(id) });
+  Object.assign(ACT, P.ACT, M.ACT, K.ACT);
 
   // The crew's own card, at the top of the board: the party sheet's.
   function crewCard(id) {
@@ -818,8 +826,8 @@ export function makeWorld(d) {
     const shownCount = doc.factions.filter((f) => f.shown.card).length;
     const lead = order.length
       ? `<p class="cc-small wb-sum">${plural(doc.factions.length, "faction", "factions")} on the board, ${shownCount ? `${shownCount} shown to the crew` : "none of them shown to the crew yet"}.</p>`
-      : '<p class="cc-lead">Nothing on the board yet. Bring in a board from the book, or start with a faction of your own. Nothing on it shows on your players’ phones till you show it to them.</p>';
-    return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${lead}${crewCard(id)}${list}
+      : '<p class="cc-lead">Nothing on the board yet. Build the world from the tables, bring in a board from the book, or start with a faction of your own. Nothing on it shows on your players’ phones till you show it to them.</p>';
+    return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${lead}${order.length ? "" : K.entry(id, doc)}${crewCard(id)}${list}${order.length ? K.entry(id, doc) : ""}
       <div class="cc-folds wb-adds">${bringFold(id, doc)}${newFold(id, doc)}</div>
       <p class="cc-small">${ruleLink("s-faction-board", "What a faction is")} ${ruleLink("s-faction-build", "Building a faction")}</p>`;
   }
@@ -948,14 +956,14 @@ export function makeWorld(d) {
     const words = gm && ui.editing === wordsKey
       ? `<form class="cc-form pt-form wb-editing" data-form="w-words" data-f="${esc(f.id)}">
         <label class="cc-field">Its name <input name="name" maxlength="${MAX.name}" autocomplete="off" required value="${esc(f.name)}"></label>
-        <label class="cc-field">What it is <input name="about" maxlength="${MAX.line}" autocomplete="off" value="${esc(f.about)}" placeholder="like A merchant guild. It works through money."></label>
+        <label class="cc-field">What it is <input name="about" maxlength="${MAX.words}" autocomplete="off" value="${esc(f.about)}" placeholder="like A merchant guild. It works through money."></label>
         <label class="cc-field">Want, the thing it always wants <input name="want" maxlength="${MAX.words}" autocomplete="off" value="${esc(f.want)}"></label>
         <label class="cc-field">Face, the person the crew deals with <input name="face" maxlength="${MAX.words}" autocomplete="off" value="${esc(f.face)}"></label>
         <div class="cc-row"><button type="submit" class="button primary">Save</button><button type="button" class="button" data-act="w" data-do="cancel">Cancel</button></div></form>`
       : `<dl class="wb-words">${f.want ? `<div><dt>Want</dt><dd><em>${rich(f.want, f.id)}</em></dd></div>` : ""}${f.face ? `<div><dt>Face</dt><dd>${rich(f.face, f.id)}${gm ? P.faceOf(id, f, doc) : ""}</dd></div>` : ""}</dl>
         ${gm ? `<button type="button" class="pt-reword" data-act="w" data-do="edit" data-k="${esc(wordsKey)}">Change its name, Want and Face</button>` : ""}`;
     const powerShown = gm || f.shown.power;
-    const head = `<header class="cc-camp-head wb-head"><p class="kicker is-gm">${f.mini ? `Mini faction${maker ? ` of ${esc(maker)}` : ""}` : "Faction"}</p><h1>${esc(f.name)}</h1>${f.about ? `<p class="cc-small">${esc(f.about)}</p>` : ""}</header>
+    const head = `<header class="cc-camp-head wb-head"><p class="kicker is-gm">${f.mini ? `Mini faction${maker ? ` of ${esc(maker)}` : ""}` : "Faction"}</p><h1>${esc(f.name)}</h1>${f.about ? `<p class="cc-small">${rich(f.about, f.id)}</p>` : ""}</header>
       <div class="wb-card card" data-glow="${lit[id]?.includes(f.id) ? "1" : ""}">
         <div class="wb-card-top"><div class="wb-card-die" role="img" aria-label="${powerShown ? `Power ${diceLabel(dice)}` : "Power not known"}">${powerShown ? them(dice) : '<span class="wb-unknown" aria-hidden="true">?</span>'}</div>
           <div class="wb-card-p"><p class="wb-k">Power</p><p class="wb-card-v">${powerShown ? diceLabel(dice) : "Not known"}</p>${powerShown ? `<p class="cc-small">${steps} ${steps === 1 ? "step" : "steps"}</p>` : ""}</div>
@@ -1078,6 +1086,7 @@ export function makeWorld(d) {
     if (!sync.me) {
       return `${topbar("/characters/", "Characters")}<header class="cc-camp-head"><p class="kicker">The world</p><h1>${esc(nameOf(v.id))}</h1></header><div class="cc-note is-warn"><p>Sign in to see your campaigns. <a href="/account/">Sign in</a></p></div>`;
     }
+    if (v.make) return K.view(v.id, v.make === "add" ? "add" : "world");
     if (v.f) return factionView(v.id, v.f);
     if (v.p) return P.pageView(v.id, v.p);
     if (v.m) return M.mapView(v.id, v.m, v.pin);
@@ -1126,6 +1135,7 @@ export function makeWorld(d) {
   // What's just been shown to a player lights up for a moment.
   function after(app) {
     M.after(app);
+    K.after(app);
     const el = app.querySelector(".wb-card");
     if (!el) return;
     if (el.dataset.glow) el.classList.add("is-new");
@@ -1144,7 +1154,10 @@ export function makeWorld(d) {
     // GM's changes to it.
     docIn: (id) => docOf(id),
     edit: (id, ops, say, o) => edit(id, ops, say, o),
+    // The world builder's Undo, from a toast.
+    makeUndo: () => watching && K.undo(watching),
     title(v) {
+      if (v.make) return K.title(v.make);
       if (v.f) return find(docOf(v.id), v.f)?.name ?? "A faction";
       if (v.p) return P.title(v.id, v.p);
       if (v.m) return M.title(v.id, v.m);
@@ -1157,12 +1170,14 @@ export function makeWorld(d) {
       delete st.k[id];
       keep();
       forgetMapsOf(id);
+      K.drop(id);
     },
     keepOnly(ids) {
       load();
       for (const id of Object.keys(st.k)) if (!ids.includes(id)) delete st.k[id];
       keep();
       keepMapsOf(ids);
+      K.keepOnly(ids);
     },
   };
 }

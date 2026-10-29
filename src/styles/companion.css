@@ -1895,3 +1895,173 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
   .ft-fac:active { transform: none; }
 }
 .ft-done-note { margin: 0; padding: 0.45rem 0.7rem; font-weight: 700; color: var(--gold-ink); background: color-mix(in srgb, var(--gold) 10%, var(--surface)); border-left: 3px solid var(--gold); border-radius: 2px; overflow-wrap: anywhere; }
+
+/* ── The world builder (stage 5 of notes/builder-plan.md, world-make.js): Build
+   the world and Add a faction, a step to a screen for a phone in one hand.
+   It's the GM's, so what she's picked is edged in violet with a violet
+   diamond in its corner, the cards are cut like the kit's tokens, and Back,
+   the steps and Next sit in the builder's bar along the bottom. */
+.wk-head .kicker { color: var(--zd-them-ink); }
+.wk-progress { grid-template-columns: repeat(var(--n, 5), minmax(0, 1fr)); }
+.wk-progress li.done { background: color-mix(in srgb, var(--zd-them) 55%, var(--zd-slot)); }
+.wk-progress li.on { background: var(--zd-them); }
+.wk-undo { gap: 6px; }
+.wk-undo svg { width: 18px; height: 18px; }
+.wk-sec { margin-top: 1.8rem; }
+.wk-sec > h2, .wk-step-h h2 { margin-bottom: 0.6rem; }
+.wk-note { margin: 0.45rem 0 0; }
+
+/* The cards to pick from: three to a step, each a token she taps. */
+.wk-step { margin-top: 1.7rem; }
+.wk-step-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.wk-step-h h2 { flex: 1 1 auto; min-width: 0; }
+.wk-locked { flex: none; display: inline-flex; align-items: center; min-height: 22px; padding: 0 7px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--zd-on-them); background: var(--zd-them); border-radius: 2px; }
+.wk-hand { display: grid; gap: 8px; }
+.wk-hand.is-row { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.wk-card, .wk-pick { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; width: 100%; min-width: 0; min-height: 52px; padding: 11px 34px 11px 13px; font: inherit; text-align: left; color: var(--ink); background: var(--zd-token); border: 1.5px solid var(--bd-edge); border-radius: 3px; cursor: pointer; transition: transform 140ms var(--bd-ease), border-color 140ms ease, box-shadow 140ms ease; }
+.wk-card:active, .wk-pick:active { transform: scale(0.98); }
+@media (hover: hover) and (pointer: fine) { .wk-card:hover, .wk-pick:not(:disabled):hover { border-color: var(--zd-them-line); } }
+.wk-card:focus-visible, .wk-pick:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wk-card.is-on, .wk-pick.is-on { border-color: var(--zd-them-line); box-shadow: inset 0 0 0 1.5px var(--zd-them-line); }
+.wk-card.is-on::after, .wk-pick.is-on::after { content: ""; position: absolute; top: 10px; right: 10px; width: 14px; height: 14px; background: var(--zd-them-line); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.wk-card.is-static { cursor: default; }
+.wk-card.is-static:active { transform: none; }
+.wk-step.is-locked .wk-card.is-on { box-shadow: inset 0 0 0 1.5px var(--zd-them-line), 0 0 0 3px var(--bg), 0 0 0 4.5px var(--zd-them-line); }
+.wk-card-w { font-size: 1.02rem; line-height: 1.35; overflow-wrap: anywhere; }
+.wk-card-n { font-family: var(--display); font-weight: 600; font-size: 1.12rem; line-height: 1.2; letter-spacing: 0.01em; overflow-wrap: anywhere; }
+.wk-keep { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--zd-them-ink); }
+.wk-notice { font-size: 0.95rem; line-height: 1.38; color: var(--ink); }
+.wk-why { font-size: 0.86rem; line-height: 1.3; font-style: italic; color: var(--muted); }
+.wk-small { font-size: 0.86rem; color: var(--muted); }
+.wk-card-m { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+.wk-mark, .wk-nudge { display: inline-flex; align-items: center; min-height: 20px; padding: 0 6px; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); border: 1.5px dashed var(--line); border-radius: 2px; }
+.wk-mark.is-strange { color: var(--zd-them-ink); border: 1.5px solid var(--zd-them-line); }
+.wk-mark.is-own { color: var(--zd-on-them); background: var(--zd-them); border: 1.5px solid var(--zd-them); }
+.wk-nudge { color: var(--ink); border-style: solid; border-color: var(--line-soft); letter-spacing: 0.04em; text-transform: none; font-size: 0.78rem; }
+.wk-card-die .zd-die { --s: 40px; }
+.wk-hand.is-row .wk-card { align-items: center; gap: 2px; padding: 10px 6px 9px; text-align: center; }
+.wk-hand.is-row .wk-card.is-on::after { top: 6px; right: 6px; width: 11px; height: 11px; }
+.wk-hand.is-row .wk-card-w { font-size: 0.9rem; line-height: 1.25; }
+.wk-card-ag { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; width: 100%; }
+.wk-card-ag .zd-mini { width: 26px; height: 26px; }
+.wk-card-ag small { font-weight: 800; color: var(--zd-them-ink); font-variant-numeric: tabular-nums; }
+.wk-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
+.wk-tags .zd-tag { font-size: 0.82rem; }
+.wk-secret { font-size: 0.82rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--zd-them-ink); }
+.wk-more { font-size: 0.97rem; line-height: 1.38; }
+
+/* Lock, Deal again and Write my own, under every step. */
+.wk-tools { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.wk-tool { gap: 6px; min-height: 44px; padding: 0 0.7rem !important; font-size: 0.9rem !important; }
+.wk-tool svg { flex: none; }
+.wk-tool .zd-mini { width: 20px; height: 20px; }
+.wk-tool[aria-pressed="true"] { color: var(--zd-on-them); background: var(--zd-them) !important; border-color: var(--zd-them); }
+.wk-tool[aria-expanded="true"] { border-color: var(--zd-them-line); }
+.wk-own { margin-top: 10px; padding: 10px 12px 12px; background: var(--panel); border: 1px solid var(--line-soft); border-left: 3px solid var(--zd-them-line); border-radius: 2px; }
+.wk-own .cc-field input, .wk-own .cc-field select { width: 100%; }
+.wk-step.is-fresh .wk-card { animation: wk-deal 280ms var(--bd-ease) backwards; }
+.wk-step.is-fresh .wk-card:nth-child(2) { animation-delay: 45ms; }
+.wk-step.is-fresh .wk-card:nth-child(3) { animation-delay: 90ms; }
+.wk-step.is-fresh .wk-card.is-on, .wk-step.is-fresh .wk-line { animation: wk-deal 280ms var(--bd-ease) backwards, wk-lit 1.2s ease-out 120ms; }
+@keyframes wk-deal { from { opacity: 0; transform: translateY(8px) rotate(-0.6deg); } }
+@keyframes wk-lit { 0% { box-shadow: inset 0 0 0 1.5px var(--zd-them-line), 0 0 0 0 color-mix(in srgb, var(--zd-them) 60%, transparent); } 100% { box-shadow: inset 0 0 0 1.5px var(--zd-them-line), 0 0 0 12px transparent; } }
+
+/* Set up: where it's set, what kind of world, and how many factions. */
+.wk-picks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 13.5rem), 1fr)); gap: 8px; }
+.wk-pick b { font-family: var(--display); font-weight: 600; font-size: 1.1rem; line-height: 1.2; }
+.wk-pick span { font-size: 0.9rem; line-height: 1.3; color: var(--muted); }
+.wk-pick:disabled { cursor: not-allowed; opacity: 0.55; border-style: dashed; }
+.wk-pick:disabled:active { transform: none; }
+.wk-later { margin-top: 0.7rem; }
+.wk-mix { margin-top: 0.4rem; }
+.wk-chips { gap: 6px; margin: 0; }
+.wk-chip { min-height: 44px; padding: 0 0.8rem; color: var(--ink); cursor: pointer; font: inherit; font-weight: 700; font-size: 0.92rem; }
+.wk-chip.is-on { color: var(--zd-on-them); background: var(--zd-them); border-color: var(--zd-them); }
+.wk-chip small { margin-left: 4px; font-weight: 600; color: var(--muted); }
+.wk-chip:disabled { border-style: dashed; }
+.wk-count { display: flex; align-items: center; gap: 12px; }
+.wk-count .wk-step-b { width: 52px; min-height: 52px; padding: 0; font-family: var(--body); font-size: 1.5rem; font-weight: 600; }
+.wk-count-n { min-width: 3ch; font-family: var(--display); font-weight: 600; font-size: 2.1rem; line-height: 1; text-align: center; color: var(--zd-them-ink); font-variant-numeric: tabular-nums; }
+.wk-all { margin-top: 2rem; padding: 14px; box-shadow: inset 3px 0 0 var(--zd-them-line); }
+.wk-all h2 { margin-bottom: 0.4rem; font-size: 1.15rem; }
+.wk-all p { margin: 0 0 0.2rem; color: var(--muted); font-size: 0.95rem; }
+
+/* The asking's dials, and the tension's d12. */
+.wk-dials { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 14px; margin: 1.4rem 0 0; padding: 10px 12px; list-style: none; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 2px; }
+.wk-dials li { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 30px; font-size: 0.88rem; color: var(--muted); }
+.wk-pips { display: inline-flex; gap: 4px; }
+.wk-pips i { width: 11px; height: 11px; background: var(--zd-slot); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.wk-pips i.on { background: var(--zd-them); }
+.wk-tension-in { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; padding: 14px; box-shadow: inset 3px 0 0 var(--zd-them-line); }
+.wk-tension-in .zd-die { --s: 76px; }
+.wk-tension-in .wk-card-w { margin: 0; font-size: 1.12rem; }
+.wk-tension-in .wk-card-m { margin: 6px 0 0; }
+.wk-yours { display: grid; place-items: center; width: 64px; height: 64px; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--zd-on-them); background: var(--zd-them); clip-path: var(--hex); }
+.wk-roll { margin-top: 10px; padding: 10px 12px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 2px; }
+.wk-roll .cc-small { margin: 0 0 8px; }
+.wk-roll-g { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; }
+.wk-roll-g .button { min-width: 0; padding: 0 !important; font-variant-numeric: tabular-nums; }
+
+/* A faction's header on its screens: its Power, what it is and where it sits. */
+.wk-fac { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 12px; margin-top: 1rem; padding: 12px 14px; box-shadow: inset 3px 0 0 var(--zd-them-line); }
+.wk-fac-die .zd-die { --s: 54px; }
+.wk-fac-in { display: grid; gap: 3px; min-width: 0; }
+.wk-fac-in p { margin: 0; }
+.wk-fac-about { font-size: 0.98rem; line-height: 1.38; overflow-wrap: anywhere; }
+.wk-fac-want { font-size: 0.95rem; color: var(--muted); }
+.wk-break { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-top: 1.2rem; }
+.wk-break .cc-small { margin: 0; }
+.wk-exc .wk-card { border-style: dashed; }
+
+/* Its resources and assets: a line each, and a tap takes one off. */
+.wk-lines { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.wk-line { display: flex; align-items: flex-start; gap: 8px; padding: 9px 8px 9px 13px; background: var(--zd-token); border: 1.5px solid var(--bd-edge); border-radius: 3px; }
+.wk-line.is-people { border-color: color-mix(in srgb, var(--zd-them-line) 70%, var(--bd-edge)); }
+.wk-line-in { display: grid; gap: 3px; flex: 1 1 auto; min-width: 0; }
+.wk-line-w { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0; overflow-wrap: anywhere; }
+.wk-line .pt-does { margin: 0; font-size: 0.9rem; color: var(--muted); }
+.wk-drop { flex: none; width: 44px; padding: 0 !important; }
+.wk-again { margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line-soft); }
+.wk-again .button { gap: 8px; }
+.wk-again .cc-small { margin-top: 0.4rem; }
+.wk-rest { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--line-soft); }
+.wk-rest .cc-small { margin: 0; flex: 1 1 12rem; }
+
+/* Threads and bonds to keep or swipe away. */
+.wk-ties { display: grid; gap: 8px; margin: 0.6rem 0 0; padding: 0; list-style: none; }
+.wk-tie { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 8px; padding: 10px 10px 10px 14px; background: var(--zd-token); border: 1.5px solid var(--bd-edge); border-radius: 3px; box-shadow: inset 3px 0 0 var(--gold); touch-action: pan-y; transition: transform 180ms var(--bd-ease), opacity 180ms ease; }
+.wk-tie.is-hostile { box-shadow: inset 3px 0 0 var(--zd-harm-line); }
+.wk-tie.is-need { grid-template-columns: minmax(0, 1fr); box-shadow: inset 3px 0 0 var(--muted); border-style: dashed; }
+.wk-tie.is-moving { transition: none; opacity: 0.85; }
+.wk-tie-in { display: grid; gap: 4px; min-width: 0; }
+.wk-tie-k { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.wk-tie.is-hostile .wk-tie-k { color: var(--zd-harm-ink); }
+.wk-tie.is-bond .wk-tie-k { color: var(--gold-ink); }
+.wk-tie-l { font-size: 0.97rem; line-height: 1.38; overflow-wrap: anywhere; }
+.wk-tie em { font-size: 0.99rem; }
+.wk-tie.is-cut { opacity: 0.6; border-style: dashed; box-shadow: none; }
+.wk-tie.is-cut em, .wk-tie.is-cut .wk-tie-l { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--muted); }
+.wk-tie-b { gap: 5px; padding: 0 0.6rem !important; font-size: 0.85rem !important; }
+.wk-tok { width: 100%; font: inherit; text-align: left; border: 1px solid var(--line); cursor: pointer; }
+.wk-done-note { margin-top: 1.4rem; }
+
+/* The way in, on the World screen. */
+.wk-start { margin: 0 0 12px; padding: 14px; box-shadow: inset 3px 0 0 var(--zd-them-line); }
+.wk-start h3 { margin: 0.15rem 0 0.3rem; font-family: var(--display); font-weight: 600; font-size: 1.25rem; color: var(--ink); }
+.wk-start p { margin: 0; }
+.wk-start .cc-row { margin-bottom: 0; }
+.wk-start.is-add { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-top: 12px; }
+.wk-start.is-add > div:first-child { flex: 1 1 14rem; min-width: 0; }
+.wk-start.is-add .cc-small, .wk-start.is-add p:not(.wb-k) { font-size: 0.95rem; color: var(--muted); }
+.wk-start.is-going { border-style: dashed; }
+
+@media (max-width: 359px) {
+  .wk-card, .wk-pick { padding: 10px 30px 10px 11px; }
+  .wk-tool span { font-size: 0.86rem; }
+  .wk-dials { grid-template-columns: minmax(0, 1fr); }
+  .wk-hand.is-row .wk-card-w { font-size: 0.82rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wk-card, .wk-pick, .wk-tie { transition: none !important; }
+  .wk-card:active, .wk-pick:active { transform: none !important; }
+}

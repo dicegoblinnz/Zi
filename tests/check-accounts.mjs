@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b or 9c)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c or 9d)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -162,6 +162,27 @@
 //    all covered. The fog's card, Mo's map with the fog's bar
 //    and Kai's map pass axe at 390, in both themes. Taking the fog off gives
 //    Kai the whole map back, with the pins.
+//    9d. Building alone (stage 5 of notes/builder-plan.md). Mo starts
+//    Thursday Lair and Sam joins it. Its empty board offers Build the world:
+//    Mo picks Medieval at Town, it's four factions for one player, and the
+//    tables deal it a step at a time. He picks an answer, writes one of his
+//    own and taps in a real 8 for the tension, deals a seat again, locks one,
+//    and it's all still there after a reload. Then the signal drops: he
+//    locks the first faction's Want and picks another type, so the rest of
+//    its card's dealt again round the Want, deals the faction again bar the
+//    Want, Undoes it, names the second one himself, deals the rest, leaves a
+//    thread of the web off, and puts it on the board, all with no signal.
+//    Once he's back it reaches the server: the factions and the seats as
+//    places, all hidden, each card saying where it sits, his name and Want
+//    kept, the thread left off both cards, and the record with every
+//    faction's id beside what was dealt it. Sam gets none of it, not the
+//    record or anything dealt, and can't change it. Tuesday Lair's board,
+//    brought in from the book, offers Add a faction on the Steeplands' mix:
+//    the new faction's rival is a faction already there, a thread each way,
+//    it sits on a new place, and the record's added gets it. Kai gets none of
+//    it. Adding a faction's screens pass axe at 390, in both themes, and at
+//    320, and one left half added on the phone is dropped from the World
+//    screen.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -3005,6 +3026,236 @@ try {
   await checkFog();
   // ZI_UPTO=9c stops here, for a quicker look while working on the fog.
   if (UPTO === "9c") break rest;
+
+  // ------------------------------------------------------------ 9d. building alone
+  async function checkBuild() {
+    const worldOf = async (id) => JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", id))[0]?.data ?? "null");
+    const making = (page, id) => page.evaluate((c) => JSON.parse(localStorage.getItem("zi-make") || "null")?.k?.[c] ?? null, id);
+    const next = async (page) => {
+      await page.click('.bd-foot [data-do="mk-next"]');
+      await page.waitForTimeout(80);
+    };
+    const kicker = (page) => page.textContent(".wk-head .kicker");
+    const lead = (page) => page.textContent(".wk-head h1");
+    const cardsAt = (page, path) => page.$$eval(`.wk-card[data-p="${path}"]`, (els) => els.map((e) => ({ on: e.getAttribute("aria-pressed") === "true", text: e.textContent.replace(/\s+/g, " ").trim() })));
+    const T = JSON.parse(readFileSync("public/world-tables.json", "utf8"));
+
+    // Mo starts Thursday Lair, and Sam joins it with Isolde.
+    const thursday = (await got(mo.page, "POST", "/api/campaigns", { name: "Thursday Lair" })).json?.campaign;
+    await api(sam.page, "PUT", "/api/characters/isolde-tttttt", crewChar("isolde-tttttt", "isolde", "Isolde"));
+    same((await got(sam.page, "POST", "/api/join", { code: thursday.code, character: "isolde-tttttt" })).json?.campaign?.role, "player", "Sam joins Thursday Lair with Isolde");
+    await mo.page.goto(`${BASE}/characters/?camp=${thursday.id}`);
+    await mo.page.waitForSelector(".wb-tile-a");
+    await mo.page.click(".wb-tile-a");
+    await mo.page.waitForSelector(".wk-start");
+    has(await text(mo.page, ".wk-start"), "Build the world", "an empty board offers Build the world");
+
+    // Set up: Medieval at Town, four factions for one player.
+    await mo.page.click('.wk-start [data-do="mk-start"][data-m="world"]');
+    await mo.page.waitForSelector(".wk-head");
+    same(await lead(mo.page), "Build the world", "Build the world opens on its set up");
+    has(await text(mo.page, ".wk"), "Coming as their tables go in", "the genres without their tables say they're coming");
+    yes(await mo.page.$eval('[data-do="mk-set"][data-k="region"][data-v="stars"]', (b) => b.disabled), "and so does the Stars");
+    await mo.page.click('[data-do="mk-set"][data-k="region"][data-v="town"]');
+    await mo.page.click('[data-do="mk-set"][data-k="genre"][data-v="medieval"]');
+    same(await mo.page.textContent(".wk-count-n"), "4", "four factions for one player, since it's never fewer");
+    for (const theme of ["dark", "light"]) {
+      await mo.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await mo.page.reload();
+      await mo.page.waitForSelector(".wk-count");
+      await axe(mo.page, `building the world, its set up, ${theme}`);
+      await shot(mo.page, `build-setup-${theme}`);
+    }
+    await mo.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+    await mo.page.reload();
+    await mo.page.waitForSelector(".wk-count");
+    await next(mo.page);
+    let e = await making(mo.page, thursday.id);
+    same([e?.W?.recipe, e?.W?.n, e?.W?.s], [{ region: "town", era: "medieval", twist: null }, 4, 6], "Medieval at Town, four factions on six seats");
+
+    // The asking: an answer of the three, one of his own, and a real roll.
+    has(await lead(mo.page), "What holds it together?", "the asking starts with what holds it together");
+    let hand = await cardsAt(mo.page, "ask:holds");
+    same([hand.length, hand.filter((c) => c.on).length], [3, 1], "three answers, one of them on");
+    const picked = hand.findIndex((c) => !c.on);
+    await mo.page.click(`.wk-card[data-p="ask:holds"][data-c="${picked}"]`);
+    yes((await cardsAt(mo.page, "ask:holds"))[picked]?.on, "a tap puts another answer on");
+    await next(mo.page);
+    has(await lead(mo.page), "pulling it apart", "then what's pulling it apart");
+    await mo.page.click('[data-do="mk-tap"]');
+    await mo.page.click('[data-do="mk-roll"][data-v="8"]');
+    has(await text(mo.page, ".wk-tension"), T.core.tension[7].text.replace(/'/g, "’"), "a real 8 tapped in is the tension table's eighth");
+    await next(mo.page);
+    await mo.page.click('[data-do="mk-own"][data-p="ask:runs"]');
+    await mo.page.fill('form[data-form="w-mk-own"][data-p="ask:runs"] input[name="text"]', "The bell-ringers run it, and nobody knows why.");
+    await mo.page.click('form[data-form="w-mk-own"][data-p="ask:runs"] button[type="submit"]');
+    hand = await cardsAt(mo.page, "ask:runs");
+    yes(hand[0]?.on && hand[0].text.includes("The bell-ringers run it") && hand[0].text.includes("Yours"), "his own answer's on, and says it's his");
+    await next(mo.page);
+    await next(mo.page);
+
+    // The ground: a seat dealt again, one locked, and all of it after a reload.
+    has(await kicker(mo.page), "Seat 1 of 6", "the ground, a seat at a time");
+    const was = (await cardsAt(mo.page, "seat:0")).find((c) => c.on).text;
+    await mo.page.click('[data-do="mk-again"][data-p="seat:0"]');
+    hand = await cardsAt(mo.page, "seat:0");
+    yes(hand.length === 3 && !hand.some((c) => c.text === was), "Deal again gives the seat three cards it didn't have");
+    await next(mo.page);
+    await mo.page.click('[data-do="mk-lock"][data-p="seat:1"]');
+    const locked = (await making(mo.page, thursday.id)).W.seats[1].text;
+    await mo.page.reload();
+    await mo.page.waitForSelector(".wk-head");
+    has(await kicker(mo.page), "Seat 2 of 6", "a reload carries on from the same screen");
+    same((await making(mo.page, thursday.id)).W.locks["seat:1"], true, "with the seat still locked");
+
+    // The signal drops, and he carries on.
+    await mo.context.setOffline(true);
+    await mo.page.click(".bd-jump summary");
+    await mo.page.click('.bd-jumps [data-s="f:0:1"]');
+    has(await kicker(mo.page), "Faction 1 of 4", "the factions, one at a time");
+    e = await making(mo.page, thursday.id);
+    yes(e.W.factions.every((f) => f.type && f.agenda && f.name), "every faction's dealt by the time he gets to the first, so agendas and Secrets can aim at any of them");
+    same(e.W.seats[1].text, locked, "and the locked seat's still the one he locked");
+    await next(mo.page);
+    await mo.page.click('[data-do="mk-lock"][data-p="f:0:want"]');
+    const want = (await making(mo.page, thursday.id)).W.factions[0].want;
+    const type = (await making(mo.page, thursday.id)).W.factions[0].type;
+    await mo.page.click('.wk-card[data-p="f:0:type"][aria-pressed="false"]');
+    e = await making(mo.page, thursday.id);
+    yes(e.W.factions[0].type.id !== type.id && e.W.factions[0].want.id === want.id, "another type keeps the locked Want");
+    has(await text(mo.page, "#cc-toast"), "Dealt again to fit", "and says what was dealt again to fit it");
+    const before = e.W.factions[0];
+    await mo.page.click('[data-do="mk-refaction"][data-i="0"]');
+    e = await making(mo.page, thursday.id);
+    yes(e.W.factions[0].want.id === want.id && e.W.factions[0].method?.id !== before.method?.id, "dealing the faction again keeps the Want and changes the rest");
+    await mo.page.click('[data-do="mk-undo"]');
+    same((await making(mo.page, thursday.id)).W.factions[0].method, before.method, "and Undo puts it back");
+    await mo.page.click(".bd-jump summary");
+    await mo.page.click('.bd-jumps [data-s="f:1:1"]');
+    for (let k = 0; k < 3; k++) await next(mo.page);
+    has(await kicker(mo.page), "Faction 2 of 4 · What it’s up to", "the second faction's agenda, Face, Secret and name");
+    for (const theme of ["dark", "light"]) {
+      await mo.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await mo.page.evaluate(() => document.documentElement.dataset.theme = localStorage.getItem("zi-theme"));
+      await axe(mo.page, `building the world, a faction, ${theme}`);
+      await shot(mo.page, `build-faction-${theme}`);
+    }
+    await mo.page.evaluate(() => { localStorage.setItem("zi-theme", "dark"); document.documentElement.dataset.theme = "dark"; });
+    await mo.page.click('[data-do="mk-own"][data-p="f:1:name"]');
+    await mo.page.fill('form[data-form="w-mk-own"][data-p="f:1:name"] input[name="text"]', "The Cold Hands");
+    await mo.page.click('form[data-form="w-mk-own"][data-p="f:1:name"] button[type="submit"]');
+    has(await lead(mo.page), "The Cold Hands", "his own name for it");
+    await mo.page.click('[data-do="mk-rest"]');
+    await mo.page.waitForSelector(".wk-ties");
+    has(await lead(mo.page), "The board", "dealing the rest goes to the board");
+    has(await text(mo.page, ".wk"), "Every faction’s card adds up", "and the checks passed");
+    await axe(mo.page, "building the world, the board, dark");
+    const tie = await mo.page.$eval('.wk-tie[data-cut^="w:"]', (el) => el.dataset.cut);
+    await mo.page.click(`.wk-tie[data-cut="${tie}"] [data-do="mk-cut"]`);
+    yes(await mo.page.$eval(`.wk-tie[data-cut="${tie}"]`, (el) => el.classList.contains("is-cut")), "a thread of the web left off");
+    e = await making(mo.page, thursday.id);
+    const [ta, tb] = tie.slice(2).split("-").map(Number);
+    await shot(mo.page, "build-board-dark");
+    await mo.page.click('.bd-foot [data-do="mk-done"]');
+    await mo.page.waitForSelector(".wb-toks");
+    await until(async () => (await text(mo.page, "#app")).includes("go up when you’ve got a signal"), "Mo's phone saying his world goes up once there's a signal");
+    same(await mo.page.$$eval(".wb-tok-n", (els) => els.length), 4, "the four factions on his board straight away");
+    same((await worldOf(thursday.id))?.factions?.length ?? 0, 0, "and not on the server yet");
+    same(await making(mo.page, thursday.id), null, "and the build's gone from the phone");
+    await mo.context.setOffline(false);
+    await until(async () => (await worldOf(thursday.id))?.build?.seed === e.W.seed, "the world on the server once Mo's back", 12000);
+    const tw = await worldOf(thursday.id);
+    same([tw.factions.length, tw.pages.length, tw.pages.every((p) => p.kind === "place")], [4, 6, true], "four factions and six seats as places");
+    yes(tw.factions.every((f) => !Object.values(f.shown).some(Boolean)) && tw.pages.every((p) => !Object.values(p.shown).some(Boolean)), "all hidden from the crew");
+    yes(tw.factions.every((f) => tw.pages.some((p) => f.about.includes(`It sits on ${p.name.replace(/^The /, "the ")}.`))), "each card says where it sits, by its place's name");
+    same(tw.factions[1].name, "The Cold Hands", "his own name kept");
+    same(tw.build.dealt.factions[0].want.id, want.id, "and the locked Want");
+    same(tw.build.dealt.ids, tw.factions.map((f) => f.id), "the record with every faction's id beside what was dealt it");
+    same(tw.build.dealt.pages, tw.pages.map((p) => p.id), "and every seat's");
+    same(tw.build.dealt.asking.runs, { own: true, text: "The bell-ringers run it, and nobody knows why." }, "and his own answer");
+    const fa = tw.factions[ta];
+    const fb = tw.factions[tb];
+    yes(!fa.threads.some((t) => t.to === fb.id) && !fb.threads.some((t) => t.to === fa.id), "the thread he left off is on neither card");
+    yes(tw.factions.every((f) => f.threads.every((t) => tw.factions.some((x) => x.id === t.to))), "every other thread's toward a faction on the board");
+    // Sam gets none of it, and can't change it.
+    const sw = (await got(sam.page, "GET", `/api/campaigns/${thursday.id}/world`)).json;
+    same([sw?.world?.factions, sw?.world?.pages, sw?.world?.build], [[], [], null], "Sam's phone gets nothing of the world till Mo shows it");
+    const said = JSON.stringify(sw);
+    yes(!said.includes(e.W.seed) && !said.includes("dealt") && !said.includes(tw.factions[0].name), "not the seed, the record or anything dealt");
+    same((await got(sam.page, "POST", `/api/campaigns/${thursday.id}/world`, { dev: "sams-phone-0001", ops: [{ n: 1, o: "wb-gone" }] })).status, 403, "and he can't touch the record");
+
+    // Add a faction on Tuesday Lair's board, brought in from the book.
+    const was2 = await worldOf(tuesday.id);
+    await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&world`);
+    await mo.page.waitForSelector(".wk-start.is-add");
+    await mo.page.click('[data-do="mk-start"][data-m="add"]');
+    await mo.page.waitForSelector(".wk-head");
+    has(await kicker(mo.page), "Adding a faction · Where it sits", "Add a faction starts on where it sits, since the board's got a mix");
+    e = await making(mo.page, tuesday.id);
+    same([e.W.recipe, e.W.fixed.strange], [{ region: "country", era: "medieval", twist: "magic" }, 0], "the Steeplands' mix: Fantasy at Country, with how strange at 0");
+    same(e.W.held, was2.factions.filter((f) => !f.mini).length, "with every faction on the board held");
+    await mo.page.click(".bd-jump summary");
+    await mo.page.click('.bd-jumps [data-s="setup"]');
+    has(await text(mo.page, ".wk-head"), "the Steeplands’ mix", "the mix says where it's from");
+    await mo.page.click(".bd-jump summary");
+    await mo.page.click('.bd-jumps [data-s="board"]');
+    await mo.page.waitForSelector(".wk-ties");
+    has(await lead(mo.page), "Its ties", "its ties");
+    await mo.page.click('.bd-foot [data-do="mk-done"]');
+    await until(async () => (await worldOf(tuesday.id))?.factions.length === was2.factions.length + 1, "the new faction on Tuesday Lair's board");
+    const w2 = await worldOf(tuesday.id);
+    const nf = w2.factions.find((f) => !was2.factions.some((x) => x.id === f.id));
+    const rival = nf.threads.find((t) => t.kind === "hostile" && was2.factions.some((f) => f.id === t.to));
+    yes(Boolean(rival), "its rival's a faction that was already there");
+    yes(w2.factions.find((f) => f.id === rival?.to)?.threads.some((t) => t.to === nf.id && t.kind === "hostile"), "with a hostile thread back on its card");
+    same(w2.pages.length, was2.pages.length + 1, "it sits on a new place");
+    yes(nf.about.includes(`It sits on ${w2.pages.at(-1).name.replace(/^The /, "the ")}.`), "and its card says so");
+    same([w2.build?.recipe?.region, w2.build?.dealt?.added?.[0]?.fid], ["country", nf.id], "the record's added has it");
+    const kw2 = (await got(kai.page, "GET", `/api/campaigns/${tuesday.id}/world`)).json;
+    yes(kw2?.world?.build === null && !kw2.world.factions.some((f) => f.id === nf.id) && !JSON.stringify(kw2).includes(w2.build.seed), "Kai gets none of it, not even the record");
+    yes(Object.values(nf.shown).every((v) => !v), "and it's hidden from the crew");
+
+    // Adding a faction's screens, at 390 in both themes.
+    await mo.page.goto(`${BASE}/characters/?camp=${thursday.id}&world`);
+    await mo.page.waitForSelector(".wk-start.is-add");
+    await mo.page.click('[data-do="mk-start"][data-m="add"]');
+    await mo.page.waitForSelector(".wk-fac");
+    for (const theme of ["dark", "light"]) {
+      await mo.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+      await mo.page.reload();
+      await mo.page.waitForSelector(".wk-fac");
+      await axe(mo.page, `adding a faction, where it sits, ${theme}`);
+      await shot(mo.page, `add-where-${theme}`);
+      await next(mo.page);
+      await axe(mo.page, `adding a faction, what it is, ${theme}`);
+      await mo.page.click(".bd-jump summary");
+      await mo.page.click('.bd-jumps [data-s="board"]');
+      await mo.page.waitForSelector(".wk-ties");
+      await axe(mo.page, `adding a faction, its ties, ${theme}`);
+      await mo.page.click(".bd-jump summary");
+      await mo.page.click('.bd-jumps [data-s="f:4:1"]');
+      await mo.page.waitForSelector(".wk-fac");
+    }
+    await mo.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+    // And on the narrowest phone.
+    await mo.page.setViewportSize({ width: 320, height: 640 });
+    await mo.page.reload();
+    await mo.page.waitForSelector(".wk-fac");
+    await next(mo.page);
+    await axe(mo.page, "adding a faction, what it is, 320 wide");
+    await mo.page.setViewportSize({ width: 390, height: 844 });
+    // One left half added on the phone, then dropped from the World screen.
+    await mo.page.goto(`${BASE}/characters/?camp=${thursday.id}&world`);
+    await mo.page.waitForSelector(".wk-start.is-going");
+    has(await text(mo.page, ".wk-start"), "You’re adding a faction", "a faction half added is still on the phone");
+    await mo.page.click('[data-do="mk-drop-build"]');
+    await mo.page.click('[data-do="mk-drop-build"]');
+    same(await making(mo.page, thursday.id), null, "and Drop it takes it off");
+  }
+  console.log("9d. Building alone");
+  await checkBuild();
+  // ZI_UPTO=9d stops here, for a quicker look while working on the world builder.
+  if (UPTO === "9d") break rest;
 
   // ------------------------------------------------------------ 10. who can do what
   console.log("10. Who can do what");

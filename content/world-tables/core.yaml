@@ -39,6 +39,8 @@ sizes: { small: 2, local: 4, city: 3, great: 1 }
 
 templates:
   about: "{type}. It works through {method}."
+  # Where it sits, after what it is on its card, so the seat's name links.
+  seat: "It sits on {seat}."
   face: "{name}, {threat}"
   ways: "Ways in: {one}, or {two}."
 

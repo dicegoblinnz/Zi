@@ -196,7 +196,7 @@ function drawFaction(W, C, f, i, reg, seat) {
         </div>
         ${die(f.die, { own: "them", label: `Power d${f.die}` })}
       </header>
-      <p class="dl-about">${esc(f.about)}${why(w.type)}</p>
+      <p class="dl-about">${esc([f.about, f.sits].filter(Boolean).join(" "))}${why(w.type)}</p>
       ${f.exception ? `<p class="dl-break"><b>Breaks the logic</b> ${esc(f.exception.text)}, ${esc(f.exception.reason)}.</p>` : ""}
       <dl class="dl-lines">${lines.map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${v}</dd></div>`).join("")}</dl>
     </article>`;

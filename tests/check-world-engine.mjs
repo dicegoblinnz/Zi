@@ -39,11 +39,21 @@
 //    well inside one change, and a player getting the history once it's
 //    shown, and never the seed or anything dealt.
 // 5. scripts/deal-world.mjs deals a board as text, the same for the same seed.
+// 6. Adding a faction (Add a faction, building alone): to the Steeplands as
+//    the book has them, on its mix, and to a world a build dealt, with its
+//    seats. The new card's whole and adds up, its rival and its ally or debt
+//    are factions already there, a thread each way, its agenda only aims at
+//    what's on the board, its name's one the board hasn't got, nothing held
+//    ever changes, the same seed deals the same faction, and it picks up from
+//    its record. Dealing a faction again deals what isn't locked or hers to a
+//    card it hasn't had, a card's words come filled in before it's on, her
+//    own Face is her words, her own resource leaves the rest of the card
+//    alone, a real roll picks its tension, and a card says where it sits.
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { apply, blank, forPlayer, readable, undoOf } from "../src/companion/board.js";
-import { BAGS, CHECKS, canDeal, cardsOf, choose, dealRest, dealWorld, lock, newSeed, options, poolOf, recordOf, redeal, resume, rngOf, SIZES, start } from "../src/companion/world-engine.js";
+import { BAGS, CHECKS, STEPS, canDeal, cardsOf, choose, dealRest, dealWorld, lock, newSeed, options, pickKey, poolOf, preview, recordOf, redeal, redealFaction, resume, rngOf, SIZES, start, startAdd, tensionAt } from "../src/companion/world-engine.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 
@@ -406,6 +416,124 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   yes(one.includes("gate-moss-wren") && one.includes("Checks:") && one.includes("The ground"), "deal-world.mjs prints a board");
   same(two, one, "and the same one for the same seed");
   console.log("5. scripts/deal-world.mjs deals a board as text");
+}
+
+// 6. Adding a faction to a board that's there.
+{
+  const steep = bookJson.companion.worlds.boards.find((b) => b.id === "steeplands");
+  const fr = T.frames.steeplands;
+  if (steep && fr && real) {
+    let n = 0;
+    const held = steep.cards.map((c) => ({ name: c.name, about: "", res: c.res.map((r) => ({ id: `r-${n++}x`, text: r.text })), assets: c.assets.map((a) => ({ id: `a-${n++}x`, text: a.text, power: a.power })) }));
+    const recipe = { region: fr.region, era: fr.era, twist: fr.twist };
+    const dials = { tense: 1, strange: 1, rich: 1, ruled: 1, ...fr.dials };
+    let bad = null;
+    let ties = 0;
+    for (let b = 0; b < 60; b++) {
+      const seed = newSeed(T, rngOf("add", b));
+      const W = startAdd(T, { recipe, dials, seed, held });
+      const was = JSON.stringify(W.factions.slice(0, held.length));
+      dealRest(T, W);
+      const C = cardsOf(T, W);
+      const i = W.held;
+      const f = C.factions[i];
+      const fail = (what) => {
+        bad ??= `${seed}: ${what}`;
+      };
+      if (JSON.stringify(recordOf(dealRest(T, startAdd(T, { recipe, dials, seed, held })))) !== JSON.stringify(recordOf(W))) fail("the same seed dealt two different factions");
+      if (JSON.stringify(W.factions.slice(0, held.length)) !== was) fail("a faction already on the board changed");
+      if (!f.name || !f.about || !f.want || !f.face || !f.secret || !f.agendas.length || !f.sits) fail("the new card's missing part of itself");
+      if (f.die !== 2 * f.steps) fail(`its d${f.die} isn't 1 step plus its people`);
+      if (held.some((h) => h.name.toLowerCase() === f.name.toLowerCase())) fail(`it's got a name the board has already: ${f.name}`);
+      if (!W.checks.every((c) => c.ok)) fail(`a check still fails: ${W.checks.filter((c) => !c.ok).map((c) => c.k)}`);
+      const rival = (W.web ?? []).find((t) => t.kind === "rival" && t.a === i);
+      if (!rival || rival.b >= i) fail("its rival isn't a faction already there");
+      for (const t of W.web ?? []) if (t.a !== i || t.b >= i) fail("a tie between two factions that were already there");
+      const mine = f.threads.length;
+      const theirs = C.factions.slice(0, i).reduce((s, x) => s + x.threads.filter((t) => t.to === i).length, 0);
+      if (mine < 1 || theirs < mine - (W.needs ?? []).filter((x) => x.i === i).length) fail(`its ties aren't a thread each way (${mine} and ${theirs})`);
+      if (mine > 1) ties++;
+      const ag = W.factions[i].agenda;
+      if (ag.aims.includes("seat")) fail("its agenda aims at a seat, and the Steeplands haven't got one on the board");
+      for (const aim of ag.aims.filter((a) => a !== "seat")) {
+        const at = ag.at?.[aim];
+        if (aim === "rival" ? !(at < i) : !(at?.j < i)) fail(`its agenda's ${aim} isn't on the board`);
+      }
+      if (/[{}]/.test([f.name, f.about, f.sits, f.want, f.face, f.secret, f.more, ...f.agendas.map((a) => a.text), ...f.threads.map((t) => t.text)].join(" "))) fail("a slot nobody filled");
+    }
+    if (bad) note(`adding to the Steeplands: ${bad}`);
+    yes(ties > 10, `the new faction gets an ally or a debt as well as its rival on more than 10 of 60 (got ${ties})`);
+    // It picks up from its record, and deals the same from there.
+    const A = startAdd(T, { recipe, dials, seed: "ash-lantern-ford", held });
+    dealRest(T, A);
+    const back = resume(T, recordOf(A));
+    same(recordOf(back), recordOf(A), "a faction being added picks up from its record");
+    redeal(T, A, `f:${A.held}:want`);
+    redeal(T, back, `f:${back.held}:want`);
+    same(recordOf(back), recordOf(A), "and deals the same from there");
+    same(recordOf((redeal(T, A, "f:0:want"), A)), recordOf(back), "and a faction that was there is never dealt");
+  }
+  // A world a build dealt, with its seats on the board as places: a new
+  // faction sits on a seat nobody holds or a new one, and an agenda at a
+  // seat aims at one that's on the board.
+  {
+    const g = groups[0];
+    let bad = null;
+    let onFree = 0;
+    for (let b = 0; b < 40; b++) {
+      const D = dealWorld(T, { recipe: g.recipe, seed: newSeed(T, rngOf("built", b)), factions: 6 });
+      const held = D.factions.map((f) => ({ name: cardsOf(T, D).factions[D.factions.indexOf(f)].name, res: f.res, assets: f.assets, seat: f.seat.k, picks: f }));
+      const W = startAdd(T, { recipe: D.recipe, dials: D.dials, seed: D.seed, held, seats: D.seats, asking: D.asking, tension: D.tension });
+      dealRest(T, W);
+      const i = W.held;
+      const f = W.factions[i];
+      const fail = (what) => {
+        bad ??= `${D.seed}: ${what}`;
+      };
+      if (W.factions.some((x, j) => j !== i && x.seat?.k === f.seat?.k)) fail("it sits on a seat another faction holds");
+      if (f.seat.k < W.hs) onFree++;
+      if (f.agenda.aims.includes("seat") && !(f.agenda.at.seat < W.hs && f.agenda.at.seat !== f.seat.k)) fail("its agenda aims at a seat that isn't on the board");
+      for (const step of ["type", "method", "want", "secret"]) if (f[step]?.id && D.factions.some((x) => x[step]?.id === f[step].id) && !f[step].again) fail(`its ${step} is one a faction there has, with the bag not run out`);
+      if (!W.checks.every((c) => c.ok)) fail(`a check still fails: ${W.checks.filter((c) => !c.ok).map((c) => c.k)}`);
+    }
+    if (bad) note(`adding to a built world: ${bad}`);
+    yes(onFree > 4 && onFree < 36, `a new faction takes a seat nobody holds sometimes, and a new place sometimes (${onFree} of 40 on a free seat)`);
+  }
+  // Dealing a faction again, bar what's locked or hers.
+  {
+    const W = dealWorld(T, { recipe: groups[0].recipe, seed: "kettle-moss-yew", factions: 6 });
+    const before = recordOf(W).factions[2];
+    lock(W, "f:2:want");
+    choose(T, W, "f:2:name", { own: true, text: "The Cold Hands" }, { keep: true });
+    redealFaction(T, W, 2);
+    const f = W.factions[2];
+    same([f.want, f.name.text], [before.want, "The Cold Hands"], "dealing a faction again keeps what's locked and what she wrote");
+    for (const step of ["type", "method", "agenda", "secret"]) if (pickKey(before[step]) != null) yes(pickKey(f[step]) !== pickKey(before[step]) || W.not[`f:2:${step}`] !== pickKey(before[step]), `and its ${step} is dealt again to a card it hasn't had`);
+    yes(STEPS.every((s) => s === "exc" || f[s] != null), "and the card's whole again");
+    for (const j of [0, 1, 3]) same(W.factions[j].type, recordOf(dealWorld(T, { recipe: groups[0].recipe, seed: "kettle-moss-yew", factions: 6 })).factions[j].type, `and faction ${j + 1}'s what it is stays as it was`);
+    // A card's words, filled in before it's on.
+    const agendas = options(T, W, "f:4:agenda", 3);
+    for (const c of agendas) {
+      const v = preview(T, W, "f:4:agenda", c);
+      yes(v.text && !/[{}]/.test(v.text) && v.die === c.die, `an agenda's card has its words filled in (${v.text})`);
+    }
+    const seat = preview(T, W, "f:1:seat", { k: W.factions[1].seat.k });
+    same(seat.name, W.seats[W.factions[1].seat.k].text, "a seat's card has its name");
+    // Her own Face is her words, with no threat behind it.
+    choose(T, W, "f:3:face", { own: true, text: "Brother Anselm, the zealot" });
+    dealRest(T, W);
+    const C = cardsOf(T, W);
+    same([C.factions[3].face, C.factions[3].threat, C.factions[3].ch], ["Brother Anselm, the zealot", null, null], "her own Face is her words");
+    // Her own resource leaves the rest of the card as it is.
+    const rest = JSON.stringify(W.factions[5].assets);
+    const agenda = JSON.stringify(W.factions[5].agenda);
+    choose(T, W, "f:5:res", [...W.factions[5].res, { own: true, text: "Eel Weirs" }], { keep: true });
+    same([JSON.stringify(W.factions[5].assets), JSON.stringify(W.factions[5].agenda), W.factions[5].res.at(-1).text], [rest, agenda, "Eel Weirs"], "her own resource on the card leaves its assets and agenda alone");
+    same(tensionAt(T, 8)?.text, T.core.tension[7].text, "a real roll of 8 is the tension table's eighth");
+    same(tensionAt(T, 13), null, "and there's no 13");
+    same(C.factions[0].sits, `It sits on ${C.seats.find((x) => x.k === W.factions[0].seat.k).name.replace(/^The /, "the ")}.`, "a card says where it sits");
+  }
+  console.log("6. adding a faction to a board that's there, dealing one again, and a card's words before it's on");
 }
 
 console.log(problems.length ? `\n${problems.length} problems` : "\nAll world engine checks passed");
