@@ -191,7 +191,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
    - `core.yaml`, the five regions in `regions.yaml`, `genres.yaml`, and the Medieval era, so Medieval deals.
    - `/deal/`, where Mo judges them.
 4. **Magic** (tables), so Fantasy deals, with the Steeplands' and the Deep Company's mixes. Needs 3. *Built 28 Oct 2026.*
-5. **Building alone.** Needs 3.
+5. **Building alone.** Needs 3. *Built 29 Oct 2026.*
    - Build the world and Add a faction on the World screen, as the brief says, without the crew step: the setup, the asking, the ground, each faction's screens, the web and the checks, and Done, with Lock, Deal again, Write my own, Undo, Deal the rest and Deal it all. Genres without their packs show as coming.
    - A new part of `tests/check-accounts.mjs`: a Medieval world built alone with the signal dropping halfway, a faction added to a frame's board brought in from the book, and a player never getting `doc.build`.
 6. **The web and the crew.** Needs 5.
