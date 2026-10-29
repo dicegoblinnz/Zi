@@ -179,7 +179,8 @@
 //    record or anything dealt, and can't change it. Tuesday Lair's board,
 //    brought in from the book, offers Add a faction on the Steeplands' mix:
 //    the new faction's rival is a faction already there, a thread each way,
-//    it sits on a new place, and the record's added gets it. Kai gets none of
+//    it sits on a new place, and the record's added gets it. Undo on Done's
+//    note takes it all back off and brings the build back. Kai gets none of
 //    it. Adding a faction's screens pass axe at 390, in both themes, and at
 //    320, and one left half added on the phone is dropped from the World
 //    screen.
@@ -3201,6 +3202,14 @@ try {
     await mo.page.click('.bd-jumps [data-s="board"]');
     await mo.page.waitForSelector(".wk-ties");
     has(await lead(mo.page), "Its ties", "its ties");
+    // Done, then Undo on its note: it comes back off, and the build's back.
+    const going = await making(mo.page, tuesday.id);
+    await mo.page.click('.bd-foot [data-do="mk-done"]');
+    await mo.page.waitForSelector(".wb-toks");
+    await mo.page.click('#cc-toast [data-act="wkundo"]');
+    await mo.page.waitForSelector(".wk-ties");
+    same((await making(mo.page, tuesday.id))?.W?.seed, going.W.seed, "Undo on Done's note brings the build back as it was");
+    await until(async () => { const w = await worldOf(tuesday.id); return w?.factions.length === was2.factions.length && !w.build && w.pages.length === was2.pages.length; }, "and takes it all back off the board");
     await mo.page.click('.bd-foot [data-do="mk-done"]');
     await until(async () => (await worldOf(tuesday.id))?.factions.length === was2.factions.length + 1, "the new faction on Tuesday Lair's board");
     const w2 = await worldOf(tuesday.id);

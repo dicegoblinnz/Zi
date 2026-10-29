@@ -473,6 +473,12 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     same(recordOf(back), recordOf(A), "and deals the same from there");
     same(recordOf((redeal(T, A, "f:0:want"), A)), recordOf(back), "and a faction that was there is never dealt");
   }
+  // A board with one faction on it: a rival, and nothing more to tie to.
+  {
+    const one = startAdd(T, { recipe: groups[0].recipe, seed: "pike-reed-sable", held: [{ name: "The Salt Brothers", res: [{ id: "salt-1x", text: "Salt Pans" }], assets: [] }] });
+    dealRest(T, one);
+    same([one.web.length, one.web[0]?.kind, one.web[0]?.b, one.checks.every((c) => c.ok)], [1, "rival", 0, true], "a board with one faction gives the new one a rival and nothing else, and its checks pass");
+  }
   // A world a build dealt, with its seats on the board as places: a new
   // faction sits on a seat nobody holds or a new one, and an agenda at a
   // seat aims at one that's on the board.
@@ -511,6 +517,15 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     for (const step of ["type", "method", "agenda", "secret"]) if (pickKey(before[step]) != null) yes(pickKey(f[step]) !== pickKey(before[step]) || W.not[`f:2:${step}`] !== pickKey(before[step]), `and its ${step} is dealt again to a card it hasn't had`);
     yes(STEPS.every((s) => s === "exc" || f[s] != null), "and the card's whole again");
     for (const j of [0, 1, 3]) same(W.factions[j].type, recordOf(dealWorld(T, { recipe: groups[0].recipe, seed: "kettle-moss-yew", factions: 6 })).factions[j].type, `and faction ${j + 1}'s what it is stays as it was`);
+    // Her own words stay when a step before them changes.
+    choose(T, W, "f:3:method", { own: true, text: "Favours owed" });
+    const typeCards = options(T, W, "f:3:type", 3).filter((c) => c.id !== W.factions[3].type.id);
+    if (typeCards[0]) {
+      choose(T, W, "f:3:type", typeCards[0]);
+      same(W.factions[3].method, { own: true, text: "Favours owed" }, "her own way it works stays when what it is changes");
+      yes(W.factions[3].want == null, "and the rest of the card that isn't hers is cleared to deal again");
+      dealRest(T, W);
+    }
     // A card's words, filled in before it's on.
     const agendas = options(T, W, "f:4:agenda", 3);
     for (const c of agendas) {

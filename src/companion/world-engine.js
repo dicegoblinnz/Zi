@@ -717,17 +717,19 @@ function faces(T, W, i, path, n, not) {
   return out;
 }
 
-// Put a pick on a step. A faction's later steps that aren't locked are dealt
-// again, since they read the card so far, and so are those of the faction
-// sitting on a seat that changes. An answer that changes moves the dials for
+// Put a pick on a step. A faction's later steps that aren't locked or hers
+// are dealt again, since they read the card so far, and so are those of the
+// faction sitting on a seat that changes. An answer that changes moves the dials for
 // what's dealt from then on, and leaves what's dealt as it is. keep leaves
 // the later steps alone, for her own changes to a set she's been dealt (a
 // resource or an asset added or taken off). A held faction or seat never
 // changes.
 export function choose(T, W, path, value, { keep = false } = {}) {
   const [head, a, b] = path.split(":");
+  // What she's written herself stays, like what she's locked.
+  const mine = (p) => own(p) || (Array.isArray(p) && p.some(own));
   const clear = (i, from) => {
-    for (const step of STEPS.slice(STEPS.indexOf(from) + 1)) if (!W.locks[`f:${i}:${step}`]) W.factions[i][step] = step === "exc" ? undefined : null;
+    for (const step of STEPS.slice(STEPS.indexOf(from) + 1)) if (!W.locks[`f:${i}:${step}`] && !mine(W.factions[i][step])) W.factions[i][step] = step === "exc" ? undefined : null;
   };
   if (head === "seat" && adding(W) && Number(a) < W.hs) return;
   if (head === "f" && W.factions[Number(a)]?.held) return;

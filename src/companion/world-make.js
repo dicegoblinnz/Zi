@@ -36,8 +36,8 @@
 // doc.build (world-record.js), with the id each faction and seat got beside
 // what was dealt it. Adding a faction, its ties go on the other factions'
 // cards too, and it joins the record's added.
-import { QUESTIONS, REGIONS, SIZES, STEPS, canDeal, cardsOf, choose, dealRest, lock, newSeed, options, pickAt, pickKey, preview, recordOf, redeal, redealFaction, resume, start, startAdd, tensionAt } from "./world-engine.js";
-import { MAX, moneyOf } from "./board.js";
+import { QUESTIONS, REGIONS, SIZES, STEPS, canDeal, cardsOf, choose, dealRest, fill, lock, newSeed, options, pickAt, pickKey, preview, recordOf, redeal, redealFaction, resume, start, startAdd, tensionAt } from "./world-engine.js";
+import { MAX, apply, readable, undoOf } from "./board.js";
 import { PMAX, findPage } from "./pages.js";
 import { die as kitDie, mini as kitMini, tag as kitTag } from "../kit/kit.js";
 
@@ -62,6 +62,10 @@ const copy = (x) => JSON.parse(JSON.stringify(x));
 const cap = (s) => String(s ?? "").charAt(0).toUpperCase() + String(s ?? "").slice(1);
 const flat = (t) => String(t ?? "").replace(/[.]+$/, "");
 const words = (v, max) => String(v ?? "").replace(/\s+/g, " ").trim().slice(0, max);
+// The same words, whatever the apostrophes and spaces.
+const sameWords = (a, b) => String(a ?? "").replace(/[’‘]/g, "'").replace(/\s+/g, " ").trim().toLowerCase() === String(b ?? "").replace(/[’‘]/g, "'").replace(/\s+/g, " ").trim().toLowerCase();
+// Appendix B's asset by its name, the way the tables key one.
+const keyOf = (name) => String(name ?? "").toLowerCase().replace(/[’']/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").replace(/^(a|an|the)-/, "");
 // A name inside a sentence, its The coming down, and its 's.
 const inline = (name) => String(name ?? "").replace(/^The /, "the ");
 const whose = (name) => `${inline(name)}${/s$/.test(name) ? "’" : "’s"}`;
@@ -106,33 +110,42 @@ export function makeWorldMake(w) {
   const live = {};
   const undos = {};
   let ui = { own: "", sure: "", roll: "" };
+  // A tap-again is for one thing in one campaign.
+  const sureOf = (kind, id) => ui.sure === `${kind}:${id}`;
+  const arm = (kind, id) => {
+    ui.sure = `${kind}:${id}`;
+  };
   let slide = "";
   let moved = false;
+  // Done, a moment ago: what takes it back off the board, and the build as it
+  // was, so Undo on its note brings her back to it with everything she'd locked.
+  let undone = null;
   let fresh = new Set();
 
   // ------------------------------------------------------------ the tables
 
+  // Fetched once. If it can't be had (no signal and never seen), it says so
+  // and tries again when the signal's back, never in a loop.
   function tables() {
     if (T) return T;
     loading ??= fetch("/world-tables.json")
       .then((r) => (r.ok ? r.json() : null))
+      .catch(() => null)
       .then((j) => {
         if (j?.core && j.packs) {
           T = j;
           failed = false;
-        } else {
-          failed = true;
-          loading = null;
-        }
-        d.quietRender();
-      })
-      .catch(() => {
-        failed = true;
-        loading = null;
+        } else failed = true;
         d.quietRender();
       });
     return null;
   }
+  addEventListener("online", () => {
+    if (T || !failed) return;
+    failed = false;
+    loading = null;
+    d.quietRender();
+  });
 
   // ------------------------------------------------------------ kept on the phone
 
@@ -152,7 +165,11 @@ export function makeWorldMake(w) {
       for (const k of Object.keys(live)) delete live[k];
     }
   });
-  const entryOf = (id) => load().k[id] ?? null;
+  const entryOf = (id) => {
+    const e = load().k[id] ?? null;
+    if (e) e.id = id;
+    return e;
+  };
   // The world in progress, picked up from what the phone kept.
   function worldOf(id) {
     const e = entryOf(id);
@@ -273,11 +290,24 @@ export function makeWorldMake(w) {
       const k = ids.indexOf(f.id);
       const rec = k >= 0 ? dealt.factions?.[k] ?? null : added.find((a) => a?.fid === f.id) ?? null;
       const pid = k >= 0 ? pages[rec?.seat?.k] : rec?.pid;
+      // What a build dealt a line, found by its words as the card has them,
+      // so the checks can see what it is. A line that's been changed since is
+      // only its words, bar an asset named the way Appendix B names one.
+      const seatName = k >= 0 ? dealt.seats?.[rec?.seat?.k]?.text : rec?.place?.text;
+      const seat = seatName ? { text: seatName, name: true } : "";
+      const dealtAs = (list, text) => (Array.isArray(list) ? list : []).find((x) => x?.text && sameWords(fill(x.text, { seat }), text)) ?? null;
+      const book = (text) => T.book?.assets?.[keyOf(text)] ? keyOf(text) : null;
       return {
         name: f.name,
         about: f.about,
-        res: f.res.map((r) => ({ id: r.id, text: r.text })),
-        assets: f.assets.filter((a) => !a.off).map((a) => ({ id: a.id, text: a.text, power: a.power, does: a.does })),
+        res: f.res.map((r) => {
+          const p = dealtAs(rec?.res, r.text);
+          return { id: r.id, text: r.text, role: p?.role ?? null, tags: p?.tags ?? [] };
+        }),
+        assets: f.assets.filter((a) => !a.off).map((a) => {
+          const p = dealtAs(rec?.assets, a.text);
+          return { id: a.id, text: a.text, power: a.power, does: a.does, role: p?.role ?? book(a.text) };
+        }),
         seat: at.has(pid) ? at.get(pid) : null,
         picks: rec,
       };
@@ -290,7 +320,7 @@ export function makeWorldMake(w) {
   function begin(id, mode) {
     load();
     const n = Math.max(4, Math.min(12, players(id) + 2));
-    const e = { mode, setup: firstSetup(n), W: null, at: "setup", hands: {}, cut: [], saved: Date.now() };
+    const e = { id, mode, setup: firstSetup(n), W: null, at: "setup", hands: {}, cut: [], saved: Date.now() };
     delete live[id];
     delete undos[id];
     if (mode === "add") {
@@ -461,7 +491,7 @@ export function makeWorldMake(w) {
   }
   function tools(path, { locked, own = true, again = "Deal again", extra = "" }) {
     return `<div class="wk-tools">
-      <button type="button" class="button sm wk-tool" data-act="w" data-do="mk-lock" data-p="${esc(path)}" aria-pressed="${locked}">${ICON.lock}<span>${locked ? "Locked" : "Lock"}</span></button>
+      <button type="button" class="button sm wk-tool" data-act="w" data-do="mk-lock" data-p="${esc(path)}" aria-pressed="${locked}">${ICON.lock}<span>Lock</span></button>
       <button type="button" class="button sm wk-tool" data-act="w" data-do="mk-again" data-p="${esc(path)}"${locked ? " disabled" : ""}>${ICON.deal}<span>${again}</span></button>
       ${own ? `<button type="button" class="button sm wk-tool" data-act="w" data-do="mk-own" data-p="${esc(path)}" aria-expanded="${ui.own === ownKey(path)}">${ICON.pen}<span>Write my own</span></button>` : ""}${extra}</div>`;
   }
@@ -543,7 +573,7 @@ export function makeWorldMake(w) {
     if (key === "setup") {
       const moved = setupMoved(e, W);
       const ok = dealsSetup(e.setup);
-      const label = W && moved ? (ui.sure === "restart" ? "Tap again to start again" : "Deal a new one") : W ? "Carry on" : "Deal it";
+      const label = W && moved ? (sureOf("restart", e.id) ? "Tap again to start again" : "Deal a new one") : W ? "Carry on" : "Deal it";
       const small = W && moved ? "What you’ve dealt goes" : e.mode === "add" ? "Where it sits" : "The asking";
       go = `<button type="button" class="button primary bd-next" data-act="w" data-do="mk-next"${ok ? "" : " disabled"}><span>${label}</span><small>${small}</small></button>`;
     } else if (key === "board") {
@@ -595,7 +625,7 @@ export function makeWorldMake(w) {
       <p class="cc-small">It starts at your players and two more, and it’s never fewer than four. There are always two more seats than factions.</p></section>`;
     const moved = W && setupMoved(e, W);
     const all = e.mode === "add" ? "" : `<section class="wk-all card"><h2>Or deal it all in one tap</h2><p>Every step dealt by the tables at once. Then you go through it a faction at a time, lock what you like and deal the rest again.</p>
-      <div class="cc-row"><button type="button" class="button" data-act="w" data-do="mk-all"${dealsSetup(s) ? "" : " disabled"}>${moved && W ? (ui.sure === "all" ? "Tap again to deal a new one" : "Deal a new one, all of it") : "Deal it all"}</button></div></section>`;
+      <div class="cc-row"><button type="button" class="button" data-act="w" data-do="mk-all"${dealsSetup(s) ? "" : " disabled"}>${moved && W ? (sureOf("all", id) ? "Tap again to deal a new one" : "Deal a new one, all of it") : "Deal it all"}</button></div></section>`;
     return `${moved && W ? `<div class="cc-note is-warn" role="status"><p>That’s different to the world you’ve dealt. Deal a new one and what you’ve dealt goes, or put these back to carry on.</p></div>` : ""}
       <section class="wk-sec" aria-labelledby="wk-region"><h2 id="wk-region">Where it’s set</h2><div class="wk-picks">${regions}</div></section>
       <section class="wk-sec" aria-labelledby="wk-genre"><h2 id="wk-genre">What kind of world</h2><div class="wk-picks">${genres}</div>${mix}
@@ -674,7 +704,7 @@ export function makeWorldMake(w) {
     const np = `seat:${fresh}`;
     return `<section class="wk-step${locked ? " is-locked" : ""}" aria-labelledby="${hid}"><div class="wk-step-h"><h2 id="${hid}">Where it sits</h2>${locked ? '<span class="wk-locked">Locked</span>' : ""}</div>
       <div class="wk-hand" role="group" aria-labelledby="${hid}">${cards}</div>
-      <div class="wk-tools"><button type="button" class="button sm wk-tool" data-act="w" data-do="mk-lock" data-p="${esc(path)}" aria-pressed="${locked}">${ICON.lock}<span>${locked ? "Locked" : "Lock"}</span></button>
+      <div class="wk-tools"><button type="button" class="button sm wk-tool" data-act="w" data-do="mk-lock" data-p="${esc(path)}" aria-pressed="${locked}">${ICON.lock}<span>Lock</span></button>
         <button type="button" class="button sm wk-tool" data-act="w" data-do="mk-again" data-p="${np}"${locked ? " disabled" : ""}>${ICON.deal}<span>New places</span></button>
         <button type="button" class="button sm wk-tool" data-act="w" data-do="mk-own" data-p="${np}" aria-expanded="${ui.own === ownKey(np)}">${ICON.pen}<span>Write my own</span></button></div>${ui.own === ownKey(np) ? ownForm(W, np) : ""}</section>`;
   }
@@ -717,7 +747,7 @@ export function makeWorldMake(w) {
       : "";
     return `<section class="wk-step${locked ? " is-locked" : ""}${fresh.has(path) ? " is-fresh" : ""}" aria-labelledby="${hid}"><div class="wk-step-h"><h2 id="${hid}">${l === "res" ? "Its resources" : "Its assets"}</h2>${locked ? '<span class="wk-locked">Locked</span>' : ""}</div>
       ${lines ? `<ul class="wk-lines">${lines}</ul>` : '<p class="cc-small">None yet.</p>'}${note}
-      <div class="wk-tools"><button type="button" class="button sm wk-tool" data-act="w" data-do="mk-lock" data-p="${esc(path)}" aria-pressed="${locked}">${ICON.lock}<span>${locked ? "Locked" : "Lock"}</span></button>
+      <div class="wk-tools"><button type="button" class="button sm wk-tool" data-act="w" data-do="mk-lock" data-p="${esc(path)}" aria-pressed="${locked}">${ICON.lock}<span>Lock</span></button>
         <button type="button" class="button sm wk-tool" data-act="w" data-do="mk-again" data-p="${esc(path)}"${locked ? " disabled" : ""}>${ICON.deal}<span>Deal again</span></button>
         <button type="button" class="button sm wk-tool" data-act="w" data-do="mk-own" data-p="${esc(path)}" aria-expanded="${ui.own === ownKey(path)}">${ICON.pen}<span>Add your own</span></button></div>${add}</section>`;
   }
@@ -759,7 +789,8 @@ export function makeWorldMake(w) {
     const failed = (W.checks ?? []).filter((c) => !c.ok);
     const fixes = [...new Map((W.fixes ?? []).filter((x) => x.path?.startsWith("f:")).map((x) => [x.path, x])).values()].map((x) => {
       const [, i, s] = x.path.split(":");
-      return `${STEP_NAMES[s] ? `${name(Number(i))}’s ${STEP_NAMES[s].replace(/^its /, "")}` : name(Number(i))} ${FIXED[x.k] ?? ""}`;
+      const who = fac(Number(i))?.name || `Faction ${Number(i) + 1}`;
+      return `${esc(STEP_NAMES[s] ? `${cap(whose(who))} ${STEP_NAMES[s].replace(/^its /, "")}` : who)} ${FIXED[x.k] ?? ""}`;
     });
     const fall = (W.fallbacks ?? []).length;
     const checks = `<section class="wk-sec" aria-labelledby="wk-checks"><h2 id="wk-checks">The checks</h2>
@@ -786,7 +817,7 @@ export function makeWorldMake(w) {
     if (e && e.mode !== mode) {
       return `${top(false)}<div class="wk" data-wb="${esc(id)}"><header class="cc-camp-head"><p class="kicker">The world builder</p><h1>${mode === "add" ? "Add a faction" : "Build the world"}</h1></header>
         <div class="cc-note"><p>${e.mode === "add" ? "You’re adding a faction on this phone already." : "You’re building the world on this phone already."} Carry on with it, or drop it first.</p>
-        <div class="cc-row"><a class="button primary" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;make=${e.mode}" data-act="w" data-do="nav">Carry on</a><button type="button" class="button" data-act="w" data-do="mk-drop-build">${ui.sure === "drop-build" ? "Tap again to drop it" : "Drop it"}</button></div></div></div>`;
+        <div class="cc-row"><a class="button primary" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;make=${e.mode}" data-act="w" data-do="nav">Carry on</a><button type="button" class="button" data-act="w" data-do="mk-drop-build">${sureOf("drop-build", id) ? "Tap again to drop it" : "Drop it"}</button></div></div></div>`;
     }
     if (!e && mode === "add" && !docOf(id).factions.some((f) => !f.mini)) return note(`There’s nothing on the board to add to yet. <a href="${board}" data-act="w" data-do="nav">Build the world</a> instead.`);
     if (!e) e = begin(id, mode);
@@ -833,6 +864,7 @@ export function makeWorldMake(w) {
     e.at = key;
     ui.own = "";
     ui.roll = "";
+    ui.sure = "";
     slide = dir;
     keep();
     d.render();
@@ -854,7 +886,7 @@ export function makeWorldMake(w) {
     const [head, a, s] = path.split(":");
     if (head !== "f" && head !== "seat") return [];
     // In the ground, before the factions are dealt, there's nothing to fit.
-    if (!W.factions.some((f) => !f.held && f.type)) return [];
+    if (head === "seat" && !W.factions.some((f) => !f.held && f.seat)) return [];
     const i = head === "f" ? Number(a) : W.factions.findIndex((f) => !f.held && f.seat?.k === Number(a));
     const before = recordOf(W);
     dealRest(T, W, { finish: false });
@@ -883,8 +915,8 @@ export function makeWorldMake(w) {
       d.go(`/characters/?camp=${encodeURIComponent(id)}&world&make=${mode}`, { from: location.pathname + location.search });
     },
     "mk-drop-build": (el, id) => {
-      if (ui.sure !== "drop-build") {
-        ui.sure = "drop-build";
+      if (!sureOf("drop-build", id)) {
+        arm("drop-build", id);
         return d.render();
       }
       ui.sure = "";
@@ -906,8 +938,8 @@ export function makeWorldMake(w) {
       if (e.at === "setup") {
         if (!dealsSetup(e.setup)) return;
         if (W && setupMoved(e, W)) {
-          if (ui.sure !== "restart") {
-            ui.sure = "restart";
+          if (!sureOf("restart", id)) {
+            arm("restart", id);
             return d.render();
           }
           snap(id);
@@ -955,8 +987,8 @@ export function makeWorldMake(w) {
       const e = entryOf(id);
       if (!e || !dealsSetup(e.setup)) return;
       let W = worldOf(id);
-      if (W && setupMoved(e, W) && ui.sure !== "all") {
-        ui.sure = "all";
+      if (W && setupMoved(e, W) && !sureOf("all", id)) {
+        arm("all", id);
         return d.render();
       }
       snap(id);
@@ -1005,8 +1037,8 @@ export function makeWorldMake(w) {
         if (c && pickKey(c) !== pickKey(W.seats[k])) choose(T, W, `seat:${k}`, copy(c));
       }
       if (pickAt(W, `f:${i}:seat`)?.k !== k) choose(T, W, `f:${i}:seat`, { k });
-      dealRest(T, W, { finish: false });
-      changed(id);
+      const again = refit(id, W, `f:${i}:seat`);
+      changed(id, again.length ? `Dealt again to fit: ${again.map((x) => STEP_NAMES[x]).slice(0, 3).join(", ")}${again.length > 3 ? " and the rest" : ""}. Lock a card to keep it.` : "");
     },
     "mk-lock": (el, id) => {
       const W = worldOf(id);
@@ -1025,8 +1057,9 @@ export function makeWorldMake(w) {
       delete e.hands[path];
       redeal(T, W, path, { rest: false });
       fresh.add(path);
-      refit(id, W, path);
-      changed(id);
+      const again = refit(id, W, path);
+      const set = /:(res|assets)$/.test(path);
+      changed(id, `${path === "tension" ? "Rolled again." : set ? "Dealt again." : "Three new cards."}${again.length ? ` What comes after it’s dealt again to fit.` : ""}`);
     },
     "mk-refaction": (el, id) => {
       const e = entryOf(id);
@@ -1037,7 +1070,7 @@ export function makeWorldMake(w) {
       for (const k of Object.keys(e.hands)) if (k.startsWith(`f:${i}:`)) delete e.hands[k];
       redealFaction(T, W, i);
       for (const s of STEPS) if (!W.locks[`f:${i}:${s}`]) fresh.add(`f:${i}:${s}`);
-      changed(id, `Dealt ${cardsOf(T, W).factions[i]?.name ?? "it"} again, bar what you’d locked.`);
+      changed(id, `Dealt ${inline(cardsOf(T, W).factions[i]?.name ?? "it")} again, bar what you’d locked or written.`);
     },
     "mk-break": (el, id) => {
       const W = worldOf(id);
@@ -1096,7 +1129,7 @@ export function makeWorldMake(w) {
       snap(id);
       choose(T, W, path, list.filter((_, n) => n !== k), { keep: true });
       lock(W, path, true);
-      changed(id, `${list[k].text ? "Taken off" : "Taken off"}. The rest of the card stays as it is, and the set’s locked.`);
+      changed(id, `Off its card: ${list[k].text}. The rest of the card stays as it is, and the set’s locked.`);
     },
     "mk-cut": (el, id) => {
       const e = entryOf(id);
@@ -1230,15 +1263,41 @@ export function makeWorldMake(w) {
       }
       dealt.added = added.slice(-12);
       b = was ? { ...was, dealt, at: Date.now() } : { recipe: W.recipe, dials: W.dials, seed: W.seed, dealt, history: [], shown: false, at: Date.now() };
-    } else b = { recipe: W.recipe, dials: W.dials, seed: W.seed, dealt: { ...rec, ids: fid, pages: pid }, history: [], shown: false, at: Date.now() };
+    } else b = { recipe: W.recipe, dials: W.dials, seed: W.seed, dealt: { ...rec, ids: fid, pages: pid }, history: doc.build?.history ?? [], shown: doc.build?.shown === true, at: Date.now() };
     ops.push({ o: "wb-set", b });
+    // What takes it all back off, worked out from the board before it goes on.
+    const was = readable(copy(doc));
+    const back = [];
+    for (const op of ops) {
+      const undo = undoOf(was, op);
+      if (apply(was, op)) back.unshift(...undo);
+    }
+    save(id);
+    const kept = JSON.stringify(entryOf(id));
     const say = W.add ? `It’s on the board, hidden from the crew: ${C.factions[mine[0]]?.name ?? "the new faction"}.` : `${plural(mine.length, "faction", "factions")} and ${plural(places, "place", "places")} are on the board, all hidden from the crew.`;
-    if (!edit(id, ops, say)) return d.toast("The board didn’t take that.", false);
+    if (!edit(id, ops, "", { undoable: false, quiet: true })) return d.toast("The board didn’t take that.", false);
     forget(id);
+    undone = { id, kept, back, at: Date.now() };
     // Back to the World screen it came from, so Back doesn't come here again.
     const board = `/characters/?camp=${encodeURIComponent(id)}&world`;
     if (history.state?.from === board) history.back();
     else d.go(board, { replace: true });
+    d.toast(say, "wkundo");
+  }
+  // Undo on Done's note: it all comes off the board, and the build's back on
+  // her phone at the board screen, as it was.
+  function unDone(id) {
+    const u = undone;
+    undone = null;
+    if (!u || u.id !== id || Date.now() - u.at > 10 * 60 * 1000) return false;
+    edit(id, u.back, "", { undoable: false, quiet: true });
+    load();
+    st.k[id] = JSON.parse(u.kept);
+    delete live[id];
+    keep();
+    d.go(`/characters/?camp=${encodeURIComponent(id)}&world&make=${st.k[id].mode}`, { from: `/characters/?camp=${encodeURIComponent(id)}&world` });
+    d.toast("Put back. It’s off the board, and the build’s here as you left it.", false);
+    return true;
   }
 
   // ------------------------------------------------------------ on the World screen
@@ -1260,7 +1319,7 @@ export function makeWorldMake(w) {
       const mode = e.mode;
       return `<div class="wk-start card is-going"><p class="wb-k">The world builder</p><h3>${mode === "add" ? "You’re adding a faction" : "You’re building the world"}</h3>
         <p>It’s on this phone, up to ${esc(where(e))}. Nothing’s on the board till you put it there.</p>
-        <div class="cc-row"><a class="button primary" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;make=${mode}" data-act="w" data-do="nav">Carry on</a><button type="button" class="button" data-act="w" data-do="mk-drop-build">${ui.sure === "drop-build" ? "Tap again to drop it" : "Drop it"}</button></div></div>`;
+        <div class="cc-row"><a class="button primary" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;make=${mode}" data-act="w" data-do="nav">Carry on</a><button type="button" class="button" data-act="w" data-do="mk-drop-build">${sureOf("drop-build", id) ? "Tap again to drop it" : "Drop it"}</button></div></div>`;
     }
     if (empty) {
       return `<div class="wk-start card"><p class="wb-k">The world builder</p><h3>Build the world</h3>
@@ -1325,7 +1384,7 @@ export function makeWorldMake(w) {
     view,
     entry,
     after,
-    undo: (id) => ACT["mk-undo"](null, id),
+    undo: (id) => unDone(id) || ACT["mk-undo"](null, id),
     title: (mode) => (mode === "add" ? "Adding a faction" : "Building the world"),
     // A campaign that's left the phone takes its build with it.
     drop: (id) => forget(id),

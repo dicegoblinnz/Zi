@@ -2039,7 +2039,7 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
 .wk-tie.is-bond .wk-tie-k { color: var(--gold-ink); }
 .wk-tie-l { font-size: 0.97rem; line-height: 1.38; overflow-wrap: anywhere; }
 .wk-tie em { font-size: 0.99rem; }
-.wk-tie.is-cut { opacity: 0.6; border-style: dashed; box-shadow: none; }
+.wk-tie.is-cut { border-style: dashed; box-shadow: none; background: var(--panel); }
 .wk-tie.is-cut em, .wk-tie.is-cut .wk-tie-l { text-decoration: line-through; text-decoration-thickness: 1px; color: var(--muted); }
 .wk-tie-b { gap: 5px; padding: 0 0.6rem !important; font-size: 0.85rem !important; }
 .wk-tok { width: 100%; font: inherit; text-align: left; border: 1px solid var(--line); cursor: pointer; }
@@ -2060,6 +2060,7 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
   .wk-tool span { font-size: 0.86rem; }
   .wk-dials { grid-template-columns: minmax(0, 1fr); }
   .wk-hand.is-row .wk-card-w { font-size: 0.82rem; }
+  .wk-roll-g { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
 @media (prefers-reduced-motion: reduce) {
   .wk-card, .wk-pick, .wk-tie { transition: none !important; }
