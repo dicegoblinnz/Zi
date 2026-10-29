@@ -44,8 +44,9 @@
 // The screens use startDeck() after the ground, current() for the card that's
 // up, answer(), prompted() and fillPrompt(), notThis(), undo(), and finish()
 // at the end. playRest() answers the rest at random, historyOf() is How it
-// came to be, and formedOf() what's formed of each faction, for its tile.
-import { QUESTIONS, SIZES, dealOne, dealRest, dealTie, drawOf, fill, needsOf, options, poolOf, recordOf, resume, rngOf } from "./world-engine.js";
+// came to be, formedOf() what's formed of each faction, for its tile, and
+// playedOf() a card that's been answered, the way it read.
+import { QUESTIONS, SIZES, dealOne, dealRest, dealTie, drawOf, fill, mendAims, needsOf, options, poolOf, recordOf, resume, rngOf } from "./world-engine.js";
 
 export const MAX = 70;
 export const AGES = [1, 2, 3];
@@ -92,13 +93,16 @@ export function deckOf(T, recipe) {
 const momentOf = (T, W, id) => deckOf(T, W.recipe).byId.get(id) ?? null;
 
 // What a faction's called on the cards: its name, or till it's named, what
-// it is and where it sits (the bell-founders' guild on the Old Bridge).
+// it is and where it sits (the bell-founders' guild on the Old Bridge), what
+// it is up to its first comma (the millers on the Abbey Orchards, for
+// Millers, father to son).
 export function calledOf(T, W, i) {
   const f = W.factions[i];
   if (!f) return "";
   const seat = seatName(W, seatOf(W, i));
   if (f.name) return fill(f.name.text, { seat });
   const what = String(f.type?.text ?? "")
+    .split(",")[0]
     .trim()
     .replace(/[.]+$/, "")
     .replace(/^(a|an|the)\s+/i, "");
@@ -146,12 +150,15 @@ const form = (D, i, p, pos) => {
   D.parts[i] ??= {};
   D.parts[i][p] ??= pos;
 };
-// What an age still needs: each faction's parts, and the board's.
+// What an age still needs: each faction's parts, its own and any an age
+// before it ran out of cards for, and the board's.
 function missingOf(T, W, age) {
   const D = W.deck;
   const f = {};
   for (const i of fresh(W)) {
-    const left = PARTS[age].filter((p) => !hasPart(D, i, p));
+    const left = AGES.filter((a) => a <= age)
+      .flatMap((a) => PARTS[a])
+      .filter((p) => !hasPart(D, i, p));
     if (left.length) f[i] = left;
   }
   const board = [];
@@ -214,12 +221,24 @@ function peopleUsed(W) {
   for (const c of D?.chains ?? []) c.words?.person?.nameId && used.add(c.words.person.nameId);
   return used;
 }
+// Once everyone's been, it's anyone who isn't a faction's Face, so no two
+// factions ever share one.
+function facesOf(W) {
+  const D = W.deck;
+  const out = new Set();
+  for (const [k, v] of Object.entries(D?.voices ?? {})) if (k.endsWith(":3") && v?.nameId) out.add(v.nameId);
+  for (const f of W.factions) for (const x of [f.voice, f.face]) x?.nameId && out.add(x.nameId);
+  return out;
+}
 function peopleOf(T, W, rand, n = 1, not = []) {
   const P = poolOf(T, W.recipe);
   const used = peopleUsed(W);
   for (const x of not) x && used.add(x);
   const left = P.people.filter((r) => !used.has(r.id));
-  return drawOf((left.length >= n ? left : P.people).map((r) => ({ w: r.w, r })), rand, n).map(({ r }) => ({ text: r.text, nameId: r.id }));
+  const faces = facesOf(W);
+  const open = P.people.filter((r) => !faces.has(r.id));
+  const from = left.length >= n ? left : open.length >= n ? open : P.people;
+  return drawOf(from.map((r) => ({ w: r.w, r })), rand, n).map(({ r }) => ({ text: r.text, nameId: r.id }));
 }
 
 // ── Holding things: what a faction's sure to hold (got), what it's lost,
@@ -511,11 +530,17 @@ function lastOf(T, W) {
   const miss = { f: {}, board: [] };
   const rand = rngOf(W.seed, "deck", "last", D.pos, D.nots.length);
   const t = tally(W);
-  let cands = [];
-  for (const m of M.all) {
-    if (!m.last || used.has(m.id) || D.nots.includes(m.id) || (m.crew && !W.crew?.who?.length)) continue;
-    for (const cast of castsOf(T, W, m, null, miss, rand, t, { last: true })) if (fitsBoard(W, m, cast)) cands.push({ w: weightOf(W, m, cast), m, cast });
-  }
+  const hand = (nots) => {
+    const out = [];
+    for (const m of M.all) {
+      if (!m.last || used.has(m.id) || (nots && D.nots.includes(m.id)) || (m.crew && !W.crew?.who?.length)) continue;
+      for (const cast of castsOf(T, W, m, null, miss, rand, t, { last: true })) if (fitsBoard(W, m, cast)) out.push({ w: weightOf(W, m, cast), m, cast });
+    }
+    return out;
+  };
+  // Not this one's been through every last card there is: back round to them.
+  let cands = hand(true);
+  if (!cands.length && D.nots.length) cands = hand(false);
   while (cands.length) {
     const [c] = drawOf(cands, rand);
     const up = upOf(T, W, c.m, c.cast);
@@ -617,6 +642,7 @@ export function current(T, W) {
     age: m.age,
     m: m.id,
     chain: up.chain != null,
+    from: up.chain,
     last: m.last,
     strange: m.strange,
     voice: up.voice.text,
@@ -627,6 +653,22 @@ export function current(T, W) {
     s: up.s,
     who: up.who,
     answers: m.answers.map((ans) => ({ text: ans.text, touches: touchesOf(up, ans), prompt: Boolean(ans.prompt) })),
+  };
+}
+
+// A card that's been answered, the way it read: who brought it, their words
+// and the answer, with the names they've got now, and its line.
+export function playedOf(T, W, pos) {
+  const c = W.deck?.cards[pos];
+  const m = c ? momentOf(T, W, c.m) : null;
+  if (!m) return null;
+  return {
+    pos,
+    age: c.age,
+    speaker: fill(T.core.templates.voice, { name: named(c.voice?.text ?? ""), faction: named(calledOf(T, W, c.a)) }),
+    text: fill(m.text, valsOf(T, W, c)),
+    answer: m.answers[c.side]?.text ?? "",
+    line: lineOf(T, W, c),
   };
 }
 
@@ -947,21 +989,29 @@ export function notThis(T, W) {
 }
 // The deck played again from the world before its first card, answer by
 // answer: the same seed and answers deal the same deck and the same board.
+// The last answer's prompt stays open when it hadn't been answered yet.
 export function replay(T, base, log) {
-  const W = resume(T, base);
+  // A copy, so playing it again never touches the base it came from.
+  const W = resume(T, copy(base));
   startDeck(T, W);
-  for (const e of log ?? []) {
-    for (let n = 0; n < (e.nots ?? 0); n++) notThis(T, W);
+  const all = log ?? [];
+  for (let n = 0; n < all.length; n++) {
+    const e = all[n];
+    for (let x = 0; x < (e.nots ?? 0); x++) notThis(T, W);
     if (!answer(T, W, e.side)) break;
-    if (W.deck.open) fillPrompt(T, W, e.prompt ?? { skip: true });
+    if (W.deck.open && (e.prompt || n < all.length - 1)) fillPrompt(T, W, e.prompt ?? { skip: true });
   }
   return W;
 }
-// Undo: the last answer taken back, with its prompt.
+// Undo: the last answer taken back, with its prompt, and the card it
+// answered up again, Not this ones and all.
 export function undo(T, W) {
   const D = W.deck;
   if (!D?.base || !D.log.length) return W;
-  return replay(T, D.base, D.log.slice(0, -1));
+  const last = D.log[D.log.length - 1];
+  const back = replay(T, D.base, D.log.slice(0, -1));
+  for (let n = 0; n < (last.nots ?? 0); n++) notThis(T, back);
+  return back;
 }
 export const doneOf = (W) => Boolean(W.deck?.done);
 // The end: whatever's still open on every card is dealt to fit what the
@@ -979,6 +1029,9 @@ export function finish(T, W) {
   mend(T, W);
   freshen(T, W);
   dealRest(T, W);
+  // A thread that named a resource a later card took off its faction names
+  // one it's got now.
+  for (const i of fresh(W)) mendAims(W, i);
   return W;
 }
 // What the board has to have that the answers didn't make, dealt around
@@ -1056,7 +1109,8 @@ export function historyOf(T, W) {
     .sort((x, y) => x.age - y.age || x.pos - y.pos);
 }
 // What's formed of each faction, for its tile: what it's called now, and
-// each part with when it formed, and what the age that's on still needs.
+// each part with when it formed, and what's still to form (the age that's
+// on's, and any an age before it ran out of cards for).
 export function formedOf(T, W) {
   const D = W.deck;
   if (!D) return null;

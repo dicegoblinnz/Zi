@@ -200,8 +200,9 @@ export function fill(tpl, vals) {
     const lead = at === 0 || /[.!?]["”’']?\s+$/.test(String(tpl).slice(0, at));
     if (!lead) s = typeof v === "object" && v.name ? s.replace(/^The /, "the ") : s.replace(/^(The|A|An) /, (x) => x.toLowerCase()).replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase());
     // A name that already has its The after one doesn't take a second
-    // (The {seat} Company on the Old Bridge is the Old Bridge Company).
-    if (/(^|[^\p{L}])[Tt]he $/u.test(String(tpl).slice(0, at))) s = s.replace(/^[Tt]he /, "");
+    // (The {seat} Company on the Old Bridge is the Old Bridge Company), and
+    // nor does one after our, their or the like (our Ward Tax).
+    if (/(^|[^\p{L}])(the|our|their|his|her|its|my|your|a|an|every|this|that) $/iu.test(String(tpl).slice(0, at))) s = s.replace(/^[Tt]he /, "");
     if (!poss) return s;
     if (/['’]s$/.test(s)) return s;
     return /s$/.test(s) ? s + poss[0] : s + poss;
@@ -1373,8 +1374,9 @@ function redealStep(T, W, i, step, only, key, t) {
   return true;
 }
 // A tie that named one of a faction's resources it's since lost names one
-// it's got now.
-function mendAims(W, i) {
+// it's got now (the deck's end uses it too, since a later card can take a
+// resource a thread named).
+export function mendAims(W, i) {
   const ids = (W.factions[i].res ?? []).map((r) => r.id).filter(Boolean);
   const mend = (t, key) => {
     if (t.at?.res != null && !ids.includes(t.at.res)) t.at.res = pick(ids, rngOf(W.seed, "mend", key, W.tries[`f:${i}:res`] ?? 0)) ?? null;

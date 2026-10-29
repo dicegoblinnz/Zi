@@ -1,9 +1,10 @@
 ---
 // /deal/: every table the world builder deals from, and boards dealt from
 // them a tap at a time, for any region and genre (stage 3 of
-// notes/builder-plan.md). It's where Mo reads and judges a pack. The board's
-// in the address, so a link brings the same one back. Not linked from
-// anywhere, and kept out of search and off phones like /kit/.
+// notes/builder-plan.md), or answered a card at a time off the deck (stage
+// 7). It's where Mo reads and judges a pack. The board's in the address, with
+// every answer, so a link brings the same one back. Not linked from anywhere,
+// and kept out of search and off phones like /kit/.
 import Base from "../layouts/Base.astro";
 import "@fontsource/alegreya-sans/800.css";
 import "../styles/kit.css";
@@ -23,7 +24,7 @@ const REGIONS = [
     <header class="dl-head">
       <p class="eyebrow">The world builder</p>
       <h1>Deal a world</h1>
-      <p class="dl-lede">Every table the builder deals from, and boards dealt from them a tap at a time. Nothing here's saved. The address keeps the board, so a link brings the same one back.</p>
+      <p class="dl-lede">Every table the builder deals from, and boards dealt from them in a tap or answered a card at a time. Nothing here's saved. The address keeps the board and every answer, so a link brings the same one back.</p>
     </header>
 
     <div class="dl-tabs" role="tablist" aria-label="What to look at">
@@ -33,6 +34,13 @@ const REGIONS = [
 
     <section id="boards" class="dl-panel" role="tabpanel" aria-labelledby="tab-boards">
       <form class="dl-set" id="set" autocomplete="off">
+        <fieldset class="dl-how">
+          <legend>Make it</legend>
+          <div class="dl-seg two">
+            <label><input type="radio" name="how" value="all" checked /> <span>Deal it all</span></label>
+            <label><input type="radio" name="how" value="deck" /> <span>Answer a deck</span></label>
+          </div>
+        </fieldset>
         <fieldset class="dl-regions">
           <legend>Region</legend>
           <div class="dl-seg">

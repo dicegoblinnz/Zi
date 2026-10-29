@@ -4,7 +4,7 @@
 //   node scripts/deal-world.mjs [--tables FILE_OR_FOLDER] [--region city]
 //        [--genre ID | --era ID [--twist ID]] [--seed ash-lantern-ford]
 //        [--factions 6] [--dials tense=2,strange=0] [--boards 1]
-//        [--crew 4] [--sheet]
+//        [--crew 4] [--sheet] [--deck]
 //
 //   --tables   public/world-tables.json (from npm run content) unless it's
 //              given, or a folder of YAML, like tests/world-pack, which is
@@ -17,10 +17,14 @@
 //   --crew     a crew of the book's first so many (Vesk, Bram, Isolde,
 //              Dorrie, Ash and Wren), each dealt a friend and a foe
 //   --sheet    a party sheet with something worth taking: A Ship and Safehouses
+//   --deck     builds it by answering instead (stage 7, world-deck.js): a deck
+//              played a card at a time, every answer and prompt picked at
+//              random from the seed, then How it came to be and the board
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { cardsOf, dealWorld, newSeed, rngOf } from "../src/companion/world-engine.js";
+import { cardsOf, dealWorld, newSeed, rngOf, start } from "../src/companion/world-engine.js";
+import { answer, current, fillPrompt, finish, historyOf, lineOf, prompted, startDeck } from "../src/companion/world-deck.js";
 import { bookFor, compileTables, readTablesDir } from "./world-tables.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -56,6 +60,43 @@ export const CREW = ["Vesk", "Bram", "Isolde", "Dorrie", "Ash", "Wren"];
 export function crewFor(n, sheet = false) {
   const who = CREW.slice(0, Math.max(0, Math.min(CREW.length, Math.floor(Number(n) || 0)))).map((name) => ({ k: name.toLowerCase(), name }));
   return { who, res: [], assets: sheet ? [{ id: "ship", text: "A Ship" }, { id: "safehouses", text: "Safehouses" }] : [] };
+}
+
+// A deck played at random from the seed, a card at a time, as text: each
+// card with who brings it, their words, the two answers and the one taken,
+// and any prompt, then How it came to be, by age.
+export function deckText(T, opts) {
+  const W = start(T, opts);
+  startDeck(T, W);
+  const rand = rngOf(W.seed, "deal-deck");
+  const out = [];
+  const AGES = ["", "Long ago", "In living memory", "This last year"];
+  for (let guard = 0; guard < 300; guard++) {
+    const o = prompted(W);
+    if (o) {
+      const k = rand() < 0.7 ? Math.floor(rand() * o.ideas.length) % o.ideas.length : null;
+      fillPrompt(T, W, k == null ? { skip: true } : { pick: k });
+      out.push(`      ${o.ask} ${o.ideas.map((x) => x.text).join(" / ")} -> ${k == null ? "skipped" : o.ideas[k].text}`);
+      out.push(`      ${lineOf(T, W, W.deck.cards[o.pos])}`);
+      continue;
+    }
+    const c = current(T, W);
+    if (!c) break;
+    const side = rand() < 0.5 ? 0 : 1;
+    out.push(`${String(c.pos + 1).padStart(2)}. (${c.age}${c.chain ? ", chain" : ""}${c.last ? ", last" : ""}) ${c.speaker}: "${c.text}"`);
+    out.push(`      ${c.answers.map((x, k) => (k === side ? `[${x.text}]` : x.text)).join(" or ")}`);
+    // What it did comes up once it's gone, after its prompt if it's got one.
+    if (!answer(T, W, side).prompt) out.push(`      ${lineOf(T, W, W.deck.cards[c.pos])}`);
+  }
+  finish(T, W);
+  out.push("", `How it came to be (${W.deck.pos} cards):`);
+  let age = 0;
+  for (const h of historyOf(T, W)) {
+    if (h.age !== age) out.push(`  ${AGES[(age = h.age)]}`);
+    out.push(`    ${h.text}`);
+  }
+  out.push("", boardText(T, W));
+  return out.join("\n");
 }
 
 // One board, as text.
@@ -132,7 +173,8 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
     }
     try {
       const crew = args.crew || args.sheet ? crewFor(args.crew ?? 0, Boolean(args.sheet)) : null;
-      console.log(boardText(T, dealWorld(T, { recipe: { region, era, twist }, dials, seed, factions: Number(args.factions ?? 6), crew })));
+      const opts = { recipe: { region, era, twist }, dials, seed, factions: Number(args.factions ?? 6), crew };
+      console.log(args.deck ? deckText(T, opts) : boardText(T, dealWorld(T, opts)));
     } catch (err) {
       stop(err.message);
     }

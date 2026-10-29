@@ -587,6 +587,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
         else if ((first.k === "friend" || first.k === "foe") && !slotsIn(ans.thread).includes("who")) bad(at, "a thread toward the crew needs {who}");
         else if (first.k !== "friend" && first.k !== "foe" && !slotsIn(ans.thread).includes("b")) bad(at, "a thread needs {b}, the faction it's toward");
         if (ans.back != null && !["rival", "ally", "debt"].includes(first?.k)) bad(at, "only a rival, an ally or a debt goes both ways, so only they have back");
+        if (ans.back == null && ["rival", "ally", "debt"].includes(first?.k)) bad(at, "a rival, an ally or a debt goes both ways, so its own words need back too");
         ans.thread0 = first?.k ?? null;
       } else if (ans.back != null) bad(at, "has back without thread");
       if (x.then != null) {

@@ -59,12 +59,25 @@
 //    one she's locked still reading their name), a friend or foe whose
 //    faction's dealt again dealt again to fit it, and adding a faction tying
 //    it to someone who's still got no friend or foe on the board.
+// 8. The deck (stage 7): its moments' checks, then 200 decks answered at
+//    random in every region for every named genre the packs cover, with
+//    prompts filled, written and skipped and Not this one tapped: every
+//    board passes the checks with a fallback in under 1 deck in 20 and adds
+//    up, every faction's formed, how many cards it takes changes with the
+//    board and the answers, no card comes twice in a deck, every chain
+//    lands, every prompt has three suggestions, nothing's left unfilled in
+//    the history, and the same seed and answers deal the same deck and
+//    board. Not this one changes nothing but the card, Undo takes an answer
+//    back, a prompt that's waiting stays waiting when the answers are played
+//    again, Not this one on the last card comes back round to the last cards
+//    rather than ending the deck, and the dealing script plays a deck as text.
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { apply, blank, forPlayer, readable, standingOf, undoOf } from "../src/companion/board.js";
 import { BAGS, CHECKS, STEPS, canDeal, cardsOf, choose, crewFits, dealRest, dealWorld, lock, newSeed, options, pickAt, pickKey, poolOf, preview, recordOf, redeal, redealFaction, resume, rngOf, setCrew, SIZES, start, startAdd, tensionAt } from "../src/companion/world-engine.js";
 import { BMAX } from "../src/companion/world-record.js";
+import { MAX, PARTS, answer, current, deckOf, fillPrompt, finish, formedOf, historyOf, notThis, playRest, prompted, replay, startDeck, undo } from "../src/companion/world-deck.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 
 const problems = [];
@@ -146,6 +159,23 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
   broken("a fallback for the crew that aims elsewhere", (s) => (s.core.fallbacks.who = { text: "Take {seat}.", die: 4 }), "fallbacks.who aims only at {who}");
   broken("a crew quality Appendix B hasn't got", (s) => (s.core.crew.qualities = ["lucky"]), "crew.qualities has one that isn't Appendix B's asset: lucky");
   broken("no crew tables", (s) => delete s.core.crew, "crew needs friends, foes and qualities");
+  // The deck's moments.
+  const moment = (s) => s.core.deck[0];
+  broken("a moment with three answers", (s) => moment(s).answers.push({ text: "Wait", does: ["lean a old"], line: "{a} waited." }), "needs two answers, found 3");
+  broken("an answer that's too long", (s) => (moment(s).answers[0].text = "Buy all of it today"), "an answer's 1 to 4 words");
+  broken("an answer with a slot in it", (s) => (moment(s).answers[0].text = "Pay {b}"), "an answer's its own plain words, with no slot");
+  broken("an effect it doesn't know", (s) => moment(s).answers[0].does.push("dance a"), "has an effect it doesn't know: dance a");
+  broken("gaining something that isn't a thing", (s) => moment(s).answers[0].does.push("gain gold a"), "gain needs res, asset or people");
+  broken("a thread with one side", (s) => moment(s).answers[0].does.push("rival a"), "rival needs two factions on the card");
+  broken("a line of history that's too long", (s) => (moment(s).answers[0].line = "{a} bought dry ground off {b}, and owed them for it, and paid and paid for years after."), "a line of history's 16 words at most");
+  broken("a chain that lands nowhere", (s) => (moment(s).answers[0].then = "nowhere"), "then lands on a key no moment has: nowhere");
+  broken("a chain card nothing lands on", (s) => s.core.deck.push({ text: "{b} came back.", key: "lonely", chain: true, age: 2, answers: [{ text: "Fight", does: ["rival a b"], line: "{a} fought {b}." }, { text: "Talk", does: ["ally a b"], line: "{a} talked to {b}." }] }), "nothing lands on the chain card lonely");
+  broken("a chain going back an age", (s) => s.core.deck.find((m) => m.key === "elopement").age = 1, "then lands on elopement, an age before it");
+  broken("someone nobody named", (s) => (moment(s).text = "{person} came asking about {b}."), "uses {person}, which nothing before it gives");
+  broken("a detail with two ideas", (s) => (moment(s).answers[0].prompt = { kind: "detail", ask: "What was it?", ideas: ["a box", "a key"] }), "a detail's prompt needs three ideas or more");
+  broken("a strange moment with nothing strange to deal", (s) => (moment(s).strange = true), "it's strange, so answer 1 needs a Secret naming nobody");
+  broken("a two-way thread with one side's words", (s) => Object.assign(moment(s).answers[1], { does: ["lean a war", "rival a b"], thread: "{b} stood in our way" }), "its own words need back too");
+  broken("too few moments", (s) => (s.core.deck = s.core.deck.slice(0, 5)), "the deck needs 60 moments or more", { minimums: true });
   // A row keeps its id when rows are added round it, so a world built from
   // last week's tables still knows which rows it holds.
   {
@@ -159,6 +189,61 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
     same(Object.keys(was).filter((k) => now[k] !== was[k]), [], "rows added at the top leave every other row's id as it was");
   }
   console.log("1. the tables' checks catch a missing file, unreadable rows, unknown tags, unfilled slots, rows written twice and too few names, and a row keeps its id");
+}
+
+// Every check a dealt board has to pass, and every card adding up: the
+// boards dealt whole (part 2) and the ones a deck dealt (part 8) alike.
+function checkDealt(W, recipe, seed, n, fail) {
+  if (W.checks.map((c) => c.k).join() !== CHECKS.join()) fail(`${seed}: the checks that ran were ${W.checks.map((c) => c.k).join(", ")}`);
+  for (const c of W.checks) if (!c.ok) fail(`${seed}: the ${c.k} check still fails`);
+  // No bag gives the same row twice till it's run out, and then it says so.
+  for (const [bag, step] of Object.entries(BAGS)) {
+    const picks = (step === "seat" ? W.seats : W.factions.map((f) => f[step])).filter((p) => p && !p.own);
+    const idOf = (p) => (step === "face" ? p.nameId : p.id);
+    const fresh = picks.filter((p) => !p.again).map(idOf);
+    if (new Set(fresh).size !== fresh.length) fail(`${seed}: the ${bag} bag gave the same row twice before it ran out`);
+    if (new Set(picks.map(idOf)).size !== picks.length && !picks.some((p) => p.again)) fail(`${seed}: the ${bag} bag gave a row twice without saying so`);
+  }
+  // Every step that needs a because has one.
+  const picks = [...W.seats, ...W.factions.flatMap((f) => [f.type, f.method, f.want, f.agenda, f.secret, ...(f.res ?? []), ...(f.assets ?? [])]), ...(W.needs ?? []).map((x) => x.asset)];
+  for (const p of picks) if (p?.by && !p.why && T.core.because[p.by] !== "") fail(`${seed}: ${p.text} was steered by its ${p.by} and doesn't say why`);
+  for (const f of W.factions) if (f.exc && !f.exc.reason) fail(`${seed}: ${f.exc.text} breaks the logic without a reason`);
+  // Every card adds up.
+  const C = cardsOf(T, W);
+  const seatsHeld = new Set();
+  const oneThing = new Set();
+  C.factions.forEach((f, i) => {
+    const who = `${seed}, ${f.name || `faction ${i + 1}`}`;
+    if (!f.name || !f.about || !f.want || !f.face || !f.secret || !f.agendas.length) fail(`${who} is missing part of its card`);
+    if (f.name.split(/\s+/).length > 4) fail(`${who}: a name's one to four words, its seat and all`);
+    const size = BOOK.sizes[f.size];
+    if (!size || f.die < size.lo || f.die > size.hi) fail(`${who}: a ${f.size} faction with a d${f.die}`);
+    if (f.die !== 2 * f.steps) fail(`${who}: its d${f.die} isn't 1 step plus its people who turn up (${f.steps} steps)`);
+    if (f.res.length < size.rlo || f.res.length > size.rhi) fail(`${who}: ${f.res.length} resources for a ${f.size} faction`);
+    const paid = f.assets.filter((a) => !a.off);
+    if (paid.length > f.res.length) fail(`${who}: ${paid.length} assets and ${f.res.length} resources paying for them`);
+    const people = W.factions[i].assets.filter((a) => a.power).map((a) => a.role);
+    if (new Set(people).size !== people.length) fail(`${who} holds two of the same people`);
+    for (const a of [...W.factions[i].assets.filter((x) => !x.power), ...(W.needs ?? []).filter((x) => x.i === i).map((x) => x.asset)]) {
+      if (a.power) fail(`${who}: a need that's people`);
+      if (oneThing.has(a.role)) fail(`${seed}: two factions hold ${a.role}`);
+      oneThing.add(a.role);
+    }
+    if (!(W.web ?? []).some((t) => t.kind === "rival" && (t.a === i || t.b === i))) fail(`${who} has no rival`);
+    if (seatsHeld.has(f.seat)) fail(`${who} shares its seat`);
+    seatsHeld.add(f.seat);
+    const ag = W.factions[i].agenda;
+    for (const aim of ag?.aims ?? []) if (ag.at?.[aim] == null) fail(`${who}: its agenda doesn't aim at a ${aim}`);
+    // A Face is one of the threats its type's own row gives, or its kind's.
+    const type = W.factions[i].type;
+    const own = type?.id ? poolOf(T, recipe).types.find((r) => r.id === type.id)?.faces : null;
+    const kinds = own?.length ? own : T.core.faces[type?.role] ?? [];
+    if (kinds.length && !kinds.includes(W.factions[i].face?.threat)) fail(`${who}: its Face is ${W.factions[i].face?.threat}, which isn't one its kind of faction can be`);
+    const words = [f.name, f.about, f.want, f.face, f.secret, f.more, ...f.res.map((r) => r.text), ...f.assets.map((a) => a.text), ...f.agendas.map((a) => a.text), ...f.threads.map((t) => t.text)];
+    for (const w of words) if (/[{}]/.test(w)) fail(`${who}: a slot nobody filled in "${w}"`);
+    for (const t of f.threads) if (t.to !== "crew" && (!Number.isInteger(t.to) || t.to === i || t.to >= C.factions.length)) fail(`${who}: a thread toward nobody`);
+  });
+  if (C.seats.length !== n + 2 || C.seats.filter((s) => s.held < 0).length !== 2) fail(`${seed}: ${C.seats.length} seats for ${n} factions`);
 }
 
 // 2. Boards, by the hundred.
@@ -191,56 +276,7 @@ for (const g of groups) {
     dealtCount++;
     if (JSON.stringify(recordOf(dealWorld(T, opts))) !== JSON.stringify(recordOf(W))) fail(`${seed} dealt two different boards`);
     if (W.fallbacks.length) fallbacks++;
-    if (W.checks.map((c) => c.k).join() !== CHECKS.join()) fail(`${seed}: the checks that ran were ${W.checks.map((c) => c.k).join(", ")}`);
-    for (const c of W.checks) if (!c.ok) fail(`${seed}: the ${c.k} check still fails`);
-    // No bag gives the same row twice till it's run out, and then it says so.
-    for (const [bag, step] of Object.entries(BAGS)) {
-      const picks = (step === "seat" ? W.seats : W.factions.map((f) => f[step])).filter((p) => p && !p.own);
-      const idOf = (p) => (step === "face" ? p.nameId : p.id);
-      const fresh = picks.filter((p) => !p.again).map(idOf);
-      if (new Set(fresh).size !== fresh.length) fail(`${seed}: the ${bag} bag gave the same row twice before it ran out`);
-      if (new Set(picks.map(idOf)).size !== picks.length && !picks.some((p) => p.again)) fail(`${seed}: the ${bag} bag gave a row twice without saying so`);
-    }
-    // Every step that needs a because has one.
-    const picks = [...W.seats, ...W.factions.flatMap((f) => [f.type, f.method, f.want, f.agenda, f.secret, ...(f.res ?? []), ...(f.assets ?? [])]), ...(W.needs ?? []).map((x) => x.asset)];
-    for (const p of picks) if (p?.by && !p.why && T.core.because[p.by] !== "") fail(`${seed}: ${p.text} was steered by its ${p.by} and doesn't say why`);
-    for (const f of W.factions) if (f.exc && !f.exc.reason) fail(`${seed}: ${f.exc.text} breaks the logic without a reason`);
-    // Every card adds up.
-    const C = cardsOf(T, W);
-    const seatsHeld = new Set();
-    const oneThing = new Set();
-    C.factions.forEach((f, i) => {
-      const who = `${seed}, ${f.name || `faction ${i + 1}`}`;
-      if (!f.name || !f.about || !f.want || !f.face || !f.secret || !f.agendas.length) fail(`${who} is missing part of its card`);
-      if (f.name.split(/\s+/).length > 4) fail(`${who}: a name's one to four words, its seat and all`);
-      const size = BOOK.sizes[f.size];
-      if (!size || f.die < size.lo || f.die > size.hi) fail(`${who}: a ${f.size} faction with a d${f.die}`);
-      if (f.die !== 2 * f.steps) fail(`${who}: its d${f.die} isn't 1 step plus its people who turn up (${f.steps} steps)`);
-      if (f.res.length < size.rlo || f.res.length > size.rhi) fail(`${who}: ${f.res.length} resources for a ${f.size} faction`);
-      const paid = f.assets.filter((a) => !a.off);
-      if (paid.length > f.res.length) fail(`${who}: ${paid.length} assets and ${f.res.length} resources paying for them`);
-      const people = W.factions[i].assets.filter((a) => a.power).map((a) => a.role);
-      if (new Set(people).size !== people.length) fail(`${who} holds two of the same people`);
-      for (const a of [...W.factions[i].assets.filter((x) => !x.power), ...(W.needs ?? []).filter((x) => x.i === i).map((x) => x.asset)]) {
-        if (a.power) fail(`${who}: a need that's people`);
-        if (oneThing.has(a.role)) fail(`${seed}: two factions hold ${a.role}`);
-        oneThing.add(a.role);
-      }
-      if (!(W.web ?? []).some((t) => t.kind === "rival" && (t.a === i || t.b === i))) fail(`${who} has no rival`);
-      if (seatsHeld.has(f.seat)) fail(`${who} shares its seat`);
-      seatsHeld.add(f.seat);
-      const ag = W.factions[i].agenda;
-      for (const aim of ag?.aims ?? []) if (ag.at?.[aim] == null) fail(`${who}: its agenda doesn't aim at a ${aim}`);
-      // A Face is one of the threats its type's own row gives, or its kind's.
-      const type = W.factions[i].type;
-      const own = type?.id ? poolOf(T, g.recipe).types.find((r) => r.id === type.id)?.faces : null;
-      const kinds = own?.length ? own : T.core.faces[type?.role] ?? [];
-      if (kinds.length && !kinds.includes(W.factions[i].face?.threat)) fail(`${who}: its Face is ${W.factions[i].face?.threat}, which isn't one its kind of faction can be`);
-      const words = [f.name, f.about, f.want, f.face, f.secret, f.more, ...f.res.map((r) => r.text), ...f.assets.map((a) => a.text), ...f.agendas.map((a) => a.text), ...f.threads.map((t) => t.text)];
-      for (const w of words) if (/[{}]/.test(w)) fail(`${who}: a slot nobody filled in "${w}"`);
-      for (const t of f.threads) if (!Number.isInteger(t.to) || t.to === i || t.to >= C.factions.length) fail(`${who}: a thread toward nobody`);
-    });
-    if (C.seats.length !== n + 2 || C.seats.filter((s) => s.held < 0).length !== 2) fail(`${seed}: ${C.seats.length} seats for ${n} factions`);
+    checkDealt(W, g.recipe, seed, n, fail);
     // Agendas and Secrets aim at the whole board, the last faction dealt too.
     const L = n - 1;
     if (W.factions.some((f, j) => j !== L && (f.agenda?.at?.rival === L || f.agenda?.at?.res?.j === L || f.agenda?.at?.asset?.j === L || f.secret?.at === L))) lastNamed++;
@@ -757,6 +793,142 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     yes(lacking > 20, `adding a faction, it's mostly the foe of the one who hasn't got one (${lacking} of 40)`);
   }
   console.log("7. a character's cards, Lock, Deal again, her own words, the record, someone leaving and joining, and adding a faction tied to the crew");
+}
+
+// 8. The deck (stage 7).
+{
+  const DECKS = 200;
+  const started = Date.now();
+  const CREW = ["Vesk", "Bram", "Isolde", "Dorrie", "Ash", "Wren"];
+  const ALL = Object.values(PARTS).flat();
+  const decks = groups.filter((g) => !g.what.startsWith("the mix "));
+  const lens = new Map();
+  let played = 0;
+  let replayed = 0;
+  let prompts = 0;
+  for (const g of decks) {
+    let fallbacks = 0;
+    let firstFail = null;
+    const fail = (what) => {
+      firstFail ??= what;
+    };
+    const M = deckOf(T, g.recipe);
+    for (let b = 0; b < DECKS; b++) {
+      const seed = newSeed(T, rngOf("deck-check", g.what, b));
+      const n = 4 + (b % 9);
+      const dials = b % 10 === 0 ? { tense: 0, strange: 0, rich: 0, ruled: 0 } : b % 10 === 5 ? { tense: 2, strange: 2, rich: 2, ruled: 2 } : null;
+      const crew = b % 3 === 1 ? { who: CREW.slice(0, 1 + (b % 6)).map((name) => ({ k: name.toLowerCase(), name })), res: [], assets: b % 2 ? [{ id: "ship", text: "A Ship" }] : [] } : null;
+      const W = start(T, { recipe: g.recipe, seed, factions: n, dials, crew });
+      startDeck(T, W);
+      const play = rngOf("deck-play", g.what, b);
+      for (let guard = 0; guard < 400; guard++) {
+        const o = prompted(W);
+        if (o) {
+          prompts++;
+          if (o.ideas.length !== 3 || o.ideas.some((x) => !x.text || /[{}]/.test(x.text))) fail(`${seed}: a prompt (${o.ask}) has ${o.ideas.length} suggestions`);
+          const x = play();
+          fillPrompt(T, W, x < 0.5 ? { pick: Math.floor(play() * 3) % 3 } : x < 0.6 ? { text: "Her own words" } : { skip: true });
+          continue;
+        }
+        const c = current(T, W);
+        if (!c) break;
+        if (/[{}]/.test(c.text) || /[{}]/.test(c.speaker)) fail(`${seed}: a slot nobody filled on a card: "${c.text}"`);
+        if (!c.chain && play() < 0.08) {
+          notThis(T, W);
+          continue;
+        }
+        answer(T, W, play() < 0.5 ? 0 : 1);
+      }
+      finish(T, W);
+      played++;
+      if (W.fallbacks.length) fallbacks++;
+      checkDealt(W, g.recipe, seed, n, fail);
+      const D = W.deck;
+      for (const f of formedOf(T, W).factions) {
+        const left = ALL.filter((p) => f.parts[p] == null);
+        if (left.length) fail(`${seed}: ${f.name} isn't formed (${left.join(", ")})`);
+      }
+      const ids = D.cards.map((c) => c.m);
+      if (new Set(ids).size !== ids.length) fail(`${seed}: a card came twice in one deck`);
+      if (D.pos > 70) fail(`${seed}: the deck ran to ${D.pos} cards`);
+      if (D.chains.length) fail(`${seed}: ${D.chains.length} chains never landed`);
+      D.cards.forEach((c, k) => {
+        const then = M.byId.get(c.m)?.answers[c.side].then;
+        if (then && !D.cards.slice(k + 1).some((x) => x.chain === k && x.m === M.byKey.get(then)?.id)) fail(`${seed}: the chain card ${k + 1} started never landed`);
+      });
+      for (const h of historyOf(T, W)) if (/[{}]/.test(h.text)) fail(`${seed}: a slot nobody filled in "${h.text}"`);
+      if (!lens.has(n)) lens.set(n, []);
+      lens.get(n).push(D.pos);
+      // The same seed and answers deal the same deck and the same board.
+      if (b % 5 === 2) {
+        replayed++;
+        if (JSON.stringify(recordOf(finish(T, replay(T, D.base, D.log)))) !== JSON.stringify(recordOf(W))) fail(`${seed}: the same answers dealt a different deck or board`);
+      }
+    }
+    yes(fallbacks * 20 < DECKS, `${g.what}: ${fallbacks} of ${DECKS} decks needed a fallback, and that's 1 in 20 or more`);
+    if (firstFail) note(`${g.what}, a deck: ${firstFail}`);
+    console.log(`8. ${g.what}: ${DECKS} decks, ${fallbacks} with a fallback`);
+  }
+  const mean = (n) => lens.get(n).reduce((x, y) => x + y, 0) / lens.get(n).length;
+  yes(mean(12) > mean(4) * 1.5, `a deck takes ${mean(4).toFixed(1)} cards on four factions and ${mean(12).toFixed(1)} on twelve`);
+  for (const [n, list] of lens) yes(new Set(list).size > 1, `every deck on ${n} factions took ${list[0]} cards, whatever the answers`);
+  yes(prompts > 0, "no deck asked for a name or a detail");
+  // Not this one deals another card and changes nothing else, and Undo takes
+  // the last answer back, the card it answered up again.
+  {
+    const W = start(T, { recipe: decks[0].recipe, seed: "ash-lantern-ford", factions: 6 });
+    startDeck(T, W);
+    for (let k = 0; k < 6; k++) {
+      answer(T, W, k % 2);
+      if (prompted(W)) fillPrompt(T, W, { skip: true });
+    }
+    const was = current(T, W);
+    const keep = (x) => JSON.stringify({ cards: x.deck.cards, parts: x.deck.parts, factions: x.factions, made: x.made });
+    const before = keep(W);
+    notThis(T, W);
+    const now = current(T, W);
+    yes(now && now.m !== was.m, "Not this one dealt the same card again");
+    same(keep(W), before, "Not this one changed something besides the card");
+    const mid = JSON.stringify(recordOf(W));
+    answer(T, W, 1);
+    if (prompted(W)) fillPrompt(T, W, { pick: 0 });
+    const back = undo(T, W);
+    current(T, back);
+    same(JSON.stringify(recordOf(back)), mid, "Undo took the last answer back to just as it was");
+  }
+  // A prompt that's still waiting when the answers are played again (a link
+  // to /deal/ with one up) stays up, and Not this one on the last card, past
+  // every last card there is, comes back round to them rather than ending
+  // the deck without one.
+  {
+    let open = 0;
+    let lasts = 0;
+    for (let s = 0; s < 40; s++) {
+      const W = start(T, { recipe: decks[s % decks.length].recipe, seed: `deck-open-${s}`, factions: 4 + (s % 9) });
+      startDeck(T, W);
+      const rand = rngOf(W.seed, "check-open");
+      for (let g = 0; g < 2 * MAX && !prompted(W) && current(T, W); g++) answer(T, W, rand() < 0.5 ? 0 : 1);
+      if (prompted(W)) {
+        open++;
+        same(JSON.stringify(prompted(replay(T, W.deck.base, W.deck.log))), JSON.stringify(prompted(W)), `${W.seed}: a prompt that was waiting wasn't when its answers were played again`);
+      }
+      playRest(T, W, rand, { finishing: false });
+      const U = undo(T, W);
+      if (!current(T, U)?.last) continue;
+      lasts++;
+      for (let x = 0; x < 8; x++) notThis(T, U);
+      yes(current(T, U)?.last, `${W.seed}: Not this one on the last card ended the deck without one`);
+    }
+    yes(open > 0 && lasts > 0, `no deck had a prompt waiting (${open}) or a last card to pass over (${lasts})`);
+  }
+  // The dealing script plays a deck as text, the same for the same seed.
+  {
+    const run = () => execFileSync("node", ["scripts/deal-world.mjs", "--deck", "--region", "town", "--genre", "medieval", "--factions", "5", "--seed", "ash-lantern-ford"], { encoding: "utf8" });
+    const one = run();
+    yes(one.includes("How it came to be") && one.includes("ash-lantern-ford"), "npm run deal -- --deck doesn't play a deck");
+    same(run(), one, "the dealing script played the same seed two ways");
+  }
+  console.log(`8. the deck: ${played} decks answered at random, ${replayed} played again, Not this one, Undo and the dealing script, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
 }
 
 console.log(problems.length ? `\n${problems.length} problems` : "\nAll world engine checks passed");

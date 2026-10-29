@@ -325,6 +325,26 @@ loyal:
 # They're written for every genre, so the slots carry what's particular.
 deck:
   # Long ago: where each faction came from, what it took, and what it's like.
+  - text: "Our founder and the first of {b} came over the pass in the same bad winter, and shared one fire."
+    age: 1
+    tags: [road]
+    answers:
+      - text: "Stay close"
+        does: ["lean a road", "favour a b", "gain people a"]
+        line: "{a} kept close to {b} after that winter, and their people grew together."
+      - text: "Go our own way"
+        does: ["lean a wild", "gain res a"]
+        line: "{a} went their own way after that winter, and found ground nobody wanted."
+  - text: "The night our founder died, every bird on {seat} flew off south and never came back."
+    age: 1
+    strange: true
+    answers:
+      - text: "Call it a sign"
+        does: ["lean a holy", "gain people a", "secret a"]
+        line: "{a} called the birds leaving {seat} a sign, and people came from miles to see."
+      - text: "Say nothing"
+        does: ["lean a secret", "gain res a", "secret a"]
+        line: "{a} said nothing about the birds leaving {seat}, and kept working the ground."
   - text: "We came with nothing but what we could carry. {b} held the only ground worth building on."
     age: 1
     answers:
@@ -689,6 +709,26 @@ deck:
         line: "{a} bought {b} fair and square, from whoever had the papers."
 
   # In living memory: deals, feuds and debts.
+  - text: "{b} came to us with a deal: our hands, their coin, and a share of whatever came of it."
+    age: 2
+    tags: [market]
+    answers:
+      - text: "Shake on it"
+        does: ["ally a b", "lean a market"]
+        line: "{a} went into business with {b}, and both did well out of it."
+      - text: "Borrow instead"
+        does: ["debt a b", "lean a debt"]
+        line: "{a} borrowed from {b} instead, and paid it back for years."
+  - text: "The court wanted a bond before it would let our founder go, and {b} stood surety."
+    age: 2
+    tags: [law]
+    answers:
+      - text: "Stand by them"
+        does: ["ally a b", "lean a law"]
+        line: "{a} stood by {b} after that, in court and out of it."
+      - text: "Owe them quietly"
+        does: ["debt a b", "lean a secret"]
+        line: "{a} let {b} hold the debt, and {b} never let them forget it."
   - text: "{b} lent us the money to rebuild after the fire. They want it back now, and we haven't got it."
     age: 2
     res: a
@@ -1056,6 +1096,26 @@ deck:
         line: "{a} kept the foundling, and {b} called it theft."
 
   # This last year: what's live now. Whoever brings a faction's card is its Face.
+  - text: "{b} asked us to stand with them by summer. Whatever's coming, they say it's coming for both of us."
+    age: 3
+    tags: [war]
+    answers:
+      - text: "Stand with them"
+        does: ["ally a b", "secret a b"]
+        line: "{a} swore to stand with {b} this last year, and told nobody why."
+      - text: "Stand alone"
+        does: ["rival a b", "agenda b a"]
+        line: "{a} turned {b} away this last year, and {b} took it badly."
+  - text: "{b} lost half their people to the fever this spring, and they've come asking us for hands."
+    age: 3
+    tags: [plague]
+    answers:
+      - text: "Send them hands"
+        does: ["debt b a", "agenda a b"]
+        line: "{a} sent {b} hands through the fever, and meant to be paid for every one."
+      - text: "Take their trade"
+        does: ["take res a b", "rival a b", "agenda b a"]
+        line: "{a} took {b}'s trade while the fever had them down, and {b} swore it'd cost them."
   - text: "{b} sent us a letter offering to buy us out. The price is an insult, and they know it."
     age: 3
     tags: [wealth]

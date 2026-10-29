@@ -60,8 +60,9 @@ const PAGES = [
   "/rules/appendix-c-every-lever-in-the-game/", "/rules/conflict/#s-defending", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
   "/characters/", "/characters/?c=check-vesk", "/characters/?c=check-vesk&t=sheet", "/characters/?c=check-vesk&t=rules", "/characters/?build", "/sheets/",
   "/account/", "/characters/?join", "/kit/",
-  // The world builder's tables, a board and every table, and the biggest board there is.
-  "/deal/", "/deal/?region=world&genre=medieval&factions=12&seed=ash-lantern-ford",
+  // The world builder's tables, a board and every table, the biggest board
+  // there is, and a deck's first card.
+  "/deal/", "/deal/?region=world&genre=medieval&factions=12&seed=ash-lantern-ford", "/deal/?deck=1&seed=ash-lantern-ford",
   // The table screen with no code yet, and with one that can't be right.
   "/table/", "/table/#not-a-code",
 ];
@@ -188,6 +189,118 @@ for (const [width, scheme] of [[390, "light"], [1280, "dark"]]) {
   await page.click(".theme-toggle");
   if (await theme()) note("theme: the switch didn't go back to dark");
   console.log("theme: the light switch checked");
+  await context.close();
+}
+
+// A deck on /deal/ (stage 7 of notes/builder-plan.md): a card at a time, Not
+// this one, a prompt's three suggestions taken, written over and skipped,
+// Undo, the address playing every answer again, Back to the deck before a new
+// one, and Answer the rest at random ending on the board, at 390 in light and
+// 320 in dark.
+for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
+  const context = await browser.newContext({ viewport: { width, height: 844 }, colorScheme: scheme });
+  if (scheme === "light") await context.addInitScript(() => { try { localStorage.setItem("zi-theme", "light"); } catch (e) {} });
+  const outside = await sealed(context);
+  const page = await context.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  page.on("console", (m) => { if (m.type() === "error") errors.push(m.text()); });
+  const at = `deck @${width} ${scheme}`;
+  const lines = () => page.locator(".dl-hist li").count();
+  const says = () => page.locator("#up .dl-says").textContent();
+  const roomy = async (when) => {
+    const { scroll, client } = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
+    if (scroll > client) note(`${at} ${when}: scrolls sideways (${scroll} > ${client})`);
+    const small = await page.evaluate(() =>
+      [...document.querySelectorAll("#board .button, #board .dl-own input")].filter((el) => el.getClientRects().length).map((el) => ({ t: el.textContent.trim().slice(0, 30), h: Math.round(el.getBoundingClientRect().height) })).filter((x) => x.h < 44),
+    );
+    if (small.length) note(`${at} ${when}: small tap targets: ${small.slice(0, 4).map((x) => `${x.t} (${x.h}px)`).join(", ")}`);
+    const result = await new AxeBuilder({ page }).include("#board").analyze();
+    for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`${at} ${when}: axe ${v.impact}: ${v.id}: ${v.nodes[0]?.target?.join(" ")}`);
+  };
+  await page.goto(BASE + "/deal/?deck=1&seed=ash-lantern-ford&region=town&genre=medieval&factions=6&crew=2");
+  await page.waitForSelector("#up .dl-ans");
+  if ((await page.locator("#up .dl-ans").count()) !== 2) note(`${at}: the first card hasn't got two answers`);
+  if (!(await page.locator("#up .dl-speaker").textContent()).trim()) note(`${at}: the first card doesn't say who's bringing it`);
+  if ((await page.locator(".dl-tile").count()) !== 6) note(`${at}: ${await page.locator(".dl-tile").count()} faction tiles for 6 factions`);
+  if (!(await page.locator(".dl-tile.on").count())) note(`${at}: no tile says who's on the card`);
+  // Not this one: another card, and nothing else changes.
+  const first = await says();
+  await page.click("[data-not]");
+  if ((await says()) === first) note(`${at}: Not this one didn't deal another card`);
+  if (await lines()) note(`${at}: Not this one wrote a line of history`);
+  // Answer till two prompts have come up. The first's skipped, taken back
+  // and answered the same way again, so the same prompt comes up and its
+  // first suggestion's taken, and the second's written over.
+  let prompts = 0;
+  let last = null;
+  let side = 0;
+  for (let n = 0; n < 60 && prompts < 2 && !(await page.locator(".dl-end").count()); n++) {
+    if (await page.locator(".dl-prompt").count()) {
+      const ideas = await page.locator(".dl-idea").count();
+      if (ideas !== 3) note(`${at}: a prompt has ${ideas} suggestions, not three`);
+      if (prompts === 0) {
+        const ask = await page.locator(".dl-q").textContent();
+        await page.click("[data-skip]");
+        if (await page.locator(".dl-prompt").count()) note(`${at}: Skip it left the prompt up`);
+        await page.click("[data-undo]");
+        await page.locator("#up .dl-ans").nth(side).click();
+        if (!(await page.locator(".dl-prompt").count()) || (await page.locator(".dl-q").textContent()) !== ask) note(`${at}: the same answer after Undo didn't ask the same thing`);
+        else await page.locator(".dl-idea").first().click();
+      } else {
+        await roomy("with a prompt up");
+        await page.fill(".dl-own input", "Old Maud");
+        await page.click(".dl-own button");
+        if (!(await page.locator("#board").textContent()).includes("Old Maud")) note(`${at}: her own words for a prompt aren't anywhere on the deck`);
+      }
+      prompts++;
+      continue;
+    }
+    last = await says();
+    side = n % 2;
+    await page.locator("#up .dl-ans").nth(side).click();
+  }
+  if (prompts < 2) note(`${at}: only ${prompts} prompts came up`);
+  if (await page.locator(".dl-prompt").count()) await page.click("[data-skip]");
+  // Undo takes the last answer back and puts its card up again.
+  const before = await lines();
+  if (!before) note(`${at}: no lines of history after answering`);
+  const lastLine = await page.locator(".dl-did p").textContent();
+  if (!lastLine.trim()) note(`${at}: nothing says what the last answer did`);
+  await page.click("[data-undo]");
+  if ((await lines()) !== before - 1) note(`${at}: Undo left ${await lines()} lines of history, not ${before - 1}`);
+  if (last && (await says()) !== last) note(`${at}: Undo didn't put the last card back up`);
+  // The address has every answer, so a reload plays the same deck.
+  const url = page.url();
+  const shown = await lines();
+  const up = await says();
+  await page.reload();
+  await page.waitForSelector("#up");
+  if ((await lines()) !== shown || (await says()) !== up) note(`${at}: a reload didn't play the same deck back (${await lines()} lines, not ${shown})`);
+  // A new deck, and Back brings this one back.
+  await page.click("#deal");
+  await page.waitForFunction((u) => location.href !== u, url);
+  if (await lines()) note(`${at}: a new deck started with history`);
+  await page.goBack();
+  await page.waitForFunction((n) => document.querySelectorAll(".dl-hist li").length === n, shown, { timeout: 5000 }).catch(() => note(`${at}: Back didn't bring the last deck back`));
+  // The rest at random, and the board at the end.
+  await page.click("[data-rest]");
+  await page.waitForSelector(".dl-end");
+  if ((await page.locator(".dl-fac").count()) !== 6) note(`${at}: the end has ${await page.locator(".dl-fac").count()} factions, not 6`);
+  if (await page.locator(".dl-tile").count()) note(`${at}: the tiles are still up at the end`);
+  const checks = await page.locator(".dl-checks").textContent();
+  if (/Still failing/.test(checks)) note(`${at}: the end's board fails its checks: ${checks}`);
+  if ((await page.locator(".dl-who").count()) !== 2) note(`${at}: the end hasn't got the crew of 2`);
+  if ((await page.locator(".dl-history h3").count()) !== 3) note(`${at}: How it came to be hasn't got all three ages`);
+  await roomy("at the end");
+  const names = await page.locator(".dl-fac h3").allTextContents();
+  const told = await lines();
+  await page.reload();
+  await page.waitForSelector(".dl-end");
+  if ((await lines()) !== told || (await page.locator(".dl-fac h3").allTextContents()).join("|") !== names.join("|")) note(`${at}: a reload at the end didn't deal the same board`);
+  if (outside.length) note(`${at}: fetches from outside the site: ${[...new Set(outside)].slice(0, 3).join(", ")}`);
+  if (errors.length) note(`${at}: console errors: ${errors.join(" | ")}`);
+  console.log(`${at}: ${told} cards answered, ${prompts} prompts, Not this one, Undo, a reload, Back and the rest at random checked`);
   await context.close();
 }
 

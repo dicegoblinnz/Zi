@@ -6,7 +6,15 @@
 // are, with something worth taking on their party sheet or not (stage 6), so
 // a link deals the same board again, and its # is left for the links between
 // a board's seats and factions.
-import { REGIONS, canDeal, cardsOf, dealWorld, newSeed } from "../companion/world-engine.js";
+//
+// Answer a deck (stage 7) makes the same world off the deck a card at a time
+// with world-deck.js: the card that's up with its two answers, Not this one,
+// Undo and Answer the rest at random, a prompt's three suggestions, the
+// factions' tiles filling in and How it came to be, then the board the end
+// deals. The address keeps every answer too (deck=1, a for the answers and n
+// for the Not this ones on the card that's up), so a link plays it again.
+import { REGIONS, canDeal, cardsOf, dealWorld, newSeed, start } from "../companion/world-engine.js";
+import { AGES, PARTS, answer, calledOf, current, fillPrompt, finish, formedOf, historyOf, notThis, playRest, playedOf, prompted, replay, startDeck, undo } from "../companion/world-deck.js";
 import { die, esc } from "../kit/kit.js";
 
 const $ = (s, r = document) => r.querySelector(s);
@@ -22,13 +30,19 @@ const BOND_NAMES = { pub: "Public Sentiment", mor: "Morale", loy: "Loyalty" };
 const CHECK_NAMES = { whole: "a card with a hole", power: "Power", rival: "a rival each", block: "a blocked trade", secret: "a Secret naming another faction", unique: "an asset held twice", aims: "an agenda aimed at nothing", crew: "a faction after something the crew’s got", strange: "something strange" };
 // The book's crew, the first so many of them, each dealt a friend and a foe.
 const CREW = ["Vesk", "Bram", "Isolde", "Dorrie", "Ash", "Wren"];
+// The deck's three ages, and what each forms of a faction.
+const AGE_NAMES = { 1: "Long ago", 2: "In living memory", 3: "This last year" };
+const PART_NAMES = { like: "what it’s like", keep: "what it took", foe: "a rival", friend: "an ally or a debt", agenda: "its agenda", secret: "its Secret", face: "its Face" };
 
 let T = null;
-const want = { region: "town", genre: "medieval", era: null, twist: null, n: 6, seed: null, crew: 0, sheet: false };
+const want = { region: "town", genre: "medieval", era: null, twist: null, n: 6, seed: null, crew: 0, sheet: false, deck: false };
+// A deck's answers and Not this ones, as the address had them.
+const asked = { log: [], nots: 0 };
 let shown = null;
 
 // ── The address: ?region=town&genre=medieval&factions=6&seed=ash-lantern-ford,
-// or a mix of its own as genre=mix&era=medieval&twist=magic.
+// or a mix of its own as genre=mix&era=medieval&twist=magic, and a deck's
+// answers as deck=1&a=…&n=….
 function readAddress() {
   const q = new URLSearchParams(location.search);
   const region = q.get("region");
@@ -38,13 +52,15 @@ function readAddress() {
   else if (genre) want.genre = genre;
   const n = Number(q.get("factions"));
   if (n >= 4 && n <= 12) want.n = Math.floor(n);
-  const seed = q.get("seed");
-  if (seed) want.seed = seed.slice(0, 40);
+  want.seed = q.get("seed")?.slice(0, 40) || null;
   const crew = Number(q.get("crew"));
   if (crew >= 0 && crew <= CREW.length) want.crew = Math.floor(crew);
   want.sheet = q.get("sheet") === "1";
+  want.deck = q.get("deck") === "1";
+  asked.log = want.deck ? logOf(q.get("a") ?? "") : [];
+  asked.nots = want.deck ? Math.max(0, Math.min(20, Math.floor(Number(q.get("n")) || 0))) : 0;
 }
-function writeAddress() {
+function writeAddress({ push = false } = {}) {
   const q = new URLSearchParams({ region: want.region, genre: want.genre });
   if (want.genre === MIX) {
     q.set("era", want.era ?? "");
@@ -54,7 +70,42 @@ function writeAddress() {
   if (want.seed) q.set("seed", want.seed);
   if (want.crew) q.set("crew", String(want.crew));
   if (want.sheet) q.set("sheet", "1");
-  history.replaceState(null, "", `${location.pathname}?${q}`);
+  if (want.deck) {
+    q.set("deck", "1");
+    const D = shown?.deck;
+    if (D?.log.length) q.set("a", logText(D.log));
+    if (D?.nots.length) q.set("n", String(D.nots.length));
+  }
+  history[push ? "pushState" : "replaceState"](null, "", `${location.pathname}?${q}`);
+}
+// A deck's answers in the address: each one's side, how many Not this ones
+// came before it and what its prompt got (a suggestion's number, her own
+// words, or null when it was skipped), as JSON in base64url.
+const b64 = (s) => btoa(String.fromCharCode(...new TextEncoder().encode(s))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const unb64 = (s) => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0)));
+function logText(log) {
+  const rows = log.map((e) => {
+    const x = [e.side];
+    if (e.nots || e.prompt) x.push(e.nots ?? 0);
+    if (e.prompt) x.push(e.prompt.skip ? null : typeof e.prompt.text === "string" ? e.prompt.text : e.prompt.pick);
+    return x;
+  });
+  return b64(JSON.stringify(rows));
+}
+function logOf(s) {
+  if (!s) return [];
+  try {
+    const rows = JSON.parse(unb64(s));
+    if (!Array.isArray(rows)) return [];
+    return rows.slice(0, 80).map((x) => {
+      const row = Array.isArray(x) ? x : [];
+      const e = { side: row[0] === 1 ? 1 : 0, nots: Math.max(0, Math.min(20, Math.floor(Number(row[1]) || 0))) };
+      if (row.length > 2) e.prompt = typeof row[2] === "string" ? { text: row[2].slice(0, 60) } : Number.isInteger(row[2]) ? { pick: row[2] } : { skip: true };
+      return e;
+    });
+  } catch {
+    return [];
+  }
 }
 
 // ── What's being asked for, as the engine's recipe.
@@ -69,10 +120,14 @@ const genreName = (r) => {
   const mix = `${T.eras[r.era] ?? r.era}${r.twist ? ` and ${T.twists[r.twist] ?? r.twist}` : ""}`;
   return g ? g.name : mix;
 };
+// The book's crew and their party sheet, as many as are asked for.
+const crewWanted = () =>
+  want.crew || want.sheet ? { who: CREW.slice(0, want.crew).map((name) => ({ k: name.toLowerCase(), name })), res: [], assets: want.sheet ? [{ id: "ship", text: "A Ship" }, { id: "safehouses", text: "Safehouses" }] : [] } : null;
 
 // ── The controls.
 function drawControls() {
   const none = [];
+  for (const input of $$('input[name="how"]')) input.checked = input.value === (want.deck ? "deck" : "all");
   for (const input of $$('input[name="region"]')) {
     const any = Object.keys(T.eras).some((era) => canDeal(T, { region: input.value, era }));
     input.disabled = !any;
@@ -125,38 +180,39 @@ function drawButton() {
   const typed = $("#seed").value.trim();
   const button = $("#deal");
   button.disabled = !ok;
-  button.textContent = typed && typed !== shown?.seed ? "Deal this seed" : shown ? "Deal another" : "Deal";
+  const deck = want.deck && shown?.deck;
+  button.textContent = typed && typed !== shown?.seed ? "Deal this seed" : want.deck ? (deck ? "New deck" : "Deal a deck") : shown && !shown.deck ? "Deal another" : "Deal";
 }
 
-// ── A board, drawn.
+// ── A board, drawn, a part at a time, so a deck draws the same parts.
 const why = (p) => (p?.why ? `<span class="why">${esc(p.why)}</span>` : "");
 const chips = (items) => `<ul class="dl-chips">${items.join("")}</ul>`;
 const factionLink = (C, j) => (C.factions[j] ? `<a href="#f-${j}">${esc(C.factions[j].name)}</a>` : "someone");
+const list = (xs) => (xs.length > 1 ? `${xs.slice(0, -1).join(", ")} and ${xs.at(-1)}` : xs[0] ?? "");
 
-function drawBoard(W) {
-  const C = cardsOf(T, W);
+function headOf(W) {
   const reg = T.regions[W.recipe.region];
-  const seat = (k) => C.seats.find((s) => s.k === k);
-  const failed = (W.checks ?? []).filter((c) => !c.ok).map((c) => CHECK_NAMES[c.k] ?? c.k);
-  const fixed = [...new Set(W.fixes.map((f) => CHECK_NAMES[f.k] ?? f.k))];
   const dial = (k) => {
     const v = W.dials[k];
     return `<li><span>${esc(DIAL_NAMES[k])}</span><span class="dl-pips" role="img" aria-label="${esc(`${DIAL_NAMES[k]}: ${v} of 2`)}">${[0, 1].map((x) => `<i${x < v ? ' class="on"' : ""}></i>`).join("")}</span></li>`;
   };
-  const head = `
+  return `
     <header class="dl-world-head card">
       <p class="dl-seed"><span class="sr">Seed </span>${W.seed.split("-").map((w) => `<b>${esc(w)}</b>`).join('<i aria-hidden="true">·</i>')}</p>
       <p class="dl-recipe">${esc(reg.name)} · ${esc(genreName(W.recipe))} · ${W.n} factions on ${W.s} seats</p>
       <ul class="dl-dials" aria-label="The dials, set by the asking">${Object.keys(DIAL_NAMES).map(dial).join("")}</ul>
       <button type="button" class="button dl-copy" data-copy>Copy the link</button>
     </header>`;
-  const asking = `
+}
+const askingOf = (W) => `
     <section class="dl-sec" aria-labelledby="h-asking">
       <h2 id="h-asking">The asking</h2>
       <dl class="dl-ask">${QUESTIONS.map(([q, label]) => `<div><dt>${esc(label)}</dt><dd>${esc(W.asking[q]?.text ?? "")}</dd></div>`).join("")}</dl>
       <div class="dl-tension">${die(12, { own: "them", face: W.tension?.roll ?? "", label: `The tension, a d12 that came up ${W.tension?.roll}` })}<p><span>What’s pulling it apart</span>${esc(W.tension?.text ?? "")}</p></div>
     </section>`;
-  const ground = `
+// The ground, with whoever holds each seat linked: to its card on a board,
+// or its tile while a deck's still forming it.
+const groundOf = (W, C, held) => `
     <section class="dl-sec" aria-labelledby="h-ground">
       <h2 id="h-ground">The ground</h2>
       <ol class="dl-seats">${C.seats
@@ -164,29 +220,39 @@ function drawBoard(W) {
           (s) => `<li id="s-${s.k}"${W.seats[s.k]?.strange ? ' class="strange"' : ""}>
             <p class="dl-seatname"><b>${esc(s.name)}</b><span class="dl-keep">${esc(s.role)}</span></p>
             <p class="dl-notice">${esc(s.notice)}</p>
-            <p class="dl-held">${s.held >= 0 ? `Held by ${factionLink(C, s.held)}` : "Nobody holds it yet"}</p>
+            <p class="dl-held">${s.held >= 0 ? `Held by ${held(s.held)}` : "Nobody holds it yet"}</p>
           </li>`,
         )
         .join("")}</ol>
     </section>`;
-  const factions = C.factions.map((f, i) => drawFaction(W, C, f, i, reg, seat)).join("");
-  // The crew: each character's friend and foe, and what's worth taking off them.
+function factionsOf(W, C) {
+  const reg = T.regions[W.recipe.region];
+  const seat = (k) => C.seats.find((s) => s.k === k);
+  return `<section class="dl-sec" aria-labelledby="h-factions"><h2 id="h-factions">The factions</h2><div class="dl-factions">${C.factions.map((f, i) => drawFaction(W, C, f, i, reg, seat)).join("")}</div></section>`;
+}
+// The crew: each character's friend and foe, and what's worth taking off them.
+function crewOf(W, C) {
+  if (!W.crew) return "";
   const side = (c, k) => {
     const p = c[k];
     const t = p ? C.factions[p.j]?.threads.find((x) => x.tie === `c:${c.k}:${k}`) : null;
     return t ? `<li class="${k === "foe" ? "hostile" : "bond"}"><span class="dl-to">A ${k} in ${factionLink(C, p.j)}</span><em>${esc(t.text)}</em>${why(p)}</li>` : "";
   };
-  const crew = W.crew
-    ? `<section class="dl-sec" aria-labelledby="h-crew"><h2 id="h-crew">The crew</h2>
+  return `<section class="dl-sec" aria-labelledby="h-crew"><h2 id="h-crew">The crew</h2>
       ${W.crew.who.length ? `<div class="dl-crew">${W.crew.who.map((c) => `<div class="dl-who card"><h3>${esc(c.name)}</h3><ul class="dl-threads">${side(c, "friend")}${side(c, "foe")}</ul></div>`).join("")}</div>` : ""}
-      <p class="dl-tnote">${W.crew.things.length ? `Worth taking off them: ${esc(W.crew.things.map((x) => x.text).join(", "))}.` : "Nothing on their party sheet worth taking yet."}</p></section>`
-    : "";
-  const checks = failed.length
+      <p class="dl-tnote">${W.crew.things.length ? `Worth taking off them: ${esc(W.crew.things.map((x) => x.text).join(", "))}.` : "Nothing on their party sheet worth taking yet."}</p></section>`;
+}
+function checksOf(W) {
+  const failed = (W.checks ?? []).filter((c) => !c.ok).map((c) => CHECK_NAMES[c.k] ?? c.k);
+  const fixed = [...new Set(W.fixes.map((f) => CHECK_NAMES[f.k] ?? f.k))];
+  const line = failed.length
     ? `Still failing: ${failed.join(", ")}.`
     : `Every check passed${fixed.length ? `, with ${fixed.join(" and ")} dealt again` : ""}${W.fallbacks.length ? `, and a fallback from core for ${W.fallbacks.join(", ")}` : ""}.`;
-  $("#board").innerHTML = `<article class="dl-world">${head}${asking}${ground}
-    <section class="dl-sec" aria-labelledby="h-factions"><h2 id="h-factions">The factions</h2><div class="dl-factions">${factions}</div></section>${crew}
-    <p class="dl-checks">${esc(checks)}</p></article>`;
+  return `<p class="dl-checks">${esc(line)}</p>`;
+}
+function drawBoard(W) {
+  const C = cardsOf(T, W);
+  $("#board").innerHTML = `<article class="dl-world">${headOf(W)}${askingOf(W)}${groundOf(W, C, (j) => factionLink(C, j))}${factionsOf(W, C)}${crewOf(W, C)}${checksOf(W)}</article>`;
 }
 
 function drawFaction(W, C, f, i, reg, seat) {
@@ -228,24 +294,26 @@ function drawFaction(W, C, f, i, reg, seat) {
 const cap = (s) => String(s ?? "").charAt(0).toUpperCase() + String(s ?? "").slice(1);
 
 // ── Dealing.
+// The board says why there's nothing on it, and a screen reader hears a
+// line about the deal rather than the whole board again.
+const say = (line) => ($("#dealt").textContent = line);
+function nothing(r) {
+  const reg = T.regions[want.region]?.name ?? want.region;
+  const line = !r ? "Pick a genre to deal." : Object.keys(T.eras).some((era) => canDeal(T, { region: r.region, era })) ? `Nothing deals at ${reg} for ${genreName(r)} till its packs are in.` : `Nothing deals at ${reg} till its packs are in.`;
+  $("#board").innerHTML = `<p class="dl-wait">${esc(line)}</p>`;
+  say(line);
+  drawButton();
+}
+function seedFor(fresh) {
+  const typed = $("#seed").value.trim();
+  return typed && typed !== shown?.seed ? typed : fresh || !want.seed ? newSeed(T) : want.seed;
+}
 function deal({ fresh = true } = {}) {
   const r = recipe();
-  // The board says why there's nothing on it, and a screen reader hears a
-  // line about the deal rather than the whole board again.
-  const say = (line) => ($("#dealt").textContent = line);
-  if (!r || !canDeal(T, r)) {
-    const reg = T.regions[want.region]?.name ?? want.region;
-    const line = !r ? "Pick a genre to deal." : Object.keys(T.eras).some((era) => canDeal(T, { region: r.region, era })) ? `Nothing deals at ${reg} for ${genreName(r)} till its packs are in.` : `Nothing deals at ${reg} till its packs are in.`;
-    $("#board").innerHTML = `<p class="dl-wait">${esc(line)}</p>`;
-    say(line);
-    drawButton();
-    return;
-  }
-  const typed = $("#seed").value.trim();
-  const seed = typed && typed !== shown?.seed ? typed : fresh || !want.seed ? newSeed(T) : want.seed;
+  if (!r || !canDeal(T, r)) return nothing(r);
+  const seed = seedFor(fresh);
   try {
-    const crew = want.crew || want.sheet ? { who: CREW.slice(0, want.crew).map((name) => ({ k: name.toLowerCase(), name })), res: [], assets: want.sheet ? [{ id: "ship", text: "A Ship" }, { id: "safehouses", text: "Safehouses" }] : [] } : null;
-    const W = dealWorld(T, { recipe: r, seed, factions: want.n, crew });
+    const W = dealWorld(T, { recipe: r, seed, factions: want.n, crew: crewWanted() });
     want.seed = W.seed;
     shown = W;
     $("#seed").value = W.seed;
@@ -257,6 +325,179 @@ function deal({ fresh = true } = {}) {
     say("That one wouldn’t deal.");
   }
   drawButton();
+}
+const redeal = (opts) => (want.deck ? dealDeck(opts) : deal(opts));
+
+// ── A deck: the ground dealt, then the deck answered a card at a time.
+// A new deck over one with answers goes into the browser's history, so Back
+// brings the old one back.
+function dealDeck({ fresh = true, log = [], nots = 0, back = false } = {}) {
+  const r = recipe();
+  if (!r || !canDeal(T, r)) return nothing(r);
+  const seed = seedFor(fresh);
+  const push = !back && Boolean(shown?.deck?.log.length);
+  try {
+    const W0 = startDeck(T, start(T, { recipe: r, seed, factions: want.n, crew: crewWanted() }));
+    const W = log.length ? replay(T, W0.deck.base, log) : W0;
+    for (let x = 0; x < nots && !W.deck.open; x++) notThis(T, W);
+    settle(W);
+    want.seed = W.seed;
+    shown = W;
+    $("#seed").value = W.seed;
+    writeAddress({ push });
+    drawDeck(W, { moved: !back && fresh });
+    say(`A deck for ${W.seed}: ${genreName(r)} at ${T.regions[r.region].name}, ${want.n} factions${want.crew ? `, and a crew of ${want.crew}` : ""}.`);
+  } catch (err) {
+    $("#board").innerHTML = `<p class="dl-wait">That one wouldn’t deal: ${esc(err.message)}</p>`;
+    say("That one wouldn’t deal.");
+  }
+  drawButton();
+}
+// Once there's no card up and no prompt waiting, the deck's run out, and the
+// end deals the rest round what the answers made, once.
+function settle(W) {
+  if (!W.checks && !prompted(W) && !current(T, W)) finish(T, W);
+  return W;
+}
+// A tap on the deck: the world after it, the address, the deck drawn again,
+// and a line for a screen reader.
+function move(kind, fn) {
+  const W = fn();
+  shown = settle(W && W.deck ? W : shown);
+  writeAddress();
+  drawDeck(shown, { moved: true });
+  const D = shown.deck;
+  const o = prompted(shown);
+  if (shown.checks) say(`That’s the deck: ${D.cards.length} cards, and the board’s dealt.`);
+  else if (o) say(o.ask);
+  else if (kind === "not") say("Another card for the same thing.");
+  else if (kind === "undo") say("Taken back.");
+  else if (D.cards.length) say(playedOf(T, shown, D.cards.length - 1)?.line ?? "");
+  drawButton();
+}
+
+function drawDeck(W, { moved = false } = {}) {
+  const D = W.deck;
+  const done = Boolean(W.checks);
+  const C = cardsOf(T, W);
+  const F = formedOf(T, W);
+  const o = done ? null : prompted(W);
+  const c = done || o ? null : current(T, W);
+  const card = o ? D.cards[o.pos] : c;
+  const on = card ? { a: card.a, b: card.b } : {};
+  const held = (j) => (done ? factionLink(C, j) : `<a href="#t-${j}">${esc(cap(calledOf(T, W, j)))}</a>`);
+
+  // What the last answer did, above the card that's up, or what to do first.
+  const before = o ? o.pos - 1 : D.cards.length - 1;
+  const last = before >= 0 ? playedOf(T, W, before) : null;
+  const did = last
+    ? `<div class="dl-did"><span>What card ${last.pos + 1} did</span><p>${esc(last.line)}</p></div>`
+    : `<div class="dl-did first"><span>The first card</span><p>Tap an answer. Each one forms the factions on the card and writes a line of how it came to be.</p></div>`;
+  const up = done ? endCard(W) : o ? promptCard(W, o) : c ? momentCard(c) : "";
+  const moves = done
+    ? `<div class="dl-moves one"><button type="button" class="button" data-undo${D.log.length ? "" : " disabled"}>Undo the last answer</button></div>`
+    : `<div class="dl-moves">
+        <button type="button" class="button" data-not${!c || c.chain ? " disabled" : ""}>Not this one</button>
+        <button type="button" class="button" data-undo${D.log.length ? "" : " disabled"}>Undo</button>
+      </div>
+      ${c?.chain ? `<p class="dl-hint">It follows on from card ${c.from + 1}, so it can’t be passed over.</p>` : ""}
+      <button type="button" class="button dl-rest" data-rest>Answer the rest at random</button>`;
+  const play = `<section class="dl-play" aria-labelledby="h-play">
+      <h2 class="sr" id="h-play">The deck</h2>
+      ${agesOf(F, done)}
+      ${did}
+      ${up}
+      ${moves}
+    </section>`;
+  const tiles = done
+    ? ""
+    : `<section class="dl-sec" aria-labelledby="h-tiles"><h2 id="h-tiles">The factions</h2>
+      <ul class="dl-tiles">${F.factions.map((f) => tileOf(f, on, F.age)).join("")}</ul></section>`;
+  // How it came to be, by age, bar the card whose prompt's still waiting.
+  const H = historyOf(T, W).filter((h) => !o || h.pos !== o.pos);
+  const lines = H.length
+    ? AGES.filter((a) => H.some((h) => h.age === a))
+        .map((a) => `<h3>${AGE_NAMES[a]}</h3><ol class="dl-hist">${H.filter((h) => h.age === a).map((h) => `<li><span class="dl-hnum"><span class="sr">Card </span>${h.pos + 1}</span><span>${esc(h.text)}</span></li>`).join("")}</ol>`)
+        .join("")
+    : `<p class="dl-tnote">Nothing yet. Every answer writes a line here.</p>`;
+  const story = `<section class="dl-sec dl-history" aria-labelledby="h-history"><h2 id="h-history">How it came to be</h2>${lines}</section>`;
+  $("#board").innerHTML = `<article class="dl-world dl-deck">${headOf(W)}<div class="dl-top">${play}${tiles}</div>${story}${askingOf(W)}${groundOf(W, C, held)}${done ? `${factionsOf(W, C)}${crewOf(W, C)}${checksOf(W)}` : ""}</article>`;
+  if (moved) bring();
+}
+// The three ages, the one that's on filled as far as its parts are formed.
+function agesOf(F, done) {
+  const need = F.factions.length * PARTS[F.age].length;
+  const left = F.factions.reduce((n, f) => n + f.left.filter((p) => PARTS[F.age].includes(p)).length, 0);
+  const p = need ? 1 - left / need : 1;
+  return `<ol class="dl-ages" aria-label="The ages">${AGES.map((a) => {
+    const state = done || a < F.age ? "past" : a === F.age ? "now" : "later";
+    const fill = state === "past" ? 1 : state === "now" ? p : 0;
+    return `<li class="${state}"${state === "now" ? ' aria-current="step"' : ""} style="--p:${fill.toFixed(3)}">${AGE_NAMES[a]}</li>`;
+  }).join("")}</ol>`;
+}
+function momentCard(c) {
+  const flags = [c.chain ? `Follows on from card ${c.from + 1}` : "", c.last ? "The last card" : ""].filter(Boolean);
+  return `<div class="dl-card card${c.strange ? " strange" : ""}" id="up" tabindex="-1" aria-labelledby="up-who up-says">
+      <p class="dl-cardtop"><span>Card ${c.pos + 1}</span>${flags.map((x) => `<span>${esc(x)}</span>`).join("")}${c.strange ? '<span class="odd">Strange</span>' : ""}</p>
+      <p class="dl-speaker" id="up-who">${esc(c.speaker)}</p>
+      <p class="dl-says" id="up-says">“${esc(c.text)}”</p>
+      <div class="dl-answers">${c.answers.map((a, k) => `<button type="button" class="button dl-ans" data-side="${k}">${esc(a.text)}</button>`).join("")}</div>
+    </div>`;
+}
+// A prompt: the card it came off, its question, three suggestions, her own
+// words, or skipped. A skipped name's dealt at the end, and anything else
+// skipped is the first suggestion.
+function promptCard(W, o) {
+  const p = playedOf(T, W, o.pos);
+  const skip = o.kind === "name" ? "Skip it and a name’s dealt at the end." : "Skip it and the first one goes in.";
+  return `<div class="dl-card dl-prompt card" id="up" tabindex="-1" aria-labelledby="up-ask">
+      <p class="dl-cardtop"><span>Card ${o.pos + 1}</span><span>Then</span></p>
+      ${p ? `<p class="dl-recap">${esc(p.speaker)}: “${esc(p.text)}” <b>${esc(p.answer)}.</b></p>` : ""}
+      <p class="dl-q" id="up-ask">${esc(o.ask)}</p>
+      ${o.ideas.length ? `<div class="dl-ideas">${o.ideas.map((x, k) => `<button type="button" class="button dl-idea" data-pick="${k}">${esc(cap(x.text))}</button>`).join("")}</div>` : ""}
+      <form class="dl-own" data-own autocomplete="off">
+        <label class="dl-field"><span>Or your own</span><input name="own" type="text" maxlength="60" spellcheck="true" /></label>
+        <button type="submit" class="button">Use it</button>
+      </form>
+      <div class="dl-skiprow"><button type="button" class="button dl-skip" data-skip>Skip it</button><p class="dl-hint">${skip}</p></div>
+    </div>`;
+}
+function endCard(W) {
+  const n = W.deck.cards.length;
+  return `<div class="dl-card dl-end card" id="up" tabindex="-1" aria-labelledby="up-end">
+      <p class="dl-cardtop"><span>${n} ${n === 1 ? "card" : "cards"}</span></p>
+      <p class="dl-q" id="up-end">That’s the deck.</p>
+      <p>Whatever the answers left open is dealt to fit what they made, and the board’s below.</p>
+      <div class="dl-jump"><a class="button" href="#h-history">How it came to be</a><a class="button" href="#h-factions">The factions</a></div>
+    </div>`;
+}
+// A faction's tile: what it's called, and a mark for each part that's
+// formed, by age, with the age that's on brightest.
+function tileOf(f, on, age) {
+  const role = on.a === f.i ? "Brings it" : on.b === f.i ? "About them" : "";
+  const groups = AGES.map((a) => `<span class="dl-tage${a === age ? " now" : ""}">${PARTS[a].map((p) => `<i${f.parts[p] != null ? ' class="on"' : ""}></i>`).join("")}</span>`).join("");
+  const got = AGES.flatMap((a) => PARTS[a]).filter((p) => f.parts[p] != null).map((p) => PART_NAMES[p]);
+  const left = f.left.map((p) => PART_NAMES[p]);
+  const sr = `${got.length ? `Formed: ${list(got)}.` : "Nothing formed yet."}${left.length ? ` Still to come: ${list(left)}.` : ""}`;
+  return `<li class="dl-tile${role ? " on" : ""}" id="t-${f.i}">
+      <p class="dl-tname">${esc(cap(f.name))}</p>
+      <p class="dl-tparts"><span class="dl-tmarks" aria-hidden="true">${groups}</span><span class="sr">${esc(sr)}</span></p>
+      ${role ? `<p class="dl-trole">${role}</p>` : ""}
+    </li>`;
+}
+// After a tap, the card that's up comes back into view if it's gone off the
+// screen, and takes the focus, so a keyboard or a screen reader's on it.
+function bring() {
+  const play = $(".dl-play");
+  const up = $("#up");
+  if (!play || !up) return;
+  const top = $(".topbar")?.getBoundingClientRect().bottom ?? 0;
+  const bar = $("#bar").hidden ? 0 : $("#bar").getBoundingClientRect().height;
+  const box = up.getBoundingClientRect();
+  if (play.getBoundingClientRect().top < top || box.bottom > innerHeight - bar) {
+    play.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
+  up.focus({ preventScroll: true });
 }
 
 // ── Every table, read once, the first time the tab opens.
@@ -287,6 +528,51 @@ const byRole = (rows, names) => {
   for (const r of rows) out.set(r.role, [...(out.get(r.role) ?? []), r]);
   return [...out.entries()].map(([role, list]) => ({ role, name: names(role), list }));
 };
+// A moment, the way its YAML says it: who's on it, then each answer with its
+// line of history and what it does, written the way the table writes it.
+const kindsOf = (ks) => list(ks.map((k) => (T.types[k] ?? k).replace(/^(a|an)\s+/i, "")));
+const fxOf = (f) => [f.k, f.what, f.on, f.from, f.to, ...(f.outs ?? []), ...(f.tags ?? [])].filter((x) => x != null).join(" ");
+function momentRow(m) {
+  const bits = [];
+  if (m.a) bits.push(`brought by ${kindsOf(m.a)}`);
+  if (m.seat) bits.push("about a seat nobody holds");
+  else if (m.b) bits.push(`about ${kindsOf(m.b)}`);
+  for (const t of ["res", "asset", "people"]) if (m[t]) bits.push(`{${t}} is ${m[t] === "seat" ? "the seat’s" : `${m[t]}’s`}`);
+  if (m.person) bits.push("names someone");
+  if (m.crew) bits.push("one of the crew");
+  if (m.chain) bits.push(`follows on, as ${m.key}`);
+  else if (m.key) bits.push(`key ${m.key}`);
+  if (m.last) bits.push("a last card");
+  if (m.regions) bits.push(m.regions.map((x) => T.regions[x]?.name ?? x).join(", "));
+  if (m.tags?.length) bits.push(m.tags.join(", "));
+  if (m.needs?.length) bits.push(`needs ${m.needs.join(" and ")}`);
+  if (m.out?.length) bits.push(`never with ${m.out.join(", ")}`);
+  if (m.w === 1) bits.push("rare");
+  if (m.strange) bits.push("strange");
+  const answers = m.answers
+    .map((a) => {
+      const more = [
+        a.does.map(fxOf).join(", "),
+        a.tags?.length ? `tags ${a.tags.join(", ")}` : "",
+        a.thread ? `thread: ${a.thread}` : "",
+        a.back ? `back: ${a.back}` : "",
+        a.prompt ? `asks: ${a.prompt.ask}${a.prompt.ideas ? ` (${a.prompt.ideas.join(", ")})` : ""}` : "",
+        a.then ? `then ${a.then}` : "",
+      ].filter(Boolean);
+      return `<span class="dl-sub dl-answer"><b>${esc(a.text)}</b> ${esc(a.line)}<span class="dl-meta">${esc(more.join(" · "))}</span></span>`;
+    })
+    .join("");
+  return `<li><span class="dl-w">${esc(m.text)}</span>${bits.length ? `<span class="dl-meta">${esc(bits.join(" · "))}</span>` : ""}${answers}</li>`;
+}
+const deckTable = (moments, note) =>
+  table(
+    "The deck",
+    AGES.flatMap((a) => {
+      const these = moments.filter((m) => m.age === a);
+      return these.length ? [`<li class="dl-group">${esc(AGE_NAMES[a])}</li>`, ...these.map(momentRow)] : [];
+    }),
+    { note },
+  );
 
 function drawTables() {
   const core = T.core;
@@ -310,6 +596,8 @@ function drawTables() {
     parts.push(table("The crew: a foe", core.crew.foes.map((r) => row(r.text, r)), { note: "A character’s foe: that faction’s hostile thread toward the crew, named for them." }));
     parts.push(table("The crew: what nobody’s after", core.crew.qualities.map((k) => row(T.book.assets[k]?.name ?? k, null, "what the crew’s like, not something it’s got")), { note: "A faction can want something on the party sheet, but never these, or people who turn up, or the new crew’s card." }));
   }
+  if (core.deck?.length) parts.push(deckTable(core.deck, "The moments Answer a deck deals, a card at a time: someone from one faction ({a}) about another ({b}) or a seat nobody holds, with two answers, each with its line of history and what it does."));
+  if (core.loyal?.length) parts.push(table("A mini faction’s Loyalty", core.loyal.map((r) => row(r.text, null)), { note: "A mini faction an answer makes: its Loyalty thread toward the faction that made it ({b})." }));
   parts.push(table("Faces", Object.entries(core.faces).map(([k, v]) => row(T.types[k] ?? k, null, esc(v.map((x) => T.book.threats.find((t) => t.key === x)?.name ?? x).join(", "))))));
   parts.push(table("Fallbacks", Object.entries(core.fallbacks).map(([k, r]) => row(r.tag || r.text, r, esc(`when ${k} still fails`)))));
 
@@ -353,6 +641,7 @@ function drawTables() {
     if (pack.wants.length) parts.push(table("What it wants", pack.wants.map((r) => row(r.text, r))));
     if (pack.secrets.length) parts.push(table("Secrets", pack.secrets.map((r) => row(r.tag, r, esc([r.more, `Ways in: ${r.ways.join(", or ")}`].filter(Boolean).join(" "))))));
     if (pack.exceptions.length) parts.push(table("Exceptions", pack.exceptions.map((r) => row(r.text, null, esc(`${r.reason} · when ${r.when.join(" and ")} · won’t ${r.drops.join(", ")}${r.gives?.length ? ` · gives ${r.gives.join(", ")}` : ""}`)))));
+    if (pack.deck?.length) parts.push(deckTable(pack.deck, `${pack.name}’s own moments, dealt beside the core’s.`));
     parts.push(table("Faction names", byRole(pack.names.factions, (k) => (k ? T.types[k] ?? k : "Any kind")).flatMap((g) => [`<li class="dl-group">${esc(g.name)}</li>`, ...g.list.map((r) => row(r.text, r, "", { role: false }))])));
     parts.push(table("People’s names", pack.names.people.map((r) => row(r.text, r))));
   }
@@ -408,6 +697,14 @@ function show(tab) {
   if (tables && T && !$("#tables-body").childElementCount) drawTables();
 }
 
+// What the address asks for, dealt: a deck plays its answers again.
+function fromAddress() {
+  drawControls();
+  $("#seed").value = want.seed ?? "";
+  if (want.deck) dealDeck({ fresh: !want.seed, log: want.seed ? asked.log : [], nots: want.seed ? asked.nots : 0, back: true });
+  else deal({ fresh: !want.seed });
+}
+
 async function boot() {
   readAddress();
   const tabs = [$("#tab-boards"), $("#tab-tables")];
@@ -430,11 +727,10 @@ async function boot() {
     $("#tables-body").innerHTML = none;
     return;
   }
-  drawControls();
-  $("#seed").value = want.seed ?? "";
-  deal({ fresh: !want.seed });
+  fromAddress();
 
   $("#set").addEventListener("change", (e) => {
+    if (e.target.name === "how") want.deck = e.target.value === "deck";
     if (e.target.name === "region") want.region = e.target.value;
     if (e.target.id === "genre") want.genre = e.target.value;
     if (e.target.id === "era") want.era = e.target.value;
@@ -442,38 +738,66 @@ async function boot() {
     if (e.target.id === "sheet") want.sheet = e.target.checked;
     if (e.target.id === "seed") return drawButton();
     drawControls();
-    deal({ fresh: false });
+    redeal({ fresh: false });
   });
   $("#set").addEventListener("submit", (e) => {
     e.preventDefault();
-    deal({ fresh: true });
+    redeal({ fresh: true });
   });
   $("#seed").addEventListener("input", drawButton);
   $$(".dl-step button[data-n]").forEach((b) =>
     b.addEventListener("click", () => {
       want.n = Math.max(4, Math.min(12, want.n + Number(b.dataset.n)));
       drawControls();
-      deal({ fresh: false });
+      redeal({ fresh: false });
     }),
   );
   $$(".dl-step button[data-c]").forEach((b) =>
     b.addEventListener("click", () => {
       want.crew = Math.max(0, Math.min(CREW.length, want.crew + Number(b.dataset.c)));
       drawControls();
-      deal({ fresh: false });
+      redeal({ fresh: false });
     }),
   );
-  $("#deal").addEventListener("click", () => deal({ fresh: true }));
+  $("#deal").addEventListener("click", () => redeal({ fresh: true }));
   $("#board").addEventListener("click", async (e) => {
     const copy = e.target.closest("[data-copy]");
-    if (!copy) return;
-    try {
-      await navigator.clipboard.writeText(location.href);
-      copy.textContent = "Copied";
-    } catch {
-      copy.textContent = "Copy it from the address bar";
+    if (copy) {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        copy.textContent = "Copied";
+      } catch {
+        copy.textContent = "Copy it from the address bar";
+      }
+      setTimeout(() => (copy.textContent = "Copy the link"), 2000);
+      return;
     }
-    setTimeout(() => (copy.textContent = "Copy the link"), 2000);
+    // The deck's buttons.
+    const b = e.target.closest("button");
+    if (!b || b.disabled || !want.deck || !shown?.deck) return;
+    const W = shown;
+    if (b.dataset.side != null) move("answer", () => (answer(T, W, Number(b.dataset.side)), W));
+    else if ("not" in b.dataset) move("not", () => notThis(T, W));
+    else if ("undo" in b.dataset) move("undo", () => undo(T, W));
+    else if ("rest" in b.dataset) move("rest", () => playRest(T, W));
+    else if (b.dataset.pick != null) move("prompt", () => fillPrompt(T, W, { pick: Number(b.dataset.pick) }));
+    else if ("skip" in b.dataset) move("prompt", () => fillPrompt(T, W, { skip: true }));
+  });
+  // Her own words for a prompt.
+  $("#board").addEventListener("submit", (e) => {
+    const form = e.target.closest("[data-own]");
+    if (!form || !shown?.deck) return;
+    e.preventDefault();
+    const field = form.elements.own;
+    const text = field.value.replace(/\s+/g, " ").trim();
+    if (!text) return field.focus();
+    const W = shown;
+    move("prompt", () => fillPrompt(T, W, { text }));
+  });
+  addEventListener("popstate", () => {
+    readAddress();
+    shown = null;
+    fromAddress();
   });
   let timer = 0;
   $("#find").addEventListener("input", (e) => {
