@@ -1034,3 +1034,219 @@ names:
     - { text: Bogdan Vodrava, regions: [world] }
     - { text: Milena Strasko, regions: [world] }
     - { text: Yaroslav Dunay, regions: [world] }
+
+# The deck's moments of its own (stage 7), in the book's feel: manors and
+# mills, abbeys and saints, the lord's war and the king's tax.
+deck:
+  - text: "The old lord died without a will, and {b} moved into his manor before the funeral."
+    age: 1
+    a: [house, family, faith]
+    tags: [blood, land]
+    answers:
+      - text: "Take it to court"
+        does: ["lean a law", "lean b blood", "gain res a", "rival a b"]
+        line: "{a} took {b} to the king's court over the manor, and won half of it."
+      - text: "Take it by force"
+        does: ["lean a war", "take res a b", "grudge b a"]
+        line: "{a} took the manor back from {b} with swords, and kept it."
+  - text: "{b} offered us their wool, every clip for ten years, if we'd build them a new chapel."
+    age: 1
+    a: [makers, traders, family]
+    b: [faith, house]
+    tags: [cloth, holy]
+    answers:
+      - text: "Build the chapel"
+        does: ["lean a guild", "lean b holy", "gain res a", "ally a b"]
+        tags: [cloth]
+        line: "{a} built {b} a new chapel, and took their wool for ten years."
+      - text: "Ask for coin instead"
+        does: ["lean a wealth", "gain res a", "grudge b a"]
+        line: "{a} asked {b} for coin instead of wool, and was never asked again."
+  - text: "The king's road was coming through, and whoever held {b} would take a toll off every cart."
+    age: 1
+    b: seat
+    res: seat
+    tags: [road, crown]
+    answers:
+      - text: "Build a tollhouse"
+        does: ["lean a road", "gain res a"]
+        line: "{a} built a tollhouse at {b}, and took the {res} for a hundred years."
+      - text: "Sell the rights"
+        does: ["lean a market", "gain asset a"]
+        tags: [crown]
+        line: "{a} sold the rights to {b}, and bought favour at court with the money."
+  - text: "A pilgrim left a finger bone with us, and swore on his life it was a saint's."
+    age: 1
+    a: [faith, keepers, family, traders]
+    tags: [holy, old]
+    answers:
+      - text: "Build it a shrine"
+        does: ["lean a holy", "gain asset a"]
+        tags: [holy, old]
+        line: "{a} built a shrine for the saint's finger, and the pilgrims came."
+        then: false-saint
+      - text: "Sell it on"
+        does: ["lean a wealth", "gain res a"]
+        line: "{a} sold the saint's finger to the highest bidder, and asked no questions."
+  - text: "The year of the comet, every calf on our side of the river was born wrong. {b} called us cursed."
+    age: 1
+    strange: true
+    tags: [old, land]
+    answers:
+      - text: "Burn the calves"
+        does: ["lean a holy", "lose res a", "gain people a", "secret a"]
+        line: "{a} burned the calves and said a mass, while {b} watched."
+      - text: "Curse them back"
+        does: ["lean a old", "gain asset a", "secret a"]
+        line: "{a} paid a cunning woman to curse {b} back, and something listened."
+  - text: "{b} held the mill, and charged us a third of every sack to grind our grain."
+    age: 2
+    a: [house, family, makers, faith]
+    tags: [grain]
+    answers:
+      - text: "Build our own mill"
+        does: ["gain res a", "rival a b"]
+        line: "{a} built a mill of their own, against {b} and the lord's law."
+      - text: "Pay the third"
+        does: ["lose res a", "debt a b"]
+        line: "{a} paid {b} a third of every sack, and hated every one."
+  - text: "{b} wanted our men for the lord's war, with the harvest not yet in."
+    age: 2
+    a: [family, makers, house]
+    b: [house, office, soldiers]
+    tags: [war, grain]
+    answers:
+      - text: "Send them"
+        does: ["lose people a", "ally a b"]
+        line: "{a} sent their men to the war for {b}, and lost the harvest."
+      - text: "Hide them"
+        does: ["rival a b", "block a b"]
+        line: "{a} hid their men in the woods when {b} came, and paid the fine."
+  - text: "{b} challenged our champion at the tourney, with the loser to pay the winner's debts."
+    age: 2
+    a: [house, soldiers]
+    b: [house, soldiers]
+    tags: [blood, war]
+    answers:
+      - text: "Accept"
+        does: ["rival a b"]
+        line: "{a} put their champion in the lists against {b}, debts and all."
+        then: tourney
+      - text: "Refuse"
+        does: ["debt a b", "grudge b a"]
+        line: "{a} refused the challenge from {b}, and paid in shame instead."
+  - text: "Our champion beat {b} at the tourney, and now they're saying she cheated."
+    key: tourney
+    chain: true
+    age: 2
+    answers:
+      - text: "Take the winnings"
+        does: ["take res a b", "rival a b"]
+        line: "{a} took the winner's due off {b}, and the cheating talk never stopped."
+      - text: "Call it a draw"
+        does: ["ally a b"]
+        line: "{a} called the bout a draw, and {b} shook on it, just."
+  - text: "{b} needed our {res} to get through the winter, and they'd just doubled the bridge toll on us."
+    age: 2
+    res: a
+    tags: [market, road]
+    answers:
+      - text: "Let them freeze"
+        does: ["block a b", "rival a b"]
+        line: "{a} let {b} go without {res} that winter, over a bridge toll."
+      - text: "Trade for the toll"
+        does: ["gain res a", "ally a b"]
+        line: "{a} swapped {res} for the toll, and {b} kept to the bargain."
+  - text: "{b} put it about that our saint's finger is a pig's knuckle. The pilgrims are listening."
+    key: false-saint
+    chain: true
+    age: 2
+    answers:
+      - text: "Prove them wrong"
+        does: ["lose res a", "rival a b"]
+        line: "{a} paid a bishop to bless the finger, and called {b} liars from the pulpit."
+      - text: "Pay them to stop"
+        does: ["debt a b"]
+        line: "{a} paid {b} to stop talking about the finger."
+  - text: "Every night since {b} cut down the old oak, there's been weeping in our well."
+    age: 2
+    strange: true
+    tags: [old, forest]
+    answers:
+      - text: "Plant a new oak"
+        does: ["ally a b", "secret a"]
+        line: "{a} planted a new oak where {b} cut the old one, and the weeping stopped."
+      - text: "Make them answer"
+        does: ["rival a b", "secret a"]
+        line: "{a} made {b} answer for the old oak at the hundred court, and lost."
+  - text: "The bishop's coming to pick a new prior, and {b} sent him gifts all winter."
+    age: 3
+    a: [faith, house, keepers, family]
+    tags: [holy]
+    answers:
+      - text: "Send better gifts"
+        does: ["agenda a b", "secret b"]
+        line: "{a} sent the bishop better gifts than {b} did, and waited."
+      - text: "Tell him about theirs"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} told the bishop what {b} had been sending, and where it came from."
+  - text: "The king's tax man arrives at midsummer, and {b} hid half their grain from the last one."
+    age: 3
+    a: [office, house, faith, family]
+    tags: [crown, grain]
+    answers:
+      - text: "Tell the tax man"
+        does: ["agenda a b", "secret b"]
+        line: "{a} told the tax man where {b} hid their grain."
+      - text: "Hide ours too"
+        does: ["secret a", "agenda b a"]
+        line: "{a} hid half their own grain from the tax man, same as {b}."
+  - text: "A knight with no lord rode in last week, offering a sword to whoever pays best, us or {b}."
+    age: 3
+    a: [house, traders, office, soldiers]
+    tags: [war]
+    answers:
+      - text: "Pay him well"
+        does: ["gain people a", "agenda a b"]
+        prompt: { kind: person, ask: "What was the knight's name?" }
+        line: "{a} paid {person} well, and set them against {b}."
+        then: hedge-knight
+      - text: "Let them have him"
+        does: ["secret a b", "agenda b a"]
+        prompt: { kind: person, ask: "What name did the knight give?" }
+        line: "{a} let {person} go to {b}, and paid someone to watch them."
+        then: hedge-knight
+  - text: "{person}, the knight from last summer, has started telling people they're the old lord's heir."
+    key: hedge-knight
+    chain: true
+    age: 3
+    answers:
+      - text: "Back the claim"
+        does: ["agenda a b", "secret a"]
+        line: "{a} backed {person} as the old lord's heir, against {b}."
+      - text: "Call it a lie"
+        does: ["secret a b", "agenda a b"]
+        line: "{a} called {person} a liar in front of {b}, and had them watched."
+  - text: "Pilgrims swear the well at {b} ran red on the saint's day, and now they're coming by the hundred."
+    age: 3
+    b: seat
+    strange: true
+    tags: [holy, old]
+    answers:
+      - text: "Sell the water"
+        does: ["agenda a seat", "secret a"]
+        line: "{a} fenced the well at {b}, and sold the red water by the cup."
+      - text: "Cap the well"
+        does: ["secret a"]
+        line: "{a} capped the well at {b} by night, and never said why."
+  - text: "The harvest failed, and {b} bought up every sack of grain left for miles."
+    age: 3
+    a: [family, faith, rebels, house]
+    tags: [grain, poor]
+    answers:
+      - text: "Break their barns"
+        does: ["agenda a b", "secret a"]
+        line: "{a} broke into the barns {b} filled, the year the harvest failed."
+      - text: "Beg the lord"
+        does: ["secret a", "agenda b a"]
+        line: "{a} begged the lord to make {b} sell, and was never forgiven for it."

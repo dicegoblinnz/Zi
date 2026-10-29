@@ -67,7 +67,52 @@
 //   fallbacks   what goes in when a check still fails after three deals:
 //               secret, strange, agenda, block, rival, who and thing, each a
 //               row
-//   founding    the founding's questions and acts (from stage 7)
+//   deck        the moments building by answering deals (stage 7), below
+//   loyal       a mini faction's Loyalty thread toward its maker ({b})
+//   founding    the founding's questions and acts (from stage 9)
+//
+// The deck, in core.yaml and any pack (deck): moments from before the crew
+// turned up, a card at a time (world-deck.js plays them). A moment's text is
+// what the one bringing it says, up to 25 words, and it has:
+//   age      1 long ago, 2 in living memory, 3 this last year
+//   a, b     who brings it and who it's about, by type role (any, if it
+//            doesn't say), and b: seat for a seat nobody holds
+//   res, asset, people    whose {res}, {asset} or {people} the text means:
+//            a's or b's (one it's got, or one dealt for it), or for {res},
+//            seat, one the seat on the card gives
+//   person   someone named on the card, off the pack's people ({person})
+//   key, chain   a moment's key, for a chain to land on, and chain: true for
+//            one that only ever comes as a chain's next card
+//   last     one for the deck's last card, how things stood when the crew
+//            turned up
+//   answers  two, each what the bringer's faction does: its words (1 to 4),
+//            does (what it does, below), tags that steer what it deals, its
+//            line of history (up to 16 words, past tense), thread and back
+//            (its first thread's own words, from each side), a prompt
+//            (kind name, person, place or detail, with ask, of: a, b or
+//            mini for a name, and three ideas or more for a detail), and
+//            then (the key of the chain's next card)
+// A moment's words can use {a}, {b}, {seat} (a's), {res}, {asset}, {people},
+// {person}, {who} (one of the crew, which makes it a crew moment), and on a
+// chain's card {place} and {detail} from a prompt before it. A line can use
+// {mini} for a mini faction its answer makes, and its own prompt's word.
+// What an answer does, X and Y each a or b:
+//   gain res|asset|people X     X builds or finds one (Establish)
+//   take res|asset|people X Y   X takes one off Y (Acquire)
+//   lose res|asset|people X     X loses one (Destroy)
+//   ally X Y, debt X Y (X owes Y), favour X Y (a bond from X toward Y)
+//                               (Influence)
+//   rival X Y, grudge X Y (a hostile thread from X toward Y), strain X Y
+//                               (X's bond toward Y strained, or a grudge)
+//                               (Undermine)
+//   block X Y                   X won't sell Y what its need takes (Obstruct)
+//   mini X out out              X makes a mini faction, doing two of the six
+//   agenda X [Y|seat|who]       a grudge or a debt becomes X's agenda
+//   secret X [Y]                X's Secret, naming Y if it's there
+//   lean X tag...               what X is like now, which steers how it
+//                               works, its Want, its Secret and its Face
+//   friend X who, foe X who     X's a friend or a foe of the one on the card
+//   face X                      the person on the card is X's Face
 //
 // regions.yaml: town, city, country, world and stars, each with name, faction,
 // seat and mini (what each is at that size), sizes (the region's words for
@@ -96,9 +141,27 @@ export const TYPES = ["house", "traders", "crooks", "faith", "office", "society"
 export const DIALS = ["tense", "strange", "rich", "ruled"];
 export const BONDS = ["pub", "mor", "loy"];
 export const TIES = ["rival", "ally", "debt", "wildcard", "blocked"];
-export const BECAUSE = ["seat", "type", "method", "want", "answer", "tension", "region", "after", "rivalof"];
+export const BECAUSE = ["seat", "type", "method", "want", "answer", "tension", "region", "after", "rivalof", "moment"];
 export const FALLBACKS = { secret: "secrets", strange: "secrets", agenda: "agendas", block: "ties", rival: "ties", who: "agendas", thing: "agendas" };
 const QUESTIONS = ["holds", "runs", "notices"];
+
+// The deck's effects, by how each is written, and the outcome each one is:
+// the book's six (Destroy, Undermine, Obstruct, Influence, Acquire and
+// Establish, with a mini faction Establish's own), and the three the deck
+// adds (a grudge or a debt becoming an agenda, a Secret, and a lean).
+export const SIX = ["destroy", "undermine", "obstruct", "influence", "acquire", "establish"];
+const FX = { gain: "thing", lose: "thing", take: "take", ally: "pair", debt: "pair", favour: "pair", rival: "pair", grudge: "pair", strain: "pair", block: "pair", mini: "mini", agenda: "aim", secret: "aim", lean: "lean", friend: "who", foe: "who", face: "one" };
+export const OUTCOME_OF = { gain: "establish", take: "acquire", lose: "destroy", ally: "influence", debt: "influence", favour: "influence", rival: "undermine", grudge: "undermine", strain: "undermine", block: "obstruct", mini: "mini", agenda: "agenda", secret: "secret", lean: "lean" };
+export const OUTCOMES = [...new Set(Object.values(OUTCOME_OF))];
+export const PROMPTS = ["name", "person", "place", "detail"];
+const THINGS = ["res", "asset", "people"];
+const THREADS = new Set(["ally", "debt", "favour", "rival", "grudge", "strain", "block", "friend", "foe"]);
+const DECK_FIELDS = ["text", "age", "a", "b", "key", "chain", "last", "res", "asset", "people", "person", "answers", "tags", "needs", "out", "regions", "rare", "strange"];
+const ANSWER_FIELDS = ["text", "line", "does", "tags", "thread", "back", "prompt", "then"];
+// The plan's counts (Writing tables, The deck): moments in core and in each
+// pack, the share of them in each age, in a chain and strange, and how many
+// answers each outcome's on and how many moments each kind of faction's on.
+export const DECK_MIN = { core: 60, pack: 12, age: 0.3, chain: 1 / 4, strange: 1 / 8, outcome: 8, kind: 6, last: 3, crew: 6, loyal: 6 };
 
 // Appendix B's asset, or a threat, by a key a table can write: its name in
 // small letters and hyphens, without a leading A, An or The.
@@ -129,6 +192,7 @@ const TABLES = {
   factions: { extra: [], slots: ["seat"], name: true, role: "type" },
   people: { extra: [], slots: [], name: true },
   crew: { extra: [], slots: ["who"] },
+  loyal: { extra: [], slots: ["b"] },
 };
 const AIMS = ["seat", "rival", "res", "asset", "who", "thing"];
 const words = (s) => String(s ?? "").trim().split(/\s+/).filter(Boolean).length;
@@ -345,6 +409,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
       if (!slotsIn(text).includes("b")) bad(where, "needs {b}, the faction it's toward");
     }
     if (kind === "crew" && !slotsIn(text).includes("who")) bad(where, "needs {who}, the character it's named for");
+    if (kind === "loyal" && !slotsIn(text).includes("b")) bad(where, "needs {b}, the faction that made it");
     return row;
   }
   const rows = (v, where, kind, opts) => {
@@ -353,6 +418,204 @@ export function compileTables(raw, book, { minimums = true } = {}) {
       return [];
     }
     return list(v).map((x, i) => rowOf(x, `${where} row ${i + 1}`, kind, opts)).filter(Boolean);
+  };
+
+  // The deck's moments, from one file. Each is checked on its own here, and
+  // its chains and the words they carry once every file's read (chainsOf()).
+  const sideOf = (x) => (x === "a" || x === "b" ? x : null);
+  function effectOf(s, where, m, ans) {
+    const w = String(s ?? "").trim().split(/\s+/).filter(Boolean);
+    const k = w[0];
+    const how = FX[k];
+    if (!how) {
+      bad(where, `has an effect it doesn't know: ${s}`);
+      return null;
+    }
+    // A faction on the card: a, or b when it's a faction and not a seat.
+    const faction = (x) => x === "a" || (x === "b" && !m.seat);
+    const two = (x, y) => faction(x) && faction(y) && x !== y;
+    const fx = { k };
+    if (how === "thing" || how === "take") {
+      fx.what = w[1];
+      fx.on = w[2];
+      if (!THINGS.includes(fx.what)) bad(where, `${k} needs res, asset or people: ${s}`);
+      if (how === "take") {
+        fx.from = w[3];
+        if (!two(fx.on, fx.from) || w.length !== 4) bad(where, `take needs who takes it and who it's taken off, a and b: ${s}`);
+      } else if (!faction(fx.on) || w.length !== 3) bad(where, `${k} needs whose it is, a or b: ${s}`);
+    } else if (how === "pair") {
+      fx.on = w[1];
+      fx.to = w[2];
+      if (!two(fx.on, fx.to) || w.length !== 3) bad(where, `${k} needs two factions on the card, a and b: ${s}`);
+    } else if (how === "mini") {
+      fx.on = w[1];
+      fx.outs = w.slice(2);
+      if (!faction(fx.on)) bad(where, `mini needs its maker, a or b: ${s}`);
+      if (fx.outs.length !== 2 || new Set(fx.outs).size !== 2 || fx.outs.some((o) => !SIX.includes(o))) bad(where, `mini needs two of the six outcomes (${SIX.join(", ")}): ${s}`);
+    } else if (how === "aim") {
+      fx.on = w[1];
+      fx.to = w[2] ?? null;
+      if (!faction(fx.on) || w.length > 3) bad(where, `${k} needs whose it is, a or b, and maybe what it's at: ${s}`);
+      if (k === "secret" && fx.to != null && !two(fx.on, fx.to)) bad(where, `a Secret names the other faction on the card: ${s}`);
+      if (k === "agenda") {
+        if (fx.to == null) fx.to = fx.on === "b" ? "a" : m.seat ? "seat" : "b";
+        if (fx.to === "seat" && !m.seat) bad(where, `an agenda at the seat needs b: seat: ${s}`);
+        else if (fx.to === "who" && !m.crew) bad(where, `an agenda at who needs one of the crew on the card ({who}): ${s}`);
+        else if (!["seat", "who"].includes(fx.to) && !two(fx.on, fx.to)) bad(where, `an agenda's at the other faction, the seat or who: ${s}`);
+      }
+    } else if (how === "lean") {
+      fx.on = w[1];
+      fx.tags = w.slice(2);
+      if (!faction(fx.on) || !fx.tags.length) bad(where, `lean needs whose it is and a tag or more: ${s}`);
+      for (const t of fx.tags) if (!known.has(t)) bad(where, `lean has a tag it doesn't know: ${t}`);
+    } else if (how === "who") {
+      fx.on = w[1];
+      if (!faction(fx.on) || w[2] !== "who" || w.length !== 3) bad(where, `${k} needs whose it is and who: ${s}`);
+      if (!m.crew) bad(where, `${k} needs one of the crew on the card ({who})`);
+    } else if (how === "one") {
+      fx.on = w[1];
+      if (!faction(fx.on) || w.length !== 2) bad(where, `face needs whose Face it is, a or b: ${s}`);
+      if (!m.person && ans.prompt?.kind !== "person") fx.chainPerson = true;
+    }
+    return fx;
+  }
+  function momentOf(raw, where, { strange = false, regionsOk = REGIONS } = {}) {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+      bad(where, "isn't a moment");
+      return null;
+    }
+    for (const k of Object.keys(raw)) if (!DECK_FIELDS.includes(k)) bad(where, `has a field it doesn't know: ${k}`);
+    const text = typeof raw.text === "string" ? raw.text.trim() : "";
+    if (!text) bad(where, "has no words");
+    else if (words(text) > 25) bad(where, `a moment's 25 words at most: ${text}`);
+    const tagList = (field, v = raw[field]) => {
+      for (const t of list(v)) if (!known.has(t)) bad(where, `${field} has a tag it doesn't know: ${t}`);
+      return list(v).filter((t) => known.has(t));
+    };
+    const kinds = (field) => {
+      if (raw[field] == null) return null;
+      if (field === "b" && raw.b === "seat") return null;
+      const v = list(raw[field]);
+      for (const x of v) if (!TYPES.includes(x)) bad(where, `${field} has a kind of faction it doesn't know: ${x}`);
+      return v.filter((x) => TYPES.includes(x));
+    };
+    const m = {
+      id: idOf("deck", where, {}, text),
+      text,
+      age: Number(raw.age),
+      a: kinds("a"),
+      b: kinds("b"),
+      seat: raw.b === "seat",
+      key: raw.key ?? null,
+      chain: raw.chain === true,
+      last: raw.last === true,
+      person: raw.person === true,
+      crew: slotsIn(text).includes("who"),
+      tags: tagList("tags"),
+      needs: tagList("needs"),
+      out: tagList("out"),
+      w: raw.rare === true ? 1 : 10,
+      strange: strange || raw.strange === true,
+    };
+    if (![1, 2, 3].includes(m.age)) bad(where, `needs its age, 1, 2 or 3: ${raw.age}`);
+    if (m.key != null && !isKey(m.key)) bad(where, `its key's small letters and hyphens: ${m.key}`);
+    if (m.chain && !m.key) bad(where, "a chain's card needs its key, for the one before it to land on");
+    if (m.chain && (m.a || m.b)) bad(where, "a chain's card has the one before it's factions, so it can't say who's on it");
+    if (m.last && m.age !== 3) bad(where, "the last card's this last year, age 3");
+    for (const t of THINGS) {
+      const v = raw[t];
+      if (v == null) continue;
+      if (!["a", "b", "seat"].includes(v) || (v === "seat" && (t !== "res" || !m.seat)) || (v === "b" && m.seat)) bad(where, `${t} is a's, b's${t === "res" && m.seat ? " or the seat's" : ""}: ${v}`);
+      else m[t] = v;
+    }
+    if (raw.regions != null) {
+      m.regions = list(raw.regions).filter((x) => {
+        if (!REGIONS.includes(x)) bad(where, `has a region it doesn't know: ${x}`);
+        else if (!regionsOk.includes(x)) bad(where, `fits ${x}, which its pack doesn't`);
+        return REGIONS.includes(x);
+      });
+    } else m.regions = null;
+    // The words a moment's own text can use, before its chain's are known.
+    const base = new Set(["a", "b", "seat", ...THINGS.filter((t) => m[t]), ...(m.person ? ["person"] : []), ...(m.crew ? ["who"] : [])]);
+    m.slots = slotsIn(text);
+    const answers = list(raw.answers);
+    if (answers.length !== 2) bad(where, `needs two answers, found ${answers.length}`);
+    m.answers = answers.slice(0, 2).map((x, n) => {
+      const at = `${where}, answer ${n + 1}`;
+      if (!x || typeof x !== "object" || Array.isArray(x)) {
+        bad(at, "isn't an answer");
+        return { text: "", line: "", does: [], tags: [], slots: [] };
+      }
+      for (const k of Object.keys(x)) if (!ANSWER_FIELDS.includes(k)) bad(at, `has a field it doesn't know: ${k}`);
+      const ans = { text: typeof x.text === "string" ? x.text.trim() : "", line: typeof x.line === "string" ? x.line.trim() : "", tags: tagList("tags", x.tags) };
+      if (!ans.text || words(ans.text) > 4) bad(at, `an answer's 1 to 4 words: ${ans.text}`);
+      if (slotsIn(ans.text).length) bad(at, `an answer's its own plain words, with no slot: ${ans.text}`);
+      if (!ans.line) bad(at, "needs its line of history");
+      else if (words(ans.line) > 16) bad(at, `a line of history's 16 words at most: ${ans.line}`);
+      if (x.prompt != null) {
+        const p = x.prompt;
+        const kind = p?.kind;
+        if (!p || typeof p !== "object" || !PROMPTS.includes(kind)) bad(at, `a prompt needs its kind: ${PROMPTS.join(", ")}`);
+        else {
+          ans.prompt = { kind, ask: typeof p.ask === "string" ? p.ask.trim() : "" };
+          if (!ans.prompt.ask || words(ans.prompt.ask) > 12) bad(at, `a prompt asks in 1 to 12 words: ${ans.prompt.ask}`);
+          for (const k of Object.keys(p)) if (!["kind", "ask", "of", "ideas"].includes(k)) bad(at, `its prompt has a field it doesn't know: ${k}`);
+          if (kind === "name") {
+            ans.prompt.of = p.of;
+            if (!["a", "b", "mini"].includes(p.of) || (p.of === "b" && m.seat)) bad(at, "a name's prompt says whose: a, b or mini");
+          }
+          if (kind === "detail") {
+            ans.prompt.ideas = list(p.ideas).filter((y) => typeof y === "string" && y.trim()).map((y) => y.trim());
+            if (ans.prompt.ideas.length < 3) bad(at, "a detail's prompt needs three ideas or more to suggest");
+            for (const y of ans.prompt.ideas) if (words(y) > 6) bad(at, `a detail's idea is 6 words at most: ${y}`);
+            if (new Set(ans.prompt.ideas.map((y) => y.toLowerCase())).size !== ans.prompt.ideas.length) bad(at, "a detail's prompt has an idea twice");
+          }
+        }
+      }
+      ans.does = list(x.does).map((s) => effectOf(s, at, m, ans)).filter(Boolean);
+      if (!ans.does.length) bad(at, "needs what it does");
+      if (ans.prompt?.kind === "name" && ans.prompt.of === "mini" && !ans.does.some((f) => f.k === "mini")) bad(at, "a mini faction's name prompt needs the answer to make one");
+      for (const k of ["thread", "back"]) {
+        if (x[k] == null) continue;
+        const v = typeof x[k] === "string" ? x[k].trim() : "";
+        if (!v || words(v) > 12) bad(at, `${k}'s a line of 1 to 12 words: ${x[k]}`);
+        ans[k] = v;
+      }
+      if (ans.thread != null) {
+        const first = ans.does.find((f) => THREADS.has(f.k));
+        if (!first) bad(at, "has a thread's words but no thread");
+        else if ((first.k === "friend" || first.k === "foe") && !slotsIn(ans.thread).includes("who")) bad(at, "a thread toward the crew needs {who}");
+        else if (first.k !== "friend" && first.k !== "foe" && !slotsIn(ans.thread).includes("b")) bad(at, "a thread needs {b}, the faction it's toward");
+        if (ans.back != null && !["rival", "ally", "debt"].includes(first?.k)) bad(at, "only a rival, an ally or a debt goes both ways, so only they have back");
+        ans.thread0 = first?.k ?? null;
+      } else if (ans.back != null) bad(at, "has back without thread");
+      if (x.then != null) {
+        if (!isKey(x.then)) bad(at, `then is a chain card's key: ${x.then}`);
+        else ans.then = x.then;
+      }
+      ans.slots = [...slotsIn(ans.line), ...slotsIn(ans.thread), ...slotsIn(ans.back)];
+      // A line can say what its answer gained or took, and the mini faction
+      // it made, as well as what the card named.
+      const own = new Set([...base, ...ans.does.filter((f) => f.k === "gain" || f.k === "take").map((f) => f.what), ...(ans.does.some((f) => f.k === "mini") ? ["mini"] : []), ...(["person", "place", "detail"].includes(ans.prompt?.kind) ? [ans.prompt.kind] : [])]);
+      // A thread's written before its prompt's answered, so it can't use it.
+      for (const s of slotsIn(ans.line)) if (!own.has(s) && !["person", "place", "detail"].includes(s)) bad(at, `has a slot nothing fills in its line: {${s}}`);
+      for (const s of [...slotsIn(ans.thread), ...slotsIn(ans.back)]) if (!base.has(s) && !["person", "place", "detail"].includes(s)) bad(at, `has a slot nothing fills in its thread: {${s}}`);
+      return ans;
+    });
+    for (const s of m.slots) if (!base.has(s) && !["person", "place", "detail"].includes(s)) bad(where, `has a slot nothing fills in its words: {${s}}`);
+    // Something strange comes onto the board whichever way it goes: a
+    // Secret (one naming nobody, since the strange ones don't) or an agenda
+    // (at a faction or a seat, where the strange ones aim). A twist's rows
+    // are all strange, so its moments' can deal anything.
+    if (m.strange && !strange) for (const [n, ans] of m.answers.entries()) if (!ans.does.some((f) => (f.k === "secret" && f.to == null) || (f.k === "agenda" && f.to !== "who"))) bad(where, `it's strange, so answer ${n + 1} needs a Secret naming nobody, or an agenda that isn't at who`);
+    return m;
+  }
+  const momentsOf = (v, where, opts) => {
+    if (v != null && !Array.isArray(v)) {
+      bad(where, "should be a list");
+      return [];
+    }
+    return list(v).map((x, i) => momentOf(x, `${where} row ${i + 1}`, opts)).filter(Boolean);
   };
 
   // core.yaml
@@ -375,7 +638,9 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     sizes[s] = v > 0 ? v : 1;
   }
   const templates = {};
-  for (const [k, slots] of [["about", ["type", "method"]], ["seat", ["seat"]], ["face", ["name", "threat"]], ["ways", ["one", "two"]]]) {
+  // called is what a faction's called on the deck's cards till it's named
+  // (the bell-founders on the Old Bridge), and voice who's bringing a card.
+  for (const [k, slots] of [["about", ["type", "method"]], ["seat", ["seat"]], ["face", ["name", "threat"]], ["ways", ["one", "two"]], ["called", ["type", "seat"]], ["voice", ["name", "faction"]]]) {
     const v = core.templates?.[k];
     if (typeof v !== "string" || !v.trim()) bad("core.yaml", `templates needs ${k}`);
     else {
@@ -461,6 +726,8 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     faces,
     fallbacks,
     crew: crewOf(core.crew),
+    deck: momentsOf(core.deck, "core.yaml deck"),
+    loyal: rows(core.loyal, "core.yaml loyal", "loyal").map((r) => ({ id: r.id, text: r.text })),
     founding: core.founding ?? null,
   };
   for (const k of ["wants", "methods", "secrets", "agendas"]) if (out.core[k].length < 12) bad("core.yaml", `${k} needs at least twelve, found ${out.core[k].length}`);
@@ -555,7 +822,8 @@ export function compileTables(raw, book, { minimums = true } = {}) {
         pack[field] = rows(p[field], `${file} ${field}`, table, opts);
       }
       pack.names = { factions: rows(p.names?.factions, `${file} names.factions`, "factions", opts), people: rows(p.names?.people, `${file} names.people`, "people", opts) };
-      for (const k of Object.keys(p)) if (!["fits", "seats", "resources", "assets", "types", "methods", "secrets", "exceptions", "wants", "names"].includes(k)) bad(file, `has a part it doesn't know: ${k}`);
+      pack.deck = momentsOf(p.deck, `${file} deck`, opts);
+      for (const k of Object.keys(p)) if (!["fits", "seats", "resources", "assets", "types", "methods", "secrets", "exceptions", "wants", "names", "deck"].includes(k)) bad(file, `has a part it doesn't know: ${k}`);
       if (minimums) {
         if (pack.exceptions.length < 6) bad(file, `needs six exceptions, found ${pack.exceptions.length}`);
         if (kind === "era") {
@@ -605,6 +873,113 @@ export function compileTables(raw, book, { minimums = true } = {}) {
       }
       out.packs[`${kind}:${id}`] = pack;
     }
+  }
+  // The deck, whole: every chain lands on a card that's there, in its own
+  // file or core's, no earlier than the card it starts from, with the same
+  // kind of other side and the crew if it needs them, and the words a
+  // chain's card uses ({person}, {place}, {detail}) come from every card
+  // that can come before it.
+  const files = [["core.yaml", out.core.deck], ...Object.values(out.packs).map((p) => [`${p.kind}s/${p.id}.yaml`, p.deck ?? []])];
+  const fileOf = new Map();
+  const keyed = new Map();
+  for (const [file, deck] of files) {
+    for (const m of deck) {
+      fileOf.set(m, file);
+      if (!m.key) continue;
+      if (keyed.has(m.key)) bad(`${file} deck`, `two moments have the key ${m.key}`);
+      else keyed.set(m.key, m);
+    }
+  }
+  const named = (m) => `${fileOf.get(m)} deck, "${m.text.split(/\s+/).slice(0, 6).join(" ")}…"`;
+  const before = new Map();
+  for (const [file, deck] of files) {
+    for (const m of deck) {
+      for (const ans of m.answers) {
+        if (!ans.then) continue;
+        const t = keyed.get(ans.then);
+        if (!t) {
+          bad(named(m), `then lands on a key no moment has: ${ans.then}`);
+          continue;
+        }
+        const tf = fileOf.get(t);
+        if (!t.chain) bad(named(m), `then lands on ${ans.then}, which needs chain: true`);
+        if (tf !== file && tf !== "core.yaml") bad(named(m), `then lands on ${ans.then} in ${tf}, and a chain stays in its own file or core's`);
+        if (t.age < m.age) bad(named(m), `then lands on ${ans.then}, an age before it`);
+        if (t.seat !== m.seat) bad(named(m), `then lands on ${ans.then}, whose other side isn't the same (a faction or a seat)`);
+        if (t.crew && !m.crew) bad(named(m), `then lands on ${ans.then}, which needs one of the crew on the card`);
+        if (!before.has(t.key)) before.set(t.key, []);
+        before.get(t.key).push({ m, ans });
+      }
+    }
+  }
+  for (const m of keyed.values()) if (m.chain && !before.has(m.key)) bad(named(m), `nothing lands on the chain card ${m.key}`);
+  const CHAIN_WORDS = ["person", "place", "detail"];
+  const words2 = new Map();
+  const wordsOf = (m, seen = new Set()) => {
+    if (words2.has(m)) return words2.get(m);
+    if (seen.has(m)) {
+      bad(named(m), `the chain at ${m.key} comes back round on itself`);
+      return new Set();
+    }
+    seen.add(m);
+    let got = null;
+    for (const { m: p, ans } of m.chain ? before.get(m.key) ?? [] : []) {
+      const w = new Set([...wordsOf(p, seen), ...(p.person ? ["person"] : []), ...(CHAIN_WORDS.includes(ans.prompt?.kind) ? [ans.prompt.kind] : [])]);
+      got = got ? new Set([...got].filter((x) => w.has(x))) : w;
+    }
+    seen.delete(m);
+    words2.set(m, got ?? new Set());
+    return words2.get(m);
+  };
+  for (const [, deck] of files) {
+    for (const m of deck) {
+      const w = new Set([...wordsOf(m), ...(m.person ? ["person"] : [])]);
+      for (const s of m.slots) if (CHAIN_WORDS.includes(s) && !w.has(s)) bad(named(m), `uses {${s}}, which nothing before it gives`);
+      m.answers.forEach((ans, n) => {
+        const own = new Set([...w, ...(CHAIN_WORDS.includes(ans.prompt?.kind) ? [ans.prompt.kind] : [])]);
+        for (const s of slotsIn(ans.line)) if (CHAIN_WORDS.includes(s) && !own.has(s)) bad(named(m), `answer ${n + 1}'s line uses {${s}}, which nothing before it gives`);
+        for (const s of [...slotsIn(ans.thread), ...slotsIn(ans.back)]) if (CHAIN_WORDS.includes(s) && !w.has(s)) bad(named(m), `answer ${n + 1}'s thread uses {${s}}, which nothing before it gives`);
+        for (const f of ans.does) if (f.chainPerson && !w.has("person")) bad(named(m), `answer ${n + 1}'s face needs a person on the card: person: true, a person prompt, or a chain that has one`);
+        delete ans.slots;
+        for (const f of ans.does) delete f.chainPerson;
+      });
+      delete m.slots;
+    }
+  }
+  const minis = files.some(([, deck]) => deck.some((m) => m.answers.some((a) => a.does.some((f) => f.k === "mini"))));
+  if (minis && !out.core.loyal.length) bad("core.yaml", "loyal needs a line, for the mini factions the deck makes");
+  if (minimums) {
+    const counts = (file, deck, kind) => {
+      const n = deck.length;
+      const most = kind === "core" ? DECK_MIN.core : DECK_MIN.pack;
+      if (n < most) bad(file, `the deck needs ${most} moments or more, found ${n}`);
+      for (const age of [1, 2, 3]) {
+        const c = deck.filter((m) => m.age === age).length;
+        if (c < Math.floor(n * DECK_MIN.age)) bad(file, `a third of the deck's in each age, and age ${age} has ${c} of ${n}`);
+      }
+      const chained = deck.filter((m) => m.chain || m.answers.some((a) => a.then)).length;
+      if (chained < Math.ceil(n * DECK_MIN.chain)) bad(file, `one moment in four starts or carries on a chain, and ${chained} of ${n} do`);
+      if (kind !== "twist") {
+        const odd = deck.filter((m) => m.strange).length;
+        if (odd < Math.ceil(n * DECK_MIN.strange)) bad(file, `one moment in eight's strange, and ${odd} of ${n} are`);
+      }
+      if (kind !== "core") return;
+      for (const o of OUTCOMES) {
+        const c = deck.flatMap((m) => m.answers).filter((a) => a.does.some((f) => OUTCOME_OF[f.k] === o)).length;
+        if (c < DECK_MIN.outcome) bad(file, `every outcome's on ${DECK_MIN.outcome} answers or more, and ${o} is on ${c}`);
+      }
+      for (const k of TYPES) {
+        const c = deck.filter((m) => m.a?.includes(k) || m.b?.includes(k)).length;
+        if (c < DECK_MIN.kind) bad(file, `every kind of faction's on ${DECK_MIN.kind} moments or more, and ${k} is on ${c}`);
+      }
+      const last = deck.filter((m) => m.last).length;
+      if (last < DECK_MIN.last) bad(file, `the deck needs ${DECK_MIN.last} last cards or more, found ${last}`);
+      const crew = deck.filter((m) => m.crew && !m.chain).length;
+      if (crew < DECK_MIN.crew) bad(file, `the deck needs ${DECK_MIN.crew} moments with one of the crew or more, so a crew of six can each come in, found ${crew}`);
+      if (out.core.loyal.length < DECK_MIN.loyal) bad(file, `loyal needs ${DECK_MIN.loyal} lines or more, found ${out.core.loyal.length}`);
+    };
+    counts("core.yaml", out.core.deck, "core");
+    for (const p of Object.values(out.packs)) counts(`${p.kind}s/${p.id}.yaml`, p.deck ?? [], p.kind);
   }
   // A frame's mix goes in with the last pack it needs, so Add a faction on a
   // board brought in from the book always has something to deal.

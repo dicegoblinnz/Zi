@@ -390,3 +390,177 @@ names:
     - Ottilie Sward
     - Absalom Venn
     - Nan Hesketh
+
+# The deck's moments of its own (stage 7): spells bought and stolen, charm
+# licences, bindings wearing thin, healers, wards and bound souls. Every one's
+# strange, like every row here.
+deck:
+  - text: "Our founder bought her first spell from {b}, and they never let her forget the price."
+    age: 1
+    tags: [magic]
+    answers:
+      - text: "Pay it back"
+        does: ["lean a magic", "gain asset a", "debt a b"]
+        tags: [magic]
+        line: "{a} paid {b} back for their first spell, and learned to sell their own."
+      - text: "Steal the rest"
+        does: ["lean a magic", "take asset a b", "grudge b a"]
+        tags: [magic]
+        line: "{a} stole the rest of the spellbook from {b}, and built on it."
+  - text: "The licence to sell charms was up for grabs, and {b} wanted it as badly as we did."
+    age: 1
+    tags: [magic, law]
+    answers:
+      - text: "Bribe the clerk"
+        does: ["lean a magic", "lean a secret", "gain res a", "grudge b a"]
+        tags: [magic]
+        line: "{a} bribed the clerk for the charm licence, and {b} never proved it."
+      - text: "Share it"
+        does: ["lean a magic", "lean b magic", "gain res a", "ally a b"]
+        tags: [magic]
+        line: "{a} split the charm licence with {b}, and both did well out of it."
+  - text: "Something old was bound under {b}, and the binding was wearing thin."
+    age: 1
+    b: seat
+    res: seat
+    tags: [magic, old]
+    answers:
+      - text: "Bind it again"
+        does: ["lean a magic", "gain res a", "secret a"]
+        line: "{a} bound what was under {b} again, and lived off the {res} above it."
+      - text: "Let it loose"
+        does: ["lean a old", "gain asset a", "secret a"]
+        tags: [old]
+        line: "{a} let what was under {b} loose, and it owed them for that."
+  - text: "{person} came to us with hands that could close any wound. {b} wanted them too."
+    age: 1
+    person: true
+    tags: [magic]
+    answers:
+      - text: "Keep the healer"
+        does: ["lean a magic", "gain people a", "grudge b a"]
+        line: "{a} took on {person}, the healer {b} wanted, and their sick got well."
+        then: healer-price
+      - text: "Send the healer on"
+        does: ["lean a law", "gain res a", "favour b a"]
+        line: "{a} sent {person} to {b}, and was paid for the kindness."
+        then: healer-price
+  - text: "{person} heals for a price. Everyone they've mended dreams of the same dark room."
+    key: healer-price
+    chain: true
+    age: 2
+    answers:
+      - text: "Keep them working"
+        does: ["rival a b"]
+        line: "{a} kept {person} healing, dreams and all, and {b} wanted no part of it."
+      - text: "Give them up"
+        does: ["lose people a", "ally a b"]
+        line: "{a} gave {person} up to {b}, and the dreams stopped."
+  - text: "{b} warded their warehouses last spring, and every thief around came to ours instead."
+    age: 2
+    tags: [magic, crime]
+    answers:
+      - text: "Ward ours better"
+        does: ["gain res a", "rival a b"]
+        line: "{a} hired better wards than {b}, and the thieves went back to them."
+      - text: "Pay them for wards"
+        does: ["lose res a", "debt a b"]
+        line: "{a} paid {b} for wards, and kept on paying."
+  - text: "{b} summoned something to settle a quarrel with us. It's still standing in our yard."
+    age: 2
+    tags: [magic, war]
+    answers:
+      - text: "Send it back"
+        does: ["rival a b", "secret a"]
+        line: "{a} sent back what {b} summoned, and didn't forget it."
+      - text: "Make it ours"
+        does: ["gain asset a", "rival a b"]
+        tags: [magic]
+        line: "{a} made the thing {b} summoned their own, and kept it."
+  - text: "{b} needed the bound spirit we keep to finish their great work. We've never lent it."
+    age: 2
+    tags: [magic]
+    answers:
+      - text: "Never"
+        does: ["block a b", "rival a b"]
+        thread: "{b} will never lay a hand on our bound spirit"
+        line: "{a} wouldn't lend {b} the bound spirit, whatever was offered."
+      - text: "Lend it for gold"
+        does: ["gain res a", "debt b a"]
+        line: "{a} lent {b} the bound spirit, and the price kept climbing."
+  - text: "Our apprentices wanted to sell charms on the street, without paying {b} a penny."
+    age: 2
+    a: [makers, traders, society, faith]
+    tags: [magic, guild]
+    answers:
+      - text: "Let them"
+        does: ["mini a establish acquire", "rival a b"]
+        line: "{a} let their apprentices go it alone, and {mini} sold charms on every corner."
+        prompt: { kind: name, of: mini, ask: "What did the apprentices call themselves?" }
+      - text: "Stop them"
+        does: ["lose people a", "ally a b"]
+        line: "{a} stopped their apprentices, and {b} took it kindly."
+  - text: "Someone in {b} has been buying souls cheap from the desperate. We've seen the ledger."
+    age: 3
+    tags: [magic, secret]
+    answers:
+      - text: "Expose them"
+        does: ["agenda a b", "secret b"]
+        line: "{a} set out to show everyone what {b} bought from the desperate."
+      - text: "Buy in"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} quietly bought souls through {b}, and kept the ledger close."
+  - text: "{b} raised one of their dead to testify against us, and the court's going to hear it."
+    age: 3
+    tags: [magic, law]
+    answers:
+      - text: "Raise one of ours"
+        does: ["agenda a b", "secret a"]
+        line: "{a} raised a dead witness of their own, to answer the one from {b}."
+      - text: "Discredit it"
+        does: ["secret a b", "agenda a b"]
+        line: "{a} proved the dead witness from {b} had been told what to say."
+  - text: "A door opened in the air over {b}, and something's been looking out of it."
+    age: 3
+    b: seat
+    tags: [magic, old]
+    answers:
+      - text: "Go through"
+        does: ["agenda a seat", "secret a"]
+        line: "{a} went through the door over {b}, and came back with a bargain."
+      - text: "Close it"
+        does: ["secret a", "agenda a seat"]
+        line: "{a} closed the door over {b}, and kept the key to themselves."
+  - text: "{b} hired a sorcerer to curse our leader, and now she won't eat."
+    age: 3
+    tags: [magic]
+    answers:
+      - text: "Break the curse"
+        does: ["agenda a b", "secret b"]
+        line: "{a} broke the curse {b} paid for, and went looking for the sorcerer."
+      - text: "Hire a better one"
+        does: ["secret a", "agenda a b"]
+        line: "{a} hired a better sorcerer than {b} did, and the curse went home."
+  - text: "The bound soul in our cellar has started talking about {b}, and what they did."
+    age: 3
+    tags: [magic, secret]
+    answers:
+      - text: "Listen"
+        does: ["agenda a b", "secret b"]
+        line: "{a} listened to the soul in the cellar, and learned what {b} did."
+        then: soul-loose
+      - text: "Gag it"
+        does: ["secret a", "agenda b a"]
+        line: "{a} gagged the soul in the cellar before it said too much."
+        then: soul-loose
+  - text: "The soul in our cellar got loose last night, and it went straight to {b}."
+    key: soul-loose
+    chain: true
+    age: 3
+    answers:
+      - text: "Hunt it down"
+        does: ["agenda a b"]
+        line: "{a} hunted the loose soul to {b}, before it could talk."
+      - text: "Wash our hands"
+        does: ["secret a b"]
+        line: "{a} let the loose soul tell {b} everything, and washed their hands of it."

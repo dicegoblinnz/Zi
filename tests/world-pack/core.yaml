@@ -35,6 +35,10 @@ templates:
   seat: "It sits on {seat}."
   face: "{name}, {threat}"
   ways: "Ways in: {one}, or {two}."
+  # What a faction's called on the deck's cards till it's named, and who's
+  # bringing a card.
+  called: "the {type} on {seat}"
+  voice: "{name} of {faction}"
 because:
   seat: because it sits on {thing}
   type: because it's {thing}
@@ -45,6 +49,8 @@ because:
   region: ""
   after: because it's after {thing}
   rivalof: "because it's {thing}'s rival"
+  # A step a deck's answer steered, or a thing it made: its line of history.
+  moment: "because {thing}"
 
 wants:
   - { text: "More: money, land, trade.", tags: [wealth] }
@@ -195,3 +201,69 @@ fallbacks:
   rival: { kind: rival, text: "{b} stands in our way" }
   who: { text: "Learn all there is about {who}.", die: 4 }
   thing: { text: "Make the crew's {thing} its own.", die: 4 }
+
+# A few moments, enough for the deck's own checks: an age each, a seat, a
+# chain with a prompt, a mini faction, the crew and a last card.
+deck:
+  - text: "We've come up the river with nothing. {b} have the only dry ground."
+    age: 1
+    answers:
+      - { text: "Buy some", does: ["gain res a", "lean a market", "debt a b"], line: "{a} bought dry ground off {b} and owed them for it." }
+      - { text: "Take some", does: ["take res a b", "lean a war"], line: "{a} took dry ground off {b} by force." }
+  - text: "Nobody's working {b}. We could."
+    age: 1
+    b: seat
+    res: seat
+    answers:
+      - { text: "Work it", does: ["gain res a", "lean a mine"], line: "{a} worked {b} and kept its {res}." }
+      - { text: "Leave it", does: ["lean a holy", "gain asset a"], line: "{a} left {b} alone and prayed instead." }
+  - text: "{b} want our help with a wedding."
+    age: 2
+    key: wedding
+    answers:
+      - { text: "Help them", does: ["ally a b"], line: "{a} helped {b} with the wedding.", then: elopement, prompt: { kind: person, ask: "Who ran off?" } }
+      - { text: "Stop it", does: ["rival a b"], line: "{a} stopped {b}'s wedding.", then: elopement, prompt: { kind: person, ask: "Who ran off?" } }
+  - text: "{person} ran off anyway. {b} blame us."
+    age: 2
+    key: elopement
+    chain: true
+    answers:
+      - { text: "Pay them", does: ["debt a b"], line: "{a} paid {b} for {person}'s running." }
+      - { text: "Laugh", does: ["rival a b", "block a b"], line: "{a} laughed, and {b} never forgot it." }
+  - text: "{b} can't feed their people this year."
+    age: 2
+    answers:
+      - { text: "Feed them", does: ["ally a b", "lose res a"], line: "{a} fed {b}'s people through the bad year." }
+      - { text: "Sell dear", does: ["block a b", "rival a b"], line: "{a} sold {b} grain at twice the price." }
+  - text: "We need people on the docks nobody can trace back to us."
+    age: 2
+    answers:
+      - { text: "Set up a crew", does: ["mini a acquire obstruct", "favour a b"], line: "{a} set up {mini} on the docks.", prompt: { kind: name, of: mini, ask: "What did they call the dock crew?" } }
+      - { text: "Hire them", does: ["debt a b"], line: "{a} hired {b}'s people for the docks." }
+  - text: "{b} know what we buried. They want paying."
+    age: 3
+    answers:
+      - { text: "Pay", does: ["agenda a b", "secret a b"], line: "{a} paid {b} to keep quiet." }
+      - { text: "Silence them", does: ["agenda a b", "secret b"], line: "{a} went after {b} to keep them quiet." }
+  - text: "{who} turned up at our door asking questions."
+    age: 3
+    answers:
+      - { text: "Answer them", does: ["friend a who", "secret a"], line: "{a} told {who} what they wanted to know." }
+      - { text: "Throw them out", does: ["foe a who", "agenda a who"], line: "{a} threw {who} out, and kept watching." }
+  - text: "Something's under {b}, and it's waking."
+    age: 3
+    b: seat
+    strange: true
+    answers:
+      - { text: "Dig", does: ["agenda a seat", "lean a old"], line: "{a} started digging under {b}." }
+      - { text: "Seal it", does: ["secret a"], line: "{a} sealed {b} and swore never to talk of it." }
+  - text: "The night the strangers came, {b} sent word to us."
+    age: 3
+    last: true
+    answers:
+      - { text: "Listen", does: ["agenda a b"], line: "{a} listened to {b}, the night the strangers came." }
+      - { text: "Ignore it", does: ["secret a b"], line: "{a} ignored {b}'s word, the night the strangers came." }
+
+loyal:
+  - "{b} gave us our start"
+  - "We'd be nobody without {b}"

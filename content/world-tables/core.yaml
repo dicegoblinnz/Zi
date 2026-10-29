@@ -43,6 +43,10 @@ templates:
   seat: "It sits on {seat}."
   face: "{name}, {threat}"
   ways: "Ways in: {one}, or {two}."
+  # What a faction's called on the deck's cards till it's named, and who's
+  # bringing a card.
+  called: "the {type} on {seat}"
+  voice: "{name} of {faction}"
 
 because:
   seat: "because it sits on {thing}"
@@ -55,6 +59,8 @@ because:
   # Why a faction's a character's foe: it's after them, or it's their friend's rival.
   after: "because it's after {thing}"
   rivalof: "because it's {thing}'s rival"
+  # A step a deck's answer steered, or a thing it made: its line of history.
+  moment: "because {thing}"
 
 # Building a Faction's What it wants, row for row.
 wants:
@@ -300,3 +306,1191 @@ fallbacks:
   rival: { kind: rival, text: "{b} stood in our way once too often" }
   who: { text: "Learn everything there is to know about {who}", die: 4 }
   thing: { text: "Make the crew's {thing} its own", die: 4 }
+
+# A mini faction's Loyalty thread toward the faction that made it ({b}).
+loyal:
+  - "{b} gave us our start, and we've not forgotten"
+  - "We'd be nobody without {b}"
+  - "{b} put the first money in our hands"
+  - "We owe {b} everything we've got"
+  - "{b} took us in when nobody else would"
+  - "We do what {b} asks, mostly"
+  - "{b} made us, and could unmake us"
+  - "{b} picked every one of us by hand"
+
+# The deck (stage 7): moments from before the crew turned up, a card at a
+# time, for building by answering. Each is what someone from one faction
+# says (a), about another (b) or a seat nobody holds, and its two answers are
+# what that faction does. scripts/world-tables.mjs says what each part holds.
+# They're written for every genre, so the slots carry what's particular.
+deck:
+  # Long ago: where each faction came from, what it took, and what it's like.
+  - text: "We came with nothing but what we could carry. {b} held the only ground worth building on."
+    age: 1
+    answers:
+      - text: "Buy a corner"
+        does: ["lean a market", "lean b wealth", "gain res a", "debt a b"]
+        line: "{a} bought their first ground off {b}, and paid for it for years."
+        prompt: { kind: name, of: a, ask: "What did people start calling them?" }
+      - text: "Build on it anyway"
+        does: ["lean a war", "take res a b", "grudge b a"]
+        thread: "{b} built on our ground and dared us to stop it"
+        line: "{a} built on ground {b} claimed, and dared anyone to stop it."
+  - text: "The flood took everything low, bar {b}, and nobody had a claim on it."
+    age: 1
+    b: seat
+    res: seat
+    answers:
+      - text: "Claim it"
+        does: ["lean a law", "gain res a"]
+        line: "{a} put their name on {b} after the flood, and lived off the {res}."
+      - text: "Pull people out"
+        does: ["lean a poor", "gain people a"]
+        line: "{a} pulled the drowned out of the water, and they never forgot it."
+  - text: "{b} offered our best hands double to come and work for them."
+    age: 1
+    a: [makers, traders, family]
+    tags: [guild]
+    answers:
+      - text: "Pay them more"
+        does: ["lean a guild", "lose res a", "gain people a"]
+        line: "{a} paid their best hands more than {b} offered, and went short for it."
+      - text: "Let them go"
+        does: ["lean a poor", "take people b a", "grudge a b"]
+        thread: "{b} lured our best hands away with double pay"
+        line: "{a} let their best hands go to {b}, and swore to get them back."
+  - text: "Something came out of the ground at {seat} that nobody could explain. {b} offered good money for it."
+    age: 1
+    a: [faith, keepers, old]
+    tags: [old]
+    answers:
+      - text: "Keep it"
+        does: ["lean a old", "gain asset a", "grudge b a"]
+        tags: [old]
+        line: "{a} kept what came out of the ground at {seat}, and turned {b} away."
+      - text: "Sell it"
+        does: ["lean a wealth", "lean b old", "gain res a", "gain asset b"]
+        tags: [old]
+        line: "{a} sold what came out of the ground to {b}, and spent the money fast."
+  - text: "Our founder walked into {b} and came out three days later, older, and wouldn't say what she'd seen."
+    age: 1
+    a: [old, faith, society, keepers]
+    b: seat
+    res: seat
+    strange: true
+    answers:
+      - text: "Build where she stood"
+        does: ["lean a old", "gain res a", "secret a"]
+        line: "{a} built where their founder came out of {b}, and asked her nothing."
+      - text: "Wall it up"
+        does: ["lean a holy", "gain asset a", "secret a"]
+        line: "{a} walled {b} up, and never spoke of what their founder saw."
+  - text: "{b} offered us their eldest in marriage, with a dowry to make it worth our while."
+    age: 1
+    a: [house, family]
+    b: [house, family, traders]
+    tags: [blood]
+    answers:
+      - text: "Take the match"
+        does: ["lean a blood", "lean b blood", "gain res a", "ally a b"]
+        line: "{a} married into {b}, and took the dowry with the vows."
+      - text: "Ask for more"
+        does: ["lean a wealth", "gain res a", "debt b a"]
+        line: "{a} asked {b} for twice the dowry, and got it."
+  - text: "{b} hired us to clear out a rival. They paid half up front, then ran short."
+    age: 1
+    a: [soldiers, rebels, crooks]
+    answers:
+      - text: "Take the rest"
+        does: ["lean a war", "lean b poor", "take res a b", "grudge b a"]
+        line: "{a} took the rest of their pay off {b} by force."
+      - text: "Let them owe it"
+        does: ["lean a law", "lean b debt", "gain asset a", "debt b a"]
+        tags: [debt]
+        line: "{a} let {b} owe it, and never let them forget."
+  - text: "A sickness went through {b}, and their people came to our door for help."
+    age: 1
+    a: [faith, family, keepers]
+    tags: [plague]
+    answers:
+      - text: "Open the doors"
+        does: ["lean a holy", "lean b plague", "lose res a", "gain people a"]
+        line: "{a} took in the sick from {b}, and half of them stayed."
+      - text: "Bar the doors"
+        does: ["lean a plague", "lean b poor", "gain res a", "grudge b a"]
+        thread: "{b} barred the door while our people were dying"
+        line: "{a} barred their doors to the sick from {b}, and kept their stores full."
+  - text: "Somebody had to write the first law here. {b} offered to help, for a price."
+    age: 1
+    a: [office, house]
+    tags: [law]
+    answers:
+      - text: "Write it alone"
+        does: ["lean a law", "gain asset a", "grudge b a"]
+        tags: [law]
+        line: "{a} wrote the first law alone, and {b} never got a say in it."
+        prompt: { kind: name, of: a, ask: "What did they call the office that wrote it?" }
+      - text: "Take their help"
+        does: ["lean a law", "lean b law", "gain res a", "debt a b"]
+        line: "{a} wrote the first law with {b}, and owed them for every word."
+  - text: "We found a map behind a wall. It showed something buried under {b}."
+    age: 1
+    a: [keepers, society, old, crooks]
+    b: seat
+    res: seat
+    answers:
+      - text: "Dig for it"
+        does: ["lean a old", "gain res a"]
+        line: "{a} started digging under {b}, the way the map said."
+        then: under-door
+      - text: "Sell the map"
+        does: ["lean a wealth", "gain asset a"]
+        line: "{a} sold the map, and never asked who bought it."
+  - text: "We dug under {b} like the map said, and hit a door with no handle."
+    key: under-door
+    chain: true
+    age: 1
+    b: seat
+    strange: true
+    answers:
+      - text: "Open it"
+        does: ["lean a old", "gain asset a", "secret a"]
+        prompt: { kind: detail, ask: "What was behind the door?", ideas: ["a room full of bones", "a stair going down", "a cold wind and nothing else", "an iron box", "somebody's old library"] }
+        line: "{a} opened the door under {b}, and found {detail}."
+      - text: "Fill it in"
+        does: ["lean a holy", "gain people a", "secret a"]
+        line: "{a} filled the hole under {b} back in, and set a watch on it."
+  - text: "{b} wanted the same buyers we did, and undercut us by a third to get them."
+    age: 1
+    a: [traders, makers, family]
+    b: [traders, makers, family]
+    tags: [market]
+    answers:
+      - text: "Go lower"
+        does: ["lean a market", "lean b market", "gain res a", "grudge a b"]
+        line: "{a} went lower than {b}, and nearly broke themselves doing it."
+      - text: "Find new buyers"
+        does: ["lean a road", "lean b market", "gain res a", "favour b a"]
+        line: "{a} found buyers further off, and left {b} the ones close to home."
+  - text: "The hard winter, {b} kept their stores locked while we went hungry."
+    age: 1
+    a: [crooks, rebels, family, makers]
+    tags: [poor]
+    answers:
+      - text: "Break the locks"
+        does: ["lean a crime", "lean b wealth", "take res a b", "grudge b a"]
+        line: "{a} broke into the stores {b} kept locked, the winter they went hungry."
+        then: winter-debt
+      - text: "Beg"
+        does: ["lean a poor", "lean b wealth", "gain people a", "debt a b"]
+        line: "{a} begged {b} for food the hard winter, and owed them after."
+        then: winter-debt
+  - text: "{b} wouldn't pay what they owed us. Our founder wanted to make an example of them."
+    age: 1
+    a: [house, office, soldiers]
+    answers:
+      - text: "Make the example"
+        does: ["lean a war", "lean b poor", "take res a b", "rival a b"]
+        line: "{a} made an example of {b}, and took what was owed with interest."
+      - text: "Forgive it, loudly"
+        does: ["lean a law", "gain asset a", "debt b a"]
+        tags: [law]
+        line: "{a} forgave {b} the debt in front of everyone, and was respected for it."
+  - text: "We needed hands {b} couldn't trace back to us, for the work we don't talk about."
+    age: 1
+    a: [crooks, traders, society]
+    tags: [secret]
+    answers:
+      - text: "Start a crew"
+        does: ["lean a secret", "mini a acquire obstruct"]
+        tags: [crime]
+        line: "{a} set up {mini} for the work nobody talks about."
+        prompt: { kind: name, of: mini, ask: "What did they call the crew?" }
+      - text: "Borrow theirs"
+        does: ["lean a secret", "gain people a", "debt a b"]
+        line: "{a} borrowed hands from {b}, and those hands talked."
+  - text: "{person} turned up preaching that the end was coming. {b} paid them to move on. We could take them in."
+    age: 1
+    a: [faith, society, keepers, rebels]
+    person: true
+    tags: [holy]
+    answers:
+      - text: "Take them in"
+        does: ["lean a holy", "lean b law", "gain people a", "grudge b a"]
+        line: "{a} took in {person}, the preacher {b} paid to leave, and the followers came too."
+        then: preacher-back
+      - text: "Send them on"
+        does: ["lean a law", "gain res a", "favour b a"]
+        line: "{a} sent {person} on their way, and {b} paid them for the trouble."
+        then: preacher-back
+  - text: "The first of us made a bargain with something under {b}. We've been paying it ever since."
+    age: 1
+    a: [old, keepers, faith, society]
+    b: seat
+    strange: true
+    answers:
+      - text: "Keep paying"
+        does: ["lean a old", "gain asset a", "secret a"]
+        line: "{a} kept paying what lived under {b}, and did well out of it."
+      - text: "Stop paying"
+        does: ["lean a war", "lose res a", "gain people a", "secret a"]
+        line: "{a} stopped paying what lived under {b}, and paid another way."
+  - text: "We worked out how to make what nobody else could. {b} sent someone to learn how."
+    age: 1
+    a: [makers, keepers, traders]
+    answers:
+      - text: "Sell them the knack"
+        does: ["lean a guild", "gain res a", "gain res b", "debt b a"]
+        line: "{a} sold {b} the knack of it, and was paid for years."
+      - text: "Run them off"
+        does: ["lean a secret", "gain asset a", "grudge b a"]
+        line: "{a} ran off the one {b} sent, and kept the knack to themselves."
+  - text: "{b} burned our first hall to the ground. We had to start again from nothing."
+    age: 1
+    a: [house, soldiers, rebels, family]
+    tags: [war]
+    answers:
+      - text: "Start again"
+        does: ["lean a blood", "lean b war", "gain res a", "grudge a b"]
+        thread: "{b} burned our first hall to the ground"
+        line: "{a} started again from the ashes {b} left behind."
+        then: feud-fire
+      - text: "Burn theirs"
+        does: ["lean a war", "lean b war", "lose res b", "gain people a", "rival a b"]
+        thread: "{b} burned our first hall, and we burned theirs back"
+        back: "{b} burned us out, and we've not forgotten it"
+        line: "{a} burned {b} out in turn, and the feud began."
+        then: feud-fire
+  - text: "Everything that came to market went past {b}. Somebody was going to start charging for it."
+    age: 1
+    b: seat
+    res: seat
+    tags: [road, market]
+    answers:
+      - text: "Charge them"
+        does: ["lean a road", "gain res a"]
+        line: "{a} started charging at {b}, and the {res} paid for everything."
+      - text: "Keep it free"
+        does: ["lean a law", "gain people a"]
+        line: "{a} kept {b} free to all, and everyone who used it remembered."
+  - text: "Our founder took a name that wasn't hers. {b} knew where it really came from."
+    age: 1
+    a: [house, family, crooks]
+    tags: [blood]
+    answers:
+      - text: "Buy their silence"
+        does: ["lean a secret", "lean b secret", "gain asset a", "debt a b"]
+        line: "{a} paid {b} to forget where their name came from."
+        prompt: { kind: name, of: a, ask: "What name did she take?" }
+      - text: "Own up to it"
+        does: ["lean a poor", "gain people a", "grudge b a"]
+        line: "{a} owned up to their borrowed name, and dared {b} to make something of it."
+        prompt: { kind: name, of: a, ask: "What was the name she borrowed?" }
+  - text: "{b} ran this place like they owned us. We were the first to say no."
+    age: 1
+    a: [rebels, crooks, makers]
+    b: [house, office, traders]
+    tags: [poor]
+    answers:
+      - text: "Walk out"
+        does: ["lean a poor", "lean b law", "gain people a", "mini a influence undermine"]
+        line: "{a} walked out on {b}, and {mini} grew out of it."
+      - text: "Take back what's ours"
+        does: ["lean a war", "lean b crown", "take res a b", "rival a b"]
+        line: "{a} took back what {b} had taken, and the fight was on."
+  - text: "{b} lost every fight, then won them all in one summer. Our founder said they'd bought their luck."
+    age: 1
+    strange: true
+    answers:
+      - text: "Buy the same"
+        does: ["lean a old", "lean b old", "gain people a", "secret a"]
+        line: "{a} went where {b} went for their luck, and paid the same price."
+      - text: "Watch them"
+        does: ["lean a holy", "lean b old", "gain asset a", "agenda a b"]
+        line: "{a} kept clear of {b} after that summer, and watched them closely."
+  - text: "The first year, {b} took in a stranger who never got any older. She's still with them."
+    age: 1
+    strange: true
+    answers:
+      - text: "Ask what she wants"
+        does: ["lean a old", "lean b old", "gain asset a", "secret b"]
+        line: "{a} went to the stranger who never aged, and came back with a gift."
+      - text: "Keep well clear"
+        does: ["lean a holy", "lean b old", "gain res a", "secret b"]
+        line: "{a} kept well clear of {b} and the guest who never aged."
+  - text: "By right {b} belonged to us, our founder said, but nobody had the papers to prove it."
+    age: 1
+    b: seat
+    res: seat
+    answers:
+      - text: "Forge them"
+        does: ["lean a secret", "gain res a"]
+        line: "{a} forged the papers for {b}, and nobody ever caught it."
+      - text: "Work it anyway"
+        does: ["lean a war", "gain res a"]
+        line: "{a} worked {b} with no papers, and fought anyone who asked."
+  - text: "When the war came, {b} picked the side that won, and we picked the one that lost."
+    age: 1
+    a: [soldiers, house, rebels]
+    tags: [war]
+    answers:
+      - text: "Change sides"
+        does: ["lean a law", "lean b war", "gain res a", "favour a b"]
+        line: "{a} changed sides to stand with {b}, and kept their lands for it."
+      - text: "Fight on"
+        does: ["lean a war", "lean b crown", "gain people a", "grudge b a"]
+        line: "{a} fought on for the side that lost, and never let anyone forget it."
+  - text: "Our founder came home one night with a child nobody had seen before, and never said whose it was."
+    age: 1
+    a: [house, family, old, society]
+    strange: true
+    answers:
+      - text: "Raise it as ours"
+        does: ["lean a blood", "gain people a", "secret a"]
+        line: "{a} raised the child their founder brought home, and never asked whose."
+        then: foundling
+      - text: "Send it away"
+        does: ["lean a law", "gain res a", "secret a"]
+        line: "{a} sent the founder's foundling away to {b}, and paid them to keep it."
+        then: foundling
+  - text: "{b} put up works upstream of us, and our water ran short."
+    age: 1
+    a: [makers, family, house, faith]
+    answers:
+      - text: "Dig a well"
+        does: ["lean a ground", "gain res a", "favour b a"]
+        line: "{a} dug a well of their own, and never needed {b} again."
+      - text: "Break their works"
+        does: ["lean a war", "lean b crime", "take res a b", "grudge b a"]
+        line: "{a} broke the works upstream, and the water came back."
+  - text: "{b} kept the only school, and our children weren't welcome in it."
+    age: 1
+    a: [family, makers, rebels, crooks]
+    b: [faith, keepers, house, office]
+    answers:
+      - text: "Teach our own"
+        does: ["lean a guild", "gain asset a"]
+        tags: [knowledge]
+        line: "{a} started teaching their own children, and kept what they learned close."
+      - text: "Pay their way in"
+        does: ["lean a law", "lean b wealth", "gain asset a", "debt a b"]
+        tags: [knowledge]
+        line: "{a} paid to send their children to {b}, and they came back different."
+  - text: "The last owner of {b} died with no heirs, and the place sat empty."
+    age: 1
+    b: seat
+    res: seat
+    answers:
+      - text: "Move in"
+        does: ["lean a land", "gain res a"]
+        line: "{a} moved in on {b} before the grave was cold."
+      - text: "Buy it fair"
+        does: ["lean a law", "gain res a"]
+        line: "{a} bought {b} fair and square, from whoever had the papers."
+
+  # In living memory: deals, feuds and debts.
+  - text: "{b} lent us the money to rebuild after the fire. They want it back now, and we haven't got it."
+    age: 2
+    res: a
+    tags: [debt]
+    answers:
+      - text: "Pay in kind"
+        does: ["take res b a", "ally a b"]
+        line: "{a} paid {b} back in {res}, and they stayed friends."
+      - text: "Make them wait"
+        does: ["debt a b", "block b a"]
+        line: "{a} made {b} wait for their money, and every day was counted."
+  - text: "{b} stopped buying from us the day someone cheaper came along. Twenty years we'd sold to them."
+    age: 2
+    a: [traders, makers, family]
+    b: [traders, makers, family, house]
+    tags: [market]
+    answers:
+      - text: "Sell to their enemies"
+        does: ["gain res a", "rival a b"]
+        thread: "{b} dropped us after twenty years for someone cheaper"
+        back: "{b} sold to everyone we hate, out of spite"
+        line: "{a} took their goods to anyone {b} hated, and made sure they knew."
+      - text: "Win them back"
+        does: ["lose res a", "ally a b"]
+        line: "{a} cut their prices to win {b} back, and never quite recovered."
+  - text: "Nobody else for miles has {res}, and {b} came asking. Last year they called us thieves."
+    age: 2
+    res: a
+    tags: [market]
+    answers:
+      - text: "Send them off"
+        does: ["block a b", "rival a b"]
+        thread: "{b} will never see a scrap of {res}"
+        line: "{a} wouldn't sell {b} a scrap of {res}, after what was said."
+      - text: "Sell at double"
+        does: ["gain res a", "debt b a"]
+        line: "{a} sold {b} the {res} at double, and got paid in full."
+  - text: "We fought beside {b} against the raiders. After, they kept the loot and gave us their thanks."
+    age: 2
+    a: [soldiers, crooks, house]
+    tags: [war]
+    answers:
+      - text: "Take our share"
+        does: ["take res a b", "rival a b"]
+        line: "{a} took their share of the loot off {b}, and broke the alliance doing it."
+      - text: "Let it go"
+        does: ["debt b a"]
+        line: "{a} let {b} keep the loot, and was owed a favour after."
+  - text: "{person}, our youngest, wants to marry into {b}. Half the family's against it."
+    age: 2
+    a: [house, family, traders]
+    b: [house, family, traders]
+    person: true
+    tags: [blood]
+    answers:
+      - text: "Allow it"
+        does: ["ally a b"]
+        line: "{a} let {person} marry into {b}, and the two were bound."
+        then: wedding-after
+      - text: "Forbid it"
+        does: ["rival a b"]
+        thread: "{b} reached too high for our youngest"
+        back: "{b} said we weren't good enough for their family"
+        line: "{a} forbade {person} to marry into {b}, and it went down badly."
+        then: elopement
+  - text: "Since the wedding, {b} came to us for a favour every other week."
+    key: wedding-after
+    chain: true
+    age: 2
+    answers:
+      - text: "Keep giving"
+        does: ["lose res a", "debt b a"]
+        line: "{a} kept doing favours for {b}, until they owed more than anyone could pay."
+      - text: "Cut them off"
+        does: ["strain a b", "block a b"]
+        line: "{a} cut {b} off, wedding or no wedding."
+  - text: "{person} ran off with someone from {b} anyway. They're saying we drove them to it."
+    key: elopement
+    chain: true
+    age: 2
+    answers:
+      - text: "Bring them home"
+        does: ["take people a b", "rival a b"]
+        line: "{a} dragged {person} home from {b}, and made enemies doing it."
+      - text: "Let them stay"
+        does: ["lose people a", "ally a b"]
+        line: "{a} let {person} stay with {b}, and made the best of it."
+  - text: "{b} cut our pay by a third and expected us to smile about it."
+    age: 2
+    a: [makers, rebels, family]
+    b: [traders, house, office, makers]
+    tags: [poor]
+    answers:
+      - text: "Strike"
+        does: ["lose res a", "mini a obstruct influence", "rival a b"]
+        line: "{a} downed tools on {b} for a season, and {mini} came out of it."
+      - text: "Take it, for now"
+        does: ["debt b a", "grudge a b"]
+        line: "{a} took the cut from {b}, and kept count of what it was owed."
+  - text: "We caught {b} moving goods without paying what's due. They offered us a cut to look away."
+    age: 2
+    a: [office, house]
+    b: [crooks, rebels, traders]
+    tags: [law]
+    answers:
+      - text: "Take the cut"
+        does: ["gain res a", "ally a b"]
+        line: "{a} took a cut from {b}, and looked the other way."
+      - text: "Make an example"
+        does: ["take res a b", "rival a b"]
+        line: "{a} seized the goods from {b}, and made an example of them."
+  - text: "{b} wanted copies of our records to win a quarrel over land. Those records never leave the building."
+    age: 2
+    a: [faith, keepers, office]
+    tags: [law]
+    answers:
+      - text: "Keep them locked"
+        does: ["block a b", "rival a b"]
+        thread: "{b} can win their quarrels without our records"
+        line: "{a} kept their records locked, and {b} lost the quarrel for it."
+      - text: "Sell the copies"
+        does: ["gain res a", "debt b a"]
+        line: "{a} sold {b} copies of their records, and the price kept going up."
+  - text: "{b} got the contract we'd worked a year for. The word is they bought the judge."
+    age: 2
+    tags: [law]
+    answers:
+      - text: "Go to law"
+        does: ["lose res a", "rival a b"]
+        line: "{a} took {b} to law over the contract, and lost."
+        then: bought-judge
+      - text: "Buy the next one"
+        does: ["take res a b", "rival a b"]
+        line: "{a} bought the next judge, and took the next contract off {b}."
+        then: bought-judge
+  - text: "Raiders hit {b} and us both. We could stand together, or let them take the worst of it."
+    age: 2
+    tags: [war]
+    answers:
+      - text: "Stand together"
+        does: ["ally a b"]
+        prompt: { kind: place, ask: "Where did the raiders come from?" }
+        line: "{a} stood beside {b} against the raiders from {place}, and both held."
+      - text: "Let them take it"
+        does: ["rival a b", "block b a"]
+        thread: "{b} blamed us for the raiders, and never let it go"
+        back: "{b} stood back and let the raiders at us"
+        line: "{a} let {b} take the worst of the raiders, and it was never forgiven."
+  - text: "{b} kept getting into our business. We needed eyes on them, people nobody would miss."
+    age: 2
+    a: [house, traders, faith, office]
+    tags: [secret]
+    answers:
+      - text: "Plant a cell"
+        does: ["mini a undermine acquire", "rival a b"]
+        line: "{a} planted {mini} among {b}, and kept eyes there after."
+        prompt: { kind: name, of: mini, ask: "What did they call the cell?" }
+      - text: "Ask them straight"
+        does: ["ally a b"]
+        line: "{a} asked {b} straight to keep out, and they shook on it."
+  - text: "Since {b} moved in next to us, our animals won't eat and our children won't sleep."
+    age: 2
+    strange: true
+    tags: [old]
+    answers:
+      - text: "Call it a curse"
+        does: ["rival a b", "secret a"]
+        line: "{a} called {b} cursed in front of everyone, and something believed it."
+      - text: "Make peace"
+        does: ["ally a b", "secret a"]
+        line: "{a} made their peace with {b}, and never said what it cost."
+  - text: "{b} hired us to guard their goods, then found someone cheaper and kept our deposit."
+    age: 2
+    a: [soldiers, crooks]
+    b: [house, traders, office]
+    answers:
+      - text: "Take it back"
+        does: ["take res a b", "rival a b"]
+        thread: "{b} kept our deposit and laughed about it"
+        back: "{b} came for their deposit with knives out"
+        line: "{a} took their deposit back off {b} at knifepoint."
+      - text: "Sell what we know"
+        does: ["gain res a", "rival a b"]
+        line: "{a} sold what it knew of {b} to anyone buying."
+  - text: "{b} paid our ransom when our founder was taken. They never asked for a penny of it back."
+    age: 2
+    answers:
+      - text: "Pay it anyway"
+        does: ["lose res a", "ally a b"]
+        line: "{a} paid {b} back the ransom in full, and they stood together after."
+      - text: "Leave it owed"
+        does: ["debt a b"]
+        line: "{a} left the ransom owed, and {b} let it hang there."
+  - text: "Our people and {b} drank together for twenty years. Last week one of ours was stabbed at their table."
+    age: 2
+    a: [crooks, soldiers, makers, family]
+    answers:
+      - text: "Demand the killer"
+        does: ["rival a b"]
+        thread: "{b} sheltered whoever knifed our man"
+        back: "{b} called us murderers at our own table"
+        line: "{a} demanded the killer from {b}, and the drinking stopped."
+      - text: "Let it lie"
+        does: ["debt b a"]
+        line: "{a} let the killing lie, and {b} owed them a life after."
+  - text: "{b} asked us to hide one of theirs from the law. We never found out what they'd done."
+    age: 2
+    a: [faith, keepers, society, family]
+    answers:
+      - text: "Hide them"
+        does: ["ally a b"]
+        prompt: { kind: person, ask: "Who did they hide?" }
+        line: "{a} hid {person} for {b}, and never asked what they'd done."
+        then: fugitive
+      - text: "Turn them in"
+        does: ["rival a b"]
+        thread: "{b} asked us to break the law for them"
+        back: "{b} handed one of ours to the law"
+        line: "{a} handed the fugitive over to the law, and {b} called it betrayal."
+  - text: "{b} quietly bought up every debt we had. All our paper was theirs."
+    age: 2
+    res: a
+    tags: [debt]
+    answers:
+      - text: "Pay them off"
+        does: ["lose res a", "ally a b"]
+        line: "{a} paid off every debt {b} held, and it nearly broke them."
+      - text: "Refuse to pay"
+        does: ["take res b a", "rival a b"]
+        line: "{a} wouldn't pay {b} a thing, and lost {res} for it."
+  - text: "{b} wanted a licence to trade at {seat}. It's ours to give, or not."
+    age: 2
+    a: [office, house, soldiers]
+    tags: [law]
+    answers:
+      - text: "Refuse it"
+        does: ["block a b", "rival a b"]
+        thread: "{b} will trade at {seat} over our dead bodies"
+        line: "{a} refused {b} a licence at {seat}, and kept on refusing."
+      - text: "Sell them a licence"
+        does: ["gain res a", "ally a b"]
+        line: "{a} let {b} trade at {seat}, for a share of everything."
+  - text: "{b} wanted protection, and they wanted it from us. The last ones protecting them went missing."
+    age: 2
+    a: [crooks, rebels, soldiers]
+    b: [traders, house, makers]
+    tags: [crime]
+    answers:
+      - text: "Protect them"
+        does: ["gain res a", "ally a b"]
+        line: "{a} took money from {b} to keep them safe, and did."
+      - text: "Squeeze them"
+        does: ["take res a b", "rival a b"]
+        line: "{a} squeezed {b} for more every month, till they fought back."
+  - text: "{b} saved our founder's life on the road, years back. Their son came asking us for a job."
+    age: 2
+    answers:
+      - text: "Give him one"
+        does: ["gain people a", "debt a b"]
+        line: "{a} gave the son of {b} a place, for the old debt."
+      - text: "Turn him away"
+        does: ["grudge b a", "block b a"]
+        line: "{a} turned the son of {b} away, debt or no debt."
+  - text: "Our young ones wanted a hall of their own, away from us. {b} offered them one."
+    age: 2
+    a: [faith, society, rebels, family]
+    answers:
+      - text: "Give them ours"
+        does: ["mini a influence establish", "rival a b"]
+        line: "{a} gave their young ones a hall, and they became {mini}."
+        prompt: { kind: name, of: mini, ask: "What did the young ones call themselves?" }
+      - text: "Let them go"
+        does: ["lose people a", "gain people b", "rival a b"]
+        line: "{a} let their young ones go to {b}, and never got them back."
+  - text: "{b} needed a loan, and nobody else would lend. We could, but not cheap."
+    age: 2
+    tags: [debt]
+    answers:
+      - text: "Lend it"
+        does: ["lose res a", "debt b a"]
+        line: "{a} lent {b} the money, at a price."
+        then: loan-due
+      - text: "Refuse"
+        does: ["block a b", "rival a b"]
+        line: "{a} refused {b} the loan, and watched them struggle."
+  - text: "{b} started paying with money nobody had seen before, every piece stamped with the same strange face."
+    age: 2
+    strange: true
+    answers:
+      - text: "Take it"
+        does: ["debt b a", "secret a"]
+        line: "{a} took the strange money from {b}, and kept every piece."
+      - text: "Refuse it"
+        does: ["rival a b", "agenda a b"]
+        line: "{a} refused the strange money, and wanted to know where {b} got it."
+  - text: "{b} pulled something out of the water last spring. Since then, nobody near them sleeps right."
+    age: 2
+    strange: true
+    answers:
+      - text: "Ask to see it"
+        does: ["ally a b", "secret a"]
+        line: "{a} asked to see what {b} pulled out of the water, and never slept right again."
+      - text: "Have it burned"
+        does: ["rival a b", "agenda a b"]
+        line: "{a} told {b} to burn what came out of the water, and was refused."
+  - text: "{b} wanted to put a road straight through our land. They offered good money for it."
+    age: 2
+    a: [house, family, makers, faith]
+    answers:
+      - text: "Take the money"
+        does: ["gain res a", "ally a b"]
+        line: "{a} let {b} put a road through their land, for good money."
+      - text: "Block the road"
+        does: ["block a b", "rival a b"]
+        thread: "{b} will get their road over our graves"
+        line: "{a} blocked the road {b} wanted, and stood on it."
+  - text: "{person} came back with hundreds behind them, and remembered who'd sent them away."
+    key: preacher-back
+    chain: true
+    age: 2
+    answers:
+      - text: "Give them a hall"
+        does: ["mini a influence undermine", "rival a b"]
+        line: "{a} gave {person} a hall, and the followers became {mini}."
+        prompt: { kind: name, of: mini, ask: "What did the followers call themselves?" }
+      - text: "Sell them out"
+        does: ["lose people a", "ally a b"]
+        line: "{a} handed {person} over to {b}, and half their own people walked out."
+  - text: "{b} never forgot the hard winter. Now they're at our door wanting it squared."
+    key: winter-debt
+    chain: true
+    age: 2
+    answers:
+      - text: "Square it"
+        does: ["lose res a", "ally a b"]
+        line: "{a} squared the hard winter with {b}, and it cost plenty."
+      - text: "Tell them no"
+        does: ["rival a b"]
+        thread: "{b} came about the hard winter, and we sent them off"
+        back: "{b} never squared the hard winter with us"
+        line: "{a} told {b} the hard winter was long gone, and meant it."
+  - text: "The feud with {b} that started with the fire hasn't stopped. Last week they burned our stores."
+    key: feud-fire
+    chain: true
+    age: 2
+    answers:
+      - text: "Burn theirs"
+        does: ["lose res b", "rival a b"]
+        line: "{a} burned the stores of {b} in turn, and the feud went on."
+      - text: "Ask for peace"
+        does: ["lose res a", "ally a b"]
+        line: "{a} paid {b} for peace, and the fires stopped, for a while."
+  - text: "The child our founder brought home grew up, and {b} came claiming she was theirs by blood."
+    key: foundling
+    chain: true
+    age: 2
+    answers:
+      - text: "Let them have her"
+        does: ["lose people a", "ally a b"]
+        line: "{a} gave the foundling up to {b}, and the two families were joined."
+      - text: "Keep her"
+        does: ["rival a b"]
+        thread: "{b} came for our foundling, and went home without her"
+        back: "{b} kept a daughter of ours and called it love"
+        line: "{a} kept the foundling, and {b} called it theft."
+
+  # This last year: what's live now. Whoever brings a faction's card is its Face.
+  - text: "{b} sent us a letter offering to buy us out. The price is an insult, and they know it."
+    age: 3
+    tags: [wealth]
+    answers:
+      - text: "Tear it up"
+        does: ["agenda a b", "agenda b a"]
+        line: "{a} tore up the offer from {b}, and both sides started planning."
+        then: second-letter
+      - text: "Hear them out"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} sat down with {b} in secret, and the talks went on."
+        then: second-letter
+  - text: "{b} sent a second letter. This one names everyone we owe money to."
+    key: second-letter
+    chain: true
+    age: 3
+    answers:
+      - text: "Settle every debt"
+        does: ["secret a", "agenda b a"]
+        line: "{a} paid off every debt the letter named, and {b} lost the lever."
+      - text: "Answer in kind"
+        does: ["agenda a b", "secret b a"]
+        line: "{a} sent {b} a letter back, naming everyone they owed."
+  - text: "Our heir's gone missing. The last anyone saw, they were drinking with {b}."
+    age: 3
+    a: [house, family, crooks]
+    tags: [blood]
+    answers:
+      - text: "Turn them over"
+        does: ["agenda a b", "secret b"]
+        line: "{a} went looking for their heir, started with {b}, and didn't ask nicely."
+      - text: "Keep it quiet"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} kept their missing heir quiet, and blamed {b} in private."
+  - text: "{b} put a knife in one of our captains last week. Everyone's waiting to see what we do."
+    age: 3
+    a: [office, soldiers, house]
+    b: [crooks, rebels, society]
+    tags: [war]
+    answers:
+      - text: "Take them apart"
+        does: ["agenda a b", "secret b"]
+        line: "{a} swore to take {b} apart, for the captain they'd knifed."
+      - text: "Find who paid"
+        does: ["agenda a b", "secret b a"]
+        line: "{a} went looking for whoever paid {b}, and found more than it wanted."
+  - text: "{b} found out what's in our cellar. They want paying every month to keep quiet."
+    age: 3
+    tags: [secret]
+    answers:
+      - text: "Pay them"
+        does: ["secret a b", "agenda a b"]
+        line: "{a} paid {b} every month to keep quiet, and hated every payment."
+      - text: "Move it"
+        does: ["secret a", "agenda b a"]
+        prompt: { kind: detail, ask: "What was in the cellar?", ideas: ["a body", "the old books", "stolen goods", "a child nobody knows about", "a door that won't stay shut"] }
+        line: "{a} moved {detail} out of the cellar, and {b} went looking for it."
+  - text: "Someone in {b} has started talking in our founder's voice. Nobody alive knows that voice better than we do."
+    age: 3
+    a: [faith, society, old, keepers]
+    strange: true
+    answers:
+      - text: "Listen to her"
+        does: ["secret a", "agenda a b"]
+        line: "{a} listened when their founder spoke out of {b}, and did as she said."
+      - text: "Silence her"
+        does: ["agenda a b", "secret b"]
+        line: "{a} set out to silence the voice in {b} for good."
+  - text: "{b} got a law passed that'll close us down by winter. Our clerk thinks it can be beaten."
+    age: 3
+    a: [traders, makers, family]
+    b: [traders, makers, office]
+    tags: [law]
+    answers:
+      - text: "Fight it in court"
+        does: ["agenda a b", "agenda b a"]
+        line: "{a} took the new law to court, against {b} and everyone backing them."
+      - text: "Find a way round"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} found a way round the law {b} passed, and kept it quiet."
+  - text: "{b} offered us a seat at their table, if we'd vote their way when it counts."
+    age: 3
+    tags: [law]
+    answers:
+      - text: "Take the seat"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} took a seat at the table {b} offered, and voted how it was told."
+      - text: "Vote against them"
+        does: ["agenda a b", "secret b"]
+        line: "{a} voted against {b}, and the table split down the middle."
+  - text: "One of ours drinks with {b} every night, and comes home talking. We think they're listening."
+    age: 3
+    tags: [secret]
+    answers:
+      - text: "Feed them lies"
+        does: ["agenda a b", "secret b a"]
+        line: "{a} fed lies to {b} through the one who drank with them."
+      - text: "Keep them home"
+        does: ["secret a", "agenda b a"]
+        line: "{a} kept their drinker home, and {b} wondered what had changed."
+  - text: "{b} sent a gift for our leader's birthday, and nobody's opened it yet."
+    age: 3
+    answers:
+      - text: "Open it"
+        does: ["secret b a", "agenda a b"]
+        prompt: { kind: detail, ask: "What was in the gift?", ideas: ["a knife", "a letter that knew too much", "a year's takings in coin", "a dead bird", "a map with our door marked"] }
+        line: "{a} opened the gift from {b}, and found {detail}."
+      - text: "Send it back"
+        does: ["secret a", "agenda b a"]
+        line: "{a} sent the gift back unopened, and {b} took it as an insult."
+  - text: "Our leader won't last the year, and someone from {b} has been asking who comes after."
+    age: 3
+    answers:
+      - text: "Name an heir now"
+        does: ["face a", "agenda a b"]
+        prompt: { kind: person, ask: "Who did they name?" }
+        line: "{a} named {person} heir before the end, and dared {b} to argue."
+      - text: "Keep it secret"
+        does: ["secret a", "agenda b a"]
+        line: "{a} kept their leader's sickness secret, and {b} kept asking."
+  - text: "A clerk from {b} came to us with their books, and a price for them."
+    age: 3
+    tags: [secret]
+    answers:
+      - text: "Buy the books"
+        does: ["agenda a b", "secret b"]
+        line: "{a} bought the books of {b} off their own clerk."
+      - text: "Send the clerk back"
+        does: ["secret a", "favour b a"]
+        line: "{a} sent the clerk back to {b}, and was owed for it."
+  - text: "{b} took one of our people in the night. Now there's a ransom note."
+    age: 3
+    answers:
+      - text: "Pay it"
+        does: ["secret a", "agenda a b"]
+        line: "{a} paid the ransom to {b}, and swore it'd be the last."
+      - text: "Go and get them"
+        does: ["agenda a b", "secret b"]
+        line: "{a} went into {b} after their own, and came back with them."
+  - text: "{who} turned up asking about {b}. They wouldn't say who'd sent them."
+    age: 3
+    answers:
+      - text: "Tell them everything"
+        does: ["friend a who", "agenda a b"]
+        line: "{a} told {who} everything it knew about {b}, and hoped it hurt."
+      - text: "Throw them out"
+        does: ["foe a who", "agenda a who"]
+        line: "{a} threw {who} out, and wanted to know who'd sent them."
+  - text: "{who} did a job for us last month, and we never paid them. They've started asking around."
+    age: 3
+    answers:
+      - text: "Pay them"
+        does: ["friend a who", "secret a"]
+        line: "{a} paid {who} in full, and asked them to forget the job."
+      - text: "Keep stalling"
+        does: ["foe a who", "agenda a who"]
+        thread: "{who} knows about a job we'd rather they forgot"
+        line: "{a} kept {who} waiting for their money, and wondered what they knew."
+  - text: "{who} was seen with {b} three nights running. Whatever they're planning, we're not in it."
+    age: 3
+    answers:
+      - text: "Buy them off"
+        does: ["friend a who", "agenda a b"]
+        line: "{a} paid {who} to work for them instead of {b}."
+      - text: "Warn everyone"
+        does: ["foe a who", "agenda a who"]
+        line: "{a} told everyone {who} couldn't be trusted, and meant it."
+  - text: "{who} pulled one of ours out of a beating {b} handed out. Everyone's talking about it."
+    age: 3
+    a: [makers, family, rebels, faith]
+    answers:
+      - text: "Thank them"
+        does: ["friend a who", "agenda a b"]
+        thread: "{who} pulled one of ours out of a beating"
+        line: "{a} thanked {who} for saving one of their own, and went after {b}."
+      - text: "Ask what they want"
+        does: ["foe a who", "agenda a who"]
+        line: "{a} asked {who} what they wanted for it, and didn't like the answer."
+  - text: "{who} broke something of ours that can't be replaced. They're saying it was an accident."
+    age: 3
+    a: [keepers, faith, makers, house]
+    answers:
+      - text: "Make them pay"
+        does: ["foe a who", "agenda a who"]
+        line: "{a} set out to make {who} pay for what they broke."
+      - text: "Forgive them"
+        does: ["friend a who", "secret a"]
+        thread: "{who} broke our best piece, and we forgave them"
+        line: "{a} forgave {who}, and quietly had a copy made."
+  - text: "{who} came asking for work. They'd heard we pay well and don't ask questions."
+    age: 3
+    answers:
+      - text: "Take them on"
+        does: ["friend a who", "agenda a b"]
+        line: "{a} took {who} on, and pointed them at {b}."
+      - text: "Send them off"
+        does: ["foe a who", "secret a"]
+        line: "{a} sent {who} off, and had them followed."
+  - text: "{who} lost a fight to one of ours in front of everyone. They're not the sort to let it go."
+    age: 3
+    answers:
+      - text: "Buy them a drink"
+        does: ["friend a who", "secret a"]
+        line: "{a} bought {who} a drink after the fight, and called it square."
+      - text: "Watch our backs"
+        does: ["foe a who", "agenda a who"]
+        line: "{a} watched their backs after the fight, and kept an eye on {who}."
+  - text: "{who} brought us a letter from someone we all thought was dead."
+    age: 3
+    answers:
+      - text: "Read it"
+        does: ["friend a who", "secret a"]
+        prompt: { kind: person, ask: "Who was the letter from?" }
+        line: "{a} read the letter {who} brought from {person}, and burned it after."
+      - text: "Burn it unread"
+        does: ["foe a who", "agenda a who"]
+        line: "{a} burned the letter {who} brought unread, and wanted to know how they got it."
+  - text: "The night {who} turned up, {b} sent us word to stay out of it."
+    age: 3
+    last: true
+    answers:
+      - text: "Stay out of it"
+        does: ["friend a who", "secret a b"]
+        line: "{a} kept out of it the night {who} turned up, as {b} asked."
+      - text: "Get in first"
+        does: ["foe a who", "agenda a who"]
+        line: "{a} got to {who} before {b} could, the night they turned up."
+  - text: "When the strangers first turned up, {b} bought drinks for anyone who'd listen."
+    age: 3
+    last: true
+    answers:
+      - text: "Outbid them"
+        does: ["agenda a b", "agenda b a"]
+        line: "{a} outbid {b} for the strangers' ear, the week they turned up."
+      - text: "Watch and wait"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} watched {b} court the strangers, and waited."
+  - text: "It's been quiet since the last fight with {b}, and everyone's using the quiet to get ready."
+    age: 3
+    last: true
+    tags: [war]
+    answers:
+      - text: "Strike first"
+        does: ["agenda a b", "secret b"]
+        line: "{a} chose to strike at {b} before the quiet broke."
+      - text: "Make peace"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} sent {b} quiet word of peace, and told nobody."
+  - text: "Everyone wants {b} now. Whoever holds it by summer holds everything around it."
+    age: 3
+    last: true
+    b: seat
+    answers:
+      - text: "Move on it"
+        does: ["agenda a seat"]
+        line: "{a} moved on {b} the season the strangers came."
+      - text: "Let them fight"
+        does: ["secret a", "agenda a seat"]
+        line: "{a} let the others fight over {b}, and got ready."
+  - text: "{b} put up high walls last spring. Nobody's seen what's behind them."
+    age: 3
+    answers:
+      - text: "Find out"
+        does: ["agenda a b", "secret b"]
+        line: "{a} set out to learn what {b} built behind the walls."
+        then: behind-walls
+      - text: "Build our own"
+        does: ["secret a", "agenda b a"]
+        line: "{a} put up walls of their own, and gave {b} something to wonder about."
+  - text: "We got someone over the walls {b} put up. They came back white as a sheet."
+    key: behind-walls
+    chain: true
+    age: 3
+    answers:
+      - text: "Tell everyone"
+        does: ["secret b", "agenda a b"]
+        prompt: { kind: detail, ask: "What was behind the walls?", ideas: ["a forge working day and night", "a pit, and something in it", "an army, drilling", "a second town, half built", "a garden that shouldn't grow"] }
+        line: "{a} told everyone what {b} hid behind the walls: {detail}."
+      - text: "Keep it to ourselves"
+        does: ["secret a b"]
+        line: "{a} kept what was behind the walls of {b} to themselves."
+  - text: "Someone from {b} sold us a book they shouldn't have. It names names."
+    age: 3
+    a: [keepers, society, faith]
+    tags: [secret]
+    answers:
+      - text: "Read every page"
+        does: ["secret a b", "agenda a b"]
+        line: "{a} read the book from {b} cover to cover, and learned too much."
+      - text: "Give it back"
+        does: ["secret a", "agenda b a"]
+        line: "{a} gave the book back to {b}, but not before copying a page."
+  - text: "Something's come up out of the old workings at {b}, and it's been asking for us by name."
+    age: 3
+    a: [old, keepers, society, faith]
+    b: seat
+    strange: true
+    answers:
+      - text: "Go to it"
+        does: ["agenda a seat", "secret a"]
+        line: "{a} went down into {b} when they heard their name called."
+      - text: "Seal it in"
+        does: ["secret a"]
+        line: "{a} sealed {b} with everything they had, and still heard their name."
+  - text: "Lights hung over {b} three nights running. Whoever gets there first will have whatever made them."
+    age: 3
+    b: seat
+    strange: true
+    answers:
+      - text: "Go and look"
+        does: ["agenda a seat", "secret a"]
+        line: "{a} went out to {b} under the lights, and came back changed."
+      - text: "Keep away"
+        does: ["secret a"]
+        line: "{a} kept away from {b}, and their children dreamed of the lights for years."
+  - text: "A stranger's been asking about our founder, and the old business with {b}."
+    age: 3
+    answers:
+      - text: "Tell them"
+        does: ["secret a b", "agenda b a"]
+        prompt: { kind: person, ask: "Who was the stranger?" }
+        line: "{a} told {person} the truth about the old business with {b}."
+        then: stranger-back
+      - text: "Pay them to stop"
+        does: ["agenda a b", "secret b"]
+        prompt: { kind: person, ask: "What name did the stranger give?" }
+        line: "{a} paid {person} to stop asking about {b}."
+        then: stranger-back
+  - text: "{person} came back, and this time {b} came with them."
+    key: stranger-back
+    chain: true
+    age: 3
+    answers:
+      - text: "Hear them both"
+        does: ["secret a b"]
+        line: "{a} heard {person} and {b} out together, and said nothing after."
+      - text: "Turn them away"
+        does: ["agenda a b"]
+        line: "{a} turned {person} and {b} away, and doubled their guard."
+  - text: "{b} doubled the rents again. People are saying it's time somebody did something about it."
+    age: 3
+    a: [rebels, crooks, makers]
+    b: [house, office, traders]
+    tags: [poor]
+    answers:
+      - text: "Do something"
+        does: ["mini a undermine destroy", "agenda a b"]
+        line: "{a} decided it was time, and {mini} went after {b}."
+      - text: "Cut a deal"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} cut a quiet deal with {b}, and kept the rents off their own."
+  - text: "Our biggest shipment went missing on the way here. Someone saw {b} selling something very like it."
+    age: 3
+    a: [traders, house, family]
+    answers:
+      - text: "Get it back"
+        does: ["agenda a b", "secret b"]
+        line: "{a} set out to get their shipment back from {b}, one way or another."
+        then: shipment-found
+      - text: "Write it off"
+        does: ["secret a", "secret b"]
+        line: "{a} wrote the shipment off, and their creditors never heard about it."
+  - text: "We found what's left of our shipment in a warehouse rented by {b}."
+    key: shipment-found
+    chain: true
+    age: 3
+    answers:
+      - text: "Break in"
+        does: ["take res a b", "secret b"]
+        line: "{a} broke into the warehouse {b} rented, and took back what it could."
+      - text: "Bring the law"
+        does: ["agenda a b"]
+        line: "{a} brought the law down on the warehouse {b} rented."
+  - text: "We need people close to {b}, people they've never seen before."
+    age: 3
+    a: [house, crooks, society, traders]
+    tags: [secret]
+    answers:
+      - text: "Plant a crew"
+        does: ["mini a undermine obstruct", "agenda a b"]
+        line: "{a} planted {mini} close to {b}, near enough to hear them breathe."
+        prompt: { kind: name, of: mini, ask: "What did they call the ones they planted?" }
+      - text: "Buy one of theirs"
+        does: ["secret b a", "agenda a b"]
+        line: "{a} bought someone inside {b}, and paid them well."
+  - text: "{b} came back from the old ground with one more person than they left with. Nobody knows who she is."
+    age: 3
+    strange: true
+    answers:
+      - text: "Take her in"
+        does: ["secret a", "agenda a b"]
+        line: "{a} took in the stranger {b} brought back, and asked her nothing."
+      - text: "Raise the alarm"
+        does: ["agenda a b", "secret b"]
+        line: "{a} warned everyone about what came back with {b}."
+  - text: "{b} offered a fortune for what's in our founder's grave."
+    age: 3
+    a: [faith, keepers, old]
+    answers:
+      - text: "Sell"
+        does: ["secret a b", "secret b"]
+        line: "{a} sold what was in their founder's grave to {b}, and filled it with stones."
+      - text: "Refuse"
+        does: ["secret a", "agenda b a"]
+        line: "{a} refused {b}, and posted a guard on the grave."
+  - text: "{person}, the one we hid for {b}, is back. This time the law's right behind them."
+    key: fugitive
+    chain: true
+    age: 3
+    answers:
+      - text: "Hide them again"
+        does: ["secret a b"]
+        line: "{a} hid {person} a second time, and {b} owed it twice over."
+      - text: "Hand them over"
+        does: ["secret a", "agenda b a"]
+        line: "{a} handed {person} over, and {b} swore revenge for it."
+  - text: "The money we lent {b} came due last month. They've paid nothing, and they're laughing about it."
+    key: loan-due
+    chain: true
+    age: 3
+    answers:
+      - text: "Collect it"
+        does: ["take res a b", "agenda a b"]
+        line: "{a} sent people to collect from {b}, and they came back bloodied."
+      - text: "Forgive it, loudly"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} forgave {b} the loan in front of everyone, and was hated for it."
+  - text: "The judge who settled things between us and {b} is up for another term this year."
+    key: bought-judge
+    chain: true
+    age: 3
+    answers:
+      - text: "See them out"
+        does: ["agenda a b"]
+        line: "{a} set out to see the judge {b} owned thrown out."
+      - text: "Buy them first"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} bought the judge out from under {b}, and word got out."

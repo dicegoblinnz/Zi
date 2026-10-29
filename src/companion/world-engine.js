@@ -62,6 +62,17 @@
 // crew, named for them, and an agenda can aim at a character ({who}) or at
 // something on the party sheet worth taking ({thing}), which the crew check
 // makes sure one does.
+//
+// What happened (stage 7, the deck in world-deck.js): what the answers made
+// is dealt around, never over. On a faction: leans, the tags of what it did,
+// each with its line of history, which steer every step it's dealt from then
+// on (a step they steered says which moment did it); got, the resources and
+// assets it's sure to hold, which its sets are dealt round; lost, how many
+// resources fewer it's dealt; spare, a resource it keeps over, for a need it
+// blocks; and voice, who brought its cards this last year, which is its
+// Face's name. On the world: made, the threads and needs that happened
+// ({ ties, needs }), which the web and the needs are dealt round, and minis,
+// the mini factions a faction made.
 
 export const REGIONS = ["town", "city", "country", "world", "stars"];
 export const SIZES = ["small", "local", "city", "great"];
@@ -185,7 +196,9 @@ export function fill(tpl, vals) {
     const text = v == null ? "" : typeof v === "object" ? String(v.text ?? "") : String(v);
     if (!text) return m;
     let s = text.replace(/[.]+$/, "");
-    if (at > 0) s = typeof v === "object" && v.name ? s.replace(/^The /, "the ") : s.replace(/^(The|A|An) /, (x) => x.toLowerCase()).replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase());
+    // A slot that starts a sentence keeps its capital, like the line's first.
+    const lead = at === 0 || /[.!?]["”’']?\s+$/.test(String(tpl).slice(0, at));
+    if (!lead) s = typeof v === "object" && v.name ? s.replace(/^The /, "the ") : s.replace(/^(The|A|An) /, (x) => x.toLowerCase()).replace(/^[A-Z](?=[a-z])/, (c) => c.toLowerCase());
     // A name that already has its The after one doesn't take a second
     // (The {seat} Company on the Old Bridge is the Old Bridge Company).
     if (/(^|[^\p{L}])[Tt]he $/u.test(String(tpl).slice(0, at))) s = s.replace(/^[Tt]he /, "");
@@ -387,7 +400,7 @@ const seatText = (W, i) => {
   const k = W.factions[i]?.seat?.k;
   return k != null && W.seats[k] ? { text: W.seats[k].text, name: true } : "";
 };
-const nameAt = (W, i) => (W.factions[i]?.name ? fill(W.factions[i].name.text, { seat: seatText(W, i) }) : "");
+export const nameAt = (W, i) => (W.factions[i]?.name ? fill(W.factions[i].name.text, { seat: seatText(W, i) }) : "");
 const rivals = (W, a, b) => (W.web ?? []).some((t) => t.kind === "rival" && ((t.a === a && t.b === b) || (t.a === b && t.b === a)));
 // A step on a held faction or seat, which never changes.
 function isHeld(W, path) {
@@ -418,6 +431,9 @@ export function resume(T, rec) {
   W.fixes = rec.fixes ?? [];
   W.fallbacks = rec.fallbacks ?? [];
   const names = (v) => (v && typeof v === "object" && !Array.isArray(v) ? Object.fromEntries(Object.entries(v).filter(([, x]) => typeof x === "string")) : {});
+  if (rec.made && typeof rec.made === "object") W.made = { ties: Array.isArray(rec.made.ties) ? rec.made.ties : [], needs: Array.isArray(rec.made.needs) ? rec.made.needs : [] };
+  if (Array.isArray(rec.minis) && rec.minis.length) W.minis = rec.minis;
+  if (rec.deck && typeof rec.deck === "object") W.deck = rec.deck;
   W.crew = rec.crew && typeof rec.crew === "object" && Array.isArray(rec.crew.who) ? { who: rec.crew.who.filter((c) => c?.k && c.name).map((c) => ({ ...c, friend: c.friend ?? null, foe: c.foe ?? null })), things: Array.isArray(rec.crew.things) ? rec.crew.things.filter((t) => t?.id) : [], seen: { who: names(rec.crew.seen?.who), things: names(rec.crew.seen?.things) } } : null;
   W.dials = dialsOf(W);
   return W;
@@ -456,6 +472,9 @@ function cardOf(W, i, step = null) {
   const add = (into, keys, src) => {
     for (const k of keys) if (k && !into.has(k)) into.set(k, src);
   };
+  // What it did comes first, since it happened before any step: so a step it
+  // steered says which moment did it.
+  for (const l of f.leans ?? []) add(tags, l.tags ?? [], { kind: "moment", text: l.text, name: l.name === true });
   const seat = f.seat && before("seat") ? W.seats[f.seat.k] : null;
   if (seat) add(tags, [seat.role, ...(seat.tags ?? [])], { kind: "seat", text: seat.text, name: true });
   for (const s of ["type", "method", "want"]) {
@@ -648,9 +667,15 @@ function dealRes(T, W, i, rand, { only = null } = {}) {
   const card = cardOf(W, i);
   const size = T.book.sizes[f.size.size];
   // One with a resource to spare holds as many as its size can.
-  const count = only === "extra" || W.dials.rich === 2 ? size.rhi : W.dials.rich === 0 ? size.rlo : size.rlo + Math.floor(rand() * (size.rhi - size.rlo + 1));
-  const elsewhere = new Set(W.factions.flatMap((x, j) => (j !== i && x.res ? x.res.map((r) => r.id) : [])));
-  const out = [];
+  let count = only === "extra" || W.dials.rich === 2 ? size.rhi : W.dials.rich === 0 ? size.rlo : size.rlo + Math.floor(rand() * (size.rhi - size.rlo + 1));
+  // What happened: the resources it's sure to hold, the ones it lost, and
+  // enough to pay for what it's sure to hold, its people and a spare.
+  const got = f.got?.res ?? [];
+  const gotAssets = f.got?.assets ?? [];
+  const owed = gotAssets.filter((a) => !a.power).length + Math.max(gotAssets.filter((a) => a.power).length, f.size.die / 2 - 1) + (f.spare ? 1 : 0);
+  count = Math.min(Math.max(count - (f.lost?.res ?? 0), size.rlo, got.length, owed), Math.max(size.rhi, got.length));
+  const elsewhere = new Set(W.factions.flatMap((x, j) => (j !== i ? [...(x.res ?? []), ...(x.got?.res ?? [])].map((r) => r.id) : [])));
+  const out = got.map((r) => ({ ...r }));
   const rows = P.resources.filter((r) => fits(r, card, board));
   const one = (filter, obvious) => {
     const cands = rows
@@ -666,7 +691,7 @@ function dealRes(T, W, i, rand, { only = null } = {}) {
   };
   // Where the keep comes from: the first one's its seat's, when there's one,
   // and the next's one it leans to by what it is or how it works.
-  if (card.seat) one((r) => r.role === card.seat.role, () => true);
+  if (card.seat && out.length < count && !out.some((r) => r.role === card.seat.role)) one((r) => r.role === card.seat.role, () => true);
   if (out.length < count) one((r) => card.leans.has(r.role), () => false);
   while (out.length < count && one(() => true, (c) => c.fit.src?.kind === "seat" && c.r.role === card.seat?.role)) {}
   return out;
@@ -678,9 +703,10 @@ function dealAssets(T, W, i, rand, { only = null } = {}) {
   const card = cardOf(W, i);
   const people = Math.max(0, Math.min(f.size.die / 2 - 1, f.res?.length ?? 0));
   const held = heldRoles(W, i);
-  const elsewhere = new Set(W.factions.flatMap((x, j) => (j !== i && x.assets ? x.assets.map((a) => a.id) : [])));
+  const elsewhere = new Set(W.factions.flatMap((x, j) => (j !== i ? [...(x.assets ?? []), ...(x.got?.assets ?? [])].map((a) => a.id) : [])));
   const rows = P.assets.filter((r) => fits(r, card, board));
-  const out = [];
+  // What it's sure to hold goes on first, and the rest's dealt round it.
+  const out = (f.got?.assets ?? []).map((a) => ({ ...a }));
   const leaned = (r) => card.leans.has(r.role);
   const one = (power, test = null) => {
     const cands = rows
@@ -697,18 +723,20 @@ function dealAssets(T, W, i, rand, { only = null } = {}) {
   // Who turns up first is who it leans to by what it is or how it works, and
   // the first thing it can do is too, when there's one, so a knight's
   // household calls its retainers before anyone else.
-  let called = people > 0 && one(true, leaned) ? 1 : 0;
+  let called = out.filter((a) => a.power).length;
+  if (!called && people > 0 && one(true, leaned)) called = 1;
   for (; called < people && one(true); called++) {}
   const free = Math.max(0, (f.res?.length ?? 0) - out.length);
   let extra = rand() < EXTRA[W.dials.rich] ? 1 : 0;
   if (free >= 4 && W.dials.rich === 2 && rand() < 0.5) extra++;
-  if (only === "extra") extra = Math.max(extra, 1);
+  if (only === "extra" || f.spare) extra = Math.max(extra, 1);
   // No two factions hold the same asset that does one thing, so a few are
   // left for the board's needs.
   const roles = new Set(rows.filter((r) => !r.power).map((r) => r.role)).size;
   const room = Math.max(0, roles - needsOf(W) - held.size);
   const most = Math.min(free - extra, room);
-  let does = most > 0 && one(false, leaned) ? 1 : 0;
+  const had = out.some((a) => !a.power);
+  let does = most > 0 && !had && one(false, leaned) ? 1 : 0;
   for (; does < most && one(false); does++) {}
   return out;
 }
@@ -717,8 +745,12 @@ const assetOf = (T, r, because) => keepOf({ id: r.id, text: r.text, role: r.role
 // role, and every need, its own included.
 function heldRoles(W, but) {
   const roles = new Set();
-  W.factions.forEach((f, j) => j !== but && f.assets?.forEach((a) => !a.power && a.role && roles.add(a.role)));
-  W.needs?.forEach((n) => n.asset.role && roles.add(n.asset.role));
+  W.factions.forEach((f, j) => {
+    if (j === but) return;
+    for (const a of [...(f.assets ?? []), ...(f.got?.assets ?? [])]) if (!a.power && a.role) roles.add(a.role);
+  });
+  for (const n of [...(W.needs ?? []), ...(W.made?.needs ?? [])]) n.asset?.role && roles.add(n.asset.role);
+  for (const m of W.minis ?? []) if (m.asset && !m.asset.power && m.asset.role) roles.add(m.asset.role);
   return roles;
 }
 
@@ -806,8 +838,19 @@ function faces(T, W, i, path, n, not) {
   const own = f.type?.id ? P.types.find((r) => r.id === f.type.id)?.faces : null;
   const likely = new Set(own?.length ? own : T.core.faces[f.type?.role] ?? []);
   const tries = W.tries[path] ?? 0;
+  const kinds = likely.size ? T.book.threats.filter((t) => likely.has(t.key)) : T.book.threats;
+  // Whoever brought its cards this last year is its Face, so only the threat
+  // is dealt, and dealt again it's another threat.
+  if (f.voice?.name) {
+    const left = kinds.length > 1 && not != null ? kinds.filter((t) => `v:${t.key}` !== not) : kinds;
+    return draw(
+      left.map((t) => ({ w: 1, t })),
+      rngOf(W.seed, path, tries, "threat"),
+      n,
+    ).map(({ t }) => ({ id: `v:${t.key}`, name: f.voice.name, nameId: f.voice.nameId ?? null, again: false, threat: t.key, threatName: t.name, is: t.is, ch: Math.max(1, f.size.die / 2), tags: t.tags.map((x) => ({ ...x })), strange: false }));
+  }
   const threats = draw(
-    (likely.size ? T.book.threats.filter((t) => likely.has(t.key)) : T.book.threats).map((t) => ({ w: 1, t })),
+    kinds.map((t) => ({ w: 1, t })),
     rngOf(W.seed, path, tries, "threat"),
     n,
   );
@@ -1100,6 +1143,7 @@ function offersOf(W, i) {
 // skipped on boards of four or five, where it comes back round.
 function dealWeb(T, W) {
   if (adding(W)) return dealTies(T, W);
+  if (W.made?.ties?.length || W.deck) return dealAround(T, W);
   const rand = randOf(W, "web");
   const ring = shuffle(
     W.factions.map((_, i) => i),
@@ -1151,11 +1195,39 @@ function dealTies(T, W) {
   }
   W.web = web;
 }
+// Around what happened: the threads that did stay, and only a faction still
+// without a rival, or without an ally or a debt, gets one, toward whoever's
+// got the fewest of them and isn't tied to it already.
+function dealAround(T, W) {
+  const rand = randOf(W, "web");
+  const web = (W.made?.ties ?? []).map((t) => copyOf(t));
+  const used = new Set(web.map((t) => t.tie?.id).filter(Boolean));
+  const tied = (a, b) => web.some((t) => (t.a === a && t.b === b) || (t.a === b && t.b === a));
+  const count = (i, kinds) => web.filter((t) => kinds.includes(t.kind) && (t.a === i || t.b === i)).length;
+  for (const kinds of [["rival"], ["ally", "debt"]]) {
+    for (const a of shuffle(fresh(W), rand)) {
+      if (count(a, kinds)) continue;
+      const all = W.factions.map((_, j) => j).filter((j) => j !== a);
+      const free = all.filter((j) => !tied(a, j));
+      const b = draw((free.length ? free : all).map((j) => ({ w: 1 / (1 + 2 * count(j, kinds)), j })), rand)[0]?.j;
+      if (b == null) continue;
+      const key = a < b ? `${a}-${b}` : `${b}-${a}`;
+      const t = tieFor(T, W, kinds, null, a, b, used, rngOf(W.seed, "tie", key, W.tries.web ?? 0));
+      if (!t) continue;
+      used.add(t.id);
+      web.push({ a, b, kind: t.kind, tie: tieOf(t), at: aimsOfTie(W, t, a, b, rngOf(W.seed, "tie-at", key, W.tries.web ?? 0)) });
+    }
+  }
+  W.web = web;
+}
+// A faction's resources: its set once it's dealt, or what it's sure to hold
+// till then.
+const resOf = (W, i) => W.factions[i]?.res ?? W.factions[i]?.got?.res ?? [];
 // A tie for a pair: one whose slots the pair can fill, fresh while there's one.
 function tieFor(T, W, kinds, bond, a, b, used, rand) {
   const can = (t) => {
     const words = `${t.text} ${t.back ?? ""}`;
-    return (!words.includes("{res}") || (W.factions[a].res ?? []).length > 0) && (!words.includes("{seat}") || W.factions[b].seat != null);
+    return (!words.includes("{res}") || resOf(W, a).length > 0) && (!words.includes("{seat}") || W.factions[b].seat != null);
   };
   const rows = T.core.ties.filter((t) => kinds.includes(t.kind) && (!bond || t.bond === bond) && can(t));
   const fresh = rows.filter((t) => !used.has(t.id));
@@ -1165,7 +1237,7 @@ const tieOf = (t) => ({ id: t.id, text: t.text, back: t.back ?? "", kind: t.kind
 function aimsOfTie(W, t, a, b, rand) {
   const at = {};
   const words = `${t.text} ${t.back ?? ""}`;
-  if (words.includes("{res}")) at.res = pick((W.factions[a].res ?? []).map((r) => r.id).filter(Boolean), rand);
+  if (words.includes("{res}")) at.res = pick(resOf(W, a).map((r) => r.id).filter(Boolean), rand);
   if (words.includes("{seat}")) at.seat = W.factions[b].seat?.k ?? null;
   return at;
 }
@@ -1178,9 +1250,11 @@ function extrasOf(W, j) {
   return Math.max(0, (f.res?.length ?? 0) - (f.assets?.length ?? 0));
 }
 // Adding to a board, each new faction has its own chance of one, as tense says.
-const needsOf = (W) => (adding(W) ? fresh(W).filter((i) => rngOf(W.seed, "need-of", i, W.tries.needs ?? 0)() < NEEDS[W.dials.tense]).length : Math.max(W.n >= 5 ? 1 : 0, Math.round(W.n * NEEDS[W.dials.tense])));
+export const needsOf = (W) => (adding(W) ? fresh(W).filter((i) => rngOf(W.seed, "need-of", i, W.tries.needs ?? 0)() < NEEDS[W.dials.tense]).length : Math.max(W.n >= 5 ? 1 : 0, Math.round(W.n * NEEDS[W.dials.tense])));
 function dealNeeds(T, W, { only = null } = {}) {
-  W.needs = [];
+  // The needs that happened stay, and count toward the board's.
+  W.needs = (W.made?.needs ?? []).map((n) => copyOf(n));
+  const has = new Set(W.needs.map((n) => n.i));
   const rand = randOf(W, "needs");
   const count = needsOf(W);
   const order = shuffle(fresh(W), rand).sort((x, y) => extrasOf(W, x) - extrasOf(W, y));
@@ -1188,7 +1262,7 @@ function dealNeeds(T, W, { only = null } = {}) {
   const board = boardOf(T, W);
   for (const i of order) {
     if (W.needs.length >= count) break;
-    if (W.locks[`f:${i}:assets`] || (W.factions[i].assets ?? []).some(own) || !W.factions[i].type) continue;
+    if (has.has(i) || W.locks[`f:${i}:assets`] || (W.factions[i].assets ?? []).some(own) || !W.factions[i].type) continue;
     const card = cardOf(W, i);
     const held = heldRoles(W, i);
     const mine = new Set((W.factions[i].assets ?? []).map((a) => a.role));
@@ -1458,6 +1532,74 @@ function fallback(T, W, key) {
   }
 }
 
+// One thing dealt for a faction, for what a moment did (the deck in
+// world-deck.js): a resource (from a seat nobody holds, when seat says
+// which), an asset that does one thing, people who turn up, an agenda aimed
+// at what at offers it ({ rival, seat, res, asset, who, thing }), or a
+// Secret (naming at.rival when there's one, and never naming anyone when
+// there isn't). The moment's tags steer it as if they were on the card, its
+// line the because, so what's dealt fits what it did, and strange deals a
+// strange one when one fits.
+export function dealOne(T, W, i, what, { tags = [], src = null, rand = Math.random, at = null, strange = false, seat = null } = {}) {
+  const f = W.factions[i];
+  if (!f?.type) return null;
+  const P = poolOf(T, W.recipe);
+  const board = boardOf(T, W);
+  const card = cardOf(W, i);
+  const said = src ?? { kind: "moment", text: "" };
+  for (const t of tags) if (t && !card.tags.has(t)) card.tags.set(t, said);
+  const scored = (list) =>
+    list.map((x) => {
+      const r = x.r ?? x;
+      const fit = fitOf(r, card, board);
+      return { w: weightOf(W, r, fit) * (x.x ?? 1), r, fit, again: Boolean(x.again) };
+    });
+  const first = (cands) => {
+    const odd = strange ? cands.filter((c) => c.r.strange) : [];
+    return draw(odd.length ? odd : cands, rand)[0] ?? null;
+  };
+  if (what === "res") {
+    const mine = new Set([...(f.res ?? []), ...(f.got?.res ?? [])].map((r) => r.id));
+    const elsewhere = new Set(W.factions.flatMap((x, j) => (j !== i ? [...(x.res ?? []), ...(x.got?.res ?? [])].map((r) => r.id) : [])));
+    let rows = P.resources.filter((r) => !mine.has(r.id) && fits(r, card, board));
+    const role = seat != null ? W.seats[seat]?.role : null;
+    if (role && rows.some((r) => r.role === role)) rows = rows.filter((r) => r.role === role);
+    const c = first(scored(rows.map((r) => ({ r, x: elsewhere.has(r.id) ? USED : 1 }))));
+    return c ? keepOf({ id: c.r.id, text: c.r.text, role: c.r.role, tags: c.r.tags, strange: c.r.strange, ...becauseOf(T, c.fit.src) }) : null;
+  }
+  if (what === "asset" || what === "people") {
+    const power = what === "people";
+    const mine = new Set([...(f.assets ?? []), ...(f.got?.assets ?? [])].map((a) => a.role));
+    const held = heldRoles(W, i);
+    const c = first(scored(P.assets.filter((r) => r.power === power && !mine.has(r.role) && (power || !held.has(r.role)) && fits(r, card, board))));
+    return c ? assetOf(T, c.r, becauseOf(T, c.fit.src)) : null;
+  }
+  if (what === "agenda") {
+    const can = Object.keys(at ?? {}).filter((k) => at[k] != null);
+    const rows = P.agendas.filter((r) => r.aims.length && r.aims.every((a) => can.includes(a)) && fits(r, card, board));
+    const c = first(scored(bagged(rows, usedBy(W, "agenda", i))));
+    if (!c) return null;
+    return { ...keepOf({ id: c.r.id, text: c.r.text, role: c.r.role, tags: c.r.tags, strange: c.r.strange, die: c.r.die, aims: c.r.aims, again: c.again, ...becauseOf(T, c.fit.src) }), at: Object.fromEntries(c.r.aims.map((a) => [a, at[a]])) };
+  }
+  if (what === "secret") {
+    const rival = Number.isInteger(at?.rival) && at.rival !== i ? at.rival : null;
+    const rows = P.secrets.filter((r) => (rival != null ? r.rival : !r.rival) && fits(r, card, board));
+    const c = first(scored(bagged(rows, usedBy(W, "secret", i))));
+    if (!c) return null;
+    return { ...keepOf({ id: c.r.id, text: c.r.tag, tag: c.r.tag, more: c.r.more, ways: c.r.ways, rival: c.r.rival, role: c.r.role, tags: c.r.tags, strange: c.r.strange, again: c.again, ...becauseOf(T, c.fit.src) }), at: c.r.rival ? rival : null };
+  }
+  return null;
+}
+// A tie off core's ties table for a pair, one of kinds (bond: a wildcard's
+// kind), fresh while there's one the threads that happened haven't used.
+export function dealTie(T, W, kinds, bond, a, b, rand = Math.random) {
+  const used = new Set((W.made?.ties ?? []).map((t) => t.tie?.id).filter(Boolean));
+  const t = tieFor(T, W, kinds, bond, a, b, used, rand);
+  return t ? { tie: tieOf(t), at: aimsOfTie(W, t, a, b, rand) } : null;
+}
+// Draw up to n by weight, none twice, for the deck's own dealing.
+export const drawOf = draw;
+
 // The whole world in one go: Deal it all.
 export function dealWorld(T, opts) {
   return dealRest(T, start(T, opts));
@@ -1480,11 +1622,11 @@ export function cardsOf(T, W) {
   // A resource or an asset in another line is named the way its card names
   // it, capitals and all, like the book writes a permission.
   const resText = (j, id) => {
-    const r = (W.factions[j]?.res ?? []).find((x) => x.id === id);
+    const r = resOf(W, j).find((x) => x.id === id);
     return r ? { text: fill(r.text, { seat: seatName(j) }), name: true } : "";
   };
   const assetText = (j, id) => {
-    const a = (W.factions[j]?.assets ?? []).find((x) => x.id === id);
+    const a = (W.factions[j]?.assets ?? W.factions[j]?.got?.assets ?? []).find((x) => x.id === id);
     return a ? { text: fill(a.text, { seat: seatName(j) }), name: true } : "";
   };
   const T2 = T.core.templates;
@@ -1509,21 +1651,23 @@ export function cardsOf(T, W) {
       thing: at.thing ? thingText(at.thing) : "",
     });
     const threads = [];
-    for (const t of W.web ?? []) {
+    // Till the web's dealt, the threads that happened (the deck's) are the web.
+    for (const t of W.web ?? W.made?.ties ?? []) {
       if (t.a !== i && t.b !== i) continue;
       const other = t.a === i ? t.b : t.a;
       const vals = (me, them) => ({ a: asName(me), b: asName(them), res: t.at?.res ? resText(t.a, t.at.res) : "", seat: seatAt(t.at?.seat) });
       // Each thread says which tie it's from (tie), the web's by its pair, so
       // a screen can leave one off.
-      const tie = `w:${t.a}-${t.b}`;
+      const tie = t.from != null ? `d:${t.from}:${t.a}-${t.b}` : `w:${t.a}-${t.b}`;
+      const s = t.s === "strained" ? "strained" : "whole";
       if (t.kind === "wildcard") {
-        if (t.a === i) threads.push({ text: fill(t.tie.text, vals(i, other)), kind: t.tie.bond, s: "whole", to: other, tie });
+        if (t.a === i) threads.push({ text: fill(t.tie.text, vals(i, other)), kind: t.tie.bond, s, to: other, tie });
       } else {
         const words = t.a === i ? t.tie.text : t.tie.back || t.tie.text;
-        threads.push({ text: fill(words, vals(i, other)), kind: t.kind === "rival" ? "hostile" : "bond", s: "whole", to: other, tie });
+        threads.push({ text: fill(words, vals(i, other)), kind: t.kind === "rival" ? "hostile" : "bond", s, to: other, tie });
       }
     }
-    for (const n of W.needs ?? []) {
+    for (const n of W.needs ?? W.made?.needs ?? []) {
       if (n.by === i && n.tie) threads.push({ text: fill(n.tie.text, { a: asName(i), b: asName(n.i), res: n.at?.res ? resText(i, n.at.res) : "", seat: seatAt(n.at?.seat) }), kind: "hostile", s: "whole", to: n.i, tie: `n:${n.i}` });
     }
     // Its threads toward the crew, as a character's friend or foe, named for them.
@@ -1546,7 +1690,7 @@ export function cardsOf(T, W) {
       seat: f.seat?.k ?? null,
       size: f.size?.size ?? null,
       die: f.size?.die ?? null,
-      steps: 1 + (f.assets ?? []).filter((a) => a.power).length,
+      steps: 1 + (f.assets ?? f.got?.assets ?? []).filter((a) => a.power).length,
       name: nameOf(i),
       about: f.type && f.method ? fill(T2.about, { type: f.type.text, method: f.method.text }) : f.type && own(f.type) && !f.held ? fill(f.type.text, {}) : "",
       // Where it sits, a line to go after what it is, so the seat's name on
@@ -1558,8 +1702,9 @@ export function cardsOf(T, W) {
       threat: f.face && !ownFace ? { key: f.face.threat, name: f.face.threatName, is: f.face.is, tags: f.face.tags } : null,
       secret: secret ? fill(secret.tag ?? secret.text, { rival, seat }) : "",
       more: secret ? [secret.more ? fill(secret.more, { rival, seat }) : "", ways].filter(Boolean).join(" ") : "",
-      res: (f.res ?? []).map((r) => ({ text: fill(r.text, { seat }), x: 1 })),
-      assets: [...(f.assets ?? []).map((a) => ({ text: fill(a.text, { seat }), does: a.does ?? "", power: a.power === true, x: 1, off: false })), ...(W.needs ?? []).filter((n) => n.i === i).map((n) => ({ text: fill(n.asset.text, { seat }), does: n.asset.does, power: false, x: 1, off: true }))],
+      // Till its sets are dealt, what it's sure to hold is all it's got.
+      res: (f.res ?? f.got?.res ?? []).map((r) => ({ text: fill(r.text, { seat }), x: 1 })),
+      assets: [...(f.assets ?? f.got?.assets ?? []).map((a) => ({ text: fill(a.text, { seat }), does: a.does ?? "", power: a.power === true, x: 1, off: false })), ...(W.needs ?? W.made?.needs ?? []).filter((n) => n.i === i).map((n) => ({ text: fill(n.asset.text, { seat }), does: n.asset.does, power: false, x: 1, off: true }))],
       agendas: f.agenda ? [{ text: fill(f.agenda.text, slot(f.agenda.at)), die: f.agenda.die, then: "" }] : [],
       pub: [],
       mor: [],
@@ -1570,7 +1715,24 @@ export function cardsOf(T, W) {
     };
   });
   const seats = W.seats.map((s, k) => (s ? { k, name: s.text, role: s.role, notice: s.notice, tags: s.tags, held: W.factions.findIndex((f) => f.seat?.k === k) } : null)).filter(Boolean);
-  return { factions, seats };
+  // The mini factions a faction made (a deck's answer): each card short, the
+  // way the book has one, with its Loyalty thread toward its maker.
+  const minis = (W.minis ?? []).map((m) => {
+    const seat = seatName(m.of);
+    const steps = 1 + (m.asset?.power ? 1 : 0);
+    return {
+      mini: true,
+      parent: m.of,
+      name: m.name ? fill(m.name.text, { seat }) : "",
+      die: 2 * steps,
+      steps,
+      res: m.res ? [{ text: fill(m.res.text, { seat }), x: 1 }] : [],
+      assets: m.asset ? [{ text: fill(m.asset.text, { seat }), does: m.asset.does ?? "", power: m.asset.power === true, x: 1, off: false }] : [],
+      outs: [...(m.outs ?? [])],
+      loy: m.loy?.text ? [{ text: fill(m.loy.text, { b: asName(m.of) }), kind: "bond" }] : [],
+    };
+  });
+  return { factions, seats, minis };
 }
 
 // A card's words, the way the board will have them with this pick on its
@@ -1634,6 +1796,10 @@ export function recordOf(W) {
       locks: W.locks,
       not: W.not,
       crew: W.crew ?? null,
+      // What happened, when a deck's been played (world-deck.js).
+      ...(W.made ? { made: W.made } : {}),
+      ...(W.minis?.length ? { minis: W.minis } : {}),
+      ...(W.deck ? { deck: W.deck } : {}),
     }),
   );
 }
