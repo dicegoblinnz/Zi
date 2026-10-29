@@ -3383,6 +3383,12 @@ try {
     // Sam's web: those two, and only what he's been shown of them.
     const others = tw.factions.filter((f) => f.id !== friend.id && f.id !== foe.id);
     for (const at of [`/characters/?camp=${thursday.id}&world`, "/characters/?c=isolde-tttttt&t=world"]) {
+      // He joined by the API, so his phone finds Isolde's campaign on the
+      // Characters page first, the way it would after the join link.
+      if (at.includes("&t=")) {
+        await sam.page.goto(`${BASE}/characters/`);
+        await until(async () => (await text(sam.page, "#app")).includes("Thursday Lair"), "Sam's phone has Thursday Lair in its campaigns");
+      }
       await sam.page.goto(`${BASE}${at}`);
       await sam.page.waitForSelector(".ww-ring");
       nodes = await ring(sam.page);
