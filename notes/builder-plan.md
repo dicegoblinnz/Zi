@@ -6,7 +6,7 @@ In code it's the world builder, never just the builder, since `builder.js` is th
 
 ## Decisions
 
-Mo's calls (27 and 28 Oct):
+Mo's calls (27, 28 and 30 Oct):
 
 - **No AI in the builder.** Nothing's generated when someone builds. Every word it shows comes from tables Mo's approved, or is typed by someone at the table. The fun's in gamified randomness and guided writing.
 - **The GM picks who builds.** Alone, she builds the world and presents it to the crew. With the crew, they found it together in a session-zero game, so they're invested from day one and play in what they made.
@@ -23,6 +23,10 @@ Mo's calls (27 and 28 Oct):
 - **Power comes only from people who turn up** (28 Oct). Stage 1 makes it true across the book.
 - **Fantasy next** (28 Oct, once he'd judged Medieval). Magic's tables come before building alone, so Fantasy deals as soon as it can.
 - **Magic's a known craft, and it's people only** (28 Oct). Everyone knows magic's real: wards, charms and healing are trades, rituals and bound souls stay behind closed doors, and about a faction in three runs on it. There are monsters, spirits, the dead and old things like dragons, and no other peoples.
+- **Building by answering** (30 Oct): a better way to build alone, the way a reign goes. She goes through a deck of cards, swiping each one way or the other, and how she answers shapes the factions. Going faction by faction and Deal it all both stay.
+- **As many cards as it takes** (30 Oct): enough for interesting dealings between the factions and to form each one whole, never a set number, and never a form filled in line by line. In Mo's words: "different card amount so it is not just 12 cards", and "it needs to help form the entire faction without it asking to fill out line by line".
+- **An answer can ask for a name or a detail** (30 Oct): a field to write in, with suggestions off the tables to tap, never filled in for her ("the suggestions needed will be recommended but it is not given").
+- **The deck comes next** (30 Oct), ahead of the founding, which uses it later.
 
 ## Calls Claude made
 
@@ -125,11 +129,31 @@ On the World screen: Build the world on an empty board, and Add a faction on any
 1. **Set up:** the region, the genre (or Mix your own) and how many factions.
 2. **The asking:** Building Your World's three questions, each with three answers dealt off the tables or her own words, and the tension rolled. The answers set the dials: how tense, how strange, how rich and how ruled.
 3. **The ground:** the seats, three cards at a time, each with its name and what a stranger notices there.
-4. **The factions,** each in a few screens: where it sits and its size, then what it is, how it works and its Want, then its resources and assets, then its agenda, Face, Secret, name and any bonds. Every screen has three cards or a dealt set, with Lock, Deal again, Write my own, the because under each card, and Undo. Deal the rest finishes the board.
+4. **The factions,** answered off the deck (Building by answering, below) or each in a few screens: where it sits and its size, then what it is, how it works and its Want, then its resources and assets, then its agenda, Face, Secret, name and any bonds. Every screen has three cards or a dealt set, with Lock, Deal again, Write my own, the because under each card, and Undo. Deal the rest finishes the board.
 5. **The web and the checks,** then **the crew:** a friend and a foe for each character in the campaign.
 6. **Done:** the factions go onto the board and the seats into the pages as places, hidden from the crew, and the record into `doc.build`. A faction's seat is written on its card by name, so it links itself.
 
 **Deal it all** plays every step by the weights in one tap, and she goes through what it dealt faction by faction, locking what she likes and dealing the rest again.
+
+### Building by answering
+
+A third way to make the factions in Build the world, after the ground, beside going faction by faction and Deal it all. She goes through a deck of moments a card at a time, the way a reign goes, and how she answers forms the factions, so she never fills one in line by line. It runs on her phone like the rest of building alone, kept in `zi-make` till Done.
+
+- **Who's who.** The factions' seats, sizes and what they are come with the ground, dealt the way they are now, so a card can say who's who. Till a faction's named it's called by what it is and where it sits (*the bell-founders on the Old Bridge*), off `templates` in `core.yaml`, and everything else on its card is open for the deck.
+- **A card's a moment** from before the crew turned up. Someone from one faction brings it, named off the pack's people, about another faction or a seat nobody holds, in a line or two (*Old Maud of the Wool Staplers: "The bridge men want a toll off every bale."*), with two answers as short as a choice gets (*Pay it*, *Run the bales at night*). She swipes it one way or the other, or taps an answer at the foot. As she leans it toward an answer, the factions it touches light up along the top, and once it's gone, what it did comes up in a line.
+- **An answer's one of the six outcomes** between the card's factions, or a mini faction made: a resource or an asset gained, taken or lost (people who turn up change Power), a thread written or strained, a grudge or a debt that becomes an agenda, a Secret that names the other faction, and a lean (tags on the faction, so how it works, its Want, its Secret and its Face come out to fit what it did). Both answers cost someone something, so every answer leaves a faction with a reason to act.
+- **Every answer's a line of history** in the past tense (*The Wool Staplers paid the toll, and never forgave the bridge.*), kept in `doc.build`'s history as How it came to be, hidden till she shows the crew.
+- **Three ages**, each done when its part's formed for every faction: long ago (where each faction came from, what it took and what it's like, so how it works and its Want), in living memory (deals, feuds and debts, so the web, the needs and the rivals), and this last year (what's live now, so its agenda, its Face and its Secret). Each line of history keeps its age (1 to 3, the record's `age`), the way the founding's will.
+- **As many cards as it takes.** The next card's the one that does most for whatever's least formed in its age, so how many it takes depends on the board and the answers: a small board might be done in a dozen and a big one in forty. The dials weight it (how tense brings feuds, how rich deals and debts, how ruled the law, how strange the strange ones). It never runs past 70, so the history fits, and the last card's how things stood when the crew turned up.
+- **Chains** make the dealings more than questions: an answer can start a story whose next card comes a few cards later (*Forbid the wedding*, then *The ferry-master's daughter ran off with the Vane groom anyway*), and a word she's written comes back on the cards after it.
+- **A prompt** comes with some answers: a name (the faction's, its Face's, a new place's or someone's) or a detail (what was taken, what's under the chapel). The card turns over to the question, a field and three suggestions dealt off the tables to fit, none of them filled in. She taps one, writes her own or skips it, and what's skipped is dealt at the end. What she writes is hers, so nothing deals over it.
+- **Not this one** deals another card for the same need and changes nothing. Undo takes an answer back (the last 25, as building alone does), and a faction's tile opens its card so far.
+- **The crew**, once there's one, can come in this last year by name: a card whose answer makes a faction a friend or a foe of a character, and their screen after the board only deals the side the deck didn't.
+- **The end.** What's still open on every card is dealt to fit what the answers made, a step the answers steered saying which moment did it in its because. She's on the board screen with the web, the checks and each faction's screens, then the crew and Done, as building alone goes. What the answers made is locked, since it's what happened, and the checks only deal what fails around it.
+- **Seeded** like the rest: the same seed and the same answers deal the same deck and the same board, and Not this one, Undo and a prompt leave everything else as it was.
+- **The engine** is `src/companion/world-deck.js`, pure like `world-engine.js` and playing on top of it. The deck's kept in the world in progress, so `recordOf()`, `resume()` and `zi-make` keep it. An answer becomes the engine's own picks, locks, tags and threads, the end's `dealRest()`, and the record's `dealt` keeps which way each card went.
+- **The cards' words** are a table in `core.yaml` (`deck`), written for every genre with slots the packs fill (a seat, a resource, an asset, someone's name), and a pack can add its own. Add a faction keeps its screens for now.
+- **The founding uses it later:** in the strife, each old power's act comes to her as a moment off the deck, and her answer's the act.
 
 ### The founding (a working name)
 
@@ -148,7 +172,7 @@ The crew builds the world with her, live on everyone's phone, as session zero. I
    - **Scheme** (1, once a round): its agenda up a size, working its agenda the way the faction turn's d6 has it.
    - **Found a mini faction** (3), the way Mini Factions says: one resource and one asset handed over, two outcomes, a Loyalty thread toward its maker, and three at most (Establish).
 
-   Pacts, feuds and raids touch another faction, and the rest build the founder's own. Every act writes a line of history, and every act but a scheme is one of the six outcomes, so the founding teaches the faction turn. Each round her phone deals each old power's one act off its agenda, hers to keep or change.
+   Pacts, feuds and raids touch another faction, and the rest build the founder's own. Every act writes a line of history, and every act but a scheme is one of the six outcomes, so the founding teaches the faction turn. Each round her phone deals each old power's one act off its agenda as a moment off the deck, and her answer's the act.
 6. **Her pass,** on her phone alone: Secrets and the old powers' hidden parts are drawn there, never from the shared seed, then the Faces and the checks.
 7. **The crew:** each player takes a friend and a foe for their character, with their own faction's ally and rival offered, and the hottest feud's named as the first job, for her to write.
 8. **Hand-over:** one tap from her phone writes it into the world: the factions and their mini factions onto the board, the seats into the pages as places, and the record and its history into `doc.build`, shown on the World screen as How it came to be. What the crew built in the open is shown, and everything else is hidden. The agendas keep the dice they reached.
@@ -175,6 +199,7 @@ For every stage that writes or changes tables.
 - Historical eras get invented names with a real feel, and the modern ones everyday names from many places.
 - A line with a faction's name in a slot reads right whether the name's one or many, so the name never does something in the present tense: past tense, or the name after the verb (*the Hill Men stole our barges*, *we owe the Hill Men*, never *the Hill Men laughs at us*).
 - Draft the whole pack in one go, deal at least twenty boards on `/deal/`, and fix what repeats or reads flat before Mo sees it.
+- **The deck** (from stage 7): a moment's up to 25 words, an answer 1 to 4, and an answer's line of history up to 16, in the past tense, so How it came to be reads straight through. Both answers are things a faction would really do, and neither's plainly right. At least 60 moments in core and a dozen in each pack, a third in each age, every outcome on at least eight, every kind of faction on at least six, one in four starting or carrying on a chain, and one in eight strange. The build checks the counts. Play at least twenty decks on `/deal/` before Mo sees it.
 
 `/deal/` (from stage 3) shows every table and deals sample boards from the current ones, a tap at a time, for any region and genre, kept out of search and off phones like `/kit/`. It's where Mo reads and judges a pack.
 
@@ -201,27 +226,36 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
 6. **The web and the crew.** Needs 5. *Built 30 Oct 2026.*
    - The faction web on the World screen and tab, as the brief says.
    - The crew step in building alone: a friend and a foe for each character in the campaign, written as those factions' threads toward the crew and named for the character, so standing counts them. The check for a faction that wants something the crew's got joins the rest.
-7. **The founding: the room and the asking.** Needs 6.
+7. **The deck** (tables), and the engine playing it. Needs 6.
+   - The deck's moments in `core.yaml` (`deck`), with Medieval's and Magic's own in their packs, read and checked by `scripts/world-tables.mjs`: each moment's age and regions, who's on it, its two answers with their outcomes, leans, prompts and lines of history, and its chains.
+   - `src/companion/world-deck.js` plays it on top of the engine, as the brief says: the factions dealt to what they are with the ground, then a card at a time for whatever's least formed in its age, each answer applied and written as history, chains, prompts with three suggestions, Not this one and Undo, and the end dealing the rest around what the answers made.
+   - `/deal/` plays a deck a card at a time (tap an answer, or Answer the rest at random), with the history and the board filling in, and `npm run deal -- --deck` plays one at random as text.
+   - A new part of `tests/check-world-engine.mjs` answers 200 decks at random in every region for every named genre the packs cover: every board passes the checks with fallbacks in under 1 board in 20, every faction's formed, how many cards it takes changes with the board and the answers, no card comes twice in a deck, every chain lands, every prompt has three suggestions, and the same seed and answers deal the same deck and board.
+8. **Building by answering.** Needs 7.
+   - The deck on her phone in Build the world after the ground, beside going faction by faction and Deal it all, as the brief says: the card in one hand, swiped or tapped, the factions' tiles along the top filling in as they form, the prompt with its suggestions, Not this one, Undo and Deal the rest, then the board screen, the crew and Done, with the history into `doc.build`. Under reduce-motion the card doesn't tilt or fly, and the answers are taps.
+   - How it came to be on the World screen, by age, hers to show the crew, and on the World tab once she has (`buildForPlayer()`).
+   - A new part of `tests/check-accounts.mjs`: a world built by answering, with a prompt filled from a suggestion, one in her own words and one skipped, Not this one, Undo, the signal dropping and a reload halfway, Deal the rest, the crew and Done, then How it came to be shown to the crew, and on a player's phone only once it's shown.
+9. **The founding: the room and the asking.** Needs 6.
    - `doc.found` on the live table, as the brief says: she sets it up from her campaign page and opens it, players join from their World tab, turns go round, each age has its clock, and every phone stays in step, with a poor signal handled the way telegraphs handle it. Then the asking, with the dials set and the tension rolled.
    - A new part of `tests/check-accounts.mjs` plays it on three phones.
-8. **Renaissance** (tables), with the Gilded Court's and Brinewake's mixes. Needs 4.
-9. **The founding: the ground and the founding.** Needs 7.
-   - The dice pool for the seats, then her old powers, then the founders in reverse order with their questions, cards and threads, as the brief says.
-10. **Industrial and Steam** (tables), so Steampunk deals. Needs 3.
-11. **The founding: the strife.** Needs 9.
-    - The tokens and the acts as the brief lists them, a raid rolled Power against Power, the old powers' acts dealt on her phone, the agendas climbing, the end, and a line of history for every act.
-12. **Modern** (tables), so Modern and Urban fantasy deal. Needs 4.
-13. **The founding: her pass and the hand-over.** Needs 11.
-    - Her pass on her phone alone, the crew's friends and foes, the first job named, and the one tap that writes it all into the world, as the brief says, with How it came to be on the World screen.
-14. **Near future and Chrome** (tables), so Cyberpunk deals. Needs 3.
-15. **The sketch.** Needs 13.
+10. **Renaissance** (tables), with the Gilded Court's and Brinewake's mixes. Needs 4.
+11. **The founding: the ground and the founding.** Needs 9.
+    - The dice pool for the seats, then her old powers, then the founders in reverse order with their questions, cards and threads, as the brief says.
+12. **Industrial and Steam** (tables), so Steampunk deals. Needs 3.
+13. **The founding: the strife.** Needs 7 and 11.
+    - The tokens and the acts as the brief lists them, a raid rolled Power against Power, the old powers' acts as moments off the deck on her phone, the agendas climbing, the end, and a line of history for every act.
+14. **Modern** (tables), so Modern and Urban fantasy deal. Needs 4.
+15. **The founding: her pass and the hand-over.** Needs 8 and 13.
+    - Her pass on her phone alone, the crew's friends and foes, the first job named, and the one tap that writes it all into the world, as the brief says, its history in How it came to be.
+16. **Near future and Chrome** (tables), so Cyberpunk deals. Needs 3.
+17. **The sketch.** Needs 15.
     - Seats placed on a blank map in the ground, in both ways of building, made into one of the world's maps with a pin at each seat when the build's done, as the brief says.
-16. **Far future and the Stars** (tables), so Futuristic and Space fantasy deal, with Long Haul's mix. Needs 4.
-17. **The founding on the table screen.** Needs 13.
+18. **Far future and the Stars** (tables), so Futuristic and Space fantasy deal, with Long Haul's mix. Needs 4.
+19. **The founding on the table screen.** Needs 15.
     - While the founding's on, the table screen shows the clock, the seats, the web growing and the history, built a field at a time in `screenOf()` like the rest of it, and never anything of hers.
-18. **Ruin and Dread** (tables), so Post-apocalyptic, Gothic horror and Dark fantasy deal, with Lanternfall's mix. Needs 10 and 12.
-19. **Ancient** (tables), so Ancient and Mythic deal. Needs 4.
-20. **When an agenda happens,** the builder deals its next agenda and its new asset or resource as cards to keep or swipe away, from the board as it stands then. Needs 5.
+20. **Ruin and Dread** (tables), so Post-apocalyptic, Gothic horror and Dark fantasy deal, with Lanternfall's mix. Needs 12 and 14.
+21. **Ancient** (tables), so Ancient and Mythic deal. Needs 4.
+22. **When an agenda happens,** the builder deals its next agenda and its new asset or resource as cards to keep or swipe away, from the board as it stands then. Needs 5.
 
 Later, when Mo says so: the paper version (the tables and both ways of building, printed), and the Oracle checking a guess before it's written (*the river city trades with the hold*, at Likely).
 
