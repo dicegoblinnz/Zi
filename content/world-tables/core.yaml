@@ -266,13 +266,13 @@ crew:
     - { text: "{who} owes us, and the interest grows every week", tags: [debt, wealth] }
     - { text: "{who} walked out on us and took what they knew", tags: [society, family, house] }
     - { text: "{who} won big at our tables, and we say they cheated", tags: [crooks, crime] }
-    - { text: "{who} turned down our money, and people noticed", tags: [wealth, traders] }
+    - { text: "{who} wouldn't take our money, and people noticed", tags: [wealth, traders] }
     - { text: "We've put a price on {who}'s head", tags: [crooks, war] }
     - { text: "{who} made a fool of our leader in public", tags: [house, law] }
     - { text: "{who} broke their word to us, and it cost us dearly" }
     - { text: "{who} put one of ours behind bars, and they're still there", tags: [law, office] }
-    - { text: "{who} wrecked our shop and never paid for the damage", tags: [market, makers] }
-    - { text: "{who} took a job we'd been promised", tags: [labour, guild] }
+    - { text: "{who} wrecked our shop and left us the bill", tags: [market, makers] }
+    - { text: "{who} took a job that should've been ours", tags: [labour, guild] }
     - { text: "{who} turned one of ours against us", tags: [society, rebels] }
     - { text: "{who} broke something we'd kept sealed for a hundred years", rare: true, strange: true, tags: [old] }
   qualities: [rooted, influential]
