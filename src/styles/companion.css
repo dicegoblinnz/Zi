@@ -2090,9 +2090,10 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
 .ww-seg-b + .ww-seg-b { border-left: 1.5px solid var(--bd-edge); }
 .ww-seg-b[aria-pressed="true"] { color: var(--zd-on-them); background: var(--zd-them); }
 .ww-seg-b:focus-visible { outline: 2px solid var(--violet); outline-offset: -4px; }
-.ww-ring { --ww-d: clamp(28px, 10cqw, 44px); --ww-w: 23cqw; position: relative; width: 100%; max-width: 480px; margin: 0 auto; aspect-ratio: 1; container-type: inline-size; }
+.ww-wrap { overflow-x: auto; overscroll-behavior-x: contain; }
+.ww-ring { --ww-d: clamp(28px, 10cqw, 44px); --ww-w: 23cqw; position: relative; width: 100%; max-width: 480px; margin: 0 auto 14px; aspect-ratio: 1; container-type: inline-size; }
 .ww-ring.is-more { --ww-w: 19cqw; --ww-d: clamp(26px, 8.6cqw, 40px); }
-.ww-ring.is-many { --ww-w: 14cqw; --ww-d: clamp(20px, 6.4cqw, 30px); }
+.ww-ring.is-many { --ww-w: 54px; --ww-d: 28px; width: max(100%, var(--ww-min, 100%)); max-width: none; }
 .ww-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .ww-l { fill: none; stroke-width: 0.8; stroke-linecap: round; transition: opacity 160ms ease, stroke-width 160ms ease; }
 .ww-l.is-bond { stroke: var(--zd-you-line); }
@@ -2103,7 +2104,7 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
 .ww-l.is-dim { opacity: 0.13; }
 .ww-arrow.is-bond { fill: var(--zd-you-line); }
 .ww-arrow.is-hostile { fill: var(--zd-harm-line); }
-.ww-node, .ww-crew { position: absolute; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; width: var(--ww-w); min-height: 44px; margin: 0; padding: 0; font: inherit; color: var(--ink); background: none; border: 0; transform: translate(-50%, calc(var(--ww-d) / -2)); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: opacity 160ms ease; }
+.ww-node, .ww-crew { position: absolute; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; width: var(--ww-w); min-width: 44px; min-height: 44px; margin: 0; padding: 0; font: inherit; color: var(--ink); background: none; border: 0; transform: translate(-50%, calc(var(--ww-d) / -2)); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: opacity 160ms ease; }
 .ww-crew { --ww-d: clamp(34px, 12.5cqw, 54px); z-index: 2; }
 .ww-die { display: grid; place-items: center; width: var(--ww-d); height: var(--ww-d); border-radius: 50%; }
 .ww-die .zd-die { --s: var(--ww-d); }

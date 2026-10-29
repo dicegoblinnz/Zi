@@ -1214,6 +1214,14 @@ export function makeWorld(d) {
   function after(app) {
     M.after(app);
     K.after(app);
+    // A big board's web slides sideways in its box: it starts at the middle,
+    // and stays where it's been slid to when a tap draws it again.
+    for (const box of app.querySelectorAll(".ww-sec[data-wb] .ww-wrap")) {
+      if (box.scrollWidth <= box.clientWidth + 1) continue;
+      const w = webOf$(box.closest("[data-wb]").dataset.wb);
+      box.scrollLeft = w.x ?? (box.scrollWidth - box.clientWidth) / 2;
+      box.addEventListener("scroll", () => (w.x = box.scrollLeft), { passive: true });
+    }
     const el = app.querySelector(".wb-card");
     if (!el) return;
     if (el.dataset.glow) el.classList.add("is-new");

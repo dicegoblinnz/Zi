@@ -17,8 +17,11 @@
 import { die as kitDie } from "../kit/kit.js";
 
 // How far round from the middle the factions sit, in a hundredth of the
-// ring's width. More factions, a wider ring, and smaller names.
-const radius = (n) => (n <= 6 ? 34 : n <= 10 ? 36 : 38);
+// ring's width. More factions, a wider ring and smaller names, and past
+// twelve the ring's as wide as it needs to be for every faction to have
+// room for a thumb, and slides sideways in its own box.
+const radius = (n) => (n <= 6 ? 34 : n <= 12 ? 36 : 40);
+const MANY = 12;
 // What a line stops short of, so its arrow shows: a faction's die, the crew's.
 const NODE = 5.4;
 const CREW = 8.2;
@@ -192,8 +195,9 @@ export function drawWeb(L, opts) {
   const crewCls = ["ww-crew", sel === "crew" ? "is-sel" : sel && !near.has("crew") ? "is-dim" : ""].filter(Boolean).join(" ");
   const crewDie = c.dice?.length ? kitDie(c.dice[0], { hide: true }) : '<span class="ww-unknown is-crew" aria-hidden="true">?</span>';
   const crew = `<button type="button" class="${crewCls}" style="left:50%;top:50%" ${opts.attrs("crew")} aria-pressed="${sel === "crew"}" aria-label="${esc(c.label ?? "The crew")}"><span class="ww-die" aria-hidden="true">${crewDie}</span><span class="ww-name" aria-hidden="true">${esc(c.name || "The crew")}</span></button>`;
-  const size = L.n > 12 ? " is-many" : L.n > 8 ? " is-more" : "";
-  return `<div class="ww-ring${size}${sel ? " is-sel" : ""}"><svg class="ww-lines" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><defs>${marker("b")}${marker("h")}</defs>${svg}</svg>${nodes}${crew}</div>`;
+  const size = L.n > MANY ? " is-many" : L.n > 8 ? " is-more" : "";
+  const wide = L.n > MANY ? ` style="--ww-min:${L.n * 22}px"` : "";
+  return `<div class="ww-wrap"><div class="ww-ring${size}${sel ? " is-sel" : ""}"${wide}><svg class="ww-lines" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><defs>${marker("b")}${marker("h")}</defs>${svg}</svg>${nodes}${crew}</div></div>`;
 }
 
 // What a line looks like, for the key.

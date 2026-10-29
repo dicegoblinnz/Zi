@@ -55,13 +55,15 @@
 //    that standing counts), one faction always after something the crew's
 //    got, a foe likelier to be the one that's after them, a character's three
 //    cards, Lock and Deal again, her own words, the record, a character
-//    leaving or joining, and adding a faction tying it to someone who's
-//    still got no friend or foe on the board.
+//    leaving or joining (an agenda after the last of them dealt again, or
+//    one she's locked still reading their name), a friend or foe whose
+//    faction's dealt again dealt again to fit it, and adding a faction tying
+//    it to someone who's still got no friend or foe on the board.
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { apply, blank, forPlayer, readable, standingOf, undoOf } from "../src/companion/board.js";
-import { BAGS, CHECKS, STEPS, canDeal, cardsOf, choose, dealRest, dealWorld, lock, newSeed, options, pickAt, pickKey, poolOf, preview, recordOf, redeal, redealFaction, resume, rngOf, setCrew, SIZES, start, startAdd, tensionAt } from "../src/companion/world-engine.js";
+import { BAGS, CHECKS, STEPS, canDeal, cardsOf, choose, crewFits, dealRest, dealWorld, lock, newSeed, options, pickAt, pickKey, poolOf, preview, recordOf, redeal, redealFaction, resume, rngOf, setCrew, SIZES, start, startAdd, tensionAt } from "../src/companion/world-engine.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 
@@ -683,6 +685,51 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     same(W.crew.who.find((c) => c.k === W.crew.who[0].k).friend != null, true, "and everyone else keeps theirs");
     const ship = W.factions.map((f) => f.agenda).find((a) => a.aims.includes("thing"));
     if (ship) yes(!/crew’s (A|An|The) /.test(cardsOf(T, W).factions[W.factions.findIndex((f) => f.agenda === ship)].agendas[0].text), "a thing on the party sheet reads without its A");
+  }
+  // A faction that's dealt again, or changed, takes a friend or a foe that
+  // doesn't fit it any more with it: it's dealt again to fit.
+  {
+    let bad = null;
+    let redealt = 0;
+    for (let b = 0; b < 40; b++) {
+      const W = dealWorld(T, { recipe: g.recipe, seed: newSeed(T, rngOf("crew-fit", b)), factions: 5, crew: { who: whoOf(4), ...sheet } });
+      const before = JSON.stringify(W.crew.who.map((c) => [c.friend, c.foe]));
+      const i = b % 5;
+      if (b % 2) redealFaction(T, W, i);
+      else {
+        const other = options(T, W, `f:${i}:type`, 3).find((c) => c.id !== W.factions[i].type.id);
+        if (other) choose(T, W, `f:${i}:type`, other);
+      }
+      dealRest(T, W);
+      if (JSON.stringify(W.crew.who.map((c) => [c.friend, c.foe])) !== before) redealt++;
+      for (const c of W.crew.who) for (const side of ["friend", "foe"]) if (!crewFits(T, W, c.k, side)) bad ??= `${W.seed}: ${c.name}'s ${side} doesn't fit ${cardsOf(T, W).factions[c[side]?.j]?.name} after it changed`;
+    }
+    if (bad) note(`a faction changing: ${bad}`);
+    yes(redealt > 0, "a friend or a foe that doesn't fit its faction any more is dealt again");
+  }
+  // The last of the crew leaving: an agenda after them is dealt again, and
+  // one she's locked still reads their name, with the check saying so.
+  {
+    let bad = null;
+    let tried = 0;
+    for (let b = 0; b < 60 && tried < 6; b++) {
+      const W = dealWorld(T, { recipe: g.recipe, seed: newSeed(T, rngOf("crew-gone", b)), factions: 4, crew: { who: whoOf(1), res: [], assets: [] } });
+      const i = W.factions.findIndex((f) => f.agenda.aims.includes("who"));
+      if (i < 0) continue;
+      tried++;
+      const locked = b % 2 === 0;
+      if (locked) lock(W, `f:${i}:agenda`);
+      setCrew(T, W, { who: [], res: [], assets: [] });
+      dealRest(T, W, { finish: false });
+      const text = cardsOf(T, W).factions[i].agendas[0]?.text ?? "";
+      if (/[{}]/.test(text)) bad ??= `${W.seed}: "${text}" has a slot nobody filled`;
+      if (locked && !text.includes("Vesk")) bad ??= `${W.seed}: the locked agenda "${text}" lost Vesk's name`;
+      if (!locked && W.factions[i].agenda.aims.includes("who")) bad ??= `${W.seed}: an agenda's still after the crew with nobody in it`;
+      dealRest(T, W);
+      if (locked && W.checks.find((c) => c.k === "aims")?.ok) bad ??= `${W.seed}: the checks don't say the locked agenda's aimed at nobody`;
+    }
+    if (bad) note(`the last of the crew leaving: ${bad}`);
+    yes(tried >= 4, `boards with an agenda after the one character to try it on (${tried})`);
   }
   // Adding a faction ties it to someone who hasn't got a friend or a foe yet.
   {

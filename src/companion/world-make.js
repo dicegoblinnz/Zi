@@ -355,12 +355,18 @@ export function makeWorldMake(w) {
     };
     for (const c of Array.isArray(dealt.crew?.who) ? dealt.crew.who : []) for (const side of SIDES) if (c?.k && Number.isInteger(c[side]?.j) && on(ids[c[side].j])) got(c.k, side);
     for (const a of Array.isArray(dealt.added) ? dealt.added : []) for (const t of Array.isArray(a?.crew) ? a.crew : []) if (t?.k && SIDES.includes(t.side) && on(a.fid)) got(t.k, t.side);
+    // Every faction added that's been tied to one of them, longer than added keeps.
+    for (const t of Array.isArray(dealt.ties) ? dealt.ties : []) if (t?.k && SIDES.includes(t.side) && on(t.fid)) got(t.k, t.side);
     return out;
   }
-  // The crew as it is now, onto the world in progress.
+  // The crew as it is now, onto the world in progress. When it's changed,
+  // the hands that read it (the agendas', and the crew's own) are dealt anew.
   function crewIn(id, W, mode) {
     const crew = W ? crewNow(id, docOf(id), mode) : null;
-    return crew ? setCrew(T, W, crew) : false;
+    if (!crew || !setCrew(T, W, crew)) return false;
+    const e = entryOf(id);
+    if (e?.hands) for (const k of Object.keys(e.hands)) if (k.endsWith(":agenda") || k.startsWith("crew:")) delete e.hands[k];
+    return true;
   }
 
   // ------------------------------------------------------------ starting one
@@ -845,6 +851,7 @@ export function makeWorldMake(w) {
 
   // What Done does, on the screen that has it, or what's still to come.
   function doneNote(e, W, list, key) {
+    if (key !== "board" && list[list.length - 1] !== key) return "";
     if (list[list.length - 1] !== key) {
       const names = (W.crew?.who ?? []).map((c) => c.name);
       return `<p class="cc-small wk-done-note">Next, a friend and a foe among these factions for ${esc(names.length > 1 ? `${names.slice(0, -1).join(", ")} and ${names.at(-1)}` : names[0] ?? "the crew")}.</p>`;
@@ -1001,6 +1008,10 @@ export function makeWorldMake(w) {
     top();
   }
   function changed(id, say = "", undoable = true) {
+    // A change anywhere but the crew's screens deals the crew's hands anew,
+    // since a card there reads its faction.
+    const e = entryOf(id);
+    if (e?.hands && !e.at?.startsWith("crew:")) for (const k of Object.keys(e.hands)) if (k.startsWith("crew:")) delete e.hands[k];
     save(id);
     ui.sure = "";
     d.render();
@@ -1399,6 +1410,7 @@ export function makeWorldMake(w) {
         added.push({ ...f, fid: fid[i], pid: k != null ? pid[k] : null, place: k != null && k >= W.hs ? rec.seats[k] : null, crew });
       }
       dealt.added = added.slice(-12);
+      dealt.ties = [...(Array.isArray(dealt.ties) ? dealt.ties : []), ...mine.flatMap((i) => C.factions[i].threads.filter((t) => t.to === "crew" && t.who && !cutOf(t)).map((t) => ({ k: t.who, side: t.side, fid: fid[i] })))].slice(-60);
       b = was ? { ...was, dealt, at: Date.now() } : { recipe: W.recipe, dials: W.dials, seed: W.seed, dealt, history: [], shown: false, at: Date.now() };
     } else b = { recipe: W.recipe, dials: W.dials, seed: W.seed, dealt: { ...rec, ids: fid, pages: pid }, history: doc.build?.history ?? [], shown: doc.build?.shown === true, at: Date.now() };
     ops.push({ o: "wb-set", b });

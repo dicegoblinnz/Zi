@@ -356,17 +356,24 @@ export function setCrew(T, W, crew) {
     }
   }
   const before = W.crew ?? null;
-  const next = who.length || things.length ? { who, things } : null;
+  // Everyone and everything the build's ever had, by name, so a card she's
+  // locked still reads right when what it's after has gone.
+  const known = { who: { ...(before?.seen?.who ?? {}) }, things: { ...(before?.seen?.things ?? {}) } };
+  for (const c of who) known.who[c.k] = c.name;
+  for (const t of things) known.things[`${t.l}:${t.id}`] = t.text;
+  const next = who.length || things.length || Object.keys(known.who).length || Object.keys(known.things).length ? { who, things, seen: known } : null;
   const ids = (c) => JSON.stringify([(c?.who ?? []).map((x) => x.k), (c?.things ?? []).map((x) => `${x.l}:${x.id}`)]);
   const changed = JSON.stringify(next) !== JSON.stringify(before);
   W.crew = next;
-  // Who's in it, or what it's got, is what the crew check looks at, and an
-  // agenda aimed at someone who's left aims at someone else.
+  // Who's in it, or what it's got, is what the crew check looks at. An
+  // agenda after someone who's left goes after someone else, or, with nobody
+  // left, is dealt again when it's next needed, unless she's locked it.
   if (ids(next) !== ids(before)) {
     W.checks = null;
     for (const i of fresh(W)) {
       const ag = W.factions[i].agenda;
-      if (aimsCrew(ag) && !aimOk(W, i, ag)) reaim(W, i, 0);
+      if (!aimsCrew(ag) || aimOk(W, i, ag) || reaim(W, i, 0)) continue;
+      if (!W.locks[`f:${i}:agenda`]) W.factions[i].agenda = null;
     }
   }
   return changed;
@@ -410,7 +417,8 @@ export function resume(T, rec) {
   for (const k of ["web", "needs", "checks"]) W[k] = rec[k] ?? null;
   W.fixes = rec.fixes ?? [];
   W.fallbacks = rec.fallbacks ?? [];
-  W.crew = rec.crew && typeof rec.crew === "object" && Array.isArray(rec.crew.who) ? { who: rec.crew.who.filter((c) => c?.k && c.name).map((c) => ({ ...c, friend: c.friend ?? null, foe: c.foe ?? null })), things: Array.isArray(rec.crew.things) ? rec.crew.things.filter((t) => t?.id) : [] } : null;
+  const names = (v) => (v && typeof v === "object" && !Array.isArray(v) ? Object.fromEntries(Object.entries(v).filter(([, x]) => typeof x === "string")) : {});
+  W.crew = rec.crew && typeof rec.crew === "object" && Array.isArray(rec.crew.who) ? { who: rec.crew.who.filter((c) => c?.k && c.name).map((c) => ({ ...c, friend: c.friend ?? null, foe: c.foe ?? null })), things: Array.isArray(rec.crew.things) ? rec.crew.things.filter((t) => t?.id) : [], seen: { who: names(rec.crew.seen?.who), things: names(rec.crew.seen?.things) } } : null;
   W.dials = dialsOf(W);
   return W;
 }
@@ -880,15 +888,47 @@ function crewCards(T, W, path, n, not, { only = null } = {}) {
   }
   return out;
 }
-// Every character's friend and foe that isn't dealt yet, a character at a
-// time, friend first, since a foe reads the friend. Adding a faction, it's
+// Whether a friend or a foe still fits: its faction's still one she's
+// building, it isn't their other side too, and its words still suit the
+// faction's card. One that doesn't is dealt again, unless she's locked it or
+// written it herself.
+export function crewFits(T, W, k, side) {
+  const c = crewOf(W, k);
+  const p = c?.[side];
+  if (!p) return false;
+  const f = W.factions[p.j];
+  if (!f || f.held || !f.type) return false;
+  if (own(p)) return true;
+  if (c[side === "friend" ? "foe" : "friend"]?.j === p.j) return false;
+  const row = (T.core.crew?.[side === "friend" ? "friends" : "foes"] ?? []).find((r) => r.id === p.id);
+  return Boolean(row && fits(row, cardOf(W, p.j), boardOf(T, W)));
+}
+// A foe that said why it was picked (after them, or their friend's rival)
+// stops saying so once it isn't, and stays.
+function crewWhy(W, c) {
+  const p = c.foe;
+  if (!p || own(p) || !p.by) return;
+  const f = W.factions[p.j];
+  const still = p.by === "after" ? aimsCrew(f?.agenda) && f.agenda.at?.who === c.k : p.by === "rivalof" ? c.friend?.j != null && rivals(W, p.j, c.friend.j) : true;
+  if (!still) Object.assign(p, { why: "", by: null });
+}
+// Every character's friend and foe that isn't dealt yet, or doesn't fit any
+// more, a character at a time, friend first, since a foe reads the friend. Adding a faction, it's
 // one thread toward the crew on the new one: named for whoever's after it,
 // or someone who's still got no friend or no foe on the board, or anyone.
 function dealCrew(T, W) {
   if (!W.crew?.who?.length) return;
   if (adding(W)) {
     const i = fresh(W)[0];
-    if (i == null || !W.factions[i].type || W.crew.who.some((c) => SIDES.some((s) => c[s]?.j === i))) return;
+    if (i == null || !W.factions[i].type) return;
+    // One it's got already stays, or is dealt again for the same one of
+    // them when its words don't fit the card any more.
+    const tied = W.crew.who.flatMap((c) => SIDES.filter((s) => c[s]?.j === i).map((s) => [c, s]));
+    if (tied.length) {
+      const [c, s] = tied[0];
+      if (!W.locks[`crew:${c.k}:${s}`] && !crewFits(T, W, c.k, s)) c[s] = crewCards(T, W, `crew:${c.k}:${s}`, 1, null, { only: i })[0] ?? c[s];
+      return;
+    }
     const rand = randOf(W, "crew");
     const ag = W.factions[i].agenda;
     let c = aimsCrew(ag) ? crewOf(W, ag.at?.who) : null;
@@ -906,9 +946,10 @@ function dealCrew(T, W) {
   for (const c of W.crew.who) {
     for (const side of SIDES) {
       const path = `crew:${c.k}:${side}`;
-      if (c[side] || W.locks[path]) continue;
+      if (W.locks[path] || (c[side] && crewFits(T, W, c.k, side))) continue;
       c[side] = crewCards(T, W, path, 1, W.not[path] ?? null)[0] ?? null;
     }
+    crewWhy(W, c);
   }
 }
 
@@ -1280,7 +1321,12 @@ function reaim(W, i, t) {
     const j = at[a]?.j;
     const list = (a === "res" || a === "asset") && j != null && j !== i ? (W.factions[j]?.[a === "res" ? "res" : "assets"] ?? []) : [];
     if (list.length) at[a] = { j, id: pick(list, rand).id };
-    else Object.assign(at, aimOf(W, i, [a], rand));
+    else {
+      // With nobody in the crew to go after now, it keeps who it was after.
+      const got = aimOf(W, i, [a], rand);
+      if (isCrewAim(a) && got[a] == null) continue;
+      Object.assign(at, got);
+    }
   }
   ag.at = at;
   return aimOk(W, i, ag);
@@ -1400,6 +1446,7 @@ function fallback(T, W, key) {
     if (i == null) return;
     const aim = W.crew.who.length ? "who" : "thing";
     const row = F[aim];
+    if (!row) return;
     W.factions[i].agenda = { ...keepOf({ id: row.id, text: row.text, die: row.die, aims: [aim], why: "" }), at: aimOf(W, i, [aim], rngOf(W.seed, "fallback", "crew", i)) };
     used();
   } else if (key === "strange") {
@@ -1444,12 +1491,12 @@ export function cardsOf(T, W) {
   // One of the crew by name, and what the party sheet calls what they've got,
   // without its A or The, since it's "the crew's" in the line.
   const whoText = (k) => {
-    const c = crewOf(W, k);
-    return c ? { text: c.name, name: true } : "";
+    const name = crewOf(W, k)?.name ?? W.crew?.seen?.who?.[k];
+    return name ? { text: name, name: true } : "";
   };
   const thingText = (t) => {
-    const x = (W.crew?.things ?? []).find((y) => y.l === t?.l && y.id === t?.id);
-    return x ? { text: x.text.replace(/^(an?|the)\s+/i, ""), name: true } : "";
+    const text = (W.crew?.things ?? []).find((y) => y.l === t?.l && y.id === t?.id)?.text ?? W.crew?.seen?.things?.[`${t?.l}:${t?.id}`];
+    return text ? { text: text.replace(/^(an?|the)\s+/i, ""), name: true } : "";
   };
   const factions = W.factions.map((f, i) => {
     const seat = seatName(i);

@@ -248,7 +248,7 @@ ties:
 # rather than something it's got, so no faction's after them.
 crew:
   friends:
-    - { text: "{who} pulled one of ours out of the river", needs: [river] }
+    - { text: "{who} pulled our youngest out of the river", needs: [river] }
     - { text: "{who} kept their mouth shut when the law came asking", tags: [crooks, crime] }
     - { text: "{who} carried our dead home, and wouldn't take payment", tags: [soldiers, war] }
     - { text: "{who} stood up for us when the whole street turned", tags: [poor, rebels] }
@@ -269,11 +269,11 @@ crew:
     - { text: "{who} wouldn't take our money, and people noticed", tags: [wealth, traders] }
     - { text: "We've put a price on {who}'s head", tags: [crooks, war] }
     - { text: "{who} made a fool of our leader in public", tags: [house, law] }
-    - { text: "{who} broke their word to us, and it cost us dearly" }
-    - { text: "{who} put one of ours behind bars, and they're still there", tags: [law, office] }
+    - { text: "{who} backed out of a deal, and it cost us dearly" }
+    - { text: "{who} got our clerk thrown in a cell", tags: [law, office] }
     - { text: "{who} wrecked our shop and left us the bill", tags: [market, makers] }
     - { text: "{who} took a job that should've been ours", tags: [labour, guild] }
-    - { text: "{who} turned one of ours against us", tags: [society, rebels] }
+    - { text: "{who} talked our second into betraying us", tags: [society, rebels] }
     - { text: "{who} broke something we'd kept sealed for a hundred years", rare: true, strange: true, tags: [old] }
   qualities: [rooted, influential]
 
