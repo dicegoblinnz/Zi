@@ -2,8 +2,10 @@
 // table (stage 3 of notes/builder-plan.md). It uses the same engine the World
 // screen will, on public/world-tables.json, so what Mo judges here is what a
 // GM gets. Nothing's saved: the address holds the region, the genre (or the
-// mix), how many factions and the seed, so a link deals the same board again,
-// and its # is left for the links between a board's seats and factions.
+// mix), how many factions, the seed, and how many of the book's crew there
+// are, with something worth taking on their party sheet or not (stage 6), so
+// a link deals the same board again, and its # is left for the links between
+// a board's seats and factions.
 import { REGIONS, canDeal, cardsOf, dealWorld, newSeed } from "../companion/world-engine.js";
 import { die, esc } from "../kit/kit.js";
 
@@ -17,10 +19,12 @@ const QUESTIONS = [
 ];
 const DIAL_NAMES = { tense: "tense", strange: "strange", rich: "rich", ruled: "ruled" };
 const BOND_NAMES = { pub: "Public Sentiment", mor: "Morale", loy: "Loyalty" };
-const CHECK_NAMES = { whole: "a card with a hole", power: "Power", rival: "a rival each", block: "a blocked trade", secret: "a Secret naming another faction", unique: "an asset held twice", aims: "an agenda aimed at nothing", strange: "something strange" };
+const CHECK_NAMES = { whole: "a card with a hole", power: "Power", rival: "a rival each", block: "a blocked trade", secret: "a Secret naming another faction", unique: "an asset held twice", aims: "an agenda aimed at nothing", crew: "a faction after something the crew’s got", strange: "something strange" };
+// The book's crew, the first so many of them, each dealt a friend and a foe.
+const CREW = ["Vesk", "Bram", "Isolde", "Dorrie", "Ash", "Wren"];
 
 let T = null;
-const want = { region: "town", genre: "medieval", era: null, twist: null, n: 6, seed: null };
+const want = { region: "town", genre: "medieval", era: null, twist: null, n: 6, seed: null, crew: 0, sheet: false };
 let shown = null;
 
 // ── The address: ?region=town&genre=medieval&factions=6&seed=ash-lantern-ford,
@@ -36,6 +40,9 @@ function readAddress() {
   if (n >= 4 && n <= 12) want.n = Math.floor(n);
   const seed = q.get("seed");
   if (seed) want.seed = seed.slice(0, 40);
+  const crew = Number(q.get("crew"));
+  if (crew >= 0 && crew <= CREW.length) want.crew = Math.floor(crew);
+  want.sheet = q.get("sheet") === "1";
 }
 function writeAddress() {
   const q = new URLSearchParams({ region: want.region, genre: want.genre });
@@ -45,6 +52,8 @@ function writeAddress() {
   }
   q.set("factions", String(want.n));
   if (want.seed) q.set("seed", want.seed);
+  if (want.crew) q.set("crew", String(want.crew));
+  if (want.sheet) q.set("sheet", "1");
   history.replaceState(null, "", `${location.pathname}?${q}`);
 }
 
@@ -103,7 +112,11 @@ function drawControls() {
   }
   $("#count").value = String(want.n);
   $("#count").textContent = String(want.n);
-  $$(".dl-step button").forEach((b) => (b.disabled = (b.dataset.n === "-1" && want.n <= 4) || (b.dataset.n === "1" && want.n >= 12)));
+  $$(".dl-step button[data-n]").forEach((b) => (b.disabled = (b.dataset.n === "-1" && want.n <= 4) || (b.dataset.n === "1" && want.n >= 12)));
+  $("#crew").value = String(want.crew);
+  $("#crew").textContent = String(want.crew);
+  $$(".dl-step button[data-c]").forEach((b) => (b.disabled = (b.dataset.c === "-1" && want.crew <= 0) || (b.dataset.c === "1" && want.crew >= CREW.length)));
+  $("#sheet").checked = want.sheet;
   drawButton();
 }
 function drawButton() {
@@ -157,11 +170,22 @@ function drawBoard(W) {
         .join("")}</ol>
     </section>`;
   const factions = C.factions.map((f, i) => drawFaction(W, C, f, i, reg, seat)).join("");
+  // The crew: each character's friend and foe, and what's worth taking off them.
+  const side = (c, k) => {
+    const p = c[k];
+    const t = p ? C.factions[p.j]?.threads.find((x) => x.tie === `c:${c.k}:${k}`) : null;
+    return t ? `<li class="${k === "foe" ? "hostile" : "bond"}"><span class="dl-to">A ${k} in ${factionLink(C, p.j)}</span><em>${esc(t.text)}</em>${why(p)}</li>` : "";
+  };
+  const crew = W.crew
+    ? `<section class="dl-sec" aria-labelledby="h-crew"><h2 id="h-crew">The crew</h2>
+      ${W.crew.who.length ? `<div class="dl-crew">${W.crew.who.map((c) => `<div class="dl-who card"><h3>${esc(c.name)}</h3><ul class="dl-threads">${side(c, "friend")}${side(c, "foe")}</ul></div>`).join("")}</div>` : ""}
+      <p class="dl-tnote">${W.crew.things.length ? `Worth taking off them: ${esc(W.crew.things.map((x) => x.text).join(", "))}.` : "Nothing on their party sheet worth taking yet."}</p></section>`
+    : "";
   const checks = failed.length
     ? `Still failing: ${failed.join(", ")}.`
     : `Every check passed${fixed.length ? `, with ${fixed.join(" and ")} dealt again` : ""}${W.fallbacks.length ? `, and a fallback from core for ${W.fallbacks.join(", ")}` : ""}.`;
   $("#board").innerHTML = `<article class="dl-world">${head}${asking}${ground}
-    <section class="dl-sec" aria-labelledby="h-factions"><h2 id="h-factions">The factions</h2><div class="dl-factions">${factions}</div></section>
+    <section class="dl-sec" aria-labelledby="h-factions"><h2 id="h-factions">The factions</h2><div class="dl-factions">${factions}</div></section>${crew}
     <p class="dl-checks">${esc(checks)}</p></article>`;
 }
 
@@ -186,7 +210,7 @@ function drawFaction(W, C, f, i, reg, seat) {
     ["Secret", `<div class="dl-secret"><p><em>${esc(f.secret)}</em></p><p>${esc(f.more)}</p></div>${why(w.secret)}`],
   ];
   if (f.offers.length) lines.push(["Could start with", `<ul class="dl-offers">${f.offers.map((o) => `<li class="${o.kind}">${esc(BOND_NAMES[o.bond])}, ${o.kind === "hostile" ? "hostile" : "bond"}: <em>${esc(o.text)}</em></li>`).join("")}</ul>`]);
-  if (f.threads.length) lines.push(["Threads", `<ul class="dl-threads">${f.threads.map((t) => `<li class="${t.kind}"><span class="dl-to">${t.kind === "hostile" ? "Hostile" : "Bond"} toward ${factionLink(C, t.to)}</span><em>${esc(t.text)}</em></li>`).join("")}</ul>`]);
+  if (f.threads.length) lines.push(["Threads", `<ul class="dl-threads">${f.threads.map((t) => `<li class="${t.kind}"><span class="dl-to">${t.kind === "hostile" ? "Hostile" : "Bond"} toward ${t.to === "crew" ? "the crew" : factionLink(C, t.to)}</span><em>${esc(t.text)}</em></li>`).join("")}</ul>`]);
   return `
     <article class="dl-fac card${w.type?.strange ? " strange" : ""}" id="f-${i}" aria-labelledby="fn-${i}">
       <header class="dl-fac-head">
@@ -220,13 +244,14 @@ function deal({ fresh = true } = {}) {
   const typed = $("#seed").value.trim();
   const seed = typed && typed !== shown?.seed ? typed : fresh || !want.seed ? newSeed(T) : want.seed;
   try {
-    const W = dealWorld(T, { recipe: r, seed, factions: want.n });
+    const crew = want.crew || want.sheet ? { who: CREW.slice(0, want.crew).map((name) => ({ k: name.toLowerCase(), name })), res: [], assets: want.sheet ? [{ id: "ship", text: "A Ship" }, { id: "safehouses", text: "Safehouses" }] : [] } : null;
+    const W = dealWorld(T, { recipe: r, seed, factions: want.n, crew });
     want.seed = W.seed;
     shown = W;
     $("#seed").value = W.seed;
     writeAddress();
     drawBoard(W);
-    say(`Dealt ${W.seed}: ${genreName(r)} at ${T.regions[r.region].name}, ${want.n} factions.`);
+    say(`Dealt ${W.seed}: ${genreName(r)} at ${T.regions[r.region].name}, ${want.n} factions${want.crew ? `, and a crew of ${want.crew}` : ""}.`);
   } catch (err) {
     $("#board").innerHTML = `<p class="dl-wait">That one wouldn’t deal: ${esc(err.message)}</p>`;
     say("That one wouldn’t deal.");
@@ -280,6 +305,11 @@ function drawTables() {
   parts.push(table("The tension (d12)", core.tension.map((r, k) => row(`${k + 1}. ${r.text}`, r))));
   const KINDS = { rival: "Rivals", ally: "Allies", debt: "Debts", wildcard: "Wildcards", blocked: "Blocked trades" };
   parts.push(table("Ties between factions", core.ties.map((r) => row(r.text, null, esc([`${KINDS[r.kind] ?? r.kind}${r.bond ? `, ${r.bond}` : ""}`, r.back ? `back: ${r.back}` : ""].filter(Boolean).join(" · "))))));
+  if (core.crew) {
+    parts.push(table("The crew: a friend", core.crew.friends.map((r) => row(r.text, r)), { note: "A character’s friend: that faction’s bond thread toward the crew, named for them." }));
+    parts.push(table("The crew: a foe", core.crew.foes.map((r) => row(r.text, r)), { note: "A character’s foe: that faction’s hostile thread toward the crew, named for them." }));
+    parts.push(table("The crew: what nobody’s after", core.crew.qualities.map((k) => row(T.book.assets[k]?.name ?? k, null, "what the crew’s like, not something it’s got")), { note: "A faction can want something on the party sheet, but never these, or people who turn up, or the new crew’s card." }));
+  }
   parts.push(table("Faces", Object.entries(core.faces).map(([k, v]) => row(T.types[k] ?? k, null, esc(v.map((x) => T.book.threats.find((t) => t.key === x)?.name ?? x).join(", "))))));
   parts.push(table("Fallbacks", Object.entries(core.fallbacks).map(([k, r]) => row(r.tag || r.text, r, esc(`when ${k} still fails`)))));
 
@@ -409,6 +439,7 @@ async function boot() {
     if (e.target.id === "genre") want.genre = e.target.value;
     if (e.target.id === "era") want.era = e.target.value;
     if (e.target.id === "twist") want.twist = e.target.value || null;
+    if (e.target.id === "sheet") want.sheet = e.target.checked;
     if (e.target.id === "seed") return drawButton();
     drawControls();
     deal({ fresh: false });
@@ -418,9 +449,16 @@ async function boot() {
     deal({ fresh: true });
   });
   $("#seed").addEventListener("input", drawButton);
-  $$(".dl-step button").forEach((b) =>
+  $$(".dl-step button[data-n]").forEach((b) =>
     b.addEventListener("click", () => {
       want.n = Math.max(4, Math.min(12, want.n + Number(b.dataset.n)));
+      drawControls();
+      deal({ fresh: false });
+    }),
+  );
+  $$(".dl-step button[data-c]").forEach((b) =>
+    b.addEventListener("click", () => {
+      want.crew = Math.max(0, Math.min(CREW.length, want.crew + Number(b.dataset.c)));
       drawControls();
       deal({ fresh: false });
     }),

@@ -171,3 +171,11 @@
 @media (prefers-reduced-motion: reduce) {
   .dl-table > summary::after { transition: none; }
 }
+
+/* The crew (stage 6): each character's friend and foe. */
+.dl-crewrow { align-items: center; }
+.dl-check { display: flex; align-items: center; gap: 0.6rem; min-height: 48px; font-size: 0.95rem; line-height: 1.35; cursor: pointer; }
+.dl-check input { flex: none; width: 22px; height: 22px; margin: 0; accent-color: var(--violet); }
+.dl-crew { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); }
+.dl-who { padding: 0.8rem 0.9rem; }
+.dl-who h3 { margin: 0 0 0.5rem; font-size: 1.1rem; }

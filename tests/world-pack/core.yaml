@@ -43,6 +43,8 @@ because:
   answer: because {thing}
   tension: because {thing}
   region: ""
+  after: because it's after {thing}
+  rivalof: "because it's {thing}'s rival"
 
 wants:
   - { text: "More: money, land, trade.", tags: [wealth] }
@@ -102,6 +104,9 @@ agendas:
   - { text: "Take {asset} off its keepers.", die: 4 }
   - { text: "Seize {res} for itself.", die: 6 }
   - { text: "Wake what sleeps under {seat}.", die: 2, rare: true, strange: true }
+  - { text: "Get back what {who} took.", die: 4 }
+  - { text: "Find out what {who} knows.", die: 4, tags: [secret] }
+  - { text: "Take the crew's {thing}.", die: 4 }
 
 asking:
   holds:
@@ -156,6 +161,18 @@ ties:
   - { kind: blocked, text: "{b} gets nothing from us" }
   - { kind: blocked, text: "{b} can whistle for {res}" }
 
+crew:
+  friends:
+    - { text: "{who} pulled one of ours out of the river", needs: [river] }
+    - { text: "{who} kept quiet when it counted", tags: [crooks] }
+    - { text: "{who} sat with our sick", tags: [holy] }
+    - "{who} drank with us the night we lost everything"
+  foes:
+    - { text: "{who} saw what we did", tags: [secret] }
+    - { text: "{who} owes us", tags: [wealth] }
+    - "We've put a price on {who}'s head"
+  qualities: [rooted]
+
 faces:
   house: [commander, champion, duellist]
   traders: [operator, hired-blade]
@@ -176,3 +193,5 @@ fallbacks:
   agenda: { text: "Take {seat}.", die: 4 }
   block: { kind: blocked, text: "{b} gets nothing from us, ever" }
   rival: { kind: rival, text: "{b} stands in our way" }
+  who: { text: "Learn all there is about {who}.", die: 4 }
+  thing: { text: "Make the crew's {thing} its own.", die: 4 }

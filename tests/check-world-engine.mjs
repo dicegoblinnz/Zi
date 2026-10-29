@@ -49,11 +49,19 @@
 //    card it hasn't had, a card's words come filled in before it's on, her
 //    own Face is her words, her own resource leaves the rest of the card
 //    alone, a real roll picks its tension, and a card says where it sits.
+// 7. The crew (stage 6): what's worth taking off the party sheet, a friend
+//    and a foe for every character across 200 boards (never one faction for
+//    both, spread round the board, named for them, a thread toward the crew
+//    that standing counts), one faction always after something the crew's
+//    got, a foe likelier to be the one that's after them, a character's three
+//    cards, Lock and Deal again, her own words, the record, a character
+//    leaving or joining, and adding a faction tying it to someone who's
+//    still got no friend or foe on the board.
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { apply, blank, forPlayer, readable, undoOf } from "../src/companion/board.js";
-import { BAGS, CHECKS, STEPS, canDeal, cardsOf, choose, dealRest, dealWorld, lock, newSeed, options, pickKey, poolOf, preview, recordOf, redeal, redealFaction, resume, rngOf, SIZES, start, startAdd, tensionAt } from "../src/companion/world-engine.js";
+import { apply, blank, forPlayer, readable, standingOf, undoOf } from "../src/companion/board.js";
+import { BAGS, CHECKS, STEPS, canDeal, cardsOf, choose, dealRest, dealWorld, lock, newSeed, options, pickAt, pickKey, poolOf, preview, recordOf, redeal, redealFaction, resume, rngOf, setCrew, SIZES, start, startAdd, tensionAt } from "../src/companion/world-engine.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 
@@ -78,7 +86,7 @@ for (const f of ["src/generated/book.json", "public/world-book.json"]) {
 }
 const bookJson = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
 const worldBook = JSON.parse(readFileSync("public/world-book.json", "utf8"));
-const BOOK = bookFor(bookJson.companion.worlds, worldBook);
+const BOOK = bookFor(bookJson.companion.worlds, worldBook, bookJson.companion.party);
 const real = existsSync("content/world-tables/core.yaml");
 const DIR = real ? "content/world-tables" : "tests/world-pack";
 const read = readTablesDir(DIR);
@@ -132,6 +140,10 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
   broken("too few agendas for the first faction built", (s) => (s.core.agendas = s.core.agendas.filter((a) => /\{(rival|res|asset)\}/.test(a.text)).concat([{ text: "Take {seat}.", die: 4 }])), "three that only aim at a seat");
   broken("a fallback agenda that needs another faction", (s) => (s.core.fallbacks.agenda = { text: "Take {seat} from {rival}.", die: 4 }), "fallbacks.agenda aims only at a seat");
   broken("a row written twice", (s) => s.eras.dusk.seats.push({ ...s.eras.dusk.seats[2] }), "says the same as eras/dusk.yaml seats row 3");
+  broken("a friend that isn't named for anyone", (s) => s.core.crew.friends.push("Someone was kind to us once"), "needs {who}, the character it's named for");
+  broken("a fallback for the crew that aims elsewhere", (s) => (s.core.fallbacks.who = { text: "Take {seat}.", die: 4 }), "fallbacks.who aims only at {who}");
+  broken("a crew quality Appendix B hasn't got", (s) => (s.core.crew.qualities = ["lucky"]), "crew.qualities has one that isn't Appendix B's asset: lucky");
+  broken("no crew tables", (s) => delete s.core.crew, "crew needs friends, foes and qualities");
   // A row keeps its id when rows are added round it, so a world built from
   // last week's tables still knows which rows it holds.
   {
@@ -549,6 +561,155 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     same(C.factions[0].sits, `It sits on ${C.seats.find((x) => x.k === W.factions[0].seat.k).name.replace(/^The /, "the ")}.`, "a card says where it sits");
   }
   console.log("6. adding a faction to a board that's there, dealing one again, and a card's words before it's on");
+}
+
+// 7. The crew.
+{
+  const g = groups.find((x) => x.recipe.region === "city" && !x.recipe.twist) ?? groups[0];
+  const names = ["Vesk", "Bram", "Isolde", "Dorrie", "Ash", "Wren"];
+  const whoOf = (n) => names.slice(0, n).map((name, k) => ({ k: `ch-${k}x`, name }));
+  const sheet = { res: [{ id: "new-res-1", text: "Odd jobs" }, { id: "res-2x", text: "Salvage rights" }], assets: [{ id: "new-asset-1", text: "Four or five of us and a back room", power: true }, { id: "as-2x", text: "A Ship" }, { id: "as-3x", text: "Rooted" }, { id: "as-4x", text: "Influential" }, { id: "as-5x", text: "Muscle", power: true }] };
+  // What's worth taking: not the new crew's card, people or what the crew's like.
+  {
+    const W = start(T, { recipe: g.recipe, seed: "ash-lantern-ford", factions: 5, crew: { who: whoOf(2), ...sheet } });
+    same(W.crew.things.map((t) => t.text), real ? ["Salvage rights", "A Ship"] : ["Salvage rights", "A Ship", "Influential"], "what's worth taking leaves out the new crew's card, people who turn up and what the crew's like");
+    const N = start(T, { recipe: g.recipe, seed: "ash-lantern-ford", factions: 5, crew: { who: [], res: sheet.res.slice(0, 1), assets: sheet.assets.slice(0, 1) } });
+    same(N.crew, null, "a crew with nobody in it and only the new crew's card isn't a crew yet");
+    const plain = dealWorld(T, { recipe: g.recipe, seed: "ash-lantern-ford", factions: 5 });
+    yes(plain.factions.every((f) => !f.agenda.aims.some((a) => a === "who" || a === "thing")) && plain.checks.find((c) => c.k === "crew")?.ok, "with no crew, nothing's aimed at one and the crew check passes");
+    yes(cardsOf(T, plain).factions.every((f) => f.threads.every((t) => t.to !== "crew")), "and nothing's got a thread toward it");
+  }
+  let bad = null;
+  let fallbacks = 0;
+  let afterFoe = 0;
+  let afterAll = 0;
+  let spreadOk = 0;
+  let boards = 0;
+  let things = 0;
+  const NB = 200;
+  for (let b = 0; b < NB; b++) {
+    const seed = newSeed(T, rngOf("crew", b));
+    const chars = 1 + (b % 6);
+    const n = 4 + (b % 7);
+    const crew = { who: whoOf(chars), ...(b % 3 === 0 ? sheet : { res: [], assets: [] }) };
+    const opts = { recipe: g.recipe, seed, factions: n, crew };
+    const W = dealWorld(T, opts);
+    boards++;
+    const fail = (what) => {
+      bad ??= `${seed}: ${what}`;
+    };
+    if (JSON.stringify(recordOf(dealWorld(T, opts))) !== JSON.stringify(recordOf(W))) fail("the same seed and crew dealt two different boards");
+    if (W.fallbacks.length) fallbacks++;
+    for (const c of W.checks) if (!c.ok) fail(`the ${c.k} check still fails`);
+    const C = cardsOf(T, W);
+    const wants = W.factions.filter((f) => f.agenda.aims.some((a) => a === "who" || a === "thing"));
+    if (!wants.length) fail("no faction wants anything the crew's got");
+    if (W.factions.some((f) => f.agenda.aims.includes("thing"))) things++;
+    const friendRows = new Set();
+    const foeRows = new Set();
+    for (const c of W.crew.who) {
+      if (!c.friend || !c.foe) fail(`${c.name} hasn't got a friend and a foe`);
+      else if (c.friend.j === c.foe.j) fail(`${c.name}'s friend is their foe too`);
+      for (const [side, seen] of [["friend", friendRows], ["foe", foeRows]]) {
+        const p = c[side];
+        if (!p) continue;
+        if (seen.has(p.id) && !p.again) fail(`two characters got the same ${side} line before the table ran out`);
+        seen.add(p.id);
+        const t = C.factions[p.j].threads.find((x) => x.tie === `c:${c.k}:${side}`);
+        if (!t || t.to !== "crew" || t.kind !== (side === "foe" ? "hostile" : "bond") || !t.text.includes(c.name) || /[{}]/.test(t.text)) fail(`${c.name}'s ${side} isn't a thread toward the crew named for them: ${JSON.stringify(t)}`);
+      }
+      const after = W.factions.findIndex((f) => f.agenda.aims.includes("who") && f.agenda.at.who === c.k);
+      if (after >= 0) {
+        afterAll++;
+        if (c.foe?.j === after) afterFoe++;
+      }
+    }
+    // A faction that's everyone's friend only when there's nobody else to be.
+    const friends = W.crew.who.map((c) => c.friend?.j);
+    if (chars >= 3 && n >= 4 && new Set(friends).size >= 2) spreadOk++;
+    else if (chars < 3 || n < 4) spreadOk++;
+    // Standing counts them: its whole threads toward the crew.
+    C.factions.forEach((f, i) => {
+      const bond = W.crew.who.filter((c) => c.friend?.j === i).length;
+      const hostile = W.crew.who.filter((c) => c.foe?.j === i).length;
+      const want = bond > hostile ? "friendly" : hostile > bond ? "hostile" : "business";
+      if (standingOf(f) !== want) fail(`${f.name} reads as ${standingOf(f)} with ${bond} friends and ${hostile} foes in the crew`);
+      for (const ag of f.agendas) if (/[{}]/.test(ag.text)) fail(`a slot nobody filled in "${ag.text}"`);
+      for (const ag of f.agendas) if (/crew’s (A|An|The) /.test(ag.text)) fail(`"${ag.text}" keeps the thing's A or The`);
+    });
+  }
+  if (bad) note(`the crew: ${bad}`);
+  yes(fallbacks * 20 < NB, `the crew: ${fallbacks} of ${NB} boards needed a fallback, and that's 1 in 20 or more`);
+  yes(afterFoe * 2 > afterAll, `a faction that's after a character is their foe on more than half (${afterFoe} of ${afterAll})`);
+  yes(spreadOk >= NB * 0.95, `three or more characters' friends spread over two factions or more on most boards (${spreadOk} of ${NB})`);
+  yes(things > 0, "with something worth taking on the party sheet, a faction's sometimes after it");
+  console.log(`7. the crew: ${NB} boards with one to six characters, ${fallbacks} with a fallback, ${afterFoe} of ${afterAll} after a character and their foe`);
+  // A character's three cards, Lock, Deal again and her own words.
+  {
+    const crew = { who: whoOf(3), ...sheet };
+    const W = dealWorld(T, { recipe: g.recipe, seed: "kettle-moss-yew", factions: 6, crew });
+    const path = `crew:${W.crew.who[0].k}:foe`;
+    const cards = options(T, W, path, 3);
+    same(cards.length, 3, "a character's foe comes as three cards");
+    yes(new Set(cards.map((c) => c.j)).size === 3 && cards.every((c) => c.j !== W.crew.who[0].friend.j), "each a different faction, and never their friend");
+    same(pickKey(cards[0]), pickKey(W.crew.who[0].foe), "the first card's the one dealing picked");
+    const v = preview(T, W, path, cards[1]);
+    yes(v.text.includes("Vesk") && v.name === cardsOf(T, W).factions[cards[1].j].name && v.kind === "hostile", `a card shows the faction and its words named for them (${v.name}: ${v.text})`);
+    const web = JSON.stringify([W.web, W.needs, W.checks]);
+    choose(T, W, path, cards[1]);
+    same([pickKey(pickAt(W, path)), JSON.stringify([W.web, W.needs, W.checks])], [pickKey(cards[1]), web], "picking a foe puts it on and leaves the web and the checks as they were");
+    const kept = pickKey(pickAt(W, path));
+    lock(W, path);
+    redeal(T, W, path);
+    same(pickKey(pickAt(W, path)), kept, "a locked foe isn't dealt again");
+    lock(W, path, false);
+    redeal(T, W, path);
+    yes(pickKey(pickAt(W, path)) !== kept, "and Deal again gives a different one");
+    choose(T, W, `crew:${W.crew.who[1].k}:friend`, { own: true, j: 2, text: "Bram knows where the bodies are, and he's ours" });
+    dealRest(T, W);
+    same(cardsOf(T, W).factions[2].threads.find((t) => t.tie === `c:${W.crew.who[1].k}:friend`)?.text, "Bram knows where the bodies are, and he's ours", "her own words for a friend go on as she wrote them");
+    const back = resume(T, recordOf(W));
+    same(recordOf(back), recordOf(W), "the crew picks up from the record");
+    // Someone leaves and someone joins.
+    const gone = W.crew.who[0].k;
+    const aimed = W.factions.findIndex((f) => f.agenda.at?.who === gone);
+    setCrew(T, W, { who: [...whoOf(3).slice(1), { k: "ch-9x", name: "Ash" }], ...sheet });
+    yes(!W.crew.who.some((c) => c.k === gone), "a character who's left loses their friend and foe");
+    if (aimed >= 0) yes(W.factions[aimed].agenda.at.who !== gone, "and an agenda that was after them is after someone else");
+    yes(W.checks == null, "and the checks run again");
+    dealRest(T, W);
+    const ash = W.crew.who.find((c) => c.k === "ch-9x");
+    yes(ash.friend && ash.foe && W.checks.every((c) => c.ok), "someone who joins gets a friend and a foe when the board's finished");
+    same(W.crew.who.find((c) => c.k === W.crew.who[0].k).friend != null, true, "and everyone else keeps theirs");
+    const ship = W.factions.map((f) => f.agenda).find((a) => a.aims.includes("thing"));
+    if (ship) yes(!/crew’s (A|An|The) /.test(cardsOf(T, W).factions[W.factions.findIndex((f) => f.agenda === ship)].agendas[0].text), "a thing on the party sheet reads without its A");
+  }
+  // Adding a faction ties it to someone who hasn't got a friend or a foe yet.
+  {
+    let bad = null;
+    let lacking = 0;
+    for (let b = 0; b < 40; b++) {
+      const D = dealWorld(T, { recipe: g.recipe, seed: newSeed(T, rngOf("crew-add", b)), factions: 5 });
+      const held = D.factions.map((f, i) => ({ name: cardsOf(T, D).factions[i].name, res: f.res, assets: f.assets, seat: f.seat.k, picks: f }));
+      const who = [{ k: "ch-0x", name: "Vesk", has: { friend: true, foe: true } }, { k: "ch-1x", name: "Bram", has: { friend: true, foe: false } }];
+      const W = startAdd(T, { recipe: D.recipe, dials: D.dials, seed: D.seed, held, seats: D.seats, asking: D.asking, tension: D.tension, crew: { who, res: [], assets: [] } });
+      dealRest(T, W);
+      const i = W.held;
+      const toCrew = cardsOf(T, W).factions[i].threads.filter((t) => t.to === "crew");
+      const fail = (what) => {
+        bad ??= `${D.seed}: ${what}`;
+      };
+      if (toCrew.length !== 1) fail(`the new faction has ${toCrew.length} threads toward the crew`);
+      if (cardsOf(T, W).factions.slice(0, i).some((f) => f.threads.some((t) => t.to === "crew"))) fail("a faction that was there got a thread toward the crew");
+      const ag = W.factions[i].agenda;
+      if (toCrew[0]?.who === "ch-1x" && toCrew[0]?.side === "foe") lacking++;
+      else if (!(ag.aims.includes("who") && ag.at.who === toCrew[0]?.who)) fail(`it's tied to ${toCrew[0]?.who} as a ${toCrew[0]?.side}, with Bram still lacking a foe`);
+      if (!W.checks.every((c) => c.ok)) fail(`a check still fails: ${W.checks.filter((c) => !c.ok).map((c) => c.k)}`);
+    }
+    if (bad) note(`adding a faction with a crew: ${bad}`);
+    yes(lacking > 20, `adding a faction, it's mostly the foe of the one who hasn't got one (${lacking} of 40)`);
+  }
+  console.log("7. a character's cards, Lock, Deal again, her own words, the record, someone leaving and joining, and adding a faction tied to the crew");
 }
 
 console.log(problems.length ? `\n${problems.length} problems` : "\nAll world engine checks passed");

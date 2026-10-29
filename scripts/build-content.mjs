@@ -1545,7 +1545,7 @@ const tablesDir = join(ROOT, "content", "world-tables");
 const tablesOut = join(ROOT, "public", "world-tables.json");
 if (existsSync(tablesDir)) {
   const { src, problems: unread } = readTablesDir(tablesDir);
-  const { tables, problems } = worlds && worldBook ? compileTables(src, bookFor(worlds, worldBook)) : { tables: null, problems: ["can't check them without the faction board and the Threat Builder from the book"] };
+  const { tables, problems } = worlds && worldBook ? compileTables(src, bookFor(worlds, worldBook, party)) : { tables: null, problems: ["can't check them without the faction board and the Threat Builder from the book"] };
   for (const p of [...unread, ...problems]) companionWarn(`world tables: ${p}`);
   if (tables) {
     tables.at = BUILT;

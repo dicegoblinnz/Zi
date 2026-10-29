@@ -21,14 +21,20 @@
 //             for them and who's blocking each one, checks what the checks
 //             found, fixes what was dealt again for them, fallbacks what
 //             went in from core.yaml when three deals weren't enough
+//   crew      once there's a crew (setCrew()): who, the characters in the
+//             campaign, each { k, name, friend, foe } (a friend and a foe
+//             among the factions, each { j, id, text, ... } with j the
+//             faction, or her own { own, j, text }), and things, what's on
+//             the party sheet worth taking ({ l, id, text })
 //   tries     how many times each step's been dealt again, locks the steps
 //             she's locked, not the card each step had before it was dealt
 //             again. Each step has its own stream of randomness from the
 //             seed, its path and its tries, so dealing one again leaves
 //             every other step as it was.
 //
-// A step's path: ask:holds, ask:runs, ask:notices, tension, seat:<k>, and
-// f:<i>:<step> for the factions' steps. Picks keep their words, so the world
+// A step's path: ask:holds, ask:runs, ask:notices, tension, seat:<k>,
+// f:<i>:<step> for the factions' steps, and crew:<k>:friend and crew:<k>:foe
+// for a character's friend and foe. Picks keep their words, so the world
 // keeps what was dealt, never just the seed (the tables change most weeks).
 // A pick she writes herself is { own: true, text } and is kept as she wrote
 // it: no check deals it again.
@@ -47,7 +53,15 @@
 // (W.hs of them), with one new seat after them. A held faction or seat is
 // read for aims, rivals, ties and the bags, and never dealt, checked or
 // changed. The new one gets a rival among them, and an ally or a debt, and
-// an agenda only aims at what's on the board.
+// an agenda only aims at what's on the board. With a crew, it gets one
+// thread toward it too, named for a character who hasn't got a friend or a
+// foe on the board yet, when there's one.
+//
+// The crew (stage 6): every character gets a friend and a foe among the
+// factions once the board's finished, each that faction's thread toward the
+// crew, named for them, and an agenda can aim at a character ({who}) or at
+// something on the party sheet worth taking ({thing}), which the crew check
+// makes sure one does.
 
 export const REGIONS = ["town", "city", "country", "world", "stars"];
 export const SIZES = ["small", "local", "city", "great"];
@@ -59,7 +73,8 @@ export const STEPS = ["seat", "size", "type", "exc", "method", "want", "res", "a
 const EARLY = STEPS.slice(0, STEPS.indexOf("agenda"));
 const LATE = STEPS.slice(STEPS.indexOf("agenda"));
 export const QUESTIONS = ["holds", "runs", "notices"];
-export const CHECKS = ["whole", "power", "rival", "block", "secret", "unique", "aims", "strange"];
+export const CHECKS = ["whole", "power", "rival", "block", "secret", "unique", "aims", "crew", "strange"];
+export const SIDES = ["friend", "foe"];
 // The bags no two factions share a row from till the bag's empty, and the
 // steps they're dealt at. A pick from a bag that had run out says so (again).
 export const BAGS = { seats: "seat", types: "type", methods: "method", wants: "want", secrets: "secret", agendas: "agenda", exceptions: "exc", names: "name", people: "face" };
@@ -222,11 +237,11 @@ export function canDeal(T, { region, era, twist = null }) {
 // A new world, with nothing dealt: four to twelve factions (the plan's call
 // on board size). dials, if they're given, are fixed, and the asking doesn't
 // move them.
-export function start(T, { recipe, dials = null, seed, factions = 6 }) {
+export function start(T, { recipe, dials = null, seed, factions = 6, crew = null }) {
   if (!canDeal(T, recipe)) throw new Error(`the tables can't deal ${recipe.era}${recipe.twist ? ` with ${recipe.twist}` : ""} at ${recipe.region}`);
   const n = Math.max(4, Math.min(12, Math.floor(Number(factions) || 6)));
   const fixed = dials ? Object.fromEntries(DIALS.map((k) => [k, clamp(dials[k] ?? 1)])) : null;
-  return {
+  const W = {
     v: 1,
     seed: String(seed),
     recipe: { region: recipe.region, era: recipe.era, twist: recipe.twist ?? null },
@@ -246,7 +261,10 @@ export function start(T, { recipe, dials = null, seed, factions = 6 }) {
     checks: null,
     fixes: [],
     fallbacks: [],
+    crew: null,
   };
+  if (crew) setCrew(T, W, crew);
+  return W;
 }
 const clamp = (v) => Math.max(0, Math.min(2, Math.round(Number(v) || 0)));
 const blankFaction = () => ({ seat: null, size: null, type: null, exc: undefined, method: null, want: null, res: null, assets: null, agenda: null, face: null, secret: null, name: null, offers: [] });
@@ -259,8 +277,8 @@ const blankFaction = () => ({ seat: null, size: null, type: null, exc: undefined
 // the board has its record: rows by step, for the bags and the tags) }. The
 // build's asking and tension, when there's one, steer it the way they did
 // the board, and its dials (or a frame's) are fixed.
-export function startAdd(T, { recipe, dials = null, seed, held = [], seats = [], asking = null, tension = null, add = 1 }) {
-  const W = start(T, { recipe, dials: dials ?? { tense: 1, strange: 1, rich: 1, ruled: 1 }, seed });
+export function startAdd(T, { recipe, dials = null, seed, held = [], seats = [], asking = null, tension = null, add = 1, crew = null }) {
+  const W = start(T, { recipe, dials: dials ?? { tense: 1, strange: 1, rich: 1, ruled: 1 }, seed, crew });
   const hs = seats.filter(Boolean).length;
   W.add = true;
   W.held = held.length;
@@ -297,6 +315,73 @@ function heldOf(h, hs) {
 }
 const adding = (W) => W.add === true;
 const fresh = (W) => W.factions.map((_, i) => i).filter((i) => !W.factions[i].held);
+
+// The crew, once there's one: the characters in the campaign and what the
+// party sheet's got. crew is { who: [{ k, name, has? }], res: [{ id, text }],
+// assets: [{ id, text, power }] }, k being the character's id and has, when
+// a faction's being added, whether they've got a friend and a foe on the
+// board already. A character keeps the friend and foe they were dealt while
+// they're still in it. What's worth taking leaves out the new crew's card,
+// people who turn up and the assets that are what the crew's like (core's
+// crew.qualities). It says whether anything changed.
+const loose = (t) => String(t ?? "").toLowerCase().replace(/[’‘]/g, "'").replace(/\s+/g, " ").trim();
+const assetKey = (t) => loose(t).replace(/'/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").replace(/^(a|an|the)-/, "");
+// A character's key in a path (crew:<k>:friend): their id, letters, numbers,
+// hyphens and underscores only.
+export const crewKey = (k) => String(k ?? "").replace(/[^A-Za-z0-9_-]/g, "").slice(0, 48);
+export function setCrew(T, W, crew) {
+  const key = crewKey;
+  const line = (v) => String(v ?? "").replace(/\s+/g, " ").trim().slice(0, 60);
+  const was = new Map((W.crew?.who ?? []).map((c) => [c.k, c]));
+  const seen = new Set();
+  const who = [];
+  for (const c of Array.isArray(crew?.who) ? crew.who : []) {
+    const k = key(c?.k);
+    const name = line(c?.name);
+    if (!k || !name || seen.has(k) || who.length >= 30) continue;
+    seen.add(k);
+    const old = was.get(k);
+    const has = c.has ? { has: { friend: c.has.friend === true, foe: c.has.foe === true } } : old?.has ? { has: { ...old.has } } : {};
+    who.push({ k, name, friend: old?.friend ?? null, foe: old?.foe ?? null, ...has });
+  }
+  const qualities = new Set(T.core.crew?.qualities ?? []);
+  const things = [];
+  for (const l of ["res", "assets"]) {
+    const start = new Set((T.book.start?.[l] ?? []).map(loose));
+    for (const x of Array.isArray(crew?.[l]) ? crew[l] : []) {
+      const text = line(x?.text);
+      if (!x?.id || !text || start.has(loose(text))) continue;
+      if (l === "assets" && (x.power === true || qualities.has(assetKey(text)))) continue;
+      if (!things.some((t) => t.l === l && t.id === String(x.id))) things.push({ l, id: String(x.id), text });
+    }
+  }
+  const before = W.crew ?? null;
+  const next = who.length || things.length ? { who, things } : null;
+  const ids = (c) => JSON.stringify([(c?.who ?? []).map((x) => x.k), (c?.things ?? []).map((x) => `${x.l}:${x.id}`)]);
+  const changed = JSON.stringify(next) !== JSON.stringify(before);
+  W.crew = next;
+  // Who's in it, or what it's got, is what the crew check looks at, and an
+  // agenda aimed at someone who's left aims at someone else.
+  if (ids(next) !== ids(before)) {
+    W.checks = null;
+    for (const i of fresh(W)) {
+      const ag = W.factions[i].agenda;
+      if (aimsCrew(ag) && !aimOk(W, i, ag)) reaim(W, i, 0);
+    }
+  }
+  return changed;
+}
+const isCrewAim = (a) => a === "who" || a === "thing";
+const aimsCrew = (ag) => Boolean(ag && !own(ag) && ag.aims?.some(isCrewAim));
+const hasCrew = (W) => Boolean(W.crew?.who?.length || W.crew?.things?.length);
+const crewOf = (W, k) => (W.crew?.who ?? []).find((c) => c.k === k) ?? null;
+// A faction's name, the way its card has it, its seat and all.
+const seatText = (W, i) => {
+  const k = W.factions[i]?.seat?.k;
+  return k != null && W.seats[k] ? { text: W.seats[k].text, name: true } : "";
+};
+const nameAt = (W, i) => (W.factions[i]?.name ? fill(W.factions[i].name.text, { seat: seatText(W, i) }) : "");
+const rivals = (W, a, b) => (W.web ?? []).some((t) => t.kind === "rival" && ((t.a === a && t.b === b) || (t.a === b && t.b === a)));
 // A step on a held faction or seat, which never changes.
 function isHeld(W, path) {
   const [head, a] = path.split(":");
@@ -325,6 +410,7 @@ export function resume(T, rec) {
   for (const k of ["web", "needs", "checks"]) W[k] = rec[k] ?? null;
   W.fixes = rec.fixes ?? [];
   W.fallbacks = rec.fallbacks ?? [];
+  W.crew = rec.crew && typeof rec.crew === "object" && Array.isArray(rec.crew.who) ? { who: rec.crew.who.filter((c) => c?.k && c.name).map((c) => ({ ...c, friend: c.friend ?? null, foe: c.foe ?? null })), things: Array.isArray(rec.crew.things) ? rec.crew.things.filter((t) => t?.id) : [] } : null;
   W.dials = dialsOf(W);
   return W;
 }
@@ -510,8 +596,15 @@ function candidates(T, W, path, { only = null } = {}) {
   if (b === "agenda") {
     const others = dealt(W, i);
     const seats = W.seats.some((s, k) => s && seatToAim(W, i, k));
-    const can = (aim) => (aim === "seat" && seats) || (aim === "rival" && others.length) || (aim === "res" && others.some((j) => W.factions[j].res?.length)) || (aim === "asset" && others.some((j) => W.factions[j].assets?.length));
-    return pool(P.agendas.filter((r) => r.aims.every(can)), "agenda").map((x) => ofRow(x, { die: x.r.die, aims: x.r.aims }));
+    const can = (aim) => (aim === "seat" && seats) || (aim === "rival" && others.length) || (aim === "res" && others.some((j) => W.factions[j].res?.length)) || (aim === "asset" && others.some((j) => W.factions[j].assets?.length)) || (aim === "who" && W.crew?.who?.length > 0) || (aim === "thing" && W.crew?.things?.length > 0);
+    // Wanting something the crew's got comes up less for each faction that
+    // already does, so the board isn't all about the crew.
+    const after = W.factions.filter((x, j) => j !== i && aimsCrew(x.agenda)).length;
+    return pool(P.agendas.filter((r) => r.aims.every(can) && (only !== "crew" || r.aims.some(isCrewAim))), "agenda").map((x) => {
+      const c = ofRow(x, { die: x.r.die, aims: x.r.aims });
+      if (x.r.aims.some(isCrewAim)) c.w *= 0.5 ** after;
+      return c;
+    });
   }
   // A name's one to four words the way it reads on the card, its seat and
   // all, so there's never a Lords of the Street of Smiths.
@@ -535,7 +628,8 @@ function candidates(T, W, path, { only = null } = {}) {
 // The fields a pick keeps: its words and what it is, never the row itself.
 const KEEP = ["id", "text", "role", "tags", "leans", "offers", "strange", "again", "why", "by", "notice", "sizes", "dials", "tag", "more", "ways", "rival", "die", "aims", "reason", "drops", "gives", "power", "does"];
 const keepOf = (c) => Object.fromEntries(KEEP.filter((k) => c[k] !== undefined).map((k) => [k, Array.isArray(c[k]) ? c[k].map((x) => (x && typeof x === "object" ? { ...x } : x)) : c[k]]));
-const keyOfPick = (p) => p?.id ?? p?.k ?? p?.size ?? p?.nameId ?? null;
+// A friend or a foe is told apart by its faction and its row.
+const keyOfPick = (p) => (p?.j != null ? `${p.j}|${p.id ?? ""}` : p?.id ?? p?.k ?? p?.size ?? p?.nameId ?? null);
 
 // A whole set, for the steps that deal one: a faction's resources, or its
 // assets.
@@ -632,7 +726,14 @@ function aimOf(W, i, aims, rand) {
       const seats = W.seats.map((s, k) => (s && seatToAim(W, i, k) ? { w: taken.has(k) ? 1 : 2, k } : null)).filter(Boolean);
       out.seat = draw(seats, rand)[0]?.k ?? mine ?? 0;
     } else if (a === "rival") out.rival = pick(others, rand);
-    else {
+    else if (a === "who" || a === "thing") {
+      // One of the crew, or what they've got, and the ones nobody's after yet likelier.
+      const list = a === "who" ? W.crew?.who ?? [] : W.crew?.things ?? [];
+      const keyOf = (x) => (a === "who" ? x.k : `${x.l}:${x.id}`);
+      const aimed = (x) => W.factions.filter((f, j) => j !== i && aimsCrew(f.agenda) && (a === "who" ? f.agenda.at?.who === x.k : f.agenda.at?.thing && `${f.agenda.at.thing.l}:${f.agenda.at.thing.id}` === keyOf(x))).length;
+      const got = draw(list.map((x) => ({ w: 1 / (1 + 3 * aimed(x)), x })), rand)[0]?.x ?? null;
+      out[a] = got ? (a === "who" ? got.k : { l: got.l, id: got.id }) : null;
+    } else {
       const list = a === "res" ? "res" : "assets";
       const all = others.flatMap((j) => (W.factions[j][list] ?? []).filter((x) => x.id).map((x) => ({ j, id: x.id })));
       out[a] = pick(all, rand);
@@ -664,6 +765,7 @@ export function options(T, W, path, n = 3, opts = {}) {
     return [c ? keepOf(c) : null];
   }
   if (head === "f" && b === "face") return faces(T, W, Number(a), path, n, not);
+  if (head === "crew") return crewCards(T, W, path, n, not, opts);
   let all = candidates(T, W, path, opts);
   if (not != null) {
     const other = all.filter((c) => keyOfPick(c) !== not);
@@ -717,6 +819,99 @@ function faces(T, W, i, path, n, not) {
   return out;
 }
 
+// A character's friend or foe: a faction and the thread it has toward the
+// crew, named for them. Each card's a different faction, never the one
+// that's their other side, and the factions already someone's friend (or
+// foe) less likely, so it spreads round the board. A foe's likelier to be a
+// faction that's after them, or their friend's rival, and it says so. The
+// words are a row off core's crew tables that fits the faction, from a bag
+// shared by the characters, so no two get the same line till it's empty. The
+// factions have a stream, and each one's words a stream of their own, so the
+// first card's the same however many are drawn. Adding a faction, only the
+// new one can be.
+function crewCards(T, W, path, n, not, { only = null } = {}) {
+  const [, k, side] = path.split(":");
+  const c = crewOf(W, k);
+  if (!c || !SIDES.includes(side)) return [];
+  const other = side === "friend" ? "foe" : "friend";
+  const rows = T.core.crew?.[side === "friend" ? "friends" : "foes"] ?? [];
+  const used = new Set(W.crew.who.filter((x) => x.k !== k && x[side] && !own(x[side])).map((x) => x[side].id));
+  const board = boardOf(T, W);
+  const tries = W.tries[path] ?? 0;
+  const wasJ = not != null ? Number(String(not).split("|")[0]) : null;
+  let cands = fresh(W)
+    .filter((j) => (only == null || j === only) && W.factions[j].type && c[other]?.j !== j)
+    .map((j) => {
+      const f = W.factions[j];
+      const on = W.crew.who.filter((x) => x.k !== k && x[side]?.j === j).length;
+      let w = 0.25 ** on;
+      let src = null;
+      const after = aimsCrew(f.agenda) && f.agenda.at?.who === k;
+      // One that's after them is likeliest of all, however many it's already a foe to.
+      if (side === "foe" && after) {
+        w = 12;
+        src = { kind: "after", text: c.name, name: true };
+      } else if (side === "foe" && c.friend?.j != null && rivals(W, j, c.friend.j)) {
+        w *= 3;
+        src = { kind: "rivalof", text: nameAt(W, c.friend.j), name: true };
+      } else if (side === "friend" && after) w *= 0.2;
+      return { w, j, src };
+    });
+  if (wasJ != null && cands.some((x) => x.j !== wasJ)) cands = cands.filter((x) => x.j !== wasJ);
+  const out = [];
+  // No two cards in a hand with the same words, while there are others.
+  const inHand = new Set();
+  for (const x of draw(cands, rngOf(W.seed, path, tries, "who"), n)) {
+    const card = cardOf(W, x.j);
+    // A foe that's after them reads its agenda too, so its words fit what it's after.
+    const ag = W.factions[x.j].agenda;
+    if (side === "foe" && x.src?.kind === "after") for (const t of ag.tags ?? []) if (!card.tags.has(t)) card.tags.set(t, x.src);
+    let list = bagged(rows.filter((r) => fits(r, card, board)), used).map((y) => {
+      const fit = fitOf(y.r, card, board);
+      return { w: weightOf(W, y.r, fit), ...y, fit };
+    });
+    if (list.some((y) => !inHand.has(y.r.id))) list = list.filter((y) => !inHand.has(y.r.id));
+    const [got] = draw(list, rngOf(W.seed, path, tries, "row", x.j));
+    if (!got) continue;
+    inHand.add(got.r.id);
+    // The because is why it's that faction, when there's a reason: the words
+    // are the faction's own business.
+    out.push({ j: x.j, ...keepOf({ id: got.r.id, text: got.r.text, tags: got.r.tags, strange: got.r.strange, again: got.again, ...becauseOf(T, x.src) }) });
+  }
+  return out;
+}
+// Every character's friend and foe that isn't dealt yet, a character at a
+// time, friend first, since a foe reads the friend. Adding a faction, it's
+// one thread toward the crew on the new one: named for whoever's after it,
+// or someone who's still got no friend or no foe on the board, or anyone.
+function dealCrew(T, W) {
+  if (!W.crew?.who?.length) return;
+  if (adding(W)) {
+    const i = fresh(W)[0];
+    if (i == null || !W.factions[i].type || W.crew.who.some((c) => SIDES.some((s) => c[s]?.j === i))) return;
+    const rand = randOf(W, "crew");
+    const ag = W.factions[i].agenda;
+    let c = aimsCrew(ag) ? crewOf(W, ag.at?.who) : null;
+    let side = c ? "foe" : null;
+    if (!c) {
+      const lacks = W.crew.who.filter((x) => !x.has?.friend || !x.has?.foe);
+      c = pick(lacks.length ? lacks : W.crew.who, rand);
+      const can = SIDES.filter((s) => !c.has?.[s]);
+      side = can.length === 1 ? can[0] : rand() < HOSTILE[W.dials.tense] ? "foe" : "friend";
+    }
+    const path = `crew:${c.k}:${side}`;
+    if (!W.locks[path]) c[side] = crewCards(T, W, path, 1, null, { only: i })[0] ?? null;
+    return;
+  }
+  for (const c of W.crew.who) {
+    for (const side of SIDES) {
+      const path = `crew:${c.k}:${side}`;
+      if (c[side] || W.locks[path]) continue;
+      c[side] = crewCards(T, W, path, 1, W.not[path] ?? null)[0] ?? null;
+    }
+  }
+}
+
 // Put a pick on a step. A faction's later steps that aren't locked or hers
 // are dealt again, since they read the card so far, and so are those of the
 // faction sitting on a seat that changes. An answer that changes moves the dials for
@@ -733,6 +928,12 @@ export function choose(T, W, path, value, { keep = false } = {}) {
   };
   if (head === "seat" && adding(W) && Number(a) < W.hs) return;
   if (head === "f" && W.factions[Number(a)]?.held) return;
+  // A friend or a foe is only theirs: nothing else on the board reads it.
+  if (head === "crew") {
+    const c = crewOf(W, a);
+    if (c && SIDES.includes(b)) c[b] = value;
+    return;
+  }
   if (head === "ask") W.asking[a] = value;
   else if (head === "tension") W.tension = value;
   else if (head === "seat") {
@@ -802,6 +1003,7 @@ export function pickAt(W, path) {
   if (head === "tension") return W.tension;
   if (head === "seat") return W.seats[Number(a)] ?? null;
   if (head === "f") return W.factions[Number(a)]?.[b] ?? null;
+  if (head === "crew") return crewOf(W, a)?.[b] ?? null;
   return null;
 }
 
@@ -821,6 +1023,7 @@ export function dealRest(T, W, { finish = true } = {}) {
   if (!W.web) dealWeb(T, W);
   if (!W.needs) dealNeeds(T, W);
   if (!W.checks) runChecks(T, W);
+  dealCrew(T, W);
   return W;
 }
 function dealFaction(T, W, i, steps = STEPS) {
@@ -1009,6 +1212,9 @@ function passes(T, W, key) {
     return true;
   }
   if (key === "aims") return mine.every((i) => own(W.factions[i].agenda) || aimOk(W, i, W.factions[i].agenda));
+  // Once there's a crew, one faction wants something it's got: one of the
+  // characters, or something on the party sheet worth taking.
+  if (key === "crew") return adding(W) || !hasCrew(W) || mine.some((i) => aimsCrew(W.factions[i].agenda) && aimOk(W, i, W.factions[i].agenda));
   if (key === "strange") return strangeCount(W) > 0;
   return true;
 }
@@ -1018,6 +1224,8 @@ function aimOk(W, i, ag) {
     const v = ag.at?.[a];
     if (a === "seat") return Number.isInteger(v) && Boolean(W.seats[v]) && (!adding(W) || v < W.hs);
     if (a === "rival") return Number.isInteger(v) && v !== i && Boolean(W.factions[v]?.type);
+    if (a === "who") return typeof v === "string" && Boolean(crewOf(W, v));
+    if (a === "thing") return Boolean(v) && (W.crew?.things ?? []).some((t) => t.l === v.l && t.id === v.id);
     const list = a === "res" ? "res" : "assets";
     return Boolean(v) && v.j !== i && (W.factions[v.j]?.[list] ?? []).some((x) => x.id === v.id);
   });
@@ -1125,6 +1333,9 @@ function fix(T, W, key, t) {
       if (reaim(W, i, t)) W.fixes.push({ k: key, path: `f:${i}:agenda`, t, aim: true });
       else redealStep(T, W, i, "agenda", null, key, t);
     }
+  } else if (key === "crew") {
+    const i = freeFaction(W, "agenda", key, t);
+    if (i != null) redealStep(T, W, i, "agenda", "crew", key, t);
   } else if (key === "strange") {
     // Only a Secret or a name, since nothing else on the card reads them, and
     // never the only Secret naming another faction.
@@ -1183,6 +1394,14 @@ function fallback(T, W, key) {
       f.agenda = { ...keepOf({ id: F.agenda.id, text: F.agenda.text, die: F.agenda.die, aims: ["seat"], why: "" }), at: aimOf(W, i, ["seat"], rngOf(W.seed, "fallback", "aims", i)) };
       used();
     });
+  } else if (key === "crew") {
+    // One of the characters when there's one, or else what's on the party sheet.
+    const i = freeFaction(W, "agenda", "fallback", 1);
+    if (i == null) return;
+    const aim = W.crew.who.length ? "who" : "thing";
+    const row = F[aim];
+    W.factions[i].agenda = { ...keepOf({ id: row.id, text: row.text, die: row.die, aims: [aim], why: "" }), at: aimOf(W, i, [aim], rngOf(W.seed, "fallback", "crew", i)) };
+    used();
   } else if (key === "strange") {
     const rivals = W.factions.filter((f) => f.secret?.at != null).length;
     const i = W.factions.findIndex((f, j) => !lockedOrOwn(W, j, "secret") && (f.secret?.at == null || rivals > 1));
@@ -1222,6 +1441,16 @@ export function cardsOf(T, W) {
     return a ? { text: fill(a.text, { seat: seatName(j) }), name: true } : "";
   };
   const T2 = T.core.templates;
+  // One of the crew by name, and what the party sheet calls what they've got,
+  // without its A or The, since it's "the crew's" in the line.
+  const whoText = (k) => {
+    const c = crewOf(W, k);
+    return c ? { text: c.name, name: true } : "";
+  };
+  const thingText = (t) => {
+    const x = (W.crew?.things ?? []).find((y) => y.l === t?.l && y.id === t?.id);
+    return x ? { text: x.text.replace(/^(an?|the)\s+/i, ""), name: true } : "";
+  };
   const factions = W.factions.map((f, i) => {
     const seat = seatName(i);
     const slot = (at = {}) => ({
@@ -1229,6 +1458,8 @@ export function cardsOf(T, W) {
       rival: at.rival != null ? asName(at.rival) : "",
       res: at.res ? resText(at.res.j, at.res.id) : "",
       asset: at.asset ? assetText(at.asset.j, at.asset.id) : "",
+      who: at.who != null ? whoText(at.who) : "",
+      thing: at.thing ? thingText(at.thing) : "",
     });
     const threads = [];
     for (const t of W.web ?? []) {
@@ -1247,6 +1478,15 @@ export function cardsOf(T, W) {
     }
     for (const n of W.needs ?? []) {
       if (n.by === i && n.tie) threads.push({ text: fill(n.tie.text, { a: asName(i), b: asName(n.i), res: n.at?.res ? resText(i, n.at.res) : "", seat: seatAt(n.at?.seat) }), kind: "hostile", s: "whole", to: n.i, tie: `n:${n.i}` });
+    }
+    // Its threads toward the crew, as a character's friend or foe, named for them.
+    for (const c of W.crew?.who ?? []) {
+      for (const side of SIDES) {
+        const p = c[side];
+        if (!p || p.j !== i) continue;
+        const text = own(p) ? String(p.text ?? "").trim() : fill(p.text, { who: { text: c.name, name: true } });
+        if (text) threads.push({ text, kind: side === "foe" ? "hostile" : "bond", s: "whole", to: "crew", tie: `c:${c.k}:${side}`, who: c.k, side });
+      }
     }
     const secret = f.secret;
     const rival = secret?.at != null ? asName(secret.at) : "";
@@ -1295,6 +1535,11 @@ export function preview(T, W, path, pick) {
   const base = { why: pick.why ?? "", strange: Boolean(pick.strange), again: Boolean(pick.again), own: Boolean(pick.own) };
   if (head === "ask" || head === "tension") return { ...base, text: fill(pick.text, {}), dials: pick.dials ?? {}, roll: pick.roll ?? null };
   if (head === "seat") return { ...base, name: fill(pick.text, {}), role: pick.role ?? "", notice: pick.notice ?? "" };
+  if (head === "crew") {
+    const c = crewOf(W, a);
+    const text = pick.own ? String(pick.text ?? "").trim() : fill(pick.text, { who: { text: c?.name ?? "", name: true } });
+    return { ...base, j: pick.j, name: nameAt(W, pick.j), text, kind: b === "foe" ? "hostile" : "bond" };
+  }
   if (head !== "f") return null;
   const i = Number(a);
   if (b === "seat") {
@@ -1341,6 +1586,7 @@ export function recordOf(W) {
       tries: W.tries,
       locks: W.locks,
       not: W.not,
+      crew: W.crew ?? null,
     }),
   );
 }

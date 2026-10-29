@@ -52,6 +52,9 @@ because:
   answer: "because {thing}"
   tension: "because of what's pulling it apart: {thing}"
   region: ""
+  # Why a faction's a character's foe: it's after them, or it's their friend's rival.
+  after: "because it's after {thing}"
+  rivalof: "because it's {thing}'s rival"
 
 # Building a Faction's What it wants, row for row.
 wants:
@@ -132,6 +135,17 @@ agendas:
   - { text: "Hunt down whoever robbed {seat}", die: 8 }
   - { text: "Open what was sealed under {seat}", die: 2, rare: true, strange: true, tags: [old] }
   - { text: "Finish the ritual begun at {seat}", die: 2, rare: true, strange: true, tags: [old] }
+  # Once there's a crew, it can want something the crew's got: one of the
+  # characters ({who}), or something on the party sheet worth taking ({thing}).
+  - { text: "Get back what {who} took from it", die: 4 }
+  - { text: "Find out what {who} knows", die: 4, tags: [secret] }
+  - { text: "Buy {who}'s silence", die: 6, tags: [secret, wealth] }
+  - { text: "Get {who} working for it", die: 6, tags: [guild] }
+  - { text: "Make {who} pay what's owed", die: 6, tags: [debt] }
+  - { text: "Bring {who} back where they belong", die: 8, tags: [blood] }
+  - { text: "Take the crew's {thing}", die: 4 }
+  - { text: "Buy the crew's {thing} off them, cheap", die: 6, tags: [wealth, market] }
+  - { text: "Prove the crew's {thing} belonged to it all along", die: 8, tags: [law] }
 
 # Building Your World's three questions. Each answer's a whole sentence, so it
 # reads after "because" too.
@@ -228,6 +242,41 @@ ties:
   - { kind: blocked, text: "We'll never share {res} with {b}" }
   - { kind: blocked, text: "{b} will pay double, or go without" }
 
+# The crew: a friend and a foe among the factions for every character, each
+# that faction's thread toward the crew, from its side, named for the character
+# ({who}). And the crew's assets in Appendix B that are what the crew's like
+# rather than something it's got, so no faction's after them.
+crew:
+  friends:
+    - { text: "{who} pulled one of ours out of the river", needs: [river] }
+    - { text: "{who} kept their mouth shut when the law came asking", tags: [crooks, crime] }
+    - { text: "{who} carried our dead home, and wouldn't take payment", tags: [soldiers, war] }
+    - { text: "{who} stood up for us when the whole street turned", tags: [poor, rebels] }
+    - { text: "{who} got our goods through when the roads were shut", tags: [road, traders, trade] }
+    - { text: "{who} paid off a debt of ours and never said a word", tags: [debt] }
+    - { text: "{who} sat with our sick when everyone else ran", tags: [plague, faith, holy] }
+    - { text: "{who} brought back what was stolen from us, every piece", tags: [keepers, wealth] }
+    - { text: "{who} talked our hotheads out of a fight they'd have lost", tags: [war, rebels, family] }
+    - { text: "{who} spoke for us at the trial, and we walked free", tags: [law, office] }
+    - { text: "{who} fixed what nobody else could, for the price of a meal", tags: [makers, craft] }
+    - { text: "{who} drank with us the night we lost everything" }
+    - { text: "{who} put our founder's ghost to rest", rare: true, strange: true, tags: [old] }
+  foes:
+    - { text: "{who} saw what we did, and hasn't told anyone yet", tags: [secret] }
+    - { text: "{who} owes us, and the interest grows every week", tags: [debt, wealth] }
+    - { text: "{who} walked out on us and took what they knew", tags: [society, family, house] }
+    - { text: "{who} won big at our tables, and we say they cheated", tags: [crooks, crime] }
+    - { text: "{who} turned down our money, and people noticed", tags: [wealth, traders] }
+    - { text: "We've put a price on {who}'s head", tags: [crooks, war] }
+    - { text: "{who} made a fool of our leader in public", tags: [house, law] }
+    - { text: "{who} broke their word to us, and it cost us dearly" }
+    - { text: "{who} put one of ours behind bars, and they're still there", tags: [law, office] }
+    - { text: "{who} wrecked our shop and never paid for the damage", tags: [market, makers] }
+    - { text: "{who} took a job we'd been promised", tags: [labour, guild] }
+    - { text: "{who} turned one of ours against us", tags: [society, rebels] }
+    - { text: "{who} broke something we'd kept sealed for a hundred years", rare: true, strange: true, tags: [old] }
+  qualities: [rooted, influential]
+
 # The Threat Builder's threats a faction's face can be, by what it is.
 faces:
   house: [commander, champion, duellist, operator, turncoat]
@@ -249,3 +298,5 @@ fallbacks:
   agenda: { text: "Take {seat}", die: 4 }
   block: { kind: blocked, text: "We'll sell {b} nothing, ever" }
   rival: { kind: rival, text: "{b} stood in our way once too often" }
+  who: { text: "Learn everything there is to know about {who}", die: 4 }
+  thing: { text: "Make the crew's {thing} its own", die: 4 }

@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c or 9d)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d or 9e)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -171,19 +171,35 @@
 //    locks the first faction's Want and picks another type, so the rest of
 //    its card's dealt again round the Want, deals the faction again bar the
 //    Want, Undoes it, names the second one himself, deals the rest, leaves a
-//    thread of the web off, and puts it on the board, all with no signal.
-//    Once he's back it reaches the server: the factions and the seats as
-//    places, all hidden, each card saying where it sits, his name and Want
-//    kept, the thread left off both cards, and the record with every
-//    faction's id beside what was dealt it. Sam gets none of it, not the
-//    record or anything dealt, and can't change it. Tuesday Lair's board,
-//    brought in from the book, offers Add a faction on the Steeplands' mix:
-//    the new faction's rival is a faction already there, a thread each way,
-//    it sits on a new place, and the record's added gets it. Undo on Done's
-//    note takes it all back off and brings the build back. Kai gets none of
-//    it. Adding a faction's screens pass axe at 390, in both themes, and at
-//    320, and one left half added on the phone is dropped from the World
-//    screen.
+//    thread of the web off, then gives Isolde a friend and a foe (another
+//    foe of the three, and her friend in his own words), and puts it on the
+//    board, all with no signal. A faction's after Isolde, since the party
+//    sheet's only got the new crew's card. Once he's back it reaches the
+//    server: the factions and the seats as places, all hidden, each card
+//    saying where it sits, his name and Want kept, the thread left off both
+//    cards, Isolde's friend and foe as threads toward the crew that make
+//    one faction friendly and the other hostile, and the record with every
+//    faction's id beside what was dealt it and who's whose. Sam gets none of
+//    it, not the record or anything dealt, and can't change it. Tuesday
+//    Lair's board, brought in from the book, offers Add a faction on the
+//    Steeplands' mix: the new faction's rival is a faction already there, a
+//    thread each way, it sits on a new place, it's got one thread toward the
+//    crew, named for one of them, and the record's added gets it. Undo on
+//    Done's note takes it all back off and brings the build back. Kai gets
+//    none of it. The crew's screen and adding a faction's screens pass axe at
+//    390, in both themes, and at 320, and one left half added on the phone
+//    is dropped from the World screen.
+//    9e. The faction web (stage 6 of notes/builder-plan.md). Mo's World
+//    screen has Thursday Lair's four factions round the crew, faint while
+//    they're hidden, with their threads between them. Tapping the crew shows
+//    how every faction sees it, Isolde's friend and foe among them, and
+//    tapping a faction lights its lines and lists its threads each way. What
+//    the crew sees is nothing till he shows them Isolde's friend, its threads
+//    too, and her foe's card alone: then Sam's web, on the World screen and
+//    Isolde's World tab, has just those two, nothing of the others anywhere
+//    on his page, the friend's thread toward the crew and not the foe's, and
+//    Mo's What the crew sees is the same. All of it passes axe at 390 in
+//    both themes, and at 320.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -204,6 +220,7 @@ import { WebSocketServer } from "ws";
 import { chromium } from "playwright";
 import { stepsToDice } from "../src/companion/dice.js";
 import { coveredShare, fogBits, fogFull, fogText, gridOf, spotCovered } from "../src/companion/maps.js";
+import { standingOf } from "../src/companion/board.js";
 import { AxeBuilder } from "@axe-core/playwright";
 
 const problems = [];
@@ -3152,11 +3169,40 @@ try {
     has(await text(mo.page, ".wk"), "Every faction’s card adds up", "and the checks passed");
     await axe(mo.page, "building the world, the board, dark");
     const tie = await mo.page.$eval('.wk-tie[data-cut^="w:"]', (el) => el.dataset.cut);
+    const cutWords = await mo.page.$$eval(`.wk-tie[data-cut="${tie}"] em`, (els) => els.map((el) => el.textContent.trim()));
     await mo.page.click(`.wk-tie[data-cut="${tie}"] [data-do="mk-cut"]`);
     yes(await mo.page.$eval(`.wk-tie[data-cut="${tie}"]`, (el) => el.classList.contains("is-cut")), "a thread of the web left off");
     e = await making(mo.page, thursday.id);
     const [ta, tb] = tie.slice(2).split("-").map(Number);
     await shot(mo.page, "build-board-dark");
+    yes(e.W.factions.some((f) => f.agenda?.aims?.includes("who") && f.agenda.at?.who === "isolde-tttttt"), "a faction's after Isolde, since she's the crew and its party sheet's only got the new crew's card");
+    // The crew: a friend and a foe for Isolde, Sam's character.
+    has(await text(mo.page, ".wk-done-note"), "a friend and a foe among these factions for Isolde", "the board says the crew comes next");
+    await next(mo.page);
+    has(await kicker(mo.page), "The crew · 1 of 1", "then the crew, a character at a time");
+    same(await lead(mo.page), "Isolde", "starting with Isolde");
+    has(await text(mo.page, ".wk-who"), "Played by Sam", "and who plays her");
+    const isoFriend = "crew:isolde-tttttt:friend";
+    const isoFoe = "crew:isolde-tttttt:foe";
+    const friends = await cardsAt(mo.page, isoFriend);
+    const foes = await cardsAt(mo.page, isoFoe);
+    same([friends.length, foes.length, friends.filter((c) => c.on).length, foes.filter((c) => c.on).length], [3, 3, 1, 1], "three cards each for her friend and her foe, one of each on");
+    yes([...friends, ...foes].every((c) => c.text.includes("Isolde")), "every one of them named for her");
+    await mo.page.click(`.wk-card[data-p="${isoFoe}"][aria-pressed="false"]`);
+    e = await making(mo.page, thursday.id);
+    const isoFoeIs = e.W.crew.who[0].foe;
+    yes(isoFoeIs && isoFoeIs.j !== e.W.crew.who[0].friend?.j, "another foe on, never her friend");
+    await mo.page.click(`[data-do="mk-own"][data-p="${isoFriend}"]`);
+    const fj = Number(await mo.page.$eval(`form[data-form="w-mk-own"][data-p="${isoFriend}"] select[name="j"]`, (el) => el.value));
+    await mo.page.fill(`form[data-form="w-mk-own"][data-p="${isoFriend}"] input[name="text"]`, "Isolde kept our name out of the trial");
+    await mo.page.click(`form[data-form="w-mk-own"][data-p="${isoFriend}"] button[type="submit"]`);
+    same((await making(mo.page, thursday.id)).W.crew.who[0].friend, { own: true, j: fj, text: "Isolde kept our name out of the trial" }, "his own words for her friend");
+    for (const theme of ["dark", "light"]) {
+      await mo.page.evaluate((t) => { localStorage.setItem("zi-theme", t); document.documentElement.dataset.theme = t; }, theme);
+      await axe(mo.page, `building the world, the crew, ${theme}`);
+      await shot(mo.page, `build-crew-${theme}`);
+    }
+    await mo.page.evaluate(() => { localStorage.setItem("zi-theme", "dark"); document.documentElement.dataset.theme = "dark"; });
     await mo.page.click('.bd-foot [data-do="mk-done"]');
     await mo.page.waitForSelector(".wb-toks");
     await until(async () => (await text(mo.page, "#app")).includes("go up when you’ve got a signal"), "Mo's phone saying his world goes up once there's a signal");
@@ -3176,8 +3222,19 @@ try {
     same(tw.build.dealt.asking.runs, { own: true, text: "The bell-ringers run it, and nobody knows why." }, "and his own answer");
     const fa = tw.factions[ta];
     const fb = tw.factions[tb];
-    yes(!fa.threads.some((t) => t.to === fb.id) && !fb.threads.some((t) => t.to === fa.id), "the thread he left off is on neither card");
-    yes(tw.factions.every((f) => f.threads.every((t) => tw.factions.some((x) => x.id === t.to))), "every other thread's toward a faction on the board");
+    // A blocked trade between the same two can still be there, so it's the words that go.
+    yes(cutWords.length > 0 && ![...fa.threads, ...fb.threads].some((t) => (t.to === fa.id || t.to === fb.id) && cutWords.includes(t.text)), "the thread he left off is on neither card");
+    yes(tw.factions.every((f) => f.threads.every((t) => t.to === "crew" || tw.factions.some((x) => x.id === t.to))), "every other thread's toward a faction on the board, or the crew");
+    // Isolde's friend and foe, threads toward the crew that standing counts.
+    const toCrew = tw.factions.flatMap((f) => f.threads.filter((t) => t.to === "crew").map((t) => ({ ...t, f })));
+    same(toCrew.length, 2, "two threads toward the crew, Isolde's friend and her foe");
+    const fr = toCrew.find((t) => t.kind === "bond");
+    const fo = toCrew.find((t) => t.kind === "hostile");
+    same([fr?.text, fr?.f.id], ["Isolde kept our name out of the trial", tw.factions[fj]?.id], "her friend's his own words, on the faction he picked");
+    yes(fo?.text.includes("Isolde") && fo.f.id === tw.factions[isoFoeIs.j]?.id, "her foe's the one he picked, named for her");
+    same([standingOf(fr.f), standingOf(fo.f)], ["friendly", "hostile"], "so one's friendly to the crew and the other's hostile");
+    same(tw.build.dealt.crew?.who?.map((c) => [c.k, c.friend?.j, c.foe?.j]), [["isolde-tttttt", fj, isoFoeIs.j]], "the record keeps who's whose");
+    yes(tw.factions.some((f) => f.agendas.some((a) => a.text.includes("Isolde"))), "and the faction that's after her says so on its card");
     // Sam gets none of it, and can't change it.
     const sw = (await got(sam.page, "GET", `/api/campaigns/${thursday.id}/world`)).json;
     same([sw?.world?.factions, sw?.world?.pages, sw?.world?.build], [[], [], null], "Sam's phone gets nothing of the world till Mo shows it");
@@ -3220,6 +3277,9 @@ try {
     same(w2.pages.length, was2.pages.length + 1, "it sits on a new place");
     yes(nf.about.includes(`It sits on ${w2.pages.at(-1).name.replace(/^The /, "the ")}.`), "and its card says so");
     same([w2.build?.recipe?.region, w2.build?.dealt?.added?.[0]?.fid], ["country", nf.id], "the record's added has it");
+    const nfCrew = nf.threads.filter((t) => t.to === "crew");
+    yes(nfCrew.length === 1 && /Vesk|Bram/.test(nfCrew[0].text), `and one thread toward the crew, named for one of Tuesday Lair's crew (${nfCrew[0]?.text})`);
+    same(w2.build.dealt.added[0].crew?.length, 1, "which the record keeps, so the next faction knows who's tied to it");
     const kw2 = (await got(kai.page, "GET", `/api/campaigns/${tuesday.id}/world`)).json;
     yes(kw2?.world?.build === null && !kw2.world.factions.some((f) => f.id === nf.id) && !JSON.stringify(kw2).includes(w2.build.seed), "Kai gets none of it, not even the record");
     yes(Object.values(nf.shown).every((v) => !v), "and it's hidden from the crew");
@@ -3260,11 +3320,96 @@ try {
     await mo.page.click('[data-do="mk-drop-build"]');
     await mo.page.click('[data-do="mk-drop-build"]');
     same(await making(mo.page, thursday.id), null, "and Drop it takes it off");
+    return { thursday, fj, foeJ: isoFoeIs.j };
   }
   console.log("9d. Building alone");
-  await checkBuild();
+  const built = await checkBuild();
   // ZI_UPTO=9d stops here, for a quicker look while working on the world builder.
   if (UPTO === "9d") break rest;
+
+  // ------------------------------------------------------------ 9e. the faction web
+  async function checkWeb({ thursday, fj, foeJ }) {
+    const tw = JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", thursday.id))[0]?.data ?? "null");
+    const friend = tw.factions[fj];
+    const foe = tw.factions[foeJ];
+    const foeLine = foe.threads.find((t) => t.to === "crew")?.text ?? "";
+    const ring = (page) => page.$$eval(".ww-node", (els) => els.map((el) => ({ label: el.getAttribute("aria-label"), hidden: el.classList.contains("is-hidden"), on: el.getAttribute("aria-pressed") === "true" })));
+    const panel = (page) => page.textContent(".ww-panel");
+    const tap = async (page, name) => {
+      const i = (await ring(page)).findIndex((x) => x.label.startsWith(`${name},`));
+      await page.click(`.ww-node >> nth=${i}`);
+    };
+    // Mo's web: all four factions round the crew, faint while they're hidden.
+    await mo.page.goto(`${BASE}/characters/?camp=${thursday.id}&world`);
+    await mo.page.waitForSelector(".ww-ring");
+    let nodes = await ring(mo.page);
+    same([nodes.length, nodes.every((x) => x.hidden)], [4, true], "Mo's web has the four factions round the crew, each faint while it's hidden");
+    yes(tw.factions.every((f) => nodes.some((x) => x.label.startsWith(`${f.name},`))), "each by its name");
+    const lines = await mo.page.$$eval(".ww-lines .ww-l", (els) => els.length);
+    yes(lines >= 4, `and their threads drawn between them (${lines} lines)`);
+    has(await panel(mo.page), "The faint ones are hidden from the crew", "with a key that says what faint means");
+    for (const theme of ["dark", "light"]) {
+      await mo.page.evaluate((t) => { localStorage.setItem("zi-theme", t); document.documentElement.dataset.theme = t; }, theme);
+      await axe(mo.page, `the faction web, ${theme}`);
+      await shot(mo.page, `web-${theme}`);
+    }
+    await mo.page.evaluate(() => { localStorage.setItem("zi-theme", "dark"); document.documentElement.dataset.theme = "dark"; });
+    // The crew in the middle: how every faction sees it.
+    await mo.page.click(".ww-crew");
+    let p = await panel(mo.page);
+    has(p, "How the factions see the crew", "tapping the crew shows how the factions see it");
+    has(p, "Isolde kept our name out of the trial", "with Isolde's friend");
+    has(p, foeLine, "and her foe");
+    // A faction: its lines lit and the rest dimmed, and its threads each way.
+    await tap(mo.page, friend.name);
+    p = await panel(mo.page);
+    yes((await ring(mo.page)).find((x) => x.label.startsWith(`${friend.name},`))?.on, "tapping a faction picks it");
+    has(p, "Toward the crew", "and lists its threads toward the crew");
+    has(p, "Isolde kept our name out of the trial", "Isolde's among them");
+    for (const t of friend.threads.filter((x) => x.to !== "crew")) has(p, t.text, "and toward other factions");
+    for (const x of tw.factions) for (const t of x.threads.filter((y) => y.to === friend.id)) has(p, t.text, "and theirs toward it");
+    const lit = await mo.page.$$eval(".ww-lines .ww-l.is-hi", (els) => els.length);
+    const dim = await mo.page.$$eval(".ww-lines .ww-l.is-dim", (els) => els.length);
+    yes(lit > 0 && lit + dim === lines, `its lines lit and the rest dimmed (${lit} and ${dim})`);
+    await axe(mo.page, "the faction web with a faction picked");
+    await mo.page.setViewportSize({ width: 320, height: 640 });
+    await axe(mo.page, "the faction web, 320 wide");
+    await mo.page.setViewportSize({ width: 390, height: 844 });
+    // What the crew sees: nothing, till he shows them.
+    await mo.page.click('[data-do="web-crew"][data-v="1"]');
+    same(await mo.page.$$eval(".ww-node", (els) => els.length), 0, "what the crew sees: nothing yet");
+    has(await text(mo.page, ".ww-sec"), "hasn’t been shown enough of the world for a web yet", "and it says so");
+    same((await got(mo.page, "POST", `/api/campaigns/${thursday.id}/world`, { dev: "mos-check-009e", ops: [{ n: 1, o: "show", id: friend.id, p: "card", v: true }, { n: 2, o: "show", id: friend.id, p: "threads", v: true }, { n: 3, o: "show", id: foe.id, p: "card", v: true }] })).status, 200, "Mo shows the crew Isolde's friend, its threads too, and her foe's card alone");
+    // Sam's web: those two, and only what he's been shown of them.
+    const others = tw.factions.filter((f) => f.id !== friend.id && f.id !== foe.id);
+    for (const at of [`/characters/?camp=${thursday.id}&world`, "/characters/?c=isolde-tttttt&t=world"]) {
+      await sam.page.goto(`${BASE}${at}`);
+      await sam.page.waitForSelector(".ww-ring");
+      nodes = await ring(sam.page);
+      same(nodes.map((x) => x.label.split(",")[0]).sort(), [friend.name, foe.name].sort(), `Sam's web has the two factions he's been shown (${at.includes("&t=") ? "Isolde's World tab" : "the World screen"})`);
+      const page = await text(sam.page, "#app");
+      yes(others.every((f) => !page.includes(f.name)), "and nothing of the others anywhere on his page");
+      await sam.page.click(".ww-crew");
+      p = await panel(sam.page);
+      has(p, "Isolde kept our name out of the trial", "the crew shows the friend's thread toward it");
+      yes(!p.includes(foeLine), "and not the foe's, since he hasn't been shown its threads");
+    }
+    for (const theme of ["dark", "light"]) {
+      await sam.page.evaluate((t) => { localStorage.setItem("zi-theme", t); document.documentElement.dataset.theme = t; }, theme);
+      await axe(sam.page, `Sam's faction web, ${theme}`);
+      await shot(sam.page, `web-sam-${theme}`);
+    }
+    await sam.page.evaluate(() => { localStorage.setItem("zi-theme", "dark"); document.documentElement.dataset.theme = "dark"; });
+    // Mo's What the crew sees is the same two.
+    await mo.page.reload();
+    await mo.page.waitForSelector(".ww-ring");
+    await mo.page.click('[data-do="web-crew"][data-v="1"]');
+    same((await ring(mo.page)).map((x) => x.label.split(",")[0]).sort(), [friend.name, foe.name].sort(), "and Mo's What the crew sees is the same two");
+  }
+  console.log("9e. The faction web");
+  await checkWeb(built);
+  // ZI_UPTO=9e stops here.
+  if (UPTO === "9e") break rest;
 
   // ------------------------------------------------------------ 10. who can do what
   console.log("10. Who can do what");

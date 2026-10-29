@@ -44,11 +44,14 @@
 //               what it is), face ({name}, {threat}), ways ({one}, {two})
 //   because     why a step went the way it did, one line for each thing that
 //               can steer it (seat, type, method, want, answer, tension,
-//               region), with {thing} for what it was. An empty line says the
-//               reason's obvious.
+//               region), with {thing} for what it was, and why a faction's a
+//               character's foe (after: it's after them, rivalof: it's their
+//               friend's rival). An empty line says the reason's obvious.
 //   wants, methods, secrets, agendas    Building a Faction's tables and the
 //               agendas, as rows. An agenda aims at something with its slot:
-//               {seat}, {rival}, {res} or {asset}.
+//               {seat}, {rival}, {res} or {asset}, and once there's a crew,
+//               {who} (one of the characters) or {thing} (something on the
+//               party sheet worth taking).
 //   asking      Building Your World's three questions: holds, runs, notices,
 //               each a list of answers with the dials they move
 //   tension     the twelve tensions, in order, for the roll
@@ -56,8 +59,14 @@
 //               bond or hostile) or blocked, written from {a}'s side toward {b}
 //   faces       for a type role, the Threat Builder's threats its face is
 //               likeliest to be (by key, like commander or old-power)
+//   crew        friends and foes, the threads toward the crew a character's
+//               friend and foe are dealt, from the faction's side, each with
+//               {who} for the character, and qualities: the crew's assets in
+//               Appendix B (by key) that are what it's like, not something
+//               it's got, so no faction's after them
 //   fallbacks   what goes in when a check still fails after three deals:
-//               secret, strange, agenda, block and rival, each a row
+//               secret, strange, agenda, block, rival, who and thing, each a
+//               row
 //   founding    the founding's questions and acts (from stage 7)
 //
 // regions.yaml: town, city, country, world and stars, each with name, faction,
@@ -87,8 +96,8 @@ export const TYPES = ["house", "traders", "crooks", "faith", "office", "society"
 export const DIALS = ["tense", "strange", "rich", "ruled"];
 export const BONDS = ["pub", "mor", "loy"];
 export const TIES = ["rival", "ally", "debt", "wildcard", "blocked"];
-export const BECAUSE = ["seat", "type", "method", "want", "answer", "tension", "region"];
-export const FALLBACKS = { secret: "secrets", strange: "secrets", agenda: "agendas", block: "ties", rival: "ties" };
+export const BECAUSE = ["seat", "type", "method", "want", "answer", "tension", "region", "after", "rivalof"];
+export const FALLBACKS = { secret: "secrets", strange: "secrets", agenda: "agendas", block: "ties", rival: "ties", who: "agendas", thing: "agendas" };
 const QUESTIONS = ["holds", "runs", "notices"];
 
 // Appendix B's asset, or a threat, by a key a table can write: its name in
@@ -112,23 +121,25 @@ const TABLES = {
   methods: { extra: [], slots: [] },
   wants: { extra: [], slots: [] },
   secrets: { extra: ["tag", "more", "ways"], slots: ["rival", "seat"], noText: true },
-  agendas: { extra: ["die"], slots: ["seat", "rival", "res", "asset"] },
+  agendas: { extra: ["die"], slots: ["seat", "rival", "res", "asset", "who", "thing"] },
   exceptions: { extra: ["when", "drops", "gives", "reason"], slots: [] },
   answers: { extra: ["dials"], slots: [] },
   tension: { extra: ["dials"], slots: [] },
   ties: { extra: ["kind", "bond", "back"], slots: ["a", "b", "res", "seat"] },
   factions: { extra: [], slots: ["seat"], name: true, role: "type" },
   people: { extra: [], slots: [], name: true },
+  crew: { extra: [], slots: ["who"] },
 };
-const AIMS = ["seat", "rival", "res", "asset"];
+const AIMS = ["seat", "rival", "res", "asset", "who", "thing"];
 const words = (s) => String(s ?? "").trim().split(/\s+/).filter(Boolean).length;
 const slotsIn = (s) => [...String(s ?? "").matchAll(/\{([a-z]+)\}/g)].map((m) => m[1]);
 const isKey = (s) => typeof s === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s);
 const list = (v) => (v == null ? [] : Array.isArray(v) ? v : [v]);
 
 // The book's parts the engine deals with: each size's Power and resources
-// (What a Faction Is), Appendix B's assets and the Threat Builder's threats.
-export function bookFor(worlds, worldBook) {
+// (What a Faction Is), Appendix B's assets, the Threat Builder's threats, and
+// the new crew's card off The Party Sheet (what nobody's after).
+export function bookFor(worlds, worldBook, party = null) {
   const range = (s) => (String(s ?? "").match(/\d+/g) ?? []).map(Number);
   const sizes = {};
   for (const s of worlds?.sizes ?? []) {
@@ -143,7 +154,8 @@ export function bookFor(worlds, worldBook) {
     .map((w) => ({ key: keyOf(w.name), name: w.name, is: w.is, ch: w.ch, tags: (w.tags ?? []).map((t) => ({ text: t.text, x: t.x ?? 1 })) }));
   // The boards a GM brings in from the book, which a frame's mix is keyed by.
   const boards = (worlds?.boards ?? []).map((b) => ({ id: b.id, name: b.name }));
-  return { sizes, assets, threats, boards };
+  const start = { res: (party?.start?.res ?? []).map((r) => r.text).filter(Boolean), assets: (party?.start?.assets ?? []).map((a) => a.text).filter(Boolean) };
+  return { sizes, assets, threats, boards, start };
 }
 
 // Every file in the folder, read and parsed. A file that can't be parsed is a
@@ -302,7 +314,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
       row.die = Number(r.die);
       if (![2, 4, 6, 8, 10, 12].includes(row.die)) bad(where, `needs its die, d2 to d12: ${r.die}`);
       row.aims = slotsIn(text).filter((x) => AIMS.includes(x));
-      if (!row.aims.length) bad(where, "has nothing to aim at: it needs {seat}, {rival}, {res} or {asset}");
+      if (!row.aims.length) bad(where, "has nothing to aim at: it needs {seat}, {rival}, {res}, {asset}, {who} or {thing}");
     }
     if (kind === "exceptions") {
       row.when = tagList("when");
@@ -332,6 +344,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
       if (words(row.back) > 12) bad(where, `a line's twelve words at most: ${row.back}`);
       if (!slotsIn(text).includes("b")) bad(where, "needs {b}, the faction it's toward");
     }
+    if (kind === "crew" && !slotsIn(text).includes("who")) bad(where, "needs {who}, the character it's named for");
     return row;
   }
   const rows = (v, where, kind, opts) => {
@@ -401,6 +414,22 @@ export function compileTables(raw, book, { minimums = true } = {}) {
   // A Face is dealt as three cards, so each kind of faction needs three
   // threats to be one of.
   if (minimums) for (const k of TYPES) if ((faces[k]?.length ?? 0) < 3) bad("core.yaml", `faces needs three threats for ${k}, found ${faces[k]?.length ?? 0}`);
+  // The crew: each character's friend and foe, and the crew's assets nobody's after.
+  function crewOf(c) {
+    if (!c || typeof c !== "object") {
+      bad("core.yaml", "crew needs friends, foes and qualities");
+      return { friends: [], foes: [], qualities: [] };
+    }
+    const friends = rows(c.friends, "core.yaml crew.friends", "crew");
+    const foes = rows(c.foes, "core.yaml crew.foes", "crew");
+    if (minimums) for (const [k, v] of [["friends", friends], ["foes", foes]]) if (v.length < 12) bad("core.yaml", `crew.${k} needs at least twelve, found ${v.length}`);
+    for (const [k, v] of [["friends", friends], ["foes", foes]]) if (!v.length) bad("core.yaml", `crew.${k} needs at least one`);
+    const qualities = list(c.qualities).filter((x) => {
+      if (!assetKeys.includes(x)) bad("core.yaml", `crew.qualities has one that isn't Appendix B's asset: ${x}`);
+      return assetKeys.includes(x);
+    });
+    return { friends, foes, qualities };
+  }
   const fallbacks = {};
   for (const [k, kind] of Object.entries(FALLBACKS)) {
     if (core.fallbacks?.[k] == null) {
@@ -414,6 +443,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     if (k === "agenda" && !(row.aims?.length && row.aims.every((x) => x === "seat"))) bad("core.yaml", "fallbacks.agenda aims only at a seat with {seat}, since there's always one");
     if (k === "block" && row.kind !== "blocked") bad("core.yaml", "fallbacks.block is a tie of kind blocked");
     if (k === "rival" && row.kind !== "rival") bad("core.yaml", "fallbacks.rival is a tie of kind rival");
+    if ((k === "who" || k === "thing") && !(row.aims?.length && row.aims.every((x) => x === k))) bad("core.yaml", `fallbacks.${k} aims only at {${k}}`);
     fallbacks[k] = row;
   }
   out.core = {
@@ -430,6 +460,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     ties,
     faces,
     fallbacks,
+    crew: crewOf(core.crew),
     founding: core.founding ?? null,
   };
   for (const k of ["wants", "methods", "secrets", "agendas"]) if (out.core[k].length < 12) bad("core.yaml", `${k} needs at least twelve, found ${out.core[k].length}`);

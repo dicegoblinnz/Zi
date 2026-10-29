@@ -59,6 +59,17 @@ const REGIONS = [
             </div>
           </div>
         </div>
+        <div class="dl-row dl-crewrow">
+          <label class="dl-check"><input type="checkbox" id="sheet" /> <span>Something worth taking on the party sheet, a ship and safehouses</span></label>
+          <div class="dl-field">
+            <span id="crew-label">The crew</span>
+            <div class="dl-step" role="group" aria-labelledby="crew-label">
+              <button type="button" data-c="-1" aria-label="One fewer in the crew">−</button>
+              <output id="crew" aria-live="polite">0</output>
+              <button type="button" data-c="1" aria-label="One more in the crew">+</button>
+            </div>
+          </div>
+        </div>
         <div class="dl-row dl-mix" id="mix" hidden>
           <label class="dl-field">
             <span>Era</span>

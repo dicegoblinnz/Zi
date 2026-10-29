@@ -4,6 +4,7 @@
 //   node scripts/deal-world.mjs [--tables FILE_OR_FOLDER] [--region city]
 //        [--genre ID | --era ID [--twist ID]] [--seed ash-lantern-ford]
 //        [--factions 6] [--dials tense=2,strange=0] [--boards 1]
+//        [--crew 4] [--sheet]
 //
 //   --tables   public/world-tables.json (from npm run content) unless it's
 //              given, or a folder of YAML, like tests/world-pack, which is
@@ -13,6 +14,9 @@
 //   --seed     three words: the same seed and tables deal the same board
 //   --dials    fixed, instead of the asking setting them
 //   --boards   how many to deal, each seed after the first made from it
+//   --crew     a crew of the book's first so many (Vesk, Bram, Isolde,
+//              Dorrie, Ash and Wren), each dealt a friend and a foe
+//   --sheet    a party sheet with something worth taking: A Ship and Safehouses
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -41,9 +45,17 @@ export function loadTables(at = join(ROOT, "public", "world-tables.json"), { min
   const book = JSON.parse(readFileSync(bookAt, "utf8"));
   const wb = JSON.parse(readFileSync(worldAt, "utf8"));
   const { src, problems: unread } = readTablesDir(at);
-  const { tables, problems } = compileTables(src, bookFor(book.companion.worlds, wb), { minimums });
+  const { tables, problems } = compileTables(src, bookFor(book.companion.worlds, wb, book.companion.party), { minimums });
   if (!tables) stop(`The tables in ${at} have problems:\n  ${[...unread, ...problems].join("\n  ")}`);
   return tables;
+}
+
+// The book's crew, the first n of them, and a party sheet with something
+// worth taking on it when there's a sheet, for dealing with a crew.
+export const CREW = ["Vesk", "Bram", "Isolde", "Dorrie", "Ash", "Wren"];
+export function crewFor(n, sheet = false) {
+  const who = CREW.slice(0, Math.max(0, Math.min(CREW.length, Math.floor(Number(n) || 0)))).map((name) => ({ k: name.toLowerCase(), name }));
+  return { who, res: [], assets: sheet ? [{ id: "ship", text: "A Ship" }, { id: "safehouses", text: "Safehouses" }] : [] };
 }
 
 // One board, as text.
@@ -76,8 +88,20 @@ export function boardText(T, W) {
     say(`   Face: ${f.face}, Challenge ${f.ch} (${(f.threat?.tags ?? []).map((t) => t.text).join(", ")})`);
     say(`   Secret: ${f.secret}. ${f.more}`);
     for (const o of f.offers) say(`   Offered: ${o.bond} ${o.kind}, ${o.text}`);
-    for (const t of f.threads) say(`   ${t.kind === "hostile" ? "Hostile" : "Bond"} toward ${C.factions[t.to]?.name}: ${t.text}`);
+    for (const t of f.threads) say(`   ${t.kind === "hostile" ? "Hostile" : "Bond"} toward ${t.to === "crew" ? "the crew" : C.factions[t.to]?.name}: ${t.text}`);
   });
+  if (W.crew?.who?.length) {
+    say();
+    say("The crew:");
+    for (const c of W.crew.who) {
+      for (const side of ["friend", "foe"]) {
+        const p = c[side];
+        if (!p) continue;
+        const t = C.factions[p.j]?.threads.find((x) => x.tie === `c:${c.k}:${side}`);
+        say(`  ${c.name}'s ${side}: ${C.factions[p.j]?.name}, ${t?.text ?? ""}${p.why ? `  [${p.why}]` : ""}`);
+      }
+    }
+  }
   say();
   const failed = (W.checks ?? []).filter((c) => !c.ok).map((c) => c.k);
   say(`Checks: ${failed.length ? `failed ${failed.join(", ")}` : "all passed"}${W.fixes.length ? `, ${W.fixes.length} dealt again (${[...new Set(W.fixes.map((f) => f.k))].join(", ")})` : ""}${W.fallbacks.length ? `, fallbacks: ${W.fallbacks.join(", ")}` : ""}`);
@@ -107,7 +131,8 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
       seed = newSeed(T, rngOf(seed, "next"));
     }
     try {
-      console.log(boardText(T, dealWorld(T, { recipe: { region, era, twist }, dials, seed, factions: Number(args.factions ?? 6) })));
+      const crew = args.crew || args.sheet ? crewFor(args.crew ?? 0, Boolean(args.sheet)) : null;
+      console.log(boardText(T, dealWorld(T, { recipe: { region, era, twist }, dials, seed, factions: Number(args.factions ?? 6), crew })));
     } catch (err) {
       stop(err.message);
     }

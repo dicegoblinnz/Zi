@@ -200,6 +200,11 @@ const world = makeWorld({
   campaign: (id) => camps.campaign(id),
   campOf: (ch) => party.campOf(ch),
   crewIn: (id) => party.crewIn(id),
+  // The world builder's crew step: what's on the party sheet, and each
+  // character's crest off their sheet.
+  partyIn: (id) => party.docIn(id),
+  normal: (ch) => normal(ch),
+  crest: (arch) => crest(arch, { size: "sm", strict: false, label: "" }),
   peek: (id) => party.peek(id),
   tools: () => themeButton(),
   rule: (id) => ruleHtml(id),

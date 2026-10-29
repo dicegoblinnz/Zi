@@ -26,13 +26,14 @@
 //             its board as the Worker last sent it and any changes still to go
 //             up. Each campaign's kept apart, and it all goes when the
 //             account's characters leave the phone (sync.js).
-import { BONDS, MAX, OUTCOMES, PARTS, apply, blank, find, minisOf, moneyOf, readable, standingOf, stepsOf, undoOf } from "./board.js";
+import { BONDS, MAX, OUTCOMES, PARTS, apply, blank, find, forPlayer, minisOf, moneyOf, readable, standingOf, stepsOf, undoOf } from "./board.js";
 import { diceLabel, rollDie, stepsToDice } from "./dice.js";
 import { typo } from "./marks.js";
 import { die as kitDie, mini as kitMini } from "../kit/kit.js";
 import { makePlaces } from "./places.js";
 import { makeMaps } from "./mapsui.js";
 import { makeWorldMake } from "./world-make.js";
+import { drawWeb, keyOf as webKey, webOf } from "./world-web.js";
 import { forgetMapsOf, keepMapsOf } from "./mapcache.js";
 
 const KEY = "zi-world";
@@ -580,6 +581,19 @@ export function makeWorld(d) {
     top() {
       scrollTo({ top: 0, behavior: "smooth" });
     },
+    // The web: a faction (or the crew) tapped for its threads, again to let it go.
+    web(el, id) {
+      const w = webOf$(id);
+      w.sel = w.sel === el.dataset.n ? null : el.dataset.n;
+      d.render();
+    },
+    // The GM's web, all of it or just what the crew's been shown.
+    "web-crew"(el, id) {
+      const w = webOf$(id);
+      w.crew = el.dataset.v === "1";
+      w.sel = null;
+      d.render();
+    },
   };
 
   function act(el, e) {
@@ -803,6 +817,70 @@ export function makeWorld(d) {
       !online() ? (k.at ? `No signal, so this is the board as it was at ${time(k.at)}.` : "No signal, and this phone hasn’t seen this board yet.") : "",
       waiting ? (online() ? "Sending your changes…" : `${waiting === 1 ? "Your change goes" : "Your changes go"} up when you’ve got a signal.`) : "",
     ].filter(Boolean).join(" ");
+  }
+
+  // ------------------------------------------------------------ the web
+
+  // The faction web, under the board on the World screen and tab: what this
+  // phone has of the board, which for a player is only what the crew's been
+  // shown. The GM sees all of it, or what the crew sees, and a faction the
+  // crew hasn't been shown is drawn faint on hers.
+  const webs = {};
+  const webOf$ = (id) => (webs[id] ??= { sel: null, crew: false });
+  function webSection(id) {
+    const gm = isGm(id);
+    const w = webOf$(id);
+    const whole = docOf(id);
+    const doc = gm && w.crew ? forPlayer(whole) : whole;
+    const all = gm && !w.crew;
+    const facs = doc.factions;
+    const toCrew = (f) => f.threads.some((t) => t.to === "crew");
+    if (facs.length < 2 && !facs.some(toCrew)) return gm && whole.factions.length > 1 ? webShell(id, gm, w, `<p class="cc-small">The crew hasn’t been shown enough of the world for a web yet.</p>`) : "";
+    if (w.sel && w.sel !== "crew" && !find(doc, w.sel)) w.sel = null;
+    const known = (f) => all || f.shown.power;
+    const nodes = facs.map((f) => ({ id: f.id, name: f.name, dice: known(f) ? powerDice(f) : null, mini: f.mini, parent: f.parent, hidden: all && !f.shown.card }));
+    const threads = facs.flatMap((f) => f.threads.map((t) => ({ from: f.id, to: t.to, kind: t.kind, s: t.s, text: t.text })));
+    const L = webOf(nodes, threads);
+    const c = d.crewIn(id);
+    const crewName = c.name || "The crew";
+    const count = (fid) => L.threads.filter((t) => t.from === fid || t.to === fid).length;
+    const pic = drawWeb(L, {
+      esc,
+      sel: w.sel,
+      uid: "wb",
+      attrs: (n) => `data-act="w" data-do="web" data-n="${esc(n)}"`,
+      label: (nd) => `${nd.name}${nd.hidden ? ", hidden from the crew" : ""}, ${plural(count(nd.id), "thread", "threads")}`,
+      crew: { name: crewName, dice: crewDice(c.steps), label: `${crewName}, ${plural(count("crew"), "thread toward it", "threads toward it")}` },
+    });
+    return webShell(id, gm, w, `${pic}${webPanel(id, doc, w.sel, all, crewName, nodes.some((x) => x.hidden))}`);
+  }
+  function webShell(id, gm, w, body) {
+    const seg = gm ? `<div class="ww-seg" role="group" aria-label="Whose web"><button type="button" class="ww-seg-b" data-act="w" data-do="web-crew" data-v="0" aria-pressed="${!w.crew}">Everything</button><button type="button" class="ww-seg-b" data-act="w" data-do="web-crew" data-v="1" aria-pressed="${w.crew}">What the crew sees</button></div>` : "";
+    return `<section class="cc-sec ww-sec" data-wb="${esc(id)}" aria-labelledby="ww-h"><h2 id="ww-h">The web</h2>${seg}<div class="ww">${body}</div></section>`;
+  }
+  // Under the web: a key, or the threads of whatever's been tapped, each way.
+  function webPanel(id, doc, sel, all, crewName, faint) {
+    const page = (f) => `<a class="ww-go" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;f=${encodeURIComponent(f.id)}" data-act="w" data-do="nav">${esc(f.name)}</a>`;
+    const stand = (f) => (all || f.shown.threads ? `<span class="wb-stand is-${standingOf(f)}">${STANDING[standingOf(f)]}</span>` : "");
+    const line = (t, small = "") => `<li class="ww-t is-${t.kind === "hostile" ? "hostile" : "bond"}${t.s === "snapped" ? " is-snapped" : ""}"><span class="ww-k">${t.kind === "hostile" ? "Hostile" : "Bond"}${t.s === "whole" ? "" : `, ${t.s}`}</span> <em>${esc(t.text)}</em>${small ? ` <small>${small}</small>` : ""}</li>`;
+    const say = (body) => `<div class="ww-panel" aria-live="polite">${body}</div>`;
+    if (!sel) return say(`${webKey()}<p class="cc-small ww-hint">Tap a faction for its threads, or ${esc(crewName === "The crew" ? "the crew" : crewName)} for how the factions see ${isGm(id) ? "them" : "you"}.${faint ? " The faint ones are hidden from the crew." : ""}</p>`);
+    if (sel === "crew") {
+      const rows = doc.factions.filter((f) => f.threads.some((t) => t.to === "crew"));
+      return say(`<h3 class="ww-h">How the factions see ${esc(crewName === "The crew" ? "the crew" : crewName)}</h3>${rows.length ? `<ul class="ww-fs">${rows.map((f) => `<li class="ww-f"><p class="ww-f-h">${page(f)} ${stand(f)}</p><ul class="ww-ts">${f.threads.filter((t) => t.to === "crew").map((t) => line(t)).join("")}</ul></li>`).join("")}</ul>` : '<p class="cc-small">No faction’s got a thread toward the crew yet.</p>'}`);
+    }
+    const f = find(doc, sel);
+    if (!f) return say("");
+    const toCrew = f.threads.filter((t) => t.to === "crew");
+    const out = f.threads.filter((t) => t.to !== "crew" && find(doc, t.to));
+    const back = doc.factions.flatMap((x) => (x.id === f.id ? [] : x.threads.filter((t) => t.to === f.id).map((t) => ({ t, x }))));
+    const group = (h, items) => (items ? `<h4 class="ww-sub">${h}</h4><ul class="ww-ts">${items}</ul>` : "");
+    const none = !toCrew.length && !out.length && !back.length;
+    return say(`<h3 class="ww-h">${page(f)}</h3>${stand(f) ? `<p class="ww-f-h">${stand(f)}</p>` : ""}
+      ${group("Toward the crew", toCrew.map((t) => line(t)).join(""))}
+      ${group("Toward other factions", out.map((t) => line(t, `toward ${esc(find(doc, t.to).name)}`)).join(""))}
+      ${group("Other factions toward it", back.map(({ t, x }) => line(t, `from ${esc(x.name)}`)).join(""))}
+      ${none ? `<p class="cc-small">${all || f.shown.threads ? "No threads yet, either way." : "The crew hasn’t been shown its threads."}</p>` : ""}`);
   }
 
   // The board: the crew's card, then every faction (each mini faction under
@@ -1095,7 +1173,7 @@ export function makeWorld(d) {
       <header class="cc-camp-head wb-head"><p class="kicker${gm ? " is-gm" : ""}">The world</p><h1>${esc(nameOf(v.id))}</h1>${gm ? "" : `<p class="cc-small">What ${esc(gmName(v.id))}’s shown the crew so far.</p>`}</header>
       ${d.turnSection?.(v.id) ?? ""}
       <section class="cc-sec wb-sec" data-wb="${esc(v.id)}" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(v.id)}</section>
-      ${P.sections(v.id)}${M.section(v.id)}${gm ? "" : unlit(v.id)}`;
+      ${webSection(v.id)}${P.sections(v.id)}${M.section(v.id)}${gm ? "" : unlit(v.id)}`;
   }
   // What's just been shown lights up once, then it's like the rest.
   function unlit(id) {
@@ -1110,7 +1188,7 @@ export function makeWorld(d) {
     return `<div class="wb-tab" data-wb="${esc(id)}"><p class="cc-small pt-where">${esc(ch.name)} plays in <a href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">${esc(nameOf(id))}</a>. This is what ${esc(gmName(id))}’s shown the crew of its world.</p>
       ${d.turnSection?.(id) ?? ""}
       <section class="cc-sec wb-sec" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(id)}</section>
-      ${P.sections(id)}${M.section(id)}${unlit(id)}</div>`;
+      ${webSection(id)}${P.sections(id)}${M.section(id)}${unlit(id)}</div>`;
   }
 
   // The way in from the campaign's page, with a glance at the board.
