@@ -2847,7 +2847,8 @@ try {
     await kai.page.goto(mapUrl);
     await kai.page.waitForSelector(".wm-stage");
     await until(async () => (await kai.page.textContent("[data-wmnote]").catch(() => "")).includes("all under the fog"), "Kai's map says it's all under the fog");
-    yes(await kai.page.$eval(".wm-fog", (c) => !c.hidden && !c.classList.contains("is-gm")), "and Kai sees solid fog");
+    // The fog's drawn once the map's in, a moment after the note says so.
+    await until(() => kai.page.$eval(".wm-fog", (c) => !c.hidden && !c.classList.contains("is-gm")).catch(() => false), "Kai to see solid fog");
     await until(() => kai.page.evaluate(async (p) => !(await (await caches.open("zi-maps")).match(new URL(p, location.origin).href)), picPath), "the map's own picture gone from Kai's phone");
     await kai.page.evaluate(() => {
       window.zdNudges = 0;
