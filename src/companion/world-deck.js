@@ -492,7 +492,9 @@ function pickCard(T, W) {
   const M = deckOf(T, W.recipe);
   const miss = missingOf(T, W, D.age);
   const r = (k) => rngOf(W.seed, "deck", D.pos, D.nots.length, k);
-  const focus = focusOf(W, miss, r("focus"));
+  // Not this one deals another card for the same faction, so the focus
+  // doesn't move with it.
+  const focus = focusOf(W, miss, rngOf(W.seed, "deck", D.pos, "focus"));
   const t = tally(W);
   const used = new Set(D.cards.map((c) => c.m));
   const crew = Boolean(W.crew?.who?.length);
@@ -1037,16 +1039,24 @@ export function finish(T, W) {
 // What the board has to have that the answers didn't make, dealt around
 // them the way the engine's checks would if the answers hadn't locked it:
 // a faction after the crew (whichever the deck made a foe of one of them,
-// then a friend, then anyone), a Secret naming another faction, and
+// then a friend, then anyone, or after something on the party sheet when
+// there's nobody in the crew yet), a Secret naming another faction, and
 // something strange.
 function mend(T, W) {
   const rand = (k) => rngOf(W.seed, "deck", "mend", k);
   const crewAim = (ag) => ag?.aims?.some((a) => a === "who" || a === "thing");
   const who = W.crew?.who ?? [];
+  const things = W.crew?.things ?? [];
   if (who.length && !W.factions.some((f) => crewAim(f.agenda))) {
     const sides = [...who.filter((c) => c.foe?.made != null).map((c) => [c.foe.j, c.k]), ...who.filter((c) => c.friend?.made != null).map((c) => [c.friend.j, c.k])];
     const [j, k] = sides.find(([x]) => !needed(W, x, "agenda")) ?? [fresh(W).find((x) => !needed(W, x, "agenda")), who[0].k];
     const pick = j != null ? dealOne(T, W, j, "agenda", { at: { who: k }, rand: rand("crew") }) : null;
+    if (pick) W.factions[j].agenda = pick;
+  } else if (things.length && !W.factions.some((f) => crewAim(f.agenda))) {
+    // Nobody in the crew yet, but something on their party sheet's worth taking.
+    const j = fresh(W).find((x) => !needed(W, x, "agenda"));
+    const t = things[Math.floor(rand("thing")() * things.length) % things.length];
+    const pick = j != null ? dealOne(T, W, j, "agenda", { at: { thing: { l: t.l, id: t.id } }, rand: rand("crew") }) : null;
     if (pick) W.factions[j].agenda = pick;
   }
   const others = (i) => fresh(W).filter((x) => x !== i);

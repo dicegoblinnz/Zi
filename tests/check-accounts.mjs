@@ -456,6 +456,14 @@ const shots = async (page, name, sel) => {
 };
 // axe, no sideways scroll and 44px tap targets.
 const axe = async (page, what) => {
+  // Anything still sliding or fading in finishes first (for a second and a
+  // half at most), so its colours are the ones it stays at.
+  await page.evaluate(() =>
+    Promise.race([
+      Promise.all(document.getAnimations().filter((a) => a.playState === "running" && a.effect?.getTiming?.().iterations !== Infinity).map((a) => a.finished.catch(() => {}))),
+      new Promise((r) => setTimeout(r, 1500)),
+    ]),
+  );
   const result = await new AxeBuilder({ page }).include("main").analyze();
   for (const v of result.violations) note(`axe (${what}): ${v.id}: ${v.help} (${v.nodes[0]?.target?.join(" ")})`);
   // A phone zooms out to fit anything too wide, so the page has to be no

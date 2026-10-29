@@ -61,7 +61,8 @@
 //    it to someone who's still got no friend or foe on the board.
 // 8. The deck (stage 7): its moments' checks, then 200 decks answered at
 //    random in every region for every named genre the packs cover, with
-//    prompts filled, written and skipped and Not this one tapped: every
+//    prompts filled, written and skipped, Not this one tapped, and a crew
+//    or just a party sheet with something worth taking on it: every
 //    board passes the checks with a fallback in under 1 deck in 20 and adds
 //    up, every faction's formed, how many cards it takes changes with the
 //    board and the answers, no card comes twice in a deck, every chain
@@ -817,7 +818,9 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       const seed = newSeed(T, rngOf("deck-check", g.what, b));
       const n = 4 + (b % 9);
       const dials = b % 10 === 0 ? { tense: 0, strange: 0, rich: 0, ruled: 0 } : b % 10 === 5 ? { tense: 2, strange: 2, rich: 2, ruled: 2 } : null;
-      const crew = b % 3 === 1 ? { who: CREW.slice(0, 1 + (b % 6)).map((name) => ({ k: name.toLowerCase(), name })), res: [], assets: b % 2 ? [{ id: "ship", text: "A Ship" }] : [] } : null;
+      // A crew of one to six every third deck, and every sixth a party sheet
+      // with something worth taking and nobody in the crew yet.
+      const crew = b % 3 === 1 ? { who: CREW.slice(0, 1 + (b % 6)).map((name) => ({ k: name.toLowerCase(), name })), res: [], assets: b % 2 ? [{ id: "ship", text: "A Ship" }] : [] } : b % 6 === 2 ? { who: [], res: [], assets: [{ id: "ship", text: "A Ship" }] } : null;
       const W = start(T, { recipe: g.recipe, seed, factions: n, dials, crew });
       startDeck(T, W);
       const play = rngOf("deck-play", g.what, b);

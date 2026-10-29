@@ -58,7 +58,7 @@ function readAddress() {
   want.sheet = q.get("sheet") === "1";
   want.deck = q.get("deck") === "1";
   asked.log = want.deck ? logOf(q.get("a") ?? "") : [];
-  asked.nots = want.deck ? Math.max(0, Math.min(20, Math.floor(Number(q.get("n")) || 0))) : 0;
+  asked.nots = want.deck ? Math.max(0, Math.min(999, Math.floor(Number(q.get("n")) || 0))) : 0;
 }
 function writeAddress({ push = false } = {}) {
   const q = new URLSearchParams({ region: want.region, genre: want.genre });
@@ -77,7 +77,9 @@ function writeAddress({ push = false } = {}) {
     if (D?.nots.length) q.set("n", String(D.nots.length));
   }
   history[push ? "pushState" : "replaceState"](null, "", `${location.pathname}?${q}`);
+  wrote = location.search;
 }
+let wrote = "";
 // A deck's answers in the address: each one's side, how many Not this ones
 // came before it and what its prompt got (a suggestion's number, her own
 // words, or null when it was skipped), as JSON in base64url.
@@ -99,7 +101,7 @@ function logOf(s) {
     if (!Array.isArray(rows)) return [];
     return rows.slice(0, 80).map((x) => {
       const row = Array.isArray(x) ? x : [];
-      const e = { side: row[0] === 1 ? 1 : 0, nots: Math.max(0, Math.min(20, Math.floor(Number(row[1]) || 0))) };
+      const e = { side: row[0] === 1 ? 1 : 0, nots: Math.max(0, Math.min(999, Math.floor(Number(row[1]) || 0))) };
       if (row.length > 2) e.prompt = typeof row[2] === "string" ? { text: row[2].slice(0, 60) } : Number.isInteger(row[2]) ? { pick: row[2] } : { skip: true };
       return e;
     });
@@ -229,6 +231,29 @@ function factionsOf(W, C) {
   const reg = T.regions[W.recipe.region];
   const seat = (k) => C.seats.find((s) => s.k === k);
   return `<section class="dl-sec" aria-labelledby="h-factions"><h2 id="h-factions">The factions</h2><div class="dl-factions">${C.factions.map((f, i) => drawFaction(W, C, f, i, reg, seat)).join("")}</div></section>`;
+}
+// The mini factions the deck's answers made, each a short card with what
+// it does and its Loyalty thread toward the faction that made it.
+const OUTCOMES = { destroy: "Destroy", undermine: "Undermine", obstruct: "Obstruct", influence: "Influence", acquire: "Acquire", establish: "Establish" };
+function minisOf(C) {
+  if (!C.minis?.length) return "";
+  const card = (m, k) => `
+    <article class="dl-fac dl-mini card" id="m-${k}" aria-labelledby="mn-${k}">
+      <header class="dl-fac-head">
+        <div>
+          <h3 id="mn-${k}">${esc(m.name)}</h3>
+          <p class="dl-size">Made by ${factionLink(C, m.parent)} · ${m.steps} ${m.steps === 1 ? "step" : "steps"}</p>
+        </div>
+        ${die(m.die, { own: "them", label: `Power d${m.die}` })}
+      </header>
+      <dl class="dl-lines">
+        <div><dt>What it does</dt><dd>${esc(list(m.outs.map((o) => OUTCOMES[o] ?? o)))}</dd></div>
+        <div><dt>Resources</dt><dd>${chips(m.res.map((r) => `<li class="dl-chip">${esc(r.text)}</li>`))}</dd></div>
+        <div><dt>Assets</dt><dd>${chips(m.assets.map((a) => `<li class="dl-chip${a.power ? " people" : ""}"><span class="dl-chipname">${esc(a.text)}${a.power ? `<span class="dl-plus">+1 Power</span>` : ""}</span>${!a.power && a.does ? `<span class="dl-does">${esc(a.does)}</span>` : ""}</li>`))}</dd></div>
+        ${m.loy.length ? `<div><dt>Threads</dt><dd><ul class="dl-threads">${m.loy.map((t) => `<li class="bond"><span class="dl-to">Loyalty toward ${factionLink(C, m.parent)}</span><em>${esc(t.text)}</em></li>`).join("")}</ul></dd></div>` : ""}
+      </dl>
+    </article>`;
+  return `<section class="dl-sec" aria-labelledby="h-minis"><h2 id="h-minis">Mini factions</h2><div class="dl-factions">${C.minis.map(card).join("")}</div></section>`;
 }
 // The crew: each character's friend and foe, and what's worth taking off them.
 function crewOf(W, C) {
@@ -421,7 +446,7 @@ function drawDeck(W, { moved = false } = {}) {
         .join("")
     : `<p class="dl-tnote">Nothing yet. Every answer writes a line here.</p>`;
   const story = `<section class="dl-sec dl-history" aria-labelledby="h-history"><h2 id="h-history">How it came to be</h2>${lines}</section>`;
-  $("#board").innerHTML = `<article class="dl-world dl-deck">${headOf(W)}<div class="dl-top">${play}${tiles}</div>${story}${askingOf(W)}${groundOf(W, C, held)}${done ? `${factionsOf(W, C)}${crewOf(W, C)}${checksOf(W)}` : ""}</article>`;
+  $("#board").innerHTML = `<article class="dl-world dl-deck">${headOf(W)}<div class="dl-top">${play}${tiles}</div>${story}${askingOf(W)}${groundOf(W, C, held)}${done ? `${factionsOf(W, C)}${minisOf(C)}${crewOf(W, C)}${checksOf(W)}` : ""}</article>`;
   if (moved) bring();
 }
 // The three ages, the one that's on filled as far as its parts are formed.
@@ -774,7 +799,7 @@ async function boot() {
     }
     // The deck's buttons.
     const b = e.target.closest("button");
-    if (!b || b.disabled || !want.deck || !shown?.deck) return;
+    if (!b || b.disabled || !want.deck || !shown?.deck || e.detail > 1) return;
     const W = shown;
     if (b.dataset.side != null) move("answer", () => (answer(T, W, Number(b.dataset.side)), W));
     else if ("not" in b.dataset) move("not", () => notThis(T, W));
@@ -794,7 +819,10 @@ async function boot() {
     const W = shown;
     move("prompt", () => fillPrompt(T, W, { text }));
   });
+  // Back and Forward deal what the address says, but a link to a faction or
+  // a seat on the board only moves down the page.
   addEventListener("popstate", () => {
+    if (location.search === wrote) return;
     readAddress();
     shown = null;
     fromAddress();
