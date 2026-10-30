@@ -48,7 +48,7 @@ export function makeFound(d) {
   // the room opens, by campaign. change: the room whose setup she's changing.
   // own: the turn she's writing an answer for. roll: the turn whose real roll
   // she's tapping in. spin: the roll this phone's just made, which tumbles once.
-  const ui = { sure: "", setup: {}, change: "", own: "", roll: "", spin: "", focus: "" };
+  const ui = { sure: "", setup: {}, change: "", own: "", roll: "", spin: "", focus: "", after: "" };
   // The three answers dealt for a turn, kept so a redraw never deals again.
   const hands = new Map();
   // The rest of an asking her phone's dealt, so time running out deals once,
@@ -78,6 +78,7 @@ export function makeFound(d) {
   // and tries again when the signal's back, never in a loop.
   function tables() {
     if (T) return T;
+    if (failed && !loading) failed = false;
     loading ??= fetch("/world-tables.json")
       .then((r) => (r.ok ? r.json() : null))
       .catch(() => null)
@@ -85,7 +86,11 @@ export function makeFound(d) {
         if (j?.core && j.packs) {
           T = j;
           failed = false;
-        } else failed = true;
+        } else {
+          failed = true;
+          // Asked for again next time something needs them.
+          loading = null;
+        }
         d.quietRender();
         for (const id of Object.keys(waitingDeal)) dealRest(id);
       });
@@ -167,9 +172,7 @@ export function makeFound(d) {
     TB().push(id, { o: "fd-rest", picks });
     return true;
   }
-  addEventListener("zi-found", (e) => {
-    if (dealRest(e.detail)) d.toast("Time’s up, so the rest of the asking’s dealt.");
-  });
+  addEventListener("zi-found", (e) => dealRest(e.detail));
 
   // ------------------------------------------------------------ small pieces
 
@@ -207,7 +210,7 @@ export function makeFound(d) {
       : "";
     const said = up ? "Time’s up" : clockText(left);
     return `<div class="fd-clock${up ? " is-up" : ""}${run ? "" : " is-stopped"}"><p class="fd-clock-k">${esc(label)}</p>
-      <p class="fd-clock-t" role="timer" aria-label="${up ? "Time’s up" : `${Math.ceil(left / 60000)} minutes left${run ? "" : ", stopped"}`}"${run && !up ? ` data-fd-clock="${esc(id)}"` : ""}>${said}${run || up ? "" : ' <small>stopped</small>'}</p>${tools}</div>`;
+      <p class="fd-clock-t" role="timer"${run && !up ? ` data-fd-clock="${esc(id)}"` : ""}>${said}${run || up ? "" : ' <small>stopped</small>'}</p>${tools}</div>`;
   }
 
   // Everyone in, in the order the turns go round, with whose turn it is.
@@ -283,10 +286,10 @@ export function makeFound(d) {
       <section class="wk-sec" aria-labelledby="fd-count"><h3 id="fd-count">How many factions</h3>${stepper("n", s.n, 4, 12, "How many factions")}
       <p class="cc-small">It starts at your players and two more, and it’s never fewer than four.</p></section>
       <section class="wk-sec" aria-labelledby="fd-clocks"><h3 id="fd-clocks">The clocks</h3><ul class="fd-ages">${clocks}</ul>
-      <p class="cc-small">Each age gets its own. The asking’s part of the ground, so the first one starts with it. When a clock runs out, the turn that’s on finishes and the tables deal whatever’s left.</p></section>`;
+      <p class="cc-small">Each age gets its own clock. The asking’s part of the ground, so the first one starts with it. When a clock runs out, the turn that’s on finishes and the tables deal whatever’s left.</p></section>`;
   }
   function setupView(id) {
-    if (!tables()) return `<section class="cc-sec fd is-gm" data-fd="${esc(id)}" aria-labelledby="fd-setup-h"><p class="kicker is-gm">The founding</p><h2 id="fd-setup-h">Set it up</h2><p class="cc-lead" role="status">${failed ? "The tables didn’t come through. Check your signal and try again." : "Getting the tables…"}</p><div class="cc-row">${btn("unsetup", "Cancel")}</div></section>`;
+    if (!tables()) return `<section class="cc-sec fd is-gm" data-fd="${esc(id)}" aria-labelledby="fd-setup-h"><p class="kicker is-gm">The founding</p><h2 id="fd-setup-h">Set it up</h2><p class="cc-lead" role="status">${failed ? "The tables didn’t come through. Check your signal and try again." : "Getting the tables…"}</p><div class="cc-row">${failed ? btn("retry", "Try again", { cls: "button primary" }) : ""}${btn("unsetup", "Cancel")}</div></section>`;
     if (ui.setup[id].pending) ui.setup[id] = firstSetup(id);
     const s = settle(ui.setup[id]);
     const r = recipeOf(s);
@@ -329,7 +332,7 @@ export function makeFound(d) {
       const list = `<ol class="fd-in">${f.who.map((w) => `<li><span class="fd-in-n">${esc(first(w.name) || "Someone")}${w.key === me ? " <small>you</small>" : ""}</span><span class="fd-in-s${w.joined ? " is-here" : ""}">${w.joined ? "Here" : "Not here yet"}</span></li>`).join("")}</ol>`;
       if (mine?.joined) return `<p class="cc-lead">You’re in. ${gmn} starts it once everyone’s here, and the turns go round in this order.</p>${list}`;
       if (f.outs.includes(me)) return `<p class="cc-lead">${gmn}’s left you out of this one. Whatever the crew’s shown of the world turns up here.</p>`;
-      return `<p class="cc-lead">${gmn}’s opened the founding. The crew builds the world together, a turn each round the table, starting with the asking. It’s ${esc(mixSaid(f))}, with ${WORDS[f.n] ?? f.n} factions.</p>
+      return `<p class="cc-lead">${gmn}’s opened the founding. The crew builds the world together, a turn each, round the table, starting with the asking. It’s ${esc(mixSaid(f))}, with ${WORDS[f.n] ?? f.n} factions.</p>
         <div class="cc-row fd-go">${btn("join", "Join it", { cls: "button primary" })}</div>${f.who.length ? `<h3 class="fd-h3">Who’s in</h3>${list}` : ""}`;
     }
     const changing = ui.change === id && T;
@@ -358,10 +361,10 @@ export function makeFound(d) {
         <p>${gm ? "The tables are dealing what’s left of the asking on this phone." : `The rest of the asking’s dealt on ${gmn}’s phone.`}</p>
         ${gm ? `<div class="cc-row">${btn("rest", "Deal the rest", { cls: "button primary" })}${btn("clock", "Five more minutes", { attrs: ' data-v="add" data-m="5"' })}</div>` : ""}</div>`;
     } else if (!f.who.length) turn = `<div class="card fd-turn"><p>${gm ? "Nobody’s in. Put someone in to carry on." : "Nobody’s in right now."}</p></div>`;
-    const tools = gm ? `<details class="cc-fold fd-tools" data-open="fd-tools-${esc(id)}"${d.isOpen(`fd-tools-${id}`) ? " open" : ""}><summary><h3 class="cc-fold-t">Who’s in, and the rest of it</h3><span class="cc-fold-g">${esc(andList(f.who.map((w) => first(w.name))))}</span></summary>
+    const tools = gm ? `<details class="cc-fold fd-tools" data-open="fd-tools-${esc(id)}"${d.isOpen(`fd-tools-${id}`) ? " open" : ""}><summary><h3 class="cc-fold-t">Who’s in, Deal the rest and End it</h3><span class="cc-fold-g">${esc(andList(f.who.map((w) => first(w.name))))}</span></summary>
         <div class="cc-fold-b">${whoRows(id, f)}
         <div class="cc-row fd-go">${btn("rest", sureOf(`rest:${id}`) ? "Tap again to deal the rest" : "Deal the rest", { attrs: ' data-sure="1"' })}${btn("end", sureOf(`end:${id}`) ? "Tap again to end it" : "End it", { cls: "button danger" })}</div>
-        <p class="cc-small">Deal the rest has the tables answer whatever’s left, this turn included. Ending it drops it all, and nothing’s on the board.</p></div></details>` : "";
+        <p class="cc-small">Deal the rest lets the tables answer everything that’s left, this turn included. Ending it drops the lot, and nothing’s on the board.</p></div></details>` : "";
     return `${turn}${strip(id, f)}${soFar(id, f, gm)}${dialsList(f)}${tools}`;
   }
 
@@ -388,13 +391,13 @@ export function makeFound(d) {
     const hand = handOf(f, part);
     const ownOpen = ui.own === `${id}|${f.id}|${part}` && can;
     let cards;
-    if (hand == null) cards = `<p class="cc-small">${failed ? "This phone couldn’t get the tables, so there’s nothing to deal. You can still write your own." : "Dealing…"}</p>`;
+    if (hand == null) cards = failed ? `<p class="cc-small">This phone couldn’t get the tables, so there’s nothing to deal yet.${can ? " You can still write your own." : ""}</p><div class="cc-row">${btn("retry", "Try again", { cls: "button sm" })}</div>` : '<p class="cc-small" role="status">Dealing…</p>';
     else if (!hand.length) cards = '<p class="cc-small">This phone’s tables can’t deal this world. Reload the page to get the new ones, or write your own.</p>';
     else {
       cards = `<div class="wk-hand fd-hand" role="group" aria-label="${esc(ASKED[part])}">${hand.map((c, i) => {
         const inner = `<span class="wk-card-w">${esc(c.text)}</span>${nudges(c.dials) || c.strange ? `<span class="wk-card-m">${nudges(c.dials)}${c.strange ? '<span class="wk-mark is-strange">Strange</span>' : ""}</span>` : ""}`;
         if (!can) return `<div class="wk-card is-static">${inner}</div>`;
-        const sure = gm && !mine && sureOf(`pick:${id}:${i}`);
+        const sure = gm && !mine && sureOf(`pick:${id}:${f.turn.key}:${part}:${i}`);
         return `<button type="button" class="wk-card${sure ? " is-sure" : ""}" data-act="fd" data-do="pick" data-c="${i}">${inner}${sure ? `<span class="fd-sure">Tap again to put this in for ${esc(name)}</span>` : ""}</button>`;
       }).join("")}</div>`;
     }
@@ -411,8 +414,8 @@ export function makeFound(d) {
     const big = kitDie(12, { own: gm && !mine ? "them" : "you", hide: true, label: "A d12" });
     const lead = mine ? "Roll the d12 on the book’s tension table, or tap in a roll of your own dice." : gm ? `${esc(name)}’s rolling the d12 on the tension table. If they haven’t got a phone with them, roll it for them or tap in their roll.` : `${esc(name)}’s rolling the d12 on the tension table.`;
     if (!can) return `<div class="fd-roll"><span class="fd-roll-d" aria-hidden="true">${big}</span><p class="cc-small">${lead}</p></div>`;
-    const sure = gm && !mine && sureOf(`roll:${id}`);
-    const grid = rolling ? `<div class="wk-roll" role="group" aria-label="The roll you got"><p class="cc-small">What did the d12 come up?</p><div class="wk-roll-g">${Array.from({ length: 12 }, (_, k) => btn("real", String(k + 1), { cls: "button sm", attrs: ` data-v="${k + 1}"` })).join("")}</div></div>` : "";
+    const sure = gm && !mine && sureOf(`roll:${id}:${f.turn.key}`);
+    const grid = rolling ? `<div class="wk-roll" role="group" aria-label="The roll you got"><p class="cc-small">What did ${mine ? "your" : "their"} d12 come up?</p><div class="wk-roll-g">${Array.from({ length: 12 }, (_, k) => btn("real", String(k + 1), { cls: "button sm", attrs: ` data-v="${k + 1}"` })).join("")}</div></div>` : "";
     return `<div class="fd-roll"><span class="fd-roll-d" aria-hidden="true">${big}</span><p class="cc-small">${lead}</p></div>
       <div class="cc-row fd-roll-b">${btn("roll", sure ? `Tap again to roll it for ${esc(name)}` : mine ? "Roll the d12" : `Roll it for ${esc(name)}`, { cls: "button primary", disabled: !tables() })}${btn("tap", "Tap in a real roll", { cls: "button", attrs: ` aria-expanded="${rolling ? "true" : "false"}"`, disabled: !tables() })}</div>${grid}`;
   }
@@ -432,7 +435,7 @@ export function makeFound(d) {
       const die = part === "tension" && p.roll ? `<span class="fd-a-d">${kitDie(12, { own: "them", face: p.roll, hide: true, spin: ui.spin === `${f.id}|tension` && !d.calm(), label: `The d12 came up ${p.roll}` })}</span>` : "";
       return `<li class="fd-a${p.own ? " is-own" : ""}${f.last?.part === part ? " is-last" : ""}" data-fdk="${part}-done">${die}<div class="fd-a-in"><p class="fd-a-q">${SHORT[part]}</p><p class="fd-a-w">${esc(p.text)}</p>
         <p class="fd-a-by"><span>${by}${part === "tension" && p.roll ? ` · ${[8, 11].includes(p.roll) ? "an" : "a"} ${p.roll}${p.real ? " on real dice" : ""}` : ""}</span>${nudges(p.dials)}</p>
-        ${last ? btn("back", sureOf(`back:${id}`) ? "Tap again to take it back" : "Take it back", { cls: "button sm fd-back", attrs: ` data-part="${part}"` }) : ""}</div></li>`;
+        ${last ? btn("back", sureOf(`back:${id}:${part}:${f.last.key}`) ? "Tap again to take it back" : "Take it back", { cls: "button sm fd-back", attrs: ` data-part="${part}"` }) : ""}</div></li>`;
     }).join("");
     return `<h3 class="fd-h3">${f.step === "ask" ? "So far" : "The answers"}</h3><ol class="fd-asked">${items}</ol>`;
   }
@@ -446,7 +449,7 @@ export function makeFound(d) {
     }
     const building = gm ? d.world().building?.(id) : null;
     const lead = gm ? "That’s the crew’s asking. Take it into Build the world on your phone and carry on from the ground there, the crew’s answers locked." : `That’s the asking done. ${gmn} takes it from here.`;
-    const carry = gm ? `<div class="cc-row fd-go">${btn("carry", sureOf(`carry:${id}`) ? "Tap again: the build on this phone goes" : "Build the rest on your phone", { cls: "button primary", disabled: !T })}${btn("end", sureOf(`end:${id}`) ? "Tap again to end it" : "End it", { cls: "button danger" })}</div>${building ? '<p class="cc-small">You’ve got a build on the go on this phone already. Taking this into Build the world drops it.</p>' : ""}` : "";
+    const carry = gm ? `<div class="cc-row fd-go">${btn("carry", sureOf(`carry:${id}`) ? "Tap again to take it in" : "Build the rest on your phone", { cls: "button primary", disabled: !T })}${btn("end", sureOf(`end:${id}`) ? "Tap again to end it" : "End it", { cls: "button danger" })}</div>${building ? '<p class="cc-small">You’ve got a build on the go on this phone already. Taking this into Build the world drops it.</p>' : ""}` : "";
     return `<p class="cc-lead">${lead}</p>${carry}${answers}${dialsList(f)}`;
   }
 
@@ -489,6 +492,7 @@ export function makeFound(d) {
       ui.roll = "";
       ui.sure = "";
       if (part === "tension") ui.spin = `${f.id}|tension`;
+      ui.after = id;
     }
     d.render();
   }
@@ -577,8 +581,9 @@ export function makeFound(d) {
       if (!c) return;
       // Hers for someone else takes a second tap, so one meant for a look
       // doesn't answer for them.
-      if (gmIn(id) && f.turn.key !== myKey(id) && !sureOf(`pick:${id}:${i}`)) {
-        arm(`pick:${id}:${i}`);
+      const key = `pick:${id}:${f.turn.key}:${f.turn.part}:${i}`;
+      if (gmIn(id) && f.turn.key !== myKey(id) && !sureOf(key)) {
+        arm(key);
         return d.render();
       }
       answer(id, c);
@@ -594,8 +599,8 @@ export function makeFound(d) {
     roll(el, id) {
       const f = foundOf(id);
       if (!f?.turn || f.turn.part !== "tension" || !tables()) return;
-      if (gmIn(id) && f.turn.key !== myKey(id) && !sureOf(`roll:${id}`)) {
-        arm(`roll:${id}`);
+      if (gmIn(id) && f.turn.key !== myKey(id) && !sureOf(`roll:${id}:${f.turn.key}`)) {
+        arm(`roll:${id}:${f.turn.key}`);
         return d.render();
       }
       const t = tensionAt(T, rollDie(12));
@@ -613,8 +618,10 @@ export function makeFound(d) {
       if (t) answer(id, { ...asPick(t), roll: t.roll, real: true });
     },
     back(el, id) {
-      if (!sureOf(`back:${id}`)) {
-        arm(`back:${id}`);
+      const f = foundOf(id);
+      const key = `back:${id}:${el.dataset.part}:${f?.last?.key ?? ""}`;
+      if (!sureOf(key)) {
+        arm(key);
         return d.render();
       }
       ui.sure = "";
@@ -643,18 +650,26 @@ export function makeFound(d) {
         return d.render();
       }
       ui.sure = "";
+      const ok = TB().check(id, { o: "fd-carry" });
+      if (!ok.ok) return d.toast(ok.why);
       if (!d.world().fromFound?.(id, f, T)) return d.toast("This phone’s tables can’t deal this world. Reload the page to get the new ones.");
       push(id, { o: "fd-carry" });
       d.go(`/characters/?camp=${encodeURIComponent(id)}&world&make=world`);
     },
     end(el, id) {
+      const f = foundOf(id);
       if (!sureOf(`end:${id}`)) {
         arm(`end:${id}`);
         return d.render();
       }
       ui.sure = "";
-      const f = foundOf(id);
       push(id, { o: "fd-end", id: f?.id });
+      d.render();
+    },
+    retry() {
+      loading = null;
+      failed = false;
+      tables();
       d.render();
     },
     nav(el, id, e) {
@@ -689,6 +704,15 @@ export function makeFound(d) {
     clearInterval(tick);
     // The room, once she's opened or started it, comes to the top of the
     // screen, so the button she tapped doesn't leave her down the page.
+    // An answer that's gone in takes the focus to it, with Take it back.
+    if (ui.after) {
+      const a = app.querySelector(`[data-fd="${CSS.escape(ui.after)}"] .fd-a.is-last`);
+      ui.after = "";
+      if (a) {
+        a.setAttribute("tabindex", "-1");
+        setTimeout(() => a.focus({ preventScroll: true }), 0);
+      }
+    }
     if (ui.focus) {
       const h = app.querySelector(`[data-fd="${CSS.escape(ui.focus)}"] h2`);
       ui.focus = "";

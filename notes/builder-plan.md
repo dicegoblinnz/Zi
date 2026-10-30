@@ -104,6 +104,8 @@ For Mo to say otherwise.
 - **The asking's part of the ground** (stage 9), so the first age's clock starts with it. A turn's one of the book's four parts in its order, so with more than four players the rest start the ground, and with fewer it goes round again.
 - **Every phone deals a turn's three cards** (stage 9), the same from the shared seed and the answers before it, so nothing has to come from the server to deal. A tap on a card answers it, and whoever answered, or she, can take the last answer back till someone answers after it. She can put one in for anyone without a phone, with a second tap so a look never answers for them, and it says it was hers. Everyone sees the cards of whoever's turn it is, so the table can talk it over.
 - **Out of time** (stage 9): the turn that's on finishes, then her phone deals the rest the way the engine would, from the seed. She can stop the clock, run it, and take five minutes off or put five on, and more time once it's out sends the turns round again.
+- **The room's seed stays in the room** (stage 9): every player has it, to deal the room's cards, so carrying the asking into Build the world deals the rest from a seed of its own, and nobody can deal her factions and Secrets for themselves.
+- **Leaving the campaign leaves the founding** (stage 9), so the turns never wait on someone who's gone, and someone she's taken out can't take their last answer back to win their turn again.
 
 ## How a stage goes
 

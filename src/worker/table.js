@@ -39,7 +39,7 @@
 //        POST /api/campaigns/<id>/screen, and every screen on the old one is
 //        told and let go.
 import { DurableObject } from "cloudflare:workers";
-import { apply, blank, current, forget, fresh, screenOf, viewOf } from "../companion/table-rules.js";
+import { apply, blank, current, forget, fresh, leave, screenOf, viewOf } from "../companion/table-rules.js";
 import { hit, seen } from "./auth.js";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
@@ -350,15 +350,16 @@ export class Table extends DurableObject {
   }
 
   // Someone's left the campaign, or been taken out: their phones stop hearing
-  // it, and they're off the table screen's crew. When their account's gone
-  // (erase), so are the telegraphs aimed at them and their name on anyone
-  // else's.
+  // it, they're off the table screen's crew, and they're out of the founding.
+  // When their account's gone (erase), so are the telegraphs aimed at them
+  // and their name on anyone else's.
   async left(user, { erase = false } = {}) {
     for (const ws of this.ctx.getWebSockets(`u:${user}`)) out(ws, "Not in the campaign");
     this.load();
     const crew = Array.isArray(this.meta?.crew) ? this.meta.crew : [];
     const gone = crew.some((c) => String(c.key).startsWith(`${user}|`)) && this.keepMeta({ ...this.meta, crew: crew.filter((c) => !String(c.key).startsWith(`${user}|`)) });
-    if (erase && forget(this.doc, user)) {
+    // Gone from the founding either way, so its turns don't wait on them.
+    if (erase ? forget(this.doc, user) : leave(this.doc, user)) {
       this.doc.v += 1;
       this.save();
       this.broadcast();

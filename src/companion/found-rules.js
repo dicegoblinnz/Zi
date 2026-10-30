@@ -73,7 +73,7 @@ const yes = () => ({ ok: true });
 const no = (why) => ({ ok: false, why });
 const gmOnly = () => no("Only the GM can do that.");
 const none = () => no("There’s no founding on. It might have ended.");
-const notIn = () => no("You need someone playing in the campaign for that.");
+const notIn = () => no("You need a character in this campaign to join it.");
 
 // ------------------------------------------------------------ the clock
 
@@ -81,7 +81,7 @@ const notIn = () => no("You need someone playing in the campaign for that.");
 export function clockLeft(f, now) {
   const c = f?.clock;
   if (!c) return 0;
-  return Math.max(0, c.run ? c.left - (now - c.run) : c.left);
+  return Math.max(0, c.run ? Math.min(c.left, c.left - (now - c.run)) : c.left);
 }
 // The asking's clock has run out.
 export const timeUp = (f, now) => f?.step === "ask" && Boolean(f.clock) && clockLeft(f, now) <= 0;
@@ -233,6 +233,8 @@ export function applyFound(doc, op, who, roster, now) {
       if (i < 0) return yes();
       const [gone] = f.who.splice(i, 1);
       if (!f.outs.includes(key)) f.outs = [...f.outs, key].slice(-MAX.outs);
+      // Their last answer stands, but they can't take it back to get a turn.
+      if (f.last?.key === key) f.last = null;
       // Their turn goes to whoever was after them.
       if (f.turn?.key === gone.key) f.turn = f.who.length ? { key: f.who[i % f.who.length].key, part: f.turn.part, at: now } : null;
       return yes();
@@ -277,7 +279,7 @@ export function applyFound(doc, op, who, roster, now) {
       if (!PARTS.includes(part)) return no("That answer didn’t make sense.");
       const had = pickOf(f, part);
       if (had) return no(had.gm && had.by === myKey ? "Your GM put an answer in for you already." : "That one’s been answered already.");
-      if (!f.turn || f.turn.part !== part) return no("It’s not that one’s turn.");
+      if (!f.turn || f.turn.part !== part) return no("That isn’t up yet.");
       const mine = myKey === f.turn.key;
       if (!gm && !mine) return no("It’s not your turn.");
       const p = pickFrom(op.pick, part);
@@ -289,9 +291,10 @@ export function applyFound(doc, op, who, roster, now) {
     }
     case "fd-back": {
       if (!f) return none();
-      if (!["ask", "asked"].includes(f.step)) return no("It’s on your GM’s phone now, so the asking stays as it is.");
+      if (f.step === "room") return no("It hasn’t started yet.");
+      if (f.step === "carried") return no(gm ? "It’s on your phone now, so the asking stays as it is." : "It’s on your GM’s phone now, so the asking stays as it is.");
       const l = f.last;
-      if (!l || l.part !== op.part || !pickOf(f, l.part)) return no("Only the last answer can be taken back, and only till someone answers after it.");
+      if (!l || l.part !== op.part || !pickOf(f, l.part) || !whoOf(f, l.key)) return no("Only the last answer can be taken back, and only till someone answers after it.");
       if (!gm && myKey !== l.key) return no("That’s not yours to take back.");
       setPick(f, l.part, null);
       f.turn = { key: l.key, part: l.part, at: now };
@@ -391,6 +394,22 @@ export function forgetFound(doc, user) {
     changed = true;
   }
   return changed;
+}
+
+// Someone's left the campaign, or been taken out of it: they're out of the
+// founding too, and their turn goes on round the table. What they answered
+// stands, by their name.
+export function leftFound(doc, user) {
+  const f = doc.found;
+  if (!f) return false;
+  const theirs = (key) => String(key ?? "").startsWith(`${user}|`);
+  const i = f.who.findIndex((w) => theirs(w.key));
+  if (i < 0) return false;
+  const turnGone = theirs(f.turn?.key);
+  f.who = f.who.filter((w) => !theirs(w.key));
+  if (turnGone) f.turn = f.who.length ? { ...f.turn, key: f.who[i % f.who.length].key } : null;
+  if (theirs(f.last?.key)) f.last = null;
+  return true;
 }
 
 // ------------------------------------------------------------ what each phone gets

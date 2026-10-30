@@ -2357,6 +2357,8 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
 /* The answers so far, in the book's order. */
 .fd-asked { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .fd-a { display: flex; align-items: flex-start; gap: 10px; padding: 3px 0 3px 11px; border-left: 3px solid var(--line); }
+.fd-a:focus, .fd h2:focus { outline: none; }
+.fd-a:focus-visible, .fd h2:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
 .fd-a.is-last { border-left-color: var(--zd-you-line); }
 .fd.is-gm .fd-a.is-last { border-left-color: var(--zd-them-line); }
 .fd-a-d .zd-die { --s: 40px; }

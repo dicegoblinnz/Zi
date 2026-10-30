@@ -244,7 +244,8 @@
 //    he's back. Mo puts Kai's last one in for her with a second tap, and
 //    the clock stops. Kai can't carry it off, end it or take Sam out. Mo
 //    carries it into Build the world, on the ground's first seat with the
-//    founding's seed, mix and four factions and the crew's answers locked,
+//    founding's mix and four factions, a seed of its own and the crew's
+//    answers locked,
 //    Kai's phone says he's building the rest, and clearing it off takes it
 //    off hers. A second founding runs out of time: Mo takes the clock to
 //    nothing on Sam's turn, Sam's phone says time's up and that his turn's
@@ -3979,7 +3980,8 @@ try {
     await mo.page.waitForSelector(".wk-head .kicker");
     has(await mo.page.textContent(".wk-head .kicker"), "Seat 1", "Mo's on the ground's first seat");
     const e = await making(mo.page, sat.id);
-    same([e?.W?.seed, e?.W?.n, e?.W?.recipe, e?.W?.asking?.holds?.text, e?.W?.tension?.roll, e?.W?.asking?.runs?.own, e?.W?.asking?.notices?.text, Object.keys(e?.W?.locks ?? {}).sort()], [f3.seed, 4, f3.recipe, holds[0], 8, true, notices[2], ["ask:holds", "ask:notices", "ask:runs", "tension"]], "the build's the founding's seed, mix and four factions, with the crew's answers locked");
+    same([e?.W?.n, e?.W?.recipe, e?.W?.asking?.holds?.text, e?.W?.tension?.roll, e?.W?.asking?.runs?.own, e?.W?.asking?.notices?.text, Object.keys(e?.W?.locks ?? {}).sort()], [4, f3.recipe, holds[0], 8, true, notices[2], ["ask:holds", "ask:notices", "ask:runs", "tension"]], "the build's the founding's mix and four factions, with the crew's answers locked");
+    yes(/^[a-z]+-[a-z]+-[a-z]+$/.test(e?.W?.seed ?? "") && e.W.seed !== f3.seed, "and a seed of its own, never the one every player had");
     await until(async () => (await fOf(mo.page, sat.id))?.step === "carried", "carried on the server");
     await until(async () => (await text(kai.page, ".fd")).includes("building the rest"), "Kai's phone says Mo's building the rest");
 

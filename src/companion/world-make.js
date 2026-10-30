@@ -451,10 +451,11 @@ export function makeWorldMake(w) {
     e.cut = [];
     return W;
   }
-  // The founding's asking (found.js), carried into Build the world: its mix,
-  // its factions and its shared seed, with the crew's answers on and locked,
-  // so she carries on from the ground. Whatever build was on the go for the
-  // campaign on this phone goes.
+  // The founding's asking (found.js), carried into Build the world: its mix
+  // and its factions, with the crew's answers on and locked, so she carries
+  // on from the ground. It deals from a seed of its own, never the room's,
+  // which every player had, so nobody can deal her factions and Secrets for
+  // themselves. Whatever build was on the go for the campaign on this phone goes.
   function fromFound(id, f) {
     if (!T || !f?.recipe || !canDeal(T, f.recipe)) return false;
     const recipe = { region: f.recipe.region, era: f.recipe.era, twist: f.recipe.twist ?? null };
@@ -462,7 +463,7 @@ export function makeWorldMake(w) {
     e.setup = { ...e.setup, region: recipe.region, ...genreOf(recipe), n: f.n };
     let W;
     try {
-      W = start(T, { recipe, seed: f.seed, factions: f.n, crew: crewNow(id, docOf(id), "world") });
+      W = start(T, { recipe, seed: newSeed(T), factions: f.n, crew: crewNow(id, docOf(id), "world") });
     } catch {
       forget(id);
       return false;

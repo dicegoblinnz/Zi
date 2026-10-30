@@ -126,7 +126,10 @@ export function makeTable(d) {
     const doc = fresh({ v: k.view?.v ?? 0, fight: k.view?.fight ?? 1, rounds: structuredClone(k.view?.rounds ?? []), scene: structuredClone(k.view?.scene ?? blankScene()), turn: structuredClone(k.view?.turn ?? null), last: structuredClone(k.view?.last ?? null), found: foundIn(k.view) });
     const who = whoIn(id);
     const roster = rosterOf(id);
-    for (const op of k.out) apply(doc, op, who, roster, op.at || Date.now());
+    // The founding's clock runs on the server's time, so its changes are tried
+    // at the server's time as near as this phone can tell.
+    const off = Number(k.off) || 0;
+    for (const op of k.out) apply(doc, op, who, roster, (op.at || Date.now()) + (String(op.o).startsWith("fd-") ? off : 0));
     return doc;
   }
   const waiting = (id, test = () => true) => camp(id).out.some(test);
@@ -2290,7 +2293,7 @@ export function makeTable(d) {
     gmName: (id) => gmName(id),
     waiting: (id) => camp(id).out.length,
     // Whether a change would be taken, tried on the table as this phone has it.
-    check: (id, op) => apply(local(id), op, whoIn(id), rosterOf(id), Date.now()),
+    check: (id, op) => apply(local(id), op, whoIn(id), rosterOf(id), Date.now() + (String(op?.o).startsWith("fd-") ? Number(camp(id).off) || 0 : 0)),
     seenAt: (id) => camp(id).at,
     // The server's clock, as near as this phone can tell, for the founding's.
     serverNow: (id) => Date.now() + (Number(camp(id).off) || 0),

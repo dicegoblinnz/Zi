@@ -81,7 +81,7 @@
 // steps down a size, and past d2 the stake's lost or the event happens.
 
 import { applyTurn, forgetTurn, isTurnOp, turnView } from "./turn-rules.js";
-import { applyFound, forgetFound, foundView, isFoundOp } from "./found-rules.js";
+import { applyFound, forgetFound, foundView, isFoundOp, leftFound } from "./found-rules.js";
 
 export const SIZES = [2, 4, 6, 8, 10, 12];
 export const MAX = { who: 60, does: 140, one: 140, name: 60, act: 60, paid: 80, tele: 24, rounds: 12, more: 4, list: 6, ground: 8, stakes: 6, events: 6, tags: 8, text: 140, tag: 80 };
@@ -902,6 +902,10 @@ export function forget(doc, user) {
   }
   return changed;
 }
+
+// Someone's left the campaign or been taken out, with their account still
+// there: they're out of the founding, so the turns don't wait on them.
+export const leave = (doc, user) => leftFound(doc, user);
 
 // What a phone gets: the GM every round of this fight, a player the last two
 // (the one on now, and the one before for anything still to roll from it,

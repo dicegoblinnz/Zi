@@ -21,8 +21,10 @@
 //    real d12 and never typed, an answer taken back, one put in by the GM
 //    for a player with no phone, late ones refused), the dials, the clock
 //    stopping when it's done, what a player gets, carrying it off, someone
-//    leaving, and the clock running out: the turn that's on finishes, more
-//    time sends the turns round again, and the rest's dealt by the GM alone.
+//    leaving, someone taken out never getting their turn back by taking an
+//    answer back, someone who leaves the campaign leaving the founding, and
+//    the clock running out: the turn that's on finishes, more time sends the
+//    turns round again, and the rest's dealt by the GM alone.
 // 2. Every crew member's set actions on the phone match their sheet in the
 //    chapter, read straight off the Markdown here rather than from book.json.
 // 3. Vesk at the table: Sneak is 3 steps, a d6. Tap off move unseen and it's
@@ -497,7 +499,7 @@ if (part("1c")) {
   now += 20000;
   ok({ o: "fd-answer", part: "holds", pick: card("core:holds:trade", "Trade holds it together.", { tags: ["market"], dials: { rich: 1 } }) }, sam, "Sam answers with a card");
   same([f().asking.holds.text, f().asking.holds.byName, f().last, f().turn.key, f().turn.part], ["Trade holds it together.", "Sam", { part: "holds", key: K.sam }, K.kai, "tension"], "it's on, and Kai's next, with the tension");
-  why({ o: "fd-answer", part: "runs", pick: card("core:runs:guilds", "The guilds run it.") }, kai, "It’s not that one’s turn.", "what's next is the tension, not who runs it");
+  why({ o: "fd-answer", part: "runs", pick: card("core:runs:guilds", "The guilds run it.") }, kai, "That isn’t up yet.", "what's next is the tension, not who runs it");
   why({ o: "fd-answer", part: "tension", pick: card("core:tension:truce", "A truce one move from breaking.") }, kai, "Roll the d12 for the tension.", "the tension's rolled");
   why({ o: "fd-answer", part: "tension", pick: { own: true, text: "Everyone hates the bridge." } }, kai, "Roll the d12 for the tension.", "and it's off the d12, never someone's own words");
   why({ o: "fd-back", part: "holds" }, kai, "That’s not yours to take back.", "Kai can't take back Sam's answer");
@@ -532,6 +534,7 @@ if (part("1c")) {
   const screen = JSON.stringify(T.screenOf(doc, { name: "Tuesday Lair", crew: [] }));
   same([screen.includes("found"), screen.includes("ash-lantern-ford"), screen.includes("ferry")], [false, false, false], "and the table screen never gets any of the founding");
   why({ o: "fd-back", part: "notices" }, sam, "It’s on your GM’s phone now, so the asking stays as it is.", "and nobody can take an answer back");
+  why({ o: "fd-back", part: "notices" }, gm, "It’s on your phone now, so the asking stays as it is.", "Mo neither");
   same(T.forget(doc, "lee"), true, "Lee deletes his account");
   same([f().who.map((w) => w.key), f().asking.runs.byName, f().asking.runs.by], [[K.sam, K.kai], "Someone who’s left", ""], "he's out, and the answer Mo put in for him stays without his name");
   why({ o: "fd-end" }, sam, "Only the GM can do that.", "a player can't end it");
@@ -549,20 +552,28 @@ if (part("1c")) {
   ok({ o: "fd-in", key: K.kai, on: true }, gm, "she's back, and Mo puts her in again");
   same(f().who.map((w) => w.key), [K.sam, K.lee, K.kai], "at the end of the order");
   ok({ o: "fd-answer", part: "holds", pick: card("core:holds:faith", "Faith holds it together.", { tags: ["holy"] }) }, sam, "Sam answers");
+  ok({ o: "fd-in", key: K.sam, on: false }, gm, "Mo takes Sam out, his answer standing");
+  why({ o: "fd-back", part: "holds" }, sam, "Only the last answer can be taken back, and only till someone answers after it.", "so Sam can't take it back to get his turn again");
+  why({ o: "fd-back", part: "holds" }, gm, "Only the last answer can be taken back, and only till someone answers after it.", "and nor can Mo, onto someone who's out");
+  same([f().asking.holds.byName, f().turn.key], ["Sam", K.lee], "it's still Sam's answer, and still Lee's turn");
+  ok({ o: "fd-in", key: K.sam, on: true }, gm, "Mo puts Sam back");
+  same(f().who.map((w) => w.key), [K.lee, K.kai, K.sam], "at the end");
   ok({ o: "fd-clock", do: "add", m: -30 }, gm, "Mo takes the time off the clock");
   same([timeUp(f(), now), f().turn.key], [true, K.lee], "time's up, and Lee's turn is still on");
   ok({ o: "fd-answer", part: "tension", pick: card("core:tension:death", "A death no one has answered for.", { tags: ["blood"], roll: 11 }) }, lee, "Lee rolls the tension");
   same([f().out, f().turn, f().step], [true, null, "ask"], "the turn that was on finishes, and nobody's next");
   ok({ o: "fd-clock", do: "add", m: 5 }, gm, "Mo gives it five more minutes");
   same([f().out, f().turn.key, f().turn.part, f().clock.left, f().clock.run], [false, K.kai, "runs", 5 * MIN, now], "and the turns go round again, to Kai");
+  same(T.leave(doc, "kai"), true, "Kai leaves the campaign");
+  same([f().who.map((w) => w.key), f().turn.key, f().turn.part], [[K.lee, K.sam], K.sam, "runs"], "she's out of the founding, and her turn goes on to Sam");
   ok({ o: "fd-clock", do: "add", m: -10 }, gm, "then takes them off again");
-  ok({ o: "fd-answer", part: "runs", pick: card("core:runs:priests", "The priests run it.", { tags: ["holy"] }) }, kai, "Kai answers who runs it");
+  ok({ o: "fd-answer", part: "runs", pick: card("core:runs:priests", "The priests run it.", { tags: ["holy"] }) }, sam, "Sam answers who runs it");
   same([f().out, f().turn], [true, null], "out of time again");
   why({ o: "fd-rest", picks: {} }, sam, "Only the GM can do that.", "the rest's dealt on Mo's phone, not a player's");
   why({ o: "fd-rest", picks: {} }, gm, "Deal all of what’s left.", "and it's all of what's left");
   why({ o: "fd-rest", picks: { notices: { own: true, text: "Bells." } } }, gm, "Deal all of what’s left.", "off the tables");
   ok({ o: "fd-rest", picks: { notices: card("core:notices:pray", "Everyone stops to pray at the same hour.", { tags: ["holy"] }), runs: card("core:runs:guilds", "The guilds run it.") } }, gm, "Mo's phone deals it");
-  same([f().step, f().asking.notices.deal, f().asking.runs.text, f().clock.run], ["asked", true, "The priests run it.", 0], "the asking's done, the last one dealt and Kai's left as she said it");
+  same([f().step, f().asking.notices.deal, f().asking.runs.text, f().clock.run], ["asked", true, "The priests run it.", 0], "the asking's done, the last one dealt and Sam's left as he said it");
   why({ o: "fd-clock", do: "run" }, gm, "The clock only runs while the asking’s on.", "and the clock waits for the ground");
 
   // What's new, said for whoever's holding the phone.
