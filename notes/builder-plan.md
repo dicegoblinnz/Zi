@@ -283,7 +283,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
    - `doc.found` on the live table, as the brief says: she sets it up from her campaign page and opens it, players join from their World tab, turns go round, each age has its clock, and every phone stays in step, with a poor signal handled the way telegraphs handle it. Then the asking, with the dials set and the tension rolled.
    - A new part of `tests/check-accounts.mjs` plays it on three phones.
 10. **Renaissance** (tables), with the Gilded Court's and Brinewake's mixes. Needs 4. *Built 30 Oct 2026.*
-11. **The founding: the ground and the founding.** Needs 9.
+11. **The founding: the ground and the founding.** Needs 9. *Built 30 Oct 2026.*
     - The dice pool for the seats, then her old powers, then the founders in reverse order with their questions, cards and threads, as the brief says.
 12. **Industrial and Steam** (tables), so Steampunk deals. Needs 3.
 13. **The founding: the strife.** Needs 7 and 11.
