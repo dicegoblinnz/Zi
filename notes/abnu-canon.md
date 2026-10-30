@@ -438,6 +438,18 @@ Stage 15 wrote these where the canon was silent, and Mo said yes to all of it on
 - **The east.** Echily burns Cobria's forest edge to keep off its fevers, which really start in Neuzon's wells, and Cobria won't sell it Fever Bark. The Polythusian Marches sheltered Echily through the last fever and tax Inkhal's caravans, and one wall-captain sells Inkhal his garrison's sleeping hours. Inkhal's couriers copy every letter in the east and sell them, Alysta first. Cobria's children who open early go missing on ships, taken by the Soulless, who hunt the Stones' students too.
 - **Sizes.** Alysta's Great. The Soths, Orza, Montia, the Union, Thelis, Cobria, Inkhal and the Marches are City. The Etweil, Xurux, Echily, the Standing Stones and the molefolk are Local, and Lubro and the Order of the Seven are Small.
 
+## What the places added (stage 16, 31 Oct 2026)
+
+Stage 16 wrote these where the canon was silent, and Mo said yes to all of it on 31 Oct, so they're canon now. The pages and the map are in `content/worlds/abnu/1000/`.
+
+- **The lands.** Each nation's land is a page named the way Mo's map names it (the Alysta Empire, the Principality of Orza, the Kingdom of Montia and the rest), and the Soths' is the Hinterlands. Xurux and Lubro are each the land and the city together.
+- **The capital.** Alysta holds the Palace, on its hill, the Statue of the Seven, the Sealed Archive, Verrant Docks, the Ninth District and the Drowned Quarter, and Hollowgate's just inland.
+- **Where things are that the map doesn't mark.** Mornhold and the Ironhand Forge, on Mornhold's east edge, are in the Soths' west, with the Standing Stones beyond them and the Iron Valleys in the east. Deepshaft Kel's in Xurux, Ezkia Prime and the Grand Library are north of Waslach, the Green Silence is in the Etweil's mountains, Sethilan Harbour's in Montia's south, and the Ledge and the Sundering Deep are in Thelis's waters.
+- **The towns.** Cata's a Soth market town on the road from Xunan to Lubro, and Waslach's the Union's foundry town, where its engines are built. Niebali sits on hot springs, Pera has the queen's temple at the top of the town, Sethilan has a copying house, and Neuzon's high on the crags where the eastern roads meet.
+- **The Mountain** is what the molefolk's home is called till Mo names it. It and their eldest are the only pages that name them where the crew could read it, and no other page says the Mountain.
+- **The people.** The Keeper and the Warden of the Ledge are she, and the master of Deepshaft Kel's he. The Order of the Seven meets in a palace storeroom Halden Moor keeps locked, the Keeper's let the Order read the Seven's texts, and Neru knows the fevers start in her own wells.
+- **The map** leaves the rivers off and keeps the seven main roads.
+
 ## Claude's calls
 
 Each stands till Mo says otherwise.

@@ -169,10 +169,14 @@ For Mo to say otherwise.
 - **The page's five tabs** (stage 13): Factions, Map, Places, People and History along the bottom, with the board and the web as two views of Factions. Places and People each have a chip for every district (where a place is, or where someone's found) and Find, a page opens as a fold the way a faction does, and each one has On the map, which opens the map at its pin.
 - **The web on the map is a switch** (stage 13): The web, under the map, puts every faction at its seat's pin, fanned out where a few share one, faint till one's tapped, then its ties lit the way the page's web walks them, with its card saying where it sits, Its card and Its ties in the web. A faction's card has On the map, with its ties, which opens it there.
 - **Elsewhere's left off** (stage 13): it says how a place looks in another kind of game, and Night City's only ever itself.
+- **A world names its own areas** (stage 16): `areas` in `world.yaml` says what its districts and parts are called, so Abnu's are lands and cities on its page, and a world that doesn't say keeps district and part.
+- **A world's map is drawn by its land** (stage 16): Abnu's ground is the land with the sea round it (`land`, and `deep` for the deepest water) rather than a city's sea with the land drawn on it, so `drawWorld()` draws the sea as the ground, a shelf of shallows round every coast, the Deep darker still and each nation's land a plate clipped to its coast, edged in gold, with the roads dashed the way Mo's are and every line growing with the map, so the whole world on a phone reads the way a city does. The rivers are left off, since nothing on a page uses them and they'd crowd a phone, and it draws no hills or open country, so the build turns either down.
+- **A land can be named for its nation** (stage 16): a district can share its name with a faction that sits in it, the way a seat can, so the Ezkian Union's land is the Ezkian Union, and Xurux and Lubro are a page each, the land and the city together.
+- **A city's places tuck on a world's map** (stage 16): Alysta's a part of the empire's land with its places in it, and on the whole world each one waits, pin and name, till there's room for both, so the capital's one name till it's zoomed in on. A map can say which pin it opens on (`opens` in `map.yaml`), and Abnu's opens on Alysta.
 
 ## How a stage goes
 
-- One stage a chat, with the prompt at the end of this plan. The stage is the first in The stages not marked built, bar stage 16, which Mo moved up on 31 Oct so it's built before 14.
+- One stage a chat, with the prompt at the end of this plan. The stage is the first in The stages not marked built.
 - A stage is marked built by ending its first line with the date it went to `main`, like *Built 30 Oct 2026.*, in the same merge.
 - A stage that writes tables, writes a world or changes a rule sends Mo what to judge in one message (the `/deal/` link on the Preview, for tables, and the world's page for a world), changes only what he names, and waits for his yes in the same chat before it merges.
 - The Night City stages (12 to 14 and 17 to 19) are built from A whole world, in the brief, and A world, in Writing tables, so each can be built from this plan alone. Abnu's (15 and 16) are built from A whole world: Abnu and `notes/abnu-canon.md` as well.
@@ -384,7 +388,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
     - `content/worlds/abnu/`: `world.yaml`, and the board and How it came to be for Abnu's now, from `notes/abnu-canon.md`, as A whole world: Abnu in the brief says. Every faction whole, the web passing Night City's checks, the mini factions, the molefolk as the secret faction, and every Secret that touches the five truths on their ladder.
     - `/worlds/abnu/` with the board, the web and How it came to be, for Mo to judge on the Preview, and the message listing everything the stage made up beyond the canon (rulers' names, districts, lines of history) and any call of its own.
     - `tests/check-world-engine.mjs` puts every Abnu card onto a board, and `tests/check-site.mjs` checks its page the way it checks Night City's.
-16. **Abnu: places, people and the map** (a world). Needs 15.
+16. **Abnu: places, people and the map** (a world). Needs 15. *Built 31 Oct 2026.*
     - The places (every seat, the canon's places and the districts of the capital) and the people (every Face, the canon's people and the contacts), with everything a page holds, and the map traced from Mo's, with a pin on every place and seat and the web on it, every faction where it sits, as the brief says.
     - The page gets places and people, Find, and the map in one hand, every pin opening its page, the way stage 13 gave Night City's.
 17. **Night City, 2045: the board and How it came to be** (a world). Needs 12.
