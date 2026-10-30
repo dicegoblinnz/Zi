@@ -82,8 +82,21 @@
 //    back, a prompt that's waiting stays waiting when the answers are played
 //    again, Not this one on the last card comes back round to the last cards
 //    rather than ending the deck, and the dealing script plays a deck as text.
+// 9. A whole world (stage 12 of notes/builder-plan.md): the made-up one in
+//    tests/worlds/ passes, and a faction with no Want, Power past its size,
+//    no rival or a rival with no thread back, no need blocked, no Secret
+//    naming another faction, two factions with the same asset, an agenda at
+//    nothing or at a faction that isn't there, nothing strange, a name too
+//    long for a card, a comma inside { }, people who don't add Power and an
+//    asset that does, a mini faction's outcomes and Loyalty, a Secret's ways
+//    in, a thread toward nobody, and a line of history in no age, out of
+//    order, too long or an age with nothing in it are each a problem that
+//    says so. Then every world in content/worlds/ passes, every card goes
+//    onto a board whole, it fits in a world with room to spare, and its page
+//    draws every faction and every line of history.
 import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { apply, blank, forPlayer, readable, standingOf, undoOf } from "../src/companion/board.js";
 import { BAGS, CHECKS, STEPS, canDeal, cardsOf, choose, crewFits, dealRest, dealWorld, lock, newSeed, options, pickAt, pickKey, poolOf, preview, recordOf, redeal, redealFaction, resume, rngOf, setCrew, SIZES, start, startAdd, tensionAt } from "../src/companion/world-engine.js";
@@ -91,6 +104,9 @@ import { BMAX } from "../src/companion/world-record.js";
 import { MAX, PARTS, answer, current, deckOf, fillPrompt, finish, formedOf, historyOf, notThis, playRest, prompted, replay, startDeck, undo } from "../src/companion/world-deck.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 import { linesOf } from "../src/companion/world-answer.js";
+import { WORLD_MAX, compileWorld, readWorldsDir } from "../scripts/worlds.mjs";
+import { boardOf, historyOf as storyOf, webOfWorld } from "../src/worlds/world-page.js";
+import { esc } from "../src/kit/kit.js";
 
 const problems = [];
 const note = (p) => {
@@ -1130,6 +1146,133 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     same(run(), one, "the dealing script played the same seed two ways");
   }
   console.log(`8. the deck: ${played} decks answered at random, ${replayed} played again, Not this one, Undo, decks picked up again after a reload and the dealing script, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
+}
+
+// 9. A whole world (stage 12): the made-up one passes, and breaking each of
+// its checks on a copy is a problem that says so. Then every real world in
+// content/worlds/ passes, each card goes onto a board the way the World
+// screen takes one, it fits in a world with room to spare, and its page
+// draws every faction and every line of history.
+{
+  const started = Date.now();
+  const bookIn = { assets: bookJson.companion.worlds.assets, sizes: bookJson.companion.worlds.sizes, regions: T.regions };
+  const madeUp = readWorldsDir("tests/worlds");
+  for (const p of madeUp.problems) note(`the made-up world: ${p}`);
+  const base = madeUp.src.find((w) => w.universe === "made-up");
+  if (!base) note("can't find the made-up world in tests/worlds/");
+  else {
+    const ok = compileWorld(base, bookIn);
+    for (const p of ok.problems) note(`the made-up world: ${p}`);
+    // Each break on its own copy, and the problem it has to raise.
+    const breaks = [
+      ["a faction with no Want", (w) => delete w.files.factions.factions[0].want, /has no want/],
+      ["Power past its size", (w) => w.files.factions.factions[1].people.push({ text: "More Boats", does: "+1 Power. Another crew." }, { text: "Even More Boats", does: "+1 Power. And another." }), /is local, so its Power's d4 to d6/],
+      ["a faction with no rival", (w) => (w.files.factions.factions[4].threads = w.files.factions.factions[4].threads.filter((t) => t.tie !== "rival")), /The Market Gang has no rival/],
+      ["a rival with no thread back", (w) => (w.files.factions.factions[0].threads = w.files.factions.factions[0].threads.filter((t) => t.to !== "market-gang")), /rival The Harbour Bank has no hostile thread back/],
+      ["no need blocked", (w) => (w.files.factions.factions[0].threads = w.files.factions.factions[0].threads.filter((t) => t.to !== "night-boats")), /no need's blocked/],
+      ["no Secret naming another faction", (w) => w.files.factions.factions.forEach((f) => f.secret && (f.secret.more = "Nobody knows.")), /no Secret names another faction/],
+      ["two factions holding the same asset", (w) => w.files.factions.factions[2].assets.push({ text: "A Vault", does: "The same vault again." }), /both hold A Vault/],
+      ["an agenda aimed at nothing", (w) => (w.files.factions.factions[2].agendas[0].at = []), /isn't aimed at anything/],
+      ["an agenda aimed at a faction that isn't there", (w) => (w.files.factions.factions[2].agendas[0].at = "the-crown"), /isn't a faction on the board/],
+      ["nothing strange", (w) => w.files.factions.factions.forEach((f) => { delete f.strange; for (const a of f.assets ?? []) delete a.strange; }), /nothing on the board's strange/],
+      ["a name too long for a card", (w) => (w.files.factions.factions[3].name = "The Tide Chapel of the Drowned Sailors and Everyone Else Who Ever Went Down"), /runs to \d+ characters, and a card holds 60/],
+      ["a comma inside { }", (w) => (w.files.factions.factions[0].threads[0]["and the rest"] = null), /can't hold/],
+      ["people who don't say +1 Power", (w) => (w.files.factions.factions[0].people[0].does = "Guards in grey."), /so what it does starts with \+1 Power/],
+      ["an asset that isn't people adding Power", (w) => (w.files.factions.factions[0].assets[0].does = "It adds Power when the vault's shut."), /only people who turn up add Power/],
+      ["a mini faction with three outcomes", (w) => (w.files.factions.factions[5].mini.outs = ["Destroy", "Undermine", "Obstruct"]), /does two of the six outcomes/],
+      ["a mini faction with no Loyalty thread", (w) => (w.files.factions.factions[5].loy = []), /has a Loyalty thread toward/],
+      ["a Secret with one way in", (w) => (w.files.factions.factions[1].secret.ways = ["The chapel's crypt"]), /has 1 ways in/],
+      ["a thread toward nobody", (w) => w.files.factions.factions[1].threads.push({ to: "the-crown", kind: "hostile", text: "Down with the crown" }), /isn't a faction on the board \(the crew isn't there yet\)/],
+      ["a line of history in no age", (w) => (w.files.history.history[0].age = 4), /the ages are 1/],
+      ["a line of history out of order", (w) => w.files.history.history.push({ age: 1, text: "Something long ago, told last." }), /out of order/],
+      ["a line of history too long to read", (w) => (w.files.history.history[0].text = Array(45).fill("word").join(" ")), /past the 40 a line reads well at/],
+      ["an age with nothing in it", (w) => (w.files.history.history = w.files.history.history.filter((l) => l.age !== 2)), /nothing in age 2/],
+      ["more history than a record holds", (w) => (w.files.history.history = Array.from({ length: BMAX.lines + 1 }, (_, i) => ({ age: 1 + Math.floor((3 * i) / (BMAX.lines + 1)), text: `Line ${i + 1}.` }))), new RegExp(`has ${BMAX.lines + 1} lines, and a world's record holds ${BMAX.lines}`)],
+      ["two factions with one key", (w) => (w.files.factions.factions[2].key = "night-boats"), /two factions have the key night-boats/],
+      ["two factions with one name", (w) => (w.files.factions.factions[2].name = "The Night Boats"), /have the same name/],
+      ["a kind the world hasn't got", (w) => (w.files.factions.factions[0].kind = "corp"), /kind is corp, and world\.yaml's kinds are money, street, law/],
+      ["a size the book hasn't got", (w) => (w.files.factions.factions[0].size = "huge"), /size is huge, and it's small, local, city or great/],
+      ["more resources than its size", (w) => w.files.factions.factions[2].res.push("Court Fees", "Licences"), /is local, so it has 2 to 4 resources, and it has 5/],
+      ["a spare resource beside a need", (w) => w.files.factions.factions[1].res.push("Lantern Oil"), /has a resource to spare and a need/],
+      ["a need from a faction with nothing spare", (w) => (w.files.factions.factions[1].assets.at(-1).from = "town-watch"), /is from The Town Watch, which has no resource to spare/],
+      ["who won't trade, on something that isn't a need", (w) => delete w.files.factions.factions[1].assets.at(-1).need, /says who won't trade for it \(from\), so it's a need/],
+      ["an ally with no bond back", (w) => (w.files.factions.factions[2].threads = w.files.factions.factions[2].threads.filter((t) => t.to !== "harbour-bank")), /ally The Town Watch has no bond thread back/],
+      ["a debt with no bond back", (w) => (w.files.factions.factions[4].threads = w.files.factions.factions[4].threads.filter((t) => t.to !== "night-boats")), /debt The Market Gang has no bond thread back/],
+      ["people from Appendix B as a thing", (w) => w.files.factions.factions[0].assets.push({ text: bookIn.assets.find((a) => a.power).text, does: "They stand about." }), /is people in Appendix B, so it's under people/],
+      ["a Secret's tag with a full stop", (w) => (w.files.factions.factions[0].secret.tag = "The money's gone."), /Secret's tag starts with a capital and has no full stop/],
+    ];
+    let broken = 0;
+    for (const [what, change, wanted] of breaks) {
+      const w = copy(base);
+      change(w);
+      const got = compileWorld(w, bookIn);
+      if (got.problems.some((p) => wanted.test(p))) broken += 1;
+      else note(`the made-up world with ${what} wasn't a problem (it said: ${got.problems.join(" | ").slice(0, 300) || "nothing"})`);
+      if (got.world) note(`the made-up world with ${what} still came out as a world`);
+    }
+    console.log(`9. a whole world: the made-up one passes, and ${broken} of ${breaks.length} breaks are each a problem`);
+  }
+  // A folder that isn't laid out right says so, instead of building nothing.
+  {
+    const dir = mkdtempSync(join(tmpdir(), "zi-worlds-"));
+    try {
+      const put = (path, text) => (mkdirSync(join(dir, path, ".."), { recursive: true }), writeFileSync(join(dir, path), text));
+      put("blank/world.yaml", "");
+      put("blank/2077/factions.yaml", "factions: []\n");
+      put("odd/world.yaml", "id: odd\nname: Odd\nyears:\n  1999:\n    title: Odd, 1999\n");
+      put("odd/1999/factions.yaml", "factions: [3]\n");
+      put("odd/1999/history.yaml", "history: []\n");
+      put("odd/2000/factions.yaml", "factions: []\n");
+      const got = readWorldsDir(dir);
+      yes(got.problems.some((p) => /blank\/world\.yaml is empty/.test(p)), `an empty world.yaml wasn't a problem (it said: ${got.problems.join(" | ") || "nothing"})`);
+      yes(got.problems.some((p) => /odd\/2000\/ is there, but world\.yaml's years don't have 2000/.test(p)), `a year folder world.yaml doesn't list wasn't a problem (it said: ${got.problems.join(" | ") || "nothing"})`);
+      const odd = got.src.find((w) => w.universe === "odd");
+      const oddOut = odd ? compileWorld(odd, bookIn) : { problems: [] };
+      yes(oddOut.problems.some((p) => /has an entry that isn't a faction/.test(p)), `an entry in factions.yaml that isn't a faction wasn't a problem (it said: ${oddOut.problems.join(" | ").slice(0, 300) || "nothing"})`);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+  // Every real world.
+  const real = readWorldsDir("content/worlds");
+  for (const p of real.problems) note(`content/worlds: ${p}`);
+  yes(real.src.some((w) => w.universe === "night-city" && w.year === "2077"), "content/worlds has no Night City, 2077");
+  for (const w of real.src) {
+    const got = compileWorld(w, bookIn);
+    for (const p of got.problems) note(`${w.universe} ${w.year}: ${p}`);
+    const world = got.world;
+    if (!world) continue;
+    // Each card onto a board, the way the World screen takes one, threads
+    // and makers by the ids they get.
+    const ids = new Map(world.factions.map((f, i) => [f.key, `f${String(i).padStart(3, "0")}`]));
+    let doc = blank();
+    let n = 0;
+    for (const f of world.factions) {
+      const id = () => `i${(n++).toString(36).padStart(3, "0")}`;
+      const c = copy(f.card);
+      const card = { ...c, id: ids.get(f.key), parent: c.parent ? ids.get(c.parent) : null, threads: c.threads.map((t) => ({ ...t, id: id(), to: ids.get(t.to) })) };
+      for (const l of ["res", "assets", "agendas", "pub", "mor", "loy"]) card[l] = c[l].map((x) => ({ ...x, id: id() }));
+      const next = copy(doc);
+      if (!apply(next, { o: "new", f: card })) note(`${world.id}: the board won't take ${f.card.name}`);
+      else doc = next;
+    }
+    const back = readable(copy(doc));
+    same(back.factions.length, world.factions.length, `${world.id}: factions on the board`);
+    for (const f of back.factions) {
+      const was = world.factions.find((x) => ids.get(x.key) === f.id);
+      for (const l of ["res", "assets", "agendas", "pub", "mor", "loy", "threads"]) if (f[l].length !== was.card[l].length) note(`${world.id}: ${f.name} lost some of its ${l} on the board`);
+    }
+    yes(world.size < WORLD_MAX, `${world.id} comes to ${world.size} characters brought in, past ${WORLD_MAX}`);
+    // The page draws every faction and every line.
+    const board = boardOf(world);
+    const story = storyOf(world);
+    const web = webOfWorld(world);
+    for (const f of world.factions) yes(board.includes(`id="f-${f.key}"`), `${world.id}'s page has no card for ${f.card.name}`);
+    const told = story.replace(/<[^>]+>/g, "");
+    for (const l of world.history) yes(told.includes(esc(l.text)), `${world.id}'s page leaves out a line of How it came to be: ${l.text.slice(0, 60)}`);
+    for (const html of [board, story, web.pic, web.panel]) if (/undefined|NaN|\[object/.test(html)) note(`${world.id}'s page has undefined, NaN or an object written into it`);
+    console.log(`   ${world.id}: ${world.factions.length} factions on a board, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k brought in, its page drawn, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
+  }
 }
 
 console.log(problems.length ? `\n${problems.length} problems` : "\nAll world engine checks passed");

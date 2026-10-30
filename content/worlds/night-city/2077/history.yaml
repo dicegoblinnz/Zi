@@ -1,0 +1,259 @@
+# How it came to be: Night City from its founding to the weeks before the
+# Konpeki Plaza job, an age at a time, in the order it happened. A line
+# that would give a faction's Secret away is hers.
+history:
+
+  # ── Long ago
+  - age: 1
+    text: >-
+      Richard Night bought the ruins of a coastal town after biker gangs
+      gutted it, and talked Arasaka and the other big corps into paying for a
+      new city there.
+  - age: 1
+    text: >-
+      His crews bulldozed the hills into the sea for new land, and building
+      started in 1994.
+  - age: 1
+    text: >-
+      The Mafia and the Yakuza ran the building trades, and they fought Night
+      over every contract.
+  - age: 1
+    text: >-
+      Somebody shot Richard Night in his penthouse in 1998. Nobody was ever
+      caught, the mob got the blame, and the city took his name.
+  - age: 1
+    text: >-
+      His widow Miriam started the foundation that became Night Corp, to
+      finish the city he'd drawn.
+  - age: 1
+    text: >-
+      The country fell apart in the Collapse, and Northern California, Night
+      City with it, went its own way as a Free State.
+  - age: 1
+    text: >-
+      The mob ran the city from 2005 till the corps sent their mercs in, and
+      by 2011 the corps owned the council.
+  - age: 1
+    text: >-
+      Arasaka grabbed a netrunner called Alt Cunningham in 2013, and Johnny
+      Silverhand started a riot outside its tower to get her back. Alt was
+      lost in the Net.
+  - age: 1
+    text: >-
+      Maelstrom started up after that, borgs who'd sooner be chrome than
+      flesh.
+  - age: 1
+    text: >-
+      Arasaka and Militech went to war in 2021, and Night City ended up
+      Arasaka's headquarters under martial law.
+  - age: 1
+    text: >-
+      Rache Bartmoss died in a corp raid in 2022, and the viruses he left
+      behind ate most of the Net.
+  - age: 1
+    text: >-
+      In 2023 Johnny Silverhand and Morgan Blackhand led a crew into Arasaka
+      Tower, and a nuke went off on the 120th floor.
+  - age: 1
+    text: >-
+      Half a million people died of that bomb, and two million lost their
+      homes.
+  - age: 1
+    text: >-
+      The official story said terrorists, and for years everybody believed
+      Arasaka had set it off itself.
+  - age: 1
+    text: >-
+      The government took Militech over after the war, and Arasaka was thrown
+      out of America in 2025.
+  - age: 1
+    text: >-
+      Ash turned the sky red for years, and people called it the Time of the
+      Red.
+  - age: 1
+    text: >-
+      The city was refounded under a new charter in 2028, and the suburbs
+      became part of it.
+  - age: 1
+    text: >-
+      The Aldecaldos and Night Corp led the rebuilding, and the rubble went
+      into the bay as new land.
+  - age: 1
+    text: >-
+      City Hall and the Hall of Justice opened in the Glen in 2037.
+  - age: 1
+    text: >-
+      The Tyger Claws fought each other over who'd lead them, and Hayato
+      Nakagawa came out on top in 2042.
+  - age: 1
+    text: >-
+      NetWatch started building the Blackwall in 2044, to shut the rogue AIs
+      out of what was left of the Net.
+
+  # ── In living memory
+  - age: 2
+    text: >-
+      The bombed-out Hot Zone was declared clean in 2052, and they started
+      building Corporate Plaza on top of it.
+  - age: 2
+    text: >-
+      Lucius Rhyne won a seat on the council in 2060.
+  - age: 2
+    text: >-
+      Militech led the money into Pacifica, to turn it into a resort with
+      hotels, casinos and a stadium.
+  - age: 2
+    text: >-
+      Haiti was abandoned after the storms of 2062, and its people came to
+      build Pacifica's hotels.
+  - age: 2
+    text: >-
+      Rosalind Myers left Militech and became the NUSA's president in 2065.
+  - age: 2
+    text: >-
+      Tyger Claws murdered one of Lizzie Borden's girls in 2067. Lizzie took an
+      axe to three of them, and the Claws burned her bar and killed her.
+  - age: 2
+    text: >-
+      The riots after Lizzie died started the Mox.
+  - age: 2
+    text: >-
+      Network 54 took Militech's side in every story, and the other big
+      network took Arasaka's.
+  - age: 2
+    text: >-
+      Myers sent the NUSA's army to take back the Free States in 2069, and
+      Night City was under siege for more than a year.
+  - age: 2
+    text: >-
+      The money ran out of Pacifica when the war came, and the Haitians were
+      left in the half-built hotels.
+  - age: 2
+    text: >-
+      Kurt Hansen's Militech unit took a corner of Pacifica in the war, and he
+      never handed it back.
+  - age: 2
+    text: >-
+      Councilman Rhyne begged Arasaka to break the siege, and in June 2070 an
+      Arasaka supercarrier sailed into the bay. The NUSA's army left within
+      hours.
+  - age: 2
+    text: >-
+      The Arvin Accord made Night City a free city of its own, and let
+      Arasaka back in.
+  - age: 2
+    text: >-
+      Lucius Rhyne became mayor, and Arasaka built a new tower where the old
+      one fell.
+  - age: 2
+    text: >-
+      Arasaka took Watson's waterfront for its docks, and Watson never got
+      over it.
+  - age: 2
+    text: >-
+      Hansen walled his corner of Pacifica off, called it Dogtown, and ran it
+      with Barghest.
+  - age: 2
+    text: >-
+      Kang Tao's smart guns took a slice of the arms trade Arasaka and
+      Militech thought was theirs.
+  - age: 2
+    text: >-
+      6th Street and the Valentinos went to war over Heywood in 2071, and
+      they've been at it ever since.
+  - age: 2
+    text: >-
+      Brick took over Maelstrom in 2072.
+  - age: 2
+    text: >-
+      The Voodoo Boys threw an NCPD task force out of Pacifica in 2072, and
+      the NCPD shut its precinct there.
+  - age: 2
+    text: >-
+      The Wraiths and the Aldecaldos fought over the Badlands roads every
+      year, and neither ever won.
+  - age: 2
+    text: >-
+      A cyberpsycho killed three people in Kabuki in 2074, and the NCPD still
+      turned down Myers' offer of Militech troops.
+  - age: 2
+    text: >-
+      Sasquatch took over the Animals in 2075.
+  - age: 2
+    text: >-
+      Dex DeShawn walked out of the Afterlife in 2075, with half of Pacifica
+      angry at him.
+
+  # ── This last year
+  - age: 3
+    text: >-
+      David Martinez, an edgerunner who'd made a name fast, made his last
+      stand at Arasaka Tower in 2076, and the news blamed terrorists.
+  - age: 3
+    text: >-
+      Commissioner Jerry Fawlter fired half the NCPD and started charging for
+      calls.
+  - age: 3
+    text: >-
+      The council gave 32 corps a tax break in 2076, and Jefferson Peralez was
+      the only one who voted no.
+  - age: 3
+    text: >-
+      Will Gunner killed 6th Street's boss Rick Morton late in 2076, and threw
+      out everyone loyal to him.
+  - age: 3
+    text: >-
+      NetWatch picked up someone trying to breach the Blackwall just before
+      Christmas 2076.
+  - age: 3
+    text: >-
+      Trauma Team put its prices up as the city got worse, and bought bigger
+      guns.
+  - age: 3
+    text: >-
+      Arasaka announced the Relic, a chip that keeps a mind going after the
+      body's gone.
+  - age: 3
+    text: >-
+      Yorinobu Arasaka stole a Relic from his father's labs in Tokyo and holed
+      up with it at Konpeki Plaza.
+    hers: true
+  - age: 3
+    text: >-
+      Mayor Rhyne called Pacifica an independent district, and the city's
+      crime figures dropped overnight.
+  - age: 3
+    text: >-
+      A cyberpsycho went for Rhyne inside City Hall, a detective called River
+      Ward shot him first, and Rhyne pulled further ahead of Peralez.
+  - age: 3
+    text: >-
+      Biotechnica offered the Aldecaldos a long contract, and the clan came to
+      the Badlands to talk it over.
+  - age: 3
+    text: >-
+      Kang Tao asked about Pacifica, and City Hall said it could have the lot
+      for one eurodollar if it cleared out the crime.
+  - age: 3
+    text: >-
+      Brick sold Dex DeShawn a stolen Militech bot for ten thousand eddies,
+      and Dex paid up front.
+    hers: true
+  - age: 3
+    text: >-
+      Royce locked Brick in a cell a few days ago, told Maelstrom he was dead,
+      and took the gang.
+    hers: true
+  - age: 3
+    text: >-
+      Evelyn Parker brought Dex a job: the Relic, out of Yorinobu's suite at
+      Konpeki Plaza.
+    hers: true
+  - age: 3
+    text: >-
+      Rhyne and his deputy Weldon Holt booked a meeting with Arasaka at
+      Konpeki Plaza, about Watson's housing.
+    hers: true
+  - age: 3
+    text: >-
+      Arasaka sealed off Watson for Saburo's ship, the Kujira, due on 1 May.

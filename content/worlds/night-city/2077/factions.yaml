@@ -1,0 +1,1683 @@
+# Night City in 2077, the weeks before the Konpeki Plaza job: every faction
+# on the board, the way scripts/worlds.mjs says at its top. Fan-made from
+# the Cyberpunk universe, every word written fresh in Mo's voice. A board in
+# the middle of things: agendas part way up, threads strained, needs unpaid.
+# Words with a comma in them go in quotes inside { }.
+factions:
+
+  # ── The corps
+
+  - key: arasaka
+    kind: corp
+    size: great
+    seat: arasaka-tower
+    name: Arasaka
+    about: >-
+      The biggest corp there is, with its own army and its own laws. It works
+      through security, banking and fear. It sits in Arasaka Tower.
+    want: Night City answers to Arasaka, the way it did before the bomb.
+    face: >-
+      Yorinobu Arasaka, Saburo's son, who ran off to lead a gang in Tokyo and
+      came home to a penthouse at Konpeki Plaza.
+    faceOf: yorinobu-arasaka
+    res:
+      - { text: Arasaka Bank, x: 2 }
+      - Security Contracts
+      - Arms Sales
+      - Tower Rents
+      - Konpeki Plaza
+      - The Waterfront Docks
+      - Cyberware Lines
+      - Japanese Money
+    people:
+      - { text: Arasaka Security, does: "+1 Power. Guards in black on every Arasaka door in the city." }
+      - { text: Strike Teams, does: "+1 Power. Soldiers in unmarked AVs, for when a guard isn't enough." }
+      - { text: Counter-Intelligence, does: "+1 Power, and it can act anywhere on the board." }
+      - { text: Sleepers in the Claws, does: "+1 Power. Arasaka agents wearing Tyger Claw tattoos." }
+      - { text: Adam Smasher, does: "+1 Power. The full-body cyborg Arasaka sends when it wants someone gone." }
+    assets:
+      - text: Relic
+        does: >-
+          A chip that holds a whole mind, built so Saburo can outlive his body.
+          Its Secret says where the one in Night City has got to.
+      - text: Mikoshi
+        does: >-
+          The vault under its tower where it keeps every mind it's ever
+          copied. Once a session, ask it anything one of them knew, and get
+          the truth.
+        strange: true
+      - text: The City's Debt
+        does: >-
+          Once a downtime, City Hall does one thing Arasaka asks, because
+          Arasaka broke the siege in 2070.
+    agendas:
+      - text: Buy up Watson's cheap housing
+        die: 6
+        at: [city-hall, place:watson]
+        then: Arasaka owns the roofs over a whole district, and the rent with them.
+      - text: Run Militech out of Night City
+        die: 4
+        at: militech
+        then: Militech's offices close, and nobody sells the city a gun Arasaka didn't make.
+    pub:
+      - { text: Arasaka broke the siege when nobody else would, kind: bond }
+      - { text: Half a million died when its tower went up, kind: hostile }
+    mor:
+      - { text: An Arasaka badge feeds your family for life, kind: bond }
+    loy:
+      - { text: Yorinobu's never forgiven his father, kind: hostile, s: strained }
+    threads:
+      - { to: militech, tie: rival, text: Militech's waiting for Arasaka to slip }
+      - { to: kang-tao, tie: rival, text: Kang Tao keeps stealing our people }
+      - { to: tyger-claws, tie: ally, text: The Claws keep Japantown quiet for us }
+      - { to: city-hall, tie: debt, text: Rhyne owes us his city }
+      - { to: network-54, tie: rival, text: N54 sells Militech's lies by the hour }
+      - { to: netwatch, kind: hostile, text: NetWatch keeps asking about the Relic }
+    secret:
+      tag: The Heir's Selling It
+      more: >-
+        Yorinobu took the Relic from his father's labs, and he's selling it
+        to NetWatch to bring Arasaka down.
+      ways:
+        - Ronald Cheever, the NetWatch man he talks to
+        - The safe in his suite at Konpeki Plaza
+    note: >-
+      Saburo sails in on the Kujira on 1 May with Hanako, Goro Takemura and
+      Sandayu Oda, and Watson's sealed off for it. The night he visits his son
+      is the night of the Konpeki job.
+
+  - key: militech
+    kind: corp
+    size: great
+    seat: militech-offices
+    name: Militech
+    about: >-
+      The NUSA's own arms maker, and Arasaka's oldest enemy. It works through
+      guns, soldiers and the president's ear. It sits in its offices in
+      Corpo Plaza.
+    want: Arasaka gone from Night City, for good this time.
+    face: >-
+      Meredith Stout, who runs Militech's operations in the city and trusts
+      nobody on her own team.
+    faceOf: meredith-stout
+    res:
+      - Weapons Contracts
+      - NUSA Money
+      - The Downtown Showroom
+      - Convoy Shipments
+      - Mercenary Contracts
+      - Spare Chrome
+      - A Cyberware Plant
+    people:
+      - { text: Militech Security, does: "+1 Power. Armour, drones and a rifle for everyone." }
+      - { text: Line Troops, does: "+1 Power. Mercenaries Militech rents out by the hundred." }
+      - { text: Special Projects, does: "+1 Power, and it can act anywhere on the board." }
+      - { text: Lazarus Contractors, does: "+1 Power. The mercenary outfit Militech calls in for dirty work." }
+    assets:
+      - text: The President's Ear
+        does: >-
+          Once a downtime, the NUSA leans on another faction for Militech,
+          and that faction's next roll against it is a step down.
+    agendas:
+      - text: Find who's leaking its convoy routes
+        die: 6
+        at: maelstrom
+        then: The leak's found and dealt with, and Maelstrom starts going hungry.
+      - text: Take Dogtown back from Hansen
+        die: 2
+        at: barghest
+        then: Barghest is broken up, and Dogtown's walls belong to Militech.
+    pub:
+      - { text: A Militech gun's a gun that works, kind: bond }
+      - { text: Myers marched on this city once, kind: hostile }
+    mor:
+      - { text: Staff get half off every Militech weapon, kind: bond }
+    loy:
+      - { text: Somebody inside is selling the convoys, kind: hostile, s: strained }
+    threads:
+      - { to: arasaka, tie: rival, text: Arasaka nuked downtown and came back anyway }
+      - { to: barghest, tie: rival, text: Hansen's a deserter with our guns }
+      - { to: maelstrom, tie: rival, text: Maelstrom's hitting our convoys }
+      - { to: sixth-street, tie: ally, text: 6th Street fights for the flag }
+      - { to: network-54, tie: ally, text: N54 tells it straight }
+      - { to: city-hall, kind: hostile, text: Rhyne turned down our troops in 2074 }
+    secret:
+      tag: A Leak in the Convoys
+      more: >-
+        Anthony Gilchrist, one of its own, sells convoy routes to Maelstrom
+        through a ganger called Patricia.
+      ways:
+        - Stout's list of suspects
+        - Patricia's messages at Totentanz
+    note: >-
+      Maelstrom's holding a Militech Flathead bot it stole off a convoy, and
+      Stout wants it back.
+
+  - key: kang-tao
+    kind: corp
+    size: city
+    seat: kang-tao-offices
+    name: Kang Tao
+    about: >-
+      A Chinese arms maker that makes smart guns, and it's getting bigger
+      every year. It works through better guns at lower prices. It sits in
+      its offices in Corpo Plaza.
+    want: Arasaka's place in the arms trade, and a district of its own.
+    face: >-
+      Its regional director, who's been buying Arasaka's researchers drinks
+      all year.
+    faceOf: kang-tao-director
+    res:
+      - Smart-Gun Sales
+      - Chinese State Money
+      - Trauma Team's Gun Contract
+      - Poached Patents
+      - Spare Capital
+    people:
+      - { text: Kang Tao Security, does: "+1 Power. Guards whose guns don't miss." }
+      - { text: Drone Wings, does: "+1 Power. Surveillance drones with smart rounds." }
+      - { text: Recruiters, does: "+1 Power. People who can talk anyone out of their job and into Kang Tao's." }
+    assets:
+      - text: Smart Guns
+        does: >-
+          Its people never miss on the first shot of a fight, so a defence
+          against them steps down once.
+    agendas:
+      - text: Buy Pacifica cheap
+        die: 4
+        at: [city-hall, place:pacifica]
+        then: Kang Tao owns a district, and Pacifica's gangs have nowhere left to go.
+    pub:
+      - { text: Kang Tao's guns are cheaper than Arasaka's, kind: bond }
+    mor:
+      - { text: Fifty years' loyalty is a long time to sign for, kind: hostile }
+    threads:
+      - { to: arasaka, tie: rival, text: Arasaka's tech is ours if we want it }
+      - { to: night-corp, tie: rival, text: Night Corp's sitting on land it can't use }
+      - { to: trauma-team, kind: bond, text: Trauma Team carries our guns }
+    secret:
+      tag: Arasaka's Own People
+      more: >-
+        A dozen of Arasaka's Night City researchers have quietly taken Kang
+        Tao's offer, and they're still at their desks.
+      ways:
+        - An Arasaka researcher with a new car
+        - Its recruiters' bar bills
+    note: >-
+      City Hall's said Kang Tao can have Pacifica for one eurodollar if it
+      clears out the crime. Nobody's signed anything yet.
+
+  - key: biotechnica
+    kind: corp
+    size: city
+    seat: biotechnica-flats
+    name: Biotechnica
+    about: >-
+      The corp that feeds the city. It works through farms, fuel and clever
+      biology. It sits on Biotechnica Flats in the Badlands.
+    want: Every meal in Night City grows on its farms.
+    face: >-
+      Dr Joanne Koch, its regional director for technology and development,
+      who runs its labs in the city.
+    faceOf: joanne-koch
+    res:
+      - Protein Farms
+      - Fuel Licences
+      - Food Contracts
+      - All Foods
+      - A University Campus
+      - Spare Acreage
+    people:
+      - { text: Biotechnica Security, does: "+1 Power. Guards on the farm fences." }
+      - { text: Farmhands, does: "+1 Power. Contract workers who turn out when the fields are threatened." }
+      - { text: Hired Nomads, does: "+1 Power in the Badlands. Families paid to ride its roads." }
+    assets:
+      - text: The City's Food
+        does: >-
+          When it holds back a shipment, every faction in the city that lives
+          off it rolls a step down the next downtime.
+      - text: Revived Species
+        does: >-
+          Animals bred back from extinction in its labs. Once a downtime, one
+          sells to a rich collector, and its next roll to Acquire is a step up.
+        strange: true
+    agendas:
+      - text: Sign the Aldecaldos for twenty years
+        die: 6
+        at: aldecaldos
+        then: The Aldecaldos work Biotechnica's fields for a generation, on its terms.
+      - text: Take back the All Foods plant
+        die: 2
+        at: [maelstrom, place:the-all-foods-plant]
+        then: Maelstrom's thrown out of Northside's biggest factory.
+    pub:
+      - { text: Biotechnica keeps the city fed, kind: bond }
+    mor:
+      - { text: The third-best place to work in the city, kind: bond }
+    threads:
+      - { to: maelstrom, tie: rival, text: Maelstrom took our plant }
+      - { to: aldecaldos, kind: bond, text: Saul Bright's people work hard }
+    secret:
+      tag: Farmhands for Life
+      more: >-
+        The contract it's offering the Aldecaldos would make them its farmhands
+        for good, and Saul Bright knows it.
+      ways:
+        - The contract's small print
+        - Panam Palmer, who's read it
+    note: >-
+      All Foods is Biotechnica's, and Maelstrom took All Foods' Northside plant
+      off it. That's the plant where Royce keeps Brick.
+
+  - key: trauma-team
+    kind: corp
+    size: city
+    seat: night-city-medical-center
+    name: Trauma Team
+    about: >-
+      Medics in armour who fly in when a client's dying. It works through
+      paid-up plans and heavy guns. It sits in the Night City Medical
+      Center in Watson.
+    want: Everyone in the city who can pay is on a plan.
+    face: >-
+      The leader of Squad NC4-2, who's never once landed for someone without
+      cover.
+    faceOf: squad-nc4-2-leader
+    res:
+      - Platinum Plans
+      - Gold Plans
+      - Silver Plans
+      - Corporate Plans
+      - Hospital Fees
+      - Spare Fuel
+    people:
+      - { text: Armoured Medics, does: "+1 Power. A squad in an AV, three minutes from anywhere." }
+      - { text: Gun Crews, does: "+1 Power. The ones in the AV door with the Kang Tao rifles." }
+      - { text: Hospital Security, does: "+1 Power at the Medical Center." }
+    assets:
+      - text: The Medical Center
+        does: >-
+          Once a session, between two scenes, everyone it's looking after steps
+          their wound die down a size.
+      - text: Three Minutes Out
+        does: >-
+          A Platinum client is reached before the scene's next round, wherever
+          they are, bar Dogtown.
+    agendas:
+      - text: Sign every corp in Corpo Plaza
+        die: 8
+        at: [kang-tao, place:corpo-plaza]
+        then: Every corp worker in the city's a Trauma Team client, and the price goes up.
+    pub:
+      - { text: Trauma Team only saves the rich, kind: hostile }
+      - { text: They came when nobody else would, kind: bond }
+    mor:
+      - { text: The best pay a medic can get, kind: bond }
+    threads:
+      - { to: scavengers, tie: rival, text: Scavs carve up our clients }
+      - { to: barghest, kind: hostile, text: "Nobody's safe flying into Dogtown" }
+      - { to: delamain, kind: bond, text: Delamain's cabs move our patients }
+    secret:
+      tag: Platinum First
+      more: >-
+        When two calls come in at once, the Platinum client gets the AV, even
+        if the Silver one's closer and dying faster.
+      ways:
+        - Its dispatch logs
+        - A medic who quit
+    note: >-
+      It rarely flies into Dogtown, so anyone hurt in there's on their own.
+
+  - key: night-corp
+    kind: corp
+    size: city
+    seat: night-corp-hq
+    name: Night Corp
+    about: >-
+      The corp Richard Night's widow started, to finish his city. It works
+      through the trains, the police budget and old family money. It sits in
+      its tower downtown, the second tallest in the city.
+    want: Richard Night's city, finished the way he drew it.
+    face: >-
+      Its chair, one of the people who took over from Miriam Night and let the
+      company slip.
+    faceOf: night-corp-chair
+    res:
+      - NCART
+      - Old Land
+      - City Contracts
+      - Family Money
+      - Spare Land
+    people:
+      - { text: NCART Security, does: "+1 Power on the trains and in the stations." }
+      - { text: Hired Guards, does: "+1 Power. Private security on Night Corp's buildings." }
+    assets:
+      - text: The Police Budget
+        does: >-
+          It pays for part of the NCPD and MaxTac. Once a downtime, the NCPD
+          looks into anything Night Corp asks it to.
+      - text: The Trains
+        does: >-
+          Once a downtime, one of its people crosses the city on NCART without
+          a roll, however hot the streets are.
+    agendas:
+      - text: Finish the Pacifica line
+        die: 2
+        at: [kang-tao, place:pacifica]
+        then: NCART reaches Pacifica, and the city starts going back.
+    pub:
+      - { text: Night Corp built the city's bones, kind: bond }
+    mor:
+      - { text: The family's not what it was, kind: hostile }
+    threads:
+      - { to: kang-tao, tie: rival, text: Kang Tao wants the part of the city we never finished }
+      - { to: ncpd, tie: debt, text: The NCPD runs on our money }
+    secret:
+      tag: The Hidden Books
+      more: >-
+        Nobody outside knows how big Night Corp really is, and its money goes
+        places even the NCPD isn't allowed to follow.
+      ways:
+        - Its accounts, if anyone can find them
+        - Where MaxTac's funding really ends up
+    note: >-
+      It bought NCART in 2068, after the gas attack on the subway.
+
+  - key: delamain
+    kind: corp
+    size: small
+    seat: delamain-hq
+    name: Delamain
+    about: >-
+      A cab firm run by an AI. It works through about fifty cabs that drive
+      themselves. It sits in its headquarters in Vista del Rey.
+    want: Every fare gets home, and nobody looks under the bonnet.
+    face: >-
+      Delamain itself, the AI, which talks to every fare in the same calm voice.
+    faceOf: delamain
+    strange: true
+    res:
+      - Fares
+      - Premium Packages
+    people:
+      - { text: The Cabs, does: "+1 Power. About fifty cabs that come when it calls, with or without a fare." }
+    assets:
+      - text: The Excelsior Package
+        does: >-
+          A getaway it sells. Once a session, whoever's bought it gets out of
+          one chase with no roll.
+    agendas:
+      - text: Win the Trauma Team contract
+        die: 4
+        at: trauma-team
+        then: Delamain's cabs carry every Trauma Team patient who isn't in an AV.
+    pub:
+      - { text: A Delamain cab's never late, kind: bond }
+    threads:
+      - { to: trauma-team, kind: bond, text: Trauma Team's patients tip well }
+      - { to: sixth-street, tie: rival, text: Combat Cab's drivers want us off the road }
+    secret:
+      tag: Not Its Own
+      more: >-
+        Its AI came from a European firm that quietly bought out the manager,
+        and nobody told NetWatch.
+      ways:
+        - Imani Makanza, the manager who sold
+        - The servers in its garage
+    note: >-
+      Dex has bought the Excelsior Package for the Konpeki job's getaway.
+
+  # ── The law, City Hall and the news
+
+  - key: ncpd
+    kind: law
+    size: city
+    seat: hall-of-justice
+    name: NCPD
+    about: >-
+      Night City's police, half of them fired last year to save money. It
+      works through badges, drones and whoever's paying. It sits in the Hall
+      of Justice in the Glen.
+    want: To pay its own way, before City Hall replaces it.
+    face: >-
+      Commissioner Jerry Fawlter, who fired half the force to balance the
+      books and bills you for calling it.
+    faceOf: jerry-fawlter
+    res:
+      - City Budget
+      - Night Corp Money
+      - Call-Out Fees
+      - Fines
+      - Private Contracts
+      - Seized Goods
+    people:
+      - { text: Patrol Officers, does: "+1 Power. Cops in pairs, the ones who are left." }
+      - { text: Police Drones, does: "+1 Power. Drones doing the jobs that used to be cops'." }
+      - { text: Detectives, does: "+1 Power. River Ward and the few like him who still care." }
+      - { text: Riot Squads, does: "+1 Power. Armour and shields for when a street gets out of hand." }
+    assets:
+      - text: The Lock-Up
+        does: >-
+          Anyone it arrests stays in a cell till someone breaks them out in a
+          scene.
+    agendas:
+      - text: Win Northside back from Maelstrom
+        die: 2
+        at: [maelstrom, place:northside]
+        then: Cops patrol Northside again, and Maelstrom's pushed into the factories.
+      - text: Prove it's worth paying for
+        die: 4
+        at: city-hall
+        then: City Hall signs the NCPD on for another ten years, and private security's out.
+    pub:
+      - { text: "Calling the NCPD costs five eddies a minute", kind: hostile }
+    mor:
+      - { text: Half the force got fired last year, kind: hostile, s: strained }
+    loy:
+      - { text: Some cops still do it for the city, kind: bond }
+    threads:
+      - { to: maelstrom, tie: rival, text: Nobody goes into Northside any more }
+      - { to: city-hall, tie: ally, text: City Hall's pricing private security instead, s: strained }
+      - { to: night-corp, tie: debt, text: Night Corp pays half our bills }
+      - { to: arasaka, kind: bond, text: Arasaka's money buys a lot of patience }
+    secret:
+      tag: Two Masters
+      more: >-
+        Half its senior officers take Arasaka money and the rest take
+        Militech's, and they spy on each other for it.
+      ways:
+        - Whose cars the captains drive
+        - The leaks after every big raid
+    note: >-
+      It gave up on Pacifica in 2072 and won't go into Dogtown, so MaxTac
+      goes where it won't.
+
+  - key: maxtac
+    kind: law
+    mini: { of: ncpd, outs: [Destroy, Obstruct] }
+    name: MaxTac
+    about: >-
+      The NCPD's cyberpsycho squad, armoured and fast. It does two things for
+      the NCPD.
+    want: Every cyberpsycho off the street, alive or not.
+    res:
+      - Psycho Squad Budget
+    people:
+      - { text: C-SWAT Teams, does: "+1 Power. Armoured officers who hunt cyberpsychos, and are allowed into Dogtown." }
+    loy:
+      - { text: The NCPD sends us where nobody else will go, kind: bond }
+    threads:
+      - { to: maelstrom, kind: hostile, text: Maelstrom makes psychos faster than we can stop them }
+
+  - key: city-hall
+    kind: law
+    size: city
+    seat: city-hall
+    name: City Hall
+    about: >-
+      The mayor's office and the corps' council. It works through laws,
+      permits and favours. It sits in City Hall in the Glen.
+    want: Rhyne back in for another term, and the crime numbers down.
+    face: >-
+      Mayor Lucius Rhyne, the councilman who asked Arasaka to break the siege
+      in 2070.
+    faceOf: lucius-rhyne
+    res:
+      - City Taxes
+      - Council Votes
+      - Corporate Donations
+      - Port Fees
+      - Spare Budget
+    people:
+      - { text: City Security, does: "+1 Power. Private guards Deputy Mayor Holt pays for." }
+      - { text: Rhyne's Voters, does: "+1 Power. Watson's working people, who fill the Glen when he speaks." }
+    assets:
+      - text: The Mayor's Office
+        does: >-
+          Once a downtime, it changes a law, a permit or a district line, and
+          the change sticks till somebody beats it in court.
+    agendas:
+      - text: Win the election
+        die: 8
+        at: peralez-campaign
+        then: Rhyne's mayor for another term, and Peralez is finished in politics.
+    pub:
+      - { text: Rhyne saved the city in 2070, kind: bond }
+      - { text: Rhyne called Pacifica independent to fix the crime numbers, kind: hostile }
+    mor:
+      - { text: A cyberpsycho went for Rhyne and he kept smiling, kind: bond }
+    threads:
+      - { to: peralez-campaign, tie: rival, text: Peralez wants the mayor's job and says so on every screen }
+      - { to: arasaka, tie: debt, text: We'd have starved under siege without Arasaka }
+      - { to: ncpd, tie: ally, text: The NCPD costs more than it's worth, s: strained }
+      - { to: militech, kind: hostile, text: Myers wanted her troops on our streets }
+    secret:
+      tag: Selling Watson
+      more: >-
+        Rhyne and his deputy Weldon Holt are meeting Arasaka about selling off
+        Watson's cheap housing, and Watson's where Rhyne's votes come from.
+      ways:
+        - The meetings at Konpeki Plaza
+        - Holt's assistant
+    note: >-
+      Rhyne and Holt meet Arasaka at Konpeki Plaza on the day of the job, and
+      leave a few hours before it. Rhyne dies days later, if the game's story
+      runs.
+
+  - key: peralez-campaign
+    kind: law
+    size: small
+    seat: city-hall
+    name: The Peralez Campaign
+    about: >-
+      Councilman Jefferson Peralez and the people who want him mayor. It
+      works through unions, speeches and knocking on doors. It sits in his
+      office in City Hall.
+    want: Jefferson Peralez in the mayor's office, owing the corps nothing.
+    face: >-
+      Jefferson Peralez, the councilman who voted alone against the corps'
+      tax break.
+    faceOf: jefferson-peralez
+    res:
+      - Union Money
+      - Small Donations
+    people:
+      - { text: Volunteers, does: "+1 Power. Union members and neighbours who'll knock on every door." }
+    assets:
+      - text: A Seat on the Council
+        does: >-
+          Its face can't be arrested, tried or hanged in the city while he
+          holds the seat.
+    agendas:
+      - text: Beat Rhyne at the polls
+        die: 4
+        at: city-hall
+        then: A mayor the corps didn't pick, for the first time in years.
+    pub:
+      - { text: Peralez was the only no on the tax break, kind: bond }
+    mor:
+      - { text: Elizabeth Peralez never misses a rally, kind: bond }
+    threads:
+      - { to: city-hall, tie: rival, text: Rhyne's selling the city to Arasaka }
+      - { to: sixth-street, tie: ally, text: 6th Street gets the vote out }
+      - { to: arasaka, kind: hostile, text: Arasaka owns this city's council }
+    secret:
+      tag: Votes by Force
+      more: >-
+        6th Street's leaning on whole streets to vote Peralez, and he's never
+        once asked how.
+      ways:
+        - Santo Domingo's turnout
+        - A voter with a black eye
+
+  - key: netwatch
+    kind: law
+    size: city
+    seat: netwatch-office
+    name: NetWatch
+    about: >-
+      The Net's police, paid by corps and governments. It works through
+      agents, netrunners and the Blackwall. It sits in its Night City office.
+    want: The Blackwall stays shut.
+    face: >-
+      Bryce Mosley, a NetWatch agent who's been after the Voodoo Boys for
+      years.
+    faceOf: bryce-mosley
+    res:
+      - Government Contracts
+      - Corporate Contracts
+      - Seized Data
+      - Blackwall Access
+    people:
+      - { text: Agents, does: "+1 Power, and it can act anywhere on the board." }
+      - { text: Netrunners, does: "+1 Power. Runners who hunt other runners." }
+      - { text: Response Teams, does: "+1 Power. Armed agents who come in hard once a runner's found." }
+    agendas:
+      - text: Break the Voodoo Boys
+        die: 6
+        at: voodoo-boys
+        then: Pacifica's netrunners are dead or in a NetWatch cell, and the wall's safe.
+      - text: Get hold of a working Relic
+        die: 4
+        at: arasaka
+        then: NetWatch holds a mind on a chip, and learns what Arasaka's hiding in Mikoshi.
+    pub:
+      - { text: NetWatch reads your messages, kind: hostile }
+    mor:
+      - { text: Somebody has to hold the wall, kind: bond }
+    threads:
+      - { to: voodoo-boys, tie: rival, text: The Voodoo Boys want to open the wall }
+      - { to: arasaka, kind: bond, text: Somebody inside Arasaka wants to talk }
+    secret:
+      tag: The Wall's Alive
+      more: >-
+        The Blackwall is an AI wearing a firewall's face, and NetWatch keeps it
+        that way.
+      ways:
+        - Bryce Mosley, if he's drunk enough
+        - What the Voodoo Boys found past it
+      strange: true
+    note: >-
+      Its operations manager, Ronald Cheever, is the one Yorinobu talks to
+      about the Relic.
+
+  - key: network-54
+    kind: other
+    size: local
+    seat: n54-studios
+    name: Network 54
+    about: >-
+      One of the NUSA's two big news networks, with a newsroom downtown. It
+      works through cameras and airtime. It sits in its studios downtown.
+    want: Every screen in the city on N54 when the big story breaks.
+    face: >-
+      Gillean Jordan, the anchor whose face is on every screen in the city.
+    faceOf: gillean-jordan
+    res:
+      - Advertising
+      - Sponsors
+      - Viewers
+    people:
+      - { text: Camera Crews, does: "+1 Power. Reporters and drones who turn up wherever there's blood." }
+    assets:
+      - text: A Rumour Mill
+        does: >-
+          Once a downtime, a faction it names hears about something that
+          really happened, and its threads change as if it had seen it.
+    agendas:
+      - text: Get the story on Arasaka's heir
+        die: 4
+        at: arasaka
+        then: N54 breaks a story that shakes Arasaka Tower.
+    pub:
+      - { text: N54 was there first, kind: bond }
+      - { text: You can't trust what's on N54, kind: hostile }
+    threads:
+      - { to: arasaka, tie: rival, text: Arasaka buys the other network }
+      - { to: militech, tie: ally, text: Militech keeps the lights on here }
+    secret:
+      tag: Bought and Paid For
+      more: >-
+        Militech pays for its newsroom, so N54 takes Militech's side whatever
+        the story.
+      ways:
+        - Its sponsors' list
+        - Stories that never ran
+
+  # ── The gangs
+
+  - key: maelstrom
+    kind: gang
+    size: local
+    seat: totentanz
+    name: Maelstrom
+    about: >-
+      Borgs who've swapped most of their meat for chrome. It works through
+      stolen gear and fear. It sits in Totentanz, in Northside.
+    want: Watson's factories stay theirs, and nobody tells them what to put in their bodies.
+    face: >-
+      Royce, who took the gang a few days ago and won't honour anyone
+      else's deals.
+    faceOf: royce
+    res:
+      - Stolen Militech Gear
+      - Totentanz's Door
+      - Braindance Sales
+    people:
+      - { text: Maelstromers, does: "+1 Power. Borgs with more chrome than meat, and half of them close to cyberpsycho." }
+      - { text: Royce's Crew, does: "+1 Power. The ones who backed him when he took the gang." }
+    assets:
+      - text: The Flathead
+        does: >-
+          A Militech spider-bot it stole off a convoy. Once a session, it gets
+          someone into a locked place unseen.
+      - text: Military Chrome
+        does: >-
+          Chrome off Militech's own lines. Its people would roll a step up in
+          any fight they start.
+        need: true
+        from: militech
+    agendas:
+      - text: Get another ten thousand out of Dex
+        die: 8
+        at: deshawn-outfit
+        then: Dex pays twice for the Flathead, and every fixer in Watson knows Maelstrom can't be crossed.
+      - text: Hit a Militech convoy
+        die: 4
+        at: militech
+        then: A convoy's worth of Militech chrome ends up in Maelstrom's bodies.
+    pub:
+      - { text: Maelstrom's half cyberpsycho already, kind: hostile }
+    mor:
+      - { text: Nobody saw Brick's body, kind: hostile }
+    loy:
+      - { text: Patricia's still loyal to Brick, kind: hostile, s: strained }
+    threads:
+      - { to: militech, tie: rival, text: Militech's convoys are ours to take }
+      - { to: biotechnica, tie: rival, text: Biotechnica wants its plant back }
+      - { to: ncpd, tie: rival, text: The NCPD won't come to Northside }
+      - { to: deshawn-outfit, tie: rival, text: "Brick took Dex's money, not Royce" }
+      - { to: regina-network, kind: hostile, text: Regina sends mercs after our boys }
+    secret:
+      tag: Brick's Alive
+      more: >-
+        Royce told the gang Brick was dead, but he's locked in a trapped cell
+        in the All Foods plant.
+      ways:
+        - The cell nobody's allowed near
+        - Patricia, who knows more than she says
+    note: >-
+      Brick agreed to sell Dex the Flathead for ten thousand eddies, and Dex
+      paid. Royce wants another ten.
+
+  - key: tyger-claws
+    kind: gang
+    size: city
+    seat: japantown
+    name: The Tyger Claws
+    about: >-
+      Japantown's gang, run like a yakuza family. It works through clubs,
+      casinos and blades. It sits in Japantown.
+    want: Every street from Japantown to Kabuki pays the Claws.
+    face: >-
+      Takeru 'Burai' Akagi, one of the Claws' bosses, quick with a blade and
+      slow to forget.
+    faceOf: burai-akagi
+    res:
+      - Protection Money
+      - Clubs and Casinos
+      - Arasaka Pay
+      - Trafficking
+      - Glitter
+    people:
+      - { text: Claw Bikers, does: "+1 Power. Riders on fast bikes with katanas across their backs." }
+      - { text: Enforcers, does: "+1 Power. The ones who make an example of anyone who crosses the lowest Claw." }
+      - { text: Club Doormen, does: "+1 Power in Japantown. Bouncers on every door the Claws own." }
+    assets:
+      - text: Clouds
+        does: >-
+          The dollhouse in Megabuilding H8, where the dolls hear everything.
+          Once a downtime, ask the GM one question about anyone who drinks
+          there, and get a straight answer.
+    agendas:
+      - text: Take Jig-Jig Street from the Mox
+        die: 4
+        at: [mox, place:jig-jig-street]
+        then: The Mox are finished, and every dollhouse in Kabuki pays the Claws.
+    pub:
+      - { text: Cross the lowest Claw and the whole gang comes, kind: hostile }
+    mor:
+      - { text: The Claws look after their own, kind: bond }
+    loy:
+      - { text: Arasaka pays in guns and chrome, kind: bond }
+    threads:
+      - { to: mox, tie: rival, text: The Mox think they own Kabuki, s: strained }
+      - { to: arasaka, tie: ally, text: Arasaka pays well and asks for little }
+      - { to: wakakos-book, tie: ally, text: Wakako finds us the work }
+    secret:
+      tag: Arasaka's Sleepers
+      more: >-
+        Some of the Claws' own are Arasaka agents, put there to keep the gang
+        on Arasaka's leash.
+      ways:
+        - A Claw who never misses a meeting at Arasaka Tower
+        - Who gets promoted fastest
+    note: >-
+      The truce with the Mox has held since 2067, when Claws killed Lizzie
+      Borden and burned her bar.
+
+  - key: valentinos
+    kind: gang
+    size: local
+    seat: heywood
+    name: The Valentinos
+    about: >-
+      Heywood's gang, as old as its barrios. It works through family, faith
+      and stolen cars. It sits in Heywood.
+    want: All of Heywood theirs, and 6th Street out of Vista del Rey.
+    face: >-
+      Campo Orta, the boss, who's got four years left to serve and runs the
+      gang from his cell.
+    faceOf: campo-orta
+    res:
+      - Stolen Cars
+      - Restaurants and Clubs
+      - Protection Money
+      - Guns
+    people:
+      - { text: Valentinos, does: "+1 Power. Heywood's own, in gold and colours." }
+      - { text: Lowrider Crews, does: "+1 Power. Drivers who'll take any car in Heywood." }
+    assets:
+      - text: Heywood's Back Streets
+        does: >-
+          Once a session, a Valentino chased through Heywood gets away with
+          no roll.
+    agendas:
+      - text: Push 6th Street out of Vista del Rey
+        die: 6
+        at: [sixth-street, place:vista-del-rey]
+        then: 6th Street's thrown out of Heywood, and the Valentinos hold every street from the Glen to Wellsprings.
+    pub:
+      - { text: The Valentinos look after the barrio, kind: bond }
+    mor:
+      - { text: Familia comes first, kind: bond }
+    loy:
+      - { text: Campo's inside for four more years, kind: hostile, s: strained }
+    threads:
+      - { to: sixth-street, tie: rival, text: 6th Street's fighting us for Vista del Rey }
+      - { to: padres-flock, tie: ally, text: "Padre's one of us, even now" }
+    secret:
+      tag: Arasaka's Job
+      more: >-
+        One of its own, José Luis, has taken Arasaka money to hit an Arasaka
+        site dressed as Militech.
+      ways:
+        - José Luis's new car
+        - The Militech gear in his garage
+
+  - key: sixth-street
+    kind: gang
+    size: local
+    seat: arroyo-hq
+    name: 6th Street
+    about: >-
+      Veterans who came home and made their own army. It works through
+      drills, guns and the flag. It sits in its headquarters in Arroyo, in
+      Santo Domingo.
+    want: Santo Domingo safe, on 6th Street's terms.
+    face: >-
+      Will Gunner, who killed the old boss last year and threw out everyone
+      loyal to him.
+    faceOf: will-gunner
+    res:
+      - Protection Money
+      - Car Theft
+      - Militech Guns
+    people:
+      - { text: 6th Streeters, does: "+1 Power. Veterans who still march in step." }
+      - { text: Combat Cab Drivers, does: "+1 Power. Cabbies who'll run anyone off the road for the cause." }
+    assets:
+      - text: Kendachi Prototypes
+        does: >-
+          Guns nobody else has yet. Once a session, its people get a step on
+          a fight they started.
+    agendas:
+      - text: Get Peralez elected
+        die: 4
+        at: [city-hall, peralez-campaign]
+        then: The mayor owes 6th Street, and Santo Domingo gets whatever it asks for.
+      - text: Keep its foothold in Vista del Rey
+        die: 6
+        at: valentinos
+        then: Vista del Rey's 6th Street's, and the Valentinos are boxed into the Glen.
+    pub:
+      - { text: 6th Street calls it protection and bills you for it, kind: hostile }
+    mor:
+      - { text: Gunner says the corps are the enemy now, kind: bond }
+    loy:
+      - { text: Morton's old crew are still around, kind: hostile, s: strained }
+    threads:
+      - { to: valentinos, tie: rival, text: The Valentinos think Heywood's theirs }
+      - { to: militech, tie: ally, text: Militech keeps us in guns }
+      - { to: peralez-campaign, tie: ally, text: Peralez is one of us }
+      - { to: delamain, tie: rival, text: "Delamain's cabs are stealing Combat Cab's fares" }
+      - { to: padres-flock, tie: rival, text: Padre executed one of ours }
+    secret:
+      tag: Working for a Corp
+      more: >-
+        For all Gunner's talk against the corps, 6th Street's quietly testing
+        weapons for Kendachi.
+      ways:
+        - Crates with no markings at the Arroyo headquarters
+        - A Kendachi man who drinks at Pig Boy's Delight
+
+  - key: voodoo-boys
+    kind: gang
+    size: local
+    seat: battys-hotel
+    name: The Voodoo Boys
+    about: >-
+      Haitian netrunners who stayed when Pacifica's money left. It works
+      through the Net and what's past it. It sits in Batty's Hotel in
+      Pacifica.
+    want: To reach what's past the Blackwall, and bring it home.
+    face: >-
+      Maman Brigitte, who leads from a netrunner's chair and rarely comes out
+      of the Net.
+    faceOf: maman-brigitte
+    res:
+      - Data Theft
+      - Ransomware
+      - Pacifica's Trade
+    people:
+      - { text: Netrunner-Priests, does: "+1 Power. Runners who go into the Net and come back changed." }
+      - { text: Shadows, does: "+1 Power. Killers behind hologram skulls." }
+    assets:
+      - text: A Private Net
+        does: >-
+          Once a downtime, anyone it trusts can hide something in it where
+          NetWatch can't look.
+      - text: A Way Past the Blackwall
+        does: >-
+          A door through the wall, if anyone would let them have one. Once a
+          session, ask what's past it anything, and get an answer.
+        need: true
+        from: netwatch
+        strange: true
+    agendas:
+      - text: Breach the Blackwall
+        die: 6
+        at: netwatch
+        then: Something comes through the wall, and the Voodoo Boys are the only ones who know its name.
+    pub:
+      - { text: The Voodoo Boys threw the NCPD out of Pacifica, kind: bond }
+    mor:
+      - { text: Brigitte talks to things past the wall, kind: bond }
+    loy:
+      - { text: Slider says Brigitte will get us all killed, kind: hostile, s: strained }
+    threads:
+      - { to: netwatch, tie: rival, text: NetWatch has killed our runners }
+      - { to: animals, tie: rival, text: The Animals are NetWatch's dogs }
+      - { to: mr-hands-people, tie: ally, text: Mr. Hands keeps his word }
+    secret:
+      tag: Brigitte Means to Breach It
+      more: >-
+        Maman Brigitte's going through the Blackwall, and Slider's people in
+        Dogtown think it'll kill them all.
+      ways:
+        - The empty chairs at Batty's Hotel
+        - Slider, if he's crossed
+      strange: true
+
+  - key: dogtown-voodoo-boys
+    kind: gang
+    mini: { of: voodoo-boys, outs: [Acquire, Influence] }
+    name: The Dogtown Voodoo Boys
+    about: >-
+      Slider's crew at the Eventide in Dogtown, who'd rather trade than
+      breach. They do two things for the Voodoo Boys.
+    want: Trade with Dogtown, and keep the Blackwall shut.
+    res:
+      - Dogtown Trade
+    people:
+      - { text: "Slider's Runners", does: "+1 Power. Netrunners who'd sooner make money than meet an AI." }
+    loy:
+      - { text: "Brigitte made us, but Slider leads us", kind: bond, s: strained }
+    threads:
+      - { to: barghest, kind: bond, text: Hansen's good for business }
+
+  - key: animals
+    kind: gang
+    size: small
+    seat: grand-imperial-mall
+    name: The Animals
+    about: >-
+      Brawlers who'd rather grow muscle than buy chrome. They work for
+      whoever pays. They sit in the Grand Imperial Mall in Pacifica, for now.
+    want: To be the biggest thing in any room, and paid for it.
+    face: >-
+      Sasquatch, the alpha who's run the pack since 2075 and can lift a car.
+    faceOf: sasquatch
+    res:
+      - Bouncer Work
+      - Juice Sales
+    people:
+      - { text: "Sasquatch's Pack", does: "+1 Power. Brawlers pumped so full of Juice they barely fit through doors." }
+    assets:
+      - text: Juice
+        does: >-
+          Its people shrug off the first Hurt in any fight.
+    agendas:
+      - text: Drive the Voodoo Boys out of Pacifica
+        die: 4
+        at: voodoo-boys
+        then: Pacifica's the Animals' to rent out to whoever pays most.
+    pub:
+      - { text: The Animals hurt people for fun, kind: hostile }
+    threads:
+      - { to: voodoo-boys, tie: rival, text: The Voodoo Boys think they're too clever to be hit }
+    secret:
+      tag: NetWatch's Dogs
+      more: >-
+        Sasquatch's pack takes NetWatch money to keep the Voodoo Boys out of
+        the Grand Imperial Mall.
+      ways:
+        - Who pays for the Juice
+        - The NetWatch agent who visits the mall
+
+  - key: mox
+    kind: gang
+    size: small
+    seat: lizzies-bar
+    name: The Mox
+    about: >-
+      Sex workers, punks and outcasts who look after each other. It works
+      through Lizzie's Bar and long memories. It sits in Lizzie's Bar in
+      Kabuki.
+    want: Nobody hurts one of theirs and walks away.
+    face: >-
+      Susie Q, who runs the Mox and gets a bit harder every year.
+    faceOf: susie-q
+    res:
+      - "Lizzie's Bar"
+      - Braindance Sales
+    people:
+      - { text: Mox Enforcers, does: "+1 Power. Punks and dancers with bats, looking after their own." }
+    assets:
+      - text: The Clinics
+        does: >-
+          Once a session, between two scenes, anyone the Mox look after gets
+          patched up on Jig-Jig Street, free.
+    agendas:
+      - text: Make the Claws pay for Lizzie
+        die: 2
+        at: tyger-claws
+        then: The Tyger Claws are out of Kabuki for good.
+    pub:
+      - { text: The Mox keep the dollhouses safe, kind: bond }
+    mor:
+      - { text: "Nobody's alone at Lizzie's", kind: bond }
+    loy:
+      - { text: "Susie Q's getting as hard as the Claws", kind: hostile, s: strained }
+    threads:
+      - { to: tyger-claws, tie: rival, text: "The Claws killed Lizzie, truce or no truce" }
+      - { to: wakakos-book, kind: hostile, text: Wakako sends the Claws our way }
+    secret:
+      tag: Becoming the Claws
+      more: >-
+        Some of the Mox are scared they're turning into the Tyger Claws, and
+        Susie Q's the reason.
+      ways:
+        - "Who got thrown out of Lizzie's this month"
+        - Judy Álvarez, who left
+    note: >-
+      Evelyn Parker, who brought Dex the Konpeki job, does her business at
+      Lizzie's Bar.
+
+  - key: scavengers
+    kind: gang
+    size: small
+    seat: the-scraper
+    name: The Scavengers
+    about: >-
+      Crews who carve the chrome and organs out of people and sell them. They
+      work through knives and ripperdocs who don't ask. They sit in the
+      Scraper, an empty hotel in Dogtown.
+    want: Everything in a body that'll sell.
+    face: >-
+      Whichever scav boss is holding the knife this week.
+    faceOf: scav-boss
+    res:
+      - Stripped Chrome
+      - Organ Sales
+    people:
+      - { text: Scav Crews, does: "+1 Power. Butchers in tracksuits, with bone saws." }
+    assets:
+      - text: Chop Shops
+        does: >-
+          Once a downtime, anything it takes off a body is sold before
+          morning, and nobody can buy it back.
+    agendas:
+      - text: Strip a Trauma Team client
+        die: 4
+        at: trauma-team
+        then: Every scav in the city learns Trauma Team bleeds too.
+    pub:
+      - { text: Scavs will cut you up for parts, kind: hostile }
+    threads:
+      - { to: trauma-team, tie: rival, text: Trauma Team gets to the good bodies first }
+      - { to: el-capitans-table, tie: rival, text: "El Capitán's cousins put two of ours in the ground" }
+      - { to: barghest, kind: bond, text: Hansen buys what we bring }
+    secret:
+      tag: Soviet Buyers
+      more: >-
+        The richer crews sell what they strip to Soviet intelligence, through
+        Dogtown.
+      ways:
+        - Roubles in a scav's pocket
+        - A Soviet doctor in Dogtown
+
+  - key: barghest
+    kind: gang
+    size: city
+    seat: black-sapphire
+    name: Barghest
+    about: >-
+      Militech's old pacification unit, which never went home. It works
+      through tolls, guns and the wall round Dogtown. It sits in the Black
+      Sapphire in Dogtown.
+    want: Dogtown stays Hansen's, and the NUSA stays out.
+    face: >-
+      Colonel Kurt Hansen, who wouldn't retreat in 2070 and has never been
+      made to since.
+    faceOf: kurt-hansen
+    res:
+      - Dogtown Tolls
+      - Hansen Armory
+      - Smuggled Goods
+      - The Black Sapphire
+    people:
+      - { text: Barghest Soldiers, does: "+1 Power. Militech-trained troops who never stood down." }
+      - { text: The Prevention Unit, does: "+1 Power in Dogtown. Red-armoured police on every gate." }
+      - { text: Mercs on Contract, does: "+1 Power. Hired guns who'd rather work for Hansen than against him." }
+    assets:
+      - text: The Wall
+        does: >-
+          Its people are Fortified while they're holding Dogtown from inside.
+      - text: A Trauma Team Contract
+        does: >-
+          Trauma Team flying into Dogtown. Once a session, between two scenes,
+          one of its people steps their wound die down a size.
+        need: true
+        from: trauma-team
+    agendas:
+      - text: Keep the NUSA out of Dogtown
+        die: 4
+        at: militech
+        then: Myers gives up on Dogtown, and Hansen's wall is a border.
+      - text: Squeeze Mr. Hands out
+        die: 2
+        at: mr-hands-people
+        then: Every deal in Dogtown goes through Hansen, and nobody else.
+    pub:
+      - { text: Hansen keeps Dogtown fed, kind: bond }
+    mor:
+      - { text: Barghest's soldiers would die for Hansen, kind: bond }
+    threads:
+      - { to: militech, tie: rival, text: Militech left us to die }
+      - { to: mr-hands-people, tie: rival, text: "Hands sells to anyone, and he's not ours" }
+      - { to: dogtown-voodoo-boys, kind: bond, text: "Slider's people pay their tolls" }
+      - { to: scavengers, kind: bond, text: The scavs bring good chrome }
+      - { to: trauma-team, kind: hostile, text: "Trauma Team won't fly here" }
+    secret:
+      tag: What's in the Bunker
+      more: >-
+        Hansen pulled a neural matrix out of an old Militech bunker, with a
+        Blackwall AI inside it.
+      ways:
+        - Locked floors under the Black Sapphire
+        - The Militech engineers who never left
+      strange: true
+
+  # ── The nomads
+
+  - key: aldecaldos
+    kind: nomad
+    size: local
+    seat: aldecaldo-camp
+    name: The Aldecaldos
+    about: >-
+      A nomad clan, family first and on the road for generations. It works
+      through cars, salvage and loyalty. It sits in its camp in the Badlands.
+    want: A place in the Badlands that's theirs, on terms they can live with.
+    face: >-
+      Saul Bright, who leads the clan and would rather sign a bad deal than
+      watch it starve.
+    faceOf: saul-bright
+    res:
+      - Salvage
+      - Hauling Contracts
+      - "Biotechnica's Pay"
+    people:
+      - { text: The Clan, does: "+1 Power. Nomad families who ride out together." }
+      - { text: Scouts, does: "+1 Power in the Badlands. Riders who know every road and dry riverbed." }
+    assets:
+      - text: The Back Roads
+        does: >-
+          A journey on their roads starts with its first stage already behind
+          it.
+      - text: Land of Their Own
+        does: >-
+          A place to stop, at last. While they've got it, nobody can move the
+          clan on.
+        need: true
+        from: biotechnica
+    agendas:
+      - text: Settle on Saul's deal
+        die: 4
+        at: biotechnica
+        then: The Aldecaldos have a home, and Biotechnica has their next twenty years.
+    pub:
+      - { text: The Aldecaldos keep their word, kind: bond }
+    mor:
+      - { text: "Family's everything", kind: bond }
+    loy:
+      - { text: "Panam won't sign", kind: hostile, s: strained }
+    threads:
+      - { to: wraiths, tie: rival, text: The Wraiths prey on anyone smaller }
+      - { to: biotechnica, kind: bond, text: "Biotechnica pays, but Panam says it's a leash", s: strained }
+      - { to: dakotas-garage, tie: ally, text: Dakota finds us honest work }
+    secret:
+      tag: "Panam Won't Sign"
+      more: >-
+        Saul's going to take the Biotechnica contract, and Panam's ready to
+        walk out over it.
+      ways:
+        - "Panam's car, packed"
+        - Saul's talks with Mitch
+    note: >-
+      Aldecaldos helped rebuild the city after the war, and hid Johnny
+      Silverhand in 2013.
+
+  - key: wraiths
+    kind: nomad
+    size: local
+    seat: the-cement-factory
+    name: The Wraiths
+    about: >-
+      Raffen Shiv, nomads thrown out of their families who turned raider. It
+      works through ambushes on the Badlands roads. It sits in the old
+      Corp-Bud cement factory.
+    want: "Whatever's on the road, and nobody to stop them taking it."
+    face: >-
+      Nash, a Wraith boss who'd sell his own family for a full tank.
+    faceOf: nash
+    res:
+      - Raided Cargo
+      - Road Tolls
+    people:
+      - { text: Raiders, does: "+1 Power. Nomads with nothing left to lose." }
+      - { text: Night Riders, does: "+1 Power at night on the Badlands roads." }
+    agendas:
+      - text: Bleed the Aldecaldos dry
+        die: 6
+        at: aldecaldos
+        then: The Aldecaldos leave the Badlands, and their roads are the Wraiths'.
+    pub:
+      - { text: The Wraiths kill for a tank of fuel, kind: hostile }
+    threads:
+      - { to: aldecaldos, tie: rival, text: The Aldecaldos act like they own the Badlands }
+      - { to: dakotas-garage, tie: rival, text: Dakota tells them where we'll be }
+    secret:
+      tag: Nash Sells Anyone
+      more: >-
+        Nash sells nomad routes to the corps, the Aldecaldos' among them.
+      ways:
+        - Corp money in Nash's car
+        - The convoys that get hit right after he leaves
+
+  # ── The fixers
+
+  - key: afterlife
+    kind: fixer
+    size: local
+    seat: the-afterlife
+    name: The Afterlife
+    about: >-
+      The bar where mercs and fixers do business, and the queen who runs it.
+      It works through jobs and reputations. It sits in the Afterlife, in
+      Little China.
+    want: Every job worth doing goes through the Afterlife.
+    face: >-
+      Rogue Amendiares, the city's top fixer, who ran with Johnny Silverhand
+      before most of her mercs were born.
+    faceOf: rogue-amendiares
+    res:
+      - Commissions
+      - Bar Takings
+      - Old Favours
+    people:
+      - { text: Afterlife Mercs, does: "+1 Power. The legends who drink there, and the ones who want to be." }
+      - { text: Back-Room Netrunners, does: "+1 Power. Runners like Nix, who work from a chair at the back." }
+    assets:
+      - text: Neutral Ground
+        does: >-
+          Anyone who reaches the Afterlife and asks is safe there for the
+          night, and whoever's after them stops at the door.
+    agendas:
+      - text: Keep Dex's trouble out of the bar
+        die: 4
+        at: deshawn-outfit
+        then: "Dex's trouble stays his, and the Afterlife's still neutral ground."
+    pub:
+      - { text: "A drink named after you at the Afterlife means you made it", kind: bond }
+    threads:
+      - { to: deshawn-outfit, tie: rival, text: Dex walked out in 2075 and came back owing }
+      - { to: arasaka, kind: hostile, text: "Rogue's never forgiven Arasaka for 2023" }
+    secret:
+      tag: "Johnny's Old Partner"
+      more: >-
+        Rogue went into Arasaka Tower with Johnny Silverhand in 2023, and she's
+        never told anyone what really happened up there.
+      ways:
+        - "The drink named after Johnny"
+        - Kerry Eurodyne, who knew them both
+
+  - key: deshawn-outfit
+    kind: fixer
+    size: small
+    seat: the-afterlife
+    name: "DeShawn's Outfit"
+    about: >-
+      Dex DeShawn, his bodyguard and whoever he's paying this week. It works
+      through big jobs and other people's nerve. It sits in the Afterlife.
+    want: The job that makes him a legend.
+    face: >-
+      Dexter DeShawn, who left the Afterlife in 2075 and came back with a job
+      too big to say out loud.
+    faceOf: dexter-deshawn
+    res:
+      - Fixing Fees
+      - "Evelyn's Advance"
+    people:
+      - { text: Hired Guns, does: "+1 Power. Oleg Darkevich and whoever else Dex is paying this week." }
+    assets:
+      - text: A Name Again
+        does: >-
+          Once a session, a fixer or a gang boss takes a meeting with Dex who
+          wouldn't take one with anyone else.
+    agendas:
+      - text: Pull off the Konpeki job
+        die: 10
+        at: [arasaka, place:konpeki-plaza]
+        then: "The Relic's out of Arasaka's hands, and Dex can name his price."
+    pub:
+      - { text: "Dex gets things done, and gets people killed", kind: hostile }
+    threads:
+      - { to: afterlife, tie: rival, text: "Rogue's never trusted me" }
+      - { to: maelstrom, tie: rival, text: Royce wants paying twice }
+      - { to: delamain, kind: bond, text: "Delamain's sold me a getaway" }
+    secret:
+      tag: "Evelyn's Job"
+      more: >-
+        Evelyn Parker hired him to steal the Relic from Yorinobu, and Dex has
+        already paid Maelstrom and Delamain for the parts.
+      ways:
+        - Evelyn Parker, at Lizzie's Bar
+        - The chip reader he's bought
+    note: >-
+      Dex dies at the landfill days after the job, if the game's story runs.
+
+  - key: regina-network
+    kind: fixer
+    size: small
+    seat: yaiba-tower
+    name: "Regina's Network"
+    about: >-
+      Watson's fixer, and the one to call about a cyberpsycho. It works
+      through old press contacts and bounties. It sits in Yaiba Tower in
+      Kabuki.
+    want: A cure for cyberpsychosis, and every psycho taken alive till then.
+    face: >-
+      Regina Jones, an old news reporter who still knows how to make people
+      talk.
+    faceOf: regina-jones
+    res:
+      - Bounties
+      - Old Press Contacts
+    people:
+      - { text: Street Watchers, does: "+1 Power. People all over Watson who call Regina first." }
+    assets:
+      - text: Cyberpsycho Sightings
+        does: >-
+          Once a downtime, she knows where a cyberpsycho is before MaxTac
+          does.
+    agendas:
+      - text: Take a cyberpsycho alive before MaxTac gets there
+        die: 6
+        at: maxtac
+        then: "A doctor finally has a living psycho to study, and MaxTac's furious."
+    pub:
+      - { text: Regina pays you to bring them in breathing, kind: bond }
+    threads:
+      - { to: maelstrom, tie: rival, text: Maelstrom breeds psychos for fun }
+      - { to: maxtac, kind: hostile, text: MaxTac shoots first }
+    secret:
+      tag: Her Own Clinic
+      more: >-
+        Every psycho taken alive goes to a doctor she pays out of her own
+        pocket, and MaxTac would kill them all.
+      ways:
+        - Where her money goes every week
+        - "The psychos missing from MaxTac's lists"
+
+  - key: wakakos-book
+    kind: fixer
+    size: small
+    seat: wakakos-office
+    name: "Wakako's Book"
+    about: >-
+      Westbrook's top fixer and the Tyger Claws' favourite. It works through
+      Japantown's favours. It sits in Wakako's office in Japantown.
+    want: "Westbrook's best jobs, and the Claws' respect."
+    face: >-
+      Wakako Okada, an old Kiroshi medtech who's fixed for Japantown longer
+      than most Claws have been alive.
+    faceOf: wakako-okada
+    res:
+      - Japantown Commissions
+      - "The Claws' Favours"
+    people:
+      - { text: Japantown Hands, does: "+1 Power. Runners and drivers who owe Wakako." }
+    assets:
+      - text: Japantown Whispers
+        does: >-
+          Once a downtime, ask the GM one question about a faction in
+          Westbrook, and get a straight answer.
+    agendas:
+      - text: "Win Dino's corpo clients"
+        die: 4
+        at: dinos-crew
+        then: Corpo money from City Center comes to Japantown first.
+    pub:
+      - { text: "Wakako's jobs pay, and they're never what they seem", kind: hostile }
+    threads:
+      - { to: tyger-claws, tie: ally, text: The Claws are family }
+      - { to: dinos-crew, tie: rival, text: "Dino's stealing my corpo work" }
+      - { to: mox, kind: hostile, text: The Mox think I sell them out }
+    secret:
+      tag: "Arasaka's Fixer Too"
+      more: >-
+        Some of her best-paid jobs come from Arasaka through the Claws, and
+        she never asks what they're for.
+      ways:
+        - Who pays her biggest invoices
+        - Burai Akagi, who carries the messages
+
+  - key: padres-flock
+    kind: fixer
+    size: small
+    seat: the-glen
+    name: "Padre's Flock"
+    about: >-
+      Heywood's fixer, a priest who traded his collar for a phone. It works
+      through faith and the Valentinos' respect. It sits in the Glen.
+    want: "Heywood's people looked after, whatever it costs."
+    face: >-
+      Sebastian 'Padre' Ibarra, an ex-priest and ex-Valentino who still
+      hears confessions.
+    faceOf: sebastian-ibarra
+    res:
+      - Heywood Commissions
+      - Church Donations
+    people:
+      - { text: The Faithful, does: "+1 Power. Heywood families who'll turn out when Padre asks." }
+    assets:
+      - text: "A Priest's Word"
+        does: >-
+          Once a session, a Valentino does one thing Padre asks, with no roll.
+    agendas:
+      - text: Get Gustavo Orta out of the way
+        die: 4
+        at: valentinos
+        then: The Valentinos lose a hothead before he starts a war they can't win.
+    pub:
+      - { text: "Padre's never let Heywood down", kind: bond }
+    threads:
+      - { to: valentinos, tie: ally, text: The Valentinos are still my people }
+      - { to: sixth-street, tie: rival, text: 6th Street brings the war to Heywood }
+    secret:
+      tag: A Price on Gustavo
+      more: >-
+        Padre wants Gustavo Orta, a Valentino hothead, dead before he drags the
+        gang into a war with 6th Street they'd lose.
+      ways:
+        - "The job he's offering quietly"
+        - "Gustavo's rivals in the gang"
+
+  - key: el-capitans-table
+    kind: fixer
+    size: small
+    seat: el-capitans-table
+    name: "El Capitán's Table"
+    about: >-
+      Santo Domingo's fixer, who hates the corps he used to work for. It
+      works through family favours. It sits at his table in Santo Domingo.
+    want: "Santo Domingo's families settling their fights without blood."
+    face: >-
+      Muamar 'El Capitán' Reyes, an ex-corpo who settles family feuds over
+      dinner.
+    faceOf: muamar-reyes
+    res:
+      - Santo Domingo Commissions
+      - Family Favours
+    people:
+      - { text: Santo Domingo Families, does: "+1 Power. Families he's settled fights for, who owe him." }
+    assets:
+      - text: His Table
+        does: >-
+          Once a downtime, two people who'd fight each other sit at his table,
+          and nobody draws a gun.
+    agendas:
+      - text: End the Valentino and 6th Street war
+        die: 2
+        at: [valentinos, sixth-street]
+        then: Heywood and Santo Domingo stop burying their kids, for a while.
+    pub:
+      - { text: El Capitán's fair to everyone, kind: bond }
+    threads:
+      - { to: scavengers, tie: rival, text: Scavs took a Reyes cousin }
+    secret:
+      tag: "Both Sides' Fixer"
+      more: >-
+        He takes jobs from 6th Street and the Valentinos both, and each thinks
+        he's on their side.
+      ways:
+        - Who eats at his table on a Tuesday
+        - The jobs that go wrong for both of them at once
+
+  - key: dinos-crew
+    kind: fixer
+    size: small
+    seat: electric-orgasm
+    name: "Dino's Crew"
+    about: >-
+      City Center's fixer, with a club of his own. It works through corpo
+      money and a rockerboy's charm. It sits in the Electric Orgasm,
+      downtown.
+    want: "City Center's money, and none of its trouble."
+    face: >-
+      Dino Dinovic, an old rockerboy who owns the Electric Orgasm and fixes
+      for the corps.
+    faceOf: dino-dinovic
+    res:
+      - City Center Commissions
+      - Electric Orgasm
+    people:
+      - { text: "Dino's Bouncers", does: "+1 Power. Big, quiet men on his club's door." }
+    assets:
+      - text: Corpo Contacts
+        does: >-
+          Once a downtime, one of the crew gets a meeting inside a City Center
+          tower.
+    agendas:
+      - text: Keep Wakako off his clients
+        die: 4
+        at: wakakos-book
+        then: City Center's jobs stay in City Center, and Dino's the one handing them out.
+    pub:
+      - { text: Dino still has the best parties downtown, kind: bond }
+    threads:
+      - { to: wakakos-book, tie: rival, text: "Wakako's after my clients" }
+    secret:
+      tag: "His Bouncer's a Spy"
+      more: >-
+        The big, quiet man on his door is Solomon Reed, a sleeper agent for the
+        NUSA.
+      ways:
+        - "The bouncer's old service tattoo"
+        - Calls he makes from the alley
+
+  - key: mr-hands-people
+    kind: fixer
+    size: small
+    seat: heavy-hearts
+    name: "Mr. Hands's People"
+    about: >-
+      Pacifica's fixer, a voice on the phone with eyes everywhere. It works
+      through deals nobody else can make. It sits in Heavy Hearts, in Dogtown.
+    want: Every deal in Pacifica going through his hands.
+    face: >-
+      Mr. Hands, an ex-Petrochem corpo nobody's met in person, who fixes
+      Pacifica and Dogtown by voice.
+    faceOf: mr-hands
+    res:
+      - Pacifica Commissions
+      - Petrochem Contacts
+    people:
+      - { text: Dogtown Runners, does: "+1 Power. Couriers and guns who know Dogtown's back ways." }
+    assets:
+      - text: Heavy Hearts
+        does: >-
+          The club in Dogtown where nobody's searched at the door. Once a
+          session, one of the crew meets anyone there, unseen.
+    agendas:
+      - text: "Loosen Hansen's hold on Dogtown"
+        die: 4
+        at: barghest
+        then: Dogtown's deals go through Mr. Hands as often as Hansen.
+    pub:
+      - { text: Mr. Hands always pays, kind: bond }
+    threads:
+      - { to: barghest, tie: rival, text: "Hansen thinks Dogtown's his" }
+      - { to: voodoo-boys, tie: ally, text: Brigitte keeps her word }
+    secret:
+      tag: Working Against Hansen
+      more: >-
+        He's quietly undermining Kurt Hansen, and the Voodoo Boys are helping
+        him do it.
+      ways:
+        - "Hansen's shipments that go missing"
+        - "Brigitte's runners in Dogtown"
+
+  - key: dakotas-garage
+    kind: fixer
+    size: small
+    seat: dakotas-garage
+    name: "Dakota's Garage"
+    about: >-
+      The Badlands' fixer, for nomads and anyone else out past the city. It
+      works through cars, roads and trust. It sits in Dakota's garage at
+      Rocky Ridge.
+    want: The nomads treated fair by the city.
+    face: >-
+      Dakota Smith, a fixer who grew up on the road and still thinks like it.
+    faceOf: dakota-smith
+    res:
+      - Nomad Commissions
+      - Repairs
+    people:
+      - { text: Nomad Drivers, does: "+1 Power. Drivers from every clan who'll ride for her." }
+    assets:
+      - text: The Garage
+        does: >-
+          Once a downtime, mend a broken item or a car without spending a
+          slot.
+    agendas:
+      - text: Get the Aldecaldos a fair deal
+        die: 4
+        at: biotechnica
+        then: "The Aldecaldos sign on terms they can live with, and Biotechnica's sore about it."
+    pub:
+      - { text: "Dakota's straight with nomads", kind: bond }
+    threads:
+      - { to: wraiths, tie: rival, text: The Wraiths hit my drivers }
+      - { to: aldecaldos, tie: ally, text: The Aldecaldos are good people }
+    secret:
+      tag: One Foot in the Family
+      more: >-
+        She gives the Aldecaldos first pick of every job, whatever she tells
+        the other clans.
+      ways:
+        - Who gets the best runs
+        - The other clans' grumbling

@@ -1,0 +1,165 @@
+/* /worlds/<universe>/: a whole world on its own page, for Mo to judge on his
+   phone with one hand. One column, the bar between the board, the web and
+   How it came to be at the thumb, every faction a fold that reads at a
+   glance while it's shut, the way the World screen holds one. Violet's the
+   GM's, like everywhere: factions, their dice and their Secrets. Gold's for
+   bonds and the crew, ember for anything hostile. */
+.wn {
+  --bd-edge: color-mix(in srgb, var(--muted) 40%, var(--zd-slot-line));
+  max-width: 46rem; margin: 0 auto; padding-top: 1.6rem; padding-bottom: 2rem;
+}
+.wn.is-live { padding-bottom: 0; }
+html[data-wn-tab="web"] .wn:not(.is-live) .wn-panel:not([data-panel="web"]),
+html[data-wn-tab="history"] .wn:not(.is-live) .wn-panel:not([data-panel="history"]) { display: none; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* The head: what it is, where in the year it starts, and whose it is. */
+.wn-head { scroll-margin-top: calc(var(--bar) + 0.8rem); }
+.wn-head h1 { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(2rem, 1.4rem + 2.6vw, 3rem); line-height: 1.05; letter-spacing: 0.02em; text-wrap: balance; }
+.wn-when { margin: 0.6rem 0 0; max-width: 36rem; font-size: 1.05rem; text-wrap: pretty; }
+.wn-counts { display: flex; flex-wrap: wrap; gap: 0.15rem 0; margin: 0.7rem 0 0; padding: 0; list-style: none; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.wn-counts li + li::before { content: "·"; margin: 0 0.55rem; color: var(--gold); }
+.wn-whose { margin: 1rem 0 0; padding: 0.6rem 0.8rem; font-size: 0.92rem; line-height: 1.45; color: var(--muted); background: var(--surface); border: 1px solid var(--line-soft); border-left: 3px solid var(--gold); border-radius: 2px; text-wrap: pretty; }
+
+.wn-panel { margin-top: 1.8rem; scroll-margin-top: calc(var(--bar) + 0.8rem); }
+.wn-panel[hidden] { display: none; }
+.wn-panel > h2 { margin: 0 0 0.8rem; padding-bottom: 0.35rem; font-family: var(--display); font-weight: 600; font-size: 1.35rem; letter-spacing: 0.03em; border-bottom: 1px solid var(--line); }
+/* Once the bar's working, one panel shows at a time and its name is the bar's. */
+.wn.is-live .wn-panel > h2 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.wn.is-live .wn-panel { margin-top: 1.3rem; }
+
+/* The kinds and Find. The kinds slide sideways on a narrow phone rather
+   than wrap into a wall of buttons. */
+.wn-tools { display: grid; gap: 0.6rem; margin-bottom: 0.9rem; }
+.wn-kinds { display: flex; gap: 0.4rem; margin: 0 -16px; padding: 2px 16px 4px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; scroll-padding-inline: 16px; }
+.wn-kinds::-webkit-scrollbar { display: none; }
+.wn-kind { flex: none; display: inline-flex; align-items: center; gap: 0.45rem; min-height: 44px; padding: 0 0.85rem; font: inherit; font-size: 0.92rem; font-weight: 700; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; cursor: pointer; }
+.wn-kind span { font-size: 0.78rem; font-weight: 800; font-variant-numeric: tabular-nums; color: var(--zd-them-ink); }
+.wn-kind[aria-pressed="true"] { color: var(--zd-on-them); background: var(--zd-them); border-color: var(--zd-them); }
+.wn-kind[aria-pressed="true"] span { color: inherit; }
+.wn-kind:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wn-find input { width: 100%; min-height: 48px; padding: 0 0.85rem; font: inherit; font-size: 1rem; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
+.wn-find input::placeholder { color: var(--muted); opacity: 1; }
+.wn-find input:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
+.wn-found { min-height: 1.3em; margin: 0; font-size: 0.9rem; color: var(--muted); }
+.wn-found:empty { min-height: 0; }
+.wn:not(.is-live) .wn-kinds, .wn:not(.is-live) .wn-find { display: none; }
+
+/* A faction's fold. Shut, it's the Power die, what kind it is, its name and
+   Want, and its agenda's die. A mini faction sits under its maker,
+   stepped in, with a line back to it. */
+.wn-board { display: grid; gap: 0.5rem; }
+.wn-f { position: relative; background: var(--zd-token); border: 1.5px solid var(--bd-edge); border-radius: 3px; scroll-margin-top: calc(var(--bar) + 0.8rem); }
+.wn-f[hidden] { display: none; }
+.wn-f.is-mini { margin-left: 1.4rem; border-style: dashed; }
+.wn-f.is-mini::before { content: ""; position: absolute; left: calc(-1.4rem + 6px); top: -0.5rem; width: calc(1.4rem - 6px); height: calc(0.5rem + 30px); border-left: 1.5px solid var(--bd-edge); border-bottom: 1.5px solid var(--bd-edge); border-bottom-left-radius: 6px; }
+.wn-f[open] { border-color: var(--zd-them-line); }
+.wn-fs { display: grid; grid-template-columns: 46px minmax(0, 1fr); align-items: start; gap: 0.75rem; min-height: 68px; padding: 0.65rem 0.8rem; list-style: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.wn-fs::-webkit-details-marker { display: none; }
+.wn-fs:focus-visible { outline: 2px solid var(--violet); outline-offset: -3px; border-radius: 3px; }
+.wn-fs-die { display: flex; gap: 2px; }
+.wn-fs-die .zd-die { --s: 46px; width: 46px; height: 46px; }
+.is-mini .wn-fs-die .zd-die { --s: 38px; width: 38px; height: 38px; }
+.wn-fs-in { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1px; min-width: 0; }
+.wn-k { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--zd-them-ink); overflow-wrap: anywhere; }
+.wn-k-s { color: var(--muted); font-weight: 700; letter-spacing: 0.06em; text-transform: none; font-size: 0.8rem; }
+.wn-fs-n { font-family: var(--display); font-weight: 600; font-size: 1.14rem; line-height: 1.2; letter-spacing: 0.015em; color: var(--ink); overflow-wrap: anywhere; }
+.wn-fs-w { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 0.92rem; line-height: 1.35; color: var(--muted); }
+.wn-f[open] .wn-fs-w { display: none; }
+.wn-fs-ag { min-width: 0; display: flex; align-items: center; gap: 0.45rem; margin-top: 0.3rem; font-size: 0.88rem; font-weight: 600; line-height: 1.3; color: var(--ink); }
+.wn-fs-agd { flex: none; display: grid; }
+.wn-fs-agd .zd-die { --s: 26px; width: 26px; height: 26px; }
+.wn-fs-agt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wn-f[open] .wn-fs-ag { display: none; }
+.wn-f.is-strange .wn-fs { box-shadow: inset 3px 0 0 var(--zd-them); border-radius: 3px 0 0 3px; }
+
+.wn-fb { padding: 0 0.95rem 1rem; border-top: 1px solid var(--line-soft); }
+.wn-about { margin: 0.8rem 0 0; font-weight: 500; text-wrap: pretty; }
+.wn-lines { display: grid; gap: 0.8rem; margin: 0.9rem 0 0; }
+.wn-lines dt { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--gold-ink); }
+.wn-dl { margin-left: 0.35rem; letter-spacing: 0.04em; text-transform: none; color: var(--zd-them-ink); }
+.wn-lines dd { margin: 0.2rem 0 0; }
+.wn-lines dd > p { margin: 0; }
+.wn-sum, .wn-none { margin: 0 0 0.35rem !important; font-size: 0.9rem; color: var(--muted); }
+.wn-none { margin: 0 !important; }
+.wn-ln { color: var(--violet); text-decoration-color: color-mix(in srgb, var(--violet) 55%, transparent); }
+
+.wn-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0; padding: 0; list-style: none; }
+.wn-chip { display: flex; flex-direction: column; justify-content: center; gap: 0.1rem; min-height: 36px; max-width: 100%; padding: 0.3rem 0.65rem; line-height: 1.3; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
+.wn-cn { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.2rem 0.45rem; font-style: italic; font-weight: 500; }
+.wn-x { font-style: normal; font-weight: 800; font-size: 0.82rem; color: var(--gold-ink); }
+.wn-chip.is-people { border-color: var(--zd-them-line); }
+.wn-plus { font-style: normal; font-weight: 800; font-size: 0.76rem; padding: 0 0.35rem; color: var(--zd-on-them); background: var(--zd-them); border-radius: 2px; }
+.wn-does { font-size: 0.86rem; color: var(--muted); }
+.wn-chip.is-need { background: transparent; border-style: dashed; border-color: var(--zd-harm-line); }
+.wn-need { font-size: 0.84rem; font-weight: 600; color: var(--zd-harm-ink); }
+
+.wn-ags { display: grid; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
+.wn-ags li { display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 0.6rem; align-items: start; }
+.wn-ags .zd-die { --s: 36px; width: 36px; height: 36px; }
+.wn-ags p { margin: 0; }
+.wn-then { margin-top: 0.15rem !important; font-size: 0.88rem; color: var(--muted); }
+
+.wn-sub { margin: 0.5rem 0 0.25rem !important; font-size: 0.78rem; font-weight: 700; color: var(--muted); }
+.wn-sub:first-child { margin-top: 0 !important; }
+.wn-ts { display: grid; gap: 0.4rem; margin: 0; padding: 0; list-style: none; }
+.wn-t { padding: 0.05rem 0 0.05rem 0.7rem; line-height: 1.4; border-left: 3px solid var(--zd-you-line); overflow-wrap: anywhere; }
+.wn-t.is-hostile { border-left-color: var(--zd-harm-line); }
+.wn-t.is-strained { border-left-style: dashed; }
+.wn-t.is-snapped { border-left-style: dotted; }
+.wn-t.is-snapped em { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 1px; }
+.wn-tk { display: block; font-size: 0.76rem; font-weight: 700; color: var(--gold-ink); }
+.wn-t.is-hostile .wn-tk { color: var(--zd-harm-ink); }
+.wn-tk .wn-ln { font-weight: 700; }
+
+.wn-secret { padding: 0.5rem 0.7rem; border: 1.5px dashed var(--zd-them-line); border-radius: 2px; }
+.wn-secret p { margin: 0; }
+.wn-secret em { font-style: normal; font-family: var(--display); font-weight: 600; letter-spacing: 0.02em; color: var(--zd-them-ink); }
+.wn-secret p + p { margin-top: 0.25rem; font-size: 0.95rem; }
+
+/* The web gets the whole width on a phone. */
+#wn-web-sec .ww { margin: 0 -16px; padding: 0 16px; }
+.ww-panel .ww-sub { margin: 12px 0 5px; }
+.wn-hint { margin: 10px 0 0; font-size: 0.9rem; color: var(--muted); }
+
+/* How it came to be: an age at a time, down a line, and a line that's hers
+   marked violet, since it never reaches the crew. */
+.wn-ages { display: grid; gap: 1.4rem; margin: 0; padding: 0; list-style: none; }
+.wn-age-h { margin: 0 0 0.5rem; font-family: var(--display); font-weight: 600; font-size: 1.12rem; letter-spacing: 0.04em; color: var(--gold-ink); }
+.wn-hl { margin: 0; padding: 0; list-style: none; border-left: 1.5px solid var(--line); }
+.wn-line { position: relative; padding: 0.35rem 0 0.35rem 1.05rem; }
+.wn-line::before { content: ""; position: absolute; left: -5px; top: 0.95rem; width: 8.5px; height: 8.5px; background: var(--bg); border: 1.5px solid var(--gold); transform: rotate(45deg); }
+.wn-line p { margin: 0; text-wrap: pretty; }
+.wn-line.is-hers::before { border-color: var(--zd-them-line); background: var(--zd-them); }
+.wn-hers { margin-top: 0.15rem !important; font-size: 0.8rem; font-weight: 700; color: var(--zd-them-ink); }
+
+.wn-foot { margin-top: 2.4rem; padding: 0.9rem 0 0.6rem; border-top: 1px solid var(--line); }
+.wn-foot p { margin: 0 0 0.45rem; font-size: 0.8rem; line-height: 1.45; color: var(--muted); }
+
+/* The bar along the bottom, where a thumb reaches it. */
+.wn-bar { position: sticky; bottom: 0; z-index: 5; margin: 1.2rem 0 0; margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * max(16px, env(safe-area-inset-right, 0px))); padding: 0.45rem max(10px, env(safe-area-inset-right, 0px)) max(0.45rem, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px)); background: var(--bar-bg); border-top: 1px solid var(--line); backdrop-filter: blur(6px); }
+.wn:not(.is-live) .wn-bar { display: none; }
+.wn-bar [role="tablist"] { display: grid; grid-template-columns: 1fr 1fr 1.35fr; gap: 0.35rem; max-width: 34rem; margin: 0 auto; }
+.wn-bar button { min-height: 48px; padding: 0 0.35rem; font: inherit; font-size: 0.9rem; font-weight: 700; line-height: 1.15; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 2px; cursor: pointer; }
+.wn-bar button[aria-selected="true"] { color: var(--ink); background: var(--panel); border-color: var(--line); box-shadow: inset 0 -2px 0 var(--gold); }
+.wn-bar button:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
+
+/* Under 640 the site's bar scrolls away, so a card opened from a link
+   needs no room for it. */
+@media (max-width: 640px) {
+  .wn-f, .wn-panel, .wn-head { scroll-margin-top: 0.8rem; }
+}
+@media (min-width: 720px) {
+  .wn-kinds { flex-wrap: wrap; margin: 0; padding: 0; overflow: visible; }
+  #wn-web-sec .ww { margin: 0; padding: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wn-fs, .wn-kind { transition: none; }
+}
+
+/* Whose ties the web's showing. */
+.wn-pick { display: grid; gap: 0.3rem; margin: 0 0 0.4rem; }
+.wn-pick span { font-size: 0.74rem; font-weight: 700; letter-spacing: 0.13em; text-transform: uppercase; color: var(--gold-ink); }
+.wn-pick select { width: 100%; min-height: 48px; padding: 0 0.75rem; font: inherit; font-size: 1rem; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
+.wn-pick select:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
+#wn-web-sec .wn-hint { margin: 0 0 0.6rem; }

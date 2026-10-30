@@ -1,0 +1,84 @@
+---
+// /worlds/<universe>/: a whole world, written rather than dealt
+// (notes/builder-plan.md, A whole world), where Mo judges one on the Preview.
+// Night City's the first, a fan-made world from the Cyberpunk universe, so
+// the line saying whose it is sits at the top and the companies' notices at
+// the foot. It's drawn here at build time (src/worlds/world-page.js), and
+// src/worlds/world-ui.js runs the bar, the kinds, Find and the web on the
+// phone. Not linked from anywhere till Mo says so, and kept out of search
+// and off phones like /deal/ and /kit/.
+import Base from "../../layouts/Base.astro";
+import worlds from "../../generated/worlds.json";
+import "@fontsource/alegreya-sans/800.css";
+import "../../styles/kit.css";
+import "../../styles/web.css";
+import "../../styles/worlds.css";
+import { boardOf, countsOf, historyOf, linkerOf, pickerOf, webData, webOfWorld } from "../../worlds/world-page.js";
+
+export function getStaticPaths() {
+  return Object.keys(worlds).map((universe) => ({ params: { universe } }));
+}
+const { universe } = Astro.params;
+const years = worlds[universe] ?? [];
+const world = years[0];
+const ln = linkerOf(world);
+const data = webData(world);
+const web = webOfWorld(world, null, data);
+// What world-ui.js needs to draw the web again: each faction's key, maker,
+// Power and threads, and nothing else.
+const forPhone = JSON.stringify({ factions: world.factions.map((f) => ({ key: f.key, of: f.of, steps: f.steps, card: { name: f.card.name, threads: f.card.threads } })) }).replace(/</g, "\\u003c");
+---
+<Base title={world.title} description={`${world.title}: a whole world for Zi’Dara, its factions, the web between them and how it came to be.`}>
+  <meta slot="head" name="robots" content="noindex" />
+  <script is:inline slot="head">
+    // A link to the web or How it came to be shows only that from the start,
+    // rather than the board till world-ui.js has run.
+    try {
+      const t = new URLSearchParams(location.search).get("tab");
+      if ((t === "web" || t === "history") && !location.hash.startsWith("#f-")) document.documentElement.dataset.wnTab = t;
+    } catch {}
+  </script>
+  <main id="main" class="wn frame">
+    <header class="wn-head" id="wn-top">
+      <p class="eyebrow">A whole world</p>
+      <h1>{world.title}</h1>
+      <p class="wn-when">{world.when}</p>
+      <ul class="wn-counts">{countsOf(world).map((c) => <li>{c}</li>)}</ul>
+      <p class="wn-whose">{world.whose}</p>
+    </header>
+
+    <section class="wn-panel" data-panel="board" id="wn-board" aria-labelledby="wn-h-board">
+      <h2 id="wn-h-board">The board</h2>
+      <Fragment set:html={boardOf(world, ln)} />
+    </section>
+
+    <section class="wn-panel" data-panel="web" id="wn-web-sec" aria-labelledby="wn-h-web">
+      <h2 id="wn-h-web">The web</h2>
+      <Fragment set:html={pickerOf(world, web.focus)} />
+      <p class="wn-hint">A faction's ties, either way. Tap one of them to walk the web to theirs.</p>
+      <div class="ww" id="wn-web"><Fragment set:html={web.pic} /></div>
+      <div class="ww-panel" id="wn-panel" aria-live="polite"><Fragment set:html={web.panel} /></div>
+    </section>
+
+    <section class="wn-panel" data-panel="history" id="wn-history" aria-labelledby="wn-h-history">
+      <h2 id="wn-h-history">How it came to be</h2>
+      <Fragment set:html={historyOf(world, ln)} />
+    </section>
+
+    <footer class="wn-foot">
+      {world.notices.map((n) => <p>{n}</p>)}
+    </footer>
+
+    <nav class="wn-bar" aria-label="The world">
+      <div role="tablist" aria-label="What to look at">
+        <button type="button" role="tab" id="wn-t-board" data-tab="board" aria-controls="wn-board" aria-selected="true">The board</button>
+        <button type="button" role="tab" id="wn-t-web" data-tab="web" aria-controls="wn-web-sec" aria-selected="false">The web</button>
+        <button type="button" role="tab" id="wn-t-history" data-tab="history" aria-controls="wn-history" aria-selected="false">How it came to be</button>
+      </div>
+    </nav>
+  </main>
+  <script type="application/json" id="wn-data" set:html={forPhone} />
+  <script>
+    import "../../worlds/world-ui.js";
+  </script>
+</Base>

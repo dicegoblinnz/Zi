@@ -1,0 +1,32 @@
+# Night City: a whole world from the Cyberpunk universe, fan-made, for
+# playing Zi'Dara there (stages 12 to 17 of notes/builder-plan.md). It's the
+# one place CLAUDE.md lets another game be named. Every word's Mo's voice,
+# written fresh, bar the two notices, which are the companies' own words.
+# scripts/worlds.mjs reads it, and says at its top how a world's written.
+id: night-city
+name: Night City
+whose: >-
+  This one's fan-made and free, so you can run Zi'Dara in Night City.
+  Cyberpunk and everything in it belong to CD Projekt and R. Talsorian Games,
+  and neither of them made this or signed off on it.
+notices:
+  - >-
+    Night City, 2077 is unofficial content provided under the Homebrew Content
+    Policy of R. Talsorian Games and is not approved or endorsed by RTG. This
+    content references materials that are the property of R. Talsorian Games
+    and its licensees.
+  - This is an unofficial fan work and is not approved/endorsed by CD PROJEKT RED.
+kinds:
+  corp: Corps
+  gang: Gangs
+  nomad: Nomads
+  fixer: Fixers
+  law: The law
+  other: The rest
+years:
+  2077:
+    title: Night City, 2077
+    when: >-
+      The weeks before the Konpeki Plaza job, with Saburo Arasaka alive and
+      Dex DeShawn setting up the job of the year.
+    recipe: { region: city, era: near-future, twist: chrome }

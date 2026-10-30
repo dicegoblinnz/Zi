@@ -196,7 +196,9 @@ export function drawWeb(L, opts) {
   const crewDie = c.dice?.length ? kitDie(c.dice[0], { hide: true }) : '<span class="ww-unknown is-crew" aria-hidden="true">?</span>';
   const crew = `<button type="button" class="${crewCls}" style="left:50%;top:50%" ${opts.attrs("crew")} aria-pressed="${sel === "crew"}" aria-label="${esc(c.label ?? "The crew")}"><span class="ww-die" aria-hidden="true">${crewDie}</span><span class="ww-name" aria-hidden="true">${esc(c.name || "The crew")}</span></button>`;
   const size = L.n > MANY ? " is-many" : L.n > 8 ? " is-more" : "";
-  const wide = L.n > MANY ? ` style="--ww-min:${L.n * 24}px"` : "";
+  // Past twelve the ring's wider than the screen, so its lines and arrows
+  // come down in step, or they'd grow with it.
+  const wide = L.n > MANY ? ` style="--ww-min:${L.n * 24}px;--ww-k:${(MANY / L.n).toFixed(3)}"` : "";
   return `<div class="ww-wrap"><div class="ww-ring${size}${sel ? " is-sel" : ""}"${wide}><svg class="ww-lines" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><defs>${marker("b")}${marker("h")}</defs>${svg}</svg>${nodes}${crew}</div></div>`;
 }
 

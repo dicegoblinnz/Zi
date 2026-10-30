@@ -1,0 +1,119 @@
+factions:
+  - key: harbour-bank
+    kind: money
+    size: city
+    seat: the-counting-house
+    name: The Harbour Bank
+    about: A bank that owns most of the waterfront. It works through loans. It sits in the Counting House.
+    want: Every boat in the harbour pays its loan on time.
+    face: Ada Venn, who's never once forgiven a debt.
+    faceOf: ada-venn
+    res: [Loan Book, Waterfront Rents, Insurance, Fishing Licences, Spare Cash]
+    people:
+      - { text: Bank Guards, does: "+1 Power. Guards in grey who come when the vault bell rings." }
+      - { text: Debt Collectors, does: "+1 Power. Collectors who come for whatever's owed." }
+      - { text: Hired Muscle, does: "+1 Power. Dock toughs it pays by the day." }
+    assets:
+      - { text: A Vault, does: "One of its resources is kept inside, and nobody can Destroy or Acquire it from downtime." }
+    agendas:
+      - { text: Buy the fish market's ashes, die: 4, at: [place:the-fish-market], then: It owns the waterfront end to end. }
+    pub: [{ text: They took my boat, kind: hostile, s: strained }]
+    threads:
+      - { to: night-boats, tie: rival, text: Smugglers don't borrow }
+      - { to: town-watch, tie: ally, text: The Watch keeps our doors shut }
+      - { to: tide-chapel, kind: hostile, text: That chapel took our best clerk }
+      - { to: market-gang, tie: rival, text: Moll's lot owe rent on ashes }
+    secret: { tag: The Money's Gone, more: The Night Boats' cargo paid for the last three loans., ways: [Its books, Its clerks on a Friday] }
+  - key: night-boats
+    kind: street
+    size: local
+    seat: the-low-steps
+    name: The Night Boats
+    about: Smugglers. They work through fast boats and quiet nights. They sit on the Low Steps.
+    want: The harbour stays dark after midnight.
+    face: Jory Pike, who's never been caught twice.
+    faceOf: jory-pike
+    res: [Smuggled Rum, Bribes]
+    people:
+      - { text: Fast Boats, does: "+1 Power on the water. Crews who know every channel by night." }
+    assets:
+      - { text: A Lantern Code, does: "Anyone on shore who knows the code can call a Night Boat in under an hour." }
+      - { text: A Hidden Cove, does: "Once a downtime, one of the crew lies low without spending a slot.", need: true, from: harbour-bank }
+    agendas:
+      - { text: Sink the bank's new cutter, die: 6, at: harbour-bank }
+    mor: [{ text: Jory always gets us home, kind: bond }]
+    threads:
+      - { to: harbour-bank, tie: rival, text: The bank wants our boats }
+      - { to: town-watch, tie: rival, text: The Watch hung Jory's brother }
+      - { to: market-gang, tie: debt, text: Moll owes us for the boat out }
+    secret: { tag: Owes the Chapel, more: The Tide Chapel hid them after the market burned., ways: [The chapel's crypt, A Night Boat with a candle] }
+  - key: town-watch
+    kind: law
+    size: local
+    seat: the-watch-house
+    name: The Town Watch
+    about: The law, such as it is. It works through warrants. It sits in the Watch House.
+    want: Nobody makes a fool of the Watch again.
+    face: Captain Hollis, who's counting the days to his pension.
+    faceOf: captain-hollis
+    res: [Town Pay, Fines, Seized Goods]
+    people:
+      - { text: Constables, does: "+1 Power. The watch's own, with clubs and a warrant." }
+      - { text: Deputies, does: "+1 Power. Shopkeepers sworn in for the night." }
+    assets:
+      - { text: A Lock-Up, does: "Anyone it arrests stays put till someone breaks them out in a scene." }
+    agendas:
+      - { text: Hang Jory Pike, die: 4, at: night-boats }
+    threads:
+      - { to: night-boats, tie: rival, text: Pike's laughing at us }
+      - { to: harbour-bank, tie: ally, text: The bank pays the overtime }
+    secret: { tag: A Knife Inside, more: Hollis's sergeant sells the warrants to the Night Boats., ways: [The sergeant's new coat, Warrants that go missing] }
+  - key: tide-chapel
+    kind: street
+    size: small
+    seat: the-tide-chapel
+    name: The Tide Chapel
+    about: A chapel to the sea that's grown too big for its pews. It works through faith. It sits in the Tide Chapel.
+    want: The town gives the sea its due again.
+    face: Mother Wren, who hears the tide talking.
+    faceOf: mother-wren
+    strange: true
+    res: [Offerings, Drowned Gold]
+    people:
+      - { text: The Faithful, does: "+1 Power. A congregation that'll fill the street when the bells ring." }
+    assets:
+      - { text: A Bell That Rings Itself, does: "Once a session, ask it who'll drown next, and it tells the truth.", strange: true }
+    agendas:
+      - { text: Bring the bank's clerk back to the water, die: 2, at: harbour-bank }
+    threads:
+      - { to: harbour-bank, tie: rival, text: The bank sold the sea's fish }
+      - { to: chapel-boys, kind: bond, text: Our boys ring the bells }
+    secret: { tag: Already Watched, more: The bank's clerk was its spy all along., ways: [The clerk's letters, The bell at midnight] }
+  - key: market-gang
+    kind: street
+    size: small
+    seat: the-fish-market
+    name: The Market Gang
+    about: Fish-gutters who lost their market. They work through threats. They sit in what's left of the Fish Market.
+    want: Somebody pays for the fire.
+    face: Big Moll, who lost her stall and her temper.
+    faceOf: big-moll
+    res: [Protection Money]
+    people:
+      - { text: Gutters, does: "+1 Power. Knife-handy market folk who turn out for Moll." }
+    agendas:
+      - { text: Burn the Counting House, die: 2, at: [harbour-bank, place:the-counting-house] }
+    threads:
+      - { to: harbour-bank, tie: rival, text: The bank lit the fire }
+      - { to: night-boats, tie: debt, text: We owe Pike for the boat out }
+    secret: { tag: One Crime, more: "Moll started the fire herself, for the insurance.", ways: [The insurance papers, A burnt lamp] }
+  - key: chapel-boys
+    kind: street
+    name: The Chapel Boys
+    about: Bell-ringers who carry knives. They do two things for the Tide Chapel.
+    want: Mother Wren's never alone.
+    mini: { of: tide-chapel, outs: [Undermine, Obstruct] }
+    res: [Candle Money]
+    people:
+      - { text: Bell-Ringers, does: "+1 Power. Lads off the chapel steps." }
+    loy: [{ text: Mother Wren took us in, kind: bond }]

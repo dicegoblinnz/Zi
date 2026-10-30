@@ -1,0 +1,18 @@
+# A small made-up world for tests/check-world-engine.mjs part 9, never
+# shipped: five factions and a mini faction in a harbour town, written the
+# way content/worlds/ writes one, so every check passes, and the test breaks
+# each check once on a copy.
+id: made-up
+name: Saltmarsh
+whose: Made up for the tests, and nobody's but ours.
+notices:
+  - Saltmarsh is test data and never leaves the repo.
+kinds:
+  money: The money
+  street: The street
+  law: The law
+years:
+  1999:
+    title: Saltmarsh, 1999
+    when: The week the fish market burned.
+    recipe: { region: town, era: modern }

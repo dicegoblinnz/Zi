@@ -29,6 +29,7 @@ import { traitInfo } from "../src/companion/grow.js";
 import { curlyQuotes, readAim, whoAndDoes } from "../src/companion/aims.js";
 import { CARD_WORDS, newestChange, reachOf, readCards, staleCards } from "./learn.mjs";
 import { bookFor, compileTables, readTablesDir } from "./world-tables.mjs";
+import { compileWorld, readWorldsDir } from "./worlds.mjs";
 import { diceCells, exampleCrews, ruleNames, statBlocks } from "./book-blocks.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -1557,6 +1558,31 @@ if (existsSync(tablesDir)) {
   rmSync(tablesOut, { force: true });
   console.log("world-tables.json: no tables yet (content/world-tables/), so the world builder has nothing to deal from");
 }
+// Whole worlds (notes/builder-plan.md, A whole world): written whole rather
+// than dealt, read off content/worlds/ by scripts/worlds.mjs and checked
+// against the book's sizes and Appendix B's assets, a file to a year in
+// public/worlds/, for /worlds/ to show. Nothing in them goes into book.json.
+const worldsDir = join(ROOT, "content", "worlds");
+const worldsOut = join(ROOT, "public", "worlds");
+const wholeWorlds = {};
+rmSync(worldsOut, { recursive: true, force: true });
+if (existsSync(worldsDir)) {
+  const { src, problems: unread } = readWorldsDir(worldsDir);
+  for (const p of unread) companionWarn(`worlds: ${p}`);
+  mkdirSync(worldsOut, { recursive: true });
+  for (const w of src) {
+    const { world, problems, notes } = compileWorld(w, { assets: worlds?.assets ?? [], sizes: worlds?.sizes ?? [], regions: existsSync(tablesOut) ? JSON.parse(readFileSync(tablesOut, "utf8")).regions : {} });
+    for (const p of problems) companionWarn(`world ${w.universe} ${w.year}: ${p}`);
+    if (!world) continue;
+    world.at = BUILT;
+    writeFileSync(join(worldsOut, `${world.id}.json`), JSON.stringify(world));
+    (wholeWorlds[world.universe] ??= []).push(world);
+    console.log(`worlds/${world.id}.json: ${world.factions.length} factions, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k of a world brought in${notes.length ? ` (${notes.join("; ")})` : ""}`);
+  }
+}
+// The pages under /worlds/ read every year of each universe from here.
+mkdirSync(join(ROOT, "src", "generated"), { recursive: true });
+writeFileSync(join(ROOT, "src", "generated", "worlds.json"), JSON.stringify(wholeWorlds));
 
 const outDir = join(ROOT, "src", "generated");
 mkdirSync(outDir, { recursive: true });
