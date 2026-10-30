@@ -27,7 +27,8 @@
 //    people, no two factions with the same asset that does one thing, a
 //    rival each, every agenda aimed at something on the board, a Face its
 //    kind of faction can be, a seat each and two to spare, and every slot
-//    filled), and every row it dealt is written for its era. A bag only
+//    filled, with nothing in a slot and an asset an agenda's after keeping
+//    its capitals), and every row it dealt is written for its era. A bag only
 //    gives a row twice once it's run out, and says so.
 // 3. Dealing one step again: the next card in its own stream, never the one
 //    it had, every other faction and every earlier step as they were, a
@@ -38,7 +39,8 @@
 //    of the web and the checks, a board's four to twelve factions, a genre
 //    never deals where its twist's pack doesn't go, or with an era its twist
 //    isn't written for, a row or a moment written for one era never comes up
-//    in another, and a world picks up from its record just as it was.
+//    in another, the fallbacks never write over a locked Secret, and a world
+//    picks up from its record just as it was, dials she set and all.
 // 4. The build's record (world-record.js, through board.js): written whole,
 //    lines of history, shown, undone, junk tidied, what was dealt kept within
 //    a world's size, one too big turned down whole, a twelve-faction record
@@ -295,6 +297,11 @@ function checkDealt(W, recipe, seed, n, fail) {
     if (kinds.length && !kinds.includes(W.factions[i].face?.threat)) fail(`${who}: its Face is ${W.factions[i].face?.threat}, which isn't one its kind of faction can be`);
     const words = [f.name, f.about, f.want, f.face, f.secret, f.more, ...f.res.map((r) => r.text), ...f.assets.map((a) => a.text), ...f.agendas.map((a) => a.text), ...f.threads.map((t) => t.text)];
     for (const w of words) if (/[{}]/.test(w)) fail(`${who}: a slot nobody filled in "${w}"`);
+    for (const w of words) if (typeof w === "string" && /\s[.,]|\s\s|^\s|\s$/.test(w)) fail(`${who}: a slot filled with nothing in "${w}"`);
+    // An asset an agenda's after keeps its capitals in the agenda's words.
+    const aa = ag?.at?.asset;
+    const held = aa && aa.j != null ? W.factions[aa.j]?.assets?.find((x) => x.id === aa.id) : null;
+    if (held && !/[{}]/.test(held.text) && !f.agendas.some((x) => x.text.includes(held.text) || x.text.includes(held.text.replace(/^The /, "the ")))) fail(`${who}: "${f.agendas[0]?.text}" doesn't keep the words of ${held.text}`);
     for (const t of f.threads) if (t.to !== "crew" && (!Number.isInteger(t.to) || t.to === i || t.to >= C.factions.length)) fail(`${who}: a thread toward nobody`);
   });
   if (C.seats.length !== n + 2 || C.seats.filter((s) => s.held < 0).length !== 2) fail(`${seed}: ${C.seats.length} seats for ${n} factions`);
@@ -419,6 +426,27 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   const lf = low.factions[0];
   const steps = 1 + lf.assets.filter((a) => a.power).length;
   yes(lf.size.die === 2 * steps && BOOK.sizes[lf.size.size].lo <= lf.size.die && lf.size.die <= BOOK.sizes[lf.size.size].hi && low.fallbacks.includes("power"), `a great faction with one resource comes down to a d${2 * steps} (got a ${lf.size.size} d${lf.size.die})`);
+  // The fallbacks never write over what she's locked: four Secrets that
+  // name nobody, all locked, stay, and the check says so instead.
+  {
+    const D = dealWorld(T, { recipe: g.recipe, seed: "slate-crow-weir", factions: 4 });
+    const plain = poolOf(T, D.recipe).secrets.filter((r) => !r.rival && !r.needs?.length);
+    D.factions.forEach((_, i) => {
+      const r = plain[i];
+      choose(T, D, `f:${i}:secret`, { id: r.id, text: r.tag, tag: r.tag, more: r.more, ways: [...(r.ways ?? [])], rival: false, strange: r.strange, why: "", by: null, at: null });
+      lock(D, `f:${i}:secret`);
+    });
+    dealRest(T, D);
+    same(D.factions.map((f) => f.secret?.id), plain.slice(0, 4).map((r) => r.id), "four locked Secrets that name nobody stay as she locked them");
+    yes(!D.checks.find((c) => c.k === "secret").ok && !D.fallbacks.includes("secret"), "and the check says so rather than writing over one");
+  }
+  // Dials set at the start stay set when a world's picked up from its record.
+  {
+    const fixedW = dealWorld(T, { recipe: g.recipe, seed: "tide-iron-rook", factions: 5, dials: { tense: 2, strange: 0, rich: 2, ruled: 0 } });
+    const back = resume(T, recordOf(fixedW));
+    redeal(T, back, "ask:holds");
+    same(back.dials, { tense: 2, strange: 0, rich: 2, ruled: 0 }, "dials set at the start stay set when a world's picked up from its record and an answer's dealt again");
+  }
   // Four to twelve factions, and a genre never deals where its twist can't.
   same([2, 13, "x"].map((n) => start(T, { recipe: g.recipe, seed: "ash-lantern-ford", factions: n }).n), [4, 12, 6], "a board's four to twelve factions");
   same([2, 13].map((n) => start(T, { recipe: g.recipe, seed: "ash-lantern-ford", factions: n }).s), [6, 14], "and two more seats than factions");
