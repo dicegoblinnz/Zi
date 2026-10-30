@@ -791,7 +791,7 @@ export function makeMaps(w) {
     const t = targetOf(doc, pin.to);
     const name = labelOf(doc, pin) || "A pin";
     const head = `<div class="wm-card-top"><span class="wm-card-mark is-${k}${gm && !pin.shown ? " is-hidden" : ""}">${MARK[k]}</span>
-      <div class="wm-card-t"><p class="wb-k">${pin.area ? cap(areaOf(m, pin)) : kindName(k)}${gm ? `<span class="wb-badge${pin.shown ? " is-on" : ""}">${pin.shown ? "Shown" : "Hidden"}</span>` : ""}</p><h2 class="wm-card-n" id="wm-card-h">${esc(name)}</h2></div>
+      <div class="wm-card-t"><p class="wb-k">${pin.area ? esc(cap(areaOf(m, pin))) : kindName(k)}${gm ? `<span class="wb-badge${pin.shown ? " is-on" : ""}">${pin.shown ? "Shown" : "Hidden"}</span>` : ""}</p><h2 class="wm-card-n" id="wm-card-h">${esc(name)}</h2></div>
       <button type="button" class="cc-x" data-act="w" data-do="mclose" aria-label="Close">${d.icon.close}</button></div>`;
     const opener = t && (gm || pin.to) ? `<a class="button primary" href="${esc(pageHref(id, pin.to))}" data-act="w" data-do="nav">Open ${theName(k)}</a>` : "";
     if (!gm) {
@@ -823,7 +823,7 @@ export function makeMaps(w) {
     if (!ui.panel) return "";
     const rows = [...m.pins].sort((a, b) => SORT(labelOf(doc, a)).localeCompare(SORT(labelOf(doc, b)))).map((p) => {
       const k = kindOf(doc, p);
-      return `<li><button type="button" class="wm-row" data-act="w" data-do="mfind" data-pid="${esc(p.id)}"><span class="wm-row-mark is-${k}${gm && !p.shown ? " is-hidden" : ""}">${MARK[k]}</span><span class="wm-row-in"><b>${esc(labelOf(doc, p) || "A pin")}</b><small>${p.area ? cap(areaOf(m, p)) : kindName(k)}${gm ? (p.shown ? " · Shown" : " · Hidden") : ""}</small></span></button></li>`;
+      return `<li><button type="button" class="wm-row" data-act="w" data-do="mfind" data-pid="${esc(p.id)}"><span class="wm-row-mark is-${k}${gm && !p.shown ? " is-hidden" : ""}">${MARK[k]}</span><span class="wm-row-in"><b>${esc(labelOf(doc, p) || "A pin")}</b><small>${p.area ? esc(cap(areaOf(m, p))) : kindName(k)}${gm ? (p.shown ? " · Shown" : " · Hidden") : ""}</small></span></button></li>`;
     }).join("");
     const empty = gm ? "No pins yet. Tap Drop a pin, move the map till the spot’s under the cross, and pin it." : "No pins on this one yet.";
     let mine = "";
@@ -1536,6 +1536,7 @@ export function makeMaps(w) {
     else if (ui.naming) ACT.mnameoff();
     else if (ui.panel) ACT.mpanel();
     else if (ui.pin) ACT.mclose();
+    else if (ui.sel) ACT.mselx();
   });
 
   // ------------------------------------------------------------ elsewhere

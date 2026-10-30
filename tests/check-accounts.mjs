@@ -4458,6 +4458,7 @@ try {
     same((await asKai(2, { o: "p-new", p: { ...NC.places[0].card, id: "nc-page-0001", here: [], ground: [], stakes: [], tags: [], teles: [], hooks: [], shown: {}, book: { from: NC.id, key: NC.places[0].key, h: "x", at: 1, was: NC.places[0].card } } })).status, 403, "and a page of it");
     same((await asKai(3, { o: "m-new", m: { id: "nc-map-0001", name: "Night City", key: "", w: 1000, h: 1000, of: "", shown: false, pins: [], from: NC.id, draw: { ground: { sea: [[0, 0], [10, 0], [10, 10]], water: [], hills: [] }, districts: {}, parts: {}, wilds: [], roads: [], marks: [] } } })).status, 403, "and its drawn map");
     same((await asKai(4, { o: "wb-set", b: { world: NC.id, recipe: NC.recipe, history: [], shown: [] } })).status, 403, "and its record");
+    same((await asKai(5, { o: "new", f: { ...nc0.card, id: "nc-card-0002", threads: [], res: [], assets: [], agendas: [], pub: [], mor: [], loy: [], shown: {}, book: { from: [NC.id], key: nc0.key, h: "x", at: 1, was: nc0.card } } })).status, 403, "and a card whose world's id is dressed up as a list");
     same((await worldOf(kaiNight.id))?.factions?.length ?? 0, 0, "and her world's still empty");
 
     // Mo brings Night City into Night Lair from its World screen, in a few sends.

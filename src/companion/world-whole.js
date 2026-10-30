@@ -105,7 +105,9 @@ export function wholeOps(world, newId, now = Date.now()) {
   // How it came to be, with the world's recipe and nothing dealt, last.
   const r = world.recipe ?? {};
   const history = (world.history ?? []).map((l) => ({ id: newId(), text: l.text, age: l.age, ...(l.hers ? { hers: true } : {}) }));
-  ops.push({ o: "wb-set", b: { world: world.id, recipe: { region: r.region, era: r.era, twist: r.twist ?? null }, dials: { tense: 1, strange: 1, rich: 1, ruled: 1, ...(r.dials ?? {}) }, seed: "", dealt: null, history, shown: [], at: now } });
+  // A fan-made world says so (fan), for the line saying whose it is on a
+  // player's phone. A world of Mo's own never sends its id to one.
+  ops.push({ o: "wb-set", b: { world: world.id, ...(world.own ? {} : { fan: true }), recipe: { region: r.region, era: r.era, twist: r.twist ?? null }, dials: { tense: 1, strange: 1, rich: 1, ruled: 1, ...(r.dials ?? {}) }, seed: "", dealt: null, history, shown: [], at: now } });
 
   return { ops, counts: { factions: world.factions.length, places: (world.places ?? []).length, people: (world.people ?? []).length, pins, lines: history.length } };
 }

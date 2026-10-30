@@ -1704,7 +1704,7 @@ html.cc-map, html.cc-map body { overflow: hidden; overscroll-behavior: none; }
    The factions that aren't on the map wait in a strip above the bar, and
    the tapped one's card comes up where a pin's does. */
 .cc .wm-web-b { height: 54px; align-content: center; gap: 1px; color: var(--zd-them-ink); }
-.wm-web-b span { font-size: 0.64rem; font-weight: 800; letter-spacing: 0.06em; line-height: 1; text-transform: uppercase; }
+.wm-web-b span { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.05em; line-height: 1; text-transform: uppercase; }
 .cc .wm-web-b[aria-pressed="true"] { color: var(--zd-on-them); background: var(--zd-them); }
 .wm-zoom .wm-web-b + .wm-z { border-top: 1px solid var(--line); }
 .wm-body.has-strip .wm-zoom { bottom: calc(158px + env(safe-area-inset-bottom, 0px)); }

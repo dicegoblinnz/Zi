@@ -22,9 +22,10 @@
 //        A whole world (stage 14 of notes/builder-plan.md) is Mo's alone to
 //        bring in for now: a change carrying one of its cards, its drawn map
 //        or its record, from any other GM, is turned down whole.
-import { apply, blank, forPlayer, readable } from "../companion/board.js";
-import { keysOf, mapsForPlayer } from "../companion/maps.js";
-import { buildForPlayer } from "../companion/world-record.js";
+import { apply, blank, factionOf, forPlayer, readable } from "../companion/board.js";
+import { keysOf, mapOf, mapsForPlayer } from "../companion/maps.js";
+import { pageOf } from "../companion/pages.js";
+import { buildForPlayer, buildOf } from "../companion/world-record.js";
 import { binned, dropPictures } from "./maps.js";
 import { tableWorld } from "./table.js";
 import wholes from "../generated/worlds-index.json";
@@ -38,9 +39,19 @@ const MAX_DOC = 700000;
 const MAX_DEVICES = 64;
 
 // A change that brings in something of a whole world's: a faction or a page
-// whose book is the world's, its drawn map, or its record.
+// whose book is the world's, its drawn map, or its record. Each is read the
+// way apply() would keep it, so the world's id is checked as it'd be stored.
 const WHOLE = new Set(wholes.map((w) => w.id));
-const ofWhole = (op) => [op?.f?.book?.from, op?.p?.book?.from, op?.m?.from, op?.o === "wb-set" ? op.b?.world : null].some((x) => typeof x === "string" && WHOLE.has(x));
+const keptFrom = (op) => {
+  if (!op || typeof op !== "object") return null;
+  const as = (x) => (x && typeof x === "object" && !Array.isArray(x) ? { ...x, id: "whole-check" } : null);
+  if (op.o === "new" || op.o === "mini") return factionOf(as(op.f))?.book?.from;
+  if (op.o === "p-new") return pageOf(as(op.p))?.book?.from;
+  if (op.o === "m-new") return mapOf(as(op.m))?.from;
+  if (op.o === "wb-set") return buildOf(op.b)?.world;
+  return null;
+};
+const ofWhole = (op) => WHOLE.has(keptFrom(op) ?? "");
 
 // FNV-1a, to say whether anything's changed since the phone last looked.
 function stampOf(text) {

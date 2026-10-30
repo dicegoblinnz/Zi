@@ -452,7 +452,7 @@ export function makePlaces(w) {
         ${p.aka.length ? `<p class="cc-small wp-aka">Also called ${p.aka.map((a) => esc(a)).join(", ")}</p>` : ""}
         ${gm ? reword(wordsKey, place ? "Change its name and what it says" : "Change their name and what it says") : ""}`;
     const card = gm || p.look || p.aka.length || (p.ch > 0 && chShown);
-    const head = `<header class="cc-camp-head wb-head"><p class="kicker is-gm">${place ? areaWord(doc, p) || "Place" : "Person"}</p><h1>${esc(p.name)}</h1>${p.line ? `<p class="wp-line">${L.rich(p.line, p.id)}${place && !/[.?!”]$/.test(p.line) ? "." : ""}</p>` : ""}</header>
+    const head = `<header class="cc-camp-head wb-head"><p class="kicker is-gm">${place ? esc(areaWord(doc, p) || "Place") : "Person"}</p><h1>${esc(p.name)}</h1>${p.line ? `<p class="wp-line">${L.rich(p.line, p.id)}${place && !/[.?!”]$/.test(p.line) ? "." : ""}</p>` : ""}</header>
       ${card ? `<div class="wb-card card wp-card" data-glow="${w.lit(id).includes(p.id) ? "1" : ""}">
         ${p.ch > 0 && chShown ? `<div class="wb-card-top"><div class="wb-card-die" role="img" aria-label="${chLabel(p.ch)}">${kitDie(dieOf(p.ch), { own: "them", hide: true })}</div><div class="wb-card-p"><p class="wb-k">Challenge</p><p class="wb-card-v">${p.ch}, a d${dieOf(p.ch)}</p></div></div>` : ""}
         ${words}</div>` : ""}`;

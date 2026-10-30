@@ -89,6 +89,9 @@ export function makeWorld(d) {
   const wholeIn = (from) => WH.find((x) => x.id === from) ?? null;
   const files = new Map();
   const fetching = new Map();
+  // When a file last couldn't be had, so it's tried again a minute later at
+  // the soonest rather than on every redraw.
+  const missed = new Map();
   let st = null;
   let ui = { editing: "", sure: "", note: "" };
   const undos = [];
@@ -383,6 +386,10 @@ export function makeWorld(d) {
           return j;
         })
         .catch(() => null)
+        .then((j) => {
+          if (!j) missed.set(from, Date.now());
+          return j;
+        })
         .finally(() => fetching.delete(from));
       fetching.set(from, job);
     }
@@ -392,7 +399,7 @@ export function makeWorld(d) {
   // screen drawn again once it is.
   function wholeFile(from) {
     if (files.has(from)) return files.get(from);
-    if (wholeIn(from) && online() && !fetching.has(from)) {
+    if (wholeIn(from) && online() && !fetching.has(from) && Date.now() - (missed.get(from) ?? 0) > 60000) {
       loadWhole(from).then((j) => {
         if (!j) return;
         if (watching && isGm(watching)) quietBook(watching);

@@ -229,8 +229,12 @@ function drawOf(raw, w, h) {
     const at = pt(m?.at);
     return at && MARKS.includes(m?.kind) ? { kind: m.kind, at } : null;
   }).filter(Boolean);
-  // What it calls its districts and parts, one and many (Abnu's lands and cities).
-  const word = (v) => one(v, 24).toLowerCase();
+  // What it calls its districts and parts, one and many (Abnu's lands and
+  // cities): plain words only, letters, spaces, hyphens and apostrophes.
+  const word = (v) => {
+    const w = one(v, 24).toLowerCase();
+    return /^[a-z][a-z' -]*$/.test(w) ? w : "";
+  };
   const pair = (v) => (Array.isArray(v) && word(v[0]) && word(v[1]) ? [word(v[0]), word(v[1])] : null);
   const a = raw.areas && typeof raw.areas === "object" ? raw.areas : null;
   const areas = a && pair(a.district) && pair(a.part) ? { district: pair(a.district), part: pair(a.part) } : null;
@@ -459,8 +463,11 @@ export function keysOf(doc) {
 export function sittersOf(factions, pins) {
   const at = new Map();
   const byPage = new Map();
+  // Only the factions it's handed, so a pin that opens one the crew hasn't
+  // been shown never puts it on their web.
+  const ids = new Set(factions.map((f) => f.id));
   for (const p of pins) {
-    if (p.to?.k === "f" && !at.has(p.to.id)) at.set(p.to.id, p.id);
+    if (p.to?.k === "f" && ids.has(p.to.id) && !at.has(p.to.id)) at.set(p.to.id, p.id);
     if (p.to?.k === "p" && !byPage.has(p.to.id)) byPage.set(p.to.id, p.id);
   }
   for (const f of factions) if (!f.mini && !at.has(f.id) && f.sits && byPage.has(f.sits)) at.set(f.id, byPage.get(f.sits));

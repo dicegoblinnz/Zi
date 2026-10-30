@@ -1778,7 +1778,19 @@ const realWorlds = [];
     for (const op of [{ o: "m-show", id: sm.id, v: true }, { o: "m-pinset", id: sm.id, pid: district.id, f: "shown", v: true }, { o: "show", id: sitter.id, p: "card", v: true }]) yes(apply(shown, op), `${world.id}: ${op.o} didn't go on`);
     let pv = mapsForPlayer(shown)[0];
     same([pv.key, Boolean(pv.draw), pv.pins.length, pv.pins[0]?.to, pv.pins[0]?.fs, pv.pins[0]?.area], ["", true, 1, null, [sitter.id], "district"], `${world.id}: the player's map with a district and a faction shown`);
-    same(forPlayer(shown).build, { history: [], shown: [], world: world.id }, `${world.id}: the player's record once something's shown`);
+    // A fan-made world's id goes to a player for its notices, and Mo's own never does.
+    same(Boolean(doc.build.fan), !world.own, `${world.id}: the record says whether it's fan-made`);
+    same(forPlayer(shown).build, world.own ? null : { history: [], shown: [], world: world.id }, `${world.id}: the player's record once something's shown`);
+    // A pin that opens a faction the crew hasn't been shown never puts it on
+    // their web, and once they've been shown it, it does.
+    const hidden = shown.factions.find((f) => !f.shown.card && !f.mini);
+    apply(shown, { o: "m-pin", id: sm.id, pin: { id: "pin-to-hidden", x: district.x, y: district.y, to: { k: "f", id: hidden.id }, name: "", shown: true } });
+    const toHidden = () => mapsForPlayer(shown)[0].pins.find((x) => x.id === "pin-to-hidden");
+    same([toHidden()?.to, toHidden()?.fs], [null, undefined], `${world.id}: a pin to a hidden faction puts it on the crew's web`);
+    apply(shown, { o: "show", id: hidden.id, p: "card", v: true });
+    same(toHidden()?.fs, [hidden.id], `${world.id}: a pin to a faction they've been shown`);
+    apply(shown, { o: "show", id: hidden.id, p: "card", v: false });
+    apply(shown, { o: "m-unpin", id: sm.id, pid: "pin-to-hidden" });
     apply(shown, { o: "p-show", id: district.to.id, p: "page", v: true });
     same(mapsForPlayer(shown)[0].pins[0]?.to, { k: "p", id: district.to.id }, `${world.id}: the district's pin opens its page once that's shown`);
     // Under her fog the pin goes, and comes back once its spot's uncovered,
@@ -1794,6 +1806,10 @@ const realWorlds = [];
     same(mapsForPlayer(shown)[0].pins.map((p) => p.id), [district.id], `${world.id}: the district's pin once its spot's uncovered`);
     yes(!apply(shown, { o: "m-crew", id: sm.id, key: "abcdefghijklmnopqrst", c: fogText(b) }), `${world.id}: a drawn map took a crew's picture`);
     yes(!apply(shown, { o: "m-pic", id: sm.id, key: "abcdefghijklmnopqrst", w: 100, h: 100 }), `${world.id}: a drawn map took a picture`);
+    // A drawing's area words are plain words or nothing, whatever a phone sends.
+    const odd = blank();
+    apply(odd, { o: "m-new", m: { id: "odd-map", name: "Odd", key: "", w: 100, h: 100, of: "", shown: true, pins: [], draw: { ground: { sea: [[0, 0], [100, 0], [100, 100]], water: [], hills: [] }, districts: { a: [[0, 0], [50, 0], [50, 50]] }, parts: {}, wilds: [], roads: [], marks: [], areas: { district: ["<svg onload=x>", "lands"], part: ["city", "cities"] } } } });
+    same([odd.maps.length, odd.maps[0]?.draw?.areas], [1, undefined], `${world.id}: a drawing kept area words that aren't plain words`);
     // Undo takes it all back off: every change's undo worked out before it went on.
     const was = blank();
     const back = [];
