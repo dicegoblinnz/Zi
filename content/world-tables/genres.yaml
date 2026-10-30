@@ -37,3 +37,10 @@ frames:
   steeplands: { era: medieval, twist: magic, region: country, dials: { strange: 0 } }
   # Lanternhead and the city under the mountain: a company town.
   deep-company: { era: medieval, twist: magic, region: town }
+  # A chain of storm-bitten islands, so Country, and magic's real but rare
+  # there (the frame's Characters), so how strange is 0.
+  brinewake: { era: renaissance, twist: magic, region: country, dials: { strange: 0 } }
+  # A dying queen's court in her capital, so City, and it's tense (Tone and
+  # feel). Magic at court's a hanging matter if anyone can prove it, so it's
+  # the deniable kind, with no twist.
+  gilded-court: { era: renaissance, region: city, dials: { tense: 2 } }

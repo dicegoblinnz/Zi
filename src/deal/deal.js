@@ -526,10 +526,13 @@ function bring() {
 }
 
 // ── Every table, read once, the first time the tab opens.
+// A twist's row written for some of its eras: Medieval only.
+const erasSay = (eras) => `${list(eras.map((x) => T.eras[x] ?? x))} only`;
 const meta = (r, { role = true } = {}) => {
   const bits = [];
   if (role && r.role) bits.push(T.book.assets[r.role]?.name ?? T.types[r.role] ?? r.role);
   if (r.regions) bits.push(r.regions.map((x) => T.regions[x]?.name ?? x).join(", "));
+  if (r.eras) bits.push(erasSay(r.eras));
   if (r.sizes) bits.push(r.sizes.join(", "));
   if (r.tags?.length) bits.push(r.tags.join(", "));
   if (r.needs?.length) bits.push(`needs ${r.needs.join(" and ")}`);
@@ -569,6 +572,7 @@ function momentRow(m) {
   else if (m.key) bits.push(`key ${m.key}`);
   if (m.last) bits.push("a last card");
   if (m.regions) bits.push(m.regions.map((x) => T.regions[x]?.name ?? x).join(", "));
+  if (m.eras) bits.push(erasSay(m.eras));
   if (m.tags?.length) bits.push(m.tags.join(", "));
   if (m.needs?.length) bits.push(`needs ${m.needs.join(" and ")}`);
   if (m.out?.length) bits.push(`never with ${m.out.join(", ")}`);
@@ -654,7 +658,8 @@ function drawTables() {
   const setDials = (f) => Object.entries(f.dials ?? {}).map(([k, v]) => `${DIAL_NAMES[k] ?? k} ${v} of 2`);
   if (frames.length) parts.push(table("The book’s boards", frames.map(([k, f]) => row(f.name ?? k, null, esc([`${genreName(f)} at ${T.regions[f.region]?.name ?? f.region}`, ...setDials(f)].join(" · ") + ", for a faction added to it")))));
   for (const pack of Object.values(T.packs)) {
-    parts.push(`</section><section class="dl-partsec"><h2 class="dl-part">${esc(pack.name)}</h2><p class="dl-tnote">${esc(`${pack.kind === "era" ? "An era" : "A twist"}, at ${pack.fits.map((x) => T.regions[x].name).join(", ")}.`)}</p>`);
+    const written = pack.eras?.length ? `, written for ${list(pack.eras.map((x) => T.eras[x] ?? x))}` : "";
+    parts.push(`</section><section class="dl-partsec"><h2 class="dl-part">${esc(pack.name)}</h2><p class="dl-tnote">${esc(`${pack.kind === "era" ? "An era" : "A twist"}${written}, at ${pack.fits.map((x) => T.regions[x].name).join(", ")}.`)}</p>`);
     for (const region of pack.fits) {
       const seats = pack.seats.filter((r) => !r.regions || r.regions.includes(region));
       parts.push(table(`Seats at ${T.regions[region].name}`, byRole(seats, (k) => k).flatMap((g) => [`<li class="dl-group">${esc(g.name)}</li>`, ...g.list.map((r) => row(r.text, r, esc(r.notice), { role: false }))])));

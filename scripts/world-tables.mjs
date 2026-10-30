@@ -22,6 +22,9 @@
 //   needs    tags that have to be on the card or the board already
 //   out      tags that rule it out
 //   regions  the regions it fits (all its pack fits, if it doesn't say)
+//   eras     a twist's row only: the eras it fits, out of the ones its twist's
+//            written for (all of them, if it doesn't say), so Magic's mail
+//            stays Medieval's
 //   sizes    the sizes it fits: small, local, city, great (all of them)
 //   rare     true for the rare weight, 1 against the common 10
 //   strange  a strange thing (a twist pack's rows always are)
@@ -128,7 +131,10 @@
 // A pack: fits (the regions it fits), seats, resources, assets, types (with
 // sizes and leans), methods, secrets, exceptions, wants (if it adds any) and
 // names (factions and people). A twist pack adds its rows to the same roles,
-// and every row in it is strange.
+// and every row in it is strange. It also says eras, the eras its rows are
+// written for, and it only deals with those (stage 10), so a new era with a
+// twist waits till someone's written the twist's rows for it. A row or a
+// moment in it can narrow that with eras of its own.
 import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -156,7 +162,7 @@ export const OUTCOMES = [...new Set(Object.values(OUTCOME_OF))];
 export const PROMPTS = ["name", "person", "place", "detail"];
 const THINGS = ["res", "asset", "people"];
 const THREADS = new Set(["ally", "debt", "favour", "rival", "grudge", "strain", "block", "friend", "foe"]);
-const DECK_FIELDS = ["text", "age", "a", "b", "key", "chain", "last", "res", "asset", "people", "person", "answers", "tags", "needs", "out", "regions", "rare", "strange"];
+const DECK_FIELDS = ["text", "age", "a", "b", "key", "chain", "last", "res", "asset", "people", "person", "answers", "tags", "needs", "out", "regions", "eras", "rare", "strange"];
 const ANSWER_FIELDS = ["text", "line", "does", "tags", "thread", "back", "prompt", "then"];
 // The plan's counts (Writing tables, The deck): moments in core and in each
 // pack, the share of them in each age, in a chain and strange, and how many
@@ -175,7 +181,7 @@ export const keyOf = (name) =>
 
 // What each table's rows can have, past the fields every row has, and the
 // slots its words can use.
-const COMMON = ["text", "role", "tags", "needs", "out", "regions", "sizes", "rare", "strange", "leans", "offers"];
+const COMMON = ["text", "role", "tags", "needs", "out", "regions", "eras", "sizes", "rare", "strange", "leans", "offers"];
 const TABLES = {
   seats: { extra: ["notice"], slots: [], name: true, role: "keep" },
   resources: { extra: [], slots: ["seat"], role: "keep" },
@@ -293,7 +299,23 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     ids.set(id, { key, where });
     return id;
   };
-  function rowOf(raw, where, kind, { strange = false, regionsOk = REGIONS } = {}) {
+  // The eras a twist's row or moment fits, out of erasOk, the ones its twist's
+  // written for. Anywhere else (erasOk null) a row fits whatever deals it.
+  const erasOf = (v, where, erasOk) => {
+    if (v == null) return null;
+    if (!erasOk) {
+      bad(where, "only a twist's rows say which eras they fit");
+      return null;
+    }
+    const got = list(v).filter((x) => {
+      if (!out.eras[x]) bad(where, `has an era genres.yaml hasn't got: ${x}`);
+      else if (!erasOk.includes(x)) bad(where, `fits ${x}, which its pack isn't written for`);
+      return erasOk.includes(x);
+    });
+    if (!list(v).length) bad(where, "eras needs one era at least");
+    return got.length ? got : null;
+  };
+  function rowOf(raw, where, kind, { strange = false, regionsOk = REGIONS, erasOk = null } = {}) {
     const spec = TABLES[kind];
     const r = typeof raw === "string" ? { text: raw } : raw;
     if (!r || typeof r !== "object" || Array.isArray(r)) {
@@ -322,6 +344,9 @@ export function compileTables(raw, book, { minimums = true } = {}) {
         return REGIONS.includes(x);
       });
     } else row.regions = null;
+    // Only kept when it says, so the phone's copy of the tables stays small.
+    const eras = erasOf(r.eras, where, erasOk);
+    if (eras) row.eras = eras;
     if (r.sizes != null) {
       row.sizes = list(r.sizes).filter((x) => {
         if (!SIZES.includes(x)) bad(where, `has a size it doesn't know: ${x}`);
@@ -479,7 +504,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     }
     return fx;
   }
-  function momentOf(raw, where, { strange = false, regionsOk = REGIONS } = {}) {
+  function momentOf(raw, where, { strange = false, regionsOk = REGIONS, erasOk = null } = {}) {
     if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
       bad(where, "isn't a moment");
       return null;
@@ -535,6 +560,8 @@ export function compileTables(raw, book, { minimums = true } = {}) {
         return REGIONS.includes(x);
       });
     } else m.regions = null;
+    const eras = erasOf(raw.eras, where, erasOk);
+    if (eras) m.eras = eras;
     // The words a moment's own text can use, before its chain's are known.
     const base = new Set(["a", "b", "seat", ...THINGS.filter((t) => m[t]), ...(m.person ? ["person"] : []), ...(m.crew ? ["who"] : [])]);
     m.slots = slotsIn(text);
@@ -817,14 +844,26 @@ export function compileTables(raw, book, { minimums = true } = {}) {
         return REGIONS.includes(x);
       });
       if (!fits.length) bad(file, "needs fits, the regions it fits");
-      const opts = { strange: kind === "twist", regionsOk: fits };
-      const pack = { kind, id, name, fits };
+      // The eras a twist's rows are written for. An era's rows are its own.
+      let eras = null;
+      if (p.eras != null) {
+        if (kind === "era") bad(file, "an era's rows are all its own era's, so it doesn't say eras");
+        else {
+          eras = list(p.eras).filter((x) => {
+            if (!out.eras[x]) bad(file, `eras has one genres.yaml hasn't got: ${x}`);
+            return Boolean(out.eras[x]);
+          });
+          if (!eras.length) bad(file, "needs eras, the eras its rows are written for");
+        }
+      } else if (kind === "twist" && minimums) bad(file, "needs eras, the eras its rows are written for");
+      const opts = { strange: kind === "twist", regionsOk: fits, erasOk: kind === "twist" ? eras ?? Object.keys(out.eras) : null };
+      const pack = { kind, id, name, fits, ...(kind === "twist" ? { eras: eras?.length ? eras : null } : {}) };
       for (const [field, table] of [["seats", "seats"], ["resources", "resources"], ["assets", "assets"], ["types", "types"], ["methods", "methods"], ["secrets", "secrets"], ["exceptions", "exceptions"], ["wants", "wants"]]) {
         pack[field] = rows(p[field], `${file} ${field}`, table, opts);
       }
       pack.names = { factions: rows(p.names?.factions, `${file} names.factions`, "factions", opts), people: rows(p.names?.people, `${file} names.people`, "people", opts) };
       pack.deck = momentsOf(p.deck, `${file} deck`, opts);
-      for (const k of Object.keys(p)) if (!["fits", "seats", "resources", "assets", "types", "methods", "secrets", "exceptions", "wants", "names", "deck"].includes(k)) bad(file, `has a part it doesn't know: ${k}`);
+      for (const k of Object.keys(p)) if (!["fits", "eras", "seats", "resources", "assets", "types", "methods", "secrets", "exceptions", "wants", "names", "deck"].includes(k)) bad(file, `has a part it doesn't know: ${k}`);
       if (minimums) {
         if (pack.exceptions.length < 6) bad(file, `needs six exceptions, found ${pack.exceptions.length}`);
         if (kind === "era") {
@@ -892,6 +931,11 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     }
   }
   const named = (m) => `${fileOf.get(m)} deck, "${m.text.split(/\s+/).slice(0, 6).join(" ")}…"`;
+  // The eras a moment can come up in: its own, or its pack's (null for core's,
+  // which come up in every era), so a chain's next card can't be one that's
+  // missing from a deck its first card's in.
+  const erasIn = new Map();
+  for (const p of Object.values(out.packs)) for (const m of p.deck ?? []) erasIn.set(m, m.eras ?? (p.kind === "era" ? [p.id] : p.eras));
   const before = new Map();
   for (const [file, deck] of files) {
     for (const m of deck) {
@@ -908,6 +952,9 @@ export function compileTables(raw, book, { minimums = true } = {}) {
         if (t.age < m.age) bad(named(m), `then lands on ${ans.then}, an age before it`);
         if (t.seat !== m.seat) bad(named(m), `then lands on ${ans.then}, whose other side isn't the same (a faction or a seat)`);
         if (t.crew && !m.crew) bad(named(m), `then lands on ${ans.then}, which needs one of the crew on the card`);
+        const to = erasIn.get(t) ?? null;
+        const missing = to ? (erasIn.get(m) ?? Object.keys(out.eras)).filter((e) => !to.includes(e)) : [];
+        if (missing.length) bad(named(m), `then lands on ${ans.then}, which isn't written for ${missing.join(" or ")}`);
         if (!before.has(t.key)) before.set(t.key, []);
         before.get(t.key).push({ m, ans });
       }
@@ -986,7 +1033,9 @@ export function compileTables(raw, book, { minimums = true } = {}) {
   // board brought in from the book always has something to deal.
   for (const [k, f] of Object.entries(out.frames)) {
     const deals = (kind, id) => id == null || Boolean(out.packs[`${kind}:${id}`]?.fits.includes(f.region));
+    const tw = f.twist ? out.packs[`twist:${f.twist}`] : null;
     if (!deals("era", f.era) || !deals("twist", f.twist)) bad(`genres.yaml frames.${k}`, `can't deal at ${f.region} till its packs are in, and a frame's mix goes in with the last one it needs`);
+    else if (tw?.eras && !tw.eras.includes(f.era)) bad(`genres.yaml frames.${k}`, `can't deal ${f.era} with ${f.twist} till ${f.twist}'s rows are written for it`);
   }
   return { tables: problems.length ? null : out, problems };
 }

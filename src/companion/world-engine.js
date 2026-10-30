@@ -210,8 +210,12 @@ export function fill(tpl, vals) {
   return out.charAt(0).toUpperCase() + out.slice(1);
 }
 
+// Whether a row fits a recipe: its region, and its era when it says which
+// (a twist's row written for some of its eras, stage 10).
+export const fitsRecipe = (r, recipe) => (!r.regions || r.regions.includes(recipe.region)) && (!r.eras || r.eras.includes(recipe.era));
+
 // The rows a world deals from: core's, and the era's and the twist's that fit
-// its region.
+// its region and its era.
 const pools = new WeakMap();
 export function poolOf(T, recipe) {
   const key = `${recipe.region}|${recipe.era}|${recipe.twist ?? ""}`;
@@ -220,7 +224,7 @@ export function poolOf(T, recipe) {
   if (byKey.has(key)) return byKey.get(key);
   const region = recipe.region;
   const packs = [T.packs[`era:${recipe.era}`], recipe.twist ? T.packs[`twist:${recipe.twist}`] : null].filter((p) => p && p.fits.includes(region));
-  const fits = (r) => !r.regions || r.regions.includes(region);
+  const fits = (r) => fitsRecipe(r, recipe);
   const from = (k) => packs.flatMap((p) => p[k] ?? []).filter(fits);
   const pool = {
     seats: from("seats"),
@@ -240,12 +244,15 @@ export function poolOf(T, recipe) {
 }
 
 // Which recipes the tables can deal: an era with its pack in the region, and
-// a twist only if its pack fits the region too, so a genre never deals
-// without its twist.
+// a twist only if its pack fits the region too and it's written for the era,
+// so a genre never deals without its twist, or with one written for another
+// era.
 export function canDeal(T, { region, era, twist = null }) {
   const e = T.packs[`era:${era}`];
   if (!REGIONS.includes(region) || !e || !e.fits.includes(region)) return false;
-  return !twist || Boolean(T.packs[`twist:${twist}`]?.fits.includes(region));
+  if (!twist) return true;
+  const t = T.packs[`twist:${twist}`];
+  return Boolean(t?.fits.includes(region) && (!t.eras || t.eras.includes(era)));
 }
 
 // A new world, with nothing dealt: four to twelve factions (the plan's call

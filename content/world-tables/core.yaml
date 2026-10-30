@@ -6,7 +6,7 @@
 
 seeds: [ash, lantern, ford, salt, crow, ember, mill, gate, rook, briar, tide, flint, moss, bell, iron, thorn, hollow, copper, gull, heron, kettle, lark, marsh, oak, pike, quill, raven, rust, sable, slate, smoke, sorrel, stag, stone, tallow, tar, thistle, vale, willow, wolf, yarrow, amber, anchor, barrow, beacon, bramble, candle, cinder, clay, coal, cobble, dusk, fallow, fern, gorse, hearth, hound, ivy, juniper, keel, linden, mallow, needle, nettle, otter, pebble, reed, rowan, saffron, sedge, sparrow, spindle, tinder, umber, vellum, wick, yew]
 
-tags: [river, coast, hill, forest, marsh, road, wall, wild, market, wealth, poor, mine, grain, metal, cloth, stone, debt, guild, law, crown, war, blood, holy, old, secret, plague, foreign, magic]
+tags: [river, coast, hill, forest, marsh, road, wall, wild, market, wealth, poor, mine, grain, metal, cloth, stone, debt, guild, law, crown, war, blood, holy, old, secret, plague, foreign, magic, print, powder]
 
 keeps:
   passage: "Where people and goods pass through, and what it costs them"

@@ -46,7 +46,7 @@
 // at the end. playRest() answers the rest at random, historyOf() is How it
 // came to be, formedOf() what's formed of each faction, for its tile, and
 // playedOf() a card that's been answered, the way it read.
-import { QUESTIONS, SIZES, dealOne, dealRest, dealTie, drawOf, fill, mendAims, needsOf, options, poolOf, recordOf, resume, rngOf } from "./world-engine.js";
+import { QUESTIONS, SIZES, dealOne, dealRest, dealTie, drawOf, fill, fitsRecipe, mendAims, needsOf, options, poolOf, recordOf, resume, rngOf } from "./world-engine.js";
 
 export const MAX = 70;
 export const AGES = [1, 2, 3];
@@ -76,7 +76,7 @@ const freeSeats = (W) => W.seats.map((s, k) => (s && !W.factions.some((f) => f.s
 const named = (text) => (text ? { text, name: true } : "");
 
 // The moments a world deals from: core's, and its era's and twist's that fit
-// its region.
+// its region and its era.
 const decks = new WeakMap();
 export function deckOf(T, recipe) {
   const key = `${recipe.region}|${recipe.era}|${recipe.twist ?? ""}`;
@@ -84,7 +84,7 @@ export function deckOf(T, recipe) {
   if (!byKey) decks.set(T, (byKey = new Map()));
   if (byKey.has(key)) return byKey.get(key);
   const packs = [T.packs[`era:${recipe.era}`], recipe.twist ? T.packs[`twist:${recipe.twist}`] : null].filter((p) => p && p.fits.includes(recipe.region));
-  const fits = (m) => !m.regions || m.regions.includes(recipe.region);
+  const fits = (m) => fitsRecipe(m, recipe);
   const all = [...(T.core.deck ?? []), ...packs.flatMap((p) => p.deck ?? [])].filter(fits);
   const D = { all, byId: new Map(all.map((m) => [m.id, m])), byKey: new Map(all.filter((m) => m.key).map((m) => [m.key, m])) };
   byKey.set(key, D);

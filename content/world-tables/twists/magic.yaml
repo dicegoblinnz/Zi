@@ -10,8 +10,12 @@
 # about a faction in three runs on magic. A row tagged magic makes the magic
 # rows after it likelier on its card, and one that needs magic only goes to a
 # faction whose seat or kind is magic already, so a wool guild doesn't sell
-# familiars. Written for Medieval, the only era so far.
+# familiars. Written for Medieval and Renaissance (stage 10): a row that only
+# fits one of them says which in eras, like the Renaissance rows at the end of
+# each part, where magic's a learned art of academies, printed charms,
+# alchemists, court astrologers and winds sold to captains.
 fits: [town, city, country, world]
+eras: [medieval, renaissance]
 
 seats:
   # Town: a street, a building or a square.
@@ -79,6 +83,16 @@ seats:
   - { text: "The Dragons' Spine", role: wonder, tags: [hill, magic, old], regions: [world], notice: "Mountains where three dragons sleep, and one's started stirring." }
   - { text: "The Grey Waste", role: wonder, tags: [magic, old, wild], regions: [world], notice: "Where the last great ritual went wrong, nothing's grown back." }
 
+  # Renaissance's own.
+  - { text: "The Horoscope Stall", role: knowledge, tags: [magic, market], regions: [town], eras: [renaissance], notice: "Charts cast while you wait, and some of them come true." }
+  - { text: "The Weather-Caller's Loft", role: passage, tags: [magic, coast], regions: [town], eras: [renaissance], notice: "Knotted cords on every beam, a fair wind in each knot." }
+  - { text: "The Hermetic Academy", role: knowledge, tags: [magic, wealth, old], regions: [city], eras: [renaissance], notice: "Magic taught to princes' sons, and the fees paid in gold." }
+  - { text: "The Spell Presses", role: craft, tags: [magic, print], regions: [city], eras: [renaissance], notice: "Charms printed by the thousand, and one sheet in fifty works." }
+  - { text: "The Warded Fortress", role: office, tags: [magic, war, wall, crown], regions: [country], eras: [renaissance], notice: "Every bastion's carved with sigils, and the engineer's a mage." }
+  - { text: "The Alchemists' Valley", role: craft, tags: [magic, mine, metal], regions: [country], eras: [renaissance], notice: "Furnaces all down the valley, and gold coming out of one." }
+  - { text: "The Sold-Wind Sea", role: passage, tags: [magic, coast], regions: [world], eras: [renaissance], notice: "No ship crosses it without buying a wind first." }
+  - { text: "The Magi's Empire", role: office, tags: [magic, crown], regions: [world], eras: [renaissance], notice: "An empire ruled by its astrologers, and the emperor's their pupil." }
+
 # Where the keep comes from, as the book's cards write a resource. The trades
 # anyone could profit from are open, and the rest need magic.
 resources:
@@ -118,6 +132,11 @@ resources:
   - { text: "Séances", role: wonder, tags: [magic, old], needs: [magic] }
   - { text: "Relics That Work", role: wonder, tags: [holy, magic] }
   - { text: "The Dragon's Hoard", role: wonder, tags: [magic, old, wealth], rare: true }
+  - { text: "Printed Charms", role: craft, tags: [magic, print], eras: [renaissance] }
+  - { text: "Gold from the Furnace", role: craft, tags: [magic, metal, wealth], needs: [magic], eras: [renaissance] }
+  - { text: "A Court Astrologer's Pension", role: office, tags: [magic, crown], needs: [magic], eras: [renaissance] }
+  - { text: "Warded Cargo Fees", role: trade, tags: [magic, coast], eras: [renaissance] }
+  - { text: "Messages from the Drowned", role: wonder, tags: [magic, coast, old], needs: [magic], eras: [renaissance] }
 
 # Appendix B's assets, by the names Magic gives them. A relic says what it
 # does, since its card has to.
@@ -125,7 +144,7 @@ assets:
   - { text: "Clay Men", role: muscle, tags: [magic, stone], needs: [magic] }
   - { text: "Battle-Mages", role: standing-army, tags: [magic, war], needs: [magic], out: [crooks, society, makers, family, keepers] }
   - { text: "The Ward-Knights", role: standing-army, tags: [crown, magic, war], regions: [country, world], out: [crooks, society, makers, family, keepers] }
-  - { text: "Guards in Charmed Mail", role: household-guard, tags: [magic], out: [rebels, society, keepers] }
+  - { text: "Guards in Charmed Mail", role: household-guard, tags: [magic], eras: [medieval], out: [rebels, society, keepers] }
   - { text: "Soul-Bound Guards", role: household-guard, tags: [magic, old], needs: [magic], out: [rebels, society, keepers] }
   - { text: "Hired Mages", role: hired-swords, tags: [magic, war] }
   - { text: "Spellswords", role: hired-swords, tags: [magic, war] }
@@ -186,6 +205,17 @@ assets:
   - { text: "The Chained Ghost", role: bound-spirit, tags: [magic, old] }
   - { text: "The House Hob", role: bound-spirit, tags: [magic, old] }
   - { text: "A Bound Familiar", role: bound-spirit, tags: [magic], needs: [magic] }
+  - { text: "Sigil-Proofed Halberdiers", role: household-guard, tags: [magic, wealth], eras: [renaissance], out: [rebels, society, keepers] }
+  - { text: "Pistoleers with Charmed Shot", role: hired-swords, tags: [magic, powder], eras: [renaissance] }
+  - { text: "Warded Galleons", role: warships, tags: [magic, coast, powder], needs: [coast], eras: [renaissance], out: [faith, keepers] }
+  - { text: "Hermetic Brothers", role: sworn-members, tags: [magic, secret, old], needs: [magic], eras: [renaissance], out: [office, traders] }
+  - { text: "A Clockwork Spy", role: informants, tags: [magic, metal], eras: [renaissance] }
+  - { text: "The Alchemist's Furnace", role: workshop, tags: [magic, metal], needs: [magic], eras: [renaissance] }
+  - { text: "A Wind-Called Pinnace", role: ship, tags: [magic, coast], needs: [coast], eras: [renaissance] }
+  - { text: "Sigil Bastions", role: fortress, tags: [magic, wall, war], eras: [renaissance] }
+  - { text: "The Court Astrologer", role: friends-at-court, tags: [magic, crown], eras: [renaissance] }
+  - { text: "A Printed Grimoire", role: relic, tags: [magic, print], does: "Anyone who reads it aloud can cast one spell from it.", eras: [renaissance] }
+  - { text: "The Portrait Prison", role: bound-spirit, tags: [magic, wealth], eras: [renaissance] }
 
 # What it is. A magic faction's Face is likelier a sorcerer than core's
 # threats for its kind, so most of these say their own.
@@ -272,6 +302,20 @@ types:
   - { text: "The river's spirit, in the shape of an old woman", role: old, sizes: [small, local], regions: [town, country], tags: [magic, old, river], leans: [passage, bound-spirit, wonder], faces: [old-power, predator, sorcerer] }
   - { text: "A sleeper under the mountains, and the priests who feed it", role: old, sizes: [local, city], regions: [world], tags: [hill, magic, old], leans: [faithful, wonder, thralls], faces: [old-power, zealot, horror] }
 
+  # Renaissance's own.
+  - { text: "A prince who keeps an astrologer by his throne", role: house, sizes: [local, city, great], regions: [city, country, world], tags: [magic, crown], eras: [renaissance], leans: [friends-at-court, knowledge, household-guard], faces: [sorcerer, commander, operator] }
+  - { text: "A bank that insures cargo with wards", role: traders, sizes: [local, city], regions: [city, country, world], tags: [magic, coast, wealth], eras: [renaissance], leans: [trade, deep-water-docks, agents-abroad], faces: [operator, sorcerer, commander] }
+  - { text: "Weather-callers who sell winds to every captain", role: traders, sizes: [small, local], regions: [town, country, world], tags: [magic, coast, market], needs: [coast], eras: [renaissance], leans: [passage, trade, fast-boats], faces: [sorcerer, operator, commander] }
+  - { text: "Cardsharps who read your fortune first", role: crooks, sizes: [small, local], regions: [town, city], tags: [magic, wealth], eras: [renaissance], leans: [crime, informants, blackmail], faces: [operator, sorcerer, turncoat] }
+  - { text: "Friars who burn witches, licensed or not", role: faith, sizes: [local, city], regions: [town, city, country], tags: [holy, law, magic], eras: [renaissance], leans: [faithful, informants, constables], faces: [zealot, warden, commander] }
+  - { text: "The prince's mages, kept in the citadel", role: office, sizes: [local, city, great], regions: [city, country], tags: [magic, crown, war], eras: [renaissance], leans: [office, fortress, standing-army], faces: [sorcerer, commander, warden] }
+  - { text: "A hermetic lodge of bankers and princes", role: society, sizes: [local, city, great], regions: [city, country, world], tags: [magic, secret, wealth], eras: [renaissance], leans: [sworn-members, friends-at-court, vault], faces: [sorcerer, operator, turncoat] }
+  - { text: "Engineers who carve wards into bastions", role: makers, sizes: [small, local, city], regions: [town, city, country], tags: [magic, war, wall], eras: [renaissance], leans: [craft, fortress, guild-hands], faces: [warden, sorcerer, construct] }
+  - { text: "A printer of spell-books", role: makers, sizes: [small, local], regions: [town, city, world], tags: [magic, print], eras: [renaissance], leans: [craft, knowledge, safehouses], faces: [operator, sorcerer, turncoat] }
+  - { text: "Alchemists with a duke's patronage", role: keepers, sizes: [small, local], regions: [town, city, country], tags: [magic, metal, wealth], eras: [renaissance], leans: [knowledge, workshop, friends-at-court], faces: [sorcerer, operator, warden] }
+  - { text: "A painter whose portraits keep their sitters", role: old, sizes: [local, city], regions: [town, city], tags: [magic, old, wealth], eras: [renaissance], leans: [bound-spirit, vault, blackmail], faces: [sorcerer, old-power, horror] }
+  - { text: "A clockwork prince, wound by his ministers", role: old, sizes: [city, great], regions: [city, country, world], tags: [magic, crown, metal], eras: [renaissance], leans: [household-guard, office, workshop], faces: [construct, old-power, operator] }
+
 methods:
   - { text: "Wards and sigils.", tags: [magic], needs: [magic], leans: [fortress, lookouts, vault] }
   - { text: "Hexes on anyone who crosses it.", tags: [magic, secret], needs: [magic], leans: [curse-on-its-goods, blackmail] }
@@ -282,6 +326,8 @@ methods:
   - { text: "Miracles, and the bill afterwards.", tags: [holy, magic], needs: [holy, magic], leans: [faithful, healers, belief] }
   - { text: "Fire, when talking doesn't work.", tags: [magic, war], needs: [magic], leans: [standing-army, hired-swords] }
   - { text: "Spirits on a short leash.", tags: [magic, old], needs: [magic], leans: [bound-spirit, thralls] }
+  - { text: "Printed charms for everyone loyal to it.", tags: [magic, print], needs: [magic], eras: [renaissance], leans: [faithful, rumour-mill] }
+  - { text: "Gold it makes itself, and spends freely.", tags: [magic, wealth], needs: [magic], eras: [renaissance], leans: [vault, influential] }
 
 wants:
   - { text: "The spell that died with its founder.", tags: [magic, old], needs: [magic], leans: [knowledge, relic] }
@@ -291,6 +337,8 @@ wants:
   - { text: "The gold under the dragon.", tags: [old, wealth], leans: [wonder, vault], rare: true }
   - { text: "A cure for the curse on its blood.", tags: [blood, magic], needs: [magic], leans: [healers, knowledge], offers: [{ bond: mor, kind: bond, text: "We're cursed together, so we stick together" }] }
   - { text: "Whatever's behind the sealed door.", tags: [old], leans: [relic, knowledge] }
+  - { text: "The philosopher's stone, before anyone else.", tags: [magic, old], needs: [magic], eras: [renaissance], leans: [knowledge, workshop] }
+  - { text: "Magic made legal at court.", tags: [magic, law, crown], needs: [magic], eras: [renaissance], leans: [friends-at-court, office] }
 
 # Hidden tags, the way the book's cards write one. One in three names another
 # faction, and every one has two ways in.
@@ -310,6 +358,10 @@ secrets:
   - { tag: "Burned the Old Masters", more: "It set the fire that put it in charge.", ways: ["The one apprentice who got out", "Scorch marks in its founder's old room"], tags: [magic, blood] }
   - { tag: "The Charm's a Fake", more: "Its famous protection's a fake, and it's just been lucky.", ways: ["A ward-maker who checked it", "The one night it failed"], tags: [magic] }
   - { tag: "Taught {rival} Everything", more: "{rival}'s best mage is its runaway apprentice, and owes it.", ways: ["The apprentice's old indenture", "A spell nobody outside it should know"], needs: [magic], tags: [magic] }
+  - { tag: "Lead by Spring", more: "Its alchemist's gold turns back to lead within a year.", ways: ["A banker weighing old coins", "Lead where the gold was hoarded"], tags: [magic, wealth], eras: [renaissance] }
+  - { tag: "{rival}'s Horoscope", more: "It cast {rival}'s chart, and knows the day their leader dies.", ways: ["The astrologer it paid", "A chart with a date circled"], tags: [magic], eras: [renaissance] }
+  - { tag: "A Soul in the Portrait", more: "Its founder's soul is in the portrait in the great hall.", ways: ["Eyes that follow the heir", "Paint that's warm to the touch"], tags: [magic, old, blood], eras: [renaissance] }
+  - { tag: "Wards Sold to {rival}", more: "It sold {rival} wards with a way in only it knows.", ways: ["A sigil carved backwards", "The engraver who cut them"], tags: [magic, secret], eras: [renaissance] }
 
 # Each breaks the logic on purpose, with its reason.
 exceptions:
@@ -321,6 +373,8 @@ exceptions:
   - { text: "It won't open its books to anyone", when: [keepers, magic], drops: [knowledge], gives: [secret], reason: "because the last reader let something out of one" }
   - { text: "It won't work for the crown", when: [magic, soldiers], drops: [office, crown], reason: "because the crown hanged its first captain as a witch" }
   - { text: "It won't make wards for the council", when: [guild, magic, makers], drops: [office], gives: [debt], reason: "because the council still owes for the last one" }
+  - { text: "It won't print a single charm", when: [magic, print], drops: [print], reason: "because a misprinted charm burned its first shop down", eras: [renaissance] }
+  - { text: "It won't let an astrologer near its heir", when: [magic, house], drops: [knowledge], reason: "because the last one's prophecy killed the heir's brother", eras: [renaissance] }
 
 names:
   factions:
@@ -371,6 +425,19 @@ names:
     - { text: "The Smiling Guest", role: old, needs: [magic, secret] }
     - { text: "The Late Master", role: old, needs: [magic] }
     - { text: "The River Mother", role: old, needs: [magic, river] }
+    # Renaissance's own, a wide mix like its era's.
+    - { text: "House Astrali", role: house, needs: [magic], eras: [renaissance] }
+    - { text: "The Wind Merchants", role: traders, needs: [magic, coast], eras: [renaissance] }
+    - { text: "The Warded Bank", role: traders, needs: [magic], eras: [renaissance] }
+    - { text: "The Fortune Cheats", role: crooks, needs: [magic], eras: [renaissance] }
+    - { text: "The Witch-Burners", role: faith, needs: [magic], eras: [renaissance] }
+    - { text: "The Prince's Magi", role: office, needs: [magic, crown], eras: [renaissance] }
+    - { text: "The Seven Metals", role: society, needs: [magic], eras: [renaissance] }
+    - { text: "The Gilt Furnace", role: makers, needs: [magic], eras: [renaissance] }
+    - { text: "The Sigil Engineers", role: makers, needs: [magic], eras: [renaissance] }
+    - { text: "The Astrologers' College", role: keepers, needs: [magic], eras: [renaissance] }
+    - { text: "The Brass Prince", role: old, needs: [magic], eras: [renaissance] }
+    - { text: "The Painter Who Waits", role: old, needs: [magic], eras: [renaissance] }
   people:
     - Mother Wendle
     - Hester Crake
@@ -390,6 +457,14 @@ names:
     - Ottilie Sward
     - Absalom Venn
     - Nan Hesketh
+    - { text: Ottavio Lunardi, eras: [renaissance] }
+    - { text: Severina Notte, eras: [renaissance] }
+    - { text: Bertrand Astruc, eras: [renaissance] }
+    - { text: Celestine Marchal, eras: [renaissance] }
+    - { text: Inés Dorado, eras: [renaissance] }
+    - { text: Margriet Sterrenburg, eras: [renaissance] }
+    - { text: Gottfried Sternwald, eras: [renaissance] }
+    - { text: Ambrose Kettlewell, eras: [renaissance] }
 
 # The deck's moments of its own (stage 7): spells bought and stolen, charm
 # licences, bindings wearing thin, healers, wards and bound souls. Every one's
@@ -564,3 +639,76 @@ deck:
       - text: "Wash our hands"
         does: ["secret a b"]
         line: "{a} let the loose soul tell {b} everything, and washed their hands of it."
+  # Renaissance's own: printed spell-books, court astrologers, sold winds,
+  # portraits and the great wards.
+  - text: "{b} printed the spell-book our founder learned from, cheap, for anyone with a penny."
+    age: 1
+    eras: [renaissance]
+    tags: [magic, print]
+    answers:
+      - text: "Buy every copy"
+        does: ["lean a magic", "gain asset a", "rival a b"]
+        tags: [magic]
+        line: "{a} bought every copy of the spell-book {b} printed, and burned most."
+      - text: "Print a better one"
+        does: ["lean a print", "gain res a", "grudge b a"]
+        tags: [magic]
+        line: "{a} printed a better spell-book than {b}, and sold it dearer."
+  - text: "The duke's astrologer died, and {b} wanted their own man in his chair."
+    age: 1
+    eras: [renaissance]
+    tags: [magic, crown]
+    answers:
+      - text: "Put in ours"
+        does: ["lean a crown", "gain asset a", "rival a b"]
+        prompt: { kind: person, ask: "Who did they make the duke's astrologer?" }
+        line: "{a} got {person} made the duke's astrologer, over {b}'s man."
+        then: stars-wrong
+      - text: "Back their man"
+        does: ["lean a magic", "favour b a"]
+        line: "{a} backed {b}'s astrologer for the duke's chair, and called in the favour later."
+  - text: "{person} read the duke's stars wrong, and the duke's marched off to war on it. {b} saw it coming."
+    key: stars-wrong
+    chain: true
+    age: 2
+    eras: [renaissance]
+    answers:
+      - text: "Blame the stars"
+        does: ["secret a", "rival a b"]
+        line: "{a} swore the stars had shifted, and {b} laughed at them in court."
+      - text: "Give them up"
+        does: ["lose asset a", "ally a b"]
+        line: "{a} gave {person} up to the duke, and {b} got the chair after all."
+  - text: "{b}'s weather-caller sold us a wind that put our ships on the rocks."
+    age: 2
+    eras: [renaissance]
+    tags: [magic, coast]
+    answers:
+      - text: "Make them pay"
+        does: ["take res a b", "rival a b"]
+        line: "{a} made {b} pay for the ships their weather-caller wrecked."
+      - text: "Hire our own"
+        does: ["gain people a", "grudge a b"]
+        line: "{a} hired a weather-caller of their own, and never trusted {b} again."
+  - text: "The portrait in {b}'s hall has started whispering about who the heir's real father was."
+    age: 3
+    eras: [renaissance]
+    tags: [magic, blood, secret]
+    answers:
+      - text: "Buy the portrait"
+        does: ["agenda a b", "secret b"]
+        line: "{a} offered a fortune for {b}'s whispering portrait, and got turned away."
+      - text: "Spread the story"
+        does: ["secret a b", "agenda b a"]
+        line: "{a} spread what {b}'s portrait whispered, and swore they'd heard it themselves."
+  - text: "The mages say the great ward fails at midsummer, and it was {b} who paid for it."
+    age: 3
+    eras: [renaissance]
+    tags: [magic, wall]
+    answers:
+      - text: "Mend it ourselves"
+        does: ["agenda a b", "gain asset a"]
+        line: "{a} paid to mend the great ward, and named {b} for its failing."
+      - text: "Let it fail"
+        does: ["secret a", "agenda a b"]
+        line: "{a} kept quiet about the ward, and waited to see who'd blame {b}."

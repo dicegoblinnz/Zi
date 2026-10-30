@@ -12,8 +12,11 @@
 //    written twice are each a problem, and so are too few faction names,
 //    people's names or strange Secrets, a type's own Faces that aren't three
 //    of the Threat Builder's, and a frame that isn't one of the book's boards
-//    or can't deal yet. A row keeps its id when rows are added round it, and
-//    the tables themselves have no problems.
+//    or can't deal yet. A twist has to say the eras it's written for, only a
+//    twist's rows can narrow that, and only to eras it's written for, a
+//    chain's next card has to come in every era its first can, and a frame's
+//    twist has to be written for its era (stage 10). A row keeps its id when
+//    rows are added round it, and the tables themselves have no problems.
 // 2. 200 boards in every region for every named genre the packs cover, and
 //    200 for every mix at one region: the same seed deals the same board, the
 //    checks pass with a fallback in under 1 board in 20, no bag gives the same
@@ -23,7 +26,8 @@
 //    people, no two factions with the same asset that does one thing, a
 //    rival each, every agenda aimed at something on the board, a Face its
 //    kind of faction can be, a seat each and two to spare, and every slot
-//    filled). A bag only gives a row twice once it's run out, and says so.
+//    filled), and every row it dealt is written for its era. A bag only
+//    gives a row twice once it's run out, and says so.
 // 3. Dealing one step again: the next card in its own stream, never the one
 //    it had, every other faction and every earlier step as they were, a
 //    locked step left alone when one before it's dealt again, and a locked
@@ -31,8 +35,9 @@
 //    and the first is what dealing picks, a Face's too. A new seat deals the
 //    card sitting on it again from its size, dealing the rest can stop short
 //    of the web and the checks, a board's four to twelve factions, a genre
-//    never deals where its twist's pack doesn't go, and a world picks up from
-//    its record just as it was.
+//    never deals where its twist's pack doesn't go, or with an era its twist
+//    isn't written for, a row or a moment written for one era never comes up
+//    in another, and a world picks up from its record just as it was.
 // 4. The build's record (world-record.js, through board.js): written whole,
 //    lines of history, shown, undone, junk tidied, what was dealt kept within
 //    a world's size, one too big turned down whole, a twelve-faction record
@@ -60,12 +65,14 @@
 //    faction's dealt again dealt again to fit it, and adding a faction tying
 //    it to someone who's still got no friend or foe on the board.
 // 8. The deck (stage 7): its moments' checks, then 200 decks answered at
-//    random in every region for every named genre the packs cover, with
+//    random in every region for every named genre the packs cover, and at
+//    one region for every mix that isn't a named genre, with
 //    prompts filled, written and skipped, Not this one tapped, and a crew
 //    or just a party sheet with something worth taking on it: every
 //    board passes the checks with a fallback in under 1 deck in 20 and adds
 //    up, every faction's formed, how many cards it takes changes with the
-//    board and the answers, no card comes twice in a deck, every chain
+//    board and the answers, no card comes twice in a deck, none comes up
+//    outside the eras it's written for, every chain
 //    lands, every prompt has three suggestions, nothing's left unfilled in
 //    the history, and the same seed and answers deal the same deck and
 //    board. Not this one changes nothing but the card, Undo takes an answer
@@ -177,6 +184,31 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
   broken("a strange moment with nothing strange to deal", (s) => (moment(s).strange = true), "it's strange, so answer 1 needs a Secret naming nobody");
   broken("a two-way thread with one side's words", (s) => Object.assign(moment(s).answers[1], { does: ["lean a war", "rival a b"], thread: "{b} stood in our way" }), "its own words need back too");
   broken("too few moments", (s) => (s.core.deck = s.core.deck.slice(0, 5)), "the deck needs 60 moments or more", { minimums: true });
+  // Which eras a twist's rows are written for (stage 10): the twist says, a
+  // row or a moment can narrow it, and only a twist's rows do.
+  const dawn = (s) => {
+    s.genres.eras.dawn = "Dawn";
+    s.eras.dawn = { ...copy(s.eras.dusk), deck: [] };
+    s.twists.glimmer.eras = ["dusk", "dawn"];
+  };
+  const lamp = (s, first, next) => {
+    dawn(s);
+    s.twists.glimmer.deck = [
+      { text: "{b} lit a lamp that never goes out.", age: 1, ...(first ? { eras: first } : {}), answers: [{ text: "Steal it", does: ["take asset a b"], line: "{a} stole the lamp from {b}.", then: "lamp-back" }, { text: "Leave it", does: ["ally a b"], line: "{a} left the lamp with {b}." }] },
+      { text: "{b} came asking for their lamp back.", key: "lamp-back", chain: true, age: 2, ...(next ? { eras: next } : {}), answers: [{ text: "Give it back", does: ["ally a b"], line: "{a} gave the lamp back to {b}." }, { text: "Keep it", does: ["rival a b"], line: "{a} kept the lamp, and {b} never forgot." }] },
+    ];
+  };
+  broken("a twist written for an era genres.yaml hasn't got", (s) => (s.twists.glimmer.eras = ["dusk", "noon"]), "eras has one genres.yaml hasn't got: noon");
+  broken("a twist that doesn't say which eras it's written for", (s) => delete s.twists.glimmer.eras, "needs eras, the eras its rows are written for", { minimums: true });
+  broken("a twist's row for an era the twist isn't written for", (s) => (dawn(s), (s.twists.glimmer.eras = ["dusk"]), (s.twists.glimmer.seats[0].eras = ["dawn"])), "fits dawn, which its pack isn't written for");
+  broken("an era's own row saying which eras it fits", (s) => (s.eras.dusk.seats[0].eras = ["dusk"]), "only a twist's rows say which eras they fit");
+  broken("a frame whose twist isn't written for its era", (s) => (dawn(s), (s.twists.glimmer.eras = ["dusk"]), (s.genres.frames["deep-company"].era = "dawn")), "frames.deep-company: can't deal dawn with glimmer till glimmer's rows are written for it");
+  broken("a chain whose next card can't come in every era its first can", (s) => lamp(s, null, ["dusk"]), "then lands on lamp-back, which isn't written for dawn");
+  {
+    const s = copy(base);
+    lamp(s, ["dusk"], ["dusk"]);
+    same(compileTables(s, BOOK, { minimums: false }).problems, [], "a chain that only comes in the eras its next card can");
+  }
   // A row keeps its id when rows are added round it, so a world built from
   // last week's tables still knows which rows it holds.
   {
@@ -192,10 +224,29 @@ console.log(`Dealing from ${DIR}${real ? "" : " (the made-up pack, till stage 3'
   console.log("1. the tables' checks catch a missing file, unreadable rows, unknown tags, unfilled slots, rows written twice and too few names, and a row keeps its id");
 }
 
+// The eras each row and moment is written for (stage 10): an era's own are
+// its era's, and a twist's are its own eras, or the twist's.
+const ERA_OF = new Map();
+for (const p of Object.values(T.packs)) {
+  const rowsOf = [...["seats", "resources", "assets", "types", "methods", "wants", "secrets", "exceptions"].flatMap((k) => p[k] ?? []), ...(p.names?.factions ?? []), ...(p.names?.people ?? []), ...(p.deck ?? [])];
+  for (const r of rowsOf) {
+    const eras = p.kind === "era" ? [p.id] : r.eras ?? p.eras ?? null;
+    if (eras) ERA_OF.set(r.id, eras);
+  }
+}
+const idsIn = (x, out = []) => {
+  if (Array.isArray(x)) for (const y of x) idsIn(y, out);
+  else if (x && typeof x === "object") for (const [k, v] of Object.entries(x)) (k === "id" || k === "nameId") && typeof v === "string" ? out.push(v) : idsIn(v, out);
+  return out;
+};
+const outOfEra = (ids, era) => ids.filter((id) => ERA_OF.has(id) && !ERA_OF.get(id).includes(era));
+
 // Every check a dealt board has to pass, and every card adding up: the
 // boards dealt whole (part 2) and the ones a deck dealt (part 8) alike.
 function checkDealt(W, recipe, seed, n, fail) {
   if (W.checks.map((c) => c.k).join() !== CHECKS.join()) fail(`${seed}: the checks that ran were ${W.checks.map((c) => c.k).join(", ")}`);
+  // Every row it dealt is one written for its era.
+  for (const id of outOfEra(idsIn([W.seats, W.factions, W.needs ?? []]), recipe.era)) fail(`${seed}: it dealt ${id}, which is written for ${ERA_OF.get(id).join(" and ")}, at ${recipe.era}`);
   for (const c of W.checks) if (!c.ok) fail(`${seed}: the ${c.k} check still fails`);
   // No bag gives the same row twice till it's run out, and then it says so.
   for (const [bag, step] of Object.entries(BAGS)) {
@@ -368,6 +419,25 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     const fake = away ? null : { ...T, packs: { ...T.packs, [`twist:${twisted.twist}`]: { ...tp, fits: tp.fits.slice(1) } } };
     const where = away ?? T.packs[`era:${twisted.era}`].fits.find((r) => !fake.packs[`twist:${twisted.twist}`].fits.includes(r));
     yes(!canDeal(fake ?? T, { region: where, era: twisted.era, twist: twisted.twist }), `${twisted.name} can't be dealt at ${where}, where its twist's pack doesn't go`);
+  }
+  // A twist deals only with the eras it's written for, and a row or a moment
+  // only in its own (stage 10), on the made-up pack with a second era.
+  {
+    const s = readTablesDir("tests/world-pack").src;
+    s.genres.eras.dawn = "Dawn";
+    s.eras.dawn = { ...copy(s.eras.dusk), deck: [] };
+    s.twists.glimmer.eras = ["dusk"];
+    const only = compileTables(copy(s), BOOK, { minimums: false }).tables;
+    yes(Boolean(only) && canDeal(only, { region: "town", era: "dusk", twist: "glimmer" }) && !canDeal(only, { region: "town", era: "dawn", twist: "glimmer" }) && canDeal(only, { region: "town", era: "dawn" }), "a twist written for dusk alone deals with dusk and never with dawn, and dawn still deals on its own");
+    s.twists.glimmer.eras = ["dusk", "dawn"];
+    s.twists.glimmer.seats[0].eras = ["dusk"];
+    s.twists.glimmer.deck = [{ text: "{b} sold us a lamp that never goes out.", age: 1, eras: ["dawn"], answers: [{ text: "Pay for it", does: ["gain asset a"], line: "{a} paid {b} for the lamp." }, { text: "Send it back", does: ["grudge b a"], line: "{a} sent the lamp back to {b}." }] }];
+    const both = compileTables(s, BOOK, { minimums: false }).tables;
+    const seat = both?.packs["twist:glimmer"].seats[0];
+    const lampId = both?.packs["twist:glimmer"].deck[0]?.id;
+    const at = (era) => ({ region: "town", era, twist: "glimmer" });
+    yes(Boolean(seat) && poolOf(both, at("dusk")).seats.some((r) => r.id === seat.id) && !poolOf(both, at("dawn")).seats.some((r) => r.id === seat.id), "a twist's row written for dusk deals with dusk and never with dawn");
+    yes(Boolean(lampId) && deckOf(both, at("dawn")).byId.has(lampId) && !deckOf(both, at("dusk")).byId.has(lampId), "a twist's moment written for dawn comes up with dawn and never with dusk");
   }
   // An agenda aimed at another faction's resource keeps its card when that
   // faction's resources are dealt again, and aims at one of the new ones,
@@ -802,7 +872,9 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   const started = Date.now();
   const CREW = ["Vesk", "Bram", "Isolde", "Dorrie", "Ash", "Wren"];
   const ALL = Object.values(PARTS).flat();
-  const decks = groups.filter((g) => !g.what.startsWith("the mix "));
+  // Every named genre, and every mix that isn't one, like Renaissance and
+  // Magic, which Brinewake's built on.
+  const decks = groups.filter((g) => !g.what.startsWith("the mix ") || !named.some((x) => x.era === g.recipe.era && (x.twist ?? null) === (g.recipe.twist ?? null)));
   const lens = new Map();
   let played = 0;
   let replayed = 0;
@@ -853,6 +925,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       }
       const ids = D.cards.map((c) => c.m);
       if (new Set(ids).size !== ids.length) fail(`${seed}: a card came twice in one deck`);
+      for (const id of outOfEra(ids, g.recipe.era)) fail(`${seed}: a moment written for ${ERA_OF.get(id).join(" and ")} came up at ${g.recipe.era}`);
       if (D.pos > 70) fail(`${seed}: the deck ran to ${D.pos} cards`);
       if (D.chains.length) fail(`${seed}: ${D.chains.length} chains never landed`);
       D.cards.forEach((c, k) => {
