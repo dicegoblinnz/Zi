@@ -187,7 +187,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     const kept = [];
     const order = [...toks].sort((a, b) => Number(b.el.classList.contains("is-sel")) - Number(a.el.classList.contains("is-sel")));
     for (const t of order) {
-      const n = t.el.querySelector(".wm-tok-n");
+      const n = t.el.querySelector(".wm-ft-n");
       if (!n) continue;
       t.el.classList.remove("is-quiet");
       const r = n.getBoundingClientRect();
@@ -304,7 +304,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     // Whatever's pressed now is a new tap, whatever the last one was.
     dragged = false;
     if (e.pointerType === "mouse" && e.button !== 0) return;
-    if (e.target.closest(".wm-pin, .wm-tok") && e.pointerType === "mouse") return;
+    if (e.target.closest(".wm-pin, .wm-ft") && e.pointerType === "mouse") return;
     cut = Boolean(anim);
     stop();
     box = el.getBoundingClientRect();
@@ -421,7 +421,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
       lastTap = { t: performance.now(), x: p.x, y: p.y };
       // A pin's own tap goes straight through. A tap on the map waits to see
       // whether it's the first of two.
-      if (!e.target.closest?.(".wm-pin, .wm-tok")) {
+      if (!e.target.closest?.(".wm-pin, .wm-ft")) {
         clearTimeout(tapTimer);
         tapTimer = setTimeout(() => onTap?.(), DOUBLE_MS);
       }
@@ -440,7 +440,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
   el.addEventListener("pointercancel", (e) => up(e, true));
   // A pin's tap stops a tap on the map just before it closing the card it opens.
   el.addEventListener("click", (e) => {
-    if (e.target.closest?.(".wm-pin, .wm-tok")) {
+    if (e.target.closest?.(".wm-pin, .wm-ft")) {
       clearTimeout(tapTimer);
       tapTimer = 0;
     }

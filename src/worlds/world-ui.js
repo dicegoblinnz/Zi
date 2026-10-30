@@ -210,8 +210,8 @@ if (data && root) {
         const dice = stepsToDice(f.steps);
         const lit = ui.sel === n.id ? " is-sel" : ui.sel && near.has(n.id) ? " is-lit" : ui.sel ? " is-dim" : "";
         return {
-          cls: `wm-tok${f.of ? " is-mini" : ""}${lit}`,
-          html: `<span class="wm-tok-d" aria-hidden="true">${die(dice[0] ?? 2, { own: "them", hide: true })}</span><span class="wm-tok-n" aria-hidden="true">${esc(f.card.name.replace(/^The /, ""))}</span>`,
+          cls: `wm-ft${f.of ? " is-mini" : ""}${lit}`,
+          html: `<span class="wm-ft-d" aria-hidden="true">${die(dice[0] ?? 2, { own: "them", hide: true })}</span><span class="wm-ft-n" aria-hidden="true">${esc(f.card.name.replace(/^The /, ""))}</span>`,
           attrs: { "data-tok": n.id, "aria-pressed": String(ui.sel === n.id), "aria-label": `${f.card.name}${ui.sel === n.id ? ", its ties lit" : ": light its ties"}` },
         };
       },

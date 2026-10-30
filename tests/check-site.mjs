@@ -128,7 +128,7 @@ for (const scheme of ["light", "dark"]) {
       if (errors.length) note(`${path} @${width} ${scheme}: console errors: ${errors.join(" | ")}`);
       // Menus and buttons need room for a thumb. Links inside running text don't.
       const small = await page.evaluate(() =>
-        [...document.querySelectorAll(".topnav a, .brand, .button, .theme-toggle, .pager a, .toc-mobile > summary, .toc-mobile a, footer.site nav a, .hero-actions .more, .part li a, .cc button, .cc-back, .cc-own > summary, .cc summary, .rs-mark, .hub-row a, .hub-carry, .rd-back, .rd-mark, .rd-foot a, .pl-tab, .seal > summary, .lr-out, .lr-icon, .lr-foot .button, .lr-more, .lr-mark, .rd-go, .rd-marks a, .wn-kind, .wn-fs, .wn-bar button, .wn-find input, .ww-seg-b, .wn-gobtn, .wn-webbtn, .wn-zoom button, .wn-mc-go, .wn-mc-x, .wm-pin, .wm-tok")]
+        [...document.querySelectorAll(".topnav a, .brand, .button, .theme-toggle, .pager a, .toc-mobile > summary, .toc-mobile a, footer.site nav a, .hero-actions .more, .part li a, .cc button, .cc-back, .cc-own > summary, .cc summary, .rs-mark, .hub-row a, .hub-carry, .rd-back, .rd-mark, .rd-foot a, .pl-tab, .seal > summary, .lr-out, .lr-icon, .lr-foot .button, .lr-more, .lr-mark, .rd-go, .rd-marks a, .wn-kind, .wn-fs, .wn-bar button, .wn-find input, .ww-seg-b, .wn-gobtn, .wn-webbtn, .wn-zoom button, .wn-mc-go, .wn-mc-x, .wm-pin, .wm-ft")]
           .filter((el) => el.getClientRects().length && el.offsetParent !== null && (!el.checkVisibility || el.checkVisibility()))
           .map((el) => ({ t: el.textContent.trim().slice(0, 30), h: Math.round(el.getBoundingClientRect().height) }))
           .filter((x) => x.h < 44),
@@ -388,10 +388,10 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   // From a faction's card: the map with the web on and its ties lit.
   await page.goto(BASE + "/worlds/night-city/#f-arasaka");
   await page.click('#f-arasaka [data-map-f="arasaka"]');
-  await page.waitForSelector(".wn-map .wm-tok", { timeout: 5000 }).catch(() => {});
-  const toks = await page.locator(".wn-map .wm-tok").count();
+  await page.waitForSelector(".wn-map .wm-ft", { timeout: 5000 }).catch(() => {});
+  const toks = await page.locator(".wn-map .wm-ft").count();
   if (toks !== cards) note(`${at}: the web on the map has ${toks} tokens for ${cards} factions`);
-  const lit = await page.evaluate(() => [document.querySelector('.wm-tok.is-sel')?.dataset.tok ?? "", document.querySelectorAll(".wm-web-l path.wm-wl").length, document.querySelectorAll(".wm-tok.is-lit").length]);
+  const lit = await page.evaluate(() => [document.querySelector('.wm-ft.is-sel')?.dataset.tok ?? "", document.querySelectorAll(".wm-web-l path.wm-wl").length, document.querySelectorAll(".wm-ft.is-lit").length]);
   if (lit[0] !== "arasaka" || lit[1] < 3 || lit[2] < 3) note(`${at}: Arasaka on the map lit ${lit[0] || "nothing"} with ${lit[1]} threads and ${lit[2]} others`);
   if ((await page.getAttribute("#wn-webbtn", "aria-pressed")) !== "true") note(`${at}: the web's switch doesn't say it's on`);
   // Places and people: a district on its own, Find, and a name in a page
