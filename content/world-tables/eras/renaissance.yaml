@@ -35,15 +35,15 @@ seats:
   - { text: "The Lottery Office", role: trade, tags: [market, poor], regions: [town], notice: "Tickets for the new bridge lottery, and nobody's ever met a winner." }
   - { text: "The Bonded Warehouse", role: trade, tags: [law, secret], regions: [town], notice: "Goods waiting on their duty, and fewer of them every week." }
   - { text: "The New Chapel", role: belief, tags: [holy, poor, print], regions: [town], notice: "Bare walls, no statues, and a preacher in the common tongue." }
-  - { text: "Saint Felisa's", role: belief, tags: [holy, wealth], regions: [town], notice: "Painted from floor to dome, and still owing the painter." }
+  - { text: "Saint Marsilia's", role: belief, tags: [holy, wealth], regions: [town], notice: "Painted from floor to dome, and still owing the painter." }
   - { text: "The Plague Chapel", role: belief, tags: [holy, plague], regions: [town], notice: "Built to end the last plague, with a vow to build another." }
   - { text: "The Broken Altar", role: belief, tags: [holy, secret], regions: [town], notice: "Saints with their faces chiselled off, and nobody's owned up." }
   - { text: "The Confraternity Hall", role: belief, tags: [holy, guild], regions: [town], notice: "The brothers carry the saint on feast days, and fight over who." }
   - { text: "The Magistrate's House", role: office, tags: [law], regions: [town], notice: "The magistrate's hired from out of town, so he's nobody's cousin." }
   - { text: "The Health Office", role: office, tags: [plague, law], regions: [town], notice: "The health officers can shut any house in town, and do." }
-  - { text: "The Weigh-House", role: office, tags: [law, market], regions: [town], notice: "Every bale's weighed twice, once for the crown, once for the clerk." }
+  - { text: "The Weigh-House", role: office, tags: [law, market], regions: [town], notice: "Bales weighed twice, once for the crown and once for the clerk." }
   - { text: "The Mustering Ground", role: office, tags: [war, crown], regions: [town], notice: "The militia drills on Sundays, and skipping it costs a fine." }
-  - { text: "The Notary's", role: office, tags: [law], regions: [town], notice: "Every contract in town, copied in a hand only he can read." }
+  - { text: "The Notary's", role: office, tags: [law], regions: [town], notice: "He copies the town's contracts in a hand only he can read." }
   - { text: "The Anatomy Theatre", role: knowledge, tags: [plague], regions: [town], notice: "Benches round a slab, and bodies bought fresh from the gallows." }
   - { text: "The Bookseller's", role: knowledge, tags: [print, secret], regions: [town], notice: "Almanacs in the window, and banned books in the back room." }
   - { text: "The Physic Garden", role: knowledge, tags: [plague, foreign], regions: [town], notice: "Herbs from across the sea, and a gardener who sells the seeds." }
@@ -67,7 +67,7 @@ seats:
 
   # City: a district, a gate or a hall.
   - { text: "The Lagoon Mouth", role: passage, tags: [coast], regions: [city], notice: "Pilots row out to every ship, and one in three's a spy." }
-  - { text: "The Customs Point", role: passage, tags: [coast, law], regions: [city], notice: "Every ship stops here, and the officers' cousins do the unloading." }
+  - { text: "The Customs Point", role: passage, tags: [coast, law], regions: [city], notice: "Ships stop here to be searched, and the officers' cousins unload them." }
   - { text: "Porta Ferrugia", role: passage, tags: [road, wall, crown], regions: [city], notice: "The duke's own gate, and his own men search every cart." }
   - { text: "The Canal Locks", role: passage, tags: [river], regions: [city], notice: "Three locks into the city, and three families who run them." }
   - { text: "The Courier Office", role: passage, tags: [road, crown, secret], regions: [city], notice: "Letters to every court, and copies to whoever pays the night clerk." }
@@ -90,10 +90,10 @@ seats:
   - { text: "The Bankers' Loggia", role: trade, tags: [wealth, debt], regions: [city], notice: "Bills from every city in the world, honoured over a handshake." }
   - { text: "The Foreigners' Hall", role: trade, tags: [foreign, market, law], regions: [city], notice: "Foreign merchants live and trade here, and they're locked in at night." }
   - { text: "The Underwriters' Room", role: trade, tags: [coast, wealth], regions: [city], notice: "Ships insured over a glass of wine, and one captain's sunk twice." }
-  - { text: "The Book Fair", role: trade, tags: [print, market], regions: [city], notice: "Every press in the land sells here, and the censors buy too." }
+  - { text: "The Book Fair", role: trade, tags: [print, market], regions: [city], notice: "Presses from all over sell here, and the censors buy too." }
   - { text: "The Cathedral Dome", role: belief, tags: [holy, wealth, stone], regions: [city], sizes: [city, great], notice: "The biggest dome ever started, and nobody knows how to finish it." }
-  - { text: "The Reformers' Hall", role: belief, tags: [holy, poor, print], regions: [city], notice: "Psalms sung in the common tongue, with a guard on the door." }
-  - { text: "The Mercy Brothers' Chapel", role: belief, tags: [holy, plague], regions: [city], notice: "Hooded brothers bury the plague dead, and keep all their names." }
+  - { text: "The Reformers' Hall", role: belief, tags: [holy, poor, print], regions: [city], notice: "Psalms the old church calls heresy, with a guard on the door." }
+  - { text: "The Mercy Brothers' Chapel", role: belief, tags: [holy, plague], regions: [city], notice: "Hooded brothers carry the dying out, and keep all their names." }
   - { text: "The Penitents' Church", role: belief, tags: [holy, secret], regions: [city], notice: "They whip themselves through the streets, and know every sinner by name." }
   - { text: "The Foundling Hospital", role: belief, tags: [holy, poor], regions: [city], notice: "A wheel in the wall for foundlings, and a ledger of who." }
   - { text: "The Ducal Palace", role: office, tags: [crown, law], regions: [city], sizes: [city, great], notice: "A lion's mouth in the wall takes accusations, signed or not." }
@@ -104,11 +104,11 @@ seats:
   - { text: "The Academy", role: knowledge, tags: [old, wealth], regions: [city], notice: "Scholars arguing over old books, paid by whichever prince likes the answer." }
   - { text: "The Observatory", role: knowledge, tags: [old], regions: [city], notice: "Charts of the heavens, and a prince's horoscope locked in a box." }
   - { text: "The Pilots' School", role: knowledge, tags: [coast, foreign, secret], regions: [city], notice: "Navigators train here, and the charts never leave the room." }
-  - { text: "The Prince's Library", role: knowledge, tags: [crown, old], regions: [city], notice: "Every book the prince ever bought, and a few he's had burned." }
+  - { text: "The Prince's Library", role: knowledge, tags: [crown, old], regions: [city], notice: "The prince's books, all of them, bar the few he's had burned." }
   - { text: "The Engineer's Studio", role: knowledge, tags: [war, wealth], regions: [city], notice: "Drawings of machines that fly, sink ships and shouldn't exist." }
   - { text: "The Wool Combers' Quarter", role: labour, tags: [cloth, poor], regions: [city], notice: "Thousands working for the cloth guild, and not one gets a vote." }
-  - { text: "The Palace Works", role: labour, tags: [stone, poor], regions: [city], notice: "The new palace is ten years building, and the masons are striking." }
-  - { text: "The Boatmen's Stations", role: labour, tags: [river, coast], regions: [city], notice: "Boatmen at every stair, and a strike would stop the city." }
+  - { text: "The Palace Works", role: labour, tags: [stone, poor], regions: [city], notice: "The palace is ten years building, and the masons want paying first." }
+  - { text: "The Boatmen's Stations", role: labour, tags: [river, coast], regions: [city], notice: "Boatmen at every stair, and if they stop, the city stops." }
   - { text: "The Mercenary Market", role: labour, tags: [war], regions: [city], notice: "Captains hire out whole companies by the month, from a tavern table." }
   - { text: "The Tanners' Island", role: labour, tags: [river, poor], regions: [city], notice: "The stink got the tanners sent across the water, families and all." }
   - { text: "The Bravo Steps", role: crime, tags: [poor], regions: [city], notice: "Hired knives sit on these steps, with their prices chalked up." }
@@ -147,23 +147,23 @@ seats:
   - { text: "The Free Port", role: trade, tags: [coast, market], regions: [country], notice: "No customs and no questions, and a governor who takes his share." }
   - { text: "The Spice Port", role: trade, tags: [coast, foreign, wealth, plague], regions: [country], notice: "Ships home from the world's far side, with pepper and plague." }
   - { text: "The Wine Port", role: trade, tags: [river, market], regions: [country], notice: "Barrels down the river, and merchants tasting with their knives out." }
-  - { text: "The Customs Frontier", role: trade, tags: [road, law, foreign], regions: [country], notice: "Every cart for the next kingdom stops here, and pays twice." }
+  - { text: "The Customs Frontier", role: trade, tags: [road, law, foreign], regions: [country], notice: "Carts for the next kingdom stop here, and pay twice." }
   - { text: "The Reformed Town", role: belief, tags: [holy, poor, print], regions: [country], notice: "The whole town turned to the new preachers, and the bishop's coming." }
   - { text: "The Great Monastery", role: belief, tags: [holy, wealth, land], regions: [country], sizes: [city, great], notice: "Richer than the crown, and the crown's noticed." }
   - { text: "The Mountain Sanctuary", role: belief, tags: [holy, hill], regions: [country], notice: "A miracle every year, and pilgrims paying for each one." }
-  - { text: "The Martyrs' Field", role: belief, tags: [holy, war], regions: [country], notice: "Where they burned the reformers, and fresh flowers every week." }
+  - { text: "The Martyrs' Field", role: belief, tags: [holy, war], regions: [country], notice: "The reformers burned here get fresh flowers every week." }
   - { text: "The Seminary", role: belief, tags: [holy, law], regions: [country], notice: "Young priests trained to argue with reformers, and to name them." }
   - { text: "The Summer Palace", role: office, tags: [crown, wealth, debt], regions: [country], sizes: [city, great], notice: "The king's new palace, built on loans the town still holds." }
   - { text: "The Frontier Fortress", role: office, tags: [war, wall, crown, powder], regions: [country], notice: "Five bastions and a garrison, paid three months late." }
   - { text: "The Parliament Town", role: office, tags: [law, land], regions: [country], notice: "The estates meet here to grant the king's taxes, or refuse them." }
   - { text: "The Governor's Residence", role: office, tags: [crown, law, debt], regions: [country], notice: "The governor bought his office, and means to earn it back." }
-  - { text: "The Salt Tax House", role: office, tags: [crown, coast], regions: [country], notice: "Every sack of salt in the province gets weighed and taxed here." }
+  - { text: "The Salt Tax House", role: office, tags: [crown, coast], regions: [country], notice: "The province's salt is weighed and taxed here, sack by sack." }
   - { text: "The Medical University", role: knowledge, tags: [plague, old], regions: [country], notice: "Doctors come from everywhere to study, and the anatomy hall's always full." }
   - { text: "The Observatory Island", role: knowledge, tags: [old, coast], regions: [country], notice: "An astronomer's island, and a prince paying for every star." }
-  - { text: "The Mapmakers' Town", role: knowledge, tags: [print, foreign], regions: [country], notice: "Every map of the world is printed here, mistakes kept on purpose." }
+  - { text: "The Mapmakers' Town", role: knowledge, tags: [print, foreign], regions: [country], notice: "Maps of every coast, with mistakes kept in on purpose." }
   - { text: "The Engineers' School", role: knowledge, tags: [war, powder], regions: [country], notice: "Officers learn to build forts here, and sell what they learn." }
   - { text: "The Archive Fortress", role: knowledge, tags: [law, old, crown], regions: [country], notice: "Every treaty the crown's signed, and the ones it says it didn't." }
-  - { text: "The Recruiting Ground", role: labour, tags: [war, poor, hill], regions: [country], notice: "Every younger son in the hills signs on here, for anyone's war." }
+  - { text: "The Recruiting Ground", role: labour, tags: [war, poor, hill], regions: [country], notice: "Younger sons from the hills sign on here, for anyone's war." }
   - { text: "The Spinning Villages", role: labour, tags: [cloth, poor, debt], regions: [country], notice: "Women spin for the merchant, and owe him for the wheel." }
   - { text: "The Boiling Houses", role: labour, tags: [coast, poor], regions: [country], notice: "Salt boiled along the shore by workers who never see the town." }
   - { text: "The Navy Yards", role: labour, tags: [coast, war, crown], regions: [country], notice: "The crown's new fleet, built by carpenters taken from their villages." }
@@ -180,14 +180,14 @@ seats:
   - { text: "The Stone Maze", role: wonder, tags: [old], regions: [country], notice: "A maze cut in the hill before any history, and freshly recut." }
 
   # World: a country, a sea or a mountain range.
-  - { text: "The Cape Route", role: passage, tags: [coast, foreign], regions: [world], notice: "Round the cape to the spice coast, if the storms allow it." }
+  - { text: "The Cape Route", role: passage, tags: [coast, foreign], regions: [world], notice: "Round the cape to the far coasts, if the storms allow." }
   - { text: "The Silver Fleet Lanes", role: passage, tags: [coast, wealth, war], regions: [world], notice: "The treasure ships sail once a year, and every pirate knows when." }
-  - { text: "The Narrow Seas", role: passage, tags: [coast, war], regions: [world], notice: "Two navies, one channel and a convoy every week." }
+  - { text: "The Contested Strait", role: passage, tags: [coast, war], regions: [world], notice: "Two navies, one channel and a convoy every week." }
   - { text: "The Ice Road", role: passage, tags: [wild, road], regions: [world], notice: "Frozen half the year, and the only way to the fur coast." }
   - { text: "The Trade Winds", role: passage, tags: [coast, foreign], regions: [world], notice: "They carry ships across the ocean in autumn, and home in spring." }
-  - { text: "The Spice Islands", role: land, tags: [coast, foreign, wealth], regions: [world], notice: "Cloves grow on three islands, and every navy wants them." }
+  - { text: "The Clove Isles", role: land, tags: [coast, foreign, wealth], regions: [world], notice: "Cloves grow nowhere else, and every navy wants them." }
   - { text: "The Cattle Plains", role: land, tags: [wild], regions: [world], notice: "Herds without number, and riders who answer to nobody." }
-  - { text: "The Wine Countries", role: land, tags: [hill, wealth], regions: [world], notice: "Every court drinks it, and two kingdoms claim the best hills." }
+  - { text: "The Wine Countries", role: land, tags: [hill, wealth], regions: [world], notice: "Kings drink it, and two kingdoms claim the best hills." }
   - { text: "The Fur Forests", role: land, tags: [forest, wild, foreign], regions: [world], notice: "Beaver and sable for every hat, and trappers dying for it." }
   - { text: "The Rice Deltas", role: land, tags: [river, grain], regions: [world], notice: "Rice for half the world, and floods that change who owns it." }
   - { text: "The Silver Mountain", role: ground, tags: [mine, wealth, metal], regions: [world], notice: "A whole mountain of silver, paying for everybody's wars." }
@@ -195,27 +195,27 @@ seats:
   - { text: "The Saltpetre Deserts", role: ground, tags: [powder, wild], regions: [world], notice: "Powder for every army starts as the crust on these dry lakes." }
   - { text: "The Emerald Mountains", role: ground, tags: [mine, wealth, foreign], regions: [world], notice: "Green stones by the sackful, and a war over every vein." }
   - { text: "The Coal Coast", role: ground, tags: [coast, mine], regions: [world], notice: "The world's glass and iron is fired with coal from one coast." }
-  - { text: "The Gun Cities", role: craft, tags: [powder, metal, war], regions: [world], notice: "Every army's cannon gets cast in the same three cities." }
+  - { text: "The Gun Cities", role: craft, tags: [powder, metal, war], regions: [world], notice: "Three cities cast the cannon for every army in the world." }
   - { text: "The Porcelain Coast", role: craft, tags: [foreign, wealth], regions: [world], notice: "Blue and white plates nobody else knows how to make." }
   - { text: "The Printing Lands", role: craft, tags: [print], regions: [world], notice: "Books for every faith, printed by men who believe none of them." }
   - { text: "The Tapestry Cities", role: craft, tags: [cloth, wealth], regions: [world], notice: "Hangings for every palace, by weavers who've never seen one." }
-  - { text: "The Clock Valleys", role: craft, tags: [metal, wealth], regions: [world], notice: "Every court's clocks come from these valleys, and so do its spies." }
+  - { text: "The Clock Valleys", role: craft, tags: [metal, wealth], regions: [world], notice: "Clocks for every court come from here, and spies with them." }
   - { text: "The Exchange City", role: trade, tags: [wealth, market], regions: [world], notice: "Every bill of exchange in the world gets settled here." }
   - { text: "The Pepper Monopoly", role: trade, tags: [coast, foreign, wealth], regions: [world], notice: "One company sets the price of pepper for the whole world." }
   - { text: "The Warehouse Ports", role: trade, tags: [coast, market], regions: [world], notice: "Goods from everywhere, held in store till the price is right." }
-  - { text: "The Indigo Markets", role: trade, tags: [foreign, cloth], regions: [world], notice: "Blue dye worth more than the ships that carry it." }
+  - { text: "The Indigo Markets", role: trade, tags: [foreign, cloth], regions: [world], notice: "Blue dye by the shipload, and dyers from three countries bidding." }
   - { text: "The Lottery Republic", role: trade, tags: [wealth, poor, law], regions: [world], notice: "A republic run on lotteries, and every citizen holds a ticket." }
   - { text: "The Reformed North", role: belief, tags: [holy, crown, print], regions: [world], notice: "Whole kingdoms left the old church, and burned its abbeys." }
   - { text: "The Old Faith's Heartland", role: belief, tags: [holy, wealth], regions: [world], notice: "The old church's own lands, where reformers hang." }
   - { text: "The Pilgrim Sea", role: belief, tags: [holy, coast], regions: [world], notice: "Pilgrim ships to the holy islands, and pirates waiting for them." }
-  - { text: "The Prophets' Desert", role: belief, tags: [holy, wild], regions: [world], notice: "Every new faith starts out here, with a man and a vision." }
+  - { text: "The Prophets' Desert", role: belief, tags: [holy, wild], regions: [world], notice: "New faiths start out here, each with a man and a vision." }
   - { text: "The Council City", role: belief, tags: [holy, law], regions: [world], notice: "The faith's great council has sat here for eighteen years." }
   - { text: "The Imperial Capital", role: office, tags: [crown, wealth], regions: [world], sizes: [city, great], notice: "A palace of a thousand rooms, and an emperor who uses three." }
-  - { text: "The Ambassadors' City", role: office, tags: [crown, foreign, secret], regions: [world], notice: "Every court's envoy lives here, and every one of them's spying." }
+  - { text: "The Ambassadors' City", role: office, tags: [crown, foreign, secret], regions: [world], notice: "Envoys from every court, and every one of them's spying." }
   - { text: "The Toll Sea", role: office, tags: [law, coast, crown], regions: [world], notice: "One crown taxes every ship that crosses its sea." }
   - { text: "The Fort Line", role: office, tags: [war, wall, powder], regions: [world], notice: "Star forts a day's march apart, every one owed its pay." }
   - { text: "The Bankrupt Kingdom", role: office, tags: [crown, debt], regions: [world], notice: "The richest crown alive, and bankrupt three times this century." }
-  - { text: "The Southern Academies", role: knowledge, tags: [old, wealth], regions: [world], notice: "Every new idea starts here, and every prince wants it first." }
+  - { text: "The Southern Academies", role: knowledge, tags: [old, wealth], regions: [world], notice: "New ideas start here, and every prince wants them first." }
   - { text: "The Chart House", role: knowledge, tags: [coast, foreign, secret], regions: [world], notice: "The world's best maps in one locked room, and spies copying them." }
   - { text: "The Observatory Peaks", role: knowledge, tags: [old, hill], regions: [world], notice: "Astronomers on the mountaintops, chasing a prize nobody's won." }
   - { text: "The University Republic", role: knowledge, tags: [old, law, print], regions: [world], notice: "Scholars run the city, and they've banned three kings' books." }
@@ -223,7 +223,7 @@ seats:
   - { text: "The Mercenary Cantons", role: labour, tags: [hill, war], regions: [world], notice: "Mountain valleys that send their sons to every war, for pay." }
   - { text: "The Fishing Banks", role: labour, tags: [coast, poor, foreign], regions: [world], notice: "Cod by the shipload, and crews from ten countries fighting for room." }
   - { text: "The Mining Valleys", role: labour, tags: [mine, poor, guild], regions: [world], notice: "Whole valleys working underground, with a miners' guild that votes." }
-  - { text: "The Weaving Lowlands", role: labour, tags: [cloth, poor], regions: [world], notice: "A loom in every house, and riots whenever the price drops." }
+  - { text: "The Weaving Lowlands", role: labour, tags: [cloth, poor], regions: [world], notice: "Looms in the cottages, and riots whenever the price drops." }
   - { text: "The Press-Gang Ports", role: labour, tags: [coast, war], regions: [world], notice: "Sailors taken from the taverns for the navy, and few come back." }
   - { text: "The Privateer Coast", role: crime, tags: [coast, war], regions: [world], notice: "Pirates with a king's letter, robbing his enemies and his friends." }
   - { text: "The Pirate Republic", role: crime, tags: [coast, secret, law], regions: [world], notice: "Pirates who vote for their captains, and sell to every crown." }
@@ -362,7 +362,7 @@ assets:
   - { text: "Retained Pistoleers", role: household-guard, tags: [powder, wealth], out: [rebels, society, keepers] }
   - { text: "Hired Pikes", role: hired-swords, tags: [war] }
   - { text: "Mountain Pikemen", role: hired-swords, tags: [hill, war, foreign] }
-  - { text: "Hired Gunmen", role: hired-swords, tags: [powder] }
+  - { text: "Hired Musketeers", role: hired-swords, tags: [powder] }
   - { text: "A Captain's Free Company", role: hired-swords, tags: [war] }
   - { text: "Bravos for Hire", role: hired-swords, tags: [poor] }
   - { text: "The Militia", role: levies, tags: [law], out: [crooks, society, makers, keepers, traders, soldiers, family] }
@@ -377,9 +377,9 @@ assets:
   - { text: "River Gunboats", role: warships, tags: [river, powder], needs: [river], out: [faith, keepers] }
   - { text: "Pinnaces", role: fast-boats, tags: [coast], needs: [coast], out: [faith, keepers] }
   - { text: "Black Canal Boats", role: fast-boats, tags: [river, secret], needs: [river], out: [faith, keepers] }
-  - { text: "Fast Luggers", role: fast-boats, tags: [coast, secret], out: [faith, keepers] }
+  - { text: "Fast Barques", role: fast-boats, tags: [coast, secret], out: [faith, keepers] }
   - { text: "Courier Sloops", role: fast-boats, tags: [coast, crown], needs: [coast], out: [faith, keepers] }
-  - { text: "Stevedores", role: dock-gangs, tags: [coast], out: [faith, office, keepers, old] }
+  - { text: "Quay Porters", role: dock-gangs, tags: [coast], out: [faith, office, keepers, old] }
   - { text: "The Porters' Company", role: dock-gangs, tags: [market, guild], out: [faith, office, keepers, old] }
   - { text: "Arsenal Hands", role: dock-gangs, tags: [war, coast], out: [faith, office, keepers, old] }
   - { text: "Canal Haulers", role: dock-gangs, tags: [river], out: [faith, office, keepers, old] }
@@ -391,13 +391,13 @@ assets:
   - { text: "Iconoclast Mobs", role: mob, tags: [holy, poor], out: [office, soldiers, house] }
   - { text: "The Carnival Crowd", role: mob, tags: [poor], out: [office, soldiers, house] }
   - { text: "Pamphlet Readers", role: mob, tags: [print], out: [office, soldiers, house] }
-  - { text: "Striking Carders", role: mob, tags: [cloth, poor], out: [office, soldiers, house] }
+  - { text: "Unpaid Carders", role: mob, tags: [cloth, poor], out: [office, soldiers, house] }
   - { text: "The Marshal's Men", role: constables, tags: [crown], out: [crooks, rebels, society, keepers, makers, faith, soldiers] }
   - { text: "Health Guards", role: constables, tags: [plague, law], out: [crooks, rebels, society, keepers, makers, faith, soldiers] }
   - { text: "The Customs Guard", role: constables, tags: [coast, law], out: [crooks, rebels, society, keepers, makers, faith, soldiers] }
   - { text: "The Provost's Archers", role: constables, tags: [crown, road], regions: [country, world], out: [crooks, rebels, society, keepers, makers, faith, soldiers] }
   - { text: "Ward Constables", role: constables, tags: [law], regions: [town, city], out: [crooks, rebels, society, keepers, makers, faith, soldiers] }
-  - { text: "Process Servers", role: bailiffs, tags: [law], out: [crooks, rebels, society] }
+  - { text: "Writ Servers", role: bailiffs, tags: [law], out: [crooks, rebels, society] }
   - { text: "Tax Farmers' Men", role: bailiffs, tags: [crown], out: [crooks, rebels, society] }
   - { text: "Creditors' Agents", role: bailiffs, tags: [debt], out: [crooks, rebels, society] }
   - { text: "The Bishop's Examiners", role: bailiffs, tags: [holy, law], needs: [holy], out: [crooks, rebels, society, soldiers, traders] }
@@ -448,7 +448,7 @@ assets:
   - { text: "Letter-Openers", role: codebreakers, tags: [road] }
   - { text: "Broadsheets", role: rumour-mill, tags: [print] }
   - { text: "Pamphleteers", role: rumour-mill, tags: [print, secret] }
-  - { text: "Barbershop Talk", role: rumour-mill, tags: [poor] }
+  - { text: "Gossip at the Bathhouse", role: rumour-mill, tags: [poor] }
   - { text: "Gossip on the Exchange", role: rumour-mill, tags: [market, wealth] }
   - { text: "Hidden Chapels", role: safehouses, tags: [holy, secret] }
   - { text: "Rooms Above the Press", role: safehouses, tags: [print] }
@@ -522,7 +522,7 @@ assets:
   - { text: "The Shipwreck Curse", role: curse-on-its-goods, tags: [coast], strange: true, rare: true }
   - { text: "The Burned Woman's Curse", role: curse-on-its-goods, tags: [law, old], strange: true, rare: true }
   - { text: "Plague in the Cloth", role: curse-on-its-goods, tags: [plague, cloth], strange: true, rare: true }
-  - { text: "The Portrait Ghost", role: bound-spirit, tags: [wealth, old], strange: true, rare: true }
+  - { text: "The Gallery Ghost", role: bound-spirit, tags: [wealth, old], strange: true, rare: true }
   - { text: "The Drowned Sailor", role: bound-spirit, tags: [coast], strange: true, rare: true }
   - { text: "The Murdered Heir", role: bound-spirit, tags: [blood], strange: true, rare: true }
   - { text: "The Anatomist's Subject", role: bound-spirit, tags: [plague, old], strange: true, rare: true }
@@ -540,7 +540,7 @@ types:
   - { text: "The prince's bastard line", role: house, sizes: [small, local], regions: [city], tags: [blood, secret], leans: [household-guard, friends-at-court, blackmail] }
   - { text: "A prince who bought his title", role: house, sizes: [local, city], regions: [city, country], tags: [crown, debt], leans: [hired-swords, friends-at-court, vault] }
   - { text: "A duke and his court", role: house, sizes: [city, great], regions: [city, country], tags: [crown, wealth], leans: [standing-army, household-guard, friends-at-court, office] }
-  - { text: "A king and his whole court", role: house, sizes: [great], regions: [city, country], tags: [crown], leans: [standing-army, office, friends-at-court] }
+  - { text: "A king with an empty treasury", role: house, sizes: [great], regions: [city, country], tags: [crown, debt], leans: [standing-army, office, friends-at-court] }
   - { text: "A border lord with guns of his own", role: house, sizes: [local, city], regions: [country], tags: [war, wall, powder], leans: [fortress, levies, standing-army] }
   - { text: "A merchant prince's city", role: house, sizes: [small, local], regions: [world], tags: [wealth, coast], leans: [trade, warships, household-guard] }
   - { text: "A duchy between two kingdoms", role: house, sizes: [small, local], regions: [world], tags: [crown, war], leans: [levies, fortress, agents-abroad] }
@@ -574,7 +574,7 @@ types:
   - { text: "A smuggling company with its own coves", role: crooks, sizes: [local, city], regions: [town, country], tags: [coast, secret], leans: [crime, fast-boats, smugglers-roads] }
   - { text: "The gaming-house owners", role: crooks, sizes: [local, city], regions: [town, city], tags: [wealth, debt], leans: [crime, toughs, blackmail] }
   - { text: "The gang that runs the docks", role: crooks, sizes: [city, great], regions: [town, city], tags: [coast, poor], leans: [crime, dock-gangs, toughs] }
-  - { text: "The underworld that owns the whole town", role: crooks, sizes: [great], regions: [town], tags: [poor, secret], leans: [crime, judge-in-its-pocket, toughs] }
+  - { text: "The thieves' lord who owns the whole town", role: crooks, sizes: [great], regions: [town], tags: [poor, secret], leans: [crime, judge-in-its-pocket, toughs] }
   - { text: "Forgers of bills and passes", role: crooks, sizes: [small, local, city], regions: [city, world], tags: [print, secret], leans: [crime, codebreakers, fences] }
   - { text: "The carnival's masked gang", role: crooks, sizes: [local, city], regions: [city], tags: [secret, poor], leans: [crime, toughs, safehouses] }
   - { text: "The beggars' brotherhood", role: crooks, sizes: [city, great], regions: [city], tags: [poor, guild], leans: [crime, informants, mob] }
@@ -635,10 +635,10 @@ types:
   - { text: "A brotherhood of exiles waiting to go home", role: society, sizes: [small, local], regions: [city, world], tags: [foreign, blood], leans: [agents-abroad, safehouses, sworn-members] }
   - { text: "The bankers' secret syndicate", role: society, sizes: [city, great], regions: [city, world], tags: [wealth, debt, secret], leans: [sworn-members, blackmail, vault] }
   - { text: "A plot to marry the heir", role: society, sizes: [small, local], regions: [country], tags: [blood, crown], leans: [friends-at-court, sworn-members, blackmail] }
-  - { text: "A spy ring that sells to the highest bidder", role: society, sizes: [local, city, great], regions: [country, world], tags: [secret, foreign], leans: [informants, codebreakers, agents-abroad] }
+  - { text: "Spies who sell to the highest bidder", role: society, sizes: [local, city, great], regions: [country, world], tags: [secret, foreign], leans: [informants, codebreakers, agents-abroad] }
   - { text: "Natural philosophers writing to each other in cipher", role: society, sizes: [local, city], regions: [country, world], tags: [old, print], leans: [knowledge, sworn-members, codebreakers] }
   - { text: "A secret order inside the church", role: society, sizes: [city, great], regions: [country, world], tags: [holy, secret], leans: [sworn-members, faithful, informants] }
-  - { text: "A cell of reformers abroad", role: society, sizes: [small, local], regions: [world], tags: [holy, foreign, secret], leans: [sworn-members, safehouses, agents-abroad] }
+  - { text: "Reformers in exile, plotting their return", role: society, sizes: [small, local], regions: [world], tags: [holy, foreign, secret], leans: [sworn-members, safehouses, agents-abroad] }
   - { text: "A league of courts against one crown", role: society, sizes: [great], regions: [world], tags: [crown, war, secret], leans: [agents-abroad, sworn-members, friends-at-court] }
 
   # A mercenary company.
@@ -770,10 +770,10 @@ secrets:
   - { tag: "A Reformer at Heart", more: "Its leader hears the new preachers in secret every week.", ways: ["A plain prayer book under her pillow", "A preacher hidden over the stables"], tags: [holy, secret] }
   - { tag: "Sold the Fortress Plans", more: "It sold the plans of the bastions to the prince's enemies.", ways: ["An engineer who drew a second copy", "Gold from a foreign bank"], tags: [war, foreign] }
   - { tag: "Sank Its Own Ships", more: "It insured its ships, then paid their captains to sink them.", ways: ["A captain drinking too well", "The underwriters' records"], tags: [coast, wealth] }
-  - { tag: "Its Notes in {rival}'s Hands", more: "Every note it's signed has ended up in {rival}'s strongbox.", ways: ["A broker who bought them cheap", "{rival}'s counting-house clerk"], tags: [debt] }
+  - { tag: "Notes in {rival}'s Hands", more: "Every note it's signed has ended up in {rival}'s strongbox.", ways: ["A broker who bought them cheap", "{rival}'s counting-house clerk"], tags: [debt] }
   - { tag: "A Bought Name", more: "Its noble name was bought from a herald, ancestors and all.", ways: ["The herald's account book", "A family tomb with nobody in it"], tags: [blood] }
-  - { tag: "Spies for a Foreign Crown", more: "Its leader reports every week to an ambassador.", ways: ["Letters in cipher in the dovecote", "Gold that comes in an embassy's bag"], tags: [foreign, crown] }
-  - { tag: "Let the Plague Ship In", more: "It let a plague ship unload, and the dying started after.", ways: ["The harbour master it paid", "The ship's log"], tags: [plague, coast] }
+  - { tag: "A Foreign Crown's Spies", more: "Its leader reports every week to an ambassador.", ways: ["Letters in cipher in the dovecote", "Gold that comes in an embassy's bag"], tags: [foreign, crown] }
+  - { tag: "The Plague Ship", more: "It let a plague ship unload, and the dying started after.", ways: ["The harbour master it paid", "The ship's log"], tags: [plague, coast] }
   - { tag: "Counterfeit Bills", more: "Half the bills it pays out with are forgeries.", ways: ["A banker abroad refusing one", "An engraver it keeps in the attic"], tags: [print, wealth] }
   - { tag: "Married into {rival}", more: "Its heir's secretly married to {rival}'s eldest.", ways: ["The priest who married them", "A ring the heir won't take off"], tags: [blood] }
   - { tag: "Burned the Wrong Woman", more: "The woman it had burned was innocent, and it knew.", ways: ["The witness who lied", "The real heretic, still preaching"], tags: [holy, law] }
@@ -814,7 +814,7 @@ names:
     - { text: "The Princes of {seat}", role: house }
     - { text: "House Tornavelli", role: house }
     - { text: "The Hautemonts", role: house }
-    - { text: "The Falkenraths", role: house }
+    - { text: "The Habichts", role: house }
     - { text: "Banco Grisanti", role: traders }
     - { text: "The Haverkamp Company", role: traders }
     - { text: "Brissard and Nephews", role: traders }
@@ -836,10 +836,10 @@ names:
     - { text: "Saint Tobin's House", role: faith }
     - { text: "Saint Merrow's Chapter", role: faith }
     - { text: "The Plain Congregation", role: faith, needs: [poor] }
-    - { text: "The Grey Penitents", role: faith, needs: [secret] }
+    - { text: "The Ash Penitents", role: faith, needs: [secret] }
     - { text: "The Canons of {seat}", role: faith }
-    - { text: "Saint Amaury's Order", role: faith }
-    - { text: "Saint Elvira's Friends", role: faith }
+    - { text: "Saint Gaudric's Order", role: faith }
+    - { text: "Saint Ombra's Friends", role: faith }
     - { text: "The Open Psalter", role: faith, needs: [print] }
     - { text: "Saint Corvo's Order", role: faith }
     - { text: "The Candlemas Brethren", role: faith }
@@ -847,11 +847,11 @@ names:
     - { text: "The Prince's Chancery", role: office, needs: [crown] }
     - { text: "The Board of Health", role: office, needs: [plague] }
     - { text: "The Board of Customs", role: office }
-    - { text: "The Admiralty Court", role: office, needs: [coast] }
-    - { text: "The Privy Council", role: office, needs: [crown] }
+    - { text: "The Sea Court", role: office, needs: [coast] }
+    - { text: "The Inner Council", role: office, needs: [crown] }
     - { text: "The Provost's Court", role: office }
     - { text: "The Treasury of {seat}", role: office }
-    - { text: "The Signet Office", role: office }
+    - { text: "The Little Seal", role: office }
     - { text: "The Council of Twelve", role: office }
     - { text: "The Petitions Office", role: office }
     - { text: "The Owl Lodge", role: society }
@@ -876,10 +876,10 @@ names:
     - { text: "The Shipwrights of {seat}", role: makers, needs: [coast] }
     - { text: "The Silk Guild", role: makers, needs: [cloth] }
     - { text: "The Master Painters", role: makers }
-    - { text: "The Craftsmen of {seat}", role: makers }
-    - { text: "The Worshipful Company", role: makers }
-    - { text: "The Company of Artisans", role: makers }
-    - { text: "The Sworn Craftsmen", role: makers }
+    - { text: "The Masters of {seat}", role: makers }
+    - { text: "The Silver Square", role: makers }
+    - { text: "The Twelve Hammers", role: makers }
+    - { text: "The Apron and Rule", role: makers }
     - { text: "The Delisles", role: family }
     - { text: "The Carvajos", role: family }
     - { text: "The Pallavera", role: family }
@@ -910,7 +910,7 @@ names:
     - { text: "The Inkwell Society", role: keepers }
     - { text: "The Collegium of {seat}", role: keepers }
     - { text: "The Gentleman in Grey", role: old }
-    - { text: "The Portrait Lady", role: old }
+    - { text: "The Veiled Lady", role: old }
     - { text: "The Undying Banker", role: old }
     - { text: "The Captain Below", role: old }
     - { text: "The Arena Sleeper", role: old }
@@ -1003,6 +1003,28 @@ deck:
       - text: "Print for the prince"
         does: ["lean a crown", "gain asset a", "strain a b"]
         line: "{a} printed for the prince from then on, and {b} lost their reward."
+  - text: "{b} sold copies of our maps as their own, mistakes and all."
+    age: 2
+    a: [keepers, makers, society]
+    tags: [print]
+    answers:
+      - text: "Shame them in print"
+        does: ["lean a print", "rival a b"]
+        line: "{a} named {b} as thieves in a pamphlet, with every copied mistake listed."
+      - text: "Charge them for it"
+        does: ["lean a wealth", "gain res a", "debt b a"]
+        line: "{a} made {b} pay for every map they'd copied, for years after."
+  - text: "{b} had a cartload of our books burned in the square, and the crowd cheered."
+    age: 2
+    a: [keepers, society, faith, makers]
+    tags: [holy, print]
+    answers:
+      - text: "Print them again"
+        does: ["lean a print", "rival a b"]
+        line: "{a} printed every burned book again, and sent {b} the first copy."
+      - text: "Lie low"
+        does: ["lean a secret", "lose res a", "grudge a b"]
+        line: "{a} hid what books were left, and never forgot {b}'s bonfire."
   - text: "The plague took half the town, and {b} sat it out in their country villa."
     age: 1
     a: [faith, family, makers, rebels, office]
@@ -1100,11 +1122,12 @@ deck:
       - text: "Buy it"
         does: ["take asset a b", "secret a"]
         line: "{a} bought {b}'s brass card-player, and locked it in the cellar."
-  - text: "{b} came to our bench for a loan to fit out three ships for the spice coast."
+  - text: "{b} came to our bench for a loan to fit out three ships for the far side of the world."
     age: 2
     a: [traders, family, house, society]
     b: [traders, family, house, office]
     tags: [debt, coast, foreign]
+    needs: [coast]
     answers:
       - text: "Lend at a third"
         does: ["lean a debt", "gain res a", "debt b a"]
@@ -1132,9 +1155,9 @@ deck:
       - text: "Print another run"
         does: ["agenda a b", "secret b"]
         line: "{a} printed a second run of the pamphlet, and sent one to {b}."
-      - text: "Sell them the plates"
+      - text: "Sell them the press"
         does: ["secret a b", "agenda b a"]
-        line: "{a} sold {b} the printing plates, and kept a copy."
+        line: "{a} sold {b} the press, and kept a copy of the pamphlet."
   - text: "{b}'s heir called our leader a coward at the ball, in front of the whole court."
     age: 3
     a: [house, family, soldiers, traders]
@@ -1176,6 +1199,7 @@ deck:
     age: 3
     a: [office, traders, crooks, family]
     tags: [plague, coast]
+    needs: [coast]
     answers:
       - text: "Tell the board"
         does: ["agenda b a", "lean a law"]

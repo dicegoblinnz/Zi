@@ -265,7 +265,8 @@ export function makeWorldMake(w) {
   }
 
   // Adding to a board: the mix it deals at, from the build kept with the
-  // world, or the frame most of its factions came in from.
+  // world, or the frame most of its factions came in from (the first one
+  // brought in, when two frames have as many).
   function mixOf(doc) {
     const b = doc.build;
     if (b?.recipe?.region && b.recipe.era && canDeal(T, b.recipe)) return { recipe: { region: b.recipe.region, era: b.recipe.era, twist: b.recipe.twist ?? null }, dials: b.dials, from: "build", asking: b.dealt?.asking ?? null, tension: b.dealt?.tension ?? null };

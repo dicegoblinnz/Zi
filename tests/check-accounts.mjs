@@ -181,8 +181,9 @@
 //    one faction friendly and the other hostile, and the record with every
 //    faction's id beside what was dealt it and who's whose. Sam gets none of
 //    it, not the record or anything dealt, and can't change it. Tuesday
-//    Lair's board, brought in from the book, offers Add a faction on the
-//    Steeplands' mix: the new faction's rival is a faction already there, a
+//    Lair's board, brought in from the book (Brinewake's four, then the
+//    Steeplands' four), offers Add a faction on Brinewake's mix, the first
+//    brought in: the new faction's rival is a faction already there, a
 //    thread each way, it sits on a new place, it's got one thread toward the
 //    crew, named for one of them, and the record's added gets it. Undo on
 //    Done's note takes it all back off and brings the build back. Kai gets
@@ -3258,11 +3259,12 @@ try {
     await mo.page.waitForSelector(".wk-head");
     has(await kicker(mo.page), "Adding a faction · Where it sits", "Add a faction starts on where it sits, since the board's got a mix");
     e = await making(mo.page, tuesday.id);
-    same([e.W.recipe, e.W.fixed.strange], [{ region: "country", era: "medieval", twist: "magic" }, 0], "the Steeplands' mix: Fantasy at Country, with how strange at 0");
+    // Brinewake's four and the Steeplands' four, so the first brought in.
+    same([e.W.recipe, e.W.fixed.strange], [{ region: "country", era: "renaissance", twist: "magic" }, 0], "Brinewake's mix, the first brought in: Renaissance and Magic at Country, with how strange at 0");
     same(e.W.held, was2.factions.filter((f) => !f.mini).length, "with every faction on the board held");
     await mo.page.click(".bd-jump summary");
     await mo.page.click('.bd-jumps [data-s="setup"]');
-    has(await text(mo.page, ".wk-head"), "the Steeplands’ mix", "the mix says where it's from");
+    has(await text(mo.page, ".wk-head"), "Brinewake’s mix", "the mix says where it's from");
     await mo.page.click(".bd-jump summary");
     await mo.page.click('.bd-jumps [data-s="board"]');
     await mo.page.waitForSelector(".wk-ties");

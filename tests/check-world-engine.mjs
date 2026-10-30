@@ -17,8 +17,9 @@
 //    chain's next card has to come in every era its first can, and a frame's
 //    twist has to be written for its era (stage 10). A row keeps its id when
 //    rows are added round it, and the tables themselves have no problems.
-// 2. 200 boards in every region for every named genre the packs cover, and
-//    200 for every mix at one region: the same seed deals the same board, the
+// 2. 200 boards in every region for every named genre the packs cover, 200
+//    for every mix at one region, and 200 for every board in the book that has
+//    a mix, at its region with the dials it sets: the same seed deals the same board, the
 //    checks pass with a fallback in under 1 board in 20, no bag gives the same
 //    row twice in a board, every step that needs a because has one, and every
 //    card adds up (Power from people who turn up and the die its size picked,
@@ -44,8 +45,8 @@
 //    well inside one change, and a player getting the history once it's
 //    shown, and never the seed or anything dealt.
 // 5. scripts/deal-world.mjs deals a board as text, the same for the same seed.
-// 6. Adding a faction (Add a faction, building alone): to the Steeplands as
-//    the book has them, on its mix, and to a world a build dealt, with its
+// 6. Adding a faction (Add a faction, building alone): to every board in the
+//    book that has a mix, as the book has it, on its mix, and to a world a build dealt, with its
 //    seats. The new card's whole and adds up, its rival and its ally or debt
 //    are factions already there, a thread each way, its agenda only aims at
 //    what's on the board, its name's one the board hasn't got, nothing held
@@ -308,6 +309,13 @@ for (const era of Object.keys(T.eras).filter((e) => T.packs[`era:${e}`])) {
   const region = fits.includes("city") ? "city" : fits[0];
   for (const twist of [null, ...Object.keys(T.twists).filter((t) => T.packs[`twist:${t}`])]) if (canDeal(T, { region, era, twist })) groups.push({ what: `the mix ${era}${twist ? ` and ${twist}` : ""} at ${region}`, recipe: { region, era, twist } });
 }
+// Every board in the book with a mix, at its region with the dials it sets.
+const bookBoard = (id) => bookJson.companion.worlds.boards.find((b) => b.id === id);
+for (const [id, fr] of Object.entries(T.frames)) {
+  const recipe = { region: fr.region, era: fr.era, twist: fr.twist ?? null };
+  if (canDeal(T, recipe)) groups.push({ what: `${bookBoard(id)?.name ?? id}'s mix`, recipe, fixed: fr.dials ?? {} });
+  else note(`${id}'s mix can't deal`);
+}
 const BOARDS = 200;
 let dealtCount = 0;
 let lastNamed = 0;
@@ -322,7 +330,8 @@ for (const g of groups) {
     const rand = rngOf("check", g.what, b);
     const seed = newSeed(T, rand);
     const n = 4 + (b % 9);
-    const dials = b % 10 === 0 ? { tense: 0, strange: 0, rich: 0, ruled: 0 } : b % 10 === 5 ? { tense: 2, strange: 2, rich: 2, ruled: 2 } : null;
+    let dials = b % 10 === 0 ? { tense: 0, strange: 0, rich: 0, ruled: 0 } : b % 10 === 5 ? { tense: 2, strange: 2, rich: 2, ruled: 2 } : null;
+    if (g.fixed) dials = { tense: 1, strange: 1, rich: 1, ruled: 1, ...dials, ...g.fixed };
     const opts = { recipe: g.recipe, seed, factions: n, dials };
     const W = dealWorld(T, opts);
     dealtCount++;
@@ -541,12 +550,13 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
 
 // 6. Adding a faction to a board that's there.
 {
-  const steep = bookJson.companion.worlds.boards.find((b) => b.id === "steeplands");
-  const fr = T.frames.steeplands;
-  if (steep && fr && real) {
+  // Every board in the book with a mix, as the book has it, on its mix.
+  for (const [id, fr] of Object.entries(real ? T.frames : {})) {
+    const book = bookBoard(id);
+    if (!book) continue;
     let n = 0;
-    const held = steep.cards.map((c) => ({ name: c.name, about: "", res: c.res.map((r) => ({ id: `r-${n++}x`, text: r.text })), assets: c.assets.map((a) => ({ id: `a-${n++}x`, text: a.text, power: a.power })) }));
-    const recipe = { region: fr.region, era: fr.era, twist: fr.twist };
+    const held = book.cards.map((c) => ({ name: c.name, about: "", res: c.res.map((r) => ({ id: `r-${n++}x`, text: r.text })), assets: c.assets.map((a) => ({ id: `a-${n++}x`, text: a.text, power: a.power })) }));
+    const recipe = { region: fr.region, era: fr.era, twist: fr.twist ?? null };
     const dials = { tense: 1, strange: 1, rich: 1, ruled: 1, ...fr.dials };
     let bad = null;
     let ties = 0;
@@ -575,24 +585,25 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       if (mine < 1 || theirs < mine - (W.needs ?? []).filter((x) => x.i === i).length) fail(`its ties aren't a thread each way (${mine} and ${theirs})`);
       if (mine > 1) ties++;
       const ag = W.factions[i].agenda;
-      if (ag.aims.includes("seat")) fail("its agenda aims at a seat, and the Steeplands haven't got one on the board");
+      if (ag.aims.includes("seat")) fail(`its agenda aims at a seat, and ${book.name} hasn't got one on the board`);
       for (const aim of ag.aims.filter((a) => a !== "seat")) {
         const at = ag.at?.[aim];
         if (aim === "rival" ? !(at < i) : !(at?.j < i)) fail(`its agenda's ${aim} isn't on the board`);
       }
       if (/[{}]/.test([f.name, f.about, f.sits, f.want, f.face, f.secret, f.more, ...f.agendas.map((a) => a.text), ...f.threads.map((t) => t.text)].join(" "))) fail("a slot nobody filled");
     }
-    if (bad) note(`adding to the Steeplands: ${bad}`);
-    yes(ties > 10, `the new faction gets an ally or a debt as well as its rival on more than 10 of 60 (got ${ties})`);
+    if (bad) note(`adding to ${book.name}: ${bad}`);
+    yes(ties > 10, `adding to ${book.name}, the new faction gets an ally or a debt as well as its rival on more than 10 of 60 (got ${ties})`);
+    console.log(`6. ${book.name}: 60 factions added on its mix`);
     // It picks up from its record, and deals the same from there.
     const A = startAdd(T, { recipe, dials, seed: "ash-lantern-ford", held });
     dealRest(T, A);
     const back = resume(T, recordOf(A));
-    same(recordOf(back), recordOf(A), "a faction being added picks up from its record");
+    same(recordOf(back), recordOf(A), `a faction being added to ${book.name} picks up from its record`);
     redeal(T, A, `f:${A.held}:want`);
     redeal(T, back, `f:${back.held}:want`);
-    same(recordOf(back), recordOf(A), "and deals the same from there");
-    same(recordOf((redeal(T, A, "f:0:want"), A)), recordOf(back), "and a faction that was there is never dealt");
+    same(recordOf(back), recordOf(A), `and deals the same from there (${book.name})`);
+    same(recordOf((redeal(T, A, "f:0:want"), A)), recordOf(back), `and a faction that was there is never dealt (${book.name})`);
   }
   // A board with one faction on it: a rival, and nothing more to tie to.
   {
