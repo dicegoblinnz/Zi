@@ -14,12 +14,13 @@ Abnu's lore, put together on 30 Oct 2026 for its whole world (stages 15 and 16 o
 3. The Six Souls, September 2026: Alysta and his amulet, the amulets made in Xurux and handed out free, the facility under the old temple, and Xurux as the city of the dead.
 4. *The World of Abnu*, the World Foundry version, September 2026: the myth, the feel, and Alysta, the Soths and the Ezkian Union.
 5. Mo's map, `notes/abnu-map.png`.
+6. Mo's own answers on 30 Oct: his picks, and the molefolk's story.
 
 ## Mo's picks (30 Oct 2026)
 
 - **The Ezkian Union's the scholars' steam republic.** Scholars running from Alysta founded it, and it has steam, clockwork, Ezkia Prime and the Council of Nine. The Ezki hunters of the cold, the fastest people alive, aren't in it.
 - **Xurux is the city of the dead, and only that.** It isn't the molefolk kingdom, and who keeps it was left open. Claude's calls say how the world reads it.
-- **The molefolk are their own faction, and secret.** They live in a special place underground between Alysta and the Soths, near the coast, and most of the world doesn't know it's there. If the world has a secret faction, it's them.
+- **The molefolk are their own faction, secret, and nothing to do with Xurux.** They live inside a mountain on the coast between Alysta and the Soths, and most of the world doesn't know they exist. If the world has a secret faction, it's them. Their story's Mo's, under The molefolk.
 - **Abnu starts in its own now.** A thousand years after the Sundering, the Queen stirring and Alysta's ban on the Seven fresh, with nothing on the board that needs one adventure. The Six Souls can still be run in it.
 - **Abnu's stages come after Night City 2077**, ahead of 2045.
 
@@ -41,7 +42,7 @@ Abnu's the name of the world, of the stone and of an empire that once ruled most
 
 ### The shape of the world
 
-A globe of wide oceans and scattered lands. People began in the Cradle, where the Anunnaki first opened their eyes (Claude's call: the Cradle's the western continent, where the oldest nation, the Soths, still stands).
+A globe of wide oceans and scattered lands. People began in the Cradle, where the Anunnaki first opened their eyes and where the Queen's meteor fell (Claude's call: the Cradle's the western continent, where the oldest nation, the Soths, still stands).
 
 ### The ten moons
 
@@ -92,7 +93,7 @@ People pray along with them, not to them. A Montian picks a virtue at breakfast 
 
 ### The war and the Sundering
 
-The Queen's refusal started a war, not between nations but between two ideas of what a soul owes the world: that a soul's owed forever, or that death has to mean something. It lasted centuries, broke continents and shattered the Anunnaki's cities. At the end she bound her soul to every Anunnaki still loyal to her and used them all to drag the moons out of the sky. The sky burned, the oceans boiled and mountains fell, and her own people died fuelling it. The Seven caught nine and hauled them back, at a cost nobody's written down. Then they sealed her and her loyalists inside the tenth moon and bound it with everything they had left.
+The Queen's refusal started a war, not between nations but between two ideas of what a soul owes the world: that a soul's owed forever, or that death has to mean something. It lasted centuries, broke continents and shattered the Anunnaki's cities. At the end she bound her soul to every Anunnaki still loyal to her and used them all to drag the moons out of the sky. The sky burned, the oceans boiled and mountains fell, and her own people died fuelling it. The Seven caught nine and hauled them back, at a cost nobody's written down. Then they sealed her and her loyalists inside the tenth moon and bound it with everything they had left. Her body died with the meteor she'd made, which came down on the Cradle and broke the ground where it hit, and the molefolk are what came of that.
 
 The world calls it the Sundering. She battered at the moon for generations, till it broke from its course and fell, slowly, into the deepest sea. She's still in it, and she's getting stronger as it sinks. She'll get out. The only real question's when, and what the people standing here then will do about it.
 
@@ -140,7 +141,7 @@ The world hides five things, and they land best in this order:
 4. The emperor's older than the empire. A portrait, a signature, a witness who should be long dead.
 5. He isn't the villain, exactly. Meeting him, and finding him tired.
 
-Every Secret and every line of history that's hers sits somewhere on that ladder, and none gives a later truth away before an earlier one has a way in.
+Every Secret and every line of history that's hers and touches them sits somewhere on that ladder, and none gives a later truth away before an earlier one has a way in.
 
 ### The ways it can end
 
@@ -165,7 +166,7 @@ Four peoples, by their old names:
 - **Nisa Matati, the People of the Land.** Humans: the Alystans, the Soths, the Orzaini and the Montians, and most of the Ezkian Union, whose scholars came from everywhere.
 - **Nise Masku, the People of the Hide.** The Etweil under their green hair, and the four lizardfolk peoples of the east under their scales.
 - **Nisa Apsu, the People of the Deep Sea.** The merfolk of Thelis.
-- **Nise Buzur, the People of the Deep Mines.** Molefolk, with claws that go through soil and soft stone, feet turned back for digging, whiskers that map a dark room from the moving air, and eyes that bright light hurts. They live underground between Alysta and the Soths, near the coast, in a place most of the world doesn't know is there.
+- **Nise Buzur, the People of the Deep Mines.** Molefolk, from people trapped inside a mountain on the coast when the Queen died, who became molefolk over the thousand years since. They still live there, between Alysta and the Soths, and most of the world doesn't know they exist.
 
 Ancestry isn't destiny. Someone raised somewhere else carries where they grew up, and a Thelisian raised on Verrant Docks is more interesting than either half.
 
@@ -273,13 +274,15 @@ The tiny bright green land on the Soths' east coast. The canon has nothing on it
 
 ### The molefolk
 
-Underground, where the Soths and Alysta meet the east coast, by the inlet just south of Lubro (Mo's pick). There's nothing of theirs on the map, since all of it's under the ground. People of the Deep Mines.
+Inside a mountain on the coast where the Soths and Alysta meet, by the inlet just south of Lubro (Mo's pick). Nothing of theirs is on the map, since all of it's under the ground. People of the Deep Mines, and nothing to do with Xurux.
 
-Their own faction, and Abnu's secret one: most of the world doesn't know they're there, and the few who do don't say. The finest craftsmen in the world, with claws that go through soil and soft stone, feet turned back for digging, and whiskers that map a room in total darkness by how the air moves. They're slow above ground and bright light hurts, and neither has ever seemed to them worth complaining about. They look after the creatures and the ground round them in a way surface folk find strange.
+When the Queen died with the meteor she'd made, a people on that coast lost their home. It collapsed, and the ones who lived through it were forced underground and trapped inside the mountain. They were lucky in one thing: down there was a glowing orb of great energy that made plants grow round it. With water and food they held on, and over the thousand years since they've slowly become molefolk, built for moving through the earth. They've got claws that go through soil and stone, hardened nails that cut through minerals, feet turned back for digging, whiskers and a nose that feel movement and map a dark room by how the air moves, and eyes that see in the dark and hurt in bright light. They're slow above ground, and they care for the creatures and growing things round them in a way surface folk find strange.
 
-Mushroom bread for breakfast, and mineral water so hard it squeaks on the teeth. Every one of them carries a maker's mark and stamps everything they finish, meals included, and *who made it?* is how they ask the price. They find the surface unbearably loud. They put their mark on their work, and they answer for it (Claude's call: these are the old book's ways, from when Xurux was their kingdom).
+The orb was an Anunnaki once, a master of plants and growth. One of the Queen's generals beat him and forced him into it, and just before the seal closed he flung himself away into the currents nearby, which carried him underground, where he's been stuck ever since. When the molefolk found the orb, his soul's gift for growth poured out of it and nurtured everything round him. To them he's a relic of the highest regard.
 
-Their name for themselves, their home's name, who leads them, what they want, what they make and trade, and who knows they're there are the stage's to write, in the shape of this.
+They keep to themselves, and most of the world doesn't know they exist. They've got some of the rarest materials in the earth.
+
+Their name for themselves, their home's name, who leads them, what they want, what they trade and with whom, and who knows they're there are the stage's to write, in the shape of this.
 
 ## The orders and the rest
 
@@ -319,7 +322,7 @@ The canon's places. Every faction's seat is a place too.
 - **The Ledge**, the shallowest Thelisian hall, in the upper depths.
 - **Gustburg**, **Inkhal**, **Neuzon** and **Molythia**, the eastern capitals.
 - **Lubro**, the free port.
-- **The molefolk's home**, underground where the Soths and Alysta meet the east coast, by the inlet south of Lubro, on no map anyone in Abnu has. Its name's the stage's.
+- **The molefolk's home**, inside the mountain on the coast where the Soths and Alysta meet, by the inlet south of Lubro, with the orb's cavern at its heart. It's on no map anyone in Abnu has, and its name's the stage's.
 - **The Sundering Deep**, the trench where the tenth moon lies.
 
 ## People
@@ -364,8 +367,11 @@ The true order, for the three ages.
 - The Anunnaki opened their eyes in the Cradle, built their cities and passed the Gates like breathing.
 - The Queen died, refused it and took another body, and her followers did the same.
 - The Seven rose from Abnu's spirit, and the war lasted centuries.
+- One of the Queen's generals beat an Anunnaki master of growth and forced him into an orb, and he flung himself into the currents, which carried him underground.
 - The Soths were a people already, and the kingdoms of Thelis older still.
 - The Sundering: she pulled the moons down, the Seven caught nine and sealed her in the tenth.
+- Her body died with the meteor she'd made, which came down on the Cradle, and a people on the coast were trapped inside their mountain.
+- The trapped people found the orb, lived on what grew round it, and over the centuries became molefolk.
 - She battered at it for generations, till it fell into the Sundering Deep.
 - The Seven brought rebirth back for every soul, and the fallen moon began stripping memory.
 - Alysta forgot and remembered across lives, banned the Seven's worship, buried his amulet and asked it never be found.
@@ -413,7 +419,7 @@ Mo's map is `notes/abnu-map.png`, 2520 by 1335, made in a fantasy map generator.
 - The open sea's about #7585b2 and the shallow shelf round the coasts #8594bb.
 - The Sundering Deep (Claude's call) is the long dark blade of deep water, #7282af, from about 1302,600 to 1494,636, south-west of Thelis, whose halls face it.
 - Thelis has no town marked, since its halls are under the water.
-- The molefolk's home (Mo's pick) is under the ground where the Soths' and Alysta's border meets the east coast, round the inlet just south of Lubro, about 980,580 to 1090,670. The map shows nothing there, so its pin's the only mark.
+- The molefolk's home (Mo's pick) is inside the mountain where the Soths' and Alysta's border meets the east coast, round the inlet just south of Lubro, about 980,580 to 1090,670. The map shows nothing there, so its pin's the only mark.
 
 ## Claude's calls
 
@@ -433,8 +439,9 @@ Each stands till Mo says otherwise.
 12. **Cassia Brenne, the Widow Ashgrove and Juno live in the capital.**
 13. **The Ezkian Union takes in the awakened**, since soul-workers running from Alysta founded it.
 14. **The amulets' grades stay as lore** (charity, standard and fine), with no prices from the old rules.
-15. **The molefolk keep the old book's ways**: the maker's mark on everything, *who made it?* for the price, the mushroom bread and the loud surface, from when Xurux was their kingdom.
+15. **The molefolk's bodies are the peoples doc's**: claws, nails that cut minerals, feet turned back, whiskers and a nose that feel the air, eyes for the dark, and care for growing things. Nothing from the old book's Xurux chapter is theirs.
 16. **Being secret takes nothing new.** Everything on a board starts hidden from the crew, so the molefolk are a card like any other, and their Secret is that they're there at all. No other card names them where the crew would read it before they've been found (only in threads and Secrets), and their pin's on no road.
+17. **The Queen's death and her meteor are the end of the Sundering.** Mo's story has her die with the meteor she made, and *The World of Abnu* has her meteor fall in the Cradle, so her body died as the Seven sealed her soul in the tenth moon, and the meteor came down on the western continent, where the molefolk's mountain is.
 
 ## Open
 
@@ -446,3 +453,4 @@ Never answered on a card, a page or a line of history:
 - What's been working at the moon for six hundred years.
 - What's down the stair under Hollowgate.
 - The one true thing Sister Ilva knows about the Seven.
+- The Anunnaki in the orb: his name, which of the Queen's generals beat him, whether he's awake or can speak, and whether the Seven know he's there.
