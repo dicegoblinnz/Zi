@@ -18,7 +18,8 @@
 //   cards   what was played, a card at a time: the moment (m), who was on it
 //           (a brought it, b's the faction it's about, or s the seat nobody
 //           holds, and who one of the crew), its voice, which way it went
-//           (side), its line of history and what fills its slots (vals)
+//           (side), its line of history, what fills its slots (vals), and
+//           whether the answer made a Secret (secret)
 //   up      the card that's up, once it's dealt, with what it says they've got
 //   nots    the moments Not this one's passed over for the card that's up
 //   open    a prompt waiting for her, after an answer that asks for a name
@@ -688,7 +689,9 @@ export function answer(T, W, side) {
   const ans = m.answers[k];
   const pos = D.pos;
   const r = (x) => rngOf(W.seed, "deck", "fx", pos, x);
-  const card = { m: m.id, age: m.age, a: up.a, b: up.b, s: up.s, who: up.who, side: k, voice: copy(up.voice), line: ans.line, vals: {}, chain: up.chain };
+  // Whether the answer made a Secret is stamped on the card, so its line stays
+  // hers whatever the tables become (secret).
+  const card = { m: m.id, age: m.age, a: up.a, b: up.b, s: up.s, who: up.who, side: k, voice: copy(up.voice), line: ans.line, vals: {}, chain: up.chain, secret: ans.does.some((fx) => fx.k === "secret") };
   // Who brought it, and this last year, its Face.
   D.voices[`${up.a}:${m.age}`] ??= copy(up.voice);
   if (m.age === 3 && !W.factions[up.a].voice) {

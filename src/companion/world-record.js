@@ -112,6 +112,9 @@ export function applyBuild(doc, op) {
       const next = buildOf(op.b);
       const meant = op.b?.dealt && typeof op.b.dealt === "object" && !Array.isArray(op.b.dealt);
       if (!next || (meant && !next.dealt)) return false;
+      // A line that's hers stays hers, whatever's sent by a phone that
+      // doesn't know it (one on older code, adding a faction).
+      if (b) for (const l of next.history) if (!l.hers && b.history.some((x) => x.id === l.id && x.hers)) l.hers = true;
       if (b && JSON.stringify(next) === JSON.stringify(b)) return false;
       doc.build = next;
       return true;
@@ -189,5 +192,5 @@ export function buildForPlayer(doc) {
   const b = doc.build;
   const shown = new Set(b?.shown ?? []);
   const history = (b?.history ?? []).filter((l) => !l.hers && shown.has(l.age)).map(({ id, text, age }) => ({ id, text, age }));
-  return history.length ? { history, shown: AGE_ORDER.filter((a) => history.some((l) => l.age === a)).sort((x, y) => x - y) } : null;
+  return history.length ? { history, shown: [...new Set(history.map((l) => l.age))].sort((x, y) => x - y) } : null;
 }

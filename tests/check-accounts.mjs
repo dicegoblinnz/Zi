@@ -208,7 +208,8 @@
 //    so the check's the same whatever the tables deal). A tile opens its
 //    faction's card so far, Not this one deals another card and nothing
 //    else, and he answers a card at a time, taking the answer that asks
-//    something when there is one. The first prompt's a suggestion, then Undo
+//    something when there is one, the first with a swipe that tilts the
+//    card, fills its answer and lights up the factions it touches. The first prompt's a suggestion, then Undo
 //    takes the next answer back and the same card's up again, a reload
 //    carries on from the same card, the second prompt's in his own words,
 //    and the third's skipped, all with the signal gone after the reload. The
@@ -224,7 +225,8 @@
 //    Mo changes a line and Sam reads the new words, and hiding it again takes
 //    it all off Sam's phone. The deck, a prompt, a card so far, its last
 //    screen and How it came to be on both phones pass axe at 390 in both
-//    themes, and the deck at 320.
+//    themes, and the deck at 320, 360, 430 and 1280. Under reduce-motion the
+//    card stays put under a thumb.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -3567,10 +3569,41 @@ try {
     D = await deck();
     yes(D.up?.m && D.up.m !== firstUp && D.pos === 0 && D.nots.length === 1, "Not this one deals another card, and nothing else");
 
+    // A swipe, the way a thumb does it: the card leans, the answer it's
+    // leaning to fills and the factions that answer touches light up, then
+    // it flies off and that's the answer.
+    // One thumb on the card, start to finish, with a look partway (a touch
+    // has to stay with the one session that started it).
+    const thumb = async (dx, look) => {
+      const at = await mo.page.$eval("#wa-up", (el) => {
+        const r = el.getBoundingClientRect();
+        return { x: r.x + r.width / 2, y: r.y + r.height * 0.4 };
+      });
+      const cdp = await mo.page.context().newCDPSession(mo.page);
+      const send = async (type, points, wait = 16) => {
+        await cdp.send("Input.dispatchTouchEvent", { type, touchPoints: points.map(([x, y], id) => ({ x, y, id })) });
+        await mo.page.waitForTimeout(wait);
+      };
+      await send("touchStart", [[at.x, at.y]]);
+      await send("touchMove", [[at.x + dx * 0.1, at.y + 2]]);
+      await send("touchMove", [[at.x + dx * 0.32, at.y + 4]], 80);
+      const seen = await look();
+      await send("touchMove", [[at.x + dx * 0.65, at.y + 6]]);
+      await send("touchMove", [[at.x + dx, at.y + 8]]);
+      await send("touchEnd", [], 450);
+      await cdp.detach();
+      return seen;
+    };
+    const swipe = async (side) => {
+      const lean = await thumb(side ? 190 : -190, () => mo.page.evaluate(() => ({ side: document.querySelector("#wa-up .wa-ans.is-lean")?.dataset.side ?? null, lit: document.querySelectorAll(".wa-tile.is-touch").length, tilt: document.querySelector("#wa-up")?.style.transform ?? "" })));
+      same([lean.side, lean.lit > 0, lean.tilt.includes("rotate")], [String(side), true, true], "leaning the card tilts it, fills its answer and lights the factions it touches");
+    };
+
     // He answers a card at a time, taking the answer that asks something when there's one.
     let prompts = 0;
     let undone = false;
     let reloaded = false;
+    let swiped = false;
     for (let guard = 0; guard < 220 && prompts < 3; guard++) {
       if (await mo.page.$("#wa-up.is-prompt")) {
         prompts++;
@@ -3596,7 +3629,12 @@ try {
       }
       const side = await mo.page.$$eval("#wa-up .wa-ans", (els) => Math.max(0, els.findIndex((el) => el.dataset.prompt)));
       const was = await deck();
-      await mo.page.click(`#wa-up .wa-ans[data-side="${side}"]`);
+      if (!swiped) {
+        swiped = true;
+        await swipe(side);
+        await until(async () => (await deck())?.pos === was.pos + 1, "a swipe answering the card");
+        same((await deck()).log.at(-1)?.side, side, "and it's the answer it was swiped to");
+      } else await mo.page.click(`#wa-up .wa-ans[data-side="${side}"]`);
       D = await deck();
       if (D.pos !== was.pos + 1) note(`an answer didn't go in (card ${was.pos + 1})`);
       // After the first prompt: Undo takes the next answer back, and the same card's up again.
@@ -3627,9 +3665,20 @@ try {
     same(prompts, 3, "three prompts on the way");
     D = await deck();
     same(D.pos, plan.answers, "the phone played the deck the engine said it would");
-    await mo.page.setViewportSize({ width: 320, height: 640 });
-    await axe(mo.page, "the deck, 320 wide");
+    for (const [width, height] of [[320, 640], [360, 740], [430, 932], [1280, 900]]) {
+      await mo.page.setViewportSize({ width, height });
+      await axe(mo.page, `the deck, ${width} wide`);
+    }
     await mo.page.setViewportSize({ width: 390, height: 844 });
+    // Under reduce-motion the card stays put under a thumb, and the answers are taps.
+    // (No reload, with no signal: a tile and back draws the card again.)
+    await mo.page.emulateMedia({ reducedMotion: "reduce" });
+    await mo.page.click(".wa-tile >> nth=0");
+    await mo.page.click('#wa-up [data-do="mk-tile"][data-i="-1"]');
+    await mo.page.waitForSelector("#wa-up.wa-card[data-swipe]");
+    same(await thumb(190, () => mo.page.$eval("#wa-up", (el) => el.style.transform)), "", "under reduce-motion the card doesn't follow a thumb");
+    same((await deck()).pos, D.pos, "and a drag doesn't answer it");
+    await mo.page.emulateMedia({ reducedMotion: "no-preference" });
 
     // Deal the rest ends the deck there, a tap again.
     await mo.page.click('.bd-foot [data-do="mk-rest"]');
@@ -3649,6 +3698,12 @@ try {
     await themes(mo.page, "the deck's last screen", "deck-end");
     await next(mo.page);
     same(await lead(mo.page), "The board", "Next from the deck's last screen is the board");
+    await mo.page.click(".bd-jump summary");
+    await mo.page.click('.bd-jumps [data-s="seat:0"]');
+    has(await text(mo.page, ".wk-fixed"), "were played on these", "once the deck's done, the ground still holds, since the cards were played on it");
+    await mo.page.click(".bd-jump summary");
+    await mo.page.click('.bd-jumps [data-s="board"]');
+    await mo.page.waitForSelector(".wk-ties");
 
     // Wren's friend and foe, with no signal.
     await next(mo.page);

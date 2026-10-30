@@ -24,7 +24,7 @@ import { AGES, PARTS, answer, calledOf, current, deckOf, fillPrompt, finish, for
 import { cardsOf, fill, options, resume } from "./world-engine.js";
 import { die as kitDie } from "../kit/kit.js";
 
-export const AGE_NAMES = { 1: "Long ago", 2: "In living memory", 3: "This last year", 0: "Besides" };
+export const AGE_NAMES = { 1: "Long ago", 2: "In living memory", 3: "This last year", 0: "The rest of it" };
 const AGE_LEADS = {
   1: "Where each faction came from, what it took and what it’s like.",
   2: "The deals and the feuds between them, and who owes whom.",
@@ -46,8 +46,9 @@ export const deckOver = (W) => Boolean(W?.deck?.finished);
 // The factions are only who's who: nothing past where they sit, how big they
 // are and what they are has been dealt, so the deck can play on them.
 export const whoOnly = (W) => Boolean(W) && W.factions.every((f) => f.held || PAST.every((s) => f[s] == null));
-// The asking and the ground stay as they are once she's answered a card.
-export const fixedBy = (W) => (deckOn(W) ? W.deck.pos : 0);
+// The asking and the ground stay as they are once she's answered a card,
+// since the cards were played on them, till she starts the deck again.
+export const fixedBy = (W) => (W?.deck?.base ? W.deck.pos ?? 0 : 0);
 
 // How it came to be, a line for every answer, by age, with the names they've
 // got now. A line's hers when its answer made a Secret, so it never leaves her
@@ -56,9 +57,17 @@ export function linesOf(T, W) {
   if (!W?.deck) return [];
   const D = deckOf(T, W.recipe);
   const o = W.deck.open;
+  // The card says whether its answer made a Secret. One from before it said
+  // so is looked up, and one the tables haven't got any more is hers.
+  const hers = (h) => {
+    const said = W.deck.cards[h.pos]?.secret;
+    if (typeof said === "boolean") return said;
+    const m = D.byId.get(h.m);
+    return !m || Boolean(m.answers?.[h.side]?.does?.some((fx) => fx.k === "secret"));
+  };
   return historyOf(T, W)
     .filter((h) => !o || h.pos !== o.pos)
-    .map((h) => ({ pos: h.pos, age: h.age, text: h.text, a: h.a, b: h.b, hers: Boolean(D.byId.get(h.m)?.answers?.[h.side]?.does?.some((fx) => fx.k === "secret")) }));
+    .map((h) => ({ pos: h.pos, age: h.age, text: h.text, a: h.a, b: h.b, hers: hers(h) }));
 }
 
 // The deck as the record keeps it: which way each card went, without the
@@ -70,6 +79,7 @@ export function makeAnswer(k) {
   // The tile that's open on the card's place, and what to bring into view
   // once the screen's drawn again.
   let tile = -1;
+  let tileIn = "";
   let fresh = "";
 
   // Once there's no card up and no prompt waiting, the deck's run out, and the
@@ -82,8 +92,11 @@ export function makeAnswer(k) {
     return true;
   }
   function end(W) {
-    finish(tables(), W);
-    W.deck.finished = true;
+    try {
+      finish(tables(), W);
+    } finally {
+      W.deck.finished = true;
+    }
   }
   // Arriving at the deck: it starts, unless she's gone faction by faction
   // (the factions are dealt past who's who), and it's settled.
@@ -240,7 +253,7 @@ export function makeAnswer(k) {
     const c = o ? null : current(T, W);
     const card = o ? D.cards[o.pos] : c;
     const on = card ? { a: card.a, b: card.b } : {};
-    if (tile >= 0 && !F.factions.some((f) => f.i === tile)) tile = -1;
+    if (tile >= 0 && (tileIn !== id || !F.factions.some((f) => f.i === tile))) tile = -1;
     const key = o ? `p${o.pos}` : c ? `c${c.pos}:${c.m}` : "";
     const isNew = key !== fresh;
     fresh = key;
@@ -324,6 +337,7 @@ export function makeAnswer(k) {
     "mk-tile": (el, id) => {
       const i = Number(el.dataset.i);
       tile = Number.isInteger(i) && i >= 0 && i !== tile ? i : -1;
+      tileIn = id;
       d.render();
       requestAnimationFrame(bring);
     },
@@ -354,8 +368,9 @@ export function makeAnswer(k) {
     // Starting the deck again, so the asking and the ground can change: back to
     // the world before its first card.
     "mk-restart": (el, id) => {
+      const e = entryOf(id);
       const W = worldOf(id);
-      if (!deckOn(W) || !W.deck.base) return;
+      if (!e || !fixedBy(W)) return;
       if (!sureOf("restart-deck", id)) {
         arm("restart-deck", id);
         return d.render();
@@ -364,6 +379,9 @@ export function makeAnswer(k) {
       const back = resume(tables(), JSON.parse(JSON.stringify(W.deck.base)));
       back.deck = null;
       setWorld(id, back);
+      // What was dealt for the factions and the crew goes with it.
+      for (const key of Object.keys(e.hands ?? {})) if (key.startsWith("f:") || key.startsWith("crew:")) delete e.hands[key];
+      e.cut = [];
       tile = -1;
       save(id);
       changed(id, "The deck’s back before its first card. Change what you like here, and it starts again when you get to it.");

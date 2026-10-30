@@ -52,6 +52,7 @@ import { die as kitDie, mini as kitMini, tag as kitTag } from "../kit/kit.js";
 import { stepsToDice } from "./dice.js";
 import { drawWeb, webOf } from "./world-web.js";
 import { deckOn, deckOver, fixedBy, keptDeck, linesOf, makeAnswer, whoOnly } from "./world-answer.js";
+import { BMAX } from "./world-record.js";
 
 const KEY = "zi-make";
 const MIX = "mix";
@@ -921,7 +922,8 @@ export function makeWorldMake(w) {
   function fixedNote(id, W) {
     const n = fixedBy(W);
     const sure = sureOf("restart-deck", id);
-    return `<div class="cc-note wk-fixed" role="note"><p>You’ve answered ${plural(n, "card", "cards")} of the deck, and ${n === 1 ? "it’s" : "they’re"} playing on these, so they stay as they are while it’s on. To change them, start the deck again, and your answers go.</p>
+    const said = deckOn(W) ? `You’ve answered ${plural(n, "card", "cards")} of the deck, and ${n === 1 ? "it’s" : "they’re"} playing on these, so they stay as they are while it’s on.` : `The deck’s ${plural(n, "card was", "cards were")} played on these, so they stay as they are.`;
+    return `<div class="cc-note wk-fixed" role="note"><p>${said} To change them, start the deck again, and your answers go.</p>
       <div class="cc-row"><button type="button" class="button${sure ? " danger" : ""}" data-act="w" data-do="mk-restart">${sure ? "Tap again to start it again" : "Start the deck again"}</button><button type="button" class="button" data-act="w" data-do="mk-go" data-s="deck">Back to the deck</button></div></div>`;
   }
 
@@ -1567,6 +1569,9 @@ export function makeWorldMake(w) {
       // each card went, without the world the deck started from.
       const history = W.deck ? linesOf(T, W).map((l) => ({ id: newId(), text: l.text, age: l.age, ...(l.hers ? { hers: true } : {}) })) : doc.build?.history ?? [];
       const dealt = { ...rec, ...(rec.deck ? { deck: keptDeck(rec.deck) } : {}), ids: fid, pages: pid, ...(mid.length ? { mids: mid } : {}) };
+      // A record too big for a world is turned down whole, so the deck's cards
+      // go first, and the lines are kept.
+      if (dealt.deck && JSON.stringify(dealt).length > BMAX.dealt) delete dealt.deck;
       b = { recipe: W.recipe, dials: W.dials, seed: W.seed, dealt, history, shown: W.deck ? [] : doc.build?.shown ?? [], at: Date.now() };
     }
     ops.push({ o: "wb-set", b });

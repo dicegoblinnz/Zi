@@ -80,6 +80,7 @@ import { BAGS, CHECKS, STEPS, canDeal, cardsOf, choose, crewFits, dealRest, deal
 import { BMAX } from "../src/companion/world-record.js";
 import { MAX, PARTS, answer, current, deckOf, fillPrompt, finish, formedOf, historyOf, notThis, playRest, prompted, replay, startDeck, undo } from "../src/companion/world-deck.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
+import { linesOf } from "../src/companion/world-answer.js";
 
 const problems = [];
 const note = (p) => {
@@ -473,6 +474,13 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   same(apply(big, { o: "wb-set", b: { dealt: { a: Array.from({ length: 60 }, () => Array.from({ length: 60 }, () => "y".repeat(500))) } } }), false, "a record too big for a world is turned down");
   same(big.build, null, "whole, not kept without what was dealt");
   same(apply(blank(), { o: "wb-show", v: true }), false, "showing a history that isn't there changes nothing");
+  // A record sent whole by a phone that doesn't know which lines are hers (one
+  // on older code, adding a faction) can't make one of hers the crew's.
+  const keepHers = blank();
+  apply(keepHers, { o: "wb-set", b: { history: [{ id: "h-1", text: "The bell-founders paid the bridge to keep quiet.", age: 3, hers: true }, { id: "h-2", text: "The millers built the weir.", age: 1 }] } });
+  apply(keepHers, { o: "wb-set", b: { history: [{ id: "h-1", text: "The bell-founders paid the bridge to keep quiet.", age: 3 }, { id: "h-2", text: "The millers built the weir.", age: 1 }], shown: true } });
+  same(keepHers.build.history.map((l) => l.hers === true), [true, false], "a line that's hers stays hers when the record's sent whole without it");
+  same(forPlayer(keepHers).build?.history?.map((l) => l.id), ["h-2"], "so it never reaches a player");
   const W12 = dealWorld(T, { recipe: groups[0].recipe, seed: "tide-iron-rook", factions: 12 });
   const whole12 = blank();
   apply(whole12, { o: "wb-set", b: { recipe: W12.recipe, dials: W12.dials, seed: W12.seed, dealt: recordOf(W12) } });
@@ -946,6 +954,33 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       yes(current(T, U)?.last, `${W.seed}: Not this one on the last card ended the deck without one`);
     }
     yes(open > 0 && lasts > 0, `no deck had a prompt waiting (${open}) or a last card to pass over (${lasts})`);
+  }
+  // A line's hers when its answer made a Secret: it's stamped on the card
+  // when it's answered, so a change to the tables can't make it the crew's,
+  // and a card the tables haven't got any more is hers to be safe.
+  {
+    let made = 0;
+    for (let s = 0; s < 30 && made < 5; s++) {
+      const W = start(T, { recipe: decks[s % decks.length].recipe, seed: `deck-hers-${s}`, factions: 6 });
+      startDeck(T, W);
+      playRest(T, W, rngOf(W.seed, "check-hers"));
+      const M = deckOf(T, W.recipe);
+      const L = linesOf(T, W);
+      for (const l of L) {
+        const c = W.deck.cards[l.pos];
+        const does = M.byId.get(c.m).answers[c.side].does.some((fx) => fx.k === "secret");
+        if (does) made++;
+        if (l.hers !== does || (c.secret === true) !== does) note(`${W.seed}: card ${l.pos + 1}'s line ${l.hers ? "is" : "isn't"} hers, stamped ${c.secret === true}, and its answer ${does ? "made" : "didn't make"} a Secret`);
+      }
+      const k = L.findIndex((l) => !l.hers);
+      if (k >= 0) {
+        const pos = L[k].pos;
+        W.deck.cards[pos].m = "not-in-the-tables";
+        delete W.deck.cards[pos].secret;
+        same(linesOf(T, W).find((l) => l.pos === pos)?.hers, true, `${W.seed}: a card the tables haven't got, with no stamp, is hers`);
+      }
+    }
+    yes(made >= 5, `only ${made} lines made a Secret in 30 decks`);
   }
   // A deck kept on her phone and picked up again after a reload (recordOf()
   // and resume(), the way zi-make keeps it) plays on just the same.

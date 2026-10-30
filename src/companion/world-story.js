@@ -9,7 +9,9 @@
 import { AGE_ORDER } from "./world-record.js";
 import { AGE_NAMES } from "./world-answer.js";
 
-const AGE_SAY = { 1: "long ago", 2: "in living memory", 3: "this last year", 0: "and the rest" };
+const AGE_SAY = { 1: "long ago", 2: "in living memory", 3: "this last year" };
+// What an age is, in a sentence: shown, hidden, and in a player's note.
+const WHAT = { 1: "what happened long ago", 2: "what happened in living memory", 3: "what happened this last year", 0: "the rest of it" };
 const MAX_LINE = 400;
 
 export function makeStory(w) {
@@ -35,7 +37,7 @@ export function makeStory(w) {
       const hers = these.filter((l) => l.hers).length;
       const seen = these.length - hers;
       const glance = `${plural(these.length, "line", "lines")}, ${on ? (hers ? `${seen} of them shown to the crew` : "shown to the crew") : "hidden from the crew"}`;
-      const say = on ? `The crew can read ${a ? `what happened ${AGE_SAY[a]}` : "these"}${hers ? `, bar ${hers === 1 ? "the line that’s" : "the lines that are"} yours` : ""}.` : "Only you see these.";
+      const say = on ? `The crew can read ${WHAT[a]}${hers ? `, bar ${hers === 1 ? "the line that’s" : "the lines that are"} yours` : ""}.` : "Only you see these.";
       const show = seen
         ? `<div class="wb-show ws-show${on ? " is-on" : ""}"><p class="cc-small">${say}</p><button type="button" class="button sm${on ? "" : " primary"}" data-act="w" data-do="hist-show" data-age="${a}" aria-pressed="${on}">${on ? "Hide it again" : "Show the crew"}</button></div>`
         : `<p class="cc-small">Every line here made a Secret, so it stays on your phone.</p>`;
@@ -63,8 +65,8 @@ export function makeStory(w) {
     const had = new Set((was.build?.history ?? []).map((l) => l.id));
     const fresh = (now.build?.history ?? []).filter((l) => !had.has(l.id));
     if (!fresh.length) return { said: [], keys: [] };
-    const ages = AGE_ORDER.filter((a) => fresh.some((l) => l.age === a)).map((a) => AGE_SAY[a]);
-    return { said: [`${gmName(id)} showed you how it came to be${ages.length === 1 && ages[0] !== AGE_SAY[0] ? `, ${ages[0]}` : ""}.`], keys: ["history"] };
+    const ages = AGE_ORDER.filter((a) => fresh.some((l) => l.age === a));
+    return { said: [`${gmName(id)} showed you how it came to be${ages.length === 1 && AGE_SAY[ages[0]] ? `, ${AGE_SAY[ages[0]]}` : ""}.`], keys: ["history"] };
   }
 
   const ACT = {
@@ -73,7 +75,8 @@ export function makeStory(w) {
       const age = Number(el.dataset.age);
       if (!isGm(id) || !doc.build || !AGE_ORDER.includes(age)) return;
       const on = (doc.build.shown ?? []).includes(age);
-      edit(id, [{ o: "wb-show", age, v: !on }], on ? `${AGE_NAMES[age]}’s hidden from the crew again.` : `The crew can read what happened ${AGE_SAY[age]} now.`);
+      const what = WHAT[age];
+      edit(id, [{ o: "wb-show", age, v: !on }], on ? `${what.charAt(0).toUpperCase()}${what.slice(1)} is hidden from the crew again.` : `The crew can read ${what} now.`);
     },
     "hist-edit": (el, id) => {
       const lid = el.dataset.lid;
