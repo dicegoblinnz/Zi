@@ -9,8 +9,11 @@
   max-width: 46rem; margin: 0 auto; padding-top: 1.6rem; padding-bottom: 2rem;
 }
 .wn.is-live { padding-bottom: 0; }
-html[data-wn-tab="web"] .wn:not(.is-live) .wn-panel:not([data-panel="web"]),
-html[data-wn-tab="history"] .wn:not(.is-live) .wn-panel:not([data-panel="history"]) { display: none; }
+html[data-wn-tab="web"] .wn:not(.is-live):has(> [data-panel="web"]) .wn-panel:not([data-panel="web"]),
+html[data-wn-tab="map"] .wn:not(.is-live):has(> [data-panel="map"]) .wn-panel:not([data-panel="map"]),
+html[data-wn-tab="places"] .wn:not(.is-live):has(> [data-panel="places"]) .wn-panel:not([data-panel="places"]),
+html[data-wn-tab="people"] .wn:not(.is-live):has(> [data-panel="people"]) .wn-panel:not([data-panel="people"]),
+html[data-wn-tab="history"] .wn:not(.is-live):has(> [data-panel="history"]) .wn-panel:not([data-panel="history"]) { display: none; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* The head: what it is, where in the year it starts, and whose it is. */
@@ -139,8 +142,10 @@ html[data-wn-tab="history"] .wn:not(.is-live) .wn-panel:not([data-panel="history
 /* The bar along the bottom, where a thumb reaches it. */
 .wn-bar { position: sticky; bottom: 0; z-index: 5; margin: 1.2rem 0 0; margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))) calc(-1 * max(16px, env(safe-area-inset-right, 0px))); padding: 0.45rem max(10px, env(safe-area-inset-right, 0px)) max(0.45rem, env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px)); background: var(--bar-bg); border-top: 1px solid var(--line); backdrop-filter: blur(6px); }
 .wn:not(.is-live) .wn-bar { display: none; }
-.wn-bar [role="tablist"] { display: grid; grid-template-columns: 1fr 1fr 1.35fr; gap: 0.35rem; max-width: 34rem; margin: 0 auto; }
-.wn-bar button { min-height: 48px; padding: 0 0.35rem; font: inherit; font-size: 0.9rem; font-weight: 700; line-height: 1.15; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 2px; cursor: pointer; }
+.wn-bar [role="tablist"] { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 0.2rem; max-width: 34rem; margin: 0 auto; }
+.wn-bar button { display: grid; justify-items: center; align-content: center; gap: 2px; min-width: 0; min-height: 52px; padding: 0.3rem 0.15rem; font: inherit; font-size: 0.76rem; font-weight: 800; letter-spacing: 0.02em; line-height: 1.1; color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 2px; cursor: pointer; }
+.wn-bi { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.wn-bar button[aria-selected="true"] .wn-bi { color: var(--gold-ink); }
 .wn-bar button[aria-selected="true"] { color: var(--ink); background: var(--panel); border-color: var(--line); box-shadow: inset 0 -2px 0 var(--gold); }
 .wn-bar button:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
 
@@ -163,3 +168,81 @@ html[data-wn-tab="history"] .wn:not(.is-live) .wn-panel:not([data-panel="history
 .wn-pick select { width: 100%; min-height: 48px; padding: 0 0.75rem; font: inherit; font-size: 1rem; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
 .wn-pick select:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
 #wn-web-sec .wn-hint { margin: 0 0 0.6rem; }
+
+
+/* The factions as the board or the web, a switch at the top of both. */
+.wn-seg { margin: 0 0 0.9rem; }
+.wn:not(.is-live) .wn-seg { display: none; }
+
+/* Places and people (stage 13): folds like the factions', a place's or a
+   person's Challenge as the die it telegraphs with, and each part of the
+   page read the way the World screen lays it out. */
+.wn-pg .wn-about p { margin: 0; }
+.wn-pg .wn-about p + p { margin-top: 0.5rem; }
+.wn-pg.is-district { border-width: 2px; }
+.wn-pg.is-district .wn-fs-n { font-size: 1.24rem; letter-spacing: 0.05em; }
+.wn-pl { display: grid; gap: 0.35rem; margin: 0; padding: 0; list-style: none; }
+.wn-pl > li { line-height: 1.42; overflow-wrap: anywhere; }
+.wn-pl > li:not(.wn-tl):not(.wn-stake) { padding-left: 0.85rem; position: relative; }
+.wn-pl > li:not(.wn-tl):not(.wn-stake)::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 5px; height: 5px; background: var(--gold); transform: rotate(45deg); }
+.wn-pl em { font-style: italic; }
+.wn-gt { display: inline-block; margin-right: 0.15rem; padding: 0 0.4rem; font-style: italic; font-weight: 700; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
+.wn-stake, .wn-tl, .wn-clock { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 0.6rem; align-items: start; }
+.wn-st-d .zd-die, .wn-tl-d .zd-die { --s: 32px; width: 32px; height: 32px; }
+.wn-stake p, .wn-tl p, .wn-clock p { margin: 0; }
+.wn-tags { display: flex; flex-wrap: wrap; gap: 0.3rem; margin: 0.25rem 0 0 !important; }
+.wn-for, .wn-at { margin-top: 0.15rem !important; font-size: 0.88rem; color: var(--muted); }
+.wn-at { font-weight: 700; color: var(--zd-them-ink); }
+.wn-go { margin: 1rem 0 0; }
+.wn-gobtn { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; padding: 0 0.9rem; font: inherit; font-size: 0.92rem; font-weight: 700; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 2px; cursor: pointer; }
+.wn-gobtn:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wn-i { width: 20px; height: 20px; fill: none; stroke: var(--gold-ink); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.wn:not(.is-live) .wn-go { display: none; }
+
+/* The map: as tall as the screen above the bar, wall to wall on a phone, the
+   card for whatever's tapped over its foot, and the web's switch and the
+   zoom in a row where the thumb is. Before the script it's the drawing on
+   its own, with every pin as a link under it. */
+.wn-mapsec { scroll-margin-top: 0; }
+.wn-mapbox { position: relative; height: max(360px, calc(100dvh - 4.25rem - max(0.45rem, env(safe-area-inset-bottom, 0px)))); max-height: 56rem; margin: 0 -16px; overflow: hidden; background: color-mix(in srgb, var(--bg) 70%, black); border-block: 1px solid var(--line); }
+.wn-map { position: absolute; inset: 0; }
+.wn-map > svg.dm { width: 100%; height: 100%; }
+.wn-pins { margin-top: 0.9rem; font-size: 0.92rem; }
+.wn-pins p { margin: 0 0 0.4rem; }
+.wn.is-live .wn-pins { display: none; }
+.wn:not(.is-live) .wn-mbar { display: none; }
+.wn-mbar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: grid; gap: 8px; padding: 10px max(12px, env(safe-area-inset-right, 0px)) 10px max(12px, env(safe-area-inset-left, 0px)); pointer-events: none; background: linear-gradient(to top, color-mix(in srgb, var(--bg) 82%, transparent), transparent); }
+.wn-mbar > * { pointer-events: auto; }
+.wn-mrow { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.wn-webbtn { display: inline-flex; align-items: center; gap: 0.55rem; min-height: 44px; padding: 0 0.9rem 0 0.6rem; font: inherit; font-size: 0.92rem; font-weight: 800; color: var(--ink); background: var(--bar-bg); border: 1px solid var(--line); border-radius: 999px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); cursor: pointer; backdrop-filter: blur(8px); }
+.wn-sw { position: relative; width: 34px; height: 20px; background: var(--panel); border: 1.5px solid var(--line); border-radius: 999px; }
+.wn-sw::after { content: ""; position: absolute; left: 2px; top: 2px; width: 13px; height: 13px; background: var(--muted); border-radius: 50%; transition: transform 160ms ease, background 160ms ease; }
+.wn-webbtn[aria-pressed="true"] .wn-sw { background: color-mix(in srgb, var(--zd-them) 35%, var(--panel)); border-color: var(--zd-them-line); }
+.wn-webbtn[aria-pressed="true"] .wn-sw::after { transform: translateX(14px); background: var(--zd-them); }
+.wn-webbtn:focus-visible, .wn-zoom button:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wn-zoom { display: flex; background: var(--bar-bg); border: 1px solid var(--line); border-radius: 999px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); backdrop-filter: blur(8px); overflow: hidden; }
+.wn-zoom button { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: var(--ink); background: none; border: 0; cursor: pointer; }
+.wn-zoom button + button { border-left: 1px solid var(--line-soft); }
+.wn-zoom svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.wn-mcard { padding: 0.7rem 0.8rem 0.75rem; background: var(--surface); border: 1.5px solid var(--zd-them-line); border-radius: 3px; box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4); }
+.wn-mcard[hidden] { display: none; }
+.wn-mc-top { display: grid; grid-template-columns: 40px minmax(0, 1fr) 44px; gap: 0.6rem; align-items: start; }
+.wn-mc-d .zd-die { --s: 40px; width: 40px; height: 40px; }
+.wn-mc-n { margin: 0.05rem 0 0; font-family: var(--display); font-size: 1.12rem; font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
+.wn-mc-l, .wn-mc-s { margin: 0.2rem 0 0; font-size: 0.9rem; line-height: 1.35; color: var(--muted); }
+.wn-mc-s { font-weight: 700; color: var(--zd-them-ink); }
+.wn-mc-x { display: grid; place-items: center; width: 44px; height: 44px; margin: -0.35rem -0.4rem 0 0; padding: 0; color: var(--muted); background: none; border: 0; cursor: pointer; }
+.wn-mc-x svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; }
+.wn-mc-x:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
+.wn-mc-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.6rem; }
+.wn-mc-go { display: inline-flex; align-items: center; min-height: 44px; padding: 0 1rem; font: inherit; font-size: 0.94rem; font-weight: 800; color: var(--zd-on-them); background: var(--zd-them); border: 1px solid var(--zd-them); border-radius: 2px; text-decoration: none; cursor: pointer; }
+.wn-mc-go.is-quiet { color: var(--ink); background: var(--panel); border-color: var(--line); }
+.wn-mc-go:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wn-mapbox .wm-stage { touch-action: none; }
+.wn.is-map .wn-foot { display: none; }
+@media (min-width: 46rem) {
+  .wn-mapbox { margin: 0; height: min(78vh, 56rem); border: 1px solid var(--line); border-radius: 3px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wn-sw::after { transition: none; }
+}

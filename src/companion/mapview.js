@@ -14,6 +14,12 @@
 // Under the fog (stage 5) there's a fog layer over the picture, and while she's
 // rubbing it, one finger rubs instead of moving the map (brush()). Two fingers
 // still move and zoom it, and so do the zoom buttons and the keys.
+//
+// A map drawn in code (stage 13 of notes/builder-plan.md) goes in the layer
+// in place of a picture (art()), so it moves and zooms the same way. The web
+// can go on any map (web()): each faction a token where its pin is, with its
+// threads drawn between them a frame at a time in the screen's own pixels, so
+// the tokens and the lines stay one size while the map moves under them.
 
 const TAP_MOVE = 10; // how far a finger can wander and still be a tap
 const DOUBLE_MS = 300;
@@ -24,6 +30,31 @@ const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
 // Past an edge it pulls harder the further it goes.
 const band = (over, dim) => (1 - 1 / ((Math.abs(over) * 0.55) / dim + 1)) * dim * Math.sign(over);
 const ease = (k) => 1 - Math.pow(1 - k, 3);
+
+// A thread between two tokens on the screen: a curve that bows to one side by
+// bow (two between the same pair bow apart), worked out from the same end
+// whichever way it goes, and stopping short of each token so its arrow shows.
+const TOKEN = 17;
+function curveOf([ax, ay], [bx, by], bow, fromA) {
+  const [p, q] = fromA ? [[ax, ay], [bx, by]] : [[bx, by], [ax, ay]];
+  const dx = q[0] - p[0];
+  const dy = q[1] - p[1];
+  const len = Math.hypot(dx, dy) || 1;
+  const off = bow * Math.min(48, len * 0.18) + len * 0.08;
+  const mx = (p[0] + q[0]) / 2 + (-dy / len) * off;
+  const my = (p[1] + q[1]) / 2 + (dx / len) * off;
+  const cut = ([sx, sy]) => {
+    const ex = mx - sx;
+    const ey = my - sy;
+    const d = Math.hypot(ex, ey) || 1;
+    const r = Math.min(TOKEN, d / 3);
+    return [sx + (ex / d) * r, sy + (ey / d) * r];
+  };
+  const s0 = cut([ax, ay]);
+  const s1 = cut([bx, by]);
+  const r = (v) => Math.round(v * 10) / 10;
+  return `M${r(s0[0])} ${r(s0[1])}Q${r(mx)} ${r(my)} ${r(s1[0])} ${r(s1[1])}`;
+}
 
 // w and h are the picture's size in pixels. drawPin(pin) gives a pin's
 // element its class and insides. onTap() is a tap on the map itself, once
@@ -37,11 +68,14 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
   el.setAttribute("aria-roledescription", "map");
   el.setAttribute("aria-label", label);
   if (how) el.setAttribute("aria-describedby", how);
-  el.innerHTML = '<div class="wm-layer" aria-hidden="true"><img class="wm-pic" alt="" draggable="false" decoding="async"><canvas class="wm-fog" hidden></canvas></div><div class="wm-pins"></div><div class="wm-cross" aria-hidden="true" hidden><i></i></div><div class="wm-ring" aria-hidden="true" hidden></div>';
+  el.innerHTML = '<div class="wm-layer" aria-hidden="true"><div class="wm-art"></div><img class="wm-pic" alt="" draggable="false" decoding="async"><canvas class="wm-fog" hidden></canvas></div><div class="wm-pins"></div><svg class="wm-web-l" aria-hidden="true" focusable="false" hidden><defs><marker id="wm-arrow-b" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path class="wm-arrow is-bond" d="M0 0L6 3L0 6Z"/></marker><marker id="wm-arrow-h" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto"><path class="wm-arrow is-hostile" d="M0 0L6 3L0 6Z"/></marker></defs><g></g></svg><div class="wm-web" hidden></div><div class="wm-cross" aria-hidden="true" hidden><i></i></div><div class="wm-ring" aria-hidden="true" hidden></div>';
   const layer = el.firstElementChild;
-  const img = layer.firstElementChild;
+  const art = layer.querySelector(".wm-art");
+  const img = layer.querySelector(".wm-pic");
   const fogEl = layer.querySelector(".wm-fog");
   const pinsEl = el.querySelector(".wm-pins");
+  const linesEl = el.querySelector(".wm-web-l");
+  const webEl = el.querySelector(".wm-web");
   const cross = el.querySelector(".wm-cross");
   const ring = el.querySelector(".wm-ring");
   // While she's rubbing the fog: { r() the brush's size on the screen,
@@ -59,6 +93,10 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
   let anim = 0;
   let queued = 0;
   let pins = [];
+  // The web on the map: its tokens [{ id, x, y, dx, dy, el }] and its lines
+  // [{ a, b, cls, arrow, bow, el }], or none.
+  let toks = [];
+  let lines = [];
   let tapTimer = 0;
   let dragged = false;
   // A glide or a zoom that a finger stopped part way, which settles once it's lifted.
@@ -71,6 +109,9 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
   // The height that isn't under the bar.
   const vis = () => Math.max(1, H - pad);
   const fitS = () => (W && H ? Math.min(W / w, vis() / h) : 1);
+  // As close as fills the screen both ways, for a map that should open
+  // filling a phone rather than as a band across it.
+  const coverS = () => clamp(W && H ? Math.max(W / w, vis() / h) : 1, fitS(), Math.max(fitS() * 4, 1));
   const minS = () => fitS();
   // In as close as a pixel of the picture to a pixel of the screen, or four
   // times the whole map, whichever's closer.
@@ -103,6 +144,19 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     queued = 0;
     layer.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${s})`;
     for (const p of pins) p.el.style.transform = `translate3d(${x + p.x * w * s}px, ${y + p.y * h * s}px, 0)`;
+    if (!toks.length) return;
+    const at = new Map();
+    for (const t of toks) {
+      const px = x + t.x * w * s + t.dx;
+      const py = y + t.y * h * s + t.dy;
+      at.set(t.id, [px, py]);
+      t.el.style.transform = `translate3d(${px}px, ${py}px, 0)`;
+    }
+    for (const l of lines) {
+      const p = at.get(l.a);
+      const q = at.get(l.b);
+      if (p && q) l.el.setAttribute("d", curveOf(p, q, l.bow, l.a < l.b));
+    }
   }
   const draw = () => {
     queued ||= requestAnimationFrame(paint);
@@ -127,9 +181,26 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
       else kept.push(box);
     }
   }
+  // The web's names the same way: the tapped faction's first, then the rest
+  // of those lit, each waiting for room.
+  function declutterToks() {
+    const kept = [];
+    const order = [...toks].sort((a, b) => Number(b.el.classList.contains("is-sel")) - Number(a.el.classList.contains("is-sel")));
+    for (const t of order) {
+      const n = t.el.querySelector(".wm-ft-n");
+      if (!n) continue;
+      t.el.classList.remove("is-quiet");
+      const r = n.getBoundingClientRect();
+      if (!r.width) continue;
+      const box = { l: r.left - 3, r: r.right + 3, t: r.top - 1, b: r.bottom + 1 };
+      if (kept.some((k) => box.l < k.r && box.r > k.l && box.t < k.b && box.b > k.t)) t.el.classList.add("is-quiet");
+      else kept.push(box);
+    }
+  }
   function rest() {
     el.classList.remove("is-moving");
     declutter();
+    if (toks.length) declutterToks();
     onRest?.();
   }
 
@@ -233,7 +304,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     // Whatever's pressed now is a new tap, whatever the last one was.
     dragged = false;
     if (e.pointerType === "mouse" && e.button !== 0) return;
-    if (e.target.closest(".wm-pin") && e.pointerType === "mouse") return;
+    if (e.target.closest(".wm-pin, .wm-ft") && e.pointerType === "mouse") return;
     cut = Boolean(anim);
     stop();
     box = el.getBoundingClientRect();
@@ -350,7 +421,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
       lastTap = { t: performance.now(), x: p.x, y: p.y };
       // A pin's own tap goes straight through. A tap on the map waits to see
       // whether it's the first of two.
-      if (!e.target.closest?.(".wm-pin")) {
+      if (!e.target.closest?.(".wm-pin, .wm-ft")) {
         clearTimeout(tapTimer);
         tapTimer = setTimeout(() => onTap?.(), DOUBLE_MS);
       }
@@ -369,7 +440,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
   el.addEventListener("pointercancel", (e) => up(e, true));
   // A pin's tap stops a tap on the map just before it closing the card it opens.
   el.addEventListener("click", (e) => {
-    if (e.target.closest?.(".wm-pin")) {
+    if (e.target.closest?.(".wm-pin, .wm-ft")) {
       clearTimeout(tapTimer);
       tapTimer = 0;
     }
@@ -429,7 +500,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
       if (pending) {
         const [fx, fy, closer] = pending;
         pending = null;
-        s = closer ? clamp(fitS() * 2.4, minS(), maxS()) : s;
+        s = closer === "cover" ? coverS() : closer ? clamp(fitS() * 2.4, minS(), maxS()) : s;
         [x, y] = hard(s, W / 2 - fx * w * s, vis() / 2 - fy * h * s);
       }
     } else {
@@ -443,7 +514,60 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
 
   return {
     el,
-    // The picture, by its address (an object URL from the phone's copy).
+    // A map drawn in code, as SVG, in the picture's place, or "" for none.
+    art(html) {
+      if (art.innerHTML !== html) art.innerHTML = html || "";
+      el.classList.toggle("is-drawn", Boolean(html));
+      el.classList.toggle("is-empty", !html && !img.getAttribute("src"));
+    },
+    // The web on the map, or null to take it off: { nodes: [{ id, x, y, dx,
+    // dy }], x and y from 0 to 1 like a pin's and dx, dy the token's pixels
+    // off that spot, lines: [{ a, b, cls, arrow, bow }], each from the node a
+    // to the node b, arrow "b" or "h" for one that only goes one way, and
+    // draw(node), its button's { cls, html, attrs } }. A token keeps its
+    // button from one drawing to the next, so the one that's got focus keeps it.
+    web(spec) {
+      if (!spec) {
+        toks = [];
+        lines = [];
+        webEl.replaceChildren();
+        linesEl.lastElementChild.replaceChildren();
+        webEl.hidden = true;
+        // An SVG has no hidden property, only the attribute.
+        linesEl.setAttribute("hidden", "");
+        el.classList.remove("is-web");
+        return;
+      }
+      const had = new Map(toks.map((t) => [t.id, t.el]));
+      toks = spec.nodes.map((n) => {
+        const b = had.get(n.id) ?? document.createElement("button");
+        had.delete(n.id);
+        b.type = "button";
+        const d = spec.draw(n);
+        if (b.className !== d.cls) b.className = d.cls;
+        if (b.innerHTML !== d.html) b.innerHTML = d.html;
+        for (const [k, v] of Object.entries(d.attrs)) if (b.getAttribute(k) !== v) b.setAttribute(k, v);
+        return { ...n, el: b };
+      });
+      for (const old of had.values()) old.remove();
+      toks.forEach((t, i) => {
+        if (webEl.children[i] !== t.el) webEl.insertBefore(t.el, webEl.children[i] ?? null);
+      });
+      const g = linesEl.lastElementChild;
+      g.replaceChildren();
+      lines = spec.lines.map((l) => {
+        const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        p.setAttribute("class", l.cls);
+        if (l.arrow) p.setAttribute("marker-end", `url(#wm-arrow-${l.arrow})`);
+        g.append(p);
+        return { ...l, el: p };
+      });
+      webEl.hidden = false;
+      linesEl.removeAttribute("hidden");
+      el.classList.add("is-web");
+      paint();
+      requestAnimationFrame(declutterToks);
+    },
     show(src) {
       if (!src) img.removeAttribute("src");
       else if (img.getAttribute("src") !== src) img.src = src;
@@ -521,6 +645,17 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
       const s1 = closer ? clamp(Math.max(s, fitS() * 2.4), minS(), maxS()) : s;
       const [x1, y1] = hard(s1, W / 2 - fx * w * s1, vis() / 2 - fy * h * s1);
       tweenTo(s1, x1, y1, 320);
+    },
+    // Filling the screen both ways, with this spot (0 to 1 each way) in the
+    // middle as near as the edges let it be.
+    cover(fx, fy) {
+      if (!placed) {
+        pending = [fx, fy, "cover"];
+        return;
+      }
+      const s1 = coverS();
+      const [x1, y1] = hard(s1, W / 2 - fx * w * s1, vis() / 2 - fy * h * s1);
+      tweenTo(s1, x1, y1, 0);
     },
     zoomIn: () => zoomTo(s * 1.8),
     zoomOut: () => zoomTo(s / 1.8),

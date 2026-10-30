@@ -16,3 +16,8 @@ years:
     title: Saltmarsh, 1999
     when: The week the fish market burned.
     recipe: { region: town, era: modern }
+ground:
+  size: [400, 300]
+  sea: [[0, 0], [80, 0], [80, 300], [0, 300]]
+  water: [[[300, 160], [340, 160], [340, 190], [300, 190]]]
+  hills: [[[330, 10], [395, 10], [395, 60], [330, 60]]]

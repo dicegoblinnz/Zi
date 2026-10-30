@@ -3,5 +3,5 @@ history:
   - { age: 1, text: "The Tide Chapel was built where the first drowned sailor washed up." }
   - { age: 2, text: "The Night Boats started running rum the year the Town Watch doubled the tolls." }
   - { age: 2, text: "The Town Watch hanged Jory Pike's brother on the Low Steps." }
-  - { age: 3, text: "The fish market burned, and the Market Gang blamed the Harbour Bank." }
+  - { age: 3, text: "The Fish Market burned, and the Market Gang blamed the Harbour Bank." }
   - { age: 3, text: "The bank's clerk went to the Tide Chapel and never came back.", hers: true }

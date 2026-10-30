@@ -51,6 +51,52 @@
 // content/worlds/<universe>/<year>/history.yaml, How it came to be:
 //   { history: [{ age, text, hers? }] }, age 1 long ago, 2 in living memory
 //   and 3 this last year, and hers when the line would give a Secret away.
+//
+// A year's places, people and map (stage 13) come together, all three or
+// none, so a year can have its board before they're written.
+//
+// content/worlds/<universe>/<year>/places.yaml, its places: { places: [ ... ] },
+// each a page the way pages.js keeps one:
+//   key, name, aka   its key, its name, and up to 4 other names it goes by,
+//                which link to it too
+//   area         district or part, for the districts and their parts, which
+//                the map draws as shapes. A place with neither is a spot in one
+//   in           the district a part's in, or the part or district a place's in
+//   line, ch, look   what it is, its Challenge (1 to 6) and what it's like
+//   here         who's here, a line each, anyone with a page named in it
+//   ground       *Name*: what it does
+//   stakes       *Name*, Challenge N: *Tag*, *Tag* (what it's for), the way
+//                Twenty Places writes them, so it goes on the live table
+//   clock        its scene clock: { d, text }
+//   twist        its complication
+//   teles        its telegraphs: [{ text, d, at }], at read the way aims.js
+//                reads a page's (Defend or Confidence and what it does, one of
+//                its stakes by name, the scene clock, or everyone somewhere)
+//   hooks, elsewhere, note   hers, like a page's
+//   secret       { tag, more }: its hidden tag, capitals on its words, and the
+//                rest, with two ways in a player could find written into it
+// content/worlds/<universe>/<year>/people.yaml: { people: [ ... ] }
+//   key, name, aka, line (who they are), ch, look (what you notice first),
+//   want, voice, rules, teles, hooks, note, as a place's are
+//   at           the place they're found, whose who's here names them
+//   tags         as a threat, a tag's words or { text, x, kind }, kind being
+//                comes, keeps, drives, weak or power, off the Threat Builder
+//   secret       { tag, more, weak }: their hidden tag, the rest, and whether
+//                it's the weak point
+// content/worlds/<universe>/<year>/map.yaml, the year's map in the map's own
+// numbers (world.yaml's ground gives its size, 0 to w across, 0 to h down):
+//   districts    { <key>: [[x, y], ...] }, every district's shape
+//   parts        { <key>: [[x, y], ...] }, every part's, inside its district
+//   wilds        [<key>], districts that are open country (the Badlands),
+//                drawn as the land itself rather than as a district's plate
+//   roads        [{ name, pts: [[x, y], ...] }], the main roads
+//   marks        [{ name, kind, at: [x, y] }], landmarks you'd steer by (kind
+//                is one of draw-map.js's MARKS)
+//   pins         { <place key>: [x, y] }, a pin for every place, inside its
+//                district and its part
+// and world.yaml's ground, what every year shares, so it never moves:
+//   ground       { size: [w, h], sea: [[x, y], ...], water: [[[x, y], ...]],
+//                hills: [[[x, y], ...]] }
 
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -58,7 +104,10 @@ import { parse as parseYaml } from "yaml";
 import { MAX, OUTCOMES, STATES, factionOf, moneyOf, stepsOf } from "../src/companion/board.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { diceLabel, stepsToDice } from "../src/companion/dice.js";
-import { curlyQuotes } from "../src/companion/aims.js";
+import { curlyQuotes, readAim } from "../src/companion/aims.js";
+import { PMAX, TAG_KINDS, linker, pageCardOf, pageOf } from "../src/companion/pages.js";
+import { MMAX } from "../src/companion/maps.js";
+import { MARKS, inShape } from "../src/worlds/draw-map.js";
 
 // A year's world, brought into a campaign whole with every was copy, stays
 // under this many of the 700,000 characters a world holds (MAX_DOC in
@@ -68,6 +117,14 @@ export const WORLD_MAX = 450000;
 export const HISTORY_WORDS = 40;
 export const AGES = [1, 2, 3];
 export const TIES = ["rival", "ally", "debt"];
+// A year's map holds this many pins at most, of the 60 a map holds (MMAX.pins
+// in maps.js), so she's got ten of her own once it's in a campaign.
+export const WORLD_PINS = 50;
+export const AREAS = ["district", "part"];
+const PLACE_FIELDS = new Set(["key", "name", "aka", "area", "in", "line", "ch", "look", "here", "ground", "stakes", "clock", "twist", "teles", "hooks", "elsewhere", "secret", "note"]);
+const PERSON_FIELDS = new Set(["key", "name", "aka", "at", "line", "ch", "look", "want", "voice", "tags", "rules", "teles", "hooks", "secret", "note"]);
+const GROUND = /^\*([^*]+)\*:\s*\S/;
+const STAKE = /^\*([^*]+)\*,?\s*Challenge ([1-6])(?::\s*(.+?))?(?:\s*\(([^)]+)\))?$/;
 const KEY = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const KINDS = ["bond", "hostile"];
 const DIALS = ["tense", "strange", "rich", "ruled"];
@@ -130,6 +187,11 @@ export function readWorldsDir(dir) {
         files[f] = existsSync(p) ? readYaml(p, problems) : null;
         if (!existsSync(p)) problems.push(`${u}/${year}/ has no ${f}.yaml`);
       }
+      // Its places, people and map, which come together or not at all.
+      const pages = ["places", "people", "map"];
+      const there = pages.filter((f) => existsSync(join(folder, `${f}.yaml`)));
+      if (there.length && there.length < pages.length) problems.push(`${u}/${year}/ has ${there.join(" and ")}.yaml but no ${pages.filter((f) => !there.includes(f)).join(" or ")}.yaml, and they come together`);
+      for (const f of there) files[f] = readYaml(join(folder, `${f}.yaml`), problems);
       src.push({ universe: u, year: String(year), world, files });
     }
   }
@@ -392,7 +454,7 @@ export function compileWorld({ universe, year, world, files }, book) {
       }
     }
   }
-  if (wanting.size) notes.push(`agendas are after ${plural(wanting.size, "place", "places")} that aren't anyone's seat, for its places stage to write: ${[...wanting].join(", ")}`);
+  if (wanting.size) notes.push(`agendas are after ${plural(wanting.size, "place", "places")} that aren't anyone's seat: ${[...wanting].join(", ")}`);
   // Something strange.
   if (!factions.some((f) => f.strange)) say("nothing on the board's strange (strange: true on a faction, an asset or a Secret)");
 
@@ -414,14 +476,31 @@ export function compileWorld({ universe, year, world, files }, book) {
   const quiet = top.filter((f) => !history.some((l) => new RegExp(`\\b${nameKey(f.card.name).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(l.text.replace(/’/g, "'"))));
   if (quiet.length) notes.push(`How it came to be never names ${quiet.map((f) => f.card.name).join(", ")}`);
 
-  // ── How big it is brought in, with a was copy of every card, the way
-  // stage 14 brings it in.
+  // ── Places, people and the map (stage 13), once the year has them.
+  const hasPages = ["places", "people", "map"].some((f) => files[f] != null);
+  const pg = hasPages ? pagesOf({ world, files, factions, history, say, notes }) : null;
+  if (!hasPages) {
+    const seats = new Set(factions.map((f) => f.seat).filter(Boolean));
+    notes.push(`no places, people or map yet, for ${plural(seats.size, "seat", "seats")} and ${plural(factions.filter((f) => f.faceOf).length, "Face", "Faces")}`);
+  }
+
+  // ── How big it is brought in, with a was copy of every card and page, the
+  // way stage 14 brings it in, and the map with its shapes kept beside it.
   const id9 = "abcdefghi";
   const shown = { card: false, power: false, res: false, assets: false, agenda: false, bonds: false, threads: false, secret: false };
   const inWorld = factions.map((f) => ({ ...JSON.parse(JSON.stringify(f.card).replace(/"x\d+"/g, `"${id9}"`)), shown, book: { from: id, key: f.key, h: "0123456789abcdef", at: Date.now(), was: f.card } }));
   const record = { recipe, dials: { tense: 1, strange: 1, rich: 1, ruled: 1 }, seed: "", dealt: null, history: history.map((l) => ({ id: id9, ...l })), shown: [], at: Date.now() };
-  const size = JSON.stringify({ factions: inWorld, pages: [], maps: [], build: record }).length;
-  if (size > WORLD_MAX) say(`brought in whole it comes to ${size} characters, past the ${WORLD_MAX} that leaves her room in a world`);
+  // Each line on a page gets an id of its own, the length the phone's are,
+  // since a page keeps only one line for each id.
+  let lineN = 0;
+  const lineId = () => `abcde${(lineN++).toString(36).padStart(4, "0")}`;
+  const pagesIn = (pg?.pages ?? []).map((p) => {
+    const withIds = (l) => (p.card[l] ?? []).map((x) => (typeof x === "string" ? { id: lineId(), text: x } : { id: lineId(), ...x }));
+    return pageOf({ ...p.card, id: id9, here: withIds("here"), ground: withIds("ground"), stakes: withIds("stakes"), tags: withIds("tags"), teles: withIds("teles"), hooks: withIds("hooks"), shown: {}, book: { from: id, key: p.key, h: "0123456789abcdef", at: Date.now(), was: p.card } });
+  });
+  const mapsIn = pg?.map ? [{ id: id9, name: curl(yr.title), key: "", w: pg.map.size[0], h: pg.map.size[1], of: "", shown: false, pins: Object.keys(pg.map.pins).map(() => ({ id: id9, x: 0.1234, y: 0.1234, to: { k: "p", id: id9 }, name: "", shown: false })), draw: drawnOf(pg.map) }] : [];
+  const size = JSON.stringify({ factions: inWorld, pages: pagesIn, maps: mapsIn, build: record }).length;
+  if (size > WORLD_MAX) say(`brought in whole it comes to ${size} characters, past the ${WORLD_MAX} that leaves her room in a world (small places go before any faction does)`);
 
   const out = {
     v: 1,
@@ -456,9 +535,367 @@ export function compileWorld({ universe, year, world, files }, book) {
       ties: asList(r.threads).map((t) => t?.tie ?? ""),
     })),
     history,
+    // Its places and people, each as the page the World screen keeps, with
+    // its key, the district or part it's in, and where a person's found.
+    places: (pg?.pages ?? []).filter((p) => p.kind === "place").map(({ key, area, in: inside, card }) => ({ key, area, in: inside, card })),
+    people: (pg?.pages ?? []).filter((p) => p.kind === "person").map(({ key, at, card }) => ({ key, at, card })),
+    map: pg?.map ?? null,
     size,
   };
   return { world: problems.length ? null : out, problems, notes };
+}
+
+// The map's shapes as a campaign keeps them beside a drawn map (stage 14):
+// numbers and names only.
+export function drawnOf(map) {
+  return { ground: map.ground, districts: map.districts, parts: map.parts, wilds: map.wilds, roads: map.roads, marks: map.marks };
+}
+
+// Words that keep their paragraphs, each curled.
+const curlParas = (s) =>
+  String(s ?? "")
+    .split(/\n\s*\n/)
+    .map((p) => curl(p))
+    .filter(Boolean)
+    .join("\n\n");
+
+// A year's places and people, each read into the page the World screen keeps
+// (pages.js), and its map, all checked: every seat a place and every Face a
+// person, every name linking where it's written, every telegraph aimed, every
+// place pinned inside its district and its part, and the shapes inside the map.
+function pagesOf({ world, files, factions, history, say, notes }) {
+  const pages = new Map();
+  const lists = [
+    ["place", asList(files.places?.places), PLACE_FIELDS, "places"],
+    ["person", asList(files.people?.people), PERSON_FIELDS, "people"],
+  ];
+  for (const [kind, list, , file] of lists) {
+    if (!list.length) say(`${file}.yaml has no ${file}`);
+    for (const x of list) {
+      if (!x || typeof x !== "object") {
+        say(`${file}.yaml has an entry that isn't a ${kind}: ${JSON.stringify(x).slice(0, 60)}`);
+        continue;
+      }
+      if (!KEY.test(String(x.key ?? ""))) say(`a ${kind}'s key isn't a key: ${JSON.stringify(x.key ?? x.name)}`);
+      else if (pages.has(x.key)) say(`two pages have the key ${x.key}`);
+      else if (factions.some((f) => f.key === x.key)) say(`${x.key} is a faction's key and a ${kind}'s, so links can't tell them apart`);
+      else pages.set(x.key, { key: x.key, kind, raw: x });
+    }
+  }
+  const DICE = [2, 4, 6, 8, 10, 12];
+  const place = (k) => pages.get(k)?.kind === "place";
+  const person = (k) => pages.get(k)?.kind === "person";
+
+  for (const p of pages.values()) {
+    const x = p.raw;
+    const who = x.name ? String(x.name) : p.key;
+    const fields = p.kind === "place" ? PLACE_FIELDS : PERSON_FIELDS;
+    for (const k of Object.keys(x)) if (!fields.has(k)) say(`${who} has a line a ${p.kind} can't hold: ${k}${["want", "voice", "tags", "rules"].includes(k) ? " (that's a person's)" : ["here", "ground", "stakes", "clock", "twist", "area", "in", "elsewhere"].includes(k) ? " (that's a place's)" : ""}`);
+    const line = (v) => curl(v);
+    const items = (l) =>
+      asList(x[l]).map((v) => {
+        if (typeof v === "string" || typeof v === "number") return curl(v);
+        say(`${who}'s ${l} has a line that isn't words (words with a comma inside { } need quotes): ${JSON.stringify(v).slice(0, 60)}`);
+        return "";
+      });
+    const tags = asList(x.tags).map((t) => {
+      if (typeof t === "string") return { text: curl(t), x: 1, kind: "" };
+      if (!t || typeof t !== "object") return { text: "", x: 1, kind: "" };
+      for (const k of Object.keys(t)) if (!["text", "x", "kind"].includes(k)) say(`${who}'s tag ${t.text ?? ""} has ${JSON.stringify(k).slice(0, 50)} in it, which a tag can't hold`);
+      if (t.kind != null && !TAG_KINDS.includes(t.kind)) say(`${who}'s tag ${t.text} is a ${t.kind} tag, and a tag's ${TAG_KINDS.filter(Boolean).join(", ")} or none`);
+      if (t.x != null && (!Number.isInteger(t.x) || t.x < 1 || t.x > PMAX.x)) say(`${who}'s tag ${t.text} is ×${t.x}, and a tag's ×1 to ×${PMAX.x}`);
+      return { text: curl(t.text), x: t.x ?? 1, kind: t.kind ?? "" };
+    });
+    const teles = asList(x.teles).map((t) => {
+      if (!t || typeof t !== "object") {
+        say(`${who} has a telegraph that isn't { text, d, at }`);
+        return { text: "", d: 6, at: "" };
+      }
+      for (const k of Object.keys(t)) if (!["text", "d", "at"].includes(k)) say(`${who}'s telegraph ${String(t.text ?? "").slice(0, 40)} has ${JSON.stringify(k).slice(0, 50)} in it (words with a comma inside { } need quotes)`);
+      if (!DICE.includes(t.d)) say(`${who}'s telegraph ${String(t.text ?? "").slice(0, 40)} is a d${t.d}, and a telegraph's die is a d2 to a d12`);
+      return { text: curlyQuotes(curl(t.text)), d: t.d, at: curl(t.at) };
+    });
+    const secret = x.secret && typeof x.secret === "object" ? x.secret : null;
+    if (x.secret != null && !secret) say(`${who}'s Secret isn't { tag, more }`);
+    if (secret) for (const k of Object.keys(secret)) if (!["tag", "more", "weak"].includes(k) || (k === "weak" && p.kind === "place")) say(`${who}'s Secret has ${JSON.stringify(k).slice(0, 50)} in it, which it can't hold`);
+    const clock = x.clock && typeof x.clock === "object" ? x.clock : null;
+    if (x.clock != null && !clock) say(`${who}'s scene clock isn't { d, text }`);
+    if (clock && !DICE.includes(clock.d)) say(`${who}'s scene clock is a d${clock.d}, and a clock's a d2 to a d12`);
+    const card = {
+      key: p.key,
+      kind: p.kind,
+      name: line(x.name),
+      aka: asList(x.aka).map(line),
+      line: line(x.line),
+      ch: x.ch,
+      look: curlParas(x.look),
+      want: line(x.want),
+      twist: line(x.twist),
+      here: items("here"),
+      ground: items("ground"),
+      stakes: items("stakes"),
+      clockD: clock?.d ?? 0,
+      clock: line(clock?.text),
+      tags,
+      rules: curlParas(x.rules),
+      teles,
+      hooks: items("hooks"),
+      elsewhere: line(x.elsewhere),
+      voice: line(x.voice),
+      secret: line(secret?.tag),
+      more: curlParas(secret?.more),
+      weak: secret?.weak === true,
+      note: curlParas(x.note),
+    };
+    // Every word fits where the World screen keeps it, and comes back whole.
+    const fits = (v, max, what) => {
+      if (String(v).length > max) say(`${who}'s ${what} runs to ${String(v).length} characters, and a page holds ${max}`);
+    };
+    fits(card.name, PMAX.name, "name");
+    for (const a of card.aka) fits(a, PMAX.name, `other name ${a}`);
+    if (card.aka.length > PMAX.aka) say(`${who} has ${card.aka.length} other names, and a page holds ${PMAX.aka}`);
+    for (const [k, max, what] of [["line", PMAX.line, p.kind === "place" ? "line on what it is" : "line on who they are"], ["look", PMAX.look, p.kind === "place" ? "line on what it's like" : "line on what you notice first"], ["want", PMAX.words, "want"], ["twist", PMAX.words, "complication"], ["clock", PMAX.words, "scene clock"], ["voice", PMAX.words, "voice"], ["rules", PMAX.rules, "rules"], ["elsewhere", PMAX.elsewhere, "Elsewhere"], ["secret", PMAX.secret, "Secret's tag"], ["more", PMAX.more, "Secret's rest"], ["note", PMAX.note, "note"]]) fits(card[k], max, what);
+    for (const l of ["here", "ground", "stakes", "hooks"]) {
+      if (card[l].length > PMAX.list) say(`${who} has ${card[l].length} lines on its ${l}, and a page holds ${PMAX.list}`);
+      for (const t of card[l]) fits(t, PMAX.item, `${l} line ${t.slice(0, 40)}`);
+    }
+    for (const t of card.teles) fits(t.text, PMAX.item, `telegraph ${t.text.slice(0, 40)}`);
+    for (const t of card.tags) fits(t.text, PMAX.name, `tag ${t.text}`);
+    if (card.teles.length > PMAX.list || card.tags.length > PMAX.list) say(`${who} has more telegraphs or tags than a page holds (${PMAX.list})`);
+    for (const k of ["name", "line"]) if (!card[k]) say(`${who} has no ${k === "line" ? (p.kind === "place" ? "line on what it is" : "line on who they are") : k}`);
+    if (!Number.isInteger(card.ch) || card.ch < 1 || card.ch > 6) say(`${who}'s Challenge is ${x.ch ?? "missing"}, and it's 1 to 6`);
+    if (!card.look) say(`${who} has no ${p.kind === "place" ? "line on what it's like (look)" : "line on what you notice first (look)"}`);
+    if (p.kind === "person" && !card.tags.length) say(`${who} has no tags, and a person's written as a threat`);
+    if (card.secret && (!/^[A-Z0-9]/.test(card.secret) || /[.?]$/.test(card.secret))) say(`${who}'s Secret's tag starts with a capital and has no full stop: ${card.secret}`);
+    if (card.secret && !card.more) say(`${who}'s Secret has no rest, and the rest says the ways in`);
+    if (card.clock && !card.clockD) say(`${who}'s scene clock has no die`);
+    if (p.kind === "place" && !AREAS.includes(x.area) && !card.clockD) say(`${who} has no scene clock, and a place that isn't a district or a part has one`);
+    for (const t of card.ground) if (!GROUND.test(t)) say(`${who}'s ground ${t.slice(0, 40)} isn't *Name*: what it does, so it won't go on the live table`);
+    const stakes = card.stakes.map((t) => t.match(STAKE));
+    card.stakes.forEach((t, i) => {
+      if (!stakes[i]) say(`${who}'s stake ${t.slice(0, 40)} isn't *Name*, Challenge N: *Tag* (what it's for), so it won't go on the live table`);
+    });
+    const names = stakes.filter(Boolean).map((m) => m[1].trim());
+    for (const t of card.teles) {
+      if (!t.text) say(`${who} has a telegraph with no words`);
+      const a = readAim(t.at, names, t.text);
+      if (a.why) say(`${who}'s telegraph ${t.text.slice(0, 40)} can't be aimed on the live table: ${a.why}`);
+    }
+    // Through the same tidying a page brought in gets, and nothing lost.
+    const tidy = pageCardOf(card);
+    for (const k of ["name", "line", "look", "want", "twist", "clock", "rules", "elsewhere", "voice", "secret", "more", "note"]) if (tidy[k] !== card[k] && String(card[k]).length <= (PMAX[k] ?? PMAX.words)) say(`${who}'s ${k} comes out changed on the World screen`);
+    for (const l of ["here", "ground", "stakes", "tags", "teles", "hooks"]) if (tidy[l].length !== card[l].length) say(`${who} loses ${card[l].length - tidy[l].length} of its ${l} on the World screen`);
+    p.card = card;
+    p.area = p.kind === "place" && AREAS.includes(x.area) ? x.area : "";
+    if (p.kind === "place" && x.area != null && !AREAS.includes(x.area)) say(`${who}'s area is ${x.area}, and it's district or part, or none for a place in one`);
+    p.in = p.kind === "place" ? String(x.in ?? "") : "";
+    p.at = p.kind === "person" ? String(x.at ?? "") : "";
+  }
+
+  // Where each place is: a district's in nothing, a part's in a district, and
+  // anywhere else is in a part or a district.
+  const areaOf = (k) => pages.get(k)?.area ?? "";
+  for (const p of pages.values()) {
+    if (p.kind !== "place") continue;
+    const who = p.card.name;
+    if (p.area === "district" && p.in) say(`${who} is a district, so it isn't in anywhere (in)`);
+    if (p.area === "part" && areaOf(p.in) !== "district") say(`${who} is a part of a district, and its in (${p.in || "nothing"}) isn't a district`);
+    if (!p.area && !["district", "part"].includes(areaOf(p.in))) say(`${who} isn't in a district or a part (in: ${p.in || "nothing"})`);
+  }
+  const districtOf = (k) => {
+    const p = pages.get(k);
+    if (!p || p.kind !== "place") return "";
+    if (p.area === "district") return p.key;
+    const up = pages.get(p.in);
+    return up?.area === "district" ? up.key : up?.area === "part" ? up.in : "";
+  };
+  const partOf = (k) => {
+    const p = pages.get(k);
+    if (!p) return "";
+    if (p.area === "part") return p.key;
+    return pages.get(p.in)?.area === "part" ? p.in : "";
+  };
+
+  // Names: no two pages with one name, and a page with a faction's name only
+  // where that faction sits there or that's its Face, since the name links to
+  // the faction everywhere but its own card.
+  const named = new Map();
+  for (const p of pages.values()) {
+    for (const n of [p.card.name, ...p.card.aka]) {
+      const k = nameKey(n);
+      if (named.has(k) && named.get(k) !== p.key) say(`${p.card.name} and ${pages.get(named.get(k)).card.name} are both called ${n}`);
+      named.set(k, p.key);
+      const f = factions.find((g) => nameKey(g.card.name) === k);
+      if (f && f.seat !== p.key && f.faceOf !== p.key) say(`${p.card.name} is called ${n}, the way ${f.card.name} is, so it never links`);
+    }
+  }
+
+  // Every seat a place and every Face a person, each linked where the card
+  // says it: its seat in what it is, and its Face in its Face line.
+  const doc = { factions: factions.map((f) => ({ id: `f-${f.key}`, name: f.card.name })), pages: [...pages.values()].map((p) => ({ id: `p-${p.key}`, name: p.card.name, aka: p.card.aka })) };
+  const L = linker(doc, (e) => `#${e.id}`);
+  const linked = (text, self) => new Set([...L.rich(text, self).matchAll(/href="#([^"]+)"/g)].map((m) => m[1]));
+  const bySeat = new Map();
+  for (const f of factions) if (f.seat) bySeat.set(f.seat, [...(bySeat.get(f.seat) ?? []), f]);
+  for (const f of factions) {
+    if (f.of) continue;
+    const who = f.card.name;
+    if (!place(f.seat)) say(`${who} sits in ${f.seat}, which isn't one of the places`);
+    else {
+      const got = linked(f.card.about, `f-${f.key}`);
+      const via = (bySeat.get(f.seat) ?? []).filter((g) => g !== f && got.has(`f-${g.key}`) && linked(g.card.about, `f-${g.key}`).has(`p-${f.seat}`));
+      if (!got.has(`p-${f.seat}`) && !via.length) say(`${who}'s line on what it is doesn't link ${pages.get(f.seat).card.name}, where it sits`);
+    }
+    if (!person(f.faceOf)) say(`${who}'s Face is ${f.faceOf}, who isn't one of the people`);
+    else if (!linked(f.card.face, `f-${f.key}`).has(`p-${f.faceOf}`)) say(`${who}'s Face line doesn't link ${pages.get(f.faceOf).card.name}`);
+  }
+  for (const f of factions) {
+    for (const ag of asList(f.raw.agendas)) {
+      for (const a of asList(ag?.at).map(String)) if (a.startsWith("place:") && !place(a.slice(6))) say(`${f.card.name}'s agenda ${ag?.text ?? ""} is after ${a.slice(6)}, which isn't one of the places`);
+    }
+  }
+  for (const p of pages.values()) {
+    if (p.kind !== "person") continue;
+    const at = pages.get(p.at);
+    if (!p.at) say(`${p.card.name} isn't anywhere (at: the place they're found)`);
+    else if (at?.kind !== "place") say(`${p.card.name} is at ${p.at}, which isn't one of the places`);
+    // Named on its who's here, or the faction they're the Face of is (Delamain,
+    // the AI, at the firm that shares its name).
+    else if (!at.card.here.some((h) => [...linked(h, `p-${at.key}`)].some((id) => id === `p-${p.key}` || factions.some((f) => `f-${f.key}` === id && f.faceOf === p.key)))) say(`${p.card.name} is at ${at.card.name}, and its who's here doesn't name them`);
+  }
+
+  // A name written so it doesn't link: two words or more with its letters in
+  // another case (corpo plaza for Corpo Plaza). Single words are left alone,
+  // since a person called Brick and a brick wall look the same.
+  const forms = [];
+  const sameName = new Map();
+  for (const e of [...doc.factions.map((f) => ({ ...f, aka: [] })), ...doc.pages]) {
+    for (const n of [e.name, ...e.aka]) {
+      const core = String(n).replace(/^(The|An|A) /, "");
+      const k = core.toLowerCase().replace(/’/g, "'");
+      sameName.set(k, [...(sameName.get(k) ?? []), e.id]);
+      if (core.split(/\s+/).length >= 2) forms.push({ id: e.id, k, name: n, re: new RegExp(`(^|[^\\p{L}\\p{N}])(${core.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/['’]/g, "['’]")})(?![\\p{L}\\p{N}])`, "giu") });
+    }
+  }
+  const texts = [];
+  for (const f of factions) {
+    const c = f.card;
+    for (const t of [c.about, c.want, c.face, c.more, c.note, ...c.agendas.flatMap((a) => [a.text, a.then]), ...["pub", "mor", "loy", "threads"].flatMap((l) => c[l].map((x) => x.text)), ...c.assets.map((a) => a.does)]) texts.push([t, `f-${f.key}`, c.name]);
+  }
+  for (const p of pages.values()) {
+    const c = p.card;
+    for (const t of [c.line, c.look, c.want, c.twist, c.clock, c.rules, c.elsewhere, c.voice, c.more, c.note, ...c.here, ...c.ground, ...c.stakes, ...c.hooks, ...c.teles.map((x) => x.text)]) texts.push([t, `p-${p.key}`, c.name]);
+  }
+  history.forEach((l, i) => texts.push([l.text, "", `history line ${i + 1}`]));
+  const unlinked = new Set();
+  for (const [t, self, where] of texts) {
+    if (!t) continue;
+    const got = linked(t, self);
+    const s = String(t).replace(/\*/g, "");
+    // Every name in it, any case, bar one inside a longer name (the Voodoo
+    // Boys in the Dogtown Voodoo Boys).
+    const hits = forms.flatMap((form) => [...s.matchAll(form.re)].map((m) => ({ form, from: m.index + m[1].length, to: m.index + m[1].length + m[2].length, words: m[2] })));
+    const kept = hits.filter((a) => !hits.some((b) => b !== a && b.from <= a.from && b.to >= a.to && b.to - b.from > a.to - a.from));
+    for (const { form, words: w } of kept) {
+      // Linked to whatever else shares the name counts (the Tide Chapel, the
+      // faction, for the chapel it sits in).
+      if ((sameName.get(form.k) ?? [form.id]).some((id) => id === self || got.has(id))) continue;
+      unlinked.add(`${where} writes ${w}, which doesn't link to ${form.name}`);
+    }
+  }
+  for (const u of unlinked) say(u);
+  // A person called by a first name that isn't one of their other names.
+  const loose = [];
+  for (const p of pages.values()) {
+    if (p.kind !== "person") continue;
+    const [first, ...rest] = p.card.name.split(" ");
+    if (first.length < 4 || !rest.length || p.card.aka.includes(first) || [...pages.values()].some((q) => q !== p && q.card.name.split(" ")[0] === first)) continue;
+    const re = new RegExp(`(^|[^\\p{L}\\p{N}])${first.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\p{L}\\p{N}]| ${rest.join(" ").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "u");
+    if (texts.some(([t, self]) => self !== `p-${p.key}` && re.test(String(t)) && !linked(t, self).has(`p-${p.key}`))) loose.push(first);
+  }
+  if (loose.length) notes.push(`called by a first name that doesn't link: ${loose.join(", ")}`);
+
+  // ── The map.
+  const map = mapOf({ world, files, pages, districtOf, partOf, say });
+  return { pages: [...pages.values()], map };
+}
+
+// The ground every year shares and this year's districts, parts, roads,
+// landmarks and pins, every place pinned inside its district and its part.
+function mapOf({ world, files, pages, districtOf, partOf, say }) {
+  const g = world.ground && typeof world.ground === "object" ? world.ground : null;
+  if (!g) say("world.yaml has no ground (the map's size, the sea, the water and the hills)");
+  const size = asList(g?.size);
+  const [w, h] = size;
+  if (size.length !== 2 || !size.every((n) => Number.isInteger(n) && n >= 100 && n <= 4096)) say(`the ground's size is ${JSON.stringify(g?.size)}, and it's [w, h], whole numbers from 100 to 4096`);
+  const point = (v, what) => {
+    if (!Array.isArray(v) || v.length !== 2 || !v.every((n) => typeof n === "number" && Number.isFinite(n))) {
+      say(`${what} has a point that isn't [x, y]: ${JSON.stringify(v).slice(0, 40)}`);
+      return null;
+    }
+    if (v[0] < 0 || v[0] > w || v[1] < 0 || v[1] > h) say(`${what} has a point off the map: ${JSON.stringify(v)}`);
+    return [Math.round(v[0]), Math.round(v[1])];
+  };
+  const shape = (v, what) => {
+    const pts = asList(v).map((p) => point(p, what)).filter(Boolean);
+    if (pts.length < 3) say(`${what} has ${pts.length} points, and a shape has three at least`);
+    return pts;
+  };
+  const shapes = (v, what) => asList(v).map((s, i) => shape(s, `${what} ${i + 1}`));
+  const ground = { size: [w, h], sea: shape(g?.sea, "the sea"), water: shapes(g?.water, "the water"), hills: shapes(g?.hills, "the hills") };
+  const m = files.map && typeof files.map === "object" ? files.map : {};
+  for (const k of Object.keys(m)) if (!["districts", "parts", "wilds", "roads", "marks", "pins"].includes(k)) say(`map.yaml has a line a map can't hold: ${k}`);
+  const keyed = (v, area) => {
+    const out = {};
+    for (const [k, pts] of Object.entries(v && typeof v === "object" ? v : {})) {
+      const p = pages.get(k);
+      if (p?.area !== area) say(`map.yaml draws ${k} as a ${area}, and it isn't one of the ${area === "district" ? "districts" : "parts"}`);
+      out[k] = shape(pts, p?.card.name ?? k);
+    }
+    for (const p of pages.values()) if (p.area === area && !out[p.key]) say(`map.yaml doesn't draw ${p.card.name}, a ${area}`);
+    return out;
+  };
+  const districts = keyed(m.districts, "district");
+  const parts = keyed(m.parts, "part");
+  // Open country, drawn as the land rather than a district's plate.
+  const wilds = asList(m.wilds).map(String);
+  for (const k of wilds) if (!districts[k]) say(`map.yaml's wilds has ${k}, which isn't one of the districts it draws`);
+  // A part's inside its district, every corner of it.
+  for (const [k, pts] of Object.entries(parts)) {
+    const d = pages.get(k)?.in;
+    if (districts[d] && pts.some((p) => !inShape(p, districts[d], 1.5))) say(`${pages.get(k).card.name} goes outside ${pages.get(d).card.name} on the map`);
+  }
+  const roads = asList(m.roads).map((r, i) => {
+    if (!r || typeof r !== "object") return { name: "", pts: [] };
+    const pts = asList(r.pts).map((p) => point(p, `road ${r.name ?? i + 1}`)).filter(Boolean);
+    if (pts.length < 2) say(`road ${r.name ?? i + 1} has ${pts.length} points, and a road has two at least`);
+    return { name: curl(r.name), pts };
+  });
+  const marks = asList(m.marks).map((x, i) => {
+    if (!MARKS.includes(x?.kind)) say(`landmark ${x?.name ?? i + 1} is a ${x?.kind}, and a landmark's ${MARKS.join(", ")}`);
+    if (!String(x?.name ?? "").trim()) say(`landmark ${i + 1} has no name`);
+    return { name: curl(x?.name), kind: x?.kind, at: point(x?.at, `landmark ${x?.name ?? i + 1}`) ?? [0, 0] };
+  });
+  // A pin for every place, inside its district and its part.
+  const pins = {};
+  for (const [k, v] of Object.entries(m.pins && typeof m.pins === "object" ? m.pins : {})) {
+    const p = pages.get(k);
+    if (p?.kind !== "place") {
+      say(`map.yaml has a pin for ${k}, which isn't one of the places`);
+      continue;
+    }
+    const at = point(v, `${p.card.name}'s pin`);
+    if (!at) continue;
+    pins[k] = at;
+    const d = districtOf(k);
+    const part = partOf(k);
+    if (districts[d] && !inShape(at, districts[d])) say(`${p.card.name}'s pin isn't inside ${pages.get(d).card.name}`);
+    if (part && parts[part] && !inShape(at, parts[part])) say(`${p.card.name}'s pin isn't inside ${pages.get(part).card.name}`);
+  }
+  for (const p of pages.values()) if (p.kind === "place" && !pins[p.key]) say(`${p.card.name} has no pin on the map`);
+  const n = Object.keys(pins).length;
+  if (n > WORLD_PINS) say(`the map has ${n} pins, and a year's map has ${WORLD_PINS} at most, so she's got ${MMAX.pins - WORLD_PINS} of her own`);
+  return { size: [w, h], ground, districts, parts, wilds, roads, marks, pins };
 }
 
 // A card as the page reads it: no made-up ids, a thread toward another

@@ -1577,7 +1577,8 @@ if (existsSync(worldsDir)) {
     world.at = BUILT;
     writeFileSync(join(worldsOut, `${world.id}.json`), JSON.stringify(world));
     (wholeWorlds[world.universe] ??= []).push(world);
-    console.log(`worlds/${world.id}.json: ${world.factions.length} factions, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k of a world brought in${notes.length ? ` (${notes.join("; ")})` : ""}`);
+    const pages = world.places.length ? `, ${world.places.length} places, ${world.people.length} people, ${Object.keys(world.map?.pins ?? {}).length} pins on its map` : "";
+    console.log(`worlds/${world.id}.json: ${world.factions.length} factions${pages}, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k of a world brought in${notes.length ? ` (${notes.join("; ")})` : ""}`);
   }
 }
 // The pages under /worlds/ read every year of each universe from here.

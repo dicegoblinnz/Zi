@@ -98,8 +98,8 @@
 //    check passes with a fallback in under 1 founding in 20, the founding's
 //    threads are all in the web, every faction's got a Face and a Secret, and
 //    a founder's Loyalty is on its card.
-// 10. A whole world (stages 12 and 15 of notes/builder-plan.md): the made-up
-//    one in tests/worlds/ passes, and 39 ways of breaking it are each a problem that
+// 10. A whole world (stages 12, 13 and 15 of notes/builder-plan.md): the
+//    made-up one in tests/worlds/ passes, and 66 ways of breaking it are each a problem that
 //    says so and never come out as a world: a card that isn't whole, too long
 //    or holds what it can't, Power or resources past its size, people who
 //    don't add Power or a thing that does, Appendix B's people as a thing, a
@@ -111,11 +111,22 @@
 //    toward nobody, nothing strange, and history in no age, out of order, too
 //    long, too much of it or an age with nothing in it, no line saying whose
 //    it is or no notices, notices on a world of Mo's own, and a recipe's dial
-//    there isn't. A folder that isn't laid out right says so. Then every world
-//    in content/worlds/ passes (Night City and Abnu), every card goes onto a
-//    board whole, it fits in a world with room to spare, its page draws every
-//    faction and every line of history, and Abnu's molefolk are named only
-//    where the crew can't read it before they're found.
+//    there isn't. Its places, people
+//    and map too: a seat that isn't a place, a Face who isn't a person, a card
+//    or Face line that doesn't link them, a name in the wrong case, someone
+//    their place doesn't name or who's nowhere, a pin outside its district or
+//    part, a place with no pin or a pin for nothing, a part outside its
+//    district, a district not drawn, too many pins, a telegraph the table
+//    can't aim, a stake or ground it can't read, two pages with one key, a
+//    page with a faction's name, a look too long, an agenda at a place there
+//    isn't, a person with no tags or a tag past ×9, a Challenge past 6, a place in nowhere, no
+//    ground and a line a place can't hold. A folder that isn't laid out right
+//    says so, places without people and a map among it. Then every world in
+//    content/worlds/ passes (Night City and Abnu), every card and page goes
+//    onto a board whole, it fits in a world with room to spare, every pin's a
+//    place on the map, its page draws every faction, place, person and line
+//    of history, and the map, and Abnu's molefolk are named only where the
+//    crew can't read it before they're found.
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -128,8 +139,10 @@ import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.m
 import { linesOf } from "../src/companion/world-answer.js";
 import { applyFound, leftFound } from "../src/companion/found-rules.js";
 import { carriedWorld, founderHand, freeSeats, namable, oldHand, restOf, roleOf, roomBoard, roomWorld, seatHand, seatSize, wantWith } from "../src/companion/found-world.js";
-import { WORLD_MAX, compileWorld, readWorldsDir } from "../scripts/worlds.mjs";
-import { boardOf, historyOf as storyOf, webOfWorld } from "../src/worlds/world-page.js";
+import { WORLD_MAX, WORLD_PINS, compileWorld, readWorldsDir } from "../scripts/worlds.mjs";
+import { boardOf, historyOf as storyOf, mapOf as mapPage, peopleOf, placesOf, webOfWorld } from "../src/worlds/world-page.js";
+import { drawMap } from "../src/worlds/draw-map.js";
+import { pageOf } from "../src/companion/pages.js";
 import { esc } from "../src/kit/kit.js";
 
 const problems = [];
@@ -1329,11 +1342,12 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   console.log(`9. the founding: ${played} foundings played at random through the ground and the founding, and carried into Build the world, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
 }
 
-// 10. A whole world (stage 12): the made-up one passes, and each way of
-// breaking it on a copy is a problem that says so. Then every real world in
-// content/worlds/ passes, each card goes onto a board the way the World
-// screen takes one, it fits in a world with room to spare, and its page
-// draws every faction and every line of history.
+// 10. A whole world (stages 12 and 13): the made-up one passes, and each way
+// of breaking it on a copy is a problem that says so, its places, people and
+// map included. Then every real world in content/worlds/ passes, each card and
+// page goes onto a board the way the World screen takes one, it fits in a
+// world with room to spare, every pin's a place on the map, and its page draws
+// every faction, place, person and line of history, and the map.
 {
   const started = Date.now();
   const bookIn = { assets: bookJson.companion.worlds.assets, sizes: bookJson.companion.worlds.sizes, regions: T.regions };
@@ -1387,6 +1401,34 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       ["no notices", (w) => (w.world.notices = []), /has no notices under the line saying whose it is/],
       ["a world of Mo's own with notices", (w) => (w.world.own = true), /says it's Mo's own, so it has no line saying whose it is and no notices/],
       ["a recipe setting a dial there isn't", (w) => (w.world.years[w.year].recipe.dials = { spooky: 2 }), /recipe sets spooky to 2/],
+      // Its places, people and map (stage 13).
+      ["a seat that isn't a place", (w) => (w.files.factions.factions[0].seat = "the-moon"), /sits in the-moon, which isn't one of the places/],
+      ["a Face who isn't a person", (w) => (w.files.factions.factions[0].faceOf = "nobody-at-all"), /Face is nobody-at-all, who isn't one of the people/],
+      ["a card that doesn't name where it sits", (w) => (w.files.factions.factions[0].about = "A bank that owns most of the waterfront. It works through loans."), /doesn't link The Counting House, where it sits/],
+      ["a Face line that doesn't name its Face", (w) => (w.files.factions.factions[0].face = "Its manager, who's never once forgiven a debt."), /Face line doesn't link Ada Venn/],
+      ["a name in the wrong case", (w) => (w.files.history.history[0].text = "The Harbour Bank lent the first boats their nets from the counting house."), /writes counting house, which doesn't link to The Counting House/],
+      ["someone their place doesn't name", (w) => (w.files.places.places.find((p) => p.key === "the-low-steps").here = ["*Jory Pike*, the captain"]), /Old Sal is at The Low Steps, and its who's here doesn't name them/],
+      ["a person nowhere", (w) => delete w.files.people.people.find((p) => p.key === "old-sal").at, /Old Sal isn't anywhere/],
+      ["a pin outside its district", (w) => (w.files.map.pins["the-watch-house"] = [150, 250]), /The Watch House's pin isn't inside The Old Town/],
+      ["a pin outside its part", (w) => (w.files.map.pins["the-counting-house"] = [120, 200]), /The Counting House's pin isn't inside The Quay/],
+      ["a place with no pin", (w) => delete w.files.map.pins["the-fish-market"], /The Fish Market has no pin on the map/],
+      ["a pin for nothing", (w) => (w.files.map.pins["the-moon"] = [100, 100]), /a pin for the-moon, which isn't one of the places/],
+      ["a part outside its district", (w) => (w.files.map.parts["the-quay"] = [[80, 0], [300, 0], [300, 150], [80, 150]]), /The Quay goes outside The Waterfront on the map/],
+      ["a district the map doesn't draw", (w) => delete w.files.map.districts["the-old-town"], /doesn't draw The Old Town, a district/],
+      ["more pins than a year's map holds", (w) => { for (let i = 0; i < 45; i++) { w.files.places.places.push({ key: `stall-${i}`, name: `Stall ${i + 1}`, in: "the-quay", line: "A stall", ch: 1, look: "Nets.", clock: { d: 4, text: "It shuts." } }); w.files.map.pins[`stall-${i}`] = [150, 60]; } }, /the map has 54 pins, and a year's map has 50 at most/],
+      ["a telegraph the table can't aim", (w) => (w.files.places.places.find((p) => p.key === "the-counting-house").teles[1].at = "the moon"), /can't be aimed on the live table: "the moon" isn't one of its stakes/],
+      ["a stake the table can't read", (w) => (w.files.places.places.find((p) => p.key === "the-counting-house").stakes = ["The ledger, which is locked"]), /stake The ledger, which is locked isn't \*Name\*, Challenge N/],
+      ["ground the table can't read", (w) => (w.files.places.places.find((p) => p.key === "the-counting-house").ground = ["A long counter"]), /ground A long counter isn't \*Name\*: what it does/],
+      ["a place's key twice", (w) => (w.files.places.places.find((p) => p.key === "the-fish-market").key = "the-watch-house"), /two pages have the key the-watch-house/],
+      ["a page with another faction's name", (w) => (w.files.places.places.find((p) => p.key === "the-fish-market").name = "The Night Boats"), /is called The Night Boats, the way The Night Boats is, so it never links/],
+      ["a look too long for a page", (w) => (w.files.places.places[0].look = Array(400).fill("wet").join(" ")), /line on what it's like runs to \d+ characters, and a page holds 1200/],
+      ["an agenda at a place there isn't", (w) => (w.files.factions.factions[0].agendas[0].at = ["place:the-moon"]), /is after the-moon, which isn't one of the places/],
+      ["a person with no tags", (w) => delete w.files.people.people.find((p) => p.key === "old-sal").tags, /Old Sal has no tags/],
+      ["a Challenge past 6", (w) => (w.files.places.places[0].ch = 9), /Challenge is 9, and it's 1 to 6/],
+      ["a place in nowhere", (w) => (w.files.places.places.find((p) => p.key === "the-fish-market").in = "the-moon"), /The Fish Market isn't in a district or a part/],
+      ["a map with no ground", (w) => delete w.world.ground, /world\.yaml has no ground/],
+      ["a place with a person's line", (w) => (w.files.places.places[0].want = "Fish"), /a line a place can't hold: want \(that's a person's\)/],
+      ["a tag past ×9", (w) => (w.files.people.people.find((p) => p.key === "old-sal").tags = [{ text: "Overlooked", x: 12 }]), /Old Sal's tag Overlooked is ×12, and a tag's ×1 to ×9/],
     ];
     let broken = 0;
     for (const [what, change, wanted] of breaks) {
@@ -1410,12 +1452,17 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       put("odd/1999/factions.yaml", "factions: [3]\n");
       put("odd/1999/history.yaml", "history: []\n");
       put("odd/2000/factions.yaml", "factions: []\n");
+      put("half/world.yaml", "id: half\nname: Half\nyears:\n  1999:\n    title: Half, 1999\n");
+      put("half/1999/factions.yaml", "factions: []\n");
+      put("half/1999/history.yaml", "history: []\n");
+      put("half/1999/places.yaml", "places: []\n");
       const got = readWorldsDir(dir);
       yes(got.problems.some((p) => /blank\/world\.yaml is empty/.test(p)), `an empty world.yaml wasn't a problem (it said: ${got.problems.join(" | ") || "nothing"})`);
       yes(got.problems.some((p) => /odd\/2000\/ is there, but world\.yaml's years don't have 2000/.test(p)), `a year folder world.yaml doesn't list wasn't a problem (it said: ${got.problems.join(" | ") || "nothing"})`);
       const odd = got.src.find((w) => w.universe === "odd");
       const oddOut = odd ? compileWorld(odd, bookIn) : { problems: [] };
       yes(oddOut.problems.some((p) => /has an entry that isn't a faction/.test(p)), `an entry in factions.yaml that isn't a faction wasn't a problem (it said: ${oddOut.problems.join(" | ").slice(0, 300) || "nothing"})`);
+      yes(got.problems.some((p) => /half\/1999\/ has places\.yaml but no people or map\.yaml, and they come together/.test(p)), `places with no people or map wasn't a problem (it said: ${got.problems.join(" | ") || "nothing"})`);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
@@ -1451,6 +1498,37 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       for (const l of ["res", "assets", "agendas", "pub", "mor", "loy", "threads"]) if (f[l].length !== was.card[l].length) note(`${world.id}: ${f.name} lost some of its ${l} on the board`);
     }
     yes(world.size < WORLD_MAX, `${world.id} comes to ${world.size} characters brought in, past ${WORLD_MAX}`);
+    // Its places and people onto a world the way the World screen takes a
+    // page, nothing lost, and every pin on the map a place's, inside the map.
+    if (world.places.length) {
+      let m = 0;
+      const lid = () => `l${(m++).toString(36).padStart(4, "0")}`;
+      for (const p of [...world.places, ...world.people]) {
+        const withIds = (l) => (p.card[l] ?? []).map((x) => (typeof x === "string" ? { id: lid(), text: x } : { id: lid(), ...x }));
+        const page = pageOf({ ...p.card, id: `pg-${String(m).padStart(3, "0")}`.slice(0, 24), here: withIds("here"), ground: withIds("ground"), stakes: withIds("stakes"), tags: withIds("tags"), teles: withIds("teles"), hooks: withIds("hooks"), shown: {} });
+        if (!page) note(`${world.id}: the World screen won't take ${p.card.name}`);
+        else for (const l of ["here", "ground", "stakes", "tags", "teles", "hooks"]) if (page[l].length !== (p.card[l] ?? []).length) note(`${world.id}: ${p.card.name} loses some of its ${l} on the World screen`);
+      }
+      const pinKeys = Object.keys(world.map.pins);
+      same(pinKeys.length, world.places.length, `${world.id}: pins on the map`);
+      for (const k of pinKeys) yes(world.places.some((p) => p.key === k), `${world.id}'s map has a pin for ${k}, which isn't a place`);
+      for (const [k, [x, y]] of Object.entries(world.map.pins)) yes(x >= 0 && y >= 0 && x <= world.map.size[0] && y <= world.map.size[1], `${world.id}'s pin for ${k} is off the map`);
+      yes(pinKeys.length <= WORLD_PINS, `${world.id}'s map has ${pinKeys.length} pins, past ${WORLD_PINS}`);
+      for (const f of world.factions) if (!f.of) yes(world.places.some((p) => p.key === f.seat) && world.people.some((p) => p.key === f.faceOf), `${world.id}: ${f.card.name}'s seat or Face isn't a page`);
+      const svg = drawMap(world.map);
+      yes(/^<svg class="dm"/.test(svg) && svg.includes("dm-coast") && !/NaN|undefined/.test(svg), `${world.id}'s map doesn't draw`);
+      const places = placesOf(world);
+      const people = peopleOf(world);
+      for (const p of world.places) yes(places.includes(`id="p-${p.key}"`), `${world.id}'s page has no page for ${p.card.name}`);
+      for (const p of world.people) yes(people.includes(`id="p-${p.key}"`), `${world.id}'s page has no page for ${p.card.name}`);
+      for (const html of [places, people, mapPage(world)]) if (/undefined|NaN|\[object/.test(html)) note(`${world.id}'s places, people or map have undefined, NaN or an object written into them`);
+      // Every faction's card links where it sits and its Face, on the page.
+      const board = boardOf(world);
+      for (const f of world.factions.filter((g) => !g.of)) {
+        const card = board.slice(board.indexOf(`id="f-${f.key}"`)).split("</details>")[0];
+        yes(card.includes(`href="#p-${f.faceOf}"`), `${world.id}'s card for ${f.card.name} doesn't link its Face`);
+      }
+    }
     // The page draws every faction and every line.
     const board = boardOf(world);
     const story = storyOf(world);
@@ -1475,7 +1553,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       for (const l of world.history) if (hidden.test(l.text) && !l.hers) note(`abnu: a line of How it came to be names the molefolk and isn't hers: ${l.text.slice(0, 60)}`);
       yes(world.factions.some((f) => f.key === "molefolk" && f.card.secret), "abnu: the molefolk aren't on the board with their Secret");
     }
-    console.log(`   ${world.id}: ${world.factions.length} factions on a board, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k brought in, its page drawn, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
+    console.log(`   ${world.id}: ${world.factions.length} factions on a board, ${world.places.length} places, ${world.people.length} people, ${Object.keys(world.map?.pins ?? {}).length} pins, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k brought in, its page drawn, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
   }
 }
 

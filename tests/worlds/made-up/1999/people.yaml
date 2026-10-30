@@ -1,0 +1,47 @@
+# The made-up world's people: every Face, and one more.
+people:
+  - key: ada-venn
+    name: Ada Venn
+    at: the-counting-house
+    line: Who runs the Harbour Bank
+    ch: 4
+    look: Ink on her fingers, and she never looks at your face.
+    want: Every boat in the harbour owes her.
+    tags: [Deep Pockets, { text: Cold, kind: drives }]
+    teles:
+      - { text: "Ada Venn names a debt you didn't know you had.", d: 6, at: "Confidence, Shaken" }
+  - key: jory-pike
+    name: Jory Pike
+    at: the-low-steps
+    line: The Night Boats' captain
+    ch: 3
+    look: Wet to the knees, always.
+    tags: [{ text: Slippery, kind: keeps }]
+  - key: captain-hollis
+    name: Captain Hollis
+    at: the-watch-house
+    line: Who runs the Town Watch
+    ch: 3
+    look: A coat with more stains than buttons.
+    tags: [Tired]
+  - key: mother-wren
+    name: Mother Wren
+    at: the-tide-chapel
+    line: Who leads the Tide Chapel
+    ch: 2
+    look: Bare feet on the cold stone.
+    tags: [{ text: Zealous, kind: drives }]
+  - key: big-moll
+    name: Big Moll
+    at: the-fish-market
+    line: The Market Gang's boss
+    ch: 3
+    look: Gutting knife, and arms like a docker's.
+    tags: [{ text: Holds a Grudge, kind: drives }]
+  - key: old-sal
+    name: Old Sal
+    at: the-low-steps
+    line: A net-mender who sees everything
+    ch: 1
+    look: Needle in her teeth.
+    tags: [Overlooked]

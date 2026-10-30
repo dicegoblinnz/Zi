@@ -289,16 +289,23 @@ const pattern = (n) => (/^(The|An|A) /.test(n) ? `[${n[0]}${n[0].toLowerCase()}]
 // Every faction's and page's name, and the other names a page goes by, so any
 // of them written on another page links to it. A name that starts with The
 // links without it too, when what's left is two words or more ("Harbour
-// Guild"). Longer names win where two could start at the same word.
+// Guild"). Longer names win where two could start at the same word. A name
+// that's a faction's and a page's both (the Afterlife, the outfit and the
+// bar it sits in) links to the faction, bar on that faction's own card,
+// where it links to the page.
 export function linker(doc, hrefOf) {
   const by = new Map();
+  const add = (k, entry) => {
+    const list = by.get(k) ?? [];
+    if (!list.some((e) => e.id === entry.id)) list.push(entry);
+    by.set(k, list);
+  };
   const put = (name, entry) => {
     const n = String(name ?? "").trim();
     if (n.length < 3) return;
-    const k = keyName(n);
-    if (!by.has(k)) by.set(k, entry);
+    add(keyName(n), entry);
     const rest = n.match(/^The (\S+(?: \S+)+)$/)?.[1];
-    if (rest && !by.has(keyName(rest))) by.set(keyName(rest), entry);
+    if (rest) add(keyName(rest), entry);
   };
   for (const f of doc.factions ?? []) put(f.name, { kind: "f", id: f.id, name: f.name });
   for (const p of doc.pages ?? []) {
@@ -310,7 +317,10 @@ export function linker(doc, hrefOf) {
   // The name and what's just before it (the start, or anything but a letter
   // or digit), since older phones can't look behind.
   const re = names.length ? new RegExp(`(^|[^\\p{L}\\p{N}])(${names.map(pattern).join("|")})(?![\\p{L}\\p{N}])`, "gu") : null;
-  const at = (m) => by.get(keyName(m)) ?? null;
+  const at = (m) => by.get(keyName(m))?.[0] ?? null;
+  // What a name links to from words on self: the first that has it, or the
+  // next when the first is self.
+  const to = (m, self) => (by.get(keyName(m)) ?? []).find((e) => e.id !== self) ?? null;
 
   // Words with their links: each name linked the first time it's in them,
   // never to the page they're on, and *italics* kept.
@@ -323,7 +333,7 @@ export function linker(doc, hrefOf) {
       let last = 0;
       if (re) {
         for (const m of s.matchAll(re)) {
-          const e = at(m[2]);
+          const e = to(m[2], self);
           if (!e || used.has(e.id)) continue;
           used.add(e.id);
           const start = m.index + m[1].length;
@@ -337,7 +347,7 @@ export function linker(doc, hrefOf) {
   }
   // Paragraphs, each with its links.
   const block = (text, self = "") => String(text ?? "").split(/\n\s*\n/).filter((x) => x.trim()).map((x) => `<p>${x.split("\n").map((l) => rich(l, self)).join("<br>")}</p>`).join("");
-  return { rich, block, at, has: (id) => [...by.values()].some((e) => e.id === id) };
+  return { rich, block, at, has: (id) => [...by.values()].some((list) => list.some((e) => e.id === id)) };
 }
 
 // Everything that's written on a faction or a page, for finding who mentions whom.

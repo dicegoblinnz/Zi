@@ -2663,6 +2663,13 @@ try {
     const small = await r2.head(`maps/${tuesday.id}/${map.key}.t`);
     yes(big.size < 8 * 1024 * 1024 && small.size < 400 * 1024 && /^image\/(webp|jpeg)$/.test(big.httpMetadata?.contentType || ""), `a picture that's quick to send (${Math.round(big.size / 1024)} KB, ${big.httpMetadata?.contentType}), and a small one (${Math.round(small.size / 1024)} KB)`);
     await until(() => picLoaded(mo.page), "the picture on Mo's map screen");
+    // The picture fills the map's layer, with nothing pushing it out of view.
+    const lies = await mo.page.$eval(".wm-layer", (l) => {
+      const a = l.getBoundingClientRect();
+      const b = l.querySelector(".wm-pic").getBoundingClientRect();
+      return [Math.round(b.top - a.top), Math.round(b.left - a.left), Math.round(b.height - a.height)];
+    });
+    same(lies, [0, 0, 0], "the picture lies on the map's layer, top to bottom");
     const picPath = `/api/campaigns/${tuesday.id}/maps/${map.id}?k=${map.key}`;
 
     // Kai's phone gets nothing of it, not even the picture.

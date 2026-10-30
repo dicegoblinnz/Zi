@@ -89,7 +89,7 @@ factions:
   - key: militech
     kind: corp
     size: great
-    seat: militech-offices
+    seat: corpo-plaza
     name: Militech
     about: >-
       The NUSA's own arms maker, and Arasaka's oldest enemy. It works through
@@ -156,7 +156,7 @@ factions:
   - key: kang-tao
     kind: corp
     size: city
-    seat: kang-tao-offices
+    seat: corpo-plaza
     name: Kang Tao
     about: >-
       A Chinese arms maker that makes smart guns, and it's getting bigger
@@ -164,8 +164,7 @@ factions:
       its offices in Corpo Plaza.
     want: Arasaka's place in the arms trade, and a district of its own.
     face: >-
-      Its regional director, who's been buying Arasaka's researchers drinks
-      all year.
+      The Kang Tao Director, who's been buying Arasaka's researchers drinks all year.
     faceOf: kang-tao-director
     res:
       - Smart-Gun Sales
@@ -246,7 +245,7 @@ factions:
         die: 6
         at: aldecaldos
         then: The Aldecaldos work Biotechnica's fields for a generation, on its terms.
-      - text: Take back the All Foods plant
+      - text: Take back the All Foods Plant
         die: 2
         at: [maelstrom, place:the-all-foods-plant]
         then: Maelstrom's thrown out of Northside's biggest factory.
@@ -280,8 +279,7 @@ factions:
       Center in Watson.
     want: Everyone in the city who can pay is on a plan.
     face: >-
-      The leader of Squad NC4-2, who's never once landed for someone without
-      cover.
+      NC4-2's Squad Leader, who's never once landed for someone without cover.
     faceOf: squad-nc4-2-leader
     res:
       - Platinum Plans
@@ -331,16 +329,15 @@ factions:
   - key: night-corp
     kind: corp
     size: city
-    seat: night-corp-hq
+    seat: downtown
     name: Night Corp
     about: >-
       The corp Richard Night's widow started, to finish his city. It works
       through the trains, the police budget and old family money. It sits in
-      its tower downtown, the second tallest in the city.
+      its tower in Downtown, the second tallest in the city.
     want: Richard Night's city, finished the way he drew it.
     face: >-
-      Its chair, one of the people who took over from Miriam Night and let the
-      company slip.
+      The Night Corp Chair, one of the people who took over from Miriam Night and let the company slip.
     faceOf: night-corp-chair
     res:
       - NCART
@@ -390,11 +387,11 @@ factions:
     name: Delamain
     about: >-
       A cab firm run by an AI. It works through about fifty cabs that drive
-      themselves. It sits in its headquarters in Vista del Rey.
+      themselves. It sits in Delamain HQ, in Vista del Rey.
     want: Every fare gets home, and nobody looks under the bonnet.
     face: >-
       Delamain itself, the AI, which talks to every fare in the same calm voice.
-    faceOf: delamain
+    faceOf: delamain-ai
     strange: true
     res:
       - Fares
@@ -432,7 +429,7 @@ factions:
   - key: ncpd
     kind: law
     size: city
-    seat: hall-of-justice
+    seat: the-hall-of-justice
     name: NCPD
     about: >-
       Night City's police, half of them fired last year to save money. It
@@ -512,11 +509,11 @@ factions:
   - key: city-hall
     kind: law
     size: city
-    seat: city-hall
+    seat: night-city-hall
     name: City Hall
     about: >-
       The mayor's office and the corps' council. It works through laws,
-      permits and favours. It sits in City Hall in the Glen.
+      permits and favours. It sits in Night City Hall, in the Glen.
     want: Rhyne back in for another term, and the crime numbers down.
     face: >-
       Mayor Lucius Rhyne, the councilman who asked Arasaka to break the siege
@@ -567,12 +564,12 @@ factions:
   - key: peralez-campaign
     kind: law
     size: small
-    seat: city-hall
+    seat: night-city-hall
     name: The Peralez Campaign
     about: >-
       Councilman Jefferson Peralez and the people who want him mayor. It
       works through unions, speeches and knocking on doors. It sits in his
-      office in City Hall.
+      office in Night City Hall.
     want: Jefferson Peralez in the mayor's office, owing the corps nothing.
     face: >-
       Jefferson Peralez, the councilman who voted alone against the corps'
@@ -613,11 +610,12 @@ factions:
   - key: netwatch
     kind: law
     size: city
-    seat: netwatch-office
+    seat: corpo-plaza
     name: NetWatch
     about: >-
       The Net's police, paid by corps and governments. It works through
-      agents, netrunners and the Blackwall. It sits in its Night City office.
+      agents, netrunners and the Blackwall. It sits in an office in Corpo
+      Plaza with no name on the door.
     want: The Blackwall stays shut.
     face: >-
       Bryce Mosley, a NetWatch agent who's been after the Voodoo Boys for
@@ -664,11 +662,11 @@ factions:
   - key: network-54
     kind: other
     size: local
-    seat: n54-studios
+    seat: downtown
     name: Network 54
     about: >-
-      One of the NUSA's two big news networks, with a newsroom downtown. It
-      works through cameras and airtime. It sits in its studios downtown.
+      One of the NUSA's two big news networks. It works through cameras and
+      airtime. It sits in its studios in Downtown.
     want: Every screen in the city on N54 when the big story breaks.
     face: >-
       Gillean Jordan, the anchor whose face is on every screen in the city.
@@ -762,7 +760,7 @@ factions:
       tag: Brick's Alive
       more: >-
         Royce told the gang Brick was dead, but he's locked in a trapped cell
-        in the All Foods plant.
+        in the All Foods Plant.
       ways:
         - The cell nobody's allowed near
         - Patricia, who knows more than she says
@@ -878,7 +876,7 @@ factions:
   - key: sixth-street
     kind: gang
     size: local
-    seat: arroyo-hq
+    seat: arroyo
     name: 6th Street
     about: >-
       Veterans who came home and made their own army. It works through
@@ -1009,7 +1007,7 @@ factions:
   - key: animals
     kind: gang
     size: small
-    seat: grand-imperial-mall
+    seat: the-grand-imperial-mall
     name: The Animals
     about: >-
       Brawlers who'd rather grow muscle than buy chrome. They work for
@@ -1105,7 +1103,7 @@ factions:
       Scraper, an empty hotel in Dogtown.
     want: Everything in a body that'll sell.
     face: >-
-      Whichever scav boss is holding the knife this week.
+      The Scav Boss, whoever's holding the knife this week.
     faceOf: scav-boss
     res:
       - Stripped Chrome
@@ -1140,7 +1138,7 @@ factions:
   - key: barghest
     kind: gang
     size: city
-    seat: black-sapphire
+    seat: the-black-sapphire
     name: Barghest
     about: >-
       Militech's old pacification unit, which never went home. It works
@@ -1204,11 +1202,12 @@ factions:
   - key: aldecaldos
     kind: nomad
     size: local
-    seat: aldecaldo-camp
+    seat: the-aldecaldo-camp
     name: The Aldecaldos
     about: >-
       A nomad clan, family first and on the road for generations. It works
-      through cars, salvage and loyalty. It sits in its camp in the Badlands.
+      through cars, salvage and loyalty. It sits in the Aldecaldo Camp, out
+      in the Badlands.
     want: A place in the Badlands that's theirs, on terms they can live with.
     face: >-
       Saul Bright, who leads the clan and would rather sign a bad deal than
@@ -1266,8 +1265,8 @@ factions:
     name: The Wraiths
     about: >-
       Raffen Shiv, nomads thrown out of their families who turned raider. It
-      works through ambushes on the Badlands roads. It sits in the old
-      Corp-Bud cement factory.
+      works through ambushes on the Badlands roads. It sits in the Cement
+      Factory, an old works out in the Badlands.
     want: "Whatever's on the road, and nobody to stop them taking it."
     face: >-
       Nash, a Wraith boss who'd sell his own family for a full tank.
@@ -1391,7 +1390,7 @@ factions:
   - key: regina-network
     kind: fixer
     size: small
-    seat: yaiba-tower
+    seat: kabuki
     name: "Regina's Network"
     about: >-
       Watson's fixer, and the one to call about a cyberpsycho. It works
@@ -1434,7 +1433,7 @@ factions:
   - key: wakakos-book
     kind: fixer
     size: small
-    seat: wakakos-office
+    seat: japantown
     name: "Wakako's Book"
     about: >-
       Westbrook's top fixer and the Tyger Claws' favourite. It works through
@@ -1518,11 +1517,12 @@ factions:
   - key: el-capitans-table
     kind: fixer
     size: small
-    seat: el-capitans-table
+    seat: rancho-coronado
     name: "El Capitán's Table"
     about: >-
       Santo Domingo's fixer, who hates the corps he used to work for. It
-      works through family favours. It sits at his table in Santo Domingo.
+      works through family favours. It sits at his table in Rancho Coronado,
+      in Santo Domingo.
     want: "Santo Domingo's families settling their fights without blood."
     face: >-
       Muamar 'El Capitán' Reyes, an ex-corpo who settles family feuds over
@@ -1559,12 +1559,12 @@ factions:
   - key: dinos-crew
     kind: fixer
     size: small
-    seat: electric-orgasm
+    seat: downtown
     name: "Dino's Crew"
     about: >-
       City Center's fixer, with a club of his own. It works through corpo
-      money and a rockerboy's charm. It sits in the Electric Orgasm,
-      downtown.
+      money and a rockerboy's charm. It sits in the Electric Orgasm, in
+      Downtown.
     want: "City Center's money, and none of its trouble."
     face: >-
       Dino Dinovic, an old rockerboy who owns the Electric Orgasm and fixes
@@ -1643,7 +1643,7 @@ factions:
   - key: dakotas-garage
     kind: fixer
     size: small
-    seat: dakotas-garage
+    seat: rocky-ridge
     name: "Dakota's Garage"
     about: >-
       The Badlands' fixer, for nomads and anyone else out past the city. It
