@@ -66,7 +66,9 @@ export function makeShare(d) {
   const { esc, sync, ICON } = d;
   // list: who you play with, what's waiting for you and what you've shared,
   // as the server last said, for whoever was signed in then.
-  const st = { list: null, at: 0, busy: "", sure: "", take: null, qr: null };
+  // taken: copies taken on this phone whose drop hadn't got through, so they
+  // don't show again and go off the server at the next chance.
+  const st = { list: null, at: 0, why: "", busy: "", sure: "", take: null, qr: null, taken: new Set() };
   let view = { name: "" };
 
   async function call(method, path, body) {
@@ -105,8 +107,16 @@ export function makeShare(d) {
       sync.signedOutHere();
       return d.render();
     }
-    if (!r.ok || sync.me?.id !== me) return;
-    st.list = { user: me, people: r.got.people || [], given: r.got.given || [], sent: r.got.sent || [] };
+    if (sync.me?.id !== me) return;
+    if (!r.ok) {
+      st.why = "net";
+      if (d.roll()?.kind === "share") d.renderDialog();
+      return;
+    }
+    st.why = "";
+    const given = (r.got.given || []).filter((g) => !st.taken.has(g.code));
+    for (const g of r.got.given || []) if (st.taken.has(g.code)) tryCall("POST", "/api/shares/drop", { code: g.code });
+    st.list = { user: me, people: r.got.people || [], given, sent: r.got.sent || [] };
     st.at = Date.now();
     if (view.name === "list") quietRender();
     if (d.roll()?.kind === "share") d.renderDialog();
@@ -161,7 +171,7 @@ export function makeShare(d) {
     if (!sync.me || sync.out) {
       body = `<p class="cc-lead">Sign in to share a copy. It comes from your account, so it’s ${name} as ${they} ${are} on every phone you use.</p><div class="cc-row"><a class="button primary" href="/account/">Sign in</a></div>`;
     } else if (!list) {
-      body = `<p class="cc-lead" role="status">${online() ? "Checking who you play with…" : "Sharing needs a signal. Try again when you’ve got one."}</p>`;
+      body = `<p class="cc-lead" role="status">${!online() ? "Sharing needs a signal. Try again when you’ve got one." : st.why ? "That didn’t load. Check your signal, then close this and try again." : "Checking who you play with…"}</p>`;
     } else {
       const person = (p) => {
         const gift = giftFor(ch.id, p.id);
@@ -286,6 +296,7 @@ export function makeShare(d) {
       if (!ch) return;
       st.sure = "";
       st.busy = "";
+      st.why = "";
       d.openDialog({ kind: "share", id: ch.id, what: "card" });
       refresh();
     },
@@ -411,7 +422,9 @@ export function makeShare(d) {
         d.render();
         return d.toast(`${gift.name}’s sheet couldn’t be read here, so they’re still waiting. Ask ${first(gift.from)} to give them to you again.`);
       }
-      await tryCall("POST", "/api/shares/drop", { code });
+      st.taken.add(code);
+      const gone = await tryCall("POST", "/api/shares/drop", { code });
+      if (gone.ok) st.taken.delete(code);
       st.busy = "";
       forget(code);
       took(ch, gift.from);
