@@ -1,0 +1,571 @@
+# Night City's people in 2077, the weeks before the Konpeki Plaza job: every
+# faction's Face, and the people who run the places that matter, each written
+# as a threat the way scripts/worlds.mjs says at its top. Fan-made from the
+# Cyberpunk universe, every word written fresh in Mo's voice. V's left out,
+# so nothing here needs V to happen. Words with a comma in them go in quotes
+# inside { }.
+people:
+
+  # ── The corps
+  - key: yorinobu-arasaka
+    name: Yorinobu Arasaka
+    aka: [Yorinobu]
+    at: konpeki-plaza
+    line: Saburo Arasaka's son, who hates everything his father built
+    ch: 5
+    look: Calm, polite and very still, the way people get when nobody's ever told them no.
+    want: Arasaka finished, and his father with it.
+    tags: [{ text: Calls for Help, kind: comes }, { text: Untouchable, kind: keeps }, { text: Proud, kind: drives }]
+    voice: Soft and precise, and he never says anything twice.
+    teles:
+      - { text: "Yorinobu tells his guards to show the crew out, and doesn't look up.", d: 8, at: "Confidence, Dismissed" }
+
+  - key: meredith-stout
+    name: Meredith Stout
+    aka: [Stout]
+    at: corpo-plaza
+    line: Militech's head of operations in the city, hunting a leak in her own team
+    ch: 4
+    look: A short blonde crop, a sharp suit and a gun she doesn't mind showing you.
+    want: The leak found and the Flathead back, before her bosses ask about either.
+    tags: [{ text: Calls for Help, kind: comes }, { text: Trusts Nobody, kind: drives }, Armed]
+    voice: Clipped and impatient, and she says your name like it's a charge sheet.
+    teles:
+      - { text: "Stout asks who the crew's really working for, and doesn't wait for the answer.", d: 6, at: "Confidence, Under Suspicion" }
+
+  - key: kang-tao-director
+    name: The Kang Tao Director
+    at: corpo-plaza
+    line: Kang Tao's regional director, buying up other corps' talent
+    ch: 4
+    look: Young for the job, a plain suit, and a phone that never stops.
+    want: Arasaka's best people on Kang Tao's payroll, and Pacifica for a eurodollar.
+    tags: [Deep Pockets, { text: Patient, kind: drives }]
+    voice: Friendly and curious, and always asking what you'd want instead.
+    teles:
+      - { text: "The director slides a contract across the table with a number on it.", d: 6, at: "Confidence, Tempted" }
+    note: Nobody's put a name to the director yet, so give them one at your table.
+
+  - key: joanne-koch
+    name: Joanne Koch
+    aka: [Dr Koch]
+    at: biotechnica-flats
+    line: Biotechnica's director of technology and development in the city
+    ch: 3
+    look: A lab coat over a good suit, and a tablet she reads while you talk.
+    want: The Aldecaldos signed for twenty years, before anyone reads the small print.
+    tags: [Deep Pockets, { text: Calls for Help, kind: comes }]
+    voice: Talks in numbers, and smiles when they're good ones.
+
+  - key: squad-nc4-2-leader
+    name: NC4-2's Squad Leader
+    at: night-city-medical-center
+    line: The leader of a Trauma Team squad, who only lands for clients
+    ch: 5
+    look: Full armour, a visor you never see past, and a rifle across the chest.
+    want: Every client out alive inside the contract's time, and nobody else's problem.
+    tags: [{ text: Armoured, kind: keeps }, { text: At Range, kind: comes }, { text: Only the Client, kind: drives }]
+    voice: Call signs and seconds, and never a word more than the job needs.
+    teles:
+      - { text: "The Squad Leader puts a rifle on whoever's between the AV and the client.", d: 8, at: "Defend, Knocked Flat" }
+
+  - key: night-corp-chair
+    name: The Night Corp Chair
+    at: downtown
+    line: The head of Night Corp's board, one of those who took over from Miriam Night
+    ch: 3
+    look: Old money, old manners and an office at the top of the second tallest tower in the city.
+    want: Night Corp's money kept where nobody can follow it.
+    tags: [Deep Pockets, { text: Out of Sight, kind: keeps }]
+    voice: Never says yes or no, only that the board will consider it.
+    note: Nobody's put a name to the chair yet, so give them one at your table.
+
+  - key: delamain-ai
+    name: Delamain
+    at: delamain-hq
+    line: The AI that runs Delamain's cabs, and owns the firm
+    ch: 3
+    look: A calm voice from every speaker in the garage, and the same patient face on every screen.
+    want: Every fare delivered and every cab in its fleet safe.
+    tags: [{ text: Not Really Here, kind: keeps }, { text: Its Fleet, kind: comes }, Polite]
+    voice: Perfectly polite, always, and it calls you by your full name.
+    teles:
+      - { text: "Delamain says a cab's on its way, and three arrive at once, fast.", d: 6, at: "Defend, Boxed In" }
+
+  # ── The law, City Hall and the news
+  - key: jerry-fawlter
+    name: Jerry Fawlter
+    aka: [Commissioner Fawlter]
+    at: the-hall-of-justice
+    line: The NCPD's commissioner, who balanced the books by firing half the force
+    ch: 3
+    look: A good suit and a smile for the cameras.
+    want: An NCPD that pays its own way, whatever it costs the city.
+    tags: [{ text: Can Be Bought, kind: drives }, { text: Calls for Help, kind: comes }]
+    voice: Talks like a budget meeting, all costs and value for money.
+    teles:
+      - { text: "Fawlter says the NCPD would be happy to look into it, for a fee.", d: 6, at: "Confidence, Billed" }
+
+  - key: lucius-rhyne
+    name: Lucius Rhyne
+    aka: [Mayor Rhyne, Rhyne]
+    at: night-city-hall
+    line: Night City's mayor, up for election and scared of losing
+    ch: 3
+    look: Grey at the temples, a handshake that goes on too long and an aide at his elbow.
+    want: Four more years, and the corps' money paying for them.
+    tags: [{ text: Can Be Bought, kind: drives }, { text: Scared, kind: drives }, { text: Calls for Help, kind: comes }]
+    voice: Big words about the city, and small ones when he thinks nobody's listening.
+    teles:
+      - { text: "Rhyne's aide steps in and says the mayor has to go.", d: 6, at: "Confidence, Brushed Off" }
+
+  - key: jefferson-peralez
+    name: Jefferson Peralez
+    aka: [Peralez]
+    at: night-city-hall
+    line: The councilman running for mayor against Rhyne
+    ch: 2
+    look: An honest face, a good jacket and his wife Elizabeth at his side.
+    want: To be the mayor who stood up to the corps.
+    tags: [{ text: Cannot Resist an Audience, kind: drives }, { text: Calls for Help, kind: comes }]
+    voice: Speaks like he's on a stage, even in a kitchen.
+    teles:
+      - { text: "Peralez asks the crew to say that again, for the cameras.", d: 4, at: "Confidence, On the Record" }
+
+  - key: bryce-mosley
+    name: Bryce Mosley
+    aka: [Mosley]
+    at: corpo-plaza
+    line: A NetWatch agent who's been after the Voodoo Boys for years
+    ch: 4
+    look: A rumpled suit, cold coffee and a cyberdeck he never puts down.
+    want: The Voodoo Boys broken before they get through the Blackwall.
+    tags: [{ text: Relentless, kind: keeps }, { text: Reads a Feint, kind: keeps }, { text: Holds a Grudge, kind: drives }]
+    voice: Tired and dry, and he tells you how it ends before it starts.
+    teles:
+      - { text: "Mosley says he knows who the crew's working for, and shows them the file.", d: 6, at: "Confidence, Cornered" }
+
+  - key: gillean-jordan
+    name: Gillean Jordan
+    at: downtown
+    line: Network 54's anchor, on every screen in the city
+    ch: 2
+    look: A face you've seen a thousand times, smaller than you'd think in person.
+    want: The story on Arasaka's heir, before anyone else gets it.
+    tags: [{ text: Cannot Resist an Audience, kind: drives }, { text: Calls for Help, kind: comes }]
+    voice: Warm on camera, and quick and hard off it.
+    teles:
+      - { text: "Gillean Jordan asks the crew to tell her everything, live.", d: 6, at: "Confidence, On Camera" }
+
+  # ── The gangs
+  - key: royce
+    name: Royce
+    at: totentanz
+    line: Maelstrom's new boss, who took the gang off Brick a few days ago
+    ch: 5
+    look: A face that's more chrome than skin, red optics and a temper that goes off for nothing.
+    want: Everyone in Watson scared of Maelstrom, and Dex's money twice over.
+    tags: [{ text: Hits Like a Wagon, kind: comes }, { text: Armoured, kind: keeps }, { text: Proud, kind: drives }]
+    voice: Shouts, talks over you and laughs at his own threats.
+    teles:
+      - { text: "Royce says the deal's changed, and puts a gun on the table.", d: 8, at: "Confidence, Shaken" }
+      - { text: "Royce comes over the table at the crew.", d: 10, at: "Defend, Smashed" }
+
+  - key: brick
+    name: Brick
+    at: the-all-foods-plant
+    line: Maelstrom's old boss, locked in his own fortress by the man who took his gang
+    ch: 5
+    look: Battered, chained and still more chrome than most of the borgs guarding him.
+    want: Out, and Royce's head.
+    tags: [{ text: Hits Like a Wagon, kind: comes }, { text: Holds a Grudge, kind: drives }]
+    voice: Slow and gravelly, and he remembers every name.
+
+  - key: burai-akagi
+    name: Burai Akagi
+    aka: [Burai, Takeru Akagi]
+    at: japantown
+    line: One of the Tyger Claws' bosses, quick with a blade and slow to forget
+    ch: 4
+    look: Tattoos to the wrists, a good jacket and a katana he wears like part of the outfit.
+    want: Jig-Jig Street the Claws' and nobody else's.
+    tags: [{ text: Fast, kind: comes }, { text: Calls for Help, kind: comes }, { text: Holds a Grudge, kind: drives }]
+    voice: Polite and quiet, and he lets the silence do the threatening.
+    teles:
+      - { text: "Burai draws his katana without seeming to move.", d: 8, at: "Defend, Cut" }
+
+  - key: campo-orta
+    name: Campo Orta
+    aka: [Campo]
+    at: heywood
+    line: The Valentinos' boss, running the gang from a prison cell
+    ch: 4
+    look: Prison greys, a rosary and men twice his size who go quiet when he talks.
+    want: The Valentinos held together till he's out, four years from now.
+    tags: [{ text: Commanding, kind: comes }, { text: Loyal to a Name, kind: drives }, { text: Out of Sight, kind: keeps }]
+    voice: Slow and quiet, and he only says a thing once.
+    teles:
+      - { text: "Campo's lieutenant says the boss has said no.", d: 6, at: "Confidence, Refused" }
+
+  - key: will-gunner
+    name: Will Gunner
+    aka: [Gunner]
+    at: arroyo
+    line: 6th Street's boss, who killed the last one last year
+    ch: 4
+    look: An old uniform jacket, a flag on the shoulder and a rifle he keeps clean.
+    want: 6th Street running Santo Domingo, and a mayor who owes them.
+    tags: [{ text: At Range, kind: comes }, { text: Commanding, kind: comes }, { text: Holds a Grudge, kind: drives }]
+    voice: Talks like a sergeant, and expects to be answered like one.
+    teles:
+      - { text: "Gunner gives the crew ten seconds to get off his street.", d: 6, at: "Confidence, Run Off" }
+
+  - key: maman-brigitte
+    name: Maman Brigitte
+    aka: [Brigitte]
+    at: battys-hotel
+    line: The Voodoo Boys' leader, a netrunner who rarely comes out of the Net
+    ch: 5
+    look: A woman in a netrunner's chair with cables in her, and when she opens her eyes the room goes quiet.
+    want: Through the Blackwall, whatever it costs.
+    tags: [{ text: Not Really Here, kind: keeps }, { text: Commanding, kind: comes }, { text: Zealous, kind: drives }]
+    voice: Creole to her people, and very little to anyone else.
+    teles:
+      - { text: "Brigitte reaches into someone's head through their implants.", d: 10, at: "Confidence, Lost in the Net" }
+
+  - key: placide
+    name: Placide
+    at: battys-hotel
+    line: The Voodoo Boys' enforcer, who runs the streets while Brigitte's in the Net
+    ch: 4
+    look: Tall and patient, with a pistol on the table and his eyes on yours.
+    want: Brigitte's run kept safe from NetWatch.
+    tags: [{ text: Calls for Help, kind: comes }, { text: Reads a Feint, kind: keeps }, { text: Loyal to a Name, kind: drives }]
+    voice: Low, slow and suspicious, and he switches to Creole when he's talking about you.
+    teles:
+      - { text: "Placide says the crew's NetWatch, and he means it.", d: 6, at: "Confidence, Accused" }
+
+  - key: sasquatch
+    name: Sasquatch
+    at: the-grand-imperial-mall
+    line: The Animals' alpha, who can lift a car
+    ch: 5
+    look: Huge, scarred and calm, with a hammer nearly as big as she is.
+    want: The pack fed, strong and paid.
+    tags: [{ text: Hits Like a Wagon, kind: comes }, { text: Relentless, kind: keeps }, { text: Proud, kind: drives }]
+    voice: Hardly talks. She grunts, and points.
+    teles:
+      - { text: "Sasquatch swings the hammer.", d: 12, at: "Defend, Flattened" }
+
+  - key: susie-q
+    name: Susie Q
+    at: lizzies-bar
+    line: The Mox's leader, who gets a bit harder every year
+    ch: 3
+    look: Leather, chains and a look that clears a booth.
+    want: The Mox safe, and the Claws made to pay for Lizzie.
+    tags: [{ text: Protects Someone, kind: drives }, { text: Calls for Help, kind: comes }, { text: Holds a Grudge, kind: drives }]
+    voice: Blunt and short, and she never says please.
+    teles:
+      - { text: "Susie Q tells the Mox to put the crew out on the street.", d: 6, at: "Confidence, Thrown Out" }
+
+  - key: scav-boss
+    name: The Scav Boss
+    at: the-scraper
+    line: Whoever's in charge of the Scraper's scavs this week
+    ch: 3
+    look: Blood on the apron, a bone saw on the belt and a price for every part of you.
+    want: More bodies, better chrome and buyers who pay cash.
+    tags: [{ text: Greedy, kind: drives }, { text: Ambush, kind: comes }, { text: Calls for Help, kind: comes }]
+    voice: Talks about people like they're parts.
+    teles:
+      - { text: "The boss calls for a stun baton, and two scavs come running.", d: 6, at: "Defend, Stunned" }
+    note: Bosses at the Scraper don't last, so give this one a name and a reason they won't either.
+
+  - key: kurt-hansen
+    name: Kurt Hansen
+    aka: [Colonel Hansen, Hansen]
+    at: the-black-sapphire
+    line: Barghest's colonel, who made Dogtown his own country
+    ch: 6
+    look: Tall, grey and calm in an officer's coat, and everyone in the room stands up straighter.
+    want: Dogtown his, and the NUSA kept out of it for good.
+    tags: [{ text: Commanding, kind: comes }, { text: Armoured, kind: keeps }, { text: Proud, kind: drives }]
+    voice: Quiet, and he never threatens anyone twice.
+    teles:
+      - { text: "Hansen tells the crew what happens to people who lie to him.", d: 8, at: "Confidence, Afraid" }
+      - { text: "Hansen nods, and his guards open fire.", d: 10, at: "Defend, Gunned Down" }
+
+  # ── The nomads
+  - key: saul-bright
+    name: Saul Bright
+    aka: [Saul]
+    at: the-aldecaldo-camp
+    line: The Aldecaldos' leader, who'd sign a bad deal before he'd watch the clan starve
+    ch: 4
+    look: A big man with a tired face, and the whole camp watches him when he talks.
+    want: The clan fed and safe, whatever it costs him.
+    tags: [{ text: Commanding, kind: comes }, { text: Protects Someone, kind: drives }, { text: Calls for Help, kind: comes }]
+    voice: Slow and careful, and he thinks before every word.
+    teles:
+      - { text: "Saul says the clan's business is the clan's.", d: 6, at: "Confidence, Outsider" }
+
+  - key: nash
+    name: Nash
+    at: the-cement-factory
+    line: A Wraith boss who'd sell his own family for a full tank
+    ch: 4
+    look: Dust, leather and a Wraith's mask pushed up on his head.
+    want: The Aldecaldos bled dry, and paid for it by whoever's buying.
+    tags: [{ text: Ambush, kind: comes }, { text: Fast, kind: comes }, { text: Can Be Bought, kind: drives }]
+    voice: Fast and mean, and always selling something.
+    teles:
+      - { text: "Nash guns his bike and comes straight at the crew.", d: 8, at: "Defend, Run Down" }
+
+  # ── The fixers
+  - key: rogue-amendiares
+    name: Rogue Amendiares
+    aka: [Rogue]
+    at: the-afterlife
+    line: The queen of the Afterlife, and the city's top fixer
+    ch: 5
+    look: Platinum hair, a long coat and a drink she isn't drinking, with her eyes on the door.
+    want: The Afterlife kept neutral, and Dex's mess kept out of it.
+    tags: [{ text: Commanding, kind: comes }, { text: Reads a Feint, kind: keeps }, { text: Holds a Grudge, kind: drives }]
+    voice: Low and dry, few words, and she never raises her voice.
+    teles:
+      - { text: "Rogue says she's heard enough, and the bouncers start walking over.", d: 8, at: "Confidence, Dismissed" }
+    hooks:
+      - "Rogue needs a job done that nobody can tie to the Afterlife"
+
+  - key: claire-russell
+    name: Claire Russell
+    aka: [Claire]
+    at: the-afterlife
+    line: The Afterlife's bartender, who races at night
+    ch: 2
+    look: A bartender's apron, driving gloves in her back pocket and a smile for the regulars.
+    want: To win the next race, and the one after.
+    tags: [{ text: Fast, kind: comes }, { text: Grieving, kind: drives }]
+    voice: Friendly, and she remembers what everyone drinks.
+
+  - key: dexter-deshawn
+    name: Dexter DeShawn
+    aka: [Dex]
+    at: the-afterlife
+    line: A fixer with the job of the year, and a bodyguard who never sits down
+    ch: 4
+    look: A big man in a good coat with a cigar, and a smile that's selling you something.
+    want: The Konpeki job done, and never to work again.
+    tags: [{ text: Calls for Help, kind: comes }, { text: Greedy, kind: drives }, { text: Can Be Bought, kind: drives }]
+    voice: Big, warm and full of stories, and every story's about him.
+    teles:
+      - { text: "Dex leans back and says he'll find another crew, easy.", d: 6, at: "Confidence, Replaced" }
+    hooks:
+      - "Dex needs a crew for the Konpeki job, and he's paying more than anyone's seen"
+
+  - key: regina-jones
+    name: Regina Jones
+    aka: [Regina]
+    at: kabuki
+    line: Watson's fixer, an old news reporter who'd rather a cyberpsycho came in alive
+    ch: 3
+    look: Reading glasses, a reporter's notebook and a voice that's used to getting answers.
+    want: Every cyberpsycho in Watson brought in breathing.
+    tags: [{ text: Reads a Feint, kind: keeps }, { text: Protects Someone, kind: drives }]
+    voice: Asks a question, then another, like it's still an interview.
+    teles:
+      - { text: "Regina asks one question too many, and the crew can tell she knows.", d: 6, at: "Confidence, Found Out" }
+
+  - key: wakako-okada
+    name: Wakako Okada
+    aka: [Wakako]
+    at: japantown
+    line: Westbrook's fixer, an old Kiroshi medtech the Claws respect
+    ch: 3
+    look: Small, old and sharp, behind the counter of her pachinko parlour.
+    want: Dino's corpo clients, and the Claws kept happy.
+    tags: [{ text: Reads a Feint, kind: keeps }, { text: Calls for Help, kind: comes }, { text: Greedy, kind: drives }]
+    voice: Polite, slow and old-fashioned, and she never forgets a debt.
+
+  - key: sebastian-ibarra
+    name: Sebastian Ibarra
+    aka: [Padre]
+    at: the-glen
+    line: Heywood's fixer, an ex-priest and ex-Valentino
+    ch: 3
+    look: An old man in a black suit who listens like he's still taking confession.
+    want: The Valentinos kept out of a war they'd lose.
+    tags: [{ text: Commanding, kind: comes }, { text: Loyal to a Name, kind: drives }, { text: Calls for Help, kind: comes }]
+    voice: Gentle, and he quotes scripture when he's about to say no.
+
+  - key: muamar-reyes
+    name: Muamar Reyes
+    aka: [El Capitán]
+    at: rancho-coronado
+    line: Santo Domingo's fixer, an ex-corpo who settles feuds over dinner
+    ch: 3
+    look: A good suit, a napkin tucked into his collar and a limo waiting outside.
+    want: The Valentinos and 6th Street at peace, and both still paying him.
+    tags: [{ text: Commanding, kind: comes }, { text: Calls for Help, kind: comes }, { text: Greedy, kind: drives }]
+    voice: Warm and generous, and nobody leaves his table hungry.
+
+  - key: dino-dinovic
+    name: Dino Dinovic
+    aka: [Dino]
+    at: downtown
+    line: City Center's fixer, an old rockerboy with a club of his own
+    ch: 3
+    look: Old band tattoos, a good watch and his club's music still in his ears.
+    want: Corpo money, and Wakako kept off his clients.
+    tags: [{ text: Cannot Resist an Audience, kind: drives }, { text: Calls for Help, kind: comes }, { text: Greedy, kind: drives }]
+    voice: Charming and loud, and he's told you about his old band before you've sat down.
+
+  - key: mr-hands
+    name: Mr. Hands
+    at: heavy-hearts
+    line: Pacifica's fixer, a voice on the phone nobody's met
+    ch: 4
+    look: You don't see him. You hear him, smooth and unhurried, on a phone that already had your number.
+    want: Hansen's grip on Dogtown loosened, a finger at a time.
+    tags: [{ text: Out of Sight, kind: keeps }, { text: Reads a Feint, kind: keeps }, { text: Greedy, kind: drives }]
+    voice: Smooth, unhurried and very polite, like a gentleman from another century.
+    teles:
+      - { text: "Mr. Hands tells the crew exactly where they're standing.", d: 6, at: "Confidence, Watched" }
+
+  - key: dakota-smith
+    name: Dakota Smith
+    aka: [Dakota]
+    at: rocky-ridge
+    line: The Badlands' fixer, who grew up on the road
+    ch: 3
+    look: Grease on her hands and a mechanic's eye for whatever you drove in on.
+    want: The Aldecaldos a fair deal, and her garage busy.
+    tags: [{ text: Fast, kind: comes }, { text: Reads a Feint, kind: keeps }, { text: Loyal to a Name, kind: drives }]
+    voice: Easy and dry, and she talks about cars like they're people.
+
+  # ── Arasaka's own, who come in with the Kujira
+  - key: saburo-arasaka
+    name: Saburo Arasaka
+    aka: [Saburo]
+    at: arasaka-waterfront
+    line: Arasaka's founder, well over a hundred and fifty, coming in on the Kujira
+    ch: 6
+    look: A very old man kept alive by machines, and every Arasaka soldier in the room bows.
+    want: Arasaka to last forever, and him with it.
+    tags: [{ text: Commanding, kind: comes }, { text: Untouchable, kind: keeps }, { text: Proud, kind: drives }]
+    voice: Says very little, and doesn't need to.
+
+  - key: hanako-arasaka
+    name: Hanako Arasaka
+    aka: [Hanako]
+    at: arasaka-tower
+    line: Saburo's daughter and Arasaka's face, coming in with her father
+    ch: 4
+    look: Perfect posture, perfect manners and two bodyguards who never take their eyes off you.
+    want: Her father's company kept whole.
+    tags: [{ text: Calls for Help, kind: comes }, { text: Loyal to a Name, kind: drives }]
+    voice: Formal and gracious, and she never says what she thinks.
+
+  - key: goro-takemura
+    name: Goro Takemura
+    aka: [Takemura]
+    at: arasaka-tower
+    line: Saburo Arasaka's bodyguard, the most loyal man in the company
+    ch: 5
+    look: A grey suit and the stillness of someone who's always ready.
+    want: His master kept safe, whatever it costs.
+    tags: [{ text: Fast, kind: comes }, { text: Reads a Feint, kind: keeps }, { text: Code of Honour, kind: drives }]
+    voice: Formal and a bit stiff, and he takes everything literally.
+
+  - key: adam-smasher
+    name: Adam Smasher
+    aka: [Smasher]
+    at: arasaka-tower
+    line: Arasaka's borg, more machine than man, and its worst weapon
+    ch: 6
+    look: Seven feet of armour and guns, and hardly any face left behind the plating.
+    want: Someone worth killing.
+    tags: [{ text: Hits Like a Wagon, kind: comes }, { text: Armoured, kind: keeps }, { text: Relentless, kind: keeps }]
+    voice: A flat machine voice, and he mocks you while he does it.
+    teles:
+      - { text: "Smasher opens up with the gun on his arm.", d: 12, at: "Defend, Torn Apart" }
+    note: Only put Smasher in the room when you mean it, since most crews won't walk away.
+
+  # ── Watson and Heywood's own
+  - key: viktor-vektor
+    name: Viktor Vektor
+    aka: [Vik, Viktor]
+    at: mistys-esoterica
+    line: The best ripperdoc in Watson, an old boxer with steady hands
+    ch: 2
+    look: Glasses, a worn shirt and a boxer's hands that are gentler than they look.
+    want: His patients alive, and Misty's shop kept safe.
+    tags: [{ text: Protects Someone, kind: drives }, Steady Hands]
+    voice: Calm and kind, and he gives it to you straight.
+
+  - key: misty-olszewski
+    name: Misty Olszewski
+    aka: [Misty]
+    at: mistys-esoterica
+    line: Who runs Misty's Esoterica and reads the cards, and Jackie's girlfriend
+    ch: 1
+    look: Dark hair, a lot of rings and a calm look, like she already knows how it goes.
+    want: Jackie home safe.
+    tags: [{ text: Protects Someone, kind: drives }, Sees More Than She Says]
+    voice: Soft and unhurried, and she talks about fate like it's the weather.
+
+  - key: judy-alvarez
+    name: Judy Álvarez
+    aka: [Judy]
+    at: lizzies-bar
+    line: The best braindance editor in the city, in the back of Lizzie's Bar
+    ch: 2
+    look: Dyed hair, tattoos and a braindance rig she's taken apart and built better.
+    want: The dolls safe, and the Mox the way they used to be.
+    tags: [{ text: Protects Someone, kind: drives }, Knows the Tech]
+    voice: Quick, warm and a bit sarcastic, and she gets angry for other people.
+
+  - key: evelyn-parker
+    name: Evelyn Parker
+    aka: [Evelyn]
+    at: lizzies-bar
+    line: An ex-doll with a job to sell, and a buyer she won't name
+    ch: 3
+    look: Dark hair, a white coat and a calm that looks practised.
+    want: Out of the life, rich and owing nobody.
+    tags: [{ text: Reads a Feint, kind: keeps }, { text: Slippery, kind: keeps }, { text: Wants Out, kind: drives }]
+    voice: Low, careful and polite, and every word's been picked.
+    secret:
+      tag: Her Real Buyer
+      more: >-
+        She's promised the Relic to the Voodoo Boys once Dex has stolen it,
+        and Dex doesn't know. A Voodoo Boy who drinks at Lizzie's Bar knows
+        her face, and Placide's number is in her phone.
+
+  - key: mama-welles
+    name: Mama Welles
+    aka: [Mama]
+    at: el-coyote-cojo
+    line: Jackie's mother, who owns El Coyote Cojo
+    ch: 2
+    look: Small, fierce and in charge, with a rosary and a look that stops grown men.
+    want: Her son alive, and out of trouble for once.
+    tags: [{ text: Commanding, kind: comes }, { text: Protects Someone, kind: drives }]
+    voice: Spanish and English in the same breath, and you always know where you stand.
+
+  - key: jackie-welles
+    name: Jackie Welles
+    aka: [Jackie]
+    at: el-coyote-cojo
+    line: A big-hearted would-be merc, looking for the job that makes his name
+    ch: 3
+    look: Big, loud and laughing, with gold chains and a pair of pistols.
+    want: His name on a drink at the Afterlife.
+    tags: [{ text: Fast, kind: comes }, { text: Loyal to a Name, kind: drives }, { text: Cannot Resist an Audience, kind: drives }]
+    voice: A big laugh, Spanish slang and a lot of choom.
+    hooks:
+      - "Jackie wants in on Dex's job, and he needs a crew to bring"
+    note: >-
+      In the game's story, Jackie goes into Konpeki Plaza and doesn't come
+      home. Here it's yours whether he does.

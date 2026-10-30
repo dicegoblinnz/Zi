@@ -1623,41 +1623,17 @@ html.cc-map, html.cc-map body { overflow: hidden; overscroll-behavior: none; }
   background-color: var(--bg);
   background-image: repeating-linear-gradient(45deg, var(--pattern) 0 1px, transparent 1px 28px), repeating-linear-gradient(-45deg, var(--pattern) 0 1px, transparent 1px 28px);
 }
-.wm-stage { position: absolute; inset: 0; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: grab; outline: none; }
-.wm-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--violet); }
-.wm-stage.is-moving { cursor: grabbing; }
-.wm-layer { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
-.wm-stage.is-empty .wm-layer { background: color-mix(in srgb, var(--zd-them) 12%, transparent); }
+/* The viewer itself (the stage, its layer, pins, the cross, the fog's layer
+   and the brush's ring) is in mapview.css, which /worlds/ uses too. */
 .cc .wm-pic { display: block; width: 100%; height: 100%; max-width: none; pointer-events: none; -webkit-user-drag: none; }
-.wm-pins { position: absolute; inset: 0; pointer-events: none; }
 
 /* A pin: a violet drop with what it is on it, its point on the spot, and its
    name beside it on a card. Names that would sit on each other go quiet till
    there's room. */
 .cc .wm-pin { position: absolute; left: 0; top: 0; display: block; width: 44px; height: 44px; margin: -41px 0 0 -22px; padding: 0; color: var(--zd-on-them); background: none; border: 0; pointer-events: auto; -webkit-tap-highlight-color: transparent; }
-.wm-pin-head { position: absolute; left: 7px; top: 4px; display: grid; place-items: center; width: 30px; height: 30px; background: var(--zd-them); border: 2px solid color-mix(in srgb, var(--zd-on-them) 80%, transparent); border-radius: 50% 50% 50% 3px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45); transform: rotate(-45deg); transition: transform 160ms ease-out; }
-.wm-pin-head svg { width: 15px; height: 15px; transform: rotate(45deg); }
-.wm-pin-n { position: absolute; left: 37px; top: 8px; max-width: 10.5rem; padding: 1px 7px 2px; font-size: 0.8rem; font-weight: 700; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); background: color-mix(in srgb, var(--surface) 92%, transparent); border: 1px solid color-mix(in srgb, var(--zd-them) 55%, transparent); border-radius: 2px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); }
-.wm-pin.is-quiet .wm-pin-n { display: none; }
-.wm-pin.is-hidden .wm-pin-head { color: var(--zd-them-ink); background: var(--surface); border: 2px dashed var(--zd-them-line); }
-.wm-pin.is-hidden .wm-pin-n { color: var(--muted); border-style: dashed; }
-.wm-pin.is-on { z-index: 2; }
-.wm-pin.is-on .wm-pin-head { transform: rotate(-45deg) scale(1.15); box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--ink), 0 2px 8px rgba(0, 0, 0, 0.45); }
-.wm-pin.is-on .wm-pin-n { border-color: var(--ink); }
 .cc .wm-pin:focus-visible { outline: none; }
-.wm-pin:focus-visible .wm-pin-head { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--violet); }
-.wm-pin.is-new .wm-pin-head { animation: wm-lit 1.4s ease-out 2; }
-@keyframes wm-lit { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--zd-them) 75%, transparent), 0 2px 6px rgba(0, 0, 0, 0.45); } 100% { box-shadow: 0 0 0 16px transparent, 0 2px 6px rgba(0, 0, 0, 0.45); } }
-.wm-stage.is-placing .wm-pin { opacity: 0.55; }
-.wm-stage.is-placing .wm-pin.is-lifted { opacity: 0.2; }
 
 /* Dropping a pin: the cross in the middle that the map moves under. */
-.wm-cross { position: absolute; left: 50%; top: calc((100% - var(--wm-pad, 0px)) / 2); width: 48px; height: 48px; margin: -24px 0 0 -24px; pointer-events: none; }
-.wm-cross[hidden] { display: none; }
-.wm-cross::before, .wm-cross::after { content: ""; position: absolute; background: var(--zd-them); box-shadow: 0 0 0 1.5px var(--zd-on-them); }
-.wm-cross::before { left: 0; top: 23px; width: 48px; height: 2px; }
-.wm-cross::after { left: 23px; top: 0; width: 2px; height: 48px; }
-.wm-cross i { position: absolute; left: 14px; top: 14px; width: 20px; height: 20px; border: 2px solid var(--zd-them); border-radius: 50%; box-shadow: 0 0 0 1.5px var(--zd-on-them), inset 0 0 0 1.5px var(--zd-on-them); }
 
 /* Zoom, on the right where a thumb reaches, and the bar along the bottom. */
 .wm-zoom { position: absolute; right: max(12px, env(safe-area-inset-right, 0px)); bottom: calc(78px + env(safe-area-inset-bottom, 0px)); z-index: 2; display: grid; background: var(--bar-bg); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border: 1px solid var(--line); border-radius: 3px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.28); }
@@ -1680,19 +1656,6 @@ html.cc-map, html.cc-map body { overflow: hidden; overscroll-behavior: none; }
    over the crew's picture, soft only where it thins out over what's been
    uncovered. On hers it's her violet and see-through, so she can read what's
    under it, and her pins under it go faint. */
-:root { --wm-fog: #3b3148; }
-:root[data-theme="light"] { --wm-fog: #bcb2c8; }
-.wm-fog { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
-.wm-fog[hidden] { display: none; }
-.wm-fog.is-gm { opacity: 0.5; }
-.wm-fog.is-going { transition: opacity 900ms ease-out; }
-.wm-fog.is-going.is-gone { opacity: 0; }
-.wm-stage.is-brushing { cursor: crosshair; }
-.wm-stage.is-brushing .wm-pin { pointer-events: none; }
-.wm-ring { position: absolute; left: 0; top: 0; border: 2px solid var(--zd-them); border-radius: 50%; box-shadow: 0 0 0 1.5px var(--zd-on-them), inset 0 0 0 1.5px var(--zd-on-them); pointer-events: none; will-change: transform; }
-.wm-ring[hidden] { display: none; }
-.wm-pin.is-fogged { opacity: 0.6; }
-.wm-pin.is-fogged.is-on { opacity: 1; }
 .wb-badge.is-fog { margin-left: 4px; color: var(--zd-them-ink); border: 1.5px solid var(--zd-them-line); }
 
 /* Rubbing it: what her finger does, how wide, Undo and Done, all in reach of

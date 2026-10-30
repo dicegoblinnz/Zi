@@ -1,0 +1,21 @@
+# The made-up world's map: two districts, a part in each, and a pin for every place.
+districts:
+  the-waterfront: [[80, 0], [220, 0], [220, 300], [80, 300]]
+  the-old-town: [[220, 0], [400, 0], [400, 300], [220, 300]]
+parts:
+  the-quay: [[80, 0], [220, 0], [220, 150], [80, 150]]
+  the-hill: [[220, 0], [400, 0], [400, 150], [220, 150]]
+roads:
+  - { name: The High Street, pts: [[80, 200], [400, 200]] }
+marks:
+  - { name: The lighthouse, kind: tower, at: [95, 280] }
+pins:
+  the-waterfront: [150, 220]
+  the-old-town: [300, 220]
+  the-quay: [150, 75]
+  the-hill: [300, 75]
+  the-counting-house: [120, 60]
+  the-low-steps: [100, 120]
+  the-fish-market: [180, 250]
+  the-watch-house: [350, 250]
+  the-tide-chapel: [340, 40]

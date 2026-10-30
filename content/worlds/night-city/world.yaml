@@ -30,3 +30,17 @@ years:
       The weeks before the Konpeki Plaza job, with Saburo Arasaka alive and
       Dex DeShawn setting up the job of the year.
     recipe: { region: city, era: near-future, twist: chrome }
+# The ground every year shares, so the coast, the water and the hills never
+# move between years: the sea, the reservoir and the hills, in the map's own
+# numbers, 0 to 1000 across and down. Our own map of the city, drawn for
+# Zi'Dara, never traced from anyone else's.
+ground:
+  size: [1000, 1000]
+  sea: [[0, 0], [445, 0], [432, 30], [380, 44], [300, 50], [248, 72], [206, 112], [186, 160], [200, 212], [178, 252], [150, 300], [138, 360], [158, 420], [128, 482], [140, 542], [110, 602], [98, 660], [70, 722], [54, 800], [70, 868], [46, 940], [40, 1000], [0, 1000]]
+  water:
+    - [[766, 170], [796, 136], [840, 128], [872, 150], [876, 196], [846, 226], [800, 236], [770, 214]]
+  hills:
+    - [[520, 26], [600, 14], [690, 18], [712, 70], [722, 120], [668, 146], [600, 140], [548, 112]]
+    - [[800, 58], [870, 40], [948, 52], [984, 120], [962, 186], [884, 204], [820, 160]]
+    - [[790, 280], [860, 248], [944, 262], [982, 350], [968, 430], [900, 462], [828, 440], [796, 380]]
+    - [[870, 630], [940, 604], [992, 640], [996, 750], [934, 786], [882, 744]]

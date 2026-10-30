@@ -1,0 +1,89 @@
+# The made-up world's places, for tests/check-world-engine.mjs part 10:
+# two districts with a part each, and a place for every seat.
+places:
+  - key: the-waterfront
+    name: The Waterfront
+    area: district
+    line: The harbour side of Saltmarsh, all ropes and tar
+    ch: 3
+    look: Gulls, wet stone and the smell of last week's catch.
+    hooks:
+      - Somebody's paying to have the burned market cleared by morning
+  - key: the-old-town
+    name: The Old Town
+    area: district
+    line: The streets up the hill, where the money lives
+    ch: 2
+    look: Steep lanes, shut doors and a bell every hour.
+  - key: the-quay
+    name: The Quay
+    area: part
+    in: the-waterfront
+    line: The stone quay where the boats tie up
+    ch: 3
+    look: Bollards, nets and men who stop talking when you walk past.
+  - key: the-hill
+    name: The Hill
+    area: part
+    in: the-old-town
+    line: The top of the Old Town, under the chapel
+    ch: 2
+    look: Wind, gorse and a view of every boat coming in.
+  - key: the-counting-house
+    name: The Counting House
+    in: the-quay
+    line: The Harbour Bank's office, with bars on every window
+    ch: 4
+    look: Ledgers to the ceiling, and a clerk at every desk who's watching the door.
+    here:
+      - "*Ada Venn*, who runs the bank (Challenge 4: *Deep Pockets*, *Cold*)"
+    ground:
+      - "*The Counter*: a long oak counter nobody gets over without a fight"
+    stakes:
+      - "*The ledger*, Challenge 4: *Locked*, *Guarded* (who owes the bank what)"
+    clock: { d: 8, text: The Town Watch turns up to see what the noise is. }
+    teles:
+      - { text: "Ada Venn rings the bell for the guards.", d: 6, at: the scene clock }
+      - { text: "A clerk slams the ledger shut and runs for the back.", d: 6, at: the ledger }
+    secret:
+      tag: The Vault's Empty
+      more: The bank lent out every coin it had, and the next run on it breaks it. The clerk who left knows, and so does the dust on the vault door.
+  - key: the-low-steps
+    name: The Low Steps
+    in: the-quay
+    line: Stone steps down to the water, where the Night Boats land
+    ch: 3
+    look: Slick steps, a lantern that's never lit, and a rope that's always there.
+    here:
+      - "*Jory Pike*, the Night Boats' captain (Challenge 3: *Slippery*)"
+      - "*Old Sal*, who mends nets and sees everything (Challenge 1: *Overlooked*)"
+    clock: { d: 6, text: The tide comes in and the boats go. }
+    teles:
+      - { text: "Jory Pike cuts the rope and shoves off.", d: 6, at: "Confidence" }
+  - key: the-fish-market
+    name: The Fish Market
+    in: the-waterfront
+    line: What's left of the market after the fire
+    ch: 3
+    look: Black beams, wet ash and stalls nobody's rebuilding.
+    here:
+      - "*Big Moll*, who lost her stall (Challenge 3: *Holds a Grudge*)"
+    clock: { d: 6, text: The bank's men arrive with a cart for the ashes. }
+  - key: the-watch-house
+    name: The Watch House
+    in: the-old-town
+    line: The Town Watch's house, cells and all
+    ch: 3
+    look: A desk, a stove and three cells with the doors open.
+    here:
+      - "*Captain Hollis*, who runs the watch (Challenge 3: *Tired*)"
+    clock: { d: 8, text: The captain finds a reason to go home. }
+  - key: the-tide-chapel
+    name: The Tide Chapel
+    in: the-hill
+    line: The chapel to the sea, on the top of the hill
+    ch: 2
+    look: Salt on the pews, and a bell that rings itself in a storm.
+    here:
+      - "*Mother Wren*, who leads the chapel (Challenge 2: *Zealous*)"
+    clock: { d: 6, text: The bell rings and the Chapel Boys come. }

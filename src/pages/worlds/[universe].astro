@@ -4,16 +4,19 @@
 // Night City's the first, a fan-made world from the Cyberpunk universe, so
 // the line saying whose it is sits at the top and the companies' notices at
 // the foot. It's drawn here at build time (src/worlds/world-page.js), and
-// src/worlds/world-ui.js runs the bar, the kinds, Find and the web on the
-// phone. Not linked from anywhere till Mo says so, and kept out of search
-// and off phones like /deal/ and /kit/.
+// src/worlds/world-ui.js runs the bar, the chips, Find, the web and the map
+// on the phone. Not linked from anywhere till Mo says so, and kept out of
+// search and off phones like /deal/ and /kit/.
 import Base from "../../layouts/Base.astro";
 import worlds from "../../generated/worlds.json";
 import "@fontsource/alegreya-sans/800.css";
 import "../../styles/kit.css";
 import "../../styles/web.css";
+import "../../styles/mapview.css";
+import "../../styles/drawn-map.css";
 import "../../styles/worlds.css";
-import { boardOf, countsOf, historyOf, linkerOf, pickerOf, webData, webOfWorld } from "../../worlds/world-page.js";
+import { middleOf } from "../../worlds/draw-map.js";
+import { MAP_ICON, boardOf, countsOf, historyOf, linkerOf, mapOf, peopleOf, pickerOf, placesOf, webData, webOfWorld } from "../../worlds/world-page.js";
 
 export function getStaticPaths() {
   return Object.keys(worlds).map((universe) => ({ params: { universe } }));
@@ -24,18 +27,42 @@ const world = years[0];
 const ln = linkerOf(world);
 const data = webData(world);
 const web = webOfWorld(world, null, data);
-// What world-ui.js needs to draw the web again: each faction's key, maker,
-// Power and threads, and nothing else.
-const forPhone = JSON.stringify({ factions: world.factions.map((f) => ({ key: f.key, of: f.of, steps: f.steps, card: { name: f.card.name, threads: f.card.threads } })) }).replace(/</g, "\\u003c");
+const hasMap = Boolean(world.map);
+function middleOfTown(map) {
+  const town = Object.entries(map.districts).filter(([k]) => !(map.wilds ?? []).includes(k)).map(([, s]) => s);
+  const pts = town.map((s) => middleOf(s));
+  const [x, y] = pts.reduce(([a, b], [c, d]) => [a + c / pts.length, b + d / pts.length], [0, 0]);
+  return [x / map.size[0], y / map.size[1]];
+}
+// What world-ui.js needs on the phone: each faction's key, kind, seat,
+// maker, Power and threads, each place's key, name, where it is, line and
+// Challenge, and the map's pins, and nothing else.
+const forPhone = JSON.stringify({
+  kinds: world.kinds,
+  factions: world.factions.map((f) => ({ key: f.key, kind: f.kind, seat: f.seat, of: f.of, steps: f.steps, card: { name: f.card.name, threads: f.card.threads } })),
+  places: (world.places ?? []).map((p) => ({ key: p.key, name: p.card.name, area: p.area, in: p.in, line: p.card.line, ch: p.card.ch })),
+  // Where the map opens: the middle of the town's districts, not the wilds.
+  map: hasMap ? { size: world.map.size, pins: world.map.pins, middle: middleOfTown(world.map) } : null,
+  mapLabel: `A map of ${world.name}`,
+}).replace(/</g, "\\u003c");
+const icon = (d: string) => `<svg class="wn-bi" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${d}</svg>`;
+const ICONS = {
+  board: icon('<path d="M6 21V3.5"/><path d="M6 4h12l-3 4.5 3 4.5H6"/>'),
+  map: MAP_ICON.replace('class="wn-i"', 'class="wn-bi"'),
+  places: icon('<path d="M4 20V9l8-5 8 5v11"/><path d="M9.5 20v-6h5v6"/>'),
+  people: icon('<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20.5c.8-4.2 3.8-6.5 7.5-6.5s6.7 2.3 7.5 6.5"/>'),
+  history: icon('<path d="M5 4.5h11.5a2.5 2.5 0 0 1 0 5H8"/><path d="M5 4.5v13a2 2 0 0 0 2 2h10.5"/><path d="M9 13.5h6M9 16.5h4"/>'),
+};
+const seg = (on: string) => `<div class="ww-seg wn-seg" role="group" aria-label="The factions as"><button type="button" class="ww-seg-b" data-view="board" aria-pressed="${on === "board"}">The board</button><button type="button" class="ww-seg-b" data-view="web" aria-pressed="${on === "web"}">The web</button></div>`;
 ---
-<Base title={world.title} description={`${world.title}: a whole world for Zi’Dara, its factions, the web between them and how it came to be.`}>
+<Base title={world.title} description={`${world.title}: a whole world for Zi’Dara, its factions, the web between them, its places and people, its map and how it came to be.`}>
   <meta slot="head" name="robots" content="noindex" />
   <script is:inline slot="head">
-    // A link to the web or How it came to be shows only that from the start,
-    // rather than the board till world-ui.js has run.
+    // A link to one of the other tabs shows only that from the start, rather
+    // than the board till world-ui.js has run.
     try {
       const t = new URLSearchParams(location.search).get("tab");
-      if ((t === "web" || t === "history") && !location.hash.startsWith("#f-")) document.documentElement.dataset.wnTab = t;
+      if (["web", "map", "places", "people", "history"].includes(t) && !/^#[fp]-/.test(location.hash)) document.documentElement.dataset.wnTab = t;
     } catch {}
   </script>
   <main id="main" class="wn frame">
@@ -49,16 +76,53 @@ const forPhone = JSON.stringify({ factions: world.factions.map((f) => ({ key: f.
 
     <section class="wn-panel" data-panel="board" id="wn-board" aria-labelledby="wn-h-board">
       <h2 id="wn-h-board">The board</h2>
+      <Fragment set:html={seg("board")} />
       <Fragment set:html={boardOf(world, ln)} />
     </section>
 
     <section class="wn-panel" data-panel="web" id="wn-web-sec" aria-labelledby="wn-h-web">
       <h2 id="wn-h-web">The web</h2>
+      <Fragment set:html={seg("web")} />
       <Fragment set:html={pickerOf(world, web.focus)} />
       <p class="wn-hint">A faction's ties, either way. Tap one of them to walk the web to theirs.</p>
       <div class="ww" id="wn-web"><Fragment set:html={web.pic} /></div>
       <div class="ww-panel" id="wn-panel" aria-live="polite"><Fragment set:html={web.panel} /></div>
     </section>
+
+    {hasMap && (
+      <section class="wn-panel wn-mapsec" data-panel="map" id="wn-map-sec" aria-labelledby="wn-h-map">
+        <h2 id="wn-h-map">The map</h2>
+        <div class="wn-mapbox">
+          <Fragment set:html={mapOf(world)} />
+          <div class="wn-mbar">
+            <section class="wn-mcard" id="wn-mcard" aria-live="polite" hidden></section>
+            <div class="wn-mrow">
+              <button type="button" class="wn-webbtn" id="wn-webbtn" aria-pressed="false"><span class="wn-sw" aria-hidden="true"></span>The web</button>
+              <div class="wn-zoom" role="group" aria-label="Zoom">
+                <button type="button" id="wn-zout" aria-label="Further out"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14" /></svg></button>
+                <button type="button" id="wn-zin" aria-label="Closer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" /></svg></button>
+                <button type="button" id="wn-zall" aria-label="The whole map"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="wn-hint" id="wn-map-how">Drag it about with one finger, double tap to go in closer, and tap a pin for its page. The web puts every faction where it sits, and a tap on one lights its ties.</p>
+      </section>
+    )}
+
+    {world.places?.length > 0 && (
+      <section class="wn-panel" data-panel="places" id="wn-places" aria-labelledby="wn-h-places">
+        <h2 id="wn-h-places">Places</h2>
+        <Fragment set:html={placesOf(world, ln)} />
+      </section>
+    )}
+
+    {world.people?.length > 0 && (
+      <section class="wn-panel" data-panel="people" id="wn-people" aria-labelledby="wn-h-people">
+        <h2 id="wn-h-people">People</h2>
+        <Fragment set:html={peopleOf(world, ln)} />
+      </section>
+    )}
 
     <section class="wn-panel" data-panel="history" id="wn-history" aria-labelledby="wn-h-history">
       <h2 id="wn-h-history">How it came to be</h2>
@@ -70,10 +134,12 @@ const forPhone = JSON.stringify({ factions: world.factions.map((f) => ({ key: f.
     </footer>
 
     <nav class="wn-bar" aria-label="The world">
-      <div role="tablist" aria-label="What to look at">
-        <button type="button" role="tab" id="wn-t-board" data-tab="board" aria-controls="wn-board" aria-selected="true">The board</button>
-        <button type="button" role="tab" id="wn-t-web" data-tab="web" aria-controls="wn-web-sec" aria-selected="false">The web</button>
-        <button type="button" role="tab" id="wn-t-history" data-tab="history" aria-controls="wn-history" aria-selected="false">How it came to be</button>
+      <div role="tablist" aria-label="What to look at" class={hasMap ? "is-five" : ""}>
+        <button type="button" role="tab" id="wn-t-board" data-tab="board" aria-controls="wn-board" aria-selected="true"><Fragment set:html={ICONS.board} />Factions</button>
+        {hasMap && <button type="button" role="tab" id="wn-t-map" data-tab="map" aria-controls="wn-map-sec" aria-selected="false"><Fragment set:html={ICONS.map} />Map</button>}
+        {world.places?.length > 0 && <button type="button" role="tab" id="wn-t-places" data-tab="places" aria-controls="wn-places" aria-selected="false"><Fragment set:html={ICONS.places} />Places</button>}
+        {world.people?.length > 0 && <button type="button" role="tab" id="wn-t-people" data-tab="people" aria-controls="wn-people" aria-selected="false"><Fragment set:html={ICONS.people} />People</button>}
+        <button type="button" role="tab" id="wn-t-history" data-tab="history" aria-controls="wn-history" aria-selected="false"><Fragment set:html={ICONS.history} />History</button>
       </div>
     </nav>
   </main>

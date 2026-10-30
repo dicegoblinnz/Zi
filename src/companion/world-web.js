@@ -91,8 +91,8 @@ export function webOf(nodes, threads) {
 // The lines: a faction's threads toward another (or the crew) by kind, two
 // the same kind going both ways being one line with no arrow, and lines
 // between the same two bowing apart, every line between two factions
-// bowing round the crew.
-function linesOf(L) {
+// bowing round the crew. The web on a map (mapview.js) draws the same lines.
+export function linesOf(L) {
   const groups = new Map();
   for (const t of L.threads) {
     const key = `${t.from}>${t.to}>${t.kind}`;

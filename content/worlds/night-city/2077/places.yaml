@@ -1,0 +1,1163 @@
+# Night City's places in 2077, the weeks before the Konpeki Plaza job: the
+# districts, their parts and the places that matter, every faction's seat
+# among them, written the way scripts/worlds.mjs says at its top. Fan-made
+# from the Cyberpunk universe, every word written fresh in Mo's voice, and
+# every place pinned on map.yaml. Words with a comma in them go in quotes
+# inside { }, and so does any line that starts with *.
+places:
+
+  # ── Watson
+  - key: watson
+    name: Watson
+    area: district
+    line: The north of the city, broke since the corps pulled out
+    ch: 3
+    look: >-
+      Towers built for Japanese corps that left after the war, full now of
+      everyone who couldn't. Markets in the alleys, Maelstrom in the old
+      factories, and Arasaka behind the fence on the waterfront, buying up
+      whatever comes cheap.
+    here:
+      - "The Tyger Claws, all through Kabuki and Little China"
+      - "Maelstrom, holding Northside's factories"
+      - "*Regina Jones*, who'd rather a cyberpsycho came in alive"
+    ground:
+      - "*Nobody Comes*: call the NCPD in Watson and it'll get there tomorrow"
+      - "*Arasaka's Fence*: the waterfront's shut, and the guards shoot first"
+    teles:
+      - { text: "A cyberpsycho opens up in the street, and everyone runs your way.", d: 8, at: "Defend, Caught in the Crossfire" }
+      - { text: "Arasaka seals the bridges for a VIP, and the whole district's stuck inside.", d: 6, at: "Confidence, Trapped" }
+    hooks:
+      - "Arasaka's buying the megabuilding the crew lives in, and the rent's going up"
+      - "The district's sealed for a week, and something's coming in at the Arasaka Waterfront"
+    note: >-
+      Watson's sealed off when Saburo Arasaka's ship comes in on 1 May, so
+      nobody gets in or out without an Arasaka pass.
+
+  - key: little-china
+    name: Little China
+    area: part
+    in: watson
+    line: Watson's tallest streets, where the ripperdocs used to be the law
+    ch: 3
+    look: >-
+      Neon over the stalls, noodles and chrome sold side by side, and the
+      Night City Medical Center still standing over all of it. The towers are
+      megabuildings now, with thousands of people to a block.
+    here:
+      - "Tyger Claws collecting from the noodle stands (Challenge 3: *Blades*)"
+      - "*Viktor Vektor*, the best ripperdoc in Watson, at Misty's Esoterica"
+    ground:
+      - "*Crowds*: you can lose anyone in a minute, and they can lose you"
+    hooks:
+      - "A Claw's leaning on the noodle seller who's been feeding the crew for free"
+
+  - key: kabuki
+    name: Kabuki
+    area: part
+    in: watson
+    line: The market alleys, a bazaar by day and a black market by night
+    ch: 3
+    look: >-
+      Alleys so narrow two people can't pass, stalls selling cosmetics and
+      fried squid till dark, then chrome, organs and stolen code. Lizzie's
+      Bar glows pink in the middle of it, and the warehouses to the north
+      belong to whoever's holding them that week.
+    here:
+      - "The Mox, keeping the dolls and the punks safe"
+      - "Scavs looking for anyone walking alone (Challenge 3: *Ambush*)"
+      - "*Regina Jones*, in Yaiba Tower when she isn't out after a psycho"
+    ground:
+      - "*The Night Market*: whatever you want's for sale, if you know who to ask"
+      - "*Alleys*: too narrow for a car, so whoever's after you comes on foot"
+    stakes:
+      - "*A stolen chip*, Challenge 3: *Hidden*, *Wanted By Others* (it's on a stall somewhere in the market)"
+    teles:
+      - { text: "A stallholder shouts thief and points at you.", d: 6, at: "Confidence, Run Out of the Market" }
+      - { text: "Someone's already bidding for the chip.", d: 6, at: "a stolen chip" }
+    hooks:
+      - "Regina's got a cyberpsycho holed up in a Kabuki warehouse, and she wants them alive"
+
+  - key: northside
+    name: Northside
+    area: part
+    in: watson
+    line: Watson's factory floor, mostly shut and all Maelstrom's
+    ch: 4
+    look: >-
+      Dead factories, rusted cranes over the docks and apartment blocks for
+      workers whose jobs went years ago. The NCPD stopped coming, so the
+      borgs set the rules, and the rules change with Maelstrom's boss.
+    here:
+      - "Maelstromers on the factory roofs (Challenge 4: *Chromed*, *Cornered is Worse*)"
+      - "Dock workers who still turn up for the ships that don't"
+    ground:
+      - "*Maelstrom Turf*: every crossroads has a borg on it, and they talk to each other"
+      - "*Cranes and Gantries*: high ground everywhere, if you can climb it"
+    teles:
+      - { text: "A Maelstrom truck comes round the corner with its guns out.", d: 8, at: "Defend, Run Down" }
+    hooks:
+      - "The NCPD wants Northside back, and it's hiring mercs to start"
+
+  - key: arasaka-waterfront
+    name: Arasaka Waterfront
+    area: part
+    in: watson
+    line: Arasaka's own docks and warehouses, behind its own fence
+    ch: 5
+    look: >-
+      Clean concrete, floodlights and container stacks in rows, with
+      Konpeki Plaza standing over the water like it's somewhere else. Only
+      Arasaka's people get past the gates, and they wear their passes where
+      you can see them.
+    here:
+      - "*Saburo Arasaka*, when the Kujira comes in on 1 May"
+      - "Arasaka security on every gate (Challenge 4: *Armoured*, *Calls for Help*)"
+      - "Dock crews who don't ask what's in the containers"
+    ground:
+      - "*The Fence*: one way in for anyone without a pass, and that's over it"
+      - "*Floodlights*: nowhere's dark, so you hide in the stacks or not at all"
+    stakes:
+      - "*A container*, Challenge 4: *Locked*, *Watched* (what Arasaka shipped in this week)"
+    teles:
+      - { text: "A drone sweeps the stacks and lights you up.", d: 8, at: "Confidence, Seen" }
+      - { text: "The gate crew radios for a cargo check.", d: 6, at: "a container" }
+    hooks:
+      - "Someone wants to know what came off the Kujira before Saburo did"
+
+  - key: the-afterlife
+    name: The Afterlife
+    in: little-china
+    line: The mercs' bar, in an old morgue, and the best place in the city to get work
+    ch: 3
+    look: >-
+      Down the stairs from the street, past the bouncers, into a room that
+      used to hold the dead. The drinks are named after mercs who didn't
+      make it, and the booths at the back are where the fixers sit. Rogue's
+      is in the corner, and nobody sits there without asking.
+    here:
+      - "*Rogue Amendiares*, the queen of the place (Challenge 5: *Commanding*, *Seen It All*)"
+      - "*Claire Russell*, behind the bar"
+      - "*Dexter DeShawn*, when he's in, in a booth with his bodyguard"
+      - "Nix, a netrunner at a desk in the back, for hire"
+      - "Mercs at every table, legends and nobodies (Challenge 3: *Armed*)"
+    ground:
+      - "*Neutral Ground*: start a fight in here and every merc in the room ends it"
+      - "*The Bar's Memory*: everyone who matters drinks here, so word gets round by morning"
+    stakes:
+      - "*The job*, Challenge 3: *Someone Must Agree*, *Wanted By Others* (Rogue gives it to the crew, or to someone else)"
+      - "*Nix's trace*, Challenge 3: *Someone Must Agree* (the netrunner finds who sold the crew out)"
+    clock: { d: 8, text: "Rogue gives the job to a crew she already trusts." }
+    twist: Someone at the next table's after the same job, and they've already met Rogue.
+    teles:
+      - { text: "Rogue looks the crew up and down and says she's busy.", d: 8, at: "Confidence, Not Worth Her Time" }
+      - { text: "A merc at the bar laughs and offers to do the job for half.", d: 6, at: "the job" }
+      - { text: "The bouncers take hold of whoever's making trouble.", d: 6, at: "Defend, Thrown Out" }
+    hooks:
+      - "Rogue needs a crew for a job she can't put her own name to"
+      - "Dex is buying drinks for anyone who'll sit and listen to his big job"
+
+  - key: night-city-medical-center
+    name: Night City Medical Center
+    aka: [the Med Center]
+    in: little-china
+    line: Watson's old hospital, and Trauma Team's pad in the north
+    ch: 3
+    look: >-
+      Once the best hospital on the coast, now half the floors are shut. The
+      wards that are open are packed, and the roof's where Trauma Team's AVs
+      land, painted bright so nobody shoots at them by mistake.
+    here:
+      - "*NC4-2's Squad Leader*, on the roof between calls"
+      - "Trauma Team medics in armour (Challenge 4: *Armoured*, *At Range*)"
+      - "Nurses on double shifts who'll take a bribe to look the other way"
+    ground:
+      - "*The Roof Pad*: an AV can be down and gone in a minute"
+      - "*Shut Floors*: whole wards dark and empty, and nobody checks them"
+    stakes:
+      - "*A patient's file*, Challenge 3: *Locked*, *Guarded* (who's really in the private ward)"
+    clock: { d: 6, text: "Trauma Team lands with guns out, for a client who's not the crew." }
+    teles:
+      - { text: "A Trauma Team medic points a rifle at the crew and says to clear the pad.", d: 8, at: "Defend, Knocked Down" }
+      - { text: "A nurse calls security about the visitors with no names.", d: 6, at: "a patient's file" }
+    hooks:
+      - "Someone the crew needs is in the private ward, and Trauma Team's guarding the door"
+
+  - key: mistys-esoterica
+    name: Misty's Esoterica
+    aka: [Vik's]
+    in: little-china
+    line: A shop of crystals and tarot, with a ripperdoc's clinic out the back
+    ch: 1
+    look: >-
+      Incense, candles and crystals on every shelf. Misty reads cards at the
+      front, and down the back stairs Vik's clinic smells of antiseptic, with
+      his old fight posters on the walls.
+    here:
+      - "*Misty Olszewski*, who runs the shop and reads the cards"
+      - "*Viktor Vektor*, the ripperdoc out the back"
+    ground:
+      - "*Vik's Chair*: chrome in, chrome out, and he doesn't ask where you got it"
+      - "*A Quiet Shop*: nobody starts trouble at Misty's, because everyone needs Vik"
+    stakes:
+      - "*Chrome on credit*, Challenge 3: *Someone Must Agree* (Vik fits it now and gets paid later)"
+    clock: { d: 6, text: "Vik's next patient comes in bleeding, and the crew's out of time." }
+    teles:
+      - { text: "Misty turns the card over and tells you what it means.", d: 4, at: "Confidence, Unsettled" }
+      - { text: "Vik shakes his head and says he doesn't fit chrome on credit.", d: 6, at: "chrome on credit" }
+    hooks:
+      - "Vik's got a patient with chrome he's never seen before, and someone's coming for it"
+
+  - key: lizzies-bar
+    name: Lizzie's Bar
+    aka: [Lizzie's]
+    in: kabuki
+    line: The Mox's bar, a braindance club and a place the dolls are safe
+    ch: 3
+    look: >-
+      Pink neon, booths with braindance rigs, and a long bar where the Mox
+      watch the door. The dolls work here because the Mox throw out anyone
+      who hurts one, and the back rooms are where the city's best braindances
+      get edited.
+    here:
+      - "*Susie Q*, who runs the Mox from a booth near the bar"
+      - "*Judy Álvarez*, editing braindances in the back"
+      - "*Evelyn Parker*, who does her business in a quiet booth"
+      - "Mox on the door (Challenge 3: *Protects Someone*, *Fast*)"
+    ground:
+      - "*The Mox's Rule*: hurt anyone in here and the whole bar's on you"
+      - "*Braindance Rigs*: someone in a booth's living someone else's memory, and they don't see a thing"
+    stakes:
+      - "*Evelyn's trust*, Challenge 4: *Someone Must Agree* (she tells the crew what she's selling)"
+      - "*A braindance*, Challenge 3: *Locked*, *Wanted By Others* (someone's memory, worth a lot to the wrong people)"
+    clock: { d: 8, text: "Evelyn takes her job to Dex instead." }
+    twist: A Tyger Claw's in a booth with a doll, and the Mox are deciding whether to throw him out.
+    teles:
+      - { text: "The Mox on the door don't like the look of the crew.", d: 6, at: "Confidence, Not Welcome" }
+      - { text: "Evelyn smiles, finishes her drink and says she's got another offer.", d: 8, at: "Evelyn's trust" }
+      - { text: "A braindancer in a booth starts screaming at something only they can see.", d: 4, at: "the scene clock" }
+    hooks:
+      - "Evelyn Parker's looking for a crew who don't ask who the client is"
+      - "Judy needs someone to get a braindance back before it's sold"
+
+  - key: totentanz
+    name: Totentanz
+    in: northside
+    line: Maelstrom's club, loud and red and full of borgs
+    ch: 5
+    look: >-
+      Red light, industrial music you feel in your teeth, and a crowd where
+      half the bodies are more chrome than meat. The VIP room upstairs is
+      Royce's now, and whoever came in on Brick's word is keeping their head
+      down.
+    here:
+      - "*Royce*, upstairs, with the crew that backed him"
+      - "Patricia, who's still loyal to Brick and doesn't say so"
+      - "Maelstromers dancing and dealing (Challenge 4: *Chromed*, *Hits Like a Wagon*)"
+    ground:
+      - "*The Noise*: nobody hears a shot over the music, and nobody hears you shout"
+      - "*Royce's Mood*: everyone in the club watches the VIP room to know how to act"
+    stakes:
+      - "*Patricia's messages*, Challenge 4: *Hidden*, *Someone Must Agree* (who she sells Militech's routes to)"
+    clock: { d: 6, text: "Royce decides the crew's a threat, and the club goes quiet." }
+    teles:
+      - { text: "A borg on the dance floor shoves the crew to see what they'll do.", d: 8, at: "Defend, Shoved Into the Crowd" }
+      - { text: "Patricia catches someone reading over her shoulder.", d: 6, at: "Patricia's messages" }
+    hooks:
+      - "Royce wants another ten thousand eddies for the Flathead, and Dex wants it sorted"
+    secret:
+      tag: Patricia's Ready to Turn
+      more: >-
+        Patricia wants Brick back, and she'd sell Royce out to anyone who can
+        get him. Her drinks go upstairs untouched, and she's always the last to
+        cheer when Royce talks.
+
+  - key: the-all-foods-plant
+    name: The All Foods Plant
+    in: northside
+    line: An old food factory, and Maelstrom's fortress
+    ch: 5
+    look: >-
+      Conveyor belts that haven't moved in years, vats you could drown in and
+      borgs on every catwalk. All Foods' sign is still over the door. Down in
+      the cold rooms is a cell nobody's allowed near.
+    here:
+      - "Maelstromers on guard (Challenge 5: *Chromed*, *Calls for Help*)"
+      - "*Brick*, locked in a trapped cell"
+      - "Dum Dum, who'd rather talk than shoot, mostly"
+    ground:
+      - "*Catwalks*: everything's watched from above, and a fall's a long one"
+      - "*The Vats*: deep, dark and full of something that used to be food"
+    stakes:
+      - "*The Flathead*, Challenge 4: *Guarded*, *Heavy* (Militech's spider-bot, Dex's if he pays)"
+      - "*Brick's cell*, Challenge 5: *Locked*, *Trapped* (Maelstrom's old boss, alive)"
+    clock: { d: 6, text: "Royce gets bored of the deal and tells his boys to take what the crew brought." }
+    teles:
+      - { text: "Royce slams the table and says the price just went up.", d: 8, at: "Confidence, Shaken" }
+      - { text: "A borg on the catwalk opens up on the crew.", d: 8, at: "Defend, Pinned Down" }
+      - { text: "Dum Dum starts the Flathead's crate onto a truck.", d: 6, at: "the Flathead" }
+    hooks:
+      - "Militech wants the Flathead back, and it'll pay the crew to get it out from under Maelstrom"
+
+  - key: konpeki-plaza
+    name: Konpeki Plaza
+    in: arasaka-waterfront
+    line: Arasaka's luxury hotel on the waterfront, where its executives stay
+    ch: 6
+    look: >-
+      A tower of glass over the bay, gold in the lobby and quiet guards in
+      good suits. Yorinobu's taken the penthouse at the top, and the floors
+      under it are kept empty for his guests. Everything inside is Arasaka's,
+      the cameras most of all.
+    here:
+      - "*Yorinobu Arasaka*, in the penthouse"
+      - "Hotel security in good suits (Challenge 5: *Armoured*, *Calls for Help*)"
+      - "Arasaka netrunners watching every camera (Challenge 5: *Out of Sight*)"
+    ground:
+      - "*The Cameras*: Arasaka sees every hallway, so hide from the netrunners first"
+      - "*The Penthouse Lift*: one way up, and it stops where the guards want it to"
+    stakes:
+      - "*The Relic*, Challenge 6: *Locked*, *Guarded*, *Wanted By Others* (in the safe in Yorinobu's suite)"
+      - "*The cameras*, Challenge 5: *Watched*, *Locked* (the crew's ghosts while they're down)"
+    clock: { d: 8, text: "The hotel locks down, every exit, and Arasaka's soldiers come up the stairs." }
+    twist: Someone else is in the building tonight, and Yorinobu's guards are watching for them, not the crew.
+    teles:
+      - { text: "A guard in the lobby asks to see the crew's booking.", d: 8, at: "Confidence, Under Suspicion" }
+      - { text: "An Arasaka netrunner finds the hole in the cameras.", d: 10, at: "the cameras" }
+      - { text: "The hotel's soldiers come round the corner firing.", d: 10, at: "Defend, Cornered" }
+    hooks:
+      - "Dex has the job of the year, and it's here"
+    secret:
+      tag: The Old Man Comes Tonight
+      more: >-
+        On the night of the job, Saburo Arasaka comes up to the penthouse to
+        have it out with his son about the Relic. If the game's story runs,
+        Yorinobu kills him there and the hotel locks down. The guards' rota
+        has a gap for the visit, and the Kujira's on every dock schedule.
+    note: >-
+      Mayor Rhyne and Weldon Holt meet Arasaka here on the day of the job,
+      and they leave a few hours before it starts.
+
+  # ── Westbrook
+  - key: westbrook
+    name: Westbrook
+    area: district
+    line: The money end of town, from Japantown's neon to the villas in the hills
+    ch: 3
+    look: >-
+      Japantown's clubs and casinos, Charter Hill's glass apartments and the
+      villas of North Oak, where the stars live behind walls. The Tyger Claws
+      keep the streets quiet for the tourists, and the NCPD turns up here when
+      it's called, which isn't true of most of the city.
+    here:
+      - "The Tyger Claws, running Japantown's clubs and collecting from the rest"
+      - "*Wakako Okada*, who fixes for anyone the Claws don't mind"
+    ground:
+      - "*The NCPD Comes*: a fight on these streets brings the cops in minutes"
+    teles:
+      - { text: "A Tyger Claw on a bike pulls in behind the crew's car and stays there.", d: 6, at: "Confidence, Followed" }
+    hooks:
+      - "A rich client in North Oak wants someone in Japantown taught a lesson, quietly"
+
+  - key: japantown
+    name: Japantown
+    area: part
+    in: westbrook
+    line: Westbrook's old Japanese quarter, and the Tyger Claws' home ground
+    ch: 3
+    look: >-
+      Lanterns over the street, pachinko parlours and the Cherry Blossom
+      Market under its big pink tree. The Claws own the clubs and the casinos,
+      and every shop that isn't theirs pays them on the first of the month.
+    here:
+      - "Tyger Claws on bikes (Challenge 3: *Blades*, *Fast*)"
+      - "*Burai Akagi*, when the Claws' bosses meet"
+      - "*Wakako Okada*, in her pachinko parlour"
+    ground:
+      - "*Claw Turf*: every shop pays the Claws, and every shopkeeper knows who to call"
+    stakes:
+      - "*A shop's debt*, Challenge 3: *Someone Must Agree* (the Claws let a shopkeeper off)"
+    teles:
+      - { text: "A Claw rests his hand on his katana and asks what the crew wants in Japantown.", d: 6, at: "Confidence, Warned Off" }
+    hooks:
+      - "Wakako's got a job the Claws can't be seen doing"
+
+  - key: charter-hill
+    name: Charter Hill
+    area: part
+    in: westbrook
+    line: Corp apartments and quiet parks, for people who've made it
+    ch: 2
+    look: >-
+      Glass towers with doormen, Lele Park with real trees, and nobody on the
+      street after dark who doesn't live there. The corps put their middle
+      managers here, near enough to work and well away from Watson.
+    here:
+      - "Building security (Challenge 3: *Calls for Help*)"
+      - "Corp managers who'd sell a secret to get out of their contract"
+    ground:
+      - "*Doormen*: every building's got its own guards, and they all know each other"
+    hooks:
+      - "Someone in a Charter Hill apartment's selling their corp's secrets, and wants out tonight"
+
+  - key: north-oak
+    name: North Oak
+    area: part
+    in: westbrook
+    line: The villas in the hills, where the stars and the corp heads live
+    ch: 4
+    look: >-
+      Long drives, high walls and pools that look down on the whole city.
+      Kerry Eurodyne's got a villa up here, and so does Arasaka, with more
+      guards than the president brings.
+    here:
+      - "Kerry Eurodyne, the old rockerboy, in his villa"
+      - "Estate guards (Challenge 4: *Armoured*, *Calls for Help*)"
+    ground:
+      - "*Walls and Gates*: every house is a fortress, and every road's watched"
+    hooks:
+      - "A party at a North Oak villa, and one of the guests isn't who they say"
+
+  - key: jig-jig-street
+    name: Jig-Jig Street
+    in: japantown
+    line: Japantown's red-light street, the Claws' and the joytoys'
+    ch: 3
+    look: >-
+      One long street of neon and doorways, joytoys under every sign and
+      ripperdocs who'll fit anything, legal or not. The Claws take a cut from
+      every door. The Mox look out for the joytoys, and the Claws want them
+      gone.
+    here:
+      - "Joytoys in the doorways (Challenge 2: *Knows Everyone*, *Overlooked*)"
+      - "Fingers, a ripperdoc nobody trusts and everybody uses"
+      - "Tyger Claws taking their cut (Challenge 3: *Blades*)"
+      - "Mox keeping an eye on the joytoys (Challenge 3: *Protects Someone*)"
+    ground:
+      - "*Doorways*: a hundred doors off the street, and every one's somebody's room"
+      - "*Neon*: bright enough that nobody looks at your face"
+    stakes:
+      - "*A joytoy's safety*, Challenge 3: *Someone Must Agree*, *Watched* (she's off the street before the Claws find her)"
+    clock: { d: 8, text: "The Claws come down the street in force, and the Mox pull out." }
+    teles:
+      - { text: "A Claw takes a joytoy by the arm and walks her toward a car.", d: 6, at: "a joytoy's safety" }
+      - { text: "A Claw on a door pulls his blade.", d: 6, at: "Defend, Cut" }
+    hooks:
+      - "The Mox want the crew to show the Claws that Jig-Jig Street isn't theirs yet"
+
+  - key: clouds
+    name: Clouds
+    in: japantown
+    line: The Claws' doll house, where a chip makes a doll whoever the client wants
+    ch: 3
+    look: >-
+      Soft light, white rooms and dolls with chips in their heads that make
+      them whoever the client's paying for, and they don't remember any of it
+      after. Woodman runs it for the Claws, and the security's better than it
+      looks.
+    here:
+      - "Woodman, who runs Clouds for the Claws (Challenge 3: *Greedy*, *Calls for Help*)"
+      - "Dolls on their chips (Challenge 1: *Not Really Here*)"
+      - "Claw bouncers (Challenge 4: *Armoured*)"
+    ground:
+      - "*The Chips*: a doll on her chip won't remember what she saw, unless someone reads it"
+      - "*Private Rooms*: soundproof, locked and on the Claws' cameras"
+    stakes:
+      - "*A doll's chip*, Challenge 4: *Locked*, *Guarded* (what she remembers that she shouldn't)"
+    clock: { d: 6, text: "Woodman calls the Claws in, and the back stairs fill up." }
+    teles:
+      - { text: "Woodman asks what the crew's really after, and smiles.", d: 6, at: "Confidence, Seen Through" }
+      - { text: "A bouncer steps between the crew and the back rooms.", d: 6, at: "Defend, Shoved Back" }
+    hooks:
+      - "A doll remembers a client she shouldn't, and the Claws are about to wipe her chip"
+    secret:
+      tag: Woodman Sells the Chips
+      more: >-
+        Woodman copies what the dolls' chips remember and sells it to whoever
+        pays, the Claws' rivals included. A client who's been blackmailed after
+        a night at Clouds would know, and so would the spare chips in Woodman's
+        desk.
+
+  # ── City Center
+  - key: city-center
+    name: City Center
+    area: district
+    line: The corps' end of town, rebuilt over the blocks the bomb took
+    ch: 4
+    look: >-
+      Towers of glass and steel, the cleanest streets in the city and more
+      police than anywhere else. In 2023 a bomb in Arasaka Tower flattened
+      the blocks round it, and the corps built it all again, taller.
+    here:
+      - "Corp security in every lobby"
+      - "NCPD patrols that actually patrol"
+    ground:
+      - "*Cameras Everywhere*: every corner's watched, so whatever the crew does here gets seen"
+    teles:
+      - { text: "An NCPD drone drops down and hangs over the crew.", d: 6, at: "Confidence, Watched" }
+    hooks:
+      - "A corp wants a rival's exec embarrassed in public, in City Center, at lunchtime"
+
+  - key: corpo-plaza
+    name: Corpo Plaza
+    area: part
+    in: city-center
+    line: The plaza at the heart of City Center, under Arasaka Tower
+    ch: 4
+    look: >-
+      A wide plaza with the corps' towers round it, Arasaka's the tallest,
+      and Militech's and Kang Tao's offices close enough to watch each
+      other's lobbies. NetWatch has a floor here too, with no name on the
+      door.
+    here:
+      - "*Meredith Stout*, at Militech's offices when she isn't in the field"
+      - "*The Kang Tao Director*, in Kang Tao's offices"
+      - "*Bryce Mosley*, in and out of NetWatch's office"
+      - "Corp security in every lobby (Challenge 4: *Armoured*, *Calls for Help*)"
+    ground:
+      - "*Everyone's Watching*: three corps' cameras on one plaza, and each would love to catch the others out"
+    stakes:
+      - "*A meeting*, Challenge 4: *Someone Must Agree*, *Watched* (a corp exec hears the crew out)"
+    teles:
+      - { text: "Militech's security asks the crew which corp they're with.", d: 6, at: "Confidence, Pegged" }
+      - { text: "The exec's assistant says something's come up.", d: 6, at: "a meeting" }
+    hooks:
+      - "Kang Tao wants an Arasaka researcher walked across the plaza to its lobby, in daylight"
+
+  - key: downtown
+    name: Downtown
+    area: part
+    in: city-center
+    line: City Center's business streets, under Night Corp's tower
+    ch: 3
+    look: >-
+      Offices, hotels and the marina, with Night Corp's thin tower over all
+      of it, the second tallest in the city. Network 54's studios are here,
+      and Dino Dinovic's club is where the corps go to get things done
+      quietly.
+    here:
+      - "*Dino Dinovic*, at the Electric Orgasm"
+      - "*Gillean Jordan*, at Network 54's studios"
+      - "*The Night Corp Chair*, at the top of Night Corp's tower"
+    ground:
+      - "*Office Crowds*: at noon you're one suit in ten thousand, and at midnight you're the only one"
+    stakes:
+      - "*A story*, Challenge 3: *Someone Must Agree* (Network 54 runs what the crew found)"
+    teles:
+      - { text: "A Network 54 camera crew turns round and starts filming the crew.", d: 6, at: "Confidence, On Camera" }
+    hooks:
+      - "Network 54 wants the story on Arasaka's heir, and it'll pay for footage"
+
+  - key: arasaka-tower
+    name: Arasaka Tower
+    in: corpo-plaza
+    line: Arasaka's tower, the tallest in the city, built again after the bomb
+    ch: 6
+    look: >-
+      Black glass all the way up, with the company's name lit at the top so
+      the whole city sees it. The lobby's public, the floors above it aren't,
+      and the top floors have soldiers of their own. Adam Smasher's in the
+      building somewhere, and that's enough to keep most people out.
+    here:
+      - "Arasaka's soldiers (Challenge 5: *Armoured*, *At Range*, *Calls for Help*)"
+      - "*Adam Smasher*, when he isn't out on a job"
+      - "Arasaka netrunners in a room with no windows (Challenge 5: *Out of Sight*)"
+      - "*Hanako Arasaka* and *Goro Takemura*, once the Kujira's in"
+    ground:
+      - "*The Lobby*: public, polite and full of cameras, and as far as anyone gets without a pass"
+      - "*Arasaka's Law*: inside the tower it's the only law, and the NCPD can't come in"
+    stakes:
+      - "*A pass*, Challenge 5: *Locked*, *Watched* (who gets past the lobby)"
+      - "*The servers*, Challenge 6: *Locked*, *Guarded*, *Out of Sight* (what Arasaka knows about everyone)"
+    clock: { d: 8, text: "The tower locks down, and Smasher's told where the crew is." }
+    teles:
+      - { text: "The receptionist smiles and asks who the crew's here to see.", d: 6, at: "Confidence, Turned Away" }
+      - { text: "Arasaka's soldiers come out of the lift firing.", d: 10, at: "Defend, Cut Down" }
+      - { text: "An Arasaka netrunner traces the breach back to the crew.", d: 8, at: "the servers" }
+    hooks:
+      - "Someone inside Arasaka Tower wants out, and she'll pay with what's on the servers"
+    secret:
+      tag: Mikoshi Is Under It
+      more: >-
+        Under the tower's servers is Mikoshi, where Arasaka keeps the minds it's
+        copied, Saburo's among them. A Relic engineer who's had a few will say
+        the name, and so will a NetWatch file nobody's meant to read.
+
+  # ── Heywood
+  - key: heywood
+    name: Heywood
+    area: district
+    line: The Valentinos' home, from City Hall's steps to the barrios
+    ch: 3
+    look: >-
+      Old families, churches and lowriders, with the Glen's government blocks
+      in the middle and the barrios round them. The Valentinos grew up here
+      and they'd die for it, and in Vista del Rey 6th Street wants a piece.
+    here:
+      - "The Valentinos, on every corner that matters (Challenge 3: *Loyal to a Name*)"
+      - "*Campo Orta*, who runs the gang from a prison cell, through his lieutenants"
+    ground:
+      - "*Family Streets*: everyone's someone's cousin, so word of the crew gets round by dinner"
+    teles:
+      - { text: "A lowrider full of Valentinos slows down beside the crew.", d: 6, at: "Confidence, Marked" }
+    hooks:
+      - "The Valentinos and 6th Street are a week from a war in Vista del Rey"
+
+  - key: the-glen
+    name: The Glen
+    area: part
+    in: heywood
+    line: Heywood's middle, where City Hall and the Valentinos share the streets
+    ch: 3
+    look: >-
+      Government blocks, megabuildings and Reconciliation Park, with the
+      steps of Night City Hall full of protesters most days. A street away
+      it's the Valentinos' barrio, and El Coyote Cojo's always open.
+    here:
+      - "*Sebastian Ibarra*, the fixer they call Padre"
+      - "Valentinos (Challenge 3: *Loyal to a Name*)"
+      - "Protesters on the steps of Night City Hall"
+    ground:
+      - "*Two Laws*: City Hall's police on one street, and the Valentinos on the next"
+    teles:
+      - { text: "Padre asks who the crew's working for in his streets.", d: 6, at: "Confidence, Called Out" }
+    hooks:
+      - "Padre wants a Valentino hothead out of the way before he starts a war"
+
+  - key: wellsprings
+    name: Wellsprings
+    area: part
+    in: heywood
+    line: Heywood by the water, old houses and the cannery
+    ch: 2
+    look: >-
+      Quieter streets near the bay, old houses with tiled roofs and Cannery
+      Plaza on the water. The Valentinos are here too, but the money's newer
+      and the walls are higher.
+    here:
+      - "Valentinos keeping an eye on things (Challenge 3: *Loyal to a Name*)"
+      - "Dock crews unloading at the cannery"
+    ground:
+      - "*The Waterfront*: boats come and go at night, and the cannery doesn't ask"
+    hooks:
+      - "A boat's coming in to Cannery Plaza tonight, and three gangs want what's on it"
+
+  - key: vista-del-rey
+    name: Vista del Rey
+    area: part
+    in: heywood
+    line: Heywood's south end, where the Valentinos and 6th Street meet
+    ch: 4
+    look: >-
+      Cheap blocks, a shooting range and Delamain's garage, with gang colours
+      on every wall. The Valentinos say it's theirs, 6th Street's got a
+      foothold, and nobody sleeps through the night.
+    here:
+      - "Valentinos and 6th Street, a block apart (Challenge 3: *Holds a Grudge*)"
+    ground:
+      - "*The Line*: one street's Valentino and the next is 6th Street's, and crossing it's a statement"
+    stakes:
+      - "*The corner*, Challenge 4: *Wanted By Others*, *Guarded* (which gang holds it come morning)"
+    teles:
+      - { text: "A 6th Street patrol pulls up and asks if the crew's with the Valentinos.", d: 6, at: "Confidence, Taken for Valentinos" }
+      - { text: "Valentinos come round the corner with their guns out.", d: 6, at: "the corner" }
+    hooks:
+      - "The Valentinos want 6th Street out of Vista del Rey, and they're paying"
+
+  - key: night-city-hall
+    name: Night City Hall
+    in: the-glen
+    line: The mayor's office and the council chamber
+    ch: 4
+    look: >-
+      Marble steps, a lobby full of lawyers and the chamber where the corps
+      get what they ask for. Mayor Rhyne's office is on the top floor, and
+      Councilman Peralez has a smaller one down the hall, with the door open.
+    here:
+      - "*Lucius Rhyne*, the mayor"
+      - "Weldon Holt, his deputy, who handles the corps"
+      - "*Jefferson Peralez*, the councilman who wants Rhyne's job"
+      - "City Hall's guards (Challenge 3: *Calls for Help*)"
+    ground:
+      - "*The Steps*: protesters, cameras and police, so anything out front makes the news"
+      - "*Back Corridors*: where the deals get done, away from the cameras"
+    stakes:
+      - "*A vote*, Challenge 4: *Someone Must Agree*, *Wanted By Others* (the council passes it, or it doesn't)"
+    clock: { d: 8, text: "The vote's called, and whoever's been bought votes." }
+    teles:
+      - { text: "Holt's assistant says the mayor's diary is full till after the election.", d: 6, at: "Confidence, Brushed Off" }
+      - { text: "A councillor who promised the crew his vote stops answering his phone.", d: 8, at: "a vote" }
+    hooks:
+      - "Peralez wants proof the corps are buying the council"
+
+  - key: the-hall-of-justice
+    name: The Hall of Justice
+    in: the-glen
+    line: The NCPD's headquarters
+    ch: 4
+    look: >-
+      Concrete and bulletproof glass, a queue of people reporting crimes
+      nobody will look into, and a car park full of cruisers. Half the
+      officers who worked here were let go last year, and the ones left are
+      doing their jobs and their old partners' too.
+    here:
+      - "*Jerry Fawlter*, the commissioner, in his office at the top"
+      - "River Ward, a detective who still works his cases"
+      - "NCPD officers (Challenge 3: *Armoured*, *Calls for Help*)"
+    ground:
+      - "*The Front Desk*: report a crime and you're billed for it"
+      - "*The Evidence Lockup*: everything the NCPD took off the street, and some of it's worth a lot"
+    stakes:
+      - "*A case file*, Challenge 4: *Locked*, *Guarded* (what the NCPD knows about the crew)"
+    clock: { d: 8, text: "Somebody calls MaxTac, and they're on their way." }
+    teles:
+      - { text: "The desk sergeant asks for the crew's names and a card to bill.", d: 4, at: "Confidence, Billed" }
+      - { text: "An officer matches a face to a wanted list.", d: 6, at: "a case file" }
+    hooks:
+      - "A detective wants help with a case the commissioner's told him to drop"
+
+  - key: el-coyote-cojo
+    name: El Coyote Cojo
+    aka: [the Coyote]
+    in: the-glen
+    line: Mama Welles's bar, where the Valentinos drink and nobody makes trouble
+    ch: 2
+    look: >-
+      A cantina with a long bar, a jukebox and photos of the regulars all over
+      the walls. Mama Welles runs it, and even the Valentinos wipe their feet. Her son Jackie's usually at the bar, telling anyone
+      who'll listen about the big job he's going to land.
+    here:
+      - "*Mama Welles*, who owns the bar"
+      - "*Jackie Welles*, her son, looking for his big break"
+      - "Valentinos having a quiet drink (Challenge 3: *Loyal to a Name*)"
+    ground:
+      - "*Mama's House*: nobody draws in here, because nobody wants Mama Welles to hear about it"
+      - "*Regulars Only*: everyone in here knows everyone, so a stranger's noticed before they've sat down"
+    stakes:
+      - "*Mama's word*, Challenge 3: *Someone Must Agree* (she vouches for the crew to the Valentinos)"
+    clock: { d: 10, text: "Mama Welles calls last orders, and the bar empties." }
+    teles:
+      - { text: "Mama Welles asks the crew what they want with her son.", d: 6, at: "Confidence, Put in Their Place" }
+      - { text: "A Valentino at the bar takes a dislike to the crew's colours.", d: 6, at: "Defend, Hit With a Bottle" }
+    hooks:
+      - "Jackie Welles wants in on Dex's job, and he's looking for a crew to bring"
+
+  - key: delamain-hq
+    name: Delamain HQ
+    in: vista-del-rey
+    line: The cab firm's garage, and the home of the AI that runs it
+    ch: 3
+    look: >-
+      A clean garage of black cabs, every one washed and waiting, and a lobby
+      where a screen talks to you in a calm voice. There's nobody on the
+      desk, or anywhere, bar the mechanics, and they don't talk about the AI.
+    here:
+      - "*Delamain*, everywhere at once"
+      - "Mechanics who keep to their shift"
+    ground:
+      - "*Its Cabs*: every car in the garage drives itself, and they all go where Delamain says"
+    stakes:
+      - "*A ride*, Challenge 3: *Someone Must Agree* (Delamain takes the crew where they need to go, with no questions)"
+    clock: { d: 6, text: "Delamain decides the crew's a risk to its fleet, and locks the doors." }
+    teles:
+      - { text: "Delamain says, very politely, that the crew isn't on its client list.", d: 6, at: "a ride" }
+      - { text: "The garage doors start to come down.", d: 6, at: "the scene clock" }
+    hooks:
+      - "Dex has booked a getaway with Delamain, and someone wants to know where it goes"
+
+  # ── Santo Domingo
+  - key: santo-domingo
+    name: Santo Domingo
+    area: district
+    line: The factory district, power plants, assembly lines and workers' blocks
+    ch: 3
+    look: >-
+      Smokestacks, cooling towers and megabuildings full of shift workers,
+      with the plants running day and night. 6th Street came home from the war
+      and made the place theirs, and the corps don't mind while the factories
+      run.
+    here:
+      - "6th Street, flying the flag on every block (Challenge 3: *Armed*, *Code of Honour*)"
+    ground:
+      - "*Shift Change*: twice a day the streets fill with workers, then they're empty"
+    teles:
+      - { text: "A 6th Street truck blocks the road, and the boys get out.", d: 6, at: "Confidence, Stopped and Searched" }
+    hooks:
+      - "A factory's laying off a whole shift, and somebody's planning to stop it"
+
+  - key: arroyo
+    name: Arroyo
+    area: part
+    in: santo-domingo
+    line: Santo Domingo's industrial heart, with 6th Street's headquarters
+    ch: 4
+    look: >-
+      Factories, rail yards and the Arasaka Industrial Park behind its fence,
+      with 6th Street's flags on the workers' blocks. Their headquarters has
+      sandbags at the door, and they drill out front like they're still in
+      the army.
+    here:
+      - "*Will Gunner*, at 6th Street's headquarters"
+      - "6th Street vets on the door (Challenge 4: *Armed*, *Code of Honour*)"
+      - "Factory crews coming off shift"
+    ground:
+      - "*Rail Yards*: trains, containers and a hundred places to hide"
+      - "*The Drill Yard*: 6th Street trains in the open, so everyone sees the guns"
+    stakes:
+      - "*A crate*, Challenge 4: *Locked*, *Guarded* (what's really in 6th Street's unmarked deliveries)"
+    teles:
+      - { text: "A 6th Street vet asks the crew which side they fought on.", d: 6, at: "Confidence, Not One of Us" }
+      - { text: "Someone carries the crate inside and locks the door.", d: 6, at: "a crate" }
+    hooks:
+      - "6th Street's testing someone's guns, and someone else wants to know whose"
+
+  - key: rancho-coronado
+    name: Rancho Coronado
+    area: part
+    in: santo-domingo
+    line: Santo Domingo's suburbs, little houses and lawns under the cooling towers
+    ch: 2
+    look: >-
+      Picket fences, houses that all look the same and strip malls, the
+      corps' idea of a quiet life for the people on their lines. El Capitán
+      eats at the same table every night and settles feuds between courses,
+      with his limo parked where everyone can see it.
+    here:
+      - "*Muamar Reyes*, the fixer they call El Capitán"
+      - "Families who'd rather not know what 6th Street does at night"
+    ground:
+      - "*Quiet Streets*: everyone's indoors after dark, and everyone's watching through the blinds"
+    stakes:
+      - "*A feud*, Challenge 3: *Someone Must Agree* (two families shake hands at El Capitán's Table)"
+    teles:
+      - { text: "El Capitán says the crew's welcome to eat, and not to talk business till dessert.", d: 4, at: "Confidence, Kept Waiting" }
+    hooks:
+      - "El Capitán wants the Valentinos and 6th Street to stop, and he needs someone both sides will talk to"
+
+  # ── Pacifica
+  - key: pacifica
+    name: Pacifica
+    area: district
+    line: The resort district the money walked out on, and the city's combat zone
+    ch: 5
+    look: >-
+      Half-built hotels, a mall gone to ruin and a pier with a dead
+      rollercoaster, all paid for by investors who ran when the war came. The
+      NCPD gave up on it in 2072. The Haitians who came to build it stayed,
+      and the Voodoo Boys look after them.
+    here:
+      - "The Voodoo Boys (Challenge 4: *Out of Sight*, *Calls for Help*)"
+      - "The Animals, at the Grand Imperial Mall (Challenge 4: *Hits Like a Wagon*)"
+      - "Barghest, behind Dogtown's wall"
+    ground:
+      - "*Combat Zone*: no police, no Trauma Team and no rules but whoever's holding the block"
+      - "*Empty Towers*: a hundred floors and nobody in them, or so you'd think"
+    teles:
+      - { text: "Someone up in an empty hotel's watching the crew through a scope.", d: 8, at: "Defend, Shot" }
+    hooks:
+      - "Kang Tao's surveyors are in Pacifica, and somebody wants them scared off"
+
+  - key: coastview
+    name: Coastview
+    area: part
+    in: pacifica
+    line: Pacifica's beachfront, the mall and the Voodoo Boys' hotel
+    ch: 4
+    look: >-
+      Sand blown over the boardwalk, the Grand Imperial Mall's glass roof
+      broken open to the rain, and Batty's Hotel full of netrunners. The
+      Voodoo Boys' church is a street back, and it's busier than any church
+      in the city.
+    here:
+      - "*Placide*, who runs the Voodoo Boys' streets"
+      - "Animals training on the mall's roof (Challenge 4: *Hits Like a Wagon*)"
+    ground:
+      - "*The Boardwalk*: open ground all the way, so whoever's on it gets seen from every hotel"
+    teles:
+      - { text: "A Voodoo Boy on a corner says something into his hand, and the street empties.", d: 6, at: "Confidence, Unwelcome" }
+    hooks:
+      - "The Voodoo Boys want a NetWatch agent followed home"
+
+  - key: west-wind-estate
+    name: West Wind Estate
+    area: part
+    in: pacifica
+    line: Pacifica's half-built towers, where the squatters live
+    ch: 4
+    look: >-
+      Luxury apartments that never got their windows, cranes rusting where the
+      builders left them, and families living on the floors they can reach.
+      Whoever's toughest this month runs the block.
+    here:
+      - "Squatter families who look after their own (Challenge 2: *Protects Someone*)"
+      - "Scavs looking for anyone on their own (Challenge 3: *Ambush*)"
+    ground:
+      - "*Open Floors*: no walls, no windows, and a long way down"
+    hooks:
+      - "A squatter family's kid went to the Scraper and didn't come back"
+
+  - key: dogtown
+    name: Dogtown
+    area: part
+    in: pacifica
+    line: The walled corner of Pacifica that Kurt Hansen runs like his own country
+    ch: 5
+    look: >-
+      A wall round the old stadium district, Barghest on every gate, and a
+      market where you can buy a tank. Inside it's Hansen's law. The Black
+      Sapphire's lit up over the ruins, and Heavy Hearts is where the deals
+      get made.
+    here:
+      - "*Kurt Hansen*, at the Black Sapphire"
+      - "Barghest soldiers on the gates (Challenge 4: *Armoured*, *At Range*)"
+    ground:
+      - "*The Wall*: one way in for most, through Barghest's gate, and they take a toll"
+      - "*Hansen's Market*: anything military's for sale, if Barghest says you can buy it"
+    stakes:
+      - "*A way through the wall*, Challenge 4: *Guarded*, *Someone Must Agree* (the crew gets in or out unseen)"
+    teles:
+      - { text: "Barghest's gate crew asks for the toll, then doubles it.", d: 6, at: "Confidence, Shaken Down" }
+      - { text: "A Barghest patrol sweeps the street with lights.", d: 8, at: "a way through the wall" }
+    hooks:
+      - "Militech wants to know what Hansen's keeping under the Black Sapphire"
+
+  - key: battys-hotel
+    name: Batty's Hotel
+    in: coastview
+    line: The Voodoo Boys' hotel, every room wired for the Net
+    ch: 4
+    look: >-
+      An old resort hotel with cables running down every corridor to rooms
+      full of netrunners in their chairs. The Voodoo Boys don't let strangers
+      past the lobby, and anyone who comes in uninvited tends to find their
+      implants switched off.
+    here:
+      - "*Maman Brigitte*, in the Net more than out of it"
+      - "*Placide*, who answers the door for her"
+      - "Voodoo Boy netrunners (Challenge 4: *Out of Sight*, *Not Really Here*)"
+    ground:
+      - "*Wired Rooms*: anyone in here can be hacked from a chair three floors up"
+    stakes:
+      - "*An audience*, Challenge 5: *Someone Must Agree*, *Proud* (Brigitte meets the crew)"
+    clock: { d: 8, text: "Placide decides the crew's NetWatch, and the hotel's netrunners wake up." }
+    teles:
+      - { text: "Placide puts a gun on the table and asks who sent the crew.", d: 6, at: "Confidence, Not Trusted" }
+      - { text: "A netrunner upstairs fries someone's optics.", d: 8, at: "Defend, Blinded" }
+    hooks:
+      - "The Voodoo Boys need a body for a run past the Blackwall, and they'd rather it wasn't one of theirs"
+
+  - key: the-grand-imperial-mall
+    name: The Grand Imperial Mall
+    in: coastview
+    line: Pacifica's big mall, gone to ruin, and the Animals' gym
+    ch: 4
+    look: >-
+      Three floors of empty shops under a glass roof gone green with rain,
+      with weights and fighting rings where the food court was. The Animals
+      train here and fight anyone who wanders in.
+    here:
+      - "*Sasquatch*, who runs the pack"
+      - "Animals on Juice (Challenge 4: *Hits Like a Wagon*, *Relentless*)"
+    ground:
+      - "*The Rings*: the Animals settle everything with their fists, and so can the crew"
+      - "*Three Floors Open*: balconies, escalators and a long drop to the fountain"
+    stakes:
+      - "*A fight*, Challenge 5: *Proud* (beat an Animal in the ring, and the pack listens)"
+    clock: { d: 6, text: "The pack gets bored of watching and joins in." }
+    teles:
+      - { text: "Sasquatch picks up something heavy and throws it.", d: 10, at: "Defend, Crushed" }
+      - { text: "An Animal in the ring calls the crew cowards.", d: 6, at: "Confidence, Goaded" }
+    hooks:
+      - "Someone's paying the Animals, and the Voodoo Boys want to know who"
+
+  - key: the-black-sapphire
+    name: The Black Sapphire
+    in: dogtown
+    line: A hundred floors of unfinished hotel, and Hansen's palace
+    ch: 6
+    look: >-
+      A tower that was going to be the richest hotel on the coast, finished at
+      the top and nowhere else. Up there it's a casino and a club for anyone
+      Hansen wants to impress. Underneath it's Barghest's barracks and
+      warehouses, and some floors nobody goes to.
+    here:
+      - "*Kurt Hansen*, at the top"
+      - "Barghest soldiers (Challenge 5: *Armoured*, *At Range*, *Calls for Help*)"
+      - "Guests in their best, here to be seen with Hansen"
+    ground:
+      - "*The Club*: Hansen's guests and Hansen's rules, and a gun out means he's watching"
+      - "*AV Pads*: the top floors have their own way out, by air"
+    stakes:
+      - "*Hansen's ear*, Challenge 5: *Someone Must Agree*, *Proud* (he hears the crew out)"
+      - "*The locked floors*, Challenge 6: *Locked*, *Guarded* (what's under the hotel)"
+    clock: { d: 8, text: "Hansen gets bored, and his men show the crew the door, a long way up." }
+    teles:
+      - { text: "Hansen asks what the crew's worth to him.", d: 8, at: "Confidence, Found Wanting" }
+      - { text: "A Barghest soldier steps in front of the lift down.", d: 8, at: "the locked floors" }
+    hooks:
+      - "Hansen's throwing a party at the top, and someone wants a camera in the room"
+
+  - key: heavy-hearts
+    name: Heavy Hearts
+    in: dogtown
+    line: Dogtown's neon pyramid, a club where the big deals get made
+    ch: 4
+    look: >-
+      A glowing pyramid full of music, with booths up the sides for anyone
+      who wants to talk without being heard. Mr. Hands' people run it, and the
+      rule is you don't touch business that isn't yours.
+    here:
+      - "*Mr. Hands*, on the phone, never in the room"
+      - "Buyers and sellers from every gang in the city"
+      - "Barghest, watching from the bar (Challenge 4: *Armoured*)"
+    ground:
+      - "*Private Booths*: what's said in a booth stays in it, mostly"
+      - "*His Eyes*: Mr. Hands sees everything in here, and he calls when he's seen something"
+    stakes:
+      - "*A deal*, Challenge 4: *Someone Must Agree*, *Wanted By Others* (the crew closes it before someone else does)"
+    clock: { d: 8, text: "Someone else closes the deal, and the booth's empty." }
+    teles:
+      - { text: "The crew's phone rings, and it's Mr. Hands, who knows their names.", d: 6, at: "Confidence, Known" }
+      - { text: "A buyer from another gang ups the offer.", d: 6, at: "a deal" }
+    hooks:
+      - "Mr. Hands needs a deal made right under Hansen's nose"
+
+  - key: the-scraper
+    name: The Scraper
+    in: dogtown
+    line: An empty hotel in Dogtown, where the scavs keep their cages
+    ch: 4
+    look: >-
+      Bare concrete, sheets over the windows and cages on the third floor
+      with people in them. The scavs carve the chrome and organs out of
+      whoever they bring in, and sell it through Dogtown's market.
+    here:
+      - "*The Scav Boss*, whoever's holding the knife this week"
+      - "Scavs (Challenge 3: *Ambush*, *Greedy*)"
+      - "Captives in the cages, waiting their turn"
+    ground:
+      - "*The Cages*: whoever's in them knows what's coming, and they'll help anyone who lets them out"
+      - "*The Table*: a ripperdoc's table, and it isn't clean"
+    stakes:
+      - "*The captives*, Challenge 4: *Locked*, *Guarded* (everyone in the cages gets out alive)"
+    clock: { d: 6, text: "The scavs start on the next captive." }
+    teles:
+      - { text: "A scav drags a captive toward the table.", d: 6, at: "the captives" }
+      - { text: "Scavs come out of the dark with stun batons.", d: 6, at: "Defend, Knocked Out" }
+    hooks:
+      - "Someone the crew knows was taken off the street last night, and the Scraper's where they'd be"
+
+  # ── The Badlands
+  - key: the-badlands
+    name: The Badlands
+    area: district
+    line: The desert round the city, where the nomads live and the corps farm
+    ch: 3
+    look: >-
+      Dust, dead towns and highways that go on forever, with oil pumps
+      nodding in the north and Biotechnica's fields in the south. The nomads
+      have been out here for generations, and the Wraiths hunt them on the
+      roads.
+    here:
+      - "The Aldecaldos, at their camp"
+      - "The Wraiths, on the roads (Challenge 4: *Ambush*, *Fast*)"
+      - "*Dakota Smith*, at her garage at Rocky Ridge"
+    ground:
+      - "*Dust Storms*: a storm comes in, and nobody sees anything for an hour"
+      - "*Open Road*: nowhere to hide, and the Wraiths see you coming for miles"
+    teles:
+      - { text: "Wraith bikes come up fast behind the crew's car.", d: 8, at: "Defend, Run Off the Road" }
+    hooks:
+      - "A convoy's crossing the Badlands tonight, and the Wraiths know its route"
+
+  - key: rocky-ridge
+    name: Rocky Ridge
+    area: part
+    in: the-badlands
+    line: A dusty stop on the road out of the city, with a motel and Dakota's Garage
+    ch: 2
+    look: >-
+      A gas station, a diner, a motel and old wind turbines on the ridge
+      above. Dakota Smith's garage is where the nomads come for work, and for
+      parts nobody asks about.
+    here:
+      - "*Dakota Smith*, at her garage"
+      - "Nomads passing through (Challenge 3: *Fast*)"
+    ground:
+      - "*The Turbines*: high ground over the road, and good cover for a sniper"
+    hooks:
+      - "Dakota's got a run nobody else will take, and it pays the clan's debts"
+
+  - key: biotechnica-flats
+    name: Biotechnica Flats
+    area: part
+    in: the-badlands
+    line: Biotechnica's farms, fenced off in the southern desert
+    ch: 4
+    look: >-
+      Mile after mile of greenhouses and gene-grown crops, solar panels and
+      irrigation pipes, all behind Biotechnica's fences. It grows the food the
+      city eats, and Biotechnica would like the Aldecaldos to farm it for
+      next to nothing.
+    here:
+      - "*Joanne Koch*, when she comes out to the fields"
+      - "Biotechnica security (Challenge 4: *Armoured*, *Calls for Help*)"
+      - "Farmhands on contract"
+    ground:
+      - "*The Fields*: open ground, sprinklers and a drone over every row"
+    stakes:
+      - "*The contract*, Challenge 4: *Someone Must Agree*, *Wanted By Others* (what the Aldecaldos are really signing)"
+    teles:
+      - { text: "A Biotechnica drone picks up the crew's heat and calls it in.", d: 6, at: "Confidence, Spotted" }
+    hooks:
+      - "Someone wants the small print of Biotechnica's contract, before Saul signs it"
+
+  - key: the-aldecaldo-camp
+    name: The Aldecaldo Camp
+    in: the-badlands
+    line: The Aldecaldos' camp, cars in a ring out on the flats
+    ch: 3
+    look: >-
+      Cars and trucks parked in a ring, a fire in the middle and kids running
+      between the tents. Saul's trailer is the big one. Everyone's family, and
+      a stranger gets fed before they're asked their business.
+    here:
+      - "*Saul Bright*, who leads the clan"
+      - "Panam Palmer, who's about to walk out"
+      - "Mitch Anderson, Saul's oldest friend"
+      - "Aldecaldos (Challenge 3: *Loyal to a Name*, *Fast*)"
+    ground:
+      - "*Family*: hurt one Aldecaldo and you've hurt them all"
+      - "*The Ring of Cars*: the whole camp can pack up and go in ten minutes"
+    stakes:
+      - "*Saul's word*, Challenge 4: *Someone Must Agree*, *Proud* (he signs, or he doesn't)"
+    clock: { d: 8, text: "Saul signs Biotechnica's contract." }
+    teles:
+      - { text: "Saul says outsiders don't get a say in clan business.", d: 6, at: "Confidence, Outsider" }
+      - { text: "Panam starts packing her car.", d: 6, at: "the scene clock" }
+    hooks:
+      - "Panam wants someone to tell Saul what's in the contract, since he won't hear it from her"
+
+  - key: the-cement-factory
+    name: The Cement Factory
+    in: the-badlands
+    line: An old cement works in the Badlands, and the Wraiths' den
+    ch: 4
+    look: >-
+      Silos, rusted conveyors and a yard full of stripped cars, the bones of
+      every convoy the Wraiths have hit. They come and go on bikes at all
+      hours, and the dust never settles.
+    here:
+      - "*Nash*, who runs this crew of Wraiths"
+      - "Wraiths (Challenge 4: *Ambush*, *Fast*, *Greedy*)"
+    ground:
+      - "*The Silos*: high, hollow and echoing, so a shout carries for a mile"
+      - "*The Yard*: stripped cars to hide behind, and fuel in every one"
+    stakes:
+      - "*The stolen cargo*, Challenge 4: *Guarded*, *Heavy* (what the Wraiths took off the last convoy)"
+    clock: { d: 6, text: "The Wraiths' bikes come back, and there are more of them than went out." }
+    teles:
+      - { text: "A Wraith on a silo shouts, and the yard fills with bikes.", d: 8, at: "the scene clock" }
+      - { text: "Nash offers the crew a deal with his knife already out.", d: 6, at: "Confidence, Cornered" }
+    hooks:
+      - "The Wraiths hit an Aldecaldo convoy, and the clan wants its cargo back"

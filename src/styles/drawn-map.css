@@ -1,0 +1,74 @@
+/* A whole world's map, drawn in code (src/worlds/draw-map.js): a city plan
+   engraved in the Sigil look. The sea's the deepest thing on the page, the
+   open country's stippled, each district's a plate in one of three plum
+   tones edged in gold, its parts split by a dashed hairline, and the hills
+   hatched. Roads are pale, landmarks are small gold marks, and the names
+   live on the pins (mapview.css), so they stay one size. Dogtown's wall is
+   ember, since it's the one border that shoots back. */
+.dm {
+  --dm-sea: #0b0812;
+  --dm-wave: rgba(181, 150, 245, 0.1);
+  --dm-land: #17111e;
+  --dm-dot: rgba(217, 180, 90, 0.17);
+  --dm-t0: #261d31;
+  --dm-t1: #2e2439;
+  --dm-t2: #21192b;
+  --dm-edge: rgba(217, 180, 90, 0.7);
+  --dm-part: rgba(217, 180, 90, 0.3);
+  --dm-hill: rgba(217, 180, 90, 0.05);
+  --dm-hatch: rgba(217, 180, 90, 0.2);
+  --dm-water: #0f1322;
+  --dm-coast: rgba(217, 180, 90, 0.5);
+  --dm-road: rgba(240, 233, 246, 0.3);
+  --dm-road-c: rgba(11, 8, 18, 0.65);
+  --dm-mark: #d9b45a;
+  --dm-wall: #ef7d5c;
+  --dm-street: rgba(240, 233, 246, 0.045);
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+:root[data-theme="light"] .dm {
+  --dm-sea: #d9d3e4;
+  --dm-wave: rgba(91, 54, 176, 0.13);
+  --dm-land: #f1ece2;
+  --dm-dot: rgba(122, 90, 18, 0.2);
+  --dm-t0: #ffffff;
+  --dm-t1: #f5f0f8;
+  --dm-t2: #ebe3f1;
+  --dm-edge: rgba(110, 81, 16, 0.75);
+  --dm-part: rgba(110, 81, 16, 0.32);
+  --dm-hill: rgba(122, 90, 18, 0.06);
+  --dm-hatch: rgba(122, 90, 18, 0.22);
+  --dm-water: #cfd6e8;
+  --dm-coast: rgba(110, 81, 16, 0.55);
+  --dm-road: rgba(29, 21, 38, 0.26);
+  --dm-road-c: rgba(255, 255, 255, 0.8);
+  --dm-mark: #8f6a12;
+  --dm-wall: #b8432a;
+  --dm-street: rgba(29, 21, 38, 0.05);
+}
+.dm-land { fill: var(--dm-land); }
+.dm-dot { fill: var(--dm-dot); }
+.dm-d { stroke: none; }
+.dm-d.is-t0 { fill: var(--dm-t0); }
+.dm-d.is-t1 { fill: var(--dm-t1); }
+.dm-d.is-t2 { fill: var(--dm-t2); }
+.dm-street { fill: none; stroke: var(--dm-street); stroke-width: 1.2; }
+.dm-hill { fill: var(--dm-hill); }
+.dm-hatch { stroke: var(--dm-hatch); stroke-width: 1.1; }
+.dm-p { fill: none; stroke: var(--dm-part); stroke-width: 1.4; stroke-dasharray: 5 4; stroke-linejoin: round; }
+/* Open country's parts are places of their own out there, so they get a
+   faint ring of ground rather than a dashed line through a plate. */
+.dm-p.is-rocky-ridge, .dm-p.is-biotechnica-flats { fill: color-mix(in srgb, var(--dm-t1) 55%, transparent); stroke-dasharray: none; }
+.dm-p.is-dogtown { fill: color-mix(in srgb, var(--dm-wall) 9%, transparent); stroke: var(--dm-wall); stroke-width: 3; stroke-dasharray: 9 3; opacity: 0.9; }
+.dm-water { fill: var(--dm-water); stroke: var(--dm-coast); stroke-width: 1.4; }
+.dm-sea { fill: var(--dm-sea); }
+.dm-wave { fill: none; stroke: var(--dm-wave); stroke-width: 1.2; }
+.dm-coast { fill: none; stroke: var(--dm-coast); stroke-width: 2; stroke-linejoin: round; }
+.dm-road-c { fill: none; stroke: var(--dm-road-c); stroke-width: 7; stroke-linecap: round; stroke-linejoin: round; }
+.dm-road { fill: none; stroke: var(--dm-road); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.dm-de { fill: none; stroke: var(--dm-edge); stroke-width: 2.6; stroke-linejoin: round; }
+.dm-mark .dm-m { fill: none; stroke: var(--dm-mark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.dm-mark .is-tower, .dm-mark .is-in, .dm-mark .is-block { fill: var(--dm-mark); fill-opacity: 0.85; }
+.dm-mark .is-dam { stroke-width: 3; }

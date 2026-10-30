@@ -16,7 +16,7 @@ factions:
     assets:
       - { text: A Vault, does: "One of its resources is kept inside, and nobody can Destroy or Acquire it from downtime." }
     agendas:
-      - { text: Buy the fish market's ashes, die: 4, at: [place:the-fish-market], then: It owns the waterfront end to end. }
+      - { text: Buy the Fish Market's ashes, die: 4, at: [place:the-fish-market], then: It owns the waterfront end to end. }
     pub: [{ text: They took my boat, kind: hostile, s: strained }]
     threads:
       - { to: night-boats, tie: rival, text: Smugglers don't borrow }

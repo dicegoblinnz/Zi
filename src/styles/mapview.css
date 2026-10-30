@@ -1,0 +1,114 @@
+/* A map on a phone (src/companion/mapview.js): the stage that's moved and
+   zoomed with one thumb, its layer (a picture, or a map drawn in code, which
+   draw-map.js draws and drawn-map.css colours), the pins over it, which stay
+   one size, the cross for dropping one, and the fog's layer and the brush's
+   ring. The World screen (companion.css) and /worlds/ (worlds.css) both use
+   it, each with what's its own on top. */
+.wm-pic, .wm-art { display: block; width: 100%; height: 100%; max-width: none; pointer-events: none; -webkit-user-drag: none; }
+.wm-art > svg { display: block; width: 100%; height: 100%; }
+.wm-stage.is-drawn .wm-pic { display: none; }
+.wm-pin { position: absolute; left: 0; top: 0; display: block; width: 44px; height: 44px; margin: -41px 0 0 -22px; padding: 0; font: inherit; color: var(--zd-on-them); background: none; border: 0; pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.wm-pin:focus-visible { outline: none; }
+.wm-stage { position: absolute; inset: 0; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: grab; outline: none; }
+.wm-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--violet); }
+.wm-stage.is-moving { cursor: grabbing; }
+.wm-layer { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+.wm-stage.is-empty .wm-layer { background: color-mix(in srgb, var(--zd-them) 12%, transparent); }
+.wm-pins { position: absolute; inset: 0; pointer-events: none; }
+.wm-pin-head { position: absolute; left: 7px; top: 4px; display: grid; place-items: center; width: 30px; height: 30px; background: var(--zd-them); border: 2px solid color-mix(in srgb, var(--zd-on-them) 80%, transparent); border-radius: 50% 50% 50% 3px; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.45); transform: rotate(-45deg); transition: transform 160ms ease-out; }
+.wm-pin-head svg { width: 15px; height: 15px; transform: rotate(45deg); }
+.wm-pin-n { position: absolute; left: 37px; top: 8px; max-width: 10.5rem; padding: 1px 7px 2px; font-size: 0.8rem; font-weight: 700; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); background: color-mix(in srgb, var(--surface) 92%, transparent); border: 1px solid color-mix(in srgb, var(--zd-them) 55%, transparent); border-radius: 2px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); }
+.wm-pin.is-quiet .wm-pin-n { display: none; }
+.wm-pin.is-hidden .wm-pin-head { color: var(--zd-them-ink); background: var(--surface); border: 2px dashed var(--zd-them-line); }
+.wm-pin.is-hidden .wm-pin-n { color: var(--muted); border-style: dashed; }
+.wm-pin.is-on { z-index: 2; }
+.wm-pin.is-on .wm-pin-head { transform: rotate(-45deg) scale(1.15); box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--ink), 0 2px 8px rgba(0, 0, 0, 0.45); }
+.wm-pin.is-on .wm-pin-n { border-color: var(--ink); }
+.wm-pin:focus-visible .wm-pin-head { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--violet); }
+.wm-pin.is-new .wm-pin-head { animation: wm-lit 1.4s ease-out 2; }
+@keyframes wm-lit { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--zd-them) 75%, transparent), 0 2px 6px rgba(0, 0, 0, 0.45); } 100% { box-shadow: 0 0 0 16px transparent, 0 2px 6px rgba(0, 0, 0, 0.45); } }
+.wm-stage.is-placing .wm-pin { opacity: 0.55; }
+.wm-stage.is-placing .wm-pin.is-lifted { opacity: 0.2; }
+.wm-cross { position: absolute; left: 50%; top: calc((100% - var(--wm-pad, 0px)) / 2); width: 48px; height: 48px; margin: -24px 0 0 -24px; pointer-events: none; }
+.wm-cross[hidden] { display: none; }
+.wm-cross::before, .wm-cross::after { content: ""; position: absolute; background: var(--zd-them); box-shadow: 0 0 0 1.5px var(--zd-on-them); }
+.wm-cross::before { left: 0; top: 23px; width: 48px; height: 2px; }
+.wm-cross::after { left: 23px; top: 0; width: 2px; height: 48px; }
+.wm-cross i { position: absolute; left: 14px; top: 14px; width: 20px; height: 20px; border: 2px solid var(--zd-them); border-radius: 50%; box-shadow: 0 0 0 1.5px var(--zd-on-them), inset 0 0 0 1.5px var(--zd-on-them); }
+:root { --wm-fog: #3b3148; }
+:root[data-theme="light"] { --wm-fog: #bcb2c8; }
+.wm-fog { position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; }
+.wm-fog[hidden] { display: none; }
+.wm-fog.is-gm { opacity: 0.5; }
+.wm-fog.is-going { transition: opacity 900ms ease-out; }
+.wm-fog.is-going.is-gone { opacity: 0; }
+.wm-stage.is-brushing { cursor: crosshair; }
+.wm-stage.is-brushing .wm-pin { pointer-events: none; }
+.wm-ring { position: absolute; left: 0; top: 0; border: 2px solid var(--zd-them); border-radius: 50%; box-shadow: 0 0 0 1.5px var(--zd-on-them), inset 0 0 0 1.5px var(--zd-on-them); pointer-events: none; will-change: transform; }
+.wm-ring[hidden] { display: none; }
+.wm-pin.is-fogged { opacity: 0.6; }
+.wm-pin.is-fogged.is-on { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wm-pin.is-new .wm-pin-head { animation: none; }
+  .wm-pin-head { transition: none; }
+  .wm-fog.is-going { transition: none; }
+}
+
+/* A map drawn in code (stage 13 of notes/builder-plan.md) names its
+   districts and their parts with pins of their own, a district in spaced
+   capitals and a part in italics, centred on their spot and as tall as a
+   thumb. Districts keep their names first when names would crowd. */
+.wm-pin.is-district, .wm-pin.is-part { width: auto; height: 44px; margin: -22px 0 0 0; translate: -50% 0; display: flex; align-items: center; justify-content: center; color: var(--ink); }
+.wm-pin.is-district .wm-pin-n, .wm-pin.is-part .wm-pin-n { position: static; max-width: none; padding: 0 4px; background: none; border: 0; border-radius: 2px; box-shadow: none; text-shadow: 0 0 3px var(--bg), 0 0 6px var(--bg), 0 0 1px var(--bg); }
+.wm-pin.is-district .wm-pin-n { font-family: var(--display); font-size: 0.86rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold-ink); }
+.wm-pin.is-part .wm-pin-n { font-size: 0.78rem; font-style: italic; font-weight: 700; letter-spacing: 0.02em; color: color-mix(in srgb, var(--gold-ink) 82%, var(--ink)); }
+.wm-pin.is-district.is-quiet, .wm-pin.is-part.is-quiet { pointer-events: none; }
+.wm-pin.is-district.is-on .wm-pin-n, .wm-pin.is-part.is-on .wm-pin-n { color: var(--ink); background: color-mix(in srgb, var(--zd-them) 26%, var(--surface)); box-shadow: 0 0 0 1.5px var(--zd-them-line); text-shadow: none; }
+.wm-pin.is-district:focus-visible .wm-pin-n, .wm-pin.is-part:focus-visible .wm-pin-n { outline: 2px solid var(--violet); outline-offset: 2px; }
+
+/* The web on a map: each faction a token where its pin is, faint till one's
+   tapped, then it and the factions it's tied to light up, with their
+   threads drawn between them, bond gold and hostile ember, the way the
+   web's ring draws them (web.css). */
+.wm-web-l { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.wm-web-l[hidden], .wm-web[hidden] { display: none; }
+.wm-wl { fill: none; stroke-width: 2.2; stroke-linecap: round; }
+.wm-wl.is-bond { stroke: var(--zd-you-line); }
+.wm-wl.is-hostile { stroke: var(--zd-harm-line); }
+.wm-wl.is-strained { stroke-dasharray: 7 5; }
+.wm-wl.is-snapped { stroke-dasharray: 1.5 6; opacity: 0.6; }
+.wm-wl.is-hi { stroke-width: 3.2; }
+.wm-wl:not(.is-hi) { opacity: 0.5; }
+.wm-arrow.is-bond { fill: var(--zd-you-line); }
+.wm-arrow.is-hostile { fill: var(--zd-harm-line); }
+.wm-web { position: absolute; inset: 0; pointer-events: none; }
+.wm-tok { position: absolute; left: 0; top: 0; display: block; width: 44px; height: 44px; margin: -22px 0 0 -22px; padding: 0; font: inherit; color: var(--ink); background: none; border: 0; pointer-events: auto; cursor: pointer; opacity: 0.62; -webkit-tap-highlight-color: transparent; transition: opacity 160ms ease; }
+.wm-tok-d { position: absolute; left: 8px; top: 8px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.45); }
+.wm-tok-d .zd-die { --s: 28px; width: 28px; height: 28px; }
+.wm-tok.is-mini .wm-tok-d { left: 11px; top: 11px; width: 22px; height: 22px; }
+.wm-tok.is-mini .wm-tok-d .zd-die { --s: 22px; width: 22px; height: 22px; }
+.wm-tok-n { position: absolute; left: 50%; top: 38px; display: none; max-width: 9rem; padding: 0 5px 1px; translate: -50% 0; font-size: 0.74rem; font-weight: 800; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); background: color-mix(in srgb, var(--surface) 92%, transparent); border: 1px solid var(--zd-them-line); border-radius: 2px; }
+.wm-tok.is-sel, .wm-tok.is-lit { z-index: 2; opacity: 1; }
+.wm-tok.is-sel .wm-tok-n, .wm-tok.is-lit .wm-tok-n { display: block; }
+.wm-tok.is-sel .wm-tok-d { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--zd-them-line), 0 2px 8px rgba(0, 0, 0, 0.5); }
+.wm-tok.is-sel .wm-tok-n { color: var(--zd-on-them); background: var(--zd-them); }
+.wm-tok.is-dim { opacity: 0.28; }
+.wm-tok.is-quiet .wm-tok-n { display: none; }
+.wm-tok:focus-visible { outline: none; }
+.wm-tok:focus-visible .wm-tok-d { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--violet); }
+.wm-stage.is-webbed .wm-pin:not(.is-district):not(.is-part) { opacity: 0.35; }
+.wm-stage.is-webbed .wm-pin:not(.is-district):not(.is-part) .wm-pin-n { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .wm-tok { transition: none; }
+}
+
+/* On a map drawn in code a place is a small diamond on its spot, the Sigil's
+   own shape, rather than a drop, since a city has dozens of them, with its
+   name beside it. Its button's still a thumb wide. */
+.wm-stage.is-drawn .wm-pin.is-place { margin: -22px 0 0 -22px; }
+.wm-stage.is-drawn .wm-pin.is-place .wm-pin-head { left: 15px; top: 15px; width: 14px; height: 14px; border-width: 2px; border-radius: 2px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.55); transform: rotate(45deg); }
+.wm-stage.is-drawn .wm-pin.is-place .wm-pin-head svg { display: none; }
+.wm-stage.is-drawn .wm-pin.is-place .wm-pin-n { left: 33px; top: 11px; }
+.wm-stage.is-drawn .wm-pin.is-place.is-on .wm-pin-head { transform: rotate(45deg) scale(1.35); box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--ink), 0 2px 8px rgba(0, 0, 0, 0.45); }
+.wm-stage.is-drawn .wm-pin.is-place:focus-visible .wm-pin-head { box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--violet); }
