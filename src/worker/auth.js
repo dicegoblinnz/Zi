@@ -103,6 +103,8 @@ export function optionsFor(env) {
           for (const c of running.results) await tableEnd(env, c.id);
           for (const c of running.results) await mapsEnd(env, c.id);
           for (const m of playing.results) await tableLeft(env, m.campaignId, user.id, { erase: true });
+          // The copies they've shared go, and so do the ones waiting for them.
+          await env.DB.prepare("DELETE FROM share WHERE fromId = ?1 OR toId = ?1").bind(user.id).run().catch(missing);
           await env.DB.prepare("DELETE FROM character WHERE userId = ?1").bind(user.id).run();
         },
       },

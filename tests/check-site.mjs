@@ -42,6 +42,11 @@ const server = createServer(async (req, res) => {
     res.writeHead(200, { "content-type": "application/json" });
     return res.end(JSON.stringify({ campaign: { name: "Tuesday Lair", gm: "Mo", id: null, role: null } }));
   }
+  // And a link to a copy of a character like this, so taking one shows it.
+  if (req.url.startsWith("/api/shares/open")) {
+    res.writeHead(200, { "content-type": "application/json" });
+    return res.end(JSON.stringify({ share: { name: "Vesk", from: "Kai Tane", at: Date.now(), until: Date.now() + 6048e5, given: false, mine: false, data: { crew: "vesk", name: "Vesk", hash: "", state: { aura: 3, notes: "Owes Bram two favours" } } } }));
+  }
   const file = await resolve(req.url);
   if (file) {
     res.writeHead(200, { "content-type": TYPES[extname(file)] || "application/octet-stream" });
@@ -59,7 +64,7 @@ const PAGES = [
   "/rules/title-ideas-and-the-crew/", "/rules/conflict/", "/rules/the-bestiary/", "/rules/twenty-places/#s-place-copper-baths",
   "/rules/appendix-c-every-lever-in-the-game/", "/rules/conflict/#s-defending", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
   "/characters/", "/characters/?c=check-vesk", "/characters/?c=check-vesk&t=sheet", "/characters/?c=check-vesk&t=rules", "/characters/?build", "/sheets/",
-  "/account/", "/characters/?join", "/kit/",
+  "/account/", "/characters/?join", "/characters/?take", "/kit/",
   // The world builder's tables, a board and every table, the biggest board
   // there is, and a deck's first card.
   "/deal/", "/deal/?region=world&genre=medieval&factions=12&seed=ash-lantern-ford", "/deal/?deck=1&seed=ash-lantern-ford",
@@ -73,12 +78,14 @@ const PAGES = [
 ];
 // A character saved on the phone, so a sheet gets checked like any other page.
 // Its hash is blank, so the sheet shows its "changed in the rules" note too.
-// A join link's code waits on the phone too, for joining a campaign signed out.
+// A join link's code waits on the phone too, for joining a campaign signed out,
+// and so does a link to a copy of a character, for taking one.
 const SAVED = JSON.stringify({ v: 1, characters: [{ id: "check-vesk", crew: "vesk", name: "Vesk", hash: "", state: {} }] });
 const seed = (context) => context.addInitScript((saved) => {
   try {
     if (!localStorage.getItem("zi-characters")) localStorage.setItem("zi-characters", saved);
     localStorage.setItem("zi-join", JSON.stringify({ code: "check-join-code-0001", at: Date.now() }));
+    localStorage.setItem("zi-take", JSON.stringify({ code: "check-take-code-0001", at: Date.now() }));
   } catch (e) {}
 }, SAVED);
 const WIDTHS = [320, 360, 390, 430, 1280];
@@ -122,6 +129,8 @@ for (const scheme of ["light", "dark"]) {
       outside.length = 0;
       await page.goto(BASE + path, { waitUntil: "load" });
       await page.waitForSelector("main");
+      // A copy to take shows the character once the link's been checked.
+      if (path === "/characters/?take") await page.waitForSelector('#app [data-do="takelink"]', { timeout: 5000 }).catch(() => note(`${path} @${width} ${scheme}: the copy to take never showed`));
       if (outside.length) note(`${path} @${width} ${scheme}: fetches from outside the site: ${[...new Set(outside)].slice(0, 3).join(", ")}`);
       const { scroll, client } = await page.evaluate(() => ({ scroll: document.documentElement.scrollWidth, client: document.documentElement.clientWidth }));
       if (scroll > client) note(`${path} @${width} ${scheme}: scrolls sideways (${scroll} > ${client})`);

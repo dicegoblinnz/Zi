@@ -14,6 +14,7 @@
 // link's code waits in zi-join while you sign in or make a character.
 import { printSheet } from "./print.js";
 import { lookView, trackLine } from "./look.js";
+import { qrSvg } from "./qr.js";
 
 const KEEP = "zi-campaigns";
 const JOIN = "zi-join";
@@ -488,12 +489,7 @@ export function makeCampaigns(d) {
   // The code's drawn on the phone, black on white so every camera reads it.
   async function drawCode(code) {
     if (st.qr?.code === code) return;
-    const { encode } = await import("uqr");
-    const qr = encode(linkOf(code), { ecc: "M", border: 0 });
-    const n = qr.size;
-    let path = "";
-    for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (qr.data[y][x]) path += `M${x + 4} ${y + 4}h1v1h-1z`;
-    st.qr = { code, svg: `<svg viewBox="0 0 ${n + 8} ${n + 8}" width="100%" height="100%" shape-rendering="crispEdges" aria-hidden="true" focusable="false"><rect width="100%" height="100%" fill="#fff"/><path fill="#000" d="${path}"/></svg>` };
+    st.qr = { code, svg: await qrSvg(linkOf(code)) };
   }
 
   // ------------------------------------------------------------ doing

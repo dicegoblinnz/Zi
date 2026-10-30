@@ -9,12 +9,15 @@
 // in it, and players see each other's names. Every campaign request checks the
 // person asking against that one campaign, so nothing crosses between them.
 // The one way in without signing in is a table screen's code, which only
-// ever gets what the crew sees of that campaign's live table (table.js).
+// ever gets what the crew sees of that campaign's live table (table.js). And a
+// copy of a character can be taken from a link signed out (share.js), but only
+// one its owner chose to share.
 import { authFor, hit, originsOf, providersOf, seen } from "./auth.js";
 import { changeParty, dropFromParty, showParty } from "./party.js";
 import { changeWorld, showWorld } from "./world.js";
 import { getPicture, mapsEnd, putPicture } from "./maps.js";
 import { screenCode, screenRoute, tableEnd, tableLeft, tableRoute, tableScreenOff } from "./table.js";
+import { shareRoute } from "./share.js";
 
 // The live table's Durable Object class, one for each campaign (table.js).
 export { Table } from "./table.js";
@@ -116,6 +119,9 @@ async function routes(request, env, url, method, [what, id, sub, subId], session
   // A join link says which campaign it's for to anyone who has it, signed in
   // or not, so the page can show it before they sign in.
   if (what === "join" && !id && method === "POST") return join(request, env, session);
+  // Sharing a copy of a character: taking one from a link needs no sign-in,
+  // and the rest checks who's asking (share.js).
+  if (what === "shares") return shareRoute(request, env, method, id, session, { json, fail, body, limited, token });
   if (!session) return fail(401, "Sign in first.");
   const user = session.user;
 
@@ -435,11 +441,22 @@ async function download(env, user) {
     if (/no such table/i.test(String(err?.message))) return [{ results: [] }, { results: [] }];
     throw err;
   });
+  // The copies they've shared and the ones waiting for them, by name and who
+  // with. Their codes stay out, like join links.
+  const [shared, given] = await env.DB.batch([
+    env.DB.prepare('SELECT s.name, t.name AS toName, s.createdAt, s.until FROM share s LEFT JOIN "user" t ON t.id = s.toId WHERE s.fromId = ?1 AND s.until > ?2').bind(user.id, Date.now()),
+    env.DB.prepare('SELECT s.name, u.name AS fromName, s.createdAt FROM share s JOIN "user" u ON u.id = s.fromId WHERE s.toId = ?1 AND s.until > ?2').bind(user.id, Date.now()),
+  ]).catch((err) => {
+    if (/no such table/i.test(String(err?.message))) return [{ results: [] }, { results: [] }];
+    throw err;
+  });
   const out = {
     account: u.results[0] ?? null,
     signIns: accounts.results.map((a) => a.providerId),
     characters: chars.results.map((c) => JSON.parse(c.data)),
     campaigns: [...running.results.map((c) => ({ name: c.name, role: "GM", started: c.createdAt })), ...playing.results.map((c) => ({ name: c.name, role: "player", joined: c.joinedAt, playing: c.character ?? null }))],
+    shared: shared.results.map((s) => ({ character: s.name, with: s.toName ?? "anyone with the link", shared: s.createdAt, until: s.until })),
+    givenToYou: given.results.map((s) => ({ character: s.name, from: s.fromName, given: s.createdAt })),
   };
   return new Response(JSON.stringify(out, null, 2), { headers: { ...HEAD, "content-disposition": 'attachment; filename="zidara-account.json"' } });
 }

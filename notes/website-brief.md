@@ -88,6 +88,7 @@ Mo's answers in the drill from `notes/app-rework.md`, round by round.
 - Sign-in starts with Google and Discord (both free to set up). The emailed link and Apple can follow.
 - Mo and the GMs he picks hand out invites. Retired 27 Oct: anyone signed in starts a campaign and is its GM, and players join with the campaign's join link.
 - Before campaigns, a player shares a sheet with their GM by picking her account. She sees it read-only until they stop sharing. Campaigns came first (27 Oct): a player brings a character into a campaign, and its GM sees it there.
+- Sharing a copy of a character (31 Oct): a player or a GM can choose to share one of their characters, and the one they share it with gets a copy of the same character on their own sheet. The one sharing keeps theirs. Built as a copy given to someone you play with (your GM, your players, the others in your campaigns), or a link anyone can take one from for a week, shown at the table as a code.
 - Print my character comes with the builder: build on the phone, then print the filled two-page sheet.
 - Telegraphs on phones are the first live piece.
 - The learn-to-play round is in (the brute swings his club at Isolde, and a new player answers with Wren and Bram). A roll log isn't, for now.

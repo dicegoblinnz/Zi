@@ -997,6 +997,23 @@ button.bd-tok:active { transform: scale(0.97); }
 }
 .cc-joinbar .button { flex: 1 1 12rem; }
 
+/* Sharing a copy of a character (share.js): the people you play with, each
+   with a button to give them a copy, the copies given to you on the
+   Characters list, and the one a link offers. */
+.sh-card .cc-h3 { margin-top: 1.3rem; }
+.sh-people { gap: 8px; }
+.sh-person, .sh-gift { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; padding: 10px 12px; }
+.sh-who, .sh-sent { display: flex; flex-direction: column; min-width: 0; }
+.sh-who { flex: 1 1 10rem; }
+.sh-who b { font-family: var(--display); font-weight: 600; font-size: 1.1rem; overflow-wrap: anywhere; }
+.sh-who small, .sh-sent small { color: var(--muted); font-size: 0.9rem; }
+.sh-sent { align-items: flex-end; gap: 4px; text-align: right; }
+.sh-gift-who { display: flex; align-items: center; gap: 14px; flex: 1 1 14rem; min-width: 0; }
+.sh-gift-who b { overflow-wrap: anywhere; }
+.sh-gift > .cc-row { margin: 0; }
+.sh-preview { align-items: flex-start; margin: 0.4rem 0 1rem; }
+.sh-preview b { overflow-wrap: anywhere; }
+
 /* The join link as a code to scan, black on white in both themes, so any
    phone's camera reads it. */
 .cc-qr-body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.8rem; }

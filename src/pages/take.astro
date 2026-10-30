@@ -1,0 +1,19 @@
+---
+// A link to a copy of someone's character: /take/#<code>. The code rides
+// after the #, so it never reaches a server's logs, and it goes on to the
+// Characters page, which keeps it on the phone while someone signs in
+// (src/companion/share.js).
+import Base from "../layouts/Base.astro";
+---
+<Base title="Take a copy" description="Take a copy of a Zi’Dara character someone’s shared with you.">
+  <script is:inline slot="head">
+    try {
+      location.replace("/characters/?take" + location.hash);
+    } catch (e) {}
+  </script>
+  <main id="main" class="frame">
+    <h1>Take a copy</h1>
+    <p><a href="/characters/?take">Carry on to take it</a>.</p>
+    <noscript><p>Taking a copy of a character needs JavaScript.</p></noscript>
+  </main>
+</Base>

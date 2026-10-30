@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e, 9f, 9g or 9h)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 5b, 6d, 9b, 9c, 9d, 9e, 9f, 9g or 9h)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -39,6 +39,22 @@
 //    thread where the campaign has it. Nothing crosses: Vesk's thread with
 //    Kai's Dorrie, in Zed's Night, stays put, and Zed gets nothing. The party
 //    sheet passes axe at 390, in both themes, with the Goal in the first screen.
+// 5b. Sharing a copy of a character. A copy keeps the character and leaves
+//    the last roll, the live table and the account behind. Kai's share card
+//    on Vesk's Sheet tab lists Mo and Zed (her GMs, Zed her player too) and
+//    Sam, and nobody else, and she gives Mo a copy, which nobody else can
+//    open or turn down. Mo takes it from Given to you: a Vesk of his own,
+//    notes and all, in his account, while Kai's isn't touched, and his note
+//    on his never reaches hers. He makes a link, and a phone that's never
+//    signed in opens it, sees who shared her and takes a copy. He brings the
+//    link up to date (the same link), gives Sam a copy that Sam turns down
+//    with a second tap, and stops the link, which then doesn't work. Nobody
+//    shares what isn't theirs or gives a copy to someone they don't play
+//    with, signed out gets nothing, a character written to break the page
+//    stays words on the walk-in's sheet and Mo's list, and twenty guessed
+//    codes trip the limit. The share card, Given to you and taking a copy
+//    pass axe at 390, in both themes. Kai's link stays up for part 11, where
+//    deleting her account takes it.
 // 6. Telegraphs on phones. Mo builds round 1 on Tuesday Lair's page, the
 //    left Warden's d10 at Vesk and the brute's d8 at Bram, and sends it. Each
 //    is on its player's play screen in a second or two, and Mo's page says
@@ -304,6 +320,7 @@ import { choose, fill, newSeed, options, resume, rngOf, start, tensionAt } from 
 import { answer, current, fillPrompt, finish, notThis, prompted, startDeck } from "../src/companion/world-deck.js";
 import { linesOf } from "../src/companion/world-answer.js";
 import { calledIn, founderHand, freeSeats, lineIn, namable, oldHand, restOf, roomWorld, seatHand } from "../src/companion/found-world.js";
+import { snapshotOf } from "../src/companion/share-rules.js";
 import { AxeBuilder } from "@axe-core/playwright";
 
 const problems = [];
@@ -326,6 +343,8 @@ const BASE = `http://localhost:${PORT}`;
 const ADMIN = "mo@example.com";
 const SHOTS = process.env.SHOTS || "";
 const UPTO = process.env.ZI_UPTO || "";
+// ZI_UPTO=5b stops after sharing, before the live table's long parts.
+const STOP = Symbol("stop here");
 if (SHOTS) mkdirSync(SHOTS, { recursive: true });
 
 // The Worker, bundled exactly as `wrangler deploy` would.
@@ -1081,6 +1100,199 @@ try {
   }
   await kai.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
   await mo.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+
+  // ------------------------------------------------------------ 5b. sharing a copy
+  console.log("5b. Sharing a copy of a character");
+  // Kai's link for Vesk stays up, for deleting her account to take it (part 11).
+  let kaisLink = null;
+  {
+  // What a copy holds: the character and where they're at, and none of the
+  // moment, the campaign or the account.
+  {
+    const snap = snapshotOf(JSON.parse('{"id":"vesk-x","acct":"u1","made":"then","saved":"now","copied":{"from":"z"},"crew":"vesk","name":" Vesk\\n ","hash":"h","junk":1,"state":{"aura":3,"notes":"n","seen":{"a":"b"},"last":{"dice":[]},"tele":{"x":{}},"__proto__":{"dead":true}}}'));
+    same(Object.keys(snap).sort(), ["crew", "hash", "name", "state"], "a copy keeps the character and nothing of the account");
+    same([snap.name, Object.keys(snap.state).sort(), Object.getPrototypeOf(snap.state) === Object.prototype], ["Vesk", ["aura", "notes", "seen"], true], "and leaves the last roll, the live table and anything that reaches a prototype");
+    same([snapshotOf({ crew: "own", name: "No build" }), snapshotOf({ crew: "<b>vesk</b>" }), snapshotOf([])], [null, null, null], "and something that isn't a character isn't one");
+  }
+  const shareRows = (who) => rows("SELECT code, toId, characterId, data FROM share WHERE fromId = ?1 ORDER BY createdAt", who);
+  const versionOf = async (id) => (await rows("SELECT version, data FROM character WHERE id = ?1", id))[0];
+  const whoIn = (page) => page.$$eval("#cc-dialog .sh-person", (els) => els.map((e) => [e.querySelector(".sh-who b").textContent, e.querySelector(".sh-who small").textContent]));
+  const openShare = async (page, id) => {
+    await page.goto(`${BASE}/characters/?c=${id}&t=sheet`);
+    await page.click('#app [data-act="sh"][data-do="open"]');
+    await page.waitForSelector("#cc-dialog .sh-card h3");
+    await page.waitForSelector('#cc-dialog [data-do="link"], #cc-dialog [data-do="give"]');
+  };
+  const kaisVesk = await versionOf("vesk-aaaaaa");
+
+  // Kai gives Mo a copy of Vesk from her Sheet tab. Her GMs, her player and
+  // Sam are there to give one to, and nobody else.
+  await openShare(kai.page, "vesk-aaaaaa");
+  same(await whoIn(kai.page), [["Mo", "Your GM in Tuesday Lair"], ["Zed", "Your GM in Zed’s Night · Plays in Kai’s Table"], ["Sam", "In Tuesday Lair with you"]], "Kai can give a copy to the people she plays with");
+  has(await text(kai.page, "#cc-dialog"), "Everything on her sheet goes with her: where she’s at, her threads and her notes.", "the card says what goes with her");
+  await axe(kai.page, "the share card");
+  await kai.page.click(`#cc-dialog [data-do="give"][data-to="${moId}"]`);
+  await kai.page.waitForSelector("#cc-dialog [data-do=\"unsend\"]");
+  has(await text(kai.page, "#cc-dialog"), "Waiting for Mo to take her", "Kai's card says it's waiting for Mo");
+  const gift = (await shareRows(kaiId))[0];
+  const giftData = JSON.parse(gift?.data ?? "{}");
+  same([gift?.toId, gift?.characterId], [moId, "vesk-aaaaaa"], "the copy's waiting for Mo");
+  yes(!["id", "acct", "made", "saved"].some((k) => k in giftData) && giftData.state?.notes === "Owes Bram two favours", "with Vesk's notes and nothing of Kai's account");
+  // A copy given to Mo is only for Mo.
+  same((await got(zed.page, "POST", "/api/shares/open", { code: gift.code })).status, 404, "Zed can't open Mo's copy");
+  same((await got(sam.page, "POST", "/api/shares/drop", { code: gift.code })).json?.ok, false, "or Sam turn it down for him");
+  same((await got(zed.page, "GET", "/api/shares")).json?.given, [], "and nothing's waiting for Zed");
+  // Mo takes it, from Given to you on his Characters page.
+  await mo.page.goto(`${BASE}/characters/`);
+  await mo.page.waitForSelector("#cc-given .sh-gift");
+  has(await text(mo.page, "#cc-given"), "A copy from Kai Tane", "Vesk's waiting on Mo's Characters page, from Kai");
+  await axe(mo.page, "given to you");
+  await Promise.all([mo.page.waitForURL(/\?c=vesk-/), mo.page.click('#cc-given [data-do="take"]')]);
+  const mosVesk = new URL(mo.page.url()).searchParams.get("c");
+  yes(mosVesk !== "vesk-aaaaaa", "Mo's copy is a character of his own");
+  has(await text(mo.page, "#cc-toast"), "Vesk’s yours now, in your account. Kai keeps theirs.", "and his phone says so");
+  await until(async () => (await serverChars(ADMIN)).some((c) => c.id === mosVesk), "Mo's copy in his account");
+  const copy = JSON.parse((await serverChars(ADMIN)).find((c) => c.id === mosVesk)?.data ?? "{}");
+  same([copy.crew, copy.name, copy.state?.notes, copy.copied?.from], ["vesk", "Vesk", "Owes Bram two favours", "Kai Tane"], "the same Vesk, notes and all");
+  same(await rows("SELECT code FROM share WHERE code = ?1", gift.code), [], "and it's not waiting any more");
+  same(await versionOf("vesk-aaaaaa"), kaisVesk, "Kai's Vesk is just as she was");
+  // Mo writes on his, and Kai's never hears of it.
+  await mo.page.goto(`${BASE}/characters/?c=${mosVesk}&t=sheet`);
+  await fold(mo.page, "notes");
+  await mo.page.fill("#cc-notes", "Mo’s Vesk now");
+  await until(async () => JSON.parse((await serverChars(ADMIN)).find((c) => c.id === mosVesk)?.data ?? "{}").state?.notes === "Mo’s Vesk now", "Mo's note going up");
+  same(await versionOf("vesk-aaaaaa"), kaisVesk, "and Kai's Vesk doesn't change with it");
+  await fold(mo.page, "about");
+  has(await text(mo.page, "#app"), "A copy of Kai Tane’s Vesk, taken", "Mo's Vesk says whose she was a copy of");
+
+  // Mo makes a link from his, and someone who's never signed in takes a copy.
+  await openShare(mo.page, mosVesk);
+  same((await whoIn(mo.page)).map(([n]) => n), ["Kai Tane", "Sam"], "Mo can give a copy to his players, and not to Zed");
+  await mo.page.click('#cc-dialog [data-do="link"]');
+  await mo.page.waitForSelector("#sh-link");
+  const link = await mo.page.inputValue("#sh-link");
+  yes(/^http:\/\/localhost:\d+\/take\/#[A-Za-z0-9_-]{16}$/.test(link), `a link with its code after the # (${link})`);
+  const code = link.split("#")[1];
+  await mo.page.click('#cc-dialog [data-do="qr"]');
+  await mo.page.waitForSelector("#cc-dialog .cc-qr svg");
+  yes((await mo.page.getAttribute("#cc-dialog .cc-qr", "aria-label"))?.includes("Vesk"), "the code's named for Vesk");
+  await mo.page.click('#cc-dialog [data-do="card"]');
+  await mo.page.waitForSelector("#sh-link");
+  const walkin = await phone();
+  await walkin.page.goto(link);
+  await walkin.page.waitForSelector('#app [data-do="takelink"]');
+  same(await walkin.page.evaluate(() => location.hash), "", "the code's off the address");
+  has(await text(walkin.page, "#app"), "Shared by Mo", "the page says who shared her");
+  has(await text(walkin.page, "#app"), "Take a copy and Vesk’s yours, on this phone. Mo keeps theirs", "and that she'll be theirs, on this phone");
+  yes(await walkin.page.$('#app [data-do="in"][data-p="google"]'), "with a way to sign in first");
+  await axe(walkin.page, "taking a copy, signed out");
+  await Promise.all([walkin.page.waitForURL(/\?c=vesk-/), walkin.page.click('#app [data-do="takelink"]')]);
+  same(await walkin.page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.map((c) => [c.name, c.acct ?? null, c.state.notes])), [["Vesk", null, "Mo’s Vesk now"]], "the walk-in has Vesk on their phone, with Mo's note");
+  await walkin.page.goto(`${BASE}/characters/`);
+  await walkin.page.waitForSelector("#app .cc-saved");
+  has(await text(walkin.page, "#app .cc-mine"), "A copy from Mo", "and their list says she's a copy from Mo");
+  // Mo brings the link up to date, and it keeps its code.
+  await mo.page.click('#cc-dialog [data-act="close"]');
+  await fold(mo.page, "notes");
+  await mo.page.fill("#cc-notes", "Mo’s Vesk, later");
+  await until(async () => JSON.parse((await serverChars(ADMIN)).find((c) => c.id === mosVesk)?.data ?? "{}").state?.notes === "Mo’s Vesk, later", "Mo's later note going up");
+  await openShare(mo.page, mosVesk);
+  await mo.page.click('#cc-dialog [data-do="link"]');
+  await until(async () => JSON.parse((await shareRows(moId))[0]?.data ?? "{}").state?.notes === "Mo’s Vesk, later", "the link brought up to date");
+  same([(await shareRows(moId)).length, await mo.page.inputValue("#sh-link")], [1, link], "with the same link");
+  // He gives Sam a copy too, and Sam turns it down.
+  await mo.page.click(`#cc-dialog [data-do="give"][data-to="${samId}"]`);
+  await mo.page.waitForSelector("#cc-dialog [data-do=\"unsend\"]");
+  await sam.page.goto(`${BASE}/characters/`);
+  await sam.page.waitForSelector("#cc-given .sh-gift");
+  await sam.page.click('#cc-given [data-do="no"]');
+  has(await text(sam.page, "#cc-given"), "Tap again to turn it down", "turning it down asks for a second tap");
+  await sam.page.click('#cc-given [data-do="no"]');
+  await sam.page.waitForSelector("#cc-given", { state: "detached" });
+  same((await shareRows(moId)).map((r) => r.toId), [null], "Sam turned it down, and the link's still there");
+  yes(!(await serverChars("sam@example.com")).some((c) => JSON.parse(c.data).copied), "and Sam's got no copy");
+  // Then he stops the link, with a second tap.
+  await mo.page.click('#cc-dialog [data-do="stop"]');
+  await mo.page.click('#cc-dialog [data-do="stop"]');
+  await mo.page.waitForSelector('#cc-dialog [data-do="link"]:has-text("Make a link")');
+  same(await shareRows(moId), [], "the link's gone");
+  same((await got(walkin.page, "POST", "/api/shares/open", { code })).json?.error, "That link didn’t work. They might’ve stopped sharing it, or it’s more than a week old, so ask them for a new one.", "and it doesn't work any more");
+  await mo.page.click('#cc-dialog [data-act="close"]');
+
+  // Nobody shares what isn't theirs, or gives a copy to someone they don't play with.
+  same((await got(sam.page, "POST", "/api/shares", { character: "vesk-aaaaaa" })).status, 409, "Sam can't share Kai's Vesk");
+  same((await got(zed.page, "POST", "/api/shares", { character: "ash-zzzzzz", to: moId })).status, 403, "Zed can't give Mo a copy, since they don't play together");
+  same((await got(kai.page, "POST", "/api/shares", { character: "vesk-aaaaaa", to: kaiId })).status, 400, "Kai can't give one to herself");
+  same((await got(walkin.page, "GET", "/api/shares")).status, 401, "signed out, nothing's listed");
+  same((await got(walkin.page, "POST", "/api/shares", { character: mosVesk })).status, 401, "and nothing's shared");
+
+  // What someone writes stays words on everyone else's phone.
+  const zap = '<img src=x onerror="window.zap=1">';
+  await api(sam.page, "PUT", "/api/characters/own-zapzap", { v: 0, data: { id: "own-zapzap", crew: "own", name: `Zap${zap}`, made: new Date().toISOString(), hash: "own",
+    build: { v: 2, name: `Zap${zap}`, titles: [{ arch: "", idea: "", text: '"><svg onload="window.zap=2">', on: [], perms: [{ text: "<script>window.zap=3</script>", on: ["Fight"] }] }], traits: [{ name: zap, own: { type: "Passive", text: zap } }], threads: [{ person: zap, text: "javascript:window.zap=4", kind: "bond" }], aspiration: zap },
+    state: { notes: zap, scars: [zap], conditions: [{ name: zap, die: 4, kind: "against" }], picked: [{ where: "bag", name: zap }] } } });
+  const zapLink = (await got(sam.page, "POST", "/api/shares", { character: "own-zapzap" })).json?.share?.code;
+  same((await got(sam.page, "POST", "/api/shares", { character: "own-zapzap", to: moId })).status, 200, "Sam gives Mo a copy of his too");
+  await walkin.page.goto(`${BASE}/take/#${zapLink}`);
+  await walkin.page.waitForSelector('#app [data-do="takelink"]');
+  has(await text(walkin.page, "#app h1"), "Zap<img", "a name that's a tag is just its words");
+  await Promise.all([walkin.page.waitForURL(/\?c=own-/), walkin.page.click('#app [data-do="takelink"]')]);
+  await walkin.page.goto(`${walkin.page.url()}&t=sheet`);
+  await walkin.page.waitForSelector("#app .cc-folds");
+  for (const key of ["titles", "traits", "threads", "notes", "kit"]) await fold(walkin.page, key);
+  await mo.page.goto(`${BASE}/characters/`);
+  await mo.page.waitForSelector("#cc-given .sh-gift");
+  has(await text(mo.page, "#cc-given"), `Zap${zap}`.slice(0, 40), "and on Mo's Characters page");
+  same([await walkin.page.evaluate(() => window.zap ?? null), await mo.page.evaluate(() => window.zap ?? null)], [null, null], "and none of it runs, on the walk-in's sheet or Mo's list");
+  // Mo turns it down, and Sam takes his back off the site.
+  await mo.page.click('#cc-given [data-do="no"]');
+  await mo.page.click('#cc-given [data-do="no"]');
+  await mo.page.waitForSelector("#cc-given", { state: "detached" });
+  same((await got(sam.page, "POST", "/api/shares/drop", { code: zapLink })).json?.ok, true, "Sam stops his link");
+  await api(sam.page, "DELETE", "/api/characters/own-zapzap");
+
+  // Codes that don't work are counted against the address they came from.
+  const guess = await phone();
+  await guess.page.goto(`${BASE}/account/`);
+  await settled(guess.page);
+  const tries = [];
+  for (let i = 0; i < 22; i++) tries.push((await api(guess.page, "POST", "/api/shares/open", { code: `no-such-share-code-${String(i).padStart(4, "0")}` })).status);
+  yes(tries.slice(0, 20).every((x) => x === 404) && tries.slice(20).every((x) => x === 429), `guessing at codes trips it after 20 misses (${tries.slice(18).join(" ")})`);
+
+  // The share card, Given to you and taking a copy, in both themes.
+  const kaisLinkRes = await got(kai.page, "POST", "/api/shares", { character: "vesk-aaaaaa" });
+  kaisLink = kaisLinkRes.json?.share?.code;
+  same((await got(kai.page, "POST", "/api/shares", { character: "vesk-aaaaaa", to: moId })).status, 200, "Kai gives Mo another copy");
+  for (const theme of ["dark", "light"]) {
+    await kai.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+    await openShare(kai.page, "vesk-aaaaaa");
+    await kai.page.waitForSelector("#sh-link");
+    await axe(kai.page, `the share card with a link, ${theme}`);
+    await shot(kai.page, `share-card-${theme}`);
+    await mo.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+    await mo.page.goto(`${BASE}/characters/`);
+    await mo.page.waitForSelector("#cc-given .sh-gift");
+    await axe(mo.page, `given to you, ${theme}`);
+    await shot(mo.page, `share-given-${theme}`);
+    await walkin.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
+    await walkin.page.goto(`${BASE}/take/#${kaisLink}`);
+    await walkin.page.waitForSelector('#app [data-do="takelink"]');
+    await axe(walkin.page, `taking a copy, ${theme}`);
+    await shot(walkin.page, `share-take-${theme}`);
+  }
+  await kai.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+  await mo.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
+  // Mo leaves Kai's copy waiting, and deletes his own Vesk: Kai's stays.
+  await mo.page.goto(`${BASE}/characters/?c=${mosVesk}&t=sheet`);
+  await fold(mo.page, "about");
+  await mo.page.click('#app [data-act="delete"]');
+  await until(async () => !(await serverChars(ADMIN)).length, "Mo's Vesk gone from his account");
+  same((await versionOf("vesk-aaaaaa")).data, kaisVesk.data, "and Kai's still there, as she was");
+  await walkin.context.close();
+  await guess.context.close();
+  }
+  // ZI_UPTO=5b stops here.
+  if (UPTO === "5b") throw STOP;
 
   // ------------------------------------------------------------ 6. telegraphs on phones
   console.log("6. Telegraphs on phones");
@@ -4393,6 +4605,7 @@ try {
   const data = await two.page.evaluate(() => fetch("/api/me/data").then((r) => r.text()));
   yes(data.includes("Owes Bram two favours") && data.includes("kai@example.com") && data.includes("Tuesday Lair") && data.includes("Kai’s Table"), "the download has her account, characters and campaigns");
   yes(!data.includes(newCode) && !data.includes(kaisTable.code), "and no join links");
+  yes(data.includes("anyone with the link") && !data.includes(kaisLink), "and the copies she's shared, by name and who with, without their codes");
   await two.page.goto(`${BASE}/account/`);
   await settled(two.page);
   await two.page.click('[data-act="delete"]');
@@ -4402,6 +4615,7 @@ try {
   same(await rows("SELECT id FROM campaign WHERE gmId = ?1", kaiId), [], "her campaign's ended");
   same(await rows("SELECT campaignId FROM member WHERE userId = ?1 OR campaignId = ?2", kaiId, kaisTable.id), [], "she's out of Mo's, and nobody's left in hers");
   same(await rows("SELECT campaignId FROM world WHERE campaignId = ?1", kaisTable.id), [], "and her campaign's board went with it");
+  same(await rows("SELECT code FROM share WHERE fromId = ?1 OR toId = ?1", kaiId), [], "and the copies she shared");
   same(await picsOf(kaisTable.id), [], "and its map's pictures");
   yes(((await tableOf(tuesday.id))?.rounds ?? []).flatMap((r) => r.tele).every((t) => t.at.user !== kaiId && t.ans?.user !== kaiId && t.icp?.user !== kaiId), "and Tuesday Lair's table has forgotten her");
   await until(async () => (await tv.page.$$eval(".ts-p .ts-pn", (els) => els.map((e) => e.textContent))).join() === "Bram", "Vesk off the table screen's crew, on the TV, once Kai's gone", 4000);
@@ -4454,7 +4668,7 @@ try {
   }
   }
 } catch (err) {
-  note(`stopped: ${err.stack || err}`);
+  if (err !== STOP) note(`stopped: ${err.stack || err}`);
 } finally {
   await browser.close();
   server.close();

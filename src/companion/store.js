@@ -8,6 +8,8 @@
 // is always read from the current rules, never saved here. A character built
 // on the phone has crew "own" (so an older page still keeps it) and a build,
 // what the player chose in the builder, which builder.js turns into a sheet.
+// One taken as a copy of someone else's (share.js) says whose and when, as
+// copied: { from, at }.
 
 const KEY = "zi-characters";
 export const VERSION = 1;

@@ -21,6 +21,8 @@ import { makeTable } from "./table.js";
 import { makeWorld } from "./world.js";
 import { makeTurn } from "./turn.js";
 import { makeFound } from "./found.js";
+import { makeShare } from "./share.js";
+import { whenOf } from "./look.js";
 import { bondKey, threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
 import { boxesSaid, isBroken, itS, keyOf, leftOf, nameOf, pieceAt, piecesOf, setTicked, standing, tick as tickBox, tickedOf, yours } from "./armour.js";
 import { aura as kitAura, boxes as kitBoxes, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, plate as kitPlate, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
@@ -316,6 +318,26 @@ const camps = makeCampaigns({
     link: (id, text) => link(id, text), steps: (n) => steps(n), crestOf: (c) => crestOf(c), stepsNow: (c, s, a) => stepsNow(c, s, a), lineOf: (c, key) => lineOf(c, key),
     lineLabel: (l) => lineLabel(l), isOut: (s, l) => isOut(s, l), lastRollView: (last) => lastRollView(last), isOpen: (key) => ui.open.has(key),
   },
+});
+// Sharing a copy of a character (share.js): Share a copy on the Sheet tab,
+// Given to you on the Characters list, and taking a copy from a link.
+const share = makeShare({
+  sync, esc, ICON,
+  render: () => render(),
+  go: (url, o) => goTo(url, o),
+  toast: (m) => toast(m, false),
+  openDialog: (r) => {
+    roll = r;
+    openDialog();
+  },
+  renderDialog: () => renderDialog(),
+  roll: () => roll,
+  tools: () => themeButton(),
+  chars: () => chars(),
+  current: () => current(),
+  sheetFor: (ch) => sheetFor(ch),
+  crestOf: (c) => crestOf(c),
+  adopt: (snap, from, o) => adopt(snap, from, o),
 });
 
 const chars = () => store.data.characters;
@@ -697,7 +719,7 @@ function listView() {
     return `<li><a class="card cc-saved" href="/characters/?c=${encodeURIComponent(ch.id)}" data-act="nav" data-id="${esc(ch.id)}">
       <span class="die" aria-hidden="true">${esc((ch.name || "?").slice(0, 1))}</span>
       <span class="cc-saved-text"><b>${esc(ch.name)}</b>
-      <small>${c ? `${ch.build ? "Your own" : esc(c.name)}${c.title ? ` · <em>${esc(c.title)}</em>` : ""}` : "This sheet isn’t in the rules any more"}</small>
+      <small>${c ? `${ch.copied ? `A copy from ${esc(ch.copied.from)}` : ch.build ? "Your own" : esc(c.name)}${c.title ? ` · <em>${esc(c.title)}</em>` : ""}` : "This sheet isn’t in the rules any more"}</small>
       ${c ? `<small>Aura ${esc(s.aura ?? c.numbers.aura)} · Resolve ${esc(s.resolve ?? c.numbers.resolve)} · Confidence d${esc(s.conf ?? c.numbers.confidence)}</small>` : ""}</span></a></li>`;
   };
   // The other ways in start a new character, so with a draft on the go they
@@ -714,6 +736,7 @@ function listView() {
     <p class="cc-paper">Playing on paper? Print a character sheet and the player reference from the <a href="/sheets/">Sheets page</a>.</p></header>
     ${saveNote()}
     ${accountNote()}
+    ${share.section()}
     ${camps.section()}
     ${mine.length ? `<section class="cc-sec" aria-labelledby="cc-mine"><h2 id="cc-mine">On this phone</h2><ul class="cc-mine">${mine.map(saved).join("")}</ul></section>` : ""}
     <section class="cc-sec" aria-labelledby="cc-learn"><h2 id="cc-learn">Learn to play</h2>
@@ -1034,7 +1057,7 @@ function sheetTab(ch, c) {
   const notesAt = String(s.notes ?? "").trim().split("\n")[0];
 
   const changeBtn = canChange(ch) ? changeLink(ch) : "";
-  return `<div class="cc-changebar">${changeBtn ? `<p class="cc-lead">Add a Title, rewrite a permission or change anything else on ${her} sheet, whenever you like.</p>` : ""}<div class="cc-row">${changeBtn}<button type="button" class="button" data-act="print"${off(ui.printing)}>${ui.printing ? "Filling in the sheet…" : "Print the sheet"}</button></div></div>
+  return `<div class="cc-changebar">${changeBtn ? `<p class="cc-lead">Add a Title, rewrite a permission or change anything else on ${her} sheet, whenever you like.</p>` : ""}<div class="cc-row">${changeBtn}<button type="button" class="button" data-act="print"${off(ui.printing)}>${ui.printing ? "Filling in the sheet…" : "Print the sheet"}</button><button type="button" class="button" data-act="sh" data-do="open" aria-haspopup="dialog">Share a copy</button></div></div>
   <div class="cc-folds">
   ${fold("acts", "Set actions", `<span class="cc-gl-wrap">${actsAt}</span>`, `<p class="cc-lead">Every line on a set action is a step, and the action’s one more. ${link("s-set-actions", "How set actions work")}</p><ul class="cc-acts">${acts}</ul>`, marked("act"))}
   ${fold("titles", c.titles.length === 1 ? "Title and permissions" : "Titles and permissions", titlesAt, `<p class="cc-lead">Tap a permission to see how it counts.</p>${titles}
@@ -1062,8 +1085,9 @@ function sheetTab(ch, c) {
   ${fold("notes", "Notes", notesAt ? esc(notesAt.length > 70 ? `${notesAt.slice(0, 68)}…` : notesAt) : "Nothing written yet", `<label class="sr-only" for="cc-notes">Notes</label><textarea id="cc-notes" data-in="notes" rows="5">${esc(s.notes)}</textarea>`)}
   ${fold("about", `About ${esc(c.name)}`, esc(c.blurb.length > 90 ? `${c.blurb.slice(0, 88)}…` : c.blurb), `<p>${esc(c.blurb)}</p><p><b>Plays like:</b> ${c.playsLike}</p>
     ${c.crewQs.map((x) => `<p><em>${esc(x.q)}</em> ${esc(x.a)}</p>`).join("")}
-    ${c.own ? `<p class="cc-lead">${CREW.has(ch.from) ? `Your own now, made from ${link("s-pregens", `${esc(CREW.get(ch.from).name)}’s sheet in the rules`)}.` : `Built on this phone, from the ${link("s-quick", "Quick Build")}.`}</p>` : `<p class="cc-lead">${link("s-pregens", `${esc(c.name)}’s sheet in the rules`)}. Change ${esc(ch.name)} at the top of this tab and ${c.pronoun === "him" ? "he’s" : c.pronoun === "her" ? "she’s" : "they’re"} your own.</p>`}
-    <p class="cc-lead">Print, at the top of this tab, fills in the two-page sheet from the <a href="/sheets/">Sheets page</a> with everything here as it stands now.</p>
+    ${ch.copied ? `<p class="cc-lead">A copy of ${esc(ch.copied.from)}’s ${esc(ch.name)}, taken ${esc(whenOf(ch.copied.at))}. Nothing either of you does reaches the other.</p>` : ""}
+    ${c.own ? `<p class="cc-lead">${CREW.has(ch.from) ? `Your own now, made from ${link("s-pregens", `${esc(CREW.get(ch.from).name)}’s sheet in the rules`)}.` : ch.copied ? `Built from the ${link("s-quick", "Quick Build")}.` : `Built on this phone, from the ${link("s-quick", "Quick Build")}.`}</p>` : `<p class="cc-lead">${link("s-pregens", `${esc(c.name)}’s sheet in the rules`)}. Change ${esc(ch.name)} at the top of this tab and ${c.pronoun === "him" ? "he’s" : c.pronoun === "her" ? "she’s" : "they’re"} your own.</p>`}
+    <p class="cc-lead">Print, at the top of this tab, fills in the two-page sheet from the <a href="/sheets/">Sheets page</a> with everything here as it stands now. Share a copy gives someone you play with a copy of ${esc(ch.name)}, or makes a link anyone can take one from.</p>
     <div class="cc-row"><button type="button" class="button danger" data-act="delete">Delete ${esc(ch.name)} from this phone</button></div>`)}
   </div>`;
 }
@@ -1868,6 +1892,7 @@ function dialogView() {
   if (roll.kind === "name") return nameView();
   if (roll.kind === "rule") return ruleView();
   if (roll.kind === "camp") return camps.dialog(roll);
+  if (roll.kind === "share") return share.dialog(roll);
   if (roll.kind === "tele" || String(roll.kind).startsWith("tg-")) return table.dialog(roll);
   if (String(roll.kind).startsWith("ft-")) return turn.dialog(roll);
   const c = normal(ch);
@@ -1922,8 +1947,8 @@ function render() {
   // with its own bar of Back and Next at the bottom.
   // A campaign, a look at a player's character and joining are full screen too.
   const camping = view.name === "camp" || view.name === "look" || view.name === "join" || view.name === "world";
-  document.documentElement.classList.toggle("cc-full", view.name === "sheet" || view.name === "build" || camping);
-  app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : view.name === "world" ? world.view(view) : camping ? camps.view(view) : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
+  document.documentElement.classList.toggle("cc-full", view.name === "sheet" || view.name === "build" || camping || view.name === "take");
+  app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : view.name === "world" ? world.view(view) : camping ? camps.view(view) : view.name === "take" ? share.view() : view.name !== "sheet" ? listView() : c ? characterView(ch, c) : missingView(ch);
   document.documentElement.classList.toggle("cc-building", Boolean(app.querySelector(".bd-foot")));
   // With the dice in a dock above the bar, a toast sits above them both.
   document.documentElement.classList.toggle("cc-docked", Boolean(app.querySelector(".bd-rail")));
@@ -2005,20 +2030,22 @@ function route() {
   const learning = !key && !id && q.has("learn");
   const camp = !key && !id && !learning ? q.get("camp") : null;
   const joining = !key && !id && !learning && !camp && q.has("join");
+  const taking = !key && !id && !learning && !camp && !joining && q.has("take");
   if (view.name === "learn" && !learning) learn.stop();
   // Leaving the builder keeps the draft, and coming back reads it again.
   if (view.name === "build" && view.key !== key) builder.close();
   // A Sheet tab fold shut on one character opens as usual on another.
   if (id !== (view.name === "sheet" ? view.id : null)) ui.shut.clear();
   view = key ? { name: "build", key } : learning ? { name: "learn" } : id ? { name: "sheet", id }
-    : camp ? (q.get("look") ? { name: "look", id: camp, who: q.get("look") } : q.has("world") ? { name: "world", id: camp, f: q.get("f") || "", p: q.get("p") || "", m: q.get("m") || "", pin: q.get("pin") || "", make: q.get("make") || "" } : { name: "camp", id: camp }) : joining ? { name: "join" } : { name: "list" };
+    : camp ? (q.get("look") ? { name: "look", id: camp, who: q.get("look") } : q.has("world") ? { name: "world", id: camp, f: q.get("f") || "", p: q.get("p") || "", m: q.get("m") || "", pin: q.get("pin") || "", make: q.get("make") || "" } : { name: "camp", id: camp }) : joining ? { name: "join" } : taking ? { name: "take" } : { name: "list" };
   ui.tab = ["sheet", "rules", "party", "world"].includes(q.get("t")) ? q.get("t") : "play";
   ui.panel = null;
   ui.sure = false;
-  document.documentElement.classList.toggle("cc-open", Boolean(id || key || learning || camp || joining));
+  document.documentElement.classList.toggle("cc-open", Boolean(id || key || learning || camp || joining || taking));
   const ch = current();
-  document.title = key ? `${key === "new" ? "Make your own" : "Change a character"} · Zi’Dara` : learning ? "Learn to play · Zi’Dara" : ch ? `${ch.name} · Zi’Dara` : view.name === "world" ? `${world.title(view)} · Zi’Dara` : camp || joining ? `${camps.title(view)} · Zi’Dara` : "Characters · Zi’Dara";
+  document.title = key ? `${key === "new" ? "Make your own" : "Change a character"} · Zi’Dara` : learning ? "Learn to play · Zi’Dara" : ch ? `${ch.name} · Zi’Dara` : view.name === "world" ? `${world.title(view)} · Zi’Dara` : camp || joining ? `${camps.title(view)} · Zi’Dara` : taking ? `${share.title()} · Zi’Dara` : "Characters · Zi’Dara";
   camps.route(view);
+  share.route(view);
   render();
 }
 
@@ -2159,6 +2186,47 @@ function start(crewId, name) {
   app.querySelector(".tile")?.focus({ preventScroll: true });
 }
 
+// A copy of someone else's character, from a share (share.js): a new one of
+// this phone's own, with its own id, their sheet and where they're at. It's
+// read the way every character's read (normalBuild(), normal()), and only
+// what a character keeps stays, so nothing in it is anything but text and
+// numbers here. Null when its sheet can't be read. With save false it's one to
+// look at, for the page that offers it.
+const KEEPS = new Set(["aura", "resolve", "conf", "wound", "scars", "shrugged", "blaze", "dead", "conditions", "threads", "used", "crossed", "boxes", "picked", "asp", "aspText", "notes", "grown", "seen", "hurt", "catches"]);
+const oneLine = (v, max) => String(v ?? "").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, max);
+function adopt(snap, from, { save = true } = {}) {
+  if (!snap || typeof snap !== "object" || Array.isArray(snap)) return null;
+  const own = snap.crew === "own";
+  if (own ? !snap.build || typeof snap.build !== "object" || Array.isArray(snap.build) : !CREW.has(snap.crew)) return null;
+  const tag = Array.from(crypto.getRandomValues(new Uint8Array(4)), (b) => b.toString(36).padStart(2, "0")).join("").slice(0, 6);
+  const raw = snap.state && typeof snap.state === "object" && !Array.isArray(snap.state) ? snap.state : {};
+  const ch = {
+    id: `${own ? "own" : snap.crew}-${tag}`, crew: own ? "own" : snap.crew, name: oneLine(snap.name, 40), made: new Date().toISOString(),
+    hash: typeof snap.hash === "string" ? snap.hash.slice(0, 80) : "",
+    state: Object.fromEntries(Object.entries(raw).filter(([k]) => KEEPS.has(k))),
+    copied: { from: oneLine(from, 60) || "someone", at: new Date().toISOString() },
+  };
+  if (own) ch.build = JSON.parse(JSON.stringify(normalBuild(snap.build), (k, v) => (k === "was" || k === "bagWas" ? undefined : v)));
+  if (CREW.has(snap.from)) ch.from = snap.from;
+  let c = null;
+  try {
+    c = normal(ch);
+  } catch {}
+  if (!c) return null;
+  const s = ch.state;
+  if (!ch.name) ch.name = own ? oneLine(ch.build.name, 40) || "Nameless" : c.name;
+  for (const k of ["notes", "aspText"]) s[k] = typeof s[k] === "string" ? s[k].slice(0, k === "notes" ? 20000 : 160) : "";
+  s.picked = s.picked.map((p) => ({ where: p.where, name: oneLine(p.name, 60) })).filter((p) => p.name);
+  s.scars = s.scars.map((x) => oneLine(x, 80));
+  for (const key of ["used", "crossed"]) s[key] = Object.fromEntries(Object.entries(s[key]).filter(([, v]) => v === true).map(([k]) => [k.slice(0, 300), true]));
+  if (s.seen) s.seen = Object.fromEntries(Object.entries(s.seen).filter(([, v]) => typeof v === "string").slice(0, 600).map(([k, v]) => [k.slice(0, 200), v.slice(0, 600)]));
+  if (!save) return { ch, c };
+  sync.claim(ch);
+  chars().push(ch);
+  store.save();
+  return ch;
+}
+
 // ---------------------------------------------------------------- doing things
 
 // The end of downtime: what the slots bought goes on the sheet, then it's a
@@ -2212,6 +2280,7 @@ function stepRoll(name, i, d) {
 
 const ACT = {
   k: (el, e) => camps.act(el, e),
+  sh: (el, e) => share.act(el, e),
   tg: (el, e) => table.act(el, e),
   p: (el, e) => party.act(el, e),
   pundo: () => party.undo(),
