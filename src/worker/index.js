@@ -189,6 +189,11 @@ async function putCharacter(request, env, user, id) {
 
 async function dropCharacter(env, user, id) {
   const row = await env.DB.prepare("UPDATE character SET data = NULL, version = version + 1, updatedAt = ?3 WHERE userId = ?1 AND id = ?2 AND data IS NOT NULL RETURNING version").bind(user.id, id, Date.now()).first();
+  // Their link stops working, and the copies of them nobody's taken yet go
+  // too, since the card that would stop them goes with them (share.js).
+  await env.DB.prepare("DELETE FROM share WHERE fromId = ?1 AND characterId = ?2").bind(user.id, id).run().catch((err) => {
+    if (!/no such table/i.test(String(err?.message))) throw err;
+  });
   return json({ v: row?.version ?? null });
 }
 

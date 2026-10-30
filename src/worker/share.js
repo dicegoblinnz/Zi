@@ -32,6 +32,7 @@ const USER_ID = /^[A-Za-z0-9_-]{1,64}$/;
 const MAX_TEXT = 200000;
 const MAX_OUT = 100; // copies one person's shared that are still waiting
 const MAX_IN = 30; // copies waiting for one person
+const MAX_EACH = 5; // copies waiting for one person from any one giver
 const NOTHING = "There’s nothing here.";
 const BAD_LINK = "That link didn’t work. They might’ve stopped sharing it, or it’s more than a week old, so ask them for a new one.";
 
@@ -109,8 +110,10 @@ async function makeShare(request, env, me, { json, fail, body, limited, token })
     // One that's run out starts again with a new code, so an old link that
     // stopped working doesn't come back to life.
     await env.DB.prepare(`DELETE FROM share WHERE fromId = ?1 AND characterId = ?2 AND ${which} AND until <= ?${args.length + 1}`).bind(...args, now).run();
-    const n = await env.DB.prepare("SELECT (SELECT COUNT(*) FROM share WHERE fromId = ?1 AND until > ?3) AS mine, (SELECT COUNT(*) FROM share WHERE toId = ?2 AND until > ?3) AS theirs").bind(me.id, to, now).first();
+    const n = await env.DB.prepare("SELECT (SELECT COUNT(*) FROM share WHERE fromId = ?1 AND until > ?3) AS mine, (SELECT COUNT(*) FROM share WHERE toId = ?2 AND until > ?3) AS theirs, (SELECT COUNT(*) FROM share WHERE fromId = ?1 AND toId = ?2 AND until > ?3) AS each").bind(me.id, to, now).first();
     if (n.mine >= MAX_OUT) return fail(400, `You’ve got ${MAX_OUT} copies shared already. Stop sharing some first.`);
+    // One giver can't fill someone's list and crowd everyone else out.
+    if (to && n.each >= MAX_EACH) return fail(400, `You’ve got ${MAX_EACH} copies waiting for them already. Give them a chance to take some or turn them down first.`);
     if (to && n.theirs >= MAX_IN) return fail(400, "They’ve got a lot of copies waiting for them already. Ask them to take some or turn them down first.");
     got = await env.DB.prepare("INSERT INTO share (code, fromId, toId, characterId, name, data, createdAt, until) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8) ON CONFLICT DO NOTHING RETURNING code, createdAt, until")
       .bind(token(12), me.id, to, id, name, data, now, until).first();
@@ -140,7 +143,10 @@ async function openShare(request, env, session, { json, fail, body, limited }) {
     await hit(env, misses, 900);
     return fail(404, BAD_LINK);
   }
-  return json({ share: { name: row.name, from: row.fromName, at: row.createdAt, until: row.until, given: row.toId != null, mine: Boolean(me && row.fromId === me.id), data } });
+  // A link can reach anyone, so it says only the first name of whoever shared
+  // it. Someone given a copy plays with them, and knows their name already.
+  const from = row.toId ? row.fromName : String(row.fromName ?? "").trim().split(/\s+/)[0] || "Someone";
+  return json({ share: { name: row.name, from, at: row.createdAt, until: row.until, given: row.toId != null, mine: Boolean(me && row.fromId === me.id), data } });
 }
 
 async function dropShare(request, env, me, { json, fail, body }) {

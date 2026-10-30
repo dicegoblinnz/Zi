@@ -20,6 +20,9 @@ import { trackLine, whenOf } from "./look.js";
 import { qrSvg } from "./qr.js";
 
 const TAKE = "zi-take";
+// Copies given to you and taken on this phone, whose turn off the list hadn't
+// got through yet ({ user, codes: { code: when } }), so they never show twice.
+const TAKEN = "zi-taken";
 const HOURS = 3600000;
 const PRONOUN = { her: ["she", "her", "her", "is", "she’s"], him: ["he", "him", "his", "is", "he’s"], them: ["they", "them", "their", "are", "they’re"] };
 
@@ -66,9 +69,20 @@ export function makeShare(d) {
   const { esc, sync, ICON } = d;
   // list: who you play with, what's waiting for you and what you've shared,
   // as the server last said, for whoever was signed in then.
-  // taken: copies taken on this phone whose drop hadn't got through, so they
-  // don't show again and go off the server at the next chance.
-  const st = { list: null, at: 0, why: "", busy: "", sure: "", take: null, qr: null, taken: new Set() };
+  const st = { list: null, at: 0, why: "", busy: "", sure: "", take: null, qr: null };
+  // The copies this phone's taken that might still be on the list, for
+  // whoever's signed in, for 30 days at most.
+  const taken = () => {
+    const t = read(TAKEN);
+    const now = Date.now();
+    return t && t.user === sync.me?.id ? Object.fromEntries(Object.entries(t.codes || {}).filter(([, at]) => now - at < 30 * 24 * HOURS)) : {};
+  };
+  const markTaken = (code, on) => {
+    const codes = taken();
+    if (on) codes[code] = Date.now();
+    else delete codes[code];
+    write(TAKEN, Object.keys(codes).length ? { user: sync.me?.id, codes } : null);
+  };
   let view = { name: "" };
 
   async function call(method, path, body) {
@@ -114,8 +128,9 @@ export function makeShare(d) {
       return;
     }
     st.why = "";
-    const given = (r.got.given || []).filter((g) => !st.taken.has(g.code));
-    for (const g of r.got.given || []) if (st.taken.has(g.code)) tryCall("POST", "/api/shares/drop", { code: g.code });
+    const had = taken();
+    const given = (r.got.given || []).filter((g) => !had[g.code]);
+    for (const g of r.got.given || []) if (had[g.code]) tryCall("POST", "/api/shares/drop", { code: g.code }).then((x) => x.ok && markTaken(g.code, false));
     st.list = { user: me, people: r.got.people || [], given, sent: r.got.sent || [] };
     st.at = Date.now();
     if (view.name === "list") quietRender();
@@ -199,9 +214,10 @@ export function makeShare(d) {
     return `${head}<div class="dlg-body sh-card">${body}</div>${foot}`;
   }
 
-  // What's shared comes from the account, so the character's latest goes up first.
+  // What's shared comes from the account, so the character's latest goes up
+  // first, and nothing's shared till it's there.
   async function upFirst(ch) {
-    if (await sync.keepNow(ch)) return true;
+    if ((await sync.keepNow(ch)) && sync.upToDate(ch)) return true;
     st.busy = "";
     d.renderDialog();
     d.toast(`${ch.name} didn’t reach your account, so there’s nothing to share yet. Try again when you’ve got a better signal.`);
@@ -422,9 +438,9 @@ export function makeShare(d) {
         d.render();
         return d.toast(`${gift.name}’s sheet couldn’t be read here, so they’re still waiting. Ask ${first(gift.from)} to give them to you again.`);
       }
-      st.taken.add(code);
+      markTaken(code, true);
       const gone = await tryCall("POST", "/api/shares/drop", { code });
-      if (gone.ok) st.taken.delete(code);
+      if (gone.ok) markTaken(code, false);
       st.busy = "";
       forget(code);
       took(ch, gift.from);

@@ -340,6 +340,9 @@ export function makeSync(store, { onChange = () => {} } = {}) {
       quiet();
       return run(push).then(() => list.length);
     },
+    // Whether the account has everything this phone's done to them, so a copy
+    // shared from the account is them as they are here (share.js).
+    upToDate: (ch) => Boolean(me && !out && ch?.acct === me.id && st.v[ch.id] != null && !changedHere(ch)),
     // One character into the account now, for something that needs it there
     // (joining a campaign with them). True once the account has them.
     async keepNow(ch) {

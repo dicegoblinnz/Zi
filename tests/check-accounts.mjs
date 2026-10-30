@@ -1155,6 +1155,7 @@ try {
   const copy = JSON.parse((await serverChars(ADMIN)).find((c) => c.id === mosVesk)?.data ?? "{}");
   same([copy.crew, copy.name, copy.state?.notes, copy.copied?.from], ["vesk", "Vesk", "Owes Bram two favours", "Kai Tane"], "the same Vesk, notes and all");
   same(await rows("SELECT code FROM share WHERE code = ?1", gift.code), [], "and it's not waiting any more");
+  same(await mo.page.evaluate(() => localStorage.getItem("zi-taken")), null, "and his phone's got nothing left to turn off the list");
   same(await versionOf("vesk-aaaaaa"), kaisVesk, "Kai's Vesk is just as she was");
   // Mo writes on his, and Kai's never hears of it.
   await mo.page.goto(`${BASE}/characters/?c=${mosVesk}&t=sheet`);
@@ -1219,6 +1220,15 @@ try {
   same((await got(walkin.page, "POST", "/api/shares/open", { code })).json?.error, "That link didn’t work. They might’ve stopped sharing it, or it’s more than a week old, so ask them for a new one.", "and it doesn't work any more");
   await mo.page.click('#cc-dialog [data-act="close"]');
 
+  // One giver can't fill someone's list: five copies waiting from Sam is the most.
+  for (let i = 0; i < 6; i++) await api(sam.page, "PUT", `/api/characters/bram-cap00${i}`, crewChar(`bram-cap00${i}`, "bram", `Bram ${i}`));
+  const caps = [];
+  for (let i = 0; i < 6; i++) caps.push((await got(sam.page, "POST", "/api/shares", { character: `bram-cap00${i}`, to: moId })).status);
+  same(caps, [200, 200, 200, 200, 200, 400], "Sam can have five copies waiting for Mo, and not a sixth");
+  for (const r of await shareRows(samId)) await got(sam.page, "POST", "/api/shares/drop", { code: r.code });
+  for (let i = 0; i < 6; i++) await api(sam.page, "DELETE", `/api/characters/bram-cap00${i}`);
+  same(await shareRows(samId), [], "and he takes them back");
+
   // Nobody shares what isn't theirs, or gives a copy to someone they don't play with.
   same((await got(sam.page, "POST", "/api/shares", { character: "vesk-aaaaaa" })).status, 409, "Sam can't share Kai's Vesk");
   same((await got(zed.page, "POST", "/api/shares", { character: "ash-zzzzzz", to: moId })).status, 403, "Zed can't give Mo a copy, since they don't play together");
@@ -1277,16 +1287,24 @@ try {
     await walkin.page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
     await walkin.page.goto(`${BASE}/take/#${kaisLink}`);
     await walkin.page.waitForSelector('#app [data-do="takelink"]');
+    if (theme === "dark") {
+      const said = await text(walkin.page, "#app");
+      yes(said.includes("Shared by Kai") && !said.includes("Kai Tane"), "a link only says the first name of who shared it");
+    }
     await axe(walkin.page, `taking a copy, ${theme}`);
     await shot(walkin.page, `share-take-${theme}`);
   }
   await kai.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
   await mo.page.evaluate(() => localStorage.setItem("zi-theme", "dark"));
-  // Mo leaves Kai's copy waiting, and deletes his own Vesk: Kai's stays.
+  // Mo leaves Kai's copy waiting, and deletes his own Vesk, which stops the
+  // link he'd made for her and takes back the copy he'd given Sam. Kai's stays.
+  same((await got(mo.page, "POST", "/api/shares", { character: mosVesk })).status, 200, "Mo makes a link for his Vesk again");
+  same((await got(mo.page, "POST", "/api/shares", { character: mosVesk, to: samId })).status, 200, "and gives Sam another copy");
   await mo.page.goto(`${BASE}/characters/?c=${mosVesk}&t=sheet`);
   await fold(mo.page, "about");
   await mo.page.click('#app [data-act="delete"]');
   await until(async () => !(await serverChars(ADMIN)).length, "Mo's Vesk gone from his account");
+  same(await shareRows(moId), [], "and her link and the copy waiting for Sam went with her");
   same((await versionOf("vesk-aaaaaa")).data, kaisVesk.data, "and Kai's still there, as she was");
   await walkin.context.close();
   await guess.context.close();
