@@ -24,9 +24,11 @@
 // a free seat, with its three questions (who had the seat before, who it owes
 // and what it'll never do) and three cards each for what it is, how it works,
 // its Want and its name. What a card's dealt with it (an old power's
-// resources and people, a founder's at Local and its agenda at d4) isn't
-// kept here: every phone deals it the same from the seed (found-world.js).
-// Nothing here is hidden, since the old powers' agendas, Faces and Secrets
+// resources and people, and a founder's size at Local with its seat and its
+// resources, people and d4 agenda with its Want) comes up with it, dealt on
+// the phone that answered from the shared seed (found-world.js), and it's
+// kept, so the board the crew saw stays what it was when the tables change
+// between sessions. Nothing here is hidden, since the old powers' agendas, Faces and Secrets
 // are her pass's, on her phone alone. At the end of any age she can carry it
 // into Build the world on her phone, everything the crew made locked, which
 // is how it ends till the strife's built.
@@ -75,11 +77,13 @@
 //     olds     how many old powers there are, once the founding's started
 //     fac      the founding's factions, old powers first, then the founders
 //              in reverse order: an old power { old, card, by, gm, deal, at },
-//              its card { seat, size, type, method, want, name }, and a
-//              founder { key, name, cname, picks }, its picks by FOUNDER part:
-//              f-seat { k }, before { j, id, text } (j null for nobody), owes
-//              { j, id, text }, never { id, text }, and type, method, want and
-//              name, a card each, with their own words as { own, text }
+//              its card { seat, size, type, method, want, name, res, assets },
+//              and a founder { key, name, cname, picks }, its picks by
+//              FOUNDER part: f-seat { k, size } (Local, at its die), before
+//              { j, id, text } (j null for nobody), owes { j, id, text },
+//              never { id, text }, and type, method, want and name, a card
+//              each, with their own words as { own, text }, the Want with
+//              what's dealt with it, with: { res, assets, agenda }
 
 import { rollDie } from "./dice.js";
 
@@ -299,11 +303,13 @@ export const poolSize = (f) => Math.min(MAX_SEATS, Math.max(f.n, f.who.length + 
 // The founding's factions: every founder in, beside the old powers she set
 // up for (her factions less the players, and always at least one, room
 // allowing), twelve at most and never more than the seats.
+// There's always an old power, since a founder's first question needs a
+// faction on the board to owe, so eleven found one at most.
 export function shapeOf(f) {
   const seats = f.pool?.length ?? 0;
-  const founders = Math.min(f.who.length, 12, seats);
+  const founders = Math.max(0, Math.min(f.who.length, 11, seats - 1));
   const factions = Math.min(12, Math.max(f.n, founders + 1));
-  const olds = Math.max(0, Math.min(factions - founders, seats - founders));
+  const olds = Math.max(1, Math.min(factions - founders, seats - founders));
   return { olds, founders };
 }
 
@@ -398,8 +404,49 @@ function sizeFrom(x, sizes = SIZE_WORDS) {
   const die = whole(x.die, 2, 12);
   return die && die % 2 === 0 ? { size: x.size, die } : null;
 }
+// A set dealt with a card: its resources, or its assets (each with what it
+// does, and whether it's people who turn up), off the tables.
+const MAX_SET = 9;
+function setFrom(v, { assets = false } = {}) {
+  if (!Array.isArray(v) || !v.length || v.length > MAX_SET) return null;
+  const out = [];
+  for (const x of v) {
+    const p = rowFrom(x, { own: false });
+    if (!p) return null;
+    if (assets) {
+      p.power = x.power === true;
+      const does = line(x.does, MAX.text);
+      if (does) p.does = does;
+    }
+    out.push(p);
+  }
+  return out;
+}
+const AIMS = ["seat", "rival", "res", "asset", "who", "thing"];
+// A founder's agenda, dealt with its Want: off the tables, at d4, and what
+// it's aimed at on the board.
+function agendaFrom(x) {
+  const p = rowFrom(x, { own: false });
+  if (!p || whole(x?.die, 2, 12) !== 4) return null;
+  const at = x.at && typeof x.at === "object" ? x.at : {};
+  const out = { ...p, die: 4, aims: Array.isArray(x.aims) ? x.aims.map(String).filter((a) => AIMS.includes(a)).slice(0, 4) : [], at: {} };
+  if (Number.isInteger(at.seat) && at.seat >= 0 && at.seat < MAX_SEATS) out.at.seat = at.seat;
+  if (Number.isInteger(at.rival) && at.rival >= 0 && at.rival < 12) out.at.rival = at.rival;
+  for (const k of ["res", "asset"]) if (at[k] && Number.isInteger(at[k].j) && at[k].j >= 0 && at[k].j < 12 && ROW.test(String(at[k].id ?? ""))) out.at[k] = { j: at[k].j, id: String(at[k].id) };
+  return out;
+}
+// What's dealt with a founder's Want: its resources, its people and assets,
+// and its agenda.
+function withFrom(x) {
+  if (!x || typeof x !== "object") return null;
+  const res = setFrom(x.res);
+  const assets = setFrom(x.assets, { assets: true });
+  const agenda = agendaFrom(x.agenda);
+  return res && assets && agenda ? { res, assets, agenda } : null;
+}
 // An old power's card: on a free seat, City or Great, what it is, how it
-// works, its Want and its name, every one off the tables.
+// works, its Want and its name, every one off the tables, with the
+// resources, people and assets dealt with it.
 function oldFrom(x, f, i) {
   if (!x || typeof x !== "object") return null;
   const seat = whole(x.seat, 0, (f.pool?.length ?? 1) - 1);
@@ -407,14 +454,18 @@ function oldFrom(x, f, i) {
   const size = sizeFrom(x.size, OLD_SIZES);
   const card = { seat, size };
   for (const k of CARDS) card[k] = rowFrom(x[k], { name: k === "name", own: false });
-  return size && CARDS.every((k) => card[k]) ? card : null;
+  card.res = setFrom(x.res);
+  card.assets = setFrom(x.assets, { assets: true });
+  return size && CARDS.every((k) => card[k]) && card.res && card.assets ? card : null;
 }
 // One of a founder's answers, for its part, checked against the founding.
 function founderFrom(x, part, f, i) {
   if (!x || typeof x !== "object") return null;
   if (part === "f-seat") {
+    // Its seat, and its size dealt with it: Local, at its die.
     const k = whole(x.k, 0, (f.pool?.length ?? 1) - 1);
-    return k != null && seatFree(f, k, i) ? { k } : null;
+    const size = sizeFrom(x.size, ["local"]);
+    return k != null && seatFree(f, k, i) && size ? { k, size } : null;
   }
   if (ASKS.includes(part)) {
     const j = x.j == null ? null : whole(x.j, 0, f.fac.length - 1);
@@ -425,7 +476,12 @@ function founderFrom(x, part, f, i) {
     const out = p.own ? { own: true, text: p.text } : { id: p.id, text: p.text, tags: p.tags };
     return part === "never" ? out : { j, ...out };
   }
-  return CARDS.includes(part) ? rowFrom(x, { name: part === "name" }) : null;
+  if (!CARDS.includes(part)) return null;
+  const p = rowFrom(x, { name: part === "name" });
+  if (!p || part !== "want") return p;
+  // A Want comes up with what's dealt with it.
+  const got = withFrom(x.with);
+  return got ? { ...p, with: got } : null;
 }
 
 // ------------------------------------------------------------ the changes
@@ -883,9 +939,9 @@ export function leftFound(doc, user) {
 // ------------------------------------------------------------ what each phone gets
 
 // What a player gets of the room's picks, a field at a time.
-const KEEP = ["id", "text", "notice", "role", "tags", "leans", "strange", "own", "why", "offers", "dials", "roll", "real", "k", "j", "by", "byName", "gm", "deal", "at"];
+const KEEP = ["id", "text", "notice", "role", "tags", "leans", "strange", "own", "why", "offers", "dials", "roll", "real", "k", "j", "size", "with", "die", "aims", "power", "does", "by", "byName", "gm", "deal", "at"];
 const kept = (p) => (p && typeof p === "object" ? clone(Object.fromEntries(KEEP.filter((k) => p[k] !== undefined).map((k) => [k, p[k]]))) : null);
-const cardOf = (c) => (c ? { seat: c.seat, size: c.size ? { size: c.size.size, die: c.size.die } : null, ...Object.fromEntries(CARDS.map((k) => [k, kept(c[k])])) } : null);
+const cardOf = (c) => (c ? { seat: c.seat, size: c.size ? { size: c.size.size, die: c.size.die } : null, ...Object.fromEntries(CARDS.map((k) => [k, kept(c[k])])), res: (c.res ?? []).map(kept), assets: (c.assets ?? []).map(kept) } : null);
 
 // The GM gets the lot. A player gets the room as it's played in the open,
 // built a field at a time, so nothing the later stages keep for her (her

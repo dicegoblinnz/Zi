@@ -108,7 +108,7 @@ import { MAX, PARTS, answer, current, deckOf, fillPrompt, finish, formedOf, hist
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 import { linesOf } from "../src/companion/world-answer.js";
 import { applyFound, leftFound } from "../src/companion/found-rules.js";
-import { carriedWorld, founderHand, freeSeats, namable, oldHand, restOf, roleOf, roomBoard, roomWorld, seatHand } from "../src/companion/found-world.js";
+import { carriedWorld, founderHand, freeSeats, namable, oldHand, restOf, roleOf, roomBoard, roomWorld, seatHand, seatSize, wantWith } from "../src/companion/found-world.js";
 
 const problems = [];
 const note = (p) => {
@@ -1248,7 +1248,10 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       }
       const who = as(t.key);
       let p;
-      if (t.part === "f-seat") p = { k: pick(freeSeats(f(), t.i), r) };
+      if (t.part === "f-seat") {
+        const k = pick(freeSeats(f(), t.i), r);
+        p = { k, size: seatSize(T, f(), t.i, k) };
+      }
       else if (t.part === "before" && r() < 0.3) p = { j: null };
       else if (t.part === "before" || t.part === "owes") {
         const j = pick(namable(f(), t.i), r);
@@ -1259,6 +1262,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
         const hand = founderHand(T, f(), t.i, t.part);
         if (hand.length !== 3) note(`${seed}: ${t.part} dealt ${hand.length} cards`);
         p = r() < 0.1 ? { own: true, text: t.part === "name" ? "Our Lot" : "Something of our own" } : pick(hand, r);
+        if (t.part === "want") p = { ...p, with: wantWith(T, f(), t.i, p) };
       }
       ap({ o: "fd-answer", part: t.part, i: t.i, pick: p }, who);
     }
@@ -1272,6 +1276,18 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       if (x.old ? !["city", "great"].includes(x.size) || x.agenda : x.size !== "local" || x.agenda?.die !== 4) note(`${seed}: ${x.name} is ${x.size} with ${x.agenda ? `a d${x.agenda.die} agenda` : "no agenda"}`);
       if (!x.named || !x.res.length || !x.assets.length) note(`${seed}: ${x.name} isn't whole`);
       if (/\{[a-z]+\}/.test(JSON.stringify([x.name, x.holds, x.toward, x.loy]))) note(`${seed}: something's left in a slot on ${x.name}`);
+    }
+    // What the room kept is what every phone shows, whatever tables a phone
+    // has: dealt again from an emptied pool of resources, the board's the same.
+    {
+      const T2 = { ...T, packs: Object.fromEntries(Object.entries(T.packs).map(([k, v]) => [k, { ...v, resources: [], assets: [] }])) };
+      let same2 = true;
+      try {
+        same2 = JSON.stringify(roomBoard(T2, f()).factions.map((x) => [x.res, x.assets, x.agenda])) === JSON.stringify(B.factions.map((x) => [x.res, x.assets, x.agenda]));
+      } catch {
+        same2 = false;
+      }
+      if (!same2) note(`${seed}: the board changes when the tables do`);
     }
     // Carried into Build the world, on a seed of its own: what the room made
     // stays as it was, and the rest's dealt round it.

@@ -164,7 +164,7 @@ import { changesOf, said, typo } from "../src/companion/marks.js";
 import { grow } from "../src/companion/grow.js";
 import { CARD_WORDS, CREW, DECK_SIZE, newestChange, reachOf, readCards, staleCards } from "../scripts/learn.mjs";
 import * as T from "../src/companion/table-rules.js";
-import { dialsOf, foundNews, timeUp } from "../src/companion/found-rules.js";
+import { dialsOf, foundNews, shapeOf, timeUp } from "../src/companion/found-rules.js";
 import { parse as parseYaml } from "yaml";
 
 const SHOTS = process.argv[2] || null;
@@ -628,13 +628,18 @@ if (part("1c")) {
 
   // The founding: her old powers, then the founders in reverse order.
   const row = (id, text, extra = {}) => ({ id, text, tags: [], ...extra });
-  const oldCard = (seat, size = { size: "city", die: 8 }) => ({ seat, size, type: row("core:type:house", "A noble house", { role: "house" }), method: row("core:method:money", "money"), want: row("core:want:more", "More."), name: row("medieval:name:vane", "The Vane Estate") });
+  const res = [row("medieval:res:rents", "Town Rents", { role: "land" }), row("medieval:res:tolls", "Bridge Tolls", { role: "passage" })];
+  const assets = [row("medieval:asset:guard", "Household Guard", { role: "household-guard", power: true, does: "+1 Power. Armed servants." })];
+  const oldCard = (seat, size = { size: "city", die: 8 }) => ({ seat, size, type: row("core:type:house", "A noble house", { role: "house" }), method: row("core:method:money", "money"), want: row("core:want:more", "More."), name: row("medieval:name:vane", "The Vane Estate"), res, assets });
+  const local = { size: "local", die: 4 };
+  const wanting = (pick) => ({ ...pick, with: { res, assets, agenda: row("core:agenda:seat", "Take {seat}", { die: 4, aims: ["seat"], at: { seat: 0 } }) } });
   whys({ o: "fd-age" }, kai, "Only the GM can do that.", "a player can't start the founding");
   oks({ o: "fd-age" }, gm, "Mo starts the founding");
   same([f().step, f().olds, f().fac.map((x) => (x.old ? "old" : x.key)), f().clock], ["found", 3, ["old", "old", "old", K.lee, K.sam, K.kai], { age: 2, left: 40 * MIN, run: now }], "three old powers (six factions less his three players), then the founders the other way round, on the founding's clock");
   same(f().turn, { key: "", part: "old", i: 0, at: now }, "his old powers are first");
   whys({ o: "fd-answer", part: "old", i: 0, pick: oldCard(0) }, kai, "That’s your GM’s to deal.", "a player can't deal an old power");
   whys({ o: "fd-answer", part: "old", i: 0, pick: oldCard(0, { size: "local", die: 4 }) }, gm, "That card didn’t make sense.", "an old power's City or Great");
+  whys({ o: "fd-answer", part: "old", i: 0, pick: { ...oldCard(0), res: [] } }, gm, "That card didn’t make sense.", "and it comes with its resources");
   oks({ o: "fd-answer", part: "old", i: 0, pick: oldCard(0) }, gm, "Mo deals the first on the Old Bridge");
   whys({ o: "fd-answer", part: "old", i: 1, pick: oldCard(0) }, gm, "That card didn’t make sense.", "and nobody else can sit there");
   oks({ o: "fd-answer", part: "old", i: 1, pick: oldCard(1, { size: "great", die: 12 }) }, gm, "the second, on the Mill Meadows");
@@ -643,9 +648,10 @@ if (part("1c")) {
   oks({ o: "fd-answer", part: "old", i: 1, pick: oldCard(1, { size: "great", die: 12 }) }, gm, "puts it back in");
   oks({ o: "fd-answer", part: "old", i: 2, pick: oldCard(2) }, gm, "and the third, on Ravel Quarry");
   same([f().turn.key, f().turn.part, f().turn.i], [K.lee, "f-seat", 3], "then Lee founds first, the last in the order");
-  whys({ o: "fd-answer", part: "f-seat", i: 3, pick: { k: 0 } }, lee, "That seat’s taken, or it isn’t one.", "not on an old power's seat");
-  whys({ o: "fd-answer", part: "f-seat", i: 3, pick: { k: 4 } }, sam, "It’s not your turn.", "and not on Sam's say");
-  oks({ o: "fd-answer", part: "f-seat", i: 3, pick: { k: 4 } }, lee, "Lee founds his on the Bell Inn");
+  whys({ o: "fd-answer", part: "f-seat", i: 3, pick: { k: 0, size: local } }, lee, "That seat’s taken, or it isn’t one.", "not on an old power's seat");
+  whys({ o: "fd-answer", part: "f-seat", i: 3, pick: { k: 4, size: local } }, sam, "It’s not your turn.", "and not on Sam's say");
+  whys({ o: "fd-answer", part: "f-seat", i: 3, pick: { k: 4, size: { size: "city", die: 8 } } }, lee, "That seat’s taken, or it isn’t one.", "a founder starts Local");
+  oks({ o: "fd-answer", part: "f-seat", i: 3, pick: { k: 4, size: local } }, lee, "Lee founds his on the Bell Inn");
   same([f().turn.part, f().turn.i, f().turn.key], ["before", 3, K.lee], "and it's his still, on who had it before");
   whys({ o: "fd-answer", part: "before", i: 3, pick: { j: 4, ...row("core:fd-before:took", "{b} took {seat} off us") } }, lee, "That answer didn’t make sense.", "only a faction on the board can have had it");
   oks({ o: "fd-answer", part: "before", i: 3, pick: { j: 0, ...row("core:fd-before:took", "{b} took {seat} off us") } }, lee, "the Vane Estate had it");
@@ -657,16 +663,21 @@ if (part("1c")) {
   oks({ o: "fd-back", part: "type", i: 3 }, lee, "he takes that back");
   oks({ o: "fd-back", part: "never", i: 3 }, lee, "and the one before it, since they're both his");
   same([f().fac[3].picks.never, f().turn.part], [undefined, "never"], "back to what they'll never do");
-  for (const [part, pick] of [["never", row("core:fd-never:behind", "We never leave one of ours behind")], ["type", row("medieval:type:ferry", "Ferrymen, father to son", { role: "traders" })], ["method", row("core:method:trade", "trade")], ["want", row("core:want:respect", "Respect.")], ["name", row("medieval:name:coyle", "Coyle's Barges")]]) ok({ o: "fd-answer", part, i: 3, pick }, lee, `Lee answers ${part}`);
+  for (const [part, pick] of [["never", row("core:fd-never:behind", "We never leave one of ours behind")], ["type", row("medieval:type:ferry", "Ferrymen, father to son", { role: "traders" })], ["method", row("core:method:trade", "trade")]]) ok({ o: "fd-answer", part, i: 3, pick }, lee, `Lee answers ${part}`);
+  why({ o: "fd-answer", part: "want", i: 3, pick: row("core:want:respect", "Respect.") }, lee, "That answer didn’t make sense.", "a Want comes up with what's dealt with it");
+  why({ o: "fd-answer", part: "want", i: 3, pick: { ...wanting(row("core:want:respect", "Respect.")), with: { res, assets, agenda: row("core:agenda:seat", "Take {seat}", { die: 8, aims: ["seat"], at: { seat: 0 } }) } } }, lee, "That answer didn’t make sense.", "and its agenda starts at d4");
+  ok({ o: "fd-answer", part: "want", i: 3, pick: wanting(row("core:want:respect", "Respect.")) }, lee, "Lee answers want, its resources, people and agenda with it");
+  same([f().fac[3].picks.want.with.res.length, f().fac[3].picks.want.with.agenda.die, f().fac[3].picks["f-seat"].size], [2, 4, local], "what's dealt with a card is kept in the room");
+  ok({ o: "fd-answer", part: "name", i: 3, pick: row("medieval:name:coyle", "Coyle's Barges") }, lee, "Lee answers name");
   same([f().turn.key, f().turn.part, f().turn.i], [K.sam, "f-seat", 4], "his faction's founded, and Sam's next");
-  ok({ o: "fd-answer", part: "f-seat", i: 4, pick: { k: 5 } }, sam, "Sam founds on the Quay");
+  ok({ o: "fd-answer", part: "f-seat", i: 4, pick: { k: 5, size: local } }, sam, "Sam founds on the Quay");
   ok({ o: "fd-answer", part: "before", i: 4, pick: { j: null } }, sam, "nobody had it before");
   ok({ o: "fd-in", key: K.sam, on: false }, gm, "Sam's had to go, so Mo takes him out mid-turn");
   same([f().turn.key, f().turn.i, f().turn.part], [K.kai, 5, "f-seat"], "Kai founds next, and Sam's faction waits for him");
   same(f().fac[4].picks.before.j, null, "what Sam answered stands");
   same(T.leave(doc, "kai"), true, "Kai leaves the campaign");
   same([f().turn, f().out], [null, true], "and with nobody left in to take what's left, Mo's phone deals the rest");
-  const dealtPicks = (seat) => ({ "f-seat": { k: seat }, before: { j: null }, owes: { j: 0, ...row("core:fd-owes:money", "We owe {b} the money we started with") }, never: row("core:fd-never:hungry", "We'll never let one of ours go hungry"), type: row("medieval:type:smiths", "Smiths", { role: "makers" }), method: row("core:method:craft", "craft"), want: row("core:want:more", "More."), name: row("medieval:name:hammermen", "The Hammermen") });
+  const dealtPicks = (seat) => ({ "f-seat": { k: seat, size: local }, before: { j: null }, owes: { j: 0, ...row("core:fd-owes:money", "We owe {b} the money we started with") }, never: row("core:fd-never:hungry", "We'll never let one of ours go hungry"), type: row("medieval:type:smiths", "Smiths", { role: "makers" }), method: row("core:method:craft", "craft"), want: wanting(row("core:want:more", "More.")), name: row("medieval:name:hammermen", "The Hammermen") });
   const samRest = Object.fromEntries(Object.entries(dealtPicks(5)).filter(([p]) => !["f-seat", "before"].includes(p)));
   whys({ o: "fd-rest", fac: { 4: { picks: samRest }, 5: { picks: { ...dealtPicks(5) } } } }, gm, "Deal all of what’s left.", "Kai's can't sit on Sam's seat");
   oks({ o: "fd-rest", fac: { 4: { picks: samRest }, 5: { picks: dealtPicks(6) } } }, gm, "Mo's phone deals what's left of both");
@@ -678,6 +689,8 @@ if (part("1c")) {
   same(said({ ...f(), step: "asked" }, { ...f(), step: "ground", turn: { key: K.lee, part: "seat" } }, K.lee), { lines: ["Mo’s rolled the ground’s dice.", "Your turn: take a die for a seat."], buzz: true }, "and so does his turn for a die");
   ok({ o: "fd-carry" }, gm, "Mo takes it into Build the world");
   same(f().step, "carried", "it's on his phone now");
+  same(shapeOf({ n: 12, who: Array.from({ length: 12 }, (_, k) => ({ key: `p${k}` })), pool: Array.from({ length: 14 }) }), { olds: 1, founders: 11 }, "twelve players: there's always an old power, so eleven found one");
+  same(shapeOf({ n: 4, who: [{ key: "a" }, { key: "b" }], pool: Array.from({ length: 6 }) }), { olds: 2, founders: 2 }, "and two players at four factions face two old powers");
 
   // What's new, said for whoever's holding the phone.
   const news = (a, b, me, gm = false) => foundNews(a, b, { gm, me, gmName: "Mo" });

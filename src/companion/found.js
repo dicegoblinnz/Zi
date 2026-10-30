@@ -25,7 +25,7 @@
 // of any age she can take it into Build the world on her phone
 // (world-make.js), everything the crew made locked.
 import { AGES, ASKED, ASKS, CARDS, CLOCKS, ENDS, FOUNDER, PARTS, RUNNING, clockLeft, diceLeft, dialsOf, facOf, keyOf, leftOf, missingOf, pickOf, seatAt, timeUp, whoOf } from "./found-rules.js";
-import { calledIn, founderHand, freeSeats, keepName, lineIn, namable, oldHand, restOf, roleOf, roomBoard, roomWorld, seatHand } from "./found-world.js";
+import { calledIn, founderHand, freeSeats, keepName, lineIn, namable, oldHand, restOf, roleOf, roomBoard, roomWorld, seatHand, seatSize, wantWith } from "./found-world.js";
 import { REGIONS, canDeal, choose, fill, newSeed, options, start, tensionAt } from "./world-engine.js";
 import { rollDie } from "./dice.js";
 import { die as kitDie, mini as kitMini } from "../kit/kit.js";
@@ -583,7 +583,7 @@ export function makeFound(d) {
     const role = roleOf(T, f, k);
     const lead = mine ? "Each die’s face picks what kind of seat it deals. Tap a die, then keep one of its three seats, or write your own." : gm ? `${esc(name)}’s taking a die. If they haven’t got a phone with them, tap one in for them.` : `${esc(name)}’s taking a die. Tap one to see what it deals.`;
     const cards = k == null ? [] : handFor(`seat|${stateKey(f)}|${k}`, () => seatHand(T, f, k));
-    const keep = T?.core?.keeps?.[role];
+    const keep = T?.keeps?.[role];
     const inner = (c) => `<span class="wk-card-n">${esc(fill(c.text, {}))}</span><span class="wk-card-w">${esc(c.notice)}</span>${c.role !== role ? `<span class="wk-card-m"><span class="wk-mark">${esc(keepName(c.role))}</span></span>` : ""}${strangeMark(c)}`;
     const own = ownTools(id, f, gm, "fd-seat-own", (whose) => `<label class="cc-field">${whose} seat’s name <input name="name" maxlength="60" autocomplete="off" required></label>
       <label class="cc-field">What a stranger notices there <input name="notice" maxlength="160" autocomplete="off" required></label>`);
@@ -817,6 +817,18 @@ export function makeFound(d) {
     d.render();
   }
 
+  // A Want goes up with what's dealt with it on this phone: the faction's
+  // resources, its people and assets, and its agenda at d4.
+  function withDealt(f, t, pick) {
+    if (t.part !== "want" || !T) return pick;
+    let got = null;
+    try {
+      got = wantWith(T, f, t.i, pick);
+    } catch {
+      got = null;
+    }
+    return got ? { ...pick, with: got } : pick;
+  }
   // Her tap for someone else's turn takes a second, so a look never answers
   // for them. True when this tap's only armed it.
   function secondTap(id, f, key) {
@@ -862,9 +874,10 @@ export function makeFound(d) {
       const f = foundOf(id);
       if (f?.turn?.part !== "f-seat") return;
       const k = freeSeats(f, f.turn.i)[Number(el.dataset.c)];
-      if (k == null) return;
+      if (k == null || !T) return;
       if (secondTap(id, f, `f:${id}:${f.turn.key}:${f.turn.i}:f-seat:${el.dataset.c}`)) return;
-      answer(id, { k });
+      // Its size at Local goes up with its seat, dealt on this phone.
+      answer(id, { k, size: seatSize(T, f, f.turn.i, k) });
     },
     fj(el, id) {
       const f = foundOf(id);
@@ -897,7 +910,7 @@ export function makeFound(d) {
       const c = handFor(`card|${stateKey(f)}|${t.i}|${t.part}`, () => founderHand(T, f, t.i, t.part))?.[Number(el.dataset.c)];
       if (!c) return;
       if (secondTap(id, f, `f:${id}:${t.key}:${t.i}:${t.part}:${el.dataset.c}`)) return;
-      answer(id, c);
+      answer(id, withDealt(f, t, c));
     },
     setup(el, id) {
       // Till the tables are in, it says it's getting them, then opens.
@@ -1112,7 +1125,7 @@ export function makeFound(d) {
         if (j == null) return d.toast("Pick a faction first.");
         return answer(id, { j, own: true, text });
       }
-      return answer(id, { own: true, text });
+      return answer(id, withDealt(f, t, { own: true, text }));
     }
     if (kind !== "fd-own") return;
     const text = tidy(fd.get("text"), 160);

@@ -3,9 +3,11 @@
 // answered (found-rules.js), so every phone deals the same three cards for a
 // turn and nothing has to come from the server to deal. What a card's dealt
 // with it (an old power's resources and people, the first with one to
-// spare, and a founder's at Local with its agenda at d4) is dealt here the
-// same way, in order, and never kept in the room. world-make.js carries it into Build the world from here,
-// on a seed of its own.
+// spare, a founder's size at Local with its seat, and its resources, people
+// and d4 agenda with its Want) is dealt here too, on the phone that answers,
+// and goes up with the answer, so the room keeps what the crew saw even when
+// the tables change between sessions. world-make.js carries it into Build
+// the world from here, on a seed of its own.
 //
 // Pure, with no page, like the engine: found.js draws it, and the tests deal
 // it the same way.
@@ -35,9 +37,12 @@ export const keepName = (role) => String(role ?? "").replace(/^./, (c) => c.toUp
 
 // The room's world: the asking, the ground's seats by their dice, and every
 // faction the founding's made so far, in order, each with what's dealt with
-// it. Kept for the last few rooms, since every redraw asks for it.
-const memo = new Map();
+// it. Kept for the last few rooms, for the tables they were dealt from,
+// since every redraw asks for it.
+const memos = new WeakMap();
 export function roomWorld(T, f) {
+  if (!memos.has(T)) memos.set(T, new Map());
+  const memo = memos.get(T);
   const key = JSON.stringify([f.id, f.seed, f.n, f.recipe, f.asking, f.tension, f.pool, f.seats, f.fac]);
   if (!memo.has(key)) {
     memo.set(key, build(T, f));
@@ -79,9 +84,10 @@ function replay(T, W, x, i) {
     W.factions[i].exc = null;
     put("method", rowOf(c.method));
     put("want", rowOf(c.want));
-    // There's always a trade to block (the plan's call): the first old power
-    // holds as many resources as its size can, with one left over. Old money.
-    dealWith(T, W, i, ["res", "assets"], i === 0 ? { only: "extra" } : {});
+    if (c.res?.length && c.assets?.length) {
+      put("res", c.res.map(setRow));
+      put("assets", c.assets.map(setRow));
+    } else dealWith(T, W, i, ["res", "assets"], i === 0 ? { only: "extra" } : {});
     put("name", rowOf(c.name));
     W.factions[i].room = "old";
     return;
@@ -90,7 +96,7 @@ function replay(T, W, x, i) {
   const k = p["f-seat"]?.k;
   if (k == null) return;
   put("seat", { k });
-  put("size", localOf(T, W, i));
+  put("size", p["f-seat"].size ?? localOf(T, W, i));
   W.factions[i].exc = null;
   W.factions[i].room = "founder";
   if (p.before?.j != null) W.made.ties.push({ a: p.before.j, b: i, kind: "wildcard", tie: { id: p.before.id ?? `own:before:${i}`, text: p.before.text, back: "", kind: "wildcard", bond: "hostile" }, at: { seat: k }, from: "fd", age: 2 });
@@ -101,11 +107,33 @@ function replay(T, W, x, i) {
     put(step, rowOf(p[step]));
     if (step === "type") W.factions[i].exc = null;
   }
-  dealWith(T, W, i, ["res", "assets", "agenda"]);
+  const got = p.want.with;
+  if (got?.res?.length && got.assets?.length && got.agenda) {
+    put("res", got.res.map(setRow));
+    put("assets", got.assets.map(setRow));
+    put("agenda", { ...setRow(got.agenda), die: 4, aims: got.agenda.aims ?? [], at: got.agenda.at ?? {} });
+  } else dealWith(T, W, i, ["res", "assets", "agenda"]);
   if (p.name) put("name", rowOf(p.name));
 }
+// A resource, an asset or an agenda as the room kept it, as the engine reads one.
+const setRow = (x) => ({ ...rowOf(x), ...(x.power != null ? { power: x.power === true } : {}), ...(x.does ? { does: x.does } : {}) });
 // A founder's size: Local, at a die the engine deals for it.
 const localOf = (T, W, i) => options(T, W, `f:${i}:size`, 4).find((s) => s.size === "local") ?? { size: "local", die: 4 };
+// What goes up with a founder's seat: its size, dealt once it sits there.
+export function seatSize(T, f, i, k) {
+  const W = roomWorld(T, f);
+  choose(T, W, `f:${i}:seat`, { k });
+  return localOf(T, W, i);
+}
+// What goes up with a founder's Want: its resources, its people and assets,
+// and its agenda at d4, dealt once it wants that.
+export function wantWith(T, f, i, want) {
+  const W = roomWorld(T, f);
+  choose(T, W, `f:${i}:want`, rowOf(want));
+  dealWith(T, W, i, ["res", "assets", "agenda"]);
+  const x = W.factions[i];
+  return x.res && x.assets && x.agenda ? { res: x.res, assets: x.assets, agenda: x.agenda } : null;
+}
 function dealWith(T, W, i, steps, opts = {}) {
   for (const step of steps) {
     const c = options(T, W, `f:${i}:${step}`, 1, step === "agenda" ? {} : opts)[0];
@@ -153,6 +181,14 @@ export function oldHand(T, f, i) {
       card[step] = p;
       if (step !== "name") choose(T, W2, `f:${i}:${step}`, p);
       if (step === "type") W2.factions[i].exc = null;
+      // Its resources and people come with it, the first old power's with
+      // one to spare, so there's always a trade to block (the plan's call).
+      if (step === "want") {
+        dealWith(T, W2, i, ["res", "assets"], i === 0 ? { only: "extra" } : {});
+        card.res = W2.factions[i].res;
+        card.assets = W2.factions[i].assets;
+        if (!card.res || !card.assets) return;
+      }
     }
     out.push(card);
   });
@@ -238,7 +274,7 @@ export function restOf(T, f) {
 function dealtPart(T, f, i, part) {
   if (part === "f-seat") {
     const c = options(T, roomWorld(T, f), `f:${i}:seat`, 1)[0];
-    return c ? { k: c.k } : null;
+    return c ? { k: c.k, size: seatSize(T, f, i, c.k) } : null;
   }
   if (part === "before") return { j: null };
   if (part === "owes") {
@@ -249,7 +285,10 @@ function dealtPart(T, f, i, part) {
     return c ? { j, ...c } : null;
   }
   if (part === "never") return linesFor(T, f, i, part, null)[0] ?? null;
-  return founderHand(T, f, i, part)[0] ?? null;
+  const c = founderHand(T, f, i, part)[0] ?? null;
+  if (!c || part !== "want") return c;
+  const got = wantWith(T, f, i, c);
+  return got ? { ...c, with: got } : null;
 }
 
 // ------------------------------------------------------------ what every phone shows
