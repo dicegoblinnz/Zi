@@ -167,7 +167,7 @@ For Mo to say otherwise.
 
 ## How a stage goes
 
-- One stage a chat, with the prompt at the end of this plan. The stage is the first in The stages not marked built, bar stage 15, which Mo moved up on 31 Oct so it's built before 13.
+- One stage a chat, with the prompt at the end of this plan. The stage is the first in The stages not marked built, bar stage 15, which Mo moved up on 31 Oct so it's built before 14 (13 was built the same day).
 - A stage is marked built by ending its first line with the date it went to `main`, like *Built 30 Oct 2026.*, in the same merge.
 - A stage that writes tables, writes a world or changes a rule sends Mo what to judge in one message (the `/deal/` link on the Preview, for tables, and the world's page for a world), changes only what he names, and waits for his yes in the same chat before it merges.
 - The Night City stages (12 to 14 and 17 to 19) are built from A whole world, in the brief, and A world, in Writing tables, so each can be built from this plan alone. Abnu's (15 and 16) are built from A whole world: Abnu and `notes/abnu-canon.md` as well.
@@ -364,7 +364,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
     - `world.yaml`, and 2077's board at the start Mo picked (Decisions): every faction whole, the web, the mini factions, and How it came to be across the three ages.
     - `/worlds/night-city/` with the board, the web and How it came to be, the line saying whose it is and both notices, for Mo to judge on the Preview.
     - A new part of `tests/check-world-engine.mjs`: a small made-up world kept with the tests and never shipped, failing each check once, and Night City passing them all. `tests/check-site.mjs` checks the page with the rest, and that search and the service worker leave it out.
-13. **Night City, 2077: places, people and the map** (a world). Needs 12.
+13. **Night City, 2077: places, people and the map** (a world). Needs 12. *Built 31 Oct 2026.*
     - The places (the districts, their parts and the places that matter, every seat among them) and the people who run them (every Face among them), with everything a page holds, and the map drawn in code with a pin on every place and seat, as the brief says.
     - The page gets places and people, Find, and the map in one hand, every pin opening its page.
     - The web on the map (Decisions): every faction at its seat's pin, faint till it's tapped, then its ties lit the way the page's web walks them, as the brief says.
