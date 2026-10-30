@@ -441,7 +441,13 @@ export function resume(T, rec) {
   const names = (v) => (v && typeof v === "object" && !Array.isArray(v) ? Object.fromEntries(Object.entries(v).filter(([, x]) => typeof x === "string")) : {});
   if (rec.made && typeof rec.made === "object") W.made = { ties: Array.isArray(rec.made.ties) ? rec.made.ties : [], needs: Array.isArray(rec.made.needs) ? rec.made.needs : [] };
   if (Array.isArray(rec.minis) && rec.minis.length) W.minis = rec.minis;
-  if (rec.deck && typeof rec.deck === "object") W.deck = rec.deck;
+  // A deck picked up again (a reload on her phone) carries on with what
+  // startDeck() gave it, the record leaving out what's still empty.
+  if (rec.deck && typeof rec.deck === "object") {
+    W.deck = rec.deck;
+    W.made ??= { ties: [], needs: [] };
+    W.minis ??= [];
+  }
   W.crew = rec.crew && typeof rec.crew === "object" && Array.isArray(rec.crew.who) ? { who: rec.crew.who.filter((c) => c?.k && c.name).map((c) => ({ ...c, friend: c.friend ?? null, foe: c.foe ?? null })), things: Array.isArray(rec.crew.things) ? rec.crew.things.filter((t) => t?.id) : [], seen: { who: names(rec.crew.seen?.who), things: names(rec.crew.seen?.things) } } : null;
   W.dials = dialsOf(W);
   return W;

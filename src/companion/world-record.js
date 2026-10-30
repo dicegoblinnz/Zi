@@ -4,7 +4,8 @@
 // starts with "wb-", so her phone and the Worker change it the same way, and
 // only the GM changes it (the Worker only takes a world's changes from her).
 // buildForPlayer() is the only part a player ever gets: How it came to be,
-// the history, once she's shown it, and never the seed or anything dealt.
+// the ages of it she's shown them, never a line that's hers, and never the
+// seed or anything dealt.
 //
 // The record: { recipe, dials, seed, dealt, history, shown, at }
 //   recipe   { region, era, twist }, by their ids in the tables
@@ -12,9 +13,13 @@
 //   seed     its three words, like ash-lantern-ford
 //   dealt    what the engine dealt (recordOf() in world-engine.js), plain
 //            words and numbers, kept as it came in, within what a world holds
-//   history  How it came to be, a line at a time: [{ id, text, age }], age
-//            being 1 for the ground, 2 the founding, 3 the strife, or 0
-//   shown    whether the crew's been shown the history
+//   history  How it came to be, a line at a time: [{ id, text, age, hers? }],
+//            age being 1 long ago, 2 in living memory and 3 this last year
+//            when the deck wrote it (the founding's will be its ground, its
+//            founding and its strife), or 0. A line that's hers (its answer
+//            made a Secret) never leaves her phone, even with its age shown.
+//   shown    the ages the crew's been shown, each a tap of hers (Mo's pick,
+//            30 Oct), like [1, 2]
 //
 // A change (its o starts with "wb-"):
 //   { o: "wb-set", b }           the record, whole (Done writes it in one go,
@@ -26,7 +31,9 @@
 //   { o: "wb-line", item, at? }  a line of history
 //   { o: "wb-edit", lid, v }     a line's words
 //   { o: "wb-drop", lid }        a line off it
-//   { o: "wb-show", v }          the history shown to the crew, or hidden again
+//   { o: "wb-show", v, age? }    an age shown to the crew (v true) or hidden
+//                                again (false), or with no age every age, or
+//                                with v a list, exactly those ages (Undo's)
 
 // One request carries 200,000 characters (MAX_TEXT in src/worker/index.js),
 // so on a big board Done sends the record on its own, after the factions.
@@ -47,6 +54,11 @@ const whole = (v, lo, hi, or) => {
   return Number.isInteger(n) && n >= lo && n <= hi ? n : or;
 };
 const tableId = (v) => (typeof v === "string" && v.length <= 24 && TABLE_ID.test(v) ? v : null);
+// The ages a history can have, in the order they're read, and which of them
+// the crew's been shown: a list, each once and in order. An old record's true
+// was all of it.
+export const AGE_ORDER = [1, 2, 3, 0];
+const showsOf = (v) => (v === true ? [0, 1, 2, 3] : Array.isArray(v) ? [...new Set(v.map(Number).filter((n) => Number.isInteger(n) && n >= 0 && n <= 3))].sort((a, b) => a - b) : []);
 
 // What was dealt, kept as plain words and numbers: nothing deeper, longer or
 // bigger than a world can hold, and nothing but data.
@@ -71,7 +83,7 @@ function dealtOf(v) {
 function lineOf(x) {
   if (!x || typeof x !== "object" || !ID.test(str(x.id))) return null;
   const text = line(x.text, BMAX.text);
-  return text ? { id: x.id, text, age: whole(x.age, 0, 3, 0) } : null;
+  return text ? { id: x.id, text, age: whole(x.age, 0, 3, 0), ...(x.hers === true ? { hers: true } : {}) } : null;
 }
 
 // A record as it came from somewhere else, tidied, or null.
@@ -86,7 +98,7 @@ export function buildOf(raw) {
     seed: SEED.test(str(raw.seed)) ? raw.seed : "",
     dealt: dealtOf(raw.dealt),
     history: (Array.isArray(raw.history) ? raw.history : []).map(lineOf).filter((x) => x && !seen.has(x.id) && seen.add(x.id)).slice(0, BMAX.lines),
-    shown: raw.shown === true,
+    shown: showsOf(raw.shown),
     at: whole(raw.at, 0, Number.MAX_SAFE_INTEGER, 0),
   };
 }
@@ -100,6 +112,9 @@ export function applyBuild(doc, op) {
       const next = buildOf(op.b);
       const meant = op.b?.dealt && typeof op.b.dealt === "object" && !Array.isArray(op.b.dealt);
       if (!next || (meant && !next.dealt)) return false;
+      // A line that's hers stays hers, whatever's sent by a phone that
+      // doesn't know it (one on older code, adding a faction).
+      if (b) for (const l of next.history) if (!l.hers && b.history.some((x) => x.id === l.id && x.hers)) l.hers = true;
       if (b && JSON.stringify(next) === JSON.stringify(b)) return false;
       doc.build = next;
       return true;
@@ -129,10 +144,20 @@ export function applyBuild(doc, op) {
       b.history.splice(b.history.indexOf(l), 1);
       return true;
     }
-    case "wb-show":
-      if (!b || b.shown === (op.v === true)) return false;
-      b.shown = op.v === true;
+    case "wb-show": {
+      if (!b) return false;
+      let next;
+      if (Array.isArray(op.v)) next = showsOf(op.v);
+      else if (op.age == null) next = op.v === true ? showsOf(true) : [];
+      else {
+        const age = whole(op.age, 0, 3, -1);
+        if (age < 0) return false;
+        next = op.v === true ? showsOf([...b.shown, age]) : b.shown.filter((x) => x !== age);
+      }
+      if (next.join() === b.shown.join()) return false;
+      b.shown = next;
       return true;
+    }
     default:
       return false;
   }
@@ -155,15 +180,17 @@ export function undoBuild(doc, op) {
     case "wb-drop":
       return l ? [{ o: "wb-line", item: copy(l), at: b.history.indexOf(l) }] : [];
     case "wb-show":
-      return b ? [{ o: "wb-show", v: b.shown }] : [];
+      return b ? [{ o: "wb-show", v: [...b.shown] }] : [];
     default:
       return [];
   }
 }
 
-// All a player gets of it: the history, once she's shown it.
+// All a player gets of it: the lines of the ages she's shown them, bar any
+// that's hers, and which ages those are.
 export function buildForPlayer(doc) {
   const b = doc.build;
-  if (!b?.shown || !b.history.length) return null;
-  return { history: b.history.map(({ id, text, age }) => ({ id, text, age })), shown: true };
+  const shown = new Set(b?.shown ?? []);
+  const history = (b?.history ?? []).filter((l) => !l.hers && shown.has(l.age)).map(({ id, text, age }) => ({ id, text, age }));
+  return history.length ? { history, shown: [...new Set(history.map((l) => l.age))].sort((x, y) => x - y) } : null;
 }

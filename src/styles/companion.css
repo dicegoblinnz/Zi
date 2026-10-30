@@ -2144,3 +2144,152 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
   .ww-l, .ww-node, .ww-crew { transition: none; }
 }
 .wk-ww { margin: 4px 0 14px; }
+
+/* ── Building by answering (stage 8 of notes/builder-plan.md, world-answer.js):
+   the deck held in one hand. The ages fill along the top, the factions' tiles
+   slide sideways under them and light up as a card leans their way, and the
+   card's cut like the kit's telegraph, with a violet band since it's the
+   GM's. It follows a thumb sideways, tilting, and flies off the way it's
+   answered. Under reduce-motion it stays put and the answers are taps. */
+.wa-ages { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 0.5rem 0 0.75rem; padding: 0; }
+.wa-ages li { position: relative; padding-bottom: 8px; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em; line-height: 1.25; text-transform: uppercase; color: var(--muted); text-wrap: balance; }
+.wa-ages li::before, .wa-ages li::after { content: ""; position: absolute; left: 0; bottom: 0; height: 4px; border-radius: 1px; }
+.wa-ages li::before { right: 0; background: var(--zd-slot); }
+.wa-ages li::after { width: calc(var(--p, 0) * 100%); background: var(--zd-them); transition: width 360ms var(--bd-ease); }
+.wa-ages li.is-now { color: var(--zd-them-ink); }
+.wa-ages li.is-past { color: var(--ink); }
+
+/* The factions, a tile each, sliding sideways in their own strip. */
+.wa-tiles-w { margin: 0 0 0.85rem; padding: 3px 2px 6px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-width: none; -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); }
+.wa-tiles-w::-webkit-scrollbar { display: none; }
+.wa-tiles { display: flex; gap: 6px; width: max-content; margin: 0; padding: 0 28px 0 0; list-style: none; }
+.wa-tile { display: grid; align-content: space-between; gap: 6px; width: 8.4rem; min-height: 66px; padding: 8px 10px; font: inherit; text-align: left; color: var(--ink); background: var(--zd-token); border: 1.5px solid var(--bd-edge); border-radius: 3px; cursor: pointer; scroll-snap-align: start; transition: border-color 140ms ease, box-shadow 180ms ease, transform 180ms var(--bd-ease), background-color 140ms ease; }
+.wa-tile:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wa-tile-n { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 0.84rem; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.wa-tile-m { display: flex; gap: 7px; }
+.wa-tm { display: inline-flex; gap: 2px; opacity: 0.5; }
+.wa-tm.is-now { opacity: 1; }
+.wa-tm i { width: 8px; height: 8px; background: var(--zd-slot); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.wa-tm i.on { background: var(--zd-them); }
+.wa-tile.is-card { border-color: var(--zd-them-line); }
+.wa-tile.is-touch { border-color: var(--zd-them-line); box-shadow: 0 0 0 2px var(--zd-them-line), 0 6px 16px -6px var(--zd-them); transform: translateY(-2px); }
+.wa-tile.is-open { color: var(--zd-on-them); background: var(--zd-them); border-color: var(--zd-them); }
+.wa-tile.is-open .wa-tm i.on { background: var(--zd-on-them); }
+
+/* The card, and what it said and did. */
+.wa-stage { position: relative; }
+.wa-card { position: relative; display: flex; flex-direction: column; background: var(--zd-token); border: 2px solid var(--zd-them-line); border-radius: 4px; box-shadow: 0 12px 26px -16px rgb(0 0 0 / 0.6); touch-action: pan-y; transform-origin: 50% 120%; }
+.wa-card[data-swipe] { -webkit-user-select: none; user-select: none; }
+.wa-card:not(.is-moving) { transition: transform 240ms var(--bd-ease); }
+.wa-card.is-moving { cursor: grabbing; }
+.wa-card:focus { outline: none; }
+.wa-card:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+.wa-card.is-strange { border-style: dashed; }
+.wa-band { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 12px; padding: 6px 14px; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--zd-on-them); background: var(--zd-them); }
+.wa-odd { padding: 0 6px; color: var(--zd-them-ink); background: var(--zd-token); border-radius: 2px; }
+.wa-card-in { display: grid; gap: 10px; padding: 14px 16px 4px; }
+.wa-card-in p { margin: 0; }
+.wa-who { font-size: 0.82rem; font-weight: 800; letter-spacing: 0.05em; line-height: 1.3; color: var(--zd-them-ink); overflow-wrap: anywhere; }
+.wa-says { font-size: 1.24rem; line-height: 1.42; overflow-wrap: anywhere; text-wrap: pretty; }
+.wa-answers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 12px; }
+.wa-ans { display: flex; align-items: center; justify-content: center; gap: 6px; min-width: 0; min-height: 60px; padding: 8px 10px; font: inherit; font-weight: 700; font-size: 1rem; line-height: 1.22; text-align: center; color: var(--ink); background: var(--panel); border: 1.5px solid var(--zd-them-line); border-radius: 3px; cursor: pointer; text-wrap: balance; transition: background-color 120ms ease, color 120ms ease, transform 140ms var(--bd-ease); }
+.wa-ans-w { min-width: 0; overflow-wrap: anywhere; }
+.wa-ans.is-left::before { content: "\2039" / ""; flex: none; font-size: 1.3rem; line-height: 1; color: var(--zd-them-ink); }
+.wa-ans.is-right::after { content: "\203A" / ""; flex: none; font-size: 1.3rem; line-height: 1; color: var(--zd-them-ink); }
+.wa-ans:active { transform: scale(0.97); }
+.wa-ans:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wa-ans.is-lean { color: var(--zd-on-them); background: var(--zd-them); }
+.wa-ans.is-lean::before, .wa-ans.is-lean::after { color: var(--zd-on-them); }
+.wa-card.is-new { animation: wa-in 280ms var(--bd-ease) both; }
+.wa-card.is-prompt.is-new { animation: wa-turn 340ms var(--bd-ease) both; }
+@keyframes wa-in { from { opacity: 0; transform: translateY(18px) scale(0.97); } }
+@keyframes wa-turn { from { opacity: 0.15; transform: perspective(1000px) rotateY(-75deg); } }
+.wa-did { margin: 14px 0 0; padding: 2px 0 2px 11px; font-size: 0.97rem; line-height: 1.42; border-left: 3px solid var(--zd-them-line); }
+.wa-did span { display: block; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.wa-did.is-first { color: var(--muted); border-left-color: var(--line); }
+.wa-moves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+.wa-hint-l { margin: 8px 0 0; }
+.wa-alt { margin-top: 12px; text-align: center; }
+
+/* A prompt: the card turned over to its question. */
+.wa-recap { font-size: 0.9rem; line-height: 1.4; color: var(--muted); overflow-wrap: anywhere; }
+.wa-recap span { font-weight: 700; }
+.wa-recap b { color: var(--ink); }
+.wa-ask { font-family: var(--display); font-weight: 600; font-size: 1.28rem; line-height: 1.22; letter-spacing: 0.01em; }
+.wa-ideas { display: grid; gap: 6px; }
+.wa-idea { min-height: 50px; padding: 8px 12px; font: inherit; font-weight: 700; font-size: 1rem; line-height: 1.25; text-align: left; color: var(--ink); background: var(--panel); border: 1.5px solid var(--zd-them-line); border-radius: 3px; cursor: pointer; overflow-wrap: anywhere; transition: transform 140ms var(--bd-ease), background-color 120ms ease; }
+.wa-idea:active { transform: scale(0.98); }
+.wa-idea:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) { .wa-idea:hover, .wa-ans:hover { background: var(--select); } .wa-ans.is-lean:hover { background: var(--zd-them); } }
+.cc .wa-own { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 8px; margin: 0; }
+.cc .wa-own .cc-field { margin: 0; }
+.cc .wa-own input { width: 100%; }
+.wa-skip { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding-bottom: 10px; }
+.wa-skip .cc-small { flex: 1 1 10rem; margin: 0; }
+
+/* A faction's card so far, on the card's place. */
+.wa-sofar-top { display: flex; align-items: center; gap: 12px; }
+.wa-sofar-top .zd-die { --s: 46px; }
+.cc .wa-sofar-top h2 { margin: 0; padding: 0; background: none; font-size: 1.22rem; overflow-wrap: anywhere; }
+.wa-sofar-is { font-size: 0.97rem; line-height: 1.4; }
+.wa-sofar-dl { display: grid; gap: 7px; margin: 0; }
+.wa-sofar-dl div { display: grid; grid-template-columns: minmax(6.5rem, 30%) minmax(0, 1fr); gap: 10px; }
+.wa-sofar-dl dt { padding-top: 3px; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.wa-sofar-dl dd { margin: 0; font-size: 0.95rem; line-height: 1.38; overflow-wrap: anywhere; }
+.wa-threads { display: grid; gap: 5px; margin: 0; padding: 0; list-style: none; }
+.wa-threads li { padding: 2px 0 2px 9px; font-size: 0.93rem; line-height: 1.38; border-left: 3px solid var(--zd-you-line); overflow-wrap: anywhere; }
+.wa-threads li.is-hostile { border-left-color: var(--zd-harm-line); }
+.wa-card .bd-label { margin: 0.3rem 0 0; }
+.wa-did-list { margin: 0; padding-left: 1.2rem; font-size: 0.93rem; line-height: 1.4; }
+.wa-back { margin: 2px 0 12px; }
+
+/* How it came to be, once the deck's done, by age. */
+.wa-story { display: grid; gap: 1.2rem; margin-top: 0.5rem; }
+.cc .wa-age h2 { margin: 0 0 0.55rem; padding: 0; background: none; font-size: 1.12rem; color: var(--zd-them-ink); }
+.wa-lines { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
+.wa-lines li { display: grid; grid-template-columns: 1.9rem minmax(0, 1fr); align-items: baseline; gap: 8px; }
+.wa-num { font-size: 0.74rem; font-weight: 800; text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wa-line { font-size: 1rem; line-height: 1.45; overflow-wrap: anywhere; }
+.wa-lines li.is-hers .wa-line { padding-left: 9px; border-left: 2px dashed var(--zd-them-line); }
+.wa-hers { display: block; margin-top: 2px; font-size: 0.8rem; font-style: italic; color: var(--zd-them-ink); }
+.wa-after { margin-top: 1.4rem; }
+.wa-way { margin-top: 0.6rem; padding: 14px; box-shadow: inset 3px 0 0 var(--zd-them-line); }
+.wa-way p { margin: 0 0 0.6rem; }
+.wa-way .cc-row { margin-bottom: 0; }
+.wk-fixed { margin-top: 1rem; }
+.wk-fixed .cc-row { margin: 0.6rem 0 0; }
+.wk-made { color: var(--zd-them-ink); }
+.wb-tok.is-mini .wk-tok { cursor: default; border-style: dashed; }
+
+@media (max-width: 359px) {
+  .wa-says { font-size: 1.12rem; }
+  .wa-ans { min-height: 56px; padding: 8px 6px; font-size: 0.94rem; }
+  .wa-card-in { padding: 12px 12px 4px; }
+  .wa-answers { padding: 10px; }
+  .wa-tile { width: 7.6rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wa-card, .wa-card.is-new, .wa-card.is-prompt.is-new, .wa-ans, .wa-idea, .wa-tile, .wa-ages li::after { animation: none !important; transition: none !important; }
+  .wa-tile.is-touch { transform: none; }
+  .wa-ans.is-left::before, .wa-ans.is-right::after { content: none; }
+}
+
+/* How it came to be (world-story.js), under the web on the World screen and
+   tab: an age to a fold on the GM's, each with its own Show the crew, and a
+   line that made a Secret marked as hers. A player reads the ages they've
+   been shown. */
+.ws-sec.is-new { animation: ws-lit 1.6s ease-out; }
+@keyframes ws-lit { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--zd-them) 55%, transparent); } 100% { box-shadow: 0 0 0 16px transparent; } }
+.cc .ws-age h3 { margin: 1rem 0 0.5rem; font-family: var(--display); font-weight: 600; font-size: 1.1rem; letter-spacing: 0.02em; color: var(--zd-them-ink); }
+.ws-age:first-of-type h3 { margin-top: 0.2rem; }
+.ws-lines { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; counter-reset: ws; }
+.ws-line { display: flex; align-items: flex-start; gap: 10px; padding: 2px 0 2px 11px; border-left: 3px solid var(--zd-them-line); }
+.ws-line-in { flex: 1 1 auto; min-width: 0; }
+.ws-text { margin: 0; font-size: 1rem; line-height: 1.45; overflow-wrap: anywhere; }
+.ws-line.is-hers { border-left-style: dashed; }
+.ws-hers { margin: 2px 0 0; font-size: 0.8rem; font-style: italic; color: var(--zd-them-ink); }
+.ws-change { flex: none; align-self: flex-start; min-height: 44px; margin-top: -10px; font-size: 0.88rem; }
+.ws-line.wb-editing { display: block; padding-left: 0; border-left: 0; }
+.ws-form textarea { width: 100%; }
+.ws-show { margin-bottom: 0.7rem; }
+@media (prefers-reduced-motion: reduce) { .ws-sec.is-new { animation: none; } }

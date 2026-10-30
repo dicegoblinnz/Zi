@@ -88,6 +88,7 @@ import { BAGS, CHECKS, STEPS, canDeal, cardsOf, choose, crewFits, dealRest, deal
 import { BMAX } from "../src/companion/world-record.js";
 import { MAX, PARTS, answer, current, deckOf, fillPrompt, finish, formedOf, historyOf, notThis, playRest, prompted, replay, startDeck, undo } from "../src/companion/world-deck.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
+import { linesOf } from "../src/companion/world-answer.js";
 
 const problems = [];
 const note = (p) => {
@@ -502,9 +503,30 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   yes(line.changed && doc.build.history.length === 1, "a line of history");
   same(forPlayer(doc).build, null, "and still nothing for a player till she shows it");
   run({ o: "wb-show", v: true });
-  same(forPlayer(doc).build, { history: [{ id: "age-one-1", text: "The river came up and took the low town.", age: 1 }], shown: true }, "once she's shown it, a player gets the history");
+  same(forPlayer(doc).build, { history: [{ id: "age-one-1", text: "The river came up and took the low town.", age: 1 }], shown: [1] }, "once she's shown it, a player gets the history");
   const seen = JSON.stringify(forPlayer(doc));
   yes(!seen.includes(W.seed) && !seen.includes("dealt") && !seen.includes(W.factions[0].type.text), "and never the seed or anything dealt");
+  // An age at a time (Mo's pick), and a line that made a Secret never leaves her phone.
+  run({ o: "wb-show", v: false });
+  same([doc.build.shown, forPlayer(doc).build], [[], null], "all of it hidden again");
+  run({ o: "wb-line", item: { id: "age-two-1", text: "The millers paid the toll, and never forgave the bridge.", age: 2 } });
+  run({ o: "wb-line", item: { id: "age-three-1", text: "The bell-founders paid the bridge every month to keep quiet.", age: 3, hers: true } });
+  run({ o: "wb-line", item: { id: "age-three-2", text: "The bridge men swore to get even with Isolde.", age: 3 } });
+  same(doc.build.history.map((l) => l.hers === true), [false, false, true, false], "a line can be hers");
+  const two = run({ o: "wb-show", age: 2, v: true });
+  same(forPlayer(doc).build?.history.map((l) => l.id), ["age-two-1"], "showing the crew one age gives them that age's lines");
+  run({ o: "wb-show", age: 3, v: true });
+  same(forPlayer(doc).build?.history.map((l) => l.id), ["age-two-1", "age-three-2"], "then the next, bar the line that's hers");
+  yes(!JSON.stringify(forPlayer(doc)).includes("keep quiet"), "so the Secret's line never reaches a player");
+  same(run({ o: "wb-show", age: 3, v: true }).changed, false, "an age shown twice is no change");
+  for (const op of two.back) apply(doc, op);
+  same(doc.build.shown, [], "and Undo puts what was shown back exactly");
+  run({ o: "wb-show", age: 2, v: true });
+  run({ o: "wb-show", age: 2, v: false });
+  same(doc.build.shown, [], "an age hidden again");
+  same(run({ o: "wb-show", age: 7, v: true }).changed, false, "an age there isn't is turned down");
+  for (const lid of ["age-two-1", "age-three-1", "age-three-2"]) run({ o: "wb-drop", lid });
+  run({ o: "wb-show", v: true });
   run({ o: "wb-edit", lid: "age-one-1", v: "The river rose." });
   same(doc.build.history[0].text, "The river rose.", "a line changed");
   const drop = run({ o: "wb-drop", lid: "age-one-1" });
@@ -519,7 +541,9 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   // Junk, tidied.
   const junk = blank();
   apply(junk, { o: "wb-set", b: { recipe: { region: "mars", era: "<b>x</b>", twist: 7 }, dials: { tense: 9, rich: 2 }, seed: "not a seed", dealt: "nope", history: [{ id: "BAD ID", text: "x" }, { id: "ok-1", text: "  a \u0000  b  " }, { id: "ok-1", text: "twice" }], shown: "yes" } });
-  same(junk.build, { recipe: { region: "", era: "", twist: null }, dials: { tense: 1, strange: 1, rich: 2, ruled: 1 }, seed: "", dealt: null, history: [{ id: "ok-1", text: "a b", age: 0 }], shown: false, at: 0 }, "junk in a record is tidied");
+  same(junk.build, { recipe: { region: "", era: "", twist: null }, dials: { tense: 1, strange: 1, rich: 2, ruled: 1 }, seed: "", dealt: null, history: [{ id: "ok-1", text: "a b", age: 0 }], shown: [], at: 0 }, "junk in a record is tidied");
+  apply(junk, { o: "wb-set", b: { history: [{ id: "ok-2", text: "Mine", age: 2, hers: "yes" }], shown: [3, 1, 1, "2", 9, -1, 1.5] } });
+  same([junk.build.shown, junk.build.history[0].hers], [[1, 2, 3], undefined], "and so are the ages shown and a line that isn't plainly hers");
   apply(junk, { o: "wb-set", b: { dealt: JSON.parse('{"__proto__": {"bad": 1}, "fine": [1, "two", {"three": null}]}') } });
   yes(!Object.prototype.hasOwnProperty.call(junk.build.dealt, "__proto__") && junk.build.dealt.bad === undefined && ({}).bad === undefined, "what was dealt can't reach past itself");
   same(junk.build.dealt.fine, [1, "two", { three: null }], "and keeps its plain words and numbers");
@@ -529,13 +553,20 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   same(apply(big, { o: "wb-set", b: { dealt: { a: Array.from({ length: 60 }, () => Array.from({ length: 60 }, () => "y".repeat(500))) } } }), false, "a record too big for a world is turned down");
   same(big.build, null, "whole, not kept without what was dealt");
   same(apply(blank(), { o: "wb-show", v: true }), false, "showing a history that isn't there changes nothing");
+  // A record sent whole by a phone that doesn't know which lines are hers (one
+  // on older code, adding a faction) can't make one of hers the crew's.
+  const keepHers = blank();
+  apply(keepHers, { o: "wb-set", b: { history: [{ id: "h-1", text: "The bell-founders paid the bridge to keep quiet.", age: 3, hers: true }, { id: "h-2", text: "The millers built the weir.", age: 1 }] } });
+  apply(keepHers, { o: "wb-set", b: { history: [{ id: "h-1", text: "The bell-founders paid the bridge to keep quiet.", age: 3 }, { id: "h-2", text: "The millers built the weir.", age: 1 }], shown: true } });
+  same(keepHers.build.history.map((l) => l.hers === true), [true, false], "a line that's hers stays hers when the record's sent whole without it");
+  same(forPlayer(keepHers).build?.history?.map((l) => l.id), ["h-2"], "so it never reaches a player");
   const W12 = dealWorld(T, { recipe: groups[0].recipe, seed: "tide-iron-rook", factions: 12 });
   const whole12 = blank();
   apply(whole12, { o: "wb-set", b: { recipe: W12.recipe, dials: W12.dials, seed: W12.seed, dealt: recordOf(W12) } });
   same(whole12.build.dealt, recordOf(W12), "a twelve-faction board's record is kept whole");
   const size12 = JSON.stringify({ o: "wb-set", b: whole12.build }).length;
   yes(size12 * 5 < BMAX.dealt * 3, `and it's well inside what a world holds (${size12} of ${BMAX.dealt})`);
-  console.log("4. the build's record: written whole, a line at a time, shown, undone, tidied, and kept from players");
+  console.log("4. the build's record: written whole, a line at a time, shown an age at a time, undone, tidied, and kept from players");
 }
 
 // 5. The dealing script.
@@ -1008,6 +1039,61 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     }
     yes(open > 0 && lasts > 0, `no deck had a prompt waiting (${open}) or a last card to pass over (${lasts})`);
   }
+  // A line's hers when its answer made a Secret: it's stamped on the card
+  // when it's answered, so a change to the tables can't make it the crew's,
+  // and a card the tables haven't got any more is hers to be safe.
+  {
+    let made = 0;
+    for (let s = 0; s < 30 && made < 5; s++) {
+      const W = start(T, { recipe: decks[s % decks.length].recipe, seed: `deck-hers-${s}`, factions: 6 });
+      startDeck(T, W);
+      playRest(T, W, rngOf(W.seed, "check-hers"));
+      const M = deckOf(T, W.recipe);
+      const L = linesOf(T, W);
+      for (const l of L) {
+        const c = W.deck.cards[l.pos];
+        const does = M.byId.get(c.m).answers[c.side].does.some((fx) => fx.k === "secret");
+        if (does) made++;
+        if (l.hers !== does || (c.secret === true) !== does) note(`${W.seed}: card ${l.pos + 1}'s line ${l.hers ? "is" : "isn't"} hers, stamped ${c.secret === true}, and its answer ${does ? "made" : "didn't make"} a Secret`);
+      }
+      const k = L.findIndex((l) => !l.hers);
+      if (k >= 0) {
+        const pos = L[k].pos;
+        W.deck.cards[pos].m = "not-in-the-tables";
+        delete W.deck.cards[pos].secret;
+        same(linesOf(T, W).find((l) => l.pos === pos)?.hers, true, `${W.seed}: a card the tables haven't got, with no stamp, is hers`);
+      }
+    }
+    yes(made >= 5, `only ${made} lines made a Secret in 30 decks`);
+  }
+  // A deck kept on her phone and picked up again after a reload (recordOf()
+  // and resume(), the way zi-make keeps it) plays on just the same.
+  {
+    let picked = 0;
+    for (let s = 0; s < 40; s++) {
+      const W = start(T, { recipe: decks[s % decks.length].recipe, seed: `deck-kept-${s}`, factions: 4 + (s % 9), crew: s % 3 ? { who: [{ k: "wren-kept01", name: "Wren" }], things: [] } : null });
+      startDeck(T, W);
+      const half = rngOf(W.seed, "check-kept");
+      for (let g = 0; g < 4 + (s % 12); g++) {
+        if (prompted(W)) {
+          fillPrompt(T, W, { skip: true });
+          continue;
+        }
+        if (!current(T, W)) break;
+        answer(T, W, half() < 0.5 ? 0 : 1);
+      }
+      try {
+        const K = resume(T, JSON.parse(JSON.stringify(recordOf(W))));
+        playRest(T, W, rngOf(W.seed, "check-kept-rest"));
+        playRest(T, K, rngOf(W.seed, "check-kept-rest"));
+        picked++;
+        same(JSON.stringify(recordOf(K)), JSON.stringify(recordOf(W)), `${W.seed}: a deck picked up again after a reload played on differently`);
+      } catch (err) {
+        note(`${W.seed}: a deck picked up again after a reload broke: ${err.message}`);
+      }
+    }
+    same(picked, 40, "every deck picked up again played to its end");
+  }
   // The dealing script plays a deck as text, the same for the same seed.
   {
     const run = () => execFileSync("node", ["scripts/deal-world.mjs", "--deck", "--region", "town", "--genre", "medieval", "--factions", "5", "--seed", "ash-lantern-ford"], { encoding: "utf8" });
@@ -1015,7 +1101,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     yes(one.includes("How it came to be") && one.includes("ash-lantern-ford"), "npm run deal -- --deck doesn't play a deck");
     same(run(), one, "the dealing script played the same seed two ways");
   }
-  console.log(`8. the deck: ${played} decks answered at random, ${replayed} played again, Not this one, Undo and the dealing script, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
+  console.log(`8. the deck: ${played} decks answered at random, ${replayed} played again, Not this one, Undo, decks picked up again after a reload and the dealing script, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
 }
 
 console.log(problems.length ? `\n${problems.length} problems` : "\nAll world engine checks passed");

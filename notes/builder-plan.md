@@ -27,6 +27,7 @@ Mo's calls (27, 28 and 30 Oct):
 - **As many cards as it takes** (30 Oct): enough for interesting dealings between the factions and to form each one whole, never a set number, and never a form filled in line by line. In Mo's words: "different card amount so it is not just 12 cards", and "it needs to help form the entire faction without it asking to fill out line by line".
 - **An answer can ask for a name or a detail** (30 Oct): a field to write in, with suggestions off the tables to tap, never filled in for her ("the suggestions needed will be recommended but it is not given").
 - **The deck comes next** (30 Oct), ahead of the founding, which uses it later.
+- **How it came to be's shown an age at a time** (30 Oct, stage 8): long ago, in living memory and this last year each have their own Show the crew, so this last year's agendas and grudges can wait till the crew's found things out, and a line whose answer made a Secret never leaves her phone.
 
 ## Calls Claude made
 
@@ -92,6 +93,11 @@ For Mo to say otherwise.
 - **Names come first at the end** (stage 7), so every line of history and every because reads with the names the factions end up with.
 - **A mini faction's Loyalty** (stage 7): core's `loyal` lines, its Loyalty thread toward the faction that made it.
 - **`/deal/` keeps every answer in the address** (stage 7), so a link plays the same deck, and a new deck goes into the browser's history so Back brings the last one back. Answer the rest at random takes either answer at even odds and a suggestion two times in three.
+- **The deck's the way after the ground** (stage 8): arriving there starts it, with Go faction by faction instead till the first answer, and Deal it all on the set up as it was. Once she's gone faction by faction, Answer the deck instead deals the factions again from who's who, a tap again, since what she's locked or written past it goes.
+- **The ground holds once the deck's played on it** (stage 8): once she's answered a card, the asking and the ground are what the cards were played on, so they stay as they are, while the deck's on and after it, with Start the deck again to change them. Before the first answer, a change there starts the deck again from them, and a new seat deals only who's who on it. The factions' own screens stay hers to change once the deck's done, round what it locked.
+- **Deal the rest on the deck's a tap again** (stage 8), since it ends the deck there. Undo's the build's own, the last 25 till a reload, and after a reload it plays the deck's last answer back off the deck itself. A tile opens its faction's card so far on the card's place, and the arrow keys answer a card too.
+- **The deck's last screen is How it came to be** (stage 8), and Next is the board. The faction screens come once it's done, a tap from the board. Done puts the mini factions the answers made on the board under their makers, and the record keeps the deck without the world it started from, so a big board fits.
+- **A line's hers when its answer made a Secret** (stage 8): it's stamped on the card when it's answered, marked on her phone, and it never reaches a player, whatever's shown, the tables change or a phone on older code sends. On the World screen she can change a line or take it out before she shows its age, and showing one tells the crew's phones to look again, the way a map does.
 
 ## How a stage goes
 
@@ -242,7 +248,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
    - `src/companion/world-deck.js` plays it on top of the engine, as the brief says: the factions dealt to what they are with the ground, then a card at a time for whatever's least formed in its age, each answer applied and written as history, chains, prompts with three suggestions, Not this one and Undo, and the end dealing the rest around what the answers made.
    - `/deal/` plays a deck a card at a time (tap an answer, or Answer the rest at random), with the history and the board filling in, and `npm run deal -- --deck` plays one at random as text.
    - A new part of `tests/check-world-engine.mjs` answers 200 decks at random in every region for every named genre the packs cover: every board passes the checks with fallbacks in under 1 board in 20, every faction's formed, how many cards it takes changes with the board and the answers, no card comes twice in a deck, every chain lands, every prompt has three suggestions, and the same seed and answers deal the same deck and board.
-8. **Building by answering.** Needs 7.
+8. **Building by answering.** Needs 7. *Built 30 Oct 2026.*
    - The deck on her phone in Build the world after the ground, beside going faction by faction and Deal it all, as the brief says: the card in one hand, swiped or tapped, the factions' tiles along the top filling in as they form, the prompt with its suggestions, Not this one, Undo and Deal the rest, then the board screen, the crew and Done, with the history into `doc.build`. Under reduce-motion the card doesn't tilt or fly, and the answers are taps.
    - How it came to be on the World screen, by age, hers to show the crew, and on the World tab once she has (`buildForPlayer()`).
    - A new part of `tests/check-accounts.mjs`: a world built by answering, with a prompt filled from a suggestion, one in her own words and one skipped, Not this one, Undo, the signal dropping and a reload halfway, Deal the rest, the crew and Done, then How it came to be shown to the crew, and on a player's phone only once it's shown.

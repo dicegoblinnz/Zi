@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d or 9e)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e or 9f)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -201,6 +201,33 @@
 //    on his page, the friend's thread toward the crew and not the foe's, and
 //    Mo's What the crew sees is the same. All of it passes axe at 390 in
 //    both themes, and at 320.
+//    9f. Building by answering (stage 8 of notes/builder-plan.md). Mo starts
+//    Friday Lair and Sam joins it with Wren. Build the world says the
+//    factions come out of a deck: Medieval at Town, six factions, the asking
+//    and the ground as they're dealt, then the deck, on a seed the engine
+//    says comes to three prompts (written into the build before it starts,
+//    so the check's the same whatever the tables deal). A tile opens its
+//    faction's card so far, Not this one deals another card and nothing
+//    else, and he answers a card at a time, taking the answer that asks
+//    something when there is one, the first with a swipe that tilts the
+//    card, fills its answer and lights up the factions it touches. The first prompt's a suggestion, then Undo
+//    takes the next answer back and the same card's up again, a reload
+//    carries on from the same card, the second prompt's in his own words,
+//    and the third's skipped, all with the signal gone after the reload. The
+//    ground stays as it is while the deck's on. Deal the rest ends it there,
+//    the board says How it came to be goes on hidden, the deck's last screen
+//    has every line by age, Wren gets a friend and a foe, and Done puts it
+//    on the board once he's back: the factions and any mini factions the
+//    answers made, the places, and the record with every line the engine
+//    says, hidden, a line that made a Secret marked hers, and which way each
+//    card went without the world it started from. Sam gets none of it. Mo
+//    shows the crew the age with a line that made a Secret: Sam's World
+//    screen and Wren's World tab get that age's other lines and nothing else,
+//    Mo changes a line and Sam reads the new words, and hiding it again takes
+//    it all off Sam's phone. The deck, a prompt, a card so far, its last
+//    screen and How it came to be on both phones pass axe at 390 in both
+//    themes, and the deck at 320, 360, 430 and 1280. Under reduce-motion the
+//    card stays put under a thumb.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -222,6 +249,9 @@ import { chromium } from "playwright";
 import { stepsToDice } from "../src/companion/dice.js";
 import { coveredShare, fogBits, fogFull, fogText, gridOf, spotCovered } from "../src/companion/maps.js";
 import { standingOf } from "../src/companion/board.js";
+import { newSeed, resume, rngOf } from "../src/companion/world-engine.js";
+import { answer, current, fillPrompt, finish, notThis, prompted, startDeck } from "../src/companion/world-deck.js";
+import { linesOf } from "../src/companion/world-answer.js";
 import { AxeBuilder } from "@axe-core/playwright";
 
 const problems = [];
@@ -3426,6 +3456,330 @@ try {
   await checkWeb(built);
   // ZI_UPTO=9e stops here.
   if (UPTO === "9e") break rest;
+
+  // ------------------------------------------------------------ 9f. building by answering
+  // Mo's rule for the deck: the answer that asks something when there is
+  // one, the first prompt a suggestion, the second his own words and the
+  // third skipped, after Not this one on the first card. The engine plays it
+  // on a seed, to find one that comes to three prompts.
+  const OWN = { name: "The Lantern Wives", person: "Old Hester Crane", place: "Gallow Ford", detail: "a chest of the old reeve's letters" };
+  function playPlan(T, rec, seed) {
+    const W = resume(T, JSON.parse(JSON.stringify({ ...rec, seed })));
+    startDeck(T, W);
+    const first = current(T, W);
+    if (first && !first.chain) notThis(T, W);
+    let prompts = 0;
+    let answers = 0;
+    let ideas = true;
+    for (let guard = 0; guard < 200 && prompts < 3; guard++) {
+      const o = prompted(W);
+      if (o) {
+        prompts++;
+        if (prompts === 1) ideas = o.ideas.length > 0;
+        fillPrompt(T, W, prompts === 1 ? { pick: 0 } : prompts === 2 ? { text: OWN[o.kind] ?? OWN.detail } : { skip: true });
+        continue;
+      }
+      const c = current(T, W);
+      if (!c) break;
+      const k = c.answers.findIndex((a) => a.prompt);
+      answer(T, W, k >= 0 ? k : 0);
+      answers++;
+    }
+    if (prompts < 3 || !ideas || answers < 4) return null;
+    finish(T, W);
+    const lines = linesOf(T, W);
+    const ages = new Set(lines.map((l) => l.age));
+    // An age with a line that made a Secret and one that didn't, to show the crew.
+    const mixed = lines.some((l) => l.hers && lines.some((x) => x.age === l.age && !x.hers));
+    return mixed && ages.size > 1 && W.checks?.every((c) => c.ok) ? { seed, W, lines, answers } : null;
+  }
+
+  async function checkAnswering() {
+    const worldOf = async (id) => JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", id))[0]?.data ?? "null");
+    const making = (page, id) => page.evaluate((c) => JSON.parse(localStorage.getItem("zi-make") || "null")?.k?.[c] ?? null, id);
+    const next = async (page) => {
+      await page.click('.bd-foot [data-do="mk-next"]');
+      await page.waitForTimeout(80);
+    };
+    const kicker = (page) => page.textContent(".wk-head .kicker");
+    const lead = (page) => page.textContent(".wk-head h1");
+    const T = JSON.parse(readFileSync("public/world-tables.json", "utf8"));
+    const themes = async (page, what, name) => {
+      for (const theme of ["dark", "light"]) {
+        await page.evaluate((t) => { localStorage.setItem("zi-theme", t); document.documentElement.dataset.theme = t; }, theme);
+        await axe(page, `${what}, ${theme}`);
+        await shot(page, `${name}-${theme}`);
+      }
+      await page.evaluate(() => { localStorage.setItem("zi-theme", "dark"); document.documentElement.dataset.theme = "dark"; });
+    };
+
+    // Mo starts Friday Lair, and Sam joins it with Wren.
+    const friday = (await got(mo.page, "POST", "/api/campaigns", { name: "Friday Lair" })).json?.campaign;
+    await api(sam.page, "PUT", "/api/characters/wren-ffffff", crewChar("wren-ffffff", "wren", "Wren"));
+    same((await got(sam.page, "POST", "/api/join", { code: friday.code, character: "wren-ffffff" })).json?.campaign?.role, "player", "Sam joins Friday Lair with Wren");
+    const deck = async () => (await making(mo.page, friday.id))?.W?.deck ?? null;
+    await mo.page.goto(`${BASE}/characters/?camp=${friday.id}`);
+    await mo.page.waitForSelector(".wb-tile-a");
+    await mo.page.click(".wb-tile-a");
+    await mo.page.waitForSelector(".wk-start");
+    has(await text(mo.page, ".wk-start"), "answer a deck of moments", "Build the world says the factions come out of a deck");
+    await mo.page.click('.wk-start [data-do="mk-start"][data-m="world"]');
+    await mo.page.waitForSelector(".wk-count");
+    await mo.page.click('[data-do="mk-set"][data-k="region"][data-v="town"]');
+    await mo.page.click('[data-do="mk-set"][data-k="genre"][data-v="medieval"]');
+    for (let k = 0; k < 2; k++) await mo.page.click('[data-do="mk-set"][data-k="n"][data-v="1"]');
+    same(await mo.page.textContent(".wk-count-n"), "6", "six factions");
+    await next(mo.page);
+    for (let k = 0; k < 11; k++) await next(mo.page);
+    has(await kicker(mo.page), "Seat 8 of 8", "the asking and the ground as they're dealt, to the last seat");
+    has(await text(mo.page, ".bd-foot"), "The deck", "and Next says the deck comes after the ground");
+
+    // A seed the engine says comes to three prompts, into the build before the deck starts.
+    const rec = (await making(mo.page, friday.id)).W;
+    yes(!rec.deck && rec.factions.every((f) => !f.type), "nothing's dealt of the factions before the deck");
+    let plan = null;
+    for (let k = 0; k < 400 && !plan; k++) plan = playPlan(T, rec, newSeed(T, rngOf("answering", k)));
+    yes(Boolean(plan), "a seed whose deck comes to three prompts");
+    if (!plan) return null;
+    await mo.page.evaluate(([c, seed]) => {
+      const st = JSON.parse(localStorage.getItem("zi-make"));
+      st.k[c].W.seed = seed;
+      localStorage.setItem("zi-make", JSON.stringify(st));
+    }, [friday.id, plan.seed]);
+    await mo.page.reload();
+    await mo.page.waitForSelector(".wk-head");
+    await next(mo.page);
+    await mo.page.waitForSelector("#wa-up.wa-card");
+    same(await lead(mo.page), "Long ago", "the deck starts long ago");
+    let D = await deck();
+    yes(D && D.pos === 0 && (await making(mo.page, friday.id)).W.factions.every((f) => f.type && f.size && f.seat && !f.method), "with who's who dealt, and nothing past it");
+    same(await mo.page.$$eval(".wa-tile", (els) => els.length), 6, "a tile for each faction");
+    same(await mo.page.$$eval("#wa-up .wa-ans", (els) => els.length), 2, "and a card with two answers");
+    yes((await text(mo.page, ".wa-ages")).includes("This last year"), "the three ages along the top");
+    await themes(mo.page, "the deck", "deck");
+    // A tile opens its faction's card so far, and Back to the card brings the card back.
+    const says = await text(mo.page, "#wa-up .wa-says");
+    await mo.page.click(".wa-tile >> nth=0");
+    await mo.page.waitForSelector("#wa-up.is-sofar");
+    has(await text(mo.page, "#wa-up"), "Still to come", "a tile opens its faction's card so far");
+    await axe(mo.page, "a faction's card so far");
+    await mo.page.click('#wa-up [data-do="mk-tile"][data-i="-1"]');
+    same(await text(mo.page, "#wa-up .wa-says"), says, "and Back to the card brings the same card back");
+    // Not this one: another card for the same need, and nothing else.
+    const firstUp = D.up?.m;
+    await mo.page.click('.wa-moves [data-do="mk-not"]');
+    D = await deck();
+    yes(D.up?.m && D.up.m !== firstUp && D.pos === 0 && D.nots.length === 1, "Not this one deals another card, and nothing else");
+
+    // A swipe, the way a thumb does it: the card leans, the answer it's
+    // leaning to fills and the factions that answer touches light up, then
+    // it flies off and that's the answer.
+    // One thumb on the card, start to finish, with a look partway (a touch
+    // has to stay with the one session that started it).
+    const thumb = async (dx, look) => {
+      const at = await mo.page.$eval("#wa-up", (el) => {
+        const r = el.getBoundingClientRect();
+        return { x: r.x + r.width / 2, y: r.y + r.height * 0.4 };
+      });
+      const cdp = await mo.page.context().newCDPSession(mo.page);
+      const send = async (type, points, wait = 16) => {
+        await cdp.send("Input.dispatchTouchEvent", { type, touchPoints: points.map(([x, y], id) => ({ x, y, id })) });
+        await mo.page.waitForTimeout(wait);
+      };
+      await send("touchStart", [[at.x, at.y]]);
+      await send("touchMove", [[at.x + dx * 0.1, at.y + 2]]);
+      await send("touchMove", [[at.x + dx * 0.32, at.y + 4]], 80);
+      const seen = await look();
+      await send("touchMove", [[at.x + dx * 0.65, at.y + 6]]);
+      await send("touchMove", [[at.x + dx, at.y + 8]]);
+      await send("touchEnd", [], 450);
+      await cdp.detach();
+      return seen;
+    };
+    const swipe = async (side) => {
+      const lean = await thumb(side ? 190 : -190, () => mo.page.evaluate(() => ({ side: document.querySelector("#wa-up .wa-ans.is-lean")?.dataset.side ?? null, lit: document.querySelectorAll(".wa-tile.is-touch").length, tilt: document.querySelector("#wa-up")?.style.transform ?? "" })));
+      same([lean.side, lean.lit > 0, lean.tilt.includes("rotate")], [String(side), true, true], "leaning the card tilts it, fills its answer and lights the factions it touches");
+    };
+
+    // He answers a card at a time, taking the answer that asks something when there's one.
+    let prompts = 0;
+    let undone = false;
+    let reloaded = false;
+    let swiped = false;
+    for (let guard = 0; guard < 220 && prompts < 3; guard++) {
+      if (await mo.page.$("#wa-up.is-prompt")) {
+        prompts++;
+        if (prompts === 1) {
+          await axe(mo.page, "a prompt on the deck");
+          await shot(mo.page, "deck-prompt");
+          const idea = (await text(mo.page, ".wa-idea >> nth=0")).trim();
+          await mo.page.click(".wa-idea >> nth=0");
+          D = await deck();
+          same(D.log.at(-1).prompt, { pick: 0 }, `the first prompt filled from a suggestion (${idea})`);
+        } else if (prompts === 2) {
+          const kind = (await deck()).open?.kind;
+          await mo.page.fill(".wa-own input", OWN[kind] ?? OWN.detail);
+          await mo.page.click('.wa-own button[type="submit"]');
+          D = await deck();
+          same(D.log.at(-1).prompt, { text: OWN[kind] ?? OWN.detail }, "the second in his own words");
+        } else {
+          await mo.page.click('[data-do="mk-skip"]');
+          D = await deck();
+          same(D.log.at(-1).prompt, { skip: true }, "and the third skipped");
+        }
+        continue;
+      }
+      const side = await mo.page.$$eval("#wa-up .wa-ans", (els) => Math.max(0, els.findIndex((el) => el.dataset.prompt)));
+      const was = await deck();
+      if (!swiped) {
+        swiped = true;
+        await swipe(side);
+        await until(async () => (await deck())?.pos === was.pos + 1, "a swipe answering the card");
+        same((await deck()).log.at(-1)?.side, side, "and it's the answer it was swiped to");
+      } else await mo.page.click(`#wa-up .wa-ans[data-side="${side}"]`);
+      D = await deck();
+      if (D.pos !== was.pos + 1) note(`an answer didn't go in (card ${was.pos + 1})`);
+      // After the first prompt: Undo takes the next answer back, and the same card's up again.
+      if (prompts === 1 && !undone) {
+        undone = true;
+        await mo.page.click('.wa-moves [data-do="mk-undo"]');
+        D = await deck();
+        same([D.pos, D.up?.m, D.open], [was.pos, was.up?.m, null], "Undo takes the answer back, and the same card's up again");
+        await mo.page.click(`#wa-up .wa-ans[data-side="${side}"]`);
+      } else if (undone && !reloaded) {
+        // Halfway, a reload carries on from the same card, then the signal goes.
+        reloaded = true;
+        const before = await text(mo.page, "#wa-up");
+        await mo.page.reload();
+        await mo.page.waitForSelector("#wa-up");
+        same(await text(mo.page, "#wa-up"), before, "a reload halfway carries on from the same card");
+        await mo.context.setOffline(true);
+        // The ground stays as it is while the deck's on.
+        await mo.page.click('.bd-foot [data-do="mk-back"]');
+        await mo.page.waitForSelector(".wk-fixed");
+        has(await text(mo.page, ".wk-fixed"), "start the deck again", "back on the ground, it says the deck's playing on it");
+        same(await mo.page.$$eval('button.wk-card[data-p^="seat:"]', (els) => els.length), 0, "and its seat's cards can't be changed");
+        await mo.page.click('.wk-fixed [data-do="mk-go"][data-s="deck"]');
+        await mo.page.waitForSelector("#wa-up");
+        same(await text(mo.page, "#wa-up"), before, "Back to the deck, on the same card");
+      }
+    }
+    same(prompts, 3, "three prompts on the way");
+    D = await deck();
+    same(D.pos, plan.answers, "the phone played the deck the engine said it would");
+    for (const [width, height] of [[320, 640], [360, 740], [430, 932], [1280, 900]]) {
+      await mo.page.setViewportSize({ width, height });
+      await axe(mo.page, `the deck, ${width} wide`);
+    }
+    await mo.page.setViewportSize({ width: 390, height: 844 });
+    // Under reduce-motion the card stays put under a thumb, and the answers are taps.
+    // (No reload, with no signal: a tile and back draws the card again.)
+    await mo.page.emulateMedia({ reducedMotion: "reduce" });
+    await mo.page.click(".wa-tile >> nth=0");
+    await mo.page.click('#wa-up [data-do="mk-tile"][data-i="-1"]');
+    await mo.page.waitForSelector("#wa-up.wa-card[data-swipe]");
+    same(await thumb(190, () => mo.page.$eval("#wa-up", (el) => el.style.transform)), "", "under reduce-motion the card doesn't follow a thumb");
+    same((await deck()).pos, D.pos, "and a drag doesn't answer it");
+    await mo.page.emulateMedia({ reducedMotion: "no-preference" });
+
+    // Deal the rest ends the deck there, a tap again.
+    await mo.page.click('.bd-foot [data-do="mk-rest"]');
+    has(await text(mo.page, ".bd-foot"), "Tap again", "Deal the rest asks for a tap again on the deck");
+    await mo.page.click('.bd-foot [data-do="mk-rest"]');
+    await mo.page.waitForSelector(".wk-ties");
+    same(await lead(mo.page), "The board", "then the board");
+    let e = await making(mo.page, friday.id);
+    yes(e.W.deck.finished && e.W.checks?.every((c) => c.ok), "the deck's ended and the rest's dealt, and the checks pass");
+    has(await text(mo.page, ".wk"), "all hidden from the crew till you show them an age at a time", "the board says How it came to be goes on hidden");
+    await mo.page.click('.wk [data-do="mk-go"][data-s="deck"]');
+    await mo.page.waitForSelector(".wa-story");
+    same(await lead(mo.page), "How it came to be", "the deck's last screen is How it came to be");
+    const told = await mo.page.$$eval(".wa-lines li", (els) => els.length);
+    same(told, plan.lines.length, "a line for every answer");
+    yes((await mo.page.$$(".wa-lines li.is-hers")).length > 0, "a line that made a Secret's marked as staying on his phone");
+    await themes(mo.page, "the deck's last screen", "deck-end");
+    await next(mo.page);
+    same(await lead(mo.page), "The board", "Next from the deck's last screen is the board");
+    await mo.page.click(".bd-jump summary");
+    await mo.page.click('.bd-jumps [data-s="seat:0"]');
+    has(await text(mo.page, ".wk-fixed"), "were played on these", "once the deck's done, the ground still holds, since the cards were played on it");
+    await mo.page.click(".bd-jump summary");
+    await mo.page.click('.bd-jumps [data-s="board"]');
+    await mo.page.waitForSelector(".wk-ties");
+
+    // Wren's friend and foe, with no signal.
+    await next(mo.page);
+    has(await kicker(mo.page), "The crew", "then the crew");
+    same(await lead(mo.page), "Wren", "Wren");
+    const wren = e.W.crew.who.find((c) => c.k === "wren-ffffff");
+    const madeSides = ["friend", "foe"].filter((side) => wren?.[side]?.made != null);
+    for (const side of madeSides) has(await text(mo.page, ".wk"), `Card ${wren[side].made + 1} of the deck made this one`, `the deck made Wren's ${side}, and the screen says so`);
+    const free = ["friend", "foe"].find((side) => !madeSides.includes(side));
+    if (free) await mo.page.click(`.wk-card[data-p="crew:wren-ffffff:${free}"][aria-pressed="false"]`);
+    e = await making(mo.page, friday.id);
+    const W = resume(T, e.W);
+    const want = linesOf(T, W).map((l) => ({ text: l.text, age: l.age, hers: l.hers }));
+    same(want.map((l) => [l.age, l.hers]), plan.lines.map((l) => [l.age, l.hers]), "the lines the engine said, by age, with the ones that are hers");
+    const minis = (e.W.minis ?? []).length;
+    await mo.page.click('.bd-foot [data-do="mk-done"]');
+    await mo.page.waitForSelector(".wb-toks");
+    same((await worldOf(friday.id))?.factions?.length ?? 0, 0, "nothing on the server with no signal");
+    await mo.context.setOffline(false);
+    await until(async () => (await worldOf(friday.id))?.build?.seed === plan.seed, "Friday Lair's world on the server once Mo's back", 12000);
+    const fw = await worldOf(friday.id);
+    same([fw.factions.filter((f) => !f.mini).length, fw.factions.filter((f) => f.mini).length, fw.pages.length], [6, minis, 8], "six factions, the mini factions the answers made and eight places");
+    yes(fw.factions.filter((f) => f.mini).every((f) => fw.factions.some((x) => x.id === f.parent && !x.mini)), "each mini faction under the faction that made it");
+    same(fw.build.history.map((l) => ({ text: l.text, age: l.age, hers: l.hers === true })), want, "How it came to be, every line as the engine has it");
+    same(fw.build.shown, [], "all of it hidden");
+    yes(fw.build.dealt.deck?.cards?.length === plan.answers && fw.build.dealt.deck.base === null, "the record keeps which way each card went, without the world it started from");
+    const sw = (await got(sam.page, "GET", `/api/campaigns/${friday.id}/world`)).json;
+    same(sw?.world?.build, null, "Sam gets none of it");
+
+    // How it came to be on Mo's World screen: an age at a time.
+    const hersAge = want.find((l) => l.hers && want.some((x) => x.age === l.age && !x.hers)).age;
+    const AGE = { 1: "Long ago", 2: "In living memory", 3: "This last year" };
+    await mo.page.goto(`${BASE}/characters/?camp=${friday.id}&world`);
+    await mo.page.waitForSelector(".ws-sec");
+    same(await mo.page.$$eval(".ws-sec details", (els) => els.length), new Set(want.map((l) => l.age)).size, "How it came to be has a fold for each age");
+    await mo.page.click(`details[data-open="wb-hist-${hersAge}"] > summary`);
+    await themes(mo.page, "How it came to be, the GM's", "story-gm");
+    await mo.page.click(`details[data-open="wb-hist-${hersAge}"] [data-do="hist-show"]`);
+    await until(async () => JSON.stringify((await worldOf(friday.id))?.build?.shown) === JSON.stringify([hersAge]), `${AGE[hersAge]} shown to the crew`);
+    const theirs = want.filter((l) => l.age === hersAge && !l.hers).map((l) => l.text);
+    const not = want.filter((l) => l.age !== hersAge || l.hers).map((l) => l.text);
+    same((await got(sam.page, "GET", `/api/campaigns/${friday.id}/world`)).json?.world?.build?.history?.map((l) => l.text), theirs, "Sam's phone gets that age's lines, bar the one that made a Secret");
+    for (const at of [`/characters/?camp=${friday.id}&world`, "/characters/?c=wren-ffffff&t=world"]) {
+      if (at.includes("&t=")) {
+        await sam.page.goto(`${BASE}/characters/`);
+        await until(async () => (await text(sam.page, "#app")).includes("Friday Lair"), "Sam's phone has Friday Lair in its campaigns");
+      }
+      await sam.page.goto(`${BASE}${at}`);
+      await sam.page.waitForSelector(".ws-sec");
+      const page = await text(sam.page, ".ws-sec");
+      yes(theirs.every((t) => page.includes(t.replace(/'/g, "’"))) && not.every((t) => !page.includes(t.replace(/'/g, "’"))), `Sam reads that age and nothing else (${at.includes("&t=") ? "Wren's World tab" : "the World screen"})`);
+    }
+    await themes(sam.page, "How it came to be, Sam's", "story-sam");
+    // Mo changes a line, and Sam reads the new words.
+    const first = fw.build.history.find((l) => l.age === hersAge && !l.hers);
+    await mo.page.click(`details[data-open="wb-hist-${hersAge}"] [data-do="hist-edit"][data-lid="${first.id}"]`);
+    await mo.page.fill(".ws-form textarea", "The ferry-master's daughter ran off with the bell-founder's son.");
+    await mo.page.click('.ws-form button[type="submit"]');
+    await until(async () => (await worldOf(friday.id))?.build?.history?.some((l) => l.id === first.id && l.text.startsWith("The ferry-master")), "Mo's words for the line on the server");
+    await sam.page.goto(`${BASE}/characters/?camp=${friday.id}&world`);
+    await sam.page.waitForSelector(".ws-sec");
+    has(await text(sam.page, ".ws-sec"), "ran off with the bell-founder", "and Sam reads them");
+    // Hidden again, it's off Sam's phone.
+    await mo.page.click(`details[data-open="wb-hist-${hersAge}"] [data-do="hist-show"]`);
+    await until(async () => (await worldOf(friday.id))?.build?.shown?.length === 0, "hidden from the crew again");
+    same((await got(sam.page, "GET", `/api/campaigns/${friday.id}/world`)).json?.world?.build, null, "and Sam's phone gets none of it again");
+    await sam.page.reload();
+    await sam.page.waitForSelector(".wb-sec");
+    same(await sam.page.$(".ws-sec"), null, "nothing of How it came to be on Sam's World screen");
+  }
+  console.log("9f. Building by answering");
+  await checkAnswering();
+  // ZI_UPTO=9f stops here.
+  if (UPTO === "9f") break rest;
 
   // ------------------------------------------------------------ 10. who can do what
   console.log("10. Who can do what");

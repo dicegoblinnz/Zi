@@ -16,6 +16,8 @@
 // The world builder (world-make.js) is off the World screen too: Build the
 // world on an empty board and Add a faction on any board, on its own screen
 // (&make=world or &make=add), and Done puts what it dealt on the board here.
+// A world built by answering the deck comes with How it came to be
+// (world-story.js), under the web, which she shows the crew an age at a time.
 //
 // A faction she brought in from the book remembers the book's card as it was,
 // so when the book changes it she gets a note and picks: take the book's
@@ -33,6 +35,7 @@ import { die as kitDie, mini as kitMini } from "../kit/kit.js";
 import { makePlaces } from "./places.js";
 import { makeMaps } from "./mapsui.js";
 import { makeWorldMake } from "./world-make.js";
+import { makeStory } from "./world-story.js";
 import { drawWeb, keyOf as webKey, webOf } from "./world-web.js";
 import { forgetMapsOf, keepMapsOf } from "./mapcache.js";
 
@@ -149,7 +152,8 @@ export function makeWorld(d) {
     }
     const pages = P.news(id, was, now);
     const maps = M.news(id, was, now);
-    return { said: [...said, ...pages.said, ...maps.said], keys: [...keys, ...pages.keys, ...maps.keys] };
+    const told = S.news(id, was, now);
+    return { said: [...said, ...pages.said, ...maps.said, ...told.said], keys: [...keys, ...pages.keys, ...maps.keys, ...told.keys] };
   }
 
   function take(id, k, got) {
@@ -613,6 +617,7 @@ export function makeWorld(d) {
     if (kind.startsWith("w-pg-")) return P.submit(kind, form, f, id);
     if (kind.startsWith("w-map-")) return M.submit(kind, form, f, id);
     if (kind.startsWith("w-mk-")) return K.submit(kind, form, f, id);
+    if (kind === "w-hist") return S.submit(kind, form, f, id);
     const doc = docOf(id);
     const fac = form.dataset.f ? find(doc, form.dataset.f) : null;
     const text = (name, max = MAX.line) => String(f.get(name) ?? "").replace(/\s+/g, " ").trim().slice(0, max);
@@ -779,7 +784,17 @@ export function makeWorld(d) {
   });
   // The world builder (world-make.js): its screens, and its way in on the board.
   const K = makeWorldMake({ d, esc, sync, edit, docOf, isGm, newId, plural, status: (id) => status(id) });
-  Object.assign(ACT, P.ACT, M.ACT, K.ACT);
+  // How it came to be (world-story.js), under the web.
+  const S = makeStory({
+    d, esc, edit, docOf, isGm, gmName, plural, fold,
+    richFor: (id, doc) => P.richFor(id, doc),
+    ui: () => ui,
+    setEditing: (k) => {
+      ui.editing = k;
+    },
+    lit: (id) => lit[id] ?? [],
+  });
+  Object.assign(ACT, P.ACT, M.ACT, K.ACT, S.ACT);
 
   // The crew's own card, at the top of the board: the party sheet's.
   function crewCard(id) {
@@ -898,7 +913,7 @@ export function makeWorld(d) {
     const list = order.length ? `<ul class="wb-toks">${order.map((f) => token(id, f, doc, gm)).join("")}</ul>` : "";
     const say = status(id);
     if (!gm) {
-      const none = !k.at && online() ? '<p class="cc-lead">Opening the board…</p>' : !order.length ? `<p class="cc-lead">${esc(gmName(id))} hasn’t shown you any of the world yet. The factions you find out about show up here, with whatever you’ve found out about each one.</p>` : "";
+      const none = !k.at && online() ? '<p class="cc-lead">Opening the board…</p>' : !order.length ? `<p class="cc-lead">${esc(gmName(id))} hasn’t shown you any of the ${doc.build?.history?.length ? "factions" : "world"} yet. The factions you find out about show up here, with whatever you’ve found out about each one.</p>` : "";
       return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${crewCard(id)}${list}${none}`;
     }
     const shownCount = doc.factions.filter((f) => f.shown.card).length;
@@ -1173,7 +1188,7 @@ export function makeWorld(d) {
       <header class="cc-camp-head wb-head"><p class="kicker${gm ? " is-gm" : ""}">The world</p><h1>${esc(nameOf(v.id))}</h1>${gm ? "" : `<p class="cc-small">What ${esc(gmName(v.id))}’s shown the crew so far.</p>`}</header>
       ${d.turnSection?.(v.id) ?? ""}
       <section class="cc-sec wb-sec" data-wb="${esc(v.id)}" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(v.id)}</section>
-      ${webSection(v.id)}${P.sections(v.id)}${M.section(v.id)}${gm ? "" : unlit(v.id)}`;
+      ${webSection(v.id)}${S.section(v.id)}${P.sections(v.id)}${M.section(v.id)}${gm ? "" : unlit(v.id)}`;
   }
   // What's just been shown lights up once, then it's like the rest.
   function unlit(id) {
@@ -1188,7 +1203,7 @@ export function makeWorld(d) {
     return `<div class="wb-tab" data-wb="${esc(id)}"><p class="cc-small pt-where">${esc(ch.name)} plays in <a href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">${esc(nameOf(id))}</a>. This is what ${esc(gmName(id))}’s shown the crew of its world.</p>
       ${d.turnSection?.(id) ?? ""}
       <section class="cc-sec wb-sec" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(id)}</section>
-      ${webSection(id)}${P.sections(id)}${M.section(id)}${unlit(id)}</div>`;
+      ${webSection(id)}${S.section(id)}${P.sections(id)}${M.section(id)}${unlit(id)}</div>`;
   }
 
   // The way in from the campaign's page, with a glance at the board.
