@@ -6,8 +6,8 @@
    live on the pins (mapview.css), so they stay one size. Dogtown's wall is
    ember, since it's the one border that shoots back. */
 /* The sea's on the map's box too, which a world's shows past its edge. */
-.dm, .wn-mapbox { --dm-sea: #0b0812; }
-:root[data-theme="light"] .dm, :root[data-theme="light"] .wn-mapbox { --dm-sea: #d9d3e4; }
+.dm, .wn-mapbox, .wm-stage.is-drawn { --dm-sea: #0b0812; }
+:root[data-theme="light"] .dm, :root[data-theme="light"] .wn-mapbox, :root[data-theme="light"] .wm-stage.is-drawn { --dm-sea: #d9d3e4; }
 .dm {
   --dm-wave: rgba(181, 150, 245, 0.1);
   --dm-land: #17111e;
@@ -103,3 +103,6 @@
 /* Past a world's edge, zoomed right out on a phone, is more of its sea
    rather than the map box's grey. */
 .wn-mapbox:has(.dm.is-world) { background: var(--dm-sea); }
+/* In a campaign (stage 14) a whole world's drawn map has its sea past its
+   edge too. */
+.wm-stage.is-drawn:has(.dm.is-world) { background: var(--dm-sea); }
