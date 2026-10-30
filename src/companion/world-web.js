@@ -88,6 +88,28 @@ export function webOf(nodes, threads) {
   return { nodes: out, threads: threads.filter((t) => t.from !== t.to && pts.has(t.from) && pts.has(t.to)), pts, n };
 }
 
+// A web too big for one ring on a phone (a whole city's) goes a faction's
+// ties at a time: the faction, everyone it's got a thread with either way,
+// and the threads between them, with it first. With crew, the crew comes in
+// too when the faction's got a thread toward it, and the crew's own ties are
+// every faction with a thread toward it. The faction with the most threads
+// goes first when nothing's picked.
+export function busiestOf(data) {
+  const count = (id) => data.threads.filter((t) => t.from === id || t.to === id).length;
+  return [...data.nodes].sort((a, b) => count(b.id) - count(a.id))[0]?.id ?? null;
+}
+export function tiesOf(data, focus, { crew = false } = {}) {
+  const near = new Set([focus]);
+  for (const t of data.threads) {
+    if (t.from === focus && (t.to !== "crew" || crew)) near.add(t.to);
+    if (t.to === focus) near.add(t.from);
+  }
+  const nodes = [data.nodes.find((n) => n.id === focus), ...data.nodes.filter((n) => n.id !== focus && near.has(n.id))]
+    .filter(Boolean)
+    .map((n) => ({ ...n, mini: n.mini && near.has(n.parent), parent: near.has(n.parent) ? n.parent : null }));
+  return { nodes, threads: data.threads.filter((t) => near.has(t.from) && near.has(t.to)) };
+}
+
 // The lines: a faction's threads toward another (or the crew) by kind, two
 // the same kind going both ways being one line with no arrow, and lines
 // between the same two bowing apart, every line between two factions

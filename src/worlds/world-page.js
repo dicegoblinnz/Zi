@@ -9,7 +9,7 @@
 
 import { die, esc } from "../kit/kit.js";
 import { diceLabel, stepsToDice } from "../companion/dice.js";
-import { drawWeb, keyOf as webKey, webOf } from "../companion/world-web.js";
+import { busiestOf, drawWeb, keyOf as webKey, tiesOf, webOf } from "../companion/world-web.js";
 import { linker, mentionsOf } from "../companion/pages.js";
 import { drawMap } from "./draw-map.js";
 
@@ -167,25 +167,9 @@ export function webData(world) {
   return { nodes, threads };
 }
 
-// A whole city's web is too many factions for one ring on a phone, so the
-// page draws one faction's ties at a time: the faction, everyone it's got a
-// thread with either way, and the threads between them, with it at the top.
-// The faction with the most threads goes first.
-export function busiestOf(data) {
-  const count = (id) => data.threads.filter((t) => t.from === id || t.to === id).length;
-  return [...data.nodes].sort((a, b) => count(b.id) - count(a.id))[0]?.id ?? null;
-}
-export function tiesOf(data, focus) {
-  const near = new Set([focus]);
-  for (const t of data.threads) {
-    if (t.from === focus && t.to !== "crew") near.add(t.to);
-    if (t.to === focus) near.add(t.from);
-  }
-  const nodes = [data.nodes.find((n) => n.id === focus), ...data.nodes.filter((n) => n.id !== focus && near.has(n.id))]
-    .filter(Boolean)
-    .map((n) => ({ ...n, mini: n.mini && near.has(n.parent), parent: near.has(n.parent) ? n.parent : null }));
-  return { nodes, threads: data.threads.filter((t) => near.has(t.from) && near.has(t.to)) };
-}
+// A whole city's web, a faction's ties at a time (world-web.js has them, since
+// a campaign with a whole world in it walks its web the same way).
+export { busiestOf, tiesOf };
 
 // The web around one faction, and what goes under it. Tapping another
 // faction in it walks the web to that one's ties.

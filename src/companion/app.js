@@ -188,7 +188,7 @@ const table = makeTable({
 // A campaign's world, starting with the faction board (world.js): the World
 // screen off a campaign's page, and the World tab of a character in one.
 const world = makeWorld({
-  sync, esc, W: DATA.worlds, icon: ICON,
+  sync, esc, W: DATA.worlds, wholes: DATA.wholes ?? [], icon: ICON,
   // The faction turn, at the top of the World screen and tab (turn.js).
   turnSection: (id) => turn.section(id),
   // The founding, at the top of a player's World tab (found.js).

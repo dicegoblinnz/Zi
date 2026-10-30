@@ -23,6 +23,12 @@
 // so when the book changes it she gets a note and picks: take the book's
 // changes, or keep hers. Typo fixes go in quietly.
 //
+// A whole world (stage 14 of notes/builder-plan.md, world-whole.js) comes in
+// on an empty world, Mo's account alone for now: Night City or Abnu, its
+// factions, places, people, drawn map and How it came to be, all hidden. Its
+// cards remember the world's file the way the book's do, and its file's
+// fetched when she brings it in or a note needs it.
+//
 //   zi-world  for the account signed in on this phone: this phone's own id
 //             (dev), the number of its last change, and for each campaign
 //             its board as the Worker last sent it and any changes still to go
@@ -36,11 +42,14 @@ import { makePlaces } from "./places.js";
 import { makeMaps } from "./mapsui.js";
 import { makeWorldMake } from "./world-make.js";
 import { makeStory } from "./world-story.js";
-import { drawWeb, keyOf as webKey, webOf } from "./world-web.js";
+import { busiestOf, drawWeb, keyOf as webKey, tiesOf, webOf } from "./world-web.js";
+import { cardNow, wholeOps } from "./world-whole.js";
 import { forgetMapsOf, keepMapsOf } from "./mapcache.js";
 
 const KEY = "zi-world";
 const POLL = 15000;
+// Past this many factions the web goes a faction's ties at a time.
+const WALK = 16;
 const SIZES = [2, 4, 6, 8, 10, 12];
 
 const read = (key) => {
@@ -74,6 +83,12 @@ const STANDING = { friendly: "Friendly to the crew", business: "Does business wi
 export function makeWorld(d) {
   const { esc, sync } = d;
   const W = d.W ?? { boards: [], build: { what: [], how: [], agendas: [] }, sizes: [], assets: [], link: "" };
+  // The whole worlds there are (worlds-index.json, built with the site), and
+  // each one's file once it's been fetched.
+  const WH = d.wholes ?? [];
+  const wholeIn = (from) => WH.find((x) => x.id === from) ?? null;
+  const files = new Map();
+  const fetching = new Map();
   let st = null;
   let ui = { editing: "", sure: "", note: "" };
   const undos = [];
@@ -291,6 +306,14 @@ export function makeWorld(d) {
   addEventListener("storage", (e) => {
     if (e.key === KEY) st = null;
   });
+  // Whose ties a big web's showing, picked from its list.
+  document.addEventListener("change", (e) => {
+    const pick = e.target.closest?.("select[data-wwpick]");
+    if (!pick) return;
+    webOf$(pick.dataset.wwpick).sel = pick.value || null;
+    d.render();
+    requestAnimationFrame(() => document.querySelector(`#app select[data-wwpick]`)?.focus({ preventScroll: true }));
+  });
   // Back online, everything that's waiting goes up, from any campaign.
   addEventListener("online", () => {
     load();
@@ -345,14 +368,58 @@ export function makeWorld(d) {
     };
   }
   const boardOf = (from) => W.boards.find((b) => b.id === from) ?? null;
-  const bookCard = (f) => boardOf(f.book?.from)?.cards.find((c) => c.key === f.book.key) ?? null;
+
+  // A whole world's file, fetched once and kept in memory, or null if it
+  // can't be had (no signal, or it's not a world there is).
+  function loadWhole(from) {
+    if (files.has(from)) return Promise.resolve(files.get(from));
+    if (!wholeIn(from)) return Promise.resolve(null);
+    if (!fetching.has(from)) {
+      const job = fetch(`/worlds/${encodeURIComponent(from)}.json`, { cache: "no-cache" })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((j) => {
+          if (j?.id !== from || !Array.isArray(j.factions)) return null;
+          files.set(from, j);
+          return j;
+        })
+        .catch(() => null)
+        .finally(() => fetching.delete(from));
+      fetching.set(from, job);
+    }
+    return fetching.get(from);
+  }
+  // For a note: the file if it's here, and on its way if it isn't, with the
+  // screen drawn again once it is.
+  function wholeFile(from) {
+    if (files.has(from)) return files.get(from);
+    if (wholeIn(from) && online() && !fetching.has(from)) {
+      loadWhole(from).then((j) => {
+        if (!j) return;
+        if (watching && isGm(watching)) quietBook(watching);
+        d.quietRender();
+      });
+    }
+    return null;
+  }
+
+  // The card as the book has it now, or as its whole world's file does, with
+  // the file's threads pointed at the factions she brought in with it.
+  function bookCard(f, doc) {
+    if (!f.book) return null;
+    if (!wholeIn(f.book.from)) return boardOf(f.book.from)?.cards.find((c) => c.key === f.book.key) ?? null;
+    const now = cardNow(wholeFile(f.book.from), f.book.key);
+    if (!now) return null;
+    const ids = new Map(doc.factions.filter((x) => x.book?.from === f.book.from).map((x) => [x.book.key, x.id]));
+    return { ...now, threads: (now.threads ?? []).map((t) => ({ ...t, to: ids.get(t.to) ?? null })) };
+  }
 
   // What the book's changed on a card she brought in, since she brought it in
   // (or last looked): each change in words, and the changes to her card that
   // take it. A typo fix is quiet, and only goes in where her words are still
   // the book's old ones.
-  function bookNews(f) {
-    const now = bookCard(f);
+  function bookNews(f, doc) {
+    const now = bookCard(f, doc);
+    const whole = Boolean(wholeIn(f.book?.from));
     // A phone on an older build than the one that last saw the card says nothing.
     if (!now || !f.book || now.h === f.book.h || (now.at ?? 0) < (f.book.at ?? 0)) return null;
     const was = f.book.was;
@@ -360,7 +427,7 @@ export function makeWorld(d) {
     const quiet = [];
     const realOps = [];
     const quietOps = [];
-    for (const [k, label] of [["name", "Its name"], ["want", "Want"], ["face", "Face"], ["secret", "Its Secret"], ["more", "The rest of its Secret"], ["note", "The book’s note"]]) {
+    for (const [k, label] of [["name", "Its name"], ["about", "What it is"], ["want", "Want"], ["face", "Face"], ["secret", "Its Secret"], ["more", "The rest of its Secret"], ["note", whole ? "The note" : "The book’s note"]]) {
       const a = was[k] ?? "";
       const b = now[k] ?? "";
       if (keyOf(a) === keyOf(b) && a === b) continue;
@@ -372,7 +439,7 @@ export function makeWorld(d) {
         if (f[k] !== b && (k !== "name" || b)) realOps.push({ o: "set", id: f.id, f: k, v: b });
       }
     }
-    const LIST_NAMES = { res: "Resources", assets: "Assets", agendas: "Agendas", pub: "Public Sentiment", mor: "Morale", loy: "Loyalty", threads: "Threads toward the crew" };
+    const LIST_NAMES = { res: "Resources", assets: "Assets", agendas: "Agendas", pub: "Public Sentiment", mor: "Morale", loy: "Loyalty", threads: whole ? "Threads" : "Threads toward the crew" };
     for (const l of Object.keys(LIST_NAMES)) {
       const a = was[l] ?? [];
       const b = now[l] ?? [];
@@ -399,8 +466,9 @@ export function makeWorld(d) {
         said.push(`<em>${esc(y.text)}</em> new`);
         if (!mine.some((m) => keyOf(m.text) === keyOf(y.text))) {
           const base = { id: newId(), ...y };
-          const it = l === "res" ? { ...base, left: y.x } : l === "assets" ? { ...base, left: y.x, off: false } : l === "agendas" ? { ...base, done: false } : l === "threads" ? { ...base, to: "crew" } : base;
-          realOps.push({ o: "add", id: f.id, l, item: it });
+          // A thread toward a faction she's taken off the board can't go on.
+          const it = l === "res" ? { ...base, left: y.x } : l === "assets" ? { ...base, left: y.x, off: false } : l === "agendas" ? { ...base, done: false } : l === "threads" ? (y.to === null ? null : { ...base, to: y.to ?? "crew" }) : base;
+          if (it) realOps.push({ o: "add", id: f.id, l, item: it });
         }
       }
       // The same line, changed: a multiplier, what it does, whether it adds
@@ -433,7 +501,7 @@ export function makeWorld(d) {
     const doc = docOf(id);
     const ops = [];
     for (const f of doc.factions) {
-      const news = bookNews(f);
+      const news = bookNews(f, doc);
       if (news && !news.real.length) ops.push(...news.quietOps, news.book);
     }
     ops.push(...P.quiet(doc));
@@ -475,6 +543,26 @@ export function makeWorld(d) {
       }
       if (doc.factions.length + cards.length > MAX.factions) return d.toast(`That’s more than the ${MAX.factions} factions a board holds. Take some off first.`, false);
       edit(id, cards.map((c) => ({ o: "new", f: fromCard(c, b.id) })), `${cards.map((c) => bare(c.name)).join(", ").replace(/, ([^,]*)$/, " and $1")} ${cards.length === 1 ? "is" : "are"} on the board. Nothing’s shown to the crew yet.`);
+    },
+    // A whole world, in one go, everything hidden: its file's fetched first,
+    // and Undo on the note takes it all back off.
+    async whole(el, id) {
+      const x = wholeIn(el.dataset.w);
+      if (!x || !isMo() || ui.whole) return;
+      if (!emptyWorld(docOf(id))) return d.toast("A whole world goes into an empty one. Take what’s in this one out first.", false);
+      if (!files.has(x.id) && !online()) return d.toast("You’ll need a signal to bring it in.", false);
+      ui.whole = x.id;
+      d.render();
+      const file = await loadWhole(x.id);
+      ui.whole = "";
+      if (!file) {
+        d.render();
+        return d.toast("It didn’t come through. Try again in a moment.", false);
+      }
+      if (!emptyWorld(docOf(id))) return d.render();
+      const { ops, counts } = wholeOps(file, newId);
+      const what = [plural(counts.factions, "faction", "factions"), counts.places ? plural(counts.places, "place", "places") : "", counts.people ? plural(counts.people, "person", "people") : "", counts.pins ? "its map" : ""].filter(Boolean);
+      edit(id, ops, `${bare(x.title)}’s in: ${what.join(", ")} and How it came to be, all hidden from the crew.`);
     },
     show(el, id) {
       const f = find(docOf(id), el.dataset.f);
@@ -551,10 +639,11 @@ export function makeWorld(d) {
       if (edit(id, [{ o: "gone", id: f.id }], `${bare(f.name)}’s off the board.${minisOf(doc, f.id).length ? " Its mini factions stay, on their own now." : ""}`)) d.go(`/characters/?camp=${encodeURIComponent(id)}&world`, { replace: true });
     },
     book(el, id) {
-      const f = find(docOf(id), el.dataset.f);
-      const news = f ? bookNews(f) : null;
+      const doc = docOf(id);
+      const f = find(doc, el.dataset.f);
+      const news = f ? bookNews(f, doc) : null;
       if (!news) return d.render();
-      if (el.dataset.take === "1") edit(id, [...news.quietOps, ...news.realOps, news.book], `${bare(f.name)} has the book’s changes now.`);
+      if (el.dataset.take === "1") edit(id, [...news.quietOps, ...news.realOps, news.book], `${bare(f.name)} has ${wholeIn(f.book?.from) ? "its" : "the book’s"} changes now.`);
       else edit(id, [...news.quietOps, news.book], `${bare(f.name)} stays the way you’ve got it.`);
     },
     // Building a Faction's tables, rolled into the form for a new faction.
@@ -588,7 +677,8 @@ export function makeWorld(d) {
     // The web: a faction (or the crew) tapped for its threads, again to let it go.
     web(el, id) {
       const w = webOf$(id);
-      w.sel = w.sel === el.dataset.n ? null : el.dataset.n;
+      // Walking a big web, a tap always walks to that faction's ties.
+      w.sel = w.sel === el.dataset.n && !w.walking ? null : el.dataset.n;
       d.render();
     },
     // The GM's web, all of it or just what the crew's been shown.
@@ -753,6 +843,10 @@ export function makeWorld(d) {
   // taps and forms going through here too.
   const M = makeMaps({
     d, esc, edit, docOf, isGm, camp, gmName, status, online, newId, bare, plural, fold, topbar,
+    // A faction's Power as dice, and a whole world's name, for the web on a
+    // map and a drawn map's list of pins.
+    powerDice: (f) => powerDice(f),
+    wholeIn,
     ui: () => ui,
     setSure: (k) => {
       ui.sure = k;
@@ -775,6 +869,9 @@ export function makeWorld(d) {
     lit: (id) => lit[id] ?? [],
     unlit: (id) => unlit(id),
     onMaps: (id, to) => M.onMaps(id, to),
+    // A whole world's file and name, for the note when it changes a page.
+    wholeIn,
+    wholeFile: (from) => wholeFile(from),
     // The book's places and people have reached the phone: typo fixes go in,
     // and the screen's drawn again with them.
     bookLoaded: () => {
@@ -855,7 +952,13 @@ export function makeWorld(d) {
     const known = (f) => all || f.shown.power;
     const nodes = facs.map((f) => ({ id: f.id, name: f.name, dice: known(f) ? powerDice(f) : null, mini: f.mini, parent: f.parent, hidden: all && !f.shown.card }));
     const threads = facs.flatMap((f) => f.threads.map((t) => ({ from: f.id, to: t.to, kind: t.kind, s: t.s, text: t.text })));
-    const L = webOf(nodes, threads);
+    // Past sixteen factions (a whole city's, brought in) one ring's too much
+    // for a phone, so it goes a faction's ties at a time, the way /worlds/
+    // draws it: the busiest first, then whichever's picked or tapped.
+    const walking = nodes.length > WALK;
+    w.walking = walking;
+    if (walking && !w.sel) w.sel = busiestOf({ nodes, threads });
+    const L = walking ? (({ nodes: n, threads: t }) => webOf(n, t))(tiesOf({ nodes, threads }, w.sel, { crew: true })) : webOf(nodes, threads);
     const c = d.crewIn(id);
     const crewName = c.name || "The crew";
     const count = (fid) => L.threads.filter((t) => t.from === fid || t.to === fid).length;
@@ -867,7 +970,8 @@ export function makeWorld(d) {
       label: (nd) => `${nd.name}${nd.hidden ? ", hidden from the crew" : ""}, ${plural(count(nd.id), "thread", "threads")}`,
       crew: { name: crewName, dice: crewDice(c.steps), label: `${crewName}, ${plural(count("crew"), "thread toward it", "threads toward it")}` },
     });
-    return webShell(id, gm, w, `${pic}${webPanel(id, doc, w.sel, all, crewName, nodes.some((x) => x.hidden))}`);
+    const pick = walking ? `<label class="cc-field ww-pick">Whose ties <select data-wwpick="${esc(id)}"><option value="crew"${w.sel === "crew" ? " selected" : ""}>${esc(crewName)}</option>${[...facs].sort((a, b) => a.name.replace(/^The /, "").localeCompare(b.name.replace(/^The /, ""))).map((f) => `<option value="${esc(f.id)}"${w.sel === f.id ? " selected" : ""}>${esc(f.name)}${all && !f.shown.card ? " (hidden)" : ""}</option>`).join("")}</select></label>` : "";
+    return webShell(id, gm, w, `${pick}${pic}${webPanel(id, doc, w.sel, all, crewName, nodes.some((x) => x.hidden))}`);
   }
   function webShell(id, gm, w, body) {
     const seg = gm ? `<div class="ww-seg" role="group" aria-label="Whose web"><button type="button" class="ww-seg-b" data-act="w" data-do="web-crew" data-v="0" aria-pressed="${!w.crew}">Everything</button><button type="button" class="ww-seg-b" data-act="w" data-do="web-crew" data-v="1" aria-pressed="${w.crew}">What the crew sees</button></div>` : "";
@@ -919,10 +1023,35 @@ export function makeWorld(d) {
     const shownCount = doc.factions.filter((f) => f.shown.card).length;
     const lead = order.length
       ? `<p class="cc-small wb-sum">${plural(doc.factions.length, "faction", "factions")} on the board, ${shownCount ? `${shownCount} shown to the crew` : "none of them shown to the crew yet"}.</p>`
-      : '<p class="cc-lead">Nothing on the board yet. Build the world from the tables, bring in a board from the book, or start with a faction of your own. Nothing on it shows on your players’ phones till you show it to them.</p>';
+      : `<p class="cc-lead">Nothing on the board yet. Build the world from the tables, bring in ${isMo() && emptyWorld(doc) ? "a whole world or " : ""}a board from the book, or start with a faction of your own. Nothing on it shows on your players’ phones till you show it to them.</p>`;
     return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${lead}${order.length ? "" : K.entry(id, doc)}${crewCard(id)}${list}${order.length ? K.entry(id, doc) : ""}
-      <div class="cc-folds wb-adds">${bringFold(id, doc)}${newFold(id, doc)}</div>
+      <div class="cc-folds wb-adds">${wholeFold(id, doc)}${bringFold(id, doc)}${newFold(id, doc)}</div>
       <p class="cc-small">${ruleLink("s-faction-board", "What a faction is")} ${ruleLink("s-faction-build", "Building a faction")}</p>`;
+  }
+
+  // A whole world into an empty one (stage 14 of notes/builder-plan.md):
+  // Mo's account alone for now, since he judges each one first and Night
+  // City's fan-made (the Worker turns its cards down from anyone else too).
+  const isMo = () => sync.me?.role === "admin";
+  const emptyWorld = (doc) => !doc.factions.length && !doc.pages.length && !doc.maps.length;
+  function wholeFold(id, doc) {
+    if (!isMo() || !WH.length || !emptyWorld(doc)) return "";
+    const cards = WH.map((x) => {
+      const what = [plural(x.factions, "faction", "factions"), x.places ? plural(x.places, "place", "places") : "", x.people ? plural(x.people, "person", "people") : "", x.map ? "a map" : ""].filter(Boolean);
+      const busy = ui.whole === x.id;
+      return `<li class="wb-bring card wb-whole"><p class="wb-k">${x.own ? "Your own world" : "Fan-made"}</p><h4>${esc(x.title)}</h4><p>${esc(x.when)}</p>
+        <p class="cc-small">${esc(`${what.slice(0, -1).join(", ")} and ${what.at(-1)}, with How it came to be.`)}</p>
+        <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="whole" data-w="${esc(x.id)}"${ui.whole ? " disabled" : ""}>${busy ? "Bringing it in…" : "Bring it in"}</button></div></li>`;
+    }).join("");
+    return fold("whole", "Bring in a whole world", WH.map((x) => x.name).join(" and "), `<p class="cc-lead">It comes in whole and running: every faction with its web, the places and people, the map and How it came to be, all of it hidden from the crew till you show them, and yours to change. Only your account can bring these in for now.</p>${online() ? "" : '<p class="cc-small">You’ll need a signal to bring one in.</p>'}<ul class="wb-brings">${cards}</ul>`);
+  }
+  // The line saying whose a fan-made world is, and the companies' notices, at
+  // the foot of its World screen and tab. A player gets the world's id once
+  // they've been shown any of it (buildForPlayer()).
+  function whoseFoot(id) {
+    const x = wholeIn(docOf(id).build?.world);
+    if (!x || x.own || !x.whose) return "";
+    return `<footer class="wb-whose"><p>${esc(x.whose)}</p>${(x.notices ?? []).map((n) => `<p class="wb-notice">${esc(n)}</p>`).join("")}</footer>`;
   }
 
   function bringFold(id, doc) {
@@ -1066,10 +1195,11 @@ export function makeWorld(d) {
       <button type="button" class="button${f.shown.card ? "" : " primary"}" data-act="w" data-do="show" data-f="${esc(f.id)}" data-p="card" aria-pressed="${f.shown.card}">${f.shown.card ? "Hide it from the crew" : `Show the crew ${esc(f.name)}`}</button></div>` : "";
 
     // The book's changed it since she brought it in.
-    const news = gm ? bookNews(f) : null;
-    const bookNote = news?.real.length ? `<div class="cc-note is-gold wb-book" role="status"><p><b>The book’s changed ${esc(f.name)} since you brought it in.</b></p><ul>${news.real.map((x) => `<li>${x}</li>`).join("")}</ul>
-      <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="book" data-f="${esc(f.id)}" data-take="1">Take the book’s changes</button><button type="button" class="button" data-act="w" data-do="book" data-f="${esc(f.id)}" data-take="0">Keep mine</button></div>
-      <p class="cc-small">Taking them only changes what the book changed. Your ticks, threads and agendas’ dice stay where play’s put them.</p></div>` : "";
+    const news = gm ? bookNews(f, doc) : null;
+    const from = wholeIn(f.book?.from);
+    const bookNote = news?.real.length ? `<div class="cc-note is-gold wb-book" role="status"><p><b>${from ? `There’s been a change to ${esc(f.name.replace(/^The /, "the "))} in ${esc(from.title)} since you brought it in.` : `The book’s changed ${esc(f.name)} since you brought it in.`}</b></p><ul>${news.real.map((x) => `<li>${x}</li>`).join("")}</ul>
+      <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="book" data-f="${esc(f.id)}" data-take="1">${from ? "Take the changes" : "Take the book’s changes"}</button><button type="button" class="button" data-act="w" data-do="book" data-f="${esc(f.id)}" data-take="0">Keep mine</button></div>
+      <p class="cc-small">Taking them only changes what ${from ? "changed" : "the book changed"}. Your ticks, threads and agendas’ dice stay where play’s put them.</p></div>` : "";
 
     const parts = [];
     const powerAssets = f.assets.filter((a) => a.power);
@@ -1188,7 +1318,7 @@ export function makeWorld(d) {
       <header class="cc-camp-head wb-head"><p class="kicker${gm ? " is-gm" : ""}">The world</p><h1>${esc(nameOf(v.id))}</h1>${gm ? "" : `<p class="cc-small">What ${esc(gmName(v.id))}’s shown the crew so far.</p>`}</header>
       ${d.foundSection?.(v.id) ?? ""}${d.turnSection?.(v.id) ?? ""}
       <section class="cc-sec wb-sec" data-wb="${esc(v.id)}" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(v.id)}</section>
-      ${webSection(v.id)}${S.section(v.id)}${P.sections(v.id)}${M.section(v.id)}${gm ? "" : unlit(v.id)}`;
+      ${webSection(v.id)}${S.section(v.id)}${P.sections(v.id)}${M.section(v.id)}${whoseFoot(v.id)}${gm ? "" : unlit(v.id)}`;
   }
   // What's just been shown lights up once, then it's like the rest.
   function unlit(id) {
@@ -1203,7 +1333,7 @@ export function makeWorld(d) {
     return `<div class="wb-tab" data-wb="${esc(id)}"><p class="cc-small pt-where">${esc(ch.name)} plays in <a href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">${esc(nameOf(id))}</a>. This is what ${esc(gmName(id))}’s shown the crew of its world.</p>
       ${d.foundSection?.(id) ?? ""}${d.turnSection?.(id) ?? ""}
       <section class="cc-sec wb-sec" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(id)}</section>
-      ${webSection(id)}${S.section(id)}${P.sections(id)}${M.section(id)}${unlit(id)}</div>`;
+      ${webSection(id)}${S.section(id)}${P.sections(id)}${M.section(id)}${whoseFoot(id)}${unlit(id)}</div>`;
   }
 
   // The way in from the campaign's page, with a glance at the board.

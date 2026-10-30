@@ -21,6 +21,7 @@
 // world.js hands it.
 import { PLISTS, PMAX, findPage, linker, mentionsOf, pageCardOf } from "./pages.js";
 import { findMap } from "./maps.js";
+import { cardNow } from "./world-whole.js";
 import { typo } from "./marks.js";
 import { die as kitDie, mini as kitMini, tag as kitTag } from "../kit/kit.js";
 
@@ -63,8 +64,10 @@ export function makePlaces(w) {
       });
     return null;
   }
-  // The book's version of a page she brought in, as it is now.
+  // The book's version of a page she brought in, as it is now, or its whole
+  // world's (stage 14 of notes/builder-plan.md), once the world's file is here.
   function bookCard(p) {
+    if (p.book && w.wholeIn(p.book.from)) return cardNow(w.wholeFile(p.book.from), p.book.key, "page");
     const B = BOOK;
     if (!B || !p.book) return null;
     if (p.book.from === "bestiary") return B.threats.find((t) => t.key === p.book.key) ?? null;
@@ -163,6 +166,21 @@ export function makePlaces(w) {
       if (news && !news.real.length) ops.push(...news.quietOps, news.book);
     }
     return ops;
+  }
+
+  // What a place is on a whole world's drawn map, when it's one of the
+  // map's districts or cities: what the world calls them (Abnu's a Land and a
+  // City, Night City's a District). A part that's only called a part is a
+  // place like any other.
+  function areaWord(doc, p) {
+    for (const m of doc.maps ?? []) {
+      if (!m.draw) continue;
+      const pin = m.pins.find((x) => x.area && x.to?.k === "p" && x.to.id === p.id);
+      if (!pin) continue;
+      const word = m.draw.areas?.[pin.area]?.[0] ?? pin.area;
+      return word === "part" ? "" : word.charAt(0).toUpperCase() + word.slice(1);
+    }
+    return "";
   }
 
   // What's new for a player: a page they've just been shown, or a part of one.
@@ -434,7 +452,7 @@ export function makePlaces(w) {
         ${p.aka.length ? `<p class="cc-small wp-aka">Also called ${p.aka.map((a) => esc(a)).join(", ")}</p>` : ""}
         ${gm ? reword(wordsKey, place ? "Change its name and what it says" : "Change their name and what it says") : ""}`;
     const card = gm || p.look || p.aka.length || (p.ch > 0 && chShown);
-    const head = `<header class="cc-camp-head wb-head"><p class="kicker is-gm">${place ? "Place" : "Person"}</p><h1>${esc(p.name)}</h1>${p.line ? `<p class="wp-line">${L.rich(p.line, p.id)}${place && !/[.?!”]$/.test(p.line) ? "." : ""}</p>` : ""}</header>
+    const head = `<header class="cc-camp-head wb-head"><p class="kicker is-gm">${place ? areaWord(doc, p) || "Place" : "Person"}</p><h1>${esc(p.name)}</h1>${p.line ? `<p class="wp-line">${L.rich(p.line, p.id)}${place && !/[.?!”]$/.test(p.line) ? "." : ""}</p>` : ""}</header>
       ${card ? `<div class="wb-card card wp-card" data-glow="${w.lit(id).includes(p.id) ? "1" : ""}">
         ${p.ch > 0 && chShown ? `<div class="wb-card-top"><div class="wb-card-die" role="img" aria-label="${chLabel(p.ch)}">${kitDie(dieOf(p.ch), { own: "them", hide: true })}</div><div class="wb-card-p"><p class="wb-k">Challenge</p><p class="wb-card-v">${p.ch}, a d${dieOf(p.ch)}</p></div></div>` : ""}
         ${words}</div>` : ""}`;
@@ -443,9 +461,10 @@ export function makePlaces(w) {
 
     const onTable = gm && place && d.scene ? `<div class="wb-show wp-table"><p>When the crew’s here, its ground, stakes and scene clock go on the live table, face up on every phone.</p><button type="button" class="button" data-act="w" data-do="pscene" data-id="${esc(p.id)}">${sure(`pscene-${p.id}`, "Tap again to put it in place of what’s there", "Put it on the table")}</button></div>` : "";
     const nw = gm ? pageNews(p) : null;
-    const bookNote = nw?.real.length ? `<div class="cc-note is-gold wb-book" role="status"><p><b>The book’s changed ${esc(p.name)} since you brought ${place ? "it" : "them"} in.</b></p><ul>${nw.real.map((x) => `<li>${x}</li>`).join("")}</ul>
-      <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="pbook" data-id="${esc(p.id)}" data-take="1">Take the book’s changes</button><button type="button" class="button" data-act="w" data-do="pbook" data-id="${esc(p.id)}" data-take="0">Keep mine</button></div>
-      <p class="cc-small">Taking them only changes what the book changed, and leaves what you’ve written alone.</p></div>` : "";
+    const whole = p.book ? w.wholeIn(p.book.from) : null;
+    const bookNote = nw?.real.length ? `<div class="cc-note is-gold wb-book" role="status"><p><b>${whole ? `There’s been a change to ${esc(p.name.replace(/^The /, "the "))} in ${esc(whole.title)} since you brought it in.` : `The book’s changed ${esc(p.name)} since you brought ${place ? "it" : "them"} in.`}</b></p><ul>${nw.real.map((x) => `<li>${x}</li>`).join("")}</ul>
+      <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="pbook" data-id="${esc(p.id)}" data-take="1">${whole ? "Take the changes" : "Take the book’s changes"}</button><button type="button" class="button" data-act="w" data-do="pbook" data-id="${esc(p.id)}" data-take="0">Keep mine</button></div>
+      <p class="cc-small">Taking them only changes what ${whole ? "changed" : "the book changed"}, and leaves what you’ve written alone.</p></div>` : "";
 
     const parts = [];
     const B = BOOK;
@@ -483,7 +502,7 @@ export function makePlaces(w) {
     const ment = mentionsOf(doc, p);
     const elsewhere = ment.length ? `<section class="cc-sec wp-ment" aria-labelledby="wp-ment-h"><h2 id="wp-ment-h">Where else ${place ? "it comes" : "they come"} up</h2><ul class="wp-ment-list">${ment.map((m) => `<li><a class="pt-reword" href="${esc(href(id, m))}" data-act="w" data-do="nav">${esc(m.name)}</a> <small>${m.kind === "f" ? "Faction" : m.page.kind === "place" ? "Place" : "Person"}</small></li>`).join("")}</ul></section>` : "";
 
-    const from = gm && p.book ? (p.book.from === "bestiary" ? "the Bestiary" : "Twenty Places") : "";
+    const from = gm && p.book ? (whole ? whole.title : p.book.from === "bestiary" ? "the Bestiary" : "Twenty Places") : "";
     const fromCard = gm && p.book ? bookCard(p) : null;
     const hiddenParts = !gm && PART[p.kind].some((k) => !p.shown[k]);
     const end = gm ? `<section class="cc-sec" aria-labelledby="wp-off"><h2 id="wp-off" class="sr-only">Taking it off</h2>${from ? `<p class="cc-small">From ${from}.${fromCard?.link ? ` <a class="pt-reword" href="${esc(fromCard.link)}">Read it in the book</a>` : ""}</p>` : ""}

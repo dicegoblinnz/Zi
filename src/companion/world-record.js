@@ -7,7 +7,7 @@
 // the ages of it she's shown them, never a line that's hers, and never the
 // seed or anything dealt.
 //
-// The record: { recipe, dials, seed, dealt, history, shown, at }
+// The record: { recipe, dials, seed, dealt, history, shown, at, world? }
 //   recipe   { region, era, twist }, by their ids in the tables
 //   dials    { tense, strange, rich, ruled }, each 0 to 2
 //   seed     its three words, like ash-lantern-ford
@@ -20,6 +20,10 @@
 //            made a Secret) never leaves her phone, even with its age shown.
 //   shown    the ages the crew's been shown, each a tap of hers (Mo's pick,
 //            30 Oct), like [1, 2]
+//   world    the whole world it came in with (stage 14), like night-city-2077,
+//            whose record has its recipe and history and nothing dealt. A
+//            player gets it once they've been shown anything at all, for the
+//            line saying whose it is
 //
 // A change (its o starts with "wb-"):
 //   { o: "wb-set", b }           the record, whole (Done writes it in one go,
@@ -54,6 +58,7 @@ const whole = (v, lo, hi, or) => {
   return Number.isInteger(n) && n >= lo && n <= hi ? n : or;
 };
 const tableId = (v) => (typeof v === "string" && v.length <= 24 && TABLE_ID.test(v) ? v : null);
+const worldId = (v) => (typeof v === "string" && v.length <= 40 && TABLE_ID.test(v) ? v : null);
 // The ages a history can have, in the order they're read, and which of them
 // the crew's been shown: a list, each once and in order. An old record's true
 // was all of it.
@@ -100,6 +105,7 @@ export function buildOf(raw) {
     history: (Array.isArray(raw.history) ? raw.history : []).map(lineOf).filter((x) => x && !seen.has(x.id) && seen.add(x.id)).slice(0, BMAX.lines),
     shown: showsOf(raw.shown),
     at: whole(raw.at, 0, Number.MAX_SAFE_INTEGER, 0),
+    ...(worldId(raw.world) ? { world: raw.world } : {}),
   };
 }
 
@@ -187,10 +193,12 @@ export function undoBuild(doc, op) {
 }
 
 // All a player gets of it: the lines of the ages she's shown them, bar any
-// that's hers, and which ages those are.
+// that's hers, and which ages those are, and the whole world it came in
+// with once they've been shown anything in it.
 export function buildForPlayer(doc) {
   const b = doc.build;
   const shown = new Set(b?.shown ?? []);
   const history = (b?.history ?? []).filter((l) => !l.hers && shown.has(l.age)).map(({ id, text, age }) => ({ id, text, age }));
-  return history.length ? { history, shown: [...new Set(history.map((l) => l.age))].sort((x, y) => x - y) } : null;
+  const world = b?.world && ((doc.factions ?? []).some((f) => f.shown?.card) || (doc.pages ?? []).some((p) => p.shown?.page) || (doc.maps ?? []).some((m) => m.shown)) ? b.world : null;
+  return history.length || world ? { history, shown: [...new Set(history.map((l) => l.age))].sort((x, y) => x - y), ...(world ? { world } : {}) } : null;
 }

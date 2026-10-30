@@ -28,9 +28,27 @@
 // crew ever gets of a map under the fog, with the fog it was made with, so
 // what's under the fog never reaches their phones, not even in the picture.
 // A pin she's shown stays off their phones till its spot's uncovered.
-import { MMAX, coveredShare, findMap, fogBits, fogFull, fogText, labelOf, shownToCrew, spotCovered, targetOf } from "./maps.js";
+//
+// A drawn map (stage 14 of notes/builder-plan.md) comes in with a whole
+// world, its shapes kept in the world, so every phone draws it (draw-map.js)
+// at twice its numbers, the way /worlds/ does, with no picture to fetch or
+// keep. Under the fog there's no crew's picture to make: their phones draw
+// her fog solid over the drawing. A place in a city on a whole world's map
+// tucks behind the city's name till there's room, and the map opens on the
+// pin it says (Abnu's capital) or on the middle of the town.
+//
+// The web on a map (stage 14): the Web switch above the zoom puts each
+// faction on the pin that opens it, or on the pin of the place it sits at,
+// fanned out where a few share one, faint till one's tapped, then its ties
+// lit. A faction that isn't on the map waits in a strip along the bottom. A
+// player's is whatever mapsForPlayer() says sits where, so it's only the
+// factions and pins they've been shown.
+import { MMAX, coveredShare, findMap, fogBits, fogFull, fogText, labelOf, shownToCrew, sittersOf, spotCovered, targetOf } from "./maps.js";
 import { findPage } from "./pages.js";
 import { makeViewer } from "./mapview.js";
+import { drawMap, middleOf } from "../worlds/draw-map.js";
+import { linesOf, tiesOf } from "./world-web.js";
+import { die as kitDie } from "../kit/kit.js";
 import { CACHE } from "./mapcache.js";
 import { crewCanvas, drawFog, rub } from "./fog.js";
 
@@ -55,7 +73,11 @@ const MARK = {
   undo: svg('<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>'),
   big: svg('<circle cx="12" cy="12" r="7" fill="currentColor" stroke="none"/>'),
   small: svg('<circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/>'),
+  web: svg('<circle cx="6" cy="7" r="2.3"/><circle cx="18" cy="6" r="2.3"/><circle cx="12" cy="18" r="2.3"/><path d="M8.3 6.8 15.7 6.2M16.9 8 13 15.9M7.1 9.1l3.8 6.9"/>'),
 };
+// A drawn map's laid out at twice its numbers, so a phone in as close as it
+// goes still draws it sharp.
+const DRAWN = 2;
 // How wide a thumb rubs the fog, on the screen.
 const BRUSH = { big: 34, small: 13 };
 
@@ -247,11 +269,20 @@ export function makeMaps(w) {
     const shownN = m.pins.filter((p) => p.shown).length;
     const glance = m.pins.length ? `${plural(m.pins.length, "pin", "pins")}${gm ? `, ${shownN ? `${shownN} shown to the crew` : "none shown yet"}` : ""}` : "No pins yet";
     const src = m.key ? addr(id, m, true) : "";
-    const pic = urls.has(src) ? `<img src="${urls.get(src)}" alt="">` : `<span class="wm-thumb-mark">${MARK.map}</span>`;
+    const pic = m.draw ? thumbDrawn(m) : urls.has(src) ? `<img src="${urls.get(src)}" alt="">` : `<span class="wm-thumb-mark">${MARK.map}</span>`;
     const badge = gm ? `<span class="wb-k"><span class="wb-badge${m.shown ? " is-on" : ""}">${m.shown ? "Shown" : "Hidden"}</span>${m.fog ? '<span class="wb-badge is-fog">Fog</span>' : ""}</span>` : "";
     return `<li class="wm-tok${lit ? " is-new" : ""}"><a class="card wm-tok-a" href="${esc(mapHref(id, m))}" data-act="w" data-do="nav">
       <span class="wm-thumb" data-thumb="${esc(src)}"${m.fog ? ` data-fog="${esc(`${id}:${m.id}`)}"` : ""}>${pic}</span>
       <span class="wm-tok-in">${badge}<b class="wm-tok-n">${esc(m.name)}</b><span class="wm-tok-w">${glance}</span></span></a></li>`;
+  }
+
+  // A drawn map's small picture is the drawing itself, filling the box, made
+  // once for each map.
+  const thumbsDrawn = new Map();
+  function thumbDrawn(m) {
+    const k = `${m.id}:${m.w}x${m.h}`;
+    if (!thumbsDrawn.has(k)) thumbsDrawn.set(k, drawMap({ ...m.draw, size: [m.w, m.h] }, { uid: `wmt-${m.id}` }).replace('preserveAspectRatio="xMidYMid meet"', 'preserveAspectRatio="xMidYMid slice"'));
+    return thumbsDrawn.get(k);
   }
 
   function section(id) {
@@ -488,7 +519,7 @@ export function makeMaps(w) {
   const fogKey = (id, mid) => `${id}:${mid}`;
   // Whether the crew's picture is behind the fog she's rubbed. All of it
   // covered needs no picture, since the crew sees none of it.
-  const behind = (m) => Boolean(m?.fog && m.fog.c !== fogFull(m.w, m.h) && m.fog.crew?.c !== m.fog.c);
+  const behind = (m) => Boolean(m?.fog && !m.draw && m.fog.c !== fogFull(m.w, m.h) && m.fog.crew?.c !== m.fog.c);
   // How much of it she's uncovered, in words.
   function howMuch(m) {
     const off = 1 - coveredShare(m.fog.c, m.w, m.h);
@@ -663,7 +694,9 @@ export function makeMaps(w) {
       move(x, y) {
         const m = mapNow();
         if (!b || !m || !view) return;
-        if (rub(b, m.w, m.h, last.x, last.y, x, y, BRUSH[brush.size] / view.v.scale(), brush.tool === "cover")) raf ||= requestAnimationFrame(redraw);
+        // A drawn map's laid out bigger than its numbers, so its rubs come back down.
+        const k = view.k ?? 1;
+        if (rub(b, m.w, m.h, last.x / k, last.y / k, x / k, y / k, BRUSH[brush.size] / view.v.scale() / k, brush.tool === "cover")) raf ||= requestAnimationFrame(redraw);
         last = { x, y };
       },
       end() {
@@ -729,12 +762,21 @@ export function makeMaps(w) {
 
   // A pin on the map, as the viewer draws it. On her phone, a pin that's
   // under the fog is drawn faint, since the crew can't see it yet.
-  function pinDraw(id, doc, gm, lit, under = () => false) {
+  // What a district or part's called on a drawn map: Abnu's a land and a city.
+  const areaOf = (m, pin) => (m?.draw?.areas?.[pin.area] ?? [pin.area === "district" ? "district" : "part"])[0];
+  const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+  function pinDraw(id, doc, gm, lit, under = () => false, m = null) {
     return (p) => {
       const pin = p.pin;
       const k = kindOf(doc, pin);
       const name = labelOf(doc, pin) || "A pin";
       const fogged = gm && under(pin);
+      // A district or a part on a drawn map is its name, the way /worlds/ draws it.
+      if (pin.area) {
+        const cls = `wm-pin is-${pin.area}${gm && !pin.shown ? " is-hidden" : ""}${fogged ? " is-fogged" : ""}${ui.pin === pin.id ? " is-on" : ""}${lit.includes(pin.id) ? " is-new" : ""}${ui.placing?.pid === pin.id ? " is-lifted" : ""}`;
+        const say = `${name}, a ${areaOf(m, pin)}${gm ? (pin.shown ? ", shown to the crew" : ", hidden from the crew") : ""}${fogged ? ", under the fog" : ""}`;
+        return { cls, html: `<span class="wm-pin-n">${esc(name)}</span>`, attrs: { "data-act": "w", "data-do": "mpin", "data-pid": pin.id, "aria-label": say, "aria-pressed": String(ui.pin === pin.id) } };
+      }
       const cls = `wm-pin is-${k}${gm && !pin.shown ? " is-hidden" : ""}${fogged ? " is-fogged" : ""}${ui.pin === pin.id ? " is-on" : ""}${lit.includes(pin.id) ? " is-new" : ""}${ui.placing?.pid === pin.id ? " is-lifted" : ""}`;
       const say = `${name}, ${kindName(k).toLowerCase()}${gm ? (pin.shown ? ", shown to the crew" : ", hidden from the crew") : ""}${fogged ? ", under the fog" : ""}`;
       return { cls, html: `<span class="wm-pin-head">${MARK[k]}</span><span class="wm-pin-n">${esc(name)}</span>`, attrs: { "data-act": "w", "data-do": "mpin", "data-pid": pin.id, "aria-label": say, "aria-pressed": String(ui.pin === pin.id) } };
@@ -749,7 +791,7 @@ export function makeMaps(w) {
     const t = targetOf(doc, pin.to);
     const name = labelOf(doc, pin) || "A pin";
     const head = `<div class="wm-card-top"><span class="wm-card-mark is-${k}${gm && !pin.shown ? " is-hidden" : ""}">${MARK[k]}</span>
-      <div class="wm-card-t"><p class="wb-k">${kindName(k)}${gm ? `<span class="wb-badge${pin.shown ? " is-on" : ""}">${pin.shown ? "Shown" : "Hidden"}</span>` : ""}</p><h2 class="wm-card-n" id="wm-card-h">${esc(name)}</h2></div>
+      <div class="wm-card-t"><p class="wb-k">${pin.area ? cap(areaOf(m, pin)) : kindName(k)}${gm ? `<span class="wb-badge${pin.shown ? " is-on" : ""}">${pin.shown ? "Shown" : "Hidden"}</span>` : ""}</p><h2 class="wm-card-n" id="wm-card-h">${esc(name)}</h2></div>
       <button type="button" class="cc-x" data-act="w" data-do="mclose" aria-label="Close">${d.icon.close}</button></div>`;
     const opener = t && (gm || pin.to) ? `<a class="button primary" href="${esc(pageHref(id, pin.to))}" data-act="w" data-do="nav">Open ${theName(k)}</a>` : "";
     if (!gm) {
@@ -781,7 +823,7 @@ export function makeMaps(w) {
     if (!ui.panel) return "";
     const rows = [...m.pins].sort((a, b) => SORT(labelOf(doc, a)).localeCompare(SORT(labelOf(doc, b)))).map((p) => {
       const k = kindOf(doc, p);
-      return `<li><button type="button" class="wm-row" data-act="w" data-do="mfind" data-pid="${esc(p.id)}"><span class="wm-row-mark is-${k}${gm && !p.shown ? " is-hidden" : ""}">${MARK[k]}</span><span class="wm-row-in"><b>${esc(labelOf(doc, p) || "A pin")}</b><small>${kindName(k)}${gm ? (p.shown ? " · Shown" : " · Hidden") : ""}</small></span></button></li>`;
+      return `<li><button type="button" class="wm-row" data-act="w" data-do="mfind" data-pid="${esc(p.id)}"><span class="wm-row-mark is-${k}${gm && !p.shown ? " is-hidden" : ""}">${MARK[k]}</span><span class="wm-row-in"><b>${esc(labelOf(doc, p) || "A pin")}</b><small>${p.area ? cap(areaOf(m, p)) : kindName(k)}${gm ? (p.shown ? " · Shown" : " · Hidden") : ""}</small></span></button></li>`;
     }).join("");
     const empty = gm ? "No pins yet. Tap Drop a pin, move the map till the spot’s under the cross, and pin it." : "No pins on this one yet.";
     let mine = "";
@@ -801,7 +843,7 @@ export function makeMaps(w) {
           ${places.length ? `<label class="cc-field">A map of <select name="of"><option value="">Nowhere in particular</option>${places.map((p) => `<option value="${esc(p.id)}"${m.of === p.id ? " selected" : ""}>${esc(p.name)}</option>`).join("")}</select></label>` : ""}
           <div class="cc-row"><button type="submit" class="button">Save</button></div></form>
         ${fog}
-        <h3 class="wm-panel-h3">A new picture</h3>${dr ? draftBody(id, doc, dr) : `<p class="cc-small">For when you’ve drawn more of it. The pins stay where they are on the picture${m.fog ? ", and so does the fog if it’s the same shape" : ""}.</p><div class="cc-row">${chooser(id, "Choose a new picture", m.id)}</div>`}
+        ${m.draw ? `<h3 class="wm-panel-h3">Drawn on every phone</h3><p class="cc-small">It came in with ${esc(w.wholeIn(m.from)?.title ?? "a whole world")}, and every phone draws it, so it opens with no signal. Pins and fog work on it the way they do on a picture.</p>` : `<h3 class="wm-panel-h3">A new picture</h3>${dr ? draftBody(id, doc, dr) : `<p class="cc-small">For when you’ve drawn more of it. The pins stay where they are on the picture${m.fog ? ", and so does the fog if it’s the same shape" : ""}.</p><div class="cc-row">${chooser(id, "Choose a new picture", m.id)}</div>`}`}
         <div class="cc-row wm-gone"><button type="button" class="button danger" data-act="w" data-do="mgone">${sure ? "Tap again to take it down" : "Take the map down"}</button></div>`;
     }
     return `<section class="wm-panel card${fresh("panel", m.id)}" aria-labelledby="wm-panel-h"><div class="wm-card-top"><h2 id="wm-panel-h" class="wm-panel-t">${m.pins.length ? `Pins <small>${m.pins.length}</small>` : "Pins"}</h2><button type="button" class="cc-x" data-act="w" data-do="mpanel" aria-label="Close">${d.icon.close}</button></div>
@@ -848,13 +890,98 @@ export function makeMaps(w) {
         <button type="button" class="button primary" data-act="w" data-do="mfogdone">Done</button></div></div>`;
   }
 
+  // ------------------------------------------------------------ the web on a map
+
+  // Where each faction sits on this map: on her phone, worked out from the
+  // whole world, and on a player's, what each pin says sits there.
+  function placeOf(doc, m, gm) {
+    if (gm) return sittersOf(doc.factions, m.pins);
+    const at = new Map();
+    for (const p of m.pins) for (const fid of p.fs ?? []) if (!at.has(fid)) at.set(fid, p.id);
+    return at;
+  }
+  // The threads the web lights, as the World screen's web reads them.
+  const webData = (doc) => ({
+    nodes: doc.factions.map((f) => ({ id: f.id, mini: f.mini, parent: f.parent })),
+    threads: doc.factions.flatMap((f) => f.threads.filter((t) => t.to !== "crew").map((t) => ({ from: f.id, to: t.to, kind: t.kind, s: t.s }))),
+  });
+  // A faction's die: its Power, once the crew knows it, or a question mark.
+  function tokDie(f, gm) {
+    const dice = gm || f.shown.power ? w.powerDice(f) : null;
+    return dice?.length ? kitDie(dice[0], { own: "them", hide: true }) : '<span class="wm-ft-q" aria-hidden="true">?</span>';
+  }
+  // The web for the viewer: every faction that's on the map a token at its
+  // pin, those sharing one fanned out round it (one under the spot, two
+  // either side, more round a ring that grows with them), and once one's
+  // tapped, the threads between it and its ties.
+  function webSpec(doc, m, gm, at) {
+    const pins = new Map(m.pins.map((p) => [p.id, p]));
+    const groups = new Map();
+    for (const f of doc.factions) {
+      const pid = at.get(f.id);
+      if (pid && pins.has(pid)) groups.set(pid, [...(groups.get(pid) ?? []), f]);
+    }
+    const nodes = [];
+    for (const [pid, fs] of groups) {
+      const pin = pins.get(pid);
+      const n = fs.length;
+      const r = n <= 2 ? 30 : 30 + 5 * (n - 3);
+      fs.forEach((f, i) => {
+        const a = n === 1 ? Math.PI / 2 : n === 2 ? Math.PI / 2 + (i ? -0.9 : 0.9) : Math.PI / 2 + (2 * Math.PI * i) / n;
+        nodes.push({ id: f.id, x: pin.x, y: pin.y, dx: Math.round(Math.cos(a) * r), dy: Math.round(Math.sin(a) * r) });
+      });
+    }
+    const placed = new Set(nodes.map((n) => n.id));
+    const sub = ui.sel ? tiesOf(webData(doc), ui.sel) : { nodes: [], threads: [] };
+    const near = new Set(sub.nodes.map((n) => n.id));
+    const lines = linesOf({ threads: sub.threads.filter((t) => placed.has(t.from) && placed.has(t.to)) }).map((x) => ({ a: x.a, b: x.b, bow: x.bow, arrow: x.both ? "" : x.kind === "hostile" ? "h" : "b", cls: ["wm-wl", `is-${x.kind}`, x.strained ? "is-strained" : "", x.snapped ? "is-snapped" : "", x.a === ui.sel || x.b === ui.sel ? "is-hi" : ""].filter(Boolean).join(" ") }));
+    const byId = new Map(doc.factions.map((f) => [f.id, f]));
+    return {
+      nodes,
+      lines,
+      draw: (nd) => {
+        const f = byId.get(nd.id);
+        const lit = ui.sel === nd.id ? " is-sel" : ui.sel && near.has(nd.id) ? " is-lit" : ui.sel ? " is-dim" : "";
+        const hid = gm && !f.shown.card ? " is-hidden" : "";
+        return {
+          cls: `wm-ft${f.mini ? " is-mini" : ""}${hid}${lit}`,
+          html: `<span class="wm-ft-d" aria-hidden="true">${tokDie(f, gm)}</span><span class="wm-ft-n" aria-hidden="true">${esc(f.name.replace(/^The /, ""))}</span>`,
+          attrs: { "data-act": "w", "data-do": "msel", "data-f": f.id, "aria-pressed": String(ui.sel === nd.id), "aria-label": `${f.name}${hid ? ", hidden from the crew" : ""}${ui.sel === nd.id ? ", its ties lit" : ": light its ties"}` },
+        };
+      },
+    };
+  }
+  // The factions that aren't on this map, in a strip along the bottom, each a
+  // tap from its ties.
+  function stripOf(doc, gm, at) {
+    const off = doc.factions.filter((f) => !at.has(f.id));
+    if (!off.length) return "";
+    const tok = (f) => `<button type="button" class="wm-st${f.mini ? " is-mini" : ""}${gm && !f.shown.card ? " is-hidden" : ""}${ui.sel === f.id ? " is-sel" : ""}" data-act="w" data-do="msel" data-f="${esc(f.id)}" aria-pressed="${ui.sel === f.id}"><span class="wm-st-d" aria-hidden="true">${tokDie(f, gm)}</span><span class="wm-st-n">${esc(f.name)}</span></button>`;
+    return `<div class="wm-strip" role="group" aria-labelledby="wm-strip-h"><p class="wm-strip-h" id="wm-strip-h">${off.length === 1 ? "Not on this map" : `${off.length} not on this map`}</p><div class="wm-strip-row">${off.map(tok).join("")}</div></div>`;
+  }
+  // The tapped faction's card: where it sits, its threads lit, and its card.
+  function webCard(id, doc, m, gm, at) {
+    const f = doc.factions.find((x) => x.id === ui.sel);
+    if (!f) return "";
+    const pin = m.pins.find((p) => p.id === at.get(f.id));
+    const ties = webData(doc).threads.filter((t) => t.from === f.id || t.to === f.id).length;
+    const on = (n) => (n === 1 ? "1 thread" : `${n} threads`);
+    const say = !ties ? (gm || f.shown.threads ? "No threads yet, either way." : "The crew hasn’t been shown its threads.") : pin ? `${on(ties)}, either way, lit on the map.` : `${on(ties)}, either way. It isn’t on this map, so its ties light up on their own.`;
+    const where = pin ? labelOf(doc, pin) : "Not on this map";
+    return `<section class="wm-card card${fresh("fac", f.id)}" aria-labelledby="wm-card-h"><div class="wm-card-top"><span class="wm-card-mark is-faction wm-card-die${gm && !f.shown.card ? " is-hidden" : ""}" aria-hidden="true">${tokDie(f, gm)}</span>
+      <div class="wm-card-t"><p class="wb-k">Faction · ${esc(where)}${gm ? `<span class="wb-badge${f.shown.card ? " is-on" : ""}">${f.shown.card ? "Shown" : "Hidden"}</span>` : ""}</p><h2 class="wm-card-n" id="wm-card-h">${esc(f.name)}</h2></div>
+      <button type="button" class="cc-x" data-act="w" data-do="mselx" aria-label="Close">${d.icon.close}</button></div>
+      <p class="cc-small wm-card-say">${say}</p>
+      <div class="cc-row"><a class="button primary" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;f=${encodeURIComponent(f.id)}" data-act="w" data-do="nav">Its card</a></div></section>`;
+  }
+
   function mapView(id, mid, focus) {
     const gm = isGm(id);
     const doc = docOf(id);
     const m = findMap(doc, mid);
     const at = `${id}:${mid}`;
     if (ui.at !== at) {
-      ui = { at, pin: "", panel: false, placing: null, picking: null, naming: "", focus: "", asked: "", lit: [], fog: false, fogAsk: false };
+      ui = { at, pin: "", panel: false, placing: null, picking: null, naming: "", focus: "", asked: "", lit: [], fog: false, fogAsk: false, web: false, sel: "" };
       find = "";
     }
     // Opened from a page's pin: that pin, once.
@@ -880,9 +1007,16 @@ export function makeMaps(w) {
       ? `<div class="wm-bar is-placing"><p class="wm-hint" role="status">Move the map till the spot’s under the cross.</p><div class="wm-bar-row"><button type="button" class="button" data-act="w" data-do="mcancel">Cancel</button><button type="button" class="button primary" data-act="w" data-do="mplace">${placing.pid ? "Put it here" : "Pin it here"}</button></div></div>`
       : fogging ? fogBar(id, m)
       : `<div class="wm-bar"><div class="wm-bar-row"><button type="button" class="button wm-pins-btn" data-act="w" data-do="mpanel" aria-expanded="${ui.panel}">Pins${m.pins.length ? ` <b>${m.pins.length}</b>` : ""}</button>${gm ? `<button type="button" class="button wm-fog-btn" data-act="w" data-do="mfog" aria-expanded="${ui.fogAsk}">${MARK.fog}Fog</button><button type="button" class="button primary" data-act="w" data-do="mdrop"${m.pins.length >= MMAX.pins ? " disabled" : ""}>${MARK.pin}Drop a pin</button>` : ""}</div></div>`;
-    const zoom = `<div class="wm-zoom" role="group" aria-label="Zoom"><button type="button" class="wm-z" data-act="w" data-do="mzoom" data-z="in" aria-label="Zoom in">${MARK.plus}</button><button type="button" class="wm-z" data-act="w" data-do="mzoom" data-z="out" aria-label="Zoom out">${MARK.minus}</button><button type="button" class="wm-z" data-act="w" data-do="mzoom" data-z="whole" aria-label="The whole map">${MARK.whole}</button></div>`;
-    const overlay = ui.picking ? picker(id, doc) : ui.panel ? panel(id, doc, m, gm) : placing || fogging ? "" : ui.fogAsk && gm ? fogAsk(m) : card(id, doc, m, gm);
+    // The web on the map: hers to switch on and off, and anyone's once
+    // they've been shown a faction. Not while she's dropping a pin or rubbing.
+    const webOn = ui.web && !placing && !fogging && doc.factions.length > 0;
+    if (ui.sel && !doc.factions.some((f) => f.id === ui.sel)) ui.sel = "";
+    const sits = webOn ? placeOf(doc, m, gm) : null;
+    const webBtn = doc.factions.length ? `<button type="button" class="wm-z wm-web-b" data-act="w" data-do="mweb" aria-pressed="${ui.web}" aria-label="The web, each faction where it sits">${MARK.web}<span aria-hidden="true">Web</span></button>` : "";
+    const zoom = `<div class="wm-zoom" role="group" aria-label="The map">${webBtn}<button type="button" class="wm-z" data-act="w" data-do="mzoom" data-z="in" aria-label="Zoom in">${MARK.plus}</button><button type="button" class="wm-z" data-act="w" data-do="mzoom" data-z="out" aria-label="Zoom out">${MARK.minus}</button><button type="button" class="wm-z" data-act="w" data-do="mzoom" data-z="whole" aria-label="The whole map">${MARK.whole}</button></div>`;
+    const overlay = ui.picking ? picker(id, doc) : ui.panel ? panel(id, doc, m, gm) : placing || fogging ? "" : ui.fogAsk && gm ? fogAsk(m) : webOn && ui.sel ? webCard(id, doc, m, gm, sits) : card(id, doc, m, gm);
     if (!overlay) up = "";
+    const strip = webOn && !overlay ? stripOf(doc, gm, sits) : "";
     // A pin that's just been shown lights up once.
     ui.lit = w.lit(id).slice();
     if (!gm) w.unlit(id);
@@ -891,12 +1025,25 @@ export function makeMaps(w) {
       <div class="wm-top">${top}
         <header class="wm-head"><div class="wm-title"><p class="kicker${gm ? " is-gm" : ""}">Map${gm ? ` <span class="wb-badge${m.shown ? " is-on" : ""}">${m.shown ? "Shown" : "Hidden"}</span>${fogBadge}` : ""}</p><h1>${esc(m.name)}</h1></div>${showBtn}</header>
         ${say ? `<p class="cc-small pt-status wm-status">${say}</p>` : ""}</div>
-      <div class="wm-body${placing ? " is-placing" : ""}${fogging ? " is-fog" : ""}">
+      <div class="wm-body${placing ? " is-placing" : ""}${fogging ? " is-fog" : ""}${strip ? " has-strip" : ""}">
         <div class="wm-slot" data-map="${esc(at)}"></div>
         <p class="sr-only" id="wm-how">${fogging && brush.tool !== "move" ? "One finger rubs the fog, and two fingers move the map. Pick Move to drag it with one." : "Drag to move it. Double tap to zoom in, or double tap and hold, then slide down to zoom in and up to zoom out."} With a keyboard, the arrow keys move it, plus and minus zoom, and 0 shows the whole map.</p>
         <p class="wm-note" data-wmnote hidden></p>
-        ${zoom}${overlay}${bar}
+        ${zoom}${overlay}${strip}${bar}
       </div></div>`;
+  }
+
+  // Where a drawn map opens: on the pin it says, if this phone has it, on
+  // the middle of the town's districts on a city's, or the whole of a world's.
+  function openAt(m) {
+    const pin = m.opens ? m.pins.find((p) => p.id === m.opens) : null;
+    if (pin) return [pin.x, pin.y];
+    if (m.draw.ground.land) return null;
+    const wild = new Set(m.draw.wilds);
+    const pts = Object.entries(m.draw.districts).filter(([key]) => !wild.has(key)).map(([, sh]) => middleOf(sh));
+    if (!pts.length) return null;
+    const [x, y] = pts.reduce(([a, b], [c, e]) => [a + c / pts.length, b + e / pts.length], [0, 0]);
+    return [x / m.w, y / m.h];
   }
 
   // Leaving a map: its viewer goes, and so does its picture from memory (it's
@@ -938,31 +1085,47 @@ export function makeMaps(w) {
     // The viewer lasts while the map's the same size, so a new picture (the
     // crew's as she uncovers more, or a new one of hers) goes in where it's
     // been moved to.
-    const key = `${id}:${mid}:${m.w}x${m.h}`;
+    const drawn = Boolean(m.draw);
+    const k = drawn ? DRAWN : 1;
+    const key = `${id}:${mid}:${m.w}x${m.h}${drawn ? ":drawn" : ""}`;
     if (view?.key !== key) {
       drop();
       const v = makeViewer({
-        w: m.w, h: m.h, label: m.name, how: "wm-how",
+        w: m.w * k, h: m.h * k, label: m.name, how: "wm-how",
         drawPin: (p) => view.draw(p),
         onTap: () => {
           if (ui.placing || ui.picking) return;
-          if (ui.pin || ui.panel) {
+          if (ui.pin || ui.panel || ui.sel) {
             ui.pin = "";
             ui.panel = false;
             ui.naming = "";
+            ui.sel = "";
             d.render();
           }
         },
       });
-      view = { key, v, src: "", draw: null, fog: null, loading: "" };
+      view = { key, v, src: "", draw: null, fog: null, loading: "", k };
+      // A drawn map's drawing goes in once, for good, and it opens on the pin
+      // it says or the middle of the town, unless it's opening at a pin.
+      if (drawn) {
+        v.art(drawMap({ ...m.draw, size: [m.w, m.h] }, { uid: "wmd" }));
+        const spot = openAt(m);
+        if (spot && !ui.focus) v.cover(spot[0], spot[1]);
+      }
     }
     slot.replaceWith(view.v.el);
     view.v.el.setAttribute("aria-label", m.name);
     // Her pins under the fog, which the crew won't see till their spot's uncovered.
     const under = gm && m.fog ? fogBits(m.fog.c, m.w, m.h) : null;
-    view.draw = pinDraw(id, doc, gm, ui.lit, under ? (pin) => spotCovered(under, m.w, m.h, pin.x, pin.y) : () => false);
-    view.v.pins(m.pins.map((pin) => ({ id: pin.id, x: pin.x, y: pin.y, pin, rank: (ui.pin === pin.id ? 4 : 0) + (pin.shown ? 1 : 0), always: ui.pin === pin.id })));
+    view.draw = pinDraw(id, doc, gm, ui.lit, under ? (pin) => spotCovered(under, m.w, m.h, pin.x, pin.y) : () => false, m);
+    // A district's name before a part's, and those before the places, and on
+    // a whole world's map a place in a city tucks behind the city's name.
+    const landed = Boolean(m.draw?.ground.land);
+    view.v.pins(m.pins.map((pin) => ({ id: pin.id, x: pin.x, y: pin.y, pin, rank: (ui.pin === pin.id ? 9 : 0) + (pin.area === "district" ? 3 : pin.area === "part" ? 2 : 0) + (pin.shown ? 1 : 0), always: ui.pin === pin.id, tuck: landed && pin.tuck === true })));
     view.v.placing(Boolean(ui.placing));
+    const webOn = ui.web && !ui.placing && !(gm && ui.fog) && doc.factions.length > 0;
+    view.v.web(webOn ? webSpec(doc, m, gm, placeOf(doc, m, gm)) : null);
+    view.v.el.classList.toggle("is-webbed", webOn);
     // The same rubber each time the screen's drawn, so a rub that's going
     // carries on through it.
     const rubOn = gm && ui.fog && m.fog && brush.tool !== "move";
@@ -970,7 +1133,7 @@ export function makeMaps(w) {
     view.v.brush(rubOn ? view.rub : null);
     // The bar along the bottom covers the bottom of the map, so the whole map
     // shows above it.
-    const row = app.querySelector(".wm-bar-row");
+    const row = app.querySelector(".wm-strip") ?? app.querySelector(".wm-bar-row");
     if (row) view.v.pad(view.v.el.getBoundingClientRect().bottom - row.getBoundingClientRect().top + 10);
     // The picture: the phone's copy if it's got one, the small one first if
     // the big one's still coming. A crew's map that's all under the fog has
@@ -983,8 +1146,13 @@ export function makeMaps(w) {
       note.textContent = t;
     };
     // A picture on its way for anything but the one the map's on now is let
-    // go (view.loading), so it never comes up when it gets here.
-    if (!big) {
+    // go (view.loading), so it never comes up when it gets here. A drawn map
+    // has no picture, only its drawing and the fog.
+    if (drawn) {
+      view.loading = "";
+      paintFog(id, m);
+      say("");
+    } else if (!big) {
       view.loading = "";
       view.src = "";
       view.v.show("");
@@ -1064,6 +1232,28 @@ export function makeMaps(w) {
   };
   const pinOn = (m) => m?.pins.find((p) => p.id === ui.pin) ?? null;
   const ACT = {
+    // The web on the map, on or off.
+    mweb() {
+      ui.web = !ui.web;
+      ui.sel = "";
+      ui.pin = "";
+      ui.panel = false;
+      d.render();
+    },
+    // A faction on the map or in the strip: its ties lit, its card up.
+    msel(el) {
+      ui.sel = ui.sel === el.dataset.f ? "" : el.dataset.f;
+      ui.pin = "";
+      ui.panel = false;
+      d.render();
+      if (ui.sel) requestAnimationFrame(() => document.querySelector("#app .wm-card .button, #app .wm-card .cc-x")?.focus({ preventScroll: true }));
+    },
+    mselx() {
+      const was = ui.sel;
+      ui.sel = "";
+      d.render();
+      requestAnimationFrame(() => document.querySelector(`#app [data-do="msel"][data-f="${CSS.escape(was)}"]`)?.focus({ preventScroll: true }));
+    },
     mshow() {
       const { id, m } = here();
       if (!m) return;
@@ -1071,6 +1261,7 @@ export function makeMaps(w) {
     },
     mpin(el) {
       ui.pin = ui.pin === el.dataset.pid ? "" : el.dataset.pid;
+      ui.sel = "";
       ui.panel = false;
       ui.naming = "";
       w.setSure("");

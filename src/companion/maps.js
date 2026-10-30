@@ -30,6 +30,21 @@
 //                  every covered square painted over, and the fog it was made
 //                  with (c), or null till her phone's made one
 //
+// A drawn map (stage 14 of notes/builder-plan.md) is a whole world's, brought
+// into a campaign with it, and has no picture. Its shapes are kept with it
+// instead, numbers and keys only, and every phone draws them with
+// draw-map.js in its own theme, so it opens with no signal from the world on
+// the phone. It has
+//   draw    { ground, districts, parts, wilds, roads, marks, areas? }, the
+//           shapes in the map's own numbers, 0 to w across and 0 to h down
+//   from    the whole world it came in with (night-city-2077)
+//   opens   the pin it opens on, or ""
+// and its pins can say what they are on it: area (district or part, drawn as
+// a name rather than a pin) and tuck (a place in a city on a map of a whole
+// world, which waits behind its city's name till there's room). Under the
+// fog there's no crew's picture to make, since nothing in the drawing is
+// hers: the crew's phones get the drawing and her fog, drawn solid over it.
+//
 // A change (its o starts with "m-"):
 //   { o: "m-new", m, at? }             a map in the world
 //   { o: "m-gone", id }                a map out of it
@@ -46,12 +61,18 @@
 // crew's picture and the fog it was made with, so what their phone shows and
 // what's in the picture always match, and a pin only once its spot's uncovered.
 import { findPage } from "./pages.js";
+import { MARKS } from "../worlds/draw-map.js";
 
 // A picture's longest side is 4096 pixels (Mo, 27 Oct), which is about the
-// most an iPhone can safely shrink and show.
-export const MMAX = { maps: 20, pins: 60, name: 60, side: 4096 };
+// most an iPhone can safely shrink and show. A drawn map's shapes hold
+// Abnu's coasts with room to spare.
+export const MMAX = { maps: 20, pins: 60, name: 60, side: 4096, draw: 80000, points: 8000, shapes: 400 };
 const ID = /^[a-z0-9-]{2,24}$/;
 const KEY = /^[A-Za-z0-9_-]{16,32}$/;
+// A district's or part's key in a drawing, and a whole world's id.
+const AREA_KEY = /^[a-z0-9-]{1,40}$/;
+const WORLD_ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+export const AREAS = ["district", "part"];
 
 export const isMapOp = (op) => typeof op?.o === "string" && op.o.startsWith("m-");
 
@@ -159,7 +180,68 @@ function fogOf(raw, w, h) {
   return { c, crew: crew ? { k: raw.crew.k, c: crew } : null };
 }
 
-// A pin, tidied, or null if it can't go on. One that opens nothing needs a name.
+// A drawn map's shapes, tidied: points as numbers to a tenth, inside a
+// reach of the map round its edges, every shape with enough of them, keys
+// that are only keys, and nothing past what a map holds. Null if it can't be
+// drawn (a city with no coast, or more than a map holds).
+function drawOf(raw, w, h) {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  const far = Math.max(w, h);
+  let points = 0;
+  const pt = (p) => (Array.isArray(p) && p.length === 2 && p.every((n) => typeof n === "number" && Number.isFinite(n) && n >= -far && n <= 2 * far) ? [Math.round(p[0] * 10) / 10, Math.round(p[1] * 10) / 10] : null);
+  const shape = (s, least = 3) => {
+    if (!Array.isArray(s) || s.length < least || s.length > MMAX.points) return null;
+    const out = s.map(pt);
+    if (out.some((p) => !p)) return null;
+    points += out.length;
+    return out;
+  };
+  const shapes = (v, least) => (Array.isArray(v) ? v : []).slice(0, MMAX.shapes).map((s) => shape(s, least)).filter(Boolean);
+  const keyed = (v) => {
+    const out = {};
+    if (!v || typeof v !== "object" || Array.isArray(v)) return out;
+    for (const [k, s] of Object.entries(v).slice(0, MMAX.shapes)) {
+      const sh = AREA_KEY.test(k) ? shape(s) : null;
+      if (sh) out[k] = sh;
+    }
+    return out;
+  };
+  const g = raw.ground && typeof raw.ground === "object" ? raw.ground : {};
+  const ground = {};
+  // A world of seas and continents gives its land, and a city its sea.
+  const land = shapes(g.land);
+  if (land.length) Object.assign(ground, { land, deep: shapes(g.deep) });
+  else {
+    const sea = shape(g.sea);
+    if (!sea) return null;
+    ground.sea = sea;
+  }
+  ground.water = shapes(g.water);
+  ground.hills = shapes(g.hills);
+  const districts = keyed(raw.districts);
+  const parts = keyed(raw.parts);
+  const wilds = [...new Set((Array.isArray(raw.wilds) ? raw.wilds : []).filter((k) => typeof k === "string" && Object.hasOwn(districts, k)))];
+  const roads = (Array.isArray(raw.roads) ? raw.roads : []).slice(0, MMAX.shapes).map((r) => {
+    const pts = shape(r?.pts, 2);
+    return pts ? { pts } : null;
+  }).filter(Boolean);
+  const marks = (Array.isArray(raw.marks) ? raw.marks : []).slice(0, MMAX.shapes).map((m) => {
+    const at = pt(m?.at);
+    return at && MARKS.includes(m?.kind) ? { kind: m.kind, at } : null;
+  }).filter(Boolean);
+  // What it calls its districts and parts, one and many (Abnu's lands and cities).
+  const word = (v) => one(v, 24).toLowerCase();
+  const pair = (v) => (Array.isArray(v) && word(v[0]) && word(v[1]) ? [word(v[0]), word(v[1])] : null);
+  const a = raw.areas && typeof raw.areas === "object" ? raw.areas : null;
+  const areas = a && pair(a.district) && pair(a.part) ? { district: pair(a.district), part: pair(a.part) } : null;
+  if (points > MMAX.points) return null;
+  const out = { ground, districts, parts, wilds, roads, marks, ...(areas ? { areas } : {}) };
+  return JSON.stringify(out).length <= MMAX.draw ? out : null;
+}
+
+// A pin, tidied, or null if it can't go on. One that opens nothing needs a
+// name. On a phone, fs is the factions the web puts at it (mapsForPlayer()),
+// and never kept in the world.
 function pinOf(raw) {
   if (!raw || typeof raw !== "object" || !isId(raw.id)) return null;
   const x = frac(raw.x);
@@ -168,8 +250,15 @@ function pinOf(raw) {
   const to = toOf(raw.to);
   const name = one(raw.name, MMAX.name);
   if (!to && !name) return null;
-  return { id: raw.id, x, y, to, name, shown: raw.shown === true };
+  const fs = Array.isArray(raw.fs) ? [...new Set(raw.fs.filter(isId))].slice(0, 48) : [];
+  return { id: raw.id, x, y, to, name, shown: raw.shown === true, ...(AREAS.includes(raw.area) ? { area: raw.area } : {}), ...(raw.tuck === true ? { tuck: true } : {}), ...(fs.length ? { fs } : {}) };
 }
+// A pin as the world keeps it: never with the web's factions on it.
+const keptPin = (raw) => {
+  const p = pinOf(raw);
+  if (p) delete p.fs;
+  return p;
+};
 
 // A map as it came from somewhere else, tidied so nothing in it is anything
 // but words and numbers in the right places.
@@ -179,13 +268,17 @@ export function mapOf(raw) {
   const w = side(raw.w);
   const h = side(raw.h);
   if (!name || !w || !h) return null;
+  const draw = raw.draw ? drawOf(raw.draw, w, h) : null;
   const fog = fogOf(raw.fog, w, h);
+  // A drawn map's fog never has a crew's picture: there's nothing to keep from them.
+  if (draw && fog) fog.crew = null;
   // A crew's map that's still all under the fog hasn't got a picture yet.
-  const key = isKey(raw.key) ? raw.key : "";
-  if (!key && !fog) return null;
+  const key = !draw && isKey(raw.key) ? raw.key : "";
+  if (!key && !fog && !draw) return null;
   const seen = new Set();
   const pins = (Array.isArray(raw.pins) ? raw.pins : []).map(pinOf).filter((p) => p && !seen.has(p.id) && seen.add(p.id)).slice(0, MMAX.pins);
-  return { id: raw.id, name, key, w, h, of: isId(raw.of) ? raw.of : "", shown: raw.shown === true, pins, ...(fog ? { fog } : {}) };
+  const drawn = draw ? { draw, from: typeof raw.from === "string" && raw.from.length <= 40 && WORLD_ID.test(raw.from) ? raw.from : "", opens: pins.some((p) => p.id === raw.opens) ? raw.opens : "" } : {};
+  return { id: raw.id, name, key, w, h, of: isId(raw.of) ? raw.of : "", shown: raw.shown === true, pins, ...(fog ? { fog } : {}), ...drawn };
 }
 
 export function mapsOf(raw) {
@@ -205,7 +298,8 @@ export function applyMap(doc, op) {
   switch (op.o) {
     case "m-new": {
       const n = mapOf(op.m);
-      if (!n || !n.key || findMap(doc, n.id) || doc.maps.length >= MMAX.maps) return false;
+      if (!n || (!n.key && !n.draw) || findMap(doc, n.id) || doc.maps.length >= MMAX.maps) return false;
+      for (const p of n.pins) delete p.fs;
       // Her phone makes the crew's picture again, since one from before
       // (a map taken down and put back) may have gone from the bucket.
       if (n.fog) n.fog.crew = null;
@@ -224,12 +318,15 @@ export function applyMap(doc, op) {
         if (!v) return false;
         m.name = v;
       } else if (op.f === "of") m.of = isId(op.v) ? op.v : "";
+      // The pin a drawn map opens on.
+      else if (op.f === "opens" && m.draw) m.opens = m.pins.some((p) => p.id === op.v) ? op.v : "";
       else return false;
       break;
     case "m-pic": {
       const w = side(op.w);
       const h = side(op.h);
-      if (!m || !isKey(op.key) || !w || !h) return false;
+      // A drawn map has no picture to change.
+      if (!m || m.draw || !isKey(op.key) || !w || !h) return false;
       // The crew's picture was made from the old one, so her phone makes
       // another. The fog stays if the new picture's laid out the same, and
       // otherwise (one turned on its side, say) covers all of it.
@@ -249,14 +346,14 @@ export function applyMap(doc, op) {
       // Fog back over anything the crew's picture shows takes that picture
       // off them straight away, so they see fog till her phone's made
       // another. Only uncovering more keeps it till then.
-      const crew = m.fog?.crew;
+      const crew = m.draw ? null : m.fog?.crew;
       m.fog = { c, crew: crew && c !== fogFull(m.w, m.h) && !coversMore(c, crew.c, m.w, m.h) ? crew : null };
       break;
     }
     case "m-crew": {
       // Never her own picture, or any other map's, and never one that shows
       // a square she's covered since it was made.
-      const c = m?.fog && isKey(op.key) ? tidyFog(op.c, m.w, m.h) : null;
+      const c = m?.fog && !m.draw && isKey(op.key) ? tidyFog(op.c, m.w, m.h) : null;
       if (!c || coversMore(m.fog.c, c, m.w, m.h) || doc.maps.some((x) => x.key === op.key || (x !== m && x.fog?.crew?.k === op.key))) return false;
       m.fog.crew = { k: op.key, c };
       break;
@@ -266,7 +363,7 @@ export function applyMap(doc, op) {
       m.shown = op.v === true;
       break;
     case "m-pin": {
-      const p = m ? pinOf(op.pin) : null;
+      const p = m ? keptPin(op.pin) : null;
       if (!p || m.pins.some((x) => x.id === p.id) || m.pins.length >= MMAX.pins) return false;
       const at = Number.isInteger(op.at) && op.at >= 0 && op.at <= m.pins.length ? op.at : m.pins.length;
       m.pins.splice(at, 0, p);
@@ -275,13 +372,14 @@ export function applyMap(doc, op) {
     case "m-unpin":
       if (!pin) return false;
       m.pins.splice(m.pins.indexOf(pin), 1);
+      if (m.opens === pin.id) m.opens = "";
       break;
     case "m-pinset": {
       if (!pin) return false;
       let next = null;
-      if (op.f === "at") next = pinOf({ ...pin, x: op.v?.x, y: op.v?.y });
-      else if (op.f === "to") next = pinOf({ ...pin, to: op.v });
-      else if (op.f === "name") next = pinOf({ ...pin, name: op.v });
+      if (op.f === "at") next = keptPin({ ...pin, x: op.v?.x, y: op.v?.y });
+      else if (op.f === "to") next = keptPin({ ...pin, to: op.v });
+      else if (op.f === "name") next = keptPin({ ...pin, name: op.v });
       else if (op.f === "shown") next = { ...pin, shown: op.v === true };
       if (!next) return false;
       Object.assign(pin, next);
@@ -312,7 +410,7 @@ export function undoMap(doc, op) {
     case "m-pin":
       return m && op.pin?.id ? [{ o: "m-unpin", id: m.id, pid: op.pin.id }] : [];
     case "m-unpin":
-      return pin ? [{ o: "m-pin", id: m.id, pin: copy(pin), at: m.pins.indexOf(pin) }] : [];
+      return pin ? [{ o: "m-pin", id: m.id, pin: copy(pin), at: m.pins.indexOf(pin) }, ...(m.opens === pin.id ? [{ o: "m-set", id: m.id, f: "opens", v: pin.id }] : [])] : [];
     case "m-pinset":
       if (!pin) return [];
       return [{ o: "m-pinset", id: m.id, pid: pin.id, f: op.f, v: op.f === "at" ? { x: pin.x, y: pin.y } : op.f === "to" ? copy(pin.to) : pin[op.f] }];
@@ -344,10 +442,30 @@ export const labelOf = (doc, pin) => pin.name || targetOf(doc, pin.to)?.name || 
 export function keysOf(doc) {
   const out = new Map();
   for (const m of doc.maps ?? []) {
-    out.set(m.key, "map");
+    if (m.key) out.set(m.key, "map");
     if (m.fog?.crew) out.set(m.fog.crew.k, "crew");
   }
   return out;
+}
+
+// ------------------------------------------------------------ the web on a map
+
+// Where each faction sits on a map, for the web on it (stage 14): at a pin
+// that opens it, or at a pin that opens the place it sits at (sits, kept on
+// a faction that came in with a whole world), the first such pin. A mini
+// faction sits with the faction that made it. A Map of faction id to pin id,
+// from the pins and factions it's handed, so the crew's are worked out from
+// only what they've been shown.
+export function sittersOf(factions, pins) {
+  const at = new Map();
+  const byPage = new Map();
+  for (const p of pins) {
+    if (p.to?.k === "f" && !at.has(p.to.id)) at.set(p.to.id, p.id);
+    if (p.to?.k === "p" && !byPage.has(p.to.id)) byPage.set(p.to.id, p.id);
+  }
+  for (const f of factions) if (!f.mini && !at.has(f.id) && f.sits && byPage.has(f.sits)) at.set(f.id, byPage.get(f.sits));
+  for (const f of factions) if (f.mini && !at.has(f.id) && f.parent && at.has(f.parent)) at.set(f.id, at.get(f.parent));
+  return at;
 }
 
 // ------------------------------------------------------------ what the crew sees
@@ -358,17 +476,29 @@ export function keysOf(doc) {
 // says which place it's of once they've been shown the place. Under the fog
 // it's the crew's picture and the fog that was made with (all of it covered,
 // with no picture, till her phone's made one), and a pin's only there once
-// its spot's uncovered.
+// its spot's uncovered. A drawn map comes with its drawing and her fog, and
+// the pin it opens on only once that's one they've got. Each pin says which
+// of the factions they've been shown sit at it (fs), for the web on the map,
+// so their phone never needs to know where a faction sits to draw it.
 export function mapsForPlayer(doc) {
+  const shownFactions = (doc.factions ?? []).filter((f) => f.shown?.card);
+  const seenIds = new Set(shownFactions.map((f) => f.id));
+  const crewFactions = shownFactions.map((f) => (f.mini && !seenIds.has(f.parent) ? { ...f, parent: null } : f));
   return (doc.maps ?? []).filter((m) => m.shown).map((m) => {
-    const seen = m.fog ? m.fog.crew?.c ?? fogFull(m.w, m.h) : null;
+    const seen = m.fog ? (m.draw ? m.fog.c : m.fog.crew?.c ?? fogFull(m.w, m.h)) : null;
     const b = seen ? fogBits(seen, m.w, m.h) : null;
+    const kept = m.pins.filter((p) => p.shown && !(seen && (!b || spotCovered(b, m.w, m.h, p.x, p.y))) && labelOf(doc, p));
+    const sit = sittersOf(crewFactions, kept);
     return {
-      id: m.id, name: m.name, key: m.fog ? m.fog.crew?.k ?? "" : m.key, w: m.w, h: m.h,
+      id: m.id, name: m.name, key: m.draw ? "" : m.fog ? m.fog.crew?.k ?? "" : m.key, w: m.w, h: m.h,
       of: m.of && findPage(doc, m.of)?.shown.page ? m.of : "",
       shown: true,
-      pins: m.pins.filter((p) => p.shown && !(seen && (!b || spotCovered(b, m.w, m.h, p.x, p.y)))).map((p) => ({ id: p.id, x: p.x, y: p.y, to: shownToCrew(doc, p.to) ? { ...p.to } : null, name: labelOf(doc, p), shown: true })).filter((p) => p.name),
+      pins: kept.map((p) => {
+        const fs = [...sit].filter(([, pid]) => pid === p.id).map(([fid]) => fid);
+        return { id: p.id, x: p.x, y: p.y, to: shownToCrew(doc, p.to) ? { ...p.to } : null, name: labelOf(doc, p), shown: true, ...(p.area ? { area: p.area } : {}), ...(p.tuck ? { tuck: true } : {}), ...(fs.length ? { fs } : {}) };
+      }),
       ...(seen ? { fog: { c: seen, crew: null } } : {}),
+      ...(m.draw ? { draw: m.draw, from: "", opens: kept.some((p) => p.id === m.opens) ? m.opens : "" } : {}),
     };
   });
 }

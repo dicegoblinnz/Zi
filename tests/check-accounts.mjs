@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e, 9f, 9g or 9h)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e, 9f, 9g, 9h or 9i)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -284,6 +284,25 @@
 //    The roll, the ground's turn, an old power, a founder's turn, the founding
 //    done and the board pass axe at 390 in both themes, and the ground and
 //    Sam's turn on a watcher's phone at 320, 360, 430 and 1280.
+//    9i. A whole world into a campaign (stage 14 of notes/builder-plan.md).
+//    Kai's own empty world never offers one, and the Worker turns down Night
+//    City's cards, map and record from her. Mo brings Night City into Night
+//    Lair from its World screen in a few sends, everything hidden, and Kai's
+//    phone gets nothing. Add a faction says Cyberpunk's coming, the web goes
+//    a faction's ties at a time, and the line saying whose it is sits at the
+//    foot. Mo shows the crew the Valentinos, the map and Heywood's pin: Kai's
+//    phone draws the map with Heywood by name and nothing it opens, and its
+//    Web switch puts the Valentinos there, its card a tap away. Mo covers the
+//    map and Heywood goes off Kai's phone, then comes back once its spot's
+//    uncovered, the fog drawn over the drawing, and with no signal Kai's map
+//    opens drawn with its pin. A made-up change to the world's file gives Mo
+//    the note on the Valentinos and on Heywood, and he takes both. Nothing
+//    crosses to Tuesday Lair or Kai's Night. Mo brings Abnu into Abnu Lair,
+//    Undo takes it all back off, and he brings it in again. Shown Alysta, its
+//    capital and the capital's pin, Sam's phone draws the world by its land,
+//    opens on the capital and puts Alysta there on the web, and the capital's
+//    places tuck on Mo's at the whole map. The World screen and both maps
+//    pass axe at 390 in both themes.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -4392,10 +4411,260 @@ try {
     await mo.page.click('.fd [data-do="end"]');
     await until(async () => (await fOf(mo.page, mkt.id)) === null, "Mo clears the founding off");
   }
+  // 9i. A whole world into a campaign (stage 14 of notes/builder-plan.md).
+  async function checkWholeWorld() {
+    const NC = JSON.parse(readFileSync("public/worlds/night-city-2077.json", "utf8"));
+    const AB = JSON.parse(readFileSync("public/worlds/abnu-1000.json", "utf8"));
+    const worldOf = async (id) => JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", id))[0]?.data ?? "null");
+    const playerWorld = async (page, id) => (await got(page, "GET", `/api/campaigns/${id}/world`)).json?.world ?? null;
+    const toWorld = async (page, id) => {
+      await page.goto(`${BASE}/characters/?camp=${id}&world`);
+      await page.waitForSelector(".wb-sec");
+    };
+    const openFold = async (page, key) => {
+      const sel = `details[data-open="${key}"]`;
+      await page.waitForSelector(sel, { state: "attached" });
+      if (!(await page.$eval(sel, (dt) => dt.open))) await page.click(`${sel} > summary`);
+    };
+    const h1 = (page) => page.textContent("#app h1").catch(() => "");
+    const themes = async (page, what, name) => {
+      for (const theme of ["dark", "light"]) {
+        await page.evaluate((t) => { localStorage.setItem("zi-theme", t); document.documentElement.dataset.theme = t; }, theme);
+        await axe(page, `${what}, ${theme}`);
+        await shot(page, `${name}-${theme}`);
+      }
+      await page.evaluate(() => { localStorage.setItem("zi-theme", "dark"); document.documentElement.dataset.theme = "dark"; });
+    };
+    // A button on the map, tapped where it sits, whether or not it's on the screen.
+    const tap = (page, sel) => page.$eval(sel, (b) => b.click());
+    const empty = { factions: [], pages: [], maps: [], build: null, by: null, at: 0 };
+
+    // Mo starts Night Lair: Kai joins with Isolde and Sam with Ash.
+    const night = (await got(mo.page, "POST", "/api/campaigns", { name: "Night Lair" })).json?.campaign;
+    await api(kai.page, "PUT", "/api/characters/isolde-nnnnnn", crewChar("isolde-nnnnnn", "isolde", "Isolde"));
+    await api(sam.page, "PUT", "/api/characters/ash-oooooo", crewChar("ash-oooooo", "ash", "Ash"));
+    same((await got(kai.page, "POST", "/api/join", { code: night.code, character: "isolde-nnnnnn" })).json?.campaign?.role, "player", "Kai joins Night Lair with Isolde");
+    same((await got(sam.page, "POST", "/api/join", { code: night.code, character: "ash-oooooo" })).json?.campaign?.role, "player", "Sam joins it with Ash");
+
+    // Kai's own empty world never offers one, and the Worker turns Night
+    // City's cards, its map and its record down from her.
+    const kaiNight = (await got(kai.page, "POST", "/api/campaigns", { name: "Kai’s Night" })).json?.campaign;
+    await toWorld(kai.page, kaiNight.id);
+    same(await kai.page.$$eval('details[data-open="wb-whole"]', (els) => els.length), 0, "Kai's empty world never offers a whole world");
+    yes(!(await text(kai.page, "#app")).includes("a whole world"), "and never mentions one");
+    const nc0 = NC.factions[0];
+    const asKai = (n, op) => got(kai.page, "POST", `/api/campaigns/${kaiNight.id}/world`, { dev: "kai-9i-000001", ops: [{ n, ...op }] });
+    same((await asKai(1, { o: "new", f: { ...nc0.card, id: "nc-card-0001", threads: [], res: [], assets: [], agendas: [], pub: [], mor: [], loy: [], shown: {}, book: { from: NC.id, key: nc0.key, h: "x", at: 1, was: nc0.card } } })).status, 403, "the Worker turns a Night City card down from Kai");
+    same((await asKai(2, { o: "p-new", p: { ...NC.places[0].card, id: "nc-page-0001", here: [], ground: [], stakes: [], tags: [], teles: [], hooks: [], shown: {}, book: { from: NC.id, key: NC.places[0].key, h: "x", at: 1, was: NC.places[0].card } } })).status, 403, "and a page of it");
+    same((await asKai(3, { o: "m-new", m: { id: "nc-map-0001", name: "Night City", key: "", w: 1000, h: 1000, of: "", shown: false, pins: [], from: NC.id, draw: { ground: { sea: [[0, 0], [10, 0], [10, 10]], water: [], hills: [] }, districts: {}, parts: {}, wilds: [], roads: [], marks: [] } } })).status, 403, "and its drawn map");
+    same((await asKai(4, { o: "wb-set", b: { world: NC.id, recipe: NC.recipe, history: [], shown: [] } })).status, 403, "and its record");
+    same((await worldOf(kaiNight.id))?.factions?.length ?? 0, 0, "and her world's still empty");
+
+    // Mo brings Night City into Night Lair from its World screen, in a few sends.
+    await toWorld(mo.page, night.id);
+    let sends = 0;
+    const count = (req) => {
+      if (req.method() === "POST" && req.url().endsWith(`/api/campaigns/${night.id}/world`)) sends++;
+    };
+    mo.page.on("request", count);
+    await openFold(mo.page, "wb-whole");
+    has(await text(mo.page, 'details[data-open="wb-whole"]'), "Night City, 2077", "Mo's empty world offers Night City");
+    has(await text(mo.page, 'details[data-open="wb-whole"]'), "Abnu, a thousand years after the Sundering", "and Abnu");
+    await mo.page.click('[data-do="whole"][data-w="night-city-2077"]');
+    await until(async () => (await worldOf(night.id))?.build?.world === NC.id, "Night City in Night Lair", 30000);
+    await until(async () => (await worldOf(night.id))?.maps?.length === 1 && (await worldOf(night.id)).factions.length === NC.factions.length, "all of it up", 30000);
+    mo.page.off("request", count);
+    let nw = await worldOf(night.id);
+    same([nw.factions.length, nw.pages.length, nw.maps.length, nw.maps[0]?.pins.length, nw.build.history.length], [NC.factions.length, NC.places.length + NC.people.length, 1, Object.keys(NC.map.pins).length, NC.history.length], "Night City's factions, pages, map, pins and history in Night Lair");
+    yes(sends >= 2 && sends <= 8, `it went up in a few sends (${sends})`);
+    yes(nw.factions.every((f) => !Object.values(f.shown).some(Boolean)) && nw.pages.every((p) => !Object.values(p.shown).some(Boolean)) && !nw.maps[0].shown && !nw.maps[0].pins.some((x) => x.shown) && !nw.build.shown.length, "all of it hidden from the crew");
+    has(await text(mo.page, "#cc-toast"), "Night City, 2077’s in", "the note says it's in");
+    same(await playerWorld(kai.page, night.id), empty, "nothing on Kai's phone till it's shown");
+
+    // Add a faction says Cyberpunk's coming, the web goes a faction's ties at
+    // a time, and the line saying whose it is sits at the foot.
+    await toWorld(mo.page, night.id);
+    await until(async () => (await text(mo.page, "#app")).includes("Cyberpunk’s tables are still to come"), "Add a faction saying Cyberpunk's coming");
+    await mo.page.waitForSelector("select[data-wwpick]");
+    const vId = nw.factions.find((f) => f.book.key === "valentinos").id;
+    await mo.page.selectOption("select[data-wwpick]", vId);
+    await until(async () => (await mo.page.getAttribute(`.ww-node[data-n="${vId}"]`, "aria-pressed").catch(() => "")) === "true", "the web walked to the Valentinos' ties");
+    yes((await mo.page.$$eval(".ww-node", (els) => els.length)) < NC.factions.length, "the web shows a faction's ties, not the whole city");
+    has(await text(mo.page, ".wb-whose"), NC.notices[0].slice(0, 40), "the line saying whose it is, and the notices, at the foot");
+
+    // Mo shows the crew the Valentinos, the map and Heywood's pin.
+    const heywood = nw.pages.find((x) => x.book?.key === "heywood");
+    const mId = nw.maps[0].id;
+    const hPin = nw.maps[0].pins.find((x) => x.to?.id === heywood.id);
+    same(hPin?.area, "district", "Heywood's pin is a district's");
+    await mo.page.goto(`${BASE}/characters/?camp=${night.id}&world&f=${vId}`);
+    await mo.page.click(`[data-do="show"][data-f="${vId}"][data-p="card"]`);
+    await mo.page.goto(`${BASE}/characters/?camp=${night.id}&world&m=${mId}`);
+    await mo.page.waitForSelector(".wm-stage.is-drawn svg.dm");
+    await mo.page.click('[data-do="mshow"]');
+    await mo.page.click(".wm-pins-btn");
+    await mo.page.click(`.wm-row[data-pid="${hPin.id}"]`);
+    await mo.page.waitForSelector(".wm-card");
+    has(await text(mo.page, ".wm-card .wb-k"), "District", "Heywood's card says it's a district");
+    await mo.page.click('[data-do="mpinshow"]');
+    await until(async () => { const w = await worldOf(night.id); return w.maps[0].shown && w.maps[0].pins.find((x) => x.id === hPin.id)?.shown && w.factions.find((f) => f.id === vId)?.shown.card; }, "the Valentinos, the map and Heywood's pin shown");
+
+    // Kai's phone draws the map, Heywood by name and nothing it opens, and
+    // the Web switch puts the Valentinos there.
+    await kai.page.goto(`${BASE}/characters/?camp=${night.id}&world`);
+    await kai.page.waitForSelector(".wm-tok");
+    yes(Boolean(await kai.page.$(".wm-tok .wm-thumb svg.dm")), "Kai's list of maps has the drawing as its small picture");
+    await kai.page.click(".wm-tok-a");
+    await kai.page.waitForSelector(".wm-stage.is-drawn svg.dm");
+    same(await kai.page.$$eval(".wm-pin", (els) => els.map((e) => e.getAttribute("aria-label"))), ["Heywood, a district"], "Kai sees Heywood by name and no other pin");
+    const kp = (await playerWorld(kai.page, night.id)).maps[0];
+    same([kp.key, Boolean(kp.draw), kp.pins[0]?.to, kp.pins[0]?.fs], ["", true, null, [vId]], "Kai's map: the drawing, Heywood opening nothing yet, and the Valentinos sitting there");
+    await kai.page.click(".wm-web-b");
+    await kai.page.waitForSelector(`.wm-ft[data-f="${vId}"]`);
+    same(await kai.page.$$eval(".wm-ft", (els) => els.map((e) => e.dataset.f)), [vId], "Kai's web puts the Valentinos at Heywood, and nobody else");
+    same(await kai.page.$$eval(".wm-strip", (els) => els.length), 0, "and nobody she's been shown waits off the map");
+    await tap(kai.page, `.wm-ft[data-f="${vId}"]`);
+    await kai.page.waitForSelector(".wm-card");
+    has(await text(kai.page, ".wm-card"), "The Valentinos", "a tap brings up the Valentinos' card");
+    has(await text(kai.page, ".wm-card .wb-k"), "Heywood", "saying where they sit");
+    has(await text(kai.page, ".wm-card"), "Its card", "with their card a tap away");
+    await themes(kai.page, "Night City's map with the web, on a player's phone", "whole-map-player");
+
+    // Mo covers the map: Heywood goes off Kai's phone, then comes back once
+    // its spot's uncovered, the fog drawn over the drawing.
+    await mo.page.click(".wm-fog-btn");
+    await mo.page.click('[data-do="mfogon"][data-v="all"]');
+    await mo.page.click('[data-do="mfogdone"]');
+    await until(async () => Boolean((await worldOf(night.id)).maps[0].fog), "the fog on Night City's map");
+    same((await playerWorld(kai.page, night.id)).maps[0].pins.length, 0, "under the fog, Heywood's off Kai's phone");
+    yes(!(await worldOf(night.id)).maps[0].fog.crew, "and there's no crew's picture to make");
+    const m0 = (await worldOf(night.id)).maps[0];
+    const fb = fogBits(m0.fog.c, m0.w, m0.h);
+    const { gw, gh } = gridOf(m0.w, m0.h);
+    const [ci, cj] = [Math.floor(hPin.x * gw), Math.floor(hPin.y * gh)];
+    for (let j = Math.max(0, cj - 2); j <= Math.min(gh - 1, cj + 2); j++) for (let i = Math.max(0, ci - 2); i <= Math.min(gw - 1, ci + 2); i++) fb[(j * gw + i) >> 3] &= ~(1 << ((j * gw + i) & 7));
+    await got(mo.page, "POST", `/api/campaigns/${night.id}/world`, { dev: "mo-9i-0000001", ops: [{ n: 1, o: "m-fog", id: mId, v: fogText(fb) }] });
+    same((await playerWorld(kai.page, night.id)).maps[0].pins.map((x) => x.id), [hPin.id], "Heywood's back on Kai's phone once its spot's uncovered");
+    await kai.page.reload();
+    await kai.page.waitForSelector(".wm-stage.is-drawn svg.dm");
+    await until(async () => (await kai.page.$$eval(".wm-pin", (els) => els.length)) === 1, "Heywood on Kai's map again");
+    yes(await kai.page.$eval(".wm-fog", (c) => !c.hidden && c.width > 0 && !c.classList.contains("is-gm")), "the fog's drawn solid over the drawing on Kai's phone");
+
+    // With no signal, Kai's map opens drawn, with its pin.
+    await kai.page.goto(`${BASE}/characters/?camp=${night.id}&world`);
+    await kai.page.waitForSelector(".wm-tok");
+    await kai.context.setOffline(true);
+    await kai.page.click(".wm-tok-a");
+    await until(async () => (await h1(kai.page)) === "Night City, 2077", "Night City's map with no signal");
+    yes(Boolean(await kai.page.$(".wm-stage.is-drawn svg.dm")), "drawn with no signal");
+    same(await kai.page.$$eval(".wm-pin", (els) => els.length), 1, "with Heywood's pin");
+    await kai.context.setOffline(false);
+
+    // A made-up change to the world's file: Mo gets the note on the
+    // Valentinos and on Heywood, and takes both.
+    const changed = JSON.parse(JSON.stringify(NC));
+    const cv = changed.factions.find((f) => f.key === "valentinos");
+    const other = NC.factions.find((f) => f.key !== "valentinos" && !f.of);
+    cv.card.want = "Every block in Heywood, held the old way.";
+    cv.card.threads.push({ to: other.key, text: "Owes them for a wedding gone wrong", kind: "bond", s: "whole" });
+    changed.places.find((x) => x.key === "heywood").card.look = "Murals on every wall, and a quiet that's only quiet till you cross somebody.";
+    await mo.context.route("**/worlds/night-city-2077.json", (route) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(changed) }));
+    await mo.page.goto(`${BASE}/characters/?camp=${night.id}&world&f=${vId}`);
+    await mo.page.waitForSelector(".wb-book");
+    has(await text(mo.page, ".wb-book"), "There’s been a change to the Valentinos in Night City, 2077", "the note on the Valentinos");
+    has(await text(mo.page, ".wb-book"), "Every block in Heywood", "with the new Want");
+    has(await text(mo.page, ".wb-book"), "Owes them for a wedding gone wrong", "and the new thread");
+    await mo.page.click('[data-do="book"][data-take="1"]');
+    const otherId = nw.factions.find((f) => f.book.key === other.key).id;
+    await until(async () => { const f = (await worldOf(night.id)).factions.find((x) => x.id === vId); return f.want === cv.card.want && f.threads.some((t) => t.text === "Owes them for a wedding gone wrong" && t.to === otherId); }, "the Valentinos' changes taken, the thread toward the right faction");
+    await mo.page.goto(`${BASE}/characters/?camp=${night.id}&world&p=${heywood.id}`);
+    await mo.page.waitForSelector(".wb-book");
+    has(await text(mo.page, ".wb-book"), "There’s been a change to Heywood in Night City, 2077", "the note on Heywood");
+    has(await text(mo.page, ".wp-wb, #app"), "District", "Heywood's page says it's a district");
+    await mo.page.click('[data-do="pbook"][data-take="1"]');
+    await until(async () => (await worldOf(night.id)).pages.find((x) => x.id === heywood.id)?.look.startsWith("Murals on every wall"), "Heywood's change taken");
+    await mo.context.unroute("**/worlds/night-city-2077.json");
+
+    // Nothing crosses: Tuesday Lair and Kai's Night get nothing of it.
+    const tues = JSON.stringify(await playerWorld(kai.page, tuesday.id));
+    yes(!tues.includes("Valentinos") && !tues.includes("night-city") && !tues.includes("Heywood"), "Tuesday Lair gets nothing of Night Lair's");
+    yes(!JSON.stringify((await worldOf(kaiNight.id)) ?? {}).includes("night-city"), "and nor does Kai's Night");
+
+    // The GM's screens at 390 in both themes: the World screen, and the map with the web on.
+    await toWorld(mo.page, night.id);
+    await themes(mo.page, "Night Lair's World screen", "whole-world-gm");
+    await mo.page.goto(`${BASE}/characters/?camp=${night.id}&world&m=${mId}`);
+    await mo.page.waitForSelector(".wm-stage.is-drawn svg.dm");
+    await mo.page.click(".wm-web-b");
+    await until(async () => (await mo.page.$$eval(".wm-ft", (els) => els.length)) >= NC.factions.length - 2, "every faction that sits somewhere on Mo's web");
+    await tap(mo.page, `.wm-ft[data-f="${vId}"]`);
+    await mo.page.waitForSelector(".wm-card");
+    yes((await mo.page.$$eval(".wm-ft.is-lit", (els) => els.length)) >= 1 && (await mo.page.$$eval(".wm-wl", (els) => els.length)) >= 1, "a tap lights the Valentinos' ties and their threads");
+    await themes(mo.page, "Night City's map with the web, on the GM's phone", "whole-map-gm");
+
+    // Abnu Lair: Mo brings Abnu in, Undo takes it all back off, and he brings it in again.
+    const abnu = (await got(mo.page, "POST", "/api/campaigns", { name: "Abnu Lair" })).json?.campaign;
+    await api(sam.page, "PUT", "/api/characters/dorrie-qqqqqq", crewChar("dorrie-qqqqqq", "dorrie", "Dorrie"));
+    same((await got(sam.page, "POST", "/api/join", { code: abnu.code, character: "dorrie-qqqqqq" })).json?.campaign?.role, "player", "Sam joins Abnu Lair with Dorrie");
+    const bringAbnu = async () => {
+      await toWorld(mo.page, abnu.id);
+      await openFold(mo.page, "wb-whole");
+      await mo.page.click('[data-do="whole"][data-w="abnu-1000"]');
+      await until(async () => (await worldOf(abnu.id))?.build?.world === AB.id, "Abnu in Abnu Lair", 30000);
+    };
+    // Undo straight from the note, while it's still going up.
+    await toWorld(mo.page, abnu.id);
+    await openFold(mo.page, "wb-whole");
+    await mo.page.click('[data-do="whole"][data-w="abnu-1000"]');
+    await mo.page.waitForSelector('#cc-toast.show [data-act="wundo"]');
+    has(await text(mo.page, "#cc-toast"), "Abnu, a thousand years after the Sundering’s in", "the note says Abnu's in");
+    await mo.page.click('#cc-toast [data-act="wundo"]');
+    await until(async () => { const w = await worldOf(abnu.id); return Boolean(w) && !w.factions.length && !w.pages.length && !w.maps.length && !w.build; }, "Undo taking Abnu all back off", 30000);
+    await bringAbnu();
+    const aw = await worldOf(abnu.id);
+    same([aw.factions.length, aw.pages.length, aw.maps.length], [AB.factions.length, AB.places.length + AB.people.length, 1], "Abnu's in Abnu Lair again");
+    yes(!JSON.stringify(await playerWorld(sam.page, abnu.id)).includes("Alysta"), "nothing on Sam's phone till it's shown");
+
+    // Shown Alysta, its capital and the capital's pin, Sam's phone draws the
+    // world by its land, opens on the capital and puts Alysta there on the web.
+    const alysta = aw.factions.find((f) => f.book.key === "alysta");
+    const capital = aw.pages.find((x) => x.book?.key === "alysta-city");
+    const am = aw.maps[0];
+    const cPin = am.pins.find((x) => x.to?.id === capital.id);
+    same([cPin?.area, am.opens], ["part", cPin?.id], "the capital's pin's a city's, and the map opens on it");
+    let an = 0;
+    const asMo = (op) => got(mo.page, "POST", `/api/campaigns/${abnu.id}/world`, { dev: "mo-9i-abnu-01", ops: [{ n: ++an, ...op }] });
+    for (const op of [{ o: "show", id: alysta.id, p: "card", v: true }, { o: "p-show", id: capital.id, p: "page", v: true }, { o: "m-show", id: am.id, v: true }, { o: "m-pinset", id: am.id, pid: cPin.id, f: "shown", v: true }]) same((await asMo(op)).status, 200, `Mo's ${op.o}`);
+    await sam.page.goto(`${BASE}/characters/?camp=${abnu.id}&world&m=${am.id}`);
+    await sam.page.waitForSelector(".wm-stage.is-drawn svg.dm.is-world");
+    same(await sam.page.$$eval(".wm-pin", (els) => els.map((e) => e.getAttribute("aria-label"))), ["Alysta, a city"], "Sam sees Alysta, the capital, by name");
+    const near = await sam.page.evaluate(() => {
+      const st = document.querySelector(".wm-stage").getBoundingClientRect();
+      const p = document.querySelector(".wm-pin").getBoundingClientRect();
+      return Math.abs(p.left + p.width / 2 - (st.left + st.width / 2)) < st.width * 0.3 && p.top > st.top && p.bottom < st.bottom;
+    });
+    yes(near, "Sam's map opens on the capital");
+    await sam.page.click(".wm-web-b");
+    await sam.page.waitForSelector(`.wm-ft[data-f="${alysta.id}"]`);
+    same(await sam.page.$$eval(".wm-ft", (els) => els.map((e) => e.dataset.f)), [alysta.id], "Sam's web puts Alysta at its capital");
+    await themes(sam.page, "Abnu's map on a player's phone", "whole-abnu-player");
+    // The capital's places tuck on Mo's phone at the whole map.
+    await mo.page.goto(`${BASE}/characters/?camp=${abnu.id}&world&m=${am.id}`);
+    await mo.page.waitForSelector(".wm-stage.is-drawn svg.dm.is-world");
+    await mo.page.click('[data-do="mzoom"][data-z="whole"]');
+    await until(async () => (await mo.page.$$eval(".wm-pin.is-tucked", (els) => els.length)) >= 4, "the capital's places tucked at the whole map");
+    has(await text(mo.page, ".wm-pin.is-part"), "Alysta", "behind the capital's name");
+  }
+
   console.log("9h. The founding: the ground and the founding");
   await checkFoundingGround();
   // ZI_UPTO=9h stops here.
   if (UPTO === "9h") break rest;
+
+  console.log("9i. A whole world into a campaign");
+  await checkWholeWorld();
+  // ZI_UPTO=9i stops here.
+  if (UPTO === "9i") break rest;
 
 
   // ------------------------------------------------------------ 10. who can do what

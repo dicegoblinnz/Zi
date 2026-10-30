@@ -19,11 +19,15 @@
 //        map or a pin she's shown), or of How it came to be (an age she's
 //        shown them), every phone on the campaign's live table is told to
 //        look again, so it's there in a moment (tableWorld()).
+//        A whole world (stage 14 of notes/builder-plan.md) is Mo's alone to
+//        bring in for now: a change carrying one of its cards, its drawn map
+//        or its record, from any other GM, is turned down whole.
 import { apply, blank, forPlayer, readable } from "../companion/board.js";
 import { keysOf, mapsForPlayer } from "../companion/maps.js";
 import { buildForPlayer } from "../companion/world-record.js";
 import { binned, dropPictures } from "./maps.js";
 import { tableWorld } from "./table.js";
+import wholes from "../generated/worlds-index.json";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
 // What the crew's phones are told to look again for: their maps and their history.
@@ -32,6 +36,11 @@ const MAX_CHANGES = 200;
 // Twenty Places and the whole Bestiary brought in fit with room to spare.
 const MAX_DOC = 700000;
 const MAX_DEVICES = 64;
+
+// A change that brings in something of a whole world's: a faction or a page
+// whose book is the world's, its drawn map, or its record.
+const WHOLE = new Set(wholes.map((w) => w.id));
+const ofWhole = (op) => [op?.f?.book?.from, op?.p?.book?.from, op?.m?.from, op?.o === "wb-set" ? op.b?.world : null].some((x) => typeof x === "string" && WHOLE.has(x));
 
 // FNV-1a, to say whether anything's changed since the phone last looked.
 function stampOf(text) {
@@ -67,12 +76,14 @@ export async function showWorld(env, url, camp, user, { json }) {
   return json({ v, world, role: camp.role });
 }
 
-// Only the GM gets here (index.js turns anyone else away).
-export async function changeWorld(request, env, camp, user, { json, fail, body }) {
+// Only the GM gets here (index.js turns anyone else away). isAdmin() says
+// whether she's Mo, asked only when a change brings in a whole world.
+export async function changeWorld(request, env, camp, user, { json, fail, body, isAdmin }) {
   const b = await body(request);
   const dev = String(b?.dev ?? "");
   if (!b || !DEV.test(dev) || !Array.isArray(b.ops)) return fail(400, "That didn’t look like a change to the board.");
   if (b.ops.length > MAX_CHANGES) return fail(413, "That’s a lot of changes at once. Send them a few at a time.");
+  if (b.ops.some(ofWhole) && !(await isAdmin?.())) return fail(403, "Only Mo can bring that world into a campaign for now.");
   const ops = b.ops.filter((x) => x && typeof x === "object" && Number.isInteger(x.n) && x.n > 0).sort((x, y) => x.n - y.n);
   let row = null;
   let top = 0;

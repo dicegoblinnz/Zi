@@ -6,13 +6,14 @@
 // are saved on the phone, and the service worker keeps this page offline.
 import Base from "../../layouts/Base.astro";
 import book from "../../generated/book.json";
+import wholes from "../../generated/worlds-index.json";
 import "@fontsource/alegreya-sans/800.css";
 import "../../styles/kit.css";
 import "../../styles/companion.css";
 import "../../styles/mapview.css";
 import "../../styles/web.css";
 
-const data = { crew: book.crew, conditions: book.companion.conditions, links: book.companion.links, build: book.companion.build, rules: book.companion.rules, party: book.companion.party, worlds: book.companion.worlds, places: book.companion.places };
+const data = { crew: book.crew, conditions: book.companion.conditions, links: book.companion.links, build: book.companion.build, rules: book.companion.rules, party: book.companion.party, worlds: book.companion.worlds, places: book.companion.places, wholes };
 const json = JSON.stringify(data).replace(/</g, "\\u003c");
 ---
 <Base title="Characters" current="characters" description="Build your own Zi’Dara character or play one of the crew from your phone, with the counting done and every roll a tap away.">

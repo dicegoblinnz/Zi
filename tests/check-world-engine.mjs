@@ -130,6 +130,17 @@
 //    place on the map, its page draws every faction, place, person and line
 //    of history, and the map, and Abnu's molefolk are named or hinted at only
 //    where the crew can't read it before they're found.
+// 11. A whole world into a campaign (stage 14): Night City and Abnu each go
+//    onto an empty world through the board's own changes, nothing turned
+//    down, every card and page with its book and every thread, maker and
+//    seat by its new id, the drawn map with a pin on every place, a district
+//    or part as its name, Abnu's capital's places tucked, and How it came to
+//    be with its recipe and nothing dealt, under what a world holds. A player
+//    gets nothing of it till it's shown, then the map's drawing and her fog,
+//    the pins she's shown and who sits at them, and their page once it's
+//    shown. Undo takes it all back off. With every faction and page of
+//    Abnu's shown bar the molefolk's, their names and hints never reach a
+//    player, and a thread toward them never does either.
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -151,6 +162,8 @@ const edgeDist = ([x, y], [ax, ay], [bx, by]) => {
   return Math.hypot(x - (ax + t * (bx - ax)), y - (ay + t * (by - ay)));
 };
 import { pageOf } from "../src/companion/pages.js";
+import { wholeOps, cardNow, hashOf } from "../src/companion/world-whole.js";
+import { fogFull, fogText, fogBits, gridOf, mapsForPlayer, sittersOf } from "../src/companion/maps.js";
 import { esc } from "../src/kit/kit.js";
 
 const problems = [];
@@ -1407,6 +1420,8 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
 // page goes onto a board the way the World screen takes one, it fits in a
 // world with room to spare, every pin's a place on the map, and its page draws
 // every faction, place, person and line of history, and the map.
+// Every real world, as compiled, for part 11.
+const realWorlds = [];
 {
   const started = Date.now();
   const bookIn = { assets: bookJson.companion.worlds.assets, sizes: bookJson.companion.worlds.sizes, regions: T.regions };
@@ -1576,6 +1591,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     for (const p of got.problems) note(`${w.universe} ${w.year}: ${p}`);
     const world = got.world;
     if (!world) continue;
+    realWorlds.push(world);
     // Each card onto a board, the way the World screen takes one, threads
     // and makers by the ids they get.
     const ids = new Map(world.factions.map((f, i) => [f.key, `f${String(i).padStart(3, "0")}`]));
@@ -1682,6 +1698,136 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     }
     console.log(`   ${world.id}: ${world.factions.length} factions on a board, ${world.places.length} places, ${world.people.length} people, ${Object.keys(world.map?.pins ?? {}).length} pins, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k brought in, its page drawn, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
   }
+}
+
+// 11. A whole world into a campaign (stage 14).
+{
+  // What a world holds (MAX_DOC in src/worker/world.js).
+  const WORLD_HOLDS = 700000;
+  let n = 0;
+  const newId = () => `w${(n++).toString(36).padStart(6, "0")}`;
+  for (const world of realWorlds) {
+    const { ops, counts } = wholeOps(world, newId, 1000);
+    const doc = blank();
+    let refused = 0;
+    for (const op of ops) if (!apply(doc, op)) refused++;
+    same(refused, 0, `${world.id}: changes the board turned down bringing it in`);
+    same([doc.factions.length, doc.pages.length, doc.maps.length, doc.build?.history.length], [world.factions.length, world.places.length + world.people.length, world.map ? 1 : 0, world.history.length], `${world.id}: factions, pages, maps and lines brought in`);
+    same(counts, { factions: world.factions.length, places: world.places.length, people: world.people.length, pins: Object.keys(world.map?.pins ?? {}).length, lines: world.history.length }, `${world.id}: what it says it brought in`);
+    same(ops.at(-1).o, "wb-set", `${world.id}: the record goes in last`);
+    const size = JSON.stringify(doc).length;
+    yes(size < WORLD_HOLDS * 0.7, `${world.id}: brought in it's ${size} characters, too near the ${WORLD_HOLDS} a world holds`);
+    same(JSON.stringify(readable(copy(doc))), JSON.stringify(doc), `${world.id}: read back off the Worker it isn't the same`);
+    // Every card with its book, and its threads, maker and seat by new ids.
+    const byKey = new Map(doc.factions.map((f) => [f.book?.key, f]));
+    const pageByKey = new Map(doc.pages.map((p) => [p.book?.key, p]));
+    for (const f of world.factions) {
+      const got = byKey.get(f.key);
+      if (!got) {
+        note(`${world.id}: ${f.card.name} isn't on the board`);
+        continue;
+      }
+      same([got.book.from, got.book.h, Object.values(got.shown).some(Boolean)], [world.id, hashOf(f.card), false], `${world.id}: ${f.card.name}'s book and what's shown`);
+      same(got.threads.map((t) => [t.text, doc.factions.find((x) => x.id === t.to)?.book.key]), f.card.threads.map((t) => [t.text, t.to]), `${world.id}: ${f.card.name}'s threads`);
+      if (f.of) same(doc.factions.find((x) => x.id === got.parent)?.book.key, f.of, `${world.id}: ${f.card.name}'s maker`);
+      if (f.seat) same(doc.pages.find((p) => p.id === got.sits)?.book.key, f.seat, `${world.id}: where ${f.card.name} sits`);
+      same(cardNow(world, f.key)?.h, got.book.h, `${world.id}: ${f.card.name}'s card now hashes as it came in`);
+    }
+    for (const p of [...world.places, ...world.people]) yes(pageByKey.get(p.key)?.book?.from === world.id, `${world.id}: ${p.card.name} isn't a page with its book`);
+    same(doc.build.world, world.id, `${world.id}: the record's world`);
+    same([doc.build.recipe.region, doc.build.recipe.era, doc.build.dealt, doc.build.seed, doc.build.shown], [world.recipe.region, world.recipe.era, null, "", []], `${world.id}: the record's recipe, nothing dealt and nothing shown`);
+    if (world.recipe.dials) for (const [k, v] of Object.entries(world.recipe.dials)) same(doc.build.dials[k], v, `${world.id}: the record's ${k} dial`);
+    same(doc.build.history.filter((l) => l.hers).length, world.history.filter((l) => l.hers).length, `${world.id}: lines that are hers`);
+    // The drawn map: no picture, its shapes and keys and no names in them, a
+    // pin on every place, districts and parts as their names, and on a whole
+    // world's map only the capital's places tucked.
+    const m = doc.maps[0];
+    const M = world.map;
+    same([m.key, m.from, m.w, m.h, m.pins.length], ["", world.id, M.size[0], M.size[1], Object.keys(M.pins).length], `${world.id}: the drawn map`);
+    yes(!/"name"/.test(JSON.stringify(m.draw)), `${world.id}: the drawing keeps a road's or landmark's name`);
+    same(Object.keys(m.draw.districts).sort(), Object.keys(M.districts).sort(), `${world.id}: the drawing's districts`);
+    const svg = drawMap({ ...m.draw, size: [m.w, m.h] }, { uid: "t" });
+    yes(svg.startsWith("<svg") && !/undefined|NaN/.test(svg), `${world.id}: the drawing doesn't draw`);
+    const areaOfKey = new Map(world.places.map((p) => [p.key, p.area || ""]));
+    for (const pin of m.pins) {
+      const key = doc.pages.find((p) => p.id === pin.to?.id)?.book.key;
+      same(pin.area ?? "", areaOfKey.get(key) ?? "", `${world.id}: ${key}'s pin says what it is`);
+      const [x, y] = M.pins[key] ?? [];
+      yes(Math.abs(pin.x - x / M.size[0]) < 0.0002 && Math.abs(pin.y - y / M.size[1]) < 0.0002, `${world.id}: ${key}'s pin isn't where the file puts it`);
+    }
+    const tucked = m.pins.filter((p) => p.tuck).map((p) => doc.pages.find((x) => x.id === p.to.id)?.book.key).sort();
+    same(tucked, world.map.ground.land ? world.places.filter((p) => !p.area && world.places.find((x) => x.key === p.in)?.area === "part").map((p) => p.key).sort() : [], `${world.id}: the places that tuck`);
+    same(doc.pages.find((p) => p.id === m.pins.find((x) => x.id === m.opens)?.to.id)?.book.key ?? "", M.opens ?? "", `${world.id}: the pin the map opens on`);
+    // Every faction that sits somewhere is on its seat's pin, and a mini
+    // faction on its maker's.
+    const at = sittersOf(doc.factions, m.pins);
+    for (const f of doc.factions) {
+      const w = world.factions.find((x) => x.key === f.book.key);
+      const seat = w.of ? world.factions.find((x) => x.key === w.of)?.seat : w.seat;
+      if (!seat || !M.pins[seat]) continue;
+      same(doc.pages.find((p) => p.id === m.pins.find((x) => x.id === at.get(f.id))?.to.id)?.book.key, seat, `${world.id}: ${f.name} on the map`);
+    }
+    // A player gets nothing till it's shown.
+    same(JSON.stringify(forPlayer(doc)), JSON.stringify({ factions: [], pages: [], maps: [], build: null, by: null, at: 0 }), `${world.id}: a player gets something before anything's shown`);
+    // Shown the map, a district's pin and the first faction sitting at it: the
+    // drawing, the pin by name with nothing it opens, and who sits there.
+    const shown = copy(doc);
+    const sm = shown.maps[0];
+    const district = sm.pins.find((p) => p.area === "district" && [...at].some(([, pid]) => pid === p.id));
+    const sitter = shown.factions.find((f) => at.get(f.id) === district?.id && !f.mini);
+    for (const op of [{ o: "m-show", id: sm.id, v: true }, { o: "m-pinset", id: sm.id, pid: district.id, f: "shown", v: true }, { o: "show", id: sitter.id, p: "card", v: true }]) yes(apply(shown, op), `${world.id}: ${op.o} didn't go on`);
+    let pv = mapsForPlayer(shown)[0];
+    same([pv.key, Boolean(pv.draw), pv.pins.length, pv.pins[0]?.to, pv.pins[0]?.fs, pv.pins[0]?.area], ["", true, 1, null, [sitter.id], "district"], `${world.id}: the player's map with a district and a faction shown`);
+    same(forPlayer(shown).build, { history: [], shown: [], world: world.id }, `${world.id}: the player's record once something's shown`);
+    apply(shown, { o: "p-show", id: district.to.id, p: "page", v: true });
+    same(mapsForPlayer(shown)[0].pins[0]?.to, { k: "p", id: district.to.id }, `${world.id}: the district's pin opens its page once that's shown`);
+    // Under her fog the pin goes, and comes back once its spot's uncovered,
+    // with the drawing and her own fog, never a crew's picture.
+    apply(shown, { o: "m-fog", id: sm.id, v: fogFull(sm.w, sm.h) });
+    pv = mapsForPlayer(shown)[0];
+    same([pv.pins.length, pv.fog?.c === shown.maps[0].fog.c, pv.fog?.crew, Boolean(pv.draw)], [0, true, null, true], `${world.id}: the player's map all under the fog`);
+    const b = fogBits(fogFull(sm.w, sm.h), sm.w, sm.h);
+    const { gw, gh } = gridOf(sm.w, sm.h);
+    const [ci, cj] = [Math.min(gw - 1, Math.floor(district.x * gw)), Math.min(gh - 1, Math.floor(district.y * gh))];
+    b[(cj * gw + ci) >> 3] &= ~(1 << ((cj * gw + ci) & 7));
+    apply(shown, { o: "m-fog", id: sm.id, v: fogText(b) });
+    same(mapsForPlayer(shown)[0].pins.map((p) => p.id), [district.id], `${world.id}: the district's pin once its spot's uncovered`);
+    yes(!apply(shown, { o: "m-crew", id: sm.id, key: "abcdefghijklmnopqrst", c: fogText(b) }), `${world.id}: a drawn map took a crew's picture`);
+    yes(!apply(shown, { o: "m-pic", id: sm.id, key: "abcdefghijklmnopqrst", w: 100, h: 100 }), `${world.id}: a drawn map took a picture`);
+    // Undo takes it all back off: every change's undo worked out before it went on.
+    const was = blank();
+    const back = [];
+    for (const op of ops) {
+      const u = undoOf(was, op);
+      if (apply(was, op)) back.unshift(...u);
+    }
+    const undone = copy(doc);
+    for (const op of back) apply(undone, op);
+    same([undone.factions.length, undone.pages.length, undone.maps.length, undone.build], [0, 0, 0, null], `${world.id}: Undo leaves something behind`);
+    // Abnu's molefolk: every other faction shown with all but its Secret, every
+    // other page shown with all but its Secret, the map, every other pin and
+    // every age, and nothing on a player's phone names them or hints at them.
+    if (world.universe === "abnu") {
+      const all = copy(doc);
+      const mole = all.factions.find((f) => f.book.key === "molefolk");
+      const theirs = new Set(["the-mountain", "molefolk-eldest"]);
+      for (const f of all.factions) if (f !== mole) for (const p of ["card", "power", "res", "assets", "agenda", "bonds", "threads"]) apply(all, { o: "show", id: f.id, p, v: true });
+      for (const p of all.pages) if (!theirs.has(p.book.key)) for (const k of ["page", "here", "ground", "stakes", "clock", "twist", "want", "threat"]) apply(all, { o: "p-show", id: p.id, p: k, v: true });
+      const am = all.maps[0];
+      apply(all, { o: "m-show", id: am.id, v: true });
+      for (const pin of am.pins) if (!theirs.has(all.pages.find((p) => p.id === pin.to.id)?.book.key)) apply(all, { o: "m-pinset", id: am.id, pid: pin.id, f: "shown", v: true });
+      apply(all, { o: "wb-show", v: true });
+      const seen = JSON.stringify(forPlayer(all));
+      // Any other mountain's lower case, and fine (stage 16).
+      const hidden = /\bmolefolk\b|\bmelammu\b|under the mountain|night boat|filled back in/i;
+      const hit = seen.match(hidden) ?? seen.match(/\b[Tt]he Mountain\b/);
+      yes(!hit, `abnu: a player shown everything bar the molefolk reads ${hit?.[0]}: ${hit ? seen.slice(Math.max(0, hit.index - 80), hit.index + 40) : ""}`);
+      yes(!seen.includes(mole.id), "abnu: a player's phone gets the molefolk's id, from a thread toward them or a pin");
+      yes(doc.factions.some((f) => f !== mole && f.threads.some((t) => t.to === mole.id)), "abnu: nothing on the board has a thread toward the molefolk, so the check above proves nothing");
+    }
+    console.log(`   ${world.id}: brought into a campaign in ${ops.length} changes, ${Math.round(size / 1000)}k, undone, and read by a player`);
+  }
+  console.log("11. a whole world into a campaign: its cards, pages, drawn map and record, a player's view of it, its fog, Undo, and the molefolk kept off a player's phone");
 }
 
 console.log(problems.length ? `\n${problems.length} problems` : "\nAll world engine checks passed");

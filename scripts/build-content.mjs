@@ -1584,6 +1584,13 @@ if (existsSync(worldsDir)) {
 // The pages under /worlds/ read every year of each universe from here.
 mkdirSync(join(ROOT, "src", "generated"), { recursive: true });
 writeFileSync(join(ROOT, "src", "generated", "worlds.json"), JSON.stringify(wholeWorlds));
+// What the World screen offers to bring into a campaign (stage 14), and what
+// the Worker knows is a whole world's: each year's id, its title and when it
+// starts, whose it is, and what's in it, but nothing of the world itself.
+writeFileSync(join(ROOT, "src", "generated", "worlds-index.json"), JSON.stringify(Object.values(wholeWorlds).flat().map((w) => ({
+  id: w.id, universe: w.universe, name: w.name, title: w.title, when: w.when, own: w.own, whose: w.whose, notices: w.notices, recipe: w.recipe,
+  factions: w.factions.length, places: w.places.length, people: w.people.length, map: Boolean(w.map), lines: w.history.length,
+}))));
 
 const outDir = join(ROOT, "src", "generated");
 mkdirSync(outDir, { recursive: true });

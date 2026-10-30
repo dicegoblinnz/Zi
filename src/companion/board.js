@@ -21,7 +21,11 @@
 //             Face), then power, res, assets, agenda, bonds, threads and secret
 //   book      where it came from, if it's out of the book: { from, key, h, at, was },
 //             was being the book's card as it was brought in, h its hash and at
-//             when the build that had it was made
+//             when the build that had it was made. A card out of a whole world
+//             (stage 14 of notes/builder-plan.md) has the world's id as from.
+//   sits      the place's page it sits at, if it came in with a whole world,
+//             so the web on a map puts it on that place's pin. Never sent to
+//             a player, whose maps say who sits where (mapsForPlayer())
 //
 // A change is one of these:
 //   { o: "new", f, at?, kids? }        a faction on the board (kids: mini factions it made, back to it)
@@ -137,6 +141,7 @@ export function factionOf(raw) {
   const s = raw.shown && typeof raw.shown === "object" ? raw.shown : {};
   f.shown = Object.fromEntries(SHOWS.map((p) => [p, s[p] === true]));
   f.book = bookOf(raw.book);
+  if (isId(raw.sits)) f.sits = raw.sits;
   return f;
 }
 

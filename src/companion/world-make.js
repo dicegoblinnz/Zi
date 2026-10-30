@@ -1696,6 +1696,13 @@ export function makeWorldMake(w) {
         <p>It’s on this phone, up to ${esc(where(e))}. Nothing’s on the board till you put it there.</p>
         <div class="cc-row"><a class="button primary" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;make=${mode}" data-act="w" data-do="nav">Carry on</a><button type="button" class="button" data-act="w" data-do="mk-drop-build">${sureOf("drop-build", id) ? "Tap again to drop it" : "Drop it"}</button></div></div>`;
     }
+    // A whole world brought in whose genre the tables don't deal yet (Night
+    // City's Cyberpunk) can't have a faction dealt for it till they do.
+    const b = doc.build;
+    const T0 = b?.world && b.recipe?.era ? tables() : null;
+    if (!empty && T0 && !canDeal(T0, b.recipe)) {
+      return `<div class="wk-start card is-add"><div><p class="wb-k">The world builder</p><h3>Add a faction</h3><p>${esc(genreName(b.recipe))}’s tables are still to come, so this board can’t have a faction dealt for it yet. Write your own under the board till then.</p></div></div>`;
+    }
     if (empty) {
       return `<div class="wk-start card"><p class="wb-k">The world builder</p><h3>Build the world</h3>
         <p>The tables deal the ground, then you answer a deck of moments from before the crew turned up, and the factions come out of how you answer. Or go a faction at a time, or deal the lot in one tap.</p>

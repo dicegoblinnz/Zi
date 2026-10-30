@@ -271,7 +271,7 @@ async function campaigns(request, env, url, method, user, id, sub, subId) {
   // campaign sees what the crew's been shown, and only the GM changes it.
   if (sub === "world" && !subId) {
     if (method === "GET") return showWorld(env, url, camp, user, { json });
-    if (method === "POST") return gm ? changeWorld(request, env, camp, user, { json, fail, body }) : gmOnly();
+    if (method === "POST") return gm ? changeWorld(request, env, camp, user, { json, fail, body, isAdmin: async () => (await roleOf(env, user.id)) === "admin" }) : gmOnly();
   }
   // A map's picture (maps.js): the GM puts them up, and her players get a
   // map's picture once she's shown the crew the map.
