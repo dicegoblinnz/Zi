@@ -17,6 +17,9 @@
 //             face, secret, name, offers }, dealt in that order, each step
 //             reading the card so far. null is still to deal (exc is
 //             undefined till it's dealt, and null when there's no exception).
+//             A faction the founding's room made (found-world.js) has room
+//             ("old" or "founder"), and a founder has loy, its own Loyalty
+//             thread, from what it said it'll never do.
 //   web       the ties round the ring, needs the assets with nothing paying
 //             for them and who's blocking each one, checks what the checks
 //             found, fixes what was dealt again for them, fallbacks what
@@ -1276,7 +1279,10 @@ function dealNeeds(T, W, { only = null } = {}) {
   const board = boardOf(T, W);
   for (const i of order) {
     if (W.needs.length >= count) break;
-    if (has.has(i) || W.locks[`f:${i}:assets`] || (W.factions[i].assets ?? []).some(own) || !W.factions[i].type) continue;
+    // A set she's locked stays as she left it, but one the founding's room
+    // dealt in the open can still be short of something it needs: the need's
+    // an asset beside its set, never in it (found-world.js).
+    if (has.has(i) || (W.locks[`f:${i}:assets`] && !W.factions[i].room) || (W.factions[i].assets ?? []).some(own) || !W.factions[i].type) continue;
     const card = cardOf(W, i);
     const held = heldRoles(W, i);
     const mine = new Set((W.factions[i].assets ?? []).map((a) => a.role));
@@ -1723,7 +1729,9 @@ export function cardsOf(T, W) {
       agendas: f.agenda ? [{ text: fill(f.agenda.text, slot(f.agenda.at)), die: f.agenda.die, then: "" }] : [],
       pub: [],
       mor: [],
-      loy: [],
+      // What a founder said it'll never do, in the founding (found-world.js):
+      // a bond thread on its own Loyalty.
+      loy: (f.loy ?? []).map((t) => ({ text: fill(t.text, { seat }), kind: "bond" })),
       threads,
       offers: f.offers.map((o) => ({ ...o })),
       exception: f.exc ? { text: f.exc.text, reason: f.exc.reason } : null,

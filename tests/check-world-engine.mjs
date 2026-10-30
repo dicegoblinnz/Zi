@@ -82,28 +82,49 @@
 //    back, a prompt that's waiting stays waiting when the answers are played
 //    again, Not this one on the last card comes back round to the last cards
 //    rather than ending the deck, and the dealing script plays a deck as text.
-// 9. A whole world (stage 12 of notes/builder-plan.md): the made-up one in
-//    tests/worlds/ passes, and a faction with no Want, Power past its size,
-//    no rival or a rival with no thread back, no need blocked, no Secret
-//    naming another faction, two factions with the same asset, an agenda at
-//    nothing or at a faction that isn't there, nothing strange, a name too
-//    long for a card, a comma inside { }, people who don't add Power and an
-//    asset that does, a mini faction's outcomes and Loyalty, a Secret's ways
-//    in, a thread toward nobody, and a line of history in no age, out of
-//    order, too long or an age with nothing in it are each a problem that
-//    says so. Then every world in content/worlds/ passes, every card goes
-//    onto a board whole, it fits in a world with room to spare, and its page
-//    draws every faction and every line of history.
+// 9. The founding (stage 11): a founding line that isn't toward anyone, has a
+//    slot nothing fills, or too few of them is a problem, and so is no
+//    newcomer. Then six foundings for every named genre in every region the
+//    packs cover, played through the rules at random with the dice rolled
+//    as the server rolls them: every die deals three seats and the same three
+//    when it's dealt again, no seat comes twice, every old power's three
+//    cards are three kinds at City or Great, every founder's hand and line is
+//    three, with seats, lines and cards in their own words now and then, the
+//    clock running out and someone leaving, and her phone's deal of the rest
+//    finishing whatever's left. Every founding finishes with old powers City
+//    or Great and no agenda, founders Local with a d4 agenda, every faction
+//    whole and nothing left in a slot. Carried into Build the world on a seed
+//    of its own, dealing the rest never changes what the room made, every
+//    check passes with a fallback in under 1 founding in 20, the founding's
+//    threads are all in the web, every faction's got a Face and a Secret, and
+//    a founder's Loyalty is on its card.
+// 10. A whole world (stage 12 of notes/builder-plan.md): the made-up one in
+//    tests/worlds/ passes, and 35 ways of breaking it are each a problem that
+//    says so and never come out as a world: a card that isn't whole, too long
+//    or holds what it can't, Power or resources past its size, people who
+//    don't add Power or a thing that does, Appendix B's people as a thing, a
+//    need with a resource to spare beside it or from a faction with none, no
+//    rival or a tie with no thread back, no need blocked, no Secret naming
+//    another faction, a Secret's tag or ways in, two factions with one key,
+//    name or asset, a kind or size there isn't, an agenda at nothing or at a
+//    faction that isn't there, a mini faction's outcomes and Loyalty, a thread
+//    toward nobody, nothing strange, and history in no age, out of order, too
+//    long, too much of it or an age with nothing in it. A folder that isn't
+//    laid out right says so. Then every world in content/worlds/ passes, every
+//    card goes onto a board whole, it fits in a world with room to spare, and
+//    its page draws every faction and every line of history.
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { apply, blank, forPlayer, readable, standingOf, undoOf } from "../src/companion/board.js";
-import { BAGS, CHECKS, STEPS, canDeal, cardsOf, choose, crewFits, dealRest, dealWorld, lock, newSeed, options, pickAt, pickKey, poolOf, preview, recordOf, redeal, redealFaction, resume, rngOf, setCrew, SIZES, start, startAdd, tensionAt } from "../src/companion/world-engine.js";
+import { BAGS, CHECKS, REGIONS, STEPS, canDeal, cardsOf, choose, crewFits, dealRest, dealWorld, lock, newSeed, options, pickAt, pickKey, poolOf, preview, recordOf, redeal, redealFaction, resume, rngOf, setCrew, SIZES, start, startAdd, tensionAt } from "../src/companion/world-engine.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { MAX, PARTS, answer, current, deckOf, fillPrompt, finish, formedOf, historyOf, notThis, playRest, prompted, replay, startDeck, undo } from "../src/companion/world-deck.js";
 import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.mjs";
 import { linesOf } from "../src/companion/world-answer.js";
+import { applyFound, leftFound } from "../src/companion/found-rules.js";
+import { carriedWorld, founderHand, freeSeats, namable, oldHand, restOf, roleOf, roomBoard, roomWorld, seatHand, seatSize, wantWith } from "../src/companion/found-world.js";
 import { WORLD_MAX, compileWorld, readWorldsDir } from "../scripts/worlds.mjs";
 import { boardOf, historyOf as storyOf, webOfWorld } from "../src/worlds/world-page.js";
 import { esc } from "../src/kit/kit.js";
@@ -1148,8 +1169,165 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   console.log(`8. the deck: ${played} decks answered at random, ${replayed} played again, Not this one, Undo, decks picked up again after a reload and the dealing script, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
 }
 
-// 9. A whole world (stage 12): the made-up one passes, and breaking each of
-// its checks on a copy is a problem that says so. Then every real world in
+// 9. The founding's world (stage 11).
+{
+  const started = Date.now();
+  const base = readTablesDir("tests/world-pack").src;
+  const broken = (what, change, want, opts = { minimums: false }) => {
+    const src = copy(base);
+    change(src);
+    const got = compileTables(src, BOOK, opts).problems;
+    yes(got.some((p) => p.includes(want)), `${what}: wanted a problem saying "${want}", got ${JSON.stringify(got.slice(0, 3))}`);
+  };
+  broken("a line for who had the seat that isn't toward anyone", (s) => (s.core.founding = { before: ["We lost {seat}"], owes: ["We owe {b} our start"], never: ["We never run"] }), "needs {b}, the newcomers it's toward");
+  broken("a line for who they owe that names nobody", (s) => (s.core.founding = { before: ["{b} took {seat}"], owes: ["We owe everyone"], never: ["We never run"] }), "needs {b}, whoever they owe");
+  broken("a line with a slot nothing fills", (s) => (s.core.founding = { before: ["{b} took {seat}"], owes: ["We owe {b} our start"], never: ["We never leave {rival}"] }), "a slot nothing fills in its words: {rival}");
+  broken("too few lines for the founding", (s) => (s.core.founding = { before: ["{b} took {seat}"], owes: ["We owe {b} our start"], never: ["We never run"] }), "founding.owes needs 12 lines or more", { minimums: true });
+  broken("no newcomer for the founding's lines", (s) => delete s.core.templates.newcomer, "templates needs newcomer");
+
+  // Foundings played through the rules at random, every hand off the tables
+  // from the shared seed, the way every phone deals them.
+  const gm = { user: "gm", role: "gm" };
+  const NAMES = ["Kai", "Sam", "Lee", "Ana", "Tui"];
+  const recipes = [];
+  for (const g of Object.values(T.genres)) for (const region of REGIONS) if (canDeal(T, { region, era: g.era, twist: g.twist ?? null })) recipes.push({ region, era: g.era, twist: g.twist ?? null });
+  let played = 0;
+  let fallbacks = 0;
+  const pick = (list, r) => list[Math.floor(r() * list.length) % list.length];
+  for (let s = 0; s < recipes.length * 6; s++) {
+    const recipe = recipes[s % recipes.length];
+    const seed = `found-check-${s}`;
+    const r = rngOf(seed, "choices");
+    const players = 1 + (s % 4);
+    const roster = NAMES.slice(0, players).map((name, k) => ({ user: `u${k}`, name, ch: `c${k}`, cname: `C${k}` }));
+    const as = (key) => ({ user: key.split("|")[0], role: "player", ch: key.split("|")[1] });
+    const doc = { found: null };
+    let now = 1e6;
+    let n = 0;
+    const ap = (op, who) => {
+      const res = applyFound(doc, { ...op, n: ++n }, who, roster, now, { server: true });
+      if (!res.ok) note(`${seed}: ${op.o} ${op.part ?? ""} was refused: ${res.why}`);
+      return res.ok;
+    };
+    const f = () => doc.found;
+    ap({ o: "fd-open", id: `found-${String(s).padStart(4, "0")}`, recipe, factions: Math.max(4, players + 2 + (s % 3)), seed: newSeed(T, r), clocks: [30, 40, 40] }, gm);
+    ap({ o: "fd-start" }, gm);
+    for (const part of ["holds", "tension", "runs", "notices"]) {
+      const c = options(T, roomWorld(T, f()), part === "tension" ? "tension" : `ask:${part}`, 1)[0];
+      ap({ o: "fd-answer", part, pick: { id: c.id, text: c.text, tags: c.tags, dials: c.dials ?? {}, ...(c.roll ? { roll: c.roll } : {}) } }, as(f().turn.key));
+    }
+    ap({ o: "fd-ground" }, gm);
+    const outAt = r() < 0.25 ? Math.floor(r() * f().pool.length) : -1;
+    while (f().step === "ground") {
+      if (f().out) {
+        const rest = restOf(T, f());
+        if (!rest) {
+          note(`${seed}: the rest of the ground couldn't be dealt`);
+          break;
+        }
+        ap(rest, gm);
+        continue;
+      }
+      const k = pick(f().seats.map((x, j) => (x ? null : j)).filter((j) => j != null), r);
+      const hand = seatHand(T, f(), k);
+      if (hand.length !== 3) note(`${seed}: die ${k} dealt ${hand.length} seats`);
+      same(seatHand(T, copy(f()), k), hand, `${seed}: a die's three seats dealt again came out differently`);
+      const p = r() < 0.12 ? { own: true, text: `Seat ${k} of Our Own`, notice: "Nobody's sure who built it.", role: roleOf(T, f(), k) } : pick(hand, r);
+      if (f().seats.filter(Boolean).length === outAt) ap({ o: "fd-clock", do: "add", m: -60 }, gm);
+      ap({ o: "fd-answer", part: "seat", die: k, pick: p }, as(f().turn.key));
+    }
+    const ids = f().seats.filter((x) => !x.own).map((x) => x.id);
+    same(new Set(ids).size, ids.length, `${seed}: a seat came up twice in the ground`);
+    ap({ o: "fd-age" }, gm);
+    if (f().olds < 1 && f().fac.length < 12) note(`${seed}: a founding with no old power`);
+    const leaveAt = r() < 0.2 ? 1 + Math.floor(r() * 8) : -1;
+    const timeAt = r() < 0.2 ? 1 + Math.floor(r() * 10) : -1;
+    let turns = 0;
+    while (f().step === "found" && turns < 400) {
+      turns++;
+      if (f().out) {
+        const rest = restOf(T, f());
+        if (!rest) {
+          note(`${seed}: the rest of the founding couldn't be dealt`);
+          break;
+        }
+        ap(rest, gm);
+        continue;
+      }
+      if (turns === leaveAt && f().who.length) leftFound(doc, f().who[0].user);
+      if (turns === timeAt) ap({ o: "fd-clock", do: "add", m: -60 }, gm);
+      const t = f().turn;
+      if (!t) continue;
+      if (t.part === "old") {
+        const hand = oldHand(T, f(), t.i);
+        if (hand.length !== 3 || new Set(hand.map((c) => c.type.id)).size !== 3 || !hand.every((c) => ["city", "great"].includes(c.size.size))) note(`${seed}: an old power's three cards weren't three kinds, City or Great`);
+        ap({ o: "fd-answer", part: "old", i: t.i, pick: pick(hand, r) }, gm);
+        continue;
+      }
+      const who = as(t.key);
+      let p;
+      if (t.part === "f-seat") {
+        const k = pick(freeSeats(f(), t.i), r);
+        p = { k, size: seatSize(T, f(), t.i, k) };
+      }
+      else if (t.part === "before" && r() < 0.3) p = { j: null };
+      else if (t.part === "before" || t.part === "owes") {
+        const j = pick(namable(f(), t.i), r);
+        const hand = founderHand(T, f(), t.i, t.part, j);
+        if (hand.length !== 3) note(`${seed}: ${t.part} dealt ${hand.length} lines`);
+        p = r() < 0.1 ? { j, own: true, text: "We owe them, and we know it" } : { j, ...pick(hand, r) };
+      } else {
+        const hand = founderHand(T, f(), t.i, t.part);
+        if (hand.length !== 3) note(`${seed}: ${t.part} dealt ${hand.length} cards`);
+        p = r() < 0.1 ? { own: true, text: t.part === "name" ? "Our Lot" : "Something of our own" } : pick(hand, r);
+        if (t.part === "want") p = { ...p, with: wantWith(T, f(), t.i, p) };
+      }
+      ap({ o: "fd-answer", part: t.part, i: t.i, pick: p }, who);
+    }
+    if (f().step !== "founded") {
+      note(`${seed}: the founding never finished (${f().step})`);
+      continue;
+    }
+    played++;
+    const B = roomBoard(T, f());
+    for (const x of B.factions) {
+      if (x.old ? !["city", "great"].includes(x.size) || x.agenda : x.size !== "local" || x.agenda?.die !== 4) note(`${seed}: ${x.name} is ${x.size} with ${x.agenda ? `a d${x.agenda.die} agenda` : "no agenda"}`);
+      if (!x.named || !x.res.length || !x.assets.length) note(`${seed}: ${x.name} isn't whole`);
+      if (/\{[a-z]+\}/.test(JSON.stringify([x.name, x.holds, x.toward, x.loy]))) note(`${seed}: something's left in a slot on ${x.name}`);
+    }
+    // What the room kept is what every phone shows, whatever tables a phone
+    // has: dealt again from an emptied pool of resources, the board's the same.
+    {
+      const T2 = { ...T, packs: Object.fromEntries(Object.entries(T.packs).map(([k, v]) => [k, { ...v, resources: [], assets: [] }])) };
+      let same2 = true;
+      try {
+        same2 = JSON.stringify(roomBoard(T2, f()).factions.map((x) => [x.res, x.assets, x.agenda])) === JSON.stringify(B.factions.map((x) => [x.res, x.assets, x.agenda]));
+      } catch {
+        same2 = false;
+      }
+      if (!same2) note(`${seed}: the board changes when the tables do`);
+    }
+    // Carried into Build the world, on a seed of its own: what the room made
+    // stays as it was, and the rest's dealt round it.
+    const W = carriedWorld(T, f(), `${seed}-hers`);
+    const before = JSON.stringify(W.factions.map((x) => [x.seat, x.size, x.type, x.method, x.want, x.res, x.assets, x.room === "founder" ? x.agenda : null, x.name, x.loy ?? null]));
+    dealRest(T, W);
+    same(JSON.stringify(W.factions.map((x) => [x.seat, x.size, x.type, x.method, x.want, x.res, x.assets, x.room === "founder" ? x.agenda : null, x.name, x.loy ?? null])), before, `${seed}: dealing the rest changed what the room made`);
+    for (const c of W.checks ?? []) if (!c.ok) note(`${seed}: the ${c.k} check failed`);
+    if (W.fallbacks.length) fallbacks++;
+    const made = (W.made?.ties ?? []).length;
+    same((W.web ?? []).filter((t) => t.from === "fd").length, made, `${seed}: the founding's threads aren't all in the web`);
+    const C = cardsOf(T, W);
+    if (!C.factions.every((x) => x.face && x.secret)) note(`${seed}: a faction without a Face or a Secret`);
+    for (const [i, x] of f().fac.entries()) if (!x.old && x.picks.never && C.factions[i].loy?.length !== 1) note(`${seed}: ${C.factions[i].name} lost what it'll never do`);
+  }
+  same(played, recipes.length * 6, "every founding played to its end");
+  yes(fallbacks * 20 < played, `fallbacks in ${fallbacks} of ${played} foundings, more than 1 in 20`);
+  console.log(`9. the founding: ${played} foundings played at random through the ground and the founding, and carried into Build the world, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
+}
+
+// 10. A whole world (stage 12): the made-up one passes, and each way of
+// breaking it on a copy is a problem that says so. Then every real world in
 // content/worlds/ passes, each card goes onto a board the way the World
 // screen takes one, it fits in a world with room to spare, and its page
 // draws every faction and every line of history.
@@ -1210,7 +1388,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       else note(`the made-up world with ${what} wasn't a problem (it said: ${got.problems.join(" | ").slice(0, 300) || "nothing"})`);
       if (got.world) note(`the made-up world with ${what} still came out as a world`);
     }
-    console.log(`9. a whole world: the made-up one passes, and ${broken} of ${breaks.length} breaks are each a problem`);
+    console.log(`10. a whole world: the made-up one passes, and ${broken} of ${breaks.length} breaks are each a problem`);
   }
   // A folder that isn't laid out right says so, instead of building nothing.
   {

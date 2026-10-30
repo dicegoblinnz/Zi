@@ -1,8 +1,10 @@
-// The founding on every phone in a campaign (stage 9 of notes/builder-plan.md):
-// the room and the asking. It's kept with the campaign's live table (table.js
-// and the Table object), so every change reaches every phone as it's made,
-// and each phone keeps the last of it for when there's no signal.
-// found-rules.js has the rules both sides use.
+// The founding on every phone in a campaign (stages 9 and 11 of
+// notes/builder-plan.md): the room and the asking, then the ground and the
+// founding. It's kept with the campaign's live table (table.js and the Table
+// object), so every change reaches every phone as it's made, and each phone
+// keeps the last of it for when there's no signal. found-rules.js has the
+// rules both sides use, and found-world.js the room's world, dealt the same
+// on every phone.
 //
 // The GM sets it up on her campaign's page and opens the room. Her players
 // join from their World tab, and once she starts it the turns go round the
@@ -11,13 +13,22 @@
 // from the shared seed, off public/world-tables.json, so nothing's
 // generated and nothing has to come from the server to deal. A player picks
 // one or writes their own. Her phone can put one in for anyone without a
-// phone, and it deals the rest when the clock runs out. Once the asking's
-// done, she takes it into Build the world on her phone (world-make.js) and
-// carries on there, the crew's answers locked.
-import { AGES, ASKED, CLOCKS, PARTS, clockLeft, dialsOf, keyOf, leftOf, pickOf, timeUp, whoOf } from "./found-rules.js";
+// phone, and it deals the rest when the clock runs out.
+//
+// Once the asking's done she rolls the ground's dice (on the server), and
+// each player takes a die in turn, its face picking what kind of seat it
+// deals, and keeps one of three seats or writes their own. Then she starts
+// the founding: she picks each old power from three whole cards, and the
+// players found a faction each, the last in the order first, a part at a
+// time: a free seat, who had it before, who they owe, what they'll never do,
+// what they are, how they work, what they want and their name. At the end
+// of any age she can take it into Build the world on her phone
+// (world-make.js), everything the crew made locked.
+import { AGES, ASKED, ASKS, CARDS, CLOCKS, ENDS, FOUNDER, PARTS, RUNNING, clockLeft, diceLeft, dialsOf, facOf, keyOf, leftOf, missingOf, pickOf, seatAt, timeUp, whoOf } from "./found-rules.js";
+import { calledIn, founderHand, freeSeats, keepName, lineIn, namable, oldHand, restOf, roleOf, roomBoard, roomWorld, seatHand, seatSize, wantWith } from "./found-world.js";
 import { REGIONS, canDeal, choose, fill, newSeed, options, start, tensionAt } from "./world-engine.js";
 import { rollDie } from "./dice.js";
-import { die as kitDie } from "../kit/kit.js";
+import { die as kitDie, mini as kitMini } from "../kit/kit.js";
 
 const MIX = "mix";
 const SHORT = { holds: "What holds it together", tension: "What’s pulling it apart", runs: "Who runs it", notices: "What a stranger notices" };
@@ -48,7 +59,9 @@ export function makeFound(d) {
   // the room opens, by campaign. change: the room whose setup she's changing.
   // own: the turn she's writing an answer for. roll: the turn whose real roll
   // she's tapping in. spin: the roll this phone's just made, which tumbles once.
-  const ui = { sure: "", setup: {}, change: "", own: "", roll: "", spin: "", focus: "", after: "" };
+  // die: the ground's die each room's looking at. fj: the faction picked for a
+  // founder's question. rolled: the rooms whose ground's dice have tumbled.
+  const ui = { sure: "", setup: {}, change: "", own: "", roll: "", spin: "", focus: "", after: "", die: {}, fj: {}, rolled: new Set() };
   // The three answers dealt for a turn, kept so a redraw never deals again.
   const hands = new Map();
   // The rest of an asking her phone's dealt, so time running out deals once,
@@ -148,8 +161,9 @@ export function makeFound(d) {
   // whatever's left of the asking, the way the engine deals it, in order.
   function dealRest(id, { force = false } = {}) {
     const f = foundOf(id);
-    if (!f || !gmIn(id) || f.step !== "ask" || (!f.out && !force)) return false;
-    const mark = `${f.id}|${leftOf(f).join(",")}`;
+    if (!f || !gmIn(id) || !RUNNING.includes(f.step) || (!f.out && !force)) return false;
+    const left = f.step === "ask" ? leftOf(f).join(",") : f.step === "ground" ? diceLeft(f).join(",") : (f.fac ?? []).map((_, i) => missingOf(f, i).length).join(",");
+    const mark = `${f.id}|${f.step}|${left}`;
     if (!force && dealt.has(mark)) return false;
     if (!tables()) {
       waitingDeal[id] = true;
@@ -157,6 +171,21 @@ export function makeFound(d) {
     }
     delete waitingDeal[id];
     if (!canDeal(T, f.recipe)) return false;
+    // The ground and the founding: what's left of them, the way the engine
+    // deals it (found-world.js). The ground waits for its dice.
+    if (f.step !== "ask") {
+      if (f.step === "ground" && !f.pool?.length) return false;
+      let op = null;
+      try {
+        op = restOf(T, f);
+      } catch {
+        op = null;
+      }
+      if (!op) return false;
+      dealt.add(mark);
+      TB().push(id, op);
+      return true;
+    }
     const picks = {};
     const sofar = structuredClone(f);
     for (const part of leftOf(f)) {
@@ -205,7 +234,7 @@ export function makeFound(d) {
     const up = timeUp(f, t);
     const run = Boolean(f.clock.run);
     const label = f.clock.age === 1 ? "The asking and the ground" : AGES[f.clock.age - 1];
-    const tools = gm && f.step === "ask"
+    const tools = gm && RUNNING.includes(f.step)
       ? `<div class="fd-clock-b">${btn("clock", run ? "Stop" : "Run", { cls: "button sm", attrs: ` data-v="${run ? "stop" : "run"}"`, disabled: !run && !left })}${btn("clock", "−5", { cls: "button sm", attrs: ' data-v="add" data-m="-5" aria-label="Five minutes off"', disabled: !left })}${btn("clock", "+5", { cls: "button sm", attrs: ' data-v="add" data-m="5" aria-label="Five more minutes"' })}</div>`
       : "";
     const said = up ? "Time’s up" : clockText(left);
@@ -317,11 +346,12 @@ export function makeFound(d) {
   function room(id, f, gm) {
     tables();
     const hid = `fd-h-${esc(id)}`;
-    const title = f.step === "room" ? "The room’s open" : f.step === "ask" ? "The asking" : "The asking’s done";
-    const body = f.step === "room" ? roomBody(id, f, gm) : f.step === "ask" ? askBody(id, f, gm) : doneBody(id, f, gm);
+    const TITLES = { room: "The room’s open", ask: "The asking", asked: "The asking’s done", ground: "The ground", grounded: "The ground’s done", found: "The founding", founded: "The founding’s done", carried: "Building the rest" };
+    const BODIES = { room: roomBody, ask: askBody, ground: groundBody, found: foundBody };
+    const body = (BODIES[f.step] ?? doneBody)(id, f, gm);
     return `<section class="cc-sec fd is-${f.step}${gm ? " is-gm" : ""}" data-fd="${esc(id)}" aria-labelledby="${hid}">
-      <div class="fd-head"><p class="kicker${gm ? " is-gm" : ""}">The founding · ${esc(mixSaid(f))}</p><h2 id="${hid}">${title}</h2></div>
-      ${status(id)}${f.step === "ask" ? clockRow(id, f, gm) : ""}${body}</section>`;
+      <div class="fd-head"><p class="kicker${gm ? " is-gm" : ""}">The founding · ${esc(mixSaid(f))}</p><h2 id="${hid}">${TITLES[f.step] ?? TITLES.asked}</h2></div>
+      ${status(id)}${RUNNING.includes(f.step) ? clockRow(id, f, gm) : ""}${body}</section>`;
   }
 
   function roomBody(id, f, gm) {
@@ -389,7 +419,7 @@ export function makeFound(d) {
     const late = up ? `<p class="cc-small fd-late">Time’s up. Once this turn’s done, the tables deal the rest.</p>` : "";
     if (part === "tension") return `<div class="card fd-turn${mine ? " is-mine" : ""}" data-fdk="tension">${head}${tensionBody(id, f, gm, mine, name)}${late}</div>`;
     const hand = handOf(f, part);
-    const ownOpen = ui.own === `${id}|${f.id}|${part}` && can;
+    const ownOpen = ui.own === `${id}|${f.id}|${part}|` && can;
     let cards;
     if (hand == null) cards = failed ? `<p class="cc-small">This phone couldn’t get the tables, so there’s nothing to deal yet.${can ? " You can still write your own." : ""}</p><div class="cc-row">${btn("retry", "Try again", { cls: "button sm" })}</div>` : '<p class="cc-small" role="status">Dealing…</p>';
     else if (!hand.length) cards = '<p class="cc-small">This phone’s tables can’t deal this world. Reload the page to get the new ones, or write your own.</p>';
@@ -440,17 +470,305 @@ export function makeFound(d) {
     return `<h3 class="fd-h3">${f.step === "ask" ? "So far" : "The answers"}</h3><ol class="fd-asked">${items}</ol>`;
   }
 
+  // The end of an age, and once she's taken it onto her phone. At the end of
+  // each age, she starts the next or takes it into Build the world.
   function doneBody(id, f, gm) {
     const gmn = esc(gmName(id));
-    const answers = soFar(id, f, gm);
-    if (f.step === "carried") {
-      const lead = gm ? "You’ve taken it into Build the world on this phone, with the crew’s answers locked. Clear this off once you’re done with it, and it goes from your players’ phones too." : `${gmn}’s building the rest of the world from the crew’s answers. Whatever you’re shown of it turns up here.`;
-      return `<p class="cc-lead">${lead}</p>${gm ? `<div class="cc-row fd-go"><a class="button primary" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;make=world" data-act="fd" data-do="nav">Carry on building</a>${btn("end", sureOf(`end:${id}`) ? "Tap again to clear it off" : "Clear it off", { cls: "button" })}</div>` : ""}${answers}${dialsList(f)}`;
-    }
     const building = gm ? d.world().building?.(id) : null;
-    const lead = gm ? "That’s the crew’s asking. Take it into Build the world on your phone and carry on from the ground there, the crew’s answers locked." : `That’s the asking done. ${gmn} takes it from here.`;
-    const carry = gm ? `<div class="cc-row fd-go">${btn("carry", sureOf(`carry:${id}`) ? "Tap again to take it in" : "Build the rest on your phone", { cls: "button primary", disabled: !T })}${btn("end", sureOf(`end:${id}`) ? "Tap again to end it" : "End it", { cls: "button danger" })}</div>${building ? '<p class="cc-small">You’ve got a build on the go on this phone already. Taking this into Build the world drops it.</p>' : ""}` : "";
-    return `<p class="cc-lead">${lead}</p>${carry}${answers}${dialsList(f)}`;
+    const carry = (label = "Build the rest on your phone") => btn("carry", sureOf(`carry:${id}`) ? "Tap again to take it in" : label, { cls: f.step === "founded" ? "button primary" : "button", disabled: !T });
+    const end = btn("end", sureOf(`end:${id}`) ? (f.step === "carried" ? "Tap again to clear it off" : "Tap again to end it") : f.step === "carried" ? "Clear it off" : "End it", { cls: f.step === "carried" ? "button" : "button danger" });
+    const dropping = building ? '<p class="cc-small">You’ve got a build on the go on this phone already. Taking this into Build the world drops it.</p>' : "";
+    const asking = f.step === "asked" || f.step === "carried" && !f.pool ? `${soFar(id, f, gm)}${dialsList(f)}` : pastFold(id, f, gm);
+    if (f.step === "carried") {
+      const lead = gm ? "You’ve taken it into Build the world on this phone, with what the crew made locked. Clear this off once you’re done with it, and it goes from your players’ phones too." : `${gmn}’s building the rest of the world from what the crew made. Whatever you’re shown of it turns up here.`;
+      return `<p class="cc-lead">${lead}</p>${gm ? `<div class="cc-row fd-go"><a class="button primary" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;make=world" data-act="fd" data-do="nav">Carry on building</a>${end}</div>` : ""}${f.fac?.length ? boardList(id, f, gm) : ""}${f.pool ? seatList(id, f, gm) : ""}${asking}`;
+    }
+    if (f.step === "grounded") {
+      const firstUp = first([...f.who].reverse()[0]?.name) || "the last in the order";
+      const lead = gm ? `That’s the ground. Start the founding when the crew’s ready: you pick the old powers first, then they found a faction each, ${esc(firstUp)} first, since the turns go back the other way.` : `That’s the ground done. ${gmn} starts the founding next: the old powers first, then a faction each, ${esc(firstUp)} first.`;
+      return `<p class="cc-lead">${lead}</p>${gm ? `<div class="cc-row fd-go">${btn("age", "Start the founding", { cls: "button primary" })}${carry()}${end}</div>${dropping}` : ""}${seatList(id, f, gm)}${asking}`;
+    }
+    if (f.step === "founded") {
+      const lead = gm ? "That’s the founding. Take it into Build the world on your phone, everything the crew made locked, and deal the rest there: the old powers’ agendas, every Face and Secret, the web, and a friend and a foe for each of the crew." : `That’s the founding done. ${gmn} builds the rest from here, on her phone.`;
+      return `<p class="cc-lead">${lead}</p>${gm ? `<div class="cc-row fd-go">${carry()}${end}</div>${dropping}` : ""}${boardList(id, f, gm)}${seatList(id, f, gm)}${asking}`;
+    }
+    const lead = gm ? "That’s the crew’s asking. Roll the ground’s dice and the turns go round again, a die each for a seat. Or take it into Build the world on your phone and carry on from the ground there, the crew’s answers locked." : `That’s the asking done. ${gmn} rolls the ground’s dice next.`;
+    return `<p class="cc-lead">${lead}</p>${gm ? `<div class="cc-row fd-go">${btn("ground", "Roll the ground", { cls: "button primary" })}${carry()}${end}</div>${dropping}` : ""}${asking}`;
+  }
+
+  // ------------------------------------------------------------ the ground
+
+  // The die a phone's looking at: the one it tapped, or the first still in
+  // the pool, so a turn's one tap when the first die suits.
+  function selDie(id, f) {
+    const k = ui.die[`${id}|${f.id}`];
+    const left = diceLeft(f);
+    return left.includes(k) ? k : left[0] ?? null;
+  }
+  // The ground's dice, each a d6 with the keep its face picks under it, the
+  // ones taken showing the seat they made. Anyone can tap one to see what it
+  // deals, and only whoever's turn it is keeps one.
+  function poolRow(id, f) {
+    if (!f.pool?.length) return `<div class="fd-rolling" role="status"><p>${online() ? "Rolling the ground’s dice…" : "The ground’s dice roll once there’s a signal."}</p></div>`;
+    const sel = selDie(id, f);
+    const spin = !ui.rolled.has(f.id);
+    return `<div class="fd-pool" role="group" aria-label="The ground’s dice">${f.pool.map((face, k) => {
+      const keep = keepName(roleOf(T, f, k));
+      const s = f.seats?.[k];
+      const dieSvg = kitDie(6, { own: "them", face, hide: true, spin: spin && !d.calm() });
+      if (s) return `<span class="fd-die is-taken"><span class="fd-die-d">${dieSvg}</span><span class="fd-die-k">${esc(s.text)}</span><span class="sr-only">, a ${face}, taken</span></span>`;
+      return `<button type="button" class="fd-die${sel === k ? " is-on" : ""}" data-act="fd" data-do="die" data-k="${k}"${pressed(sel === k)} aria-label="A ${face}: ${esc(keep)}"><span class="fd-die-d">${dieSvg}</span><span class="fd-die-k">${esc(keep)}</span></button>`;
+    }).join("")}</div>`;
+  }
+  // A hand, dealt once for what it reads, so a redraw never deals again.
+  function handFor(key, deal) {
+    if (!tables()) return null;
+    if (!hands.has(key)) {
+      let cards = [];
+      try {
+        cards = deal() ?? [];
+      } catch {
+        cards = [];
+      }
+      hands.set(key, cards);
+      if (hands.size > 80) hands.delete(hands.keys().next().value);
+    }
+    return hands.get(key);
+  }
+  const stateKey = (f) => JSON.stringify([f.id, f.seed, f.asking, f.tension, f.pool, f.seats, f.fac]);
+  // The cards a turn deals, as buttons for whoever can tap them, or to look
+  // at for everyone else. A tap for someone else takes a second, on her phone.
+  function hand(id, f, gm, cards, doit, inner, { label, sureKey }) {
+    const mine = f.turn?.key === myKey(id);
+    const can = mine || (gm && f.turn?.key !== "") || (gm && f.turn?.part === "old");
+    const name = f.turn?.key ? nameOf(f, f.turn.key) : "";
+    if (cards == null) return failed ? `<p class="cc-small">This phone couldn’t get the tables, so there’s nothing to deal yet.${can ? " You can still write your own." : ""}</p><div class="cc-row">${btn("retry", "Try again", { cls: "button sm" })}</div>` : '<p class="cc-small" role="status">Dealing…</p>';
+    if (!cards.length) return '<p class="cc-small">This phone’s tables can’t deal this. Reload the page to get the new ones, or write your own.</p>';
+    return `<div class="wk-hand fd-hand" role="group" aria-label="${esc(label)}">${cards.map((c, i) => {
+      if (!can) return `<div class="wk-card is-static">${inner(c)}</div>`;
+      const sure = gm && !mine && f.turn?.key !== "" && sureOf(`${sureKey}:${i}`);
+      return `<button type="button" class="wk-card${sure ? " is-sure" : ""}" data-act="fd" data-do="${doit}" data-c="${i}">${inner(c)}${sure ? `<span class="fd-sure">Tap again to put this in for ${esc(name)}</span>` : ""}</button>`;
+    }).join("")}</div>`;
+  }
+  const strangeMark = (c) => (c.strange ? '<span class="wk-card-m"><span class="wk-mark is-strange">Strange</span></span>' : "");
+  // Write my own, for whoever's turn it is, or hers for them.
+  function ownTools(id, f, gm, form, fields) {
+    const mine = f.turn?.key === myKey(id);
+    if (!mine && !gm) return "";
+    const key = `${id}|${f.id}|${f.turn.part}|${f.turn.i ?? ""}`;
+    const open = ui.own === key;
+    const name = nameOf(f, f.turn.key);
+    return `<div class="wk-tools">${btn("own", gm && !mine ? "Write theirs" : "Write my own", { cls: "button sm wk-tool", attrs: ` aria-expanded="${open ? "true" : "false"}"` })}</div>
+      ${open ? `<form class="cc-form pt-form wk-own fd-own" data-form="${form}">${fields(gm && !mine ? `${esc(name)}’s` : "Your")}
+        <div class="cc-row"><button type="submit" class="button primary">Put it in</button>${btn("own", "Cancel")}</div></form>` : ""}`;
+  }
+
+  function groundBody(id, f, gm) {
+    const gmn = esc(gmName(id));
+    const up = timeUp(f, now(id));
+    let turn = "";
+    if (f.turn?.part === "seat") turn = seatTurn(id, f, gm, up);
+    else if (f.out) turn = outCard(id, f, gm, "ground");
+    else if (!f.pool?.length) turn = `<div class="card fd-turn">${poolRow(id, f)}</div>`;
+    else if (!f.who.length) turn = `<div class="card fd-turn"><p>${gm ? "Nobody’s in. Put someone in to carry on." : "Nobody’s in right now."}</p></div>`;
+    return `${turn}${strip(id, f)}${seatList(id, f, gm)}${pastFold(id, f, gm)}${toolsFold(id, f, gm, "the ground")}`;
+  }
+  function seatTurn(id, f, gm, up) {
+    const mine = f.turn.key === myKey(id);
+    const name = nameOf(f, f.turn.key);
+    const done = (f.seats ?? []).filter(Boolean).length;
+    const head = `<p class="fd-turn-k"><span>${turnWho(id, f)}</span><span class="fd-turn-n">Seat ${done + 1} of ${f.pool?.length || f.seats?.length || 0}</span></p><h3 class="fd-q">Take a die for a seat</h3>`;
+    if (!f.pool?.length) return `<div class="card fd-turn" data-fdk="seat">${head}${poolRow(id, f)}</div>`;
+    const k = selDie(id, f);
+    const role = roleOf(T, f, k);
+    const lead = mine ? "Each die’s face picks what kind of seat it deals. Tap a die, then keep one of its three seats, or write your own." : gm ? `${esc(name)}’s taking a die. If they haven’t got a phone with them, tap one in for them.` : `${esc(name)}’s taking a die. Tap one to see what it deals.`;
+    const cards = k == null ? [] : handFor(`seat|${stateKey(f)}|${k}`, () => seatHand(T, f, k));
+    const keep = T?.keeps?.[role];
+    const inner = (c) => `<span class="wk-card-n">${esc(fill(c.text, {}))}</span><span class="wk-card-w">${esc(c.notice)}</span>${c.role !== role ? `<span class="wk-card-m"><span class="wk-mark">${esc(keepName(c.role))}</span></span>` : ""}${strangeMark(c)}`;
+    const own = ownTools(id, f, gm, "fd-seat-own", (whose) => `<label class="cc-field">${whose} seat’s name <input name="name" maxlength="60" autocomplete="off" required></label>
+      <label class="cc-field">What a stranger notices there <input name="notice" maxlength="160" autocomplete="off" required></label>`);
+    return `<div class="card fd-turn${mine ? " is-mine" : ""}${gm && !mine ? " is-theirs" : ""}" data-fdk="seat">${head}<p class="cc-small fd-turn-l">${lead}</p>${poolRow(id, f)}
+      ${keep && k != null ? `<p class="fd-keep"><b>A ${f.pool[k]} is ${esc(String(role))}:</b> ${esc(keep.charAt(0).toLowerCase() + keep.slice(1))}.</p>` : ""}
+      ${hand(id, f, gm, cards, "seat", inner, { label: "Seats this die deals", sureKey: `seat:${id}:${f.turn.key}:${k}` })}${own}${up ? '<p class="cc-small fd-late">Time’s up. Once this turn’s done, the tables deal the rest of the ground.</p>' : ""}</div>`;
+  }
+  // The seats so far, in the order they were taken, with who took each, and
+  // Take it back on the last for whoever took it, or for her.
+  function seatList(id, f, gm) {
+    const me = myKey(id);
+    const gmn = esc(gmName(id));
+    const taken = (f.seats ?? []).map((s, k) => (s ? { s, k } : null)).filter(Boolean).sort((a, b) => (a.s.at ?? 0) - (b.s.at ?? 0));
+    if (!taken.length) return "";
+    const held = (k) => (f.fac ?? []).findIndex((_, i) => seatAt(f, i) === k);
+    const W = f.fac?.length && T ? roomWorld(T, f) : null;
+    const items = taken.map(({ s, k }) => {
+      const name = esc(first(s.byName) || "Someone");
+      const by = s.deal ? "Dealt by the tables" : s.gm ? (gm ? `${name}’s, put in by you` : s.by === me ? `Yours, put in by ${gmn}` : `${name}’s, put in by ${gmn}`) : s.by === me ? (s.own ? "Yours, in your own words" : "Yours") : s.own ? `${name}’s own words` : name;
+      const last = f.last?.part === "seat" && f.last.k === k && (gm || f.last.key === me) && ["ground", "grounded"].includes(f.step);
+      const h = held(k);
+      const holder = h >= 0 && W ? ` · ${esc(calledIn(T, W, h))} sit${W.factions[h]?.name ? "s" : ""} here` : "";
+      return `<li class="fd-a fd-seat${s.own ? " is-own" : ""}${last ? " is-last" : ""}" data-fdk="seat-${k}"><span class="fd-a-d">${kitDie(6, { own: "them", face: f.pool?.[k] ?? "", hide: true })}</span><div class="fd-a-in"><p class="fd-a-n">${esc(fill(s.text, {}))}</p><p class="fd-a-w">${esc(s.notice)}</p>
+        <p class="fd-a-by"><span>${by} · ${esc(keepName(s.role))}${holder}</span></p>
+        ${last ? btn("back", sureOf(`back:${id}:seat:${f.last.key}`) ? "Tap again to take it back" : "Take it back", { cls: "button sm fd-back", attrs: ` data-part="seat" data-die="${k}"` }) : ""}</div></li>`;
+    }).join("");
+    return `<h3 class="fd-h3">The ground${f.step === "ground" ? " so far" : ""}</h3><ol class="fd-asked fd-seats">${items}</ol>`;
+  }
+
+  // ------------------------------------------------------------ the founding
+
+  // What each part of a founder's turn asks.
+  const FQ = { "f-seat": "Where do they found it?", before: "Who had it before them?", owes: "Who do they owe?", never: "What will they never do?", type: "What are they?", method: "How do they work?", want: "What do they want?", name: "What are they called?" };
+  const FLEAD = {
+    "f-seat": "Any seat nobody holds. The old powers are on theirs already.",
+    before: "Pick the faction that had it, or nobody. Whoever had it holds a grudge, so the words are theirs.",
+    owes: "Pick who they owe, then what’s owed.",
+    never: "It’s a promise their own people hold them to.",
+    type: "Pick one of the three, or write your own.",
+    method: "Pick one of the three, or write your own.",
+    want: "Pick one of the three, or write your own. Their resources, people and agenda are dealt with it.",
+    name: "Pick one of the three, or write your own.",
+  };
+  const SHORT_F = { "f-seat": "the seat", before: "who had it before", owes: "who they owe", never: "what they’ll never do", type: "what they are", method: "how they work", want: "what they want", name: "their name", old: "the old power" };
+
+  function foundBody(id, f, gm) {
+    let turn = "";
+    const up = timeUp(f, now(id));
+    if (f.turn?.part === "old") turn = oldTurn(id, f, gm, up);
+    else if (FOUNDER.includes(f.turn?.part)) turn = founderTurn(id, f, gm, up);
+    else if (f.out) turn = outCard(id, f, gm, "founding");
+    else if (!f.who.length) turn = `<div class="card fd-turn"><p>${gm ? "Nobody’s in. Put someone in to carry on." : "Nobody’s in right now."}</p></div>`;
+    return `${turn}${lastLine(id, f, gm)}${strip(id, f)}${boardList(id, f, gm)}${seatFold(id, f, gm)}${pastFold(id, f, gm)}${toolsFold(id, f, gm, "the founding")}`;
+  }
+  // An old power, hers to pick: three whole cards, each already on its seat.
+  function oldTurn(id, f, gm, up) {
+    const i = f.turn.i;
+    const gmn = esc(gmName(id));
+    const head = `<p class="fd-turn-k"><span>${gm ? "Your turn" : `${gmn}’s turn`}</span><span class="fd-turn-n">Old power ${i + 1} of ${f.olds}</span></p><h3 class="fd-q">${gm ? "Deal an old power" : "The old powers"}</h3>`;
+    const lead = gm ? "Pick one of the three. It’s on its seat already, City or Great, and its resources and people come with it. Its agenda, Face and Secret wait for you, on your phone." : `${gmn}’s picking the old powers, the money that was here first. Everyone founds their own once they’re in.`;
+    const sizes = T?.regions?.[f.recipe.region]?.sizes ?? {};
+    const cards = handFor(`old|${stateKey(f)}|${i}`, () => oldHand(T, f, i));
+    const W = cards?.length ? roomWorld(T, f) : null;
+    const inner = (c) => {
+      const seat = W?.seats[c.seat];
+      const seatText = seat ? { text: seat.text, name: true } : "";
+      return `<span class="wk-card-n">${esc(fill(c.name.text, { seat: seatText }))}</span><span class="wk-card-w">${esc(fill(T.core.templates.about, { type: c.type.text, method: c.method.text }))} ${esc(fill(T.core.templates.seat, { seat: seatText }))}</span>
+        <span class="wk-card-w fd-card-want">Want: ${esc(fill(c.want.text, {}))}</span><span class="wk-card-m"><span class="wk-nudge">${esc(cap(sizes[c.size.size] ?? c.size.size))}, d${c.size.die}</span>${[c.type, c.method, c.want].some((x) => x.strange) ? '<span class="wk-mark is-strange">Strange</span>' : ""}</span>`;
+    };
+    return `<div class="card fd-turn${gm ? " is-mine" : ""}" data-fdk="old">${head}<p class="cc-small fd-turn-l">${lead}</p>${hand(id, f, gm, cards, "old", inner, { label: "The old powers you can deal", sureKey: `old:${id}:${i}` })}${up ? '<p class="cc-small fd-late">Time’s up. Once this one’s in, the tables deal the rest of the founding.</p>' : ""}</div>`;
+  }
+  // A founder's turn, a part at a time: where it sits, its three questions,
+  // then three cards each for what it is, how it works, its Want and its name.
+  function founderTurn(id, f, gm, up) {
+    const t = f.turn;
+    const i = t.i;
+    const mine = t.key === myKey(id);
+    const can = mine || gm;
+    const name = nameOf(f, t.key);
+    const n = FOUNDER.indexOf(t.part);
+    const founders = f.fac.filter((x) => !x.old);
+    const which = founders.indexOf(facOf(f, i)) + 1;
+    const W = T ? roomWorld(T, f) : null;
+    const seatK = seatAt(f, i);
+    const seatName = W && seatK != null ? fill(W.seats[seatK]?.text ?? "", {}) : "";
+    const q = t.part === "before" && seatName ? `Who had ${seatName.replace(/^The /, "the ")} before them?` : FQ[t.part];
+    const segs = `<ol class="fd-segs" aria-hidden="true">${FOUNDER.map((p, k) => `<li class="${k < n ? "is-done" : k === n ? "is-on" : ""}"></li>`).join("")}</ol>`;
+    const head = `<p class="fd-turn-k"><span>${turnWho(id, f)}</span><span class="fd-turn-n">${n + 1} of ${FOUNDER.length}</span></p>
+      <p class="fd-turn-f">${mine ? "Founding your faction" : `${esc(name)}’s founding a faction`}, ${which} of ${founders.length}</p>${segs}<h3 class="fd-q">${esc(q)}</h3>`;
+    const lead = mine ? FLEAD[t.part] : gm ? `${esc(name)}’s answering this. If they haven’t got a phone with them, tap one in for them.` : `${esc(name)}’s answering this. Talk it over.`;
+    const sureKey = `f:${id}:${t.key}:${i}:${t.part}`;
+    let body = "";
+    if (!W) body = failed ? `<p class="cc-small">This phone couldn’t get the tables.</p><div class="cc-row">${btn("retry", "Try again", { cls: "button sm" })}</div>` : '<p class="cc-small" role="status">Dealing…</p>';
+    else if (t.part === "f-seat") {
+      const free = freeSeats(f, i).map((k) => ({ k, s: f.seats[k] }));
+      body = hand(id, f, gm, free, "fseat", (c) => `<span class="wk-card-n">${esc(fill(c.s.text, {}))}</span><span class="wk-card-w">${esc(c.s.notice)}</span><span class="wk-card-m"><span class="wk-mark">${esc(keepName(c.s.role))}</span></span>`, { label: "Seats nobody holds", sureKey });
+    } else if (ASKS.includes(t.part)) {
+      const pickKey = `${id}|${f.id}|${i}|${t.part}`;
+      const j = t.part === "never" ? null : ui.fj[pickKey] ?? null;
+      const chips = t.part === "never" ? "" : `<div class="fd-chips" role="group" aria-label="${esc(t.part === "before" ? "Who had it" : "Who they owe")}">${namable(f, i).map((x) => {
+        const on = j === x;
+        const label = cap(calledIn(T, W, x));
+        return can ? `<button type="button" class="chip pt-chip wk-chip${on ? " is-on" : ""}" data-act="fd" data-do="fj" data-j="${x}"${pressed(on)}>${esc(label)}</button>` : `<span class="chip pt-chip wk-chip is-static">${esc(label)}</span>`;
+      }).join("")}${t.part === "before" ? (can ? `<button type="button" class="chip pt-chip wk-chip${gm && !mine && sureOf(`${sureKey}:nobody`) ? " is-sure" : ""}" data-act="fd" data-do="fj" data-j="-1">${gm && !mine && sureOf(`${sureKey}:nobody`) ? `Tap again: nobody, for ${esc(name)}` : "Nobody"}</button>` : '<span class="chip pt-chip wk-chip is-static">Nobody</span>') : ""}</div>`;
+      if (t.part === "never" || j != null) {
+        const cards = handFor(`line|${stateKey(f)}|${i}|${t.part}|${j}`, () => founderHand(T, f, i, t.part, j));
+        body = `${chips}${hand(id, f, gm, cards, "fline", (c) => `<span class="wk-card-w">${esc(lineIn(T, W, i, t.part, c.text, j))}</span>${strangeMark(c)}`, { label: q, sureKey: `${sureKey}:${j}` })}
+          ${ownTools(id, f, gm, "fd-found-own", (whose) => `<label class="cc-field">${whose} words <input name="text" maxlength="160" autocomplete="off" required></label>`)}`;
+      } else body = `${chips}<p class="cc-small fd-pick-first">${can ? "Tap a faction, and its three lines come up." : `${esc(name)} picks a faction first.`}</p>`;
+    } else {
+      const cards = handFor(`card|${stateKey(f)}|${i}|${t.part}`, () => founderHand(T, f, i, t.part));
+      const inner = (c) => `<span class="${t.part === "name" ? "wk-card-n" : "wk-card-w"}">${esc(t.part === "name" ? fill(c.text, { seat: seatName ? { text: seatName, name: true } : "" }) : fill(c.text, {}))}</span>${c.why ? `<span class="wk-why">${esc(c.why)}</span>` : ""}${strangeMark(c)}`;
+      body = `${hand(id, f, gm, cards, "fcard", inner, { label: q, sureKey })}${ownTools(id, f, gm, "fd-found-own", (whose) => `<label class="cc-field">${whose} answer <input name="text" maxlength="${t.part === "name" ? 60 : 160}" autocomplete="off" required></label>`)}`;
+    }
+    return `<div class="card fd-turn${mine ? " is-mine" : ""}${gm && !mine ? " is-theirs" : ""}" data-fdk="${t.part}">${head}<p class="cc-small fd-turn-l">${lead}</p>${body}${up ? '<p class="cc-small fd-late">Time’s up. Once this faction’s founded, the tables deal the rest.</p>' : ""}</div>`;
+  }
+  // The last answer in the founding, with Take it back for whoever gave it,
+  // or for her, till someone answers after it.
+  function lastLine(id, f, gm) {
+    const l = f.last;
+    if (!l || (l.part !== "old" && !FOUNDER.includes(l.part))) return "";
+    const me = myKey(id);
+    if (!gm && l.key !== me) return "";
+    const x = facOf(f, l.i);
+    if (!x) return "";
+    const W = T ? roomWorld(T, f) : null;
+    const what = l.part === "old" ? (W ? calledIn(T, W, l.i) : "the old power") : SHORT_F[l.part];
+    const whose = l.part === "old" ? "Your last old power" : l.key === me ? "Your last answer" : `${esc(first(x.name) || "Their")}’s last answer`;
+    return `<div class="fd-last"><p class="cc-small">${whose}: ${esc(what)}.</p>${btn("back", sureOf(`back:${id}:${l.part}:${l.key}`) ? "Tap again to take it back" : "Take it back", { cls: "button sm fd-back", attrs: ` data-part="${esc(l.part)}" data-i="${l.i}"` })}</div>`;
+  }
+  // Every faction that's started, a fold each, the one that's on open.
+  function boardList(id, f, gm) {
+    if (!T || !f.fac?.length) return "";
+    const B = roomBoard(T, f);
+    const started = B.factions.filter((x) => (x.old ? f.fac[x.i].card : x.seat != null));
+    const waiting = B.factions.filter((x) => !x.old && x.seat == null).map((x) => first(x.who) || "someone");
+    if (!started.length && !waiting.length) return "";
+    return `<h3 class="fd-h3">The factions${f.step === "found" ? " so far" : ""}</h3><div class="fd-facs">${started.map((x) => facCard(id, f, B, x)).join("")}</div>${waiting.length && f.step === "found" ? `<p class="cc-small fd-wait">Still to found one: ${esc(andList(waiting))}.</p>` : ""}`;
+  }
+  function facCard(id, f, B, x) {
+    const on = f.turn?.i === x.i;
+    const key = `fd-fac-${id}-${f.id}-${x.i}`;
+    const open = on || d.isOpen(key);
+    const name = (j) => cap(B.factions[j]?.name ?? "");
+    const kick = x.old ? "Old power" : `${esc(first(x.who) || "Someone")}’s`;
+    const lines = [];
+    if (x.about || x.sits) lines.push(`<p class="fd-fac-w">${esc([x.about, x.sits].filter(Boolean).join(" "))}</p>`);
+    if (x.size) lines.push(`<p class="fd-fac-s">${kitMini(x.die ?? 4, { own: "them" })}<span>${esc(cap(x.sizeWord))}, d${x.die} · Power ${x.steps}</span></p>`);
+    if (x.want) lines.push(`<p class="fd-fac-w"><b>Want:</b> ${esc(x.want)}</p>`);
+    if (x.res.length) lines.push(`<p class="bd-label">Resources</p><p class="fd-fac-l">${esc(x.res.join(" · "))}</p>`);
+    if (x.assets.length) lines.push(`<p class="bd-label">Assets</p><ul class="fd-fac-ul">${x.assets.map((a) => `<li>${esc(a.text)}${a.power ? ' <small class="fd-pow">people who turn up</small>' : ""}</li>`).join("")}</ul>`);
+    if (x.agenda) lines.push(`<p class="bd-label">Agenda</p><p class="fd-fac-s">${kitMini(x.agenda.die, { own: "them" })}<span>${esc(x.agenda.text)}</span></p>`);
+    const threads = [...x.holds.map((t) => ({ ...t, line: `Toward ${name(t.to)}` })), ...x.toward.map((t) => ({ ...t, line: `${name(t.from)}, toward them` }))];
+    if (threads.length) lines.push(`<p class="bd-label">Threads</p><ul class="fd-threads">${threads.map((t) => `<li class="is-${t.kind}"><span class="fd-th-k">${esc(t.line)}</span> <i>${esc(t.text)}</i></li>`).join("")}</ul>`);
+    if (x.loy) lines.push(`<p class="bd-label">Loyalty</p><p class="fd-fac-w"><i>${esc(x.loy)}</i></p>`);
+    const glance = x.done ? esc(x.sizeWord ? `${cap(x.sizeWord)}, d${x.die}` : "") : on ? "Being founded" : "Still to finish";
+    return `<details class="cc-fold fd-fac${x.old ? " is-old" : ""}${on ? " is-on" : ""}" data-open="${esc(key)}"${open ? " open" : ""}><summary><span class="fd-fac-k">${kick}</span><h4 class="cc-fold-t">${esc(cap(x.name))}</h4><span class="cc-fold-g">${glance}</span></summary><div class="cc-fold-b">${lines.join("") || '<p class="cc-small">Nothing yet.</p>'}</div></details>`;
+  }
+  // The ground, folded, once the founding's on.
+  function seatFold(id, f, gm) {
+    if (!f.seats?.some(Boolean)) return "";
+    const key = `fd-seats-${id}`;
+    return `<details class="cc-fold fd-past" data-open="${esc(key)}"${d.isOpen(key) ? " open" : ""}><summary><h3 class="cc-fold-t">The ground</h3><span class="cc-fold-g">${f.seats.filter(Boolean).length} seats</span></summary><div class="cc-fold-b">${seatList(id, f, gm).replace(/^<h3[^>]*>.*?<\/h3>/, "")}</div></details>`;
+  }
+  // The asking, folded, once the room's past it.
+  function pastFold(id, f, gm) {
+    const key = `fd-asking-${id}`;
+    return `<details class="cc-fold fd-past" data-open="${esc(key)}"${d.isOpen(key) ? " open" : ""}><summary><h3 class="cc-fold-t">The asking</h3><span class="cc-fold-g">${esc(pickOf(f, "holds")?.text ?? "")}</span></summary><div class="cc-fold-b">${soFar(id, f, gm).replace(/^<h3[^>]*>.*?<\/h3>/, "")}${dialsList(f)}</div></details>`;
+  }
+  // Out of time, or nobody in left to take what's left: her phone deals it.
+  function outCard(id, f, gm, age) {
+    const gmn = esc(gmName(id));
+    const t = now(id);
+    const said = timeUp(f, t) ? "Time’s up" : "Nobody’s left to take it";
+    return `<div class="card fd-turn is-out" role="status"><p class="fd-turn-k">${said}</p>
+      <p>${gm ? `The tables are dealing what’s left of ${age} on this phone.` : `The rest of ${age}’s dealt on ${gmn}’s phone.`}</p>
+      ${gm ? `<div class="cc-row">${btn("rest", "Deal the rest", { cls: "button primary" })}${timeUp(f, t) ? btn("clock", "Five more minutes", { attrs: ' data-v="add" data-m="5"' }) : ""}</div>` : ""}</div>`;
+  }
+  // Her tools while an age is on: who's in, Deal the rest and End it.
+  function toolsFold(id, f, gm, age) {
+    if (!gm) return "";
+    return `<details class="cc-fold fd-tools" data-open="fd-tools-${esc(id)}"${d.isOpen(`fd-tools-${id}`) ? " open" : ""}><summary><h3 class="cc-fold-t">Who’s in, Deal the rest and End it</h3><span class="cc-fold-g">${esc(andList(f.who.map((w) => first(w.name))))}</span></summary>
+        <div class="cc-fold-b">${whoRows(id, f)}
+        <div class="cc-row fd-go">${btn("rest", sureOf(`rest:${id}`) ? "Tap again to deal the rest" : "Deal the rest", { attrs: ' data-sure="1"' })}${btn("end", sureOf(`end:${id}`) ? "Tap again to end it" : "End it", { cls: "button danger" })}</div>
+        <p class="cc-small">Deal the rest lets the tables answer everything that’s left of ${age}, this turn included. Ending it drops the lot, and nothing’s on the board.</p></div></details>`;
   }
 
   // ------------------------------------------------------------ a player's campaign page
@@ -464,7 +782,7 @@ export function makeFound(d) {
     const w = TB().whoIn(id);
     const where = `<a href="/characters/?c=${encodeURIComponent(w.ch)}&amp;t=world">${esc(w.cname || "your character")}’s World tab</a>`;
     if (f.step === "room" && !f.outs.includes(me) && !whoOf(f, me)?.joined) return `<div class="cc-note fd-point" role="status"><p>${esc(gmName(id))}’s opened the founding. Join it on ${where}.</p></div>`;
-    if (f.step === "ask" && f.turn?.key === me) return `<div class="cc-note fd-point" role="status"><p>It’s your turn in the founding, on ${where}.</p></div>`;
+    if (RUNNING.includes(f.step) && f.turn?.key === me) return `<div class="cc-note fd-point" role="status"><p>It’s your turn in the founding, on ${where}.</p></div>`;
     return "";
   }
 
@@ -483,11 +801,13 @@ export function makeFound(d) {
   }
   const campOf = (el) => el.closest("[data-fd]")?.dataset.fd ?? null;
 
-  function answer(id, pick) {
+  // An answer for the turn that's on: the asking's, a seat (with its die),
+  // an old power, or a founder's (with its faction).
+  function answer(id, pick, extra = {}) {
     const f = foundOf(id);
     if (!f?.turn) return;
     const part = f.turn.part;
-    if (push(id, { o: "fd-answer", part, pick })) {
+    if (push(id, { o: "fd-answer", part, pick, ...(f.turn.i != null ? { i: f.turn.i } : {}), ...extra })) {
       ui.own = "";
       ui.roll = "";
       ui.sure = "";
@@ -497,7 +817,101 @@ export function makeFound(d) {
     d.render();
   }
 
+  // A Want goes up with what's dealt with it on this phone: the faction's
+  // resources, its people and assets, and its agenda at d4.
+  function withDealt(f, t, pick) {
+    if (t.part !== "want" || !T) return pick;
+    let got = null;
+    try {
+      got = wantWith(T, f, t.i, pick);
+    } catch {
+      got = null;
+    }
+    return got ? { ...pick, with: got } : pick;
+  }
+  // Her tap for someone else's turn takes a second, so a look never answers
+  // for them. True when this tap's only armed it.
+  function secondTap(id, f, key) {
+    if (!gmIn(id) || f.turn.key === myKey(id) || f.turn.key === "" || sureOf(key)) return false;
+    arm(key);
+    d.render();
+    return true;
+  }
+  const tidy = (v, max) => String(v ?? "").replace(/\s+/g, " ").trim().slice(0, max);
+
   const ACT = {
+    ground(el, id) {
+      if (push(id, { o: "fd-ground" })) ui.focus = id;
+      d.render();
+    },
+    age(el, id) {
+      if (push(id, { o: "fd-age" })) ui.focus = id;
+      d.render();
+    },
+    die(el, id) {
+      const f = foundOf(id);
+      if (!f) return;
+      ui.die[`${id}|${f.id}`] = Number(el.dataset.k);
+      ui.own = "";
+      d.render();
+    },
+    seat(el, id) {
+      const f = foundOf(id);
+      if (f?.turn?.part !== "seat") return;
+      const k = selDie(id, f);
+      const c = k == null ? null : handFor(`seat|${stateKey(f)}|${k}`, () => seatHand(T, f, k))?.[Number(el.dataset.c)];
+      if (!c) return;
+      if (secondTap(id, f, `seat:${id}:${f.turn.key}:${k}:${el.dataset.c}`)) return;
+      answer(id, c, { die: k });
+    },
+    old(el, id) {
+      const f = foundOf(id);
+      if (f?.turn?.part !== "old" || !gmIn(id)) return;
+      const c = handFor(`old|${stateKey(f)}|${f.turn.i}`, () => oldHand(T, f, f.turn.i))?.[Number(el.dataset.c)];
+      if (c) answer(id, c);
+    },
+    fseat(el, id) {
+      const f = foundOf(id);
+      if (f?.turn?.part !== "f-seat") return;
+      const k = freeSeats(f, f.turn.i)[Number(el.dataset.c)];
+      if (k == null || !T) return;
+      if (secondTap(id, f, `f:${id}:${f.turn.key}:${f.turn.i}:f-seat:${el.dataset.c}`)) return;
+      // Its size at Local goes up with its seat, dealt on this phone.
+      answer(id, { k, size: seatSize(T, f, f.turn.i, k) });
+    },
+    fj(el, id) {
+      const f = foundOf(id);
+      const t = f?.turn;
+      if (!t || !["before", "owes"].includes(t.part)) return;
+      const j = Number(el.dataset.j);
+      if (j < 0) {
+        if (secondTap(id, f, `f:${id}:${t.key}:${t.i}:${t.part}:nobody`)) return;
+        return answer(id, { j: null });
+      }
+      ui.fj[`${id}|${f.id}|${t.i}|${t.part}`] = j;
+      ui.own = "";
+      d.render();
+    },
+    fline(el, id) {
+      const f = foundOf(id);
+      const t = f?.turn;
+      if (!t || !ASKS.includes(t.part)) return;
+      const j = t.part === "never" ? null : ui.fj[`${id}|${f.id}|${t.i}|${t.part}`] ?? null;
+      if (t.part !== "never" && j == null) return;
+      const c = handFor(`line|${stateKey(f)}|${t.i}|${t.part}|${j}`, () => founderHand(T, f, t.i, t.part, j))?.[Number(el.dataset.c)];
+      if (!c) return;
+      if (secondTap(id, f, `f:${id}:${t.key}:${t.i}:${t.part}:${j}:${el.dataset.c}`)) return;
+      answer(id, t.part === "never" ? c : { j, ...c });
+    },
+    fcard(el, id) {
+      const f = foundOf(id);
+      const t = f?.turn;
+      if (!t || !CARDS.includes(t.part)) return;
+      const c = handFor(`card|${stateKey(f)}|${t.i}|${t.part}`, () => founderHand(T, f, t.i, t.part))?.[Number(el.dataset.c)];
+      if (!c) return;
+      if (secondTap(id, f, `f:${id}:${t.key}:${t.i}:${t.part}:${el.dataset.c}`)) return;
+      answer(id, withDealt(f, t, c));
+    },
     setup(el, id) {
       // Till the tables are in, it says it's getting them, then opens.
       ui.setup[id] = tables() ? firstSetup(id) : { pending: true };
@@ -591,7 +1005,7 @@ export function makeFound(d) {
     own(el, id) {
       const f = foundOf(id);
       if (!f?.turn) return;
-      const key = `${id}|${f.id}|${f.turn.part}`;
+      const key = `${id}|${f.id}|${f.turn.part}|${f.turn.i ?? ""}`;
       ui.own = ui.own === key ? "" : key;
       d.render();
       if (ui.own) setTimeout(() => document.querySelector(".fd-own input")?.focus(), 0);
@@ -625,7 +1039,8 @@ export function makeFound(d) {
         return d.render();
       }
       ui.sure = "";
-      push(id, { o: "fd-back", part: el.dataset.part });
+      const { part, die, i } = el.dataset;
+      push(id, { o: "fd-back", part, ...(die != null ? { die: Number(die) } : {}), ...(i != null ? { i: Number(i) } : {}) });
       d.render();
     },
     rest(el, id) {
@@ -644,7 +1059,7 @@ export function makeFound(d) {
     },
     carry(el, id) {
       const f = foundOf(id);
-      if (!f || f.step !== "asked" || !T) return;
+      if (!f || !ENDS.includes(f.step) || !T) return;
       if (d.world().building?.(id) && !sureOf(`carry:${id}`)) {
         arm(`carry:${id}`);
         return d.render();
@@ -683,14 +1098,37 @@ export function makeFound(d) {
     if (!id) return;
     const doit = el.dataset.do;
     // A tap anywhere else lets go of a button that was waiting on its second.
-    if (ui.sure && !["pick", "roll", "back", "rest", "carry", "end"].includes(doit)) ui.sure = "";
+    if (ui.sure && !["pick", "roll", "back", "rest", "carry", "end", "seat", "fseat", "fj", "fline", "fcard"].includes(doit)) ui.sure = "";
     ACT[doit]?.(el, id, e);
   }
 
   function submit(kind, form, fd) {
     const id = campOf(form);
-    if (kind !== "fd-own" || !id) return;
-    const text = String(fd.get("text") ?? "").replace(/\s+/g, " ").trim().slice(0, 160);
+    if (!id) return;
+    const f = foundOf(id);
+    const t = f?.turn;
+    if (kind === "fd-seat-own") {
+      // A seat in their own words: its name and what a stranger notices, of
+      // the keep its die picked.
+      const k = t?.part === "seat" ? selDie(id, f) : null;
+      const name = tidy(fd.get("name"), 60);
+      const notice = tidy(fd.get("notice"), 160);
+      if (k == null || !name || !notice || !T) return;
+      return answer(id, { own: true, text: name, notice, role: roleOf(T, f, k) }, { die: k });
+    }
+    if (kind === "fd-found-own") {
+      if (!t) return;
+      const text = tidy(fd.get("text"), t.part === "name" ? 60 : 160);
+      if (!text) return;
+      if (t.part === "before" || t.part === "owes") {
+        const j = ui.fj[`${id}|${f.id}|${t.i}|${t.part}`];
+        if (j == null) return d.toast("Pick a faction first.");
+        return answer(id, { j, own: true, text });
+      }
+      return answer(id, withDealt(f, t, { own: true, text }));
+    }
+    if (kind !== "fd-own") return;
+    const text = tidy(fd.get("text"), 160);
     if (!text) return;
     answer(id, { own: true, text });
   }
@@ -706,7 +1144,8 @@ export function makeFound(d) {
     // screen, so the button she tapped doesn't leave her down the page.
     // An answer that's gone in takes the focus to it, with Take it back.
     if (ui.after) {
-      const a = app.querySelector(`[data-fd="${CSS.escape(ui.after)}"] .fd-a.is-last`);
+      const scope = app.querySelector(`[data-fd="${CSS.escape(ui.after)}"]`);
+      const a = scope?.querySelector(".fd-a.is-last") ?? scope?.querySelector(".fd-turn.is-mine .fd-q, .fd-last");
       ui.after = "";
       if (a) {
         a.setAttribute("tabindex", "-1");
@@ -742,6 +1181,15 @@ export function makeFound(d) {
         }
       };
       tick = setInterval(step, 1000);
+    }
+    // The ground's dice tumble once on each phone, the first time it sees them.
+    for (const pool of app.querySelectorAll(".fd-pool")) {
+      const fid = pool.closest("[data-fd]")?.dataset.fd;
+      const f = fid ? foundOf(fid) : null;
+      if (f && !ui.rolled.has(f.id)) {
+        ui.rolled.add(f.id);
+        if (pool.querySelector("[data-spin]")) d.tumble(() => app.querySelector(".fd-pool"), () => {});
+      }
     }
     if (ui.spin) {
       const scope = () => app.querySelector('[data-fdk="tension-done"]');

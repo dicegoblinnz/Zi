@@ -239,6 +239,7 @@ export function makeAnswer(k) {
   function body(id, e, W) {
     const T = tables();
     const D = W.deck;
+    if (!D && W.factions.some((f) => f.room)) return `<div class="wa-way card"><p>The crew founded these factions in the room, so there’s no deck to answer. Their cards are a tap away on the board, with what the room made locked.</p></div>`;
     if (!D) {
       const sure = sureOf("deck", id);
       return `<div class="wa-way card"><p>You’ve dealt the factions a step at a time. Answering the deck instead deals them again from where they sit, how big they are and what they are, and what you’ve locked or written on them past that goes.</p>
@@ -354,7 +355,8 @@ export function makeAnswer(k) {
     "mk-deck": (el, id) => {
       const e = entryOf(id);
       const W = worldOf(id);
-      if (!e || !W || W.deck) return;
+      // The crew founded these factions in the room, so they stay as they are.
+      if (!e || !W || W.deck || W.factions.some((f) => f.room)) return;
       if (!sureOf("deck", id)) {
         arm("deck", id);
         return d.render();

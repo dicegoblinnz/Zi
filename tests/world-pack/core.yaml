@@ -39,6 +39,7 @@ templates:
   # bringing a card.
   called: "the {type} on {seat}"
   voice: "{name} of {faction}"
+  newcomer: "the newcomers"
 because:
   seat: because it sits on {thing}
   type: because it's {thing}

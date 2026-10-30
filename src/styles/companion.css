@@ -2340,3 +2340,68 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
   .fd-row { grid-template-columns: minmax(0, 1fr) auto auto; }
   .fd-row-b { grid-column: auto; }
 }
+
+/* The ground (stage 11): the pool of d6s her phone's server rolled, each a
+   die with the keep its face picks, and the seats the crew kept. */
+.fd-rolling { margin: 0.6rem 0 0; padding: 10px 12px; color: var(--muted); border: 1.5px dashed var(--line); border-radius: 3px; }
+.fd-rolling p { margin: 0; }
+.fd-pool { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px; margin: 0.2rem 0 0; }
+.fd-die { display: grid; justify-items: center; align-content: start; gap: 3px; min-width: 0; min-height: 76px; padding: 7px 4px 6px; font: inherit; color: var(--ink); background: var(--zd-token); border: 1.5px solid var(--bd-edge, var(--line)); border-radius: 3px; cursor: pointer; transition: transform 140ms var(--bd-ease, ease), border-color 140ms ease; }
+.fd-die:active { transform: scale(0.96); }
+.fd-die:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.fd-die .zd-die { --s: 40px; }
+.fd-die-d { display: block; line-height: 0; }
+.fd-die-k { max-width: 100%; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.06em; line-height: 1.2; text-align: center; text-transform: uppercase; color: var(--muted); overflow-wrap: anywhere; }
+.fd-die.is-on { border-color: var(--zd-you-line); box-shadow: inset 0 0 0 1.5px var(--zd-you-line); }
+.fd-die.is-on .fd-die-k { color: var(--zd-you-ink); }
+.fd.is-gm .fd-die.is-on { border-color: var(--zd-them-line); box-shadow: inset 0 0 0 1.5px var(--zd-them-line); }
+.fd.is-gm .fd-die.is-on .fd-die-k { color: var(--zd-them-ink); }
+.fd-die.is-taken { cursor: default; background: none; border-style: dashed; border-color: var(--line-soft); }
+.fd-die.is-taken .zd-die { opacity: 0.45; }
+.fd-die.is-taken .fd-die-k { font-weight: 700; letter-spacing: 0; text-transform: none; font-size: 0.74rem; }
+@media (hover: hover) and (pointer: fine) { .fd-die:not(.is-taken):hover { border-color: var(--zd-you-line); } .fd.is-gm .fd-die:not(.is-taken):hover { border-color: var(--zd-them-line); } }
+.fd-keep { margin: 0.7rem 0 0.6rem; font-size: 0.92rem; line-height: 1.45; color: var(--muted); }
+.fd-keep b { color: var(--ink); }
+.fd-a-n { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.25; overflow-wrap: anywhere; }
+.fd-seat .fd-a-d .zd-die { --s: 34px; }
+.fd-seat .fd-a-w { font-size: 0.95rem; }
+
+/* The founding: her old powers, then a founder's turn a part at a time, and
+   every faction so far as a fold. */
+.fd-turn-f { margin: 0.25rem 0 0; font-size: 0.92rem; font-weight: 700; color: var(--ink); }
+.fd-segs { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 3px; margin: 0.5rem 0 0.15rem; padding: 0; list-style: none; }
+.fd-segs li { height: 4px; background: var(--line-soft); border-radius: 1px; }
+.fd-segs li.is-done { background: var(--zd-you-line); opacity: 0.55; }
+.fd-segs li.is-on { background: var(--zd-you-line); }
+.fd-turn.is-theirs .fd-segs li.is-done, .fd-turn.is-theirs .fd-segs li.is-on, .fd-turn:not(.is-mine) .fd-segs li.is-on { background: var(--zd-them-line); }
+.fd-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 0.7rem; }
+.fd .wk-chip.is-on { color: var(--zd-on-you); background: var(--zd-you); border-color: var(--zd-you); }
+.fd.is-gm .wk-chip.is-on { color: var(--zd-on-them); background: var(--zd-them); border-color: var(--zd-them); }
+.fd .wk-chip.is-static { cursor: default; }
+.fd .wk-chip.is-sure { color: var(--zd-them-ink); border-color: var(--zd-them-line); }
+.fd-pick-first { margin: 0; }
+.fd-card-want { font-size: 0.95rem; color: var(--muted); }
+.fd-last { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 10px; margin: 0.6rem 0 0; padding: 4px 0 4px 11px; border-left: 3px solid var(--zd-you-line); }
+.fd.is-gm .fd-last { border-left-color: var(--zd-them-line); }
+.fd-last p { flex: 1 1 12rem; margin: 0; }
+.fd-last .fd-back { margin-top: 0; }
+.fd-facs { display: grid; gap: 6px; }
+.fd-fac > summary { padding-right: 46px; }
+.fd-fac-k { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.fd-fac.is-old .fd-fac-k { color: var(--zd-them-ink); }
+.fd-fac.is-on { border-color: var(--zd-you-line); }
+.fd.is-gm .fd-fac.is-on { border-color: var(--zd-them-line); }
+.cc .fd-fac .cc-fold-t { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.08rem; line-height: 1.25; overflow-wrap: anywhere; }
+.fd-fac-w { margin: 0.35rem 0 0; line-height: 1.45; overflow-wrap: anywhere; }
+.fd-fac-s { display: flex; align-items: flex-start; gap: 8px; margin: 0.45rem 0 0; line-height: 1.4; }
+.fd-fac-s .zd-mini { flex: none; width: 22px; height: 22px; }
+.fd-fac-l { margin: 0; line-height: 1.45; overflow-wrap: anywhere; }
+.fd-fac-ul { margin: 0; padding-left: 1.1rem; line-height: 1.45; }
+.fd-pow { font-size: 0.78rem; font-weight: 700; color: var(--gold-ink); }
+.fd-threads { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.fd-threads li { padding: 2px 0 2px 10px; line-height: 1.4; border-left: 3px solid var(--zd-you-line); overflow-wrap: anywhere; }
+.fd-threads li.is-hostile { border-left-color: var(--zd-harm-line); }
+.fd-th-k { display: block; font-size: 0.76rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.fd-wait { margin: 0.5rem 0 0; }
+.fd-past { margin-top: 1rem; }
+.fd-past .fd-dials { margin-top: 0.8rem; }
