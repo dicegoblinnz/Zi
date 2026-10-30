@@ -237,7 +237,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
 6. **The web and the crew.** Needs 5. *Built 30 Oct 2026.*
    - The faction web on the World screen and tab, as the brief says.
    - The crew step in building alone: a friend and a foe for each character in the campaign, written as those factions' threads toward the crew and named for the character, so standing counts them. The check for a faction that wants something the crew's got joins the rest.
-7. **The deck** (tables), and the engine playing it. Needs 6.
+7. **The deck** (tables), and the engine playing it. Needs 6. *Built 30 Oct 2026.*
    - The deck's moments in `core.yaml` (`deck`), with Medieval's and Magic's own in their packs, read and checked by `scripts/world-tables.mjs`: each moment's age and regions, who's on it, its two answers with their outcomes, leans, prompts and lines of history, and its chains.
    - `src/companion/world-deck.js` plays it on top of the engine, as the brief says: the factions dealt to what they are with the ground, then a card at a time for whatever's least formed in its age, each answer applied and written as history, chains, prompts with three suggestions, Not this one and Undo, and the end dealing the rest around what the answers made.
    - `/deal/` plays a deck a card at a time (tap an answer, or Answer the rest at random), with the history and the board filling in, and `npm run deal -- --deck` plays one at random as text.
