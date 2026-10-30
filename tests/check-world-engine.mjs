@@ -99,7 +99,7 @@
 //    threads are all in the web, every faction's got a Face and a Secret, and
 //    a founder's Loyalty is on its card.
 // 10. A whole world (stages 12 and 13 of notes/builder-plan.md): the made-up
-//    one in tests/worlds/ passes, and 61 ways of breaking it are each a problem that
+//    one in tests/worlds/ passes, and 62 ways of breaking it are each a problem that
 //    says so and never come out as a world: a card that isn't whole, too long
 //    or holds what it can't, Power or resources past its size, people who
 //    don't add Power or a thing that does, Appendix B's people as a thing, a
@@ -117,7 +117,7 @@
 //    district, a district not drawn, too many pins, a telegraph the table
 //    can't aim, a stake or ground it can't read, two pages with one key, a
 //    page with a faction's name, a look too long, an agenda at a place there
-//    isn't, a person with no tags, a Challenge past 6, a place in nowhere, no
+//    isn't, a person with no tags or a tag past ×9, a Challenge past 6, a place in nowhere, no
 //    ground and a line a place can't hold. A folder that isn't laid out right
 //    says so, places without people and a map among it. Then every world in
 //    content/worlds/ passes, every card and page goes onto a board whole, it
@@ -1419,6 +1419,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       ["a place in nowhere", (w) => (w.files.places.places.find((p) => p.key === "the-fish-market").in = "the-moon"), /The Fish Market isn't in a district or a part/],
       ["a map with no ground", (w) => delete w.world.ground, /world\.yaml has no ground/],
       ["a place with a person's line", (w) => (w.files.places.places[0].want = "Fish"), /a line a place can't hold: want \(that's a person's\)/],
+      ["a tag past ×9", (w) => (w.files.people.people.find((p) => p.key === "old-sal").tags = [{ text: "Overlooked", x: 12 }]), /Old Sal's tag Overlooked is ×12, and a tag's ×1 to ×9/],
     ];
     let broken = 0;
     for (const [what, change, wanted] of breaks) {

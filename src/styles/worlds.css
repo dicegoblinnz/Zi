@@ -9,11 +9,11 @@
   max-width: 46rem; margin: 0 auto; padding-top: 1.6rem; padding-bottom: 2rem;
 }
 .wn.is-live { padding-bottom: 0; }
-html[data-wn-tab="web"] .wn:not(.is-live) .wn-panel:not([data-panel="web"]),
-html[data-wn-tab="map"] .wn:not(.is-live) .wn-panel:not([data-panel="map"]),
-html[data-wn-tab="places"] .wn:not(.is-live) .wn-panel:not([data-panel="places"]),
-html[data-wn-tab="people"] .wn:not(.is-live) .wn-panel:not([data-panel="people"]),
-html[data-wn-tab="history"] .wn:not(.is-live) .wn-panel:not([data-panel="history"]) { display: none; }
+html[data-wn-tab="web"] .wn:not(.is-live):has(> [data-panel="web"]) .wn-panel:not([data-panel="web"]),
+html[data-wn-tab="map"] .wn:not(.is-live):has(> [data-panel="map"]) .wn-panel:not([data-panel="map"]),
+html[data-wn-tab="places"] .wn:not(.is-live):has(> [data-panel="places"]) .wn-panel:not([data-panel="places"]),
+html[data-wn-tab="people"] .wn:not(.is-live):has(> [data-panel="people"]) .wn-panel:not([data-panel="people"]),
+html[data-wn-tab="history"] .wn:not(.is-live):has(> [data-panel="history"]) .wn-panel:not([data-panel="history"]) { display: none; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* The head: what it is, where in the year it starts, and whose it is. */
@@ -204,7 +204,7 @@ html[data-wn-tab="history"] .wn:not(.is-live) .wn-panel:not([data-panel="history
    zoom in a row where the thumb is. Before the script it's the drawing on
    its own, with every pin as a link under it. */
 .wn-mapsec { scroll-margin-top: 0; }
-.wn-mapbox { position: relative; height: max(360px, calc(100dvh - 4.7rem)); max-height: 56rem; margin: 0 -16px; overflow: hidden; background: color-mix(in srgb, var(--bg) 70%, black); border-block: 1px solid var(--line); }
+.wn-mapbox { position: relative; height: max(360px, calc(100dvh - 4.25rem - max(0.45rem, env(safe-area-inset-bottom, 0px)))); max-height: 56rem; margin: 0 -16px; overflow: hidden; background: color-mix(in srgb, var(--bg) 70%, black); border-block: 1px solid var(--line); }
 .wn-map { position: absolute; inset: 0; }
 .wn-map > svg.dm { width: 100%; height: 100%; }
 .wn-pins { margin-top: 0.9rem; font-size: 0.92rem; }

@@ -35,6 +35,11 @@ if (data && root) {
   }
   let factionsView = "board";
   let showing = "";
+  // The tab the address says, if the page has it, or the board.
+  const tabIn = () => {
+    const t = new URL(location.href).searchParams.get("tab");
+    return t && panels.some((p) => p.dataset.panel === t) ? t : "board";
+  };
   const show = (name, { scroll = true } = {}) => {
     if (name === "board" || name === "web") factionsView = name;
     showing = name;
@@ -48,6 +53,9 @@ if (data && root) {
     const url = new URL(location.href);
     if (name === "board") url.searchParams.delete("tab");
     else url.searchParams.set("tab", name);
+    // A card or page the address points at stays in it only while it's in
+    // what's showing, so a reload or Back opens what was on the screen.
+    if (/^#[fp]-/.test(url.hash) && !document.getElementById(url.hash.slice(1))?.closest(`[data-panel="${name}"]`)) url.hash = "";
     history.replaceState(history.state, "", url);
     root.classList.toggle("is-map", name === "map");
     if (name === "map") mountMap();
@@ -128,8 +136,12 @@ if (data && root) {
     history.pushState(history.state, "", `${location.search}#${id}`);
     open(id);
   });
+  // Back and Forward: the card or page the address points at, or the tab it
+  // says.
   addEventListener("popstate", () => {
-    if (/^#[fp]-/.test(location.hash)) open(location.hash.slice(1), { focus: false });
+    const id = location.hash.slice(1);
+    if (/^[fp]-/.test(id) && document.getElementById(id)) open(id, { focus: false });
+    else show(tabIn(), { scroll: false });
   });
 
   // The web: one faction's ties at a time. Picking a faction, or tapping one
@@ -219,6 +231,15 @@ if (data && root) {
   };
   const cardEl = $("#wn-mcard");
   const webBtn = $("#wn-webbtn");
+  // What a tap opened, said once from a line that's always on the page, since
+  // a card that's only just stopped being hidden often isn't read out.
+  const sayEl = $("#wn-msay");
+  let said = "";
+  const say = (key, text) => {
+    if (key === said) return;
+    said = key;
+    if (sayEl) sayEl.textContent = text;
+  };
   const drawCard = () => {
     if (ui.web && ui.sel) {
       const f = factionBy.get(ui.sel);
@@ -226,6 +247,7 @@ if (data && root) {
       const ties = W.threads.filter((t) => t.from === ui.sel || t.to === ui.sel).length;
       cardEl.innerHTML = `<div class="wn-mc-top"><span class="wn-mc-d" aria-hidden="true">${die(stepsToDice(f.steps)[0] ?? 2, { own: "them", hide: true })}</span><div><p class="wn-k">${esc(data.kinds[f.kind] ?? "")}${seat ? ` · ${esc(seat.name)}` : ""}</p><h3 class="wn-mc-n">${esc(f.card.name)}</h3><p class="wn-mc-l">${ties === 1 ? "1 thread" : `${ties} threads`}, either way, lit on the map.</p></div><button type="button" class="wn-mc-x" data-mc="x" aria-label="Close">${X}</button></div><div class="wn-mc-row"><a class="wn-mc-go" href="#f-${esc(f.key)}">Its card</a><button type="button" class="wn-mc-go is-quiet" data-mc="ties">Its ties in the web</button></div>`;
       cardEl.hidden = false;
+      say(`f-${f.key}`, `${f.card.name}: ${ties === 1 ? "1 thread" : `${ties} threads`} lit on the map.`);
       padMap();
       return;
     }
@@ -233,6 +255,7 @@ if (data && root) {
     if (!p) {
       cardEl.hidden = true;
       cardEl.replaceChildren();
+      say("", "");
       padMap();
       return;
     }
@@ -240,6 +263,7 @@ if (data && root) {
     const sits = data.factions.filter((f) => f.seat === p.key);
     cardEl.innerHTML = `<div class="wn-mc-top"><span class="wn-mc-d" role="img" aria-label="Challenge ${p.ch}">${die(Math.min(12, p.ch * 2), { own: "them", hide: true })}</span><div><p class="wn-k">${esc(where)}</p><h3 class="wn-mc-n">${esc(p.name)}</h3><p class="wn-mc-l">${esc(p.line)}</p>${sits.length ? `<p class="wn-mc-s">${sits.map((f) => esc(f.card.name)).join(", ")} ${sits.length > 1 ? "sit" : "sits"} here</p>` : ""}</div><button type="button" class="wn-mc-x" data-mc="x" aria-label="Close">${X}</button></div><div class="wn-mc-row"><a class="wn-mc-go" href="#p-${esc(p.key)}">Its page</a></div>`;
     cardEl.hidden = false;
+    say(`p-${p.key}`, `${p.name}. ${where}. ${p.line}`);
     padMap();
   };
   const redraw = () => {
@@ -343,8 +367,10 @@ if (data && root) {
     if (at) view.centreOn(at[0] / M.size[0], at[1] / M.size[1]);
   });
 
-  const tab = new URL(location.href).searchParams.get("tab");
-  show(["web", "map", "places", "people", "history"].includes(tab) ? tab : "board", { scroll: false });
-  if (/^#[fp]-/.test(location.hash)) open(location.hash.slice(1), { focus: false });
+  // A card or page in the address opens in its own tab, whatever tab the
+  // address says, the way the page drew it before this ran.
+  const first = location.hash.slice(1);
+  if (/^[fp]-/.test(first) && document.getElementById(first)) open(first, { focus: false });
+  else show(tabIn(), { scroll: false });
 }
 

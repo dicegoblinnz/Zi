@@ -385,6 +385,12 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   await page.click("#wn-mcard .wn-mc-go");
   const pageOpen = await page.waitForFunction(() => { const d = document.getElementById("p-the-afterlife"); return d?.open && !d.closest("[data-panel]").hidden; }, null, { timeout: 3000 }).then(() => true, () => false);
   if (!pageOpen) note(`${at}: the pin's Its page didn't open the Afterlife's page`);
+  const said = await page.locator("#wn-msay").textContent().catch(() => "");
+  if (!/^The Afterlife\. /.test(said ?? "")) note(`${at}: a screen reader isn't told what the pin opened (${(said ?? "").slice(0, 60)})`);
+  // Back from the page is the map again, the way the address says.
+  await page.goBack();
+  const backOnMap = await page.waitForFunction(() => !document.getElementById("wn-map-sec")?.hidden && document.getElementById("wn-places")?.hidden && new URL(location.href).searchParams.get("tab") === "map", null, { timeout: 3000 }).then(() => true, () => false);
+  if (!backOnMap) note(`${at}: Back from the Afterlife's page didn't bring the map back`);
   // From a faction's card: the map with the web on and its ties lit.
   await page.goto(BASE + "/worlds/night-city/#f-arasaka");
   await page.click('#f-arasaka [data-map-f="arasaka"]');

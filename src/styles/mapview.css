@@ -4,7 +4,11 @@
    one size, the cross for dropping one, and the fog's layer and the brush's
    ring. The World screen (companion.css) and /worlds/ (worlds.css) both use
    it, each with what's its own on top. */
-.wm-pic, .wm-art { display: block; width: 100%; height: 100%; max-width: none; pointer-events: none; -webkit-user-drag: none; }
+.wm-pic { display: block; width: 100%; height: 100%; max-width: none; pointer-events: none; -webkit-user-drag: none; }
+/* A drawn map lies over the layer where the picture would be, and takes no
+   room at all on a map that's a picture. */
+.wm-art { position: absolute; inset: 0; pointer-events: none; }
+.wm-art:empty { display: none; }
 .wm-art > svg { display: block; width: 100%; height: 100%; }
 .wm-stage.is-drawn .wm-pic { display: none; }
 .wm-pin { position: absolute; left: 0; top: 0; display: block; width: 44px; height: 44px; margin: -41px 0 0 -22px; padding: 0; font: inherit; color: var(--zd-on-them); background: none; border: 0; pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -65,7 +69,7 @@
 .wm-pin.is-part .wm-pin-n { font-size: 0.78rem; font-style: italic; font-weight: 700; letter-spacing: 0.02em; color: color-mix(in srgb, var(--gold-ink) 82%, var(--ink)); }
 .wm-pin.is-district.is-quiet, .wm-pin.is-part.is-quiet { pointer-events: none; }
 .wm-pin.is-district.is-on .wm-pin-n, .wm-pin.is-part.is-on .wm-pin-n { color: var(--ink); background: color-mix(in srgb, var(--zd-them) 26%, var(--surface)); box-shadow: 0 0 0 1.5px var(--zd-them-line); text-shadow: none; }
-.wm-pin.is-district:focus-visible .wm-pin-n, .wm-pin.is-part:focus-visible .wm-pin-n { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wm-pin.is-district:focus-visible .wm-pin-n, .wm-pin.is-part:focus-visible .wm-pin-n { display: block; outline: 2px solid var(--violet); outline-offset: 2px; }
 
 /* The web on a map: each faction a token where its pin is, faint till one's
    tapped, then it and the factions it's tied to light up, with their

@@ -587,6 +587,7 @@ function pagesOf({ world, files, factions, history, say, notes }) {
       if (!t || typeof t !== "object") return { text: "", x: 1, kind: "" };
       for (const k of Object.keys(t)) if (!["text", "x", "kind"].includes(k)) say(`${who}'s tag ${t.text ?? ""} has ${JSON.stringify(k).slice(0, 50)} in it, which a tag can't hold`);
       if (t.kind != null && !TAG_KINDS.includes(t.kind)) say(`${who}'s tag ${t.text} is a ${t.kind} tag, and a tag's ${TAG_KINDS.filter(Boolean).join(", ")} or none`);
+      if (t.x != null && (!Number.isInteger(t.x) || t.x < 1 || t.x > PMAX.x)) say(`${who}'s tag ${t.text} is ×${t.x}, and a tag's ×1 to ×${PMAX.x}`);
       return { text: curl(t.text), x: t.x ?? 1, kind: t.kind ?? "" };
     });
     const teles = asList(x.teles).map((t) => {
@@ -737,7 +738,6 @@ function pagesOf({ world, files, factions, history, say, notes }) {
       for (const a of asList(ag?.at).map(String)) if (a.startsWith("place:") && !place(a.slice(6))) say(`${f.card.name}'s agenda ${ag?.text ?? ""} is after ${a.slice(6)}, which isn't one of the places`);
     }
   }
-  const faces = new Set(factions.map((f) => f.faceOf).filter(Boolean));
   for (const p of pages.values()) {
     if (p.kind !== "person") continue;
     const at = pages.get(p.at);
@@ -746,7 +746,6 @@ function pagesOf({ world, files, factions, history, say, notes }) {
     // Named on its who's here, or the faction they're the Face of is (Delamain,
     // the AI, at the firm that shares its name).
     else if (!at.card.here.some((h) => [...linked(h, `p-${at.key}`)].some((id) => id === `p-${p.key}` || factions.some((f) => `f-${f.key}` === id && f.faceOf === p.key)))) say(`${p.card.name} is at ${at.card.name}, and its who's here doesn't name them`);
-    if (!faces.has(p.key) && !p.at) say(`${p.card.name} is nobody's Face and isn't at a place, so nothing links to them`);
   }
 
   // A name written so it doesn't link: two words or more with its letters in

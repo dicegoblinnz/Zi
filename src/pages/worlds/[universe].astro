@@ -95,7 +95,8 @@ const seg = (on: string) => `<div class="ww-seg wn-seg" role="group" aria-label=
         <div class="wn-mapbox">
           <Fragment set:html={mapOf(world)} />
           <div class="wn-mbar">
-            <section class="wn-mcard" id="wn-mcard" aria-live="polite" hidden></section>
+            <section class="wn-mcard" id="wn-mcard" aria-label="What you tapped" hidden></section>
+            <p class="sr" id="wn-msay" aria-live="polite"></p>
             <div class="wn-mrow">
               <button type="button" class="wn-webbtn" id="wn-webbtn" aria-pressed="false"><span class="wn-sw" aria-hidden="true"></span>The web</button>
               <div class="wn-zoom" role="group" aria-label="Zoom">
