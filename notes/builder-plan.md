@@ -27,6 +27,7 @@ Mo's calls (27, 28 and 30 Oct):
 - **As many cards as it takes** (30 Oct): enough for interesting dealings between the factions and to form each one whole, never a set number, and never a form filled in line by line. In Mo's words: "different card amount so it is not just 12 cards", and "it needs to help form the entire faction without it asking to fill out line by line".
 - **An answer can ask for a name or a detail** (30 Oct): a field to write in, with suggestions off the tables to tap, never filled in for her ("the suggestions needed will be recommended but it is not given").
 - **The deck comes next** (30 Oct), ahead of the founding, which uses it later.
+- **How it came to be's shown an age at a time** (30 Oct, stage 8): long ago, in living memory and this last year each have their own Show the crew, so this last year's agendas and grudges can wait till the crew's found things out, and a line whose answer made a Secret never leaves her phone.
 
 ## Calls Claude made
 
@@ -92,6 +93,11 @@ For Mo to say otherwise.
 - **Names come first at the end** (stage 7), so every line of history and every because reads with the names the factions end up with.
 - **A mini faction's Loyalty** (stage 7): core's `loyal` lines, its Loyalty thread toward the faction that made it.
 - **`/deal/` keeps every answer in the address** (stage 7), so a link plays the same deck, and a new deck goes into the browser's history so Back brings the last one back. Answer the rest at random takes either answer at even odds and a suggestion two times in three.
+- **The deck's the way after the ground** (stage 8): arriving there starts it, with Go faction by faction instead till the first answer, and Deal it all on the set up as it was. Once she's gone faction by faction, Answer the deck instead deals the factions again from who's who, a tap again, since what she's locked or written past it goes.
+- **The ground holds while the deck's on** (stage 8): once she's answered a card, the asking and the ground are what it's playing on, so they stay as they are, with Start the deck again to change them. Before the first answer, a change there starts the deck again from them, and a new seat deals only who's who on it.
+- **Deal the rest on the deck's a tap again** (stage 8), since it ends the deck there. Undo's the build's own, the last 25 till a reload, and after a reload it plays the deck's last answer back off the deck itself. A tile opens its faction's card so far on the card's place, and the arrow keys answer a card too.
+- **The deck's last screen is How it came to be** (stage 8), and Next is the board. The faction screens come once it's done, a tap from the board. Done puts the mini factions the answers made on the board under their makers, and the record keeps the deck without the world it started from, so a big board fits.
+- **A line's hers when its answer made a Secret** (stage 8): it's marked on her phone, and it never reaches a player, whatever's shown. On the World screen she can change a line or take it out before she shows its age, and showing one tells the crew's phones to look again, the way a map does.
 
 ## How a stage goes
 
