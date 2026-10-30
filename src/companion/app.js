@@ -20,6 +20,7 @@ import { makeParty } from "./party.js";
 import { makeTable } from "./table.js";
 import { makeWorld } from "./world.js";
 import { makeTurn } from "./turn.js";
+import { makeFound } from "./found.js";
 import { bondKey, threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
 import { boxesSaid, isBroken, itS, keyOf, leftOf, nameOf, pieceAt, piecesOf, setTicked, standing, tick as tickBox, tickedOf, yours } from "./armour.js";
 import { aura as kitAura, boxes as kitBoxes, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, plate as kitPlate, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
@@ -190,6 +191,8 @@ const world = makeWorld({
   sync, esc, W: DATA.worlds, icon: ICON,
   // The faction turn, at the top of the World screen and tab (turn.js).
   turnSection: (id) => turn.section(id),
+  // The founding, at the top of a player's World tab (found.js).
+  foundSection: (id) => found.tab(id),
   // A telegraph off a place's or a person's page, onto the live table's round,
   // and a place of hers onto its scene.
   tele: (id, f) => table.composeFrom(id, f),
@@ -263,12 +266,30 @@ const turn = makeTurn({
   },
 });
 
+// The founding (found.js): the crew builds the world with her, live on
+// everyone's phone, kept with the campaign's live table like the faction turn.
+const found = makeFound({
+  esc, icon: ICON,
+  table: () => table,
+  world: () => world,
+  isOpen: (key) => ui.open.has(key),
+  render: () => render(),
+  quietRender: () => {
+    if (!dialog.open && !document.activeElement?.matches?.("#app input:not([type=radio]):not([type=checkbox]), #app textarea, #app select")) render();
+  },
+  toast: (m, u) => toast(m, u),
+  go: (url, o) => goTo(url, o),
+  calm: () => calm(),
+  tumble: (where, done) => tumble(where, done),
+});
+
 // Campaigns: starting one, joining one from its link, and the GM's look at
 // her players' characters, drawn with the same pieces as a character here.
 const camps = makeCampaigns({
   party,
   table,
   world,
+  found,
   sync, store, esc, ICON,
   render: () => render(),
   go: (url, o) => goTo(url, o),
@@ -1918,6 +1939,7 @@ function render() {
   world.route(view, ch);
   world.after(app);
   turn.after(app);
+  found.after(app);
   glow(ch);
   if (dialog.open) renderDialog();
   else refocus(keep);
@@ -2195,6 +2217,7 @@ const ACT = {
   pundo: () => party.undo(),
   w: (el, e) => world.act(el, e),
   ft: (el, e) => turn.act(el, e),
+  fd: (el, e) => found.act(el, e),
   wundo: () => world.undo(),
   wkundo: () => world.makeUndo(),
   b: (el, e) => builder.act(el, e, render, () => {
@@ -2894,6 +2917,7 @@ document.addEventListener("submit", (e) => {
   if (kind.startsWith("p-")) return party.submit(kind, form, f);
   if (kind.startsWith("w-")) return world.submit(kind, form, f);
   if (kind.startsWith("ft-")) return turn.submit(kind, form, f);
+  if (kind.startsWith("fd-")) return found.submit(kind, form, f);
   if (kind === "name") return start(roll?.crew, String(f.get("name") ?? "").trim().slice(0, 40));
   // A Blaze they live through: the wound becomes a Scar, a Catch, and the
   // wound die drops back to the Scars.

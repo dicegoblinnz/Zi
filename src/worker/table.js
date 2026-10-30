@@ -17,6 +17,10 @@
 //        is the table as that phone sees it, with the last number taken (seq)
 //        and why any change didn't (no).
 //
+// The faction turn (turn-rules.js) and the founding (found-rules.js) are kept
+// in the same document beside the rounds, so they reach every phone the same
+// way, each phone getting only what its rules give it.
+//
 // Changes come in over plain HTTPS rather than the socket, so the server
 // checks who's playing whom against D1 every time, the way the party sheet
 // does. The socket only ever carries the table out, plus "ping" from the
@@ -91,10 +95,12 @@ export class Table extends DurableObject {
     } catch {}
     this.doc = doc && Array.isArray(doc.rounds) ? doc : { ...blank(), seq: {} };
     if (!this.doc.seq || typeof this.doc.seq !== "object") this.doc.seq = {};
-    // A table from before the scene, the round's actions and the faction turn.
+    // A table from before the scene, the round's actions, the faction turn
+    // and the founding.
     fresh(this.doc);
     this.doc.turn ??= null;
     this.doc.last ??= null;
+    this.doc.found ??= null;
     const meta = sql.exec("SELECT v FROM kv WHERE k = 'meta'").toArray()[0];
     try {
       this.meta = meta ? JSON.parse(meta.v) : null;
@@ -308,7 +314,7 @@ export class Table extends DurableObject {
     const doc = this.load();
     const crewChanged = this.keepMeta(meta);
     const now = Date.now();
-    const was = JSON.stringify([doc.fight, doc.rounds, doc.scene, doc.turn ?? null, doc.last ?? null]);
+    const was = JSON.stringify([doc.fight, doc.rounds, doc.scene, doc.turn ?? null, doc.last ?? null, doc.found ?? null]);
     // Each phone's last change, under a key no phone can turn into anything else.
     const key = `d:${dev}`;
     const high = Number(doc.seq[key]?.n) || 0;
@@ -335,7 +341,7 @@ export class Table extends DurableObject {
     const people = this.here();
     if (who.role === "player") people.add(who.user);
     this.markSeen(people, now);
-    const changed = JSON.stringify([doc.fight, doc.rounds, doc.scene, doc.turn ?? null, doc.last ?? null]) !== was;
+    const changed = JSON.stringify([doc.fight, doc.rounds, doc.scene, doc.turn ?? null, doc.last ?? null, doc.found ?? null]) !== was;
     if (changed) doc.v += 1;
     if (changed || top > high) this.save();
     if (changed) this.broadcast();

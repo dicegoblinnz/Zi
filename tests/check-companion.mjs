@@ -14,6 +14,15 @@
 //    scene: one at a stake and one at the scene clock with no defence, landing
 //    then and there on a lost answer or at the round's end, a late win taking
 //    it back, and one at a place landing on whoever's in it.
+// 1c. The founding's rules: the room opened by the GM alone and one at a
+//    time, joining, taking someone out so they can't put themselves back,
+//    the order, the setup fixed once it starts, then the asking a turn each
+//    round the table (a card, someone's own words tidied, the tension off a
+//    real d12 and never typed, an answer taken back, one put in by the GM
+//    for a player with no phone, late ones refused), the dials, the clock
+//    stopping when it's done, what a player gets, carrying it off, someone
+//    leaving, and the clock running out: the turn that's on finishes, more
+//    time sends the turns round again, and the rest's dealt by the GM alone.
 // 2. Every crew member's set actions on the phone match their sheet in the
 //    chapter, read straight off the Markdown here rather than from book.json.
 // 3. Vesk at the table: Sneak is 3 steps, a d6. Tap off move unseen and it's
@@ -153,6 +162,7 @@ import { changesOf, said, typo } from "../src/companion/marks.js";
 import { grow } from "../src/companion/grow.js";
 import { CARD_WORDS, CREW, DECK_SIZE, newestChange, reachOf, readCards, staleCards } from "../scripts/learn.mjs";
 import * as T from "../src/companion/table-rules.js";
+import { dialsOf, foundNews, timeUp } from "../src/companion/found-rules.js";
 import { parse as parseYaml } from "yaml";
 
 const SHOTS = process.argv[2] || null;
@@ -432,6 +442,137 @@ if (part("1b")) {
   ok5({ o: "round", id: "round-v-0002", tele: [] }, gm, "the next round");
   same(ap5({ o: "answer", id: "tele-cell-05", ch: "isolde", a: { act: "Ward", steps: 3, dice: [{ size: 6, total: 6 }], opp: 2, t: 9700 } }, lee, { phoneNow: 10100 }).why, "Round 1’s gone by, so what landed on the cellar stands. Tell the GM.", "once the next round's on, what landed on the scene stands");
   console.log("the live table's rules checked");
+}
+
+// 1c. The founding's rules (found-rules.js, through table-rules.js), the ones
+// the server and every phone apply: the room, who's in, turns going round
+// the asking, the clock, and what a player gets.
+if (part("1c")) {
+  const roster = [{ user: "kai", name: "Kai Tane", ch: "vesk", cname: "Vesk" }, { user: "sam", name: "Sam", ch: "bram", cname: "Bram" }, { user: "lee", name: "Lee", ch: "isolde", cname: "Isolde" }];
+  const gm = { user: "mo", role: "gm", ch: null, cname: "" };
+  const kai = { user: "kai", role: "player", ch: "vesk", cname: "Vesk" };
+  const sam = { user: "sam", role: "player", ch: "bram", cname: "Bram" };
+  const lee = { user: "lee", role: "player", ch: "isolde", cname: "Isolde" };
+  const K = { kai: "kai|vesk", sam: "sam|bram", lee: "lee|isolde" };
+  const MIN = 60000;
+  let doc = T.blank();
+  let now = 100000;
+  // Every change carries its phone's own number for it, n, the way it reaches the server.
+  let seq = 0;
+  const ap = (op, who) => T.apply(doc, { ...op, n: ++seq }, who, roster, now);
+  const ok = (op, who, what) => same(ap(op, who), { ok: true }, what);
+  const why = (op, who, want, what) => same(ap(op, who).why, want, what);
+  const f = () => doc.found;
+  const setup = { o: "fd-open", id: "found-0001", recipe: { region: "town", era: "medieval", twist: null }, factions: 5, seed: "ash-lantern-ford", clocks: [30, 40, 40] };
+  const card = (id, text, extra = {}) => ({ id, text, tags: [], dials: {}, ...extra });
+
+  // The room: she sets it up and opens it, and the crew joins.
+  why({ ...setup }, kai, "Only the GM can do that.", "a player can't open a founding");
+  ok({ ...setup, who: [K.kai, K.sam, "zed|dorrie"] }, gm, "Mo opens the room with Kai and Sam in");
+  same(f().who.map((w) => [w.key, w.name, w.joined]), [[K.kai, "Kai Tane", 0], [K.sam, "Sam", 0]], "they're in, in that order, and nobody who isn't playing in the campaign");
+  ok({ ...setup }, gm, "opening it again, sent twice, is the same room");
+  why({ ...setup, id: "found-0002" }, gm, "There’s a founding on already. End it first.", "and there's one founding at a time");
+  why({ ...setup, id: "found-0003" }, gm, "There’s a founding on already. End it first.", "whatever's in it");
+  now += 1000;
+  ok({ o: "fd-join" }, lee, "Lee joins himself while the room's open");
+  same([f().who.map((w) => w.key), f().who[2].joined], [[K.kai, K.sam, K.lee], now], "and he's in at the end, joined");
+  ok({ o: "fd-in", key: K.lee, on: false }, gm, "Mo takes Lee out");
+  why({ o: "fd-join" }, lee, "Your GM’s left you out of this one.", "and Lee can't put himself back");
+  ok({ o: "fd-in", key: K.lee, on: true }, gm, "Mo puts him back");
+  same([f().who.map((w) => w.key), f().outs], [[K.kai, K.sam, K.lee], []], "and he's in again");
+  ok({ o: "fd-join" }, kai, "Kai joins");
+  same(f().who.map((w) => Boolean(w.joined)), [true, false, false], "Kai's joined, and Lee's back in without having joined again");
+  ok({ o: "fd-move", key: K.sam }, gm, "Mo moves Sam up, so he goes first");
+  why({ o: "fd-set", factions: 9 }, sam, "Only the GM can do that.", "a player can't change the setup");
+  ok({ o: "fd-set", factions: 6 }, gm, "Mo makes it six factions");
+  why({ o: "fd-set", clocks: [30, 0, 40] }, gm, "That setup didn’t make sense.", "every age needs some time on its clock");
+  same([f().n, f().clocks], [6, [30, 40, 40]], "the setup's as he left it");
+
+  // The asking: a turn each, round the table.
+  why({ o: "fd-start" }, kai, "Only the GM can do that.", "a player can't start it");
+  ok({ o: "fd-start" }, gm, "Mo starts the asking");
+  same([f().step, f().clock, f().turn], ["ask", { age: 1, left: 30 * MIN, run: now }, { key: K.sam, part: "holds", at: now }], "the first age's clock runs, and Sam's first, on what holds it together");
+  why({ o: "fd-set", factions: 7 }, gm, "It’s started, so the setup stays as it is.", "the setup's fixed once it's started");
+  why({ o: "fd-answer", part: "holds", pick: card("core:holds:trade", "Trade holds it together.") }, kai, "It’s not your turn.", "Kai can't answer Sam's turn");
+  now += 20000;
+  ok({ o: "fd-answer", part: "holds", pick: card("core:holds:trade", "Trade holds it together.", { tags: ["market"], dials: { rich: 1 } }) }, sam, "Sam answers with a card");
+  same([f().asking.holds.text, f().asking.holds.byName, f().last, f().turn.key, f().turn.part], ["Trade holds it together.", "Sam", { part: "holds", key: K.sam }, K.kai, "tension"], "it's on, and Kai's next, with the tension");
+  why({ o: "fd-answer", part: "runs", pick: card("core:runs:guilds", "The guilds run it.") }, kai, "It’s not that one’s turn.", "what's next is the tension, not who runs it");
+  why({ o: "fd-answer", part: "tension", pick: card("core:tension:truce", "A truce one move from breaking.") }, kai, "Roll the d12 for the tension.", "the tension's rolled");
+  why({ o: "fd-answer", part: "tension", pick: { own: true, text: "Everyone hates the bridge." } }, kai, "Roll the d12 for the tension.", "and it's off the d12, never someone's own words");
+  why({ o: "fd-back", part: "holds" }, kai, "That’s not yours to take back.", "Kai can't take back Sam's answer");
+  ok({ o: "fd-back", part: "holds" }, sam, "Sam takes his back, since nobody's answered after it");
+  same([f().asking.holds, f().turn.key, f().turn.part, f().last], [null, K.sam, "holds", null], "and it's his turn again");
+  ok({ o: "fd-answer", part: "holds", pick: { own: true, text: "  The ferry,\nand nothing else.  " } }, sam, "Sam writes his own");
+  same(f().asking.holds, { own: true, text: "The ferry, and nothing else.", by: K.sam, byName: "Sam", gm: false, at: now }, "in his words, tidied");
+  ok({ o: "fd-answer", part: "tension", pick: card("core:tension:truce", "A truce one move from breaking.", { tags: ["war"], dials: { tense: 1 }, roll: 8, real: true }) }, kai, "Kai rolls an 8 on real dice");
+  same([f().tension.roll, f().tension.real, f().turn.key, f().turn.part], [8, true, K.lee, "runs"], "it's the truce, and Lee's on who runs it");
+  why({ o: "fd-answer", part: "tension", pick: card("core:tension:outside", "An outside power buying the place up.", { roll: 7 }) }, sam, "That one’s been answered already.", "a roll that turns up late, from a phone with no signal, doesn't count");
+  ok({ o: "fd-answer", part: "runs", pick: card("core:runs:council", "A council runs it, when it can agree on anything.", { tags: ["law"], dials: { ruled: -1, tense: 1 } }) }, gm, "Lee's got no phone, so Mo puts his in for him");
+  same([f().asking.runs.gm, f().asking.runs.byName, f().turn.key, f().turn.part], [true, "Lee", K.sam, "notices"], "it's marked as Mo's tap, and the turns go round to Sam");
+  why({ o: "fd-answer", part: "runs", pick: card("core:runs:guilds", "The guilds run it.") }, lee, "Your GM put an answer in for you already.", "Lee's own, sent late, says so");
+  same(dialsOf(f()), { tense: 2, strange: 1, rich: 1, ruled: 0 }, "the dials: the truce and the council make it tense, and the council less ruled");
+  now += 60000;
+  ok({ o: "fd-answer", part: "notices", pick: card("core:notices:boats", "There are boats tied up on every bank.", { tags: ["river"] }) }, sam, "Sam answers the last of it");
+  same([f().step, f().turn, f().clock.run, f().clock.left], ["asked", null, 0, 30 * MIN - 80000], "that's the asking done, and the clock stops with what's left of it");
+  ok({ o: "fd-back", part: "notices" }, sam, "Sam takes the last one back");
+  same([f().step, f().turn.part, f().clock.run], ["ask", "notices", now], "and the asking's on again, its clock running");
+  ok({ o: "fd-answer", part: "notices", pick: card("core:notices:boats", "There are boats tied up on every bank.", { tags: ["river"] }) }, sam, "Sam answers it again");
+
+  // What a player gets, and what happens after.
+  const theirs = T.viewOf(doc, "player").found;
+  same(Object.keys(theirs).sort(), ["asking", "at", "clock", "clocks", "id", "last", "n", "now", "out", "outs", "recipe", "seed", "step", "tension", "turn", "who"], "a player gets the room's fields and nothing else");
+  same(Object.keys(theirs.who[0]).sort(), ["ch", "cname", "joined", "key", "name", "user"], "and who's in, by name");
+  const hers = T.viewOf(doc, "gm").found;
+  delete hers.now;
+  same(hers, f(), "the GM gets all of it");
+  why({ o: "fd-carry" }, kai, "Only the GM can do that.", "a player can't carry it off");
+  ok({ o: "fd-carry" }, gm, "Mo carries it into Build the world");
+  same(f().step, "carried", "it's on his phone now");
+  why({ o: "fd-back", part: "notices" }, sam, "It’s on your GM’s phone now, so the asking stays as it is.", "and nobody can take an answer back");
+  same(T.forget(doc, "lee"), true, "Lee deletes his account");
+  same([f().who.map((w) => w.key), f().asking.runs.byName, f().asking.runs.by], [[K.sam, K.kai], "Someone who’s left", ""], "he's out, and the answer Mo put in for him stays without his name");
+  why({ o: "fd-end" }, sam, "Only the GM can do that.", "a player can't end it");
+  ok({ o: "fd-end" }, gm, "Mo clears it off");
+  same([doc.found, T.viewOf(doc, "player").found], [null, null], "and it's gone from every phone");
+
+  // The clock running out, and someone taken out on their turn.
+  doc = T.blank();
+  now = 500000;
+  ok({ ...setup, id: "found-0004" }, gm, "Mo opens another, with everyone in");
+  same(f().who.map((w) => w.key), [K.kai, K.sam, K.lee], "everyone's in, in the order they joined the campaign");
+  ok({ o: "fd-start" }, gm, "and starts it");
+  ok({ o: "fd-in", key: K.kai, on: false }, gm, "Kai's had to go, so Mo takes her out on her turn");
+  same([f().turn.key, f().turn.part], [K.sam, "holds"], "and it's Sam's, the one after her");
+  ok({ o: "fd-in", key: K.kai, on: true }, gm, "she's back, and Mo puts her in again");
+  same(f().who.map((w) => w.key), [K.sam, K.lee, K.kai], "at the end of the order");
+  ok({ o: "fd-answer", part: "holds", pick: card("core:holds:faith", "Faith holds it together.", { tags: ["holy"] }) }, sam, "Sam answers");
+  ok({ o: "fd-clock", do: "add", m: -30 }, gm, "Mo takes the time off the clock");
+  same([timeUp(f(), now), f().turn.key], [true, K.lee], "time's up, and Lee's turn is still on");
+  ok({ o: "fd-answer", part: "tension", pick: card("core:tension:death", "A death no one has answered for.", { tags: ["blood"], roll: 11 }) }, lee, "Lee rolls the tension");
+  same([f().out, f().turn, f().step], [true, null, "ask"], "the turn that was on finishes, and nobody's next");
+  ok({ o: "fd-clock", do: "add", m: 5 }, gm, "Mo gives it five more minutes");
+  same([f().out, f().turn.key, f().turn.part, f().clock.left, f().clock.run], [false, K.kai, "runs", 5 * MIN, now], "and the turns go round again, to Kai");
+  ok({ o: "fd-clock", do: "add", m: -10 }, gm, "then takes them off again");
+  ok({ o: "fd-answer", part: "runs", pick: card("core:runs:priests", "The priests run it.", { tags: ["holy"] }) }, kai, "Kai answers who runs it");
+  same([f().out, f().turn], [true, null], "out of time again");
+  why({ o: "fd-rest", picks: {} }, sam, "Only the GM can do that.", "the rest's dealt on Mo's phone, not a player's");
+  why({ o: "fd-rest", picks: {} }, gm, "Deal all of what’s left.", "and it's all of what's left");
+  why({ o: "fd-rest", picks: { notices: { own: true, text: "Bells." } } }, gm, "Deal all of what’s left.", "off the tables");
+  ok({ o: "fd-rest", picks: { notices: card("core:notices:pray", "Everyone stops to pray at the same hour.", { tags: ["holy"] }), runs: card("core:runs:guilds", "The guilds run it.") } }, gm, "Mo's phone deals it");
+  same([f().step, f().asking.notices.deal, f().asking.runs.text, f().clock.run], ["asked", true, "The priests run it.", 0], "the asking's done, the last one dealt and Kai's left as she said it");
+  why({ o: "fd-clock", do: "run" }, gm, "The clock only runs while the asking’s on.", "and the clock waits for the ground");
+
+  // What's new, said for whoever's holding the phone.
+  const news = (a, b, me, gm = false) => foundNews(a, b, { gm, me, gmName: "Mo" });
+  const room = { id: "found-0005", step: "room", who: [{ key: K.kai, joined: 0 }], out: false, turn: null };
+  same(news(null, room, K.kai), { lines: ["Mo’s opened the founding. Join it on the World tab."], buzz: true }, "the room opening buzzes the crew's phones");
+  same(news(null, room, K.sam).lines, [], "and says nothing to someone who isn't in it");
+  const asking = { ...room, step: "ask", turn: { key: K.kai, part: "tension" } };
+  same(news(room, asking, K.kai), { lines: ["The founding’s started.", "Your turn: roll the d12 for what’s pulling it apart."], buzz: true }, "her turn buzzes her phone");
+  same(news(asking, { ...asking, turn: null, out: true }, null, true).lines, ["Time’s up, so the rest of the asking’s dealt."], "time's up, on Mo's phone");
+  same(news(asking, null, K.kai).lines, ["Mo’s ended the founding."], "and ending it says so");
+  console.log("the founding's rules checked");
 }
 
 // A small static server that answers the way Cloudflare's assets do.
