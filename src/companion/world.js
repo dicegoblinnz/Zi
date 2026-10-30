@@ -1186,7 +1186,7 @@ export function makeWorld(d) {
     const gm = isGm(v.id);
     return `${topbar(`/characters/?camp=${encodeURIComponent(v.id)}`, nameOf(v.id))}
       <header class="cc-camp-head wb-head"><p class="kicker${gm ? " is-gm" : ""}">The world</p><h1>${esc(nameOf(v.id))}</h1>${gm ? "" : `<p class="cc-small">What ${esc(gmName(v.id))}’s shown the crew so far.</p>`}</header>
-      ${d.turnSection?.(v.id) ?? ""}
+      ${d.foundSection?.(v.id) ?? ""}${d.turnSection?.(v.id) ?? ""}
       <section class="cc-sec wb-sec" data-wb="${esc(v.id)}" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(v.id)}</section>
       ${webSection(v.id)}${S.section(v.id)}${P.sections(v.id)}${M.section(v.id)}${gm ? "" : unlit(v.id)}`;
   }
@@ -1201,7 +1201,7 @@ export function makeWorld(d) {
     const id = d.campOf(ch);
     if (!id) return `<div class="cc-note"><p>${esc(ch.name)} isn’t playing in a campaign on this phone.</p></div>`;
     return `<div class="wb-tab" data-wb="${esc(id)}"><p class="cc-small pt-where">${esc(ch.name)} plays in <a href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">${esc(nameOf(id))}</a>. This is what ${esc(gmName(id))}’s shown the crew of its world.</p>
-      ${d.turnSection?.(id) ?? ""}
+      ${d.foundSection?.(id) ?? ""}${d.turnSection?.(id) ?? ""}
       <section class="cc-sec wb-sec" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(id)}</section>
       ${webSection(id)}${S.section(id)}${P.sections(id)}${M.section(id)}${unlit(id)}</div>`;
   }
@@ -1257,6 +1257,10 @@ export function makeWorld(d) {
     edit: (id, ops, say, o) => edit(id, ops, say, o),
     // The world builder's Undo, from a toast.
     makeUndo: () => watching && K.undo(watching),
+    // The founding (found.js): a build on the go on this phone, and the
+    // asking carried into Build the world.
+    building: (id) => K.building(id),
+    fromFound: (id, f, t) => K.fromFound(id, f, t),
     title(v) {
       if (v.make) return K.title(v.make);
       if (v.f) return find(docOf(v.id), v.f)?.name ?? "A faction";

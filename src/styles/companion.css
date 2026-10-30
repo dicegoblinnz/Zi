@@ -2293,3 +2293,113 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
 .ws-form textarea { width: 100%; }
 .ws-show { margin-bottom: 0.7rem; }
 @media (prefers-reduced-motion: reduce) { .ws-sec.is-new { animation: none; } }
+
+/* The founding (found.js): the room on the GM's campaign page and every
+   player's World tab. Violet's hers and gold's yours, as everywhere: the
+   turn that's yours lights gold, and her taps on someone's behalf violet. The
+   clock counts down in the display face, and goes ember when it's out. */
+.fd .kicker.is-gm, .fd-tile .kicker.is-gm { color: var(--zd-them-ink); }
+.cc .fd h2, .cc .fd-tile h2 { margin-top: 0.15rem; }
+.fd-head { display: grid; gap: 2px; }
+.fd-status { margin: 0.4rem 0 0; }
+.cc .fd-h3 { margin: 1.3rem 0 0.5rem; font-family: var(--display); font-weight: 600; font-size: 1.05rem; letter-spacing: 0.02em; }
+.fd-go { margin-top: 1rem; }
+.fd-tile-in { padding: 14px 16px; box-shadow: inset 3px 0 0 var(--zd-them-line); }
+.fd-tile-in p { margin: 0.35rem 0 0; }
+.fd-tile-in .cc-row { margin: 0.8rem 0 0; }
+
+/* The clock: the age it's for and the time left, on one line, with her
+   buttons beside it when there's room and under it when there isn't. */
+.fd-clock { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; margin: 0.8rem 0 0; padding: 8px 12px; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 2px; }
+.fd-clock-k { flex: 1 1 8.5rem; margin: 0; font-size: 0.74rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.fd-clock-t { flex: none; margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.75rem; line-height: 1.1; font-variant-numeric: tabular-nums; color: var(--ink); }
+.fd-clock-t small { font-family: var(--body); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.06em; color: var(--muted); }
+.fd-clock.is-stopped .fd-clock-t { color: var(--muted); }
+.fd-clock.is-up { border-color: var(--zd-harm-line); }
+.fd-clock.is-up .fd-clock-t { font-size: 1.3rem; color: var(--zd-harm-ink); }
+.fd-clock-b { flex: none; display: flex; gap: 6px; margin-left: auto; }
+.fd-clock-b .button { min-width: 44px; min-height: 44px; padding: 0 0.6rem !important; font-variant-numeric: tabular-nums; }
+
+/* Who's in, in the order the turns go round. */
+.fd-who { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.7rem 0 0; padding: 0; list-style: none; }
+.fd-who-i { display: grid; gap: 0; min-width: 4.6rem; padding: 5px 10px 6px; background: var(--zd-token); border: 1.5px solid var(--line-soft); border-radius: 3px; }
+.fd-who-n { font-weight: 800; font-size: 0.95rem; line-height: 1.2; }
+.fd-who-c { font-size: 0.78rem; line-height: 1.2; color: var(--muted); overflow-wrap: anywhere; }
+.fd-who-i.is-on { border-color: var(--zd-them-line); box-shadow: inset 0 0 0 1px var(--zd-them-line); }
+.fd-who-i.is-on.is-me { border-color: var(--zd-you-line); box-shadow: inset 0 0 0 1px var(--zd-you-line); }
+.fd-who-i.is-on .fd-who-n::before { content: ""; display: inline-block; width: 8px; height: 8px; margin: 0 6px 1px 0; background: var(--zd-them); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.fd-who-i.is-on.is-me .fd-who-n::before { background: var(--zd-you); }
+
+/* The turn that's on: the question, its three answers, or the d12. */
+.fd-turn { margin-top: 0.9rem; padding: 12px 14px 14px; box-shadow: inset 3px 0 0 var(--line); }
+.fd-turn.is-mine { box-shadow: inset 3px 0 0 var(--zd-you-line); }
+.fd-turn.is-theirs { box-shadow: inset 3px 0 0 var(--zd-them-line); }
+.fd-turn.is-out { box-shadow: inset 3px 0 0 var(--zd-harm-line); }
+.fd-turn-k { display: flex; justify-content: space-between; gap: 10px; margin: 0; font-size: 0.76rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.fd-turn.is-mine .fd-turn-k span:first-child { color: var(--zd-you-ink); }
+.fd-turn.is-out .fd-turn-k { color: var(--zd-harm-ink); }
+.fd-turn-n { font-variant-numeric: tabular-nums; letter-spacing: 0.06em; }
+.cc .fd-q { margin: 0.3rem 0 0.2rem; font-family: var(--display); font-weight: 600; font-size: 1.32rem; line-height: 1.25; }
+.fd-turn-l { margin: 0 0 0.7rem; }
+.fd-turn p:last-child { margin-bottom: 0; }
+.fd-hand .wk-card { padding-right: 13px; }
+.fd .wk-card:not(.is-static):focus-visible { outline-color: var(--zd-you-line); }
+.fd.is-gm .wk-card:not(.is-static):focus-visible { outline-color: var(--violet); }
+.wk-card.is-sure { border-color: var(--zd-them-line); box-shadow: inset 0 0 0 1.5px var(--zd-them-line); }
+.fd-sure { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--zd-them-ink); }
+.fd-late { margin: 0.7rem 0 0; color: var(--zd-harm-ink); }
+.fd-own input { font-size: 1rem; }
+.fd-roll { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; }
+.fd-roll .zd-die { --s: 64px; }
+.fd-roll p { margin: 0; }
+.fd-roll-b { margin: 0.8rem 0 0; }
+
+/* The answers so far, in the book's order. */
+.fd-asked { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.fd-a { display: flex; align-items: flex-start; gap: 10px; padding: 3px 0 3px 11px; border-left: 3px solid var(--line); }
+.fd-a:focus, .fd h2:focus { outline: none; }
+.fd-a:focus-visible, .fd h2:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.fd-a.is-last { border-left-color: var(--zd-you-line); }
+.fd.is-gm .fd-a.is-last { border-left-color: var(--zd-them-line); }
+.fd-a-d .zd-die { --s: 40px; }
+.fd-a-in { flex: 1 1 auto; min-width: 0; }
+.fd-a-q { margin: 0; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.fd-a-w { margin: 1px 0 0; font-size: 1.02rem; line-height: 1.4; overflow-wrap: anywhere; }
+.fd-a.is-own .fd-a-w { font-style: italic; }
+.fd-a-by { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; margin: 3px 0 0; font-size: 0.84rem; color: var(--muted); }
+.fd-back { min-height: 44px; margin-top: 4px; }
+.fd-dials { margin-top: 1rem; }
+.fd-tools { margin-top: 1.2rem; }
+
+/* The room, before it starts: who's in, and her setup. */
+.fd-in { display: grid; gap: 4px; margin: 0.3rem 0 0; padding: 0; list-style: none; }
+.fd-in li { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 40px; padding: 0 2px; border-bottom: 1px solid var(--line-soft); }
+.fd-in-n { font-weight: 700; }
+.fd-in-n small { margin-left: 4px; font-weight: 600; color: var(--muted); }
+.fd-in-s { flex: none; font-size: 0.8rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.fd-in-s.is-here { color: var(--zd-you-ink); }
+.fd.is-gm .fd-in-s.is-here { color: var(--zd-them-ink); }
+.fd-rows { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.fd-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 4px 10px; padding: 8px 10px; background: var(--zd-token); border: 1px solid var(--line-soft); border-radius: 2px; }
+.fd-row-in { display: grid; min-width: 0; }
+.fd-row-in small { color: var(--muted); overflow-wrap: anywhere; }
+.fd-row-b { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
+.fd-row-b .button { min-height: 44px; }
+.fd-row.is-out { background: none; border-style: dashed; }
+.fd-row.is-out .fd-row-in b { color: var(--muted); }
+.fd-set { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-top: 0.8rem; padding: 10px 12px; }
+.fd-set p { flex: 1 1 14rem; margin: 0; }
+.fd-set .button { min-height: 44px; }
+.fd-change { margin-top: 0.4rem; }
+.fd-ages { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.fd-age { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; }
+.fd-age-n { font-weight: 700; }
+.fd-count { gap: 10px; }
+.fd-count .wk-count-n { min-width: 4.2ch; font-size: 1.7rem; }
+.fd-count .wk-count-n small { margin-left: 3px; font-family: var(--body); font-size: 0.8rem; font-weight: 700; color: var(--muted); }
+.fd-setup .wk-sec h3 { margin-bottom: 0.6rem; }
+.fd-point a { font-weight: 700; }
+@media (min-width: 560px) {
+  .fd-row { grid-template-columns: minmax(0, 1fr) auto auto; }
+  .fd-row-b { grid-column: auto; }
+}

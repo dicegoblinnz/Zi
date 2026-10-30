@@ -247,10 +247,11 @@ export function makeCampaigns(d) {
       const partyHtml = `<section class="cc-sec" aria-labelledby="k-party"><h2 id="k-party">The party</h2>
         ${party.length ? `<ul class="cc-mine cc-party">${party.map((p) => memberCard(c, p)).join("")}</ul>` : '<p class="cc-lead">Nobody’s joined yet. When they do, their characters show up here, and you can open each one’s sheet.</p>'}</section>`;
       const sheet = d.party.sheet(id);
-      // The round's telegraphs come first, since they're what she taps most in a fight.
-      return `${head}${d.table.section(id)}${screenTile()}${d.world.tile(id)}${party.length ? partyHtml + sheet + bring : bring + partyHtml + sheet}${thisView(c)}`;
+      // The round's telegraphs come first, since they're what she taps most in
+      // a fight, bar a founding that's on, which is all a session zero's about.
+      return `${head}${d.found.top(id)}${d.table.section(id)}${screenTile()}${d.world.tile(id)}${d.found.tile(id)}${party.length ? partyHtml + sheet + bring : bring + partyHtml + sheet}${thisView(c)}`;
     }
-    return `${head}${d.table.pointer(id)}${youView(c, myChar)}${d.world.tile(id)}${d.party.sheet(id)}
+    return `${head}${d.found.pointer(id)}${d.table.pointer(id)}${youView(c, myChar)}${d.world.tile(id)}${d.party.sheet(id)}
       <section class="cc-sec" aria-labelledby="k-party"><h2 id="k-party">Who’s in it</h2>
         <ul class="cc-mine cc-names"><li class="card cc-name"><b>${esc(c.gm)}</b><small>the GM</small></li>${party.map((p) => `<li class="card cc-name"><b>${p.character ? esc(p.character.name) : "No character yet"}</b><small>${p.id === sync.me?.id ? "you" : esc(p.name)}</small></li>`).join("")}</ul></section>
       <section class="cc-sec" aria-labelledby="k-leave"><h2 id="k-leave">Leaving</h2>

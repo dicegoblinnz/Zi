@@ -452,6 +452,41 @@ export function makeWorldMake(w) {
     e.cut = [];
     return W;
   }
+  // The founding's asking (found.js), carried into Build the world: its mix
+  // and its factions, with the crew's answers on and locked, so she carries
+  // on from the ground. It deals from a seed of its own, never the room's,
+  // which every player had, so nobody can deal her factions and Secrets for
+  // themselves. Whatever build was on the go for the campaign on this phone goes.
+  function fromFound(id, f) {
+    if (!T || !f?.recipe || !canDeal(T, f.recipe)) return false;
+    const recipe = { region: f.recipe.region, era: f.recipe.era, twist: f.recipe.twist ?? null };
+    const e = begin(id, "world");
+    e.setup = { ...e.setup, region: recipe.region, ...genreOf(recipe), n: f.n };
+    let W;
+    try {
+      W = start(T, { recipe, seed: newSeed(T), factions: f.n, crew: crewNow(id, docOf(id), "world") });
+    } catch {
+      forget(id);
+      return false;
+    }
+    const as = (p) => (p.own ? { own: true, text: p.text } : { id: p.id, text: p.text, tags: p.tags ?? [], dials: p.dials ?? {}, strange: p.strange === true, why: "", ...(p.roll ? { roll: p.roll } : {}) });
+    for (const q of QUESTIONS) {
+      if (!f.asking?.[q]) continue;
+      choose(T, W, `ask:${q}`, as(f.asking[q]));
+      lock(W, `ask:${q}`);
+    }
+    if (f.tension) {
+      choose(T, W, "tension", as(f.tension));
+      lock(W, "tension");
+    }
+    live[id] = W;
+    e.W = recordOf(W);
+    e.at = "seat:0";
+    e.found = f.id;
+    keep();
+    return true;
+  }
+
   // Whether Set up says something other than the world that's been dealt.
   function setupMoved(e, W) {
     if (!W) return true;
@@ -1703,6 +1738,14 @@ export function makeWorldMake(w) {
     title: (mode) => (mode === "add" ? "Adding a faction" : "Building the world"),
     // A campaign that's left the phone takes its build with it.
     drop: (id) => forget(id),
+    // The founding's way in (found.js): whether there's a build on the go,
+    // and its asking carried in.
+    building: (id) => Boolean(entryOf(id)),
+    fromFound: (id, f, tablesIn = null) => {
+      // The founding's phone has the tables already, and they're the same file.
+      if (!T && tablesIn?.core && tablesIn.packs) T = tablesIn;
+      return T || tables() ? fromFound(id, f) : false;
+    },
     keepOnly(ids) {
       load();
       for (const k of Object.keys(st.k)) if (!ids.includes(k)) delete st.k[k];

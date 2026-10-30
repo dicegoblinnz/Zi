@@ -81,6 +81,7 @@
 // steps down a size, and past d2 the stake's lost or the event happens.
 
 import { applyTurn, forgetTurn, isTurnOp, turnView } from "./turn-rules.js";
+import { applyFound, forgetFound, foundView, isFoundOp, leftFound } from "./found-rules.js";
 
 export const SIZES = [2, 4, 6, 8, 10, 12];
 export const MAX = { who: 60, does: 140, one: 140, name: 60, act: 60, paid: 80, tele: 24, rounds: 12, more: 4, list: 6, ground: 8, stakes: 6, events: 6, tags: 8, text: 140, tag: 80 };
@@ -103,8 +104,9 @@ export const lower = (name) => String(name ?? "").replace(/^(A|An|The|His|Her|Th
 
 export const blankScene = () => ({ ground: [], stakes: [], events: [], place: null });
 // turn is the faction turn of the downtime that's on, and last what changed
-// in the one before (turn-rules.js).
-export const blank = () => ({ v: 0, fight: 1, rounds: [], scene: blankScene(), turn: null, last: null });
+// in the one before (turn-rules.js). found is the founding, while one's on
+// (found-rules.js).
+export const blank = () => ({ v: 0, fight: 1, rounds: [], scene: blankScene(), turn: null, last: null, found: null });
 export const current = (doc) => doc?.rounds?.[doc.rounds.length - 1] ?? null;
 // A table from before the scene and the round's actions gets them.
 export function fresh(doc) {
@@ -587,6 +589,7 @@ const gmOnly = () => no("Only the GM can do that.");
 export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
   fresh(doc);
   if (isTurnOp(op)) return applyTurn(doc, op, who, roster, now);
+  if (isFoundOp(op)) return applyFound(doc, op, who, roster, now);
   const gm = who?.role === "gm";
   const last = current(doc);
   switch (op?.o) {
@@ -864,7 +867,8 @@ export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
 // Someone's deleted their account: the telegraphs aimed at them go, and their
 // answers to anyone else's stay as how it went, but not who answered.
 export function forget(doc, user) {
-  let changed = forgetTurn(doc, user);
+  const turned = forgetTurn(doc, user);
+  let changed = forgetFound(doc, user) || turned;
   for (const r of doc.rounds) {
     const kept = r.tele.filter((t) => t.at.user !== user);
     if (kept.length !== r.tele.length) changed = true;
@@ -899,13 +903,18 @@ export function forget(doc, user) {
   return changed;
 }
 
+// Someone's left the campaign or been taken out, with their account still
+// there: they're out of the founding, so the turns don't wait on them.
+export const leave = (doc, user) => leftFound(doc, user);
+
 // What a phone gets: the GM every round of this fight, a player the last two
 // (the one on now, and the one before for anything still to roll from it,
 // and no further, so a table rolling real dice isn't nagged round after
-// round). Telegraphs are face up, so everyone sees them all.
+// round). Telegraphs are face up, so everyone sees them all. The faction turn
+// and the founding are each as their own rules give them out.
 export function viewOf(doc, role) {
   const rounds = role === "gm" ? doc.rounds : doc.rounds.slice(-2);
-  return { v: doc.v, fight: doc.fight, rounds: JSON.parse(JSON.stringify(rounds)), scene: JSON.parse(JSON.stringify(doc.scene ?? blankScene())), ...turnView(doc, role) };
+  return { v: doc.v, fight: doc.fight, rounds: JSON.parse(JSON.stringify(rounds)), scene: JSON.parse(JSON.stringify(doc.scene ?? blankScene())), ...turnView(doc, role), found: foundView(doc, role) };
 }
 
 // What the table screen gets (/table/, src/companion/table-screen.js): the

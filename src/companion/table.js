@@ -29,6 +29,7 @@
 //             the phone (sync.js).
 import { MAX, ONCE, SIZES, actSaid, apply, atName, atPlace, blankScene, current, dieOf, findEl, findTele, fresh, fxSaid, inIt, joinersOf, keyOf, landsOn, lower, onScene, placeOf, spentBy, stateFor, stateOf, workedIn } from "./table-rules.js";
 import { turnNews } from "./turn-rules.js";
+import { foundNews } from "./found-rules.js";
 import { curlyQuotes, readAim, whoAndDoes } from "./aims.js";
 import { die as kitDie, tag as kitTag, telegraph as kitTele } from "../kit/kit.js";
 
@@ -122,13 +123,22 @@ export function makeTable(d) {
   // server's, with whatever's still to go up on top.
   function local(id) {
     const k = camp(id);
-    const doc = fresh({ v: k.view?.v ?? 0, fight: k.view?.fight ?? 1, rounds: structuredClone(k.view?.rounds ?? []), scene: structuredClone(k.view?.scene ?? blankScene()), turn: structuredClone(k.view?.turn ?? null), last: structuredClone(k.view?.last ?? null) });
+    const doc = fresh({ v: k.view?.v ?? 0, fight: k.view?.fight ?? 1, rounds: structuredClone(k.view?.rounds ?? []), scene: structuredClone(k.view?.scene ?? blankScene()), turn: structuredClone(k.view?.turn ?? null), last: structuredClone(k.view?.last ?? null), found: foundIn(k.view) });
     const who = whoIn(id);
     const roster = rosterOf(id);
-    for (const op of k.out) apply(doc, op, who, roster, op.at || Date.now());
+    // The founding's clock runs on the server's time, so its changes are tried
+    // at the server's time as near as this phone can tell.
+    const off = Number(k.off) || 0;
+    for (const op of k.out) apply(doc, op, who, roster, (op.at || Date.now()) + (String(op.o).startsWith("fd-") ? off : 0));
     return doc;
   }
   const waiting = (id, test = () => true) => camp(id).out.some(test);
+  // The founding as the server last sent it, without the server's clock.
+  function foundIn(view) {
+    if (!view?.found) return null;
+    const { now, ...f } = view.found;
+    return structuredClone(f);
+  }
 
   // ------------------------------------------------------------ the server
 
@@ -226,9 +236,12 @@ export function makeTable(d) {
     if (!got || !Array.isArray(got.rounds)) return;
     const k = camp(id);
     if (k.view && Number(got.v) < Number(k.view.v) && got.fight === k.view.fight) return;
-    const was = k.view ? { v: k.view.v, fight: k.view.fight, rounds: k.view.rounds, scene: k.view.scene, turn: k.view.turn ?? null, last: k.view.last ?? null } : null;
-    k.view = { v: Number(got.v) || 0, fight: Number(got.fight) || 1, rounds: got.rounds, scene: got.scene && typeof got.scene === "object" ? got.scene : blankScene(), turn: got.turn ?? null, last: got.last ?? null };
+    const was = k.view ? { v: k.view.v, fight: k.view.fight, rounds: k.view.rounds, scene: k.view.scene, turn: k.view.turn ?? null, last: k.view.last ?? null, found: k.view.found ?? null } : null;
+    k.view = { v: Number(got.v) || 0, fight: Number(got.fight) || 1, rounds: got.rounds, scene: got.scene && typeof got.scene === "object" ? got.scene : blankScene(), turn: got.turn ?? null, last: got.last ?? null, found: got.found && typeof got.found === "object" ? got.found : null };
     k.at = Date.now();
+    // How far this phone's clock is from the server's, so the founding's
+    // clock counts down the same on every phone.
+    if (Number.isFinite(Number(got.found?.now))) k.off = Number(got.found.now) - k.at;
     net.why = "";
     const said = news(id, k, was, k.view);
     keep();
@@ -239,6 +252,8 @@ export function makeTable(d) {
     d.quietRender();
     const cur = d.current();
     if (cur) setTimeout(() => catchUp(cur), 0);
+    // The founding (found.js) hears it too, wherever the phone's at.
+    dispatchEvent(new CustomEvent("zi-found", { detail: id }));
   }
 
   // What's new since the phone last looked, said for whoever's holding it.
@@ -317,6 +332,10 @@ export function makeTable(d) {
       const ft = turnNews(was, now, { gm, me: me() });
       out.push(...ft.lines);
       if (ft.buzz) out.buzz = true;
+      const w = whoIn(id);
+      const fd = foundNews(was.found ?? null, now.found ?? null, { gm, me: !gm && w.ch ? keyOf(w.user, w.ch) : null, gmName: cap(gmName(id)) });
+      out.push(...fd.lines);
+      if (fd.buzz) out.buzz = true;
     }
     if (k.said.length > 120) k.said = k.said.slice(-120);
     return out;
@@ -2274,8 +2293,10 @@ export function makeTable(d) {
     gmName: (id) => gmName(id),
     waiting: (id) => camp(id).out.length,
     // Whether a change would be taken, tried on the table as this phone has it.
-    check: (id, op) => apply(local(id), op, whoIn(id), rosterOf(id), Date.now()),
+    check: (id, op) => apply(local(id), op, whoIn(id), rosterOf(id), Date.now() + (String(op?.o).startsWith("fd-") ? Number(camp(id).off) || 0 : 0)),
     seenAt: (id) => camp(id).at,
+    // The server's clock, as near as this phone can tell, for the founding's.
+    serverNow: (id) => Date.now() + (Number(camp(id).off) || 0),
     landedFor,
     dialog,
     input,

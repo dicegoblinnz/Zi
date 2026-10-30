@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e or 9f)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e, 9f or 9g)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -228,6 +228,32 @@
 //    screen and How it came to be on both phones pass axe at 390 in both
 //    themes, and the deck at 320, 360, 430 and 1280. Under reduce-motion the
 //    card stays put under a thumb.
+//    9g. The founding's room and the asking (stage 9 of
+//    notes/builder-plan.md), on three phones. Mo starts Saturday Lair, and
+//    Kai joins with Ash and Sam with Dorrie. Its empty board offers the
+//    founding on Mo's page, and he sets it up: Medieval at Town, four
+//    factions (his two players and two more) and 25 minutes on the ground's
+//    clock. Sunday Lair's table never gets it, and Kai can't reach Sunday
+//    Lair's at all. Kai's campaign page points her at Ash's World tab, where
+//    she joins, and Sam joins with no signal, his phone saying so, and it
+//    reaches the server once he's back. Mo moves Sam up and starts it: Sam's
+//    first on what holds it together, with the ground's clock running. All
+//    three phones show the same three answers, the engine's from the shared
+//    seed, and only Sam's can tap them. He taps one, takes it back and taps
+//    another. Kai, after a reload, rolls the tension on real dice, an 8. Sam,
+//    with no signal again, writes his own for who runs it, which goes up once
+//    he's back. Mo puts Kai's last one in for her with a second tap, and
+//    the clock stops. Kai can't carry it off, end it or take Sam out. Mo
+//    carries it into Build the world, on the ground's first seat with the
+//    founding's mix and four factions, a seed of its own and the crew's
+//    answers locked,
+//    Kai's phone says he's building the rest, and clearing it off takes it
+//    off hers. A second founding runs out of time: Mo takes the clock to
+//    nothing on Sam's turn, Sam's phone says time's up and that his turn's
+//    the last, he rolls, and Mo's phone deals the rest the way the engine
+//    would from the seed. The setup, the room on both sides, every turn and
+//    the asking done pass axe at 390 in both themes, Sam's turn on Kai's
+//    phone at 320, 360, 430 and 1280, and Mo's room at 1280.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -249,7 +275,7 @@ import { chromium } from "playwright";
 import { stepsToDice } from "../src/companion/dice.js";
 import { coveredShare, fogBits, fogFull, fogText, gridOf, spotCovered } from "../src/companion/maps.js";
 import { standingOf } from "../src/companion/board.js";
-import { newSeed, resume, rngOf } from "../src/companion/world-engine.js";
+import { choose, fill, newSeed, options, resume, rngOf, start, tensionAt } from "../src/companion/world-engine.js";
 import { answer, current, fillPrompt, finish, notThis, prompted, startDeck } from "../src/companion/world-deck.js";
 import { linesOf } from "../src/companion/world-answer.js";
 import { AxeBuilder } from "@axe-core/playwright";
@@ -3780,6 +3806,238 @@ try {
   await checkAnswering();
   // ZI_UPTO=9f stops here.
   if (UPTO === "9f") break rest;
+
+  // ------------------------------------------------------------ 9g. the founding: the room and the asking
+  async function checkFounding() {
+    const T = JSON.parse(readFileSync("public/world-tables.json", "utf8"));
+    const fOf = async (page, id) => (await got(page, "GET", `/api/campaigns/${id}/table`)).json?.found ?? null;
+    const making = (page, id) => page.evaluate((c) => JSON.parse(localStorage.getItem("zi-make") || "null")?.k?.[c] ?? null, id);
+    const handIn = (page) => page.$$eval(".fd-turn .wk-card .wk-card-w", (els) => els.map((e) => e.textContent));
+    const cards = (W, path, n = 3) => options(T, W, path, n).map((c) => fill(c.text, {}));
+    const themes = async (page, what, name) => {
+      for (const theme of ["dark", "light"]) {
+        await page.evaluate((t) => { localStorage.setItem("zi-theme", t); document.documentElement.dataset.theme = t; }, theme);
+        await axe(page, `${what}, ${theme}`);
+        await shot(page, `${name}-${theme}`);
+      }
+      await page.evaluate(() => { localStorage.setItem("zi-theme", "dark"); document.documentElement.dataset.theme = "dark"; });
+    };
+
+    // Mo starts Saturday Lair: Kai joins with Ash and Sam with Dorrie.
+    const sat = (await got(mo.page, "POST", "/api/campaigns", { name: "Saturday Lair" })).json?.campaign;
+    const sunday = (await got(mo.page, "POST", "/api/campaigns", { name: "Sunday Lair" })).json?.campaign;
+    await api(kai.page, "PUT", "/api/characters/ash-gggggg", crewChar("ash-gggggg", "ash", "Ash"));
+    await api(sam.page, "PUT", "/api/characters/dorrie-hhhhhh", crewChar("dorrie-hhhhhh", "dorrie", "Dorrie"));
+    same((await got(kai.page, "POST", "/api/join", { code: sat.code, character: "ash-gggggg" })).json?.campaign?.role, "player", "Kai joins Saturday Lair with Ash");
+    same((await got(sam.page, "POST", "/api/join", { code: sat.code, character: "dorrie-hhhhhh" })).json?.campaign?.role, "player", "Sam joins it with Dorrie");
+    const kaiKey = `${(await user("kai@example.com")).id}|ash-gggggg`;
+    const samKey = `${(await user("sam@example.com")).id}|dorrie-hhhhhh`;
+
+    // Mo sets it up on Saturday Lair's page: Medieval at Town, four
+    // factions, and 25 minutes on the ground's clock.
+    await mo.page.goto(`${BASE}/characters/?camp=${sat.id}`);
+    await mo.page.waitForSelector(".fd-tile");
+    has(await text(mo.page, ".fd-tile"), "Found the world with the crew", "an empty board offers the founding on Mo's page");
+    await mo.page.click('.fd-tile [data-do="setup"]');
+    await mo.page.waitForSelector(".fd-setup .wk-pick");
+    await mo.page.click('.fd-setup [data-do="set"][data-k="region"][data-v="town"]');
+    await mo.page.click('.fd-setup [data-do="set"][data-k="genre"][data-v="medieval"]');
+    same(await mo.page.textContent('.fd-setup [data-fdn="n"]'), "4", "four factions, his two players and two more");
+    await mo.page.click('.fd-setup [data-do="set"][data-k="clock"][data-i="0"][data-v="-1"]');
+    same(await mo.page.textContent('.fd-setup [data-fdn="clock0"]'), "25min", "the ground's clock down to 25 minutes");
+    await themes(mo.page, "setting up the founding", "found-setup");
+    await mo.page.click('.fd-setup [data-do="open"]');
+    await until(async () => (await fOf(mo.page, sat.id))?.step === "room", "the room open on the server");
+    const f0 = await fOf(mo.page, sat.id);
+    same([f0.recipe, f0.n, f0.clocks, f0.who.map((w) => w.cname), /^[a-z]+-[a-z]+-[a-z]+$/.test(f0.seed)], [{ region: "town", era: "medieval", twist: null }, 4, [25, 40, 40], ["Ash", "Dorrie"], true], "Medieval at Town, four factions, the clocks, a seed, and both of them in");
+    same((await got(mo.page, "GET", `/api/campaigns/${sunday.id}/table`)).json?.found, null, "nothing crosses: Sunday Lair's table hasn't got it");
+    same((await api(kai.page, "GET", `/api/campaigns/${sunday.id}/table`)).status, 404, "and Kai can't get at Sunday Lair's at all");
+
+    // Kai's campaign page points her at Ash's World tab, where she joins.
+    await kai.page.goto(`${BASE}/characters/`);
+    await until(async () => (await text(kai.page, "#app")).includes("Saturday Lair"), "Kai's phone has Saturday Lair in its campaigns");
+    await kai.page.goto(`${BASE}/characters/?camp=${sat.id}`);
+    await kai.page.waitForSelector(".fd-point");
+    has(await text(kai.page, ".fd-point"), "opened the founding", "Kai's campaign page points her at the founding");
+    await Promise.all([kai.page.waitForURL(/t=world/), kai.page.click(".fd-point a")]);
+    await kai.page.waitForSelector('.fd [data-do="join"]');
+    has(await text(kai.page, ".fd"), "Medieval at Town, with four factions", "the room says what kind of world it is");
+    await themes(kai.page, "the room, before Kai joins", "found-room-kai");
+    await kai.page.click('.fd [data-do="join"]');
+    await until(async () => (await fOf(mo.page, sat.id))?.who.find((w) => w.key === kaiKey)?.joined > 0, "Kai's joined on the server");
+
+    // Sam joins with no signal, and it goes up once he's back.
+    await sam.page.goto(`${BASE}/characters/`);
+    await until(async () => (await text(sam.page, "#app")).includes("Saturday Lair"), "Sam's phone has Saturday Lair in its campaigns");
+    await sam.page.goto(`${BASE}/characters/?c=dorrie-hhhhhh&t=world`);
+    await sam.page.waitForSelector('.fd [data-do="join"]');
+    await sam.context.setOffline(true);
+    await sam.page.click('.fd [data-do="join"]');
+    await sam.page.waitForSelector(".fd .fd-status");
+    has(await text(sam.page, ".fd"), "when you’ve got a signal", "Sam's phone says his join goes up when there's a signal");
+    has(await text(sam.page, ".fd"), "You’re in", "and that he's in");
+    same((await fOf(mo.page, sat.id)).who.find((w) => w.key === samKey).joined, 0, "it's not on the server yet");
+    await sam.context.setOffline(false);
+    await until(async () => (await fOf(mo.page, sat.id))?.who.find((w) => w.key === samKey)?.joined > 0, "Sam's join reaches the server once he's back");
+
+    // Mo sees them both here, moves Sam up, and starts it.
+    await until(async () => ((await text(mo.page, ".fd")).match(/Here/g) ?? []).length === 2, "Mo's page has both of them here");
+    await themes(mo.page, "the room, Mo's", "found-room-mo");
+    await mo.page.setViewportSize({ width: 1280, height: 900 });
+    await axe(mo.page, "the room, Mo's, at 1280");
+    await mo.page.setViewportSize({ width: 390, height: 844 });
+    await mo.page.click(`.fd [data-do="move"][data-key="${samKey}"]`);
+    await until(async () => (await fOf(mo.page, sat.id))?.who[0]?.key === samKey, "Sam's first in the order");
+    await mo.page.click('.fd [data-do="start"]');
+    await until(async () => (await fOf(mo.page, sat.id))?.step === "ask", "the asking's started");
+    const f1 = await fOf(mo.page, sat.id);
+    same([f1.turn.key, f1.turn.part, f1.clock.age, f1.clock.left], [samKey, "holds", 1, 25 * 60000], "Sam's first, on what holds it together, with the ground's 25 minutes running");
+
+    // The same three answers on every phone, dealt off the tables from the seed.
+    const W = start(T, { recipe: f1.recipe, seed: f1.seed, factions: f1.n });
+    const holds = cards(W, "ask:holds");
+    await sam.page.waitForSelector(".fd-turn.is-mine button.wk-card");
+    same(await handIn(sam.page), holds, "Sam's three answers are the engine's, from the shared seed");
+    await kai.page.waitForSelector(".fd-turn .wk-card");
+    same(await handIn(kai.page), holds, "Kai sees the same three");
+    same(await kai.page.$$(".fd-turn button.wk-card"), [], "and can't tap them, since it's not her turn");
+    await mo.page.waitForSelector(".fd-turn .wk-card");
+    same(await handIn(mo.page), holds, "and so does Mo");
+    has(await text(sam.page, ".fd-clock"), "The asking and the ground", "the clock's the ground's, on Sam's phone too");
+    await themes(sam.page, "Sam's turn", "found-turn-sam");
+    await themes(kai.page, "Sam's turn, on Kai's phone", "found-watch-kai");
+    for (const [w, h] of [[320, 640], [360, 740], [430, 932], [1280, 900]]) {
+      await kai.page.setViewportSize({ width: w, height: h });
+      await axe(kai.page, `Sam's turn, on Kai's phone at ${w}`);
+    }
+    await kai.page.setViewportSize({ width: 390, height: 844 });
+    await themes(mo.page, "Sam's turn, on Mo's phone", "found-turn-mo");
+
+    // Sam taps the second, takes it back, and taps the first.
+    await sam.page.click(".fd-turn .wk-card >> nth=1");
+    await until(async () => (await fOf(mo.page, sat.id))?.asking.holds?.text === holds[1], "Sam's answer on the server");
+    await until(async () => (await text(kai.page, ".fd")).includes(holds[1]), "and on Kai's phone in a moment");
+    await sam.page.click('.fd-asked [data-do="back"]');
+    await sam.page.click('.fd-asked [data-do="back"]');
+    await until(async () => (await fOf(mo.page, sat.id))?.asking.holds === null, "he takes it back");
+    await sam.page.waitForSelector(".fd-turn.is-mine button.wk-card");
+    await sam.page.click(".fd-turn .wk-card >> nth=0");
+    await until(async () => (await fOf(mo.page, sat.id))?.turn?.key === kaiKey, "his first answer's in, and it's Kai's turn");
+    same((await fOf(mo.page, sat.id)).asking.holds.text, holds[0], "with the first answer");
+
+    // A reload brings the room back, and Kai rolls the tension on real dice: an 8.
+    await kai.page.reload();
+    await kai.page.waitForSelector('.fd-turn.is-mine [data-do="tap"]');
+    has(await text(kai.page, ".fd-turn"), "What’s pulling it apart?", "after a reload, Kai's turn is the tension");
+    await themes(kai.page, "the tension, Kai's turn", "found-tension-kai");
+    await kai.page.click('.fd-turn [data-do="tap"]');
+    await kai.page.click('.fd-turn [data-do="real"][data-v="8"]');
+    await until(async () => (await fOf(mo.page, sat.id))?.tension?.roll === 8, "Kai's 8 on the server");
+    const truce = tensionAt(T, 8);
+    same([(await fOf(mo.page, sat.id)).tension.text, (await fOf(mo.page, sat.id)).tension.real, (await fOf(mo.page, sat.id)).tension.dials], [fill(truce.text, {}), true, truce.dials ?? {}], "it's the tension table's 8, on real dice, with its nudge");
+
+    // Sam has no signal for who runs it, and writes his own.
+    await sam.page.waitForSelector('.fd-turn.is-mine [data-do="own"]');
+    await sam.context.setOffline(true);
+    await sam.page.click('.fd-turn [data-do="own"]');
+    await sam.page.fill('.fd-own input[name="text"]', "The ferrymen run it, whatever the reeve says.");
+    await sam.page.click('.fd-own button[type="submit"]');
+    await sam.page.waitForSelector(".fd .fd-status");
+    has(await text(sam.page, ".fd"), "when you’ve got a signal", "his answer goes up when there's a signal");
+    has(await text(sam.page, ".fd-asked"), "The ferrymen run it", "and it's on his phone straight away");
+    same((await fOf(mo.page, sat.id)).asking.runs, null, "not on the server yet");
+    await sam.context.setOffline(false);
+    await until(async () => (await fOf(mo.page, sat.id))?.asking.runs?.own === true, "it's in once he's back, in his own words");
+
+    // Kai's turn on what a stranger notices: Mo puts it in for her.
+    await mo.page.waitForSelector(".fd-turn.is-theirs button.wk-card");
+    const W3 = start(T, { recipe: f1.recipe, seed: f1.seed, factions: f1.n });
+    const f2 = await fOf(mo.page, sat.id);
+    choose(T, W3, "ask:holds", { id: f2.asking.holds.id, text: f2.asking.holds.text, tags: f2.asking.holds.tags, dials: f2.asking.holds.dials, why: "" });
+    choose(T, W3, "tension", { id: f2.tension.id, text: f2.tension.text, tags: f2.tension.tags, dials: f2.tension.dials, why: "", roll: 8 });
+    choose(T, W3, "ask:runs", { own: true, text: f2.asking.runs.text });
+    const notices = cards(W3, "ask:notices");
+    same(await handIn(mo.page), notices, "the cards for the last of it read what's been answered, on Mo's phone");
+    await mo.page.click(".fd-turn .wk-card >> nth=2");
+    has(await text(mo.page, ".fd-turn"), "Tap again to put this in for Kai", "Mo's first tap asks again");
+    same((await fOf(mo.page, sat.id)).asking.notices, null, "and puts nothing in");
+    await mo.page.click(".fd-turn .wk-card >> nth=2");
+    await until(async () => (await fOf(mo.page, sat.id))?.step === "asked", "his second puts it in for Kai, and that's the asking done");
+    const f3 = await fOf(mo.page, sat.id);
+    same([f3.asking.notices.text, f3.asking.notices.gm, f3.clock.run, f3.turn], [notices[2], true, 0, null], "Kai's, put in by Mo, and the clock's stopped");
+    await until(async () => (await text(kai.page, ".fd")).includes("Yours, put in by Mo"), "Kai's phone says Mo put hers in");
+    await themes(kai.page, "the asking done, Kai's", "found-done-kai");
+    await themes(mo.page, "the asking done, Mo's", "found-done-mo");
+
+    // A player can't do what's hers.
+    let n = 0;
+    const kaiOp = async (op) => (await got(kai.page, "POST", `/api/campaigns/${sat.id}/table`, { dev: "kai-check-0001", ops: [{ ...op, n: ++n }] })).json?.no?.[0]?.why;
+    same(await kaiOp({ o: "fd-carry" }), "Only the GM can do that.", "Kai can't carry it off");
+    same(await kaiOp({ o: "fd-end" }), "Only the GM can do that.", "or end it");
+    same(await kaiOp({ o: "fd-in", key: samKey, on: false }), "Only the GM can do that.", "or take Sam out");
+
+    // Mo takes it into Build the world, and carries on from the ground.
+    await mo.page.click('.fd [data-do="carry"]');
+    await mo.page.waitForURL(/make=world/);
+    await mo.page.waitForSelector(".wk-head .kicker");
+    has(await mo.page.textContent(".wk-head .kicker"), "Seat 1", "Mo's on the ground's first seat");
+    const e = await making(mo.page, sat.id);
+    same([e?.W?.n, e?.W?.recipe, e?.W?.asking?.holds?.text, e?.W?.tension?.roll, e?.W?.asking?.runs?.own, e?.W?.asking?.notices?.text, Object.keys(e?.W?.locks ?? {}).sort()], [4, f3.recipe, holds[0], 8, true, notices[2], ["ask:holds", "ask:notices", "ask:runs", "tension"]], "the build's the founding's mix and four factions, with the crew's answers locked");
+    yes(/^[a-z]+-[a-z]+-[a-z]+$/.test(e?.W?.seed ?? "") && e.W.seed !== f3.seed, "and a seed of its own, never the one every player had");
+    await until(async () => (await fOf(mo.page, sat.id))?.step === "carried", "carried on the server");
+    await until(async () => (await text(kai.page, ".fd")).includes("building the rest"), "Kai's phone says Mo's building the rest");
+
+    // He clears it off, and it's gone from every phone.
+    await mo.page.goto(`${BASE}/characters/?camp=${sat.id}`);
+    await mo.page.waitForSelector('.fd [data-do="end"]');
+    await mo.page.click('.fd [data-do="end"]');
+    await mo.page.click('.fd [data-do="end"]');
+    await until(async () => (await fOf(mo.page, sat.id)) === null, "cleared off the server");
+    await until(async () => !(await kai.page.$(".fd")), "and off Kai's phone");
+
+    // Another, with the clock running out: Kai's first, since she joined the
+    // campaign first, and the ground gets 30 minutes.
+    await mo.page.waitForSelector('.fd-tile [data-do="setup"]');
+    await mo.page.click('.fd-tile [data-do="setup"]');
+    await mo.page.waitForSelector('.fd-setup [data-do="open"]');
+    await mo.page.click('.fd-setup [data-do="set"][data-k="region"][data-v="town"]');
+    await mo.page.click('.fd-setup [data-do="set"][data-k="genre"][data-v="medieval"]');
+    await mo.page.click('.fd-setup [data-do="open"]');
+    await mo.page.waitForSelector('.fd [data-do="start"]');
+    await mo.page.click('.fd [data-do="start"]');
+    await until(async () => (await fOf(mo.page, sat.id))?.turn?.key === kaiKey, "the second founding's started, and Kai's first");
+    await kai.page.waitForSelector(".fd-turn.is-mine button.wk-card");
+    await kai.page.click(".fd-turn .wk-card >> nth=0");
+    await until(async () => (await fOf(mo.page, sat.id))?.turn?.key === samKey, "Kai's answered, and it's Sam's turn, on the tension");
+    await mo.page.waitForSelector('.fd-clock [data-m="-5"]:not([disabled])');
+    for (let k = 0; k < 6; k++) {
+      const off = await mo.page.$('.fd-clock [data-m="-5"]:not([disabled])');
+      if (!off) break;
+      await off.click();
+      await mo.page.waitForTimeout(250);
+    }
+    await until(async () => (await fOf(mo.page, sat.id))?.clock?.left === 0, "Mo's taken the clock down to nothing");
+    await until(async () => (await text(sam.page, ".fd-clock")).includes("Time’s up"), "Sam's phone says time's up");
+    has(await text(sam.page, ".fd-turn"), "Once this turn’s done, the tables deal the rest", "and that his turn's the last");
+    await sam.page.click('.fd-turn [data-do="roll"]');
+    await until(async () => (await fOf(mo.page, sat.id))?.step === "asked", "Sam rolls, and Mo's phone deals the rest");
+    const f4 = await fOf(mo.page, sat.id);
+    const W4 = start(T, { recipe: f4.recipe, seed: f4.seed, factions: f4.n });
+    const as = (p) => (p.own ? { own: true, text: p.text } : { id: p.id, text: p.text, tags: p.tags, dials: p.dials, why: "", ...(p.roll ? { roll: p.roll } : {}) });
+    choose(T, W4, "ask:holds", as(f4.asking.holds));
+    choose(T, W4, "tension", as(f4.tension));
+    const runs = cards(W4, "ask:runs", 1)[0];
+    choose(T, W4, "ask:runs", as(f4.asking.runs));
+    same([f4.asking.runs.deal, f4.asking.notices.deal, f4.asking.runs.text, f4.asking.notices.text], [true, true, runs, cards(W4, "ask:notices", 1)[0]], "the rest's dealt the way the engine deals it, from the seed");
+    await until(async () => (await text(kai.page, ".fd-asked")).includes("Dealt by the tables"), "and Kai's phone says the tables dealt it");
+    await mo.page.click('.fd [data-do="end"]');
+    await mo.page.click('.fd [data-do="end"]');
+    await until(async () => (await fOf(mo.page, sat.id)) === null, "Mo ends it");
+  }
+  console.log("9g. The founding: the room and the asking");
+  await checkFounding();
+  // ZI_UPTO=9g stops here.
+  if (UPTO === "9g") break rest;
 
   // ------------------------------------------------------------ 10. who can do what
   console.log("10. Who can do what");
