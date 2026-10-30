@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e or 9f)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e, 9f or 9g)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -227,6 +227,31 @@
 //    screen and How it came to be on both phones pass axe at 390 in both
 //    themes, and the deck at 320, 360, 430 and 1280. Under reduce-motion the
 //    card stays put under a thumb.
+//    9g. The founding's room and the asking (stage 9 of
+//    notes/builder-plan.md), on three phones. Mo starts Saturday Lair, and
+//    Kai joins with Ash and Sam with Dorrie. Its empty board offers the
+//    founding on Mo's page, and he sets it up: Medieval at Town, four
+//    factions (his two players and two more) and 25 minutes on the ground's
+//    clock. Sunday Lair's table never gets it, and Kai can't reach Sunday
+//    Lair's at all. Kai's campaign page points her at Ash's World tab, where
+//    she joins, and Sam joins with no signal, his phone saying so, and it
+//    reaches the server once he's back. Mo moves Sam up and starts it: Sam's
+//    first on what holds it together, with the ground's clock running. All
+//    three phones show the same three answers, the engine's from the shared
+//    seed, and only Sam's can tap them. He taps one, takes it back and taps
+//    another. Kai, after a reload, rolls the tension on real dice, an 8. Sam,
+//    with no signal again, writes his own for who runs it, which goes up once
+//    he's back. Mo puts Kai's last one in for her with a second tap, and
+//    the clock stops. Kai can't carry it off, end it or take Sam out. Mo
+//    carries it into Build the world, on the ground's first seat with the
+//    founding's seed, mix and four factions and the crew's answers locked,
+//    Kai's phone says he's building the rest, and clearing it off takes it
+//    off hers. A second founding runs out of time: Mo takes the clock to
+//    nothing on Sam's turn, Sam's phone says time's up and that his turn's
+//    the last, he rolls, and Mo's phone deals the rest the way the engine
+//    would from the seed. The setup, the room on both sides, every turn and
+//    the asking done pass axe at 390 in both themes, and Sam's turn on Kai's
+//    phone at 320.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
