@@ -326,7 +326,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
 10. **Renaissance** (tables), with the Gilded Court's and Brinewake's mixes. Needs 4. *Built 30 Oct 2026.*
 11. **The founding: the ground and the founding.** Needs 9. *Built 30 Oct 2026.*
     - The dice pool for the seats, then her old powers, then the founders in reverse order with their questions, cards and threads, as the brief says.
-12. **Night City, 2077: the board and How it came to be** (a world). Needs 6.
+12. **Night City, 2077: the board and How it came to be** (a world). Needs 6. *Built 30 Oct 2026.*
     - CLAUDE.md's exception to naming other games, for Night City only, and the world's files and `scripts/worlds.mjs` with its checks, as A whole world in the brief says.
     - `world.yaml`, and 2077's board at the start Mo picked (Decisions): every faction whole, the web, the mini factions, and How it came to be across the three ages.
     - `/worlds/night-city/` with the board, the web and How it came to be, the line saying whose it is and both notices, for Mo to judge on the Preview.
