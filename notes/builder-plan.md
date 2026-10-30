@@ -31,6 +31,7 @@ Mo's calls (27, 28 and 30 Oct):
 - **The tension's a turn of its own** (30 Oct, stage 9): in the room, right after what holds it together, the next player rolls the d12, so the asking's four turns and a fourth player gets one too.
 - **The asking goes into Build the world till the ground's built** (30 Oct, stage 9): once the crew's answered it, one tap on her phone takes it into Build the world, the crew's answers locked, so the same session carries on with the ground and the deck there.
 - **Renaissance names are a wide mix** (30 Oct, stage 10): Italian, French, Spanish, Dutch, German and English on every board, Town to World.
+- **A seat's kept as it comes, or in their own words** (30 Oct, stage 11): in the ground, whoever takes a die keeps one of the three seats it deals, its name and what a stranger notices as they are, or writes either themselves, so a turn's one tap when a card suits.
 
 ## Calls Claude made
 
@@ -114,6 +115,15 @@ For Mo to say otherwise.
 - **A twist says the eras it's written for** (stage 10, told to Mo): `eras` on its pack, and on a row or a moment that only fits some of them, the way stage 4 said it would go. A twist only deals with an era it's written for, so Magic's Renaissance rows never come up in Fantasy.
 - **`print` and `powder` are core's newest tags** (stage 10), so presses, pamphlets and guns find each other.
 - **Two frames brought in by as many factions** (stage 10, told to Mo): Add a faction deals at the first one's, so Tuesday Lair, with Brinewake's four and the Steeplands' four, deals Brinewake's mix.
+- **The ground's dice are rolled on the server** (stage 11): her tap rolls a d6 for every seat in the Table object, so every phone gets the same faces and no phone picks them. A die's three seats are of the keep its face picks and none already in the ground, and once a keep's run out they're whatever comes next. Anyone can tap a die to see its three, and only whoever's turn it is keeps one.
+- **The ground's turns go on round the table** (stage 11) from whoever gave the asking's last answer, a die a turn, till the pool's empty.
+- **The ages wait for her** (stage 11, told to Mo): the clock stops at the end of each age and she starts the next, so she can say what's coming. Out of time, the turn that's on finishes and her phone deals the rest of that age.
+- **How many old powers** (stage 11, told to Mo): the factions she set less the players, and always one at least, twelve factions at most. The pool's the factions and two more seats, with room for everyone in to found one beside an old power.
+- **The old powers are dealt in the open** (stage 11, told to Mo): she picks each from three whole cards (its name, what it is and how it works, where it sits, City or Great, and its Want), each a different kind of faction on a stream of its own, and its resources and people come with it. The first old power holds a resource to spare, so there's always a trade to block. Its agenda, Face and Secret wait for her pass.
+- **A founder's turn is its whole faction** (stage 11, told to Mo), a part at a time in the brief's order, its name last (three off the tables, or their own), and they can take their answers back one at a time while they're the last. Its resources and people at Local and an agenda at d4 are dealt in the open once it's got its Want. Before it's named, its lines call it the newcomers (`templates.newcomer`).
+- **The founding's questions are lines off core's `founding` table** (stage 11, Mo to judge): three for who had the seat before (the old holder's grudge toward the newcomers) and three for who they owe (saying what's owed), once they've picked the faction, weighted to the seat and that faction, or their own words. What they'll never do is a bond thread on their own Loyalty, a promise their people hold them to. Dealt by the tables, nobody had the seat before.
+- **Someone who leaves mid-founding** (stage 11): their turn goes on to the next founder, what they made stands, and a faction they hadn't finished waits for her phone, which deals the rest once nobody in's left to take it.
+- **Till the strife's built, the founding goes into Build the world** (stage 11, told to Mo, on from his stage 9 pick): from the end of any age, everything the crew made locked, on a seed of her own. After the asking it's the ground's first seat, after the ground the deck, and after the founding the board, where her phone deals the old powers' agendas, every Face and Secret, the web round what the founding wrote, the needs (one can land on a faction the room made, beside its set), the checks and the crew's friends and foes.
 
 ## How a stage goes
 

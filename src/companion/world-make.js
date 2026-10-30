@@ -53,6 +53,7 @@ import { stepsToDice } from "./dice.js";
 import { drawWeb, webOf } from "./world-web.js";
 import { deckOn, deckOver, fixedBy, keptDeck, linesOf, makeAnswer, whoOnly } from "./world-answer.js";
 import { BMAX } from "./world-record.js";
+import { carriedWorld } from "./found-world.js";
 
 const KEY = "zi-make";
 const MIX = "mix";
@@ -452,15 +453,38 @@ export function makeWorldMake(w) {
     e.cut = [];
     return W;
   }
-  // The founding's asking (found.js), carried into Build the world: its mix
-  // and its factions, with the crew's answers on and locked, so she carries
-  // on from the ground. It deals from a seed of its own, never the room's,
-  // which every player had, so nobody can deal her factions and Secrets for
-  // themselves. Whatever build was on the go for the campaign on this phone goes.
+  // The founding (found.js), carried into Build the world: its mix and its
+  // factions, with what the crew made locked, so she carries on from where
+  // the room stopped. After the asking, that's the ground's first seat. After
+  // the ground, it's the deck, its seats locked. After the founding, it's the
+  // board, every faction's card as the room made it locked, and the rest
+  // (the old powers' agendas, every Face and Secret, the web round what the
+  // founding wrote, the checks and the crew's friends and foes) dealt on her
+  // phone. It deals from a seed of its own, never the room's, which every
+  // player had, so nobody can deal her factions and Secrets for themselves.
+  // Whatever build was on the go for the campaign on this phone goes.
   function fromFound(id, f) {
     if (!T || !f?.recipe || !canDeal(T, f.recipe)) return false;
     const recipe = { region: f.recipe.region, era: f.recipe.era, twist: f.recipe.twist ?? null };
     const e = begin(id, "world");
+    const past = f.step === "founded" || f.fac?.some((x) => x.old ? x.card : x.picks?.["f-seat"]) ? "founded" : f.pool?.length && f.seats?.every(Boolean) ? "grounded" : "asked";
+    if (past !== "asked") {
+      let W;
+      try {
+        W = carriedWorld(T, f, newSeed(T));
+        setCrew(T, W, crewNow(id, docOf(id), "world"));
+      } catch {
+        forget(id);
+        return false;
+      }
+      e.setup = { ...e.setup, region: recipe.region, ...genreOf(recipe), n: W.n };
+      live[id] = W;
+      e.W = recordOf(W);
+      e.at = past === "founded" ? "board" : "deck";
+      e.found = f.id;
+      keep();
+      return true;
+    }
     e.setup = { ...e.setup, region: recipe.region, ...genreOf(recipe), n: f.n };
     let W;
     try {
@@ -1518,7 +1542,9 @@ export function makeWorldMake(w) {
     for (const i of mine) {
       const c = C.factions[i];
       const threads = c.threads.filter((t) => !cutOf(t) && there(t.to)).map((t) => line({ text: t.text, kind: t.kind, s: "whole", to: t.to === "crew" ? "crew" : fid[t.to] }));
+      // Its own bonds (a founder's Loyalty, from the founding), then the ones its cards offer.
       const bonds = { pub: [], mor: [], loy: [] };
+      for (const b of ["pub", "mor", "loy"]) for (const t of c[b] ?? []) bonds[b].push(line({ text: t.text, kind: t.kind === "hostile" ? "hostile" : "bond", s: "whole" }));
       for (const o of c.offers) if (bonds[o.bond] && !cut.has(`o:${i}:${o.text}`)) bonds[o.bond].push(line({ text: o.text, kind: o.kind === "hostile" ? "hostile" : "bond", s: "whole" }));
       ops.push({
         o: "new",

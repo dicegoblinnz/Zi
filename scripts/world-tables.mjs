@@ -44,7 +44,9 @@
 //   types       the twelve type roles, the same
 //   sizes       how often each size comes up: { small, local, city, great }
 //   templates   about ({type}, {method}), seat ({seat}, where it sits, after
-//               what it is), face ({name}, {threat}), ways ({one}, {two})
+//               what it is), face ({name}, {threat}), ways ({one}, {two}),
+//               called and voice (the deck's, below) and newcomer (a
+//               founder's faction in the founding's lines till it's named)
 //   because     why a step went the way it did, one line for each thing that
 //               can steer it (seat, type, method, want, answer, tension,
 //               region), with {thing} for what it was, and why a faction's a
@@ -72,7 +74,11 @@
 //               row
 //   deck        the moments building by answering deals (stage 7), below
 //   loyal       a mini faction's Loyalty thread toward its maker ({b})
-//   founding    the founding's questions and acts (from stage 9)
+//   founding    a founder's three questions (stage 11), each a list of
+//               lines: before (the hostile thread whoever had its seat holds
+//               toward the newcomers, {b}), owes (the newcomers' bond thread
+//               toward whoever they owe, {b}, saying what's owed) and never
+//               (their own Loyalty thread), each able to use {seat}
 //
 // The deck, in core.yaml and any pack (deck): moments from before the crew
 // turned up, a card at a time (world-deck.js plays them). A moment's text is
@@ -168,6 +174,10 @@ const ANSWER_FIELDS = ["text", "line", "does", "tags", "thread", "back", "prompt
 // pack, the share of them in each age, in a chain and strange, and how many
 // answers each outcome's on and how many moments each kind of faction's on.
 export const DECK_MIN = { core: 60, pack: 12, age: 0.3, chain: 1 / 4, strange: 1 / 8, outcome: 8, kind: 6, last: 3, crew: 6, loyal: 6 };
+// A founder's three questions: lines enough for eleven founders, the most a
+// board of twelve has, to be dealt three each with none of them shared.
+export const FOUNDING = ["before", "owes", "never"];
+export const FOUNDING_MIN = 12;
 
 // Appendix B's asset, or a threat, by a key a table can write: its name in
 // small letters and hyphens, without a leading A, An or The.
@@ -199,6 +209,9 @@ const TABLES = {
   people: { extra: [], slots: [], name: true },
   crew: { extra: [], slots: ["who"] },
   loyal: { extra: [], slots: ["b"] },
+  "fd-before": { extra: [], slots: ["b", "seat"] },
+  "fd-owes": { extra: [], slots: ["b", "seat"] },
+  "fd-never": { extra: [], slots: ["seat"] },
 };
 const AIMS = ["seat", "rival", "res", "asset", "who", "thing"];
 const words = (s) => String(s ?? "").trim().split(/\s+/).filter(Boolean).length;
@@ -435,6 +448,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     }
     if (kind === "crew" && !slotsIn(text).includes("who")) bad(where, "needs {who}, the character it's named for");
     if (kind === "loyal" && !slotsIn(text).includes("b")) bad(where, "needs {b}, the faction that made it");
+    if ((kind === "fd-before" || kind === "fd-owes") && !slotsIn(text).includes("b")) bad(where, kind === "fd-before" ? "needs {b}, the newcomers it's toward" : "needs {b}, whoever they owe");
     return row;
   }
   const rows = (v, where, kind, opts) => {
@@ -668,7 +682,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
   const templates = {};
   // called is what a faction's called on the deck's cards till it's named
   // (the bell-founders on the Old Bridge), and voice who's bringing a card.
-  for (const [k, slots] of [["about", ["type", "method"]], ["seat", ["seat"]], ["face", ["name", "threat"]], ["ways", ["one", "two"]], ["called", ["type", "seat"]], ["voice", ["name", "faction"]]]) {
+  for (const [k, slots] of [["about", ["type", "method"]], ["seat", ["seat"]], ["face", ["name", "threat"]], ["ways", ["one", "two"]], ["called", ["type", "seat"]], ["voice", ["name", "faction"]], ["newcomer", []]]) {
     const v = core.templates?.[k];
     if (typeof v !== "string" || !v.trim()) bad("core.yaml", `templates needs ${k}`);
     else {
@@ -739,6 +753,16 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     if ((k === "who" || k === "thing") && !(row.aims?.length && row.aims.every((x) => x === k))) bad("core.yaml", `fallbacks.${k} aims only at {${k}}`);
     fallbacks[k] = row;
   }
+  // The founding's lines, a list for each of a founder's three questions.
+  function foundingOf(v) {
+    const got = {};
+    for (const q of FOUNDING) {
+      const list = rows(v?.[q], `core.yaml founding.${q}`, `fd-${q}`);
+      if (minimums && list.length < FOUNDING_MIN) bad("core.yaml", `founding.${q} needs ${FOUNDING_MIN} lines or more, found ${list.length}`);
+      got[q] = list.map((r) => ({ id: r.id, text: r.text, tags: r.tags, w: r.w, ...(r.strange ? { strange: true } : {}) }));
+    }
+    return got;
+  }
   out.core = {
     seeds: [...new Set(seeds)],
     sizes,
@@ -756,7 +780,7 @@ export function compileTables(raw, book, { minimums = true } = {}) {
     crew: crewOf(core.crew),
     deck: momentsOf(core.deck, "core.yaml deck"),
     loyal: rows(core.loyal, "core.yaml loyal", "loyal").map((r) => ({ id: r.id, text: r.text })),
-    founding: core.founding ?? null,
+    founding: foundingOf(core.founding),
   };
   for (const k of ["wants", "methods", "secrets", "agendas"]) if (out.core[k].length < 12) bad("core.yaml", `${k} needs at least twelve, found ${out.core[k].length}`);
   // The first faction built has nobody else to aim at, so it needs three

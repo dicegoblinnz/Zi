@@ -585,11 +585,13 @@ const gmOnly = () => no("Only the GM can do that.");
 
 // One change, from the GM or a player (who: { user, role, ch, cname }).
 // It changes doc, and says why when it can't. phoneNow is the sending phone's
-// clock when it sent the batch, to tell when an answer was rolled.
-export function apply(doc, op, who, roster, now, { phoneNow = null } = {}) {
+// clock when it sent the batch, to tell when an answer was rolled, and
+// server says it's the Table object applying it, which rolls the founding's
+// ground.
+export function apply(doc, op, who, roster, now, { phoneNow = null, server = false } = {}) {
   fresh(doc);
   if (isTurnOp(op)) return applyTurn(doc, op, who, roster, now);
-  if (isFoundOp(op)) return applyFound(doc, op, who, roster, now);
+  if (isFoundOp(op)) return applyFound(doc, op, who, roster, now, { server });
   const gm = who?.role === "gm";
   const last = current(doc);
   switch (op?.o) {

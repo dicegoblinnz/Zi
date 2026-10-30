@@ -627,6 +627,11 @@ function drawTables() {
   }
   if (core.deck?.length) parts.push(deckTable(core.deck, "The moments Answer a deck deals, a card at a time: someone from one faction ({a}) about another ({b}) or a seat nobody holds, with two answers, each with its line of history and what it does."));
   if (core.loyal?.length) parts.push(table("A mini faction’s Loyalty", core.loyal.map((r) => row(r.text, null)), { note: "A mini faction an answer makes: its Loyalty thread toward the faction that made it ({b})." }));
+  if (core.founding) {
+    parts.push(table("The founding: who had the seat before", core.founding.before.map((r) => row(r.text, r)), { note: "A founder’s first question, in the founding: the hostile thread whoever had its seat holds toward the newcomers ({b}), about that seat ({seat}). A founder’s called the newcomers till it’s named." }));
+    parts.push(table("The founding: who they owe", core.founding.owes.map((r) => row(r.text, r)), { note: "The second: the newcomers’ bond thread toward whoever they owe ({b}), saying what’s owed." }));
+    parts.push(table("The founding: what they’ll never do", core.founding.never.map((r) => row(r.text, r)), { note: "The third: a bond thread on their own Loyalty, a promise their people hold them to." }));
+  }
   parts.push(table("Faces", Object.entries(core.faces).map(([k, v]) => row(T.types[k] ?? k, null, esc(v.map((x) => T.book.threats.find((t) => t.key === x)?.name ?? x).join(", "))))));
   parts.push(table("Fallbacks", Object.entries(core.fallbacks).map(([k, r]) => row(r.tag || r.text, r, esc(`when ${k} still fails`)))));
 

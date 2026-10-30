@@ -47,6 +47,8 @@ templates:
   # bringing a card.
   called: "the {type} on {seat}"
   voice: "{name} of {faction}"
+  # A founder's faction in the founding's lines, till it's named.
+  newcomer: "the newcomers"
 
 because:
   seat: "because it sits on {thing}"
@@ -317,6 +319,66 @@ loyal:
   - "We do what {b} asks, mostly"
   - "{b} made us, and could unmake us"
   - "{b} picked every one of us by hand"
+
+# The founding (stage 11): a founder's three questions. Each answer's one of
+# the faction's first threads, written for every genre. {seat} is the seat
+# it's founded on.
+founding:
+  # Who had this seat before: the thread whoever had it holds toward the
+  # newcomers ({b}), a hostile one.
+  before:
+    - "{b} took {seat} off us, and we want it back"
+    - { text: "{b} bought {seat} out from under us with borrowed money", tags: [debt, wealth] }
+    - { text: "We were promised {seat}, and {b} got it instead", tags: [law, crown] }
+    - { text: "{b} moved onto {seat} the week we buried our leader", tags: [blood] }
+    - { text: "{b} drove our people off {seat} with nothing", tags: [war, soldiers] }
+    - { text: "We sold {seat} to {b} cheap, the year we went broke", tags: [poor, debt] }
+    - { text: "{b} won {seat} off us in a bet we should've refused", tags: [crime, crooks] }
+    - "We lost {seat} to {b} in one bad night, and nobody's forgotten"
+    - { text: "{b} took {seat} through the courts, and we'll prove it was rigged", tags: [law, office] }
+    - { text: "We walked away from {seat}, and {b} walked straight in", tags: [poor] }
+    - { text: "{b} built over the graves we left on {seat}", tags: [holy, faith] }
+    - { text: "{b} talked our own people into handing {seat} over", tags: [secret, society] }
+    - { text: "We lent {b} {seat} for a season, and never got it back", tags: [debt, family] }
+    - { text: "{b} burned us out of {seat}, and swore it was an accident", tags: [crime, war] }
+    - { text: "We fled what lives under {seat}, and {b} didn't", rare: true, strange: true, tags: [old] }
+  # Who it owes: the newcomers' thread toward whoever they owe ({b}), a bond,
+  # its words saying what's owed.
+  owes:
+    - { text: "We owe {b} the money we started with", tags: [debt, wealth] }
+    - { text: "{b} lent us our first hands, and we've kept them on", tags: [labour] }
+    - { text: "{b} sent us our first customers", tags: [trade, market, traders] }
+    - { text: "We'd have been locked up if {b} hadn't spoken for us", tags: [law, office] }
+    - { text: "We still owe {b} a year's work, unpaid", tags: [labour, craft] }
+    - { text: "{b} taught us the trade, and we pay them a cut", tags: [guild, makers] }
+    - { text: "One of {b}'s people died getting us here", tags: [blood, war] }
+    - { text: "{b} sold us what we needed on credit, and we haven't paid", tags: [trade, debt] }
+    - { text: "We promised {b} a share of everything we'd ever make", tags: [wealth, house] }
+    - { text: "{b} hid us the night we had nowhere to go", tags: [secret, crooks] }
+    - { text: "{b} paid off the people who wanted us dead", tags: [crime, blood] }
+    - { text: "We owe {b} for the tools on our benches", tags: [craft, makers] }
+    - { text: "{b} never told anyone what we did to get started", tags: [secret, society] }
+    - "{b} gave up {seat} so we could have it"
+    - "We owe {b} one favour, and they can name it"
+    - { text: "{b} talked the rest out of crushing us while we were small", tags: [war, house] }
+  # What it'll never do: a Loyalty thread on the newcomers' own card, a bond,
+  # the promise its people hold it to.
+  never:
+    - "We never leave one of ours behind"
+    - "We've never sold out our own, and never will"
+    - { text: "We'll never let one of ours go hungry", tags: [poor, grain] }
+    - { text: "We don't pay bribes, to anyone, ever", tags: [law, office] }
+    - { text: "We never go back on a deal, even a bad one", tags: [trade, traders] }
+    - { text: "We'll never let the law into our business", tags: [crime, crooks] }
+    - { text: "We never turn a stranger away from our door", tags: [holy, road] }
+    - "We'll never let {seat} go, whatever it costs"
+    - { text: "We'll never take work off people who've downed tools", tags: [labour, guild] }
+    - "We keep every promise, even the ones made to enemies"
+    - { text: "We never lift a hand against family", tags: [family, blood] }
+    - { text: "We'll never take orders from someone we haven't chosen", tags: [rebels] }
+    - { text: "We never take more from {seat} than it can give", tags: [land, ground] }
+    - { text: "We'll never open what's buried under {seat}", rare: true, strange: true, tags: [old] }
+    - "We'll never forget who held {seat} before us"
 
 # The deck (stage 7): moments from before the crew turned up, a card at a
 # time, for building by answering. Each is what someone from one faction

@@ -324,7 +324,7 @@ export class Table extends DurableObject {
       for (const op of ops) {
         if (op.n <= high) continue;
         top = Math.max(top, op.n);
-        const res = apply(doc, op, who, roster, now, { phoneNow });
+        const res = apply(doc, op, who, roster, now, { phoneNow, server: true });
         if (!res.ok) no.push({ n: op.n, o: String(op.o ?? ""), why: res.why });
       }
     } catch (err) {
