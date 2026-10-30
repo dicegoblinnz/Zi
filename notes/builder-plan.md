@@ -30,6 +30,7 @@ Mo's calls (27, 28 and 30 Oct):
 - **How it came to be's shown an age at a time** (30 Oct, stage 8): long ago, in living memory and this last year each have their own Show the crew, so this last year's agendas and grudges can wait till the crew's found things out, and a line whose answer made a Secret never leaves her phone.
 - **The tension's a turn of its own** (30 Oct, stage 9): in the room, right after what holds it together, the next player rolls the d12, so the asking's four turns and a fourth player gets one too.
 - **The asking goes into Build the world till the ground's built** (30 Oct, stage 9): once the crew's answered it, one tap on her phone takes it into Build the world, the crew's answers locked, so the same session carries on with the ground and the deck there.
+- **Renaissance names are a wide mix** (30 Oct, stage 10): Italian, French, Spanish, Dutch, German and English on every board, Town to World.
 
 ## Calls Claude made
 
@@ -106,6 +107,13 @@ For Mo to say otherwise.
 - **Out of time** (stage 9): the turn that's on finishes, then her phone deals the rest the way the engine would, from the seed. She can stop the clock, run it, and take five minutes off or put five on, and more time once it's out sends the turns round again.
 - **The room's seed stays in the room** (stage 9): every player has it, to deal the room's cards, so carrying the asking into Build the world deals the rest from a seed of its own, and nobody can deal her factions and Secrets for themselves.
 - **Leaving the campaign leaves the founding** (stage 9), so the turns never wait on someone who's gone, and someone she's taken out can't take their last answer back to win their turn again.
+- **Brinewake is Renaissance and Magic at Country with how strange at 0, and the Gilded Court's Renaissance at City with how tense at 2** (stage 10, told to Mo): Brinewake's islands have magic that's real but rare, as its frame says, and the Gilded Court's a dying queen's court where magic's a hanging matter, so it's plain Renaissance and anything strange stays deniable.
+- **Renaissance magic's a learned art** (stage 10): astrologers, alchemists, a mages' academy, printed charms and weather-callers, still a craft everyone knows is real, with the big magic behind closed doors like Medieval's.
+- **Plain Renaissance's strange things are the deniable kind** (stage 10), like Medieval's: a comet, miracle cures, a brass man who plays cards, an alchemist who might be a fraud.
+- **The far side of the world is trade** (stage 10, told to Mo): ships, spices, dye and maps, and never the conquest of whoever lives there.
+- **A twist says the eras it's written for** (stage 10, told to Mo): `eras` on its pack, and on a row or a moment that only fits some of them, the way stage 4 said it would go. A twist only deals with an era it's written for, so Magic's Renaissance rows never come up in Fantasy.
+- **`print` and `powder` are core's newest tags** (stage 10), so presses, pamphlets and guns find each other.
+- **Two frames brought in by as many factions** (stage 10, told to Mo): Add a faction deals at the first one's, so Tuesday Lair, with Brinewake's four and the Steeplands' four, deals Brinewake's mix.
 
 ## How a stage goes
 
@@ -263,7 +271,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
 9. **The founding: the room and the asking.** Needs 6. *Built 30 Oct 2026.*
    - `doc.found` on the live table, as the brief says: she sets it up from her campaign page and opens it, players join from their World tab, turns go round, each age has its clock, and every phone stays in step, with a poor signal handled the way telegraphs handle it. Then the asking, with the dials set and the tension rolled.
    - A new part of `tests/check-accounts.mjs` plays it on three phones.
-10. **Renaissance** (tables), with the Gilded Court's and Brinewake's mixes. Needs 4.
+10. **Renaissance** (tables), with the Gilded Court's and Brinewake's mixes. Needs 4. *Built 30 Oct 2026.*
 11. **The founding: the ground and the founding.** Needs 9.
     - The dice pool for the seats, then her old powers, then the founders in reverse order with their questions, cards and threads, as the brief says.
 12. **Industrial and Steam** (tables), so Steampunk deals. Needs 3.
