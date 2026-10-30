@@ -490,8 +490,8 @@ function founderFrom(x, part, f, i) {
 // ch, cname }, roster: everyone playing someone in the campaign, { user,
 // name, ch, cname }). It changes doc, and says why when it can't. server:
 // it's the Table object applying it, so the ground's dice are rolled here
-// and nowhere else.
-export function applyFound(doc, op, who, roster, now, { server = false } = {}) {
+// and nowhere else, with roll (rollDie unless the checks fix the dice).
+export function applyFound(doc, op, who, roster, now, { server = false, roll = rollDie } = {}) {
   const gm = who?.role === "gm";
   // A player's phone may not have the whole roster, so who's sending stands in
   // for it there. On the server, who only has a character when D1 says so.
@@ -599,7 +599,7 @@ export function applyFound(doc, op, who, roster, now, { server = false } = {}) {
       if (f.step !== "asked") return no(f.step === "room" || f.step === "ask" ? "Finish the asking first." : "The ground’s been and gone.");
       if (!f.who.length) return no("Put someone in first.");
       const size = poolSize(f);
-      f.pool = server ? Array.from({ length: size }, () => rollDie(6)) : [];
+      f.pool = server ? Array.from({ length: size }, () => roll(6)) : [];
       f.seats = Array.from({ length: size }, () => null);
       f.step = "ground";
       f.last = null;

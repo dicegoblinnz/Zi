@@ -132,8 +132,10 @@
 //    phone photo that came out sideways: his phone turns it and shrinks it to
 //    4096 on its longest side, with a small copy, and both are in the bucket
 //    under Tuesday Lair. Kai gets nothing of it, not even its picture. Mo drops
-//    a pin on the Copper Baths, one that's only a name (smoke on the ridge)
-//    and one on Lord Aldous Vane, whose page the crew hasn't been shown. He
+//    a pin on the Copper Baths, one that's only a name (smoke on the ridge,
+//    with him in its box before the card it's on has had a frame on his
+//    phone, and what he types stays there) and one on Lord Aldous Vane, whose
+//    page the crew hasn't been shown. He
 //    shows the crew the map and two of the pins: Kai gets the Copper Baths,
 //    which opens its page, and Lord Vane by name only, and the hidden pin never
 //    reaches her phone. She moves and zooms it in one hand (a double tap, a
@@ -144,8 +146,11 @@
 //    bucket. Nothing crosses: Zed gets no picture, nobody but the GM puts one
 //    up, and Zed's Night has no maps. The World screen, a map with a pin's
 //    card and the list of pins, and Kai's map pass axe at 390, in both themes.
-//    9c. Fog she lifts. Mo covers the Steeplands: Kai's phone gets fog and no
-//    picture, and the map's own picture, and the pins he's shown, are off it.
+//    9c. Fog she lifts. Mo covers the Steeplands while Kai's reading the
+//    rules: Kai's phone gets fog and no picture, and the map's own picture,
+//    and the pins he's shown, are off it. When she opens the map, the world
+//    comes in while her phone's still putting up the picture it had, and the
+//    fog's solid with nothing of the picture under it.
 //    He rubs the fog off the Copper Baths with a small brush and a strip lower
 //    down with a big one, and his phone makes the crew's picture: every
 //    covered square of it is painted over, the uncovered ones match his, and
@@ -2701,8 +2706,16 @@ try {
     const cy = sb.y + sb.height / 2;
     const drag = (dx, dy) => fingers(mo.page, [["touchStart", [[cx, cy]]], ["touchMove", [[cx + dx * 0.3, cy + dy * 0.3]]], ["touchMove", [[cx + dx * 0.7, cy + dy * 0.7]]], ["touchMove", [[cx + dx, cy + dy]], 120], ["touchEnd", [], 400]]);
     await drag(-70, -40);
-    await mo.page.click('[data-do="mplace"]');
-    await mo.page.fill('form[data-form="w-map-name"] input[name="name"]', "smoke on the ridge");
+    // He taps Pin it here and goes straight for the name box, before the card
+    // it brings up has had a frame on his phone: what he types goes in the
+    // name box all the same, wherever the card would put him.
+    await mo.page.evaluate(() => {
+      document.querySelector('[data-do="mplace"]').click();
+      document.querySelector('form[data-form="w-map-name"] input[name="name"]').focus();
+    });
+    await mo.page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+    await mo.page.keyboard.insertText("smoke on the ridge");
+    same(await mo.page.inputValue('form[data-form="w-map-name"] input[name="name"]'), "smoke on the ridge", "what he types goes in the name box, wherever the card would put him");
     await mo.page.click('form[data-form="w-map-name"] button[type="submit"]');
     await until(async () => (await mapIn("The Steeplands"))?.pins.length === 2, "the smoke pin on the server");
     const smoke = (await mapIn("The Steeplands")).pins.find((p) => p.name === "smoke on the ridge");
@@ -2911,6 +2924,31 @@ try {
       return m?.fog?.crew && m.fog.crew.c === m.fog.c ? m : null;
     };
 
+    // Kai's reading the rules while he does it, so her phone still has the map
+    // as she last saw it, picture and all. The next page she opens holds back
+    // a picture's last step on her phone (decoding it) till the check lets it
+    // go (zd-hold), so the world can come in while that's going.
+    await kai.context.addInitScript(() => {
+      try {
+        if (localStorage.getItem("zd-hold") !== "1") return;
+        localStorage.removeItem("zd-hold");
+        let open;
+        const gate = new Promise((r) => (open = r));
+        window.zdHeld = 0;
+        window.zdOpen = open;
+        const decode = HTMLImageElement.prototype.decode;
+        HTMLImageElement.prototype.decode = function () {
+          const kept = String(this.src).startsWith("blob:");
+          return decode.call(this).then((v) => {
+            if (kept) window.zdHeld++;
+            return gate.then(() => v);
+          });
+        };
+      } catch {}
+    });
+    await kai.page.goto(`${BASE}/rules/`);
+    await kai.page.evaluate(() => localStorage.setItem("zd-hold", "1"));
+
     // Mo opens the Steeplands and covers it, all of it.
     await mo.page.goto(mapUrl);
     await mo.page.waitForSelector(".wm-stage");
@@ -2933,11 +2971,32 @@ try {
     same((await fetchPic(kai.page, picPath)).status, 404, "and Kai can't get its picture any more");
     same((await fetchPic(kai.page, `${picPath}&t=1`)).status, 404, "or its small one");
 
-    // Kai has the map open, on the live table with the World screen.
+    // Kai opens the map, and has it open from here on, on the live table with
+    // the World screen. Her phone starts putting up the picture it had, and
+    // the world saying it's all under the fog comes in while that's going.
+    let letIn;
+    const worldIn = new Promise((r) => (letIn = r));
+    const holdWorld = async (route) => {
+      if (route.request().method() === "GET") await worldIn;
+      await route.continue();
+    };
+    const worldGet = /\/api\/campaigns\/[^/]+\/world(\?|$)/;
+    await kai.page.route(worldGet, holdWorld);
     await kai.page.goto(mapUrl);
     await kai.page.waitForSelector(".wm-stage");
+    await until(() => kai.page.evaluate(() => window.zdHeld > 0), "Kai's phone putting up the picture it had");
+    letIn();
     await until(async () => (await kai.page.textContent("[data-wmnote]").catch(() => "")).includes("all under the fog"), "Kai's map says it's all under the fog");
-    yes(await kai.page.$eval(".wm-fog", (c) => !c.hidden && !c.classList.contains("is-gm")), "and Kai sees solid fog");
+    // Then the picture it had is ready, and none of it goes up.
+    const fogNow = await kai.page.evaluate(async () => {
+      window.zdOpen?.();
+      for (let i = 0; i < 40; i++) await Promise.resolve();
+      const c = document.querySelector(".wm-fog");
+      return { solid: Boolean(c) && !c.hidden && !c.classList.contains("is-gm"), pic: document.querySelector(".wm-pic")?.getAttribute("src") ?? "" };
+    });
+    yes(fogNow.solid, "and Kai sees solid fog, once the picture her phone had is ready too");
+    same(fogNow.pic, "", "with nothing of the picture under it");
+    await kai.page.unroute(worldGet, holdWorld);
     await until(() => kai.page.evaluate(async (p) => !(await (await caches.open("zi-maps")).match(new URL(p, location.origin).href)), picPath), "the map's own picture gone from Kai's phone");
     await kai.page.evaluate(() => {
       window.zdNudges = 0;

@@ -650,23 +650,61 @@ function candidates(T, W, path, { only = null } = {}) {
       return c;
     });
   }
-  // A name's one to four words the way it reads on the card, its seat and
-  // all, so there's never a Lords of the Street of Smiths.
+  // A name comes from the first of its runs that has one (nameRuns()).
   if (b === "name") {
-    const kind = f.type?.role;
-    const seat = card.seat ? { text: card.seat.text, name: true } : "";
-    const short = (r) => fill(r.text, { seat }).split(/\s+/).filter(Boolean).length <= 4;
-    const mine = (r) => !r.role || r.role === kind;
-    // Never a name a faction on the board's already got.
-    const taken = new Set(W.factions.filter((x, j) => j !== i && x.name?.own).map((x) => nameKey(x.name.text)));
-    const free = (r) => !taken.has(nameKey(fill(r.text, { seat })));
-    for (const test of [(r) => mine(r) && short(r), short, mine, () => true]) {
-      const got = pool(P.names.filter((r) => free(r) && test(r)), "name");
+    for (const rows of nameRuns(T, W, i, card, board)) {
+      const got = keep(bagged(rows, usedBy(W, "name", i)));
       if (got.length) return got.map((x) => ofRow(x, { why: "", by: null }));
     }
     return [];
   }
   return [];
+}
+
+// A faction's names, a run for each test the engine goes down in turn, each
+// worked out only when it's got to: its own kind's that read in one to four
+// words on the card (its seat and all, so there's never a Lords of the Street
+// of Smiths), any that do, its own kind's, and any at all. Never a name a
+// faction on the board's already got.
+function* nameRuns(T, W, i, card, board) {
+  const P = poolOf(T, W.recipe);
+  const kind = W.factions[i].type?.role;
+  const seat = card.seat ? { text: card.seat.text, name: true } : "";
+  const short = (r) => fill(r.text, { seat }).split(/\s+/).filter(Boolean).length <= 4;
+  const mine = (r) => !r.role || r.role === kind;
+  const taken = new Set(W.factions.filter((x, j) => j !== i && x.name?.own).map((x) => nameKey(x.name.text)));
+  const free = (r) => fits(r, card, board) && !taken.has(nameKey(fill(r.text, { seat })));
+  for (const test of [(r) => mine(r) && short(r), short, mine, () => true]) yield P.names.filter((r) => free(r) && test(r));
+}
+// More names, for a hand its run's down to its last one or two of, or a name
+// dealt again whose run has only the one it had: from the runs after it, the
+// way the engine goes down them, only names no other faction holds, and
+// never one in the hand already or the one Deal again took off it.
+function spareNames(T, W, i, have, not, k, rand, { only = null } = {}) {
+  const board = boardOf(T, W);
+  const card = cardOf(W, i, "name");
+  const used = usedBy(W, "name", i);
+  const ok = (r) => only !== "strange" || r.strange;
+  const seen = new Set([...have.map((c) => c.id), not]);
+  const out = [];
+  // Past the run the hand came from, the first with any in.
+  let past = false;
+  for (const rows of nameRuns(T, W, i, card, board)) {
+    if (!past) {
+      past = rows.some(ok);
+      continue;
+    }
+    if (out.length >= k) break;
+    const fresh = rows.filter((r) => ok(r) && !used.has(r.id) && !seen.has(r.id)).map((r) => {
+      const fit = fitOf(r, card, board);
+      return { w: weightOf(W, r, fit), id: r.id, text: r.text, role: r.role, tags: r.tags, leans: r.leans, offers: r.offers, strange: r.strange, again: false, why: "", by: null };
+    });
+    for (const c of draw(fresh, rand, k - out.length)) {
+      out.push(c);
+      seen.add(c.id);
+    }
+  }
+  return out;
 }
 
 // The fields a pick keeps: its words and what it is, never the row itself.
@@ -828,7 +866,18 @@ export function options(T, W, path, n = 3, opts = {}) {
     const other = all.filter((c) => keyOfPick(c) !== not);
     if (other.length) all = other;
   }
-  const cands = draw(all, rand, n);
+  let cands = draw(all, rand, n);
+  // A name's hand whose run is down to its last one or two is made up from
+  // the runs after it, on a stream of its own, so the cards it did deal stay
+  // as they were. Dealt again with only the one it had in its run, it's one
+  // of those instead, while there are any.
+  if (head === "f" && b === "name") {
+    const had = not != null && cands.length === 1 && keyOfPick(cands[0]) === not;
+    if (had || cands.length < n) {
+      const spare = spareNames(T, W, Number(a), had ? [] : cands, not, had ? n : n - cands.length, randOf(W, path, opts.only ?? "", "spare"), opts);
+      cands = had ? (spare.length ? spare : cands) : [...cands, ...spare];
+    }
+  }
   const sub = (c) => rngOf(W.seed, path, W.tries[path] ?? 0, keyOfPick(c));
   if (head === "f" && b === "seat") return cands.map((c) => ({ k: c.k }));
   if (head === "f" && b === "size") {

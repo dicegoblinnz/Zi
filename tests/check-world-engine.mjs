@@ -86,18 +86,21 @@
 //    slot nothing fills, or too few of them is a problem, and so is no
 //    newcomer. Then six foundings for every named genre in every region the
 //    packs cover, played through the rules at random with the dice rolled
-//    as the server rolls them: every die deals three seats and the same three
-//    when it's dealt again, no seat comes twice, every old power's three
-//    cards are three kinds at City or Great, every founder's hand and line is
-//    three, with seats, lines and cards in their own words now and then, the
-//    clock running out and someone leaving, and her phone's deal of the rest
-//    finishing whatever's left. Every founding finishes with old powers City
-//    or Great and no agenda, founders Local with a d4 agenda, every faction
-//    whole and nothing left in a slot. Carried into Build the world on a seed
-//    of its own, dealing the rest never changes what the room made, every
-//    check passes with a fallback in under 1 founding in 20, the founding's
-//    threads are all in the web, every faction's got a Face and a Secret, and
-//    a founder's Loyalty is on its card.
+//    as the server rolls them, off each founding's seed so every run plays
+//    the same ones, and one more on dice that land on a room where a
+//    founder's kind of faction is down to two names that read in four words:
+//    every die deals three seats and the same three when it's dealt again,
+//    no seat comes twice, every old power's three cards are three kinds at
+//    City or Great, every founder's hand and line is three (her name too,
+//    when her kind's names run short), with seats, lines and cards in their
+//    own words now and then, the clock running out and someone leaving, and
+//    her phone's deal of the rest finishing whatever's left. Every founding
+//    finishes with old powers City or Great and no agenda, founders Local
+//    with a d4 agenda, every faction whole and nothing left in a slot.
+//    Carried into Build the world on a seed of its own, dealing the rest
+//    never changes what the room made, every check passes with a fallback in
+//    under 1 founding in 20, the founding's threads are all in the web, every
+//    faction's got a Face and a Secret, and a founder's Loyalty is on its card.
 // 10. A whole world (stages 12, 13 and 15 of notes/builder-plan.md): the
 //    made-up one in tests/worlds/ passes, and 69 ways of breaking it are each a problem that
 //    says so and never come out as a world: a card that isn't whole, too long
@@ -451,6 +454,40 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   redeal(T, W, `f:${last}:face`);
   yes(W.factions[last].face.nameId !== face.nameId, "dealing a Face again gives someone else");
   same(options(T, W, `f:${last}:face`, 3)[0], W.factions[last].face, "and the first of its cards is still the one it's got");
+  // A name when its kind's down to its last one that reads in four words and
+  // nobody holds (31 Oct), on the made-up pack: a makers' faction there has
+  // the Loom Guild, the Lantern Club (anyone's) and the Smiths of its seat,
+  // and the other factions hold the last two. Its three cards are the Loom
+  // Guild and two more nobody holds, and Deal again gives one of those, never
+  // the Loom Guild again.
+  {
+    const P = compileTables(readTablesDir("tests/world-pack").src, BOOK, { minimums: false }).tables;
+    const recipe = { region: "town", era: "dusk", twist: null };
+    const names = poolOf(P, recipe).names;
+    const row = (text) => {
+      const r = names.find((x) => x.text === text);
+      return r ? { id: r.id, text: r.text, role: r.role, tags: r.tags ?? [] } : null;
+    };
+    const D = dealWorld(P, { recipe, seed: "ash-lantern-ford", factions: 6 });
+    choose(P, D, "f:0:type", { ...poolOf(P, recipe).types.find((r) => r.role === "makers"), why: "" });
+    dealRest(P, D, { finish: false });
+    const [loom, club, smiths] = [row("The Loom Guild"), row("The Lantern Club"), row("The Smiths of {seat}")];
+    yes(loom && club && smiths, "the made-up pack's makers' names and the Lantern Club");
+    choose(P, D, "f:1:name", club);
+    choose(P, D, "f:2:name", smiths);
+    choose(P, D, "f:0:name", loom);
+    for (const j of [3, 4, 5]) if ([loom.id, club.id, smiths.id].includes(D.factions[j].name?.id)) choose(P, D, `f:${j}:name`, { own: true, text: `Faction ${j}` });
+    const held = new Set(D.factions.slice(1).map((x) => x.name?.id).filter(Boolean));
+    const hand = options(P, D, "f:0:name", 3);
+    same(hand.length, 3, "a name down to its last one of its kind is still three cards");
+    same(hand[0]?.id, loom.id, "the first its own kind's");
+    same(new Set(hand.map((c) => c.id)).size, hand.length, "three different names");
+    yes(hand.every((c) => !held.has(c.id)), `none another faction holds (${hand.map((c) => c.text).join(", ")})`);
+    redeal(P, D, "f:0:name", { rest: false });
+    yes(D.factions[0].name?.id !== loom.id && !held.has(D.factions[0].name?.id), `dealt again, it's another name nobody holds (${D.factions[0].name?.text})`);
+    const again = options(P, D, "f:0:name", 3);
+    yes(again.length === 3 && again[0]?.id === D.factions[0].name?.id && !again.some((c) => c.id === loom.id), `and its three cards start with it, without the Loom Guild (${again.map((c) => c.text).join(", ")})`);
+  }
   // A locked step isn't dealt again.
   const want = W.factions[1].want;
   const tries = W.tries["f:1:want"] ?? 0;
@@ -1215,10 +1252,22 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   let played = 0;
   let fallbacks = 0;
   const pick = (list, r) => list[Math.floor(r() * list.length) % list.length];
-  for (let s = 0; s < recipes.length * 6; s++) {
-    const recipe = recipes[s % recipes.length];
+  // The ground's dice the way the server rolls them, a d6 for every seat, but
+  // off each founding's seed, so every run of the check plays the same ones.
+  // And found-check-4 once more, a Medieval town on dice that land on a room
+  // where a founder's kind of faction is down to two names that read in four
+  // words (31 Oct): her name's still three cards.
+  const runs = Array.from({ length: recipes.length * 6 }, (_, s) => ({ s }));
+  runs.push({ s: 4, recipe: { region: "town", era: "medieval", twist: null }, dice: [3, 2, 2, 1, 5, 4], short: true });
+  for (const run of runs) {
+    const s = run.s;
+    const recipe = run.recipe ?? recipes[s % recipes.length];
     const seed = `found-check-${s}`;
     const r = rngOf(seed, "choices");
+    const thrown = rngOf(seed, "dice");
+    const fixed = [...(run.dice ?? [])];
+    const roll = (size) => (fixed.length ? fixed.shift() : 1 + Math.floor(thrown() * size));
+    let ranShort = false;
     const players = 1 + (s % 4);
     const roster = NAMES.slice(0, players).map((name, k) => ({ user: `u${k}`, name, ch: `c${k}`, cname: `C${k}` }));
     const as = (key) => ({ user: key.split("|")[0], role: "player", ch: key.split("|")[1] });
@@ -1226,7 +1275,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     let now = 1e6;
     let n = 0;
     const ap = (op, who) => {
-      const res = applyFound(doc, { ...op, n: ++n }, who, roster, now, { server: true });
+      const res = applyFound(doc, { ...op, n: ++n }, who, roster, now, { server: true, roll });
       if (!res.ok) note(`${seed}: ${op.o} ${op.part ?? ""} was refused: ${res.why}`);
       return res.ok;
     };
@@ -1300,6 +1349,10 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       } else {
         const hand = founderHand(T, f(), t.i, t.part);
         if (hand.length !== 3) note(`${seed}: ${t.part} dealt ${hand.length} cards`);
+        // A hand short of three, or a name from past her own kind's that read
+        // in four words: the room ran short of them.
+        const kind = t.part === "name" ? roomWorld(T, f()).factions[t.i].type?.role : null;
+        if (kind && (hand.length < 3 || hand.some((c) => c.role && c.role !== kind))) ranShort = true;
         p = r() < 0.1 ? { own: true, text: t.part === "name" ? "Our Lot" : "Something of our own" } : pick(hand, r);
         if (t.part === "want") p = { ...p, with: wantWith(T, f(), t.i, p) };
       }
@@ -1309,6 +1362,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       note(`${seed}: the founding never finished (${f().step})`);
       continue;
     }
+    if (run.short && !ranShort) note(`${seed} on the dice ${run.dice.join(", ")}: no founder's name came from past her own kind's that read in four words, so it isn't the room it's here for any more (the tables have changed): find dice that land on one`);
     played++;
     const B = roomBoard(T, f());
     for (const x of B.factions) {
@@ -1342,7 +1396,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     if (!C.factions.every((x) => x.face && x.secret)) note(`${seed}: a faction without a Face or a Secret`);
     for (const [i, x] of f().fac.entries()) if (!x.old && x.picks.never && C.factions[i].loy?.length !== 1) note(`${seed}: ${C.factions[i].name} lost what it'll never do`);
   }
-  same(played, recipes.length * 6, "every founding played to its end");
+  same(played, runs.length, "every founding played to its end");
   yes(fallbacks * 20 < played, `fallbacks in ${fallbacks} of ${played} foundings, more than 1 in 20`);
   console.log(`9. the founding: ${played} foundings played at random through the ground and the founding, and carried into Build the world, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
 }

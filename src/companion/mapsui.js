@@ -982,14 +982,19 @@ export function makeMaps(w) {
       note.hidden = !t;
       note.textContent = t;
     };
+    // A picture on its way for anything but the one the map's on now is let
+    // go (view.loading), so it never comes up when it gets here.
     if (!big) {
+      view.loading = "";
       view.src = "";
       view.v.show("");
       paintFog(id, m);
       say("It’s all under the fog for now.");
     } else if (view.src === big) {
+      view.loading = "";
       paintFog(id, m);
     } else if (urls.has(big)) {
+      view.loading = "";
       swap(id, m, big, urls.get(big));
     } else if (view.loading !== big) {
       // Whatever's up stays up till the new one's in, so the fog never lifts
@@ -1004,24 +1009,36 @@ export function makeMaps(w) {
       }
       view.loading = big;
       const was = view.key;
-      Promise.all([view.src ? null : picture(small), picture(big)]).then(async ([s, b]) => {
-        if (view?.key !== was || view.loading !== big) return;
-        view.loading = "";
+      // The map as it is now, while this is still the picture it's on, on
+      // this viewer: it can go all under the fog, or get a new picture, while
+      // this one's coming.
+      const ours = () => view?.key === was && view.loading === big;
+      const current = () => {
+        const now = ours() ? findMap(docOf(id), mid) : null;
+        return now?.key && addr(id, now) === big ? now : null;
+      };
+      const put = (t) => {
         const live = document.querySelector("#app [data-wmnote]");
-        const put = (t) => {
-          if (!live) return;
-          live.hidden = !t;
-          live.textContent = t;
-        };
-        const now = findMap(docOf(id), mid);
-        if (b && now && now.key && addr(id, now) === big) {
-          await decoded(b);
-          if (view?.key !== was) return;
+        if (!live) return;
+        live.hidden = !t;
+        live.textContent = t;
+      };
+      Promise.all([view.src ? null : picture(small), picture(big)]).then(async ([s, b]) => {
+        if (!ours()) return;
+        if (b && current()) await decoded(b);
+        // It's moved on: the next drawing of the screen puts up what it needs.
+        const now = current();
+        if (!now) {
+          if (ours()) view.loading = "";
+          return;
+        }
+        view.loading = "";
+        if (b) {
           swap(id, now, big, b);
           return put("");
         }
         if (s && !view.src) view.v.show(s);
-        if (!b) put(online() ? "The picture didn’t come through. Try again in a moment." : "No signal, and this phone hasn’t got this map’s picture yet.");
+        put(online() ? "The picture didn’t come through. Try again in a moment." : "No signal, and this phone hasn’t got this map’s picture yet.");
       });
     }
     // Opened from a page's pin: straight to it, with its card up.
@@ -1122,7 +1139,12 @@ export function makeMaps(w) {
       ui.picking = at;
       find = "";
       d.render();
-      requestAnimationFrame(() => document.querySelector("#app .wm-pick input")?.focus({ preventScroll: true }));
+      // The find box, once the card's drawn, unless she's in one of its boxes
+      // already: what she's typing stays where she's typing it.
+      requestAnimationFrame(() => {
+        if (document.activeElement?.closest?.("#app .wm-pick")) return;
+        document.querySelector("#app .wm-pick input")?.focus({ preventScroll: true });
+      });
     },
     mcancel() {
       const back = ui.placing?.pid ?? "";
