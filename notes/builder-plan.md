@@ -47,7 +47,8 @@ Mo's calls (27, 28 and 30 Oct):
 - **Xurux is the city of the dead only** (30 Oct, Abnu): not the molefolk kingdom, and who keeps it left open.
 - **The molefolk are Abnu's secret faction** (30 Oct): their own faction and nothing to do with Xurux, inside a mountain on the coast between Alysta and the Soths, and most of the world doesn't know they exist. They're the people trapped there when the Queen died with her meteor, kept alive by the glowing orb an Anunnaki was forced into, and they've got some of the rarest materials in the earth. The canon has their story.
 - **Abnu starts in its own now** (30 Oct): a thousand years after the Sundering, the Queen stirring in the Deep and Alysta's ban on the Seven fresh, with nothing that needs one adventure.
-- **Abnu comes after Night City 2077** (30 Oct): stages 15 and 16, ahead of 2045.
+- **Abnu goes live now** (31 Oct, replacing 30 Oct's after Night City 2077): stage 15 is built next, ahead of 13 and 14, since it needs only 12, and stage 16 comes after 14.
+- **Mo's still writing Abnu's history** (31 Oct): the names the canon leaves open wait for him, and the molefolk's card and home take plain names (the molefolk, the mountain) till he names them. The molefolk call their orb Melammu.
 - **The web on a map** (30 Oct, stages 13 and 14): a map, Night City's or her own picture of a world or a city, can have the web on it: each faction's token where it's pinned and its threads drawn to the others, every faction faint till one's tapped, then its threads and the factions at their ends light up, and a tap on another walks to its ties. The look's the web's own, and a pin she moves takes its lines with it.
 
 ## Calls Claude made
@@ -158,7 +159,7 @@ For Mo to say otherwise.
 
 ## How a stage goes
 
-- One stage a chat, with the prompt at the end of this plan. The stage is the first in The stages not marked built.
+- One stage a chat, with the prompt at the end of this plan. The stage is the first in The stages not marked built, bar stage 15, which Mo moved up on 31 Oct so it's built before 13.
 - A stage is marked built by ending its first line with the date it went to `main`, like *Built 30 Oct 2026.*, in the same merge.
 - A stage that writes tables, writes a world or changes a rule sends Mo what to judge in one message (the `/deal/` link on the Preview, for tables, and the world's page for a world), changes only what he names, and waits for his yes in the same chat before it merges.
 - The Night City stages (12 to 14 and 17 to 19) are built from A whole world, in the brief, and A world, in Writing tables, so each can be built from this plan alone. Abnu's (15 and 16) are built from A whole world: Abnu and `notes/abnu-canon.md` as well.

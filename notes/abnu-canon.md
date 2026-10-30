@@ -22,7 +22,8 @@ Abnu's lore, put together on 30 Oct 2026 for its whole world (stages 15 and 16 o
 - **Xurux is the city of the dead, and only that.** It isn't the molefolk kingdom, and who keeps it was left open. Claude's calls say how the world reads it.
 - **The molefolk are their own faction, secret, and nothing to do with Xurux.** They live inside a mountain on the coast between Alysta and the Soths, and most of the world doesn't know they exist. If the world has a secret faction, it's them. Their story's Mo's, under The molefolk.
 - **Abnu starts in its own now.** A thousand years after the Sundering, the Queen stirring and Alysta's ban on the Seven fresh, with nothing on the board that needs one adventure. The Six Souls can still be run in it.
-- **Abnu's stages come after Night City 2077**, ahead of 2045.
+- **Abnu goes live as soon as it can** (31 Oct, replacing the 30 Oct pick to wait for Night City 2077): its board and How it came to be first, ahead of Night City's places, then its places, people and map once a whole world can come into a campaign.
+- **Mo's still writing Abnu's history** (31 Oct), so the names this file leaves open stay open till he sends them. Till then the molefolk's card and home take plain names (the molefolk, the mountain), never made-up ones.
 
 ## The feel
 
@@ -278,11 +279,11 @@ Inside a mountain on the coast where the Soths and Alysta meet, by the inlet jus
 
 When the Queen died with the meteor she'd made, a people on that coast lost their home. It collapsed, and the ones who lived through it were forced underground and trapped inside the mountain. They were lucky in one thing: down there was a glowing orb of great energy that made plants grow round it. With water and food they held on, and over the thousand years since they've slowly become molefolk, built for moving through the earth. They've got claws that go through soil and stone, hardened nails that cut through minerals, feet turned back for digging, whiskers and a nose that feel movement and map a dark room by how the air moves, and eyes that see in the dark and hurt in bright light. They're slow above ground, and they care for the creatures and growing things round them in a way surface folk find strange.
 
-The orb was an Anunnaki once, a master of plants and growth. One of the Queen's generals beat him and forced him into it, and just before the seal closed he flung himself away into the currents nearby, which carried him underground, where he's been stuck ever since. When the molefolk found the orb, his soul's gift for growth poured out of it and nurtured everything round him. To them he's a relic of the highest regard.
+The orb, which they call Melammu, was an Anunnaki once, a master of plants and growth. One of the Queen's generals beat him and forced him into it, and just before the seal closed he flung himself away into the currents nearby, which carried him underground, where he's been stuck ever since. When the molefolk found Melammu, his soul's gift for growth poured out of it and nurtured everything round him. To them he's a relic of the highest regard.
 
 They keep to themselves, and most of the world doesn't know they exist. They've got some of the rarest materials in the earth.
 
-Their name for themselves, their home's name, who leads them, what they want, what they trade and with whom, and who knows they're there are the stage's to write, in the shape of this.
+Who leads them, what they want, what they trade and with whom, and who knows they're there are the stage's to write, in the shape of this. Their name for themselves and their home's name wait for Mo.
 
 ## The orders and the rest
 
@@ -322,7 +323,7 @@ The canon's places. Every faction's seat is a place too.
 - **The Ledge**, the shallowest Thelisian hall, in the upper depths.
 - **Gustburg**, **Inkhal**, **Neuzon** and **Molythia**, the eastern capitals.
 - **Lubro**, the free port.
-- **The molefolk's home**, inside the mountain on the coast where the Soths and Alysta meet, by the inlet south of Lubro, with the orb's cavern at its heart. It's on no map anyone in Abnu has, and its name's the stage's.
+- **The molefolk's home**, inside the mountain on the coast where the Soths and Alysta meet, by the inlet south of Lubro, with Melammu's cavern at its heart. It's on no map anyone in Abnu has, and its name waits for Mo.
 - **The Sundering Deep**, the trench where the tenth moon lies.
 
 ## People
@@ -371,7 +372,7 @@ The true order, for the three ages.
 - The Soths were a people already, and the kingdoms of Thelis older still.
 - The Sundering: she pulled the moons down, the Seven caught nine and sealed her in the tenth.
 - Her body died with the meteor she'd made, which came down on the Cradle, and a people on the coast were trapped inside their mountain.
-- The trapped people found the orb, lived on what grew round it, and over the centuries became molefolk.
+- The trapped people found the orb they call Melammu, lived on what grew round it, and over the centuries became molefolk.
 - She battered at it for generations, till it fell into the Sundering Deep.
 - The Seven brought rebirth back for every soul, and the fallen moon began stripping memory.
 - Alysta forgot and remembered across lives, banned the Seven's worship, buried his amulet and asked it never be found.
@@ -453,4 +454,5 @@ Never answered on a card, a page or a line of history:
 - What's been working at the moon for six hundred years.
 - What's down the stair under Hollowgate.
 - The one true thing Sister Ilva knows about the Seven.
-- The Anunnaki in the orb: his name, which of the Queen's generals beat him, whether he's awake or can speak, and whether the Seven know he's there.
+- The Anunnaki inside Melammu: his name, which of the Queen's generals beat him, whether he's awake or can speak, and whether the Seven know he's there.
+- The molefolk's name for themselves and their home's name.
