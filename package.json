@@ -5,10 +5,10 @@
   "scripts": {
     "content": "node scripts/build-content.mjs",
     "dev": "npm run content && astro dev",
-    "build": "npm run content && astro build && pagefind --site dist && node scripts/build-sw.mjs && node scripts/preview-first.mjs",
+    "build": "npm run content && astro build && pagefind --site dist && node scripts/build-sw.mjs",
     "preview": "npm run build && wrangler dev",
     "deploy": "wrangler d1 migrations apply DB --remote && wrangler deploy",
-    "deploy:preview": "wrangler preview --ignore-base-config",
+    "deploy:preview": "wrangler preview",
     "sheets": "node scripts/build-sheets.mjs",
     "deal": "node scripts/deal-world.mjs"
   },
