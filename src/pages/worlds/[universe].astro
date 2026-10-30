@@ -3,10 +3,10 @@
 // (notes/builder-plan.md, A whole world), where Mo judges one on the Preview.
 // Night City's the first, a fan-made world from the Cyberpunk universe, so
 // the line saying whose it is sits at the top and the companies' notices at
-// the foot. It's drawn here at build time (src/worlds/world-page.js), and
-// src/worlds/world-ui.js runs the bar, the kinds, Find and the web on the
-// phone. Not linked from anywhere till Mo says so, and kept out of search
-// and off phones like /deal/ and /kit/.
+// the foot. Abnu's Mo's own, so it has neither. It's drawn here at build
+// time (src/worlds/world-page.js), and src/worlds/world-ui.js runs the bar,
+// the kinds, Find and the web on the phone. Not linked from anywhere till Mo
+// says so, and kept out of search and off phones like /deal/ and /kit/.
 import Base from "../../layouts/Base.astro";
 import worlds from "../../generated/worlds.json";
 import "@fontsource/alegreya-sans/800.css";
@@ -44,7 +44,7 @@ const forPhone = JSON.stringify({ factions: world.factions.map((f) => ({ key: f.
       <h1>{world.title}</h1>
       <p class="wn-when">{world.when}</p>
       <ul class="wn-counts">{countsOf(world).map((c) => <li>{c}</li>)}</ul>
-      <p class="wn-whose">{world.whose}</p>
+      {world.whose && <p class="wn-whose">{world.whose}</p>}
     </header>
 
     <section class="wn-panel" data-panel="board" id="wn-board" aria-labelledby="wn-h-board">
@@ -65,9 +65,11 @@ const forPhone = JSON.stringify({ factions: world.factions.map((f) => ({ key: f.
       <Fragment set:html={historyOf(world, ln)} />
     </section>
 
-    <footer class="wn-foot">
-      {world.notices.map((n) => <p>{n}</p>)}
-    </footer>
+    {world.notices.length > 0 && (
+      <footer class="wn-foot">
+        {world.notices.map((n) => <p>{n}</p>)}
+      </footer>
+    )}
 
     <nav class="wn-bar" aria-label="The world">
       <div role="tablist" aria-label="What to look at">

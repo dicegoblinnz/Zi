@@ -1,0 +1,1115 @@
+# Abnu a thousand years after the Sundering: every power on the board, the
+# way scripts/worlds.mjs says at its top, written from notes/abnu-canon.md
+# and nothing else. A board in the middle of things: agendas part way up,
+# threads strained, needs unpaid, and the ban still landing. The molefolk are
+# the secret faction, so no other card names them where the crew would read
+# it before they're found, only in threads and Secrets. Every Secret that
+# touches the canon's five truths sits on their ladder.
+# Words with a comma in them go in quotes inside { }.
+factions:
+
+  # ── The west
+
+  - key: alysta
+    kind: west
+    size: great
+    seat: alysta
+    name: Alysta
+    about: >-
+      The biggest and richest nation in Abnu, and the one that stopped asking
+      questions. It works through the civil service, good roads and amulets
+      worn with pride. It sits in Alysta, on the south-east coast.
+    want: The empire at peace and in order, the way it's been since Alysta took the throne.
+    face: >-
+      Chancellor Odile Garran, who's run the civil service for thirty years
+      and has never once lost a piece of paper.
+    faceOf: odile-garran
+    res:
+      - { text: Imperial Taxes, x: 2 }
+      - Verrant Dock Duties
+      - The Heartland's Grain
+      - The Imperial Mint
+      - Guild Levies
+      - Crown Estates
+      - Court Fees
+      - White Stone Quarries
+    people:
+      - { text: The Imperial Watch, does: "+1 Power. A watch on every street of every city, and they work together better than anyone alive." }
+      - { text: The Legions, does: "+1 Power. The army that ended the wars, kept sharp for one that hasn't come in 380 years." }
+      - { text: Customs Men, does: "+1 Power. On every dock in the empire, and Verrant's got the most." }
+      - { text: The Guild Crews, does: "+1 Power. Alysta's crews, gangs and choirs, who turn out together when the empire asks." }
+    assets:
+      - text: The Emperor's Charity
+        does: >-
+          Free amulets through every temple and almshouse in the poorer
+          districts. Once a downtime, it wins back a district that's turned on
+          the empire.
+      - text: The Sealed Archive
+        does: >-
+          Every banned text in the empire, catalogued instead of burned. Once a
+          session, ask it what a banned book says.
+      - text: Hollowgate
+        does: >-
+          A research station three days inland, on no map and very well
+          supplied. Once a downtime, it works on whatever the emperor's set
+          it, and nobody asks what.
+      - text: The Imperial Roads
+        does: >-
+          The best roads in the world. Once a session, the empire's people get
+          anywhere in it first.
+      - text: Passage East
+        does: >-
+          Imperial cargo on Montian ships to the eastern continent, which
+          Montia's captains have refused to carry since the ban.
+        need: true
+        from: montia
+    agendas:
+      - text: Root out the Seven's worship in the empire
+        die: 8
+        at: [order-of-the-seven, place:the-drowned-quarter]
+        then: >-
+          Every shrine to the Seven in the empire's shut, and anyone caught
+          keeping one is in a cell.
+      - text: Get Montia's captains carrying imperial cargo again
+        die: 4
+        at: montia
+        then: >-
+          Montian ships carry the empire's cargo east again, and their holds get
+          searched for books at Verrant.
+    pub:
+      - { text: Long years to the throne, kind: bond }
+      - { text: The ban's split the Drowned Quarter, kind: hostile, s: strained }
+    mor:
+      - { text: "Stronger together, and every school says so", kind: bond }
+    loy:
+      - { text: My word is my bond, kind: bond }
+    threads:
+      - { to: montia, tie: rival, text: Montia calls the emperor a heretic in his own ports }
+      - { to: ezkian-union, tie: rival, text: The Union shelters everyone the empire's banned }
+      - { to: soths, tie: rival, text: The Soths watch the ban like they're waiting for a reason }
+      - { to: order-of-the-seven, tie: rival, text: Someone under the emperor's roof still keeps the Seven }
+      - { to: standing-stones, kind: hostile, text: The Stones keep teaching what the empire's banned }
+      - { to: lubro, kind: hostile, text: Lubro sells Soth blades to anyone who'll pay }
+      - { to: xurux, tie: ally, text: "Xurux makes our amulets, and nobody makes them better" }
+    secret:
+      tag: The Standing Order
+      more: >-
+        Every charity amulet comes from Xurux on one standing order, off the
+        books, at a volume a clerk would call industrial, signed A.
+      ways:
+        - The Ninth District's almshouse ledgers
+        - The manifest Merren Vast read instead of signing
+    note: >-
+      The emperor's Alysta, the same soul for a thousand years, remembering all
+      of it for 380, in a body that was his son's. He can't take his amulet off
+      without dying, and his own notes keep count: Attempt eleven. Not yet. He's
+      tired, he isn't exactly the villain, and the crew should have to decide
+      what to do about him.
+
+  - key: soulless
+    kind: order
+    mini: { of: alysta, outs: [Destroy, Obstruct] }
+    name: The Soulless
+    about: >-
+      Agents with no self left in them to reason with, trained to move unseen
+      and hunt the souls that show the tells of opening. It does two things
+      for Alysta.
+    want: No second Sundering, whatever it costs.
+    res:
+      - A Budget Nobody Audits
+      - The Emperor's Own Purse
+    people:
+      - { text: Soulless Agents, does: "+1 Power. Undying agents in every big institution, and most of those they take never come back." }
+    assets:
+      - text: A Headquarters That Doesn't Exist
+        does: >-
+          Officially, nowhere. Once a session, someone the Soulless take drops
+          out of every record in the empire.
+    agendas:
+      - text: Take the strong souls before they open
+        die: 6
+        at: [cobria, standing-stones]
+        then: >-
+          Every soul in the north and the east that might have opened is gone
+          before it can.
+    loy:
+      - { text: "Loyal to the emperor himself, not the throne", kind: bond }
+    threads:
+      - { to: cobria, kind: hostile, text: Cobria grows strong souls like weeds }
+      - { to: standing-stones, kind: hostile, text: The Stones keep sending strong souls south }
+      - { to: order-of-the-seven, kind: hostile, text: There's a traitor in the palace }
+    secret:
+      tag: His Hand on the Charter
+      more: >-
+        The Soulless's founding charter is in the emperor's own hand, from an
+        incarnation three centuries back, and the hand's the same one he signs
+        with now.
+      ways:
+        - The charter, in the headquarters that doesn't exist
+        - An agent taken alive
+
+  - key: soths
+    kind: west
+    size: city
+    seat: mornhold
+    name: The Soths
+    about: >-
+      The oldest nation in the world, older than the Sundering, and the one
+      Alysta's never absorbed. It works through iron, warriors and keeping its
+      word. It sits in Mornhold, on top of the Flat-Top Mountain.
+    want: Their mountains, their iron and their word kept, whatever Alysta does.
+    face: >-
+      Queen Signe Ironhand, whose family runs the Ironhand Forge and tests
+      every blade it sells against the smith's own hand.
+    faceOf: signe-ironhand
+    res:
+      - { text: Iron Valley Ore, x: 2 }
+      - Ironhand Blades
+      - Highland Herds
+      - Mountain Tolls
+      - Clan Tithes
+      - Mornhold's Markets
+    people:
+      - { text: Ironhand Warriors, does: "+1 Power. Every Soth adult's armed and trained, and the best turn out when the queen calls." }
+      - { text: The Valley Clans, does: "+1 Power. Miners who fight as well as they dig." }
+      - { text: Mornhold's Guard, does: "+1 Power. They'll clear a chasm other nations would bridge, then complain about the bridge." }
+    assets:
+      - text: The Ironhand Forge
+        does: >-
+          Marked blades every nation respects. Once a downtime, it arms
+          someone the queen favours with the best blade in Abnu.
+      - text: A Soth Promise
+        does: >-
+          A promise is a debt and a debt's a wound. Once a downtime, the Soths
+          call in a promise someone made them, and it gets kept.
+    agendas:
+      - text: Dig the new shaft into the coast mountain
+        die: 4
+        at: molefolk
+        then: >-
+          The Ironhand Forge has ore for a hundred years, and whatever's in
+          that mountain has nowhere left to go.
+      - text: Turn Xurux's amulet carts back at the border
+        die: 6
+        at: xurux
+        then: >-
+          No amulet crosses Soth land, and Xurux's road to the coast runs the
+          long way round.
+    pub:
+      - { text: "Strength is earned, not claimed", kind: bond }
+    mor:
+      - { text: "Scars are shown, never hidden", kind: bond }
+    loy:
+      - { text: The queen keeps her word, kind: bond }
+      - { text: Some clans want the ban answered with steel, kind: hostile, s: strained }
+    threads:
+      - { to: alysta, tie: rival, text: Alysta's war on the Seven is how the last one started }
+      - { to: molefolk, tie: rival, text: Something in the new shaft fills our tunnels back in }
+      - { to: xurux, tie: rival, text: Xurux sells the dead's work to the living }
+      - { to: montia, tie: ally, text: Montia honours the Seven the way we do }
+      - { to: standing-stones, tie: ally, text: The Stones trained half our soul-workers }
+      - { to: lubro, tie: ally, text: "Lubro sells our iron, and we never have to haggle" }
+    secret:
+      tag: The Queen's Old Peace
+      more: >-
+        Queen Signe's line keeps an old peace with the Seven, and she'll honour
+        it quietly whatever Alysta does, even if it puts her against her own
+        clans.
+      ways:
+        - The oath under Mornhold's great hall
+        - Abbess Hild, who stood witness
+    note: >-
+      The Soths remember what the last war over the Seven cost, and they're
+      watching Alysta's with real unease. If the queen's peace ever has to be
+      said out loud, her own people might not stand with her.
+
+  - key: orza
+    kind: west
+    size: city
+    seat: aron
+    name: Orza
+    about: >-
+      A principality of thinkers in the north-west, running on a plant that's
+      killing them slowly. It works through visions, libraries and being
+      cleverer than the room. It sits in Aron.
+    want: To see what's coming before it comes, and live through the day after.
+    face: >-
+      Prince Emeric Sallow, who's ruled from a darkened room every other day
+      for twenty years and is right more often than he'd like.
+    faceOf: emeric-sallow
+    res:
+      - { text: Jak's Dream Fields, x: 2 }
+      - Library Fees
+      - Grey Tea
+      - Aron's Scribes
+    people:
+      - { text: The Prince's Guard, does: "+1 Power. Quick, sharp and fragile, and they only stand guard on their bright days." }
+      - { text: The Library Wardens, does: "+1 Power. Orza has more libraries than beds, and the wardens turn out for every one." }
+    assets:
+      - text: Jak's Dream
+        does: >-
+          The leaf that drives the mind into visions, now and then true ones.
+          Once a session, a seer asks the GM one thing about what's coming, and
+          loses the next day to it.
+        strange: true
+      - text: The Libraries of Aron
+        does: >-
+          Once a downtime, Orza finds whatever's ever been written down about
+          anything.
+    agendas:
+      - text: Learn what's under the sea the seers keep seeing
+        die: 4
+        at: thelis
+        then: >-
+          Orza's seers learn what's under the sea, and every library in Aron has
+          it written down.
+      - text: Close Aron's libraries to the Union's scholars
+        die: 6
+        at: ezkian-union
+        then: >-
+          No Ezkian reads in Aron again, and whatever the Union's racing for
+          goes on without what's written there.
+    pub:
+      - { text: Orza's seers have been right often enough, kind: bond }
+    mor:
+      - { text: The day after's always coming, kind: hostile, s: strained }
+    loy:
+      - { text: The prince sees further than any of us, kind: bond }
+    threads:
+      - { to: ezkian-union, tie: rival, text: The Union takes our best minds and sells them back as engines }
+      - { to: thelis, kind: hostile, text: Thelis knows what our seers keep seeing and won't say }
+      - { to: xurux, kind: bond, text: Xurux takes our dead when the Garden won't }
+    secret:
+      tag: The Same Dream
+      more: >-
+        Every seer in Aron's had the same vision since spring: the sea opening
+        over a trench, and something climbing out. The prince has told nobody.
+      ways:
+        - A seer's drawing in an Aron library book
+        - A grey-day seer who talks in her sleep
+    note: >-
+      Cities run on alternating days, half the people bright and talking too
+      fast and half grey and silent in darkened rooms, so which day are you on
+      is the first thing anyone asks. A few Orzaini have tried to change what
+      they saw, and how that went is most of Orzaini literature.
+
+  - key: ezkian-union
+    kind: west
+    size: city
+    seat: ezkia-prime
+    name: The Ezkian Union
+    about: >-
+      A scholars' republic, small next to Alysta and the most advanced nation
+      in Abnu by a long way. It works through steam, clockwork and the Grand
+      Library. It sits in Ezkia Prime, the City of Towers.
+    want: To finish what the Anunnaki started, before anyone else does.
+    face: >-
+      Councillor Maren Aldaz, the youngest of the Nine, who's running the race
+      and three other projects at once.
+    faceOf: maren-aldaz
+    res:
+      - { text: Engine Patents, x: 2 }
+      - Gas and Coal
+      - Waslach Foundries
+      - Scholars' Fees
+      - Commissions
+      - Clockwork Exports
+    people:
+      - { text: The Brass Guard, does: "+1 Power. Wardens in clockwork armour on every tower in Ezkia Prime." }
+      - { text: Runaway Soul-Workers, does: "+1 Power. The awakened who fled Alysta, and they'll fight to stay free." }
+    assets:
+      - text: The Grand Library
+        does: >-
+          It elects the Council of Nine. Once a downtime, its scholars build one
+          thing nobody else in Abnu could.
+      - text: Steam and Clockwork
+        does: >-
+          Engines, gas lamps and the first sparks of something like lightning.
+          Once a session, the Union has a machine for it.
+      - text: The Anunnaki Work
+        does: >-
+          Something the Anunnaki left half finished, kept under the Grand
+          Library. What it does once it's done, nobody outside the Nine knows.
+        strange: true
+    agendas:
+      - text: Finish the Anunnaki work before Hollowgate does
+        die: 8
+        at: [alysta, place:hollowgate]
+        then: >-
+          The Union's finished what the Anunnaki couldn't, and nobody knows yet
+          what it does.
+      - text: Bring Alysta's runaway soul-workers over the border
+        die: 4
+        at: alysta
+        then: >-
+          Every soul-worker who runs from the ban reaches Ezkia Prime, and the
+          empire's lost them for good.
+    pub:
+      - { text: "Everything has a price, including speed", kind: bond }
+    mor:
+      - { text: The Nine aren't sure the race is a good idea, kind: hostile, s: strained }
+    loy:
+      - { text: "Every scholar's welcome, whatever they're running from", kind: bond }
+    threads:
+      - { to: alysta, tie: rival, text: Alysta burned our founders' books }
+      - { to: orza, tie: rival, text: Orza hoards what its seers see }
+      - { to: etweil, tie: rival, text: The Etweil walk our surveyors back out of the south }
+      - { to: standing-stones, tie: ally, text: The Stones send us soul-workers with nowhere else to go }
+    secret:
+      tag: Kept Going by One Vote
+      more: >-
+        Four of the Nine want the race stopped, and the vote that kept it going
+        was won by one, the night Councillor Aldaz heard Hollowgate was close.
+      ways:
+        - A councillor who resigned in the spring
+        - The Grand Library's sealed minutes
+    note: >-
+      Ezkia Prime's lit by gas lamps after dark. An Ezkian smith's quick if you
+      pay extra, brilliant, easily distracted, and halfway through commissions
+      for three clients at once.
+
+  - key: etweil
+    kind: west
+    size: local
+    seat: niebali
+    name: The Etweilian Tribes
+    about: >-
+      Among the kindest people in the world, small, hairy and green-haired,
+      hidden in mountains cold enough to kill. It works through patience, guiding and
+      remembering. It sits in Niebali.
+    want: To be left alone in the cold, and to bring back whoever wanders into the Green Silence.
+    face: >-
+      Hessa, the eldest at Niebali, who'll stand very still beside you till
+      you notice she's there.
+    faceOf: hessa
+    res:
+      - Snow Lichen
+      - Hot Springs
+      - The Southern Passes
+    people:
+      - { text: Silent Walkers, does: "+1 Power. Etweil who walk the killing cold naked, and get taken for bushes." }
+      - { text: Mountain Guides, does: "+1 Power. They know every pass in the cold, and every way back." }
+    assets:
+      - text: The Green Silence
+        does: >-
+          Nobody's mapped it. Once a downtime, the Etweil bring someone out of
+          it, and never talk about what happened in there.
+    agendas:
+      - text: Keep the Union's surveyors out of the Green Silence
+        die: 4
+        at: [ezkian-union, place:the-green-silence]
+        then: >-
+          No Ezkian ever maps the Green Silence, and the Etweil never say why.
+    pub:
+      - { text: Nobody's ever offered us an amulet, kind: bond }
+    mor:
+      - { text: We've never once been in a hurry, kind: bond }
+    loy:
+      - { text: "Our grandmothers hummed the tenth verse, and so do we", kind: bond }
+    threads:
+      - { to: ezkian-union, tie: rival, text: The Union's surveyors won't stop coming south }
+      - { to: thelis, kind: bond, text: Thelis carves what we sing }
+    secret:
+      tag: They Remember the Ten
+      more: >-
+        The tenth verse the Etweil hum is the tenth moon's, the one that fell,
+        and every elder at Niebali can still sing it.
+      ways:
+        - An elder who trusts the crew completely
+        - The carvings Thelis keeps at the Ledge
+    note: >-
+      Etweil greet each other by standing very still till the other one
+      notices. One meal a day keeps them going, in a land with almost nothing.
+      They remember what everyone else agreed to forget, and tell nobody till
+      they trust them completely.
+
+  - key: xurux
+    kind: west
+    size: local
+    seat: xurux
+    name: Xurux
+    about: >-
+      The city of the dead, where souls the Garden's too crowded to take live
+      till they choose to cease. It works through the amulet trade and the
+      dead's long patience. It sits in Xurux, between Orza and the Soths.
+    want: Every soul that comes to it given a place, and a good end when it's ready.
+    face: >-
+      The master of Deepshaft Kel, the finest amulet-maker in the world, who's
+      proud and decent and lately asking questions.
+    faceOf: master-of-deepshaft-kel
+    strange: true
+    res:
+      - { text: The Amulet Trade, x: 2 }
+      - Xunan's Market
+      - Fine Silverwork
+      - The Empire's Orders
+    people:
+      - { text: The Dead of Xurux, does: "+1 Power. Souls the Garden couldn't take, with all the time in the world." }
+      - { text: Xunan's Carters, does: "+1 Power. The living at the gate, who carry the amulets out and the buyers in." }
+    assets:
+      - text: The Amulet Houses
+        does: >-
+          The most respected houses in the city, every amulet stamped with
+          Xurux's mark. Once a downtime, they fill any order in the world.
+      - text: Essence
+        does: >-
+          What a soul here becomes when it chooses to cease. Xurux builds
+          everything it makes out of it, amulets and all.
+        strange: true
+    agendas:
+      - text: Keep Deepshaft Kel's questions inside the city
+        die: 4
+        at: place:deepshaft-kel
+        then: >-
+          Nobody outside Xurux hears what Deepshaft Kel's master asked, and the
+          trade goes on the way it always has.
+      - text: Get the amulet carts round the Soths
+        die: 6
+        at: soths
+        then: >-
+          Xurux's carts reach the coast without touching Soth land, and the
+          border means nothing to the trade.
+    pub:
+      - { text: Xurux makes the finest amulets in the world, kind: bond }
+    mor:
+      - { text: Every soul here chose to stay, kind: bond }
+    loy:
+      - { text: Old Tekk asked the wrong question and left, kind: hostile, s: strained }
+    threads:
+      - { to: soths, tie: rival, text: The Soths turn our carts back and call our work obscene }
+      - { to: alysta, tie: ally, text: The empire buys more amulets every year }
+    secret:
+      tag: Nobody Drew the Wards
+      more: >-
+        The ward patterns came with the tools, nobody living or dead designed
+        them, and every amulet that carries them stills the soul that wears it.
+      ways:
+        - Old Tekk, exiled for asking
+        - Someone who awakens the moment their amulet comes off
+    note: >-
+      The dead run Xurux themselves, and the living come no further than
+      Xunan. Nobody in the city knows what the etching does, the master of
+      Deepshaft Kel included, though he's started to wonder.
+
+  - key: lubro
+    kind: west
+    size: small
+    seat: lubro
+    name: Lubro
+    about: >-
+      A free port on the Soths' east coast, there because somebody has to sell
+      Soth iron to the world. It works through low dues and a short memory.
+      It sits in Lubro.
+    want: Free trade off the Soth coast, and nobody looking too closely at the cargo.
+    face: >-
+      Harbourmaster Dagny Rusk, whose family's run the harbour longer than
+      anyone can remember.
+    faceOf: dagny-rusk
+    res:
+      - Soth Iron Sales
+      - Rare Stones
+    people:
+      - { text: The Free Captains, does: "+1 Power. Ships that sail for anyone, and fight for the port when they have to." }
+    assets:
+      - text: The Free Port
+        does: >-
+          No taxes, and nobody writes anything down. Once a downtime, anything
+          sold in Lubro can't be traced.
+    agendas:
+      - text: Keep Alysta's customs cutters out of Lubro's water
+        die: 6
+        at: alysta
+        then: >-
+          Lubro stays free, and every ship that wants Soth iron without the
+          empire's tax comes here first.
+      - text: Keep the Rusks' night trade quiet
+        die: 4
+        at: molefolk
+        then: >-
+          The trade under the mountain's safe for another generation, and
+          Lubro's fortune with it.
+    pub:
+      - { text: Lubro's dues are the lowest on the coast, kind: bond }
+    loy:
+      - { text: The Rusks have always looked after the port, kind: bond }
+    threads:
+      - { to: alysta, tie: rival, text: Alysta's customs cutters sit off our harbour }
+      - { to: soths, tie: ally, text: The Soths let us stand and we sell their iron }
+      - { to: molefolk, tie: debt, text: Our best stones come from friends who don't want thanks }
+    secret:
+      tag: Ore From Under the Mountain
+      more: >-
+        Lubro's rarest stones come from the molefolk inside the mountain, by
+        the Rusks' night boat, and the family's kept it quiet for two hundred
+        years.
+      ways:
+        - Stones no mine in Abnu can name
+        - The Rusks' boat that goes out empty at night
+
+  - key: molefolk
+    kind: west
+    size: local
+    seat: the-mountain
+    name: The molefolk
+    about: >-
+      A people built for moving through the earth, living inside a mountain on
+      the coast where the Soths and Alysta meet. It works through digging,
+      growing and staying hidden. It sits in the mountain.
+    want: To stay hidden, and keep Melammu safe in the dark.
+    face: >-
+      Their eldest, who tends Melammu's cavern and speaks for every tunnel.
+    faceOf: molefolk-eldest
+    res:
+      - { text: The Rarest Stones, x: 2 }
+      - Melammu's Gardens
+      - Deep Seams
+      - Trade Through Lubro
+    people:
+      - { text: Diggers, does: "+1 Power. Claws that go through soil and stone, and nails that cut through minerals." }
+      - { text: Tunnel Wardens, does: "+1 Power. Whiskers that feel a footstep three halls away, and eyes made for the dark." }
+    assets:
+      - text: Melammu
+        does: >-
+          The glowing orb at the mountain's heart, an Anunnaki once, whose gift
+          for growth feeds everything round it. Once a downtime, whatever's
+          planted in its light grows a season in a night.
+        strange: true
+      - text: The Tunnels
+        does: >-
+          A thousand years of tunnels nobody on the surface knows. Once a
+          session, the molefolk get anywhere under the mountain unseen.
+    agendas:
+      - text: Bring the Soth shaft down before it reaches Melammu
+        die: 4
+        at: soths
+        then: >-
+          The new shaft collapses, the Soths put it down to bad ground, and
+          Melammu stays hidden.
+    mor:
+      - { text: Melammu's light has fed us for a thousand years, kind: bond }
+    loy:
+      - { text: Care for every growing thing, kind: bond }
+    threads:
+      - { to: soths, tie: rival, text: Soth picks are coming through our walls }
+      - { to: lubro, tie: debt, text: The Rusks have never told a soul about us }
+    secret:
+      tag: A People Under the Mountain
+      more: >-
+        A whole people lives inside the coast mountain between the Soths and
+        Alysta, round Melammu's light, and almost nobody on the surface knows
+        they exist.
+      ways:
+        - The Rusks of Lubro
+        - The new Soth shaft
+    note: >-
+      They were a coast people trapped when the Queen's meteor came down, and a
+      thousand years in the dark made them molefolk. They're slow above ground,
+      bright light hurts them, and they care for the creatures and growing
+      things round them in a way surface folk find strange.
+
+  # ── The middle sea
+
+  - key: montia
+    kind: sea
+    size: city
+    seat: pera
+    name: Montia
+    about: >-
+      A seafaring kingdom across the middle sea, where the sailing and the
+      faith are one thing. It works through ships, temples and saying it out
+      loud. It sits in Pera, on the main island.
+    want: Every text of the Seven copied, carried and read, Alysta's ports included.
+    face: >-
+      Queen Aurea Pell, who's carried Justice every day since the ban and tells
+      the emperor's envoys so.
+    faceOf: aurea-pell
+    res:
+      - { text: Sea Trade, x: 2 }
+      - Pilgrim Gifts
+      - Island Barley
+      - Harbour Dues
+      - The Eastern Holding
+      - Copied Books
+    people:
+      - { text: Montian Sailors, does: "+1 Power. Eyes that see a kilometre clean, and they always know north." }
+      - { text: Temple Wardens, does: "+1 Power. They guard the seven doors, and the seventh most of all." }
+      - { text: The Island Levies, does: "+1 Power. Islanders who keep going on short rations long after anyone else stops." }
+    assets:
+      - text: The Seven-Door Temples
+        does: >-
+          Low and wide, with the seventh door always shut. Once a downtime, a
+          temple hides someone who needs hiding.
+      - text: Sethilan Harbour
+        does: >-
+          Where the pilgrim fleets take on supplies. Once a session, anything
+          Montia wants moved leaves in a hold nobody searches.
+    agendas:
+      - text: Get the Seven's texts into every port Alysta has
+        die: 6
+        at: alysta
+        then: >-
+          The Seven's texts are read in every Alystan port, and the ban can't
+          keep up.
+      - text: Find out why Thelis turns ships back from the Deep
+        die: 4
+        at: thelis
+        then: >-
+          Montia knows what Thelis won't say, and says it out loud in every
+          port, the way Montians do.
+    pub:
+      - { text: Montia kept the Seven's texts alive when nobody else would, kind: bond }
+    mor:
+      - { text: Staying still is how a thing gets lost, kind: bond }
+    loy:
+      - { text: "A virtue picked at breakfast, and carried till evening", kind: bond }
+    threads:
+      - { to: alysta, tie: rival, text: The heretic king banned the Seven in his own capital }
+      - { to: alysta, kind: bond, s: snapped, text: We carried imperial cargo east since our grandfathers' day }
+      - { to: thelis, tie: rival, text: Thelis turns our ships back over the Deep and won't say why }
+      - { to: soths, tie: ally, text: The Soths keep the Seven as we do }
+      - { to: order-of-the-seven, tie: ally, text: Our pilgrims bring the palace the texts it can't keep }
+      - { to: inkhal, tie: debt, s: strained, text: We owe Inkhal a winter's grain for the eastern holding }
+    secret:
+      tag: Customs Paid in Silver
+      more: >-
+        Montia damns the emperor out loud in every port, and quietly pays
+        Alysta's own customs men at Verrant to let the books through.
+      ways:
+        - A Verrant customs man spending Montian silver
+        - Sethilan Harbour's second set of books
+    note: >-
+      Books leave Sethilan Harbour in every hold, illegally and constantly, and
+      nobody's managed to stop it. Every wayside shrine has seven alcoves, and
+      the seventh's always empty and swept clean.
+
+  - key: pilgrim-fleets
+    kind: sea
+    mini: { of: montia, outs: [Influence, Establish] }
+    name: The Pilgrim Fleets
+    about: >-
+      Montia's pilgrim ships, with a copied text of the Seven in every hold.
+      It does two things for Montia.
+    want: A book of the Seven in every port in the world.
+    res:
+      - Pilgrim Holds
+      - Copying Decks
+    people:
+      - { text: Pilgrim Crews, does: "+1 Power. Sailors who'd go over the side before they'd give up a book." }
+    assets:
+      - text: Two Hundred Ships
+        does: >-
+          A book in one library can be burned, and a book in two hundred ships
+          can't. Once a downtime, the Seven's words reach any port.
+    loy:
+      - { text: Every ship we sail was blessed in Pera, kind: bond }
+    threads:
+      - { to: alysta, kind: hostile, text: Alysta burns every book it finds in a hold }
+
+  - key: thelis
+    kind: sea
+    size: city
+    seat: the-ledge
+    name: Thelis
+    about: >-
+      Merfolk kingdoms older than any surface empire, in water too deep for
+      ships to sound round a green island in the middle sea. It works through
+      watching, the sea's creatures and never saying. It sits under the Ledge,
+      its shallowest hall.
+    want: The Deep kept quiet, and every surface ship kept away from it.
+    face: >-
+      The Warden of the Ledge, whose name's three notes long, and the only
+      Thelisian who'll talk to surface folk.
+    faceOf: warden-of-the-ledge
+    res:
+      - { text: Deep-Sea Pearls, x: 2 }
+      - The Coral Halls
+      - Drowned Salvage
+      - The Currents
+    people:
+      - { text: The Hall Guard, does: "+1 Power. Merfolk who stay down four hours on one breath and fight in the dark." }
+      - { text: Speakers to the Sea, does: "+1 Power. They call up the sea's creatures with something that isn't language and works anyway." }
+    assets:
+      - text: The Ledge
+        does: >-
+          The only hall a surface-dweller's ever been invited into. Once a
+          session, Thelis meets someone there on its own terms.
+      - text: The Watch on the Deep
+        does: >-
+          Thelisians posted all round the Sundering Deep. Once a downtime, a
+          ship that sails for it is turned back before it gets there.
+    agendas:
+      - text: Keep every ship off the Sundering Deep
+        die: 6
+        at: [montia, place:the-sundering-deep]
+        then: >-
+          No surface ship crosses the Deep, and nobody up there ever learns
+          why.
+    pub:
+      - { text: Older than any empire on the surface, kind: bond }
+    mor:
+      - { text: Raised to watch rather than act, kind: bond }
+      - { text: The Deep shakes harder every month, kind: hostile, s: strained }
+    loy:
+      - { text: One who tells has betrayed their people, kind: bond }
+    threads:
+      - { to: montia, tie: rival, text: Montian ships keep sailing over the Deep }
+      - { to: orza, kind: hostile, text: Orza's seers dream what we won't say }
+    secret:
+      tag: What Fell Into the Sea
+      more: >-
+        There were ten moons. The tenth lies at the bottom of the Sundering
+        Deep, and Thelis knows the shaking's what's sealed in it trying to get
+        out.
+      ways:
+        - The ten moons carved on the Ledge's walls
+        - A Thelisian who'll betray their people
+    note: >-
+      Their halls face down, toward the Deep, and no Thelisian will say what's
+      down there, though every one of them knows. They eat when the current
+      turns, and they won't discuss amulets.
+
+  # ── The east
+
+  - key: cobria
+    kind: east
+    size: city
+    seat: gustburg
+    name: Cobria
+    about: >-
+      The rainforest nation across the eastern continent's long north, dangerous,
+      crowded with creatures and closer to the world's energies than almost
+      anyone. It works through the forest, venom and souls that open early.
+      It sits in Gustburg.
+    want: Its children safe, and its forest whole.
+    face: >-
+      Speaker Sevra of Gustburg, who was found glowing in her cradle and has
+      watched every child's eyes since.
+    faceOf: sevra
+    res:
+      - Forest Medicines
+      - Rare Woods
+      - The Venom Trade
+      - River Ports
+      - Gustburg's Markets
+    people:
+      - { text: Forest Hunters, does: "+1 Power. A venomous bite, and a stomach that shrugs off any poison." }
+      - { text: Gustburg's Watch, does: "+1 Power. They hold the river towns, as long as it isn't cold." }
+      - { text: Cobria's Awakened, does: "+1 Power. More soul-workers than anywhere else in the world for its size." }
+    assets:
+      - text: The Rainforest
+        does: >-
+          Dangerous and crowded with creatures. Once a session, anyone chasing
+          a Cobrian into it loses them.
+    agendas:
+      - text: Stop Echily burning the forest's edge
+        die: 6
+        at: echily
+        then: >-
+          Echily's fire-lines stop at the river, and the forest grows back to
+          the old border.
+      - text: Find out who's taking Cobria's children
+        die: 4
+        at: soulless
+        then: >-
+          Cobria knows who's been taking its children, and its awakened go
+          after them.
+    pub:
+      - { text: Cobrian souls run deep and open early, kind: bond }
+    mor:
+      - { text: The cold's always been our trouble, kind: hostile }
+    loy:
+      - { text: Every child's watched for the glowing eyes, kind: bond }
+    threads:
+      - { to: echily, tie: rival, text: Echily burns our forest's edge to keep its fevers off }
+      - { to: inkhal, kind: bond, text: Inkhal buys our venom at a fair price }
+    secret:
+      tag: The Children Who Went to Sea
+      more: >-
+        Cobrian children who open early have been going missing from the coast
+        towns, a few a year, and each of them left on a ship.
+      ways:
+        - A Gustburg mother who kept her son's letters
+        - A harbour log of passengers who never landed
+
+  - key: echily
+    kind: east
+    size: local
+    seat: neuzon
+    name: Echily
+    about: >-
+      The high places in the middle of the eastern continent, where lives are
+      short and every town's built to be left. It works through gliding,
+      climbing and leaving on time. It sits in Neuzon.
+    want: Every town moved before the next fever reaches it.
+    face: >-
+      Highmother Neru of Neuzon, who's forty, which is old in Echily, and in a
+      hurry.
+    faceOf: neru
+    res:
+      - Cliff Honey
+      - Cliff Pastures
+      - Neuzon's Looms
+    people:
+      - { text: Gliders, does: "+1 Power. Echilians who drop from a height on their pseudo-wings and climb back up with their talons." }
+      - { text: The Cliff Towns, does: "+1 Power. Spread out, high and ready to move, and every one turns out." }
+    assets:
+      - text: Towns Built to Be Left
+        does: >-
+          Once a downtime, a whole Echilian town packs up and moves before
+          anything reaches it.
+      - text: Fever Bark
+        does: >-
+          The forest cure for the fevers that empty Echilian towns, and Cobria
+          won't sell it.
+        need: true
+        from: cobria
+    agendas:
+      - text: Burn the forest's edge back past the river
+        die: 6
+        at: cobria
+        then: >-
+          The fever-line's a day's glide from every town, and Cobria's lost its
+          border.
+    pub:
+      - { text: Nobody climbs higher or leaves faster, kind: bond }
+    mor:
+      - { text: The last fever took half of Neuzon's east side, kind: hostile, s: strained }
+    loy:
+      - { text: "The Highmother moves first, and the towns move with her", kind: bond }
+    threads:
+      - { to: cobria, tie: rival, text: Every fever comes out of Cobria's forest }
+      - { to: polythusian-marches, tie: debt, text: The Marches kept us behind their walls in the last fever }
+    secret:
+      tag: The Fever's in the Wells
+      more: >-
+        The fevers that empty Echilian towns start in Neuzon's own wells, and
+        the council blames Cobria to keep the towns from turning on it.
+      ways:
+        - A well-keeper who stopped drinking from his own well
+        - A Cobrian healer who's had a look
+
+  - key: polythusian-marches
+    kind: east
+    size: city
+    seat: molythia
+    name: The Polythusian Marches
+    about: >-
+      The mountain nation in the far east, masters of thin air who sleep twelve
+      hours at a stretch. It works through walls, passes and
+      tolls. It sits in Molythia.
+    want: The passes held, and every caravan that uses them paying.
+    face: >-
+      Wallward Tamsk of Molythia, who's held its wall for twenty winters and
+      sleeps his twelve hours on top of it.
+    faceOf: tamsk
+    res:
+      - { text: Pass Tolls, x: 2 }
+      - Silver Seams
+      - Mountain Wool
+      - Thaw Rivers
+      - Molythia's Forges
+    people:
+      - { text: The Wall Garrisons, does: "+1 Power. Lungs that recover where anyone else's would fail, and nobody holds a wall better." }
+      - { text: Mountain Leapers, does: "+1 Power. Legs that clear what others need a run-up for." }
+      - { text: The Second Watch, does: "+1 Power. The half that's awake while the other half sleeps." }
+    assets:
+      - text: The Molythia Wall
+        does: >-
+          Nobody's taken it in living memory. Once a session, anyone behind it
+          holds against anything.
+    agendas:
+      - text: Double the toll on Inkhal's caravans
+        die: 6
+        at: inkhal
+        then: >-
+          Inkhal pays double to go north, and the Marches' walls are mended for
+          a generation.
+    pub:
+      - { text: Poor company on the road and the best on a wall, kind: bond }
+    mor:
+      - { text: Twelve hours' sleep and no arguing about it, kind: bond }
+    loy:
+      - { text: The garrisons trust the Wallward with their sleep, kind: bond }
+    threads:
+      - { to: inkhal, tie: rival, text: Inkhal's caravans slip through while we sleep }
+      - { to: echily, tie: debt, text: Echily owes us a winter behind our walls }
+    secret:
+      tag: Sold Sleep
+      more: >-
+        One of the Marches' wall-captains sells Inkhal the hours his garrison
+        sleeps, and its smugglers go through without paying a thing.
+      ways:
+        - A toll book that's short on the same nights every month
+        - A wall-captain with new silver
+
+  - key: inkhal
+    kind: east
+    size: city
+    seat: inkhal
+    name: The Free City of Inkhal
+    about: >-
+      A free city in the heat of the far south-east, where everyone sleeps
+      through the day and lives in the cool of the night. It
+      works through night markets, couriers and not being seen. It sits in
+      Inkhal.
+    want: Every caravan in the east paying its way through Inkhal's night markets.
+    face: >-
+      Mistress Okal, who chairs the Night Council and hasn't been seen by
+      daylight in forty years.
+    faceOf: okal
+    res:
+      - { text: Night Trade, x: 2 }
+      - Salt Pans
+      - Spice Gardens
+      - Market Dues
+    people:
+      - { text: The Night Watch, does: "+1 Power. Their colour matches whatever they lie against, so a still one simply isn't there." }
+      - { text: Caravan Guards, does: "+1 Power. Night eyes and leathery skin, and they've walked every road in the east." }
+    assets:
+      - text: The Night Markets
+        does: >-
+          Every trade in the east goes through them after dark. Once a downtime,
+          Inkhal sells anything to anyone.
+      - text: The Couriers
+        does: >-
+          They carry every letter in the east. Once a session, Inkhal knows what
+          someone wrote.
+      - text: The Northern Road
+        does: >-
+          Caravans north through the Marches' passes, which the Marches won't
+          open without a toll Inkhal won't pay.
+        need: true
+        from: polythusian-marches
+    agendas:
+      - text: Open the Marches' passes for nothing
+        die: 4
+        at: polythusian-marches
+        then: >-
+          Inkhal's caravans go north free, and the Marches lose the toll that
+          feeds them.
+      - text: Sell the empire what the couriers read
+        die: 6
+        at: alysta
+        then: >-
+          Alysta knows everything written in the east, and Inkhal's rich on
+          it.
+    pub:
+      - { text: Inkhal keeps other hours than everyone, kind: bond }
+    mor:
+      - { text: We sleep through days that'd kill anyone else, kind: bond }
+    loy:
+      - { text: The Night Council keeps the city cool and rich, kind: bond }
+    threads:
+      - { to: polythusian-marches, tie: rival, text: The Marches tax our caravans to death }
+      - { to: montia, tie: debt, s: strained, text: Montia's eastern holding still owes us a winter's grain }
+    secret:
+      tag: Every Letter Read
+      more: >-
+        Inkhal's couriers copy every letter they carry, and the Night Council
+        sells the copies to whoever pays, Alysta first.
+      ways:
+        - A courier's copy book
+        - A letter that arrived resealed
+
+  # ── The orders
+
+  - key: order-of-the-seven
+    kind: order
+    size: small
+    seat: the-palace
+    name: The Order of the Seven
+    about: >-
+      A handful of rebels who still keep the Seven's ways, meeting in secret
+      inside the emperor's own palace. It works through servants, keys and
+      keeping quiet. It sits in the palace in Alysta.
+    want: The Seven honoured in Alysta again, starting under the emperor's own roof.
+    face: >-
+      Halden Moor, the palace's keeper of keys, who's opened every door in it
+      since he was a boy.
+    faceOf: halden-moor
+    res:
+      - Smuggled Texts
+      - Servants' Wages
+    people:
+      - { text: Palace Servants, does: "+1 Power. Cooks, grooms and pages who carry a virtue a day where nobody's looking." }
+    assets:
+      - text: Every Key in the Palace
+        does: >-
+          Once a session, the Order gets someone into the palace, or out of it,
+          unseen.
+    agendas:
+      - text: Bring the Seven's worship back to Alysta
+        die: 2
+        at: alysta
+        then: >-
+          The ban's lifted, and the Seven's statue is mended where everyone has
+          to walk past it.
+    mor:
+      - { text: We meet under his roof and he hasn't found us, kind: bond }
+    loy:
+      - { text: Six doors used and the seventh kept shut, kind: bond }
+    threads:
+      - { to: alysta, tie: rival, text: The emperor's ban is aimed at us }
+      - { to: montia, tie: ally, text: Montia's pilgrims bring us the texts }
+      - { to: soulless, kind: hostile, text: Someone's reading the Archive's visitor log }
+    secret:
+      tag: They Know What He Is
+      more: >-
+        The Order knows the emperor's Alysta, the soul the Seven set to guide
+        people, and it meets in his palace hoping he'll remember why.
+      ways:
+        - A palace cook who picks a virtue at breakfast
+        - Sister Ilva, who feeds the Order's runners
+    note: >-
+      If the emperor knows they're there, he's never said.
+
+  - key: standing-stones
+    kind: order
+    size: local
+    seat: the-standing-stones
+    name: The Standing Stones
+    about: >-
+      A monastery in the Soth highlands that takes no coin, where half the
+      awakened in the north trained. It works through trials, favours and the
+      work. It sits in the Standing Stones.
+    want: Every soul that wants to open taught how, and every debt to the Stones paid.
+    face: >-
+      Abbess Hild, who takes no coin and forgets no favour.
+    faceOf: hild
+    res:
+      - { text: Favours Owed, x: 2 }
+      - Students' Labour
+      - Highland Barley
+    people:
+      - { text: Awakened Monks, does: "+1 Power. Eyes that glow when they work, and some whose whole arm does." }
+      - { text: Old Students, does: "+1 Power. Soul-workers across the north who trained here, and come when they're called." }
+    assets:
+      - text: The Trials
+        does: >-
+          No coin, only favours, trials and a share of the work. Once a
+          downtime, the Stones call in a favour from anyone who trained there.
+    agendas:
+      - text: Find the students who went south and stopped writing
+        die: 4
+        at: alysta
+        then: >-
+          The Stones know who took their students, and everyone who owes them
+          is asked to help get them back.
+    pub:
+      - { text: Half the north's awakened trained here, kind: bond }
+    mor:
+      - { text: "Discipline and honest self-knowledge, never blood", kind: bond }
+    loy:
+      - { text: Every student swore to the Stones, kind: bond }
+    threads:
+      - { to: alysta, tie: rival, text: Alysta's made what we teach a crime }
+      - { to: soths, tie: ally, text: The Soths have always let us be }
+      - { to: ezkian-union, tie: ally, text: The Union takes the students who want books }
+    secret:
+      tag: The Students Who Went Quiet
+      more: >-
+        Seven students the Stones sent south to Alysta in the last ten years
+        stopped writing, and Abbess Hild's sure someone took them.
+      ways:
+        - The abbess's list of names
+        - A student's last letter, from Verrant Docks

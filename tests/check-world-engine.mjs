@@ -98,8 +98,8 @@
 //    check passes with a fallback in under 1 founding in 20, the founding's
 //    threads are all in the web, every faction's got a Face and a Secret, and
 //    a founder's Loyalty is on its card.
-// 10. A whole world (stage 12 of notes/builder-plan.md): the made-up one in
-//    tests/worlds/ passes, and 35 ways of breaking it are each a problem that
+// 10. A whole world (stages 12 and 15 of notes/builder-plan.md): the made-up
+//    one in tests/worlds/ passes, and 39 ways of breaking it are each a problem that
 //    says so and never come out as a world: a card that isn't whole, too long
 //    or holds what it can't, Power or resources past its size, people who
 //    don't add Power or a thing that does, Appendix B's people as a thing, a
@@ -109,10 +109,13 @@
 //    name or asset, a kind or size there isn't, an agenda at nothing or at a
 //    faction that isn't there, a mini faction's outcomes and Loyalty, a thread
 //    toward nobody, nothing strange, and history in no age, out of order, too
-//    long, too much of it or an age with nothing in it. A folder that isn't
-//    laid out right says so. Then every world in content/worlds/ passes, every
-//    card goes onto a board whole, it fits in a world with room to spare, and
-//    its page draws every faction and every line of history.
+//    long, too much of it or an age with nothing in it, no line saying whose
+//    it is or no notices, notices on a world of Mo's own, and a recipe's dial
+//    there isn't. A folder that isn't laid out right says so. Then every world
+//    in content/worlds/ passes (Night City and Abnu), every card goes onto a
+//    board whole, it fits in a world with room to spare, its page draws every
+//    faction and every line of history, and Abnu's molefolk are named only
+//    where the crew can't read it before they're found.
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -1378,6 +1381,12 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       ["a debt with no bond back", (w) => (w.files.factions.factions[4].threads = w.files.factions.factions[4].threads.filter((t) => t.to !== "night-boats")), /debt The Market Gang has no bond thread back/],
       ["people from Appendix B as a thing", (w) => w.files.factions.factions[0].assets.push({ text: bookIn.assets.find((a) => a.power).text, does: "They stand about." }), /is people in Appendix B, so it's under people/],
       ["a Secret's tag with a full stop", (w) => (w.files.factions.factions[0].secret.tag = "The money's gone."), /Secret's tag starts with a capital and has no full stop/],
+      // Someone else's world says whose it is with their notices, and one of
+      // Mo's own (Abnu) has neither.
+      ["no line saying whose it is", (w) => delete w.world.whose, /world\.yaml has no whose/],
+      ["no notices", (w) => (w.world.notices = []), /has no notices under the line saying whose it is/],
+      ["a world of Mo's own with notices", (w) => (w.world.own = true), /says it's Mo's own, so it has no line saying whose it is and no notices/],
+      ["a recipe setting a dial there isn't", (w) => (w.world.years[w.year].recipe.dials = { spooky: 2 }), /recipe sets spooky to 2/],
     ];
     let broken = 0;
     for (const [what, change, wanted] of breaks) {
@@ -1415,6 +1424,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   const real = readWorldsDir("content/worlds");
   for (const p of real.problems) note(`content/worlds: ${p}`);
   yes(real.src.some((w) => w.universe === "night-city" && w.year === "2077"), "content/worlds has no Night City, 2077");
+  yes(real.src.some((w) => w.universe === "abnu" && w.year === "1000"), "content/worlds has no Abnu, a thousand years after the Sundering");
   for (const w of real.src) {
     const got = compileWorld(w, bookIn);
     for (const p of got.problems) note(`${w.universe} ${w.year}: ${p}`);
@@ -1449,6 +1459,22 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     const told = story.replace(/<[^>]+>/g, "");
     for (const l of world.history) yes(told.includes(esc(l.text)), `${world.id}'s page leaves out a line of How it came to be: ${l.text.slice(0, 60)}`);
     for (const html of [board, story, web.pic, web.panel]) if (/undefined|NaN|\[object/.test(html)) note(`${world.id}'s page has undefined, NaN or an object written into it`);
+    // Abnu's Mo's own, with no line saying whose it is or notices, and its
+    // molefolk are the secret faction (notes/abnu-canon.md, Claude's call
+    // 16): no other card names them or Melammu anywhere the crew reads
+    // before they're found, only in threads, Secrets and her note, and every
+    // line of How it came to be that does is hers.
+    if (world.universe === "abnu") {
+      yes(world.own && !world.whose && !world.notices.length, "abnu: isn't Mo's own, or has a line saying whose it is or notices");
+      const hidden = /\bmolefolk\b|\bmelammu\b/i;
+      for (const f of world.factions.filter((x) => x.key !== "molefolk")) {
+        const c = f.card;
+        const open = [c.about, c.want, c.face, ...c.res.map((r) => r.text), ...c.assets.flatMap((a) => [a.text, a.does]), ...c.agendas.flatMap((a) => [a.text, a.then]), ...["pub", "mor", "loy"].flatMap((l) => c[l].map((t) => t.text))];
+        for (const t of open) if (hidden.test(t)) note(`abnu: ${c.name} names the molefolk where the crew could read it: ${t.slice(0, 60)}`);
+      }
+      for (const l of world.history) if (hidden.test(l.text) && !l.hers) note(`abnu: a line of How it came to be names the molefolk and isn't hers: ${l.text.slice(0, 60)}`);
+      yes(world.factions.some((f) => f.key === "molefolk" && f.card.secret), "abnu: the molefolk aren't on the board with their Secret");
+    }
     console.log(`   ${world.id}: ${world.factions.length} factions on a board, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k brought in, its page drawn, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
   }
 }

@@ -1,0 +1,21 @@
+# Abnu: Mo's own setting, a whole world for playing Zi'Dara there (stages 15
+# and 16 of notes/builder-plan.md), written from notes/abnu-canon.md and
+# nothing else. It's his, so it says so (own), with no line saying whose it
+# is and no notices.
+# scripts/worlds.mjs reads it, and says at its top how a world's written.
+id: abnu
+name: Abnu
+own: true
+kinds:
+  west: The west
+  sea: The middle sea
+  east: The east
+  order: The orders
+years:
+  1000:
+    title: Abnu, a thousand years after the Sundering
+    when: >-
+      A thousand years after the Sundering, not long after the emperor banned
+      the Seven's worship outright, and two nights after a dock-master at
+      Verrant read a manifest instead of signing it.
+    recipe: { region: world, era: renaissance, twist: magic, dials: { strange: 0 } }

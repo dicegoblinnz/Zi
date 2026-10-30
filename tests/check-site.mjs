@@ -65,9 +65,10 @@ const PAGES = [
   "/deal/", "/deal/?region=world&genre=medieval&factions=12&seed=ash-lantern-ford", "/deal/?deck=1&seed=ash-lantern-ford",
   // The table screen with no code yet, and with one that can't be right.
   "/table/", "/table/#not-a-code",
-  // A whole world (stage 12 of notes/builder-plan.md): the board with a
-  // faction open, the web and How it came to be.
+  // The whole worlds (stages 12 and 15 of notes/builder-plan.md): the board
+  // with a faction open, the web and How it came to be.
   "/worlds/night-city/#f-arasaka", "/worlds/night-city/?tab=web", "/worlds/night-city/?tab=history",
+  "/worlds/abnu/#f-alysta", "/worlds/abnu/?tab=web", "/worlds/abnu/?tab=history",
 ];
 // A character saved on the phone, so a sheet gets checked like any other page.
 // Its hash is blank, so the sheet shows its "changed in the rules" note too.
@@ -307,10 +308,15 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   await context.close();
 }
 
-// A whole world on /worlds/ (stage 12 of notes/builder-plan.md): out of
-// search and off phones, its line saying whose it is and both notices, the
-// kinds and Find, a name opening its card, the web's tap, and How it came to
-// be by age, at 390 in light and 320 in dark.
+// The whole worlds on /worlds/ (stages 12 and 15 of notes/builder-plan.md):
+// out of search and off phones, Night City's line saying whose it is and
+// both notices, and Abnu, Mo's own, with neither, then for each the kinds and
+// Find, a name opening its card, the web's tap, and How it came to be by age,
+// at 390 in light and 320 in dark.
+const WORLDS = [
+  { slug: "night-city", search: "Arasaka", whose: /CD Projekt/, notices: [/Homebrew Content Policy of R\. Talsorian Games/, /CD PROJEKT RED/], kind: ["gang", "Gangs"], find: "arasaka", open: "militech", picks: { maelstrom: "Maelstrom", militech: "Militech" } },
+  { slug: "abnu", search: "Xurux", whose: null, notices: [], kind: ["east", "The east"], find: "xurux", open: "montia", picks: { soths: "The Soths", montia: "Montia" } },
+];
 {
   const sw = await readFile(join(DIST, "sw.js"), "utf8").catch(() => "");
   if (!sw) note("worlds: no sw.js in the build");
@@ -318,50 +324,54 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   const context = await browser.newContext({ viewport: { width: 390, height: 860 } });
   await sealed(context);
   const page = await context.newPage();
-  await page.goto(BASE + "/search/?q=Arasaka");
-  await page.waitForSelector(".pagefind-ui__message", { timeout: 10000 }).catch(() => {});
-  await page.waitForTimeout(800);
-  if (await page.locator(".pagefind-ui__result").count()) note("worlds: search finds Night City");
+  for (const w of WORLDS) {
+    await page.goto(BASE + `/search/?q=${w.search}`);
+    await page.waitForSelector(".pagefind-ui__message", { timeout: 10000 }).catch(() => {});
+    await page.waitForTimeout(800);
+    if (await page.locator(".pagefind-ui__result").count()) note(`worlds: search finds ${w.slug}`);
+  }
   await context.close();
 }
-for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
-  const at = `worlds @${width} ${scheme}`;
+for (const w of WORLDS) for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
+  const at = `worlds ${w.slug} @${width} ${scheme}`;
   const context = await browser.newContext({ viewport: { width, height: 860 } });
   if (scheme === "light") await context.addInitScript(() => { try { localStorage.setItem("zi-theme", "light"); } catch (e) {} });
   await sealed(context);
   const page = await context.newPage();
   const errors = [];
   page.on("pageerror", (e) => errors.push(String(e)));
-  await page.goto(BASE + "/worlds/night-city/");
+  await page.goto(BASE + `/worlds/${w.slug}/`);
   if ((await page.getAttribute('meta[name="robots"]', "content")) !== "noindex") note(`${at}: not marked noindex`);
-  if (!/CD Projekt/.test(await page.textContent(".wn-whose"))) note(`${at}: the line saying whose it is doesn't name CD Projekt`);
+  const whose = await page.locator(".wn-whose").allTextContents();
+  if (w.whose ? !w.whose.test(whose.join(" ")) : whose.length) note(`${at}: the line saying whose it is ${w.whose ? `doesn't match ${w.whose}` : "is there, on a world of Mo's own"}`);
   const notices = await page.locator(".wn-foot p").allTextContents();
-  if (!notices.some((n) => /Homebrew Content Policy of R\. Talsorian Games/.test(n)) || !notices.some((n) => /CD PROJEKT RED/.test(n))) note(`${at}: the notices at the foot aren't both there`);
+  if (w.notices.length ? !w.notices.every((re) => notices.some((n) => re.test(n))) : (await page.locator(".wn-foot").count())) note(`${at}: the notices at the foot ${w.notices.length ? "aren't all there" : "are there, on a world of Mo's own"}`);
   const cards = await page.locator(".wn-f").count();
-  // The gangs alone, then Find, then every one again.
-  await page.click('.wn-kind[data-kind="gang"]');
-  const gangs = await page.locator('.wn-f:not([hidden])').evaluateAll((els) => els.map((e) => e.dataset.kind));
-  if (!gangs.length || gangs.some((k) => k !== "gang")) note(`${at}: Gangs shows ${gangs.join(", ") || "nothing"}`);
+  // One kind alone, then Find, then every one again.
+  await page.click(`.wn-kind[data-kind="${w.kind[0]}"]`);
+  const kinds = await page.locator('.wn-f:not([hidden])').evaluateAll((els) => els.map((e) => e.dataset.kind));
+  if (!kinds.length || kinds.some((k) => k !== w.kind[0])) note(`${at}: ${w.kind[1]} shows ${kinds.join(", ") || "nothing"}`);
   await page.click('.wn-kind[data-kind=""]');
-  await page.fill("#wn-find", "arasaka");
+  await page.fill("#wn-find", w.find);
   const found = await page.locator(".wn-f:not([hidden])").count();
-  if (!found || found === cards) note(`${at}: Find for arasaka shows ${found} of ${cards}`);
+  if (!found || found === cards) note(`${at}: Find for ${w.find} shows ${found} of ${cards}`);
   await page.fill("#wn-find", "");
   // A name in an open card opens that faction's card.
-  await page.click("#f-militech > summary");
-  const link = page.locator("#f-militech .wn-fb a.wn-ln").first();
+  await page.click(`#f-${w.open} > summary`);
+  const link = page.locator(`#f-${w.open} .wn-fb a.wn-ln`).first();
   const to = (await link.getAttribute("href"))?.slice(1);
   await link.click();
   const opened = to && (await page.waitForFunction((id) => { const d = document.getElementById(id); const top = d?.getBoundingClientRect().top; return d?.open && top >= 0 && top < innerHeight; }, to, { timeout: 3000 }).then(() => true, () => false));
-  if (!opened) note(`${at}: a name in Militech's card didn't open ${to} in view`);
+  if (!opened) note(`${at}: a name in ${w.picks[w.open]}'s card didn't open ${to} in view`);
   // The web: a faction's ties, picked from the list, then walked to a
   // neighbour's with a tap.
   await page.click('.wn-bar [data-tab="web"]');
   if (!(await page.locator("#wn-web-sec").isVisible())) note(`${at}: the web didn't show`);
-  const pick = (await page.inputValue("#wn-focus")) === "maelstrom" ? "militech" : "maelstrom";
+  const [one, two] = Object.keys(w.picks);
+  const pick = (await page.inputValue("#wn-focus")) === one ? two : one;
   await page.selectOption("#wn-focus", pick);
   const picked = await page.evaluate(() => [document.querySelector("#wn-panel .ww-h")?.textContent ?? "", document.querySelector("#wn-web .ww-node.is-sel")?.dataset.web ?? ""]);
-  if (picked[0] !== { maelstrom: "Maelstrom", militech: "Militech" }[pick] || picked[1] !== pick) note(`${at}: picking ${pick} showed ${picked.join(" and ") || "nothing"}`);
+  if (picked[0] !== w.picks[pick] || picked[1] !== pick) note(`${at}: picking ${pick} showed ${picked.join(" and ") || "nothing"}`);
   const next = await page.locator(`#wn-web [data-web]:not([data-web="${pick}"]):not([data-web="crew"])`).first().getAttribute("data-web");
   await page.click(`#wn-web [data-web="${next}"]`);
   if ((await page.inputValue("#wn-focus")) !== next) note(`${at}: tapping ${next} in the web didn't walk to its ties`);
@@ -373,7 +383,7 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   if (errors.length) note(`${at}: ${errors.join(" | ")}`);
   if (SHOTS && width === 390) for (const tab of ["board", "web", "history"]) {
     await page.click(`.wn-bar [data-tab="${tab}"]`);
-    await page.screenshot({ path: join(SHOTS, `worlds-${tab}-${width}-${scheme}.png`) });
+    await page.screenshot({ path: join(SHOTS, `worlds-${w.slug}-${tab}-${width}-${scheme}.png`) });
   }
   console.log(`${at}: ${cards} factions, the kinds, Find, a name, the web and How it came to be checked`);
   await context.close();

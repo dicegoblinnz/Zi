@@ -2,9 +2,10 @@
 // written whole rather than dealt, the way a campaign looks once it's set up
 // and running, read off content/worlds/ and checked here into
 // public/worlds/<universe>-<year>.json. Night City is the first (stages 12 to
-// 17), a fan-made world from the Cyberpunk universe, and the one place
-// CLAUDE.md lets another game be named. Nothing here goes into book.json, the
-// chapters, the sheets, search or the builder's tables.
+// 19), a fan-made world from the Cyberpunk universe, and the one place
+// CLAUDE.md lets another game be named. Abnu, Mo's own setting, is the second
+// (stages 15 and 16). Nothing here goes into book.json, the chapters, the
+// sheets, search or the builder's tables.
 //
 // How a world's written. Every word's plain text with plain apostrophes,
 // since the build makes them curly, and every key is lower case letters,
@@ -12,12 +13,15 @@
 //
 // content/worlds/<universe>/world.yaml, the universe:
 //   id, name     its key and its name (night-city, Night City)
+//   own          true for a world of Mo's own (Abnu), which has no whose and
+//                no notices. Every other world has both:
 //   whose        the line saying whose it is, in Mo's voice
 //   notices      the companies' own notices, word for word, under it
 //   kinds        the kinds of faction the page sorts by: { key: name }
-//   years        { <year>: { title, when, recipe: { region, era, twist } } },
-//                when being where in the year it starts, and recipe the
-//                builder's mix it deals at (Add a faction, from stage 14)
+//   years        { <year>: { title, when, recipe: { region, era, twist,
+//                dials? } } }, when being where in the year it starts, and
+//                recipe the builder's mix it deals at (Add a faction, from
+//                stage 14), with any dials it sets the way a frame does
 //
 // content/worlds/<universe>/<year>/factions.yaml, the board: { factions: [ ... ] }
 //   key, kind, size   its key, one of the kinds, and small, local, city or great
@@ -66,6 +70,7 @@ export const AGES = [1, 2, 3];
 export const TIES = ["rival", "ally", "debt"];
 const KEY = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const KINDS = ["bond", "hostile"];
+const DIALS = ["tense", "strange", "rich", "ruled"];
 const FACTION_FIELDS = new Set(["key", "kind", "size", "seat", "name", "about", "want", "face", "faceOf", "note", "res", "people", "assets", "agendas", "pub", "mor", "loy", "threads", "secret", "strange", "mini"]);
 const BOND_LISTS = ["pub", "mor", "loy"];
 const BOND_NAMES = { pub: "Public Sentiment", mor: "Morale", loy: "Loyalty" };
@@ -143,12 +148,22 @@ export function compileWorld({ universe, year, world, files }, book) {
   const id = `${world.id ?? universe}-${year}`;
   if (world.id !== universe) say(`world.yaml's id is ${world.id ?? "missing"}, but its folder's ${universe}`);
   const yr = world.years?.[year] ?? {};
-  for (const k of ["name", "whose"]) if (!String(world[k] ?? "").trim()) say(`world.yaml has no ${k}`);
-  if (asList(world.notices).filter((n) => String(n).trim()).length < 1) say("world.yaml has no notices under the line saying whose it is");
+  if (!String(world.name ?? "").trim()) say("world.yaml has no name");
+  // Someone else's world says whose it is with their notices under it, and a
+  // world of Mo's own says so and has neither.
+  const notices = asList(world.notices).filter((n) => String(n).trim()).length;
+  if (world.own != null && world.own !== true) say(`world.yaml's own is ${JSON.stringify(world.own)}, and it's true for a world of Mo's own or left out`);
+  if (world.own === true) {
+    if (String(world.whose ?? "").trim() || notices) say("world.yaml says it's Mo's own, so it has no line saying whose it is and no notices");
+  } else {
+    if (!String(world.whose ?? "").trim()) say("world.yaml has no whose");
+    if (notices < 1) say("world.yaml has no notices under the line saying whose it is");
+  }
   if (!String(yr.title ?? "").trim()) say(`${year} has no title`);
   if (!String(yr.when ?? "").trim()) say(`${year} doesn't say where in the year it starts (when)`);
   const recipe = yr.recipe ?? {};
   if (!recipe.region || !recipe.era) say(`${year} has no recipe (its region and era for Add a faction)`);
+  for (const [k, v] of Object.entries(recipe.dials ?? {})) if (!DIALS.includes(k) || ![0, 1, 2].includes(v)) say(`${year}'s recipe sets ${k} to ${v}, and its dials are ${DIALS.join(", ")}, each 0, 1 or 2`);
   const kinds = world.kinds && typeof world.kinds === "object" ? world.kinds : {};
   if (!Object.keys(kinds).length) say("world.yaml has no kinds of faction to sort the board by");
 
@@ -377,7 +392,7 @@ export function compileWorld({ universe, year, world, files }, book) {
       }
     }
   }
-  if (wanting.size) notes.push(`agendas are after ${plural(wanting.size, "place", "places")} that aren't anyone's seat, for stage 13 to write: ${[...wanting].join(", ")}`);
+  if (wanting.size) notes.push(`agendas are after ${plural(wanting.size, "place", "places")} that aren't anyone's seat, for its places stage to write: ${[...wanting].join(", ")}`);
   // Something strange.
   if (!factions.some((f) => f.strange)) say("nothing on the board's strange (strange: true on a faction, an asset or a Secret)");
 
@@ -414,6 +429,7 @@ export function compileWorld({ universe, year, world, files }, book) {
     universe,
     year: Number(year),
     name: curl(world.name),
+    own: world.own === true,
     title: curl(yr.title),
     when: curl(yr.when),
     whose: curl(world.whose),
