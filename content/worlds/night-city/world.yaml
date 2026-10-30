@@ -1,7 +1,8 @@
 # Night City: a whole world from the Cyberpunk universe, fan-made, for
-# playing Zi'Dara there (stages 12 to 17 of notes/builder-plan.md). It's the
-# one place CLAUDE.md lets another game be named. Every word's Mo's voice,
-# written fresh, bar the two notices, which are the companies' own words.
+# playing Zi'Dara there (stages 12 to 14 and 17 to 19 of
+# notes/builder-plan.md). It's the one place CLAUDE.md lets another game be
+# named. Every word's Mo's voice, written fresh, bar the two notices, which
+# are the companies' own words.
 # scripts/worlds.mjs reads it, and says at its top how a world's written.
 id: night-city
 name: Night City
