@@ -4,6 +4,8 @@ A builder that deals a whole world, faction by faction, from tables Mo's approve
 
 In code it's the world builder, never just the builder, since `builder.js` is the character builder: its files are `world-` names.
 
+It also holds Night City (stages 12 to 17, from 30 Oct): a whole campaign world written from the official Cyberpunk universe rather than dealt, and the first world that comes into a campaign whole. It's Mo's one exception to CLAUDE.md's rule about naming other games, and A whole world, in the brief, says what it is and what it may never do.
+
 ## Decisions
 
 Mo's calls (27, 28 and 30 Oct):
@@ -31,6 +33,10 @@ Mo's calls (27, 28 and 30 Oct):
 - **The tension's a turn of its own** (30 Oct, stage 9): in the room, right after what holds it together, the next player rolls the d12, so the asking's four turns and a fourth player gets one too.
 - **The asking goes into Build the world till the ground's built** (30 Oct, stage 9): once the crew's answered it, one tap on her phone takes it into Build the world, the crew's answers locked, so the same session carries on with the ground and the deck there.
 - **Renaissance names are a wide mix** (30 Oct, stage 10): Italian, French, Spanish, Dutch, German and English on every board, Town to World.
+- **Night City, 2077, a whole example campaign** (30 Oct): the official Cyberpunk universe, lore accurate, starting in Night City in 2077, made into a finished Zi'Dara world, the way a campaign looks once it's set up and running. Every faction as the rules make one (the corps, the gangs, the fixers, the law and the rest), each card whole and adding up with its agendas, Face and Secret, and the web between them: rivals, allies, debts, blocked needs, bonds, threads and mini factions. Places and people with everything a page holds (the districts, the places that matter and the people who run them), How it came to be across the three ages from the setting's own history, and a map of the city with a pin on every place and seat. Other years of the same universe come later, so it's built for another year to be added.
+- **Naming the game, here only** (30 Oct): Night City breaks CLAUDE.md's rule about naming other games, by Mo's call, and the rule stays everywhere else.
+- **Cyberpunk is CD Projekt's and R. Talsorian Games'** (30 Oct): the lore's checked on the web, and every word's written fresh in Mo's voice, never copied (no text, maps, art or logos). The map's drawn in code, a map of the districts of our own, never traced from the game's and never from an image generator. It stays out of the book, the printed sheets and search, like `/deal/` and `/kit/`, with a line saying it's fan-made and who owns Cyberpunk, and it isn't linked from anywhere public till Mo says so.
+- **The builder's tables stay Zi'Dara's** (30 Oct): Near future and Chrome are their own stage, with names of their own, and nothing from Night City goes into them.
 
 ## Calls Claude made
 
@@ -114,12 +120,20 @@ For Mo to say otherwise.
 - **A twist says the eras it's written for** (stage 10, told to Mo): `eras` on its pack, and on a row or a moment that only fits some of them, the way stage 4 said it would go. A twist only deals with an era it's written for, so Magic's Renaissance rows never come up in Fantasy.
 - **`print` and `powder` are core's newest tags** (stage 10), so presses, pamphlets and guns find each other.
 - **Two frames brought in by as many factions** (stage 10, told to Mo): Add a faction deals at the first one's, so Tuesday Lair, with Brinewake's four and the Steeplands' four, deals Brinewake's mix.
+- **A whole world is files of its own** (stage 12): `content/worlds/`, read by a script of its own into `public/worlds/`, never into `book.json`, the chapters or the builder's tables, so keeping it out of the book is how it's built, not something to remember.
+- **Every faction that acts in the city** (stage 12): the corps with a hand in Night City's streets, every gang, every district's fixer, the law, and the rest (the medics, the net's police, the news, and what's past the Blackwall), around thirty cards. A brand that only sells in the city isn't a faction. A board that big runs on the book's own rule: only telegraph the factions the crew can reach, and the rest move off-screen.
+- **V's left out** (stage 12): V's the game's player's own, so the world's people are everyone else, and nothing on it needs V to happen.
+- **Running, not fresh** (stage 12): the board's in the middle of things, with agendas part way up, threads strained, a need or two unpaid and mini factions already made, the way a campaign looks once it's running.
+- **It fits with room to spare** (stage 12): brought in whole, `was` copies and all, a year's world is under 450,000 of the 700,000 characters a world holds, so she's got room for her own. If it won't fit, small places go before any faction does.
+- **Both companies' notices go on it** (stage 12): R. Talsorian's Homebrew Content Policy asks for its notice on fan work, and CD Projekt's fan content guidelines ask for theirs, so both go under the line saying whose it is, in the companies' own words, the only words on it that aren't Mo's. The title's *Night City, 2077*, since R. Talsorian's policy keeps its games' titles out of a fan work's title.
+- **The map's drawn on every phone, never a picture** (stage 13): shapes in the map's own coordinates, drawn as SVG in the site's tokens, so it follows the light switch, stays sharp at any zoom and needs nothing put up. In a campaign (stage 14) it's a new kind of map with its shapes kept beside it, and the sketch (stage 23) can be one too.
 
 ## How a stage goes
 
 - One stage a chat, with the prompt at the end of this plan. The stage is the first in The stages not marked built.
 - A stage is marked built by ending its first line with the date it went to `main`, like *Built 30 Oct 2026.*, in the same merge.
-- A stage that writes tables or changes a rule sends Mo what to judge in one message (the `/deal/` link on the Preview, for tables), changes only what he names, and waits for his yes in the same chat before it merges.
+- A stage that writes tables, writes a world or changes a rule sends Mo what to judge in one message (the `/deal/` link on the Preview, for tables, and the world's page for a world), changes only what he names, and waits for his yes in the same chat before it merges.
+- The Night City stages (12 to 17) are built from A whole world, in the brief, and A world, in Writing tables, so each can be built from this plan alone.
 - Every stage writes what it built into CLAUDE.md the way the worlds stages did: a paragraph under The site for what it built and where, the Live since and Still to come lines, and any new part of the tests in the list that must pass.
 - A call about how the builder works goes in Calls Claude made, here. A call about a rule goes in `notes/to-confirm.md`.
 - The founding's stages use `durable-objects` for the live table, and every stage with a phone test uses `webapp-testing`.
@@ -216,6 +230,23 @@ The crew builds the world with her, live on everyone's phone, as session zero. I
 - **The sketch** comes later, in the ground of both ways of building: seats placed on a blank map, with coast, river, mountain, forest and road strokes. When the build's done, her phone draws it into a picture that goes up the way her pictures do, as one of the world's maps with a pin at each seat opening its page.
 - **Her own picture** already takes pins to the seat pages.
 
+### A whole world: Night City
+
+A world written whole rather than dealt, the way a campaign looks once it's set up and running, that a GM brings into a campaign in a tap. The first is Night City in 2077, from the official Cyberpunk universe (Mo's call, 30 Oct). A universe can hold more than one year, and each year's a world of its own.
+
+- **Whose it is.** Cyberpunk belongs to CD Projekt and R. Talsorian Games. The lore's checked on the web, and every word's Mo's voice, written fresh: nothing copied or closely reworded, and no text, maps, art or logos of theirs. The map's drawn in code as a map of our own, never traced from the game's and never from an image generator. Its title's *Night City, 2077*, and Cyberpunk's named only in the line saying whose it is. That line, in Mo's voice, says it's fan-made, free and nothing to do with them, and the two notices go under it in the companies' own words (R. Talsorian's Homebrew Content Policy notice and CD Projekt's fan work line, checked against their pages when it's written). It's kept out of the book, the printed sheets, the Learn deck, search and the builder's tables, and nothing links to it till Mo says so.
+- **The files.** `content/worlds/night-city/`: `world.yaml` for the universe (its name, the line and the notices, its years, what every year shares, like the coast and the bay, and the keys of anyone or anywhere in more than one year), and a folder for each year, `2077/` first, with `factions.yaml` and `history.yaml` (stage 12), then `places.yaml`, `people.yaml` and `map.yaml` (stage 13), written with plain apostrophes like the tables. `scripts/worlds.mjs` reads and checks them into `public/worlds/night-city-2077.json` after `build-content.mjs`, since it needs Appendix B's assets out of `book.json`, and stops the build on anything wrong. Its top says how a world's written.
+- **A faction** is written the way the World screen keeps one (`board.js`), by a key: its name, what it is with where it sits (`about`, the way the builder writes it: "It sits in Arasaka Tower."), Want, Face (and the key of the person who's its Face), its people who turn up and other assets with what each does, resources with any multipliers, up to two agendas at their dice with what happens when one does, its bonds (Public Sentiment, Morale and Loyalty), its threads toward other factions by their keys (none toward the crew, who aren't there yet), its Secret (a hidden tag in capitals and a line) and her note. A mini faction names its maker and its two outcomes, with a Loyalty thread toward it. Each card's checked the way the book's are (`worldsFrom()`: Power is 1 step plus its people, and an asset named like one of Appendix B's agrees with it about adding Power), then goes through `factionOf()`, and the build stops if anything's cut short or dropped, so every card comes in whole.
+- **The web** passes the checks a dealt board passes (`CHECKS` in `world-engine.js`, written again over the board's own shape): a rival for every faction (a hostile thread each way), a need blocked (an asset with nothing paying for it, and the faction with the resource to spare holding a hostile thread across the trade), a Secret naming another faction, no two factions holding the same asset that does one thing, every agenda aimed at something on the board, and something strange. An ally's a bond each way, and a debt's a bond whose words say who owes what.
+- **How it came to be** is the record's history (`world-record.js`): lines in the past tense from the setting's own history, by age (long ago, in living memory, this last year), inside the record's 80, each saying one thing that happened to the city or between factions, with the cards' and pages' names so they link. A line that would give away a Secret is hers.
+- **A place or a person** is a page the way `pages.js` keeps one, with everything a page holds. A place has its name and other names, what it is, its Challenge, what it's like, who's here, the ground, the stakes, a scene clock, a complication, telegraphs, hooks, Elsewhere, its Secret and her note. A person has their name and other names, who they are, what you notice first, what they want, their Challenge and tags as a threat off the Threat Builder, a voice, telegraphs, hooks, their Secret (their hidden tag) and her note. The districts, their parts and the places that matter are places, every faction's seat among them, and every Face is a person. Telegraphs read the way `readAim()` in `aims.js` reads a page's, so Telegraph it aims them. Every name on a card, a page or a line of history that's another's links to it (`linker()`), and a check finds names that should and don't.
+- **The map** is `map.yaml`: shapes in its own coordinates (the coast and the water, the districts and their parts, the main roads and the landmarks you'd steer by), and a pin for every place and seat where it is, inside its district, within the 60 pins a map holds (`MMAX.pins` in `maps.js`). `src/worlds/draw-map.js` is pure and draws it as SVG in the site's tokens, so the page, the World screen and the tests all draw it the same way, in either theme and sharp at any zoom. Pins' names wait for room when they'd crowd, districts first.
+- **Its size.** Brought in whole, `was` copies and all, a year's world comes to under 450,000 of the 700,000 characters a world holds (`MAX_DOC` in `src/worker/world.js`), and the build stops if it doesn't.
+- **The page** is `/worlds/night-city/` (`src/pages/worlds/night-city.astro` and `src/worlds/`), kept out of search and off phones like `/deal/` and `/kit/`, with the line saying whose it is at the top and the notices at the foot. It's a year at a time (2077, with a switch once there's another): the board drawn the way the World screen holds a faction, the web (`drawWeb()`), How it came to be by age, then (from stage 13) places and people with Find, and the map in `mapview.js`, moved and zoomed in one hand, every pin opening its page. It's where Mo judges a world, on the Preview.
+- **Bringing it in** (stage 14). On the World screen, a world with nothing on it yet (no factions, pages or maps) offers the whole worlds beside the book's boards, to whoever Mo's said may have them (Decisions). One tap brings it in, everything hidden from the crew and hers to change: the factions onto the board and the places and people into the pages, each keeping what the world's file said as `book` (`from` the world's id), so a later change to the file gives her the note the book's changes give, How it came to be into the record (`doc.build`, with the world's id, its recipe of Cyberpunk at City, its history and nothing dealt, so Add a faction says Cyberpunk's coming till stage 22 deals it), and the map. Undo on its note takes it all back off. It goes up in as many sends as it takes (200 changes and 200,000 characters to a send), the record last, the way Done sends a build.
+- **A drawn map** (stage 14) is a new kind in `maps.js`: no picture in the bucket, its shapes kept with it (`draw`, numbers and names only, checked on the Worker), drawn on every phone by `draw-map.js` in that phone's theme, so it reads offline from the world on the phone with nothing else kept. Pins and fog work on it the way they do on her pictures: a player gets it once she's shown it, with the pins she's shown, a pin under the fog stays hidden till its spot's uncovered, and their phone draws the fog solid over it, since there's nothing of hers in the drawing to keep from them.
+- **Another year** (stages 15 to 17): Mo's answers go here.
+
 ### Like the rest of the site
 
 One-handed on a phone at the table, in both themes, from 320 wide, and offline for anything already seen. Everything kept per campaign stays in it, checked on the server, and nothing crosses between campaigns. Building alone runs on her phone, so it works with no signal and goes up when there's one.
@@ -233,6 +264,7 @@ For every stage that writes or changes tables.
 - A line with a faction's name in a slot reads right whether the name's one or many, so the name never does something in the present tense: past tense, or the name after the verb (*the Hill Men stole our barges*, *we owe the Hill Men*, never *the Hill Men laughs at us*).
 - Draft the whole pack in one go, deal at least twenty boards on `/deal/`, and fix what repeats or reads flat before Mo sees it.
 - **The deck** (from stage 7): a moment's up to 25 words, an answer 1 to 4, and an answer's line of history up to 16, in the past tense, so How it came to be reads straight through. Both answers are things a faction would really do, and neither's plainly right. At least 60 moments in core and a dozen in each pack, a third in each age, every outcome on at least eight, every kind of faction on at least six, one in four starting or carrying on a chain, and one in eight strange. The build checks the counts. Play at least twenty decks on `/deal/` before Mo sees it.
+- **A world** (from stage 12): everything above that fits, in Mo's voice through `zi-voice`, and every word written fresh. The lore's checked on the web, the year's own source first where they disagree (the game for 2077, the tabletop books for the years they cover), and nothing's copied or closely reworded from anywhere. The setting's own names are the one exception to naming nothing from another game, and still no real company, brand or person goes in (CD Projekt's fan rules ask that too). A card or a page says what it is at this game's table: its dice, Challenges, tags and telegraphs in Zi'Dara's terms, never the other game's rules or numbers. Lines run the way the tables' do, a place's look or a Secret's rest is a short paragraph at most, and every entry earns its place with a reason to act, a hook or a rule. Read the whole year through on its page at 390 before Mo sees it, and fix what repeats or reads flat.
 
 `/deal/` (from stage 3) shows every table and deals sample boards from the current ones, a tap at a time, for any region and genre, kept out of search and off phones like `/kit/`. It's where Mo reads and judges a pack.
 
@@ -274,21 +306,38 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
 10. **Renaissance** (tables), with the Gilded Court's and Brinewake's mixes. Needs 4. *Built 30 Oct 2026.*
 11. **The founding: the ground and the founding.** Needs 9.
     - The dice pool for the seats, then her old powers, then the founders in reverse order with their questions, cards and threads, as the brief says.
-12. **Industrial and Steam** (tables), so Steampunk deals. Needs 3.
-13. **The founding: the strife.** Needs 7 and 11.
+12. **Night City, 2077: the board and How it came to be** (a world). Needs 6.
+    - CLAUDE.md's exception to naming other games, for Night City only, and the world's files and `scripts/worlds.mjs` with its checks, as A whole world in the brief says.
+    - `world.yaml`, and 2077's board at the start Mo picked (Decisions): every faction whole, the web, the mini factions, and How it came to be across the three ages.
+    - `/worlds/night-city/` with the board, the web and How it came to be, the line saying whose it is and both notices, for Mo to judge on the Preview.
+    - A new part of `tests/check-world-engine.mjs`: a small made-up world kept with the tests and never shipped, failing each check once, and Night City passing them all. `tests/check-site.mjs` checks the page with the rest, and that search and the service worker leave it out.
+13. **Night City, 2077: places, people and the map** (a world). Needs 12.
+    - The places (the districts, their parts and the places that matter, every seat among them) and the people who run them (every Face among them), with everything a page holds, and the map drawn in code with a pin on every place and seat, as the brief says.
+    - The page gets places and people, Find, and the map in one hand, every pin opening its page.
+    - The checks: every seat a place, every Face a person, names linking, every place pinned inside its district, and the size it all comes to brought in.
+14. **A whole world into a campaign.** Needs 13.
+    - Bringing it in on the World screen, as the brief says, to whoever Mo's said may have it, and the drawn map as a new kind in `maps.js`, with pins and fog on every phone.
+    - The note when the world's file changes something she brought in, the way the book's changes give one.
+    - A new part of `tests/check-accounts.mjs`: Night City brought in on Mo's phone in a few sends, nothing on a player's phone till it's shown, a faction, a district and its pin shown, the map drawn on the player's phone with fog lifted on it, offline, a made-up change to the world's file taken, Undo taking it all back off, nothing crossing between campaigns, and the screens at 390 in both themes.
+15. **Another year: the board and How it came to be** (a world). Needs 12.
+16. **Another year: places, people and the map** (a world). Needs 13 and 15.
+17. **Going to another year.** Needs 14 and 16.
+18. **Industrial and Steam** (tables), so Steampunk deals. Needs 3.
+19. **The founding: the strife.** Needs 7 and 11.
     - The tokens and the acts as the brief lists them, a raid rolled Power against Power, the old powers' acts as moments off the deck on her phone, the agendas climbing, the end, and a line of history for every act.
-14. **Modern** (tables), so Modern and Urban fantasy deal. Needs 4.
-15. **The founding: her pass and the hand-over.** Needs 8 and 13.
+20. **Modern** (tables), so Modern and Urban fantasy deal. Needs 4.
+21. **The founding: her pass and the hand-over.** Needs 8 and 19.
     - Her pass on her phone alone, the crew's friends and foes, the first job named, and the one tap that writes it all into the world, as the brief says, its history in How it came to be.
-16. **Near future and Chrome** (tables), so Cyberpunk deals. Needs 3.
-17. **The sketch.** Needs 15.
-    - Seats placed on a blank map in the ground, in both ways of building, made into one of the world's maps with a pin at each seat when the build's done, as the brief says.
-18. **Far future and the Stars** (tables), so Futuristic and Space fantasy deal, with Long Haul's mix. Needs 4.
-19. **The founding on the table screen.** Needs 15.
+22. **Near future and Chrome** (tables), so Cyberpunk deals. Needs 3.
+    - Names of its own, and nothing from Night City goes in (Mo, 30 Oct).
+23. **The sketch.** Needs 21.
+    - Seats placed on a blank map in the ground, in both ways of building, made into one of the world's maps with a pin at each seat when the build's done, as the brief says. Stage 14's drawn maps may suit it better than a picture.
+24. **Far future and the Stars** (tables), so Futuristic and Space fantasy deal, with Long Haul's mix. Needs 4.
+25. **The founding on the table screen.** Needs 21.
     - While the founding's on, the table screen shows the clock, the seats, the web growing and the history, built a field at a time in `screenOf()` like the rest of it, and never anything of hers.
-20. **Ruin and Dread** (tables), so Post-apocalyptic, Gothic horror and Dark fantasy deal, with Lanternfall's mix. Needs 12 and 14.
-21. **Ancient** (tables), so Ancient and Mythic deal. Needs 4.
-22. **When an agenda happens,** the builder deals its next agenda and its new asset or resource as cards to keep or swipe away, from the board as it stands then. Needs 5.
+26. **Ruin and Dread** (tables), so Post-apocalyptic, Gothic horror and Dark fantasy deal, with Lanternfall's mix. Needs 18 and 20.
+27. **Ancient** (tables), so Ancient and Mythic deal. Needs 4.
+28. **When an agenda happens,** the builder deals its next agenda and its new asset or resource as cards to keep or swipe away, from the board as it stands then. Needs 5.
 
 Later, when Mo says so: the paper version (the tables and both ways of building, printed), and the Oracle checking a guess before it's written (*the river city trades with the hold*, at Likely).
 

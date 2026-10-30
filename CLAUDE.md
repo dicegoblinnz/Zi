@@ -58,7 +58,7 @@ Write as Mo, teaching at the table with dice in hand. Use the `zi-voice` skill w
 - NZ spelling (armour, colour, favour, defence, centre).
 - Never em dashes, semicolons or exclamation marks in prose. No slogans, "not X, it's Y", rhythm triplets, punchline closers, mood-setting openers or filler words.
 - No "Mo's note" boxes or designer notes. The chapters say how the game works, never what changed (that's the change log's job).
-- Don't name other games, books, films or shows.
+- Don't name other games, books, films or shows. The one exception is Night City (`content/worlds/night-city/`, stages 12 to 17 of `notes/builder-plan.md`), by Mo's call on 30 Oct: a fan-made example world from the Cyberpunk universe, which names that universe's own people, places and companies there and nowhere else, and stays out of the book, the sheets, the Learn deck, search and the builder's tables.
 - Digits for dice and steps (a d8, 3 steps, 1 Aura, 1 Resolve).
 
 ## The Markdown
