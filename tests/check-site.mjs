@@ -442,7 +442,9 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   const context = await browser.newContext({ viewport: { width: 390, height: 860 } });
   await sealed(context);
   const page = await context.newPage();
-  await page.goto(BASE + "/search/?q=Xurux");
+  // Anunnaki's all through Abnu and nowhere in the book (search for Xurux
+  // turns up the X-Card).
+  await page.goto(BASE + "/search/?q=Anunnaki");
   await page.waitForSelector(".pagefind-ui__message", { timeout: 10000 }).catch(() => {});
   await page.waitForTimeout(800);
   if (await page.locator(".pagefind-ui__result").count()) note("worlds: search finds Abnu");
