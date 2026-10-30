@@ -422,6 +422,22 @@ Mo's map is `notes/abnu-map.png`, 2520 by 1335, made in a fantasy map generator.
 - Thelis has no town marked, since its halls are under the water.
 - The molefolk's home (Mo's pick) is inside the mountain where the Soths' and Alysta's border meets the east coast, round the inlet just south of Lubro, about 980,580 to 1090,670. The map shows nothing there, so its pin's the only mark.
 
+## What the board added (stage 15, 31 Oct 2026)
+
+Stage 15 wrote these where the canon was silent, and Mo said yes to all of it on 31 Oct, so they're canon now. The cards and lines themselves are in `content/worlds/abnu/1000/`.
+
+- **The Faces.** Chancellor Odile Garran runs Alysta's civil service and fronts the empire, so the emperor's a person of his own. Prince Emeric Sallow rules Orza from a darkened room every other day. Queen Aurea Pell of Montia has carried Justice every day since the ban. Councillor Maren Aldaz is the youngest of the Union's Nine. Hessa's the eldest at Niebali. The Warden of the Ledge speaks for Thelis. Speaker Sevra leads Cobria, Mistress Okal chairs Inkhal's Night Council, Highmother Neru leads Echily and Wallward Tamsk holds Molythia's wall. Harbourmaster Dagny Rusk runs Lubro. Halden Moor, the palace's keeper of keys, fronts the Order of the Seven, and Abbess Hild the Standing Stones. The master of Deepshaft Kel fronts Xurux, Queen Signe the Soths, and the molefolk's eldest, with no name, the molefolk.
+- **The molefolk.** Only Lubro's Rusk family knows they're there: a Rusk boat found their door two hundred years ago, and their rare stones go out through Lubro. The Soths are digging a new shaft into their mountain for the Ironhand Forge, and the molefolk keep filling it back in. Whatever's planted in Melammu's light grows a season in a night.
+- **Alysta.** Since the ban, Montia's captains won't carry imperial cargo east. The charity's amulets come from Xurux on one standing order, signed A., and the manifest Merren Vast read is the way into it. The empire's customs cutters sit off Lubro.
+- **The Union** fears Alysta will reach the Anunnaki work first, and the Nine kept the race going by one vote. What the work is stays open.
+- **The Soths** turn Xurux's amulet carts back at the border. Queen Signe's peace is an oath under Mornhold's great hall, with Abbess Hild its witness.
+- **Orza's** seers have all had the same vision since spring, the sea opening over a trench and something climbing out, and Orza's shut two libraries to Ezkian scholars.
+- **The Etweil** keep walking the Union's surveyors back out of the Green Silence.
+- **The Standing Stones** lost seven students who went south to Alysta and stopped writing, and Sister Ilva feeds the Order's runners.
+- **Montia** quietly pays Alysta's customs men at Verrant to let the books through, and owes Inkhal a winter's grain for its eastern holding. Thelis turns its ships back from the Sundering Deep.
+- **The east.** Echily burns Cobria's forest edge to keep off its fevers, which really start in Neuzon's wells, and Cobria won't sell it Fever Bark. The Polythusian Marches sheltered Echily through the last fever and tax Inkhal's caravans, and one wall-captain sells Inkhal his garrison's sleeping hours. Inkhal's couriers copy every letter in the east and sell them, Alysta first. Cobria's children who open early go missing on ships, taken by the Soulless, who hunt the Stones' students too.
+- **Sizes.** Alysta's Great. The Soths, Orza, Montia, the Union, Thelis, Cobria, Inkhal and the Marches are City. The Etweil, Xurux, Echily, the Standing Stones and the molefolk are Local, and Lubro and the Order of the Seven are Small.
+
 ## Claude's calls
 
 Each stands till Mo says otherwise.
