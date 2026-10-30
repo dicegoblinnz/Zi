@@ -28,6 +28,8 @@ Mo's calls (27, 28 and 30 Oct):
 - **An answer can ask for a name or a detail** (30 Oct): a field to write in, with suggestions off the tables to tap, never filled in for her ("the suggestions needed will be recommended but it is not given").
 - **The deck comes next** (30 Oct), ahead of the founding, which uses it later.
 - **How it came to be's shown an age at a time** (30 Oct, stage 8): long ago, in living memory and this last year each have their own Show the crew, so this last year's agendas and grudges can wait till the crew's found things out, and a line whose answer made a Secret never leaves her phone.
+- **The tension's a turn of its own** (30 Oct, stage 9): in the room, right after what holds it together, the next player rolls the d12, so the asking's four turns and a fourth player gets one too.
+- **The asking goes into Build the world till the ground's built** (30 Oct, stage 9): once the crew's answered it, one tap on her phone takes it into Build the world, the crew's answers locked, so the same session carries on with the ground and the deck there.
 
 ## Calls Claude made
 
@@ -98,6 +100,10 @@ For Mo to say otherwise.
 - **Deal the rest on the deck's a tap again** (stage 8), since it ends the deck there. Undo's the build's own, the last 25 till a reload, and after a reload it plays the deck's last answer back off the deck itself. A tile opens its faction's card so far on the card's place, and the arrow keys answer a card too.
 - **The deck's last screen is How it came to be** (stage 8), and Next is the board. The faction screens come once it's done, a tap from the board. Done puts the mini factions the answers made on the board under their makers, and the record keeps the deck without the world it started from, so a big board fits.
 - **A line's hers when its answer made a Secret** (stage 8): it's stamped on the card when it's answered, marked on her phone, and it never reaches a player, whatever's shown, the tables change or a phone on older code sends. On the World screen she can change a line or take it out before she shows its age, and showing one tells the crew's phones to look again, the way a map does.
+- **The founding's offered on an empty board** (stage 9), on her campaign page, like Build the world on the World screen. Opening the room puts everyone playing in the campaign in, in the order they joined it, and they join from their World tab. She can move someone up before it starts, and take anyone out (their turn goes on to whoever's after them, and they can't put themselves back) or put them back at the end, any time.
+- **The asking's part of the ground** (stage 9), so the first age's clock starts with it. A turn's one of the book's four parts in its order, so with more than four players the rest start the ground, and with fewer it goes round again.
+- **Every phone deals a turn's three cards** (stage 9), the same from the shared seed and the answers before it, so nothing has to come from the server to deal. A tap on a card answers it, and whoever answered, or she, can take the last answer back till someone answers after it. She can put one in for anyone without a phone, with a second tap so a look never answers for them, and it says it was hers. Everyone sees the cards of whoever's turn it is, so the table can talk it over.
+- **Out of time** (stage 9): the turn that's on finishes, then her phone deals the rest the way the engine would, from the seed. She can stop the clock, run it, and take five minutes off or put five on, and more time once it's out sends the turns round again.
 
 ## How a stage goes
 
@@ -252,7 +258,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
    - The deck on her phone in Build the world after the ground, beside going faction by faction and Deal it all, as the brief says: the card in one hand, swiped or tapped, the factions' tiles along the top filling in as they form, the prompt with its suggestions, Not this one, Undo and Deal the rest, then the board screen, the crew and Done, with the history into `doc.build`. Under reduce-motion the card doesn't tilt or fly, and the answers are taps.
    - How it came to be on the World screen, by age, hers to show the crew, and on the World tab once she has (`buildForPlayer()`).
    - A new part of `tests/check-accounts.mjs`: a world built by answering, with a prompt filled from a suggestion, one in her own words and one skipped, Not this one, Undo, the signal dropping and a reload halfway, Deal the rest, the crew and Done, then How it came to be shown to the crew, and on a player's phone only once it's shown.
-9. **The founding: the room and the asking.** Needs 6.
+9. **The founding: the room and the asking.** Needs 6. *Built 30 Oct 2026.*
    - `doc.found` on the live table, as the brief says: she sets it up from her campaign page and opens it, players join from their World tab, turns go round, each age has its clock, and every phone stays in step, with a poor signal handled the way telegraphs handle it. Then the asking, with the dials set and the tension rolled.
    - A new part of `tests/check-accounts.mjs` plays it on three phones.
 10. **Renaissance** (tables), with the Gilded Court's and Brinewake's mixes. Needs 4.

@@ -250,8 +250,8 @@
 //    nothing on Sam's turn, Sam's phone says time's up and that his turn's
 //    the last, he rolls, and Mo's phone deals the rest the way the engine
 //    would from the seed. The setup, the room on both sides, every turn and
-//    the asking done pass axe at 390 in both themes, and Sam's turn on Kai's
-//    phone at 320.
+//    the asking done pass axe at 390 in both themes, Sam's turn on Kai's
+//    phone at 320, 360, 430 and 1280, and Mo's room at 1280.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -3880,6 +3880,9 @@ try {
     // Mo sees them both here, moves Sam up, and starts it.
     await until(async () => ((await text(mo.page, ".fd")).match(/Here/g) ?? []).length === 2, "Mo's page has both of them here");
     await themes(mo.page, "the room, Mo's", "found-room-mo");
+    await mo.page.setViewportSize({ width: 1280, height: 900 });
+    await axe(mo.page, "the room, Mo's, at 1280");
+    await mo.page.setViewportSize({ width: 390, height: 844 });
     await mo.page.click(`.fd [data-do="move"][data-key="${samKey}"]`);
     await until(async () => (await fOf(mo.page, sat.id))?.who[0]?.key === samKey, "Sam's first in the order");
     await mo.page.click('.fd [data-do="start"]');
@@ -3900,8 +3903,10 @@ try {
     has(await text(sam.page, ".fd-clock"), "The asking and the ground", "the clock's the ground's, on Sam's phone too");
     await themes(sam.page, "Sam's turn", "found-turn-sam");
     await themes(kai.page, "Sam's turn, on Kai's phone", "found-watch-kai");
-    await kai.page.setViewportSize({ width: 320, height: 640 });
-    await axe(kai.page, "Sam's turn, on Kai's phone at 320");
+    for (const [w, h] of [[320, 640], [360, 740], [430, 932], [1280, 900]]) {
+      await kai.page.setViewportSize({ width: w, height: h });
+      await axe(kai.page, `Sam's turn, on Kai's phone at ${w}`);
+    }
     await kai.page.setViewportSize({ width: 390, height: 844 });
     await themes(mo.page, "Sam's turn, on Mo's phone", "found-turn-mo");
 

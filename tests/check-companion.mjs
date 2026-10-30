@@ -529,6 +529,8 @@ if (part("1c")) {
   why({ o: "fd-carry" }, kai, "Only the GM can do that.", "a player can't carry it off");
   ok({ o: "fd-carry" }, gm, "Mo carries it into Build the world");
   same(f().step, "carried", "it's on his phone now");
+  const screen = JSON.stringify(T.screenOf(doc, { name: "Tuesday Lair", crew: [] }));
+  same([screen.includes("found"), screen.includes("ash-lantern-ford"), screen.includes("ferry")], [false, false, false], "and the table screen never gets any of the founding");
   why({ o: "fd-back", part: "notices" }, sam, "It’s on your GM’s phone now, so the asking stays as it is.", "and nobody can take an answer back");
   same(T.forget(doc, "lee"), true, "Lee deletes his account");
   same([f().who.map((w) => w.key), f().asking.runs.byName, f().asking.runs.by], [[K.sam, K.kai], "Someone who’s left", ""], "he's out, and the answer Mo put in for him stays without his name");
