@@ -274,15 +274,24 @@ export function districtsOf(world) {
   return { by, of };
 }
 
-// What a place is, under its name: a district, a part of one, or where it is.
+// What a world calls its districts and parts, one and many (world.yaml's
+// areas): a city's are districts and parts, and Abnu's are lands and cities.
+export const wordsOf = (world) => world.areas ?? { district: ["district", "districts"], part: ["part", "parts"] };
+// What a place is, under its name: a district, a part of one, or where it
+// is, in the world's own words, with up being the name of what it's in.
+export function whereWords(area, up, words) {
+  if (area === "district") return cap(words.district[0]);
+  if (area === "part") return words.part[0] === "part" ? `Part of ${up}` : `${cap(words.part[0])} in ${up}`;
+  return `In ${up}`;
+}
 function whereOf(world, p) {
   const { by } = districtsOf(world);
-  if (p.area === "district") return "District";
-  const up = by.get(p.in);
-  if (p.area === "part") return `Part of ${up?.card.name ?? ""}`;
-  return `In ${up?.card.name ?? ""}`;
+  return whereWords(p.area, by.get(p.in)?.card.name ?? "", wordsOf(world));
 }
 
+// A page's other names, bar one that's only its own name in other capitals
+// (The palace for The Palace), which is there so the name links either way.
+const otherNames = (c) => c.aka.filter((a) => a.toLowerCase() !== c.name.toLowerCase());
 const listOf = (items, li) => (items.length ? `<ul class="wn-pl">${items.map(li).join("")}</ul>` : "");
 function teleLi(t, ln, self) {
   return `<li class="wn-tl"><span class="wn-tl-d" role="img" aria-label="d${t.d}">${die(t.d, { own: "them", hide: true })}</span><div><p>${ln(t.text, self)}</p><p class="wn-at">At ${esc(t.at)}</p></div></li>`;
@@ -295,7 +304,7 @@ export function placeFold(world, p, ln = linkerOf(world), doc = docOf(world)) {
   const pid = `p-${p.key}`;
   const { by, of } = districtsOf(world);
   const lines = [];
-  if (c.aka.length) lines.push(["Other names", `<p>${esc(c.aka.join(", "))}</p>`]);
+  if (otherNames(c).length) lines.push(["Other names", `<p>${esc(otherNames(c).join(", "))}</p>`]);
   if (c.here.length) lines.push(["Who’s here", listOf(c.here, (h) => `<li>${ln(h, pid)}</li>`)]);
   if (c.ground.length) {
     lines.push(["The ground", listOf(c.ground, (g) => {
@@ -322,7 +331,8 @@ export function placeFold(world, p, ln = linkerOf(world), doc = docOf(world)) {
   const sits = world.factions.filter((f) => f.seat === p.key);
   if (sits.length) lines.push([sits.length > 1 ? "Factions that sit here" : "The faction that sits here", `<p>${sits.map((f) => `<a class="wn-ln" href="#f-${esc(f.key)}">${esc(f.card.name)}</a>`).join(", ")}</p>`]);
   const inside = (world.places ?? []).filter((q) => q.in === p.key);
-  if (inside.length) lines.push([p.area === "district" ? "Its parts and places" : "Places in it", `<p>${inside.map((q) => `<a class="wn-ln" href="#p-${esc(q.key)}">${esc(q.card.name)}</a>`).join(", ")}</p>`]);
+  const parts = inside.some((q) => q.area === "part");
+  if (inside.length) lines.push([p.area === "district" ? (parts ? `Its ${wordsOf(world).part[1]} and places` : "Its places") : "Places in it", `<p>${inside.map((q) => `<a class="wn-ln" href="#p-${esc(q.key)}">${esc(q.card.name)}</a>`).join(", ")}</p>`]);
   const found = (world.people ?? []).filter((q) => q.at === p.key);
   const ment = mentionsOf(doc, { ...c, id: pid }).filter((e) => !sits.some((f) => `f-${f.key}` === e.id) && !inside.some((q) => `p-${q.key}` === e.id) && !found.some((q) => `p-${q.key}` === e.id));
   if (ment.length) lines.push(["Where else it comes up", `<p>${ment.map((e) => `<a class="wn-ln" href="#${esc(e.id)}">${esc(e.name)}</a>`).join(", ")}</p>`]);
@@ -354,7 +364,7 @@ export function personFold(world, p, ln = linkerOf(world), doc = docOf(world)) {
   const faceOf = world.factions.filter((f) => f.faceOf === p.key);
   const at = by.get(p.at);
   const lines = [];
-  if (c.aka.length) lines.push(["Other names", `<p>${esc(c.aka.join(", "))}</p>`]);
+  if (otherNames(c).length) lines.push(["Other names", `<p>${esc(otherNames(c).join(", "))}</p>`]);
   if (c.want) lines.push(["What they want", `<p>${ln(c.want, pid)}</p>`]);
   if (c.tags.length) {
     lines.push([`Challenge ${c.ch} <span class="wn-dl">a d${chDie(c.ch)}</span>`, `<p class="wn-tags">${c.tags.map((t) => `<span class="zd-tag threat"${TAG_NAMES[t.kind] ? ` title="${esc(TAG_NAMES[t.kind])}"` : ""}><em>${esc(t.text)}${t.x > 1 ? ` ×${t.x}` : ""}</em></span>`).join("")}</p>${c.rules ? ln.block(c.rules, pid) : ""}`]);
@@ -394,7 +404,7 @@ function toolsOf(world, items, what, find) {
   const districts = (world.places ?? []).filter((p) => p.area === "district" && count(p.key));
   return `
     <div class="wn-tools">
-      <div class="wn-kinds" role="group" aria-label="Show ${what} in a district">
+      <div class="wn-kinds" role="group" aria-label="Show ${what} in a ${wordsOf(world).district[0]}">
         <button type="button" class="wn-kind" data-area="" aria-pressed="true">Every one <span>${items.length}</span></button>
         ${districts.map((d) => `<button type="button" class="wn-kind" data-area="${esc(d.key)}" aria-pressed="false">${esc(by.get(d.key).card.name)} <span>${count(d.key)}</span></button>`).join("")}
       </div>
@@ -439,6 +449,6 @@ export function mapOf(world) {
   const { by } = districtsOf(world);
   const groups = (world.places ?? []).filter((p) => p.area === "district");
   const under = (d) => (world.places ?? []).filter((p) => p.key !== d.key && districtsOf(world).of(p.key) === d.key);
-  return `<div class="wn-map" id="wn-map">${drawMap(world.map, { uid: "wnm", label: `A map of ${world.name}: its districts, their parts, the main roads and every place with a pin` })}</div>
+  return `<div class="wn-map" id="wn-map">${drawMap(world.map, { uid: "wnm", label: `A map of ${world.name}: its ${wordsOf(world).district[1]}, their ${wordsOf(world).part[1]}, the main roads and every place with a pin` })}</div>
     <div class="wn-pins" id="wn-pins"><p class="wn-sub">Every pin on the map</p>${groups.map((d) => `<p><a class="wn-ln" href="#p-${esc(d.key)}">${esc(d.card.name)}</a>: ${under(d).map((p) => `<a class="wn-ln" href="#p-${esc(p.key)}">${esc(by.get(p.key).card.name)}</a>`).join(", ")}</p>`).join("")}</div>`;
 }

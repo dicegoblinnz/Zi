@@ -87,9 +87,14 @@ function markOf(kind, [x, y], r) {
 // Which of three tones each district's drawn in, so two that share a border
 // never look the same: each takes the first tone none of its neighbours
 // before it has, neighbours being districts with a corner in common.
-export function tonesOf(districts) {
+// A world's lands only count as neighbours where they meet on land (on, a
+// test for a corner), since their shapes meet out at sea too, and they're
+// toned as a whole rather than one at a time, so a continent's three tones
+// go round it with no two that touch the same.
+export function tonesOf(districts, on) {
   const keys = Object.keys(districts);
   const corners = new Map(keys.map((k) => [k, new Set(districts[k].map(([x, y]) => `${x},${y}`))]));
+  if (on) return tonesRound(keys, corners, on);
   const tone = {};
   for (const k of keys) {
     const near = keys.filter((o) => o !== k && tone[o] != null && [...corners.get(k)].some((c) => corners.get(o).has(c)));
@@ -97,12 +102,40 @@ export function tonesOf(districts) {
   }
   return tone;
 }
+function tonesRound(keys, corners, on) {
+  const near = new Map(keys.map((k) => [k, new Set()]));
+  const owners = new Map();
+  for (const k of keys) for (const c of corners.get(k)) owners.set(c, [...(owners.get(c) ?? []), k]);
+  for (const [c, ks] of owners) {
+    if (ks.length < 2 || ks.every((a) => ks.every((b) => a === b || near.get(a).has(b))) || !on(c.split(",").map(Number))) continue;
+    for (const a of ks) for (const b of ks) if (a !== b) near.get(a).add(b);
+  }
+  // The most neighbours first, each tried in every tone till all fit.
+  const order = [...keys].sort((a, b) => near.get(b).size - near.get(a).size || keys.indexOf(a) - keys.indexOf(b));
+  const tone = {};
+  const fit = (i) => {
+    if (i === order.length) return true;
+    const k = order[i];
+    for (const t of [0, 1, 2]) {
+      if ([...near.get(k)].some((o) => tone[o] === t)) continue;
+      tone[k] = t;
+      if (fit(i + 1)) return true;
+    }
+    delete tone[k];
+    return false;
+  };
+  if (!fit(0)) for (const k of order) tone[k] = [0, 1, 2].find((t) => ![...near.get(k)].some((o) => tone[o] === t)) ?? 0;
+  return tone;
+}
 
 // The whole map as SVG. opts.label is what a screen reader hears for it, and
 // opts.uid keeps its patterns apart from another map's on the same page. A
 // district in map.wilds is open country (the Badlands round a city), drawn as
-// the land itself, stippled, rather than as a district's plate.
+// the land itself, stippled, rather than as a district's plate. A world of
+// seas and continents gives its land rather than its sea, and is drawn as one
+// (drawWorld()).
 export function drawMap(map, opts = {}) {
+  if (map.ground.land) return drawWorld(map, opts);
   const [w, h] = map.size;
   const g = map.ground;
   const uid = opts.uid ?? "dm";
@@ -130,6 +163,40 @@ export function drawMap(map, opts = {}) {
   for (const m of map.marks) out.push(`<g class="dm-mark">${markOf(m.kind, m.at, r)}</g>`);
   const label = opts.label ? ` role="img" aria-label="${String(opts.label).replace(/"/g, "&quot;")}"` : ' aria-hidden="true"';
   return `<svg class="dm" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" focusable="false"${label}>${out.join("")}</svg>`;
+}
+
+// A world of seas and continents (Abnu): the sea's the ground, its deepest
+// water darker and a shelf of shallows round every coast, and the land's
+// every continent and island. Each land's plate is clipped to the land, so a
+// land's shape can run out to sea to hold all its islands in one and only
+// its own ground shows. k is how much bigger the map is than a city's
+// thousand across, as the lines and patterns grow with it (--dm-k), so they
+// read the same as a city's when the whole of it's on a screen.
+function drawWorld(map, opts) {
+  const [w, h] = map.size;
+  const g = map.ground;
+  const uid = opts.uid ?? "dm";
+  const k = Math.round(Math.sqrt(Math.max(w, h) / 1000) * 100) / 100;
+  const s = (n) => f1(n * k);
+  const coast = g.land.map(path).join("");
+  const districts = Object.entries(map.districts);
+  const tone = tonesOf(map.districts, (c) => g.land.some((r) => inShape(c, r, 0.5)));
+  const out = [];
+  out.push(`<defs><pattern id="${uid}-waves" width="${s(24)}" height="${s(10)}" patternUnits="userSpaceOnUse"><path class="dm-wave" d="M0 ${s(6)}Q${s(6)} ${s(3)} ${s(12)} ${s(6)}T${s(24)} ${s(6)}"/></pattern><clipPath id="${uid}-land"><path d="${coast}"/></clipPath></defs>`);
+  out.push(`<rect class="dm-sea" width="${w}" height="${h}"/><rect class="dm-sea-in" width="${w}" height="${h}" fill="url(#${uid}-waves)"/>`);
+  for (const d of g.deep ?? []) out.push(`<path class="dm-deep" d="${path(d)}"/>`);
+  out.push(`<path class="dm-shelf" d="${coast}"/><path class="dm-shelf-in" d="${coast}"/>`);
+  out.push(`<g clip-path="url(#${uid}-land)"><path class="dm-land" d="${coast}"/>`);
+  for (const [key, sh] of districts) out.push(`<path class="dm-d is-t${tone[key]} is-${key}" d="${path(sh)}"/>`);
+  for (const [key, sh] of Object.entries(map.parts)) out.push(`<path class="dm-p is-${key}" d="${path(sh)}"/>`);
+  for (const [key, sh] of districts) out.push(`<path class="dm-de is-${key}" d="${path(sh)}"/>`);
+  out.push("</g>");
+  for (const sh of g.water) out.push(`<path class="dm-water" d="${path(sh)}"/>`);
+  for (const rd of map.roads) out.push(`<path class="dm-road-c" d="${line(rd.pts)}"/><path class="dm-road" d="${line(rd.pts)}"/>`);
+  out.push(`<path class="dm-coast" d="${coast}"/>`);
+  for (const m of map.marks) out.push(`<g class="dm-mark">${markOf(m.kind, m.at, 9 * k)}</g>`);
+  const label = opts.label ? ` role="img" aria-label="${String(opts.label).replace(/"/g, "&quot;")}"` : ' aria-hidden="true"';
+  return `<svg class="dm is-world" style="--dm-k:${k}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet" focusable="false"${label}>${out.join("")}</svg>`;
 }
 
 export { pts as pointsOf };

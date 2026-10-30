@@ -6,7 +6,7 @@
 // opening its card or its page. The page is all there without this, drawn at
 // build time by world-page.js.
 
-import { webOfWorld, webData, tiesOf } from "./world-page.js";
+import { webOfWorld, webData, tiesOf, whereWords } from "./world-page.js";
 import { linesOf } from "../companion/world-web.js";
 import { makeViewer } from "../companion/mapview.js";
 import { die, esc } from "../kit/kit.js";
@@ -15,6 +15,8 @@ import { stepsToDice } from "../companion/dice.js";
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const data = JSON.parse($("#wn-data")?.textContent || "null");
+// What this world calls its districts and parts (Abnu's lands and cities).
+const AREAS = data?.areas ?? { district: ["district", "districts"], part: ["part", "parts"] };
 const root = $(".wn");
 const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
 // A place's pin carries a house, and a card closes on a cross.
@@ -181,10 +183,13 @@ if (data && root) {
     const k = pl.area || "place";
     const on = ui.pin === p.id;
     const html = k === "place" ? `<span class="wm-pin-head">${PIN}</span><span class="wm-pin-n">${esc(pl.name)}</span>` : `<span class="wm-pin-n">${esc(pl.name)}</span>`;
-    const say = `${pl.name}, ${k === "district" ? "a district" : k === "part" ? `part of ${byKey.get(pl.in)?.name ?? ""}` : `in ${byKey.get(pl.in)?.name ?? ""}`}`;
+    const up = byKey.get(pl.in)?.name ?? "";
+    const say = `${pl.name}, ${k === "district" ? `a ${AREAS.district[0]}` : k === "part" ? (AREAS.part[0] === "part" ? `part of ${up}` : `a ${AREAS.part[0]} in ${up}`) : `in ${up}`}`;
     return { cls: `wm-pin is-${k}${on ? " is-on" : ""}`, html, attrs: { "data-pin": p.id, "aria-label": say, "aria-pressed": String(on) } };
   };
-  const pinsNow = () => Object.entries(M.pins).map(([k, [x, y]]) => ({ id: k, x: x / M.size[0], y: y / M.size[1], rank: (ui.pin === k ? 9 : 0) + (RANK[byKey.get(k)?.area] ?? 1), always: ui.pin === k }));
+  // On a map of a whole world, a place inside a part (one of Abnu's
+  // capital's) tucks behind its city's name till there's room for it.
+  const pinsNow = () => Object.entries(M.pins).map(([k, [x, y]]) => ({ id: k, x: x / M.size[0], y: y / M.size[1], rank: (ui.pin === k ? 9 : 0) + (RANK[byKey.get(k)?.area] ?? 1), always: ui.pin === k, tuck: Boolean(M.world) && !byKey.get(k)?.area && byKey.get(byKey.get(k)?.in)?.area === "part" }));
   // Where each faction's token goes: on its seat's pin, those that share one
   // fanned out under it, and a mini faction beside its maker.
   const tokensNow = () => {
@@ -259,7 +264,7 @@ if (data && root) {
       padMap();
       return;
     }
-    const where = p.area === "district" ? "District" : p.area === "part" ? `Part of ${byKey.get(p.in)?.name ?? ""}` : `In ${byKey.get(p.in)?.name ?? ""}`;
+    const where = whereWords(p.area, byKey.get(p.in)?.name ?? "", AREAS);
     const sits = data.factions.filter((f) => f.seat === p.key);
     cardEl.innerHTML = `<div class="wn-mc-top"><span class="wn-mc-d" role="img" aria-label="Challenge ${p.ch}">${die(Math.min(12, p.ch * 2), { own: "them", hide: true })}</span><div><p class="wn-k">${esc(where)}</p><h3 class="wn-mc-n">${esc(p.name)}</h3><p class="wn-mc-l">${esc(p.line)}</p>${sits.length ? `<p class="wn-mc-s">${sits.map((f) => esc(f.card.name)).join(", ")} ${sits.length > 1 ? "sit" : "sits"} here</p>` : ""}</div><button type="button" class="wn-mc-x" data-mc="x" aria-label="Close">${X}</button></div><div class="wn-mc-row"><a class="wn-mc-go" href="#p-${esc(p.key)}">Its page</a></div>`;
     cardEl.hidden = false;
@@ -295,7 +300,8 @@ if (data && root) {
       },
     });
     view.art(art);
-    // It opens filling the screen, on the middle of the city.
+    // It opens filling the screen, on the middle of the city or the pin
+    // its map says (Abnu's capital).
     view.cover(data.map.middle[0], data.map.middle[1]);
     box.replaceChildren(view.el);
     box.classList.add("is-live");

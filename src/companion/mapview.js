@@ -166,17 +166,30 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     anim = 0;
   }
   // Labels that would sit on top of each other: the ones further down the
-  // list keep their pin and lose their name till there's room.
+  // list keep their pin and lose their name till there's room. A pin that
+  // tucks (a place inside a city on a map of a whole world) waits for room
+  // for its pin and its name both, behind its city's name, so a city's a
+  // name till it's zoomed in on and its places come out named, never as a
+  // pin with no name.
   function declutter() {
     const kept = [];
+    const heads = [];
+    const hits = (box, list) => list.some((k) => box.l < k.r && box.r > k.l && box.t < k.b && box.b > k.t);
     const order = [...pins].sort((a, b) => b.rank - a.rank || a.y - b.y);
     for (const p of order) {
       const n = p.el.querySelector(".wm-pin-n");
       if (!n) continue;
-      p.el.classList.remove("is-quiet");
+      p.el.classList.remove("is-quiet", "is-tucked");
+      const h = p.el.querySelector(".wm-pin-head")?.getBoundingClientRect();
+      const head = h && { l: h.left - 2, r: h.right + 2, t: h.top - 2, b: h.bottom + 2 };
       const r = n.getBoundingClientRect();
       const box = { l: r.left - 4, r: r.right + 4, t: r.top - 2, b: r.bottom + 2 };
-      const hit = kept.some((k) => box.l < k.r && box.r > k.l && box.t < k.b && box.b > k.t);
+      const hit = hits(box, kept);
+      if (p.tuck && !p.always && head && (hit || hits(head, kept) || hits(head, heads))) {
+        p.el.classList.add("is-tucked");
+        continue;
+      }
+      if (head) heads.push(head);
       if (hit && !p.always) p.el.classList.add("is-quiet");
       else kept.push(box);
     }

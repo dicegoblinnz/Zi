@@ -1,0 +1,438 @@
+# Abnu's people a thousand years after the Sundering: every faction's Face,
+# the canon's people and the six contacts, each written as a threat the way
+# scripts/worlds.mjs says at its top, from notes/abnu-canon.md and the board.
+# The molefolk's eldest is the only one who names them outside a Secret or
+# her note. Words with a comma in them go in quotes inside { }.
+people:
+
+  # ── The capital
+  - key: the-emperor
+    name: The Emperor
+    aka: [The emperor]
+    at: the-palace
+    line: The emperor of Alysta, who banned the Seven's worship this year and rules from the palace
+    ch: 6
+    look: A man in his forties in plain good wool, with ink on his fingers and a brass amulet on a chain, who looks like he hasn't slept since spring.
+    want: The empire kept at peace and in order, whatever it costs him.
+    tags: [{ text: Knows Your Plans, kind: comes }, { text: Politically Untouchable, kind: keeps }, { text: Tired, kind: drives }]
+    voice: Quiet and courteous, and he asks your name though he already knows it.
+    teles:
+      - { text: "The emperor says he's read the crew's file, and quotes it back to them.", d: 10, at: "Confidence, Shaken" }
+    hooks:
+      - "The emperor asks to see one of the crew alone, and won't say why"
+    secret:
+      tag: Older Than the Empire
+      more: >-
+        He's Alysta, the soul the Seven set to guide people, the same soul for
+        a thousand years and remembering all of it for about 380, in a body
+        that was his son's. His amulet holds his memory in and won't let his
+        soul open a single Gate, and he can't take it off without dying. The
+        crew could find his face on a portrait three hundred years old, or
+        match his signature to the one on the Soulless's charter.
+    note: >-
+      Anything he faces is something he set up years before, in a building he
+      built, through an institution he wrote, against people whose names he
+      had long ago. His own notes keep count: Attempt eleven. Not yet. He's
+      tired, and he isn't exactly the villain.
+
+  - key: odile-garran
+    name: Odile Garran
+    aka: [Chancellor Garran, The Chancellor]
+    at: the-palace
+    line: The Chancellor, who's run Alysta's civil service for thirty years and fronts the empire for it
+    ch: 4
+    look: Grey hair pinned tight, a ledger under one arm, and a clerk at each elbow taking down what she says.
+    want: Everything written down, filed and in its place, and nothing done in a hurry.
+    tags: [{ text: Well-Connected, kind: keeps }, { text: Bound by Rules, kind: keeps }, { text: Proud, kind: drives }]
+    voice: Brisk and exact, and she never says anything she'd mind seeing written down.
+    teles:
+      - { text: "Odile Garran says there's a form for that, and hands it over.", d: 8, at: "Confidence, Brushed Off" }
+    hooks:
+      - "She's lost a piece of paper for the first time in thirty years, and she needs it found before anyone knows"
+
+  - key: halden-moor
+    name: Halden Moor
+    aka: [Halden]
+    at: the-palace
+    line: The palace's keeper of keys, who's opened every door in it since he was a boy
+    ch: 2
+    look: A stooped old man with a ring of keys at his belt that he never lets jangle.
+    want: Every door in the palace kept, and to know who's behind each one.
+    tags: [{ text: Overlooked, kind: keeps }, { text: Knows the House, kind: comes }, { text: Secretly Kind, kind: drives }]
+    voice: Soft, and he says sir and madam to everyone, the emperor included.
+    hooks:
+      - "Halden Moor needs a door opened he hasn't got the key to, and that's never happened before"
+    secret:
+      tag: The Order's Keys
+      more: >-
+        He's the Order of the Seven's Face, and he opens the storeroom where it
+        meets. The crew could follow him on the one night a month he takes the
+        long way round, or find a key on his ring that fits no door on the
+        palace plans.
+
+  - key: the-keeper
+    name: The Keeper
+    at: the-sealed-archive
+    line: The Keeper of the Sealed Archive, who catalogues every banned book in the empire
+    ch: 2
+    look: Spectacles pushed up into white hair, ink to the wrist, and a voice so quiet you lean in.
+    want: Every book kept and nothing burned, whatever's in it.
+    tags: [{ text: Well-Read, kind: drives }, { text: Secretly Kind, kind: drives }, { text: Overlooked, kind: keeps }]
+    voice: Barely above a whisper, and she always knows the shelf number.
+    teles:
+      - { text: "The Keeper says that book was never catalogued, and goes back to her ledger.", d: 6, at: "Confidence, Brushed Off" }
+    hooks:
+      - "The Keeper needs a book out of the city before the Soulless read the visitor log"
+    secret:
+      tag: On the Seven's Side
+      more: >-
+        She's quietly on the Seven's side, and she's let the Order read the only
+        complete copy of their texts. The crew could catch her leaving the stacks
+        with a Montian prayer book, or see her own name in the visitor log on a
+        night the Archive was shut.
+
+  - key: cassia-brenne
+    name: Cassia Brenne
+    aka: [Cassia]
+    at: alysta-city
+    line: A magistrate's clerk with expensive habits, beautifully dressed and terrified nearly all the time
+    ch: 1
+    look: Silk she can't afford on a clerk's pay, a perfect smile, and a hand that keeps going to her collar.
+    want: To keep everything she's got, and get a little more without anyone noticing.
+    tags: [{ text: Well-Connected, kind: keeps }, { text: Can Be Bought, kind: drives }, { text: Scared, kind: drives }]
+    voice: Charming and quick, and she laughs a beat too early.
+    hooks:
+      - "Cassia can get the crew a signature, a name, a date or a copy of something, and she won't risk a hair doing it"
+    secret:
+      tag: Somebody Pays More
+      more: >-
+        Somebody already pays Cassia more than the crew does, and she'd tell
+        them if they asked. The crew could ask, or follow her to the man with
+        no name on his papers she meets every week.
+
+  - key: merren-vast
+    name: Merren Vast
+    aka: [Merren]
+    at: verrant-docks
+    line: The dock-master at Verrant, who signs manifests nobody reads
+    ch: 2
+    look: A middle-aged man in a wet coat with a pencil behind his ear, who hasn't slept properly in two nights.
+    want: To go back to signing without reading, and to sleep.
+    tags: [{ text: Knows the Waterfront, kind: keeps }, { text: Tired, kind: drives }, { text: Guilty, kind: drives }]
+    voice: Low and careful, and he looks over his shoulder before he says a name.
+    teles:
+      - { text: "Merren Vast says he never saw the crew, and turns his back.", d: 6, at: "Confidence, Brushed Off" }
+    hooks:
+      - "Two nights ago Merren read a manifest instead of signing it, and he needs somebody to tell what it said"
+    secret:
+      tag: He Read the Manifest
+      more: >-
+        The manifest Merren read was for crates from Xurux, off the books, on a
+        standing order signed A., at a volume no charity needs. The crew could
+        get him drunk enough to say it, or find the manifest in the false
+        bottom of his desk.
+    note: >-
+      He knows every crew and every crate, and he's the easiest way into
+      anything, but every favour he does gets noticed by someone, and he's the
+      one who pays.
+
+  - key: juno
+    name: Juno
+    at: verrant-docks
+    line: A girl of twelve who sees everything and charges in food
+    ch: 1
+    look: A small girl in a coat three sizes too big, eating something, always.
+    want: A hot meal every day, and to know everything first.
+    tags: [{ text: Overlooked, kind: keeps }, { text: Fast, kind: comes }, { text: Curious, kind: drives }]
+    voice: Fast, blunt and full of questions, and she'll tell you you're doing it wrong.
+    hooks:
+      - "Juno knows which doors on the docks are watched, and she'll show the crew for supper"
+    note: >-
+      She isn't brave exactly, she just hasn't worked out yet that she can be
+      hurt. She's never hurt casually, and she's never untouchable either.
+
+  - key: the-widow-ashgrove
+    name: The Widow Ashgrove
+    aka: [The Widow]
+    at: the-ninth-district
+    line: A widow who owns half the Ninth District's debts and all its gossip
+    ch: 2
+    look: A big woman in mourning black thirty years old, at a window table with a ledger and a pot of tea.
+    want: Everyone in the Ninth owing her something, and enjoying the asking.
+    tags: [{ text: Well-Connected, kind: keeps }, { text: Deep Pockets, kind: keeps }, { text: Greedy, kind: drives }]
+    voice: Warm and amused, and every sentence is a negotiation she's winning.
+    hooks:
+      - "The Widow will grant the crew almost anything, and risk nothing, for a favour she'll name later"
+    note: She's never once been unfair, which is why people keep borrowing.
+
+  - key: sister-ilva
+    name: Sister Ilva
+    aka: [Ilva]
+    at: the-ninth-district
+    line: A Montian pilgrim keeping an unlicensed shrine in a room above a laundry
+    ch: 1
+    look: A thin woman in a sailor's coat over a pilgrim's grey, with a pot on the stove for whoever turns up.
+    want: Everyone who climbs her stairs fed, and asked one honest question.
+    tags: [{ text: Kind, kind: drives }, { text: Devout, kind: drives }, { text: Won't Back Down, kind: keeps }]
+    voice: Gentle and direct, and she asks about virtue the way you'd ask about someone's day.
+    hooks:
+      - "Sister Ilva feeds the Order of the Seven's runners, and one of them didn't come back last night"
+    note: >-
+      She's got almost nothing and will risk almost everything. She'll forgive
+      one betrayal. She knows one true thing about the Seven she's never said
+      out loud.
+
+  - key: old-tekk
+    name: Old Tekk
+    aka: [Tekk]
+    at: the-drowned-quarter
+    line: A smith from Xurux, exiled for asking about the amulets, who can still make anything
+    ch: 3
+    look: A gaunt old man with burn-scarred hands, working on a doorstep, who seems a little less there each time you look.
+    want: A workshop again, and an answer about what the etching does.
+    tags: [{ text: Fast Hands, kind: comes }, { text: Fading, kind: keeps }, { text: Holds a Grudge, kind: drives }]
+    voice: Gruff and short, and he never says why he left.
+    hooks:
+      - "Old Tekk will make the crew anything at all, if they'll bring him an amulet from Deepshaft Kel to take apart"
+    secret:
+      tag: One of the Dead
+      more: >-
+        Tekk's one of Xurux's dead, and outside the city he's fading, a little
+        more every week. The crew could see his hands go faint by lamplight, or
+        ask the gatekeeper at Xunan why he can't come home.
+
+  # ── The west
+  - key: signe-ironhand
+    name: Signe Ironhand
+    aka: [Queen Signe, Signe]
+    at: mornhold
+    line: The Soths' queen, whose family runs the Ironhand Forge
+    ch: 5
+    look: A broad grey-haired woman with a smith's forearms and a scar across one palm for every blade she's passed.
+    want: Her mountains, her iron and her word kept, whatever Alysta does.
+    tags: [{ text: Commanding, kind: comes }, { text: Hits Like a Wagon, kind: comes }, { text: Keeps Its Word, kind: drives }]
+    voice: Blunt and slow, and she'll ask about your scars before your name.
+    teles:
+      - { text: "Queen Signe stands, and the hall goes quiet.", d: 10, at: "Confidence, Shaken" }
+    hooks:
+      - "The queen wants the new shaft finished, and the clans have stopped going down it"
+    secret:
+      tag: The Queen's Old Peace
+      more: >-
+        Signe keeps her line's old peace with the Seven, an oath under
+        Mornhold's great hall with Abbess Hild as its witness, and she'll honour
+        it quietly whatever Alysta does, even against her own clans. The crew
+        could find the oath stone, or watch her refuse an Alystan envoy
+        something small for a reason she won't give.
+
+  - key: hild
+    name: Hild
+    aka: [Abbess Hild]
+    at: the-standing-stones
+    line: The abbess of the Standing Stones, who takes no coin and forgets no favour
+    ch: 5
+    look: A tall woman with a shaved head and eyes that glow faintly, even in daylight.
+    want: Every soul that wants to open taught how, and every debt to the Stones paid.
+    tags: [{ text: Commanding, kind: comes }, { text: Patient, kind: comes }, { text: Holds a Grudge, kind: drives }]
+    voice: Even and slow, and she remembers what you owe her better than you do.
+    hooks:
+      - "Hild wants the students who went south found, and she'll call in every favour the Stones are owed to do it"
+    secret:
+      tag: Witness to an Oath
+      more: >-
+        Hild witnessed Queen Signe's oath to keep the old peace with the Seven,
+        under Mornhold's great hall, and she's the only one who could say so
+        out loud. The crew could earn a favour from her and ask, or see her go
+        down into the great hall alone.
+
+  - key: emeric-sallow
+    name: Emeric Sallow
+    aka: [Prince Emeric]
+    at: aron
+    line: The prince of Orza, who's ruled from a darkened room every other day for twenty years
+    ch: 3
+    look: A thin, quick man in a shuttered room, talking too fast on his bright days and silent as stone on his grey ones.
+    want: To see what's coming before it comes, and get Orza through the day after.
+    tags: [{ text: Knows Your Plans, kind: comes }, { text: Clever, kind: drives }, { text: Fragile, kind: drives }]
+    voice: On a bright day he's three thoughts ahead of you and impatient, and on a grey day he says nothing at all.
+    hooks:
+      - "The prince has seen something in the smoke he hasn't told anyone, and he wants it checked"
+    secret:
+      tag: He Saw It Too
+      more: >-
+        The prince has had the same vision every seer in Aron's had since
+        spring, the sea opening over a trench and something climbing out, and
+        he's told nobody. The crew could catch him sketching the trench on a
+        bright day, or ask him straight on a grey one, when he's too tired to
+        pretend.
+
+  - key: maren-aldaz
+    name: Maren Aldaz
+    aka: [Councillor Aldaz]
+    at: ezkia-prime
+    line: The youngest of the Council of Nine, running the race and three other projects at once
+    ch: 3
+    look: A woman of thirty in an oil-stained coat, with clockwork in every pocket and four people trying to catch her eye.
+    want: To finish what the Anunnaki started, before anyone else does.
+    tags: [{ text: Silver-Tongued, kind: comes }, { text: Clever, kind: drives }, { text: Ambitious, kind: drives }]
+    voice: Fast and excited, and she starts a new sentence before she's finished the last one.
+    hooks:
+      - "Maren Aldaz has heard someone else is close to finishing the Anunnaki work, and she wants to know who"
+    secret:
+      tag: Kept Going by One Vote
+      more: >-
+        Four of the Nine want the race stopped, and the vote that kept it going
+        was won by one, the night she heard someone else was close. The crew
+        could find the tally in the Grand Library's minutes, or hear a
+        councillor who voted against it say so after a drink.
+
+  - key: hessa
+    name: Hessa
+    at: niebali
+    line: The eldest at Niebali, who speaks for the Etweil when they speak at all
+    ch: 2
+    look: A small old woman with moss-dark green hair, standing so still you take her for a bush till she blinks.
+    want: To be left alone in the cold, and to bring back whoever wanders into the Green Silence.
+    tags: [{ text: Patient, kind: comes }, { text: Silent, kind: comes }, { text: Kind, kind: drives }]
+    voice: Slow, warm and very quiet, with long pauses she doesn't seem to notice.
+    hooks:
+      - "Hessa wants a promise from the crew before she'll take them anywhere, and she'll know if they break it"
+
+  - key: master-of-deepshaft-kel
+    name: The master of Deepshaft Kel
+    at: deepshaft-kel
+    line: The master of the finest amulet workshop in the world, proud, decent and lately asking questions
+    ch: 3
+    look: One of the dead, tall and grave, with essence-pale hands and a jeweller's loupe on a cord round his neck.
+    want: To know what the etching he puts on every amulet does.
+    tags: [{ text: Proud, kind: drives }, { text: Curious, kind: drives }, { text: A Hundred Years of This, kind: keeps }]
+    voice: Formal and careful, and he answers a question with a better one.
+    hooks:
+      - "The master wants one of his amulets taken to someone who can read the ward pattern, and brought back with an answer"
+    note: He's the last person in his trade who should be asking questions, and he knows it.
+
+  - key: dagny-rusk
+    name: Dagny Rusk
+    aka: [Harbourmaster Rusk]
+    at: lubro-land
+    line: Lubro's harbourmaster, whose family's run the harbour longer than anyone can remember
+    ch: 3
+    look: A weathered woman in a sea coat with a brass harbour key on a chain and a smile that tells you nothing.
+    want: Free trade off the Soth coast, and nobody looking too closely at the cargo.
+    tags: [{ text: Well-Connected, kind: keeps }, { text: Slippery, kind: keeps }, { text: Protects Someone, kind: drives }]
+    voice: Friendly and easy, and somehow you've told her everything and she's told you nothing.
+    hooks:
+      - "Dagny Rusk needs the customs cutters off her harbour for one night, and she'll pay in stones"
+    secret:
+      tag: Keeper of the Night Boat
+      more: >-
+        Dagny's family keeps the molefolk's secret, trading for their rare
+        stones by a night boat to the coast mountain, and she'd sink a ship
+        before she let the empire find out. The crew could see her own boat go
+        out with no lamp, or find a stone in her harbour office that no surface
+        mine ever gave.
+
+  - key: molefolk-eldest
+    name: The molefolk's eldest
+    at: the-mountain
+    line: The eldest of the molefolk, who tends Melammu's cavern and speaks for every tunnel
+    ch: 3
+    look: Small, broad and silver-whiskered, with long digging claws folded quietly and eyes that squint at any light.
+    want: To stay hidden, and keep Melammu safe in the dark.
+    tags: [{ text: Patient, kind: comes }, { text: Sees in the Dark, kind: keeps }, { text: Protects Someone, kind: drives }]
+    voice: Slow and soft, and they feel the air before they answer.
+    hooks:
+      - "The eldest needs the Soths' shaft stopped before it reaches Melammu, without the Soths ever knowing why"
+
+  # ── The middle sea
+  - key: aurea-pell
+    name: Aurea Pell
+    aka: [Queen Aurea]
+    at: pera
+    line: The queen of Montia, who's carried Justice every day since the ban and tells the emperor's envoys so
+    ch: 4
+    look: A sea-browned woman in a plain pilgrim's coat with a queen's ring, who looks you in the eye and waits.
+    want: Every text of the Seven copied, carried and read, Alysta's ports included.
+    tags: [{ text: Commanding, kind: comes }, { text: Beloved, kind: keeps }, { text: Code of Honour, kind: drives }]
+    voice: Clear and plain, and she says the hard thing first.
+    hooks:
+      - "Aurea Pell wants to know why Thelis turns her ships back from the Sundering Deep"
+    secret:
+      tag: Customs Paid in Silver
+      more: >-
+        Montia damns the emperor out loud in every port, and Aurea quietly pays
+        Alysta's own customs men at Verrant to let the books through. The crew
+        could see a Montian purser pay off a customs man on Verrant Docks, or
+        find the payments in her treasurer's books.
+
+  - key: warden-of-the-ledge
+    name: The Warden of the Ledge
+    at: the-ledge
+    line: The only Thelisian who'll talk to surface folk, whose name's three notes long
+    ch: 4
+    look: A grey-green Thelisian whose blowhole whistles when she's amused, watching you the way the sea does.
+    want: The Deep kept quiet, and every surface ship kept away from it.
+    tags: [{ text: Patient, kind: comes }, { text: Swift, kind: comes }, { text: Keeps Its Word, kind: drives }]
+    voice: Three notes for her name, then careful surface words, and long silences where an answer should be.
+    hooks:
+      - "The Warden wants a Montian ship off the Sundering Deep before it finds what it's looking for"
+
+  # ── The east
+  - key: sevra
+    name: Sevra
+    aka: [Speaker Sevra]
+    at: gustburg
+    line: Cobria's Speaker, who was found glowing in her cradle and has watched every child's eyes since
+    ch: 4
+    look: A lean, scaled woman with amber eyes that glow when she's angry, and a hunter's knife at her hip.
+    want: Cobria's children safe, and its forest whole.
+    tags: [{ text: Commanding, kind: comes }, { text: Venom, kind: comes }, { text: Protects Someone, kind: drives }]
+    voice: Sharp and quick, and she lets a silence go on till you fill it.
+    hooks:
+      - "Sevra's sworn to find whoever's taking Cobria's children, and she'll trade Fever Bark for a name"
+
+  - key: neru
+    name: Neru
+    aka: [Highmother Neru]
+    at: neuzon
+    line: Echily's Highmother, who's forty, which is old in Echily, and in a hurry
+    ch: 3
+    look: A wiry woman with folded pseudo-wings and grey at her temples, already halfway out the door.
+    want: Every town moved before the next fever reaches it.
+    tags: [{ text: Fast, kind: comes }, { text: Ambitious, kind: drives }, { text: Guilty, kind: drives }]
+    voice: Quick and clipped, and she finishes your sentences for you.
+    hooks:
+      - "Neru will pay anything for Fever Bark, and Cobria won't sell her any"
+    secret:
+      tag: She Knows About the Wells
+      more: >-
+        Neru knows the fevers start in Neuzon's own wells, and she's let the
+        council blame Cobria to keep the towns from turning on it. The crew
+        could notice she only drinks rainwater, or find her name on the
+        council's old report.
+
+  - key: tamsk
+    name: Tamsk
+    aka: [Wallward Tamsk]
+    at: molythia
+    line: Molythia's Wallward, who's held its wall for twenty winters and sleeps his twelve hours on top of it
+    ch: 4
+    look: A huge man in scaled armour, asleep on the parapet with a hand on his spear, or wide awake and looking right at you.
+    want: The passes held, and every caravan that uses them paying.
+    tags: [{ text: Hits Like a Wagon, kind: comes }, { text: Holds the Line, kind: keeps }, { text: Code of Honour, kind: drives }]
+    voice: Slow and heavy, and he says the toll again till you pay it.
+    hooks:
+      - "Tamsk will waive the toll for the name of whoever's selling his garrison's sleeping hours"
+
+  - key: okal
+    name: Okal
+    aka: [Mistress Okal]
+    at: inkhal-city
+    line: Inkhal's Mistress, who chairs the Night Council and hasn't been seen by daylight in forty years
+    ch: 4
+    look: An old Inkhalian whose skin goes the colour of whatever she's sitting against, so you see her eyes before you see her.
+    want: Every caravan in the east paying its way through Inkhal's night markets.
+    tags: [{ text: Knows Your Plans, kind: comes }, { text: Deep Pockets, kind: keeps }, { text: Greedy, kind: drives }]
+    voice: Dry and amused, and she calls everyone dear in a way that's a warning.
+    hooks:
+      - "Okal's selling the empire a letter the crew wrote, and she'll sell it back to them for more"

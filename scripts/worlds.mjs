@@ -94,9 +94,19 @@
 //                is one of draw-map.js's MARKS)
 //   pins         { <place key>: [x, y] }, a pin for every place, inside its
 //                district and its part
+//   opens        the key of the pin the map opens on, or left out for the
+//                middle of the town's districts
 // and world.yaml's ground, what every year shares, so it never moves:
 //   ground       { size: [w, h], sea: [[x, y], ...], water: [[[x, y], ...]],
-//                hills: [[[x, y], ...]] }
+//                hills: [[[x, y], ...]] }, or for a world of seas and
+//                continents (Abnu), land in place of sea: every continent and
+//                island as a shape, [[[x, y], ...]], with deep: [[[x, y],
+//                ...]] for its deepest water. A district's shape there can run
+//                out to sea to hold all its islands, since only its land's
+//                drawn
+//   areas        in world.yaml, what the page calls its districts and parts,
+//                { district: [one, many], part: [one, many] } (Abnu's are
+//                lands and cities), districts and parts if it's left out
 
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
@@ -122,6 +132,10 @@ export const TIES = ["rival", "ally", "debt"];
 // in maps.js), so she's got ten of her own once it's in a campaign.
 export const WORLD_PINS = 50;
 export const AREAS = ["district", "part"];
+// What a world calls them (world.yaml's areas), one and many: a city's are
+// districts and their parts, and Abnu's are lands and the one city drawn as
+// a part of one.
+export const AREA_WORDS = { district: ["district", "districts"], part: ["part", "parts"] };
 const PLACE_FIELDS = new Set(["key", "name", "aka", "area", "in", "line", "ch", "look", "here", "ground", "stakes", "clock", "twist", "teles", "hooks", "elsewhere", "secret", "note"]);
 const PERSON_FIELDS = new Set(["key", "name", "aka", "at", "line", "ch", "look", "want", "voice", "tags", "rules", "teles", "hooks", "secret", "note"]);
 const GROUND = /^\*([^*]+)\*:\s*\S/;
@@ -228,6 +242,12 @@ export function compileWorld({ universe, year, world, files }, book) {
   for (const [k, v] of Object.entries(recipe.dials ?? {})) if (!DIALS.includes(k) || ![0, 1, 2].includes(v)) say(`${year}'s recipe sets ${k} to ${v}, and its dials are ${DIALS.join(", ")}, each 0, 1 or 2`);
   const kinds = world.kinds && typeof world.kinds === "object" ? world.kinds : {};
   if (!Object.keys(kinds).length) say("world.yaml has no kinds of faction to sort the board by");
+  // What the page calls its districts and parts, one and many.
+  const areas = { ...AREA_WORDS };
+  for (const [k, v] of Object.entries(world.areas && typeof world.areas === "object" ? world.areas : {})) {
+    if (!AREA_WORDS[k] || !Array.isArray(v) || v.length !== 2 || !v.every((x) => /^[a-z][a-z ]*$/.test(String(x)))) say(`world.yaml's areas has ${k}: ${JSON.stringify(v)}, and it's district or part, each [one, many] in lower case`);
+    else areas[k] = v.map(String);
+  }
 
   // The book's sizes and Appendix B's assets.
   const sizes = Object.fromEntries((book.sizes ?? []).map((s) => [String(s.size).toLowerCase(), { power: rangeOf(s.power), res: rangeOf(s.res) }]));
@@ -514,6 +534,7 @@ export function compileWorld({ universe, year, world, files }, book) {
     whose: curl(world.whose),
     notices: asList(world.notices).map((n) => String(n).replace(/\s+/g, " ").trim()),
     kinds: Object.fromEntries(Object.entries(kinds).map(([k, v]) => [k, curl(v)])),
+    areas,
     years: Object.keys(world.years ?? {}).map(Number),
     recipe,
     // The region's words for the four sizes, so a Great faction on a City
@@ -717,8 +738,9 @@ function pagesOf({ world, files, factions, history, say, notes }) {
   };
 
   // Names: no two pages with one name, and a page with a faction's name only
-  // where that faction sits there or that's its Face, since the name links to
-  // the faction everywhere but its own card.
+  // where that faction sits there, that's its Face, or it's the district the
+  // faction sits in (a land, Orza's for Orza), since the name links to the
+  // faction everywhere but its own card.
   const named = new Map();
   for (const p of pages.values()) {
     for (const n of [p.card.name, ...p.card.aka]) {
@@ -726,7 +748,7 @@ function pagesOf({ world, files, factions, history, say, notes }) {
       if (named.has(k) && named.get(k) !== p.key) say(`${p.card.name} and ${pages.get(named.get(k)).card.name} are both called ${n}`);
       named.set(k, p.key);
       const f = factions.find((g) => nameKey(g.card.name) === k);
-      if (f && f.seat !== p.key && f.faceOf !== p.key) say(`${p.card.name} is called ${n}, the way ${f.card.name} is, so it never links`);
+      if (f && f.seat !== p.key && f.faceOf !== p.key && !(p.area === "district" && districtOf(f.seat) === p.key)) say(`${p.card.name} is called ${n}, the way ${f.card.name} is, so it never links`);
     }
   }
 
@@ -842,9 +864,18 @@ function mapOf({ world, files, pages, districtOf, partOf, say }) {
     return pts;
   };
   const shapes = (v, what) => asList(v).map((s, i) => shape(s, `${what} ${i + 1}`));
-  const ground = { size: [w, h], sea: shape(g?.sea, "the sea"), water: shapes(g?.water, "the water"), hills: shapes(g?.hills, "the hills") };
+  // A city's ground is its sea. A world of seas and continents gives its land
+  // instead, every continent and island, with its deepest water.
+  for (const k of Object.keys(g ?? {})) if (!["size", "sea", "land", "deep", "water", "hills"].includes(k)) say(`world.yaml's ground has a line a ground can't hold: ${k}`);
+  if (g?.sea != null && g?.land != null) say("world.yaml's ground has the sea and the land, and it's one or the other");
+  if (g?.deep != null && g?.land == null) say("world.yaml's ground has deep water, which only a world drawn by its land has");
+  const ground =
+    g?.land != null
+      ? { size: [w, h], land: shapes(g.land, "the land"), deep: shapes(g.deep, "the deep water"), water: shapes(g.water, "the water"), hills: shapes(g.hills, "the hills") }
+      : { size: [w, h], sea: shape(g?.sea, "the sea"), water: shapes(g?.water, "the water"), hills: shapes(g?.hills, "the hills") };
+  if (ground.land && !ground.land.length) say("world.yaml's ground has no land in it");
   const m = files.map && typeof files.map === "object" ? files.map : {};
-  for (const k of Object.keys(m)) if (!["districts", "parts", "wilds", "roads", "marks", "pins"].includes(k)) say(`map.yaml has a line a map can't hold: ${k}`);
+  for (const k of Object.keys(m)) if (!["districts", "parts", "wilds", "roads", "marks", "pins", "opens"].includes(k)) say(`map.yaml has a line a map can't hold: ${k}`);
   const keyed = (v, area) => {
     const out = {};
     for (const [k, pts] of Object.entries(v && typeof v === "object" ? v : {})) {
@@ -895,7 +926,11 @@ function mapOf({ world, files, pages, districtOf, partOf, say }) {
   for (const p of pages.values()) if (p.kind === "place" && !pins[p.key]) say(`${p.card.name} has no pin on the map`);
   const n = Object.keys(pins).length;
   if (n > WORLD_PINS) say(`the map has ${n} pins, and a year's map has ${WORLD_PINS} at most, so she's got ${MMAX.pins - WORLD_PINS} of her own`);
-  return { size: [w, h], ground, districts, parts, wilds, roads, marks, pins };
+  // Where the map opens: a pin's key (Abnu's on its capital, where most
+  // campaigns start), or left out for the middle of the town's districts.
+  const opens = m.opens == null ? "" : String(m.opens);
+  if (opens && !pins[opens]) say(`map.yaml opens on ${opens}, which has no pin`);
+  return { size: [w, h], ground, districts, parts, wilds, roads, marks, pins, opens };
 }
 
 // A card as the page reads it: no made-up ids, a thread toward another

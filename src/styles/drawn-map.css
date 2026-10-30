@@ -72,3 +72,34 @@
 .dm-mark .dm-m { fill: none; stroke: var(--dm-mark); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .dm-mark .is-tower, .dm-mark .is-in, .dm-mark .is-block { fill: var(--dm-mark); fill-opacity: 0.85; }
 .dm-mark .is-dam { stroke-width: 3; }
+
+/* A world of seas and continents (Abnu, drawWorld()): the sea's the ground,
+   a shelf of shallows round every coast, the deepest water darker still with
+   a faint edge, and each land a plate clipped to the coast, its borders gold.
+   Its lines grow with the map (--dm-k), so the whole world on a phone reads
+   like a city does, and the roads are dashed the way Mo's map has them. */
+.dm.is-world {
+  --dm-shelf: #1b1428;
+  --dm-deep: #040306;
+  --dm-deep-edge: rgba(181, 150, 245, 0.26);
+  --dm-capital: rgba(217, 180, 90, 0.08);
+}
+:root[data-theme="light"] .dm.is-world {
+  --dm-shelf: #e8e3ef;
+  --dm-deep: #c3b9d5;
+  --dm-deep-edge: rgba(91, 54, 176, 0.32);
+  --dm-capital: rgba(122, 90, 18, 0.07);
+}
+.dm-shelf { fill: none; stroke: var(--dm-shelf); stroke-width: calc(34px * var(--dm-k, 1)); stroke-linejoin: round; opacity: 0.5; }
+.dm-shelf-in { fill: none; stroke: var(--dm-shelf); stroke-width: calc(14px * var(--dm-k, 1)); stroke-linejoin: round; }
+.dm-deep { fill: var(--dm-deep); stroke: var(--dm-deep-edge); stroke-width: calc(1.6px * var(--dm-k, 1)); stroke-linejoin: round; }
+.dm.is-world .dm-wave { stroke-width: calc(1.2px * var(--dm-k)); }
+.dm.is-world .dm-de { stroke-width: calc(2px * var(--dm-k)); }
+.dm.is-world .dm-p { fill: var(--dm-capital); stroke-width: calc(1.2px * var(--dm-k)); stroke-dasharray: calc(4px * var(--dm-k)) calc(3px * var(--dm-k)); }
+.dm.is-world .dm-coast { stroke-width: calc(1.8px * var(--dm-k)); }
+.dm.is-world .dm-road-c { stroke-width: calc(3.4px * var(--dm-k)); opacity: 0.35; }
+.dm.is-world .dm-road { stroke-width: calc(1.6px * var(--dm-k)); stroke-dasharray: calc(4px * var(--dm-k)) calc(3.5px * var(--dm-k)); stroke-linecap: butt; }
+/* Past a world's edge, zoomed right out on a phone, is more of its sea
+   rather than the map box's grey. */
+.wn-mapbox:has(.dm.is-world) { background: #0b0812; }
+:root[data-theme="light"] .wn-mapbox:has(.dm.is-world) { background: #d9d3e4; }

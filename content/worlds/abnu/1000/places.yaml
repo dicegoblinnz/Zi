@@ -1,0 +1,1332 @@
+# Abnu's places a thousand years after the Sundering: every land on Mo's map,
+# every seat, the canon's places and the capital's districts, written the way
+# scripts/worlds.mjs says at its top, from notes/abnu-canon.md and the board,
+# and every place pinned on map.yaml. The molefolk's names and the hints at
+# them stay on their own pages, Secrets and her notes. Words with a comma in
+# them go in quotes inside { }, and so does any line that starts with *.
+places:
+
+  # ── The west: the Alysta Empire and its capital
+  - key: the-alysta-empire
+    name: The Alysta Empire
+    area: district
+    line: The biggest and richest nation in the world, across the heart of the western continent
+    ch: 3
+    look: >-
+      Good roads, honest courts and busy towns, with a small brass moon over
+      every door, nine of them, and nobody can say why. Nearly everyone wears
+      an amulet, nearly always, and not wearing one says something. Breakfast's
+      white bread and soft cheese, eaten standing, and long years to the
+      throne gets said fast, the way you'd say bless you.
+    here:
+      - "Alysta, ruling it all from the capital"
+      - "The Imperial Watch, on every road and in every town (Challenge 3: *Trained*, *Calls for Help*)"
+      - "Customs men at every port and border post (Challenge 2: *Bound by Rules*, *Can Be Bought*)"
+      - "Guild crews, choirs and watches, who work together better than anyone alive (Challenge 2: *Stirs the Crowd*)"
+    ground:
+      - "*The Imperial Roads*: a day on them covers what two would anywhere else, and every inn on them talks to the Watch"
+      - "*Stronger Together*: an Alystan crowd moves as one, so start trouble with one of them and you've started it with all of them"
+    teles:
+      - { text: "A Watch patrol on the road stops the crew and asks for their papers.", d: 6, at: "Confidence, Under Suspicion" }
+      - { text: "Somebody notices one of the crew isn't wearing an amulet, and says so loudly.", d: 6, at: "Confidence, Watched" }
+    hooks:
+      - "Soul sight's a crime since the ban, and someone the crew loves has started seeing souls"
+      - "Montia's captains won't carry imperial cargo east, and a merchant's paying well for anyone who will"
+    note: >-
+      It's the empire that stopped asking questions. My word is my bond and
+      stronger together are taught in every school and meant, and the second
+      one's also the handiest belief there is for a ruler who'd rather nobody
+      grew too strong alone. Nobody's ever put those two side by side out loud.
+
+  - key: alysta-city
+    name: Alysta
+    aka: [The capital]
+    area: part
+    in: the-alysta-empire
+    line: The emperor's capital, in white stone on a bay of the south-east coast
+    ch: 4
+    look: >-
+      White stone on the hills and lamps in the rain down by the water. The
+      palace sits up top, the statue of the Seven stands in ruins in the great
+      square where everyone has to walk past it, and below them the city runs
+      down through the Ninth District to Verrant Docks, where everything comes
+      into the empire. The Drowned Quarter's under it all, older than the rest
+      of the city and half under the tide.
+    here:
+      - "The emperor, in the palace, who sees almost nobody"
+      - "The Imperial Watch, on every corner (Challenge 3: *Trained*, *Calls for Help*)"
+      - "*Cassia Brenne*, a magistrate's clerk who can get you a signature (Challenge 1: *Scared*, *Can Be Bought*)"
+      - "The charity's kind people, handing out amulets at the almshouse doors (Challenge 1: *Kind*)"
+    ground:
+      - "*Everything's Written Down*: nothing in the capital happens without paper, and the paper's always somewhere"
+      - "*Nobody Moves Quickly*: a request takes a week, and asking twice sends it to the bottom of the pile"
+    stakes:
+      - "*A signature*, Challenge 3: *Paperwork*, *Someone Must Agree* (the right name on the right form gets the crew anywhere in the city)"
+    clock: { d: 8, text: "The Watch has the crew's names, and the city gates know them." }
+    twist: The emperor's banned the Seven, and the whole city's watching to see who still looks at the statue.
+    teles:
+      - { text: "A clerk smiles and says the form's the wrong colour.", d: 6, at: "a signature" }
+      - { text: "The Watch closes the street and starts checking faces.", d: 8, at: "Confidence, Under Suspicion" }
+    hooks:
+      - "Someone's bought up every copy of a pamphlet about the statue, and the crew's been asked to find the printer first"
+    note: >-
+      Everything that matters in the capital is from this reign, and Alystans
+      are very proud of how it rebuilt. Most campaigns start on Verrant Docks.
+
+  - key: the-palace
+    name: The Palace
+    aka: [The palace]
+    in: alysta-city
+    line: The emperor's palace on the hill over the capital, every room of it written down
+    ch: 6
+    look: >-
+      White stone halls, quiet servants and a door for everything, with every
+      key on Halden Moor's ring. Clerks carry paper from one wing to the next
+      all day, and the throne room's smaller than people expect. The lamps in
+      the emperor's study burn past midnight most nights.
+    here:
+      - "*The Emperor*, who works late and sees almost nobody (Challenge 6: *Knows Your Plans*, *Politically Untouchable*)"
+      - "*Odile Garran*, the Chancellor, who sees everyone (Challenge 4: *Well-Connected*, *Bound by Rules*)"
+      - "*Halden Moor*, the keeper of keys (Challenge 2: *Overlooked*, *Knows the House*)"
+      - "Palace servants, on every stair (Challenge 1: *Overlooked*)"
+      - "The Imperial Watch, at every gate (Challenge 4: *Trained*, *Armoured*)"
+    ground:
+      - "*Every Door Has a Key*: whoever's got the key goes where they like, and whoever hasn't goes where they're led"
+      - "*Servants' Stairs*: there's a second way into every room, if a servant shows you"
+    stakes:
+      - "*An audience*, Challenge 5: *Someone Must Agree*, *Paperwork* (a word with the emperor, or the Chancellor at least)"
+      - "*The study*, Challenge 5: *Locked*, *Guarded* (whatever the emperor keeps where he works)"
+    clock: { d: 6, text: "The Watch is told the crew's somewhere they shouldn't be." }
+    twist: The Chancellor's already got a file on the crew, and it's thicker than it should be.
+    teles:
+      - { text: "Odile Garran thanks the crew for coming and says the emperor's busy.", d: 8, at: "an audience" }
+      - { text: "A guard steps out of an alcove and takes hold of the nearest arm.", d: 8, at: "Defend, Grabbed" }
+      - { text: "Halden Moor locks the door behind the crew and pockets the key.", d: 6, at: "the study" }
+    hooks:
+      - "The Chancellor wants something found in the city quietly, and she doesn't trust the Watch with it"
+    secret:
+      tag: Rebels Under His Roof
+      more: >-
+        The Order of the Seven meets in the palace itself, in a storeroom
+        Halden Moor keeps locked, a handful of servants who still keep the
+        Seven's ways. The crew could notice the same servants missing on the
+        same night every month, or find a copied text of the Seven tucked in a
+        linen press.
+    note: If the emperor knows the Order's under his roof, he's never said.
+
+  - key: the-statue-of-the-seven
+    name: The Statue of the Seven
+    aka: [The statue of the Seven]
+    in: alysta-city
+    line: The Seven in stone in the capital's great square, left in ruins since the ban where everyone has to walk past them
+    ch: 2
+    look: >-
+      Seven figures on one plinth, or what's left of them. The emperor had them
+      broken the week of the ban and the pieces left where they fell, and the
+      square's busier than ever, since everyone has to cross it to get
+      anywhere. People walk past without looking, a bit too carefully.
+    here:
+      - "The Imperial Watch, two of them, all day (Challenge 3: *Trained*, *Calls for Help*)"
+      - "Whoever's watching who looks too long (Challenge 4: *Out of Sight*, *Patient*)"
+      - "Market folk, selling right up to the rubble (Challenge 1: *Stirs the Crowd*)"
+    ground:
+      - "*Don't Look Too Long*: stop at the statue and someone writes it down"
+      - "*The Rubble*: plenty to hide behind and climb, and it shifts underfoot"
+    stakes:
+      - "*The flowers*, Challenge 3: *Watched*, *Hidden Away* (find who leaves them before whoever's watching does)"
+    clock: { d: 8, text: "Whoever's watching has the crew's faces, and follows them home." }
+    twist: Someone left flowers on the plinth last night, and the Watch is paying for a name.
+    teles:
+      - { text: "A Watchman asks why the crew stopped, and takes out his notebook.", d: 6, at: "Confidence, Under Suspicion" }
+      - { text: "A loose block slides off the rubble as someone climbs.", d: 6, at: "Defend, Prone" }
+      - { text: "A stranger who's been watching all day turns and walks off fast.", d: 8, at: "the flowers" }
+    hooks:
+      - "Seven flowers turn up on the plinth every morning, and somebody wants the crew to find out who leaves them before the Watch does"
+    note: Whoever's watching is the Soulless, looking for anyone who stops.
+
+  - key: the-sealed-archive
+    name: The Sealed Archive
+    in: alysta-city
+    line: Where the empire catalogues every banned text instead of burning it
+    ch: 4
+    look: >-
+      Shelves to the ceiling in a building with no windows below the third
+      floor, and every banned book in the empire catalogued, numbered and kept,
+      since burning them would mean nobody could check them. Readers sign the
+      visitor log at the door. At the back's a section behind an iron door that
+      even the Keeper can't open.
+    here:
+      - "*The Keeper*, who's read more banned books than anyone alive (Challenge 2: *Well-Read*, *Secretly Kind*)"
+      - "Archive clerks, quiet and quick (Challenge 1: *Bound by Rules*)"
+      - "The Watch, on the door (Challenge 3: *Trained*)"
+    ground:
+      - "*The Visitor Log*: everyone signs it, with their name and what they read"
+      - "*Silence*: raise your voice and every clerk in the building looks up"
+    stakes:
+      - "*The Seven's texts*, Challenge 4: *Someone Must Agree*, *Watched* (the only complete copy from before the ban)"
+      - "*The locked section*, Challenge 6: *Locked*, *Guarded* (nobody's opened it in living memory, the Keeper included)"
+    clock: { d: 8, text: "The crew's names go into the visitor log, and someone reads it that night." }
+    twist: Someone with no name on his papers has asked for the visitor log twice this month.
+    teles:
+      - { text: "A clerk asks the crew to sign the visitor log, pen held out.", d: 6, at: "Confidence, Watched" }
+      - { text: "The Keeper says the book they want's out for rebinding.", d: 8, at: "the Seven's texts" }
+    hooks:
+      - "The Keeper needs a book carried out of the city before the next inspection, and she can't carry it herself"
+    secret:
+      tag: The Log Gets Read
+      more: >-
+        Someone collects the visitor log every week and copies it, and it's the
+        Soulless. The crew could see the same plain man take the log away on the
+        same day each week, or find their own names copied out in a stranger's
+        hand.
+    note: >-
+      There's a portrait in the stacks, filed as banned for a reason nobody
+      wrote down, and the face in it is the emperor's, three hundred years old.
+
+  - key: verrant-docks
+    name: Verrant Docks
+    aka: [Verrant]
+    in: alysta-city
+    line: The capital's lower city on the water, where everything comes into the empire
+    ch: 2
+    look: >-
+      Working, cold and unromantic, with lamps in the rain and crates stacked
+      three high. Every ship into the empire ties up here and every cargo gets
+      signed for, mostly without anyone reading it. Some of the crates come off
+      with no mark on them at all.
+    here:
+      - "*Merren Vast*, the dock-master, who signs manifests nobody reads (Challenge 2: *Tired*, *Knows the Waterfront*)"
+      - "*Juno*, who runs errands nobody asked her to (Challenge 1: *Overlooked*, *Fast*)"
+      - "Customs men, who don't look in every crate (Challenge 2: *Can Be Bought*)"
+      - "Dockers, who'll down tools for one of their own (Challenge 2: *Heavy*, *Stirs the Crowd*)"
+    ground:
+      - "*Crates Three High*: a maze, with something to climb and something to hide behind everywhere"
+      - "*The Tide*: the water's in at night and out by morning, and so's half of what's on it"
+    stakes:
+      - "*The manifest*, Challenge 3: *Paperwork*, *Wanted By Others* (the one Merren read instead of signing)"
+      - "*A crate with no mark*, Challenge 3: *Heavy Load*, *Watched* (there's one in every shipment, and nobody signs for it)"
+    clock: { d: 8, text: "The crates go out on the morning carts, and whatever's in them is gone." }
+    twist: Merren Vast read a manifest two nights ago instead of signing it, and somebody's noticed.
+    teles:
+      - { text: "A docker swings a crate round on a hook, right at whoever's in the way.", d: 6, at: "Defend, Prone" }
+      - { text: "A customs man asks what's in the crew's bags, and he's already looking.", d: 6, at: "Confidence, Under Suspicion" }
+      - { text: "A cart pulls up for the crates with no mark, an hour early.", d: 8, at: "a crate with no mark" }
+    hooks:
+      - "Merren Vast needs someone to read a manifest he wishes he hadn't"
+      - "Juno's seen a crate come off a ship at night with nobody to sign for it, and she'll show the crew for supper"
+    note: >-
+      The crates with no mark carry the charity's amulets from Xurux, off the
+      books, on the standing order signed A. Most campaigns start on this dock.
+
+  - key: the-ninth-district
+    name: The Ninth District
+    aka: [The Ninth]
+    in: alysta-city
+    line: The capital's poorest district, loud and loyal, with more free amulets a head than anywhere in the world
+    ch: 2
+    look: >-
+      Narrow streets, washing across every alley and everybody's business
+      shouted out of a window. The charity's almshouses hand out amulets at the
+      door, and every neck in the district has one on it. People here love the
+      emperor loudly, and they mean it.
+    here:
+      - "*The Widow Ashgrove*, who owns half the district's debts and all its gossip (Challenge 2: *Well-Connected*, *Greedy*)"
+      - "*Sister Ilva*, in a room above a laundry (Challenge 1: *Kind*, *Devout*)"
+      - "The charity's almsfolk, handing out amulets (Challenge 1: *Kind*)"
+      - "A street gang that runs errands for the Widow (Challenge 2: *Knows the Streets*, *Loyal to a Name*)"
+    ground:
+      - "*Everyone Knows Everyone*: a stranger's noticed in one street and talked about in the next"
+      - "*Washing Lines*: you can cross the district without touching the ground, if you're light enough"
+    stakes:
+      - "*A debt*, Challenge 3: *Someone Must Agree*, *Paperwork* (the Widow holds it, and she'll trade it)"
+    clock: { d: 8, text: "The Widow hears the crew's in her streets, and sends for them." }
+    twist: A boy took his amulet off on a dare yesterday, and the whole street's talking about what happened to his eyes.
+    teles:
+      - { text: "Somebody shouts from a window that there are strangers in the street.", d: 6, at: "Confidence, Watched" }
+      - { text: "The Widow's lads block the alley at both ends and smile.", d: 8, at: "Defend, Pinned" }
+    hooks:
+      - "Nobody's asked why the Ninth gets more free amulets than anywhere in the world, and the Widow would love to know"
+    secret:
+      tag: Stilled on Purpose
+      more: >-
+        The amulets still the soul that wears them, and the Ninth gets the most
+        because it's loud, loyal and poor, and the empire would rather nobody
+        here ever opened. The crew could watch someone take theirs off and
+        awaken on the spot, or count the almshouse's deliveries against the
+        district's heads.
+
+  - key: the-drowned-quarter
+    name: The Drowned Quarter
+    in: alysta-city
+    line: The capital's oldest district, older than the city round it, half under water at high tide
+    ch: 3
+    look: >-
+      Three streets of water at high tide and mud at low, and stone older than
+      anything else in Alysta. The Watch ignores it till something forces its
+      hand. When the tide's out a market goes up on the footbridges, and
+      there's a shrine to the Seven that people still visit, quietly.
+    here:
+      - "The ferryman, who's rowed the same three streets for forty years and remembers everyone who needed to disappear (Challenge 2: *Knows the Waterfront*, *Keeps Its Word*)"
+      - "*Old Tekk*, on a doorstep, making something out of nothing (Challenge 3: *Fading*, *Holds a Grudge*)"
+      - "Smugglers, who use the old tunnels (Challenge 3: *Knows the Territory*, *Ambush*)"
+      - "People at the shrine, who don't want to be seen there (Challenge 1: *Scared*)"
+    ground:
+      - "*High Water*: when the tide's in the streets are canals and only the ferry crosses, and when it's out it's mud to the knee"
+      - "*Old Grates*: the sewer grates open on tunnels older than the city, unmapped for a century"
+    stakes:
+      - "*The tunnels*, Challenge 4: *Hidden Away*, *Far Away* (a way under the city nobody's mapped)"
+    clock: { d: 6, text: "The tide comes in, and the streets are water till morning." }
+    twist: The Watch has finally been ordered in, to close the shrine.
+    teles:
+      - { text: "The tide turns, and the water's up to the knee and rising.", d: 8, at: "the scene clock" }
+      - { text: "A smuggler drops out of a grate behind the crew with a knife.", d: 6, at: "Defend, Grabbed" }
+    hooks:
+      - "The ferryman's the only one who knows where a missing friend went, and he wants a favour first"
+      - "Someone's mapping the old tunnels for the first time in a century, and the smugglers want them stopped"
+    note: At least one smuggling ring depends on nobody having mapped the tunnels.
+
+  - key: hollowgate
+    name: Hollowgate
+    in: the-alysta-empire
+    line: An imperial research station three days inland, on no map, built round an old temple of the Seven
+    ch: 5
+    look: >-
+      High walls in empty country, very well supplied for a place nobody's
+      heard of. Inside, the station's built round an old temple of the Seven,
+      six of its doors bricked up and the seventh left alone. The people who
+      work here are the empire's brightest, and none of them talk about it in
+      town.
+    here:
+      - "Imperial scholars in grey, the empire's brightest (Challenge 2: *Clever*, *Following Orders*)"
+      - "Guards with no badges (Challenge 4: *Trained*, *Silent*)"
+      - "Whoever's in the cells below, if anyone (Challenge 1: *Scared*)"
+    ground:
+      - "*On No Map*: nobody who works here admits it exists, so nobody's coming to help"
+      - "*The Seventh Door*: the only door into the old temple, and it's been used"
+    stakes:
+      - "*The station's records*, Challenge 5: *Locked*, *Written in Code* (what they're really doing out here)"
+      - "*The stair*, Challenge 4: *Hidden Away*, *Far Away* (under a flagstone by the old altar, going down past the station)"
+    clock: { d: 6, text: "The guards find the crew's way in, and seal it." }
+    twist: There's a lamp burning halfway down the stair, and nobody at the station will say whose it is.
+    teles:
+      - { text: "A bell rings somewhere in the walls, and doors start shutting.", d: 8, at: "the scene clock" }
+      - { text: "A guard with no badge steps out of a doorway, already swinging.", d: 8, at: "Defend, Staggered" }
+      - { text: "A scholar sweeps the papers into a stove.", d: 6, at: "the station's records" }
+    hooks:
+      - "Someone the crew knows went to work at a station inland and stopped writing home"
+    secret:
+      tag: Where the Soulless Are Made
+      more: >-
+        Hollowgate's where the Soulless come from, and where they bring the
+        people they hunt, and most of those never leave. The crew could find a
+        cell with fresh straw and a name scratched on the wall, or follow a
+        closed cart from the capital that never comes back.
+    note: >-
+      Behind the seventh door's a small room of undisturbed dust, with six
+      names carved on the wall long ago and a seventh space that was never
+      carved. The flagstone by the altar's been lifted more than once, and
+      cold air moves up the stair. What's down there, nobody's said.
+
+  # ── The west: the Hinterlands, Lubro and Xurux
+  - key: the-hinterlands
+    name: The Hinterlands
+    aka: [Savages of the Hinterlands]
+    area: district
+    line: The Soths' mountains and valleys across the western continent's north, older than the Sundering
+    ch: 4
+    look: >-
+      Cold valleys, high pastures and iron in the rock, and nothing on any of
+      it built to impress anybody. Every adult's armed and trained, scars are
+      shown rather than hidden, and asking about one's a courtesy. Breakfast's
+      cold meat and hot bitter tea, in company, since eating alone is what you
+      do when you're ashamed. Alystan maps call it the Savages of the
+      Hinterlands.
+    here:
+      - "The Soths, ruling from Mornhold"
+      - "The Valley Clans, in every valley with a name (Challenge 3: *Armed Anyway*, *Code of Honour*)"
+      - "Border captains, who turn Xurux's amulet carts back (Challenge 3: *Won't Back Down*)"
+    ground:
+      - "*A Promise Is a Debt*: give a Soth your word and they'll hold you to it, and if you break it every clan hears"
+      - "*Clear It or Go Round*: Soths jump the chasms other people bridge, so the paths go straight over and the roads go round"
+    teles:
+      - { text: "A clan warrior hears the crew make a promise too lightly, and draws.", d: 8, at: "Defend, Staggered" }
+      - { text: "A Soth asks about one of the crew's scars, and waits for the true answer.", d: 6, at: "Confidence, Shaken" }
+    hooks:
+      - "The worst insult a Soth has means you would be believed, and someone's just said it to one of the crew"
+    note: >-
+      They're two centuries behind on everything made and entirely unbothered
+      by it, and they remember what the last war over the Seven cost.
+
+  - key: mornhold
+    name: Mornhold
+    aka: [The Flat-Top Mountain]
+    in: the-hinterlands
+    line: The Soths' capital, on top of the Flat-Top Mountain, which a hero's said to have torn free with bare hands
+    ch: 5
+    look: >-
+      A city on a mountain with a top as flat as a table, a day's climb up the
+      only road, and the wind never stops. Every house is stone and every door's
+      got a weapon by it, and the great hall's dug into the rock itself. Smoke
+      goes up from the Ironhand Forge on the east edge day and night.
+    here:
+      - "*Signe Ironhand*, the queen, who keeps her word whatever it costs (Challenge 5: *Commanding*, *Code of Honour*)"
+      - "Mornhold's Guard, on the one road up (Challenge 4: *Armoured*, *Holds the Line*)"
+      - "Clan chiefs, in for the queen's council (Challenge 4: *Proud*, *Armed Anyway*)"
+    ground:
+      - "*The Only Road*: there's one way up, and it's watched the whole way"
+      - "*Eaten in Company*: share a meal with Soths and you're under their roof till morning, and nobody draws on a guest"
+    stakes:
+      - "*The queen's ear*, Challenge 4: *Someone Must Agree*, *Proof Needed* (Signe hears the crew out, and believes them)"
+    clock: { d: 8, text: "The council decides without the crew, and the clans ride." }
+    twist: The clans want the queen to say out loud what she thinks of Alysta's ban, and she won't.
+    teles:
+      - { text: "A clan chief calls the crew liars to their faces, and waits.", d: 8, at: "Confidence, Shaken" }
+      - { text: "Mornhold's Guard close the road behind the crew.", d: 6, at: "the queen's ear" }
+    hooks:
+      - "A Soth chief wants a debt paid, and the crew's name is on it"
+    secret:
+      tag: An Oath Under the Hall
+      more: >-
+        Queen Signe's line keeps an old peace with the Seven, sworn under
+        Mornhold's great hall with Abbess Hild as its witness. The crew could
+        find the oath stone under the hall, or hear Hild let slip a word about
+        the queen's promises.
+
+  - key: the-ironhand-forge
+    name: The Ironhand Forge
+    in: the-hinterlands
+    line: The ruling family's forge on Mornhold's east edge, whose marked blades are respected in every nation
+    ch: 4
+    look: >-
+      Furnaces cut into the mountain's east face, and the hammering never
+      stops. Every blade that leaves here is tested against the smith's own
+      hand before it's sold, and the smith will show you the scar. The ore
+      comes up from the Iron Valleys in carts, and lately the smiths complain
+      it isn't coming fast enough.
+    here:
+      - "Ironhand smiths, scarred to the elbow (Challenge 3: *Hits Like a Wagon*, *Proud*)"
+      - "Ironhand Warriors, in for their blades (Challenge 4: *Armoured*, *Trained*)"
+    ground:
+      - "*The Hand Test*: a blade that won't cut the smith's hand isn't sold, and the smith decides"
+      - "*Furnace Mouths*: get thrown against one and you come off it burning"
+    stakes:
+      - "*A marked blade*, Challenge 4: *Someone Must Agree*, *Proof Needed* (the smiths only sell to someone they'd trust with one)"
+    clock: { d: 8, text: "The shift ends, and the smiths decide who leaves with a blade." }
+    twist: The new shaft's ore is late again, and the smiths want somebody to go and find out why.
+    teles:
+      - { text: "A smith holds out his hand and asks one of the crew to test a blade on it.", d: 6, at: "Confidence, Shaken" }
+      - { text: "A white-hot bar swings round on its chain.", d: 8, at: "Defend, Burning" }
+    hooks:
+      - "The new shaft keeps coming up short, and the smiths are offering a marked blade to anyone who'll go and look"
+
+  - key: the-iron-valleys
+    name: The Iron Valleys
+    in: the-hinterlands
+    line: The valleys in the Soths' east where the finest iron ore in the world comes out of the rock
+    ch: 3
+    look: >-
+      Steep valleys running down toward the east coast, every one of them with
+      a clan and a mine, and ore carts on every track. This year the Soths
+      opened a new shaft for the Ironhand Forge, into the coast mountain past
+      the last valley, and the whole valley's been talking about it since.
+    here:
+      - "The Valley Clans, who mine and fight in the same boots (Challenge 3: *Armed Anyway*, *Knows the Territory*)"
+      - "Miners on the new shaft, who don't like going down it any more (Challenge 2: *Superstitious*, *Heavy*)"
+    ground:
+      - "*Ore Carts*: the tracks run downhill fast, and so does anything on them"
+      - "*Clan Ground*: every valley's a clan's, and crossing one without asking is an insult"
+    stakes:
+      - "*The new shaft*, Challenge 4: *Far Away*, *Easily Broken* (it's deep, and the props aren't holding)"
+    clock: { d: 6, text: "The clans close the valley, and nobody else goes down the new shaft." }
+    twist: Two clans are arguing over who gets the new shaft's ore, and neither's been paid yet.
+    teles:
+      - { text: "An ore cart comes loose at the top of the track.", d: 8, at: "Defend, Prone" }
+      - { text: "A clan chief wants to know whose valley the crew thinks they're in.", d: 6, at: "Confidence, Shaken" }
+    hooks:
+      - "The Forge wants the new shaft finished, and the miners have stopped going down it"
+    secret:
+      tag: Dug by Day, Filled by Night
+      more: >-
+        The new shaft's tunnels keep turning up filled back in overnight, and
+        it's the molefolk, keeping the Soths away from Melammu's cavern. The
+        crew could go down at night and hear digging ahead of them, or find
+        claw marks in the fresh earth that no tool made.
+
+  - key: the-standing-stones
+    name: The Standing Stones
+    in: the-hinterlands
+    line: A monastery in the Soth highlands that takes no coin, where half the awakened in the north trained
+    ch: 4
+    look: >-
+      A ring of grey stones on a high moor, older than the Soths, with the
+      monastery built round it in turf and timber. Nobody pays. You give
+      favours, take the trials and do your share of the work, and you owe the
+      Stones after, for life. Monks with glowing eyes cut peat beside students
+      who haven't opened yet.
+    here:
+      - "*Abbess Hild*, who takes no coin and forgets no favour (Challenge 5: *Commanding*, *Patient*)"
+      - "Awakened monks, glowing to the shoulder (Challenge 4: *Silent*, *Trained*)"
+      - "Students, a year in and still waiting to open (Challenge 1: *Curious*)"
+    ground:
+      - "*Every Favour Counted*: help the Stones and they'll help you, and they never forget which way it went"
+      - "*The Ring*: inside the stones, soul sight sees further and nobody can hide what they are"
+    stakes:
+      - "*A place in the trials*, Challenge 4: *Someone Must Agree*, *Proof Needed* (Hild takes whoever's ready, and nobody else)"
+    clock: { d: 8, text: "Hild decides the crew owes the Stones a favour, and names it." }
+    twist: A student opened in the night and can't stop glowing, and the trials aren't for another month.
+    teles:
+      - { text: "A monk steps into the crew's way and asks what they've come to give.", d: 6, at: "Confidence, Shaken" }
+      - { text: "Hild looks at one of the crew a long moment and says they're not ready.", d: 8, at: "a place in the trials" }
+    hooks:
+      - "The Stones are owed a favour by someone the crew needs, and Hild will trade it"
+    secret:
+      tag: Students Gone Quiet
+      more: >-
+        Seven students the Stones sent south to Alysta in the last ten years
+        stopped writing, and Hild's sure someone took them. The crew could read
+        the last letter one of them sent, in Hild's cell, or see a Stones
+        novice's charm round the neck of a stranger in the capital.
+
+  - key: cata
+    name: Cata
+    in: the-hinterlands
+    line: A Soth market town on the road from Xunan to Lubro, where the valley clans come down to trade
+    ch: 3
+    look: >-
+      Stone houses round a market square, and pens for the highland herds on
+      every side. Lubro's traders come up the road with salt and cloth and go
+      back down with ore and hides, and the clans come down from the valleys to
+      argue prices in person. Nobody here eats alone, so every deal gets done
+      over a meal.
+    here:
+      - "Clan traders, haggling like it's a fight (Challenge 2: *Proud*, *Armed Anyway*)"
+      - "Lubro's buyers, up the road for ore (Challenge 2: *Deep Pockets*, *Can Be Bought*)"
+      - "A border captain, who's turned back more of Xurux's carts than anyone (Challenge 3: *Code of Honour*, *Won't Back Down*)"
+    ground:
+      - "*Market Day*: everyone's here, armed and in a good mood, till someone cheats"
+      - "*Herd Pens*: a scared herd goes through a crowd like a flood"
+    stakes:
+      - "*A Soth's word*, Challenge 3: *Someone Must Agree*, *Proof Needed* (once it's given, it holds the whole road)"
+    clock: { d: 8, text: "The market closes, and the clans go home with their prices settled." }
+    twist: A cart of Xurux's amulets came in by a back road, and the border captain wants to know who let it through.
+    teles:
+      - { text: "A trader says one of the crew cheated him, loud enough for the whole square.", d: 6, at: "Confidence, Under Suspicion" }
+      - { text: "The herd breaks out of its pen and straight through the market.", d: 8, at: "everyone in the market, Defend, Prone" }
+    hooks:
+      - "The border captain's turned back a cart with something on it that isn't amulets, and he wants it looked at"
+
+  - key: the-mountain
+    name: The Mountain
+    in: the-hinterlands
+    line: The molefolk's home, inside a mountain on the coast where the Soths and Alysta meet
+    ch: 4
+    look: >-
+      Tunnels through soil and stone in every direction, cool and dark, with
+      the air moving through them so every room's got a breath of its own. At
+      the heart's a cavern lit by Melammu, a glowing orb, with gardens round it
+      that grow a season in a night. Bright light hurts down here, and nobody
+      minds.
+    here:
+      - "*The molefolk's eldest*, who tends Melammu's cavern (Challenge 3: *Patient*, *Sees in the Dark*)"
+      - "Diggers, who go through stone like soil (Challenge 3: *Grapple*, *Knows the Territory*)"
+      - "Tunnel Wardens, who feel a stranger by how the air moves (Challenge 4: *Sees in the Dark*, *Ambush*)"
+    ground:
+      - "*Dark*: there's no light but Melammu's, and the molefolk see fine in it"
+      - "*Moving Air*: every step a stranger takes moves the air, and the molefolk feel it"
+    stakes:
+      - "*Melammu*, Challenge 6: *Guarded*, *Hidden Away* (the orb at the heart of the cavern, and the molefolk's whole world)"
+      - "*Safe passage*, Challenge 4: *Someone Must Agree*, *Proof Needed* (the eldest lets the crew go, or doesn't)"
+    clock: { d: 6, text: "The tunnels behind the crew are filled in, and the only way out's through the eldest." }
+    twist: The Soths' new shaft is three walls from Melammu's cavern, and the diggers can hear the picks.
+    teles:
+      - { text: "The tunnel ahead fills with earth, and so does the one behind.", d: 8, at: "Defend, Pinned" }
+      - { text: "A Tunnel Warden takes hold of the nearest ankle from below.", d: 6, at: "Defend, Grabbed" }
+      - { text: "The eldest shuts their eyes and says the crew can't be let go.", d: 8, at: "safe passage" }
+    hooks:
+      - "The molefolk need the Soths' shaft stopped without anyone finding out why"
+    secret:
+      tag: Melammu Was Anunnaki
+      more: >-
+        Melammu was one of the Anunnaki once, a master of growth, forced into
+        the orb by one of the Queen's generals, and it's his gift for growth
+        that keeps everything down here alive. The crew could find a carving in
+        the oldest tunnel of a figure being forced into a ball of light, or
+        watch the gardens die back the moment the orb's moved.
+    note: >-
+      Only Lubro's Rusk family knows they're here. A Rusk boat found their door
+      two hundred years ago, and their rarest stones go out through Lubro by
+      night.
+
+  - key: lubro-land
+    name: Lubro
+    area: district
+    line: A free port on the Soths' east coast, there because somebody has to sell Soth iron to the world
+    ch: 3
+    look: >-
+      A harbour town on a scrap of coast the Soths never bothered to take, all
+      quays, warehouses and taverns. Dues are low and questions are fewer, and
+      the Rusks have run the harbour longer than anyone can remember. Alysta's
+      customs cutters sit just off the harbour mouth now, watching who comes
+      and goes.
+    here:
+      - "*Dagny Rusk*, the harbourmaster (Challenge 3: *Well-Connected*, *Slippery*)"
+      - "The Free Captains, who'll carry anything for the right price (Challenge 3: *Knows the Waterfront*, *Greedy*)"
+      - "Alysta's customs cutters, just outside the harbour (Challenge 3: *Trained*, *Calls for Help*)"
+    ground:
+      - "*Low Dues*: anything can be bought or sold here, and nobody asks where it came from"
+      - "*The Cutters*: every ship that leaves is seen, and the empire writes it down"
+    stakes:
+      - "*A berth out*, Challenge 3: *Someone Must Agree*, *Watched* (a captain who'll take the crew past the cutters)"
+    clock: { d: 8, text: "The tide turns, and the last ship out tonight sails without the crew." }
+    twist: The cutters stopped a Free Captain last night and found nothing, and now they're stopping everyone.
+    teles:
+      - { text: "A customs cutter swings across the harbour mouth.", d: 8, at: "a berth out" }
+      - { text: "A Free Captain decides the crew owes him for the drinks.", d: 6, at: "Confidence, Shaken" }
+    hooks:
+      - "The Rusks are paying a lot for someone to keep the cutters busy for one night"
+    secret:
+      tag: Stones by Night
+      more: >-
+        Lubro's rarest stones come from the molefolk inside the coast mountain,
+        by the Rusks' night boat, and the family's kept it quiet for two hundred
+        years. The crew could watch a Rusk boat go out with no lamp and come
+        back heavy before dawn, or find a stone in a Rusk warehouse that no mine
+        on the surface could give.
+
+  - key: xurux-land
+    name: Xurux
+    aka: [The city of the dead]
+    area: district
+    line: The city of the dead, between Orza and the Soths, where souls the Garden's too crowded to take live till they choose to cease
+    ch: 4
+    look: >-
+      Quiet streets of pale stone, and everything in them made of essence:
+      walls, lamps, tools and bread. The dead run it themselves, patient and
+      polite, and when one's ready to cease they choose to become essence, and
+      the city's built a little more out of them. The amulet houses are the
+      most respected in Xurux, and their marks are on every amulet worth
+      having.
+    here:
+      - "Xurux, ruled by its own dead"
+      - "The Dead of Xurux, who've got all the time there is (Challenge 3: *Patient*, *A Hundred Years of This*)"
+      - "Amulet makers, proud of the mark (Challenge 2: *Proud*, *Bound by Rules*)"
+    ground:
+      - "*The Living Stop at Xunan*: past the gate the living are guests, and guests are watched"
+      - "*Made of Essence*: everything here was somebody once, and the dead don't like it broken"
+    stakes:
+      - "*A word with the amulet houses*, Challenge 4: *Someone Must Agree*, *Proof Needed* (they don't talk to the living)"
+    teles:
+      - { text: "A dead clerk asks the crew, politely, to wait at the gate.", d: 6, at: "Confidence, Brushed Off" }
+    hooks:
+      - "One of the dead wants a message carried to someone living, before they cease"
+    note: >-
+      Nobody in Xurux knows what the etching on the amulets does, and since
+      the master of Deepshaft Kel started asking, the city's been very polite
+      to him.
+
+  - key: xunan
+    name: Xunan
+    in: xurux-land
+    line: The living town at Xurux's gate, where the amulets go out and the empire's buyers come in
+    ch: 2
+    look: >-
+      One long street of inns, warehouses and carters' yards against the gate
+      of the city of the dead. The living do their business here and go no
+      further. The empire's buyers fill the inns, and the carts leave every
+      morning loaded with amulets in straw.
+    here:
+      - "Xunan's Carters, who drive the amulet carts (Challenge 2: *Knows the Territory*, *Can Be Bought*)"
+      - "The empire's buyers, with orders to fill (Challenge 2: *Deep Pockets*, *Bound by Rules*)"
+      - "A dead gatekeeper, who's never once let the wrong person through (Challenge 4: *Immovable*, *Bound to a Place*)"
+    ground:
+      - "*The Gate*: the living go no further unless the dead invite them"
+      - "*Carters' Yards*: carts, mules and straw everywhere, and a cart's easy to hide in"
+    stakes:
+      - "*The coast road*, Challenge 3: *Far Away*, *Watched* (the carters' way round the Soths, and who's paying for it)"
+    clock: { d: 8, text: "The morning carts leave, and whatever's on them is on the road." }
+    twist: The Soths turned back three carts this week, and the carters want someone to ride the coast road with them.
+    teles:
+      - { text: "A carter cracks his whip and the mules go, cart and all, at whoever's in front.", d: 6, at: "Defend, Prone" }
+      - { text: "The gatekeeper says the crew isn't on the list.", d: 8, at: "Confidence, Brushed Off" }
+    hooks:
+      - "An imperial buyer's order has gone up again this year, and a carter wants to know where so many amulets go"
+
+  - key: deepshaft-kel
+    name: Deepshaft Kel
+    in: xurux-land
+    line: The finest amulet workshop in Xurux, and so in the world
+    ch: 4
+    look: >-
+      A deep workshop cut into the city's oldest stone, its benches lit by
+      essence lamps and its master's mark on every tool. The ward patterns came
+      with the tools, and the rule's the same as it's always been: nothing
+      leaves unetched. Lately the master's been asking his own smiths what the
+      etching's for, and none of them know.
+    here:
+      - "*The master of Deepshaft Kel*, proud, decent and asking questions (Challenge 3: *Proud*, *Curious*)"
+      - "Kel's smiths, the dead at their benches (Challenge 2: *Patient*, *Bound by Rules*)"
+    ground:
+      - "*Nothing Leaves Unetched*: every amulet gets its ward pattern before it goes out, without exception"
+      - "*The Old Tools*: they came with the workshop, and nobody here made them"
+    stakes:
+      - "*The ward patterns*, Challenge 5: *Written in Code*, *Guarded* (what the etching does, if anyone can read it)"
+    clock: { d: 8, text: "The amulet houses hear the master's been talking to the living, and call him in." }
+    twist: The other amulet houses have stopped sending their smiths here to train since the master started asking questions.
+    teles:
+      - { text: "A dead smith quietly closes the pattern book.", d: 6, at: "the ward patterns" }
+      - { text: "The master asks the crew a question he shouldn't, and waits for the answer.", d: 8, at: "Confidence, Shaken" }
+    hooks:
+      - "The master wants one of his amulets taken to someone who can read the ward pattern, and brought back with an answer"
+    secret:
+      tag: Nobody Drew the Wards
+      more: >-
+        The ward patterns came with the tools, nobody at the workshops ever
+        designed them, and every amulet that carries them stills the soul that
+        wears it. The crew could take one off someone who's worn it for years
+        and see what wakes, or take the pattern to the Grand Library and ask.
+
+  # ── The west: Orza, the Union and the Etweil
+  - key: the-principality-of-orza
+    name: The Principality of Orza
+    area: district
+    line: The north-west of the western continent, where Jak's Dream grows thick and the cities run on alternating days
+    ch: 3
+    look: >-
+      Fields of Jak's Dream as far as you can see, and towns where half the
+      people are bright and talking too fast and the other half are grey and
+      silent behind shut shutters. Which day are you on is the first thing
+      anyone asks you. There are more libraries than beds, and the libraries
+      are fuller.
+    here:
+      - "Orza, ruling from Aron"
+      - "The Library Wardens, who keep the books and the peace (Challenge 3: *Well-Read*, *Bound by Rules*)"
+      - "Leaf farmers, a day on and a day off (Challenge 1: *Tired*)"
+    ground:
+      - "*Which Day Are You On*: half the people you meet are sharp and quick, and the other half can barely look at you"
+      - "*Jak's Dream*: breathe the smoke and you might see something true, and you'll pay for it with a day in the dark"
+    teles:
+      - { text: "Smoke off a leaf fire rolls across the road, thick and sweet.", d: 6, at: "everyone on the road, Confidence, Seeing Things" }
+    hooks:
+      - "An Orzaini seer saw the crew in a vision, and she's been waiting at the border for a week"
+    note: A few Orzaini have tried to change what they saw, and how that went is most of Orzaini literature.
+
+  - key: aron
+    name: Aron
+    in: the-principality-of-orza
+    line: Orza's capital, a city of libraries in the north-west, ruled from a darkened room every other day
+    ch: 3
+    look: >-
+      Libraries on every street, reading rooms in every inn, and the smell of
+      leaf smoke everywhere. The prince's palace keeps its shutters closed half
+      the week. Two of the libraries shut their doors to Ezkian scholars this
+      year, and the scholars sit on the steps outside anyway.
+    here:
+      - "*Emeric Sallow*, the prince, who rules from a darkened room every other day (Challenge 3: *Clever*, *Fragile*)"
+      - "The Prince's Guard (Challenge 3: *Trained*, *Following Orders*)"
+      - "Seers, in the smoke rooms (Challenge 1: *Knows Your Plans*, *Tired*)"
+      - "Ezkian scholars, on the library steps (Challenge 1: *Curious*, *Won't Back Down*)"
+    ground:
+      - "*The Libraries*: whatever's ever been written, someone in Aron's read it"
+      - "*Smoke Rooms*: whoever goes in comes out knowing something or nothing, and tired either way"
+    stakes:
+      - "*A seer's vision*, Challenge 4: *Someone Must Agree*, *Proof Needed* (what they saw, if they'll say it)"
+    clock: { d: 8, text: "The city goes grey for its day off, and nobody'll talk till tomorrow." }
+    twist: It's the city's grey day, and the one person the crew needs is asleep behind a shuttered window.
+    teles:
+      - { text: "A seer grabs one of the crew by the sleeve and says she's seen how this ends.", d: 6, at: "Confidence, Shaken" }
+      - { text: "The seer slumps back into the smoke, and the vision's gone till tomorrow.", d: 8, at: "a seer's vision" }
+    hooks:
+      - "The prince wants a book out of the Sealed Archive, and he'll pay in visions"
+    secret:
+      tag: The Same Dream
+      more: >-
+        Every seer in Aron's had the same vision since spring, the sea opening
+        over a trench and something climbing out, and the prince has told
+        nobody. The crew could share a smoke room with a seer and see it too, or
+        find a stack of sketches of the same trench in the prince's study.
+
+  - key: the-ezkian-union
+    name: The Ezkian Union
+    area: district
+    line: The scholars' steam republic in the west of the western continent, between Orza and the Etweil
+    ch: 3
+    look: >-
+      Foundry smoke, rail tracks and clockwork on every street, and more
+      scholars than farmers. Anyone's welcome whatever they're running from, so
+      the awakened who get out of Alysta come here, and nobody makes them wear
+      an amulet. Everything has a price, including speed.
+    here:
+      - "The Ezkian Union, governing from Ezkia Prime"
+      - "The Brass Guard, in brass and clockwork (Challenge 4: *Armoured*, *Trained*)"
+      - "Soul-workers who ran from Alysta, glowing and nervous (Challenge 3: *Scared*, *Burns*)"
+    ground:
+      - "*Everything Has a Price*: anything can be made fast, if you pay extra"
+      - "*No Amulets*: nobody here wears one, so soul sight sees everyone as they are"
+    teles:
+      - { text: "A steam carriage comes round the corner faster than it should.", d: 6, at: "Defend, Prone" }
+    hooks:
+      - "A soul-worker who got out of Alysta wants her family brought over the border too"
+
+  - key: ezkia-prime
+    name: Ezkia Prime
+    aka: [The City of Towers]
+    in: the-ezkian-union
+    line: The Union's capital, the City of Towers, lit by gas lamps after dark
+    ch: 3
+    look: >-
+      Towers on towers in brass and glass, joined by bridges high up and lit
+      after dark by gas lamps that hiss. Clockwork carts run the streets on
+      rails, and the Grand Library sits in the middle of it all with the
+      Council of Nine's hall inside it. Ezkian smiths take three commissions at
+      once and finish all of them late.
+    here:
+      - "*Maren Aldaz*, the youngest of the Nine (Challenge 3: *Clever*, *Ambitious*)"
+      - "The Brass Guard (Challenge 4: *Armoured*, *Trained*)"
+      - "Scholars from every nation, arguing on the bridges (Challenge 1: *Curious*)"
+    ground:
+      - "*Gaslight*: the streets are as bright at midnight as at noon"
+      - "*Bridges*: the towers join up high, and the quickest way anywhere's over"
+    stakes:
+      - "*A commission*, Challenge 3: *On a Timer*, *Someone Must Agree* (an Ezkian smith makes it, if they'll start it this week)"
+    clock: { d: 8, text: "The Council sits, and decides without anyone from outside the Union in the room." }
+    twist: Alysta's envoy is in the city asking for a runaway soul-worker back, and the Union's being very polite about it.
+    teles:
+      - { text: "A gas lamp bursts over the bridge, and the flames come down.", d: 6, at: "Defend, Burning" }
+      - { text: "The smith says it'll cost double to start it this week.", d: 6, at: "a commission" }
+    hooks:
+      - "Maren Aldaz needs a crate brought in from the coast with nobody looking inside it"
+    note: >-
+      The Union's racing to finish something the Anunnaki left half finished,
+      before Alysta gets there first, and it isn't sure, inside, that the race
+      is a good idea.
+
+  - key: the-grand-library
+    name: The Grand Library
+    in: the-ezkian-union
+    line: The library in Ezkia Prime that elects the Council of Nine
+    ch: 4
+    look: >-
+      A library the size of a town under one roof, with its own streets of
+      shelves and its own weather up near the top. Every scholar in the Union's
+      a member, and the members elect the Nine. In a locked hall in the middle
+      of it is the work the Union's racing to finish, and nobody goes near it
+      without the Council's word.
+    here:
+      - "Librarians, who know where everything is (Challenge 2: *Well-Read*, *Bound by Rules*)"
+      - "The Brass Guard, on the hall at the heart (Challenge 4: *Armoured*, *Trained*)"
+      - "Scholars from every nation (Challenge 1: *Curious*, *Clever*)"
+    ground:
+      - "*Members Only*: a member walks anywhere, and anyone else is asked who brought them"
+      - "*The Stacks*: aisles so long you can lose someone in them, and get lost yourself"
+    stakes:
+      - "*The locked hall*, Challenge 6: *Locked*, *Guarded* (the work the Union's racing to finish)"
+      - "*A member's ticket*, Challenge 3: *Someone Must Agree*, *Paperwork* (anyone with one goes where they like)"
+    clock: { d: 8, text: "The librarians notice who isn't a member, and send for the Brass Guard." }
+    twist: The vote for the next seat on the Nine is tomorrow, and every member in the building's being bought a drink.
+    teles:
+      - { text: "A librarian asks whose ticket the crew's using.", d: 6, at: "a member's ticket" }
+      - { text: "A ladder and a shelf of books come down off the high stacks.", d: 6, at: "Defend, Pinned" }
+    hooks:
+      - "A scholar's found a page in the stacks about what the Union's racing to finish, and she's scared of it"
+
+  - key: waslach
+    name: Waslach
+    in: the-ezkian-union
+    line: A foundry town in the Union's south, where its engines are built
+    ch: 2
+    look: >-
+      Foundries, coal smoke and noise, day and night, and the river running
+      black below the works. Every engine in the Union's built here, and half
+      its clockwork. The surveyors set out from Waslach for the Green Silence,
+      and the Etweil walk them home again, politely, every time.
+    here:
+      - "Foundry crews (Challenge 2: *Heavy*, *Barracks Humour*)"
+      - "Union surveyors, packing for another try (Challenge 2: *Curious*, *Won't Back Down*)"
+    ground:
+      - "*Coal Smoke*: thick enough to hide in, and to choke on"
+      - "*Engines Everywhere*: there's always something here that can lift, pull or crush"
+    stakes:
+      - "*The survey*, Challenge 4: *Far Away*, *Someone Must Agree* (a map of the Green Silence, if the Etweil allow it)"
+    clock: { d: 8, text: "The surveyors set out without the crew." }
+    twist: The last survey team came back from the Green Silence and won't say a word about it.
+    teles:
+      - { text: "A boiler blows its valve in a shriek of steam.", d: 6, at: "everyone in the foundry, Defend, Burning" }
+      - { text: "The survey leader says they've already got a guide, and turns away.", d: 6, at: "the survey" }
+    hooks:
+      - "The surveyors want a guide who's been into the Green Silence and come out on their own"
+
+  - key: the-etweilian-tribes
+    name: The Etweilian Tribes
+    area: district
+    line: The mountains of the western continent's south, cold enough to kill, where the Etweil live
+    ch: 3
+    look: >-
+      Peaks cold enough to kill and passes that close for half the year. The
+      Etweil walk through it naked, small, hairy and green-haired, and a still
+      one gets taken for a bush. They eat once a day, greet each other by
+      standing very still till they're noticed, and hum the tenth verse of
+      every song instead of singing it.
+    here:
+      - "The Etweilian Tribes, from Niebali"
+      - "Mountain Guides, who'll take you through if you ask the right way (Challenge 2: *Knows the Territory*, *Patient*)"
+      - "Silent Walkers, who'll bring you out whether you asked or not (Challenge 3: *Silent*, *Kind*)"
+    ground:
+      - "*Cold Enough to Kill*: a night out here without shelter's a fight"
+      - "*Taken for a Bush*: an Etweil who stands still isn't seen till they want to be"
+    teles:
+      - { text: "The wind comes off the peaks and the snow with it.", d: 8, at: "everyone on the pass, Defend, Staggered" }
+    hooks:
+      - "An Etweil guide's offered to take the crew through the southern passes, and won't say what she wants for it"
+    note: Nobody's ever offered the Etweil an amulet.
+
+  - key: niebali
+    name: Niebali
+    in: the-etweilian-tribes
+    line: The Etweil's chief town, in a valley warmed by hot springs
+    ch: 2
+    look: >-
+      Low houses of turf and stone round hot springs that steam all winter, and
+      not much else. People eat whatever grew nearest, slowly and in silence.
+      The elders sit by the springs and remember what everyone else agreed to
+      forget, and they'll tell you once they trust you completely, which takes
+      years.
+    here:
+      - "*Hessa*, the eldest, who'll stand very still beside you till you notice her (Challenge 2: *Patient*, *Kind*)"
+      - "Elders by the springs (Challenge 1: *Old*, *Patient*)"
+      - "Mountain Guides (Challenge 2: *Knows the Territory*)"
+    ground:
+      - "*Hot Springs*: warm water in the coldest place alive, and nobody fights in it"
+      - "*Never in a Hurry*: rush an Etweil and they'll take longer"
+    stakes:
+      - "*An elder's trust*, Challenge 5: *Someone Must Agree*, *Proof Needed* (it takes years, and the crew hasn't got them)"
+    clock: { d: 10, text: "Hessa stands up and walks the crew politely to the edge of town." }
+    twist: The Union's surveyors are back, camped at the edge of town, waiting for a guide.
+    teles:
+      - { text: "Hessa stands very still beside one of the crew, and waits.", d: 6, at: "Confidence, Unsettled" }
+      - { text: "An elder says she'll think about it, and closes her eyes.", d: 8, at: "an elder's trust" }
+    hooks:
+      - "Hessa wants someone brought out of the Green Silence who went in on purpose"
+    secret:
+      tag: They Remember the Ten
+      more: >-
+        The tenth verse the Etweil hum is the tenth moon's, the one that fell,
+        and every elder at Niebali can still sing it. The crew could earn an
+        elder's trust and hear it sung, or count the moons on an old carving by
+        the springs, and there are ten.
+
+  - key: the-green-silence
+    name: The Green Silence
+    in: the-etweilian-tribes
+    line: A stretch of the Etweil's mountains nobody's mapped, where people go in and the Etweil bring them out again
+    ch: 5
+    look: >-
+      Green in the middle of the snow, and quiet. No birds, no wind and no
+      echo. People go in, and the Etweil bring them out again, politely, and
+      never talk about what happened, and neither do the people they bring
+      out.
+    here:
+      - "Silent Walkers, who know the way in and out (Challenge 3: *Silent*, *Kind*)"
+      - "Whoever went in this week and hasn't come out (Challenge 1: *Scared*)"
+    ground:
+      - "*Silence*: no sound carries, so nobody hears you call for help"
+      - "*No Way to Map It*: the paths aren't where they were an hour ago"
+    stakes:
+      - "*Whoever went in*, Challenge 4: *Far Away*, *Alive and Scared* (find them before the Etweil do)"
+    clock: { d: 8, text: "The Etweil find the crew and walk them out, politely, before they've found anything." }
+    twist: An Ezkian survey team went in three days ago, and the Etweil haven't brought them out yet.
+    teles:
+      - { text: "The path behind the crew isn't there any more.", d: 8, at: "the scene clock" }
+      - { text: "A Silent Walker steps out of the green and takes hold of an arm, gently.", d: 6, at: "Defend, Grabbed" }
+    hooks:
+      - "The Union pays well for anyone who maps a mile of it and comes back with the map"
+    note: What's in there, the Etweil don't say, and nobody who's come out has said either.
+
+  # ── The middle sea: Montia and Thelis
+  - key: the-kingdom-of-montia
+    name: The Kingdom of Montia
+    area: district
+    line: The middle sea's islands, the western continent's eastern tip and a holding on the eastern shore, all of it Montia's
+    ch: 3
+    look: >-
+      Islands, harbours and the sea between them, and temples low and wide on
+      every one with seven doors, the seventh always shut. Montians pick a
+      virtue at breakfast over their barley porridge and try to be it till
+      evening. Which one are you carrying is hello, and they always say the
+      thing out loud.
+    here:
+      - "Montia, ruling from Pera"
+      - "Montian Sailors, who see a kilometre clean and always know north (Challenge 2: *Knows the Waterfront*, *Devout*)"
+      - "Temple Wardens, at the seven doors (Challenge 3: *Devout*, *Holds the Line*)"
+      - "The Pilgrim Fleets, in every harbour (Challenge 2: *Loyal to a Name*)"
+    ground:
+      - "*Seven Doors*: every temple has them, and the seventh stays shut, never locked, just never opened"
+      - "*They Say It Out Loud*: a Montian tells you what they think, in any port, to anyone"
+    teles:
+      - { text: "A Montian asks which virtue the crew's carrying today, and waits for a real answer.", d: 6, at: "Confidence, Shaken" }
+    hooks:
+      - "The eastern holding owes the Free City of Inkhal a winter's grain, and Inkhal's sent someone to collect"
+    note: >-
+      Every wayside shrine has seven alcoves, and the seventh's always empty and
+      swept clean. You don't put anything in that one.
+
+  - key: pera
+    name: Pera
+    in: the-kingdom-of-montia
+    line: Montia's capital, on the main island, with the queen's temple at the top of the town
+    ch: 3
+    look: >-
+      A harbour city in bright stone with ships three deep at the quays, and a
+      temple low and wide at the top of the town, its seven doors facing the
+      sea. Montian captains drink in the harbour taverns and call the emperor a
+      heretic king to anyone who'll listen. The Seven's texts are sold openly
+      in the market.
+    here:
+      - "*Aurea Pell*, the queen, who's carried Justice every day since the ban (Challenge 4: *Commanding*, *Code of Honour*)"
+      - "Temple Wardens (Challenge 3: *Devout*, *Holds the Line*)"
+      - "Montian captains, who won't carry imperial cargo east (Challenge 3: *Proud*, *Knows the Waterfront*)"
+    ground:
+      - "*The Queen's Temple*: it has seven doors like every temple, and nobody goes through the seventh"
+      - "*Books in the Market*: the Seven's texts are sold here like bread"
+    stakes:
+      - "*The queen's justice*, Challenge 4: *Someone Must Agree*, *Proof Needed* (Aurea Pell hears the crew's case, fairly and in public)"
+    clock: { d: 8, text: "The queen gives her judgement, and it stands." }
+    twist: An imperial envoy's in the harbour asking Montia's captains to carry cargo east again, and the whole town's come to watch the queen say no.
+    teles:
+      - { text: "Aurea Pell asks the crew which virtue they're carrying, in front of the whole court.", d: 8, at: "Confidence, Shaken" }
+      - { text: "A captain spits at the envoy's feet, and the envoy's guards draw.", d: 6, at: "everyone on the quay, Defend, Staggered" }
+    hooks:
+      - "The queen wants to know why Thelis turns her ships back from the Sundering Deep"
+
+  - key: sethilan-harbour
+    name: Sethilan Harbour
+    in: the-kingdom-of-montia
+    line: The harbour where the Pilgrim Fleets take on supplies, and every hold takes on books
+    ch: 3
+    look: >-
+      The busiest harbour in the middle sea, all chandlers, rope walks and
+      copying houses, where scribes copy the Seven's texts by hand at long
+      tables by the water. Every ship that leaves takes a book in its hold,
+      illegally and constantly, and nobody's ever managed to stop it.
+    here:
+      - "Pilgrim Crews, taking on stores (Challenge 2: *Devout*, *Knows the Waterfront*)"
+      - "Copyists at the long tables (Challenge 1: *Well-Read*, *Patient*)"
+      - "An imperial agent nobody's spotted yet (Challenge 3: *Out of Sight*, *Patient*)"
+    ground:
+      - "*Every Hold Takes a Book*: whatever the crew needs carried can go out with the texts"
+      - "*Rope Walks*: long sheds full of line, made for climbing and for getting tangled in"
+    stakes:
+      - "*A berth with the fleet*, Challenge 3: *Someone Must Agree*, *Proof Needed* (the pilgrims carry anyone who's carrying a virtue)"
+    clock: { d: 8, text: "The fleet sails on the tide, with or without the crew." }
+    twist: A whole crate of copied texts has gone missing from the copying house, and the scribes think it was one of their own.
+    teles:
+      - { text: "A line goes taut as a ship pulls out, right across the quay.", d: 6, at: "everyone on the quay, Defend, Prone" }
+      - { text: "The harbourmaster says the fleet's full this tide.", d: 6, at: "a berth with the fleet" }
+    hooks:
+      - "A pilgrim captain needs a book got onto Verrant Docks past the customs men"
+
+  - key: thelis-land
+    name: Thelis
+    area: district
+    line: The green island in the north of the middle sea, and the merfolk kingdoms in the water round it, down toward the Sundering Deep
+    ch: 4
+    look: >-
+      A green island nobody lives on, and under the water round it, kingdoms
+      older than any surface empire, their halls facing down toward the deep.
+      Thelisians have a blowhole for a nose, webbed hands and feet and four
+      hours on a breath, and they talk to the sea's creatures in a way that
+      isn't language and works anyway. Their names are three notes long.
+    here:
+      - "Thelis, from the halls below"
+      - "The Hall Guard, in the water (Challenge 4: *Swift*, *Sees in the Dark*)"
+      - "Speakers to the Sea, and whatever they've called (Challenge 3: *Calls for Help*, *Patient*)"
+    ground:
+      - "*Four Hours on a Breath*: a Thelisian can wait you out under the water"
+      - "*The Sea's Creatures*: anything that swims here might be listening for Thelis"
+    teles:
+      - { text: "Something big moves under the boat, and the boat moves with it.", d: 8, at: "everyone in the boat, Defend, Prone" }
+    hooks:
+      - "A Thelisian's been seen ashore on Verrant Docks, asking for someone by name"
+    note: Thelisians are raised to watch rather than act, and they feel older than everyone round them.
+
+  - key: the-ledge
+    name: The Ledge
+    in: thelis-land
+    line: The shallowest Thelisian hall, in the upper depths off Thelis, and the only one a surface-dweller's ever been invited into
+    ch: 4
+    look: >-
+      A hall of coral and old stone on a shelf of rock, deep enough that the
+      light's green and dim, with air kept in a dome at the top for guests.
+      Carvings run round every wall, and the faces in them all look down,
+      toward the deep.
+    here:
+      - "*The Warden of the Ledge*, the only Thelisian who'll talk to surface folk (Challenge 4: *Patient*, *Keeps Its Word*)"
+      - "The Hall Guard (Challenge 4: *Swift*, *Sees in the Dark*)"
+    ground:
+      - "*The Air Dome*: the only air in the hall, and it's the Warden's to give"
+      - "*Borrowed Breath*: everywhere but the dome's under water, and a surface-dweller's on borrowed time"
+    stakes:
+      - "*An invitation*, Challenge 4: *Someone Must Agree*, *Underwater* (the Warden asks the crew in, or doesn't)"
+      - "*The carvings*, Challenge 4: *Underwater*, *Written in Code* (what's on the walls, if someone can read them)"
+    clock: { d: 6, text: "The air in the dome runs thin, and the guests have to go up." }
+    twist: The Deep's shaken twice since morning, and the Warden keeps looking down instead of at the crew.
+    teles:
+      - { text: "The Warden turns away and lets the silence say no.", d: 8, at: "an invitation" }
+      - { text: "The hall shudders, and the dome loses air in a rush of bubbles.", d: 8, at: "the scene clock" }
+    hooks:
+      - "The Warden wants a surface ship that ignored the warning turned back before it reaches the Deep"
+    secret:
+      tag: Ten Moons on the Wall
+      more: >-
+        The carvings show ten moons, and Thelisians are raised never to say what
+        fell into the sea. The crew could count them by lamplight in the dome,
+        or ask the Warden about the tenth and watch her not answer.
+
+  - key: the-sundering-deep
+    name: The Sundering Deep
+    aka: [The Deep]
+    in: thelis-land
+    line: The trench south-west of Thelis that could swallow a nation, where the sea's wrong
+    ch: 6
+    look: >-
+      Water so dark it looks like a hole in the sea, long enough to sail a day
+      along. Sailors give it a wide berth and can't tell you why, past saying
+      the sea's wrong over it. Lately it shakes, and the swell comes up from
+      below rather than off the wind.
+    here:
+      - "Thelis's watch on the Deep, out of sight below (Challenge 4: *Out of Sight*, *Swift*)"
+      - "Ships that didn't listen, turned back or wrecked (Challenge 1: *Scared*)"
+    ground:
+      - "*The Sea's Wrong*: compasses wander, and the swell comes up from below"
+      - "*Turned Back*: the sea's creatures herd any ship off the Deep, one way or another"
+    stakes:
+      - "*A way across*, Challenge 5: *Far Away*, *Underwater* (get a ship over the Deep without Thelis turning it back)"
+    clock: { d: 6, text: "The Deep shakes, and the sea takes whatever's on it." }
+    twist: The shaking's harder than anyone remembers, and a Montian ship's out there anyway, looking for why Thelis turns them back.
+    teles:
+      - { text: "The sea heaves up from below, and the deck goes out from under everyone.", d: 8, at: "everyone on the deck, Defend, Prone" }
+      - { text: "A shape the size of the ship rises alongside and turns it, gently, back the way it came.", d: 8, at: "a way across" }
+    hooks:
+      - "Montia's queen wants to know why Thelis turns ships back, and she's paying for someone to find out"
+    secret:
+      tag: The Tenth Moon
+      more: >-
+        There were ten moons, and the tenth lies at the bottom of the Deep,
+        sealed, with something in it trying to get out. The crew could hear an
+        Orzaini seer describe the trench before they've ever seen it, or get a
+        Thelisian to break her people's rule and say what fell into the sea.
+    note: >-
+      Raising the moon's one of the ways this can end, and something's been
+      working at it for six hundred years. What, nobody knows.
+
+  # ── The east
+  - key: cobria-land
+    name: Cobria
+    area: district
+    line: The rainforest across the eastern continent's long north, dangerous and crowded with creatures
+    ch: 4
+    look: >-
+      Rainforest so thick the roads are rivers, crowded with things that bite,
+      sting and watch. Cobrians shrug off poison and suffer in the cold, and
+      their souls open early, so their children are watched for glowing eyes
+      from young. The forest's edge is burning in the south, where Echily's
+      been setting fire-lines.
+    here:
+      - "Cobria, ruling from Gustburg"
+      - "Forest Hunters, who move through it like it's open ground (Challenge 3: *Venom*, *Knows the Territory*)"
+      - "Cobria's Awakened, who opened as children (Challenge 3: *Burns*, *Proud*)"
+    ground:
+      - "*The Rainforest*: thick, wet and full of things that bite, and every Cobrian knows the way through"
+      - "*Rivers for Roads*: the quickest way anywhere's by boat"
+    teles:
+      - { text: "Something in the canopy drops onto whoever's at the back.", d: 6, at: "Defend, Poisoned" }
+    hooks:
+      - "Cobrian children who open early keep going missing from the coast towns, and nobody's found where they go"
+
+  - key: gustburg
+    name: Gustburg
+    in: cobria-land
+    line: Cobria's capital, on a slow river in the eastern continent's north
+    ch: 3
+    look: >-
+      A city on stilts over a slow brown river, its houses built up into the
+      trees and its markets on rafts. The medicine stalls sell cures for poisons
+      nobody else has heard of. Children with the glow in their eyes get
+      pointed out in the street, proudly.
+    here:
+      - "*Sevra*, the Speaker, who was found glowing in her cradle (Challenge 4: *Commanding*, *Protects Someone*)"
+      - "Gustburg's Watch, on the river (Challenge 3: *Knows the Territory*, *Venom*)"
+      - "Medicine sellers, who'll cure what you've got and sell you what you'll get next (Challenge 1: *Can Be Bought*)"
+    ground:
+      - "*Raft Markets*: everything's for sale and everything floats, mostly"
+      - "*Fever Bark*: Gustburg's stalls sell it, and nobody else in the east can make it"
+    stakes:
+      - "*Fever Bark for Echily*, Challenge 4: *Someone Must Agree*, *Wanted By Others* (Cobria won't sell it to Echily while the forest burns)"
+    clock: { d: 8, text: "The Speaker's council rules against outsiders, and the river gates close." }
+    twist: A ship left the coast with a Cobrian child aboard last week, and the Speaker wants to know whose ship it was.
+    teles:
+      - { text: "The raft under the crew tips as someone shoves past.", d: 6, at: "Defend, Prone" }
+      - { text: "Sevra says Cobria's bark is for Cobria, and turns away.", d: 8, at: "Fever Bark for Echily" }
+    hooks:
+      - "Sevra's sworn to find whoever's taking Cobria's children, and she'll trade anything for a name"
+
+  - key: echily-land
+    name: Echily
+    area: district
+    line: The high places in the middle of the eastern continent, where every town's built to be left
+    ch: 3
+    look: >-
+      Cliffs and crags with towns perched on top of them, built light and
+      spread out, with nothing in them anyone couldn't carry. Echilians glide
+      down on their pseudo-wings and climb back up with their talons, and every
+      one of them knows exactly how much less time they've got than you. When
+      a fever comes, the whole town moves.
+    here:
+      - "Echily, from Neuzon"
+      - "Gliders, who come down off the crags before you see them (Challenge 3: *Flies*, *Ambush*)"
+      - "The Cliff Towns, packed and ready to move (Challenge 2: *Scared*, *Runs*)"
+    ground:
+      - "*Built to Be Left*: every town here can be packed and gone by morning"
+      - "*Up High*: the only ways up are the glide, the climb and the long path"
+    teles:
+      - { text: "A glider drops out of the sky onto whoever's out in the open.", d: 6, at: "Defend, Prone" }
+    hooks:
+      - "Echily's fire-lines have reached the river, and Cobria's hunters are coming to answer"
+
+  - key: neuzon
+    name: Neuzon
+    in: echily-land
+    line: Echily's capital, high on the crags where the eastern roads meet
+    ch: 3
+    look: >-
+      A town of looms and cliff honey strung along the crags, with rope bridges
+      between the rocks and the council in the highest house. Half the east
+      side's stood empty since the fever, and the people who stayed boil every
+      drop they drink.
+    here:
+      - "*Neru*, the Highmother, who's forty and in a hurry (Challenge 3: *Ambitious*, *Fast*)"
+      - "The council, in the highest house (Challenge 3: *Politically Untouchable*, *Guilty*)"
+      - "Gliders (Challenge 3: *Flies*, *Ambush*)"
+    ground:
+      - "*Rope Bridges*: the quickest way between houses, and the easiest to cut"
+      - "*The Empty East Side*: half the town nobody's lived in since the fever"
+    stakes:
+      - "*The council's ear*, Challenge 4: *Someone Must Agree*, *Up High* (they meet in the highest house, and they don't like being climbed to)"
+    clock: { d: 8, text: "The council says the fever's Cobria's fault again, and the fire-lines go further." }
+    twist: Neru wants Fever Bark badly enough to buy it from anyone, and someone's selling fakes.
+    teles:
+      - { text: "A rope bridge swings hard as someone cuts one of its lines.", d: 8, at: "everyone on the bridge, Defend, Prone" }
+      - { text: "Neru says she hasn't got time for this, and means it.", d: 6, at: "the council's ear" }
+    hooks:
+      - "Neru will pay anything for Fever Bark, and Cobria won't sell her any"
+    secret:
+      tag: The Fever's in the Wells
+      more: >-
+        The fevers that empty Echilian towns start in Neuzon's own wells, and
+        the council blames Cobria to keep the towns from turning on it. The
+        crew could drink from the east side's wells and fall sick, or find the
+        council's old report on the wells, hidden in the highest house.
+
+  - key: the-polythusian-marches
+    name: The Polythusian Marches
+    area: district
+    line: The mountains in the far east of the eastern continent, all passes, walls and tolls
+    ch: 4
+    look: >-
+      Peaks and passes with a wall across every one of them. Polythusians
+      breathe thin air like it's nothing and clear a gap other people need a
+      run-up for, and they sleep twelve hours at a stretch, deeply and not
+      negotiably. Every caravan through pays the toll, and the toll's been
+      doubled twice.
+    here:
+      - "The Polythusian Marches, from Molythia"
+      - "The Wall Garrisons, half of them asleep at any time (Challenge 4: *Holds the Line*, *Fortified*)"
+      - "Mountain Leapers, who come over the rocks rather than round them (Challenge 3: *Swift*, *Ambush*)"
+    ground:
+      - "*Thin Air*: everyone but a Polythusian's short of breath up here"
+      - "*Twelve Hours Down*: half the garrison's always asleep, and nothing wakes them"
+    teles:
+      - { text: "A Leaper drops off the rocks into the middle of the path.", d: 6, at: "Defend, Staggered" }
+    hooks:
+      - "Inkhal's caravans are getting through at night, and the garrisons want to know how"
+
+  - key: molythia
+    name: Molythia
+    in: the-polythusian-marches
+    line: The Marches' capital, behind the Molythia Wall in the far east
+    ch: 4
+    look: >-
+      A city built into the mountain behind a wall that's never been taken,
+      with forges in the rock and silver coming out of the seams. Half the city's
+      asleep whenever you arrive, and the other half's keeping the wall.
+    here:
+      - "*Tamsk*, the Wallward, who sleeps his twelve hours on top of the wall (Challenge 4: *Holds the Line*, *Code of Honour*)"
+      - "The Second Watch, awake while the first sleeps (Challenge 3: *Trained*, *Following Orders*)"
+      - "Caravan masters, arguing the toll (Challenge 2: *Greedy*, *Deep Pockets*)"
+    ground:
+      - "*The Wall*: it's never been taken, and Tamsk means to keep it that way"
+      - "*A Sleeping City*: half of Molythia's always asleep, and it won't wake up for you"
+    stakes:
+      - "*The toll*, Challenge 3: *Paperwork*, *Someone Must Agree* (doubled twice, and Tamsk isn't in the mood)"
+    clock: { d: 8, text: "Tamsk wakes up, and the gates shut till the toll's paid." }
+    twist: One of the wall-captains has more silver than his pay explains, and the Second Watch has noticed.
+    teles:
+      - { text: "The gate comes down, and the crew's on the wrong side of it.", d: 8, at: "the toll" }
+      - { text: "A guard on the wall drops a rock on whoever's arguing.", d: 6, at: "Defend, Staggered" }
+    hooks:
+      - "Tamsk wants to know who's selling his garrison's sleeping hours, and he'll waive the toll for a name"
+
+  - key: the-free-city-of-inkhal
+    name: The Free City of Inkhal
+    area: district
+    line: The free city's lands in the heat of the eastern continent's south-east, where everyone sleeps through the day
+    ch: 4
+    look: >-
+      Salt pans, spice gardens and baking stone, so hot by day that nobody's
+      out in it. At night everything wakes: the night markets, the caravans
+      and the couriers. An Inkhalian's skin shifts to match whatever they're
+      lying against, so a still one just isn't there.
+    here:
+      - "The Free City of Inkhal, from its night markets"
+      - "Caravan Guards, who know every road in the dark (Challenge 3: *Sees in the Dark*, *Knows the Territory*)"
+      - "Couriers, carrying every letter in the east (Challenge 2: *Fast*, *Overlooked*)"
+    ground:
+      - "*Day Heat*: out in the day, anyone but an Inkhalian's fighting the sun"
+      - "*Still Is Gone*: an Inkhalian who lies against a wall can't be seen"
+    teles:
+      - { text: "The sun comes over the ridge and the heat hits like a wall.", d: 8, at: "everyone in the open, Defend, Staggered" }
+    hooks:
+      - "Montia owes Inkhal a winter's grain for its eastern holding, and the Night Council's sent the crew to collect"
+
+  - key: inkhal-city
+    name: Inkhal
+    in: the-free-city-of-inkhal
+    line: The free city itself, asleep all day and alive all night
+    ch: 4
+    look: >-
+      Shuttered and silent at noon, with lamps on every street by dusk. The
+      night markets sell anything from anywhere, and the couriers' office never
+      closes. The Night Council meets after midnight, and Mistress Okal hasn't
+      been seen by daylight in forty years.
+    here:
+      - "*Mistress Okal*, who chairs the Night Council (Challenge 4: *Knows Your Plans*, *Deep Pockets*)"
+      - "The Night Watch (Challenge 3: *Sees in the Dark*, *Trained*)"
+      - "Couriers, coming and going all night (Challenge 2: *Fast*, *Overlooked*)"
+    ground:
+      - "*The Night Markets*: anything from anywhere, and nobody asks your name"
+      - "*Shutters by Day*: at noon the whole city's asleep, and the streets are empty"
+    stakes:
+      - "*A letter*, Challenge 4: *Wanted By Others*, *Watched* (whatever the couriers carried, and whoever's bought a copy)"
+    clock: { d: 8, text: "Dawn comes, and the city shuts its shutters on whoever's still outside." }
+    twist: A courier's gone missing with a satchel of letters, and three different buyers want them first.
+    teles:
+      - { text: "A courier brushes past, and one of the crew's letters is gone.", d: 6, at: "a letter" }
+      - { text: "The Night Watch steps out of a doorway nobody saw it in.", d: 8, at: "Defend, Grabbed" }
+    hooks:
+      - "The Night Council's selling copies of letters it shouldn't have, and someone wants to know who's buying"
+    secret:
+      tag: Every Letter Read
+      more: >-
+        Inkhal's couriers copy every letter they carry, and the Night Council
+        sells the copies to whoever pays, Alysta first. The crew could send a
+        letter with something false in it and hear it back from someone else, or
+        find the copying room under the couriers' office.

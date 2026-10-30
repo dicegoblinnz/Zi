@@ -23,6 +23,7 @@
 .wm-pin-head svg { width: 15px; height: 15px; transform: rotate(45deg); }
 .wm-pin-n { position: absolute; left: 37px; top: 8px; max-width: 10.5rem; padding: 1px 7px 2px; font-size: 0.8rem; font-weight: 700; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); background: color-mix(in srgb, var(--surface) 92%, transparent); border: 1px solid color-mix(in srgb, var(--zd-them) 55%, transparent); border-radius: 2px; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); }
 .wm-pin.is-quiet .wm-pin-n { display: none; }
+.wm-pin.is-tucked { visibility: hidden; pointer-events: none; }
 .wm-pin.is-hidden .wm-pin-head { color: var(--zd-them-ink); background: var(--surface); border: 2px dashed var(--zd-them-line); }
 .wm-pin.is-hidden .wm-pin-n { color: var(--muted); border-style: dashed; }
 .wm-pin.is-on { z-index: 2; }

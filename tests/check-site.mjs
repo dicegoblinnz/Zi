@@ -65,11 +65,11 @@ const PAGES = [
   "/deal/", "/deal/?region=world&genre=medieval&factions=12&seed=ash-lantern-ford", "/deal/?deck=1&seed=ash-lantern-ford",
   // The table screen with no code yet, and with one that can't be right.
   "/table/", "/table/#not-a-code",
-  // The whole worlds (stages 12, 13 and 15 of notes/builder-plan.md): the
-  // board with a faction open, the web, Night City's map, a place and a
-  // person open, and How it came to be.
+  // The whole worlds (stages 12, 13, 15 and 16 of notes/builder-plan.md):
+  // the board with a faction open, the web, each map, a place and a person
+  // open, and How it came to be.
   "/worlds/night-city/#f-arasaka", "/worlds/night-city/?tab=web", "/worlds/night-city/?tab=map", "/worlds/night-city/?tab=places#p-the-afterlife", "/worlds/night-city/?tab=people#p-rogue-amendiares", "/worlds/night-city/?tab=history",
-  "/worlds/abnu/#f-alysta", "/worlds/abnu/?tab=web", "/worlds/abnu/?tab=history",
+  "/worlds/abnu/#f-alysta", "/worlds/abnu/?tab=web", "/worlds/abnu/?tab=map", "/worlds/abnu/?tab=places#p-verrant-docks", "/worlds/abnu/?tab=people#p-merren-vast", "/worlds/abnu/?tab=history",
 ];
 // A character saved on the phone, so a sheet gets checked like any other page.
 // Its hash is blank, so the sheet shows its "changed in the rules" note too.
@@ -433,11 +433,14 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   await context.close();
 }
 
-// Abnu (stage 15 of notes/builder-plan.md), Mo's own setting: no line saying
-// whose it is and no notices, out of search, and its board, the kinds and
-// Find, a name opening its card, the web's tap, and How it came to be by age,
-// at 390 in light and 320 in dark. It has no places, people or map till
-// stage 16, so its bar has the factions and the history and nothing else.
+// Abnu (stages 15 and 16 of notes/builder-plan.md), Mo's own setting: no
+// line saying whose it is and no notices, out of search, and its board, the
+// kinds and Find, a name opening its card, the web's tap, the map of the
+// whole world traced from Mo's (opening on the capital with its places
+// waiting behind its name, every pin a place's, a pin's card opening its
+// page once it's zoomed in on, and the web on it), the places and people
+// with their lands and Find, and How it came to be by age, at 390 in light
+// and 320 in dark.
 {
   const context = await browser.newContext({ viewport: { width: 390, height: 860 } });
   await sealed(context);
@@ -463,7 +466,7 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   if (await page.locator(".wn-whose").count()) note(`${at}: there's a line saying whose it is on a world of Mo's own`);
   if (await page.locator(".wn-foot").count()) note(`${at}: there are notices at the foot of a world of Mo's own`);
   const tabs = await page.locator(".wn-bar [data-tab]").evaluateAll((els) => els.map((e) => e.dataset.tab));
-  if (tabs.join("|") !== "board|history") note(`${at}: the bar has ${tabs.join(", ")}, and Abnu has its factions and its history so far`);
+  if (tabs.join("|") !== "board|map|places|people|history") note(`${at}: the bar has ${tabs.join(", ")}, and Abnu has its factions, its map, places, people and history`);
   const cards = await page.locator("#wn-board .wn-f").count();
   // The east alone, then Find, then every one again.
   await page.click('.wn-kind[data-kind="east"]');
@@ -493,17 +496,76 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   const next = await page.locator(`#wn-web [data-web]:not([data-web="${pick}"]):not([data-web="crew"])`).first().getAttribute("data-web");
   await page.click(`#wn-web [data-web="${next}"]`);
   if ((await page.inputValue("#wn-focus")) !== next) note(`${at}: tapping ${next} in the web didn't walk to its ties`);
+  // The map: the whole world drawn by its land, a pin for every place, open
+  // on the capital filling the screen, with the capital's places tucked
+  // behind its name till they're zoomed in on.
+  await page.click('.wn-bar [data-tab="map"]');
+  await page.waitForSelector(".wn-map .wm-stage", { timeout: 5000 }).catch(() => note(`${at}: the map didn't go into its viewer`));
+  await page.waitForTimeout(400);
+  const places = await page.locator("#wn-places .wn-pg").count();
+  const pins = await page.locator(".wn-map .wm-pin").count();
+  if (!places || pins !== places) note(`${at}: the map has ${pins} pins for ${places} places`);
+  if (!(await page.locator(".wn-map svg.dm.is-world [clip-path]").count())) note(`${at}: the map isn't drawn as a world, its lands clipped to the coasts`);
+  const filled = await page.evaluate(() => { const r = document.querySelector(".wn-map .wm-stage")?.getBoundingClientRect(); return r && r.top > -2 && r.top < 40 && r.height > innerHeight * 0.6; });
+  if (!filled) note(`${at}: the map doesn't fill the screen above the bar when it's opened`);
+  const capital = await page.evaluate(() => { const b = document.querySelector('.wm-pin[data-pin="alysta-city"]')?.getBoundingClientRect(); return b ? b.left + b.width / 2 >= 0 && b.left + b.width / 2 <= innerWidth && b.top >= 0 && b.top <= innerHeight : false; });
+  if (!capital) note(`${at}: the map didn't open on the capital`);
+  if (!(await page.locator('.wm-pin[data-pin="verrant-docks"].is-tucked').count())) note(`${at}: Verrant Docks isn't waiting behind the capital's name when the map opens`);
+  // In close over the capital, where its places come out.
+  for (let i = 0; i < 14; i++) {
+    const b = await page.locator('.wm-pin[data-pin="alysta-city"]').boundingBox();
+    if (!b) break;
+    await page.mouse.move(b.x + b.width / 2, b.y + b.height - 3);
+    await page.mouse.wheel(0, -260);
+    await page.waitForTimeout(120);
+  }
+  await page.waitForTimeout(500);
+  const tucked = await page.locator('.wm-pin[data-pin^="the-"].is-tucked, .wm-pin[data-pin="verrant-docks"].is-tucked').evaluateAll((els) => els.map((e) => e.dataset.pin).filter((k) => ["the-palace", "the-sealed-archive", "the-statue-of-the-seven", "verrant-docks", "the-ninth-district", "the-drowned-quarter"].includes(k)));
+  if (tucked.length) note(`${at}: in close on the capital, ${tucked.join(", ")} still wait behind its name`);
+  await page.locator('.wm-pin[data-pin="verrant-docks"]').dispatchEvent("click");
+  const card = await page.locator("#wn-mcard").textContent().catch(() => "");
+  if (!/Verrant Docks/.test(card ?? "") || !/City in the Alysta Empire|In Alysta/.test(card ?? "")) note(`${at}: Verrant Docks' pin didn't bring up its card (${(card ?? "").trim().slice(0, 80)})`);
+  await page.click("#wn-mcard .wn-mc-go");
+  const docksOpen = await page.waitForFunction(() => { const d = document.getElementById("p-verrant-docks"); return d?.open && !d.closest("[data-panel]").hidden; }, null, { timeout: 3000 }).then(() => true, () => false);
+  if (!docksOpen) note(`${at}: the pin's Its page didn't open Verrant Docks' page`);
+  // From a faction's card: the map with the web on and its ties lit.
+  await page.goto(BASE + "/worlds/abnu/#f-montia");
+  await page.click('#f-montia [data-map-f="montia"]');
+  await page.waitForSelector(".wn-map .wm-ft", { timeout: 5000 }).catch(() => {});
+  const toks = await page.locator(".wn-map .wm-ft").count();
+  if (toks !== cards) note(`${at}: the web on the map has ${toks} tokens for ${cards} factions`);
+  const lit = await page.evaluate(() => [document.querySelector(".wm-ft.is-sel")?.dataset.tok ?? "", document.querySelectorAll(".wm-web-l path.wm-wl").length, document.querySelectorAll(".wm-ft.is-lit").length]);
+  if (lit[0] !== "montia" || lit[1] < 3 || lit[2] < 3) note(`${at}: Montia on the map lit ${lit[0] || "nothing"} with ${lit[1]} threads and ${lit[2]} others`);
+  // Places and people: a land on its own, Find, and a name in a page opening
+  // its page.
+  await page.click('.wn-bar [data-tab="places"]');
+  await page.click('#wn-places .wn-kind[data-area="the-hinterlands"]');
+  const soth = await page.locator("#wn-places .wn-pg:not([hidden])").evaluateAll((els) => els.map((e) => e.dataset.area));
+  if (!soth.length || soth.some((k) => k !== "the-hinterlands")) note(`${at}: the Hinterlands shows ${soth.join(", ") || "nothing"}`);
+  if ((await page.textContent('#wn-places .wn-kinds')).match(/district/i)) note(`${at}: Abnu's lands are called districts`);
+  await page.click('#wn-places .wn-kind[data-area=""]');
+  await page.fill("#wn-places .wn-find input", "pilgrim");
+  const pil = await page.locator("#wn-places .wn-pg:not([hidden])").evaluateAll((els) => els.map((e) => e.id));
+  if (!pil.includes("p-sethilan-harbour")) note(`${at}: Find for pilgrim in the places doesn't find Sethilan Harbour (${pil.join(", ")})`);
+  await page.fill("#wn-places .wn-find input", "");
+  await page.click("#p-verrant-docks > summary");
+  await page.click('#p-verrant-docks a.wn-ln[href="#p-merren-vast"]');
+  const merren = await page.waitForFunction(() => { const d = document.getElementById("p-merren-vast"); const top = d?.getBoundingClientRect().top; return d?.open && top >= 0 && top < innerHeight && !d.closest("[data-panel]").hidden; }, null, { timeout: 3000 }).then(() => true, () => false);
+  if (!merren) note(`${at}: Merren Vast's name on Verrant Docks didn't open his page`);
+  await page.fill("#wn-people .wn-find input", "warden");
+  if ((await page.locator("#wn-people .wn-pg:not([hidden])").count()) < 1) note(`${at}: Find for warden in the people finds nobody`);
+  await page.fill("#wn-people .wn-find input", "");
   // How it came to be, by age.
   await page.click('.wn-bar [data-tab="history"]');
   const ages = await page.locator(".wn-age-h").allTextContents();
   if (ages.join("|") !== "Long ago|In living memory|This last year") note(`${at}: How it came to be's ages are ${ages.join(", ")}`);
   if (new URL(page.url()).searchParams.get("tab") !== "history") note(`${at}: the address doesn't keep the tab`);
   if (errors.length) note(`${at}: ${errors.join(" | ")}`);
-  if (SHOTS && width === 390) for (const tab of ["board", "history"]) {
+  if (SHOTS && width === 390) for (const tab of ["board", "map", "places", "people", "history"]) {
     await page.click(`.wn-bar [data-tab="${tab}"]`);
     await page.screenshot({ path: join(SHOTS, `worlds-abnu-${tab}-${width}-${scheme}.png`) });
   }
-  console.log(`${at}: ${cards} factions, no line or notices, the kinds, Find, a name, the web and How it came to be checked`);
+  console.log(`${at}: ${cards} factions, ${places} places on the map, no line or notices, the kinds, Find, a name, the web, the map in close on the capital and its web, places, people and How it came to be checked`);
   await context.close();
 }
 

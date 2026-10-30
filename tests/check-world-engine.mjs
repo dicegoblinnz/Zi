@@ -141,7 +141,12 @@ import { applyFound, leftFound } from "../src/companion/found-rules.js";
 import { carriedWorld, founderHand, freeSeats, namable, oldHand, restOf, roleOf, roomBoard, roomWorld, seatHand, seatSize, wantWith } from "../src/companion/found-world.js";
 import { WORLD_MAX, WORLD_PINS, compileWorld, readWorldsDir } from "../scripts/worlds.mjs";
 import { boardOf, historyOf as storyOf, mapOf as mapPage, peopleOf, placesOf, webOfWorld } from "../src/worlds/world-page.js";
-import { drawMap } from "../src/worlds/draw-map.js";
+import { drawMap, inShape } from "../src/worlds/draw-map.js";
+// How far a point is from a road's segment, in the map's numbers.
+const edgeDist = ([x, y], [ax, ay], [bx, by]) => {
+  const t = Math.max(0, Math.min(1, ((x - ax) * (bx - ax) + (y - ay) * (by - ay)) / ((bx - ax) ** 2 + (by - ay) ** 2 || 1)));
+  return Math.hypot(x - (ax + t * (bx - ax)), y - (ay + t * (by - ay)));
+};
 import { pageOf } from "../src/companion/pages.js";
 import { esc } from "../src/kit/kit.js";
 
@@ -1432,6 +1437,15 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       ["a map with no ground", (w) => delete w.world.ground, /world\.yaml has no ground/],
       ["a place with a person's line", (w) => (w.files.places.places[0].want = "Fish"), /a line a place can't hold: want \(that's a person's\)/],
       ["a tag past ×9", (w) => (w.files.people.people.find((p) => p.key === "old-sal").tags = [{ text: "Overlooked", x: 12 }]), /Old Sal's tag Overlooked is ×12, and a tag's ×1 to ×9/],
+      // A world drawn by its land (stage 16, Abnu), a map that opens on a
+      // pin, a world's words for its areas, and a land named for its faction.
+      ["a ground with the sea and the land", (w) => (w.world.ground.land = [[[80, 0], [400, 0], [400, 300], [80, 300]]]), /has the sea and the land, and it's one or the other/],
+      ["deep water on a city's sea", (w) => (w.world.ground.deep = [[[10, 10], [60, 10], [60, 40]]]), /has deep water, which only a world drawn by its land has/],
+      ["a ground with a line it can't hold", (w) => (w.world.ground.rivers = []), /ground has a line a ground can't hold: rivers/],
+      ["land with nothing in it", (w) => { delete w.world.ground.sea; w.world.ground.land = []; }, /has no land in it/],
+      ["a map that opens on no pin", (w) => (w.files.map.opens = "the-moon"), /opens on the-moon, which has no pin/],
+      ["areas in the wrong shape", (w) => (w.world.areas = { district: "land" }), /areas has district: "land"/],
+      ["a district named for a faction that doesn't sit in it", (w) => (w.files.places.places.find((p) => p.key === "the-waterfront").name = "The Town Watch"), /is called The Town Watch, the way The Town Watch is, so it never links/],
     ];
     let broken = 0;
     for (const [what, change, wanted] of breaks) {
@@ -1441,6 +1455,31 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       if (got.problems.some((p) => wanted.test(p))) broken += 1;
       else note(`the made-up world with ${what} wasn't a problem (it said: ${got.problems.join(" | ").slice(0, 300) || "nothing"})`);
       if (got.world) note(`the made-up world with ${what} still came out as a world`);
+    }
+    // And what's let through: a district named for the faction that sits in
+    // it (a land named for its nation), and a world drawn by its land, which
+    // draws as one, its plates clipped to its coasts.
+    {
+      const w = copy(base);
+      w.files.places.places.find((p) => p.key === "the-old-town").name = "The Town Watch";
+      const got = compileWorld(w, bookIn);
+      yes(got.world, `the made-up world with the Old Town named for the Town Watch, which sits in it, didn't come out as a world (it said: ${got.problems.join(" | ").slice(0, 300)})`);
+    }
+    {
+      const w = copy(base);
+      delete w.world.ground.sea;
+      w.world.ground.land = [[[80, 0], [400, 0], [400, 300], [80, 300]], [[20, 100], [60, 100], [60, 140], [20, 140]]];
+      w.world.ground.deep = [[[10, 10], [60, 10], [60, 40], [10, 40]]];
+      w.world.areas = { district: ["land", "lands"], part: ["city", "cities"] };
+      w.files.map.opens = "the-fish-market";
+      const got = compileWorld(w, bookIn);
+      yes(got.world, `the made-up world drawn by its land didn't come out as a world (it said: ${got.problems.join(" | ").slice(0, 300)})`);
+      if (got.world) {
+        const svg = drawMap(got.world.map);
+        yes(/^<svg class="dm is-world"/.test(svg) && svg.includes("clip-path=") && svg.includes("dm-deep") && !svg.includes("dm-grid") && !/NaN|undefined/.test(svg), "the made-up world drawn by its land doesn't draw as a world");
+        same(got.world.map.opens, "the-fish-market", "the made-up world's map opens on");
+        same(got.world.areas.part[1], "cities", "the made-up world's word for its parts");
+      }
     }
     console.log(`10. a whole world: the made-up one passes, and ${broken} of ${breaks.length} breaks are each a problem`);
   }
@@ -1519,7 +1558,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       yes(pinKeys.length <= WORLD_PINS, `${world.id}'s map has ${pinKeys.length} pins, past ${WORLD_PINS}`);
       for (const f of world.factions) if (!f.of) yes(world.places.some((p) => p.key === f.seat) && world.people.some((p) => p.key === f.faceOf), `${world.id}: ${f.card.name}'s seat or Face isn't a page`);
       const svg = drawMap(world.map);
-      yes(/^<svg class="dm"/.test(svg) && svg.includes("dm-coast") && !/NaN|undefined/.test(svg), `${world.id}'s map doesn't draw`);
+      yes(/^<svg class="dm[" ]/.test(svg) && svg.includes("dm-coast") && !/NaN|undefined/.test(svg), `${world.id}'s map doesn't draw`);
       const places = placesOf(world);
       const people = peopleOf(world);
       for (const p of world.places) yes(places.includes(`id="p-${p.key}"`), `${world.id}'s page has no page for ${p.card.name}`);
@@ -1556,6 +1595,33 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       }
       for (const l of world.history) if (hidden.test(l.text) && !l.hers) note(`abnu: a line of How it came to be names the molefolk and isn't hers: ${l.text.slice(0, 60)}`);
       yes(world.factions.some((f) => f.key === "molefolk" && f.card.secret), "abnu: the molefolk aren't on the board with their Secret");
+      // Their home and their eldest are the only pages that name them where
+      // the crew could read it, and nothing else says the Mountain, which
+      // links to their home (any other mountain's lower case, and fine).
+      const theirs = new Set(["the-mountain", "molefolk-eldest"]);
+      for (const p of [...world.places, ...world.people].filter((x) => !theirs.has(x.key))) {
+        const c = p.card;
+        const open = [c.name, ...c.aka, c.line, c.look, c.want, c.twist, c.clock, c.voice, ...c.here, ...c.ground, ...c.stakes, ...c.tags.map((t) => t.text), ...c.teles.map((t) => t.text)];
+        for (const t of open) if (hidden.test(t) || /\b[Tt]he Mountain\b/.test(t)) note(`abnu: ${c.name} names or hints at the molefolk where the crew could read it: ${String(t).slice(0, 60)}`);
+      }
+      for (const f of world.factions.filter((x) => x.key !== "molefolk")) {
+        const c = f.card;
+        for (const t of [c.about, c.want, c.face, ...c.agendas.flatMap((a) => [a.text, a.then])]) if (/\b[Tt]he Mountain\b/.test(t ?? "")) note(`abnu: ${c.name} writes the Mountain where the crew could read it: ${String(t).slice(0, 60)}`);
+      }
+      // Its map's a world, traced from Mo's: the coasts and the Deep, every
+      // land a district, the Deep and the Ledge in Thelis's waters, the
+      // capital's places in the capital, and the mountain's pin on no road.
+      const M = world.map;
+      yes(M.ground.land?.length > 10 && M.ground.deep?.length === 1 && !M.ground.sea, "abnu's map isn't drawn by its land, with the Deep");
+      same(world.places.filter((p) => p.area === "district").length, 13, "abnu's lands");
+      const P = Object.fromEntries(world.places.map((p) => [p.key, p]));
+      for (const k of ["the-ledge", "the-sundering-deep"]) same(P[k]?.in, "thelis-land", `abnu: ${k} is in`);
+      for (const k of ["the-palace", "the-sealed-archive", "the-statue-of-the-seven", "verrant-docks", "the-ninth-district", "the-drowned-quarter"]) same(P[k]?.in, "alysta-city", `abnu: ${k} is in`);
+      yes(inShape(M.pins["the-sundering-deep"], M.ground.deep[0], 4), "abnu: the Sundering Deep's pin isn't on the Deep");
+      same(M.opens, "alysta-city", "abnu's map opens on");
+      const toRoad = (pt) => Math.min(...M.roads.flatMap((r) => r.pts.slice(1).map((b, i) => edgeDist(pt, r.pts[i], b))));
+      yes(toRoad(M.pins["the-mountain"]) > 20, `abnu: the mountain's pin is ${Math.round(toRoad(M.pins["the-mountain"]))} from a road, and it's on no road`);
+      yes(!M.marks.length, "abnu's map has a landmark, and nothing but its pin marks the mountain");
     }
     console.log(`   ${world.id}: ${world.factions.length} factions on a board, ${world.places.length} places, ${world.people.length} people, ${Object.keys(world.map?.pins ?? {}).length} pins, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k brought in, its page drawn, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
   }

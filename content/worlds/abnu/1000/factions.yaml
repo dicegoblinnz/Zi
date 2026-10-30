@@ -13,7 +13,7 @@ factions:
   - key: alysta
     kind: west
     size: great
-    seat: alysta
+    seat: alysta-city
     name: Alysta
     about: >-
       The biggest and richest nation in Abnu, and the one that stopped asking
@@ -426,7 +426,7 @@ factions:
   - key: xurux
     kind: west
     size: local
-    seat: xurux
+    seat: xurux-land
     name: Xurux
     about: >-
       The city of the dead, where souls the Garden's too crowded to take live
@@ -494,7 +494,7 @@ factions:
   - key: lubro
     kind: west
     size: small
-    seat: lubro
+    seat: lubro-land
     name: Lubro
     about: >-
       A free port on the Soths' east coast, there because somebody has to sell
@@ -554,10 +554,11 @@ factions:
     about: >-
       A people built for moving through the earth, living inside a mountain on
       the coast where the Soths and Alysta meet. It works through digging,
-      growing and staying hidden. It sits in the mountain.
+      growing and staying hidden. It sits in the Mountain.
     want: To stay hidden, and keep Melammu safe in the dark.
     face: >-
-      Their eldest, who tends Melammu's cavern and speaks for every tunnel.
+      The molefolk's eldest, who tends Melammu's cavern and speaks for every
+      tunnel.
     faceOf: molefolk-eldest
     res:
       - { text: The Rarest Stones, x: 2 }
@@ -641,7 +642,7 @@ factions:
           temple hides someone who needs hiding.
       - text: Sethilan Harbour
         does: >-
-          Where the pilgrim fleets take on supplies. Once a session, anything
+          Where the Pilgrim Fleets take on supplies. Once a session, anything
           Montia wants moved leaves in a hold nobody searches.
     agendas:
       - text: Get the Seven's texts into every port Alysta has
@@ -945,7 +946,7 @@ factions:
   - key: inkhal
     kind: east
     size: city
-    seat: inkhal
+    seat: inkhal-city
     name: The Free City of Inkhal
     about: >-
       A free city in the heat of the far south-east, where everyone sleeps

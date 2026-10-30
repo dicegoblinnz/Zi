@@ -30,6 +30,7 @@ const data = webData(world);
 const web = webOfWorld(world, null, data);
 const hasMap = Boolean(world.map);
 function middleOfTown(map) {
+  if (map.opens) return [map.pins[map.opens][0] / map.size[0], map.pins[map.opens][1] / map.size[1]];
   const town = Object.entries(map.districts).filter(([k]) => !(map.wilds ?? []).includes(k)).map(([, s]) => s);
   const pts = town.map((s) => middleOf(s));
   const [x, y] = pts.reduce(([a, b], [c, d]) => [a + c / pts.length, b + d / pts.length], [0, 0]);
@@ -42,9 +43,12 @@ const forPhone = JSON.stringify({
   kinds: world.kinds,
   factions: world.factions.map((f) => ({ key: f.key, kind: f.kind, seat: f.seat, of: f.of, steps: f.steps, card: { name: f.card.name, threads: f.card.threads } })),
   places: (world.places ?? []).map((p) => ({ key: p.key, name: p.card.name, area: p.area, in: p.in, line: p.card.line, ch: p.card.ch })),
-  // Where the map opens: the middle of the town's districts, not the wilds.
-  map: hasMap ? { size: world.map.size, pins: world.map.pins, middle: middleOfTown(world.map) } : null,
+  // Where the map opens: the pin it says, or the middle of the town's
+  // districts, not the wilds.
+  map: hasMap ? { size: world.map.size, pins: world.map.pins, middle: middleOfTown(world.map), world: Boolean(world.map.ground.land) } : null,
   mapLabel: `A map of ${world.name}`,
+  // What it calls its districts and parts.
+  areas: world.areas,
 }).replace(/</g, "\\u003c");
 const icon = (d: string) => `<svg class="wn-bi" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${d}</svg>`;
 const ICONS = {
