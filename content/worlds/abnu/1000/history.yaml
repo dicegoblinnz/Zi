@@ -206,10 +206,10 @@ history:
   - age: 2
     text: Orza's prince closed two of Aron's libraries to Ezkian scholars.
   - age: 2
-    text: >-
-      The Soths opened a new shaft into the coast mountain for the Ironhand
-      Forge, and their miners started finding the tunnels filled back in
-      overnight.
+    text: The Soths opened a new shaft into the coast mountain for the Ironhand Forge.
+  - age: 2
+    hers: true
+    text: Soth miners started finding the new shaft's tunnels filled back in overnight.
 
   # ── This last year
   - age: 3

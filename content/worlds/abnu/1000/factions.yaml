@@ -37,7 +37,7 @@ factions:
       - { text: The Imperial Watch, does: "+1 Power. A watch on every street of every city, and they work together better than anyone alive." }
       - { text: The Legions, does: "+1 Power. The army that ended the wars, kept sharp for one that hasn't come in 380 years." }
       - { text: Customs Men, does: "+1 Power. On every dock in the empire, and Verrant's got the most." }
-      - { text: The Guild Crews, does: "+1 Power. Alysta's crews, gangs and choirs, who turn out together when the empire asks." }
+      - { text: The Guild Crews, does: "+1 Power. Alysta's crews, gangs and choirs, who'll down tools together when the empire asks." }
     assets:
       - text: The Emperor's Charity
         does: >-
@@ -100,7 +100,7 @@ factions:
         - The Ninth District's almshouse ledgers
         - The manifest Merren Vast read instead of signing
     note: >-
-      The emperor's Alysta, the same soul for a thousand years, remembering all
+      The emperor is Alysta, the same soul for a thousand years, remembering all
       of it for 380, in a body that was his son's. He can't take his amulet off
       without dying, and his own notes keep count: Attempt eleven. Not yet. He's
       tired, he isn't exactly the villain, and the crew should have to decide
@@ -187,8 +187,8 @@ factions:
         die: 4
         at: molefolk
         then: >-
-          The Ironhand Forge has ore for a hundred years, and whatever's in
-          that mountain has nowhere left to go.
+          The Ironhand Forge has ore for a hundred years out of the coast
+          mountain.
       - text: Turn Xurux's amulet carts back at the border
         die: 6
         at: xurux
@@ -244,7 +244,7 @@ factions:
       - Aron's Scribes
     people:
       - { text: The Prince's Guard, does: "+1 Power. Quick, sharp and fragile, and they only stand guard on their bright days." }
-      - { text: The Library Wardens, does: "+1 Power. Orza has more libraries than beds, and the wardens turn out for every one." }
+      - { text: The Library Wardens, does: "+1 Power. Orza has more libraries than beds, and the wardens will fight for every one." }
     assets:
       - text: Jak's Dream
         does: >-
@@ -328,13 +328,13 @@ factions:
           Once a session, the Union has a machine for it.
       - text: The Anunnaki Work
         does: >-
-          Something the Anunnaki left half finished, kept under the Grand
-          Library. What it does once it's done, nobody outside the Nine knows.
+          Something the Anunnaki left half finished, and the Union's close.
+          What it does once it's done, nobody outside the Nine knows.
         strange: true
     agendas:
-      - text: Finish the Anunnaki work before Hollowgate does
+      - text: Get the Anunnaki work finished first
         die: 8
-        at: [alysta, place:hollowgate]
+        at: alysta
         then: >-
           The Union's finished what the Anunnaki couldn't, and nobody knows yet
           what it does.
@@ -359,7 +359,7 @@ factions:
       tag: Kept Going by One Vote
       more: >-
         Four of the Nine want the race stopped, and the vote that kept it going
-        was won by one, the night Councillor Aldaz heard Hollowgate was close.
+        was won by one, the night Councillor Aldaz heard someone else was close.
       ways:
         - A councillor who resigned in the spring
         - The Grand Library's sealed minutes
@@ -481,7 +481,7 @@ factions:
     secret:
       tag: Nobody Drew the Wards
       more: >-
-        The ward patterns came with the tools, nobody living or dead designed
+        The ward patterns came with the tools, nobody at the workshops designed
         them, and every amulet that carries them stills the soul that wears it.
       ways:
         - Old Tekk, exiled for asking
@@ -522,12 +522,12 @@ factions:
         then: >-
           Lubro stays free, and every ship that wants Soth iron without the
           empire's tax comes here first.
-      - text: Keep the Rusks' night trade quiet
+      - text: Keep the Rusks' best trade a family secret
         die: 4
         at: molefolk
         then: >-
-          The trade under the mountain's safe for another generation, and
-          Lubro's fortune with it.
+          The Rusks' trade stays theirs for another generation, and Lubro's
+          fortune with it.
     pub:
       - { text: Lubro's dues are the lowest on the coast, kind: bond }
     loy:
@@ -851,7 +851,7 @@ factions:
       - Neuzon's Looms
     people:
       - { text: Gliders, does: "+1 Power. Echilians who drop from a height on their pseudo-wings and climb back up with their talons." }
-      - { text: The Cliff Towns, does: "+1 Power. Spread out, high and ready to move, and every one turns out." }
+      - { text: The Cliff Towns, does: "+1 Power. Spread out, high and ready to move, and every one comes when it's called." }
     assets:
       - text: Towns Built to Be Left
         does: >-
@@ -1055,7 +1055,7 @@ factions:
     secret:
       tag: They Know What He Is
       more: >-
-        The Order knows the emperor's Alysta, the soul the Seven set to guide
+        The Order knows the emperor is Alysta, the soul the Seven set to guide
         people, and it meets in his palace hoping he'll remember why.
       ways:
         - A palace cook who picks a virtue at breakfast

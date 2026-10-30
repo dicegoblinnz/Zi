@@ -108,6 +108,7 @@ import { curlyQuotes, readAim } from "../src/companion/aims.js";
 import { PMAX, TAG_KINDS, linker, pageCardOf, pageOf } from "../src/companion/pages.js";
 import { MMAX } from "../src/companion/maps.js";
 import { MARKS, inShape } from "../src/worlds/draw-map.js";
+import { DIALS } from "../src/companion/world-engine.js";
 
 // A year's world, brought into a campaign whole with every was copy, stays
 // under this many of the 700,000 characters a world holds (MAX_DOC in
@@ -127,7 +128,6 @@ const GROUND = /^\*([^*]+)\*:\s*\S/;
 const STAKE = /^\*([^*]+)\*,?\s*Challenge ([1-6])(?::\s*(.+?))?(?:\s*\(([^)]+)\))?$/;
 const KEY = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const KINDS = ["bond", "hostile"];
-const DIALS = ["tense", "strange", "rich", "ruled"];
 const FACTION_FIELDS = new Set(["key", "kind", "size", "seat", "name", "about", "want", "face", "faceOf", "note", "res", "people", "assets", "agendas", "pub", "mor", "loy", "threads", "secret", "strange", "mini"]);
 const BOND_LISTS = ["pub", "mor", "loy"];
 const BOND_NAMES = { pub: "Public Sentiment", mor: "Morale", loy: "Loyalty" };

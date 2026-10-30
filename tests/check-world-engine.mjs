@@ -99,7 +99,7 @@
 //    threads are all in the web, every faction's got a Face and a Secret, and
 //    a founder's Loyalty is on its card.
 // 10. A whole world (stages 12, 13 and 15 of notes/builder-plan.md): the
-//    made-up one in tests/worlds/ passes, and 66 ways of breaking it are each a problem that
+//    made-up one in tests/worlds/ passes, and 69 ways of breaking it are each a problem that
 //    says so and never come out as a world: a card that isn't whole, too long
 //    or holds what it can't, Power or resources past its size, people who
 //    don't add Power or a thing that does, Appendix B's people as a thing, a
@@ -110,8 +110,8 @@
 //    faction that isn't there, a mini faction's outcomes and Loyalty, a thread
 //    toward nobody, nothing strange, and history in no age, out of order, too
 //    long, too much of it or an age with nothing in it, no line saying whose
-//    it is or no notices, notices on a world of Mo's own, and a recipe's dial
-//    there isn't. Its places, people
+//    it is or no notices, a world of Mo's own with either, an own that isn't
+//    true, and a recipe's dial there isn't or past 2. Its places, people
 //    and map too: a seat that isn't a place, a Face who isn't a person, a card
 //    or Face line that doesn't link them, a name in the wrong case, someone
 //    their place doesn't name or who's nowhere, a pin outside its district or
@@ -125,8 +125,8 @@
 //    content/worlds/ passes (Night City and Abnu), every card and page goes
 //    onto a board whole, it fits in a world with room to spare, every pin's a
 //    place on the map, its page draws every faction, place, person and line
-//    of history, and the map, and Abnu's molefolk are named only where the
-//    crew can't read it before they're found.
+//    of history, and the map, and Abnu's molefolk are named or hinted at only
+//    where the crew can't read it before they're found.
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -1399,8 +1399,11 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       // Mo's own (Abnu) has neither.
       ["no line saying whose it is", (w) => delete w.world.whose, /world\.yaml has no whose/],
       ["no notices", (w) => (w.world.notices = []), /has no notices under the line saying whose it is/],
-      ["a world of Mo's own with notices", (w) => (w.world.own = true), /says it's Mo's own, so it has no line saying whose it is and no notices/],
+      ["a world of Mo's own with notices", (w) => { w.world.own = true; delete w.world.whose; }, /says it's Mo's own, so it has no line saying whose it is and no notices/],
+      ["a world of Mo's own saying whose it is", (w) => { w.world.own = true; w.world.notices = []; }, /says it's Mo's own, so it has no line saying whose it is and no notices/],
+      ["own that isn't true", (w) => (w.world.own = "yes"), /own is "yes", and it's true for a world of Mo's own or left out/],
       ["a recipe setting a dial there isn't", (w) => (w.world.years[w.year].recipe.dials = { spooky: 2 }), /recipe sets spooky to 2/],
+      ["a recipe setting a dial past 2", (w) => (w.world.years[w.year].recipe.dials = { strange: 3 }), /recipe sets strange to 3/],
       // Its places, people and map (stage 13).
       ["a seat that isn't a place", (w) => (w.files.factions.factions[0].seat = "the-moon"), /sits in the-moon, which isn't one of the places/],
       ["a Face who isn't a person", (w) => (w.files.factions.factions[0].faceOf = "nobody-at-all"), /Face is nobody-at-all, who isn't one of the people/],
@@ -1544,7 +1547,8 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     // line of How it came to be that does is hers.
     if (world.universe === "abnu") {
       yes(world.own && !world.whose && !world.notices.length, "abnu: isn't Mo's own, or has a line saying whose it is or notices");
-      const hidden = /\bmolefolk\b|\bmelammu\b/i;
+      // Their names, and the hints that would give them away.
+      const hidden = /\bmolefolk\b|\bmelammu\b|under the mountain|night boat|filled back in/i;
       for (const f of world.factions.filter((x) => x.key !== "molefolk")) {
         const c = f.card;
         const open = [c.about, c.want, c.face, ...c.res.map((r) => r.text), ...c.assets.flatMap((a) => [a.text, a.does]), ...c.agendas.flatMap((a) => [a.text, a.then]), ...["pub", "mor", "loy"].flatMap((l) => c[l].map((t) => t.text))];
