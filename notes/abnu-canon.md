@@ -19,6 +19,7 @@ Abnu's lore, put together on 30 Oct 2026 for its whole world (stages 15 and 16 o
 
 - **The Ezkian Union's the scholars' steam republic.** Scholars running from Alysta founded it, and it has steam, clockwork, Ezkia Prime and the Council of Nine. The Ezki hunters of the cold, the fastest people alive, aren't in it.
 - **Xurux is the city of the dead, and only that.** It isn't the molefolk kingdom, and who keeps it was left open. Claude's calls say how the world reads it.
+- **The molefolk are their own faction, and secret.** They live in a special place underground between Alysta and the Soths, near the coast, and most of the world doesn't know it's there. If the world has a secret faction, it's them.
 - **Abnu starts in its own now.** A thousand years after the Sundering, the Queen stirring and Alysta's ban on the Seven fresh, with nothing on the board that needs one adventure. The Six Souls can still be run in it.
 - **Abnu's stages come after Night City 2077**, ahead of 2045.
 
@@ -164,7 +165,7 @@ Four peoples, by their old names:
 - **Nisa Matati, the People of the Land.** Humans: the Alystans, the Soths, the Orzaini and the Montians, and most of the Ezkian Union, whose scholars came from everywhere.
 - **Nise Masku, the People of the Hide.** The Etweil under their green hair, and the four lizardfolk peoples of the east under their scales.
 - **Nisa Apsu, the People of the Deep Sea.** The merfolk of Thelis.
-- **Nise Buzur, the People of the Deep Mines.** Molefolk, with claws that go through soil and soft stone, feet turned back for digging, whiskers that map a dark room from the moving air, and eyes that bright light hurts. Where they live is open, since Xurux is the city of the dead.
+- **Nise Buzur, the People of the Deep Mines.** Molefolk, with claws that go through soil and soft stone, feet turned back for digging, whiskers that map a dark room from the moving air, and eyes that bright light hurts. They live underground between Alysta and the Soths, near the coast, in a place most of the world doesn't know is there.
 
 Ancestry isn't destiny. Someone raised somewhere else carries where they grew up, and a Thelisian raised on Verrant Docks is more interesting than either half.
 
@@ -242,7 +243,6 @@ Claude's calls for Xurux:
 
 - The dead run it themselves, so its people who turn up are the dead.
 - The living come no further than Xunan, where the amulets go out and the empire's buyers come in.
-- Every one of the dead stamps a maker's mark on everything they finish, since it's what a soul that can't rise leaves behind, so *who made it?* is how Xurux asks the price.
 - The amulets are built from the essence of the dead, like everything else the city makes.
 
 ### Thelis
@@ -270,6 +270,16 @@ The eastern continent. People of the Hide: four peoples, scattered and unalike, 
 ### Lubro
 
 The tiny bright green land on the Soths' east coast. The canon has nothing on it (Claude's call: a free port the Soths let stand on their coast, since somebody has to sell Soth iron to the world).
+
+### The molefolk
+
+Underground, where the Soths and Alysta meet the east coast, by the inlet just south of Lubro (Mo's pick). There's nothing of theirs on the map, since all of it's under the ground. People of the Deep Mines.
+
+Their own faction, and Abnu's secret one: most of the world doesn't know they're there, and the few who do don't say. The finest craftsmen in the world, with claws that go through soil and soft stone, feet turned back for digging, and whiskers that map a room in total darkness by how the air moves. They're slow above ground and bright light hurts, and neither has ever seemed to them worth complaining about. They look after the creatures and the ground round them in a way surface folk find strange.
+
+Mushroom bread for breakfast, and mineral water so hard it squeaks on the teeth. Every one of them carries a maker's mark and stamps everything they finish, meals included, and *who made it?* is how they ask the price. They find the surface unbearably loud. They put their mark on their work, and they answer for it (Claude's call: these are the old book's ways, from when Xurux was their kingdom).
+
+Their name for themselves, their home's name, who leads them, what they want, what they make and trade, and who knows they're there are the stage's to write, in the shape of this.
 
 ## The orders and the rest
 
@@ -309,6 +319,7 @@ The canon's places. Every faction's seat is a place too.
 - **The Ledge**, the shallowest Thelisian hall, in the upper depths.
 - **Gustburg**, **Inkhal**, **Neuzon** and **Molythia**, the eastern capitals.
 - **Lubro**, the free port.
+- **The molefolk's home**, underground where the Soths and Alysta meet the east coast, by the inlet south of Lubro, on no map anyone in Abnu has. Its name's the stage's.
 - **The Sundering Deep**, the trench where the tenth moon lies.
 
 ## People
@@ -402,6 +413,7 @@ Mo's map is `notes/abnu-map.png`, 2520 by 1335, made in a fantasy map generator.
 - The open sea's about #7585b2 and the shallow shelf round the coasts #8594bb.
 - The Sundering Deep (Claude's call) is the long dark blade of deep water, #7282af, from about 1302,600 to 1494,636, south-west of Thelis, whose halls face it.
 - Thelis has no town marked, since its halls are under the water.
+- The molefolk's home (Mo's pick) is under the ground where the Soths' and Alysta's border meets the east coast, round the inlet just south of Lubro, about 980,580 to 1090,670. The map shows nothing there, so its pin's the only mark.
 
 ## Claude's calls
 
@@ -411,7 +423,7 @@ Each stands till Mo says otherwise.
 2. **The Soths are the Hinterlands**, and *Savages of the Hinterlands* is the Alystan name on Mo's map.
 3. **Mornhold's the Soths' capital and Ezkia Prime the Union's**, as the lore names them. The map's Cata and Waslach stay as other towns, and every other town on the map keeps its name.
 4. **The western continent's the Cradle**, since the oldest nation's on it.
-5. **Xurux**: the dead run it, the living stop at Xunan, the dead's maker's mark is how a soul that can't rise leaves something behind, and the amulets are built from essence like the rest of the city's goods.
+5. **Xurux**: the dead run it, the living stop at Xunan, and the amulets are built from essence like the rest of the city's goods, stamped with Xurux's mark.
 6. **Old Tekk's one of Xurux's dead**, exiled for asking about the amulets and fading outside the city.
 7. **Hollowgate's the Six Souls' facility**, the temple of the Seven under it and all.
 8. **Alysta's numbers**: the same soul for a thousand years, remembering all of it for about 380 since the amulet came back. The old book's line that the empire rebuilt itself within living memory is true of his memory, not his subjects'.
@@ -421,13 +433,14 @@ Each stands till Mo says otherwise.
 12. **Cassia Brenne, the Widow Ashgrove and Juno live in the capital.**
 13. **The Ezkian Union takes in the awakened**, since soul-workers running from Alysta founded it.
 14. **The amulets' grades stay as lore** (charity, standard and fine), with no prices from the old rules.
+15. **The molefolk keep the old book's ways**: the maker's mark on everything, *who made it?* for the price, the mushroom bread and the loud surface, from when Xurux was their kingdom.
+16. **Being secret takes nothing new.** Everything on a board starts hidden from the crew, so the molefolk are a card like any other, and their Secret is that they're there at all. No other card names them where the crew would read it before they've been found (only in threads and Secrets), and their pin's on no road.
 
 ## Open
 
 Never answered on a card, a page or a line of history:
 
 - Which of the Seven isn't here, and why.
-- Where the molefolk, the Nise Buzur, live now.
 - The Queen's name.
 - What the Ezkian Union's racing to finish, past something the Anunnaki left half finished.
 - What's been working at the moon for six hundred years.
