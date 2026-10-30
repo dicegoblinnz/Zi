@@ -1445,6 +1445,8 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       ["land with nothing in it", (w) => { delete w.world.ground.sea; w.world.ground.land = []; }, /has no land in it/],
       ["a map that opens on no pin", (w) => (w.files.map.opens = "the-moon"), /opens on the-moon, which has no pin/],
       ["areas in the wrong shape", (w) => (w.world.areas = { district: "land" }), /areas has district: "land"/],
+      ["hills on a world drawn by its land", (w) => { delete w.world.ground.sea; w.world.ground.land = [[[80, 0], [400, 0], [400, 300], [80, 300]]]; }, /has hills, which a world drawn by its land doesn't draw/],
+      ["open country on a world drawn by its land", (w) => { delete w.world.ground.sea; w.world.ground.hills = []; w.world.ground.land = [[[80, 0], [400, 0], [400, 300], [80, 300]]]; w.files.map.wilds = [Object.keys(w.files.map.districts)[0]]; }, /has wilds, and a world drawn by its land doesn't draw open country/],
       ["a district named for a faction that doesn't sit in it", (w) => (w.files.places.places.find((p) => p.key === "the-waterfront").name = "The Town Watch"), /is called The Town Watch, the way The Town Watch is, so it never links/],
     ];
     let broken = 0;
@@ -1468,6 +1470,7 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     {
       const w = copy(base);
       delete w.world.ground.sea;
+      w.world.ground.hills = [];
       w.world.ground.land = [[[80, 0], [400, 0], [400, 300], [80, 300]], [[20, 100], [60, 100], [60, 140], [20, 140]]];
       w.world.ground.deep = [[[10, 10], [60, 10], [60, 40], [10, 40]]];
       w.world.areas = { district: ["land", "lands"], part: ["city", "cities"] };

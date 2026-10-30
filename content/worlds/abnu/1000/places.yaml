@@ -33,8 +33,8 @@ places:
       - "Soul sight's a crime since the ban, and someone the crew loves has started seeing souls"
       - "Montia's captains won't carry imperial cargo east, and a merchant's paying well for anyone who will"
     note: >-
-      It's the empire that stopped asking questions. My word is my bond and
-      stronger together are taught in every school and meant, and the second
+      It's the empire that stopped asking questions. "My word is my bond" and
+      "Stronger together" are taught in every school and meant, and the second
       one's also the handiest belief there is for a ruler who'd rather nobody
       grew too strong alone. Nobody's ever put those two side by side out loud.
 
@@ -838,7 +838,7 @@ places:
       Foundries, coal smoke and noise, day and night, and the river running
       black below the works. Every engine in the Union's built here, and half
       its clockwork. The surveyors set out from Waslach for the Green Silence,
-      and the Etweil walk them home again, politely, every time.
+      and the Etweil walk them home again every time.
     here:
       - "Foundry crews (Challenge 2: *Heavy*, *Barracks Humour*)"
       - "Union surveyors, packing for another try (Challenge 2: *Curious*, *Won't Back Down*)"
@@ -899,7 +899,7 @@ places:
       - "*Never in a Hurry*: rush an Etweil and they'll take longer"
     stakes:
       - "*An elder's trust*, Challenge 5: *Someone Must Agree*, *Proof Needed* (it takes years, and the crew hasn't got them)"
-    clock: { d: 10, text: "Hessa stands up and walks the crew politely to the edge of town." }
+    clock: { d: 10, text: "Hessa stands up and walks the crew to the edge of town." }
     twist: The Union's surveyors are back, camped at the edge of town, waiting for a guide.
     teles:
       - { text: "Hessa stands very still beside one of the crew, and waits.", d: 6, at: "Confidence, Unsettled" }
@@ -921,9 +921,8 @@ places:
     ch: 5
     look: >-
       Green in the middle of the snow, and quiet. No birds, no wind and no
-      echo. People go in, and the Etweil bring them out again, politely, and
-      never talk about what happened, and neither do the people they bring
-      out.
+      echo. People go in, and the Etweil bring them out again and never talk
+      about what happened, and neither do the people they bring out.
     here:
       - "Silent Walkers, who know the way in and out (Challenge 3: *Silent*, *Kind*)"
       - "Whoever went in this week and hasn't come out (Challenge 1: *Scared*)"
@@ -1056,8 +1055,7 @@ places:
     look: >-
       A hall of coral and old stone on a shelf of rock, deep enough that the
       light's green and dim, with air kept in a dome at the top for guests.
-      Carvings run round every wall, and the faces in them all look down,
-      toward the deep.
+      Carvings run round every wall, in a script no surface scholar can read.
     here:
       - "*The Warden of the Ledge*, the only Thelisian who'll talk to surface folk (Challenge 4: *Patient*, *Keeps Its Word*)"
       - "The Hall Guard (Challenge 4: *Swift*, *Sees in the Dark*)"

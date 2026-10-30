@@ -874,6 +874,7 @@ function mapOf({ world, files, pages, districtOf, partOf, say }) {
       ? { size: [w, h], land: shapes(g.land, "the land"), deep: shapes(g.deep, "the deep water"), water: shapes(g.water, "the water"), hills: shapes(g.hills, "the hills") }
       : { size: [w, h], sea: shape(g?.sea, "the sea"), water: shapes(g?.water, "the water"), hills: shapes(g?.hills, "the hills") };
   if (ground.land && !ground.land.length) say("world.yaml's ground has no land in it");
+  if (ground.land && ground.hills.length) say("world.yaml's ground has hills, which a world drawn by its land doesn't draw");
   const m = files.map && typeof files.map === "object" ? files.map : {};
   for (const k of Object.keys(m)) if (!["districts", "parts", "wilds", "roads", "marks", "pins", "opens"].includes(k)) say(`map.yaml has a line a map can't hold: ${k}`);
   const keyed = (v, area) => {
@@ -891,6 +892,7 @@ function mapOf({ world, files, pages, districtOf, partOf, say }) {
   // Open country, drawn as the land rather than a district's plate.
   const wilds = asList(m.wilds).map(String);
   for (const k of wilds) if (!districts[k]) say(`map.yaml's wilds has ${k}, which isn't one of the districts it draws`);
+  if (wilds.length && ground.land) say("map.yaml has wilds, and a world drawn by its land doesn't draw open country");
   // A part's inside its district, every corner of it.
   for (const [k, pts] of Object.entries(parts)) {
     const d = pages.get(k)?.in;

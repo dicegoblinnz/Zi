@@ -277,12 +277,15 @@ export function districtsOf(world) {
 // What a world calls its districts and parts, one and many (world.yaml's
 // areas): a city's are districts and parts, and Abnu's are lands and cities.
 export const wordsOf = (world) => world.areas ?? { district: ["district", "districts"], part: ["part", "parts"] };
+// A name in the middle of a line, its The lower case: in the Hinterlands.
+export const midName = (n) => String(n ?? "").replace(/^The (?=\p{Lu})/u, "the ");
 // What a place is, under its name: a district, a part of one, or where it
 // is, in the world's own words, with up being the name of what it's in.
 export function whereWords(area, up, words) {
+  const at = midName(up);
   if (area === "district") return cap(words.district[0]);
-  if (area === "part") return words.part[0] === "part" ? `Part of ${up}` : `${cap(words.part[0])} in ${up}`;
-  return `In ${up}`;
+  if (area === "part") return words.part[0] === "part" ? `Part of ${at}` : `${cap(words.part[0])} in ${at}`;
+  return `In ${at}`;
 }
 function whereOf(world, p) {
   const { by } = districtsOf(world);
@@ -378,7 +381,7 @@ export function personFold(world, p, ln = linkerOf(world), doc = docOf(world)) {
   if (at) lines.push(["Where they’re found", `<p><a class="wn-ln" href="#p-${esc(at.key)}">${esc(at.card.name)}</a></p>`]);
   const ment = mentionsOf(doc, { ...c, id: pid }).filter((e) => !faceOf.some((f) => `f-${f.key}` === e.id) && e.id !== `p-${p.at}`);
   if (ment.length) lines.push(["Where else they come up", `<p>${ment.map((e) => `<a class="wn-ln" href="#${esc(e.id)}">${esc(e.name)}</a>`).join(", ")}</p>`]);
-  const who = faceOf.length ? `The Face of ${faceOf.map((f) => f.card.name).join(" and ")}` : at ? `At ${at.card.name}` : "";
+  const who = faceOf.length ? `The Face of ${faceOf.map((f) => midName(f.card.name)).join(" and ")}` : at ? `At ${midName(at.card.name)}` : "";
   const find = [c.name, ...c.aka, c.line, who, ...c.tags.map((t) => t.text)].join(" ").toLowerCase().replace(/[’‘]/g, "'");
   return `
     <details class="wn-f wn-pg is-person" id="${pid}" data-area="${esc(of(p.at))}" data-find="${esc(find)}">

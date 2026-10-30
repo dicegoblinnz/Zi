@@ -170,7 +170,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
   // tucks (a place inside a city on a map of a whole world) waits for room
   // for its pin and its name both, behind its city's name, so a city's a
   // name till it's zoomed in on and its places come out named, never as a
-  // pin with no name.
+  // pin with no name. The one a keyboard's on stays put.
   function declutter() {
     const kept = [];
     const heads = [];
@@ -185,7 +185,7 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
       const r = n.getBoundingClientRect();
       const box = { l: r.left - 4, r: r.right + 4, t: r.top - 2, b: r.bottom + 2 };
       const hit = hits(box, kept);
-      if (p.tuck && !p.always && head && (hit || hits(head, kept) || hits(head, heads))) {
+      if (p.tuck && !p.always && head && !p.el.contains(document.activeElement) && (hit || hits(head, kept) || hits(head, heads))) {
         p.el.classList.add("is-tucked");
         continue;
       }

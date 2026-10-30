@@ -6,7 +6,7 @@
 // opening its card or its page. The page is all there without this, drawn at
 // build time by world-page.js.
 
-import { webOfWorld, webData, tiesOf, whereWords } from "./world-page.js";
+import { webOfWorld, webData, tiesOf, whereWords, midName } from "./world-page.js";
 import { linesOf } from "../companion/world-web.js";
 import { makeViewer } from "../companion/mapview.js";
 import { die, esc } from "../kit/kit.js";
@@ -183,7 +183,7 @@ if (data && root) {
     const k = pl.area || "place";
     const on = ui.pin === p.id;
     const html = k === "place" ? `<span class="wm-pin-head">${PIN}</span><span class="wm-pin-n">${esc(pl.name)}</span>` : `<span class="wm-pin-n">${esc(pl.name)}</span>`;
-    const up = byKey.get(pl.in)?.name ?? "";
+    const up = midName(byKey.get(pl.in)?.name ?? "");
     const say = `${pl.name}, ${k === "district" ? `a ${AREAS.district[0]}` : k === "part" ? (AREAS.part[0] === "part" ? `part of ${up}` : `a ${AREAS.part[0]} in ${up}`) : `in ${up}`}`;
     return { cls: `wm-pin is-${k}${on ? " is-on" : ""}`, html, attrs: { "data-pin": p.id, "aria-label": say, "aria-pressed": String(on) } };
   };

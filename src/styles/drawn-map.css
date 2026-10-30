@@ -5,8 +5,10 @@
    hatched. Roads are pale, landmarks are small gold marks, and the names
    live on the pins (mapview.css), so they stay one size. Dogtown's wall is
    ember, since it's the one border that shoots back. */
+/* The sea's on the map's box too, which a world's shows past its edge. */
+.dm, .wn-mapbox { --dm-sea: #0b0812; }
+:root[data-theme="light"] .dm, :root[data-theme="light"] .wn-mapbox { --dm-sea: #d9d3e4; }
 .dm {
-  --dm-sea: #0b0812;
   --dm-wave: rgba(181, 150, 245, 0.1);
   --dm-land: #17111e;
   --dm-dot: rgba(217, 180, 90, 0.17);
@@ -29,7 +31,6 @@
   height: 100%;
 }
 :root[data-theme="light"] .dm {
-  --dm-sea: #d9d3e4;
   --dm-wave: rgba(91, 54, 176, 0.13);
   --dm-land: #f1ece2;
   --dm-dot: rgba(122, 90, 18, 0.2);
@@ -101,5 +102,4 @@
 .dm.is-world .dm-road { stroke-width: calc(1.6px * var(--dm-k)); stroke-dasharray: calc(4px * var(--dm-k)) calc(3.5px * var(--dm-k)); stroke-linecap: butt; }
 /* Past a world's edge, zoomed right out on a phone, is more of its sea
    rather than the map box's grey. */
-.wn-mapbox:has(.dm.is-world) { background: #0b0812; }
-:root[data-theme="light"] .wn-mapbox:has(.dm.is-world) { background: #d9d3e4; }
+.wn-mapbox:has(.dm.is-world) { background: var(--dm-sea); }

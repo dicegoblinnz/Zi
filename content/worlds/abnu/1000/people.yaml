@@ -76,7 +76,7 @@ people:
     line: The Keeper of the Sealed Archive, who catalogues every banned book in the empire
     ch: 2
     look: Spectacles pushed up into white hair, ink to the wrist, and a voice so quiet you lean in.
-    want: Every book kept and nothing burned, whatever's in it.
+    want: Every banned book kept and catalogued, and none of them burned.
     tags: [{ text: Well-Read, kind: drives }, { text: Secretly Kind, kind: drives }, { text: Overlooked, kind: keeps }]
     voice: Barely above a whisper, and she always knows the shelf number.
     teles:
@@ -157,7 +157,7 @@ people:
     at: the-ninth-district
     line: A widow who owns half the Ninth District's debts and all its gossip
     ch: 2
-    look: A big woman in mourning black thirty years old, at a window table with a ledger and a pot of tea.
+    look: A big woman who's worn mourning black for thirty years, at a window table with a ledger and a pot of tea.
     want: Everyone in the Ninth owing her something, and enjoying the asking.
     tags: [{ text: Well-Connected, kind: keeps }, { text: Deep Pockets, kind: keeps }, { text: Greedy, kind: drives }]
     voice: Warm and amused, and every sentence is a negotiation she's winning.
@@ -209,7 +209,7 @@ people:
     line: The Soths' queen, whose family runs the Ironhand Forge
     ch: 5
     look: A broad grey-haired woman with a smith's forearms and a scar across one palm for every blade she's passed.
-    want: Her mountains, her iron and her word kept, whatever Alysta does.
+    want: To keep her mountains her own and her word unbroken, ban or no ban.
     tags: [{ text: Commanding, kind: comes }, { text: Hits Like a Wagon, kind: comes }, { text: Keeps Its Word, kind: drives }]
     voice: Blunt and slow, and she'll ask about your scars before your name.
     teles:

@@ -110,11 +110,15 @@ function tonesRound(keys, corners, on) {
     if (ks.length < 2 || ks.every((a) => ks.every((b) => a === b || near.get(a).has(b))) || !on(c.split(",").map(Number))) continue;
     for (const a of ks) for (const b of ks) if (a !== b) near.get(a).add(b);
   }
-  // The most neighbours first, each tried in every tone till all fit.
+  // The most neighbours first, each tried in every tone till all fit, and a
+  // world too tangled for three tones gets them as they come instead, rather
+  // than a search that never ends.
   const order = [...keys].sort((a, b) => near.get(b).size - near.get(a).size || keys.indexOf(a) - keys.indexOf(b));
   const tone = {};
+  let steps = 0;
   const fit = (i) => {
     if (i === order.length) return true;
+    if (++steps > 20000) return false;
     const k = order[i];
     for (const t of [0, 1, 2]) {
       if ([...near.get(k)].some((o) => tone[o] === t)) continue;
