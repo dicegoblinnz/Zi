@@ -165,6 +165,7 @@ import { pageOf } from "../src/companion/pages.js";
 import { wholeOps, cardNow, hashOf } from "../src/companion/world-whole.js";
 import { fogFull, fogText, fogBits, gridOf, mapsForPlayer, sittersOf } from "../src/companion/maps.js";
 import { esc } from "../src/kit/kit.js";
+import { CHARGES, FIELDS, chargeWeights, sealKey } from "../src/kit/seals.js";
 
 const problems = [];
 const note = (p) => {
@@ -340,6 +341,15 @@ function checkDealt(W, recipe, seed, n, fail) {
   for (const f of W.factions) if (f.exc && !f.exc.reason) fail(`${seed}: ${f.exc.text} breaks the logic without a reason`);
   // Every card adds up.
   const C = cardsOf(T, W);
+  // Every faction's dealt a seal, a charge its kind of faction suits, and no
+  // two on the board share one (stage 1 of notes/faction-feel-plan.md).
+  const seals = C.factions.map((f) => f.seal);
+  if (seals.some((s) => !s || !CHARGES[s.c] || !FIELDS[s.f])) fail(`${seed}: a faction without a seal`);
+  else if (new Set(seals.map(sealKey)).size !== seals.length) fail(`${seed}: two factions share a seal`);
+  else seals.forEach((s, i) => {
+    const type = W.factions[i].type;
+    if (!type?.own && !(chargeWeights(type?.role, type?.tags ?? [])[s.c] > 0)) fail(`${seed}: ${C.factions[i].name}'s ${s.c} isn't a charge a ${type?.role} suits`);
+  });
   const seatsHeld = new Set();
   const oneThing = new Set();
   C.factions.forEach((f, i) => {
@@ -417,7 +427,9 @@ for (const g of groups) {
     const opts = { recipe: g.recipe, seed, factions: n, dials };
     const W = dealWorld(T, opts);
     dealtCount++;
-    if (JSON.stringify(recordOf(dealWorld(T, opts))) !== JSON.stringify(recordOf(W))) fail(`${seed} dealt two different boards`);
+    const again = dealWorld(T, opts);
+    if (JSON.stringify(recordOf(again)) !== JSON.stringify(recordOf(W))) fail(`${seed} dealt two different boards`);
+    if (JSON.stringify(cardsOf(T, again).factions.map((f) => f.seal)) !== JSON.stringify(cardsOf(T, W).factions.map((f) => f.seal))) fail(`${seed} dealt two different sets of seals`);
     if (W.fallbacks.length) fallbacks++;
     checkDealt(W, g.recipe, seed, n, fail);
     // Agendas and Secrets aim at the whole board, the last faction dealt too.
@@ -705,6 +717,28 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   console.log("4. the build's record: written whole, a line at a time, shown an age at a time, undone, tidied, and kept from players");
 }
 
+// 4b. Seals on the board (stage 1 of notes/faction-feel-plan.md): a card out
+// of the book comes in wearing the book's seal when the change doesn't give
+// it one, keeps its own when it does, keeps none once it's taken off, and a
+// player gets it only with the card.
+{
+  const brine = bookBoard("brinewake");
+  const card = brine.cards[0];
+  const { h, at, ...was } = card;
+  const doc = blank();
+  const book = { from: "brinewake", key: card.key, h, at, was };
+  apply(doc, { o: "new", f: { id: "f-aaaaaaaa", name: card.name, want: card.want, book } });
+  same(doc.factions[0].seal, card.seal, "a card out of the book wears the book's seal");
+  apply(doc, { o: "new", f: { id: "f-bbbbbbbb", name: "The Gull Kings", book: { ...book, key: "the-gull-kings" }, seal: { c: "ship", f: "fess", d: "" } } });
+  same(doc.factions[1].seal, { c: "ship", f: "fess", d: "" }, "and one that comes with its own keeps it");
+  apply(doc, { o: "seal", id: "f-aaaaaaaa", v: null });
+  same(readable(JSON.parse(JSON.stringify(doc))).factions[0].seal, null, "a seal she's taken off stays off");
+  same(forPlayer(doc).factions.length, 0, "a player gets no seal before the card");
+  apply(doc, { o: "show", id: "f-bbbbbbbb", p: "card", v: true });
+  same(forPlayer(doc).factions[0].seal, { c: "ship", f: "fess", d: "" }, "and gets it with the card");
+  console.log("4b. seals on the board: a book card's, its own, taken off, and a player's only with the card");
+}
+
 // 5. The dealing script.
 {
   const args = ["scripts/deal-world.mjs", "--tables", DIR, "--region", groups[0].recipe.region, "--era", groups[0].recipe.era, ...(groups[0].recipe.twist ? ["--twist", groups[0].recipe.twist] : []), "--seed", "gate-moss-wren", "--factions", "4"];
@@ -722,14 +756,17 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     const book = bookBoard(id);
     if (!book) continue;
     let n = 0;
-    const held = book.cards.map((c) => ({ name: c.name, about: "", res: c.res.map((r) => ({ id: `r-${n++}x`, text: r.text })), assets: c.assets.map((a) => ({ id: `a-${n++}x`, text: a.text, power: a.power })) }));
+    const held = book.cards.map((c) => ({ name: c.name, about: "", res: c.res.map((r) => ({ id: `r-${n++}x`, text: r.text })), assets: c.assets.map((a) => ({ id: `a-${n++}x`, text: a.text, power: a.power })), seal: c.seal }));
+    // A mini faction's seal on the board too, which a new one can't have either.
+    const taken = [...held.map((h) => h.seal), { c: held[0].seal?.c ?? "crown", f: "plain", d: "bar" }];
+    yes(held.every((h) => h.seal), `every card on ${book.name} has its seal`);
     const recipe = { region: fr.region, era: fr.era, twist: fr.twist ?? null };
     const dials = { tense: 1, strange: 1, rich: 1, ruled: 1, ...fr.dials };
     let bad = null;
     let ties = 0;
     for (let b = 0; b < 60; b++) {
       const seed = newSeed(T, rngOf("add", b));
-      const W = startAdd(T, { recipe, dials, seed, held });
+      const W = startAdd(T, { recipe, dials, seed, held, taken });
       const was = JSON.stringify(W.factions.slice(0, held.length));
       dealRest(T, W);
       const C = cardsOf(T, W);
@@ -738,7 +775,11 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       const fail = (what) => {
         bad ??= `${seed}: ${what}`;
       };
-      if (JSON.stringify(recordOf(dealRest(T, startAdd(T, { recipe, dials, seed, held })))) !== JSON.stringify(recordOf(W))) fail("the same seed dealt two different factions");
+      const twice = dealRest(T, startAdd(T, { recipe, dials, seed, held, taken }));
+      if (JSON.stringify(recordOf(twice)) !== JSON.stringify(recordOf(W))) fail("the same seed dealt two different factions");
+      if (sealKey(cardsOf(T, twice).factions[i].seal) !== sealKey(f.seal)) fail("the same seed dealt two different seals");
+      if (!f.seal || taken.some((x) => sealKey(x) === sealKey(f.seal))) fail(`its seal's ${f.seal ? "one the board has already" : "missing"}`);
+      if (C.factions.slice(0, i).some((x, j) => sealKey(x.seal) !== sealKey(held[j].seal))) fail("a faction already on the board has another seal on the card");
       if (JSON.stringify(W.factions.slice(0, held.length)) !== was) fail("a faction already on the board changed");
       if (!f.name || !f.about || !f.want || !f.face || !f.secret || !f.agendas.length || !f.sits) fail("the new card's missing part of itself");
       if (f.die !== 2 * f.steps) fail(`its d${f.die} isn't 1 step plus its people`);
@@ -763,10 +804,11 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     yes(ties > 10, `adding to ${book.name}, the new faction gets an ally or a debt as well as its rival on more than 10 of 60 (got ${ties})`);
     console.log(`6. ${book.name}: 60 factions added on its mix`);
     // It picks up from its record, and deals the same from there.
-    const A = startAdd(T, { recipe, dials, seed: "ash-lantern-ford", held });
+    const A = startAdd(T, { recipe, dials, seed: "ash-lantern-ford", held, taken });
     dealRest(T, A);
     const back = resume(T, recordOf(A));
     same(recordOf(back), recordOf(A), `a faction being added to ${book.name} picks up from its record`);
+    same(cardsOf(T, back).factions.map((x) => x.seal), cardsOf(T, A).factions.map((x) => x.seal), `and its seals with it (${book.name})`);
     redeal(T, A, `f:${A.held}:want`);
     redeal(T, back, `f:${back.held}:want`);
     same(recordOf(back), recordOf(A), `and deals the same from there (${book.name})`);

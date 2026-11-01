@@ -110,7 +110,7 @@ export const CHARGES = {
   // Rebels, the ones who broke free.
   chain: { name: "A broken chain", kinds: ["rebels"], tags: ["poor", "law"], art: `<path d="M9.6 13.4 L7.4 15.6 A3 3 0 0 1 3.2 11.4 L6.6 8 A3 3 0 0 1 10.2 7.4"/><path d="M14.4 10.6 L16.6 8.4 A3 3 0 0 1 20.8 12.6 L17.4 16 A3 3 0 0 1 13.8 16.6"/><path d="M12 4.2 V6.6 M12 17.4 V19.8 M4.8 19.2 L6.4 17.6 M19.2 4.8 L17.6 6.4"/>` },
   // Something old that wears a human face, a secret that bites.
-  serpent: { name: "A serpent", kinds: ["old", "society"], tags: ["old", "secret", "magic", "wild"], art: `<path d="M5 20.4 C2.6 19.8 2.8 16.4 5.8 15.8 C9.4 15 14.8 15.6 16.4 12.2 C17.8 9.2 14.8 7 11.8 8.2 C9.8 9 8.6 7.4 9.6 5.8 C10.8 3.8 14.4 3.4 16.6 4.8"/><path d="M16.6 4.8 L19.6 3.6 M16.6 4.8 L19.4 6.6"/>` },
+  serpent: { name: "A serpent", kinds: ["old", "society"], tags: ["old", "secret", "magic"], art: `<path d="M5 20.4 C2.6 19.8 2.8 16.4 5.8 15.8 C9.4 15 14.8 15.6 16.4 12.2 C17.8 9.2 14.8 7 11.8 8.2 C9.8 9 8.6 7.4 9.6 5.8 C10.8 3.8 14.4 3.4 16.6 4.8"/><path d="M16.6 4.8 L19.6 3.6 M16.6 4.8 L19.4 6.6"/>` },
   // The hills, the mines, a nation up in the mountains.
   mountain: { name: "A mountain", kinds: ["house", "makers", "rebels"], tags: ["hill", "mine", "stone", "wild"], art: `<path d="M2.4 19.6 L9.2 7.2 L13.2 14 L15.6 10.4 L21.6 19.6 Z"/><path d="M6.8 11.6 L9.2 13.2 L11.2 11.2"/>` },
   // News, broadcasts, whoever's listening in. Never dealt: a whole world's,
@@ -173,14 +173,18 @@ export function sealIn(raw) {
   return { c, f, d: d && Object.hasOwn(MARKS, d) ? d : "" };
 }
 // How likely each charge is for a kind of faction: three for one that suits
-// its type role, and two for each of its type's tags it has. With no role (her
-// own words, or a faction that wasn't dealt), every charge that can be dealt
-// is as likely as the rest.
+// its type role, and two more for each of its type's tags the charge has. A
+// charge for another kind only comes in by where the faction is (a ship for
+// pirates on the coast), never by what it's like, so a temple's never a
+// serpent. With no role (her own words, or a faction that wasn't dealt),
+// every charge that can be dealt is as likely as the rest.
+const WHERE = new Set(["coast", "river", "marsh", "forest", "hill", "mine", "wild", "road"]);
 export function chargeWeights(role = null, tags = []) {
   const out = {};
   for (const [id, c] of Object.entries(CHARGES)) {
     if (!c.kinds.length) continue;
-    out[id] = role ? (c.kinds.includes(role) ? 3 : 0) + 2 * tags.filter((t) => c.tags.includes(t)).length : 1;
+    const has = tags.filter((t) => c.tags.includes(t));
+    out[id] = !role ? 1 : c.kinds.includes(role) ? 3 + 2 * has.length : 2 * has.filter((t) => WHERE.has(t)).length;
   }
   return Object.values(out).some((w) => w > 0) ? out : chargeWeights(null);
 }

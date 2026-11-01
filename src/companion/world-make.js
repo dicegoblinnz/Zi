@@ -354,9 +354,11 @@ export function makeWorldMake(w) {
         }),
         seat: at.has(pid) ? at.get(pid) : null,
         picks: rec,
+        seal: f.seal,
       };
     });
-    return { held, seats, ids: factions.map((f) => f.id), seatIds };
+    // Every seal on the board, mini factions' too, so a new one's never the same.
+    return { held, seats, ids: factions.map((f) => f.id), seatIds, taken: doc.factions.map((f) => f.seal).filter(Boolean) };
   }
 
   // The crew as this phone last saw the campaign: its characters, and what's
@@ -418,7 +420,7 @@ export function makeWorldMake(w) {
       if (mix) {
         e.mix = { from: mix.from, name: mix.name ?? "" };
         e.setup = { ...e.setup, region: mix.recipe.region, ...genreOf(mix.recipe) };
-        const W = startAdd(T, { recipe: mix.recipe, dials: mix.dials, seed: newSeed(T), held: held.held, seats: held.seats, asking: mix.asking, tension: mix.tension, crew: crewNow(id, doc, "add") });
+        const W = startAdd(T, { recipe: mix.recipe, dials: mix.dials, seed: newSeed(T), held: held.held, seats: held.seats, asking: mix.asking, tension: mix.tension, crew: crewNow(id, doc, "add"), taken: held.taken });
         live[id] = W;
         e.W = recordOf(W);
         e.at = `f:${W.held}:1`;
@@ -445,7 +447,7 @@ export function makeWorldMake(w) {
       e.ids = held.ids;
       e.seats = held.seatIds;
       e.mix = null;
-      W = startAdd(T, { recipe, dials: b?.dials ?? null, seed: newSeed(T), held: held.held, seats: held.seats, asking: b?.dealt?.asking ?? null, tension: b?.dealt?.tension ?? null, crew: crewNow(id, doc, "add") });
+      W = startAdd(T, { recipe, dials: b?.dials ?? null, seed: newSeed(T), held: held.held, seats: held.seats, asking: b?.dealt?.asking ?? null, tension: b?.dealt?.tension ?? null, crew: crewNow(id, doc, "add"), taken: held.taken });
     } else W = start(T, { recipe, seed: newSeed(T), factions: e.setup.n, crew: crewNow(id, docOf(id), "world") });
     live[id] = W;
     e.W = recordOf(W);
@@ -1563,6 +1565,7 @@ export function makeWorldMake(w) {
           ...bonds,
           threads,
           shown: {},
+          seal: c.seal ?? null,
         },
       });
     }
@@ -1590,6 +1593,7 @@ export function makeWorldMake(w) {
           loy: m.loy.map((t) => line({ text: t.text, kind: t.kind === "hostile" ? "hostile" : "bond", s: "whole" })),
           threads: [],
           shown: {},
+          seal: m.seal ?? null,
         },
       });
     });

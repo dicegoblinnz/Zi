@@ -26,7 +26,9 @@
 //   seal      its wax seal, { c, f, d }: a charge, a field and a mark ("" for
 //             none) out of src/kit/seals.js, or null for none yet. It goes to
 //             the crew with the card and never before it
-//             (notes/faction-feel-plan.md, stage 1)
+//             (notes/faction-feel-plan.md, stage 1). A card out of the book
+//             comes in wearing the book's (its was has it) unless the change
+//             that brings it in says otherwise
 //   sits      the place's page it sits at, if it came in with a whole world,
 //             so the web on a map puts it on that place's pin. Never sent to
 //             a player, whose maps say who sits where (mapsForPlayer())
@@ -121,6 +123,9 @@ export function cardOf(raw) {
   c.assets = list("assets", (x) => ({ text: x.text, does: x.does, power: x.power, x: x.x }));
   c.agendas = list("agendas", (x) => ({ text: x.text, die: x.die, then: x.then })).slice(0, MAX.agendas);
   for (const l of ["pub", "mor", "loy", "threads"]) c[l] = list(l, (x) => ({ text: x.text, kind: x.kind, s: x.s }));
+  // The book's seal for it (content/world-tables/seals.yaml), when it has one.
+  const seal = sealOf(raw.seal);
+  if (seal) c.seal = seal;
   return c;
 }
 
@@ -194,6 +199,9 @@ export function apply(doc, op) {
     case "new": {
       const n = factionOf(op.f);
       if (!n || find(doc, n.id) || doc.factions.length >= MAX.factions) return false;
+      // A card out of the book comes in wearing the book's seal, unless the
+      // change gives it one of its own (or none, as null).
+      if (op.f.seal === undefined && n.book?.was?.seal) n.seal = sealOf(n.book.was.seal);
       if (n.parent && n.parent !== "crew" && !doc.factions.some((p) => p.id === n.parent && !p.mini)) n.parent = null;
       const at = Number.isInteger(op.at) && op.at >= 0 && op.at <= doc.factions.length ? op.at : doc.factions.length;
       doc.factions.splice(at, 0, n);
