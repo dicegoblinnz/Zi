@@ -1418,7 +1418,7 @@ export function makeTurn(d) {
       ui.sure = "";
       // What changed goes into How it came to be, as the downtime's own age.
       const t = turnOf(id);
-      if (t) d.world().edit(id, [{ o: "wb-age", n: t.n, len: t.len ?? "", lines: t.said.map((x, i) => ({ id: `d${t.n}-${i}-${newId().slice(0, 8)}`, text: x.text })) }], "", { undoable: false, quiet: true });
+      if (t) d.world().edit(id, [{ o: "wb-age", dt: t.n, len: t.len ?? "", lines: t.said.map((x, i) => ({ id: `d${t.n}-${i}-${newId().slice(0, 8)}`, text: x.text })) }], "", { undoable: false, quiet: true });
       push(id, { o: "ft-end" });
       d.toast("That downtime’s done. What changed is in How it came to be now, as its own age.", false);
     },

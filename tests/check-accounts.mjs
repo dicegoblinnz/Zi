@@ -2034,7 +2034,7 @@ try {
       if (SHOTS) await page.screenshot({ path: join(SHOTS, `${name}.png`), fullPage: true });
     };
     // A reveal's sheet on a player's phone (reveal.js), dealt with a Got it at a time.
-    const sheet = ".zr:not([hidden])";
+    const sheet = ".zr:not([hidden]):not([inert])";
     const gotIt = async (page) => {
       for (let i = 0; i < 12 && (await page.$(`${sheet} [data-zr="ok"], ${sheet} [data-zr="all"]`)); i++) {
         await page.click(`${sheet} [data-zr="ok"], ${sheet} [data-zr="all"]`);
@@ -2102,9 +2102,10 @@ try {
     same(await text(kai.page, `${sheet} .zr-t`), "The Brothers of the Lamp’s threads", "Got it, and its threads are next");
     has(await text(kai.page, `${sheet} .zr-w`), "The Kittiwake runs our brandy", "in the Lamp's words");
     yes(!(await text(kai.page, sheet)).includes(lamp.secret), "and nothing of its Secret");
-    await tall(kai.page, "reveal-sheet");
+    await kai.page.waitForTimeout(1300);
+    await shot(kai.page, "reveal-sheet");
     await kai.page.click(`${sheet} [data-zr="ok"]`);
-    same(await kai.page.$(sheet), null, "Got it again, and it's gone");
+    await until(async () => !(await kai.page.$(".zr:not([hidden])")), "Got it again, and it's gone");
 
     // Mo starts the downtime from the World screen, a season long, and it's
     // on Kai's phone in seconds.
@@ -2226,6 +2227,7 @@ try {
     await sam.page.click('.cc-tabs [data-t="world"]');
     await sam.page.waitForSelector(".wb-tab .ft-crew [data-do='slot']");
     has(await text(sam.page, ".wb-tab .ft"), "No signal, so this is the downtime as it was", "with no signal, Bram's World tab has the downtime as it was");
+    await gotIt(sam.page);
     await sam.page.click(".ft-crew [data-do='slot']");
     has(await text(sam.page, ".ft"), "goes up when you’ve got a signal", "his slot goes up when there's a signal");
     await sam.context.setOffline(false);

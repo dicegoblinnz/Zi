@@ -43,11 +43,13 @@
 //   { o: "wb-show", v, age? }    an age shown to the crew (v true) or hidden
 //                                again (false), or with no age every age, or
 //                                with v a list, exactly those ages (Undo's)
-//   { o: "wb-age", n, len, lines }  downtime n ends: its age, how long it was,
+//   { o: "wb-age", dt, len, lines }  downtime dt ends: its age, how long it was,
 //                                and what changed in it, shown to the crew,
 //                                since it's what they heard. A world with no
 //                                record yet gets one.
-//   { o: "wb-age-off", n }       downtime n's age off it again
+//   { o: "wb-age-off", dt }      downtime dt's age off it again (the
+//                                downtime's dt, since n is each change's own
+//                                number on its way up)
 
 // One request carries 200,000 characters (MAX_TEXT in src/worker/index.js),
 // so on a big board Done sends the record on its own, after the factions.
@@ -188,7 +190,7 @@ export function applyBuild(doc, op) {
       return true;
     }
     case "wb-age": {
-      const n = whole(op.n, 1, BMAX.downtimes, 0);
+      const n = whole(op.dt, 1, BMAX.downtimes, 0);
       const into = b ?? buildOf({});
       if (!n || into.ages.some((x) => x.n === n)) return false;
       const age = 3 + n;
@@ -206,7 +208,7 @@ export function applyBuild(doc, op) {
       return true;
     }
     case "wb-age-off": {
-      const n = whole(op.n, 1, BMAX.downtimes, 0);
+      const n = whole(op.dt, 1, BMAX.downtimes, 0);
       if (!b || !b.ages.some((x) => x.n === n)) return false;
       b.ages = b.ages.filter((x) => x.n !== n);
       b.history = b.history.filter((l) => l.age !== 3 + n);
@@ -237,10 +239,10 @@ export function undoBuild(doc, op) {
     case "wb-show":
       return b ? [{ o: "wb-show", v: [...b.shown] }] : [];
     case "wb-age":
-      return b ? [{ o: "wb-age-off", n: op.n }] : [{ o: "wb-gone" }];
+      return b ? [{ o: "wb-age-off", dt: op.dt }] : [{ o: "wb-gone" }];
     case "wb-age-off": {
-      const a = b?.ages.find((x) => x.n === op.n);
-      return a ? [{ o: "wb-age", n: a.n, len: a.len, lines: b.history.filter((l) => l.age === 3 + a.n).map(({ id, text }) => ({ id, text })) }] : [];
+      const a = b?.ages.find((x) => x.n === op.dt);
+      return a ? [{ o: "wb-age", dt: a.n, len: a.len, lines: b.history.filter((l) => l.age === 3 + a.n).map(({ id, text }) => ({ id, text })) }] : [];
     }
     default:
       return [];

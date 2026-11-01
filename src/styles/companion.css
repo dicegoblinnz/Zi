@@ -1932,8 +1932,7 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
 .ft-seqh { display: flex; align-items: center; gap: 10px; margin: 0.8rem 0 0.7rem; }
 .ft-of { flex: none; margin: 0; font-family: var(--display); font-size: 1rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .ft-of b { font-size: 1.55rem; color: var(--ink); }
-.ft-track { display: flex; gap: 2px; min-width: 0; margin: 0; padding: 0; overflow-x: auto; list-style: none; scrollbar-width: none; }
-.ft-track::-webkit-scrollbar { display: none; }
+.ft-track { display: flex; flex-wrap: wrap; gap: 2px; min-width: 0; margin: 0; padding: 0; list-style: none; }
 .ft-tk-b { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; background: none; border: 1px solid transparent; border-radius: 2px; }
 .ft-tk .zd-seal { --s: 30px; }
 .ft-tk.is-now .ft-tk-b { background: color-mix(in srgb, var(--zd-them) 16%, transparent); border-color: var(--zd-them-line); }
@@ -1954,7 +1953,7 @@ button.ft-tk-b:focus-visible { outline: 2px solid var(--violet); outline-offset:
 .ft-hap-a { margin: 0; font-size: 1rem; line-height: 1.4; overflow-wrap: anywhere; }
 
 /* While you rested: what changed, once, and how long it took. */
-.ft-rest-h { margin: 0.5rem 0 0; font-family: var(--display); font-weight: 600; font-size: 1.45rem; line-height: 1.15; }
+.cc .ft-rest-h { margin: 0.5rem 0 0; font-family: var(--display); font-weight: 600; font-size: 1.45rem; line-height: 1.15; color: var(--ink); }
 .ft-rest-len { margin: 0.1rem 0 0.75rem; font-weight: 700; color: var(--muted); }
 .ft-rest .cc-small { margin: 0.6rem 0 0; }
 .ws-len { margin-left: 4px; font-family: var(--body); font-size: 0.82em; font-weight: 600; letter-spacing: 0.02em; color: var(--muted); }

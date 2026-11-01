@@ -113,6 +113,7 @@ export function makeReveal({ d, esc }) {
     }
     sheet.classList.toggle("is-calm", calm());
     sheet.classList.remove("is-down");
+    sheet.inert = false;
     if (sheet.hidden) {
       sheet.hidden = false;
       sheet.classList.add("is-up");
@@ -139,6 +140,8 @@ export function makeReveal({ d, esc }) {
       sheet.hidden = true;
       return;
     }
+    // On its way out it takes no more taps.
+    sheet.inert = true;
     sheet.classList.add("is-down");
     gone = setTimeout(() => {
       sheet.hidden = true;
