@@ -344,8 +344,8 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   const notices = await page.locator(".wn-foot p").allTextContents();
   if (!notices.some((n) => /Homebrew Content Policy of R\. Talsorian Games/.test(n)) || !notices.some((n) => /CD PROJEKT RED/.test(n))) note(`${at}: the notices at the foot aren't both there`);
   const cards = await page.locator("#wn-board .wn-f").count();
-  const sealed = await page.locator("#wn-board .wn-f .wn-fs .zd-seal:not(.is-blank)").count();
-  if (!cards || sealed !== cards) note(`${at}: ${sealed} of ${cards} factions on the board have their seal`);
+  const withSeals = await page.locator("#wn-board .wn-f .wn-fs .zd-seal:not(.is-blank)").count();
+  if (!cards || withSeals !== cards) note(`${at}: ${withSeals} of ${cards} factions on the board have their seal`);
   // The gangs alone, then Find, then every one again.
   await page.click('.wn-kind[data-kind="gang"]');
   const gangs = await page.locator('#wn-board .wn-f:not([hidden])').evaluateAll((els) => els.map((e) => e.dataset.kind));
