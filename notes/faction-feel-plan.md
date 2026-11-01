@@ -69,3 +69,20 @@ Her own picture instead of a seal, using the picture uploads maps already have (
 ## How each stage is checked
 
 Each agent runs only the tests for its part, on its own `ZI_PORT`. Once the three are merged: `npm run build`, then `tests/check-site.mjs`, `tests/check-companion.mjs`, `tests/check-accounts.mjs` and `tests/check-world-engine.mjs` once each, and one Sonnet agent reviews the whole diff. The checks to add: a seal on every faction a build deals and in both whole worlds, none reaching a player before the card, a blank seal on the web for a faction the crew hasn't met, hostile lines told apart from bonds without colour, the crew's World tab and a faction's page at 390 in both themes with the board's first screen holding Since you last played and Closing in, a reveal reaching a second phone and the table screen with nothing the crew hasn't been shown, and a downtime's sequence followed on a player's phone, its summary in How it came to be as a new age with its length.
+
+## Where it's got to (2 Nov)
+
+Stages 1 to 5 are merged on `website` and on its Preview. All four suites pass on the merged branch. One reviewer read the whole change and a second read the fixes. Between them they found five real problems, all fixed with a check each:
+
+- A downtime with nothing in it took the next one's number, so the next one never reached How it came to be (`counts()` and `ageOf()`).
+- Boards from before seals showed every met faction as a blank seal (`sealsFor()`, filled only where there's none).
+- A seal she'd picked on one phone could be dealt over from her other phone (`fill`).
+- The table screen missed a reveal shown again after she'd hidden it.
+- Add a faction on a record a downtime started kept its recipe blank.
+
+Waiting on Mo:
+
+- His yes to the charges and glyphs on `/kit/` before `website` goes to `main`.
+- Showing the crew a faction's Secret puts its words on the table screen like any other reveal, as his call that a reveal goes on the table screen says. The screen has no sign-in, so it's his to say if a Secret should stay off it.
+
+Left as it is: an empty age that the old End wrote on the Preview before the fix isn't cleared. Only a downtime ended with nothing in it, on the Preview in the hour before the fix, could have made one.
