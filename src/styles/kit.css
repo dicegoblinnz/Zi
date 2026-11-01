@@ -148,7 +148,7 @@
 :root[data-theme="paper"] .zd-seal .rim { opacity: 1; }
 /* The GM's seal on a faction's page (src/companion/seal-pick.js): the seal
    big, Deal another, and a picker for each part. A new seal's pressed into the
-   wax, and still under reduce-motion. */
+   wax, and just appears under reduce-motion. */
 .sp-top { display: flex; align-items: center; gap: 1rem; }
 .sp-top .zd-seal { --s: 92px; }
 .sp-top .zd-seal.is-new { animation: zd-stamp 0.32s cubic-bezier(0.23, 1, 0.32, 1); }
@@ -168,6 +168,11 @@
 @media (prefers-reduced-motion: reduce) {
   .sp-top .zd-seal.is-new, .sp-o { animation: none; transition: none; }
 }
+/* The builder's header for a faction (world-make.js): its dealt seal, with its
+   Power small on the seal's edge. */
+.wk-fac-die.has-seal { position: relative; }
+.wk-fac-die.has-seal .zd-seal { --s: 58px; }
+.wk-fac-die.has-seal .zd-die { position: absolute; right: -8px; bottom: -6px; --s: 28px; width: 28px; height: 28px; }
 .zd-glyph { display: inline-block; flex: none; width: var(--s, 22px); height: var(--s, 22px); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.25em; }
 .zd-crest { display: block; width: var(--s, 72px); height: var(--s, 72px); flex: none; overflow: visible; }
 .zd-crest.sm { --s: 28px; }

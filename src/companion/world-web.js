@@ -197,8 +197,10 @@ function pathOf(L, x) {
   const run = Math.hypot(e.x - s.x, e.y - s.y) || 1;
   return { d: `M${f1(s.x)} ${f1(s.y)}Q${f1(mx)} ${f1(my)} ${f1(e.x)} ${f1(e.y)}`, mid, dir: { x: (e.x - s.x) / run, y: (e.y - s.y) / run } };
 }
-// A cross on a line, its arms at 45 degrees to it, k smaller on a wide ring.
-function crossAt(mid, dir, k = 1) {
+// A cross on a line, its arms at 45 degrees to it, k smaller on a wide ring:
+// mid is where (in the web's 100 box), dir the line's way there as a unit
+// vector. The web on a map can mark its hostile lines with it too.
+export function crossAt(mid, dir, k = 1) {
   const r = 1.5 * k;
   const arm = (a) => {
     const c = Math.cos(a), sn = Math.sin(a);
