@@ -12,9 +12,9 @@
 
 import { stepsToDice } from "../companion/dice.js";
 import { SIGILS } from "./sigils.js";
-import { CHARGES, FIELDS, GLYPHS, MARKS } from "./seals.js";
+import { CHARGES, FIELDS, GLYPHS, MARKS, sealIn, sealWords } from "./seals.js";
 
-export { SIGILS, CHARGES, FIELDS, GLYPHS, MARKS };
+export { SIGILS, CHARGES, FIELDS, GLYPHS, MARKS, sealWords };
 export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const r1 = (n) => Math.round(n * 10) / 10;
 const P = (p) => `${r1(p.x)} ${r1(p.y)}`;
@@ -311,18 +311,21 @@ const SEAL_RING = (() => {
 })();
 let sealN = 0;
 export function seal(s, { size = "md", label = "", blank = false, own = "them", cls = "" } = {}) {
-  const charge = !blank && s && Object.hasOwn(CHARGES, s.c) ? CHARGES[s.c] : null;
-  const field = !blank && s && Object.hasOwn(FIELDS, s.f) ? FIELDS[s.f] : null;
-  const mark = !blank && s && s.d && Object.hasOwn(MARKS, s.d) ? MARKS[s.d] : null;
+  const v = blank ? null : sealIn(s);
+  const charge = v ? CHARGES[v.c] : null;
+  const field = v ? FIELDS[v.f] : null;
+  const mark = v?.d ? MARKS[v.d] : null;
   const id = `zs${(sealN = (sealN + 1) % 1e6)}`;
   const named = label ? `role="img" aria-label="${esc(label)}"` : 'aria-hidden="true"';
-  const classes = ["zd-seal", own, size, blank || !charge ? "is-blank" : "", cls].filter(Boolean).join(" ");
-  return `<svg class="${classes}" viewBox="0 0 64 64" ${named} focusable="false">` +
+  const classes = ["zd-seal", own, size, charge ? "" : "is-blank", cls].filter(Boolean).join(" ");
+  // The charge goes down twice: a halo the colour of the face, then the
+  // charge itself, so it sits clear of whatever field's under it.
+  return `<svg class="${classes}" viewBox="0 0 64 64" ${named} focusable="false"${v ? ` data-seal="${esc(`${v.c} ${v.f}${v.d ? ` ${v.d}` : ""}`)}"` : ""}>` +
     `<path class="wax" d="${SEAL_RING}"/><circle class="face" cx="32" cy="32" r="19.5"/>` +
     (field?.art ? `<clipPath id="${id}"><circle cx="32" cy="32" r="19.5"/></clipPath><g class="field" clip-path="url(#${id})">${field.art}</g>` : "") +
     `<circle class="rim" cx="32" cy="32" r="19.5"/>` +
-    (charge ? `<g class="charge" transform="translate(18.4 18.4) scale(1.13)">${charge.art}</g>` : "") +
-    (mark ? `<g class="mark" transform="translate(39 6) scale(0.6)">${mark.art}</g>` : "") +
+    (charge ? `<g class="cg" transform="translate(17.6 17.6) scale(1.2)"><g class="halo">${charge.art}</g><g class="charge">${charge.art}</g></g>` : "") +
+    (mark ? `<circle class="badge" cx="51" cy="13" r="7.8"/><g class="mark" transform="translate(45.24 7.24) scale(0.48)">${mark.art}</g>` : "") +
     `</svg>`;
 }
 

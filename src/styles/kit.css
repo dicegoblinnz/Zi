@@ -118,19 +118,34 @@
 /* Seals (stage 1 of notes/faction-feel-plan.md): a faction's wax seal, told
    apart by its charge, field and mark, never by colour. Violet is theirs and
    gold the crew's. A blank one is a faction the crew hasn't been shown. */
-.zd-seal { display: block; flex: none; overflow: visible; width: var(--s, 56px); height: var(--s, 56px); --own: var(--zd-them); --own-line: var(--zd-them-line); --own-ink: var(--zd-them-ink); }
+.zd-seal { display: block; flex: none; overflow: visible; width: var(--s, 56px); height: var(--s, 56px); --own: var(--zd-them); --own-line: var(--zd-them-line); --own-ink: var(--zd-them-ink); --seal-face: color-mix(in srgb, var(--own) 12%, var(--zd-token)); --cw: 1.8; }
 .zd-seal.you { --own: var(--zd-you); --own-line: var(--zd-you-line); --own-ink: var(--zd-you-ink); }
-.zd-seal.sm { --s: 32px; }
-.zd-seal.lg { --s: 92px; }
+/* Strokes thicken as a seal shrinks, so a web node's still reads. */
+.zd-seal.sm { --s: 32px; --cw: 2.15; }
+.zd-seal.lg { --s: 92px; --cw: 1.55; }
 .zd-seal .wax { fill: var(--zd-token); stroke: var(--own-line); stroke-width: 1.6; }
-.zd-seal .face { fill: color-mix(in srgb, var(--own) 16%, var(--zd-token)); }
-.zd-seal .field { fill: color-mix(in srgb, var(--own) 34%, var(--zd-token)); }
+.zd-seal.sm .wax { stroke-width: 2.4; }
+/* At a web node's size the charge fills more of the face. */
+.zd-seal.sm .cg { transform: translate(14.6px, 14.6px) scale(1.45); }
+.zd-seal .face { fill: var(--seal-face); }
+.zd-seal .field { fill: color-mix(in srgb, var(--own) 44%, var(--zd-token)); }
+:root[data-theme="light"] .zd-seal .field { fill: color-mix(in srgb, var(--own) 30%, var(--zd-token)); }
 .zd-seal .rim { fill: none; stroke: var(--own-line); stroke-width: 1.2; opacity: 0.7; }
-.zd-seal .charge, .zd-seal .mark { fill: none; stroke: var(--own-ink); stroke-width: 1.55; stroke-linecap: round; stroke-linejoin: round; }
+.zd-seal.sm .rim { stroke-width: 1.8; }
+.zd-seal .charge, .zd-seal .halo, .zd-seal .mark { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.zd-seal .charge { stroke: var(--own-ink); stroke-width: var(--cw); }
+.zd-seal .halo { stroke: var(--seal-face); stroke-width: calc(var(--cw) + 2.6); }
+.zd-seal .charge .dot { fill: var(--own-ink); stroke: none; }
+.zd-seal .halo .dot { fill: var(--seal-face); }
+.zd-seal .badge { fill: var(--zd-token); stroke: var(--own-line); stroke-width: 1.4; }
+.zd-seal .mark { stroke: var(--own-ink); stroke-width: 2.6; }
+.zd-seal .mark .dot { fill: var(--own-ink); stroke: none; }
 .zd-seal.is-blank .wax { stroke-dasharray: 3 2.4; }
 .zd-seal.is-blank .face { fill: var(--zd-slot); }
-:root[data-theme="paper"] .zd-seal .face { fill: #fff; }
+.zd-seal.is-blank .rim { opacity: 0.35; }
+:root[data-theme="paper"] .zd-seal { --seal-face: #fff; --own-line: #111; --own-ink: #111; }
 :root[data-theme="paper"] .zd-seal .field { fill: url(#zd-hatch); }
+:root[data-theme="paper"] .zd-seal .rim { opacity: 1; }
 .zd-glyph { display: inline-block; flex: none; width: var(--s, 22px); height: var(--s, 22px); fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vertical-align: -0.25em; }
 .zd-crest { display: block; width: var(--s, 72px); height: var(--s, 72px); flex: none; overflow: visible; }
 .zd-crest.sm { --s: 28px; }
