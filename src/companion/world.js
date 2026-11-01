@@ -34,7 +34,7 @@
 //             its board as the Worker last sent it and any changes still to go
 //             up. Each campaign's kept apart, and it all goes when the
 //             account's characters leave the phone (sync.js).
-import { BONDS, MAX, OUTCOMES, PARTS, apply, blank, find, forPlayer, minisOf, moneyOf, readable, standingOf, stepsOf, undoOf } from "./board.js";
+import { BONDS, MAX, OUTCOMES, PARTS, ago, apply, blank, find, forPlayer, minisOf, moneyOf, readable, standingOf, stepsOf, undoOf } from "./board.js";
 import { diceLabel, rollDie, stepsToDice } from "./dice.js";
 import { typo } from "./marks.js";
 import { die as kitDie, glyph as kitGlyph, mini as kitMini, seal as kitSeal } from "../kit/kit.js";
@@ -76,7 +76,11 @@ const newId = () => `${random(6)}${Date.now().toString(36).slice(-3)}`;
 const bare = (t) => String(t ?? "").replace(/[.!?…]+$/, "");
 const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
 const keyOf = (t) => String(t ?? "").normalize("NFKD").toLowerCase().replace(/['’‘`]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
-const ago = (die) => ({ 2: "years off", 4: "a season or more away", 6: "a month or two away", 8: "a week or two away", 10: "days away", 12: "any day now" })[die] ?? "";
+// A faction's name in the middle of a sentence: "the Tithe Fleet", not "The".
+const midName = (n) => String(n ?? "").replace(/^The (?=\p{Lu})/u, "the ");
+const cap = (s) => String(s ?? "").charAt(0).toUpperCase() + String(s ?? "").slice(1);
+// A name list in a sentence, the first as it is and the rest lowered.
+const names = (xs) => xs.map((x, i) => (i ? midName(x) : x)).join(", ").replace(/, ([^,]*)$/, " and $1");
 
 // What each part of a card's called, and the lists in it.
 const PART_NAMES = { card: "it", power: "its Power", res: "its resources", assets: "its other assets", agenda: "its agendas", bonds: "its bonds", threads: "its threads", secret: "its Secret" };
@@ -139,6 +143,55 @@ export function makeWorld(d) {
     return doc;
   }
 
+  // What a player's phone last looked at, for Since you last played: the board
+  // as it was (k.seen, { doc, n, at }, n being the last downtime it had), kept
+  // whenever the board's on the screen. Each time the app opens, the first
+  // look at a campaign's world takes the one kept before as what to compare
+  // with, and keeps it for as long as the app's open, so the summary doesn't
+  // vanish on the next redraw.
+  const bases = new Map();
+  // The last downtime as this phone's live table last had it (table.js keeps
+  // it in zi-table for turn.js). Only read here, never written.
+  function lastDowntime(id) {
+    try {
+      const t = JSON.parse(localStorage.getItem("zi-table") || "null");
+      if (!t || !sync.me || t.user !== sync.me.id) return null;
+      const last = t.k?.[id]?.view?.last;
+      if (!last || !Number.isInteger(last.n)) return null;
+      return { n: last.n, said: (Array.isArray(last.said) ? last.said : []).map((x) => String(x?.text ?? "")).filter(Boolean) };
+    } catch {
+      return null;
+    }
+  }
+  function markSeen(id) {
+    const k = camp(id);
+    if (roleIn(id) === "gm" || !k.doc) return;
+    k.seen = { doc: structuredClone(k.doc), n: lastDowntime(id)?.n ?? k.seen?.n ?? 0, at: Date.now() };
+  }
+  function baseOf(id) {
+    if (!bases.has(id)) bases.set(id, camp(id).seen ?? null);
+    return bases.get(id);
+  }
+  // Which parts of each faction this phone's opened, so what's just been
+  // shown says New till its page is opened. A phone that's never kept it
+  // starts with everything it's got opened.
+  function openedOf(id) {
+    const k = camp(id);
+    if (!k.opened || typeof k.opened !== "object") {
+      k.opened = {};
+      for (const f of (k.doc?.factions ?? [])) k.opened[f.id] = shownOf(f);
+      keep();
+    }
+    return k.opened;
+  }
+  const shownOf = (f) => ["card", ...PARTS].filter((p) => f.shown?.[p]);
+  const newOf = (id, f) => {
+    const had = openedOf(id)[f.id] ?? [];
+    return shownOf(f).filter((p) => !had.includes(p));
+  };
+  // How much the crew knows of a faction: its card and its seven parts.
+  const knownOf = (f) => (f.shown.card ? 1 + PARTS.filter((p) => f.shown[p]).length : 0);
+
   // ------------------------------------------------------------ in step with the Worker
 
   async function call(method, path, body) {
@@ -160,13 +213,13 @@ export function makeWorld(d) {
     for (const f of now.factions) {
       const b = before.get(f.id);
       if (!b) {
-        said.push(`${gmName(id)} showed you ${bare(f.name)}.`);
+        said.push(`${gmName(id)} showed you ${midName(bare(f.name))}.`);
         keys.push(f.id);
         continue;
       }
       const parts = PARTS.filter((p) => f.shown[p] && !b.shown[p]);
       if (parts.length) {
-        said.push(parts.length === 1 ? `You’ve found out ${bare(f.name)}’s ${PART_NAMES[parts[0]].replace(/^its /, "")}.` : `You’ve found out more about ${bare(f.name)}.`);
+        said.push(parts.length === 1 ? `You’ve found out ${midName(bare(f.name))}’s ${PART_NAMES[parts[0]].replace(/^its /, "")}.` : `You’ve found out more about ${midName(bare(f.name))}.`);
         keys.push(f.id);
       }
     }
@@ -191,6 +244,12 @@ export function makeWorld(d) {
       }
       // A moment on the phone for what's just been shown (reveal.js).
       R.news(id, was, now, news);
+    }
+    // On the screen now, so it's what this phone's last looked at.
+    if (k.role !== "gm" && watching === id) {
+      baseOf(id);
+      openedOf(id);
+      markSeen(id);
     }
   }
 
@@ -294,6 +353,12 @@ export function makeWorld(d) {
     watching = id;
     ui = { editing: "", sure: "", note: "" };
     if (!id) return;
+    if (!isGm(id)) {
+      baseOf(id);
+      openedOf(id);
+      markSeen(id);
+      keep();
+    }
     syncNow(id);
     M.got(id);
     d.peek(id);
@@ -554,7 +619,7 @@ export function makeWorld(d) {
         return d.render();
       }
       if (doc.factions.length + cards.length > MAX.factions) return d.toast(`That’s more than the ${MAX.factions} factions a board holds. Take some off first.`, false);
-      edit(id, cards.map((c) => ({ o: "new", f: fromCard(c, b.id) })), `${cards.map((c) => bare(c.name)).join(", ").replace(/, ([^,]*)$/, " and $1")} ${cards.length === 1 ? "is" : "are"} on the board. Nothing’s shown to the crew yet.`);
+      edit(id, cards.map((c) => ({ o: "new", f: fromCard(c, b.id) })), `${names(cards.map((c) => bare(c.name)))} ${cards.length === 1 ? "is" : "are"} on the board. Nothing’s shown to the crew yet.`);
     },
     // A whole world, in one go, everything hidden: its file's fetched first,
     // and Undo on the note takes it all back off.
@@ -588,8 +653,9 @@ export function makeWorld(d) {
       }
       const part = PART_NAMES[p].replace(/^its /, "");
       const many = ["res", "assets", "agenda", "bonds", "threads"].includes(p);
-      const say = p === "card" ? (v ? `The crew can see ${bare(f.name)} now: its name, what it is, its Want and its Face.` : `${bare(f.name)}’s hidden from the crew again.`)
-        : v ? `The crew can see ${bare(f.name)}’s ${part} now.` : `${bare(f.name)}’s ${part} ${many ? "are" : "is"} hidden from the crew again.`;
+      ui.flip = `${f.id}:${p}`;
+      const say = p === "card" ? (v ? `The crew can see ${midName(bare(f.name))} now: its name, what it is, its Want and its Face.` : `${bare(f.name)}’s hidden from the crew again.`)
+        : v ? `The crew can see ${midName(bare(f.name))}’s ${part} now.` : `${bare(f.name)}’s ${part} ${many ? "are" : "is"} hidden from the crew again.`;
       edit(id, [{ o: "show", id: f.id, p, v }], say);
     },
     tick(el, id) {
@@ -597,7 +663,7 @@ export function makeWorld(d) {
       const x = f?.[el.dataset.l]?.find((y) => y.id === el.dataset.lid);
       if (!x) return;
       const by = Number(el.dataset.by) === -1 ? -1 : 1;
-      const say = by === -1 ? `One back on ${bare(x.text)}.` : x.left <= 1 ? `${bare(x.text)}’s gone from ${bare(f.name)}’s card.` : `${bare(x.text)} has ${x.left - 1} of ${x.x} left.`;
+      const say = by === -1 ? `One back on ${bare(x.text)}.` : x.left <= 1 ? `${bare(x.text)}’s gone from ${midName(bare(f.name))}’s card.` : `${bare(x.text)} has ${x.left - 1} of ${x.x} left.`;
       edit(id, [{ o: "tick", id: f.id, l: el.dataset.l, lid: x.id, by }], say);
     },
     paid(el, id) {
@@ -630,7 +696,7 @@ export function makeWorld(d) {
         return d.render();
       }
       ui.editing = "";
-      edit(id, [{ o: "drop", id: f.id, l: el.dataset.l, lid: x.id }], `${bare(x.text)}’s off ${bare(f.name)}’s card.`);
+      edit(id, [{ o: "drop", id: f.id, l: el.dataset.l, lid: x.id }], `${bare(x.text)}’s off ${midName(bare(f.name))}’s card.`);
     },
     pick(el, id) {
       const f = find(docOf(id), el.dataset.f);
@@ -699,6 +765,54 @@ export function makeWorld(d) {
       w.crew = el.dataset.v === "1";
       w.sel = null;
       d.render();
+    },
+    // The web as a picture, or as a list to read.
+    "web-list"(el, id) {
+      webOf$(id).list = el.dataset.v === "1";
+      d.render();
+    },
+    // A faction's own web: a tap on another faction opens its page, and on
+    // this one or the crew, the whole web with it picked.
+    fweb(el, id) {
+      const n = el.dataset.n;
+      const here = new URLSearchParams(location.search).get("f");
+      if (n !== "crew" && n !== here) return d.go(`/characters/?camp=${encodeURIComponent(id)}&world&f=${encodeURIComponent(n)}`, { from: location.pathname + location.search });
+      const w = webOf$(id);
+      w.sel = n;
+      w.list = false;
+      d.go(`/characters/?camp=${encodeURIComponent(id)}&world`, { from: location.pathname + location.search });
+      requestAnimationFrame(() => document.getElementById("ww-h")?.scrollIntoView({ block: "start" }));
+    },
+    // Her board, in another order or one kind of faction.
+    wbsort(el, id) {
+      boardUi(id).sort = ["board", "close", "after"].includes(el.dataset.v) ? el.dataset.v : "board";
+      d.render();
+    },
+    wbkind(el, id) {
+      boardUi(id).kind = el.dataset.v || "";
+      d.render();
+    },
+    // How a faction sees the crew, and why: a tap opens it, another shuts it.
+    why(el) {
+      ui.why = ui.why === el.dataset.f ? "" : el.dataset.f;
+      d.render();
+      requestAnimationFrame(() => document.querySelector(`#app [data-do="why"][data-f="${CSS.escape(el.dataset.f)}"]`)?.focus({ preventScroll: true }));
+    },
+    // Her faction's page as the crew sees it, and back.
+    ascrew(el) {
+      ui.asCrew = el.dataset.v === "0" ? "" : el.dataset.f;
+      ui.why = "";
+      d.render();
+      requestAnimationFrame(() => document.querySelector(`#app [data-do="ascrew"]`)?.focus({ preventScroll: true }));
+    },
+    // Since you last played: to what changed in the downtime, opened.
+    "to-ft"(el, id) {
+      const sec = document.querySelector(`#app [data-ft="${CSS.escape(id)}"]`);
+      if (!sec) return;
+      const fold = sec.querySelector("details.ft-last");
+      if (fold && !fold.open) fold.open = true;
+      sec.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      (fold?.querySelector("summary") ?? sec.querySelector("h2"))?.focus?.({ preventScroll: true });
     },
   };
 
@@ -848,8 +962,6 @@ export function makeWorld(d) {
   const ruleLink = (id, text) => `<button type="button" class="pt-reword pt-rule" data-act="rule" data-r="${id}">${text}</button>`;
   const sure = (key, yes, no) => (ui.sure === key ? yes : no);
   const editingKey = (f, k) => `${f.id}:${k}`;
-  // Whether the crew's seen this part, as a badge in its heading (the GM's).
-  const badge = (f, p) => `<span class="wb-badge${f.shown.card && f.shown[p] ? " is-on" : ""}">${f.shown.card && f.shown[p] ? "Shown" : "Hidden"}</span>`;
 
   // Maps (mapsui.js), under places and people and full screen, with their
   // taps and forms going through here too.
@@ -919,23 +1031,112 @@ export function makeWorld(d) {
       <a class="pt-reword wb-crew-a" href="/characters/?camp=${encodeURIComponent(id)}" data-act="w" data-do="nav">On the party sheet</a></div>`;
   }
 
-  // A faction on the board, a glance and a tap to its page.
-  function token(id, f, doc, gm) {
+  const facHref = (id, f) => `/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;f=${encodeURIComponent(f.id)}`;
+  // How much the crew knows of a faction, as eight small pips: its card and
+  // its seven parts.
+  const pips = (n, label) => `<span class="wb-know" role="img" aria-label="${esc(label)}">${Array.from({ length: 8 }, (_, i) => `<i${i < n ? ' class="is-on"' : ""}></i>`).join("")}</span>`;
+  const NEW = '<span class="wb-new">New</span>';
+  // Every faction on the board, each mini faction under the faction that made it.
+  function boardOrder(doc) {
+    const order = [];
+    for (const f of doc.factions) {
+      if (f.mini && f.parent && f.parent !== "crew" && find(doc, f.parent)) continue;
+      order.push(f);
+      if (!f.mini) order.push(...minisOf(doc, f.id));
+    }
+    return order;
+  }
+  // Its nearest agenda: one that's happened, then the highest die.
+  const nearOf = (f) => Math.max(0, ...f.agendas.map((a) => (a.done ? 14 : a.die)));
+
+  // An agenda's ladder: the six die sizes, the ones it's climbed through lit
+  // and the one it's at bigger, then the mark for when it happens.
+  const BURST = '<svg class="wb-burst" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3L13.8 8.9L19.8 7.5L15.6 12L19.8 16.5L13.8 15.1L12 21L10.2 15.1L4.2 16.5L8.4 12L4.2 7.5L10.2 8.9Z"/></svg>';
+  function ladder(a) {
+    const at = a.done ? 14 : a.die;
+    const rungs = SIZES.map((s) => `<span class="wb-rung${s <= at ? " is-on" : ""}${s === a.die && !a.done ? " is-now" : ""}">${kitMini(s, { own: "them" })}</span>`).join("");
+    return `<span class="wb-ladder" role="img" aria-label="${a.done ? "Past d12, so it’s happened" : `At d${a.die}, ${ago(a.die)}. Past d12 it happens`}">${rungs}<span class="wb-rung wb-rung-end${a.done ? " is-on is-now" : ""}">${BURST}</span></span>`;
+  }
+  const whenOf = (a) => (a.done ? "It’s happened" : ago(a.die));
+
+  // Since you last played (a player's): what's changed and what the crew's
+  // found out since this phone last looked, kept on the phone.
+  const STAND_NOW = { friendly: "is friendly to the crew now", business: "does business with the crew now", hostile: "is hostile to the crew now" };
+  function sinceSection(id) {
+    const base = baseOf(id);
+    if (!base?.doc) return "";
+    const was = readable(structuredClone(base.doc));
+    const now = docOf(id);
+    const lines = [];
+    const last = lastDowntime(id);
+    let downtime = false;
+    if (last && last.n > (Number(base.n) || 0)) {
+      downtime = true;
+      lines.push(`Downtime ${last.n}’s over.${last.said.length ? ` ${esc(last.said[0])}` : ""}${last.said.length > 1 ? ` <small>And ${plural(last.said.length - 1, "more thing", "more things")} changed.</small>` : ""}`);
+    }
+    // Keep the downtime this phone's seen up to date while it's on the screen.
+    if (last && watching === id && camp(id).seen && last.n > (Number(camp(id).seen.n) || 0)) {
+      camp(id).seen.n = last.n;
+      keep();
+    }
+    lines.push(...newsOf(id, was, now).said.map((x) => esc(x)));
+    const before = new Map(was.factions.map((f) => [f.id, f]));
+    for (const f of now.factions) {
+      const b = before.get(f.id);
+      if (!b || !b.shown.card) continue;
+      const name = esc(bare(f.name));
+      if (f.shown.agenda && b.shown.agenda) {
+        for (const a of f.agendas) {
+          const o = b.agendas.find((x) => x.id === a.id);
+          if (!o) lines.push(`${name} has a new agenda: ${esc(bare(a.text))}.`);
+          else if (a.done && !o.done) lines.push(`${esc(bare(a.text))} has happened.`);
+          else if (!a.done && a.die > o.die) lines.push(`${esc(bare(a.text))} climbed to d${a.die}, ${ago(a.die)}.`);
+          else if (!a.done && a.die < o.die) lines.push(`${esc(bare(a.text))} was set back to d${a.die}.`);
+        }
+      }
+      if (f.shown.threads && b.shown.threads && standingOf(f) !== standingOf(b)) lines.push(`${name} ${STAND_NOW[standingOf(f)]}.`);
+      if (f.shown.power && b.shown.power && stepsOf(f) !== stepsOf(b)) lines.push(`${name} is a ${diceLabel(powerDice(f))} now.`);
+    }
+    const max = 5;
+    const list = lines.length
+      ? `<ul class="wb-since-l">${lines.slice(0, max).map((x) => `<li>${x}</li>`).join("")}${lines.length > max ? `<li class="wb-since-more">And ${plural(lines.length - max, "more", "more")} since then.</li>` : ""}</ul>`
+      : '<p class="wb-since-none">Nothing’s changed since you last looked.</p>';
+    const go = downtime ? `<button type="button" class="pt-reword wb-since-go" data-act="w" data-do="to-ft">What changed in the downtime</button>` : "";
+    return `<section class="cc-sec wb-since${lines.length ? "" : " is-quiet"}" data-wb="${esc(id)}" aria-labelledby="wb-since-h"><h2 id="wb-since-h">Since you last played</h2>${list}${go}</section>`;
+  }
+
+  // Closing in (a player's): every agenda the crew's been shown, nearest first.
+  function closingSection(id, doc) {
+    const rows = [];
+    for (const f of doc.factions) if (f.shown.agenda) for (const a of f.agendas) rows.push({ f, a });
+    rows.sort((x, y) => Number(y.a.done) - Number(x.a.done) || y.a.die - x.a.die);
+    const body = rows.length
+      ? `<ul class="wb-close">${rows.map(({ f, a }) => `<li><a class="wb-ag${a.done || a.die >= 10 ? " is-hot" : ""}" href="${facHref(id, f)}" data-act="w" data-do="nav">${kitSeal(f.seal, { size: "sm" })}<span class="wb-ag-in"><b class="wb-ag-n">${esc(a.text)}</b><span class="wb-ag-w">${esc(f.name)} · <span class="wb-ag-when">${whenOf(a)}</span></span></span>${ladder(a)}</a></li>`).join("")}</ul>`
+      : '<p class="cc-small">You haven’t found out what any faction’s working on yet. When you do, it shows up here, nearest first.</p>';
+    return `<section class="cc-sec wb-closing" data-wb="${esc(id)}" aria-labelledby="wb-close-h"><h2 id="wb-close-h">Closing in</h2>${body}</section>`;
+  }
+
+  // A faction on the board as a seal card: its standing as the card's top
+  // edge, its Power (or a ? till the crew knows it), and how much the crew
+  // knows of it. A tap opens its page. Her cards say what's shown and carry
+  // its nearest agenda, for sorting by what's closing in.
+  const findWords = (f) => [f.name, f.about, f.want, f.face].join(" ").toLowerCase().replace(/[’‘]/g, "'");
+  function token(id, f, doc, gm, { hide = false, kind = "" } = {}) {
     const maker = f.mini ? (f.parent === "crew" ? "the crew" : find(doc, f.parent)?.name ?? "") : "";
-    const kicker = f.mini ? `Mini faction${maker ? ` of ${esc(maker)}` : ""}` : "Faction";
     const powerShown = gm || f.shown.power;
     const dice = powerDice(f);
-    const ag = (gm || f.shown.agenda) && f.agendas[0];
     const standing = gm || f.shown.threads ? standingOf(f) : null;
-    const bits = [
-      ag ? `<span class="cc-gl">${kitMini(ag.die, { own: "them" })}${esc(ag.text)} <small>${ag.done ? "happened" : `d${ag.die}`}</small></span>` : "",
-      standing ? `<span class="wb-stand is-${standing}">${STANDING[standing]}</span>` : "",
-    ].filter(Boolean).join("");
+    const known = knownOf(f);
+    const fresh = !gm && newOf(id, f).length > 0;
+    const glow = lit[id]?.includes(f.id) ? " is-lit" : "";
+    const ag = gm && f.agendas.length ? [...f.agendas].sort((x, y) => (y.done ? 14 : y.die) - (x.done ? 14 : x.die))[0] : null;
     const shown = gm ? `<span class="wb-badge${f.shown.card ? " is-on" : ""}">${f.shown.card ? "Shown" : "Hidden"}</span>` : "";
-    const glow = lit[id]?.includes(f.id) ? " is-new" : "";
-    return `<li class="wb-tok${f.mini ? " is-mini" : ""}${glow}"><a class="card wb-tok-a" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;f=${encodeURIComponent(f.id)}" data-act="w" data-do="nav">
-      <span class="wb-tok-die" role="img" aria-label="${powerShown ? `Power ${diceLabel(dice)}` : "Power not known"}">${powerShown ? them(dice) : '<span class="wb-unknown" aria-hidden="true">?</span>'}</span>
-      <span class="wb-tok-in"><span class="wb-k">${kicker}${shown}</span><b class="wb-tok-n">${esc(f.name)}</b>${f.want ? `<span class="wb-tok-w">${esc(f.want)}</span>` : ""}${bits ? `<span class="cc-gl-wrap wb-tok-m">${bits}</span>` : ""}</span></a></li>`;
+    const kicker = f.mini || shown ? `<span class="wb-k">${f.mini ? `Mini faction${maker ? ` of ${esc(midName(maker))}` : ""}` : ""}${shown}</span>` : "";
+    const stand = standing ? STANDING[standing] : "You don’t know how it sees you";
+    return `<li class="wb-tok${f.mini ? " is-mini" : ""}${standing ? ` is-${standing}` : ""}${fresh ? " is-new" : ""}${glow}" data-find="${esc(findWords(f))}"${kind ? ` data-kind="${esc(kind)}"` : ""}${hide ? " hidden" : ""}><a class="card wb-tok-a" href="${facHref(id, f)}" data-act="w" data-do="nav">
+      ${fresh ? NEW : ""}<span class="wb-tok-seal">${kitSeal(f.seal, { size: f.mini ? "sm" : "md" })}</span>
+      <span class="wb-tok-in">${kicker}<b class="wb-tok-n">${esc(f.name)}</b><span class="wb-tok-s">${stand}</span>${ag ? `<span class="cc-gl wb-tok-ag">${kitMini(ag.die, { own: "them" })}<span>${esc(ag.text)} <small>${ag.done ? "happened" : `d${ag.die}`}</small></span></span>` : ""}</span>
+      <span class="wb-tok-f"><span class="wb-tok-die" role="img" aria-label="${powerShown ? `Power ${diceLabel(dice)}` : "Power not known"}">${powerShown ? them(dice) : '<span class="wb-unknown" aria-hidden="true">?</span>'}</span>${pips(known, gm ? (f.shown.card ? `The crew knows ${known} of 8` : "Hidden from the crew") : `${known} of 8 found out`)}</span></a></li>`;
   }
 
   function status(id) {
@@ -954,7 +1155,7 @@ export function makeWorld(d) {
   // shown. The GM sees all of it, or what the crew sees, and a faction the
   // crew hasn't been shown is drawn faint on hers.
   const webs = {};
-  const webOf$ = (id) => (webs[id] ??= { sel: null, crew: false });
+  const webOf$ = (id) => (webs[id] ??= { sel: null, crew: false, list: false });
   function webSection(id) {
     const gm = isGm(id);
     const w = webOf$(id);
@@ -966,7 +1167,9 @@ export function makeWorld(d) {
     if (facs.length < 2 && !facs.some(toCrew)) return gm && whole.factions.length > 1 ? webShell(id, gm, w, `<p class="cc-small">The crew hasn’t been shown enough of the world for a web yet.</p>`) : "";
     if (w.sel && w.sel !== "crew" && !find(doc, w.sel)) w.sel = null;
     const known = (f) => all || f.shown.power;
-    const nodes = facs.map((f) => ({ id: f.id, name: f.name, dice: known(f) ? powerDice(f) : null, mini: f.mini, parent: f.parent, hidden: all && !f.shown.card }));
+    // Each faction's seal goes with it, so the web can draw it (a player's
+    // phone only ever has the seals of factions the crew's been shown).
+    const nodes = facs.map((f) => ({ id: f.id, name: f.name, dice: known(f) ? powerDice(f) : null, mini: f.mini, parent: f.parent, hidden: all && !f.shown.card, seal: f.seal ?? null }));
     const threads = facs.flatMap((f) => f.threads.map((t) => ({ from: f.id, to: t.to, kind: t.kind, s: t.s, text: t.text })));
     // Past sixteen factions (a whole city's, brought in) one ring's too much
     // for a phone, so it goes a faction's ties at a time, the way /worlds/
@@ -977,6 +1180,8 @@ export function makeWorld(d) {
     const L = walking ? (({ nodes: n, threads: t }) => webOf(n, t))(tiesOf({ nodes, threads }, w.sel, { crew: true })) : webOf(nodes, threads);
     const c = d.crewIn(id);
     const crewName = c.name || "The crew";
+    // The list, for anyone who'd rather read the web than tap round it.
+    if (w.list) return webShell(id, gm, w, webList(id, doc, all, crewName));
     const count = (fid) => L.threads.filter((t) => t.from === fid || t.to === fid).length;
     const pic = drawWeb(L, {
       esc,
@@ -991,13 +1196,30 @@ export function makeWorld(d) {
   }
   function webShell(id, gm, w, body) {
     const seg = gm ? `<div class="ww-seg" role="group" aria-label="Whose web"><button type="button" class="ww-seg-b" data-act="w" data-do="web-crew" data-v="0" aria-pressed="${!w.crew}">Everything</button><button type="button" class="ww-seg-b" data-act="w" data-do="web-crew" data-v="1" aria-pressed="${w.crew}">What the crew sees</button></div>` : "";
-    return `<section class="cc-sec ww-sec" data-wb="${esc(id)}" aria-labelledby="ww-h"><h2 id="ww-h">The web</h2>${seg}<div class="ww">${body}</div></section>`;
+    const how = `<div class="ww-seg ww-how" role="group" aria-label="How to show the web"><button type="button" class="ww-seg-b" data-act="w" data-do="web-list" data-v="0" aria-pressed="${!w.list}">Picture</button><button type="button" class="ww-seg-b" data-act="w" data-do="web-list" data-v="1" aria-pressed="${Boolean(w.list)}">List</button></div>`;
+    return `<section class="cc-sec ww-sec" data-wb="${esc(id)}" aria-labelledby="ww-h"><h2 id="ww-h">The web</h2><div class="ww-bar">${seg}${how}</div><div class="ww">${body}</div></section>`;
+  }
+  // A thread in a list, and how a faction sees the crew, under the web.
+  const wwLine = (t, small = "") => `<li class="ww-t is-${t.kind === "hostile" ? "hostile" : "bond"}${t.s === "snapped" ? " is-snapped" : ""}"><span class="ww-k">${t.kind === "hostile" ? "Hostile" : "Bond"}${t.s === "whole" ? "" : `, ${t.s}`}</span> <em>${esc(t.text)}</em>${small ? ` <small>${small}</small>` : ""}</li>`;
+  const wwStand = (f, all) => (all || f.shown.threads ? `<span class="wb-stand is-${standingOf(f)}">${STANDING[standingOf(f)]}</span>` : "");
+  const wwPage = (id, f) => `<a class="ww-go" href="${facHref(id, f)}" data-act="w" data-do="nav">${esc(f.name)}</a>`;
+  // The whole web as a list: every faction with a thread, each of its threads
+  // toward the crew or another faction once, under it.
+  function webList(id, doc, all, crewName) {
+    const crew = crewName === "The crew" ? "the crew" : crewName;
+    const rows = boardOrder(doc).map((f) => {
+      const ts = f.threads.filter((t) => t.to === "crew" || find(doc, t.to));
+      if (!ts.length) return "";
+      const hid = all && !f.shown.card;
+      return `<li class="ww-f${hid ? " is-hidden" : ""}"><p class="ww-f-h">${wwPage(id, f)} ${wwStand(f, all)}${hid ? ' <span class="wb-badge">Hidden</span>' : ""}</p><ul class="ww-ts">${ts.map((t) => wwLine(t, t.to === "crew" ? `toward ${esc(crew)}` : `toward ${esc(midName(find(doc, t.to).name))}`)).join("")}</ul></li>`;
+    }).join("");
+    return `<div class="ww-panel ww-list">${rows ? `<ul class="ww-fs">${rows}</ul>` : '<p class="cc-small">No threads yet, either way.</p>'}</div>`;
   }
   // Under the web: a key, or the threads of whatever's been tapped, each way.
   function webPanel(id, doc, sel, all, crewName, faint) {
-    const page = (f) => `<a class="ww-go" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;f=${encodeURIComponent(f.id)}" data-act="w" data-do="nav">${esc(f.name)}</a>`;
-    const stand = (f) => (all || f.shown.threads ? `<span class="wb-stand is-${standingOf(f)}">${STANDING[standingOf(f)]}</span>` : "");
-    const line = (t, small = "") => `<li class="ww-t is-${t.kind === "hostile" ? "hostile" : "bond"}${t.s === "snapped" ? " is-snapped" : ""}"><span class="ww-k">${t.kind === "hostile" ? "Hostile" : "Bond"}${t.s === "whole" ? "" : `, ${t.s}`}</span> <em>${esc(t.text)}</em>${small ? ` <small>${small}</small>` : ""}</li>`;
+    const page = (f) => wwPage(id, f);
+    const stand = (f) => wwStand(f, all);
+    const line = wwLine;
     const say = (body) => `<div class="ww-panel" aria-live="polite">${body}</div>`;
     if (!sel) return say(`${webKey()}<p class="cc-small ww-hint">Tap a faction for its threads, or ${esc(crewName === "The crew" ? "the crew" : crewName)} for how the factions see ${isGm(id) ? "them" : "you"}.${faint ? " The faint ones are hidden from the crew." : ""}</p>`);
     if (sel === "crew") {
@@ -1013,34 +1235,95 @@ export function makeWorld(d) {
     const none = !toCrew.length && !out.length && !back.length;
     return say(`<h3 class="ww-h">${page(f)}</h3>${stand(f) ? `<p class="ww-f-h">${stand(f)}</p>` : ""}
       ${group("Toward the crew", toCrew.map((t) => line(t)).join(""))}
-      ${group("Toward other factions", out.map((t) => line(t, `toward ${esc(find(doc, t.to).name)}`)).join(""))}
-      ${group("Other factions toward it", back.map(({ t, x }) => line(t, `from ${esc(x.name)}`)).join(""))}
+      ${group("Toward other factions", out.map((t) => line(t, `toward ${esc(midName(find(doc, t.to).name))}`)).join(""))}
+      ${group("Other factions toward it", back.map(({ t, x }) => line(t, `from ${esc(midName(x.name))}`)).join(""))}
       ${none ? `<p class="cc-small">${all || f.shown.threads ? "No threads yet, either way." : "The crew hasn’t been shown its threads."}</p>` : ""}`);
   }
 
   // The board: the crew's card, then every faction (each mini faction under
   // the faction that made it), and for the GM, what she can bring in or add.
+  // The GM's board past about eight factions: Find, the kinds of faction a
+  // whole world has, and sorting by what's closing in or who's after the crew.
+  const TOOLS_FROM = 9;
+  const boards = {};
+  const boardUi = (id) => (boards[id] ??= { sort: "board", find: "", kind: "" });
+  // A whole world's kinds (Corps, Gangs…), once its file's on the phone.
+  function kindsOf(doc) {
+    const file = doc.build?.world ? wholeFile(doc.build.world) : null;
+    if (!file?.kinds) return null;
+    const byKey = new Map(file.factions.map((x) => [x.key, x.kind]));
+    const of = new Map(doc.factions.filter((f) => f.book?.from === file.id && byKey.has(f.book.key)).map((f) => [f.id, byKey.get(f.book.key)]));
+    return of.size ? { names: file.kinds, of } : null;
+  }
+  const words = (s) => String(s ?? "").toLowerCase().replace(/[’‘]/g, "'").split(/\s+/).filter(Boolean);
+  const matches = (b, f, kind) => (!b.kind || kind === b.kind) && words(b.find).every((w) => findWords(f).includes(w));
+  // How much a faction's after the crew: its whole hostile threads toward
+  // them, less its whole bond ones.
+  const afterOf = (f) => f.threads.filter((t) => t.to === "crew" && t.s === "whole").reduce((n, t) => n + (t.kind === "hostile" ? 1 : -1), 0);
+  function sortedFor(b, order) {
+    if (b.sort === "board") return order;
+    const at = new Map(order.map((f, i) => [f.id, i]));
+    const key = b.sort === "close" ? (f) => [nearOf(f), 0] : (f) => [afterOf(f), nearOf(f)];
+    return [...order].sort((x, y) => {
+      const [a1, a2] = key(x);
+      const [b1, b2] = key(y);
+      return b1 - a1 || b2 - a2 || at.get(x.id) - at.get(y.id);
+    });
+  }
+  const foundSay = (n, all) => (n === all ? "" : n ? `${plural(n, "faction", "factions")} of ${all}.` : "No faction on the board matches that.");
+  function boardTools(id, doc, order, KD, shownN) {
+    const b = boardUi(id);
+    const chip = (doit, v, on, label) => `<button type="button" class="wb-chip-b" data-act="w" data-do="${doit}" data-v="${esc(v)}" aria-pressed="${on}">${label}</button>`;
+    const count = (k) => order.filter((f) => KD.of.get(f.id) === k).length;
+    const kinds = KD ? `<div class="wb-chips" role="group" aria-label="Show a kind of faction">${chip("wbkind", "", !b.kind, `Every one <span>${order.length}</span>`)}${Object.entries(KD.names).filter(([k]) => count(k)).map(([k, name]) => chip("wbkind", k, b.kind === k, `${esc(name)} <span>${count(k)}</span>`)).join("")}</div>` : "";
+    const sorts = `<div class="wb-chips" role="group" aria-label="Put them in order">${[["board", "Board order"], ["close", "Closing in"], ["after", "After the crew"]].map(([v, label]) => chip("wbsort", v, b.sort === v, label)).join("")}</div>`;
+    return `<div class="wb-tools"><label class="cc-field wb-find"><span class="sr-only">Find a faction</span><input type="search" data-wbfind="${esc(id)}" value="${esc(b.find)}" placeholder="Find a faction, its Want or its Face" autocomplete="off" enterkeyhint="search"></label>
+      ${kinds}${sorts}<p class="cc-small wb-found" aria-live="polite">${foundSay(shownN, order.length)}</p></div>`;
+  }
+  // Find, as she types: the cards that don't match hide, without a redraw.
+  document.addEventListener("input", (e) => {
+    const box = e.target.closest?.("input[data-wbfind]");
+    if (!box) return;
+    const id = box.dataset.wbfind;
+    const b = boardUi(id);
+    b.find = box.value;
+    const sec = box.closest(".wb-sec");
+    if (!sec) return;
+    const ws = words(b.find);
+    let n = 0;
+    const cards = [...sec.querySelectorAll(".wb-toks > .wb-tok")];
+    for (const li of cards) {
+      const on = (!b.kind || li.dataset.kind === b.kind) && ws.every((w) => li.dataset.find.includes(w));
+      li.hidden = !on;
+      if (on) n++;
+    }
+    const say = sec.querySelector(".wb-found");
+    if (say) say.textContent = foundSay(n, cards.length);
+  });
+
   function boardBody(id) {
     const gm = isGm(id);
     const doc = docOf(id);
     const k = camp(id);
-    const order = [];
-    for (const f of doc.factions) {
-      if (f.mini && f.parent && f.parent !== "crew" && find(doc, f.parent)) continue;
-      order.push(f);
-      if (!f.mini) order.push(...minisOf(doc, f.id));
-    }
-    const list = order.length ? `<ul class="wb-toks">${order.map((f) => token(id, f, doc, gm)).join("")}</ul>` : "";
+    const order = boardOrder(doc);
     const say = status(id);
     if (!gm) {
+      const list = order.length ? `<ul class="wb-toks wb-seals">${order.map((f) => token(id, f, doc, false)).join("")}</ul>` : "";
       const none = !k.at && online() ? '<p class="cc-lead">Opening the board…</p>' : !order.length ? `<p class="cc-lead">${esc(gmName(id))} hasn’t shown you any of the ${doc.build?.history?.length ? "factions" : "world"} yet. The factions you find out about show up here, with whatever you’ve found out about each one.</p>` : "";
       return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${crewCard(id)}${list}${none}`;
     }
+    const tools = order.length >= TOOLS_FROM;
+    const b = boardUi(id);
+    const KD = tools ? kindsOf(doc) : null;
+    if (b.kind && !KD) b.kind = "";
+    const seen = sortedFor(tools ? b : { sort: "board" }, order);
+    const on = (f) => !tools || matches(b, f, KD?.of.get(f.id) ?? "");
+    const list = order.length ? `<ul class="wb-toks wb-seals">${seen.map((f) => token(id, f, doc, true, { hide: !on(f), kind: KD?.of.get(f.id) ?? "" })).join("")}</ul>` : "";
     const shownCount = doc.factions.filter((f) => f.shown.card).length;
     const lead = order.length
       ? `<p class="cc-small wb-sum">${plural(doc.factions.length, "faction", "factions")} on the board, ${shownCount ? `${shownCount} shown to the crew` : "none of them shown to the crew yet"}.</p>`
       : `<p class="cc-lead">Nothing on the board yet. Build the world from the tables, bring in ${isMo() && emptyWorld(doc) ? "a whole world or " : ""}a board from the book, or start with a faction of your own. Nothing on it shows on your players’ phones till you show it to them.</p>`;
-    return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${lead}${order.length ? "" : K.entry(id, doc)}${crewCard(id)}${list}${order.length ? K.entry(id, doc) : ""}
+    return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${lead}${order.length ? "" : K.entry(id, doc)}${crewCard(id)}${tools ? boardTools(id, doc, order, KD, order.filter(on).length) : ""}${list}${order.length ? K.entry(id, doc) : ""}
       <div class="cc-folds wb-adds">${wholeFold(id, doc)}${bringFold(id, doc)}${newFold(id, doc)}</div>
       <p class="cc-small">${ruleLink("s-faction-board", "What a faction is")} ${ruleLink("s-faction-build", "Building a faction")}</p>`;
   }
@@ -1121,7 +1404,7 @@ export function makeWorld(d) {
   }
   function giveTo(f, doc) {
     const others = doc.factions.filter((y) => y.id !== f.id);
-    return others.length ? `<label class="cc-field">Give it to another faction <select name="give"><option value="">No, it stays with ${esc(f.name)}</option>${others.map((y) => `<option value="${esc(y.id)}">${esc(y.name)}</option>`).join("")}</select></label>` : "";
+    return others.length ? `<label class="cc-field">Give it to another faction <select name="give"><option value="">No, it stays with ${esc(midName(f.name))}</option>${others.map((y) => `<option value="${esc(y.id)}">${esc(y.name)}</option>`).join("")}</select></label>` : "";
   }
   const timesField = (x) => `<label class="cc-field">Its multiplier, the wins it takes <select name="x">${Array.from({ length: MAX.x }, (_, i) => i + 1).map((n) => `<option value="${n}"${n === (x?.x ?? 1) ? " selected" : ""}>×${n}</option>`).join("")}</select></label>`;
   function lineForm(f, l, x, doc) {
@@ -1149,18 +1432,22 @@ export function makeWorld(d) {
       <label class="cc-field">${label} <input name="text" maxlength="${l === "res" || l === "assets" ? MAX.name : MAX.line}" autocomplete="off"></label>${extra}
       <div class="cc-row"><button type="submit" class="button">Add it</button></div></form>`;
   }
-  // Show it to the crew, or hide it again: the top of each part, the GM's.
-  function shower(f, p) {
-    if (!f.shown.card && p !== "card") return `<p class="cc-small wb-show">Show the crew ${esc(f.name)} first, then this.</p>`;
-    const on = f.shown[p];
-    const label = on ? "Hide it from the crew" : p === "secret" ? sure(`secret-${f.id}`, "Tap again to show the Secret", "Show the crew its Secret") : "Show the crew";
-    return `<div class="wb-show${on ? " is-on" : ""}"><p class="cc-small">${on ? "The crew’s been shown this." : "Only you see this."}</p><button type="button" class="button sm${on ? "" : p === "secret" ? " danger" : " primary"}" data-act="w" data-do="show" data-f="${esc(f.id)}" data-p="${p}" aria-pressed="${on}">${label}</button></div>`;
+  // Show it to the crew, or hide it again: a small switch in each part's
+  // header, the GM's. A part waits till the crew's been shown the faction,
+  // and the Secret takes a second tap.
+  function switchFor(f, p) {
+    const on = Boolean(f.shown.card && f.shown[p]);
+    const sure = p === "secret" && !on && ui.sure === `secret-${f.id}`;
+    const state = sure ? "Tap again" : on ? "Shown" : "Hidden";
+    const flip = ui.flip === `${f.id}:${p}` ? " is-flip" : "";
+    const name = sure ? "Tap again to show the crew its Secret" : `Show the crew ${PART_NAMES[p]}`;
+    return `<button type="button" class="wb-sw${on ? " is-on" : ""}${sure ? " is-sure" : ""}${flip}" role="switch" aria-checked="${on}" aria-label="${name}" data-act="w" data-do="show" data-f="${esc(f.id)}" data-p="${p}"${f.shown.card ? "" : " disabled"}><span class="wb-sw-t" aria-hidden="true"><i></i></span><span class="wb-sw-w" aria-hidden="true">${state}</span></button>`;
   }
 
   function threadLine(id, f, l, t, gm, doc) {
     const key = editingKey(f, `${l}:${t.id}`);
     if (gm && ui.editing === key) return `<li class="pt-line wb-editing">${lineForm(f, l, t, doc)}</li>`;
-    const toward = l === "threads" ? (t.to === "crew" ? "toward the crew" : `toward ${esc(find(doc, t.to)?.name ?? "a faction that’s gone")}`) : "";
+    const toward = l === "threads" ? (t.to === "crew" ? "toward the crew" : `toward ${esc(midName(find(doc, t.to)?.name ?? "a faction that’s gone"))}`) : "";
     const state = t.s === "whole" ? "" : ` <span class="chip sm wb-chip is-${t.s}">${t.s === "strained" ? "Strained" : "Snapped"}</span>`;
     const words = `<p class="wb-thread is-${t.kind}${t.s === "snapped" ? " is-snapped" : ""}"><span class="wb-kind-mark">${t.kind === "hostile" ? "Hostile" : "Bond"}</span> <em>${esc(t.text)}</em>${state}${toward ? ` <small>${toward}</small>` : ""}</p>`;
     if (!gm) return `<li class="pt-line"><div class="pt-line-in">${words}</div></li>`;
@@ -1169,12 +1456,89 @@ export function makeWorld(d) {
     return `<li class="pt-line"><div class="pt-line-in">${words}</div><div class="cc-row wb-line-row">${moves}<button type="button" class="button sm" data-act="w" data-do="edit" data-k="${esc(key)}" aria-label="Change ${esc(t.text)}">Change</button></div></li>`;
   }
 
+  // How a faction sees the crew, and why: its threads toward them, which of
+  // them count (only whole ones, so a strained one stops counting), and what
+  // would change it, by standingOf()'s rule.
+  const NUM = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+  const num = (n) => NUM[n] ?? String(n);
+  function whyPanel(f, gm) {
+    const you = gm ? "the crew" : "you";
+    const toCrew = f.threads.filter((t) => t.to === "crew");
+    const whole = toCrew.filter((t) => t.s === "whole");
+    const b = whole.filter((t) => t.kind === "bond").length;
+    const h = whole.length - b;
+    const s = standingOf(f);
+    const lead = !toCrew.length ? `It hasn’t got a thread toward ${you}, so it does business. Everything has a price.`
+      : s === "friendly" ? `More of its threads toward ${you} are bond threads than hostile ones, so it’s friendly. It helps when it costs little, and it asks favours.`
+      : s === "hostile" ? `More of its threads toward ${you} are hostile than bond threads, so it’s hostile. It watches, and it’ll hurt ${gm ? "them" : "you"} when it’s cheap to.`
+      : `It’s got as many hostile threads toward ${you} as bond ones, so it does business. Everything has a price.`;
+    const said = (t) => (t.s === "whole" ? "counts" : t.s === "strained" ? "strained, so it doesn’t count till it’s mended" : "snapped, so it doesn’t count");
+    const list = toCrew.length ? `<ul class="wb-why-l">${toCrew.map((t) => `<li class="ww-t is-${t.kind === "hostile" ? "hostile" : "bond"}${t.s === "snapped" ? " is-snapped" : ""}"><span class="ww-k">${t.kind === "hostile" ? "Hostile" : "Bond"}</span> <em>${esc(t.text)}</em> <small>${said(t)}</small></li>`).join("")}</ul>` : "";
+    const n = Math.abs(b - h);
+    const change = s === "friendly" ? `${cap(num(n))} more hostile ${n === 1 ? "thread" : "threads"}, or ${n === 1 ? "one of its bond threads" : `${num(n)} of its bond threads`} strained, and it’d only do business with ${you}. A betrayal snaps every bond thread it’s got toward ${you}.`
+      : s === "hostile" ? `${cap(num(n))} more bond ${n === 1 ? "thread" : "threads"} and it’d do business with ${you}, and ${num(n + 1)} and it’d be friendly.`
+      : `One more bond thread and it’s friendly. One more hostile thread and it’s hostile.`;
+    return `<div class="wb-why" id="wb-why-${esc(f.id)}"><p>${lead}</p>${list}<h3 class="wb-why-h">What would change it</h3><p>${change}</p>
+      <p class="cc-small">A real service writes a bond thread, like a job done well, a gift or one of its enemies brought down. Costing it something it cares about writes a hostile one. ${ruleLink("s-standing", "How a faction sees the crew")}</p></div>`;
+  }
+
+  // What's new on a faction's page for a player: worked out when the page
+  // opens, and kept while it's open. Opening it marks the lot opened, so it
+  // isn't New the next time, and what's shown while it's open is New too.
+  function newOnPage(id, f) {
+    const add = newOf(id, f);
+    if (ui.newOn?.f !== f.id) ui.newOn = { f: f.id, parts: [] };
+    if (add.length) {
+      ui.newOn.parts = [...new Set([...ui.newOn.parts, ...add])];
+      openedOf(id)[f.id] = shownOf(f);
+      keep();
+    }
+    return ui.newOn.parts;
+  }
+
+  // A faction's own small web: just its ties, with it lit in the middle of
+  // them. A tap on another faction opens that one's page.
+  function ownWeb(id, f, doc, gm) {
+    const nodes = doc.factions.map((x) => ({ id: x.id, name: x.name, dice: gm || x.shown.power ? powerDice(x) : null, mini: x.mini, parent: x.parent, hidden: gm && !x.shown.card, seal: x.seal ?? null }));
+    const threads = doc.factions.flatMap((x) => x.threads.map((t) => ({ from: x.id, to: t.to, kind: t.kind, s: t.s, text: t.text })));
+    if (!threads.some((t) => (t.from === f.id && (t.to === "crew" || find(doc, t.to))) || t.to === f.id)) return "";
+    const T = tiesOf({ nodes, threads }, f.id, { crew: true });
+    const L = webOf(T.nodes, T.threads);
+    const c = d.crewIn(id);
+    const crewName = c.name || "The crew";
+    const pic = drawWeb(L, {
+      esc,
+      sel: f.id,
+      uid: "wf",
+      attrs: (n) => `data-act="w" data-do="fweb" data-n="${esc(n)}"`,
+      label: (nd) => (nd.id === f.id ? `${nd.name}, in the whole web` : `${nd.name}${nd.hidden ? ", hidden from the crew" : ""}, its page`),
+      crew: { name: crewName, dice: crewDice(c.steps), label: `${crewName}, how every faction sees ${gm ? "them" : "you"}` },
+    });
+    const back = doc.factions.flatMap((x) => (x.id === f.id ? [] : x.threads.filter((t) => t.to === f.id).map((t) => ({ t, x }))));
+    const list = back.length ? `<div class="ww-panel"><h3 class="ww-sub">Other factions toward it</h3><ul class="ww-ts">${back.map(({ t, x }) => wwLine(t, `from ${esc(midName(x.name))}`)).join("")}</ul></div>` : "";
+    return `<section class="cc-sec ww-sec ww-own" data-wb="${esc(id)}" aria-labelledby="ww-own-h"><h2 id="ww-own-h">Its ties</h2><div class="ww">${pic}${list}</div></section>`;
+  }
+
+  // The board with one faction's card shown, for her look at what the crew
+  // will see before she's shown it.
+  function withCard(doc, fid) {
+    const out = structuredClone(doc);
+    const f = find(out, fid);
+    if (f) f.shown = { ...f.shown, card: true };
+    return out;
+  }
+
   function factionView(id, fid) {
-    const gm = isGm(id);
-    const doc = docOf(id);
+    const isHers = isGm(id);
+    const whole = docOf(id);
+    // Her look at what the crew sees: the crew's page, from forPlayer() on
+    // her own board, with nothing she can change.
+    const preview = isHers && ui.asCrew === fid && Boolean(find(whole, fid));
+    const gm = isHers && !preview;
+    const doc = preview ? forPlayer(withCard(whole, fid)) : whole;
     const f = find(doc, fid);
     // Back to the World tab or the page she came from, or the board.
-    const [back, backLabel] = P.backOf(id, "The board");
+    const [back, backLabel] = P.backOf(id, isHers ? "The board" : "The world");
     const top = topbar(back, backLabel);
     if (!f) {
       return `${top}<header class="cc-camp-head"><p class="kicker">Faction</p><h1>Not on the board</h1></header>
@@ -1186,8 +1550,11 @@ export function makeWorld(d) {
     const money = moneyOf(f);
     // Names on the card link to the pages and factions they name.
     const rich = P.richFor(id, doc);
-    const standing = standingOf(f);
+    const standing = gm || f.shown.threads ? standingOf(f) : null;
     const say = status(id);
+    const fresh = !isHers ? newOnPage(id, f) : [];
+    const nb = (p) => (fresh.includes(p) ? NEW : "");
+    const known = knownOf(f);
 
     // Its words: name, what it is, Want and Face.
     const wordsKey = editingKey(f, "words");
@@ -1201,23 +1568,38 @@ export function makeWorld(d) {
       : `<dl class="wb-words">${f.want ? `<div><dt>Want</dt><dd><em>${rich(f.want, f.id)}</em></dd></div>` : ""}${f.face ? `<div><dt>Face</dt><dd>${rich(f.face, f.id)}${gm ? P.faceOf(id, f, doc) : ""}</dd></div>` : ""}</dl>
         ${gm ? `<button type="button" class="pt-reword" data-act="w" data-do="edit" data-k="${esc(wordsKey)}">Change its name, Want and Face</button>` : ""}`;
     const powerShown = gm || f.shown.power;
-    const head = `<header class="cc-camp-head wb-head"><p class="kicker is-gm">${f.mini ? `Mini faction${maker ? ` of ${esc(maker)}` : ""}` : "Faction"}</p><h1>${esc(f.name)}</h1>${f.about ? `<p class="cc-small">${rich(f.about, f.id)}</p>` : ""}</header>
-      <div class="wb-card card" data-glow="${lit[id]?.includes(f.id) ? "1" : ""}">
+    const kicker = `${f.mini ? `Mini faction${maker ? ` of ${esc(midName(maker))}` : ""}` : "Faction"}${nb("card") ? ` ${NEW}` : ""}`;
+    const stand = standing ? `<button type="button" class="wb-stand wb-stand-b is-${standing}" data-act="w" data-do="why" data-f="${esc(f.id)}" aria-expanded="${ui.why === f.id}" aria-controls="wb-why-${esc(f.id)}">${STANDING[standing]}<span class="wb-stand-q" aria-hidden="true">${ui.why === f.id ? "−" : "?"}</span></button>`
+      : `<p class="wb-stand is-unknown">You don’t know how it sees you</p>`;
+    const head = `<header class="cc-camp-head wb-head wb-fhead"><span class="wb-head-seal">${kitSeal(f.seal, { size: "lg" })}</span><div class="wb-head-in"><p class="kicker is-gm">${kicker}</p><h1>${esc(f.name)}</h1>${stand}</div></header>
+      ${ui.why === f.id && standing ? whyPanel(f, gm) : ""}${f.about ? `<p class="cc-small wb-about">${rich(f.about, f.id)}</p>` : ""}`;
+    // How much the crew knows: the pips on a player's phone, and one line at
+    // the top of hers, with the card's own switch and her look at their page.
+    const told = PARTS.filter((p) => f.shown[p]).map((p) => PART_NAMES[p]);
+    const knows = isHers && !preview
+      ? `<div class="wb-crewline${f.shown.card ? " is-on" : ""}"><p>${pips(known, f.shown.card ? `The crew knows ${known} of 8` : "Hidden from the crew")}<span>${f.shown.card ? `The crew knows ${known} of 8: its name, Want and Face${told.length ? `, ${told.join(", ").replace(/, ([^,]*)$/, " and $1")}` : ""}.` : "The crew hasn’t been shown it yet. Its parts wait till they have."}</span></p>
+        <div class="cc-row"><button type="button" class="button sm${f.shown.card ? "" : " primary"}" data-act="w" data-do="show" data-f="${esc(f.id)}" data-p="card" aria-pressed="${f.shown.card}">${f.shown.card ? "Hide it from the crew" : `Show the crew ${esc(midName(f.name))}`}</button><button type="button" class="button sm" data-act="w" data-do="ascrew" data-f="${esc(f.id)}">What the crew sees</button></div></div>`
+      : `<p class="wb-knows">${pips(known, `${known} of 8 found out`)}<span>${known} of 8 found out</span></p>`;
+    const previewBar = preview ? `<div class="wb-preview" role="status"><p>${find(whole, fid).shown.card ? "This is what the crew sees of it now." : "The crew can’t see it yet. Once you show it, this is what they get."}</p><button type="button" class="button sm" data-act="w" data-do="ascrew" data-f="${esc(f.id)}" data-v="0">Back to yours</button></div>` : "";
+    const card = `<div class="wb-card card" data-glow="${!isHers && lit[id]?.includes(f.id) ? "1" : ""}">
         <div class="wb-card-top"><div class="wb-card-die" role="img" aria-label="${powerShown ? `Power ${diceLabel(dice)}` : "Power not known"}">${powerShown ? them(dice) : '<span class="wb-unknown" aria-hidden="true">?</span>'}</div>
-          <div class="wb-card-p"><p class="wb-k">Power</p><p class="wb-card-v">${powerShown ? diceLabel(dice) : "Not known"}</p>${powerShown ? `<p class="cc-small">${steps} ${steps === 1 ? "step" : "steps"}</p>` : ""}</div>
-          ${gm || f.shown.threads ? `<span class="wb-stand is-${standing}">${STANDING[standing]}</span>` : ""}</div>
+          <div class="wb-card-p"><p class="wb-k">Power</p><p class="wb-card-v">${powerShown ? diceLabel(dice) : "Not known"}</p>${powerShown ? `<p class="cc-small">${steps} ${steps === 1 ? "step" : "steps"}</p>` : ""}</div></div>
         ${words}</div>`;
-    const showCard = gm ? `<div class="wb-show wb-show-card${f.shown.card ? " is-on" : ""}"><p>${f.shown.card ? "The crew can see it: its name, what it is, its Want and its Face, and whatever else you’ve shown them." : "The crew can’t see it yet. Show it when they find out it’s there."}</p>
-      <button type="button" class="button${f.shown.card ? "" : " primary"}" data-act="w" data-do="show" data-f="${esc(f.id)}" data-p="card" aria-pressed="${f.shown.card}">${f.shown.card ? "Hide it from the crew" : `Show the crew ${esc(f.name)}`}</button></div>` : "";
 
     // The book's changed it since she brought it in.
     const news = gm ? bookNews(f, doc) : null;
     const from = wholeIn(f.book?.from);
-    const bookNote = news?.real.length ? `<div class="cc-note is-gold wb-book" role="status"><p><b>${from ? `There’s been a change to ${esc(f.name.replace(/^The /, "the "))} in ${esc(from.title)} since you brought it in.` : `The book’s changed ${esc(f.name)} since you brought it in.`}</b></p><ul>${news.real.map((x) => `<li>${x}</li>`).join("")}</ul>
+    const bookNote = news?.real.length ? `<div class="cc-note is-gold wb-book" role="status"><p><b>${from ? `There’s been a change to ${esc(midName(f.name))} in ${esc(from.title)} since you brought it in.` : `The book’s changed ${esc(midName(f.name))} since you brought it in.`}</b></p><ul>${news.real.map((x) => `<li>${x}</li>`).join("")}</ul>
       <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="book" data-f="${esc(f.id)}" data-take="1">${from ? "Take the changes" : "Take the book’s changes"}</button><button type="button" class="button" data-act="w" data-do="book" data-f="${esc(f.id)}" data-take="0">Keep mine</button></div>
       <p class="cc-small">Taking them only changes what ${from ? "changed" : "the book changed"}. Your ticks, threads and agendas’ dice stay where play’s put them.</p></div>` : "";
 
+    // Its parts, each a fold that reads at a glance. Hers carry a switch in
+    // the header, and a player's say New on what's just been shown.
+    // In the book's order on every faction: Power, resources, other assets,
+    // agendas, bonds, threads and the Secret.
     const parts = [];
+    const byPart = {};
+    const put = (p, html) => (byPart[p] = gm ? `<div class="wb-part" data-p="${p}">${html}${switchFor(f, p)}</div>` : html);
     const powerAssets = f.assets.filter((a) => a.power);
     const otherAssets = f.assets.filter((a) => !a.power);
     const list = (l, items) => (items.length ? `<ul class="pt-lines">${items.map((x) => lineView(id, f, l, x, gm, doc)).join("")}</ul>` : "");
@@ -1225,51 +1607,51 @@ export function makeWorld(d) {
 
     if (gm || f.shown.power) {
       const adds = powerAssets.filter((a) => !a.off).length;
-      parts.push(part(`power-${f.id}`, "Power", `${diceLabel(dice)} <small>· ${adds ? `1 step, plus ${plural(adds, "asset", "assets")} that add Power` : "1 step, and nothing adding Power"}</small>`,
-        `${gm ? shower(f, "power") : ""}<p class="cc-lead">What it rolls when it acts and defends with: 1 step, plus 1 for each lot of people who turn up when it calls and have something paying for them.</p>${moneyLine}${list("assets", powerAssets)}${gm ? addForm(f, "assets", "Someone who turns up when it calls", doc).replace('name="power">', 'name="power" checked>') : ""}`,
-        gm ? badge(f, "power") : ""));
-    }
-    if (gm || f.shown.res) {
-      parts.push(part(`res-${f.id}`, "Resources", f.res.length ? `${few(f.res.map((x) => `${esc(x.text)}${x.x > 1 ? ` ×${x.x}` : ""}`), 4)}${gm && money.extra ? ` <small>· ${money.extra} extra</small>` : ""}` : "None",
-        `${gm ? shower(f, "res") : ""}<p class="cc-lead">Where its money comes from, one line each. Every asset needs one paying for it, every downtime.</p>${moneyLine}${list("res", f.res)}${gm ? addForm(f, "res", "A new resource", doc) : ""}${ruleLink("s-wealth", "Resources and assets")}`,
-        gm ? badge(f, "res") : ""));
-    }
-    if (gm || f.shown.assets) {
-      const onCard = new Set(f.assets.map((a) => keyOf(a.text)));
-      const groups = [...new Set(W.assets.map((a) => a.group))];
-      const picks = gm ? `<details class="cc-group wb-picks" data-open="wb-picks-${esc(f.id)}"${d.isOpen(`wb-picks-${f.id}`) ? " open" : ""}><summary>Assets to pick from <small>Appendix B</small></summary>${groups.map((g) => `<h3>${esc(g)}</h3><ul class="pt-lines">${W.assets.map((a, i) => (a.group === g ? `<li class="pt-line pt-pick"><div class="pt-line-in"><p><b>${esc(a.text)}</b></p><p class="pt-does">${esc(a.does)}</p></div>${onCard.has(keyOf(a.text)) ? '<span class="chip sm pt-chip is-on">On the card</span>' : `<button type="button" class="button sm" data-act="w" data-do="pick" data-f="${esc(f.id)}" data-i="${i}" aria-label="Give ${esc(f.name)} ${esc(a.text)}">Add it</button>`}</li>` : "")).join("")}</ul>`).join("")}</details>` : "";
-      parts.push(part(`assets-${f.id}`, "Other assets", otherAssets.length ? few(otherAssets.map((x) => (x.off ? `<s>${esc(x.text)}</s>` : esc(x.text))), 4) : "None",
-        `${gm ? shower(f, "assets") : ""}<p class="cc-lead">What it can do besides turning up, one line each, and each one does exactly what it says.</p>${list("assets", otherAssets)}${gm ? addForm(f, "assets", "A new asset", doc) : ""}${picks}`,
-        gm ? badge(f, "assets") : ""));
+      put("power", part(`power-${f.id}`, "Power", `${diceLabel(dice)} <small>· ${adds ? `1 step, plus ${plural(adds, "asset", "assets")} that add Power` : "1 step, and nothing adding Power"}</small>`,
+        `<p class="cc-lead">What it rolls when it acts and defends with: 1 step, plus 1 for each lot of people who turn up when it calls and have something paying for them.</p>${moneyLine}${list("assets", powerAssets)}${gm ? addForm(f, "assets", "Someone who turns up when it calls", doc).replace('name="power">', 'name="power" checked>') : ""}`,
+        nb("power")));
     }
     if (gm || f.shown.agenda) {
       const agendas = f.agendas.map((a) => {
         const key = editingKey(f, `agendas:${a.id}`);
         if (gm && ui.editing === key) return `<li class="pt-line wb-editing">${lineForm(f, "agendas", a, doc)}</li>`;
-        return `<li class="pt-project wb-agenda${a.done ? " is-done" : ""}"><div class="pt-project-top">${kitDie(a.die, { own: "them", label: a.done ? `d${a.die}, past it` : `d${a.die}`, state: a.done ? "top" : "" })}<div class="pt-line-in"><p><b>${esc(a.text)}</b>${a.done ? ' <span class="chip sm pt-chip">It’s happened</span>' : ""}</p><p class="pt-does">${a.done ? "Past d12." : `d${a.die}, ${ago(a.die)}.`}${a.then ? ` ${esc(a.then)}` : ""}</p></div></div>
+        return `<li class="pt-project wb-agenda${a.done ? " is-done" : ""}"><div class="wb-agenda-in"><p><b>${esc(a.text)}</b>${a.done ? ' <span class="chip sm pt-chip">It’s happened</span>' : ""}</p>${ladder(a)}<p class="pt-does">${a.done ? "Past d12." : `d${a.die}, ${ago(a.die)}.`}${a.then ? ` ${esc(a.then)}` : ""}</p></div>
           ${a.done && gm ? `<div class="pt-rules">${d.rule("when-an-agenda-happens")}</div>` : ""}
           ${gm ? `<div class="cc-row">${a.done ? `<button type="button" class="button sm" data-act="w" data-do="climb" data-f="${esc(f.id)}" data-lid="${esc(a.id)}" data-by="-1">Not yet</button><button type="button" class="button sm" data-act="w" data-do="drop" data-f="${esc(f.id)}" data-l="agendas" data-lid="${esc(a.id)}">${sure(`drop-${a.id}`, "Tap again to take it off", "It’s done with, take it off")}</button>`
             : `<button type="button" class="button sm" data-act="w" data-do="climb" data-f="${esc(f.id)}" data-lid="${esc(a.id)}" data-by="-1"${a.die <= 2 ? " disabled" : ""}>Set back</button><button type="button" class="button sm primary" data-act="w" data-do="climb" data-f="${esc(f.id)}" data-lid="${esc(a.id)}" data-by="1">${a.die >= 12 ? "It happens" : "It climbs"}</button>`}
             <button type="button" class="button sm" data-act="w" data-do="edit" data-k="${esc(key)}" aria-label="Change ${esc(a.text)}">Change</button></div>` : ""}</li>`;
       }).join("");
-      parts.push(part(`agenda-${f.id}`, "Agendas", f.agendas.length ? `<span class="cc-gl-wrap">${f.agendas.map((a) => `<span class="cc-gl">${kitMini(a.die, { own: "them" })}${esc(a.text)} <small>${a.done ? "happened" : `d${a.die}`}</small></span>`).join("")}</span>` : "None on the go",
-        `${gm ? shower(f, "agenda") : ""}<p class="cc-lead">What it’s doing right now. Its die climbs as it works at it, and past d12 it happens. Two at most.</p>${agendas ? `<ul class="pt-lines">${agendas}</ul>` : ""}${gm && f.agendas.length < MAX.agendas ? addForm(f, "agendas", "A new agenda", doc) : ""}${ruleLink("s-agendas", "How agendas work")}`,
-        gm ? badge(f, "agenda") : ""));
-    }
-    if (gm || f.shown.bonds) {
-      const groups = BONDS.map(([l, label]) => `<div class="wb-bond"><h3>${label}</h3>${f[l].length ? `<ul class="pt-lines">${f[l].map((t) => threadLine(id, f, l, t, gm, doc)).join("")}</ul>` : '<p class="cc-small">None yet.</p>'}${gm ? addForm(f, l, `A thread on ${label}`, doc) : ""}</div>`).join("");
-      const count = f.pub.length + f.mor.length + f.loy.length;
-      parts.push(part(`bonds-${f.id}`, "Bonds", count ? BONDS.filter(([l]) => f[l].length).map(([l, label]) => `${label} <small>${f[l].length}</small>`).join(" · ") : "No threads yet",
-        `${gm ? shower(f, "bonds") : ""}<p class="cc-lead">Public Sentiment, Morale and Loyalty. A bond thread’s a step on any roll it fits, and a hostile one’s a vulnerability, so a win against it that fits ticks once more.</p>${groups}${ruleLink("s-faction-bonds", "How bonds work")}`,
-        gm ? badge(f, "bonds") : ""));
+      put("agenda", part(`agenda-${f.id}`, "Agendas", f.agendas.length ? `<span class="cc-gl-wrap">${f.agendas.map((a) => `<span class="cc-gl">${kitMini(a.die, { own: "them" })}${esc(a.text)} <small>${a.done ? "happened" : `d${a.die}, ${ago(a.die)}`}</small></span>`).join("")}</span>` : "None on the go",
+        `<p class="cc-lead">What it’s doing right now. Its die climbs as it works at it, and past d12 it happens. Two at most.</p>${agendas ? `<ul class="pt-lines">${agendas}</ul>` : ""}${gm && f.agendas.length < MAX.agendas ? addForm(f, "agendas", "A new agenda", doc) : ""}${ruleLink("s-agendas", "How agendas work")}`,
+        nb("agenda")));
     }
     if (gm || f.shown.threads) {
       const crewT = f.threads.filter((t) => t.to === "crew");
       const others = f.threads.filter((t) => t.to !== "crew" && find(doc, t.to));
-      parts.push(part(`threads-${f.id}`, "Threads", `${STANDING[standing]}${others.length ? ` <small>· ${plural(others.length, "toward another faction", "toward other factions")}</small>` : ""}`,
-        `${gm ? shower(f, "threads") : ""}<p class="cc-lead">How it sees the crew, and the factions it cares about. Mostly bond threads toward the crew and it’s friendly, mostly hostile and it’s hostile, and otherwise it does business.</p>
+      put("threads", part(`threads-${f.id}`, "Threads", `${STANDING[standingOf(f)]}${others.length ? ` <small>· ${plural(others.length, "toward another faction", "toward other factions")}</small>` : ""}`,
+        `<p class="cc-lead">How it sees the crew, and the factions it cares about. Mostly bond threads toward the crew and it’s friendly, mostly hostile and it’s hostile, and otherwise it does business.</p>
         ${crewT.length || others.length ? `<ul class="pt-lines">${[...crewT, ...others].map((t) => threadLine(id, f, "threads", t, gm, doc)).join("")}</ul>` : '<p class="cc-small">None yet.</p>'}${gm ? addForm(f, "threads", "A new thread", doc) : ""}${ruleLink("s-standing", "How a faction sees the crew")}`,
-        gm ? badge(f, "threads") : ""));
+        nb("threads")));
+    }
+    if (gm || f.shown.bonds) {
+      const groups = BONDS.map(([l, label]) => `<div class="wb-bond"><h3>${label}</h3>${f[l].length ? `<ul class="pt-lines">${f[l].map((t) => threadLine(id, f, l, t, gm, doc)).join("")}</ul>` : '<p class="cc-small">None yet.</p>'}${gm ? addForm(f, l, `A thread on ${label}`, doc) : ""}</div>`).join("");
+      const count = f.pub.length + f.mor.length + f.loy.length;
+      put("bonds", part(`bonds-${f.id}`, "Bonds", count ? BONDS.filter(([l]) => f[l].length).map(([l, label]) => `${label} <small>${f[l].length}</small>`).join(" · ") : "No threads yet",
+        `<p class="cc-lead">Public Sentiment, Morale and Loyalty. A bond thread’s a step on any roll it fits, and a hostile one’s a vulnerability, so a win against it that fits ticks once more.</p>${groups}${ruleLink("s-faction-bonds", "How bonds work")}`,
+        nb("bonds")));
+    }
+    if (gm || f.shown.res) {
+      put("res", part(`res-${f.id}`, "Resources", f.res.length ? `${few(f.res.map((x) => `${esc(x.text)}${x.x > 1 ? ` ×${x.x}` : ""}`), 4)}${gm && money.extra ? ` <small>· ${money.extra} extra</small>` : ""}` : "None",
+        `<p class="cc-lead">Where its money comes from, one line each. Every asset needs one paying for it, every downtime.</p>${moneyLine}${list("res", f.res)}${gm ? addForm(f, "res", "A new resource", doc) : ""}${ruleLink("s-wealth", "Resources and assets")}`,
+        nb("res")));
+    }
+    if (gm || f.shown.assets) {
+      const onCard = new Set(f.assets.map((a) => keyOf(a.text)));
+      const groups = [...new Set(W.assets.map((a) => a.group))];
+      const picks = gm ? `<details class="cc-group wb-picks" data-open="wb-picks-${esc(f.id)}"${d.isOpen(`wb-picks-${f.id}`) ? " open" : ""}><summary>Assets to pick from <small>Appendix B</small></summary>${groups.map((g) => `<h3>${esc(g)}</h3><ul class="pt-lines">${W.assets.map((a, i) => (a.group === g ? `<li class="pt-line pt-pick"><div class="pt-line-in"><p><b>${esc(a.text)}</b></p><p class="pt-does">${esc(a.does)}</p></div>${onCard.has(keyOf(a.text)) ? '<span class="chip sm pt-chip is-on">On the card</span>' : `<button type="button" class="button sm" data-act="w" data-do="pick" data-f="${esc(f.id)}" data-i="${i}" aria-label="Give ${esc(midName(f.name))} ${esc(a.text)}">Add it</button>`}</li>` : "")).join("")}</ul>`).join("")}</details>` : "";
+      put("assets", part(`assets-${f.id}`, "Other assets", otherAssets.length ? few(otherAssets.map((x) => (x.off ? `<s>${esc(x.text)}</s>` : esc(x.text))), 4) : "None",
+        `<p class="cc-lead">What it can do besides turning up, one line each, and each one does exactly what it says.</p>${list("assets", otherAssets)}${gm ? addForm(f, "assets", "A new asset", doc) : ""}${picks}`,
+        nb("assets")));
     }
     if (gm || f.shown.secret) {
       const key = editingKey(f, "secret");
@@ -1278,8 +1660,9 @@ export function makeWorld(d) {
           <label class="cc-field">The rest of it <input name="more" maxlength="${MAX.words}" autocomplete="off" value="${esc(f.more)}"></label>
           <div class="cc-row"><button type="submit" class="button primary">Save</button><button type="button" class="button" data-act="w" data-do="cancel">Cancel</button></div></form>`
         : `${f.secret ? `<p class="wb-secret"><em>${esc(f.secret)}.</em> ${esc(f.more)}</p>` : '<p class="cc-small">No Secret written yet.</p>'}${gm ? `<button type="button" class="pt-reword" data-act="w" data-do="edit" data-k="${esc(key)}">Change its Secret</button>` : ""}`;
-      parts.push(part(`secret-${f.id}`, "Secret", f.secret ? `<em>${esc(f.secret)}</em>` : "Not written yet", `${gm ? shower(f, "secret") : ""}${body}`, gm ? badge(f, "secret") : ""));
+      put("secret", part(`secret-${f.id}`, "Secret", f.secret ? `<em>${esc(f.secret)}</em>` : "Not written yet", body, nb("secret")));
     }
+    for (const p of PARTS) if (byPart[p]) parts.push(byPart[p]);
     if (f.mini) {
       const key = editingKey(f, "outs");
       const outsBody = gm && ui.editing === key
@@ -1291,15 +1674,15 @@ export function makeWorld(d) {
       const kids = minisOf(doc, f.id);
       const can = kids.length < MAX.minis;
       const form = can ? `<form class="cc-form pt-form pt-add" data-form="w-mini" data-f="${esc(f.id)}">
-        <p class="cc-lead">Making one is Establish: ${esc(f.name)}’s action, and it hands over one of its own resources and one of its own assets.</p>
+        <p class="cc-lead">Making one is Establish: ${esc(midName(f.name))}’s action, and it hands over one of its own resources and one of its own assets.</p>
         <label class="cc-field">Its name <input name="name" maxlength="${MAX.name}" autocomplete="off" placeholder="like The Night Boats"></label>
         <label class="cc-field">The resource it hands over <select name="res"><option value="">None</option>${f.res.map((x) => `<option value="${esc(x.id)}">${esc(x.text)}</option>`).join("")}</select></label>
         <label class="cc-field">The asset it hands over <select name="asset"><option value="">None</option>${f.assets.map((x) => `<option value="${esc(x.id)}">${esc(x.text)}${x.power ? " (+1 Power)" : ""}</option>`).join("")}</select></label>
         <fieldset class="wb-outs"><legend>The two outcomes it can do</legend>${OUTCOMES.map((o) => `<label class="pt-check"><input type="checkbox" name="out-${o}"> ${o}</label>`).join("")}</fieldset>
-        <label class="cc-field">Its Loyalty thread toward ${esc(f.name)} <input name="loy" maxlength="${MAX.line}" autocomplete="off" placeholder="like The Guild pays better than the river ever did"></label>${kindField()}
+        <label class="cc-field">Its Loyalty thread toward ${esc(midName(f.name))} <input name="loy" maxlength="${MAX.line}" autocomplete="off" placeholder="like The Guild pays better than the river ever did"></label>${kindField()}
         <div class="cc-row"><button type="submit" class="button">Make it</button></div></form>` : `<p class="cc-small">That’s three, which is as many as a faction can make.</p>`;
       parts.push(part(`minis-${f.id}`, "Mini factions", kids.length ? few(kids.map((x) => esc(x.name)), 3) : "None yet",
-        `${kids.length ? `<ul class="wb-toks">${kids.map((x) => token(id, x, doc, gm)).join("")}</ul>` : ""}${form}${ruleLink("s-mini-factions", "Mini factions")}`));
+        `${kids.length ? `<ul class="wb-toks wb-seals">${kids.map((x) => token(id, x, doc, gm)).join("")}</ul>` : ""}${form}${ruleLink("s-mini-factions", "Mini factions")}`));
     }
     if (gm) {
       const key = editingKey(f, "note");
@@ -1311,13 +1694,15 @@ export function makeWorld(d) {
       if (sealFold) parts.push(sealFold);
       parts.push(part(`note-${f.id}`, "Your note", f.note ? esc(f.note.slice(0, 80)) + (f.note.length > 80 ? "…" : "") : "Only you see it", `<p class="cc-lead">Anything you want to remember about it. It never goes to the crew.</p>${body}`));
     }
+    // What the crew's still to find out, as sealed rows, the same on every faction.
+    const still = gm ? [] : PARTS.filter((p) => !f.shown[p]);
+    const sealed = still.length ? `<section class="wb-sealed" aria-labelledby="wb-sealed-h"><h2 id="wb-sealed-h" class="wb-sealed-h">Still to find out</h2><ul>${still.map((p) => `<li>${kitSeal(null, { size: "sm", blank: true })}<span>${cap(PART_NAMES[p])}</span></li>`).join("")}</ul></section>` : "";
     const source = gm && f.book ? boardOf(f.book.from) : null;
-    const hidden = !gm && PARTS.some((p) => !f.shown[p]);
     const end = gm ? `<section class="cc-sec" aria-labelledby="wb-off"><h2 id="wb-off" class="sr-only">Taking it off</h2>${source ? `<p class="cc-small">From ${esc(source.name)}. <a class="pt-reword" href="${esc(source.link)}">Read it in the book</a></p>` : ""}
-      <div class="cc-row"><button type="button" class="button danger" data-act="w" data-do="gone" data-f="${esc(f.id)}">${sure(`gone-${f.id}`, "Tap again to take it off the board", "Take it off the board")}</button></div></section>`
-      : hidden ? `<p class="cc-small wb-more">There’s more to ${esc(f.name)} you haven’t found out yet.</p>` : "";
-    if (!gm) lit[id] = [];
-    return `${top}<div class="wb" data-wb="${esc(id)}">${head}${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${showCard}${bookNote}<div class="cc-folds wb-parts">${parts.join("")}</div>${P.factionMentions(id, f, doc)}${M.onMaps(id, { k: "f", id: f.id })}${end}</div>`;
+      <div class="cc-row"><button type="button" class="button danger" data-act="w" data-do="gone" data-f="${esc(f.id)}">${sure(`gone-${f.id}`, "Tap again to take it off the board", "Take it off the board")}</button></div></section>` : "";
+    if (!isHers) lit[id] = [];
+    const more = preview ? "" : `${P.factionMentions(id, f, doc)}${M.onMaps(id, { k: "f", id: f.id })}`;
+    return `${top}<div class="wb${preview ? " is-preview" : ""}" data-wb="${esc(id)}">${previewBar}${head}${knows}${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${bookNote}${card}<div class="cc-folds wb-parts">${parts.join("")}</div>${sealed}${ownWeb(id, f, doc, gm)}${more}${end}</div>`;
   }
 
   // ------------------------------------------------------------ the screens
@@ -1332,11 +1717,21 @@ export function makeWorld(d) {
     if (v.p) return P.pageView(v.id, v.p);
     if (v.m) return M.mapView(v.id, v.m, v.pin);
     const gm = isGm(v.id);
+    ui.newOn = null;
     return `${topbar(`/characters/?camp=${encodeURIComponent(v.id)}`, nameOf(v.id))}
       <header class="cc-camp-head wb-head"><p class="kicker${gm ? " is-gm" : ""}">The world</p><h1>${esc(nameOf(v.id))}</h1>${gm ? "" : `<p class="cc-small">What ${esc(gmName(v.id))}’s shown the crew so far.</p>`}</header>
-      ${d.foundSection?.(v.id) ?? ""}${d.turnSection?.(v.id) ?? ""}
-      <section class="cc-sec wb-sec" data-wb="${esc(v.id)}" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(v.id)}</section>
+      ${d.foundSection?.(v.id) ?? ""}${worldBody(v.id, gm)}
       ${webSection(v.id)}${S.section(v.id)}${P.sections(v.id)}${M.section(v.id)}${whoseFoot(v.id)}${gm ? "" : unlit(v.id)}`;
+  }
+  // The top of the World screen and tab. A player's opens on what's changed
+  // since they last looked, then what's closing in, the downtime (on top
+  // while it's on), and who's who. Hers is the downtime and her board.
+  function worldBody(id, gm) {
+    const turn = d.turnSection?.(id) ?? "";
+    const board = `<section class="cc-sec wb-sec" data-wb="${esc(id)}" aria-labelledby="wb-h"><h2 id="wb-h">${gm ? "The board" : "Who’s who"}</h2>${boardBody(id)}</section>`;
+    if (gm) return `${turn}${board}`;
+    const live = Boolean(d.turnGlance?.(id));
+    return live ? `${sinceSection(id)}${turn}${closingSection(id, docOf(id))}${board}` : `${sinceSection(id)}${closingSection(id, docOf(id))}${board}${turn}`;
   }
   // What's just been shown lights up once, then it's like the rest.
   function unlit(id) {
@@ -1348,9 +1743,9 @@ export function makeWorld(d) {
   function tabView(ch) {
     const id = d.campOf(ch);
     if (!id) return `<div class="cc-note"><p>${esc(ch.name)} isn’t playing in a campaign on this phone.</p></div>`;
+    ui.newOn = null;
     return `<div class="wb-tab" data-wb="${esc(id)}"><p class="cc-small pt-where">${esc(ch.name)} plays in <a href="/characters/?camp=${encodeURIComponent(id)}&amp;world" data-act="w" data-do="nav">${esc(nameOf(id))}</a>. This is what ${esc(gmName(id))}’s shown the crew of its world.</p>
-      ${d.foundSection?.(id) ?? ""}${d.turnSection?.(id) ?? ""}
-      <section class="cc-sec wb-sec" aria-labelledby="wb-h"><h2 id="wb-h">The board</h2>${boardBody(id)}</section>
+      ${d.foundSection?.(id) ?? ""}${worldBody(id, false)}
       ${webSection(id)}${S.section(id)}${P.sections(id)}${M.section(id)}${whoseFoot(id)}${unlit(id)}</div>`;
   }
 
@@ -1375,13 +1770,14 @@ export function makeWorld(d) {
 
   // What's just been shown to a player lights up for a moment.
   function after(app) {
+    ui.flip = "";
     M.after(app);
     K.after(app);
     SP.after(app);
     R.after(app);
     // A big board's web slides sideways in its box: it starts at the middle,
     // and stays where it's been slid to when a tap draws it again.
-    for (const box of app.querySelectorAll(".ww-sec[data-wb] .ww-wrap")) {
+    for (const box of app.querySelectorAll(".ww-sec[data-wb]:not(.ww-own) .ww-wrap")) {
       if (box.scrollWidth <= box.clientWidth + 1) continue;
       const w = webOf$(box.closest("[data-wb]").dataset.wb);
       box.scrollLeft = w.x ?? (box.scrollWidth - box.clientWidth) / 2;

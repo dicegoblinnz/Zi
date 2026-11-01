@@ -1413,8 +1413,92 @@ button.bd-tok:active { transform: scale(0.97); }
 .wb-tok.is-mini .wb-tok-a { grid-template-columns: 40px minmax(0, 1fr); padding-block: 10px; }
 .wb-tok.is-mini .wb-tok-die .zd-die { --s: 38px; }
 .wb-tok.is-mini .wb-tok-n { font-size: 1.02rem; }
-.wb-tok.is-new .wb-tok-a, .wb-card.is-new { animation: wb-lit 1.6s ease-out; }
+.wb-card.is-new { animation: wb-lit 1.6s ease-out; }
 @keyframes wb-lit { 0% { box-shadow: inset 3px 0 0 var(--zd-them-line), 0 0 0 0 color-mix(in srgb, var(--zd-them) 65%, transparent); } 100% { box-shadow: inset 3px 0 0 var(--zd-them-line), 0 0 0 16px transparent; } }
+
+/* Who's who (notes/faction-feel-plan.md, stage 2): each faction as a seal
+   card, two to a row. Its standing's the card's top edge (ember hostile, gold
+   friendly, plain for business or not known yet), with its Power and how much
+   the crew knows at the foot, as eight pips: its card and its seven parts. */
+.wb-seals { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.wb-seals > .wb-tok { min-width: 0; }
+.wb-seals > .wb-tok.is-mini { margin-left: 0; }
+.wb-seals > .wb-tok.is-mini::before { content: none; }
+.wb-seals .wb-tok-a { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; padding: 16px 10px 10px; text-align: center; box-shadow: inset 0 3px 0 var(--zd-slot-line); }
+.wb-seals > .is-hostile > .wb-tok-a { box-shadow: inset 0 3px 0 var(--zd-harm); }
+.wb-seals > .is-friendly > .wb-tok-a { box-shadow: inset 0 3px 0 var(--gold); }
+.wb-seals > .wb-tok.is-new > .wb-tok-a { border-color: color-mix(in srgb, var(--zd-them) 60%, transparent); }
+.wb-seals .wb-tok-in { justify-items: center; gap: 3px; }
+.wb-seals .wb-k { justify-content: center; }
+.wb-seals .wb-tok-n { font-size: 1.02rem; line-height: 1.22; }
+.wb-seals > .wb-tok.is-mini .wb-tok-n { font-size: 0.95rem; }
+.wb-tok-seal { display: grid; place-items: center; min-height: 60px; }
+.wb-tok-seal .zd-seal.md { --s: 60px; }
+.wb-tok-seal .zd-seal.sm { --s: 40px; }
+.wb-tok-s { font-size: 0.86rem; line-height: 1.3; color: var(--muted); }
+.wb-seals > .is-hostile .wb-tok-s { color: var(--zd-harm-ink); }
+.wb-seals > .is-friendly .wb-tok-s { color: var(--gold-ink); }
+.wb-tok-ag { justify-content: center; margin-top: 2px; font-size: 0.85rem; line-height: 1.3; text-align: left; }
+.wb-tok-ag .zd-mini { width: 16px; height: 16px; }
+.wb-tok-ag small { color: var(--muted); }
+.wb-tok-f { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 8px; margin-top: auto; padding-top: 4px; }
+.wb-seals .wb-tok-die { flex-direction: row; align-items: center; padding: 0; gap: 2px; }
+.wb-seals .wb-tok-die .zd-die { --s: 30px; }
+.wb-seals .wb-tok-die .zd-die.is-next { --s: 18px; }
+.wb-seals .wb-unknown { width: 28px; height: 28px; font-size: 1rem; }
+.wb-know { display: inline-flex; align-items: center; gap: 4px; padding: 2px; }
+.wb-know i { display: block; width: 6px; height: 6px; border: 1.5px solid var(--zd-them-line); transform: rotate(45deg); }
+.wb-know i.is-on { background: var(--zd-them); }
+.wb-new { display: inline-flex; align-items: center; min-height: 20px; padding: 0 6px; font-family: var(--body); font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--zd-on-them); background: var(--zd-them); border-radius: 2px; }
+.wb-seals .wb-tok-a > .wb-new { position: absolute; top: 9px; right: 8px; }
+.cc-fold-t .wb-new { margin-left: 8px; }
+.wb-seals > .wb-tok.is-lit > .wb-tok-a { animation: wb-lit-card 1.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes wb-lit-card { 0% { outline: 2px solid color-mix(in srgb, var(--zd-them) 85%, transparent); outline-offset: 0; } 100% { outline: 2px solid transparent; outline-offset: 12px; } }
+
+/* Since you last played and Closing in, at the top of a player's World tab
+   and screen. What's changed is violet, the world's colour, and an agenda
+   climbs a ladder of the six die shapes, the one it's at bigger. */
+.wb-since { margin-top: 1.1rem; padding: 12px 14px; background: color-mix(in srgb, var(--zd-them) 12%, var(--panel)); border: 1px solid color-mix(in srgb, var(--zd-them) 45%, transparent); border-radius: 2px; }
+.wb-since.is-quiet { background: var(--surface); border-color: var(--line-soft); }
+.cc .wb-since > h2 { margin: 0 0 6px; padding: 0; background: none; font-family: var(--body); font-size: 0.78rem; font-weight: 800; line-height: 1.3; letter-spacing: 0.14em; text-transform: uppercase; color: var(--zd-them-ink); }
+.wb-since-l { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; font-size: 1.02rem; line-height: 1.4; }
+.wb-since-l li { position: relative; padding-left: 16px; overflow-wrap: anywhere; }
+.wb-since-l li::before { content: ""; position: absolute; left: 2px; top: 0.55em; width: 6px; height: 6px; background: var(--zd-them); transform: rotate(45deg); }
+.wb-since-l small { font-size: 0.9rem; color: var(--muted); }
+.wb-since-l .wb-since-more { font-size: 0.92rem; color: var(--muted); }
+.wb-since-none { margin: 0; color: var(--muted); }
+.wb-since-go { margin-top: 2px; }
+.wb-closing { margin-top: 1.6rem; }
+.wb-close { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.wb-ag { display: grid; grid-template-columns: 32px minmax(0, 1fr); align-items: center; gap: 8px 12px; padding: 10px 12px; color: var(--ink); text-decoration: none; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; transition: transform 120ms ease-out; }
+.wb-ag:active { transform: scale(0.985); }
+.wb-ag:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wb-ag.is-hot { background: color-mix(in srgb, var(--zd-them) 8%, var(--surface)); border-color: color-mix(in srgb, var(--zd-them) 55%, transparent); }
+.wb-ag-in { display: grid; gap: 1px; min-width: 0; }
+.wb-ag-n { font-size: 1.02rem; line-height: 1.25; overflow-wrap: anywhere; }
+.wb-ag-w { font-size: 0.9rem; line-height: 1.35; color: var(--muted); overflow-wrap: anywhere; }
+.wb-ag.is-hot .wb-ag-when { font-weight: 700; color: var(--zd-them-ink); }
+.wb-ag > .wb-ladder { grid-column: 1 / -1; }
+.wb-ladder { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.wb-rung { display: grid; place-items: center; width: 26px; height: 30px; }
+.wb-rung .zd-mini { width: 18px; height: 18px; }
+.wb-rung:not(.is-on) .zd-mini { --own: var(--zd-slot); --own-line: var(--zd-slot-line); }
+.wb-rung.is-now .zd-mini { width: 28px; height: 28px; }
+.wb-burst { width: 14px; height: 14px; fill: var(--zd-slot-line); }
+.wb-rung-end.is-on .wb-burst { width: 22px; height: 22px; fill: var(--zd-them); }
+
+/* Her board past about eight factions: Find, a whole world's kinds of
+   faction, and the order she wants them in. */
+.wb-tools { display: grid; gap: 8px; margin: 0 0 12px; }
+.wb-find input { width: 100%; }
+.wb-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.wb-chip-b { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 12px; font: inherit; font-size: 0.9rem; font-weight: 700; color: var(--muted); background: var(--surface); border: 1.5px solid var(--line); border-radius: 2px; cursor: pointer; }
+.wb-chip-b span { font-weight: 800; color: var(--zd-them-ink); font-variant-numeric: tabular-nums; }
+.wb-chip-b[aria-pressed="true"] { color: var(--zd-on-them); background: var(--zd-them); border-color: var(--zd-them); }
+.wb-chip-b[aria-pressed="true"] span { color: inherit; }
+.wb-chip-b:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wb-found { margin: 0; }
+.wb-found:empty { display: none; }
 
 /* What she can bring in or add. */
 .wb-adds { margin-top: 1.1rem; }
@@ -1434,6 +1518,11 @@ button.bd-tok:active { transform: scale(0.97); }
 .wb-whose .wb-notice { font-size: 0.78rem; }
 /* Whose ties a big web shows, picked from a list. */
 .ww-pick { max-width: 22rem; margin: 0 0 10px; }
+/* The web's switches, its list for reading, and a faction's own web. */
+.ww-bar { display: flex; flex-wrap: wrap; gap: 0 10px; }
+.ww-list .ww-fs { margin: 0; }
+.ww-list .ww-f.is-hidden .ww-go { font-style: italic; color: var(--muted); }
+.ww-own .ww-ring { max-width: 380px; }
 .wb-bring .cc-row { align-items: center; margin-bottom: 0; }
 .wb-new .cc-field input, .wb-new .cc-field select { width: 100%; }
 .wb-sizes ul { margin: 0.4rem 0 0; padding-left: 1.1rem; font-size: 0.92rem; }
@@ -1487,6 +1576,58 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
 .wb-outs legend { grid-column: 1 / -1; }
 .wb-picks h3 { margin: 0.8rem 0 0.1rem; font-size: 0.95rem; color: var(--zd-them-ink); }
 .wb-more { margin-top: 1.2rem; font-style: italic; }
+/* Its seal big beside its name, and its standing a tap that explains itself. */
+.wb-fhead { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; }
+.wb-head-seal .zd-seal.lg { --s: 88px; }
+.wb-head-in { min-width: 0; }
+.wb-fhead h1 { margin: 0.1rem 0 0.45rem; }
+.wb-stand-b { gap: 8px; min-height: 44px; padding: 0 10px; font: inherit; font-size: 0.88rem; font-weight: 700; background: transparent; cursor: pointer; }
+.wb-stand-b:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.wb-stand-q { display: inline-grid; place-items: center; width: 18px; height: 18px; font-size: 0.78rem; line-height: 1; border: 1.5px solid currentColor; border-radius: 50%; }
+.wb-stand.is-unknown { margin: 0; border-style: dashed; }
+.wb-why { margin: 0.2rem 0 0.9rem; padding: 12px 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
+.wb-why p { margin: 0 0 0.5rem; }
+.wb-why p:last-child { margin-bottom: 0; }
+.wb-why-l { display: grid; gap: 6px; margin: 0 0 0.5rem; padding: 0; list-style: none; }
+.cc .wb-why-h { margin: 0.7rem 0 0.2rem; font-family: var(--body); font-size: 0.76rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.wb-about { margin: 0 0 0.7rem; }
+/* How much the crew knows: pips on a player's phone, and on hers one line
+   with the faction's own switch and her look at what the crew sees. */
+.wb-knows { display: flex; align-items: center; gap: 10px; margin: 0 0 0.8rem; font-size: 0.95rem; color: var(--muted); }
+.wb-knows .wb-know i, .wb-crewline .wb-know i { width: 8px; height: 8px; }
+.wb-crewline { margin: 0 0 0.8rem; padding: 10px 12px; background: var(--panel); border: 1.5px dashed var(--zd-them-line); border-radius: 2px; }
+.wb-crewline.is-on { background: color-mix(in srgb, var(--zd-them) 8%, var(--panel)); border-style: solid; }
+.wb-crewline p { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; margin: 0; font-size: 0.95rem; line-height: 1.4; }
+.wb-crewline .cc-row { margin: 0.6rem 0 0; }
+.wb-preview { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin: 0.4rem 0 0.9rem; padding: 10px 12px; background: color-mix(in srgb, var(--zd-them) 14%, var(--panel)); border: 1.5px solid var(--zd-them-line); border-radius: 2px; }
+.wb-preview p { flex: 1 1 12rem; margin: 0; }
+/* Her switch in each part's header: shown or hidden, a tap either way. */
+.wb-part { position: relative; }
+.wb-part > .cc-fold > summary { padding-right: 136px; }
+.wb-sw { position: absolute; top: 2px; right: 38px; display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 6px; font: inherit; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); background: none; border: 0; border-radius: 3px; cursor: pointer; }
+.wb-sw-t { position: relative; flex: none; width: 36px; height: 22px; border: 1.5px dashed var(--muted); border-radius: 11px; transition: background-color 180ms ease-out, border-color 180ms ease-out; }
+.wb-sw-t i { position: absolute; top: 3px; left: 3px; width: 13px; height: 13px; background: var(--muted); border-radius: 50%; transition: transform 200ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.wb-sw-w { min-width: 4.8em; text-align: left; }
+.wb-sw.is-on { color: var(--zd-them-ink); }
+.wb-sw.is-on .wb-sw-t { background: var(--zd-them); border: 1.5px solid var(--zd-them); }
+.wb-sw.is-on .wb-sw-t i { background: var(--zd-on-them); transform: translateX(14px); }
+.wb-sw.is-on.is-flip .wb-sw-t i { animation: wb-knob-on 200ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.wb-sw.is-flip:not(.is-on) .wb-sw-t i { animation: wb-knob-off 200ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+@keyframes wb-knob-on { from { transform: translateX(0); } }
+@keyframes wb-knob-off { from { transform: translateX(14px); } }
+.wb-sw.is-sure { color: var(--zd-harm-ink); }
+.wb-sw.is-sure .wb-sw-t { border: 1.5px solid var(--zd-harm-line); }
+.wb-sw:disabled { opacity: 0.55; cursor: not-allowed; }
+.wb-sw:focus-visible { outline: 2px solid var(--violet); outline-offset: 0; }
+/* An agenda on its page climbs the same ladder. */
+.wb-agenda-in p { margin: 0; overflow-wrap: anywhere; }
+.wb-agenda-in .wb-ladder { margin: 6px 0 4px; }
+/* What the crew's still to find out, as sealed rows. */
+.wb-sealed { margin-top: 1rem; padding: 12px 14px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.cc .wb-sealed-h { margin: 0 0 8px; padding: 0; background: none; font-family: var(--body); font-size: 0.78rem; font-weight: 800; line-height: 1.3; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-ink); }
+.wb-sealed ul { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.wb-sealed li { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 4px 10px; color: var(--muted); background: repeating-linear-gradient(135deg, transparent 0 6px, color-mix(in srgb, var(--zd-them) 7%, transparent) 6px 12px); border: 1px dashed var(--zd-slot-line); }
+.wb-sealed .zd-seal { --s: 26px; }
 
 /* The way in, on the campaign's page. */
 .wb-tile { margin-top: 1.4rem; }
@@ -1512,8 +1653,7 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
 .ts-give .cc-small { margin: 0; }
 .ts-give-at { margin: 0 0 0.35rem; font-weight: 700; font-size: 1.2rem; color: var(--ink); overflow-wrap: anywhere; }
 .ts-give-code { margin: 0.2rem 0 0; font-family: var(--body); font-weight: 800; font-size: clamp(1.7rem, 8.5vw, 2.4rem); line-height: 1.1; letter-spacing: 0.12em; color: var(--gold-ink); font-variant-numeric: lining-nums; white-space: nowrap; }
-.wb-tab .wb-sec { margin-top: 0.8rem; }
-.wb-tab .wb-sec > h2 { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.wb-tab .wb-sec { margin-top: 1.6rem; }
 @media (max-width: 360px) {
   .wb-tok-a { grid-template-columns: 42px minmax(0, 1fr); gap: 10px; padding-inline: 10px; }
   .wb-tok-die .zd-die { --s: 40px; }

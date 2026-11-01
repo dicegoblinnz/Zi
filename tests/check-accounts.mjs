@@ -1879,10 +1879,25 @@ try {
     await mo.page.click(`${mini} button[type="submit"]`);
     await until(async () => (await mo.page.textContent("#app h1").catch(() => "")) === "The Night Boats", "the Night Boats' page");
     same(await power(mo.page), "d4", "the Night Boats are a d4: 1 step, plus Fast Boats");
-    has(await text(mo.page, ".wb-head"), "Mini faction of The Harbour Guild", "made by the Guild");
+    has(await text(mo.page, ".wb-head"), "Mini faction of the Harbour Guild", "made by the Guild");
     await toBoard(mo.page);
     same(await mo.page.$$eval(".wb-tok.is-mini .wb-tok-n", (els) => els.map((e) => e.textContent)), ["The Night Boats"], "the Night Boats sit under the Guild");
     same(await mo.page.getAttribute(`${tok("The Harbour Guild")} .wb-tok-die`, "aria-label"), "Power d8", "and the Guild's a d8 without its Fast Boats");
+    // Nine factions, so her board has Find and an order: Find hides the rest
+    // as she types, and Closing in puts Vane's happened agenda first.
+    await mo.page.waitForSelector(".wb-tools input[data-wbfind]");
+    same(await mo.page.$$eval(".wb-seals > .wb-tok", (els) => els.length), 9, "the nine as seal cards");
+    await mo.page.fill(".wb-tools input[data-wbfind]", "vane");
+    same(await mo.page.$$eval(".wb-tok:not([hidden]) .wb-tok-n", (els) => els.map((e) => e.textContent)), ["The Vane Estate"], "Find hides every faction but the Vane Estate");
+    has(await text(mo.page, ".wb-found"), "1 faction of 9", "and says how many it's found");
+    await mo.page.fill(".wb-tools input[data-wbfind]", "");
+    await until(async () => (await mo.page.$$eval(".wb-tok:not([hidden])", (els) => els.length)) === 9, "all nine back");
+    await mo.page.click('[data-do="wbsort"][data-v="close"]');
+    await until(async () => (await mo.page.$$eval(".wb-tok-n", (els) => els[0]?.textContent)) === "The Vane Estate", "Closing in puts the Vane Estate first, its agenda happened");
+    same(await mo.page.getAttribute('[data-do="wbsort"][data-v="close"]', "aria-pressed"), "true", "with Closing in pressed");
+    await axe(mo.page, "her board in the order of what's closing in");
+    await mo.page.click('[data-do="wbsort"][data-v="board"]');
+    await until(async () => (await mo.page.$$eval(".wb-tok-n", (els) => els[0]?.textContent)) === brine.cards[0].name, "back in the board's order");
 
     // Showing the crew. The Tithe Fleet first, then its Power, and Vesk's World
     // tab has each one on its own.
@@ -1895,17 +1910,18 @@ try {
     await until(async () => (await kai.page.$$(".wb-tok")).length === 1, "the Tithe Fleet on Vesk's World tab");
     same(await kai.page.getAttribute(".wb-tok-die", "aria-label"), "Power not known", "with its Power not known yet");
     await wbFold(mo.page, "power");
-    await mo.page.click('details[data-open^="wb-power-"] [data-do="show"][data-p="power"]');
+    await mo.page.click('.wb-sw[data-do="show"][data-p="power"]');
     await until(async () => (await playerWorld())?.factions?.[0]?.assets.length === fleet.assets.filter((a) => a.power).length, "its Power assets on the server for Kai");
     await nudge(kai.page);
     await until(async () => (await kai.page.getAttribute(".wb-tok-die", "aria-label").catch(() => "")) === `Power ${powerOf(fleet)}`, "its Power on Vesk's World tab");
     // Its Secret takes a second tap, and never reaches Kai's phone till then.
     await wbFold(mo.page, "secret");
-    await mo.page.click('details[data-open^="wb-secret-"] [data-do="show"][data-p="secret"]');
+    await mo.page.click('.wb-sw[data-do="show"][data-p="secret"]');
     await mo.page.waitForTimeout(900);
+    has(await text(mo.page, '.wb-sw[data-p="secret"]'), "Tap again", "the Secret's switch asks for a second tap");
     same((await factionIn(tuesday.id, "The Tithe Fleet"))?.shown?.secret, false, "one tap doesn't show the Secret");
     yes(!JSON.stringify(await playerWorld()).includes(fleet.secret), "and it isn't on Kai's phone");
-    await mo.page.click('details[data-open^="wb-secret-"] [data-do="show"][data-p="secret"]');
+    await mo.page.click('.wb-sw[data-do="show"][data-p="secret"]');
     await until(async () => (await playerWorld())?.factions?.[0]?.secret === fleet.secret, "the second tap shows it");
     // A thread toward a faction the crew hasn't been shown stays off Kai's phone.
     await wbFold(mo.page, "threads");
@@ -1914,9 +1930,60 @@ try {
     await mo.page.check(`${tf} input[value="hostile"]`);
     await mo.page.selectOption(`${tf} select[name="to"]`, { label: "Tarrant & Daughters" });
     await mo.page.click(`${tf} button[type="submit"]`);
-    await mo.page.click('details[data-open^="wb-threads-"] [data-do="show"][data-p="threads"]');
+    await mo.page.click('.wb-sw[data-do="show"][data-p="threads"]');
     await until(async () => (await playerWorld())?.factions?.[0]?.threads?.length > 0, "the Fleet's threads on the server for Kai");
     same((await playerWorld()).factions[0].threads.map((t) => t.text), fleet.threads.map((t) => t.text), "only its thread toward the crew, not the one toward Tarrant & Daughters");
+    // Vesk's World tab: Who's who has the Fleet as a seal card, hostile, a d6
+    // and 4 of 8 found out. Kai looks, goes to Vesk's Play tab, and Mo shows
+    // the crew its agenda while she's away. Next time she opens the tab, Since
+    // you last played says so, Closing in has it on its ladder, and the card
+    // says New till she opens the Fleet's page.
+    const fleetAg = fleet.agendas[0];
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector(".wb-tab .wb-tok");
+    await until(async () => (await kai.page.getAttribute(".wb-tab .wb-tok .wb-know", "aria-label").catch(() => "")) === "4 of 8 found out", "the Fleet's card: 4 of 8 found out");
+    yes(await kai.page.$(".wb-tab .wb-tok.is-hostile .wb-tok-seal svg.zd-seal"), "a seal card, its top edge hostile");
+    has(await text(kai.page, ".wb-tab .wb-tok"), "Hostile to the crew", "saying so");
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa`);
+    await kai.page.waitForSelector('.cc-tabs [data-t="world"]');
+    await wbFold(mo.page, "agenda");
+    await mo.page.click('.wb-sw[data-do="show"][data-p="agenda"]');
+    await until(async () => (await playerWorld())?.factions?.[0]?.agendas?.length === 1, "the Fleet's agenda on the server for Kai");
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await until(async () => (await text(kai.page, ".wb-tab .wb-since").catch(() => "")).includes("You’ve found out the Tithe Fleet’s agendas"), "Since you last played: Kai's found out the Fleet's agenda");
+    has(await text(kai.page, ".wb-closing .wb-ag"), fleetAg.text, "Closing in has it");
+    same(await kai.page.getAttribute(".wb-closing .wb-ladder", "aria-label"), `At d${fleetAg.die}, a season or more away. Past d12 it happens`, "on its ladder, with the words for its die");
+    same(await kai.page.$$eval(".wb-closing .wb-rung.is-on", (els) => els.length), fleetAg.die / 2, "its sizes lit up to d4");
+    const firstScreen = await kai.page.evaluate(() => [".wb-since", ".wb-closing"].map((s) => document.querySelector(s)?.getBoundingClientRect().top ?? 9999).every((top) => top < innerHeight));
+    yes(firstScreen, "Since you last played and Closing in both start on the World tab's first screen");
+    yes(await kai.page.$(".wb-tab .wb-tok.is-new .wb-new"), "the Fleet's card says New");
+    await openFaction(kai.page, "The Tithe Fleet");
+    yes(await kai.page.$(".wb-head-seal svg.zd-seal.lg"), "its page has its seal big");
+    has(await text(kai.page, ".wb-knows"), "5 of 8 found out", "and 5 of 8 found out");
+    has(await text(kai.page, 'details[data-open^="wb-agenda-"] .cc-fold-t'), "New", "its agendas say New");
+    same(await kai.page.$$eval(".wb-sealed li", (els) => els.map((e) => e.textContent.trim())), ["Its resources", "Its other assets", "Its bonds"], "Still to find out: the three parts not shown, sealed");
+    const cargoes = fleet.res.find((r) => r.text === "Seized Cargoes").text;
+    yes(!(await text(kai.page, "#app")).includes(cargoes), "with nothing of them on the page");
+    await kai.page.click(".wb-stand-b");
+    await kai.page.waitForSelector(".wb-why");
+    has(await text(kai.page, ".wb-why"), fleet.threads[0].text, "tapping its standing shows the thread behind it");
+    has(await text(kai.page, ".wb-why"), "One more bond thread and it’d do business with you, and two and it’d be friendly", "and what would change it");
+    yes(await kai.page.$(".ww-own .ww-crew"), "its own small web, its tie to the crew");
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector(".wb-tab .wb-tok");
+    same(await kai.page.$(".wb-tab .wb-tok.is-new"), null, "once its page is opened, the card isn't New");
+    // Mo's page for the Fleet: one line saying what the crew knows, a switch
+    // in each part's header, and a look at what the crew sees.
+    has(await text(mo.page, ".wb-crewline"), "The crew knows 5 of 8", "Mo's page says what the crew knows");
+    same([await mo.page.getAttribute('.wb-sw[data-p="power"]', "aria-checked"), await mo.page.getAttribute('.wb-sw[data-p="res"]', "aria-checked")], ["true", "false"], "its Power's switch on and its resources' off");
+    await mo.page.click('[data-do="ascrew"]');
+    await mo.page.waitForSelector(".wb-preview");
+    same(await mo.page.$$eval(".wb-sealed li", (els) => els.length), 3, "What the crew sees has the same three sealed");
+    yes(!(await text(mo.page, "#app")).includes(cargoes) && !(await mo.page.$(".wb-sw")), "with none of the rest, and no switches");
+    await axe(mo.page, "what the crew sees, on Mo's phone");
+    await mo.page.click('.wb-preview [data-do="ascrew"]');
+    await mo.page.waitForSelector(".wb-sw");
+
     // Kai can't change the board.
     const fleetId = (await factionIn(tuesday.id, "The Tithe Fleet")).id;
     same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "kais-phone-0001", ops: [{ n: 1, o: "show", id: fleetId, p: "agenda", v: true }] })).status, 403, "Kai can't change the board");
@@ -1952,7 +2019,7 @@ try {
     await db.prepare("UPDATE world SET data = ?2, version = version + 1 WHERE campaignId = ?1").bind(tuesday.id, JSON.stringify(doc)).run();
     await mo.page.reload();
     await mo.page.waitForSelector(".wb-book");
-    has(await text(mo.page, ".wb-book"), "The book’s changed The Tithe Fleet since you brought it in", "a note on the Fleet's page");
+    has(await text(mo.page, ".wb-book"), "The book’s changed the Tithe Fleet since you brought it in", "a note on the Fleet's page, the name lowered mid-sentence");
     has(await text(mo.page, ".wb-book"), "Every ship pays", "saying what its Want was");
     has(await text(mo.page, ".wb-book"), "Old Harbour Dues", "and the resource that's gone");
     await mo.page.click('.wb-book [data-take="1"]');
@@ -2003,6 +2070,12 @@ try {
       await axe(kai.page, `a faction on Kai's phone, ${theme}`);
       await shot(kai.page, `world-faction-player-${theme}`);
     }
+    await kai.page.setViewportSize({ width: 320, height: 640 });
+    await axe(kai.page, "a faction on Kai's phone, 320 wide");
+    await kai.page.goto(`${BASE}/characters/?c=vesk-aaaaaa&t=world`);
+    await kai.page.waitForSelector(".wb-tab .wb-tok");
+    await axe(kai.page, "the World tab, 320 wide");
+    await kai.page.setViewportSize({ width: 390, height: 844 });
     for (const p of [mo.page, kai.page]) await p.evaluate(() => localStorage.setItem("zi-theme", "dark"));
   }
   console.log("7. The world: the faction board");
@@ -3553,6 +3626,17 @@ try {
     await mo.page.setViewportSize({ width: 320, height: 640 });
     await axe(mo.page, "the faction web, 320 wide");
     await mo.page.setViewportSize({ width: 390, height: 844 });
+    // The web as a list, for anyone who'd rather read than tap: every
+    // faction's threads under it, the hidden ones marked.
+    await mo.page.click('[data-do="web-list"][data-v="1"]');
+    await mo.page.waitForSelector(".ww-list");
+    const listed = await text(mo.page, ".ww-list");
+    for (const x of tw.factions) for (const t of x.threads) has(listed, t.text, `the list has ${x.name}'s threads`);
+    has(listed, "Isolde kept our name out of the trial", "Isolde's friend's thread toward the crew among them");
+    same(await mo.page.$$eval(".ww-list .ww-f.is-hidden", (els) => els.length), await mo.page.$$eval(".ww-list .ww-f", (els) => els.length), "each one marked hidden");
+    await axe(mo.page, "the faction web as a list");
+    await mo.page.click('[data-do="web-list"][data-v="0"]');
+    await mo.page.waitForSelector(".ww-ring");
     // What the crew sees: nothing, till he shows them.
     await mo.page.click('[data-do="web-crew"][data-v="1"]');
     same(await mo.page.$$eval(".ww-node", (els) => els.length), 0, "what the crew sees: nothing yet");

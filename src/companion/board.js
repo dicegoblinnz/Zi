@@ -408,6 +408,12 @@ export function undoOf(doc, op) {
 // for it. A mini faction's is the same, with its one asset.
 export const stepsOf = (f) => 1 + f.assets.filter((a) => a.power && !a.off).length;
 
+// How far off an agenda is at each die, in the book's words: d2 is years off
+// and d12 any day now, and past d12 it happens. The World screen and the
+// faction turn both say it this way.
+export const AGO = { 2: "years off", 4: "a season or more away", 6: "a month or two away", 8: "a week or two away", 10: "days away", 12: "any day now" };
+export const ago = (die) => AGO[die] ?? "";
+
 // What pays for what. Every asset needs a resource paying for it, and one
 // that isn't paying for anything is an extra resource.
 export function moneyOf(f) {
