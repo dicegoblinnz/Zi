@@ -36,12 +36,12 @@ function middleOfTown(map) {
   const [x, y] = pts.reduce(([a, b], [c, d]) => [a + c / pts.length, b + d / pts.length], [0, 0]);
   return [x / map.size[0], y / map.size[1]];
 }
-// What world-ui.js needs on the phone: each faction's key, kind, seat,
+// What world-ui.js needs on the phone: each faction's key, kind, seal, seat,
 // maker, Power and threads, each place's key, name, where it is, line and
 // Challenge, and the map's pins, and nothing else.
 const forPhone = JSON.stringify({
   kinds: world.kinds,
-  factions: world.factions.map((f) => ({ key: f.key, kind: f.kind, seat: f.seat, of: f.of, steps: f.steps, card: { name: f.card.name, threads: f.card.threads } })),
+  factions: world.factions.map((f) => ({ key: f.key, kind: f.kind, seal: f.seal, seat: f.seat, of: f.of, steps: f.steps, card: { name: f.card.name, threads: f.card.threads } })),
   places: (world.places ?? []).map((p) => ({ key: p.key, name: p.card.name, area: p.area, in: p.in, line: p.card.line, ch: p.card.ch })),
   // Where the map opens: the pin it says, or the middle of the town's
   // districts, not the wilds.

@@ -25,6 +25,10 @@
 //
 // content/worlds/<universe>/<year>/factions.yaml, the board: { factions: [ ... ] }
 //   key, kind, size   its key, one of the kinds, and small, local, city or great
+//   seal         its wax seal, { c, f, d? }: a charge, a field and a mark out of
+//                src/kit/seals.js, none the same as another's on the board
+//                (stage 1 of notes/faction-feel-plan.md), and our own drawing,
+//                never the company's logo
 //   seat         the key of the place it sits in (a place from stage 13)
 //   name, about, want, face, note   its words, as the World screen keeps them,
 //                about being what it is and where it sits
@@ -118,6 +122,7 @@ import { curlyQuotes, readAim } from "../src/companion/aims.js";
 import { PMAX, TAG_KINDS, linker, pageCardOf, pageOf } from "../src/companion/pages.js";
 import { MMAX } from "../src/companion/maps.js";
 import { MARKS, inShape } from "../src/worlds/draw-map.js";
+import { sealIn, sealKey } from "../src/kit/seals.js";
 import { DIALS } from "../src/companion/world-engine.js";
 
 // A year's world, brought into a campaign whole with every was copy, stays
@@ -142,7 +147,7 @@ const GROUND = /^\*([^*]+)\*:\s*\S/;
 const STAKE = /^\*([^*]+)\*,?\s*Challenge ([1-6])(?::\s*(.+?))?(?:\s*\(([^)]+)\))?$/;
 const KEY = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const KINDS = ["bond", "hostile"];
-const FACTION_FIELDS = new Set(["key", "kind", "size", "seat", "name", "about", "want", "face", "faceOf", "note", "res", "people", "assets", "agendas", "pub", "mor", "loy", "threads", "secret", "strange", "mini"]);
+const FACTION_FIELDS = new Set(["key", "kind", "seal", "size", "seat", "name", "about", "want", "face", "faceOf", "note", "res", "people", "assets", "agendas", "pub", "mor", "loy", "threads", "secret", "strange", "mini"]);
 const BOND_LISTS = ["pub", "mor", "loy"];
 const BOND_NAMES = { pub: "Public Sentiment", mor: "Morale", loy: "Loyalty" };
 
@@ -276,11 +281,17 @@ export function compileWorld({ universe, year, world, files }, book) {
   }
   const isFaction = (k) => keys.has(k);
   const factions = [];
+  const sealsSeen = new Map();
   for (const f of keys.values()) {
     const who = f.name ? `${f.name}` : f.key;
     for (const k of Object.keys(f)) if (!FACTION_FIELDS.has(k)) say(`${who} has a line a faction can't hold: ${k}`);
     const mini = f.mini && typeof f.mini === "object" ? f.mini : null;
     if (!kinds[f.kind]) say(`${who}'s kind is ${f.kind ?? "missing"}, and world.yaml's kinds are ${Object.keys(kinds).join(", ")}`);
+    const seal = sealIn(f.seal);
+    if (!f.seal) say(`${who} has no seal (seal: { c, f }, out of src/kit/seals.js)`);
+    else if (!seal || (f.seal.d && !seal.d)) say(`${who}'s seal isn't one the kit has: ${JSON.stringify(f.seal)}`);
+    else if (sealsSeen.has(sealKey(seal))) say(`${who} and ${sealsSeen.get(sealKey(seal))} have the same seal`);
+    else sealsSeen.set(sealKey(seal), who);
     if (!mini && !sizes[String(f.size ?? "")]) say(`${who}'s size is ${f.size ?? "missing"}, and it's small, local, city or great`);
     if (!mini && !KEY.test(String(f.seat ?? ""))) say(`${who} doesn't say where it sits (seat, a place's key)`);
     if (!mini && !KEY.test(String(f.faceOf ?? ""))) say(`${who} doesn't say who its Face is (faceOf, a person's key)`);
@@ -413,7 +424,7 @@ export function compileWorld({ universe, year, world, files }, book) {
       if (x.from != null && !isFaction(x.from)) say(`${who}'s need ${x.text} is from ${x.from}, which isn't a faction on the board`);
     }
 
-    factions.push({ key: f.key, kind: f.kind, size: mini ? "" : f.size, seat: f.seat ?? "", faceOf: f.faceOf ?? "", of: mini?.of ?? "", strange: f.strange === true || others.some((x) => x.strange === true) || f.secret?.strange === true, steps, die: dice[0] ?? 2, card, raw: f });
+    factions.push({ key: f.key, kind: f.kind, seal, size: mini ? "" : f.size, seat: f.seat ?? "", faceOf: f.faceOf ?? "", of: mini?.of ?? "", strange: f.strange === true || others.some((x) => x.strange === true) || f.secret?.strange === true, steps, die: dice[0] ?? 2, card, raw: f });
   }
   const byKey = new Map(factions.map((f) => [f.key, f]));
   for (const f of factions) {
@@ -508,7 +519,7 @@ export function compileWorld({ universe, year, world, files }, book) {
   // way stage 14 brings it in, and the map with its shapes kept beside it.
   const id9 = "abcdefghi";
   const shown = { card: false, power: false, res: false, assets: false, agenda: false, bonds: false, threads: false, secret: false };
-  const inWorld = factions.map((f) => ({ ...JSON.parse(JSON.stringify(f.card).replace(/"x\d+"/g, `"${id9}"`)), shown, book: { from: id, key: f.key, h: "0123456789abcdef", at: Date.now(), was: f.card } }));
+  const inWorld = factions.map((f) => ({ ...JSON.parse(JSON.stringify(f.card).replace(/"x\d+"/g, `"${id9}"`)), shown, seal: f.seal, book: { from: id, key: f.key, h: "0123456789abcdef", at: Date.now(), was: f.card } }));
   const record = { recipe, dials: { tense: 1, strange: 1, rich: 1, ruled: 1 }, seed: "", dealt: null, history: history.map((l) => ({ id: id9, ...l })), shown: [], at: Date.now() };
   // Each line on a page gets an id of its own, the length the phone's are,
   // since a page keeps only one line for each id.
@@ -540,9 +551,10 @@ export function compileWorld({ universe, year, world, files }, book) {
     // The region's words for the four sizes, so a Great faction on a City
     // board reads as the city and the land round it.
     sizeWords: book.regions?.[recipe.region]?.sizes ?? {},
-    factions: factions.map(({ key, kind, size: sz, seat, faceOf, of, strange, steps, die, card, raw: r }) => ({
+    factions: factions.map(({ key, kind, seal, size: sz, seat, faceOf, of, strange, steps, die, card, raw: r }) => ({
       key,
       kind,
+      seal,
       size: sz,
       seat,
       faceOf,

@@ -6,15 +6,21 @@
 // world builder's board screen draws the web it's dealt.
 //
 // webOf(nodes, threads) lays it out. A node's { id, name, dice (its Power as
-// dice, or null when the crew doesn't know it), mini, parent, hidden }, in
-// the board's order, and a thread's { from, to (a node's id, or "crew"),
+// dice, or null when the crew doesn't know it), mini, parent, hidden, seal },
+// in the board's order. A node that has seal (even null) is drawn as its seal
+// (stage 1 of notes/faction-feel-plan.md), a blank one when it's hidden from
+// the crew or hasn't got one, with its Power small beside it, and one without
+// seal as its Power's die. A thread's { from, to (a node's id, or "crew"),
 // kind (bond or hostile), s (whole, strained or snapped), text }. The
 // factions go round the ring so the ones with threads between them sit near
 // each other, each mini faction straight after the faction that made it,
 // and the board's first faction at the top. drawWeb() is the picture with a
 // button on every faction and the crew, and panelOf() is what goes under it:
 // a key, or the threads of the faction (or the crew) that's been tapped.
-import { die as kitDie } from "../kit/kit.js";
+// A hostile line carries a cross at its middle, so it's told apart from a
+// bond by more than its colour (ember and gold are close for some
+// colour-blind players).
+import { die as kitDie, seal as kitSeal } from "../kit/kit.js";
 
 // How far round from the middle the factions sit, in a hundredth of the
 // ring's width. More factions, a wider ring and smaller names, and past
@@ -186,7 +192,20 @@ function pathOf(L, x) {
   const to = x.a === lo ? q : p;
   const s = cut(from, x.a);
   const e = cut(to, x.b);
-  return `M${f1(s.x)} ${f1(s.y)}Q${f1(mx)} ${f1(my)} ${f1(e.x)} ${f1(e.y)}`;
+  // The curve's middle, and which way it runs there, for a hostile line's cross.
+  const mid = { x: (s.x + 2 * mx + e.x) / 4, y: (s.y + 2 * my + e.y) / 4 };
+  const run = Math.hypot(e.x - s.x, e.y - s.y) || 1;
+  return { d: `M${f1(s.x)} ${f1(s.y)}Q${f1(mx)} ${f1(my)} ${f1(e.x)} ${f1(e.y)}`, mid, dir: { x: (e.x - s.x) / run, y: (e.y - s.y) / run } };
+}
+// A cross on a line, its arms at 45 degrees to it, k smaller on a wide ring.
+function crossAt(mid, dir, k = 1) {
+  const r = 1.5 * k;
+  const arm = (a) => {
+    const c = Math.cos(a), sn = Math.sin(a);
+    const ux = dir.x * c - dir.y * sn, uy = dir.x * sn + dir.y * c;
+    return `M${f1(mid.x - ux * r)} ${f1(mid.y - uy * r)}L${f1(mid.x + ux * r)} ${f1(mid.y + uy * r)}`;
+  };
+  return arm(Math.PI / 4) + arm(-Math.PI / 4);
 }
 
 // The picture, and a button on every faction and the crew. opts:
@@ -202,16 +221,23 @@ export function drawWeb(L, opts) {
   const touches = (x, id) => x.a === id || x.b === id;
   const near = new Set();
   if (sel) for (const x of lines) if (touches(x, sel)) near.add(x.a === sel ? x.b : x.a);
+  const k = L.n > MANY ? MANY / L.n : 1;
   const svg = lines.map((x) => {
-    const cls = [`ww-l is-${x.kind}`, x.strained ? "is-strained" : "", x.snapped ? "is-snapped" : "", sel ? (touches(x, sel) ? "is-hi" : "is-dim") : ""].filter(Boolean).join(" ");
+    const lit = sel ? (touches(x, sel) ? "is-hi" : "is-dim") : "";
+    const cls = [`ww-l is-${x.kind}`, x.strained ? "is-strained" : "", x.snapped ? "is-snapped" : "", lit].filter(Boolean).join(" ");
     const arrow = x.both ? "" : ` marker-end="url(#ww-${uid}-${x.kind === "hostile" ? "h" : "b"})"`;
-    return `<path class="${cls}" d="${pathOf(L, x)}"${arrow}/>`;
+    const p = pathOf(L, x);
+    const cross = x.kind === "hostile" ? `<path class="ww-x${x.snapped ? " is-snapped" : ""}${lit ? ` ${lit}` : ""}" d="${crossAt(p.mid, p.dir, k)}"/>` : "";
+    return `<path class="${cls}" d="${p.d}"${arrow}/>${cross}`;
   }).join("");
   const marker = (k) => `<marker id="ww-${uid}-${k}" viewBox="0 0 6 6" refX="5" refY="3" markerWidth="3.6" markerHeight="3.6" orient="auto"><path class="ww-arrow is-${k === "h" ? "hostile" : "bond"}" d="M0 0L6 3L0 6Z"/></marker>`;
   const nodes = L.nodes.map((nd) => {
     const cls = ["ww-node", nd.mini ? "is-mini" : "", nd.hidden ? "is-hidden" : "", sel === nd.id ? "is-sel" : sel && sel !== nd.id && !near.has(nd.id) ? "is-dim" : ""].filter(Boolean).join(" ");
+    const sealed = Object.hasOwn(nd, "seal");
     const die = nd.dice?.length ? kitDie(nd.dice[0], { own: "them", hide: true }) : '<span class="ww-unknown" aria-hidden="true">?</span>';
-    return `<button type="button" class="${cls}" style="left:${f1(nd.x)}%;top:${f1(nd.y)}%" ${opts.attrs(nd.id)} aria-pressed="${sel === nd.id}" aria-label="${esc(opts.label(nd))}"><span class="ww-die" aria-hidden="true">${die}</span><span class="ww-name" aria-hidden="true">${esc(String(nd.name ?? "").replace(/^The /, ""))}</span></button>`;
+    // Its seal, with its Power small on the seal's edge when it's known.
+    const mark = sealed ? `${kitSeal(nd.hidden ? null : nd.seal, { size: "sm", blank: nd.hidden || !nd.seal })}${nd.dice?.length ? `<span class="ww-pow">${kitDie(nd.dice[0], { own: "them", hide: true })}</span>` : ""}` : die;
+    return `<button type="button" class="${cls}${sealed ? " is-sealed" : ""}" style="left:${f1(nd.x)}%;top:${f1(nd.y)}%" ${opts.attrs(nd.id)} aria-pressed="${sel === nd.id}" aria-label="${esc(opts.label(nd))}"><span class="ww-die" aria-hidden="true">${mark}</span><span class="ww-name" aria-hidden="true">${esc(String(nd.name ?? "").replace(/^The /, ""))}</span></button>`;
   }).join("");
   const c = opts.crew ?? {};
   const crewCls = ["ww-crew", sel === "crew" ? "is-sel" : sel && !near.has("crew") ? "is-dim" : ""].filter(Boolean).join(" ");
@@ -226,6 +252,6 @@ export function drawWeb(L, opts) {
 
 // What a line looks like, for the key.
 export function keyOf() {
-  const swatch = (cls) => `<svg class="ww-swatch" viewBox="0 0 28 8" aria-hidden="true" focusable="false"><path class="ww-l ${cls}" d="M1 4H27"/></svg>`;
+  const swatch = (cls) => `<svg class="ww-swatch" viewBox="0 0 28 8" aria-hidden="true" focusable="false"><path class="ww-l ${cls}" d="M1 4H27"/>${/is-hostile/.test(cls) ? `<path class="ww-x${/is-snapped/.test(cls) ? " is-snapped" : ""}" d="${crossAt({ x: 14, y: 4 }, { x: 1, y: 0 }, 1.9)}"/>` : ""}</svg>`;
   return `<ul class="ww-key"><li>${swatch("is-bond")}Bond</li><li>${swatch("is-hostile")}Hostile</li><li>${swatch("is-bond is-strained")}Strained</li><li>${swatch("is-hostile is-snapped")}Snapped</li></ul>`;
 }

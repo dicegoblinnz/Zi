@@ -102,14 +102,14 @@
 //    under 1 founding in 20, the founding's threads are all in the web, every
 //    faction's got a Face and a Secret, and a founder's Loyalty is on its card.
 // 10. A whole world (stages 12, 13 and 15 of notes/builder-plan.md): the
-//    made-up one in tests/worlds/ passes, and 69 ways of breaking it are each a problem that
+//    made-up one in tests/worlds/ passes, and 72 ways of breaking it are each a problem that
 //    says so and never come out as a world: a card that isn't whole, too long
 //    or holds what it can't, Power or resources past its size, people who
 //    don't add Power or a thing that does, Appendix B's people as a thing, a
 //    need with a resource to spare beside it or from a faction with none, no
 //    rival or a tie with no thread back, no need blocked, no Secret naming
 //    another faction, a Secret's tag or ways in, two factions with one key,
-//    name or asset, a kind or size there isn't, an agenda at nothing or at a
+//    name, asset or seal, a seal the kit hasn't got or none, a kind or size there isn't, an agenda at nothing or at a
 //    faction that isn't there, a mini faction's outcomes and Loyalty, a thread
 //    toward nobody, nothing strange, and history in no age, out of order, too
 //    long, too much of it or an age with nothing in it, no line saying whose
@@ -1477,6 +1477,9 @@ const realWorlds = [];
     // Each break on its own copy, and the problem it has to raise.
     const breaks = [
       ["a faction with no Want", (w) => delete w.files.factions.factions[0].want, /has no want/],
+      ["a faction with no seal", (w) => delete w.files.factions.factions[2].seal, /The Town Watch has no seal/],
+      ["a seal the kit hasn't got", (w) => (w.files.factions.factions[2].seal = { c: "unicorn", f: "plain" }), /isn't one the kit has/],
+      ["two factions with the same seal", (w) => (w.files.factions.factions[3].seal = { ...w.files.factions.factions[1].seal }), /have the same seal/],
       ["Power past its size", (w) => w.files.factions.factions[1].people.push({ text: "More Boats", does: "+1 Power. Another crew." }, { text: "Even More Boats", does: "+1 Power. And another." }), /is local, so its Power's d4 to d6/],
       ["a faction with no rival", (w) => (w.files.factions.factions[4].threads = w.files.factions.factions[4].threads.filter((t) => t.tie !== "rival")), /The Market Gang has no rival/],
       ["a rival with no thread back", (w) => (w.files.factions.factions[0].threads = w.files.factions.factions[0].threads.filter((t) => t.to !== "market-gang")), /rival The Harbour Bank has no hostile thread back/],
@@ -1760,6 +1763,7 @@ const realWorlds = [];
     const size = JSON.stringify(doc).length;
     yes(size < WORLD_HOLDS * 0.7, `${world.id}: brought in it's ${size} characters, too near the ${WORLD_HOLDS} a world holds`);
     same(JSON.stringify(readable(copy(doc))), JSON.stringify(doc), `${world.id}: read back off the Worker it isn't the same`);
+    yes(world.factions.every((f) => f.seal) && new Set(world.factions.map((f) => sealKey(f.seal))).size === world.factions.length, `${world.id}: every faction has a seal of its own`);
     // Every card with its book, and its threads, maker and seat by new ids.
     const byKey = new Map(doc.factions.map((f) => [f.book?.key, f]));
     const pageByKey = new Map(doc.pages.map((p) => [p.book?.key, p]));
@@ -1770,6 +1774,7 @@ const realWorlds = [];
         continue;
       }
       same([got.book.from, got.book.h, Object.values(got.shown).some(Boolean)], [world.id, hashOf(f.card), false], `${world.id}: ${f.card.name}'s book and what's shown`);
+      same(got.seal, f.seal, `${world.id}: ${f.card.name} brought in with its seal`);
       same(got.threads.map((t) => [t.text, doc.factions.find((x) => x.id === t.to)?.book.key]), f.card.threads.map((t) => [t.text, t.to]), `${world.id}: ${f.card.name}'s threads`);
       if (f.of) same(doc.factions.find((x) => x.id === got.parent)?.book.key, f.of, `${world.id}: ${f.card.name}'s maker`);
       if (f.seat) same(doc.pages.find((p) => p.id === got.sits)?.book.key, f.seat, `${world.id}: where ${f.card.name} sits`);

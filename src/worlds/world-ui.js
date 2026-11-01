@@ -37,6 +37,21 @@ if (data && root) {
   }
   let factionsView = "board";
   let showing = "";
+  // The world's header folds to its name once a tab's picked, or when the
+  // page opens on one, so what's picked starts on a phone's first screen.
+  // More about it unfolds it again.
+  const head = $(".wn-head");
+  const more = document.createElement("button");
+  more.type = "button";
+  more.className = "wn-unfold";
+  more.textContent = "More about it";
+  more.setAttribute("aria-expanded", "false");
+  head?.append(more);
+  const fold = (on) => {
+    head?.classList.toggle("is-folded", on);
+    more.setAttribute("aria-expanded", String(!on));
+  };
+  more.addEventListener("click", () => fold(false));
   // The tab the address says, if the page has it, or the board.
   const tabIn = () => {
     const t = new URL(location.href).searchParams.get("tab");
@@ -65,8 +80,14 @@ if (data && root) {
     // view whole.
     if (scroll || name === "map") panels.find((p) => p.dataset.panel === name)?.scrollIntoView({ block: "start" });
   };
-  for (const t of tabs) t.addEventListener("click", () => show(t.dataset.tab === "board" ? factionsView : t.dataset.tab));
-  for (const b of $$("[data-view]")) b.addEventListener("click", () => show(b.dataset.view, { scroll: false }));
+  for (const t of tabs) t.addEventListener("click", () => {
+    fold(true);
+    show(t.dataset.tab === "board" ? factionsView : t.dataset.tab);
+  });
+  for (const b of $$("[data-view]")) b.addEventListener("click", () => {
+    fold(true);
+    show(b.dataset.view, { scroll: false });
+  });
   // The arrow keys, Home and End move along the bar, the way a set of tabs does.
   $(".wn-bar")?.addEventListener("keydown", (e) => {
     const i = tabs.indexOf(document.activeElement);
@@ -377,6 +398,9 @@ if (data && root) {
   // address says, the way the page drew it before this ran.
   const first = location.hash.slice(1);
   if (/^[fp]-/.test(first) && document.getElementById(first)) open(first, { focus: false });
-  else show(tabIn(), { scroll: false });
+  else {
+    if (tabIn() !== "board") fold(true);
+    show(tabIn(), { scroll: false });
+  }
 }
 
