@@ -1580,7 +1580,7 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
 .wb-fhead { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 14px; }
 .wb-head-seal .zd-seal.lg { --s: 88px; }
 .wb-head-in { min-width: 0; }
-.wb-fhead h1 { margin: 0.1rem 0 0.45rem; }
+.wb-fhead h1 { margin: 0.1rem 0 0.45rem; font-size: clamp(1.7rem, 1.25rem + 2.2vw, 2.6rem); }
 .wb-stand-b { gap: 8px; min-height: 44px; padding: 0 10px; font: inherit; font-size: 0.88rem; font-weight: 700; background: transparent; cursor: pointer; }
 .wb-stand-b:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
 .wb-stand-q { display: inline-grid; place-items: center; width: 18px; height: 18px; font-size: 0.78rem; line-height: 1; border: 1.5px solid currentColor; border-radius: 50%; }
@@ -1589,7 +1589,7 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
 .wb-why p { margin: 0 0 0.5rem; }
 .wb-why p:last-child { margin-bottom: 0; }
 .wb-why-l { display: grid; gap: 6px; margin: 0 0 0.5rem; padding: 0; list-style: none; }
-.cc .wb-why-h { margin: 0.7rem 0 0.2rem; font-family: var(--body); font-size: 0.76rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.wb-why .wb-why-h { margin: 0.7rem 0 0.2rem; font-family: var(--body); font-size: 0.76rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
 .wb-about { margin: 0 0 0.7rem; }
 /* How much the crew knows: pips on a player's phone, and on hers one line
    with the faction's own switch and her look at what the crew sees. */

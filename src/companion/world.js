@@ -1478,7 +1478,7 @@ export function makeWorld(d) {
     const change = s === "friendly" ? `${cap(num(n))} more hostile ${n === 1 ? "thread" : "threads"}, or ${n === 1 ? "one of its bond threads" : `${num(n)} of its bond threads`} strained, and it’d only do business with ${you}. A betrayal snaps every bond thread it’s got toward ${you}.`
       : s === "hostile" ? `${cap(num(n))} more bond ${n === 1 ? "thread" : "threads"} and it’d do business with ${you}, and ${num(n + 1)} and it’d be friendly.`
       : `One more bond thread and it’s friendly. One more hostile thread and it’s hostile.`;
-    return `<div class="wb-why" id="wb-why-${esc(f.id)}"><p>${lead}</p>${list}<h3 class="wb-why-h">What would change it</h3><p>${change}</p>
+    return `<div class="wb-why" id="wb-why-${esc(f.id)}"><p>${lead}</p>${list}<p class="wb-why-h">What would change it</p><p>${change}</p>
       <p class="cc-small">A real service writes a bond thread, like a job done well, a gift or one of its enemies brought down. Costing it something it cares about writes a hostile one. ${ruleLink("s-standing", "How a faction sees the crew")}</p></div>`;
   }
 
@@ -1569,7 +1569,7 @@ export function makeWorld(d) {
         ${gm ? `<button type="button" class="pt-reword" data-act="w" data-do="edit" data-k="${esc(wordsKey)}">Change its name, Want and Face</button>` : ""}`;
     const powerShown = gm || f.shown.power;
     const kicker = `${f.mini ? `Mini faction${maker ? ` of ${esc(midName(maker))}` : ""}` : "Faction"}${nb("card") ? ` ${NEW}` : ""}`;
-    const stand = standing ? `<button type="button" class="wb-stand wb-stand-b is-${standing}" data-act="w" data-do="why" data-f="${esc(f.id)}" aria-expanded="${ui.why === f.id}" aria-controls="wb-why-${esc(f.id)}">${STANDING[standing]}<span class="wb-stand-q" aria-hidden="true">${ui.why === f.id ? "−" : "?"}</span></button>`
+    const stand = standing ? `<button type="button" class="wb-stand wb-stand-b is-${standing}" data-act="w" data-do="why" data-f="${esc(f.id)}" aria-expanded="${ui.why === f.id}"${ui.why === f.id ? ` aria-controls="wb-why-${esc(f.id)}"` : ""}>${STANDING[standing]}<span class="wb-stand-q" aria-hidden="true">${ui.why === f.id ? "−" : "?"}</span></button>`
       : `<p class="wb-stand is-unknown">You don’t know how it sees you</p>`;
     const head = `<header class="cc-camp-head wb-head wb-fhead"><span class="wb-head-seal">${kitSeal(f.seal, { size: "lg" })}</span><div class="wb-head-in"><p class="kicker is-gm">${kicker}</p><h1>${esc(f.name)}</h1>${stand}</div></header>
       ${ui.why === f.id && standing ? whyPanel(f, gm) : ""}${f.about ? `<p class="cc-small wb-about">${rich(f.about, f.id)}</p>` : ""}`;
@@ -1713,11 +1713,12 @@ export function makeWorld(d) {
       return `${topbar("/characters/", "Characters")}<header class="cc-camp-head"><p class="kicker">The world</p><h1>${esc(nameOf(v.id))}</h1></header><div class="cc-note is-warn"><p>Sign in to see your campaigns. <a href="/account/">Sign in</a></p></div>`;
     }
     if (v.make) return K.view(v.id, v.make === "add" ? "add" : "world");
+    // What's New on a faction's page lasts while it's open.
+    if (!v.f) ui.newOn = null;
     if (v.f) return factionView(v.id, v.f);
     if (v.p) return P.pageView(v.id, v.p);
     if (v.m) return M.mapView(v.id, v.m, v.pin);
     const gm = isGm(v.id);
-    ui.newOn = null;
     return `${topbar(`/characters/?camp=${encodeURIComponent(v.id)}`, nameOf(v.id))}
       <header class="cc-camp-head wb-head"><p class="kicker${gm ? " is-gm" : ""}">The world</p><h1>${esc(nameOf(v.id))}</h1>${gm ? "" : `<p class="cc-small">What ${esc(gmName(v.id))}’s shown the crew so far.</p>`}</header>
       ${d.foundSection?.(v.id) ?? ""}${worldBody(v.id, gm)}
