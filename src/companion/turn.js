@@ -25,7 +25,7 @@
 import { BONDS, OUTCOMES, ago, find, minisOf, moneyOf, standingOf, stepsOf } from "./board.js";
 import { diceLabel, rollDie, stepsToDice } from "./dice.js";
 import { lower } from "./table-rules.js";
-import { MAX, STEPS, allDice, allFaces, best, crewDice, crewResult, crewSteps, defOf, diceOf, landed, powerAt, rolled, shapeOf, spentOf, stateOfAct } from "./turn-rules.js";
+import { MAX, STEPS, ageOf, allDice, allFaces, best, crewDice, crewResult, crewSteps, defOf, diceOf, landed, powerAt, rolled, shapeOf, spentOf, stateOfAct } from "./turn-rules.js";
 import { die as kitDie, glyph as kitGlyph, seal as kitSeal } from "../kit/kit.js";
 import { feel } from "./feel.js";
 
@@ -1414,11 +1414,13 @@ export function makeTurn(d) {
         return d.render();
       }
       ui.sure = "";
-      // What changed goes into How it came to be, as the downtime's own age.
+      // What changed goes into How it came to be, as the downtime's own age,
+      // unless nothing did, when it's as if it never started.
       const t = turnOf(id);
-      if (t) d.world().edit(id, [{ o: "wb-age", dt: t.n, len: t.len ?? "", lines: t.said.map((x, i) => ({ id: `d${t.n}-${i}-${newId().slice(0, 8)}`, text: x.text })) }], "", { undoable: false, quiet: true });
+      const age = t ? ageOf(t, (i) => `d${t.n}-${i}-${newId().slice(0, 8)}`) : null;
+      if (age) d.world().edit(id, [age], "", { undoable: false, quiet: true });
       push(id, { o: "ft-end" });
-      d.toast("That downtime’s done. What changed is in How it came to be now, as its own age.", false);
+      d.toast(age || !t ? "That downtime’s done. What changed is in How it came to be now, as its own age." : "That downtime’s done. Nothing changed in it, so it’s not in How it came to be.", false);
     },
   };
 

@@ -59,7 +59,7 @@
 // the world builder's record, as doc.build (world-record.js), with changes
 // starting "wb-".
 
-import { CHARGES as SEAL_CHARGES, FIELDS as SEAL_FIELDS, MARKS as SEAL_MARKS, cadetSeal } from "../kit/seals.js";
+import { CHARGES as SEAL_CHARGES, FIELDS as SEAL_FIELDS, MARKS as SEAL_MARKS, cadetSeal, dealSeal, sealKey } from "../kit/seals.js";
 import { applyMap, isMapOp, mapsForPlayer, mapsOf, undoMap } from "./maps.js";
 import { applyPage, isPageOp, pagesForPlayer, pagesOf, undoPage } from "./pages.js";
 import { applyBuild, buildForPlayer, buildOf, isBuildOp, undoBuild } from "./world-record.js";
@@ -137,6 +137,34 @@ export function sealOf(raw) {
   const c = String(raw.c ?? ""), f = String(raw.f ?? ""), d = String(raw.d ?? "");
   if (!Object.hasOwn(SEAL_CHARGES, c) || !Object.hasOwn(SEAL_FIELDS, f)) return null;
   return { c, f, d: d && Object.hasOwn(SEAL_MARKS, d) ? d : "" };
+}
+
+// Seals for the factions on a board that haven't one (a board from before
+// seals, 1 Nov), so a faction the crew's met never looks like one it hasn't:
+// the book's when nobody on the board has it, a mini faction its maker's with
+// a mark, or else one dealt. book(f) is the book's seal for f, null for none,
+// or undefined to leave f till later (its whole world's file isn't on the
+// phone yet), and rand(f) the randomness that deals f's, the same on every
+// phone of hers. Makers go first, so a mini faction can wear its maker's.
+// The changes that give them, { o: "seal" } each.
+export function sealsFor(doc, { book = () => null, rand }) {
+  const got = new Map(doc.factions.filter((f) => f.seal).map((f) => [f.id, f.seal]));
+  const taken = [...got.values()];
+  const free = (s) => Boolean(s) && !taken.some((t) => sealKey(t) === sealKey(s));
+  const ops = [];
+  for (const f of [...doc.factions.filter((x) => !x.mini), ...doc.factions.filter((x) => x.mini)]) {
+    if (got.has(f.id)) continue;
+    const b = book(f);
+    if (b === undefined) continue;
+    let s = sealOf(b);
+    if (!free(s)) s = f.mini && got.has(f.parent) ? cadetSeal(got.get(f.parent), taken) : null;
+    s ??= dealSeal(rand(f), { taken });
+    if (!s) continue;
+    got.set(f.id, s);
+    taken.push(s);
+    ops.push({ o: "seal", id: f.id, v: s });
+  }
+  return ops;
 }
 
 function bookOf(b) {

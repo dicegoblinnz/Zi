@@ -1630,7 +1630,10 @@ export function makeWorldMake(w) {
       }
       dealt.added = added.slice(-12);
       dealt.ties = [...(Array.isArray(dealt.ties) ? dealt.ties : []), ...mine.flatMap((i) => C.factions[i].threads.filter((t) => t.to === "crew" && t.who && !cutOf(t)).map((t) => ({ k: t.who, side: t.side, fid: fid[i] })))].slice(-60);
-      b = was ? { ...was, dealt, at: Date.now() } : { recipe: W.recipe, dials: W.dials, seed: W.seed, dealt, history: [], shown: false, at: Date.now() };
+      // A record a downtime started (wb-age) has no recipe or seed yet, so it
+      // takes the ones this faction was dealt at, for the next to deal at too.
+      const fresh = was && !was.seed && !was.recipe?.region ? { recipe: W.recipe, dials: W.dials, seed: W.seed } : {};
+      b = was ? { ...was, ...fresh, dealt, at: Date.now() } : { recipe: W.recipe, dials: W.dials, seed: W.seed, dealt, history: [], shown: false, at: Date.now() };
     } else {
       // Built by answering, How it came to be's the deck's lines, all hidden,
       // the ones that made a Secret hers for good. The record keeps which way

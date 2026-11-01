@@ -34,7 +34,8 @@
 //             its board as the Worker last sent it and any changes still to go
 //             up. Each campaign's kept apart, and it all goes when the
 //             account's characters leave the phone (sync.js).
-import { BONDS, MAX, OUTCOMES, PARTS, ago, apply, blank, find, forPlayer, minisOf, moneyOf, readable, standingOf, stepsOf, undoOf } from "./board.js";
+import { BONDS, MAX, OUTCOMES, PARTS, ago, apply, blank, find, forPlayer, minisOf, moneyOf, readable, sealsFor, standingOf, stepsOf, undoOf } from "./board.js";
+import { rngOf } from "./world-engine.js";
 import { diceLabel, rollDie, stepsToDice } from "./dice.js";
 import { typo } from "./marks.js";
 import { die as kitDie, glyph as kitGlyph, mini as kitMini, seal as kitSeal } from "../kit/kit.js";
@@ -584,6 +585,20 @@ export function makeWorld(d) {
       if (news && !news.real.length) ops.push(...news.quietOps, news.book);
     }
     ops.push(...P.quiet(doc));
+    // A faction from before seals gets one (sealsFor() in board.js): its
+    // book's, or its whole world's once the file's here, or one dealt from the
+    // campaign and its id, so two of her phones deal the same.
+    ops.push(...sealsFor(doc, {
+      book: (f) => {
+        if (!f.book) return null;
+        if (!wholeIn(f.book.from)) return bookCard(f, doc)?.seal ?? null;
+        // A whole world's file keeps each faction's seal beside its card.
+        const file = files.get(f.book.from);
+        if (!file) return void wholeFile(f.book.from);
+        return file.factions.find((x) => x.key === f.book.key)?.seal ?? null;
+      },
+      rand: (f) => rngOf(id, f.id, "seal"),
+    }));
     if (ops.length) edit(id, ops, "", { undoable: false, quiet: true });
   }
 

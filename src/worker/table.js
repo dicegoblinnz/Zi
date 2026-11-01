@@ -404,9 +404,11 @@ export class Table extends DurableObject {
       } catch {}
     }
     this.load();
-    if (hid && this.reveal) {
-      this.reveal = null;
-      this.ctx.storage.sql.exec("DELETE FROM kv WHERE k = 'reveal'");
+    // What's up comes down, and its number stays, so a screen that had it up
+    // still knows the next one's new.
+    if (hid && this.reveal?.items?.length) {
+      this.reveal = { n: Number(this.reveal.n) || 0, at: 0, items: [] };
+      this.ctx.storage.sql.exec("INSERT OR REPLACE INTO kv (k, v) VALUES ('reveal', ?)", JSON.stringify(this.reveal));
       this.toScreens();
     }
     if (!Array.isArray(shown) || !shown.length) return;

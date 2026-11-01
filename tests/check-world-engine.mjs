@@ -145,7 +145,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { apply, blank, forPlayer, readable, standingOf, undoOf } from "../src/companion/board.js";
+import { apply, blank, forPlayer, readable, sealsFor, standingOf, undoOf } from "../src/companion/board.js";
 import { BAGS, CHECKS, REGIONS, STEPS, canDeal, cardsOf, choose, crewFits, dealRest, dealWorld, lock, newSeed, options, pickAt, pickKey, poolOf, preview, recordOf, redeal, redealFaction, resume, rngOf, setCrew, SIZES, start, startAdd, tensionAt } from "../src/companion/world-engine.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { MAX, PARTS, answer, current, deckOf, fillPrompt, finish, formedOf, historyOf, notThis, playRest, prompted, replay, startDeck, undo } from "../src/companion/world-deck.js";
@@ -166,7 +166,7 @@ import { wholeOps, cardNow, hashOf } from "../src/companion/world-whole.js";
 import { makeSealPick } from "../src/companion/seal-pick.js";
 import { fogFull, fogText, fogBits, gridOf, mapsForPlayer, sittersOf } from "../src/companion/maps.js";
 import { esc } from "../src/kit/kit.js";
-import { CHARGES, FIELDS, chargeWeights, sealKey } from "../src/kit/seals.js";
+import { CHARGES, FIELDS, MARKS, chargeWeights, sealKey } from "../src/kit/seals.js";
 
 const problems = [];
 const note = (p) => {
@@ -745,7 +745,26 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   apply(doc, { o: "mini", id: "f-bbbbbbbb", res: "r-aaaaaaaa", asset: "", f: { id: "f-cccccccc", name: "The Egg Boats", outs: ["Acquire", "Establish"] } });
   apply(doc, { o: "mini", id: "f-bbbbbbbb", res: "", asset: "", f: { id: "f-dddddddd", name: "The Cliff Boys", outs: ["Destroy", "Obstruct"] } });
   same(doc.factions.filter((x) => x.mini).map((x) => x.seal), [{ c: "ship", f: "fess", d: "bar" }, { c: "ship", f: "fess", d: "crescent" }], "a mini faction made in play wears its maker's seal with a mark of its own");
-  console.log("4b. seals on the board: a book card's, its own, taken off, a mini faction's, and a player's only with the card");
+  // A board from before seals: every faction gets one on her phone, the
+  // book's, a mini faction its maker's with a mark, or one dealt the same on
+  // every phone of hers, and one whose whole world's file isn't here waits.
+  const old = blank();
+  apply(old, { o: "new", f: { id: "f-old-mini", name: "The Egg Boats", mini: true, parent: "f-old-gull", seal: null } });
+  apply(old, { o: "new", f: { id: "f-old-book", name: card.name, book, seal: null } });
+  apply(old, { o: "new", f: { id: "f-old-gull", name: "The Gull Kings", seal: null } });
+  apply(old, { o: "new", f: { id: "f-old-wait", name: "Arasaka", book: { ...book, from: "night-city-2077", key: "arasaka" }, seal: null } });
+  old.factions.find((x) => x.id === "f-old-mini").parent = "f-old-gull";
+  same(old.factions.map((x) => x.seal), [null, null, null, null], "a board from before seals has none");
+  const fill = () => sealsFor(old, { book: (f) => (f.book?.from === "night-city-2077" ? undefined : f.book ? card.seal : null), rand: (f) => rngOf("camp-1", f.id, "seal") });
+  const ops = fill();
+  same(JSON.stringify(fill()), JSON.stringify(ops), "and dealing them again deals the same");
+  for (const op of ops) apply(old, op);
+  const sealOn = (id) => old.factions.find((x) => x.id === id).seal;
+  same(sealOn("f-old-book"), card.seal, "a book's card gets the book's seal");
+  yes(sealOn("f-old-gull") && sealKey(sealOn("f-old-gull")) !== sealKey(card.seal), "one of her own gets one dealt, nobody else's");
+  same(sealOn("f-old-mini"), { ...sealOn("f-old-gull"), d: Object.keys(MARKS)[0] }, "a mini faction gets its maker's with a mark");
+  same([sealOn("f-old-wait"), sealsFor(old, { book: () => undefined, rand: () => Math.random }).length], [null, 0], "and one whose world's file isn't here waits for it");
+  console.log("4b. seals on the board: a book card's, its own, taken off, a mini faction's, a player's only with the card, and a board from before seals given them");
 }
 
 // 4c. The GM's seal fold (seal-pick.js), with world.js's edit() and fold()

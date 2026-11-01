@@ -2179,6 +2179,18 @@ try {
     await shot(kai.page, "reveal-sheet");
     await kai.page.click(`${sheet} [data-zr="ok"]`);
     await until(async () => !(await kai.page.$(".zr:not([hidden])")), "Got it again, and it's gone");
+    // Hidden again it comes off the table screen, and shown again it's back
+    // up, however many times (a reveal's number goes on past a hide).
+    for (let i = 0; i < 2; i++) {
+      same((await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "turn-setup-03", ops: [{ o: "show", id: lamp.id, p: "threads", v: false, n: 2 * i + 1 }] })).status, 200, `the Lamp's threads hidden again (${i + 1})`);
+      await until(async () => !(await tv.page.$(".ts-rv:not([hidden])")), `and off the table screen (${i + 1})`, 8000);
+      same((await got(mo.page, "POST", `/api/campaigns/${tuesday.id}/world`, { dev: "turn-setup-03", ops: [{ o: "show", id: lamp.id, p: "threads", v: true, n: 2 * i + 2 }] })).status, 200, `and shown again (${i + 1})`);
+      await until(async () => (await tv.page.$(".ts-rv:not([hidden])")) && (await text(tv.page, ".ts-rv")).includes("threads"), `back up on the table screen (${i + 1})`, 8000);
+    }
+    // Kai's phone has the threads again as a sheet, unless it slept through
+    // the hiding, and Got it puts it away.
+    await kai.page.waitForSelector(sheet, { timeout: 6000 }).catch(() => {});
+    await gotIt(kai.page);
 
     // Mo starts the downtime from the World screen, a season long, and it's
     // on Kai's phone in seconds.
@@ -3648,7 +3660,9 @@ try {
     await mo.page.click('#cc-toast [data-act="wkundo"]');
     await mo.page.waitForSelector(".wk-ties");
     same((await making(mo.page, tuesday.id))?.W?.seed, going.W.seed, "Undo on Done's note brings the build back as it was");
-    await until(async () => { const w = await worldOf(tuesday.id); return w?.factions.length === was2.factions.length && !w.build && w.pages.length === was2.pages.length; }, "and takes it all back off the board");
+    // The record's back as it was too: the two downtimes' ages from part 8,
+    // and nothing of the faction.
+    await until(async () => { const w = await worldOf(tuesday.id); return w?.factions.length === was2.factions.length && JSON.stringify(w.build ?? null) === JSON.stringify(was2.build ?? null) && w.pages.length === was2.pages.length; }, "and takes it all back off the board");
     await mo.page.click('.bd-foot [data-do="mk-done"]');
     await until(async () => (await worldOf(tuesday.id))?.factions.length === was2.factions.length + 1, "the new faction on Tuesday Lair's board");
     const w2 = await worldOf(tuesday.id);
@@ -3663,7 +3677,7 @@ try {
     yes(nfCrew.length === 1 && /Vesk|Bram/.test(nfCrew[0].text), `and one thread toward the crew, named for one of Tuesday Lair's crew (${nfCrew[0]?.text})`);
     same(w2.build.dealt.added[0].crew?.length, 1, "which the record keeps, so the next faction knows who's tied to it");
     const kw2 = (await got(kai.page, "GET", `/api/campaigns/${tuesday.id}/world`)).json;
-    yes(kw2?.world?.build === null && !kw2.world.factions.some((f) => f.id === nf.id) && !JSON.stringify(kw2).includes(w2.build.seed), "Kai gets none of it, not even the record");
+    yes(kw2?.world && !kw2.world.factions.some((f) => f.id === nf.id) && !JSON.stringify(kw2).includes(w2.build.seed) && !JSON.stringify(kw2.world.build ?? {}).includes("added"), "Kai gets none of it: not the faction, the seed or anything dealt");
     yes(Object.values(nf.shown).every((v) => !v), "and it's hidden from the crew");
 
     // Adding a faction's screens, at 390 in both themes.

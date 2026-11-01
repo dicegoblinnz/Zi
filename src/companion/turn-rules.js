@@ -625,12 +625,25 @@ export function applyTurn(doc, op, who, roster, now) {
     case "ft-end": {
       if (!gm) return gmOnly();
       if (!t) return yes();
-      if (t.said.length || t.acts.some((a) => a.done != null) || t.crew?.done != null) doc.last = { n: t.n, at: t.at, over: now, said: t.said };
+      if (counts(t)) doc.last = { n: t.n, at: t.at, over: now, said: t.said };
       doc.turn = null;
       return yes();
     }
   }
   return no("That didn’t make sense.");
+}
+
+// Whether a downtime counts once it ends: something changed in it, or
+// something was done. One that doesn't is as if it never started, so the next
+// one has its number and it's no age in How it came to be.
+export const counts = (t) => Boolean(t && (t.said.length || t.acts.some((a) => a.done != null) || t.crew?.done != null));
+
+// The change her phone sends the world when she ends a downtime that counts:
+// its age in How it came to be (wb-age in world-record.js), with its length
+// and what changed, each line's id from idOf(i). null for one that doesn't.
+export function ageOf(t, idOf) {
+  if (!counts(t)) return null;
+  return { o: "wb-age", dt: t.n, len: t.len ?? "", lines: t.said.map((x, i) => ({ id: idOf(i), text: x.text })) };
 }
 
 export const isTurnOp = (op) => typeof op?.o === "string" && op.o.startsWith("ft-");

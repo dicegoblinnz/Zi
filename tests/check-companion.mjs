@@ -166,6 +166,7 @@ import { CARD_WORDS, CREW, DECK_SIZE, newestChange, reachOf, readCards, staleCar
 import * as T from "../src/companion/table-rules.js";
 import * as B from "../src/companion/board.js";
 import * as RV from "../src/companion/reveal-rules.js";
+import * as TR from "../src/companion/turn-rules.js";
 import { dialsOf, foundNews, shapeOf, timeUp } from "../src/companion/found-rules.js";
 import { parse as parseYaml } from "yaml";
 
@@ -474,6 +475,16 @@ if (part("1b")) {
     same(T.viewOf(dt, "player").turn.acts[0].hap, true, "its agenda happened, and every phone knows it");
     same(T.apply(dt, { o: "ft-focus", id: "end" }, gm, roster, at).ok && T.viewOf(dt, "player").turn.focus, "end", "Skip to the end: While you rested on every phone");
     same(apt({ o: "ft-end" }, gm).ok, true, "and it ends");
+    // One that changes nothing is as if it never started: the next has its
+    // number, and only one that counts is an age in How it came to be.
+    same(dt.last?.n, 1, "the downtime that changed something is downtime 1");
+    apt({ o: "ft-start", id: "downtime-02", len: "A week" }, gm);
+    same(TR.ageOf(dt.turn, (i) => `d-${i}`), null, "one that changes nothing has no age in How it came to be");
+    apt({ o: "ft-end" }, gm);
+    apt({ o: "ft-start", id: "downtime-03", len: "A month" }, gm);
+    same(dt.turn.n, 2, "so the next one's downtime 2");
+    apt({ o: "ft-say", id: "said-00001", line: "The bridge is down." }, gm);
+    same(TR.ageOf(dt.turn, (i) => `d2-line-${i}`), { o: "wb-age", dt: 2, len: "A month", lines: [{ id: "d2-line-0", text: "The bridge is down." }] }, "and its age is downtime 2's, a month long, with what changed");
   }
   // The table screen gets what she's just shown the crew, and never a faction's id.
   {
