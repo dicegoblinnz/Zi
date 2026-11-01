@@ -1472,7 +1472,7 @@ export function makeWorld(d) {
       : s === "friendly" ? `More of its threads toward ${you} are bond threads than hostile ones, so it’s friendly. It helps when it costs little, and it asks favours.`
       : s === "hostile" ? `More of its threads toward ${you} are hostile than bond threads, so it’s hostile. It watches, and it’ll hurt ${gm ? "them" : "you"} when it’s cheap to.`
       : `It’s got as many hostile threads toward ${you} as bond ones, so it does business. Everything has a price.`;
-    const said = (t) => (t.s === "whole" ? "counts" : t.s === "strained" ? "strained, so it doesn’t count till it’s mended" : "snapped, so it doesn’t count");
+    const said = (t) => (t.s === "whole" ? "it counts" : t.s === "strained" ? "strained, so it doesn’t count till it’s mended" : "snapped, so it doesn’t count");
     const list = toCrew.length ? `<ul class="wb-why-l">${toCrew.map((t) => `<li class="ww-t is-${t.kind === "hostile" ? "hostile" : "bond"}${t.s === "snapped" ? " is-snapped" : ""}"><span class="ww-k">${t.kind === "hostile" ? "Hostile" : "Bond"}</span> <em>${esc(t.text)}</em> <small>${said(t)}</small></li>`).join("")}</ul>` : "";
     const n = Math.abs(b - h);
     const change = s === "friendly" ? `${cap(num(n))} more hostile ${n === 1 ? "thread" : "threads"}, or ${n === 1 ? "one of its bond threads" : `${num(n)} of its bond threads`} strained, and it’d only do business with ${you}. A betrayal snaps every bond thread it’s got toward ${you}.`

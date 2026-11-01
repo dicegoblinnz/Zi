@@ -1661,7 +1661,9 @@ p.wb-show { display: block; border-style: dashed; color: var(--muted); }
   .wb-outs { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .wb-tok-a:active, .wb-tile-a:active, .ts-tile-a:active { transform: none; }
+  .wb-tok-a:active, .wb-tile-a:active, .ts-tile-a:active, .wb-ag:active { transform: none; }
+  .wb-seals > .wb-tok.is-lit > .wb-tok-a, .wb-sw.is-flip .wb-sw-t i { animation: none; }
+  .wb-sw-t, .wb-sw-t i { transition: none; }
 }
 
 /* ── Places and people (stage 3 of notes/worlds-plan.md): pages under the
