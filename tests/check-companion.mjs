@@ -164,6 +164,8 @@ import { changesOf, said, typo } from "../src/companion/marks.js";
 import { grow } from "../src/companion/grow.js";
 import { CARD_WORDS, CREW, DECK_SIZE, newestChange, reachOf, readCards, staleCards } from "../scripts/learn.mjs";
 import * as T from "../src/companion/table-rules.js";
+import * as B from "../src/companion/board.js";
+import * as RV from "../src/companion/reveal-rules.js";
 import { dialsOf, foundNews, shapeOf, timeUp } from "../src/companion/found-rules.js";
 import { parse as parseYaml } from "yaml";
 
@@ -479,6 +481,21 @@ if (part("1b")) {
     same(sv.reveal, { n: 3, items: [{ name: "The Tithe Fleet", seal: { c: "anchor", f: "bend", d: "" }, part: "secret", title: "The Tithe Fleet’s Secret", lines: [{ label: "", text: "Bought Captains", big: true }] }] }, "the screen's reveal: the name, the seal and the part's words");
     same(JSON.stringify(sv).includes("fleet-id"), false, "and not the faction’s id");
     same(T.screenOf(T.blank(), null).reveal, null, "and none when she hasn't shown them anything");
+  }
+  // What a reveal is, worked out from what the crew had and has (reveal-rules.js).
+  {
+    const board = B.readable({ factions: [] });
+    B.apply(board, { o: "new", f: { id: "fleet", name: "The Tithe Fleet", want: "To own the bay.", face: "Admiral Senn", secret: "Bought Captains", seal: { c: "anchor", f: "bend", d: "" }, threads: [{ id: "t1", text: "Owes us", kind: "hostile", s: "whole", to: "crew" }, { id: "t2", text: "Tarrant money", kind: "hostile", s: "whole", to: "tarrant" }] } });
+    B.apply(board, { o: "new", f: { id: "tarrant", name: "Tarrant & Daughters", want: "Money." } });
+    const before = B.forPlayer(board);
+    B.apply(board, { o: "show", id: "fleet", p: "card", v: true });
+    B.apply(board, { o: "show", id: "fleet", p: "threads", v: true });
+    const after = B.forPlayer(board);
+    const rv = RV.revealsOf(before, after);
+    same(rv.map((x) => [x.part, x.title, x.lines.map((l) => l.text)]), [["card", "The Tithe Fleet", ["To own the bay.", "Admiral Senn"]], ["threads", "The Tithe Fleet’s threads", ["Owes us"]]], "its card, then its threads, and not its thread toward a faction the crew hasn't met");
+    same(JSON.stringify(rv).includes("Bought Captains") || JSON.stringify(rv).includes("Tarrant"), false, "nothing of its Secret or of Tarrant");
+    B.apply(board, { o: "show", id: "fleet", p: "threads", v: false });
+    same([RV.hiddenSince(after, B.forPlayer(board)), RV.hiddenSince(before, after)], [true, false], "hiding a part again is noticed, and showing one isn't");
   }
   console.log("the live table's rules checked");
 }

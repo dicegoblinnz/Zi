@@ -28,7 +28,7 @@ import { apply, blank, factionOf, forPlayer, readable } from "../companion/board
 import { keysOf, mapOf } from "../companion/maps.js";
 import { pageOf } from "../companion/pages.js";
 import { buildOf } from "../companion/world-record.js";
-import { revealsOf } from "../companion/reveal-rules.js";
+import { hiddenSince, revealsOf } from "../companion/reveal-rules.js";
 import { binned, dropPictures } from "./maps.js";
 import { tableWorld } from "./table.js";
 import wholes from "../generated/worlds-index.json";
@@ -103,6 +103,7 @@ export async function changeWorld(request, env, camp, user, { json, fail, body, 
   let gone = [];
   let crewMoved = false;
   let shown = [];
+  let hid = false;
   for (let tries = 0; ; tries++) {
     row = await worldRow(env, camp.id);
     const raw = row ? parse(row.data) ?? {} : {};
@@ -147,7 +148,11 @@ export async function changeWorld(request, env, camp, user, { json, fail, body, 
       if (changed) {
         const crewSees = forPlayer(doc);
         crewMoved = JSON.stringify(crewSees) !== crewSaw;
-        if (crewMoved) shown = revealsOf(JSON.parse(crewSaw), crewSees);
+        if (crewMoved) {
+          const saw = JSON.parse(crewSaw);
+          shown = revealsOf(saw, crewSees);
+          hid = hiddenSince(saw, crewSees);
+        }
       }
       break;
     }
@@ -156,7 +161,7 @@ export async function changeWorld(request, env, camp, user, { json, fail, body, 
   }
   // Pictures a day in the bin come off the bucket, now the world's let them go.
   if (gone.length) await dropPictures(env, camp.id, gone).catch((err) => console.error(`maps bin: ${err?.message ?? err}`));
-  if (crewMoved) await tableWorld(env, camp.id, shown);
+  if (crewMoved) await tableWorld(env, camp.id, shown, hid);
   // The world as it now stands, without reading it back again.
   return json({ seq: top, ...viewOf(camp, row, doc), role: camp.role });
 }

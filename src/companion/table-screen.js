@@ -408,7 +408,9 @@ function revealOff() {
 // A view with a reveal she's not shown here yet puts it up.
 function revealFrom(v) {
   const r = v?.reveal;
-  if (!r || !Array.isArray(r.items) || !r.items.length || r.n === RV.n) return;
+  // Gone from the view: she's hidden it again, or it's had its time.
+  if (!r) return revealOff();
+  if (!Array.isArray(r.items) || !r.items.length || r.n === RV.n) return;
   Object.assign(RV, { n: r.n, items: r.items, at: 0 });
   revealOne();
 }

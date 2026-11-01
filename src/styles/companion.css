@@ -1929,12 +1929,14 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
 
 /* Then one at a time: how far along, the order by seals (hers to jump
    about in), the action, and what it changed. */
-.ft-seqh { display: flex; align-items: center; gap: 10px; margin: 0.8rem 0 0.7rem; }
+.ft-seqh { display: grid; gap: 2px; margin: 0.8rem 0 0.7rem; }
 .ft-of { flex: none; margin: 0; font-family: var(--display); font-size: 1rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .ft-of b { font-size: 1.55rem; color: var(--ink); }
 .ft-track { display: flex; flex-wrap: wrap; gap: 2px; min-width: 0; margin: 0; padding: 0; list-style: none; }
 .ft-tk-b { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; background: none; border: 1px solid transparent; border-radius: 2px; }
 .ft-tk .zd-seal { --s: 30px; }
+span.ft-tk-b { width: 38px; height: 38px; }
+span.ft-tk-b .zd-seal { --s: 28px; }
 .ft-tk.is-now .ft-tk-b { background: color-mix(in srgb, var(--zd-them) 16%, transparent); border-color: var(--zd-them-line); }
 .ft-tk.is-done:not(.is-now) .zd-seal, .ft-tk.is-past:not(.is-now) .zd-seal { opacity: 0.5; }
 .ft-tk.is-off .zd-seal { opacity: 0.7; }

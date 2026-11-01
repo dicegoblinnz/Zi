@@ -86,5 +86,21 @@ export function revealsOf(was, now) {
   return out.slice(0, REVEAL.items);
 }
 
+// Whether the crew's lost sight of anything since was: a faction or a part of
+// one she's hidden again, so a reveal of it shouldn't stay up anywhere.
+export function hiddenSince(was, now) {
+  if (!was?.factions || !now?.factions) return false;
+  const after = new Map(now.factions.map((f) => [f.id, f]));
+  return was.factions.some((f) => {
+    const g = after.get(f.id);
+    return !g || PARTS.some((p) => f.shown?.[p] && !g.shown?.[p]);
+  });
+}
+// Whether a reveal's still what the crew can see.
+export const stillShown = (now, x) => {
+  const f = now?.factions?.find((y) => y.id === x.f);
+  return Boolean(f && (x.part === "card" || f.shown?.[x.part]));
+};
+
 // The parts as the sheet's line under the name says them, in a sentence.
 export const PART_SAID = { card: "a faction they hadn’t met", power: "its Power", res: "its resources", assets: "its other assets", agenda: "its agendas", bonds: "its bonds", threads: "its threads", secret: "its Secret" };

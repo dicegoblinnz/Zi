@@ -17,7 +17,7 @@
 // card alone doesn't get a sheet.
 import { seal as kitSeal } from "../kit/kit.js";
 import { calm, feel } from "./feel.js";
-import { PART_SAID, revealsOf } from "./reveal-rules.js";
+import { PART_SAID, revealsOf, stillShown } from "./reveal-rules.js";
 
 const MANY = 3;
 const first = (name) => String(name || "").trim().split(/\s+/)[0] || "";
@@ -180,6 +180,15 @@ export function makeReveal({ d, esc }) {
     news: (id, was, now) => {
       const turn = new Set((document.querySelector("#app [data-ftf]")?.dataset.ftf ?? "").split(" ").filter(Boolean));
       const got = revealsOf(was, now).filter((x) => !(x.part === "card" && turn.has(x.f)));
+      // Anything she's hidden again since comes off the sheet.
+      const gone = q.filter((y) => y.id === id && !stillShown(now, y.x));
+      if (gone.length) {
+        q.splice(0, q.length, ...q.filter((y) => !gone.includes(y)));
+        if (on && (gone.includes(on) || on.many?.some((y) => gone.includes(y)))) {
+          on = null;
+          if (!got.length) return show();
+        }
+      }
       if (!got.length) return;
       q.push(...got.map((x) => ({ id, x })));
       if (!on) show();
