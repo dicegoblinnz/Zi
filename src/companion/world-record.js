@@ -77,7 +77,9 @@ const worldId = (v) => (typeof v === "string" && v.length <= 40 && TABLE_ID.test
 export const AGE_ORDER = [1, 2, 3, 0];
 // The highest age: the founding's three, then a downtime each.
 const TOP = 3 + BMAX.downtimes;
-const showsOf = (v, b = null) => (v === true ? [0, 1, 2, 3, ...(b?.ages ?? []).map((x) => 3 + x.n)] : Array.isArray(v) ? [...new Set(v.map(Number).filter((n) => Number.isInteger(n) && n >= 0 && n <= TOP))].sort((a, b) => a - b) : []);
+// Only ages the record has: the founding's three and the rest, and the
+// downtimes in it (b.ages).
+const showsOf = (v, b = null) => (v === true ? [0, 1, 2, 3, ...(b?.ages ?? []).map((x) => 3 + x.n)] : Array.isArray(v) ? [...new Set(v.map(Number).filter((n) => Number.isInteger(n) && n >= 0 && n <= TOP && (n <= 3 || (b?.ages ?? []).some((x) => 3 + x.n === n))))].sort((a, b) => a - b) : []);
 // Every age in the order it's read: the founding's three, each downtime in
 // turn, then the rest of it.
 export const agesOf = (b) => [1, 2, 3, ...(b?.ages ?? []).map((x) => 3 + x.n), 0];
@@ -178,12 +180,12 @@ export function applyBuild(doc, op) {
     case "wb-show": {
       if (!b) return false;
       let next;
-      if (Array.isArray(op.v)) next = showsOf(op.v);
+      if (Array.isArray(op.v)) next = showsOf(op.v, b);
       else if (op.age == null) next = op.v === true ? showsOf(true, b) : [];
       else {
         const age = whole(op.age, 0, TOP, -1);
         if (age < 0 || (isDowntime(age) && !b.ages.some((x) => 3 + x.n === age))) return false;
-        next = op.v === true ? showsOf([...b.shown, age]) : b.shown.filter((x) => x !== age);
+        next = op.v === true ? showsOf([...b.shown, age], b) : b.shown.filter((x) => x !== age);
       }
       if (next.join() === b.shown.join()) return false;
       b.shown = next;
@@ -203,7 +205,7 @@ export function applyBuild(doc, op) {
         const old = new Set(into.history.filter((l) => l.age > 3).slice(0, over).map((l) => l.id));
         into.history = into.history.filter((l) => !old.has(l.id));
       }
-      into.shown = showsOf([...into.shown, age]);
+      into.shown = showsOf([...into.shown, age], into);
       doc.build = into;
       return true;
     }

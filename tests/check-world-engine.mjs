@@ -690,9 +690,11 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   // Junk, tidied.
   const junk = blank();
   apply(junk, { o: "wb-set", b: { recipe: { region: "mars", era: "<b>x</b>", twist: 7 }, dials: { tense: 9, rich: 2 }, seed: "not a seed", dealt: "nope", history: [{ id: "BAD ID", text: "x" }, { id: "ok-1", text: "  a \u0000  b  " }, { id: "ok-1", text: "twice" }], shown: "yes" } });
-  same(junk.build, { recipe: { region: "", era: "", twist: null }, dials: { tense: 1, strange: 1, rich: 2, ruled: 1 }, seed: "", dealt: null, history: [{ id: "ok-1", text: "a b", age: 0 }], shown: [], at: 0 }, "junk in a record is tidied");
+  same(junk.build, { recipe: { region: "", era: "", twist: null }, dials: { tense: 1, strange: 1, rich: 2, ruled: 1 }, seed: "", dealt: null, history: [{ id: "ok-1", text: "a b", age: 0 }], shown: [], ages: [], at: 0 }, "junk in a record is tidied");
   apply(junk, { o: "wb-set", b: { history: [{ id: "ok-2", text: "Mine", age: 2, hers: "yes" }], shown: [3, 1, 1, "2", 9, -1, 1.5] } });
   same([junk.build.shown, junk.build.history[0].hers], [[1, 2, 3], undefined], "and so are the ages shown and a line that isn't plainly hers");
+  apply(junk, { o: "wb-set", b: { ages: [{ n: 6, len: "A month" }, { n: 6, len: "twice" }, { n: "x" }], history: [{ id: "ok-3", text: "The bridge fell", age: 9 }, { id: "ok-4", text: "Nowhere", age: 12 }], shown: [1, 9, 12] } });
+  same([junk.build.ages, junk.build.shown, junk.build.history.map((l) => l.id)], [[{ n: 6, len: "A month" }], [1, 9], ["ok-3"]], "a downtime's age, its lines and showing it are kept only when the record has that downtime");
   apply(junk, { o: "wb-set", b: { dealt: JSON.parse('{"__proto__": {"bad": 1}, "fine": [1, "two", {"three": null}]}') } });
   yes(!Object.prototype.hasOwnProperty.call(junk.build.dealt, "__proto__") && junk.build.dealt.bad === undefined && ({}).bad === undefined, "what was dealt can't reach past itself");
   same(junk.build.dealt.fine, [1, "two", { three: null }], "and keeps its plain words and numbers");
