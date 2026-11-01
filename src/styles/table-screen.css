@@ -194,6 +194,55 @@ html.ts-live.ts-still, html.ts-live.ts-still * { cursor: none; }
 .ts .ts-warn { margin: 0; padding: 0.7rem 0.9rem; font-weight: 700; background: var(--panel); border-left: 3px solid var(--zd-harm-line); }
 .ts .ts-opening { margin: 0; font-size: 1.15rem; font-weight: 700; color: var(--gold-ink); }
 
+/* ── What she's just shown the crew (table-screen.js): a sheet across the
+   foot of the screen, over the table, the seal broken open and the part's
+   words in a line at a time, gone again on its own. A faction the crew's
+   just met comes out of a blank seal that cracks and falls apart. */
+.ts-rv { position: fixed; left: 50%; bottom: max(1.4rem, env(safe-area-inset-bottom, 0px)); z-index: 40; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 1.6rem; box-sizing: border-box; width: min(58rem, calc(100vw - 2.8rem)); max-height: calc(100vh - 2.8rem); padding: 1.4rem 1.9rem; overflow: hidden; transform: translateX(-50%); background: color-mix(in srgb, var(--zd-them) 8%, var(--surface)); border: 2px solid var(--zd-them-line); border-radius: 4px; box-shadow: 0 1.4rem 4rem -1rem rgb(0 0 0 / 0.7), 0 0 0 100vmax rgb(0 0 0 / 0.38); }
+.ts-rv[hidden] { display: none; }
+.ts-rv-seal { position: relative; width: 7.5rem; height: 7.5rem; }
+.ts-rv-seal > span { position: absolute; inset: 0; }
+.ts-rv-seal .zd-seal { --s: 7.5rem; }
+.ts-rv-half.is-l { clip-path: polygon(0 0, 53% 0, 45% 31%, 56% 48%, 42% 67%, 52% 100%, 0 100%); }
+.ts-rv-half.is-r { clip-path: polygon(53% 0, 100% 0, 100% 100%, 52% 100%, 42% 67%, 56% 48%, 45% 31%); }
+.ts-rv-crack { position: absolute; inset: 0; width: 100%; height: 100%; fill: none; stroke: var(--zd-them-ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; opacity: 0.8; }
+.ts-rv-seal.is-met .ts-rv-crack { opacity: 0; }
+.ts-rv-in { min-width: 0; }
+.ts-rv h2 { margin: 0 0 0.45rem; font-family: var(--display); font-weight: 600; font-size: 2.1rem; line-height: 1.1; letter-spacing: 0.02em; overflow-wrap: anywhere; }
+.ts-rv-w { display: grid; gap: 0.3rem; margin: 0 0 0.65rem; padding: 0; font-size: 1.25rem; line-height: 1.4; }
+ul.ts-rv-w { padding-left: 1.3rem; }
+.ts-rv-w p { margin: 0; overflow-wrap: anywhere; }
+.ts-rv-k { margin-right: 0.3rem; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--zd-them-ink); }
+.ts-rv-w .ts-rv-big { font-size: 1.9rem; font-weight: 700; line-height: 1.2; color: var(--zd-them-ink); }
+.ts-rv-n { margin: 0; font-size: 1rem; color: var(--muted); }
+.ts-rv-n b { color: var(--ink); white-space: nowrap; }
+@media (max-width: 700px) {
+  .ts-rv { grid-template-columns: minmax(0, 1fr); justify-items: center; gap: 0.8rem; text-align: center; }
+  .ts-rv-w { text-align: left; }
+}
+@keyframes ts-rv-up { from { opacity: 0; transform: translate(-50%, 2rem); } }
+@keyframes ts-rv-crack { from { stroke-dashoffset: 1; opacity: 1; } to { stroke-dashoffset: 0; opacity: 0.8; } }
+@keyframes ts-rv-crack-met { 0% { stroke-dashoffset: 1; opacity: 1; } 55% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes ts-rv-l { to { opacity: 0; transform: translate(-1rem, 0.7rem) rotate(-14deg); } }
+@keyframes ts-rv-r { to { opacity: 0; transform: translate(1rem, 0.7rem) rotate(14deg); } }
+@keyframes ts-rv-real { from { opacity: 0; transform: scale(0.88); } }
+@keyframes ts-rv-pop { 40% { transform: scale(1.07); } }
+@keyframes ts-rv-glow { 0%, 100% { filter: drop-shadow(0 0 0 transparent); } 30% { filter: drop-shadow(0 0 1.2rem color-mix(in srgb, var(--zd-them) 75%, transparent)); } }
+@media (prefers-reduced-motion: no-preference) {
+  .ts-rv:not(.is-calm) { animation: ts-rv-up 0.42s cubic-bezier(0.22, 1, 0.36, 1); }
+  .ts-rv .ts-rv-crack { animation: ts-rv-crack 0.3s ease-out 0.12s both; }
+  .ts-rv .ts-rv-seal.is-met .ts-rv-crack { animation-name: ts-rv-crack-met; animation-duration: 0.52s; }
+  .ts-rv .ts-rv-seal.is-met .ts-rv-half.is-l { animation: ts-rv-l 0.48s cubic-bezier(0.3, 0.5, 0.5, 1) 0.38s forwards; }
+  .ts-rv .ts-rv-seal.is-met .ts-rv-half.is-r { animation: ts-rv-r 0.48s cubic-bezier(0.3, 0.5, 0.5, 1) 0.38s forwards; }
+  .ts-rv .ts-rv-seal.is-met .ts-rv-real { animation: ts-rv-real 0.52s cubic-bezier(0.22, 1, 0.36, 1) 0.38s both, ts-rv-glow 1s ease-out 0.42s; }
+  .ts-rv .ts-rv-seal:not(.is-met) .ts-rv-real { animation: ts-rv-pop 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s, ts-rv-glow 0.9s ease-out 0.3s; }
+  .ts-rv h2 { animation: ts-in 0.34s cubic-bezier(0.22, 1, 0.36, 1) 0.36s both; }
+  .ts-rv-w > * { animation: ts-in 0.34s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(0.46s + var(--i, 0) * 0.08s); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ts-rv-half { display: none; }
+}
+
 /* ── Motion: a new telegraph comes in, and once it's settled the band wipes
    across the foot of the card and its word stamps down. Nothing moves under
    reduce-motion. */

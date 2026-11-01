@@ -929,8 +929,11 @@ export function viewOf(doc, role) {
 // name, and the crew in the order they joined, { key: "user|ch", name, crew,
 // arch, grown }, where crew is who they started as from the book (or "own"),
 // arch the archetypes their own build's Titles have, and grown the ones
-// they've grown in downtime, for their crest.
-export function screenOf(doc, meta = null) {
+// they've grown in downtime, for their crest. reveal is what she's just shown
+// the crew of the factions, from the Table object for a minute and a half
+// (worldMoved() in src/worker/table.js): each faction's name, seal and the
+// part's words, and never its id.
+export function screenOf(doc, meta = null, reveal = null) {
   const crew = (Array.isArray(meta?.crew) ? meta.crew : []).slice(0, 40);
   const idx = new Map(crew.map((c, i) => [c.key, i]));
   const kOf = (user, ch) => idx.get(keyOf(user, ch)) ?? null;
@@ -988,6 +991,15 @@ export function screenOf(doc, meta = null) {
     const spent = round && !round.over ? spentBy(round, user, ch) : null;
     return { name: c.name, crew: c.crew ?? "", arch: c.arch ?? [], grown: c.grown ?? [], acts, more: [...(a?.more ?? [])], left: spent ? Math.max(0, spent.have - spent.used) : null };
   });
+  const SEAL = /^[a-z0-9-]{0,24}$/;
+  const sealOut = (x) => (x && typeof x === "object" && SEAL.test(String(x.c ?? "")) && SEAL.test(String(x.f ?? "")) && SEAL.test(String(x.d ?? "")) ? { c: String(x.c ?? ""), f: String(x.f ?? ""), d: String(x.d ?? "") } : null);
+  const shown = Array.isArray(reveal?.items) ? reveal.items.slice(0, 8).map((x) => ({
+    name: line(x.name, MAX.name),
+    seal: sealOut(x.seal),
+    part: ["card", "power", "res", "assets", "agenda", "bonds", "threads", "secret"].includes(x.part) ? x.part : "card",
+    title: line(x.title, 90),
+    lines: (Array.isArray(x.lines) ? x.lines : []).slice(0, 8).map((l) => ({ label: line(l?.label, 40), text: line(l?.text, 240), big: l?.big === true })).filter((l) => l.text),
+  })).filter((x) => x.name) : [];
   // No version: the table's own moves on with the GM's hidden changes too,
   // so the Durable Object gives each view the screen's own (screenNow()).
   return {
@@ -996,5 +1008,6 @@ export function screenOf(doc, meta = null) {
     round: round ? { n: round.n, over: Boolean(round.over), tele: round.tele.map(tele) } : null,
     scene,
     crew: people,
+    reveal: shown.length ? { n: Number(reveal.n) || 0, items: shown } : null,
   };
 }

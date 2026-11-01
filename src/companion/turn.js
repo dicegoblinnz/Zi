@@ -13,11 +13,21 @@
 // real dice instead. Each action that lands changes the cards in a tap: the
 // board through world.js and the party sheet through party.js, so only she
 // ever changes the board.
+//
+// When it starts, the table picks how long the downtime is (only the story's
+// clock). The landing's a sequence on every phone (stage 5 of
+// notes/faction-feel-plan.md): every move the crew can see, all at once, each
+// faction's seal with its outcome's glyph and its target, then one action at
+// a time as she lands it, the crew's phones following her taps (focus on the
+// turn), with Skip to the end always there. An agenda that happens gets the
+// big moment. It ends on While you rested, what changed said once, which
+// goes into How it came to be as a new age when she ends it.
 import { BONDS, OUTCOMES, find, minisOf, moneyOf, standingOf, stepsOf } from "./board.js";
 import { diceLabel, rollDie, stepsToDice } from "./dice.js";
 import { lower } from "./table-rules.js";
 import { MAX, STEPS, allDice, allFaces, best, crewDice, crewResult, crewSteps, defOf, diceOf, landed, powerAt, rolled, shapeOf, spentOf, stateOfAct } from "./turn-rules.js";
-import { die as kitDie } from "../kit/kit.js";
+import { die as kitDie, glyph as kitGlyph, seal as kitSeal } from "../kit/kit.js";
+import { feel } from "./feel.js";
 
 const SIZES = [2, 4, 6, 8, 10, 12];
 const STEP_NAMES = { hire: "Hiring", tele: "Telegraphs", crew: "The crew", land: "Landing" };
@@ -38,14 +48,23 @@ const stepsSay = (n) => `${n} ${n === 1 ? "step" : "steps"}`;
 const WHAT_NAMES = { agenda: "Its agenda", write: "A new agenda", comes: "Comes for the crew" };
 // The crew's moves on a faction, as the book names them, then the rest.
 const MOVE_NAMES = { "Set back": "Set back its agenda", "Work for it": "Work for it", Goal: "Chase the Goal", Project: "Work a project", Else: "Something else" };
+// Each move's glyph (the kit's GLYPHS), the factions' and the crew's.
+const GLYPH_OF = { Destroy: "destroy", Undermine: "undermine", Obstruct: "obstruct", Influence: "influence", Acquire: "acquire", Establish: "establish", agenda: "agenda", write: "agenda", comes: "crew", "Set back": "undermine", "Work for it": "influence", Goal: "agenda", Project: "agenda" };
+const GLYPH_SAY = { Destroy: "Destroy", Undermine: "Undermine", Obstruct: "Obstruct", Influence: "Influence", Acquire: "Acquire", Establish: "Establish", agenda: "Its agenda", write: "A new agenda", comes: "Comes for the crew", "Set back": "Set back an agenda", "Work for it": "Work for it", Goal: "The Goal", Project: "A project" };
+// How long a downtime can be, the three the book's table talk reaches for.
+const LENS = ["A week", "A month", "A season"];
 
 export function makeTurn(d) {
   const { esc } = d;
   const BOOK = d.W?.turn ?? { does: [], outcomes: [], comes: [], moves: [] };
   const AGENDAS = d.W?.build?.agendas ?? [];
   // sure: a button waiting on its second tap. spin: the roll this phone's just
-  // made, which tumbles once.
-  const ui = { sure: "", spin: null };
+  // made, or one a following phone's just been sent, which tumbles once.
+  // skip: the downtime a player's skipped to the end of on their own phone.
+  // stage: where each campaign's landing was last drawn, so a new step comes
+  // in. rolling: actions this phone's seen before they were rolled. hap:
+  // agendas whose moment this phone's had.
+  const ui = { sure: "", spin: null, skip: "", stage: {}, moved: "", rolling: new Set(), hap: new Set(), hapNow: "" };
 
   // ------------------------------------------------------------ what this phone's got
 
@@ -136,12 +155,15 @@ export function makeTurn(d) {
       if (!gm) return lastHtml ? `<section class="cc-sec ft is-idle" data-ft="${esc(id)}" aria-labelledby="${hid}"><h2 id="${hid}">Downtime</h2>${lastHtml}</section>` : "";
       const n = boardOf(id).factions.length;
       return `<section class="cc-sec ft is-idle" data-ft="${esc(id)}" aria-labelledby="${hid}"><h2 id="${hid}">Downtime</h2>
-        <p class="cc-lead">Every faction on the board takes one action a downtime, and so does the crew. ${n ? "Start the faction turn when the crew’s week starts, and it goes step by step from there, the same as the book." : "Put a faction or two on the board first."} ${ruleLink("s-faction-turn", "The faction turn")}</p>
+        <p class="cc-lead">Every faction on the board takes one action a downtime, and so does the crew. ${n ? "Start the faction turn when the crew’s downtime starts, and it goes step by step from there, the same as the book." : "Put a faction or two on the board first."} ${ruleLink("s-faction-turn", "The faction turn")}</p>
         ${n ? btn("start", "Start the faction turn", { cls: "button primary ft-go" }) : ""}${lastHtml}</section>`;
     }
     const body = t.step === "hire" ? hireBody(id, t, gm) : t.step === "tele" ? teleBody(id, t, gm) : t.step === "crew" ? crewBody(id, t, gm) : landBody(id, t, gm);
-    return `<section class="cc-sec ft is-${t.step}" data-ft="${esc(id)}" aria-labelledby="${hid}">
-      <div class="ft-head"><h2 id="${hid}">Downtime ${t.n} <small>the faction turn</small></h2></div>
+    // The factions in the telegraphs the crew's had, so a reveal of one's
+    // card alone (reveal.js) leaves it to the turn.
+    const met = t.sent ? [...new Set(t.acts.filter((a) => !a.off).flatMap((a) => [a.f, a.at.f]).filter((f) => f && f !== "crew"))] : [];
+    return `<section class="cc-sec ft is-${t.step}" data-ft="${esc(id)}" data-ftf="${esc(met.join(" "))}" aria-labelledby="${hid}">
+      <div class="ft-head"><h2 id="${hid}">Downtime ${t.n} <small>${t.len ? esc(midway(bare(t.len))) : "the faction turn"}</small></h2>${gm ? btn("len", t.len ? "Change how long" : "Say how long it is", { cls: "pt-reword ft-lenb" }) : ""}</div>
       ${strip(id, t, gm)}${status(id)}${body}</section>`;
   }
 
@@ -233,14 +255,14 @@ export function makeTurn(d) {
   const dieWon = (x, i) => (i < x.main.length ? x.won?.main : x.won?.split);
 
   // What happened, under the card.
+  // What it changed is said once, in the step and in While you rested.
   function verdict(id, t, a) {
-    if (a.done) return `<div class="tg-v"><p><b>What changed:</b> ${esc(a.done)}</p></div>`;
-    if (a.done != null && !a.stop?.won) return "";
     if (a.stop?.won) {
       const by = a.stop.by === "crew" ? crewName(id) : t.acts.find((x) => x.id === a.stop.by)?.name ?? "A faction";
       return `<div class="tg-v is-good"><p><b>${esc(by)} stopped it.</b> It doesn’t land this downtime.</p></div>`;
     }
     if (!a.won) {
+      if (a.done != null) return "";
       if (a.stop && !a.stop.won) return `<div class="tg-v"><p>${esc(a.stop.by === "crew" ? crewName(id) : t.acts.find((x) => x.id === a.stop.by)?.name ?? "A faction")} tried to stop it, and didn’t. It still lands.</p></div>`;
       return "";
     }
@@ -357,8 +379,8 @@ export function makeTurn(d) {
       foot = opts.length ? `<div class="tg-do">${opts.join("")}</div>` : "";
     }
     const result = c.won
-      ? c.vs.k === "none" ? `<div class="tg-v is-good"><p><b>It happens.</b> ${c.done ? `What changed: ${esc(c.done)}` : ""}</p></div>`
-        : `<div class="tg-v ${c.won.main ? "is-good" : "is-bad"}"><p><b>${cap(crewResult(c))}.</b> The crew’s best came up ${best(c.faces.main)} against ${def}${c.tie.main ? ", and an extra resource bought the tie" : ""}.${c.again.length ? ` ${andList(c.again.map((x) => esc(x.name)))} spent Resolve to roll it again.` : ""}${c.real ? ' <span class="tg-real">Real dice</span>' : ""}</p>${c.done ? `<p><b>What changed:</b> ${esc(c.done)}</p>` : ""}</div>`
+      ? c.vs.k === "none" ? `<div class="tg-v is-good"><p><b>It happens.</b></p></div>`
+        : `<div class="tg-v ${c.won.main ? "is-good" : "is-bad"}"><p><b>${cap(crewResult(c))}.</b> The crew’s best came up ${best(c.faces.main)} against ${def}${c.tie.main ? ", and an extra resource bought the tie" : ""}.${c.again.length ? ` ${andList(c.again.map((x) => esc(x.name)))} spent Resolve to roll it again.` : ""}${c.real ? ' <span class="tg-real">Real dice</span>' : ""}</p></div>`
       : "";
     return `<div class="ft-crew card" data-ftk="crew"><h3 class="ft-h3">The crew’s action <small>${esc(MOVE_NAMES[c.move] ?? c.move)}</small></h3>
       <div class="ft-crew-tb"><span class="ft-dice">${diceHtml}</span><div><p class="ft-crew-does">${esc(c.does)}</p>${c.at.name ? `<p class="cc-small">At ${esc(lower(c.at.name))}</p>` : ""}</div></div>
@@ -368,7 +390,7 @@ export function makeTurn(d) {
 
   function saidList(id, t, gm) {
     const list = t.said.length ? `<h3 class="ft-h3">What changed</h3><ul class="ft-said">${t.said.map((x) => `<li>${esc(x.text)}</li>`).join("")}</ul>` : "";
-    const form = gm ? `<form class="cc-form ft-say" data-form="ft-say"><label class="cc-field">Anything else that changed <input name="line" maxlength="${MAX.line}" autocomplete="off" placeholder="The Night Boats moved upriver"></label><div class="cc-row"><button type="submit" class="button">Say it</button></div></form>` : "";
+    const form = gm ? sayForm() : "";
     return list + form;
   }
 
@@ -400,18 +422,106 @@ export function makeTurn(d) {
     return `<div class="tg-do">${btn("land", "Land it", { cls: "button primary", attrs: ` data-x="${esc(a.id)}"` })}${btn("real", "Real dice", { attrs: ` data-x="${esc(a.id)}"` })}</div>`;
   }
 
-  function landBody(id, t, gm) {
+  // ------------------------------------------------------------ the landing, a step at a time
+
+  // The order it lands in: the crew's action first, since it might be
+  // stopping one, then Obstructs, then the rest, then (hers) off-screen.
+  const seqOf = (t, gm) => [...(t.crew ? ["crew"] : []), ...landOrder(t).filter((a) => gm || !a.off).map((a) => a.id)];
+  const itemOf = (t, x) => (x === "crew" ? t.crew : t.acts.find((a) => a.id === x) ?? null);
+  // Where this phone's at: hers, which every phone follows, or the end for a
+  // player who's skipped ahead on their own phone.
+  const focusOf = (t, gm) => (!gm && ui.skip === t.id ? "end" : t.focus ?? null);
+  const STAR = '<svg class="ft-star" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 2.6 L14.3 9.3 L21.4 9.5 L15.8 13.9 L17.8 20.8 L12 16.8 L6.2 20.8 L8.2 13.9 L2.6 9.5 L9.7 9.3 Z"/></svg>';
+
+  // A seal as this phone has it: hers whole, and on a player's phone blank
+  // for a faction the crew hasn't met. The crew's own is gold.
+  function sealFor(id, fid, size = "sm") {
+    if (fid === "crew") return kitSeal(null, { size, own: "you", cls: "ft-crewseal" });
+    const f = fid ? find(boardOf(id), fid) : null;
+    return kitSeal(f?.seal ?? null, { size, blank: !f });
+  }
+  const skipBtn = (gm) => btn(gm ? "focus" : "skip", "Skip to the end", { attrs: gm ? ' data-x="end"' : "" });
+
+  // One move, as the list of what's coming has it: whose it is, its glyph,
+  // and what it's at.
+  function moveRow(id, t, x, i) {
+    const crew = x === "crew";
+    const a = itemOf(t, x);
+    const actor = crew ? "crew" : a.f;
+    const what = crew ? a.move : a.what;
+    const at = a.at?.f && a.at.f !== actor ? a.at.f : null;
+    const done = a.done != null;
+    return `<li class="ft-move${crew ? " is-crew" : ""}${a.off ? " is-off" : ""}${done ? " is-done" : ""}" style="--i:${i}">
+      <span class="ft-mv-s">${sealFor(id, actor)}</span><span class="ft-mv-g">${GLYPH_OF[what] ? kitGlyph(GLYPH_OF[what], { label: GLYPH_SAY[what] }) : ""}</span><span class="ft-mv-s">${at ? sealFor(id, at) : ""}</span>
+      <span class="ft-mv-in"><b>${esc(crew ? crewName(id) : a.name)}</b> <span>${esc(a.does)}</span>${a.off ? ' <span class="ft-tag">Off-screen</span>' : ""}${done ? ' <span class="ft-mv-d">Done</span>' : ""}</span></li>`;
+  }
+
+  // Before anything lands: every move the crew can see, all at once.
+  function movesBody(id, t, gm, seq) {
+    const lead = gm
+      ? `Every move, in the order it lands: the crew’s action first, then Obstructs, then the rest${t.acts.some((a) => a.off) ? ", and the ones off-screen last" : ""}. Land them one at a time, and the crew’s phones follow you. ${ruleLink("s-faction-outcomes", "The six outcomes")}`
+      : `Every move you can see coming, in the order it lands. ${esc(gmName(id))} lands them one at a time, and this follows along.`;
+    return `<p class="cc-lead">${lead}</p>
+      <div class="ft-in"><h3 class="ft-h3">What’s coming</h3>${seq.length ? `<ol class="ft-moves">${seq.map((x, i) => moveRow(id, t, x, i)).join("")}</ol>` : `<p class="cc-small">Nothing’s moving where the crew can see it this downtime.</p>`}</div>
+      <div class="tg-do tg-bar">${gm ? (seq.length ? btn("focus", "Land the first one", { cls: "button primary", attrs: ` data-x="${esc(seq[0])}"` }) : "") : `<p class="cc-small ft-wait">Waiting on ${esc(gmName(id))} to land the first one.</p>`}${skipBtn(gm)}</div>`;
+  }
+
+  // An agenda that happened: every size lit, then past d12.
+  function hapBlock(a) {
+    const fresh = !ui.hap.has(a.id);
+    return `<div class="ft-hap${fresh ? " is-new" : ""}" data-hap="${esc(a.id)}">
+      <div class="ft-hap-dice" aria-hidden="true">${SIZES.map((x, i) => `<span style="--i:${i}">${kitDie(x, { own: "them", hide: true, bare: true })}</span>`).join("")}<span class="ft-hap-x" style="--i:6">${STAR}</span></div>
+      <p class="ft-hap-t">It happened</p><p class="ft-hap-a">${esc(poss(a.name))} agenda: ${esc(bare(a.at.name))}.</p></div>`;
+  }
+
+  // One action at a time, as she lands it.
+  function stepBody(id, t, gm, seq, x) {
+    const at = seq.indexOf(x);
+    const y = itemOf(t, x);
+    const crew = x === "crew";
+    // A following phone tumbles the dice when they come in.
+    if (!y.faces) ui.rolling.add(x);
+    else if (ui.rolling.has(x)) {
+      ui.rolling.delete(x);
+      if (!ui.spin) ui.spin = x;
+    }
+    const track = seq.map((z, i) => {
+      const it = itemOf(t, z);
+      const label = `${i + 1} of ${seq.length}: ${z === "crew" ? crewName(id) : it?.name ?? ""}${it?.done != null ? ", done" : ""}`;
+      const inner = sealFor(id, z === "crew" ? "crew" : it?.f);
+      const cls = `ft-tk${i < at ? " is-past" : ""}${i === at ? " is-now" : ""}${it?.done != null ? " is-done" : ""}${it?.off ? " is-off" : ""}`;
+      return `<li class="${cls}"${i === at ? ' aria-current="step"' : ""}>${gm && i !== at ? `<button type="button" class="ft-tk-b" data-act="ft" data-do="focus" data-x="${esc(z)}" aria-label="${esc(label)}">${inner}</button>` : `<span class="ft-tk-b" role="img" aria-label="${esc(label)}">${inner}</span>`}</li>`;
+    }).join("");
+    const card = crew ? crewPanel(id, t, gm) : `<ol class="tg-list ft-list">${actCard(id, t, y, gm, gm ? landControls(id, t, y) : "")}</ol>`;
+    const next = seq[at + 1] ?? "end";
     const ready = gm ? landOrder(t).filter((a) => readyToLand(t, a)) : [];
+    return `<div class="ft-stage ft-in" data-stage="${esc(x)}">
+      <div class="ft-seqh"><p class="ft-of"><b>${at + 1}</b> of ${seq.length}</p><ol class="ft-track" aria-label="The actions, in the order they land">${track}</ol></div>
+      ${!crew && y.hap ? hapBlock(y) : ""}${card}${y.done ? `<div class="ft-one"><p><b>What changed:</b> ${esc(y.done)}</p></div>` : ""}</div>
+      <div class="tg-do tg-bar">${gm ? btn("focus", next === "end" ? "On to While you rested" : "Next", { cls: `button${y.done != null ? " primary" : ""}`, attrs: ` data-x="${esc(next)}"` }) : `<p class="cc-small ft-wait">${esc(gmName(id))}’s landing them one at a time, and this follows along.</p>`}${gm && ready.length > 1 ? btn("landall", `Roll the rest at once <small>${ready.length}</small>`) : ""}${skipBtn(gm)}</div>`;
+  }
+
+  const sayForm = () => `<form class="cc-form ft-say" data-form="ft-say"><label class="cc-field">Anything else that changed <input name="line" maxlength="${MAX.line}" autocomplete="off" placeholder="The Night Boats moved upriver"></label><div class="cc-row"><button type="submit" class="button">Say it</button></div></form>`;
+
+  // The end: what changed, once, and how long it took.
+  function restBody(id, t, gm) {
     const left = t.acts.filter((a) => a.done == null && !(a.stop?.won)).length + (t.crew && t.crew.done == null ? 1 : 0);
     const end = ui.sure === `end:${id}`;
-    const crew = t.crew ? crewPanel(id, t, gm) : gm ? `<div class="ft-crew card"><h3 class="ft-h3">The crew’s action</h3><p class="cc-small">The crew hasn’t taken one this downtime.</p><div class="tg-do">${btn("step", "Back to the crew’s action", { attrs: ' data-s="crew"' })}</div></div>` : "";
-    const cards = landOrder(t).filter((a) => gm || !a.off);
-    return `${gm ? `<p class="cc-lead">Obstructs go first, then the rest. A faction’s Power is rolled once, the first time anything goes at it, and that roll stands all downtime. When one lands, make its changes on the cards. ${ruleLink("s-faction-outcomes", "The six outcomes")}</p>` : `<p class="cc-lead">${esc(gmName(id))}’s landing the factions’ actions. Each one shows up here as it does.</p>`}
-      ${crew}
-      ${cards.length ? `<h3 class="ft-h3">The actions land</h3><ol class="tg-list ft-list">${cards.map((a) => actCard(id, t, a, gm, gm ? landControls(id, t, a) : "")).join("")}</ol>` : ""}
-      ${gm && ready.length > 1 ? `<div class="tg-do">${btn("landall", `Roll the rest at once <small>${ready.length}</small>`)}</div>` : ""}
-      ${saidList(id, t, gm)}
-      ${gm ? `<div class="tg-do tg-bar">${end && left ? `<p class="cc-small">${left === 1 ? "One action hasn’t" : `${left} actions haven’t`} been finished. Ending it leaves ${left === 1 ? "it" : "them"} as they are.</p>` : ""}${btn("end", end ? "Tap again to end the downtime" : "End the downtime", { cls: "button primary" })}${btn("step", "Back to the crew’s action", { attrs: ' data-s="crew"' })}</div>` : ""}`;
+    const list = t.said.length ? `<ul class="ft-said">${t.said.map((x, i) => `<li style="--i:${i}">${esc(x.text)}</li>`).join("")}</ul>` : `<p class="cc-small">Nothing the crew’s heard about has changed${left ? " yet" : ""}.</p>`;
+    const foot = gm
+      ? `${end && left ? `<p class="cc-small">${left === 1 ? "One action hasn’t" : `${left} actions haven’t`} been finished. Ending it leaves ${left === 1 ? "it" : "them"} as they are.</p>` : ""}${btn("end", end ? "Tap again to end the downtime" : "End the downtime", { cls: "button primary" })}${btn("focus", "Back to the actions", { attrs: ` data-x="${esc(seqOf(t, gm).slice(-1)[0] ?? "")}"` })}`
+      : ui.skip === t.id ? btn("follow", `Follow ${esc(gmName(id))} again`) : `<p class="cc-small ft-wait">${esc(gmName(id))}’s ending the downtime.</p>`;
+    return `<div class="ft-rest ft-in"><h3 class="ft-rest-h">While you rested</h3><p class="ft-rest-len">Downtime ${t.n}${t.len ? `, ${esc(midway(bare(t.len)))}` : ""}</p>
+      ${list}${gm ? `<p class="cc-small">Ending it puts this in How it came to be, as downtime ${t.n}’s own age.</p>${sayForm()}` : ""}</div>
+      <div class="tg-do tg-bar">${foot}</div>`;
+  }
+
+  function landBody(id, t, gm) {
+    const seq = seqOf(t, gm);
+    const f = focusOf(t, gm);
+    if (f === "end") return restBody(id, t, gm);
+    if (f == null || !seq.includes(f)) return movesBody(id, t, gm, seq);
+    return stepBody(id, t, gm, seq, f);
   }
 
   // ------------------------------------------------------------ dialogs: paying a faction
@@ -1061,6 +1171,8 @@ export function makeTurn(d) {
     const x = !t ? null : r.x === "crew" ? t.crew : t.acts.find((a) => a.id === r.x);
     if (!x) return closed();
     const crew = r.x === "crew";
+    // Its agenda's happened already: the big moment's on its way.
+    if (!crew && x.what === "agenda" && find(boardOf(id), x.f)?.agendas.some((y) => y.id === x.at.lid && y.done)) r.hap = true;
     const title = crew ? "The crew’s action" : x.name;
     const summary = crew ? `<p class="tg-for"><span class="k">${esc(MOVE_NAMES[x.move] ?? x.move)}</span>${esc(x.does)}${x.won && x.vs.k !== "none" ? `: ${esc(crewResult(x))}` : ""}.</p>` : `<ol class="tg-list">${actCard(id, t, x, true)}</ol>`;
     const changesHtml = changes(id, t, x, r);
@@ -1077,6 +1189,19 @@ export function makeTurn(d) {
 
   const closed = () => `${head("The faction turn")}<div class="dlg-body"><p class="cc-lead">That’s moved on. The downtime might have ended, or it’s changed on another phone.</p></div>`;
 
+  // How long the downtime is: picked as it starts, and changed after.
+  function lenView(r) {
+    const t = turnOf(r.camp);
+    const own = LENS.includes(r.len) ? "" : r.len;
+    return `${head("How long’s this downtime?", t ? `Downtime ${t.n}` : "The faction turn")}
+      <div class="dlg-body ft-dlg"><p class="cc-lead">Pick it with the table. It’s only the story’s clock: it goes on this downtime’s age in How it came to be, and changes nothing in play.</p>
+        <div class="ft-lens">${LENS.map((x) => choice("lenpick", r.len === x, x, "", ` data-v="${esc(x)}"`)).join("")}</div>
+        <label class="tg-label" for="ft-lenown">Or in your own words</label>
+        <input id="ft-lenown" data-ft="lenown" maxlength="${MAX.len}" autocomplete="off" placeholder="Two weeks of rain" value="${esc(own)}">
+      </div>
+      <div class="dlg-foot">${btn("savelen", t ? "Save it" : "Start the faction turn", { cls: "button primary" })}</div>`;
+  }
+
   function dialog(r) {
     if (r.kind === "ft-hire") return hireView(r);
     if (r.kind === "ft-act") return actView(r);
@@ -1084,6 +1209,7 @@ export function makeTurn(d) {
     if (r.kind === "ft-vs") return vsView(r);
     if (r.kind === "ft-real") return realView(r);
     if (r.kind === "ft-out") return outView(r);
+    if (r.kind === "ft-len") return lenView(r);
     return "";
   }
 
@@ -1095,6 +1221,10 @@ export function makeTurn(d) {
     r.err = "";
     if (r.kind === "ft-hire" && k === "job") r.job = v;
     if (r.kind === "ft-out" && k === "line") r.line = v;
+    if (r.kind === "ft-len" && k === "lenown") {
+      r.len = v;
+      for (const b of el.closest(".dlg-body")?.querySelectorAll('[data-do="lenpick"]') ?? []) b.setAttribute("aria-pressed", String(b.dataset.v === v));
+    }
     if (r.kind === "ft-act") {
       const a = r.a;
       if (k === "does") {
@@ -1162,8 +1292,23 @@ export function makeTurn(d) {
   }
 
   const ACT = {
+    // The table picks how long it is first.
     start(el, id) {
-      push(id, { o: "ft-start", id: newId() });
+      d.openDialog({ kind: "ft-len", camp: id, len: "", err: "" });
+    },
+    len(el, id) {
+      d.openDialog({ kind: "ft-len", camp: id, len: turnOf(id)?.len ?? "", err: "" });
+    },
+    // Her phone moves the landing on a step, and every phone follows.
+    focus(el, id) {
+      push(id, { o: "ft-focus", id: el.dataset.x || null });
+    },
+    // A player can skip to the end on their own phone, and follow her again.
+    skip(el, id) {
+      ui.skip = turnOf(id)?.id ?? "";
+    },
+    follow() {
+      ui.skip = "";
     },
     step(el, id) {
       ui.sure = "";
@@ -1271,13 +1416,25 @@ export function makeTurn(d) {
         return d.render();
       }
       ui.sure = "";
+      // What changed goes into How it came to be, as the downtime's own age.
+      const t = turnOf(id);
+      if (t) d.world().edit(id, [{ o: "wb-age", dt: t.n, len: t.len ?? "", lines: t.said.map((x, i) => ({ id: `d${t.n}-${i}-${newId().slice(0, 8)}`, text: x.text })) }], "", { undoable: false, quiet: true });
       push(id, { o: "ft-end" });
-      d.toast("That downtime’s done. What changed stays here for the crew.", false);
+      d.toast("That downtime’s done. What changed is in How it came to be now, as its own age.", false);
     },
   };
 
   // Taps inside the dialogs.
   const DLG = {
+    lenpick: (el, r) => (r.len = el.dataset.v),
+    savelen(el, r) {
+      const id = r.camp;
+      const len = String(r.len ?? "").replace(/\s+/g, " ").trim().slice(0, MAX.len);
+      if (turnOf(id)) push(id, { o: "ft-len", len });
+      else push(id, { o: "ft-start", id: newId(), len });
+      d.closeDialog();
+      return "closed";
+    },
     payer: (el, r) => (r.payer = el.dataset.f),
     taker: (el, r) => (r.to = el.dataset.f),
     savehire: (el, r) => saveHire(r),
@@ -1435,7 +1592,7 @@ export function makeTurn(d) {
       const t = turnOf(id);
       const x = r.x === "crew" ? t?.crew : t?.acts.find((a) => a.id === r.x);
       if (!x) return;
-      push(id, { o: "ft-done", id: r.x, line: String(r.line ?? lineFor(id, t, x)).trim() });
+      push(id, { o: "ft-done", id: r.x, line: String(r.line ?? lineFor(id, t, x)).trim(), ...(r.hap ? { hap: true } : {}) });
       d.closeDialog();
       return "closed";
     },
@@ -1492,6 +1649,8 @@ export function makeTurn(d) {
     climb(el, r) {
       const id = r.camp;
       const x = turnOf(id).acts.find((a) => a.id === r.x);
+      // Past d12, it happens: that's the downtime's big moment on every phone.
+      if ((find(boardOf(id), x.f)?.agendas.find((y) => y.id === el.dataset.id)?.die ?? 0) >= 12) r.hap = true;
       board(id, [{ o: "climb", id: x.f, lid: el.dataset.id, by: 1 }], "It climbs.");
     },
     write(el, r) {
@@ -1611,8 +1770,21 @@ export function makeTurn(d) {
     d.renderDialog();
   }
 
-  // A roll this phone's just made tumbles, once.
+  // A new step comes in from the side, an agenda that happened gets its
+  // moment (and its sound, when it's on), and a roll tumbles, once.
   function after(app) {
+    const sec = app.querySelector(".ft[data-ft]");
+    if (sec) {
+      const key = sec.querySelector(".ft-stage")?.dataset.stage ?? (sec.querySelector(".ft-rest") ? "end" : sec.querySelector(".ft-moves") ? "moves" : "");
+      const was = ui.stage[sec.dataset.ft];
+      ui.stage[sec.dataset.ft] = key;
+      if (was !== undefined && was !== key && key) sec.querySelector(".ft-in")?.classList.add("is-in");
+    }
+    const hap = app.querySelector(".ft-hap.is-new");
+    if (hap && !ui.hap.has(hap.dataset.hap)) {
+      ui.hap.add(hap.dataset.hap);
+      feel.happened();
+    }
     if (!ui.spin) return;
     const key = ui.spin;
     const scope = () => app.querySelector(`[data-ftk="${CSS.escape(key)}"]`);

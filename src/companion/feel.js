@@ -115,6 +115,26 @@ export const feel = {
     tone(196, 0.32, { vol: 0.16, to: 147, type: "triangle", at: 0.08 });
     buzz([40, 70, 40]);
   },
+  // Something she's shown the crew: a crack of wax and a soft chime, with a
+  // low note under it for a Secret.
+  reveal(big = false) {
+    if (!on) return;
+    knock(0.2);
+    tone(659.25, 0.5, { vol: 0.08, at: 0.07 });
+    tone(987.77, 0.6, { vol: 0.05, at: 0.15 });
+    if (big) tone(130.81, 0.7, { vol: 0.2, to: 98, type: "triangle", at: 0.05 });
+    buzz(big ? [30, 60, 50] : 18);
+  },
+  // A faction's agenda happening in the faction turn: the heavy knock, then
+  // a chime that rings on.
+  happened() {
+    if (!on) return;
+    tone(98, 0.5, { vol: 0.32, to: 49, type: "triangle" });
+    knock(0.3);
+    tone(783.99, 1.1, { vol: 0.08, at: 0.18 });
+    tone(1174.66, 1.0, { vol: 0.05, at: 0.26 });
+    buzz([60, 50, 90]);
+  },
   // A Hurt that puts the wound die on d12, or makes you Blaze.
   heavy() {
     if (!on) return;
