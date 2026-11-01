@@ -87,4 +87,4 @@ export function revealsOf(was, now) {
 }
 
 // The parts as the sheet's line under the name says them, in a sentence.
-export const PART_SAID = { card: "who they are", power: "its Power", res: "its resources", assets: "its other assets", agenda: "its agendas", bonds: "its bonds", threads: "its threads", secret: "its Secret" };
+export const PART_SAID = { card: "a faction they hadn’t met", power: "its Power", res: "its resources", assets: "its other assets", agenda: "its agendas", bonds: "its bonds", threads: "its threads", secret: "its Secret" };

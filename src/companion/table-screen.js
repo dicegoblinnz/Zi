@@ -393,7 +393,7 @@ function revealOne() {
   RV.sheet.className = `ts-rv is-${x.part}${calm() ? " is-calm" : ""}`;
   RV.sheet.innerHTML = `<div class="ts-rv-seal${met ? " is-met" : ""}" aria-hidden="true"><span class="ts-rv-real">${kitSeal(x.seal, { size: "lg" })}</span>${met ? `<span class="ts-rv-half is-l">${kitSeal(null, { size: "lg", blank: true })}</span><span class="ts-rv-half is-r">${kitSeal(null, { size: "lg", blank: true })}</span>` : ""}<svg class="ts-rv-crack" viewBox="0 0 64 64"><path pathLength="1" d="M34 5 L29 20 L36 31 L27 43 L33 59"/></svg></div>
     <div class="ts-rv-in"><h2 id="ts-rv-t">${esc(x.title)}</h2>${listed ? `<ul class="ts-rv-w">${lines}</ul>` : `<div class="ts-rv-w">${lines}</div>`}
-    <p class="ts-rv-n">${met ? "The crew’s just met them." : `The crew’s just found out ${esc(PART_SAID[x.part] ?? "more")}.`}${many ? ` <b>${RV.at + 1} of ${RV.items.length}</b>` : ""}</p></div>`;
+    <p class="ts-rv-n">${met ? "A faction the crew hadn’t met." : `The crew’s just found out ${esc(PART_SAID[x.part] ?? "more")}.`}${many ? ` <b>${RV.at + 1} of ${RV.items.length}</b>` : ""}</p></div>`;
   RV.sheet.hidden = false;
   RV.say.textContent = `The crew’s been shown ${met ? x.name : x.title}${x.part === "secret" && x.lines[0]?.big ? `: ${x.lines[0].text}` : ""}.`;
   RV.timer = setTimeout(() => {
