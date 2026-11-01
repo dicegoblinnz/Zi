@@ -48,7 +48,7 @@
 import { QUESTIONS, REGIONS, SIDES, SIZES, STEPS, canDeal, cardsOf, choose, crewKey, dealRest, fill, lock, newSeed, options, pickAt, pickKey, preview, recordOf, redeal, redealFaction, resume, setCrew, start, startAdd, tensionAt } from "./world-engine.js";
 import { MAX, apply, readable, undoOf } from "./board.js";
 import { PMAX, findPage } from "./pages.js";
-import { die as kitDie, mini as kitMini, tag as kitTag } from "../kit/kit.js";
+import { die as kitDie, mini as kitMini, tag as kitTag, seal as kitSeal } from "../kit/kit.js";
 import { stepsToDice } from "./dice.js";
 import { drawWeb, webOf } from "./world-web.js";
 import { deckOn, deckOver, fixedBy, keptDeck, linesOf, makeAnswer, whoOnly } from "./world-answer.js";
@@ -354,9 +354,11 @@ export function makeWorldMake(w) {
         }),
         seat: at.has(pid) ? at.get(pid) : null,
         picks: rec,
+        seal: f.seal,
       };
     });
-    return { held, seats, ids: factions.map((f) => f.id), seatIds };
+    // Every seal on the board, mini factions' too, so a new one's never the same.
+    return { held, seats, ids: factions.map((f) => f.id), seatIds, taken: doc.factions.map((f) => f.seal).filter(Boolean) };
   }
 
   // The crew as this phone last saw the campaign: its characters, and what's
@@ -418,7 +420,7 @@ export function makeWorldMake(w) {
       if (mix) {
         e.mix = { from: mix.from, name: mix.name ?? "" };
         e.setup = { ...e.setup, region: mix.recipe.region, ...genreOf(mix.recipe) };
-        const W = startAdd(T, { recipe: mix.recipe, dials: mix.dials, seed: newSeed(T), held: held.held, seats: held.seats, asking: mix.asking, tension: mix.tension, crew: crewNow(id, doc, "add") });
+        const W = startAdd(T, { recipe: mix.recipe, dials: mix.dials, seed: newSeed(T), held: held.held, seats: held.seats, asking: mix.asking, tension: mix.tension, crew: crewNow(id, doc, "add"), taken: held.taken });
         live[id] = W;
         e.W = recordOf(W);
         e.at = `f:${W.held}:1`;
@@ -445,7 +447,7 @@ export function makeWorldMake(w) {
       e.ids = held.ids;
       e.seats = held.seatIds;
       e.mix = null;
-      W = startAdd(T, { recipe, dials: b?.dials ?? null, seed: newSeed(T), held: held.held, seats: held.seats, asking: b?.dealt?.asking ?? null, tension: b?.dealt?.tension ?? null, crew: crewNow(id, doc, "add") });
+      W = startAdd(T, { recipe, dials: b?.dials ?? null, seed: newSeed(T), held: held.held, seats: held.seats, asking: b?.dealt?.asking ?? null, tension: b?.dealt?.tension ?? null, crew: crewNow(id, doc, "add"), taken: held.taken });
     } else W = start(T, { recipe, seed: newSeed(T), factions: e.setup.n, crew: crewNow(id, docOf(id), "world") });
     live[id] = W;
     e.W = recordOf(W);
@@ -869,7 +871,9 @@ export function makeWorldMake(w) {
     if (!f) return "";
     const steps = f.steps;
     const dice = f.die ? kitDie(f.die, { own: "them", label: `Power d${f.die}` }) : "";
-    return `<div class="wk-fac card"><div class="wk-fac-die">${dice}</div><div class="wk-fac-in"><p class="wb-k">${esc(f.size ? cap(f.size) : "")}${f.size ? `, ${esc(T.regions[W.recipe.region]?.sizes?.[f.size] ?? "")}` : ""}</p>
+    // Its seal, once its type's dealt one, with its Power small on the edge.
+    const mark = f.seal ? `<div class="wk-fac-die has-seal">${kitSeal(f.seal, { size: "md" })}${dice}</div>` : `<div class="wk-fac-die">${dice}</div>`;
+    return `<div class="wk-fac card">${mark}<div class="wk-fac-in"><p class="wb-k">${esc(f.size ? cap(f.size) : "")}${f.size ? `, ${esc(T.regions[W.recipe.region]?.sizes?.[f.size] ?? "")}` : ""}</p>
       <p class="wk-fac-about">${esc([f.about, f.sits].filter(Boolean).join(" "))}</p>${f.want ? `<p class="wk-fac-want"><em>${esc(f.want)}</em></p>` : ""}<p class="cc-small">${steps} ${steps === 1 ? "step" : "steps"} of Power</p></div></div>`;
   }
 
@@ -1055,7 +1059,7 @@ export function makeWorldMake(w) {
     // a tap from its screens, and the crew from theirs.
     let ring = "";
     if (e.mode !== "add" && C.factions.length > 1) {
-      const nodes = [...C.factions.map((f, i) => ({ id: `f${i}`, name: f.name || `Faction ${i + 1}`, dice: f.die ? [f.die] : null })), ...(C.minis ?? []).map((m, k) => ({ id: `m${k}`, name: m.name, dice: [m.die], mini: true, parent: `f${m.parent}` }))];
+      const nodes = [...C.factions.map((f, i) => ({ id: `f${i}`, name: f.name || `Faction ${i + 1}`, dice: f.die ? [f.die] : null, seal: f.seal ?? null })), ...(C.minis ?? []).map((m, k) => ({ id: `m${k}`, name: m.name, dice: [m.die], mini: true, parent: `f${m.parent}`, seal: m.seal ?? null }))];
       const threads = C.factions.flatMap((f, i) => f.threads.filter((t) => !(t.tie && e.cut.includes(t.tie))).map((t) => ({ from: `f${i}`, to: t.to === "crew" ? "crew" : `f${t.to}`, kind: t.kind, s: "whole", text: t.text })));
       const crew = crewScreens(W)[0];
       const c = d.crewIn(id);
@@ -1563,6 +1567,7 @@ export function makeWorldMake(w) {
           ...bonds,
           threads,
           shown: {},
+          seal: c.seal ?? null,
         },
       });
     }
@@ -1590,6 +1595,7 @@ export function makeWorldMake(w) {
           loy: m.loy.map((t) => line({ text: t.text, kind: t.kind === "hostile" ? "hostile" : "bond", s: "whole" })),
           threads: [],
           shown: {},
+          seal: m.seal ?? null,
         },
       });
     });

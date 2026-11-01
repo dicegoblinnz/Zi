@@ -5,7 +5,7 @@
 // checks make it the same way, and going to another year (stage 19) can too.
 //
 // Everything comes in hidden from the crew and hers to change: the factions
-// onto the board, makers first so each mini faction sits under the faction
+// onto the board with their seals, makers first so each mini faction sits under the faction
 // that made it, their threads toward each other by their new ids, and where
 // each one sits as sits; the places and people into the pages; the map,
 // drawn, with a pin on every place; and How it came to be into the record,
@@ -69,6 +69,8 @@ export function wholeOps(world, newId, now = Date.now()) {
         pub: ids(c.pub), mor: ids(c.mor), loy: ids(c.loy),
         threads: (c.threads ?? []).filter((t) => fid.has(t.to)).map((t) => ({ id: newId(), text: t.text, kind: t.kind, s: t.s, to: fid.get(t.to) })),
         ...(f.seat && pid.has(f.seat) ? { sits: pid.get(f.seat) } : {}),
+        // Its seal, as the file has it (stage 1 of notes/faction-feel-plan.md).
+        seal: f.seal ?? null,
         shown: {},
         book: book(f.key, c),
       },

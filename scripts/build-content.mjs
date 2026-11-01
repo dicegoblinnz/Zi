@@ -30,6 +30,7 @@ import { curlyQuotes, readAim, whoAndDoes } from "../src/companion/aims.js";
 import { CARD_WORDS, newestChange, reachOf, readCards, staleCards } from "./learn.mjs";
 import { bookFor, compileTables, readTablesDir } from "./world-tables.mjs";
 import { compileWorld, readWorldsDir } from "./worlds.mjs";
+import { sealIn, sealKey } from "../src/kit/seals.js";
 import { diceCells, exampleCrews, ruleNames, statBlocks } from "./book-blocks.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -965,6 +966,27 @@ function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, wa
     boards.push({ id: m[2].replace(/^s-frame-/, ""), name: curly(m[1]), kind: "A frame", pitch: curly(firstSentence(plain(pitch).replace(/^["“]/, ""))), link: `${pageFor.get(framesDoc.path)}#${m[2]}`, cards });
   }
   if (boards.length < 6) warn(`expected the Steeplands and five frames to bring in, found ${boards.length}`);
+
+  // Each card's seal, from content/world-tables/seals.yaml, put on after its
+  // hash so a seal's never news to a GM who's brought the card in already.
+  let sealsRaw = null;
+  try {
+    sealsRaw = parseYaml(readFileSync(join(ROOT, "content", "world-tables", "seals.yaml"), "utf8"))?.boards ?? null;
+  } catch (err) {
+    warn(`can't read content/world-tables/seals.yaml: ${String(err?.message ?? err).split("\n")[0]}`);
+  }
+  for (const b of boards) {
+    const given = sealsRaw?.[b.id] ?? {};
+    for (const k of Object.keys(given)) if (!b.cards.some((c) => c.key === k)) warn(`seals.yaml has a seal for ${k} on ${b.name}, and that board hasn't got it`);
+    const seen = new Map();
+    for (const c of b.cards) {
+      const s = sealIn(given[c.key]);
+      if (!s) warn(given[c.key] ? `${c.name}'s seal in seals.yaml isn't one the kit has (src/kit/seals.js)` : `${c.name} on ${b.name} has no seal in content/world-tables/seals.yaml`);
+      else if (seen.has(sealKey(s))) warn(`${c.name} and ${seen.get(sealKey(s))} on ${b.name} have the same seal`);
+      else seen.set(sealKey(s), c.name);
+      c.seal = s;
+    }
+  }
 
   // Appendix B's assets, to pick from.
   const assets = [];

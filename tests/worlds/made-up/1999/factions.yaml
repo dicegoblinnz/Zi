@@ -1,6 +1,7 @@
 factions:
   - key: harbour-bank
     kind: money
+    seal: { c: coins, f: pale }
     size: city
     seat: the-counting-house
     name: The Harbour Bank
@@ -26,6 +27,7 @@ factions:
     secret: { tag: The Money's Gone, more: The Night Boats' cargo paid for the last three loans., ways: [Its books, Its clerks on a Friday] }
   - key: night-boats
     kind: street
+    seal: { c: ship, f: plain }
     size: local
     seat: the-low-steps
     name: The Night Boats
@@ -49,6 +51,7 @@ factions:
     secret: { tag: Owes the Chapel, more: The Tide Chapel hid them after the market burned., ways: [The chapel's crypt, A Night Boat with a candle] }
   - key: town-watch
     kind: law
+    seal: { c: helm, f: plain }
     size: local
     seat: the-watch-house
     name: The Town Watch
@@ -70,6 +73,7 @@ factions:
     secret: { tag: A Knife Inside, more: Hollis's sergeant sells the warrants to the Night Boats., ways: [The sergeant's new coat, Warrants that go missing] }
   - key: tide-chapel
     kind: street
+    seal: { c: bell, f: bend }
     size: small
     seat: the-tide-chapel
     name: The Tide Chapel
@@ -91,6 +95,7 @@ factions:
     secret: { tag: Already Watched, more: The bank's clerk was its spy all along., ways: [The clerk's letters, The bell at midnight] }
   - key: market-gang
     kind: street
+    seal: { c: knife, f: plain }
     size: small
     seat: the-fish-market
     name: The Market Gang
@@ -109,6 +114,7 @@ factions:
     secret: { tag: One Crime, more: "Moll started the fire herself, for the insurance.", ways: [The insurance papers, A burnt lamp] }
   - key: chapel-boys
     kind: street
+    seal: { c: bell, f: bend, d: bar }
     name: The Chapel Boys
     about: Bell-ringers who carry knives. They do two things for the Tide Chapel.
     want: Mother Wren's never alone.
