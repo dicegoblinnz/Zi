@@ -9,7 +9,7 @@
 import { webOfWorld, webData, tiesOf, whereWords, midName } from "./world-page.js";
 import { linesOf } from "../companion/world-web.js";
 import { makeViewer } from "../companion/mapview.js";
-import { die, esc } from "../kit/kit.js";
+import { die, esc, seal } from "../kit/kit.js";
 import { stepsToDice } from "../companion/dice.js";
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -245,11 +245,10 @@ if (data && root) {
       lines,
       draw: (n) => {
         const f = factionBy.get(n.id);
-        const dice = stepsToDice(f.steps);
         const lit = ui.sel === n.id ? " is-sel" : ui.sel && near.has(n.id) ? " is-lit" : ui.sel ? " is-dim" : "";
         return {
           cls: `wm-ft${f.of ? " is-mini" : ""}${lit}`,
-          html: `<span class="wm-ft-d" aria-hidden="true">${die(dice[0] ?? 2, { own: "them", hide: true })}</span><span class="wm-ft-n" aria-hidden="true">${esc(f.card.name.replace(/^The /, ""))}</span>`,
+          html: `<span class="wm-ft-d is-seal" aria-hidden="true">${seal(f.seal ?? null, { size: "sm" })}</span><span class="wm-ft-n" aria-hidden="true">${esc(f.card.name.replace(/^The /, ""))}</span>`,
           attrs: { "data-tok": n.id, "aria-pressed": String(ui.sel === n.id), "aria-label": `${f.card.name}${ui.sel === n.id ? ", its ties lit" : ": light its ties"}` },
         };
       },
@@ -271,7 +270,7 @@ if (data && root) {
       const f = factionBy.get(ui.sel);
       const seat = byKey.get(f.of ? factionBy.get(f.of)?.seat : f.seat);
       const ties = W.threads.filter((t) => t.from === ui.sel || t.to === ui.sel).length;
-      cardEl.innerHTML = `<div class="wn-mc-top"><span class="wn-mc-d" aria-hidden="true">${die(stepsToDice(f.steps)[0] ?? 2, { own: "them", hide: true })}</span><div><p class="wn-k">${esc(data.kinds[f.kind] ?? "")}${seat ? ` · ${esc(seat.name)}` : ""}</p><h3 class="wn-mc-n">${esc(f.card.name)}</h3><p class="wn-mc-l">${ties === 1 ? "1 thread" : `${ties} threads`}, either way, lit on the map.</p></div><button type="button" class="wn-mc-x" data-mc="x" aria-label="Close">${X}</button></div><div class="wn-mc-row"><a class="wn-mc-go" href="#f-${esc(f.key)}">Its card</a><button type="button" class="wn-mc-go is-quiet" data-mc="ties">Its ties in the web</button></div>`;
+      cardEl.innerHTML = `<div class="wn-mc-top"><span class="wn-mc-d is-seal" aria-hidden="true">${seal(f.seal ?? null, { size: "sm" })}<span class="wn-mc-pow">${die(stepsToDice(f.steps)[0] ?? 2, { own: "them", hide: true })}</span></span><div><p class="wn-k">${esc(data.kinds[f.kind] ?? "")}${seat ? ` · ${esc(seat.name)}` : ""}</p><h3 class="wn-mc-n">${esc(f.card.name)}</h3><p class="wn-mc-l">${ties === 1 ? "1 thread" : `${ties} threads`}, either way, lit on the map.</p></div><button type="button" class="wn-mc-x" data-mc="x" aria-label="Close">${X}</button></div><div class="wn-mc-row"><a class="wn-mc-go" href="#f-${esc(f.key)}">Its card</a><button type="button" class="wn-mc-go is-quiet" data-mc="ties">Its ties in the web</button></div>`;
       cardEl.hidden = false;
       say(`f-${f.key}`, `${f.card.name}: ${ties === 1 ? "1 thread" : `${ties} threads`} lit on the map.`);
       padMap();

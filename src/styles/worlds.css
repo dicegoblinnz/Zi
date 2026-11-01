@@ -246,6 +246,15 @@ html[data-wn-tab] .wn:not(.is-live) .wn-head :is(.eyebrow, .wn-when, .wn-counts)
 .wn-mcard[hidden] { display: none; }
 .wn-mc-top { display: grid; grid-template-columns: 40px minmax(0, 1fr) 44px; gap: 0.6rem; align-items: start; }
 .wn-mc-d .zd-die { --s: 40px; width: 40px; height: 40px; }
+/* A faction on the map is its seal (stage 1 of notes/faction-feel-plan.md):
+   the web's tokens, and the card a tap brings up, with its Power small on the
+   seal's edge. */
+.wn-mc-d.is-seal { position: relative; }
+.wn-mc-d.is-seal .zd-seal { --s: 40px; }
+.wn-mc-pow { position: absolute; right: -6px; bottom: -5px; display: grid; }
+.wn-mc-pow .zd-die { --s: 22px; width: 22px; height: 22px; }
+.wn-map .wm-ft-d.is-seal .zd-seal { --s: 30px; }
+.wn-map .wm-ft.is-mini .wm-ft-d.is-seal .zd-seal { --s: 24px; }
 .wn-mc-n { margin: 0.05rem 0 0; font-family: var(--display); font-size: 1.12rem; font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
 .wn-mc-l, .wn-mc-s { margin: 0.2rem 0 0; font-size: 0.9rem; line-height: 1.35; color: var(--muted); }
 .wn-mc-s { font-weight: 700; color: var(--zd-them-ink); }

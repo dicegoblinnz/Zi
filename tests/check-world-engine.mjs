@@ -737,7 +737,13 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   same(forPlayer(doc).factions.length, 0, "a player gets no seal before the card");
   apply(doc, { o: "show", id: "f-bbbbbbbb", p: "card", v: true });
   same(forPlayer(doc).factions[0].seal, { c: "ship", f: "fess", d: "" }, "and gets it with the card");
-  console.log("4b. seals on the board: a book card's, its own, taken off, and a player's only with the card");
+  // A mini faction made in play wears its maker's seal with a mark, the first
+  // that's free.
+  apply(doc, { o: "add", id: "f-bbbbbbbb", l: "res", item: { id: "r-aaaaaaaa", text: "Gull Eggs", x: 1, left: 1 } });
+  apply(doc, { o: "mini", id: "f-bbbbbbbb", res: "r-aaaaaaaa", asset: "", f: { id: "f-cccccccc", name: "The Egg Boats", outs: ["Acquire", "Establish"] } });
+  apply(doc, { o: "mini", id: "f-bbbbbbbb", res: "", asset: "", f: { id: "f-dddddddd", name: "The Cliff Boys", outs: ["Destroy", "Obstruct"] } });
+  same(doc.factions.filter((x) => x.mini).map((x) => x.seal), [{ c: "ship", f: "fess", d: "bar" }, { c: "ship", f: "fess", d: "crescent" }], "a mini faction made in play wears its maker's seal with a mark of its own");
+  console.log("4b. seals on the board: a book card's, its own, taken off, a mini faction's, and a player's only with the card");
 }
 
 // 4c. The GM's seal fold (seal-pick.js), with world.js's edit() and fold()

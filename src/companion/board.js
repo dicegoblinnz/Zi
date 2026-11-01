@@ -27,8 +27,9 @@
 //             none) out of src/kit/seals.js, or null for none yet. It goes to
 //             the crew with the card and never before it
 //             (notes/faction-feel-plan.md, stage 1). A card out of the book
-//             comes in wearing the book's (its was has it) unless the change
-//             that brings it in says otherwise
+//             comes in wearing the book's (its was has it), and a mini faction
+//             its maker's with a mark of its own, unless the change that
+//             brings it in says otherwise
 //   sits      the place's page it sits at, if it came in with a whole world,
 //             so the web on a map puts it on that place's pin. Never sent to
 //             a player, whose maps say who sits where (mapsForPlayer())
@@ -58,7 +59,7 @@
 // the world builder's record, as doc.build (world-record.js), with changes
 // starting "wb-".
 
-import { CHARGES as SEAL_CHARGES, FIELDS as SEAL_FIELDS, MARKS as SEAL_MARKS } from "../kit/seals.js";
+import { CHARGES as SEAL_CHARGES, FIELDS as SEAL_FIELDS, MARKS as SEAL_MARKS, cadetSeal } from "../kit/seals.js";
 import { applyMap, isMapOp, mapsForPlayer, mapsOf, undoMap } from "./maps.js";
 import { applyPage, isPageOp, pagesForPlayer, pagesOf, undoPage } from "./pages.js";
 import { applyBuild, buildForPlayer, buildOf, isBuildOp, undoBuild } from "./world-record.js";
@@ -223,6 +224,8 @@ export function apply(doc, op) {
       if (!f || f.mini || minisOf(doc, f.id).length >= MAX.minis || doc.factions.length >= MAX.factions) return false;
       const n = factionOf({ ...op.f, mini: true, parent: f.id });
       if (!n || find(doc, n.id)) return false;
+      // It wears its maker's seal with a mark of its own, the first that's free.
+      if (op.f.seal === undefined && f.seal) n.seal = cadetSeal(f.seal, doc.factions.map((x) => x.seal).filter(Boolean));
       const res = f.res.find((x) => x.id === op.res);
       const asset = f.assets.find((x) => x.id === op.asset);
       if (res && !n.res.some((x) => x.id === res.id)) {
