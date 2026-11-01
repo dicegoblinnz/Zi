@@ -49,6 +49,7 @@
 //   { o: "move", id, l, lid, to, at? } a resource or an asset goes to another faction
 //   { o: "book", id, card, h, at }     the book's card she's now seen (with her pick made in changes before it)
 //   { o: "seal", id, v }              its seal, { c, f, d }, or null to take it off
+//                                     (fill: true only on one without, sealsFor())
 //
 // A board out of the book comes in as one "new" for each card, so it's undone
 // the same way.
@@ -145,24 +146,29 @@ export function sealOf(raw) {
 // a mark, or else one dealt. book(f) is the book's seal for f, null for none,
 // or undefined to leave f till later (its whole world's file isn't on the
 // phone yet), and rand(f) the randomness that deals f's, the same on every
-// phone of hers. Makers go first, so a mini faction can wear its maker's.
-// The changes that give them, { o: "seal" } each.
+// phone of hers. Makers go first, so a mini faction can wear its maker's, and
+// one whose maker's waiting waits with it. The changes that give them,
+// { o: "seal", fill: true } each, which only fill a faction still without.
 export function sealsFor(doc, { book = () => null, rand }) {
   const got = new Map(doc.factions.filter((f) => f.seal).map((f) => [f.id, f.seal]));
   const taken = [...got.values()];
   const free = (s) => Boolean(s) && !taken.some((t) => sealKey(t) === sealKey(s));
   const ops = [];
+  const waiting = new Set();
   for (const f of [...doc.factions.filter((x) => !x.mini), ...doc.factions.filter((x) => x.mini)]) {
     if (got.has(f.id)) continue;
     const b = book(f);
-    if (b === undefined) continue;
+    if (b === undefined || (f.mini && waiting.has(f.parent))) {
+      waiting.add(f.id);
+      continue;
+    }
     let s = sealOf(b);
     if (!free(s)) s = f.mini && got.has(f.parent) ? cadetSeal(got.get(f.parent), taken) : null;
     s ??= dealSeal(rand(f), { taken });
     if (!s) continue;
     got.set(f.id, s);
     taken.push(s);
-    ops.push({ o: "seal", id: f.id, v: s });
+    ops.push({ o: "seal", id: f.id, v: s, fill: true });
   }
   return ops;
 }
@@ -370,6 +376,10 @@ export function apply(doc, op) {
       if (!f) return false;
       const v = op.v === null ? null : sealOf(op.v);
       if (op.v !== null && !v) return false;
+      // One that fills a faction from before seals (sealsFor()) only goes on
+      // one that's still without, and never copies another's, since it may
+      // have been dealt from a board her other phone's changed since.
+      if (op.fill && (f.seal || !v || doc.factions.some((x) => x !== f && x.seal && sealKey(x.seal) === sealKey(v)))) return false;
       f.seal = v;
       break;
     }

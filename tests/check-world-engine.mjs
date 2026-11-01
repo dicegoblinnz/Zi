@@ -753,8 +753,9 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   apply(old, { o: "new", f: { id: "f-old-book", name: card.name, book, seal: null } });
   apply(old, { o: "new", f: { id: "f-old-gull", name: "The Gull Kings", seal: null } });
   apply(old, { o: "new", f: { id: "f-old-wait", name: "Arasaka", book: { ...book, from: "night-city-2077", key: "arasaka" }, seal: null } });
+  apply(old, { o: "new", f: { id: "f-old-wmin", name: "The Netwatch Eyes", mini: true, parent: "f-old-wait", seal: null } });
   old.factions.find((x) => x.id === "f-old-mini").parent = "f-old-gull";
-  same(old.factions.map((x) => x.seal), [null, null, null, null], "a board from before seals has none");
+  same(old.factions.map((x) => x.seal), [null, null, null, null, null], "a board from before seals has none");
   const fill = () => sealsFor(old, { book: (f) => (f.book?.from === "night-city-2077" ? undefined : f.book ? card.seal : null), rand: (f) => rngOf("camp-1", f.id, "seal") });
   const ops = fill();
   same(JSON.stringify(fill()), JSON.stringify(ops), "and dealing them again deals the same");
@@ -763,7 +764,12 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   same(sealOn("f-old-book"), card.seal, "a book's card gets the book's seal");
   yes(sealOn("f-old-gull") && sealKey(sealOn("f-old-gull")) !== sealKey(card.seal), "one of her own gets one dealt, nobody else's");
   same(sealOn("f-old-mini"), { ...sealOn("f-old-gull"), d: Object.keys(MARKS)[0] }, "a mini faction gets its maker's with a mark");
-  same([sealOn("f-old-wait"), sealsFor(old, { book: () => undefined, rand: () => Math.random }).length], [null, 0], "and one whose world's file isn't here waits for it");
+  same([sealOn("f-old-wait"), sealOn("f-old-wmin"), sealsFor(old, { book: () => undefined, rand: () => Math.random }).length], [null, null, 0], "and one whose world's file isn't here waits for it, with its mini factions");
+  // Dealt from a board her other phone's changed since, one only fills a
+  // faction that's still without, and never copies another's.
+  const gull = sealOn("f-old-gull");
+  same([apply(old, { o: "seal", id: "f-old-gull", v: card.seal, fill: true }), sealOn("f-old-gull")], [false, gull], "a seal that fills never goes over one she's set");
+  same([apply(old, { o: "seal", id: "f-old-wait", v: gull, fill: true }), sealOn("f-old-wait")], [false, null], "or copies another faction's");
   console.log("4b. seals on the board: a book card's, its own, taken off, a mini faction's, a player's only with the card, and a board from before seals given them");
 }
 
