@@ -21,6 +21,8 @@
 // threads drawn between them a frame at a time in the screen's own pixels, so
 // the tokens and the lines stay one size while the map moves under them.
 
+import { crossAt } from "./world-web.js";
+
 const TAP_MOVE = 10; // how far a finger can wander and still be a tap
 const DOUBLE_MS = 300;
 const DOUBLE_GAP = 44;
@@ -34,7 +36,11 @@ const ease = (k) => 1 - Math.pow(1 - k, 3);
 // A thread between two tokens on the screen: a curve that bows to one side by
 // bow (two between the same pair bow apart), worked out from the same end
 // whichever way it goes, and stopping short of each token so its arrow shows.
+// It hands back the curve, its middle and which way it runs there, where a
+// hostile one carries the web's cross (crossAt() in world-web.js), so it's
+// told from a bond by more than its colour.
 const TOKEN = 17;
+const CROSS = 3.4; // the cross's size in the screen's pixels, against the web's 100 box
 function curveOf([ax, ay], [bx, by], bow, fromA) {
   const [p, q] = fromA ? [[ax, ay], [bx, by]] : [[bx, by], [ax, ay]];
   const dx = q[0] - p[0];
@@ -53,7 +59,12 @@ function curveOf([ax, ay], [bx, by], bow, fromA) {
   const s0 = cut([ax, ay]);
   const s1 = cut([bx, by]);
   const r = (v) => Math.round(v * 10) / 10;
-  return `M${r(s0[0])} ${r(s0[1])}Q${r(mx)} ${r(my)} ${r(s1[0])} ${r(s1[1])}`;
+  const run = Math.hypot(s1[0] - s0[0], s1[1] - s0[1]) || 1;
+  return {
+    d: `M${r(s0[0])} ${r(s0[1])}Q${r(mx)} ${r(my)} ${r(s1[0])} ${r(s1[1])}`,
+    mid: { x: (s0[0] + 2 * mx + s1[0]) / 4, y: (s0[1] + 2 * my + s1[1]) / 4 },
+    dir: { x: (s1[0] - s0[0]) / run, y: (s1[1] - s0[1]) / run },
+  };
 }
 
 // w and h are the picture's size in pixels. drawPin(pin) gives a pin's
@@ -155,7 +166,10 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
     for (const l of lines) {
       const p = at.get(l.a);
       const q = at.get(l.b);
-      if (p && q) l.el.setAttribute("d", curveOf(p, q, l.bow, l.a < l.b));
+      if (!p || !q) continue;
+      const c = curveOf(p, q, l.bow, l.a < l.b);
+      l.el.setAttribute("d", c.d);
+      l.x?.setAttribute("d", crossAt(c.mid, c.dir, CROSS));
     }
   }
   const draw = () => {
@@ -573,7 +587,14 @@ export function makeViewer({ w, h, label, how, drawPin, onTap, onRest }) {
         p.setAttribute("class", l.cls);
         if (l.arrow) p.setAttribute("marker-end", `url(#wm-arrow-${l.arrow})`);
         g.append(p);
-        return { ...l, el: p };
+        // A hostile line's cross, lit and faded with its line.
+        let x = null;
+        if (/\bis-hostile\b/.test(l.cls)) {
+          x = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          x.setAttribute("class", ["wm-wx", ...["is-snapped", "is-hi"].filter((c) => new RegExp(`\\b${c}\\b`).test(l.cls))].join(" "));
+          g.append(x);
+        }
+        return { ...l, el: p, x };
       });
       webEl.hidden = false;
       linesEl.removeAttribute("hidden");

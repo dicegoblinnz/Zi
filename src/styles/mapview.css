@@ -85,6 +85,10 @@
 .wm-wl.is-snapped { stroke-dasharray: 1.5 6; opacity: 0.6; }
 .wm-wl.is-hi { stroke-width: 3.2; }
 .wm-wl:not(.is-hi) { opacity: 0.5; }
+.wm-wx { fill: none; stroke: var(--zd-harm-line); stroke-width: 2.2; stroke-linecap: round; }
+.wm-wx.is-snapped { opacity: 0.6; }
+.wm-wx.is-hi { stroke-width: 3.2; }
+.wm-wx:not(.is-hi) { opacity: 0.5; }
 .wm-arrow.is-bond { fill: var(--zd-you-line); }
 .wm-arrow.is-hostile { fill: var(--zd-harm-line); }
 .wm-web { position: absolute; inset: 0; pointer-events: none; }
