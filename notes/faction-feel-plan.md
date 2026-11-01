@@ -36,6 +36,8 @@ Every faction gets a wax seal: a charge for the kind of faction it is, a field t
 
 Owns: `src/kit/`, `src/styles/kit.css`, `src/pages/kit.astro`, `src/companion/seal-pick.js`, the seal's change in `board.js`, the builder's dealing (`world-engine.js`, `world-make.js`'s card screens only where the seal shows), `content/world-tables/`, `content/worlds/`, `scripts/worlds.mjs`, `scripts/world-tables.mjs`, `src/companion/world-web.js`, `src/styles/web.css`, `src/worlds/`.
 
+Built (1 Nov): 27 charges, 8 fields, 6 marks and the 8 glyphs, all our own drawings, on `/kit/` for Mo's yes. The builder deals a seal with every faction and Add a faction one nobody on the board has, the book's boards have theirs in `content/world-tables/seals.yaml`, both whole worlds have one on every faction, a card out of the book wears the book's, and a mini faction made in play wears its maker's with a mark. The GM's seal fold has Deal another and a picker, and a pick that would copy another faction's takes a mark. The web draws seals, and a hostile line carries a cross, on a map's web too. Of the small fixes, a faction's name mid-sentence was done in stage 2's `world.js`, and the "What changed" lines and the names on telegraph and turn cards (ink now) in stage 5's files.
+
 ### Stage 2: the board shows what's happening (the board and faction page)
 
 The crew's World tab opens on three things. Since you last played: what changed and what they've found out since this phone last looked, kept on the phone. Closing in: every agenda the crew's been shown, drawn as its six die sizes with the one it's at lit, nearest first, in the words the code already has ("any day now", which `world.js` and `turn.js` each have a copy of, so share one). Who's who: seal cards, standing as the card's top edge (ember hostile, gold friendly, plain for business), Power, and how much the crew knows. The GM's board is the same with Find and the kind chips the world pages have once there are more than about eight factions, and sorting by closing in or by who's after the crew.
@@ -44,6 +46,8 @@ A faction's page for the crew: its seal big, the same layout on every faction, w
 
 Owns: `src/companion/world.js` and its part of `src/styles/companion.css` (the `wb-` and `ww-` rules).
 
+Built (1 Nov): all of it, with `ago()` shared from `board.js` now. Two things are smaller than asked: the kind chips show only on a whole world, since the book's boards and dealt factions don't keep a kind on the board, and After the crew sorts by threads toward the crew, which Night City's factions come in without, so it keeps the board's order there till she adds some.
+
 ### Stage 3: reveals as moments, and stage 5: the faction turn as a sequence (the moments)
 
 When she shows the crew part of a faction, every crew phone gets a sheet: the seal breaks open and the part writes in, with the sound and buzz if the player's turned them on (`feel.js`), and the table screen shows it too. It's only ever what the crew's been shown, and on the table screen only what a screen may show (`screenOf()`). The live table tells the crew's phones to look again when what they can see of the board changes (`crewView()` in `src/worker/world.js` doesn't count the factions yet).
@@ -51,6 +55,8 @@ When she shows the crew part of a faction, every crew phone gets a sheet: the se
 The faction turn: when it starts, the table picks how long the downtime is. Before anything lands, every move the crew's allowed to see is shown at once, each faction's seal with its outcome's glyph and an arrow at its target. Then the actions land one at a time, the crew's phones following her taps, with a way to skip to the end always there. The big flourish is saved for an agenda that happens, and it ends on one "While you rested" summary that lists what changed, once, and writes it into How it came to be as a new age with its length (`world-record.js` and `world-story.js`, starting a record when the world hasn't one).
 
 Owns: `src/companion/turn.js`, `src/companion/turn-rules.js`, `src/companion/reveal.js`, `src/companion/table-screen.js`, `src/styles/table-screen.css`, `src/companion/feel.js`, `src/companion/world-record.js`, `src/companion/world-story.js`, `src/worker/table.js` and `src/worker/world.js`, and the `tg-`, `ft-` and turn rules in `companion.css`. It touches `world.js` only through the reveal seam.
+
+Built (1 Nov): the reveal (`reveal-rules.js` works out what's just been shown, the Table object keeps it for 90 seconds for the table screen) and the turn as a sequence, with each downtime an age in How it came to be (`wb-age`). A place or a person shown pokes the crew's phones but gets no sheet yet, and the table screen still shows none of the faction turn, as before.
 
 ### Stage 6: the GM's ledger (after the playtests)
 
