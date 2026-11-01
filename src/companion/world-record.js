@@ -7,7 +7,7 @@
 // the ages of it she's shown them, never a line that's hers, and never the
 // seed or anything dealt.
 //
-// The record: { recipe, dials, seed, dealt, history, shown, at, world? }
+// The record: { recipe, dials, seed, dealt, history, shown, ages, at, world? }
 //   recipe   { region, era, twist }, by their ids in the tables
 //   dials    { tense, strange, rich, ruled }, each 0 to 2
 //   seed     its three words, like ash-lantern-ford
@@ -18,6 +18,10 @@
 //            when the deck wrote it (the founding's will be its ground, its
 //            founding and its strife), or 0. A line that's hers (its answer
 //            made a Secret) never leaves her phone, even with its age shown.
+//            After the founding's three, each downtime is an age of its own:
+//            downtime n's lines are age 3 + n (notes/faction-feel-plan.md)
+//   ages     the downtimes in it, [{ n, len }], len being how long the table
+//            said it was ("A month", or its own words), only the story's clock
 //   shown    the ages the crew's been shown, each a tap of hers (Mo's pick,
 //            30 Oct), like [1, 2]
 //   world    the whole world it came in with (stage 14), like night-city-2077,
@@ -39,10 +43,15 @@
 //   { o: "wb-show", v, age? }    an age shown to the crew (v true) or hidden
 //                                again (false), or with no age every age, or
 //                                with v a list, exactly those ages (Undo's)
+//   { o: "wb-age", n, len, lines }  downtime n ends: its age, how long it was,
+//                                and what changed in it, shown to the crew,
+//                                since it's what they heard. A world with no
+//                                record yet gets one.
+//   { o: "wb-age-off", n }       downtime n's age off it again
 
 // One request carries 200,000 characters (MAX_TEXT in src/worker/index.js),
 // so on a big board Done sends the record on its own, after the factions.
-export const BMAX = { lines: 80, text: 400, dealt: 150000, depth: 8, list: 256, words: 600 };
+export const BMAX = { lines: 80, text: 400, dealt: 150000, depth: 8, list: 256, words: 600, downtimes: 96, more: 600, len: 40 };
 const REGIONS = ["town", "city", "country", "world", "stars"];
 const DIALS = ["tense", "strange", "rich", "ruled"];
 const ID = /^[a-z0-9-]{2,24}$/;
@@ -64,7 +73,15 @@ const worldId = (v) => (typeof v === "string" && v.length <= 40 && TABLE_ID.test
 // the crew's been shown: a list, each once and in order. An old record's true
 // was all of it.
 export const AGE_ORDER = [1, 2, 3, 0];
-const showsOf = (v) => (v === true ? [0, 1, 2, 3] : Array.isArray(v) ? [...new Set(v.map(Number).filter((n) => Number.isInteger(n) && n >= 0 && n <= 3))].sort((a, b) => a - b) : []);
+// The highest age: the founding's three, then a downtime each.
+const TOP = 3 + BMAX.downtimes;
+const showsOf = (v, b = null) => (v === true ? [0, 1, 2, 3, ...(b?.ages ?? []).map((x) => 3 + x.n)] : Array.isArray(v) ? [...new Set(v.map(Number).filter((n) => Number.isInteger(n) && n >= 0 && n <= TOP))].sort((a, b) => a - b) : []);
+// Every age in the order it's read: the founding's three, each downtime in
+// turn, then the rest of it.
+export const agesOf = (b) => [1, 2, 3, ...(b?.ages ?? []).map((x) => 3 + x.n), 0];
+// A downtime's age, and the downtime an age is.
+export const isDowntime = (age) => Number.isInteger(age) && age > 3;
+export const downtimeOf = (b, age) => (isDowntime(age) ? (b?.ages ?? []).find((x) => 3 + x.n === age) ?? { n: age - 3, len: "" } : null);
 
 // What was dealt, kept as plain words and numbers: nothing deeper, longer or
 // bigger than a world can hold, and nothing but data.
@@ -89,7 +106,7 @@ function dealtOf(v) {
 function lineOf(x) {
   if (!x || typeof x !== "object" || !ID.test(str(x.id))) return null;
   const text = line(x.text, BMAX.text);
-  return text ? { id: x.id, text, age: whole(x.age, 0, 3, 0), ...(x.hers === true ? { hers: true } : {}) } : null;
+  return text ? { id: x.id, text, age: whole(x.age, 0, TOP, 0), ...(x.hers === true ? { hers: true } : {}) } : null;
 }
 
 // A record as it came from somewhere else, tidied, or null.
@@ -98,13 +115,18 @@ export function buildOf(raw) {
   const r = raw.recipe && typeof raw.recipe === "object" ? raw.recipe : {};
   const d = raw.dials && typeof raw.dials === "object" ? raw.dials : {};
   const seen = new Set();
+  const ns = new Set();
+  const ages = (Array.isArray(raw.ages) ? raw.ages : []).map((x) => ({ n: whole(x?.n, 1, BMAX.downtimes, 0), len: line(x?.len, BMAX.len) })).filter((x) => x.n && !ns.has(x.n) && ns.add(x.n)).sort((x, y) => x.n - y.n);
+  const lines = (Array.isArray(raw.history) ? raw.history : []).map(lineOf).filter((x) => x && !seen.has(x.id) && seen.add(x.id));
   return {
     recipe: { region: REGIONS.includes(r.region) ? r.region : "", era: tableId(r.era) ?? "", twist: tableId(r.twist) },
     dials: Object.fromEntries(DIALS.map((k) => [k, whole(d[k], 0, 2, 1)])),
     seed: SEED.test(str(raw.seed)) ? raw.seed : "",
     dealt: dealtOf(raw.dealt),
-    history: (Array.isArray(raw.history) ? raw.history : []).map(lineOf).filter((x) => x && !seen.has(x.id) && seen.add(x.id)).slice(0, BMAX.lines),
-    shown: showsOf(raw.shown),
+    // The founding's lines, then what changed each downtime, each in its own cap.
+    history: [...lines.filter((l) => l.age <= 3).slice(0, BMAX.lines), ...lines.filter((l) => l.age > 3 && ns.has(l.age - 3)).slice(-BMAX.more)],
+    shown: showsOf(raw.shown, { ages }),
+    ages,
     at: whole(raw.at, 0, Number.MAX_SAFE_INTEGER, 0),
     ...(worldId(raw.world) ? { world: raw.world, ...(raw.fan === true ? { fan: true } : {}) } : {}),
   };
@@ -133,7 +155,7 @@ export function applyBuild(doc, op) {
     case "wb-line": {
       const item = lineOf(op.item);
       const into = b ?? buildOf({});
-      if (!item || into.history.some((x) => x.id === item.id) || into.history.length >= BMAX.lines) return false;
+      if (!item || item.age > 3 || into.history.some((x) => x.id === item.id) || into.history.filter((x) => x.age <= 3).length >= BMAX.lines) return false;
       into.history.splice(whole(op.at, 0, into.history.length, into.history.length), 0, item);
       doc.build = into;
       return true;
@@ -155,14 +177,40 @@ export function applyBuild(doc, op) {
       if (!b) return false;
       let next;
       if (Array.isArray(op.v)) next = showsOf(op.v);
-      else if (op.age == null) next = op.v === true ? showsOf(true) : [];
+      else if (op.age == null) next = op.v === true ? showsOf(true, b) : [];
       else {
-        const age = whole(op.age, 0, 3, -1);
-        if (age < 0) return false;
+        const age = whole(op.age, 0, TOP, -1);
+        if (age < 0 || (isDowntime(age) && !b.ages.some((x) => 3 + x.n === age))) return false;
         next = op.v === true ? showsOf([...b.shown, age]) : b.shown.filter((x) => x !== age);
       }
       if (next.join() === b.shown.join()) return false;
       b.shown = next;
+      return true;
+    }
+    case "wb-age": {
+      const n = whole(op.n, 1, BMAX.downtimes, 0);
+      const into = b ?? buildOf({});
+      if (!n || into.ages.some((x) => x.n === n)) return false;
+      const age = 3 + n;
+      const lines = (Array.isArray(op.lines) ? op.lines : []).map((x) => lineOf({ id: x?.id, text: x?.text, age })).filter((l) => l && !into.history.some((y) => y.id === l.id)).slice(0, BMAX.lines);
+      into.ages = [...into.ages, { n, len: line(op.len, BMAX.len) }].sort((x, y) => x.n - y.n);
+      into.history.push(...lines);
+      // Past what a record holds, the oldest downtime's lines go first.
+      const over = into.history.filter((l) => l.age > 3).length - BMAX.more;
+      if (over > 0) {
+        const old = new Set(into.history.filter((l) => l.age > 3).slice(0, over).map((l) => l.id));
+        into.history = into.history.filter((l) => !old.has(l.id));
+      }
+      into.shown = showsOf([...into.shown, age]);
+      doc.build = into;
+      return true;
+    }
+    case "wb-age-off": {
+      const n = whole(op.n, 1, BMAX.downtimes, 0);
+      if (!b || !b.ages.some((x) => x.n === n)) return false;
+      b.ages = b.ages.filter((x) => x.n !== n);
+      b.history = b.history.filter((l) => l.age !== 3 + n);
+      b.shown = b.shown.filter((x) => x !== 3 + n);
       return true;
     }
     default:
@@ -188,6 +236,12 @@ export function undoBuild(doc, op) {
       return l ? [{ o: "wb-line", item: copy(l), at: b.history.indexOf(l) }] : [];
     case "wb-show":
       return b ? [{ o: "wb-show", v: [...b.shown] }] : [];
+    case "wb-age":
+      return b ? [{ o: "wb-age-off", n: op.n }] : [{ o: "wb-gone" }];
+    case "wb-age-off": {
+      const a = b?.ages.find((x) => x.n === op.n);
+      return a ? [{ o: "wb-age", n: a.n, len: a.len, lines: b.history.filter((l) => l.age === 3 + a.n).map(({ id, text }) => ({ id, text })) }] : [];
+    }
     default:
       return [];
   }
@@ -201,5 +255,7 @@ export function buildForPlayer(doc) {
   const shown = new Set(b?.shown ?? []);
   const history = (b?.history ?? []).filter((l) => !l.hers && shown.has(l.age)).map(({ id, text, age }) => ({ id, text, age }));
   const world = b?.world && b.fan && ((doc.factions ?? []).some((f) => f.shown?.card) || (doc.pages ?? []).some((p) => p.shown?.page) || (doc.maps ?? []).some((m) => m.shown)) ? b.world : null;
-  return history.length || world ? { history, shown: [...new Set(history.map((l) => l.age))].sort((x, y) => x - y), ...(world ? { world } : {}) } : null;
+  // The downtimes the crew can read, with how long each was.
+  const ages = (b?.ages ?? []).filter((x) => history.some((l) => l.age === 3 + x.n)).map(({ n, len }) => ({ n, len }));
+  return history.length || world ? { history, shown: [...new Set(history.map((l) => l.age))].sort((x, y) => x - y), ...(ages.length ? { ages } : {}), ...(world ? { world } : {}) } : null;
 }

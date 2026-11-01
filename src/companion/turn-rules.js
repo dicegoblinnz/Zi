@@ -13,11 +13,21 @@
 //         cards (world.js keeps the board, party.js the party sheet)
 // Ending it keeps what changed, for the crew to look back on.
 //
-//   turn  { id, n, at, step, sent, hires, acts, crew, power, pressure, said }
+//   turn  { id, n, at, len, step, sent, hires, acts, crew, power, pressure,
+//           said, focus, vis }
+//     len       how long the downtime is, picked when it starts ("A week", "A
+//               month", "A season" or the table's own words). It's only the
+//               story's clock: it goes on the downtime's age in How it came
+//               to be (world-record.js), and changes nothing in play
 //     sent      when she telegraphed (0 till then)
 //     power     each faction's Power, rolled once a downtime: { <faction>: { d, v } }
 //     pressure  the action that's the faction pressure
 //     said      what changed, a line each: { id, text, at }
+//     focus     where the landing's got to on her phone, which every phone
+//               follows: null (what's coming, all at once), "crew", an
+//               action's id, or "end" (While you rested). vis is the last
+//               place it was that the crew can see, which is all a player
+//               gets, so an off-screen action never shows even as a step
 //   a hire  { id, by ("crew" or the faction paying), byName, to, toName, job }
 //   an act  { id, f, name, mini, what, at, does, job, steps, split, main, vs,
 //             roll, off, comes, faces, vsFaces, real, stop, won, done }
@@ -43,6 +53,7 @@
 //             stops, each one's result, so one that stopped it stands
 //     won     { main, split } once it's landed, and done, its line once
 //             she's made its changes on the cards ("" when it's nobody's news)
+//     hap     true when it worked its agenda and the agenda happened
 //   the crew's action  { id, move, at, does, how, who, steps, fits, split,
 //             slot, vs, faces, vsFaces, real, by, again, tie, won, done }
 //     move    one of the crew's moves on a faction, or "Goal", "Project" or
@@ -63,7 +74,7 @@ export const WHATS = [...OUTCOMES, "agenda", "write", "comes"];
 // The crew's moves on a faction, then the rest of what its action can be.
 export const MOVES = [...OUTCOMES, "Set back", "Work for it", "Goal", "Project", "Else"];
 export const PARTS = ["power", "thing", "face", "agenda", "act", "goal", "project"];
-export const MAX = { name: 60, line: 160, at: 120, comes: 240, acts: 60, hires: 12, said: 80, fits: 12, steps: 36 };
+export const MAX = { name: 60, line: 160, at: 120, comes: 240, acts: 60, hires: 12, said: 80, fits: 12, steps: 36, len: 40 };
 const SIZES = [2, 4, 6, 8, 10, 12];
 const LISTS = ["res", "assets", "agendas", "pub", "mor", "loy", "threads"];
 const KS = ["power", "die", "act", "none"];
@@ -345,7 +356,25 @@ export function applyTurn(doc, op, who, roster, now) {
       if (!gm) return gmOnly();
       if (!ID.test(String(op.id ?? ""))) return no("That downtime didn’t make sense.");
       if (t) return t.id === op.id ? yes() : no("There’s a downtime on already.");
-      doc.turn = { id: String(op.id), n: (Number(doc.last?.n) || 0) + 1, at: now, step: "hire", sent: 0, hires: [], acts: [], crew: null, power: {}, pressure: null, said: [] };
+      doc.turn = { id: String(op.id), n: (Number(doc.last?.n) || 0) + 1, at: now, len: line(op.len, MAX.len), step: "hire", sent: 0, hires: [], acts: [], crew: null, power: {}, pressure: null, said: [], focus: null, vis: null };
+      return yes();
+    }
+    case "ft-len": {
+      if (!gm) return gmOnly();
+      if (!t) return none();
+      t.len = line(op.len, MAX.len);
+      return yes();
+    }
+    case "ft-focus": {
+      if (!gm) return gmOnly();
+      if (!t) return none();
+      if (!t.sent) return no("Telegraph the factions’ actions first.");
+      const to = op.id == null ? null : String(op.id);
+      if (to !== null && to !== "end" && to !== "crew" && !act(to)) return no("That action’s gone.");
+      if (to === "crew" && !t.crew) return no("The crew hasn’t taken an action this downtime.");
+      t.focus = to;
+      // The crew only ever follows her to what it can see.
+      if (to === null || to === "end" || to === "crew" || !act(to).off) t.vis = to;
       return yes();
     }
     case "ft-hire": {
@@ -579,6 +608,7 @@ export function applyTurn(doc, op, who, roster, now) {
       if (!landed(x) && !(op.id === "crew" && rolled(x))) return no("It hasn’t landed yet.");
       const text = line(op.line, MAX.line);
       x.done = text;
+      if (op.id !== "crew" && x.what === "agenda" && op.hap === true) x.hap = true;
       if (text && t.said.length < MAX.said) t.said.push({ id: op.id === "crew" ? `crew-${t.id}`.slice(0, 32) : x.id, text, at: now });
       return yes();
     }
@@ -652,7 +682,9 @@ export function turnView(doc, role) {
   if (crew?.vs.k === "power" && (crew.vs.set || rolled(crew))) seen.add(crew.vs.f);
   return {
     turn: {
-      id: t.id, n: t.n, at: t.at, step: t.step, sent: t.sent,
+      id: t.id, n: t.n, at: t.at, len: t.len ?? "", step: t.step, sent: t.sent,
+      // Where she's got to in the landing, as far as the crew can see it.
+      focus: t.vis ?? null,
       hires: clone(t.hires.filter((h) => h.by === "crew")),
       acts, crew,
       power: Object.fromEntries(Object.entries(t.power).filter(([f]) => seen.has(f)).map(([f, p]) => [f, clone(p)])),
@@ -712,6 +744,12 @@ export function turnNews(was, now, { gm = false, me = null } = {}) {
   if (!gm) {
     const before = new Set(a.said.map((x) => x.id));
     for (const x of b.said) if (!before.has(x.id)) lines.push(x.text);
+    // An agenda happening is the downtime's big moment.
+    for (const x of b.acts) {
+      if (!x.hap || a.acts.some((y) => y.id === x.id && y.hap)) continue;
+      lines.push(`${x.name}’s agenda happened.`);
+      buzz = true;
+    }
   }
   return { lines, buzz };
 }

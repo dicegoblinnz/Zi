@@ -1900,6 +1900,84 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
 }
 .ft-done-note { margin: 0; padding: 0.45rem 0.7rem; font-weight: 700; color: var(--gold-ink); background: color-mix(in srgb, var(--gold) 10%, var(--surface)); border-left: 3px solid var(--gold); border-radius: 2px; overflow-wrap: anywhere; }
 
+/* A faction's name on a telegraph or a turn's card is ink: gold's the crew's. */
+.cc .zd-tele h3, .cc-dialog .zd-tele h3 { color: var(--ink); }
+
+/* How long the downtime is, by the heading, and picking it. */
+.ft-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 12px; }
+.ft-lenb { min-height: 44px; }
+.ft-lens { display: grid; gap: 8px; margin-bottom: 0.9rem; }
+
+/* The landing, a step at a time (stage 5 of notes/faction-feel-plan.md).
+   First every move at once: whose it is, its glyph, and what it's at, each
+   by its seal, the crew's in gold. */
+.ft-in { margin-top: 0.2rem; }
+.ft-moves { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.ft-move { display: grid; grid-template-columns: 34px 24px 34px minmax(0, 1fr); align-items: center; gap: 8px; padding: 8px 10px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.ft-move.is-off { border-style: dashed; }
+.ft-mv-s { display: grid; place-items: center; min-height: 34px; }
+.ft-mv-s .zd-seal { --s: 34px; }
+.ft-mv-g { display: grid; place-items: center; color: var(--zd-them-ink); }
+.ft-move.is-crew .ft-mv-g { color: var(--gold-ink); }
+.ft-mv-g .zd-glyph { --s: 22px; }
+.ft-mv-in { min-width: 0; line-height: 1.3; overflow-wrap: anywhere; }
+.ft-mv-in b { display: block; font-family: var(--display); font-weight: 600; font-size: 1.02rem; }
+.ft-mv-in > span:not(.ft-tag):not(.ft-mv-d) { font-size: 0.95rem; color: var(--muted); }
+.ft-mv-d { font-size: 0.82rem; font-weight: 700; color: var(--zd-them-ink); }
+.zd-seal.ft-crewseal.is-blank .wax { stroke-dasharray: none; }
+.zd-seal.ft-crewseal.is-blank .face { fill: color-mix(in srgb, var(--zd-you) 24%, var(--zd-token)); }
+
+/* Then one at a time: how far along, the order by seals (hers to jump
+   about in), the action, and what it changed. */
+.ft-seqh { display: flex; align-items: center; gap: 10px; margin: 0.8rem 0 0.7rem; }
+.ft-of { flex: none; margin: 0; font-family: var(--display); font-size: 1rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.ft-of b { font-size: 1.55rem; color: var(--ink); }
+.ft-track { display: flex; gap: 2px; min-width: 0; margin: 0; padding: 0; overflow-x: auto; list-style: none; scrollbar-width: none; }
+.ft-track::-webkit-scrollbar { display: none; }
+.ft-tk-b { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; background: none; border: 1px solid transparent; border-radius: 2px; }
+.ft-tk .zd-seal { --s: 30px; }
+.ft-tk.is-now .ft-tk-b { background: color-mix(in srgb, var(--zd-them) 16%, transparent); border-color: var(--zd-them-line); }
+.ft-tk.is-done:not(.is-now) .zd-seal, .ft-tk.is-past:not(.is-now) .zd-seal { opacity: 0.5; }
+.ft-tk.is-off .zd-seal { opacity: 0.7; }
+button.ft-tk-b { cursor: pointer; }
+button.ft-tk-b:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
+.ft-one { margin-top: 10px; padding: 0.65rem 0.8rem; background: var(--panel); border-radius: 2px; }
+.ft-one p { margin: 0; font-size: 0.98rem; line-height: 1.45; overflow-wrap: anywhere; }
+.ft-stage .ft-crew { margin-top: 0; }
+
+/* An agenda that happened: every size lit in turn, then past d12. */
+.ft-hap { display: grid; justify-items: center; gap: 4px; margin: 0 0 12px; padding: 14px 12px 12px; text-align: center; background: color-mix(in srgb, var(--zd-them) 12%, var(--surface)); border: 1px solid var(--zd-them-line); border-radius: 3px; }
+.ft-hap-dice { display: flex; align-items: center; gap: 4px; }
+.ft-hap-dice .zd-die { --s: 30px; }
+.ft-star { display: block; width: 28px; height: 28px; fill: var(--zd-them); stroke: var(--zd-them-ink); stroke-width: 1.2; stroke-linejoin: round; }
+.ft-hap-t { margin: 2px 0 0; font-family: var(--display); font-weight: 700; font-size: 1.55rem; line-height: 1.1; letter-spacing: 0.04em; color: var(--zd-them-ink); }
+.ft-hap-a { margin: 0; font-size: 1rem; line-height: 1.4; overflow-wrap: anywhere; }
+
+/* While you rested: what changed, once, and how long it took. */
+.ft-rest-h { margin: 0.5rem 0 0; font-family: var(--display); font-weight: 600; font-size: 1.45rem; line-height: 1.15; }
+.ft-rest-len { margin: 0.1rem 0 0.75rem; font-weight: 700; color: var(--muted); }
+.ft-rest .cc-small { margin: 0.6rem 0 0; }
+.ws-len { margin-left: 4px; font-family: var(--body); font-size: 0.82em; font-weight: 600; letter-spacing: 0.02em; color: var(--muted); }
+
+/* A step comes in from the side, the moves and the summary rise in a line
+   at a time, and an agenda happening lights its dice up, then the star. */
+.ft-stage.is-in { animation: ft-step-in 280ms cubic-bezier(0.22, 1, 0.36, 1); }
+.ft-in.is-in .ft-move, .ft-rest.is-in .ft-said li { animation: ft-rise 300ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: calc(var(--i, 0) * 60ms); }
+.ft-hap.is-new { animation: ft-hap-glow 1200ms ease-out 420ms; }
+.ft-hap.is-new .ft-hap-dice > span { animation: ft-hap-lit 260ms ease-out both; animation-delay: calc(var(--i, 0) * 70ms); }
+.ft-hap.is-new .ft-hap-x { animation: ft-hap-star 520ms cubic-bezier(0.34, 1.56, 0.64, 1) 440ms both; }
+.ft-hap.is-new .ft-hap-t { animation: ft-hap-t 420ms cubic-bezier(0.34, 1.56, 0.64, 1) 520ms both; }
+@keyframes ft-step-in { from { opacity: 0; transform: translateX(18px); } }
+@keyframes ft-rise { from { opacity: 0; transform: translateY(6px); } }
+@keyframes ft-hap-lit { from { opacity: 0.2; transform: scale(0.8); } }
+@keyframes ft-hap-star { from { opacity: 0; transform: scale(0.3) rotate(-40deg); } }
+@keyframes ft-hap-t { from { opacity: 0; transform: scale(1.25); } }
+@keyframes ft-hap-glow { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--zd-them) 60%, transparent); } 100% { box-shadow: 0 0 0 18px transparent; } }
+@media (max-width: 359px) {
+  .ft-move { grid-template-columns: 30px 20px 30px minmax(0, 1fr); gap: 6px; padding: 8px; }
+  .ft-mv-s .zd-seal { --s: 30px; }
+}
+
 /* A reveal (reveal.js): what she's just shown the crew, as a sheet along the
    bottom of a crew phone, above the tabs. A faction they've just met comes
    out of a blank seal that cracks and falls apart, a part of one they know
