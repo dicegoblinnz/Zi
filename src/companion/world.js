@@ -37,7 +37,9 @@
 import { BONDS, MAX, OUTCOMES, PARTS, apply, blank, find, forPlayer, minisOf, moneyOf, readable, standingOf, stepsOf, undoOf } from "./board.js";
 import { diceLabel, rollDie, stepsToDice } from "./dice.js";
 import { typo } from "./marks.js";
-import { die as kitDie, mini as kitMini } from "../kit/kit.js";
+import { die as kitDie, glyph as kitGlyph, mini as kitMini, seal as kitSeal } from "../kit/kit.js";
+import { makeReveal } from "./reveal.js";
+import { makeSealPick } from "./seal-pick.js";
 import { makePlaces } from "./places.js";
 import { makeMaps } from "./mapsui.js";
 import { makeWorldMake } from "./world-make.js";
@@ -181,11 +183,14 @@ export function makeWorld(d) {
     k.role = got.role === "gm" || got.role === "player" ? got.role : k.role;
     k.at = Date.now();
     if (k.role !== "gm" && was && k.doc) {
-      const news = newsOf(id, was, readable(structuredClone(k.doc)));
+      const now = readable(structuredClone(k.doc));
+      const news = newsOf(id, was, now);
       if (news.said.length) {
         lit[id] = news.keys;
         notices.push({ id, text: news.said.slice(-2).join(" ") });
       }
+      // A moment on the phone for what's just been shown (reveal.js).
+      R.news(id, was, now, news);
     }
   }
 
@@ -898,7 +903,11 @@ export function makeWorld(d) {
     },
     lit: (id) => lit[id] ?? [],
   });
-  Object.assign(ACT, P.ACT, M.ACT, K.ACT, S.ACT);
+  // A faction's seal on her phone (seal-pick.js), and the moment a player's
+  // phone has when she shows them something (reveal.js).
+  const SP = makeSealPick({ d, esc, edit, fold });
+  const R = makeReveal({ d, esc });
+  Object.assign(ACT, P.ACT, M.ACT, K.ACT, S.ACT, SP.ACT, R.ACT);
 
   // The crew's own card, at the top of the board: the party sheet's.
   function crewCard(id) {
@@ -1298,6 +1307,8 @@ export function makeWorld(d) {
         ? `<form class="cc-form pt-form wb-editing" data-form="w-note" data-f="${esc(f.id)}"><label class="cc-field">Your note <textarea name="note" maxlength="${MAX.note}" rows="4">${esc(f.note)}</textarea></label>
           <div class="cc-row"><button type="submit" class="button primary">Save</button><button type="button" class="button" data-act="w" data-do="cancel">Cancel</button></div></form>`
         : `${f.note ? `<p>${esc(f.note)}</p>` : '<p class="cc-small">Nothing yet.</p>'}<button type="button" class="pt-reword" data-act="w" data-do="edit" data-k="${esc(key)}">${f.note ? "Change it" : "Write one"}</button>`;
+      const sealFold = SP.fold(id, f, doc);
+      if (sealFold) parts.push(sealFold);
       parts.push(part(`note-${f.id}`, "Your note", f.note ? esc(f.note.slice(0, 80)) + (f.note.length > 80 ? "…" : "") : "Only you see it", `<p class="cc-lead">Anything you want to remember about it. It never goes to the crew.</p>${body}`));
     }
     const source = gm && f.book ? boardOf(f.book.from) : null;
@@ -1366,6 +1377,8 @@ export function makeWorld(d) {
   function after(app) {
     M.after(app);
     K.after(app);
+    SP.after(app);
+    R.after(app);
     // A big board's web slides sideways in its box: it starts at the middle,
     // and stays where it's been slid to when a tap draws it again.
     for (const box of app.querySelectorAll(".ww-sec[data-wb] .ww-wrap")) {

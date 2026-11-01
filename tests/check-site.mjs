@@ -51,8 +51,10 @@ const server = createServer(async (req, res) => {
     res.end(await readFile(join(DIST, "404.html")));
   }
 });
-await new Promise((r) => server.listen(4173, r));
-const BASE = "http://localhost:4173";
+// ZI_PORT runs it on another port, so several worktrees can check at once.
+const PORT = Number(process.env.ZI_PORT) || 4173;
+await new Promise((r) => server.listen(PORT, r));
+const BASE = `http://localhost:${PORT}`;
 
 const PAGES = [
   "/", "/rules/", "/learn/", "/rules/welcome/", "/rules/the-core/", "/rules/the-archetypes/",

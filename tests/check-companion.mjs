@@ -722,8 +722,10 @@ const server = createServer(async (req, res) => {
   res.writeHead(file ? 200 : 404, { "content-type": TYPES[extname(file ?? ".html")] || "application/octet-stream" });
   res.end(await readFile(file ?? join(DIST, "404.html")));
 });
-await new Promise((r) => server.listen(4174, r));
-const BASE = "http://localhost:4174";
+// ZI_PORT runs it on another port, so several worktrees can check at once.
+const PORT = Number(process.env.ZI_PORT) || 4174;
+await new Promise((r) => server.listen(PORT, r));
+const BASE = `http://localhost:${PORT}`;
 const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
 
 async function phone(extra = {}) {

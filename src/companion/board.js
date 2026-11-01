@@ -6,7 +6,7 @@
 // moment it's made as it does once the Worker's got it.
 //
 // A card: { id, name, about, want, face, secret, more, note, mini, parent,
-//   outs, res, assets, agendas, pub, mor, loy, threads, shown, book }
+//   outs, res, assets, agendas, pub, mor, loy, threads, shown, book, seal }
 //   about     what it is, in a line, like "A merchant guild. It works through money."
 //   secret    its Secret's tag, and more, the rest of it
 //   note      the GM's own, never shown to the crew
@@ -23,6 +23,10 @@
 //             was being the book's card as it was brought in, h its hash and at
 //             when the build that had it was made. A card out of a whole world
 //             (stage 14 of notes/builder-plan.md) has the world's id as from.
+//   seal      its wax seal, { c, f, d }: a charge, a field and a mark ("" for
+//             none) out of src/kit/seals.js, or null for none yet. It goes to
+//             the crew with the card and never before it
+//             (notes/faction-feel-plan.md, stage 1)
 //   sits      the place's page it sits at, if it came in with a whole world,
 //             so the web on a map puts it on that place's pin. Never sent to
 //             a player, whose maps say who sits where (mapsForPlayer())
@@ -41,6 +45,7 @@
 //   { o: "die", id, lid, v, done? }    an agenda set straight to a size
 //   { o: "move", id, l, lid, to, at? } a resource or an asset goes to another faction
 //   { o: "book", id, card, h, at }     the book's card she's now seen (with her pick made in changes before it)
+//   { o: "seal", id, v }              its seal, { c, f, d }, or null to take it off
 //
 // A board out of the book comes in as one "new" for each card, so it's undone
 // the same way.
@@ -51,6 +56,7 @@
 // the world builder's record, as doc.build (world-record.js), with changes
 // starting "wb-".
 
+import { CHARGES as SEAL_CHARGES, FIELDS as SEAL_FIELDS, MARKS as SEAL_MARKS } from "../kit/seals.js";
 import { applyMap, isMapOp, mapsForPlayer, mapsOf, undoMap } from "./maps.js";
 import { applyPage, isPageOp, pagesForPlayer, pagesOf, undoPage } from "./pages.js";
 import { applyBuild, buildForPlayer, buildOf, isBuildOp, undoBuild } from "./world-record.js";
@@ -118,6 +124,15 @@ export function cardOf(raw) {
   return c;
 }
 
+// A seal as it came from somewhere else: a charge and a field the kit has, and
+// a mark it has or none. Anything else is no seal at all.
+export function sealOf(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const c = String(raw.c ?? ""), f = String(raw.f ?? ""), d = String(raw.d ?? "");
+  if (!Object.hasOwn(SEAL_CHARGES, c) || !Object.hasOwn(SEAL_FIELDS, f)) return null;
+  return { c, f, d: d && Object.hasOwn(SEAL_MARKS, d) ? d : "" };
+}
+
 function bookOf(b) {
   if (!b || typeof b !== "object") return null;
   const was = cardOf(b.was);
@@ -141,6 +156,7 @@ export function factionOf(raw) {
   const s = raw.shown && typeof raw.shown === "object" ? raw.shown : {};
   f.shown = Object.fromEntries(SHOWS.map((p) => [p, s[p] === true]));
   f.book = bookOf(raw.book);
+  f.seal = sealOf(raw.seal);
   if (isId(raw.sits)) f.sits = raw.sits;
   return f;
 }
@@ -311,6 +327,13 @@ export function apply(doc, op) {
       f.book = { ...f.book, h: line(op.h, 20), at: whole(op.at, 0, Number.MAX_SAFE_INTEGER, f.book.at), was: card };
       break;
     }
+    case "seal": {
+      if (!f) return false;
+      const v = op.v === null ? null : sealOf(op.v);
+      if (op.v !== null && !v) return false;
+      f.seal = v;
+      break;
+    }
     default:
       return false;
   }
@@ -372,6 +395,8 @@ export function undoOf(doc, op) {
       return item ? [{ o: "move", id: op.to, l: op.l, lid: item.id, to: f.id, at: f[op.l].indexOf(item) }, ...(op.l === "assets" && item.off ? [{ o: "edit", id: f.id, l: "assets", lid: item.id, f: "off", v: true }] : [])] : [];
     case "book":
       return f?.book ? [{ o: "book", id: f.id, card: copy(f.book.was), h: f.book.h, at: f.book.at }] : [];
+    case "seal":
+      return f ? [{ o: "seal", id: f.id, v: f.seal ? { ...f.seal } : null }] : [];
     default:
       return [];
   }
@@ -432,6 +457,7 @@ export function forPlayer(doc) {
         threads: s.threads ? f.threads.filter((t) => t.to === "crew" || seen.has(t.to)) : [],
         shown: { ...s },
         book: null,
+        seal: f.seal ? { ...f.seal } : null,
       };
     }),
     pages: pagesForPlayer(doc),

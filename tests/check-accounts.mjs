@@ -345,7 +345,8 @@ const has = (got, want, what) => {
   if (!String(got ?? "").includes(want)) note(`${what}: "${want}" isn't in "${String(got ?? "").replace(/\s+/g, " ").slice(0, 240)}"`);
 };
 
-const PORT = 4175;
+// ZI_PORT runs it on another port, so several worktrees can check at once.
+const PORT = Number(process.env.ZI_PORT) || 4175;
 const BASE = `http://localhost:${PORT}`;
 const ADMIN = "mo@example.com";
 const SHOTS = process.env.SHOTS || "";
