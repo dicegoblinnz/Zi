@@ -11,12 +11,10 @@
 //           or one of PARTS in board.js
 //   lines   what it says, a line each: { label, text, big }, big being a
 //           Secret's tag
-import { BONDS, PARTS, stepsOf } from "./board.js";
+import { BONDS, PARTS, ago, stepsOf } from "./board.js";
 import { diceLabel, stepsToDice } from "./dice.js";
 
 export const REVEAL = { items: 8, lines: 8, text: 240 };
-// How far off an agenda is, by its die, the way the board says it.
-const AGO = { 2: "years off", 4: "a season or more away", 6: "a month or two away", 8: "a week or two away", 10: "days away", 12: "any day now" };
 const TITLES = { power: "Power", res: "resources", assets: "other assets", agenda: "agendas", bonds: "bonds", threads: "threads", secret: "Secret" };
 const bare = (t) => String(t ?? "").replace(/[.!?…]+$/, "").trim();
 const cut = (t) => String(t ?? "").replace(/\s+/g, " ").trim().slice(0, REVEAL.text);
@@ -48,7 +46,7 @@ function linesOf(f, part, names) {
       for (const a of (f.assets ?? []).filter((x) => !x.power)) add("", `${a.text}${times(a)}${a.does ? `: ${a.does}` : ""}`);
       break;
     case "agenda":
-      for (const a of f.agendas ?? []) add("", a.done ? `${bare(a.text)}. It’s happened.` : `${bare(a.text)}, ${AGO[a.die] ?? `at d${a.die}`}`);
+      for (const a of f.agendas ?? []) add("", a.done ? `${bare(a.text)}. It’s happened.` : `${bare(a.text)}, ${ago(a.die) || `at d${a.die}`}`);
       break;
     case "bonds":
       for (const [l, label] of BONDS) for (const t of f[l] ?? []) add(label, t.text);

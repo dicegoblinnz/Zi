@@ -14,7 +14,8 @@
 // only covers the bottom of the screen, so the page under it still works.
 // A faction the crew's met through a telegraph in the faction turn is the
 // turn's news (turn.js marks those factions on its section, data-ftf), so its
-// card alone doesn't get a sheet.
+// card alone doesn't get a sheet. news() hands back the factions it's put on
+// the sheet, so world.js leaves them out of its own notice.
 import { seal as kitSeal } from "../kit/kit.js";
 import { calm, feel } from "./feel.js";
 import { PART_SAID, revealsOf, stillShown } from "./reveal-rules.js";
@@ -186,16 +187,18 @@ export function makeReveal({ d, esc }) {
         q.splice(0, q.length, ...q.filter((y) => !gone.includes(y)));
         if (on && (gone.includes(on) || on.many?.some((y) => gone.includes(y)))) {
           on = null;
-          if (!got.length) return show();
+          if (!got.length) show();
         }
       }
-      if (!got.length) return;
-      q.push(...got.map((x) => ({ id, x })));
-      if (!on) show();
-      else if (!on.many) {
-        count.of = count.at + q.filter((y) => y.id === on.id).length - 1;
-        drawOne(on, count.at, count.of);
+      if (got.length) {
+        q.push(...got.map((x) => ({ id, x })));
+        if (!on) show();
+        else if (!on.many) {
+          count.of = count.at + q.filter((y) => y.id === on.id).length - 1;
+          drawOne(on, count.at, count.of);
+        }
       }
+      return new Set(got.map((x) => x.f));
     },
     // Its taps are its own (the sheet sits outside the app, so a redraw never
     // takes it away).

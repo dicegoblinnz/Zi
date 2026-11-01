@@ -226,7 +226,9 @@ export function makeWorld(d) {
     const pages = P.news(id, was, now);
     const maps = M.news(id, was, now);
     const told = S.news(id, was, now);
-    return { said: [...said, ...pages.said, ...maps.said, ...told.said], keys: [...keys, ...pages.keys, ...maps.keys, ...told.keys] };
+    // facs: the faction each of the first lines is about, so the ones the
+    // reveal's sheet says can come out of the notice.
+    return { said: [...said, ...pages.said, ...maps.said, ...told.said], keys: [...keys, ...pages.keys, ...maps.keys, ...told.keys], facs: keys.slice() };
   }
 
   function take(id, k, got) {
@@ -238,12 +240,12 @@ export function makeWorld(d) {
     if (k.role !== "gm" && was && k.doc) {
       const now = readable(structuredClone(k.doc));
       const news = newsOf(id, was, now);
-      if (news.said.length) {
-        lit[id] = news.keys;
-        notices.push({ id, text: news.said.slice(-2).join(" ") });
-      }
-      // A moment on the phone for what's just been shown (reveal.js).
-      R.news(id, was, now, news);
+      // A moment on the phone for what's just been shown (reveal.js), and the
+      // notice keeps only what its sheet doesn't say.
+      const sheet = R.news(id, was, now, news) ?? new Set();
+      const said = news.said.filter((_, i) => !(i < news.facs.length && sheet.has(news.facs[i])));
+      if (news.said.length) lit[id] = news.keys;
+      if (said.length) notices.push({ id, text: said.slice(-2).join(" ") });
     }
     // On the screen now, so it's what this phone's last looked at.
     if (k.role !== "gm" && watching === id) {

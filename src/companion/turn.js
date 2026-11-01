@@ -22,7 +22,7 @@
 // turn), with Skip to the end always there. An agenda that happens gets the
 // big moment. It ends on While you rested, what changed said once, which
 // goes into How it came to be as a new age when she ends it.
-import { BONDS, OUTCOMES, find, minisOf, moneyOf, standingOf, stepsOf } from "./board.js";
+import { BONDS, OUTCOMES, ago, find, minisOf, moneyOf, standingOf, stepsOf } from "./board.js";
 import { diceLabel, rollDie, stepsToDice } from "./dice.js";
 import { lower } from "./table-rules.js";
 import { MAX, STEPS, allDice, allFaces, best, crewDice, crewResult, crewSteps, defOf, diceOf, landed, powerAt, rolled, shapeOf, spentOf, stateOfAct } from "./turn-rules.js";
@@ -1067,8 +1067,6 @@ export function makeTurn(d) {
   // The line she starts from: nothing for one that moved off-screen, since
   // that's only news if she says so.
   const lineFor = (id, t, x) => (x.off ? "" : lineOf(id, t, x));
-
-  const ago = (die) => ({ 2: "years off", 4: "a season or more away", 6: "a month or two away", 8: "a week or two away", 10: "days away", 12: "any day now" })[die] ?? "";
 
   // What a win changes on the cards: a button for each change, and a little
   // form for the ones that need words.
