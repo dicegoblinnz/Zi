@@ -163,6 +163,7 @@ const edgeDist = ([x, y], [ax, ay], [bx, by]) => {
 };
 import { pageOf } from "../src/companion/pages.js";
 import { wholeOps, cardNow, hashOf } from "../src/companion/world-whole.js";
+import { makeSealPick } from "../src/companion/seal-pick.js";
 import { fogFull, fogText, fogBits, gridOf, mapsForPlayer, sittersOf } from "../src/companion/maps.js";
 import { esc } from "../src/kit/kit.js";
 import { CHARGES, FIELDS, chargeWeights, sealKey } from "../src/kit/seals.js";
@@ -737,6 +738,51 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   apply(doc, { o: "show", id: "f-bbbbbbbb", p: "card", v: true });
   same(forPlayer(doc).factions[0].seal, { c: "ship", f: "fess", d: "" }, "and gets it with the card");
   console.log("4b. seals on the board: a book card's, its own, taken off, and a player's only with the card");
+}
+
+// 4c. The GM's seal fold (seal-pick.js), with world.js's edit() and fold()
+// stood in for: her faction's seal big, Deal another never dealing one on the
+// board, a pick that'd be another faction's taking a mark and saying so, a
+// mark that'd be another's not offered, and each tap one change.
+{
+  const doc = blank();
+  apply(doc, { o: "new", f: { id: "f-aaaaaaaa", name: "The Tithe Fleet", seal: { c: "anchor", f: "bend", d: "" } } });
+  apply(doc, { o: "new", f: { id: "f-bbbbbbbb", name: "Tarrant & Daughters", seal: { c: "scales", f: "pale", d: "" } } });
+  apply(doc, { o: "new", f: { id: "f-cccccccc", name: "The Drowned Choir", seal: null } });
+  const sent = [];
+  const toasts = [];
+  const edit = (id, ops, say) => {
+    let did = false;
+    for (const op of ops) did = apply(doc, op) || did;
+    if (did) sent.push({ ops, say });
+    return did;
+  };
+  const SP = makeSealPick({ d: { render: () => {}, toast: (t) => toasts.push(t) }, esc, edit, fold: (key, title, glance, body, badge, h) => `<details data-k="${key}" data-h="${h}"><summary>${title} ${glance}</summary>${body}</details>` });
+  const fleet = () => doc.factions[0];
+  const tap = (act, data) => SP.ACT[act]({ dataset: data }, "camp-1");
+  let html = SP.fold("camp-1", fleet(), doc);
+  yes(/data-h="2"/.test(html) && /class="zd-seal them lg/.test(html) && /data-do="seal-deal"/.test(html), "her faction's seal fold has its seal big and Deal another, with an h2 like the parts beside it");
+  same((html.match(/data-part="c"/g) ?? []).length, Object.keys(CHARGES).length, "and every charge to pick from");
+  tap("seal-set", { f: "f-aaaaaaaa", part: "c", v: "scales" });
+  same(fleet().seal, { c: "scales", f: "bend", d: "" }, "picking what's on it keeps how it's split");
+  tap("seal-set", { f: "f-aaaaaaaa", part: "f", v: "pale" });
+  same(fleet().seal, { c: "scales", f: "pale", d: "bar" }, "a pick that'd be another faction's takes a mark");
+  yes(/tells it apart from Tarrant &amp; Daughters/.test(sent.at(-1).say), `and says so (${sent.at(-1).say})`);
+  html = SP.fold("camp-1", fleet(), doc);
+  yes(/data-part="d" data-v=""[^>]*disabled/.test(html), "taking the mark off, which would make it Tarrant & Daughters', isn't offered");
+  same(sent.every((x) => x.ops.length === 1 && x.ops[0].o === "seal"), true, "each tap's one change");
+  const back = undoOf(doc, { o: "seal", id: "f-aaaaaaaa", v: null });
+  same(back, [{ o: "seal", id: "f-aaaaaaaa", v: { c: "scales", f: "pale", d: "bar" } }], "and it's undone the same way");
+  const seen = new Set();
+  for (let k = 0; k < 40; k++) {
+    tap("seal-deal", { f: "f-cccccccc" });
+    const s = doc.factions[2].seal;
+    if (!s || doc.factions.filter((x) => sealKey(x.seal) === sealKey(s)).length !== 1) note(`Deal another gave ${JSON.stringify(s)}, which isn't one of its own`);
+    seen.add(sealKey(s));
+  }
+  yes(seen.size > 20, `Deal another deals a fresh one each time (${seen.size} different in 40)`);
+  same(toasts, [], "with nothing turned down");
+  console.log("4c. the GM's seal fold: big, Deal another, picks that take a mark, and one change a tap");
 }
 
 // 5. The dealing script.
