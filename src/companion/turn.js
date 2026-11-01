@@ -140,7 +140,10 @@ export function makeTurn(d) {
         ${n ? btn("start", "Start the faction turn", { cls: "button primary ft-go" }) : ""}${lastHtml}</section>`;
     }
     const body = t.step === "hire" ? hireBody(id, t, gm) : t.step === "tele" ? teleBody(id, t, gm) : t.step === "crew" ? crewBody(id, t, gm) : landBody(id, t, gm);
-    return `<section class="cc-sec ft is-${t.step}" data-ft="${esc(id)}" aria-labelledby="${hid}">
+    // The factions in the telegraphs the crew's had, so a reveal of one's
+    // card alone (reveal.js) leaves it to the turn.
+    const met = t.sent ? [...new Set(t.acts.filter((a) => !a.off).flatMap((a) => [a.f, a.at.f]).filter((f) => f && f !== "crew"))] : [];
+    return `<section class="cc-sec ft is-${t.step}" data-ft="${esc(id)}" data-ftf="${esc(met.join(" "))}" aria-labelledby="${hid}">
       <div class="ft-head"><h2 id="${hid}">Downtime ${t.n} <small>the faction turn</small></h2></div>
       ${strip(id, t, gm)}${status(id)}${body}</section>`;
   }

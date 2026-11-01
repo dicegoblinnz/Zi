@@ -13,8 +13,13 @@
 // While it's showing, it keeps the screen awake, hides the pointer when it's
 // still, shrinks everything to fit a landscape screen rather than scroll,
 // and keeps trying when the signal drops, saying so in the bar.
+//
+// When she shows the crew a faction or part of one, it's here too, the way
+// it is on their phones (reveal.js): a sheet over the table with the seal
+// broken open and the part's words, one at a time, gone again on its own.
+// It's only ever each faction's name, seal and what the crew was shown.
 
-import { crest as kitCrest, die as kitDie, esc, tag as kitTag, telegraph as kitTele } from "../kit/kit.js";
+import { crest as kitCrest, die as kitDie, esc, seal as kitSeal, tag as kitTag, telegraph as kitTele } from "../kit/kit.js";
 
 // The phone's socket rules: ping this often, and a socket that hasn't
 // answered in QUIET is dead. When sockets won't connect at all, the screen
@@ -356,6 +361,58 @@ addEventListener("resize", () => {
   fitting = requestAnimationFrame(fit);
 });
 
+// ------------------------------------------------------------ what she's just shown the crew
+
+// One reveal at a time, each up for a while (a Secret a little longer), then
+// the next, then gone. A new one from her starts again from its first.
+const RV = { n: null, items: [], at: 0, timer: 0, host: null, sheet: null, say: null };
+const RV_MS = { secret: 13000, card: 10000 };
+const PART_SAID = { power: "its Power", res: "its resources", assets: "its other assets", agenda: "its agendas", bonds: "its bonds", threads: "its threads", secret: "its Secret" };
+const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function revealHost() {
+  if (RV.host?.isConnected) return;
+  RV.host = document.createElement("div");
+  RV.host.className = "ts-rv-host";
+  RV.host.innerHTML = '<p class="visually-hidden" aria-live="polite"></p><section class="ts-rv" aria-labelledby="ts-rv-t" hidden></section>';
+  document.getElementById("main")?.append(RV.host);
+  RV.say = RV.host.querySelector("p");
+  RV.sheet = RV.host.querySelector(".ts-rv");
+}
+function revealOne() {
+  clearTimeout(RV.timer);
+  const x = RV.items[RV.at];
+  if (!x) return revealOff();
+  revealHost();
+  const many = RV.items.length > 1;
+  const listed = ["res", "assets", "agenda"].includes(x.part);
+  const lines = x.lines.map((l, i) => (l.big ? `<p class="ts-rv-big" style="--i:${i}"><em>${esc(l.text)}</em></p>`
+    : listed ? `<li style="--i:${i}">${esc(l.text)}</li>`
+    : `<p style="--i:${i}">${l.label ? `<b class="ts-rv-k">${esc(l.label)}</b> ` : ""}${esc(l.text)}</p>`)).join("");
+  const met = x.part === "card";
+  RV.sheet.className = `ts-rv is-${x.part}${calm() ? " is-calm" : ""}`;
+  RV.sheet.innerHTML = `<div class="ts-rv-seal${met ? " is-met" : ""}" aria-hidden="true"><span class="ts-rv-real">${kitSeal(x.seal, { size: "lg" })}</span>${met ? `<span class="ts-rv-half is-l">${kitSeal(null, { size: "lg", blank: true })}</span><span class="ts-rv-half is-r">${kitSeal(null, { size: "lg", blank: true })}</span>` : ""}<svg class="ts-rv-crack" viewBox="0 0 64 64"><path pathLength="1" d="M34 5 L29 20 L36 31 L27 43 L33 59"/></svg></div>
+    <div class="ts-rv-in"><h2 id="ts-rv-t">${esc(x.title)}</h2>${listed ? `<ul class="ts-rv-w">${lines}</ul>` : `<div class="ts-rv-w">${lines}</div>`}
+    <p class="ts-rv-n">${met ? "The crew’s just met them." : `The crew’s just found out ${esc(PART_SAID[x.part] ?? "more")}.`}${many ? ` <b>${RV.at + 1} of ${RV.items.length}</b>` : ""}</p></div>`;
+  RV.sheet.hidden = false;
+  RV.say.textContent = `The crew’s been shown ${met ? x.name : x.title}${x.part === "secret" && x.lines[0]?.big ? `: ${x.lines[0].text}` : ""}.`;
+  RV.timer = setTimeout(() => {
+    RV.at += 1;
+    revealOne();
+  }, RV_MS[x.part] ?? 9000);
+}
+function revealOff() {
+  clearTimeout(RV.timer);
+  if (RV.sheet) RV.sheet.hidden = true;
+}
+// A view with a reveal she's not shown here yet puts it up.
+function revealFrom(v) {
+  const r = v?.reveal;
+  if (!r || !Array.isArray(r.items) || !r.items.length || r.n === RV.n) return;
+  Object.assign(RV, { n: r.n, items: r.items, at: 0 });
+  revealOne();
+}
+
 // ------------------------------------------------------------ the table
 
 function take(m, { plain = false } = {}) {
@@ -366,12 +423,14 @@ function take(m, { plain = false } = {}) {
   st.note = "";
   net.down = false;
   render();
+  revealFrom(m);
   wake();
 }
 
 // The screen's done with this code: reset, ended, or it never worked.
 function gone(why, note = "") {
   shut();
+  revealOff();
   st.view = null;
   st.why = why;
   st.note = note;

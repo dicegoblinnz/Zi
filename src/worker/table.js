@@ -49,6 +49,9 @@ const MAX_DEVICES = 64;
 const MAX_SOCKETS = 6;
 // Table screens open on one table at once. Past that, the oldest closes.
 const MAX_SCREENS = 8;
+// How long what she's just shown the crew stays on a table screen's view, so
+// a screen that opens a minute later doesn't get it as news.
+const REVEAL_MS = 90000;
 // A table screen's code: 12 of these, read off the GM's phone and typed on a
 // TV, so there's nothing that looks like something else (no 0 or O, no 1, I
 // or L). That's about 59 bits, and wrong codes count against where they
@@ -80,6 +83,9 @@ export class Table extends DurableObject {
     this.meta = null;
     // What the table screens were last sent: { n, h }, kept as 'screen'.
     this.shown = null;
+    // What she last showed the crew of the factions, for the screens:
+    // { n, at, items }, kept as 'reveal' (worldMoved()).
+    this.reveal = null;
     // The phones' heartbeat, answered without waking the object.
     ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair("ping", "pong"));
   }
@@ -106,6 +112,11 @@ export class Table extends DurableObject {
       this.meta = meta ? JSON.parse(meta.v) : null;
     } catch {
       this.meta = null;
+    }
+    try {
+      this.reveal = JSON.parse(sql.exec("SELECT v FROM kv WHERE k = 'reveal'").toArray()[0]?.v ?? "null");
+    } catch {
+      this.reveal = null;
     }
     return this.doc;
   }
@@ -136,7 +147,8 @@ export class Table extends DurableObject {
     let view;
     let body;
     try {
-      view = screenOf(this.doc, this.meta);
+      const shown = this.reveal && Date.now() - (Number(this.reveal.at) || 0) < REVEAL_MS ? this.reveal : null;
+      view = screenOf(this.doc, this.meta, shown);
       body = JSON.stringify(view);
     } catch (err) {
       console.error(`table screen: ${err?.message ?? err}`);
@@ -375,11 +387,14 @@ export class Table extends DurableObject {
     for (const ws of this.ctx.getWebSockets("screen")) if (ws.deserializeAttachment()?.code !== keep) out(ws, "The screen's link was reset", "reset");
   }
 
-  // What the crew sees of the campaign's maps has changed (world.js): every
+  // What the crew sees of the campaign's world has changed (world.js): every
   // phone on the table fetches the world again, and gets only what it's
-  // allowed to see. The message says nothing else, and a table screen, which
-  // never shows the world, isn't told.
-  async worldMoved() {
+  // allowed to see. The message says nothing else. shown is what she's just
+  // shown the crew of the factions (revealsOf() in reveal-rules.js), which
+  // the table screens get for a minute and a half, without the factions'
+  // ids. A faction the crew's met through a telegraph in the faction turn is
+  // the turn's news, so its card alone isn't the screen's.
+  async worldMoved(shown = null) {
     const msg = JSON.stringify({ t: "world" });
     for (const ws of this.ctx.getWebSockets()) {
       if (ws.deserializeAttachment()?.role === "screen") continue;
@@ -387,6 +402,15 @@ export class Table extends DurableObject {
         ws.send(msg);
       } catch {}
     }
+    if (!Array.isArray(shown) || !shown.length) return;
+    this.load();
+    const t = this.doc.turn;
+    const inTurn = new Set(t ? t.acts.filter((a) => !a.off).flatMap((a) => [a.f, a.at?.f]) : []);
+    const items = shown.filter((x) => x && !(x.part === "card" && inTurn.has(x.f))).map(({ f, ...x }) => x);
+    if (!items.length) return;
+    this.reveal = { n: (Number(this.reveal?.n) || 0) + 1, at: Date.now(), items };
+    this.ctx.storage.sql.exec("INSERT OR REPLACE INTO kv (k, v) VALUES ('reveal', ?)", JSON.stringify(this.reveal));
+    this.toScreens();
   }
 
   // The campaign's ended: everyone's phone stops hearing it, and it's gone.
@@ -395,6 +419,7 @@ export class Table extends DurableObject {
     this.doc = null;
     this.meta = null;
     this.shown = null;
+    this.reveal = null;
     await this.ctx.storage.deleteAll();
   }
 }
@@ -521,10 +546,11 @@ export async function tableLeft(env, campaignId, userId, { erase = false } = {})
   await tableOf(env, campaignId).left(userId, { erase }).catch((err) => console.error(`table left: ${err?.message ?? err}`));
 }
 
-// What the crew sees of the maps has changed, so the phones look again.
-export async function tableWorld(env, campaignId) {
+// What the crew sees of the world has changed, so the phones look again,
+// and what she's just shown them of the factions goes to the table screens.
+export async function tableWorld(env, campaignId, shown = null) {
   if (!env.TABLE) return;
-  await tableOf(env, campaignId).worldMoved().catch((err) => console.error(`table world: ${err?.message ?? err}`));
+  await tableOf(env, campaignId).worldMoved(shown).catch((err) => console.error(`table world: ${err?.message ?? err}`));
 }
 
 // A campaign's ended, so its table goes too.
