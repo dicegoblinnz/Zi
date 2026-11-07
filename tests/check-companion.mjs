@@ -759,8 +759,9 @@ if (part("1d")) {
   same(readDice({ theirs: dice([[6, 6]]) }).tops, [], "their top face gives nobody Aura");
   same(readDice({ mine: dice([[4, 4], [8, 8]]), theirs: dice([[8, 8]]), def: "you" }).tops, [0, 1], "your top faces, whoever's defending");
   // What's kept on the phone.
-  same(setupOf(null), { you: [], them: [], def: "them", each: false }, "nothing kept starts empty");
-  same(setupOf({ you: [6, 7, "8", 20, 2], them: Array(20).fill(4), def: "you", each: "yes" }), { you: [6, 8, 2], them: Array(MOST).fill(4), def: "you", each: false }, "only real dice are kept, up to the most a side holds");
+  same(setupOf(null), { you: [], them: [], def: "you", each: false }, "nothing kept starts empty, with them coming at you");
+  same(setupOf({ you: [6, 7, "8", 20, 2], them: Array(20).fill(4), def: "them", each: "yes" }), { you: [6, 8, 2], them: Array(MOST).fill(4), def: "them", each: false }, "only real dice are kept, up to the most a side holds");
+  same(setupOf({ def: "sideways" }).def, "you", "a way that isn't one comes back as them coming at you");
   console.log("the dice roller's rules checked");
 }
 
@@ -2433,7 +2434,7 @@ if (part("7c")) {
     same([await tray(page, "you"), await tray(page, "them")], [[6, 6, 2], [8, 8, 8]], "each side's dice, in the order they went on");
     has(await line(page, ".dlg-head"), "2d6 + d2 against 3d8", "the head says what's on");
     same(await page.$(`${dlg} button[data-dz="each"]`), null, "one target or several only asked of one die against several");
-    await page.click(`${dlg} button[data-dz="def"][data-v="you"]`);
+    same(await page.getAttribute(`${dlg} button[data-dz="def"][data-v="you"]`, "aria-pressed"), "true", "they're coming at you to start with");
     await go(page, [6, 3, 1, 7, 5, 2]);
     same(await line(page, ".dz-verdict"), "2 stopped, and one gets through.", "Bram's 6 on the 5 and his 3 on the 2");
     same(await outs(page), ["Gets through", "Stopped", "Stopped"], "only the 7 gets through");

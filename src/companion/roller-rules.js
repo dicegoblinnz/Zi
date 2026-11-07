@@ -87,9 +87,11 @@ export function readDice({ mine = [], theirs = [], def = "them", each = false, a
 
 // What's kept on the phone between rolls: the dice on each side, who's
 // defending and whether they're one thing or several. Anything that isn't
-// one of those comes back as it starts.
+// one of those comes back as it starts: no dice, and them coming at you,
+// since dice matched to blocks after the roll are what the roller was asked
+// for, till it's set the other way.
 export function setupOf(raw) {
   const side = (list) => (Array.isArray(list) ? list.map(Number).filter((d) => SIDES.includes(d)).slice(0, MOST) : []);
   const x = raw && typeof raw === "object" ? raw : {};
-  return { you: side(x.you), them: side(x.them), def: x.def === "you" ? "you" : "them", each: x.each === true };
+  return { you: side(x.you), them: side(x.them), def: x.def === "them" ? "them" : "you", each: x.each === true };
 }

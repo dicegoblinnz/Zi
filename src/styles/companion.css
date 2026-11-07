@@ -259,11 +259,12 @@ html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px))
   .tile-dice .zd-die { --s: 44px; }
 }
 /* When it lands: the GM's telegraphs coming in, so it's edged in violet, with
-   your Defend's dice. When the set actions are an even number it gets the row
-   to itself. */
+   your Defend's dice. On the play screen the dice roller comes after it, so
+   it only gets a row to itself where it's last, on the GM's look (look.js). */
 .tile-defend { border-color: color-mix(in srgb, var(--violet) 60%, transparent); }
 .cc-play .tile-defend:nth-child(odd):last-child { grid-column: 1 / -1; }
-/* The dice roller sits beside When it lands, or under it on a row of its own. */
+/* The dice roller sits beside When it lands when the set actions are an even
+   number, and with an odd number it gets the row to itself under them. */
 .tile-free .tile-dice .zd-die.is-next { margin-left: -12px; }
 @media (max-width: 559px) {
   .cc-play .tile-free:nth-child(odd) { grid-column: 1 / -1; }

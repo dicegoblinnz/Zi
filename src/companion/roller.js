@@ -180,7 +180,7 @@ export function makeRoller(k) {
     // How it's read, with a tap to read the same dice the other way round when
     // it was set the wrong way.
     const how = { act: "You’re going at them, so ties are theirs.", each: "Everyone defends on their own, and ties are theirs.", defend: "They’re coming at you, so ties are yours.", free: "Nothing to beat, so it’s just the numbers." }[x.way];
-    const flip = both(r) ? ` ${b("def", "Read it the other way", ` data-v="${r.def === "you" ? "them" : "you"}" aria-label="Read it as ${r.def === "you" ? "you going at them" : "them coming at you"} instead"`, "dz-flip")}` : "";
+    const flip = both(r) ? ` ${b("def", "Read it the other way", ` data-v="${r.def === "you" ? "them" : "you"}" aria-label="Read it the other way, as ${r.def === "you" ? "you going at them" : "them coming at you"}"`, "dz-flip")}` : "";
     const said = spin ? { main: "Rolling…", note: "" } : verdict(r, x);
     return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">Dice roller</h2><p class="cc-small dz-how">${esc(how)}${flip}</p></div>
       <button type="button" class="cc-x" data-act="close" aria-label="Close">${k.icon.close}</button></div>
