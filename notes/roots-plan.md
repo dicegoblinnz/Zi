@@ -1,0 +1,53 @@
+# Roots: the plan
+
+Mo's 6 to 8 Nov 2026 rework of the core, from four weeks of playtests: set actions, Defend as a set action, Confidence's swing, Resolve as a pool and the wound die all go, and every roll becomes a Root plus a specialty. His words and picks are in `notes/playtest-sheets/2026-11-08-chat-decisions.md`, and the calls Claude made filling the gaps are in `notes/to-confirm.md` under 8 Nov.
+
+It changes the character in nearly every chapter and most of the companion, so it goes in stages, a fresh chat each. Nothing merges to `main` till Mo says, because the live companion has to keep working for his four campaigns. Every stage works on the branch `rules/2026-11-08-roots` and pushes it, with the `website` branch moved to it for the Preview.
+
+## The core, as the book has it
+
+**Roots.** Body (what your hands and feet do), Mind (what goes on in your head) and Soul (who you are). A roll is one Root and one specialty, pitched to fit how you're doing it. No step for the action, and every roll's at least 1 step, a d2. Steps into dice is the same table, and past 6 steps is more dice.
+
+**Steps.**
+- A Title: +1 to one Root, and +1 to each of three specialties that fit it. It holds six permissions at most.
+- A permission: +1 to a Root and +1 to a specialty, both of which it has to fit. Written as before, a doing word with how, what or where (one word's the Roots' job now).
+- An item: +1 on a roll you use it in, as part of the specialty, or as a 1-step specialty of its own. Never a Root. Each item that fits counts.
+- A specialty's something you could be known for or teach (Locks, Shieldwork, Fire, The dead), named by the player.
+- Combos: one Root a roll, the roller's, and every action in it brings a specialty (and the items it uses). Every action's a split, as before.
+
+**Pitching.** A specialty that plainly fits is free. One you have to make a case for is 1 Aura, and so is going beyond what something normally does.
+
+**Aura.** Maximum 5, full at the start of every scene. +1 for every die that wins and +1 for every top face, any roll you make, defence included (not summons, flipped dice or a number added after the roll). On your own turn it can go past 5, and it drops back to 5 when your turn ends. 1 Aura: bring something in, pitch, go beyond, win a tie acting, intercept, quick heal, keep a Catch quiet. 3 Aura: an extra action, and the most actions you can have in a round is one for each archetype you've got (holding, coming out of hiding and traits are on top).
+
+**The tracks.** Stamina (Body), Confidence (Mind) and Resolve (Soul). Each starts at d12 and drops a size for every hit that gets through to its Root. Below d2 is the Blaze. They're the defence: when the telegraphs land, roll the track for each Root you're hit at, once, and each die stops one telegraph at that Root it meets or beats. Archetype abilities spend them, 1 of the archetype's home track or 2 from the other two (any mix), and spending stops at d2. Rolling again costs 1 Resolve.
+
+**Recovery.** End of every scene: roll each track below d12, and 4 or more puts it up a size. At d2 it waits for downtime. Every downtime starts with each track up a size, and a Recover slot is 6 sizes back, spread how you like.
+
+**Blaze and Scars.** Something extraordinary, then die (your call) or leave the scene with a Scar on that track: a Catch that also locks the track's lowest open size for good. A Scar that would lock its last size is your last Blaze. Nobody Blazes on purpose.
+
+**Defence.** Defend as your action: a Root and a specialty that fit how you're defending, with your armour as items, and its dice go with your tracks when the telegraphs land, each stopping one it beats or ties, as long as how you're defending fits it. Intercept: 1 Aura a friend, free for a Guardian, blows only.
+
+**Armour.** On a Root: Body (leathers, plate, shields, helmets), Mind (clothes that fit the scene, a uniform, a disguise you trust) or Soul (a holy symbol, a ward, a relic). Quality is boxes (Common 1, Fine 2, Masterwork 3). Offer it when a hit gets through to that Root and tick a box instead of the track dropping. Mended in downtime. +1 as an item when you Defend.
+
+**2:1.** When a hit gets through, pay 2 from your other two tracks (any mix) and the one it was aimed at stays put. The same rate pays an ability from outside its home track.
+
+**Archetypes.** Their own pick. Each gives its mechanic (free), its abilities (1 of its home track each, stacking), and the most actions you can have in a round is one for each archetype, everyone's first free and the rest 3 Aura each. Six abilities at most. Home tracks: Body for the Bloodsworn, Guardian, Maker, Shadow, Shifter and Warrior; Mind for the Face, Gambler, Hunter, Illusionist, Oracle and Scholar; Soul for the Bard, Elementalist, Healer, Leader, Summoner and Teleporter.
+
+**Attunement.** One personal thing, bound to you, that can't break. It's an item on your rolls, it gains you Aura its own way (written when you attune it), and it has awakenings: Awakened 1 (+1 with a Catch), Tempered 2 (+2 with a Burden), Perfected 3 (+3 with a Burden and a Catch), a material for each stage and a downtime slot for each new awakening. A passive awakening holds up to 2 Aura, pumped in on your turn without an action, and works for as much as it holds. An active one spends Aura when you use the thing, more for more. The same awakening twice holds 4. Only you pump it, or a Maker. Stored Aura goes at the end of the scene.
+
+**Summoning.** A Summoner's summoning attunement holds the souls they've caught, a soul to an awakening. Calling one spends Aura: a d4 for each, built into one summon or several, none bigger than the soul's own die. Summons fade a size every round, and a hit that gets through knocks one off. Their dice never pay Aura, and a horde rolls as one throw.
+
+**Making a character.** Two Titles (three permissions each), two archetypes, two traits, one attuned thing, what you carry, threads, Connect and an Aspiration at d2. An Aspiration past d12 is a new Title (one permission), archetype or attuned thing.
+
+## Stages
+
+1. **The core and the crew** (8 Nov, done): the decisions, this plan, The Core, Building, The Archetypes, the Quick Build and the six crew, Conflict, Magic's Summoning, Downtime, Appendix D, the Learn deck, both paper sheets, the change log and the calls. The build reads and checks the new crew into `book.json` as `roots`, and the new builder's and conditions' data as `companion.next`, for stage 3. The companion itself is frozen on the data from before Roots (`src/data/companion-pre-roots.json`, a snapshot of main's `book.json` at 5da6118: its crew, builder, conditions, rules on a tap and links), and prints onto the sheet from before Roots (`public/sheets/zidara-character-sheet-pre-roots.pdf`, `SHEET` in `src/companion/print.js`), so it plays on the Preview the way it does live. The new paper sheet has one attuned thing across the page (a second goes in Notes) and four bonds of three threads. Every other chapter still says set actions, Defend, the wound die and Confidence in places (`python3 -I tools/check_terms.py` lists them, with the retired words added), and the companion's checks that read the crew off 03b (parts 2, 5, 6 and 10 of `tests/check-companion.mjs`) are behind till stage 3.
+2. **The rest of the book:** Tactical Play, the rest of Magic, Coin and Kit's attuned things (their permissions become awakenings), Growing (Vesk and the crew from session 1 to 20), the GM chapters (the round budget, now that rolls are 6 to 11 steps and the tracks start at d12, and telegraphs at Body, Mind or Soul), the Threat Builder, the Bestiary, Twenty Places and the frames (every telegraph's target), Appendices A, B, C, E and F, and the index, with the Learn deck checked against whatever changes. Every old id that's gone points somewhere new, and `check_terms.py` (which has the retired words now) lists nothing but the old false alarms.
+3. **The companion's character:** the freeze comes off (`companion-pre-roots.json`, the pre-Roots sheet and `SHEET` in `print.js`), and the companion reads `roots` and `companion.next`. The play screen (Roots and specialties, building a roll by pitching, the three tracks with Scars and armour on each Root, Aura past 5 on your turn, abilities paid in sizes with 2:1, awakenings pumped and spent, When it lands with the tracks and Defend), downtime (recovery, Grow, awakenings) and print (onto the new sheet's fields), the saved characters of the old shape shown as they were till they're rebuilt, and the companion's checks moved onto the Roots crew.
+4. **The builder, the learning round and the live table** (and the last paragraph of the 8 Nov change log entry, which says the rest is still to come, comes out): the builder for Titles, archetypes, attunements and specialties; the learning round on the new sheets; the live table's telegraphs at Body, Mind or Soul, extra actions for 3 Aura capped by archetypes, and intercepts on Body only.
+
+Each stage ends with the prompt for the next one.
+
+## The prompt for stage 2
+
+> Stage 2 of `notes/roots-plan.md`: the rest of the book for the Roots change. Read the plan, `notes/playtest-sheets/2026-11-08-chat-decisions.md` and the 8 Nov calls in `notes/to-confirm.md`, then work on the branch `rules/2026-11-08-roots`. Rewrite every chapter stage 1 didn't touch so it matches The Core, Building, The Archetypes, the crew and Conflict as they are now, retune the GM's round budget and the threats' Challenges for rolls of 6 to 11 steps against d12 tracks, put every telegraph at Body, Mind or Soul, check the Learn deck against what you change, and clear what `check_terms.py` lists. Keep the build reading places and threats, push the branch and the Preview, and give me the calls you made and the prompt for stage 3.

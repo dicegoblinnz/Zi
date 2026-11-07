@@ -1,9 +1,33 @@
 ---
 title: "What's Changed"
 id: changes
-updated: 2026-10-28
+updated: 2026-11-08
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
+
+## 8 Nov 2026: Roots, specialties and three tracks {#c-2026-11-08-roots}
+
+Mo's calls in chat, after four weeks of playtests.
+
+**Every roll's a Root plus a specialty.** Your three Roots are Body, Mind and Soul, and a specialty's something you could be known for or teach, like Locks or Fire, named by you. Each Title adds 1 to a Root and 1 to each of three specialties, each permission adds 1 to a Root and 1 to a specialty, and an item's 1 more on a roll you use it in. There's no cap, so past 6 steps you throw more dice. This replaces set actions (Defend, Fight, Move, Sneak, Study, Talk and your own) and the 1 step for the action. One-word permissions like *Quick* are gone, since that's what Roots are for. See [Roots](#s-roots), [Specialties and Permissions](#s-permissions) and [Steps and Dice](#s-building-die).
+
+**A specialty you have to make a case for is 1 Aura**, and so's going beyond, which was 1 Resolve. See [Going Beyond](#s-going-beyond).
+
+**Three tracks, all starting at d12: Stamina for Body, Confidence for Mind and Resolve for Soul.** Every hit that gets through to a Root drops its track a size, and a hit at d2 is a Blaze. A Scar locks the track's smallest size for good. The tracks are your defence when the telegraphs land, and they pay for your archetype's abilities. At the end of every scene each one comes up a size on a 4 or more, every downtime starts with them all up a size, and a slot in downtime puts 6 sizes back. Nobody Blazes on purpose. This replaces the wound die, Hurts, Confidence starting each scene on d6 and swinging, shaken and fired up, and Resolve as points. See [The Tracks](#s-tracks), [When It Lands](#s-defending), [When a Track Runs Out](#s-blaze) and [Healing](#s-healing).
+
+**Telegraphs say Body, Mind or Soul.** Defend's a Root and a specialty rolled with your tracks, armour sits on a Root, intercepting's only for blows at a friend's Body, and 2 for 1 pays two sizes from your other tracks to keep the one that was hit where it is. See [Telegraphs](#s-telegraphs), [Defend](#s-defend), [Intercept](#s-intercept), [Consequences](#s-consequences) and [Armour](#s-armour).
+
+**Aura's the one thing you spend.** Every die of yours that wins pays 1, and so does every top face, your defence included. It can go past 5 while you're acting and drops back once you're done. 3 Aura buys an extra action, and you can have one action a round for each archetype you've got. Rolling again costs 1 Resolve. See [Aura](#s-aura) and [Extra actions](#s-extra-actions).
+
+**Archetypes are their own pick**, two to start, and they don't come with your Titles any more. Each one has a home track, and its abilities cost 1 from it or 2 from your other two, and stack. This replaces archetypes' Aura and Resolve spends. The [Gambler](#a-gambler)'s new: once a round, flip any die you can see after it lands. See [How Archetypes Work](#s-how-archetypes) and [Abilities](#s-abilities).
+
+**Attuned things have awakenings** instead of permissions. Pump Aura into a passive one and it holds up to 2 and works for as much as it holds, spend Aura on an active one, and it all goes at the end of the scene. Each attuned thing gets you Aura its own way too. Summons are a d4 for each Aura and fade a size every round. See [Attunement](#s-attunement) and [Summoning](#s-summoning).
+
+**An Aspiration past d12** gives you a new Title, archetype or attuned thing. See [Aspiration](#s-aspiration).
+
+**The six crew are rebuilt** on Roots and specialties, with their traits, armour and attuned things to match. See [the crew](#s-pregens).
+
+The rest of the book and the character companion catch up next, so till then a few chapters still say set actions or the wound die, and the companion plays the old way.
 
 ## 28 Oct 2026: Only people add Power {#c-2026-10-28-power}
 
@@ -45,7 +69,7 @@ Mo's calls in chat.
 -   **The crew's numbers moved with it.** Vesk's Sneak is 3 steps, a d6, Bram's Talk 3, a d6, Isolde's Study 3, a d6, and Wren's Fight 4, a d8. See [the six ready-made characters](#s-pregens).
 -   **Writing your own:** a passive trait or a triggered one, never a step. See [Writing Your Own](#s-levers-writing).
 
-**A plain item goes on one set action,** the one where it helps most, and anywhere else it fits it's 1 Aura to bring in. That replaces items going on every set action they fit. It's every plain thing you carry, utility items and the keepsake included. An attuned thing's permissions go on two set actions each, like a Title's, and the crew's sheets name them now, like Bram's *fight with a war hammer*, instead of the thing. See [How permissions stack](#how-permissions-stack), [Set Actions](#s-set-actions), [Step 4](#s-step-set-actions) and [Items](#s-items).
+**A plain item goes on one set action,** the one where it helps most, and anywhere else it fits it's 1 Aura to bring in. That replaces items going on every set action they fit. It's every plain thing you carry, utility items and the keepsake included. An attuned thing's permissions go on two set actions each, like a Title's, and the crew's sheets name them now, like Bram's *fight with a war hammer*, instead of the thing. See [How permissions stack](#how-permissions-stack), [Set Actions](#s-roots), [Step 4](#s-step-roots) and [Items](#s-items).
 
 **Each person's one bond.** Write their name once, and every thread you've got with them goes under it, including a new one from downtime. See [Bonds and threads](#s-bonds).
 
@@ -63,7 +87,7 @@ Mo's calls in chat.
 
 Mo's answers after reading the 24 Oct change.
 
-**Confidence swings with every roll now.** It still starts each scene on d6. It goes up a size for every telegraph your Defend or Confidence stops, and for every action where one of your dice wins. It goes down a size every time your wound die steps up (not when your armour or kit takes the blow), for every action where all your dice miss, and when fear, lies or pressure get through, unless 1 Resolve holds your ground. At d2 you're shaken, and you can't act at what the scene's about without 1 Resolve, so your action goes on pulling yourself together, back up to d4. That replaces Confidence going up only when you stopped all of it or took a threat down, and "bury it" is gone from what fear costs you. On d2, fear that gets through is a Hurt or 1 Resolve, and anything else leaves you on d2. See [Confidence](#s-confidence) and [When fear gets through](#s-fear-gets-through).
+**Confidence swings with every roll now.** It still starts each scene on d6. It goes up a size for every telegraph your Defend or Confidence stops, and for every action where one of your dice wins. It goes down a size every time your wound die steps up (not when your armour or kit takes the blow), for every action where all your dice miss, and when fear, lies or pressure get through, unless 1 Resolve holds your ground. At d2 you're shaken, and you can't act at what the scene's about without 1 Resolve, so your action goes on pulling yourself together, back up to d4. That replaces Confidence going up only when you stopped all of it or took a threat down, and "bury it" is gone from what fear costs you. On d2, fear that gets through is a Hurt or 1 Resolve, and anything else leaves you on d2. See [Confidence](#s-tracks) and [When fear gets through](#s-fear-gets-through).
 
 **Defend doubles your Defend, and nothing else.** Defending counts every line on your Defend twice, and your Confidence rolls as it is. It used to double your Confidence too. See [Defend](#s-defend).
 
@@ -112,7 +136,7 @@ These came out of the 23 Oct playtests.
 -   *Unyielding*, the Hurt Boon and [playing alone](#s-solo-gm) mean the first Hurt each scene doesn't move your wound die, instead of an extra bar.
 -   *Tend the Crew* works on the rest now: everyone in the crew who was in the scene rolls two Confidence dice for it, and the best counts. It used to heal Catches in downtime.
 
-**Every archetype has a Resolve spend**, something big for 1 Resolve. See [1 Resolve on your mechanic](#resolve-on-your-mechanic). And:
+**Every archetype has a Resolve spend**, something big for 1 Resolve. See [1 Resolve on your mechanic](#s-abilities). And:
 -   The [Bard](#a-bard)'s *Hold them* is a Defend against fear for everyone who can hear, and the song can split as often as you like. It replaces one roll that stopped all of it.
 -   The [Oracle](#a-oracle) rolls its dice as foresight and swaps those numbers into anyone's dice, friend or foe. It replaces taking steps off telegraphs.
 -   The [Hunter](#a-hunter)'s Mark jumps to another creature when its target falls.
@@ -138,7 +162,7 @@ These came out of the 23 Oct playtests.
 
 These all came out of the playtests.
 
-**Resolve replaces Sparks.** Resolve is your character pushing themselves, and it pays for the big stuff. You have as much as you have Titles, so 2 to start. See [Resolve](#s-resolve).
+**Resolve replaces Sparks.** Resolve is your character pushing themselves, and it pays for the big stuff. You have as much as you have Titles, so 2 to start. See [Resolve](#s-tracks).
 -   Spend 1 to take an extra action this round, reroll a roll you just failed (all your dice or just one), go beyond what a permission normally does, hold your ground when fear gets through, or go at a threat when you're shaken.
 -   Get 1 back at the end of every scene and all of it after downtime, and 1 each when your Catch bites in a big way, when the GM rewards great roleplay, and when you strain a thread.
 -   Sparks are gone, and so are making an opportunity and adding a permission for the scene.
@@ -147,7 +171,7 @@ These all came out of the playtests.
 
 **Aura keeps the small stuff:** bringing something in, keeping a Catch quiet or turning it your way, winning a tie when you're acting, what 1 Aura gets your archetype, a quick heal, and borrowing a permission through a thread. **Going beyond costs 1 Resolve now**, not 1 Aura. See [Aura](#s-aura) and [Going Beyond](#s-going-beyond).
 
-**Confidence swings up and down in a scene.** See [Confidence](#s-confidence).
+**Confidence swings up and down in a scene.** See [Confidence](#s-tracks).
 -   Every scene starts on d6, a size up in clothes that fit. Titles and bonds don't make it bigger any more, and it doesn't come back in downtime, because it goes back to d6 at the end of every scene.
 -   Fear is a telegraph, and that's your fear check. Stop all of it and you go up a size. Take a threat down and you go up a size too.
 -   When fear, lies or pressure get through, you choose: let it shake you and drop a size, bury it and take a Hurt, or hold your ground for 1 Resolve. The GM doesn't name that cost any more. See [When fear gets through](#s-fear-gets-through).
@@ -226,7 +250,7 @@ These all came out of the playtests.
 ## 9 and 10 Oct 2026: Titles, set actions and one action a round {#c-2026-10-09}
 
 -   **Titles hold your permissions.** A new character has two Titles with three permissions each, up to six on a Title. The Title itself counts 1 on any roll it fits. See [Archetypes and Titles](#s-title).
--   **Set actions:** Fight, Move, Sneak, Study and Talk, and your own, with everything that fits counted in advance. (Defend joined them on 24 Oct.) See [Set Actions](#s-set-actions).
+-   **Set actions:** Fight, Move, Sneak, Study and Talk, and your own, with everything that fits counted in advance. (Defend joined them on 24 Oct.) See [Set Actions](#s-roots).
 -   **One action a round.** There's no Help action: to help, put your action into the same thing as a combo. See [Your Action](#s-actions) and [Working Together](#s-teamwork).
 -   **Bring something in** for 1 Aura: anything that isn't on your set action. That replaced stretching a permission.
 -   **Going beyond** what a permission normally does cost 1 Aura, for a sword or a spell. (1 Resolve from 16 Oct.) It replaced big magic.

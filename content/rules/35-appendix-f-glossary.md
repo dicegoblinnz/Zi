@@ -43,7 +43,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Clock](#s-stakes)** | A die on a stake that steps down every round nobody works it. |
 | **[Combo](#s-teamwork)** | Two or more actions into the same thing at the same time, yours or your friends'. Add the set actions together and roll once, with no Aura. The same permission from two of you counts for each. |
 | **[Condition](#s-conditions)** | A tag carrying a die, for you or against you. One step while it lasts, or for a few, a vulnerability. Spend it for its big effect. One of each on a target, and the same one goes on once a round. |
-| **[Confidence](#s-confidence)** | Your nerve, and your defence against fear, lies and pressure. It starts every scene on d6. A size up for every telegraph your defence stops and every action that wins, and a size down every time your wound die steps up, every action where all your dice miss, and when fear gets through. |
+| **[Confidence](#s-tracks)** | Your nerve, and your defence against fear, lies and pressure. It starts every scene on d6. A size up for every telegraph your defence stops and every action that wins, and a size down every time your wound die steps up, every action where all your dice miss, and when fear gets through. |
 | **[Consequence](#s-consequences)** | What a landed blow or a costly miss does. The GM names it, and you can offer another that fits and costs about as much. When fear, lies or pressure get through, you choose instead. |
 | **[Crew](#s-party-faction)** | The player characters, together. Also a faction, with Power, resources, assets and Reputations. |
 | **[Crew action](#downtime)** | The crew's one action a downtime, like any faction's. A player can put a personal slot into it, and two slots on one thing count everything twice. |
@@ -58,8 +58,8 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Extra resource](#s-wealth)** | A resource that isn't paying for an asset. It's spent each downtime, not saved: it hires another faction, pays for a new asset, goes in a trade, or takes the crew a tie. |
 | **[Face](#s-faction-board)** | The person a faction sends to deal with the crew, written as a threat. |
 | **[Faction](#factions)** | A power bigger than one person: Power, resources, assets, an agenda, three bonds, and threads toward the crew. |
-| **[Fear, lies and pressure](#s-confidence)** | Telegraphs at your Confidence. Answer them or let them ride, and nobody can intercept them. Each one that gets through drops your Confidence a size, unless you hold your ground for 1 Resolve. |
-| **[Fired up](#s-confidence)** | Confidence at d12. Cash it in for an extra action or to bring your wound die down a size, and it drops back to d6. |
+| **[Fear, lies and pressure](#s-tracks)** | Telegraphs at your Confidence. Answer them or let them ride, and nobody can intercept them. Each one that gets through drops your Confidence a size, unless you hold your ground for 1 Resolve. |
+| **[Fired up](#s-tracks)** | Confidence at d12. Cash it in for an extra action or to bring your wound die down a size, and it drops back to d6. |
 | **[Foresight](#a-oracle)** | The Oracle's: the numbers it rolled, swapped into anyone's dice before the round ends, as long as each fits the die. |
 | **[Forms](#s-unique-threats)** | A threat with two or more forms. When the last tag keeping a form going is stripped, it changes: it takes new tags, and its multipliers come back on the ones that matter most. |
 | **[Frame](#frames)** | A ready-made kind of campaign: a world, a tone, a board of factions and a first job. |
@@ -71,7 +71,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Harmony](#oracle)** | An Oracle reading: two of the three dice match. |
 | **[Heal](#s-healing)** | The Healer's roll: an action against the patient's wound die, and each die that beats it brings it down a size. It reaches one person, or a second you can touch with a split. |
 | **[Hold](#s-actions)** | Doing nothing this round apart from your stride, for two actions next round. |
-| **[Hold your ground](#s-confidence)** | 1 Resolve, when fear, lies or pressure get through, so your Confidence doesn't drop. |
+| **[Hold your ground](#s-tracks)** | 1 Resolve, when fear, lies or pressure get through, so your Confidence doesn't drop. |
 | **[Hook](#s-aftermath)** | Something at the end of a session that pulls the crew into the next one. |
 | **[Hostile thread](#s-bonds)** | A thread that's gone bad, like a debt you can't pay or a grudge. It bites like a Catch: 1 Aura when it brings you real trouble, 1 Resolve for a big bite. |
 | **[Hurt](#s-blaze)** | What a blow costs you when it lands: your wound die goes up a size. A Hurt at d12 Blazes. |
@@ -111,8 +111,8 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Question](#s-question)** | In an investigation, what the crew wants to know, written as a stake. Each tag on it is something that's hiding the answer. |
 | **[Quick heal](#s-healing)** | Anyone's: 1 Aura brings one person's wound die down a size, no roll. It still takes your action. |
 | **[Reputation](#s-party-faction)** | What the city says about the crew, in one line. A step on any crew roll it fits. One for every Goal done. |
-| **[Resolve](#s-resolve)** | Your character pushing themselves, so it pays for the big stuff: an extra action, a reroll, going beyond, holding your ground, acting at what the scene's about when you're shaken, or your archetype's Resolve spend. As much as you've got Titles. 1 back at the end of every scene, and all of it after downtime. |
-| **[Resolve spend](#resolve-on-your-mechanic)** | Something big each archetype does for 1 Resolve, like the Guardian shrugging off a hit. |
+| **[Resolve](#s-tracks)** | Your character pushing themselves, so it pays for the big stuff: an extra action, a reroll, going beyond, holding your ground, acting at what the scene's about when you're shaken, or your archetype's Resolve spend. As much as you've got Titles. 1 back at the end of every scene, and all of it after downtime. |
+| **[Resolve spend](#s-abilities)** | Something big each archetype does for 1 Resolve, like the Guardian shrugging off a hit. |
 | **[Resource](#s-wealth)** | A permission on a faction's card for where its money comes from, like *Silver Mine*. Each one pays for one asset every downtime, and an extra one, paying for nothing, hires another faction, buys something or goes in a trade. |
 | **[Rest](#s-blaze)** | At the end of every scene: roll the Confidence you finished on against your wound die, and a win brings it down a size. |
 | **[Round](#s-round)** | The GM telegraphs, everyone takes one action, the round ends. |
@@ -120,9 +120,9 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Scar](#s-blaze)** | Your wound, after a Blaze, written as a Catch. Your wound die never goes below a size for each one, and with five, your next Blaze is your last. |
 | **[Scene](#s-aura)** | One place and one problem. Aura refills and Confidence starts on d6 when a new one starts, and you get 1 Resolve back when it ends. |
 | **[Scene clock](#s-scene-clock)** | A die on the whole scene. It steps down every round. Past d2, the scene turns. |
-| **[Set action](#s-set-actions)** | A row on your sheet, like Defend, Fight or Sneak, with everything that fits it nearly every time already counted: 1 for the action, and 1 for every line. A Title goes on every one it fits, a permission on two at most and a plain item on one. |
+| **[Set action](#s-roots)** | A row on your sheet, like Defend, Fight or Sneak, with everything that fits it nearly every time already counted: 1 for the action, and 1 for every line. A Title goes on every one it fits, a permission on two at most and a plain item on one. |
 | **[Shadow pool](#a-shadow)** | A Shadow's: the dice you rolled to get into hiding, to add to any roll after that, as dice or as steps. Each one's gone once you use it. |
-| **[Shaken](#s-confidence)** | Confidence at d2. You can't take an action at what the scene's about unless you spend 1 Resolve each time, and otherwise your action goes on pulling yourself together, back up to d4. The condition *Shaken* is one step less on your Confidence, and spending it drops your Confidence a size ([Conditions](#s-conditions)). |
+| **[Shaken](#s-tracks)** | Confidence at d2. You can't take an action at what the scene's about unless you spend 1 Resolve each time, and otherwise your action goes on pulling yourself together, back up to d4. The condition *Shaken* is one step less on your Confidence, and spending it drops your Confidence a size ([Conditions](#s-conditions)). |
 | **[Site](#s-site)** | Somewhere the crew goes into and has to find its way through. One scene, with an alarm for its clock. |
 | **[Size](#s-building-die)** | One die size. Stepping down one size is a d8 becoming a d6. |
 | **[Slot](#downtime)** | A unit of downtime. You get two, and the crew takes one action, which a slot of yours can go into. |
@@ -138,7 +138,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Supplies](#s-journey)** | On a journey, a clock for the crew's food and water. It steps down every leg nobody feeds the crew. |
 | **[Swap](#grow)** | In downtime, trading a permission for another that fits your Title, or two of them for a Boon, and back. |
 | **[Tag](#s-challenges)** | Something true about a threat, a stake or a place. It does what it says, and a big one carries a multiplier. A Maker can give an item tags for the scene, and they work like permissions. |
-| **[Take a breath](#s-confidence)** | Your action: your Confidence comes up a size, as far as d6. |
+| **[Take a breath](#s-tracks)** | Your action: your Confidence comes up a size, as far as d6. |
 | **[Telegraph](#s-telegraphs)** | The GM saying, face up, what's coming, at whom, and how hard. One aimed at you lands wherever you've gone. Fear, lies and pressure come as telegraphs too. |
 | **[Tempered](#s-attunement)** | An attuned thing's second stage: 2 permissions, and 2 more with a Burden. |
 | **[Thread](#s-bonds)** | One truth you share with a bond. A bond thread's something good: borrow a permission through it for 1 Aura, or strain it for 1 Resolve. A hostile thread's gone bad, and it bites like a Catch. You start with two bond threads with the crew, and three if you write a hostile one too. A faction's threads go one way, and they're how it sees the crew. |

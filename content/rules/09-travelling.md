@@ -48,7 +48,7 @@ A telegraph aimed at the way or at Supplies has no defence to roll, like any tel
 
 ### Running out {#s-supplies}
 
-When Supplies steps down past a d2, you're out. From then on the GM telegraphs hunger every leg: a d6 at each of you, against [Confidence](#s-confidence). Feeding the crew answers it for everyone, and puts Supplies back at a d2.
+When Supplies steps down past a d2, you're out. From then on the GM telegraphs hunger every leg: a d6 at each of you, against [Confidence](#s-tracks). Feeding the crew answers it for everyone, and puts Supplies back at a d2.
 
 ### The whole journey's one scene {#the-whole-journeys-one-scene}
 

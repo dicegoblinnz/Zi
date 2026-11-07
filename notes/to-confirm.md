@@ -1,6 +1,36 @@
-# For Mo: calls to confirm (28 Oct 2026)
+# For Mo: calls to confirm (8 Nov 2026)
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
+
+## 8 Nov: Roots, specialties and three tracks
+
+Your chat from 6 to 8 Nov (`notes/playtest-sheets/2026-11-08-chat-decisions.md`) is the source, and `notes/roots-plan.md` is how it's going through the book. Stage 1 put it through The Core, Building, The Archetypes, the crew, Conflict, Magic's Summoning, Downtime, Appendix D, the Learn deck and both paper sheets. These are the calls Claude made doing it, the ones that change play most first.
+
+1. **Making a character:** two Titles (three permissions each), two archetypes, two traits and one attuned thing. You floated five picks to spread (like three archetypes and two Titles with no attunement), so say if you want that instead.
+2. **Home tracks:** Stamina for the Bloodsworn, Guardian, Maker, Shadow, Shifter and Warrior. Confidence for the Face, Gambler, Hunter, Illusionist, Oracle and Scholar. Resolve for the Bard, Elementalist, Healer, Leader, Summoner and Teleporter.
+3. **Abilities:** each archetype's old Aura spend and Resolve spend became its first two abilities, a size each, and you've got them as soon as you take it. Push is +2 (+3 for the same archetype twice). That leaves four more to write for each, up to your six, and how you'd get them later (a downtime slot each, like awakenings?) is yours to say.
+4. **The conversions that changed most:** the Guardian's *Stand firm* (the next two hits through this round do nothing), the Bloodsworn's every size of Stamina dropped adding 3 steps (with *Bleed for it* and *Bleed out*), the Bard's *Lift them* (everyone who hears rolls their Confidence as at a scene's end, as far as d10), the Summoner, a Maker pumping Aura into someone else's attuned thing, and the Gambler from your die flip idea (once a round, any die you can see, its size plus 1 take away the roll, never paying Aura, with *Another flip* and *Double or nothing*).
+5. **Defend:** a Root and a specialty, with armour as items, rolled with your tracks rather than instead of them, each die stopping one telegraph that fits how you're defending.
+6. **Intercept** only takes blows at a friend's Body. Fear and despair are inside their head.
+7. **Combos:** one Root a roll, whoever's rolling, and every action brings a specialty and its items. Your own extra action in the same roll brings another specialty, or the same one again for 1 more.
+8. **Every roll's at least 1 step**, a d2, so nothing that fits is still a long shot.
+9. **Items:** every item you're using that fits is 1 more, so Bram's hammer and shield both count behind the shield. An item with no specialty behind it is a 1-step specialty of its own.
+10. **Permissions are two-part only** (a doing word with how, what or where), since one word for what kind of person you are is what Roots are for.
+11. **Aura:** a die that wins and lands on its top face pays 2, and a die that beats three men pays once. Off your own turn, like off your defence, Aura stops at your maximum and you can give the rest to a friend. A summon's dice, a flipped die and a number added after the roll don't pay.
+12. **Rolling again costs 1 Resolve**, all your dice or one, and works in downtime.
+13. **Resolve comes back** on a big bite from a Catch or a hostile thread, and when you strain a bond thread, a size each time, in place of the old Resolve point.
+14. **Take a breath** stays an action, putting your Confidence up a size as far as d6. Shaken and fired up are gone.
+15. **Armour on every Root:** Body (leathers, plate, shields, helmets), Mind (court clothes, a uniform, a disguise you trust, while it fits the scene) and Soul (a holy symbol, a ward, a relic), boxes by quality as before, mended in downtime, and 1 more when you Defend.
+16. **Scars:** a Scar locks the smallest open size of that track, a Scar that would lock its last size is your last Blaze, and after a Blaze the track sits on its smallest open size.
+17. **Traits:** *Unyielding* (the first hit through each scene doesn't drop Stamina), *Iron Will* (the same for Resolve), *Reputation Precedes Me* (the same for Confidence at your Mind), *Tenacious*, *Tend the Crew* (everyone rolls each track twice at the end of the scene), *Second Wind* (an extra action the first time a track drops), *Style* (clothes get a box as Mind armour), *Steady Hands* (Confidence comes back on a 3) and *Cool Under Pressure* (the first time Confidence hits d2 it comes back to d6).
+18. **Boons and Burdens:** Toughness, Recovery (3+ or 5+), Regen, Defend and Intercept are redone for the tracks, and the rest are as they were.
+19. **Attunement:** Awakened has one awakening (two with a Catch), Tempered two (four with a Burden), Perfected three (six with a Burden and a Catch). It's an item on your rolls, it gets you Aura its own way, written when you attune it, pumping it is free and takes no action, and it empties every scene.
+20. **Summons:** a Summoner's attunement holds a soul to each awakening, calling one spends Aura for a d4 each (no bigger than the soul's own die), and a hit that gets through knocks a size off.
+21. **Extra actions:** holding your action, coming out of hiding, a trait and the Boon are on top of the one per archetype you can buy.
+22. **Downtime rolls** lost their slot's step, to match no step for the action.
+23. **Quick heal** stays (1 Aura and your action, one track up a size), and a Healer's heal roll puts a track up a size for each die that rolls 4 or more.
+24. **The crew:** Vesk Body 5, Mind 3, Soul 0. Dorrie 1, 5, 2. Bram 5, 1, 2. Isolde 0, 5, 3. Wren 4, 4, 0. Ash 0, 2, 6. Each one's best specialty is 3 or 4, and their archetypes are as they were (Vesk and Wren twice over).
+25. **Not done yet (stage 2):** threats' Challenges and the GM's budget of about 5 steps a round for each of you aren't retuned for rolls of 6 to 11 steps against tracks of d12, so fights will feel easy till then. Ranged attacks are still yours to sort out.
 
 ## 28 Oct: only people add Power
 

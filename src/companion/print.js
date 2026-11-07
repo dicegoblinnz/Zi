@@ -6,7 +6,9 @@
 import { threadState } from "./threads.js";
 import { nameOf, piecesOf, tickedOf } from "./armour.js";
 
-const SHEET = "/sheets/zidara-character-sheet.pdf";
+// Till stage 3 of notes/roots-plan.md rebuilds the companion for Roots, it
+// prints onto the sheet from before Roots, whose fields its characters fill.
+const SHEET = "/sheets/zidara-character-sheet-pre-roots.pdf";
 const FIXED = ["defend", "fight", "move", "sneak", "study", "talk"];
 const SCARS = 5;
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII", "XXIV"];

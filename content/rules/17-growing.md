@@ -18,7 +18,7 @@ You don't earn anything in Zi'Dara by counting kills. Everything that changes on
 
 ## What changes every session {#what-changes-every-session}
 
-Every session ends in a [downtime](#downtime), and you choose what your two slots buy. Nobody chooses for you. The only thing pushing back is the world, which always wants some of your time. Once the downtime's over, all your [Resolve](#s-resolve) comes back too, and your wound die goes back to d2, or to your Scars.
+Every session ends in a [downtime](#downtime), and you choose what your two slots buy. Nobody chooses for you. The only thing pushing back is the world, which always wants some of your time. Once the downtime's over, all your [Resolve](#s-tracks) comes back too, and your wound die goes back to d2, or to your Scars.
 
 ## What changes over an arc {#what-changes-over-an-arc}
 
@@ -31,7 +31,7 @@ Every session ends in a [downtime](#downtime), and you choose what your two slot
 
 There aren't any tiers. You get stronger by putting more lines on your sheet, and every line on a set action makes it a step bigger, so your dice get bigger, and past 6 steps you get a second one. The lines come from:
 
--   **Permissions**, one a Grow, up to six on a Title. Bram's Hold the door, in [Set actions](#s-step-set-actions), is what two Grows look like.
+-   **Permissions**, one a Grow, up to six on a Title. Bram's Hold the door, in [Set actions](#s-step-roots), is what two Grows look like.
 -   **Boons.** Two permission slots on a Title buy a permanent upgrade, like shrugging off the first Hurt each scene (see [Boons and Burdens](#s-boons)).
 -   **Attuned things**, a stage at a time: Awakened, Tempered, Perfected. Each stage needs its material, and each new permission takes a downtime slot (see [Attunement](#s-attunement)).
 -   **A new archetype** every time your Aspiration climbs past d12, with a Title you name for it and one permission. Grow fills it from there, and your Resolve maximum goes up by one with it.

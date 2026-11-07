@@ -303,22 +303,22 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .steps-ladder span { font: 700 7.6pt/1 var(--body); }
 
 /* A track: Confidence from shaken to fired up, the wound die up to Blaze. */
-.track-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 0 7mm; }
+.track-panel { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0 4mm; }
 .track-panel .side { display: flex; flex-direction: column; }
 .trk { display: flex; align-items: flex-start; justify-content: space-between; padding: 1.4mm 0 1.2mm; border-top: 0.4mm solid var(--ink); border-bottom: 0.25mm solid var(--hair); }
 .trk > div { display: flex; flex-direction: column; align-items: center; gap: 0.8mm; flex: 1; }
-.trk .zd-die { width: 9mm; height: 9mm; }
-.trk span { font: italic 500 6.6pt/1.1 var(--body); color: var(--muted); text-align: center; white-space: nowrap; }
-.trk .end b { font: 700 9pt/1 var(--display); letter-spacing: 0.05em; height: 9mm; display: flex; align-items: center; }
+.trk .zd-die { width: 6.4mm; height: 6.4mm; }
+.trk span { font: italic 500 5.8pt/1.1 var(--body); color: var(--muted); text-align: center; white-space: nowrap; }
+.trk .end b { font: 700 8pt/1 var(--display); letter-spacing: 0.05em; height: 6.4mm; display: flex; align-items: center; }
 
 /* Aura and Resolve, side by side: what one buys and how it comes back. */
-.econ { display: grid; grid-template-columns: 1fr 1fr; gap: 0 7mm; }
+.econ { display: grid; grid-template-columns: 1fr; gap: 0 7mm; }
 .econ .qr { margin: 0; }
 .econ h2 .zd-chit { width: 5mm; height: auto; }
 .econ h2 .zd-gem { width: 4.6mm; height: 4.6mm; }
 .econ .zd-chit .a, .econ .zd-gem .a { fill: var(--ink); stroke: var(--ink); }
 .econ .zd-gem .b { stroke: #fff; stroke-width: 5; opacity: 0.6; }
-.econ .lists { display: grid; grid-template-columns: 1fr 1fr; gap: 0 3.4mm; margin: 0.6mm 0 1.2mm; }
+.econ .lists { display: grid; grid-template-columns: 1fr 1fr; gap: 0 7mm; margin: 0.6mm 0 1.2mm; }
 .econ .lists h3 { font: 700 6.8pt/1 var(--body); letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 0.9mm; }
 .econ .lists ul { padding-left: 2.8mm; }
 .econ .lists li { margin-bottom: 0.6mm; }
@@ -329,3 +329,56 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .arch .zd-crest { width: 6.4mm; height: 6.4mm; margin-top: 0.2mm; }
 .arch p { margin: 0; }
 .arch p strong { font: 700 7.9pt/1 var(--display); letter-spacing: 0.04em; }
+
+/* ---------- Roots: the three tracks, Roots and specialties, archetypes and awakenings. ---------- */
+/* The three tracks side by side: d12 down to d2, the Blaze past them, a tick
+   for each size a Scar locks, and two lines of armour on that Root. */
+.tracks3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 4mm; margin-top: 0.8mm; }
+.track3 { border-top: 0.4mm solid var(--ink); padding-top: 0.8mm; }
+.track3 .th { display: flex; align-items: baseline; gap: 1.6mm; }
+.track3 .th h2 { font: 700 8.6pt/1 var(--display); letter-spacing: 0.06em; }
+.track3 > .row { gap: 0; margin-left: -0.7mm; }
+.track3 .blaze { display: flex; flex-direction: column; align-items: flex-start; margin-left: 0.6mm; }
+.track3 .blaze b { font: 700 7.4pt/1 var(--display); letter-spacing: 0.04em; white-space: nowrap; }
+.track3 .blaze span { font: italic 400 6pt/1.15 var(--body); color: var(--muted); margin-top: 0.5mm; white-space: nowrap; }
+.locks { display: flex; align-items: center; gap: 1.2mm; margin: 0.6mm 0 0.4mm; }
+.lock { display: inline-flex; align-items: center; gap: 0.5mm; }
+.lock i { font: italic 500 6pt/1 var(--body); color: var(--muted); }
+.lock .tick { width: 3mm; height: 3mm; }
+.arm { display: flex; align-items: flex-end; gap: 1.2mm; }
+.arm .w { height: 4.6mm; }
+.arm .lab { margin-bottom: 0.9mm; }
+.arm .boxes { display: flex; flex: none; gap: 0.7mm; margin-bottom: 0.45mm; }
+.arm .tick { width: 3.1mm; height: 3.1mm; }
+.tracks3 + .hint { margin-top: 0.9mm; }
+
+/* Roots: three boxes, and the specialties in two columns. */
+.roots { display: flex; align-items: center; gap: 4mm; margin-top: 1mm; }
+.root { display: flex; align-items: center; gap: 1.6mm; }
+.root h2 { font: 700 8.6pt/1 var(--display); letter-spacing: 0.06em; }
+.roots .hint { flex: 1; }
+.specs { display: grid; grid-template-columns: 1fr 1fr; gap: 0 6mm; }
+.specs .sa .name { width: auto; }
+.specs .sa .steps { width: 14mm; }
+.specs .sa td.name .w { margin-right: 0; border-right: 0; }
+
+/* The Scars on the front: a cut and its Catch. */
+.scars .scar .w { height: 4.8mm; }
+
+/* An archetype: its name, its home track to ring, its mechanic and its abilities. */
+.xcard .home { margin: 0.4mm 0 0.2mm; }
+.xcard .home .kind { height: auto; margin: 0; }
+.xcard .perms, .tcard .perms { padding-left: 2.6mm; }
+.tcard .w.short { flex: 0 0 13mm; }
+
+/* An awakening: its line, passive or active to ring, and two boxes for the
+   Aura it's holding. */
+.wakes .top, .wake { display: grid; grid-template-columns: 1fr 22mm 8.6mm; align-items: end; }
+.wakes .top > span { font: italic 500 6pt/1 var(--body); color: var(--muted); text-align: center; padding-bottom: 0.4mm; white-space: nowrap; }
+.wake .w { margin-right: 1.2mm; }
+.wake .boxes { display: flex; justify-content: center; gap: 0.7mm; margin-bottom: 0.6mm; }
+.wake .tick { width: 3mm; height: 3mm; }
+/* The attuned thing across the page: its awakenings in two columns of three. */
+.acard.wide .row + .row { margin-top: 0.4mm; }
+.acard.wide .grow2 { display: flex; flex: 2.2; min-width: 0; }
+.wakes2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 6mm; margin-top: 0.6mm; }

@@ -60,7 +60,7 @@ Most things just happen. **Only roll when something pushes back, or when the out
 
 ### Reading permissions {#reading-permissions}
 
-Players will ask whether something fits a hundred times a session. Answer fast and be generous. Whatever's on the [set action](#s-set-actions) they're rolling is free. Anything else that fits costs them 1 Aura to bring in, even when it plainly fits, and pushing a permission past what it normally does costs 1 Resolve to [go beyond](#s-going-beyond). If you catch yourself arguing about whether it's normal, it's going beyond, so take the Resolve and move on.
+Players will ask whether something fits a hundred times a session. Answer fast and be generous. Whatever's on the [set action](#s-roots) they're rolling is free. Anything else that fits costs them 1 Aura to bring in, even when it plainly fits, and pushing a permission past what it normally does costs 1 Resolve to [go beyond](#s-going-beyond). If you catch yourself arguing about whether it's normal, it's going beyond, so take the Resolve and move on.
 
 Be consistent. If calling up someone a hundred years dead was going beyond for Isolde last week, it's going beyond this week too.
 
@@ -453,7 +453,7 @@ When a player shoves the shielded captain off a narrow bridge, *Shield* and *For
 ## Archetypes, Resolve and Study at the Table {#s-gm-area}
 
 -   **Let each archetype do its thing.** Every [archetype](#archetypes) has something only it can do. When it comes out, let it change the fight, and say what it looks like: Dorrie's influence turning the captain's cut onto his own sergeant, or an Illusionist's wall sending the guards the long way round.
--   **Let a Resolve spend be as big as it says.** Every archetype has one, on top of its Aura ([1 Resolve on your mechanic](#resolve-on-your-mechanic)), and Resolve's hard to come by, so don't shave it down. When Bram spends his, the hit that got through to him does nothing, however big it was. When Dorrie spends hers on that captain, he fights for the crew till the round ends.
+-   **Let a Resolve spend be as big as it says.** Every archetype has one, on top of its Aura ([1 Resolve on your mechanic](#s-abilities)), and Resolve's hard to come by, so don't shave it down. When Bram spends his, the hit that got through to him does nothing, however big it was. When Dorrie spends hers on that captain, he fights for the crew till the round ends.
 -   **Areas are the Elementalist's.** An [Elementalist](#a-elementalist) can make a die their area, and it takes a split but no Aura. Say what it touches before they roll. Fire catches everyone in the squares it covers, friend and foe, so if a friend's standing in the fireball, say so, and let them make it smaller, or spend 1 Resolve so it skips them. Wards, blessings and heals reach one person, and a split's second die can reach another friend they can touch.
 -   **Big things are big Challenges.** Going beyond is 1 Resolve whatever the size, so the size goes in the Challenge. Phasing through a garden wall and through the vault door both cost 1 Resolve, but the vault door's a far bigger Challenge, with tags for what stands in the way. Set it by how hard it is in the world, and let them roll.
 -   **Study finds what's there:** a hidden tag or a straight answer. Only a Scholar's truth makes something true that wasn't.

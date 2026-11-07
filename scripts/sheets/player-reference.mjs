@@ -1,12 +1,12 @@
 // The player reference: Appendix D in Mo's words, four A4 pages in the kit's
 // Paper theme. The table's most-used rules come first: the round and rolling,
-// then Confidence, wounds and defence, then Aura, Resolve and the archetypes,
-// then your character, threats and gear. Each page is one part, and each part
+// then the tracks and defence, then Aura and the archetypes, then your
+// character, threats and gear. Each page is one part, and each part
 // takes sections of Appendix D by id, whole or with some of their bullets, so
 // the reference never says anything the quick reference doesn't. A few are
 // drawn with the kit as well as said: the round as its three steps, the steps
-// ladder with the dice in their shapes, Confidence and the wound die as
-// tracks, Aura and Resolve side by side, and each archetype with its sigil.
+// ladder with the dice in their shapes, Stamina, Confidence and Resolve as
+// tracks, Aura's spends and gains side by side, and each archetype with its sigil.
 // A section that's new to Appendix D stops the build until it's given a part
 // (or left out on purpose), so nothing gets missed, and a page that's too
 // full stops it too (scripts/build-sheets.mjs says by how much).
@@ -20,7 +20,7 @@ import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import { visit, SKIP } from "unist-util-visit";
 import { ROOT } from "./sources.mjs";
-import { die, mini, crest, aura, resolve, SIGILS, SIZES } from "../../src/kit/kit.js";
+import { die, mini, crest, aura, SIGILS, SIZES } from "../../src/kit/kit.js";
 import { stepsToDice, diceLabel } from "../../src/companion/dice.js";
 
 const SOURCE = "content/rules/33-appendix-d-quick-reference.md";
@@ -41,18 +41,18 @@ const PAGES = [
     ],
   },
   {
-    title: "Confidence, wounds and defence",
-    short: "Confidence and wounds",
+    title: "The tracks and defence",
+    short: "Tracks and defence",
     blocks: [
-      { panel: "tracks", ids: ["s-qr-confidence", "s-qr-hurt"] },
-      { flow: [{ id: "s-qr-confidence" }, { id: "s-qr-hurt" }, { id: "telegraphs-and-defence" }, { id: "consequences-the-gm-names-one" }, { id: "conditions" }] },
+      { panel: "tracks", ids: ["s-qr-tracks"] },
+      { flow: [{ id: "s-qr-tracks" }, { id: "telegraphs-and-defence" }, { id: "consequences-the-gm-names-one" }, { id: "conditions" }] },
     ],
   },
   {
-    title: "Aura, Resolve, archetypes and threads",
+    title: "Aura, archetypes and threads",
     short: "Aura and archetypes",
     blocks: [
-      { panel: "economy", ids: ["aura", "s-qr-resolve"] },
+      { panel: "economy", ids: ["aura"] },
       { panel: "archetypes", id: "s-qr-archetypes" },
       { flow: [{ id: "s-qr-threads" }] },
     ],
@@ -159,32 +159,25 @@ function ladder(section) {
   return `<section class="panel"><div class="cap"><h2>Steps into dice</h2></div><div class="steps-ladder">${cells.join("")}</div></section>`;
 }
 
-// Confidence and the wound die, as the tracks they move along. The words
-// under the dice are the bold leads of the bullets below them.
-function tracks(confidence, hurt) {
-  const has = (section, text) => {
-    if (!section.body.includes(text)) throw new Error(`Appendix D, ${section.heading}: the track's labels come from "${text}", which isn't there any more`);
+// Stamina, Confidence and Resolve, as the tracks they move along: d12 down
+// to d2, and the Blaze past it. The words come from the bullets below them.
+function tracks(section) {
+  for (const text of ["**Stamina** (Body), **Confidence** (Mind) and **Resolve** (Soul)", "Each starts at d12", "**Blaze:**", "a 4 or more puts it up a size"]) {
+    if (!section.body.includes(text)) throw new Error(`Appendix D, ${section.heading}: the tracks panel's labels come from "${text}", which isn't there any more`);
+  }
+  const row = (name, root) => {
+    const dice = [...SIZES].reverse().map((d) => `<div>${die(d, { own: "harm", hide: true })}<span>${d === 12 ? "starts here" : ""}</span></div>`).join("");
+    return `<div class="side"><div class="cap"><h2>${name}</h2><p>${root}</p></div><div class="trk">${dice}<div class="end"><b>Blaze</b><span>a hit at d2</span></div></div></div>`;
   };
-  has(confidence, "**d2, shaken:**");
-  has(confidence, "**Every scene starts on d6.**");
-  has(confidence, "**d12, fired up:**");
-  has(hurt, "Your wound die starts at d2");
-  has(hurt, "**Blaze:**");
-  const under = { 2: "shaken", 6: "every scene starts here", 12: "fired up" };
-  const conf = SIZES.map((d) => `<div>${die(d, { hide: true })}<span>${under[d] || ""}</span></div>`).join("");
-  const wound = SIZES.map((d) => `<div>${die(d, { own: "harm", hide: true })}<span>${d === 2 ? "starts here" : ""}</span></div>`).join("");
-  return `<section class="panel track-panel">
-  <div class="side"><div class="cap"><h2>Confidence</h2></div><div class="trk">${conf}</div></div>
-  <div class="side"><div class="cap"><h2>Wound die</h2><p>every Hurt puts it up a size</p></div><div class="trk">${wound}<div class="end"><b>Blaze</b><span>a Hurt at d12</span></div></div></div>
-</section>`;
+  return `<section class="panel track-panel">${row("Stamina", "Body")}${row("Confidence", "Mind")}${row("Resolve", "Soul")}</section>`;
 }
 
-// Aura and Resolve side by side: what one buys and how it comes back.
+// Aura: what one buys and how it comes back, side by side.
 function economy(sectionsFound) {
-  const icon = { aura: svgOf(aura(1, 1)), "s-qr-resolve": svgOf(resolve(1, 1)) };
+  const icon = { aura: svgOf(aura(1, 1)) };
   return `<section class="panel econ">${sectionsFound.map(([id, section]) => {
     const lines = section.body.split("\n").filter((l) => l.trim());
-    if (lines.some((l) => bullet(l) === null)) throw new Error(`Appendix D, ${section.heading}: the panel for Aura and Resolve reads bullets only, and this section has something else in it now`);
+    if (lines.some((l) => bullet(l) === null)) throw new Error(`Appendix D, ${section.heading}: the panel for Aura reads bullets only, and this section has something else in it now`);
     const items = lines.map(bullet);
     const spend = items.find((b) => b.startsWith("**Spend 1:**"));
     const get = items.find((b) => b.startsWith("**Get 1 back:**"));

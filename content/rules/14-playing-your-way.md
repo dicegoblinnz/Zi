@@ -89,7 +89,7 @@ The book's in plain words, and every rule term's in the [glossary](#appendix-glo
 
 ## Talking at the Table {#s-access-voice}
 
-You don't have to do voices, or talk as your character at all. Say what they do, in the third person if that's easier: "Dorrie gives the clerk a false name and flashes her signet pin." It's the same roll either way: her Pass as someone else, with the pin already on it, 5 steps, a d10. The [Resolve](#s-resolve) the GM gives for great roleplay works the same way. It's for what your character does, like facing their fear or keeping a promise to themselves, so it counts however you tell it.
+You don't have to do voices, or talk as your character at all. Say what they do, in the third person if that's easier: "Dorrie gives the clerk a false name and flashes her signet pin." It's the same roll either way: her Pass as someone else, with the pin already on it, 5 steps, a d10. The [Resolve](#s-tracks) the GM gives for great roleplay works the same way. It's for what your character does, like facing their fear or keeping a promise to themselves, so it counts however you tell it.
 
 -   **Take the spotlight when you want it.** Want a moment? Ask for one: "Can Dorrie have a go at the clerk?" If you'd rather sit back for a scene, tell the GM and she'll aim it at someone else. When your moment comes, it can be a roll instead of a speech.
 -   **Ask before putting anyone on the spot.** The GM asks players to make up bits of the world (see [The Conversation](#s-conversation)). Some love it and some don't, so she gives a heads-up and a way out: "Isolde, in a minute I'll ask what your order's sigils mean, so have a think. Or I'll make it up, if you'd rather."

@@ -14,6 +14,8 @@ export const SIGILS = {
   Elementalist: `<path d="M12 2.8 C12.6 6.6 18.4 9.2 18.4 14.6 A6.4 6.4 0 0 1 5.6 14.6 C5.6 11.6 7.2 9.6 8.6 8 C8.8 10.4 9.8 11.6 11 12.2 C10.6 9 11 5.6 12 2.8 Z"/><path d="M12 19.6 C10.6 19.6 9.8 18.6 9.8 17.4 C9.8 15.9 11.2 14.9 12 13.4 C12.8 14.9 14.2 15.9 14.2 17.4 C14.2 18.6 13.4 19.6 12 19.6 Z"/>`,
   // A mask: getting into a threat's head.
   Face: `<path d="M3.4 8.2 C6.4 6.2 9.4 7 12 8.8 C14.6 7 17.6 6.2 20.6 8.2 C20.6 13.6 17.4 17.6 12 18.8 C6.6 17.6 3.4 13.6 3.4 8.2 Z"/><path d="M6.6 11.6 Q8.5 9.8 10.5 11.8 Q8.4 13 6.6 11.6 Z"/><path d="M17.4 11.6 Q15.5 9.8 13.5 11.8 Q15.6 13 17.4 11.6 Z"/>`,
+  // A coin turning over: the die flipped after it lands.
+  Gambler: `<ellipse cx="12" cy="12" rx="4.2" ry="7.4"/><path d="M12 4.6 V19.4"/><path d="M3.6 9.4 C3 5.6 6.2 3 9.8 3.4"/><path d="M9.8 3.4 L7.6 2.2 M9.8 3.4 L8.4 5.4"/><path d="M20.4 14.6 C21 18.4 17.8 21 14.2 20.6"/><path d="M14.2 20.6 L16.4 21.8 M14.2 20.6 L15.6 18.6"/>`,
   // A shield: standing in front of the crew.
   Guardian: `<path d="M12 2.8 L19.6 5.6 V11.4 C19.6 16 16.6 19.4 12 21.2 C7.4 19.4 4.4 16 4.4 11.4 V5.6 Z"/><path d="M12 6.4 V17.6"/>`,
   // A leaf with its vein: patching people up mid-scene.

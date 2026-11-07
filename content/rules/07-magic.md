@@ -6,7 +6,7 @@ order: 7
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-11-08
 ---
 :::quote
 Everyone's got a soul, and a soul can be spent.
@@ -96,7 +96,7 @@ How magic sits in society is up to your world. In the Steeplands it sits quietly
 
 Only a [Summoner](#a-summoner) catches souls and summons. A Summoner catches souls, then calls them back out to work for her. A summon is anything that works on its own, like a hound that tracks for you, or a caught courtier who'll talk to people you can't.
 
-**Souls go in attunement.** A summoning attunement holds souls the way an attuned item holds permissions, and the souls you catch are its material. It sits in one of your [attunement](#s-attunement) slots and grows through the same three stages:
+**Souls go in attunement.** A summoning attunement holds souls the way any attuned thing holds awakenings, a soul to each awakening, and the souls you catch are its material. It sits in one of your [attunement](#s-attunement) slots and grows through the same three stages:
 
 | Stage | Souls | It can hold more | In all |
 | --- | --- | --- | --- |
@@ -104,34 +104,28 @@ Only a [Summoner](#a-summoner) catches souls and summons. A Summoner catches sou
 | Tempered | 2 | 2 more with a Burden | 4 |
 | Perfected | 3 | 3 more with a Burden and a Catch | 6 |
 
-You start at Awakened, like anything you attune, so that's one soul, or two if you give it its Catch. Starting souls are d4s. You start with one attunement slot, so if your summoning attunement's in it, that's your one attuned thing till you get more in downtime.
+You start at Awakened, like anything you attune, so that's one soul, or two if you give it its Catch. A starting soul's a d4. You start with one attunement slot, so if your summoning attunement's in it, that's your one attuned thing till you get more in downtime. Like any attuned thing, it gets you Aura its own way, which you write when you attune it.
 
-**Your Summon dice** are a set action like any other: your Title, the permissions that fit, and the action. They're what you catch souls with, and what you call them back out with.
+**Catching a soul.** When a creature falls, spend your action and roll against its Challenge, with a Root and a specialty that fit how you catch it. Beat it and its soul goes into one of your utility slots, with its Challenge die. Miss and that soul's gone. In downtime, put it into your summoning attunement. You can swap a soul in your attunement for one you're carrying whenever you've got the slot.
 
-**Catching a soul.** When a creature falls, spend your action and roll your Summon dice against its Challenge. Beat it and its soul goes into one of your utility slots. Miss and that soul's gone. In downtime, put it into your summoning attunement. You can swap a soul in your attunement for one you're carrying whenever you've got the slot.
+**Calling them out.** Each soul's an active awakening. Spend Aura on it as part of your action, and every Aura's **a d4 of summons**: build them into one summon or several, as you like, but none bigger than that soul's own die. Three Aura on the harbour Warden, a d8, is a d8 Warden and a d4 one, or three d4s. It needs a reason in the story. Nobody calls up a horde to drink at the tavern.
 
-**Calling them out.** Summoning takes your action, and it needs a reason in the story. Nobody calls up a horde to drink at the tavern. Roll your Summon dice against your souls' dice, and each of your dice brings out one soul it beats. Split to go for more.
+**A soul is what it was.** A caught courtier talks, a hound tracks and a Warden fights. Each summon rolls its own die for whatever it does, and acts in the round like anyone.
 
-**Aura.** When you're catching or summoning, 1 Aura adds +2 to one of your dice. That's the Summoner's +2, so take Summoner twice and it's +3, and three times it's +4. A tie still costs 1 Aura to win.
+**They fade.** Every summon drops a size at the end of every round, and **every hit that gets through to it knocks a size off**. Past d2, it's gone, and its soul's back in your attunement, ready to call again.
 
-**A soul is what it was.** A caught courtier talks, a hound tracks and a Warden fights. It keeps its Challenge die, and each one rolls its own die for whatever it does.
+**A horde rolls as one throw.** Roll every summon's die together, with an intent each, so ten of them don't take ten turns.
 
-**Summons act in the round like anyone.** One hit takes a summon out, and its soul goes back to its slot, so you can call it again.
+**Intercepting.** A summon [intercepts](#s-intercept) for free, so it doesn't cost Aura or an action. It can take the blows aimed at someone within its stride, as many as you like, and they come at it instead. Like anyone's intercept, it can't take what's at their Mind or their Soul. When they land, it rolls its die to stop one of them, and it's got to beat it or tie. Every one that gets through knocks a size off it, and once it's gone, the rest go on to whoever they were aimed at.
 
-**Intercepting.** A summon [intercepts](#s-intercept) for free, so it doesn't cost Aura or an action. It can take the blows aimed at someone within its stride, as many as you like, and they come at it instead. Like anyone's intercept, it can't take fear, lies or pressure. When they land, it rolls its die to stop one of them, and it's got to beat it or tie. The first die that gets through takes it out, and the rest go on to whoever they were aimed at.
-
-**At the end of a scene,** roll each summon's die. On 3 or lower it goes back to its slot. They all go back at downtime.
-
-Summons can't combo, and their top faces don't give Aura.
+Summons can't combo, and **their dice never give Aura**, top faces and wins included. They all go back at the end of the scene.
 
 :::example[Summoning at the table]
-Sable's a Summoner. Her Summon action is a d10, and she's got three souls: a rat swarm (d4), a hound (d6) and the harbour Warden (d8). She splits into a d6 and a d4 and goes for the two small ones. Her d4 comes up 2 against the rats' 3, so she spends 1 Aura to make it a 4, and the rats pour out. That's the d4's top face, but the +2 got it there, so there's no Aura back. Her d6 beats the hound.
+Sable's a Summoner, and she's got three souls: a rat swarm (d4), a hound (d6) and the harbour Warden (d8). Two dockhands come at her with clubs, so she spends 3 Aura as part of her action: 2 on the hound, which can't be bigger than a d6, so it's a d6 hound and a d2 one, and 1 on the rats, a d4 swarm. The swarm goes at the dockhands' feet.
 
-Next round, two dockhands come at Sable with clubs, a d6 each. The hound intercepts both for her, free, so they come at it instead. When they land, the clubs come up 4 and 3, and the hound rolls its d6: 5. That beats both, but one die only stops one, so it stops the 4, and the 3 gets through. That's the hound out, and its soul goes back to its slot, ready to call again.
+Next round, the clubs come at Sable, a d6 each. The bigger hound intercepts both for her, free, so they come at it instead. When they land, the clubs come up 4 and 3. The hound faded to a d4 at the end of last round, so it rolls a d4: 4. That stops the 4, and the 3 gets through, so it's a d2. At the end of the round it fades again, and it's gone, back in her attunement.
 
-Later the dock boss falls, and Sable spends her action catching his soul: her d10 against his Challenge 3, a d6. She rolls 7 against his 4, and his soul goes into one of her utility slots, a d6. In downtime she can put him in her attunement if there's room, or swap him for the rats.
-
-At the end of the scene the rats are still out, so Sable rolls their d4. It's a 2, so they go back to their slot too.
+Later the dock boss falls, and Sable spends her action catching his soul: her Soul and her Necromancy, 7 steps, against his Challenge 3, a d6. Her d12 rolls 7 against his 4, and his soul goes into one of her utility slots, a d6. In downtime she can put him in her attunement if there's room, or swap him for the rats.
 :::
 
 ## Rituals {#rituals}

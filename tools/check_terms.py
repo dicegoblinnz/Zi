@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Flag rules words that the 7 Oct to 27 Oct 2026 changes retired, and broken links.
+"""Flag rules words that the 7 Oct to 8 Nov 2026 changes retired, and broken links.
 
 Usage: python3 tools/check_terms.py [FILE.md ...]   (default: every chapter)
        add --links to check every #anchor link points at a real heading id
@@ -15,7 +15,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 RETIRED = [
     ("game name", r"\bZi\b(?!['’]Dara)"),
-    ("abilities", r"\babilit(y|ies)\b"),
     ("tiers", r"\b(Novice|Skilled|tiers?)\b|\bMaster tier\b|\bat Master\b"),
     ("specialization", r"\bspeciali[sz](ation|ations|ed)\b"),
     ("Help action", r"\bHelp(s|ing|ed)?\b|\bhelp action\b"),
@@ -72,6 +71,14 @@ RETIRED = [
     ("old trait types", r"\bInvoked\b|\bonce-per-scene traits?\b|\bonce-a-(scene|downtime) traits?\b|\bonce-per-downtime traits?\b|\bPer (scene|downtime)\b"),
     ("cut traits", r"\bPrepared Mind\b|\bContingency\b"),
     ("items everywhere", r"\b(an |a )?(plain )?items? goes? on every set action\b|\bitems go on every\b"),
+    # 8 Nov 2026: Roots, specialties and three tracks (abilities are back, on archetypes)
+    ("set actions", r"\bset actions?\b"),
+    ("wound die", r"\bwound (die|dice)\b"),
+    ("Hurt", r"\bHurts?\b"),
+    ("shaken or fired up", r"\bshaken\b(?! off)|\bfired up\b"),
+    ("old spends", r"\b(Resolve|Aura) spends?\b"),
+    ("old Confidence", r"\b(starts?|back) (on|at|to) d6\b.*\bConfidence\b|\bConfidence\b.*\b(starts?|back) (on|at|to) d6\b|\bConfidence swings?\b|\bthe swing\b"),
+    ("step for the action", r"\b(1|a|one) (step )?for the action\b|\bthe action on its own is\b|\bwith the action,? (that's|it's)\b"),
 ]
 
 

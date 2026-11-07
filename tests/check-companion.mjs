@@ -761,17 +761,14 @@ async function play(page, crewId, name) {
   await page.waitForSelector(".tile[data-a]");
 }
 
-// 2. The crew's set actions, read off their sheets in the chapter.
+// 2. The crew's set actions. Till stage 3 of notes/roots-plan.md takes the
+// freeze off, the companion plays the crew from before Roots, so their sheets
+// come from that snapshot (src/data/companion-pre-roots.json), not the chapter,
+// which the build checks under Roots.
 if (part("2")) {
-  const md = readFileSync("content/rules/03b-title-ideas-and-the-crew.md", "utf8");
-  const sheets = [...md.matchAll(/^:::sheet\[([^:\]]+): [^\]]+\]\n([\s\S]*?)\n:::$/gm)].map((m) => ({
-    name: m[1],
-    actions: m[2].match(/^\*\*Set actions:\*\* (.+)$/m)[1].replace(/\.$/, "").split(" · ").map((s) => {
-      const x = s.match(/^(.+?) (\d+) \(([^)]+)\)/);
-      return [x[1].replace(/'/g, "’"), Number(x[2]), x[3]];
-    }),
-  }));
-  same(sheets.length, 6, "crew sheets in the chapter");
+  const pre = JSON.parse(readFileSync("src/data/companion-pre-roots.json", "utf8"));
+  const sheets = pre.crew.map((c) => ({ name: c.name, actions: c.actions.map((a) => [a.name.replace(/'/g, "’"), a.steps, a.die]) }));
+  same(sheets.length, 6, "crew sheets in the snapshot");
   const { context, page } = await phone();
   for (const sheet of sheets) {
     await play(page, sheet.name.toLowerCase());
@@ -780,7 +777,7 @@ if (part("2")) {
   }
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")));
   same([saved.v, saved.characters.length], [1, 6], "the saved list's version and size");
-  console.log(`crew: ${sheets.length} sheets checked against the chapter`);
+  console.log(`crew: ${sheets.length} sheets checked against the crew from before Roots`);
   await context.close();
 }
 
@@ -1516,12 +1513,9 @@ if (part("4")) {
 
 // 5. Building your own.
 if (part("5")) {
-  const md = readFileSync("content/rules/03b-title-ideas-and-the-crew.md", "utf8");
-  const block = md.match(/^:::sheet\[Vesk: [^\]]+\]\n([\s\S]*?)\n:::$/m)[1];
-  const want = block.match(/^\*\*Set actions:\*\* (.+)$/m)[1].replace(/\.$/, "").split(" · ").map((s) => {
-    const x = s.match(/^(.+?) (\d+) \(([^)]+)\)/);
-    return [x[1], Number(x[2]), x[3]];
-  }).sort();
+  // Vesk from before Roots, which the builder still builds till stage 3.
+  const pre = JSON.parse(readFileSync("src/data/companion-pre-roots.json", "utf8"));
+  const want = pre.crew.find((c) => c.name === "Vesk").actions.map((a) => [a.name, a.steps, a.die]).sort();
   const { context, page } = await phone();
   const axe = async (what) => {
     const result = await new AxeBuilder({ page }).analyze();
@@ -1675,7 +1669,7 @@ if (part("5")) {
   await shot(page, "7-builder-check");
   await b('[data-b="save"]');
   await page.waitForSelector(".tile[data-a]");
-  same(await tiles(), want, "the built Vesk's set actions against her sheet in the chapter");
+  same(await tiles(), want, "the built Vesk's set actions against her sheet from before Roots");
   has(await page.textContent(".cc-head"), "Stride 5 (Light on my Feet)", "the built Vesk's stride on her sheet");
   const saved = await page.evaluate(() => [JSON.parse(localStorage.getItem("zi-characters")).characters.at(-1), JSON.parse(localStorage.getItem("zi-drafts") || "{}")]);
   same([saved[0].crew, saved[0].name, Boolean(saved[0].build), "new" in saved[1]], ["own", "Vesk", true, false], "the built Vesk saved, and the draft cleared");
@@ -2889,18 +2883,20 @@ if (part("10")) {
   }
   const withDice = cards.filter((c) => CREW.some((n) => c.example.includes(n)) && /\bd(2|4|6|8|10|12)\b/.test(c.example));
   if (withDice.length < cards.length * 0.6) note(`learn: only ${withDice.length} of ${cards.length} cards have an example with the crew's dice`);
-  // Every die an example gives one of the crew's set actions is the one on their sheet.
+  // Every number of steps an example gives comes out as the dice it says, off
+  // the companion's own table. The crew's Roots and specialties are the
+  // build's to check (book.roots), since till stage 3 of notes/roots-plan.md
+  // the companion's crew is the one from before Roots.
   const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
   let dieChecks = 0;
   for (const c of cards) {
-    for (const m of c.example.matchAll(/\b(Vesk|Dorrie|Bram|Isolde|Wren|Ash)['’]s ([A-Z][a-z]+(?: [a-z]+){0,2})(?:,| is) (?:(\d+) steps, )?a (d\d+)\b/g)) {
-      const action = book.crew.find((x) => x.name === m[1])?.actions.find((a) => a.name.toLowerCase() === m[2].toLowerCase());
-      if (!action) continue;
+    for (const m of c.example.matchAll(/\b(\d+) steps[,:] (an? d\d+(?: and an? d\d+)?|two d12s)/g)) {
+      const said = m[2] === "two d12s" ? "2d12" : m[2].replace(/\ban? /g, "").replace(" and ", " + ");
       dieChecks += 1;
-      same([m[3] ? Number(m[3]) : action.steps, m[4]], [action.steps, action.die], `learn: “${c.title}” gives ${m[1]}'s ${m[2]}`);
+      same(diceLabel(stepsToDice(Number(m[1]))), said, `learn: “${c.title}” gives ${m[1]} steps as ${m[2]}`);
     }
   }
-  if (dieChecks < 4) note(`learn: only ${dieChecks} set actions found in the examples to check against the crew's sheets`);
+  if (dieChecks < 10) note(`learn: only ${dieChecks} rolls found in the examples to check against the steps into dice`);
   // A made-up change to Extra actions touches the card that teaches Your Action.
   const reach = (id) => reachOf(chapterDocs, id);
   same(staleCards(cards, { iso: "2099-01-01", title: "made up", links: ["s-extra-actions"] }, "2026-10-26", reach).map((c) => c.id), ["l-action"], "learn: a made-up change to Extra actions names the card that teaches Your Action");
@@ -3236,7 +3232,7 @@ if (part("10")) {
   await opened(page, "s-permissions");
   await page.click('.rd-track > section.is-on a[href="#how-permissions-stack"]');
   await page.waitForSelector(".zp[open]", { timeout: 8000 }).catch(() => note("a chapter's pop-up didn't open offline"));
-  has(await text(page, ".zp-text"), "counts once a roll", "a chapter's pop-up offline");
+  has(await text(page, ".zp-text"), "One Root a roll", "a chapter's pop-up offline");
   await context.setOffline(false);
   await context.close();
 
@@ -3336,7 +3332,7 @@ if (part("10")) {
     await axe("the crew's sheets");
     await context.close();
   }
-  console.log(`reading: ${cards.length} cards checked against the chapters and the crew's sheets (${dieChecks} set actions), the deck swiped, remembered and read offline, a chapter's contents and its sections a page at a time (swiped, keyed, Back and Forward), bookmarks, what's read and where you're up to, pop-ups, Carry on reading, and a place's tabs, tags and Roll a d20`);
+  console.log(`reading: ${cards.length} cards checked against the chapters and the steps into dice (${dieChecks} rolls), the deck swiped, remembered and read offline, a chapter's contents and its sections a page at a time (swiped, keyed, Back and Forward), bookmarks, what's read and where you're up to, pop-ups, Carry on reading, and a place's tabs, tags and Roll a d20`);
 }
 
 await browser.close();

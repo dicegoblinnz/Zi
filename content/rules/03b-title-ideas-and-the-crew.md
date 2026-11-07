@@ -5,8 +5,8 @@ slug: title-ideas-and-the-crew
 order: 3.5
 part: "Play"
 partNumber: "Part I"
-source: 2026-10-02 rulebook (split out of Building Your Character)
-updated: 2026-10-27
+source: 2026-10-02 rulebook (split out of Building Your Character), and Mo's chat decisions, 6 to 8 Nov 2026
+updated: 2026-11-08
 ---
 ## Quick Build {#s-quick}
 
@@ -16,35 +16,35 @@ Ten minutes, and you're playing.
 
 The quick build is the long build with most of the thinking done for you. You pick two archetypes, take what you need from the [Title ideas](#s-title-ideas), and bring the parts that make the character yours: the Titles, the people and what you want. Each step says where it's explained in full.
 
-1.  **Pick two archetypes, and a Title idea for each if you like.** Each archetype has a mechanic, something only it can do, and on most of them 1 Aura adds +2 to one die on it. You can take the same archetype twice, and then that +2 is a +3. Every Title idea says which archetypes it suits, and gives you Titles, permissions and traits to start from. See [How archetypes work](#s-how-archetypes).
-2.  **Write a Title for each, and three permissions on it.** Your Title is the name you give your archetype. Take one of the idea's examples or write your own, and make it specific: *the best blade in the city* is fine, and *the best blade in the Low Market* is better. Then take three permissions that fit inside it, so you've got six. Change the words to suit your character, or write one that isn't on the list. A permission can be one word, like *Deceptive*, or a doing word and how, what or where, like *pick a mechanical lock*. See [Titles](#s-title) and [Permissions](#s-writing-permissions).
-3.  **Pick two traits.** A trait's never a step, so it does its one thing without going on a set action. Take them from the ideas you started from, or from [the full list](#s-traits).
-4.  **Fill in your set actions.** Defend, Fight, Move, Sneak, Study and Talk are on every sheet, and if there's something you do all the time, give it a set action of its own. Put your Titles on every set action they fit nearly every time, each permission on the two it helps most, never twice on the same one, and each plain item on the one it helps most. Plain armour, a shield and a helmet go on your Defend. A set action's steps are 1 for the action and 1 for every line on it. See [Set actions](#s-step-set-actions).
-5.  **Take what you carry, and attune one thing.** You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more. Armour, a shield or a helmet is Common, with 1 box, and one piece can be Fine, with 2. Your attuned thing starts at Awakened with one permission. If there's trouble you'd like on it, give it a Catch and it gets a second permission. You can attune more later, in downtime. See [What you carry](#s-carrying) and [Attunement](#s-attunement).
+1.  **Pick two archetypes.** Each one has a mechanic, something only it can do, and abilities you pay for out of your tracks, and most of them have a Push: +2 to one die on the mechanic. You can take the same archetype twice, and then that +2 is a +3. Every Title idea says which archetypes suit it. See [How archetypes work](#s-how-archetypes).
+2.  **Write two Titles, and three permissions on each.** Take a Title off one of the ideas or write your own, and make it specific: *the best blade in the city* is fine, and *the best blade in the Low Market* is better. Each Title's a Root and three specialties that fit it. Then take three permissions that fit inside it, so you've got six, and give each one a Root and a specialty: *pick a mechanical lock* (Body, Locks). Change the words to suit your character, or write one that isn't on the list. See [Titles](#s-title) and [Permissions](#s-writing-permissions).
+3.  **Pick two traits.** A trait's never a step, so it does its one thing without you deciding to. Take them from the ideas you started from, or from [the full list](#s-traits).
+4.  **Add up your Roots and specialties.** Each Root's 1 for every Title and every permission on it, and each specialty's 1 for every Title that names it and every permission on it. A roll's one Root and one specialty, and what you carry counts while you're using it. See [Roots and specialties](#s-step-roots).
+5.  **Take what you carry, and attune one thing.** You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more. Armour goes on the Root it guards, Common with 1 box, and one piece can be Fine, with 2. Your attuned thing starts at Awakened with one awakening, and you write its own way to get you Aura. If there's trouble you'd like on it, give it a Catch and it gets a second awakening. You can attune more later, in downtime. See [What you carry](#s-carrying) and [Attunement](#s-attunement).
 6.  **Write your threads.** Answer at least two of the [ten crew questions](#s-connect), and turn two of your answers into **bond threads** with the crew, something good between you. A thread with someone in the crew goes on both your sheets, so agree on it together. Write a **hostile thread** as well, with anyone, and you can write a third bond thread. With two players, one of your bond threads goes to someone outside the crew, and playing alone, both do. See [Bonds and threads](#s-bonds).
 7.  **Write your Aspiration** at d2. It's one thing you want, and it climbs as you chase it. Past d12 you get it, so make it something you'd know the day it's done: *be a hero again* is too vague, and *earn back the rank they stripped from me* is better. See [Aspiration](#s-aspiration) and [A good Aspiration](#s-good-aspiration).
-8.  **Check the numbers.** You've got 5 Aura, 2 Resolve (one for each Title), a stride of 3 and a wound die at d2. Confidence starts every scene on d6, a size up in clothes that fit the scene, and a trait like Iron Will can start you higher. Then it swings a size at a time: up when you win a roll or stop a telegraph, and down when you're hurt or miss with every die. See [Resolve](#s-resolve), [Wounds](#s-blaze) and [Confidence](#s-confidence).
+8.  **Check the numbers.** You've got 5 Aura, a stride of 3, and Stamina, Confidence and Resolve all at d12. Your tracks are what you defend with, they pay for your abilities, and they come down a size with every hit that gets through. At the end of every scene, each one comes back a size on a 4 or more. See [The Tracks](#s-tracks) and [Aura](#s-aura).
 
 :::example[Wren, the quick way]
-Wren takes Hunter twice, so her +2 is a +3. She starts both Titles from the Ranger idea, which suits a Hunter, and they're both examples off its list: *the hunter who has never lost a trail* and *an outrider from the border war*. Her first Title gets three permissions from the list, *follow any trail*, *move through the wild unseen* and *know a beast's habits*. Her second gets three that aren't on the list at all: *scout ahead of an army*, *ride hard over rough country* and *read the land for an ambush*. Her traits are their own pick, and she takes two of the Ranger's, Marksman's Eye and Sure-Footed.
+Wren takes Hunter twice, so her Push is a +3. She starts both Titles from the Ranger idea, and they're both examples off its list. *The hunter who has never lost a trail* is her Mind, with Tracking, Archery and Wildcraft, and *an outrider from the border war* is her Body, with Scouting, Riding and Archery. Her first Title gets three permissions from the list, *follow any trail* (Mind, Tracking), *move through the wild unseen* (Body, Wildcraft) and *know a beast's habits* (Mind, Wildcraft). Her second gets three that aren't on the list at all: *scout ahead of an army* (Body, Scouting), *ride hard over rough country* (Body, Riding) and *read the land for an ambush* (Mind, Scouting). Her traits are their own pick, and she takes two of the Ranger's, Marksman's Eye and Sure-Footed.
 
-Her Track is her first Title, *follow any trail* and *know a beast's habits*, so with the action that's 4 steps, a d8. She attunes her longbow with *shoot a longbow*, and gives it the Catch *Wanted* for a second permission, *hit anything I can see*. Both go on her Fight with her first Title, and that's 4 steps, a d8.
+That's a Body of 4 and a Mind of 4, so following a trail is her Mind and her Tracking, 6 steps, a d12. She attunes her longbow, with *Long shot* as its awakening, and gives it the Catch *Wanted* for a second, *Hit anything I can see*. Shooting is her Body and her Archery, with the longbow, 7 steps, a d12 and a d2.
 
-Say she marks the Warden with her Fight and wins, so it's *Marked d8*. Bram swings at it, and his d8 comes up 4 and the Mark die 6, against the Warden's 7. Wren spends 1 Aura to make the Mark die a 9, so Bram's hammer gets through. Her whole sheet's [further down](#s-pregens).
+Say she marks the Warden with a shot and her d12 wins, so it's *Marked d12*. Bram swings at it, and his d12 comes up 4, his d8 3 and the Mark die 6, against the Warden's 7. Wren pays 1 Confidence to put her +3 on the Mark die, and it's a 9, so Bram's hammer gets through. Her whole sheet's [further down](#s-pregens).
 :::
 
 A quick-built character is every bit as real as one built the long way, and everything about it grows the same way. In more of a hurry than that? Take one of the [six ready-made characters](#s-pregens) and play.
 
 ## Title Ideas {#s-title-ideas}
 
-Every Title is an [archetype](#s-how-archetypes), and the Title is the name you give it. Here are twenty-nine ideas to build one from, the same ones the Player Companion app offers: roles first, then schools of magic. Each one says which archetypes it suits, and gives you example Titles, permissions and trait ideas, along with what going beyond looks like and the trouble that comes with it. Take what fits, change the words so they sound like your character, or use them to get started on something of your own. They're just as good for a Title you earn later, which starts with one permission.
+A Title is who you are, and your [archetypes](#s-how-archetypes) are a pick of their own. Here are twenty-nine ideas to build a Title from, the same ones the Player Companion app offers: roles first, then schools of magic. Each one says which archetypes suit it, and gives you example Titles, permissions and trait ideas, along with what going beyond looks like and the trouble that comes with it. Take what fits, change the words so they sound like your character, or use them to get started on something of your own. They're just as good for a Title you earn later, which starts with one permission.
 
 A Title idea isn't a Title, and neither is an archetype. *Warrior* doesn't tell the table what you're the best at, so a Warrior still needs a Title that does, like *the best blade in the city*. Keep each Title to one role or one school. *Archmage* is too wide, so pick the school you're known for.
 
--   **Archetypes** are the ones the idea suits. Each Title is one archetype, so where an idea suits more than one, pick the one that plays the way you want. They're suggestions, so if your Title fits a different archetype better, go with that one. What each one does is in [The Archetypes](#archetypes).
--   **Permissions** are ready to copy onto your sheet, and they're a good guide when you write your own (see [Permissions](#s-writing-permissions)). Each one goes on two of your set actions at most.
+-   **Archetypes** are the ones that suit the idea. Your archetypes are your own pick, so take whichever play the way you want, with whatever Titles you write. What each one does is in [The Archetypes](#archetypes).
+-   **Permissions** are ready to copy onto your sheet, and they're a good guide when you write your own (see [Permissions](#s-writing-permissions)). Give each one the Root and specialty it builds when you write it down.
 -   **Traits** are three that suit the idea. You've got two traits, and you can take them from here or from [the full list](#s-traits).
--   **Going beyond** is what this kind of character does when they push a permission past what it normally does. It costs 1 Resolve (see [Going beyond](#s-going-beyond)).
+-   **Going beyond** is what this kind of character does when they push a permission past what it normally does. It costs 1 Aura (see [Going beyond](#s-going-beyond)).
 -   **Trouble** is the kind that follows this sort of character around. Titles don't have Catches, so it isn't part of the Title, and you can bring it into a scene whenever you like. Let it cause real trouble and you take 1 Aura (see [Catches and trouble](#s-trouble)). Any of it makes a good Catch for something you [attune](#s-attunement), too.
 
 If what you want to play isn't here, it's probably two of these put together, or one of them with a permission of your own.
@@ -546,9 +546,9 @@ Pick one and play tonight.
 
 These are the same six you can choose in the Player Companion app. Take one as written, or copy one and change anything you like. They're the crew as they start out. The examples elsewhere in this book sometimes show them later in their careers, with more Titles, more permissions and new tricks.
 
-Each of them has two archetypes, with a Title for each built from a [Title idea](#s-title-ideas), and a few permissions of their own. The archetype's in brackets after each Title. Their set actions are already counted. The number's the steps, then the die, then what's on it, and the action itself is the 1 that isn't written down: Vesk's Sneak is her first Title and *move unseen*, plus the action, so it's 3 steps, a d6. An attuned thing's permissions are written in italics on a set action like any other permission, and a trait's never on one.
+Each of them has two archetypes, and two Titles built from a [Title idea](#s-title-ideas) with three permissions on each. The Root and specialties each one builds are in brackets after it, and their Roots and specialties are already added up: Vesk's Body is her first Title and four permissions, 5, and her Locks is both Titles and two permissions, 4. What they carry only counts while they're using it, so it isn't in those numbers.
 
-They've each got one attuned thing, at Awakened, and Wren's longbow and Bram's war hammer have each taken a Catch for a second permission. Everyone's got room for more in what they carry, so pick things up in play, or fill the gaps from [What you carry](#s-carrying) before you start. A piece of armour's [quality](#s-armour-quality) comes first, so Bram's Fine plate armour has two boxes, and his Common shield has one.
+They've each got one attuned thing, at Awakened, with its own way to get them Aura, and Wren's longbow and Bram's war hammer have each taken a Catch for a second awakening. Everyone's got room for more in what they carry, so pick things up in play, or fill the gaps from [What you carry](#s-carrying) before you start. A piece of armour's [quality](#s-armour-quality) comes first, and its Armour line says which Root it guards, so Bram's Fine plate armour has two boxes on his Body, and his Common shield has one.
 
 Their [threads](#s-bonds) are laid out by bond, and each one says whether it's a bond thread or a hostile one. Each of them wrote two bond threads with the crew and one hostile thread, so they've each got room for a third bond thread. A thread with someone in the crew goes on both sheets, so most of them have more than that. Where a thread's in someone else's words, it says whose. None of them is strained yet.
 
@@ -557,21 +557,31 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 :::sheet[Vesk: The best cat burglar in the city]
 *A thief who never gets seen. Fast, quiet, and good with locks.*
 
-**Plays like:** a cat burglar, thief or scout. She's a [Shadow](#a-shadow) twice, so her +2 is a +3, and both her Titles come from the [Rogue](#k-rogue) idea.
+**Plays like:** a cat burglar, thief or scout. She's a [Shadow](#a-shadow) twice, so her Push is +3, and both her Titles come from the [Rogue](#k-rogue) idea.
 
-**First Title:** *The best cat burglar in the city* (Shadow). Permissions: *move unseen*, *run the rooftops*, *pick a mechanical lock*.
+**Archetypes:** [Shadow](#a-shadow) · [Shadow](#a-shadow).
 
-**Second Title:** *Raised by the Guild* (Shadow). Permissions: *know how a lock's built*, *fight dirty with a knife*, *find a buyer for anything*.
+**First Title:** *The best cat burglar in the city* (Body; Stealth, Climbing, Locks). Permissions: *move unseen* (Body, Stealth), *run the rooftops* (Body, Climbing), *pick a mechanical lock* (Body, Locks).
+
+**Second Title:** *Raised by the Guild* (Mind; Locks, Knives, Black market). Permissions: *know how a lock's built* (Mind, Locks), *fight dirty with a knife* (Body, Knives), *find a buyer for anything* (Mind, Black market).
 
 **Traits:** Silent Step (Triggered) · Light on my Feet (Passive).
 
-**Set actions:** Sneak 3 (d6): her first Title, *move unseen* · Move 4 (d8): her first Title, *run the rooftops*, *climb or swing anywhere you can throw a hook* · Locks 5 (d10): her first Title, *pick a mechanical lock*, *know how a lock's built*, her picks · Defend 2 (d4): her worn leathers · Fight 2 (d4): *fight dirty with a knife* · Study 1 (d2) · Talk 1 (d2).
+**Roots:** Body 5 · Mind 3 · Soul 0.
 
-**Carries:** Common worn leathers (equipment, 1 of 3) · a purse of gold, a smoke bomb, a perfect set of picks (utility, 3 of 3) · the first coin she ever stole (keepsake) · an empty bag (0 of 10).
+**Specialties:** Locks 4 · Stealth 2 · Climbing 2 · Knives 2 · Black market 2.
 
-**Attuned (Awakened):** A grappling line: *climb or swing anywhere you can throw a hook*.
+**Carries:** Common worn leathers, a knife (equipment, 2 of 3) · a purse of gold, a smoke bomb, a perfect set of picks (utility, 3 of 3) · the first coin she ever stole (keepsake) · an empty bag (0 of 10).
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 5 (Light on my Feet) · Confidence starts every scene on d6 · Wound die d2.
+**Armour:** Common worn leathers (Body, 1 box).
+
+**Attuned (Awakened):** A grappling line.
+
+**Its Aura:** 1 the first time each scene she gets somewhere nobody else could follow.
+
+**Awakenings:** *Anywhere I can throw a hook* (passive): +1 on one die of every roll she makes with it, for each Aura in it.
+
+**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 5 (Light on my Feet).
 
 **Threads:** Dorrie: *We have pulled a dozen jobs. I trust her with my life.* (bond) and *We came up on the same streets. She never asks why.* (Dorrie's, bond) · Bram: *He once carried me out of a fire. I have never said thank you.* (bond) · Isolde: *She stole the book that started all this.* (Isolde's, hostile) · Wren: *I owe her for the night she hid me from the watch.* (Wren's, bond) · The fence: *I owe a debt I would rather not discuss.* (hostile)
 
@@ -587,19 +597,29 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Plays like:** a con artist, courtier or spy. She's a [Face](#a-face) and a [Shadow](#a-shadow), and she took both her Titles off the [Face](#k-face) idea's list.
 
-**First Title:** *The voice that talked a duke out of his own house* (Face). Permissions: *talk my way past a door*, *read a room in a glance*, *make a lie sound like old news*.
+**Archetypes:** [Face](#a-face) · [Shadow](#a-shadow).
 
-**Second Title:** *The woman with a hundred names* (Shadow). Permissions: *pass as someone I'm not*, *forge a letter in any hand*, *keep my story straight under questions*.
+**First Title:** *The voice that talked a duke out of his own house* (Soul; Persuasion, Lying, Reading people). Permissions: *talk my way past a door* (Soul, Persuasion), *read a room in a glance* (Mind, Reading people), *make a lie sound like old news* (Mind, Lying).
+
+**Second Title:** *The woman with a hundred names* (Mind; Disguise, Forgery, Lying). Permissions: *pass as someone I'm not* (Mind, Disguise), *forge a letter in any hand* (Body, Forgery), *keep my story straight under questions* (Mind, Lying).
 
 **Traits:** Silver Tongue (Triggered) · Cold Reader (Triggered).
 
-**Set actions:** Talk 4 (d8): her first Title, *read a room in a glance*, *make a lie sound like old news* · Pass as someone else 5 (d10): her second Title, *pass as someone I'm not*, *keep my story straight under questions*, *pass as someone who matters* · Study 2 (d4): *read a room in a glance* · Defend 1 (d2) · Fight 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
+**Roots:** Body 1 · Mind 5 · Soul 2.
 
-**Carries:** court clothes (equipment, 1 of 3) · a fine bottle of wine, a deck of marked cards (utility, 2 of 3) · a letter of introduction (keepsake) · an empty bag (0 of 10).
+**Specialties:** Lying 4 · Persuasion 2 · Reading people 2 · Disguise 2 · Forgery 2.
 
-**Attuned (Awakened):** A signet pin: *pass as someone who matters*.
+**Carries:** Common court clothes (equipment, 1 of 3) · a fine bottle of wine, a deck of marked cards (utility, 2 of 3) · a letter of introduction (keepsake) · an empty bag (0 of 10).
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Confidence starts every scene on d6, or d8 in her court clothes when they fit the scene · Wound die d2.
+**Armour:** Common court clothes (Mind, 1 box, when they fit the scene).
+
+**Attuned (Awakened):** A signet pin.
+
+**Its Aura:** 1 the first time each scene someone treats her as somebody who matters.
+
+**Awakenings:** *Someone who matters* (passive): +1 on one die of every roll where she passes as someone of rank, for each Aura in it.
+
+**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 3.
 
 **Threads:** Vesk: *We came up on the same streets. She never asks why.* (bond) and *We have pulled a dozen jobs. I trust her with my life.* (Vesk's, bond) · Bram: *He thinks I sold him out on the harbour job. I did not.* (hostile) and *I do not trust her, and she knows it.* (Bram's, hostile) · Isolde: *I keep her secrets at court. She keeps mine.* (bond) and *I am the only one who knows her real name.* (Isolde's, bond) · Ash: *She smuggled me out of the Ember Court. I owe her my life.* (Ash's, bond)
 
@@ -615,19 +635,29 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Plays like:** a bodyguard, shield-bearer or man-at-arms. He's a [Guardian](#a-guardian) and a [Leader](#a-leader), and his Titles come from the [Guardian](#k-guardian) and [Captain](#k-captain) ideas.
 
-**First Title:** *The wall that held the harbour gate* (Guardian). Permissions: *hold the line*, *guard one person*, *lift what two men can't*.
+**Archetypes:** [Guardian](#a-guardian) · [Leader](#a-leader).
 
-**Second Title:** *A sergeant who lost his stripes* (Leader). Permissions: *fight in a shield wall*, *bark an order that gets obeyed*, *spot who's in charge*.
+**First Title:** *The wall that held the harbour gate* (Body; Shieldwork, Bodyguarding, Lifting). Permissions: *hold the line* (Body, Shieldwork), *guard one person* (Body, Bodyguarding), *lift what two men can't* (Body, Lifting).
+
+**Second Title:** *A sergeant who lost his stripes* (Soul; Command, Shieldwork, Soldiering). Permissions: *fight in a shield wall* (Body, Shieldwork), *bark an order that gets obeyed* (Soul, Command), *spot who's in charge* (Mind, Soldiering).
 
 **Traits:** Unyielding (Passive) · Intimidating Presence (Passive).
 
-**Set actions:** Fight 4 (d8): his first Title, *hold the line*, *fight with a war hammer* · Defend 4 (d8): his first Title, his plate armour, his shield · Talk 3 (d6): his second Title, *bark an order that gets obeyed* · Lift and carry 3 (d6): his first Title, *lift what two men can't* · Study 2 (d4): *spot who's in charge* · Move 1 (d2) · Sneak 1 (d2).
+**Roots:** Body 5 · Mind 1 · Soul 2.
+
+**Specialties:** Shieldwork 4 · Bodyguarding 2 · Lifting 2 · Command 2 · Soldiering 2.
 
 **Carries:** Fine plate armour, a Common shield (equipment, 2 of 3) · a medical kit, his coin from home (utility, 2 of 3) · his old sergeant's stripes (keepsake) · an empty bag (0 of 10).
 
-**Attuned (Awakened):** His war hammer (Breaker): *fight with a war hammer*, plus *knock a man off his feet* for its Catch, *Marked*.
+**Armour:** Fine plate armour (Body, 2 boxes) · a Common shield (Body, 1 box).
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Confidence starts every scene on d6 · Wound die d2 (Unyielding: the first Hurt he takes each scene doesn't move it).
+**Attuned (Awakened):** His war hammer (Breaker), with its Catch, *Marked*.
+
+**Its Aura:** 1 the first time each scene he takes a blow meant for someone else.
+
+**Awakenings:** *Ring the bell* (passive): +1 on one die of every roll he makes with it, for each Aura in it · *Knock them flat* (active): 1 Aura when it wins, and the target's *Prone* at the die that won. Each Aura more does it to another target the same roll beat.
+
+**Numbers:** Aura 5 · Stamina d12 (Unyielding: the first hit that gets through each scene doesn't drop it) · Confidence d12 · Resolve d12 · Stride 3.
 
 **Threads:** Isolde: *I swore to her father I would keep her alive.* (bond) and *He has guarded me since I was twelve.* (Isolde's, bond) · Vesk: *He once carried me out of a fire. I have never said thank you.* (Vesk's, bond) · Dorrie: *I do not trust her, and she knows it.* (hostile) and *He thinks I sold him out on the harbour job. I did not.* (Dorrie's, hostile) · Wren: *We held the same wall in the border war.* (bond) and *He is the only one who can keep up with me.* (Wren's, bond)
 
@@ -643,19 +673,29 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Plays like:** a mage, sage or medium. She's an [Oracle](#a-oracle) and a [Scholar](#a-scholar), and her Titles come from the [Medium](#k-medium) and [Scholar](#k-scholar) ideas.
 
-**First Title:** *The last student of a dead order* (Oracle). Permissions: *speak with the recently dead*, *draw a ward the dead can't cross*, *read the order's old script*.
+**Archetypes:** [Oracle](#a-oracle) · [Scholar](#a-scholar).
 
-**Second Title:** *A scholar of forbidden texts* (Scholar). Permissions: *know the history of anything old*, *find what I need in any library*, *read dead languages*.
+**First Title:** *The last student of a dead order* (Soul; The dead, Warding, Dead languages). Permissions: *speak with the recently dead* (Soul, The dead), *draw a ward the dead can't cross* (Soul, Warding), *read the order's old script* (Mind, Dead languages).
+
+**Second Title:** *A scholar of forbidden texts* (Mind; History, Research, Dead languages). Permissions: *know the history of anything old* (Mind, History), *find what I need in any library* (Mind, Research), *read dead languages* (Mind, Dead languages).
 
 **Traits:** Perfect Recall (Passive) · Iron Will (Passive).
 
-**Set actions:** Study 3 (d6): her second Title, *know the history of anything old* · The dead 3 (d6): her first Title, *speak with the recently dead* · Ward 3 (d6): her first Title, *draw a warding circle anywhere I can kneel* · Talk 2 (d4): her fine coat · Defend 1 (d2) · Fight 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
+**Roots:** Body 0 · Mind 5 · Soul 3.
 
-**Carries:** a fine coat with silver thread (equipment, 1 of 3) · a salt packet, a book she never finished (utility, 2 of 3) · an old letter (keepsake) · an empty bag (0 of 10).
+**Specialties:** Dead languages 4 · The dead 2 · Warding 2 · History 2 · Research 2.
 
-**Attuned (Awakened):** Chalk and salt: *draw a warding circle anywhere I can kneel*.
+**Carries:** a Common coat with silver thread (equipment, 1 of 3) · a salt packet, a book she never finished (utility, 2 of 3) · an old letter (keepsake) · an empty bag (0 of 10).
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Confidence starts every scene on d8 (Iron Will), or d10 in her fine coat when it fits the scene · Wound die d2.
+**Armour:** a Common coat with silver thread (Mind, 1 box, when it fits the scene).
+
+**Attuned (Awakened):** Chalk and salt.
+
+**Its Aura:** 1 whenever something stops at one of her circles.
+
+**Awakenings:** *A circle anywhere I can kneel* (active): 1 Aura draws a warding circle where she kneels, with room for her and one friend, and nothing dead can cross it till the scene ends. Each Aura more makes room for one more.
+
+**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 (Iron Will: the first hit that gets through to her Soul each scene doesn't drop it) · Stride 3.
 
 **Threads:** Bram: *He has guarded me since I was twelve.* (bond) and *I swore to her father I would keep her alive.* (Bram's, bond) · Dorrie: *I am the only one who knows her real name.* (bond) and *I keep her secrets at court. She keeps mine.* (Dorrie's, bond) · Vesk: *She stole the book that started all this.* (hostile) · Wren: *She knows more about my brother than she has said.* (Wren's, hostile) · Ash: *She is the only one who is not afraid of me.* (Ash's, bond)
 
@@ -669,21 +709,29 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 :::sheet[Wren: The hunter who has never lost a trail]
 *The scout. Sees them first, and hits them from further away than they thought possible.*
 
-**Plays like:** a hunter, archer or tracker. She's a [Hunter](#a-hunter) twice, so her +2 is a +3, and both her Titles come from the [Ranger](#k-ranger) idea.
+**Plays like:** a hunter, archer or tracker. She's a [Hunter](#a-hunter) twice, so her Push is +3, and both her Titles come from the [Ranger](#k-ranger) idea.
 
-**First Title:** *The hunter who has never lost a trail* (Hunter). Permissions: *follow any trail*, *move through the wild unseen*, *know a beast's habits*.
+**Archetypes:** [Hunter](#a-hunter) · [Hunter](#a-hunter).
 
-**Second Title:** *An outrider from the border war* (Hunter). Permissions: *scout ahead of an army*, *ride hard over rough country*, *read the land for an ambush*.
+**First Title:** *The hunter who has never lost a trail* (Mind; Tracking, Archery, Wildcraft). Permissions: *follow any trail* (Mind, Tracking), *move through the wild unseen* (Body, Wildcraft), *know a beast's habits* (Mind, Wildcraft).
+
+**Second Title:** *An outrider from the border war* (Body; Scouting, Riding, Archery). Permissions: *scout ahead of an army* (Body, Scouting), *ride hard over rough country* (Body, Riding), *read the land for an ambush* (Mind, Scouting).
 
 **Traits:** Marksman's Eye (Passive) · Sure-Footed (Passive).
 
-**Set actions:** Fight 4 (d8): her first Title, *shoot a longbow*, *hit anything I can see* · Sneak 4 (d8): her first Title, *move through the wild unseen*, her hooded cloak · Track 4 (d8): her first Title, *follow any trail*, *know a beast's habits* · Study 3 (d6): her second Title, *read the land for an ambush* · Move 2 (d4): her second Title · Defend 1 (d2) · Talk 1 (d2).
+**Roots:** Body 4 · Mind 4 · Soul 0.
+
+**Specialties:** Wildcraft 3 · Scouting 3 · Archery 2 · Tracking 2 · Riding 2.
 
 **Carries:** her hooded cloak (equipment, 1 of 3) · rations (utility, 1 of 3) · a torn map (keepsake) · her hunter's pack, empty (0 of 10).
 
-**Attuned (Awakened):** Her longbow (Long, Two-Handed): *shoot a longbow*, plus *hit anything I can see* for its Catch, *Wanted*.
+**Attuned (Awakened):** Her longbow (Long, Two-Handed), with its Catch, *Wanted*.
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Confidence starts every scene on d6 · Wound die d2.
+**Its Aura:** 1 whenever she hits something that never saw her.
+
+**Awakenings:** *Long shot* (passive): +1 on one die of every roll she makes with it, for each Aura in it · *Hit anything I can see* (active): 1 Aura and one die she shoots with goes at anything she can see, however far, and cover doesn't help it. Each Aura more does it for another die.
+
+**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 3.
 
 **Threads:** Bram: *He is the only one who can keep up with me.* (bond) and *We held the same wall in the border war.* (Bram's, bond) · Vesk: *I owe her for the night she hid me from the watch.* (bond) · Isolde: *She knows more about my brother than she has said.* (hostile) · Ash: *We have never agreed on anything.* (Ash's, hostile)
 
@@ -699,19 +747,27 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Plays like:** a pyromancer or wild mage. She's an [Elementalist](#a-elementalist) and a [Face](#a-face), and her Titles come from the [Fire](#k-sorcerer) and [Courtier](#k-courtier) ideas.
 
-**First Title:** *The last fire-speaker of the Ember Court* (Elementalist). Permissions: *throw fire*, *make a threat stick*, *feel every flame in a room*.
+**Archetypes:** [Elementalist](#a-elementalist) · [Face](#a-face).
 
-**Second Title:** *The Court's runaway heir* (Face). Permissions: *know the old courts' history*, *carry myself like royalty*, *command a room*.
+**First Title:** *The last fire-speaker of the Ember Court* (Soul; Fire, Intimidation, Court lore). Permissions: *throw fire* (Soul, Fire), *make a threat stick* (Soul, Intimidation), *feel every flame in a room* (Mind, Fire).
+
+**Second Title:** *The Court's runaway heir* (Soul; Court lore, Command, Etiquette). Permissions: *know the old courts' history* (Mind, Court lore), *carry myself like royalty* (Soul, Etiquette), *command a room* (Soul, Command).
 
 **Traits:** Killer Instinct (Triggered) · Battle Focus (Triggered).
 
-**Set actions:** Fight 4 (d8): her first Title, *throw fire*, *call fire without a word or a gesture* · Scare them off 5 (d10): her first Title, *throw fire*, *make a threat stick*, *call fire without a word or a gesture* · Talk 4 (d8): her second Title, *command a room*, *make a threat stick* · Study 2 (d4): *know the old courts' history* · Defend 1 (d2) · Move 1 (d2) · Sneak 1 (d2).
+**Roots:** Body 0 · Mind 2 · Soul 6.
+
+**Specialties:** Fire 3 · Court lore 3 · Intimidation 2 · Command 2 · Etiquette 2.
 
 **Carries:** a scorched coat (equipment, 1 of 3) · a tinderbox, flash powder (utility, 2 of 3) · a silver locket (keepsake) · an empty bag (0 of 10).
 
-**Attuned (Awakened):** An ember stone on a chain: *call fire without a word or a gesture*.
+**Attuned (Awakened):** An ember stone on a chain. She can call fire with it without a word or a gesture.
 
-**Numbers:** Aura 5 · Resolve 2 · Stride 3 · Confidence starts every scene on d6 · Wound die d2.
+**Its Aura:** 1 the first time each scene something catches fire because of her.
+
+**Awakenings:** *Fire without a word* (passive): +1 on one die of every roll she throws fire with, for each Aura in it.
+
+**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 3.
 
 **Threads:** Dorrie: *She smuggled me out of the Ember Court. I owe her my life.* (bond) · Isolde: *She is the only one who is not afraid of me.* (bond) · Wren: *We have never agreed on anything.* (hostile)
 
