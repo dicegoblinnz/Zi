@@ -262,7 +262,12 @@ html.cc-tabbed .cc-toast { bottom: calc(72px + env(safe-area-inset-bottom, 0px))
    your Defend's dice. When the set actions are an even number it gets the row
    to itself. */
 .tile-defend { border-color: color-mix(in srgb, var(--violet) 60%, transparent); }
-.cc-play .tile-defend:nth-child(odd) { grid-column: 1 / -1; }
+.cc-play .tile-defend:nth-child(odd):last-child { grid-column: 1 / -1; }
+/* The dice roller sits beside When it lands, or under it on a row of its own. */
+.tile-free .tile-dice .zd-die.is-next { margin-left: -12px; }
+@media (max-width: 559px) {
+  .cc-play .tile-free:nth-child(odd) { grid-column: 1 / -1; }
+}
 .cc-play .tile-sub { align-self: start; font-size: 0.88rem; line-height: 1.3; }
 .cc-last { margin: 0.8rem 0 0; padding: 0.6rem 0.8rem; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 2px; font-size: 0.95rem; }
 .cc-last .k, .cc-mine-roll .k { margin-right: 0.3rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
@@ -540,6 +545,73 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .cc-num { min-height: 44px; padding: 0; font-weight: 700; font-size: 1.1rem; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 2px; }
 .cc-num[aria-pressed="true"] { color: var(--on-gold); background: var(--gold); border-color: var(--gold); }
 
+/* The dice roller (roller.js): yours and theirs, each a tray of the dice on
+   it with a die of every size under it to tap one on. What they did reads
+   like the roll card, and when they're coming at you each of theirs gets a
+   lane with the die of yours that's on it. Gold's yours and violet's theirs. */
+.dz-side { margin: 0 0 0.9rem; padding: 0.3rem 0.7rem 0.7rem; background: var(--surface); border: 1px solid var(--line-soft); border-left: 3px solid var(--zd-you-line); border-radius: 2px; }
+.dz-side.is-them { border-left-color: var(--zd-them-line); }
+.dz-side-head { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; }
+.dz-side-head h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.05rem; letter-spacing: 0.02em; }
+.dz-count { min-width: 0; font-weight: 700; color: var(--zd-you-ink); overflow-wrap: anywhere; }
+.is-them .dz-count { color: var(--zd-them-ink); }
+.dz-clear { margin-left: auto; }
+.dz-tray { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; min-height: 60px; padding: 2px 0 8px; }
+.dz-none { margin: 0; font-size: 0.92rem; color: var(--muted); }
+.dz-die { display: inline-grid; place-items: center; min-width: 48px; min-height: 48px; padding: 0; color: inherit; background: none; border: 0; border-radius: 2px; }
+.dz-die .zd-die { --s: 50px; }
+.dz-die.is-new .zd-die { animation: zd-pop 0.3s cubic-bezier(0.23, 1, 0.32, 1) both; }
+.dz-add { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; padding-top: 8px; border-top: 1px dashed var(--line-soft); }
+.dz-adddie { display: grid; place-items: center; min-width: 0; min-height: 48px; padding: 3px 0; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
+.dz-adddie .zd-die { --s: 38px; }
+.dz-die:focus-visible, .dz-adddie:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.dz-die, .dz-adddie { transition: transform 120ms ease-out; }
+.dz-die:active, .dz-adddie:active:not(:disabled) { transform: scale(0.94); }
+@media (hover: hover) and (pointer: fine) { .dz-adddie:hover:not(:disabled) { border-color: var(--gold); } .is-them .dz-adddie:hover:not(:disabled) { border-color: var(--violet); } }
+.dz-who { margin-top: 0.2rem; }
+.dz-who .cc-chipbtn { flex: 1 1 10rem; }
+.dz-q { margin: 0.8rem 0 0.4rem; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
+.dz-who .cc-lead { margin: 0.6rem 0 0; }
+
+.dz-how { display: flex; flex-wrap: wrap; align-items: center; column-gap: 0.4rem; }
+.dz-flip { display: inline-flex; align-items: center; min-height: 44px; margin: -6px 0 -10px; padding: 0; font-weight: 700; color: var(--violet); background: none; border: 0; text-decoration: underline; text-underline-offset: 3px; }
+.dz-flip:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.dz-verdict { margin: 0 0 0.3rem; text-align: center; font-family: var(--display); font-weight: 600; font-size: 1.3rem; line-height: 1.25; }
+.dz-note { margin: 0 0 0.6rem; text-align: center; font-weight: 700; color: var(--violet); }
+.dz-result > [role="status"] { margin-bottom: 0.6rem; }
+.dz-result .cc-stage { padding-top: 0; }
+.dz-stands { margin: 0; }
+.dz-lanes { list-style: none; display: grid; gap: 8px; margin: 0 0 0.8rem; padding: 0; }
+.dz-lane { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px 12px; padding: 6px 10px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.dz-lane .zd-die { --s: 50px; }
+.dz-lane .res-out { font-size: 1.1rem; line-height: 1.2; }
+.dz-pair { display: inline-flex; align-items: center; gap: 6px; }
+.dz-d { display: inline-flex; flex-direction: column; align-items: center; gap: 1px; }
+.dz-d small { font-size: 0.78rem; font-weight: 700; line-height: 1; color: var(--muted); }
+.dz-pair .vs, .dz-one .k, .dz-spare .k { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.dz-pair .vs { margin-bottom: 14px; }
+.dz-gap { display: inline-block; width: 42px; height: 42px; margin: 4px; border: 2px dashed var(--line); border-radius: 2px; }
+.cc-pad.is-them .cc-num[aria-pressed="true"] { color: var(--zd-on-them); background: var(--zd-them); border-color: var(--zd-them); }
+@media (max-width: 349px) {
+  .dz-add { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 359px) {
+  .dz-lane { column-gap: 8px; padding: 6px 8px; }
+  .dz-lane .zd-die { --s: 44px; }
+  .dz-gap { width: 36px; height: 36px; }
+}
+.dz-lane.is-stopped, .dz-lane.is-beat { border-color: var(--gold); }
+.dz-lane.is-stopped .res-out, .dz-lane.is-beat .res-out { color: var(--gold-ink); }
+.dz-lane.is-through { border-color: var(--violet); }
+.dz-lane.is-tie .res-out { color: var(--violet); }
+.dz-lane.is-under .res-out { color: var(--muted); }
+.dz-one { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px 12px; margin: 0 0 0.8rem; }
+.dz-one .zd-die { --s: 84px; }
+.dz-spare { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 0.8rem; }
+.dz-spare .zd-die { --s: 40px; }
+.cc-reveal .dz-lane.is-stopped, .cc-reveal .dz-lane.is-beat { animation: cc-shine 0.7s ease-out; }
+.cc-reveal .dz-verdict, .cc-reveal .dz-note, .cc-reveal .dz-lane .res-out { animation: cc-rise 0.32s ease-out both; }
+
 .cc-toast {
   position: fixed; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 30;
   display: flex; align-items: center; gap: 10px; width: min(30rem, calc(100vw - 24px)); padding: 8px 8px 8px 14px;
@@ -609,7 +681,7 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 /* The phone's reduce-motion setting stills all of it. */
 @media (prefers-reduced-motion: reduce) {
   .companion *, .companion *::before, .companion *::after, .cc-dialog[open] { animation: none !important; }
-  .tile:active, .cc-stat:active, .cc-undo:active, .cc-pickdie:active, .cc-ringbtn:active { transform: none; }
+  .tile:active, .cc-stat:active, .cc-undo:active, .cc-pickdie:active, .cc-ringbtn:active, .dz-die:active, .dz-adddie:active { transform: none; }
   /* The builder's further down, so its press and its colour changes need the !important. */
   button.bd-tok:active, .cc .bd-foot .button:active { transform: none !important; }
   .bd-tok, .bd-seg, .cc .bd-foot .button { transition: none !important; }
