@@ -80,9 +80,9 @@ Stages 1 to 5 are merged on `website` and on its Preview. All four suites pass o
 - The table screen missed a reveal shown again after she'd hidden it.
 - Add a faction on a record a downtime started kept its recipe blank.
 
-Waiting on Mo:
+Mo's answers (9 Nov), and it went to `main` the same day:
 
-- His yes to the charges and glyphs on `/kit/` before `website` goes to `main`.
-- Showing the crew a faction's Secret puts its words on the table screen like any other reveal, as his call that a reveal goes on the table screen says. The screen has no sign-in, so it's his to say if a Secret should stay off it.
+- Yes to the charges and glyphs on `/kit/`.
+- A Secret she shows the crew goes on the table screen like any other reveal (his pick, over keeping Secrets off a screen with no sign-in).
 
 Left as it is: an empty age that the old End wrote on the Preview before the fix isn't cleared. Only a downtime ended with nothing in it, on the Preview in the hour before the fix, could have made one.

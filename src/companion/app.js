@@ -21,6 +21,7 @@ import { makeTable } from "./table.js";
 import { makeWorld } from "./world.js";
 import { makeTurn } from "./turn.js";
 import { makeFound } from "./found.js";
+import { makeRoller } from "./roller.js";
 import { bondKey, threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
 import { boxesSaid, isBroken, itS, keyOf, leftOf, nameOf, pieceAt, piecesOf, setTicked, standing, tick as tickBox, tickedOf, yours } from "./armour.js";
 import { aura as kitAura, boxes as kitBoxes, crest, die as kitDie, grow as growDie, mini as kitMini, pips as kitPips, plate as kitPlate, resolve as kitResolve, scars as kitScars } from "../kit/kit.js";
@@ -93,6 +94,23 @@ const builder = makeBuilder({ B: DATA.build, link, icon: ICON, rule: (id) => rul
 const learn = makeLearn({ crew: CREW, esc, hex, steps, rules: RULE, ruleHtml: (id) => ruleHtml(id), isOpen: (key) => ui.open.has(key), lineOf: (c, key) => lineOf(c, key), lineLabel: (l) => lineLabel(l), throwDie, feel, tumble, calm, icon: ICON, sound: () => soundButton(), render: () => render(), gauge: (wound, floor, fresh) => gauge(wound, floor, fresh ? floor : wound) });
 
 const dt = makeDowntime({ B: DATA.build, esc, hex, steps, link, icon: ICON, lineLabel: (l) => lineLabel(l), throwDie, crewNames: () => new Set(DATA.crew.map((x) => x.name)), isOpen: (key) => ui.open.has(key), rule: (id) => ruleHtml(id) });
+
+// The dice roller (roller.js): any dice of yours against any of theirs, with
+// no telegraph or threat, off the play screen and the Characters list. It's
+// only dice, so it never goes through change().
+const roller = makeRoller({
+  esc, icon: ICON, throwDie, calm, tumble, feel, dialog,
+  open: (r) => openRoll(r),
+  roll: () => roll,
+  redraw: ({ reveal = false } = {}) => {
+    if (reveal) ui.reveal = true;
+    renderDialog();
+  },
+  spinning: (stop) => {
+    ui.stopSpin?.();
+    ui.stopSpin = stop;
+  },
+});
 
 // The party sheet on every phone in a campaign, and threads between the crew
 // kept in step on both their phones (party.js).
@@ -719,6 +737,9 @@ function listView() {
     <section class="cc-sec" aria-labelledby="cc-learn"><h2 id="cc-learn">Learn to play</h2>
       <p class="cc-lead">New to Zi’Dara? Play one round on your phone first. The brute swings his club at Isolde, and you answer it with Wren and Bram.</p>
       <div class="cc-row"><a class="button${mine.length ? "" : " primary"}" href="/characters/?learn" data-act="learn" data-do="open">Play the learning round</a></div></section>
+    <section class="cc-sec" aria-labelledby="cc-dice"><h2 id="cc-dice">Dice roller</h2>
+      <p class="cc-lead">Any dice you like, yours against theirs, all rolled together. You don’t need a character for it.</p>
+      <div class="cc-row"><button type="button" class="button" data-act="dz" data-dz="open" data-from="list">Roll some dice</button></div></section>
     <section class="cc-sec" aria-labelledby="cc-own"><h2 id="cc-own">Make your own</h2>
       <p class="cc-lead">Build a character step by step. It follows the ${link("s-quick", "Quick Build")}, with the rules for each step right there, and it’s saved on this phone as you go.</p>
       <div class="cc-row">${draft ? `<a class="button primary" href="/characters/?build" data-act="bopen">Carry on with ${esc(draft.name || "your character")}</a><button type="button" class="button" data-act="bdrop">${ui.sure === true ? "Tap again to bin it" : "Start again"}</button>` : '<a class="button primary" href="/characters/?build" data-act="bopen">Build a character</a>'}</div>
@@ -923,7 +944,7 @@ function playTab(ch, c) {
   const owed = landed ? landed.incoming.length + landed.more : 0;
   return `${table.playCard(ch)}${trackView(ch, c, s)}${alertView(ch, c, s)}
   <section class="cc-sec cc-play" aria-labelledby="cc-actions"><h2 id="cc-actions" class="sr-only">Set actions</h2>
-    <div class="cc-tiles">${tiles}<button type="button" class="tile card tile-defend${owed ? " is-owed" : ""}" data-act="defence"><span class="tile-dice" aria-hidden="true">${diceOf(defend)}</span><span class="tile-name">When it lands</span><span class="tile-sub">${owed ? `${owed === 1 ? "One’s" : `${cap(["", "", "two", "three", "four", "five", "six"][owed] || String(owed))} have`} landed on ${esc(ch.name)} · ` : ""}Defend ${esc(diceLabel(stepsToDice(defend)))} · Confidence d${s.conf}</span></button></div>
+    <div class="cc-tiles">${tiles}<button type="button" class="tile card tile-defend${owed ? " is-owed" : ""}" data-act="defence"><span class="tile-dice" aria-hidden="true">${diceOf(defend)}</span><span class="tile-name">When it lands</span><span class="tile-sub">${owed ? `${owed === 1 ? "One’s" : `${cap(["", "", "two", "three", "four", "five", "six"][owed] || String(owed))} have`} landed on ${esc(ch.name)} · ` : ""}Defend ${esc(diceLabel(stepsToDice(defend)))} · Confidence d${s.conf}</span></button><button type="button" class="tile card tile-free" data-act="dz" data-dz="open" data-from="play"><span class="tile-dice" aria-hidden="true">${kitDie(6, { hide: true })}${kitDie(8, { own: "them", hide: true, cls: "is-next" })}</span><span class="tile-name">Dice roller</span><span class="tile-sub">Any dice, yours against theirs</span></button></div>
     ${lastRollView(s.last)}
     <div class="cc-row cc-scene"><button type="button" class="button" data-act="scene">New scene</button><button type="button" class="button" data-act="downtime">Downtime</button>${changeLink(ch)}</div>
   </section>`;
@@ -1870,6 +1891,7 @@ function dialogView() {
   if (roll.kind === "camp") return camps.dialog(roll);
   if (roll.kind === "tele" || String(roll.kind).startsWith("tg-")) return table.dialog(roll);
   if (String(roll.kind).startsWith("ft-")) return turn.dialog(roll);
+  if (roll.kind === "dice") return roller.view(roll);
   const c = normal(ch);
   if (!c) return "";
   const s = ch.state;
@@ -2218,6 +2240,7 @@ const ACT = {
   w: (el, e) => world.act(el, e),
   ft: (el, e) => turn.act(el, e),
   fd: (el, e) => found.act(el, e),
+  dz: (el, e) => roller.act(el, e),
   wundo: () => world.undo(),
   wkundo: () => world.makeUndo(),
   b: (el, e) => builder.act(el, e, render, () => {
