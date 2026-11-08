@@ -153,7 +153,7 @@ import { bookFor, compileTables, readTablesDir } from "../scripts/world-tables.m
 import { linesOf } from "../src/companion/world-answer.js";
 import { applyFound, leftFound } from "../src/companion/found-rules.js";
 import { carriedWorld, founderHand, freeSeats, namable, oldHand, restOf, roleOf, roomBoard, roomWorld, seatHand, seatSize, wantWith } from "../src/companion/found-world.js";
-import { WORLD_MAX, WORLD_PINS, compileWorld, readWorldsDir } from "../scripts/worlds.mjs";
+import { WORLD_MAX, WORLD_PINS, checkYears, compileWorld, readWorldsDir } from "../scripts/worlds.mjs";
 import { boardOf, historyOf as storyOf, mapOf as mapPage, peopleOf, placesOf, webOfWorld } from "../src/worlds/world-page.js";
 import { drawMap, inShape } from "../src/worlds/draw-map.js";
 // How far a point is from a road's segment, in the map's numbers.
@@ -1678,6 +1678,33 @@ const realWorlds = [];
       }
     }
     console.log(`10. a whole world: the made-up one passes, and ${broken} of ${breaks.length} breaks are each a problem`);
+    // Two years of one universe (stage 17): the made-up world again as
+    // 2000, everything shared, then each way world.yaml's both and opens can
+    // be wrong, each a problem that says so.
+    const one = ok.world;
+    if (one) {
+      const two = { ...copy(one), year: 2000 };
+      const shared = [...new Set([...one.factions.flatMap((f) => [f.key, f.seat, f.faceOf]), ...one.places.map((p) => p.key), ...one.people.map((p) => p.key)].filter(Boolean))];
+      const yamlOf = (more) => ({ ...base.world, years: { 1999: base.world.years[1999], 2000: { ...base.world.years[1999], title: "Saltmarsh, 2000" } }, opens: 1999, both: shared, ...more });
+      const fine = checkYears(yamlOf({}), [one, two]);
+      yes(!fine.length, `two years sharing everything weren't fine: ${fine.join(" | ")}`);
+      const gone = one.factions.find((f) => !f.of && !one.factions.some((g) => g.of === f.key)).key;
+      const yearBreaks = [
+        ["a faction in both years that both doesn't have", yamlOf({ both: shared.filter((k) => k !== one.factions[0].key) }), [one, two], /so world\.yaml's both has to have it/],
+        ["a key in both that's only in one year", yamlOf({ both: [...shared, "nobody-here"] }), [one, two], /both has nobody-here, but it's only in/],
+        ["opens that isn't one of its years", yamlOf({ opens: 1998 }), [one, two], /opens is 1998, which isn't one of its years/],
+        ["two years and no opens", yamlOf({ opens: undefined }), [one, two], /has 2 years and no opens/],
+        ["a faction with another seal the next year", yamlOf({}), [one, { ...two, factions: two.factions.map((f, i) => (i ? f : { ...f, seal: { c: "anchor", f: "plain" } })) }], /wears a different seal/],
+        ["a faction one year and a place the next", yamlOf({}), [one, { ...two, factions: two.factions.filter((f) => f.key !== gone), places: [...two.places, { key: gone }] }], new RegExp(`${gone} is a faction in 1999 and a place in 2000`)],
+      ];
+      let yearsBroken = 0;
+      for (const [what, yaml, years, want] of yearBreaks) {
+        const got = checkYears(yaml, years);
+        if (got.some((p) => want.test(p))) yearsBroken++;
+        else note(`two years, ${what}: no problem said so (it said: ${got.join(" | ") || "nothing"})`);
+      }
+      console.log(`   two years: everything shared passes, and ${yearsBroken} of ${yearBreaks.length} ways both and opens can be wrong are each a problem`);
+    }
   }
   // A folder that isn't laid out right says so, instead of building nothing.
   {
@@ -1822,6 +1849,12 @@ const realWorlds = [];
     }
     console.log(`   ${world.id}: ${world.factions.length} factions on a board, ${world.places.length} places, ${world.people.length} people, ${Object.keys(world.map?.pins ?? {}).length} pins, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k brought in, its page drawn, in ${((Date.now() - started) / 1000).toFixed(1)}s`);
   }
+  // Each universe's years together: what they share and the year its page
+  // opens on.
+  yes(realWorlds.some((w) => w.id === "night-city-2045"), "content/worlds has no Night City, 2045");
+  for (const u of new Set(real.src.map((w) => w.universe))) {
+    for (const p of checkYears(real.src.find((w) => w.universe === u).world, realWorlds.filter((w) => w.universe === u))) note(`${u}: ${p}`);
+  }
 }
 
 // 11. A whole world into a campaign (stage 14).
@@ -1830,7 +1863,9 @@ const realWorlds = [];
   const WORLD_HOLDS = 700000;
   let n = 0;
   const newId = () => `w${(n++).toString(36).padStart(6, "0")}`;
-  for (const world of realWorlds) {
+  // Only a year that's whole is offered in a campaign, so a year whose
+  // places, people and map aren't written yet isn't brought in here either.
+  for (const world of realWorlds.filter((w) => w.map)) {
     const { ops, counts } = wholeOps(world, newId, 1000);
     const doc = blank();
     let refused = 0;

@@ -16,12 +16,20 @@
 //   own          true for a world of Mo's own (Abnu), which has no whose and
 //                no notices. Every other world has both:
 //   whose        the line saying whose it is, in Mo's voice
-//   notices      the companies' own notices, word for word, under it
+//   notices      the companies' own notices, word for word, under it, with
+//                {title} where a notice names the work, so each year's names
+//                its own title (Night City, 2045 and Night City, 2077)
 //   kinds        the kinds of faction the page sorts by: { key: name }
 //   years        { <year>: { title, when, recipe: { region, era, twist,
 //                dials? } } }, when being where in the year it starts, and
 //                recipe the builder's mix it deals at (Add a faction, from
 //                stage 14), with any dials it sets the way a frame does
+//   opens        the year /worlds/<universe>/ opens on, once there's more
+//                than one, and the others are /worlds/<universe>/<year>/
+//   both         the keys of anyone or anywhere in more than one year (a
+//                faction, a place or a person), so Rogue in 2045 and Rogue in
+//                2077 are one person. A key in two years has to be here, it's
+//                the same kind of thing in each, and a faction keeps its seal
 //
 // content/worlds/<universe>/<year>/factions.yaml, the board: { factions: [ ... ] }
 //   key, kind, size   its key, one of the kinds, and small, local, city or great
@@ -215,6 +223,57 @@ export function readWorldsDir(dir) {
     }
   }
   return { src, problems };
+}
+
+// What a universe's years share, checked once every year's compiled (years
+// being each one's world, as compileWorld makes it): the year its page opens
+// on, and world.yaml's both, the keys of anyone or anywhere in more than one
+// year. A key that turns up in two years is one faction, place or person,
+// so it's the same kind of thing in each, both has to say so, and a faction
+// keeps its seal, so the crew knows it when a campaign goes to another year.
+export function checkYears(world, years) {
+  const problems = [];
+  const say = (p) => problems.push(p);
+  const listed = Object.keys(world?.years ?? {}).map(Number);
+  if (world?.opens != null && !listed.includes(Number(world.opens))) say(`world.yaml's opens is ${world.opens}, which isn't one of its years (${listed.join(" or ")})`);
+  else if (listed.length > 1 && world?.opens == null) say(`world.yaml has ${listed.length} years and no opens, the year its page opens on`);
+  const both = asList(world?.both).map(String);
+  for (const k of both) if (!KEY.test(k)) say(`world.yaml's both has ${JSON.stringify(k)}, which isn't a key`);
+  const seen = new Map();
+  const seals = new Map();
+  for (const w of years.filter(Boolean)) {
+    const what = new Map();
+    const put = (k, kind) => {
+      if (k && !what.has(k)) what.set(k, kind);
+    };
+    for (const f of w.factions) put(f.key, "faction");
+    for (const f of w.factions) {
+      put(f.seat, "place");
+      put(f.faceOf, "person");
+    }
+    for (const p of w.places ?? []) put(p.key, "place");
+    for (const p of w.people ?? []) put(p.key, "person");
+    for (const [k, kind] of what) {
+      if (!seen.has(k)) seen.set(k, []);
+      seen.get(k).push({ year: w.year, kind });
+    }
+    for (const f of w.factions) {
+      if (!seals.has(f.key)) seals.set(f.key, []);
+      seals.get(f.key).push({ year: w.year, s: sealKey(f.seal) });
+    }
+  }
+  for (const [k, ins] of seen) {
+    if (ins.length < 2) continue;
+    if (new Set(ins.map((x) => x.kind)).size > 1) say(`${k} is ${ins.map((x) => `a ${x.kind} in ${x.year}`).join(" and ")}, and a key in more than one year is the same faction, place or person in each`);
+    else if (!both.includes(k)) say(`${k} is a ${ins[0].kind} in ${ins.map((x) => x.year).join(" and ")}, so world.yaml's both has to have it, to say it's one ${ins[0].kind}`);
+  }
+  for (const k of both) {
+    const ins = seen.get(k) ?? [];
+    if (ins.length < 2) say(`world.yaml's both has ${k}, but it's only in ${ins.map((x) => x.year).join("") || "none of its years"}`);
+    const s = seals.get(k) ?? [];
+    if (new Set(s.map((x) => x.s)).size > 1) say(`${k} wears a different seal in ${s.map((x) => x.year).join(" and ")}, and a faction keeps its seal from year to year`);
+  }
+  return problems;
 }
 
 // One year of a universe, checked, as the page and the World screen read it.
@@ -543,10 +602,12 @@ export function compileWorld({ universe, year, world, files }, book) {
     title: curl(yr.title),
     when: curl(yr.when),
     whose: curl(world.whose),
-    notices: asList(world.notices).map((n) => String(n).replace(/\s+/g, " ").trim()),
+    notices: asList(world.notices).map((n) => String(n).replace(/\s+/g, " ").replace(/\{title\}/g, curl(yr.title)).trim()),
     kinds: Object.fromEntries(Object.entries(kinds).map(([k, v]) => [k, curl(v)])),
     areas,
     years: Object.keys(world.years ?? {}).map(Number),
+    opens: Number(world.opens ?? Object.keys(world.years ?? {})[0]),
+    both: asList(world.both).map(String),
     recipe,
     // The region's words for the four sizes, so a Great faction on a City
     // board reads as the city and the land round it.

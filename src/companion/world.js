@@ -1351,15 +1351,18 @@ export function makeWorld(d) {
   const isMo = () => sync.me?.role === "admin";
   const emptyWorld = (doc) => !doc.factions.length && !doc.pages.length && !doc.maps.length;
   function wholeFold(id, doc) {
-    if (!isMo() || !WH.length || !emptyWorld(doc)) return "";
-    const cards = WH.map((x) => {
+    // Only a year that's whole, its places, people and map with its board,
+    // is offered, so a year whose places aren't written yet waits on its page.
+    const offer = WH.filter((x) => x.map);
+    if (!isMo() || !offer.length || !emptyWorld(doc)) return "";
+    const cards = offer.map((x) => {
       const what = [plural(x.factions, "faction", "factions"), x.places ? plural(x.places, "place", "places") : "", x.people ? plural(x.people, "person", "people") : "", x.map ? "a map" : ""].filter(Boolean);
       const busy = ui.whole === x.id;
       return `<li class="wb-bring card wb-whole"><p class="wb-k">${x.own ? "Your own world" : "Fan-made"}</p><h4>${esc(x.title)}</h4><p>${esc(x.when)}</p>
         <p class="cc-small">${esc(`${what.slice(0, -1).join(", ")} and ${what.at(-1)}, with How it came to be.`)}</p>
         <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="whole" data-w="${esc(x.id)}"${ui.whole ? " disabled" : ""}>${busy ? "Bringing it in…" : "Bring it in"}</button></div></li>`;
     }).join("");
-    return fold("whole", "Bring in a whole world", WH.map((x) => x.name).join(" and "), `<p class="cc-lead">It comes in whole and running: every faction with its web, the places and people, the map and How it came to be, all of it hidden from the crew till you show them, and yours to change. Only your account can bring these in for now.</p>${online() ? "" : '<p class="cc-small">You’ll need a signal to bring one in.</p>'}<ul class="wb-brings">${cards}</ul>`);
+    return fold("whole", "Bring in a whole world", [...new Set(offer.map((x) => x.name))].join(" and "),`<p class="cc-lead">It comes in whole and running: every faction with its web, the places and people, the map and How it came to be, all of it hidden from the crew till you show them, and yours to change. Only your account can bring these in for now.</p>${online() ? "" : '<p class="cc-small">You’ll need a signal to bring one in.</p>'}<ul class="wb-brings">${cards}</ul>`);
   }
   // The line saying whose a fan-made world is, and the companies' notices, at
   // the foot of its World screen and tab. A player gets the world's id once
