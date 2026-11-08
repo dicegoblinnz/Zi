@@ -6,7 +6,7 @@ order: 3
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 :::quote
 Your whole character fits in a few plain sentences and some numbers.
@@ -16,20 +16,19 @@ Here's what you write down, step by step:
 
 1.  **Two Titles**: who you are, a role or a school of magic. Each one's a Root and three specialties.
 2.  **Two archetypes**, like Guardian or Shadow.
-3.  **Two traits.**
-4.  **Three permissions** on each Title, each one a Root and a specialty.
-5.  **Your Roots and specialties**, added up.
-6.  **What you carry:** 3 equipment, 3 utility items and a keepsake, and a bag.
-7.  **One attuned thing**, which starts at Awakened.
-8.  **Your numbers**, and **two bond threads** with the crew, or three if you write a hostile thread as well.
-9.  **A few answers** that tie you to the rest of the crew, and they're where your bond threads come from.
-10. **An Aspiration** at d2.
+3.  **Three permissions** on each Title, each one a Root and a specialty.
+4.  **Your Roots and specialties**, added up.
+5.  **What you carry:** 3 equipment, 3 utility items and a keepsake, and a bag.
+6.  **One attuned thing**, which starts at Awakened.
+7.  **Your numbers**, and **two bond threads** with the crew, or three if you write a hostile thread as well.
+8.  **A few answers** that tie you to the rest of the crew, and they're where your bond threads come from.
+9.  **An Aspiration** at d2.
 
 You start with 5 Aura, a stride of 3, and Stamina, Confidence and Resolve all at d12. Your armour sits on whichever Root it guards.
 
-In a hurry? The [Quick Build](#s-quick) gets you a character in ten minutes, or you can pick one of the [six ready-made characters](#s-pregens) and play. If you've got a character in your head but not the words for it yet, start from the [Title ideas](#s-title-ideas): example Titles, permissions and trait ideas, and the archetypes that suit them.
+In a hurry? The [Quick Build](#s-quick) gets you a character in ten minutes, or you can pick one of the [six ready-made characters](#s-pregens) and play. If you've got a character in your head but not the words for it yet, start from the [Title ideas](#s-title-ideas): example Titles and permissions, and the archetypes that suit them.
 
-**Those are your starting numbers, not limits.** You earn more Titles, archetypes, traits, permissions and threads as you play, you can attune more things later in downtime, and there's no cap on Titles, Roots, specialties, traits or threads. A Title can't hold more than six permissions, though, an archetype six abilities and an attuned thing six awakenings, and [what you carry](#s-carrying) has its limits.
+**Those are your starting numbers, not limits.** You earn more Titles, archetypes, permissions and threads as you play, you can attune more things later in downtime, and there's no cap on Titles, Roots, specialties or threads. A Title can't hold more than six permissions, though, an archetype six abilities and an attuned thing six awakenings, and [what you carry](#s-carrying) has its limits.
 
 ## Step 1: Titles {#s-title}
 
@@ -65,7 +64,7 @@ One role or one school per Title. *Archmage* is too wide, so pick the school you
 
 ### What a Title holds {#what-a-title-holds}
 
-**A Title holds its Root, its three specialties and its permissions.** It starts with three permissions (Step 4), and it holds six at most. There's no Catch and no Burden on a Title: Catches come from [attunement](#s-attunement) and from [Scars](#s-blaze), and Burdens only ever come on attuned things.
+**A Title holds its Root, its three specialties and its permissions.** It starts with three permissions (Step 3), and it holds six at most. There's no Catch and no Burden on a Title: Catches come from [attunement](#s-attunement) and from [Scars](#s-blaze), and Burdens only ever come on attuned things.
 
 :::sheet[Bram's first Title]
 **Title:** *The wall that held the harbour gate.*
@@ -89,106 +88,7 @@ Your archetypes don't belong to your Titles. Bram's a Guardian and a Leader, and
 
 If you're not sure which ones you're after, the table in [Picking Your Archetypes](#s-picking-archetypes) says what each one's for, and every [Title idea](#s-title-ideas) says which ones suit it.
 
-## Step 3: Traits {#s-traits}
-
-A **trait** is something always true of you, with one effect, like *Unyielding: the first hit that gets through to you each scene doesn't drop your Stamina*. You've got two. You pick them from the list below, and they aren't tied to either Title.
-
-A trait's never a step. You can't bring one in for Aura, and you never have to decide to use it. It just does what its line says, every time it applies. Your steps come from your Titles, your permissions and what you carry.
-
-Every trait has a **type** and an **effect**, and you write them down together.
-
-### Trait types {#trait-types}
-
--   **Passive.** It's always on.
--   **Triggered.** It fires by itself when something specific happens, and the trait says what. A few only fire the first time each scene.
-
-### The 47 traits {#the-48-traits}
-
-Pick two, or write your own in the same shape: a name, a type and one line. Whatever you write, it can't be a step, and it can't be something you choose to fire. You'll pick up more in play.
-
-Some traits change a number on your sheet. *Unyielding* means the first hit each scene doesn't drop your Stamina, *Prepared* lets you carry one more utility item, and *Light on my Feet* adds 2 to your stride (how far you move each round for free). If you write your own, say which number it changes.
-
-#### Combat {#combat}
-
-| Trait | Type | Effect |
-| --- | --- | --- |
-| **Unyielding** | Passive | The first hit that gets through to you each scene doesn't drop your Stamina. |
-| **Battle Focus** | Triggered | The first time your Aura runs out each scene, gain 3 Aura. |
-| **Killer Instinct** | Triggered | Gain 1 Aura when you take a threat down. |
-| **Duelist** | Passive | When you're fighting someone one-on-one, you win ties without paying Aura. |
-| **Pack Fighter** | Passive | When a friend's action and yours go into the same roll, it wins ties without paying Aura. |
-| **Never Unarmed** | Passive | You've always got a knife hidden on you, whatever anyone searched. |
-| **Marksman's Eye** | Passive | If you haven't moved this round, your shots win ties without paying Aura. |
-| **Ready Hand** | Passive | Once a round, pulling something out of your bag costs no action. |
-| **Tenacious** | Triggered | The first time each scene a hit would make you Blaze, it doesn't, and that track stays where it is. |
-| **Field Dressing** | Passive | Your first quick heal each scene costs no Aura. |
-| **Healer's Hands** | Passive | Your quick heals cost no Aura, once a scene for each person, yourself included. |
-| **Tend the Crew** | Triggered | When a scene you were in ends, everyone in the crew who was in it rolls each of their tracks twice to come back, and the best counts. |
-| **Predator's Eye** | Triggered | The first time you go at a threat each scene, the GM tells you whether it's got a weak point, and where. |
-
-#### Movement {#movement}
-
-| Trait | Type | Effect |
-| --- | --- | --- |
-| **Light on my Feet** | Passive | +2 units of movement per round. |
-| **Sure-Footed** | Passive | Ignore difficult ground. |
-| **Fast** | Triggered | In the first round of every scene, you get a Move action that costs no action. |
-| **Acrobatic** | Triggered | The first time you fall each scene, it's a safe landing, and you move 3 units straight after. |
-| **Silent Step** | Triggered | Coming out of hiding gives you 1 Aura, as well as your extra action. |
-| **Sprinter** | Passive | When you take a Move action, your stride counts twice that round. |
-| **Nimble** | Passive | *Grabbed* and *Pinned* fade two sizes a round on you, not one. |
-| **Second Wind** | Triggered | The first time one of your tracks drops each scene, you get an extra action. |
-| **Lucky** | Triggered | The first time each scene you roll a 1 on one of your own dice, roll it again. |
-| **Focused** | Triggered | On your first roll each scene, your lowest die counts as its highest face. It isn't a top face, so there's no Aura for it. |
-
-#### Social {#social}
-
-| Trait | Type | Effect |
-| --- | --- | --- |
-| **Reputation Precedes Me** | Passive | In a scene where people know who you are, the first hit that gets through to your Mind doesn't drop your Confidence. |
-| **Silver Tongue** | Triggered | The first social roll you fail each scene succeeds anyway. |
-| **Charming** | Triggered | The first time each scene you win a social roll against someone you haven't got a bond with, you've got a bond thread with them for the scene. |
-| **Commanding Presence** | Passive | Anyone who answers to you follows your orders without a roll, unless the order would get them killed. |
-| **Cold Reader** | Triggered | The first time you speak with someone in a scene, the GM tells you their mood in a word. |
-| **Style** | Passive | Clothes that fit the scene have one more box as Mind armour. |
-| **Showstopper** | Passive | While a crowd's watching you, a friend in it can go into hiding without a roll. |
-| **Intimidating Presence** | Passive | When you're threatening someone, you win ties without paying Aura. |
-| **Diplomat** | Passive | Two sides about to fight always hear you out first, so nobody starts it before you've had your say. |
-| **Host** | Triggered | Every downtime, someone you've hosted owes you a small favour. |
-
-#### Mental {#mental}
-
-| Trait | Type | Effect |
-| --- | --- | --- |
-| **Iron Will** | Passive | The first hit that gets through to your Soul each scene doesn't drop your Resolve. |
-| **Steady Hands** | Passive | Your Confidence comes back on a 3 or more at the end of a scene, not a 4. |
-| **Hard to Lie To** | Triggered | The first time each scene someone lies to your face, the GM tells you it's a lie. |
-| **Perfect Recall** | Passive | You remember everything you've seen and heard, and the GM tells you anything from a scene you were in, exactly as it was. |
-| **Quick Study** | Triggered | The first time you face a threat each scene, the GM tells you one of its hidden tags. |
-| **Cool Under Pressure** | Triggered | The first time your Confidence drops to d2 each scene, it comes straight back up to d6. |
-| **Deep Well** | Passive | Your Aura maximum is one higher. |
-
-#### Preparation {#preparation}
-
-| Trait | Type | Effect |
-| --- | --- | --- |
-| **I Have the Thing** | Passive | Your bag's always got the plain utility item you need. Pulling it out still takes your action, and you cross off a purse of gold for it. |
-| **Prepared** | Passive | You can carry one more utility item. |
-| **Cache** | Triggered | At the start of every downtime, take any plain item you like from your stash, equipment or utility. |
-| **Tireless** | Passive | You get three downtime slots, not two. |
-| **Scout Ahead** | Triggered | The first scene each session in a place you've seen before has 3 more ground tags, ones you spotted last time. |
-| **Network** | Triggered | When you take it, write 3 new bond threads, on bonds you've already got. |
-| **Tactical Mind** | Triggered | The first time you look a place over each scene, the GM tells you one useful thing about it that nobody else has noticed. |
-
-:::example[A trait firing at the table]
-Dorrie's at a noble's table, trying to talk her way into the vault room. The noble's steward is cold and won't budge, and the moment she speaks to him, *Cold Reader* fires: the GM tells her his mood in a word: frightened. Dorrie guesses it's his master he's scared of, and leans on that.
-
-She could charm him with her Soul and her Persuasion, but she's a better liar than she is a charmer, so it's her Mind and her Lying, 9 steps, a d12 and a d6. She rolls 6 and 2, and the steward's d8 rolls 3, so she's in.
-
-Then she pushes her luck and asks for the key. This time her dice come up 2 and 1 against his 7. It's the first social roll she's failed this scene, so *Silver Tongue* fires and it succeeds anyway. The steward hands her the key and never quite knows why.
-:::
-
-## Step 4: Permissions {#s-writing-permissions}
+## Step 3: Permissions {#s-writing-permissions}
 
 A **permission** is something your character can do. Each Title starts with three, so you've got six, and they have to fit inside the Title they're on. **Each permission adds 1 to a Root and 1 to a specialty**, and you write both next to it: *pick a mechanical lock* (Body, Locks). It's what you lean on every time you roll, so it's worth a couple of minutes to get right. Here's how I write them.
 
@@ -200,7 +100,6 @@ A **permission** is something your character can do. Each Title starts with thre
 | Root | how you're doing it: Body, Mind or Soul | Body |
 | Specialty | something you could be known for or teach | Locks · Shieldwork · Fire |
 | Permission | something you can do, and a step on a Root and a specialty | *pick a mechanical lock* |
-| Trait | something always true of you, with one effect, and never a step | *Unyielding: the first hit each scene doesn't drop your Stamina* |
 | Catch | trouble the GM can run with, from an attuned thing or a Scar | *Wanted* · *a spear through the shoulder* |
 
 If what you've written reads like a name, like *Combat master*, it's a Title. If it's something you can do, like *pick a mechanical lock*, it's a permission. If it's one word for what kind of person you are, like *Strong* or *Deceptive*, that's what your Roots are for, so build the Root instead.
@@ -278,7 +177,7 @@ A few to start from, sorted by what they're for. The [Title ideas](#s-title-idea
 | Mending and making | *stitch a wound* · *mix a remedy* · *fix anything mechanical* |
 | Magic | *throw fire* · *change my face* · *step to a place I can see* · *ward a friend against harm* |
 
-## Step 5: Roots and specialties {#s-step-roots}
+## Step 4: Roots and specialties {#s-step-roots}
 
 Now add it all up, so every roll starts from a number. **Each Root is 1 for every Title and every permission on it.** **Each specialty is 1 for every Title that names it and every permission on it.** Write your three Roots, and every specialty you've got with its number. What you carry doesn't go in, because an item only counts while you're using it.
 
@@ -297,13 +196,13 @@ Now add it all up, so every roll starts from a number. **Each Root is 1 for ever
 | Command | his second Title, *bark an order that gets obeyed* | 2 |
 | Soldiering | his second Title, *spot who's in charge* | 2 |
 
-His fighting's his Body and his Shieldwork, 9 steps, and with his war hammer in his hand it's 10: a d12 and a d8. Defending behind his shield in his plate, it's 11. His orders are his Soul and his Command, 4 steps, a d8, so for now he's a better wall than he is a sergeant. His traits, Unyielding and Intimidating Presence, don't go anywhere. They just do what they say.
+His fighting's his Body and his Shieldwork, 9 steps, and with his war hammer in his hand it's 10: a d12 and a d8. Defending behind his shield in his plate, it's 11. His orders are his Soul and his Command, 4 steps, a d8, so for now he's a better wall than he is a sergeant.
 
 :::example[Growing a specialty]
 Two Grows later, Bram's added *fight two at once* and *fight in tight spaces* to his first Title, both Body and Shieldwork. His Body's 7 and his Shieldwork's 6 now, so in a doorway with two guards coming, he's rolling 14 with his hammer: two d12s and a d4.
 :::
 
-## Step 6: Items and what you carry {#s-items}
+## Step 5: Items and what you carry {#s-items}
 
 **Plain items are just what they are.** A sword's a sword. When you're using it and it fits, it's **1 more on the roll**: on the specialty you're rolling, or as a specialty of its own if you haven't got one that fits. Vesk's knife makes her Body and Knives 8 steps, and a dagger in the hand of someone with no fighting specialty at all is 1 step on its own, added to their Body. An item never adds to a Root. A rope lets you climb down a well, and a lantern lets you see what's at the bottom.
 
@@ -320,7 +219,7 @@ Plain items don't have Catches. Plate's heavy and a pistol's loud, and the story
 -   **Attuned things are on top of that.** You start with one attunement slot, and what you attune doesn't count towards what you carry. Bram's war hammer is attuned, so his plate armour and his shield are 2 of his 3 equipment, and he's still got room for one more.
 -   **Your bag.** Nothing in it can be used until you've pulled it out, and getting something out takes your action. Putting something away is free. What you pull out takes a place among what you carry, so if you're full, put something away first. A bag can't go inside another bag.
 -   **A purse of gold** is a utility item, about a month's wages.
--   **Some things change a limit by one.** *Prepared* lets you carry one more utility item, and the Kit Boon and the Kit Burden make it one more item or one fewer (see [Boons and Burdens](#s-boons)).
+-   **Some things change a limit by one.** The Kit Boon and the Kit Burden make it one more item or one fewer (see [Boons and Burdens](#s-boons)).
 -   **Past the limit**, it goes in your bag or it stays behind.
 -   **When something breaks**, it's something you carry. Armour, shields and helmets take a hit a box at a time, and break when the last box goes (see [Armour](#s-armour)). Attuned things can't be broken.
 
@@ -407,7 +306,7 @@ Weapons, armour and anything else you wear or wield are equipment. Tools and thi
 
 ### Things you use up: 20 {#consumables-20}
 
-Each of these is a utility item, and you cross it off once it's used. You can get more in play, even mid-scene, if there's someone to get it from: a purse of gold, a favour called in, or a promise made. Deep in a vault with nobody to buy from, only a trait like *I Have the Thing* helps, because you'd packed it all along.
+Each of these is a utility item, and you cross it off once it's used. You can get more in play, even mid-scene, if there's someone to get it from: a purse of gold, a favour called in, or a promise made. Deep in a vault with nobody to buy from, you've only got what you packed.
 
 | Item | What it does |
 | --- | --- |
@@ -437,7 +336,7 @@ The corridor's filling up with Iron Wardens. Vesk pulls a *smoke bomb* from her 
 
 She throws it and the GM marks the smoke on the map. Everything the Wardens aim into it comes in a step weaker. Bram drags Isolde out of the corridor, Vesk follows, and the smoke bomb gets crossed off her sheet.
 
-Later in the same fight the smoke's gone and Vesk could use another, but there's nobody in a vault to buy one from. If she had *I Have the Thing*, she'd cross off her purse of gold and spend her action pulling a second smoke bomb out of her bag, because she'd packed it all along.
+Later in the same fight the smoke's gone and Vesk could use another, but there's nobody in a vault to buy one from, so she'll have to do without.
 :::
 
 ### Keepsakes: 10 {#keepsakes-10}
@@ -457,7 +356,7 @@ Your **keepsake** is something that matters to your character, like a ring or an
 | **Coin from home** | A reminder of where you're from. |
 | **Wedding band** | You're taken for married in social settings. |
 
-## Step 7: Attunement {#s-attunement}
+## Step 6: Attunement {#s-attunement}
 
 When you **attune** something, it's bound to you, and it grows with you. It's always something personal: Vesk's grappling line, Bram's war hammer, Isolde's chalk and salt. You start with **one attunement slot**, so that's one attuned thing, and you can get more later in downtime. What you attune starts at **Awakened**.
 
@@ -523,7 +422,7 @@ In the market at Thornby, Wren's player lets *Wanted* bite: one of the foresters
 If she wants the bow Tempered one day, she'll need a material first, and the string off the Duke's own bow would do nicely. After that, every new awakening on it takes a downtime slot.
 :::
 
-## Step 8: Your numbers and bonds {#s-starting-numbers}
+## Step 7: Your numbers and bonds {#s-starting-numbers}
 
 Your [Aura](#s-aura) maximum is 5, unless something on your sheet changes it, and you're full at the start of every scene. Aura's what you spend on the small stuff, like bringing something in or winning a tie, 3 of it buys an extra action, and it's what powers your attuned thing.
 
@@ -595,7 +494,7 @@ It never stops you working together in the moment. You still combo and still int
 Vesk's bond thread with Bram is *He once carried me out of a fire. I have never said thank you.* Her Resolve's down to d2 on a wall and she yells for him to haul her up again, so she strains it, and her Resolve comes up to d4. Bram's player says he's starting to feel like her ladder, and she can fix it by saying thank you. It was their only thread, so none are whole now, and he's cold with her until she makes it right. At the bar afterwards she finally says it. The thread's mended, and she rewrites it now that it's said.
 :::
 
-## Step 9: Connect {#s-connect}
+## Step 8: Connect {#s-connect}
 
 Before you play, tie the crew together. Go round the table with these ten questions. Everyone answers **at least two**, and names another player's character in each answer. If the table's enjoying it, answer all ten.
 
@@ -616,7 +515,7 @@ Your answers are where your threads come from. Turn two of them into your **bond
 Bram answers three. He already knows Isolde, because he's guarded her since she was twelve, and that becomes his first bond thread: *I swore to her father I would keep her alive.* He trusts Wren most, because they held the same wall in the border war, and that's his second: *We held the same wall in the border war.* His unfinished business is with Dorrie. The harbour job went wrong and she walked away clean, so that one's gone bad, and it's his hostile thread: *I do not trust her, and she knows it.*
 :::
 
-## Step 10: Aspiration {#s-aspiration}
+## Step 9: Aspiration {#s-aspiration}
 
 Your **Aspiration** is one thing you want. It starts at **d2** and climbs as you chase it, so the first steps come easy and the last ones are hard work. The crew writes its [Party Goal](#s-goal) at d2 as well, and it climbs the same way.
 
@@ -696,9 +595,9 @@ Broken armour's mended in downtime, the same as anything else you carry: it take
 :::example[Armour at the table]
 Bram's wearing Fine plate, with two boxes, and a Common shield, with one, and they're both Body armour.
 
-Round 1: a Warden's spear gets through. It's the first hit he's taken this scene, and he's *Unyielding*, so his Stamina doesn't move.
+Round 1: a Warden's spear gets through, and the GM names a size of Stamina. It's early and he'd rather keep his plate's boxes, so he takes it, and his Stamina's d10.
 
-Round 3: another spear gets through, and the GM names a size of Stamina. Bram offers his plate instead and ticks one of its two boxes, so his Stamina's still d12.
+Round 3: another spear gets through, and the GM names a size of Stamina. Bram offers his plate instead and ticks one of its two boxes, so his Stamina's still d10.
 
 Round 4: another gets through, and he offers his plate again. That's its last box, so it breaks, and when he Defends it isn't 1 more till it's mended. His shield's still got its box for the next one.
 
@@ -760,16 +659,7 @@ For the second Title he asks himself where she learned it all, and writes *Raise
 
 He picks the Shadow. When she gets into hiding, the dice she hid with go into her shadow pool, the things she noticed while nobody was looking, and she can add them to any roll after that. He takes it twice, so her Push, +2 on her roll to hide or on a shadow die, is +3 instead, for 1 Stamina. Two archetypes means she can buy one extra action a round.
 
-### Step 3: Traits {#step-2-traits-three}
-
-He picks two from the list:
-
--   **Silent Step** (Triggered). Coming out of hiding gives her 1 Aura, as well as her extra action.
--   **Light on my Feet** (Passive). +2 units of movement, so her stride's 5.
-
-They don't go on anything. They just do what they say.
-
-### Step 4: Permissions {#step-3-permissions}
+### Step 3: Permissions {#step-3-permissions}
 
 He writes *hide in Vane's wine cellar* first, and the GM points at the size table: that'd come up once a campaign. *Move unseen* is about right. He ends up with three on each Title:
 
@@ -778,7 +668,7 @@ He writes *hide in Vane's wine cellar* first, and the GM points at the size tabl
 
 Every one passes the quick test. *Know how a lock's built* is all about locks, but it's the kind of thing you learn growing up in the Guild, so it fits inside her second Title, and it's in her head, so it's her Mind.
 
-### Step 5: Roots and specialties {#step-5-roots}
+### Step 4: Roots and specialties {#step-5-roots}
 
 He adds it all up:
 
@@ -795,26 +685,26 @@ He adds it all up:
 
 So her sneaking's Body and Stealth, 7 steps, a d12 and a d2, and when she gets into hiding, both those dice go in her shadow pool. Her Soul's 0, so any roll on it is a d2 unless a specialty helps, and the player's happy with that. She's a loner.
 
-### Step 6: What she carries {#step-4-items-three}
+### Step 5: What she carries {#step-4-items-three}
 
 -   **Equipment:** Common worn leathers, which are Body armour with one box, and a knife. Her Body and Knives with the knife in her hand are 8 steps. She's still got one equipment slot free.
 -   **Utility:** a purse of gold, a smoke bomb and a perfect set of picks, which is all 3. The picks are in her hands nearly every time she works a lock, so her Body and Locks are 10 steps with them, a d12 and a d8.
 -   **Keepsake:** the first coin she ever stole.
 -   **Bag:** empty, and ready for whatever she lifts.
 
-### Step 7: Attunement {#step-6-attunement}
+### Step 6: Attunement {#step-6-attunement}
 
 She's got one thing to attune, and he picks her grappling line. It's an item, so when she climbs with it, her Body and Climbing are 8 steps. Its way to Aura is the first time each scene she gets somewhere nobody else could follow. It starts at Awakened, with one awakening, *Anywhere I can throw a hook*, a passive one: +1 on one die of every roll she makes with it for each Aura in it, up to 2.
 
 He could give it its Catch now for a second awakening, but there's no trouble he wants on it yet, so he leaves it. It doesn't count towards what she carries, and it can't be broken.
 
-### Step 8: Numbers and bonds {#step-6-bonds}
+### Step 7: Numbers and bonds {#step-6-bonds}
 
-She starts with the usual numbers: 5 Aura, and her Stamina, Confidence and Resolve all at d12. Her stride's 5 with Light on my Feet, and her worn leathers are her only armour.
+She starts with the usual numbers: 5 Aura, and her Stamina, Confidence and Resolve all at d12. Her stride's 3, and her worn leathers are her only armour.
 
 Her threads come from her answers to the crew questions, so he writes them in the next step.
 
-### Step 9: Connect {#step-7-connect}
+### Step 8: Connect {#step-7-connect}
 
 He answers two of the crew questions:
 
@@ -835,7 +725,7 @@ Her threads with Dorrie and Bram go on their sheets as well, in her words. The r
 
 That's six threads on five bonds. Both of Dorrie's go under her name, on the one bond, and Isolde's is hostile.
 
-### Step 10: Aspiration {#step-8-aspiration}
+### Step 9: Aspiration {#step-8-aspiration}
 
 *Own the score of a lifetime.* It starts at d2.
 
@@ -845,8 +735,6 @@ That's six threads on five bonds. Both of Dorrie's go under her name, on the one
 **Titles:** The best cat burglar in the city (Body; Stealth, Climbing, Locks) · Raised by the Guild (Mind; Locks, Knives, Black market).
 
 **Archetypes:** Shadow, twice. The dice she hides with go in her shadow pool, and her Push is +3 for 1 Stamina.
-
-**Traits:** Silent Step (Triggered) · Light on my Feet (Passive).
 
 **Permissions:** *move unseen* (Body, Stealth), *run the rooftops* (Body, Climbing), *pick a mechanical lock* (Body, Locks) on her first Title · *know how a lock's built* (Mind, Locks), *fight dirty with a knife* (Body, Knives), *find a buyer for anything* (Mind, Black market) on her second.
 
@@ -864,5 +752,5 @@ That's six threads on five bonds. Both of Dorrie's go under her name, on the one
 
 **Aspiration:** Own the score of a lifetime (d2).
 
-**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 5 (3 + 2).
+**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 3.
 :::

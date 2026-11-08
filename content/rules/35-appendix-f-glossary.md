@@ -6,13 +6,13 @@ order: 35
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-28
+updated: 2026-11-09
 ---
 Here are the rule terms in the book, one line each, and each one links to its rule.
 
 | Term | What it means |
 | --- | --- |
-| **[Action](#s-actions)** | What you spend to do something. One a round. Hold it and you've got two next round, and Resolve, a trait or a few other things can give you another. |
+| **[Action](#s-actions)** | What you spend to do something. One a round. Hold it and you've got two next round, and Resolve or a few other things can give you another. |
 | **[Advantage](#s-intents)** | Several dice on one intent. Your best die counts. |
 | **[Agenda](#s-agendas)** | What a faction is doing right now, on a die that climbs. Past d12, it happens. |
 | **[Alarm](#s-alarm)** | A site's scene clock: how much the place knows you're there. Noise steps it down too. Past d2, the place knows. |
@@ -54,7 +54,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Epilogue](#s-ending)** | At the end of a campaign, a few sentences on where each character is a year later. |
 | **[Equipment](#s-carrying)** | What you wear or wield: weapons, armour and shields. You carry 3. Each plain one's a line on one set action. |
 | **[Event](#s-stakes)** | Something running on its own clock. Past d2, it happens. |
-| **[Extra action](#s-extra-actions)** | One on top of your one a round: from holding your action, 1 Resolve, coming out of hiding, fired-up Confidence, a trait that says so, or the Boon. Its own roll, or the same one as a combo. |
+| **[Extra action](#s-extra-actions)** | One on top of your one a round: from holding your action, 1 Resolve, coming out of hiding, fired-up Confidence, or the Boon. Its own roll, or the same one as a combo. |
 | **[Extra resource](#s-wealth)** | A resource that isn't paying for an asset. It's spent each downtime, not saved: it hires another faction, pays for a new asset, goes in a trade, or takes the crew a tie. |
 | **[Face](#s-faction-board)** | The person a faction sends to deal with the crew, written as a threat. |
 | **[Faction](#factions)** | A power bigger than one person: Power, resources, assets, an agenda, three bonds, and threads toward the crew. |
@@ -145,10 +145,9 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Threat budget](#s-threat-budget)** | 10 a character with two Titles, and more with every Title after. It sizes multipliers and how long a scene runs. |
 | **[Tick](#s-stakes)** | A clock or an event stepping down one, a faction's agenda climbing one, one win off a multiplier, or one Hurt. |
 | **[Title](#s-title)** | The name you give your archetype: one role or one school of magic, real and specific, with up to six permissions. It counts 1 where it fits, and each one's 1 Resolve on your maximum. |
-| **[Title idea](#s-title-ideas)** | A place to start a Title: twenty-nine roles and schools, each with the archetypes it suits, and permissions, traits and going-beyond ideas to pick from. |
+| **[Title idea](#s-title-ideas)** | A place to start a Title: twenty-nine roles and schools, each with the archetypes it suits, and permissions and going-beyond ideas to pick from. |
 | **[Top face](#s-the-roll)** | A die's highest number. 1 Aura back, unless your archetype's +2 took it there, it's a summon's, or an Oracle swapped it in. A Warrior's explodes. |
 | **[Trail](#s-trails)** | A way to something hidden: a person who knows, a place that shows it, or a thing that proves it. Leave three. |
-| **[Trait](#s-traits)** | Something always true of you, with one effect. You start with two, and you can grow more. Passive (always on) or triggered (it fires by itself). Never a step, and never on a set action. |
 | **[Trouble](#s-trouble)** | Something going wrong for you that the GM can run with. You bring it yourself, by letting a Catch bite or with no Catch at all, and take 1 Aura for it. |
 | **[Utility](#s-carrying)** | Tools and things you use up, like rope, a lantern or a smoke bomb. You carry 3, and cross off what you use. |
 | **[Vulnerability](#s-vulnerable)** | Something that makes a hit hurt more, like *Prone* or *Vulnerable to fire*. Each one that fits a win that does harm adds a tick, and you choose where it goes, so one can strip two plain tags. The same one never counts twice. |

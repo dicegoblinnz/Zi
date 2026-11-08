@@ -6,7 +6,7 @@ order: 23
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-11-09
 ---
 :::quote
 You can play Zi'Dara solo. It's not as good as playing with a table, but it works.
@@ -18,7 +18,7 @@ Either way, make your character the usual way, apart from the threads. With no o
 
 ## Solo With a GM {#s-solo-gm}
 
-If it's just you and a GM, the first Hurt you take each scene doesn't move your [wound die](#s-blaze), the way *Unyielding* works. If you've got *Unyielding* as well, it's the first two. The [round budget](#s-budget) doesn't change: it's about 5 steps a round for each player, so that's 5 for you. Build scenes with fewer stakes, because one character can't be in three places at once.
+If it's just you and a GM, the first Hurt you take each scene doesn't move your [wound die](#s-blaze). The [round budget](#s-budget) doesn't change: it's about 5 steps a round for each player, so that's 5 for you. Build scenes with fewer stakes, because one character can't be in three places at once.
 
 The bestiary's [multipliers](#s-tough) are written for a starting crew of four, a threat budget of 40, so scale them to yours the way [The Threat Budget](#s-threat-budget) says: take 1 off each for every 10 you're under. One character with two Titles is a threat budget of 10, so that's 3 off: *Armoured ×6* is *Armoured ×3*, and anything at ×4 or less is a plain tag.
 
@@ -32,7 +32,7 @@ All you need is one character, one set of dice and the Oracle, and the Oracle's 
 2.  **Build the scene** the way the GM would: one or two stakes, whatever pushes back and a clock. Ask the Oracle anything you don't know, and say [how likely](#s-oracle-odds) it is first. Play fair with yourself: if the guards are always awake at this hour, it's likely they're awake.
 3.  **Set Challenges** by rolling a d6 when you can't decide: 1–2 is Challenge 2, 3–4 is 3, 5 is 4 and 6 is 5. A boss is always 6.
 4.  **Telegraph for the world** before you act. For one character, the round budget's about 5 steps. [Running the Threats Yourself](#s-solo-threats) shows you how.
-5.  **Play it out,** and write one sentence in the log. The same as with a GM, the first Hurt you take each scene doesn't move your wound die, or the first two with *Unyielding*.
+5.  **Play it out,** and write one sentence in the log. The same as with a GM, the first Hurt you take each scene doesn't move your wound die.
 6.  **Downtime,** as normal. [Downtime and Factions](#s-solo-downtime) covers the slots.
 
 Outside a round, when you'd look at the GM and wait, make a move for the world instead ([When They Look at You](#s-gm-moves)), and if nothing comes to you, roll on the Twist table in [The Oracle](#oracle).
@@ -244,7 +244,7 @@ This time she Studies it. Her Study is her second Title and *read the land for a
 
 Is there a rock she can get up onto, out of its road? She wants a yes, but it's open moor, so she calls it unlikely: Fate 12, Bane 7, and two Boon dice, 15 and 9. She keeps the lower, and neither 9 nor 7 beats Fate, so it's a no.
 
-Then she reads her sheet again. She's *Sure-Footed*, so heather that would bog anyone else down is just ground to her. She steps off the trail into it on her free stride, and the cat isn't trying to stop her, so there's nothing to roll. It goes past her and away down the trail she came up, and its telegraphs go with it. Nothing was rolled, so her Confidence stays on d10.
+Then she looks at the ground. The heather's difficult, 2 units a square, but her stride's 3, so one square off the trail is free. She steps off into it, and the cat isn't trying to stop her, so there's nothing to roll. It goes past her and away down the trail she came up, and its telegraphs go with it. Nothing was rolled, so her Confidence stays on d10.
 
 That leaves *Doubles Back*, and her action's gone, so she spends 1 Resolve on another. It's her Track again, another d8, and she rolls 8 against the stake's 5. That's a top face, so 1 Aura comes back. The tracks go on up into the hills, and she's read which way before the rain can wash them out, so the stake's hers. That's another win, and her Confidence hits d12, so she's fired up, but with the stake won there's nothing left to cash it in on.
 

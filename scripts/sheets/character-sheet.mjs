@@ -101,12 +101,7 @@ function front(stamp) {
   <section class="goals">${goal("aspiration", "Aspiration", "Past d12: a new Title, archetype or attuned thing, and a new Aspiration at d2.")}${goal("party_goal", "Party Goal", "Past d12: the crew’s done it, and everyone writes a new thread.")}
   </section>
 
-  <div class="grid">
-    <section class="blk">
-      ${tab("Traits", "Passive or Triggered · never a step")}
-      ${range(3).map((i) => `<div class="trait"><div class="row">${w(`trait_${i}`)}<span class="lab">type</span>${w(`trait_${i}_type`, { cls: "short" })}</div><span class="w two" data-f="trait_${i}_does" data-multi data-size="8"></span></div>`).join("")}
-    </section>
-    <section class="blk kit">
+  <section class="blk kit">
       ${tab("Kit", "an item's 1 more on a roll you use it in · armour goes on its track")}
       <div class="cols">
         <div class="sub"><span class="lab">Equipment · what you wear or wield</span>${lines("equipment", 3)}</div>
@@ -115,8 +110,7 @@ function front(stamp) {
       <div class="sub row"><span class="lab">Keepsake · something that matters to you</span>${w("keepsake")}</div>
       <div class="sub"><span class="lab">Bag · holds 10 · getting something out takes your action</span>
         <div class="cols"><div>${range(5).map((i) => w(`bag_${i}`)).join("")}</div><div>${range(5).map((i) => w(`bag_${i + 5}`)).join("")}</div></div></div>
-    </section>
-  </div>
+  </section>
 
   <section class="blk notes">
     ${tab("Notes", "whatever your archetype’s holding, like a Shadow’s pool, and a thread that won’t fit on its bond")}

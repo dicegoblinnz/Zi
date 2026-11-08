@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Flag rules words that the 7 Oct to 8 Nov 2026 changes retired, and broken links.
+"""Flag rules words that the 7 Oct to 9 Nov 2026 changes retired, and broken links.
 
 Usage: python3 tools/check_terms.py [FILE.md ...]   (default: every chapter)
        add --links to check every #anchor link points at a real heading id
@@ -29,7 +29,6 @@ RETIRED = [
     ("big magic", r"\bbig magic\b"),
     ("quick-build kits", r"\bquick-build kits?\b"),
     # 14 Oct: archetypes
-    ("trait on a Title", r"\b(each|every|your) Title (brings|has|gives) (a|one|its) trait\b|\btrait (for|on) each Title\b|\bTitle['’]s trait\b"),
     ("area for anyone", r"\barea\b.*\b1 Aura\b|\b1 Aura\b.*\barea\b|\bmake a die your area\b|\bcounts? friends\b"),
     ("heal a group", r"\bheal(ing)? a group\b|\bgroup heal\b"),
     ("something that helps", r"\bsomething that helps\b"),
@@ -66,10 +65,7 @@ RETIRED = [
     ("two-part permissions", r"\btwo parts\b|\bdescribing word\b|\bonly half a permission\b"),
     ("every set action it fits", r"\b(every|as many) set actions? it fits\b"),
     ("old Oracle", r"\bsteps? off (the |a )?(threats['’] )?telegraphs?\b|\bshrink(ing|s)? (the )?(threats['’] )?telegraphs\b"),
-    # 27 Oct 2026: traits are passive, a plain item goes on one set action
-    ("trait as a step", r"\btraits? (is|are) a step\b|\+1 step\b.*\btrait\b|\btrait\b.*\+1 step\b|\bTitles?, items? and traits?\b|\bitems? and traits?\b|\bpermissions, items or traits\b"),
-    ("old trait types", r"\bInvoked\b|\bonce-per-scene traits?\b|\bonce-a-(scene|downtime) traits?\b|\bonce-per-downtime traits?\b|\bPer (scene|downtime)\b"),
-    ("cut traits", r"\bPrepared Mind\b|\bContingency\b"),
+    # 27 Oct 2026: a plain item goes on one set action
     ("items everywhere", r"\b(an |a )?(plain )?items? goes? on every set action\b|\bitems go on every\b"),
     # 8 Nov 2026: Roots, specialties and three tracks (abilities are back, on archetypes)
     ("set actions", r"\bset actions?\b"),
@@ -79,6 +75,8 @@ RETIRED = [
     ("old spends", r"\b(Resolve|Aura) spends?\b"),
     ("old Confidence", r"\b(starts?|back) (on|at|to) d6\b.*\bConfidence\b|\bConfidence\b.*\b(starts?|back) (on|at|to) d6\b|\bConfidence swings?\b|\bthe swing\b"),
     ("step for the action", r"\b(1|a|one) (step )?for the action\b|\bthe action on its own is\b|\bwith the action,? (that's|it's)\b"),
+    # 9 Nov 2026: no more traits
+    ("traits", r"\btraits?\b"),
 ]
 
 

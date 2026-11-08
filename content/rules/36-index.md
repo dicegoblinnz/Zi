@@ -6,7 +6,7 @@ order: 36
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-28
+updated: 2026-11-09
 ---
 :::index-section
 ## A {#a}
@@ -264,7 +264,6 @@ updated: 2026-10-28
 -   **Title** — [Archetypes and Titles](#s-title), [Title Ideas](#s-title-ideas)
 -   **Title ideas** — [Title Ideas](#s-title-ideas)
 -   **Trail** — [Three trails to everything](#s-trails), [Secrets and Discovery](#s-discovery)
--   **Traits** — [Traits](#s-traits)
 -   **Traps** — [Traps](#s-traps)
 -   **Travelling** — [Travelling](#travelling)
 -   **Trouble** — [Catches and Trouble](#s-trouble), [Catches and Resolve at the Table](#s-catches-gm)

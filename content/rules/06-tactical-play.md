@@ -6,7 +6,7 @@ order: 6
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-11-09
 ---
 :::quote
 Every round's a puzzle with a clock on it, and you get to see all the pieces before you move.
@@ -30,7 +30,7 @@ Everyone gets [one action a round](#s-actions), and your stride, a few words and
 
 Make all five on purpose and it's a good round. The great rounds are the ones where one action solves two problems.
 
-If nothing's worth your action this round, **hold it**: do nothing apart from your stride, and you've got two actions next round. There are other ways to an [extra action](#s-extra-actions) too: spend 1 Resolve, come out of hiding, cash in your Confidence when it's fired up at d12, or use a trait like *Second Wind*. An extra action can be its own roll, or go into the same roll as a combo.
+If nothing's worth your action this round, **hold it**: do nothing apart from your stride, and you've got two actions next round. There are other ways to an [extra action](#s-extra-actions) too: spend 1 Resolve, come out of hiding, or cash in your Confidence when it's fired up at d12. An extra action can be its own roll, or go into the same roll as a combo.
 
 ## Movement and Range {#s-movement}
 
@@ -41,8 +41,8 @@ You play Zi'Dara on a grid first, where 1 square is 1 unit, about five feet.
 -   **Stride is free.** Every character has a base **stride of 3 units**. Every round you can move your stride without spending an action, whether that's before, between or after your actions.
 -   **Move action.** Spend your action to go further. Roll whatever makes you fast here, plus the action. That's usually your Move set action, like Vesk's Title, *run the rooftops* and her grappling line. The number you roll is how many extra units you move. Split it into several dice and they add together. Movement's the one roll in Zi'Dara where dice add.
 -   **Diagonals count as one.** It keeps things quick.
--   **Difficult ground**, like deep snow, a slick floor or a crowd, costs 2 units a square. *Sure-Footed* ignores it.
--   **Your sheet can change your stride.** *Light on my Feet* adds 2 units, and so does the Stride Boon. A Stride Burden takes 2 away, and a *Heavy* Catch on something you've attuned takes 1, to a minimum of 0. A [Teleporter](#a-teleporter)'s stride can be a teleport of up to 10 units.
+-   **Difficult ground**, like deep snow, a slick floor or a crowd, costs 2 units a square.
+-   **Your sheet can change your stride.** The Stride Boon adds 2 units. A Stride Burden takes 2 away, and a *Heavy* Catch on something you've attuned takes 1, to a minimum of 0. A [Teleporter](#a-teleporter)'s stride can be a teleport of up to 10 units.
 -   **Getting something out of your bag** takes your action, but putting it away is free. See [What you carry](#s-carrying).
 
 :::rule
@@ -64,7 +64,7 @@ How far a bow, a thrown knife or a spell reaches is the story's call. The bands 
 **Line of sight** comes from the story. If something solid's in the way, you can't hit through it, and neither can they. That's what cover is. It decides what's possible, and it doesn't add steps. Stand behind a wall and the archer on the roof has to telegraph at someone else, or come down.
 
 :::example[Movement at the table]
-Vesk has *Light on my Feet*, so her stride is 3 + 2 = 5. In one round she moves those 5 units for free, then spends her action to Move across the rooftops. Her Move is her first Title, *run the rooftops* and her grappling line, plus the action, so she's on 4 steps, a d8. She rolls a 6, and that's 11 units in total.
+Vesk's stride is 3. In one round she moves those 3 units for free, then spends her action to Move across the rooftops. Her Move is her first Title, *run the rooftops* and her grappling line, plus the action, so she's on 4 steps, a d8. She rolls a 6, and that's 9 units in total.
 
 Bram's stride is 3. He moves 3 units for free, then spends his action on a Move. Nothing on his sheet makes him fast, not even a Title, so it's the action on its own: 1 step, a d2. He rolls a 2, its top face, so he gets 1 Aura back, and that's 5 units in total. He's no runner, and his sheet says so.
 :::
@@ -111,7 +111,7 @@ You deal with every telegraph aimed at the crew in one of four ways. Fear, lies 
 :::example[Defend, or intercept]
 Two Wardens go for Isolde this round, a spear thrust and a sweep, a d10 each, and her Defend's a d2. She's within Bram's stride, and he's a Guardian, so he intercepts both for free, and he Defends. His Defend is his first Title, his plate armour and his shield, and Defending counts those three lines twice: 1 + 6 = 7 steps, a d12 and a d2. He splits the d12 into two d6s. When it lands, the d10s come up 5 and 3, and Bram rolls 5, 3 and 1. He puts the 5 on the 5 and the 3 on the 3, and ties go to him, so neither gets through, and stopping two puts his Confidence up two sizes.
 
-If he'd wanted his action for the Wardens instead, he could still intercept both for free and let them ride. Then it's his Defend rolled once, one d8, so it stops one of them at most, and the other gets through to him instead of her. If the GM names a Hurt and it's his first this scene, *Unyielding* means it won't even move his wound die, so it won't cost him any Confidence either.
+If he'd wanted his action for the Wardens instead, he could still intercept both for free and let them ride. Then it's his Defend rolled once, one d8, so it stops one of them at most, and the other gets through to him instead of her.
 
 Anyone else can intercept too, for 1 Aura a friend, but they need the defence to back it up. Vesk could step in for Isolde, but her Defend's only her worn leathers. Defending makes it a d6, or a d4 and a d2 with her split, and that's not much against two d10s.
 :::
@@ -159,7 +159,7 @@ Aura's for the small stuff, and it comes back all the time. [Resolve](#s-tracks)
 -   **Keep one for a friend.** [Intercepting](#s-intercept) costs 1 Aura a friend and no action, so an Aura you've kept back can move a blow off a friend with a d2 Defend and onto you.
 -   **Farm it, and share it.** Every top face is 1 Aura back, and small dice land on their top face more often. When you've got a split to spare, peel off a d2 with a small intent. If you're already full, the Aura goes to a friend in the scene.
 -   **Let trouble bite.** Let a Catch bite as often as you like, Scars included, and take 1 Aura each time. It has to bring real trouble every time, and you don't even need a Catch on your sheet: bring real trouble on yourself in the story and take 1 Aura. Do it when the scene can stand a bit more trouble.
--   **Other ways back.** *Killer Instinct*, *Battle Focus*, and the Beat a threat and In your element Boons all bring Aura back. And when a great setup doesn't land (you planned it, it was cool, and the dice said no), the GM can give you 1 Aura.
+-   **Other ways back.** The Beat a threat and In your element Boons bring Aura back. And when a great setup doesn't land (you planned it, it was cool, and the dice said no), the GM can give you 1 Aura.
 -   **Ties matter.** A tie on the roll that ends the fight is worth an Aura, every time.
 -   **Resolve buys the big things.** You've got 1 for each Title, so 2 to start. Spend 1 to take an extra action, to reroll a roll you just failed, to go beyond what a permission normally does, to hold your ground when fear, lies or pressure get through, to take an action at what the scene's about when you're shaken, or on your archetype's own spend. An extra action can turn a round: put it into a friend's roll, or into your own with another of your set actions (Fight with Sneak is a sneak attack). A reroll's best when the threat rolled low, because its dice stay where they landed. Your archetype's spend is the big version of what it does, like Bram shrugging off a hit that got through, or Wren rolling one Mark at every creature she can see, so save it for the round that decides the scene (see [1 Resolve on your mechanic](#s-abilities)).
 -   **Spend one every scene.** You get 1 Resolve back at the end of every scene and all of it after downtime, so one a scene costs you nothing. If you're out, let a Catch bite in a big way, one that changes the scene or costs you something you wanted, and take 1 Resolve instead of the Aura. Straining a thread gets you one too (see [Bonds and threads](#s-bonds)), and so can great roleplay, when the GM says so.
@@ -232,7 +232,7 @@ The crew looks at the map. There are four problems, and one action each to spend
 **Wren** goes first, from her rock.
 
 :::example
-**Wren:** My Fight's my first Title and my bow's *shoot a longbow* and *hit anything I can see*. With the action that's 4 steps, a d8. I haven't moved, so *Marksman's Eye* gives me any tie. The captain's 11 squares away across the water, which is *Far*, and a longbow reaches Far. I'm shooting the crossbow out of his hands.
+**Wren:** My Fight's my first Title and my bow's *shoot a longbow* and *hit anything I can see*. With the action that's 4 steps, a d8. The captain's 11 squares away across the water, which is *Far*, and a longbow reaches Far. I'm shooting the crossbow out of his hands.
 
 **GM:** Nobody's gone at him yet this round, so roll his d8 with yours.
 
@@ -265,7 +265,7 @@ That 5 is the captain's defence for the rest of the round, so anyone else who go
 **Ash:** Three's done. Two's a tie, and that goes to him unless I pay an Aura. I'll leave it. He's got Bram in front of him. **GM:** Bandit three drops his torch into the river and goes in after it.
 :::
 
-Ash's *Killer Instinct* gives her 1 Aura for taking a threat down. She's full, so it goes to Bram, who spent one on the river. Her win puts her Confidence up a size as well, d6 to d8, and Wren's and Bram's went up the same way when the crossbow and the bandit hit the water.
+Ash's win puts her Confidence up a size, d6 to d8, and Wren's and Bram's went up the same way when the crossbow and the bandit hit the water.
 
 **Vesk** has the best idea at the table.
 
@@ -292,7 +292,7 @@ That's 4 + 3 = 7 steps. The GM's still got about 20, but there's nothing left wo
 And Vesk's right behind the captain. His shield and his doorway both face the bridge, so she's around everything that keeps him going, and that's an opening. The next win against him takes him out, whatever he's got left. Her Sneak on its own is a d6 against his d8, though, and that's worse than a coin toss.
 
 :::example
-**Wren:** I'm in. I've got an arrow on the string, aimed at his face. "Don't." I still haven't moved, so it's my Fight again, 4 steps, and *Marksman's Eye* takes any tie.
+**Wren:** I'm in. I've got an arrow on the string, aimed at his face. "Don't." It's my Fight again, 4 steps.
 
 **Vesk:** And my knife's at his back. My Sneak's my first Title and *move unseen*, with the action 3 steps. I'll bring in *fight dirty with a knife* for 1 Aura, so 4. With Wren's 4 that's 8 steps between us, a d12 and a d4, and they both go on "yield, now", so it's advantage.
 

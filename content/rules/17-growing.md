@@ -6,7 +6,7 @@ order: 17
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-27
+updated: 2026-11-09
 ---
 :::quote
 There aren't any levels in Zi'Dara. Your character grows, and you choose how.
@@ -72,7 +72,7 @@ Then do the **epilogues**. Each player says where their character is a year late
 
 ## Retiring a character {#s-retiring}
 
-When you decide your character's done, write a final Title, leave the party sheet, and make a new character at the same progression: the same number of archetypes, each with its Title, and the same number of permissions and traits, spent however you like.
+When you decide your character's done, write a final Title, leave the party sheet, and make a new character at the same progression: the same number of archetypes, each with its Title, and the same number of permissions, spent however you like.
 
 Leave something behind. Give one thing you carry or one attuned thing to someone in the crew, or introduce them to someone you've got a bond with, so they can write a thread with that person. Give your new character a thread with the old one if it fits. An attuned thing needs someone with a free attunement slot. A retired character can still turn up in the story, and the GM should bring them back now and then.
 

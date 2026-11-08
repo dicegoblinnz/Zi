@@ -1,4 +1,4 @@
-# For Mo: calls to confirm (8 Nov 2026)
+# For Mo: calls to confirm (9 Nov 2026)
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
@@ -6,7 +6,7 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 
 Your chat from 6 to 8 Nov (`notes/playtest-sheets/2026-11-08-chat-decisions.md`) is the source, and `notes/roots-plan.md` is how it's going through the book. Stage 1 put it through The Core, Building, The Archetypes, the crew, Conflict, Magic's Summoning, Downtime, Appendix D, the Learn deck and both paper sheets. These are the calls Claude made doing it, the ones that change play most first.
 
-1. **Making a character:** two Titles (three permissions each), two archetypes, two traits and one attuned thing. You floated five picks to spread (like three archetypes and two Titles with no attunement), so say if you want that instead.
+1. **Making a character:** two Titles (three permissions each), two archetypes and one attuned thing. You floated five picks to spread (like three archetypes and two Titles with no attunement), so say if you want that instead.
 2. **Home tracks:** Stamina for the Bloodsworn, Guardian, Maker, Shadow, Shifter and Warrior. Confidence for the Face, Gambler, Hunter, Illusionist, Oracle and Scholar. Resolve for the Bard, Elementalist, Healer, Leader, Summoner and Teleporter.
 3. **Abilities:** each archetype's old Aura spend and Resolve spend became its first two abilities, a size each, and you've got them as soon as you take it. Push is +2 (+3 for the same archetype twice). That leaves four more to write for each, up to your six, and how you'd get them later (a downtime slot each, like awakenings?) is yours to say.
 4. **The conversions that changed most:** the Guardian's *Stand firm* (the next two hits through this round do nothing), the Bloodsworn's every size of Stamina dropped adding 3 steps (with *Bleed for it* and *Bleed out*), the Bard's *Lift them* (everyone who hears rolls their Confidence as at a scene's end, as far as d10), the Summoner, a Maker pumping Aura into someone else's attuned thing, and the Gambler from your die flip idea (once a round, any die you can see, its size plus 1 take away the roll, never paying Aura, with *Another flip* and *Double or nothing*).
@@ -22,11 +22,11 @@ Your chat from 6 to 8 Nov (`notes/playtest-sheets/2026-11-08-chat-decisions.md`)
 14. **Take a breath** stays an action, putting your Confidence up a size as far as d6. Shaken and fired up are gone.
 15. **Armour on every Root:** Body (leathers, plate, shields, helmets), Mind (court clothes, a uniform, a disguise you trust, while it fits the scene) and Soul (a holy symbol, a ward, a relic), boxes by quality as before, mended in downtime, and 1 more when you Defend.
 16. **Scars:** a Scar locks the smallest open size of that track, a Scar that would lock its last size is your last Blaze, and after a Blaze the track sits on its smallest open size.
-17. **Traits:** *Unyielding* (the first hit through each scene doesn't drop Stamina), *Iron Will* (the same for Resolve), *Reputation Precedes Me* (the same for Confidence at your Mind), *Tenacious*, *Tend the Crew* (everyone rolls each track twice at the end of the scene), *Second Wind* (an extra action the first time a track drops), *Style* (clothes get a box as Mind armour), *Steady Hands* (Confidence comes back on a 3) and *Cool Under Pressure* (the first time Confidence hits d2 it comes back to d6).
+17. **Traits:** settled by your 9 Nov answer. There are no traits now.
 18. **Boons and Burdens:** Toughness, Recovery (3+ or 5+), Regen, Defend and Intercept are redone for the tracks, and the rest are as they were.
 19. **Attunement:** Awakened has one awakening (two with a Catch), Tempered two (four with a Burden), Perfected three (six with a Burden and a Catch). It's an item on your rolls, it gets you Aura its own way, written when you attune it, pumping it is free and takes no action, and it empties every scene.
 20. **Summons:** a Summoner's attunement holds a soul to each awakening, calling one spends Aura for a d4 each (no bigger than the soul's own die), and a hit that gets through knocks a size off.
-21. **Extra actions:** holding your action, coming out of hiding, a trait and the Boon are on top of the one per archetype you can buy.
+21. **Extra actions:** holding your action, coming out of hiding and the Boon are on top of the one per archetype you can buy.
 22. **Downtime rolls** lost their slot's step, to match no step for the action.
 23. **Quick heal** stays (1 Aura and your action, one track up a size), and a Healer's heal roll puts a track up a size for each die that rolls 4 or more.
 24. **The crew:** Vesk Body 5, Mind 3, Soul 0. Dorrie 1, 5, 2. Bram 5, 1, 2. Isolde 0, 5, 3. Wren 4, 4, 0. Ash 0, 2, 6. Each one's best specialty is 3 or 4, and their archetypes are as they were (Vesk and Wren twice over).
@@ -91,19 +91,11 @@ You asked for one action a round on the phones, intercepting on the phone, and t
 
 ## 27 Oct: traits, gear and bonds
 
-1. **How each trait went passive.** Every trait's now Passive (always on) or Triggered (fires by itself), and none of them is a step. Where one was a step or something you chose to fire, here's what it does now:
-   - **Ties instead of steps.** *Duelist* (one-on-one), *Pack Fighter* (a roll a friend's action went into), *Marksman's Eye* (shooting when you haven't moved) and *Intimidating Presence* (threatening someone) win ties without paying Aura.
-   - **The first time each scene.** *Battle Focus*: 3 Aura the first time your Aura runs out. *Tenacious*: the first Hurt that would Blaze you doesn't. *Second Wind*: an extra action the first time your wound die steps up. *Lucky*: the first 1 you roll is rolled again. *Focused*: your lowest die on your first roll counts as its highest face. *Silver Tongue*: the first social roll you fail succeeds anyway. *Charming*: the first social roll you win against someone new gives you a bond thread with them for the scene. *Hard to Lie To*: the first lie told to your face, the GM tells you. *Cool Under Pressure*: the first time you're shaken, Confidence goes back to where it started. *Acrobatic*: your first fall is a safe landing. *Predator's Eye* and *Quick Study*: the first threat you go at or face, the GM tells you its weak point or one hidden tag. *Tactical Mind*: the first place you look over, one useful thing nobody noticed (it isn't a permission for the crew any more).
-   - **When something happens.** *Cold Reader*: the first time you speak with someone in a scene, the GM gives you their mood in a word. *Silent Step*: coming out of hiding gives you 1 Aura too. *Fast*: a free Move action in the first round of every scene. *Tend the Crew*, *Host* and *Cache* fire by themselves at the end of a scene or every downtime. *Scout Ahead*: three ground tags in the first scene each session somewhere you've been. *Network*: three bond threads when you take it (the meeting's gone).
-   - **Always on.** *Field Dressing*: your first quick heal each scene costs no Aura. *Healer's Hands*: no Aura, once a scene for each person. *Never Unarmed*: you've always got a hidden knife. *Sprinter*: your stride counts twice when you take a Move action. *Nimble*: *Grabbed* and *Pinned* fade two sizes a round on you. *Reputation Precedes Me*: a size up on Confidence where people know you. *Commanding Presence*: your own people follow orders without a roll. *Style*: clothes that fit are two sizes up, not one. *Showstopper*: while a crowd's watching you, a friend can hide in it without a roll. *Diplomat*: two sides about to fight always hear you out first. *Steady Hands*: being shaken doesn't stop you. *Perfect Recall*: the GM tells you anything from a scene you were in. *I Have the Thing*: your bag's always got the plain utility item you need, for your action and a purse of gold. *Tireless*: three downtime slots, not two. *Iron Will* keeps its size up on Confidence and loses its step.
-   - **Cut:** *Prepared Mind* and *Contingency*, which were both things you chose to fire, with nothing passive left once that went. The Warding Title idea suggests *Tactical Mind* in Prepared Mind's place.
-2. **The crew kept their traits' names.** Dorrie's *Silver Tongue* and *Cold Reader*, Ash's *Battle Focus* and Isolde's *Perfect Recall* are the new passive versions, rather than new traits. Say if you'd rather they took different ones.
+Your 9 Nov answer (no more traits) settled the calls about traits, so they're gone from here.
+
 3. **The crew's numbers dropped.** With the traits off their set actions, Vesk's Sneak is 3 steps (d6), Bram's Talk 3 (d6), Isolde's Study 3 (d6) and Wren's Fight 4 (d8). Nobody got a new line to make up for it. Every example that used those numbers is redone, and where a roll no longer worked, it changed: in the magistrate's hearing, Isolde's small die goes on a Study that finds *Hates the Vane Estate* (Cold Reader used to), and Bram hands Vesk 2 steps and Wren 1 when he barks orders.
 4. **Plain things you carry go on one set action,** utility items and the keepsake as well as equipment, since you picked "a plain thing goes on one set action only". Bram's plate and shield are two things, so they're both on his Defend and it's still a d8.
 5. **Attuned things are written as their permissions** on the crew's set actions (Bram's Fight has *fight with a war hammer*, not "his war hammer"), so it's clear they follow the two-set-action rule. Ash's *call fire without a word or a gesture* is on her Fight and Scare them off, and that's its two.
-6. **Traits can't be brought in for Aura either,** since a trait's never a step.
-7. **The "traits are being reworked" note is gone** from Step 2, and you still start with two.
-8. **Writing your own trait:** Appendix C has two rows now, a passive trait and a triggered one, both never a step.
 
 ## 27 Oct: armour's quality and boxes
 
@@ -303,6 +295,8 @@ Your 26 Oct answers settled how big a multiplier is, Defend and Confidence, inte
 
 ## The ones that mattered most (16 Oct)
 
+Your 9 Nov answer (no more traits) settled the calls about traits, so they're gone from here.
+
 1. **The crew's archetypes.** Your examples set Bram (Guardian and Leader), Ash (Elementalist), Dorrie (Face), Wren (Hunter), Isolde (Scholar) and Vesk (Shadow). The other Titles are Claude's picks:
    - Vesk's *Raised by the Guild* is a Shadow, so she's a Shadow twice (+3).
    - Dorrie's *The woman with a hundred names* is a Shadow (a spy hiding in plain sight).
@@ -310,10 +304,7 @@ Your 26 Oct answers settled how big a multiplier is, Defend and Confidence, inte
    - Wren's *An outrider from the border war* is a Hunter, so she's a Hunter twice (+3).
    - Ash's *The Court's runaway heir* is a Face.
    - Later on: Vesk's third and fourth Titles in Growing are Shadows too (+4, then +5), and Isolde's third Title in the campaign arc is an Oracle.
-2. **Traits for a new character.** You said keep yours until traits are sorted. So a new character picks two traits from the list, not tied to a Title, with a short note that traits are being reworked. A Title gained later brings no trait.
 3. **Title ideas stay as ideas.** The twenty-nine roles and schools are still in Title Ideas and the Crew, and each now says which archetypes it suits (Rogue a Shadow, Captain a Leader, Medium a Summoner or an Oracle, the Face idea a Face or a Shadow, and so on). Long Haul's three ideas: Pilot a Warrior or Leader, Spacer a Maker, Systems a Scholar or Face.
-4. **Traits that touched Confidence.** *Iron Will* and *Style* now start you a size up. *Cool Under Pressure* and the *Heartened* condition bring you back up, as far as where you started the scene.
-5. **Charming.** It adds a temporary bond thread for the scene. Strain it for 1 Resolve, then strain it again to snap it for another, and that's 2 Resolve a scene. Suggestion: you can borrow through a temporary thread, but not strain it.
 6. **The downtime reroll** costs 1 Resolve (it was a Spark). All your Resolve comes back after downtime, so it's free in effect. Fine, or should it come out of next session's Resolve?
 7. **Conditions on friends.** You said wards and blessings reach one person, or two with a split. The book does the same for every good condition you put on a friend (*Heartened*, *Rallied*, *Inspired* and the rest), because the area that used to spread them is gone. Two at most?
 8. **Healing permissions on attuned things** (Sister Hale's Thimble, the Surgeon's Casebook). For a Healer they're a line on the heal roll. For anyone else they're a free quick heal once a scene. Keep that, or cut the second half?
@@ -332,7 +323,7 @@ Your 26 Oct answers settled how big a multiplier is, Defend and Confidence, inte
 - A Layered threat rolls all its dice the first time it's attacked in a round, and its best one stands.
 - The attunement stages are called Awakened, Tempered and Perfected. An attuned thing counts through its permissions. You can give a starting attuned thing its Catch at creation. Handing one over carries the Boon its Burden paid for.
 - The twenty rare and legendary things are now Tempered and Perfected attuned things, with Burdens.
-- *Tend the Crew* is a new trait, and the Medical kit is a quick heal without the Aura.
+- The Medical kit is a quick heal without the Aura.
 - Keepsakes lost their old mechanics until you decide what a keepsake does.
 - Party holdings cost 1 Aura to bring in.
 - In a combo, whoever rolls gets the Aura for every top face. Steps a Leader hands out don't give a split, and a lead can be a combo.

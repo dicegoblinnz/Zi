@@ -6,7 +6,7 @@ order: 33
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 ## Building the roll {#building-the-die}
 
@@ -49,7 +49,7 @@ updated: 2026-11-08
 ## Your action {#s-qr-action}
 
 -   One a round: act, answer a telegraph, Defend, move past your stride, pull something from your bag, break a condition, take a breath (your Confidence comes up a size, as far as d6), or lead if you're a Leader. Your stride, a few words, dropping something or putting it away, and pumping Aura into your attuned thing are free. Intercepting costs 1 Aura but no action.
--   **Extra actions:** 3 Aura each, up to one action a round for each archetype you've got, counting the one everybody gets · hold it (just your stride this round) and you've got two next round · coming out of hiding, one even if you're *Unseen* as well · the Boon, or a trait that says so.
+-   **Extra actions:** 3 Aura each, up to one action a round for each archetype you've got, counting the one everybody gets · hold it (just your stride this round) and you've got two next round · coming out of hiding, one even if you're *Unseen* as well · the Boon that says so.
 -   **Combo:** two or more actions into the same thing at the same time, yours or your friends'. One Root, whoever rolls, and every action brings its specialty and the items it's using. No Aura. The same specialty from two of you counts for each. Whoever rolls takes the Aura. Your own extra action brings in another specialty (Knives with Stealth), or the same one again for +1.
 -   **Lead** (the Leader's): build an order or a rallying song and hand its steps to friends who can hear or see you, this round. They don't have to fit, and they don't bring a split.
 -   Outside a round, it's one action for a quick go, two if you can take your time.
@@ -58,9 +58,8 @@ updated: 2026-11-08
 
 -   Up to your maximum, 5 to start. You're full every scene, and there's none in downtime. While you're acting it can go past your maximum, and once you've finished acting for the round, anything over is gone. Off your turn it stops at your maximum, and you can give the rest to a friend in the scene.
 -   **Spend 1:** bring something in, a friend's specialty through a thread too · make a case for a specialty, or go beyond · keep a Catch quiet, or turn it your way · win a tie when you're acting · a quick heal · intercept for a friend within your stride · pump it into your attuned thing.
--   **Get 1 back:** every die of yours that wins · every top face · letting a Catch bite, as often as you like, as long as it's real trouble · bringing real trouble on yourself with no Catch · your attuned thing's own way · a great setup that didn't land, if the GM says so · traits and Boons that say so.
+-   **Get 1 back:** every die of yours that wins · every top face · letting a Catch bite, as often as you like, as long as it's real trouble · bringing real trouble on yourself with no Catch · your attuned thing's own way · a great setup that didn't land, if the GM says so · Boons that say so.
 -   **Spend 3:** an extra action, up to one a round for each archetype you've got.
--   Traits are free, and they're never a step, so you never bring one in.
 
 ## The tracks {#s-qr-tracks}
 
@@ -135,7 +134,6 @@ A hit, a size off the track it's at · a box on your armour on that Root, or som
 -   **Permissions:** a doing word and how, what or where, like *climb sheer walls*. Each one's 1 on a Root and 1 on a specialty, and it fits both. You need a magic permission or a magic item to do magic at all, and magic's written narrow.
 -   **Roots and specialties:** add them up. A specialty's something you could be known for or teach, and you name it. A roll's one Root and one specialty, plus the items you're using.
 -   **Archetypes:** two to start, apart from your Titles, and you can take the same one twice. Each one's a mechanic and its abilities, and you can have one action a round for each archetype, so two let you buy one.
--   **Traits:** two, and Grow can give you more. Each one's passive: always on, or it fires by itself when something happens. It's never a step.
 -   **Boons:** two permission slots on a Title buy one. Burdens only come on attuned things. The menu's in [Boons and Burdens](#s-boons).
 -   **Aspiration:** starts at d2 and climbs. An action when it's within reach, or a slot. One step a roll. Past d12, take a new Title, archetype or attuned thing.
 -   **To start:** 5 Aura, Stamina, Confidence and Resolve at d12, a stride of 3, one attuned thing, and two bond threads with the crew.
@@ -195,7 +193,7 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 
 -   Four pressures: personal, party, faction, world. Ignore one and it gets worse, and twice makes it a scene. Every faction's action is telegraphed at the start, and rolled after the slots.
 -   Two personal slots each, and the crew takes one action, like any faction. A personal slot can go into the crew's action. Every downtime starts with each of your tracks up a size.
--   **Recover:** heal, 6 sizes back on your tracks however you like · mend something broken, or a piece of armour with boxes ticked. **Grow:** a new permission on a Title · a new trait or thread · chase your Aspiration · get something.
+-   **Recover:** heal, 6 sizes back on your tracks however you like · mend something broken, or a piece of armour with boxes ticked. **Grow:** a new permission on a Title · a new thread · chase your Aspiration · get something.
 -   **Mend a thread** you've strained by making it right with them. Downtime's one place for it, and a scene with them is the other.
 -   **Swap** a permission for another that fits your Title, or two for a Boon, and back. **Attune:** a slot for each new awakening, and the material for a new stage. A soul you're carrying goes into your summoning attunement.
 -   Ties go to the defender. No Aura: pay 1 Resolve to roll your dice again, or an extra crew resource to take the tie.

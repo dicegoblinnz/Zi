@@ -156,10 +156,6 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .goal .w { height: 5.2mm; align-self: flex-end; margin-bottom: 1.3mm; }
 .goal .hint { flex: 0 0 47mm; }
 
-.trait + .trait { margin-top: 1.1mm; }
-.trait .row { align-items: flex-end; }
-.trait .w.short { flex: 0 0 22mm; }
-.trait .w.two { height: 9mm; border: 0; background: linear-gradient(var(--write), var(--write)) 0 4.5mm / 100% 0.25mm no-repeat, linear-gradient(var(--write), var(--write)) 0 100% / 100% 0.25mm no-repeat; }
 .kit .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0 4mm; }
 .kit .sub { margin-top: 1.1mm; }
 .kit .sub > .lab { display: block; margin-bottom: 0.1mm; }

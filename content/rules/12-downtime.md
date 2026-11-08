@@ -6,7 +6,7 @@ order: 12
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 :::quote
 Downtime's the half of the game where the world decides what it's been doing while you were bleeding in a warehouse.
@@ -15,7 +15,7 @@ Downtime's the half of the game where the world decides what it's been doing whi
 After **every session** there's a downtime: a week, a month, a season, however long the story needs. It's where the world moves, and where you heal and grow.
 
 :::rule
-**Progression in Zi'Dara is yours.** Nobody hands out levels, and there's no experience to count. Every downtime, you choose what your character gets: a new permission, a new trait, a new awakening on something you've attuned, a roll at your Aspiration, a new thread. What you don't get to choose is how much time you have, and the world's always asking for some of it.
+**Progression in Zi'Dara is yours.** Nobody hands out levels, and there's no experience to count. Every downtime, you choose what your character gets: a new permission, a new awakening on something you've attuned, a roll at your Aspiration, a new thread. What you don't get to choose is how much time you have, and the world's always asking for some of it.
 :::
 
 ## The Four Pressures {#the-four-pressures}
@@ -31,9 +31,9 @@ If you ignore a pressure, it doesn't go away. It gets worse, and the GM brings i
 
 ## Your Slots {#your-slots}
 
-Every player gets **two personal slots**, or three with *Tireless*. The crew gets **one action**, the same as every faction on the board, and nothing buys it another. Put one of your personal slots into the crew's action and everything counts twice. A personal slot can also chase the Goal, work a project or support an Aspiration on its own, but it can never be a second move on a faction.
+Every player gets **two personal slots**. The crew gets **one action**, the same as every faction on the board, and nothing buys it another. Put one of your personal slots into the crew's action and everything counts twice. A personal slot can also chase the Goal, work a project or support an Aspiration on its own, but it can never be a second move on a faction.
 
-Some things happen without costing a slot. **Every downtime starts with each of your [tracks](#s-tracks) up a size**, Stamina, Confidence and Resolve, as far as d12. A trait that fires every downtime, like *Host* or *Cache*, does it by itself.
+Some things happen without costing a slot. **Every downtime starts with each of your [tracks](#s-tracks) up a size**, Stamina, Confidence and Resolve, as far as d12.
 
 ## What You Can Do With a Slot {#what-you-can-do-with-a-slot}
 
@@ -49,7 +49,6 @@ Some things happen without costing a slot. **Every downtime starts with each of 
 ### Grow {#grow}
 
 -   **A new permission** on one of your Titles, up to six on it. It has to fit inside the Title, and the story should say where you learned it. It adds 1 to a Root and 1 to a specialty, the same as the ones you started with. See [Permissions](#s-writing-permissions).
--   **A new trait**, either from the list or written in the same shape. Like every trait, it's never a step.
 -   **Chase your Aspiration.** Roll against its die, built from whatever you're doing about it. Beat it and it climbs one. See [Aspiration](#s-aspiration).
 -   **Deepen a bond.** Write a new thread with someone, a bond thread or a hostile one, whichever the story's given you. If you've already got a bond with them, it goes under that one. If they're in the crew, it goes on both your sheets, so agree on it together.
 -   **Get something** the story can give you, whether it's bought, made, won or owed: something to carry, a purse of gold, or the material an attuned thing needs for its next stage.

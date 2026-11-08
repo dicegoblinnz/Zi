@@ -6,7 +6,7 @@ order: 3.5
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook (split out of Building Your Character), and Mo's chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 ## Quick Build {#s-quick}
 
@@ -18,15 +18,14 @@ The quick build is the long build with most of the thinking done for you. You pi
 
 1.  **Pick two archetypes.** Each one has a mechanic, something only it can do, and abilities you pay for out of your tracks, and most of them have a Push: +2 to one die on the mechanic. You can take the same archetype twice, and then that +2 is a +3. Every Title idea says which archetypes suit it. See [How archetypes work](#s-how-archetypes).
 2.  **Write two Titles, and three permissions on each.** Take a Title off one of the ideas or write your own, and make it specific: *the best blade in the city* is fine, and *the best blade in the Low Market* is better. Each Title's a Root and three specialties that fit it. Then take three permissions that fit inside it, so you've got six, and give each one a Root and a specialty: *pick a mechanical lock* (Body, Locks). Change the words to suit your character, or write one that isn't on the list. See [Titles](#s-title) and [Permissions](#s-writing-permissions).
-3.  **Pick two traits.** A trait's never a step, so it does its one thing without you deciding to. Take them from the ideas you started from, or from [the full list](#s-traits).
-4.  **Add up your Roots and specialties.** Each Root's 1 for every Title and every permission on it, and each specialty's 1 for every Title that names it and every permission on it. A roll's one Root and one specialty, and what you carry counts while you're using it. See [Roots and specialties](#s-step-roots).
-5.  **Take what you carry, and attune one thing.** You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more. Armour goes on the Root it guards, Common with 1 box, and one piece can be Fine, with 2. Your attuned thing starts at Awakened with one awakening, and you write its own way to get you Aura. If there's trouble you'd like on it, give it a Catch and it gets a second awakening. You can attune more later, in downtime. See [What you carry](#s-carrying) and [Attunement](#s-attunement).
-6.  **Write your threads.** Answer at least two of the [ten crew questions](#s-connect), and turn two of your answers into **bond threads** with the crew, something good between you. A thread with someone in the crew goes on both your sheets, so agree on it together. Write a **hostile thread** as well, with anyone, and you can write a third bond thread. With two players, one of your bond threads goes to someone outside the crew, and playing alone, both do. See [Bonds and threads](#s-bonds).
-7.  **Write your Aspiration** at d2. It's one thing you want, and it climbs as you chase it. Past d12 you get it, so make it something you'd know the day it's done: *be a hero again* is too vague, and *earn back the rank they stripped from me* is better. See [Aspiration](#s-aspiration) and [A good Aspiration](#s-good-aspiration).
-8.  **Check the numbers.** You've got 5 Aura, a stride of 3, and Stamina, Confidence and Resolve all at d12. Your tracks are what you defend with, they pay for your abilities, and they come down a size with every hit that gets through. At the end of every scene, each one comes back a size on a 4 or more. See [The Tracks](#s-tracks) and [Aura](#s-aura).
+3.  **Add up your Roots and specialties.** Each Root's 1 for every Title and every permission on it, and each specialty's 1 for every Title that names it and every permission on it. A roll's one Root and one specialty, and what you carry counts while you're using it. See [Roots and specialties](#s-step-roots).
+4.  **Take what you carry, and attune one thing.** You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more. Armour goes on the Root it guards, Common with 1 box, and one piece can be Fine, with 2. Your attuned thing starts at Awakened with one awakening, and you write its own way to get you Aura. If there's trouble you'd like on it, give it a Catch and it gets a second awakening. You can attune more later, in downtime. See [What you carry](#s-carrying) and [Attunement](#s-attunement).
+5.  **Write your threads.** Answer at least two of the [ten crew questions](#s-connect), and turn two of your answers into **bond threads** with the crew, something good between you. A thread with someone in the crew goes on both your sheets, so agree on it together. Write a **hostile thread** as well, with anyone, and you can write a third bond thread. With two players, one of your bond threads goes to someone outside the crew, and playing alone, both do. See [Bonds and threads](#s-bonds).
+6.  **Write your Aspiration** at d2. It's one thing you want, and it climbs as you chase it. Past d12 you get it, so make it something you'd know the day it's done: *be a hero again* is too vague, and *earn back the rank they stripped from me* is better. See [Aspiration](#s-aspiration) and [A good Aspiration](#s-good-aspiration).
+7.  **Check the numbers.** You've got 5 Aura, a stride of 3, and Stamina, Confidence and Resolve all at d12. Your tracks are what you defend with, they pay for your abilities, and they come down a size with every hit that gets through. At the end of every scene, each one comes back a size on a 4 or more. See [The Tracks](#s-tracks) and [Aura](#s-aura).
 
 :::example[Wren, the quick way]
-Wren takes Hunter twice, so her Push is a +3. She starts both Titles from the Ranger idea, and they're both examples off its list. *The hunter who has never lost a trail* is her Mind, with Tracking, Archery and Wildcraft, and *an outrider from the border war* is her Body, with Scouting, Riding and Archery. Her first Title gets three permissions from the list, *follow any trail* (Mind, Tracking), *move through the wild unseen* (Body, Wildcraft) and *know a beast's habits* (Mind, Wildcraft). Her second gets three that aren't on the list at all: *scout ahead of an army* (Body, Scouting), *ride hard over rough country* (Body, Riding) and *read the land for an ambush* (Mind, Scouting). Her traits are their own pick, and she takes two of the Ranger's, Marksman's Eye and Sure-Footed.
+Wren takes Hunter twice, so her Push is a +3. She starts both Titles from the Ranger idea, and they're both examples off its list. *The hunter who has never lost a trail* is her Mind, with Tracking, Archery and Wildcraft, and *an outrider from the border war* is her Body, with Scouting, Riding and Archery. Her first Title gets three permissions from the list, *follow any trail* (Mind, Tracking), *move through the wild unseen* (Body, Wildcraft) and *know a beast's habits* (Mind, Wildcraft). Her second gets three that aren't on the list at all: *scout ahead of an army* (Body, Scouting), *ride hard over rough country* (Body, Riding) and *read the land for an ambush* (Mind, Scouting).
 
 That's a Body of 4 and a Mind of 4, so following a trail is her Mind and her Tracking, 6 steps, a d12. She attunes her longbow, with *Long shot* as its awakening, and gives it the Catch *Wanted* for a second, *Hit anything I can see*. Shooting is her Body and her Archery, with the longbow, 7 steps, a d12 and a d2.
 
@@ -37,13 +36,12 @@ A quick-built character is every bit as real as one built the long way, and ever
 
 ## Title Ideas {#s-title-ideas}
 
-A Title is who you are, and your [archetypes](#s-how-archetypes) are a pick of their own. Here are twenty-nine ideas to build a Title from, the same ones the Player Companion app offers: roles first, then schools of magic. Each one says which archetypes suit it, and gives you example Titles, permissions and trait ideas, along with what going beyond looks like and the trouble that comes with it. Take what fits, change the words so they sound like your character, or use them to get started on something of your own. They're just as good for a Title you earn later, which starts with one permission.
+A Title is who you are, and your [archetypes](#s-how-archetypes) are a pick of their own. Here are twenty-nine ideas to build a Title from, the same ones the Player Companion app offers: roles first, then schools of magic. Each one says which archetypes suit it, and gives you example Titles and permissions, along with what going beyond looks like and the trouble that comes with it. Take what fits, change the words so they sound like your character, or use them to get started on something of your own. They're just as good for a Title you earn later, which starts with one permission.
 
 A Title idea isn't a Title, and neither is an archetype. *Warrior* doesn't tell the table what you're the best at, so a Warrior still needs a Title that does, like *the best blade in the city*. Keep each Title to one role or one school. *Archmage* is too wide, so pick the school you're known for.
 
 -   **Archetypes** are the ones that suit the idea. Your archetypes are your own pick, so take whichever play the way you want, with whatever Titles you write. What each one does is in [The Archetypes](#archetypes).
 -   **Permissions** are ready to copy onto your sheet, and they're a good guide when you write your own (see [Permissions](#s-writing-permissions)). Give each one the Root and specialty it builds when you write it down.
--   **Traits** are three that suit the idea. You've got two traits, and you can take them from here or from [the full list](#s-traits).
 -   **Going beyond** is what this kind of character does when they push a permission past what it normally does. It costs 1 Aura (see [Going beyond](#s-going-beyond)).
 -   **Trouble** is the kind that follows this sort of character around. Titles don't have Catches, so it isn't part of the Title, and you can bring it into a scene whenever you like. Let it cause real trouble and you take 1 Aura (see [Catches and trouble](#s-trouble)). Any of it makes a good Catch for something you [attune](#s-attunement), too.
 
@@ -79,8 +77,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 
 **Permissions:** *fight with a sword* · *fight two at once* · *fight in tight spaces* · *disarm a man* · *keep my feet in a brawl* · *read a fighter's style* · *finish a fight fast* · *fight in front of a crowd* · *spot a hired blade* · *fight dirty when it counts*
 
-**Traits:** Duelist · Tenacious · Second Wind
-
 **Going beyond:** an aimed blow that takes out the tag you choose · cut through a shield or a door in one swing
 
 **Trouble:** *can't turn down a duel* · *an old rival wants my head* · *owes the fighting pits one more bout*
@@ -94,8 +90,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 **Titles:** *The wall that held the harbour gate* · *Shield to the Duke's daughter* · *The bodyguard who's never lost a client*
 
 **Permissions:** *hold the line* · *guard one person* · *turn aside a blow meant for someone else* · *hold a doorway* · *fight with a shield* · *lift what two men can't* · *stay on my feet* · *carry someone out of a fight* · *know when my charge is lying* · *spot an assassin in a crowd*
-
-**Traits:** Unyielding · Pack Fighter · Steady Hands
 
 **Going beyond:** guard everyone behind you, not just one person · hold a door shut against a battering ram
 
@@ -111,8 +105,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 
 **Permissions:** *pick a mechanical lock* · *move unseen* · *run the rooftops* · *lift a purse* · *case a house* · *spot a trap* · *climb a sheer wall* · *spot a guard's routine* · *call in a Guild favour* · *know how a lock's built*
 
-**Traits:** Silent Step · Light on my Feet · I Have the Thing
-
 **Going beyond:** pick a lock that has magic on it · climb a wall with no handholds at all
 
 **Trouble:** *wanted in three districts* · *owes the Guild* · *can't resist a locked box*
@@ -126,8 +118,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 **Titles:** *The voice that talked a duke out of his own house* · *The woman with a hundred names* · *A smile the whole court trusts*
 
 **Permissions:** *talk my way past a door* · *read a room in a glance* · *tell a lie with a straight face* · *drop a name that opens doors* · *pass as someone who matters* · *haggle anyone down* · *get a seat at any high table* · *know when I'm being played* · *spot an easy mark*
-
-**Traits:** Silver Tongue · Cold Reader · Charming
 
 **Going beyond:** talk someone into something that goes against everything they care about · pass as someone the mark knows well
 
@@ -143,8 +133,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 
 **Permissions:** *play any instrument* · *hold a crowd* · *know the old songs* · *make people laugh* · *start a rumour* · *read an audience* · *get a crowd on my side* · *know every lord's scandal* · *get into any party*
 
-**Traits:** Showstopper · Charming · Style
-
 **Going beyond:** turn a riot around with one song · start a rumour that's all over the city by morning
 
 **Trouble:** *can't turn down a stage* · *a song of mine made a lord look a fool* · *everyone knows my face*
@@ -158,8 +146,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 **Titles:** *The investigator the watch hates* · *The thief-taker who always gets her man* · *The coroner who sees what the dead saw*
 
 **Permissions:** *read a crime scene* · *question a witness* · *follow a paper trail* · *spot a forgery* · *know a poison by its smell* · *remember a face* · *know the watch's habits* · *find the one person who saw it* · *know how a criminal thinks*
-
-**Traits:** Hard to Lie To · Perfect Recall · Quick Study
 
 **Going beyond:** name the culprit from a single clue · tell exactly how someone died at a glance
 
@@ -175,8 +161,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 
 **Permissions:** *follow any trail* · *shoot a bow* · *move through the wild unseen* · *know a beast's habits* · *live off the land* · *read the weather* · *slip a hunting party* · *know where a beast will go* · *call on an old comrade*
 
-**Traits:** Marksman's Eye · Sure-Footed · Scout Ahead
-
 **Going beyond:** an aimed shot that takes out the tag you choose · follow a trail that's days old, through the rain
 
 **Trouble:** *wanted by the Duke's foresters* · *the thing that killed my family is still out there* · *my old company wants me back*
@@ -190,8 +174,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 **Titles:** *A doctor who stopped believing in medicine* · *The field surgeon of the Red Company* · *The herbwife every village sends for*
 
 **Permissions:** *stitch a wound* · *know a sickness by its signs* · *mix a remedy* · *keep someone alive till help comes* · *calm the frightened* · *know what really kills people* · *treat anyone, anywhere* · *know the signs of a poisoning* · *get any medicine in the city*
-
-**Traits:** Field Dressing · Healer's Hands · Cool Under Pressure
 
 **Going beyond:** keep someone alive through a wound that should have killed them · patch up a whole room of wounded before dawn
 
@@ -207,8 +189,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 
 **Permissions:** *fix anything mechanical* · *build a trap* · *take a machine apart* · *spot a weak join* · *make something from scrap* · *read a blueprint* · *know how anything's built* · *get tools anywhere* · *spot a part that's been tampered with*
 
-**Traits:** Prepared · I Have the Thing · Quick Study
-
 **Going beyond:** fix in a moment what should take a day · build a machine nobody has ever seen
 
 **Trouble:** *can't leave a machine alone* · *the Guild wants its secrets back* · *my last invention hurt someone*
@@ -222,8 +202,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 **Titles:** *Captain of the Guard* · *The officer who brought them home from the border war* · *A sergeant who lost his stripes*
 
 **Permissions:** *give orders people follow* · *read a battlefield* · *plan an ambush* · *keep a crew together* · *spot who's in charge* · *lead a charge* · *bring a frightened crowd to order* · *know the army's ways* · *call on soldiers who served with me*
-
-**Traits:** Commanding Presence · Tactical Mind · Pack Fighter
 
 **Going beyond:** give orders to a crowd that isn't yours · turn a rout around with one shout
 
@@ -239,8 +217,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 
 **Permissions:** *know every noble house* · *read court etiquette* · *make an ally of a rival* · *host a dinner people talk about* · *hear the gossip first* · *speak for my house* · *get credit anywhere my name's known* · *know the rival house's every move* · *call on my family's old friends*
 
-**Traits:** Diplomat · Host · Reputation Precedes Me
-
 **Going beyond:** get an audience with the Duke tonight · turn a rival house into a friend over one dinner
 
 **Trouble:** *my family's debts* · *a rival house wants us gone* · *promised to marry someone I've never met*
@@ -254,8 +230,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 **Titles:** *A pilot who knows every rock on the coast* · *The navigator who brought the Gull home* · *First mate to a pirate queen*
 
 **Permissions:** *sail anything with a mast* · *read the stars* · *find the way in a storm* · *know every coast* · *fight on a moving deck* · *climb the rigging* · *know when the sea's about to turn* · *find a berth in any port* · *call in a favour at sea*
-
-**Traits:** Sure-Footed · Acrobatic · Lucky
 
 **Going beyond:** sail through a storm that sinks everyone else · bring a ship through a channel nobody has ever sailed
 
@@ -271,8 +245,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 
 **Permissions:** *know who runs which street* · *find a fence* · *get lost in a crowd* · *hear what the street's saying* · *find a safehouse* · *spot a tail* · *call on my old gang* · *know the black market's prices* · *slip a watch patrol*
 
-**Traits:** Fast · Network · Lucky
-
 **Going beyond:** find anyone in the city by morning · get a whole street to look the other way
 
 **Trouble:** *my old gang wants me back* · *I owe the wrong people* · *the watch has my name*
@@ -286,8 +258,6 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 **Titles:** *A scholar of forbidden texts* · *The archivist who knows where everything's buried* · *The lawyer who's never lost a case*
 
 **Permissions:** *know the history of anything old* · *read dead languages* · *find what I need in any library* · *know the law* · *read an old map* · *spot a forgery* · *know which books are dangerous* · *read any hand* · *find a hidden way into an old building*
-
-**Traits:** Perfect Recall · Iron Will · Quick Study
 
 **Going beyond:** read a language nobody has spoken for a thousand years · know the answer without the book in front of me
 
@@ -307,8 +277,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 
 **Permissions:** *throw fire* · *light a room with a word* · *burn through rope or wood* · *feel every flame in a room* · *smother a fire with a word* · *make a fire leap where I point* · *know a fire-speaker's work* · *read old fire-signs*
 
-**Traits:** Killer Instinct · Battle Focus · Focused
-
 **Going beyond:** become a column of flame · see through a fire on the other side of the city
 
 **Trouble:** *fire answers my temper* · *the people who burned my school want me dead* · *my magic leaves soot on everything I touch*
@@ -322,8 +290,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 **Titles:** *The storm-caller of the northern isles* · *A wind-witch the sailors pay in silver* · *Master of the Grey Sky*
 
 **Permissions:** *call lightning down on a man* · *throw a gust that knocks men flat* · *hear a storm coming* · *still the wind* · *fill a sail* · *read the sky* · *feel a change in the air* · *know the sea's moods*
-
-**Traits:** Battle Focus · Focused · Fast
 
 **Going beyond:** ride the wind · call a storm out of a clear sky
 
@@ -339,8 +305,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 
 **Permissions:** *make a false sound* · *change my face* · *make a light that isn't there* · *hide in plain sight* · *fool a crowd* · *spot an illusion* · *find any trick for sale* · *draw every eye in the room*
 
-**Traits:** Showstopper · Charming · Quick Study
-
 **Going beyond:** duplicate myself · an image that fools the whole street · an illusion that lasts the scene without me
 
 **Trouble:** *nobody believes a word I say* · *the Night Market wants its cut* · *can't resist showing off*
@@ -354,8 +318,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 **Titles:** *Master of the Quiet Word* · *A mesmer from the pleasure houses* · *The voice in the Duke's head*
 
 **Permissions:** *calm someone with a word* · *make someone like me* · *put a moment of fear in someone* · *read someone's mood* · *tell when someone's been enchanted* · *know what someone wants most* · *find people who'll pay for my help*
-
-**Traits:** Cold Reader · Charming · Hard to Lie To
 
 **Going beyond:** make someone forget the last minute · put someone to sleep with a word · make someone act against what they care about
 
@@ -371,8 +333,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 
 **Permissions:** *know if someone's lying* · *find something lost in a room* · *read a person's fortune* · *see an object's past* · *know when danger's close* · *get an audience with anyone curious* · *know when I'm in the wrong place*
 
-**Traits:** Hard to Lie To · Perfect Recall · Predator's Eye
-
 **Going beyond:** see a place far away · glimpse what's coming · see what happened here years ago
 
 **Trouble:** *my visions come when they want* · *everyone wants their future read* · *I've seen my own death*
@@ -386,8 +346,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 **Titles:** *The green witch of the Thornwood* · *A beast-talker raised by wolves* · *Keeper of the old grove*
 
 **Permissions:** *calm an animal* · *make a vine hold* · *know tomorrow's weather* · *find water anywhere* · *speak with birds* · *track by scent* · *call on the grove's beasts* · *live off the land anywhere*
-
-**Traits:** Sure-Footed · Scout Ahead · Light on my Feet
 
 **Going beyond:** wear a beast's shape for the scene · make a plant grow in a moment · bring the fog in off the river
 
@@ -403,8 +361,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 
 **Permissions:** *ward a friend against harm* · *bar a door with a sigil* · *feel a ward before I touch it* · *unpick a small ward* · *keep a spirit out of a room* · *know when a ward's been broken* · *know every way into a building* · *spot a thief's mark*
 
-**Traits:** Steady Hands · Iron Will · Tactical Mind
-
 **Going beyond:** seal a room so nothing gets in or out · unpick a ward someone powerful made
 
 **Trouble:** *I feel every ward I've made when it breaks* · *bound to protect one place* · *the thieves' guild wants my sigils*
@@ -418,8 +374,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 **Titles:** *The mender of the Lantern Hospice* · *A bone-setter with magic in her hands* · *The priest-surgeon of the river towns*
 
 **Permissions:** *stop bleeding with a touch* · *draw out a poison* · *mend a broken object* · *ease pain* · *know what's wrong with someone* · *know where it hurts* · *get a bed in any hospice* · *calm the frightened*
-
-**Traits:** Healer's Hands · Field Dressing · Cool Under Pressure
 
 **Going beyond:** keep the dying alive till dawn · mend a whole wall or a ship's hull · draw a poison out of everyone in the room
 
@@ -435,8 +389,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 
 **Permissions:** *snuff the lights* · *silence my steps* · *wrap myself in shadow* · *see in the dark* · *find the darkest way through* · *know who's watching a street* · *sense who's hiding nearby*
 
-**Traits:** Silent Step · Fast · Lucky
-
 **Going beyond:** open a shadow door to somewhere nearby · make a room forget I was in it · bring the dark down on a whole street
 
 **Trouble:** *half-blind in daylight* · *the Guild owns my debts* · *something in the dark knows my name*
@@ -450,8 +402,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 **Titles:** *The woman who walked out of the Duke's dungeon* · *A blink-mage from the College* · *The thief no wall can hold*
 
 **Permissions:** *slip out of any grip* · *pass through a crowd without touching anyone* · *step to a place I can see* · *let a blow pass through me* · *know the College's tricks* · *know how thick a wall is* · *feel a hidden room*
-
-**Traits:** Light on my Feet · Fast · Acrobatic
 
 **Going beyond:** step through a wall · take someone with me when I step · step somewhere I can't see · reach into a locked box
 
@@ -467,8 +417,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 
 **Permissions:** *know the rites for the dead* · *tell a haunting from a draught* · *calm the grieving* · *speak with the recently dead* · *sense the dead nearby* · *raise the dead to fight or carry things* · *know how someone died* · *find a priest who'll look the other way*
 
-**Traits:** Perfect Recall · Iron Will · Cold Reader
-
 **Going beyond:** call up someone who died long ago · let a spirit speak through me · lay a ghost to rest for good
 
 **Trouble:** *the dead won't leave me alone* · *the temple calls me a heretic* · *a ghost follows me everywhere*
@@ -482,8 +430,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 **Titles:** *The curse-witch of Mill Lane* · *A hexer the farmers pay to stay away* · *The bone-caster who cursed a king*
 
 **Permissions:** *make someone stumble* · *spoil food and drink* · *tell a curse when I see one* · *put bad luck on someone* · *know who's been cursed* · *find a village's dirty secrets* · *know who made a curse*
-
-**Traits:** Intimidating Presence · Cold Reader · Lucky
 
 **Going beyond:** break a curse someone else laid · curse a bloodline · a hex that lasts the whole scene
 
@@ -499,8 +445,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 
 **Permissions:** *steady a friend with a prayer* · *bless a friend before a fight* · *know the rites of every temple* · *hold holy ground* · *swear an oath anyone will believe* · *get sanctuary in any temple* · *know the signs of dark worship*
 
-**Traits:** Steady Hands · Commanding Presence · Healer's Hands
-
 **Going beyond:** drive out a spirit · hallow a place so nothing evil can enter
 
 **Trouble:** *sworn never to lie* · *the temple wants me back in the cloister* · *my order hunts heretics, and I've met one I like*
@@ -515,8 +459,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 
 **Permissions:** *shove a man without touching him* · *catch anything that falls* · *leap a wide gap* · *lift something heavy with my mind* · *throw something without touching it* · *spot a College agent* · *hold something perfectly still*
 
-**Traits:** Fast · Acrobatic · Second Wind
-
 **Going beyond:** fly · stop an arrow in the air · throw a cart across the street
 
 **Trouble:** *things move when I'm upset* · *the College keeps a file on me* · *my nose bleeds when I push too hard*
@@ -530,8 +472,6 @@ A school is the one kind of magic you're known for. You need a magic permission 
 **Titles:** *The artificer who built the talking gate* · *A sigil-smith the vaults pay well* · *The golem-maker of Copper Street*
 
 **Permissions:** *read a sigil* · *wake a lock* · *mend a construct* · *know a construct's maker* · *know a vault's weak point* · *see how any device works*
-
-**Traits:** Prepared · I Have the Thing · Quick Study
 
 **Going beyond:** make a lock only I can open · bind a spirit into an object · turn someone else's construct aside
 
@@ -565,8 +505,6 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Second Title:** *Raised by the Guild* (Mind; Locks, Knives, Black market). Permissions: *know how a lock's built* (Mind, Locks), *fight dirty with a knife* (Body, Knives), *find a buyer for anything* (Mind, Black market).
 
-**Traits:** Silent Step (Triggered) · Light on my Feet (Passive).
-
 **Roots:** Body 5 · Mind 3 · Soul 0.
 
 **Specialties:** Locks 4 · Stealth 2 · Climbing 2 · Knives 2 · Black market 2.
@@ -581,7 +519,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Awakenings:** *Anywhere I can throw a hook* (passive): +1 on one die of every roll she makes with it, for each Aura in it.
 
-**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 5 (Light on my Feet).
+**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 3.
 
 **Threads:** Dorrie: *We have pulled a dozen jobs. I trust her with my life.* (bond) and *We came up on the same streets. She never asks why.* (Dorrie's, bond) · Bram: *He once carried me out of a fire. I have never said thank you.* (bond) · Isolde: *She stole the book that started all this.* (Isolde's, hostile) · Wren: *I owe her for the night she hid me from the watch.* (Wren's, bond) · The fence: *I owe a debt I would rather not discuss.* (hostile)
 
@@ -602,8 +540,6 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 **First Title:** *The voice that talked a duke out of his own house* (Soul; Persuasion, Lying, Reading people). Permissions: *talk my way past a door* (Soul, Persuasion), *read a room in a glance* (Mind, Reading people), *make a lie sound like old news* (Mind, Lying).
 
 **Second Title:** *The woman with a hundred names* (Mind; Disguise, Forgery, Lying). Permissions: *pass as someone I'm not* (Mind, Disguise), *forge a letter in any hand* (Body, Forgery), *keep my story straight under questions* (Mind, Lying).
-
-**Traits:** Silver Tongue (Triggered) · Cold Reader (Triggered).
 
 **Roots:** Body 1 · Mind 5 · Soul 2.
 
@@ -641,8 +577,6 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Second Title:** *A sergeant who lost his stripes* (Soul; Command, Shieldwork, Soldiering). Permissions: *fight in a shield wall* (Body, Shieldwork), *bark an order that gets obeyed* (Soul, Command), *spot who's in charge* (Mind, Soldiering).
 
-**Traits:** Unyielding (Passive) · Intimidating Presence (Passive).
-
 **Roots:** Body 5 · Mind 1 · Soul 2.
 
 **Specialties:** Shieldwork 4 · Bodyguarding 2 · Lifting 2 · Command 2 · Soldiering 2.
@@ -657,7 +591,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Awakenings:** *Ring the bell* (passive): +1 on one die of every roll he makes with it, for each Aura in it · *Knock them flat* (active): 1 Aura when it wins, and the target's *Prone* at the die that won. Each Aura more does it to another target the same roll beat.
 
-**Numbers:** Aura 5 · Stamina d12 (Unyielding: the first hit that gets through each scene doesn't drop it) · Confidence d12 · Resolve d12 · Stride 3.
+**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 3.
 
 **Threads:** Isolde: *I swore to her father I would keep her alive.* (bond) and *He has guarded me since I was twelve.* (Isolde's, bond) · Vesk: *He once carried me out of a fire. I have never said thank you.* (Vesk's, bond) · Dorrie: *I do not trust her, and she knows it.* (hostile) and *He thinks I sold him out on the harbour job. I did not.* (Dorrie's, hostile) · Wren: *We held the same wall in the border war.* (bond) and *He is the only one who can keep up with me.* (Wren's, bond)
 
@@ -679,8 +613,6 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Second Title:** *A scholar of forbidden texts* (Mind; History, Research, Dead languages). Permissions: *know the history of anything old* (Mind, History), *find what I need in any library* (Mind, Research), *read dead languages* (Mind, Dead languages).
 
-**Traits:** Perfect Recall (Passive) · Iron Will (Passive).
-
 **Roots:** Body 0 · Mind 5 · Soul 3.
 
 **Specialties:** Dead languages 4 · The dead 2 · Warding 2 · History 2 · Research 2.
@@ -695,7 +627,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Awakenings:** *A circle anywhere I can kneel* (active): 1 Aura draws a warding circle where she kneels, with room for her and one friend, and nothing dead can cross it till the scene ends. Each Aura more makes room for one more.
 
-**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 (Iron Will: the first hit that gets through to her Soul each scene doesn't drop it) · Stride 3.
+**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 3.
 
 **Threads:** Bram: *He has guarded me since I was twelve.* (bond) and *I swore to her father I would keep her alive.* (Bram's, bond) · Dorrie: *I am the only one who knows her real name.* (bond) and *I keep her secrets at court. She keeps mine.* (Dorrie's, bond) · Vesk: *She stole the book that started all this.* (hostile) · Wren: *She knows more about my brother than she has said.* (Wren's, hostile) · Ash: *She is the only one who is not afraid of me.* (Ash's, bond)
 
@@ -716,8 +648,6 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 **First Title:** *The hunter who has never lost a trail* (Mind; Tracking, Archery, Wildcraft). Permissions: *follow any trail* (Mind, Tracking), *move through the wild unseen* (Body, Wildcraft), *know a beast's habits* (Mind, Wildcraft).
 
 **Second Title:** *An outrider from the border war* (Body; Scouting, Riding, Archery). Permissions: *scout ahead of an army* (Body, Scouting), *ride hard over rough country* (Body, Riding), *read the land for an ambush* (Mind, Scouting).
-
-**Traits:** Marksman's Eye (Passive) · Sure-Footed (Passive).
 
 **Roots:** Body 4 · Mind 4 · Soul 0.
 
@@ -752,8 +682,6 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 **First Title:** *The last fire-speaker of the Ember Court* (Soul; Fire, Intimidation, Court lore). Permissions: *throw fire* (Soul, Fire), *make a threat stick* (Soul, Intimidation), *feel every flame in a room* (Mind, Fire).
 
 **Second Title:** *The Court's runaway heir* (Soul; Court lore, Command, Etiquette). Permissions: *know the old courts' history* (Mind, Court lore), *carry myself like royalty* (Soul, Etiquette), *command a room* (Soul, Command).
-
-**Traits:** Killer Instinct (Triggered) · Battle Focus (Triggered).
 
 **Roots:** Body 0 · Mind 2 · Soul 6.
 

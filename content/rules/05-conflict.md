@@ -6,7 +6,7 @@ order: 5
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 :::quote
 Every fight in this game runs on one engine, whether you're fighting with blades, with words or against the clock.
@@ -70,10 +70,9 @@ Now and then you'll get more than one action in a round:
 -   **Spend 3 Aura** for an extra action this round. The most actions you can have in a round, counting the one everybody gets, is **one for each archetype you've got**, so with two archetypes you can buy one. See [Aura](#s-aura).
 -   **Hold it.** Do nothing this round apart from your stride, and you've got two actions next round.
 -   **Come out of hiding.** Whoever you are, coming out of hiding gives you an extra action. It's one extra action, even if you're *Unseen* as well.
--   **A trait that says so.** *Second Wind* gives you one the first time one of your tracks drops each scene, and *Fast* gives you a free Move action in the first round of every scene.
 -   **The Extra action Boon** gives you one extra action a scene. See [Boons and Burdens](#s-boons).
 
-Holding, hiding, traits and the Boon are on top of what you can buy. An extra action can be its own roll, or it can go into the same roll as a combo. Put the same specialty in again and it adds 1. Put a different one in and it brings its steps with it as a new approach, like Knives with Stealth for a sneak attack.
+Holding, hiding and the Boon are on top of what you can buy. An extra action can be its own roll, or it can go into the same roll as a combo. Put the same specialty in again and it adds 1. Put a different one in and it brings its steps with it as a new approach, like Knives with Stealth for a sneak attack.
 
 :::example[Extra actions]
 **Holding:** Vesk spends round two crossing the gallery on her stride and nothing else. In round three she's got two actions, and she puts both into the vault door. Her Body and her Locks, with her picks, are 10 steps, and her Locks again adds 1, so it's 11: a d12 and a d10.
@@ -426,7 +425,7 @@ Paying for an ability drops a track too, but **paying never takes a track below 
 Vesk takes a spear in round one and a knife in round two, so her Stamina's gone from d12 to d10 to d8. In round three she pays 1 Stamina for her Shadow's Vanish, and it's a d6. Then a guard's blow lands while she's *Exposed*, which is two sizes, and she's on d2. The next hit to her Body, she Blazes.
 :::
 
-Some of you take more wearing down. Bram's *Unyielding* means the first hit that gets through to him each scene doesn't drop his Stamina, Isolde's *Iron Will* does the same for her Resolve, and the Toughness Boon does it for whichever track the hit's at. The Toughness Burden works the other way: one track's smallest size is locked, so it's a size shorter. See [Boons and Burdens](#s-boons).
+Some of you take more wearing down. The Toughness Boon means the first hit that gets through to you each scene doesn't drop the track it's at. The Toughness Burden works the other way: one track's smallest size is locked, so it's a size shorter. See [Boons and Burdens](#s-boons).
 
 **When you Blaze**, declare something extraordinary and it happens, no roll. From your very first Blaze, **you can choose for your character to die**. If you don't, they'll leave the scene, and that track takes a **Scar**.
 
@@ -444,7 +443,7 @@ The GM can take a Scar away when the story's earned it, like a miracle, a ritual
 
 Your tracks come back on their own, a bit at a time.
 
--   **At the end of every scene, you rest.** Roll each of your tracks that's below d12, and **a 4 or more puts it up a size**. A d2 can't roll a 4, so a track that low is a mortal wound, and it waits for downtime. *Tend the Crew* lets everyone in the crew who was in the scene roll each track twice and keep the best (see [Traits](#s-traits)).
+-   **At the end of every scene, you rest.** Roll each of your tracks that's below d12, and **a 4 or more puts it up a size**. A d2 can't roll a 4, so a track that low is a mortal wound, and it waits for downtime.
 -   **Every downtime starts with each of your tracks up a size**, free.
 -   **A slot spent recovering in downtime puts 6 sizes back**, spread however you like across your tracks (see [Recover](#recover)).
 -   **Nothing goes past d12, and nothing heals a Scar.**
@@ -465,7 +464,7 @@ Say you're a Healer, and your Title's *The field surgeon of the Red Company*. Yo
 
 **Quick heal.** Anyone can do this one. Pay 1 Aura to put one of someone's tracks up a size, no roll. It still takes your action. It's how a crew with no Healer gets by: Dorrie can't stitch a wound, but she can spend the Aura and her action to bring Bram's Stamina up from a d6 to a d8.
 
-**Traits and gear that say they heal** still work the way they're written, because none of them is a heal roll. *Field Dressing* takes the Aura off your first quick heal each scene (see [Traits](#s-traits)), and a medical kit's a quick heal without the Aura.
+**Gear that says it heals** still works the way it's written, because none of it is a heal roll. A medical kit's a quick heal without the Aura.
 
 A few archetypes have their own way past a hit. Whoever's holding a [Maker](#a-maker)'s item can break one of its tags instead of taking a hit, a [Shifter](#a-shifter) can strip an animal tag instead, and a Guardian can [stand firm](#a-guardian). A ward takes a hit instead of you as well.
 
@@ -478,7 +477,7 @@ Social and mental conflict run on the same engine and the same dice. A threat ha
 :::example[A social conflict, played out]
 A few sessions in, Dorrie's trying to talk a magistrate into releasing Vesk from a cell before the Vane Estate's lawyers arrive in the morning. Isolde's come along as her clerk. The magistrate is *The Honest Magistrate*, Challenge 5. *Duty-bound* and *Wary* keep him going, and one hidden tag drives him. Dorrie's in her court clothes, and they fit a hearing, so she's got a box of Mind armour.
 
-**Round 1.** *Cold Reader* went off the moment Dorrie first spoke to him, and the GM's word for his mood was *bitter*, so she wants to know who at. The GM telegraphs: *"Show me the law that lets her walk."* That's a d10 at Dorrie's Mind. Dorrie answers it, and Isolde puts her action into the same thing. Isolde digs up a harbour statute nobody's used in forty years, and Dorrie swears the court leaned on it only last spring. Dorrie rolls, on her Mind, 5, with her Lying, 4, and Isolde's History adds 2. That's 11 steps from two actions, a d12 and a d10. The d12 goes on the answer, and the d10 goes on Study: what's he so bitter about?
+**Round 1.** The magistrate's been bitter since they walked in, and Dorrie wants to know who at. The GM telegraphs: *"Show me the law that lets her walk."* That's a d10 at Dorrie's Mind. Dorrie answers it, and Isolde puts her action into the same thing. Isolde digs up a harbour statute nobody's used in forty years, and Dorrie swears the court leaned on it only last spring. Dorrie rolls, on her Mind, 5, with her Lying, 4, and Isolde's History adds 2. That's 11 steps from two actions, a d12 and a d10. The d12 goes on the answer, and the d10 goes on Study: what's he so bitter about?
 
 The telegraph rolls 4 and the d12 rolls 9, so it's stopped. The magistrate's d10 rolls 1 against the d10's 5, so the Study wins too. The GM reveals the hidden tag: *Hates the Vane Estate.* Both dice won, so that's 2 Aura for Dorrie.
 
@@ -519,7 +518,7 @@ The corridor's thirty feet of polished marble, lit by candles in iron brackets. 
 **Telegraphs:** about 5 steps a round for each of the four, so about 20.
 :::
 
-That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way. Everyone's tracks are on d12. Bram's *Unyielding* means the first hit that gets through to him this scene won't drop his Stamina, and Isolde's *Iron Will* does the same for her Resolve. Bram's wearing Fine plate and a Common shield, and Vesk's got her Common worn leathers, all of it Body armour. Everyone's got 5 Aura, and it'll come and go all fight.
+That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way. Everyone's tracks are on d12. Bram's wearing Fine plate and a Common shield, and Vesk's got her Common worn leathers, all of it Body armour. Everyone's got 5 Aura, and it'll come and go all fight.
 
 ### Round 1: The telegraph {#round-1-the-telegraph}
 
@@ -568,7 +567,7 @@ A ward reaches one friend. Isolde could have split it and put the second die on 
 
 **Dorrie:** 8 and 2, and her d4's a 3. **GM:** She comes down, shaking, and she's staying.
 
-**Dorrie:** *Cold Reader* went off when I spoke to her. What's she feeling? **GM:** Terror. She saw Bram's face on the stair. That's the hidden tag on *Leave no trace*: *A Servant Saw Bram*.
+**Dorrie:** She's terrified. Of what? **GM:** She saw Bram's face on the stair. That's the hidden tag on *Leave no trace*: *A Servant Saw Bram*.
 :::
 
 Her d12 won, and that's 1 Aura, but she's already on 5, so it'll be gone once she's done acting. She's got nothing to spend it on this round, so she lets it go.
@@ -588,7 +587,7 @@ Her d12 won, and that's 1 Aura, but she's already on 5, so it'll be gone once sh
 **End of Round 1.** The maid was answered, and Bram intercepted the spear at Isolde, so four telegraphs land.
 
 -   **The doorway** (aimed at the stake) lands with no roll. The right Warden fills the vault door, and *Get the paintings out* gains a new tag in the way: *Blocked*.
--   **The pin and the spear at Bram.** He Defended, so he rolls his Body and his Shieldwork, with his plate and his shield, 11 steps, a d12 and a d10, and his Stamina's d12 with them. The pin's d10 rolls 10 and the spear's rolls 6, and Bram rolls 4 and 3, and his Stamina 7. The 7 stops the spear, and that's 1 Aura. Nothing he's got can stop the pin, and a push wouldn't get his 4 there, so the GM names *Pinned*. Bram doesn't want to be stuck against the wall with another Warden coming, so he offers a hit instead: it cracks his ribs on the stone, but he's free. It's the first hit that's got through to him this scene, so his *Unyielding* means his Stamina doesn't drop.
+-   **The pin and the spear at Bram.** He Defended, so he rolls his Body and his Shieldwork, with his plate and his shield, 11 steps, a d12 and a d10, and his Stamina's d12 with them. The pin's d10 rolls 10 and the spear's rolls 6, and Bram rolls 4 and 3, and his Stamina 7. The 7 stops the spear, and that's 1 Aura. Nothing he's got can stop the pin, and a push wouldn't get his 4 there, so the GM names *Pinned*. Bram doesn't want to be stuck against the wall with another Warden coming, so he offers a hit instead: it cracks his ribs on the stone, but he's free, and his Stamina drops to a d10.
 -   **The sweep at Vesk.** She rolls her Stamina once, a d12, and the ward's step with it, a d2, and gets 5 and 1. The sweep rolls 7, so it gets through, and the GM names a size of Stamina. Vesk could spend the ward on it, but it's still a step on her defence and there are more spears coming, so she offers her leathers instead. They split down the side, and she crosses them out until they're mended.
 
 Nobody worked *Leave no trace*, so its clock steps down to a d6. *The household wakes* steps down to a d6 as well, and Vesk's ward fades to a d10.
@@ -638,7 +637,7 @@ One Warden's down, and three of its four keeps-it-going tags weren't even touche
 **End of Round 2.** The left Warden's gone, so its d10 at Bram never lands. The rest do.
 
 -   **The spear at Vesk.** She's on the rope when it finds her, because climbing away doesn't stop a telegraph aimed at you. Her Stamina's a d12, and what's left of the ward is a step on top, a d2. She rolls 3 and 1, and the d8 rolls 6, so it gets through and the GM names a size of Stamina. Vesk spends the ward, and it takes the hit instead, so her Stamina stays on d12.
--   **The spears at Dorrie and Isolde** come at Bram, because he intercepted them. He rolls his Stamina once, a d12, and gets 3. The spears roll 6 and 4, so neither's stopped, and even a 12 would only have stopped one of them. That's two hits. His *Unyielding* went on his ribs in round 1, so both of them count. He offers his plate for one, and ticks one of its two boxes. The other drops his Stamina to a d10.
+-   **The spears at Dorrie and Isolde** come at Bram, because he intercepted them. He rolls his Stamina once, a d12, and gets 3. The spears roll 6 and 4, so neither's stopped, and even a 12 would only have stopped one of them. That's two hits. He offers his plate for one, and ticks one of its two boxes. The other drops his Stamina to a d8.
 -   **The portrait's whisper** goes against Isolde's Confidence, a d12, and she rolls it once: 2. The d6 rolls 4, so it gets through, and that's a size of her Confidence. She could pay 2 for 1 out of her Stamina and her Resolve, but she wants those for later, so she lets it shake her, and she's on d10. The portrait goes quiet, and keeps looking at her.
 
 The work on *Leave no trace* kept its clock where it was, and *The household wakes* steps down to a d4.
@@ -651,17 +650,17 @@ Isolde doesn't go for the second sigil. She speaks the name instead, which is th
 
 Bram ties the bundle on and heaves it up the rope, and Vesk puts her action into the same thing, hauling from the top. Bram rolls, on his Body, 5, with his Lifting, 2. Vesk hasn't got anything that plainly fits, so she makes her case for her Climbing, braced in the skylight like she's done a hundred times, and pays 1 Aura. That's 9 steps, a d12 and a d6, against the stake's d8: 7 and 2 against 3. *Heavy Load* is gone, and the paintings are theirs, and the die that won is 1 Aura for Bram.
 
-Bram took the crew's spears last round, so Dorrie spends 3 Aura for an extra action and puts it into him first. She's no Healer, so she can't make a heal roll, but a quick heal's for anyone: 1 Aura and the action, no roll, and his Stamina comes up from a d10 to a d12. That leaves her on 1 Aura. Then she meets the butler at the foot of the main stair as the housekeeper, with a smile and a story about the wind and a loose shutter. That's her Mind and her Disguise, 7 steps, and she shares it out into a d10 to answer the lantern and a d4 to strip *Watched*. The lantern's d8 rolls 4 against her 6, and the stake's d6 rolls 3 against her 4. Both won and the 4's a top face, so she's back up to 4 Aura. *Leave no trace* is theirs too.
+Bram took the crew's spears last round, so Dorrie spends 3 Aura for an extra action and puts it into him first. She's no Healer, so she can't make a heal roll, but a quick heal's for anyone: 1 Aura and the action, no roll, and his Stamina comes up from a d8 to a d10. That leaves her on 1 Aura. Then she meets the butler at the foot of the main stair as the housekeeper, with a smile and a story about the wind and a loose shutter. That's her Mind and her Disguise, 7 steps, and she shares it out into a d10 to answer the lantern and a d4 to strip *Watched*. The lantern's d8 rolls 4 against her 6, and the stake's d6 rolls 3 against her 4. Both won and the 4's a top face, so she's back up to 4 Aura. *Leave no trace* is theirs too.
 
 At the end of the round the household clock steps down to its last die. When it runs out there'll be lamps lit on every floor, but by then the crew will be three roofs away, and the maid will be swearing she saw a stranger.
 
-When the scene ends, everyone rests. Isolde's the only one with a track below d12, her Confidence on d10, and it rolls a 6, so it's back to d12. Bram's plate keeps its ticked box and Vesk's leathers stay crossed out until they're mended in downtime.
+When the scene ends, everyone rests. Two tracks are below d12. Isolde's Confidence is on d10, and it rolls a 6, so it's back to d12. Bram's Stamina's on d10 too, and it rolls a 3, so it stays there till downtime. Bram's plate keeps its ticked box and Vesk's leathers stay crossed out until they're mended in downtime.
 
 ### What the fight taught {#what-the-fight-taught}
 
 -   **The crew never ground a Warden down.** They studied, found a weak point and a hidden tag, and took both routes.
 -   **The stakes mattered more than the enemies.** Vesk spent her whole first round on padlocks instead of spears, and it won the scene.
--   **Every cost was out in the open.** Bram traded a pin for a hit his *Unyielding* soaked up, Vesk gave up her leathers to keep her ward, Bram's plate took one spear and his Stamina the other, and Isolde chose to let the portrait shake her rather than pay 2 for 1. Nobody lost anything they didn't see coming.
+-   **Every cost was out in the open.** Bram traded a pin for a size of Stamina, Vesk gave up her leathers to keep her ward, Bram's plate took one spear and his Stamina the other, and Isolde chose to let the portrait shake her rather than pay 2 for 1. Nobody lost anything they didn't see coming.
 -   **One die stops one.** In round 1 Bram Defended, so he had three dice for two telegraphs. In round 2 his action went on the sigil, so his Stamina faced two spears on its own, and it cost him a box and a size.
 -   **Aura moved all fight.** Every win paid. Isolde turned a good Study into an extra action, Vesk put a spare one into her grappling line for the climb, and Dorrie spent hers on an extra action and a quick heal.
 -   **One action each made them work together.** The sigil fell to a combo, Bram intercepted the spears at Dorrie and Isolde for free, and Dorrie spent her extra action patching him up.

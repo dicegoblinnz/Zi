@@ -25,7 +25,6 @@ import rehypeStringify from "rehype-stringify";
 import { visit, SKIP } from "unist-util-visit";
 import { diceLabel, stepsToDice } from "../src/companion/dice.js";
 import { threadNote } from "../src/companion/threads.js";
-import { traitInfo } from "../src/companion/grow.js";
 import { curlyQuotes, readAim, whoAndDoes } from "../src/companion/aims.js";
 import { CARD_WORDS, newestChange, reachOf, readCards, staleCards } from "./learn.mjs";
 import { bookFor, compileTables, readTablesDir } from "./world-tables.mjs";
@@ -360,7 +359,7 @@ const curly = (s) => (typeof s === "string" ? s.replace(/'/g, "\u2019") : s);
 // The ready-made crew, read straight off their sheets so the home page and the
 // character companion always match the book. Each sheet becomes full data
 // (rootsFrom): archetypes, Titles with their Root, specialties and
-// permissions, traits, Roots and specialties checked against the sums, what
+// permissions, Roots and specialties checked against the sums, what
 // they carry, armour on its Root, the attuned thing with its awakenings,
 // numbers, threads, Aspiration and trouble. Till stage 3 of
 // notes/roots-plan.md, the companion itself still runs on the crew from
@@ -420,7 +419,7 @@ function rootsSheet(name, titleText, body, block, ctx) {
     if (f) field[f[1]] = f[2].trim();
   }
   const labelled = (re) => Object.keys(field).find((k) => re.test(k));
-  for (const label of ["Plays like", "Archetypes", "Traits", "Roots", "Specialties", "Carries", "Its Aura", "Awakenings", "Numbers", "Threads", "Aspiration"]) {
+  for (const label of ["Plays like", "Archetypes", "Roots", "Specialties", "Carries", "Its Aura", "Awakenings", "Numbers", "Threads", "Aspiration"]) {
     if (!(label in field)) warn(`there's no ${label} line`);
   }
   const rootOf = (s, what) => {
@@ -484,15 +483,6 @@ function rootsSheet(name, titleText, body, block, ctx) {
     else if (saidSpecs.get(s) !== n) warn(`the Specialties line says ${s} ${saidSpecs.get(s)}, but the Titles and permissions on it make ${n}`);
   }
   for (const s of saidSpecs.keys()) if (!specs.has(s)) warn(`the Specialties line has ${s}, and nothing on the Titles builds it`);
-
-  const traits = dropStop(field.Traits).split(" · ").filter(Boolean).map((s) => {
-    const t = s.match(/^(.+?) \(([^)]+)\)$/);
-    const traitName = curly(t ? t[1] : s);
-    const rule = ctx.traits[traitName];
-    if (!rule) warn(`there's no trait called ${traitName} in the list`);
-    else if (t && t[2] !== rule.type) warn(`${traitName} says (${t[2]}), but it's ${rule.type} in the list`);
-    return { name: traitName, type: t?.[2] ?? rule?.type ?? "" };
-  });
 
   // What they carry, the same shape as before Roots.
   const carry = { equipment: [], utility: [], keepsake: null, bag: { name: "a bag", max: 10 } };
@@ -583,7 +573,7 @@ function rootsSheet(name, titleText, body, block, ctx) {
     hash: createHash("sha1").update(block).digest("hex").slice(0, 8),
     pronoun: troubleLabel?.split(" ").pop() ?? "them",
     playsLike: ctx.inline(field["Plays like"] ?? ""),
-    archetypes, titles, traits,
+    archetypes, titles,
     roots: Object.fromEntries(ROOT_NAMES.map((r) => [r, roots[r]])),
     specialties: [...saidSpecs].map(([s, steps]) => ({ name: s, steps })),
     carry, armour, attuned, numbers, threads, crewQs,
@@ -647,14 +637,6 @@ function archetypesFrom(doc, inline) {
     for (const a of abilities) if (a.cost !== home) companionWarn(`the ${archetype}'s ${a.name} costs 1 ${a.cost}, and its home track's ${home}`);
     out[archetype] = { id, summary: inline(text.trim().split(/\n\s*\n/)[0]), for: forLine.get(archetype) ?? "", home, abilities };
   }
-  return out;
-}
-
-// The traits list in Building Your Character: name, type and what it does.
-function traitsFrom(doc, inline) {
-  const out = {};
-  const list = doc.body.split(/^### The \d+ traits.*$/m)[1]?.split(/^## /m)[0] ?? "";
-  for (const m of list.matchAll(/^\| \*\*(.+?)\*\* \| (.+?) \| (.+?) \|$/gm)) out[curly(m[1])] = { type: m[2], text: m[3], html: inline(m[3]) };
   return out;
 }
 
@@ -1163,8 +1145,8 @@ function pagesFrom({ placesDoc, worldDoc, threatDoc, bestiaryDoc, tagsDoc }, pag
 
 // What the character builder offers, read off Building Your Character and the
 // Title ideas so it always matches the book: the Quick Build's steps, the
-// ideas, every trait and the number it changes, what you can carry, the Catch
-// ideas, the quick test, permission ideas and the Connect questions.
+// ideas, what you can carry, the Catch ideas, the quick test, permission
+// ideas and the Connect questions.
 function sectionOf(body, id) {
   const m = body.match(new RegExp(`^(#{2,4}) [^\\n]*\\{#${id}\\}[^\\n]*$`, "m"));
   if (!m) return "";
@@ -1175,34 +1157,6 @@ function sectionOf(body, id) {
 const listItems = (sec) => [...sec.matchAll(/^\d+\.\s+(.+)$/gm)].map((m) => m[1].trim());
 const tableRows = (sec) => [...sec.matchAll(/^\| (.+) \|$/gm)].map((m) => m[1].split(" | ").map((x) => x.trim())).filter((r) => !/^-+$/.test(r[0])).slice(1);
 const dots = (s = "") => s.split(" · ").map((x) => x.trim()).filter(Boolean);
-
-// A trait or a note that says the first Hurt (or the first two) you take each
-// scene doesn't move your wound die, like Unyielding. It's read loosely, so a
-// reworded rule still counts: how many it covers, or 0.
-function shrugOf(text = "") {
-  const m = String(text ?? "").match(/\bfirst (?:(two|three) )?(?:Hurts?|hits?)\b[^.|]*?\b(?:doesn['’]t|don['’]t|does not|do not|won['’]t|never)\b[^.|]*?\b(?:move|put|step|go|raise|drop)/i);
-  return m ? COUNT[m[1]?.toLowerCase()] ?? 1 : 0;
-}
-
-function traitEffects(text) {
-  const e = {};
-  if (/\bAura maximum is one higher\b/i.test(text)) e.aura = 1;
-  const shrug = shrugOf(text);
-  if (shrug) e.shrug = shrug;
-  const move = text.match(/\+(\d+) units? of movement\b/i);
-  if (move) e.stride = Number(move[1]);
-  if (/\bcarry one more utility item\b/i.test(text)) e.utility = 1;
-  if (/\bstart every scene a size up on Confidence\b/i.test(text)) e.confidence = 1;
-  // Style: clothes that fit start you two sizes up, not one.
-  if (/\bclothes that fit the scene start you two sizes up\b/i.test(text)) e.dressed = 1;
-  // Tireless: three downtime slots, not two.
-  if (/\bthree downtime slots\b/i.test(text)) e.slots = 1;
-  return e;
-}
-
-// A trait's Passive or Triggered (27 Oct 2026), and what else the phone needs
-// to know about it is traitInfo, in src/companion/grow.js.
-const TRAIT_TYPES = ["Passive", "Triggered"];
 
 function buildFrom(rulesDoc, ideasDoc, archetypes, inline, warn) {
   const ideas = [];
@@ -1222,26 +1176,10 @@ function buildFrom(rulesDoc, ideasDoc, archetypes, inline, warn) {
     if (!arch.length) warn(`the ${m[2]} Title idea has no archetypes`);
     ideas.push({
       id: m[3], name: curly(m[2]), group, playsLike: plain(dropStop(field["Plays like"])), archetypes: arch,
-      titles: italics(field.Titles), permissions: italics(field.Permissions), traits: dots(field.Traits).map(curly),
+      titles: italics(field.Titles), permissions: italics(field.Permissions),
       beyond: dots(field["Going beyond"]).map(plain), trouble: italics(field.Trouble),
     });
   }
-
-  const traits = [];
-  let kind = "";
-  const list = rulesDoc.body.split(/^### The \d+ traits.*$/m)[1]?.split(/^## /m)[0] ?? "";
-  for (const m of list.matchAll(/^#### (.+?)(?: \{#[^}]+\})?$|^\| \*\*(.+?)\*\* \| (.+?) \| (.+?) \|$/gm)) {
-    if (m[1]) {
-      kind = curly(m[1]);
-      continue;
-    }
-    // A trait's passive (27 Oct 2026): Passive or Triggered, and never a step.
-    if (!TRAIT_TYPES.includes(m[3])) warn(`the trait ${m[2]} is ${m[3]}, and a trait's ${TRAIT_TYPES.join(" or ")}`);
-    if (/\bsteps?\b/i.test(m[4].replace(/\bsteps? (up|down)\b/gi, ""))) warn(`the trait ${m[2]} talks about steps, and a trait's never a step`);
-    traits.push({ name: curly(m[2]), type: m[3], group: kind, html: inline(m[4]), ...traitInfo(m[4]), effects: traitEffects(m[4]) });
-  }
-  const known = new Set(traits.map((t) => t.name));
-  for (const idea of ideas) for (const t of idea.traits) if (!known.has(t)) warn(`the ${idea.name} Title idea suggests ${t}, which isn't in the traits list`);
 
   const body = rulesDoc.body;
   // Each Quick Build step's first sentence is what the builder says on that
@@ -1254,7 +1192,6 @@ function buildFrom(rulesDoc, ideasDoc, archetypes, inline, warn) {
     quick: listItems(sectionOf(ideasDoc.body, "s-quick")).map(leadOf),
     archetypes: Object.entries(archetypes).map(([name, a]) => ({ name, ...a })),
     ideas,
-    traits,
     items: tableRows(sectionOf(body, "the-item-list")).map((r) => ({ group: plain(r[0]), items: dots(r[1]).map(plain) })),
     usedUp: tableRows(sectionOf(body, "consumables-20")).map((r) => ({ name: plain(r[0]), html: inline(r[1]) })),
     keepsakes: tableRows(sectionOf(body, "keepsakes-10")).map((r) => ({ name: plain(r[0]), text: plain(r[1]) })),
@@ -1263,9 +1200,9 @@ function buildFrom(rulesDoc, ideasDoc, archetypes, inline, warn) {
     permIdeas: tableRows(sectionOf(body, "permission-ideas")).map((r) => ({ for: plain(r[0]), perms: italics(r[1]) })),
     connect: listItems(sectionOf(body, "s-connect")).map(curly),
   };
-  const expect = { quick: 8, quickTest: 4, catches: 12, connect: 10 };
+  const expect = { quick: 7, quickTest: 4, catches: 12, connect: 10 };
   for (const [key, n] of Object.entries(expect)) if (build[key].length !== n) warn(`the builder expected ${n} ${key}, found ${build[key].length}`);
-  for (const [key, n] of Object.entries({ archetypes: 10, ideas: 20, traits: 40, items: 4, usedUp: 10, keepsakes: 5, permIdeas: 4 })) {
+  for (const [key, n] of Object.entries({ archetypes: 10, ideas: 20, items: 4, usedUp: 10, keepsakes: 5, permIdeas: 4 })) {
     if (build[key].length < n) warn(`the builder found only ${build[key].length} ${key}`);
   }
   return build;
@@ -1315,7 +1252,6 @@ const ctx = {
   warn: companionWarn,
   inline,
   archetypes: docWith("{#s-how-archetypes}") ? archetypesFrom(docWith("{#s-how-archetypes}"), inline) : {},
-  traits: docWith("{#s-traits}") ? traitsFrom(docWith("{#s-traits}"), inline) : {},
   qualities: qualitiesFrom(docWith("{#s-armour-quality}"), (msg) => companionWarn(msg)),
 };
 const crewDoc = docWith("{#s-pregens}");
@@ -1323,7 +1259,7 @@ const crewDoc = docWith("{#s-pregens}");
 const roots = crewDoc ? rootsFrom(crewDoc, ctx) : [];
 if (roots.length !== 6) companionWarn(`expected the six crew sheets, found ${roots.length}`);
 checkMirrors(roots, companionWarn);
-const buildDoc = docWith("{#s-traits}");
+const buildDoc = docWith("{#s-step-roots}");
 const ideasDoc = docWith("{#s-quick}");
 const rootsBuild = buildDoc && ideasDoc ? buildFrom(buildDoc, ideasDoc, ctx.archetypes, inline, (msg) => companionWarn(`builder: ${msg}`)) : null;
 if (!rootsBuild) companionWarn("can't find Building Your Character or the Quick Build for the builder");

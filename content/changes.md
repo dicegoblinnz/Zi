@@ -1,9 +1,20 @@
 ---
 title: "What's Changed"
 id: changes
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
+
+## 9 Nov 2026: No more traits {#c-2026-11-09-traits}
+
+Mo's call in chat.
+
+**Traits are gone.** You don't pick two when you make a character, a Grow in downtime can't give you one, and nothing in the game comes from one any more: no extra actions, no Aura back, no ties won. See [Building Your Character](#s-title), the [Quick Build](#s-quick) and [Grow](#grow).
+
+-   **The Boons still do the useful ones.** Toughness shrugs off the first hit each scene, Stride's 2 more stride, and Kit carries one more item. See [Boons and Burdens](#s-boons).
+-   **The six crew lose theirs**, and every example in the book's played without them. Vesk's stride is 3, and Bram's Stamina drops on his first hit like anyone's. See [the crew](#s-pregens).
+
+It replaces the traits list, the two you started with and growing more (27 Oct and 14 Oct below).
 
 ## 8 Nov 2026: Roots, specialties and three tracks {#c-2026-11-08-roots}
 
@@ -25,7 +36,7 @@ Mo's calls in chat, after four weeks of playtests.
 
 **An Aspiration past d12** gives you a new Title, archetype or attuned thing. See [Aspiration](#s-aspiration).
 
-**The six crew are rebuilt** on Roots and specialties, with their traits, armour and attuned things to match. See [the crew](#s-pregens).
+**The six crew are rebuilt** on Roots and specialties, with their armour and attuned things to match. See [the crew](#s-pregens).
 
 The rest of the book and the character companion catch up next, so till then a few chapters still say set actions or the wound die, and the companion plays the old way.
 
@@ -64,8 +75,8 @@ Mo's call in chat.
 
 Mo's calls in chat.
 
-**Traits are passive.** A trait's never a step now. It doesn't go on a set action, you can't [bring one in](#s-aura) for Aura, and you never choose to use one. It's **Passive**, always on, or **Triggered**, firing by itself when something happens, and a few only fire the first time each scene. That replaces traits as lines on your set actions, like Vesk's Silent Step on her Sneak, and the Invoked, once-a-scene and once-a-downtime traits. See [Traits](#s-traits).
--   **Every trait that was a step or something you fired is rewritten.** The ones that were a step win ties instead, like *Duelist* and *Marksman's Eye*, and the ones you fired go off by themselves, like *Silver Tongue* on the first social roll you fail each scene, *Cold Reader* the first time you speak with someone, and *Battle Focus* the first time your Aura runs out. *Second Wind* and *Fast* still give you [extra actions](#s-extra-actions), by themselves. *Tireless* is three [downtime slots](#your-slots), and *Style* makes clothes that fit two sizes up. *Prepared Mind* and *Contingency* are gone. See [The 47 traits](#the-48-traits).
+**Traits are passive.** A trait's never a step now. It doesn't go on a set action, you can't [bring one in](#s-aura) for Aura, and you never choose to use one. It's **Passive**, always on, or **Triggered**, firing by itself when something happens, and a few only fire the first time each scene. That replaces traits as lines on your set actions, like Vesk's Silent Step on her Sneak, and the Invoked, once-a-scene and once-a-downtime traits. (Since 9 Nov, there are no traits at all.)
+-   **Every trait that was a step or something you fired is rewritten.** The ones that were a step win ties instead, like *Duelist* and *Marksman's Eye*, and the ones you fired go off by themselves, like *Silver Tongue* on the first social roll you fail each scene, *Cold Reader* the first time you speak with someone, and *Battle Focus* the first time your Aura runs out. *Second Wind* and *Fast* still give you [extra actions](#s-extra-actions), by themselves. *Tireless* is three [downtime slots](#your-slots), and *Style* makes clothes that fit two sizes up. *Prepared Mind* and *Contingency* are gone.
 -   **The crew's numbers moved with it.** Vesk's Sneak is 3 steps, a d6, Bram's Talk 3, a d6, Isolde's Study 3, a d6, and Wren's Fight 4, a d8. See [the six ready-made characters](#s-pregens).
 -   **Writing your own:** a passive trait or a triggered one, never a step. See [Writing Your Own](#s-levers-writing).
 
@@ -198,7 +209,7 @@ These all came out of the playtests.
 -   The sixteen: Bloodsworn, Elementalist, Face, Guardian, Healer, Hunter, Illusionist, Leader, Maker, Oracle, Scholar, Shadow, Shifter, Summoner, Teleporter and Warrior. (The Bard came on 16 Oct.)
 -   On most of them, 1 Aura adds +2 to one die on the mechanic, after you roll. Take the archetype twice and it's +3.
 -   Every Title idea now says which archetypes it suits. See [Title Ideas](#s-title-ideas).
--   Keep the traits you've got. Where traits go now is still being worked out. (Since 27 Oct, every trait's passive and never a step.)
+-   Keep the traits you've got. Where traits go now is still being worked out. (Since 27 Oct, every trait's passive and never a step, and since 9 Nov there are none.)
 
 **Some things everyone used to do now belong to one archetype:**
 -   **Leading** is the [Leader](#a-leader)'s. Anyone can still put their action into a friend's roll.

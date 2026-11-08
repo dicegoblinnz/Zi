@@ -4,7 +4,7 @@ id: how-to-use
 slug: welcome
 order: 1
 source: 2026-10-02 rulebook
-updated: 2026-10-24
+updated: 2026-11-09
 ---
 :::note
 **What you need to play.** Two to six players and a GM. Polyhedral dice (d4, d6, d8, d10 and d12), a few d2s (a coin works), and three d20s for *The Oracle*, or one d20 rolled three times. A grid map helps, but you don't need one. Paper and pencils. A session runs two to four hours.
@@ -49,7 +49,7 @@ At the end of the round the dog's d8 rolls a 7 against Bram's Defend, a d8, whic
 
 **GM:** It gets its teeth into your arm. Take a Hurt.
 
-**Bram:** That's my first one this scene, and I'm *Unyielding*, so my wound die doesn't move. I keep hauling on the gate.
+**Bram:** My wound die goes up a size. I keep hauling on the gate.
 
 **GM:** It hangs off your arm, and you don't even slow down.
 :::

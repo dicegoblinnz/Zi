@@ -8,7 +8,7 @@ id: learn
 # The cards teach the chapters and never change a rule. When a rules change
 # touches a section a card teaches, the build names the cards. Check them
 # against the chapters, then set checked to that change's date.
-checked: 2026-11-08
+checked: 2026-11-09
 ---
 ::::card[Did you succeed?]{#l-succeed teaches=the-core}
 You play someone who's properly good at something, like a thief who can open any lock in the city. Every roll's one of your three **Roots**, Body, Mind or Soul, plus one of your **specialties**, the things you could be known for, like Locks or Fire. Your Titles and permissions build both up, so the better you are, the bigger your dice. Then the question's simple: did you succeed? Roll against whatever's in your way, and if you beat the number, you did.
@@ -35,7 +35,7 @@ Bram's first Title, *The wall that held the harbour gate*, is Body, and Shieldwo
 ::::
 
 ::::card[How it adds up]{#l-lines teaches=how-permissions-stack}
-A Root or a specialty is 1 for every Title and permission that puts 1 on it. A roll's **one Root and one specialty**, plus **1 for each item** you're using that fits, like a sword in a sword fight. An item never adds to a Root. There's **no cap**, so a Root of 10 is a d12 and a d8. Permissions don't come in levels, and traits are never steps.
+A Root or a specialty is 1 for every Title and permission that puts 1 on it. A roll's **one Root and one specialty**, plus **1 for each item** you're using that fits, like a sword in a sword fight. An item never adds to a Root. There's **no cap**, so a Root of 10 is a d12 and a d8. Permissions don't come in levels.
 
 :::example
 Vesk's got 5 in her Body: her first Title, *move unseen*, *run the rooftops*, *pick a mechanical lock* and *fight dirty with a knife*. Her Locks is 4, from both Titles and two permissions. A lock with her picks is 10 steps, a d12 and a d8.

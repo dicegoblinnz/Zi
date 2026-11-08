@@ -6,7 +6,7 @@ order: 2
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 You play someone who's properly good at something, like a thief who can open any lock in the city or a fighter nobody wants to meet in a narrow corridor. Being good means you stack the odds in your favour before anyone touches a die.
 
@@ -40,7 +40,7 @@ A **specialty** is something you could be known for or teach: Locks, Shieldwork,
 
 **A plain item's 1 more on a roll you use it in.** A sword's a sword, so it's a step in a sword fight. It adds to the specialty you're rolling, or if you haven't got one that fits, it's a specialty of its own: a dagger with nothing behind it is 1 step. An item never adds to a Root. An attuned thing's an item like that too, and its awakenings do more on top (see [Attunement](#s-attunement)).
 
-You've got two **archetypes** as well, like Guardian or Shadow, and they're separate from your Titles. Each one's got something only it can do, and abilities you pay for out of your tracks. They're all in [The Archetypes](#s-how-archetypes). Your **traits** are never steps, and each one only does what its line says (see [Traits](#s-traits)).
+You've got two **archetypes** as well, like Guardian or Shadow, and they're separate from your Titles. Each one's got something only it can do, and abilities you pay for out of your tracks. They're all in [The Archetypes](#s-how-archetypes).
 
 ### How it adds up {#how-permissions-stack}
 
@@ -221,14 +221,11 @@ Anything that works on its own, like a summoned beast or a raised servant acting
 
 **Pump it into your attuned thing.** It's free, and it takes no action. What it holds powers the thing's awakenings till the scene ends (see [Attunement](#s-attunement)).
 
-**Traits are free.** A trait's never a step, so there's nothing to pay, and it does what its line says every time it applies.
-
 ### Getting it back {#getting-it-back}
 
 -   **Win and roll top faces.** That's where most of it comes from.
 -   **Let a Catch bite**, as often as you like, and take 1 Aura each time. A hostile thread bites the same way. A big bite puts your Resolve up a size instead. No Catch? Bring real trouble on yourself anyway and take 1 Aura. There's more in [Catches and Trouble](#s-trouble).
 -   **Your attuned thing's own way.** Each one gets you Aura its own way, like Bram's hammer whenever he knocks someone off their feet.
--   **Traits that say so**, like Ash's Killer Instinct (1 Aura when she takes a threat down) and Battle Focus (3 Aura the first time she runs out each scene).
 -   **A great setup that doesn't land.** You planned it, it was cool, and the dice said no. The GM can give you 1 Aura for it.
 -   **Boons** like *Beat a threat* and *In your element* (see [Boons](#s-boons)).
 
@@ -252,7 +249,7 @@ Your tracks are what keep you standing: **Stamina** for your Body, **Confidence*
 -   **They come back.** At the end of every scene, roll each track that's below d12, and **a 4 or more puts it up a size**. A d2 can't roll a 4, so a track that low waits for downtime. Every downtime starts with each track up a size, and a slot spent recovering puts 6 sizes back, spread however you like (see [Healing](#s-healing)).
 
 :::example[Bram's tracks in one fight]
-Bram starts on d12 all round. A spear gets through in round one, but he's *Unyielding*, so the first hit each scene doesn't move his Stamina. Another gets through in round two, and it's a d10. In round three he pays 1 Stamina to push his Defend, his Guardian's ability, and it's a d8. A Warden's howl gets through his Confidence, so that's a d10, and when one more spear gets through he pays 1 Confidence and 1 Resolve to keep his Stamina on d8. At the end of the scene his Stamina rolls a 5 and comes up to d10, his Confidence rolls a 3 and stays on d8, and his Resolve rolls a 9 and comes back to d12.
+Bram starts on d12 all round. A spear gets through in round one, and his Stamina's a d10. In round three he pays 1 Stamina to push his Defend, his Guardian's ability, and it's a d8. A Warden's howl gets through his Confidence, so that's a d10, and when one more spear gets through he pays 1 Confidence and 1 Resolve to keep his Stamina on d8. At the end of the scene his Stamina rolls a 5 and comes up to d10, his Confidence rolls a 3 and stays on d8, and his Resolve rolls a 9 and comes back to d12.
 :::
 
 ## Catches and Trouble {#s-trouble}
@@ -280,7 +277,7 @@ There's no special action for helping. To help a friend, put your action into th
 -   **Nobody pays Aura for it**, but it has to be one thing in the story, and you've got to be able to join in from where you are. Any number of friends can join one roll.
 -   **Every action in the roll gives you a split.** The same specialty from two of you counts for each, because you're two people.
 -   **Joining a friend's roll** brings your specialty, your items and your action, plus any steps a Leader's handed you. Whoever rolls gets the Aura for every die that wins and every top face, friends' dice included.
--   **Your own extra action** works the same way: bring another of your specialties in as a new approach, like Knives with Stealth for a sneak attack. Put the same specialty in again and it adds 1. Extra actions come from holding your action, coming out of hiding, spending 3 Aura, or a trait or the Boon that says so (see [Extra actions](#s-extra-actions)).
+-   **Your own extra action** works the same way: bring another of your specialties in as a new approach, like Knives with Stealth for a sneak attack. Put the same specialty in again and it adds 1. Extra actions come from holding your action, coming out of hiding, spending 3 Aura, or the Boon that says so (see [Extra actions](#s-extra-actions)).
 
 :::example[Back at the study door]
 Vesk's at the study door with her Body and her Locks, and her picks, 10 steps. Dorrie joins in, keeping the guard talking at the foot of the stairs, and adds her Lying, 4 steps. That's 14 steps from two actions, and two actions give them two splits: a d10 for the lock, a d10 to keep it quiet and a d8 to keep the guard talking.

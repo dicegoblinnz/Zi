@@ -6,7 +6,7 @@ order: 7
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 :::quote
 Everyone's got a soul, and a soul can be spent.
@@ -52,7 +52,7 @@ Every other caster puts their magic on one target, or splits it: a d6 at the cap
 
 ## Schools of Magic {#s-schools}
 
-A school of magic is a Title, the same as a role, so it's the name you give one of your archetypes. Here are fifteen to start from. Each one shows the archetypes it suits, a few things its permissions do for free, and what going beyond looks like, for 1 Resolve. Pick one and an archetype it suits, write your Title for it, real and specific, and choose three permissions that fit inside it. There's more on archetypes in [How archetypes work](#s-how-archetypes), and you'll find the full ideas for every school, with Titles, permissions and traits, in [Title ideas](#s-title-ideas).
+A school of magic is a Title, the same as a role, so it's the name you give one of your archetypes. Here are fifteen to start from. Each one shows the archetypes it suits, a few things its permissions do for free, and what going beyond looks like, for 1 Resolve. Pick one and an archetype it suits, write your Title for it, real and specific, and choose three permissions that fit inside it. There's more on archetypes in [How archetypes work](#s-how-archetypes), and you'll find the full ideas for every school, with Titles and permissions, in [Title ideas](#s-title-ideas).
 
 Where a school suits more than one archetype, pick the one that fits how you play it. Warding on a Guardian stands in front of the crew, and Warding on an Oracle sees how the dice will fall and decides who gets the good ones.
 

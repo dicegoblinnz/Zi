@@ -2,6 +2,8 @@
 
 Mo's 6 to 8 Nov 2026 rework of the core, from four weeks of playtests: set actions, Defend as a set action, Confidence's swing, Resolve as a pool and the wound die all go, and every roll becomes a Root plus a specialty. His words and picks are in `notes/playtest-sheets/2026-11-08-chat-decisions.md`, and the calls Claude made filling the gaps are in `notes/to-confirm.md` under 8 Nov.
 
+**No traits** (Mo, 9 Nov): they're gone from the whole book, the crew and the paper sheet, and `check_terms.py` flags the word, so no stage brings them back. The builder and the companion (stages 3 and 4) don't offer any.
+
 It changes the character in nearly every chapter and most of the companion, so it goes in stages, a fresh chat each. Nothing merges to `main` till Mo says, because the live companion has to keep working for his four campaigns. Every stage works on the branch `rules/2026-11-08-roots` and pushes it, with the `website` branch moved to it for the Preview.
 
 ## The core, as the book has it
@@ -17,7 +19,7 @@ It changes the character in nearly every chapter and most of the companion, so i
 
 **Pitching.** A specialty that plainly fits is free. One you have to make a case for is 1 Aura, and so is going beyond what something normally does.
 
-**Aura.** Maximum 5, full at the start of every scene. +1 for every die that wins and +1 for every top face, any roll you make, defence included (not summons, flipped dice or a number added after the roll). On your own turn it can go past 5, and it drops back to 5 when your turn ends. 1 Aura: bring something in, pitch, go beyond, win a tie acting, intercept, quick heal, keep a Catch quiet. 3 Aura: an extra action, and the most actions you can have in a round is one for each archetype you've got (holding, coming out of hiding and traits are on top).
+**Aura.** Maximum 5, full at the start of every scene. +1 for every die that wins and +1 for every top face, any roll you make, defence included (not summons, flipped dice or a number added after the roll). On your own turn it can go past 5, and it drops back to 5 when your turn ends. 1 Aura: bring something in, pitch, go beyond, win a tie acting, intercept, quick heal, keep a Catch quiet. 3 Aura: an extra action, and the most actions you can have in a round is one for each archetype you've got (holding and coming out of hiding are on top).
 
 **The tracks.** Stamina (Body), Confidence (Mind) and Resolve (Soul). Each starts at d12 and drops a size for every hit that gets through to its Root. Below d2 is the Blaze. They're the defence: when the telegraphs land, roll the track for each Root you're hit at, once, and each die stops one telegraph at that Root it meets or beats. Archetype abilities spend them, 1 of the archetype's home track or 2 from the other two (any mix), and spending stops at d2. Rolling again costs 1 Resolve.
 
@@ -37,7 +39,7 @@ It changes the character in nearly every chapter and most of the companion, so i
 
 **Summoning.** A Summoner's summoning attunement holds the souls they've caught, a soul to an awakening. Calling one spends Aura: a d4 for each, built into one summon or several, none bigger than the soul's own die. Summons fade a size every round, and a hit that gets through knocks one off. Their dice never pay Aura, and a horde rolls as one throw.
 
-**Making a character.** Two Titles (three permissions each), two archetypes, two traits, one attuned thing, what you carry, threads, Connect and an Aspiration at d2. An Aspiration past d12 is a new Title (one permission), archetype or attuned thing.
+**Making a character.** Two Titles (three permissions each), two archetypes, one attuned thing, what you carry, threads, Connect and an Aspiration at d2. An Aspiration past d12 is a new Title (one permission), archetype or attuned thing.
 
 ## Stages
 
