@@ -12,6 +12,7 @@ factions:
 
   - key: alysta
     kind: west
+    seal: { c: crown, f: pale }
     size: great
     seat: alysta-city
     name: Alysta
@@ -108,6 +109,7 @@ factions:
 
   - key: soulless
     kind: order
+    seal: { c: crown, f: pale, d: ring }
     mini: { of: alysta, outs: [Destroy, Obstruct] }
     name: The Soulless
     about: >-
@@ -150,6 +152,7 @@ factions:
 
   - key: soths
     kind: west
+    seal: { c: swords, f: fess }
     size: city
     seat: mornhold
     name: The Soths
@@ -225,6 +228,7 @@ factions:
 
   - key: orza
     kind: west
+    seal: { c: scroll, f: bend }
     size: city
     seat: aron
     name: Orza
@@ -295,6 +299,7 @@ factions:
 
   - key: ezkian-union
     kind: west
+    seal: { c: cog, f: quarterly }
     size: city
     seat: ezkia-prime
     name: The Ezkian Union
@@ -370,6 +375,7 @@ factions:
 
   - key: etweil
     kind: west
+    seal: { c: mountain, f: plain }
     size: local
     seat: niebali
     name: The Etweilian Tribes
@@ -425,6 +431,7 @@ factions:
 
   - key: xurux
     kind: west
+    seal: { c: lamp, f: pile }
     size: local
     seat: xurux-land
     name: Xurux
@@ -493,6 +500,7 @@ factions:
 
   - key: lubro
     kind: west
+    seal: { c: anchor, f: pale }
     size: small
     seat: lubro-land
     name: Lubro
@@ -548,6 +556,7 @@ factions:
 
   - key: molefolk
     kind: west
+    seal: { c: mountain, f: fess }
     size: local
     seat: the-mountain
     name: The molefolk
@@ -612,6 +621,7 @@ factions:
 
   - key: montia
     kind: sea
+    seal: { c: ship, f: chevron }
     size: city
     seat: pera
     name: Montia
@@ -685,6 +695,7 @@ factions:
 
   - key: pilgrim-fleets
     kind: sea
+    seal: { c: ship, f: chevron, d: bar }
     mini: { of: montia, outs: [Influence, Establish] }
     name: The Pilgrim Fleets
     about: >-
@@ -708,6 +719,7 @@ factions:
 
   - key: thelis
     kind: sea
+    seal: { c: wave, f: plain }
     size: city
     seat: the-ledge
     name: Thelis
@@ -773,6 +785,7 @@ factions:
 
   - key: cobria
     kind: east
+    seal: { c: serpent, f: bend }
     size: city
     seat: gustburg
     name: Cobria
@@ -834,6 +847,7 @@ factions:
 
   - key: echily
     kind: east
+    seal: { c: sun, f: plain }
     size: local
     seat: neuzon
     name: Echily
@@ -891,6 +905,7 @@ factions:
 
   - key: polythusian-marches
     kind: east
+    seal: { c: tower, f: chevron }
     size: city
     seat: molythia
     name: The Polythusian Marches
@@ -945,6 +960,7 @@ factions:
 
   - key: inkhal
     kind: east
+    seal: { c: lamp, f: fess }
     size: city
     seat: inkhal-city
     name: The Free City of Inkhal
@@ -1016,6 +1032,7 @@ factions:
 
   - key: order-of-the-seven
     kind: order
+    seal: { c: key, f: quarterly }
     size: small
     seat: the-palace
     name: The Order of the Seven
@@ -1066,6 +1083,7 @@ factions:
 
   - key: standing-stones
     kind: order
+    seal: { c: bell, f: pile }
     size: local
     seat: the-standing-stones
     name: The Standing Stones

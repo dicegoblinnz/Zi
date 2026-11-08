@@ -25,6 +25,13 @@
 //    answer back, someone who leaves the campaign leaving the founding, and
 //    the clock running out: the turn that's on finishes, more time sends the
 //    turns round again, and the rest's dealt by the GM alone.
+// 1d. The dice roller's rules, off the book's own examples: Vesk's one
+//    Defend roll against two blows and Bram Defending against three, matched
+//    so the most are stopped, a swap, and a matching that can't stand put
+//    right. Bram and Wren's three dice on the guard captain against his one
+//    roll, a Layered vault door's best die standing, Ash's area with each man
+//    defending on his own, dice on one side added up, and what's kept on the
+//    phone between rolls.
 // 2. Every crew member's set actions on the phone match their sheet in the
 //    chapter, read straight off the Markdown here rather than from book.json.
 // 3. Vesk at the table: Sneak is 3 steps, a d6. Tap off move unseen and it's
@@ -94,6 +101,14 @@
 //    her 6 front and centre with its top face lit, and the Sheet tab under two
 //    screens with its folds shut, with axe on all three in both themes. A
 //    Hurt with reduce-motion on swaps the wound die's shape, and nothing moves.
+// 7c. The dice roller, off Vesk's play screen and the Characters list. Bram
+//    Defending against three d8s with fixed dice, the most stopped, a swap,
+//    the same dice read the other way, and Vesk's sheet left as it was. The
+//    set-up kept through a reload, dice on one side added up, one die tied,
+//    Ash's area with each man on his own and as one thing, real dice tapped
+//    in, Esc, and the list's way in offline. Then 320 wide in both themes:
+//    nothing sideways, every button 44px, and axe on the set-up and a result.
+//    With motion on the dice tumble, and a tap lands them.
 // 8. Downtime and rule changes. Vesk's week from Downtime, with a Hurt on
 //    her that clears for free: one slot pays the fence, which strains her
 //    hostile thread with him, and the other gives her grappling line its
@@ -164,7 +179,11 @@ import { changesOf, said, typo } from "../src/companion/marks.js";
 import { grow } from "../src/companion/grow.js";
 import { CARD_WORDS, CREW, DECK_SIZE, newestChange, reachOf, readCards, staleCards } from "../scripts/learn.mjs";
 import * as T from "../src/companion/table-rules.js";
+import * as B from "../src/companion/board.js";
+import * as RV from "../src/companion/reveal-rules.js";
+import * as TR from "../src/companion/turn-rules.js";
 import { dialsOf, foundNews, shapeOf, timeUp } from "../src/companion/found-rules.js";
+import { MOST, bestMatch, readDice, setupOf, swapped } from "../src/companion/roller-rules.js";
 import { parse as parseYaml } from "yaml";
 
 const SHOTS = process.argv[2] || null;
@@ -443,6 +462,68 @@ if (part("1b")) {
   same([cellar().out, T.findTele(doc5, "tele-cell-05").t.did?.none], ["won", "won"], "it counts before the guard: the cellar's the crew's, and the guard found it won");
   ok5({ o: "round", id: "round-v-0002", tele: [] }, gm, "the next round");
   same(ap5({ o: "answer", id: "tele-cell-05", ch: "isolde", a: { act: "Ward", steps: 3, dice: [{ size: 6, total: 6 }], opp: 2, t: 9700 } }, lee, { phoneNow: 10100 }).why, "Round 1’s gone by, so what landed on the cellar stands. Tell the GM.", "once the next round's on, what landed on the scene stands");
+  // The faction turn as a sequence (stage 5 of notes/faction-feel-plan.md):
+  // how long the downtime is, her focus that every phone follows, and an
+  // agenda happening, with nothing off-screen on a player's phone even as a step.
+  {
+    const dt = T.blank();
+    let at = 5000;
+    const apt = (op, who) => T.apply(dt, op, who, roster, at++);
+    same(apt({ o: "ft-start", id: "downtime-01", len: "A season" }, gm).ok, true, "a downtime starts, a season long");
+    same([dt.turn.len, dt.turn.focus], ["A season", null], "its length is kept on the turn, and nothing's in focus");
+    same(apt({ o: "ft-len", len: "Two weeks of rain" }, kai).why, "Only the GM can do that.", "only she changes how long it is");
+    apt({ o: "ft-len", len: "Two weeks of rain" }, gm);
+    const act = (id, f, what, extra = {}) => ({ id, f, name: f === "choir" ? "The Drowned Choir" : "Tarrant & Daughters", what, at: { f, name: "Raise the Glass Shelf", l: "agendas", lid: "ag-1" }, does: "Work its agenda", steps: 2, vs: { k: "die", d: [12] }, ...extra });
+    apt({ o: "ft-act", a: act("act-choir-1", "choir", "agenda") }, gm);
+    apt({ o: "ft-act", a: { ...act("act-tarr-01", "tarrant", "Establish"), at: { f: "tarrant", name: "A second warehouse" }, does: "Establish a second warehouse", vs: { k: "none" }, off: true } }, gm);
+    same(apt({ o: "ft-focus", id: "act-choir-1" }, gm).why, "Telegraph the factions’ actions first.", "the landing waits for the telegraphs");
+    apt({ o: "ft-send" }, gm);
+    same(apt({ o: "ft-focus", id: "act-choir-1" }, kai).why, "Only the GM can do that.", "a player's phone follows hers, and never moves it");
+    same(apt({ o: "ft-focus", id: "act-choir-1" }, gm).ok, true, "her phone moves to the Choir's action");
+    same(T.viewOf(dt, "player").turn.focus, "act-choir-1", "and every player's phone has it");
+    apt({ o: "ft-focus", id: "act-tarr-01" }, gm);
+    same([T.viewOf(dt, "gm").turn.focus, T.viewOf(dt, "player").turn.focus], ["act-tarr-01", "act-choir-1"], "an off-screen one's hers alone: the crew stays on the last they saw");
+    same(JSON.stringify(T.viewOf(dt, "player")).includes("act-tarr-01"), false, "and its id never reaches a player");
+    same(apt({ o: "ft-focus", id: "act-gone-01" }, gm).why, "That action’s gone.", "a step that isn't there is turned down");
+    apt({ o: "ft-focus", id: "act-choir-1" }, gm);
+    apt({ o: "ft-land", id: "act-choir-1", faces: { main: [2] }, vsFaces: [1] }, gm);
+    apt({ o: "ft-done", id: "act-choir-1", line: "The Glass Shelf has risen out of the bay.", hap: true }, gm);
+    same(T.viewOf(dt, "player").turn.acts[0].hap, true, "its agenda happened, and every phone knows it");
+    same(T.apply(dt, { o: "ft-focus", id: "end" }, gm, roster, at).ok && T.viewOf(dt, "player").turn.focus, "end", "Skip to the end: While you rested on every phone");
+    same(apt({ o: "ft-end" }, gm).ok, true, "and it ends");
+    // One that changes nothing is as if it never started: the next has its
+    // number, and only one that counts is an age in How it came to be.
+    same(dt.last?.n, 1, "the downtime that changed something is downtime 1");
+    apt({ o: "ft-start", id: "downtime-02", len: "A week" }, gm);
+    same(TR.ageOf(dt.turn, (i) => `d-${i}`), null, "one that changes nothing has no age in How it came to be");
+    apt({ o: "ft-end" }, gm);
+    apt({ o: "ft-start", id: "downtime-03", len: "A month" }, gm);
+    same(dt.turn.n, 2, "so the next one's downtime 2");
+    apt({ o: "ft-say", id: "said-00001", line: "The bridge is down." }, gm);
+    same(TR.ageOf(dt.turn, (i) => `d2-line-${i}`), { o: "wb-age", dt: 2, len: "A month", lines: [{ id: "d2-line-0", text: "The bridge is down." }] }, "and its age is downtime 2's, a month long, with what changed");
+  }
+  // The table screen gets what she's just shown the crew, and never a faction's id.
+  {
+    const sv = T.screenOf(T.blank(), { name: "Tuesday Lair", crew: [] }, { n: 3, at: 1, items: [{ f: "fleet-id", name: "The Tithe Fleet", seal: { c: "anchor", f: "bend", d: "" }, part: "secret", title: "The Tithe Fleet’s Secret", lines: [{ label: "", text: "Bought Captains", big: true }] }] });
+    same(sv.reveal, { n: 3, items: [{ name: "The Tithe Fleet", seal: { c: "anchor", f: "bend", d: "" }, part: "secret", title: "The Tithe Fleet’s Secret", lines: [{ label: "", text: "Bought Captains", big: true }] }] }, "the screen's reveal: the name, the seal and the part's words");
+    same(JSON.stringify(sv).includes("fleet-id"), false, "and not the faction’s id");
+    same(T.screenOf(T.blank(), null).reveal, null, "and none when she hasn't shown them anything");
+  }
+  // What a reveal is, worked out from what the crew had and has (reveal-rules.js).
+  {
+    const board = B.readable({ factions: [] });
+    B.apply(board, { o: "new", f: { id: "fleet", name: "The Tithe Fleet", want: "To own the bay.", face: "Admiral Senn", secret: "Bought Captains", seal: { c: "anchor", f: "bend", d: "" }, threads: [{ id: "t1", text: "Owes us", kind: "hostile", s: "whole", to: "crew" }, { id: "t2", text: "Tarrant money", kind: "hostile", s: "whole", to: "tarrant" }] } });
+    B.apply(board, { o: "new", f: { id: "tarrant", name: "Tarrant & Daughters", want: "Money." } });
+    const before = B.forPlayer(board);
+    B.apply(board, { o: "show", id: "fleet", p: "card", v: true });
+    B.apply(board, { o: "show", id: "fleet", p: "threads", v: true });
+    const after = B.forPlayer(board);
+    const rv = RV.revealsOf(before, after);
+    same(rv.map((x) => [x.part, x.title, x.lines.map((l) => l.text)]), [["card", "The Tithe Fleet", ["To own the bay.", "Admiral Senn"]], ["threads", "The Tithe Fleet’s threads", ["Owes us"]]], "its card, then its threads, and not its thread toward a faction the crew hasn't met");
+    same(JSON.stringify(rv).includes("Bought Captains") || JSON.stringify(rv).includes("Tarrant"), false, "nothing of its Secret or of Tarrant");
+    B.apply(board, { o: "show", id: "fleet", p: "threads", v: false });
+    same([RV.hiddenSince(after, B.forPlayer(board)), RV.hiddenSince(before, after)], [true, false], "hiding a part again is noticed, and showing one isn't");
+  }
   console.log("the live table's rules checked");
 }
 
@@ -704,6 +785,51 @@ if (part("1c")) {
   console.log("the founding's rules checked");
 }
 
+// 1d. The dice roller's rules (roller-rules.js), read off the book's own
+// examples in The Roll and When It Lands.
+if (part("1d")) {
+  const dice = (list) => list.map(([size, v]) => ({ size, v }));
+  // Vesk lets two blows ride: her Defend's a d4 and comes up 3, against a d8
+  // on 6 and a d6 on 3. The tie's hers, so the d6 is stopped.
+  const vesk = readDice({ mine: dice([[4, 3]]), theirs: dice([[8, 6], [6, 3]]), def: "you" });
+  same([vesk.way, vesk.lanes.map((l) => l.out), vesk.stopped, vesk.through, vesk.lanes[1].i], ["defend", ["through", "stopped"], 1, 1, 0], "Vesk's 3 stops the d6's 3 and the d8 gets through");
+  // Bram Defends: 6, 3 and 1 on his d6, d6 and d2, against three d8s on 7, 5
+  // and 2. The 6 goes on the 5 and the 3 on the 2, so only the 7 gets through.
+  const bram = readDice({ mine: dice([[6, 6], [6, 3], [2, 1]]), theirs: dice([[8, 7], [8, 5], [8, 2]]), def: "you" });
+  same([bram.assign, bram.lanes.map((l) => l.out), bram.stopped, bram.tops], [[2, 0, 1], ["through", "stopped", "stopped"], 2, [0]], "Bram's 6 on the 5 and his 3 on the 2, with his d6's top face");
+  same(bestMatch([1, 1], [4, 6]), [0, 1], "dice that stop nothing still go on what's left");
+  // A swap trades the dice on two of theirs, and the roll's read that way.
+  const traded = readDice({ mine: dice([[6, 6], [6, 3], [2, 1]]), theirs: dice([[8, 7], [8, 5], [8, 2]]), def: "you", assign: swapped(bram.assign, 0, 1) });
+  same([traded.assign, traded.lanes.map((l) => l.out), traded.stopped], [[0, 2, 1], ["through", "through", "stopped"], 1], "a swap puts his 6 on the 7 and his 1 on the 5");
+  same(readDice({ mine: dice([[6, 6], [6, 3], [2, 1]]), theirs: dice([[8, 7], [8, 5], [8, 2]]), def: "you", assign: [0, 0, 1] }).assign, [2, 0, 1], "a matching with a die on two of theirs is put right");
+  same(readDice({ mine: dice([[6, 2]]), theirs: dice([[8, 7], [8, 5]]), def: "you", assign: [0, 3] }).assign, [-1, 0], "and so is one with a die that isn't there, its 2 going on the lower of theirs");
+  const spare = readDice({ mine: dice([[6, 6], [4, 2], [6, 5]]), theirs: dice([[8, 4]]), def: "you" });
+  same([spare.assign, spare.spare, spare.stopped], [[2], [0, 1], 1], "more dice than blows: the 5 stops the 4 and the rest aren't needed");
+  // Bram and Wren's three dice on the guard captain, against his one roll
+  // of 4: the 5 beats it, the 2's under and the 4's a tie, his unless they
+  // pay 1 Aura.
+  const captain = readDice({ mine: dice([[6, 5], [4, 2], [6, 4]]), theirs: dice([[6, 4]]) });
+  same([captain.way, captain.outs, captain.beat, captain.ties, captain.stands], ["act", ["beat", "under", "tie"], 1, 1, 4], "three dice on the captain's one roll");
+  // A Layered vault door rolls 3d8 and keeps the best.
+  const door = readDice({ mine: dice([[10, 7], [12, 8]]), theirs: dice([[8, 3], [8, 7], [8, 5]]) });
+  same([door.at, door.stands, door.outs], [1, 7, ["tie", "beat"]], "the vault door's best d8 stands against both");
+  same(readDice({ mine: dice([[10, 7], [12, 8]]), theirs: dice([[8, 3], [8, 7]]), each: true }).way, "act", "two dice of yours are always one thing's");
+  // Ash's burst: her d6 comes up 5, once, and each man in it rolls his own d6.
+  const burst = readDice({ mine: dice([[6, 5]]), theirs: dice([[6, 2], [6, 4], [6, 6], [6, 1], [6, 5]]), each: true });
+  same([burst.way, burst.lanes.map((l) => l.out), burst.beat, burst.ties], ["each", ["beat", "beat", "under", "beat", "tie"], 3, 1], "Ash's 5 against five men, each on his own");
+  same(readDice({ mine: dice([[6, 5]]), theirs: dice([[6, 2], [6, 6]]) }).outs, ["under"], "one thing rolling two dice: its 6 stands");
+  same(readDice({ mine: dice([[6, 5]]), theirs: dice([[6, 2]]), each: true }).way, "act", "one of theirs is one thing");
+  // One side only: nothing to beat, so it's the numbers, added up for a Move.
+  same(readDice({ mine: dice([[6, 4], [4, 3]]) }), { way: "free", tops: [], total: 7 }, "a Move's d6 and d4 add up");
+  same(readDice({ theirs: dice([[6, 6]]) }).tops, [], "their top face gives nobody Aura");
+  same(readDice({ mine: dice([[4, 4], [8, 8]]), theirs: dice([[8, 8]]), def: "you" }).tops, [0, 1], "your top faces, whoever's defending");
+  // What's kept on the phone.
+  same(setupOf(null), { you: [], them: [], def: "you", each: false }, "nothing kept starts empty, with them coming at you");
+  same(setupOf({ you: [6, 7, "8", 20, 2], them: Array(20).fill(4), def: "them", each: "yes" }), { you: [6, 8, 2], them: Array(MOST).fill(4), def: "them", each: false }, "only real dice are kept, up to the most a side holds");
+  same(setupOf({ def: "sideways" }).def, "you", "a way that isn't one comes back as them coming at you");
+  console.log("the dice roller's rules checked");
+}
+
 // A small static server that answers the way Cloudflare's assets do.
 const DIST = join(process.cwd(), "dist");
 const TYPES = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".pdf": "application/pdf" };
@@ -722,8 +848,10 @@ const server = createServer(async (req, res) => {
   res.writeHead(file ? 200 : 404, { "content-type": TYPES[extname(file ?? ".html")] || "application/octet-stream" });
   res.end(await readFile(file ?? join(DIST, "404.html")));
 });
-await new Promise((r) => server.listen(4174, r));
-const BASE = "http://localhost:4174";
+// ZI_PORT runs it on another port, so several worktrees can check at once.
+const PORT = Number(process.env.ZI_PORT) || 4174;
+await new Promise((r) => server.listen(PORT, r));
+const BASE = `http://localhost:${PORT}`;
 const browser = await chromium.launch(process.env.PW_CHROMIUM ? { executablePath: process.env.PW_CHROMIUM } : {});
 
 async function phone(extra = {}) {
@@ -2335,6 +2463,144 @@ if (part("7b")) {
     await context.close();
   }
   console.log("one hand: the crest at the top, the set actions high up as dice, the roll as a moment and the Sheet tab at a glance, in both themes");
+}
+
+// 7c. The dice roller (roller.js): any dice of yours against any of theirs,
+// with no telegraph or threat, off the play screen and the Characters list.
+if (part("7c")) {
+  const dlg = "#cc-dialog";
+  const line = (page, sel) => page.$eval(`${dlg} ${sel}`, (el) => el.textContent.replace(/\s+/g, " ").trim()).catch(() => "");
+  const outs = (page, sel = ".dz-lane .res-out") => page.$$eval(`${dlg} ${sel}`, (els) => els.map((e) => e.textContent));
+  const add = async (page, side, list) => {
+    for (const d of list) await page.click(`${dlg} .dz-adddie[data-side="${side}"][data-d="${d}"]`);
+  };
+  const tray = (page, side) => page.$$eval(`${dlg} .dz-side.is-${side} .dz-tray .zd-die`, (els) => els.map((e) => Number(e.dataset.d)));
+  const go = async (page, dice) => {
+    await page.evaluate((list) => window.ziCompanion.setDice(list), dice);
+    await page.click(`${dlg} button[data-dz="go"]`);
+    await page.waitForSelector(`${dlg} .dz-result`);
+  };
+  {
+    const { context, page } = await phone();
+    await play(page, "vesk", "Vesk");
+    const aura = await page.textContent('.cc-stat[data-p="aura"] .v');
+    await page.click(".tile-free");
+    await page.waitForSelector(`${dlg} .dz`);
+    same(await page.$eval(`${dlg} button[data-dz="go"]`, (el) => el.disabled), true, "Roll waits for some dice");
+    has(await line(page, ".dz > .cc-lead"), "your sheet stays as it is", "off a character, it says the sheet's left alone");
+    // Bram Defends, the way When It Lands has it: 6, 3 and 1 on his d6, d6
+    // and d2, against three d8s on 7, 5 and 2.
+    await add(page, "you", [6, 6, 2]);
+    await add(page, "them", [8, 8, 8]);
+    same([await tray(page, "you"), await tray(page, "them")], [[6, 6, 2], [8, 8, 8]], "each side's dice, in the order they went on");
+    has(await line(page, ".dlg-head"), "2d6 + d2 against 3d8", "the head says what's on");
+    same(await page.$(`${dlg} button[data-dz="each"]`), null, "one target or several only asked of one die against several");
+    same(await page.getAttribute(`${dlg} button[data-dz="def"][data-v="you"]`, "aria-pressed"), "true", "they're coming at you to start with");
+    await go(page, [6, 3, 1, 7, 5, 2]);
+    same(await line(page, ".dz-verdict"), "2 stopped, and one gets through.", "Bram's 6 on the 5 and his 3 on the 2");
+    same(await outs(page), ["Gets through", "Stopped", "Stopped"], "only the 7 gets through");
+    has(await line(page, ".cc-topnote"), "Top face on your d6, so 1 Aura back", "the d6's top face");
+    await page.click(`${dlg} button[data-dz="swap"][data-j="0"]`);
+    await page.click(`${dlg} button[data-dz="swap"][data-j="1"]`);
+    same([await outs(page), await line(page, ".dz-verdict")], [["Gets through", "Gets through", "Stopped"], "1 stopped, and 2 get through."], "a swap puts the 6 on the 7");
+    await page.click(`${dlg} .dz-flip`);
+    same([await line(page, ".dz-verdict"), await outs(page, ".cc-stage .res-out")], ["None of them beat it.", ["Under", "Under", "Under"]], "the same dice read as Bram going at them, with their 7 standing");
+    await page.click(`${dlg} button[data-act="close"]`);
+    same([await page.textContent('.cc-stat[data-p="aura"] .v'), await page.$(".cc-last")], [aura, null], "Vesk's Aura and last roll left as they were");
+    // Kept on the phone, with the way it was last read.
+    await page.reload();
+    await page.click(".tile-free");
+    same([await tray(page, "you"), await tray(page, "them"), await page.getAttribute(`${dlg} button[data-dz="def"][data-v="them"]`, "aria-pressed")], [[6, 6, 2], [8, 8, 8], "true"], "the set-up kept through a reload");
+    // Nothing of theirs: the numbers, added up for a Move.
+    await page.click(`${dlg} button[data-dz="clear"][data-side="them"]`);
+    same(await page.$(`${dlg} .dz-who`), null, "with nothing of theirs, nobody's going at anybody");
+    await go(page, [6, 3, 1]);
+    same([await line(page, ".dz-verdict"), await line(page, ".dz-note")], ["Added up, 10.", "That’s only if it’s a Move, the one roll where dice add."], "dice on one side added up");
+    // One die tied: it's theirs, unless Vesk pays for it.
+    await page.click(`${dlg} button[data-dz="back"]`);
+    await page.click(`${dlg} button[data-dz="clear"][data-side="you"]`);
+    await add(page, "you", [8]);
+    await add(page, "them", [6]);
+    await go(page, [4, 4]);
+    same([await line(page, ".dz-verdict"), await line(page, ".dz-note"), await outs(page, ".cc-stage .res-out")], ["", "It’s theirs, unless you pay 1 Aura.", ["Tie"]], "one die tied, said once under it");
+    // Ash's burst: her one die against five men, each on his own, then as one thing.
+    await page.click(`${dlg} button[data-dz="back"]`);
+    await add(page, "them", [6, 6, 6, 6]);
+    await page.click(`${dlg} button[data-dz="each"][data-v="1"]`);
+    await go(page, [5, 2, 4, 6, 1, 5]);
+    same([await line(page, ".dz-verdict"), await line(page, ".dz-note"), await outs(page)], ["Your 5 beats 3 of the 5.", "One’s a tie, and it’s theirs unless you pay 1 Aura.", ["Beat it", "Beat it", "Under", "Beat it", "Tie"]], "Ash's 5 against five men on their own");
+    await page.click(`${dlg} button[data-dz="back"]`);
+    await page.click(`${dlg} button[data-dz="each"][data-v="0"]`);
+    await go(page, [5, 2, 4, 6, 1, 5]);
+    same([await outs(page, ".cc-stage .res-out"), await line(page, ".dz-stands")], [["Under"], "Their 6 stands against every one of yours."], "as one thing, its best 6 stands");
+    // Real dice, tapped in.
+    await page.click(`${dlg} button[data-dz="back"]`);
+    await page.click(`${dlg} button[data-dz="clear"][data-side="them"]`);
+    await add(page, "them", [10]);
+    await page.click(`${dlg} button[data-dz="real"]`);
+    same(await page.$eval(`${dlg} button[data-dz="pad-done"]`, (el) => el.disabled), true, "real dice wait for every number");
+    await page.click(`${dlg} .cc-pad.is-you button[data-v="8"]`);
+    await page.click(`${dlg} .cc-pad.is-them button[data-v="7"]`);
+    await page.click(`${dlg} button[data-dz="pad-done"]`);
+    same([await outs(page, ".cc-stage .res-out"), await line(page, ".cc-topnote")], [["Beat it"], "Top face on your d8, so 1 Aura back."], "an 8 on a real d8 beats their 7");
+    await page.keyboard.press("Escape");
+    await page.waitForFunction((sel) => !document.querySelector(sel).open, dlg, { timeout: 2000 }).catch(() => note("Esc didn't put the roller away"));
+    // Off the Characters list, with no character, and with no signal.
+    await page.goto(`${BASE}/characters/`);
+    await page.evaluate(() => navigator.serviceWorker.ready);
+    await page.waitForFunction(() => navigator.serviceWorker.controller !== null, null, { timeout: 15000 }).catch(() => note("the service worker never took over the page"));
+    await context.setOffline(true);
+    await page.reload();
+    await page.click('button[data-dz="open"][data-from="list"]');
+    await page.waitForSelector(`${dlg} .dz`);
+    same(await line(page, ".dz > .cc-lead"), "Any dice you like, yours and theirs, all rolled together.", "off the list it's just dice");
+    await go(page, [2, 9]);
+    same(await outs(page, ".cc-stage .res-out"), ["Under"], "a roll with no signal");
+    await context.setOffline(false);
+    await context.close();
+  }
+  // At 320 wide in both themes: nothing sideways, 44px buttons, and axe.
+  for (const theme of ["dark", "light"]) {
+    const { context, page } = await phone({ viewport: { width: 320, height: 640 } });
+    if (theme === "light") await page.addInitScript(() => localStorage.setItem("zi-theme", "light"));
+    await page.addInitScript(() => localStorage.setItem("zi-dice", JSON.stringify({ you: [6, 6, 2], them: [8, 8, 8, 10, 6], def: "you" })));
+    const axe = async (what) => {
+      const result = await new AxeBuilder({ page }).include(dlg).analyze();
+      for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on ${what}: ${v.id} (${v.nodes.length})`);
+    };
+    const fits = async (what) => {
+      const wide = await page.$eval(`${dlg} .dlg-body`, (el) => el.scrollWidth > el.clientWidth);
+      if (wide) note(`the roller scrolls sideways at 320, ${what}, ${theme}`);
+      const small = await page.$$eval(`${dlg} button`, (els) => els.filter((el) => el.checkVisibility() && (el.getBoundingClientRect().width < 44 || el.getBoundingClientRect().height < 44)).map((el) => el.textContent.trim() || el.getAttribute("aria-label")));
+      if (small.length) note(`buttons under 44px on ${what} at 320, ${theme}: ${small.join(", ")}`);
+    };
+    await page.goto(`${BASE}/characters/`);
+    await page.click('button[data-dz="open"]');
+    await page.waitForSelector(`${dlg} .dz`);
+    await fits("the set-up");
+    await axe(`the roller's set-up, ${theme}`);
+    await go(page, [6, 3, 1, 7, 5, 2, 9, 6]);
+    same(await line(page, ".dz-verdict"), "2 stopped, and 3 get through.", `five against three, ${theme}`);
+    await fits("a result");
+    await axe(`the roller's result, ${theme}`);
+    await shot(page, `roller-${theme}`);
+    await context.close();
+  }
+  // With motion on, the dice tumble, and a tap lands them.
+  {
+    const { context, page } = await phone({ reducedMotion: "no-preference" });
+    await page.addInitScript(() => localStorage.setItem("zi-dice", JSON.stringify({ you: [6, 4], them: [8], def: "them" })));
+    await page.goto(`${BASE}/characters/`);
+    await page.click('button[data-dz="open"]');
+    await page.evaluate(() => window.ziCompanion.setDice([6, 2, 5]));
+    await page.click(`${dlg} button[data-dz="go"]`);
+    same(await page.$$eval(`${dlg} [data-spin]`, (els) => els.length), 3, "the dice tumbling");
+    await page.click(`${dlg} .cc-res`);
+    await page.waitForSelector(`${dlg} .dz-verdict`, { timeout: 2000 }).catch(() => note("a tap didn't land the dice"));
+    same([await line(page, ".dz-verdict"), await page.$$eval(`${dlg} .cc-stage .res .zd-die`, (els) => els.map((e) => e.textContent))], ["1 of 2 beat it.", ["6", "2"]], "landed on their numbers");
+    await context.close();
+  }
+  console.log("dice roller: Bram's defence with a swap and read the other way, the sheet left alone, the set-up kept, one side added up, a tie, an area each on their own and as one, real dice, offline off the list, 320 wide in both themes, and the tumble");
 }
 
 // 8. Downtime and rule changes.

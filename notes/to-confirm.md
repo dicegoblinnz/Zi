@@ -4,6 +4,8 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 
 ## 9 Nov: the GM's budgets and the rest of the book
 
+**Mo said yes to all of these on 9 Nov**, and stages 1 and 2 went live that day.
+
 Stage 2 of `notes/roots-plan.md` put the Roots change through every chapter stage 1 didn't touch. The numbers come from dice runs: four of the crew as they start against a boss and its people, three thousand fights a setting.
 
 1. **Round budget: about 10 steps a round for each player**, so 20 for a breather, 40 at Even and 60 at Hard for four. It was 5. Every track starts at d12, and a d12 stops a lone d10 about six times in ten, so 5 a player hardly ever got through. At 10, each player takes about 2 hits in a fight at Even, and Hard has a real chance of a Blaze.
@@ -21,7 +23,7 @@ Stage 2 of `notes/roots-plan.md` put the Roots change through every chapter stag
 13. **The *Healers* crew asset** and Night City's Medical Center put one of everyone's tracks up a size, once a session, where they brought a wound die down.
 14. **The full fight in Conflict** runs as a breather (about 20), since its Wardens are half-woken, so its rounds stand as they are.
 15. **The worlds' telegraphs** (Night City and Abnu) are on Body, Mind and Soul too, and the live table reads Mind and Soul as fear till stage 4, so a phone won't let anyone intercept them. A page a GM wrote with Defend or Confidence still reads.
-16. **The Preview:** the plan says to move `website` to this branch, but `website` has 25 commits of the design pass that aren't on `main` or here, so moving it would drop them. This branch has its own Preview on the zidara Worker instead, so I left `website` alone. Say if those 25 can go.
+16. **The Preview:** the plan says to move `website` to this branch, but `website` has 25 commits of the design pass that aren't on `main` or here, so moving it would drop them. This branch has its own Preview on the zidara Worker instead, so I left `website` alone. The design pass has gone into `main` since, so that's settled.
 
 ## 8 Nov: Roots, specialties and three tracks
 

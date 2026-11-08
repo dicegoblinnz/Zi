@@ -102,14 +102,14 @@
 //    under 1 founding in 20, the founding's threads are all in the web, every
 //    faction's got a Face and a Secret, and a founder's Loyalty is on its card.
 // 10. A whole world (stages 12, 13 and 15 of notes/builder-plan.md): the
-//    made-up one in tests/worlds/ passes, and 69 ways of breaking it are each a problem that
+//    made-up one in tests/worlds/ passes, and 72 ways of breaking it are each a problem that
 //    says so and never come out as a world: a card that isn't whole, too long
 //    or holds what it can't, Power or resources past its size, people who
 //    don't add Power or a thing that does, Appendix B's people as a thing, a
 //    need with a resource to spare beside it or from a faction with none, no
 //    rival or a tie with no thread back, no need blocked, no Secret naming
 //    another faction, a Secret's tag or ways in, two factions with one key,
-//    name or asset, a kind or size there isn't, an agenda at nothing or at a
+//    name, asset or seal, a seal the kit hasn't got or none, a kind or size there isn't, an agenda at nothing or at a
 //    faction that isn't there, a mini faction's outcomes and Loyalty, a thread
 //    toward nobody, nothing strange, and history in no age, out of order, too
 //    long, too much of it or an age with nothing in it, no line saying whose
@@ -145,7 +145,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { apply, blank, forPlayer, readable, standingOf, undoOf } from "../src/companion/board.js";
+import { apply, blank, forPlayer, readable, sealsFor, standingOf, undoOf } from "../src/companion/board.js";
 import { BAGS, CHECKS, REGIONS, STEPS, canDeal, cardsOf, choose, crewFits, dealRest, dealWorld, lock, newSeed, options, pickAt, pickKey, poolOf, preview, recordOf, redeal, redealFaction, resume, rngOf, setCrew, SIZES, start, startAdd, tensionAt } from "../src/companion/world-engine.js";
 import { BMAX } from "../src/companion/world-record.js";
 import { MAX, PARTS, answer, current, deckOf, fillPrompt, finish, formedOf, historyOf, notThis, playRest, prompted, replay, startDeck, undo } from "../src/companion/world-deck.js";
@@ -163,8 +163,10 @@ const edgeDist = ([x, y], [ax, ay], [bx, by]) => {
 };
 import { pageOf } from "../src/companion/pages.js";
 import { wholeOps, cardNow, hashOf } from "../src/companion/world-whole.js";
+import { makeSealPick } from "../src/companion/seal-pick.js";
 import { fogFull, fogText, fogBits, gridOf, mapsForPlayer, sittersOf } from "../src/companion/maps.js";
 import { esc } from "../src/kit/kit.js";
+import { CHARGES, FIELDS, MARKS, chargeWeights, sealKey } from "../src/kit/seals.js";
 
 const problems = [];
 const note = (p) => {
@@ -340,6 +342,15 @@ function checkDealt(W, recipe, seed, n, fail) {
   for (const f of W.factions) if (f.exc && !f.exc.reason) fail(`${seed}: ${f.exc.text} breaks the logic without a reason`);
   // Every card adds up.
   const C = cardsOf(T, W);
+  // Every faction's dealt a seal, a charge its kind of faction suits, and no
+  // two on the board share one (stage 1 of notes/faction-feel-plan.md).
+  const seals = C.factions.map((f) => f.seal);
+  if (seals.some((s) => !s || !CHARGES[s.c] || !FIELDS[s.f])) fail(`${seed}: a faction without a seal`);
+  else if (new Set(seals.map(sealKey)).size !== seals.length) fail(`${seed}: two factions share a seal`);
+  else seals.forEach((s, i) => {
+    const type = W.factions[i].type;
+    if (!type?.own && !(chargeWeights(type?.role, type?.tags ?? [])[s.c] > 0)) fail(`${seed}: ${C.factions[i].name}'s ${s.c} isn't a charge a ${type?.role} suits`);
+  });
   const seatsHeld = new Set();
   const oneThing = new Set();
   C.factions.forEach((f, i) => {
@@ -417,7 +428,9 @@ for (const g of groups) {
     const opts = { recipe: g.recipe, seed, factions: n, dials };
     const W = dealWorld(T, opts);
     dealtCount++;
-    if (JSON.stringify(recordOf(dealWorld(T, opts))) !== JSON.stringify(recordOf(W))) fail(`${seed} dealt two different boards`);
+    const again = dealWorld(T, opts);
+    if (JSON.stringify(recordOf(again)) !== JSON.stringify(recordOf(W))) fail(`${seed} dealt two different boards`);
+    if (JSON.stringify(cardsOf(T, again).factions.map((f) => f.seal)) !== JSON.stringify(cardsOf(T, W).factions.map((f) => f.seal))) fail(`${seed} dealt two different sets of seals`);
     if (W.fallbacks.length) fallbacks++;
     checkDealt(W, g.recipe, seed, n, fail);
     // Agendas and Secrets aim at the whole board, the last faction dealt too.
@@ -677,9 +690,11 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   // Junk, tidied.
   const junk = blank();
   apply(junk, { o: "wb-set", b: { recipe: { region: "mars", era: "<b>x</b>", twist: 7 }, dials: { tense: 9, rich: 2 }, seed: "not a seed", dealt: "nope", history: [{ id: "BAD ID", text: "x" }, { id: "ok-1", text: "  a \u0000  b  " }, { id: "ok-1", text: "twice" }], shown: "yes" } });
-  same(junk.build, { recipe: { region: "", era: "", twist: null }, dials: { tense: 1, strange: 1, rich: 2, ruled: 1 }, seed: "", dealt: null, history: [{ id: "ok-1", text: "a b", age: 0 }], shown: [], at: 0 }, "junk in a record is tidied");
+  same(junk.build, { recipe: { region: "", era: "", twist: null }, dials: { tense: 1, strange: 1, rich: 2, ruled: 1 }, seed: "", dealt: null, history: [{ id: "ok-1", text: "a b", age: 0 }], shown: [], ages: [], at: 0 }, "junk in a record is tidied");
   apply(junk, { o: "wb-set", b: { history: [{ id: "ok-2", text: "Mine", age: 2, hers: "yes" }], shown: [3, 1, 1, "2", 9, -1, 1.5] } });
   same([junk.build.shown, junk.build.history[0].hers], [[1, 2, 3], undefined], "and so are the ages shown and a line that isn't plainly hers");
+  apply(junk, { o: "wb-set", b: { ages: [{ n: 6, len: "A month" }, { n: 6, len: "twice" }, { n: "x" }], history: [{ id: "ok-3", text: "The bridge fell", age: 9 }, { id: "ok-4", text: "Nowhere", age: 12 }], shown: [1, 9, 12] } });
+  same([junk.build.ages, junk.build.shown, junk.build.history.map((l) => l.id)], [[{ n: 6, len: "A month" }], [1, 9], ["ok-3"]], "a downtime's age, its lines and showing it are kept only when the record has that downtime");
   apply(junk, { o: "wb-set", b: { dealt: JSON.parse('{"__proto__": {"bad": 1}, "fine": [1, "two", {"three": null}]}') } });
   yes(!Object.prototype.hasOwnProperty.call(junk.build.dealt, "__proto__") && junk.build.dealt.bad === undefined && ({}).bad === undefined, "what was dealt can't reach past itself");
   same(junk.build.dealt.fine, [1, "two", { three: null }], "and keeps its plain words and numbers");
@@ -705,6 +720,104 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
   console.log("4. the build's record: written whole, a line at a time, shown an age at a time, undone, tidied, and kept from players");
 }
 
+// 4b. Seals on the board (stage 1 of notes/faction-feel-plan.md): a card out
+// of the book comes in wearing the book's seal when the change doesn't give
+// it one, keeps its own when it does, keeps none once it's taken off, and a
+// player gets it only with the card.
+{
+  const brine = bookBoard("brinewake");
+  const card = brine.cards[0];
+  const { h, at, ...was } = card;
+  const doc = blank();
+  const book = { from: "brinewake", key: card.key, h, at, was };
+  apply(doc, { o: "new", f: { id: "f-aaaaaaaa", name: card.name, want: card.want, book } });
+  same(doc.factions[0].seal, card.seal, "a card out of the book wears the book's seal");
+  apply(doc, { o: "new", f: { id: "f-bbbbbbbb", name: "The Gull Kings", book: { ...book, key: "the-gull-kings" }, seal: { c: "ship", f: "fess", d: "" } } });
+  same(doc.factions[1].seal, { c: "ship", f: "fess", d: "" }, "and one that comes with its own keeps it");
+  apply(doc, { o: "seal", id: "f-aaaaaaaa", v: null });
+  same(readable(JSON.parse(JSON.stringify(doc))).factions[0].seal, null, "a seal she's taken off stays off");
+  same(forPlayer(doc).factions.length, 0, "a player gets no seal before the card");
+  apply(doc, { o: "show", id: "f-bbbbbbbb", p: "card", v: true });
+  same(forPlayer(doc).factions[0].seal, { c: "ship", f: "fess", d: "" }, "and gets it with the card");
+  // A mini faction made in play wears its maker's seal with a mark, the first
+  // that's free.
+  apply(doc, { o: "add", id: "f-bbbbbbbb", l: "res", item: { id: "r-aaaaaaaa", text: "Gull Eggs", x: 1, left: 1 } });
+  apply(doc, { o: "mini", id: "f-bbbbbbbb", res: "r-aaaaaaaa", asset: "", f: { id: "f-cccccccc", name: "The Egg Boats", outs: ["Acquire", "Establish"] } });
+  apply(doc, { o: "mini", id: "f-bbbbbbbb", res: "", asset: "", f: { id: "f-dddddddd", name: "The Cliff Boys", outs: ["Destroy", "Obstruct"] } });
+  same(doc.factions.filter((x) => x.mini).map((x) => x.seal), [{ c: "ship", f: "fess", d: "bar" }, { c: "ship", f: "fess", d: "crescent" }], "a mini faction made in play wears its maker's seal with a mark of its own");
+  // A board from before seals: every faction gets one on her phone, the
+  // book's, a mini faction its maker's with a mark, or one dealt the same on
+  // every phone of hers, and one whose whole world's file isn't here waits.
+  const old = blank();
+  apply(old, { o: "new", f: { id: "f-old-mini", name: "The Egg Boats", mini: true, parent: "f-old-gull", seal: null } });
+  apply(old, { o: "new", f: { id: "f-old-book", name: card.name, book, seal: null } });
+  apply(old, { o: "new", f: { id: "f-old-gull", name: "The Gull Kings", seal: null } });
+  apply(old, { o: "new", f: { id: "f-old-wait", name: "Arasaka", book: { ...book, from: "night-city-2077", key: "arasaka" }, seal: null } });
+  apply(old, { o: "new", f: { id: "f-old-wmin", name: "The Netwatch Eyes", mini: true, parent: "f-old-wait", seal: null } });
+  old.factions.find((x) => x.id === "f-old-mini").parent = "f-old-gull";
+  same(old.factions.map((x) => x.seal), [null, null, null, null, null], "a board from before seals has none");
+  const fill = () => sealsFor(old, { book: (f) => (f.book?.from === "night-city-2077" ? undefined : f.book ? card.seal : null), rand: (f) => rngOf("camp-1", f.id, "seal") });
+  const ops = fill();
+  same(JSON.stringify(fill()), JSON.stringify(ops), "and dealing them again deals the same");
+  for (const op of ops) apply(old, op);
+  const sealOn = (id) => old.factions.find((x) => x.id === id).seal;
+  same(sealOn("f-old-book"), card.seal, "a book's card gets the book's seal");
+  yes(sealOn("f-old-gull") && sealKey(sealOn("f-old-gull")) !== sealKey(card.seal), "one of her own gets one dealt, nobody else's");
+  same(sealOn("f-old-mini"), { ...sealOn("f-old-gull"), d: Object.keys(MARKS)[0] }, "a mini faction gets its maker's with a mark");
+  same([sealOn("f-old-wait"), sealOn("f-old-wmin"), sealsFor(old, { book: () => undefined, rand: () => Math.random }).length], [null, null, 0], "and one whose world's file isn't here waits for it, with its mini factions");
+  // Dealt from a board her other phone's changed since, one only fills a
+  // faction that's still without, and never copies another's.
+  const gull = sealOn("f-old-gull");
+  same([apply(old, { o: "seal", id: "f-old-gull", v: card.seal, fill: true }), sealOn("f-old-gull")], [false, gull], "a seal that fills never goes over one she's set");
+  same([apply(old, { o: "seal", id: "f-old-wait", v: gull, fill: true }), sealOn("f-old-wait")], [false, null], "or copies another faction's");
+  console.log("4b. seals on the board: a book card's, its own, taken off, a mini faction's, a player's only with the card, and a board from before seals given them");
+}
+
+// 4c. The GM's seal fold (seal-pick.js), with world.js's edit() and fold()
+// stood in for: her faction's seal big, Deal another never dealing one on the
+// board, a pick that'd be another faction's taking a mark and saying so, a
+// mark that'd be another's not offered, and each tap one change.
+{
+  const doc = blank();
+  apply(doc, { o: "new", f: { id: "f-aaaaaaaa", name: "The Tithe Fleet", seal: { c: "anchor", f: "bend", d: "" } } });
+  apply(doc, { o: "new", f: { id: "f-bbbbbbbb", name: "Tarrant & Daughters", seal: { c: "scales", f: "pale", d: "" } } });
+  apply(doc, { o: "new", f: { id: "f-cccccccc", name: "The Drowned Choir", seal: null } });
+  const sent = [];
+  const toasts = [];
+  const edit = (id, ops, say) => {
+    let did = false;
+    for (const op of ops) did = apply(doc, op) || did;
+    if (did) sent.push({ ops, say });
+    return did;
+  };
+  const SP = makeSealPick({ d: { render: () => {}, toast: (t) => toasts.push(t) }, esc, edit, fold: (key, title, glance, body, badge, h) => `<details data-k="${key}" data-h="${h}"><summary>${title} ${glance}</summary>${body}</details>` });
+  const fleet = () => doc.factions[0];
+  const tap = (act, data) => SP.ACT[act]({ dataset: data }, "camp-1");
+  let html = SP.fold("camp-1", fleet(), doc);
+  yes(/data-h="2"/.test(html) && /class="zd-seal them lg/.test(html) && /data-do="seal-deal"/.test(html), "her faction's seal fold has its seal big and Deal another, with an h2 like the parts beside it");
+  same((html.match(/data-part="c"/g) ?? []).length, Object.keys(CHARGES).length, "and every charge to pick from");
+  tap("seal-set", { f: "f-aaaaaaaa", part: "c", v: "scales" });
+  same(fleet().seal, { c: "scales", f: "bend", d: "" }, "picking what's on it keeps how it's split");
+  tap("seal-set", { f: "f-aaaaaaaa", part: "f", v: "pale" });
+  same(fleet().seal, { c: "scales", f: "pale", d: "bar" }, "a pick that'd be another faction's takes a mark");
+  yes(/tells it apart from Tarrant &amp; Daughters/.test(sent.at(-1).say), `and says so (${sent.at(-1).say})`);
+  html = SP.fold("camp-1", fleet(), doc);
+  yes(/data-part="d" data-v=""[^>]*disabled/.test(html), "taking the mark off, which would make it Tarrant & Daughters', isn't offered");
+  same(sent.every((x) => x.ops.length === 1 && x.ops[0].o === "seal"), true, "each tap's one change");
+  const back = undoOf(doc, { o: "seal", id: "f-aaaaaaaa", v: null });
+  same(back, [{ o: "seal", id: "f-aaaaaaaa", v: { c: "scales", f: "pale", d: "bar" } }], "and it's undone the same way");
+  const seen = new Set();
+  for (let k = 0; k < 40; k++) {
+    tap("seal-deal", { f: "f-cccccccc" });
+    const s = doc.factions[2].seal;
+    if (!s || doc.factions.filter((x) => sealKey(x.seal) === sealKey(s)).length !== 1) note(`Deal another gave ${JSON.stringify(s)}, which isn't one of its own`);
+    seen.add(sealKey(s));
+  }
+  yes(seen.size > 20, `Deal another deals a fresh one each time (${seen.size} different in 40)`);
+  same(toasts, [], "with nothing turned down");
+  console.log("4c. the GM's seal fold: big, Deal another, picks that take a mark, and one change a tap");
+}
+
 // 5. The dealing script.
 {
   const args = ["scripts/deal-world.mjs", "--tables", DIR, "--region", groups[0].recipe.region, "--era", groups[0].recipe.era, ...(groups[0].recipe.twist ? ["--twist", groups[0].recipe.twist] : []), "--seed", "gate-moss-wren", "--factions", "4"];
@@ -722,14 +835,17 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     const book = bookBoard(id);
     if (!book) continue;
     let n = 0;
-    const held = book.cards.map((c) => ({ name: c.name, about: "", res: c.res.map((r) => ({ id: `r-${n++}x`, text: r.text })), assets: c.assets.map((a) => ({ id: `a-${n++}x`, text: a.text, power: a.power })) }));
+    const held = book.cards.map((c) => ({ name: c.name, about: "", res: c.res.map((r) => ({ id: `r-${n++}x`, text: r.text })), assets: c.assets.map((a) => ({ id: `a-${n++}x`, text: a.text, power: a.power })), seal: c.seal }));
+    // A mini faction's seal on the board too, which a new one can't have either.
+    const taken = [...held.map((h) => h.seal), { c: held[0].seal?.c ?? "crown", f: "plain", d: "bar" }];
+    yes(held.every((h) => h.seal), `every card on ${book.name} has its seal`);
     const recipe = { region: fr.region, era: fr.era, twist: fr.twist ?? null };
     const dials = { tense: 1, strange: 1, rich: 1, ruled: 1, ...fr.dials };
     let bad = null;
     let ties = 0;
     for (let b = 0; b < 60; b++) {
       const seed = newSeed(T, rngOf("add", b));
-      const W = startAdd(T, { recipe, dials, seed, held });
+      const W = startAdd(T, { recipe, dials, seed, held, taken });
       const was = JSON.stringify(W.factions.slice(0, held.length));
       dealRest(T, W);
       const C = cardsOf(T, W);
@@ -738,7 +854,11 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
       const fail = (what) => {
         bad ??= `${seed}: ${what}`;
       };
-      if (JSON.stringify(recordOf(dealRest(T, startAdd(T, { recipe, dials, seed, held })))) !== JSON.stringify(recordOf(W))) fail("the same seed dealt two different factions");
+      const twice = dealRest(T, startAdd(T, { recipe, dials, seed, held, taken }));
+      if (JSON.stringify(recordOf(twice)) !== JSON.stringify(recordOf(W))) fail("the same seed dealt two different factions");
+      if (sealKey(cardsOf(T, twice).factions[i].seal) !== sealKey(f.seal)) fail("the same seed dealt two different seals");
+      if (!f.seal || taken.some((x) => sealKey(x) === sealKey(f.seal))) fail(`its seal's ${f.seal ? "one the board has already" : "missing"}`);
+      if (C.factions.slice(0, i).some((x, j) => sealKey(x.seal) !== sealKey(held[j].seal))) fail("a faction already on the board has another seal on the card");
       if (JSON.stringify(W.factions.slice(0, held.length)) !== was) fail("a faction already on the board changed");
       if (!f.name || !f.about || !f.want || !f.face || !f.secret || !f.agendas.length || !f.sits) fail("the new card's missing part of itself");
       if (f.die !== 2 * f.steps) fail(`its d${f.die} isn't 1 step plus its people`);
@@ -763,10 +883,11 @@ yes(lastNamed * 4 > dealtCount, `the last faction dealt is aimed at by another's
     yes(ties > 10, `adding to ${book.name}, the new faction gets an ally or a debt as well as its rival on more than 10 of 60 (got ${ties})`);
     console.log(`6. ${book.name}: 60 factions added on its mix`);
     // It picks up from its record, and deals the same from there.
-    const A = startAdd(T, { recipe, dials, seed: "ash-lantern-ford", held });
+    const A = startAdd(T, { recipe, dials, seed: "ash-lantern-ford", held, taken });
     dealRest(T, A);
     const back = resume(T, recordOf(A));
     same(recordOf(back), recordOf(A), `a faction being added to ${book.name} picks up from its record`);
+    same(cardsOf(T, back).factions.map((x) => x.seal), cardsOf(T, A).factions.map((x) => x.seal), `and its seals with it (${book.name})`);
     redeal(T, A, `f:${A.held}:want`);
     redeal(T, back, `f:${back.held}:want`);
     same(recordOf(back), recordOf(A), `and deals the same from there (${book.name})`);
@@ -1435,6 +1556,9 @@ const realWorlds = [];
     // Each break on its own copy, and the problem it has to raise.
     const breaks = [
       ["a faction with no Want", (w) => delete w.files.factions.factions[0].want, /has no want/],
+      ["a faction with no seal", (w) => delete w.files.factions.factions[2].seal, /The Town Watch has no seal/],
+      ["a seal the kit hasn't got", (w) => (w.files.factions.factions[2].seal = { c: "unicorn", f: "plain" }), /isn't one the kit has/],
+      ["two factions with the same seal", (w) => (w.files.factions.factions[3].seal = { ...w.files.factions.factions[1].seal }), /have the same seal/],
       ["Power past its size", (w) => w.files.factions.factions[1].people.push({ text: "More Boats", does: "+1 Power. Another crew." }, { text: "Even More Boats", does: "+1 Power. And another." }), /is local, so its Power's d4 to d6/],
       ["a faction with no rival", (w) => (w.files.factions.factions[4].threads = w.files.factions.factions[4].threads.filter((t) => t.tie !== "rival")), /The Market Gang has no rival/],
       ["a rival with no thread back", (w) => (w.files.factions.factions[0].threads = w.files.factions.factions[0].threads.filter((t) => t.to !== "market-gang")), /rival The Harbour Bank has no hostile thread back/],
@@ -1718,6 +1842,7 @@ const realWorlds = [];
     const size = JSON.stringify(doc).length;
     yes(size < WORLD_HOLDS * 0.7, `${world.id}: brought in it's ${size} characters, too near the ${WORLD_HOLDS} a world holds`);
     same(JSON.stringify(readable(copy(doc))), JSON.stringify(doc), `${world.id}: read back off the Worker it isn't the same`);
+    yes(world.factions.every((f) => f.seal) && new Set(world.factions.map((f) => sealKey(f.seal))).size === world.factions.length, `${world.id}: every faction has a seal of its own`);
     // Every card with its book, and its threads, maker and seat by new ids.
     const byKey = new Map(doc.factions.map((f) => [f.book?.key, f]));
     const pageByKey = new Map(doc.pages.map((p) => [p.book?.key, p]));
@@ -1728,6 +1853,7 @@ const realWorlds = [];
         continue;
       }
       same([got.book.from, got.book.h, Object.values(got.shown).some(Boolean)], [world.id, hashOf(f.card), false], `${world.id}: ${f.card.name}'s book and what's shown`);
+      same(got.seal, f.seal, `${world.id}: ${f.card.name} brought in with its seal`);
       same(got.threads.map((t) => [t.text, doc.factions.find((x) => x.id === t.to)?.book.key]), f.card.threads.map((t) => [t.text, t.to]), `${world.id}: ${f.card.name}'s threads`);
       if (f.of) same(doc.factions.find((x) => x.id === got.parent)?.book.key, f.of, `${world.id}: ${f.card.name}'s maker`);
       if (f.seat) same(doc.pages.find((p) => p.id === got.sits)?.book.key, f.seat, `${world.id}: where ${f.card.name} sits`);

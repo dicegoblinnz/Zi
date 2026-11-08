@@ -6,7 +6,7 @@
 // moment it's made as it does once the Worker's got it.
 //
 // A card: { id, name, about, want, face, secret, more, note, mini, parent,
-//   outs, res, assets, agendas, pub, mor, loy, threads, shown, book }
+//   outs, res, assets, agendas, pub, mor, loy, threads, shown, book, seal }
 //   about     what it is, in a line, like "A merchant guild. It works through money."
 //   secret    its Secret's tag, and more, the rest of it
 //   note      the GM's own, never shown to the crew
@@ -23,6 +23,13 @@
 //             was being the book's card as it was brought in, h its hash and at
 //             when the build that had it was made. A card out of a whole world
 //             (stage 14 of notes/builder-plan.md) has the world's id as from.
+//   seal      its wax seal, { c, f, d }: a charge, a field and a mark ("" for
+//             none) out of src/kit/seals.js, or null for none yet. It goes to
+//             the crew with the card and never before it
+//             (notes/faction-feel-plan.md, stage 1). A card out of the book
+//             comes in wearing the book's (its was has it), and a mini faction
+//             its maker's with a mark of its own, unless the change that
+//             brings it in says otherwise
 //   sits      the place's page it sits at, if it came in with a whole world,
 //             so the web on a map puts it on that place's pin. Never sent to
 //             a player, whose maps say who sits where (mapsForPlayer())
@@ -41,6 +48,8 @@
 //   { o: "die", id, lid, v, done? }    an agenda set straight to a size
 //   { o: "move", id, l, lid, to, at? } a resource or an asset goes to another faction
 //   { o: "book", id, card, h, at }     the book's card she's now seen (with her pick made in changes before it)
+//   { o: "seal", id, v }              its seal, { c, f, d }, or null to take it off
+//                                     (fill: true only on one without, sealsFor())
 //
 // A board out of the book comes in as one "new" for each card, so it's undone
 // the same way.
@@ -51,6 +60,7 @@
 // the world builder's record, as doc.build (world-record.js), with changes
 // starting "wb-".
 
+import { CHARGES as SEAL_CHARGES, FIELDS as SEAL_FIELDS, MARKS as SEAL_MARKS, cadetSeal, dealSeal, sealKey } from "../kit/seals.js";
 import { applyMap, isMapOp, mapsForPlayer, mapsOf, undoMap } from "./maps.js";
 import { applyPage, isPageOp, pagesForPlayer, pagesOf, undoPage } from "./pages.js";
 import { applyBuild, buildForPlayer, buildOf, isBuildOp, undoBuild } from "./world-record.js";
@@ -115,7 +125,52 @@ export function cardOf(raw) {
   c.assets = list("assets", (x) => ({ text: x.text, does: x.does, power: x.power, x: x.x }));
   c.agendas = list("agendas", (x) => ({ text: x.text, die: x.die, then: x.then })).slice(0, MAX.agendas);
   for (const l of ["pub", "mor", "loy", "threads"]) c[l] = list(l, (x) => ({ text: x.text, kind: x.kind, s: x.s }));
+  // The book's seal for it (content/world-tables/seals.yaml), when it has one.
+  const seal = sealOf(raw.seal);
+  if (seal) c.seal = seal;
   return c;
+}
+
+// A seal as it came from somewhere else: a charge and a field the kit has, and
+// a mark it has or none. Anything else is no seal at all.
+export function sealOf(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const c = String(raw.c ?? ""), f = String(raw.f ?? ""), d = String(raw.d ?? "");
+  if (!Object.hasOwn(SEAL_CHARGES, c) || !Object.hasOwn(SEAL_FIELDS, f)) return null;
+  return { c, f, d: d && Object.hasOwn(SEAL_MARKS, d) ? d : "" };
+}
+
+// Seals for the factions on a board that haven't one (a board from before
+// seals, 1 Nov), so a faction the crew's met never looks like one it hasn't:
+// the book's when nobody on the board has it, a mini faction its maker's with
+// a mark, or else one dealt. book(f) is the book's seal for f, null for none,
+// or undefined to leave f till later (its whole world's file isn't on the
+// phone yet), and rand(f) the randomness that deals f's, the same on every
+// phone of hers. Makers go first, so a mini faction can wear its maker's, and
+// one whose maker's waiting waits with it. The changes that give them,
+// { o: "seal", fill: true } each, which only fill a faction still without.
+export function sealsFor(doc, { book = () => null, rand }) {
+  const got = new Map(doc.factions.filter((f) => f.seal).map((f) => [f.id, f.seal]));
+  const taken = [...got.values()];
+  const free = (s) => Boolean(s) && !taken.some((t) => sealKey(t) === sealKey(s));
+  const ops = [];
+  const waiting = new Set();
+  for (const f of [...doc.factions.filter((x) => !x.mini), ...doc.factions.filter((x) => x.mini)]) {
+    if (got.has(f.id)) continue;
+    const b = book(f);
+    if (b === undefined || (f.mini && waiting.has(f.parent))) {
+      waiting.add(f.id);
+      continue;
+    }
+    let s = sealOf(b);
+    if (!free(s)) s = f.mini && got.has(f.parent) ? cadetSeal(got.get(f.parent), taken) : null;
+    s ??= dealSeal(rand(f), { taken });
+    if (!s) continue;
+    got.set(f.id, s);
+    taken.push(s);
+    ops.push({ o: "seal", id: f.id, v: s, fill: true });
+  }
+  return ops;
 }
 
 function bookOf(b) {
@@ -141,6 +196,7 @@ export function factionOf(raw) {
   const s = raw.shown && typeof raw.shown === "object" ? raw.shown : {};
   f.shown = Object.fromEntries(SHOWS.map((p) => [p, s[p] === true]));
   f.book = bookOf(raw.book);
+  f.seal = sealOf(raw.seal);
   if (isId(raw.sits)) f.sits = raw.sits;
   return f;
 }
@@ -178,6 +234,9 @@ export function apply(doc, op) {
     case "new": {
       const n = factionOf(op.f);
       if (!n || find(doc, n.id) || doc.factions.length >= MAX.factions) return false;
+      // A card out of the book comes in wearing the book's seal, unless the
+      // change gives it one of its own (or none, as null).
+      if (op.f.seal === undefined && n.book?.was?.seal) n.seal = sealOf(n.book.was.seal);
       if (n.parent && n.parent !== "crew" && !doc.factions.some((p) => p.id === n.parent && !p.mini)) n.parent = null;
       const at = Number.isInteger(op.at) && op.at >= 0 && op.at <= doc.factions.length ? op.at : doc.factions.length;
       doc.factions.splice(at, 0, n);
@@ -199,6 +258,8 @@ export function apply(doc, op) {
       if (!f || f.mini || minisOf(doc, f.id).length >= MAX.minis || doc.factions.length >= MAX.factions) return false;
       const n = factionOf({ ...op.f, mini: true, parent: f.id });
       if (!n || find(doc, n.id)) return false;
+      // It wears its maker's seal with a mark of its own, the first that's free.
+      if (op.f.seal === undefined && f.seal) n.seal = cadetSeal(f.seal, doc.factions.map((x) => x.seal).filter(Boolean));
       const res = f.res.find((x) => x.id === op.res);
       const asset = f.assets.find((x) => x.id === op.asset);
       if (res && !n.res.some((x) => x.id === res.id)) {
@@ -311,6 +372,17 @@ export function apply(doc, op) {
       f.book = { ...f.book, h: line(op.h, 20), at: whole(op.at, 0, Number.MAX_SAFE_INTEGER, f.book.at), was: card };
       break;
     }
+    case "seal": {
+      if (!f) return false;
+      const v = op.v === null ? null : sealOf(op.v);
+      if (op.v !== null && !v) return false;
+      // One that fills a faction from before seals (sealsFor()) only goes on
+      // one that's still without, and never copies another's, since it may
+      // have been dealt from a board her other phone's changed since.
+      if (op.fill && (f.seal || !v || doc.factions.some((x) => x !== f && x.seal && sealKey(x.seal) === sealKey(v)))) return false;
+      f.seal = v;
+      break;
+    }
     default:
       return false;
   }
@@ -372,6 +444,8 @@ export function undoOf(doc, op) {
       return item ? [{ o: "move", id: op.to, l: op.l, lid: item.id, to: f.id, at: f[op.l].indexOf(item) }, ...(op.l === "assets" && item.off ? [{ o: "edit", id: f.id, l: "assets", lid: item.id, f: "off", v: true }] : [])] : [];
     case "book":
       return f?.book ? [{ o: "book", id: f.id, card: copy(f.book.was), h: f.book.h, at: f.book.at }] : [];
+    case "seal":
+      return f ? [{ o: "seal", id: f.id, v: f.seal ? { ...f.seal } : null }] : [];
     default:
       return [];
   }
@@ -382,6 +456,12 @@ export function undoOf(doc, op) {
 // Its Power: 1 step, plus each asset that adds Power and has something paying
 // for it. A mini faction's is the same, with its one asset.
 export const stepsOf = (f) => 1 + f.assets.filter((a) => a.power && !a.off).length;
+
+// How far off an agenda is at each die, in the book's words: d2 is years off
+// and d12 any day now, and past d12 it happens. The World screen and the
+// faction turn both say it this way.
+export const AGO = { 2: "years off", 4: "a season or more away", 6: "a month or two away", 8: "a week or two away", 10: "days away", 12: "any day now" };
+export const ago = (die) => AGO[die] ?? "";
 
 // What pays for what. Every asset needs a resource paying for it, and one
 // that isn't paying for anything is an extra resource.
@@ -432,6 +512,7 @@ export function forPlayer(doc) {
         threads: s.threads ? f.threads.filter((t) => t.to === "crew" || seen.has(t.to)) : [],
         shown: { ...s },
         book: null,
+        seal: f.seal ? { ...f.seal } : null,
       };
     }),
     pages: pagesForPlayer(doc),

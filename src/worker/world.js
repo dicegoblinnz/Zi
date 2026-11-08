@@ -15,24 +15,25 @@
 //        sent twice (the signal dropped before the answer came back) counts once.
 //        A picture a change takes off a map goes in the world's bin for a day,
 //        so Undo can put it back, then off the bucket (binned() in maps.js).
-//        When what the crew sees of the maps has changed (fog she's lifted, a
-//        map or a pin she's shown), or of How it came to be (an age she's
-//        shown them), every phone on the campaign's live table is told to
-//        look again, so it's there in a moment (tableWorld()).
+//        When anything the crew sees has changed (a faction or a part of one
+//        she's shown, a page, fog she's lifted, a map or a pin, an age of How
+//        it came to be), every phone on the campaign's live table is told to
+//        look again, so it's there in a moment (tableWorld()), and what she's
+//        just shown them of the factions goes to the table screen too
+//        (revealsOf() in reveal-rules.js, never with a faction's id).
 //        A whole world (stage 14 of notes/builder-plan.md) is Mo's alone to
 //        bring in for now: a change carrying one of its cards, its drawn map
 //        or its record, from any other GM, is turned down whole.
 import { apply, blank, factionOf, forPlayer, readable } from "../companion/board.js";
-import { keysOf, mapOf, mapsForPlayer } from "../companion/maps.js";
+import { keysOf, mapOf } from "../companion/maps.js";
 import { pageOf } from "../companion/pages.js";
-import { buildForPlayer, buildOf } from "../companion/world-record.js";
+import { buildOf } from "../companion/world-record.js";
+import { hiddenSince, revealsOf } from "../companion/reveal-rules.js";
 import { binned, dropPictures } from "./maps.js";
 import { tableWorld } from "./table.js";
 import wholes from "../generated/worlds-index.json";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
-// What the crew's phones are told to look again for: their maps and their history.
-const crewView = (doc) => JSON.stringify([mapsForPlayer(doc), buildForPlayer(doc)]);
 const MAX_CHANGES = 200;
 // Twenty Places and the whole Bestiary brought in fit with room to spare.
 const MAX_DOC = 700000;
@@ -101,12 +102,17 @@ export async function changeWorld(request, env, camp, user, { json, fail, body, 
   let doc = null;
   let gone = [];
   let crewMoved = false;
+  let shown = [];
+  let hid = false;
   for (let tries = 0; ; tries++) {
     row = await worldRow(env, camp.id);
     const raw = row ? parse(row.data) ?? {} : {};
     doc = readable(raw);
     const had = keysOf(doc);
-    const crewSaw = crewView(doc);
+    // What the crew's phones have of it: the factions, pages, maps and history
+    // they've been shown, as forPlayer() makes it. Kept as words, since
+    // forPlayer() shares the board's own lists, which the changes move.
+    const crewSaw = JSON.stringify(forPlayer(doc));
     // Kept with no prototype, so no phone's id can be anything but an entry.
     const seq = Object.assign(Object.create(null), raw.seq && typeof raw.seq === "object" ? raw.seq : {});
     const high = Number(seq[dev]?.n) || 0;
@@ -139,7 +145,15 @@ export async function changeWorld(request, env, camp, user, { json, fail, body, 
       : await env.DB.prepare("INSERT INTO world (campaignId, data, version, updatedAt) VALUES (?1, ?2, 1, ?3) ON CONFLICT DO NOTHING").bind(camp.id, text, now).run();
     if (res.meta.changes) {
       row = { data: text, version: (row?.version ?? 0) + 1 };
-      crewMoved = changed && crewView(doc) !== crewSaw;
+      if (changed) {
+        const crewSees = forPlayer(doc);
+        crewMoved = JSON.stringify(crewSees) !== crewSaw;
+        if (crewMoved) {
+          const saw = JSON.parse(crewSaw);
+          shown = revealsOf(saw, crewSees);
+          hid = hiddenSince(saw, crewSees);
+        }
+      }
       break;
     }
     // A change from her other phone got in first, so these go on top of it.
@@ -147,7 +161,7 @@ export async function changeWorld(request, env, camp, user, { json, fail, body, 
   }
   // Pictures a day in the bin come off the bucket, now the world's let them go.
   if (gone.length) await dropPictures(env, camp.id, gone).catch((err) => console.error(`maps bin: ${err?.message ?? err}`));
-  if (crewMoved) await tableWorld(env, camp.id);
+  if (crewMoved) await tableWorld(env, camp.id, shown, hid);
   // The world as it now stands, without reading it back again.
   return json({ seq: top, ...viewOf(camp, row, doc), role: camp.role });
 }

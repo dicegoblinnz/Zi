@@ -6,17 +6,31 @@
 // take it out. A player's phone only ever gets the lines of the ages she's
 // shown (buildForPlayer() in world-record.js), and a name in a line links to
 // whatever of the world it's been shown.
-import { AGE_ORDER } from "./world-record.js";
+//
+// After the founding's three ages, each downtime that's ended is an age of
+// its own (stage 5 of notes/faction-feel-plan.md): what changed in it, a line
+// each, under how long the table said it was. The crew can read it, since
+// it's what they heard, unless she hides it again.
+import { agesOf, downtimeOf, isDowntime } from "./world-record.js";
 import { AGE_NAMES } from "./world-answer.js";
 
 const AGE_SAY = { 1: "long ago", 2: "in living memory", 3: "this last year" };
 // What an age is, in a sentence: shown, hidden, and in a player's note.
 const WHAT = { 1: "what happened long ago", 2: "what happened in living memory", 3: "what happened this last year", 0: "the rest of it" };
+const whatOf = (age) => WHAT[age] ?? `what changed in downtime ${age - 3}`;
+const midway = (t) => String(t ?? "").charAt(0).toLowerCase() + String(t ?? "").slice(1);
 const MAX_LINE = 400;
 
 export function makeStory(w) {
   const { d, esc, edit, docOf, isGm, gmName, plural, fold, richFor, ui, setEditing, lit } = w;
   const edKey = (l) => `hist:${l.id}`;
+
+  // An age's name: the founding's own, or the downtime's, with how long it was.
+  function ageName(b, a) {
+    const dt = downtimeOf(b, a);
+    if (!dt) return AGE_NAMES[a];
+    return `Downtime ${dt.n}${dt.len ? ` <small class="ws-len">${esc(midway(dt.len))}</small>` : ""}`;
+  }
 
   function section(id) {
     const gm = isGm(id);
@@ -24,11 +38,11 @@ export function makeStory(w) {
     const lines = doc.build?.history ?? [];
     if (!lines.length) return "";
     const rich = richFor(id, doc);
-    const ages = AGE_ORDER.filter((a) => lines.some((l) => l.age === a));
+    const ages = agesOf(doc.build).filter((a) => lines.some((l) => l.age === a));
     const glow = lit(id).includes("history") ? " is-new" : "";
     if (!gm) {
       return `<section class="cc-sec ws-sec${glow}" data-wb="${esc(id)}" aria-labelledby="ws-h"><h2 id="ws-h">How it came to be</h2>
-        ${ages.map((a) => `<div class="ws-age"><h3>${AGE_NAMES[a]}</h3><ol class="ws-lines">${lines.filter((l) => l.age === a).map((l) => `<li class="ws-line"><p class="ws-text">${rich(l.text)}</p></li>`).join("")}</ol></div>`).join("")}</section>`;
+        ${ages.map((a) => `<div class="ws-age${isDowntime(a) ? " is-downtime" : ""}"><h3>${ageName(doc.build, a)}</h3><ol class="ws-lines">${lines.filter((l) => l.age === a).map((l) => `<li class="ws-line"><p class="ws-text">${rich(l.text)}</p></li>`).join("")}</ol></div>`).join("")}</section>`;
     }
     const shown = new Set(doc.build.shown ?? []);
     const parts = ages.map((a) => {
@@ -37,16 +51,19 @@ export function makeStory(w) {
       const hers = these.filter((l) => l.hers).length;
       const seen = these.length - hers;
       const glance = `${plural(these.length, "line", "lines")}, ${on ? (hers ? `${seen} of them shown to the crew` : "shown to the crew") : "hidden from the crew"}`;
-      const say = on ? `The crew can read ${WHAT[a]}${hers ? `, bar ${hers === 1 ? "the line that’s" : "the lines that are"} yours` : ""}.` : "Only you see these.";
+      const say = on ? `The crew can read ${whatOf(a)}${hers ? `, bar ${hers === 1 ? "the line that’s" : "the lines that are"} yours` : ""}.` : "Only you see these.";
       const show = seen
         ? `<div class="wb-show ws-show${on ? " is-on" : ""}"><p class="cc-small">${say}</p><button type="button" class="button sm${on ? "" : " primary"}" data-act="w" data-do="hist-show" data-age="${a}" aria-pressed="${on}">${on ? "Hide it again" : "Show the crew"}</button></div>`
         : `<p class="cc-small">Every line here made a Secret, so it stays on your phone.</p>`;
       const badge = `<span class="wb-badge${on && seen ? " is-on" : ""}">${on && seen ? "Shown" : "Hidden"}</span>`;
-      return fold(`hist-${a}`, AGE_NAMES[a], glance, `${show}<ol class="ws-lines">${these.map((l) => lineView(l, rich)).join("")}</ol>`, badge);
+      return fold(`hist-${a}`, ageName(doc.build, a), glance, `${show}<ol class="ws-lines">${these.map((l) => lineView(l, rich)).join("")}</ol>`, badge);
     });
     const hersAll = lines.filter((l) => l.hers).length;
+    const deck = lines.filter((l) => !isDowntime(l.age)).length;
+    const downtimes = (doc.build.ages ?? []).filter((x) => lines.some((l) => l.age === 3 + x.n)).length;
+    const sum = [deck ? `${plural(deck, "line", "lines")} from the deck. You show the crew an age at a time${hersAll ? `, and ${hersAll === 1 ? "the line that made a Secret stays" : `the ${hersAll} lines that made Secrets stay`} on your phone` : ""}.` : "", downtimes ? `${downtimes === 1 ? "A downtime’s" : `${plural(downtimes, "downtime", "downtimes")}’`} worth of what changed, an age each, which the crew can read.` : ""].filter(Boolean).join(" ");
     return `<section class="cc-sec ws-sec${glow}" data-wb="${esc(id)}" aria-labelledby="ws-h"><h2 id="ws-h">How it came to be</h2>
-      <p class="cc-small wb-sum">${plural(lines.length, "line", "lines")} from the deck. You show the crew an age at a time${hersAll ? `, and ${hersAll === 1 ? "the line that made a Secret stays" : `the ${hersAll} lines that made Secrets stay`} on your phone` : ""}.</p>
+      <p class="cc-small wb-sum">${sum}</p>
       <div class="cc-folds">${parts.join("")}</div></section>`;
   }
 
@@ -65,7 +82,8 @@ export function makeStory(w) {
     const had = new Set((was.build?.history ?? []).map((l) => l.id));
     const fresh = (now.build?.history ?? []).filter((l) => !had.has(l.id));
     if (!fresh.length) return { said: [], keys: [] };
-    const ages = AGE_ORDER.filter((a) => fresh.some((l) => l.age === a));
+    const ages = agesOf(now.build).filter((a) => fresh.some((l) => l.age === a));
+    if (ages.length && ages.every(isDowntime)) return { said: [ages.length === 1 ? `What changed in downtime ${ages[0] - 3} is in How it came to be now.` : "What changed in the last downtimes is in How it came to be now."], keys: ["history"] };
     return { said: [`${gmName(id)} showed you how it came to be${ages.length === 1 && AGE_SAY[ages[0]] ? `, ${AGE_SAY[ages[0]]}` : ""}.`], keys: ["history"] };
   }
 
@@ -73,9 +91,9 @@ export function makeStory(w) {
     "hist-show": (el, id) => {
       const doc = docOf(id);
       const age = Number(el.dataset.age);
-      if (!isGm(id) || !doc.build || !AGE_ORDER.includes(age)) return;
+      if (!isGm(id) || !doc.build || !agesOf(doc.build).includes(age)) return;
       const on = (doc.build.shown ?? []).includes(age);
-      const what = WHAT[age];
+      const what = whatOf(age);
       edit(id, [{ o: "wb-show", age, v: !on }], on ? `${what.charAt(0).toUpperCase()}${what.slice(1)} is hidden from the crew again.` : `The crew can read ${what} now.`);
     },
     "hist-edit": (el, id) => {

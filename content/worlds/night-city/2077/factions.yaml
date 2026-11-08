@@ -9,6 +9,7 @@ factions:
 
   - key: arasaka
     kind: corp
+    seal: { c: tower, f: plain }
     size: great
     seat: arasaka-tower
     name: Arasaka
@@ -88,6 +89,7 @@ factions:
 
   - key: militech
     kind: corp
+    seal: { c: swords, f: pale }
     size: great
     seat: corpo-plaza
     name: Militech
@@ -155,6 +157,7 @@ factions:
 
   - key: kang-tao
     kind: corp
+    seal: { c: cog, f: bend }
     size: city
     seat: corpo-plaza
     name: Kang Tao
@@ -208,6 +211,7 @@ factions:
 
   - key: biotechnica
     kind: corp
+    seal: { c: tree, f: fess }
     size: city
     seat: biotechnica-flats
     name: Biotechnica
@@ -270,6 +274,7 @@ factions:
 
   - key: trauma-team
     kind: corp
+    seal: { c: helm, f: chevron }
     size: city
     seat: night-city-medical-center
     name: Trauma Team
@@ -328,6 +333,7 @@ factions:
 
   - key: night-corp
     kind: corp
+    seal: { c: column, f: pile }
     size: city
     seat: downtown
     name: Night Corp
@@ -382,6 +388,7 @@ factions:
 
   - key: delamain
     kind: corp
+    seal: { c: wheel, f: plain }
     size: small
     seat: delamain-hq
     name: Delamain
@@ -428,6 +435,7 @@ factions:
 
   - key: ncpd
     kind: law
+    seal: { c: key, f: pale }
     size: city
     seat: the-hall-of-justice
     name: NCPD
@@ -491,6 +499,7 @@ factions:
 
   - key: maxtac
     kind: law
+    seal: { c: key, f: pale, d: bar }
     mini: { of: ncpd, outs: [Destroy, Obstruct] }
     name: MaxTac
     about: >-
@@ -508,6 +517,7 @@ factions:
 
   - key: city-hall
     kind: law
+    seal: { c: column, f: plain }
     size: city
     seat: night-city-hall
     name: City Hall
@@ -563,6 +573,7 @@ factions:
 
   - key: peralez-campaign
     kind: law
+    seal: { c: scales, f: chevron }
     size: small
     seat: night-city-hall
     name: The Peralez Campaign
@@ -609,6 +620,7 @@ factions:
 
   - key: netwatch
     kind: law
+    seal: { c: signal, f: quarterly }
     size: city
     seat: corpo-plaza
     name: NetWatch
@@ -661,6 +673,7 @@ factions:
 
   - key: network-54
     kind: other
+    seal: { c: signal, f: plain }
     size: local
     seat: downtown
     name: Network 54
@@ -706,6 +719,7 @@ factions:
 
   - key: maelstrom
     kind: gang
+    seal: { c: cog, f: quarterly }
     size: local
     seat: totentanz
     name: Maelstrom
@@ -770,6 +784,7 @@ factions:
 
   - key: tyger-claws
     kind: gang
+    seal: { c: knife, f: plain }
     size: city
     seat: japantown
     name: The Tyger Claws
@@ -826,6 +841,7 @@ factions:
 
   - key: valentinos
     kind: gang
+    seal: { c: chalice, f: bend }
     size: local
     seat: heywood
     name: The Valentinos
@@ -875,6 +891,7 @@ factions:
 
   - key: sixth-street
     kind: gang
+    seal: { c: helm, f: fess }
     size: local
     seat: arroyo
     name: 6th Street
@@ -931,6 +948,7 @@ factions:
 
   - key: voodoo-boys
     kind: gang
+    seal: { c: signal, f: wavy }
     size: local
     seat: battys-hotel
     name: The Voodoo Boys
@@ -989,6 +1007,7 @@ factions:
 
   - key: dogtown-voodoo-boys
     kind: gang
+    seal: { c: signal, f: wavy, d: bar }
     mini: { of: voodoo-boys, outs: [Acquire, Influence] }
     name: The Dogtown Voodoo Boys
     about: >-
@@ -1006,6 +1025,7 @@ factions:
 
   - key: animals
     kind: gang
+    seal: { c: skull, f: plain }
     size: small
     seat: the-grand-imperial-mall
     name: The Animals
@@ -1045,6 +1065,7 @@ factions:
 
   - key: mox
     kind: gang
+    seal: { c: rose, f: chevron }
     size: small
     seat: lizzies-bar
     name: The Mox
@@ -1094,6 +1115,7 @@ factions:
 
   - key: scavengers
     kind: gang
+    seal: { c: knife, f: bend }
     size: small
     seat: the-scraper
     name: The Scavengers
@@ -1137,6 +1159,7 @@ factions:
 
   - key: barghest
     kind: gang
+    seal: { c: tower, f: chevron }
     size: city
     seat: the-black-sapphire
     name: Barghest
@@ -1201,6 +1224,7 @@ factions:
 
   - key: aldecaldos
     kind: nomad
+    seal: { c: wheel, f: pale }
     size: local
     seat: the-aldecaldo-camp
     name: The Aldecaldos
@@ -1260,6 +1284,7 @@ factions:
 
   - key: wraiths
     kind: nomad
+    seal: { c: skull, f: bend }
     size: local
     seat: the-cement-factory
     name: The Wraiths
@@ -1299,6 +1324,7 @@ factions:
 
   - key: afterlife
     kind: fixer
+    seal: { c: crown, f: plain }
     size: local
     seat: the-afterlife
     name: The Afterlife
@@ -1344,6 +1370,7 @@ factions:
 
   - key: deshawn-outfit
     kind: fixer
+    seal: { c: coins, f: plain }
     size: small
     seat: the-afterlife
     name: "DeShawn's Outfit"
@@ -1389,6 +1416,7 @@ factions:
 
   - key: regina-network
     kind: fixer
+    seal: { c: lamp, f: plain }
     size: small
     seat: kabuki
     name: "Regina's Network"
@@ -1432,6 +1460,7 @@ factions:
 
   - key: wakakos-book
     kind: fixer
+    seal: { c: scroll, f: pale }
     size: small
     seat: japantown
     name: "Wakako's Book"
@@ -1475,6 +1504,7 @@ factions:
 
   - key: padres-flock
     kind: fixer
+    seal: { c: bell, f: plain }
     size: small
     seat: the-glen
     name: "Padre's Flock"
@@ -1516,6 +1546,7 @@ factions:
 
   - key: el-capitans-table
     kind: fixer
+    seal: { c: chalice, f: pale }
     size: small
     seat: rancho-coronado
     name: "El Capitán's Table"
@@ -1558,6 +1589,7 @@ factions:
 
   - key: dinos-crew
     kind: fixer
+    seal: { c: coins, f: fess }
     size: small
     seat: downtown
     name: "Dino's Crew"
@@ -1600,6 +1632,7 @@ factions:
 
   - key: mr-hands-people
     kind: fixer
+    seal: { c: signal, f: bend }
     size: small
     seat: heavy-hearts
     name: "Mr. Hands's People"
@@ -1642,6 +1675,7 @@ factions:
 
   - key: dakotas-garage
     kind: fixer
+    seal: { c: wheel, f: chevron }
     size: small
     seat: rocky-ridge
     name: "Dakota's Garage"
