@@ -10,9 +10,10 @@
 //   a round      { id, n, at, over, tele, acts, held, moved }   over is when it ended, or 0
 //     acts       what each of the crew spent their actions on, by "user|ch":
 //                { name, more, list }. Everyone's got one action a round, and
-//                more holds where any extra ones came from (resolve, held,
-//                hiding, fired, trait). An answer is an action too, kept on
-//                its telegraph. Each act in list is { id, k, ref, act, steps, t }:
+//                more holds where any extra ones came from (aura, 3 Aura and
+//                no more than one for each archetype past the first; held;
+//                hiding; boon, the Extra action Boon). An answer is an action
+//                too, kept on its telegraph. Each act in list is { id, k, ref, act, steps, t }:
 //                  join    their action put into whoever answers telegraph ref,
 //                          with act and steps, the set action they put in
 //                  work    a roll at a stake or an event (ref): roll { dice, opp,
@@ -22,12 +23,18 @@
 //                  else    something else: act says what (Defend, a set action)
 //     held       a stake's or an event's die, rolled once a round: { ref: n }
 //     moved      what the end of the round stepped down: [{ ref, from, to, out }]
-//   a telegraph  { id, who, does, d, kind, one, at, sent, seen, ans, def, icp,
-//                  fx, did, there }
+//   a telegraph  { id, who, does, d, root, kind, one, at, sent, seen, ans, def,
+//                  icp, fx, did, there }
 //     who and does  who's telegraphing and what it's doing, in the GM's words
 //     d             how hard: its die
-//     kind          "blow" (Defend stops it) or "fear" (fear, lies and
-//                   pressure, against Confidence)
+//     root          the Root it's at (Roots, 8 Nov 2026): Body (blows, blades,
+//                   teeth), Mind (fear, lies and pressure) or Soul (despair,
+//                   temptation, curses). When it lands, the track for that Root
+//                   rolls against it (Stamina, Confidence or Resolve), and a
+//                   Defend can stop it too.
+//     kind          "blow" at a Body, "fear" at a Mind or Soul, kept for a
+//                   table from before Roots, which only had kind: rootOf()
+//                   reads a blow as Body and fear as Mind
 //     one           what happens if it lands, when it's only got one answer
 //     at            who or what it's aimed at. One of the crew: { user, ch,
 //                   name, player, arch }, the character, who plays them and
@@ -39,11 +46,13 @@
 //     seen          when it reached the player's phone, or 0
 //     ans           how someone answered it: { user, ch, name, act, steps,
 //                   dice, opp, real, won, at, late }, or null
-//     def           their When it lands, once it's landed: { stopped, mine,
-//                   v, paid, real, at }, or null
+//     def           their When it lands, once it's landed: { on, stopped,
+//                   mine, v, paid, real, at }, or null. on is what stopped it
+//                   or what it rode on: the track for its Root (Stamina,
+//                   Confidence or Resolve) or Defend
 //     icp           a friend who intercepted it, so it comes at them when it
-//                   lands: { user, ch, name, free, at }. Fear can't be, and
-//                   nor can one at the scene.
+//                   lands: { user, ch, name, free, at }. Only one at a Body
+//                   can be, never one at the scene.
 //     fx            at a stake or an event, what it does if it lands: { tag }
 //                   a new tag in the stake's way, or { by } its clock (an
 //                   event's die, or a stake's clock) down that many sizes
@@ -84,10 +93,23 @@ import { applyTurn, forgetTurn, isTurnOp, turnView } from "./turn-rules.js";
 import { applyFound, forgetFound, foundView, isFoundOp, leftFound } from "./found-rules.js";
 
 export const SIZES = [2, 4, 6, 8, 10, 12];
+// The Roots a telegraph can be at, and the track that rides against each.
+export const ROOTS = ["Body", "Mind", "Soul"];
+export const TRACK_AT = { Body: "Stamina", Mind: "Confidence", Soul: "Resolve" };
+export const DEFS = ["Stamina", "Confidence", "Resolve", "Defend"];
+// The Root a telegraph's at. One sent before Roots only says blow or fear.
+export const rootOf = (t) => (ROOTS.includes(t?.root) ? t.root : t?.kind === "fear" ? "Mind" : "Body");
 export const MAX = { who: 60, does: 140, one: 140, name: 60, act: 60, paid: 80, tele: 24, rounds: 12, more: 4, list: 6, ground: 8, stakes: 6, events: 6, tags: 8, text: 140, tag: 80 };
-// Where an extra action can come from (Extra actions, in Conflict).
-export const MORE = ["resolve", "held", "hiding", "fired", "trait"];
-export const ONCE = ["held", "hiding", "fired"];
+// Where an extra action can come from (Extra actions, in Conflict): 3 Aura,
+// as many as your archetypes allow, holding last round's, coming out of
+// hiding and the Extra action Boon, once each. From before Roots, 1 Resolve
+// reads as Aura and a trait as the Boon, and fired-up Confidence is gone.
+export const MORE = ["aura", "held", "hiding", "boon"];
+export const ONCE = ["held", "hiding", "boon"];
+const MORE_WAS = { resolve: "aura", trait: "boon" };
+// The most extra actions Aura can buy in a round: one for each archetype past
+// the first. With no count, the table doesn't know, so it lets the phone say.
+export const auraCap = (n) => (Number.isInteger(n) && n > 0 ? n - 1 : MAX.more);
 const ID = /^[A-Za-z0-9_-]{6,32}$/;
 // An archetype's name, as the crest draws it.
 const ARCH = /^[A-Za-z][A-Za-z' -]{0,23}$/;
@@ -156,6 +178,8 @@ export const atPlace = (t) => t?.at?.k === "place";
 // What it's aimed at, mid-sentence: one of the crew by name, the scene's
 // pieces the way the scene says them (the deal, the scene clock).
 export const atName = (t) => (t?.at?.k ? lower(t.at.name) : t?.at?.name ?? "");
+// Its Root, mid-sentence: "Bram’s Body", or "their Mind" at a place.
+export const atRoot = (t) => (t?.at?.name && !t.at.k ? `${t.at.name}’s ${rootOf(t)}` : `their ${rootOf(t)}`);
 
 // A part of the place, the way the GM says it: "everyone on the gallery", or
 // just "on the gallery". where's the part after everyone, so the phone can
@@ -238,7 +262,8 @@ export function teleFrom(x, roster, now, doc = null) {
   const does = line(x.does, MAX.does);
   const d = Number(x.d);
   if (!who || !does || !SIZES.includes(d)) return null;
-  const base = { id: String(x.id), who, does, d, kind: x.kind === "fear" ? "fear" : "blow", one: line(x.one, MAX.one), sent: now, seen: 0, ans: null, def: null };
+  const root = ROOTS.includes(x.root) ? x.root : x.kind === "fear" ? "Mind" : "Body";
+  const base = { id: String(x.id), who, does, d, root, kind: root === "Body" ? "blow" : "fear", one: line(x.one, MAX.one), sent: now, seen: 0, ans: null, def: null };
   const k = x.at?.k;
   // A stake or an event on the scene, and what it does if it lands. A stake
   // gets a new tag in its way, or its clock drops when it's got one.
@@ -255,7 +280,7 @@ export function teleFrom(x, roster, now, doc = null) {
       if (!tag) return { why: "Say what goes in its way if it lands." };
       fx = { tag };
     }
-    return { ...base, kind: "blow", one: "", at: { k, ref: el.id, name: el.name }, fx };
+    return { ...base, root: "Body", kind: "blow", one: "", at: { k, ref: el.id, name: el.name }, fx };
   }
   // A part of the place: everyone playing's in it when it goes out.
   if (k === "place") {
@@ -290,14 +315,15 @@ export function answerFrom(a) {
 // When it lands, for one telegraph: whether a die stopped it, what that die
 // came up (or null when there wasn't one left for it), what the telegraph's
 // die came up, and what getting through cost.
-// on: what it was rolled with, Defend for a blow or Confidence for fear.
+// on: the die that stopped it, or that it rode on: the track for its Root
+// (Stamina, Confidence or Resolve), or Defend's.
 export function defenceFrom(r) {
   if (!r || typeof r !== "object") return null;
   const v = num(r.v, 1, 60);
   if (v == null) return null;
   const mine = r.mine == null ? null : num(r.mine, 0, 60);
   // A die stops a telegraph it beats or ties.
-  return { on: r.on === "Confidence" ? "Confidence" : "Defend", stopped: r.stopped === true && mine != null && mine >= v, mine, v, paid: line(r.paid, MAX.paid), real: r.real === true };
+  return { on: DEFS.includes(r.on) ? r.on : "Defend", stopped: r.stopped === true && mine != null && mine >= v, mine, v, paid: line(r.paid, MAX.paid), real: r.real === true };
 }
 
 // A piece of the scene the GM put on the table, or null if it doesn't make
@@ -347,10 +373,13 @@ function actFrom(x) {
 }
 function actsFrom(x) {
   if (!x || typeof x !== "object") return null;
-  // Holding last round's, coming out of hiding and cashing in d12 Confidence
-  // give one each. Resolve and traits can give more.
+  // Holding last round's, coming out of hiding and the Boon give one each.
+  // Aura can give more, as many as the archetypes allow.
   const more = [];
-  for (const m of Array.isArray(x.more) ? x.more : []) if (MORE.includes(m) && (ONCE.includes(m) ? !more.includes(m) : true) && more.length < MAX.more) more.push(m);
+  for (const was of Array.isArray(x.more) ? x.more : []) {
+    const m = MORE_WAS[was] ?? was;
+    if (MORE.includes(m) && (ONCE.includes(m) ? !more.includes(m) : true) && more.length < MAX.more) more.push(m);
+  }
   const list = [];
   for (const y of (Array.isArray(x.list) ? x.list : []).slice(0, MAX.list)) {
     const a = actFrom(y);
@@ -710,7 +739,9 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
       const r = defenceFrom(op.r);
       if (!r) return no("That roll didn’t make sense.");
       if (r.v > t.d) return no(`That roll was against a ${r.v}, and ${lower(t.who)}’s d${t.d} can’t roll that.`);
-      if ((r.on === "Confidence") !== (t.kind === "fear")) return no(t.kind === "fear" ? `${cap(lower(t.who))} was fear, so it’s against Confidence.` : `${cap(lower(t.who))} was a blow, so it’s against Defend.`);
+      // A track only stops what's at its own Root. Defend can stop anything.
+      const at = rootOf(t);
+      if (r.on !== "Defend" && r.on !== TRACK_AT[at]) return no(`${cap(lower(t.who))} was at ${atRoot(t)}, so it’s ${TRACK_AT[at]} or Defend that rolls against it.`);
       if (mine) mine.def = { ...r, at: now };
       else t.def = { ...r, at: now };
       return yes();
@@ -739,7 +770,7 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
         return yes();
       }
       if (hit.round.over) return no(`Round ${hit.round.n}’s over, so it’s too late to take ${lower(t.who)}.`);
-      if (t.kind === "fear") return no("Nobody can intercept fear, lies or pressure. It’s inside their head.");
+      if (rootOf(t) !== "Body") return no(`Nobody can intercept what’s at ${atRoot(t)}. It’s inside their head.`);
       if (t.at.user === who.user && t.at.ch === who.ch) return no("That one’s aimed at you already.");
       if (t.ans) return no(`${t.ans.name} answered ${lower(t.who)} already.`);
       if (t.icp) return no(`${t.icp.name} took ${lower(t.who)} first.`);
@@ -798,7 +829,8 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
           if (!t) return no("That telegraph’s gone. The GM took it back.");
           if (t.ans) return no(`${t.ans.name} answered ${lower(t.who)} already, so it’s too late to put your action in.`);
           if (added.some((b) => b !== a && b.k === "join" && b.ref === a.ref) || kept.some((b) => b.k === "join" && b.ref === a.ref)) return no("You’re in on that one already.");
-        } else {
+        } else if (a.k !== "else") {
+          // Something else (a Move, a set action) isn't aimed at the scene.
           const hit = findEl(doc, a.ref);
           if (!hit || (a.k === "ground") !== (hit.kind === "ground")) return no("That’s gone from the scene.");
           // Settled, unless it was the end of this round that settled it and
@@ -818,6 +850,11 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
         const t = a.k === "join" ? round.tele.find((x) => x.id === a.ref) : null;
         if (t?.ans?.with?.some((w) => w.user === who.user && w.ch === who.ch)) return no(`${t.ans.name} answered ${lower(t.who)} with you in it, so it stays.`);
       }
+      // Aura buys an extra action for each archetype past the first, and no more.
+      const bought = next.more.filter((m) => m === "aura").length;
+      const archs = who.n ?? (roster ?? []).find((r) => r.user === who.user && r.ch === who.ch)?.n;
+      const cap = auraCap(archs);
+      if (bought > cap) return no(cap ? `With ${archs} archetypes you can buy ${cap === 1 ? "one extra action" : `${cap} extra actions`} a round with Aura. Holding, hiding and the Boon are on top.` : "With one archetype there’s no extra action to buy with Aura. Holding, hiding and the Boon are on top.");
       const sp = spentBy({ ...round, acts: { [key]: next } }, who.user, who.ch);
       if (sp.used > sp.have) return no(sp.have === 1 ? "You’ve got one action this round. Got another? Say where it came from." : `You’ve got ${sp.have} actions this round, and that’s more.`);
       round.acts[key] = { name: line(who.cname, MAX.name) || "Someone", more: next.more, list: [...kept] };
@@ -941,9 +978,9 @@ export function screenOf(doc, meta = null, reveal = null) {
   const s = doc?.scene ?? blankScene();
   const dice = (a) => (a?.dice ?? []).map((x) => ({ size: x.size, total: x.total, out: x.out }));
   const answer = (a) => (a ? { k: kOf(a.user, a.ch), name: a.name, act: a.act, dice: dice(a), opp: a.opp, won: Boolean(a.won), with: (a.with ?? []).map((w) => w.name) } : null);
-  const defence = (x) => (x ? { mine: x.mine ?? null, v: x.v, stopped: Boolean(x.stopped) } : null);
+  const defence = (x) => (x ? { on: DEFS.includes(x.on) ? x.on : "", mine: x.mine ?? null, v: x.v, stopped: Boolean(x.stopped) } : null);
   const tele = (t) => {
-    const out = { id: t.id, who: t.who, does: t.does, d: t.d, kind: t.kind, one: t.one ?? "", at: atName(t), state: stateOf(t, round), ans: answer(t.ans) };
+    const out = { id: t.id, who: t.who, does: t.does, d: t.d, kind: t.kind, root: rootOf(t), one: t.one ?? "", at: atName(t), state: stateOf(t, round), ans: answer(t.ans) };
     if (onScene(t)) {
       const el = findEl(doc, t.at.ref)?.el;
       // What it does if it lands, said the way every phone says it.

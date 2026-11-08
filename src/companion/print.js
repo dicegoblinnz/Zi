@@ -10,6 +10,8 @@ import { nameOf, piecesOf, tickedOf, withQuality } from "./armour.js";
 import * as R from "./roots.js";
 
 const SHEET = "/sheets/zidara-character-sheet.pdf";
+// A Boon as it's written on the paper.
+const boonLine = (b) => `Boon, ${b.name ? `${b.name} (${b.lever})` : b.lever}${b.on ? `, ${b.on}` : ""}: ${b.text}`;
 // What the paper has room for: anything past it goes in Notes.
 const ROWS = { specs: 12, scars: 5, titles: 6, perms: 6, archetypes: 3, abilities: 6, awakenings: 6, armour: 2, conditions: 4, bonds: 4, threads: 3, equipment: 3, utility: 3, bag: 10 };
 const PRONOUNS = { her: "she, her", him: "he, him", them: "they, them" };
@@ -141,9 +143,11 @@ export async function fillSheet(ch, c, s, { goal = null, B = null } = {}) {
     put(`title_${i + 1}`, t.name);
     put(`title_${i + 1}_root`, t.root);
     put(`title_${i + 1}_specialties`, (t.specialties ?? []).join(", "));
-    t.permissions.slice(0, ROWS.perms).forEach((p, j) => put(`title_${i + 1}_permission_${j + 1}`, `${p.text} (${p.root}, ${p.specialty})`));
+    // A Boon takes two of the six rows: what it is, then a line saying so.
+    const rows = [...t.permissions.map((p) => `${p.text} (${p.root}, ${p.specialty})`), ...(t.boons ?? []).flatMap((b) => [boonLine(b), "The Boon above takes this slot too"])];
+    rows.slice(0, ROWS.perms).forEach((x, j) => put(`title_${i + 1}_permission_${j + 1}`, x));
   });
-  for (const t of c.titles.slice(ROWS.titles)) notes.push(`Title, ${t.name} (${t.root}; ${(t.specialties ?? []).join(", ")}): ${t.permissions.map((p) => `${p.text} (${p.root}, ${p.specialty})`).join(", ") || "no permissions yet"}.`);
+  for (const t of c.titles.slice(ROWS.titles)) notes.push(`Title, ${t.name} (${t.root}; ${(t.specialties ?? []).join(", ")}): ${[...t.permissions.map((p) => `${p.text} (${p.root}, ${p.specialty})`), ...(t.boons ?? []).map(boonLine)].join(", ") || "no permissions yet"}.`);
   const archs = R.archetypesOf(c, B);
   archs.slice(0, ROWS.archetypes).forEach((a, i) => {
     put(`archetype_${i + 1}`, a.times > 1 ? `${a.name}, ${TIMES[a.times] ?? `${a.times} times`}` : a.name);

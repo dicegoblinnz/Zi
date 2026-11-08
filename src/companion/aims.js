@@ -58,10 +58,11 @@ export function whoAndDoes(sentence, fallback) {
 }
 
 // What it's aimed at, read off what follows its die: "Body, Grabbed" is one
-// of the crew, at their Body, and Grabbed if it lands. Mind and Soul are fear
-// on the live table till it has the three tracks, and Defend and Confidence,
-// the words from before Roots, still read on pages brought in back then (Defend
-// a blow, Confidence fear). "the deal" is one of
+// of the crew, at their Body, and Grabbed if it lands. Mind and Soul are the
+// other two Roots, and Defend and Confidence, the words from before Roots,
+// still read on pages brought in back then (Defend as Body, Confidence as
+// Mind). root is the Root, and kind's blow (Body) or fear (Mind or Soul), for
+// a table from before Roots. "the deal" is one of
 // the place's stakes (stakes: their names), found by its name or the words it
 // starts or ends with (the ship, for The ship in the bay); "the scene clock";
 // and "everyone on the gallery, Body, Staggered" is a part of the place.
@@ -70,11 +71,12 @@ export function whoAndDoes(sentence, fallback) {
 // gives { why } when it can't tell.
 export const ROOT_WORDS = new Set(["Body", "Mind", "Soul", "Defend", "Confidence"]);
 export const FEAR_WORDS = new Set(["Mind", "Soul", "Confidence"]);
+const ROOT_OF = { Body: "Body", Mind: "Mind", Soul: "Soul", Defend: "Body", Confidence: "Mind" };
 export function readAim(text, stakes, line = "") {
   const parts = String(text ?? "").split(",").map((x) => x.trim()).filter(Boolean);
   const j = parts.findIndex((x) => ROOT_WORDS.has(x));
   const target = j >= 0 ? parts.slice(0, j) : parts;
-  const out = { kind: j >= 0 && FEAR_WORDS.has(parts[j]) ? "fear" : "blow", aim: "crew", one: j >= 0 ? curly(flat(parts.slice(j + 1).join(", "))).replace(/^[a-z]/, (c) => c.toUpperCase()) : "" };
+  const out = { root: j >= 0 ? ROOT_OF[parts[j]] : "Body", kind: j >= 0 && FEAR_WORDS.has(parts[j]) ? "fear" : "blow", aim: "crew", one: j >= 0 ? curly(flat(parts.slice(j + 1).join(", "))).replace(/^[a-z]/, (c) => c.toUpperCase()) : "" };
   const head = flat(target[0] ?? "");
   if (!head) return j >= 0 ? out : { why: "it isn't aimed at anything" };
   if (/^the scene clock$/i.test(head)) return target.length > 1 ? { why: "it says more than the table can hold" } : { ...out, aim: "clock" };

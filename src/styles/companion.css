@@ -722,6 +722,17 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .ln-hurt .k { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .ln-hurt .mini i { width: 14px; height: 16px; }
 .ln-rule { margin-top: 0.4rem; }
+/* The learning round on Roots: the kit's dice, Wren's Aura as hexes, and
+   Isolde's Stamina dropping a size. */
+.ln-vs .zd-die { --s: 52px; }
+.ln-dice .zd-die { --s: 64px; }
+.ln-tile .tile-dice .zd-die { --s: 40px; }
+.ln-tile .tile-dice .zd-die.is-next { --s: 22px; margin-left: -10px; }
+.ln-hurt .zd-die { --s: 40px; }
+.ln-aura { margin: 0 0 0.8rem; }
+.ln-hex { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ln-hex .k { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ln-hex .zd-chit { width: 22px; height: 22px; }
 .ln-foot { margin-top: 1rem; }
 
 /* The builder: the Quick Build a step to a screen, for a phone held in one
@@ -895,6 +906,30 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-att input:placeholder-shown + .bd-on { display: none; }
 /* A second permission waits for its Catch, unless there are words in it already. */
 .bd-att:has(input[data-bin$=".catch"]:placeholder-shown) .bd-perm2:has(input:placeholder-shown) { display: none; }
+/* Roots: a Title's Root and three specialties, and each permission's Root
+   and specialty under its words, with the Title's own specialties a tap away. */
+.bd-roots { margin: 0.2rem 0 0.6rem; }
+.bd-specs3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 0.4rem; }
+.bd-specs3 > .cc-field { grid-row: 1; margin: 0; font-size: 0.78rem; color: var(--muted); }
+.bd-specs3 > input { grid-row: 2; min-width: 0; }
+.bd-perm { margin: 0.4rem 0 0.9rem; padding-left: 12px; border-left: 2px solid var(--line-soft); }
+.bd-perm > input:placeholder-shown ~ .bd-perm-how { display: none; }
+.bd-perm-how { display: grid; gap: 6px; margin-top: 6px; }
+.bd-perm-how .bd-roots { margin: 0; }
+.bd-perm-how > .cc-field { margin: 0; font-size: 0.85rem; color: var(--muted); }
+.bd-perm-how .bd-spec { max-width: 22rem; }
+.bd-specs { margin: 0; }
+.bd-boon { margin: 0.6rem 0 0.9rem; padding: 0.6rem 0.75rem; background: var(--surface); border-left: 2px solid var(--gold); }
+.bd-boon > p small { color: var(--muted); }
+.bd-boons { margin-top: 0.6rem; }
+.bd-arm .bd-label small, .bd-arm .bd-label { margin-top: 0.2rem; }
+.bd-slot.is-row > .bd-arm { grid-column: 1 / -1; margin: 0 0 0.5rem; }
+.bd-awk { margin: 0.6rem 0 0.8rem; padding-left: 12px; border-left: 2px solid var(--line-soft); }
+.bd-awk .cc-chips { margin: 6px 0; }
+.bd-from-list small { display: block; font-weight: 400; color: var(--muted); }
+.bd-zero { display: inline-grid; place-items: center; width: 34px; height: 34px; font-weight: 800; color: var(--muted); border: 1.5px dashed var(--line); border-radius: 50%; }
+.bd-tiles .tile.is-none .tile-name { color: var(--muted); }
+.bd-ideas > summary small { margin-left: 0.4rem; color: var(--gold-ink); font-weight: 700; }
 .bd-box { min-width: 0; margin: 1rem 0 0; padding: 0.8rem 0.9rem 0.95rem; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; }
 .bd-box > legend { padding: 0 0.3rem; font-family: var(--display); font-weight: 600; font-size: 1.05rem; letter-spacing: 0.02em; }
 .bd-att .bd-items { margin-bottom: 0.2rem; }
@@ -2851,3 +2886,9 @@ html.cc-tabbed .zr { bottom: calc(59px + env(safe-area-inset-bottom, 0px)); padd
 .dt-specs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 0.6rem; }
 .dt-specs input { min-height: 44px; min-width: 0; }
 .cc-notes-read { white-space: normal; }
+
+/* Boons on a Title, and a Shadow's pool (stage 4 of the Roots plan). */
+.cc-boons { list-style: none; margin: .6rem 0 0; padding: .55rem 0 0; border-top: 1px dashed var(--line); display: grid; gap: .45rem; }
+.cc-boons p { margin: 0; }
+.cc-pool { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin: .4rem 0; }
+.cc-pool-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-block: .45rem; }

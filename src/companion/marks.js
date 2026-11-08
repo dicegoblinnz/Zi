@@ -23,6 +23,7 @@ export function placesOf(c) {
   return {
     titles: at(c.titles),
     perms: c.titles.map((t) => at(t.permissions)),
+    boons: c.titles.map((t) => at(t.boons ?? [])),
     attuned: c.attuned.map((a) => at(a.awakenings ?? [])),
     threads: Object.fromEntries(c.threads.map((p) => [p.person, at(p.threads)])),
   };
@@ -44,6 +45,7 @@ export function linesOf(c) {
     const title = `your ${ORD[i] ?? "next"} Title`;
     add(`title:${P.titles[i]}`, `${t.name} (${t.root}; ${(t.specialties ?? []).join(", ")})`, `Your ${ORD[i] ?? "next"} Title`);
     t.permissions.forEach((p, j) => add(`perm:${P.titles[i]}:${P.perms[i][j]}`, `${p.text} (${p.root}, ${p.specialty})`, `A permission on ${title}`));
+    (t.boons ?? []).forEach((b, k) => add(`boon:${P.titles[i]}:${P.boons[i][k]}`, `${b.name ? `${b.name}, ` : ""}the ${b.lever} Boon${b.on ? ` (${b.on})` : ""}: ${b.text}`, `A Boon on ${title}`));
   });
   const seen = new Set();
   for (const a of c.archetypes) {

@@ -64,8 +64,6 @@ Mo's calls in chat, after four weeks of playtests.
 
 **The six crew are rebuilt** on Roots and specialties, with their armour and attuned things to match. See [the crew](#s-pregens).
 
-The rest of the book caught up on 9 Nov. The character companion's next, so till then it plays the old way.
-
 ## 28 Oct 2026: Only people add Power {#c-2026-10-28-power}
 
 Mo's call in chat.

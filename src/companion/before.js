@@ -2,8 +2,8 @@
 // made their own from the crew, shown as it was: their set actions with the
 // dice they rolled, their Titles and permissions, traits, what they carry,
 // threads and where they'd got to. It's read straight off what's saved, so
-// nothing's lost, and none of it plays: the builder rebuilds them on Roots
-// once it's on the new rules (stage 4 of notes/roots-plan.md).
+// nothing's lost, and none of it plays till the player rebuilds them on Roots
+// in the builder (builder.js, fromBefore), which takes everything across.
 import { diceLabel, stepsToDice } from "./dice.js";
 import { threadKey } from "./threads.js";
 
@@ -40,7 +40,8 @@ export function beforeView(ch, { esc, link, back, tools }) {
   const sec = (title, body) => (body ? `<section class="cc-sec"><h2 class="cc-h3">${title}</h2><ul class="cc-list">${body}</ul></section>` : "");
   return `<div class="cc-topbar"><a class="cc-back" href="/characters/" data-act="nav">${back}Characters</a><div class="cc-tools">${tools}</div></div>
   <header class="cc-head cc-char"><div class="cc-who"><h1>${esc(ch.name)}</h1>${text(b.blurb) ? `<p class="cc-title"><em>${esc(text(b.blurb))}</em></p>` : ""}<p class="cc-small">Your own, from before the Roots change</p></div></header>
-  <div class="cc-note is-gold" role="status"><p><b>${esc(ch.name)} was built before the Roots change, so here’s the sheet as it was.</b> Every roll’s a Root and a specialty now, with three tracks to keep you standing, and ${esc(ch.name)} gets rebuilt on them once the builder’s on the new rules. Nothing here’s lost in the meantime. ${link("s-roots", "Roots in the rules")}</p></div>
+  <div class="cc-note is-gold" role="status"><p><b>${esc(ch.name)} was built before the Roots change, so here’s the sheet as it was.</b> Every roll’s a Root and a specialty now, with three tracks to keep you standing. Rebuild ${esc(ch.name)} on them and everything here comes across: give each Title its Root and three specialties, and each permission its Root and specialty. ${link("s-roots", "Roots in the rules")}</p>
+  <div class="cc-row"><a class="button primary" href="/characters/?build=${encodeURIComponent(ch.id)}" data-act="bopen" data-key="${esc(ch.id)}">Rebuild ${esc(ch.name)} on Roots</a></div></div>
   ${numbers.length ? `<p class="cc-lead">Where ${esc(ch.name)} had got to: ${esc(numbers.join(", "))}.${text(s.aspText) || text(b.aspiration) ? ` Aspiration: <em>${esc(text(s.aspText) || text(b.aspiration))}</em>${num(s.asp) ? `, d${num(s.asp)}` : ""}.` : ""}</p>` : ""}
   ${sec("Set actions", acts)}${sec("Titles and permissions", perms)}${sec("Traits", traits)}
   ${carried.length ? `<section class="cc-sec"><h2 class="cc-h3">What they carried</h2><p>${carried.map(esc).join(" · ")}</p></section>` : ""}

@@ -49,7 +49,7 @@
 //    seconds. Sam has no signal:
 //    he answers with real dice tapped in, his phone says it goes up when
 //    there's a signal, and it reaches Mo once he's back. Mo sends the maid's
-//    fear at Vesk mid-round, then ends the round: it lands at her Mind, Kai
+//    lie at Vesk's Mind mid-round, then ends the round: it lands there, Kai
 //    rolls When it lands with the d4 already in, her Confidence against it,
 //    and Mo sees what got through. Kai's Undo
 //    takes it back off Mo's page. Vesk's phone, wiped, gets the round back
@@ -63,7 +63,8 @@
 //    gets out of the hot room and Mo's card says so. Sam answers the runner
 //    and loses, so the scene clock drops then and there. The round ends: the
 //    deal's new tag is on every phone, the pipes land on Vesk alone, and she
-//    rolls When it lands for them with the bath-man from round 2.
+//    rolls When it lands for them, then for the bath-man from round 2 on its
+//    own, a round's landing at a time.
 //    6d puts it on the table screen: Mo opens it from Tuesday Lair's page and
 //    gets its code, and a TV signed in to nothing types it in and has round 3
 //    as it ended (one stopped, two landed, Vesk in the hot room and Bram out
@@ -1250,11 +1251,11 @@ try {
   await mo.page.click('.tg-target:has-text("Vesk")');
   await mo.page.fill("#tg-who", "The maid");
   await mo.page.click('.tg-size[data-d="4"]');
-  await mo.page.click('#cc-dialog [data-do="kind"][data-k="fear"]');
+  await mo.page.click('#cc-dialog [data-do="root"][data-k="Mind"]');
   await mo.page.click('.tg-verbs [data-v="Frighten"]');
   await mo.page.click('#cc-dialog [data-do="save"]');
   await until(async () => (await cardText(kai.page, "The maid")).includes("Frighten Vesk"), "the maid on Vesk's play screen", 4000);
-  has(await cardText(kai.page, "The maid"), "Lands on Confidence at the end of the round", "against her Confidence");
+  has(await cardText(kai.page, "The maid"), "At Vesk’s Mind, against their Confidence", "at her Mind, against her Confidence");
   // One sent at Bram by mistake comes back with a second tap, and Sam's told.
   await mo.page.click('.tg-sec [data-do="compose"]');
   await mo.page.waitForSelector(".tg-compose");
@@ -1279,7 +1280,7 @@ try {
   await kai.page.click('li.tg:has(h3:text-is("The maid")) [data-do="land"]');
   await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
   same(await kai.page.$eval('#cc-dialog [data-act="d-at"][data-j="0"][data-v="Mind"]', (el) => el.getAttribute("aria-pressed")), "true", "at her Mind, against her Confidence");
-  yes(await kai.page.$eval('#cc-dialog [data-act="d-at"][data-j="0"][data-v="Body"]', (el) => el.disabled), "and never her Body, since the GM said it's fear");
+  yes(await kai.page.$eval('#cc-dialog [data-act="d-at"][data-j="0"][data-v="Body"]', (el) => el.disabled), "and never her Body, since the GM said it's at her Mind");
   same(await kai.page.$$eval("#cc-dialog .cc-inc .zd-die", (els) => els.map((el) => el.dataset.d)), ["4"], "the maid's d4 already in");
   if (SHOTS) await kai.page.waitForTimeout(400);
   await shot(kai.page, "tele-land");
@@ -1488,7 +1489,7 @@ try {
   // Locks takes Locked.
   const vNow = (await stateIn(kai.page, "vesk-aaaaaa")).aura;
   await kai.page.click(".tg-more > summary");
-  await kai.page.click('.tg-more [data-do="more"][data-k="resolve"]');
+  await kai.page.click('.tg-more [data-do="more"][data-k="aura"]');
   await until(async () => (await text(kai.page, ".tg-yours")).includes("One more action to spend this round."), "an extra action for 3 Aura");
   same((await stateIn(kai.page, "vesk-aaaaaa")).aura, vNow - 3, "that cost her 3 Aura");
   if (!(await kai.page.$eval(".tg-scenefold", (el) => el.open))) await kai.page.click(".tg-scenefold > summary");
@@ -1548,7 +1549,7 @@ try {
   same(await mo.page.getAttribute('.tg-target.is-scene:has(b:text-is("The deal"))', "aria-pressed"), "true", "aimed at the deal");
   has(await text(mo.page, ".tg-preview footer"), "At the deal", "the card's at the deal");
   has(await text(mo.page, ".tg-preview .one"), "If it lands, it’s a new tag in the way of the deal.", "and says what it does if it lands");
-  same(await mo.page.$('#cc-dialog [data-do="kind"]'), null, "there's no blow or fear for one with no defence");
+  same(await mo.page.$('#cc-dialog [data-do="root"]'), null, "there's no Root for one with no defence");
   if (SHOTS) {
     await mo.page.evaluate(() => document.querySelector("#cc-dialog .dlg-body").scrollTo(0, 0));
     await mo.page.waitForTimeout(400);
@@ -1567,7 +1568,7 @@ try {
   await mo.page.click('.tg-size[data-d="6"]');
   await mo.page.fill("#tg-does", "burst and fill the hot room with steam.");
   has(await text(mo.page, ".tg-preview footer"), "At everyone in the hot room", "the card's at everyone in the hot room");
-  has(await text(mo.page, ".tg-preview footer"), "Hits whoever’s there when it lands", "and hits whoever's there");
+  has(await text(mo.page, ".tg-preview footer"), "Hits whoever’s there, at their Body", "and hits whoever's there");
   if (SHOTS) await mo.page.waitForTimeout(400);
   await shot(mo.page, "scene-tele-place");
   await axe(mo.page, "telegraphing at a place");
@@ -1643,14 +1644,25 @@ try {
   await shotsAt(sam.page, "scene-tele-missed", `.tg-play li.tg[data-tg="${(await teleOf("The pipes")).id}"]`);
   await until(async () => Boolean(await kai.page.$('li.tg:has(h3:text-is("The pipes")) [data-do="land"]')), "the pipes landed on Vesk", 4000);
   has(await cardText(mo.page, "The pipes"), "It landed on Vesk.", "Mo's page says who it landed on");
-  // Vesk rolls When it lands for the bath-man from round 2 and the pipes at once.
+  // Vesk rolls When it lands a round at a time, since her tracks roll once for
+  // each round's landing: the pipes from round 3 off its card, then the
+  // bath-man from round 2 off the When it lands tile.
   await kai.page.click('li.tg:has(h3:text-is("The pipes")) [data-do="land"]');
   await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
-  same(await kai.page.$$eval("#cc-dialog .cc-inc .zd-die", (els) => els.map((el) => el.dataset.d)), ["8", "6"], "the bath-man's d8 and the pipes' d6 in, together");
-  await kai.page.evaluate(() => window.ziCompanion.setDice([4, 7, 2]));
+  same(await kai.page.$$eval("#cc-dialog .cc-inc .zd-die", (els) => els.map((el) => el.dataset.d)), ["6"], "the pipes' d6 from round 3, on its own");
+  await kai.page.evaluate(() => window.ziCompanion.setDice([4, 2]));
   await kai.page.click('#cc-dialog [data-act="d-go"]');
   await kai.page.waitForFunction(() => /Stopped by/.test(document.querySelector("#cc-dialog .cc-hits")?.textContent ?? ""));
   await until(async () => (await cardText(mo.page, "The pipes")).includes("Vesk stopped it when it landed: 4 against its 2."), "her 4 stops the pipes, on Mo's page", 4000);
+  await kai.page.click("#cc-dialog .cc-x");
+  await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  await kai.page.click('.tile[data-act="defence"]');
+  await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
+  same(await kai.page.$$eval("#cc-dialog .cc-inc .zd-die", (els) => els.map((el) => el.dataset.d)), ["8"], "then the bath-man's d8 from round 2");
+  await kai.page.evaluate(() => window.ziCompanion.setDice([7, 3]));
+  await kai.page.click('#cc-dialog [data-act="d-go"]');
+  await kai.page.waitForFunction(() => /Stopped by/.test(document.querySelector("#cc-dialog .cc-hits")?.textContent ?? ""));
+  await until(async () => (await teleOf("A bath-man"))?.def?.stopped === true, "her 7 stops the bath-man, on the table", 4000);
   await kai.page.click("#cc-dialog .cc-x");
   await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
   same(await mo.page.$$eval('li.tg:has(h3:text-is("The pipes")) .tg-there', (els) => els.length), 0, "once everyone in it's rolled, there's nobody to put in or out");
@@ -1741,7 +1753,7 @@ try {
   await until(async () => (await text(tv.page, ".ts-rhead h2")) === "Round 4", "round 4 on the TV in a second or two", 4000);
   same(await tv.page.$$eval(".ts-tally li", (els) => els.map((e) => e.textContent.trim())), ["1 coming"], "one coming");
   has(await tvCard("Orla Strand").textContent(), "At Vesk", "Orla's at Vesk");
-  has(await tvCard("Orla Strand").textContent(), "Lands on Confidence at the end of the round", "and it's fear, so it's on her Confidence");
+  has(await tvCard("Orla Strand").textContent(), "At Vesk’s Mind, against their Confidence", "and it's at her Mind, so it's on her Confidence");
   same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Vesk")) .ts-pl').textContent(), "One action left", "Vesk's still got her action");
   same((await got(kai.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "kais-phone-screen-1", now: Date.now(), ops: [{ n: 1, o: "answer", id: "tele-tv-00001", ch: "vesk-aaaaaa", a: { act: "Talk", steps: 2, dice: [{ size: 6, total: 6 }], opp: 3 } }] })).json?.no, [], "Kai answers it");
   await until(async () => (await tvCard("Orla Strand").locator(".ts-vw").count()) && (await tvCard("Orla Strand").locator(".ts-vw").textContent()) === "Stopped", "Stopped on the TV", 4000);
@@ -2741,8 +2753,8 @@ try {
     await wpFold(mo.page, "teles");
     await mo.page.click('details[data-open^="wb-teles-"] [data-do="ptele"]');
     await mo.page.waitForSelector("#cc-dialog .tg-compose");
-    same([await mo.page.inputValue("#tg-who"), await mo.page.inputValue("#tg-does"), await mo.page.getAttribute('.tg-size[data-d="8"]', "aria-pressed"), await mo.page.getAttribute('.cc-line[data-k="fear"]', "aria-pressed")],
-      ["Orla Strand", baths.teles[0].text, "true", "true"], "the composer opens with Orla, her cane, a d8 and Confidence");
+    same([await mo.page.inputValue("#tg-who"), await mo.page.inputValue("#tg-does"), await mo.page.getAttribute('.tg-size[data-d="8"]', "aria-pressed"), await mo.page.getAttribute('.cc-line[data-do="root"][data-k="Mind"]', "aria-pressed")],
+      ["Orla Strand", baths.teles[0].text, "true", "true"], "the composer opens with Orla, her cane, a d8 and her Mind");
     await mo.page.click("#cc-dialog .cc-x");
     // And the whole place onto the live table's scene from its page: its
     // ground, its stakes and its scene clock, the way Mo's got them.

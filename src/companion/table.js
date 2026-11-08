@@ -27,10 +27,11 @@
 //             builds it. Each campaign's
 //             kept apart, and it all goes when the account's characters leave
 //             the phone (sync.js).
-import { MAX, ONCE, SIZES, actSaid, apply, atName, atPlace, blankScene, current, dieOf, findEl, findTele, fresh, fxSaid, inIt, joinersOf, keyOf, landsOn, lower, onScene, placeOf, spentBy, stateFor, stateOf, workedIn } from "./table-rules.js";
+import { MAX, ONCE, ROOTS, SIZES, TRACK_AT, actSaid, apply, atName, atPlace, auraCap, blankScene, rootOf, current, dieOf, findEl, findTele, fresh, fxSaid, inIt, joinersOf, keyOf, landsOn, lower, onScene, placeOf, spentBy, stateFor, stateOf, workedIn } from "./table-rules.js";
 import { turnNews } from "./turn-rules.js";
 import { foundNews } from "./found-rules.js";
 import { curlyQuotes, readAim, whoAndDoes } from "./aims.js";
+import * as R from "./roots.js";
 import { die as kitDie, tag as kitTag, telegraph as kitTele } from "../kit/kit.js";
 
 const KEY = "zi-table";
@@ -65,7 +66,13 @@ const plural = (n, one, many) => `${words(n)} ${n === 1 ? one : many}`;
 const andList = (xs) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`);
 // What a telegraph's trying to do, said by the GM: these start the line, and
 // the defence roll reads the first word as a condition when it gets through.
-const INTENTS = { blow: ["Hurt", "Pin", "Disarm"], fear: ["Frighten", "Taunt"] };
+const INTENTS = { Body: ["Hurt", "Pin", "Disarm"], Mind: ["Frighten", "Taunt"], Soul: ["Hex", "Charm"] };
+// What each Root takes, in the GM's composer.
+const ROOT_TAKES = { Body: "blows, blades, falling rocks and teeth", Mind: "fear, lies and pressure", Soul: "despair, temptation, curses and anything taking them over" };
+// The track that rides against a telegraph, and what a defence roll said
+// stopped it: a track, or Defend.
+const trackFor = (t) => TRACK_AT[rootOf(t)];
+const defName = (def, t) => (def?.on && def.on !== "Defend" ? def.on : def?.on === "Defend" ? "Defend" : trackFor(t));
 // A place's pin, drawn the way the kit's telegraph card draws it.
 const PIN = `<svg class="zd-aim" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.4 C12 21.4 5 14.6 5 9.6 A7 7 0 0 1 19 9.6 C19 14.6 12 21.4 12 21.4 Z"/><circle cx="12" cy="9.6" r="2.6"/></svg>`;
 
@@ -115,7 +122,13 @@ export function makeTable(d) {
     const role = roleIn(id);
     if (role === "gm") return { user: me(), role: "gm", ch: null, cname: "" };
     const listed = d.list()?.find((x) => x.id === id)?.character ?? info(id)?.players?.find((p) => p.id === me())?.character ?? null;
-    return { user: me(), role: "player", ch: listed?.id ?? null, cname: String(listed?.name ?? "") };
+    // How many archetypes they've got caps what Aura can buy, the way the
+    // server counts them.
+    // Read off the sheet alone: normal() would swap the character's state for
+    // a fresh copy mid-change, and lose what the change is writing.
+    const local0 = listed ? store.data.characters.find((x) => x.id === listed.id) : null;
+    const n = local0 ? d.sheet(local0)?.archetypes.length ?? null : null;
+    return { user: me(), role: "player", ch: listed?.id ?? null, cname: String(listed?.name ?? ""), n };
   }
   const gmName = (id) => first(info(id)?.campaign?.gm ?? d.list()?.find((x) => x.id === id)?.gm) || "your GM";
 
@@ -617,7 +630,7 @@ export function makeTable(d) {
     if (atPlace(t)) return placeVerdict(t, round, { forGm, ch });
     const s = stateOf(t, round);
     const you = !forGm && t.ans && t.ans.user === me() && ch && t.ans.ch === ch.id;
-    const what = t.kind === "fear" ? "Confidence" : "Defend";
+    const what = defName(t.def, t);
     // Whoever put their action in with the one who rolled it.
     const withWho = t.ans?.with?.length ? `, with ${andList(t.ans.with.map((w) => (ch && w.user === me() && w.ch === ch.id ? "you" : w.name)))} in it,` : "";
     if (s === "stopped") {
@@ -641,7 +654,7 @@ export function makeTable(d) {
       const took = t.icp ? ` ${esc(t.icp.name)} took it for ${esc(t.at.name)}.` : "";
       return forGm
         ? `<div class="tg-v is-bad"><p><b>It landed.</b>${took} ${esc(onName)} rolls When it lands next.</p></div>`
-        : mine ? `<div class="tg-v is-bad"><p><b>It landed on you.</b>${t.icp ? ` You took it for ${esc(t.at.name)}.` : ""} Roll When it lands, against your ${what}.</p></div>`
+        : mine ? `<div class="tg-v is-bad"><p><b>It landed on you.</b>${t.icp ? ` You took it for ${esc(t.at.name)}.` : ""} Roll When it lands: your ${trackFor(t)}, and your Defend if that was your action.</p></div>`
           : `<div class="tg-v is-bad"><p><b>It landed on ${esc(onName)}.</b>${t.icp && ch && isAt(t.at, ch.id) ? ` ${esc(t.icp.name)} took it for you.` : ""}</p></div>`;
     }
     if (s === "held") {
@@ -676,7 +689,7 @@ export function makeTable(d) {
   // just their own.
   function placeVerdict(t, round, { forGm, ch }) {
     const s = stateOf(t, round);
-    const what = t.kind === "fear" ? "Confidence" : "Defend";
+    const what = trackFor(t);
     const { you, withWho, late } = answered(t, ch, forGm);
     if (s === "stopped") return `<div class="tg-v is-good">${diceRow(t.ans)}<p><b>Stopped.</b> ${esc(you ? "You" : t.ans.name)} answered it${esc(withWho)} with ${esc(t.ans.act)}: ${bestOf(t.ans)} against its ${t.ans.opp}.${realNote(t.ans)}${late}</p></div>`;
     if (forGm) {
@@ -697,9 +710,9 @@ export function makeTable(d) {
     const p = ch ? t.there?.[keyOf(me(), ch.id)] : null;
     if (ms === "hit") return `<div class="tg-v is-bad">${diceRow(t.ans)}<p><b>It landed then and there.</b> ${esc(you ? "Your" : `${t.ans.name}’s`)} ${esc(t.ans.act)}${esc(withWho)} came up ${bestOf(t.ans)} against its ${t.ans.opp}, so it hit you with no defence. The GM says what it costs.${realNote(t.ans)}</p></div>`;
     if (ms === "clear") return `<div class="tg-v is-good"><p><b>It missed you.</b> ${round?.over || t.ans ? "You were out of it when it landed." : "You’re out of it."}</p></div>`;
-    if (ms === "landed") return `<div class="tg-v is-bad"><p><b>It landed on you.</b> Roll When it lands, against your ${what}.</p></div>`;
-    if (ms === "held") return `<div class="tg-v is-good"><p><b>Stopped when it landed.</b> Your ${what} came up ${p.def.mine} against its ${p.def.v}.${realNote(p.def)}</p></div>`;
-    if (ms === "through") return `<div class="tg-v is-bad"><p><b>It got through.</b> ${p.def.mine == null ? `There was no die left on your ${what} for it.` : `Your ${what} came up ${p.def.mine} against its ${p.def.v}.`}${p.def.paid ? ` <span class="tg-paid">${esc(p.def.paid)}</span>` : ""}${realNote(p.def)}</p></div>`;
+    if (ms === "landed") return `<div class="tg-v is-bad"><p><b>It landed on you.</b> Roll When it lands: your ${what}, and your Defend if that was your action.</p></div>`;
+    if (ms === "held") return `<div class="tg-v is-good"><p><b>Stopped when it landed.</b> Your ${defName(p.def, t)} came up ${p.def.mine} against its ${p.def.v}.${realNote(p.def)}</p></div>`;
+    if (ms === "through") return `<div class="tg-v is-bad"><p><b>It got through.</b> ${p.def.mine == null ? `There was no die left on your ${what} for it.` : `Your ${defName(p.def, t)} came up ${p.def.mine} against its ${p.def.v}.`}${p.def.paid ? ` <span class="tg-paid">${esc(p.def.paid)}</span>` : ""}${realNote(p.def)}</p></div>`;
     return "";
   }
 
@@ -709,7 +722,7 @@ export function makeTable(d) {
     const s = ch ? stateHere(t, round, ch.id) : stateOf(t, round);
     const mine = ch && atPlace(t) ? t.there?.[keyOf(me(), ch.id)] : null;
     const face = t.ans ? t.ans.opp : t.def ? t.def.v : mine?.def ? mine.def.v : null;
-    const coming = t.kind === "fear" ? (atPlace(t) ? "Hits whoever’s there, against Confidence" : "Lands on Confidence at the end of the round") : atPlace(t) ? "Hits whoever’s there when it lands" : "";
+    const coming = onScene(t) ? "" : atPlace(t) ? `Hits whoever’s there, at their ${rootOf(t)}` : `At ${t.at.name ?? "their"}’s ${rootOf(t)}, against their ${trackFor(t)}`;
     const when = s === "coming" ? (onScene(t) ? "" : coming) : { stopped: "Stopped", hit: "Landed", landed: "Landed", held: "Landed, and stopped", through: onScene(t) ? "Landed" : "Landed, and got through", clear: ch ? "Landed, and missed you" : "Landed on nobody" }[s];
     return `<li class="tg${on ? " is-lit" : ""}" data-tg="${esc(t.id)}">${kitTele({ who: t.who, does: t.does, at: atName(t), atCrest: t.at.k ? null : t.at.arch ?? [], aim: aimOf(t), d: t.d, round: round.n, one: oneOf(t), face, state: s === "coming" ? "" : s, when, extra, strict: false })}</li>`;
   }
@@ -737,8 +750,11 @@ export function makeTable(d) {
   // ------------------------------------------------------------ actions and the scene
 
   // Where an extra action came from (Extra actions, in Conflict).
-  const MORES = [["resolve", "3 Aura"], ["held", "I held last round"], ["hiding", "Out of hiding"], ["fired", "Cashing in d12 Confidence"], ["trait", "A Boon"]];
-  const moreName = (k) => ({ resolve: "3 Aura", held: "held last round", hiding: "out of hiding", fired: "fired-up Confidence", trait: "a Boon" })[k] ?? k;
+  // Where another action can come from: 3 Aura, as many as their archetypes
+  // allow, holding last round's, coming out of hiding, or the Extra action
+  // Boon. From before Roots, 1 Resolve reads as Aura and a trait as the Boon.
+  const MORES = [["aura", "3 Aura"], ["held", "I held last round"], ["hiding", "Out of hiding"], ["boon", "The Extra action Boon"]];
+  const moreName = (k) => ({ aura: "3 Aura", resolve: "3 Aura", held: "held last round", hiding: "out of hiding", boon: "the Extra action Boon", trait: "the Extra action Boon" })[k] ?? k;
   const isAt = (x, chId) => Boolean(x && x.user === me() && x.ch === chId);
   // Everything that lands on this character: aimed at them and nobody took
   // it, taken by them for a friend, or at a place they're in.
@@ -883,11 +899,13 @@ export function makeTable(d) {
     const answers = last.tele.filter((t) => t.ans && isAt(t.ans, ch.id)).map((t) => `<li><span>${esc(cap(`answering ${lower(t.who)} with ${t.ans.act}: ${outcome(t.ans.won)}`))}</span></li>`).join("");
     const head = left > 0 ? (sp.used ? `<b>${left === 1 ? "One more action" : `${cap(words(left))} more actions`}</b> to spend this round.` : "<b>Your action’s still yours.</b> Answer one telegraph, put it into a friend’s answer, or do something else.") : `<b>${sp.have === 1 ? "Your action’s spent" : "Your actions are spent"}</b> this round.`;
     const more = rec.more.length ? `<p class="cc-small">${sp.have === 2 ? "An extra action" : `${cap(words(rec.more.length))} extra actions`} from ${esc(andList(rec.more.map(moreName)))}.</p>` : "";
-    // There's no fired-up Confidence to cash in on Roots (8 Nov 2026), and an
-    // extra action's 3 Aura. Till stage 4 of notes/roots-plan.md the table
-    // keeps its own word for it, "resolve".
-    const canFire = false;
-    const extra = `<details class="tg-more" data-open="tg-more"${d.isOpen("tg-more") ? " open" : ""}><summary>Got another action?</summary><div class="cc-chips">${MORES.filter(([k]) => k !== "fired" || canFire).map(([k, label]) => `<button type="button" class="cc-chipbtn sm" data-act="tg" data-do="more" data-k="${k}"${(k === "resolve" && s.resolve < 1) || (ONCE.includes(k) && rec.more.includes(k)) ? " disabled" : ""}>${esc(label)}</button>`).join("")}</div><p class="cc-small">Holding your action last round, coming out of hiding, 1 Resolve, d12 Confidence or a trait that says so.</p></details>`;
+    // 3 Aura buys another, one for each archetype past the first. Holding,
+    // hiding and the Boon are on top, once each.
+    const archs = c.archetypes.length;
+    const bought = rec.more.filter((m) => m === "aura" || m === "resolve").length;
+    const boon = R.boonCount(c, "Extra action") > 0;
+    const off = (k) => (k === "aura" ? s.aura < 3 || bought >= auraCap(archs) : ONCE.includes(k) && rec.more.includes(k));
+    const extra = `<details class="tg-more" data-open="tg-more"${d.isOpen("tg-more") ? " open" : ""}><summary>Got another action?</summary><div class="cc-chips">${MORES.filter(([k]) => k !== "boon" || boon).map(([k, label]) => `<button type="button" class="cc-chipbtn sm" data-act="tg" data-do="more" data-k="${k}"${off(k) ? " disabled" : ""}>${esc(label)}</button>`).join("")}</div><p class="cc-small">With ${archs === 1 ? "one archetype" : `${words(archs)} archetypes`} you can have ${archs === 1 ? "one action" : `${words(archs)} actions`} a round, the rest 3 Aura each. Holding your action last round, coming out of hiding${boon ? " and the Extra action Boon, once a scene," : ""} are on top.</p></details>`;
     return `<div class="tg-yours" role="group" aria-label="Your action this round"><p class="tg-yours-head">${head}</p>${answers || backs ? `<ul class="tg-done">${answers}${backs}</ul>` : ""}${more}
       ${left > 0 ? `<div class="cc-row"><button type="button" class="button" data-act="tg" data-do="else">Something else</button></div>` : ""}${extra}</div>`;
   }
@@ -920,7 +938,7 @@ export function makeTable(d) {
     const v = asSent(id, t);
     const warn = draftOk(id, t) ? "" : t.at?.k ? "What this was aimed at has gone from the scene, or it’s settled." : "Whoever this was aimed at isn’t playing here now.";
     const extra = `<div class="tg-do"><button type="button" class="button sm" data-act="tg" data-do="edit" data-id="${esc(t.id)}">Change it</button><button type="button" class="button sm" data-act="tg" data-do="drop" data-id="${esc(t.id)}">Take it off</button>${warn ? `<p class="cc-warn">${warn}</p>` : ""}</div>`;
-    const when = atPlace(v) ? (t.kind === "fear" ? "Hits whoever’s there, against Confidence" : "Hits whoever’s there when it lands") : t.kind === "fear" && !onScene(v) ? "Lands on Confidence at the end of the round" : "";
+    const when = onScene(v) ? "" : atPlace(v) ? `Hits whoever’s there, at their ${rootOf(t)}` : `At their ${rootOf(t)}, against their ${trackFor(t)}`;
     return `<li class="tg is-draft">${kitTele({ who: t.who, does: t.does, at: atName(v), atCrest: v.at.k ? null : v.at.arch, aim: aimOf(v), d: t.d, round: n, one: oneOf(v), when, extra, strict: false })}</li>`;
   }
 
@@ -1071,7 +1089,7 @@ export function makeTable(d) {
         const back = took ? `<button type="button" class="button sm" data-act="tg" data-do="icp-off" data-id="${esc(t.id)}">Give it back</button>` : "";
         extra = `<div class="tg-do">${answerBtn(t, "Answer it", !took)}${back}${note}</div>`;
       }
-      if (s === "landed" && landsHere(t, ch.id)) extra += `<div class="tg-do"><button type="button" class="button primary" data-act="tg" data-do="land" data-k="${t.kind}">When it lands</button></div>`;
+      if (s === "landed" && landsHere(t, ch.id)) extra += `<div class="tg-do"><button type="button" class="button primary" data-act="tg" data-do="land" data-id="${esc(t.id)}">When it lands</button></div>`;
       return card(t, round, extra, { lit: takeLit(t.id) });
     };
     // One at a place: whether they're in it, said with a tap, and getting out
@@ -1085,13 +1103,14 @@ export function makeTable(d) {
         extra = `<div class="tg-in"><p class="tg-q" id="tg-q-${esc(t.id)}">${esc(cap(t.at.where))}?</p><div class="tg-in-btns" role="group" aria-labelledby="tg-q-${esc(t.id)}"><button type="button" class="cc-chipbtn" data-act="tg" data-do="there" data-id="${esc(t.id)}" data-v="1"${pressedAttr(inNow)}>I’m in it</button><button type="button" class="cc-chipbtn" data-act="tg" data-do="there" data-id="${esc(t.id)}" data-v="0"${pressedAttr(!inNow)}>I’m out of it</button></div></div>
           <div class="tg-do">${answerBtn(t, "Answer it", inNow)}<p class="cc-small">${say}</p></div>`;
       }
-      if (s === "landed") extra += `<div class="tg-do"><button type="button" class="button primary" data-act="tg" data-do="land" data-k="${t.kind}">When it lands</button></div>`;
+      if (s === "landed") extra += `<div class="tg-do"><button type="button" class="button primary" data-act="tg" data-do="land" data-id="${esc(t.id)}">When it lands</button></div>`;
       return card(t, round, extra, { lit: takeLit(t.id), ch });
     };
     // A friend's: answer it for them, put your action into whoever does, or
-    // take it for them (blows only, since fear's inside their head).
+    // take it for them (one at their Body only, since their Mind and Soul are
+    // inside their head).
     const takeBtn = (t) => {
-      if (!live || t.at.k || t.kind === "fear" || t.ans || t.icp || isAt(t.at, ch.id)) return "";
+      if (!live || t.at.k || rootOf(t) !== "Body" || t.ans || t.icp || isAt(t.at, ch.id)) return "";
       const free = guardianOf(c);
       const paid = !free && paidFor(doc, last, ch.id, t.at);
       const label = free ? "Take it, free" : paid ? "Take it, already paid" : "Take it: 1 Aura";
@@ -1120,28 +1139,29 @@ export function makeTable(d) {
     return `<section class="cc-sec tg-play" aria-labelledby="tg-play-h">${head}${wait}${owedHtml}${atHtml}${last ? actionPanel(ch, id, doc, last) : ""}${rest}${sceneHtml}</section>`;
   }
 
-  // The telegraphs that landed on this character and still need When it lands:
-  // the blows (Defend) or the fear (Confidence), ready for the defence roll.
-  function landedFor(ch, kind = null) {
+  // The telegraphs that landed on this character and still need When it lands,
+  // a round at a time, each at its own Root: the track for each Root rolls
+  // once, and Defend's dice with them if Defending was their action that round.
+  // One round's at a time, since every track rolls once for each round's
+  // landing: the round of the card it was opened from, or the oldest.
+  function landedFor(ch, from = null) {
     const id = ch ? d.campOf(ch) : null;
     if (!id) return null;
     const doc = local(id);
     const list = doc.rounds.flatMap((r) => r.tele.filter((t) => landsHere(t, ch.id) && stateHere(t, r, ch.id) === "landed").map((t) => ({ ...t, round: r })));
-    const blows = list.filter((t) => t.kind !== "fear");
-    const fear = list.filter((t) => t.kind === "fear");
-    const pick = kind === "fear" ? fear : kind === "blow" ? blows : blows.length ? blows : fear;
-    if (!pick.length) return null;
-    // Defending was their action in the round these landed in.
-    const defending = pick[0].kind !== "fear" && actsIn(ch.state, id, pick[0].round.id).list.some((a) => a.k === "else" && a.act === "Defend");
+    if (!list.length) return null;
+    const round = list.find((t) => t.id === from)?.round ?? list[0].round;
+    const pick = list.filter((t) => t.round === round);
+    const defending = actsIn(ch.state, id, pick[0].round.id).list.some((a) => a.k === "else" && a.act === "Defend");
     return {
       defend: defending,
       camp: id,
-      against: pick[0].kind === "fear" ? "confidence" : "blows",
       incoming: pick.map((t) => t.d),
+      roots: pick.map((t) => rootOf(t)),
       intents: Object.fromEntries(pick.map((t, j) => [`d${j}`, String(t.does).slice(0, 40)])),
       teles: pick.map((t) => t.id),
       from: Object.fromEntries(pick.map((t) => [t.id, { who: t.who, d: t.d, does: t.does }])),
-      more: kind ? 0 : (pick === blows ? fear.length : 0),
+      more: list.length - pick.length,
     };
   }
 
@@ -1307,10 +1327,11 @@ export function makeTable(d) {
   // at named the way the scene names it.
   function fromFields(id, f) {
     const k = f.at?.k;
-    const t = { who: f.who.trim(), does: f.does.trim(), d: f.d, kind: f.kind === "fear" ? "fear" : "blow", one: f.one.trim() };
+    const root = ROOTS.includes(f.root) ? f.root : "Body";
+    const t = { who: f.who.trim(), does: f.does.trim(), d: f.d, root, kind: root === "Body" ? "blow" : "fear", one: f.one.trim() };
     if (k === "stake" || k === "event") {
       const el = findEl(local(id), f.at.ref)?.el ?? null;
-      Object.assign(t, { kind: "blow", one: "", at: { k, ref: f.at.ref, name: el?.name ?? "something that’s gone" } });
+      Object.assign(t, { root: "Body", kind: "blow", one: "", at: { k, ref: f.at.ref, name: el?.name ?? "something that’s gone" } });
       t.fx = k === "event" || (f.fx === "clock" && el?.clock) ? { by: f.by === 2 ? 2 : 1 } : { tag: f.tag.replace(/,/g, "").trim().slice(0, MAX.tag) };
     } else if (k === "place") {
       const p = placeOf(f.where);
@@ -1325,7 +1346,7 @@ export function makeTable(d) {
   function previewOf(id, f, n) {
     const t = fromFields(id, f);
     const shown = { ...t, who: t.who || "Who’s telegraphing", does: t.does || "What it’s doing" };
-    const when = atPlace(t) ? (t.kind === "fear" ? "Hits whoever’s there, against Confidence" : "Hits whoever’s there when it lands") : t.kind === "fear" && !onScene(t) ? "Lands on Confidence at the end of the round" : "";
+    const when = onScene(t) ? "" : atPlace(t) ? `Hits whoever’s there, at their ${t.root}` : `At their ${t.root}, against their ${TRACK_AT[t.root]}`;
     return kitTele({ who: shown.who, does: shown.does, at: t.at ? atName(shown) : "who or what it’s aimed at", atCrest: t.at?.k ? null : t.at?.arch ?? [], aim: t.at ? aimOf(t) : "someone", d: f.d || 6, round: n, one: t.at ? oneOf(shown) : t.one, when, strict: false });
   }
   // The place on the scene's own telegraphs, each with what it's aimed at
@@ -1339,7 +1360,8 @@ export function makeTable(d) {
     return (d.pageTeles?.(id, sp.id) ?? []).filter((t) => SIZES.includes(Number(t.d)) && String(t.text ?? "").trim()).map((t) => {
       const line = curlyQuotes(String(t.text).replace(/\*/g, "").replace(/\s+/g, " ").trim());
       const a = readAim(t.at, stakes, line);
-      return { line, ...whoAndDoes(line, sp.name), d: Number(t.d), ...(a.why ? { kind: /\bConfidence\b/.test(String(t.at ?? "")) ? "fear" : "blow", aim: "crew", one: "" } : a) };
+      const root = /\b(Mind|Confidence)\b/.test(String(t.at ?? "")) ? "Mind" : /\bSoul\b/.test(String(t.at ?? "")) ? "Soul" : "Body";
+      return { line, ...whoAndDoes(line, sp.name), d: Number(t.d), ...(a.why ? { root, kind: root === "Body" ? "blow" : "fear", aim: "crew", one: "" } : a) };
     });
   }
   function bookTeles(id) {
@@ -1361,7 +1383,7 @@ export function makeTable(d) {
   }
   // How the book's telegraph goes, under its words.
   function bookSays(b) {
-    const against = b.aim === "crew" || b.aim === "place" ? `, against ${b.kind === "fear" ? "Confidence" : "Defend"}` : "";
+    const against = b.aim === "crew" || b.aim === "place" ? `, at the ${b.root ?? (b.kind === "fear" ? "Mind" : "Body")}` : "";
     const lands = b.aim === "stake" ? " · a new tag in its way if it lands" : b.aim === "clock" ? " · it drops a size if it lands" : b.one ? ` · ${b.one}` : "";
     return `d${b.d} at ${b.at}${against}${lands}`;
   }
@@ -1381,7 +1403,7 @@ export function makeTable(d) {
     const el = k === "stake" || k === "event" ? findEl(doc, f.at.ref)?.el ?? null : null;
     const known = threatsOf(id);
     const pressed = (on) => ` aria-pressed="${on ? "true" : "false"}"`;
-    const verbs = INTENTS[f.kind === "fear" ? "fear" : "blow"];
+    const verbs = INTENTS[ROOTS.includes(f.root) ? f.root : "Body"];
     const book = r.edit ? { place: null, list: [] } : bookTeles(id);
     const bookHtml = book.list.length ? `<div class="tg-book"><p class="tg-tlabel">From ${esc(book.place.name)}</p><ul class="tg-booklist">${book.list.map((b) => `<li><button type="button" class="tg-bookt" data-act="tg" data-do="book" data-i="${b.i}"${pressed(f.book === b.i)}>${kitDie(b.d, { own: "them", hide: true, bare: true })}<span><span class="tg-bookline">${esc(b.line)}</span><small>${esc(bookSays(b))}</small></span></button></li>`).join("")}</ul></div>` : "";
     // The scene: its open stakes, the scene clock and the events, and a place.
@@ -1428,9 +1450,8 @@ export function makeTable(d) {
       <label class="tg-label" for="tg-does">What it’s doing</label>
       <input id="tg-does" data-tg="does" maxlength="${MAX.does}" autocomplete="off" placeholder="${esc(target ? `Pin ${target.cname} against the wall` : k === "stake" ? "Head for the door with it" : k === "event" ? "Bring word the watch is coming" : k === "place" ? "Bring the stair down in flames" : "Pin her against the wall")}" value="${esc(f.does)}">
       ${!k ? `<div class="cc-chips tg-verbs" role="group" aria-label="Start it with">${verbs.map((v) => `<button type="button" class="cc-chipbtn sm" data-act="tg" data-do="verb" data-v="${v}">${v}${target ? ` ${esc(target.cname)}` : ""}</button>`).join("")}</div>` : ""}
-      ${crewOrPlace ? `<fieldset class="cc-group"><legend>What lands</legend>
-        <button type="button" class="cc-line" data-act="tg" data-do="kind" data-k="blow"${pressed(f.kind !== "fear")}><span class="tick" aria-hidden="true"></span><span>A blow <small>blades, falling rocks and teeth, stopped by ${k === "place" ? "each one’s" : "their"} Defend</small></span></button>
-        <button type="button" class="cc-line" data-act="tg" data-do="kind" data-k="fear"${pressed(f.kind === "fear")}><span class="tick" aria-hidden="true"></span><span>Fear, lies or pressure <small>against ${k === "place" ? "each one’s" : "their"} Confidence</small></span></button></fieldset>
+      ${crewOrPlace ? `<fieldset class="cc-group"><legend>Which Root it’s at</legend>
+        ${ROOTS.map((root) => `<button type="button" class="cc-line" data-act="tg" data-do="root" data-k="${root}"${pressed((f.root ?? "Body") === root)}><span class="tick" aria-hidden="true"></span><span>${k === "place" ? "Each one’s" : "Their"} ${root} <small>${ROOT_TAKES[root]}, against ${k === "place" ? "each one’s" : "their"} ${TRACK_AT[root]}${root === "Body" ? "" : ". Nobody can intercept it"}</small></span></button>`).join("")}</fieldset>
       <details class="cc-group" data-open="tg-one"${f.one || d.isOpen("tg-one") ? " open" : ""}><summary>Only one answer? <small>what happens if it lands</small></summary>
         <label class="cc-field" for="tg-one">If it lands</label><input id="tg-one" data-tg="one" maxlength="${MAX.one}" autocomplete="off" placeholder="The household clock drops two sizes" value="${esc(f.one)}"></details>` : `<p class="cc-small tg-hint">There’s no defence against it. Anyone can answer it with their action, and if nobody does, it does what it said when the round ends.</p>`}
       ${r.live ? `<p class="cc-small">It goes out now. The round can change while someone’s still got an action to answer it with.</p>` : ""}
@@ -1464,8 +1485,8 @@ export function makeTable(d) {
     return `<span class="tg-crest" aria-hidden="true">${d.crest(arch ?? [])}</span>`;
   }
 
-  // Answering: the telegraph, and the set action that fits the way you're
-  // stopping it.
+  // Answering: the telegraph, and the specialty that fits the way you're
+  // stopping it, on its usual Root. The roll card can pitch it another way.
   function pickView(r) {
     const ch = d.current();
     const c = ch ? d.normal(ch) : null;
@@ -1480,9 +1501,9 @@ export function makeTable(d) {
     const forOther = !t.at.k && !(t.at.user === me() && t.at.ch === ch.id);
     const ins = friendsIn(doc, hit, ch);
     const combo = ins.length ? `<p class="cc-lead"><b>${ins.length === 1 ? `${esc(ins[0].name)}’s` : `${esc(andList(ins.map((j) => j.name)))} are`} in on it</b>, so ${ins.reduce((n, j) => n + j.steps, 0)} more steps go into your roll as a combo.</p>` : "";
-    const lead = onScene(t) ? `Pick the set action that fits the way you’re stopping it. Win and it never lands. Lose and it lands now, and ${esc(fxSaid(t))}.`
-      : atPlace(t) ? `Pick the set action that fits the way you’re stopping it. Win and it never lands, on anyone. Lose and it lands now on whoever’s ${esc(t.at.where)}, with no defence.`
-        : `Pick the set action that fits the way you’re stopping it: dodge it, block it, talk them down, or get your shot in first. Win and it never lands. Lose and it lands now, with no defence.${forOther ? ` If you put yourself in the way and lose, it lands on you.` : ""}`;
+    const lead = onScene(t) ? `Pick the specialty that fits the way you’re stopping it, and the roll card puts it on a Root. Win and it never lands. Lose and it lands now, and ${esc(fxSaid(t))}.`
+      : atPlace(t) ? `Pick the specialty that fits the way you’re stopping it, and the roll card puts it on a Root. Win and it never lands, on anyone. Lose and it lands now on whoever’s ${esc(t.at.where)}, with no defence.`
+        : `Pick the specialty that fits the way you’re stopping it: dodge it, block it, talk them down, or get your shot in first. The roll card puts it on a Root. Win and it never lands. Lose and it lands now, with no defence.${forOther ? ` If you put yourself in the way and lose, it lands on you.` : ""}`;
     return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${forOther ? `Answer it for ${esc(t.at.name)}` : "Answer it"}</h2><p class="cc-small">Spend your action on it.</p></div>
       <button type="button" class="cc-x" data-act="close" aria-label="Close">${d.icon.close}</button></div>
     <div class="dlg-body tg-pick">
@@ -1495,7 +1516,7 @@ export function makeTable(d) {
 
   // ------------------------------------------------------------ actions, in dialogs
 
-  // A set action to put in, as the answer picker draws them.
+  // A specialty to put in, on its usual Root, as the answer picker draws them.
   const tiles = (ch, c, doIt) => `<div class="tg-acts">${d.actions(ch, c).map((a) => `<button type="button" class="tile card tg-act" data-act="tg" data-do="${doIt}" data-a="${a.i}"><span class="tile-dice" aria-hidden="true">${a.dice}</span><span class="tile-name">${esc(a.name)}</span><span class="tile-says">${esc(a.says)}</span></button>`).join("")}</div>`;
   const head = (title, sub = "") => `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">${title}</h2>${sub ? `<p class="cc-small">${sub}</p>` : ""}</div><button type="button" class="cc-x" data-act="close" aria-label="Close">${d.icon.close}</button></div>`;
   const goneView = (title, why) => `${head(title)}<div class="dlg-body"><p class="cc-lead">${why}</p></div>`;
@@ -1510,13 +1531,13 @@ export function makeTable(d) {
     return `${head("Put your action in", "It’s a combo: one roll between you.")}
     <div class="dlg-body tg-pick">
       <ol class="tg-list">${card(t, hit.round)}</ol>
-      <p class="cc-lead">Whoever answers ${esc(lower(t.who))} rolls it with your steps in, and you both move with the roll: up a size if a die wins, down a size if they all miss. Pick the set action you’re putting in.</p>
+      <p class="cc-lead">Whoever answers ${esc(lower(t.who))} rolls it on their own Root, with your specialty and what you’re using in it, and every action in it gives them a split. Pick the specialty you’re putting in.</p>
       ${tiles(ch, c, "jwith")}
       <details class="cc-group" data-open="tg-rule-c"${d.isOpen("tg-rule-c") ? " open" : ""}><summary>How working together works</summary><div class="cc-rule">${d.rule("s-teamwork")}</div></details>
     </div>`;
   }
 
-  // Working a stake or engaging an event: what you're going for, then the set action.
+  // Working a stake or engaging an event: what you're going for, then the specialty.
   function workView(r) {
     const ch = d.current();
     const c = ch ? d.normal(ch) : null;
@@ -1539,7 +1560,7 @@ export function makeTable(d) {
     </div>`;
   }
 
-  // Something else: the scene, a set action, Defend, or anything at all.
+  // Something else: the scene, a specialty, Defend, or anything at all.
   function elseView(r) {
     const ch = d.current();
     const c = ch ? d.normal(ch) : null;
@@ -1548,14 +1569,14 @@ export function makeTable(d) {
     if (!c || !last || last.over) return goneView("Something else", "The round’s over.");
     const scene = sceneParts(doc);
     const open = [...scene.clocks, ...scene.stakes, ...scene.events].filter((el) => !el.out);
-    const plain = [["Defend", "Defend", "every line on your Defend counts twice when the telegraphs land"], ["Move", "Move", "further than your stride"], ["Taking a breath", "Take a breath", "your Confidence comes up a size, as far as d6"]];
+    const plain = [["Defend", "Defend", "a Root and a specialty, with your armour, roll with your tracks when the telegraphs land"], ["Move", "Move", "further than your stride"], ["Taking a breath", "Take a breath", "your Confidence comes up a size, as far as d6"]];
     return `${head("Something else", "Spend your action on it.")}
     <div class="dlg-body tg-pick tg-else">
       ${open.length ? `<h3 class="tg-h3">The scene</h3><div class="cc-chips">${open.map((el) => `<button type="button" class="cc-chipbtn" data-act="tg" data-do="work" data-el="${esc(el.id)}">${el.t === "stake" ? "Work" : "Engage"} ${esc(lower(el.name))}</button>`).join("")}</div>` : ""}
       ${scene.ground.length ? `<h3 class="tg-h3">The ground</h3><div class="cc-chips">${scene.ground.map((el) => `<button type="button" class="cc-chipbtn" data-act="tg" data-do="use" data-el="${esc(el.id)}">Use ${esc(lower(el.name))}</button>`).join("")}</div>` : ""}
       <h3 class="tg-h3">Or one of these</h3>
       <div class="tg-options">${plain.map(([v, label, say]) => `<button type="button" class="tg-option" data-act="tg" data-do="other" data-v="${esc(v)}"><b>${label}</b><small>${say}</small></button>`).join("")}</div>
-      <h3 class="tg-h3">Or roll a set action</h3><p class="cc-small">Go at a threat, strip a tag, lead, heal, whatever it is. It goes down as your action, then the roll card opens.</p>
+      <h3 class="tg-h3">Or roll a specialty</h3><p class="cc-small">Go at a threat, strip a tag, lead, heal, whatever it is. It goes down as your action, then the roll card opens.</p>
       ${tiles(ch, c, "owith")}
       <label class="tg-label" for="tg-else-text">Or say what it is</label>
       <div class="tg-else-row"><input id="tg-else-text" data-tg="else" maxlength="${MAX.act}" autocomplete="off" placeholder="Pull the rope out of my bag" value="${esc(r.text ?? "")}"><button type="button" class="button" data-act="tg" data-do="other-text">That’s it</button></div>
@@ -1751,8 +1772,8 @@ export function makeTable(d) {
     const doc = local(id);
     const last = current(doc);
     const live = Boolean(last && !last.over) && !draft;
-    const base = { who: "", does: "", d: 0, kind: "blow", one: "", at: null, fx: "tag", tag: "", by: 1, where: "", book: -1 };
-    const f = draft ? { ...base, who: draft.who, does: draft.does, d: draft.d, kind: draft.kind, one: draft.one ?? "" } : base;
+    const base = { who: "", does: "", d: 0, root: "Body", one: "", at: null, fx: "tag", tag: "", by: 1, where: "", book: -1 };
+    const f = draft ? { ...base, who: draft.who, does: draft.does, d: draft.d, root: rootOf(draft), one: draft.one ?? "" } : base;
     if (draft?.at?.k === "stake" || draft?.at?.k === "event") Object.assign(f, { at: { k: draft.at.k, ref: draft.at.ref }, fx: draft.fx?.by && draft.at.k === "stake" ? "clock" : "tag", tag: draft.fx?.tag ?? "", by: draft.fx?.by === 2 ? 2 : 1 });
     else if (draft?.at?.k === "place") Object.assign(f, { at: { k: "place" }, where: draft.at.where ?? "" });
     else if (draft?.at) f.at = { user: draft.at.user, ch: draft.at.ch };
@@ -1760,7 +1781,7 @@ export function makeTable(d) {
     if (!draft) {
       const known = given ? null : threatsOf(id)[0];
       if (known) Object.assign(f, { who: known.who, d: known.d });
-      if (given) Object.assign(f, { who: String(given.who ?? "").slice(0, MAX.who), does: String(given.does ?? "").slice(0, MAX.does), d: SIZES.includes(given.d) ? given.d : 0, kind: given.kind === "fear" ? "fear" : "blow" });
+      if (given) Object.assign(f, { who: String(given.who ?? "").slice(0, MAX.who), does: String(given.does ?? "").slice(0, MAX.does), d: SIZES.includes(given.d) ? given.d : 0, root: rootOf(given) });
       const roster = rosterOf(id);
       if (roster.length === 1) f.at = { user: roster[0].user, ch: roster[0].ch };
       if (given?.text && given.at != null) aimGiven(id, f, given);
@@ -1777,6 +1798,8 @@ export function makeTable(d) {
     const doc = local(id);
     const line = curlyQuotes(String(given.text).replace(/\*/g, "").replace(/\s+/g, " ").trim());
     const a = readAim(given.at, doc.scene.stakes.filter((x) => !x.out).map((x) => x.name), line);
+    // One at someone says the Root it's at, and waits for her to pick who.
+    if (!a.why) f.root = rootOf(a);
     if (a.why || a.aim === "crew") return;
     if (a.aim === "stake") {
       const el = doc.scene.stakes.find((x) => x.name === a.stake && !x.out);
@@ -1789,7 +1812,7 @@ export function makeTable(d) {
     } else f.at = { k: "place" };
     if (a.aim === "place") f.where = placeOf(a.place)?.where ?? "";
     const wd = whoAndDoes(line, f.who || given.page || "");
-    Object.assign(f, { who: wd.who.slice(0, MAX.who), does: wd.does.slice(0, MAX.does), kind: a.kind, one: a.one ?? "" });
+    Object.assign(f, { who: wd.who.slice(0, MAX.who), does: wd.does.slice(0, MAX.does), root: rootOf(a), one: a.one ?? "" });
   }
 
   function save(r) {
@@ -1810,7 +1833,7 @@ export function makeTable(d) {
       return d.renderDialog();
     }
     const at = k === "stake" || k === "event" ? { k, ref: f.at.ref } : k === "place" ? { k, name: made.at.name, where: made.at.where } : { user: target.user, ch: target.ch, arch: crestOf(id, target) ?? [] };
-    const t = { id: r.edit || newId(), who: f.who.trim().slice(0, MAX.who), does: f.does.trim().slice(0, MAX.does), d: f.d, kind: made.kind, one: made.one.slice(0, MAX.one), at, ...(made.fx ? { fx: made.fx } : {}) };
+    const t = { id: r.edit || newId(), who: f.who.trim().slice(0, MAX.who), does: f.does.trim().slice(0, MAX.does), d: f.d, root: made.root, kind: made.kind, one: made.one.slice(0, MAX.one), at, ...(made.fx ? { fx: made.fx } : {}) };
     const kept = camp(id);
     if (r.live) push(id, { o: "add", tele: t });
     else {
@@ -1920,7 +1943,7 @@ export function makeTable(d) {
       const r = d.roll();
       const b = bookTeles(r.camp).list.find((x) => x.i === Number(el.dataset.i));
       if (!b) return;
-      Object.assign(r.f, { who: b.who, does: b.does, d: b.d, kind: b.kind, one: b.one ?? "", book: b.i });
+      Object.assign(r.f, { who: b.who, does: b.does, d: b.d, root: rootOf(b), one: b.one ?? "", book: b.i });
       if (b.aim === "stake") Object.assign(r.f, { at: { k: "stake", ref: b.ref }, fx: "tag", tag: b.tag, by: 1 });
       else if (b.aim === "clock") Object.assign(r.f, { at: { k: "event", ref: b.ref }, by: 1 });
       else if (b.aim === "place") Object.assign(r.f, { at: { k: "place" }, where: placeOf(b.place)?.where ?? "" });
@@ -1966,9 +1989,9 @@ export function makeTable(d) {
         box.setSelectionRange(box.value.length, box.value.length);
       }
     },
-    kind: (el) => {
+    root: (el) => {
       const r = d.roll();
-      r.f.kind = el.dataset.k === "fear" ? "fear" : "blow";
+      r.f.root = ROOTS.includes(el.dataset.k) ? el.dataset.k : "Body";
       d.renderDialog();
     },
     save: () => save(d.roll()),
@@ -1989,7 +2012,7 @@ export function makeTable(d) {
       d.answer(Number(el.dataset.a), { camp: r.camp, id: t.id, d: t.d, who: t.who, does: t.does, atName: atName(t), mine: isAt(t.at, ch.id), aim: t.at.k ?? "", fx: fxSaid(t), where: t.at.where ?? "", ...(ins.length ? { with: ins } : {}) });
     },
     land: (el) => {
-      const pre = landedFor(d.current(), el.dataset.k === "fear" ? "fear" : "blow");
+      const pre = landedFor(d.current(), el.dataset.id);
       if (pre) d.defend(pre);
     },
     // Their action, spent on something: a friend's answer, the scene, the
@@ -2090,15 +2113,15 @@ export function makeTable(d) {
       const last = id ? current(local(id)) : null;
       const k = el.dataset.k;
       if (!last || last.over || !MORES.some(([x]) => x === k)) return;
-      spend(ch, id, last.id, "an extra action", (rec, s) => {
+      spend(ch, id, last.id, "an extra action", (rec, s, c) => {
         if (rec.more.length >= MAX.more || (ONCE.includes(k) && rec.more.includes(k))) return false;
-        if (k === "resolve") {
-          if (s.aura < 3) return false;
+        if (k === "aura") {
+          // One for each archetype past the first, and no more.
+          if (s.aura < 3 || rec.more.filter((m) => m === "aura").length >= auraCap(c?.archetypes.length)) return false;
           s.aura -= 3;
         }
-        if (k === "fired") return false;
         rec.more.push(k);
-        return `Another action this round, from ${moreName(k)}.${k === "resolve" ? ` Aura’s ${s.aura}.` : ""}`;
+        return `Another action this round, from ${moreName(k)}.${k === "aura" ? ` Aura’s ${s.aura}.` : ""}`;
       });
     },
     // Intercepting a friend's telegraph: 1 Aura, once for each friend a
@@ -2108,7 +2131,7 @@ export function makeTable(d) {
       const id = ch ? d.campOf(ch) : null;
       const doc = id ? local(id) : null;
       const hit = doc ? findTele(doc, el.dataset.id) : null;
-      if (!hit || hit.round.over || hit.t.icp || hit.t.ans || hit.t.kind === "fear") return;
+      if (!hit || hit.round.over || hit.t.icp || hit.t.ans || rootOf(hit.t) !== "Body") return;
       d.change(`taking ${lower(hit.t.who)} for ${hit.t.at.name}`, (s, c) => {
         const free = guardianOf(c);
         const paid = !free && !paidFor(doc, hit.round, ch.id, hit.t.at);
@@ -2258,7 +2281,7 @@ export function makeTable(d) {
     if (close) d.closeDialog();
     spend(ch, id, last.id, "your action", (rec) => {
       rec.list.push({ id: newId(), k: "else", act: what, ...(set ? { set: true } : {}), t: Date.now() });
-      return what === "Defend" ? "You’re Defending this round. When the telegraphs land, every line on your Defend counts twice." : `Your action’s on ${actSaid({ act: what, set })}.`;
+      return what === "Defend" ? "You’re Defending this round. When the telegraphs land, a Root and a specialty roll with your tracks, your armour as items, and each die stops one it beats or ties." : `Your action’s on ${actSaid({ act: what, set })}.`;
     });
   }
 

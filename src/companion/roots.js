@@ -115,7 +115,9 @@ export function rootsSheet(base, grown = [], B = null) {
     bag: { name: carry.bag?.name ?? "a bag", max: carry.bag?.max ?? 10, items: carry.bag?.items ?? [] },
   };
   c.armour = (c.armour ?? []).map((a) => ({ ...a, root: ROOTS.includes(a.root) ? a.root : "Body" }));
+  for (const t of c.titles) t.boons = (Array.isArray(t.boons) ? t.boons : []).filter((x) => x && text(x.lever, 40)).map((x) => boonOf(x, B));
   if (Array.isArray(grown) && grown.length) growRoots(c, grown, B);
+  withBoons(c);
   const { roots, specialties } = countRoots(c.titles);
   c.roots = roots;
   // The sheet's own order on a tie, so the crew's read the way the chapter
@@ -146,7 +148,15 @@ export function growRoots(c, grown, B = null) {
     const words = text(x.text, 120);
     if (x.k === "perm" && words && root && spec) {
       const t = c.titles[int(x.t, -1)];
-      if (t && t.permissions.length < MAX_PERMS) t.permissions.push({ text: words, root, specialty: spec, g });
+      if (t && slotsOf(t) < MAX_PERMS) t.permissions.push({ text: words, root, specialty: spec, g });
+    } else if (x.k === "boon" && text(x.lever, 40)) {
+      // Two permissions swapped for a Boon, in downtime: they come off the
+      // Title and the Boon takes their two slots.
+      const t = c.titles[int(x.t, -1)];
+      if (!t) continue;
+      const drop = [...new Set((Array.isArray(x.drop) ? x.drop : []).map((j) => int(j, -1)))].filter((j) => t.permissions[j]).sort((a, b) => b - a);
+      for (const j of drop) t.permissions.splice(j, 1);
+      if (slotsOf(t) + 2 <= MAX_PERMS) t.boons.push({ ...boonOf(x, B), g });
     } else if (x.k === "swap" && words && root && spec) {
       const t = c.titles[int(x.t, -1)];
       const j = int(x.j, -1);
@@ -174,7 +184,7 @@ export function growRoots(c, grown, B = null) {
       const specs = (Array.isArray(x.specs) ? x.specs : []).map((s) => text(s, 40)).filter(Boolean).slice(0, 3);
       const p = x.perm && typeof x.perm === "object" ? x.perm : null;
       const perm = p && text(p.text, 120) && ROOTS.includes(p.root) && text(p.spec, 40) ? [{ text: text(p.text, 120), root: p.root, specialty: text(p.spec, 40), g }] : [];
-      c.titles.push({ name: words, root, specialties: specs, permissions: perm, g });
+      c.titles.push({ name: words, root, specialties: specs, permissions: perm, boons: [], g });
     } else if (x.k === "arch" && text(x.arch, 24)) {
       const rule = ARCH.get(text(x.arch, 24));
       c.archetypes.push({ name: text(x.arch, 24), id: rule?.id ?? null, home: rule?.home ?? null, summary: rule?.summary ?? "", for: rule?.for ?? "", abilities: rule?.abilities ?? [], g });
@@ -185,6 +195,63 @@ export function growRoots(c, grown, B = null) {
   }
   return c;
 }
+
+// ---------------------------------------------------------------- Boons
+
+// A Boon takes two permission slots on its Title (Boons and Burdens, in
+// Building Your Character), so a Title's six slots are its permissions and
+// two for each Boon. What a Boon does comes from the book's table by its
+// lever, and the player's own name for it and what it's on (a piece of
+// armour, a condition, climbing) are theirs.
+export const BOON_SLOTS = 2;
+export const slotsOf = (t) => (t?.permissions?.length ?? 0) + BOON_SLOTS * (t?.boons?.length ?? 0);
+export function boonOf(x, B = null) {
+  const lever = text(x?.lever, 40);
+  const rule = (B?.boons ?? []).find((b) => b.lever === lever);
+  const out = { lever, name: text(x?.name, 40), text: rule?.text ?? text(x?.text, 200), on: text(x?.on, 60) };
+  if (x?.g != null) out.g = x.g;
+  return out;
+}
+export const boonsOf = (c) => (c?.titles ?? []).flatMap((t) => t.boons ?? []);
+export const boonCount = (c, lever) => boonsOf(c).filter((b) => b.lever === lever).length;
+// What the Boons change on the sheet itself: Aura's maximum and the stride
+// are 2 more for each, a piece of armour gets a box, and Kit's an item more.
+// The rest work in play (roots.js and the play screen) or are the player's
+// to remember, like Getting around.
+export function withBoons(c) {
+  const n = c.numbers ?? (c.numbers = {});
+  const said = (lever) => {
+    const list = boonsOf(c).filter((b) => b.lever === lever);
+    return list.length ? list.map((b) => b.name || `the ${b.lever} Boon`).join(", ") : null;
+  };
+  const aura = boonCount(c, "Aura");
+  if (aura) {
+    n.aura = int(n.aura, 5) + 2 * aura;
+    n.auraNote = said("Aura");
+  }
+  const stride = boonCount(c, "Stride");
+  if (stride) {
+    n.stride = int(n.stride, 3) + 2 * stride;
+    n.strideNote = [n.strideNote, said("Stride")].filter(Boolean).join(", ");
+  }
+  n.kit = boonCount(c, "Kit");
+  // One piece has one more box for each Armour Boon: the one it names, or
+  // the first piece they've got.
+  for (const b of boonsOf(c).filter((x) => x.lever === "Armour")) {
+    const piece = c.armour.find((a) => specKey(a.name) === specKey(b.on)) ?? c.armour.find((a) => !b.on || specKey(a.name).includes(specKey(b.on))) ?? c.armour[0];
+    if (piece) piece.boxes = Math.min(6, (piece.boxes ?? 1) + 1);
+  }
+  return c;
+}
+// At the end of a scene a track comes back on this or more: 4, or 3 with
+// the Recovery Boon.
+export const restsOn = (c) => (boonCount(c, "Recovery") ? 3 : 4);
+// What a Boon's called on the sheet: the player's name for it, or the lever.
+export const boonSaid = (c, lever) => boonsOf(c).find((b) => b.lever === lever)?.name || `your ${lever} Boon`;
+// A condition the Conditions Boon says can't touch them.
+export const shrugs = (c, name) => boonsOf(c).some((b) => b.lever === "Conditions" && b.on && specKey(b.on) === specKey(name));
+// Going beyond's free once a scene with the Going beyond Boon, and 1 Aura after.
+export const freeBeyond = (c, s) => boonCount(c, "Going beyond") > 0 && s.beyond !== true;
 
 // How much a specialty's worth, by name, whatever its capitals.
 export const specSteps = (c, name) => c.specialties.find((s) => specKey(s.name) === specKey(name))?.steps ?? 0;
@@ -280,7 +347,9 @@ export function normalRoots(raw, c) {
   const s = Object.assign(freshRoots(c), raw && typeof raw === "object" ? raw : {});
   s.v = 2;
   s.acting = Boolean(s.acting);
-  s.aura = clamp(s.aura, 0, s.acting ? 99 : max);
+  // Past the maximum only while acting, or by the 1 In your element gave at
+  // the start of the scene, till they've finished acting.
+  s.aura = clamp(s.aura, 0, s.acting ? 99 : max + (s.elem === true ? 1 : 0));
   const scars = s.scars && typeof s.scars === "object" ? s.scars : {};
   const tracks = s.tracks && typeof s.tracks === "object" ? s.tracks : {};
   s.scars = {};
@@ -308,6 +377,16 @@ export function normalRoots(raw, c) {
     if (v) s.store[w.key] = v;
   }
   if (s.seen && typeof s.seen !== "object") delete s.seen;
+  // What a scene's used up: the Toughness Boon's free hits, the Going
+  // beyond Boon's free go and In your element's Aura, cleared by a new scene.
+  s.tough = clamp(s.tough, 0, 9);
+  if (!s.tough) delete s.tough;
+  if (s.beyond !== true) delete s.beyond;
+  if (s.elem !== true) delete s.elem;
+  // A Shadow's pool: the dice they rolled getting into hiding, there to add
+  // to a roll later, one die at a time.
+  s.pool = (Array.isArray(s.pool) ? s.pool : []).map((d) => even(d, 2, 12)).slice(0, 12);
+  if (!s.pool.length) delete s.pool;
   delete s.used;
   delete s.shrugged;
   return s;
@@ -476,7 +555,8 @@ export function itemsOf(c, s) {
 // specialty each extra action brings (the same one again is 1), and friends'
 // and a Leader's steps. Every roll's at least 1 step, a d2. r is:
 //   { root, spec, items: [key], other, borrow: [person], pitch, beyond,
-//     extra: [{ spec, via }], friends: [steps], handed, conds: [name] }
+//     extra: [{ spec, via }], friends: [steps], handed, conds: [name],
+//     pool: [{ i, die }] }
 // pitch is true when the specialty needs a case made for it (1 Aura).
 export function countRoll(c, s, r) {
   const rootN = c.roots[r.root] ?? 0;
@@ -495,9 +575,16 @@ export function countRoll(c, s, r) {
   const friends = (r.friends ?? []).reduce((a, b) => a + Math.max(1, int(b, 1)), 0);
   const other = clamp(r.other ?? 0, 0, 9);
   const borrowed = (r.borrow ?? []).length;
-  const total = Math.max(1, rootN + specN + using.length + other + borrowed + extras.reduce((t, x) => t + x.steps, 0) + friends + clamp(r.handed ?? 0, 0, 30) + conds);
-  const splits = 1 + extras.length + (r.friends ?? []).length;
+  // A Shadow's pool dice, each one as steps (a d8 is 4) or as its own die.
+  const taken = new Set();
+  const pool = (r.pool ?? []).filter((x) => Number.isInteger(x?.i) && s.pool?.[x.i] && !taken.has(x.i) && taken.add(x.i)).map((x) => ({ i: x.i, size: s.pool[x.i], die: Boolean(x.die) }));
+  const poolSteps = pool.filter((x) => !x.die).reduce((t, x) => t + x.size / 2, 0);
+  const total = Math.max(1, rootN + specN + using.length + other + borrowed + extras.reduce((t, x) => t + x.steps, 0) + friends + clamp(r.handed ?? 0, 0, 30) + conds + poolSteps);
+  // Every action in it gives a split, and the Splits Boon one more each.
+  const splits = 1 + extras.length + (r.friends ?? []).length + boonCount(c, "Splits");
   const bought = extras.filter((x) => x.via === "aura").length;
-  const aura = (r.pitch && spec ? 1 : 0) + (r.beyond ? 1 : 0) + other + borrowed + EXTRA_AURA * bought;
-  return { rootN, spec, specN, items: using, extras, conds, friends, other, borrowed, total, splits, bought, aura, dice: stepsToDice(total) };
+  const free = Boolean(r.beyond && freeBeyond(c, s));
+  const aura = (r.pitch && spec ? 1 : 0) + (r.beyond && !free ? 1 : 0) + other + borrowed + EXTRA_AURA * bought;
+  const poolDice = pool.filter((x) => x.die).map((x) => x.size);
+  return { rootN, spec, specN, items: using, extras, conds, friends, other, borrowed, total, splits, bought, aura, free, pool, poolDice, dice: [...stepsToDice(total), ...poolDice] };
 }

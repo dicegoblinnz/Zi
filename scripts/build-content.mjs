@@ -1219,6 +1219,17 @@ function buildFrom(rulesDoc, ideasDoc, archetypes, inline, warn) {
     permIdeas: tableRows(sectionOf(body, "permission-ideas")).map((r) => ({ for: plain(r[0]), perms: italics(r[1]) })),
     connect: listItems(sectionOf(body, "s-connect")).map(curly),
   };
+  // Boons and Burdens: each lever's Boon and Burden off the table (a Boon
+  // that starts "none" isn't one you can take), then the Boons that get you
+  // Aura back, which have no Burden. A Boon takes two permission slots.
+  const boonSec = sectionOf(body, "s-boons");
+  const none = (s) => /^none\b/i.test(plain(s));
+  build.boons = [
+    ...tableRows(boonSec).filter((r) => r.length === 3 && !none(r[1])).map((r) => ({ lever: plain(r[0]), text: plain(r[1]), burden: none(r[2]) ? "" : plain(r[2]) })),
+    ...[...(boonSec.split(/\*\*Boons that get you Aura back\.\*\*/)[1] ?? "").split(/\n\n(?!-)/)[0].matchAll(/^-\s+\*\*([^*:]+):\*\* (.+)$/gm)].map((m) => ({ lever: plain(m[1]), text: plain(m[2]).replace(/\.$/, ""), burden: "", aura: true })),
+  ];
+  if (build.boons.length < 12) warn(`expected the Boons table and the Aura Boons, found ${build.boons.length} Boons`);
+  for (const lever of ["Toughness", "Aura", "Stride", "Kit", "Ties", "Splits", "Extra action", "Armour", "Recovery"]) if (!build.boons.some((b) => b.lever === lever)) warn(`the builder needs the ${lever} Boon, and Boons and Burdens hasn't got it`);
   const expect = { quick: 7, quickTest: 4, catches: 12, connect: 10 };
   for (const [key, n] of Object.entries(expect)) if (build[key].length !== n) warn(`the builder expected ${n} ${key}, found ${build[key].length}`);
   for (const [key, n] of Object.entries({ archetypes: 10, ideas: 20, items: 4, usedUp: 10, keepsakes: 5, permIdeas: 4 })) {
@@ -1283,6 +1294,24 @@ const ideasDoc = docWith("{#s-quick}");
 const rootsBuild = buildDoc && ideasDoc ? buildFrom(buildDoc, ideasDoc, ctx.archetypes, inline, (msg) => companionWarn(`builder: ${msg}`)) : null;
 if (!rootsBuild) companionWarn("can't find Building Your Character or the Quick Build for the builder");
 else rootsBuild.qualities = ctx.qualities;
+// The book's attuned things from the story (Coin and Kit), each with its own
+// way to Aura and its awakenings, for random characters to start from.
+function thingsFrom(doc, warn) {
+  const out = [];
+  for (const id of ["twelve-rare-things", "eight-legendary-things"]) {
+    const sec = sectionOf(doc.body, id);
+    for (const m of sec.matchAll(/^:::sheet\[([^\]]+)\]\n([\s\S]*?)\n:::$/gm)) {
+      const aura = m[2].match(/^\*\*Its Aura\*\* (.+)$/m)?.[1] ?? "";
+      const wakes = m[2].match(/^\*\*(?:Tempered|Perfected)\*\* (.+)$/m)?.[1] ?? "";
+      const awakenings = dots(wakes).map((w) => w.match(/^\*([^*]+)\* \((passive|active)\): (.+)$/)).filter(Boolean).map((x) => ({ name: plain(x[1]), kind: x[2], text: plain(x[3]).replace(/\.$/, "") }));
+      if (!aura || !awakenings.length) warn(`can't read ${m[1]}'s Aura or awakenings in Coin and Kit`);
+      else out.push({ name: curly(m[1]), aura: plain(aura).replace(/\.$/, ""), awakenings });
+    }
+  }
+  if (out.length < 12) warn(`found only ${out.length} attuned things in Coin and Kit`);
+  return out;
+}
+if (rootsBuild && docWith("{#twelve-rare-things}")) rootsBuild.things = thingsFrom(docWith("{#twelve-rare-things}"), (msg) => companionWarn(`builder: ${msg}`));
 const rootsConditions = docWith("{#s-conditions-list}") ? conditionsFrom(docWith("{#s-conditions-list}"), inline) : [];
 if (rootsConditions.length < 10) companionWarn(`found only ${rootsConditions.length} conditions in Conflict`);
 // The companion plays the crew on Roots, with the builder's data (the
@@ -1522,6 +1551,10 @@ writeFileSync(join(ROOT, "src", "generated", "worlds.json"), JSON.stringify(whol
 // What the World screen offers to bring into a campaign (stage 14), and what
 // the Worker knows is a whole world's: each year's id, its title and when it
 // starts, whose it is, and what's in it, but nothing of the world itself.
+// The crew's archetypes, for the Worker's live table, which caps the extra
+// actions each of them can buy with Aura at one for each archetype past the
+// first, and for the table screen's crests.
+writeFileSync(join(ROOT, "src", "generated", "crew-archetypes.json"), JSON.stringify(Object.fromEntries(crew.map((c) => [c.id, c.archetypes.map((a) => a.name)]))));
 writeFileSync(join(ROOT, "src", "generated", "worlds-index.json"), JSON.stringify(Object.values(wholeWorlds).flat().map((w) => ({
   id: w.id, universe: w.universe, name: w.name, title: w.title, when: w.when, own: w.own, whose: w.whose, notices: w.notices, recipe: w.recipe,
   factions: w.factions.length, places: w.places.length, people: w.people.length, map: Boolean(w.map), lines: w.history.length,

@@ -63,7 +63,7 @@
 //     vs      as an act's, with set: whether it's known yet. The GM says what
 //             it's up against, unless it's a telegraphed action's dice or a
 //             die on the party sheet.
-//     again   who spent 1 Resolve to roll it again, tie, which intents an
+//     again   who spent a size of Resolve to roll it again, tie, which intents an
 //             extra resource bought the tie for on this roll, and paid, how
 //             many extras ties have cost the crew
 import { stepsToDice } from "./dice.js";
@@ -749,7 +749,7 @@ export function turnNews(was, now, { gm = false, me = null } = {}) {
   if (cb?.slot && !ca?.slot && cb.slot.user !== me) lines.push(`${cb.slot.name} put a personal slot into the crew’s action, so everything counts twice.`);
   if (cb && !gm && cb.vs.set && ca && !ca.vs.set && ca.id === cb.id) lines.push("The GM’s said what the crew’s up against. Roll it.");
   if (cb?.won && !ca?.won && cb.by?.user !== me) lines.push(`${cb.by?.name ?? "Someone"} rolled the crew’s action: ${crewResult(cb)}.`);
-  if (cb?.again.length > (ca?.again.length ?? 0) && cb.again[cb.again.length - 1].user !== me) lines.push(`${cb.again[cb.again.length - 1].name} spent 1 Resolve to roll the crew’s action again: ${crewResult(cb)}.`);
+  if (cb?.again.length > (ca?.again.length ?? 0) && cb.again[cb.again.length - 1].user !== me) lines.push(`${cb.again[cb.again.length - 1].name} spent a size of Resolve to roll the crew’s action again: ${crewResult(cb)}.`);
   if (gm) {
     const paid = b.hires.filter((h) => h.by === "crew" && !a.hires.some((x) => x.id === h.id));
     if (paid.length) lines.push(`The crew’s paying ${andList(paid.map((h) => h.toName))}.`);

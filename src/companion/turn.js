@@ -358,7 +358,7 @@ export function makeTurn(d) {
     const def = defOf(t, c);
     const diceHtml = all.map((x, i) => kitDie(x, { own: "you", face: faces ? faces[i] : null, state: faces && c.won && !(i < dice.main.length ? c.won.main : c.won.split) ? "low" : "", spin, cls: "ft-d", label: faces ? `The crew’s d${x}, which came up ${faces[i]}` : `The crew’s d${x}` })).join("");
     const steps = crewSteps(c);
-    const how = c.how === "own" ? `${esc(c.who?.name ?? "Someone")}’s own permissions, ${stepsSay(c.steps)}` : `The crew’s Power${c.fits.length ? ` and ${andList(c.fits.map((x) => `<em>${esc(x)}</em>`))}` : ""}, ${stepsSay(c.steps)}`;
+    const how = c.how === "own" ? `${esc(c.who?.name ?? "Someone")}’s own roll, ${stepsSay(c.steps)}` : `The crew’s Power${c.fits.length ? ` and ${andList(c.fits.map((x) => `<em>${esc(x)}</em>`))}` : ""}, ${stepsSay(c.steps)}`;
     const slot = c.slot
       ? `<p class="ft-slot is-on">${esc(c.slot.name)} put a personal slot in, so everything counts twice: ${stepsSay(steps)}, ${diceLabel(stepsToDice(steps))}.</p>${place && c.slot.user === me() && !rolled(c) ? `<div class="tg-do">${btn("slot", `Take ${esc(place.cname)}’s slot out`, { attrs: ' data-on="0"' })}</div>` : ""}`
       : !rolled(c) && place ? `<p class="ft-slot">Put one of ${esc(place.cname)}’s personal slots in and everything counts twice.</p><div class="tg-do">${btn("slot", `Put ${esc(place.cname)}’s slot in`, { attrs: ' data-on="1"' })}</div>` : "";
@@ -373,7 +373,7 @@ export function makeTurn(d) {
       const lostAny = c.faces && (!c.won.main || c.won.split === false);
       const opts = [];
       const ch = place ? d.character(place.ch) : null;
-      if (place && lostAny && ch) opts.push(btn("again", `Roll again for 1 Resolve <small>${esc(place.cname)}’s Resolve is ${ch.die ? `a d${ch.die}` : ch.resolve}</small>`, { disabled: ch.resolve < 1 }));
+      if (place && lostAny && ch) opts.push(btn("again", `Roll again for a size of Resolve <small>${esc(place.cname)}’s Resolve is a d${ch.die}${ch.resolve < 1 ? ", as small as it goes" : ""}</small>`, { disabled: ch.resolve < 1 }));
       if (tied && can) opts.push(btn("tie", extrasLeft(id, t) ? "Take the tie with an extra resource" : "No extra resource left for the tie", { disabled: !extrasLeft(id, t), attrs: ` data-w="${best(c.faces.main) === def && !c.tie.main ? "main" : "split"}"` }));
       if (gm) opts.push(btn("out", "Make the changes", { cls: "button primary", attrs: ' data-x="crew"' }));
       foot = opts.length ? `<div class="tg-do">${opts.join("")}</div>` : "";
@@ -908,7 +908,7 @@ export function makeTurn(d) {
     const withHtml = c.move && c.move !== "Work for it" && c.move !== "Else" ? `<fieldset class="cc-group"><legend>What it rolls</legend>
         ${choice("how", c.how === "crew", "The crew’s Power, and what fits", `${diceLabel(crewPower(id))}, plus a step for every Reputation and bond thread that fits`, ' data-v="crew"')}
         ${c.how === "crew" ? fits.map((x) => choice("cfit", c.fits.includes(x.text), `<em>${esc(x.text)}</em>`, esc(x.where), ` data-t="${esc(x.text)}"`)).join("") : ""}
-        ${choice("how", c.how === "own", "Someone’s own permissions", "when one of the crew’s plainly the right person for it: 1 step for the action, plus everything that fits", ' data-v="own"')}
+        ${choice("how", c.how === "own", "Someone’s own roll", "when one of the crew’s plainly the right person for it: a Root and a specialty that fit what they’re doing, and what they’re using", ' data-v="own"')}
         ${c.how === "own" ? `${gm ? `<div class="cc-chips">${roster.map((p) => `<button type="button" class="cc-chipbtn sm" data-act="ft" data-do="ownch" data-ch="${esc(p.ch)}"${pressed(c.ownCh === p.ch)}>${esc(p.cname)}</button>`).join("")}</div>` : ""}
           <div class="ft-stepper"><span>${esc(roster.find((p) => p.ch === c.ownCh)?.cname ?? place?.cname ?? "Their")} rolls</span>${btn("own", "−", { cls: "button sm", attrs: ' data-by="-1" aria-label="One step fewer"' })}<b>${stepsSay(Math.max(1, c.ownSteps))}</b>${btn("own", "+", { cls: "button sm", attrs: ' data-by="1" aria-label="One more step"' })}</div>` : ""}
         ${place && !gm ? choice("cslot", c.slot, `Put one of ${esc(place.cname)}’s personal slots in`, "two slots on one move count everything twice") : ""}
@@ -925,7 +925,7 @@ export function makeTurn(d) {
         <fieldset class="cc-group"><legend>Or something else</legend>${moveBtn("Goal", `against the Goal’s die, d${sheet.goal.die}`)}${moveBtn("Project", "against the project’s die")}${moveBtn("Else", "advance a world event, support an Aspiration, anything else")}</fieldset>
         ${at}${withHtml}${warn}
         ${c.move ? `<label class="tg-label" for="ft-cdoes">In a line</label><input id="ft-cdoes" data-ft="cdoes" maxlength="${MAX.line}" autocomplete="off" value="${esc(built?.does ?? c.does)}">` : ""}
-        <p class="cc-small">Ties go to the faction. There’s no Aura in downtime, but a player can spend 1 Resolve to roll the crew’s dice again, or the crew can spend an extra resource and take the tie. ${ruleLink("s-downtime-rolls", "Rolling in downtime")}</p>
+        <p class="cc-small">Ties go to the faction. There’s no Aura in downtime, but a player can spend a size of their Resolve to roll the crew’s dice again, or the crew can spend an extra resource and take the tie. ${ruleLink("s-downtime-rolls", "Rolling in downtime")}</p>
       </div>
       <div class="dlg-foot">${r.err ? `<p class="cc-warn" role="alert">${esc(r.err)}</p>` : ""}${btn("savecrew", "That’s the crew’s action", { cls: "button primary" })}${t.crew && !rolled(t.crew) ? btn("dropcrew", ui.sure === "dropcrew" ? "Tap again to clear it" : "Clear it", { cls: "button danger" }) : ""}</div>`;
   }

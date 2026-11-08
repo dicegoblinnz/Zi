@@ -64,13 +64,18 @@ const net = { ws: null, open: false, tries: 0, failed: 0, timer: 0, steady: 0, b
 
 // ------------------------------------------------------------ the words
 
-const MORE = { resolve: "3 Aura", held: "held last round", hiding: "out of hiding", fired: "fired-up Confidence", trait: "a Boon" };
+const MORE = { aura: "3 Aura", resolve: "3 Aura", held: "held last round", hiding: "out of hiding", boon: "the Extra action Boon", trait: "the Extra action Boon" };
 const GOOD = new Set(["stopped", "held", "clear"]);
 const BAD = new Set(["hit", "landed", "through"]);
 // The best die on an answer: the one that won it, or the highest that didn't.
 const best = (a) => Math.max(...a.dice.filter((x) => x.out === "beat" || x.out === "won").map((x) => x.total), ...(a.won ? [] : a.dice.map((x) => x.total)));
 const withWho = (a) => (a.with?.length ? `, with ${andList(a.with)} in it,` : "");
-const against = (t) => (t.kind === "fear" ? "Confidence" : "Defend");
+// The Root a telegraph's at, and the track that rides against it. One from
+// before Roots only says blow or fear. What stopped it is what the defence
+// says, a track or Defend.
+const ROOT_OF = (t) => (["Body", "Mind", "Soul"].includes(t.root) ? t.root : t.kind === "fear" ? "Mind" : "Body");
+const TRACK = { Body: "Stamina", Mind: "Confidence", Soul: "Resolve" };
+const against = (t, def = null) => (def?.on || TRACK[ROOT_OF(t)]);
 // Archetypes for someone's crest: the book's for one of the crew, their own
 // build's otherwise, and whatever they've grown in downtime. A character can
 // say it's anyone, so only the crew's own names count.
@@ -96,10 +101,10 @@ const oneOf = (t) => (t.aim === "stake" ? (t.ifLands ? `If it lands, ${t.ifLands
 // What goes at the foot of the card while it's coming.
 function whenOf(t, v) {
   if (t.state !== "coming") return "";
-  if (t.aim === "place") return t.kind === "fear" ? "Hits whoever’s there, against Confidence" : "Hits whoever’s there when it lands";
+  if (t.aim === "place") return `Hits whoever’s there, at their ${ROOT_OF(t)}`;
   if (t.aim === "stake") return "";
   if (t.icp) return `${t.icp.name} took it for ${t.at}`;
-  return t.kind === "fear" ? "Lands on Confidence at the end of the round" : "";
+  return `At ${t.at}’s ${ROOT_OF(t)}, against their ${TRACK[ROOT_OF(t)]}`;
 }
 
 // How it went, in a band across the bottom of the card: the word to read from
@@ -139,8 +144,8 @@ function verdict(t) {
       const own = a.k != null && a.k === (t.icp ? t.icp.k : t.k);
       [word, lines] = ["Landed then and there", [`${a.name}’s ${a.act}${withWho(a)} came up ${best(a)} against its ${a.opp}, ${own ? `so it hit ${on} with no defence.` : "so it landed with no defence."}`]];
     } else if (s === "landed") [word, lines] = [`Landed on ${on}`, [`${took}${on} rolls When it lands.`]];
-    else if (s === "held") [word, lines] = ["Stopped when it landed", [`${took}${on}’s ${against(t)} came up ${t.def.mine} against its ${t.def.v}.`]];
-    else [word, lines] = ["It got through", [`${took}${t.def.mine == null ? `There was no die left on ${on}’s ${against(t)} for it.` : `${on}’s ${against(t)} came up ${t.def.mine} against its ${t.def.v}.`}`]];
+    else if (s === "held") [word, lines] = ["Stopped when it landed", [`${took}${on}’s ${against(t, t.def)} came up ${t.def.mine} against its ${t.def.v}.`]];
+    else [word, lines] = ["It got through", [`${took}${t.def.mine == null ? `There was no die left on ${on}’s ${against(t)} for it.` : `${on}’s ${against(t, t.def)} came up ${t.def.mine} against its ${t.def.v}.`}`]];
   }
   lines = lines.filter(Boolean);
   return `<div class="ts-v ${GOOD.has(s) ? "is-good" : "is-bad"}"><div class="ts-vt"><p class="ts-vw">${esc(word)}</p>${lines.map((l) => `<p class="ts-vl">${esc(l)}</p>`).join("")}</div>${dice ? `<span class="ts-vd" aria-hidden="true">${dice}</span>` : ""}</div>`;

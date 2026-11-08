@@ -41,6 +41,9 @@
 import { DurableObject } from "cloudflare:workers";
 import { apply, blank, current, forget, fresh, leave, screenOf, viewOf } from "../companion/table-rules.js";
 import { hit, seen } from "./auth.js";
+// The crew's archetypes, off the chapter, so the table knows how many extra
+// actions each of them can buy (scripts/build-content.mjs writes it).
+import CREW_ARCHS from "../generated/crew-archetypes.json";
 
 const DEV = /^[A-Za-z0-9_-]{8,40}$/;
 const MAX_OPS = 60;
@@ -461,12 +464,22 @@ const tableOf = (env, id) => env.TABLE.getByName(`table:${id}`);
 async function rosterOf(env, id) {
   const { results } = await env.DB.prepare(`SELECT m.userId AS user, u.name, m.characterId AS ch, json_extract(ch.data, '$.name') AS cname,
       json_extract(ch.data, '$.crew') AS crew,
+      (SELECT json_group_array(t.value) FROM json_each(ch.data, '$.build.archs') t WHERE t.type = 'text') AS archs,
       (SELECT json_group_array(json_extract(t.value, '$.arch')) FROM json_each(ch.data, '$.build.titles') t WHERE t.type = 'object') AS built,
       (SELECT json_group_array(json_extract(g.value, '$.arch')) FROM json_each(ch.data, '$.state.grown') g WHERE CASE WHEN g.type = 'object' THEN json_extract(g.value, '$.k') IN ('title', 'arch') ELSE 0 END) AS grown
     FROM member m JOIN "user" u ON u.id = m.userId
     LEFT JOIN character ch ON ch.userId = m.userId AND ch.id = m.characterId AND ch.data IS NOT NULL
     WHERE m.campaignId = ?1 ORDER BY m.joinedAt, m.userId`).bind(id).all();
-  return results.filter((m) => m.ch && m.cname != null).map((m) => ({ user: String(m.user), name: String(m.name ?? ""), ch: String(m.ch), cname: String(m.cname), crew: String(m.crew ?? ""), built: archsOf(m.built), grown: archsOf(m.grown) }));
+  return results.filter((m) => m.ch && m.cname != null).map((m) => {
+    // A build on Roots lists its archetypes (archs), and one from before had
+    // one on each Title. One of the crew has the book's.
+    const crew = String(m.crew ?? "");
+    const built = archsOf(m.archs).length ? archsOf(m.archs) : archsOf(m.built);
+    const grown = archsOf(m.grown);
+    const book = Object.hasOwn(CREW_ARCHS, crew) ? CREW_ARCHS[crew] : null;
+    const n = book ? book.length + grown.length : built.length ? built.length + grown.length : null;
+    return { user: String(m.user), name: String(m.name ?? ""), ch: String(m.ch), cname: String(m.cname), crew, built, grown, n };
+  });
 }
 // An archetype's name, the way the crest reads it.
 const ARCH = /^[A-Za-z][A-Za-z' -]{0,23}$/;
@@ -506,7 +519,8 @@ export async function tableRoute(request, env, method, camp, user, { json, fail,
     // character a player's answering as.
     const roster = await rosterOf(env, camp.id);
     const me = gm ? null : roster.find((m) => m.user === user.id) ?? null;
-    const who = { user: user.id, role: gm ? "gm" : "player", ch: me?.ch ?? null, cname: me?.cname ?? "" };
+    // How many archetypes they've got caps the extra actions Aura can buy.
+    const who = { user: user.id, role: gm ? "gm" : "player", ch: me?.ch ?? null, cname: me?.cname ?? "", n: me?.n ?? null };
     const phoneNow = Number.isFinite(Number(b.now)) ? Number(b.now) : null;
     return json(await tableOf(env, camp.id).change(who, roster, dev, ops, phoneNow, metaOf(camp, roster)));
   }

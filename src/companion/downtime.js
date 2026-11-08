@@ -57,23 +57,24 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
   const blank = () => ({ k: "" });
 
   function start(ch) {
-    const d = drafts.get(ch.id) ?? { kind: "downtime", id: ch.id, slots: [blank(), blank()], swaps: [], mends: [], rights: [], sure: false };
+    const d = drafts.get(ch.id) ?? { kind: "downtime", id: ch.id, slots: [blank(), blank()], swaps: [], boons: [], mends: [], rights: [], sure: false };
+    d.boons ??= [];
     d.sure = false;
     drafts.set(ch.id, d);
     return d;
   }
   const done = (ch) => drafts.delete(ch.id);
-  const at = (d, where) => (String(where)[0] === "w" ? d.swaps[Number(String(where).slice(1))] : d.slots[Number(where)]);
+  const at = (d, where) => (String(where)[0] === "w" ? d.swaps[Number(String(where).slice(1))] : String(where)[0] === "b" ? d.boons?.[Number(String(where).slice(1))] : d.slots[Number(where)]);
 
   function can(k, c, s) {
     if (k === "mend") return crossed(c, s).length > 0;
-    if (k === "perm") return c.titles.some((t) => t.permissions.length < R.MAX_PERMS);
+    if (k === "perm") return c.titles.some((t) => R.slotsOf(t) < R.MAX_PERMS);
     if (k === "awk") return c.attuned.length > 0;
     return true;
   }
 
   function fresh(k, c, s) {
-    const firstTitle = Math.max(0, c.titles.findIndex((t) => t.permissions.length < R.MAX_PERMS));
+    const firstTitle = Math.max(0, c.titles.findIndex((t) => R.slotsOf(t) < R.MAX_PERMS));
     return {
       pressure: { k, text: "" }, mend: { k, key: crossed(c, s)[0]?.key ?? "" },
       heal: { k, n: Object.fromEntries(R.TRACKS.map((t) => [t, 0])) },
@@ -215,7 +216,7 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       case "perm": {
         const t = c.titles[sl.t];
         const e = earlier(d, i, s);
-        const has = (j) => c.titles[j].permissions.length + (e.perms[j] ?? 0);
+        const has = (j) => R.slotsOf(c.titles[j]) + (e.perms[j] ?? 0);
         return `${chips(i, "t", c.titles.map((x, j) => [j, `<em>${esc(x.name)}</em> <small>${has(j)} of ${R.MAX_PERMS}</small>`, has(j) >= R.MAX_PERMS]), sl.t, "Which Title")}
           ${t ? `<p class="cc-lead">It has to fit inside <em>${esc(t.name)}</em>, and the story should say where you learned it.</p>` : ""}
           ${field(i, "text", "The permission", sl.text)}${quickTest()}
@@ -271,6 +272,22 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="swap-off" data-s="${n}">Leave it as it was</button></div></div>`;
   }
 
+  // Two permissions on one Title for a Boon, which takes their two slots.
+  // Fewer go when the Title's got slots free.
+  const BOON_ON = { Armour: "Which piece of armour", Conditions: "Which condition can’t touch you", "Getting around": "Climbing, swimming or rough ground" };
+  const goes = (t) => Math.max(0, R.BOON_SLOTS - (R.MAX_PERMS - R.slotsOf(t)));
+  function boonView(w, n, c) {
+    const where = `b${n}`;
+    const t = c.titles[w.t];
+    const need = t ? goes(t) : 0;
+    const rule = (B.boons ?? []).find((x) => x.lever === w.lever);
+    return `<div class="dt-swap">${chips(where, "t", c.titles.map((x, j) => [j, `<em>${esc(x.name)}</em>`]), w.t, "Which Title")}
+      ${t && need ? `<p class="cc-lead">${need === 1 ? "Pick the permission that goes." : "Pick the two permissions that go."}</p><div class="cc-chips" role="group" aria-label="The permissions going">${t.permissions.map((p, j) => `<button type="button" class="cc-chipbtn" data-act="dt" data-do="boon-drop" data-s="${where}" data-v="${j}"${pressed(w.drop.includes(j))}><em>${esc(p.text)}</em></button>`).join("")}</div>` : t ? `<p class="cc-lead">${esc(t.name)} has two slots free, so nothing has to go.</p>` : ""}
+      ${chips(where, "lever", (B.boons ?? []).map((x) => [x.lever, esc(x.lever)]), w.lever, "Which Boon")}
+      ${rule ? `<p class="cc-lead">${esc(cap(rule.text))}.</p>${field(where, "name", "Its name from the story, if you like", w.name)}${BOON_ON[w.lever] ? field(where, "on", BOON_ON[w.lever], w.on) : ""}` : ""}
+      <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="boon-off" data-s="${n}">Leave it as it was</button></div></div>`;
+  }
+
   function view(c, s, ch, d) {
     const n = 2;
     while (d.slots.length < n) d.slots.push(blank());
@@ -279,7 +296,7 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     const strained = strainedOf(c, s);
     const grudges = grudgesOf(c, s);
     const warn = d.sure ? warnings(d, c, s) : [];
-    const free = ["swaps", ...(strained.length ? ["mending"] : []), ...(grudges.length ? ["hostile threads"] : [])];
+    const free = ["swaps", "Boons", ...(strained.length ? ["mending"] : []), ...(grudges.length ? ["hostile threads"] : [])];
     const start = startOf(s);
     const up = R.TRACKS.filter((t) => start[t] > s.tracks[t]);
     return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">Downtime</h2><p class="cc-small">${picked} of ${n} slots picked</p></div>
@@ -289,11 +306,15 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       ${ruleBox("dt-how", "Your slots, from the rules", "your-slots")}
       <datalist id="dt-speclist">${c.specialties.map((x) => `<option value="${esc(x.name)}">`).join("")}</datalist>
       ${d.slots.map((_, i) => slotView(d, i, c, s)).join("")}
-      <details class="cc-group" data-open="dt-free"${isOpen("dt-free") || d.swaps.length || d.mends.length || d.rights.length ? " open" : ""}><summary>Without a slot <small>${andList(free)}</small></summary>
+      <details class="cc-group" data-open="dt-free"${isOpen("dt-free") || d.swaps.length || d.boons.length || d.mends.length || d.rights.length ? " open" : ""}><summary>Without a slot <small>${andList(free)}</small></summary>
         <h3>Swap a permission</h3>
         <p class="cc-lead">Swap any permission for another that fits its Title, as long as it makes sense for your character.</p>
         ${d.swaps.map((w, k) => swapView(w, k, c)).join("")}
         <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="swap-add">${d.swaps.length ? "Swap another" : "Swap a permission"}</button></div>
+        <h3>Two permissions for a Boon</h3>
+        <p class="cc-lead">Two permissions on one Title can go for a Boon, which takes their two slots. A Boon can go back for two permissions the same way, from Change. ${link("s-boons", "Boons and Burdens")}</p>
+        ${d.boons.map((w, k) => boonView(w, k, c)).join("")}
+        <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="boon-add">${d.boons.length ? "Another Boon" : "Two permissions for a Boon"}</button></div>
         ${strained.length ? `<h3>Mend a strained bond thread</h3><p class="cc-lead">Make it right with them, whatever suits them, and play it out at the table. ${link("s-downtime-threads", "Mending threads")}</p>
           ${strained.map((t) => `<button type="button" class="cc-line" data-act="dt" data-do="mend" data-v="${esc(t.key)}"${pressed(d.mends.includes(t.key))}><span class="tick" aria-hidden="true"></span><span><em>${esc(t.text)}</em> <small>${esc(t.person)}</small></span></button>`).join("")}` : ""}
         ${grudges.length ? `<h3>Did right by them</h3><p class="cc-lead">Doing right by someone you’ve a hostile thread with, like paying what you owe, strains it, and doing right by them again snaps it. Tick the ones you did right by this week.</p>
@@ -309,12 +330,20 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
   const empty = (x) => !String(x ?? "").trim();
   function warnings(d, c, s) {
     const out = [];
+    const titled = new Set();
+    for (const w of d.boons ?? []) {
+      const t = c.titles[w.t];
+      if (!t || !w.lever) continue;
+      if (titled.has(w.t)) out.push(`${t.name} takes one Boon a downtime here, so the second waits for the next.`);
+      else if (w.drop.filter((j) => t.permissions[j]).length < goes(t)) out.push(`${t.name} needs ${goes(t) === 1 ? "a permission" : "two permissions"} picked to make room for ${w.name.trim() || `the ${w.lever} Boon`}.`);
+      titled.add(w.t);
+    }
     d.slots.forEach((sl, i) => {
       const which = `Your ${ORD[i]} slot`;
       if (!sl.k) out.push(`${which} isn’t picked yet, so it goes to waste.`);
       else if (sl.k === "heal" && !R.TRACKS.some((t) => sl.n[t])) out.push(`${which} hasn’t put any sizes back yet.`);
       else if (sl.k === "perm" && (empty(sl.text) || empty(sl.spec))) out.push(`${which} needs the new permission’s words and its specialty.`);
-      else if (sl.k === "perm" && c.titles[sl.t] && c.titles[sl.t].permissions.length + (earlier(d, i, s).perms[sl.t] ?? 0) >= R.MAX_PERMS) out.push(`${which} would be a seventh permission on ${c.titles[sl.t].name}, and six is the most a Title holds.`);
+      else if (sl.k === "perm" && c.titles[sl.t] && R.slotsOf(c.titles[sl.t]) + (earlier(d, i, s).perms[sl.t] ?? 0) >= R.MAX_PERMS) out.push(`${which} would be a seventh permission on ${c.titles[sl.t].name}, and six is the most a Title holds.`);
       else if (sl.k === "asp" && !sl.dice) out.push(`${which} hasn’t rolled at your Aspiration yet.`);
       else if (sl.k === "asp" && earlier(d, i, s).asp >= 12 && (Math.max(...sl.dice) > sl.opp || sl.tie)) {
         if (!sl.take) out.push(`${which} resolves your Aspiration, so pick a new Title, archetype or attuned thing.`);
@@ -364,7 +393,7 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
         const a = pieceAt(c, sl.key);
         mend(s, sl.key);
         said.push(a ? `${cap(yours(a, { quality: true }))} ${many(a) ? "are" : "is"} mended, every box clear` : `${nameOf(c, where, rest.join("|"))} is mended`);
-      } else if (sl.k === "perm" && text && !empty(sl.spec) && c.titles[sl.t] && c.titles[sl.t].permissions.length + (earlier(d, i, s).perms[sl.t] ?? 0) < R.MAX_PERMS) {
+      } else if (sl.k === "perm" && text && !empty(sl.spec) && c.titles[sl.t] && R.slotsOf(c.titles[sl.t]) + (earlier(d, i, s).perms[sl.t] ?? 0) < R.MAX_PERMS) {
         grow({ k: "perm", t: sl.t, text, root: sl.root, spec: sl.spec.trim() });
         said.push(`“${text}” goes on your ${ORD[sl.t] ?? ""} Title, and your ${sl.root} and your ${sl.spec.trim()} are 1 more`);
       } else if (sl.k === "asp" && sl.dice) {
@@ -413,6 +442,17 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       grow({ k: "swap", t: w.t, j: w.j, text, root: w.root, spec: w.spec.trim() });
       said.push(`“${from}” becomes “${text}”`);
     }
+    const titled = new Set();
+    for (const w of d.boons ?? []) {
+      const t = c.titles[w.t];
+      if (!t || !w.lever || titled.has(w.t)) continue;
+      const drop = [...new Set(w.drop)].filter((j) => t.permissions[j]).slice(0, R.BOON_SLOTS);
+      if (drop.length < goes(t)) continue;
+      titled.add(w.t);
+      const name = w.name.trim() || `the ${w.lever} Boon`;
+      grow({ k: "boon", t: w.t, lever: w.lever, name: w.name.trim(), on: w.on.trim(), drop });
+      said.push(drop.length ? `${andList(drop.map((j) => `“${t.permissions[j].text}”`))} ${drop.length === 1 ? "goes" : "go"} for ${name}` : `${t.name} takes ${name}`);
+    }
     const now = new Map(threadsOf(c, s).map((t) => [t.key, t]));
     for (const key of d.mends) {
       const t = now.get(key);
@@ -453,6 +493,7 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     else if (go === "clear") d.slots[Number(el.dataset.s)] = blank();
     else if (go === "set" && sl) {
       sl[f] = ["t", "j", "a"].includes(f) ? Number(v) : v;
+      if (String(el.dataset.s)[0] === "b" && f === "t") sl.drop = [];
       // A swap starts from the permission it's swapping: its words, Root and specialty.
       if (String(el.dataset.s)[0] === "w") {
         if (f === "t") sl.j = -1;
@@ -492,6 +533,14 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       } else sl.dice = aspDice(sl, c).map((size) => throwDie(size));
     } else if (go === "asp-tie" && sl) sl.tie = true;
     else if (go === "swap-add") d.swaps.push({ t: 0, j: -1, text: "", root: "Body", spec: "" });
+    else if (go === "boon-add") d.boons.push({ t: 0, drop: [], lever: "", name: "", on: "" });
+    else if (go === "boon-off") d.boons.splice(Number(el.dataset.s), 1);
+    else if (go === "boon-drop" && sl) {
+      const j = Number(v);
+      const k = sl.drop.indexOf(j);
+      if (k >= 0) sl.drop.splice(k, 1);
+      else sl.drop = [...sl.drop, j].slice(-R.BOON_SLOTS);
+    }
     else if (go === "swap-off") d.swaps.splice(Number(el.dataset.s), 1);
     else if (go === "mend" || go === "right") {
       const list = go === "mend" ? d.mends : d.rights;
