@@ -16,15 +16,27 @@
 //   own          true for a world of Mo's own (Abnu), which has no whose and
 //                no notices. Every other world has both:
 //   whose        the line saying whose it is, in Mo's voice
-//   notices      the companies' own notices, word for word, under it
+//   notices      the companies' own notices, word for word, under it, with
+//                {title} where a notice names the work, so each year's names
+//                its own title (Night City, 2045 and Night City, 2077)
 //   kinds        the kinds of faction the page sorts by: { key: name }
 //   years        { <year>: { title, when, recipe: { region, era, twist,
 //                dials? } } }, when being where in the year it starts, and
 //                recipe the builder's mix it deals at (Add a faction, from
 //                stage 14), with any dials it sets the way a frame does
+//   opens        the year /worlds/<universe>/ opens on, once there's more
+//                than one, and the others are /worlds/<universe>/<year>/
+//   both         the keys of anyone or anywhere in more than one year (a
+//                faction, a place or a person), so Rogue in 2045 and Rogue in
+//                2077 are one person. A key in two years has to be here, it's
+//                the same kind of thing in each, and a faction keeps its seal
 //
 // content/worlds/<universe>/<year>/factions.yaml, the board: { factions: [ ... ] }
 //   key, kind, size   its key, one of the kinds, and small, local, city or great
+//   seal         its wax seal, { c, f, d? }: a charge, a field and a mark out of
+//                src/kit/seals.js, none the same as another's on the board
+//                (stage 1 of notes/faction-feel-plan.md), and our own drawing,
+//                never the company's logo
 //   seat         the key of the place it sits in (a place from stage 13)
 //   name, about, want, face, note   its words, as the World screen keeps them,
 //                about being what it is and where it sits
@@ -118,6 +130,7 @@ import { curlyQuotes, readAim } from "../src/companion/aims.js";
 import { PMAX, TAG_KINDS, linker, pageCardOf, pageOf } from "../src/companion/pages.js";
 import { MMAX } from "../src/companion/maps.js";
 import { MARKS, inShape } from "../src/worlds/draw-map.js";
+import { sealIn, sealKey } from "../src/kit/seals.js";
 import { DIALS } from "../src/companion/world-engine.js";
 
 // A year's world, brought into a campaign whole with every was copy, stays
@@ -142,7 +155,7 @@ const GROUND = /^\*([^*]+)\*:\s*\S/;
 const STAKE = /^\*([^*]+)\*,?\s*Challenge ([1-6])(?::\s*(.+?))?(?:\s*\(([^)]+)\))?$/;
 const KEY = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const KINDS = ["bond", "hostile"];
-const FACTION_FIELDS = new Set(["key", "kind", "size", "seat", "name", "about", "want", "face", "faceOf", "note", "res", "people", "assets", "agendas", "pub", "mor", "loy", "threads", "secret", "strange", "mini"]);
+const FACTION_FIELDS = new Set(["key", "kind", "seal", "size", "seat", "name", "about", "want", "face", "faceOf", "note", "res", "people", "assets", "agendas", "pub", "mor", "loy", "threads", "secret", "strange", "mini"]);
 const BOND_LISTS = ["pub", "mor", "loy"];
 const BOND_NAMES = { pub: "Public Sentiment", mor: "Morale", loy: "Loyalty" };
 
@@ -212,6 +225,57 @@ export function readWorldsDir(dir) {
   return { src, problems };
 }
 
+// What a universe's years share, checked once every year's compiled (years
+// being each one's world, as compileWorld makes it): the year its page opens
+// on, and world.yaml's both, the keys of anyone or anywhere in more than one
+// year. A key that turns up in two years is one faction, place or person,
+// so it's the same kind of thing in each, both has to say so, and a faction
+// keeps its seal, so the crew knows it when a campaign goes to another year.
+export function checkYears(world, years) {
+  const problems = [];
+  const say = (p) => problems.push(p);
+  const listed = Object.keys(world?.years ?? {}).map(Number);
+  if (world?.opens != null && !listed.includes(Number(world.opens))) say(`world.yaml's opens is ${world.opens}, which isn't one of its years (${listed.join(" or ")})`);
+  else if (listed.length > 1 && world?.opens == null) say(`world.yaml has ${listed.length} years and no opens, the year its page opens on`);
+  const both = asList(world?.both).map(String);
+  for (const k of both) if (!KEY.test(k)) say(`world.yaml's both has ${JSON.stringify(k)}, which isn't a key`);
+  const seen = new Map();
+  const seals = new Map();
+  for (const w of years.filter(Boolean)) {
+    const what = new Map();
+    const put = (k, kind) => {
+      if (k && !what.has(k)) what.set(k, kind);
+    };
+    for (const f of w.factions) put(f.key, "faction");
+    for (const f of w.factions) {
+      put(f.seat, "place");
+      put(f.faceOf, "person");
+    }
+    for (const p of w.places ?? []) put(p.key, "place");
+    for (const p of w.people ?? []) put(p.key, "person");
+    for (const [k, kind] of what) {
+      if (!seen.has(k)) seen.set(k, []);
+      seen.get(k).push({ year: w.year, kind });
+    }
+    for (const f of w.factions) {
+      if (!seals.has(f.key)) seals.set(f.key, []);
+      seals.get(f.key).push({ year: w.year, s: sealKey(f.seal) });
+    }
+  }
+  for (const [k, ins] of seen) {
+    if (ins.length < 2) continue;
+    if (new Set(ins.map((x) => x.kind)).size > 1) say(`${k} is ${ins.map((x) => `a ${x.kind} in ${x.year}`).join(" and ")}, and a key in more than one year is the same faction, place or person in each`);
+    else if (!both.includes(k)) say(`${k} is a ${ins[0].kind} in ${ins.map((x) => x.year).join(" and ")}, so world.yaml's both has to have it, to say it's one ${ins[0].kind}`);
+  }
+  for (const k of both) {
+    const ins = seen.get(k) ?? [];
+    if (ins.length < 2) say(`world.yaml's both has ${k}, but it's only in ${ins.map((x) => x.year).join("") || "none of its years"}`);
+    const s = seals.get(k) ?? [];
+    if (new Set(s.map((x) => x.s)).size > 1) say(`${k} wears a different seal in ${s.map((x) => x.year).join(" and ")}, and a faction keeps its seal from year to year`);
+  }
+  return problems;
+}
+
 // One year of a universe, checked, as the page and the World screen read it.
 // book is what the book gives it: Appendix B's assets and the four sizes
 // (companion.worlds in book.json), and the regions from the builder's
@@ -276,11 +340,17 @@ export function compileWorld({ universe, year, world, files }, book) {
   }
   const isFaction = (k) => keys.has(k);
   const factions = [];
+  const sealsSeen = new Map();
   for (const f of keys.values()) {
     const who = f.name ? `${f.name}` : f.key;
     for (const k of Object.keys(f)) if (!FACTION_FIELDS.has(k)) say(`${who} has a line a faction can't hold: ${k}`);
     const mini = f.mini && typeof f.mini === "object" ? f.mini : null;
     if (!kinds[f.kind]) say(`${who}'s kind is ${f.kind ?? "missing"}, and world.yaml's kinds are ${Object.keys(kinds).join(", ")}`);
+    const seal = sealIn(f.seal);
+    if (!f.seal) say(`${who} has no seal (seal: { c, f }, out of src/kit/seals.js)`);
+    else if (!seal || (f.seal.d && !seal.d)) say(`${who}'s seal isn't one the kit has: ${JSON.stringify(f.seal)}`);
+    else if (sealsSeen.has(sealKey(seal))) say(`${who} and ${sealsSeen.get(sealKey(seal))} have the same seal`);
+    else sealsSeen.set(sealKey(seal), who);
     if (!mini && !sizes[String(f.size ?? "")]) say(`${who}'s size is ${f.size ?? "missing"}, and it's small, local, city or great`);
     if (!mini && !KEY.test(String(f.seat ?? ""))) say(`${who} doesn't say where it sits (seat, a place's key)`);
     if (!mini && !KEY.test(String(f.faceOf ?? ""))) say(`${who} doesn't say who its Face is (faceOf, a person's key)`);
@@ -413,7 +483,7 @@ export function compileWorld({ universe, year, world, files }, book) {
       if (x.from != null && !isFaction(x.from)) say(`${who}'s need ${x.text} is from ${x.from}, which isn't a faction on the board`);
     }
 
-    factions.push({ key: f.key, kind: f.kind, size: mini ? "" : f.size, seat: f.seat ?? "", faceOf: f.faceOf ?? "", of: mini?.of ?? "", strange: f.strange === true || others.some((x) => x.strange === true) || f.secret?.strange === true, steps, die: dice[0] ?? 2, card, raw: f });
+    factions.push({ key: f.key, kind: f.kind, seal, size: mini ? "" : f.size, seat: f.seat ?? "", faceOf: f.faceOf ?? "", of: mini?.of ?? "", strange: f.strange === true || others.some((x) => x.strange === true) || f.secret?.strange === true, steps, die: dice[0] ?? 2, card, raw: f });
   }
   const byKey = new Map(factions.map((f) => [f.key, f]));
   for (const f of factions) {
@@ -508,7 +578,7 @@ export function compileWorld({ universe, year, world, files }, book) {
   // way stage 14 brings it in, and the map with its shapes kept beside it.
   const id9 = "abcdefghi";
   const shown = { card: false, power: false, res: false, assets: false, agenda: false, bonds: false, threads: false, secret: false };
-  const inWorld = factions.map((f) => ({ ...JSON.parse(JSON.stringify(f.card).replace(/"x\d+"/g, `"${id9}"`)), shown, book: { from: id, key: f.key, h: "0123456789abcdef", at: Date.now(), was: f.card } }));
+  const inWorld = factions.map((f) => ({ ...JSON.parse(JSON.stringify(f.card).replace(/"x\d+"/g, `"${id9}"`)), shown, seal: f.seal, book: { from: id, key: f.key, h: "0123456789abcdef", at: Date.now(), was: f.card } }));
   const record = { recipe, dials: { tense: 1, strange: 1, rich: 1, ruled: 1 }, seed: "", dealt: null, history: history.map((l) => ({ id: id9, ...l })), shown: [], at: Date.now() };
   // Each line on a page gets an id of its own, the length the phone's are,
   // since a page keeps only one line for each id.
@@ -532,17 +602,20 @@ export function compileWorld({ universe, year, world, files }, book) {
     title: curl(yr.title),
     when: curl(yr.when),
     whose: curl(world.whose),
-    notices: asList(world.notices).map((n) => String(n).replace(/\s+/g, " ").trim()),
+    notices: asList(world.notices).map((n) => String(n).replace(/\s+/g, " ").replace(/\{title\}/g, curl(yr.title)).trim()),
     kinds: Object.fromEntries(Object.entries(kinds).map(([k, v]) => [k, curl(v)])),
     areas,
     years: Object.keys(world.years ?? {}).map(Number),
+    opens: Number(world.opens ?? Object.keys(world.years ?? {})[0]),
+    both: asList(world.both).map(String),
     recipe,
     // The region's words for the four sizes, so a Great faction on a City
     // board reads as the city and the land round it.
     sizeWords: book.regions?.[recipe.region]?.sizes ?? {},
-    factions: factions.map(({ key, kind, size: sz, seat, faceOf, of, strange, steps, die, card, raw: r }) => ({
+    factions: factions.map(({ key, kind, seal, size: sz, seat, faceOf, of, strange, steps, die, card, raw: r }) => ({
       key,
       kind,
+      seal,
       size: sz,
       seat,
       faceOf,

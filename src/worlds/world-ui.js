@@ -9,7 +9,7 @@
 import { webOfWorld, webData, tiesOf, whereWords, midName } from "./world-page.js";
 import { linesOf } from "../companion/world-web.js";
 import { makeViewer } from "../companion/mapview.js";
-import { die, esc } from "../kit/kit.js";
+import { die, esc, seal } from "../kit/kit.js";
 import { stepsToDice } from "../companion/dice.js";
 
 const $ = (s, el = document) => el.querySelector(s);
@@ -37,6 +37,21 @@ if (data && root) {
   }
   let factionsView = "board";
   let showing = "";
+  // The world's header folds to its name once a tab's picked, or when the
+  // page opens on one, so what's picked starts on a phone's first screen.
+  // More about it unfolds it again.
+  const head = $(".wn-head");
+  const more = document.createElement("button");
+  more.type = "button";
+  more.className = "wn-unfold";
+  more.textContent = "More about it";
+  more.setAttribute("aria-expanded", "false");
+  head?.append(more);
+  const fold = (on) => {
+    head?.classList.toggle("is-folded", on);
+    more.setAttribute("aria-expanded", String(!on));
+  };
+  more.addEventListener("click", () => fold(false));
   // The tab the address says, if the page has it, or the board.
   const tabIn = () => {
     const t = new URL(location.href).searchParams.get("tab");
@@ -59,14 +74,28 @@ if (data && root) {
     // what's showing, so a reload or Back opens what was on the screen.
     if (/^#[fp]-/.test(url.hash) && !document.getElementById(url.hash.slice(1))?.closest(`[data-panel="${name}"]`)) url.hash = "";
     history.replaceState(history.state, "", url);
+    // The year switch takes the tab that's open across to the other year,
+    // when that year has it, and its board otherwise.
+    for (const y of $$(".wn-years a[data-tabs]")) {
+      const to = new URL(y.href, location.href);
+      if (name !== "board" && y.dataset.tabs.split(" ").includes(name)) to.searchParams.set("tab", name);
+      else to.searchParams.delete("tab");
+      y.href = to.pathname + to.search;
+    }
     root.classList.toggle("is-map", name === "map");
     if (name === "map") mountMap();
     // The map's as tall as the screen above the bar, so it always comes into
     // view whole.
     if (scroll || name === "map") panels.find((p) => p.dataset.panel === name)?.scrollIntoView({ block: "start" });
   };
-  for (const t of tabs) t.addEventListener("click", () => show(t.dataset.tab === "board" ? factionsView : t.dataset.tab));
-  for (const b of $$("[data-view]")) b.addEventListener("click", () => show(b.dataset.view, { scroll: false }));
+  for (const t of tabs) t.addEventListener("click", () => {
+    fold(true);
+    show(t.dataset.tab === "board" ? factionsView : t.dataset.tab);
+  });
+  for (const b of $$("[data-view]")) b.addEventListener("click", () => {
+    fold(true);
+    show(b.dataset.view, { scroll: false });
+  });
   // The arrow keys, Home and End move along the bar, the way a set of tabs does.
   $(".wn-bar")?.addEventListener("keydown", (e) => {
     const i = tabs.indexOf(document.activeElement);
@@ -224,11 +253,10 @@ if (data && root) {
       lines,
       draw: (n) => {
         const f = factionBy.get(n.id);
-        const dice = stepsToDice(f.steps);
         const lit = ui.sel === n.id ? " is-sel" : ui.sel && near.has(n.id) ? " is-lit" : ui.sel ? " is-dim" : "";
         return {
           cls: `wm-ft${f.of ? " is-mini" : ""}${lit}`,
-          html: `<span class="wm-ft-d" aria-hidden="true">${die(dice[0] ?? 2, { own: "them", hide: true })}</span><span class="wm-ft-n" aria-hidden="true">${esc(f.card.name.replace(/^The /, ""))}</span>`,
+          html: `<span class="wm-ft-d is-seal" aria-hidden="true">${seal(f.seal ?? null, { size: "sm" })}</span><span class="wm-ft-n" aria-hidden="true">${esc(f.card.name.replace(/^The /, ""))}</span>`,
           attrs: { "data-tok": n.id, "aria-pressed": String(ui.sel === n.id), "aria-label": `${f.card.name}${ui.sel === n.id ? ", its ties lit" : ": light its ties"}` },
         };
       },
@@ -250,7 +278,7 @@ if (data && root) {
       const f = factionBy.get(ui.sel);
       const seat = byKey.get(f.of ? factionBy.get(f.of)?.seat : f.seat);
       const ties = W.threads.filter((t) => t.from === ui.sel || t.to === ui.sel).length;
-      cardEl.innerHTML = `<div class="wn-mc-top"><span class="wn-mc-d" aria-hidden="true">${die(stepsToDice(f.steps)[0] ?? 2, { own: "them", hide: true })}</span><div><p class="wn-k">${esc(data.kinds[f.kind] ?? "")}${seat ? ` · ${esc(seat.name)}` : ""}</p><h3 class="wn-mc-n">${esc(f.card.name)}</h3><p class="wn-mc-l">${ties === 1 ? "1 thread" : `${ties} threads`}, either way, lit on the map.</p></div><button type="button" class="wn-mc-x" data-mc="x" aria-label="Close">${X}</button></div><div class="wn-mc-row"><a class="wn-mc-go" href="#f-${esc(f.key)}">Its card</a><button type="button" class="wn-mc-go is-quiet" data-mc="ties">Its ties in the web</button></div>`;
+      cardEl.innerHTML = `<div class="wn-mc-top"><span class="wn-mc-d is-seal" aria-hidden="true">${seal(f.seal ?? null, { size: "sm" })}<span class="wn-mc-pow">${die(stepsToDice(f.steps)[0] ?? 2, { own: "them", hide: true })}</span></span><div><p class="wn-k">${esc(data.kinds[f.kind] ?? "")}${seat ? ` · ${esc(seat.name)}` : ""}</p><h3 class="wn-mc-n">${esc(f.card.name)}</h3><p class="wn-mc-l">${ties === 1 ? "1 thread" : `${ties} threads`}, either way, lit on the map.</p></div><button type="button" class="wn-mc-x" data-mc="x" aria-label="Close">${X}</button></div><div class="wn-mc-row"><a class="wn-mc-go" href="#f-${esc(f.key)}">Its card</a><button type="button" class="wn-mc-go is-quiet" data-mc="ties">Its ties in the web</button></div>`;
       cardEl.hidden = false;
       say(`f-${f.key}`, `${f.card.name}: ${ties === 1 ? "1 thread" : `${ties} threads`} lit on the map.`);
       padMap();
@@ -377,6 +405,9 @@ if (data && root) {
   // address says, the way the page drew it before this ran.
   const first = location.hash.slice(1);
   if (/^[fp]-/.test(first) && document.getElementById(first)) open(first, { focus: false });
-  else show(tabIn(), { scroll: false });
+  else {
+    if (tabIn() !== "board") fold(true);
+    show(tabIn(), { scroll: false });
+  }
 }
 

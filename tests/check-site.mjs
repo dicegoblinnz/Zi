@@ -51,8 +51,10 @@ const server = createServer(async (req, res) => {
     res.end(await readFile(join(DIST, "404.html")));
   }
 });
-await new Promise((r) => server.listen(4173, r));
-const BASE = "http://localhost:4173";
+// ZI_PORT runs it on another port, so several worktrees can check at once.
+const PORT = Number(process.env.ZI_PORT) || 4173;
+await new Promise((r) => server.listen(PORT, r));
+const BASE = `http://localhost:${PORT}`;
 
 const PAGES = [
   "/", "/rules/", "/learn/", "/rules/welcome/", "/rules/the-core/", "/rules/the-archetypes/",
@@ -69,6 +71,9 @@ const PAGES = [
   // the board with a faction open, the web, each map, a place and a person
   // open, and How it came to be.
   "/worlds/night-city/#f-arasaka", "/worlds/night-city/?tab=web", "/worlds/night-city/?tab=map", "/worlds/night-city/?tab=places#p-the-afterlife", "/worlds/night-city/?tab=people#p-rogue-amendiares", "/worlds/night-city/?tab=history",
+  // Night City's other year (stage 17): 2045's board with a card open, its
+  // web and How it came to be.
+  "/worlds/night-city/2045/#f-militech", "/worlds/night-city/2045/?tab=web", "/worlds/night-city/2045/?tab=history",
   "/worlds/abnu/#f-alysta", "/worlds/abnu/?tab=web", "/worlds/abnu/?tab=map", "/worlds/abnu/?tab=places#p-verrant-docks", "/worlds/abnu/?tab=people#p-merren-vast", "/worlds/abnu/?tab=history",
 ];
 // A character saved on the phone, so a sheet gets checked like any other page.
@@ -343,6 +348,8 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   const notices = await page.locator(".wn-foot p").allTextContents();
   if (!notices.some((n) => /Homebrew Content Policy of R\. Talsorian Games/.test(n)) || !notices.some((n) => /CD PROJEKT RED/.test(n))) note(`${at}: the notices at the foot aren't both there`);
   const cards = await page.locator("#wn-board .wn-f").count();
+  const withSeals = await page.locator("#wn-board .wn-f .wn-fs .zd-seal:not(.is-blank)").count();
+  if (!cards || withSeals !== cards) note(`${at}: ${withSeals} of ${cards} factions on the board have their seal`);
   // The gangs alone, then Find, then every one again.
   await page.click('.wn-kind[data-kind="gang"]');
   const gangs = await page.locator('#wn-board .wn-f:not([hidden])').evaluateAll((els) => els.map((e) => e.dataset.kind));
@@ -369,6 +376,18 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   await page.selectOption("#wn-focus", pick);
   const picked = await page.evaluate(() => [document.querySelector("#wn-panel .ww-h")?.textContent ?? "", document.querySelector("#wn-web .ww-node.is-sel")?.dataset.web ?? ""]);
   if (picked[0] !== { maelstrom: "Maelstrom", militech: "Militech" }[pick] || picked[1] !== pick) note(`${at}: picking ${pick} showed ${picked.join(" and ") || "nothing"}`);
+  // Every faction in the web is its seal, and every hostile line has its
+  // cross, so it's told from a bond without colour (stage 1 of
+  // notes/faction-feel-plan.md). The web starts on the
+  // first screen, the header folded to its name.
+  const webSeals = await page.evaluate(() => {
+    const nodes = document.querySelectorAll("#wn-web .ww-node").length;
+    const top = document.querySelector("#wn-web .ww-ring")?.getBoundingClientRect().top ?? 9999;
+    return { nodes, seals: document.querySelectorAll("#wn-web .ww-node .zd-seal:not(.is-blank)").length, hostile: document.querySelectorAll("#wn-web .ww-l.is-hostile").length, crosses: document.querySelectorAll("#wn-web .ww-x").length, top: Math.round(top), screen: innerHeight, folded: document.querySelector(".wn-head")?.classList.contains("is-folded") };
+  });
+  if (!webSeals.nodes || webSeals.seals !== webSeals.nodes) note(`${at}: ${webSeals.seals} of the web's ${webSeals.nodes} factions are drawn as their seals`);
+  if (webSeals.crosses !== webSeals.hostile) note(`${at}: ${webSeals.crosses} crosses on ${webSeals.hostile} hostile lines in the web`);
+  if (!webSeals.folded || webSeals.top > webSeals.screen * 0.62) note(`${at}: the web starts ${webSeals.top}px down a ${webSeals.screen}px screen${webSeals.folded ? "" : ", with the header still unfolded"}`);
   const next = await page.locator(`#wn-web [data-web]:not([data-web="${pick}"]):not([data-web="crew"])`).first().getAttribute("data-web");
   await page.click(`#wn-web [data-web="${next}"]`);
   if ((await page.inputValue("#wn-focus")) !== next) note(`${at}: tapping ${next} in the web didn't walk to its ties`);
@@ -431,6 +450,52 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
     await page.screenshot({ path: join(SHOTS, `worlds-${tab}-${width}-${scheme}.png`) });
   }
   console.log(`${at}: ${cards} factions, ${places} places on the map, the kinds, Find, a name, the web, the map and its web, places, people and How it came to be checked`);
+  await context.close();
+}
+
+// Night City's other year (stage 17 of notes/builder-plan.md): the switch
+// under the title, 2077 opening at /worlds/night-city/ and 2045 at its own
+// address, each year's notice naming its own title, 2045's board and How it
+// came to be with no map, places or people yet, the tab that's open carried
+// across to the other year, and no switch on a world with one year, at 390
+// in light and 320 in dark.
+for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
+  const at = `another year @${width} ${scheme}`;
+  const context = await browser.newContext({ viewport: { width, height: 860 } });
+  if (scheme === "light") await context.addInitScript(() => { try { localStorage.setItem("zi-theme", "light"); } catch (e) {} });
+  await sealed(context);
+  const page = await context.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  const years = () => page.$$eval(".wn-years a", (as) => as.map((a) => `${a.textContent.trim()} ${a.getAttribute("href")} ${a.getAttribute("aria-current") ?? ""}`.trim()).join(" | "));
+  const notice = async (title) => (await page.locator(".wn-foot p").allTextContents()).some((n) => n.trim().startsWith(`${title} is unofficial content`));
+  await page.goto(BASE + "/worlds/night-city/");
+  await page.waitForSelector(".wn.is-live");
+  if ((await years()) !== "2045 /worlds/night-city/2045/ | 2077 /worlds/night-city/ page") note(`${at}: the year switch on 2077 is ${(await years()) || "missing"}`);
+  if (!(await notice("Night City, 2077"))) note(`${at}: 2077's notice doesn't name Night City, 2077`);
+  await page.click('.wn-years a[href="/worlds/night-city/2045/"]');
+  await page.waitForURL(/\/worlds\/night-city\/2045\/$/);
+  await page.waitForSelector(".wn.is-live");
+  if ((await page.textContent(".wn-head h1")).trim() !== "Night City, 2045") note(`${at}: 2045's page isn't titled Night City, 2045`);
+  if ((await page.getAttribute('meta[name="robots"]', "content")) !== "noindex") note(`${at}: 2045's page isn't marked noindex`);
+  if ((await years()) !== "2045 /worlds/night-city/2045/ page | 2077 /worlds/night-city/") note(`${at}: the year switch on 2045 is ${(await years()) || "missing"}`);
+  if (!(await notice("Night City, 2045"))) note(`${at}: 2045's notice doesn't name Night City, 2045`);
+  const tabs = await page.$$eval(".wn-bar [data-tab]", (b) => b.map((x) => x.dataset.tab).join(" "));
+  if (tabs !== "board history") note(`${at}: 2045's bar has ${tabs}, and it's the board and How it came to be till its places, people and map come`);
+  const folds = await page.locator("details.wn-f").count();
+  if (folds !== 28) note(`${at}: 2045's board has ${folds} factions, not 28`);
+  await page.click('.wn-bar [data-tab="history"]');
+  if ((await page.locator(".wn-line").count()) < 40) note(`${at}: How it came to be in 2045 has under 40 lines`);
+  if (!(await page.locator('.wn-years a[href="/worlds/night-city/?tab=history"]').count())) note(`${at}: the switch doesn't take How it came to be across to 2077`);
+  await page.click(".wn-years a:not([aria-current])");
+  await page.waitForURL(/\/worlds\/night-city\/\?tab=history$/);
+  await page.waitForSelector(".wn.is-live");
+  if (await page.locator("#wn-history").isHidden()) note(`${at}: 2077 didn't open on How it came to be from 2045's`);
+  await page.click('.wn-bar [data-tab="map"]');
+  if (!(await page.locator('.wn-years a[href="/worlds/night-city/2045/"]').count())) note(`${at}: the switch takes 2077's map across to 2045, which hasn't got one yet`);
+  await page.goto(BASE + "/worlds/abnu/");
+  if (await page.locator(".wn-years").count()) note(`${at}: Abnu has a year switch with one year`);
+  if (errors.length) note(`${at}: page errors: ${errors.join(" | ")}`);
   await context.close();
 }
 
@@ -568,6 +633,33 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   }
   console.log(`${at}: ${cards} factions, ${places} places on the map, no line or notices, the kinds, Find, a name, the web, the map in close on the capital and its web, places, people and How it came to be checked`);
   await context.close();
+}
+
+// The kit's seals (stage 1 of notes/faction-feel-plan.md), for Mo's yes:
+// every charge, field, mark and glyph the kit has, a seal for each of the
+// Brinewake's four and a blank one, in each theme, with nothing wider than
+// the screen.
+{
+  const { CHARGES, FIELDS, MARKS, GLYPHS } = await import("../src/kit/seals.js");
+  for (const theme of ["dark", "light", "paper"]) {
+    const at = `kit seals @390 ${theme}`;
+    const context = await browser.newContext({ viewport: { width: 390, height: 860 } });
+    await context.addInitScript((t) => { try { localStorage.setItem("zi-kit", JSON.stringify({ theme: t })); } catch (e) {} }, theme);
+    await sealed(context);
+    const page = await context.newPage();
+    await page.goto(BASE + "/kit/#seals");
+    const got = await page.evaluate(() => {
+      const sec = document.getElementById("seals");
+      const charges = new Set([...sec.querySelectorAll(".seals:not(.fields):not(.board) .zd-seal")].map((x) => x.dataset.seal?.split(" ")[0]));
+      const fields = new Set([...sec.querySelectorAll(".seals.fields .zd-seal")].map((x) => x.dataset.seal?.split(" ")[1]));
+      const marks = new Set([...sec.querySelectorAll(".seals.fields .zd-seal")].map((x) => x.dataset.seal?.split(" ")[2]).filter(Boolean));
+      return { charges: charges.size, fields: fields.size, marks: marks.size, glyphs: [...sec.querySelectorAll(".glyphs li .zd-glyph")].filter((g) => g.childElementCount).length, board: sec.querySelectorAll(".seals.board .zd-seal:not(.is-blank)").length, blank: sec.querySelectorAll(".seals.board .zd-seal.is-blank").length, wide: document.documentElement.scrollWidth > innerWidth };
+    });
+    const want = { charges: Object.keys(CHARGES).length, fields: Object.keys(FIELDS).length, marks: Object.keys(MARKS).length, glyphs: Object.keys(GLYPHS).length, board: 4, blank: 1, wide: false };
+    if (JSON.stringify(got) !== JSON.stringify(want)) note(`${at}: the seals section has ${JSON.stringify(got)}, and the kit has ${JSON.stringify(want)}`);
+    console.log(`${at}: ${got.charges} charges, ${got.fields} fields, ${got.marks} marks and ${got.glyphs} glyphs`);
+    await context.close();
+  }
 }
 
 await browser.close();

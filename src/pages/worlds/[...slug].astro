@@ -1,6 +1,9 @@
 ---
 // /worlds/<universe>/: a whole world, written rather than dealt
 // (notes/builder-plan.md, A whole world), where Mo judges one on the Preview.
+// A universe with more than one year opens on the year world.yaml's opens
+// says, and each other year's /worlds/<universe>/<year>/, with a switch
+// between them under the title.
 // Night City's the first, a fan-made world from the Cyberpunk universe, so
 // the line saying whose it is sits at the top and the companies' notices at
 // the foot. Abnu's Mo's own, so it has neither. It's drawn here at build
@@ -20,11 +23,16 @@ import { middleOf } from "../../worlds/draw-map.js";
 import { MAP_ICON, boardOf, countsOf, historyOf, linkerOf, mapOf, peopleOf, pickerOf, placesOf, webData, webOfWorld } from "../../worlds/world-page.js";
 
 export function getStaticPaths() {
-  return Object.keys(worlds).map((universe) => ({ params: { universe } }));
+  return Object.entries(worlds).flatMap(([universe, years]) => {
+    const opens = years.find((y) => y.year === y.opens) ?? years[0];
+    const hrefOf = (y) => (y === opens ? `/worlds/${universe}/` : `/worlds/${universe}/${y.year}/`);
+    // Each year's link says which tabs it has, so world-ui.js can carry the
+    // one that's open across, when the other year has it too.
+    const links = years.map((y) => ({ year: y.year, href: hrefOf(y), tabs: ["board", "web", y.map && "map", y.places?.length && "places", y.people?.length && "people", "history"].filter(Boolean).join(" ") }));
+    return years.map((y) => ({ params: { slug: y === opens ? universe : `${universe}/${y.year}` }, props: { world: y, links } }));
+  });
 }
-const { universe } = Astro.params;
-const years = worlds[universe] ?? [];
-const world = years[0];
+const { world, links } = Astro.props;
 const ln = linkerOf(world);
 const data = webData(world);
 const web = webOfWorld(world, null, data);
@@ -36,12 +44,12 @@ function middleOfTown(map) {
   const [x, y] = pts.reduce(([a, b], [c, d]) => [a + c / pts.length, b + d / pts.length], [0, 0]);
   return [x / map.size[0], y / map.size[1]];
 }
-// What world-ui.js needs on the phone: each faction's key, kind, seat,
+// What world-ui.js needs on the phone: each faction's key, kind, seal, seat,
 // maker, Power and threads, each place's key, name, where it is, line and
 // Challenge, and the map's pins, and nothing else.
 const forPhone = JSON.stringify({
   kinds: world.kinds,
-  factions: world.factions.map((f) => ({ key: f.key, kind: f.kind, seat: f.seat, of: f.of, steps: f.steps, card: { name: f.card.name, threads: f.card.threads } })),
+  factions: world.factions.map((f) => ({ key: f.key, kind: f.kind, seal: f.seal, seat: f.seat, of: f.of, steps: f.steps, card: { name: f.card.name, threads: f.card.threads } })),
   places: (world.places ?? []).map((p) => ({ key: p.key, name: p.card.name, area: p.area, in: p.in, line: p.card.line, ch: p.card.ch })),
   // Where the map opens: the pin it says, or the middle of the town's
   // districts, not the wilds.
@@ -74,6 +82,11 @@ const seg = (on: string) => `<div class="ww-seg wn-seg" role="group" aria-label=
     <header class="wn-head" id="wn-top">
       <p class="eyebrow">A whole world</p>
       <h1>{world.title}</h1>
+      {links.length > 1 && (
+        <nav class="wn-years ww-seg" aria-label="Which year">
+          {links.map((l) => <a class="ww-seg-b" href={l.href} data-tabs={l.tabs} aria-current={l.year === world.year ? "page" : undefined}>{l.year}</a>)}
+        </nav>
+      )}
       <p class="wn-when">{world.when}</p>
       <ul class="wn-counts">{countsOf(world).map((c) => <li>{c}</li>)}</ul>
       {world.whose && <p class="wn-whose">{world.whose}</p>}

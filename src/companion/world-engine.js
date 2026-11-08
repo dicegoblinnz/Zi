@@ -60,6 +60,14 @@
 // thread toward it too, named for a character who hasn't got a friend or a
 // foe on the board yet, when there's one.
 //
+// Seals (stage 1 of notes/faction-feel-plan.md): cardsOf() gives every
+// faction a seal once its type's dealt, a charge its type suits
+// (src/kit/seals.js) on a field, and a mark when it needs one, none the same
+// as another on the board. Each faction's is dealt on a stream of its own
+// from the seed, so dealing one never moves anything else. Adding a faction,
+// taken is every seal on the board already, and a held faction keeps its own.
+// A mini faction the deck made wears its maker's charge and field with a mark.
+//
 // The crew (stage 6): every character gets a friend and a foe among the
 // factions once the board's finished, each that faction's thread toward the
 // crew, named for them, and an agenda can aim at a character ({who}) or at
@@ -76,6 +84,8 @@
 // Face's name. On the world: made, the threads and needs that happened
 // ({ ties, needs }), which the web and the needs are dealt round, and minis,
 // the mini factions a faction made.
+
+import { cadetSeal, chargeWeights, dealSeal, sealIn } from "../kit/seals.js";
 
 export const REGIONS = ["town", "city", "country", "world", "stars"];
 export const SIZES = ["small", "local", "city", "great"];
@@ -301,11 +311,12 @@ const blankFaction = () => ({ seat: null, size: null, type: null, exc: undefined
 // the board has its record: rows by step, for the bags and the tags) }. The
 // build's asking and tension, when there's one, steer it the way they did
 // the board, and its dials (or a frame's) are fixed.
-export function startAdd(T, { recipe, dials = null, seed, held = [], seats = [], asking = null, tension = null, add = 1, crew = null }) {
+export function startAdd(T, { recipe, dials = null, seed, held = [], seats = [], asking = null, tension = null, add = 1, crew = null, taken = [] }) {
   const W = start(T, { recipe, dials: dials ?? { tense: 1, strange: 1, rich: 1, ruled: 1 }, seed, crew });
   const hs = seats.filter(Boolean).length;
   W.add = true;
   W.held = held.length;
+  W.taken = (Array.isArray(taken) ? taken : []).map(sealIn).filter(Boolean);
   W.hs = hs;
   W.n = held.length + Math.max(1, Math.min(4, Math.floor(Number(add) || 1)));
   W.s = hs + 1;
@@ -335,6 +346,7 @@ function heldOf(h, hs) {
     face: row("face"),
     secret: row("secret"),
     name: { ...(row("name") ?? {}), own: true, text: words(h.name) },
+    seal: sealIn(h.seal),
   };
 }
 const adding = (W) => W.add === true;
@@ -432,6 +444,7 @@ export function resume(T, rec) {
     W.s = int(rec.s, W.hs + 1);
     W.seats = Array.from({ length: W.s }, () => null);
     W.factions = Array.from({ length: W.n }, () => blankFaction());
+    W.taken = (Array.isArray(rec.taken) ? rec.taken : []).map(sealIn).filter(Boolean);
   }
   for (const k of ["tries", "locks", "not"]) W[k] = rec[k] && typeof rec[k] === "object" ? { ...rec[k] } : {};
   for (const q of QUESTIONS) W.asking[q] = rec.asking?.[q] ?? null;
@@ -1675,10 +1688,33 @@ export function dealWorld(T, opts) {
   return dealRest(T, start(T, opts));
 }
 
+// Every faction's seal, in the board's order, and the deck's mini factions'.
+// A faction's is dealt from its type on a stream of its own, none the same as
+// one before it or one on the board already, and a held faction keeps the
+// board's. Till its type's dealt it has none.
+function sealsOf(W) {
+  const taken = [...(W.taken ?? []), ...W.factions.map((f) => (f.held ? f.seal : null)).filter(Boolean)];
+  const factions = W.factions.map((f, i) => {
+    if (f.held) return f.seal ?? null;
+    if (!f.type) return null;
+    const mine = !own(f.type);
+    const s = dealSeal(rngOf(W.seed, "seal", i), { taken, weights: chargeWeights(mine ? f.type.role ?? null : null, mine ? f.type.tags ?? [] : []) });
+    if (s) taken.push(s);
+    return s;
+  });
+  const minis = (W.minis ?? []).map((m) => {
+    const s = cadetSeal(factions[m.of], taken);
+    if (s) taken.push(s);
+    return s;
+  });
+  return { factions, minis };
+}
+
 // The world as the board will have it, every slot filled with the words the
 // board so far gives it: each faction's card the way board.js keeps one (its
 // threads by the index of the faction they're toward), and the seats.
 export function cardsOf(T, W) {
+  const sealed = sealsOf(W);
   const seatName = (i) => {
     const k = W.factions[i]?.seat?.k;
     return k != null && W.seats[k] ? { text: W.seats[k].text, name: true } : "";
@@ -1784,12 +1820,13 @@ export function cardsOf(T, W) {
       threads,
       offers: f.offers.map((o) => ({ ...o })),
       exception: f.exc ? { text: f.exc.text, reason: f.exc.reason } : null,
+      seal: sealed.factions[i],
     };
   });
   const seats = W.seats.map((s, k) => (s ? { k, name: s.text, role: s.role, notice: s.notice, tags: s.tags, held: W.factions.findIndex((f) => f.seat?.k === k) } : null)).filter(Boolean);
   // The mini factions a faction made (a deck's answer): each card short, the
   // way the book has one, with its Loyalty thread toward its maker.
-  const minis = (W.minis ?? []).map((m) => {
+  const minis = (W.minis ?? []).map((m, k) => {
     const seat = seatName(m.of);
     const steps = 1 + (m.asset?.power ? 1 : 0);
     return {
@@ -1802,6 +1839,7 @@ export function cardsOf(T, W) {
       assets: m.asset ? [{ text: fill(m.asset.text, { seat }), does: m.asset.does ?? "", power: m.asset.power === true, x: 1, off: false }] : [],
       outs: [...(m.outs ?? [])],
       loy: m.loy?.text ? [{ text: fill(m.loy.text, { b: asName(m.of) }), kind: "bond" }] : [],
+      seal: sealed.minis[k],
     };
   });
   return { factions, seats, minis };
@@ -1850,7 +1888,7 @@ export function recordOf(W) {
       v: 1,
       seed: W.seed,
       recipe: W.recipe,
-      ...(adding(W) ? { add: true, held: W.held, hs: W.hs } : {}),
+      ...(adding(W) ? { add: true, held: W.held, hs: W.hs, taken: W.taken ?? [] } : {}),
       n: W.n,
       s: W.s,
       fixed: W.fixed,

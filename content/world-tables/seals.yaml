@@ -1,0 +1,37 @@
+# The seals on the book's boards (stage 1 of notes/faction-feel-plan.md): each
+# board by its id, and each card on it by its key, as { c, f, d } out of
+# src/kit/seals.js: a charge, a field, and a mark (d) only when two on a board
+# would be the same without one. scripts/build-content.mjs puts each on its
+# card, and stops on a card with none, one the kit hasn't got, a card that
+# isn't on the board, or two the same on one board.
+boards:
+  steeplands:
+    the-vane-estate: { c: crown, f: bend }
+    the-harbour-guild: { c: anchor, f: pale }
+    the-quiet-order: { c: bell, f: plain }
+    the-bound: { c: chain, f: quarterly }
+  brinewake:
+    the-tithe-fleet: { c: anchor, f: bend }
+    tarrant-daughters: { c: scales, f: pale }
+    the-brothers-of-the-lamp: { c: lamp, f: chevron }
+    the-drowned-choir: { c: bell, f: wavy }
+  deep-company:
+    the-deep-company: { c: coins, f: chevron }
+    the-lampwrights-guild: { c: lamp, f: pale }
+    holloways-team: { c: mountain, f: bend }
+    the-underhold: { c: skull, f: fess }
+  lanternfall:
+    the-night-watch: { c: helm, f: pale }
+    the-lamplighters-guild: { c: lamp, f: plain }
+    the-carrow-society: { c: rose, f: bend }
+    the-thing-in-the-fog: { c: serpent, f: wavy }
+  gilded-court:
+    house-veraine: { c: rose, f: plain }
+    house-marchetti: { c: coins, f: bend }
+    the-queens-eyes: { c: key, f: chevron }
+    the-crown: { c: crown, f: plain }
+  long-haul:
+    the-meridian-combine: { c: cog, f: plain }
+    halberd-credit: { c: coins, f: pale }
+    the-free-stations-compact: { c: wheel, f: bend }
+    the-rustbacks: { c: knife, f: fess }

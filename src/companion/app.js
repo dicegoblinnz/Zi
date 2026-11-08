@@ -20,6 +20,7 @@ import { makeTable } from "./table.js";
 import { makeWorld } from "./world.js";
 import { makeTurn } from "./turn.js";
 import { makeFound } from "./found.js";
+import { makeRoller } from "./roller.js";
 import { bondKey, threadKey, threadLabel, threadPlace, threadState } from "./threads.js";
 import { boxesSaid, isBroken, itS, leftOf, nameOf, pieceAt, piecesOf, setTicked, tick as tickBox, tickedOf, yours } from "./armour.js";
 import * as R from "./roots.js";
@@ -93,6 +94,23 @@ const ICON = {
 
 const dt = makeDowntime({ B: DATA.build, esc, steps, link, icon: ICON, throwDie, crewNames: () => new Set(DATA.crew.map((x) => x.name)), isOpen: (key) => ui.open.has(key), rule: (id) => ruleHtml(id) });
 
+
+// The dice roller (roller.js): any dice of yours against any of theirs, with
+// no telegraph or threat, off the play screen and the Characters list. It's
+// only dice, so it never goes through change().
+const roller = makeRoller({
+  esc, icon: ICON, throwDie, calm, tumble, feel, dialog,
+  open: (r) => openRoll(r),
+  roll: () => roll,
+  redraw: ({ reveal = false } = {}) => {
+    if (reveal) ui.reveal = true;
+    renderDialog();
+  },
+  spinning: (stop) => {
+    ui.stopSpin?.();
+    ui.stopSpin = stop;
+  },
+});
 
 // The party sheet on every phone in a campaign, and threads between the crew
 // kept in step on both their phones (party.js).
@@ -485,6 +503,7 @@ function hitAt(s, t, sizes = 1) {
   const r = R.hitTrack(s, t, sizes);
   thud = Math.max(thud, r.blaze || r.to <= R.lowOf(s, t) ? 2 : r.to < r.from ? 1 : 0);
   if (r.blaze) return `${r.to < r.from ? `Your ${TN(t)}’s down to d${r.to}, and that` : `Your ${TN(t)} was on d${r.from}, so that`} hit Blazes.`;
+  if (r.to === r.from) return `Your ${TN(t)}’s on d${r.to} already, so that hit Blazes it too. Settle the Blaze that’s waiting, then tap A hit gets through on your ${TN(t)}.`;
   return `Your ${TN(t)} drops to d${r.to}.${r.to <= R.lowOf(s, t) ? ` The next hit there Blazes.` : ""}`;
 }
 // Up a size, as far as d12. Nothing heals a Scar.
@@ -608,6 +627,9 @@ function listView() {
     ${accountNote()}
     ${camps.section()}
     ${mine.length ? `<section class="cc-sec" aria-labelledby="cc-mine"><h2 id="cc-mine">On this phone</h2><ul class="cc-mine">${mine.map(saved).join("")}</ul></section>` : ""}
+    <section class="cc-sec" aria-labelledby="cc-dice"><h2 id="cc-dice">Dice roller</h2>
+      <p class="cc-lead">Any dice you like, yours against theirs, all rolled together. You don’t need a character for it.</p>
+      <div class="cc-row"><button type="button" class="button" data-act="dz" data-dz="open" data-from="list">Roll some dice</button></div></section>
     <section class="cc-sec" aria-labelledby="cc-crew"><h2 id="cc-crew">Pick from the crew</h2>
       <p class="cc-lead">Six ready-made characters, straight off their sheets in the ${link("s-pregens", "rules")}.</p>
       <div class="crew">${DATA.crew.map(crew).join("")}</div></section>
@@ -842,7 +864,7 @@ function playTab(ch, c) {
   <section class="cc-sec cc-play" aria-labelledby="cc-specs-h"><h2 id="cc-specs-h" class="cc-h3 cc-play-h">Roll a specialty <small>or tap a Root</small></h2>
     <div class="cc-tiles cc-spectiles">${specs}</div>
     <div class="cc-tiles cc-roots">${roots}</div>
-    <div class="cc-tiles"><button type="button" class="tile card tile-defend${owed ? " is-owed" : ""}" data-act="defence"><span class="tile-dice" aria-hidden="true">${R.TRACKS.map((t, j) => kitDie(s.tracks[t], { hide: true, cls: j ? "is-next" : "" })).join("")}</span><span class="tile-name">When it lands</span><span class="tile-sub">${owed ? `${owed === 1 ? "One’s" : `${cap(["", "", "two", "three", "four", "five", "six"][owed] || String(owed))} have`} landed on ${esc(ch.name)} · ` : ""}${glanceTracks(s)}</span></button></div>
+    <div class="cc-tiles"><button type="button" class="tile card tile-defend${owed ? " is-owed" : ""}" data-act="defence"><span class="tile-dice" aria-hidden="true">${R.TRACKS.map((t, j) => kitDie(s.tracks[t], { hide: true, cls: j ? "is-next" : "" })).join("")}</span><span class="tile-name">When it lands</span><span class="tile-sub">${owed ? `${owed === 1 ? "One’s" : `${cap(["", "", "two", "three", "four", "five", "six"][owed] || String(owed))} have`} landed on ${esc(ch.name)} · ` : ""}${glanceTracks(s)}</span></button><button type="button" class="tile card tile-free" data-act="dz" data-dz="open" data-from="play"><span class="tile-dice" aria-hidden="true">${kitDie(6, { hide: true })}${kitDie(8, { own: "them", hide: true, cls: "is-next" })}</span><span class="tile-name">Dice roller</span><span class="tile-sub">Any dice, yours against theirs</span></button></div>
     ${lastRollView(s.last)}
     <div class="cc-row cc-scene"><button type="button" class="button" data-act="scene">New scene</button><button type="button" class="button" data-act="downtime">Downtime</button></div>
   </section>
@@ -1105,7 +1127,7 @@ function threadRow(p, t, place, s, look = false) {
   const buttons = look || st === "snapped" ? []
     : bond ? (st === "strained"
       ? [b("strain", "Strain it again: it snaps, Resolve up a size"), b("mend", "Mended")]
-      : [b("tborrow", "Borrow a specialty: 1 Aura", ` aria-label="Borrow one of ${who}’s specialties: 1 Aura"`, s.aura < 1), b("strain", "Strain it: Resolve up a size")])
+      : [b("strain", "Strain it: Resolve up a size")])
     : [b("bite", "It brought trouble: +1 Aura", ` data-big="0" aria-label="Your thread with ${who} brought real trouble: +1 Aura"`), b("bite", "A big bite: Resolve up a size", ` data-big="1" aria-label="A big bite from your thread with ${who}: Resolve up a size"`),
       b("right", st === "strained" ? "Did right by them again: it snaps" : "Did right by them: it strains"), ...(st === "strained" ? [b("wrong", "Wronged them again: it’s whole")] : [])];
   const at = threadPlace(t, st);
@@ -1837,6 +1859,7 @@ function dialogView() {
   if (roll.kind === "camp") return camps.dialog(roll);
   if (roll.kind === "tele" || String(roll.kind).startsWith("tg-")) return table.dialog(roll);
   if (String(roll.kind).startsWith("ft-")) return turn.dialog(roll);
+  if (roll.kind === "dice") return roller.view(roll);
   const c = normal(ch);
   if (!c) return "";
   const s = ch.state;
@@ -2183,6 +2206,7 @@ const ACT = {
   w: (el, e) => world.act(el, e),
   ft: (el, e) => turn.act(el, e),
   fd: (el, e) => found.act(el, e),
+  dz: (el, e) => roller.act(el, e),
   wundo: () => world.undo(),
   wkundo: () => world.makeUndo(),
   async print() {
@@ -2318,7 +2342,13 @@ const ACT = {
       return `Your ${TN(t)}’s a d${s.tracks[t]}.`;
     });
   },
-  hit: (el) => change(`a hit at your ${R.TRACK[el.dataset.t].root}`, (s) => hitAt(s, el.dataset.t)),
+  hit: (el) => {
+    const t = el.dataset.t;
+    const s = current()?.state;
+    // One Blaze at a time: a track already on its smallest waits for it.
+    if (s?.blaze && s.blaze !== t && s.tracks[t] <= R.lowOf(s, t)) return toast(`Your ${TN(t)}’s on d${s.tracks[t]}, so that hit Blazes it too. Settle the Blaze that’s waiting first.`);
+    return change(`a hit at your ${R.TRACK[t].root}`, (st) => hitAt(st, t));
+  },
   up: (el) => change("a size back", (s) => upOne(s, el.dataset.t)),
   quickheal: (el) => change("a quick heal", (s) => {
     const t = el.dataset.t;
@@ -2517,12 +2547,6 @@ const ACT = {
     return `You wronged them again, so it’s whole.${tellCrew(found.person, "whole", c)}`;
   }),
   // Borrowing through a bond thread, away from the roll card.
-  tborrow: (el) => change("borrowing through a thread", (s, c) => {
-    const found = threadAt(c, el.dataset.k);
-    if (!found || s.aura < 1 || !lendersOf(c, s).includes(found.person)) return "";
-    s.aura -= 1;
-    return `You borrow one of ${found.person}’s specialties for 1 Aura, so it’s a step on the roll it fits. Aura’s ${s.aura}.`;
-  }),
   // Something from before the Roots change that isn't going back on.
   letgo: (el) => change("letting it go", (s) => {
     const n = Number(el.dataset.n);
@@ -2769,8 +2793,9 @@ const ACT = {
       const tele = r.incoming[j];
       const t = R.trackAt[tele.at];
       if (what === "hit") {
+        const was = s.tracks[t];
         r.log.push(hitAt(s, t));
-        r.paid[j] = s.blaze === t ? `${TN(t)} took it, and Blazed` : `${TN(t)} down to d${s.tracks[t]}`;
+        r.paid[j] = s.blaze === t ? `${TN(t)} took it, and Blazed` : s.tracks[t] === was ? `${TN(t)} on d${was}, its Blaze waiting on the other` : `${TN(t)} down to d${s.tracks[t]}`;
         r.harm[j] = true;
       } else if (what === "box" || what === "vbox") {
         // A piece of armour on that Root takes it on a box, and its last box

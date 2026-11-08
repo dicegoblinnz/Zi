@@ -6,7 +6,9 @@
 // too few names for a region its pack says it fits.
 //
 // The files:
-//   core.yaml        everything that isn't genre
+//   core.yaml        everything that isn't genre (and the seals the builder
+//                    deals each kind of faction are the kit's, src/kit/seals.js,
+//                    checked here against the type roles and tags)
 //   regions.yaml     the five regions
 //   genres.yaml      the eras, the twists, the named genres and the frames' mixes
 //   eras/<id>.yaml   a pack for an era, twists/<id>.yaml one for a twist
@@ -145,6 +147,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
+import { CHARGES } from "../src/kit/seals.js";
 
 export const REGIONS = ["town", "city", "country", "world", "stars"];
 export const SIZES = ["small", "local", "city", "great"];
@@ -296,6 +299,17 @@ export function compileTables(raw, book, { minimums = true } = {}) {
   const ownTags = list(core.tags);
   for (const t of ownTags) if (!isKey(t)) bad("core.yaml", `tags has one that isn't a tag: ${t}`);
   const known = new Set([...ownTags, ...KEEPS, ...TYPES, ...assetKeys, ...REGIONS]);
+  // The seals the builder deals (src/kit/seals.js): every kind of faction
+  // has three charges at least, and a charge only names kinds and tags the
+  // tables have (the real ones, not a made-up pack for the checks).
+  if (minimums) for (const [id, c] of Object.entries(CHARGES)) {
+    for (const k of c.kinds) if (!TYPES.includes(k)) bad("src/kit/seals.js", `the ${id} charge suits ${k}, which isn't a type role`);
+    for (const t of c.tags) if (!known.has(t)) bad("src/kit/seals.js", `the ${id} charge has a tag the tables haven't got: ${t}`);
+  }
+  if (minimums) for (const k of TYPES) {
+    const n = Object.values(CHARGES).filter((c) => c.kinds.includes(k)).length;
+    if (n < 3) bad("src/kit/seals.js", `${k} has ${n} charges to be dealt, and a kind of faction needs three at least`);
+  }
 
   // A row's id comes from where it's written and its own words, so it stays
   // the same when rows are added, taken out or moved round it, and a world

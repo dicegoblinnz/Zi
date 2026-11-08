@@ -38,6 +38,7 @@ Mo's answers from 16 Oct 2026, given before the redesign. Everything built for z
 - What was wrong with the old companion apps: rolls took too long, they were hard to use at the table, they fell behind the rules, and sheets got lost or stuck.
 - When a rule changes, a saved character's numbers recount themselves, and anything the player has to choose gets flagged.
 - 17 Oct: the first version lets players pick one of the six crew (no blank sheets yet), saves on the phone and works offline. Sign-in comes after it, to keep the first version quick and light on usage. The plan is in `notes/companion-plan.md`.
+- 8 Nov: a dice roller of its own, beside tapping an action and building its roll. You pick your dice and the opponent's too (3 of yours against 5 of theirs, say), with no telegraph or threat to set up, and they all roll at once, since dice get matched to blocks after the roll. Whatever none of yours is set against goes straight through. It stands on its own.
 
 ## The GM companion and live play
 

@@ -4,7 +4,7 @@ Mo's 6 to 8 Nov 2026 rework of the core, from four weeks of playtests: set actio
 
 **No traits** (Mo, 9 Nov): they're gone from the whole book, the crew and the paper sheet, and `check_terms.py` flags the word, so no stage brings them back. The builder and the companion (stages 3 and 4) don't offer any.
 
-It changes the character in nearly every chapter and most of the companion, so it goes in stages, a fresh chat each. Nothing merges to `main` till Mo says, because the live companion has to keep working for his four campaigns. Every stage works on the branch `rules/2026-11-08-roots` and pushes it, and the branch builds its own Preview on the zidara Worker (https://rules-2026-11-08-roots-zidara.storyforgenz.workers.dev), so `website`, which holds 25 commits of the design pass that aren't on `main`, stays where it is.
+It changes the character in nearly every chapter and most of the companion, so it goes in stages, a fresh chat each. Nothing merges to `main` till Mo says, because the live companion has to keep working for his four campaigns. Stages 1 and 2 went live on 9 Nov with Mo's yes, the companion still on its snapshot of the old rules. Every stage works on the branch `rules/2026-11-08-roots` and pushes it, and the branch builds its own Preview on the zidara Worker (https://rules-2026-11-08-roots-zidara.storyforgenz.workers.dev), so `website` stays where it is.
 
 ## The core, as the book has it
 

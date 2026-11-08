@@ -321,12 +321,15 @@ export const lowOf = (s, t) => Math.min(12, 2 + 2 * (s.scars?.[t]?.length ?? 0))
 export const roomOf = (s, t) => Math.max(0, (s.tracks[t] - lowOf(s, t)) / 2);
 
 // A hit that gets through drops its track a size, and one at its smallest
-// size Blazes. A vulnerability makes it more sizes. It says what happened.
+// size Blazes. A vulnerability makes it more sizes. A Blaze waiting on
+// another track doesn't stop the hit: it still drops this one, as far as its
+// smallest size, and one Blaze at a time is settled. It says what happened.
 export function hitTrack(s, t, sizes = 1) {
   const from = s.tracks[t];
-  for (let i = 0; i < sizes && !s.blaze; i++) {
-    if (s.tracks[t] <= lowOf(s, t)) s.blaze = t;
-    else s.tracks[t] = sizeDown(s.tracks[t]);
+  for (let i = 0; i < sizes && s.blaze !== t; i++) {
+    if (s.tracks[t] > lowOf(s, t)) s.tracks[t] = sizeDown(s.tracks[t]);
+    else if (!s.blaze) s.blaze = t;
+    else break;
   }
   return { from, to: s.tracks[t], blaze: s.blaze === t };
 }

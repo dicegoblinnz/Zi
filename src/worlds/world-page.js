@@ -7,7 +7,7 @@
 // one, and any name of theirs written anywhere on the page links to it, the
 // way it will on the World screen (linker() in pages.js).
 
-import { die, esc } from "../kit/kit.js";
+import { die, esc, seal } from "../kit/kit.js";
 import { diceLabel, stepsToDice } from "../companion/dice.js";
 import { busiestOf, drawWeb, keyOf as webKey, tiesOf, webOf } from "../companion/world-web.js";
 import { linker, mentionsOf } from "../companion/pages.js";
@@ -122,11 +122,14 @@ export function factionOf(world, f, ln = linkerOf(world)) {
   const seat = !f.of && world.map?.pins?.[f.seat] ? f.seat : mini && world.map?.pins?.[mini.seat] ? mini.seat : "";
   const go = seat ? `<p class="wn-go"><button type="button" class="wn-gobtn" data-map-f="${esc(f.key)}">${MAP_ICON}On the map, with its ties</button></p>` : "";
 
+  // Its seal (stage 1 of notes/faction-feel-plan.md), with its Power small on
+  // the seal's edge.
+  const mark = `<span class="wn-fs-seal">${seal(f.seal, { size: mini ? "sm" : "md" })}<span class="wn-fs-pow" role="img" aria-label="Power ${esc(diceLabel(dice))}">${dice.map((d) => die(d, { own: "them", hide: true })).join("")}</span></span>`;
   const glance = ag ? `<span class="wn-fs-ag"><span class="wn-fs-agd" role="img" aria-label="Agenda at d${ag.die}">${die(ag.die, { own: "them", hide: true })}</span><span class="wn-fs-agt">${esc(ag.text)}</span></span>` : "";
   return `
     <details class="wn-f${mini ? " is-mini" : ""}${f.strange ? " is-strange" : ""}" id="f-${esc(f.key)}" data-kind="${esc(f.kind)}" data-find="${esc(findWords)}">
       <summary class="wn-fs">
-        <span class="wn-fs-die" role="img" aria-label="Power ${esc(diceLabel(dice))}">${dice.map((d) => die(d, { own: "them", hide: true })).join("")}</span>
+        ${mark}
         <span class="wn-fs-in">
           <span class="wn-k">${esc(kind)}<span aria-hidden="true"> · </span><span class="wn-k-s">${sizeLine}</span></span>
           <span class="wn-fs-n">${esc(c.name)}</span>
@@ -162,7 +165,7 @@ export function boardOf(world, ln = linkerOf(world)) {
 
 // The web's pieces, the way the World screen hands them to world-web.js.
 export function webData(world) {
-  const nodes = world.factions.map((f) => ({ id: f.key, name: f.card.name, dice: stepsToDice(f.steps), mini: Boolean(f.of), parent: f.of || null, hidden: false }));
+  const nodes = world.factions.map((f) => ({ id: f.key, name: f.card.name, dice: stepsToDice(f.steps), mini: Boolean(f.of), parent: f.of || null, hidden: false, seal: f.seal ?? null }));
   const threads = world.factions.flatMap((f) => f.card.threads.map((t) => ({ from: f.key, to: t.to, kind: t.kind, s: t.s, text: t.text })));
   return { nodes, threads };
 }

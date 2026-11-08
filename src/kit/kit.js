@@ -12,8 +12,9 @@
 
 import { stepsToDice } from "../companion/dice.js";
 import { SIGILS } from "./sigils.js";
+import { CHARGES, FIELDS, GLYPHS, MARKS, sealIn, sealWords } from "./seals.js";
 
-export { SIGILS };
+export { SIGILS, CHARGES, FIELDS, GLYPHS, MARKS, sealWords };
 export const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 const r1 = (n) => Math.round(n * 10) / 10;
 const P = (p) => `${r1(p.x)} ${r1(p.y)}`;
@@ -286,6 +287,55 @@ export function telegraph({ who, does, at = "", atCrest = null, aim = atCrest ? 
 
 // A cost in running text, like "1 Aura": the token, then the words.
 export const cost = (n, what = "Aura") => `<span class="zd-cost">${what === "Aura" ? CHIT.replace('class="zd-chit"', 'class="zd-chit on"') : GEM.replace('class="zd-gem"', 'class="zd-gem on"')}${n} ${esc(what)}</span>`;
+
+// ── Seals (stage 1 of notes/faction-feel-plan.md): a faction's wax seal, its
+// charge, field and mark from seals.js. s is the faction's { c, f, d }, or
+// nothing for a faction with no seal yet. blank: the crew hasn't been shown
+// the faction, so it's a plain seal with nothing on it, which gives nothing
+// away. own: "them" (violet, every faction) or "you" (gold, the crew's own).
+// size: "sm" (a list or a web's node), "md" (a card) or "lg" (a faction's page).
+// The ring's bumps are worked out once.
+const SEAL_RING = (() => {
+  const bumps = 18, r = 28.5, amp = 2.2, pts = [];
+  for (let i = 0; i < bumps * 2; i++) {
+    const a = (Math.PI * i) / bumps - Math.PI / 2;
+    const rr = i % 2 === 0 ? r + amp : r - amp * 0.4;
+    pts.push([32 + rr * Math.cos(a), 32 + rr * Math.sin(a)]);
+  }
+  let d = `M${r1(pts[0][0])} ${r1(pts[0][1])}`;
+  for (let i = 1; i <= pts.length; i++) {
+    const p = pts[i % pts.length], q = pts[i - 1];
+    d += ` Q${r1(q[0])} ${r1(q[1])} ${r1((p[0] + q[0]) / 2)} ${r1((p[1] + q[1]) / 2)}`;
+  }
+  return `${d}Z`;
+})();
+let sealN = 0;
+export function seal(s, { size = "md", label = "", blank = false, own = "them", cls = "" } = {}) {
+  const v = blank ? null : sealIn(s);
+  const charge = v ? CHARGES[v.c] : null;
+  const field = v ? FIELDS[v.f] : null;
+  const mark = v?.d ? MARKS[v.d] : null;
+  const id = `zs${(sealN = (sealN + 1) % 1e6)}`;
+  const named = label ? `role="img" aria-label="${esc(label)}"` : 'aria-hidden="true"';
+  const classes = ["zd-seal", own, size, charge ? "" : "is-blank", cls].filter(Boolean).join(" ");
+  // The charge goes down twice: a halo the colour of the face, then the
+  // charge itself, so it sits clear of whatever field's under it.
+  return `<svg class="${classes}" viewBox="0 0 64 64" ${named} focusable="false"${v ? ` data-seal="${esc(`${v.c} ${v.f}${v.d ? ` ${v.d}` : ""}`)}"` : ""}>` +
+    `<path class="wax" d="${SEAL_RING}"/><circle class="face" cx="32" cy="32" r="19.5"/>` +
+    (field?.art ? `<clipPath id="${id}"><circle cx="32" cy="32" r="19.5"/></clipPath><g class="field" clip-path="url(#${id})">${field.art}</g>` : "") +
+    `<circle class="rim" cx="32" cy="32" r="19.5"/>` +
+    (charge ? `<g class="cg" transform="translate(17.6 17.6) scale(1.2)"><g class="halo">${charge.art}</g><g class="charge">${charge.art}</g></g>` : "") +
+    (mark ? `<circle class="badge" cx="51" cy="13" r="7.8"/><g class="mark" transform="translate(45.24 7.24) scale(0.48)">${mark.art}</g>` : "") +
+    `</svg>`;
+}
+
+// One of the faction turn's outcomes (or its agenda, or coming for the crew)
+// as a glyph, from GLYPHS in seals.js.
+export function glyph(name, { label = "", cls = "" } = {}) {
+  const g = Object.hasOwn(GLYPHS, name) ? GLYPHS[name] : null;
+  const named = label ? `role="img" aria-label="${esc(label)}"` : 'aria-hidden="true"';
+  return `<svg class="zd-glyph${cls ? ` ${cls}` : ""}" viewBox="0 0 24 24" ${named} focusable="false">${g ? g.art : ""}</svg>`;
+}
 
 // The hatching the GM's pieces get on paper, once per page.
 export const DEFS = `<svg class="zd-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs>` +

@@ -28,7 +28,8 @@ import { threadNote } from "../src/companion/threads.js";
 import { curlyQuotes, readAim, whoAndDoes } from "../src/companion/aims.js";
 import { CARD_WORDS, newestChange, reachOf, readCards, staleCards } from "./learn.mjs";
 import { bookFor, compileTables, readTablesDir } from "./world-tables.mjs";
-import { compileWorld, readWorldsDir } from "./worlds.mjs";
+import { checkYears, compileWorld, readWorldsDir } from "./worlds.mjs";
+import { sealIn, sealKey } from "../src/kit/seals.js";
 import { diceCells, exampleCrews, ruleNames, statBlocks } from "./book-blocks.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -908,6 +909,27 @@ function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, wa
   }
   if (boards.length < 6) warn(`expected the Steeplands and five frames to bring in, found ${boards.length}`);
 
+  // Each card's seal, from content/world-tables/seals.yaml, put on after its
+  // hash so a seal's never news to a GM who's brought the card in already.
+  let sealsRaw = null;
+  try {
+    sealsRaw = parseYaml(readFileSync(join(ROOT, "content", "world-tables", "seals.yaml"), "utf8"))?.boards ?? null;
+  } catch (err) {
+    warn(`can't read content/world-tables/seals.yaml: ${String(err?.message ?? err).split("\n")[0]}`);
+  }
+  for (const b of boards) {
+    const given = sealsRaw?.[b.id] ?? {};
+    for (const k of Object.keys(given)) if (!b.cards.some((c) => c.key === k)) warn(`seals.yaml has a seal for ${k} on ${b.name}, and that board hasn't got it`);
+    const seen = new Map();
+    for (const c of b.cards) {
+      const s = sealIn(given[c.key]);
+      if (!s) warn(given[c.key] ? `${c.name}'s seal in seals.yaml isn't one the kit has (src/kit/seals.js)` : `${c.name} on ${b.name} has no seal in content/world-tables/seals.yaml`);
+      else if (seen.has(sealKey(s))) warn(`${c.name} and ${seen.get(sealKey(s))} on ${b.name} have the same seal`);
+      else seen.set(sealKey(s), c.name);
+      c.seal = s;
+    }
+  }
+
   // Appendix B's assets, to pick from.
   const assets = [];
   for (const [id, power] of [["assets-people", true], ["assets-reach", false], ["assets-places", false], ["assets-influence", false], ["assets-odd", false]]) {
@@ -1473,15 +1495,25 @@ if (existsSync(worldsDir)) {
   const { src, problems: unread } = readWorldsDir(worldsDir);
   for (const p of unread) companionWarn(`worlds: ${p}`);
   mkdirSync(worldsOut, { recursive: true });
+  const unbuilt = new Set();
   for (const w of src) {
     const { world, problems, notes } = compileWorld(w, { assets: worlds?.assets ?? [], sizes: worlds?.sizes ?? [], regions: existsSync(tablesOut) ? JSON.parse(readFileSync(tablesOut, "utf8")).regions : {} });
     for (const p of problems) companionWarn(`world ${w.universe} ${w.year}: ${p}`);
-    if (!world) continue;
+    if (!world) {
+      unbuilt.add(w.universe);
+      continue;
+    }
     world.at = BUILT;
     writeFileSync(join(worldsOut, `${world.id}.json`), JSON.stringify(world));
     (wholeWorlds[world.universe] ??= []).push(world);
     const pages = world.places.length ? `, ${world.places.length} places, ${world.people.length} people, ${Object.keys(world.map?.pins ?? {}).length} pins on its map` : "";
     console.log(`worlds/${world.id}.json: ${world.factions.length} factions${pages}, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k of a world brought in${notes.length ? ` (${notes.join("; ")})` : ""}`);
+  }
+  // What a universe's years share (world.yaml's both), and the year its page
+  // opens on, once every year's compiled (a year that didn't has said why).
+  for (const [u, list] of Object.entries(wholeWorlds)) {
+    if (unbuilt.has(u)) continue;
+    for (const p of checkYears(src.find((w) => w.universe === u)?.world, list)) companionWarn(`world ${u}: ${p}`);
   }
 }
 // The pages under /worlds/ read every year of each universe from here.

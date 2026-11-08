@@ -14,7 +14,7 @@ import "@fontsource/alegreya-sans/800.css";
 import "../styles/site.css";
 import "../styles/kit.css";
 import book from "../generated/book.json";
-import { die, diceFor, inline, pips, aura, scars, boxes, condition, tag, crest, telegraph, cost, DEFS, SIGILS, SHAPES, SIZES } from "../kit/kit.js";
+import { die, diceFor, inline, pips, aura, scars, boxes, condition, tag, crest, telegraph, cost, seal, glyph, DEFS, SIGILS, SHAPES, SIZES, CHARGES, FIELDS, MARKS, GLYPHS } from "../kit/kit.js";
 import { diceLabel, stepsToDice } from "../companion/dice.js";
 import { withQuality } from "../companion/armour.js";
 import { rootFor, rootsSheet, specSteps } from "../companion/roots.js";
@@ -45,6 +45,17 @@ const combo = wrenShot + bramIn;
 const roof = vesk.roots.Body + specSteps(vesk, "Stealth");
 const chase = crew.bram.roots.Body + specSteps(crew.bram, "Soldiering");
 const bramDefend = crew.bram.roots.Body + specSteps(crew.bram, "Shieldwork") + crew.bram.armour.filter((a) => a.root === "Body").length;
+// Seals (stage 1 of notes/faction-feel-plan.md): every charge with the kinds
+// of faction the builder deals it to, every field and mark, the Brinewake's
+// board as the book has it, and the faction turn's glyphs with the book's
+// words for each.
+const KINDS = { house: "noble houses", traders: "merchant guilds", crooks: "street gangs", faith: "temples and orders", office: "crown offices", society: "secret societies", soldiers: "mercenaries", makers: "craft guilds", family: "family businesses", rebels: "rebels", keepers: "keepers of old things", old: "old things with human faces" };
+const kindsOf = (c) => (c.kinds.length ? c.kinds.map((k) => KINDS[k] ?? k).join(", ").replace(/^./, (x) => x.toUpperCase()) : "Only a whole world's, or the GM's pick");
+const brine = book.companion.worlds.boards.find((b) => b.id === "brinewake");
+const turn = book.companion.worlds.turn;
+const outcomeOf = (name) => turn.outcomes.find((o) => o.name.toLowerCase() === name)?.text ?? "";
+const doesOf = (re) => turn.does.find((x) => re.test(x.text))?.text ?? "";
+const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
 ---
 <!doctype html>
 <html lang="en-NZ">
@@ -84,7 +95,7 @@ const bramDefend = crew.bram.roots.Body + specSteps(crew.bram, "Shieldwork") + c
         <h1>The kit</h1>
         <p class="lede">Every piece of the game, drawn once and used everywhere: on your phone at the table, in the rules and in the builder. They’re tokens punched out of card, and every die is its real shape, so you can see how big it is before you read it.</p>
         <nav class="kjump" aria-label="On this page">
-          <a href="#table">At the table</a><a href="#roll">The roll</a><a href="#dice">Dice</a><a href="#steps">Steps</a><a href="#numbers">Aura</a><a href="#tracks">The tracks</a><a href="#wounds">Blaze and Scars</a><a href="#defend">Defend</a><a href="#tags">Tags</a><a href="#telegraphs">Telegraphs</a><a href="#sigils">Sigils</a><a href="#rules">In the rules</a>
+          <a href="#table">At the table</a><a href="#roll">The roll</a><a href="#dice">Dice</a><a href="#steps">Steps</a><a href="#numbers">Aura</a><a href="#tracks">The tracks</a><a href="#wounds">Blaze and Scars</a><a href="#defend">Defend</a><a href="#tags">Tags</a><a href="#telegraphs">Telegraphs</a><a href="#sigils">Sigils</a><a href="#seals">Seals</a><a href="#rules">In the rules</a>
         </nav>
       </header>
 
@@ -320,6 +331,49 @@ const bramDefend = crew.bram.roots.Body + specSteps(crew.bram, "Shieldwork") + c
           ))}
         </div>
         <p class="small">At telegraph size: <span class="tiny">{order.map((id) => <Fragment set:html={crest(archOf(crew[id]), { size: "sm", label: crew[id].name })} />)}</span></p>
+      </section>
+
+      <!-- Seals and the faction turn's glyphs -->
+      <section id="seals" class="ksec">
+        <h2>Seals</h2>
+        <p>Every faction gets a wax seal. What’s on it says what kind of faction it is, how it’s split tells two of a kind apart, and a small mark on its rim does it when even that’s not enough. They’re told apart by their shapes, never a colour, so violet still means theirs and they print in one ink. The crew sees a faction’s seal with its card, and a blank one till then.</p>
+        <h3>What’s on them</h3>
+        <p class="note">Each one big, then at the size it is on the web. The builder deals each to the kinds of faction under it.</p>
+        <div class="seals">
+          {Object.entries(CHARGES).map(([id, c]) => (
+            <figure>
+              <span class="two"><Fragment set:html={seal({ c: id, f: "plain" }, { label: c.name })} /><Fragment set:html={seal({ c: id, f: "plain" }, { size: "sm" })} /></span>
+              <figcaption><b>{c.name}</b><span>{kindsOf(c)}</span></figcaption>
+            </figure>
+          ))}
+        </div>
+        <h3>How they’re split</h3>
+        <div class="seals fields">
+          {Object.entries(FIELDS).map(([id, f]) => (
+            <figure><Fragment set:html={seal({ c: "anchor", f: id }, { label: `An anchor, ${f.name.toLowerCase()}` })} /><figcaption><b>{f.name}</b></figcaption></figure>
+          ))}
+        </div>
+        <h3>The marks</h3>
+        <div class="seals fields">
+          {Object.entries(MARKS).map(([id, m]) => (
+            <figure><span class="two"><Fragment set:html={seal({ c: "crown", f: "bend", d: id }, { label: `A crown with ${m.name.toLowerCase()}` })} /><Fragment set:html={seal({ c: "crown", f: "bend", d: id }, { size: "sm" })} /></span><figcaption><b>{m.name}</b></figcaption></figure>
+          ))}
+        </div>
+        <h3>On a board</h3>
+        <p class="note">{brine.name}’s four as the book has them, and a faction the crew hasn’t met yet.</p>
+        <div class="seals board">
+          {brine.cards.map((c) => (
+            <figure><Fragment set:html={seal(c.seal, { size: "lg", label: c.name })} /><figcaption><b>{c.name}</b></figcaption></figure>
+          ))}
+          <figure><Fragment set:html={seal(null, { size: "lg", blank: true, label: "A faction the crew hasn’t met" })} /><figcaption><b>Not met yet</b></figcaption></figure>
+        </div>
+        <h3>The faction turn</h3>
+        <p class="note">What each faction’s doing when the turn shows every move at once, before any of them lands.</p>
+        <ul class="glyphs">
+          {Object.entries(GLYPHS).map(([id, g]) => (
+            <li><Fragment set:html={glyph(id)} /><span><b>{g.name}.</b> {glyphWords[id] ?? outcomeOf(id)}</span></li>
+          ))}
+        </ul>
       </section>
 
       <!-- In the rules -->
@@ -624,6 +678,20 @@ const bramDefend = crew.bram.roots.Body + specSteps(crew.bram, "Shieldwork") + c
   .crews figcaption b { font-family: var(--display); font-size: 1.05rem; }
   .crews figcaption span { font-size: 0.82rem; color: var(--muted); }
   .sigils { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.9rem 0.4rem; }
+  .seals { display: grid; grid-template-columns: repeat(auto-fill, minmax(7.4rem, 1fr)); gap: 1.1rem 0.6rem; margin: 0.8rem 0 0.4rem; }
+  .seals figure { display: grid; justify-items: center; align-content: start; gap: 0.45rem; text-align: center; }
+  .seals .two { display: flex; align-items: flex-end; gap: 0.5rem; }
+  .seals .zd-seal.md { --s: 64px; }
+  .seals figcaption { display: grid; gap: 0.15rem; line-height: 1.25; }
+  .seals figcaption b { font-size: 0.95rem; }
+  .seals figcaption span { font-size: 0.8rem; color: var(--muted); }
+  .seals.fields { grid-template-columns: repeat(auto-fill, minmax(6.4rem, 1fr)); }
+  .seals.board { grid-template-columns: repeat(auto-fill, minmax(8.6rem, 1fr)); }
+  .seals.board figcaption b { font-family: var(--display); font-weight: 600; font-size: 1rem; }
+  .glyphs { display: grid; gap: 0.7rem; margin: 0.8rem 0 0; padding: 0; list-style: none; }
+  .glyphs li { display: flex; align-items: flex-start; gap: 0.8rem; line-height: 1.4; }
+  .glyphs .zd-glyph { --s: 30px; color: var(--zd-them-ink); margin-top: -0.1rem; }
+  .glyphs b { color: var(--ink); }
   .sigils .zd-crest { --s: 58px; }
   .sigils figcaption { font-size: 0.8rem; color: var(--muted); }
   .tiny { display: inline-flex; gap: 0.5rem; vertical-align: middle; margin-left: 0.4rem; flex-wrap: wrap; }
