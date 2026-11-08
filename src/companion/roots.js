@@ -155,8 +155,10 @@ export function growRoots(c, grown, B = null) {
       const t = c.titles[int(x.t, -1)];
       if (!t) continue;
       const drop = [...new Set((Array.isArray(x.drop) ? x.drop : []).map((j) => int(j, -1)))].filter((j) => t.permissions[j]).sort((a, b) => b - a);
+      // Nothing comes off unless the Boon fits once it has.
+      if (slotsOf(t) - drop.length + BOON_SLOTS > MAX_PERMS) continue;
       for (const j of drop) t.permissions.splice(j, 1);
-      if (slotsOf(t) + 2 <= MAX_PERMS) t.boons.push({ ...boonOf(x, B), g });
+      t.boons.push({ ...boonOf(x, B), g });
     } else if (x.k === "swap" && words && root && spec) {
       const t = c.titles[int(x.t, -1)];
       const j = int(x.j, -1);

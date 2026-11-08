@@ -126,7 +126,8 @@
 //    marked, and Got it clears them for good.
 // 9. Every crew member's growth adds up on Roots (a permission, a thread, a
 //    Title, an archetype and an awakening), a Title stops at six permissions,
-//    and Vesk's Aspiration past d12 gives her a third Title on the phone.
+//    a Boon takes two permissions' slots and one that won't fit takes nothing
+//    off, and Vesk's Aspiration past d12 gives her a third Title on the phone.
 // 10. The rules on a phone. The Learn deck (content/learn.md) has 30 to 40
 //    cards of 40 to 120 words in book order, each teaching a section the book
 //    has, most with an example using the crew's real dice, and an example
@@ -2463,6 +2464,16 @@ if (part("8")) {
 // growth on top of their sheet adds up, a seventh permission never gets on,
 // and an Aspiration past d12 gives a Title, an archetype or an attuned thing.
 if (part("9")) {
+  // Two permissions for a Boon in downtime: the Boon takes their slots, and
+  // one that wouldn't fit takes nothing off.
+  {
+    const vesk = structuredClone(book.crew.find((c) => c.id === "vesk"));
+    vesk.titles[0].permissions.push({ text: "slip a grip", root: "Body", specialty: "Stealth" }, { text: "hang off a ledge", root: "Body", specialty: "Climbing" });
+    const swapped = rootsSheet(vesk, [{ k: "boon", t: 0, lever: "Aura", name: "Second Wind", drop: [0], g: 0 }], BUILD);
+    same([swapped.titles[0].permissions.length, swapped.titles[0].boons.map((b) => b.name), swapped.numbers.aura], [4, ["Second Wind"], 7], "a permission off her five for a Boon, with Aura 2 more");
+    const full = rootsSheet(vesk, [{ k: "perm", t: 0, text: "palm a key", root: "Body", spec: "Locks", g: 0 }, { k: "boon", t: 0, lever: "Aura", drop: [0], g: 1 }], BUILD);
+    same([full.titles[0].permissions.length, full.titles[0].boons.length, full.numbers.aura], [6, 0, 5], "a Boon that won't fit beside six permissions takes none of them off");
+  }
   for (const base of book.crew) {
     const c0 = rootsSheet(base, [], BUILD);
     const sp = c0.specialties[0].name;

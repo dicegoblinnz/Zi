@@ -722,7 +722,7 @@ export function makeTable(d) {
     const s = ch ? stateHere(t, round, ch.id) : stateOf(t, round);
     const mine = ch && atPlace(t) ? t.there?.[keyOf(me(), ch.id)] : null;
     const face = t.ans ? t.ans.opp : t.def ? t.def.v : mine?.def ? mine.def.v : null;
-    const coming = onScene(t) ? "" : atPlace(t) ? `Hits whoever’s there, at their ${rootOf(t)}` : `At ${t.at.name ?? "their"}’s ${rootOf(t)}, against their ${trackFor(t)}`;
+    const coming = onScene(t) ? "" : atPlace(t) ? `Hits whoever’s there, at their ${rootOf(t)}` : `At ${t.at.name ? `${t.at.name}’s` : "their"} ${rootOf(t)}, against their ${trackFor(t)}`;
     const when = s === "coming" ? (onScene(t) ? "" : coming) : { stopped: "Stopped", hit: "Landed", landed: "Landed", held: "Landed, and stopped", through: onScene(t) ? "Landed" : "Landed, and got through", clear: ch ? "Landed, and missed you" : "Landed on nobody" }[s];
     return `<li class="tg${on ? " is-lit" : ""}" data-tg="${esc(t.id)}">${kitTele({ who: t.who, does: t.does, at: atName(t), atCrest: t.at.k ? null : t.at.arch ?? [], aim: aimOf(t), d: t.d, round: round.n, one: oneOf(t), face, state: s === "coming" ? "" : s, when, extra, strict: false })}</li>`;
   }
@@ -1659,9 +1659,11 @@ export function makeTable(d) {
         // An extra action the table didn't take gives back what it cost.
         const kept = [...(has?.more ?? [])];
         for (const m of o.x?.more ?? []) {
-          const i = kept.indexOf(m);
+          // An old record's 1 Resolve is 3 Aura now, the way the table reads it.
+          const was = m === "resolve" ? "aura" : m === "trait" ? "boon" : m;
+          const i = kept.indexOf(was);
           if (i >= 0) kept.splice(i, 1);
-          else if (m === "resolve") s.aura += 3;
+          else if (was === "aura") s.aura += 3;
         }
         record(s, id, "x", o.round, has ? { more: [...has.more], list: has.list.map(({ did, at, late, ...a }) => ({ ...a, ...(a.roll ? { roll: { dice: a.roll.dice, opp: a.roll.opp, real: a.roll.real } } : {}) })) } : null);
       }

@@ -275,11 +275,13 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
   // Two permissions on one Title for a Boon, which takes their two slots.
   // Fewer go when the Title's got slots free.
   const BOON_ON = { Armour: "Which piece of armour", Conditions: "Which condition can’t touch you", "Getting around": "Climbing, swimming or rough ground" };
-  const goes = (t) => Math.max(0, R.BOON_SLOTS - (R.MAX_PERMS - R.slotsOf(t)));
-  function boonView(w, n, c) {
+  // How many permissions have to go, counting the ones this downtime's slots
+  // put on the same Title first.
+  const goes = (t, j, d, s) => Math.max(0, R.BOON_SLOTS - (R.MAX_PERMS - R.slotsOf(t) - (earlier(d, d.slots.length, s).perms[j] ?? 0)));
+  function boonView(w, n, c, d, s) {
     const where = `b${n}`;
     const t = c.titles[w.t];
-    const need = t ? goes(t) : 0;
+    const need = t ? goes(t, w.t, d, s) : 0;
     const rule = (B.boons ?? []).find((x) => x.lever === w.lever);
     return `<div class="dt-swap">${chips(where, "t", c.titles.map((x, j) => [j, `<em>${esc(x.name)}</em>`]), w.t, "Which Title")}
       ${t && need ? `<p class="cc-lead">${need === 1 ? "Pick the permission that goes." : "Pick the two permissions that go."}</p><div class="cc-chips" role="group" aria-label="The permissions going">${t.permissions.map((p, j) => `<button type="button" class="cc-chipbtn" data-act="dt" data-do="boon-drop" data-s="${where}" data-v="${j}"${pressed(w.drop.includes(j))}><em>${esc(p.text)}</em></button>`).join("")}</div>` : t ? `<p class="cc-lead">${esc(t.name)} has two slots free, so nothing has to go.</p>` : ""}
@@ -313,7 +315,7 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
         <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="swap-add">${d.swaps.length ? "Swap another" : "Swap a permission"}</button></div>
         <h3>Two permissions for a Boon</h3>
         <p class="cc-lead">Two permissions on one Title can go for a Boon, which takes their two slots. A Boon can go back for two permissions the same way, from Change. ${link("s-boons", "Boons and Burdens")}</p>
-        ${d.boons.map((w, k) => boonView(w, k, c)).join("")}
+        ${d.boons.map((w, k) => boonView(w, k, c, d, s)).join("")}
         <div class="cc-row"><button type="button" class="button sm" data-act="dt" data-do="boon-add">${d.boons.length ? "Another Boon" : "Two permissions for a Boon"}</button></div>
         ${strained.length ? `<h3>Mend a strained bond thread</h3><p class="cc-lead">Make it right with them, whatever suits them, and play it out at the table. ${link("s-downtime-threads", "Mending threads")}</p>
           ${strained.map((t) => `<button type="button" class="cc-line" data-act="dt" data-do="mend" data-v="${esc(t.key)}"${pressed(d.mends.includes(t.key))}><span class="tick" aria-hidden="true"></span><span><em>${esc(t.text)}</em> <small>${esc(t.person)}</small></span></button>`).join("")}` : ""}
@@ -335,7 +337,7 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       const t = c.titles[w.t];
       if (!t || !w.lever) continue;
       if (titled.has(w.t)) out.push(`${t.name} takes one Boon a downtime here, so the second waits for the next.`);
-      else if (w.drop.filter((j) => t.permissions[j]).length < goes(t)) out.push(`${t.name} needs ${goes(t) === 1 ? "a permission" : "two permissions"} picked to make room for ${w.name.trim() || `the ${w.lever} Boon`}.`);
+      else if (w.drop.filter((j) => t.permissions[j]).length < goes(t, w.t, d, s)) out.push(`${t.name} needs ${goes(t, w.t, d, s) === 1 ? "a permission" : "two permissions"} picked to make room for ${w.name.trim() || `the ${w.lever} Boon`}.`);
       titled.add(w.t);
     }
     d.slots.forEach((sl, i) => {
@@ -447,7 +449,7 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       const t = c.titles[w.t];
       if (!t || !w.lever || titled.has(w.t)) continue;
       const drop = [...new Set(w.drop)].filter((j) => t.permissions[j]).slice(0, R.BOON_SLOTS);
-      if (drop.length < goes(t)) continue;
+      if (drop.length < goes(t, w.t, d, s)) continue;
       titled.add(w.t);
       const name = w.name.trim() || `the ${w.lever} Boon`;
       grow({ k: "boon", t: w.t, lever: w.lever, name: w.name.trim(), on: w.on.trim(), drop });
