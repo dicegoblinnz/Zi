@@ -637,7 +637,7 @@ One Warden's down, and three of its four keeps-it-going tags weren't even touche
 **End of Round 2.** The left Warden's gone, so its d10 at Bram never lands. The rest do.
 
 -   **The spear at Vesk.** She's on the rope when it finds her, because climbing away doesn't stop a telegraph aimed at you. Her Stamina's a d12, and what's left of the ward is a step on top, a d2. She rolls 3 and 1, and the d8 rolls 6, so it gets through and the GM names a size of Stamina. Vesk spends the ward, and it takes the hit instead, so her Stamina stays on d12.
--   **The spears at Dorrie and Isolde** come at Bram, because he intercepted them. He rolls his Stamina once, a d12, and gets 3. The spears roll 6 and 4, so neither's stopped, and even a 12 would only have stopped one of them. That's two hits. He offers his plate for one, and ticks one of its two boxes. The other drops his Stamina to a d8.
+-   **The spears at Dorrie and Isolde** come at Bram, because he intercepted them. He rolls his Stamina once, a d10, and gets 3. The spears roll 6 and 4, so neither's stopped, and even a 10 would only have stopped one of them. That's two hits. He offers his plate for one, and ticks one of its two boxes. The other drops his Stamina to a d8.
 -   **The portrait's whisper** goes against Isolde's Confidence, a d12, and she rolls it once: 2. The d6 rolls 4, so it gets through, and that's a size of her Confidence. She could pay 2 for 1 out of her Stamina and her Resolve, but she wants those for later, so she lets it shake her, and she's on d10. The portrait goes quiet, and keeps looking at her.
 
 The work on *Leave no trace* kept its clock where it was, and *The household wakes* steps down to a d4.
