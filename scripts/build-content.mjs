@@ -804,10 +804,10 @@ function sheetCard(name, body, warn) {
 }
 
 // A place's telegraphs, ready for the GM to send: who and what, its die, and
-// what it's aimed at, which is one of the crew when it only says Defend or
-// Confidence, one of the place's stakes, the scene clock, or a part of the
+// what it's aimed at, which is one of the crew when it only says Body, Mind or
+// Soul, one of the place's stakes, the scene clock, or a part of the
 // place (everyone on the gallery, whoever's at the door). Whatever comes after
-// Defend or Confidence is what it does if it lands (Grabbed). One at a stake
+// Body, Mind or Soul is what it does if it lands (Grabbed). One at a stake
 // puts a new tag in its way if it lands: the one in italics after the stake,
 // if the book names one, or the telegraph's own words.
 function placeTeles(name, field, stakes, warn) {

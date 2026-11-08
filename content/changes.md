@@ -5,6 +5,32 @@ updated: 2026-11-09
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
 
+## 9 Nov 2026: The GM's budgets, and the rest of the book {#c-2026-11-09-budgets}
+
+To go with [Roots, specialties and three tracks](#c-2026-11-08-roots).
+
+**The round budget's about 10 steps a round for each player**, so a crew of four is 40 at Even, 20 for a breather and 60 at Hard. It was about 5 a player. Every track starts at d12 now, and a d12 stops a lone d10 about six times in ten, so it takes that much to push. See [Telegraphs a Round](#s-budget).
+
+**The threat budget's 15 a character as they start**, so 60 for four, and it climbs with every Title, archetype or attuned thing an Aspiration gives them: about 17 or 18 a character with one, 20 with two, 22 or 23 with three and 25 with four. It was 10 a character with two Titles, and more with every Title after. See [The Threat Budget](#s-threat-budget).
+
+**Every multiplier in the book is 2 bigger**, and a threat's Challenge plus 2 is the place to start, so a boss still takes about four rounds to bring down the long way. The bestiary's are written for a threat budget of 60, like the Iron Warden's *Armoured ×8*, and you add 1 to each for every 10 the budget's over that. Challenges still run from 2 to 6. See [Multipliers](#s-tough-gm), [Multipliers](#s-tough) in Conflict and [The Bestiary](#bestiary).
+
+**How long a scene runs** is everything standing in the crew's way divided by half the actions they take a round, counting the ones they buy with Aura. See [How long a scene runs](#s-size-scene).
+
+**Every telegraph at the crew says Body, Mind or Soul**: blows and teeth at your Body, fear, lies and pressure at your Mind, and despair, temptation and curses at your Soul. Twenty Places, the Bestiary, the Threat Builder, the frames and the Tag Reference are redone to match. See [Telegraphs](#s-telegraphs) and [Twenty Places](#places).
+
+**Playing alone, the first hit that gets through to you each scene doesn't drop a track**, the way the Toughness Boon works, and one character as they start takes 4 off every multiplier. See [Solo With a GM](#s-solo-gm).
+
+**The GM's 1 Resolve for great roleplay is gone**, since Resolve's a track now. A great setup that doesn't land still gets 1 Aura. See [Aura](#s-aura).
+
+**Attuned things from the story have awakenings**, each with its own way to Aura, and their Burdens come off the new menu. See [Attuned Things from the Story](#s-rare).
+
+**In the frames**, Depth brings your Resolve up a size for every level you leave behind, Dread comes at your Mind, a favour called in brings your Resolve up a size like any bond thread, and the ship's and a holding's tags are a step for 1 Aura. See [Frames](#frames).
+
+**The *Healers* crew asset** puts one of everyone's tracks up a size, once a session. See [Crew assets](#s-crew-tags).
+
+**The rest of the book reads the new way**: [Tactical Play](#tactics), [Magic](#magic), [Chases](#chases), [Travelling](#travelling), [Exploring](#exploring), [Investigating](#investigating), [Growing](#growing), [Coin and Kit](#coin-kit), [Running the Game](#running), [Playing Alone](#solo), [the sheets](#appendix-sheet), [every lever](#appendix-levers), [the glossary](#appendix-glossary) and the index. The full fight in [Conflict](#s-fight) runs as a breather, since its Wardens are only half-woken.
+
 ## 9 Nov 2026: No more traits {#c-2026-11-09-traits}
 
 Mo's call in chat.
@@ -38,7 +64,7 @@ Mo's calls in chat, after four weeks of playtests.
 
 **The six crew are rebuilt** on Roots and specialties, with their armour and attuned things to match. See [the crew](#s-pregens).
 
-The rest of the book and the character companion catch up next, so till then a few chapters still say set actions or the wound die, and the companion plays the old way.
+The rest of the book caught up on 9 Nov. The character companion's next, so till then it plays the old way.
 
 ## 28 Oct 2026: Only people add Power {#c-2026-10-28-power}
 

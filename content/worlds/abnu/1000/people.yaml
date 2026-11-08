@@ -17,7 +17,7 @@ people:
     tags: [{ text: Knows Your Plans, kind: comes }, { text: Politically Untouchable, kind: keeps }, { text: Tired, kind: drives }]
     voice: Quiet and courteous, and he asks your name though he already knows it.
     teles:
-      - { text: "The emperor says he's read the crew's file, and quotes it back to them.", d: 10, at: "Confidence, Shaken" }
+      - { text: "The emperor says he's read the crew's file, and quotes it back to them.", d: 10, at: "Mind, Shaken" }
     hooks:
       - "The emperor asks to see one of the crew alone, and won't say why"
     secret:
@@ -46,7 +46,7 @@ people:
     tags: [{ text: Well-Connected, kind: keeps }, { text: Bound by Rules, kind: keeps }, { text: Proud, kind: drives }]
     voice: Brisk and exact, and she never says anything she'd mind seeing written down.
     teles:
-      - { text: "Odile Garran says there's a form for that, and hands it over.", d: 8, at: "Confidence, Brushed Off" }
+      - { text: "Odile Garran says there's a form for that, and hands it over.", d: 8, at: "Mind, Brushed Off" }
     hooks:
       - "She's lost a piece of paper for the first time in thirty years, and she needs it found before anyone knows"
 
@@ -80,7 +80,7 @@ people:
     tags: [{ text: Well-Read, kind: drives }, { text: Secretly Kind, kind: drives }, { text: Overlooked, kind: keeps }]
     voice: Barely above a whisper, and she always knows the shelf number.
     teles:
-      - { text: "The Keeper says that book was never catalogued, and goes back to her ledger.", d: 6, at: "Confidence, Brushed Off" }
+      - { text: "The Keeper says that book was never catalogued, and goes back to her ledger.", d: 6, at: "Mind, Brushed Off" }
     hooks:
       - "The Keeper needs a book out of the city before the Soulless read the visitor log"
     secret:
@@ -121,7 +121,7 @@ people:
     tags: [{ text: Knows the Waterfront, kind: keeps }, { text: Tired, kind: drives }, { text: Guilty, kind: drives }]
     voice: Low and careful, and he looks over his shoulder before he says a name.
     teles:
-      - { text: "Merren Vast says he never saw the crew, and turns his back.", d: 6, at: "Confidence, Brushed Off" }
+      - { text: "Merren Vast says he never saw the crew, and turns his back.", d: 6, at: "Mind, Brushed Off" }
     hooks:
       - "Two nights ago Merren read a manifest instead of signing it, and he needs somebody to tell what it said"
     secret:
@@ -213,7 +213,7 @@ people:
     tags: [{ text: Commanding, kind: comes }, { text: Hits Like a Wagon, kind: comes }, { text: Keeps Its Word, kind: drives }]
     voice: Blunt and slow, and she'll ask about your scars before your name.
     teles:
-      - { text: "Queen Signe stands, and the hall goes quiet.", d: 10, at: "Confidence, Shaken" }
+      - { text: "Queen Signe stands, and the hall goes quiet.", d: 10, at: "Mind, Shaken" }
     hooks:
       - "The queen wants the new shaft finished, and the clans have stopped going down it"
     secret:

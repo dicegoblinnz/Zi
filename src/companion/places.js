@@ -688,7 +688,7 @@ export function makePlaces(w) {
       const p = findPage(doc, el.dataset.id);
       const t = p?.teles.find((x) => x.id === el.dataset.lid);
       if (!t || !d.tele) return;
-      const cond = t.at.split(",").map((x) => x.trim()).filter((x) => !/^(Defend|Confidence)$/.test(x) && /^[A-Z][a-z]+$/.test(x));
+      const cond = t.at.split(",").map((x) => x.trim()).filter((x) => !/^(Body|Mind|Soul|Defend|Confidence)$/.test(x) && /^[A-Z][a-z]+$/.test(x));
       // A place's telegraph that starts with someone in it is theirs:
       // "Orla raps her cane" is Orla Strand's.
       let who = p.name;
@@ -699,7 +699,7 @@ export function makePlaces(w) {
       }
       // Its words and what it's aimed at go too, so one at a stake, the scene
       // clock or a part of the place comes aimed there (table.js).
-      d.tele(id, { who: who.slice(0, 60), does: `${flat(t.text)}${cond.length ? ` (${cond.join(", ")})` : ""}`.slice(0, 140), d: t.d, kind: /\bConfidence\b/.test(t.at) ? "fear" : "blow", text: flat(t.text), at: t.at, page: p.name });
+      d.tele(id, { who: who.slice(0, 60), does: `${flat(t.text)}${cond.length ? ` (${cond.join(", ")})` : ""}`.slice(0, 140), d: t.d, kind: /\b(Mind|Soul|Confidence)\b/.test(t.at) ? "fear" : "blow", text: flat(t.text), at: t.at, page: p.name });
     },
   };
 

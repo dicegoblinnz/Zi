@@ -40,7 +40,7 @@ Nothing's been rolled yet. Now that you know exactly what's coming, it's up to y
 -   **Body, Mind or Soul.** Blows, blades, teeth and falling rocks are at your Body. Fear, lies and pressure are at your Mind. Despair, temptation, curses and anything trying to take you over are at your Soul.
 -   **One die at each person.** A threat can telegraph at several of you, but it only aims one die at each, unless a tag says it can do more, like *Flurry*. To spread you thin, the GM aims at more of you, not more dice at one.
 -   **Anything can telegraph.** It can be a threat, the ground (the fire spreads to the stair), an event (the bell starts to ring), or something the GM's just decided the scene needs. If it's on the table, it came with a die.
--   **The GM has a budget.** It works out at about 5 steps a round for each of you, so about a d10 each, and she can split it into smaller telegraphs at more of you. Within it, threats can do as much as the story allows. The details are in [Running the Game](#s-budget), and you never need to track it.
+-   **The GM has a budget.** It works out at about 10 steps a round for each of you, so about two d10s each, and she can split it into smaller telegraphs at more of you. Within it, threats can do as much as the story allows. The details are in [Running the Game](#s-budget), and you never need to track it.
 -   **Telegraphs are honest.** The GM never hides a telegraph's size or its target.
 -   **Running doesn't dodge.** A telegraph aimed at you lands on you at the end of the round, wherever you've gone. It's already coming. To stop it, answer it. A telegraph aimed at a place, like the burning stair or the doorway under the chandelier, only hits whoever's in it when it lands, so getting out of there gets you clear.
 -   **Some telegraphs have only one answer.** If the GM says so when she telegraphs it, that's what happens if it lands, and there's no trading it for something else.
@@ -228,7 +228,7 @@ A vault door is Challenge 4, and three tags keep it shut: *Oak*, *Iron Bars* and
 Some tags take more than one win to strip, and they carry a **multiplier**: *Armoured ×4* takes four wins, *Shield ×3* takes three and *Sword ×2* takes two. A tag with no multiplier goes in one win, the same as always. Every win ticks one off, and the GM says what's left out loud: *"Armoured ×2 left."* [Vulnerabilities](#s-vulnerable) add more ticks, and you choose where they go. A multiplier never changes the threat's dice. It's only how many wins the tag takes.
 
 -   **Most threats don't need them.** They're for bosses and the few things built to last.
--   **A multiplier's as big as the creature needs**, and where it goes says what the creature is. Its Challenge is a good place to start, then go up or down from there: a dragon's hide might be *Hide ×8*, and a dark paladin who's the villain of the whole arc might be *Plate Armour ×5* and *Shield ×3*. Keep it in proportion to who they are, and make sure it makes sense.
+-   **A multiplier's as big as the creature needs**, and where it goes says what the creature is. Its Challenge plus 2 is a good place to start, then go up or down from there: a dragon's hide might be *Hide ×10*, and a dark paladin who's the villain of the whole arc might be *Plate Armour ×7* and *Shield ×5*. Keep it in proportion to who they are, and make sure it makes sense.
 -   **A named tag only ticks to what fits it.** Blades and hammers tick *Natural Armour*, shaming a captain in front of his men ticks *Commanding Presence*, and bribes and threats tick a crowd that's *Loyal ×3*.
 -   **Some come first.** A tag marked *first*, like *Natural Armour ×5 (first)*, has to go before anything under it can be stripped.
 -   **Every die can tick it.** Call several dice at it, each as its own intent. It rolls its defence once that round, and every die that beats that roll ticks one off.
@@ -237,11 +237,11 @@ Some tags take more than one win to strip, and they carry a **multiplier**: *Arm
 -   **Conditions tick too.** A spent condition that would strip a tag, like *Burning*, ticks one off instead.
 
 :::example[Through the hide]
-The thing under the bridge is Challenge 5, and it's *Natural Armour ×5 (first)*, *Relentless* and *Hungry*. Nothing touches *Relentless* or *Hungry* until the armour's gone.
+The thing under the bridge is Challenge 5, and it's *Natural Armour ×7 (first)*, *Relentless* and *Hungry*. Nothing touches *Relentless* or *Hungry* until the armour's gone.
 
-Bram goes at the hide first, with his Body and his Shieldwork and his hammer, 10 steps, a d12 and a d8, each one its own intent on the hide. He's the first to go at it this round, so he rolls its d10 as well, and it comes up 6. His d12 rolls 9 and his d8 rolls 4, so that's one off, and it's *Natural Armour ×4*.
+Bram goes at the hide first, with his Body and his Shieldwork and his hammer, 10 steps, a d12 and a d8, each one its own intent on the hide. He's the first to go at it this round, so he rolls its d10 as well, and it comes up 6. His d12 rolls 9 and his d8 rolls 4, so that's one off, and it's *Natural Armour ×6*.
 
-Ash throws fire at the same hide with her Soul and her Fire and her ember stone, 10 steps, a d12 and a d8, both at the hide. The thing's 6 still stands, so nobody rolls its d10 again. Ash's d8 comes up 8, its top face, and her d12 comes up 7, so that's two more off, and it's *Natural Armour ×2*, and 3 Aura for her. Her 8 doesn't do any more than her 7, because a win ticks one off however high it rolls. Another round like that and the crew's into it.
+Ash throws fire at the same hide with her Soul and her Fire and her ember stone, 10 steps, a d12 and a d8, both at the hide. The thing's 6 still stands, so nobody rolls its d10 again. Ash's d8 comes up 8, its top face, and her d12 comes up 7, so that's two more off, and it's *Natural Armour ×4*, and 3 Aura for her. Her 8 doesn't do any more than her 7, because a win ticks one off however high it rolls. A round or two more like that and the crew's through it.
 :::
 
 ### Hidden tags and weak points {#s-hidden}
@@ -515,7 +515,7 @@ The corridor's thirty feet of polished marble, lit by candles in iron brackets. 
 
 **Ground:** *Candlelight, Narrow Stair*, and one hidden tag.
 
-**Telegraphs:** about 5 steps a round for each of the four, so about 20.
+**Telegraphs:** about 10 steps a round for each of the four is 40, but the Wardens are only half-woken, so the GM runs it as a breather, about half that: 20.
 :::
 
 That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way. Everyone's tracks are on d12. Bram's wearing Fine plate and a Common shield, and Vesk's got her Common worn leathers, all of it Body armour. Everyone's got 5 Aura, and it'll come and go all fight.
@@ -526,7 +526,7 @@ That's four keeps-it-going tags each, so grinding a Warden down will take four w
 **GM:** The left Warden closes in to pin Bram against the wall, that's a d10 at his Body. As it passes, it sweeps its spear low at Vesk, a d8 at her Body. The right Warden drives its spear at Isolde, a d10 at her Body, and plants itself in the vault doorway, another d10. And the maid's going to bolt up the stair and wake the house. That's a d4, and it's only got one answer: if it lands, the household clock drops two sizes.
 :::
 
-That's 5 + 4 + 5 + 5 + 2 = 21 steps, about what four players get, and it's five telegraphs against four actions. The sweep at Vesk's a glancing blow as it goes past, so the GM makes it smaller than it could be.
+That's 5 + 4 + 5 + 5 + 2 = 21 steps, a breather for four players, and it's five telegraphs against four actions. The sweep at Vesk's a glancing blow as it goes past, so the GM makes it smaller than it could be.
 
 **Bram** goes first. Isolde's Body is 0, there's a spear coming at her, and Bram's a [Guardian](#a-guardian).
 
@@ -644,7 +644,7 @@ The work on *Leave no trace* kept its clock where it was, and *The household wak
 
 ### Round 3: The turn {#round-3-the-turn}
 
-The GM leans in. The right Warden abandons the doorway and comes for Isolde with everything it's got: a d10 at her Body, a d10 at Bram's and a d10 at Vesk on the rope. The butler's lantern appears on the main stair, a d8 aimed at *Leave no trace*. Then the GM plays her twist. The portrait that whispered Isolde's name speaks out loud, and it knows the name of the person inside the second Warden.
+The GM leans in. The right Warden abandons the doorway and comes for Isolde with everything it's got: a d10 at her Body, a d10 at Bram's and a d10 at Vesk's, up on the rope. The butler's lantern appears on the main stair, a d8 aimed at *Leave no trace*. Then the GM plays her twist. The portrait that whispered Isolde's name speaks out loud, and it knows the name of the person inside the second Warden.
 
 Isolde doesn't go for the second sigil. She speaks the name instead, which is the other way to end it, because the hidden tag *A Person Inside* is a weak point of its own. That's her Soul and The dead, 5 steps. A hundred years isn't recent, so speaking to this one is going beyond, and that's 1 Aura. She brings in *A Person Inside*, a tag she knows, for 1 Aura more, and that makes 6 steps, a d12. The right Warden's d10 rolls 6, and her d12 comes up 12, its top face, so that's 2 Aura back. The right Warden kneels on the marble, and its three telegraphs go with it.
 

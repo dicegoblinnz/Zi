@@ -96,20 +96,22 @@ function telegraph(line, owner, ctx, warn) {
   const m = line.match(/^\*(.+)\* \(d(\d+), (.+)\)\.?$/);
   const d = Number(m?.[2]);
   if (!m || !SIZES.includes(d)) {
-    warn(`can't read the telegraph ${line.slice(0, 50)} (like *She swings.* (d8, Defend))`);
+    warn(`can't read the telegraph ${line.slice(0, 50)} (like *She swings.* (d8, Body))`);
     return null;
   }
   let { who, does } = whoAndDoes(m[1], owner);
   if (/^(He|She|It|They)$/.test(who)) who = owner;
   const parts = m[3].split(", ");
   const lands = [];
-  while (parts.length > 1 && /^[A-Z]/.test(parts[parts.length - 1]) && !/^(Defend|Confidence)$/.test(parts[parts.length - 1])) lands.unshift(parts.pop());
+  while (parts.length > 1 && /^[A-Z]/.test(parts[parts.length - 1]) && !/^(Body|Mind|Soul)$/.test(parts[parts.length - 1])) lands.unshift(parts.pop());
   const at = parts.join(", ");
-  const kind = /^(Defend|Confidence)$/.test(at) ? "crew" : /, (Defend|Confidence)$/.test(at) || /^(everyone|whoever|anyone)\b/i.test(at) ? "place" : "stake";
+  const kind = /^(Body|Mind|Soul)$/.test(at) ? "crew" : /, (Body|Mind|Soul)$/.test(at) || /^(everyone|whoever|anyone)\b/i.test(at) ? "place" : "stake";
+  // One of the crew's Body, Mind or Soul reads as theirs on the card.
+  const atText = kind === "crew" ? `their ${at}` : at.replace(/^(.*), (Body|Mind|Soul)$/, "the $2 of $1");
   return el("article", { className: ["tele"] }, [
     el("p", { className: ["tele-k"] }, [txt("Telegraph")]),
     el("div", { className: ["tele-b"] }, [dieOf(d), el("div", {}, [el("p", { className: ["tele-who"] }, [txt(who)]), el("p", { className: ["tele-does"] }, inl(does))])]),
-    el("p", { className: ["tele-at"] }, [raw(ICON[kind]), el("span", {}, [txt(`At ${at}`)]), ...lands.map((c) => chip(c, ctx, ["cond"]))]),
+    el("p", { className: ["tele-at"] }, [raw(ICON[kind]), el("span", {}, [txt(`At ${atText}`)]), ...lands.map((c) => chip(c, ctx, ["cond"]))]),
   ]);
 }
 

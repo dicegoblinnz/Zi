@@ -27,8 +27,8 @@ places:
       - "*The Imperial Roads*: a day on them covers what two would anywhere else, and every inn on them talks to the Watch"
       - "*Stronger Together*: an Alystan crowd moves as one, so start trouble with one of them and you've started it with all of them"
     teles:
-      - { text: "A Watch patrol on the road stops the crew and asks for their papers.", d: 6, at: "Confidence, Under Suspicion" }
-      - { text: "Somebody notices one of the crew isn't wearing an amulet, and says so loudly.", d: 6, at: "Confidence, Watched" }
+      - { text: "A Watch patrol on the road stops the crew and asks for their papers.", d: 6, at: "Mind, Under Suspicion" }
+      - { text: "Somebody notices one of the crew isn't wearing an amulet, and says so loudly.", d: 6, at: "Mind, Watched" }
     hooks:
       - "Soul sight's a crime since the ban, and someone the crew loves has started seeing souls"
       - "Montia's captains won't carry imperial cargo east, and a merchant's paying well for anyone who will"
@@ -66,7 +66,7 @@ places:
     twist: The emperor's banned the Seven, and the whole city's watching to see who still looks at the statue.
     teles:
       - { text: "A clerk smiles and says the form's the wrong colour.", d: 6, at: "a signature" }
-      - { text: "The Watch closes the street and starts checking faces.", d: 8, at: "Confidence, Under Suspicion" }
+      - { text: "The Watch closes the street and starts checking faces.", d: 8, at: "Mind, Under Suspicion" }
     hooks:
       - "Someone's bought up every copy of a pamphlet about the statue, and the crew's been asked to find the printer first"
     note: >-
@@ -100,7 +100,7 @@ places:
     twist: The Chancellor's already got a file on the crew, and it's thicker than it should be.
     teles:
       - { text: "Odile Garran thanks the crew for coming and says the emperor's busy.", d: 8, at: "an audience" }
-      - { text: "A guard steps out of an alcove and takes hold of the nearest arm.", d: 8, at: "Defend, Grabbed" }
+      - { text: "A guard steps out of an alcove and takes hold of the nearest arm.", d: 8, at: "Body, Grabbed" }
       - { text: "Halden Moor locks the door behind the crew and pockets the key.", d: 6, at: "the study" }
     hooks:
       - "The Chancellor wants something found in the city quietly, and she doesn't trust the Watch with it"
@@ -137,8 +137,8 @@ places:
     clock: { d: 8, text: "Whoever's watching has the crew's faces, and follows them home." }
     twist: Someone left flowers on the plinth last night, and the Watch is paying for a name.
     teles:
-      - { text: "A Watchman asks why the crew stopped, and takes out his notebook.", d: 6, at: "Confidence, Under Suspicion" }
-      - { text: "A loose block slides off the rubble as someone climbs.", d: 6, at: "Defend, Prone" }
+      - { text: "A Watchman asks why the crew stopped, and takes out his notebook.", d: 6, at: "Mind, Under Suspicion" }
+      - { text: "A loose block slides off the rubble as someone climbs.", d: 6, at: "Body, Prone" }
       - { text: "A stranger who's been watching all day turns and walks off fast.", d: 8, at: "the flowers" }
     hooks:
       - "Seven flowers turn up on the plinth every morning, and somebody wants the crew to find out who leaves them before the Watch does"
@@ -168,7 +168,7 @@ places:
     clock: { d: 8, text: "The crew's names go into the visitor log, and someone reads it that night." }
     twist: Someone with no name on his papers has asked for the visitor log twice this month.
     teles:
-      - { text: "A clerk asks the crew to sign the visitor log, pen held out.", d: 6, at: "Confidence, Watched" }
+      - { text: "A clerk asks the crew to sign the visitor log, pen held out.", d: 6, at: "Mind, Watched" }
       - { text: "The Keeper says the book they want's out for rebinding.", d: 8, at: "the Seven's texts" }
     hooks:
       - "The Keeper needs a book carried out of the city before the next inspection, and she can't carry it herself"
@@ -208,8 +208,8 @@ places:
     clock: { d: 8, text: "The crates go out on the morning carts, and whatever's in them is gone." }
     twist: Merren Vast read a manifest two nights ago instead of signing it, and somebody's noticed.
     teles:
-      - { text: "A docker swings a crate round on a hook, right at whoever's in the way.", d: 6, at: "Defend, Prone" }
-      - { text: "A customs man asks what's in the crew's bags, and he's already looking.", d: 6, at: "Confidence, Under Suspicion" }
+      - { text: "A docker swings a crate round on a hook, right at whoever's in the way.", d: 6, at: "Body, Prone" }
+      - { text: "A customs man asks what's in the crew's bags, and he's already looking.", d: 6, at: "Mind, Under Suspicion" }
       - { text: "A cart pulls up for the crates with no mark, an hour early.", d: 8, at: "a crate with no mark" }
     hooks:
       - "Merren Vast needs someone to read a manifest he wishes he hadn't"
@@ -242,8 +242,8 @@ places:
     clock: { d: 8, text: "The Widow hears the crew's in her streets, and sends for them." }
     twist: A boy took his amulet off on a dare yesterday, and the whole street's talking about what happened to his eyes.
     teles:
-      - { text: "Somebody shouts from a window that there are strangers in the street.", d: 6, at: "Confidence, Watched" }
-      - { text: "The Widow's lads block the alley at both ends and smile.", d: 8, at: "Defend, Pinned" }
+      - { text: "Somebody shouts from a window that there are strangers in the street.", d: 6, at: "Mind, Watched" }
+      - { text: "The Widow's lads block the alley at both ends and smile.", d: 8, at: "Body, Pinned" }
     hooks:
       - "Nobody's asked why the Ninth gets more free amulets than anywhere in the world, and the Widow would love to know"
     secret:
@@ -279,7 +279,7 @@ places:
     twist: The Watch has finally been ordered in, to close the shrine.
     teles:
       - { text: "The tide turns, and the water's up to the knee and rising.", d: 8, at: "the scene clock" }
-      - { text: "A smuggler drops out of a grate behind the crew with a knife.", d: 6, at: "Defend, Grabbed" }
+      - { text: "A smuggler drops out of a grate behind the crew with a knife.", d: 6, at: "Body, Grabbed" }
     hooks:
       - "The ferryman's the only one who knows where a missing friend went, and he wants a favour first"
       - "Someone's mapping the old tunnels for the first time in a century, and the smugglers want them stopped"
@@ -310,7 +310,7 @@ places:
     twist: There's a lamp burning halfway down the stair, and nobody at the station will say whose it is.
     teles:
       - { text: "A bell rings somewhere in the walls, and doors start shutting.", d: 8, at: "the scene clock" }
-      - { text: "A guard with no badge steps out of a doorway, already swinging.", d: 8, at: "Defend, Staggered" }
+      - { text: "A guard with no badge steps out of a doorway, already swinging.", d: 8, at: "Body, Staggered" }
       - { text: "A scholar sweeps the papers into a stove.", d: 6, at: "the station's records" }
     hooks:
       - "Someone the crew knows went to work at a station inland and stopped writing home"
@@ -349,8 +349,8 @@ places:
       - "*A Promise Is a Debt*: give a Soth your word and they'll hold you to it, and if you break it every clan hears"
       - "*Clear It or Go Round*: Soths jump the chasms other people bridge, so the paths go straight over and the roads go round"
     teles:
-      - { text: "A clan warrior hears the crew make a promise too lightly, and draws.", d: 8, at: "Defend, Staggered" }
-      - { text: "A Soth asks about one of the crew's scars, and waits for the true answer.", d: 6, at: "Confidence, Shaken" }
+      - { text: "A clan warrior hears the crew make a promise too lightly, and draws.", d: 8, at: "Body, Staggered" }
+      - { text: "A Soth asks about one of the crew's scars, and waits for the true answer.", d: 6, at: "Mind, Shaken" }
     hooks:
       - "The worst insult a Soth has means you would be believed, and someone's just said it to one of the crew"
     note: >-
@@ -380,7 +380,7 @@ places:
     clock: { d: 8, text: "The council decides without the crew, and the clans ride." }
     twist: The clans want the queen to say out loud what she thinks of Alysta's ban, and she won't.
     teles:
-      - { text: "A clan chief calls the crew liars to their faces, and waits.", d: 8, at: "Confidence, Shaken" }
+      - { text: "A clan chief calls the crew liars to their faces, and waits.", d: 8, at: "Mind, Shaken" }
       - { text: "Mornhold's Guard close the road behind the crew.", d: 6, at: "the queen's ear" }
     hooks:
       - "A Soth chief wants a debt paid, and the crew's name is on it"
@@ -414,8 +414,8 @@ places:
     clock: { d: 8, text: "The shift ends, and the smiths decide who leaves with a blade." }
     twist: The new shaft's ore is late again, and the smiths want somebody to go and find out why.
     teles:
-      - { text: "A smith holds out his hand and asks one of the crew to test a blade on it.", d: 6, at: "Confidence, Shaken" }
-      - { text: "A white-hot bar swings round on its chain.", d: 8, at: "Defend, Burning" }
+      - { text: "A smith holds out his hand and asks one of the crew to test a blade on it.", d: 6, at: "Mind, Shaken" }
+      - { text: "A white-hot bar swings round on its chain.", d: 8, at: "Body, Burning" }
     hooks:
       - "The new shaft keeps coming up short, and the smiths are offering a marked blade to anyone who'll go and look"
 
@@ -440,8 +440,8 @@ places:
     clock: { d: 6, text: "The clans close the valley, and nobody else goes down the new shaft." }
     twist: Two clans are arguing over who gets the new shaft's ore, and neither's been paid yet.
     teles:
-      - { text: "An ore cart comes loose at the top of the track.", d: 8, at: "Defend, Prone" }
-      - { text: "A clan chief wants to know whose valley the crew thinks they're in.", d: 6, at: "Confidence, Shaken" }
+      - { text: "An ore cart comes loose at the top of the track.", d: 8, at: "Body, Prone" }
+      - { text: "A clan chief wants to know whose valley the crew thinks they're in.", d: 6, at: "Mind, Shaken" }
     hooks:
       - "The Forge wants the new shaft finished, and the miners have stopped going down it"
     secret:
@@ -475,7 +475,7 @@ places:
     clock: { d: 8, text: "Hild decides the crew owes the Stones a favour, and names it." }
     twist: A student opened in the night and can't stop glowing, and the trials aren't for another month.
     teles:
-      - { text: "A monk steps into the crew's way and asks what they've come to give.", d: 6, at: "Confidence, Shaken" }
+      - { text: "A monk steps into the crew's way and asks what they've come to give.", d: 6, at: "Mind, Shaken" }
       - { text: "Hild looks at one of the crew a long moment and says they're not ready.", d: 8, at: "a place in the trials" }
     hooks:
       - "The Stones are owed a favour by someone the crew needs, and Hild will trade it"
@@ -510,8 +510,8 @@ places:
     clock: { d: 8, text: "The market closes, and the clans go home with their prices settled." }
     twist: A cart of Xurux's amulets came in by a back road, and the border captain wants to know who let it through.
     teles:
-      - { text: "A trader says one of the crew cheated him, loud enough for the whole square.", d: 6, at: "Confidence, Under Suspicion" }
-      - { text: "The herd breaks out of its pen and straight through the market.", d: 8, at: "everyone in the market, Defend, Prone" }
+      - { text: "A trader says one of the crew cheated him, loud enough for the whole square.", d: 6, at: "Mind, Under Suspicion" }
+      - { text: "The herd breaks out of its pen and straight through the market.", d: 8, at: "everyone in the market, Body, Prone" }
     hooks:
       - "The border captain's turned back a cart with something on it that isn't amulets, and he wants it looked at"
 
@@ -539,8 +539,8 @@ places:
     clock: { d: 6, text: "The tunnels behind the crew are filled in, and the only way out's through the eldest." }
     twist: The Soths' new shaft is three walls from Melammu's cavern, and the diggers can hear the picks.
     teles:
-      - { text: "The tunnel ahead fills with earth, and so does the one behind.", d: 8, at: "Defend, Pinned" }
-      - { text: "A Tunnel Warden takes hold of the nearest ankle from below.", d: 6, at: "Defend, Grabbed" }
+      - { text: "The tunnel ahead fills with earth, and so does the one behind.", d: 8, at: "Body, Pinned" }
+      - { text: "A Tunnel Warden takes hold of the nearest ankle from below.", d: 6, at: "Body, Grabbed" }
       - { text: "The eldest shuts their eyes and says the crew can't be let go.", d: 8, at: "safe passage" }
     hooks:
       - "The molefolk need the Soths' shaft stopped without anyone finding out why"
@@ -581,7 +581,7 @@ places:
     twist: The cutters stopped a Free Captain last night and found nothing, and now they're stopping everyone.
     teles:
       - { text: "A customs cutter swings across the harbour mouth.", d: 8, at: "a berth out" }
-      - { text: "A Free Captain decides the crew owes him for the drinks.", d: 6, at: "Confidence, Shaken" }
+      - { text: "A Free Captain decides the crew owes him for the drinks.", d: 6, at: "Mind, Shaken" }
     hooks:
       - "The Rusks are paying a lot for someone to keep the cutters busy for one night"
     secret:
@@ -616,7 +616,7 @@ places:
     stakes:
       - "*A word with the amulet houses*, Challenge 4: *Someone Must Agree*, *Proof Needed* (they don't talk to the living)"
     teles:
-      - { text: "A dead clerk asks the crew, politely, to wait at the gate.", d: 6, at: "Confidence, Brushed Off" }
+      - { text: "A dead clerk asks the crew, politely, to wait at the gate.", d: 6, at: "Mind, Brushed Off" }
     hooks:
       - "One of the dead wants a message carried to someone living, before they cease"
     note: >-
@@ -646,8 +646,8 @@ places:
     clock: { d: 8, text: "The morning carts leave, and whatever's on them is on the road." }
     twist: The Soths turned back three carts this week, and the carters want someone to ride the coast road with them.
     teles:
-      - { text: "A carter cracks his whip and the mules go, cart and all, at whoever's in front.", d: 6, at: "Defend, Prone" }
-      - { text: "The gatekeeper says the crew isn't on the list.", d: 8, at: "Confidence, Brushed Off" }
+      - { text: "A carter cracks his whip and the mules go, cart and all, at whoever's in front.", d: 6, at: "Body, Prone" }
+      - { text: "The gatekeeper says the crew isn't on the list.", d: 8, at: "Mind, Brushed Off" }
     hooks:
       - "An imperial buyer's order has gone up again this year, and a carter wants to know where so many amulets go"
 
@@ -674,7 +674,7 @@ places:
     twist: The other amulet houses have stopped sending their smiths here to train since the master started asking questions.
     teles:
       - { text: "A dead smith quietly closes the pattern book.", d: 6, at: "the ward patterns" }
-      - { text: "The master asks the crew a question he shouldn't, and waits for the answer.", d: 8, at: "Confidence, Shaken" }
+      - { text: "The master asks the crew a question he shouldn't, and waits for the answer.", d: 8, at: "Mind, Shaken" }
     hooks:
       - "The master wants one of his amulets taken to someone who can read the ward pattern, and brought back with an answer"
     secret:
@@ -705,7 +705,7 @@ places:
       - "*Which Day Are You On*: half the people you meet are sharp and quick, and the other half can barely look at you"
       - "*Jak's Dream*: breathe the smoke and you might see something true, and you'll pay for it with a day in the dark"
     teles:
-      - { text: "Smoke off a leaf fire rolls across the road, thick and sweet.", d: 6, at: "everyone on the road, Confidence, Seeing Things" }
+      - { text: "Smoke off a leaf fire rolls across the road, thick and sweet.", d: 6, at: "everyone on the road, Mind, Seeing Things" }
     hooks:
       - "An Orzaini seer saw the crew in a vision, and she's been waiting at the border for a week"
     note: A few Orzaini have tried to change what they saw, and how that went is most of Orzaini literature.
@@ -733,7 +733,7 @@ places:
     clock: { d: 8, text: "The city goes grey for its day off, and nobody'll talk till tomorrow." }
     twist: It's the city's grey day, and the one person the crew needs is asleep behind a shuttered window.
     teles:
-      - { text: "A seer grabs one of the crew by the sleeve and says she's seen how this ends.", d: 6, at: "Confidence, Shaken" }
+      - { text: "A seer grabs one of the crew by the sleeve and says she's seen how this ends.", d: 6, at: "Mind, Shaken" }
       - { text: "The seer slumps back into the smoke, and the vision's gone till tomorrow.", d: 8, at: "a seer's vision" }
     hooks:
       - "The prince wants a book out of the Sealed Archive, and he'll pay in visions"
@@ -763,7 +763,7 @@ places:
       - "*Everything Has a Price*: anything can be made fast, if you pay extra"
       - "*No Amulets*: nobody here wears one, so soul sight sees everyone as they are"
     teles:
-      - { text: "A steam carriage comes round the corner faster than it should.", d: 6, at: "Defend, Prone" }
+      - { text: "A steam carriage comes round the corner faster than it should.", d: 6, at: "Body, Prone" }
     hooks:
       - "A soul-worker who got out of Alysta wants her family brought over the border too"
 
@@ -791,7 +791,7 @@ places:
     clock: { d: 8, text: "The Council sits, and decides without anyone from outside the Union in the room." }
     twist: Alysta's envoy is in the city asking for a runaway soul-worker back, and the Union's being very polite about it.
     teles:
-      - { text: "A gas lamp bursts over the bridge, and the flames come down.", d: 6, at: "Defend, Burning" }
+      - { text: "A gas lamp bursts over the bridge, and the flames come down.", d: 6, at: "Body, Burning" }
       - { text: "The smith says it'll cost double to start it this week.", d: 6, at: "a commission" }
     hooks:
       - "Maren Aldaz needs a crate brought in from the coast with nobody looking inside it"
@@ -825,7 +825,7 @@ places:
     twist: The vote for the next seat on the Nine is tomorrow, and every member in the building's being bought a drink.
     teles:
       - { text: "A librarian asks whose ticket the crew's using.", d: 6, at: "a member's ticket" }
-      - { text: "A ladder and a shelf of books come down off the high stacks.", d: 6, at: "Defend, Pinned" }
+      - { text: "A ladder and a shelf of books come down off the high stacks.", d: 6, at: "Body, Pinned" }
     hooks:
       - "A scholar's found a page in the stacks about what the Union's racing to finish, and she's scared of it"
 
@@ -850,7 +850,7 @@ places:
     clock: { d: 8, text: "The surveyors set out without the crew." }
     twist: The last survey team came back from the Green Silence and won't say a word about it.
     teles:
-      - { text: "A boiler blows its valve in a shriek of steam.", d: 6, at: "everyone in the foundry, Defend, Burning" }
+      - { text: "A boiler blows its valve in a shriek of steam.", d: 6, at: "everyone in the foundry, Body, Burning" }
       - { text: "The survey leader says they've already got a guide, and turns away.", d: 6, at: "the survey" }
     hooks:
       - "The surveyors want a guide who's been into the Green Silence and come out on their own"
@@ -874,7 +874,7 @@ places:
       - "*Cold Enough to Kill*: a night out here without shelter's a fight"
       - "*Taken for a Bush*: an Etweil who stands still isn't seen till they want to be"
     teles:
-      - { text: "The wind comes off the peaks and the snow with it.", d: 8, at: "everyone on the pass, Defend, Staggered" }
+      - { text: "The wind comes off the peaks and the snow with it.", d: 8, at: "everyone on the pass, Body, Staggered" }
     hooks:
       - "An Etweil guide's offered to take the crew through the southern passes, and won't say what she wants for it"
     note: Nobody's ever offered the Etweil an amulet.
@@ -902,7 +902,7 @@ places:
     clock: { d: 10, text: "Hessa stands up and walks the crew to the edge of town." }
     twist: The Union's surveyors are back, camped at the edge of town, waiting for a guide.
     teles:
-      - { text: "Hessa stands very still beside one of the crew, and waits.", d: 6, at: "Confidence, Unsettled" }
+      - { text: "Hessa stands very still beside one of the crew, and waits.", d: 6, at: "Mind, Unsettled" }
       - { text: "An elder says she'll think about it, and closes her eyes.", d: 8, at: "an elder's trust" }
     hooks:
       - "Hessa wants someone brought out of the Green Silence who went in on purpose"
@@ -935,7 +935,7 @@ places:
     twist: An Ezkian survey team went in three days ago, and the Etweil haven't brought them out yet.
     teles:
       - { text: "The path behind the crew isn't there any more.", d: 8, at: "the scene clock" }
-      - { text: "A Silent Walker steps out of the green and takes hold of an arm, gently.", d: 6, at: "Defend, Grabbed" }
+      - { text: "A Silent Walker steps out of the green and takes hold of an arm, gently.", d: 6, at: "Body, Grabbed" }
     hooks:
       - "The Union pays well for anyone who maps a mile of it and comes back with the map"
     note: What's in there, the Etweil don't say, and nobody who's come out has said either.
@@ -961,7 +961,7 @@ places:
       - "*Seven Doors*: every temple has them, and the seventh stays shut, never locked, just never opened"
       - "*They Say It Out Loud*: a Montian tells you what they think, in any port, to anyone"
     teles:
-      - { text: "A Montian asks which virtue the crew's carrying today, and waits for a real answer.", d: 6, at: "Confidence, Shaken" }
+      - { text: "A Montian asks which virtue the crew's carrying today, and waits for a real answer.", d: 6, at: "Mind, Shaken" }
     hooks:
       - "The eastern holding owes the Free City of Inkhal a winter's grain, and Inkhal's sent someone to collect"
     note: >-
@@ -991,8 +991,8 @@ places:
     clock: { d: 8, text: "The queen gives her judgement, and it stands." }
     twist: An imperial envoy's in the harbour asking Montia's captains to carry cargo east again, and the whole town's come to watch the queen say no.
     teles:
-      - { text: "Aurea Pell asks the crew which virtue they're carrying, in front of the whole court.", d: 8, at: "Confidence, Shaken" }
-      - { text: "A captain spits at the envoy's feet, and the envoy's guards draw.", d: 6, at: "everyone on the quay, Defend, Staggered" }
+      - { text: "Aurea Pell asks the crew which virtue they're carrying, in front of the whole court.", d: 8, at: "Mind, Shaken" }
+      - { text: "A captain spits at the envoy's feet, and the envoy's guards draw.", d: 6, at: "everyone on the quay, Body, Staggered" }
     hooks:
       - "The queen wants to know why Thelis turns her ships back from the Sundering Deep"
 
@@ -1018,7 +1018,7 @@ places:
     clock: { d: 8, text: "The fleet sails on the tide, with or without the crew." }
     twist: A whole crate of copied texts has gone missing from the copying house, and the scribes think it was one of their own.
     teles:
-      - { text: "A line goes taut as a ship pulls out, right across the quay.", d: 6, at: "everyone on the quay, Defend, Prone" }
+      - { text: "A line goes taut as a ship pulls out, right across the quay.", d: 6, at: "everyone on the quay, Body, Prone" }
       - { text: "The harbourmaster says the fleet's full this tide.", d: 6, at: "a berth with the fleet" }
     hooks:
       - "A pilgrim captain needs a book got onto Verrant Docks past the customs men"
@@ -1042,7 +1042,7 @@ places:
       - "*Four Hours on a Breath*: a Thelisian can wait you out under the water"
       - "*The Sea's Creatures*: anything that swims here might be listening for Thelis"
     teles:
-      - { text: "Something big moves under the boat, and the boat moves with it.", d: 8, at: "everyone in the boat, Defend, Prone" }
+      - { text: "Something big moves under the boat, and the boat moves with it.", d: 8, at: "everyone in the boat, Body, Prone" }
     hooks:
       - "A Thelisian's been seen ashore on Verrant Docks, asking for someone by name"
     note: Thelisians are raised to watch rather than act, and they feel older than everyone round them.
@@ -1101,7 +1101,7 @@ places:
     clock: { d: 6, text: "The Deep shakes, and the sea takes whatever's on it." }
     twist: The shaking's harder than anyone remembers, and a Montian ship's out there anyway, looking for why Thelis turns them back.
     teles:
-      - { text: "The sea heaves up from below, and the deck goes out from under everyone.", d: 8, at: "everyone on the deck, Defend, Prone" }
+      - { text: "The sea heaves up from below, and the deck goes out from under everyone.", d: 8, at: "everyone on the deck, Body, Prone" }
       - { text: "A shape the size of the ship rises alongside and turns it, gently, back the way it came.", d: 8, at: "a way across" }
     hooks:
       - "Montia's queen wants to know why Thelis turns ships back, and she's paying for someone to find out"
@@ -1136,7 +1136,7 @@ places:
       - "*The Rainforest*: thick, wet and full of things that bite, and every Cobrian knows the way through"
       - "*Rivers for Roads*: the quickest way anywhere's by boat"
     teles:
-      - { text: "Something in the canopy drops onto whoever's at the back.", d: 6, at: "Defend, Poisoned" }
+      - { text: "Something in the canopy drops onto whoever's at the back.", d: 6, at: "Body, Poisoned" }
     hooks:
       - "Cobrian children who open early keep going missing from the coast towns, and nobody's found where they go"
 
@@ -1162,7 +1162,7 @@ places:
     clock: { d: 8, text: "The Speaker's council rules against outsiders, and the river gates close." }
     twist: A ship left the coast with a Cobrian child aboard last week, and the Speaker wants to know whose ship it was.
     teles:
-      - { text: "The raft under the crew tips as someone shoves past.", d: 6, at: "Defend, Prone" }
+      - { text: "The raft under the crew tips as someone shoves past.", d: 6, at: "Body, Prone" }
       - { text: "Sevra says Cobria's bark is for Cobria, and turns away.", d: 8, at: "Fever Bark for Echily" }
     hooks:
       - "Sevra's sworn to find whoever's taking Cobria's children, and she'll trade anything for a name"
@@ -1186,7 +1186,7 @@ places:
       - "*Built to Be Left*: every town here can be packed and gone by morning"
       - "*Up High*: the only ways up are the glide, the climb and the long path"
     teles:
-      - { text: "A glider drops out of the sky onto whoever's out in the open.", d: 6, at: "Defend, Prone" }
+      - { text: "A glider drops out of the sky onto whoever's out in the open.", d: 6, at: "Body, Prone" }
     hooks:
       - "Echily's fire-lines have reached the river, and Cobria's hunters are coming to answer"
 
@@ -1212,7 +1212,7 @@ places:
     clock: { d: 8, text: "The council says the fever's Cobria's fault again, and the fire-lines go further." }
     twist: Neru wants Fever Bark badly enough to buy it from anyone, and someone's selling fakes.
     teles:
-      - { text: "A rope bridge swings hard as someone cuts one of its lines.", d: 8, at: "everyone on the bridge, Defend, Prone" }
+      - { text: "A rope bridge swings hard as someone cuts one of its lines.", d: 8, at: "everyone on the bridge, Body, Prone" }
       - { text: "Neru says she hasn't got time for this, and means it.", d: 6, at: "the council's ear" }
     hooks:
       - "Neru will pay anything for Fever Bark, and Cobria won't sell her any"
@@ -1243,7 +1243,7 @@ places:
       - "*Thin Air*: everyone but a Polythusian's short of breath up here"
       - "*Twelve Hours Down*: half the garrison's always asleep, and nothing wakes them"
     teles:
-      - { text: "A Leaper drops off the rocks into the middle of the path.", d: 6, at: "Defend, Staggered" }
+      - { text: "A Leaper drops off the rocks into the middle of the path.", d: 6, at: "Body, Staggered" }
     hooks:
       - "Inkhal's caravans are getting through at night, and the garrisons want to know how"
 
@@ -1269,7 +1269,7 @@ places:
     twist: One of the wall-captains has more silver than his pay explains, and the Second Watch has noticed.
     teles:
       - { text: "The gate comes down, and the crew's on the wrong side of it.", d: 8, at: "the toll" }
-      - { text: "A guard on the wall drops a rock on whoever's arguing.", d: 6, at: "Defend, Staggered" }
+      - { text: "A guard on the wall drops a rock on whoever's arguing.", d: 6, at: "Body, Staggered" }
     hooks:
       - "Tamsk wants to know who's selling his garrison's sleeping hours, and he'll waive the toll for a name"
 
@@ -1291,7 +1291,7 @@ places:
       - "*Day Heat*: out in the day, anyone but an Inkhalian's fighting the sun"
       - "*Still Is Gone*: an Inkhalian who lies against a wall can't be seen"
     teles:
-      - { text: "The sun comes over the ridge and the heat hits like a wall.", d: 8, at: "everyone in the open, Defend, Staggered" }
+      - { text: "The sun comes over the ridge and the heat hits like a wall.", d: 8, at: "everyone in the open, Body, Staggered" }
     hooks:
       - "Montia owes Inkhal a winter's grain for its eastern holding, and the Night Council's sent the crew to collect"
 
@@ -1318,7 +1318,7 @@ places:
     twist: A courier's gone missing with a satchel of letters, and three different buyers want them first.
     teles:
       - { text: "A courier brushes past, and one of the crew's letters is gone.", d: 6, at: "a letter" }
-      - { text: "The Night Watch steps out of a doorway nobody saw it in.", d: 8, at: "Defend, Grabbed" }
+      - { text: "The Night Watch steps out of a doorway nobody saw it in.", d: 8, at: "Body, Grabbed" }
     hooks:
       - "The Night Council's selling copies of letters it shouldn't have, and someone wants to know who's buying"
     secret:

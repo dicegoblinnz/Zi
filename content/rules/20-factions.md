@@ -6,7 +6,7 @@ order: 20
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-28
+updated: 2026-11-09
 ---
 :::quote
 The factions keep moving whatever the crew does, but the crew gets to choose where it stands.
@@ -18,7 +18,7 @@ A **faction** is any power bigger than one person, like a noble house, a guild, 
 
 You write a faction once, and from then on its card does the work. Take your time building it, the way you would a character, because after that it runs on one action a downtime. A faction's card has its name and nine lines:
 
--   **Power:** its die. It's **1 step, plus 1 for each lot of people who'll turn up when it calls**, so one army makes a d4 and five lots of people make a d12. Nothing else adds Power: a charter or an old name is an asset that does one thing. It's what the faction rolls when it acts and what it defends with. Leave out an asset that doesn't fit what it's doing, the same as a line on a set action: a navy doesn't help in the mountains. Its best people are threats with a Challenge to match, so a d8 Power sends Challenge 4, and its face can go higher than that.
+-   **Power:** its die. It's **1 step, plus 1 for each lot of people who'll turn up when it calls**, so one army makes a d4 and five lots of people make a d12. Nothing else adds Power: a charter or an old name is an asset that does one thing. It's what the faction rolls when it acts and what it defends with. Leave out an asset that doesn't fit what it's doing, the same as an item that doesn't fit your roll: a navy doesn't help in the mountains. Its best people are threats with a Challenge to match, so a d8 Power sends Challenge 4, and its face can go higher than that.
 -   **Resources:** permissions for where its money comes from, one line each, like *Silver Mine*, *Grain Fields* or *Harbour Tolls*.
 -   **Assets:** permissions for what it can do, one line each, and every one says exactly what it does: *Standing Army* (+1 Power), *Spy Network* (once a downtime, ask the GM one question about another faction), *Deep-Water Docks* (it can trade with anyone across the sea). Don't read in anything an asset doesn't say. Big ones carry a multiplier, like *Standing Army ×3*, and take that many wins to destroy or to take.
 -   **Want:** one sentence, the thing it always wants.
@@ -291,7 +291,7 @@ Say the Harbour Guild makes *The Night Boats*, a smuggling crew. It hands over *
 
 ## The Crew and the Factions {#s-faction-crew}
 
-The crew's a faction too, on the same card (see [The Party Sheet](#s-party-faction)), so it takes **one action** a downtime, the same as every other faction. Roll the crew's **Power**, plus a step for every Reputation and bond thread that fits: when the crew goes to the Guildmaster for a favour, the Guild's bond thread toward them is a step. If one character's plainly the right person for it, they can roll their own permissions instead: 1 step for the action, plus everything that fits.
+The crew's a faction too, on the same card (see [The Party Sheet](#s-party-faction)), so it takes **one action** a downtime, the same as every other faction. Roll the crew's **Power**, plus a step for every Reputation and bond thread that fits: when the crew goes to the Guildmaster for a favour, the Guild's bond thread toward them is a step. If one character's plainly the right person for it, they can roll their own instead, a Root and a specialty that fit what they're doing.
 
 **A player can put one of their personal slots into the crew's action**, and two slots on one move count everything twice. A personal slot can never be a second move on a faction, though, and nothing buys the crew another action (see [Downtime](#party-slots)).
 
@@ -316,7 +316,7 @@ The crew's moves are the six outcomes, the same as any faction's, plus two of it
 
 Trading's agreed in the story, so it doesn't take the crew's action: a favour for a favour, or an extra resource for something a faction will sell (see [Extra Resources](#s-crew-wealth)).
 
-Ties go to the faction. There's no Aura in downtime, but a player can spend 1 Resolve to roll again (their own dice only), or the crew can spend an extra resource and take the tie. Only the crew gets to do that. See [Rolling in downtime](#s-downtime-rolls).
+Ties go to the faction. There's no Aura in downtime, but a player can pay 1 Resolve to roll again (their own dice only), or the crew can spend an extra resource and take the tie. Only the crew gets to do that. See [Rolling in downtime](#s-downtime-rolls).
 
 Scenes move factions too. If the crew burns a Guild warehouse in play, that's a Destroy, and it doesn't cost the crew its action. Tick it off the Guild's card, and if the Guild knows who did it, it writes a hostile thread toward the crew.
 

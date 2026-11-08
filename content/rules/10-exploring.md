@@ -6,7 +6,7 @@ order: 10
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-11-09
 ---
 :::quote
 Somebody built this place to keep people out, and something else has moved in since.
@@ -51,7 +51,7 @@ Study a place against the site's Challenge and win, and you get what Study alway
 
 ### One scene, until you come out {#one-scene-until-you-come-out}
 
-Aura fills when you go in, and not again until you come out. Your Confidence starts on d6 when you go in, and it swings all the way through. Come back another day and it's a new scene with full Aura, but the place has had a day too. Start the alarm a size smaller than last time, because whatever lives there knows somebody's been in.
+Aura fills when you go in, and not again until you come out, and your tracks rest when you're out, the way they would at the end of any scene. Come back another day and it's a new scene with full Aura, but the place has had a day too. Start the alarm a size smaller than last time, because whatever lives there knows somebody's been in.
 
 ### What's in this place? {#whats-in-this-place}
 
@@ -60,7 +60,7 @@ When a place needs something in it, roll a d8.
 | d8 | What's in it |
 | --- | --- |
 | 1 | Something asleep. While it sleeps it's helpless, and that's an opening. A fight wakes it. |
-| 2 | A trap nobody's found. A d8 at whoever goes in first. |
+| 2 | A trap nobody's found. A d8 at the Body of whoever goes in first. |
 | 3 | Someone who got here first and never got out. Whatever they carried is still on them. |
 | 4 | A way on that costs something: a squeeze, a drop, or a door that only opens from the other side. |
 | 5 | A clue to the secret. |
@@ -71,11 +71,11 @@ When a place needs something in it, roll a d8.
 :::example[The vaults under the library]
 Vesk, Isolde and Bram are going down into the vaults under the burned library of Isolde's order, after the catalogue of everything it held. The GM's built the site at Challenge 4, a d8. *The catalogue* is the stake, with *Warded Door* and *Locked Cage* in the way. The alarm's a d8, and when it runs out, the Keeper wakes. There are four places, the stair, the scriptorium, the bone room and the archive, and the secret is that the fire started down here.
 
-**The stair.** Vesk goes first, and she Studies the stair before anyone puts a foot on it. Her Study's just the action, 1 step. Her first Title fits finding a trap, but it isn't on her Study, so she brings it in for 1 Aura. She's got time, so the GM gives her two actions, and the same set action twice adds 1. That's 3 steps, a d6. She rolls 5, and the site's d8 comes up 2. She asks for a hidden tag and gets *Pressure Plate on the Fifth Step*. Now that they know it's there, nothing's pushing back, so they step over it without a roll.
+**The stair.** Vesk goes first, and she Studies the stair before anyone puts a foot on it. A trap's a lock with teeth, so it's her Mind and her Locks, 7 steps. She's got time, so the GM gives her two actions, and the second brings in her Climbing, because she's testing every step for give before she trusts her weight to it. That's 9 steps, a d12 and a d6. She rolls 5 and 3, and the site's d8 comes up 2. She asks for a hidden tag and gets *Pressure Plate on the Fifth Step*. Now that they know it's there, nothing's pushing back, so they step over it without a roll.
 
 **The scriptorium** is ash and fallen shelves, and they're through it in a sentence. **In the bone room**, a moor cat's asleep on a heap of old bones. It's helpless while it sleeps, so one win from Bram would end it, but a fight's loud, so they creep past.
 
-**The archive.** The door's warded with the order's own sigils. Isolde's Ward is her first Title and her chalk and salt, 3 steps with the action. The sigils are written in the order's old script, so she brings in *read the order's old script* for 1 Aura. Nobody's hurrying her either, so it's two actions on her Ward, and that adds 1. She's on 5 steps, a d10. Before she rolls, the GM telegraphs: "Break that badly and it screams. A d6 at the alarm." Isolde splits it into a d6 for the ward and a d4 to answer the scream. The d6 rolls 6 against the door's 5, and *Warded Door* is gone. It's a top face too, so the Aura she spent comes straight back. The d4 rolls 3 against the scream's 6, so it lands. The alarm steps down to a d6, and somewhere below them, something turns over in its sleep.
+**The archive.** The door's warded with the order's own sigils. Isolde's ward-breaking is her Soul and her Warding, with her chalk and salt, 6 steps. Nobody's hurrying her either, so she takes two actions, and the second brings in her Dead languages, because the sigils are written in the order's old script. That's 10 steps, a d12 and a d8. Before she rolls, the GM telegraphs: "Break that badly and it screams. A d6 at the alarm." Isolde puts the d12 on the ward and the d8 on the scream. The d12 rolls 6 against the door's 5, and *Warded Door* is gone. The d8 rolls 3 against the scream's 6, so it lands. The alarm steps down to a d6, and somewhere below them, something turns over in its sleep.
 
-The catalogue's in an iron cage. Vesk's Locks is her first Title, *pick a mechanical lock*, *know how a lock's built* and her picks, 5 steps with the action, a d10. She rolls 6, and so does the cage. A tie goes to the defender, so she pays 1 Aura to win it, and the catalogue's theirs. Now they've got to carry it back up past the moor cat with the alarm at a d6.
+The catalogue's in an iron cage. Vesk's Body and her Locks, with her picks, are 10 steps, a d12 and a d8. Her best is a 6, and so's the cage. A tie goes to the defender, so she pays 1 Aura to win it, and the catalogue's theirs. Now they've got to carry it back up past the moor cat with the alarm at a d6.
 :::

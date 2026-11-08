@@ -6,7 +6,7 @@ order: 4
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-10-28
+updated: 2026-11-09
 ---
 :::quote
 Everything the crew wants, owns and owes, out on the table where everyone can see it.
@@ -38,7 +38,7 @@ Most dice in Zi'Dara count down. A scene clock, a stake clock, an event, Supplie
 
 -   **In a scene**, an action aimed at it rolls against its die, when the GM says it's within reach. That's usually once or twice a session, when a scene's really about it.
 -   **In downtime**, the crew's action or a personal slot spent on it is one roll.
--   **Whoever does it builds the roll.** In a scene it's an action like any other, built from the set action that fits. In downtime it's 1 step for the crew's action or the slot, plus everything on their sheet that fits what they're doing about it.
+-   **Whoever does it builds the roll**, a Root and a specialty that fit what they're doing about it, the same as any roll, in a scene or in downtime.
 -   **Ties go to the die you're climbing.** In a scene you can pay 1 Aura to win one, the same as always. In downtime there's no Aura, so see [Rolling in downtime](#s-downtime-rolls).
 
 ## The Party Goal {#s-goal}
@@ -50,9 +50,9 @@ The Goal is what the crew's after this arc, like *clear Dorrie's name*, *free th
 -   **When it climbs past d12, the crew's done it.** Play the moment out. Then the crew grows (see [How the crew grows](#s-crew-grows)), everyone writes one new [thread](#s-bonds), to someone the Goal brought into their life, and the table writes the next Goal, at d2.
 
 :::example[Clearing Dorrie's name]
-**Session 1.** The crew corners the forger who's been signing Dorrie's hand on letters, and the GM says it out loud: the Goal's within reach. The proof's locked in his desk, so Vesk goes at it with her Locks: her first Title, *pick a mechanical lock*, *know how a lock's built* and her picks, with the action 5 steps, a d10. She rolls 6 against the Goal's d2, which rolls a 2, and it climbs to d4.
+**Session 1.** The crew corners the forger who's been signing Dorrie's hand on letters, and the GM says it out loud: the Goal's within reach. The proof's locked in his desk, so Vesk goes at it with her Body and her Locks, and her picks, 10 steps, a d12 and a d8. Her best is a 6 against the Goal's d2, which rolls a 2, and it climbs to d4.
 
-**Downtime.** The crew's action goes on getting the proof in front of the right magistrate, and Dorrie's plainly the right person for it, so she rolls her own permissions. That's 1 step for the action, plus what fits: her first Title, *talk my way past a door* and *read a room in a glance*. She's on 4 steps, a d8, against the d4. It's 3 against 3, and the tie goes to the Goal. She spends 1 Resolve to roll again and gets a 7, so it's d6.
+**Downtime.** The crew's action goes on getting the proof in front of the right magistrate, and Dorrie's plainly the right person for it. There's no lie in this, so it's her Soul and her Persuasion, 4 steps, a d8, against the d4. It's 3 against 3, and the tie goes to the Goal. She pays 1 Resolve to roll again and gets a 7, so it's d6.
 
 **Sessions 2 to 5.** It climbs slower as it goes, and a bad night at the magistrate's knocks it back a step. By session 5 it's at d12, and the last roll is Dorrie standing up in court. She wins it, the Goal climbs past d12, and the crew's done it.
 :::
@@ -136,7 +136,7 @@ Here are twelve to pick from. There are plenty more in [Appendix B](#faction-str
 | **A Ship** | The crew's own ship. A voyage on it needs no Supplies clock, and while nothing's paying for it, it stays tied up in harbour. |
 | **Smugglers' Roads** | A journey on the crew's own roads starts with its first stage already behind it. |
 | **A Workshop** | Once a downtime, mend a broken item, or a piece of armour with boxes ticked, without spending a slot. |
-| **Healers** | Once a session, between two scenes, everyone in the crew steps their wound die down a size. |
+| **Healers** | Once a session, between two scenes, everyone in the crew puts one of their tracks up a size. |
 | **Old Debts** | Once a session, someone the crew once helped turns up and does one thing for them. |
 
 ### Extra Resources {#s-crew-wealth}
@@ -165,7 +165,7 @@ There's a whole campaign of it, from a crew with no name to a power in the Low M
 
 ## Party Holdings {#s-party-resources}
 
-Big things, like a horse, a cart, a small boat or a house, are **party holdings** rather than items. The story decides whether you've got access to them, and the crew keeps track of them together. A holding counts as a line on any roll it fits for whoever's using it: a fast horse in a chase, or a safehouse when the crew needs to disappear. It isn't on anyone's set action, so bringing it into a roll costs 1 Aura, the same as bringing in the ground. A holding isn't an asset, so nothing has to pay for it.
+Big things, like a horse, a cart, a small boat or a house, are **party holdings** rather than items. The story decides whether you've got access to them, and the crew keeps track of them together. A holding's something whoever's using it can bring into a roll where it fits: a fast horse in a chase, or a safehouse when the crew needs to disappear. It isn't anyone's own, so bringing it in costs 1 Aura and adds a step, the same as bringing in the ground. A holding isn't an asset, so nothing has to pay for it.
 
 :::example
 In session 3 the crew steals a horse and cart from a Vane warehouse. It goes on the party sheet as a holding: *"A horse and cart."*

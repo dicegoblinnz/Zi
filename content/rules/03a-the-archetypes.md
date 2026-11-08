@@ -6,7 +6,7 @@ order: 3.2
 part: "Play"
 partNumber: "Part I"
 source: Mo's playtest sheets, 14 and 16 Oct 2026, and his chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-08
+updated: 2026-11-09
 ---
 :::quote
 Every archetype has something only it can do.
@@ -114,7 +114,7 @@ The Bard's for nerve. You're the one keeping the crew's heads straight, and Defe
 :::
 
 :::example[A dragon roars]
-A dragon roars at four of you, a d10 at each one's Confidence: you, Bram, Wren and Isolde. Say you're the Bard, with a Soul of 4 and Song 3. You sing to hold them, so that's 7 steps, and you split it four ways, so you've got a die for each roar: three d4s and a d2.
+A dragon roars at four of you, a d10 at each one's Mind: you, Bram, Wren and Isolde. Say you're the Bard, with a Soul of 4 and Song 3. You sing to hold them, so that's 7 steps, and you split it four ways, so you've got a die for each roar: three d4s and a d2.
 
 The roar comes up 1 at you, 2 at Wren, 4 at Isolde and 5 at Bram. Your d4s come up 3, 3 and 1, and your d2 comes up 1. The d2 stops the 1 at you, because the tie's yours, and a 3 stops Wren's 2. You pay 1 Resolve to push the other 3 to a 5, and that stops Isolde's 4. Your last 1 can't stop Bram's 5, so the roar has to get past his own Confidence, a d12, and it comes up 5. The tie's his, so it's stopped too. Nobody's Confidence drops, and two of your dice won without a push, so that's 2 Aura for you.
 :::
@@ -182,7 +182,7 @@ Spend your action and build your dice the usual way, but don't roll them. Put th
 :::
 
 :::example[The bandit captain]
-Dorrie's put her Mind and her Lying on the bandit captain as influence, 9 steps, a d12 and a d6. He telegraphs a d6 at Bram and another at Wren, and she rolls her influence against them: her best is a 5. They come up 3 at Bram and 6 at Wren. The 3's hers, so that cut lands on his own sergeant. She wants the other one too, so she pays 1 Confidence to push her 5 to a 7, and the cut at Wren goes into the wall.
+Dorrie's put her Mind and her Lying on the bandit captain as influence, 9 steps, a d12 and a d6. He telegraphs a d6 at Bram's Body and another at Wren's, and she rolls her influence against them: her best is a 5. They come up 3 at Bram and 6 at Wren. The 3's hers, so that cut lands on his own sergeant. She wants the other one too, so she pays 1 Confidence to push her 5 to a 7, and the cut at Wren goes into the wall.
 :::
 
 **Title ideas:** [Face](#k-face) · [Courtier](#k-courtier) · [Streetwise](#k-streetwise) · [Enchantment](#k-enchantment)

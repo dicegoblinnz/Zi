@@ -74,6 +74,10 @@ RETIRED = [
     ("shaken or fired up", r"\bshaken\b(?! off)|\bfired up\b"),
     ("old spends", r"\b(Resolve|Aura) spends?\b"),
     ("old Confidence", r"\b(starts?|back) (on|at|to) d6\b.*\bConfidence\b|\bConfidence\b.*\b(starts?|back) (on|at|to) d6\b|\bConfidence swings?\b|\bthe swing\b"),
+    ("Resolve maximum", r"\bResolve (maximum|gems?)\b|\bmaximum Resolve\b"),
+    ("Aura Push", r"\b1 Aura (is|puts|for) \+[234]\b|\+[234] for 1 Aura\b"),
+    ("old budgets", r"\babout 5 steps (a round|of telegraphs)\b|\b10 a character\b"),
+    ("Title archetype", r"\bevery Title is an archetype\b|\bname you give your archetype\b"),
     ("step for the action", r"\b(1|a|one) (step )?for the action\b|\bthe action on its own is\b|\bwith the action,? (that's|it's)\b"),
     # 9 Nov 2026: no more traits
     ("traits", r"\btraits?\b"),

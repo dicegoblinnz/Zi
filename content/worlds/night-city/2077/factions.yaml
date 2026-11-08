@@ -295,8 +295,8 @@ factions:
     assets:
       - text: The Medical Center
         does: >-
-          Once a session, between two scenes, everyone it's looking after steps
-          their wound die down a size.
+          Once a session, between two scenes, everyone it's looking after puts
+          one of their tracks up a size.
       - text: Three Minutes Out
         does: >-
           A Platinum client is reached before the scene's next round, wherever
@@ -1024,7 +1024,7 @@ factions:
     assets:
       - text: Juice
         does: >-
-          Its people shrug off the first Hurt in any fight.
+          Its people shrug off the first hit in any fight.
     agendas:
       - text: Drive the Voodoo Boys out of Pacifica
         die: 4
@@ -1165,7 +1165,7 @@ factions:
       - text: A Trauma Team Contract
         does: >-
           Trauma Team flying into Dogtown. Once a session, between two scenes,
-          one of its people steps their wound die down a size.
+          one of its people puts one of their tracks up a size.
         need: true
         from: trauma-team
     agendas:

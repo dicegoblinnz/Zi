@@ -2,6 +2,27 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
+## 9 Nov: the GM's budgets and the rest of the book
+
+Stage 2 of `notes/roots-plan.md` put the Roots change through every chapter stage 1 didn't touch. The numbers come from dice runs: four of the crew as they start against a boss and its people, three thousand fights a setting.
+
+1. **Round budget: about 10 steps a round for each player**, so 20 for a breather, 40 at Even and 60 at Hard for four. It was 5. Every track starts at d12, and a d12 stops a lone d10 about six times in ten, so 5 a player hardly ever got through. At 10, each player takes about 2 hits in a fight at Even, and Hard has a real chance of a Blaze.
+2. **Threat budget: 15 a character as they start** (60 for four), and about 2.5 more for each Title, archetype or attuned thing an Aspiration gives them (17 or 18 with one, 20 with two, 22 or 23 with three, 25 with four). Past four it's the GM's call. It was 10 a character with two Titles.
+3. **Every multiplier is 2 bigger**, in the Bestiary, the Threat Builder, the frames, Twenty Places and the Tag Reference, and the rule of thumb's its Challenge plus 2 (a dragon's *Hide ×10*, a dark paladin's *Plate Armour ×7* and *Shield ×5*). A boss of about 14 wins lasts about four rounds at Even, the way the old ones did. Redhand's *Armoured ×8 (first)* and *Feeds ×5*, a boss's Forms take ×5 then ×4, and the Fallen Champion's ten wins. The bestiary's written for 60, and +1 for every 10 over.
+4. **Challenges stay 2 to 6.** What a threat is still picks its die, and the bigger rolls are met by the bigger multipliers and round budget instead.
+5. **How long a scene runs** divides by half the crew's actions a round, counting the extra ones they buy with Aura (about six for four once the Aura's flowing).
+6. **Telegraphs:** Defend became Body and Confidence became Mind, except despair, temptation, curses and anything that takes you over, which went to Soul (nine in the Bestiary, four in the frames, two in the worlds). Lanternfall's Dread is at your Mind. The road's hunger, weather and bandits are at your Body.
+7. **The GM's 1 Resolve for great roleplay is gone**, since Resolve's a track now. A great setup that doesn't land still gets 1 Aura.
+8. **Depth** (the Deep Company) brings your Resolve up a size for every level you leave behind, where it gave 1 Resolve.
+9. **Playing alone:** the first hit through each scene doesn't drop a track, the way the Toughness Boon works, and one character as they start is a threat budget of 15, so 4 off every multiplier.
+10. **Coin and Kit:** every attuned thing from the story has awakenings now, each one passive or active, and its own way to Aura. Its old permissions became awakenings, a passive one usually +1 on one die for each Aura in it, like *Unruffled* (+1 on your Confidence's die when the telegraphs land) and *Turn the blow* (the same for your Defend or your Stamina), which is how attuned armour, with no boxes, holds the line. An awakening that heals is a quick heal you can make bigger, a size for each Aura. Their Burdens come off the new menu.
+11. **Vesk in Growing:** her new attuned things come from Aspirations, since that's the only way to another one now, and her sessions 1 to 20 are rebuilt on the new sheet.
+12. **Party holdings and the ship's tags** are a step for 1 Aura when they fit, the same as the ground.
+13. **The *Healers* crew asset** and Night City's Medical Center put one of everyone's tracks up a size, once a session, where they brought a wound die down.
+14. **The full fight in Conflict** runs as a breather (about 20), since its Wardens are half-woken, so its rounds stand as they are.
+15. **The worlds' telegraphs** (Night City and Abnu) are on Body, Mind and Soul too, and the live table reads Mind and Soul as fear till stage 4, so a phone won't let anyone intercept them. A page a GM wrote with Defend or Confidence still reads.
+16. **The Preview:** the plan says to move `website` to this branch, but `website` has 25 commits of the design pass that aren't on `main` or here, so moving it would drop them. This branch has its own Preview on the zidara Worker instead, so I left `website` alone. Say if those 25 can go.
+
 ## 8 Nov: Roots, specialties and three tracks
 
 Your chat from 6 to 8 Nov (`notes/playtest-sheets/2026-11-08-chat-decisions.md`) is the source, and `notes/roots-plan.md` is how it's going through the book. Stage 1 put it through The Core, Building, The Archetypes, the crew, Conflict, Magic's Summoning, Downtime, Appendix D, the Learn deck and both paper sheets. These are the calls Claude made doing it, the ones that change play most first.
@@ -30,7 +51,7 @@ Your chat from 6 to 8 Nov (`notes/playtest-sheets/2026-11-08-chat-decisions.md`)
 22. **Downtime rolls** lost their slot's step, to match no step for the action.
 23. **Quick heal** stays (1 Aura and your action, one track up a size), and a Healer's heal roll puts a track up a size for each die that rolls 4 or more.
 24. **The crew:** Vesk Body 5, Mind 3, Soul 0. Dorrie 1, 5, 2. Bram 5, 1, 2. Isolde 0, 5, 3. Wren 4, 4, 0. Ash 0, 2, 6. Each one's best specialty is 3 or 4, and their archetypes are as they were (Vesk and Wren twice over).
-25. **Not done yet (stage 2):** threats' Challenges and the GM's budget of about 5 steps a round for each of you aren't retuned for rolls of 6 to 11 steps against tracks of d12, so fights will feel easy till then. Ranged attacks are still yours to sort out.
+25. **Done in stage 2 (9 Nov, above):** the round budget and the threats are retuned for rolls of 6 to 11 steps against tracks of d12. Ranged attacks are still yours to sort out.
 
 ## 28 Oct: only people add Power
 

@@ -18,7 +18,7 @@ people:
     tags: [{ text: Calls for Help, kind: comes }, { text: Untouchable, kind: keeps }, { text: Proud, kind: drives }]
     voice: Soft and precise, and he never says anything twice.
     teles:
-      - { text: "Yorinobu tells his guards to show the crew out, and doesn't look up.", d: 8, at: "Confidence, Dismissed" }
+      - { text: "Yorinobu tells his guards to show the crew out, and doesn't look up.", d: 8, at: "Mind, Dismissed" }
 
   - key: meredith-stout
     name: Meredith Stout
@@ -31,7 +31,7 @@ people:
     tags: [{ text: Calls for Help, kind: comes }, { text: Trusts Nobody, kind: drives }, Armed]
     voice: Clipped and impatient, and she says your name like it's a charge sheet.
     teles:
-      - { text: "Stout asks who the crew's really working for, and doesn't wait for the answer.", d: 6, at: "Confidence, Under Suspicion" }
+      - { text: "Stout asks who the crew's really working for, and doesn't wait for the answer.", d: 6, at: "Mind, Under Suspicion" }
 
   - key: kang-tao-director
     name: The Kang Tao Director
@@ -43,7 +43,7 @@ people:
     tags: [Deep Pockets, { text: Patient, kind: drives }]
     voice: Friendly and curious, and always asking what you'd want instead.
     teles:
-      - { text: "The director slides a contract across the table with a number on it.", d: 6, at: "Confidence, Tempted" }
+      - { text: "The director slides a contract across the table with a number on it.", d: 6, at: "Soul, Tempted" }
     note: Nobody's put a name to the director yet, so give them one at your table.
 
   - key: joanne-koch
@@ -67,7 +67,7 @@ people:
     tags: [{ text: Armoured, kind: keeps }, { text: At Range, kind: comes }, { text: Only the Client, kind: drives }]
     voice: Call signs and seconds, and never a word more than the job needs.
     teles:
-      - { text: "The Squad Leader puts a rifle on whoever's between the AV and the client.", d: 8, at: "Defend, Knocked Flat" }
+      - { text: "The Squad Leader puts a rifle on whoever's between the AV and the client.", d: 8, at: "Body, Knocked Flat" }
 
   - key: night-corp-chair
     name: The Night Corp Chair
@@ -90,7 +90,7 @@ people:
     tags: [{ text: Not Really Here, kind: keeps }, { text: Its Fleet, kind: comes }, Polite]
     voice: Perfectly polite, always, and it calls you by your full name.
     teles:
-      - { text: "Delamain says a cab's on its way, and three arrive at once, fast.", d: 6, at: "Defend, Boxed In" }
+      - { text: "Delamain says a cab's on its way, and three arrive at once, fast.", d: 6, at: "Body, Boxed In" }
 
   # ── The law, City Hall and the news
   - key: jerry-fawlter
@@ -104,7 +104,7 @@ people:
     tags: [{ text: Can Be Bought, kind: drives }, { text: Calls for Help, kind: comes }]
     voice: Talks like a budget meeting, all costs and value for money.
     teles:
-      - { text: "Fawlter says the NCPD would be happy to look into it, for a fee.", d: 6, at: "Confidence, Billed" }
+      - { text: "Fawlter says the NCPD would be happy to look into it, for a fee.", d: 6, at: "Mind, Billed" }
 
   - key: lucius-rhyne
     name: Lucius Rhyne
@@ -117,7 +117,7 @@ people:
     tags: [{ text: Can Be Bought, kind: drives }, { text: Scared, kind: drives }, { text: Calls for Help, kind: comes }]
     voice: Big words about the city, and small ones when he thinks nobody's listening.
     teles:
-      - { text: "Rhyne's aide steps in and says the mayor has to go.", d: 6, at: "Confidence, Brushed Off" }
+      - { text: "Rhyne's aide steps in and says the mayor has to go.", d: 6, at: "Mind, Brushed Off" }
 
   - key: jefferson-peralez
     name: Jefferson Peralez
@@ -130,7 +130,7 @@ people:
     tags: [{ text: Cannot Resist an Audience, kind: drives }, { text: Calls for Help, kind: comes }]
     voice: Speaks like he's on a stage, even in a kitchen.
     teles:
-      - { text: "Peralez asks the crew to say that again, for the cameras.", d: 4, at: "Confidence, On the Record" }
+      - { text: "Peralez asks the crew to say that again, for the cameras.", d: 4, at: "Mind, On the Record" }
 
   - key: bryce-mosley
     name: Bryce Mosley
@@ -143,7 +143,7 @@ people:
     tags: [{ text: Relentless, kind: keeps }, { text: Reads a Feint, kind: keeps }, { text: Holds a Grudge, kind: drives }]
     voice: Tired and dry, and he tells you how it ends before it starts.
     teles:
-      - { text: "Mosley says he knows who the crew's working for, and shows them the file.", d: 6, at: "Confidence, Cornered" }
+      - { text: "Mosley says he knows who the crew's working for, and shows them the file.", d: 6, at: "Mind, Cornered" }
 
   - key: gillean-jordan
     name: Gillean Jordan
@@ -155,7 +155,7 @@ people:
     tags: [{ text: Cannot Resist an Audience, kind: drives }, { text: Calls for Help, kind: comes }]
     voice: Warm on camera, and quick and hard off it.
     teles:
-      - { text: "Gillean Jordan asks the crew to tell her everything, live.", d: 6, at: "Confidence, On Camera" }
+      - { text: "Gillean Jordan asks the crew to tell her everything, live.", d: 6, at: "Mind, On Camera" }
 
   # ── The gangs
   - key: royce
@@ -168,8 +168,8 @@ people:
     tags: [{ text: Hits Like a Wagon, kind: comes }, { text: Armoured, kind: keeps }, { text: Proud, kind: drives }]
     voice: Shouts, talks over you and laughs at his own threats.
     teles:
-      - { text: "Royce says the deal's changed, and puts a gun on the table.", d: 8, at: "Confidence, Shaken" }
-      - { text: "Royce comes over the table at the crew.", d: 10, at: "Defend, Smashed" }
+      - { text: "Royce says the deal's changed, and puts a gun on the table.", d: 8, at: "Mind, Shaken" }
+      - { text: "Royce comes over the table at the crew.", d: 10, at: "Body, Smashed" }
 
   - key: brick
     name: Brick
@@ -192,7 +192,7 @@ people:
     tags: [{ text: Fast, kind: comes }, { text: Calls for Help, kind: comes }, { text: Holds a Grudge, kind: drives }]
     voice: Polite and quiet, and he lets the silence do the threatening.
     teles:
-      - { text: "Burai draws his katana without seeming to move.", d: 8, at: "Defend, Cut" }
+      - { text: "Burai draws his katana without seeming to move.", d: 8, at: "Body, Cut" }
 
   - key: campo-orta
     name: Campo Orta
@@ -205,7 +205,7 @@ people:
     tags: [{ text: Commanding, kind: comes }, { text: Loyal to a Name, kind: drives }, { text: Out of Sight, kind: keeps }]
     voice: Slow and quiet, and he only says a thing once.
     teles:
-      - { text: "Campo's lieutenant says the boss has said no.", d: 6, at: "Confidence, Refused" }
+      - { text: "Campo's lieutenant says the boss has said no.", d: 6, at: "Mind, Refused" }
 
   - key: will-gunner
     name: Will Gunner
@@ -218,7 +218,7 @@ people:
     tags: [{ text: At Range, kind: comes }, { text: Commanding, kind: comes }, { text: Holds a Grudge, kind: drives }]
     voice: Talks like a sergeant, and expects to be answered like one.
     teles:
-      - { text: "Gunner gives the crew ten seconds to get off his street.", d: 6, at: "Confidence, Run Off" }
+      - { text: "Gunner gives the crew ten seconds to get off his street.", d: 6, at: "Mind, Run Off" }
 
   - key: maman-brigitte
     name: Maman Brigitte
@@ -231,7 +231,7 @@ people:
     tags: [{ text: Not Really Here, kind: keeps }, { text: Commanding, kind: comes }, { text: Zealous, kind: drives }]
     voice: Creole to her people, and very little to anyone else.
     teles:
-      - { text: "Brigitte reaches into someone's head through their implants.", d: 10, at: "Confidence, Lost in the Net" }
+      - { text: "Brigitte reaches into someone's head through their implants.", d: 10, at: "Soul, Lost in the Net" }
 
   - key: placide
     name: Placide
@@ -243,7 +243,7 @@ people:
     tags: [{ text: Calls for Help, kind: comes }, { text: Reads a Feint, kind: keeps }, { text: Loyal to a Name, kind: drives }]
     voice: Low, slow and suspicious, and he switches to Creole when he's talking about you.
     teles:
-      - { text: "Placide says the crew's NetWatch, and he means it.", d: 6, at: "Confidence, Accused" }
+      - { text: "Placide says the crew's NetWatch, and he means it.", d: 6, at: "Mind, Accused" }
 
   - key: sasquatch
     name: Sasquatch
@@ -255,7 +255,7 @@ people:
     tags: [{ text: Hits Like a Wagon, kind: comes }, { text: Relentless, kind: keeps }, { text: Proud, kind: drives }]
     voice: Hardly talks. She grunts, and points.
     teles:
-      - { text: "Sasquatch swings the hammer.", d: 12, at: "Defend, Flattened" }
+      - { text: "Sasquatch swings the hammer.", d: 12, at: "Body, Flattened" }
 
   - key: susie-q
     name: Susie Q
@@ -267,7 +267,7 @@ people:
     tags: [{ text: Protects Someone, kind: drives }, { text: Calls for Help, kind: comes }, { text: Holds a Grudge, kind: drives }]
     voice: Blunt and short, and she never says please.
     teles:
-      - { text: "Susie Q tells the Mox to put the crew out on the street.", d: 6, at: "Confidence, Thrown Out" }
+      - { text: "Susie Q tells the Mox to put the crew out on the street.", d: 6, at: "Mind, Thrown Out" }
 
   - key: scav-boss
     name: The Scav Boss
@@ -279,7 +279,7 @@ people:
     tags: [{ text: Greedy, kind: drives }, { text: Ambush, kind: comes }, { text: Calls for Help, kind: comes }]
     voice: Talks about people like they're parts.
     teles:
-      - { text: "The boss calls for a stun baton, and two scavs come running.", d: 6, at: "Defend, Stunned" }
+      - { text: "The boss calls for a stun baton, and two scavs come running.", d: 6, at: "Body, Stunned" }
     note: Bosses at the Scraper don't last, so give this one a name and a reason they won't either.
 
   - key: kurt-hansen
@@ -293,8 +293,8 @@ people:
     tags: [{ text: Commanding, kind: comes }, { text: Armoured, kind: keeps }, { text: Proud, kind: drives }]
     voice: Quiet, and he never threatens anyone twice.
     teles:
-      - { text: "Hansen tells the crew what happens to people who lie to him.", d: 8, at: "Confidence, Afraid" }
-      - { text: "Hansen nods, and his guards open fire.", d: 10, at: "Defend, Gunned Down" }
+      - { text: "Hansen tells the crew what happens to people who lie to him.", d: 8, at: "Mind, Afraid" }
+      - { text: "Hansen nods, and his guards open fire.", d: 10, at: "Body, Gunned Down" }
 
   # ── The nomads
   - key: saul-bright
@@ -308,7 +308,7 @@ people:
     tags: [{ text: Commanding, kind: comes }, { text: Protects Someone, kind: drives }, { text: Calls for Help, kind: comes }]
     voice: Slow and careful, and he thinks before every word.
     teles:
-      - { text: "Saul says the clan's business is the clan's.", d: 6, at: "Confidence, Outsider" }
+      - { text: "Saul says the clan's business is the clan's.", d: 6, at: "Mind, Outsider" }
 
   - key: nash
     name: Nash
@@ -320,7 +320,7 @@ people:
     tags: [{ text: Ambush, kind: comes }, { text: Fast, kind: comes }, { text: Can Be Bought, kind: drives }]
     voice: Fast and mean, and always selling something.
     teles:
-      - { text: "Nash guns his bike and comes straight at the crew.", d: 8, at: "Defend, Run Down" }
+      - { text: "Nash guns his bike and comes straight at the crew.", d: 8, at: "Body, Run Down" }
 
   # ── The fixers
   - key: rogue-amendiares
@@ -334,7 +334,7 @@ people:
     tags: [{ text: Commanding, kind: comes }, { text: Reads a Feint, kind: keeps }, { text: Holds a Grudge, kind: drives }]
     voice: Low and dry, few words, and she never raises her voice.
     teles:
-      - { text: "Rogue says she's heard enough, and the bouncers start walking over.", d: 8, at: "Confidence, Dismissed" }
+      - { text: "Rogue says she's heard enough, and the bouncers start walking over.", d: 8, at: "Mind, Dismissed" }
     hooks:
       - "Rogue needs a job done that nobody can tie to the Afterlife"
 
@@ -360,7 +360,7 @@ people:
     tags: [{ text: Calls for Help, kind: comes }, { text: Greedy, kind: drives }, { text: Can Be Bought, kind: drives }]
     voice: Big, warm and full of stories, and every story's about him.
     teles:
-      - { text: "Dex leans back and says he'll find another crew, easy.", d: 6, at: "Confidence, Replaced" }
+      - { text: "Dex leans back and says he'll find another crew, easy.", d: 6, at: "Mind, Replaced" }
     hooks:
       - "Dex needs a crew for the Konpeki job, and he's paying more than anyone's seen"
 
@@ -375,7 +375,7 @@ people:
     tags: [{ text: Reads a Feint, kind: keeps }, { text: Protects Someone, kind: drives }]
     voice: Asks a question, then another, like it's still an interview.
     teles:
-      - { text: "Regina asks one question too many, and the crew can tell she knows.", d: 6, at: "Confidence, Found Out" }
+      - { text: "Regina asks one question too many, and the crew can tell she knows.", d: 6, at: "Mind, Found Out" }
 
   - key: wakako-okada
     name: Wakako Okada
@@ -431,7 +431,7 @@ people:
     tags: [{ text: Out of Sight, kind: keeps }, { text: Reads a Feint, kind: keeps }, { text: Greedy, kind: drives }]
     voice: Smooth, unhurried and very polite, like a gentleman from another century.
     teles:
-      - { text: "Mr. Hands tells the crew exactly where they're standing.", d: 6, at: "Confidence, Watched" }
+      - { text: "Mr. Hands tells the crew exactly where they're standing.", d: 6, at: "Mind, Watched" }
 
   - key: dakota-smith
     name: Dakota Smith
@@ -489,7 +489,7 @@ people:
     tags: [{ text: Hits Like a Wagon, kind: comes }, { text: Armoured, kind: keeps }, { text: Relentless, kind: keeps }]
     voice: A flat machine voice, and he mocks you while he does it.
     teles:
-      - { text: "Smasher opens up with the gun on his arm.", d: 12, at: "Defend, Torn Apart" }
+      - { text: "Smasher opens up with the gun on his arm.", d: 12, at: "Body, Torn Apart" }
     note: Only put Smasher in the room when you mean it, since most crews won't walk away.
 
   # ── Watson and Heywood's own

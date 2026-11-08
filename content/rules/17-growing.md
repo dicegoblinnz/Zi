@@ -18,39 +18,39 @@ You don't earn anything in Zi'Dara by counting kills. Everything that changes on
 
 ## What changes every session {#what-changes-every-session}
 
-Every session ends in a [downtime](#downtime), and you choose what your two slots buy. Nobody chooses for you. The only thing pushing back is the world, which always wants some of your time. Once the downtime's over, all your [Resolve](#s-tracks) comes back too, and your wound die goes back to d2, or to your Scars.
+Every session ends in a [downtime](#downtime), and you choose what your two slots buy. Nobody chooses for you. The only thing pushing back is the world, which always wants some of your time. Every downtime starts with each of your [tracks](#s-tracks) up a size, too, and a slot spent recovering puts 6 sizes back, so you can walk into the next session whole, or close to it.
 
 ## What changes over an arc {#what-changes-over-an-arc}
 
--   **An Aspiration resolves.** You get what you were after, and you gain a new archetype, with a Title you name for it, and growth doesn't get any bigger than that. See [Archetypes and Titles](#s-title).
--   **Your Titles fill up**, a permission at a time, and your attuned things go up a stage.
+-   **An Aspiration resolves.** You get what you were after, and you take a new Title, a new archetype or a new attuned thing, your pick, and growth doesn't get any bigger than that. See [Aspiration](#s-aspiration).
+-   **Your Titles fill up**, a permission at a time, and your attuned things wake up, an awakening at a time and a stage at a time.
 -   **The crew grows**, the way a character does. See [The Crew](#s-party-faction), and [The Crew, Session 1 to 20](#s-crew-1-20) below.
 -   **Your bonds grow.** When the Party Goal's done, everyone writes a new thread, with someone the Goal brought into their life.
 
 ## How power grows {#how-power-grows}
 
-There aren't any tiers. You get stronger by putting more lines on your sheet, and every line on a set action makes it a step bigger, so your dice get bigger, and past 6 steps you get a second one. The lines come from:
+There aren't any tiers. You get stronger by putting more on your sheet, and nearly all of it makes a Root or a specialty bigger, so your dice get bigger, and past 6 steps you get more of them. It comes from:
 
--   **Permissions**, one a Grow, up to six on a Title. Bram's Hold the door, in [Set actions](#s-step-roots), is what two Grows look like.
--   **Boons.** Two permission slots on a Title buy a permanent upgrade, like shrugging off the first Hurt each scene (see [Boons and Burdens](#s-boons)).
--   **Attuned things**, a stage at a time: Awakened, Tempered, Perfected. Each stage needs its material, and each new permission takes a downtime slot (see [Attunement](#s-attunement)).
--   **A new archetype** every time your Aspiration climbs past d12, with a Title you name for it and one permission. Grow fills it from there, and your Resolve maximum goes up by one with it.
+-   **Permissions**, one a Grow, up to six on a Title. Each one's 1 more on a Root and 1 more on a specialty, so a Grow that fits what you do all the time is a step on most of your rolls.
+-   **Boons.** Two permission slots on a Title buy a permanent upgrade, like shrugging off the first hit each scene (see [Boons and Burdens](#s-boons)).
+-   **Attuned things**, a stage at a time: Awakened, Tempered, Perfected. Each stage needs its material, and each new awakening takes a downtime slot (see [Attunement](#s-attunement)).
+-   **Your Aspiration**, every time it climbs past d12. Take a new Title, with its Root, its three specialties and one permission, so that's 2 more on a Root and 4 more across your specialties. Or a new archetype, with its mechanic, its abilities and room for one more action a round. Or a new attuned thing.
 
-**Which archetype you take matters too.** One you haven't got yet brings its mechanic, something only that archetype can do. On most archetypes, one you've already got makes its +2 bigger: twice is +3, and three times is +4 (see [How archetypes work](#s-how-archetypes)). Say Bram's Aspiration climbs past d12. He could take Healer, and he'd be the only one in the crew who can make a heal roll. Or he could take Guardian again, and when he spends 1 Aura on one of his Defend or Confidence dice, it'd be +3 instead of +2.
+**Which archetype you take matters too.** One you haven't got yet brings its mechanic, something only that archetype can do, and its abilities. One you've already got makes its Push bigger: twice is +3, and three times is +4 (see [How archetypes work](#s-how-archetypes)). Either way it's one more action you can buy a round, for 3 Aura. Say Bram's Aspiration climbs past d12 and he wants an archetype. He could take Healer, and he'd be the only one in the crew who can make a heal roll. Or he could take Guardian again, and his Push would be +3 instead of +2.
 
-**Scars don't upgrade.** A Scar's a Catch, so it bites like one, but it doesn't turn into anything else (see [Wounds, Blaze and Scars](#s-blaze)).
+**Scars don't upgrade.** A Scar's a Catch, so it bites like one, but it doesn't turn into anything else (see [When a Track Runs Out](#s-blaze)).
 
-The [threat budget](#s-threat-budget) climbs with every Title, so the world keeps pace, and threats that used to be bosses become lieutenants.
+The [threat budget](#s-threat-budget) climbs with every new Title, archetype and attuned thing, so the world keeps pace, and threats that used to be bosses become lieutenants.
 
 ## The Long Game {#s-long-game}
 
-A campaign changes shape as the crew gets better. The dice keep pace on their own, because the threat budget rises with every Title. What changes is who's paying attention.
+A campaign changes shape as the crew gets better. The dice keep pace on their own, because the threat budget rises with every Aspiration that comes good. What changes is who's paying attention.
 
-| Titles each | Who's noticed the crew | What the jobs look like |
+| Aspirations come good, each | Who's noticed the crew | What the jobs look like |
 | --- | --- | --- |
-| Two | Fences, guards and rival crews | A score, a debt, or a favour for someone bigger. |
-| Three or four | The guilds and the old families | Jobs that move a faction. The crew picks a side, or gets picked. |
-| Five or more | Anyone with power | The crew's a power itself. Factions come to it, and its enemies are other powers. |
+| None yet | Fences, guards and rival crews | A score, a debt, or a favour for someone bigger. |
+| One or two | The guilds and the old families | Jobs that move a faction. The crew picks a side, or gets picked. |
+| Three or more | Anyone with power | The crew's a power itself. Factions come to it, and its enemies are other powers. |
 
 -   **Threats move up.** Last arc's boss is this arc's lieutenant. Bring them back with new tags, or working for someone worse.
 -   **The past comes back.** Threads, debts, Scars and old enemies are the best things you've got to work with, so keep bringing them back.
@@ -72,13 +72,13 @@ Then do the **epilogues**. Each player says where their character is a year late
 
 ## Retiring a character {#s-retiring}
 
-When you decide your character's done, write a final Title, leave the party sheet, and make a new character at the same progression: the same number of archetypes, each with its Title, and the same number of permissions, spent however you like.
+When you decide your character's done, write a final Title, leave the party sheet, and make a new character at the same progression: the same number of Titles, archetypes and attuned things, and the same number of permissions, spent however you like.
 
 Leave something behind. Give one thing you carry or one attuned thing to someone in the crew, or introduce them to someone you've got a bond with, so they can write a thread with that person. Give your new character a thread with the old one if it fits. An attuned thing needs someone with a free attunement slot. A retired character can still turn up in the story, and the GM should bring them back now and then.
 
 ## Death {#s-death}
 
-From your very first Blaze, you can choose for your character to die. If you don't, they leave the scene and the wound becomes a Scar, and once you've got five Scars, your next Blaze is your last (see [Wounds, Blaze and Scars](#s-blaze)). If a player chooses it, the GM slows right down and lets them tell their last moment in their own words.
+From your very first Blaze, you can choose for your character to die. If you don't, they leave the scene and that track takes a Scar, and when a Scar would lock a track's last size, that Blaze is your last (see [When a Track Runs Out](#s-blaze)). If a player chooses it, the GM slows right down and lets them tell their last moment in their own words.
 
 After that it's the same as retirement, with a farewell scene. Play it at the start of the next session, before anything else. Whoever wants to says something, at the graveside or over a drink, and the dead character's player says what they leave behind, the same way a retiring character does.
 
@@ -99,54 +99,60 @@ Here's what growth actually looks like.
 **Session 1: Creation.** She's the character built in [A Complete Character](#a-complete-character-start-to-finish).
 
 :::sheet[Vesk: The best cat burglar in the city]
-**Titles:** The best cat burglar in the city (Shadow) · Raised by the Guild (Shadow), with three permissions each.
+**Titles:** *The best cat burglar in the city* (Body; Stealth, Climbing, Locks) · *Raised by the Guild* (Mind; Locks, Knives, Black market), with three permissions each.
 
-**Set actions:** Sneak 3 (d6) · Move 4 (d8) · Locks 5 (d10) · Defend 2 (d4) · Fight 2 (d4) · Study 1 (d2) · Talk 1 (d2).
+**Archetypes:** Shadow · Shadow, so her Push is +3.
+
+**Roots:** Body 5 · Mind 3 · Soul 0.
+
+**Specialties:** Locks 4 · Stealth 2 · Climbing 2 · Knives 2 · Black market 2.
 
 **Attuned:** Her grappling line, Awakened.
 
 **Aspiration:** *Own the score of a lifetime*, d2.
 
-**Numbers:** Aura 5 · Resolve 2 · Shadow twice, so its +2 is a +3 · Confidence starts every scene on d6 · Stride 5 · Wound die d2.
+**Numbers:** Aura 5 · Stamina d12 · Confidence d12 · Resolve d12 · Stride 3.
 :::
 
 **Session 6: The first arc.** Her Aspiration's climbed from d2 to d12. Most downtimes, one slot went on it and the other on whatever the last job cost her. She hasn't added a permission, so she's the same person, just further along. That's her call.
 
-**Session 7: A new Title.** She robs the Vane Estate, and her Aspiration climbs past d12. That's a new archetype, and she takes Shadow a third time. She names it *The woman who has never been seen*, and gives it one permission, *leave no trace*. The Title and the permission both fit her Sneak nearly every time, so it's 5 steps now, a d10. Her Resolve maximum goes up to 3, and with Shadow three times, its +2 is a +4. She writes *Find out who the fence really is* at d2, and on her way out she takes a sliver of steel from the vault's bolt, because she knows what it's for.
+**Session 7: A new attuned thing.** She robs the Vane Estate, and her Aspiration climbs past d12. She could take a new Title, or Shadow a third time for a +4 Push and room for a third action a round, but she wants her picks bound to her. They're attuned now, at Awakened, so they're on top of what she carries, and they can't break. They're still 1 more on every lock, and they get her Aura their own way: 1 the first time each scene she opens something that was meant to stay shut. Their awakening's *Open any lock with a mechanism*, a passive one, +1 on one die of every lock she picks with them for each Aura in it. She writes *Find out who the fence really is* at d2, and on her way out she takes a sliver of steel from the vault's bolt, because she knows what it's for.
 
-**Session 8: Her picks.** In downtime she attunes her picks, at Awakened, with *open any lock with a mechanism*. Their permission's the line on her Locks now, instead of the picks themselves, so it's still 5 steps, and from here on they'll grow with her.
+**Sessions 10 and 11: Locks.** A Grow puts *work a lock in the dark* (Body, Locks) on her first Title, so her Body's 6 and her Locks 5, and a lock's 12 steps with her picks: two d12s. Then the vault steel takes her picks to Tempered, and a slot wakes their second awakening, *Through the ward*, an active one: 1 Aura and one of her dice on a lock goes through any magic holding it shut, as if it were only steel.
 
-**Sessions 10 and 11: Locks.** A Grow puts *work a lock in the dark* on her first Title, and it fits her Locks nearly every time: 6 steps, a d12. Then the vault steel takes her picks to Tempered, and their second permission takes another slot: *open a lock that's held shut by magic*. That won't fit every lock, so it stays off her Locks, and on a warded door she brings it in for 1 Aura.
+**Session 14: A Blaze.** In a burning warehouse her Stamina's down to d2, and one more falling beam gets through, so she Blazes: she walks out through the fire with both crewmates over her shoulders. Her player could choose for her to die there, and doesn't, so she leaves the scene, and the burn becomes a Scar on her Stamina, written down as a Catch: *a burn across the back*. Whenever she lets it cause real trouble, she takes 1 Aura. It locks her Stamina's d2 for good, so she's on d4 when she leaves, and from now on a hit that gets through at d4 is a Blaze.
 
-**Session 14: A Blaze.** In a burning warehouse her wound die climbs all the way to d12, then she takes one more Hurt and Blazes: she walks out through the fire with both crewmates over her shoulders. Her player could choose for her to die there, and doesn't, so she leaves the scene, and the burn becomes a Scar, written down as a Catch: *a burn across the back*. Whenever she lets it cause real trouble, she takes 1 Aura. It starts her wound die a size bigger too, so it drops back to d4, and nothing heals her below that now.
+**Session 17: Perfected.** A pin from the Quiet Order's vault lock takes her picks to Perfected, and a slot wakes their third awakening, *Find the trap before it springs*, a passive one: +1 for each Aura in it on any die she puts on a trap.
 
-**Session 17: Perfected.** A pin from the Quiet Order's vault lock takes her picks to Perfected, and their third permission takes a slot: *find the trap on a lock before it springs*. Nearly every lock worth picking has one, so it goes on her Locks: 7 steps, a d12 and a d2.
+**Session 18: A third Title.** Her second Aspiration climbs past d12, and this time she takes a Title: *The ghost of the harbour quarter*, Mind, with Harbour, Stealth and Smuggling, and one permission, *know every way in or out of the harbour quarter* (Mind, Harbour). Her Mind's 5 now and her Stealth's 3, and she's got Harbour at 2 and Smuggling at 1 to grow into.
 
-**Session 18: A fourth Title.** Her second Aspiration climbs past d12, and she takes Shadow again: *The ghost of the harbour quarter*, with *know every way in or out of the harbour quarter*. Her Resolve maximum's 4 now, and Shadow four times makes its +2 a +5.
-
-**Session 19: Two for a Boon.** She swaps *fight dirty with a knife* and *find a buyer for anything* for a Boon on *Raised by the Guild*, *Up the Walls*: she climbs at full stride. She hasn't pulled a knife in a year, and after the fence she's done selling. Her Fight's down to a d2, and she's fine with that.
+**Session 19: Two for a Boon.** She swaps *fight dirty with a knife* and *find a buyer for anything* for a Boon on *Raised by the Guild*, *Up the Walls*: she climbs at full stride. She hasn't pulled a knife in a year, and after the fence she's done selling. That's 1 off her Body and her Knives, and 1 off her Mind and her Black market, and she's fine with that.
 
 **Session 20: Retirement.**
 
 :::sheet[Vesk, session 20]
-**Titles (4):** The best cat burglar in the city · Raised by the Guild · The woman who has never been seen · The ghost of the harbour quarter, all four Shadow.
+**Titles (3):** *The best cat burglar in the city* (Body; Stealth, Climbing, Locks) · *Raised by the Guild* (Mind; Locks, Knives, Black market) · *The ghost of the harbour quarter* (Mind; Harbour, Stealth, Smuggling).
 
-**Permissions:** Four on her first Title, one on each of the others, and *Up the Walls* in two slots on her second.
+**Permissions:** Four on her first Title, one and *Up the Walls* in two slots on her second, and one on her third.
 
-**Set actions:** Sneak 5 (d10) · Locks 7 (d12 and d2) · Move 4 (d8) · Defend 2 (d4) · Fight 1 (d2) · Study 1 (d2) · Talk 1 (d2).
+**Archetypes:** Shadow · Shadow, so her Push is +3.
 
-**Attuned:** Her picks, Perfected · her grappling line, Awakened.
+**Roots:** Body 5 · Mind 4 · Soul 0.
+
+**Specialties:** Locks 5 · Stealth 3 · Climbing 2 · Harbour 2 · Knives 1 · Black market 1 · Smuggling 1.
+
+**Attuned:** Her picks, Perfected, with three awakenings · her grappling line, Awakened.
 
 **Threads:** She's written a new bond thread for each Goal the crew finished, and the old ones have all been rewritten at least once. Paying the fence on time strained her hostile thread with him, and keeping his name out of it when the watch came asking snapped it, so she owes him nothing now.
 
 **Aspiration:** *Train someone who will outlive me*, d2.
 
-**Numbers:** Aura 5 · Resolve 4 · Shadow four times, so its +2 is a +5 · Confidence starts every scene on d6 · Stride 5 · Wound die d4, from one Scar: *a burn across the back*.
+**Numbers:** Aura 5 · Stamina d12, with its d2 locked by one Scar, *a burn across the back* · Confidence d12 · Resolve d12 · Stride 3.
 :::
 
-When she retires, she writes her final Title, and it's Shadow again: *The one who walked away*.
+When she retires, she writes her final Title: *The one who walked away*.
 
-**What changed across twenty sessions:** she went from two Titles to four, from six permissions to seven and a Boon, and from picks she just carried to Perfected ones. Taking Shadow every time has made its +2 a +5. On a lock she used to roll a d10. Now it's 7 steps, a d12 and a d2, and when she brings in the picks' magic on a warded vault it's 8: a d6 for the lock, a d6 for the trap and a d4 for the alarm, all off one action.
+**What changed across twenty sessions:** she went from two Titles to three, from six permissions to six and a Boon, and from picks she just carried to Perfected ones. On a lock she used to roll her Body and her Locks with her picks, 10 steps, a d12 and a d8. Now it's 11, a d12 and a d10, with up to 2 more on one of them from the Aura in her picks, and on a warded vault *Through the ward* takes the magic out of the lock for 1 Aura. Split, that's a d8 for the lock, a d8 for the trap and a d6 for the alarm, all off one action.
 
 ## The Crew, Session 1 to 20 {#s-crew-1-20}
 

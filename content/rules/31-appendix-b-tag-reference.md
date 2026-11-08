@@ -6,7 +6,7 @@ order: 31
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-10-28
+updated: 2026-11-09
 ---
 Every tag in here tells you how it shows up in the story and what it opens up for the crew. Tags don't make a threat's dice bigger. A tag only changes dice when it says so. Players who know a tag can bring it into a roll for 1 Aura. A tag that takes more than one win to strip carries a [multiplier](#s-tough), like *Armoured ×3*, and a tag that makes a hit hurt more is a [vulnerability](#vulnerability-tags).
 
@@ -30,7 +30,7 @@ These tags say what its telegraphs can do to you.
 | **Fast** | It is on you before the sentence ends. It closes distance, takes the door first, gets the knife in. Slow the ground down and it loses its edge. |
 | **Fast Hands** | Your purse is lighter and you didn't feel it. It takes things mid-conversation. Watch the hands, not the face. |
 | **Faster Than You** | Whoever you are, it's faster. Racing it loses. Tricking it, blocking it or making it choose doesn't. |
-| **Fear** | It aims at Confidence, not Defend. Something in the chest goes cold. Naming what it is takes some of that away. |
+| **Fear** | It aims at your Mind, so your Confidence rides against it and a shield won't stop it. Something in the chest goes cold. Naming what it is takes some of that away. |
 | **Flurry** | Blow after blow. It can aim two dice at one person in a round, and each one has to be stopped on its own. Get out of its reach, or put a shield in front of it. |
 | **Grapple** | It grabs and doesn't let go. Its telegraphs can leave you *Grabbed*, at the die that lands. A friend can pry you loose. |
 | **Grasping** | It wants what you're holding, and it'll take it. Its hits steal as well as hurt. |
@@ -44,7 +44,7 @@ These tags say what its telegraphs can do to you.
 | **Never Shows the Knife** | Every threat is polite. Every favour has a hook. You won't see it strike, only that you've been struck. |
 | **One Strike** | It gets one chance, and it has made it count before. Its first telegraph comes a step bigger. Survive it and the fight changes. |
 | **Patient** | It waits for the right moment. It will not take the first bait. Give it a deadline and it has to move. |
-| **Poisoned Words** | It says the one thing that makes you doubt your friends. It aims at Confidence, and at the bonds between you. |
+| **Poisoned Words** | It says the one thing that makes you doubt your friends. It aims at your Mind, and at the bonds between you. |
 | **Reach** | Spear, whip, long arms. It hits you from further away than you can hit back. Get inside the reach and it's clumsy. |
 | **Ride as One** | Many riders, one will. Their telegraphs land together. Break one from the pack and the rest stumble. |
 | **Runs** | It doesn't fight if it can run. Beaten means gone, and it knows the streets better than you. |
@@ -55,14 +55,14 @@ These tags say what its telegraphs can do to you.
 | **Stirs the Crowd** | It speaks and the crowd moves. Every telegraph it makes can come through the people around it. Quiet the crowd and it is one voice. |
 | **Swift** | Here, then there. It picks its ground, and it is never where you left it. Pin it to one place. |
 | **Two Knives** | One knife for show, one for the kidney. Like *Flurry*, it can aim both at one person in a round. |
-| **Vengeful** | It remembers. Hurt it and it'll come for you, maybe not today. Make peace, or make sure. |
+| **Vengeful** | It remembers. Cross it and it'll come for you, maybe not today. Make peace, or make sure. |
 | **Venom** | A scratch that burns an hour later. Its hits leave *Poisoned* behind. Know the antidote and it's only pain. |
 
 ## What keeps it going {#what-keeps-it-going}
 
 These tags are its health. Each one's a reason it's still standing, and when you strip them all, it falls. A few, like *Crumbling*, *Forms* and *Layered*, change how the rest works.
 
-Any of them can carry a **multiplier** when it should take more than one win, like *Natural Armour ×6* or *Beloved ×3*. It's as big as the creature needs, and where it goes says what the creature is: a dragon's hide might be *Hide ×8*, and a dark paladin who's the villain of the arc might be *Plate Armour ×5* and *Shield ×3*. Every win ticks one off, and the GM says what's left every time, so nobody has to guess. A named one only ticks to what fits it: blades on the hide, or turning the crowd. Marked *(first)*, nothing under it can be stripped till it's gone. A spent condition that would strip a tag, like *Burning*, ticks one off, and *Piercing* still gets through *Armoured*, whatever its multiplier. An opening ends a Mook or a Named threat, and takes two whole tags off a Boss, multipliers and all, and a weak point still ends the threat at once. There's more in [Multipliers](#s-tough).
+Any of them can carry a **multiplier** when it should take more than one win, like *Natural Armour ×8* or *Beloved ×5*. It's as big as the creature needs, and where it goes says what the creature is: a dragon's hide might be *Hide ×10*, and a dark paladin who's the villain of the arc might be *Plate Armour ×7* and *Shield ×5*. Every win ticks one off, and the GM says what's left every time, so nobody has to guess. A named one only ticks to what fits it: blades on the hide, or turning the crowd. Marked *(first)*, nothing under it can be stripped till it's gone. A spent condition that would strip a tag, like *Burning*, ticks one off, and *Piercing* still gets through *Armoured*, whatever its multiplier. An opening ends a Mook or a Named threat, and takes two whole tags off a Boss, multipliers and all, and a weak point still ends the threat at once. There's more in [Multipliers](#s-tough).
 
 | Tag | How it plays |
 | --- | --- |
@@ -112,12 +112,12 @@ Any of them can carry a **multiplier** when it should take more than one win, li
 | **Trained** | It knows how to hold a weapon and stand its ground. Nothing fancy, nothing it hasn't drilled. |
 | **Unkillable** | You can beat it. You can't kill it. It'll get up. Put it somewhere it can't get out of. |
 | **Warded** | Old marks protect it against magic and the strange: one more win to bring down. Break the ward, scuff the chalk, or come at it plainly. |
-| **Well-Connected** | Hurt it and someone important hears. It has friends in every room that matters. |
+| **Well-Connected** | Cross it and someone important hears. It has friends in every room that matters. |
 | **Won't Back Down** | It won't back down, give ground or change its mind. Threats slide off. Respect might not. |
 
 ## Vulnerabilities {#vulnerability-tags}
 
-A vulnerability makes a hit hurt more. When a win strips one of its tags or causes a Hurt, every vulnerability that fits adds one more tick, and whoever won chooses where each one goes: another off the same tag, or a tick on another tag that keeps it going, which strips a plain one outright. So one vulnerability can strip two plain tags, or take two off one multiplier. It has to make sense, so the hit has to be able to reach what it takes, and nothing under a *first* tag can go till that tag's gone. On the crew, each one's another Hurt. The same one never counts twice, so a thing that's really weak to fire has two different ones. Plenty are hidden, and Study finds them. There's more in [Vulnerabilities](#s-vulnerable).
+A vulnerability makes a hit hurt more. When a win strips one of its tags or lands a hit, every vulnerability that fits adds one more tick, and whoever won chooses where each one goes: another off the same tag, or a tick on another tag that keeps it going, which strips a plain one outright. So one vulnerability can strip two plain tags, or take two off one multiplier. It has to make sense, so the hit has to be able to reach what it takes, and nothing under a *first* tag can go till that tag's gone. On the crew, each one's another size off the track. The same one never counts twice, so a thing that's really weak to fire has two different ones. Plenty are hidden, and Study finds them. There's more in [Vulnerabilities](#s-vulnerable).
 
 | Tag | How it plays |
 | --- | --- |
@@ -130,7 +130,7 @@ A vulnerability makes a hit hurt more. When a win strips one of its tags or caus
 | **Soft Underbelly** | Its belly's bare. Get underneath it, and every hit there gets one more tick. |
 | **Easily Shamed** | Shame works on it. A win that shames it in front of its people gets one more tick. |
 | **Holy Ground** | On holy ground, everything hurts it more. Lure it there. |
-| **Opened** | The Warrior's, for 1 Resolve: every hit on it gets one more tick till the round ends. |
+| **Opened** | The Warrior's, for 1 Stamina: every hit on it gets one more tick till the round ends. |
 
 ## What drives it {#what-drives-it}
 
@@ -316,7 +316,7 @@ Each of these is +1 Power whenever it fits the roll, and its people in a scene c
 
 | Asset | What it does |
 | --- | --- |
-| **Healers** | Once a session, between two scenes, everyone in the crew steps their wound die down a size. |
+| **Healers** | Once a session, between two scenes, everyone in the crew puts one of their tracks up a size. |
 | **Relic** | Something old and powerful. Its card says what it does, often through its Secret, and without it, the faction's just another power. |
 | **A Curse on Its Goods** | Anyone who steals from it is *Hexed*, at its Power, at the start of every scene till they give it back. |
 | **A Bound Spirit** | Once a session, ask it about anything that happened inside the walls it haunts, and it tells the truth. |
@@ -331,7 +331,7 @@ A condition you put on a friend, like a ward or a blessing, goes on one friend a
 
 **For you: one step more while it lasts.** *Warded* · *Heartened* · *Covered* · *Braced* · *Unseen* · *Fleet* · *Blessed* · *Inspired* · *Rallied* · *Sighted* · *Guided* · *Disguised* · *Fortunate* · *Surging*
 
-Two of them move your Confidence as it swings. Spend *Heartened* and it comes back up a size, as far as where it started the scene, and spend *Shaken* and it drops a size.
+Two of them move your Confidence. Spend *Heartened* and it comes back up a size, and spend *Shaken* and it drops a size.
 
 *Unseen* gives you an extra action when you spend it. Coming out of hiding gives you one too, and with both it's still one.
 

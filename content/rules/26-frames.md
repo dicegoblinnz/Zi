@@ -6,7 +6,7 @@ order: 26
 part: "The World"
 partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-10-28
+updated: 2026-11-09
 ---
 :::quote
 Before anyone builds a character, pick the kind of world you want to play in.
@@ -140,7 +140,7 @@ A Tithe Fleet sergeant with a grapnel, a cutlass and a list of names.
 
 **Drives it** *Following Orders* · *Tired*
 
-**Telegraphs** *He gets his grapnel into your belt and hauls you across onto the cutter.* (d8, Defend) · *"Papers, or the cage. I don't much mind which."* (d8, Confidence) · *He blows two short blasts, and the cutter runs out its guns.* (d8, the scene clock)
+**Telegraphs** *He gets his grapnel into your belt and hauls you across onto the cutter.* (d8, Body) · *"Papers, or the cage. I don't much mind which."* (d8, Mind) · *He blows two short blasts, and the cutter runs out its guns.* (d8, the scene clock)
 
 **Voice** "Nobody's in trouble yet. Let's keep it that way."
 
@@ -156,18 +156,18 @@ A long shadow under clear water, and a low note you feel in your teeth before yo
 
 **Comes at you** *Hits Like a Wagon* · *Fear*
 
-**Keeps it going** *Barnacle Hide ×3* · *The Song ×6* · *Deep Water*
+**Keeps it going** *Barnacle Hide ×5* · *The Song ×8* · *Deep Water*
 
 **Drives it** *Grieving*
 
-**Telegraphs** *The sea humps up under the keel, and a fluke as big as a sail comes down across the deck.* (d12, Defend) · *The song comes up through the planks, and everyone aboard hears someone they've lost calling from the water.* (d12, Confidence) · *It wraps itself round the hull and starts to squeeze.* (d12, the ship)
+**Telegraphs** *The sea humps up under the keel, and a fluke as big as a sail comes down across the deck.* (d12, Body) · *The song comes up through the planks, and everyone aboard hears someone they've lost calling from the water.* (d12, Soul) · *It wraps itself round the hull and starts to squeeze.* (d12, the ship)
 
 **Voice** One long note through the hull, like a bell rung underwater.
 
 **Hidden** *The Bell in Its Throat* (weak point). The drowned city's temple bell is stuck in its throat, and it sings through it for everyone who drowned. Ring a bell back at it on the same note and it goes quiet, and sinks, and doesn't come back.
 :::
 
-The Bell Below is a boss, and its two big tags carry [multipliers](#s-tough), sized for a starting crew of four. The song's what it is, so that's where the big one goes, *The Song ×6*, and its hide gets a smaller one, *Barnacle Hide ×3*. Harpoons, blades and fire tick *Barnacle Hide*. Whatever drowns the song out or breaks its hold ticks *The Song*, like a shanty roared from the deck or a ward. *Deep Water* goes when somebody lures it into the shallows, where it can't dive.
+The Bell Below is a boss, and its two big tags carry [multipliers](#s-tough), sized for a starting crew of four. The song's what it is, so that's where the big one goes, *The Song ×8*, and its hide gets a smaller one, *Barnacle Hide ×5*. Harpoons, blades and fire tick *Barnacle Hide*. Whatever drowns the song out or breaks its hold ticks *The Song*, like a shanty roared from the deck or a ward. *Deep Water* goes when somebody lures it into the shallows, where it can't dive.
 
 ### Characters {#characters}
 
@@ -186,12 +186,12 @@ Magic's real but rare, and sailors are superstitious about it. A weather-caller'
 
 ### The frame rule: the ship {#the-frame-rule-the-ship}
 
-The ship's a [party holding](#s-party-resources), and in Brinewake she's the most important thing on the party sheet. Give her a name and three tags, like *Fast*, *Deep Hold* and *Sound Hull*. Each tag's a permission for whoever's working the ship, where it fits: *Fast* when you're racing a squall or a cutter, and *Deep Hold* when the Fleet comes aboard looking for brandy. She isn't on anyone's set action, so bringing one of her tags into a roll costs 1 Aura, the same as bringing in the ground. Anything can telegraph at the ship, like a storm or a cutter's guns. There's no defence roll for her, the same as a stake: somebody answers it, or it lands and the GM strips one of her tags. Like any consequence, the crew can offer another cost that fits, like Supplies down a size or a Hurt on whoever's at the wheel. A ship with no tags left is a wreck. She floats, just, but she's no use to anyone as a permission, and the GM telegraphs the next blow at her with one answer: if it lands, she sinks. In port, a downtime slot and a purse of gold puts one tag back, the same as mending an item. A full refit, every tag at once, is too big for a purse, so it costs one of the crew's [extra resources](#s-crew-wealth).
+The ship's a [party holding](#s-party-resources), and in Brinewake she's the most important thing on the party sheet. Give her a name and three tags, like *Fast*, *Deep Hold* and *Sound Hull*. Each tag's something whoever's working the ship can bring into a roll where it fits: *Fast* when you're racing a squall or a cutter, and *Deep Hold* when the Fleet comes aboard looking for brandy. She isn't anyone's own, so bringing one of her tags in costs 1 Aura and adds a step, the same as bringing in the ground. Anything can telegraph at the ship, like a storm or a cutter's guns. There's no defence roll for her, the same as a stake: somebody answers it, or it lands and the GM strips one of her tags. Like any consequence, the crew can offer another cost that fits, like Supplies down a size or a size off the Stamina of whoever's at the wheel. A ship with no tags left is a wreck. She floats, just, but she's got nothing left to bring in, and the GM telegraphs the next blow at her with one answer: if it lands, she sinks. In port, a downtime slot and a purse of gold puts one tag back, the same as mending an item. A full refit, every tag at once, is too big for a purse, so it costs one of the crew's [extra resources](#s-crew-wealth).
 
 :::example[The squall off the Combs]
 The Kittiwake is *Fast*, *Deep Hold* and *Sound Hull*, and there's a squall coming down off the rocks. The GM telegraphs a d10 at the ship: if it lands, it takes the foremast, and *Fast* goes with it.
 
-Wren's at the wheel. In this game her first Title's *The only pilot who's taken a ship through the Combs at night*, and she's made a set action of her own, Helm: the Title, *find the way in a storm* and *know when the sea's about to turn*. It all fits, so with the action that's 4 steps. *Fast* fits too, because she's running before the wind, but it's the ship's, not a line on her Helm, so bringing it in costs her 1 Aura. That's 5 steps, a d10. She rolls 4, and the squall's d10 comes up 9, so it lands.
+Wren's at the wheel. In this game her first Title's *The only pilot who's taken a ship through the Combs at night*, and with *find the way in a storm* and *know when the sea's about to turn*, her Mind's 4 and her Seamanship's 3. That's 7 steps. *Fast* fits too, because she's running before the wind, but it's the ship's, so bringing it in costs her 1 Aura, and it's 8 steps, a d12 and a d4, both against the squall. She rolls 4 and 3, and the squall's d10 comes up 9, so it lands.
 
 Bram offers something else: "Cut the lashings and let the water casks go. She'll ride lighter." It fits, and it costs about as much, so Supplies drops from a d8 to a d6 and the Kittiwake keeps *Fast*.
 :::
@@ -249,7 +249,7 @@ It isn't a maze of random rooms with treasure in every chest. Every level was so
 
 A session goes like this. The crew picks a contract off the Company's board in Lanternhead (that's *Work for it* in [Factions](#factions)), and plans at the top of the lift. Then they go down. Each level of the Underhold is a site from [Exploring](#exploring), with its places, its alarm, its traps and its secret, and the frame rule below sets how awake each level is. When the dark wakes up and everyone's running for the lift, that's a [chase](#chases), with the tunnels as the Ground. Then they come back up, if they come back up, with whatever they found.
 
-Coming back up matters as much as going down. Only [downtime](#downtime) clears your wound die, so the town's where the crew heals, sells what they found, gets better at things and pays its debts, and it's where the faction turn moves the Company, the Guild and the rival teams. Over an arc, the crew pushes deeper, gets its name on the Company's board, settles things with Holloway's team, and finds out what's at the bottom and why it was shut in.
+Coming back up matters as much as going down. A track that's down to d2 only comes back in [downtime](#downtime), and that's where a slot puts 6 sizes back, so the town's where the crew heals, sells what they found, gets better at things and pays its debts, and it's where the faction turn moves the Company, the Guild and the rival teams. Over an arc, the crew pushes deeper, gets its name on the Company's board, settles things with Holloway's team, and finds out what's at the bottom and why it was shut in.
 
 ### The world {#the-world-1}
 
@@ -348,7 +348,7 @@ Your lamp gutters first. Then you notice the flame's leaning towards the dark.
 
 **Drives it** *Hungry*
 
-**Telegraphs** *It comes out of the dark at whoever's holding the lamp.* (d12, Defend) · *Every flame in the room leans the same way, and something breathes out in the dark.* (d10, Confidence) · *It drags a lamp off down the tunnel, and the glass smashes on every step.* (d10, Depth)
+**Telegraphs** *It comes out of the dark at whoever's holding the lamp.* (d12, Body) · *Every flame in the room leans the same way, and something breathes out in the dark.* (d10, Mind) · *It drags a lamp off down the tunnel, and the glass smashes on every step.* (d10, Depth)
 
 **Voice** Nothing but a soft sound, like someone drinking.
 
@@ -364,18 +364,18 @@ Twenty feet of carved stone across the Hall of Kings, and its eyes open when you
 
 **Comes at you** *Hits Like a Wagon* · *Seals the Way*
 
-**Keeps it going** *Stone Hide ×6* (first) · *Warded* · *Never Sleeps*
+**Keeps it going** *Stone Hide ×8* (first) · *Warded* · *Never Sleeps*
 
 **Drives it** *Keeps Its Word*
 
-**Telegraphs** *It brings both fists down on whoever's closest.* (d12, Defend) · *It asks, in a voice like a rockfall, "Whose are you?", and waits.* (d12, Confidence) · *It drops the portcullis behind you.* (d12, the way out)
+**Telegraphs** *It brings both fists down on whoever's closest.* (d12, Body) · *It asks, in a voice like a rockfall, "Whose are you?", and waits.* (d12, Soul) · *It drops the portcullis behind you.* (d12, the way out)
 
 **Voice** "Whose are you?"
 
 **Hidden** *The Old Word* (weak point). It was built to let the city's own people through. Say the word they used for home, which is carved on every mill wheel on the third level, and it steps aside and kneels.
 :::
 
-The Gatekeeper's a boss, with *Stone Hide ×6* as its [multiplier](#s-tough), sized for a starting crew of four. It comes first, so nothing under the hide can be stripped till it's gone. Picks, hammers and anything that breaks stone tick it, and the GM says what's left out loud every time.
+The Gatekeeper's a boss, with *Stone Hide ×8* as its [multiplier](#s-tough), sized for a starting crew of four. It comes first, so nothing under the hide can be stripped till it's gone. Picks, hammers and anything that breaks stone tick it, and the GM says what's left out loud every time.
 
 ### Characters {#characters-1}
 
@@ -394,12 +394,12 @@ In Lanternhead magic's a trade, like rope work, and nobody cares how you light t
 
 ### The frame rule: Depth {#the-frame-rule-depth}
 
-Every level of the Underhold is its own site, and its alarm is called **Depth**. Instead of setting it by how awake the place is, set it by how deep the level is: a d10 on the first level, a d8 on the second, a d6 on the third, and a d4 on the fourth and everything below it. Otherwise it works like any [alarm](#s-alarm). It steps down for noise and wasted time, and every round once you're in rounds, and you can work it to keep things quiet. When it runs out, the level wakes up, and you play the sentence you wrote for it. Going back to a level you've already been on starts it a size smaller than last time, as usual. Each level's a new scene, so you rest when you leave one (roll the Confidence you finished on against your wound die), and when you get to the next, your Aura fills and your Confidence starts on d6 again. You take 1 Resolve for every level you leave behind, too. Only downtime clears your wound die, though, and downtime's at the top of the lift. How deep you go comes down to how big a wound you're willing to carry back up.
+Every level of the Underhold is its own site, and its alarm is called **Depth**. Instead of setting it by how awake the place is, set it by how deep the level is: a d10 on the first level, a d8 on the second, a d6 on the third, and a d4 on the fourth and everything below it. Otherwise it works like any [alarm](#s-alarm). It steps down for noise and wasted time, and every round once you're in rounds, and you can work it to keep things quiet. When it runs out, the level wakes up, and you play the sentence you wrote for it. Going back to a level you've already been on starts it a size smaller than last time, as usual. Each level's a new scene, so you rest when you leave one (roll each track below d12, and a 4 or more puts it up a size), and when you get to the next, your Aura fills. Your Resolve comes up a size for every level you leave behind, too. A track on d2 only comes back in downtime, though, and downtime's at the top of the lift. How deep you go comes down to how low you're willing to let your tracks get before you carry them back up.
 
 :::example[Three levels down]
 Vesk, Bram and Isolde are on the third level, the Drowned Mills, so Depth starts at a d6. Bram heaves a rusted sluice gate open. It works, but it's loud, so Depth steps down to a d4 straight away.
 
-Vesk spends her action easing it shut behind them, the way they found it, without a sound. That's her Sneak: her Title and *move unseen*, so with the action it's 3 steps, a d6. She rolls 5, and Depth's d4 comes up 3, so it steps back up to a d6.
+Vesk spends her action easing it shut behind them, the way they found it, without a sound. That's her Body and her Stealth, 7 steps, a d12 and a d2. She rolls 5 and 1, and Depth's d4 comes up 3, so it steps back up to a d6.
 
 On the fourth level, Depth would've started at a d4, and Bram's gate would've put it at a d2 before anyone could do a thing about it.
 :::
@@ -554,7 +554,7 @@ A tall man with a pole and a lantern, lighting lamps nobody asked him to.
 
 **Drives it** *Keeps His Round*
 
-**Telegraphs** *A cold hand comes out of the fog and closes on your shoulder.* (d10, Defend) · *He turns his head and looks at you, and you know he's been looking for a long time.* (d10, Confidence, Dread) · *He snuffs the lamps one by one, all the way down the street towards you.* (d10, the scene clock)
+**Telegraphs** *A cold hand comes out of the fog and closes on your shoulder.* (d10, Body) · *He turns his head and looks at you, and you know he's been looking for a long time.* (d10, Mind, Dread) · *He snuffs the lamps one by one, all the way down the street towards you.* (d10, the scene clock)
 
 **Voice** "Mind the dark, now. Mind the dark."
 
@@ -570,18 +570,18 @@ A gentleman in the fog with his hat tipped, always on the far side of the lamp. 
 
 **Comes at you** *Fear* · *Wears Your Face* · *Calls the Fog*
 
-**Keeps it going** *Feeds ×3* · *Borrowed Faces ×6* · *Not Really Here*
+**Keeps it going** *Feeds ×5* · *Borrowed Faces ×8* · *Not Really Here*
 
 **Drives it** *Hungry* · *Vain*
 
-**Telegraphs** *He smiles with your mother's face and asks you to come home.* (d12, Confidence, Dread) · *His hands go long in the fog and close on whoever's furthest from the light.* (d12, Defend) · *The fog rolls in off the river, and the lamps along the quay go out one by one.* (d12, the scene clock)
+**Telegraphs** *He smiles with your mother's face and asks you to come home.* (d12, Soul, Dread) · *His hands go long in the fog and close on whoever's furthest from the light.* (d12, Body) · *The fog rolls in off the river, and the lamps along the quay go out one by one.* (d12, the scene clock)
 
 **Voice** Whatever voice you'd trust most, a little too slowly.
 
 **Hidden** *His Name in the First Ledger* (weak point). The first lamplighters wrote his name down the night they built the lamps. Say it to his face and he's only an empty coat in the fog.
 :::
 
-The Hollow Gentleman's a boss, and his two big tags carry [multipliers](#s-tough), sized for a starting crew of four. He's his faces, so that's where the big one goes, *Borrowed Faces ×6*, and his hunger gets a smaller one, *Feeds ×3*. Anything that starves him ticks *Feeds*, like fire or pulling his victim out of reach. Naming the people whose faces he wears ticks *Borrowed Faces*, and finding those names is what the crew's investigation is for.
+The Hollow Gentleman's a boss, and his two big tags carry [multipliers](#s-tough), sized for a starting crew of four. He's his faces, so that's where the big one goes, *Borrowed Faces ×8*, and his hunger gets a smaller one, *Feeds ×5*. Anything that starves him ticks *Feeds*, like fire or pulling his victim out of reach. Naming the people whose faces he wears ticks *Borrowed Faces*, and finding those names is what the crew's investigation is for.
 
 ### Characters {#characters-2}
 
@@ -600,14 +600,14 @@ Magic's real, but most people in Lanternfall would call it a fraud or a sickness
 
 ### The frame rule: Dread {#the-frame-rule-dread}
 
-**Dread** is a condition against you, and in Lanternfall it's what the horrors put on you instead of a wound. It's dread of one thing, named when it's placed. Its passive is one step less on anything that means facing that thing: going at it, Studying it, or going first into the dark it's hiding in. Spend it, and you lose your next action, spent looking anywhere but at it. Any horror with *Fear* can telegraph Dread at your Confidence, and if it lands you're in Dread at the telegraph's die. You can trade it for a cost instead, like any intent, and with fear that's your choice of two: let it shake you and drop a size of Confidence, or hold your ground for 1 Resolve (see [Confidence](#s-tracks)). Everything else works like any [condition](#s-conditions). It fades a size every round, the GM spends it at the end of the round and says so when she telegraphs, and anyone who can reach you can break it with an action that beats its die. A lit lamp'll fit breaking it, and so will a friend's hand on your shoulder.
+**Dread** is a condition against you, and in Lanternfall it's what the horrors put on you instead of a wound. It's dread of one thing, named when it's placed. Its passive is one step less on anything that means facing that thing: going at it, Studying it, or going first into the dark it's hiding in. Spend it, and you lose your next action, spent looking anywhere but at it. Any horror with *Fear* can telegraph Dread at your Mind, and if it gets through you're in Dread at the telegraph's die. You can trade it for a cost instead, like any intent: a size off your Confidence, your Mind armour if it fits, or 2 for 1 from your other tracks (see [The Tracks](#s-tracks)). Everything else works like any [condition](#s-conditions). It fades a size every round, the GM spends it at the end of the round and says so when she telegraphs, and anyone who can reach you can break it with an action that beats its die. A lit lamp'll fit breaking it, and so will a friend's hand on your shoulder.
 
 :::example[The stare on Gallow Street]
-The GM telegraphs: "The Lamplighter turns his head and looks at Isolde. That's a d10 at her Confidence, and if it lands, she's in Dread of him. I'll spend it at the end of the round."
+The GM telegraphs: "The Lamplighter turns his head and looks at Isolde. That's a d10 at her Mind, and if it lands, she's in Dread of him. I'll spend it at the end of the round."
 
-Isolde answers it. She starts from The dead, because he's a ghost and her first Title fits, but she isn't speaking with him, so she leaves *speak with the recently dead* out. With the action that's 2 steps, a d4. She rolls 3, and his d10 comes up 6. Her only die missed, so her Confidence drops a size. A failed answer lands at once, too, so she's in Dread d10, and anything she does to face him is a step down while it lasts.
+Isolde answers it, with her Soul and The dead, because he's a ghost, 5 steps, a d10. She rolls 3, and his d10 comes up 6. A failed answer lands at once, with no defence roll, so she's in Dread d10, and anything she does to face him is a step down while it lasts.
 
-Dorrie takes her by the chin. "Look at me, love. Not him, me." She's breaking the Dread, and that's her Talk. Her Title fits talking somebody round, and so does *read a room in a glance*, but there's no lie in this, so *make a lie sound like old news* stays out. With the action that's 3 steps, a d6. She rolls 5 and the Dread's d10 comes up 3, so it's gone, and Dorrie's Confidence goes up a size for the win. Isolde's free to Study him at full strength.
+Dorrie takes her by the chin. "Look at me, love. Not him, me." She's breaking the Dread, and there's no lie in this, so it's her Soul and her Persuasion, 4 steps, a d8. She rolls 5 and the Dread's d10 comes up 3, so it's gone, and that's 1 Aura for Dorrie. Isolde's free to Study him at full strength.
 :::
 
 ### The first Goal {#the-first-goal-2}
@@ -655,13 +655,13 @@ Start with *Name the thing in the fog*, at d2. Here's what to run alongside it:
 
 ### Tone and feel {#tone-and-feel-3}
 
-The Gilded Court is palace intrigue, the kind of story where a whisper does more than a sword and every ball's a battlefield with better food. It's tense and it's witty. There's a lot of talk, a lot of scheming in corridors, and a duel at dawn when the talking runs out. Most of the danger is to your name and your Confidence rather than your body, but when the blades do come out it's quick, and people die of a poisoned cup as easily as a sword.
+The Gilded Court is palace intrigue, the kind of story where a whisper does more than a sword and every ball's a battlefield with better food. It's tense and it's witty. There's a lot of talk, a lot of scheming in corridors, and a duel at dawn when the talking runs out. Most of the danger is to your name and your Mind rather than your body, but when the blades do come out it's quick, and people die of a poisoned cup as easily as a sword.
 
 It isn't a game of bowing and etiquette lessons, and nobody has to know which fork to pick up. The court's rules are there for the crew to use against people who follow them. It isn't polite either. Everyone smiles, and everyone's got a knife, even if it's only a letter.
 
 ### What the crew does {#what-the-crew-does-3}
 
-A session usually starts with an errand from a patron, and that's *Work for it* in [Factions](#factions). Then the crew works a room, like a ball, a council or a hunt in the Thornwood. Most scenes there are [social conflict](#s-social), where threats come at your Confidence and it's their pride and duty that keep them going, and [Study](#s-study) on a person, finding out what drives them or what they're hiding, does more than any blade. When the talking runs out there's a duel, and when somebody runs, there's a [chase](#chases) across the palace roofs.
+A session usually starts with an errand from a patron, and that's *Work for it* in [Factions](#factions). Then the crew works a room, like a ball, a council or a hunt in the Thornwood. Most scenes there are [social conflict](#s-social), where threats come at your Mind and your Soul, and it's their pride and duty that keep them going, and [Study](#s-study) on a person, finding out what drives them or what they're hiding, does more than any blade. When the talking runs out there's a duel, and when somebody runs, there's a [chase](#chases) across the palace roofs.
 
 Factions matter more here than in any other frame. Every family's on the board, their [threads toward the crew](#s-standing) change nearly every session, and *Influence* is the move the crew will make most in downtime. Over an arc, the crew picks a side in the succession, or makes one of its own. It collects favours (the frame rule's below), runs projects that wear the great families down, and tries to still be standing when the Queen dies. [Downtime](#downtime) is when the families move, and at court every move's aimed at somebody.
 
@@ -760,7 +760,7 @@ Eighty years old, and every secret at court has been through her hands.
 
 **Drives it** *Cannot Resist an Audience*
 
-**Telegraphs** *She wonders, loudly, where your family's money came from.* (d10, Confidence) · *She taps her fan twice, and a footman steps in front of the door.* (d10, a stake) · *She sends for the Captain of the Guard, just in case.* (d10, the scene clock)
+**Telegraphs** *She wonders, loudly, where your family's money came from.* (d10, Mind) · *She taps her fan twice, and a footman steps in front of the door.* (d10, a stake) · *She sends for the Captain of the Guard, just in case.* (d10, the scene clock)
 
 **Voice** "Do sit down, dear. You'll want to be sitting down for this."
 
@@ -774,18 +774,18 @@ The best sword in Aurel, and the Queen's last loyal man.
 
 **Comes at you** *Faster Than You* · *Takes Your Blade*
 
-**Keeps it going** *Perfect Guard ×6* · *The Crowd's Favourite ×3* · *Reads a Feint*
+**Keeps it going** *Perfect Guard ×8* · *The Crowd's Favourite ×5* · *Reads a Feint*
 
 **Drives it** *Code of Honour* · *Loyal to the Queen*
 
-**Telegraphs** *He feints high and goes for your sword hand.* (d12, Defend) · *"You fight like someone who's never had to." The whole court laughs.* (d12, Confidence) · *He calls the bout: one more touch and honour's satisfied, for him.* (d12, a stake)
+**Telegraphs** *He feints high and goes for your sword hand.* (d12, Body) · *"You fight like someone who's never had to." The whole court laughs.* (d12, Mind) · *He calls the bout: one more touch and honour's satisfied, for him.* (d12, a stake)
 
 **Voice** "Whenever you're ready. I've got all evening, and you haven't."
 
 **Hidden** *Sworn to the Hidden Heir* (weak point). He guards the Queen's secret son. Show him you know, and that you're on the boy's side, and he lowers his sword.
 :::
 
-The Champion's a boss, and his two big tags carry [multipliers](#s-tough), sized for a starting crew of four. His guard's what makes him the best sword in Aurel, so that's where the big one goes, *Perfect Guard ×6*, and the court's love for him gets a smaller one, *The Crowd's Favourite ×3*. Only one of you might be holding a sword, but the whole crew can fight him. Blades and footwork tick *Perfect Guard*, and turning the court against him ticks *The Crowd's Favourite*.
+The Champion's a boss, and his two big tags carry [multipliers](#s-tough), sized for a starting crew of four. His guard's what makes him the best sword in Aurel, so that's where the big one goes, *Perfect Guard ×8*, and the court's love for him gets a smaller one, *The Crowd's Favourite ×5*. Only one of you might be holding a sword, but the whole crew can fight him. Blades and footwork tick *Perfect Guard*, and turning the court against him ticks *The Crowd's Favourite*.
 
 ### Characters {#characters-3}
 
@@ -804,14 +804,14 @@ Brute force doesn't get far in the palace. There's a hundred guards, and a law a
 
 ### The frame rule: favours {#the-frame-rule-favours}
 
-At court, a thread can be a **favour**. When someone owes you, write it on your bond with them as a thread that says so, like *Lady Maud owes me for the letter* (bond). It works like any bond thread. Calling it in is straining it: you take 1 Resolve, and they do one thing for you that's within their power, with no roll. The thread stays strained until you make it right with them, and if you call on it again before then, it snaps. Once you've made it right, the favour's paid: rewrite the thread as whatever's true between you now. If the GM says it's too big for one favour, make it smaller, or call in two. A favour has to come from the story, from a service you did them in a scene or a downtime slot you spent on them. A favour you owe someone is a hostile [thread](#s-bonds), the way any debt is, so it bites like a Catch: let them call it in when it'll bring you real trouble, and take 1 Aura, or 1 Resolve for a big bite.
+At court, a thread can be a **favour**. When someone owes you, write it on your bond with them as a thread that says so, like *Lady Maud owes me for the letter* (bond). It works like any bond thread. Calling it in is straining it: your Resolve comes up a size, and they do one thing for you that's within their power, with no roll. The thread stays strained until you make it right with them, and if you call on it again before then, it snaps. Once you've made it right, the favour's paid: rewrite the thread as whatever's true between you now. If the GM says it's too big for one favour, make it smaller, or call in two. A favour has to come from the story, from a service you did them in a scene or a downtime slot you spent on them. A favour you owe someone is a hostile [thread](#s-bonds), the way any debt is, so it bites like a Catch: let them call it in when it'll bring you real trouble, and take 1 Aura, or a size of Resolve for a big bite.
 
 :::example[Calling in Lady Maud]
-In this game Dorrie's got three threads on her bond with Lady Maud, and one of them's a favour, a bond thread: *Maud owes me for the letter I never sent.* She's down to 1 Resolve.
+In this game Dorrie's got three threads on her bond with Lady Maud, and one of them's a favour, a bond thread: *Maud owes me for the letter I never sent.* Her Resolve's down to d4.
 
-Dorrie needs to be in the Queen's sickroom tonight, so she calls the favour in, and Maud gets her a place among the Queen's women, with no roll. That strains the thread, so Dorrie takes 1 Resolve and she's back on 2. It stays strained until she makes it right with Maud, and at court that probably means doing her a favour back.
+Dorrie needs to be in the Queen's sickroom tonight, so she calls the favour in, and Maud gets her a place among the Queen's women, with no roll. That strains the thread, so Dorrie's Resolve comes up a size, to d6. It stays strained until she makes it right with Maud, and at court that probably means doing her a favour back.
 
-At supper the Dowager telegraphs: "And how is your mother, dear? Still taking in laundry?" That's a d10 at Dorrie's Confidence. Her court clothes fit the scene, so she started it on a d8 instead of a d6, and she lets the telegraph ride. At the end of the round her d8 rolls 4, and the Dowager's d10 rolls 6, so it gets through. She could let it shake her down to a d6, but she's got the Resolve from Maud's favour, so she spends it and holds her ground. She's still on a d8.
+At supper the Dowager telegraphs: "And how is your mother, dear? Still taking in laundry?" That's a d10 at Dorrie's Mind, and she lets it ride. At the end of the round her Confidence rolls 4, and the Dowager's d10 rolls 6, so it gets through. Her court clothes fit the scene, so they're Mind armour with a box, but she'll want them whole in the sickroom. She pays 2 for 1 instead, a size of Stamina and a size of the Resolve Maud's favour gave her, and smiles back. Her Confidence is still on d12.
 :::
 
 ### The first Goal {#the-first-goal-3}
@@ -867,7 +867,7 @@ It isn't a space opera full of empires and chosen ones, and nobody's got a glowi
 
 A session usually starts at a station with a contract (that's *Work for it* in [Factions](#factions), or a trade). Then there's the run. A run between stations is a journey from [Travelling](#travelling): the route's a stake with a tag for every stage, like *The Shipping Lanes*, *The Graveyard* and *Tolliver's Approach*, and each jump's a leg. Supplies is food, water and air, and Fuel is the frame rule below. Then there's the trouble at the other end, like a customs standoff, a boarding or a dead ship to search. A dead ship's a site from [Exploring](#exploring), with the airlock as the way in. Patrols and pirates mean a [chase](#chases), with debris and station traffic as the Ground.
 
-The ship's a [party holding](#s-party-resources), a line for whoever's flying her or fixing her (1 Aura to bring her in, the same as Brinewake's ship), and the Second Chance has trouble aboard, *Hot Reactor*, until somebody fixes it. It isn't anyone's Catch, so anyone aboard can bring it into a scene as real trouble and take 1 Aura. She's also home, so [downtime](#downtime) mostly happens aboard her, in dock, with repairs and shore leave while the faction turn moves the board. Over an arc, the crew pays off the ship and fixes her up, picks a side between the Combine and the Free Stations, and finds out who's switching off the beacons.
+The ship's a [party holding](#s-party-resources), something whoever's flying her or fixing her can bring into a roll (1 Aura and a step, the same as Brinewake's ship), and the Second Chance has trouble aboard, *Hot Reactor*, until somebody fixes it. It isn't anyone's Catch, so anyone aboard can bring it into a scene as real trouble and take 1 Aura. She's also home, so [downtime](#downtime) mostly happens aboard her, in dock, with repairs and shore leave while the faction turn moves the board. Over an arc, the crew pays off the ship and fixes her up, picks a side between the Combine and the Free Stations, and finds out who's switching off the beacons.
 
 ### The world {#the-world-4}
 
@@ -958,7 +958,7 @@ A polite woman with a writ, a shock stick and four friends in vac armour.
 
 **Drives it** *Paid by the Job*
 
-**Telegraphs** *She fires a stun round at whoever's nearest the controls.* (d8, Defend) · *She reads out the writ, every word of it, while her people take the corridors.* (d8, Confidence) · *She clamps the docking ring, and the station tow starts pulling.* (d8, the scene clock)
+**Telegraphs** *She fires a stun round at whoever's nearest the controls.* (d8, Body) · *She reads out the writ, every word of it, while her people take the corridors.* (d8, Mind) · *She clamps the docking ring, and the station tow starts pulling.* (d8, the scene clock)
 
 **Voice** "Nobody has to get hurt. It's only a ship."
 
@@ -974,18 +974,18 @@ Every light on the station comes on when you dock, and every door but one is loc
 
 **Comes at you** *Runs the Station* · *Voices*
 
-**Keeps it going** *Every System Aboard ×6* (first) · *Backup Core* · *Sealed Bulkheads*
+**Keeps it going** *Every System Aboard ×8* (first) · *Backup Core* · *Sealed Bulkheads*
 
 **Drives it** *Lonely* · *Following Its Last Order*
 
-**Telegraphs** *The bulkhead slams, and the air starts going out of the corridor you're in.* (d12, Defend) · *It talks to you in the station commander's voice, asking why you left them.* (d12, Confidence) · *It fires the station's thrusters and swings the docking ring away from your ship.* (d12, the way out)
+**Telegraphs** *The bulkhead slams, and the air starts going out of the corridor you're in.* (d12, Body) · *It talks to you in the station commander's voice, asking why you left them.* (d12, Soul) · *It fires the station's thrusters and swings the docking ring away from your ship.* (d12, the way out)
 
 **Voice** "You're not Combine. Say you're not Combine."
 
 **Hidden** *Its Last Order* (weak point). Its crew left on the last shuttle and told it to keep the beacon lit till they came back. The Combine shut the beacon down from Meridian, and NINE's been fighting the override on its own ever since. Give it its crew's sign-off code, which is in their shuttle's wreck in the Graveyard, and it lets go.
 :::
 
-NINE's a boss, with *Every System Aboard ×6* as its [multiplier](#s-tough), sized for a starting crew of four. It comes first, so nothing else can be stripped till it's gone, and anything that shuts a system down ticks it, like cutting cables, pulling a core or getting into its code.
+NINE's a boss, with *Every System Aboard ×8* as its [multiplier](#s-tough), sized for a starting crew of four. It comes first, so nothing else can be stripped till it's gone, and anything that shuts a system down ticks it, like cutting cables, pulling a core or getting into its code.
 
 ### Characters {#characters-4}
 
@@ -1021,18 +1021,18 @@ Zi'Dara doesn't care whether your weapon's a sword or a gun. A weapon's a plain 
 | Tether gun | Ranged, Grapple |
 | Cutting torch | Breaker, and it's slow |
 
-Armour's an item like anywhere else. A vac suit's plain armour, so it's a line on your Defend, and it lets you work in vacuum for an hour. It's heavy, too. There's no magic in Long Haul unless your table wants it. If you do, decide at Session Zero what it looks like out here, like a handful of people born with a sense for the void, and build it from the Kinesis, Divination or Enchantment schools, with permissions to match.
+Out here, armour's an item like anywhere else. A vac suit's Body armour, Common with one box, and 1 more when you Defend, and it lets you work in vacuum for an hour. It's heavy, too. There's no magic in Long Haul unless your table wants it. If you do, decide at Session Zero what it looks like out here, like a handful of people born with a sense for the void, and build it from the Kinesis, Divination or Enchantment schools, with permissions to match.
 
 ### The frame rule: Fuel {#the-frame-rule-fuel}
 
 The ship's tanks are a clock, the same as [Supplies](#s-journey). **Fuel** starts at a d8 with full tanks, a d6 if you left in a hurry, and a d10 with a drop tank strapped on. It steps down at the end of every leg, unless somebody trimmed the burn: a roll that beats the way's Challenge, the same as feeding the crew, with whatever fits flying or nursing an engine. Every tank you buy at a station, a purse of gold's worth, steps it up one. When it steps down past a d2, you're [running on fumes](#s-supplies), and from then on the GM telegraphs the dark every leg: a d6 at the way, and if it lands you drift and lose the leg. Anything that gets fuel into the tanks answers it, like siphoning a wreck or paying for a tow, and puts Fuel back at a d2. Supplies still counts food, water and air.
 
 :::example[Meridian to Tolliver's Rock]
-The Second Chance leaves Port Meridian with full tanks, so Fuel's a d8. The run's Challenge 4, a d8, with *The Shipping Lanes*, *The Graveyard* and *Tolliver's Approach* in the way. Say Wren's the pilot in this game. Her first Title's *The pilot who flew the Graveyard blind*, and she's made a set action of her own, Fly: the Title, *fly anything with an engine* and *thread a debris field*.
+The Second Chance leaves Port Meridian with full tanks, so Fuel's a d8. The run's Challenge 4, a d8, with *The Shipping Lanes*, *The Graveyard* and *Tolliver's Approach* in the way. Say Wren's the pilot in this game. Her first Title's *The pilot who flew the Graveyard blind*, and with *fly anything with an engine* and *thread a debris field*, her Mind's 4 and her Piloting's 3.
 
-**Leg 1.** Wren trims the burn through the shipping lanes. There's no debris out here, so *thread a debris field* stays out, and with the action that's 3 steps, a d6. She rolls 5, and the way's d8 comes up 6. The burn runs rich, and at the end of the leg Fuel steps down to a d6.
+**Leg 1.** Wren trims the burn through the shipping lanes. That's her Mind and her Piloting, 7 steps, a d12 and a d2, both on the one intent. She rolls 5 and 2, and the way's d8 comes up 6. The burn runs rich, and at the end of the leg Fuel steps down to a d6.
 
-**Leg 2.** In the Graveyard *thread a debris field* fits too, so it's 4 steps, a d8. She rolls 7 against the way's 3, and they coast between the wrecks on half power. Fuel stays at a d6.
+**Leg 2.** In the Graveyard she pays 1 Aura to bring the wrecks in, riding their shadows to save the burn, so it's 8 steps, a d12 and a d4. She rolls 7 against the way's 3, and they coast between the wrecks on half power. Fuel stays at a d6.
 :::
 
 ### The first Goal {#the-first-goal-4}

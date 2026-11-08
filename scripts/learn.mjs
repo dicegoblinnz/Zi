@@ -52,14 +52,18 @@ export function wordsOf(md) {
   return text.split(/\s+/).filter((w) => /[A-Za-z0-9]/.test(w)).length;
 }
 
-// The newest change log entry: its date and every section it links to.
+// The newest change log entries, every one on the newest day: the date and every section they link to.
 export function newestChange(changesBody) {
-  const entries = [...changesBody.matchAll(/^## (.+?) \{#c-(\d{4}-\d{2}-\d{2})\}[ \t]*$/gm)].map((m) => ({ title: m[1], iso: m[2], at: m.index }));
+  const entries = [...changesBody.matchAll(/^## (.+?) \{#c-(\d{4}-\d{2}-\d{2})(?:-[\w-]+)?\}[ \t]*$/gm)].map((m) => ({ title: m[1], iso: m[2], at: m.index }));
   if (!entries.length) return null;
   const newest = entries.reduce((a, e) => (e.iso > a.iso ? e : a));
-  const rest = changesBody.slice(newest.at).split("\n").slice(1).join("\n");
-  const end = rest.search(/^## /m);
-  const text = end === -1 ? rest : rest.slice(0, end);
+  // Two entries can share a day (each with its own word after the date), so
+  // every entry on the newest day counts.
+  const text = entries.filter((e) => e.iso === newest.iso).map((e) => {
+    const rest = changesBody.slice(e.at).split("\n").slice(1).join("\n");
+    const end = rest.search(/^## /m);
+    return end === -1 ? rest : rest.slice(0, end);
+  }).join("\n");
   return { title: newest.title, iso: newest.iso, links: [...new Set([...text.matchAll(/\]\(#([A-Za-z0-9_-]+)\)/g)].map((m) => m[1]))] };
 }
 

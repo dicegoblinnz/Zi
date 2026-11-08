@@ -103,8 +103,8 @@ A hit, a size off the track it's at · a box on your armour on that Root, or som
 -   A win: strip a tag, or tick one off its multiplier · take it down · a condition · move it · learn something · stop a telegraph. An opening: one win ends a Mook or Named, and a Boss loses two whole tags (only its weak point ends it).
 -   **Vulnerabilities:** each one that fits a win that strips a tag or lands a hit adds one more tick, and you choose where it goes: the same tag, or another one the hit could reach, so one vulnerability can strip two plain tags. On you, it's one more size off the track. The same one never counts twice. *Prone* and *Exposed* are vulnerabilities, and a hidden one's a hidden tag.
 -   **Forms:** when a form's last keeps-it-going tag goes, it changes. It takes 3 to 5 tags from its Forms list, and its multipliers come back on whichever of them matter most. Its weak point ends it in any form.
--   **Round budget:** about 5 steps of telegraphs a round for each player, and one die at each of the crew from each threat. A Breather's about half, and Hard's about half again. A telegraph costs its die's steps, once for each target.
--   **Threat budget:** 10 a character with two Titles, about 12 or 13 with three, 15 with four, 17 or 18 with five and 20 with six, then it's the GM's call. It sizes multipliers and how long a scene runs.
+-   **Round budget:** about 10 steps of telegraphs a round for each player, and one die at each of the crew from each threat. A Breather's about half, and Hard's about half again. A telegraph costs its die's steps, once for each target, and says Body, Mind or Soul.
+-   **Threat budget:** 15 a character as they start, so 60 for four, and about 2 or 3 more for every Title, archetype or attuned thing an Aspiration gives them after that, up to 25 with four, then it's the GM's call. It sizes multipliers and how long a scene runs. The bestiary's multipliers are written for 60, and a threat's Challenge plus 2 is a good start for your own.
 
 ## Conditions {#conditions}
 

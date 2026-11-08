@@ -57,19 +57,24 @@ export function whoAndDoes(sentence, fallback) {
   return n && does ? { who, does } : { who: fallback, does: s };
 }
 
-// What it's aimed at, read off what follows its die: "Defend, Grabbed" is one
-// of the crew, against Defend, and Grabbed if it lands; "the deal" is one of
+// What it's aimed at, read off what follows its die: "Body, Grabbed" is one
+// of the crew, at their Body, and Grabbed if it lands. Mind and Soul are fear
+// on the live table till it has the three tracks, and Defend and Confidence,
+// the words from before Roots, still read on pages brought in back then (Defend
+// a blow, Confidence fear). "the deal" is one of
 // the place's stakes (stakes: their names), found by its name or the words it
 // starts or ends with (the ship, for The ship in the bay); "the scene clock";
-// and "everyone on the gallery, Defend, Staggered" is a part of the place.
+// and "everyone on the gallery, Body, Staggered" is a part of the place.
 // One at a stake puts a new tag in its way if it lands: the one in italics
 // after the stake, if it names one, or the telegraph's own words (line). It
 // gives { why } when it can't tell.
+export const ROOT_WORDS = new Set(["Body", "Mind", "Soul", "Defend", "Confidence"]);
+const FEAR_WORDS = new Set(["Mind", "Soul", "Confidence"]);
 export function readAim(text, stakes, line = "") {
   const parts = String(text ?? "").split(",").map((x) => x.trim()).filter(Boolean);
-  const j = parts.findIndex((x) => x === "Defend" || x === "Confidence");
+  const j = parts.findIndex((x) => ROOT_WORDS.has(x));
   const target = j >= 0 ? parts.slice(0, j) : parts;
-  const out = { kind: j >= 0 && parts[j] === "Confidence" ? "fear" : "blow", aim: "crew", one: j >= 0 ? curly(flat(parts.slice(j + 1).join(", "))).replace(/^[a-z]/, (c) => c.toUpperCase()) : "" };
+  const out = { kind: j >= 0 && FEAR_WORDS.has(parts[j]) ? "fear" : "blow", aim: "crew", one: j >= 0 ? curly(flat(parts.slice(j + 1).join(", "))).replace(/^[a-z]/, (c) => c.toUpperCase()) : "" };
   const head = flat(target[0] ?? "");
   if (!head) return j >= 0 ? out : { why: "it isn't aimed at anything" };
   if (/^the scene clock$/i.test(head)) return target.length > 1 ? { why: "it says more than the table can hold" } : { ...out, aim: "clock" };

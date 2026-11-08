@@ -11,6 +11,7 @@ updated: 2026-11-09
 :::index-section
 ## A {#a}
 
+-   **Abilities** — [Abilities](#s-abilities), [The Archetypes](#archetypes)
 -   **Absent players** — [When Someone Can't Make It](#s-absent)
 -   **Accessibility** — [Playing Your Way](#access)
 -   **Action** — [Steps and Dice](#s-building-die), [Your Action](#s-actions)
@@ -20,23 +21,25 @@ updated: 2026-11-09
 -   **Alarm** — [The alarm](#s-alarm)
 -   **Animal tags** — [Shifter](#a-shifter)
 -   **Answering a telegraph** — [Answering](#s-answering)
--   **Archetypes** — [The Archetypes](#archetypes), [How Archetypes Work](#s-how-archetypes), [Picking Your Archetypes](#s-picking-archetypes), [Archetypes and Titles](#s-title), [Archetypes, Resolve and Study at the Table](#s-gm-area)
+-   **Archetypes** — [The Archetypes](#archetypes), [How Archetypes Work](#s-how-archetypes), [Picking Your Archetypes](#s-picking-archetypes), [Step 2: Archetypes](#s-step-archetypes), [Archetypes and Study at the Table](#s-gm-area)
 -   **Arcs** — [Campaigns](#s-campaigns), [Between Arcs](#s-arcs)
 -   **Area die** — [Area](#s-area), [Area magic](#s-magic-area), [Elementalist](#a-elementalist)
 -   **Armour** — [Armour](#s-armour), [Quality](#s-armour-quality), [Broken Armour](#recovering-armour), [Defend](#s-defend)
 -   **Aspiration** — [Aspiration](#s-aspiration), [A good Aspiration](#s-good-aspiration)
 -   **Assets, a faction's** — [Resources and assets](#s-wealth), [Crew assets](#s-crew-tags), [Assets to borrow from](#faction-strength)
 -   **Attunement** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
--   **Aura** — [Aura](#s-aura), [Aura and Resolve](#s-aura-tactics)
+-   **Aura** — [Aura](#s-aura), [Aura and Your Tracks](#s-aura-tactics)
 -   **Awakened** — [Attunement](#s-attunement)
+-   **Awakenings** — [Attunement](#s-attunement), [How to write one](#how-to-write-one)
 
 ## B {#b}
 
 -   **Bag** — [What You Carry](#s-carrying)
 -   **Bard** — [Bard](#a-bard)
--   **Blaze** — [Wounds, Blaze and Scars](#s-blaze)
+-   **Blaze** — [When a Track Runs Out](#s-blaze)
 -   **Blessings** — [Wards and blessings](#s-wards)
 -   **Bloodsworn** — [Bloodsworn](#a-bloodsworn)
+-   **Body** — [Roots](#s-roots), [The Tracks](#s-tracks)
 -   **Bonds** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain), [A faction's bonds](#s-faction-bonds)
 -   **Bond threads** — [Bonds and threads](#s-bonds)
 -   **Boon table** — [The Oracle](#oracle)
@@ -51,7 +54,7 @@ updated: 2026-11-09
 
 -   **Campaign, ending a** — [Ending a Campaign](#s-ending)
 -   **Carrying** — [What You Carry](#s-carrying)
--   **Catch** — [Catches and Trouble](#s-trouble), [Attunement](#s-attunement), [Wounds, Blaze and Scars](#s-blaze), [Catches and Resolve at the Table](#s-catches-gm)
+-   **Catch** — [Catches and Trouble](#s-trouble), [Attunement](#s-attunement), [When a Track Runs Out](#s-blaze), [Catches and Resolve at the Table](#s-catches-gm)
 -   **Challenge** — [Threats](#s-challenges)
 -   **Character sheet** — [Appendix A](#s-sheet-character)
 -   **Chase** — [Chases](#chases)
@@ -60,7 +63,7 @@ updated: 2026-11-09
 -   **Clock** — [Stakes, Clocks and Events](#s-stakes)
 -   **Combo** — [Working Together](#s-teamwork)
 -   **Condition** — [Conditions](#s-conditions)
--   **Confidence** — [Confidence](#s-tracks), [When It Lands](#s-defending), [Appendix C](#s-levers-confidence)
+-   **Confidence** — [The Tracks](#s-tracks), [When It Lands](#s-defending), [Mind and Soul](#s-fear-gets-through), [Appendix C](#s-levers-confidence)
 -   **Consequence** — [Consequences](#s-consequences)
 -   **Crew** — [The Crew](#s-party-faction), [The Crew, Session 1 to 20](#s-crew-1-20)
 -   **Crew action** — [The crew's action](#party-slots), [The Crew and the Factions](#s-faction-crew)
@@ -70,9 +73,9 @@ updated: 2026-11-09
 
 ## D {#d}
 
--   **Death** — [Death](#s-death), [Wounds, Blaze and Scars](#s-blaze)
+-   **Death** — [Death](#s-death), [When a Track Runs Out](#s-blaze)
 -   **Defence** — [When It Lands](#s-defending)
--   **Defend** — [Defend](#s-defend), [Set Actions](#s-roots), [Guardian](#a-guardian)
+-   **Defend** — [Defend](#s-defend), [Answer, Defend, Intercept or Let It Ride](#s-answer-or-ride), [Guardian](#a-guardian)
 -   **Downtime** — [Downtime](#downtime)
 -   **Downtime rolls** — [Rolling in downtime](#s-downtime-rolls)
 
@@ -95,8 +98,7 @@ updated: 2026-11-09
 -   **Faction Sheet** — [Appendix A](#s-sheet-faction)
 -   **Faction turn** — [The Faction Turn](#s-faction-turn)
 -   **Factions** — [Factions](#factions)
--   **Fear** — [Confidence](#s-tracks), [When It Lands](#s-defending)
--   **Fired up** — [Confidence](#s-tracks)
+-   **Fear** — [The Tracks](#s-tracks), [When It Lands](#s-defending), [Mind and Soul](#s-fear-gets-through)
 -   **First session** — [Session Zero](#session-zero)
 -   **Foresight** — [Oracle](#a-oracle)
 -   **Forms** — [Unique mechanics](#s-unique-threats)
@@ -104,6 +106,7 @@ updated: 2026-11-09
 
 ## G {#g}
 
+-   **Gambler** — [Gambler](#a-gambler)
 -   **Glossary** — [Appendix F](#appendix-glossary)
 -   **GM moves** — [When They Look at You](#s-gm-moves)
 -   **Goal, party** — [The Party Goal](#s-goal), [A good Goal](#s-good-goal)
@@ -114,16 +117,15 @@ updated: 2026-11-09
 ## H {#h}
 
 -   **Healer** — [Healer](#a-healer)
--   **Healing** — [Healing](#s-healing), [Healer](#a-healer)
+-   **Healing** — [Healing](#s-healing), [Healer](#a-healer), [Appendix C](#s-levers-hurt)
 -   **Helmets** — [Armour](#s-armour), [Quality](#s-armour-quality)
 -   **Hidden tag** — [Hidden tags and weak points](#s-hidden)
 -   **Hiding** — [Extra actions](#s-extra-actions), [Shadow](#a-shadow)
--   **Holding your ground** — [Confidence](#s-tracks)
 -   **Holdings, party** — [Party holdings](#s-party-resources)
+-   **Home track** — [Abilities](#s-abilities)
 -   **Hook** — [The aftermath](#s-aftermath)
 -   **Hostile threads** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
 -   **Hunter** — [Hunter](#a-hunter)
--   **Hurt** — [Wounds, Blaze and Scars](#s-blaze), [Healing](#s-healing)
 
 ## I {#i}
 
@@ -135,6 +137,7 @@ updated: 2026-11-09
 -   **Investigating** — [Investigating](#investigating)
 -   **Items** — [Items](#s-items), [What You Carry](#s-carrying)
 -   **Items, attuned** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
+-   **Its Aura** — [Attunement](#s-attunement)
 
 ## J {#j}
 
@@ -168,6 +171,7 @@ updated: 2026-11-09
 -   **Material** — [Attunement](#s-attunement)
 -   **Mini factions** — [Mini factions](#s-mini-factions)
 -   **Mending a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain), [Mending Threads](#s-downtime-threads)
+-   **Mind** — [Roots](#s-roots), [Mind and Soul](#s-fear-gets-through)
 -   **Move action** — [Movement and Range](#s-movement)
 -   **Multipliers** — [Multipliers](#s-tough), [Running the Game](#s-tough-gm)
 
@@ -195,6 +199,7 @@ updated: 2026-11-09
 -   **Power, a faction's** — [What a Faction Is](#s-faction-board), [People who turn up](#assets-people), [The Crew](#s-party-faction)
 -   **Projects** — [Projects](#s-projects)
 -   **Prone** — [Conditions to start with](#s-conditions-list), [Vulnerabilities](#s-vulnerable)
+-   **Push** — [Abilities](#s-abilities)
 
 ## Q {#q}
 
@@ -210,35 +215,37 @@ updated: 2026-11-09
 -   **Range** — [Movement and Range](#s-movement)
 -   **Ready-made characters** — [Six Ready-Made Characters](#s-pregens)
 -   **Reputation** — [The Crew](#s-party-faction)
--   **Resolve** — [Resolve](#s-tracks), [Aura and Resolve](#s-aura-tactics), [Catches and Resolve at the Table](#s-catches-gm), [Archetypes, Resolve and Study at the Table](#s-gm-area)
--   **Resolve spends** — [1 Resolve on your mechanic](#s-abilities)
+-   **Resolve** — [The Tracks](#s-tracks), [Aura and Your Tracks](#s-aura-tactics), [Catches and Resolve at the Table](#s-catches-gm), [Mind and Soul](#s-fear-gets-through)
 -   **Resources, a faction's** — [Resources and assets](#s-wealth), [Extra resources](#s-crew-wealth)
--   **Rest** — [Wounds, Blaze and Scars](#s-blaze)
+-   **Rest** — [Healing](#s-healing)
 -   **Retiring** — [Retiring a character](#s-retiring)
 -   **Ritual** — [Rituals](#rituals)
+-   **Roots** — [Roots](#s-roots), [Step 5: Roots and specialties](#s-step-roots)
 -   **Round** — [The Round](#s-round)
 -   **Round budget** — [Telegraphs a Round](#s-budget)
 -   **Running doesn't dodge** — [Telegraphs](#s-telegraphs)
 
 ## S {#s}
 
--   **Scar** — [Wounds, Blaze and Scars](#s-blaze)
+-   **Scar** — [When a Track Runs Out](#s-blaze)
 -   **Scene clock** — [A clock on every scene](#s-scene-clock)
 -   **Scene, building a** — [Building a Scene](#s-building-scenes)
 -   **Scholar** — [Scholar](#a-scholar)
 -   **Session Zero** — [Session Zero](#session-zero)
 -   **Session, the** — [The Session](#the-session)
--   **Set actions** — [Set Actions](#s-roots), [Filling In Your Set Actions](#s-step-roots)
 -   **Shadow** — [Shadow](#a-shadow)
 -   **Shadow pool** — [Shadow](#a-shadow)
--   **Shaken** — [Confidence](#s-tracks), [Conditions to start with](#s-conditions-list)
+-   **Shaken** — [Conditions to start with](#s-conditions-list)
 -   **Shifter** — [Shifter](#a-shifter)
 -   **Site** — [Building a Site](#s-site)
 -   **Snapping a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
+-   **Soul** — [Roots](#s-roots), [Mind and Soul](#s-fear-gets-through)
 -   **Souls** — [Summoning](#s-summoning), [Summoner](#a-summoner)
+-   **Specialties** — [Specialties and Permissions](#s-permissions), [How it adds up](#how-permissions-stack), [Step 5: Roots and specialties](#s-step-roots)
 -   **Splitting** — [Splitting](#s-splitting)
 -   **Spotlight** — [A moment for each character](#s-spotlight)
 -   **Stake** — [Stakes, Clocks and Events](#s-stakes), [Stakes, not obstacles](#s-stakes-gm)
+-   **Stamina** — [The Tracks](#s-tracks), [When It Lands](#s-defending)
 -   **Step** — [Steps and Dice](#s-building-die)
 -   **Straining a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
 -   **Stride** — [Movement and Range](#s-movement)
@@ -252,7 +259,7 @@ updated: 2026-11-09
 
 -   **Tactics** — [Tactical Play](#tactics)
 -   **Tag** — [Threats](#s-challenges), [Appendix B](#appendix-tags), [Maker](#a-maker)
--   **Take a breath** — [Your Action](#s-actions), [Confidence](#s-tracks)
+-   **Take a breath** — [Your Action](#s-actions)
 -   **Teamwork** — [Working Together](#s-teamwork)
 -   **Telegraph** — [Telegraphs](#s-telegraphs), [Telegraphing Well](#s-telegraphing)
 -   **Teleporter** — [Teleporter](#a-teleporter)
@@ -261,13 +268,15 @@ updated: 2026-11-09
 -   **Threat budget** — [The Threat Budget](#s-threat-budget)
 -   **Threat, building a** — [The Threat Builder](#threat-builder)
 -   **Tie** — [The Roll](#s-the-roll)
--   **Title** — [Archetypes and Titles](#s-title), [Title Ideas](#s-title-ideas)
+-   **Title** — [Step 1: Titles](#s-title), [Title Ideas](#s-title-ideas)
 -   **Title ideas** — [Title Ideas](#s-title-ideas)
+-   **Tracks** — [The Tracks](#s-tracks), [When a Track Runs Out](#s-blaze), [Healing](#s-healing), [Aura and Your Tracks](#s-aura-tactics), [Appendix C](#s-levers-confidence)
 -   **Trail** — [Three trails to everything](#s-trails), [Secrets and Discovery](#s-discovery)
 -   **Traps** — [Traps](#s-traps)
 -   **Travelling** — [Travelling](#travelling)
 -   **Trouble** — [Catches and Trouble](#s-trouble), [Catches and Resolve at the Table](#s-catches-gm)
 -   **Twist table** — [The Oracle](#oracle)
+-   **Two for one (2 for 1)** — [Consequences: When Something Lands](#s-consequences), [The Tracks](#s-tracks)
 
 ## U {#u}
 
@@ -284,7 +293,6 @@ updated: 2026-11-09
 -   **Warrior** — [Warrior](#a-warrior)
 -   **Weak point** — [Hidden tags and weak points](#s-hidden)
 -   **Weapon properties** — [Weapons and their properties](#s-weapon-props)
--   **Wound die** — [Wounds, Blaze and Scars](#s-blaze), [Healing](#s-healing)
 
 ## X {#x}
 

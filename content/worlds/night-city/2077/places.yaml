@@ -25,8 +25,8 @@ places:
       - "*Nobody Comes*: call the NCPD in Watson and it'll get there tomorrow"
       - "*Arasaka's Fence*: the waterfront's shut, and the guards shoot first"
     teles:
-      - { text: "A cyberpsycho opens up in the street, and everyone runs your way.", d: 8, at: "Defend, Caught in the Crossfire" }
-      - { text: "Arasaka seals the bridges for a VIP, and the whole district's stuck inside.", d: 6, at: "Confidence, Trapped" }
+      - { text: "A cyberpsycho opens up in the street, and everyone runs your way.", d: 8, at: "Body, Caught in the Crossfire" }
+      - { text: "Arasaka seals the bridges for a VIP, and the whole district's stuck inside.", d: 6, at: "Mind, Trapped" }
     hooks:
       - "Arasaka's buying the megabuilding the crew lives in, and the rent's going up"
       - "The district's sealed for a week, and something's coming in at the Arasaka Waterfront"
@@ -73,7 +73,7 @@ places:
     stakes:
       - "*A stolen chip*, Challenge 3: *Hidden*, *Wanted By Others* (it's on a stall somewhere in the market)"
     teles:
-      - { text: "A stallholder shouts thief and points at you.", d: 6, at: "Confidence, Run Out of the Market" }
+      - { text: "A stallholder shouts thief and points at you.", d: 6, at: "Mind, Run Out of the Market" }
       - { text: "Someone's already bidding for the chip.", d: 6, at: "a stolen chip" }
     hooks:
       - "Regina's got a cyberpsycho holed up in a Kabuki warehouse, and she wants them alive"
@@ -95,7 +95,7 @@ places:
       - "*Maelstrom Turf*: every crossroads has a borg on it, and they talk to each other"
       - "*Cranes and Gantries*: high ground everywhere, if you can climb it"
     teles:
-      - { text: "A Maelstrom truck comes round the corner with its guns out.", d: 8, at: "Defend, Run Down" }
+      - { text: "A Maelstrom truck comes round the corner with its guns out.", d: 8, at: "Body, Run Down" }
     hooks:
       - "The NCPD wants Northside back, and it's hiring mercs to start"
 
@@ -120,7 +120,7 @@ places:
     stakes:
       - "*A container*, Challenge 4: *Locked*, *Watched* (what Arasaka shipped in this week)"
     teles:
-      - { text: "A drone sweeps the stacks and lights you up.", d: 8, at: "Confidence, Seen" }
+      - { text: "A drone sweeps the stacks and lights you up.", d: 8, at: "Mind, Seen" }
       - { text: "The gate crew radios for a cargo check.", d: 6, at: "a container" }
     hooks:
       - "Someone wants to know what came off the Kujira before Saburo did"
@@ -150,9 +150,9 @@ places:
     clock: { d: 8, text: "Rogue gives the job to a crew she already trusts." }
     twist: Someone at the next table's after the same job, and they've already met Rogue.
     teles:
-      - { text: "Rogue looks the crew up and down and says she's busy.", d: 8, at: "Confidence, Not Worth Her Time" }
+      - { text: "Rogue looks the crew up and down and says she's busy.", d: 8, at: "Mind, Not Worth Her Time" }
       - { text: "A merc at the bar laughs and offers to do the job for half.", d: 6, at: "the job" }
-      - { text: "The bouncers take hold of whoever's making trouble.", d: 6, at: "Defend, Thrown Out" }
+      - { text: "The bouncers take hold of whoever's making trouble.", d: 6, at: "Body, Thrown Out" }
     hooks:
       - "Rogue needs a crew for a job she can't put her own name to"
       - "Dex is buying drinks for anyone who'll sit and listen to his big job"
@@ -178,7 +178,7 @@ places:
       - "*A patient's file*, Challenge 3: *Locked*, *Guarded* (who's really in the private ward)"
     clock: { d: 6, text: "Trauma Team lands with guns out, for a client who's not the crew." }
     teles:
-      - { text: "A Trauma Team medic points a rifle at the crew and says to clear the pad.", d: 8, at: "Defend, Knocked Down" }
+      - { text: "A Trauma Team medic points a rifle at the crew and says to clear the pad.", d: 8, at: "Body, Knocked Down" }
       - { text: "A nurse calls security about the visitors with no names.", d: 6, at: "a patient's file" }
     hooks:
       - "Someone the crew needs is in the private ward, and Trauma Team's guarding the door"
@@ -203,7 +203,7 @@ places:
       - "*Chrome on credit*, Challenge 3: *Someone Must Agree* (Vik fits it now and gets paid later)"
     clock: { d: 6, text: "Vik's next patient comes in bleeding, and the crew's out of time." }
     teles:
-      - { text: "Misty turns the card over and tells you what it means.", d: 4, at: "Confidence, Unsettled" }
+      - { text: "Misty turns the card over and tells you what it means.", d: 4, at: "Mind, Unsettled" }
       - { text: "Vik shakes his head and says he doesn't fit chrome on credit.", d: 6, at: "chrome on credit" }
     hooks:
       - "Vik's got a patient with chrome he's never seen before, and someone's coming for it"
@@ -233,7 +233,7 @@ places:
     clock: { d: 8, text: "Evelyn takes her job to Dex instead." }
     twist: A Tyger Claw's in a booth with a doll, and the Mox are deciding whether to throw him out.
     teles:
-      - { text: "The Mox on the door don't like the look of the crew.", d: 6, at: "Confidence, Not Welcome" }
+      - { text: "The Mox on the door don't like the look of the crew.", d: 6, at: "Mind, Not Welcome" }
       - { text: "Evelyn smiles, finishes her drink and says she's got another offer.", d: 8, at: "Evelyn's trust" }
       - { text: "A braindancer in a booth starts screaming at something only they can see.", d: 4, at: "the scene clock" }
     hooks:
@@ -261,7 +261,7 @@ places:
       - "*Patricia's messages*, Challenge 4: *Hidden*, *Someone Must Agree* (who she sells Militech's routes to)"
     clock: { d: 6, text: "Royce decides the crew's a threat, and the club goes quiet." }
     teles:
-      - { text: "A borg on the dance floor shoves the crew to see what they'll do.", d: 8, at: "Defend, Shoved Into the Crowd" }
+      - { text: "A borg on the dance floor shoves the crew to see what they'll do.", d: 8, at: "Body, Shoved Into the Crowd" }
       - { text: "Patricia catches someone reading over her shoulder.", d: 6, at: "Patricia's messages" }
     hooks:
       - "Royce wants another ten thousand eddies for the Flathead, and Dex wants it sorted"
@@ -293,8 +293,8 @@ places:
       - "*Brick's cell*, Challenge 5: *Locked*, *Trapped* (Maelstrom's old boss, alive)"
     clock: { d: 6, text: "Royce gets bored of the deal and tells his boys to take what the crew brought." }
     teles:
-      - { text: "Royce slams the table and says the price just went up.", d: 8, at: "Confidence, Shaken" }
-      - { text: "A borg on the catwalk opens up on the crew.", d: 8, at: "Defend, Pinned Down" }
+      - { text: "Royce slams the table and says the price just went up.", d: 8, at: "Mind, Shaken" }
+      - { text: "A borg on the catwalk opens up on the crew.", d: 8, at: "Body, Pinned Down" }
       - { text: "Dum Dum starts the Flathead's crate onto a truck.", d: 6, at: "the Flathead" }
     hooks:
       - "Militech wants the Flathead back, and it'll pay the crew to get it out from under Maelstrom"
@@ -322,9 +322,9 @@ places:
     clock: { d: 8, text: "The hotel locks down, every exit, and Arasaka's soldiers come up the stairs." }
     twist: Someone else is in the building tonight, and Yorinobu's guards are watching for them, not the crew.
     teles:
-      - { text: "A guard in the lobby asks to see the crew's booking.", d: 8, at: "Confidence, Under Suspicion" }
+      - { text: "A guard in the lobby asks to see the crew's booking.", d: 8, at: "Mind, Under Suspicion" }
       - { text: "An Arasaka netrunner finds the hole in the cameras.", d: 10, at: "the cameras" }
-      - { text: "The hotel's soldiers come round the corner firing.", d: 10, at: "Defend, Cornered" }
+      - { text: "The hotel's soldiers come round the corner firing.", d: 10, at: "Body, Cornered" }
     hooks:
       - "Dex has the job of the year, and it's here"
     secret:
@@ -355,7 +355,7 @@ places:
     ground:
       - "*The NCPD Comes*: a fight on these streets brings the cops in minutes"
     teles:
-      - { text: "A Tyger Claw on a bike pulls in behind the crew's car and stays there.", d: 6, at: "Confidence, Followed" }
+      - { text: "A Tyger Claw on a bike pulls in behind the crew's car and stays there.", d: 6, at: "Mind, Followed" }
     hooks:
       - "A rich client in North Oak wants someone in Japantown taught a lesson, quietly"
 
@@ -378,7 +378,7 @@ places:
     stakes:
       - "*A shop's debt*, Challenge 3: *Someone Must Agree* (the Claws let a shopkeeper off)"
     teles:
-      - { text: "A Claw rests his hand on his katana and asks what the crew wants in Japantown.", d: 6, at: "Confidence, Warned Off" }
+      - { text: "A Claw rests his hand on his katana and asks what the crew wants in Japantown.", d: 6, at: "Mind, Warned Off" }
     hooks:
       - "Wakako's got a job the Claws can't be seen doing"
 
@@ -441,7 +441,7 @@ places:
     clock: { d: 8, text: "The Claws come down the street in force, and the Mox pull out." }
     teles:
       - { text: "A Claw takes a joytoy by the arm and walks her toward a car.", d: 6, at: "a joytoy's safety" }
-      - { text: "A Claw on a door pulls his blade.", d: 6, at: "Defend, Cut" }
+      - { text: "A Claw on a door pulls his blade.", d: 6, at: "Body, Cut" }
     hooks:
       - "The Mox want the crew to show the Claws that Jig-Jig Street isn't theirs yet"
 
@@ -466,8 +466,8 @@ places:
       - "*A doll's chip*, Challenge 4: *Locked*, *Guarded* (what she remembers that she shouldn't)"
     clock: { d: 6, text: "Woodman calls the Claws in, and the back stairs fill up." }
     teles:
-      - { text: "Woodman asks what the crew's really after, and smiles.", d: 6, at: "Confidence, Seen Through" }
-      - { text: "A bouncer steps between the crew and the back rooms.", d: 6, at: "Defend, Shoved Back" }
+      - { text: "Woodman asks what the crew's really after, and smiles.", d: 6, at: "Mind, Seen Through" }
+      - { text: "A bouncer steps between the crew and the back rooms.", d: 6, at: "Body, Shoved Back" }
     hooks:
       - "A doll remembers a client she shouldn't, and the Claws are about to wipe her chip"
     secret:
@@ -494,7 +494,7 @@ places:
     ground:
       - "*Cameras Everywhere*: every corner's watched, so whatever the crew does here gets seen"
     teles:
-      - { text: "An NCPD drone drops down and hangs over the crew.", d: 6, at: "Confidence, Watched" }
+      - { text: "An NCPD drone drops down and hangs over the crew.", d: 6, at: "Mind, Watched" }
     hooks:
       - "A corp wants a rival's exec embarrassed in public, in City Center, at lunchtime"
 
@@ -519,7 +519,7 @@ places:
     stakes:
       - "*A meeting*, Challenge 4: *Someone Must Agree*, *Watched* (a corp exec hears the crew out)"
     teles:
-      - { text: "Militech's security asks the crew which corp they're with.", d: 6, at: "Confidence, Pegged" }
+      - { text: "Militech's security asks the crew which corp they're with.", d: 6, at: "Mind, Pegged" }
       - { text: "The exec's assistant says something's come up.", d: 6, at: "a meeting" }
     hooks:
       - "Kang Tao wants an Arasaka researcher walked across the plaza to its lobby, in daylight"
@@ -544,7 +544,7 @@ places:
     stakes:
       - "*A story*, Challenge 3: *Someone Must Agree* (Network 54 runs what the crew found)"
     teles:
-      - { text: "A Network 54 camera crew turns round and starts filming the crew.", d: 6, at: "Confidence, On Camera" }
+      - { text: "A Network 54 camera crew turns round and starts filming the crew.", d: 6, at: "Mind, On Camera" }
     hooks:
       - "Network 54 wants the story on Arasaka's heir, and it'll pay for footage"
 
@@ -571,8 +571,8 @@ places:
       - "*The servers*, Challenge 6: *Locked*, *Guarded*, *Out of Sight* (what Arasaka knows about everyone)"
     clock: { d: 8, text: "The tower locks down, and Smasher's told where the crew is." }
     teles:
-      - { text: "The receptionist smiles and asks who the crew's here to see.", d: 6, at: "Confidence, Turned Away" }
-      - { text: "Arasaka's soldiers come out of the lift firing.", d: 10, at: "Defend, Cut Down" }
+      - { text: "The receptionist smiles and asks who the crew's here to see.", d: 6, at: "Mind, Turned Away" }
+      - { text: "Arasaka's soldiers come out of the lift firing.", d: 10, at: "Body, Cut Down" }
       - { text: "An Arasaka netrunner traces the breach back to the crew.", d: 8, at: "the servers" }
     hooks:
       - "Someone inside Arasaka Tower wants out, and she'll pay with what's on the servers"
@@ -599,7 +599,7 @@ places:
     ground:
       - "*Family Streets*: everyone's someone's cousin, so word of the crew gets round by dinner"
     teles:
-      - { text: "A lowrider full of Valentinos slows down beside the crew.", d: 6, at: "Confidence, Marked" }
+      - { text: "A lowrider full of Valentinos slows down beside the crew.", d: 6, at: "Mind, Marked" }
     hooks:
       - "The Valentinos and 6th Street are a week from a war in Vista del Rey"
 
@@ -620,7 +620,7 @@ places:
     ground:
       - "*Two Laws*: City Hall's police on one street, and the Valentinos on the next"
     teles:
-      - { text: "Padre asks who the crew's working for in his streets.", d: 6, at: "Confidence, Called Out" }
+      - { text: "Padre asks who the crew's working for in his streets.", d: 6, at: "Mind, Called Out" }
     hooks:
       - "Padre wants a Valentino hothead out of the way before he starts a war"
 
@@ -659,7 +659,7 @@ places:
     stakes:
       - "*The corner*, Challenge 4: *Wanted By Others*, *Guarded* (which gang holds it come morning)"
     teles:
-      - { text: "A 6th Street patrol pulls up and asks if the crew's with the Valentinos.", d: 6, at: "Confidence, Taken for Valentinos" }
+      - { text: "A 6th Street patrol pulls up and asks if the crew's with the Valentinos.", d: 6, at: "Mind, Taken for Valentinos" }
       - { text: "Valentinos come round the corner with their guns out.", d: 6, at: "the corner" }
     hooks:
       - "The Valentinos want 6th Street out of Vista del Rey, and they're paying"
@@ -685,7 +685,7 @@ places:
       - "*A vote*, Challenge 4: *Someone Must Agree*, *Wanted By Others* (the council passes it, or it doesn't)"
     clock: { d: 8, text: "The vote's called, and whoever's been bought votes." }
     teles:
-      - { text: "Holt's assistant says the mayor's diary is full till after the election.", d: 6, at: "Confidence, Brushed Off" }
+      - { text: "Holt's assistant says the mayor's diary is full till after the election.", d: 6, at: "Mind, Brushed Off" }
       - { text: "A councillor who promised the crew his vote stops answering his phone.", d: 8, at: "a vote" }
     hooks:
       - "Peralez wants proof the corps are buying the council"
@@ -711,7 +711,7 @@ places:
       - "*A case file*, Challenge 4: *Locked*, *Guarded* (what the NCPD knows about the crew)"
     clock: { d: 8, text: "Somebody calls MaxTac, and they're on their way." }
     teles:
-      - { text: "The desk sergeant asks for the crew's names and a card to bill.", d: 4, at: "Confidence, Billed" }
+      - { text: "The desk sergeant asks for the crew's names and a card to bill.", d: 4, at: "Mind, Billed" }
       - { text: "An officer matches a face to a wanted list.", d: 6, at: "a case file" }
     hooks:
       - "A detective wants help with a case the commissioner's told him to drop"
@@ -737,8 +737,8 @@ places:
       - "*Mama's word*, Challenge 3: *Someone Must Agree* (she vouches for the crew to the Valentinos)"
     clock: { d: 10, text: "Mama Welles calls last orders, and the bar empties." }
     teles:
-      - { text: "Mama Welles asks the crew what they want with her son.", d: 6, at: "Confidence, Put in Their Place" }
-      - { text: "A Valentino at the bar takes a dislike to the crew's colours.", d: 6, at: "Defend, Hit With a Bottle" }
+      - { text: "Mama Welles asks the crew what they want with her son.", d: 6, at: "Mind, Put in Their Place" }
+      - { text: "A Valentino at the bar takes a dislike to the crew's colours.", d: 6, at: "Body, Hit With a Bottle" }
     hooks:
       - "Jackie Welles wants in on Dex's job, and he's looking for a crew to bring"
 
@@ -781,7 +781,7 @@ places:
     ground:
       - "*Shift Change*: twice a day the streets fill with workers, then they're empty"
     teles:
-      - { text: "A 6th Street truck blocks the road, and the boys get out.", d: 6, at: "Confidence, Stopped and Searched" }
+      - { text: "A 6th Street truck blocks the road, and the boys get out.", d: 6, at: "Mind, Stopped and Searched" }
     hooks:
       - "A factory's laying off a whole shift, and somebody's planning to stop it"
 
@@ -806,7 +806,7 @@ places:
     stakes:
       - "*A crate*, Challenge 4: *Locked*, *Guarded* (what's really in 6th Street's unmarked deliveries)"
     teles:
-      - { text: "A 6th Street vet asks the crew which side they fought on.", d: 6, at: "Confidence, Not One of Us" }
+      - { text: "A 6th Street vet asks the crew which side they fought on.", d: 6, at: "Mind, Not One of Us" }
       - { text: "Someone carries the crate inside and locks the door.", d: 6, at: "a crate" }
     hooks:
       - "6th Street's testing someone's guns, and someone else wants to know whose"
@@ -830,7 +830,7 @@ places:
     stakes:
       - "*A feud*, Challenge 3: *Someone Must Agree* (two families shake hands at El Capitán's Table)"
     teles:
-      - { text: "El Capitán says the crew's welcome to eat, and not to talk business till dessert.", d: 4, at: "Confidence, Kept Waiting" }
+      - { text: "El Capitán says the crew's welcome to eat, and not to talk business till dessert.", d: 4, at: "Mind, Kept Waiting" }
     hooks:
       - "El Capitán wants the Valentinos and 6th Street to stop, and he needs someone both sides will talk to"
 
@@ -853,7 +853,7 @@ places:
       - "*Combat Zone*: no police, no Trauma Team and no rules but whoever's holding the block"
       - "*Empty Towers*: a hundred floors and nobody in them, or so you'd think"
     teles:
-      - { text: "Someone up in an empty hotel's watching the crew through a scope.", d: 8, at: "Defend, Shot" }
+      - { text: "Someone up in an empty hotel's watching the crew through a scope.", d: 8, at: "Body, Shot" }
     hooks:
       - "Kang Tao's surveyors are in Pacifica, and somebody wants them scared off"
 
@@ -874,7 +874,7 @@ places:
     ground:
       - "*The Boardwalk*: open ground all the way, so whoever's on it gets seen from every hotel"
     teles:
-      - { text: "A Voodoo Boy on a corner says something into his hand, and the street empties.", d: 6, at: "Confidence, Unwelcome" }
+      - { text: "A Voodoo Boy on a corner says something into his hand, and the street empties.", d: 6, at: "Mind, Unwelcome" }
     hooks:
       - "The Voodoo Boys want a NetWatch agent followed home"
 
@@ -916,7 +916,7 @@ places:
     stakes:
       - "*A way through the wall*, Challenge 4: *Guarded*, *Someone Must Agree* (the crew gets in or out unseen)"
     teles:
-      - { text: "Barghest's gate crew asks for the toll, then doubles it.", d: 6, at: "Confidence, Shaken Down" }
+      - { text: "Barghest's gate crew asks for the toll, then doubles it.", d: 6, at: "Mind, Shaken Down" }
       - { text: "A Barghest patrol sweeps the street with lights.", d: 8, at: "a way through the wall" }
     hooks:
       - "Militech wants to know what Hansen's keeping under the Black Sapphire"
@@ -941,8 +941,8 @@ places:
       - "*An audience*, Challenge 5: *Someone Must Agree*, *Proud* (Brigitte meets the crew)"
     clock: { d: 8, text: "Placide decides the crew's NetWatch, and the hotel's netrunners wake up." }
     teles:
-      - { text: "Placide puts a gun on the table and asks who sent the crew.", d: 6, at: "Confidence, Not Trusted" }
-      - { text: "A netrunner upstairs fries someone's optics.", d: 8, at: "Defend, Blinded" }
+      - { text: "Placide puts a gun on the table and asks who sent the crew.", d: 6, at: "Mind, Not Trusted" }
+      - { text: "A netrunner upstairs fries someone's optics.", d: 8, at: "Body, Blinded" }
     hooks:
       - "The Voodoo Boys need a body for a run past the Blackwall, and they'd rather it wasn't one of theirs"
 
@@ -965,8 +965,8 @@ places:
       - "*A fight*, Challenge 5: *Proud* (beat an Animal in the ring, and the pack listens)"
     clock: { d: 6, text: "The pack gets bored of watching and joins in." }
     teles:
-      - { text: "Sasquatch picks up something heavy and throws it.", d: 10, at: "Defend, Crushed" }
-      - { text: "An Animal in the ring calls the crew cowards.", d: 6, at: "Confidence, Goaded" }
+      - { text: "Sasquatch picks up something heavy and throws it.", d: 10, at: "Body, Crushed" }
+      - { text: "An Animal in the ring calls the crew cowards.", d: 6, at: "Mind, Goaded" }
     hooks:
       - "Someone's paying the Animals, and the Voodoo Boys want to know who"
 
@@ -992,7 +992,7 @@ places:
       - "*The locked floors*, Challenge 6: *Locked*, *Guarded* (what's under the hotel)"
     clock: { d: 8, text: "Hansen gets bored, and his men show the crew the door, a long way up." }
     teles:
-      - { text: "Hansen asks what the crew's worth to him.", d: 8, at: "Confidence, Found Wanting" }
+      - { text: "Hansen asks what the crew's worth to him.", d: 8, at: "Mind, Found Wanting" }
       - { text: "A Barghest soldier steps in front of the lift down.", d: 8, at: "the locked floors" }
     hooks:
       - "Hansen's throwing a party at the top, and someone wants a camera in the room"
@@ -1017,7 +1017,7 @@ places:
       - "*A deal*, Challenge 4: *Someone Must Agree*, *Wanted By Others* (the crew closes it before someone else does)"
     clock: { d: 8, text: "Someone else closes the deal, and the booth's empty." }
     teles:
-      - { text: "The crew's phone rings, and it's Mr. Hands, who knows their names.", d: 6, at: "Confidence, Known" }
+      - { text: "The crew's phone rings, and it's Mr. Hands, who knows their names.", d: 6, at: "Mind, Known" }
       - { text: "A buyer from another gang ups the offer.", d: 6, at: "a deal" }
     hooks:
       - "Mr. Hands needs a deal made right under Hansen's nose"
@@ -1043,7 +1043,7 @@ places:
     clock: { d: 6, text: "The scavs start on the next captive." }
     teles:
       - { text: "A scav drags a captive toward the table.", d: 6, at: "the captives" }
-      - { text: "Scavs come out of the dark with stun batons.", d: 6, at: "Defend, Knocked Out" }
+      - { text: "Scavs come out of the dark with stun batons.", d: 6, at: "Body, Knocked Out" }
     hooks:
       - "Someone the crew knows was taken off the street last night, and the Scraper's where they'd be"
 
@@ -1066,7 +1066,7 @@ places:
       - "*Dust Storms*: a storm comes in, and nobody sees anything for an hour"
       - "*Open Road*: nowhere to hide, and the Wraiths see you coming for miles"
     teles:
-      - { text: "Wraith bikes come up fast behind the crew's car.", d: 8, at: "Defend, Run Off the Road" }
+      - { text: "Wraith bikes come up fast behind the crew's car.", d: 8, at: "Body, Run Off the Road" }
     hooks:
       - "A convoy's crossing the Badlands tonight, and the Wraiths know its route"
 
@@ -1108,7 +1108,7 @@ places:
     stakes:
       - "*The contract*, Challenge 4: *Someone Must Agree*, *Wanted By Others* (what the Aldecaldos are really signing)"
     teles:
-      - { text: "A Biotechnica drone picks up the crew's heat and calls it in.", d: 6, at: "Confidence, Spotted" }
+      - { text: "A Biotechnica drone picks up the crew's heat and calls it in.", d: 6, at: "Mind, Spotted" }
     hooks:
       - "Someone wants the small print of Biotechnica's contract, before Saul signs it"
 
@@ -1133,7 +1133,7 @@ places:
       - "*Saul's word*, Challenge 4: *Someone Must Agree*, *Proud* (he signs, or he doesn't)"
     clock: { d: 8, text: "Saul signs Biotechnica's contract." }
     teles:
-      - { text: "Saul says outsiders don't get a say in clan business.", d: 6, at: "Confidence, Outsider" }
+      - { text: "Saul says outsiders don't get a say in clan business.", d: 6, at: "Mind, Outsider" }
       - { text: "Panam starts packing her car.", d: 6, at: "the scene clock" }
     hooks:
       - "Panam wants someone to tell Saul what's in the contract, since he won't hear it from her"
@@ -1158,6 +1158,6 @@ places:
     clock: { d: 6, text: "The Wraiths' bikes come back, and there are more of them than went out." }
     teles:
       - { text: "A Wraith on a silo shouts, and the yard fills with bikes.", d: 8, at: "the scene clock" }
-      - { text: "Nash offers the crew a deal with his knife already out.", d: 6, at: "Confidence, Cornered" }
+      - { text: "Nash offers the crew a deal with his knife already out.", d: 6, at: "Mind, Cornered" }
     hooks:
       - "The Wraiths hit an Aldecaldo convoy, and the clan wants its cargo back"

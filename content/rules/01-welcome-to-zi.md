@@ -26,30 +26,30 @@ Nobody wins or loses the way they would in a board game. A session runs a few ho
 
 ## Coming from another roleplaying game? {#s-from-dnd}
 
-You'll pick it up fast, but a few things work differently. You pick two [archetypes](#s-how-archetypes), like Guardian or Shadow, and each one has something only it can do. Then you name each one with a Title that says who you are, like *the best cat burglar in the city* for a Shadow. Everything else your character can do is a permission written on one of your Titles, so your Titles and permissions say what you're actually good at, and there's no skill list. You don't roll a d20 to see if it works either. Your die grows out of those, and your sheet has it counted before you sit down. Most threats don't have hit points. They have tags, and every win strips one, though the big ones carry multipliers, like *Armoured ×4*, which takes four wins. There's no initiative. The GM shows you everything that's coming first, then everyone takes one action, in any order. If you want a proper side-by-side, there's a free guide called *Crossing Over*.
+You'll pick it up fast, but a few things work differently. You've got two **Titles** that say who you are, like *the best cat burglar in the city*, and everything else your character can do is a permission written on one of them, so your Titles and permissions say what you're actually good at. They build up your three [Roots](#s-roots), Body, Mind and Soul, and your specialties, the things you could be known for, like Locks or Fire. A roll's one Root and one specialty, and there's no skill list. You pick two [archetypes](#s-how-archetypes) as well, like Guardian or Shadow, and each one has something only it can do. You don't roll a d20 to see if it works either. Your dice grow out of your Roots and specialties, past a d12 you throw more of them, and your sheet has them counted before you sit down. Most threats don't have hit points. They have tags, and every win strips one, though the big ones carry multipliers, like *Armoured ×4*, which takes four wins. There's no initiative. The GM shows you everything that's coming first, then everyone takes one action, in any order. If you want a proper side-by-side, there's a free guide called *Crossing Over*.
 
 ## What it looks like at the table {#s-at-the-table}
 
 Don't worry about the words yet. *The Core* and *Conflict* explain all of them.
 
 :::example[Over the wall]
-**GM:** Vesk, you're halfway over the manor wall. The gate guard hasn't seen you yet, but his dog's spotted Bram at the gate, and he's reaching for the bell rope. That's a d6 at the bell, and if it lands, the whole house wakes up. Bram, the dog's already coming for you. That's a d8 at your Defend.
+**GM:** Vesk, you're halfway over the manor wall. The gate guard hasn't seen you yet, but his dog's spotted Bram at the gate, and he's reaching for the bell rope. That's a d6 at the bell, and if it lands, the whole house wakes up. Bram, the dog's already coming for you. That's a d8 at your Body.
 
-**Vesk:** He's not ringing that bell. I drop off the wall onto him from behind and drag him away from the rope. That's my Sneak: my first Title and *move unseen*, with the action, 3 steps. My grappling line's on my Move, so I'll pay an Aura to bring it in and swing down on it. That's 4 steps, a d8, on the bell.
+**Vesk:** He's not ringing that bell. I swing down off the wall on my grappling line, land on him from behind and drag him away from the rope. That's my Body and my Stealth, 7 steps, and the line makes it 8. A d12 and a d4, both on the bell.
 
 **GM:** Fair enough. Roll his d6 as well.
 
-**Vesk:** 8 on the d8. That's a top face, so I get my Aura straight back. His d6 is a 5.
+**Vesk:** 9 on the d12, and 4 on the d4. That's a top face, so with the win that's 2 Aura. His d6 is a 5.
 
 **GM:** You land on him before his hand's on the rope. Nobody's heard a thing.
 
 **Bram:** I'm getting the gate open. The dog can have a go at my plate.
 
-At the end of the round the dog's d8 rolls a 7 against Bram's Defend, a d8, which rolls a 3. It lands.
+At the end of the round the dog's d8 rolls a 7 against Bram's Stamina, a d12, which rolls a 3. It gets through.
 
-**GM:** It gets its teeth into your arm. Take a Hurt.
+**GM:** It gets its teeth into your arm. That's a size of Stamina.
 
-**Bram:** My wound die goes up a size. I keep hauling on the gate.
+**Bram:** My Stamina's a d10, then. I keep hauling on the gate.
 
 **GM:** It hangs off your arm, and you don't even slow down.
 :::

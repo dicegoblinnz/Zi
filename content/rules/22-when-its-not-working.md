@@ -6,7 +6,7 @@ order: 22
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-11-09
 ---
 :::quote
 Every long campaign hits a week where it isn't working.
@@ -18,8 +18,8 @@ Try ignoring it first: play without it for a session.
 
 ## When Fights Feel Too Easy, or Too Hard {#when-fights-feel-too-easy-or-too-hard}
 
--   **Too easy?** Check the budgets: are you actually spending the [round budget](#s-budget), and are the boss's multipliers as big as it needs, sized to the [threat budget](#s-threat-budget)? Count the dice too: each of the crew's defence dice stops one, so one die at each of them is a fair round, and two at each, from two threats, is a hard one. Are your telegraphs aimed at stakes, clocks and Confidence, or only at the crew's Defend? Add a stake the crew can't ignore. Look at your threats' [vulnerabilities](#s-vulnerable) as well, because each one lets a single hit strip two tags.
--   **Too hard?** Run the next scene as a breather. Give the boss an obvious weak point. Make sure every threat that matters has something driving it, so fighting isn't the only way through. Check you're not stacking [vulnerabilities](#s-vulnerable) on the crew, because each one adds a Hurt to every hit it fits, and takes a size of Confidence with it.
+-   **Too easy?** Check the budgets: are you actually spending the [round budget](#s-budget), and are the boss's multipliers as big as it needs, sized to the [threat budget](#s-threat-budget)? Count the dice too: each of the crew's tracks stops one at its Root, so one die at each of them is a fair round, and two at the same Root, from two threats, is a hard one. Are your telegraphs aimed at stakes, clocks, Minds and Souls, or only at the crew's Bodies? Add a stake the crew can't ignore. Look at your threats' [vulnerabilities](#s-vulnerable) as well, because each one lets a single hit strip two tags.
+-   **Too hard?** Run the next scene as a breather. Give the boss an obvious weak point. Make sure every threat that matters has something driving it, so fighting isn't the only way through. Check you're not stacking [vulnerabilities](#s-vulnerable) on the crew, because each one adds another size to every hit it fits.
 -   **Too long?** Count the keeps-it-going tags and their multipliers. Four on every threat is a slog, and so is a multiplier on everything. Cut them, or make them findable.
 
 ## When a Player Is Checked Out {#when-a-player-is-checked-out}

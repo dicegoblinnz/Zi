@@ -70,7 +70,7 @@
 //   clock        its scene clock: { d, text }
 //   twist        its complication
 //   teles        its telegraphs: [{ text, d, at }], at read the way aims.js
-//                reads a page's (Defend or Confidence and what it does, one of
+//                reads a page's (Body, Mind or Soul and what it does, one of
 //                its stakes by name, the scene clock, or everyone somewhere)
 //   hooks, elsewhere, note   hers, like a page's
 //   secret       { tag, more }: its hidden tag, capitals on its words, and the

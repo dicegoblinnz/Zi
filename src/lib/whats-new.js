@@ -17,20 +17,22 @@ const label = (iso) => {
 };
 const plain = (html) => html.replace(/<[^>]+>/g, "").replace(/&amp;/g, "&").replace(/&#39;|&rsquo;|’/g, "’").trim();
 
+// An entry's id is c- and its date, with a word after it when it needs one,
+// like c-2026-11-08-roots, so two entries on one day each have their own.
 function read(now = new Date()) {
   const html = book.changes?.html ?? "";
-  const dates = [...html.matchAll(/<h2 id="c-(\d{4}-\d{2}-\d{2})"/g)].map((m) => m[1]).sort();
+  const dates = [...html.matchAll(/<h2 id="c-(\d{4}-\d{2}-\d{2})(?:-[\w-]+)?"/g)].map((m) => m[1]).sort();
   const newest = dates.length ? new Date(`${dates[dates.length - 1]}T00:00:00`) : now;
   const cutoff = new Date(Math.max(now.getTime() - NEW_FOR_DAYS * 864e5, newest.getTime() - BATCH_DAYS * 864e5));
   const entries = [];
-  const parts = html.split(/(?=<h2 id="c-\d{4}-\d{2}-\d{2}")/);
+  const parts = html.split(/(?=<h2 id="c-\d{4}-\d{2}-\d{2}(?:-[\w-]+)?")/);
   for (const part of parts) {
-    const head = part.match(/^<h2 id="c-(\d{4}-\d{2}-\d{2})">([\s\S]*?)<\/h2>/);
+    const head = part.match(/^<h2 id="(c-(\d{4}-\d{2}-\d{2})(?:-[\w-]+)?)">([\s\S]*?)<\/h2>/);
     if (!head) continue;
-    const [, iso, title] = head;
+    const [, id, iso, title] = head;
     if (new Date(`${iso}T23:59:59`) < cutoff) continue;
     const links = [...part.matchAll(/href="\/rules\/([^/"#]+)\/#([^"]+)"/g)].map(([, slug, id]) => ({ slug, id }));
-    entries.push({ id: `c-${iso}`, iso, date: label(iso), title: plain(title).replace(/^\d+ \w+ \d{4}:\s*/, ""), links });
+    entries.push({ id, iso, date: label(iso), title: plain(title).replace(/^\d+ \w+ \d{4}:\s*/, ""), links });
   }
   // Newest entry wins when a section's in more than one.
   const bySlug = new Map();

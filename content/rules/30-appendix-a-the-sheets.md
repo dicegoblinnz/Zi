@@ -18,40 +18,40 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 **Zi'Dara character sheet, front: play**
 
 -   Name · Pronouns · Player
--   Aura (now \_\_\_ · max \_\_\_ · full every scene, and 5 unless your sheet changes it)
+-   Aura (now \_\_\_ · max \_\_\_ · full every scene, and 5 unless your sheet changes it · 1 back for every die of yours that wins and every top face)
+-   Actions (the most you can take in a round, one for each archetype you've got · 3 Aura buys one)
 -   Stride (3 to start)
--   Resolve (a gem for each Title, and one more or one fewer for the Resolve Boon or Burden: that's your maximum · fill in the ones you've got · 1 back at the end of every scene, and all of it after downtime)
--   Confidence (a row of dice from d2 to d12: ring the one you're on, and move the ring as it swings · d6 at the start of every scene, a size up in clothes that fit it · up a size when one of your dice wins or you stop a telegraph, and down a size when your wound die goes up or every die misses · d2 is shaken, d12 is fired up · back to d6 when the scene ends)
--   Conditions (4 · the die that placed it, with its size to ring)
--   Wound die (d2 → d4 → d6 → d8 → d10 → d12 → Blaze: ring the one you're on · every Hurt puts it up a size, and a Hurt at d12 Blazes · a heal has to beat it · when a scene ends, roll your Confidence against it, and beat it to bring it down a size · downtime clears it to your Scars)
--   Scars (5 lines, one for each Scar's Catch · beside each one, the size your wound die never goes below once you've got it, d4 for the first up to d12 for the fifth · with five, your next Blaze is your last)
--   Aspiration (d2 → d4 → d6 → d8 → d10 → d12 · past d12: a new archetype, with a Title you name for it, and a new Aspiration at d2)
--   Party Goal (d2 → d4 → d6 → d8 → d10 → d12 · past d12: the crew's done it, and everyone writes a new thread)
--   Set actions: Defend (dodge, parry, armour) · Fight (melee and ranged) · Move (run, climb, jump and chase) · Sneak (unseen and unheard) · Study (look closely, know things) · Talk (charm, lies and threats), and six more rows for set actions of your own, like Locks or Ward
--   On each row: what's on it · steps · die
+-   Tracks: Stamina (Body), Confidence (Mind) and Resolve (Soul), each a row of dice from d12 down to d2 to ring the one you're on, then Blaze, for a hit at d2 · d12 to start · a size off for every hit that gets through, and back a size on a 4 or more when a scene ends · under each, a box to cross on d2, d4, d6, d8 and d10, for the sizes your Scars lock, from the bottom up · and two armour lines on each, with three boxes beside each line
+-   Under the tracks: what an ability costs (1 off its home track, or 2 from the other two), 2 for 1, and Blaze
+-   Roots: Body, Mind and Soul, a box each · and twelve rows for your specialties, each with its name and steps · a roll's one Root and one specialty, plus 1 for each item you're using
 -   Steps into dice (1 step is a d2, 6 is a d12, 12 is two d12s, and 24 is four)
--   Kit: equipment (3 · what you wear or wield, with a weapon's properties · each piece of plain armour, a shield and a helmet, is a line on your Defend, written with its quality first and three boxes beside it, ticked a blow at a time, and it breaks on the first box if it's Common, the second if it's Fine and the third if it's Masterwork) · utility (3 · tools and things you use up · cross it off once it's used) · a keepsake (something that matters to your character) · the bag (holds 10 · getting something out takes your action, and putting it away is free)
--   Notes (a thread that won't fit on its bond, and whatever your archetype's holding, like a Shadow's pool or a Shifter's animal tags)
+-   Conditions (4 · the die that placed it, with its size to ring · it steps down a size every round)
+-   Scars (5 lines, one for each Scar's Catch · each one locks the lowest size its track's got open)
+-   Aspiration (d2 → d4 → d6 → d8 → d10 → d12 · past d12: a new Title, archetype or attuned thing, and a new Aspiration at d2)
+-   Party Goal (d2 → d4 → d6 → d8 → d10 → d12 · past d12: the crew's done it, and everyone writes a new thread)
+-   Kit: equipment (3 · what you wear or wield, with a weapon's properties and each piece of armour's quality and Root · an item's 1 more on a roll you use it in) · utility (3 · tools and things you use up · cross it off once it's used) · a keepsake (something that matters to your character) · the bag (holds 10 · getting something out takes your action, and putting it away is free)
+-   Notes (whatever your archetype's holding, like a Shadow's pool or a Shifter's animal tags, and a thread that won't fit on its bond)
 :::
 
 :::sheet-fields
 **Back: who you are**
 
 -   Six Titles: I and II to start, III to VI earned in play
--   On each: the Title, the name you give your archetype · the archetype · six permission lines (three to start on I and II, one on a Title you earn later)
+-   On each: the Title · its Root and its three specialties · six permission lines (three to start on I and II, one on a Title you earn later), and write each permission's Root and specialty beside it
 -   A Boon takes two permission lines on the Title that pays for it
--   Attunement (two cards · you start with one thing, and attune more later in downtime, on top of what you carry · on each: the thing · Awakened, Tempered or Perfected, to ring · the material that took it there · its Catch · its Burden · six permission lines · a Summoner's summoning attunement writes its souls and their dice on those lines instead)
--   Bonds (6 · four thread lines on each · ring each thread bond or hostile · tick the first box when it's strained, and the second when it snaps)
+-   Archetypes (three cards · two to start, and the same one twice is fine · on each: the archetype · its home track, Stamina, Confidence or Resolve, to ring · its mechanic · six ability lines · an ability's 1 off its home track, or 2 from the other two)
+-   Attunement (one card, the width of the page · you start with one thing, on top of what you carry · on it: the thing · the material that took it to its stage · Awakened, Tempered or Perfected, to ring · Its Aura · its Catch · its Burden · six awakenings, each with passive or active to ring, and two boxes for the Aura a passive one's holding · a Summoner's souls go on those lines, with their dice · a second attuned thing goes in Notes)
+-   Bonds (4 · three thread lines on each · a bond's usually a person, but it can be a faction, a place or a cause · ring each thread bond or hostile · tick the first box when it's strained, and the second when it snaps)
 :::
 
-Title cards don't have a Catch line. Your Catches live on your attuned things, on the back, and in your Scars, on the front.
+Title cards don't have a Catch line. Your Catches live on your attuned thing, on the back, and in your Scars, on the front.
 
-What Aura and Resolve buy and how they come back, your archetype's +2 and its Resolve spend, building a roll and your action aren't on the sheet. They're in the **player reference**, a separate four-page PDF on the [Sheets page](/sheets/). It's the [quick reference](#appendix-quick) in four parts, a page each, with what you reach for most at the table first:
+What Aura buys and how it comes back, building a roll and your action aren't on the sheet. They're in the **player reference**, a separate four-page PDF on the [Sheets page](/sheets/). It's the [quick reference](#appendix-quick) in four parts, a page each, with what you reach for most at the table first:
 
-1.  **The round and rolling:** the round, your action, building a roll, set actions and the steps ladder, the roll, your dice and splits, combos, and moving, how far and weapon properties.
-2.  **Confidence, wounds and defence:** how Confidence swings, the wound die, resting, Blaze, Scars and healing, answering, letting it ride, where each die stops one, Defend, intercepting, what it costs, and conditions.
-3.  **Aura, Resolve, archetypes and threads:** what Aura and Resolve buy and how they come back, Catches included, the seventeen archetypes, a line each with its sigil, and bonds and threads.
-4.  **Your character, downtime, threats and gear:** making a character, Defend and Boons and Burdens, things that climb, downtime, reading a threat, its multipliers and vulnerabilities, what a win does, Study, stakes and clocks, chases, what you carry, attunement and summoning.
+1.  **The round and rolling:** the round, your action and extra actions, building a roll and the steps ladder, the roll, splits, combos, and moving, how far and weapon properties.
+2.  **The tracks and defence:** Stamina, Confidence and Resolve, what they pay, 2 for 1, how they come back, Blaze, Scars and healing, answering, letting it ride, Defend, intercepting, what it costs, and conditions.
+3.  **Aura, archetypes and threads:** what Aura buys and how it comes back, Catches included, the eighteen archetypes, a line each with its sigil and its home track, and bonds and threads.
+4.  **Your character, downtime, threats and gear:** making a character, Boons and Burdens, things that climb, downtime, reading a threat, its multipliers and vulnerabilities, what a win does, Study, stakes and clocks, chases, what you carry, attunement and summoning.
 
 The GM's side of the quick reference stays in the book: factions, the session, the Oracle, and the round and threat budgets.
 

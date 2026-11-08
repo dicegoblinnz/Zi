@@ -6,7 +6,7 @@ order: 16
 part: "The Table"
 partNumber: "Part II"
 source: 2026-10-02 rulebook
-updated: 2026-10-26
+updated: 2026-11-09
 ---
 :::quote
 A session is one night of Zi'Dara, and it's got a shape.
@@ -16,7 +16,7 @@ Here's that shape for a three-hour night. Stretch it or squeeze it to fit your t
 
 | Part | Time | What happens |
 | --- | --- | --- |
-| Opening | 20 min | Recap, downtime, the party sheet, a check-in, Resolve back and wounds cleared. |
+| Opening | 20 min | Recap, downtime, the party sheet, a check-in, and everyone's tracks where downtime left them. |
 | Planning | 20 min | The crew decides what it's doing tonight. |
 | Confrontation | 90 min | The job, the fight, the chase or the ball. |
 | Aftermath | 30 min | What it cost, and what it changed. |
@@ -28,7 +28,7 @@ Here's that shape for a three-hour night. Stretch it or squeeze it to fit your t
 2.  **Downtime.** The four pressures land, then everyone spends their slots.
 3.  **Read the party sheet.** Go through the Goal, every Aspiration and every faction.
 4.  **Check-in.** "Anything anyone wants to flag before we start?"
-5.  **Resolve and wounds.** Everyone starts the session with all their [Resolve](#s-tracks), one for each Title, because it all comes back after downtime. Downtime clears wounds too, so everyone's [wound die](#s-blaze) is back on d2, or on their Scars.
+5.  **Tracks.** Everyone starts the session with their [tracks](#s-tracks) where downtime left them. Every downtime puts each one up a size, and a slot spent recovering puts 6 sizes back, but nothing opens a size a [Scar](#s-blaze)'s locked.
 
 Take turns doing the recap, so it isn't always the same person. If the log doesn't jog anyone's memory, the GM fills in the gaps.
 
