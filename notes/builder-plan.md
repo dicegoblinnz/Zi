@@ -408,7 +408,7 @@ Each stage reaches Mo's playtests within a week. Table packs and the founding ta
 16. **Abnu: places, people and the map** (a world). Needs 15. *Built 31 Oct 2026.*
     - The places (every seat, the canon's places and the districts of the capital) and the people (every Face, the canon's people and the contacts), with everything a page holds, and the map traced from Mo's, with a pin on every place and seat and the web on it, every faction where it sits, as the brief says.
     - The page gets places and people, Find, and the map in one hand, every pin opening its page, the way stage 13 gave Night City's.
-17. **Night City, 2045: the board and How it came to be** (a world). Needs 12.
+17. **Night City, 2045: the board and How it came to be** (a world). Needs 12. *Built 9 Nov 2026.*
     - 2045's board in `2045/`, written and checked the way 2077's was, what the two years share moved into `world.yaml`, and the year switch on the page.
 18. **Night City, 2045: places, people and the map** (a world). Needs 13 and 17.
     - 2045's places, people and map, as the brief says, its map on the ground both years share.
