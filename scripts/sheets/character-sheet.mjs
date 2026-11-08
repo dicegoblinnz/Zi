@@ -142,7 +142,7 @@ function back(stamp) {
       <div class="card acard wide">
         <div class="row"><span class="lab">Thing</span><span class="grow2">${w(`attune_${a}_thing`)}</span><span class="lab">Material</span>${w(`attune_${a}_material`)}<div class="stage">${STAGES.map((s) => `<span class="word" data-radio="attune_${a}_stage" data-value="${s.toLowerCase()}">${s}</span>`).join("<i>›</i>")}</div></div>
         <div class="row"><span class="lab">Its Aura</span><span class="grow2">${w(`attune_${a}_aura`, { size: 8 })}</span><span class="lab">Catch</span>${w(`attune_${a}_catch`)}<span class="lab">Burden</span>${w(`attune_${a}_burden`)}</div>
-        <div class="wakes2">${[0, 1].map((c) => `<div class="wakes"><div class="top"><span></span><span>passive or active</span><span>stored</span></div>${range(3).map((r) => wake(a, c * 3 + r + 1)).join("")}</div>`).join("")}</div>
+        <div class="wakes2">${[0, 1].map((c) => `<div class="wakes"><div class="top"><span></span><span>passive or active</span><span>stored</span></div>${range(3).map((r) => wake(a, c * 3 + r)).join("")}</div>`).join("")}</div>
       </div>`;
   // Each thread: its truth, bond or hostile to ring, and a box for strained
   // and one for snapped. A thread's a sentence, so it gets the width, and a

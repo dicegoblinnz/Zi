@@ -23,40 +23,48 @@ export function placesOf(c) {
   return {
     titles: at(c.titles),
     perms: c.titles.map((t) => at(t.permissions)),
-    traits: at(c.traits),
-    attuned: c.attuned.map((a) => at(a.permissions)),
+    attuned: c.attuned.map((a) => at(a.awakenings ?? [])),
     threads: Object.fromEntries(c.threads.map((p) => [p.person, at(p.threads)])),
   };
 }
 
-// Every line on a sheet: where it sits, what it says, and what to call it.
+// Every line on a sheet on Roots (roots.js): where it sits, what it says, and
+// what to call it.
 export function linesOf(c) {
   const out = [];
   const add = (id, text, name) => out.push({ id, text, name });
   const n = c.numbers;
   const P = placesOf(c);
   add("num:aura", `Aura ${n.aura}`, "Aura");
-  add("num:resolve", `Resolve ${n.resolve}`, "Resolve");
   add("num:stride", `Stride ${n.stride}${note(n.strideNote)}`, "Stride");
-  add("num:conf", `Confidence starts every scene on d${n.confidence}${note(n.confidenceNote)}${n.dressed ? `, or d${n.dressed.die} in ${n.dressed.what} when they fit the scene` : ""}`, "Confidence");
-  add("num:wound", `Wound die d${n.wound ?? 2}${note(n.woundNote)}`, "Wound die");
-  for (const a of c.actions) add(`act:${a.name}`, `${a.steps} step${a.steps === 1 ? "" : "s"}, ${a.die}`, a.name);
+  for (const [k, name] of [["stamina", "Stamina"], ["confidence", "Confidence"], ["resolve", "Resolve"]]) add(`num:${k}`, `${name} starts at d${n[k]?.die ?? 12}${note(n[k]?.note)}`, name);
+  for (const root of ["Body", "Mind", "Soul"]) add(`root:${root}`, `${root} ${c.roots[root]}`, root);
+  for (const sp of c.specialties) add(`spec:${sp.name}`, `${sp.name} ${sp.steps}`, sp.name);
   c.titles.forEach((t, i) => {
     const title = `your ${ORD[i] ?? "next"} Title`;
-    add(`title:${P.titles[i]}`, `${t.name}${note(t.archetype)}`, `Your ${ORD[i] ?? "next"} Title`);
-    t.permissions.forEach((p, j) => add(`perm:${P.titles[i]}:${P.perms[i][j]}`, p.text, `A permission on ${title}`));
+    add(`title:${P.titles[i]}`, `${t.name} (${t.root}; ${(t.specialties ?? []).join(", ")})`, `Your ${ORD[i] ?? "next"} Title`);
+    t.permissions.forEach((p, j) => add(`perm:${P.titles[i]}:${P.perms[i][j]}`, `${p.text} (${p.root}, ${p.specialty})`, `A permission on ${title}`));
   });
-  for (const a of c.archetypeRules) add(`arch:${a.name}`, `${plain(a.summary)}${a.aura ? ` 1 Aura: ${plain(a.auraHtml || a.aura)}` : ""}${a.resolve ? ` 1 Resolve: ${plain(a.resolveHtml || a.resolve)}` : ""}`, a.name);
-  c.traits.forEach((t, i) => add(`trait:${P.traits[i]}`, `${t.name}${note(t.type)}: ${plain(t.html)}`, t.name));
+  const seen = new Set();
+  for (const a of c.archetypes) {
+    if (seen.has(a.name)) continue;
+    seen.add(a.name);
+    add(`arch:${a.name}`, `${a.name}, home ${a.home ?? ""}${a.abilities?.length ? `: ${a.abilities.map((x) => `${x.name}, ${plain(x.html ?? x.text)}`).join(" ")}` : ""}`, a.name);
+  }
   const kit = c.carry;
-  // Armour says its quality first, so a quality the rules change is marked too.
-  add("kit:equipment", `${kit.equipment.items.map((x) => nameOf(c, "equipment", x)).join(", ") || kit.equipment.note || "nothing"}, ${kit.equipment.items.length} of ${kit.equipment.max}`, "Equipment");
-  add("kit:utility", `${kit.utility.items.join(", ") || kit.utility.note || "nothing"}, ${kit.utility.items.length} of ${kit.utility.max}`, "Utility");
+  // Armour says its quality and its Root, so a change to either is marked too.
+  const armourOf = (x) => {
+    const a = (c.armour ?? []).find((p) => p.name === x);
+    return a ? `${nameOf(c, "equipment", x)} (${a.root ?? "Body"}${a.when ? `, ${a.when}` : ""})` : x;
+  };
+  add("kit:equipment", kit.equipment.map(armourOf).join(", ") || "nothing", "Equipment");
+  add("kit:utility", kit.utility.join(", ") || "nothing", "Utility");
   if (kit.keepsake) add("kit:keepsake", kit.keepsake, "Keepsake");
   add("kit:bag", `${kit.bag.name}${kit.bag.items?.length ? `: ${kit.bag.items.join(", ")}` : ""}`, "The bag");
   c.attuned.forEach((a, i) => {
-    add(`att:${i}`, `${a.name}${note(a.props)}, ${a.stage || "Awakened"}${a.catch ? `, its Catch ${a.catch}` : ""}${a.burden ? `, its Burden ${a.burden}` : ""}`, a.name.charAt(0).toUpperCase() + a.name.slice(1));
-    a.permissions.forEach((p, j) => add(`att:${i}:${P.attuned[i][j]}`, p.text, `A permission on ${a.name.replace(/^(A|An|The|His|Her|Their) /, (m) => m.toLowerCase())}`));
+    const name = a.name.charAt(0).toUpperCase() + a.name.slice(1);
+    add(`att:${i}`, `${a.name}${note(a.props)}, ${a.stage || "Awakened"}${a.aura ? `, its Aura ${a.aura}` : ""}${a.catch ? `, its Catch ${a.catch}` : ""}${a.burden ? `, its Burden ${a.burden}` : ""}`, name);
+    (a.awakenings ?? []).forEach((w, j) => add(`att:${i}:${P.attuned[i][j]}`, `${w.name} (${w.kind}): ${plain(w.text)}`, `An awakening on ${a.name.replace(/^(A|An|The|His|Her|Their) /, (m) => m.toLowerCase())}`));
   });
   for (const p of c.threads) p.threads.forEach((t, j) => add(`thr:${p.person}:${P.threads[p.person][j]}`, `${t.text}${note(t.note)}`, `A thread with ${p.person}`));
   if (c.aspiration?.text) add("asp", c.aspiration.text, "Your Aspiration");

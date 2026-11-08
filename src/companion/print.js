@@ -2,22 +2,24 @@
 // phone with everything the companion knows, the sheet and where they are now,
 // and handed over as a PDF to print or keep. Its fields stay fillable. pdf-lib
 // only loads when someone prints, and the service worker keeps it and the
-// blank sheet on the phone, so it works offline.
+// blank sheet on the phone, so it works offline. The field names are the
+// sheet's own (scripts/sheets/character-sheet.mjs), so rename one there and
+// it's renamed here too.
 import { threadState } from "./threads.js";
-import { nameOf, piecesOf, tickedOf } from "./armour.js";
+import { nameOf, piecesOf, tickedOf, withQuality } from "./armour.js";
+import * as R from "./roots.js";
 
-// Till stage 3 of notes/roots-plan.md rebuilds the companion for Roots, it
-// prints onto the sheet from before Roots, whose fields its characters fill.
-const SHEET = "/sheets/zidara-character-sheet-pre-roots.pdf";
-const FIXED = ["defend", "fight", "move", "sneak", "study", "talk"];
-const SCARS = 5;
-const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX", "XX", "XXI", "XXII", "XXIII", "XXIV"];
+const SHEET = "/sheets/zidara-character-sheet.pdf";
+// What the paper has room for: anything past it goes in Notes.
+const ROWS = { specs: 12, scars: 5, titles: 6, perms: 6, archetypes: 3, abilities: 6, awakenings: 6, armour: 2, conditions: 4, bonds: 4, threads: 3, equipment: 3, utility: 3, bag: 10 };
 const PRONOUNS = { her: "she, her", him: "he, him", them: "they, them" };
+const TIMES = ["", "", "twice", "three times", "four times"];
+const TN = (t) => R.TRACK[t].name;
 
 const textOf = (html) => new DOMParser().parseFromString(html ?? "", "text/html").body.textContent.trim();
 const slug = (s) => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
-export async function fillSheet(ch, c, s, { goal = null } = {}) {
+export async function fillSheet(ch, c, s, { goal = null, B = null } = {}) {
   const [{ PDFDocument, StandardFonts }, blank] = await Promise.all([
     import("pdf-lib"),
     fetch(SHEET).then((res) => {
@@ -32,8 +34,8 @@ export async function fillSheet(ch, c, s, { goal = null } = {}) {
   // The sheet's fields use a font every PDF viewer has, which can't draw every
   // letter, so a ā prints as a, and anything else it can't draw is left out.
   const can = new Set(font.getCharacterSet());
-  const ok = (ch) => ch === "\n" || can.has(ch.codePointAt(0));
-  const clean = (v) => [...String(v ?? "").normalize("NFC")].map((ch) => (ok(ch) ? ch : [...ch.normalize("NFD")].filter(ok).join(""))).join("").trim();
+  const ok = (ch2) => ch2 === "\n" || can.has(ch2.codePointAt(0));
+  const clean = (v) => [...String(v ?? "").normalize("NFC")].map((ch2) => (ok(ch2) ? ch2 : [...ch2.normalize("NFD")].filter(ok).join(""))).join("").trim();
 
   // How many lines a multiline field wraps text into, the way pdf-lib does.
   const linesAt = (text, size, room) => text.split("\n").reduce((n, para) => {
@@ -76,26 +78,46 @@ export async function fillSheet(ch, c, s, { goal = null } = {}) {
 
   const n = c.numbers;
   const them = c.pronoun === "him" ? "him" : c.pronoun === "her" ? "her" : "them";
+  const notes = [];
 
-  // The front: who, the numbers, the wound die and Scars, set actions, traits and kit.
+  // The front: who, Aura, actions and stride, the three tracks with their
+  // Scars and armour, Roots and specialties, conditions, Scars, the
+  // Aspiration and the Party Goal, kit and notes.
   put("name", ch.name);
   put("pronouns", PRONOUNS[c.pronoun]);
   put("aura_now", s.aura);
   put("aura_max", n.aura);
-  for (let i = 1; i <= Math.min(7, s.resolve); i++) tick(`resolve_${i}`);
-  put("resolve_max", n.resolve);
+  put("actions", R.actionsMax(c));
   put("stride", n.stride);
-  ring("confidence", `d${s.conf}`);
-  s.conditions.slice(0, 4).forEach((x, i) => {
+  for (const t of R.TRACKS) {
+    ring(t, `d${s.tracks[t]}`);
+    // A Scar locks a track's smallest size, from d2 up.
+    for (let k = 0; k < s.scars[t].length && k < R.MAX_SCARS; k++) tick(`${t}_scar_${2 + 2 * k}`);
+    const pieces = piecesOf(c).filter((a) => (a.root ?? "Body") === R.TRACK[t].root);
+    pieces.slice(0, ROWS.armour).forEach((a, i) => {
+      const broken = Boolean(s.crossed[`equipment|${a.name}`]);
+      put(`${t}_armour_${i + 1}`, `${withQuality(a.name, a.quality)}${a.when ? `, ${a.when}` : ""}${broken ? " (broken)" : ""}`);
+      for (let j = 1; j <= Math.min(3, tickedOf(s, a)); j++) tick(`${t}_armour_${i + 1}_box_${j}`);
+    });
+    for (const a of pieces.slice(ROWS.armour)) notes.push(`Armour on ${R.TRACK[t].root}: ${withQuality(a.name, a.quality)}, ${tickedOf(s, a)} of ${a.boxes} ${a.boxes === 1 ? "box" : "boxes"} ticked.`);
+  }
+  put("root_body", c.roots.Body);
+  put("root_mind", c.roots.Mind);
+  put("root_soul", c.roots.Soul);
+  c.specialties.slice(0, ROWS.specs).forEach((sp, i) => {
+    put(`spec_${i + 1}_name`, sp.name);
+    put(`spec_${i + 1}_steps`, sp.steps);
+  });
+  if (c.specialties.length > ROWS.specs) notes.push(`More specialties: ${c.specialties.slice(ROWS.specs).map((sp) => `${sp.name} ${sp.steps}`).join(", ")}.`);
+  s.conditions.slice(0, ROWS.conditions).forEach((x, i) => {
     put(`condition_${i + 1}`, x.name);
     ring(`condition_${i + 1}_die`, `d${x.die}`);
   });
-
-  // The wound die's ringed where it is, and each Scar's Catch goes on its
-  // line, the floor it sets printed beside it. One that hasn't been written
-  // yet still takes its line.
-  ring("wound_die", `d${s.wound}`);
-  s.scars.slice(0, SCARS).forEach((x, i) => put(`scar_${i + 1}`, x || "a Scar"));
+  // Each Scar's Catch goes on its line with the track it's on. One that
+  // hasn't been written yet still takes its line.
+  const scars = R.TRACKS.flatMap((t) => s.scars[t].map((x) => `${x || "a Scar"} (${TN(t)})`));
+  scars.slice(0, ROWS.scars).forEach((x, i) => put(`scar_${i + 1}`, x));
+  if (scars.length > ROWS.scars) notes.push(`More Scars: ${scars.slice(ROWS.scars).join(", ")}.`);
   put("aspiration", s.aspText || c.aspiration.text);
   ring("aspiration_die", `d${s.asp}`);
   // In a campaign, the Party Goal's where the party sheet has it.
@@ -104,98 +126,79 @@ export async function fillSheet(ch, c, s, { goal = null } = {}) {
     ring("party_goal_die", `d${goal.die}`);
   }
 
-  // A Title on a set action is its number on the back, and an attuned thing's
-  // permission is the thing, so each row stays short.
-  const titleNo = new Map(c.titles.map((t, i) => [t.key, NUMERALS[i] ?? String(i + 1)]));
-  const label = (key) => {
-    const l = c.lines.find((x) => x.key === key);
-    if (!l) return "";
-    return l.kind === "title" ? `Title ${titleNo.get(key)}` : l.kind === "attuned" ? l.item : l.label;
-  };
-  // Something crossed out prints as it is on the sheet, with "(broken)" after it.
-  const out = (key) => {
-    const l = c.lines.find((x) => x.key === key);
-    return l?.kind === "kit" && Object.keys(s.crossed).some((k) => s.crossed[k] && k.endsWith(`|${l.label}`));
-  };
-  let row = 0;
-  for (const a of c.actions) {
-    const fixed = FIXED.find((f) => f === a.name.toLowerCase());
-    const at = fixed ?? (row < 6 ? String(++row) : null);
-    if (!at) continue;
-    if (!fixed) put(`set_${at}_name`, a.name);
-    put(`set_${at}_lines`, [...new Set(a.lines.map((key) => (label(key) && out(key) ? `${label(key)} (broken)` : label(key))).filter(Boolean))].join(", "));
-    put(`set_${at}_steps`, a.steps);
-    put(`set_${at}_die`, a.die);
-  }
-  c.traits.slice(0, 3).forEach((t, i) => {
-    put(`trait_${i + 1}`, t.name);
-    put(`trait_${i + 1}_type`, t.type);
-    put(`trait_${i + 1}_does`, textOf(t.html));
-  });
-
   // What they carry, with anything picked up in play. Broken and used things
   // say so, and a list too long for its lines shares the last one. Armour
-  // says its quality first, and each of its ticked boxes is ticked beside it.
-  const kit = (where, list, note) => {
-    const all = [...list, ...s.picked.filter((p) => p.where === where).map((p) => p.name)].map((x) => (s.crossed[`${where}|${x}`] ? `${nameOf(c, where, x)} (${where === "equipment" ? "broken" : "used"})` : nameOf(c, where, x)));
-    return all.length || !note ? all : [note.charAt(0).toUpperCase() + note.slice(1)];
-  };
+  // says its quality first.
+  const kit = (where, list) => [...list, ...s.picked.filter((p) => p.where === where).map((p) => p.name)].map((x) => (s.crossed[`${where}|${x}`] ? `${nameOf(c, where, x)} (${where === "equipment" ? "broken" : "used"})` : nameOf(c, where, x)));
   const lines = (prefix, list, rows) => list.slice(0, rows).forEach((x, i) => put(`${prefix}_${i + 1}`, i === rows - 1 ? list.slice(i).join(", ") : x));
-  lines("equipment", kit("equipment", c.carry.equipment.items, c.carry.equipment.note), 3);
-  const worn = [...c.carry.equipment.items, ...s.picked.filter((p) => p.where === "equipment").map((p) => p.name)];
-  worn.slice(0, 3).forEach((x, i) => {
-    const a = piecesOf(c).find((p) => p.name === x);
-    if (!a || (i === 2 && worn.length > 3)) return;
-    for (let j = 1; j <= Math.min(3, tickedOf(s, a)); j++) tick(`equipment_${i + 1}_box_${j}`);
-  });
-  lines("utility", kit("utility", c.carry.utility.items, c.carry.utility.note), 3);
+  lines("equipment", kit("equipment", c.carry.equipment), ROWS.equipment);
+  lines("utility", kit("utility", c.carry.utility), ROWS.utility);
   if (c.carry.keepsake) put("keepsake", s.crossed[`keepsake|${c.carry.keepsake}`] ? `${c.carry.keepsake} (used)` : c.carry.keepsake);
-  lines("bag", kit("bag", c.carry.bag.items ?? []), 10);
+  lines("bag", kit("bag", c.carry.bag?.items ?? []), ROWS.bag);
 
-  // The paper sheet has nowhere else for trouble, clothes, a fourth trait, a
-  // seventh Title, a third attuned thing, a seventh bond or a fifth thread.
-  // On its own line a thread says whose words they are, and its kind is ringed.
+  // The back: Titles, archetypes, the attuned thing and bonds.
+  c.titles.slice(0, ROWS.titles).forEach((t, i) => {
+    put(`title_${i + 1}`, t.name);
+    put(`title_${i + 1}_root`, t.root);
+    put(`title_${i + 1}_specialties`, (t.specialties ?? []).join(", "));
+    t.permissions.slice(0, ROWS.perms).forEach((p, j) => put(`title_${i + 1}_permission_${j + 1}`, `${p.text} (${p.root}, ${p.specialty})`));
+  });
+  for (const t of c.titles.slice(ROWS.titles)) notes.push(`Title, ${t.name} (${t.root}; ${(t.specialties ?? []).join(", ")}): ${t.permissions.map((p) => `${p.text} (${p.root}, ${p.specialty})`).join(", ") || "no permissions yet"}.`);
+  const archs = R.archetypesOf(c, B);
+  archs.slice(0, ROWS.archetypes).forEach((a, i) => {
+    put(`archetype_${i + 1}`, a.times > 1 ? `${a.name}, ${TIMES[a.times] ?? `${a.times} times`}` : a.name);
+    ring(`archetype_${i + 1}_track`, a.home);
+    put(`archetype_${i + 1}_mechanic`, a.for || a.summary);
+    a.abilities.slice(0, ROWS.abilities).forEach((x, j) => put(`archetype_${i + 1}_ability_${j + 1}`, `${x.name} (1 ${TN(a.home)}): ${textOf(x.html)}`));
+  });
+  for (const a of archs.slice(ROWS.archetypes)) notes.push(`Archetype, ${a.name} (home ${TN(a.home)}): ${a.abilities.map((x) => x.name).join(", ")}.`);
+  const thing = c.attuned[0];
+  if (thing) {
+    put("attune_1_thing", thing.props ? `${thing.name} (${thing.props})` : thing.name);
+    ring("attune_1_stage", (thing.stage || "Awakened").toLowerCase());
+    put("attune_1_aura", thing.aura);
+    put("attune_1_catch", thing.catch);
+    put("attune_1_burden", thing.burden);
+    // What a passive awakening's holding is ticked beside it, shared across
+    // the same awakening taken twice.
+    const held = {};
+    thing.awakenings.slice(0, ROWS.awakenings).forEach((w, j) => {
+      put(`attune_1_awakening_${j + 1}`, `${w.name}: ${w.text}`);
+      ring(`attune_1_awakening_${j + 1}_kind`, w.kind === "active" ? "active" : "passive");
+      if (w.kind !== "active") {
+        const key = `0|${w.name}`;
+        const left = (s.store[key] ?? 0) - (held[key] ?? 0);
+        const here = Math.max(0, Math.min(R.HOLDS, left));
+        for (let k = 1; k <= here; k++) tick(`attune_1_awakening_${j + 1}_aura_${k}`);
+        held[key] = (held[key] ?? 0) + here;
+      }
+    });
+    for (const w of thing.awakenings.slice(ROWS.awakenings)) notes.push(`${thing.name}, ${w.name} (${w.kind}): ${w.text}.`);
+  }
+  for (const a of c.attuned.slice(1)) notes.push(`Attuned, ${a.props ? `${a.name} (${a.props})` : a.name}, ${a.stage}${a.aura ? `, its Aura ${a.aura}` : ""}${a.catch ? `, its Catch ${a.catch}` : ""}${a.burden ? `, its Burden ${a.burden}` : ""}: ${a.awakenings.map((w) => `${w.name} (${w.kind}), ${w.text}`).join("; ") || "no awakenings yet"}.`);
+
+  // A thread in someone else's words says whose, the way the companion does,
+  // and its kind's ringed.
   const threadOf = (t) => (t.whose ? `${t.text} (${t.whose} words)` : t.text);
   const strain = (p, t) => ({ strained: " (strained)", snapped: " (snapped)" })[threadState(s, p.person, t)] ?? "";
   const kindOf = (t) => (t.kind === "hostile" ? "hostile" : "bond");
-  // At its smallest size it still might not fit, and then print says so.
-  const roomy = put("notes", [
-    c.trouble.length ? `Trouble that follows ${them}: ${c.trouble.join(", ")}.` : "",
-    n.dressed ? `Confidence starts on d${n.dressed.die} in ${n.dressed.what} when they fit the scene.` : "",
-    ...c.traits.slice(3).map((t) => `${t.name} (${t.type}): ${textOf(t.html)}`),
-    ...c.titles.slice(6).map((t, i) => `Title ${NUMERALS[i + 6] ?? i + 7}, ${t.name}${t.archetype ? ` (${t.archetype})` : ""}: ${t.permissions.map((p) => p.text).join(", ") || "no permissions yet"}`),
-    ...c.attuned.slice(0, 2).filter((a) => a.burden).map((a) => `${a.name}’s Burden: ${a.burden}`),
-    ...c.attuned.slice(2).map((a) => `Attuned, ${a.props ? `${a.name} (${a.props})` : a.name}, ${a.stage || "Awakened"}${a.catch ? `, its Catch ${a.catch}` : ""}${a.burden ? `, its Burden ${a.burden}` : ""}: ${a.permissions.map((p) => p.text).join(", ")}`),
-    ...c.threads.slice(0, 6).flatMap((p) => p.threads.slice(4).map((t) => `A ${kindOf(t)} thread with ${p.person}: ${threadOf(t)}${strain(p, t)}`)),
-    ...c.threads.slice(6).flatMap((p) => p.threads.map((t) => `A ${kindOf(t)} thread with ${p.person}: ${threadOf(t)}${strain(p, t)}`)),
-    s.notes,
-  ].filter(Boolean).join("\n"));
-
-  // The back: Titles, attuned things and bonds. A thread in someone else's
-  // words says whose, the way the companion does.
-  c.titles.slice(0, 6).forEach((t, i) => {
-    put(`title_${i + 1}`, t.name);
-    put(`title_${i + 1}_archetype`, t.archetype);
-    t.permissions.slice(0, 6).forEach((p, j) => put(`title_${i + 1}_permission_${j + 1}`, p.text));
-  });
-  c.attuned.slice(0, 2).forEach((a, i) => {
-    const at = `attune_${i + 1}`;
-    put(`${at}_thing`, a.props ? `${a.name} (${a.props})` : a.name);
-    ring(`${at}_stage`, (a.stage || "Awakened").toLowerCase());
-    put(`${at}_catch`, a.catch);
-    a.permissions.slice(0, 6).forEach((p, j) => put(`${at}_permission_${j + 1}`, p.text));
-  });
-  c.threads.slice(0, 6).forEach((p, i) => {
+  c.threads.slice(0, ROWS.bonds).forEach((p, i) => {
     const at = `bond_${i + 1}`;
     put(at, p.person);
-    p.threads.slice(0, 4).forEach((t, j) => {
+    p.threads.slice(0, ROWS.threads).forEach((t, j) => {
       put(`${at}_thread_${j + 1}`, threadOf(t));
       ring(`${at}_thread_${j + 1}_kind`, kindOf(t));
       const st = threadState(s, p.person, t);
       if (st !== "whole") tick(`${at}_thread_${j + 1}_strained`);
       if (st === "snapped") tick(`${at}_thread_${j + 1}_snapped`);
     });
+    for (const t of p.threads.slice(ROWS.threads)) notes.push(`A ${kindOf(t)} thread with ${p.person}: ${threadOf(t)}${strain(p, t)}.`);
   });
+  for (const p of c.threads.slice(ROWS.bonds)) for (const t of p.threads) notes.push(`A ${kindOf(t)} thread with ${p.person}: ${threadOf(t)}${strain(p, t)}.`);
+
+  // The paper sheet has nowhere else for trouble or whatever didn't fit, and
+  // at its smallest size Notes still might not fit, and then print says so.
+  const roomy = put("notes", [c.trouble.length ? `Trouble that follows ${them}: ${c.trouble.join(", ")}.` : "", ...notes, s.notes].filter(Boolean).join("\n"));
 
   form.updateFieldAppearances(font);
   pdf.setTitle(`${ch.name}, a Zi’Dara character`, { showInWindowTitleBar: true });

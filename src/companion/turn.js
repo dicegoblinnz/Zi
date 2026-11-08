@@ -351,7 +351,7 @@ export function makeTurn(d) {
       const lostAny = c.faces && (!c.won.main || c.won.split === false);
       const opts = [];
       const ch = place ? d.character(place.ch) : null;
-      if (place && lostAny && ch) opts.push(btn("again", `Roll again for 1 Resolve <small>${esc(place.cname)}’s got ${ch.resolve}</small>`, { disabled: ch.resolve < 1 }));
+      if (place && lostAny && ch) opts.push(btn("again", `Roll again for 1 Resolve <small>${esc(place.cname)}’s Resolve is ${ch.die ? `a d${ch.die}` : ch.resolve}</small>`, { disabled: ch.resolve < 1 }));
       if (tied && can) opts.push(btn("tie", extrasLeft(id, t) ? "Take the tie with an extra resource" : "No extra resource left for the tie", { disabled: !extrasLeft(id, t), attrs: ` data-w="${best(c.faces.main) === def && !c.tie.main ? "main" : "split"}"` }));
       if (gm) opts.push(btn("out", "Make the changes", { cls: "button primary", attrs: ' data-x="crew"' }));
       foot = opts.length ? `<div class="tg-do">${opts.join("")}</div>` : "";
@@ -1235,7 +1235,7 @@ export function makeTurn(d) {
       // The Resolve's only spent on a roll the table will take.
       const ok = T().check(id, op);
       if (!ok.ok) return d.toast(ok.why || "That can’t be rolled again now.", false);
-      if (!d.spendResolve(place.ch)) return d.toast(`${place.cname} hasn’t got any Resolve to spend.`, false);
+      if (!d.spendResolve(place.ch)) return d.toast(`${place.cname} hasn’t got a size of Resolve to pay with.`, false);
       ui.spin = "crew";
       push(id, op);
     },

@@ -737,8 +737,8 @@ export function makeTable(d) {
   // ------------------------------------------------------------ actions and the scene
 
   // Where an extra action came from (Extra actions, in Conflict).
-  const MORES = [["resolve", "1 Resolve"], ["held", "I held last round"], ["hiding", "Out of hiding"], ["fired", "Cashing in d12 Confidence"], ["trait", "A trait or a Boon"]];
-  const moreName = (k) => ({ resolve: "1 Resolve", held: "held last round", hiding: "out of hiding", fired: "fired-up Confidence", trait: "a trait or a Boon" })[k] ?? k;
+  const MORES = [["resolve", "3 Aura"], ["held", "I held last round"], ["hiding", "Out of hiding"], ["fired", "Cashing in d12 Confidence"], ["trait", "A Boon"]];
+  const moreName = (k) => ({ resolve: "3 Aura", held: "held last round", hiding: "out of hiding", fired: "fired-up Confidence", trait: "a Boon" })[k] ?? k;
   const isAt = (x, chId) => Boolean(x && x.user === me() && x.ch === chId);
   // Everything that lands on this character: aimed at them and nobody took
   // it, taken by them for a friend, or at a place they're in.
@@ -776,7 +776,7 @@ export function makeTable(d) {
   function paidFor(doc, round, chId, friend) {
     return round.tele.some((t) => t.icp && isAt(t.icp, chId) && !t.icp.free && t.at.user === friend.user && t.at.ch === friend.ch);
   }
-  const guardianOf = (c) => c.archetypeRules.some((a) => a.name === "Guardian");
+  const guardianOf = (c) => (c.archetypes ?? []).some((a) => (a?.name ?? a) === "Guardian");
   // What the end of a round did to a stake's clock or an event, in a sentence.
   function movedSaid(el, m) {
     const name = cap(lower(el.name));
@@ -883,7 +883,10 @@ export function makeTable(d) {
     const answers = last.tele.filter((t) => t.ans && isAt(t.ans, ch.id)).map((t) => `<li><span>${esc(cap(`answering ${lower(t.who)} with ${t.ans.act}: ${outcome(t.ans.won)}`))}</span></li>`).join("");
     const head = left > 0 ? (sp.used ? `<b>${left === 1 ? "One more action" : `${cap(words(left))} more actions`}</b> to spend this round.` : "<b>Your action’s still yours.</b> Answer one telegraph, put it into a friend’s answer, or do something else.") : `<b>${sp.have === 1 ? "Your action’s spent" : "Your actions are spent"}</b> this round.`;
     const more = rec.more.length ? `<p class="cc-small">${sp.have === 2 ? "An extra action" : `${cap(words(rec.more.length))} extra actions`} from ${esc(andList(rec.more.map(moreName)))}.</p>` : "";
-    const canFire = s.conf >= 12;
+    // There's no fired-up Confidence to cash in on Roots (8 Nov 2026), and an
+    // extra action's 3 Aura. Till stage 4 of notes/roots-plan.md the table
+    // keeps its own word for it, "resolve".
+    const canFire = false;
     const extra = `<details class="tg-more" data-open="tg-more"${d.isOpen("tg-more") ? " open" : ""}><summary>Got another action?</summary><div class="cc-chips">${MORES.filter(([k]) => k !== "fired" || canFire).map(([k, label]) => `<button type="button" class="cc-chipbtn sm" data-act="tg" data-do="more" data-k="${k}"${(k === "resolve" && s.resolve < 1) || (ONCE.includes(k) && rec.more.includes(k)) ? " disabled" : ""}>${esc(label)}</button>`).join("")}</div><p class="cc-small">Holding your action last round, coming out of hiding, 1 Resolve, d12 Confidence or a trait that says so.</p></details>`;
     return `<div class="tg-yours" role="group" aria-label="Your action this round"><p class="tg-yours-head">${head}</p>${answers || backs ? `<ul class="tg-done">${answers}${backs}</ul>` : ""}${more}
       ${left > 0 ? `<div class="cc-row"><button type="button" class="button" data-act="tg" data-do="else">Something else</button></div>` : ""}${extra}</div>`;
@@ -1637,8 +1640,7 @@ export function makeTable(d) {
         for (const m of o.x?.more ?? []) {
           const i = kept.indexOf(m);
           if (i >= 0) kept.splice(i, 1);
-          else if (m === "resolve") s.resolve = Math.min(c.numbers.resolve, s.resolve + 1);
-          else if (m === "fired" && s.conf === 6) s.conf = 12;
+          else if (m === "resolve") s.aura += 3;
         }
         record(s, id, "x", o.round, has ? { more: [...has.more], list: has.list.map(({ did, at, late, ...a }) => ({ ...a, ...(a.roll ? { roll: { dice: a.roll.dice, opp: a.roll.opp, real: a.roll.real } } : {}) })) } : null);
       }
@@ -1653,6 +1655,9 @@ export function makeTable(d) {
   function catchUp(ch) {
     const id = ch ? d.campOf(ch) : null;
     if (!id || roleIn(id) !== "player" || d.current()?.id !== ch.id) return;
+    // On Roots (8 Nov 2026) nobody's Confidence moves with a roll, so there's
+    // nothing to catch up on.
+    if (ch.state?.tracks) return;
     const doc = local(id);
     const had = ch.state.tele?.c === id ? ch.state.tele.w ?? {} : {};
     const sig = (a) => `${a.won ? 1 : 0}:${a.opp}:${(a.dice ?? []).map((x) => x.total).join(",")}`;
@@ -2088,15 +2093,12 @@ export function makeTable(d) {
       spend(ch, id, last.id, "an extra action", (rec, s) => {
         if (rec.more.length >= MAX.more || (ONCE.includes(k) && rec.more.includes(k))) return false;
         if (k === "resolve") {
-          if (s.resolve < 1) return false;
-          s.resolve -= 1;
+          if (s.aura < 3) return false;
+          s.aura -= 3;
         }
-        if (k === "fired") {
-          if (s.conf < 12) return false;
-          s.conf = 6;
-        }
+        if (k === "fired") return false;
         rec.more.push(k);
-        return `Another action this round, from ${moreName(k)}.${k === "resolve" ? ` Resolve’s ${s.resolve}.` : k === "fired" ? " Your Confidence is back to d6." : ""}`;
+        return `Another action this round, from ${moreName(k)}.${k === "resolve" ? ` Aura’s ${s.aura}.` : ""}`;
       });
     },
     // Intercepting a friend's telegraph: 1 Aura, once for each friend a

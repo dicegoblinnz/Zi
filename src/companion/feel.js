@@ -115,7 +115,7 @@ export const feel = {
     tone(196, 0.32, { vol: 0.16, to: 147, type: "triangle", at: 0.08 });
     buzz([40, 70, 40]);
   },
-  // A Hurt that puts the wound die on d12, or makes you Blaze.
+  // A hit that leaves a track on its smallest open size, or makes you Blaze.
   heavy() {
     if (!on) return;
     tone(98, 0.45, { vol: 0.4, to: 41, type: "triangle" });

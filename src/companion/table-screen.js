@@ -59,7 +59,7 @@ const net = { ws: null, open: false, tries: 0, failed: 0, timer: 0, steady: 0, b
 
 // ------------------------------------------------------------ the words
 
-const MORE = { resolve: "1 Resolve", held: "held last round", hiding: "out of hiding", fired: "fired-up Confidence", trait: "a trait or a Boon" };
+const MORE = { resolve: "3 Aura", held: "held last round", hiding: "out of hiding", fired: "fired-up Confidence", trait: "a Boon" };
 const GOOD = new Set(["stopped", "held", "clear"]);
 const BAD = new Set(["hit", "landed", "through"]);
 // The best die on an answer: the one that won it, or the highest that didn't.

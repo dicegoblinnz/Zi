@@ -429,7 +429,7 @@ async function rosterOf(env, id) {
   const { results } = await env.DB.prepare(`SELECT m.userId AS user, u.name, m.characterId AS ch, json_extract(ch.data, '$.name') AS cname,
       json_extract(ch.data, '$.crew') AS crew,
       (SELECT json_group_array(json_extract(t.value, '$.arch')) FROM json_each(ch.data, '$.build.titles') t WHERE t.type = 'object') AS built,
-      (SELECT json_group_array(json_extract(g.value, '$.arch')) FROM json_each(ch.data, '$.state.grown') g WHERE CASE WHEN g.type = 'object' THEN json_extract(g.value, '$.k') = 'title' ELSE 0 END) AS grown
+      (SELECT json_group_array(json_extract(g.value, '$.arch')) FROM json_each(ch.data, '$.state.grown') g WHERE CASE WHEN g.type = 'object' THEN json_extract(g.value, '$.k') IN ('title', 'arch') ELSE 0 END) AS grown
     FROM member m JOIN "user" u ON u.id = m.userId
     LEFT JOIN character ch ON ch.userId = m.userId AND ch.id = m.characterId AND ch.data IS NOT NULL
     WHERE m.campaignId = ?1 ORDER BY m.joinedAt, m.userId`).bind(id).all();

@@ -361,9 +361,7 @@ const curly = (s) => (typeof s === "string" ? s.replace(/'/g, "\u2019") : s);
 // (rootsFrom): archetypes, Titles with their Root, specialties and
 // permissions, Roots and specialties checked against the sums, what
 // they carry, armour on its Root, the attuned thing with its awakenings,
-// numbers, threads, Aspiration and trouble. Till stage 3 of
-// notes/roots-plan.md, the companion itself still runs on the crew from
-// before Roots (src/data/companion-pre-roots.json).
+// numbers, threads, Aspiration and trouble, which the companion plays.
 const ORDINAL = { first: 0, second: 1, third: 2, fourth: 3, fifth: 4, sixth: 5 };
 const COUNT = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6 };
 const plain = (s = "") => curly(s.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/\*/g, "").trim());
@@ -398,9 +396,8 @@ function qualityOf(text, qualities = []) {
 // and Specialties lines have to be what those add up to. What they carry
 // never adds to a Root or a specialty, armour says which Root it guards and
 // its boxes by its quality, and an attuned thing has as many awakenings as
-// its stage and its Catch give it. This is the book's (the crests by an
-// example, and stage 3 of notes/roots-plan.md for the companion), while the
-// companion stays on its pre-Roots data till then.
+// its stage and its Catch give it. The crests by an example and the
+// companion both read it.
 const ROOT_NAMES = ["Body", "Mind", "Soul"];
 const TRACK_OF = { Body: "Stamina", Mind: "Confidence", Soul: "Resolve" };
 const STAGE_AWAKENINGS = { Awakened: 1, Tempered: 2, Perfected: 3 };
@@ -1266,13 +1263,12 @@ if (!rootsBuild) companionWarn("can't find Building Your Character or the Quick 
 else rootsBuild.qualities = ctx.qualities;
 const rootsConditions = docWith("{#s-conditions-list}") ? conditionsFrom(docWith("{#s-conditions-list}"), inline) : [];
 if (rootsConditions.length < 10) companionWarn(`found only ${rootsConditions.length} conditions in Conflict`);
-// The companion itself (its crew, builder, conditions, rules on a tap and
-// links) stays on the data from before Roots till stage 3 of
-// notes/roots-plan.md rebuilds it, so it works on the Preview as it does live.
-const PRE = JSON.parse(readFileSync(join(ROOT, "src", "data", "companion-pre-roots.json"), "utf8"));
-const crew = PRE.crew;
-const build = PRE.build;
-const conditions = PRE.conditions;
+// The companion plays the crew on Roots, with the builder's data (the
+// archetypes with their home tracks and abilities, the Title ideas, items,
+// Catches and armour's qualities) and the conditions read off the chapters.
+const crew = roots;
+const build = rootsBuild;
+const conditions = rootsConditions;
 const partyDoc = docWith("{#s-party-faction}");
 const party = partyDoc ? partyFrom(partyDoc, (msg) => companionWarn(`party sheet: ${msg}`)) : null;
 if (!party) companionWarn("can't find The Party Sheet for the party sheet");
@@ -1345,15 +1341,41 @@ const blockHtml = (text) => {
   for (const msg of file.messages) companionWarn(msg.message);
   return String(file).trim();
 };
-// The rules on a tap and the companion's links are the pre-Roots ones too,
-// with the ids those rules had, till stage 3.
-const rules = PRE.rules;
+const rules = {};
+for (const id of ["s-roots", "s-permissions", "how-permissions-stack", "s-building-die", "s-round", "s-telegraphs", "s-actions", "s-answering", "s-the-roll", "s-intents", "s-splitting", "s-going-beyond", "s-teamwork", "s-extra-actions",
+  "s-aura", "getting-it-back", "s-tracks", "s-abilities", "s-how-archetypes", "s-attunement", "attunement-stages", "s-armour", "s-armour-quality", "s-defending", "s-defend", "s-intercept", "s-consequences", "s-fear-gets-through",
+  "s-blaze", "s-healing", "s-vulnerable", "s-conditions", "s-bonds", "s-trouble", "s-aspiration", "s-good-aspiration", "your-slots", "recover", "grow", "s-downtime-attunement", "s-downtime-threads", "s-downtime-rolls",
+  "s-goal", "s-good-goal", "s-climb", "s-projects", "s-crew-size", "s-crew-tags", "s-crew-wealth", "s-crew-grows", "s-party-resources",
+  "s-faction-board", "s-wealth", "s-faction-bonds", "s-agendas", "when-an-agenda-happens", "s-standing", "s-mini-factions", "s-faction-build",
+  "s-faction-turn", "s-faction-outcomes", "s-faction-comes", "s-faction-crew", "party-slots"]) {
+  const doc = docWith(`{#${id}}`);
+  const head = doc?.body.match(new RegExp(`^#{2,4} (.+?) \\{#${id}\\}`, "m"));
+  const blocks = [];
+  // A rule or note box is part of the rule, so it's kept without its fence.
+  const text = doc && head ? sectionOf(doc.body, id).replace(/^:::(?:rule|note)(?:\{[^}\n]*\})?\n([\s\S]*?)\n:::$/gm, "$1") : "";
+  for (const block of text.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean)) {
+    if (/^(#|:::|\|)/.test(block) || blocks.length >= 6) break;
+    blocks.push(block);
+  }
+  if (!blocks.length) companionWarn(`can't find the rule #${id} to show on a tap`);
+  else rules[id] = { title: curly(head[1].replace(/[*_]/g, "").replace(/^Step \d+: /, "")), html: blockHtml(blocks.join("\n\n")) };
+}
 const linkTo = (id) => {
   const target = where.get(id);
   if (!target) companionWarn(`there's no #${id} in the book to link to`);
   return !target ? "/rules/" : target.own ? pageFor.get(target.page) : `${pageFor.get(target.page)}#${id}`;
 };
-const companionLinks = PRE.links;
+const companionLinks = Object.fromEntries(
+  ["s-round", "s-telegraphs", "s-answering", "s-aura", "getting-it-back", "s-tracks", "s-roots", "s-permissions", "s-building-die", "s-armour", "s-armour-quality", "s-blaze", "s-healing", "s-conditions", "s-bonds", "s-trouble", "steps-into-dice",
+    "s-splitting", "s-teamwork", "s-extra-actions", "s-going-beyond", "s-the-roll", "s-defending", "s-defend", "s-intercept", "s-vulnerable", "s-fear-gets-through", "s-actions",
+    "s-consequences", "s-aspiration", "s-pregens", "s-how-archetypes", "s-abilities", "s-attunement", "attunement-stages", "s-carrying", "s-intents", "how-permissions-stack",
+    "s-quick", "s-title-ideas", "s-title", "s-writing-permissions", "the-quick-test", "permission-ideas", "s-step-roots", "s-items", "s-boons",
+    "the-item-list", "catches-12", "s-starting-numbers", "s-connect", "what-you-can-do-with-a-slot", "recover", "grow", "s-downtime-attunement", "s-downtime-threads", "s-playing-the-strain", "s-summoning"]
+    .map((id) => [id, linkTo(id)]),
+);
+for (const a of build?.archetypes ?? []) if (a.id) companionLinks[a.id] = linkTo(a.id);
+for (const idea of build?.ideas ?? []) companionLinks[idea.id] = linkTo(idea.id);
+for (const id of Object.keys(rules)) companionLinks[id] ??= linkTo(id);
 
 // The Learn deck (/learn/): the core rules as cards, read the same way the
 // tests read them (scripts/learn.mjs). A card that can't be read, or that
@@ -1485,8 +1507,7 @@ writeFileSync(
     crew,
     crewLink: crewDoc ? `${pageFor.get(crewDoc.path)}#s-pregens` : "/rules/",
     tagLinks,
-    roots,
-    companion: { conditions, links: companionLinks, build, rules, party, worlds, places, next: { build: rootsBuild, conditions: rootsConditions } },
+    companion: { conditions, links: companionLinks, build, rules, party, worlds, places },
     learn,
   }),
 );

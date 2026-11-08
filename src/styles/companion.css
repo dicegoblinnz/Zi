@@ -2409,3 +2409,90 @@ button.ft-step-b:focus-visible { outline: 2px solid var(--violet); outline-offse
 .fd-wait { margin: 0.5rem 0 0; }
 .fd-past { margin-top: 1rem; }
 .fd-past .fd-dials { margin-top: 0.8rem; }
+
+/* Roots (8 Nov 2026): the three tracks in a row, each a die with its Scars
+   and a plate for every box of armour on its Root, then Aura and Undo, then
+   the conditions. */
+.cc-track.is-roots { grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(52px, auto); }
+.cc-track.is-roots .is-trk { grid-column: auto; display: grid; grid-template-columns: auto minmax(0, 1fr); grid-template-rows: auto auto; align-items: center; justify-items: start; gap: 2px 6px; min-height: 64px; padding: 6px 8px; text-align: left; }
+.cc-track.is-roots .is-trk .k { grid-column: 1 / -1; grid-row: 1; font-size: 0.74rem; letter-spacing: 0.04em; text-transform: none; }
+.cc-track.is-roots .is-trk .k { white-space: normal; line-height: 1.15; }
+.cc-track.is-roots .is-trk .k small { display: block; font-weight: 500; color: var(--muted); }
+.cc-track.is-roots .is-trk > .zd-die { grid-row: 2; grid-column: 1; --s: 44px; }
+.cc-track.is-roots .is-trk .cc-now { grid-row: 2; grid-column: 2; flex-direction: column; align-items: flex-start; gap: 2px; }
+.cc-track.is-roots .is-trk .v { font-size: 1.2rem; line-height: 1.05; color: var(--ink); }
+.cc-track.is-roots .t-stamina { grid-column: 1; }
+.cc-track.is-roots .t-confidence { grid-column: 2; }
+.cc-track.is-roots .t-resolve { grid-column: 3 / 5; }
+.cc-track.is-roots .t-aura { grid-column: 1 / 4; }
+.cc-track.is-roots .cc-undo { grid-column: 4; }
+.cc-track.is-roots .t-cond { grid-column: 1 / -1; }
+.cc-track .t-aura.is-over { border-color: var(--gold); }
+.cc-plates { display: inline-flex; gap: 2px; }
+.cc-plates .zd-plate { width: 12px; height: 12px; }
+.cc-track.is-look .is-trk, .cc-track.is-look .t-aura, .cc-track.is-look .t-cond { cursor: default; }
+@media (max-width: 379px) {
+  .cc-track.is-roots .is-trk { grid-template-columns: minmax(0, 1fr); padding: 6px; }
+  .cc-track.is-roots .is-trk > .zd-die { --s: 38px; }
+  .cc-track.is-roots .is-trk .cc-now { grid-row: 3; grid-column: 1; }
+}
+.cc-play-h { display: flex; align-items: baseline; gap: 0.5rem; margin: 0.9rem 0 0.5rem; }
+.cc-play-h small { font-family: var(--body, inherit); font-size: 0.8rem; letter-spacing: 0; text-transform: none; color: var(--muted); }
+.cc-tiles.cc-roots { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 8px; }
+/* A specialty's name runs across the top of its tile, where a long one has
+   room, with its dice under it and the steps beside them. */
+.cc-play .cc-spectiles .tile { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "name name" "dice steps"; row-gap: 6px; align-items: center; }
+.cc-play .cc-spectiles .tile-name { align-self: start; }
+.cc-play .cc-spectiles .tile-says { align-self: center; }
+@media (max-width: 359px) { .cc-play .cc-spectiles .tile-name { font-size: 0.9rem; } }
+/* The Roots on their own, three to a row: a smaller die beside the name. */
+.cc-play .cc-roots .tile { column-gap: 6px; min-height: 60px; padding: 8px 6px; }
+.cc-play .cc-roots .tile-dice .zd-die { --s: 34px; }
+.cc-play .cc-roots .tile-dice .zd-die.is-next { --s: 18px; margin-left: -10px; }
+.cc-play .cc-roots .tile-name { font-size: 0.95rem; overflow-wrap: normal; }
+.cc-play .cc-roots .tile-says { font-size: 0.8rem; }
+.cc-play .tile.is-root { min-height: 64px; }
+.cc-play .tile.is-root .tile-dice .zd-die { --s: 40px; }
+.cc-play .tile.is-root .tile-dice .zd-die.is-next { --s: 20px; margin-left: -10px; }
+.cc-play .cc-tiles + .cc-tiles { margin-top: 8px; }
+@media (max-width: 379px) {
+  .cc-tiles.cc-roots .tile { grid-template-columns: minmax(0, 1fr); grid-template-areas: "dice" "name" "steps"; justify-items: start; }
+}
+.cc-abilities .cc-arch, .cc-attune .cc-attuned { padding: 0.6rem 0; border-top: 1px solid var(--line-soft); }
+.cc-arch-h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 0.25rem; }
+.cc-arch-h small { color: var(--muted); }
+.cc-abils, .cc-wakes { list-style: none; margin: 0.3rem 0 0; padding: 0; display: grid; gap: 8px; }
+.cc-abil p, .cc-wake p { margin: 0 0 0.25rem; }
+.cc-abil small, .cc-wake small { color: var(--muted); }
+.cc-wake { padding: 0.5rem 0.7rem; background: var(--surface); border: 1px solid var(--line-soft); border-left: 3px solid var(--gold); border-radius: 2px; }
+.cc-wake.is-active { border-left-color: var(--violet); }
+.cc-held { display: flex; align-items: center; gap: 8px; }
+.cc-held .k { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.cc-held .zd-chit { width: 14px; }
+.cc-held .v { font-weight: 700; color: var(--gold-ink); }
+.cc-held .v small { color: var(--muted); font-weight: 500; }
+.cc-specs { list-style: none; margin: 0.3rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.cc-spec { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 0.7rem; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.cc-spec span { font-weight: 800; color: var(--gold-ink); }
+.cc-perm-at { color: var(--muted); }
+.cc-perms li { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 6px; }
+.cc-extra { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 6px 10px; padding: 6px 0; border-top: 1px solid var(--line-soft); }
+.cc-extra .cc-field { flex: 1 1 12rem; margin: 0; }
+.cc-incs, .cc-hits { list-style: none; margin: 0.4rem 0 0.6rem; padding: 0; display: grid; gap: 8px; }
+.cc-inc, .cc-hit { padding: 8px 10px; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.cc-inc-in, .cc-hit-in { display: flex; align-items: center; gap: 10px; }
+.cc-inc-in > div, .cc-hit-in > div { flex: 1; min-width: 0; }
+.cc-inc-in .zd-die, .cc-hit-in .zd-die { --s: 44px; flex: none; }
+.cc-inc p, .cc-hit p { margin: 0 0 0.2rem; }
+.cc-inc small, .cc-hit small { color: var(--muted); }
+.cc-hit.is-stopped { border-color: color-mix(in srgb, var(--gold) 60%, transparent); }
+.cc-hit.is-through { border-color: var(--zd-harm-line, var(--violet)); }
+.cc-pays { margin-top: 6px; }
+.cc-paid { margin: 6px 0 0; font-weight: 700; color: var(--gold-ink); }
+.cc-inline-die { --s: 28px; vertical-align: middle; }
+.cc-before .cc-list { margin-top: 0.4rem; }
+.cc-putback { margin-top: 0.4rem; }
+.cc-acting { border-color: var(--gold); }
+.dt-specs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 0.6rem; }
+.dt-specs input { min-height: 44px; min-width: 0; }
+.cc-notes-read { white-space: normal; }

@@ -14,30 +14,37 @@ import "@fontsource/alegreya-sans/800.css";
 import "../styles/site.css";
 import "../styles/kit.css";
 import book from "../generated/book.json";
-import { die, diceFor, inline, pips, aura, resolve, scars, boxes, condition, tag, crest, telegraph, cost, DEFS, SIGILS, SHAPES, SIZES } from "../kit/kit.js";
+import { die, diceFor, inline, pips, aura, scars, boxes, condition, tag, crest, telegraph, cost, DEFS, SIGILS, SHAPES, SIZES } from "../kit/kit.js";
 import { diceLabel, stepsToDice } from "../companion/dice.js";
 import { withQuality } from "../companion/armour.js";
+import { rootFor, rootsSheet, specSteps } from "../companion/roots.js";
 
-const crew = Object.fromEntries(book.crew.map((c) => [c.id, c]));
-const archOf = (c) => c.titles.map((t) => t.archetype);
+const crew = Object.fromEntries(book.crew.map((c) => [c.id, rootsSheet(c, [], book.companion.build)]));
+const archOf = (c) => c.archetypes.map((a) => a.name);
+const archNames = (c) => [...c.archetypes.reduce((m, a) => m.set(a.name, (m.get(a.name) ?? 0) + 1), new Map())].map(([x, k]) => (k > 1 ? `${x} twice` : x));
 const ARCH = book.companion.build.archetypes;
 for (const a of ARCH) if (!SIGILS[a.name]) throw new Error(`The kit has no sigil for ${a.name}. Draw one in src/kit/sigils.js.`);
 const vesk = crew.vesk;
-const lineOf = (c, key) => c.lines.find((l) => l.key === key);
-const said = (l) => (l.kind === "title" ? `Title: ${l.label}` : l.label);
-const sneak = vesk.actions.find((a) => a.name === "Sneak");
-const sneakLines = sneak.lines.map((k) => lineOf(vesk, k));
-const wren = crew.wren.actions.find((a) => a.name === "Fight");
-const bram = crew.bram.actions.find((a) => a.name === "Fight");
-const bramDefend = crew.bram.actions.find((a) => a.name === "Defend");
-const bramDefendLines = bramDefend.lines.map((k) => lineOf(crew.bram, k));
-const doubled = 1 + 2 * bramDefend.lines.length;
-const combo = wren.steps + bram.steps;
-const order = ["vesk", "dorrie", "bram", "isolde", "wren", "ash"];
 const n = vesk.numbers;
-const isolde = crew.isolde.numbers;
-// A Defend for the table: Vesk's, read off her sheet.
-const veskDefend = vesk.actions.find((a) => a.name === "Defend");
+const order = ["vesk", "dorrie", "bram", "isolde", "wren", "ash"];
+// Each specialty as a roll on the Root it's usually rolled with.
+const tilesOf = (c) => c.specialties.map((sp) => ({ name: sp.name, root: rootFor(c, sp.name), steps: c.roots[rootFor(c, sp.name)] + sp.steps, spec: sp.steps }));
+// Vesk at the vault door: her Body and her Locks, with her picks.
+const lock = { body: vesk.roots.Body, locks: specSteps(vesk, "Locks") };
+lock.steps = lock.body + lock.locks + 1;
+// Bram talks his way past the gate: his Soul and his Command, a d8.
+const talk = crew.bram.roots.Soul + specSteps(crew.bram, "Command");
+// Wren and Bram on the brute's club: her Body, her Archery and her longbow,
+// and his Shieldwork and his hammer.
+const wrenShot = crew.wren.roots.Body + specSteps(crew.wren, "Archery") + 1;
+const bramIn = specSteps(crew.bram, "Shieldwork") + 1;
+const combo = wrenShot + bramIn;
+// Bram Defends: his Body and his Shieldwork, with his plate and his shield.
+// The Core's own example: Vesk over the roof, and Bram making a case for his
+// Soldiering.
+const roof = vesk.roots.Body + specSteps(vesk, "Stealth");
+const chase = crew.bram.roots.Body + specSteps(crew.bram, "Soldiering");
+const bramDefend = crew.bram.roots.Body + specSteps(crew.bram, "Shieldwork") + crew.bram.armour.filter((a) => a.root === "Body").length;
 ---
 <!doctype html>
 <html lang="en-NZ">
@@ -77,7 +84,7 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
         <h1>The kit</h1>
         <p class="lede">Every piece of the game, drawn once and used everywhere: on your phone at the table, in the rules and in the builder. They’re tokens punched out of card, and every die is its real shape, so you can see how big it is before you read it.</p>
         <nav class="kjump" aria-label="On this page">
-          <a href="#table">At the table</a><a href="#roll">The roll</a><a href="#dice">Dice</a><a href="#steps">Steps</a><a href="#numbers">Aura and Resolve</a><a href="#confidence">Confidence</a><a href="#wounds">Wounds</a><a href="#defend">Defend</a><a href="#tags">Tags</a><a href="#telegraphs">Telegraphs</a><a href="#sigils">Sigils</a><a href="#rules">In the rules</a>
+          <a href="#table">At the table</a><a href="#roll">The roll</a><a href="#dice">Dice</a><a href="#steps">Steps</a><a href="#numbers">Aura</a><a href="#tracks">The tracks</a><a href="#wounds">Blaze and Scars</a><a href="#defend">Defend</a><a href="#tags">Tags</a><a href="#telegraphs">Telegraphs</a><a href="#sigils">Sigils</a><a href="#rules">In the rules</a>
         </nav>
       </header>
 
@@ -87,26 +94,26 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
         <p class="note">Vesk at the start of a scene, every number off her sheet.</p>
         <div class="vphone">
           <div class="vhead">
-            <Fragment set:html={crest(archOf(vesk), { label: `${vesk.name}’s crest: ${vesk.archetypes.join(", ")}` })} />
+            <Fragment set:html={crest(archOf(vesk), { label: `${vesk.name}’s crest: ${archNames(vesk).join(", ")}` })} />
             <div>
               <p class="vname">{vesk.name}</p>
               <p class="vtitle">{vesk.title}</p>
-              <p class="vmeta">{vesk.archetypes.join(" · ")} · Stride {n.stride}</p>
+              <p class="vmeta">{archNames(vesk).join(" · ")} · Stride {n.stride}</p>
             </div>
           </div>
           <div class="vtrack">
-            <div class="vt die-t"><span class="vl">Confidence</span><Fragment set:html={die(n.confidence, { label: `Confidence d${n.confidence}` })} /></div>
-            <div class="vt die-t"><span class="vl">Wound die</span><Fragment set:html={die(n.wound, { own: "harm", label: `Wound die d${n.wound}` })} /></div>
+            <div class="vt die-t"><span class="vl">Stamina</span><Fragment set:html={die(n.stamina.die, { label: `Stamina d${n.stamina.die}` })} /></div>
+            <div class="vt die-t"><span class="vl">Confidence</span><Fragment set:html={die(n.confidence.die, { label: `Confidence d${n.confidence.die}` })} /></div>
+            <div class="vt die-t"><span class="vl">Resolve</span><Fragment set:html={die(n.resolve.die, { label: `Resolve d${n.resolve.die}` })} /></div>
             <div class="vt"><span class="vl">Aura</span><Fragment set:html={aura(n.aura, n.aura)} /></div>
-            <div class="vt"><span class="vl">Resolve</span><Fragment set:html={resolve(n.resolve, n.resolve)} /></div>
           </div>
           <div class="vtiles">
-            {vesk.actions.map((a) => (
+            {tilesOf(vesk).map((a) => (
               <div class="vtile">
                 <Fragment set:html={diceFor(a.steps, { hide: true })} />
                 <div>
                   <p class="tn">{a.name}</p>
-                  <p class="ts">{a.steps} {a.steps === 1 ? "step" : "steps"}, {diceLabel(stepsToDice(a.steps))}</p>
+                  <p class="ts">{a.root} {vesk.roots[a.root]} and {a.spec}, {diceLabel(stepsToDice(a.steps))}</p>
                 </div>
               </div>
             ))}
@@ -117,18 +124,17 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
       <!-- The roll -->
       <section id="roll" class="ksec">
         <h2>The roll</h2>
-        <p class="note">Vesk slips past the guard on Lord Vane’s roof. Her Sneak’s {sneak.steps} steps, a {sneak.die}, against the guard’s d6.</p>
+        <p class="note">Bram talks his way past the gate guard. His Soul and his Command are {talk} steps, a d{talk * 2}, against the guard’s d6.</p>
         <div class="vroll lead">
           <div class="vs">
-            <figure><Fragment set:html={die(8, { face: 6, label: "Vesk’s d8 came up 6" })} /><figcaption>Vesk’s d8</figcaption></figure>
+            <figure><Fragment set:html={die(8, { face: 6, label: "Bram’s d8 came up 6" })} /><figcaption>Bram’s d8</figcaption></figure>
             <span class="vsx" aria-hidden="true">against</span>
             <figure><Fragment set:html={die(6, { own: "them", face: 5, state: "low", label: "The guard’s d6 came up 5" })} /><figcaption>The guard’s d6</figcaption></figure>
           </div>
           <p class="verdict" aria-live="polite">Beat it</p>
-          <p class="why">Her 6 beats his 5, so she’s past him, and her Confidence goes up a size.</p>
+          <p class="why">His 6 beats the guard’s 5, so he’s through the gate, and a die that wins is 1 Aura.</p>
           <div class="vafter">
-            <div><span class="vl">Confidence</span><span class="conf-now"><Fragment set:html={die(8, { label: "Confidence d8" })} /></span></div>
-            <div><span class="vl">Aura</span><span class="aura-now"><Fragment set:html={aura(n.aura - 1, n.aura)} /></span></div>
+            <div><span class="vl">Aura</span><span class="aura-now"><Fragment set:html={aura(n.aura, n.aura)} /></span></div>
           </div>
           <button type="button" class="kbtn primary" data-act="roll">Roll it</button>
         </div>
@@ -137,7 +143,7 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
       <!-- Dice -->
       <section id="dice" class="ksec">
         <h2>Dice</h2>
-        <p>Every die is its real shape: a d2’s a coin, a d4 a triangle, a d6 a square, a d8 a diamond, a d10 a kite and a d12 a pentagon. Every line on a set action is a step, and the steps make the die, straight off the table in The Core.</p>
+        <p>Every die is its real shape: a d2’s a coin, a d4 a triangle, a d6 a square, a d8 a diamond, a d10 a kite and a d12 a pentagon. A Root and a specialty add up to steps, and the steps make the die, straight off the table in The Core.</p>
         <div class="kladder">
           {SIZES.map((d) => (
             <figure><Fragment set:html={die(d)} /><figcaption><b>{d / 2}</b> {d === 2 ? "step" : "steps"}, a {SHAPES[d].name}</figcaption></figure>
@@ -160,117 +166,101 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
           <figure><Fragment set:html={die(8, { face: 5, state: "tie" })} /><figcaption>Tied</figcaption></figure>
         </div>
         <h3>Theirs, and harm</h3>
-        <p>The GM’s dice are violet, built from the same steps, so a d10 telegraph is 5 of her budget. Harm is ember, like your wound die.</p>
+        <p>The GM’s dice are violet, built from the same steps, so a d10 telegraph is 5 of her budget. Harm is ember.</p>
         <div class="kladder short">
           {[4, 8, 10].map((d) => (
             <figure><Fragment set:html={die(d, { own: "them" })} /><figcaption><b>{d / 2}</b> steps</figcaption></figure>
           ))}
-          <figure><Fragment set:html={die(6, { own: "harm", label: "A wound die, d6" })} /><figcaption>A wound die</figcaption></figure>
+          <figure><Fragment set:html={die(6, { own: "harm", label: "Harm, a d6" })} /><figcaption>Harm</figcaption></figure>
         </div>
         <h3>Past a d12</h3>
-        <p>Wren and Bram put their Fights in together on the brute’s club: {wren.steps} steps and {bram.steps}, so {combo} steps, a {diceLabel(stepsToDice(combo))}.</p>
+        <p>Wren and Bram answer the brute’s club together: her Body, her Archery and her longbow, {wrenShot} steps, and his Shieldwork and his hammer, {bramIn} more, so {combo} steps, {diceLabel(stepsToDice(combo))}.</p>
         <div class="beyond"><Fragment set:html={diceFor(combo)} /></div>
       </section>
 
       <!-- Steps -->
       <section id="steps" class="ksec">
         <h2>Steps</h2>
-        <p>Vesk’s Sneak, line by line. Each line’s a step, the action’s one more, and they make her {sneak.die}.</p>
+        <p>Vesk at the vault door, step by step: one Root, one specialty and the item in her hand, and they make {diceLabel(stepsToDice(lock.steps))}.</p>
         <div class="buildup">
           <ul>
-            {sneakLines.map((l) => (
-              <li><Fragment set:html={pips(1)} /><span>{l.kind === "title" ? <>Her first Title, <i>{l.label}</i></> : l.kind === "permission" ? <i>{l.label}</i> : l.label}</span></li>
-            ))}
-            <li><Fragment set:html={pips(1)} /><span>The action</span></li>
+            <li><Fragment set:html={pips(lock.body)} /><span>Her Body, {lock.body}</span></li>
+            <li><Fragment set:html={pips(lock.locks)} /><span>Her Locks, {lock.locks}</span></li>
+            <li><Fragment set:html={pips(1)} /><span>Her picks</span></li>
           </ul>
           <span class="eq" aria-hidden="true">=</span>
-          <Fragment set:html={diceFor(sneak.steps)} />
+          <Fragment set:html={diceFor(lock.steps)} />
         </div>
       </section>
 
-      <!-- Aura and Resolve -->
+      <!-- Aura -->
       <section id="numbers" class="ksec">
-        <h2>Aura and Resolve</h2>
-        <p>Aura’s the small gold hexes, {n.aura} to start every scene, and no die’s a hex, so they never get mixed up. Resolve’s the cut gems, one for every Title, with a flat top so it never looks like a d8. Both are yours to spend, so both are gold.</p>
+        <h2>Aura</h2>
+        <p>Aura’s the small gold hexes, {n.aura} to start every scene, and no die’s a hex, so they never get mixed up. It’s the one thing you spend, so it’s gold. While you’re acting it can go past {n.aura}, and the hexes past it light up beside the rest till you’ve finished.</p>
         <div class="pairs">
           <div><span class="vl">Full</span><Fragment set:html={aura(n.aura, n.aura)} /></div>
           <div><span class="vl">After 1 Aura</span><Fragment set:html={aura(n.aura - 1, n.aura)} /></div>
-          <div><span class="vl">Resolve</span><Fragment set:html={resolve(n.resolve, n.resolve)} /></div>
-          <div><span class="vl">After 1 Resolve</span><Fragment set:html={resolve(n.resolve - 1, n.resolve)} /></div>
-        </div>
-        <div class="gemvs">
-          <figure><Fragment set:html={resolve(1, 1)} /><figcaption>Resolve</figcaption></figure>
-          <figure><Fragment set:html={die(8, { hide: true })} /><figcaption>A d8</figcaption></figure>
+          <div><span class="vl">While acting</span><Fragment set:html={aura(n.aura + 2, n.aura + 2)} /></div>
+          <div><span class="vl">After 3 for an action</span><Fragment set:html={aura(n.aura - 1, n.aura)} /></div>
         </div>
       </section>
 
-      <!-- Confidence -->
-      <section id="confidence" class="ksec">
-        <h2>Confidence</h2>
-        <p>It starts every scene on d6 and moves a size at a time. A win puts it up a size, and so does every telegraph your defence stops. A miss with every die takes it down a size, and so does every step your wound die goes up.</p>
+      <!-- The tracks -->
+      <section id="tracks" class="ksec">
+        <h2>The tracks</h2>
+        <p>Stamina for your Body, Confidence for your Mind and Resolve for your Soul. Each starts every character on d12, and every hit that gets through to that Root drops it a size. They’re the dice you roll when the telegraphs land, and they pay for your archetype’s abilities.</p>
         <div class="kladder conf">
-          <figure><Fragment set:html={die(2, { label: "Confidence d2, shaken" })} /><figcaption><b>d2</b> shaken</figcaption></figure>
-          <figure><Fragment set:html={die(6, { label: "Confidence d6, every scene starts here" })} /><figcaption><b>d6</b> every scene</figcaption></figure>
-          <figure><Fragment set:html={die(isolde.confidence, { label: `Confidence d${isolde.confidence}, Isolde’s Iron Will` })} /><figcaption><b>d{isolde.confidence}</b> Isolde’s {isolde.confidenceNote}</figcaption></figure>
-          <figure><Fragment set:html={die(12, { label: "Confidence d12, fired up" })} /><figcaption><b>d12</b> fired up</figcaption></figure>
+          <figure><Fragment set:html={die(12, { label: "Stamina d12, where it starts" })} /><figcaption><b>d12</b> to start</figcaption></figure>
+          <figure><Fragment set:html={die(8, { label: "Stamina d8, two hits in" })} /><figcaption><b>d8</b> two hits in</figcaption></figure>
+          <figure><Fragment set:html={die(4, { label: "Stamina d4" })} /><figcaption><b>d4</b> worn down</figcaption></figure>
+          <figure><Fragment set:html={die(2, { state: "low", label: "Stamina d2, the next hit Blazes" })} /><figcaption><b>d2</b> the next hit Blazes</figcaption></figure>
         </div>
         <div class="swingdemo">
-          <span class="swing-now"><Fragment set:html={die(6, { label: "Confidence d6" })} /></span>
-          <p class="small" aria-live="polite" data-swing-say>d6, where every scene starts.</p>
+          <span class="swing-now"><Fragment set:html={die(12, { label: "Stamina d12" })} /></span>
+          <p class="small" aria-live="polite" data-swing-say>d12, where every character starts.</p>
         </div>
         <div class="kbtns">
-          <button type="button" class="kbtn" data-act="win">One of her dice wins</button>
-          <button type="button" class="kbtn" data-act="miss">Every die misses</button>
-          <button type="button" class="kbtn" data-act="fresh">New scene</button>
+          <button type="button" class="kbtn" data-act="win">A hit gets through</button>
+          <button type="button" class="kbtn" data-act="miss">Pay for an ability</button>
+          <button type="button" class="kbtn" data-act="fresh">The scene ends</button>
         </div>
       </section>
 
-      <!-- Wounds and Scars -->
+      <!-- Blaze and Scars -->
       <section id="wounds" class="ksec">
-        <h2>The wound die and Scars</h2>
-        <p>Your wound die’s how hurt you are, a die like any other in ember. It starts at d2, and every Hurt puts it up a size and takes your Confidence down one. Take a Hurt at d12 and you Blaze, and the wound becomes a Scar, written in as a Catch beside it.</p>
+        <h2>Blaze and Scars</h2>
+        <p>A hit that gets through at d2 and you Blaze: something extraordinary, and then the character dies, your call, or leaves the scene with a Scar on that track. A Scar’s a Catch in your words, and it locks the track’s smallest open size for good.</p>
         <div class="wounddemo">
-          <div class="wd"><span class="vl">Wound die</span><span class="wound-now"><Fragment set:html={die(2, { own: "harm", label: "Wound die d2" })} /></span></div>
+          <div class="wd"><span class="vl">Stamina</span><span class="wound-now"><Fragment set:html={die(12, { label: "Stamina d12" })} /></span></div>
           <div class="wd"><span class="vl">Scars</span><span class="scars-now"><Fragment set:html={scars(0, { slots: true })} /></span></div>
-          <div class="wd"><span class="vl">Confidence</span><span class="wconf-now"><Fragment set:html={die(6, { label: "Confidence d6" })} /></span></div>
         </div>
         <div class="kbtns">
-          <button type="button" class="kbtn" data-act="hurt">Take a Hurt</button>
-          <button type="button" class="kbtn" data-act="heal">Heal: down a size</button>
+          <button type="button" class="kbtn" data-act="hurt">A hit gets through</button>
+          <button type="button" class="kbtn" data-act="heal">Up a size</button>
           <button type="button" class="kbtn" data-act="scar" hidden>Take the Scar</button>
         </div>
-        <p class="small" aria-live="polite" data-hurt-say>Fresh, on d2.</p>
-        <p>Each Scar starts the wound die a size bigger, and nothing heals it below them. With five, the next Blaze is the last. Bram’s <i>Unyielding</i> means the first Hurt he takes each scene doesn’t move his.</p>
-        <div class="chips">
-          <span class="scarline"><Fragment set:html={die(4, { own: "harm", label: "Wound die d4, with one Scar" })} /><Fragment set:html={scars(1)} /><span><i>a spear through the shoulder</i></span></span>
-        </div>
+        <p class="small" aria-live="polite" data-hurt-say>Fresh, on d12.</p>
+        <p>With five Scars on a track, only its d12’s left, and the next Blaze there is the last. Nobody Blazes on purpose: paying for an ability never takes a track below its smallest size.</p>
       </section>
 
       <!-- Defend -->
       <section id="defend" class="ksec">
         <h2>Defend</h2>
-        <p>Defend’s a set action like the rest, and plain armour, a shield and a helmet are lines on it, a step each. Bram’s plate and shield, his first Title and the action make his Defend {bramDefend.steps} steps, a {bramDefend.die}. When he spends his action to Defend, every line counts twice: {doubled} steps, a {diceLabel(stepsToDice(doubled))}, and each die stops one telegraph.</p>
+        <p>Defend as your action and a Root and a specialty roll with your tracks when the telegraphs land, with your armour as items. Bram’s Body and his Shieldwork, with his plate and his shield, are {bramDefend} steps, {diceLabel(stepsToDice(bramDefend))}, and his Stamina’s d12 rolls with them, so each die stops one telegraph.</p>
         <div class="defends">
           <div class="dfn">
             <ul>
-              {bramDefendLines.map((l) => <li><Fragment set:html={pips(1)} /><span>{said(l)}</span></li>)}
-              <li><Fragment set:html={pips(1)} /><span>The action</span></li>
+              <li><Fragment set:html={pips(crew.bram.roots.Body)} /><span>His Body</span></li>
+              <li><Fragment set:html={pips(specSteps(crew.bram, "Shieldwork"))} /><span>His Shieldwork</span></li>
+              {crew.bram.armour.map((a) => <li><Fragment set:html={pips(1)} /><span>{withQuality(a.name, a.quality)}</span></li>)}
             </ul>
-            <Fragment set:html={diceFor(bramDefend.steps)} />
-          </div>
-          <div class="dfn">
-            <ul>
-              {bramDefendLines.map((l) => <li><Fragment set:html={pips(2)} /><span>{said(l)}, twice</span></li>)}
-              <li><Fragment set:html={pips(1)} /><span>The action</span></li>
-            </ul>
-            <Fragment set:html={diceFor(doubled)} />
+            <Fragment set:html={diceFor(bramDefend)} />
           </div>
         </div>
-        <p class="small">Vesk’s is her worn leathers and the action, {veskDefend.steps} steps, a <Fragment set:html={inline(Number(veskDefend.die.slice(1)))} />.</p>
-        <p>Every piece of armour has a box for every blow it can take for you, from its quality: Common 1, Fine 2 and Masterwork 3. A ticked box is ember, and the last one breaks it.</p>
+        <p>Armour’s on a Root, and every piece has a box for every hit it can take there instead of the track dropping, from its quality: Common 1, Fine 2 and Masterwork 3. A ticked box is ember, and the last one breaks it.</p>
         <div class="chips">
-          {crew.bram.armour.map((a) => <span class="armourline"><span>{withQuality(a.name, a.quality)}</span><Fragment set:html={boxes(0, a.boxes, { label: `${a.boxes} ${a.boxes === 1 ? "box" : "boxes"}, none ticked` })} /></span>)}
-          <span class="armourline"><span>His plate, after a blow</span><Fragment set:html={boxes(1, crew.bram.armour[0]?.boxes ?? 2)} /></span>
+          {crew.bram.armour.map((a) => <span class="armourline"><span>{withQuality(a.name, a.quality)}, on {a.root}</span><Fragment set:html={boxes(0, a.boxes, { label: `${a.boxes} ${a.boxes === 1 ? "box" : "boxes"}, none ticked` })} /></span>)}
+          <span class="armourline"><span>His plate, after a hit</span><Fragment set:html={boxes(1, crew.bram.armour[0]?.boxes ?? 2)} /></span>
         </div>
       </section>
 
@@ -311,12 +301,12 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
       <!-- Sigils and crests -->
       <section id="sigils" class="ksec">
         <h2>Sigils and crests</h2>
-        <p>A crest is the Zi’Dara mark made personal: the violet diamond, with your first Title’s archetype in the middle. Take an archetype twice and the diamond’s doubled. A second archetype sits in a seal on its edge. It holds a sigil, never a number, so it never reads as a d8.</p>
+        <p>A crest is the Zi’Dara mark made personal: the violet diamond, with your first archetype in the middle. Take an archetype twice and the diamond’s doubled. A second archetype sits in a seal on its edge. It holds a sigil, never a number, so it never reads as a d8.</p>
         <div class="crews">
           {order.map((id) => (
             <figure>
               <Fragment set:html={crest(archOf(crew[id]), { label: `${crew[id].name}’s crest` })} />
-              <figcaption><b>{crew[id].name}</b><span>{crew[id].archetypes.join(" and ")}</span></figcaption>
+              <figcaption><b>{crew[id].name}</b><span>{archNames(crew[id]).join(" and ")}</span></figcaption>
             </figure>
           ))}
         </div>
@@ -341,8 +331,8 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
             <Fragment set:html={crest(archOf(vesk), { size: "sm", label: "Vesk" })} />
             <span class="rk">Example</span><span class="rn">Building a roll</span>
           </div>
-          <p><b>Bringing one in:</b> Vesk’s going over Lord Vane’s roof without a sound. She starts from her Sneak: her first Title, <i>move unseen</i> and Silent Step, with the action, 4 steps, a <Fragment set:html={inline(8)} />. Her grappling line fits too, but it’s on her Move, not her Sneak, so bringing it in costs <Fragment set:html={cost(1)} />. That’s 5 steps, a <Fragment set:html={inline(10)} />.</p>
-          <p><b>Leaving one out:</b> Bram swings at a smuggler who’s running for the door. His Fight is his first Title, <i>hold the line</i> and his war hammer, with the action, 4 steps. He isn’t holding any line, so he leaves that one out: 3 steps, a <Fragment set:html={inline(6)} />.</p>
+          <p><b>Plainly fits:</b> Vesk’s going over Lord Vane’s roof without a sound. That’s her Body and her Stealth, {roof} steps, and her grappling line’s in her hand, so it’s {roof + 1}: <Fragment set:html={stepsToDice(roof + 1).map((d) => `a ${inline(d)}`).join(" and ")} />.</p>
+          <p><b>Making a case:</b> Bram’s chasing a smuggler down the quay. His Body’s {crew.bram.roots.Body}, but Shieldwork’s for holding a line, not running a man down. He says a sergeant knows exactly how a frightened man runs, and pays <Fragment set:html={cost(1)} /> to bring his Soldiering in, so it’s {chase} steps, <Fragment set:html={stepsToDice(chase).map((d) => `a ${inline(d)}`).join(" and ")} />. Without it, he’d have rolled his Body on its own, {crew.bram.roots.Body} steps, <Fragment set:html={stepsToDice(crew.bram.roots.Body).map((d) => `a ${inline(d)}`).join(" and ")} />.</p>
         </div>
       </section>
     </main>
@@ -387,15 +377,14 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
       act("more").addEventListener("click", () => { if (steps < 14) { steps++; draw(steps - 1); } });
       act("less").addEventListener("click", () => { if (steps > 1) { steps--; draw(steps + 1); } });
 
-      // The roll: Vesk's d8 against the guard's d6, and her Confidence swings.
-      let veskAura = 4;
-      let veskConf = 6;
+      // The roll: Bram's d8 against the guard's d6, and the Aura it pays: 1
+      // for a win and 1 for a top face.
+      let bramAura = 4;
       const rollBox = document.querySelector(".vroll");
       const figs = rollBox.querySelectorAll(".vs figure");
       const verdict = rollBox.querySelector(".verdict");
       const why = rollBox.querySelector(".why");
       const auraBox = rollBox.querySelector(".aura-now");
-      const confBox = rollBox.querySelector(".conf-now");
       const put = (fig, html) => { fig.querySelector("svg").outerHTML = html; return fig.querySelector("svg"); };
       act("roll").addEventListener("click", async (e) => {
         const button = e.currentTarget;
@@ -412,49 +401,49 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
         const result = mine > theirs ? "beat" : mine === theirs ? "tie" : "under";
         put(figs[1], die(6, { own: "them", face: theirs, state: result === "beat" ? "low" : "", cls: "is-landed", label: `The guard’s d6 came up ${theirs}` }));
         await new Promise((r) => setTimeout(r, still() ? 0 : 140));
-        put(figs[0], die(8, { face: mine, state: top ? "top" : result === "under" ? "low" : result === "tie" ? "tie" : "", cls: "is-landed", label: `Vesk’s d8 came up ${mine}` }));
+        put(figs[0], die(8, { face: mine, state: top ? "top" : result === "under" ? "low" : result === "tie" ? "tie" : "", cls: "is-landed", label: `Bram’s d8 came up ${mine}` }));
         verdict.textContent = result === "beat" ? "Beat it" : result === "tie" ? "A tie" : "Under";
-        const was = veskConf;
-        veskConf = result === "beat" ? sizeUp(was) : result === "under" ? sizeDown(was) : was;
-        const swing = veskConf > was ? `, and her Confidence goes up to d${veskConf}` : veskConf < was ? `, and her Confidence drops to d${veskConf}` : was === 12 && result === "beat" ? ", and her Confidence is on d12 already" : "";
-        why.textContent = result === "beat" ? `Her ${mine} beats his ${theirs}, so she’s past him${swing}.` : result === "tie" ? `${mine} each. A tie’s his, unless she pays 1 Aura to make it hers.` : `His ${theirs} beats her ${mine}. He’s seen something${swing}.`;
-        swap(confBox, was, veskConf, die(veskConf, { label: `Confidence d${veskConf}` }));
-        if (top && veskAura < 5) {
-          veskAura++;
-          auraBox.innerHTML = aura(veskAura, 5);
-          auraBox.querySelectorAll(".zd-chit.on")[veskAura - 1]?.classList.add("is-new");
-          why.textContent += " Her 8’s a top face, so she gets 1 Aura back.";
-        } else if (top) why.textContent += " Her 8’s a top face, and her Aura’s full, so she can give it to a friend.";
+        const gain = (result === "beat" ? 1 : 0) + (top ? 1 : 0);
+        const was = bramAura;
+        bramAura = Math.min(5, bramAura + gain);
+        why.textContent = result === "beat" ? `His ${mine} beats the guard’s ${theirs}, so he’s through the gate` : result === "tie" ? `${mine} each. A tie’s the guard’s, unless Bram pays 1 Aura to make it his` : `The guard’s ${theirs} beats his ${mine}. He’s not getting through like that`;
+        why.textContent += gain ? `, and that’s ${gain} Aura${top ? ", with a top face" : ""}.` : ".";
+        auraBox.innerHTML = aura(bramAura, 5);
+        [...auraBox.querySelectorAll(".zd-chit.on")].slice(was, bramAura).forEach((el) => el.classList.add("is-new"));
+        if (bramAura >= 5) bramAura = 3;
         button.disabled = false;
       });
 
-      // Confidence on its own: a win, a miss and a new scene.
-      let conf = 6;
+      // A track on its own: a hit through, paying for an ability, and the
+      // rest at the end of a scene.
+      let track = 12;
       const swingBox = document.querySelector(".swing-now");
       const swingSay = document.querySelector("[data-swing-say]");
-      const mood = (d) => (d === 2 ? "d2, so she’s shaken: no action at what the scene’s about without 1 Resolve." : d === 12 ? "d12, so she’s fired up: she can cash it in for an extra action." : `d${d}.`);
-      const setConf = (to, why) => {
-        const was = conf;
-        conf = to;
-        swap(swingBox, was, conf, die(conf, { label: `Confidence d${conf}` }));
-        swingSay.textContent = `${why} ${mood(conf)}`;
+      const setTrack = (to, why) => {
+        const was = track;
+        track = to;
+        swap(swingBox, was, track, die(track, { label: `Stamina d${track}`, state: track === 2 ? "low" : "" }));
+        swingSay.textContent = `${why} d${track}.${track === 2 ? " The next hit through Blazes." : ""}`;
       };
-      act("win").addEventListener("click", () => setConf(sizeUp(conf), conf === 12 ? "Already as high as it goes:" : "Up a size:"));
-      act("miss").addEventListener("click", () => setConf(sizeDown(conf), conf === 2 ? "As low as it goes:" : "Down a size:"));
-      act("fresh").addEventListener("click", () => setConf(6, "A new scene starts it on"));
+      act("win").addEventListener("click", () => setTrack(track === 2 ? 12 : sizeDown(track), track === 2 ? "A hit at d2 Blazes, so start again on" : "A hit gets through:"));
+      act("miss").addEventListener("click", () => (track > 2 ? setTrack(sizeDown(track), "1 Stamina for an ability:") : (swingSay.textContent = "Paying never takes a track below d2, so it stays on d2.")));
+      act("fresh").addEventListener("click", () => {
+        if (track >= 12 || track <= 2) return (swingSay.textContent = track >= 12 ? "It’s on d12 already." : "A d2 can’t roll a 4, so it waits for downtime.");
+        const r = rollDie(track);
+        if (r >= 4) setTrack(sizeUp(track), `It rolls ${r}, a 4 or more, so it comes up to`);
+        else swingSay.textContent = `It rolls ${r}, under 4, so it stays on d${track}.`;
+      });
 
-      // The wound die: every Hurt up a size and Confidence down one, a Blaze at
-      // d12, and the Scar it leaves.
-      let wound = 2, scarred = 0, wconf = 6, blazed = false;
+      // Blaze and Scars: hits drop Stamina a size, a hit at its smallest open
+      // size Blazes, and each Scar locks the smallest size left.
+      let wound = 12, scarred = 0, blazed = false;
       const woundBox = document.querySelector(".wound-now");
       const scarBox = document.querySelector(".scars-now");
-      const wconfBox = document.querySelector(".wconf-now");
       const say = document.querySelector("[data-hurt-say]");
       const scarButton = act("scar");
       const floor = () => Math.min(12, 2 + 2 * scarred);
-      const drawWound = (wasWound, wasConf, fresh) => {
-        swap(woundBox, wasWound, wound, die(wound, { own: "harm", label: `Wound die d${wound}` }));
-        swap(wconfBox, wasConf, wconf, die(wconf, { label: `Confidence d${wconf}` }));
+      const drawWound = (wasWound, fresh) => {
+        swap(woundBox, wasWound, wound, die(wound, { label: `Stamina d${wound}`, state: wound <= floor() ? "low" : "" }));
         scarBox.innerHTML = scars(scarred, { slots: true });
         if (fresh) scarBox.querySelectorAll("i.on")[scarred - 1]?.classList.add("is-new");
         scarButton.hidden = !blazed;
@@ -463,40 +452,38 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
       };
       act("hurt").addEventListener("click", () => {
         if (blazed) return;
-        const w = wound, c = wconf;
-        if (wound >= 12) {
+        const w = wound;
+        if (wound <= floor()) {
           blazed = true;
-          say.textContent = `A Hurt at d12, so she Blazes. She declares something extraordinary and it happens, no roll.${scarred >= MAX_SCARS ? " With five Scars, it’s her last." : " Then she leaves the scene, and the wound becomes a Scar."}`;
-          drawWound(w, c, false);
+          say.textContent = `A hit at d${wound}, so she Blazes. She declares something extraordinary and it happens, no roll.${scarred >= MAX_SCARS ? " With five Scars, it’s her last." : " Then she leaves the scene, and her Stamina takes a Scar."}`;
+          drawWound(w, false);
           return;
         }
-        wound = sizeUp(wound);
-        wconf = sizeDown(wconf);
-        say.textContent = `A Hurt: her wound die’s a d${wound}${wound === 12 ? ", and the next one Blazes" : ""}, and her Confidence ${wconf < c ? `drops to d${wconf}` : "is on d2 already"}.`;
-        drawWound(w, c, false);
+        wound = sizeDown(wound);
+        say.textContent = `A hit gets through, and her Stamina’s a d${wound}${wound <= floor() ? ". The next one Blazes" : ""}.`;
+        drawWound(w, false);
       });
       act("heal").addEventListener("click", () => {
         const w = wound;
-        if (wound <= floor()) { say.textContent = `Nothing heals her below d${floor()}${scarred ? ", where her Scars keep it" : ""}.`; return; }
-        wound = sizeDown(wound);
+        if (wound >= 12) { say.textContent = "It’s on d12 already."; return; }
+        wound = sizeUp(wound);
         blazed = false;
-        say.textContent = `A heal brings it down to d${wound}.`;
-        drawWound(w, wconf, false);
+        say.textContent = `Up a size, to d${wound}.`;
+        drawWound(w, false);
       });
       scarButton.addEventListener("click", () => {
-        const w = wound, c = wconf;
+        const w = wound;
         if (scarred >= MAX_SCARS) {
-          scarred = 0; wound = 2; wconf = 6; blazed = false;
-          say.textContent = "Fresh, on d2.";
-          drawWound(w, c, false);
+          scarred = 0; wound = 12; blazed = false;
+          say.textContent = "Fresh, on d12.";
+          drawWound(w, false);
           return;
         }
         scarred++;
         blazed = false;
         wound = floor();
-        wconf = 6;
-        say.textContent = scarred === MAX_SCARS ? "Five Scars, so she’s scarred out: her wound die never goes below d12, and her next Blaze is her last." : `The wound’s a Scar now, a Catch in her words. Her wound die drops back to d${wound}, and it never goes below that. A new scene starts her Confidence on d6.`;
-        drawWound(w, c, true);
+        say.textContent = scarred === MAX_SCARS ? "Five Scars, so only her d12’s left, and her next Blaze is her last." : `The hit’s a Scar now, a Catch in her words. It locks her d${floor() - 2}, and her Stamina’s on d${wound}.`;
+        drawWound(w, true);
       });
     </script>
   </body>
@@ -541,7 +528,8 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
   .vname { margin: 0; font-family: var(--display); font-weight: 700; font-size: 1.9rem; line-height: 1; letter-spacing: 0.03em; }
   .vtitle { margin: 0.25rem 0 0; font-style: italic; line-height: 1.25; }
   .vmeta { margin: 0.2rem 0 0; font-size: 0.85rem; color: var(--muted); }
-  .vtrack { display: grid; grid-template-columns: auto auto 1fr; align-items: end; gap: 0.8rem 1rem; }
+  .vtrack { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: 0.8rem 1rem; }
+  .vtrack .vt:not(.die-t) { grid-column: 1 / -1; }
   .vt { display: grid; gap: 0.35rem; justify-items: start; min-width: 0; }
   .vt.die-t { justify-items: center; }
   .vt.die-t .zd-die { --s: 46px; }
@@ -552,6 +540,12 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
   .vtile .zd-dice .zd-die + .zd-die { --s: 26px; margin-left: -8px; }
   .tn { margin: 0; font-family: var(--display); font-weight: 700; font-size: 1.12rem; line-height: 1.1; }
   .ts { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
+  /* A specialty's name and its Root take the tile's width on a phone, with
+     the dice above them. */
+  @media (max-width: 480px) {
+    .vtile { flex-direction: column; justify-content: center; text-align: center; gap: 0.35rem; padding: 0.6rem 0.4rem; }
+    .ts { white-space: normal; }
+  }
 
   /* The roll */
   .vroll { padding: 1.2rem 1rem 1.1rem; display: grid; justify-items: center; text-align: center; gap: 0.5rem; max-width: 26rem; border-radius: 4px; background: var(--surface); border: 3px solid var(--gold); }
@@ -596,7 +590,7 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
   .gemvs .zd-gem { width: 48px; height: 48px; }
   .gemvs .zd-die { --s: 48px; }
 
-  /* Steps, Confidence, wounds and Defend */
+  /* Steps, the tracks, Blaze and Scars, and Defend */
   .buildup, .dfn { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 0.7rem; }
   .buildup { grid-template-columns: minmax(0, 1fr) auto auto; }
   .buildup ul, .dfn ul { list-style: none; margin: 0; padding: 0 0.8rem 0 0; display: grid; gap: 0.45rem; border-right: 1px solid var(--line); }
@@ -648,6 +642,6 @@ const veskDefend = vesk.actions.find((a) => a.name === "Defend");
     .kladder.conf, .states { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .sigils { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .crews .zd-crest { --s: 70px; }
-    .vtrack { grid-template-columns: auto auto; }
+    .vtrack { gap: 0.8rem 0.5rem; }
   }
 </style>

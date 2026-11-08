@@ -21,7 +21,9 @@
 // 4. Campaigns. Mo starts Tuesday Lair from the Characters page and gets its
 //    link. Kai opens it and joins with Vesk. Lee, with no account, opens it,
 //    signs in and joins with Bram, made from the crew on the way. Mo sees both
-//    characters and opens Vesk's sheet, and Kai sees names only. Mo resets the
+//    characters and opens Vesk's sheet, read without any growth it can't read,
+//    and one that isn't in the rules still lets him take Kai out. Kai sees
+//    names only. Mo resets the
 //    link and the old one's refused, then takes Lee out. Kai runs a campaign of
 //    her own and plays Dorrie in Zed's, so she switches between three in a
 //    tap, with a different character in each one she plays in. Nothing
@@ -42,12 +44,14 @@
 // 6. Telegraphs on phones. Mo builds round 1 on Tuesday Lair's page, the
 //    left Warden's d10 at Vesk and the brute's d8 at Bram, and sends it. Each
 //    is on its player's play screen in a second or two, and Mo's page says
-//    it's on their phones. Kai answers on Vesk's play screen, the roll card
-//    taking the d10, and Mo sees it stopped within seconds. Sam has no signal:
+//    it's on their phones. Kai answers on Vesk's play screen with her Body and
+//    her Stealth, the roll card taking the d10, and Mo sees it stopped within
+//    seconds. Sam has no signal:
 //    he answers with real dice tapped in, his phone says it goes up when
 //    there's a signal, and it reaches Mo once he's back. Mo sends the maid's
-//    fear at Vesk mid-round, then ends the round: it lands, Kai rolls When it
-//    lands with the d4 already in, and Mo sees what got through. Kai's Undo
+//    fear at Vesk mid-round, then ends the round: it lands at her Mind, Kai
+//    rolls When it lands with the d4 already in, her Confidence against it,
+//    and Mo sees what got through. Kai's Undo
 //    takes it back off Mo's page. Vesk's phone, wiped, gets the round back
 //    from the server. Nothing crosses: Zed gets nothing of Tuesday Lair's
 //    table, Zed's Night's is empty, Kai's Dorrie there sees no telegraphs,
@@ -754,13 +758,23 @@ try {
   await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&look=${kaiId}`);
   await mo.page.waitForSelector(".cc-track.is-look .cc-last, .cc-last");
   same(await mo.page.evaluate(() => [window.__pwned ?? null, document.querySelectorAll("#app img, #app svg[onload]").length]), [null, 0], "and on the GM's phone it's text and numbers only");
+  // Growth and a last roll it can't read are left out, and the rest reads.
+  const odd = JSON.parse(veskWas);
+  odd.state.grown = [{ k: "perm", t: "__proto__", text: "Grown wrong" }];
+  odd.state.last = { dice: "not a list" };
+  same(await putVesk(odd), 200, "a sheet with growth that can't be read is kept as it came");
+  await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
+  await mo.page.waitForSelector('.cc-look-card:has-text("Vesk")');
+  await Promise.all([mo.page.waitForURL(/look=/), mo.page.click('.cc-look-card:has-text("Vesk")')]);
+  await mo.page.waitForSelector(".cc-track.is-look");
+  yes(!(await text(mo.page, "#app")).includes("Grown wrong"), "and the GM's phone reads Vesk without it");
+  // A sheet that isn't in the rules still leaves her a way to take them out.
   const broken = JSON.parse(veskWas);
-  broken.state.grown = [{ k: "perm", t: "__proto__", text: "Grown wrong" }];
-  broken.state.last = { dice: "not a list" };
+  broken.crew = "__proto__";
   same(await putVesk(broken), 200, "a sheet that can't be read is kept as it came");
   await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}`);
   await mo.page.waitForSelector(`#app [data-do="remove"][data-id="${kaiId}"]`);
-  yes((await text(mo.page, "#app")).includes("couldn’t be read"), "the party says so, and Mo can still take Kai out");
+  yes((await text(mo.page, "#app")).includes("isn’t in the rules any more"), "the party says so, and Mo can still take Kai out");
   await mo.page.goto(`${BASE}/characters/?camp=${tuesday.id}&look=${kaiId}`);
   await mo.page.waitForSelector(`#app [data-do="remove"][data-id="${kaiId}"]`);
   same(await putVesk(JSON.parse(veskWas)), 200, "Vesk's put back as Kai left her");
@@ -1172,22 +1186,23 @@ try {
   await shots(kai.page, "tele-play", '.tg-play [data-do="answer"]');
   await axe(kai.page, "a telegraph on the play screen");
 
-  // Kai answers it on Vesk's play screen: Sneak, and the roll card takes the d10.
+  // Kai answers it on Vesk's play screen: her Stealth on her Body, and the
+  // roll card takes the d10.
   await kai.page.click('.tg-play li.tg [data-do="answer"]');
   await kai.page.waitForSelector(".tg-acts");
   has(await kai.page.textContent("#cc-dialog .tg-pick"), "Win and it never lands", "what answering does, on the card");
   if (SHOTS) await kai.page.waitForTimeout(500);
   await shot(kai.page, "tele-pick");
   await axe(kai.page, "picking the answer");
-  await kai.page.click('.tg-acts [data-do="with"]:has-text("Sneak")');
+  await kai.page.click('.tg-acts [data-do="with"]:has-text("Stealth")');
   await kai.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="10"][aria-pressed="true"]');
   has(await kai.page.textContent("#cc-dialog .tg-for"), "The left Warden’s d10", "the roll card says what it's answering");
-  await kai.page.evaluate(() => window.ziCompanion.setDice([5, 4]));
+  await kai.page.evaluate(() => window.ziCompanion.setDice([5, 1, 4]));
   await kai.page.click('#cc-dialog [data-act="go"]');
   await kai.page.waitForSelector("#cc-dialog .tg-verdict");
   has(await kai.page.textContent("#cc-dialog .tg-verdict"), "Stopped. It never lands.", "her 5 beats its 4");
   sentAt = Date.now();
-  await until(async () => (await cardText(mo.page, "The left Warden")).includes("Stopped. Vesk answered it with Sneak: 5 against its 4."), "Kai's answer on Mo's page", 4000);
+  await until(async () => (await cardText(mo.page, "The left Warden")).includes("Stopped. Vesk answered it with Body and Stealth: 5 against its 4."), "Kai's answer on Mo's page", 4000);
   const mAt = Date.now() - sentAt;
   yes(mAt < 4000, `Mo sees it ${mAt}ms after she rolled, not 20 seconds`);
   same((await teleOf("The left Warden"))?.ans?.won, true, "the table has it stopped");
@@ -1207,10 +1222,11 @@ try {
   await sam.context.setOffline(true);
   await sam.page.click('.tg-play li.tg [data-do="answer"]');
   await sam.page.waitForSelector(".tg-acts");
-  await sam.page.click('.tg-acts [data-do="with"]:has-text("Fight")');
+  await sam.page.click('.tg-acts [data-do="with"]:has-text("Shieldwork")');
   await sam.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="8"][aria-pressed="true"]');
   await sam.page.click('#cc-dialog [data-act="go-real"]');
   await sam.page.click('#cc-dialog [data-act="pad"][data-k="p0"][data-v="3"]');
+  await sam.page.click('#cc-dialog [data-act="pad"][data-k="p1"][data-v="2"]');
   await sam.page.click('#cc-dialog [data-act="pad"][data-k="opp"][data-v="6"]');
   await sam.page.click('#cc-dialog [data-act="pad-done"]');
   await sam.page.waitForSelector("#cc-dialog .tg-verdict");
@@ -1223,7 +1239,7 @@ try {
   await shot(sam.page, "tele-offline");
   await sam.context.setOffline(false);
   await until(async () => (await teleOf("The brute"))?.ans?.real === true, "Sam's answer reaching the table once he's back", 10000);
-  await until(async () => (await cardText(mo.page, "The brute")).includes("It landed then and there. Bram’s Fight came up 3 against its 6"), "and Mo's page", 4000);
+  await until(async () => (await cardText(mo.page, "The brute")).includes("It landed then and there. Bram’s Body and Shieldwork came up 3 against its 6"), "and Mo's page", 4000);
   has(await cardText(mo.page, "The brute"), "real dice", "marked as real dice");
 
   // Mid-round, Mo sends the maid's fear at Vesk, a d4.
@@ -1261,18 +1277,18 @@ try {
   yes(await kai.page.$eval('.tile[data-act="defence"]', (el) => el.classList.contains("is-owed")), "When it lands says something's landed");
   await kai.page.click('li.tg:has(h3:text-is("The maid")) [data-do="land"]');
   await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
-  same(await kai.page.$eval('#cc-dialog [data-act="d-against"][data-v="confidence"]', (el) => el.getAttribute("aria-pressed")), "true", "against her Confidence");
-  yes(await kai.page.$eval('#cc-dialog [data-act="d-against"][data-v="blows"]', (el) => el.disabled), "and it stays that way, since the GM said it's fear");
-  same(await kai.page.$$eval("#cc-dialog .cc-incoming .zd-die", (els) => els.map((el) => el.dataset.d)), ["4"], "the maid's d4 already in");
+  same(await kai.page.$eval('#cc-dialog [data-act="d-at"][data-j="0"][data-v="Mind"]', (el) => el.getAttribute("aria-pressed")), "true", "at her Mind, against her Confidence");
+  yes(await kai.page.$eval('#cc-dialog [data-act="d-at"][data-j="0"][data-v="Body"]', (el) => el.disabled), "and never her Body, since the GM said it's fear");
+  same(await kai.page.$$eval("#cc-dialog .cc-inc .zd-die", (els) => els.map((el) => el.dataset.d)), ["4"], "the maid's d4 already in");
   if (SHOTS) await kai.page.waitForTimeout(400);
   await shot(kai.page, "tele-land");
   await kai.page.evaluate(() => window.ziCompanion.setDice([2, 3]));
   await kai.page.click('#cc-dialog [data-act="d-go"]');
-  await kai.page.waitForSelector("#cc-dialog .res .res-out");
-  same(await kai.page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent)), ["Gets through"], "her 2 doesn't stop its 3");
-  await kai.page.click('#cc-dialog [data-act="d-pay"][data-what="shake"]');
+  await kai.page.waitForFunction(() => /It got through/.test(document.querySelector("#cc-dialog li.cc-hit")?.textContent ?? ""));
+  has(await kai.page.textContent("#cc-dialog li.cc-hit"), "It got through: your Confidence’s 2 against its 3.", "her 2 doesn't stop its 3");
+  await kai.page.click('#cc-dialog [data-act="d-pay"][data-what="hit"]');
   await until(async () => (await cardText(mo.page, "The maid")).includes("It got through. Vesk’s Confidence came up 2 against its 3."), "what got through, on Mo's page", 4000);
-  await until(async () => (await cardText(mo.page, "The maid")).includes("Confidence down to d6"), "and what it cost", 4000);
+  await until(async () => (await cardText(mo.page, "The maid")).includes("Confidence down to d10"), "and what it cost", 4000);
   // Kai's Undo takes it back off Mo's page: first the cost, then the roll.
   await kai.page.click('#cc-dialog .dlg-foot [data-act="undo"]');
   await until(async () => !(await cardText(mo.page, "The maid")).includes("Confidence down"), "the cost undone on Mo's page", 4000);
@@ -1424,20 +1440,21 @@ try {
   if (SHOTS) await sam.page.waitForTimeout(400);
   await shot(sam.page, "scene-join");
   await axe(sam.page, "putting your action in");
-  await sam.page.click('#cc-dialog [data-do="jwith"]:has-text("Fight")');
+  await sam.page.click('#cc-dialog [data-do="jwith"]:has-text("Shieldwork")');
   await sam.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
   has(await text(sam.page, ".tg-yours"), "Your action’s spent this round.", "Bram's action's spent");
-  has(await text(sam.page, ".tg-yours"), "Fight into whoever answers the attendant", "and his phone says on what");
+  has(await text(sam.page, ".tg-yours"), "Shieldwork into whoever answers the attendant", "and his phone says on what");
   same(await row(sam.page, "The attendant").locator(".tg-chip.is-mine").count(), 1, "the attendant's row says he's in on it");
   same(await sam.page.$$eval('.tg-play [data-do="answer"], .tg-play [data-do="join"], .tg-play [data-do="else"], .tg-play [data-do="work"]', (els) => els.length), 0, "and there's nothing left to spend it on");
   await until(async () => (await cardText(mo.page, "The attendant")).includes("Bram’s put an action into whoever answers it."), "Mo's page has Bram in on it", 4000);
-  await until(async () => (await text(mo.page, ".tg-crew")).includes("Fight into whoever answers the attendant"), "and so do the crew's lines", 4000);
+  await until(async () => (await text(mo.page, ".tg-crew")).includes("Shieldwork into whoever answers the attendant"), "and so do the crew's lines", 4000);
   // A second phone of Sam's can't spend it again.
   const bathMan = await teleOf("A bath-man");
-  const again = await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "sams-tablet-0001", now: Date.now(), ops: [{ n: 1, o: "answer", ch: "bram-ssssss", id: bathMan.id, a: { act: "Fight", steps: 4, dice: [{ size: 8, total: 7, out: "beat" }], opp: 3, real: false } }] });
+  const again = await got(sam.page, "POST", `/api/campaigns/${tuesday.id}/table`, { dev: "sams-tablet-0001", now: Date.now(), ops: [{ n: 1, o: "answer", ch: "bram-ssssss", id: bathMan.id, a: { act: "Shieldwork", steps: 9, dice: [{ size: 12, total: 7, out: "beat" }, { size: 6, total: 2, out: "under" }], opp: 3, real: false } }] });
   has(again.json?.no?.[0]?.why, "You’ve spent your action this round", "the table won't take a second action from another phone");
 
-  // Kai looks at Something else, then answers the attendant with Sneak and Bram's Fight in it.
+  // Kai looks at Something else, then answers the attendant with her Stealth
+  // and Bram's Shieldwork in it, a combo on her Body.
   await kai.page.click('.tg-yours [data-do="else"]');
   await kai.page.waitForSelector("#cc-dialog .tg-else");
   has(await text(kai.page, "#cc-dialog .tg-else"), "Work Dace’s satchel", "the scene's in Something else");
@@ -1446,31 +1463,33 @@ try {
   await axe(kai.page, "something else");
   await kai.page.click("#cc-dialog .dlg-head .cc-x");
   await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
-  const bConf = (await stateIn(sam.page, "bram-ssssss")).conf;
   await kai.page.click('.tg-play li.tg:has(h3:text-is("The attendant")) [data-do="answer"]');
   await kai.page.waitForSelector(".tg-acts");
   has(await text(kai.page, "#cc-dialog .tg-pick"), "Bram’s in on it, so 4 more steps go into your roll as a combo.", "the answer says Bram's in on it");
-  await kai.page.click('.tg-acts [data-do="with"]:has-text("Sneak")');
+  await kai.page.click('.tg-acts [data-do="with"]:has-text("Stealth")');
   await kai.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="6"][aria-pressed="true"]');
   has(await text(kai.page, "#cc-dialog"), "Friend 1’s steps", "Bram's steps are in the roll");
+  has(await text(kai.page, "#cc-dialog .cc-dice"), "11 steps", "her Body and her Stealth, and his Shieldwork");
+  const comboAura = (await stateIn(kai.page, "vesk-aaaaaa")).aura;
   await kai.page.evaluate(() => window.ziCompanion.setDice([9, 1, 4]));
   await kai.page.click('#cc-dialog [data-act="go"]');
   await kai.page.waitForSelector("#cc-dialog .tg-verdict");
   has(await text(kai.page, "#cc-dialog .tg-verdict"), "Stopped. It never lands.", "her d12's 9 beats its 4");
   await until(async () => (await teleOf("The attendant"))?.ans?.with?.[0]?.ch === "bram-ssssss", "the table has Bram in Vesk's answer", 4000);
-  await until(async () => (await stateIn(sam.page, "bram-ssssss")).conf === Math.min(12, bConf + 2), "Bram's Confidence moving up with the win", 6000);
+  same((await stateIn(kai.page, "vesk-aaaaaa")).aura, comboAura + 1, "Vesk gets the Aura for the win, since she rolled");
   await until(async () => (await text(sam.page, ".tg-yours")).includes("In on the attendant with Vesk: stopped"), "and his phone says how it went", 4000);
   await kai.page.click('#cc-dialog .dlg-foot [data-act="close"]');
   await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
   has(await text(kai.page, ".tg-yours"), "Your action’s spent this round.", "Vesk's action's spent on it");
   same(await kai.page.$$eval('.tg-play [data-do="answer"], .tg-play [data-do="join"]', (els) => els.length), 0, "so she can't answer anything else");
 
-  // 1 Resolve for another, on Dace's satchel: her Locks takes Locked.
-  const vResolve = (await stateIn(kai.page, "vesk-aaaaaa")).resolve;
+  // 3 Aura for another, since she's two archetypes, on Dace's satchel: her
+  // Locks takes Locked.
+  const vNow = (await stateIn(kai.page, "vesk-aaaaaa")).aura;
   await kai.page.click(".tg-more > summary");
   await kai.page.click('.tg-more [data-do="more"][data-k="resolve"]');
-  await until(async () => (await text(kai.page, ".tg-yours")).includes("One more action to spend this round."), "an extra action for 1 Resolve");
-  same((await stateIn(kai.page, "vesk-aaaaaa")).resolve, vResolve - 1, "that cost her 1 Resolve");
+  await until(async () => (await text(kai.page, ".tg-yours")).includes("One more action to spend this round."), "an extra action for 3 Aura");
+  same((await stateIn(kai.page, "vesk-aaaaaa")).aura, vNow - 3, "that cost her 3 Aura");
   if (!(await kai.page.$eval(".tg-scenefold", (el) => el.open))) await kai.page.click(".tg-scenefold > summary");
   await piece(kai.page, "Dace’s satchel").locator('[data-do="work"]').click();
   await kai.page.waitForSelector('#cc-dialog [data-do="wwith"]');
@@ -1480,17 +1499,17 @@ try {
   await axe(kai.page, "working a stake");
   await kai.page.click('#cc-dialog [data-do="wwith"]:has-text("Locks")');
   await kai.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="6"][aria-pressed="true"]');
-  await kai.page.evaluate(() => window.ziCompanion.setDice([7, 3]));
+  await kai.page.evaluate(() => window.ziCompanion.setDice([7, 1, 3]));
   await kai.page.click('#cc-dialog [data-act="go"]');
   await kai.page.waitForSelector("#cc-dialog .tg-verdict");
   has(await text(kai.page, "#cc-dialog .tg-verdict"), "You beat it. Locked’s gone.", "7 against its 3");
   await until(async () => (await sceneOf())?.stakes[1].tags.map((g) => g.gone).join() === "1,0", "Locked gone from the satchel on the table", 4000);
   await kai.page.click('#cc-dialog .dlg-foot [data-act="close"]');
   await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
-  has(await text(kai.page, ".tg-yours"), "Working Dace’s satchel with Locks: Locked gone", "her phone says what the second one went on");
+  has(await text(kai.page, ".tg-yours"), "Working Dace’s satchel with Body and Locks: Locked gone", "her phone says what the second one went on");
   await until(async () => (await piece(mo.page, "Dace’s satchel").locator('.sc-tag[aria-pressed="true"]').count()) === 1, "Locked struck off on Mo's page", 4000);
-  await until(async () => (await mo.page.$$eval('.tg-crewlist li:has(b:text-is("Vesk")) .tg-did', (els) => els.map((e) => e.textContent)).catch(() => [])).join(" | ") === "Answering the attendant with Sneak: stopped | Working Dace’s satchel with Locks: Locked gone | Took a bath-man for Bram", "and the crew's lines have all three of Vesk's", 4000);
-  has(await text(mo.page, ".tg-crew"), "An extra action: 1 Resolve", "with where the extra one came from");
+  await until(async () => (await mo.page.$$eval('.tg-crewlist li:has(b:text-is("Vesk")) .tg-did', (els) => els.map((e) => e.textContent)).catch(() => [])).join(" | ") === "Answering the attendant with Body and Stealth: stopped | Working Dace’s satchel with Body and Locks: Locked gone | Took a bath-man for Bram", "and the crew's lines have all three of Vesk's", 4000);
+  has(await text(mo.page, ".tg-crew"), "An extra action: 3 Aura", "with where the extra one came from");
   await shotsAt(kai.page, "scene-play", ".tg-play");
   await shotsAt(kai.page, "scene-yours", ".tg-yours");
   await axe(kai.page, "the round and the scene on the play screen");
@@ -1589,9 +1608,9 @@ try {
   await row(sam.page, "A runner").locator('[data-do="answer"]').click();
   await sam.page.waitForSelector(".tg-acts");
   has(await text(sam.page, "#cc-dialog .tg-pick"), "Lose and it lands now, and the scene clock drops a size.", "answering says what losing does");
-  await sam.page.click('.tg-acts [data-do="with"]:has-text("Fight")');
+  await sam.page.click('.tg-acts [data-do="with"]:has-text("Shieldwork")');
   await sam.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="6"][aria-pressed="true"]');
-  await sam.page.evaluate(() => window.ziCompanion.setDice([1, 5]));
+  await sam.page.evaluate(() => window.ziCompanion.setDice([1, 1, 5]));
   await sam.page.click('#cc-dialog [data-act="go"]');
   await sam.page.waitForSelector("#cc-dialog .tg-verdict");
   has(await text(sam.page, "#cc-dialog .tg-verdict"), "It lands now, and the scene clock drops a size.", "his 1 doesn't beat its 5");
@@ -1626,10 +1645,10 @@ try {
   // Vesk rolls When it lands for the bath-man from round 2 and the pipes at once.
   await kai.page.click('li.tg:has(h3:text-is("The pipes")) [data-do="land"]');
   await kai.page.waitForSelector('#cc-dialog [data-act="d-go"]');
-  same(await kai.page.$$eval("#cc-dialog .cc-incoming .zd-die", (els) => els.map((el) => el.dataset.d)), ["8", "6"], "the bath-man's d8 and the pipes' d6 in, together");
+  same(await kai.page.$$eval("#cc-dialog .cc-inc .zd-die", (els) => els.map((el) => el.dataset.d)), ["8", "6"], "the bath-man's d8 and the pipes' d6 in, together");
   await kai.page.evaluate(() => window.ziCompanion.setDice([4, 7, 2]));
   await kai.page.click('#cc-dialog [data-act="d-go"]');
-  await kai.page.waitForSelector("#cc-dialog .res .res-out");
+  await kai.page.waitForFunction(() => /Stopped by/.test(document.querySelector("#cc-dialog .cc-hits")?.textContent ?? ""));
   await until(async () => (await cardText(mo.page, "The pipes")).includes("Vesk stopped it when it landed: 4 against its 2."), "her 4 stops the pipes, on Mo's page", 4000);
   await kai.page.click("#cc-dialog .cc-x");
   await kai.page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
@@ -1680,13 +1699,13 @@ try {
   has(await tvCard("The pipes").locator(".ts-v").textContent(), "Vesk stopped it: 4 against its 2.", "with her roll");
   same([await tvCard("The pipes").locator(".ts-chip:not(.is-out)").allTextContents(), await tvCard("The pipes").locator(".ts-chip.is-out").allTextContents()], [["Vesk"], ["Bram"]], "Vesk in the hot room, and Bram out of it");
   same(await tvCard("A runner").locator(".ts-vw").textContent(), "Landed then and there", "the runner landed then and there");
-  same(await tvCard("A runner").locator(".ts-vl").allTextContents(), ["Bram’s Fight came up 1 against its 5.", "The scene clock dropped to d4."], "with Bram's roll and what it did");
-  same(await tvCard("A runner").locator(".ts-vd .zd-die").count(), 1, "and Bram's die, big");
+  same(await tvCard("A runner").locator(".ts-vl").allTextContents(), ["Bram’s Body and Shieldwork came up 1 against its 5.", "The scene clock dropped to d4."], "with Bram's roll and what it did");
+  same(await tvCard("A runner").locator(".ts-vd .zd-die").count(), 2, "and Bram's dice, big");
   same(await text(tv.page, ".ts-scene h2"), "The Copper Baths", "the scene's the Copper Baths");
   same(await tv.page.getAttribute(".ts-clock .zd-die", "data-d"), "2", "with its scene clock on a d2");
   same(await tv.page.locator(".ts-el.is-stake:has(.ts-eln:text-is('The deal')) .zd-tag").allTextContents(), ["Someone Must Agree", "Wanted By Others", "Dace grabs his towel and heads for the changing room"], "and what's in the deal's way, Dace's tag too");
   same(await tv.page.$$eval(".ts-p .ts-pn", (els) => els.map((e) => e.textContent)), ["Vesk", "Bram"], "the crew, in the order they joined");
-  same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Bram")) .ts-pa li').allTextContents(), ["Answering a runner with Fight: it landed"], "and what Bram did this round");
+  same(await tv.page.locator('.ts-p:has(.ts-pn:text-is("Bram")) .ts-pa li').allTextContents(), ["Answering a runner with Body and Shieldwork: it landed"], "and what Bram did this round");
   // It only ever has what the crew sees, and none of the table's workings.
   const screenJson = async () => (await got(tv.page, "GET", `/api/screen/${tvCode}`)).json;
   const tvJson = await screenJson();

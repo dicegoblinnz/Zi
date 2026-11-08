@@ -35,7 +35,7 @@ const offPages = [...["kit", "deal", "table"].map((name) => join(DIST, name, "in
 const offRefs = new Set(offPages.filter((p) => existsSync(p)).flatMap((p) => refs(readFileSync(p, "utf8"))));
 const others = new Set(files.filter((p) => p.endsWith(".html") && !offPages.includes(p)).flatMap((p) => refs(readFileSync(p, "utf8"))));
 const offOnly = (rel) => rel.startsWith("kit/") || rel.startsWith("deal/") || rel.startsWith("table/") || rel.startsWith("worlds/") || (offRefs.has(rel) && !others.has(rel));
-const keep = (rel) => !offOnly(rel) && ((/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf" || rel === "sheets/zidara-character-sheet-pre-roots.pdf" || rel === "openings.json" || rel === "world-book.json" || rel === "world-tables.json");
+const keep = (rel) => !offOnly(rel) && ((/\.(html|css|js|svg)$/.test(rel) && !["sw.js", "404.html"].includes(rel)) || /latin.*\.woff2$/.test(rel) || rel === "sheets/zidara-character-sheet.pdf" || rel === "openings.json" || rel === "world-book.json" || rel === "world-tables.json");
 const hash = createHash("sha1");
 const urls = [];
 for (const path of files.sort()) {

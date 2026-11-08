@@ -2,6 +2,24 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
+## 9 Nov: the companion on Roots
+
+Stage 3 of `notes/roots-plan.md` put the companion's character on Roots. These are the calls the phone needed where the book doesn't say.
+
+1. **The crew saved before Roots move onto it.** Their tracks start at d12 and their Aura's full, and their Scars go on their Stamina, since the wound die took blows. Their conditions, threads (strained and snapped), crossed-out kit, boxes, Aspiration and notes stay, and a Catch from the old Hurt track goes into Notes. What they grew in downtime waits on the Sheet tab to go back on free, each with the Root and specialty it fits, and an old Title with its archetype brings both back. Traits are let go, since they're gone from the rules.
+2. **A character built on the phone before Roots is shown as it was**, read only, with its set actions and their steps, till the builder rebuilds them in stage 4. It can still be deleted.
+3. **A tie won for 1 Aura pays nothing back.** The Core says a die something added to after you rolled doesn't pay, and the phone counts a bought tie the same way. Top faces and wins pay as the dice land.
+4. **You're acting from the moment you roll an action** till you tap I've finished acting or roll When it lands, and anything over your Aura's maximum goes then.
+5. **Pumping Aura into a passive awakening works whenever you tap it.** The book says while you're acting, and the phone leaves that to the table. What's pumped in holds till the scene ends, and its bonus is offered on any roll the thing's on without using it up.
+6. **Defend's dice can stop a telegraph at any Root**, since a Defend's your whole action for the round. The phone matches dice to telegraphs with your tracks first, then Defend's, and you can swap any two.
+7. **Push is split by each archetype's wording**: one for a roll to defend goes on When it lands, and one for an action goes on the roll card.
+8. **Stand firm** is two hits that do nothing for each time it's paid, cleared when the round or the scene ends.
+9. **Roll again costs a size of Resolve** wherever it's offered: a roll, When it lands, the rest at the end of a scene and downtime's Aspiration (after downtime's free size up).
+10. **Downtime's free size up comes first when you finish**, so Recover's 6 sizes count from where it leaves you, and nothing goes past d12.
+11. **Print puts one archetype on the sheet once**, however many times you've got it (*Shadow, twice*), and a second attuned thing and anything else that doesn't fit go in Notes.
+12. **The live table, till stage 4:** an answer's a specialty on its usual Root, the extra action that cost 1 Resolve costs 3 Aura, a blow from the GM stays at Body, and fear can go at Mind or Soul but never Body. The table still words a blow's defence as Defend and fear's as Confidence.
+13. **Not on the phone yet:** Boons, a Summoner's souls, the Gambler's flip and the Shadow's pool. The player keeps them on paper till stage 4 or later.
+
 ## 9 Nov: the GM's budgets and the rest of the book
 
 Stage 2 of `notes/roots-plan.md` put the Roots change through every chapter stage 1 didn't touch. The numbers come from dice runs: four of the crew as they start against a boss and its people, three thousand fights a setting.

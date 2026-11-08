@@ -1,6 +1,8 @@
 ---
 import Base from "../layouts/Base.astro";
 import book from "../generated/book.json";
+// Each archetype once, "twice" for one taken twice, the way the companion says it.
+const archNames = (c) => [...c.archetypes.reduce((m, a) => m.set(a.name, (m.get(a.name) ?? 0) + 1), new Map())].map(([n, k]) => (k > 1 ? `${n} twice` : n));
 import { recentEntries } from "../lib/whats-new.js";
 
 const latest = book.changes.headings[0];
@@ -113,7 +115,7 @@ const ladder = [
             <div class="body">
               <h3>{c.name}</h3>
               <p class="title">{c.title}</p>
-              <div class="chips">{c.archetypes.map((a) => <span class="chip">{a}</span>)}</div>
+              <div class="chips">{archNames(c).map((a) => <span class="chip">{a}</span>)}</div>
               <p class="blurb">{c.blurb}</p>
             </div>
           </article>
