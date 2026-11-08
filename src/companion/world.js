@@ -1362,7 +1362,7 @@ export function makeWorld(d) {
         <p class="cc-small">${esc(`${what.slice(0, -1).join(", ")} and ${what.at(-1)}, with How it came to be.`)}</p>
         <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="whole" data-w="${esc(x.id)}"${ui.whole ? " disabled" : ""}>${busy ? "Bringing it in…" : "Bring it in"}</button></div></li>`;
     }).join("");
-    return fold("whole", "Bring in a whole world", offer.map((x) => x.name).join(" and "), `<p class="cc-lead">It comes in whole and running: every faction with its web, the places and people, the map and How it came to be, all of it hidden from the crew till you show them, and yours to change. Only your account can bring these in for now.</p>${online() ? "" : '<p class="cc-small">You’ll need a signal to bring one in.</p>'}<ul class="wb-brings">${cards}</ul>`);
+    return fold("whole", "Bring in a whole world", [...new Set(offer.map((x) => x.name))].join(" and "),`<p class="cc-lead">It comes in whole and running: every faction with its web, the places and people, the map and How it came to be, all of it hidden from the crew till you show them, and yours to change. Only your account can bring these in for now.</p>${online() ? "" : '<p class="cc-small">You’ll need a signal to bring one in.</p>'}<ul class="wb-brings">${cards}</ul>`);
   }
   // The line saying whose a fan-made world is, and the companies' notices, at
   // the foot of its World screen and tab. A player gets the world's id once

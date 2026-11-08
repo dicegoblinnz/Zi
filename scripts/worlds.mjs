@@ -235,7 +235,7 @@ export function checkYears(world, years) {
   const problems = [];
   const say = (p) => problems.push(p);
   const listed = Object.keys(world?.years ?? {}).map(Number);
-  if (world?.opens != null && !listed.includes(Number(world.opens))) say(`world.yaml's opens is ${world.opens}, and it's one of its years (${listed.join(" or ")})`);
+  if (world?.opens != null && !listed.includes(Number(world.opens))) say(`world.yaml's opens is ${world.opens}, which isn't one of its years (${listed.join(" or ")})`);
   else if (listed.length > 1 && world?.opens == null) say(`world.yaml has ${listed.length} years and no opens, the year its page opens on`);
   const both = asList(world?.both).map(String);
   for (const k of both) if (!KEY.test(k)) say(`world.yaml's both has ${JSON.stringify(k)}, which isn't a key`);

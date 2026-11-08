@@ -1692,7 +1692,7 @@ const realWorlds = [];
       const yearBreaks = [
         ["a faction in both years that both doesn't have", yamlOf({ both: shared.filter((k) => k !== one.factions[0].key) }), [one, two], /so world\.yaml's both has to have it/],
         ["a key in both that's only in one year", yamlOf({ both: [...shared, "nobody-here"] }), [one, two], /both has nobody-here, but it's only in/],
-        ["opens that isn't one of its years", yamlOf({ opens: 1998 }), [one, two], /opens is 1998, and it's one of its years/],
+        ["opens that isn't one of its years", yamlOf({ opens: 1998 }), [one, two], /opens is 1998, which isn't one of its years/],
         ["two years and no opens", yamlOf({ opens: undefined }), [one, two], /has 2 years and no opens/],
         ["a faction with another seal the next year", yamlOf({}), [one, { ...two, factions: two.factions.map((f, i) => (i ? f : { ...f, seal: { c: "anchor", f: "plain" } })) }], /wears a different seal/],
         ["a faction one year and a place the next", yamlOf({}), [one, { ...two, factions: two.factions.filter((f) => f.key !== gone), places: [...two.places, { key: gone }] }], new RegExp(`${gone} is a faction in 1999 and a place in 2000`)],

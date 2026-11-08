@@ -490,6 +490,8 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   await page.waitForURL(/\/worlds\/night-city\/\?tab=history$/);
   await page.waitForSelector(".wn.is-live");
   if (await page.locator("#wn-history").isHidden()) note(`${at}: 2077 didn't open on How it came to be from 2045's`);
+  await page.click('.wn-bar [data-tab="map"]');
+  if (!(await page.locator('.wn-years a[href="/worlds/night-city/2045/"]').count())) note(`${at}: the switch takes 2077's map across to 2045, which hasn't got one yet`);
   await page.goto(BASE + "/worlds/abnu/");
   if (await page.locator(".wn-years").count()) note(`${at}: Abnu has a year switch with one year`);
   if (errors.length) note(`${at}: page errors: ${errors.join(" | ")}`);

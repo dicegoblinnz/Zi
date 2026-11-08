@@ -1592,10 +1592,14 @@ if (existsSync(worldsDir)) {
   const { src, problems: unread } = readWorldsDir(worldsDir);
   for (const p of unread) companionWarn(`worlds: ${p}`);
   mkdirSync(worldsOut, { recursive: true });
+  const unbuilt = new Set();
   for (const w of src) {
     const { world, problems, notes } = compileWorld(w, { assets: worlds?.assets ?? [], sizes: worlds?.sizes ?? [], regions: existsSync(tablesOut) ? JSON.parse(readFileSync(tablesOut, "utf8")).regions : {} });
     for (const p of problems) companionWarn(`world ${w.universe} ${w.year}: ${p}`);
-    if (!world) continue;
+    if (!world) {
+      unbuilt.add(w.universe);
+      continue;
+    }
     world.at = BUILT;
     writeFileSync(join(worldsOut, `${world.id}.json`), JSON.stringify(world));
     (wholeWorlds[world.universe] ??= []).push(world);
@@ -1603,8 +1607,9 @@ if (existsSync(worldsDir)) {
     console.log(`worlds/${world.id}.json: ${world.factions.length} factions${pages}, ${world.history.length} lines of history, ${Math.round(world.size / 1000)}k of a world brought in${notes.length ? ` (${notes.join("; ")})` : ""}`);
   }
   // What a universe's years share (world.yaml's both), and the year its page
-  // opens on, once every year's compiled.
+  // opens on, once every year's compiled (a year that didn't has said why).
   for (const [u, list] of Object.entries(wholeWorlds)) {
+    if (unbuilt.has(u)) continue;
     for (const p of checkYears(src.find((w) => w.universe === u)?.world, list)) companionWarn(`world ${u}: ${p}`);
   }
 }
