@@ -12,7 +12,7 @@ whose: >-
   and neither of them made this or signed off on it.
 notices:
   - >-
-    Night City, 2077 is unofficial content provided under the Homebrew Content
+    {title} is unofficial content provided under the Homebrew Content
     Policy of R. Talsorian Games and is not approved or endorsed by RTG. This
     content references materials that are the property of R. Talsorian Games
     and its licensees.
@@ -24,13 +24,47 @@ kinds:
   fixer: Fixers
   law: The law
   other: The rest
+# The year /worlds/night-city/ opens on, and 2045's at /worlds/night-city/2045/.
+opens: 2077
 years:
+  2045:
+    title: Night City, 2045
+    when: >-
+      The Time of the Red, twenty-two years after the bomb, with the city
+      rebuilding a district at a time and the Council arguing over who pays.
+    recipe: { region: city, era: near-future, twist: chrome }
   2077:
     title: Night City, 2077
     when: >-
       The weeks before the Konpeki Plaza job, with Saburo Arasaka alive and
       Dex DeShawn setting up the job of the year.
     recipe: { region: city, era: near-future, twist: chrome }
+# Anyone or anywhere in more than one year, by its key, so it's one faction,
+# place or person from year to year: Rogue in 2045 is Rogue in 2077.
+both:
+  # the factions
+  - militech
+  - biotechnica
+  - network-54
+  - trauma-team
+  - ncpd
+  - maxtac
+  - maelstrom
+  - tyger-claws
+  - sixth-street
+  - voodoo-boys
+  - aldecaldos
+  - afterlife
+  # the places
+  - the-glen
+  - charter-hill
+  - watson
+  - santo-domingo
+  - rancho-coronado
+  - pacifica
+  - the-afterlife
+  # the people
+  - rogue-amendiares
 # The ground every year shares, so the coast, the water and the hills never
 # move between years: the sea, the reservoir and the hills, in the map's own
 # numbers, 0 to 1000 across and down. Our own map of the city, drawn for

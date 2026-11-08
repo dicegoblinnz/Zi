@@ -29,6 +29,14 @@ html[data-wn-tab] .wn:not(.is-live) .wn-head :is(.eyebrow, .wn-when, .wn-counts)
 .wn-head.is-folded .wn-unfold { grid-row: 1; grid-column: 2; display: inline-flex; align-items: center; min-height: 44px; margin: 0; padding: 0; font: inherit; font-size: 0.9rem; font-weight: 700; color: var(--gold-ink); background: none; border: 0; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; cursor: pointer; }
 .wn-unfold:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; border-radius: 2px; }
 .wn-head h1 { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(2rem, 1.4rem + 2.6vw, 3rem); line-height: 1.05; letter-spacing: 0.02em; text-wrap: balance; }
+/* The year switch, under the title: each year its own page, so they're links,
+   drawn the way the board and the web switch, with the year that's showing
+   filled in. It stays under the name when the header folds. */
+.wn-years { margin: 0.85rem 0 0; }
+.wn-years .ww-seg-b { display: inline-flex; align-items: center; justify-content: center; min-width: 4.5rem; text-decoration: none; letter-spacing: 0.05em; font-variant-numeric: lining-nums tabular-nums; }
+.wn-years .ww-seg-b:not([aria-current]):hover { color: var(--ink); }
+.wn-years .ww-seg-b[aria-current="page"] { color: var(--zd-on-them); background: var(--zd-them); cursor: default; }
+.wn-head.is-folded .wn-years { grid-column: 1 / -1; justify-self: start; margin: 0.45rem 0 0.1rem; }
 .wn-when { margin: 0.6rem 0 0; max-width: 36rem; font-size: 1.05rem; text-wrap: pretty; }
 .wn-counts { display: flex; flex-wrap: wrap; gap: 0.15rem 0; margin: 0.7rem 0 0; padding: 0; list-style: none; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 .wn-counts li + li::before { content: "·"; margin: 0 0.55rem; color: var(--gold); }

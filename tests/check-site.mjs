@@ -71,6 +71,9 @@ const PAGES = [
   // the board with a faction open, the web, each map, a place and a person
   // open, and How it came to be.
   "/worlds/night-city/#f-arasaka", "/worlds/night-city/?tab=web", "/worlds/night-city/?tab=map", "/worlds/night-city/?tab=places#p-the-afterlife", "/worlds/night-city/?tab=people#p-rogue-amendiares", "/worlds/night-city/?tab=history",
+  // Night City's other year (stage 17): 2045's board with a card open, its
+  // web and How it came to be.
+  "/worlds/night-city/2045/#f-militech", "/worlds/night-city/2045/?tab=web", "/worlds/night-city/2045/?tab=history",
   "/worlds/abnu/#f-alysta", "/worlds/abnu/?tab=web", "/worlds/abnu/?tab=map", "/worlds/abnu/?tab=places#p-verrant-docks", "/worlds/abnu/?tab=people#p-merren-vast", "/worlds/abnu/?tab=history",
 ];
 // A character saved on the phone, so a sheet gets checked like any other page.
@@ -446,6 +449,50 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
     await page.screenshot({ path: join(SHOTS, `worlds-${tab}-${width}-${scheme}.png`) });
   }
   console.log(`${at}: ${cards} factions, ${places} places on the map, the kinds, Find, a name, the web, the map and its web, places, people and How it came to be checked`);
+  await context.close();
+}
+
+// Night City's other year (stage 17 of notes/builder-plan.md): the switch
+// under the title, 2077 opening at /worlds/night-city/ and 2045 at its own
+// address, each year's notice naming its own title, 2045's board and How it
+// came to be with no map, places or people yet, the tab that's open carried
+// across to the other year, and no switch on a world with one year, at 390
+// in light and 320 in dark.
+for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
+  const at = `another year @${width} ${scheme}`;
+  const context = await browser.newContext({ viewport: { width, height: 860 } });
+  if (scheme === "light") await context.addInitScript(() => { try { localStorage.setItem("zi-theme", "light"); } catch (e) {} });
+  await sealed(context);
+  const page = await context.newPage();
+  const errors = [];
+  page.on("pageerror", (e) => errors.push(String(e)));
+  const years = () => page.$$eval(".wn-years a", (as) => as.map((a) => `${a.textContent.trim()} ${a.getAttribute("href")} ${a.getAttribute("aria-current") ?? ""}`.trim()).join(" | "));
+  const notice = async (title) => (await page.locator(".wn-foot p").allTextContents()).some((n) => n.trim().startsWith(`${title} is unofficial content`));
+  await page.goto(BASE + "/worlds/night-city/");
+  await page.waitForSelector(".wn.is-live");
+  if ((await years()) !== "2045 /worlds/night-city/2045/ | 2077 /worlds/night-city/ page") note(`${at}: the year switch on 2077 is ${(await years()) || "missing"}`);
+  if (!(await notice("Night City, 2077"))) note(`${at}: 2077's notice doesn't name Night City, 2077`);
+  await page.click('.wn-years a[href="/worlds/night-city/2045/"]');
+  await page.waitForURL(/\/worlds\/night-city\/2045\/$/);
+  await page.waitForSelector(".wn.is-live");
+  if ((await page.textContent(".wn-head h1")).trim() !== "Night City, 2045") note(`${at}: 2045's page isn't titled Night City, 2045`);
+  if ((await page.getAttribute('meta[name="robots"]', "content")) !== "noindex") note(`${at}: 2045's page isn't marked noindex`);
+  if ((await years()) !== "2045 /worlds/night-city/2045/ page | 2077 /worlds/night-city/") note(`${at}: the year switch on 2045 is ${(await years()) || "missing"}`);
+  if (!(await notice("Night City, 2045"))) note(`${at}: 2045's notice doesn't name Night City, 2045`);
+  const tabs = await page.$$eval(".wn-bar [data-tab]", (b) => b.map((x) => x.dataset.tab).join(" "));
+  if (tabs !== "board history") note(`${at}: 2045's bar has ${tabs}, and it's the board and How it came to be till its places, people and map come`);
+  const folds = await page.locator("details.wn-f").count();
+  if (folds !== 28) note(`${at}: 2045's board has ${folds} factions, not 28`);
+  await page.click('.wn-bar [data-tab="history"]');
+  if ((await page.locator(".wn-line").count()) < 40) note(`${at}: How it came to be in 2045 has under 40 lines`);
+  if (!(await page.locator('.wn-years a[href="/worlds/night-city/?tab=history"]').count())) note(`${at}: the switch doesn't take How it came to be across to 2077`);
+  await page.click(".wn-years a:not([aria-current])");
+  await page.waitForURL(/\/worlds\/night-city\/\?tab=history$/);
+  await page.waitForSelector(".wn.is-live");
+  if (await page.locator("#wn-history").isHidden()) note(`${at}: 2077 didn't open on How it came to be from 2045's`);
+  await page.goto(BASE + "/worlds/abnu/");
+  if (await page.locator(".wn-years").count()) note(`${at}: Abnu has a year switch with one year`);
+  if (errors.length) note(`${at}: page errors: ${errors.join(" | ")}`);
   await context.close();
 }
 

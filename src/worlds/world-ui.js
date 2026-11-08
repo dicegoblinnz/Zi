@@ -74,6 +74,14 @@ if (data && root) {
     // what's showing, so a reload or Back opens what was on the screen.
     if (/^#[fp]-/.test(url.hash) && !document.getElementById(url.hash.slice(1))?.closest(`[data-panel="${name}"]`)) url.hash = "";
     history.replaceState(history.state, "", url);
+    // The year switch takes the tab that's open across to the other year,
+    // when that year has it, and its board otherwise.
+    for (const y of $$(".wn-years a[data-tabs]")) {
+      const to = new URL(y.href, location.href);
+      if (name !== "board" && y.dataset.tabs.split(" ").includes(name)) to.searchParams.set("tab", name);
+      else to.searchParams.delete("tab");
+      y.href = to.pathname + to.search;
+    }
     root.classList.toggle("is-map", name === "map");
     if (name === "map") mountMap();
     // The map's as tall as the screen above the bar, so it always comes into
