@@ -69,7 +69,7 @@ export function whoAndDoes(sentence, fallback) {
 // after the stake, if it names one, or the telegraph's own words (line). It
 // gives { why } when it can't tell.
 export const ROOT_WORDS = new Set(["Body", "Mind", "Soul", "Defend", "Confidence"]);
-const FEAR_WORDS = new Set(["Mind", "Soul", "Confidence"]);
+export const FEAR_WORDS = new Set(["Mind", "Soul", "Confidence"]);
 export function readAim(text, stakes, line = "") {
   const parts = String(text ?? "").split(",").map((x) => x.trim()).filter(Boolean);
   const j = parts.findIndex((x) => ROOT_WORDS.has(x));

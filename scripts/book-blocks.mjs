@@ -104,6 +104,8 @@ function telegraph(line, owner, ctx, warn) {
   const parts = m[3].split(", ");
   const lands = [];
   while (parts.length > 1 && /^[A-Z]/.test(parts[parts.length - 1]) && !/^(Body|Mind|Soul)$/.test(parts[parts.length - 1])) lands.unshift(parts.pop());
+  // Defend and Confidence were where telegraphs went before the Roots change.
+  if (parts.some((x) => /^(Defend|Confidence)$/.test(x))) warn(`the telegraph ${line.slice(0, 50)} is aimed the old way, so say Body, Mind or Soul`);
   const at = parts.join(", ");
   const kind = /^(Body|Mind|Soul)$/.test(at) ? "crew" : /, (Body|Mind|Soul)$/.test(at) || /^(everyone|whoever|anyone)\b/i.test(at) ? "place" : "stake";
   // One of the crew's Body, Mind or Soul reads as theirs on the card.

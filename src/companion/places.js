@@ -20,6 +20,7 @@
 // draws the pages and handles their taps and forms, through the helpers
 // world.js hands it.
 import { PLISTS, PMAX, findPage, linker, mentionsOf, pageCardOf } from "./pages.js";
+import { FEAR_WORDS, ROOT_WORDS } from "./aims.js";
 import { findMap } from "./maps.js";
 import { cardNow } from "./world-whole.js";
 import { typo } from "./marks.js";
@@ -688,7 +689,11 @@ export function makePlaces(w) {
       const p = findPage(doc, el.dataset.id);
       const t = p?.teles.find((x) => x.id === el.dataset.lid);
       if (!t || !d.tele) return;
-      const cond = t.at.split(",").map((x) => x.trim()).filter((x) => !/^(Body|Mind|Soul|Defend|Confidence)$/.test(x) && /^[A-Z][a-z]+$/.test(x));
+      // The Root it's at is one of its words, the way readAim() reads it, so a
+      // stake or a part of the place with Soul in its name isn't fear.
+      const words = t.at.split(",").map((x) => x.trim());
+      const root = words.find((x) => ROOT_WORDS.has(x));
+      const cond = words.filter((x) => !ROOT_WORDS.has(x) && /^[A-Z][a-z]+$/.test(x));
       // A place's telegraph that starts with someone in it is theirs:
       // "Orla raps her cane" is Orla Strand's.
       let who = p.name;
@@ -699,7 +704,7 @@ export function makePlaces(w) {
       }
       // Its words and what it's aimed at go too, so one at a stake, the scene
       // clock or a part of the place comes aimed there (table.js).
-      d.tele(id, { who: who.slice(0, 60), does: `${flat(t.text)}${cond.length ? ` (${cond.join(", ")})` : ""}`.slice(0, 140), d: t.d, kind: /\b(Mind|Soul|Confidence)\b/.test(t.at) ? "fear" : "blow", text: flat(t.text), at: t.at, page: p.name });
+      d.tele(id, { who: who.slice(0, 60), does: `${flat(t.text)}${cond.length ? ` (${cond.join(", ")})` : ""}`.slice(0, 140), d: t.d, kind: FEAR_WORDS.has(root) ? "fear" : "blow", text: flat(t.text), at: t.at, page: p.name });
     },
   };
 
