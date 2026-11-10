@@ -4,6 +4,8 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 
 ## 9 Nov: the builder, the learning round and the live table on Roots
 
+**Live since 10 Nov**, with the stage 3 calls below, when you said to push Roots to the website. They're still yours to say yes or no to.
+
 Stage 4 of `notes/roots-plan.md` put the rest of the companion on Roots. These are the calls it needed where the book doesn't say.
 
 1. **The quick build on the phone** picks the two archetypes first, then each Title with its Root, three specialties and three permissions, each permission with its own Root and specialty. A Title from an idea's cards, or a permission tapped in from one, comes with its Root and specialty guessed from the words, and the step says to check them. It warns and never blocks, bar one thing: six slots is the most a Title holds, and a Boon takes two.
