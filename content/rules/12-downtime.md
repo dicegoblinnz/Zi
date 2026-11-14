@@ -6,7 +6,7 @@ order: 12
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::quote
 Downtime's the half of the game where the world decides what it's been doing while you were bleeding in a warehouse.
@@ -15,7 +15,7 @@ Downtime's the half of the game where the world decides what it's been doing whi
 After **every session** there's a downtime: a week, a month, a season, however long the story needs. It's where the world moves, and where you heal and grow.
 
 :::rule
-**Progression in Zi'Dara is yours.** Nobody hands out levels, and there's no experience to count. Every downtime, you choose what your character gets: a new permission, a new awakening on something you've attuned, a roll at your Aspiration, a new thread. What you don't get to choose is how much time you have, and the world's always asking for some of it.
+**Progression in Zi'Dara is yours.** Nobody hands out levels, and there's no experience to count. Every downtime, you choose what your character gets: a new permission, a new ability, a new awakening on something you've attuned, a roll at your Aspiration, a new thread. What you don't get to choose is how much time you have, and the world's always asking for some of it.
 :::
 
 ## The Four Pressures {#the-four-pressures}
@@ -48,7 +48,10 @@ Some things happen without costing a slot. **Every downtime starts with each of 
 
 ### Grow {#grow}
 
--   **A new permission** on one of your Titles, up to six on it. It has to fit inside the Title, and the story should say where you learned it. It adds 1 to a Root and 1 to a specialty, the same as the ones you started with. See [Permissions](#s-writing-permissions).
+A slot buys what a point buys when you make your character: a permission, an ability, an awakening or something to carry. A new Title, archetype or attuned thing comes from your [Aspiration](#s-aspiration).
+
+-   **A new permission** on one of your Titles, up to six on it. It has to fit inside the Title, and the story should say where you learned it. It puts 1 on its Root, the same as the ones you started with, and it's a step on every roll it fits. See [Permissions](#s-writing-permissions).
+-   **A new ability** off one of your archetypes' lists, up to six on it. The story should say where it came from, the same as a permission. See [Abilities](#s-abilities).
 -   **Chase your Aspiration.** Roll against its die, built from whatever you're doing about it. Beat it and it climbs one. See [Aspiration](#s-aspiration).
 -   **Deepen a bond.** Write a new thread with someone, a bond thread or a hostile one, whichever the story's given you. If you've already got a bond with them, it goes under that one. If they're in the crew, it goes on both your sheets, so agree on it together.
 -   **Get something** the story can give you, whether it's bought, made, won or owed: something to carry, a purse of gold, or the material an attuned thing needs for its next stage.
@@ -63,7 +66,7 @@ Every new awakening on an attuned thing takes a slot, up to what its stage allow
 
 The crew's action is its one move a downtime, and it can be any of these. When someone puts a personal slot into it as well, that's two slots on one thing, and everything counts twice.
 
--   **Chase the Goal.** Whoever does it rolls against the Goal's die, a Root and a specialty that fit. Beat it and it climbs one. See [The Party Goal](#s-goal).
+-   **Chase the Goal.** Whoever does it rolls against the Goal's die, a Root and everything on their sheet that fits. Beat it and it climbs one. See [The Party Goal](#s-goal).
 -   **Work a project.** The same, against the project's die. See [Projects](#s-projects).
 -   **Move on a faction.** Destroy, Undermine, Obstruct, Influence, Acquire or Establish, set back its agenda, or work for it. See [Factions](#s-faction-crew).
 -   **Rebuild.** Establish an asset or a resource the crew's lost. An asset still needs a resource paying for it. See [How the crew grows](#s-crew-grows).
@@ -107,18 +110,18 @@ Vesk's only thread with Bram is a bond thread: the fire he carried her out of, a
 :::example
 **Vesk:** One slot pays the fence what he's asking for this week. The other gives my grappling line its Catch, *Loud*, because the hook rings off stone every time, and a second awakening with it, *Haul someone up after me*.
 
-**Dorrie:** One slot goes on the vault score. The other's a new permission, *tell people what they want to hear*, Soul and Persuasion. I've been talking my way past too many doormen not to have learned something.
+**Dorrie:** One slot goes on the vault score. The other's a new permission on my first Title, *tell people what they want to hear*, on my Soul. I've been talking my way past too many doormen not to have learned something.
 
-**Isolde:** I'll put *read how a spirit's been bound* on my first Title, Mind and The dead. I've spent the week with the Warden's empty armour. My other slot goes on my Aspiration, because whoever bound that Warden knew my order's work.
+**Isolde:** I'll put *read how a spirit's been bound* on my first Title, on my Mind. I've spent the week with the Warden's empty armour. My other slot goes on my Aspiration, because whoever bound that Warden knew my order's work.
 
 **Bram:** The Warden's spear ticked my plate, so one slot mends it. My ribs'll knit on their own, so my other slot goes in with the crew's action. We're going at the Estate, and it's too big for the action on its own.
 :::
 
 **Resolution.** Vesk's slot pays the fence what he asked for. That's doing right by him, so her hostile thread with him, *I owe a debt I would rather not discuss*, is strained now, and one more good turn would snap it. *Haul someone up after me* is an active awakening: 1 Aura and a friend comes up the line with her, and each Aura more brings one more.
 
-Dorrie's slot is a roll at the Goal: her Mind and her Lying, 9 steps, a d12 and a d6, against the Goal's d4. Her best is 6 against 3, so the Goal climbs to d6. Her new permission puts her Soul up to 3 and her Persuasion up to 3.
+Dorrie's slot is a roll at the Goal, sending Vane's investigators the wrong way: her Mind, both Titles, *make a lie sound like old news*, *keep my story straight under questions* and Face, 11 steps, a d12 and a d10, against the Goal's d4. Her best is 6 against 3, so the Goal climbs to d6. Her new permission puts her Soul up to 5.
 
-Isolde's Aspiration roll is her Mind and her Research, 7 steps, a d12 and a d2, against its d6. Her best is 5 against 5, and the tie goes to the Aspiration. There's no Aura in downtime, so she pays 1 Resolve to roll again, gets 7, and it climbs to d8. Her new permission puts her Mind up to 6 and The dead up to 3.
+Isolde's Aspiration roll is her Mind, both Titles, *find what I need in any library* and Scholar, 11 steps, a d12 and a d10, against its d6. Her best is 5 against 5, and the tie goes to the Aspiration. There's no Aura in downtime, so she pays 1 Resolve to roll again, gets a 7, and it climbs to d8. Her new permission puts her Mind up to 8.
 
 Bram's slot mends his plate. His ribs don't need one: he finished last session with his Stamina on a d8, and downtime started by putting it up to d10. If he wants it back to d12 before the next job, that's a slot on healing.
 
