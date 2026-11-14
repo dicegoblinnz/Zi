@@ -37,7 +37,10 @@ None yet.
 
 ### 5. The dice roller
 
-None yet.
+1. **The roller says all the Aura a throw pays**: 1 for every die that wins and 1 for every top face, added up across every action. It only used to count top faces. A die that stops a blow coming at you is a win, so it pays. A tie going at them pays nothing, since it's theirs unless you pay, an area die pays once however many it beats, and their top faces pay nobody.
+2. **A new action starts as you going at them**, since going at more than one thing is what more than one action's mostly for. The first one on a phone that's never set it still starts as them coming at you, as before.
+3. **A throw holds up to 8 actions**, each up to 12 dice a side as before. Add another action waits till the open one's got dice on.
+4. **Opening the roller again opens the first action**, with the rest folded into a line each.
 
 ### 6. The play screen
 
