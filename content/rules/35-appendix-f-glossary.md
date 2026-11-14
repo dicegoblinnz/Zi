@@ -1,10 +1,10 @@
 ---
-title: "Appendix F: Glossary"
+title: "Appendix E: Glossary"
 id: appendix-glossary
 slug: appendix-f-glossary
 order: 35
 part: "Appendices & Index"
-partNumber: "Part V"
+partNumber: "Part IV"
 source: 2026-10-02 rulebook
 updated: 2026-11-14
 ---
@@ -17,7 +17,6 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Action](#s-actions)** | What you spend to do something. One a round. Aura buys more, 3 for the first in a round, then 4, then 5, with no cap, and holding it, coming out of hiding or the Boon can give you more. |
 | **[Advantage](#s-intents)** | Several dice on one intent. Your best die counts. |
 | **[Agenda](#s-agendas)** | What a faction is doing right now, on a die that climbs. Past d12, it happens. |
-| **[Alarm](#s-alarm)** | A site's scene clock: how much the place knows you're there. Noise steps it down too. Past d2, the place knows. |
 | **[Animal tag](#a-shifter)** | A Shifter's: something an animal does, like wings or a breath attack, caught against its die and yours until downtime. It's a step when it fits, and you can strip one instead of taking a hit. |
 | **[Answer](#s-answering)** | Spending your action to stop a telegraph before it lands. Friends can put theirs in too. |
 | **[Arc](#s-campaigns)** | Four to six sessions around one Party Goal. |
@@ -66,12 +65,10 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Flip](#a-gambler)** | The Gambler's, once a round: a die you can see turned over after it lands, its size plus 1 take away what it rolled. A flipped die gives no Aura. |
 | **[Foresight](#a-oracle)** | The Oracle's: the numbers it rolled, swapped into anyone's dice before the round ends, as long as each fits the die. |
 | **[Forms](#s-unique-threats)** | A threat with two or more forms. When the last tag keeping a form going is stripped, it changes: it takes new tags, and its multipliers come back on the ones that matter most. |
-| **[Frame](#frames)** | A ready-made kind of campaign: a world, a tone, a board of factions and a first job. |
-| **[Gap](#chases)** | In a chase, the distance between you and what's after you. Past d2, caught. Past d12, away. |
 | **[GM move](#s-gm-moves)** | Something the world does when everyone looks at the GM. Usually a telegraph outside a round. |
 | **[Goal](#s-goal)** | What the whole crew is after this arc: one thing they could get done in it (see [A good Goal](#s-good-goal)). Starts at d2 and climbs. Past d12, the crew has done it, it grows, and everyone writes a new thread. |
 | **[Going beyond](#s-going-beyond)** | Pushing a permission past what it normally does, like phasing through a wall. 1 Aura, for a sword or a spell. If you have to make a case for why it's normal, it's going beyond. |
-| **[Ground](#the-ground)** | Tags on the place itself. Bring one into your roll for 1 Aura. In a chase, the die for the way ahead. |
+| **[Ground](#the-ground)** | Tags on the place itself. Bring one into your roll for 1 Aura. |
 | **[Harmony](#oracle)** | An Oracle reading: two of the three dice match. |
 | **[Heal](#s-healing)** | The Healer's roll: an action, and each die that rolls a 4 or more puts one of the patient's tracks up a size. It reaches one person, or a second you can touch with a split. |
 | **[Hold](#s-actions)** | Doing nothing this round apart from your stride, for two actions next round. |
@@ -86,7 +83,6 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Keepsake](#s-carrying)** | Something that matters to your character, carried on top of your equipment and utility. It has no rule of its own. |
 | **[Layered](#s-layered)** | A tag for special encounters only: the first time it's attacked in a round, it rolls one Challenge die for every tag it has left keeping it going, and its best die counts. |
 | **[Lead](#a-leader)** | The Leader's action: an order or a rallying song, built from a Root and everything that fits, with its steps handed out to friends who can hear or see you for this round. They don't have to fit. |
-| **[Leg](#s-legs)** | A day on a journey, or one stage of it. It runs like a round. |
 | **[Let it bite](#s-trouble)** | Bringing a Catch, or any real trouble, down on yourself in the story. The GM runs with it, and you take 1 Aura, or your Resolve comes up a size when a Catch bites in a big way, changing the scene or costing you something you wanted. |
 | **[Let it ride](#s-defending)** | Leaving a telegraph unanswered, without Defending, so it lands at the end of the round against your tracks, where each die stops one at its Root. |
 | **[Lines and veils](#s-lines-veils)** | What the table won't have in the story at all (a line), or won't play out in detail (a veil). |
@@ -110,10 +106,8 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Power](#s-faction-board)** | A faction's muscle, on a die: 1 step, plus 1 for each lot of people who turn up when it calls. Nothing else adds Power. The crew has one too. |
 | **[Pressure](#downtime)** | One of the four things pushing on the crew each downtime: personal, party, faction, world. |
 | **[Project](#s-projects)** | Something the crew sets out to build or bring about. Starts at d2 and climbs. Past d12, what you wrote happens. |
-| **[Pursuer](#chases)** | In a chase, whatever's after you, on a die. Past d2, it's shaken off. |
 | **[Push](#s-abilities)** | The ability most archetypes have: +2 on one die of the mechanic after you roll, for 1 off its home track, and +3 if you've taken the archetype twice. A die it takes to its top face gives no Aura. |
 | **[Quality](#s-armour-quality)** | What a piece of armour, a shield or a helmet is: Common, Fine or Masterwork, with 1, 2 or 3 boxes. |
-| **[Question](#s-question)** | In an investigation, what the crew wants to know, written as a stake. Each tag on it is something that's hiding the answer. |
 | **[Quick heal](#s-healing)** | Anyone's: 1 Aura puts one of someone's tracks up a size, no roll. It still takes your action. |
 | **[Reputation](#s-party-faction)** | What the city says about the crew, in one line. A step on any crew roll it fits. One for every Goal done. |
 | **[Resolve](#s-tracks)** | Your Soul's track, and your defence against despair, temptation, curses and anything trying to take you over. It starts at d12, drops a size for every hit that gets through to your Soul, and pays for rerolls and the Bard's, the Elementalist's, the Healer's, the Leader's, the Summoner's and the Teleporter's abilities. Straining a bond thread or a big bite brings it up a size. |
@@ -126,7 +120,6 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Scene](#s-aura)** | One place and one problem. Aura refills when a new one starts, and your tracks rest when it ends. |
 | **[Scene clock](#s-scene-clock)** | A die on the whole scene. It steps down every round. Past d2, the scene turns. |
 | **[Shadow pool](#a-shadow)** | A Shadow's: the dice you rolled to get into hiding, to add to any roll after that, as dice or as steps. Each one's gone once you use it. |
-| **[Site](#s-site)** | Somewhere the crew goes into and has to find its way through. One scene, with an alarm for its clock. |
 | **[Size](#s-building-die)** | One die size. Stepping down one size is a d8 becoming a d6. |
 | **[Slot](#downtime)** | A unit of downtime. You get two, and the crew takes one action, which a slot of yours can go into. |
 | **[Snap](#s-bonds)** | What a thread does when you strain it again before it's mended. Your Resolve still comes up, but cross the thread out. When the last one goes, so does the bond. |
@@ -139,7 +132,6 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Stride](#s-movement)** | Free movement every round. 3 squares to start. A Teleporter's can be a teleport of up to 10 units. |
 | **[Study](#s-study)** | An intent that finds a hidden tag or a straight answer. An Oracle can pay for *Foretold* and introduce a truth instead. |
 | **[Summon](#s-summoning)** | A soul a Summoner calls out with Aura, as part of an action: a d4 of summons for each Aura. It acts in the round like anyone, fades a size every round, and loses a size to every hit that gets through. |
-| **[Supplies](#s-journey)** | On a journey, a clock for the crew's food and water. It steps down every leg nobody feeds the crew. |
 | **[Swap](#grow)** | In downtime, trading a permission for another that fits your Title, or two of them for a Boon, and back. |
 | **[Tag](#s-challenges)** | Something true about a threat, a stake or a place. It does what it says, and a big one carries a multiplier. A Maker can give an item tags for the scene, and they work like permissions. |
 | **[Take a breath](#s-actions)** | Your action: your Confidence comes up a size, as far as d6. |
@@ -152,7 +144,6 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Title idea](#s-title-ideas)** | A place to start a Title: twenty-nine roles and schools, each with the archetypes it suits, and permissions and going-beyond ideas to pick from. |
 | **[Top face](#s-the-roll)** | A die's highest number. 1 Aura back, unless a Push or an awakening took it there, it's a summon's, an Oracle swapped it in or a Gambler flipped it. A Warrior's explodes. |
 | **[Track](#s-tracks)** | Stamina, Confidence or Resolve, one for each Root. Each starts at d12, drops a size for every hit that gets through, and rolls once as your defence when the telegraphs land. A hit at d2 and you Blaze. |
-| **[Trail](#s-trails)** | A way to something hidden: a person who knows, a place that shows it, or a thing that proves it. Leave three. |
 | **[Trait](#s-how-archetypes)** | Something that's always true of you because of your archetype, written in its rule box. Every archetype has one, most cost nothing, and six get you Aura back. Take the same archetype twice and it's still the one Trait. |
 | **[Trouble](#s-trouble)** | Something going wrong for you that the GM can run with. You bring it yourself, by letting a Catch bite or with no Catch at all, and take 1 Aura for it. |
 | **[Utility](#s-carrying)** | Tools and things you use up, like rope, a lantern or a smoke bomb. You carry 3, and cross off what you use. |

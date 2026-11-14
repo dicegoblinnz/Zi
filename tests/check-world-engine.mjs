@@ -189,7 +189,12 @@ for (const f of ["src/generated/book.json", "public/world-book.json"]) {
 }
 const bookJson = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
 const worldBook = JSON.parse(readFileSync("public/world-book.json", "utf8"));
-const BOOK = bookFor(bookJson.companion.worlds, worldBook, bookJson.companion.party);
+// The book's had no boards to bring in since the 14 Nov cut, so the boards a
+// frame's keyed by are the old ones in tests/book-pack/, never shipped, for
+// the made-up pack's frames and the checks on a card brought in from a board.
+const packBoards = JSON.parse(readFileSync("tests/book-pack/boards.json", "utf8"));
+const bookWorlds = { ...bookJson.companion.worlds, boards: [...bookJson.companion.worlds.boards, ...packBoards] };
+const BOOK = bookFor(bookWorlds, worldBook, bookJson.companion.party);
 const real = existsSync("content/world-tables/core.yaml");
 const DIR = real ? "content/world-tables" : "tests/world-pack";
 const read = readTablesDir(DIR);
@@ -403,7 +408,7 @@ for (const era of Object.keys(T.eras).filter((e) => T.packs[`era:${e}`])) {
   for (const twist of [null, ...Object.keys(T.twists).filter((t) => T.packs[`twist:${t}`])]) if (canDeal(T, { region, era, twist })) groups.push({ what: `the mix ${era}${twist ? ` and ${twist}` : ""} at ${region}`, recipe: { region, era, twist } });
 }
 // Every board in the book with a mix, at its region with the dials it sets.
-const bookBoard = (id) => bookJson.companion.worlds.boards.find((b) => b.id === id);
+const bookBoard = (id) => bookWorlds.boards.find((b) => b.id === id);
 for (const [id, fr] of Object.entries(T.frames)) {
   const recipe = { region: fr.region, era: fr.era, twist: fr.twist ?? null };
   if (canDeal(T, recipe)) groups.push({ what: `${bookBoard(id)?.name ?? id}'s mix`, recipe, fixed: fr.dials ?? {} });
@@ -1732,11 +1737,10 @@ const realWorlds = [];
       rmSync(dir, { recursive: true, force: true });
     }
   }
-  // Every real world.
+  // Every real world. Night City and Abnu came off the site in the 14 Nov
+  // cut (content/worlds/retired.yaml), so there's none till one's rebuilt.
   const real = readWorldsDir("content/worlds");
   for (const p of real.problems) note(`content/worlds: ${p}`);
-  yes(real.src.some((w) => w.universe === "night-city" && w.year === "2077"), "content/worlds has no Night City, 2077");
-  yes(real.src.some((w) => w.universe === "abnu" && w.year === "1000"), "content/worlds has no Abnu, a thousand years after the Sundering");
   for (const w of real.src) {
     const got = compileWorld(w, bookIn);
     for (const p of got.problems) note(`${w.universe} ${w.year}: ${p}`);
@@ -1851,7 +1855,6 @@ const realWorlds = [];
   }
   // Each universe's years together: what they share and the year its page
   // opens on.
-  yes(realWorlds.some((w) => w.id === "night-city-2045"), "content/worlds has no Night City, 2045");
   for (const u of new Set(real.src.map((w) => w.universe))) {
     for (const p of checkYears(real.src.find((w) => w.universe === u).world, realWorlds.filter((w) => w.universe === u))) note(`${u}: ${p}`);
   }
@@ -2004,7 +2007,9 @@ const realWorlds = [];
     }
     console.log(`   ${world.id}: brought into a campaign in ${ops.length} changes, ${Math.round(size / 1000)}k, undone, and read by a player`);
   }
-  console.log("11. a whole world into a campaign: its cards, pages, drawn map and record, a player's view of it, its fog, Undo, and the molefolk kept off a player's phone");
+  console.log(realWorlds.length
+    ? `11. a whole world into a campaign (${realWorlds.map((w) => w.id).join(", ")}): its cards, pages, drawn map and record, a player's view of it, its fog, Undo, and Abnu's molefolk kept off a player's phone`
+    : "11. a whole world into a campaign: none to bring in since the 14 Nov cut, so this comes back with the first world rebuilt on the core");
 }
 
 console.log(problems.length ? `\n${problems.length} problems` : "\nAll world engine checks passed");

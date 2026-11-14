@@ -1,0 +1,1722 @@
+[
+ {
+  "id": "steeplands",
+  "name": "The Steeplands",
+  "kind": "A world in two pages",
+  "pitch": "The Steeplands are a rain-soaked archipelago of trade cities and old grudges.",
+  "link": "/rules/the-steeplands/#the-board",
+  "cards": [
+   {
+    "key": "the-vane-estate",
+    "name": "The Vane Estate",
+    "want": "To keep everything that’s his.",
+    "face": "Lord Aldous Vane, the collector.",
+    "secret": "The Inkwell Is the Binding",
+    "more": "Break it and every soul in the collection goes free.",
+    "note": "",
+    "res": [
+     {
+      "text": "Vineyards",
+      "x": 1
+     },
+     {
+      "text": "River Tolls",
+      "x": 1
+     },
+     {
+      "text": "Low Market Rents",
+      "x": 1
+     },
+     {
+      "text": "The Vane Bank",
+      "x": 1
+     },
+     {
+      "text": "Salt Contracts",
+      "x": 1
+     },
+     {
+      "text": "Old Money",
+      "x": 1
+     },
+     {
+      "text": "The Collection’s Buyers",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Household Guard",
+      "does": "+1 Power",
+      "power": true,
+      "x": 2
+     },
+     {
+      "text": "Hired Swords",
+      "does": "+1 Power",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "The Courts’ Bailiffs",
+      "does": "+1 Power",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Old Retainers",
+      "does": "+1 Power",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Agents Abroad",
+      "does": "+1 Power, and it can act anywhere on the board",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Relic: The Inkwell",
+      "does": "see its Secret",
+      "power": false,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Vane comes home",
+      "die": 6,
+      "then": ""
+     }
+    ],
+    "pub": [
+     {
+      "text": "The Vanes have owned this city for three hundred years",
+      "kind": "bond",
+      "s": "whole"
+     }
+    ],
+    "mor": [],
+    "loy": [
+     {
+      "text": "The guard’s been on the same pay for twenty years",
+      "kind": "hostile",
+      "s": "whole"
+     }
+    ],
+    "threads": [],
+    "h": "1prhy3h",
+    "at": 1794619159815,
+    "seal": {
+     "c": "crown",
+     "f": "bend",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-harbour-guild",
+    "name": "The Harbour Guild",
+    "want": "Every ship to pay.",
+    "face": "The Guildmaster",
+    "secret": "One bad year",
+    "more": "The fortune is paper.",
+    "note": "",
+    "res": [
+     {
+      "text": "Dock Fees",
+      "x": 1
+     },
+     {
+      "text": "Warehouse Rents",
+      "x": 1
+     },
+     {
+      "text": "Smuggling Runs",
+      "x": 1
+     },
+     {
+      "text": "Shipping Shares",
+      "x": 1
+     },
+     {
+      "text": "Loans to Captains",
+      "x": 1
+     },
+     {
+      "text": "The Fish Market",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Captains in Its Debt",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Warehouse Watchmen",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Fast Boats",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Dock Gangs",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Buy the harbour court",
+      "die": 6,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "19h29ib",
+    "at": 1794619159815,
+    "seal": {
+     "c": "anchor",
+     "f": "pale",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-quiet-order",
+    "name": "The Quiet Order",
+    "want": "Nothing to change.",
+    "face": "A priest of the Order",
+    "secret": "It sold Vane the rite that binds the souls",
+    "more": "",
+    "note": "",
+    "res": [
+     {
+      "text": "Funerals",
+      "x": 1
+     },
+     {
+      "text": "Temple Lands",
+      "x": 1
+     },
+     {
+      "text": "Offerings",
+      "x": 1
+     },
+     {
+      "text": "Burial Plots",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "The Faithful",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Gravediggers",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Thistle’s Novices",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Bury the Vane scandal",
+      "die": 8,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "sewi5b",
+    "at": 1794619159815,
+    "seal": {
+     "c": "bell",
+     "f": "plain",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-bound",
+    "name": "The Bound",
+    "want": "To be free.",
+    "face": "The Painted Knight",
+    "secret": "Not all of them were victims",
+    "more": "",
+    "note": "",
+    "res": [
+     {
+      "text": "The Paintings",
+      "x": 1
+     },
+     {
+      "text": "The Statues",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "The Painted",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "The Ones in Marble",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Wake",
+      "die": 2,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "1abypba",
+    "at": 1794619159815,
+    "seal": {
+     "c": "chain",
+     "f": "quarterly",
+     "d": ""
+    }
+   }
+  ]
+ },
+ {
+  "id": "brinewake",
+  "name": "Brinewake",
+  "kind": "A frame",
+  "pitch": "You crew the Kittiwake, a fast little ship with a leaky hull and a mortgage, in the Brinewake, a chain of storm-bitten islands where every port has a price.",
+  "link": "/rules/frames/#s-frame-brinewake",
+  "cards": [
+   {
+    "key": "the-tithe-fleet",
+    "name": "The Tithe Fleet",
+    "want": "Every ship that sails pays the tithe.",
+    "face": "Commodore Isel Varrow, who hanged her own brother for smuggling.",
+    "secret": "Bought Captains",
+    "more": "Half her captains take Tarrant money to look the other way, and she’s got no idea.",
+    "note": "",
+    "res": [
+     {
+      "text": "The Tithe",
+      "x": 1
+     },
+     {
+      "text": "Sailing Papers",
+      "x": 1
+     },
+     {
+      "text": "Seized Cargoes",
+      "x": 1
+     },
+     {
+      "text": "Gallowsmouth Fines",
+      "x": 1
+     },
+     {
+      "text": "Crown Pay",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Warships",
+      "does": "",
+      "power": true,
+      "x": 2
+     },
+     {
+      "text": "Marines",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Tithe Men",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Revenue Cutters",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Close the Combs",
+      "die": 4,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [
+     {
+      "text": "The Kittiwake sails without papers",
+      "kind": "hostile",
+      "s": "whole"
+     }
+    ],
+    "h": "161pq4c",
+    "at": 1794619159815,
+    "seal": {
+     "c": "anchor",
+     "f": "bend",
+     "d": ""
+    }
+   },
+   {
+    "key": "tarrant-daughters",
+    "name": "Tarrant & Daughters",
+    "want": "To own every sea lane in the Brinewake.",
+    "face": "Marguerite Tarrant, the eldest daughter, who never raises her voice and never forgets a late payment.",
+    "secret": "They Woke It",
+    "more": "Their diving barges on the Glass Shelf broke into something that should’ve stayed shut.",
+    "note": "",
+    "res": [
+     {
+      "text": "Cargo Contracts",
+      "x": 1
+     },
+     {
+      "text": "Ship Mortgages",
+      "x": 1
+     },
+     {
+      "text": "Marine Insurance",
+      "x": 1
+     },
+     {
+      "text": "Warehouses in Every Port",
+      "x": 1
+     },
+     {
+      "text": "Whale Oil",
+      "x": 1
+     },
+     {
+      "text": "Passenger Fares",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Holds the Note",
+      "does": "it owns the Kittiwake’s mortgage, so one missed payment and it can take her back",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Factors in Every Port",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Merchantmen",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Armed Escorts",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Buy the Saltreach harbour charter",
+      "die": 6,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "1bqk9zd",
+    "at": 1794619159815,
+    "seal": {
+     "c": "scales",
+     "f": "pale",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-brothers-of-the-lamp",
+    "name": "The Brothers of the Lamp",
+    "want": "A sea with no tithe on it.",
+    "face": "Old Hennick One-Lamp, who was smuggling before the Fleet had a name.",
+    "secret": "Wreckers",
+    "more": "When trade’s slow, they hang false lights on the rocks and strip whatever runs aground.",
+    "note": "",
+    "res": [
+     {
+      "text": "Brandy Runs",
+      "x": 1
+     },
+     {
+      "text": "Smuggled Passengers",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Lamp Crews",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "The Cove Villages",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Run the Gallowsmouth blockade",
+      "die": 8,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [
+     {
+      "text": "The Kittiwake runs our brandy",
+      "kind": "bond",
+      "s": "whole"
+     }
+    ],
+    "h": "120wwt8",
+    "at": 1794619159815,
+    "seal": {
+     "c": "lamp",
+     "f": "chevron",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-drowned-choir",
+    "name": "The Drowned Choir",
+    "want": "To bring the drowned city back up into the air.",
+    "face": "The Cantor, a drowned priest who talks through anyone who’s swallowed enough seawater.",
+    "secret": "Sunk on Purpose",
+    "more": "The founders of Saltreach drowned that city, and the Choir remembers every name.",
+    "note": "Threads: None yet. It hasn’t noticed the crew.",
+    "res": [
+     {
+      "text": "Every Drowning",
+      "x": 1
+     },
+     {
+      "text": "The Drowned City",
+      "x": 1
+     },
+     {
+      "text": "Sailors’ Offerings",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Calls the Tide",
+      "does": "once a downtime, it holds one channel in the Combs shut or open till the next downtime",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "The Drowned",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Its Mouths",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Raise the Glass Shelf",
+      "die": 2,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "16wo9yg",
+    "at": 1794619159815,
+    "seal": {
+     "c": "bell",
+     "f": "wavy",
+     "d": ""
+    }
+   }
+  ]
+ },
+ {
+  "id": "deep-company",
+  "name": "The Deep Company",
+  "kind": "A frame",
+  "pitch": "The Deep Company holds the royal charter on the Underhold, a city that went down into the mountain a thousand years ago and never came out.",
+  "link": "/rules/frames/#s-frame-deep-company",
+  "cards": [
+   {
+    "key": "the-deep-company",
+    "name": "The Deep Company",
+    "want": "Everything that comes up out of the mountain, with its cut taken.",
+    "face": "Factor Ilse Brannock, who counts every lamp that goes down and every one that comes back.",
+    "secret": "The Charter Ends at Midwinter",
+    "more": "Unless the Company brings up something worth renewing it for, the crown takes the Underhold back.",
+    "note": "",
+    "res": [
+     {
+      "text": "The Company’s Cut",
+      "x": 1
+     },
+     {
+      "text": "Delving Licences",
+      "x": 1
+     },
+     {
+      "text": "Bunkhouse Rents",
+      "x": 1
+     },
+     {
+      "text": "The Pawnshops",
+      "x": 1
+     },
+     {
+      "text": "The Company Store",
+      "x": 1
+     },
+     {
+      "text": "Buyers in the Capital",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Royal Charter",
+      "does": "once a downtime, it pulls one team’s licence, and that team can’t go down till the next downtime",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "The Lift",
+      "does": "a team it keeps off the lift climbs down the old way, so every level starts its Depth a size smaller",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Company Men",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "The Store’s Debtors",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Open the Hall of Kings",
+      "die": 6,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "wlufcd",
+    "at": 1794619159815,
+    "seal": {
+     "c": "coins",
+     "f": "chevron",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-lampwrights-guild",
+    "name": "The Lampwrights’ Guild",
+    "want": "A fair cut, and a widow’s share for every team that doesn’t come back.",
+    "face": "Marta Cole, who’s buried two husbands and kept both their maps.",
+    "secret": "Their Own Map",
+    "more": "The Guild’s map goes two levels deeper than the Company’s.",
+    "note": "",
+    "res": [
+     {
+      "text": "Guild Dues",
+      "x": 1
+     },
+     {
+      "text": "The Lamp Works",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Lamp Works Hands",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "The Winch Crews",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Down tools",
+      "die": 4,
+      "then": "When it happens, the lift stops, and nobody goes down for anyone."
+     }
+    ],
+    "pub": [
+     {
+      "text": "Every team in Lanternhead knows us",
+      "kind": "bond",
+      "s": "whole"
+     }
+    ],
+    "mor": [],
+    "loy": [],
+    "threads": [
+     {
+      "text": "They’re one of our teams",
+      "kind": "bond",
+      "s": "whole"
+     }
+    ],
+    "h": "1cras7c",
+    "at": 1794619159815,
+    "seal": {
+     "c": "lamp",
+     "f": "pale",
+     "d": ""
+    }
+   },
+   {
+    "key": "holloways-team",
+    "name": "Holloway’s Team",
+    "want": "To be first everywhere, whatever it costs, as long as somebody else pays.",
+    "face": "Saul Holloway, who’s never once come back up without someone missing.",
+    "secret": "They Cut the Rope",
+    "more": "Holloway left the Tallow team to die on the second level, and two of them are still alive.",
+    "note": "",
+    "res": [
+     {
+      "text": "Company Contracts",
+      "x": 1
+     },
+     {
+      "text": "Finds Sold on the Side",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Best Kit in Lanternhead",
+      "does": "every level it goes down to starts its Depth a size bigger",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Holloway’s Delvers",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Reach the Underneath",
+      "die": 8,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [
+     {
+      "text": "They’re after the same finds",
+      "kind": "hostile",
+      "s": "whole"
+     }
+    ],
+    "h": "10s3txr",
+    "at": 1794619159815,
+    "seal": {
+     "c": "mountain",
+     "f": "bend",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-underhold",
+    "name": "The Underhold",
+    "want": "To keep what’s left of itself.",
+    "face": "The Gatekeeper, at the door of the Hall of Kings.",
+    "secret": "Buried from Outside",
+    "more": "The old city never fell. The first kings of the crown sealed it in, and the Company’s charter is written on top of that.",
+    "note": "Threads: Toward anyone who comes down with a lamp, the crew included: They come down with lamps (hostile).",
+    "res": [
+     {
+      "text": "The Dark",
+      "x": 1
+     },
+     {
+      "text": "Sealed Doors",
+      "x": 1
+     },
+     {
+      "text": "The Old City’s Dead",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Everywhere Below",
+      "does": "it can act anywhere below the Upper Galleries",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Old",
+      "does": "nothing down there surprises it, so nobody gets an *Ambush* or a first strike on it below the Upper Galleries",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Constructs",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "The King Wakes",
+      "die": 2,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [
+     {
+      "text": "They come down with lamps",
+      "kind": "hostile",
+      "s": "whole"
+     }
+    ],
+    "h": "up3u57",
+    "at": 1794619159815,
+    "seal": {
+     "c": "skull",
+     "f": "fess",
+     "d": ""
+    }
+   }
+  ]
+ },
+ {
+  "id": "lanternfall",
+  "name": "Lanternfall",
+  "kind": "A frame",
+  "pitch": "Lanternfall is a city of gas lamps and river fog, where the lamplighters light every street at dusk and nobody goes out again till dawn.",
+  "link": "/rules/frames/#s-frame-lanternfall",
+  "cards": [
+   {
+    "key": "the-night-watch",
+    "name": "The Night Watch",
+    "want": "Order, and nothing in the newspapers.",
+    "face": "Inspector Hollis Graves, who stopped believing in coincidence twenty years ago.",
+    "secret": "Graves Has Seen It",
+    "more": "He saw it once, on a night shift in the Sumps, and left it out of his report.",
+    "note": "",
+    "res": [
+     {
+      "text": "City Pay",
+      "x": 1
+     },
+     {
+      "text": "Court Fines",
+      "x": 1
+     },
+     {
+      "text": "Private Patrols",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Informers",
+      "does": "once a downtime, it finds out where anyone it names was on any one night",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "The Law",
+      "does": "anyone it arrests sits in the cells till the next downtime, unless someone gets them out in a scene",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Constables",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Hang someone for the Sump killings",
+      "die": 8,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [
+     {
+      "text": "They ask too many questions",
+      "kind": "hostile",
+      "s": "whole"
+     }
+    ],
+    "h": "147vhcn",
+    "at": 1794619159815,
+    "seal": {
+     "c": "helm",
+     "f": "pale",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-lamplighters-guild",
+    "name": "The Lamplighters’ Guild",
+    "want": "Every lamp lit, every night.",
+    "face": "Orla Penhallow, the Lamp-Warden, who knows every street by the colour of its flame.",
+    "secret": "The Lamps Are a Ward",
+    "more": "The first lamplighters laid them out to keep something in, and the dark gaps are where people go missing.",
+    "note": "",
+    "res": [
+     {
+      "text": "The Lamp Rate",
+      "x": 1
+     },
+     {
+      "text": "Gas Contracts",
+      "x": 1
+     },
+     {
+      "text": "Guild Dues",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "The Ledgers",
+      "does": "once a downtime, it knows where the fog fed last",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Lamplighters",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Light the Sumps",
+      "die": 4,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "9otf2b",
+    "at": 1794619159815,
+    "seal": {
+     "c": "lamp",
+     "f": "plain",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-carrow-society",
+    "name": "The Carrow Society",
+    "want": "To know what’s in the fog, and to own it.",
+    "face": "Lord Cassius Carrow, who’s very charming and very interested in your notes.",
+    "secret": "They Fed It First",
+    "more": "The Society’s founders gave it its first names to eat, and got things in return that nobody should have.",
+    "note": "",
+    "res": [
+     {
+      "text": "Old Fortunes",
+      "x": 1
+     },
+     {
+      "text": "Gaslight Mile Rents",
+      "x": 1
+     },
+     {
+      "text": "Shares in the Gasworks",
+      "x": 1
+     },
+     {
+      "text": "Members’ Gifts",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "A Judge in Its Pocket",
+      "does": "once a downtime, the law looks the other way for it",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Sworn Members",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Hired Men",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Open the Undercroft door",
+      "die": 6,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [
+     {
+      "text": "Their notes are worth paying for",
+      "kind": "bond",
+      "s": "whole"
+     }
+    ],
+    "h": "qfmgli",
+    "at": 1794619159815,
+    "seal": {
+     "c": "rose",
+     "f": "bend",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-thing-in-the-fog",
+    "name": "The Thing in the Fog",
+    "want": "To feed.",
+    "face": "The Lamplighter Who Wasn’t.",
+    "secret": "It Can Be Named",
+    "more": "Its name’s in the first ledger the Lamplighters ever kept, and a thing with a name can be bound.",
+    "note": "Threads: None toward the crew, till it notices them. After that, every thread it writes toward them is hostile.",
+    "res": [
+     {
+      "text": "The Dark Gaps",
+      "x": 1
+     },
+     {
+      "text": "The Sumps",
+      "x": 1
+     },
+     {
+      "text": "The River",
+      "x": 1
+     },
+     {
+      "text": "The Names It’s Eaten",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Wherever the Fog Goes",
+      "does": "it can act anywhere the fog reaches",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Old",
+      "does": "nothing binds or banishes it but its own name",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Borrowed Faces",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Its Dead",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "The Long Night",
+      "die": 4,
+      "then": "When it happens, the fog doesn’t lift for a month."
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "px1jsy",
+    "at": 1794619159815,
+    "seal": {
+     "c": "serpent",
+     "f": "wavy",
+     "d": ""
+    }
+   }
+  ]
+ },
+ {
+  "id": "gilded-court",
+  "name": "The Gilded Court",
+  "kind": "A frame",
+  "pitch": "The Queen of Aurel is dying, she hasn’t named an heir, and every great family at the Gilded Court has a plan for the morning after.",
+  "link": "/rules/frames/#s-frame-gilded-court",
+  "cards": [
+   {
+    "key": "house-veraine",
+    "name": "House Veraine",
+    "want": "The crown, by right of blood.",
+    "face": "Duke Alaric Veraine, the Queen’s cousin, who’s waited forty years and has started to show it.",
+    "secret": "A Forged Pedigree",
+    "more": "He isn’t her cousin at all, and the abbey’s registers prove it.",
+    "note": "",
+    "res": [
+     {
+      "text": "The Northern Estates",
+      "x": 1
+     },
+     {
+      "text": "A Crown Pension",
+      "x": 1
+     },
+     {
+      "text": "Timber Rights",
+      "x": 1
+     },
+     {
+      "text": "Rosewater Rents",
+      "x": 1
+     },
+     {
+      "text": "Old Loans",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Royal Blood",
+      "does": "while its pedigree stands, its face can’t be arrested, tried or hanged by anyone but the crown",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Influential",
+      "does": "its face can’t be refused an audience with the Queen",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Household Guard",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Northern Levies",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Be named heir",
+      "die": 6,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "843jhw",
+    "at": 1794619159815,
+    "seal": {
+     "c": "rose",
+     "f": "plain",
+     "d": ""
+    }
+   },
+   {
+    "key": "house-marchetti",
+    "name": "House Marchetti",
+    "want": "To buy what the old families were born with.",
+    "face": "Lucia Marchetti, who’s never lost a negotiation and doesn’t plan to start.",
+    "secret": "They Paid the Poisoner",
+    "more": "The Queen’s illness came out of a bottle, and the Marchettis bought it.",
+    "note": "",
+    "res": [
+     {
+      "text": "The Marchetti Bank",
+      "x": 1
+     },
+     {
+      "text": "Interest",
+      "x": 1
+     },
+     {
+      "text": "The Silk Trade",
+      "x": 1
+     },
+     {
+      "text": "Spice Ships",
+      "x": 1
+     },
+     {
+      "text": "Rosewater Gambling Dens",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Friends It’s Paid For",
+      "does": "once a downtime, someone at court outside the crew who’s taken its money does one thing it asks, with no roll",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Debt Collectors",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Hired Blades",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Marry the Queen’s ward",
+      "die": 8,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [
+     {
+      "text": "Lucia wants them on her books",
+      "kind": "bond",
+      "s": "whole"
+     }
+    ],
+    "h": "1rte65k",
+    "at": 1794619159815,
+    "seal": {
+     "c": "coins",
+     "f": "bend",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-queens-eyes",
+    "name": "The Queen’s Eyes",
+    "want": "To know everything, and to decide who else gets to.",
+    "face": "Master Corvin Thale, the Queen’s spymaster, whom nobody’s ever seen eat or sleep.",
+    "secret": "He’s Already Chosen",
+    "more": "Thale’s picked the next monarch himself, and he’s quietly making it happen.",
+    "note": "",
+    "res": [
+     {
+      "text": "The Privy Purse",
+      "x": 1
+     },
+     {
+      "text": "Blackmail",
+      "x": 1
+     },
+     {
+      "text": "Secrets It Sells",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Codebreakers",
+      "does": "once a session, anything *Written in Code* that it’s got hold of gets read, with no roll",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "A Spy in Every House",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Agents Abroad",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Find the poisoner",
+      "die": 4,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [
+     {
+      "text": "Nobody owns them yet",
+      "kind": "hostile",
+      "s": "whole"
+     }
+    ],
+    "h": "yr34f1",
+    "at": 1794619159815,
+    "seal": {
+     "c": "key",
+     "f": "chevron",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-crown",
+    "name": "The Crown",
+    "want": "To die with the kingdom in one piece.",
+    "face": "Queen Isaura, who’s sharper on her deathbed than most of the court is at a ball.",
+    "secret": "A Son Nobody Knows About",
+    "more": "The Queen has a son, raised quietly at the Abbey of Saint Coll, and he’s the true heir.",
+    "note": "Threads: None. She’s never heard of you, yet.",
+    "res": [
+     {
+      "text": "Crown Lands",
+      "x": 1
+     },
+     {
+      "text": "The Salt Tax",
+      "x": 1
+     },
+     {
+      "text": "Customs",
+      "x": 1
+     },
+     {
+      "text": "The Mint",
+      "x": 1
+     },
+     {
+      "text": "Tribute from the Provinces",
+      "x": 1
+     },
+     {
+      "text": "The Royal Forests",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "The Throne",
+      "does": "whoever sits on it names the heir, and no court can say otherwise",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "The Queen’s Guard",
+      "does": "",
+      "power": true,
+      "x": 2
+     },
+     {
+      "text": "The Army",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Bailiffs",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Provincial Levies",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Name an heir",
+      "die": 4,
+      "then": "If she lives that long."
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "1fv1t1w",
+    "at": 1794619159815,
+    "seal": {
+     "c": "crown",
+     "f": "plain",
+     "d": ""
+    }
+   }
+  ]
+ },
+ {
+  "id": "long-haul",
+  "name": "Long Haul",
+  "kind": "A frame",
+  "pitch": "The Second Chance is a forty-year-old freighter with a cracked reactor shield and a bank that wants her back.",
+  "link": "/rules/frames/#s-frame-long-haul",
+  "cards": [
+   {
+    "key": "the-meridian-combine",
+    "name": "The Meridian Combine",
+    "want": "Every station on the Fringe signed to a Combine contract.",
+    "face": "Director Anika Sole, who’s never once raised her voice.",
+    "secret": "They Switched the Beacons Off",
+    "more": "It’s cheaper to let the Free Stations go dark than to buy them.",
+    "note": "",
+    "res": [
+     {
+      "text": "Ore Contracts",
+      "x": 1
+     },
+     {
+      "text": "Station Leases",
+      "x": 1
+     },
+     {
+      "text": "Shipping Lines",
+      "x": 1
+     },
+     {
+      "text": "Customs Fees",
+      "x": 1
+     },
+     {
+      "text": "Fuel Depots",
+      "x": 1
+     },
+     {
+      "text": "Shareholders",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Gunships",
+      "does": "",
+      "power": true,
+      "x": 2
+     },
+     {
+      "text": "Lawyers",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Combine Marines",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Station Security",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Buy Tolliver’s Rock",
+      "die": 6,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "16eqmyy",
+    "at": 1794619159815,
+    "seal": {
+     "c": "cog",
+     "f": "plain",
+     "d": ""
+    }
+   },
+   {
+    "key": "halberd-credit",
+    "name": "Halberd Credit",
+    "want": "Every loan paid, with interest.",
+    "face": "Mr Pell, a loans officer who’s very sorry about all this.",
+    "secret": "A Forged Note",
+    "more": "The crew’s loan was bought from a dead bank, and the paperwork wouldn’t last five minutes in front of a judge.",
+    "note": "",
+    "res": [
+     {
+      "text": "Interest Payments",
+      "x": 1
+     },
+     {
+      "text": "Repossessed Ships",
+      "x": 1
+     },
+     {
+      "text": "Debts Bought Cheap",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Every Debt on the Fringe",
+      "does": "once a downtime, someone outside the crew who owes it does one thing it asks, with no roll",
+      "power": false,
+      "x": 1
+     },
+     {
+      "text": "Repo Crews",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Repossess the Second Chance",
+      "die": 6,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [
+     {
+      "text": "They’re behind on their payments",
+      "kind": "hostile",
+      "s": "whole"
+     }
+    ],
+    "h": "76al1q",
+    "at": 1794619159815,
+    "seal": {
+     "c": "coins",
+     "f": "pale",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-free-stations-compact",
+    "name": "The Free Stations Compact",
+    "want": "To keep the Fringe free of the Combine.",
+    "face": "Councillor Maeve Okoro of Tolliver’s Rock, who used to drive an ore hauler and still talks like it.",
+    "secret": "Running Guns",
+    "more": "The Compact’s arming the miners, and one Combine inspection would find the crates.",
+    "note": "",
+    "res": [
+     {
+      "text": "Ore Sales",
+      "x": 1
+     },
+     {
+      "text": "Station Dues",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Free Station Dockhands",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "The Miners’ Council",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Get the beacons back on",
+      "die": 4,
+      "then": ""
+     }
+    ],
+    "pub": [
+     {
+      "text": "Every dock on the Fringe knows us",
+      "kind": "bond",
+      "s": "whole"
+     }
+    ],
+    "mor": [],
+    "loy": [],
+    "threads": [
+     {
+      "text": "They carry for Tolliver’s Rock",
+      "kind": "bond",
+      "s": "whole"
+     }
+    ],
+    "h": "1r6olfc",
+    "at": 1794619159815,
+    "seal": {
+     "c": "wheel",
+     "f": "bend",
+     "d": ""
+    }
+   },
+   {
+    "key": "the-rustbacks",
+    "name": "The Rustbacks",
+    "want": "Everything that drifts.",
+    "face": "Juno Vey, who’s very polite while she’s robbing you.",
+    "secret": "Combine Money",
+    "more": "The Combine pays them to hit Free Stations shipping, and half the Rustbacks don’t know.",
+    "note": "",
+    "res": [
+     {
+      "text": "Salvage",
+      "x": 1
+     },
+     {
+      "text": "Hijacked Cargo",
+      "x": 1
+     }
+    ],
+    "assets": [
+     {
+      "text": "Fast Ships",
+      "does": "",
+      "power": true,
+      "x": 1
+     },
+     {
+      "text": "Salvage Crews",
+      "does": "",
+      "power": true,
+      "x": 1
+     }
+    ],
+    "agendas": [
+     {
+      "text": "Take a Combine ore hauler",
+      "die": 8,
+      "then": ""
+     }
+    ],
+    "pub": [],
+    "mor": [],
+    "loy": [],
+    "threads": [],
+    "h": "1vfjek1",
+    "at": 1794619159815,
+    "seal": {
+     "c": "knife",
+     "f": "fess",
+     "d": ""
+    }
+   }
+  ]
+ }
+]

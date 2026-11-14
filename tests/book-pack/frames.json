@@ -1,0 +1,64 @@
+{
+ "frames": {
+  "steeplands": {
+   "name": "The Steeplands",
+   "era": "medieval",
+   "twist": "magic",
+   "region": "country",
+   "dials": {
+    "strange": 0
+   }
+  },
+  "deep-company": {
+   "name": "The Deep Company",
+   "era": "medieval",
+   "twist": "magic",
+   "region": "town",
+   "dials": {}
+  },
+  "brinewake": {
+   "name": "Brinewake",
+   "era": "renaissance",
+   "twist": "magic",
+   "region": "country",
+   "dials": {
+    "strange": 0
+   }
+  },
+  "gilded-court": {
+   "name": "The Gilded Court",
+   "era": "renaissance",
+   "twist": null,
+   "region": "city",
+   "dials": {
+    "tense": 2
+   }
+  }
+ },
+ "boards": [
+  {
+   "id": "steeplands",
+   "name": "The Steeplands"
+  },
+  {
+   "id": "brinewake",
+   "name": "Brinewake"
+  },
+  {
+   "id": "deep-company",
+   "name": "The Deep Company"
+  },
+  {
+   "id": "lanternfall",
+   "name": "Lanternfall"
+  },
+  {
+   "id": "gilded-court",
+   "name": "The Gilded Court"
+  },
+  {
+   "id": "long-haul",
+   "name": "Long Haul"
+  }
+ ]
+}

@@ -31,16 +31,8 @@ genres:
   post-apocalyptic: { name: Post-apocalyptic, era: modern, twist: ruin }
   dark-fantasy: { name: Dark fantasy, era: medieval, twist: dread }
   space-fantasy: { name: Space fantasy, era: far-future, twist: magic }
-frames:
-  # The book's own world: an archipelago of trade cities, so Country, and
-  # magic sits quietly there (Magic in the World), so how strange is 0.
-  steeplands: { era: medieval, twist: magic, region: country, dials: { strange: 0 } }
-  # Lanternhead and the city under the mountain: a company town.
-  deep-company: { era: medieval, twist: magic, region: town }
-  # A chain of storm-bitten islands, so Country, and magic's real but rare
-  # there (the frame's Characters), so how strange is 0.
-  brinewake: { era: renaissance, twist: magic, region: country, dials: { strange: 0 } }
-  # A dying queen's court in her capital, so City, and it's tense (Tone and
-  # feel). Magic at court's a hanging matter if anyone can prove it, so it's
-  # the deniable kind, with no twist.
-  gilded-court: { era: renaissance, region: city, dials: { tense: 2 } }
+# frames: each board the book has to bring in, by its id, with the mix it
+# deals at. The book's had no boards since the 14 Nov cut (the Steeplands
+# and Frames are out with the rest of the world part), so there are none
+# till they come back.
+frames: {}

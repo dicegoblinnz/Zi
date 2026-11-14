@@ -20,7 +20,7 @@ A good pitch sounds something like this: *"Four thieves in a rain-soaked port ci
 
 The GM brings the pitch, and the table can push back on it. It should say who the crew is and what's about to go wrong for them. If the players want something different, now's the time to say so.
 
-If you don't know what kind of world you want yet, pick a [frame](#frames). The book's own world, [the Steeplands](#steeplands), is one, and there are five more: the sea, a company delving under a mountain, a fog-drowned city where something feeds at night, a royal court, and a freighter at the edge of settled space. Each one has a pitch you can read out loud, so read a couple and let the table choose.
+If you don't know what kind of world you want yet, answer the three questions in [Building Your World](#regions) together and roll its tension. Whoever's got an idea says it, and the pitch usually falls out of the answers.
 
 ## 2. The Tone {#the-tone}
 
@@ -60,7 +60,7 @@ Decide how magic sits in this world. Is it rare, feared, common, holy or illegal
 
 ## 8. The Map {#the-map}
 
-Grid or theatre of the mind? Zi'Dara's built for a grid, but it plays fine without one, so decide together. If you use a grid, one square's one unit, about five feet. There's more on this in [Tactical Play](#tactics).
+Grid or theatre of the mind? Zi'Dara's built for a grid, but it plays fine without one, so decide together. If you use a grid, one square's one unit, about five feet. There's more on this in [Movement and Range](#s-movement).
 
 ## 9. If You've Played Other Games {#if-youve-played-other-games}
 

@@ -1,0 +1,1554 @@
+[
+ {
+  "id": "s-place-copper-baths",
+  "name": "The Copper Baths",
+  "ground": [
+   {
+    "name": "Steam",
+    "text": "you can’t see past arm’s length"
+   },
+   {
+    "name": "The House Rule",
+    "text": "no blades past the door, and whoever brings one in has broken the peace"
+   },
+   {
+    "name": "The Hot Pool",
+    "text": "shove someone in and they’ll come out pink and gasping"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The deal",
+    "c": 4,
+    "tags": [
+     "Someone Must Agree",
+     "Wanted By Others"
+    ],
+    "note": "Dace signs with the crew, or with someone else"
+   },
+   {
+    "name": "Dace’s satchel",
+    "c": 3,
+    "tags": [
+     "Locked",
+     "Guarded"
+    ],
+    "note": "it’s in the changing-room cupboards"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "Dace’s other buyer arrives, and he signs with them"
+  },
+  "tele": [
+   {
+    "line": "Orla raps her cane on the tiles: “Not in my house.”",
+    "who": "Orla",
+    "does": "raps her cane on the tiles: “Not in my house.”",
+    "d": 8,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "A bath-man takes whoever’s making trouble by the collar and walks them to the door.",
+    "who": "A bath-man",
+    "does": "takes whoever’s making trouble by the collar and walks them to the door.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": "Grabbed"
+   },
+   {
+    "line": "Dace grabs his towel and heads for the changing room.",
+    "who": "Dace",
+    "does": "grabs his towel and heads for the changing room.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "stake",
+    "one": "",
+    "stake": "The deal",
+    "tag": "Dace grabs his towel and heads for the changing room"
+   }
+  ]
+ },
+ {
+  "id": "s-place-teeth-light",
+  "name": "The Teeth Light",
+  "ground": [
+   {
+    "name": "The Spiral",
+    "text": "ninety-nine iron steps, and whoever holds the top holds the tower"
+   },
+   {
+    "name": "Wind",
+    "text": "anything loose goes, and arrows won’t fly straight"
+   },
+   {
+    "name": "The Lens",
+    "text": "the light goes wherever it points"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The ship in the bay",
+    "c": 4,
+    "tags": [
+     "Far Away",
+     "Storm"
+    ],
+    "note": "get her off the Teeth before she strikes"
+   },
+   {
+    "name": "Tam Ollery",
+    "c": 3,
+    "tags": [
+     "Hidden Away",
+     "Alive and Scared"
+    ],
+    "note": "find him before the Crewes do"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "the ship strikes the Teeth"
+  },
+  "tele": [
+   {
+    "line": "Abe comes up the spiral and reaches for you with his gaff hook.",
+    "who": "Abe",
+    "does": "comes up the spiral and reaches for you with his gaff hook.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": "Grabbed"
+   },
+   {
+    "line": "Crewe swings the lamp’s shutter closed.",
+    "who": "Crewe",
+    "does": "swings the lamp’s shutter closed.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "stake",
+    "one": "",
+    "stake": "The ship in the bay",
+    "tag": "Crewe swings the lamp’s shutter closed"
+   },
+   {
+    "line": "A wave breaks right over the gallery.",
+    "who": "A wave",
+    "does": "breaks right over the gallery.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "place",
+    "one": "Staggered",
+    "place": "everyone on the gallery"
+   }
+  ]
+ },
+ {
+  "id": "s-place-pledge-house",
+  "name": "The Pledge House",
+  "ground": [
+   {
+    "name": "The Grille",
+    "text": "an iron cage round the counter, and you can’t reach whoever’s behind it, only talk to them"
+   },
+   {
+    "name": "Ticket Shelves",
+    "text": "pull one down and the whole wall comes with it"
+   },
+   {
+    "name": "The Back Stair",
+    "text": "narrow and creaking, with the strongroom door underneath"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The pledge",
+    "c": 3,
+    "tags": [
+     "Locked",
+     "Paperwork"
+    ],
+    "note": "it’s in the strongroom, and the ticket’s gone"
+   },
+   {
+    "name": "The ledger",
+    "c": 3,
+    "tags": [
+     "Behind the Grille",
+     "Written in Code"
+    ],
+    "note": "who owes the house, and how much"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "Quill stops waiting and goes upstairs to see the master"
+  },
+  "tele": [
+   {
+    "line": "Jessamy, through the grille: “No ticket, no pledge.”",
+    "who": "Jessamy",
+    "does": "through the grille: “No ticket, no pledge.”",
+    "d": 6,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "The elder Rudd grabs whoever’s nearest the stair and puts them through the shelves.",
+    "who": "The elder Rudd",
+    "does": "grabs whoever’s nearest the stair and puts them through the shelves.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": "Prone"
+   },
+   {
+    "line": "Jessamy tips the ledger toward the stove.",
+    "who": "Jessamy",
+    "does": "tips the ledger toward the stove.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "stake",
+    "one": "",
+    "stake": "The ledger",
+    "tag": "Jessamy tips the ledger toward the stove"
+   },
+   {
+    "line": "Quill straightens his coat and puts a foot on the bottom stair.",
+    "who": "Quill",
+    "does": "straightens his coat and puts a foot on the bottom stair.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "clock",
+    "one": ""
+   }
+  ]
+ },
+ {
+  "id": "s-place-kestrel-lodge",
+  "name": "Kestrel Lodge",
+  "ground": [
+   {
+    "name": "The Great Fire",
+    "text": "a hearth big enough to stand in"
+   },
+   {
+    "name": "Trophies",
+    "text": "boar spears on every wall, so nobody’s unarmed for long"
+   },
+   {
+    "name": "Hounds",
+    "text": "under every table, and they’ll wake up angry"
+   },
+   {
+    "name": "The Forest",
+    "text": "Garrow knows it, and you don’t"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "Hawley’s ear",
+    "c": 5,
+    "tags": [
+     "Someone Must Agree",
+     "An Audience"
+    ],
+    "note": "whatever the crew came to ask him for"
+   },
+   {
+    "name": "Hawley’s letters",
+    "c": 4,
+    "tags": [
+     "Locked",
+     "Watched"
+    ],
+    "note": "in his rooms upstairs, with a guest on every landing"
+   }
+  ],
+  "clock": {
+   "d": 10,
+   "what": "dawn, when the horns go up and the hunt rides out"
+  },
+  "tele": [
+   {
+    "line": "Hawley lifts his glass: “To our guests, who’ll be riding with us in the morning.”",
+    "who": "Hawley",
+    "does": "lifts his glass: “To our guests, who’ll be riding with us in the morning.”",
+    "d": 10,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "A hound wakes under the table and goes for whoever’s moving.",
+    "who": "A hound",
+    "does": "wakes under the table and goes for whoever’s moving.",
+    "d": 4,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "Garrow steps out of the shadows at the foot of the stairs.",
+    "who": "Garrow",
+    "does": "steps out of the shadows at the foot of the stairs.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "stake",
+    "one": "",
+    "stake": "Hawley’s letters",
+    "tag": "Garrow steps out of the shadows at the foot of the stairs"
+   }
+  ]
+ },
+ {
+  "id": "s-place-gilt-rooms",
+  "name": "The Gilt Rooms",
+  "ground": [
+   {
+    "name": "An Audience",
+    "text": "every bid’s public, and so is every scene"
+   },
+   {
+    "name": "The Rostrum",
+    "text": "whoever holds the hammer holds the room"
+   },
+   {
+    "name": "The Lot Room",
+    "text": "crates and porters behind a velvet curtain"
+   },
+   {
+    "name": "The Glass Roof",
+    "text": "it’s on hinges"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "Lot 31",
+    "c": 4,
+    "tags": [
+     "Wanted By Others",
+     "Guarded"
+    ],
+    "note": "win the bidding, or get it out of the lot room first"
+   },
+   {
+    "name": "The consignment book",
+    "c": 4,
+    "tags": [
+     "Locked",
+     "Watched"
+    ],
+    "note": "who sold lot 31, and when"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "lot 31 comes up, and the hammer falls"
+  },
+  "tele": [
+   {
+    "line": "Fairweather points his hammer at you: “Is that a bid, or a cough?”",
+    "who": "Fairweather",
+    "does": "points his hammer at you: “Is that a bid, or a cough?”",
+    "d": 8,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "Dame Hester lifts her paddle without looking round.",
+    "who": "Dame Hester",
+    "does": "lifts her paddle without looking round.",
+    "d": 10,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "stake",
+    "one": "",
+    "stake": "Lot 31",
+    "tag": "Dame Hester lifts her paddle without looking round"
+   },
+   {
+    "line": "A guard comes down the aisle and takes your elbow.",
+    "who": "A guard",
+    "does": "comes down the aisle and takes your elbow.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": "Grabbed"
+   }
+  ]
+ },
+ {
+  "id": "s-place-breakers-flats",
+  "name": "The Breakers’ Flats",
+  "ground": [
+   {
+    "name": "Sucking Mud",
+    "text": "anyone who goes down is stuck"
+   },
+   {
+    "name": "Rotten Decks",
+    "text": "heavy things go through, and light feet don’t"
+   },
+   {
+    "name": "The Tide",
+    "text": "it comes in faster than anyone can walk"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The ship’s bell",
+    "c": 3,
+    "tags": [
+     "Hidden Away",
+     "Heavy Load"
+    ],
+    "note": "proof of which ship a hulk really is"
+   },
+   {
+    "name": "Off the flats",
+    "c": 3,
+    "tags": [
+     "Far Away",
+     "Watched"
+    ],
+    "note": "a mile of mud, and the breakers are watching"
+   }
+  ],
+  "clock": {
+   "d": 6,
+   "what": "the tide’s in, and anyone still out on the flats is swimming"
+  },
+  "tele": [
+   {
+    "line": "The mud takes your boot, then your leg.",
+    "who": "The mud",
+    "does": "takes your boot, then your leg.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": "Pinned"
+   },
+   {
+    "line": "Slade comes along the walkway with an axe on his shoulder.",
+    "who": "Slade",
+    "does": "comes along the walkway with an axe on his shoulder.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "The first channel fills behind you.",
+    "who": "The first channel",
+    "does": "fills behind you.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "clock",
+    "one": ""
+   }
+  ]
+ },
+ {
+  "id": "s-place-foundry",
+  "name": "Hollin’s Foundry",
+  "ground": [
+   {
+    "name": "The Ladle",
+    "text": "tip it and everything under it burns"
+   },
+   {
+    "name": "Sand Pits",
+    "text": "they’re soft and deep, and full of moulds"
+   },
+   {
+    "name": "The Crane",
+    "text": "run along its beam, or swing on its chains"
+   },
+   {
+    "name": "The Bellows",
+    "text": "nobody hears a shout past arm’s length"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "Tonight’s casting",
+    "c": 4,
+    "tags": [
+     "Guarded",
+     "Heavy Load"
+    ],
+    "note": "whatever’s being poured, ruin it or take it"
+   },
+   {
+    "name": "The order book",
+    "c": 3,
+    "tags": [
+     "Locked",
+     "Watched"
+    ],
+    "note": "who paid for the casting, and why"
+   }
+  ],
+  "clock": {
+   "d": 6,
+   "what": "Hollin taps the furnace and the iron runs"
+  },
+  "tele": [
+   {
+    "line": "Hollin swings his tapping bar at whoever’s closest.",
+    "who": "Hollin",
+    "does": "swings his tapping bar at whoever’s closest.",
+    "d": 10,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "The crane jerks and the ladle slops over the pits.",
+    "who": "The crane",
+    "does": "jerks and the ladle slops over the pits.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "place",
+    "one": "Burning",
+    "place": "everyone by the pits"
+   },
+   {
+    "line": "A founder knocks the clay plug half out of the tap hole.",
+    "who": "A founder",
+    "does": "knocks the clay plug half out of the tap hole.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "clock",
+    "one": ""
+   }
+  ]
+ },
+ {
+  "id": "s-place-weeping-field",
+  "name": "The Weeping Field",
+  "ground": [
+   {
+    "name": "Mist",
+    "text": "ten paces and the world ends"
+   },
+   {
+    "name": "The Broken Wall",
+    "text": "the line they died holding, and cover for anyone"
+   },
+   {
+    "name": "Old Iron",
+    "text": "nobody here’s unarmed for long"
+   },
+   {
+    "name": "Sacred Ground",
+    "text": "the dead won’t cross the chapel step"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The far side",
+    "c": 4,
+    "tags": [
+     "Far Away",
+     "Mist"
+    ],
+    "note": "cross before dark, or spend the night in the chapel"
+   },
+   {
+    "name": "The colours",
+    "c": 4,
+    "tags": [
+     "Hidden Away",
+     "Guarded"
+    ],
+    "note": "the regiment’s banner, buried where it fell"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "full dark, and the whole Grey Line comes over the wall"
+  },
+  "tele": [
+   {
+    "line": "A rank of grey shapes levels spears that aren’t there.",
+    "who": "A rank of grey shapes",
+    "does": "levels spears that aren’t there.",
+    "d": 10,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "place",
+    "one": "Frightened",
+    "place": "everyone in the open"
+   },
+   {
+    "line": "Thorne’s voice comes out of the mist: “Hold the wall.”",
+    "who": "Thorne’s voice",
+    "does": "comes out of the mist: “Hold the wall.”",
+    "d": 12,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "stake",
+    "one": "",
+    "stake": "The far side",
+    "tag": "Thorne’s voice comes out of the mist: “Hold the wall.”"
+   },
+   {
+    "line": "A robber’s spade hits a coffin lid, and the mist turns toward the noise.",
+    "who": "A robber’s spade",
+    "does": "hits a coffin lid, and the mist turns toward the noise.",
+    "d": 4,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "clock",
+    "one": ""
+   }
+  ]
+ },
+ {
+  "id": "s-place-lantern-theatre",
+  "name": "The Lantern Theatre",
+  "ground": [
+   {
+    "name": "An Audience",
+    "text": "hundreds of people, all looking the same way"
+   },
+   {
+    "name": "The Fly Loft",
+    "text": "cut a rope and something comes down"
+   },
+   {
+    "name": "Footlights",
+    "text": "kick them over and it’s dark, or on fire"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The third act",
+    "c": 4,
+    "tags": [
+     "Someone Must Agree",
+     "Watched"
+    ],
+    "note": "get it played, or get it stopped, depending on who’s paying"
+   },
+   {
+    "name": "The playwright",
+    "c": 4,
+    "tags": [
+     "Hidden Away",
+     "Wanted By Others"
+    ],
+    "note": "nobody knows who wrote it, and Kell’s men are looking too"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "the interval ends and the third act starts, ready or not"
+  },
+  "tele": [
+   {
+    "line": "Penhallow pushes you out of the wings: “You’re on, darling.”",
+    "who": "Penhallow",
+    "does": "pushes you out of the wings: “You’re on, darling.”",
+    "d": 8,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "One of Kell’s men comes down the backstage corridor with his knife held low.",
+    "who": "One of Kell’s men",
+    "does": "comes down the backstage corridor with his knife held low.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "Kell stands up in his box, and the house goes quiet.",
+    "who": "Kell",
+    "does": "stands up in his box, and the house goes quiet.",
+    "d": 10,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "stake",
+    "one": "",
+    "stake": "The third act",
+    "tag": "Kell stands up in his box and the house goes quiet"
+   }
+  ]
+ },
+ {
+  "id": "s-place-tanners-lock",
+  "name": "Tanner’s Lock",
+  "ground": [
+   {
+    "name": "The Gate Beams",
+    "text": "one at a time, and there’s a drop into the chamber"
+   },
+   {
+    "name": "The Windlass",
+    "text": "whoever holds the handle holds the water"
+   },
+   {
+    "name": "Towpath Horses",
+    "text": "spook them and the towlines go everywhere"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The barge",
+    "c": 3,
+    "tags": [
+     "Guarded",
+     "Locked"
+    ],
+    "note": "search it, or stop it leaving"
+   },
+   {
+    "name": "The lock book",
+    "c": 3,
+    "tags": [
+     "Paperwork",
+     "Watched"
+    ],
+    "note": "every barge through here this year, and what it paid"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "the chamber’s empty, the bottom gates open, and the barge is gone downriver"
+  },
+  "tele": [
+   {
+    "line": "Nell swings her boat hook at whoever’s on the gate beam.",
+    "who": "Nell",
+    "does": "swings her boat hook at whoever’s on the gate beam.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": "Into the chamber"
+   },
+   {
+    "line": "Ware leans on the windlass, and the water drops away under the barge.",
+    "who": "Ware",
+    "does": "leans on the windlass, and the water drops away under the barge.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "clock",
+    "one": ""
+   },
+   {
+    "line": "The horses spook and drag the towline across the path.",
+    "who": "The horses",
+    "does": "spook and drag the towline across the path.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "place",
+    "one": "Prone",
+    "place": "everyone on the towpath"
+   }
+  ]
+ },
+ {
+  "id": "s-place-gallows-square",
+  "name": "Gallows Square",
+  "ground": [
+   {
+    "name": "A Crowd",
+    "text": "easy to vanish into, and you can’t swing a halberd in it"
+   },
+   {
+    "name": "The Scaffold",
+    "text": "everyone in the square can see whoever’s on it"
+   },
+   {
+    "name": "The Bell",
+    "text": "the trap drops on its last stroke, so silence it, by magic or by hand, and Pyke has to wait"
+   },
+   {
+    "name": "Market Stalls",
+    "text": "awnings to climb and carts to tip"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "Jory Pell",
+    "c": 4,
+    "tags": [
+     "Guarded",
+     "In Irons"
+    ],
+    "note": "get him off the scaffold alive"
+   },
+   {
+    "name": "The crowd",
+    "c": 4,
+    "tags": [
+     "Here for a Hanging",
+     "Thinks He Did It"
+    ],
+    "note": "turn it, and nobody hangs anyone in front of it"
+   }
+  ],
+  "clock": {
+   "d": 6,
+   "what": "the bell’s last stroke, and Pyke pulls the lever"
+  },
+  "tele": [
+   {
+    "line": "Captain Brandt points: “Those three. Hold them.”",
+    "who": "Captain Brandt",
+    "does": "points: “Those three. Hold them.”",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": "Grabbed"
+   },
+   {
+    "line": "The crowd surges for a better look and carries you with it.",
+    "who": "The crowd",
+    "does": "surges for a better look and carries you with it.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "place",
+    "one": "Staggered",
+    "place": "everyone in the crowd"
+   },
+   {
+    "line": "Pyke tests the lever with his boot.",
+    "who": "Pyke",
+    "does": "tests the lever with his boot.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "clock",
+    "one": ""
+   }
+  ]
+ },
+ {
+  "id": "s-place-basket-monastery",
+  "name": "The Basket Monastery",
+  "ground": [
+   {
+    "name": "The Basket",
+    "text": "it swings and spins, and the winch decides who comes and goes"
+   },
+   {
+    "name": "A Long Drop",
+    "text": "on every side, and climbing it, or magic, is the only other way up"
+   },
+   {
+    "name": "Sacred Ground",
+    "text": "the brothers won’t fight in the chapel"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The one you came for",
+    "c": 5,
+    "tags": [
+     "Someone Must Agree",
+     "Hidden Away"
+    ],
+    "note": "one of the brothers is the person the crew wants"
+   },
+   {
+    "name": "The winch",
+    "c": 3,
+    "tags": [
+     "Guarded",
+     "Needs Two Hands"
+    ],
+    "note": "the only way down that isn’t falling"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "dusk, when the basket comes up and the winch is chained till morning"
+  },
+  "tele": [
+   {
+    "line": "Brother Simeon lets the rope run, and the basket drops ten feet.",
+    "who": "Brother Simeon",
+    "does": "lets the rope run, and the basket drops ten feet.",
+    "d": 8,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "place",
+    "one": "",
+    "place": "everyone in the basket"
+   },
+   {
+    "line": "The abbot, gently: “You came up as guests. Act like it.”",
+    "who": "The abbot",
+    "does": "gently: “You came up as guests. Act like it.”",
+    "d": 10,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "A gust swings the basket into the rock.",
+    "who": "A gust",
+    "does": "swings the basket into the rock.",
+    "d": 10,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "place",
+    "one": "",
+    "place": "everyone in the basket"
+   }
+  ]
+ },
+ {
+  "id": "s-place-fever-house",
+  "name": "The Fever House",
+  "ground": [
+   {
+    "name": "Thirty Beds",
+    "text": "someone’s in every one, so you can’t swing freely"
+   },
+   {
+    "name": "Sacred Ground",
+    "text": "the sisters won’t raise a hand in here"
+   },
+   {
+    "name": "The Locked Doors",
+    "text": "whoever has the keys has the scene"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The patient",
+    "c": 4,
+    "tags": [
+     "Locked",
+     "Someone Must Agree"
+    ],
+    "note": "get them out, past the Mother"
+   },
+   {
+    "name": "The admissions book",
+    "c": 3,
+    "tags": [
+     "Hidden Away",
+     "Watched"
+    ],
+    "note": "who sent each patient here, and who pays"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "the evening bell, when the ward’s locked for the night with whoever’s inside"
+  },
+  "tele": [
+   {
+    "line": "Mother Benedetta: “Touch that bed and you’ll carry the fever home to your own door.”",
+    "who": "Mother Benedetta",
+    "does": "“Touch that bed and you’ll carry the fever home to your own door.”",
+    "d": 10,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "An orderly hauls you off the bed by your collar.",
+    "who": "An orderly",
+    "does": "hauls you off the bed by your collar.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": "Grabbed"
+   },
+   {
+    "line": "Sister Prue backs toward the door with the keys.",
+    "who": "Sister Prue",
+    "does": "backs toward the door with the keys.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "stake",
+    "one": "",
+    "stake": "The patient",
+    "tag": "Sister Prue backs toward the door with the keys"
+   }
+  ]
+ },
+ {
+  "id": "s-place-long-quarry",
+  "name": "The Long Quarry",
+  "ground": [
+   {
+    "name": "Blasting Powder",
+    "text": "a shed full, and one dropped lamp brings a wall down"
+   },
+   {
+    "name": "The Crane",
+    "text": "a block of stone overhead, held by one rope and a ratchet"
+   },
+   {
+    "name": "Terraces and Ladders",
+    "text": "there’s a long drop from everywhere"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The hole",
+    "c": 5,
+    "tags": [
+     "Heavy Load",
+     "Something Wants Out"
+    ],
+    "note": "seal it before whatever’s in there comes up"
+   },
+   {
+    "name": "Price’s map",
+    "c": 3,
+    "tags": [
+     "Guarded",
+     "Hidden Away"
+    ],
+    "note": "it shows what’s under the hill"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "Price loses patience and sends the men down, willing or not"
+  },
+  "tele": [
+   {
+    "line": "Brennock bellows at the crew to get off his quarry.",
+    "who": "Brennock",
+    "does": "bellows at the crew to get off his quarry.",
+    "d": 8,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "The crane’s ratchet slips and the block swings.",
+    "who": "The crane’s ratchet",
+    "does": "slips and the block swings.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "place",
+    "one": "",
+    "place": "everyone under the crane"
+   },
+   {
+    "line": "A cold breath comes up out of the hole, and every lamp gutters.",
+    "who": "A cold breath",
+    "does": "comes up out of the hole, and every lamp gutters.",
+    "d": 10,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "place",
+    "one": "Frightened",
+    "place": "everyone at the bottom"
+   }
+  ]
+ },
+ {
+  "id": "s-place-undercroft",
+  "name": "The Undercroft",
+  "ground": [
+   {
+    "name": "Pitch Dark",
+    "text": "whoever brought light can see, and everyone can see them"
+   },
+   {
+    "name": "A Forest of Pillars",
+    "text": "cover everywhere, and you can’t see ten feet"
+   },
+   {
+    "name": "Old Wards",
+    "text": "chalk and silver marks on the oldest pillars, and they’re there to stop something"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The one who didn’t come up",
+    "c": 4,
+    "tags": [
+     "Hidden Away",
+     "Alive and Scared"
+    ],
+    "note": "somewhere in the dark, if they’re still breathing"
+   },
+   {
+    "name": "The smugglers’ cache",
+    "c": 4,
+    "tags": [
+     "Underwater",
+     "Guarded"
+    ],
+    "note": "sunk in nets off the walkway"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "the river rises, Grebe opens the sluices, and the water comes up to the vaults"
+  },
+  "tele": [
+   {
+    "line": "Something brushes your leg under the water, then pulls.",
+    "who": "Something",
+    "does": "brushes your leg under the water, then pulls.",
+    "d": 10,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": "Grabbed"
+   },
+   {
+    "line": "Mags’s crew snuff their lamps and come at you from three sides.",
+    "who": "Mags’s crew",
+    "does": "snuff their lamps and come at you from three sides.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "Grebe hauls on the sluice wheel.",
+    "who": "Grebe",
+    "does": "hauls on the sluice wheel.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "clock",
+    "one": ""
+   }
+  ]
+ },
+ {
+  "id": "s-place-salt-pans",
+  "name": "The Salt Pans",
+  "ground": [
+   {
+    "name": "Brine Pans",
+    "text": "knee deep and slick, and every cut stings"
+   },
+   {
+    "name": "Boiling-Houses",
+    "text": "scalding steam and nowhere to step back"
+   },
+   {
+    "name": "Salt Crust",
+    "text": "you can’t hide a track on it"
+   },
+   {
+    "name": "Open Marsh",
+    "text": "easy to lose a pursuer in, and easy to get lost in"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The tallies",
+    "c": 4,
+    "tags": [
+     "Locked",
+     "Paperwork"
+    ],
+    "note": "the debts that keep every salter here"
+   },
+   {
+    "name": "Tonight’s load",
+    "c": 3,
+    "tags": [
+     "Heavy Load",
+     "Guarded"
+    ],
+    "note": "forty sacks bound for the city"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "the salt barge comes up the channel with the owner on it"
+  },
+  "tele": [
+   {
+    "line": "Two wardens wade in to drag you out of the brine.",
+    "who": "Two wardens",
+    "does": "wade in to drag you out of the brine.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": "Grabbed"
+   },
+   {
+    "line": "A pan boils over and the boiling-house fills with scalding steam.",
+    "who": "A pan",
+    "does": "boils over and the boiling-house fills with scalding steam.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "place",
+    "one": "Burning",
+    "place": "everyone in the boiling-house"
+   },
+   {
+    "line": "Harrow blows a whistle that carries all the way down the channel.",
+    "who": "Harrow",
+    "does": "blows a whistle that carries all the way down the channel.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "clock",
+    "one": ""
+   }
+  ]
+ },
+ {
+  "id": "s-place-turning-library",
+  "name": "The Turning Library",
+  "ground": [
+   {
+    "name": "Moving Shelves",
+    "text": "the aisles grind round and close, and people get split up"
+   },
+   {
+    "name": "Chained Books",
+    "text": "nothing leaves without a key"
+   },
+   {
+    "name": "Silence",
+    "text": "raise your voice and you’ll have the porter on you"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The book",
+    "c": 5,
+    "tags": [
+     "Hidden Away",
+     "Chained"
+    ],
+    "note": "the one the crew came for"
+   },
+   {
+    "name": "The catalogue",
+    "c": 4,
+    "tags": [
+     "Written in Code",
+     "Watched"
+    ],
+    "note": "where every book was last seen"
+   }
+  ],
+  "clock": {
+   "d": 10,
+   "what": "the closing bell, when the doors lock with whoever’s still inside"
+  },
+  "tele": [
+   {
+    "line": "The shelves grind shut between you and your friends.",
+    "who": "The shelves",
+    "does": "grind shut between you and your friends.",
+    "d": 10,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "place",
+    "one": "Pinned",
+    "place": "everyone in the aisle"
+   },
+   {
+    "line": "Shawe, without looking up: “That’s been out longer than the rules allow.”",
+    "who": "Shawe",
+    "does": "without looking up: “That’s been out longer than the rules allow.”",
+    "d": 10,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "The rival slips a book into his sleeve and heads for the door.",
+    "who": "The rival",
+    "does": "slips a book into his sleeve and heads for the door.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "stake",
+    "one": "",
+    "stake": "The book",
+    "tag": "The rival slips a book into his sleeve and heads for the door"
+   }
+  ]
+ },
+ {
+  "id": "s-place-hospice",
+  "name": "The Hospice in the Pass",
+  "ground": [
+   {
+    "name": "Blizzard",
+    "text": "step outside and you can’t see your own hand"
+   },
+   {
+    "name": "Deep Snow",
+    "text": "every step’s work"
+   },
+   {
+    "name": "The Bell",
+    "text": "somebody ought to go"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The bell on the road",
+    "c": 4,
+    "tags": [
+     "Far Away",
+     "Blizzard"
+    ],
+    "note": "bring in whoever’s out there before they freeze"
+   },
+   {
+    "name": "The deserter",
+    "c": 4,
+    "tags": [
+     "Hidden Away",
+     "Wanted By Others"
+    ],
+    "note": "Kasza wants him, and the crew might too"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "full dark, when nobody outside lives till morning"
+  },
+  "tele": [
+   {
+    "line": "Kasza, in the doorway: “Nobody leaves till I’ve seen every face.”",
+    "who": "Kasza",
+    "does": "in the doorway: “Nobody leaves till I’ve seen every face.”",
+    "d": 6,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "The dogs get up and stand between you and the door.",
+    "who": "The dogs",
+    "does": "get up and stand between you and the door.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "stake",
+    "one": "",
+    "stake": "The bell on the road",
+    "tag": "The dogs get up and stand between you and the door"
+   },
+   {
+    "line": "Snow slides off the roof onto whoever’s at the door.",
+    "who": "Snow",
+    "does": "slides off the roof onto whoever’s at the door.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "place",
+    "one": "Prone",
+    "place": "whoever’s at the door"
+   }
+  ]
+ },
+ {
+  "id": "s-place-menagerie",
+  "name": "The Menagerie",
+  "ground": [
+   {
+    "name": "The Cages",
+    "text": "open one and the problem’s somebody else’s"
+   },
+   {
+    "name": "The Aviary",
+    "text": "one door left open fills the garden with birds"
+   },
+   {
+    "name": "The Bear Pit",
+    "text": "a long drop, with a bear at the bottom"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "The grey wolf",
+    "c": 4,
+    "tags": [
+     "Locked",
+     "Guarded"
+    ],
+    "note": "buy it, free it or steal it"
+   },
+   {
+    "name": "Salk’s ledger",
+    "c": 4,
+    "tags": [
+     "Locked",
+     "Watched"
+    ],
+    "note": "in the summer house, and it shows where his partner’s money went"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "Salk’s guests come out for the show at the bear pit"
+  },
+  "tele": [
+   {
+    "line": "A handler cracks his whip at whoever’s too close to the cages.",
+    "who": "A handler",
+    "does": "cracks his whip at whoever’s too close to the cages.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "crew",
+    "one": "Disarmed"
+   },
+   {
+    "line": "The bear rears up and roars, and every animal in the garden answers.",
+    "who": "The bear",
+    "does": "rears up and roars, and every animal in the garden answers.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "clock",
+    "one": ""
+   },
+   {
+    "line": "Salk, from the terrace: “Ida, let the tiger out. Let’s see them run.”",
+    "who": "Salk",
+    "does": "from the terrace: “Ida, let the tiger out. Let’s see them run.”",
+    "d": 10,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "place",
+    "one": "Frightened",
+    "place": "everyone in the garden"
+   }
+  ]
+ },
+ {
+  "id": "s-place-mallorys-ferry",
+  "name": "Mallory’s Ferry",
+  "ground": [
+   {
+    "name": "Fog",
+    "text": "ten paces and the far bank’s gone"
+   },
+   {
+    "name": "The Cable",
+    "text": "cut it and the ferry goes wherever the river likes"
+   },
+   {
+    "name": "Deep Slow Water",
+    "text": "colder and deeper than it looks"
+   },
+   {
+    "name": "The Weir",
+    "text": "half a mile downriver, and you can hear it from the middle"
+   }
+  ],
+  "stakes": [
+   {
+    "name": "Across",
+    "c": 3,
+    "tags": [
+     "Someone Must Agree",
+     "Far Away"
+    ],
+    "note": "Cobb’s price, then a quarter mile of black water"
+   },
+   {
+    "name": "The ferry",
+    "c": 3,
+    "tags": [
+     "Guarded",
+     "Needs Two Hands"
+    ],
+    "note": "take it off Cobb and haul it yourselves"
+   }
+  ],
+  "clock": {
+   "d": 8,
+   "what": "the riders come out of the trees onto the landing"
+  },
+  "tele": [
+   {
+    "line": "Cobb plants himself in the ferry gate: “Toll first.”",
+    "who": "Cobb",
+    "does": "plants himself in the ferry gate: “Toll first.”",
+    "d": 8,
+    "root": "Mind",
+    "kind": "fear",
+    "aim": "crew",
+    "one": ""
+   },
+   {
+    "line": "Halfway over, the ferry lurches and the cable sings.",
+    "who": "Mallory’s Ferry",
+    "does": "Halfway over, the ferry lurches and the cable sings.",
+    "d": 6,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "place",
+    "one": "Staggered",
+    "place": "everyone on the ferry"
+   },
+   {
+    "line": "Horns on the road behind you, closer now.",
+    "who": "Horns",
+    "does": "on the road behind you, closer now.",
+    "d": 8,
+    "root": "Body",
+    "kind": "blow",
+    "aim": "clock",
+    "one": ""
+   }
+  ]
+ }
+]

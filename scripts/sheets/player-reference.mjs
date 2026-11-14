@@ -67,7 +67,6 @@ const PAGES = [
         { id: "s-qr-downtime" },
         { id: "study" },
         { id: "stakes-clocks-events", drop: ["Things that climb"] },
-        { id: "s-qr-chases" },
         { id: "s-qr-carry" },
         { id: "s-qr-summoning" },
       ] },

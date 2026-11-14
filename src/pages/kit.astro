@@ -66,7 +66,14 @@ const stepsSaid = (k) => `${k} ${k === 1 ? "step" : "steps"}`;
 // words for each.
 const KINDS = { house: "noble houses", traders: "merchant guilds", crooks: "street gangs", faith: "temples and orders", office: "crown offices", society: "secret societies", soldiers: "mercenaries", makers: "craft guilds", family: "family businesses", rebels: "rebels", keepers: "keepers of old things", old: "old things with human faces" };
 const kindsOf = (c) => (c.kinds.length ? c.kinds.map((k) => KINDS[k] ?? k).join(", ").replace(/^./, (x) => x.toUpperCase()) : "Only a whole world's, or the GM's pick");
-const brine = book.companion.worlds.boards.find((b) => b.id === "brinewake");
+// Four seals on a board. The book's had no boards to bring in since the 14 Nov
+// cut, so these four are made up for the kit.
+const brine = { cards: [
+  { name: "A noble house", seal: { c: "crown", f: "bend" } },
+  { name: "A merchants' guild", seal: { c: "anchor", f: "pale" } },
+  { name: "An old order", seal: { c: "bell", f: "plain" } },
+  { name: "The ones who want out", seal: { c: "chain", f: "quarterly" } },
+] };
 const turn = book.companion.worlds.turn;
 const outcomeOf = (name) => turn.outcomes.find((o) => o.name.toLowerCase() === name)?.text ?? "";
 const doesOf = (re) => turn.does.find((x) => re.test(x.text))?.text ?? "";
@@ -382,7 +389,7 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
           ))}
         </div>
         <h3>On a board</h3>
-        <p class="note">{brine.name}’s four as the book has them, and a faction the crew hasn’t met yet.</p>
+        <p class="note">Four factions on a board, and a faction the crew hasn’t met yet.</p>
         <div class="seals board">
           {brine.cards.map((c) => (
             <figure><Fragment set:html={seal(c.seal, { size: "lg", label: c.name })} /><figcaption><b>{c.name}</b></figcaption></figure>

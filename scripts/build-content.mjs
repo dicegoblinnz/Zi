@@ -639,8 +639,12 @@ function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, wa
   if (build.what.length !== 12 || build.how.length !== 12) warn("expected Building a Faction's two d12 tables (what it is and wants, how it works and its secret)");
   if (build.agendas.length !== 12 || build.agendas.some((a) => ![2, 4, 6, 8, 10, 12].includes(a.die))) warn("expected the twelve agendas, each with the die it starts at, in Agendas");
 
-  // The Steeplands: its board's a table, and the Estate's whole card is in Factions.
+  // The boards to bring in. The book's had none since the 14 Nov cut (the
+  // Steeplands and Frames are out with the rest of the world part), so each
+  // of these only reads what's there, and boards stays empty till they're back.
   const boards = [];
+  // The Steeplands: its board's a table, and the Estate's whole card is in Factions.
+  if (steepDoc) {
   const steepTable = tablesOf(sectionOf(steepDoc.body, "the-board"))[0];
   const steep = [];
   for (const r of steepTable?.rows ?? []) {
@@ -658,9 +662,10 @@ function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, wa
   if (steep.length !== 4) warn(`expected the Steeplands' four great powers on its board, found ${steep.length}`);
   const opening = steepDoc.body.replace(/^:::quote[\s\S]*?^:::$/m, "").split(/\n\s*\n/).map((p) => p.trim()).find((p) => p && !p.startsWith("#"));
   boards.push({ id: "steeplands", name: "The Steeplands", kind: "A world in two pages", pitch: curly(firstSentence(plain(opening ?? ""))), link: `${pageFor.get(steepDoc.path)}#the-board`, cards: steep });
+  }
 
   // Every frame's board.
-  for (const m of framesDoc.body.matchAll(/^## (.+?) \{#(s-frame-[a-z-]+)\}$/gm)) {
+  for (const m of (framesDoc?.body ?? "").matchAll(/^## (.+?) \{#(s-frame-[a-z-]+)\}$/gm)) {
     if (m[2] === "s-frame-own") continue;
     const sec = sectionOf(framesDoc.body, m[2]);
     const pitch = sec.match(/### The pitch[^\n]*\n+:::example[^\n]*\n([^\n]+)/)?.[1] ?? "";
@@ -670,7 +675,7 @@ function worldsFrom({ factionsDoc, steepDoc, framesDoc, assetsDoc }, pageFor, wa
     if (!pitch) warn(`can't find ${m[1]}'s pitch`);
     boards.push({ id: m[2].replace(/^s-frame-/, ""), name: curly(m[1]), kind: "A frame", pitch: curly(firstSentence(plain(pitch).replace(/^["“]/, ""))), link: `${pageFor.get(framesDoc.path)}#${m[2]}`, cards });
   }
-  if (boards.length < 6) warn(`expected the Steeplands and five frames to bring in, found ${boards.length}`);
+  if (steepDoc && framesDoc && boards.length < 6) warn(`expected the Steeplands and five frames to bring in, found ${boards.length}`);
 
   // Each card's seal, from content/world-tables/seals.yaml, put on after its
   // hash so a seal's never news to a GM who's brought the card in already.
@@ -838,9 +843,10 @@ function pagesFrom({ placesDoc, worldDoc, threatDoc, bestiaryDoc, tagsDoc }, pag
   if (what.length !== 20 || !what[19]?.twice || what.slice(0, 19).some((w) => !w.name || !w.ch || !w.tags.length)) warn("expected the d20 table of what a threat is, each with its Challenge and tags, ending with Roll twice");
   for (const k of ["comes", "keeps", "drives"]) if (tables[k].length !== 12) warn(`expected the d12 table of tags for ${k} in Its Tags`);
 
-  // The Bestiary: every threat, by the part of the chapter it's in.
+  // The Bestiary: every threat, by the part of the chapter it's in. The
+  // book's had no Bestiary since the 14 Nov cut, so this is empty till it's back.
   const threats = [];
-  for (const sec of bestiaryDoc.body.split(/^(?=## )/m)) {
+  for (const sec of bestiaryDoc ? bestiaryDoc.body.split(/^(?=## )/m) : []) {
     const head = sec.match(/^## ([^:{]+?)(?::[^{]*)? \{#([a-z0-9-]+)\}/);
     const group = curly(head?.[1] ?? "");
     for (const m of sec.matchAll(/^:::threat\[([^\]]+)\]\n([\s\S]*?)^:::$/gm)) {
@@ -867,7 +873,7 @@ function pagesFrom({ placesDoc, worldDoc, threatDoc, bestiaryDoc, tagsDoc }, pag
       threats.push(card);
     }
   }
-  if (threats.length < 30) warn(`expected the Bestiary's threats, found ${threats.length}`);
+  if (bestiaryDoc && threats.length < 30) warn(`expected the Bestiary's threats, found ${threats.length}`);
   const threatNamed = (n) => threats.find((t) => keyOf(t.name) === keyOf(n) || keyOf(t.name) === keyOf(`The ${n}`)) ?? null;
 
   // Twenty Places, with the named people in each one's Who's here.
@@ -876,7 +882,7 @@ function pagesFrom({ placesDoc, worldDoc, threatDoc, bestiaryDoc, tagsDoc }, pag
   // someone the Bestiary has (Challenge 3, the Bestiary's Debt Collector).
   const PERSON = /^\*([^*]+)\*(?:,\s*(.+?)|\s+(of\s.+?)|\s+and\s+(.+?))?\s*\(Challenge (\d)(?::\s*(.+?)|,\s*the Bestiary['’]s ([^)]+))\)$/;
   const places = [];
-  for (const m of placesDoc.body.matchAll(/^## (.+?) \{#(s-place-[a-z-]+)\}\s*\n+:::place\n([\s\S]*?)^:::$/gm)) {
+  for (const m of (placesDoc?.body ?? "").matchAll(/^## (.+?) \{#(s-place-[a-z-]+)\}\s*\n+:::place\n([\s\S]*?)^:::$/gm)) {
     const name = curly(m[1]);
     const paras = m[3].split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
     const first = (paras[0] ?? "").match(/^(.+?) \(Challenge (\d)\)\.$/);
@@ -917,11 +923,11 @@ function pagesFrom({ placesDoc, worldDoc, threatDoc, bestiaryDoc, tagsDoc }, pag
     card.link = `${pageFor.get(placesDoc.path)}#${m[2]}`;
     places.push(card);
   }
-  if (places.length !== 20) warn(`expected Twenty Places' twenty places, found ${places.length}`);
+  if (placesDoc && places.length !== 20) warn(`expected Twenty Places' twenty places, found ${places.length}`);
 
   return {
     v: 1, places, threats, tables, tags,
-    links: { places: pageFor.get(placesDoc.path), bestiary: pageFor.get(bestiaryDoc.path), world: pageFor.get(worldDoc.path), threat: `${pageFor.get(threatDoc.path)}#building-a-threat`, tags: pageFor.get(tagsDoc.path) },
+    links: { places: placesDoc ? pageFor.get(placesDoc.path) : null, bestiary: bestiaryDoc ? pageFor.get(bestiaryDoc.path) : null, world: pageFor.get(worldDoc.path), threat: `${pageFor.get(threatDoc.path)}#building-a-threat`, tags: pageFor.get(tagsDoc.path) },
   };
 }
 
@@ -1088,15 +1094,16 @@ const conditions = rootsConditions;
 const partyDoc = docWith("{#s-party-faction}");
 const party = partyDoc ? partyFrom(partyDoc, (msg) => companionWarn(`party sheet: ${msg}`)) : null;
 if (!party) companionWarn("can't find The Party Sheet for the party sheet");
-// The twenty places, for the live table's scene.
+// The book's places, for the live table's scene. The book's had none since
+// the 14 Nov cut (Twenty Places is out with the rest of the world part), so
+// this is empty till places come back, and the scene's from her own pages.
 const placesDoc = docWith("{#s-place-copper-baths}");
 const places = placesDoc ? placesFrom(placesDoc, (msg) => companionWarn(`places: ${msg}`)) : [];
-if (!placesDoc) companionWarn("can't find the Twenty Places for the live table's scene");
 // The faction board's official content: the boards to bring in, Building a
 // Faction's tables and Appendix B's assets.
 const worldDocs = { factionsDoc: docWith("{#s-faction-build}"), steepDoc: docWith("{#the-four-great-powers}"), framesDoc: docWith("{#s-frame-brinewake}"), assetsDoc: docWith("{#faction-strength}") };
-const worlds = Object.values(worldDocs).every(Boolean) ? worldsFrom(worldDocs, pageFor, (msg) => companionWarn(`board: ${msg}`)) : null;
-if (!worlds) companionWarn("can't find Factions, the Steeplands, Frames or Appendix B's assets for the faction board");
+const worlds = worldDocs.factionsDoc && worldDocs.assetsDoc ? worldsFrom(worldDocs, pageFor, (msg) => companionWarn(`board: ${msg}`)) : null;
+if (!worlds) companionWarn("can't find Factions or Appendix B's assets for the faction board");
 // The crew's twelve assets are in Appendix B too, worded for the crew, so
 // each one adds Power exactly when Appendix B's does.
 if (party && worlds) {
@@ -1110,8 +1117,8 @@ if (party && worlds) {
 // Places and people: Twenty Places, the Bestiary, and the tables to make
 // your own, in their own file for the World screen.
 const pageDocs = { placesDoc, worldDoc: docWith("{#s-world-places}"), threatDoc: docWith("{#its-tags}"), bestiaryDoc: docWith(":::threat[The Watchman]"), tagsDoc: docWith("{#what-drives-it}") };
-const worldBook = Object.values(pageDocs).every(Boolean) ? pagesFrom(pageDocs, pageFor, (msg) => companionWarn(`places and people: ${msg}`)) : null;
-if (!worldBook) companionWarn("can't find Twenty Places, Building Your World, the Threat Builder, the Bestiary or Appendix B's tags for places and people");
+const worldBook = pageDocs.worldDoc && pageDocs.threatDoc && pageDocs.tagsDoc ? pagesFrom(pageDocs, pageFor, (msg) => companionWarn(`places and people: ${msg}`)) : null;
+if (!worldBook) companionWarn("can't find Building Your World, the Threat Builder or Appendix B's tags for places and people");
 
 // What the chapters draw (scripts/book-blocks.mjs) needs: what each tag in
 // Appendix B does and where it is, each place's number and line on Twenty
@@ -1321,10 +1328,29 @@ writeFileSync(join(ROOT, "src", "generated", "worlds.json"), JSON.stringify(whol
 // the extra actions bought with Aura by them till it checks their price
 // instead (notes/stacking-plan.md, prompt 8).
 writeFileSync(join(ROOT, "src", "generated", "crew-archetypes.json"), JSON.stringify(Object.fromEntries(crew.map((c) => [c.id, c.archetypes.map((a) => a.name)]))));
-writeFileSync(join(ROOT, "src", "generated", "worlds-index.json"), JSON.stringify(Object.values(wholeWorlds).flat().map((w) => ({
-  id: w.id, universe: w.universe, name: w.name, title: w.title, when: w.when, own: w.own, whose: w.whose, notices: w.notices, recipe: w.recipe,
-  factions: w.factions.length, places: w.places.length, people: w.people.length, map: Boolean(w.map), lines: w.history.length,
-}))));
+// A world taken off the site (content/worlds/retired.yaml, 14 Nov) stays in
+// the index as retired, with whose it is and its notices and nothing else,
+// so a campaign that brought it in before still shows them and the Worker
+// still keeps its cards Mo's, while nothing offers it or fetches its file.
+let retired = [];
+try {
+  const path = join(worldsDir, "retired.yaml");
+  if (existsSync(path)) retired = parseYaml(readFileSync(path, "utf8")) ?? [];
+} catch (err) {
+  companionWarn(`worlds: can't read content/worlds/retired.yaml: ${String(err?.message ?? err).split("\n")[0]}`);
+}
+for (const r of retired) if (!r?.id || !r.universe || !r.name || !r.title || (!r.own && (!r.whose || !r.notices?.length))) companionWarn(`worlds: retired.yaml's ${r?.id ?? "?"} needs an id, a universe, a name, a title, and whose it is with its notices unless it's own`);
+const builtIds = new Set(Object.values(wholeWorlds).flat().map((w) => w.id));
+writeFileSync(join(ROOT, "src", "generated", "worlds-index.json"), JSON.stringify([
+  ...Object.values(wholeWorlds).flat().map((w) => ({
+    id: w.id, universe: w.universe, name: w.name, title: w.title, when: w.when, own: w.own, whose: w.whose, notices: w.notices, recipe: w.recipe,
+    factions: w.factions.length, places: w.places.length, people: w.people.length, map: Boolean(w.map), lines: w.history.length,
+  })),
+  ...retired.filter((r) => r?.id && !builtIds.has(r.id)).map((r) => ({
+    id: r.id, universe: r.universe, name: r.name, title: curly(r.title), when: "", own: r.own === true, whose: r.own ? "" : curly(r.whose), notices: r.own ? [] : r.notices.map((n) => curly(n)), recipe: null,
+    factions: 0, places: 0, people: 0, map: false, lines: 0, retired: true,
+  })),
+]));
 
 const outDir = join(ROOT, "src", "generated");
 mkdirSync(outDir, { recursive: true });

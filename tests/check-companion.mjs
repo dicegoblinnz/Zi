@@ -213,13 +213,13 @@
 //    up to on the contents, pop-ups from a link to another chapter and one in
 //    the same chapter, Back inside a pop-up, Esc and a drag putting a sheet
 //    away, the first section's Before and the last's Next, and Carry on
-//    reading on the chapter and the rules page. Twenty Places: a card for
-//    every place, Roll a d20, a place's tabs (tapped and keyed), its Secret
-//    sealed, and a tag saying what it does. Then the deck, its pop-ups and
+//    reading on the chapter and the rules page. A section opened by its
+//    address (Twenty Places' cards, a place's tabs and a tag saying what it
+//    does went with the world part on 14 Nov). Then the deck, its pop-ups and
 //    Read more offline, nothing moving under reduce-motion and a section and
 //    a sheet sliding in with motion on, 44px tap targets, and axe in both
-//    themes on the deck, a section, its contents, a pop-up, a place's tabs,
-//    threats and the crew's sheets.
+//    themes on the deck, a section, its contents, a pop-up and the crew's
+//    sheets.
 import { createServer } from "node:http";
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -4128,46 +4128,12 @@ if (part("10")) {
     await context.close();
   }
 
-  // A place: its number, its dice and its parts as tabs, a tag that says
-  // what it does, and Roll a d20 on Twenty Places.
-  const places = chapterOf("twenty-places");
-  await page.goto(`${BASE}/rules/twenty-places/`);
-  await page.waitForSelector(".hub-place");
-  same(await page.locator(".hub-place").count(), 20, "Twenty Places has a card for every place");
-  await page.evaluate(() => (Math.random = () => 0.31));
-  await page.click(".hub-d20");
-  await page.waitForSelector(".hub-rolled.on a", { timeout: 5000 }).catch(() => note("Roll a d20 never landed"));
-  const rolled = places.hub.rows.find((r) => r.place?.n === 7);
-  same([await text(page, ".hub-rolled .n"), await text(page, ".hub-rolled a"), await page.getAttribute(".hub-place.is-rolled", "data-s")], ["7", rolled.title, rolled.id], "Roll a d20 picks out the place");
-  await shot(page, "places-rolled-dark");
-  await page.click(".hub-rolled a");
-  await opened(page, rolled.id);
-  await page.goto(`${BASE}/rules/twenty-places/#s-place-copper-baths`);
-  await opened(page, "s-place-copper-baths");
-  const tabs = () => page.evaluate(() => {
-    const pl = document.querySelector(".rd-track > section.is-on .pl");
-    return { tab: pl.querySelector(".pl-tab[aria-selected='true']").dataset.tab, panels: [...pl.querySelectorAll(".pl-panel")].filter((p) => p.checkVisibility()).map((p) => p.dataset.tab) };
-  });
-  same([await text(page, ".rd-count"), await text(page, ".is-on .pl-n"), await tabs()], ["1 of 21", "1", { tab: "scene", panels: ["scene"] }], "the Copper Baths opens on its scene, number 1");
-  await shot(page, "place-scene-dark");
-  await page.click('.is-on .pl-tab[data-tab="tele"]');
-  same(await tabs(), { tab: "tele", panels: ["tele"] }, "the Telegraphs tab");
-  same(await page.locator(".is-on .pl-panel.on .tele").count(), 3, "the Copper Baths' three telegraphs, as cards");
-  await shot(page, "place-telegraphs-dark");
-  await page.keyboard.press("ArrowRight");
-  same([await tabs(), await page.evaluate(() => document.activeElement?.dataset.tab)], [{ tab: "prep", panels: ["prep"] }, "prep"], "the right arrow on the tabs goes to Prep");
-  await page.click('.is-on .pl-tab[data-tab="secret"]');
-  same(await page.$eval(".is-on .pl-panel.on details.seal", (d) => d.open), false, "the Secret's sealed till it's opened");
-  await page.click(".is-on .pl-panel.on details.seal > summary");
-  has(await text(page, ".is-on .pl-panel.on .secret"), "Every Word Is Sold", "the Secret opens in a tap");
-  await page.click('.is-on .pl-tab[data-tab="scene"]');
-  const tag = await page.$eval(".is-on .pl-panel.on button.tag[data-tag]", (b) => b.dataset.tag);
-  const tagged = JSON.parse(readFileSync("public/world-book.json", "utf8")).tags.find((t) => t.name === tag);
-  await page.click(`.is-on .pl-panel.on button.tag[data-tag="${tag}"]`);
-  same([await page.getAttribute(`.is-on .pl-panel.on button.tag[data-tag="${tag}"]`, "aria-expanded"), (await text(page, ".is-on .tagx")).includes(tagged?.does?.slice(0, 30) ?? "?")], ["true", true], `${tag} says what it does`);
-  await shot(page, "place-tag-dark");
-  await page.click(`.is-on .pl-panel.on button.tag[data-tag="${tag}"]`);
-  same(await page.locator(".is-on .tagx").count(), 0, "tapped again, it's put away");
+  // A section opened by its address, then Contents. The book's places and
+  // threats, drawn as the game's pieces (a place's tabs, Roll a d20 on Twenty
+  // Places, a tag that says what it does), went with the world part in the
+  // 14 Nov cut, and their checks come back with them.
+  await page.goto(`${BASE}/rules/conflict/#s-movement`);
+  await opened(page, "s-movement");
   await page.click(".rd-back");
   await contents(page);
   same((await view(page)).hash, "", "Contents from a section opened by its address");
@@ -4278,23 +4244,6 @@ if (part("10")) {
     await page.waitForSelector(".hub-row");
     await axe("a chapter's contents");
     await shot(page, `chapter-contents-${theme}`);
-    await page.goto(`${BASE}/rules/twenty-places/`);
-    await page.waitForSelector(".hub-place");
-    await axe("Twenty Places' contents");
-    await shot(page, `places-${theme}`);
-    await page.goto(`${BASE}/rules/twenty-places/#s-place-copper-baths`);
-    await page.waitForSelector(".rd-track > section.is-on .pl");
-    await page.click(".is-on .pl-panel.on button.tag[data-tag]");
-    await axe("a place, with a tag open");
-    await shot(page, `place-scene-${theme}`);
-    for (const t of ["tele", "prep", "secret"]) {
-      await page.click(`.is-on .pl-tab[data-tab="${t}"]`);
-      await axe(`a place's ${t} tab`);
-    }
-    await page.goto(`${BASE}/rules/the-bestiary/#${chapterOf("the-bestiary").hub.rows[0].id}`);
-    await page.waitForSelector(".rd-track > section.is-on .box-threat");
-    await axe("a page of threats");
-    await shot(page, `threats-${theme}`);
     await page.goto(`${BASE}/rules/title-ideas-and-the-crew/#s-pregens`);
     await page.waitForSelector(".rd-track > section.is-on .box-sheet");
     await axe("the crew's sheets");

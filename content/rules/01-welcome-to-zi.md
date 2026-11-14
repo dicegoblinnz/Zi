@@ -58,13 +58,13 @@ At the end of the round the dog's d8 rolls a 7 against Bram's Stamina, a d12, wh
 
 This book is the whole game. You don't need anything else.
 
-There are thirty chapters. The first thirteen teach you to play. The next six are about playing together over a campaign. The next five are for the GM. The last six are the world: how to build your own, a ready-made one called the Steeplands, five frames to choose a different world from, twenty places ready to drop in, a threat builder and a bestiary. After that come the appendices, a glossary and an index.
+There are twenty chapters. The first eight teach you to play. The next six are about playing together over a campaign. The last six are for the GM: running the game, then her tools for building threats, the world around the crew and its factions, the Oracle, and what to do when something's not working. After that come the appendices, a glossary and an index.
 
-There are worked examples all the way through: a fight on the page and a round on the grid, a social duel, a chase, a journey, a dig under a burned library, a murder, a week of downtime, one character's whole career, a crew's whole career, and a four-session campaign. If you want to play tonight, *Title Ideas and the Crew* has twenty-nine Title ideas to build from in ten minutes, roles and schools of magic, each with the archetypes it suits, and six ready-made characters. All seventeen archetypes are in *The Archetypes*.
+There are worked examples all the way through: a character built from scratch, a whole fight, a week of downtime, a threat built start to finish, one character's whole career and a crew's whole career. If you want to play tonight, *Title Ideas and the Crew* has twenty-nine Title ideas to build from in ten minutes, roles and schools of magic, each with the archetypes it suits, and six ready-made characters. All eighteen archetypes are in *The Archetypes*.
 
 ## Where to start {#where-to-start}
 
-**If you're a player**, read *The Core*, *Building Your Character* and *Conflict*, plus your own archetypes in *The Archetypes* and the *Movement and Range* section of *Tactical Play*. That's enough to sit down and play tonight. Come back for the rest of *Tactical Play* when you want to get good at it.
+**If you're a player**, read *The Core*, *Building Your Character* and *Conflict*, plus your own archetypes in *The Archetypes*. That's enough to sit down and play tonight.
 
 **If you're the GM**, read the lot, in order. Everyone skips *The Party Sheet*, so don't. *Running the Game* is the chapter you'll keep coming back to.
 

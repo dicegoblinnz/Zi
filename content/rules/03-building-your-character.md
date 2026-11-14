@@ -305,7 +305,7 @@ A weapon's a plain item, so it's 1 more when you fight with it, like anything el
 | Crossbow | Long, Piercing, Reload, Two-Handed |
 | Improvised weapon | Whatever the fiction gives it. A chair leg is a club, and a broken bottle is a knife that isn't Concealed. |
 
-How far a bow or a thrown weapon reaches is the story's call, and the properties say what kind of distance it likes. Write them in brackets after the weapon. If your world has pistols or stranger things, build them the same way: a pistol is *Ranged, Piercing, Reload*, and everyone nearby hears it go off. There's more on using all of this in [Tactical Play](#s-weapons-tactics).
+How far a bow or a thrown weapon reaches is the story's call, and the properties say what kind of distance it likes. Write them in brackets after the weapon. If your world has pistols or stranger things, build them the same way: a pistol is *Ranged, Piercing, Reload*, and everyone nearby hears it go off. There's more on using all of this in [Conflict](#s-weapons-tactics).
 
 ### The item list {#the-item-list}
 
@@ -330,7 +330,7 @@ Each of these is a utility item, and you cross it off once it's used. Use one in
 | **Antidote** | Break *Poisoned*, no roll. Nothing can poison you for the rest of the scene. |
 | **Acid vial** | Strip one protective tag (*Armoured*, *Warded*, *Fortified*) from a threat, or one tick off it if it's got a multiplier. No roll. |
 | **Smoke bomb** | A burst of smoke one square out from where it lands, for one round. Anything aimed into it or out of it is one step less. |
-| **Caltrops** | Cover two squares. Anyone who crosses them is *Staggered d6*. In a chase, the Pursuer steps down one. |
+| **Caltrops** | Cover two squares. Anyone who crosses them is *Staggered d6*. |
 | **Purse of gold** | +1 step to one social roll, or buy something ordinary. About a month's wages. |
 | **Silver mirror** | Reveal one illusion or hidden thing in sight. |
 | **Salt packet** | Ward a threshold. Supernatural things can't cross for one scene. |

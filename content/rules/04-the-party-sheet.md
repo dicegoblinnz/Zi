@@ -43,7 +43,7 @@ Most dice in Zi'Dara count down. A scene clock, a stake clock, an event, Supplie
 
 ## The Party Goal {#s-goal}
 
-The Goal is what the crew's after this arc, like *clear Dorrie's name*, *free the Bound* or *own the Low Market*. It starts at **d2** and climbs.
+The Goal is what the crew's after this arc, like *clear Dorrie's name*, *free the souls in the paintings* or *own the Low Market*. It starts at **d2** and climbs.
 
 -   **It climbs** when someone chases it and wins: an action in a scene when the GM says the Goal's within reach, or in downtime, the crew's action or a personal slot someone puts toward it.
 -   **It steps back down** one when a consequence lands on it, or when the crew takes a real setback. It never goes below d2.
@@ -63,7 +63,7 @@ When the Goal climbs past d12, the crew's done it, and they get whatever it says
 
 -   *Rule the city* is a whole campaign. *Own the Low Market* is one arc of it.
 -   *Keep the harbour safe* never ends. *Clear Dorrie's name* is done the day she wins in court.
--   *Bring peace to the Steeplands, with treaties nobody can break* is every city at once, and it's meant to last forever. *Get the Harbour Guild and the Vane Estate to sign a truce* fits in an arc, and whether the truce holds is the next story.
+-   *Bring peace to the whole country, with treaties nobody can break* is every city at once, and it's meant to last forever. *Get the Harbour Guild and the Vane Estate to sign a truce* fits in an arc, and whether the truce holds is the next story.
 
 A Goal that's too big is usually where the campaign's heading. Say it out loud so the GM can build toward it, and make its first piece the Goal. If the table writes one that's too big or too vague, the GM says so, and you work it out together before it goes on the party sheet.
 

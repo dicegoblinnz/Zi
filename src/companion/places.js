@@ -252,12 +252,19 @@ export function makePlaces(w) {
       const list = pages.length ? `<ul class="wp-toks">${pages.map((p) => token(id, p, gm)).join("")}</ul>` : "";
       const lead = !gm ? ""
         : pages.length ? `<p class="cc-small wb-sum">${plural(pages.length, kind === "place" ? "place" : "person", kind === "place" ? "places" : "people")}, ${shownN ? `${shownN} shown to the crew` : "none shown to the crew yet"}.</p>`
-        : `<p class="cc-small">${kind === "place" ? "No places yet." : "Nobody yet."} ${tip(`wp-none-${kind}`, `${kind === "place" ? "Bring one in from Twenty Places, or write your own." : "Bring in a place and its people come with it, or bring in a threat from the Bestiary, or write someone of your own."} Nothing shows on your players’ phones till you show it to them.`, kind === "place" ? "Putting places in" : "Putting people in")}</p>`;
-      const adds = gm ? `<div class="cc-folds wb-adds">${kind === "place" ? bringPlaces(id, doc) + newPlace() : bringThreats(id, doc) + newPerson()}</div>` : "";
+        : `<p class="cc-small">${kind === "place" ? "No places yet." : "Nobody yet."} ${tip(`wp-none-${kind}`, `${kind === "place" ? (bookHas("places") ? "Bring one in from Twenty Places, or write your own." : "Write your own.") : bookHas("places") || bookHas("threats") ? "Bring in a place and its people come with it, or bring in a threat from the Bestiary, or write someone of your own." : "Write someone of your own."} Nothing shows on your players’ phones till you show it to them.`, kind === "place" ? "Putting places in" : "Putting people in")}</p>`;
+      const adds = gm ? `<div class="cc-folds wb-adds">${kind === "place" ? (bookHas("places") ? bringPlaces(id, doc) : "") + newPlace() : (bookHas("threats") ? bringThreats(id, doc) : "") + newPerson()}</div>` : "";
       out.push(`<section class="cc-sec wp-sec" data-wb="${esc(id)}" aria-labelledby="wp-h-${kind}"><h2 id="wp-h-${kind}">${title}</h2>${lead}${list}${adds}</section>`);
     }
     if (find && many) requestAnimationFrame(() => filter(find));
     return out.join("");
+  }
+
+  // Whether the book has any places or threats to bring in. It's had none
+  // since the 14 Nov cut (Twenty Places and the Bestiary are out with the rest
+  // of the world part), so those folds stay away till they're back.
+  function bookHas(what) {
+    return Boolean(BOOK?.[what]?.length);
   }
 
   function waitingBook() {

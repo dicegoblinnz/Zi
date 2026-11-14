@@ -90,7 +90,7 @@ Magic in Zi'Dara is a craft, and there's no caste or class of wizards, just peop
 
 **The Book-Bound** learned it from reading, and Isolde's one of them. **The Quiet Orders** are small religious traditions that do one or two things very well and nothing else. **The Practical Crafters** are the alchemists, ward-makers and sigil-carvers. **The Born** could always do it and never knew why. **The Desperate** can be anyone, once, when they need something enough.
 
-How magic sits in society is up to your world. In the Steeplands it sits quietly: most people don't believe rituals are real, and the ones who do keep their voices down. Decide it in [Session Zero](#session-zero), because it decides what happens when the crew uses magic in the street.
+How magic sits in society is up to your world. It can sit quietly, where most people don't believe rituals are real and the ones who do keep their voices down. Decide it in [Session Zero](#session-zero), because it decides what happens when the crew uses magic in the street.
 
 ## Summoning {#s-summoning}
 

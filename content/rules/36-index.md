@@ -4,7 +4,7 @@ id: index
 slug: the-index
 order: 36
 part: "Appendices & Index"
-partNumber: "Part V"
+partNumber: "Part IV"
 source: 2026-10-02 rulebook
 updated: 2026-11-14
 ---
@@ -18,7 +18,6 @@ updated: 2026-11-14
 -   **Advantage** — [Intents](#s-intents)
 -   **Aftermath** — [The aftermath](#s-aftermath)
 -   **Agenda** — [What a Faction Is](#s-faction-board), [Agendas](#s-agendas)
--   **Alarm** — [The alarm](#s-alarm)
 -   **Animal tags** — [Shifter](#a-shifter)
 -   **Answering a telegraph** — [Answering](#s-answering)
 -   **Archetypes** — [The Archetypes](#archetypes), [How Archetypes Work](#s-how-archetypes), [Picking Your Archetypes](#s-picking-archetypes), [Step 2: Archetypes](#s-step-archetypes), [Archetypes and Study at the Table](#s-gm-area)
@@ -28,7 +27,7 @@ updated: 2026-11-14
 -   **Aspiration** — [Aspiration](#s-aspiration), [A good Aspiration](#s-good-aspiration)
 -   **Assets, a faction's** — [Resources and assets](#s-wealth), [Crew assets](#s-crew-tags), [Assets to borrow from](#faction-strength)
 -   **Attunement** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
--   **Aura** — [Aura](#s-aura), [Aura and Your Tracks](#s-aura-tactics)
+-   **Aura** — [Aura](#s-aura)
 -   **Awakened** — [Attunement](#s-attunement)
 -   **Awakenings** — [Attunement](#s-attunement), [How to write one](#how-to-write-one)
 
@@ -57,7 +56,6 @@ updated: 2026-11-14
 -   **Catch** — [Catches and Trouble](#s-trouble), [Attunement](#s-attunement), [When a Track Runs Out](#s-blaze), [Catches and Resolve at the Table](#s-catches-gm)
 -   **Challenge** — [Threats](#s-challenges)
 -   **Character sheet** — [Appendix A](#s-sheet-character)
--   **Chase** — [Chases](#chases)
 -   **Check-ins** — [Check-Ins](#s-check-ins)
 -   **Climbing dice** — [Things That Climb](#s-climb)
 -   **Clock** — [Stakes, Clocks and Events](#s-stakes)
@@ -75,7 +73,7 @@ updated: 2026-11-14
 
 -   **Death** — [Death](#s-death), [When a Track Runs Out](#s-blaze)
 -   **Defence** — [When It Lands](#s-defending)
--   **Defend** — [Defend](#s-defend), [Answer, Defend, Intercept or Let It Ride](#s-answer-or-ride), [Guardian](#a-guardian)
+-   **Defend** — [Defend](#s-defend), [Guardian](#a-guardian)
 -   **Downtime** — [Downtime](#downtime)
 -   **Downtime rolls** — [Rolling in downtime](#s-downtime-rolls)
 
@@ -86,7 +84,6 @@ updated: 2026-11-14
 -   **Equipment** — [What You Carry](#s-carrying)
 -   **Event** — [Stakes, Clocks and Events](#s-stakes)
 -   **Exploding dice** — [Warrior](#a-warrior)
--   **Exploring** — [Exploring](#exploring)
 -   **Exposed** — [Conditions to start with](#s-conditions-list), [Vulnerabilities](#s-vulnerable)
 -   **Extra actions** — [Extra actions](#s-extra-actions)
 -   **Extra resources** — [Resources and assets](#s-wealth), [Extra resources](#s-crew-wealth)
@@ -102,12 +99,11 @@ updated: 2026-11-14
 -   **First session** — [Session Zero](#session-zero)
 -   **Foresight** — [Oracle](#a-oracle)
 -   **Forms** — [Unique mechanics](#s-unique-threats)
--   **Frames** — [Frames](#frames)
 
 ## G {#g}
 
 -   **Gambler** — [Gambler](#a-gambler)
--   **Glossary** — [Appendix F](#appendix-glossary)
+-   **Glossary** — [Appendix E](#appendix-glossary)
 -   **GM moves** — [When They Look at You](#s-gm-moves)
 -   **Goal, party** — [The Party Goal](#s-goal), [A good Goal](#s-good-goal)
 -   **Going beyond** — [Going Beyond](#s-going-beyond)
@@ -134,14 +130,12 @@ updated: 2026-11-14
 -   **Intent** — [Intents](#s-intents)
 -   **Intercept** — [Intercept](#s-intercept), [Guardian](#a-guardian)
 -   **Introducing a truth** — [Oracle](#a-oracle), [Studying Something](#s-study)
--   **Investigating** — [Investigating](#investigating)
 -   **Items** — [Items](#s-items), [What You Carry](#s-carrying)
 -   **Items, attuned** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
 
 ## J {#j}
 
 -   **Joining a crew** — [New Characters](#s-new-character)
--   **Journey** — [Travelling](#travelling)
 
 ## K {#k}
 
@@ -152,8 +146,7 @@ updated: 2026-11-14
 -   **Layered** — [Tags are its health](#s-layered), [Unique mechanics](#s-unique-threats), [Tag Reference](#appendix-tags)
 -   **Leader** — [Leader](#a-leader)
 -   **Leading** — [Leader](#a-leader)
--   **Leg** — [A Leg on the Road](#s-legs)
--   **Let it ride** — [When It Lands](#s-defending), [Answer, Defend, Intercept or Let It Ride](#s-answer-or-ride)
+-   **Let it ride** — [When It Lands](#s-defending)
 -   **Letting trouble bite** — [Catches and Trouble](#s-trouble), [Aura](#s-aura)
 -   **Levers** — [Appendix C](#appendix-levers)
 -   **Likely and unlikely** — [How Likely Is It?](#s-oracle-odds)
@@ -180,7 +173,7 @@ updated: 2026-11-14
 
 ## O {#o}
 
--   **Opening** — [What a Win Does](#s-win), [Tags Are the Battlefield](#s-tags-battlefield)
+-   **Opening** — [What a Win Does](#s-win)
 -   **Oracle (archetype)** — [Oracle](#a-oracle)
 -   **Oracle odds** — [How Likely Is It?](#s-oracle-odds)
 -   **Oracle, The** — [The Oracle](#oracle)
@@ -191,7 +184,6 @@ updated: 2026-11-14
 -   **Party sheet** — [The Party Sheet](#party-sheet), [Appendix A](#s-sheet-party)
 -   **Perfected** — [Attunement](#s-attunement)
 -   **Permission** — [Titles and Permissions](#s-permissions), [How it adds up](#how-permissions-stack), [Step 3: Permissions](#s-writing-permissions)
--   **Places** — [Twenty Places](#places)
 -   **Planning scene** — [The planning scene](#s-planning)
 -   **Player reference** — [Appendix A](#s-sheet-character)
 -   **Playing Carefully** — [Playing Carefully](#playing-carefully)
@@ -205,7 +197,6 @@ updated: 2026-11-14
 ## Q {#q}
 
 -   **Quality, armour's** — [Quality](#s-armour-quality), [Upgrading gear](#upgrading-gear)
--   **Question, investigation** — [The Question](#s-question)
 -   **Quick Build** — [Quick Build](#s-quick)
 -   **Quick heal** — [Healing](#s-healing)
 -   **Quick Reference** — [Appendix D](#appendix-quick)
@@ -216,7 +207,7 @@ updated: 2026-11-14
 -   **Range** — [Movement and Range](#s-movement)
 -   **Ready-made characters** — [Six Ready-Made Characters](#s-pregens)
 -   **Reputation** — [The Crew](#s-party-faction)
--   **Resolve** — [The Tracks](#s-tracks), [Aura and Your Tracks](#s-aura-tactics), [Catches and Resolve at the Table](#s-catches-gm), [Mind and Soul](#s-fear-gets-through)
+-   **Resolve** — [The Tracks](#s-tracks), [Catches and Resolve at the Table](#s-catches-gm), [Mind and Soul](#s-fear-gets-through)
 -   **Resources, a faction's** — [Resources and assets](#s-wealth), [Extra resources](#s-crew-wealth)
 -   **Rest** — [Healing](#s-healing)
 -   **Retiring** — [Retiring a character](#s-retiring)
@@ -237,7 +228,6 @@ updated: 2026-11-14
 -   **Shadow pool** — [Shadow](#a-shadow)
 -   **Shaken** — [Conditions to start with](#s-conditions-list)
 -   **Shifter** — [Shifter](#a-shifter)
--   **Site** — [Building a Site](#s-site)
 -   **Snapping a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
 -   **Soul** — [Roots](#s-roots), [Mind and Soul](#s-fear-gets-through)
 -   **Souls** — [Summoning](#s-summoning), [Summoner](#a-summoner)
@@ -251,12 +241,10 @@ updated: 2026-11-14
 -   **Study** — [Studying Something](#s-study), [Oracle](#a-oracle), [Archetypes, Resolve and Study at the Table](#s-gm-area)
 -   **Summoner** — [Summoner](#a-summoner)
 -   **Summoning** — [Summoning](#s-summoning), [Summoner](#a-summoner)
--   **Supplies** — [Setting Up a Journey](#s-journey), [Running out](#s-supplies)
 -   **Swapping permissions** — [Grow](#grow), [Boons and Burdens](#s-boons)
 
 ## T {#t}
 
--   **Tactics** — [Tactical Play](#tactics)
 -   **Tag** — [Threats](#s-challenges), [Appendix B](#appendix-tags), [Maker](#a-maker)
 -   **Take a breath** — [Your Action](#s-actions)
 -   **Teamwork** — [Working Together](#s-teamwork)
@@ -269,11 +257,9 @@ updated: 2026-11-14
 -   **Tie** — [The Roll](#s-the-roll)
 -   **Title** — [Step 1: Titles](#s-title), [Titles and Permissions](#s-permissions), [Title Ideas](#s-title-ideas)
 -   **Title ideas** — [Title Ideas](#s-title-ideas)
--   **Tracks** — [The Tracks](#s-tracks), [When a Track Runs Out](#s-blaze), [Healing](#s-healing), [Aura and Your Tracks](#s-aura-tactics), [Appendix C](#s-levers-confidence)
--   **Trail** — [Three trails to everything](#s-trails), [Secrets and Discovery](#s-discovery)
+-   **Tracks** — [The Tracks](#s-tracks), [When a Track Runs Out](#s-blaze), [Healing](#s-healing), [Appendix C](#s-levers-confidence)
+-   **Trail** — [Secrets and Discovery](#s-discovery)
 -   **Trait** — [How Archetypes Work](#s-how-archetypes), [The Archetypes](#archetypes)
--   **Traps** — [Traps](#s-traps)
--   **Travelling** — [Travelling](#travelling)
 -   **Trouble** — [Catches and Trouble](#s-trouble), [Catches and Resolve at the Table](#s-catches-gm)
 -   **Twist table** — [The Oracle](#oracle)
 -   **Two for one (2 for 1)** — [Consequences: When Something Lands](#s-consequences), [The Tracks](#s-tracks)
