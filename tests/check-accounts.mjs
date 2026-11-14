@@ -4754,7 +4754,9 @@ try {
         const backShut = await height(x.who.page);
         heights[x.name].back = { shut: backShut, open: back };
         yes(shut <= backShut, `${x.name}: no longer with its folds shut than with the words back (${shut}px against ${backShut}px)`);
-        // A screen with nothing to explain (a player's World tab, often) has no ? to save it room.
+        // Every screen here has explanations behind ?s, bar a player's World tab,
+        // which often has nothing to explain.
+        if (x.name !== "world-tab") yes(asks >= 1, `${x.name}: its explanations are behind ?s (${asks})`);
         if (asks) yes(back - opened >= 20, `${x.name}: shorter with its folds open than with the words back (${opened}px against ${back}px)`);
       }
       console.log(`  ${x.name}: ${shut}px shut, ${opened}px open, ${asks} ?s${heights[x.name].back ? `, with the words back ${heights[x.name].back.shut}px and ${heights[x.name].back.open}px` : ""}`);
@@ -4899,19 +4901,25 @@ try {
     const pq = await askBox(kai.page, "#app .tip");
     await kai.page.touchscreen.tap(pq.x, pq.y);
     const was = await openCard(kai.page);
+    // The card that's open now is marked, so a new one's told from it.
+    await kai.page.evaluate(() => { document.querySelector(".tip-card:popover-open").dataset.was = "1"; });
     await kai.page.evaluate(() => dispatchEvent(new StorageEvent("storage", { key: "zi-characters" })));
     await kai.page.waitForTimeout(200);
     const now = await openCard(kai.page);
-    same([now?.id, now?.focus], [was?.id, true], "the screen drawn again under an open card keeps it open, with the focus in it");
+    same(await kai.page.evaluate(() => [Boolean(document.querySelector("[data-was]")), document.querySelector(".tip-card:popover-open")?.dataset.was ?? ""]), [false, ""], "the screen's drawn again under the open card");
+    same([now?.id, now?.focus], [was?.id, true], "and the new one's open in its place, with the focus in it");
     yes(await kai.page.evaluate(() => !document.querySelector(".tip-card:popover-open")?.getAnimations().length), "and it doesn't arrive all over again");
     await kai.page.keyboard.press("Escape");
-    await kai.context.setOffline(true);
-    await kai.page.evaluate(() => dispatchEvent(new StorageEvent("storage", { key: "zi-characters" })));
-    const oq = await askBox(kai.page, "#app .tip");
-    await kai.page.touchscreen.tap(oq.x, oq.y);
-    yes(((await openCard(kai.page))?.words.length ?? 0) > 20, "with no signal, a card still has its words");
-    await kai.page.keyboard.press("Escape");
-    await kai.context.setOffline(false);
+    try {
+      await kai.context.setOffline(true);
+      await kai.page.evaluate(() => dispatchEvent(new StorageEvent("storage", { key: "zi-characters" })));
+      const oq = await askBox(kai.page, "#app .tip");
+      await kai.page.touchscreen.tap(oq.x, oq.y);
+      yes(((await openCard(kai.page))?.words.length ?? 0) > 20, "with no signal, a card still has its words");
+      await kai.page.keyboard.press("Escape");
+    } finally {
+      await kai.context.setOffline(false);
+    }
     if (!hadBuild) await mo.page.evaluate((id) => {
       const s = JSON.parse(localStorage.getItem("zi-make") || "null");
       if (!s?.k?.[id]) return;

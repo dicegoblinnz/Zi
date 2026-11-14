@@ -2944,16 +2944,21 @@ button.tip > zi-q { display: grid; place-items: center; width: 22px; height: 22p
 }
 @keyframes tip-in { from { opacity: 0; transform: scale(0.97); } }
 /* Beside a button in a row, a ? sits in the middle of the row and takes its
-   own room, and a field's label can have one beside it. */
+   own room, and a field's label can have one beside it. End the downtime
+   keeps its ? on its own row, since it's as wide as the bar. */
 :is(.cc-row, .tg-do, .wa-skip, .wk-rest, .wk-break, .cc-field-h) > .tip { margin: 0 -6px; align-self: center; }
 .cc-field-h { display: flex; align-items: center; gap: 4px; }
 .cc-field-h > :is(.cc-field, .tg-label) { flex: 0 1 auto; }
+.tg-do > .ft-endrow { flex: 1 1 100%; display: flex; align-items: center; gap: 4px; }
+.ft-endrow > .button { flex: 1 1 auto; min-height: 50px; }
+.ft-endrow > .tip { margin: 0 -6px; }
 /* A fold's ? can't go in its summary, so it's the first thing in its body,
    which shows while the fold's open, and it sits beside the fold's title:
    anchored to it where the browser can, and up on the right where it can't. */
 .cc-fold-ask > .tip { margin: 0; }
+.cc-fold-b > .cc-fold-ask:first-child + * { margin-top: 0; }
 @supports (anchor-name: --x) {
-  .cc-fold:has(> .cc-fold-b > .cc-fold-ask) { position: relative; }
+  .cc-fold:has(> .cc-fold-b > .cc-fold-ask) { position: relative; anchor-scope: --cc-fold-t; }
   .cc-fold:has(> .cc-fold-b > .cc-fold-ask) > summary .cc-fold-t { anchor-name: --cc-fold-t; width: fit-content; max-width: calc(100% - 30px); }
   .cc-fold-ask { position: absolute; position-anchor: --cc-fold-t; left: anchor(right); top: anchor(center); translate: -6px -50%; }
 }

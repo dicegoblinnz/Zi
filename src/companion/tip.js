@@ -70,9 +70,13 @@ function install() {
     if (e.newState === "open") {
       live.open = e.target;
       live.id = e.target.id;
-    } else if (live.open === e.target) {
-      live.open = null;
-      live.id = null;
+    } else {
+      // Its next arrival's its own, after one that only came back after a redraw.
+      e.target.classList.remove("is-kept");
+      if (live.open === e.target) {
+        live.open = null;
+        live.id = null;
+      }
     }
   }, true);
 
@@ -84,10 +88,11 @@ function install() {
 
   // The tap that closes it is only that: the click it makes, and on a phone
   // the focus it would put in a box, go nowhere. A drag that scrolls makes no
-  // click, and a key never starts one of these.
+  // click, and a key never starts one of these. A tap on another ? opens that
+  // one, since a ? only ever opens words.
   addEventListener("pointerdown", (e) => {
     const card = live.open;
-    live.swallow = isOpen(card) && !card.contains(e.target) && !askFor(card)?.contains(e.target);
+    live.swallow = isOpen(card) && !card.contains(e.target) && !e.target.closest?.(".tip");
   }, true);
   addEventListener("pointercancel", () => { live.swallow = false; }, true);
   addEventListener("mousedown", (e) => {
@@ -108,11 +113,14 @@ function install() {
     shut(live.open, true);
   }, true);
 
+  // Focus going anywhere but the card or its ? (Tab past the card, or
+  // Shift+Tab back past the ?) shuts it.
   document.addEventListener("focusout", (e) => {
     const card = live.open;
     const to = e.relatedTarget;
-    if (!isOpen(card) || !to || !card.contains(e.target)) return;
-    if (card.contains(to) || askFor(card)?.contains(to)) return;
+    const ask = askFor(card);
+    if (!isOpen(card) || !to || !(card.contains(e.target) || ask?.contains(e.target))) return;
+    if (card.contains(to) || ask?.contains(to)) return;
     shut(card, false);
   }, true);
 

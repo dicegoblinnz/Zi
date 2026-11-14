@@ -510,7 +510,7 @@ export function makeTurn(d) {
     const end = ui.sure === `end:${id}`;
     const list = t.said.length ? `<ul class="ft-said">${t.said.map((x, i) => `<li style="--i:${i}">${esc(x.text)}</li>`).join("")}</ul>` : `<p class="cc-small">Nothing the crew’s heard about has changed${left ? " yet" : ""}.</p>`;
     const foot = gm
-      ? `${end && left ? `<p class="cc-small">${left === 1 ? "One action hasn’t" : `${left} actions haven’t`} been finished. Ending it leaves ${left === 1 ? "it" : "them"} as they are.</p>` : ""}${btn("end", end ? "Tap again to end the downtime" : "End the downtime", { cls: "button primary" })}${tip(`ft-end-${id}`, `Ending it puts this in How it came to be, as downtime ${t.n}’s own age.`, "Ending the downtime")}${btn("focus", "Back to the actions", { attrs: ` data-x="${esc(seqOf(t, gm).slice(-1)[0] ?? "")}"` })}`
+      ? `${end && left ? `<p class="cc-small">${left === 1 ? "One action hasn’t" : `${left} actions haven’t`} been finished. Ending it leaves ${left === 1 ? "it" : "them"} as they are.</p>` : ""}<span class="ft-endrow">${btn("end", end ? "Tap again to end the downtime" : "End the downtime", { cls: "button primary" })}${tip(`ft-end-${id}`, `Ending it puts this in How it came to be, as downtime ${t.n}’s own age.`, "Ending the downtime")}</span>${btn("focus", "Back to the actions", { attrs: ` data-x="${esc(seqOf(t, gm).slice(-1)[0] ?? "")}"` })}`
       : ui.skip === t.id ? btn("follow", `Follow ${esc(gmName(id))} again`) : `<p class="cc-small ft-wait">${esc(gmName(id))}’s ending the downtime.</p>`;
     return `<div class="ft-rest ft-in"><h3 class="ft-rest-h">While you rested</h3><p class="ft-rest-len">Downtime ${t.n}${t.len ? `, ${esc(midway(bare(t.len)))}` : ""}</p>
       ${list}${gm ? sayForm() : ""}</div>
@@ -744,10 +744,12 @@ export function makeTurn(d) {
     const payer = hired && hired.by !== "crew" ? find(boardOf(id), hired.by) : null;
     const who = payer ?? f;
     const s = standingOf(who);
-    const whose = payer ? `${payer.name}’s paying, so it’s ${poss(lower(payer.name))} threads toward the crew that count.` : "";
-    if (s === "hostile") return { t: "hostile", why: `${whose} ${cap(lower(who.name))}’s threads toward the crew are mostly hostile, so it’s the first table.`.trim() };
-    if (s === "friendly") return { t: "bond", why: `${whose} ${cap(lower(who.name))}’s threads toward the crew are mostly bond threads, so it’s the second table.`.trim() };
-    return { t: null, why: `${whose} ${cap(lower(who.name))} has as many bond threads as hostile toward the crew, or none, so a d2 picks the table first.`.trim() };
+    // Its words are HTML, in the d12's ?, so the names are escaped.
+    const whose = payer ? `${esc(payer.name)}’s paying, so it’s ${esc(poss(lower(payer.name)))} threads toward the crew that count.` : "";
+    const name = esc(cap(lower(who.name)));
+    if (s === "hostile") return { t: "hostile", why: `${whose} ${name}’s threads toward the crew are mostly hostile, so it’s the first table.`.trim() };
+    if (s === "friendly") return { t: "bond", why: `${whose} ${name}’s threads toward the crew are mostly bond threads, so it’s the second table.`.trim() };
+    return { t: null, why: `${whose} ${name} has as many bond threads as hostile toward the crew, or none, so a d2 picks the table first.`.trim() };
   }
 
   function saveAct(r) {
