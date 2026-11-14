@@ -27,7 +27,7 @@
 //             builds it. Each campaign's
 //             kept apart, and it all goes when the account's characters leave
 //             the phone (sync.js).
-import { MAX, ONCE, ROOTS, SIZES, TRACK_AT, actSaid, apply, atName, atPlace, blankScene, rootOf, current, dieOf, findEl, findTele, fresh, fxSaid, howOf, inIt, joinHow, joinersOf, keyOf, landsOn, lower, moresOf, onScene, placeOf, spentBy, stateFor, stateOf, stepsSaid, workedIn } from "./table-rules.js";
+import { MAX, ONCE, ROOTS, SIZES, TRACK_AT, actSaid, apply, atName, atPlace, blankScene, rootOf, current, dieOf, findEl, findTele, fresh, fxSaid, howOf, inIt, joinHow, joinersOf, keyOf, landsOn, lower, moresOf, onScene, placeOf, settleActs, spentBy, stateFor, stateOf, stepsSaid, workedIn } from "./table-rules.js";
 import { turnNews } from "./turn-rules.js";
 import { foundNews } from "./found-rules.js";
 import { curlyQuotes, readAim, whoAndDoes } from "./aims.js";
@@ -758,8 +758,11 @@ export function makeTable(d) {
   const moreName = (m) => (m.k === "aura" ? `${m.paid} Aura` : { held: "held last round", hiding: "out of hiding", boon: "the Extra action Boon" }[m.k] ?? m.k);
   // How many this character's bought with Aura this round, by the record and
   // by the phone (state.bought, which a roll's own extra action counts too),
-  // so the next one's price follows on from both.
+  // so the next one's price follows on from both. It's never less than one
+  // more than the dearest the round's record has, since the phone's count
+  // starts again when they finish acting and the round's doesn't.
   const boughtNow = (rec, s) => Math.max(rec.more.filter((m) => m === "aura" || m === "resolve").length, Number(s?.bought) || 0);
+  const nextPrice = (rec, s) => Math.max(R.extraCost(boughtNow(rec, s)), ...rec.paid.filter((p) => Number.isInteger(p)).map((p) => p + 1));
   const isAt = (x, chId) => Boolean(x && x.user === me() && x.ch === chId);
   // Everything that lands on this character: aimed at them and nobody took
   // it, taken by them for a friend, or at a place they're in.
@@ -907,7 +910,7 @@ export function makeTable(d) {
     const more = mores.length ? `<p class="cc-small">${mores.length === 1 ? "An extra action" : `${cap(words(mores.length))} extra actions`} from ${esc(andList(mores.map(moreName)))}.</p>` : "";
     // Aura buys as many as they like, each one more than the one before it
     // this round. Holding, hiding and the Boon are on top, once each.
-    const price = R.extraCost(boughtNow(rec, s));
+    const price = nextPrice(rec, s);
     const boon = R.boonCount(c, "Extra action") > 0;
     const off = (k) => rec.more.length >= MAX.more || (k === "aura" ? s.aura < price : ONCE.includes(k) && rec.more.includes(k));
     const ask = tip(`tg-more-${ch.id}`, [`Buy another with Aura, as many as you like: ${R.EXTRA_AURA} for the first this round, then ${R.EXTRA_AURA + 1}, then ${R.EXTRA_AURA + 2}, and next round it’s back to ${R.EXTRA_AURA}.`, `Holding last round’s action and coming out of hiding${boon ? ", and the Extra action Boon once a scene," : ""} give you one each on top, and they don’t put the price up.`, ruleLink("s-extra-actions", "Extra actions")], "Where another action comes from");
@@ -1693,23 +1696,14 @@ export function makeTable(d) {
       } else {
         const round = local(id).rounds.find((r) => r.id === o.round);
         const has = round?.acts?.[keyOf(me(), o.ch)];
-        // An extra action the table didn't take gives back what it cost.
-        // The ones it took are the cheapest, since the rest were bought after
-        // them. An old record's 1 Resolve is Aura now, the way the table reads it.
-        const kept = moresOf(has);
-        const sent = moresOf(o.x).sort((x, y) => (x.paid ?? 0) - (y.paid ?? 0));
-        let back = 0;
-        for (const m of sent) {
-          const i = kept.findIndex((x) => x.k === m.k);
-          if (i >= 0) kept.splice(i, 1);
-          else if (m.k === "aura") {
-            back += m.paid;
-            s.bought = Math.max(0, (Number(s.bought) || 0) - 1);
-          }
-        }
-        // So does explaining what went into a friend's answer it didn't take.
-        for (const a of o.x?.list ?? []) if (a.k === "join" && a.paid && !(has?.list ?? []).some((x) => x.id === a.id)) back += Number(a.paid) || 0;
-        s.aura += back;
+        // The table's record stands, and the Aura follows it (settleActs()).
+        // It's against the record as this phone has it now, not as the change
+        // carried it, so when several changes to one round come back turned
+        // down together only the first does anything, and one still on its
+        // way after them (in local()'s table already) leaves it be.
+        const back = settleActs(actsIn(s, id, o.round), has);
+        s.aura = Math.max(0, s.aura + back.aura);
+        s.bought = Math.max(0, (Number(s.bought) || 0) + back.bought);
         record(s, id, "x", o.round, has ? { more: [...has.more], paid: [...(has.paid ?? [])], list: has.list.map(({ did, at, late, ...a }) => ({ ...a, ...(a.roll ? { roll: { dice: a.roll.dice, opp: a.roll.opp, real: a.roll.real } } : {}) })) } : null);
       }
     });
@@ -2189,14 +2183,14 @@ export function makeTable(d) {
         }
         // As many as they like, each one more than the one before it this
         // round, and its price goes with it so the table can check it.
-        const price = R.extraCost(boughtNow(rec, s));
+        const price = nextPrice(rec, s);
         if (s.aura < price) return false;
         const had = rec.more.filter((m) => m === "aura" || m === "resolve").length;
         rec.paid = [...rec.paid.slice(0, had), ...Array(Math.max(0, had - rec.paid.length)).fill(null), price];
         rec.more.push(k);
         s.aura -= price;
         s.bought = (Number(s.bought) || 0) + 1;
-        return `Another action this round, for ${price} Aura. Aura’s ${s.aura}, and the next one’s ${R.extraCost(boughtNow(rec, s))}.`;
+        return `Another action this round, for ${price} Aura. Aura’s ${s.aura}, and the next one’s ${nextPrice(rec, s)}.`;
       });
     },
     // Intercepting a friend's telegraph: 1 Aura, once for each friend a

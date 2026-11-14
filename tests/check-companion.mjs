@@ -279,14 +279,14 @@ if (part("1b")) {
   ok({ o: "answer", id: "tele-spear-1", ch: "vesk", a: { act: "Sneak", steps: 3, dice: [{ size: 6, total: 5 }], opp: 4, t: 990 } }, kai, "Vesk answers the spear", { phoneNow: 1000 });
   const work = (id, total, opp, aim = "Locked", t = 995) => ({ id, k: "work", ref: "stake-satchel", act: "Locks", steps: 5, t, roll: { dice: [{ size: 10, total }], opp }, aim });
   not({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: [], list: [work("act-vesk-01", 8, 4)] } }, kai, "her answer's her action, so she can't work the satchel too", { phoneNow: 1000 });
-  ok({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["resolve"], list: [work("act-vesk-01", 8, 4)] } }, kai, "with 1 Resolve for an extra action, she can", { phoneNow: 1000 });
+  ok({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["aura"], paid: [3], list: [work("act-vesk-01", 8, 4)] } }, kai, "with an extra action for 3 Aura, she can", { phoneNow: 1000 });
   same(doc.scene.stakes[0].tags.map((g) => g.gone), [1, 0], "her Locks, 8 against its 4, takes Locked");
   same(r1().held["stake-satchel"], 4, "and the satchel's 4 stands for the round");
   ok({ o: "acts", round: "round-one-01", ch: "bram", x: { more: [], list: [{ id: "act-bram-01", k: "work", ref: "stake-satchel", act: "Lift and carry", steps: 3, t: 996, roll: { dice: [{ size: 6, total: 4 }], opp: 2 }, aim: "Guarded" }] } }, sam, "Bram goes at it too", { phoneNow: 1000 });
   same(r1().acts["sam|bram"].list[0].roll.won, false, "his 4 ties the 4 that stands, and a tie's a loss");
-  ok({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["resolve"], list: [] } }, kai, "Vesk takes her roll back", { phoneNow: 1000 });
+  ok({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["aura"], paid: [3], list: [] } }, kai, "Vesk takes her roll back", { phoneNow: 1000 });
   same(doc.scene.stakes[0].tags.map((g) => g.gone), [0, 0], "and Locked's back in the way");
-  ok({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["resolve"], list: [work("act-vesk-02", 9, 4, "Guarded")] } }, kai, "she rolls it again, going for Guarded", { phoneNow: 1000 });
+  ok({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["aura"], paid: [3], list: [work("act-vesk-02", 9, 4, "Guarded")] } }, kai, "she rolls it again, going for Guarded", { phoneNow: 1000 });
   same(doc.scene.stakes[0].tags.map((g) => g.gone), [0, 1], "and Guarded's gone");
   // A combo: Isolde puts her action into whoever answers the archer.
   ok({ o: "add", tele: { id: "tele-arrow-1", who: "The archer", does: "Shoot Bram", d: 10, kind: "blow", at: { user: "sam", ch: "bram" } } }, gm, "the archer, mid-round");
@@ -298,7 +298,7 @@ if (part("1b")) {
   same(r1().tele.find((t) => t.id === "tele-arrow-1").ans.with.map((w) => w.name), ["Isolde"], "Isolde's in his answer");
   not({ o: "acts", round: "round-one-01", ch: "isolde", x: { more: [], list: [] } }, lee, "and once it's rolled, she can't take hers back", { phoneNow: 1000 });
   same(T.spentBy(r1(), "sam", "bram"), { used: 1, have: 1 }, "Bram's one action is his answer");
-  not({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["resolve"], list: [work("act-vesk-02", 9, 4, "Guarded"), { id: "act-vesk-03", k: "else", act: "Defend", t: 998 }] } }, kai, "three actions on one extra is too many", { phoneNow: 1000 });
+  not({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["aura"], paid: [3], list: [work("act-vesk-02", 9, 4, "Guarded"), { id: "act-vesk-03", k: "else", act: "Defend", t: 998 }] } }, kai, "three actions on one extra is too many", { phoneNow: 1000 });
   // The round ends: what nobody worked steps down, and the club lands on Bram.
   now = 2000;
   ok({ o: "end", round: "round-one-01" }, gm, "round 1 ends");
@@ -310,7 +310,7 @@ if (part("1b")) {
   // Isolde's roll at the buyer, done in the round with no signal, turns up late: it never stepped down.
   ok({ o: "acts", round: "round-one-01", ch: "isolde", x: { more: ["held"], list: [{ id: "act-isol-01", k: "join", ref: "tele-arrow-1", act: "Ward", steps: 3, t: 997 }, { id: "act-isol-02", k: "work", ref: "event-buyer", act: "Talk", steps: 2, t: 1500, roll: { dice: [{ size: 4, total: 1 }], opp: 3 }, aim: "slow" }] } }, lee, "Isolde's roll at the buyer, done in the round, turns up late", { phoneNow: 2001 });
   same([doc.scene.events[0].d, r1().moved.length], [4, 0], "so the buyer never stepped down");
-  not({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["resolve"], list: [work("act-vesk-02", 9, 4, "Guarded"), { id: "act-vesk-09", k: "else", act: "Move", t: 2500 }] } }, kai, "one done after the round ended doesn't count", { phoneNow: 2600 });
+  not({ o: "acts", round: "round-one-01", ch: "vesk", x: { more: ["aura"], paid: [3], list: [work("act-vesk-02", 9, 4, "Guarded"), { id: "act-vesk-09", k: "else", act: "Move", t: 2500 }] } }, kai, "one done after the round ended doesn't count", { phoneNow: 2600 });
   // On Roots (8 Nov): a telegraph's at a Root, only what's at a Body can be
   // intercepted, and When it lands says the track or Defend that rolled. On
   // stacking (14 Nov), extra actions have no cap: each one bought with Aura
@@ -338,6 +338,7 @@ if (part("1b")) {
     same(T.moresOf(actsOf("vesk")).map((m) => m.paid), [3, 4, 5], "each one's price kept with it");
     same(not2(buy("vesk", ["aura", "aura", "aura", "aura"], [3, 4, 5, 5], [1, 2, 3, 4, 5]), kai, "a fourth priced 5 is turned down", { phoneNow: 5000 }), "The fourth extra action you buy this round is 6 Aura, not 5.", "since it's 6");
     same(not2(buy("vesk", ["aura", "aura"], [3, 3], [1, 2, 3]), kai, "two for 3 each is turned down too", { phoneNow: 5000 }), "The second extra action you buy this round is 4 Aura, not 3.", "since the second's 4");
+    same(not2({ ...buy("vesk", ["aura", "aura", "aura", "aura"], null, [1, 2, 3, 4, 5]), x: { ...buy("vesk", ["aura", "aura", "aura", "aura"], null, [1, 2, 3, 4, 5]).x, paid: [3, 4, 5] } }, kai, "a new one with no price is turned down", { phoneNow: 5000 }), "Your phone’s from before extra actions had a price. Reload the page and buy it again.", "since only one from before prices were kept goes unchecked");
     same(T.moresOf(actsOf("vesk")).length, 3, "and the table keeps the three she paid for");
     ok2(buy("vesk", ["aura", "aura", "hiding"], [3, 4], [1, 2, 3, 4]), kai, "coming out of hiding's on top, and doesn't put the price up", { phoneNow: 5000 });
     ok2(buy("bram", ["aura"], [4], [1, 2]), sam, "Bram's first is 4, after one bought on his roll card", { phoneNow: 5000 });
@@ -346,6 +347,17 @@ if (part("1b")) {
     same(T.moresOf(actsOf("bram")), [{ k: "aura", paid: 3 }, { k: "held" }], "and reads as the 3 an older phone took");
     not2(buy("bram", ["aura", "held"], [4], [1, 2, 3, 4]), sam, "but more actions than he's got is still turned down", { phoneNow: 5000 });
     ok2(buy("bram", [], null, []), sam, "Bram takes his back");
+    // A phone whose actions came back turned down gets back what they cost,
+    // once however many of its changes came back together, and pays again
+    // for one the table kept that it had taken back.
+    const three = { more: ["aura", "aura", "aura"], paid: [3, 4, 5], list: [] };
+    same(T.settleActs(three, undefined), { aura: 12, bought: -3 }, "three extras the table never took give back 12 Aura");
+    same(T.settleActs({ more: [], paid: [], list: [] }, undefined), { aura: 0, bought: 0 }, "and settled again, once the phone's record is the table's, nothing more");
+    same(T.settleActs(three, { more: ["aura"], paid: [3], list: [] }), { aura: 9, bought: -2 }, "one kept is the cheapest, so the 4 and the 5 come back");
+    same(T.settleActs({ more: ["aura"], paid: [3], list: [] }, { more: ["aura", "aura"], paid: [3, 4], list: [] }), { aura: -4, bought: 1 }, "one the table kept that the phone took back costs it again");
+    same(T.settleActs({ more: ["resolve", "held"], list: [] }, { more: ["held"], list: [] }), { aura: 3, bought: -1 }, "an old record's 1 Resolve comes back as the 3 Aura it was");
+    same(T.settleActs({ more: [], list: [{ id: "act-bram-j1", k: "join", ref: "tele-x", steps: 3, paid: 1 }] }, { more: [], list: [] }), { aura: 1, bought: 0 }, "and so does explaining what went into a friend's answer the table didn't take");
+    same(T.settleActs({ more: [], list: [] }, { more: [], list: [{ id: "act-bram-j1", k: "join", ref: "tele-x", steps: 3, paid: 1 }] }), { aura: -1, bought: 0 }, "or costs it again when the table kept it");
     ok2({ o: "end", round: "round-root01" }, gm, "the round on Roots ends");
     not2({ o: "defend", id: "tele-lie-r01", ch: "isolde", r: { on: "Stamina", stopped: true, mine: 7, v: 4 } }, lee, "her Stamina can't roll against the lie at her Mind");
     ok2({ o: "defend", id: "tele-lie-r01", ch: "isolde", r: { on: "Confidence", stopped: true, mine: 7, v: 4 } }, lee, "her Confidence stops it");
@@ -427,7 +439,7 @@ if (part("1b")) {
   ok2({ o: "acts", round: "round-a-0001", ch: "bram", x: { more: [], list: [at("act-watch-b1", "event-watch1", "Talk", 6, 7, "slow")] } }, sam, "Bram's roll at it is judged against the 7 that stands, though it's only a d6 now");
   same(r().acts["sam|bram"].list[0].roll.won, false, "and his 6 doesn't beat it");
   ok2({ o: "acts", round: "round-a-0001", ch: "isolde", x: { more: [], list: [at("act-door-i1", "stake-door01", "Ward", 6, 2, "Locked")] } }, lee, "Isolde takes Locked off the door");
-  ok2({ o: "acts", round: "round-a-0001", ch: "bram", x: { more: ["resolve"], list: [at("act-watch-b1", "event-watch1", "Talk", 6, 7, "slow"), at("act-door-b2", "stake-door01", "Lift and carry", 5, 2, "Barred")] } }, sam, "Bram, with 1 Resolve, takes Barred, the last thing in its way");
+  ok2({ o: "acts", round: "round-a-0001", ch: "bram", x: { more: ["aura"], paid: [3], list: [at("act-watch-b1", "event-watch1", "Talk", 6, 7, "slow"), at("act-door-b2", "stake-door01", "Lift and carry", 5, 2, "Barred")] } }, sam, "Bram, with an extra action for 3 Aura, takes Barred, the last thing in its way");
   same(doc2.scene.stakes[0].out, "won", "so the door's won");
   ok2({ o: "acts", round: "round-a-0001", ch: "isolde", x: { more: [], list: [] } }, lee, "Isolde takes hers back");
   same([doc2.scene.stakes[0].tags.map((g) => g.gone), doc2.scene.stakes[0].out], [[0, 1], ""], "Locked's back in the way, so it isn't won any more");

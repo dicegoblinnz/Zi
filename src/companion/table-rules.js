@@ -154,6 +154,36 @@ export function priceWrong(paid) {
   }
   return "";
 }
+// What a round's actions being turned down costs a phone, or gives it back.
+// The table's record (has) stands, and the phone's (mine) is what it paid
+// for: an Aura extra or a friend's answer the table hasn't got gives back
+// what it cost (the ones it has are the cheapest, since the rest were bought
+// after them), and one it has that the phone hadn't costs it again. Returns
+// { aura, bought }: the Aura to put back (below 0 to take off) and the change
+// to how many extras they've bought. Settling twice gives nothing the second
+// time, once the phone's record is the table's.
+export function settleActs(mine, has) {
+  const kept = moresOf(has);
+  let aura = 0;
+  let bought = 0;
+  for (const m of moresOf(mine).sort((x, y) => x.k.localeCompare(y.k) || (x.paid ?? 0) - (y.paid ?? 0))) {
+    const i = kept.findIndex((x) => x.k === m.k);
+    if (i >= 0) kept.splice(i, 1);
+    else if (m.k === "aura") {
+      aura += m.paid;
+      bought -= 1;
+    }
+  }
+  for (const m of kept) {
+    if (m.k !== "aura") continue;
+    aura -= m.paid;
+    bought += 1;
+  }
+  const joins = (x) => (Array.isArray(x?.list) ? x.list : []).filter((a) => a?.k === "join");
+  for (const a of joins(mine)) if (!joins(has).some((x) => x.id === a.id)) aura += Number(a.paid) || 0;
+  for (const a of joins(has)) if (!joins(mine).some((x) => x.id === a.id)) aura -= Number(a.paid) || 0;
+  return { aura, bought };
+}
 // How an answer, or a roll at the scene, was rolled, in words: its steps on
 // the Root it rolled ("12 steps on Body"). One from before stacking says the
 // Root and specialty it rolled, as it was ("Body and Archery").
@@ -924,7 +954,11 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
         if (t?.ans?.with?.some((w) => w.user === who.user && w.ch === who.ch)) return no(`${t.ans.name} answered ${lower(t.who)} with you in it, so it stays.`);
       }
       // There's no cap on extra actions, but each one bought with Aura costs
-      // more than the one before it this round: 3, then 4, then 5.
+      // more than the one before it this round: 3, then 4, then 5. A new one
+      // has to come with its price, so only one the table had before prices
+      // were kept goes unchecked.
+      const priced = moresOf(round.acts[key]).filter((m) => m.k === "aura").length;
+      if (next.paid.slice(priced).some((p) => p == null)) return no("Your phone’s from before extra actions had a price. Reload the page and buy it again.");
       const wrong = priceWrong(next.paid);
       if (wrong) return no(wrong);
       const sp = spentBy({ ...round, acts: { [key]: next } }, who.user, who.ch);
