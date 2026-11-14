@@ -4,7 +4,7 @@ id: appendix-levers
 slug: appendix-c-every-lever-in-the-game
 order: 32
 part: "Appendices & Index"
-partNumber: "Part V"
+partNumber: "Part IV"
 source: 2026-10-02 rulebook
 updated: 2026-11-14
 ---
@@ -96,7 +96,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **Take it for a friend** | Intercept: 1 Aura and no action, and any of the blows at a friend's Body within your stride come at you instead, for your own Stamina or Defend to handle. One friend for each Aura. Nobody can step in front of what's at a friend's Mind or Soul. The Guardian's, free, for every friend within their stride, and a Guardian who's a Teleporter as well reaches every friend within 10 units. A summon intercepts for free, and so do the GM's people. Answer for a friend, standing in the way. *Covered* (condition). The Intercept Burden: you can't. |
 | **One die at each of you** | A threat aims one die at each person, unless a tag like *Flurry* says it can do more. |
 | **Put the hit somewhere else** | The GM names the cost. Offer another that fits and costs about as much: a piece of armour on that Root, something else you carry breaking, your Aspiration, the Party Goal, a clock. Attuned things can't be broken. 2 for 1 always fits: pay 2 from your other two tracks, in any mix, and the one it's at stays put. |
-| **Cancel a hit** | *Warded* (spend it and it takes the hit). The Toughness Boon (the first hit each scene, wherever it's at). The Guardian's *Stand firm* (1 Stamina: the next two hits this round). Break a tag a Maker gave the thing you're holding. Strip one of your animal tags, if you're a Shifter. [Playing alone](#s-solo-gm), the first hit each scene. |
+| **Cancel a hit** | *Warded* (spend it and it takes the hit). The Toughness Boon (the first hit each scene, wherever it's at). The Guardian's *Stand firm* (1 Stamina: the next two hits this round). Break a tag a Maker gave the thing you're holding. Strip one of your animal tags, if you're a Shifter. |
 | **Stay where you are** | *Braced* (condition). |
 
 ## Your Tracks {#s-levers-confidence}

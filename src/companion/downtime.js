@@ -106,7 +106,7 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     return {
       pressure: { k, text: "" }, mend: { k, key: crossed(c, s)[0]?.key ?? "" },
       heal: { k, n: Object.fromEntries(R.TRACKS.map((t) => [t, 0])) },
-      perm: { k, t: firstTitle, text: "", root: c.titles[firstTitle]?.root || "Body" },
+      perm: { k, t: firstTitle, text: "", root: R.mostOf(c.titles[firstTitle]?.roots ?? {}) || "Body" },
       ability: { k, a: firstArch, name: "" },
       asp: { k, root: R.bestRoot(c), using: [], dice: null, opp: null, real: false, pads: [], padOpp: "", rerolls: 0, tie: false, take: "", text: "", roots: noRoots(), shape: "one", perm: "", proot: "Body", arch: "", ability: "", name: "", wname: "", wkind: "passive", wtext: "" },
       thread: { k, person: "", text: "", tkind: "bond" }, get: { k, text: "", where: "bag" },
@@ -577,7 +577,7 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
         }
       }
       // A new permission starts on the Root its Title puts most on.
-      if (sl.k === "perm" && f === "t") sl.root = c.titles[sl.t]?.root || sl.root;
+      if (sl.k === "perm" && f === "t") sl.root = R.mostOf(c.titles[sl.t]?.roots ?? {}) || sl.root;
       if (sl.k === "ability" && f === "a") sl.name = "";
       if (sl.k === "awk" && f === "a") Object.assign(sl, { up: false, catch: "", burden: "" });
     } else if (go === "use" && sl) {

@@ -85,13 +85,13 @@ export function spreadOf(t) {
   if (ROOTS.includes(t?.root)) out[t.root] = TITLE_ROOTS;
   return out;
 }
-// The Root a Title puts most on, the first of them on a tie, for the screens
-// that show a Title with one Root.
-const mostOf = (spread) => ROOTS.reduce((best, r) => (spread[r] > (spread[best] ?? 0) ? r : best), "");
+// The Root a Title puts most on, the first of them on a tie: where a roll
+// with the Title in it is likeliest, and the Root a new permission on it
+// starts on.
+export const mostOf = (spread) => ROOTS.reduce((best, r) => (spread[r] > (spread[best] ?? 0) ? r : best), "");
 
 // Count the Roots: each Title's spread, and 1 for every permission on its
-// Root. Nothing else adds to a Root, and there are no specialties, so that
-// list's always empty, left for the screens that haven't moved off it.
+// Root. Nothing else adds to a Root.
 export function countRoots(titles) {
   const roots = { Body: 0, Mind: 0, Soul: 0 };
   for (const t of titles ?? []) {
@@ -99,29 +99,24 @@ export function countRoots(titles) {
     for (const r of ROOTS) roots[r] += spread[r];
     for (const p of t?.permissions ?? []) if (ROOTS.includes(p?.root)) roots[p.root] += 1;
   }
-  return { roots, specialties: [] };
+  return { roots };
 }
 
 // A Title on the sheet: its words, its spread and its permissions, each with
-// its Root. One from before stacking (a crew sheet or a build with one Root)
-// reads as all 3 on that Root, and says so (fromRoot), for the player to
-// spread how they like. Its name, its one Root and an empty list of
-// specialties, and an empty specialty on each permission, stay there for the
-// screens that haven't moved yet.
+// its Root. One from before stacking (a crew sheet or a build with one Root
+// and its specialties) reads as all 3 on that Root, and says so (fromRoot),
+// for the player to spread how they like, and its specialties go.
 function titleOf(t, B) {
   const words = text(t?.text ?? t?.name, 160);
   const spread = spreadOf(t);
   const out = {
     ...t,
     text: words,
-    name: words,
     roots: spread,
-    root: mostOf(spread),
-    specialties: [],
-    permissions: (Array.isArray(t?.permissions) ? t.permissions : []).filter((p) => p && typeof p === "object").map((p) => ({ ...p, root: ROOTS.includes(p.root) ? p.root : "", specialty: "" })),
+    permissions: (Array.isArray(t?.permissions) ? t.permissions : []).filter((p) => p && typeof p === "object").map(({ specialty, spec, ...p }) => ({ ...p, root: ROOTS.includes(p.root) ? p.root : "" })),
     boons: (Array.isArray(t?.boons) ? t.boons : []).filter((x) => x && text(x.lever, 40)).map((x) => boonOf(x, B)),
   };
-  delete out.fromRoot;
+  for (const k of ["name", "root", "specialties", "specs", "fromRoot"]) delete out[k];
   if (!(t?.roots && typeof t.roots === "object") && ROOTS.includes(t?.root)) out.fromRoot = t.root;
   return out;
 }
@@ -130,13 +125,14 @@ function titleOf(t, B) {
 // its Trait and its whole list of abilities) with the abilities this
 // character's got, the one it came with first. One from before stacking came
 // with every ability it had, so it keeps them all. A Trait the book hasn't
-// got yet is there with nothing in it.
+// got yet is there with nothing in it. One the book hasn't got at all any
+// more, like the Scholar since 14 Nov, is gone, for the player to swap.
 const traitOf = (x) => (x && typeof x === "object" ? { name: text(x.name, 60), text: String(x.text ?? x.html ?? ""), short: String(x.short ?? "") } : typeof x === "string" && x ? { name: text(x, 60), text: "" } : { name: "", text: "" });
 function archOf(a, B) {
   const rule = (B?.archetypes ?? []).find((x) => x.name === a.name) ?? null;
   const abilities = rule?.abilities ?? (Array.isArray(a.abilities) ? a.abilities : []);
   const have = Array.isArray(a.have) ? a.have : abilities.map((x) => x.name);
-  return {
+  const out = {
     ...a,
     id: a.id ?? rule?.id ?? null,
     home: a.home ?? rule?.home ?? null,
@@ -146,6 +142,9 @@ function archOf(a, B) {
     abilities,
     have: [...new Set(have.map((n) => text(n, 60)).filter(Boolean))],
   };
+  delete out.gone;
+  if (B?.archetypes?.length && !rule) out.gone = true;
+  return out;
 }
 
 // The sheet the phone plays from: the crew's off the chapter, or a build's,
@@ -184,7 +183,7 @@ export function rootsSheet(base, grown = [], B = null) {
   if (Array.isArray(grown) && grown.length) growRoots(c, grown, B);
   withBoons(c);
   c.roots = countRoots(c.titles).roots;
-  c.specialties = [];
+  delete c.specialties;
   return c;
 }
 
@@ -213,7 +212,7 @@ export function growRoots(c, grown, B = null) {
     const words = text(x.text, 120);
     if (x.k === "perm" && words && root) {
       const t = c.titles[int(x.t, -1)];
-      if (t && slotsOf(t) < MAX_PERMS) t.permissions.push({ text: words, root, specialty: "", g });
+      if (t && slotsOf(t) < MAX_PERMS) t.permissions.push({ text: words, root, g });
     } else if (x.k === "boon" && text(x.lever, 40)) {
       // Two permissions swapped for a Boon, in downtime: they come off the
       // Title and the Boon takes their two slots.
@@ -227,7 +226,7 @@ export function growRoots(c, grown, B = null) {
     } else if (x.k === "swap" && words && root) {
       const t = c.titles[int(x.t, -1)];
       const j = int(x.j, -1);
-      if (t && t.permissions[j]) t.permissions[j] = { text: words, root, specialty: "", g, was: t.permissions[j].text };
+      if (t && t.permissions[j]) t.permissions[j] = { text: words, root, g, was: t.permissions[j].text };
     } else if (x.k === "ability" && text(x.name, 60)) {
       const a = c.archetypes[int(x.a, -1)];
       if (a && !a.have.includes(text(x.name, 60)) && a.have.length < MAX_ABILITIES) a.have.push(text(x.name, 60));
@@ -269,11 +268,17 @@ export function growRoots(c, grown, B = null) {
 // What moving onto stacking left for the player to choose: each Title read as
 // all 3 on its old Root, for them to spread how they like, and any points
 // they've got left (a character built on the phone before points could come
-// to less than they start on).
+// to less than they start on), and an archetype that isn't one any more, to
+// swap for another in Change.
+//   { k: "arch", a, name }     archetype a, gone from the book
 //   { k: "spread", t, root }   Title t, all 3 on root
 //   { k: "points", left }      points they've got left to spend
 export function choicesOf(c) {
   const out = [];
+  // An archetype the book hasn't got any more, once however many times it's taken.
+  (c.archetypes ?? []).forEach((a, i) => {
+    if (a.gone && !out.some((x) => x.name === a.name)) out.push({ k: "arch", a: i, name: a.name });
+  });
   (c.titles ?? []).forEach((t, i) => {
     if (t.fromRoot) out.push({ k: "spread", t: i, root: t.fromRoot });
   });
@@ -338,18 +343,6 @@ export const shrugs = (c, name) => boonsOf(c).some((b) => b.lever === "Condition
 // Going beyond's free once a scene with the Going beyond Boon, and 1 Aura after.
 export const freeBeyond = (c, s) => boonCount(c, "Going beyond") > 0 && s.beyond !== true;
 
-// Specialties are gone, so a specialty's worth nothing. These stay for the
-// screens that haven't moved off them yet.
-export const specSteps = (c, name) => c.specialties.find((s) => specKey(s.name) === specKey(name))?.steps ?? 0;
-export function rootFor(c, name) {
-  const k = specKey(name);
-  const n = { Body: 0, Mind: 0, Soul: 0 };
-  for (const t of c.titles) for (const p of t.permissions) if (k && specKey(p.specialty) === k && ROOTS.includes(p.root)) n[p.root] += 1;
-  const best = ROOTS.filter((r) => n[r]).sort((a, b) => n[b] - n[a] || c.roots[b] - c.roots[a])[0];
-  if (best) return best;
-  const title = c.titles.find((t) => (t.specialties ?? []).some((s) => specKey(s) === k));
-  return title?.root || bestRoot(c);
-}
 export const bestRoot = (c) => [...ROOTS].sort((a, b) => c.roots[b] - c.roots[a])[0];
 
 // Each archetype once, how many times it's taken, its home track, its Trait
@@ -386,9 +379,6 @@ export function archetypesOf(c, B) {
 // hiding and the Extra action Boon are on top and don't put the price up.
 export const EXTRA_AURA = 3;
 export const extraCost = (n = 0) => EXTRA_AURA + Math.max(0, int(n, 0));
-// There's no cap on actions any more. This is the old one (one for each
-// archetype), only there for the screens that haven't moved off it yet.
-export const actionsMax = (c) => Math.max(1, c.archetypes.length);
 
 // ---------------------------------------------------------------- state
 
@@ -399,7 +389,7 @@ export function freshRoots(c) {
     v: 3, aura: int(n.aura, BASE_AURA), acting: false,
     tracks: { stamina: start("stamina"), confidence: start("confidence"), resolve: start("resolve") },
     scars: { stamina: [], confidence: [], resolve: [] },
-    blaze: null, dead: false, power: {}, store: {},
+    blaze: null, dead: false, power: {},
     conditions: [], threads: {}, crossed: {}, boxes: {}, picked: [],
     asp: even(c.aspiration?.die ?? 2, 2, 12), aspText: "", notes: "", last: null, grown: [], choose: [],
   };
@@ -445,9 +435,9 @@ export function normalRoots(raw, c) {
   s.v = 3;
   s.acting = Boolean(s.acting);
   // Aura powering a passive awakening that's still on the sheet, up to what
-  // it holds. What was held the old way, or by a screen that hasn't moved off
-  // it yet, is powering it now: it came off their Aura already, and now it
-  // comes off their maximum too.
+  // it holds. What was held the old way, pumped into it (store), is powering
+  // it now: it came off their Aura already, and now it comes off their
+  // maximum too.
   const power = obj(s.power);
   const store = obj(s.store);
   s.power = {};
@@ -455,7 +445,7 @@ export function normalRoots(raw, c) {
     const v = clamp(int(power[w.key], 0) + int(store[w.key], 0), 0, w.holds);
     if (v) s.power[w.key] = v;
   }
-  s.store = {};
+  delete s.store;
   // Past the maximum only while acting, or by the 1 In your element gave at
   // the start of the scene, till they've finished acting.
   s.aura = clamp(s.aura, 0, s.acting ? 99 : auraMax(c, s) + (s.elem === true ? 1 : 0));
@@ -489,7 +479,7 @@ export function normalRoots(raw, c) {
     s.choose = now;
   } else {
     if (s.stacked !== true) delete s.stacked;
-    s.choose = (Array.isArray(s.choose) ? s.choose : []).map((x) => now.find((y) => y.k === x?.k && (y.k !== "spread" || y.t === x.t))).filter(Boolean);
+    s.choose = (Array.isArray(s.choose) ? s.choose : []).map((x) => now.find((y) => y.k === x?.k && (y.k !== "spread" || y.t === x.t) && (y.k !== "arch" || y.name === x.name))).filter(Boolean);
   }
   if (s.seen && typeof s.seen !== "object") delete s.seen;
   // What a scene's used up: the Toughness Boon's free hits, the Going
@@ -648,7 +638,6 @@ export function powerUp(s, c, key, n = 1) {
 // The end of the scene: nothing's powered any more, so the maximum's back.
 export function powerOff(s) {
   s.power = {};
-  s.store = {};
 }
 // A passive that adds to a die says so: "+1 ... for each Aura powering it". One that
 // talks about the telegraphs landing, a track or Defend goes on a defence
@@ -718,7 +707,7 @@ export function thingsOf(c, s = {}) {
     out.push({ key: n > 1 ? `${key}|${n}` : key, kind, name, root, ...more });
   };
   (c.titles ?? []).forEach((t, i) => {
-    add(`title|${i}`, "title", t.text ?? t.name, t.root || null);
+    add(`title|${i}`, "title", t.text ?? t.name, mostOf(t.roots ?? {}) || null);
     (t.permissions ?? []).forEach((p, j) => add(`perm|${i}|${j}`, "perm", p.text, ROOTS.includes(p.root) ? p.root : null, { t: i }));
   });
   (c.archetypes ?? []).forEach((a, i) => {
@@ -752,14 +741,12 @@ export function thingsOf(c, s = {}) {
 //     pool: [{ i, die }], against, aim }
 // An extra action bought with Aura (via "aura") costs extraCost() of how many
 // they've bought already (s.bought, then each one in this roll), and held,
-// out of hiding and the Boon cost nothing. A screen that hasn't moved yet
-// can still send its items, which count as things it's using, and its
-// specialty, which counts for nothing.
+// out of hiding and the Boon cost nothing.
 export function countRoll(c, s, r) {
   const rootN = c.roots[r.root] ?? 0;
   const known = new Set(thingsOf(c, s).map((x) => x.key));
   const cases = [...new Set(r.cases ?? [])].filter((k) => known.has(k));
-  const using = [...new Set([...(r.using ?? []), ...(r.items ?? []), ...cases])].filter((k) => known.has(k));
+  const using = [...new Set([...(r.using ?? []), ...cases])].filter((k) => known.has(k));
   const extras = (r.extra ?? []).map((x) => ({ ...x, steps: 1 }));
   const conds = (s.conditions ?? []).filter((x) => (r.conds ?? []).includes(x.name)).reduce((t, x) => t + (x.kind === "for" ? 1 : -1), 0);
   const friends = (r.friends ?? []).reduce((a, b) => a + Math.max(1, int(b, 1)), 0);
@@ -779,12 +766,8 @@ export function countRoll(c, s, r) {
   const free = Boolean(r.beyond && freeBeyond(c, s));
   const aura = cases.length + (r.beyond && !free ? 1 : 0) + other + borrowed + price;
   const poolDice = pool.filter((x) => x.die).map((x) => x.size);
-  const items = new Set(itemsOf(c, s).map((x) => x.key));
   return {
     rootN, using, cases, extras, conds, friends, other, borrowed, total, splits, bought, price, aura, free, pool, poolDice,
     dice: [...stepsToDice(total), ...poolDice],
-    // For the screens that haven't moved yet: no specialty, and the items
-    // among what's used.
-    spec: null, specN: 0, items: using.filter((k) => items.has(k)),
   };
 }

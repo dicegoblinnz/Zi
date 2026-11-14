@@ -56,8 +56,10 @@
 //    twice, a second attuned thing and the Aura Boon do to it), saves from
 //    before coming across (Vesk keeping her play with her hook's Aura powering
 //    it, Old Vesk from before Roots, and Tamsin, built on the phone, recounted
-//    with her spreads and her last point flagged), and the build stopping on a
-//    crew sheet that doesn't add up.
+//    with her spreads and her last point flagged, and with a Scholar, which
+//    the book hasn't got any more, flagged first, for her to swap), nothing
+//    left on a sheet from specialties or the old cap, and the build stopping
+//    on a crew sheet that doesn't add up.
 // 1f. Print, with no browser: the blank sheet holds exactly the fields
 //    src/companion/sheet-fields.js lists, and every crew member printed reads
 //    back field by field (each Root and where its points came from, adding up
@@ -213,13 +215,13 @@
 //    up to on the contents, pop-ups from a link to another chapter and one in
 //    the same chapter, Back inside a pop-up, Esc and a drag putting a sheet
 //    away, the first section's Before and the last's Next, and Carry on
-//    reading on the chapter and the rules page. Twenty Places: a card for
-//    every place, Roll a d20, a place's tabs (tapped and keyed), its Secret
-//    sealed, and a tag saying what it does. Then the deck, its pop-ups and
+//    reading on the chapter and the rules page. A section opened by its
+//    address (Twenty Places' cards, a place's tabs and a tag saying what it
+//    does went with the world part on 14 Nov). Then the deck, its pop-ups and
 //    Read more offline, nothing moving under reduce-motion and a section and
 //    a sheet sliding in with motion on, 44px tap targets, and axe in both
-//    themes on the deck, a section, its contents, a pop-up, a place's tabs,
-//    threats and the crew's sheets.
+//    themes on the deck, a section, its contents, a pop-up and the crew's
+//    sheets.
 import { createServer } from "node:http";
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
@@ -228,7 +230,7 @@ import { chromium } from "playwright";
 import { AxeBuilder } from "@axe-core/playwright";
 import { PDFCheckBox, PDFDocument, PDFRadioGroup, PDFTextField } from "pdf-lib";
 import { diceLabel, diceRange, diceShapes, stepsToDice } from "../src/companion/dice.js";
-import { ROOTS, rootFor, rootsSheet } from "../src/companion/roots.js";
+import { ROOTS, rootsSheet } from "../src/companion/roots.js";
 import * as RS from "../src/companion/roots.js";
 import { costOf } from "../src/companion/points.js";
 import { checksOf, foldGrown, normalBuild, pointsOf, sheetOf } from "../src/companion/builder.js";
@@ -1085,7 +1087,7 @@ if (part("1e")) {
       same(c.titles.map((t) => t.permissions.length), [3, 3], `${id} has three permissions on each Title`);
       same(c.archetypes.map((a) => [a.name, a.have]), HAVE[id], `${id}'s archetypes and the abilities they've got`);
       same(c.numbers.aura, 7, `${id}'s Aura maximum, 5 and 2 for one attuned thing`);
-      same(c.specialties, [], `${id} has no specialties`);
+      same("specialties" in c, false, `${id} has no specialties`);
       same(c.attuned.length, 1, `${id} has one attuned thing`);
       if (c.attuned.some((a) => "aura" in a)) note(`${id}'s attuned thing still has its own way to Aura`);
       const cost = costOf(c);
@@ -1180,10 +1182,12 @@ if (part("1e")) {
     // A Boon does what it says and adds no step.
     const boon = sheet("vesk", [{ k: "boon", t: 0, lever: "Splits", name: "", on: "", drop: [1, 2] }]);
     if (RS.thingsOf(boon, RS.freshRoots(boon)).some((x) => /boon/i.test(x.kind))) note("a Boon is on the list of things that add a step");
-    // Old screens still draw till they've moved: no specialties, and every
-    // Title still has a name and its biggest Root.
-    same([c.titles[1].name, c.titles[1].root, c.titles[1].specialties, c.titles[1].permissions[0].specialty], ["Raised by the Guild", "Mind", [], ""], "the old fields are there and empty");
-    same([RS.specSteps(c, "Locks"), ROOTS.includes(rootFor(c, "Locks"))], [0, true], "a specialty's worth nothing and still has a Root");
+    // Every screen's on stacking now, so a Title's its words, its spread and
+    // its permissions, with nothing left over from specialties, and its
+    // thing's Root is the one it puts most on.
+    same(["name", "root", "specialties"].filter((k) => k in c.titles[1]).concat(c.titles[1].permissions.flatMap((x) => Object.keys(x).filter((k) => /spec/.test(k)))), [], "no old fields on a Title or its permissions");
+    same([things.find((x) => x.key === "title|1")?.root, RS.mostOf(c.titles[1].roots)], ["Mind", "Mind"], "her second Title's thing is on her Mind, where it puts most");
+    same(["specSteps", "rootFor", "actionsMax"].filter((k) => k in RS), [], "and nothing's kept for specialties or the old cap");
   });
 
   // Extra actions: your first's free, then 3 Aura, 4, 5 and so on, back to 3
@@ -1230,7 +1234,7 @@ if (part("1e")) {
     RS.doneActing(s, c);
     same(s.aura, 5, "and when she's done, she's back to the lower maximum");
     same([RS.gainAura(s, c, 2), s.aura], [2, 5], "and wins fill her up to 5, not 7");
-    same(s.store ?? {}, {}, "nothing's held the old way");
+    same("store" in s, false, "nothing's held the old way");
     const zero = RS.freshRoots(c);
     zero.acting = true;
     zero.aura = 0;
@@ -1263,16 +1267,16 @@ if (part("1e")) {
     };
     const s = RS.normalRoots(JSON.parse(JSON.stringify(raw)), c);
     same(s.v, 3, "a save from before is on v3");
-    same([s.aura, s.power, s.store, RS.auraMax(c, s)], [3, { [hook]: 2 }, {}, 5], "the 2 she held in her hook is powering it, so her maximum's 5");
+    same([s.aura, s.power, "store" in s, RS.auraMax(c, s)], [3, { [hook]: 2 }, false, 5], "the 2 she held in her hook is powering it, so her maximum's 5");
     same([s.tracks, s.scars.stamina, s.conditions.map((x) => x.name), s.threads, s.crossed, s.picked.map((p) => p.name), s.asp, s.notes, s.tele, s.grown.length], [raw.tracks, raw.scars.stamina, ["Burning"], raw.threads, raw.crossed, ["a lantern"], 4, raw.notes, raw.tele, 1], "Vesk keeps her play");
     same([s.bought ?? 0, s.stacked, s.choose], [0, true, []], "she's told once, and there's nothing for her player to choose");
     same(RS.normalRoots(JSON.parse(JSON.stringify(s)), c).stacked, true, "and it stays till she's seen it");
     const done = RS.normalRoots({ ...JSON.parse(JSON.stringify(s)), stacked: false }, c);
     same(done.stacked, undefined, "and goes once she has");
     same(RS.normalRoots({ ...raw, aura: 5, store: {} }, c).aura, 5, "her Aura comes across as it was, with room for 2 more next scene");
-    // An old screen that still holds Aura in store: it's powering now.
+    // Aura held the old way, pumped in: it's powering now.
     const held = RS.normalRoots({ ...JSON.parse(JSON.stringify(s)), store: { [hook]: 1 }, power: {} }, c);
-    same([held.power, held.store], [{ [hook]: 1 }, {}], "Aura an old screen held is powering the hook");
+    same([held.power, "store" in held], [{ [hook]: 1 }, false], "Aura pumped into the hook the old way is powering it");
     // A character from before Roots comes all the way across.
     const old = RS.normalRoots(RS.fromOld({ wound: 8, conf: 3, resolve: 2, scars: 1, notes: "Old notes.", threads: { dorrie: "strained" } }, c), c);
     same([old.v, old.moved, old.stacked, old.scars.stamina.length, old.notes], [3, true, true, 1, "Old notes."], "Old Vesk moves onto Roots and onto stacking at once");
@@ -1294,7 +1298,7 @@ if (part("1e")) {
     };
     const t = rootsSheet(tamsin, [], BUILD);
     same(t.roots, { Body: 6, Mind: 2, Soul: 4 }, "Tamsin's Roots recounted: each Title's 3 on its Root, and her permissions");
-    same([t.specialties, t.titles.map((x) => x.roots), t.titles.map((x) => x.fromRoot)], [[], [full({ Body: 3 }), full({ Soul: 3 })], ["Body", "Soul"]], "her Titles read as 3 on their old Roots, for her to check");
+    same(["specialties" in t, t.titles.map((x) => x.roots), t.titles.map((x) => x.fromRoot), t.titles.flatMap((x) => ["name", "root", "specialties"].filter((k) => k in x))], [false, [full({ Body: 3 }), full({ Soul: 3 })], ["Body", "Soul"], []], "her Titles read as 3 on their old Roots, for her to check, with their specialties gone");
     same([t.numbers.aura, "aura" in t.attuned[0]], [7, false], "her rapier puts 2 on her Aura and has no way to Aura of its own");
     same(t.archetypes.map((a) => a.have.length), [2, 2], "she keeps every ability her archetypes had");
     same(t.points, { start: 35, spent: 34 }, "she comes to 34 of her 35 points");
@@ -1303,6 +1307,15 @@ if (part("1e")) {
     // Once her build spreads a Title, its flag goes.
     const spread = rootsSheet({ ...tamsin, titles: [{ ...tamsin.titles[0], roots: { Body: 2, Mind: 1, Soul: 0 } }, tamsin.titles[1]] }, [], BUILD);
     same(RS.normalRoots(ts, spread).choose, [{ k: "spread", t: 1, root: "Soul" }, { k: "points", left: 1 }], "spreading her first Title clears its flag");
+    // An archetype the book hasn't got any more, like the Scholar since
+    // 14 Nov, is hers to swap, and it's the first thing she's asked.
+    const withScholar = rootsSheet({ ...tamsin, archetypes: [tamsin.archetypes[0], { name: "Scholar", id: "a-scholar", home: "Confidence" }] }, [], BUILD);
+    same([withScholar.archetypes.map((a) => Boolean(a.gone)), RS.choicesOf(withScholar)[0]], [[false, true], { k: "arch", a: 1, name: "Scholar" }], "the Scholar's gone from the book, and hers to swap");
+    const sc = RS.normalRoots({ v: 2, aura: 5, tracks: { stamina: 12, confidence: 12, resolve: 12 } }, withScholar);
+    same(sc.choose[0], { k: "arch", a: 1, name: "Scholar" }, "moving across, it's the first thing she's asked");
+    const swapped = rootsSheet({ ...tamsin, archetypes: [tamsin.archetypes[0], { name: "Oracle", id: "a-oracle", home: "Confidence" }] }, [], BUILD);
+    same(RS.normalRoots(sc, swapped).choose.some((x) => x.k === "arch"), false, "and once she's swapped it in Change, it goes");
+    same(rootsSheet(withScholar, [], null).archetypes.some((a) => a.gone), false, "with no book to hand, nothing's called gone");
   });
 
   // The build stops on a crew sheet that doesn't add up, or an ability that
@@ -3678,7 +3691,7 @@ if (part("8")) {
         perm("run the rooftops").text = "run and leap the rooftops";
         perm("know how a lock’s built").text = "know how a locks built";
         perm("pick a mechanical lock").root = "Mind";
-        v.titles[1].name = v.titles[1].text = "Raised by the guild";
+        v.titles[1].text = "Raised by the guild";
         v.numbers.stride = 4;
         v.hash = "madeup01";
         return `${open}${JSON.stringify(data).replace(/</g, "\\u003c")}${close}`;
@@ -3734,7 +3747,7 @@ if (part("9")) {
   }
   for (const base of book.crew) {
     const c0 = rootsSheet(base, [], BUILD);
-    const root = c0.titles[0].root;
+    const root = RS.mostOf(c0.titles[0].roots);
     const grown = [
       { k: "perm", t: 0, text: "a new permission", root },
       { k: "thread", person: "Someone new", text: "They owe me.", kind: "hostile" },
@@ -3749,7 +3762,7 @@ if (part("9")) {
     roots.Mind += 1;
     roots.Soul += 3;
     same(c.roots, roots, `${base.name}'s Roots with a permission and a new Title spread Mind 1 and Soul 2`);
-    same(c.specialties, [], `${base.name} with no specialties`);
+    same("specialties" in c, false, `${base.name} with no specialties`);
     same([c.titles.length, c.archetypes.length, c.archetypes.at(-1).have, c.attuned.length, c.attuned[0].awakenings.length, c.numbers.aura], [c0.titles.length + 1, c0.archetypes.length + 1, ["Pull them back"], c0.attuned.length + 1, c0.attuned[0].awakenings.length + 1, c0.numbers.aura + 2], `${base.name}'s Titles, archetypes with the one ability, a new attuned thing with Aura 2 more, and awakenings`);
     same(c.threads.find((p) => p.person === "Someone new")?.threads[0]?.kind, "hostile", `${base.name}'s new hostile thread`);
     // A seventh permission never gets on a Title.
@@ -4128,46 +4141,12 @@ if (part("10")) {
     await context.close();
   }
 
-  // A place: its number, its dice and its parts as tabs, a tag that says
-  // what it does, and Roll a d20 on Twenty Places.
-  const places = chapterOf("twenty-places");
-  await page.goto(`${BASE}/rules/twenty-places/`);
-  await page.waitForSelector(".hub-place");
-  same(await page.locator(".hub-place").count(), 20, "Twenty Places has a card for every place");
-  await page.evaluate(() => (Math.random = () => 0.31));
-  await page.click(".hub-d20");
-  await page.waitForSelector(".hub-rolled.on a", { timeout: 5000 }).catch(() => note("Roll a d20 never landed"));
-  const rolled = places.hub.rows.find((r) => r.place?.n === 7);
-  same([await text(page, ".hub-rolled .n"), await text(page, ".hub-rolled a"), await page.getAttribute(".hub-place.is-rolled", "data-s")], ["7", rolled.title, rolled.id], "Roll a d20 picks out the place");
-  await shot(page, "places-rolled-dark");
-  await page.click(".hub-rolled a");
-  await opened(page, rolled.id);
-  await page.goto(`${BASE}/rules/twenty-places/#s-place-copper-baths`);
-  await opened(page, "s-place-copper-baths");
-  const tabs = () => page.evaluate(() => {
-    const pl = document.querySelector(".rd-track > section.is-on .pl");
-    return { tab: pl.querySelector(".pl-tab[aria-selected='true']").dataset.tab, panels: [...pl.querySelectorAll(".pl-panel")].filter((p) => p.checkVisibility()).map((p) => p.dataset.tab) };
-  });
-  same([await text(page, ".rd-count"), await text(page, ".is-on .pl-n"), await tabs()], ["1 of 21", "1", { tab: "scene", panels: ["scene"] }], "the Copper Baths opens on its scene, number 1");
-  await shot(page, "place-scene-dark");
-  await page.click('.is-on .pl-tab[data-tab="tele"]');
-  same(await tabs(), { tab: "tele", panels: ["tele"] }, "the Telegraphs tab");
-  same(await page.locator(".is-on .pl-panel.on .tele").count(), 3, "the Copper Baths' three telegraphs, as cards");
-  await shot(page, "place-telegraphs-dark");
-  await page.keyboard.press("ArrowRight");
-  same([await tabs(), await page.evaluate(() => document.activeElement?.dataset.tab)], [{ tab: "prep", panels: ["prep"] }, "prep"], "the right arrow on the tabs goes to Prep");
-  await page.click('.is-on .pl-tab[data-tab="secret"]');
-  same(await page.$eval(".is-on .pl-panel.on details.seal", (d) => d.open), false, "the Secret's sealed till it's opened");
-  await page.click(".is-on .pl-panel.on details.seal > summary");
-  has(await text(page, ".is-on .pl-panel.on .secret"), "Every Word Is Sold", "the Secret opens in a tap");
-  await page.click('.is-on .pl-tab[data-tab="scene"]');
-  const tag = await page.$eval(".is-on .pl-panel.on button.tag[data-tag]", (b) => b.dataset.tag);
-  const tagged = JSON.parse(readFileSync("public/world-book.json", "utf8")).tags.find((t) => t.name === tag);
-  await page.click(`.is-on .pl-panel.on button.tag[data-tag="${tag}"]`);
-  same([await page.getAttribute(`.is-on .pl-panel.on button.tag[data-tag="${tag}"]`, "aria-expanded"), (await text(page, ".is-on .tagx")).includes(tagged?.does?.slice(0, 30) ?? "?")], ["true", true], `${tag} says what it does`);
-  await shot(page, "place-tag-dark");
-  await page.click(`.is-on .pl-panel.on button.tag[data-tag="${tag}"]`);
-  same(await page.locator(".is-on .tagx").count(), 0, "tapped again, it's put away");
+  // A section opened by its address, then Contents. The book's places and
+  // threats, drawn as the game's pieces (a place's tabs, Roll a d20 on Twenty
+  // Places, a tag that says what it does), went with the world part in the
+  // 14 Nov cut, and their checks come back with them.
+  await page.goto(`${BASE}/rules/conflict/#s-movement`);
+  await opened(page, "s-movement");
   await page.click(".rd-back");
   await contents(page);
   same((await view(page)).hash, "", "Contents from a section opened by its address");
@@ -4278,29 +4257,12 @@ if (part("10")) {
     await page.waitForSelector(".hub-row");
     await axe("a chapter's contents");
     await shot(page, `chapter-contents-${theme}`);
-    await page.goto(`${BASE}/rules/twenty-places/`);
-    await page.waitForSelector(".hub-place");
-    await axe("Twenty Places' contents");
-    await shot(page, `places-${theme}`);
-    await page.goto(`${BASE}/rules/twenty-places/#s-place-copper-baths`);
-    await page.waitForSelector(".rd-track > section.is-on .pl");
-    await page.click(".is-on .pl-panel.on button.tag[data-tag]");
-    await axe("a place, with a tag open");
-    await shot(page, `place-scene-${theme}`);
-    for (const t of ["tele", "prep", "secret"]) {
-      await page.click(`.is-on .pl-tab[data-tab="${t}"]`);
-      await axe(`a place's ${t} tab`);
-    }
-    await page.goto(`${BASE}/rules/the-bestiary/#${chapterOf("the-bestiary").hub.rows[0].id}`);
-    await page.waitForSelector(".rd-track > section.is-on .box-threat");
-    await axe("a page of threats");
-    await shot(page, `threats-${theme}`);
     await page.goto(`${BASE}/rules/title-ideas-and-the-crew/#s-pregens`);
     await page.waitForSelector(".rd-track > section.is-on .box-sheet");
     await axe("the crew's sheets");
     await context.close();
   }
-  console.log(`reading: ${cards.length} cards checked against the chapters and the steps into dice (${dieChecks} rolls), the deck swiped, remembered and read offline, a chapter's contents and its sections a page at a time (swiped, keyed, Back and Forward), bookmarks, what's read and where you're up to, pop-ups, Carry on reading, and a place's tabs, tags and Roll a d20`);
+  console.log(`reading: ${cards.length} cards checked against the chapters and the steps into dice (${dieChecks} rolls), the deck swiped, remembered and read offline, a chapter's contents and its sections a page at a time (swiped, keyed, Back and Forward), bookmarks, what's read and where you're up to, pop-ups and Carry on reading`);
 }
 
 await browser.close();

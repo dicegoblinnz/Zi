@@ -953,10 +953,11 @@ function chooseNote(ch, c) {
       const t = c.titles[x.t];
       return `<li class="cc-item"><p><em>${esc(t?.text ?? t?.name ?? "A Title")}</em> puts all 3 on ${their} ${esc(x.root)}, the way it was.</p><div class="cc-row">${changeLink(ch, "Spread it")}<button type="button" class="button" data-act="choose" data-i="${i}">Keep all 3 on ${esc(x.root)}</button></div></li>`;
     }
+    if (x.k === "arch") return `<li class="cc-item"><p>The ${esc(x.name)} isn’t one of the archetypes any more, so it’s got no Trait or abilities on ${their} sheet.</p><div class="cc-row">${changeLink(ch, "Pick another")}<button type="button" class="button" data-act="choose" data-i="${i}">Later</button></div></li>`;
     if (x.k === "points") return `<li class="cc-item"><p>${x.left === 1 ? "There’s 1 point" : `There are ${x.left} points`} left to spend on ${their} sheet.</p><div class="cc-row">${changeLink(ch, x.left === 1 ? "Spend it" : "Spend them")}<button type="button" class="button" data-act="choose" data-i="${i}">Later</button></div></li>`;
     return "";
   }).join("");
-  return `<section class="cc-note cc-choose" aria-labelledby="cc-choose-t"><h2 class="cc-h3"><span id="cc-choose-t">Yours to choose</span> ${tip("mv-choose", ["A Title puts 3 on your Roots, spread however you like: all 3 on one, 2 and 1, or 1 on each. One that was on a single Root reads as all 3 on it till you spread it.", "Most characters start on 35 points, and one built before points came in might have some left.", link("s-step-roots", "Roots in the rules")], "Spreading a Title")}</h2><ul class="cc-list">${rows}</ul></section>`;
+  return `<section class="cc-note cc-choose" aria-labelledby="cc-choose-t"><h2 class="cc-h3"><span id="cc-choose-t">Yours to choose</span> ${tip("mv-choose", ["A Title puts 3 on your Roots, spread however you like: all 3 on one, 2 and 1, or 1 on each. One that was on a single Root reads as all 3 on it till you spread it.", "Most characters start on 35 points, and one built before points came in might have some left.", "An archetype that's gone from the book, like the Scholar, does nothing till you swap it for another in Change.", link("s-step-roots", "Roots in the rules")], "What’s yours to choose")}</h2><ul class="cc-list">${rows}</ul></section>`;
 }
 
 // A character on the phone: the play screen first, and the rest of the sheet
@@ -1275,7 +1276,7 @@ function putBackView(ch, c, s) {
     if (g.k === "perm" || g.k === "swap") {
       const t = c.titles[g.t];
       return `<li class="cc-item">${head("A permission", g.text)}${form(`<label class="cc-field">On <select name="t">${c.titles.map((x, i) => `<option value="${i}"${i === g.t ? " selected" : ""}${R.slotsOf(x) >= R.MAX_PERMS ? " disabled" : ""}>${esc(x.text ?? x.name)}</option>`).join("")}</select></label>
-        <label class="cc-field">Its Root ${rootPick("root", t?.root)}</label>`)}</li>`;
+        <label class="cc-field">Its Root ${rootPick("root", R.mostOf(t?.roots ?? {}))}</label>`)}</li>`;
     }
     if (g.k === "att") {
       return `<li class="cc-item">${head("On an attuned thing", g.text)}${form(`<label class="cc-field">On <select name="a">${c.attuned.map((a, i) => `<option value="${i}"${i === (g.a ?? 0) ? " selected" : ""}>${esc(a.name)}</option>`).join("")}</select></label>

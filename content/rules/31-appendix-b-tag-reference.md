@@ -4,7 +4,7 @@ id: appendix-tags
 slug: appendix-b-tag-reference
 order: 31
 part: "Appendices & Index"
-partNumber: "Part V"
+partNumber: "Part IV"
 source: 2026-10-02 rulebook
 updated: 2026-11-14
 ---

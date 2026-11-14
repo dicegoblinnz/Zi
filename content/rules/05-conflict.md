@@ -84,6 +84,53 @@ Holding, hiding and the Boon are on top of what you buy, and they don't put the 
 
 You can't keep your action back to use later in *this* round once the telegraphs start landing, because there are no last-moment reactions in Zi'Dara. Everything you might react to is already on the table, so you deal with it on your turn.
 
+## Movement and Range {#s-movement}
+
+:::quote
+You play Zi'Dara on a grid first, where 1 square is 1 unit, about five feet.
+:::
+
+-   **Stride is free.** Every character has a base **stride of 3 units**. Every round you can move your stride without spending an action, whether that's before, between or after your actions.
+-   **Move action.** Spend your action to go further. Roll a Root and everything that fits how you're moving, like Vesk's Body, her first Title, *run the rooftops* and her grappling line. The number you roll is how many extra units you move. Split it, or go past 6 steps, and the dice add together. Movement's the one roll in Zi'Dara where dice add.
+-   **Diagonals count as one.** It keeps things quick.
+-   **Difficult ground**, like deep snow, a slick floor or a crowd, costs 2 units a square.
+-   **Your sheet can change your stride.** The Stride Boon adds 2 units. A Stride Burden takes 2 away, and a *Heavy* Catch on something you've attuned takes 1, to a minimum of 0. A [Teleporter](#a-teleporter)'s stride can be a teleport of up to 10 units.
+-   **Getting something out of your bag** takes your action, but putting it away is free. See [What you carry](#s-carrying).
+
+:::rule
+**No reactions, no opportunity attacks.** You can walk right past a guard and nothing lashes out at you for moving. Threats control space with their *telegraphs*, like *cut off the way to the door* or *grab whoever runs*, so you always know what moving will cost before you move. Moving doesn't get you out of a telegraph aimed at you, though. That one lands wherever you end up, and diving behind cover once it's aimed is a way of answering it, so roll for it. Only a telegraph aimed at a place, like a fire or a falling chandelier, can be walked out of.
+:::
+
+### Reach and range {#reach-and-range}
+
+How far a bow, a thrown knife or a spell reaches is the story's call. The bands are a guide, so don't go getting a ruler out.
+
+| Band | Grid | What reaches it |
+| --- | --- | --- |
+| **Close** | Next to you (1 unit) | Fists, blades, a whisper, a hand on the shoulder. |
+| **Reach** | 2 units | Spears, polearms, whips: anything with *Reach*. |
+| **Near** | Across a room, or down a street | Thrown and Ranged weapons: knives, slings, shortbows, pistols. Most magic. A shout. |
+| **Far** | Across a town square, or a field | Longbows and crossbows: anything *Long*. Magic that goes beyond. |
+| **Beyond** | Further | The story decides: a siege engine, a sniper's rifle, a working that spans the city. |
+
+**Line of sight** comes from the story. If something solid's in the way, you can't hit through it, and neither can they. That's what cover is. It decides what's possible, and it doesn't add steps. Stand behind a wall and the archer on the roof has to telegraph at someone else, or come down.
+
+:::example[Movement at the table]
+Vesk's stride is 3. In one round she moves those 3 units for free, then spends her action to Move across the rooftops. That's her Body, her first Title, *run the rooftops*, her grappling line and *Anywhere I can throw a hook*, 12 steps, two d12s, and they add. She rolls 6 and 3, and that's 12 units in total.
+
+Bram's stride is 3. He moves 3 units for free, then spends his action on a Move. Nothing on his sheet's about running, so it's his Body on its own, 7 steps, a d12 and a d2. He rolls 4 and 1, and that's 8 units in total. He's strong, but he's no sprinter, and his sheet says so.
+:::
+
+### Playing without a grid {#s-theatre}
+
+You don't need a map. Use the bands instead of squares.
+
+-   **Close, Reach and Near** are within your free stride of each other, so moving between them costs nothing.
+-   **Far** takes a Move action to cross.
+-   **Beyond** takes more than one round.
+
+When it matters where someone is, like who's in the doorway or who can reach the lever, say it out loud and the GM writes it on a card in the middle of the table. A rough sketch on scrap paper counts as a grid too.
+
 ## Answering a Telegraph {#s-answering}
 
 To **answer** a telegraph, spend your action and build a roll from a Root and everything on your sheet that fits the *way* you're stopping it: dodge it, parry it, shove the brute's arm aside, shout the crowd down, slam the door before it slams on you, or shoot the archer first. Then roll against the telegraph's dice. Friends can put their actions in too, and then it's a combo with one roll between you.
@@ -273,6 +320,19 @@ Take a threat down and its telegraphs go with it, which is often the best answer
 :::rule
 **Threats don't step down.** Beating a threat never makes its Challenge smaller. A few unique threats do work that way, like a crowd that thins as you win it over or a wall that crumbles as you batter it, and their tags say so. For everything else, the Challenge is the Challenge, and the tags are what you fight.
 :::
+
+## Weapons and What They Let You Do {#s-weapons-tactics}
+
+A plain weapon is just what it is. It's 1 more on any roll you use it in that it fits, so a sword's a step in a sword fight, and a dagger's still 1 more in the hand of someone with nothing else on their sheet for a fight. It lets you do what that weapon does: a sword cuts, and a spear keeps them back. An attuned weapon's an item the same way, and its awakenings do more on top: Wren's longbow is 1 more on every shot, *Long shot* is a step as well, and it's +1 on one of her dice for every Aura powering it.
+
+Weapons also come with **properties**, free with the weapon. They're the things a weapon lets you do that bare hands can't. The full list is in [Weapon properties](#s-weapon-props). At the table they sort into four jobs:
+
+-   **Controlling distance**: *Reach, Thrown, Ranged, Long.* You're hitting them from where they can't hit back. A spear holds a doorway, and a longbow holds a whole street.
+-   **Getting through**: *Piercing, Breaker.* A crossbow bolt doesn't care about *Armoured*, whatever its multiplier, and a war hammer doesn't care about *Shield*. When everything keeping a threat going is something your weapon ignores, one win takes it out.
+-   **Holding and moving**: *Grapple, Sweep, Charge.* Pin one enemy where the others can't help it, or go at a whole line at once. *Sweep* puts one die on everyone within your reach, and it's free. Unless you're an [Elementalist](#a-elementalist), it's the way to put one die on a crowd.
+-   **Surprise**: *Concealed, Quick.* It's the knife nobody found, drawn without spending an action.
+
+Some properties are costs: *Two-Handed* means no shield, and *Reload* means an action to load it again after every shot. With one action a round, that's your whole next turn, so a crossbow hits hard and then waits. The heavy hitters carry them for a reason.
 
 ## Stakes, Clocks and Events {#s-stakes}
 

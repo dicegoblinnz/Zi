@@ -2,11 +2,11 @@
 title: "Building Your World"
 id: world
 slug: building-your-world
-order: 24
-part: "The World"
-partNumber: "Part IV"
+order: 19.6
+part: "The GM"
+partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-10-16
+updated: 2026-11-14
 ---
 :::quote
 You build everything else with the same tools you used to make your character.

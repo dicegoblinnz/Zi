@@ -2,9 +2,9 @@
 title: "The Threat Builder"
 id: threat-builder
 slug: the-threat-builder
-order: 28
-part: "The World"
-partNumber: "Part IV"
+order: 19.3
+part: "The GM"
+partNumber: "Part III"
 source: 2026-10-02 rulebook
 updated: 2026-11-14
 ---
@@ -12,7 +12,7 @@ updated: 2026-11-14
 You don't need a page of numbers for every monster. A threat is a Challenge and a few tags.
 :::
 
-This chapter's just the procedure. [Running the Game](#s-building-threats) has the thinking behind it, and [The Bestiary](#bestiary) has forty threats built this way.
+This chapter's just the procedure. [Running the Game](#s-building-threats) has the thinking behind it.
 
 ## Building a threat {#building-a-threat}
 
@@ -118,4 +118,4 @@ For how he comes at you, she rolls a 9, *Calls for Help*, and decides that's his
 
 Three plain tags would be three wins against his d12, and a crew of four can manage that in a single round. So she gives his big ones [multipliers](#s-tough-gm), as big as he needs. She starts from four times his Challenge, 24, and his armour's what makes him a wall, so that's where it goes: *Armoured ×24*, and it still comes first. His feeding's part of him too, but a smaller part, so it's *Feeds ×15*. Her table's a starting crew of four, a [threat budget](#s-threat-budget) of 60, so they stay as they are. Once each of them has had an Aspiration come good it'd be 80, a third more, and they'd be ×32 and ×20. Now he's forty wins the long way: twenty-four through the armour, one for *Relentless* and fifteen to stop him feeding. A crew of four lands about ten wins a round, so that's about four rounds, or one win if the crew has read Vane's ledger. That makes him a boss worth a session, because he's hard to grind down and he's got a secret worth hunting for.
 
-At the table, Redhand telegraphs from the round budget like everything else. His axe is a d12 at someone's Body, and *Reach* lets it pin someone at the end of it. His wolf goes for the scene's clock with a d12: *it howls, and the pack answers.* Write three like that on his card before the session, the way every threat in [The Bestiary](#bestiary) has them, and you'll never be stuck for what he does next.
+At the table, Redhand telegraphs from the round budget like everything else. His axe is a d12 at someone's Body, and *Reach* lets it pin someone at the end of it. His wolf goes for the scene's clock with a d12: *it howls, and the pack answers.* Write three like that on his card before the session, and you'll never be stuck for what he does next.

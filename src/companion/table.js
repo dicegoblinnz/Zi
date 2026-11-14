@@ -875,7 +875,7 @@ export function makeTable(d) {
     const live = Boolean(last && !last.over);
     const body = p.any ? sceneList(id, doc, { gm: true, round: last, live }) : `<p class="cc-lead">Put the scene on the table, and every phone sees it. ${tip(`sc-how-${id}`, ["What the crew’s after and what’s in the way, what’s running out, and what’s there to use.", "Each player can spend their action on it, and whatever nobody works steps down at the end of the round."], "How the scene works")}</p>`;
     return `<div class="tg-scene" aria-labelledby="sc-h"><div class="tg-head"><h3 id="sc-h">The scene</h3>${p.any ? `<p class="cc-small">${esc(sceneGlance(doc))}</p>` : ""}</div>${body}
-      <div class="cc-row sc-add"><button type="button" class="button sm" data-act="tg" data-do="sc-place">${p.any ? "Another place" : "From a place in the book"}</button><button type="button" class="button sm" data-act="tg" data-do="sc-new" data-t="stake">Add a stake</button><button type="button" class="button sm" data-act="tg" data-do="sc-new" data-t="event">${p.clocks.length ? "Add an event" : "Add an event or scene clock"}</button><button type="button" class="button sm" data-act="tg" data-do="sc-new" data-t="ground">Add the ground</button>${p.any ? `<button type="button" class="button sm" data-act="tg" data-do="sc-clear">${sure("sc-clear", "Tap again to clear it", "Clear the scene")}</button>` : ""}</div></div>`;
+      <div class="cc-row sc-add">${(d.places ?? []).length ? `<button type="button" class="button sm" data-act="tg" data-do="sc-place">${p.any ? "Another place" : "From a place in the book"}</button>` : ""}<button type="button" class="button sm" data-act="tg" data-do="sc-new" data-t="stake">Add a stake</button><button type="button" class="button sm" data-act="tg" data-do="sc-new" data-t="event">${p.clocks.length ? "Add an event" : "Add an event or scene clock"}</button><button type="button" class="button sm" data-act="tg" data-do="sc-new" data-t="ground">Add the ground</button>${p.any ? `<button type="button" class="button sm" data-act="tg" data-do="sc-clear">${sure("sc-clear", "Tap again to clear it", "Clear the scene")}</button>` : ""}</div></div>`;
   }
 
   // Who's done what this round, on the GM's page.
@@ -1692,7 +1692,9 @@ export function makeTable(d) {
         if (!was) return;
         const still = was.paid && hit ? hit.round.tele.find((t) => t.id !== o.id && s.tele.i?.[t.id] && t.at.user === hit.t.at.user && t.at.ch === hit.t.at.ch) : null;
         if (still) s.tele.i[still.id] = { ...s.tele.i[still.id], paid: 1 };
-        else if (was.paid) s.aura = Math.min(c.numbers.aura, s.aura + 1);
+        // Its Aura back, up to the maximum less what's powering, or past it
+        // while they're acting.
+        else if (was.paid) R.gainAura(s, c, 1);
         record(s, id, "i", o.id, null);
       } else {
         const round = local(id).rounds.find((r) => r.id === o.round);
@@ -2222,7 +2224,7 @@ export function makeTable(d) {
         // Still taking another one for the same friend, it carries the Aura now.
         const still = was.paid ? hit.round.tele.find((t) => t.id !== hit.t.id && s.tele.i?.[t.id] && t.at.user === hit.t.at.user && t.at.ch === hit.t.at.ch) : null;
         if (still) s.tele.i[still.id] = { ...s.tele.i[still.id], paid: 1 };
-        else if (was.paid) s.aura = Math.min(c.numbers.aura, s.aura + 1);
+        else if (was.paid) R.gainAura(s, c, 1);
         record(s, id, "i", hit.t.id, null);
         return `It’s back on ${hit.t.at.name}.${was.paid && !still ? ` Your Aura’s back too: ${s.aura}.` : ""}`;
       });

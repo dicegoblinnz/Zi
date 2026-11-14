@@ -142,15 +142,11 @@ function crewSheet(name, titleText, body, block, ctx) {
       if (/,/.test(p[2])) warn(`*${p[1]}* says (${p[2]}), and a permission's just its Root now`);
       const r = rootOf(p[2].split(",")[0], `*${p[1]}*`);
       if (ROOT_NAMES.includes(r)) roots[r] += 1;
-      return { text: plain(p[1]), root: r, specialty: "" };
+      return { text: plain(p[1]), root: r };
     });
     if (!permissions.length) warn(`the ${label} has no permissions I can read: each one's *a permission* (its Root)`);
     if (permissions.length > 6) warn(`the ${label} has ${permissions.length} permissions, and a Title holds six at most`);
-    const words = plain(t[1]);
-    const most = ROOT_NAMES.reduce((best, r) => (spread[r] > (spread[best] ?? 0) ? r : best), "");
-    // name, root, specialties and a permission's specialty are only there
-    // for the companion's screens that haven't moved onto stacking yet.
-    titles.push({ text: words, name: words, roots: spread, root: most, specialties: [], permissions, boons: [] });
+    titles.push({ text: plain(t[1]), roots: spread, permissions, boons: [] });
   }
   if (!titles.length) warn("there are no Titles");
 
@@ -285,8 +281,6 @@ function crewSheet(name, titleText, body, block, ctx) {
     points: { start: 0, spent: 0 },
     archetypes, titles,
     roots: Object.fromEntries(ROOT_NAMES.map((r) => [r, roots[r]])),
-    // Empty, for the screens that haven't moved onto stacking yet.
-    specialties: [],
     carry, armour, attuned, numbers, threads, crewQs,
     aspiration: { text: curly(asp?.[1] ?? ""), die: Number(asp?.[2] ?? 2) },
     trouble: troubleLabel ? italics(field[troubleLabel]) : [],

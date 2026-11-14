@@ -199,7 +199,7 @@ The crew has to recover a ledger from the Harbourmaster's ball before it's read 
 
 **Stakes:** *Get the ledger* is Challenge 4, with *Locked* and *Watched* in the way. If they fail, every name in it is ruined, including Dorrie's cousin. The second, *Keep your faces out of it*, is Challenge 3, with *An Old Enemy in the Room* (hidden) in the way, and there's a clock on it at d8, while the inspector asks questions. If they fail, the Guild knows exactly who robbed it. The third, *Win the Harbourmaster's wife*, is Challenge 4, with *Loyal* and *Afraid* in the way. If they win, she'll testify against him later. That one's optional, and tempting.
 
-**Who pushes back:** The Harbourmaster (Bestiary), his two guards (mooks), and the old enemy, a Guild inspector who arrested Vesk once and wants to finish the job.
+**Who pushes back:** The Harbourmaster, his two guards (mooks), and the old enemy, a Guild inspector who arrested Vesk once and wants to finish the job.
 
 **Ground:** *An Audience*, *Chandelier* and *Balconies*, plus a hidden one: *A Servants' Passage*.
 
@@ -290,20 +290,20 @@ Most threats need nothing but Challenge and tags. A few deserve a rule of their 
 Your **threat budget** says how much your threats can take, and how long a scene's going to run.
 
 :::rule
-**Threat budget: 15 a character as they start.** A starting crew of four is **60**. Every Title, archetype or attuned thing an Aspiration gives them after that puts 5 more on it: 20 a character with one, 25 with two, 30 with three and 35 with four. Past four, it's your call.
+**Threat budget: 15 a character as they start.** A starting crew of four is **60**. Every Title, archetype or attuned thing an Aspiration gives them after that puts a third on each character's share, on top of the last: 20 a character with one, 27 with two, 36 with three and 48 with four. Past four, it's your call.
 :::
 
 | New picks each | A character | Four characters | Multipliers |
 | --- | --- | --- | --- |
 | None (a starting crew) | 15 | **60** | As they're written |
 | One | 20 | **80** | A third bigger |
-| Two | 25 | **100** | Two thirds bigger |
-| Three | 30 | **120** | Twice as big |
-| Four | 35 | **140** | Two and a third times |
+| Two | 27 | **108** | Nearly twice as big |
+| Three | 36 | **144** | Nearly two and a half times |
+| Four | 48 | **192** | A bit over three times |
 
-Every [multiplier](#s-tough-gm) in this book is written for a starting crew of four, a threat budget of 60. For a bigger or more experienced crew, multiply each one by the threat budget and divide by 60, to the nearest whole number. Every new thing on their sheets is a step on most of their rolls, so a crew that's grown lands a lot more wins. At 80 that's a third more, so Redhand's *Armoured ×24* is *Armoured ×32*, and his *Feeds ×15* is *Feeds ×20*. A smaller crew works the same way: two characters as they start are a threat budget of 30, so every multiplier's halved, and a tag that gets down to ×1 is a plain one.
+A threat's [multipliers](#s-tough-gm) are built for a starting crew of four, a threat budget of 60. For a bigger or more experienced crew, multiply each one by the threat budget and divide by 60, to the nearest whole number. Every new thing on their sheets is a step on most of their rolls, and every win's Aura towards another action, so each pick puts more on the crew than the one before. At 80 that's a third more, so Redhand's *Armoured ×24* is *Armoured ×32*, and his *Feeds ×15* is *Feeds ×20*. A smaller crew works the same way: two characters as they start are a threat budget of 30, so every multiplier's halved, and a tag that gets down to ×1 is a plain one.
 
-It's a guide, so move it to suit the table. If the crew's mixed, add up each character's share: Bram and Dorrie as they started, and Vesk and Isolde with two new picks each, is 15 + 15 + 25 + 25 = 80, so every multiplier's a third bigger. Past four new picks the crew's growing in ways the ladder doesn't count, like Titles filled to six permissions, Boons and attuned things at Perfected, so go by what you see at the table.
+It's a guide, so move it to suit the table. If the crew's mixed, add up each character's share: Bram and Dorrie as they started, and Vesk and Isolde with two new picks each, is 15 + 15 + 27 + 27 = 84, so every multiplier's two fifths bigger, and Redhand's *Armoured ×24* is *Armoured ×34*. Past four new picks the crew's growing in ways the ladder doesn't count, like Titles filled to six permissions, Boons and attuned things at Perfected, so go by what you see at the table.
 
 ### How long a scene runs {#s-size-scene}
 
@@ -512,7 +512,7 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 
 **In a round.** Telegraph everything, face up, within the round budget: about 11 steps for each player, about half that for a breather and half again at Hard. A telegraph at one of the crew says Body, Mind or Soul. Mix harm, control, position, stakes, clocks and words, about one die at each of the crew's Body at Even. A threat aims one die at each of the crew, unless a tag says more, and each of their tracks stops one at its Root, so count the dice at each Root. Nobody can intercept what's at someone's Mind or Soul. Let the players roll the threats' dice, once a round for each threat, let wins change things, and recognise openings.
 
-**Threats.** Size scenes from the threat budget: 15 a character as they start, so that's 60 for a starting crew of four, and 5 more a character with every new Title, archetype or attuned thing. A multiplier's as big as the creature needs, on the tag that says what it is, and four times its Challenge is a good start. They're written for 60, so multiply each one by the threat budget and divide by 60. A vulnerability can strip two tags in one hit, so give them out with care, and keep them rare on the crew.
+**Threats.** Size scenes from the threat budget: 15 a character as they start, so that's 60 for a starting crew of four, and a third on each character's share with every new Title, archetype or attuned thing (20, 27, 36 and 48). A multiplier's as big as the creature needs, on the tag that says what it is, and four times its Challenge is a good start. They're built for 60, so multiply each one by the threat budget and divide by 60. A vulnerability can strip two tags in one hit, so give them out with care, and keep them rare on the crew.
 
 **Consequences.** Only when it matters. Name the cost of a blow or a miss, take a fair swap, and fail forward. What gets through to their Mind or Soul costs a size of Confidence or Resolve, the same as a blow, unless armour on that Root takes it or they pay 2 for 1. When a player chooses to die at a Blaze, slow right down and let them tell it.
 

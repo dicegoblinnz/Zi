@@ -95,6 +95,9 @@ export function makeWorld(d) {
   // each one's file once it's been fetched.
   const WH = d.wholes ?? [];
   const wholeIn = (from) => WH.find((x) => x.id === from) ?? null;
+  // A world taken off the site (content/worlds/retired.yaml) has no file to
+  // fetch, so nothing goes looking for one, and it's never offered.
+  const fileFor = (from) => Boolean(wholeIn(from) && !wholeIn(from).retired);
   const files = new Map();
   const fetching = new Map();
   // When a file last couldn't be had, so it's tried again a minute later at
@@ -450,7 +453,7 @@ export function makeWorld(d) {
   // can't be had (no signal, or it's not a world there is).
   function loadWhole(from) {
     if (files.has(from)) return Promise.resolve(files.get(from));
-    if (!wholeIn(from)) return Promise.resolve(null);
+    if (!fileFor(from)) return Promise.resolve(null);
     if (!fetching.has(from)) {
       const job = fetch(`/worlds/${encodeURIComponent(from)}.json`, { cache: "no-cache" })
         .then((r) => (r.ok ? r.json() : null))
@@ -473,7 +476,7 @@ export function makeWorld(d) {
   // screen drawn again once it is.
   function wholeFile(from) {
     if (files.has(from)) return files.get(from);
-    if (wholeIn(from) && online() && !fetching.has(from) && Date.now() - (missed.get(from) ?? 0) > 60000) {
+    if (fileFor(from) && online() && !fetching.has(from) && Date.now() - (missed.get(from) ?? 0) > 60000) {
       loadWhole(from).then((j) => {
         if (!j) return;
         if (watching && isGm(watching)) quietBook(watching);
@@ -1379,6 +1382,8 @@ export function makeWorld(d) {
   }
 
   function bringFold(id, doc) {
+    // The book's had no boards to bring in since the 14 Nov cut.
+    if (!W.boards.length) return "";
     const have = new Map();
     for (const f of doc.factions) if (f.book) have.set(f.book.from, (have.get(f.book.from) ?? 0) + 1);
     const cards = W.boards.map((b) => {

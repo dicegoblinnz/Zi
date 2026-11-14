@@ -85,6 +85,13 @@ function run(deck) {
   const first = hashed >= 0 ? hashed : Math.max(0, saved);
   track.scrollLeft = leftOf(cards[first]);
   show(first, false);
+  // A link to another card while the deck's open only changes the address,
+  // with no new page, so the deck goes there. The deck's own moves replace
+  // the address and never get here.
+  addEventListener("hashchange", () => {
+    const i = cards.findIndex((c) => `#${c.id}` === location.hash);
+    if (i >= 0 && i !== at) go(i, true);
+  });
 
   prev.addEventListener("click", () => go(at - 1));
   next.addEventListener("click", () => {

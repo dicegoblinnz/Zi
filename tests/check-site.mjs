@@ -58,7 +58,7 @@ const BASE = `http://localhost:${PORT}`;
 
 const PAGES = [
   "/", "/rules/", "/learn/", "/rules/welcome/", "/rules/the-core/", "/rules/the-archetypes/",
-  "/rules/title-ideas-and-the-crew/", "/rules/conflict/", "/rules/the-bestiary/", "/rules/twenty-places/#s-place-copper-baths",
+  "/rules/title-ideas-and-the-crew/", "/rules/conflict/", "/rules/conflict/#s-movement", "/rules/the-threat-builder/", "/rules/building-your-world/",
   "/rules/appendix-c-every-lever-in-the-game/", "/rules/conflict/#s-defending", "/rules/the-index/", "/changes/", "/search/", "/no-such-page/",
   "/characters/", "/characters/?c=check-vesk", "/characters/?c=check-vesk&t=sheet", "/characters/?c=check-vesk&t=rules", "/characters/?build", "/sheets/",
   "/account/", "/characters/?join", "/kit/",
@@ -67,14 +67,6 @@ const PAGES = [
   "/deal/", "/deal/?region=world&genre=medieval&factions=12&seed=ash-lantern-ford", "/deal/?deck=1&seed=ash-lantern-ford",
   // The table screen with no code yet, and with one that can't be right.
   "/table/", "/table/#not-a-code",
-  // The whole worlds (stages 12, 13, 15 and 16 of notes/builder-plan.md):
-  // the board with a faction open, the web, each map, a place and a person
-  // open, and How it came to be.
-  "/worlds/night-city/#f-arasaka", "/worlds/night-city/?tab=web", "/worlds/night-city/?tab=map", "/worlds/night-city/?tab=places#p-the-afterlife", "/worlds/night-city/?tab=people#p-rogue-amendiares", "/worlds/night-city/?tab=history",
-  // Night City's other year (stage 17): 2045's board with a card open, its
-  // web and How it came to be.
-  "/worlds/night-city/2045/#f-militech", "/worlds/night-city/2045/?tab=web", "/worlds/night-city/2045/?tab=history",
-  "/worlds/abnu/#f-alysta", "/worlds/abnu/?tab=web", "/worlds/abnu/?tab=map", "/worlds/abnu/?tab=places#p-verrant-docks", "/worlds/abnu/?tab=people#p-merren-vast", "/worlds/abnu/?tab=history",
 ];
 // A character saved on the phone, so a sheet gets checked like any other page.
 // Its hash is blank, so the sheet shows its "changed in the rules" note too.
@@ -315,329 +307,22 @@ for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
   await context.close();
 }
 
-// A whole world on /worlds/ (stages 12 and 13 of notes/builder-plan.md): out
-// of search and off phones, its line saying whose it is and both notices, the
-// kinds and Find, a name opening its card, the web's tap, the map with a pin
-// on every place opening its page and the web on it, the places and people
-// with their districts and Find, and How it came to be by age, at 390 in
-// light and 320 in dark.
+// The whole worlds came off the site on 14 Nov, when the book went down to
+// its core (content/worlds/retired.yaml): /worlds/ has no pages, and the
+// service worker keeps nothing under it.
 {
   const sw = await readFile(join(DIST, "sw.js"), "utf8").catch(() => "");
   if (!sw) note("worlds: no sw.js in the build");
   else if (/\/worlds\//.test(sw)) note("worlds: the service worker keeps a /worlds/ page or file on phones");
-  const context = await browser.newContext({ viewport: { width: 390, height: 860 } });
-  await sealed(context);
-  const page = await context.newPage();
-  await page.goto(BASE + "/search/?q=Arasaka");
-  await page.waitForSelector(".pagefind-ui__message", { timeout: 10000 }).catch(() => {});
-  await page.waitForTimeout(800);
-  if (await page.locator(".pagefind-ui__result").count()) note("worlds: search finds Night City");
-  await context.close();
-}
-for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
-  const at = `worlds @${width} ${scheme}`;
-  const context = await browser.newContext({ viewport: { width, height: 860 } });
-  if (scheme === "light") await context.addInitScript(() => { try { localStorage.setItem("zi-theme", "light"); } catch (e) {} });
-  await sealed(context);
-  const page = await context.newPage();
-  const errors = [];
-  page.on("pageerror", (e) => errors.push(String(e)));
-  await page.goto(BASE + "/worlds/night-city/");
-  if ((await page.getAttribute('meta[name="robots"]', "content")) !== "noindex") note(`${at}: not marked noindex`);
-  if (!/CD Projekt/.test(await page.textContent(".wn-whose"))) note(`${at}: the line saying whose it is doesn't name CD Projekt`);
-  const notices = await page.locator(".wn-foot p").allTextContents();
-  if (!notices.some((n) => /Homebrew Content Policy of R\. Talsorian Games/.test(n)) || !notices.some((n) => /CD PROJEKT RED/.test(n))) note(`${at}: the notices at the foot aren't both there`);
-  const cards = await page.locator("#wn-board .wn-f").count();
-  const withSeals = await page.locator("#wn-board .wn-f .wn-fs .zd-seal:not(.is-blank)").count();
-  if (!cards || withSeals !== cards) note(`${at}: ${withSeals} of ${cards} factions on the board have their seal`);
-  // The gangs alone, then Find, then every one again.
-  await page.click('.wn-kind[data-kind="gang"]');
-  const gangs = await page.locator('#wn-board .wn-f:not([hidden])').evaluateAll((els) => els.map((e) => e.dataset.kind));
-  if (!gangs.length || gangs.some((k) => k !== "gang")) note(`${at}: Gangs shows ${gangs.join(", ") || "nothing"}`);
-  await page.click('.wn-kind[data-kind=""]');
-  await page.fill("#wn-find", "arasaka");
-  const found = await page.locator("#wn-board .wn-f:not([hidden])").count();
-  if (!found || found === cards) note(`${at}: Find for arasaka shows ${found} of ${cards}`);
-  await page.fill("#wn-find", "");
-  // A name in an open card opens that faction's card.
-  await page.click("#f-militech > summary");
-  const link = page.locator("#f-militech .wn-fb a.wn-ln").first();
-  const to = (await link.getAttribute("href"))?.slice(1);
-  await link.click();
-  const opened = to && (await page.waitForFunction((id) => { const d = document.getElementById(id); const top = d?.getBoundingClientRect().top; return d?.open && top >= 0 && top < innerHeight; }, to, { timeout: 3000 }).then(() => true, () => false));
-  if (!opened) note(`${at}: a name in Militech's card didn't open ${to} in view`);
-  // The web: a faction's ties, picked from the list, then walked to a
-  // neighbour's with a tap.
-  await page.click('.wn-bar [data-tab="board"]');
-  await page.click('#wn-board [data-view="web"]');
-  if (!(await page.locator("#wn-web-sec").isVisible())) note(`${at}: the web didn't show`);
-  if (new URL(page.url()).searchParams.get("tab") !== "web") note(`${at}: the address doesn't say it's the web`);
-  const pick = (await page.inputValue("#wn-focus")) === "maelstrom" ? "militech" : "maelstrom";
-  await page.selectOption("#wn-focus", pick);
-  const picked = await page.evaluate(() => [document.querySelector("#wn-panel .ww-h")?.textContent ?? "", document.querySelector("#wn-web .ww-node.is-sel")?.dataset.web ?? ""]);
-  if (picked[0] !== { maelstrom: "Maelstrom", militech: "Militech" }[pick] || picked[1] !== pick) note(`${at}: picking ${pick} showed ${picked.join(" and ") || "nothing"}`);
-  // Every faction in the web is its seal, and every hostile line has its
-  // cross, so it's told from a bond without colour (stage 1 of
-  // notes/faction-feel-plan.md). The web starts on the
-  // first screen, the header folded to its name.
-  const webSeals = await page.evaluate(() => {
-    const nodes = document.querySelectorAll("#wn-web .ww-node").length;
-    const top = document.querySelector("#wn-web .ww-ring")?.getBoundingClientRect().top ?? 9999;
-    return { nodes, seals: document.querySelectorAll("#wn-web .ww-node .zd-seal:not(.is-blank)").length, hostile: document.querySelectorAll("#wn-web .ww-l.is-hostile").length, crosses: document.querySelectorAll("#wn-web .ww-x").length, top: Math.round(top), screen: innerHeight, folded: document.querySelector(".wn-head")?.classList.contains("is-folded") };
-  });
-  if (!webSeals.nodes || webSeals.seals !== webSeals.nodes) note(`${at}: ${webSeals.seals} of the web's ${webSeals.nodes} factions are drawn as their seals`);
-  if (webSeals.crosses !== webSeals.hostile) note(`${at}: ${webSeals.crosses} crosses on ${webSeals.hostile} hostile lines in the web`);
-  if (!webSeals.folded || webSeals.top > webSeals.screen * 0.62) note(`${at}: the web starts ${webSeals.top}px down a ${webSeals.screen}px screen${webSeals.folded ? "" : ", with the header still unfolded"}`);
-  const next = await page.locator(`#wn-web [data-web]:not([data-web="${pick}"]):not([data-web="crew"])`).first().getAttribute("data-web");
-  await page.click(`#wn-web [data-web="${next}"]`);
-  if ((await page.inputValue("#wn-focus")) !== next) note(`${at}: tapping ${next} in the web didn't walk to its ties`);
-  // The map: a pin for every place, a pin's card opening its page, and the
-  // web on it with a faction's ties lit.
-  await page.click('.wn-bar [data-tab="map"]');
-  await page.waitForSelector(".wn-map .wm-stage", { timeout: 5000 }).catch(() => note(`${at}: the map didn't go into its viewer`));
-  const places = await page.locator("#wn-places .wn-pg").count();
-  const pins = await page.locator(".wn-map .wm-pin").count();
-  if (!places || pins !== places) note(`${at}: the map has ${pins} pins for ${places} places`);
-  const filled = await page.evaluate(() => { const r = document.querySelector(".wn-map .wm-stage")?.getBoundingClientRect(); return r && r.top > -2 && r.top < 40 && r.height > innerHeight * 0.6; });
-  if (!filled) note(`${at}: the map doesn't fill the screen above the bar when it's opened`);
-  await page.locator('.wm-pin[data-pin="the-afterlife"]').dispatchEvent("click");
-  const card = await page.locator("#wn-mcard").textContent().catch(() => "");
-  if (!/The Afterlife/.test(card ?? "") || !/sits? here/.test(card ?? "")) note(`${at}: the Afterlife's pin didn't bring up its card with who sits there (${(card ?? "").trim().slice(0, 80)})`);
-  await page.click("#wn-mcard .wn-mc-go");
-  const pageOpen = await page.waitForFunction(() => { const d = document.getElementById("p-the-afterlife"); return d?.open && !d.closest("[data-panel]").hidden; }, null, { timeout: 3000 }).then(() => true, () => false);
-  if (!pageOpen) note(`${at}: the pin's Its page didn't open the Afterlife's page`);
-  const said = await page.locator("#wn-msay").textContent().catch(() => "");
-  if (!/^The Afterlife\. /.test(said ?? "")) note(`${at}: a screen reader isn't told what the pin opened (${(said ?? "").slice(0, 60)})`);
-  // Back from the page is the map again, the way the address says.
-  await page.goBack();
-  const backOnMap = await page.waitForFunction(() => !document.getElementById("wn-map-sec")?.hidden && document.getElementById("wn-places")?.hidden && new URL(location.href).searchParams.get("tab") === "map", null, { timeout: 3000 }).then(() => true, () => false);
-  if (!backOnMap) note(`${at}: Back from the Afterlife's page didn't bring the map back`);
-  // From a faction's card: the map with the web on and its ties lit.
-  await page.goto(BASE + "/worlds/night-city/#f-arasaka");
-  await page.click('#f-arasaka [data-map-f="arasaka"]');
-  await page.waitForSelector(".wn-map .wm-ft", { timeout: 5000 }).catch(() => {});
-  const toks = await page.locator(".wn-map .wm-ft").count();
-  if (toks !== cards) note(`${at}: the web on the map has ${toks} tokens for ${cards} factions`);
-  const lit = await page.evaluate(() => [document.querySelector('.wm-ft.is-sel')?.dataset.tok ?? "", document.querySelectorAll(".wm-web-l path.wm-wl").length, document.querySelectorAll(".wm-ft.is-lit").length]);
-  if (lit[0] !== "arasaka" || lit[1] < 3 || lit[2] < 3) note(`${at}: Arasaka on the map lit ${lit[0] || "nothing"} with ${lit[1]} threads and ${lit[2]} others`);
-  if ((await page.getAttribute("#wn-webbtn", "aria-pressed")) !== "true") note(`${at}: the web's switch doesn't say it's on`);
-  // Places and people: a district on its own, Find, and a name in a page
-  // opening its page.
-  await page.click('.wn-bar [data-tab="places"]');
-  await page.click('#wn-places .wn-kind[data-area="pacifica"]');
-  const pac = await page.locator("#wn-places .wn-pg:not([hidden])").evaluateAll((els) => els.map((e) => e.dataset.area));
-  if (!pac.length || pac.some((k) => k !== "pacifica")) note(`${at}: Pacifica shows ${pac.join(", ") || "nothing"}`);
-  await page.click('#wn-places .wn-kind[data-area=""]');
-  await page.fill("#wn-places .wn-find input", "braindance");
-  const bd = await page.locator("#wn-places .wn-pg:not([hidden])").evaluateAll((els) => els.map((e) => e.id));
-  if (!bd.includes("p-lizzies-bar")) note(`${at}: Find for braindance in the places doesn't find Lizzie's Bar (${bd.join(", ")})`);
-  await page.fill("#wn-places .wn-find input", "");
-  await page.click("#p-lizzies-bar > summary");
-  await page.click('#p-lizzies-bar a.wn-ln[href="#p-judy-alvarez"]');
-  const judy = await page.waitForFunction(() => { const d = document.getElementById("p-judy-alvarez"); const top = d?.getBoundingClientRect().top; return d?.open && top >= 0 && top < innerHeight && !d.closest("[data-panel]").hidden; }, null, { timeout: 3000 }).then(() => true, () => false);
-  if (!judy) note(`${at}: Judy's name on Lizzie's Bar didn't open her page`);
-  await page.fill("#wn-people .wn-find input", "rogue");
-  const rogue = await page.locator("#wn-people .wn-pg:not([hidden])").count();
-  if (rogue < 1) note(`${at}: Find for rogue in the people finds nobody`);
-  // How it came to be, by age.
-  await page.click('.wn-bar [data-tab="history"]');
-  const ages = await page.locator(".wn-age-h").allTextContents();
-  if (ages.join("|") !== "Long ago|In living memory|This last year") note(`${at}: How it came to be's ages are ${ages.join(", ")}`);
-  if (new URL(page.url()).searchParams.get("tab") !== "history") note(`${at}: the address doesn't keep the tab`);
-  if (errors.length) note(`${at}: ${errors.join(" | ")}`);
-  if (SHOTS && width === 390) for (const tab of ["board", "map", "places", "people", "history"]) {
-    await page.click(`.wn-bar [data-tab="${tab}"]`);
-    await page.screenshot({ path: join(SHOTS, `worlds-${tab}-${width}-${scheme}.png`) });
+  for (const gone of ["/worlds/night-city/", "/worlds/abnu/", "/worlds/night-city/2045/"]) {
+    const res = await fetch(BASE + gone);
+    if (res.status !== 404) note(`worlds: ${gone} answers ${res.status}, and it came off the site on 14 Nov`);
   }
-  console.log(`${at}: ${cards} factions, ${places} places on the map, the kinds, Find, a name, the web, the map and its web, places, people and How it came to be checked`);
-  await context.close();
-}
-
-// Night City's other year (stage 17 of notes/builder-plan.md): the switch
-// under the title, 2077 opening at /worlds/night-city/ and 2045 at its own
-// address, each year's notice naming its own title, 2045's board and How it
-// came to be with no map, places or people yet, the tab that's open carried
-// across to the other year, and no switch on a world with one year, at 390
-// in light and 320 in dark.
-for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
-  const at = `another year @${width} ${scheme}`;
-  const context = await browser.newContext({ viewport: { width, height: 860 } });
-  if (scheme === "light") await context.addInitScript(() => { try { localStorage.setItem("zi-theme", "light"); } catch (e) {} });
-  await sealed(context);
-  const page = await context.newPage();
-  const errors = [];
-  page.on("pageerror", (e) => errors.push(String(e)));
-  const years = () => page.$$eval(".wn-years a", (as) => as.map((a) => `${a.textContent.trim()} ${a.getAttribute("href")} ${a.getAttribute("aria-current") ?? ""}`.trim()).join(" | "));
-  const notice = async (title) => (await page.locator(".wn-foot p").allTextContents()).some((n) => n.trim().startsWith(`${title} is unofficial content`));
-  await page.goto(BASE + "/worlds/night-city/");
-  await page.waitForSelector(".wn.is-live");
-  if ((await years()) !== "2045 /worlds/night-city/2045/ | 2077 /worlds/night-city/ page") note(`${at}: the year switch on 2077 is ${(await years()) || "missing"}`);
-  if (!(await notice("Night City, 2077"))) note(`${at}: 2077's notice doesn't name Night City, 2077`);
-  await page.click('.wn-years a[href="/worlds/night-city/2045/"]');
-  await page.waitForURL(/\/worlds\/night-city\/2045\/$/);
-  await page.waitForSelector(".wn.is-live");
-  if ((await page.textContent(".wn-head h1")).trim() !== "Night City, 2045") note(`${at}: 2045's page isn't titled Night City, 2045`);
-  if ((await page.getAttribute('meta[name="robots"]', "content")) !== "noindex") note(`${at}: 2045's page isn't marked noindex`);
-  if ((await years()) !== "2045 /worlds/night-city/2045/ page | 2077 /worlds/night-city/") note(`${at}: the year switch on 2045 is ${(await years()) || "missing"}`);
-  if (!(await notice("Night City, 2045"))) note(`${at}: 2045's notice doesn't name Night City, 2045`);
-  const tabs = await page.$$eval(".wn-bar [data-tab]", (b) => b.map((x) => x.dataset.tab).join(" "));
-  if (tabs !== "board history") note(`${at}: 2045's bar has ${tabs}, and it's the board and How it came to be till its places, people and map come`);
-  const folds = await page.locator("details.wn-f").count();
-  if (folds !== 28) note(`${at}: 2045's board has ${folds} factions, not 28`);
-  await page.click('.wn-bar [data-tab="history"]');
-  if ((await page.locator(".wn-line").count()) < 40) note(`${at}: How it came to be in 2045 has under 40 lines`);
-  if (!(await page.locator('.wn-years a[href="/worlds/night-city/?tab=history"]').count())) note(`${at}: the switch doesn't take How it came to be across to 2077`);
-  await page.click(".wn-years a:not([aria-current])");
-  await page.waitForURL(/\/worlds\/night-city\/\?tab=history$/);
-  await page.waitForSelector(".wn.is-live");
-  if (await page.locator("#wn-history").isHidden()) note(`${at}: 2077 didn't open on How it came to be from 2045's`);
-  await page.click('.wn-bar [data-tab="map"]');
-  if (!(await page.locator('.wn-years a[href="/worlds/night-city/2045/"]').count())) note(`${at}: the switch takes 2077's map across to 2045, which hasn't got one yet`);
-  await page.goto(BASE + "/worlds/abnu/");
-  if (await page.locator(".wn-years").count()) note(`${at}: Abnu has a year switch with one year`);
-  if (errors.length) note(`${at}: page errors: ${errors.join(" | ")}`);
-  await context.close();
-}
-
-// Abnu (stages 15 and 16 of notes/builder-plan.md), Mo's own setting: no
-// line saying whose it is and no notices, out of search, and its board, the
-// kinds and Find, a name opening its card, the web's tap, the map of the
-// whole world traced from Mo's (opening on the capital with its places
-// waiting behind its name, every pin a place's, a pin's card opening its
-// page once it's zoomed in on, and the web on it), the places and people
-// with their lands and Find, and How it came to be by age, at 390 in light
-// and 320 in dark.
-{
-  const context = await browser.newContext({ viewport: { width: 390, height: 860 } });
-  await sealed(context);
-  const page = await context.newPage();
-  // Anunnaki's all through Abnu and nowhere in the book (search for Xurux
-  // turns up the X-Card).
-  await page.goto(BASE + "/search/?q=Anunnaki");
-  await page.waitForSelector(".pagefind-ui__message", { timeout: 10000 }).catch(() => {});
-  await page.waitForTimeout(800);
-  if (await page.locator(".pagefind-ui__result").count()) note("worlds: search finds Abnu");
-  await context.close();
-}
-for (const [width, scheme] of [[390, "light"], [320, "dark"]]) {
-  const at = `abnu @${width} ${scheme}`;
-  const context = await browser.newContext({ viewport: { width, height: 860 } });
-  if (scheme === "light") await context.addInitScript(() => { try { localStorage.setItem("zi-theme", "light"); } catch (e) {} });
-  await sealed(context);
-  const page = await context.newPage();
-  const errors = [];
-  page.on("pageerror", (e) => errors.push(String(e)));
-  await page.goto(BASE + "/worlds/abnu/");
-  if ((await page.getAttribute('meta[name="robots"]', "content")) !== "noindex") note(`${at}: not marked noindex`);
-  if (await page.locator(".wn-whose").count()) note(`${at}: there's a line saying whose it is on a world of Mo's own`);
-  if (await page.locator(".wn-foot").count()) note(`${at}: there are notices at the foot of a world of Mo's own`);
-  const tabs = await page.locator(".wn-bar [data-tab]").evaluateAll((els) => els.map((e) => e.dataset.tab));
-  if (tabs.join("|") !== "board|map|places|people|history") note(`${at}: the bar has ${tabs.join(", ")}, and Abnu has its factions, its map, places, people and history`);
-  const cards = await page.locator("#wn-board .wn-f").count();
-  // The east alone, then Find, then every one again.
-  await page.click('.wn-kind[data-kind="east"]');
-  const east = await page.locator("#wn-board .wn-f:not([hidden])").evaluateAll((els) => els.map((e) => e.dataset.kind));
-  if (!east.length || east.some((k) => k !== "east")) note(`${at}: The east shows ${east.join(", ") || "nothing"}`);
-  await page.click('.wn-kind[data-kind=""]');
-  await page.fill("#wn-find", "xurux");
-  const found = await page.locator("#wn-board .wn-f:not([hidden])").count();
-  if (!found || found === cards) note(`${at}: Find for xurux shows ${found} of ${cards}`);
-  await page.fill("#wn-find", "");
-  // A name in an open card opens that faction's card.
-  await page.click("#f-montia > summary");
-  const link = page.locator("#f-montia .wn-fb a.wn-ln").first();
-  const to = (await link.getAttribute("href"))?.slice(1);
-  await link.click();
-  const opened = to && (await page.waitForFunction((id) => { const d = document.getElementById(id); const top = d?.getBoundingClientRect().top; return d?.open && top >= 0 && top < innerHeight; }, to, { timeout: 3000 }).then(() => true, () => false));
-  if (!opened) note(`${at}: a name in Montia's card didn't open ${to} in view`);
-  // The web: a faction's ties, picked from the list, then walked to a
-  // neighbour's with a tap.
-  await page.click('.wn-bar [data-tab="board"]');
-  await page.click('#wn-board [data-view="web"]');
-  if (!(await page.locator("#wn-web-sec").isVisible())) note(`${at}: the web didn't show`);
-  const pick = (await page.inputValue("#wn-focus")) === "soths" ? "montia" : "soths";
-  await page.selectOption("#wn-focus", pick);
-  const picked = await page.evaluate(() => [document.querySelector("#wn-panel .ww-h")?.textContent ?? "", document.querySelector("#wn-web .ww-node.is-sel")?.dataset.web ?? ""]);
-  if (picked[0] !== { soths: "The Soths", montia: "Montia" }[pick] || picked[1] !== pick) note(`${at}: picking ${pick} showed ${picked.join(" and ") || "nothing"}`);
-  const next = await page.locator(`#wn-web [data-web]:not([data-web="${pick}"]):not([data-web="crew"])`).first().getAttribute("data-web");
-  await page.click(`#wn-web [data-web="${next}"]`);
-  if ((await page.inputValue("#wn-focus")) !== next) note(`${at}: tapping ${next} in the web didn't walk to its ties`);
-  // The map: the whole world drawn by its land, a pin for every place, open
-  // on the capital filling the screen, with the capital's places tucked
-  // behind its name till they're zoomed in on.
-  await page.click('.wn-bar [data-tab="map"]');
-  await page.waitForSelector(".wn-map .wm-stage", { timeout: 5000 }).catch(() => note(`${at}: the map didn't go into its viewer`));
-  await page.waitForTimeout(400);
-  const places = await page.locator("#wn-places .wn-pg").count();
-  const pins = await page.locator(".wn-map .wm-pin").count();
-  if (!places || pins !== places) note(`${at}: the map has ${pins} pins for ${places} places`);
-  if (!(await page.locator(".wn-map svg.dm.is-world [clip-path]").count())) note(`${at}: the map isn't drawn as a world, its lands clipped to the coasts`);
-  const filled = await page.evaluate(() => { const r = document.querySelector(".wn-map .wm-stage")?.getBoundingClientRect(); return r && r.top > -2 && r.top < 40 && r.height > innerHeight * 0.6; });
-  if (!filled) note(`${at}: the map doesn't fill the screen above the bar when it's opened`);
-  const capital = await page.evaluate(() => { const b = document.querySelector('.wm-pin[data-pin="alysta-city"]')?.getBoundingClientRect(); return b ? b.left + b.width / 2 >= 0 && b.left + b.width / 2 <= innerWidth && b.top >= 0 && b.top <= innerHeight : false; });
-  if (!capital) note(`${at}: the map didn't open on the capital`);
-  if (!(await page.locator('.wm-pin[data-pin="verrant-docks"].is-tucked').count())) note(`${at}: Verrant Docks isn't waiting behind the capital's name when the map opens`);
-  // In close over the capital, where its places come out.
-  for (let i = 0; i < 14; i++) {
-    const b = await page.locator('.wm-pin[data-pin="alysta-city"]').boundingBox();
-    if (!b) break;
-    await page.mouse.move(b.x + b.width / 2, b.y + b.height - 3);
-    await page.mouse.wheel(0, -260);
-    await page.waitForTimeout(120);
-  }
-  await page.waitForTimeout(500);
-  const tucked = await page.locator('.wm-pin[data-pin^="the-"].is-tucked, .wm-pin[data-pin="verrant-docks"].is-tucked').evaluateAll((els) => els.map((e) => e.dataset.pin).filter((k) => ["the-palace", "the-sealed-archive", "the-statue-of-the-seven", "verrant-docks", "the-ninth-district", "the-drowned-quarter"].includes(k)));
-  if (tucked.length) note(`${at}: in close on the capital, ${tucked.join(", ")} still wait behind its name`);
-  await page.locator('.wm-pin[data-pin="verrant-docks"]').dispatchEvent("click");
-  const card = await page.locator("#wn-mcard").textContent().catch(() => "");
-  if (!/Verrant Docks/.test(card ?? "") || !/City in the Alysta Empire|In Alysta/.test(card ?? "")) note(`${at}: Verrant Docks' pin didn't bring up its card (${(card ?? "").trim().slice(0, 80)})`);
-  await page.click("#wn-mcard .wn-mc-go");
-  const docksOpen = await page.waitForFunction(() => { const d = document.getElementById("p-verrant-docks"); return d?.open && !d.closest("[data-panel]").hidden; }, null, { timeout: 3000 }).then(() => true, () => false);
-  if (!docksOpen) note(`${at}: the pin's Its page didn't open Verrant Docks' page`);
-  // From a faction's card: the map with the web on and its ties lit.
-  await page.goto(BASE + "/worlds/abnu/#f-montia");
-  await page.click('#f-montia [data-map-f="montia"]');
-  await page.waitForSelector(".wn-map .wm-ft", { timeout: 5000 }).catch(() => {});
-  const toks = await page.locator(".wn-map .wm-ft").count();
-  if (toks !== cards) note(`${at}: the web on the map has ${toks} tokens for ${cards} factions`);
-  const lit = await page.evaluate(() => [document.querySelector(".wm-ft.is-sel")?.dataset.tok ?? "", document.querySelectorAll(".wm-web-l path.wm-wl").length, document.querySelectorAll(".wm-ft.is-lit").length]);
-  if (lit[0] !== "montia" || lit[1] < 3 || lit[2] < 3) note(`${at}: Montia on the map lit ${lit[0] || "nothing"} with ${lit[1]} threads and ${lit[2]} others`);
-  // Places and people: a land on its own, Find, and a name in a page opening
-  // its page.
-  await page.click('.wn-bar [data-tab="places"]');
-  await page.click('#wn-places .wn-kind[data-area="the-hinterlands"]');
-  const soth = await page.locator("#wn-places .wn-pg:not([hidden])").evaluateAll((els) => els.map((e) => e.dataset.area));
-  if (!soth.length || soth.some((k) => k !== "the-hinterlands")) note(`${at}: the Hinterlands shows ${soth.join(", ") || "nothing"}`);
-  if ((await page.textContent('#wn-places .wn-kinds')).match(/district/i)) note(`${at}: Abnu's lands are called districts`);
-  await page.click('#wn-places .wn-kind[data-area=""]');
-  await page.fill("#wn-places .wn-find input", "pilgrim");
-  const pil = await page.locator("#wn-places .wn-pg:not([hidden])").evaluateAll((els) => els.map((e) => e.id));
-  if (!pil.includes("p-sethilan-harbour")) note(`${at}: Find for pilgrim in the places doesn't find Sethilan Harbour (${pil.join(", ")})`);
-  await page.fill("#wn-places .wn-find input", "");
-  await page.click("#p-verrant-docks > summary");
-  await page.click('#p-verrant-docks a.wn-ln[href="#p-merren-vast"]');
-  const merren = await page.waitForFunction(() => { const d = document.getElementById("p-merren-vast"); const top = d?.getBoundingClientRect().top; return d?.open && top >= 0 && top < innerHeight && !d.closest("[data-panel]").hidden; }, null, { timeout: 3000 }).then(() => true, () => false);
-  if (!merren) note(`${at}: Merren Vast's name on Verrant Docks didn't open his page`);
-  await page.fill("#wn-people .wn-find input", "warden");
-  if ((await page.locator("#wn-people .wn-pg:not([hidden])").count()) < 1) note(`${at}: Find for warden in the people finds nobody`);
-  await page.fill("#wn-people .wn-find input", "");
-  // How it came to be, by age.
-  await page.click('.wn-bar [data-tab="history"]');
-  const ages = await page.locator(".wn-age-h").allTextContents();
-  if (ages.join("|") !== "Long ago|In living memory|This last year") note(`${at}: How it came to be's ages are ${ages.join(", ")}`);
-  if (new URL(page.url()).searchParams.get("tab") !== "history") note(`${at}: the address doesn't keep the tab`);
-  if (errors.length) note(`${at}: ${errors.join(" | ")}`);
-  if (SHOTS && width === 390) for (const tab of ["board", "map", "places", "people", "history"]) {
-    await page.click(`.wn-bar [data-tab="${tab}"]`);
-    await page.screenshot({ path: join(SHOTS, `worlds-abnu-${tab}-${width}-${scheme}.png`) });
-  }
-  console.log(`${at}: ${cards} factions, ${places} places on the map, no line or notices, the kinds, Find, a name, the web, the map in close on the capital and its web, places, people and How it came to be checked`);
-  await context.close();
 }
 
 // The kit's seals (stage 1 of notes/faction-feel-plan.md), for Mo's yes:
-// every charge, field, mark and glyph the kit has, a seal for each of the
-// Brinewake's four and a blank one, in each theme, with nothing wider than
+// every charge, field, mark and glyph the kit has, four made-up factions'
+// seals on a board and a blank one, in each theme, with nothing wider than
 // the screen.
 {
   const { CHARGES, FIELDS, MARKS, GLYPHS } = await import("../src/kit/seals.js");

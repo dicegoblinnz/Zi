@@ -4,7 +4,7 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 
 ## 14 Nov: stacking
 
-**Not built yet.** Part 1 of the stacking rework (`notes/stacking-plan.md`), from your 14 Nov chat (`notes/playtest-sheets/2026-11-14-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it, and each chat adds its own in its subsection below.
+**Built, and not on `main` yet.** Part 1 of the stacking rework (`notes/stacking-plan.md`), from your 14 Nov chat (`notes/playtest-sheets/2026-11-14-chat-decisions.md`), built by thirteen chats on `rules/2026-11-14-stacking` with the book's core cut under it. These are the calls Claude made writing it down, before any chat built it, and each chat added its own in its subsection below. It goes to the website when you say yes.
 
 1. **Every thing that fits is 1 step**, and an archetype taken twice counts twice.
 2. **Explaining costs 1 Aura for each thing you explain**, not 1 a roll.
@@ -154,7 +154,7 @@ Written into Conflict, Tactical Play, Magic, the side chapters, Downtime, Playin
 1. **The runs** (`tools/fight_sim.py`): Bram, Vesk, Wren and Ash as they start against Redhand, two named threats and three mooks, 3,000 to 4,000 fights a setting, played plain (the way stage 2 did, which lands on its four rounds and two hits) and with the archetypes played hard. Dorrie and Isolde are left out, because influence and foresight decide a fight on their own. The Traits aren't in, since prompt 3 hadn't landed.
 2. **Three times sits between the two ways of playing.** Plain play needs about ×2.6 and the archetypes played hard about ×4, so a fight played plain runs a little long (4.7 rounds against 4.4) and one played hard about a round short (2.9 against 3.3).
 3. **Four times its Challenge** is the rule of thumb, so a boss starts at ×24. Three times the old Challenge plus 2 would be 24, 21 and 18 for Challenges 6, 5 and 4, and four times is 24, 20 and 16.
-4. **The threat budget multiplies** instead of adding 1 for every 10, because each pick each needs about a third more. It compounds: every new thing's a step on most rolls, and bigger rolls win more Aura for extra actions. So it's 5 a character a pick, and every multiplier times the threat budget over 60.
+4. **The threat budget multiplies** instead of adding 1 for every 10, because each pick each needs about a third more. It compounds: every new thing's a step on most rolls, and bigger rolls win more Aura for extra actions. So it's 5 a character a pick, and every multiplier times the threat budget over 60. (Prompt 12 ran it again with the Traits, and the picks need a third on top of the last: see 12, call 3.)
 5. **How long a scene runs divides by all the crew's actions**, not half, since a stacked roll lands about once an action. Four characters take about ten actions a round.
 6. **Forms keep their multipliers smaller**: about ×15 with two forms and ×12 with three, three times what they were.
 7. **The examples' big obstacles are three times bigger** too: a vault door that's *Reinforced ×12* and a crowd that's *Loyal ×9*.
@@ -165,7 +165,27 @@ Written into Conflict, Tactical Play, Magic, the side chapters, Downtime, Playin
 
 ### 12. Bringing it together
 
-None yet.
+1. **The core cut's in part 1.** You hadn't said yes to it yet, but the prompts doc had it going in before prompts 1 and 2, and prompts 10 and 11 left its chapters alone on your yes, so part 1 wasn't whole without it: Playing Alone still said specialty and the world part still had the old multipliers. It's merged into `rules/2026-11-14-stacking` and still not on `main`, so a yes to part 1 puts both on the website. Say so and it comes back out.
+2. **The multipliers stay three times what they were, and the round budget 11 a player.** With the Traits, a fight played plain needs ×2.9 (×2.7 without them) and lasts 4.4 rounds at ×3, the same as on 10 Nov. Played hard it'd need ×5.4 (×4.1), but bigger multipliers hardly lengthen a hard-played fight: ×5 gets it from 2.6 rounds to 3.2, and drags a plain one from 4.4 to 6.5. So they stay set for the long way, and a crew that plays its archetypes hard finishes a boss in two or three rounds.
+3. **The threat budget compounds**: every pick puts a third on each character's share, on top of the last, so it's 15, 20, 27, 36 and 48 a character, 60, 80, 108, 144 and 192 for four, and multipliers a third bigger, nearly twice, nearly two and a half and a bit over three times. The runs need 1.37, 1.84, 2.44 and 3.06 times between playing plain and hard, and the ladder you said yes to had 1.33, 1.67, 2 and 2.33, which would've had a crew with three or four picks through a boss a round or more early.
+4. **The runs play the Guardian's, the Hunter's and the Leader's Traits.** Bram gets 1 Aura for every blow he takes for a friend, Wren 1 for every die a friend wins against her Mark, and Bram moves steps to where they're worth most each round. The Shadow's, the Elementalist's and the Face's change nothing the runs play (Vesk can always hide there, nobody's areas catch a friend, and how much a contact helps is your call), Dorrie and Isolde stay out as they did for prompt 11, so the Oracle's isn't in, and nobody in the crew's a Warrior.
+5. **Played hard, the Guardian steps in on his own turn**, so *Better Me Than You*'s Aura can go past his maximum and buy actions. That's the rule as it's written (you can intercept any time before the telegraphs land), and it's the biggest thing the Traits add to a fight.
+6. **A character with a Scholar gets asked to swap it.** Moving onto stacking, an archetype the book hasn't got any more is the first thing on their Yours to choose, with Pick another and Later. Till they swap it, it's on their sheet with no Trait or abilities, the way prompt 3 left it.
+7. **Things That Climb doesn't list Supplies and the alarm any more**, since they went with Travelling and Exploring in the cut. *A Ship*'s line still says a voyage needs no Supplies clock, on the party sheet and in Appendix B, the way the cut kept *Smugglers' Roads* and *Rooted* for when travelling and chases come back.
+
+## 14 Nov: the book down to its core
+
+You asked for the old stuff out, the lore above all, with the book down to its core mechanics, and Night City and Abnu off the site. You picked Down to the core. These are the calls the cut needed. The old book's at the branch `archive/pre-core-cut-2026-11-14`.
+
+1. **Building Your World stays**, moved into the GM's part beside the Threat Builder. It's random tables for a region, a place, a person and a hook with no world in them, nothing in it changes when the rules do, and the site's world builder and her place pages run on its tables. (The question said it'd go with the rest of the world part.)
+2. **The crew's running story stays in the examples**: the Vane Estate, the Harbour Guild and the Quiet Order are the examples' cast now, the way the crew are, with the Steeplands themselves gone. A Goal that only made sense in the Steeplands (*free the Bound*, *bring peace to the Steeplands*) was reworded. Part 1 recounts every example anyway, so that's the time to rename or cut them.
+3. **Factions, the Party Sheet, the Oracle and the table chapters stay.** The site's faction board, faction turn and party sheet run on Factions and the Party Sheet, and the Oracle, Playing Carefully, Playing Your Way, Session Zero, The Session and When It's Not Working don't change when the core does.
+4. **Movement and Range, Playing without a grid and Weapons** moved into Conflict, after Your Action and after What a Win Does. The rest of Tactical Play (its advice and A Round on the Grid) is out with the side systems.
+5. **Two crew assets still point at what's set aside**: *Smugglers' Roads* (a journey's first stage) and *Rooted* (getting away in a chase). They're on the party sheet as they were, for when travelling and chases come back.
+6. **The glossary's Appendix E now**, since the worked campaign arc was E.
+7. **Night City and Abnu are off the site**: no pages under /worlds/, and nobody can bring them into a campaign. The Sapphire Queen and Cyberpunk keep their own copies, untouched, and Cyberpunk's World screen still shows the fan-made line and the companies' notices at its foot, from `content/worlds/retired.yaml`. The book won't send either game a note about a card changing any more, and their boards lose the kind chips (Corps, Gangs and the like) that came from the world's file, while Find and the sorts still work.
+8. **The world builder** keeps its tables, the founding and Build the world. Without the book's boards there are no frames' mixes, so Add a faction on a board she built by hand asks for the region and genre, and one the builder dealt still deals at its own mix. Its Cyberpunk genre is still on its list as one to come.
+9. **Old links to the cut chapters** (Tactical Play, Chases, the Steeplands and the rest) land on the site's page that says there's nothing there.
 
 ## 9 Nov: the builder, the learning round and the live table on Roots
 
