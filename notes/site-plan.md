@@ -26,7 +26,7 @@ What else it found on the live site:
 - Someone signed out couldn't find campaigns at all: the Characters page leaves them out till you're signed in.
 - The Characters page is 5,081px long on a phone for someone back. Their own characters start 883px down, under Campaigns, and the crew's cards are the last 3,100px.
 
-## What's built (`site/home-character-first`)
+## What's built (`site/home-character-first`, live 15 Nov)
 
 - **The home page** (`src/pages/index.astro`, `src/home/home.js`, `src/styles/home.css`). Someone new gets Make your character first: Start building (the guided builder), then Play one of the crew, Random in one tap and A blank sheet, then New here? (the learning round and the Learn deck), the crew as cards you tap to play (crest, Title, archetypes and Roots), How a round goes (the book's own round, Wren and Bram answering the brute's club, drawn with the kit), Play together and the rules. Someone back (a character on the phone, or signed in) gets Your characters (crest, Title and the campaign each plays in) and Your games first, read off the phone so it works with no signal, with Make a new character between them. The head's script decides before anything paints.
 - **The top bar** (`src/layouts/Base.astro`): Learn, Rules, Characters and Campaigns, with search a button beside the light switch. What's changed is under Rules (the Rules page's button, and the home page's New line). On a phone the four tabs get their own row.
@@ -51,7 +51,6 @@ Each stage below is a chat of its own, smallest first, and each one's tested by 
 4. **Learn as the place to start.** The Learn tab opens on a choice of the learning round or the deck, and the deck's last card hands you to Make your character.
 5. **A GM's way in.** Run your first game as a page of steps (a Do page, `diataxis-pages`) off Campaigns and Running the Game: start a campaign, send the link, put the table screen up, and your first telegraphs.
 
-## Still to do on this one
+## Going live
 
-- Mo's yes to put it live (it merges to `main` only when he says so).
-- The home page's crew cards and Vesk's sheet read the crew straight off the chapter, so they follow the rules. The words around them are the home page's own, so `tests/check-journeys.mjs` checks them against the retired words every run.
+Mo said yes on 15 Nov and picked stage 1, Characters just yours, to build next. The home page's crew cards and Vesk's sheet read the crew straight off the chapter, so they follow the rules. The words round them are the home page's own, so `tests/check-journeys.mjs` checks them against the retired words every run.
