@@ -28,7 +28,7 @@ Newest wins, and everything from Roots that Mo hasn't changed stands: the three 
 
 ## The crew on 35 points
 
-**Waiting on Mo's yes** (14 Nov). Their sheets in 03b (prompt 2) and every example in the book come from this section.
+**Mo said yes** (14 Nov, in prompt 2). Their sheets in 03b (prompt 2) and every example in the book come from this section.
 
 Everyone keeps both Titles, all six permissions, both archetypes with both their abilities, and their attuned thing, so every example keeps its pieces. The keepsake's free, and everything else they carry is a point. Bram comes to 35 as he was, and the rest had a point or more spare, so each picks up something that stacks. Everyone's Aura maximum is 7, with one attuned thing each. A roll below counts the Root, then 1 for each thing that plainly fits.
 
@@ -188,7 +188,21 @@ Written 14 Nov on `rules/2026-11-14-stacking-rules`, landed into `rules/2026-11-
 
 ### 2. The crew and the character
 
-Not yet.
+Built 14 Nov on `rules/2026-11-14-stacking-crew` and landed. Its calls are in `notes/to-confirm.md` under 14 Nov.
+
+- **03b:** the six crew from the crew section above, in the sheet format, with a Points line each, every Title's spread, each permission's Root, the abilities each archetype's got, Aura 7 and no Specialties or Its Aura line. The Quick Build's the fast way to spend 35 points (12 on two archetypes with a second ability each, 14 on two Titles with three permissions each, 5 on the attuned thing and 4 on what you carry), Wren's example is on her new numbers, and the Title ideas say each permission takes a Root. The Quick Build still has seven steps in the builder's order, so its screens still read it.
+- **The build:** the crew are read by `scripts/crew-sheets.mjs` (`crewFrom()`, moved out of `build-content.mjs` so the checks can break copies of the chapter), which stops on a Title that doesn't spread 3, a Roots line that doesn't add up, a Points line whose parts don't add up or that isn't what `costOf()` says they cost, an ability that isn't its archetype's, an archetype with none after it, Aura that isn't 5 and 2 for the attuned thing, a count in what they carry that's wrong (a bag lists what's in it, `her hunter's pack, with a coil of rope (1 of 10)`), and a Specialties or Its Aura line. A crew member in `book.json` has `points`, Titles with `text` and `roots`, archetypes with `have`, an attuned thing with no `aura`, and `specialties: []`, plus each Title's `name`, `root` (the Root it puts most on) and `specialties: []` and each permission's `specialty: ""` for the screens that haven't moved, which prompt 12 can take out. `crew-archetypes.json` is the same shape as before.
+- **`src/companion/points.js`:** `costOf()` takes a sheet or the builder's build as it is now (`archs` as names or `{ name, have }`, `titles[].perms`, `attuned[].awk`, `equipment`, `utility`, `keepsake` and `bag` as lines) and gives `{ spent, lines: [{ kind, what, cost }] }`, a line for everything that costs something (title, perm, boon, arch, ability, attuned, awk or item). `START` is 35.
+- **`src/companion/roots.js`:** the shared pieces. `rootsSheet()` gives Titles `{ text, roots, permissions: [{ text, root }], boons }` (one from before with a `root` reads as 3 on it, and says so as `fromRoot`), archetypes `{ name, id, home, summary, for, trait, abilities, have }` (one from before has every ability, and `trait` is `{ name, text }`, empty till prompt 3's reader gives it one), attuned things with no `aura`, `numbers.aura` (5, 2 for each attuned thing and 2 for each Aura Boon), `points: { start, spent }` (what they were made with, before downtime's growth) and `specialties: []`. Then `thingsOf(c, s)`, `countRoll(c, s, r)` (which still takes an old screen's `items`, and counts its `spec` as nothing), `extraCost(n)`, `auraMax(c, s)`, `poweredOf(s)`, `powerUp(s, c, key, n)`, `powerOff(s)` and `choicesOf(c)`. `growRoots()` takes the new shapes as well as the old: a permission with no `spec`, a Title with `roots`, an archetype with `have`, and `{ k: "ability", a, name }` for an ability bought in downtime. `actionsMax()`, `specSteps()` and `rootFor()` are only there for the screens that haven't moved.
+- **State v3:** `normalRoots()` moves a v2 state across. Everything they had stays, what was in `store` is powering its awakening (`store` stays as `{}` for the screens that haven't moved), their Aura stays as it was inside the new maximum, `stacked` is `true` till the player's seen it, and `choose` is what's theirs to choose: `{ k: "spread", t, root }` for each Title read off its old Root and `{ k: "points", left }` for points they've got left. A choice goes from `choose` once it doesn't apply (their build spreads that Title), and a screen takes one off once the player's chosen. `fromOld()` hands back a v2 state, so a character from before Roots comes all the way across. `doneActing()` clears `bought`.
+- **Checks:** `tests/check-companion.mjs` part 1e, no browser.
+
+What the other prompts need from it:
+
+- **6, the play screen:** New scene wants `R.powerOff(s)` and `s.aura = R.auraMax(c, s)` (app.js's `endScene()` only empties `store`), pumping is `R.powerUp()`, a roll's things come from `R.thingsOf()` and it's counted with `R.countRoll(c, s, { root, using, cases, … })`, and `s.bought += k.bought` once it's rolled. `stacked` and `choose` want a note. `.tile[data-s]` and `play()` in the checks wait on specialty tiles that aren't drawn any more, and part 2 reads the old Specialties line.
+- **7, the builder and downtime:** `fromCrew()` reads a crew member's Titles by `name` and `root`, so a copy of the crew reads each Title as all 3 on the Root it puts most on and each archetype with every ability (Vesk comes to 37): carry `roots` and `have` across. `costOf()` reads the build as it stands, `archs` as names or `{ name, have }`. Downtime's new permission and Title don't need `spec` or `specs` any more, and `{ k: "ability", a, name }` buys an ability.
+- **8, the live table:** `extraCost()` is the price, and `crew-archetypes.json` hasn't changed.
+- **9, print:** the crew's `numbers.aura` is 7, and an attuned thing has no `aura`.
 
 ### 3. Traits
 
