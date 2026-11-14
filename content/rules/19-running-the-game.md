@@ -6,7 +6,7 @@ order: 19
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::quote
 Your job is to build the players a world worth being competent in, and beating them isn't part of it.
@@ -199,7 +199,7 @@ The crew has to recover a ledger from the Harbourmaster's ball before it's read 
 
 **Stakes:** *Get the ledger* is Challenge 4, with *Locked* and *Watched* in the way. If they fail, every name in it is ruined, including Dorrie's cousin. The second, *Keep your faces out of it*, is Challenge 3, with *An Old Enemy in the Room* (hidden) in the way, and there's a clock on it at d8, while the inspector asks questions. If they fail, the Guild knows exactly who robbed it. The third, *Win the Harbourmaster's wife*, is Challenge 4, with *Loyal* and *Afraid* in the way. If they win, she'll testify against him later. That one's optional, and tempting.
 
-**Who pushes back:** The Harbourmaster (Bestiary), his two guards (mooks), and the old enemy, a Guild inspector who arrested Vesk once and wants to finish the job.
+**Who pushes back:** The Harbourmaster, his two guards (mooks), and the old enemy, a Guild inspector who arrested Vesk once and wants to finish the job.
 
 **Ground:** *An Audience*, *Chandelier* and *Balconies*, plus a hidden one: *A Servants' Passage*.
 
@@ -301,7 +301,7 @@ Your **threat budget** says how much your threats can take, and how long a scene
 | Three | 22–23 | **90** |
 | Four | 25 | **100** |
 
-The bestiary's [multipliers](#s-tough-gm) are written for a starting crew of four, a threat budget of 60. For a bigger or more experienced crew, add 1 to each multiplier for every 10 the threat budget is over 60. At 80, the Iron Warden's *Armoured ×8* is *Armoured ×10*, and the Wandering Giant's *Mournful ×5* is *Mournful ×7*. For a smaller crew, take 1 off for every 10 it's under, and a tag that gets down to ×1 or less is a plain one.
+A threat's [multipliers](#s-tough-gm) are built for a starting crew of four, a threat budget of 60. For a bigger or more experienced crew, add 1 to each multiplier for every 10 the threat budget is over 60. At 80, an *Armoured ×8* is *Armoured ×10*, and a *Mournful ×5* is *Mournful ×7*. For a smaller crew, take 1 off for every 10 it's under, and a tag that gets down to ×1 or less is a plain one.
 
 It's a guide, so move it to suit the table. If the crew's mixed, add up each character's share: Bram and Dorrie as they started, and Vesk and Isolde with two new picks each, is 15 + 15 + 20 + 20 = 70, so every multiplier goes up 1. Past four new picks the crew's growing in ways the ladder doesn't count, like Titles filled to six permissions, Boons and attuned things at Perfected, so go by what you see at the table.
 
@@ -514,7 +514,7 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 
 **In a round.** Telegraph everything, face up, within the round budget: about 10 steps for each player, about half that for a breather and half again at Hard. A telegraph at one of the crew says Body, Mind or Soul. Mix harm, control, position, stakes, clocks and words, about one die at each of the crew's Body at Even. A threat aims one die at each of the crew, unless a tag says more, and each of their tracks stops one at its Root, so count the dice at each Root. Nobody can intercept what's at someone's Mind or Soul. Let the players roll the threats' dice, once a round for each threat, let wins change things, and recognise openings.
 
-**Threats.** Size scenes from the threat budget: 15 a character as they start, so that's 60 for a starting crew of four, and it climbs with every new Title, archetype or attuned thing. A multiplier's as big as the creature needs, on the tag that says what it is, and its Challenge plus 2 is a good start. The bestiary's are written for 60, so add 1 to each for every 10 over, and take 1 off for every 10 under. A vulnerability can strip two tags in one hit, so give them out with care, and keep them rare on the crew.
+**Threats.** Size scenes from the threat budget: 15 a character as they start, so that's 60 for a starting crew of four, and it climbs with every new Title, archetype or attuned thing. A multiplier's as big as the creature needs, on the tag that says what it is, and its Challenge plus 2 is a good start. They're built for 60, so add 1 to each for every 10 over, and take 1 off for every 10 under. A vulnerability can strip two tags in one hit, so give them out with care, and keep them rare on the crew.
 
 **Consequences.** Only when it matters. Name the cost of a blow or a miss, take a fair swap, and fail forward. What gets through to their Mind or Soul costs a size of Confidence or Resolve, the same as a blow, unless armour on that Root takes it or they pay 2 for 1. When a player chooses to die at a Blaze, slow right down and let them tell it.
 

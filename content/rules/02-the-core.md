@@ -6,7 +6,7 @@ order: 2
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 You play someone who's properly good at something, like a thief who can open any lock in the city or a fighter nobody wants to meet in a narrow corridor. Being good means you stack the odds in your favour before anyone touches a die.
 
@@ -160,7 +160,7 @@ The captain's Challenge 5, and it's the first time anyone's gone at him this rou
 
 You can **split** your steps into more, smaller dice. **Every action in the roll gives you one split**, so one action can turn a d8 into two d4s, or a d2 and a d6. Dice past six steps are already separate and don't use up your splits, so going past 6 steps gives you a split on top of the one your action gives: 8 steps on one action can be a d6, a d6 and a d4. You can also share your steps out between the dice you've got, so a d12 and a d8 can be two d10s.
 
-Your dice all go at things that belong to the same job. A fighter's steps can disarm, trip and frighten someone, because that's all part of a fight. If a die would be doing something completely different, like picking a lock in the middle of a sword fight, build it from its own action instead. There's more on shaping your dice in [Tactical Play](#s-shaping).
+Your dice all go at things that belong to the same job. A fighter's steps can disarm, trip and frighten someone, because that's all part of a fight. If a die would be doing something completely different, like picking a lock in the middle of a sword fight, build it from its own action instead.
 
 :::example[Splitting at the study door]
 Vesk's at the study door with her Body and her Locks, and her picks, 10 steps. On her own that's a d12 and a d8, and her split lets her make it three dice: a d10 for the lock, a d6 to keep it quiet so the guard at the foot of the stairs hears nothing, and a d4 to listen for anyone else coming. The lock's d8 rolls 5, and her d10 opens it with a 7. Her d6 lands on 6, a top face, against the guard's 3. Her d4's got nothing to beat but the quiet house, and the GM calls it a Challenge 1, a d2, which her 3 beats. All three dice won, and the 6 was a top face as well, so that's 4 Aura.

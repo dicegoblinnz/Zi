@@ -4,9 +4,9 @@ id: appendix-quick
 slug: appendix-d-quick-reference
 order: 33
 part: "Appendices & Index"
-partNumber: "Part V"
+partNumber: "Part IV"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 ## Building the roll {#building-the-die}
 
@@ -104,7 +104,7 @@ A hit, a size off the track it's at · a box on your armour on that Root, or som
 -   **Vulnerabilities:** each one that fits a win that strips a tag or lands a hit adds one more tick, and you choose where it goes: the same tag, or another one the hit could reach, so one vulnerability can strip two plain tags. On you, it's one more size off the track. The same one never counts twice. *Prone* and *Exposed* are vulnerabilities, and a hidden one's a hidden tag.
 -   **Forms:** when a form's last keeps-it-going tag goes, it changes. It takes 3 to 5 tags from its Forms list, and its multipliers come back on whichever of them matter most. Its weak point ends it in any form.
 -   **Round budget:** about 10 steps of telegraphs a round for each player, and one die at each of the crew from each threat. A Breather's about half, and Hard's about half again. A telegraph costs its die's steps, once for each target, and says Body, Mind or Soul.
--   **Threat budget:** 15 a character as they start, so 60 for four, and about 2 or 3 more for every Title, archetype or attuned thing an Aspiration gives them after that, up to 25 with four, then it's the GM's call. It sizes multipliers and how long a scene runs. The bestiary's multipliers are written for 60, and a threat's Challenge plus 2 is a good start for your own.
+-   **Threat budget:** 15 a character as they start, so 60 for four, and about 2 or 3 more for every Title, archetype or attuned thing an Aspiration gives them after that, up to 25 with four, then it's the GM's call. It sizes multipliers and how long a scene runs. Multipliers are built for 60, and a threat's Challenge plus 2 is a good start for your own.
 
 ## Conditions {#conditions}
 
@@ -184,10 +184,6 @@ Each ability's 1 from the archetype's home track, or 2 from your other two, and 
 -   **Catch one:** when a creature falls, spend your action and roll against its Challenge. Beat it and its soul goes in a utility slot, with its Challenge die, and into your attunement in downtime. Miss and it's gone.
 -   **Call them out:** spend Aura on a soul as part of your action, with a reason in the story. Each Aura's a d4 of summons, built into one or several, none bigger than the soul's own die.
 -   A summon acts like anyone and rolls its own die. It drops a size every round and for every hit that gets through, and past d2 it's gone, back in your attunement. It intercepts for free and rolls its die to stop one of the dice it took. A horde rolls as one throw. Summons can't combo, and their dice never give Aura. They all go back at the end of the scene.
-
-## Chases {#s-qr-chases}
-
-The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) · The Ground (past d2: the world wins). The Gap and the Ground step down each round unless someone changed them.
 
 ## Downtime {#s-qr-downtime}
 

@@ -1,0 +1,4634 @@
+{
+ "places": [
+  {
+   "key": "copper-baths",
+   "kind": "place",
+   "name": "The Copper Baths",
+   "line": "A bathhouse where the city’s deals get made",
+   "ch": 3,
+   "look": "Steam rolls out when the door opens, smelling of hot stone and cedar oil. Copper pipes tick, and voices stay low, because everyone’s doing business in a towel. In the hot room at the back, there’s a moneylender waiting to sell to whoever offers most.",
+   "here": [
+    "*Orla Strand*, who owns the baths (Challenge 4: *Well-Connected*, *Proud*)",
+    "*Casimir Dace*, the moneylender (Challenge 4: *Deep Pockets*, *Cowardly*)",
+    "four bath-men (Challenge 3: *Heavy*)",
+    "*Old Tamsin*, who stokes the furnace (Challenge 2: *Overlooked*)"
+   ],
+   "ground": [
+    "*Steam*: you can’t see past arm’s length",
+    "*The House Rule*: no blades past the door, and whoever brings one in has broken the peace",
+    "*The Hot Pool*: shove someone in and they’ll come out pink and gasping"
+   ],
+   "stakes": [
+    "*The deal*, Challenge 4: *Someone Must Agree*, *Wanted By Others* (Dace signs with the crew, or with someone else)",
+    "*Dace’s satchel*, Challenge 3: *Locked*, *Guarded* (it’s in the changing-room cupboards)"
+   ],
+   "clockD": 8,
+   "clock": "Dace’s other buyer arrives, and he signs with them.",
+   "teles": [
+    {
+     "text": "Orla raps her cane on the tiles: “Not in my house.”",
+     "d": 8,
+     "at": "Mind"
+    },
+    {
+     "text": "A bath-man takes whoever’s making trouble by the collar and walks them to the door.",
+     "d": 6,
+     "at": "Body, Grabbed"
+    },
+    {
+     "text": "Dace grabs his towel and heads for the changing room.",
+     "d": 8,
+     "at": "the deal"
+    }
+   ],
+   "hooks": [
+    "Someone the crew needs won’t meet anywhere but on neutral ground",
+    "Dace holds a debt that’ll sink a friend, and he’s selling it today"
+   ],
+   "elsewhere": "In a court game it’s the queen’s bathing house, and the room over the furnace belongs to her spymaster.",
+   "secret": "Every Word Is Sold",
+   "more": "The grilles in the hot room carry every word up a pipe to a cupboard over the furnace, where Orla’s clerk writes it down for her to sell. Nobody’s ever made a private deal in here. Tamsin knows, because she’s heard the pen scratching over her head for years. Study the hot room and the grilles are newer than the tiles, and warm on the wrong side. Once the crew knows, the pipe works both ways, and a lie or a voice made with magic goes straight into Orla’s book.",
+   "weak": false,
+   "h": "85uj50",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "orla-strand",
+     "kind": "person",
+     "name": "Orla Strand",
+     "line": "who owns the baths",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Well-Connected",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Proud",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "d8cjhc",
+     "at": 1794619159815
+    },
+    {
+     "key": "casimir-dace",
+     "kind": "person",
+     "name": "Casimir Dace",
+     "line": "the moneylender",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Deep Pockets",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Cowardly",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "ivwxph",
+     "at": 1794619159815
+    },
+    {
+     "key": "old-tamsin",
+     "kind": "person",
+     "name": "Old Tamsin",
+     "line": "who stokes the furnace",
+     "ch": 2,
+     "look": "",
+     "tags": [
+      {
+       "text": "Overlooked",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1w58j4w",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-copper-baths"
+  },
+  {
+   "key": "teeth-light",
+   "kind": "place",
+   "name": "The Teeth Light",
+   "line": "A lighthouse on a rock off the reef they call the Teeth",
+   "ch": 4,
+   "look": "A white tower stands on a black rock, reached by a causeway at low tide and a boat the rest of the time. The wind never drops, and the whole place smells of whale oil. There’s still wreckage on the rocks from the last ship that didn’t make it.",
+   "here": [
+    "*Silas Crewe*, the keeper (Challenge 4: *Fortified*, *Protects Someone*)",
+    "his sons *Abe* and *Lem* (Challenge 3: *Trained*), though Lem *Wants Out*",
+    "*Tam Ollery*, who survived the last wreck, and he’s hiding in the oil store (Challenge 2: *Scared*)"
+   ],
+   "ground": [
+    "*The Spiral*: ninety-nine iron steps, and whoever holds the top holds the tower",
+    "*Wind*: anything loose goes, and arrows won’t fly straight",
+    "*The Lens*: the light goes wherever it points"
+   ],
+   "stakes": [
+    "*The ship in the bay*, Challenge 4: *Far Away*, *Storm* (get her off the Teeth before she strikes)",
+    "*Tam Ollery*, Challenge 3: *Hidden Away*, *Alive and Scared* (find him before the Crewes do)"
+   ],
+   "clockD": 8,
+   "clock": "the ship strikes the Teeth.",
+   "teles": [
+    {
+     "text": "Abe comes up the spiral and reaches for you with his gaff hook.",
+     "d": 6,
+     "at": "Body, Grabbed"
+    },
+    {
+     "text": "Crewe swings the lamp’s shutter closed.",
+     "d": 8,
+     "at": "the ship"
+    },
+    {
+     "text": "A wave breaks right over the gallery.",
+     "d": 8,
+     "at": "everyone on the gallery, Body, Staggered"
+    }
+   ],
+   "hooks": [
+    "A ship the crew cares about is due in tonight",
+    "Crewe’s selling ship’s goods in town, and someone wants to know where he gets them"
+   ],
+   "elsewhere": "In a science-fiction game it’s a beacon in an asteroid field, and the keeper’s been moving the signal.",
+   "secret": "The Light’s Been Moved",
+   "more": "The Crewes have shifted the lens so the beam leads ships onto the Teeth, and they live off whatever washes up. Tam saw the light swing the night his ship went down. Study the lamp room and there’s fresh scraping where the mount’s been moved. In the cottage, a captain’s sea chest is doing duty as a table. Put the lens back, or make a light of your own, and they’ll see the reef in time. Lem’s sick of it, and he’ll help anyone who promises he won’t hang.",
+   "weak": false,
+   "h": "9or4m9",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "silas-crewe",
+     "kind": "person",
+     "name": "Silas Crewe",
+     "line": "the keeper",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Fortified",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Protects Someone",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1ypv0ab",
+     "at": 1794619159815
+    },
+    {
+     "key": "tam-ollery",
+     "kind": "person",
+     "name": "Tam Ollery",
+     "line": "who survived the last wreck, and he’s hiding in the oil store",
+     "ch": 2,
+     "look": "",
+     "tags": [
+      {
+       "text": "Scared",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1885r6r",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-teeth-light"
+  },
+  {
+   "key": "pledge-house",
+   "kind": "place",
+   "name": "The Pledge House",
+   "line": "A pawnbroker’s where half the street has something on the shelves",
+   "ch": 3,
+   "look": "It’s a narrow shop, shelved to the ceiling with ticketed pledges, from wedding rings to a soldier’s medal. It smells of camphor, and under that, faintly, of something sweet. Behind an iron grille, the clerk tells everyone the master’s ill upstairs and won’t see anyone.",
+   "here": [
+    "*Jessamy Cole*, the clerk (Challenge 3: *Slippery*, *Scared*)",
+    "the Rudd brothers, the master’s nephews, who collect for him (Challenge 3: *Heavy*, *Can Be Bought*)",
+    "*Mister Quill*, who’s come to collect from the master (Challenge 3, the Bestiary’s Debt Collector)"
+   ],
+   "ground": [
+    "*The Grille*: an iron cage round the counter, and you can’t reach whoever’s behind it, only talk to them",
+    "*Ticket Shelves*: pull one down and the whole wall comes with it",
+    "*The Back Stair*: narrow and creaking, with the strongroom door underneath"
+   ],
+   "stakes": [
+    "*The pledge*, Challenge 3: *Locked*, *Paperwork* (it’s in the strongroom, and the ticket’s gone)",
+    "*The ledger*, Challenge 3: *Behind the Grille*, *Written in Code* (who owes the house, and how much)"
+   ],
+   "clockD": 8,
+   "clock": "Quill stops waiting and goes upstairs to see the master.",
+   "teles": [
+    {
+     "text": "Jessamy, through the grille: “No ticket, no pledge.”",
+     "d": 6,
+     "at": "Mind"
+    },
+    {
+     "text": "The elder Rudd grabs whoever’s nearest the stair and puts them through the shelves.",
+     "d": 6,
+     "at": "Body, Prone"
+    },
+    {
+     "text": "Jessamy tips the ledger toward the stove.",
+     "d": 6,
+     "at": "the ledger"
+    },
+    {
+     "text": "Quill straightens his coat and puts a foot on the bottom stair.",
+     "d": 6,
+     "at": "the scene clock"
+    }
+   ],
+   "hooks": [
+    "Someone the crew cares about pledged something they need back",
+    "Quill’s employer wants to know why the master’s stopped paying"
+   ],
+   "elsewhere": "",
+   "secret": "The Master’s Been Dead a Month",
+   "more": "Abel Mossop died in his chair upstairs four weeks ago. Once anyone finds out, the Rudds inherit and sell every pledge, so Jessamy’s kept the shop open in his name, giving the street its things back for a copper each. She’ll go still the moment anyone nears the stair. Study the shop and the ledger’s been in her hand alone for a month, and his signature’s a copy. Study the stair, or feel for the dead, and the smell’s coming from the room at the top. Once the crew knows, she’ll help anyone who keeps it quiet.",
+   "weak": false,
+   "h": "j943rx",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "jessamy-cole",
+     "kind": "person",
+     "name": "Jessamy Cole",
+     "line": "the clerk",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Slippery",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Scared",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "qhgz9",
+     "at": 1794619159815
+    },
+    {
+     "key": "mister-quill",
+     "kind": "person",
+     "name": "Mister Quill",
+     "line": "who’s come to collect from the master",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Patient",
+       "x": 1,
+       "kind": "comes"
+      },
+      {
+       "text": "Well-Connected",
+       "x": 1,
+       "kind": "keeps"
+      }
+     ],
+     "rules": "",
+     "teles": [
+      {
+       "text": "He reads out what you owe, slowly, so the whole room hears.",
+       "d": 6,
+       "at": "Mind"
+      },
+      {
+       "text": "He sends his boy running to fetch the men who do the heavy lifting.",
+       "d": 6,
+       "at": "an event: his heavies arrive"
+      },
+      {
+       "text": "He puts a hand on the thing you came for and calls it surety.",
+       "d": 6,
+       "at": "a stake"
+      }
+     ],
+     "voice": "“It’s not personal. It never is.”",
+     "secret": "Someone Else’s Man",
+     "more": "He is here on someone’s behalf. Name who, and he backs down.",
+     "weak": true,
+     "h": "n3612l",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-pledge-house"
+  },
+  {
+   "key": "kestrel-lodge",
+   "kind": "place",
+   "name": "Kestrel Lodge",
+   "line": "A lord’s hunting lodge, full of guests the night before the hunt",
+   "ch": 4,
+   "look": "It’s a long timber hall with antlers on every beam and a fire you could roast an ox in. Hounds sleep under the tables, it smells of woodsmoke and wet dog, and the guests in hunting green have been drinking since breakfast. Out the back are the kennels and the hawks, and past them, the forest.",
+   "here": [
+    "*Lord Edric Hawley*, the host (Challenge 5: *Well-Connected*, *Proud*)",
+    "*Piers Hawley*, his nephew and heir (Challenge 3: *Charming*)",
+    "*Garrow*, the huntsman (Challenge 4: *Knows the Territory*, *Loyal to a Name*)",
+    "the hounds (Challenge 2: *Fast*, *Bites*)",
+    "a dozen guests (Challenge 3: *Bored*)"
+   ],
+   "ground": [
+    "*The Great Fire*: a hearth big enough to stand in",
+    "*Trophies*: boar spears on every wall, so nobody’s unarmed for long",
+    "*Hounds*: under every table, and they’ll wake up angry",
+    "*The Forest*: Garrow knows it, and you don’t"
+   ],
+   "stakes": [
+    "*Hawley’s ear*, Challenge 5: *Someone Must Agree*, *An Audience* (whatever the crew came to ask him for)",
+    "*Hawley’s letters*, Challenge 4: *Locked*, *Watched* (in his rooms upstairs, with a guest on every landing)"
+   ],
+   "clockD": 10,
+   "clock": "dawn, when the horns go up and the hunt rides out.",
+   "teles": [
+    {
+     "text": "Hawley lifts his glass: “To our guests, who’ll be riding with us in the morning.”",
+     "d": 10,
+     "at": "Mind"
+    },
+    {
+     "text": "A hound wakes under the table and goes for whoever’s moving.",
+     "d": 4,
+     "at": "Body"
+    },
+    {
+     "text": "Garrow steps out of the shadows at the foot of the stairs.",
+     "d": 8,
+     "at": "the letters"
+    }
+   ],
+   "hooks": [
+    "The crew needs something from Hawley, and this is the only place he’ll see them",
+    "Piers wrote asking the crew to come, and wouldn’t say why"
+   ],
+   "elsewhere": "",
+   "secret": "The Hunt’s for Piers",
+   "more": "Hawley’s arranged an accident for his nephew tomorrow: a crossbow waiting in a gully, and a horse that’s been badly shod on purpose. With Piers dead, the estate’s his for life. Garrow knows, and it’s eating him, because he served Piers’s father. Study the stables and Piers’s horse has a shoe somebody’s loosened. Anyone who can talk to beasts can ask a hawk where the crossbow’s waiting. Anyone who reads Hawley sees he can’t look his nephew in the eye.",
+   "weak": false,
+   "h": "m2l5cv",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "lord-edric-hawley",
+     "kind": "person",
+     "name": "Lord Edric Hawley",
+     "line": "the host",
+     "ch": 5,
+     "look": "",
+     "tags": [
+      {
+       "text": "Well-Connected",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Proud",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1xj4p27",
+     "at": 1794619159815
+    },
+    {
+     "key": "piers-hawley",
+     "kind": "person",
+     "name": "Piers Hawley",
+     "line": "his nephew and heir",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Charming",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "12m1bgk",
+     "at": 1794619159815
+    },
+    {
+     "key": "garrow",
+     "kind": "person",
+     "name": "Garrow",
+     "line": "the huntsman",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Knows the Territory",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Loyal to a Name",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "14rfjgl",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-kestrel-lodge"
+  },
+  {
+   "key": "gilt-rooms",
+   "kind": "place",
+   "name": "The Gilt Rooms",
+   "line": "An auction house where old families sell what they can’t afford to keep",
+   "ch": 4,
+   "look": "Rows of gilt chairs face a rostrum under a glass roof, and every painting on the walls has a lot number on it. It smells of beeswax and perfume, and the talk’s all quiet laughter from people who knew each other’s grandparents. The thing the crew wants is lot 31.",
+   "here": [
+    "*Lucan Fairweather*, the auctioneer (Challenge 4: *Silver-Tongued*, *Well-Connected*)",
+    "*Dame Hester Quell*, the richest bidder in the room (Challenge 5: *Deep Pockets*, *Proud*)",
+    "six porters (Challenge 2: *Overlooked*)",
+    "a guard on every door (Challenge 3: *Trained*)"
+   ],
+   "ground": [
+    "*An Audience*: every bid’s public, and so is every scene",
+    "*The Rostrum*: whoever holds the hammer holds the room",
+    "*The Lot Room*: crates and porters behind a velvet curtain",
+    "*The Glass Roof*: it’s on hinges"
+   ],
+   "stakes": [
+    "*Lot 31*, Challenge 4: *Wanted By Others*, *Guarded* (win the bidding, or get it out of the lot room first)",
+    "*The consignment book*, Challenge 4: *Locked*, *Watched* (who sold lot 31, and when)"
+   ],
+   "clockD": 8,
+   "clock": "lot 31 comes up, and the hammer falls.",
+   "teles": [
+    {
+     "text": "Fairweather points his hammer at you: “Is that a bid, or a cough?”",
+     "d": 8,
+     "at": "Mind"
+    },
+    {
+     "text": "Dame Hester lifts her paddle without looking round.",
+     "d": 10,
+     "at": "lot 31"
+    },
+    {
+     "text": "A guard comes down the aisle and takes your elbow.",
+     "d": 6,
+     "at": "Body, Grabbed"
+    }
+   ],
+   "hooks": [
+    "Lot 31 was stolen from someone the crew knows",
+    "A client wants it bought quietly, and won’t go over a certain price"
+   ],
+   "elsewhere": "",
+   "secret": "Stolen to Order",
+   "more": "Fairweather takes commissions: a rich client names a thing, he has it stolen, and a month later it’s in his catalogue with a clean history. Lot 31 was stolen for Dame Hester, and the bidding’s a show. She’s bored, because she’s already paid, and anyone who reads people sees it. One of the porters hates Fairweather enough to say which lots came in the back door at night. Study the catalogue and you’ll find it was printed the week before lot 31 went missing. Magic that sees the past shows the night it was taken. Proof strips *Wanted By Others*, because Hester won’t be seen bidding on a scandal.",
+   "weak": false,
+   "h": "1la3x4p",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "lucan-fairweather",
+     "kind": "person",
+     "name": "Lucan Fairweather",
+     "line": "the auctioneer",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Silver-Tongued",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Well-Connected",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "fxgqdo",
+     "at": 1794619159815
+    },
+    {
+     "key": "dame-hester-quell",
+     "kind": "person",
+     "name": "Dame Hester Quell",
+     "line": "the richest bidder in the room",
+     "ch": 5,
+     "look": "",
+     "tags": [
+      {
+       "text": "Deep Pockets",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Proud",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "3m8khh",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-gilt-rooms"
+  },
+  {
+   "key": "breakers-flats",
+   "kind": "place",
+   "name": "The Breakers’ Flats",
+   "line": "A mudflat where old ships are broken up, walkable only at low tide",
+   "ch": 3,
+   "look": "Twenty hulks lie on their sides in grey mud with their ribs showing, and gulls scream on every mast stump. It smells of rot and tar. At low tide it’s a mile of mud out to the sea, and folk on shore say lights move inside the hulks at night.",
+   "here": [
+    "*Orrin Slade*, the foreman (Challenge 3: *Heavy*, *Greedy*)",
+    "eight breakers with axes (Challenge 2: *One of Many*)",
+    "*Nance*, a mudlark who knows every hulk (Challenge 2: *Slippery*)",
+    "whatever carries the lights (Challenge 3: *Out of Sight*)"
+   ],
+   "ground": [
+    "*Sucking Mud*: anyone who goes down is stuck",
+    "*Rotten Decks*: heavy things go through, and light feet don’t",
+    "*The Tide*: it comes in faster than anyone can walk"
+   ],
+   "stakes": [
+    "*The ship’s bell*, Challenge 3: *Hidden Away*, *Heavy Load* (proof of which ship a hulk really is)",
+    "*Off the flats*, Challenge 3: *Far Away*, *Watched* (a mile of mud, and the breakers are watching)"
+   ],
+   "clockD": 6,
+   "clock": "the tide’s in, and anyone still out on the flats is swimming.",
+   "teles": [
+    {
+     "text": "The mud takes your boot, then your leg.",
+     "d": 6,
+     "at": "Body, Pinned"
+    },
+    {
+     "text": "Slade comes along the walkway with an axe on his shoulder.",
+     "d": 6,
+     "at": "Body"
+    },
+    {
+     "text": "The first channel fills behind you.",
+     "d": 6,
+     "at": "the scene clock"
+    }
+   ],
+   "hooks": [
+    "A ship the crew knows was stolen last month",
+    "Someone wants the ghosts laid to rest, and they’ll pay well",
+    "Someone the crew’s after is hiding in the hulks"
+   ],
+   "elsewhere": "In a horror game, let the breakers fake the ghosts in every hulk but one.",
+   "secret": "The Breakers Make the Ghosts",
+   "more": "Slade’s men hang the lights and moan in the hulks themselves to keep people off the flats at night, because that’s when they break up stolen ships brought in on the tide. Nance carries the lamps for a penny a night, and she’ll talk for more. Study the hulks and one’s got new copper under the tar and her name burned off the stern. Ghosts don’t leave bootprints, either. A ghost of your own, made with magic or a lamp and a sheet, frightens the breakers worse than anyone.",
+   "weak": false,
+   "h": "x881x0",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "orrin-slade",
+     "kind": "person",
+     "name": "Orrin Slade",
+     "line": "the foreman",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Heavy",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Greedy",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1tgy7dj",
+     "at": 1794619159815
+    },
+    {
+     "key": "nance",
+     "kind": "person",
+     "name": "Nance",
+     "line": "a mudlark who knows every hulk",
+     "ch": 2,
+     "look": "",
+     "tags": [
+      {
+       "text": "Slippery",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "hbdf6z",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-breakers-flats"
+  },
+  {
+   "key": "foundry",
+   "kind": "place",
+   "name": "Hollin’s Foundry",
+   "line": "An iron foundry on the river that hasn’t let its furnace go out in sixty years",
+   "ch": 4,
+   "look": "You can feel the heat from the street. Inside, a furnace three storeys high glows at the seams, and a ladle of white iron hangs from a crane overhead. The bellows roar so loud that nobody bothers shouting, and the air tastes of hot metal.",
+   "here": [
+    "*Master Odo Hollin*, the founder (Challenge 5: *Hits Like a Wagon*, *Relentless*, *Proud*)",
+    "*Gully*, who feeds the furnace (Challenge 2: *Overlooked*, *Scared*)",
+    "a dozen founders with iron bars (Challenge 3: *Trained*)"
+   ],
+   "ground": [
+    "*The Ladle*: tip it and everything under it burns",
+    "*Sand Pits*: they’re soft and deep, and full of moulds",
+    "*The Crane*: run along its beam, or swing on its chains",
+    "*The Bellows*: nobody hears a shout past arm’s length"
+   ],
+   "stakes": [
+    "*Tonight’s casting*, Challenge 4: *Guarded*, *Heavy Load* (whatever’s being poured, ruin it or take it)",
+    "*The order book*, Challenge 3: *Locked*, *Watched* (who paid for the casting, and why)"
+   ],
+   "clockD": 6,
+   "clock": "Hollin taps the furnace and the iron runs.",
+   "teles": [
+    {
+     "text": "Hollin swings his tapping bar at whoever’s closest.",
+     "d": 10,
+     "at": "Body"
+    },
+    {
+     "text": "The crane jerks and the ladle slops over the pits.",
+     "d": 8,
+     "at": "everyone by the pits, Body, Burning"
+    },
+    {
+     "text": "A founder knocks the clay plug half out of the tap hole.",
+     "d": 6,
+     "at": "the scene clock"
+    }
+   ],
+   "hooks": [
+    "Someone’s ordered something cast here that mustn’t exist",
+    "Hollin owes a friend of the crew and won’t pay",
+    "Gully came to the crew frightened, and wouldn’t say of what"
+   ],
+   "elsewhere": "",
+   "secret": "Something Lives in the Furnace",
+   "more": "Hollin’s grandfather bound a fire-spirit into the furnace, and it’s why his iron’s the best in the city. The binding’s cast into the furnace’s iron bands, and it’s wearing thin. When the furnace is tapped tonight, the spirit comes out with the iron. Gully knows, because it talks to him while he shovels. Study the furnace and it’s hotter than coal can make it, with old sigils all over the bands. The chalk wards round its mouth are freshly drawn, and the fire leans toward whoever stands closest. A ward can hold it back, and anyone who can read the bands can mend the binding, or break it.",
+   "weak": false,
+   "h": "1skuemj",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "master-odo-hollin",
+     "kind": "person",
+     "name": "Master Odo Hollin",
+     "line": "the founder",
+     "ch": 5,
+     "look": "",
+     "tags": [
+      {
+       "text": "Hits Like a Wagon",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Relentless",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Proud",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "lvpult",
+     "at": 1794619159815
+    },
+    {
+     "key": "gully",
+     "kind": "person",
+     "name": "Gully",
+     "line": "who feeds the furnace",
+     "ch": 2,
+     "look": "",
+     "tags": [
+      {
+       "text": "Overlooked",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Scared",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "9i7qrl",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-foundry"
+  },
+  {
+   "key": "weeping-field",
+   "kind": "place",
+   "name": "The Weeping Field",
+   "line": "An old battlefield where nothing grows and the dead still hold the line",
+   "ch": 5,
+   "look": "It’s a long slope of grey grass with a broken wall across the middle and a roofless chapel at the top. The air smells of wet iron, and there aren’t any birds. At dusk there’s drumming from nowhere, and the mist comes up out of the grass in ranks.",
+   "here": [
+    "*The Grey Line*, the dead of the battle (Challenge 5: *Not Really Here*, *Relentless*)",
+    "*Captain Ambrose Thorne*, who held the wall (Challenge 6: *Bound to a Place*, *Code of Honour*)",
+    "*Widow Hale*, who keeps the chapel (Challenge 3: *Knows the Territory*, *Grieving*)",
+    "three grave robbers (Challenge 2: *Greedy*, *Cowardly*)"
+   ],
+   "ground": [
+    "*Mist*: ten paces and the world ends",
+    "*The Broken Wall*: the line they died holding, and cover for anyone",
+    "*Old Iron*: nobody here’s unarmed for long",
+    "*Sacred Ground*: the dead won’t cross the chapel step"
+   ],
+   "stakes": [
+    "*The far side*, Challenge 4: *Far Away*, *Mist* (cross before dark, or spend the night in the chapel)",
+    "*The colours*, Challenge 4: *Hidden Away*, *Guarded* (the regiment’s banner, buried where it fell)"
+   ],
+   "clockD": 8,
+   "clock": "full dark, and the whole Grey Line comes over the wall.",
+   "teles": [
+    {
+     "text": "A rank of grey shapes levels spears that aren’t there.",
+     "d": 10,
+     "at": "everyone in the open, Mind, Frightened"
+    },
+    {
+     "text": "Thorne’s voice comes out of the mist: “Hold the wall.”",
+     "d": 12,
+     "at": "the far side"
+    },
+    {
+     "text": "A robber’s spade hits a coffin lid, and the mist turns toward the noise.",
+     "d": 4,
+     "at": "the scene clock"
+    }
+   ],
+   "hooks": [
+    "The crew has to cross, and the road round takes three days",
+    "A family wants its banner back"
+   ],
+   "elsewhere": "",
+   "secret": "They Don’t Know It’s Over",
+   "more": "The peace was signed the morning of the battle, and the rider bringing the order never got through, so the dead are still holding the wall. He’s under the chapel floor with the treaty in his satchel. Widow Hale knows the story, and doesn’t believe a word of it. Study the chapel and the floor’s been laid over a grave that isn’t in her book. Anyone who can speak to the dead can ask Thorne what he’s waiting for, and he’ll tell them plainly: the order. Read him the treaty and the Grey Line lays down its arms.",
+   "weak": false,
+   "h": "1f1anlo",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "the-grey-line",
+     "kind": "person",
+     "name": "The Grey Line",
+     "line": "the dead of the battle",
+     "ch": 5,
+     "look": "",
+     "tags": [
+      {
+       "text": "Not Really Here",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Relentless",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1pl2zmq",
+     "at": 1794619159815
+    },
+    {
+     "key": "captain-ambrose-thorne",
+     "kind": "person",
+     "name": "Captain Ambrose Thorne",
+     "line": "who held the wall",
+     "ch": 6,
+     "look": "",
+     "tags": [
+      {
+       "text": "Bound to a Place",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Code of Honour",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "klu3ar",
+     "at": 1794619159815
+    },
+    {
+     "key": "widow-hale",
+     "kind": "person",
+     "name": "Widow Hale",
+     "line": "who keeps the chapel",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Knows the Territory",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Grieving",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1oaltc1",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-weeping-field"
+  },
+  {
+   "key": "lantern-theatre",
+   "kind": "place",
+   "name": "The Lantern Theatre",
+   "line": "A playhouse on the opening night of a play everyone’s talking about",
+   "ch": 3,
+   "look": "There’s a row of candles for footlights, a painted sky, and ropes and sandbags up in the dark of the fly loft. The pit’s packed and loud, the boxes are full of the quality, and it smells of oranges and too many people. Backstage is a maze of painted flats.",
+   "here": [
+    "*Madam Iris Penhallow*, who owns the theatre (Challenge 4: *Well-Connected*, *Greedy*)",
+    "*Lord Aubrey Kell*, alone in the best box (Challenge 5: *Politically Untouchable*, *Proud*)",
+    "two of Kell’s men (Challenge 3: *Trained*)",
+    "*Pip Larkin*, the prompter (Challenge 2: *Overlooked*)"
+   ],
+   "ground": [
+    "*An Audience*: hundreds of people, all looking the same way",
+    "*The Fly Loft*: cut a rope and something comes down",
+    "*Footlights*: kick them over and it’s dark, or on fire"
+   ],
+   "stakes": [
+    "*The third act*, Challenge 4: *Someone Must Agree*, *Watched* (get it played, or get it stopped, depending on who’s paying)",
+    "*The playwright*, Challenge 4: *Hidden Away*, *Wanted By Others* (nobody knows who wrote it, and Kell’s men are looking too)"
+   ],
+   "clockD": 8,
+   "clock": "the interval ends and the third act starts, ready or not.",
+   "teles": [
+    {
+     "text": "Penhallow pushes you out of the wings: “You’re on, darling.”",
+     "d": 8,
+     "at": "Mind"
+    },
+    {
+     "text": "One of Kell’s men comes down the backstage corridor with his knife held low.",
+     "d": 6,
+     "at": "Body"
+    },
+    {
+     "text": "Kell stands up in his box, and the house goes quiet.",
+     "d": 10,
+     "at": "the third act"
+    }
+   ],
+   "hooks": [
+    "Someone’s hired the crew to stop the play",
+    "The playwright’s a friend who’s gone missing"
+   ],
+   "elsewhere": "",
+   "secret": "The Play Is a Confession",
+   "more": "The third act shows exactly how Kell’s brother died, and the only witness wrote it: Pip Larkin, who was the brother’s valet and now feeds the actors their lines from the wings. Pip doesn’t look down at the book once. Penhallow knows who wrote it, and she’s selling the name to whoever pays more. Study the script and the third act’s in a different hand, naming a poison any apothecary would know. A medium who looks at Kell’s box feels his brother in the empty chair beside him. Play the third act to the end and Kell’s *Proud* breaks in front of the whole city.",
+   "weak": false,
+   "h": "rhnjb1",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "madam-iris-penhallow",
+     "kind": "person",
+     "name": "Madam Iris Penhallow",
+     "line": "who owns the theatre",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Well-Connected",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Greedy",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1txvvp0",
+     "at": 1794619159815
+    },
+    {
+     "key": "lord-aubrey-kell",
+     "kind": "person",
+     "name": "Lord Aubrey Kell",
+     "line": "alone in the best box",
+     "ch": 5,
+     "look": "",
+     "tags": [
+      {
+       "text": "Politically Untouchable",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Proud",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "16i5tiu",
+     "at": 1794619159815
+    },
+    {
+     "key": "pip-larkin",
+     "kind": "person",
+     "name": "Pip Larkin",
+     "line": "the prompter",
+     "ch": 2,
+     "look": "",
+     "tags": [
+      {
+       "text": "Overlooked",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1xxmt6q",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-lantern-theatre"
+  },
+  {
+   "key": "tanners-lock",
+   "kind": "place",
+   "name": "Tanner’s Lock",
+   "line": "A canal lock out in the fields, where barges drop down to the river",
+   "ch": 3,
+   "look": "Two pairs of black oak gates hold back the water, with a stone chamber between them like a giant’s trough. A barge sits in the chamber, and there are geraniums in the keeper’s window. When the paddles go up, the water roars through loud enough to drown a shout.",
+   "here": [
+    "*Dunstan Ware*, the lockkeeper (Challenge 3: *Knows the Territory*, *Greedy*)",
+    "*Hetty Ware*, his wife (Challenge 2: *Wants Out*)",
+    "*Big Nell Fairley*, the bargee (Challenge 4: *Heavy*, *Holds the Line*, *Protects Someone*)"
+   ],
+   "ground": [
+    "*The Gate Beams*: one at a time, and there’s a drop into the chamber",
+    "*The Windlass*: whoever holds the handle holds the water",
+    "*Towpath Horses*: spook them and the towlines go everywhere"
+   ],
+   "stakes": [
+    "*The barge*, Challenge 3: *Guarded*, *Locked* (search it, or stop it leaving)",
+    "*The lock book*, Challenge 3: *Paperwork*, *Watched* (every barge through here this year, and what it paid)"
+   ],
+   "clockD": 8,
+   "clock": "the chamber’s empty, the bottom gates open, and the barge is gone downriver.",
+   "teles": [
+    {
+     "text": "Nell swings her boat hook at whoever’s on the gate beam.",
+     "d": 8,
+     "at": "Body, into the chamber"
+    },
+    {
+     "text": "Ware leans on the windlass, and the water drops away under the barge.",
+     "d": 6,
+     "at": "the scene clock"
+    },
+    {
+     "text": "The horses spook and drag the towline across the path.",
+     "d": 6,
+     "at": "everyone on the towpath, Body, Prone"
+    }
+   ],
+   "hooks": [
+    "Something’s coming down the canal that mustn’t reach the river",
+    "A body turned up in the lock last week"
+   ],
+   "elsewhere": "",
+   "secret": "A Room in the Lock Wall",
+   "more": "Below the lowest the water ever goes, there’s an iron door in the chamber wall, and behind it there’s a dry room the Wares rent to smugglers. Air comes down a pipe that looks like a drain in Hetty’s geranium bed. Nell’s barge is a decoy, and whatever the crew’s after is behind that door. Hetty knows, and she wants out badly enough that she’ll tell. Study the chamber and the water drops slower on one side, where the air’s pushing back. Anyone who can move water with magic can empty the chamber further than the paddles go, and then nobody can miss the door.",
+   "weak": false,
+   "h": "11ochdh",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "dunstan-ware",
+     "kind": "person",
+     "name": "Dunstan Ware",
+     "line": "the lockkeeper",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Knows the Territory",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Greedy",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "19idkj8",
+     "at": 1794619159815
+    },
+    {
+     "key": "hetty-ware",
+     "kind": "person",
+     "name": "Hetty Ware",
+     "line": "his wife",
+     "ch": 2,
+     "look": "",
+     "tags": [
+      {
+       "text": "Wants Out",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "6s5976",
+     "at": 1794619159815
+    },
+    {
+     "key": "big-nell-fairley",
+     "kind": "person",
+     "name": "Big Nell Fairley",
+     "line": "the bargee",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Heavy",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Holds the Line",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Protects Someone",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "kll2eu",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-tanners-lock"
+  },
+  {
+   "key": "gallows-square",
+   "kind": "place",
+   "name": "Gallows Square",
+   "line": "A market square on hanging day",
+   "ch": 4,
+   "look": "A scaffold with three nooses stands over a crowd of hundreds, eating pies and shouting. Watchmen with halberds hold a ring round it, the hangman waits in his hood, and the bell of the hanging church tolls once a minute while the cart comes down Gaol Street.",
+   "here": [
+    "*Gideon Pyke*, the hangman (Challenge 4: *Trained*, *Bored*)",
+    "*Captain Ilse Brandt* of the watch (Challenge 4: *Commanding*, *Trained*)",
+    "twelve watchmen (Challenge 3, the Bestiary’s Watchman)",
+    "*Father Tobin*, the chaplain (Challenge 3: *Kind*)",
+    "*Jory Pell*, on the cart (Challenge 2: *Scared*)"
+   ],
+   "ground": [
+    "*A Crowd*: easy to vanish into, and you can’t swing a halberd in it",
+    "*The Scaffold*: everyone in the square can see whoever’s on it",
+    "*The Bell*: the trap drops on its last stroke, so silence it, by magic or by hand, and Pyke has to wait",
+    "*Market Stalls*: awnings to climb and carts to tip"
+   ],
+   "stakes": [
+    "*Jory Pell*, Challenge 4: *Guarded*, *In Irons* (get him off the scaffold alive)",
+    "*The crowd*, Challenge 4: *Here for a Hanging*, *Thinks He Did It* (turn it, and nobody hangs anyone in front of it)"
+   ],
+   "clockD": 6,
+   "clock": "the bell’s last stroke, and Pyke pulls the lever.",
+   "teles": [
+    {
+     "text": "Captain Brandt points: “Those three. Hold them.”",
+     "d": 8,
+     "at": "Body, Grabbed"
+    },
+    {
+     "text": "The crowd surges for a better look and carries you with it.",
+     "d": 8,
+     "at": "everyone in the crowd, Body, Staggered"
+    },
+    {
+     "text": "Pyke tests the lever with his boot.",
+     "d": 8,
+     "at": "the scene clock"
+    }
+   ],
+   "hooks": [
+    "Someone the crew cares about is on the cart",
+    "Jory knows something the crew needs, and it dies with him",
+    "Someone’s paid the crew to make sure he hangs"
+   ],
+   "elsewhere": "",
+   "secret": "The Rope’s Been Cut",
+   "more": "Pyke’s been paid to fake it, and he’s done it before. The rope’s sawn half through, so it’ll break when Jory drops, and in the shouting a closed cart under the scaffold carries him off to whoever paid, who wants what he knows and won’t be gentle getting it. Father Tobin heard Pyke’s confession this morning, and it’s eating him. Pyke’s far too calm, and anyone who reads people sees it. Study the scaffold and the rope’s been sawn. And the cart’s driver isn’t watching the hanging.",
+   "weak": false,
+   "h": "1d2zwxq",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "gideon-pyke",
+     "kind": "person",
+     "name": "Gideon Pyke",
+     "line": "the hangman",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Trained",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Bored",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "9hh5m2",
+     "at": 1794619159815
+    },
+    {
+     "key": "captain-ilse-brandt",
+     "kind": "person",
+     "name": "Captain Ilse Brandt",
+     "line": "of the watch",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Commanding",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Trained",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "y05oe0",
+     "at": 1794619159815
+    },
+    {
+     "key": "father-tobin",
+     "kind": "person",
+     "name": "Father Tobin",
+     "line": "the chaplain",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Kind",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "yk688q",
+     "at": 1794619159815
+    },
+    {
+     "key": "jory-pell",
+     "kind": "person",
+     "name": "Jory Pell",
+     "line": "on the cart",
+     "ch": 2,
+     "look": "",
+     "tags": [
+      {
+       "text": "Scared",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "13qutrq",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-gallows-square"
+  },
+  {
+   "key": "basket-monastery",
+   "kind": "place",
+   "name": "The Basket Monastery",
+   "line": "A monastery on top of a rock pillar, reached only by a basket on a rope",
+   "ch": 5,
+   "look": "The pillar’s four hundred feet of bare rock, with the monastery on top like a nest. You ride up in a net basket on a rope, spinning, and at the top a winch creaks. After that it’s quiet, just a chapel in terraced gardens and monks who don’t say much.",
+   "here": [
+    "*Abbot Lorens* (Challenge 5: *Warded*, *Won’t Back Down*, *Kind*)",
+    "*Brother Simeon*, who works the winch (Challenge 4: *Heavy*, *Kind*)",
+    "twelve brothers (Challenge 3: *Devout*)"
+   ],
+   "ground": [
+    "*The Basket*: it swings and spins, and the winch decides who comes and goes",
+    "*A Long Drop*: on every side, and climbing it, or magic, is the only other way up",
+    "*Sacred Ground*: the brothers won’t fight in the chapel"
+   ],
+   "stakes": [
+    "*The one you came for*, Challenge 5: *Someone Must Agree*, *Hidden Away* (one of the brothers is the person the crew wants)",
+    "*The winch*, Challenge 3: *Guarded*, *Needs Two Hands* (the only way down that isn’t falling)"
+   ],
+   "clockD": 8,
+   "clock": "dusk, when the basket comes up and the winch is chained till morning.",
+   "teles": [
+    {
+     "text": "Brother Simeon lets the rope run, and the basket drops ten feet.",
+     "d": 8,
+     "at": "everyone in the basket, Mind"
+    },
+    {
+     "text": "The abbot, gently: “You came up as guests. Act like it.”",
+     "d": 10,
+     "at": "Mind"
+    },
+    {
+     "text": "A gust swings the basket into the rock.",
+     "d": 10,
+     "at": "everyone in the basket, Body"
+    }
+   ],
+   "hooks": [
+    "Someone the crew’s after has taken refuge on the rock",
+    "A message has to reach the abbot, who never comes down"
+   ],
+   "elsewhere": "In a sea game it’s a monastery on a sea stack, and the basket comes down to a boat.",
+   "secret": "Everyone Up Here Is Hiding",
+   "more": "Every brother on the rock is someone the world below wants, from deserters to a murderer who’s sorry. The abbot gives them new names, and the basket never goes down for anyone who’s come to collect. Brother Simeon will say so to anyone who’s kind to him. Study the brothers and they’ve got soldiers’ hands and city accents, and one’s got a brand under his sleeve. Whoever the crew came for is here, and they aren’t who the crew was told.",
+   "weak": false,
+   "h": "1qk8bmn",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "abbot-lorens",
+     "kind": "person",
+     "name": "Abbot Lorens",
+     "line": "",
+     "ch": 5,
+     "look": "",
+     "tags": [
+      {
+       "text": "Warded",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Won’t Back Down",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Kind",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "6tnhha",
+     "at": 1794619159815
+    },
+    {
+     "key": "brother-simeon",
+     "kind": "person",
+     "name": "Brother Simeon",
+     "line": "who works the winch",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Heavy",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Kind",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "cg2nb3",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-basket-monastery"
+  },
+  {
+   "key": "fever-house",
+   "kind": "place",
+   "name": "The Fever House",
+   "line": "A fever ward run by nursing sisters, locked from outside",
+   "ch": 4,
+   "look": "It’s a long whitewashed ward with thirty beds and herbs smouldering in braziers. Everything smells of vinegar and lye, and sisters in grey move between the beds with cloths over their mouths. There’s less coughing than you’d expect, and every door locks from the outside.",
+   "here": [
+    "*Mother Benedetta*, who runs the ward (Challenge 5: *Warded*, *Won’t Back Down*)",
+    "*Sister Prue*, who keeps the keys (Challenge 3: *Following Orders*, *Kind*)",
+    "two orderlies (Challenge 3: *Heavy*)",
+    "thirty patients (Challenge 2: *Scared*)"
+   ],
+   "ground": [
+    "*Thirty Beds*: someone’s in every one, so you can’t swing freely",
+    "*Sacred Ground*: the sisters won’t raise a hand in here",
+    "*The Locked Doors*: whoever has the keys has the scene"
+   ],
+   "stakes": [
+    "*The patient*, Challenge 4: *Locked*, *Someone Must Agree* (get them out, past the Mother)",
+    "*The admissions book*, Challenge 3: *Hidden Away*, *Watched* (who sent each patient here, and who pays)"
+   ],
+   "clockD": 8,
+   "clock": "the evening bell, when the ward’s locked for the night with whoever’s inside.",
+   "teles": [
+    {
+     "text": "Mother Benedetta: “Touch that bed and you’ll carry the fever home to your own door.”",
+     "d": 10,
+     "at": "Mind"
+    },
+    {
+     "text": "An orderly hauls you off the bed by your collar.",
+     "d": 6,
+     "at": "Body, Grabbed"
+    },
+    {
+     "text": "Sister Prue backs toward the door with the keys.",
+     "d": 6,
+     "at": "the patient"
+    }
+   ],
+   "hooks": [
+    "Someone the crew knows was brought here sick and hasn’t been heard from since",
+    "A sister smuggles out a letter asking for help"
+   ],
+   "elsewhere": "In a science-fiction game it’s a quarantine deck, sealed from outside, full of people the company wanted gone.",
+   "secret": "Nobody Here Has the Fever",
+   "more": "It’s been gone for months. The patients are people that powerful families paid to have put away, from an awkward wife to an heir. The sisters think they’re keeping a sickness in, and only the Mother knows she’s keeping people. Anyone with medicine or healing magic who looks at a patient sees it without a roll: there’s no fever, and the rash has been painted on. Sister Prue knows the bills come from families, never the parish, and she’ll say so to anyone who shows her the order was wrong. Show the sisters the truth and they’ll open the doors themselves.",
+   "weak": false,
+   "h": "1imyy9d",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "mother-benedetta",
+     "kind": "person",
+     "name": "Mother Benedetta",
+     "line": "who runs the ward",
+     "ch": 5,
+     "look": "",
+     "tags": [
+      {
+       "text": "Warded",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Won’t Back Down",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1qeo6kz",
+     "at": 1794619159815
+    },
+    {
+     "key": "sister-prue",
+     "kind": "person",
+     "name": "Sister Prue",
+     "line": "who keeps the keys",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Following Orders",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Kind",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1lmpgxo",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-fever-house"
+  },
+  {
+   "key": "long-quarry",
+   "kind": "place",
+   "name": "The Long Quarry",
+   "line": "A stone quarry where the men have stopped work and won’t go down",
+   "ch": 4,
+   "look": "It’s a bowl of pale stone sixty feet deep, with terraces and ladders down its sides and a crane at the lip. The dust gets in your teeth, and it’s far too quiet. Yesterday’s blast opened a black hole at the bottom, and the quarrymen are up top, staring at it.",
+   "here": [
+    "*Josse Brennock*, the ganger (Challenge 4: *Commanding*, *Superstitious*)",
+    "thirty quarrymen (Challenge 3: *Heavy*, *Scared*)",
+    "*Wendell Price*, the owner’s agent (Challenge 4: *Deep Pockets*, *Greedy*)",
+    "something old in the dark past the hole (Challenge 5: *Out of Sight*, *Bound to a Place*)"
+   ],
+   "ground": [
+    "*Blasting Powder*: a shed full, and one dropped lamp brings a wall down",
+    "*The Crane*: a block of stone overhead, held by one rope and a ratchet",
+    "*Terraces and Ladders*: there’s a long drop from everywhere"
+   ],
+   "stakes": [
+    "*The hole*, Challenge 5: *Heavy Load*, *Something Wants Out* (seal it before whatever’s in there comes up)",
+    "*Price’s map*, Challenge 3: *Guarded*, *Hidden Away* (it shows what’s under the hill)"
+   ],
+   "clockD": 8,
+   "clock": "Price loses patience and sends the men down, willing or not.",
+   "teles": [
+    {
+     "text": "Brennock bellows at the crew to get off his quarry.",
+     "d": 8,
+     "at": "Mind"
+    },
+    {
+     "text": "The crane’s ratchet slips and the block swings.",
+     "d": 8,
+     "at": "everyone under the crane, Body"
+    },
+    {
+     "text": "A cold breath comes up out of the hole, and every lamp gutters.",
+     "d": 10,
+     "at": "everyone at the bottom, Mind, Frightened"
+    }
+   ],
+   "hooks": [
+    "A friend of the crew was on the blasting team, and he’s gone down the hole",
+    "Price hires the crew to go down when his men won’t"
+   ],
+   "elsewhere": "",
+   "secret": "Price Knew It Was There",
+   "more": "The owner bought this hill because an old map put a sealed tomb under it, and Price moved the charges to blow its wall in on purpose. He wants what’s inside, and he doesn’t care what wakes. Brennock knows Price changed the plan, and he’s been too frightened to say so. Study the blast and it’s plain it was laid by someone who knew exactly where the wall was. The map’s in Price’s coat, and it shows how the tomb was sealed, so anyone who can work a ward could seal it again.",
+   "weak": false,
+   "h": "35pyux",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "josse-brennock",
+     "kind": "person",
+     "name": "Josse Brennock",
+     "line": "the ganger",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Commanding",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Superstitious",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1gex5uh",
+     "at": 1794619159815
+    },
+    {
+     "key": "wendell-price",
+     "kind": "person",
+     "name": "Wendell Price",
+     "line": "the owner’s agent",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Deep Pockets",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Greedy",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "nh6xd2",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-long-quarry"
+  },
+  {
+   "key": "undercroft",
+   "kind": "place",
+   "name": "The Undercroft",
+   "line": "The great cistern under the old city",
+   "ch": 4,
+   "look": "It’s forty wet steps down from a cellar door, and then the dark goes on further than any lamp reaches. Hundreds of pillars stand in still water that smells of stone, and every drip comes back three times. A plank walkway runs between them to an island of old stonework in the middle.",
+   "here": [
+    "*Sauly Grebe*, the lampman who works the sluices (Challenge 3: *Knows the Territory*, *Lonely*)",
+    "*Mags Tolley* and four smugglers (Challenge 3: *Out of Sight*, *Greedy*)",
+    "something long and pale under the water (Challenge 5: *Grapple*, *Out of Sight*, *Bound to a Place*)"
+   ],
+   "ground": [
+    "*Pitch Dark*: whoever brought light can see, and everyone can see them",
+    "*A Forest of Pillars*: cover everywhere, and you can’t see ten feet",
+    "*Old Wards*: chalk and silver marks on the oldest pillars, and they’re there to stop something"
+   ],
+   "stakes": [
+    "*The one who didn’t come up*, Challenge 4: *Hidden Away*, *Alive and Scared* (somewhere in the dark, if they’re still breathing)",
+    "*The smugglers’ cache*, Challenge 4: *Underwater*, *Guarded* (sunk in nets off the walkway)"
+   ],
+   "clockD": 8,
+   "clock": "the river rises, Grebe opens the sluices, and the water comes up to the vaults.",
+   "teles": [
+    {
+     "text": "Something brushes your leg under the water, then pulls.",
+     "d": 10,
+     "at": "Body, Grabbed"
+    },
+    {
+     "text": "Mags’s crew snuff their lamps and come at you from three sides.",
+     "d": 6,
+     "at": "Body"
+    },
+    {
+     "text": "Grebe hauls on the sluice wheel.",
+     "d": 6,
+     "at": "the scene clock"
+    }
+   ],
+   "hooks": [
+    "Someone went down into the cistern and didn’t come up",
+    "The city’s water’s gone bad, and this is where it comes from"
+   ],
+   "elsewhere": "",
+   "secret": "A Temple Under the Water",
+   "more": "The island’s the roof of a temple older than the city, and the cistern was built to drown it. The thing in the water is its keeper, and it goes for anyone who gets near the island, which is where whoever didn’t come up is stuck. Grebe knows there’s a door in the island with a bell beside it, and he’s never rung it. Study the pillars and the oldest are carved with warnings in a dead script, all facing the island. The water’s warm near it, too. Ring the bell and the keeper goes still, because the bell’s its weak point.",
+   "weak": false,
+   "h": "1lagzzt",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "sauly-grebe",
+     "kind": "person",
+     "name": "Sauly Grebe",
+     "line": "the lampman who works the sluices",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Knows the Territory",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Lonely",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "itj8sr",
+     "at": 1794619159815
+    },
+    {
+     "key": "mags-tolley",
+     "kind": "person",
+     "name": "Mags Tolley",
+     "line": "with four smugglers",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Out of Sight",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Greedy",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "b5lla",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-undercroft"
+  },
+  {
+   "key": "salt-pans",
+   "kind": "place",
+   "name": "The Salt Pans",
+   "line": "A saltworks on the marsh, where seawater’s boiled down in iron pans",
+   "ch": 3,
+   "look": "Shallow pans of brine run across the marsh in rows, and smoke pours out of the boiling-houses, where fires burn under iron pans the size of rooms. Everything tastes of salt. The salters have cracked lips and red hands, and they don’t look up.",
+   "here": [
+    "*Bryn Harrow*, the overseer (Challenge 4: *Commanding*, *Won’t Back Down*, *In Debt*)",
+    "four salt-wardens with clubs (Challenge 3: *Trained*)",
+    "forty salters (Challenge 2: *Tired*)",
+    "*Old Megs*, who’s raked these pans for fifty years (Challenge 2: *Knows the Territory*)"
+   ],
+   "ground": [
+    "*Brine Pans*: knee deep and slick, and every cut stings",
+    "*Boiling-Houses*: scalding steam and nowhere to step back",
+    "*Salt Crust*: you can’t hide a track on it",
+    "*Open Marsh*: easy to lose a pursuer in, and easy to get lost in"
+   ],
+   "stakes": [
+    "*The tallies*, Challenge 4: *Locked*, *Paperwork* (the debts that keep every salter here)",
+    "*Tonight’s load*, Challenge 3: *Heavy Load*, *Guarded* (forty sacks bound for the city)"
+   ],
+   "clockD": 8,
+   "clock": "the salt barge comes up the channel with the owner on it.",
+   "teles": [
+    {
+     "text": "Two wardens wade in to drag you out of the brine.",
+     "d": 6,
+     "at": "Body, Grabbed"
+    },
+    {
+     "text": "A pan boils over and the boiling-house fills with scalding steam.",
+     "d": 6,
+     "at": "everyone in the boiling-house, Body, Burning"
+    },
+    {
+     "text": "Harrow blows a whistle that carries all the way down the channel.",
+     "d": 8,
+     "at": "the scene clock"
+    }
+   ],
+   "hooks": [
+    "Someone the crew owes is working off a debt in the pans",
+    "The city’s priests buy their salt here, and one of them wants to know why it’s stopped working"
+   ],
+   "elsewhere": "",
+   "secret": "The Salt’s Cut With Sand",
+   "more": "Salt from these pans is what the city’s priests use to ward their doors, and it’s always worked. Harrow’s been cutting it half and half with dune sand to pay his debts, and all over the city the wards are failing. Old Megs knows the sand carts come in at night. Study the salt and it’s grey and gritty under the white. A ward drawn with it won’t hold, and anyone with warding magic can feel that it won’t. Show the salters the sand and they’ll turn on Harrow, because they’ve been blamed for every ward that broke.",
+   "weak": false,
+   "h": "1bjhlr5",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "bryn-harrow",
+     "kind": "person",
+     "name": "Bryn Harrow",
+     "line": "the overseer",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Commanding",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Won’t Back Down",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "In Debt",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1m41cg1",
+     "at": 1794619159815
+    },
+    {
+     "key": "old-megs",
+     "kind": "person",
+     "name": "Old Megs",
+     "line": "who’s raked these pans for fifty years",
+     "ch": 2,
+     "look": "",
+     "tags": [
+      {
+       "text": "Knows the Territory",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "kjqzva",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-salt-pans"
+  },
+  {
+   "key": "turning-library",
+   "kind": "place",
+   "name": "The Turning Library",
+   "line": "A college library whose shelves move when nobody’s looking",
+   "ch": 5,
+   "look": "Galleries of dark wood climb to a glass dome, with ladders on rails and books chained to the shelves. It smells of dust and old paper. Every so often there’s a grinding sound, like a millstone a long way off, and when you look back, the aisle you came down isn’t there any more.",
+   "here": [
+    "*Ottoline Shawe*, the librarian (Challenge 5: *Warded*, *Well-Read*)",
+    "*Bastien Moor*, the porter (Challenge 3: *Trained*, *Following Orders*)",
+    "a few readers who never seem to leave (Challenge 2: *Curious*)",
+    "a rival after the same book (Challenge 4, the Bestiary’s Scholar of Things Better Left Buried)"
+   ],
+   "ground": [
+    "*Moving Shelves*: the aisles grind round and close, and people get split up",
+    "*Chained Books*: nothing leaves without a key",
+    "*Silence*: raise your voice and you’ll have the porter on you"
+   ],
+   "stakes": [
+    "*The book*, Challenge 5: *Hidden Away*, *Chained* (the one the crew came for)",
+    "*The catalogue*, Challenge 4: *Written in Code*, *Watched* (where every book was last seen)"
+   ],
+   "clockD": 10,
+   "clock": "the closing bell, when the doors lock with whoever’s still inside.",
+   "teles": [
+    {
+     "text": "The shelves grind shut between you and your friends.",
+     "d": 10,
+     "at": "everyone in the aisle, Body, Pinned"
+    },
+    {
+     "text": "Shawe, without looking up: “That’s been out longer than the rules allow.”",
+     "d": 10,
+     "at": "Mind"
+    },
+    {
+     "text": "The rival slips a book into his sleeve and heads for the door.",
+     "d": 8,
+     "at": "the book"
+    }
+   ],
+   "hooks": [
+    "The crew needs a book that’s only here, and Shawe won’t lend it",
+    "A scholar went in a week ago and hasn’t come out"
+   ],
+   "elsewhere": "",
+   "secret": "The Library’s Hiding It From Her",
+   "more": "The man who built the library bound himself into the shelves to keep one book unread, and he moves them to keep it away from Shawe. She’s spent twenty years hunting it, and she’s the last person who should read it. The readers have noticed the shelves always move away from her. Study the floor and there’s no machinery at all, just sigils cut under the boards. Anyone who can speak to the dead finds the founder’s still here, and still stubborn. Walk where Shawe isn’t and the shelves open up, and the book’s at the end of them.",
+   "weak": false,
+   "h": "15n8w6w",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "ottoline-shawe",
+     "kind": "person",
+     "name": "Ottoline Shawe",
+     "line": "the librarian",
+     "ch": 5,
+     "look": "",
+     "tags": [
+      {
+       "text": "Warded",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Well-Read",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1omt4ju",
+     "at": 1794619159815
+    },
+    {
+     "key": "bastien-moor",
+     "kind": "person",
+     "name": "Bastien Moor",
+     "line": "the porter",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Trained",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Following Orders",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1mvhi4t",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-turning-library"
+  },
+  {
+   "key": "hospice",
+   "kind": "place",
+   "name": "The Hospice in the Pass",
+   "line": "A stone hospice on a mountain pass, the only shelter for a day’s walk",
+   "ch": 4,
+   "look": "Snow’s banked to the windowsills. Inside there’s one low hall with a big fire and dogs the size of ponies asleep by the hearth, and it smells of wet wool. The storm’s trapped a dozen travellers here, and out on the pass road a bell’s ringing for help.",
+   "here": [
+    "*Hedda Strom*, who keeps the hospice (Challenge 4: *Knows the Territory*, *Protects Someone*)",
+    "her dogs (Challenge 3: *Fast*, *Loyal to a Name*)",
+    "*Sergeant Tibor Kasza* and four soldiers, hunting a deserter (Challenge 3: *Trained*, *Following Orders*)",
+    "eight travellers (Challenge 2), among them *Emil*, a quiet lad who keeps the fire going"
+   ],
+   "ground": [
+    "*Blizzard*: step outside and you can’t see your own hand",
+    "*Deep Snow*: every step’s work",
+    "*The Bell*: somebody ought to go"
+   ],
+   "stakes": [
+    "*The bell on the road*, Challenge 4: *Far Away*, *Blizzard* (bring in whoever’s out there before they freeze)",
+    "*The deserter*, Challenge 4: *Hidden Away*, *Wanted By Others* (Kasza wants him, and the crew might too)"
+   ],
+   "clockD": 8,
+   "clock": "full dark, when nobody outside lives till morning.",
+   "teles": [
+    {
+     "text": "Kasza, in the doorway: “Nobody leaves till I’ve seen every face.”",
+     "d": 6,
+     "at": "Mind"
+    },
+    {
+     "text": "The dogs get up and stand between you and the door.",
+     "d": 6,
+     "at": "the bell on the road"
+    },
+    {
+     "text": "Snow slides off the roof onto whoever’s at the door.",
+     "d": 8,
+     "at": "whoever’s at the door, Body, Prone"
+    }
+   ],
+   "hooks": [
+    "The storm’s caught the crew on the pass too",
+    "Kasza’s officer is paying the crew to make sure the deserter comes back"
+   ],
+   "elsewhere": "In a horror game, keep Hedda’s cord, and let something out on the road ring back.",
+   "secret": "Nobody’s on the Road",
+   "more": "Hedda rings the bell herself, from a cord that runs under the snow from her cellar, to draw the soldiers out into the storm. Emil’s her son, and he’s the deserter. The dogs don’t stir when the bell rings, and anyone who knows dogs sees what that means. Study the bell and the sound’s coming from under the snow. Magic that sees far places shows an empty road. Emil can’t stand much more of it, and he’ll own up before he lets anyone die for him.",
+   "weak": false,
+   "h": "i4uj77",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "hedda-strom",
+     "kind": "person",
+     "name": "Hedda Strom",
+     "line": "who keeps the hospice",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Knows the Territory",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Protects Someone",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1r0zytd",
+     "at": 1794619159815
+    },
+    {
+     "key": "sergeant-tibor-kasza",
+     "kind": "person",
+     "name": "Sergeant Tibor Kasza",
+     "line": "with four soldiers, hunting a deserter",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Trained",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Following Orders",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "vcdago",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-hospice"
+  },
+  {
+   "key": "menagerie",
+   "kind": "place",
+   "name": "The Menagerie",
+   "line": "A merchant prince’s private zoo, in the garden behind his town house",
+   "ch": 4,
+   "look": "Iron cages stand round a garden, with a bear pit in the middle and an aviary like a wire cathedral. It smells of straw and dung, and peacocks scream at nothing. In the end cage, a grey wolf sits very still and watches the people instead of the meat.",
+   "here": [
+    "*Corvin Salk*, who owns it all (Challenge 5: *Deep Pockets*, *Vain*)",
+    "*Ida Brisk*, the keeper (Challenge 3: *Knows the House*, *Kind*)",
+    "four handlers with whips (Challenge 3: *Trained*)",
+    "the bear (Challenge 4: *Hits Like a Wagon*, *Armoured*)",
+    "the grey wolf (Challenge 4: *Fast*, *Bites*)"
+   ],
+   "ground": [
+    "*The Cages*: open one and the problem’s somebody else’s",
+    "*The Aviary*: one door left open fills the garden with birds",
+    "*The Bear Pit*: a long drop, with a bear at the bottom"
+   ],
+   "stakes": [
+    "*The grey wolf*, Challenge 4: *Locked*, *Guarded* (buy it, free it or steal it)",
+    "*Salk’s ledger*, Challenge 4: *Locked*, *Watched* (in the summer house, and it shows where his partner’s money went)"
+   ],
+   "clockD": 8,
+   "clock": "Salk’s guests come out for the show at the bear pit.",
+   "teles": [
+    {
+     "text": "A handler cracks his whip at whoever’s too close to the cages.",
+     "d": 6,
+     "at": "Body, Disarmed"
+    },
+    {
+     "text": "The bear rears up and roars, and every animal in the garden answers.",
+     "d": 8,
+     "at": "the scene clock"
+    },
+    {
+     "text": "Salk, from the terrace: “Ida, let the tiger out. Let’s see them run.”",
+     "d": 10,
+     "at": "everyone in the garden, Mind, Frightened"
+    }
+   ],
+   "hooks": [
+    "Salk’s business partner vanished a year ago, and his family wants answers",
+    "Salk’s showing off his collection tonight, and the crew’s on the guest list"
+   ],
+   "elsewhere": "",
+   "secret": "The Wolf Was a Man",
+   "more": "The grey wolf is Salk’s old partner, cursed by a hexer Salk paid. In a week it’ll be a year and a day since anyone saw the partner, and his half of the business passes to Salk. Ida knows the wolf won’t touch raw meat and cries at night. Study the wolf and there’s a gold ring sunk in the fur of its foreleg, too tight to come off. Anyone who knows curses sees this one without a roll. Breaking the curse is its own stake, Challenge 5, with *Curse on It* in the way.",
+   "weak": false,
+   "h": "jpkm36",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "corvin-salk",
+     "kind": "person",
+     "name": "Corvin Salk",
+     "line": "who owns it all",
+     "ch": 5,
+     "look": "",
+     "tags": [
+      {
+       "text": "Deep Pockets",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Vain",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "n7bozp",
+     "at": 1794619159815
+    },
+    {
+     "key": "ida-brisk",
+     "kind": "person",
+     "name": "Ida Brisk",
+     "line": "the keeper",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Knows the House",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Kind",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "1rtgavn",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-menagerie"
+  },
+  {
+   "key": "mallorys-ferry",
+   "kind": "place",
+   "name": "Mallory’s Ferry",
+   "line": "A rope ferry across a wide, slow river, the last crossing for twenty miles",
+   "ch": 3,
+   "look": "A flat-bottomed ferry hangs on a cable across a river a quarter mile wide, and the ferryman hauls it over by hand. There’s fog on the water, frogs in the reeds and a toll board on the ferry house. Downriver, you can hear the weir.",
+   "here": [
+    "*Cobb Mallory*, the ferryman (Challenge 4: *Heavy*, *Holds the Line*, *In Debt*)",
+    "*Ruth Mallory*, who takes the tolls (Challenge 3: *Secretly Kind*)",
+    "riders on the road behind, whoever they’re after (Challenge 4: *Fast*, *Ride as One*)"
+   ],
+   "ground": [
+    "*Fog*: ten paces and the far bank’s gone",
+    "*The Cable*: cut it and the ferry goes wherever the river likes",
+    "*Deep Slow Water*: colder and deeper than it looks",
+    "*The Weir*: half a mile downriver, and you can hear it from the middle"
+   ],
+   "stakes": [
+    "*Across*, Challenge 3: *Someone Must Agree*, *Far Away* (Cobb’s price, then a quarter mile of black water)",
+    "*The ferry*, Challenge 3: *Guarded*, *Needs Two Hands* (take it off Cobb and haul it yourselves)"
+   ],
+   "clockD": 8,
+   "clock": "the riders come out of the trees onto the landing.",
+   "teles": [
+    {
+     "text": "Cobb plants himself in the ferry gate: “Toll first.”",
+     "d": 8,
+     "at": "Mind"
+    },
+    {
+     "text": "Halfway over, the ferry lurches and the cable sings.",
+     "d": 6,
+     "at": "everyone on the ferry, Body, Staggered"
+    },
+    {
+     "text": "Horns on the road behind you, closer now.",
+     "d": 8,
+     "at": "the scene clock"
+    }
+   ],
+   "hooks": [
+    "Someone’s chasing the crew, and this is the only way over",
+    "Someone has to be on the far bank by morning",
+    "A cart that crossed here last month never reached the other side"
+   ],
+   "elsewhere": "",
+   "secret": "The Ferryman’s Been Paid",
+   "more": "Whoever’s on the road behind paid Cobb to cut the cable halfway across, so the ferry drifts down onto the weir, where more of them are waiting with lanterns. The riders are only there to drive the crew on, and the new purse on Cobb’s belt says who paid. Ruth knows, and she can’t stand it. Cobb’s nervous and keeps looking downriver, and anyone who reads people sees it. Study the cable and it’s been sawn half through by the far post. Anyone who can move water or hold a boat with magic can keep the ferry off the weir, cable or no cable.",
+   "weak": false,
+   "h": "vp9f2v",
+   "at": 1794619159815,
+   "people": [
+    {
+     "key": "cobb-mallory",
+     "kind": "person",
+     "name": "Cobb Mallory",
+     "line": "the ferryman",
+     "ch": 4,
+     "look": "",
+     "tags": [
+      {
+       "text": "Heavy",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "Holds the Line",
+       "x": 1,
+       "kind": ""
+      },
+      {
+       "text": "In Debt",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "jv0ju1",
+     "at": 1794619159815
+    },
+    {
+     "key": "ruth-mallory",
+     "kind": "person",
+     "name": "Ruth Mallory",
+     "line": "who takes the tolls",
+     "ch": 3,
+     "look": "",
+     "tags": [
+      {
+       "text": "Secretly Kind",
+       "x": 1,
+       "kind": ""
+      }
+     ],
+     "rules": "",
+     "teles": [],
+     "voice": "",
+     "secret": "",
+     "more": "",
+     "weak": false,
+     "h": "10sm3s9",
+     "at": 1794619159815
+    }
+   ],
+   "link": "/rules/twenty-places/#s-place-mallorys-ferry"
+  }
+ ],
+ "threats": [
+  {
+   "key": "the-watchman",
+   "kind": "person",
+   "name": "The Watchman",
+   "line": "A tired man on a long shift.",
+   "ch": 3,
+   "look": "Uniform a size too big, lantern held low, eyes on the middle distance.",
+   "tags": [
+    {
+     "text": "Trained",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "One of Many",
+     "x": 1,
+     "kind": "drives"
+    },
+    {
+     "text": "Bored",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "He holds his lantern up to the nearest face and asks what you’re doing here.",
+     "d": 6,
+     "at": "Mind"
+    },
+    {
+     "text": "He puts his whistle to his lips.",
+     "d": 6,
+     "at": "an event: the watch arrives"
+    },
+    {
+     "text": "He swings the lantern pole at whoever’s closest.",
+     "d": 6,
+     "at": "Body"
+    }
+   ],
+   "voice": "“Right. Nothing to see here, then. Move along.”",
+   "secret": "Takes Bribes",
+   "more": "A purse of gold gets you past him, no questions.",
+   "weak": true,
+   "group": "Mooks",
+   "h": "878rhw",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#mooks-challenge-23"
+  },
+  {
+   "key": "the-cutpurse",
+   "kind": "person",
+   "name": "The Cutpurse",
+   "line": "A child with an old face.",
+   "ch": 2,
+   "look": "",
+   "tags": [
+    {
+     "text": "Fast Hands",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Runs",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Slippery",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "He tugs at the sleeve of whoever’s nearest while his other hand goes into their coat.",
+     "d": 4,
+     "at": "Mind"
+    },
+    {
+     "text": "He tips a barrow of apples across the path behind him.",
+     "d": 4,
+     "at": "the ground"
+    },
+    {
+     "text": "He bolts for the alleys with whatever he’s lifted.",
+     "d": 4,
+     "at": "a stake"
+    }
+   ],
+   "voice": "“Sir. Sir. You dropped this.”",
+   "secret": "Works for Someone",
+   "more": "The purse is already passed on. Let him run and he leads you to his boss.",
+   "weak": false,
+   "group": "Mooks",
+   "h": "i0s42z",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#mooks-challenge-23"
+  },
+  {
+   "key": "the-guard-dog",
+   "kind": "person",
+   "name": "The Guard Dog",
+   "line": "A mastiff who’s bitten before.",
+   "ch": 2,
+   "look": "",
+   "tags": [
+    {
+     "text": "Bites",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Loud",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Loyal to a Name",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "It clamps onto the ankle of whoever’s nearest and won’t let go.",
+     "d": 4,
+     "at": "Body, Grabbed"
+    },
+    {
+     "text": "It barks fit to wake the whole street.",
+     "d": 4,
+     "at": "the scene clock"
+    },
+    {
+     "text": "It stands in front of its master’s door, growling.",
+     "d": 4,
+     "at": "a stake"
+    }
+   ],
+   "voice": "Nothing. It only barks.",
+   "secret": "Older Than It Looks",
+   "more": "Stiff in the joints. Past the first corner it can’t keep up.",
+   "weak": true,
+   "group": "Mooks",
+   "h": "h4jhtd",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#mooks-challenge-23"
+  },
+  {
+   "key": "the-drunk",
+   "kind": "person",
+   "name": "The Drunk",
+   "line": "A man who’s stopped pretending.",
+   "ch": 2,
+   "look": "",
+   "tags": [
+    {
+     "text": "Belligerent",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Fragile",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "He grabs whoever’s nearest by the collar and asks if they’re looking at him.",
+     "d": 4,
+     "at": "Mind"
+    },
+    {
+     "text": "He starts bellowing about the lot of you until the whole street turns to look.",
+     "d": 4,
+     "at": "the scene clock"
+    },
+    {
+     "text": "He takes a wild swing at whoever tries to pull him off.",
+     "d": 4,
+     "at": "Body"
+    }
+   ],
+   "voice": "“You looking at me? I said, you looking at me?”",
+   "secret": "A Locksmith, Sober",
+   "more": "Sober him up and he is the best lock-picker in the district. Worth more as a friend.",
+   "weak": true,
+   "group": "Mooks",
+   "h": "hde0q8",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#mooks-challenge-23"
+  },
+  {
+   "key": "the-debt-collector",
+   "kind": "person",
+   "name": "The Debt Collector",
+   "line": "A patient man with a ledger.",
+   "ch": 3,
+   "look": "",
+   "tags": [
+    {
+     "text": "Patient",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Well-Connected",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "He reads out what you owe, slowly, so the whole room hears.",
+     "d": 6,
+     "at": "Mind"
+    },
+    {
+     "text": "He sends his boy running to fetch the men who do the heavy lifting.",
+     "d": 6,
+     "at": "an event: his heavies arrive"
+    },
+    {
+     "text": "He puts a hand on the thing you came for and calls it surety.",
+     "d": 6,
+     "at": "a stake"
+    }
+   ],
+   "voice": "“It’s not personal. It never is.”",
+   "secret": "Someone Else’s Man",
+   "more": "He is here on someone’s behalf. Name who, and he backs down.",
+   "weak": true,
+   "group": "Mooks",
+   "h": "1qew1es",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#mooks-challenge-23"
+  },
+  {
+   "key": "the-dock-thug",
+   "kind": "person",
+   "name": "The Dock Thug",
+   "line": "A wall with a face.",
+   "ch": 3,
+   "look": "",
+   "tags": [
+    {
+     "text": "Heavy",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Knows the Waterfront",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "He puts his shoulder into whoever’s in front of him and sends them off the pier.",
+     "d": 6,
+     "at": "Body"
+    },
+    {
+     "text": "He looms over the smallest of you and says one word.",
+     "d": 6,
+     "at": "Mind"
+    },
+    {
+     "text": "He steps into the only gap between the crates and folds his arms.",
+     "d": 6,
+     "at": "a stake"
+    }
+   ],
+   "voice": "“Move.”",
+   "secret": "Protecting His Sister",
+   "more": "Everything he does is for her. Threaten her and he breaks. Help her and he walks away.",
+   "weak": true,
+   "group": "Mooks",
+   "h": "nhdmc0",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#mooks-challenge-23"
+  },
+  {
+   "key": "the-conscript",
+   "kind": "person",
+   "name": "The Conscript",
+   "line": "A boy handed a spear three weeks ago.",
+   "ch": 2,
+   "look": "",
+   "tags": [
+    {
+     "text": "Armed Anyway",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Scared",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "He jabs his spear wildly at whoever comes closest.",
+     "d": 4,
+     "at": "Body"
+    },
+    {
+     "text": "He shouts for his sergeant at the top of his voice.",
+     "d": 4,
+     "at": "the scene clock"
+    },
+    {
+     "text": "He backs into the gateway with his spear levelled, shaking.",
+     "d": 4,
+     "at": "a stake"
+    }
+   ],
+   "voice": "“Please. Please just go.”",
+   "secret": "A Deserter",
+   "more": "He ran from the other side. Say so out loud and he runs again.",
+   "weak": true,
+   "group": "Mooks",
+   "h": "1rj765t",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#mooks-challenge-23"
+  },
+  {
+   "key": "the-servant",
+   "kind": "person",
+   "name": "The Servant",
+   "line": "Unseen, and knows everything.",
+   "ch": 2,
+   "look": "",
+   "tags": [
+    {
+     "text": "Knows the House",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Overlooked",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "They slip up the back stair to wake the house.",
+     "d": 4,
+     "at": "the scene clock"
+    },
+    {
+     "text": "They turn the key in the study door behind you.",
+     "d": 4,
+     "at": "a stake"
+    },
+    {
+     "text": "They stop on the stair and look straight at whoever’s lying.",
+     "d": 4,
+     "at": "Mind"
+    }
+   ],
+   "voice": "“Yes sir. Of course sir.”",
+   "secret": "Trusted Most",
+   "more": "The household believes them over anyone. Win them and doors open.",
+   "weak": false,
+   "group": "Mooks",
+   "h": "1krmbvr",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#mooks-challenge-23"
+  },
+  {
+   "key": "the-rival-apprentice",
+   "kind": "person",
+   "name": "The Rival Apprentice",
+   "line": "A mirror with a grudge.",
+   "ch": 3,
+   "look": "",
+   "tags": [
+    {
+     "text": "Clever",
+     "x": 1,
+     "kind": "drives"
+    },
+    {
+     "text": "Envious",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "They tell the room why the master really kept you on.",
+     "d": 6,
+     "at": "Mind"
+    },
+    {
+     "text": "They get to the thing you came for first and lock it away.",
+     "d": 6,
+     "at": "a stake"
+    },
+    {
+     "text": "They turn the master’s own trick on whoever’s closest.",
+     "d": 6,
+     "at": "Body"
+    }
+   ],
+   "voice": "“They only kept you because you were first.”",
+   "secret": "Secretly Fond",
+   "more": "They love you. They can’t admit it. Say something kind and true and they falter.",
+   "weak": true,
+   "group": "Mooks",
+   "h": "bb2c1x",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#mooks-challenge-23"
+  },
+  {
+   "key": "the-street-preacher",
+   "kind": "person",
+   "name": "The Street Preacher",
+   "line": "A voice for people who have none.",
+   "ch": 3,
+   "look": "",
+   "tags": [
+    {
+     "text": "Stirs the Crowd",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Beloved",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "The preacher points at whoever’s doing the talking and asks the crowd who sent them.",
+     "d": 6,
+     "at": "Mind"
+    },
+    {
+     "text": "The crowd closes ranks between the crew and the thing they came for.",
+     "d": 6,
+     "at": "a stake"
+    },
+    {
+     "text": "The preacher starts a hymn, and the whole street takes it up.",
+     "d": 6,
+     "at": "the scene clock"
+    }
+   ],
+   "voice": "“You are not lost.”",
+   "secret": "Mostly Right",
+   "more": "Agree with what is true in the sermon and the crowd turns with you.",
+   "weak": false,
+   "group": "Mooks",
+   "h": "1619agd",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#mooks-challenge-23"
+  },
+  {
+   "key": "the-hired-blade",
+   "kind": "person",
+   "name": "The Hired Blade",
+   "line": "A killer who does it for coin.",
+   "ch": 4,
+   "look": "",
+   "tags": [
+    {
+     "text": "Patient",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Two Knives",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Reads a Feint",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Knows the Streets",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "He flicks the knife you can see at whoever’s facing him.",
+     "d": 6,
+     "at": "Body"
+    },
+    {
+     "text": "The knife you can’t see goes for the kidney of whoever’s behind him.",
+     "d": 8,
+     "at": "Body, Bleeding"
+    },
+    {
+     "text": "He whistles, and a friend on the corner puts out the street lamp.",
+     "d": 8,
+     "at": "the ground"
+    }
+   ],
+   "voice": "“Not yet. Let’s see what you’re really made of.”",
+   "secret": "Already Hired",
+   "more": "Someone in the party already paid him. Find out who, and what for.",
+   "weak": false,
+   "group": "Named",
+   "h": "4txi61",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-iron-sergeant",
+   "kind": "person",
+   "name": "The Iron Sergeant",
+   "line": "A soldier who never quit and never will.",
+   "ch": 5,
+   "look": "",
+   "tags": [
+    {
+     "text": "Armoured",
+     "x": 7,
+     "kind": "keeps"
+    },
+    {
+     "text": "Holds the Line",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Barracks Humour",
+     "x": 1,
+     "kind": "drives"
+    },
+    {
+     "text": "Old Wounds",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "He hacks at whoever’s in front of him, short and ugly, the way he was drilled.",
+     "d": 10,
+     "at": "Body"
+    },
+    {
+     "text": "He sets his feet in the doorway, and nobody’s getting past.",
+     "d": 10,
+     "at": "a stake"
+    },
+    {
+     "text": "He laughs at whoever last swung at him and dares them to try again.",
+     "d": 10,
+     "at": "Mind, Taunted"
+    }
+   ],
+   "voice": "“Right. Same as last time, lads.”",
+   "secret": "The War Nobody Names",
+   "more": "Name the war he was discharged from and he lowers his blade to talk.",
+   "weak": true,
+   "group": "Named",
+   "h": "1l81dct",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-duellist-on-the-stair",
+   "kind": "person",
+   "name": "The Duellist on the Stair",
+   "line": "A blade that’s never been beaten.",
+   "ch": 5,
+   "look": "",
+   "tags": [
+    {
+     "text": "Faster Than You",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Reads a Feint",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Never Beaten",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Cannot Resist an Audience",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "She darts in at whoever’s nearest, faster than they can lift a blade.",
+     "d": 10,
+     "at": "Body"
+    },
+    {
+     "text": "She calls the best blade among you up the stair to face her, in front of everyone.",
+     "d": 10,
+     "at": "Mind, Taunted"
+    },
+    {
+     "text": "She takes the top step, so anyone coming up has to come one at a time.",
+     "d": 10,
+     "at": "a stake"
+    }
+   ],
+   "voice": "“Ooh. A real one. This is going to be fun.”",
+   "secret": "Lost Once",
+   "more": "The one who beat her is standing behind her. With them watching, she can’t fight clean.",
+   "weak": false,
+   "group": "Named",
+   "h": "1j2wmsb",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-scholar-of-things-better-left-buried",
+   "kind": "person",
+   "name": "The Scholar of Things Better Left Buried",
+   "line": "Knowledge with a cost.",
+   "ch": 4,
+   "look": "",
+   "tags": [
+    {
+     "text": "Warded",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Out of Sight",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Well-Read",
+     "x": 1,
+     "kind": "drives"
+    },
+    {
+     "text": "Fragile",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "They read three words from the book, and every candle in the room goes out.",
+     "d": 8,
+     "at": "the ground"
+    },
+    {
+     "text": "They read aloud the line in the book that names whoever’s nearest.",
+     "d": 8,
+     "at": "Mind, Frightened"
+    },
+    {
+     "text": "They step back behind the chalk, and the archive door swings shut.",
+     "d": 8,
+     "at": "a stake"
+    }
+   ],
+   "voice": "“You are asking the wrong question.”",
+   "secret": "Already Read It",
+   "more": "They have read the thing they are trying to stop. Some of it is in them now.",
+   "weak": false,
+   "group": "Named",
+   "h": "yya3hn",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-nobles-champion",
+   "kind": "person",
+   "name": "The Noble’s Champion",
+   "line": "Armour with a family crest on it.",
+   "ch": 5,
+   "look": "",
+   "tags": [
+    {
+     "text": "Armoured",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Shield",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Proud",
+     "x": 1,
+     "kind": "drives"
+    },
+    {
+     "text": "Code of Honour",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "He meets whoever answered his challenge with a full swing of his sword.",
+     "d": 10,
+     "at": "Body"
+    },
+    {
+     "text": "He slams his shield into whoever’s beside him and puts them on the floor.",
+     "d": 10,
+     "at": "Body, Prone"
+    },
+    {
+     "text": "He sets himself in front of the noble with his shield raised.",
+     "d": 10,
+     "at": "a stake"
+    }
+   ],
+   "voice": "“On your feet. I will not fight a man on his knees.”",
+   "secret": "Nothing to Believe In",
+   "more": "He has never fought for something he believed. Give him a cause and he changes sides.",
+   "weak": true,
+   "group": "Named",
+   "h": "1h5nvok",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-fixer",
+   "kind": "person",
+   "name": "The Fixer",
+   "line": "Everyone owes them something.",
+   "ch": 4,
+   "look": "",
+   "tags": [
+    {
+     "text": "Knows a Guy",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Never Shows the Knife",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Deep Pockets",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Well-Connected",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "They send a runner, and someone’s waiting wherever you’re headed next.",
+     "d": 8,
+     "at": "a stake"
+    },
+    {
+     "text": "They mention, very pleasantly, where your family sleeps.",
+     "d": 8,
+     "at": "Mind, Shaken"
+    },
+    {
+     "text": "They catch the watch captain’s eye across the room, and he starts walking over.",
+     "d": 8,
+     "at": "the scene clock"
+    }
+   ],
+   "voice": "“Don’t worry about it. I know someone.”",
+   "secret": "One Missed Payment",
+   "more": "The whole operation is one payment from collapse. Threaten the money and they fold.",
+   "weak": true,
+   "group": "Named",
+   "h": "19e7hki",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-poisoner",
+   "kind": "person",
+   "name": "The Poisoner",
+   "line": "Patient, precise, gone before the symptoms start.",
+   "ch": 4,
+   "look": "",
+   "tags": [
+    {
+     "text": "Patient",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Venom",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Out of Sight",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Slippery",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "They top up the glass of whoever’s nearest.",
+     "d": 8,
+     "at": "Body, Poisoned"
+    },
+    {
+     "text": "They show whoever drank a little bottle of antidote and name a price.",
+     "d": 8,
+     "at": "Mind"
+    },
+    {
+     "text": "They slip out through the kitchen door while everyone’s looking the other way.",
+     "d": 8,
+     "at": "a stake"
+    }
+   ],
+   "voice": "“Try the wine. The vintage is excellent.”",
+   "secret": "Your Name Is on the List",
+   "more": "They work for someone else, and one of the crew is next.",
+   "weak": false,
+   "group": "Named",
+   "h": "zwft50",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-priest-of-the-quiet-order",
+   "kind": "person",
+   "name": "The Priest of the Quiet Order",
+   "line": "Faith that won’t be moved.",
+   "ch": 5,
+   "look": "",
+   "tags": [
+    {
+     "text": "Warded",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Won’t Back Down",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Devout",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "They lift one hand, and whoever’s speaking loses their voice.",
+     "d": 10,
+     "at": "Soul, Silenced"
+    },
+    {
+     "text": "They pour a line of salt across the doorway, and nothing strange gets over it.",
+     "d": 10,
+     "at": "the ground"
+    },
+    {
+     "text": "They crack their staff across the knuckles of whoever’s working magic.",
+     "d": 10,
+     "at": "Body"
+    }
+   ],
+   "voice": "“You are not the first to ask.”",
+   "secret": "Years of Doubt",
+   "more": "Speak to the doubt, honestly, and they won’t raise a hand.",
+   "weak": true,
+   "group": "Named",
+   "h": "1l1hcr8",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-court-assassin",
+   "kind": "person",
+   "name": "The Court Assassin",
+   "line": "You won’t see them coming.",
+   "ch": 5,
+   "look": "",
+   "tags": [
+    {
+     "text": "Silent",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "One Strike",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Out of Sight",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Slippery",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "A blade comes out of nowhere at whoever the contract names.",
+     "d": 12,
+     "at": "Body"
+    },
+    {
+     "text": "They cut the chandelier’s rope.",
+     "d": 10,
+     "at": "everyone under it, Body"
+    },
+    {
+     "text": "They let whoever’s guarding the target see the knife, just for a moment.",
+     "d": 10,
+     "at": "Mind, Frightened"
+    }
+   ],
+   "voice": "Nothing. They are already gone by the time you turn.",
+   "secret": "Blackmailed",
+   "more": "They don’t want to be here. Free them from whoever holds the letter and they walk away.",
+   "weak": true,
+   "group": "Named",
+   "h": "134mu3o",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-wandering-monk",
+   "kind": "person",
+   "name": "The Wandering Monk",
+   "line": "Empty hands, immovable stance.",
+   "ch": 4,
+   "look": "",
+   "tags": [
+    {
+     "text": "Immovable",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Reads a Feint",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Kind",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "They sweep the legs out from under whoever’s nearest.",
+     "d": 8,
+     "at": "Body, Prone"
+    },
+    {
+     "text": "They twist the weapon out of the hand of whoever swings at them.",
+     "d": 8,
+     "at": "Body, Disarmed"
+    },
+    {
+     "text": "They ask whoever’s angriest, quietly, whether they really want to do this.",
+     "d": 8,
+     "at": "Mind"
+    }
+   ],
+   "voice": "“You do not have to do this.”",
+   "secret": "The Last Student",
+   "more": "The last of an order dead a century. Honour it and they become an ally.",
+   "weak": true,
+   "group": "Named",
+   "h": "vfbw8x",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-harbourmaster",
+   "kind": "person",
+   "name": "The Harbourmaster",
+   "line": "Knows every ship and every secret that came in on it.",
+   "ch": 4,
+   "look": "",
+   "tags": [
+    {
+     "text": "Loud",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Well-Connected",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Fortified",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Cowardly",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "He bellows down the quay for the harbour watch.",
+     "d": 8,
+     "at": "the scene clock"
+    },
+    {
+     "text": "He tells whoever’s asking questions which magistrate he dines with on Sundays.",
+     "d": 8,
+     "at": "Mind"
+    },
+    {
+     "text": "He scuttles into his office and bars the door behind him.",
+     "d": 8,
+     "at": "a stake"
+    }
+   ],
+   "voice": "“You have no idea who you’re dealing with.”",
+   "secret": "Not His Ring",
+   "more": "The signet belonged to the man in the harbour. Mention it quietly and he will do anything.",
+   "weak": true,
+   "group": "Named",
+   "h": "9o3wv9",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-magister",
+   "kind": "person",
+   "name": "The Magister",
+   "line": "Politically untouchable, personally fragile.",
+   "ch": 5,
+   "look": "",
+   "tags": [
+    {
+     "text": "Silver-Tongued",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Warded",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Politically Untouchable",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Ambitious",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "They turn the last thing you said back on you, in front of the whole court.",
+     "d": 10,
+     "at": "Mind"
+    },
+    {
+     "text": "They offer whoever looks most useful a place at their side.",
+     "d": 10,
+     "at": "Soul, Charmed"
+    },
+    {
+     "text": "They ring for the guard, and nobody in the room stops them.",
+     "d": 10,
+     "at": "the scene clock"
+    }
+   ],
+   "voice": "“You would not dare. Nobody dares.”",
+   "secret": "Watched by the Crown",
+   "more": "The Crown already has eyes on them. Anything public ruins them.",
+   "weak": false,
+   "group": "Named",
+   "h": "1m7e1c4",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#named-challenge-45"
+  },
+  {
+   "key": "the-moor-cat",
+   "kind": "person",
+   "name": "The Moor Cat",
+   "line": "Bigger than a hound, quieter than a thought.",
+   "ch": 3,
+   "look": "",
+   "tags": [
+    {
+     "text": "Ambush",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Sees in the Dark",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Cowardly",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "It drops out of the heather onto whoever’s at the back.",
+     "d": 8,
+     "at": "Body"
+    },
+    {
+     "text": "It knocks the lantern out of the hand of whoever’s carrying it.",
+     "d": 6,
+     "at": "the ground"
+    },
+    {
+     "text": "Its eyes catch the firelight, right behind whoever’s on watch.",
+     "d": 6,
+     "at": "Mind, Frightened"
+    }
+   ],
+   "voice": "Nothing.",
+   "secret": "Hunting Something Else",
+   "more": "It is after whatever has been following the crew. Step aside and it passes.",
+   "weak": true,
+   "group": "Wilderness",
+   "h": "lbk62b",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#wilderness"
+  },
+  {
+   "key": "the-bog-walker",
+   "kind": "person",
+   "name": "The Bog Walker",
+   "line": "Something that used to be a man.",
+   "ch": 5,
+   "look": "",
+   "tags": [
+    {
+     "text": "Grapple",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Relentless",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Bound to the Bog",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "It wraps its arms round whoever’s nearest and drags them under the water.",
+     "d": 10,
+     "at": "Body, Grabbed"
+    },
+    {
+     "text": "It hums, low, and whoever hears it takes a step towards the water.",
+     "d": 10,
+     "at": "Soul, Charmed"
+    },
+    {
+     "text": "It sinks the firm path behind the crew into the mud.",
+     "d": 10,
+     "at": "the ground"
+    }
+   ],
+   "voice": "A low, bubbling hum.",
+   "secret": "Remembering",
+   "more": "Show it the thing it is looking for and it turns aside.",
+   "weak": true,
+   "group": "Wilderness",
+   "h": "x6umip",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#wilderness"
+  },
+  {
+   "key": "the-pack-leader",
+   "kind": "person",
+   "name": "The Pack Leader",
+   "line": "Not a wolf. A decision the wolves made.",
+   "ch": 5,
+   "look": "",
+   "tags": [
+    {
+     "text": "Commanding",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Fast",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Reads a Feint",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Knows the Territory",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "It comes out of the dark at whoever strayed furthest from the fire.",
+     "d": 10,
+     "at": "Body"
+    },
+    {
+     "text": "It howls at whoever’s holding the torch, and the pack answers from every side.",
+     "d": 10,
+     "at": "Mind, Frightened"
+    },
+    {
+     "text": "It sends the horses bolting off into the night.",
+     "d": 10,
+     "at": "a stake"
+    }
+   ],
+   "voice": "Nothing. It doesn’t need to speak.",
+   "secret": "Starving",
+   "more": "The pack is hungry, not cruel. Feed it and the hunt is over.",
+   "weak": true,
+   "group": "Wilderness",
+   "h": "1lqgs2p",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#wilderness"
+  },
+  {
+   "key": "the-wandering-giant",
+   "kind": "person",
+   "name": "The Wandering Giant",
+   "line": "A hill that’s learned to walk, and it’s confused about where it is.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Hits Like a Wagon",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Slow",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Armoured",
+     "x": 8,
+     "kind": "keeps"
+    },
+    {
+     "text": "Old",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Mournful",
+     "x": 5,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "It brings both fists down on whoever’s at its feet.",
+     "d": 12,
+     "at": "Body"
+    },
+    {
+     "text": "It sits down in the middle of the pass, and nothing’s getting by.",
+     "d": 12,
+     "at": "a stake"
+    },
+    {
+     "text": "It lets out a long, low note that makes everyone who hears it want to weep.",
+     "d": 12,
+     "at": "everyone in earshot, Soul"
+    }
+   ],
+   "voice": "A low, rumbling note.",
+   "secret": "Looking for Someone",
+   "more": "It has searched a century for one person. Help it and it leaves in peace.",
+   "weak": true,
+   "group": "Wilderness",
+   "h": "1udu2fb",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#wilderness"
+  },
+  {
+   "key": "the-wild-hunt",
+   "kind": "person",
+   "name": "The Wild Hunt",
+   "line": "Riders who shouldn’t be riding.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Fast",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Ride as One",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Relentless",
+     "x": 8,
+     "kind": "keeps"
+    },
+    {
+     "text": "Ancient",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Bound to the Night",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "They ride down whoever’s caught in the open, all together.",
+     "d": 12,
+     "at": "Body"
+    },
+    {
+     "text": "The horn sounds right behind whoever’s at the back.",
+     "d": 12,
+     "at": "Mind, Frightened"
+    },
+    {
+     "text": "A rider leans out of the saddle to snatch what the crew’s carrying.",
+     "d": 12,
+     "at": "a stake"
+    }
+   ],
+   "voice": "A single horn. You never hear who blew it.",
+   "secret": "After What You Carry",
+   "more": "They want something the crew is carrying. Drop it and they ride past.",
+   "weak": true,
+   "group": "Wilderness",
+   "h": "nk2cf0",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#wilderness"
+  },
+  {
+   "key": "the-weeping-widow",
+   "kind": "person",
+   "name": "The Weeping Widow",
+   "line": "She’s not crying for you.",
+   "ch": 5,
+   "look": "",
+   "tags": [
+    {
+     "text": "Fear",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Not Really Here",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Bound to a Place",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Grieving",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "She turns her face towards whoever’s closest.",
+     "d": 10,
+     "at": "Mind, Frightened"
+    },
+    {
+     "text": "Her crying rises, and every door in the house slams shut.",
+     "d": 10,
+     "at": "a stake"
+    },
+    {
+     "text": "She drifts through whoever’s in her way, and the cold goes right to the bone.",
+     "d": 10,
+     "at": "Body"
+    }
+   ],
+   "voice": "The crying. That is the entire voice.",
+   "secret": "The True Name",
+   "more": "Say the true name of the one she mourns and she stops.",
+   "weak": true,
+   "group": "Supernatural",
+   "h": "3fsmz4",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#supernatural"
+  },
+  {
+   "key": "the-chained-choir",
+   "kind": "person",
+   "name": "The Chained Choir",
+   "line": "Five voices singing the same note forever.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Fear",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Bound by Rules",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Warded",
+     "x": 8,
+     "kind": "keeps"
+    },
+    {
+     "text": "Chained",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Ancient",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "The five voices turn, all together, towards whoever stepped into the circle.",
+     "d": 12,
+     "at": "Mind, Frightened"
+    },
+    {
+     "text": "The note swells until whoever’s speaking can’t hear their own voice.",
+     "d": 12,
+     "at": "Mind, Silenced"
+    },
+    {
+     "text": "The note drives whoever’s nearest back across the floor and off their feet.",
+     "d": 12,
+     "at": "Body, Prone"
+    }
+   ],
+   "voice": "A note. Just the one note.",
+   "secret": "Keeping Something In",
+   "more": "They aren’t trapped. They’re guarding. Break the circle and something else gets out.",
+   "weak": false,
+   "group": "Supernatural",
+   "h": "ehr1uv",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#supernatural"
+  },
+  {
+   "key": "the-lantern-bearer",
+   "kind": "person",
+   "name": "The Lantern-Bearer",
+   "line": "A light that appears on the road ahead of you.",
+   "ch": 4,
+   "look": "",
+   "tags": [
+    {
+     "text": "Patient",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Silent",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Fading",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Not Really Here",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "The light drifts off the road, and whoever’s leading has to follow it.",
+     "d": 8,
+     "at": "Soul, Charmed"
+    },
+    {
+     "text": "The light goes out, and the road behind you is gone in the dark.",
+     "d": 8,
+     "at": "the ground"
+    },
+    {
+     "text": "It stays the same distance ahead however fast you walk, and the night stretches on.",
+     "d": 8,
+     "at": "the scene clock"
+    }
+   ],
+   "voice": "Nothing. It never speaks.",
+   "secret": "A Guide",
+   "more": "Follow it and you arrive somewhere. Not where you wanted.",
+   "weak": false,
+   "group": "Supernatural",
+   "h": "1q0igxz",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#supernatural"
+  },
+  {
+   "key": "the-hollow-mother",
+   "kind": "person",
+   "name": "The Hollow Mother",
+   "line": "A shape that wants to be needed.",
+   "ch": 5,
+   "look": "",
+   "tags": [
+    {
+     "text": "Charming",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Hollow",
+     "x": 4,
+     "kind": "keeps"
+    },
+    {
+     "text": "Forms (2)",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Wants to Be Needed",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "Forms: When its last keeps-it-going tag goes, it changes: it takes 3 to 5 of these, and its multiplier goes on whichever of them matters most. *Charming* · *Grasping* · *Grapple* · *Fear* · *Shifting* · *Possessing* · *Calls for Help* · *Regrows* · *Feeds* · *Hollow*. Her second form is everyone she’s taken, all reaching for you at once.",
+   "teles": [
+    {
+     "text": "She calls whoever’s nearest by the name their mother used.",
+     "d": 10,
+     "at": "Soul, Charmed"
+    },
+    {
+     "text": "She offers to carry whoever’s hurt, and her arms close round them.",
+     "d": 10,
+     "at": "Body, Grabbed"
+    },
+    {
+     "text": "Somewhere close, a child starts walking towards her.",
+     "d": 10,
+     "at": "a stake"
+    }
+   ],
+   "voice": "Something like your mother’s voice.",
+   "secret": "Made of Everyone",
+   "more": "She is everyone who walked toward her. Name one of them and they pull against her.",
+   "weak": true,
+   "group": "Supernatural",
+   "h": "1k915qi",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#supernatural"
+  },
+  {
+   "key": "the-thing-at-the-edge-of-sight",
+   "kind": "person",
+   "name": "The Thing at the Edge of Sight",
+   "line": "You keep seeing it, and you keep forgetting you saw it.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Patient",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Vengeful",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Out of Sight ×8 (first)",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Forgets You",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Not Really Here",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "It’s right behind whoever hurt it last.",
+     "d": 12,
+     "at": "Body"
+    },
+    {
+     "text": "Whoever’s at the back forgets, for a moment, who they came here with.",
+     "d": 12,
+     "at": "Mind"
+    },
+    {
+     "text": "The way out gets further away the faster you walk.",
+     "d": 12,
+     "at": "the scene clock"
+    }
+   ],
+   "voice": "Nothing you can hear.",
+   "secret": "Standing Still",
+   "more": "It isn’t following. You’re moving past it. Stop moving and it can’t reach you.",
+   "weak": true,
+   "group": "Supernatural",
+   "h": "9h7g9",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#supernatural"
+  },
+  {
+   "key": "captain-marrow",
+   "kind": "person",
+   "name": "Captain Marrow",
+   "line": "A duellist who’s never lost, and knows it.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Faster Than You",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Flurry",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Relentless",
+     "x": 8,
+     "kind": "keeps"
+    },
+    {
+     "text": "Reads a Feint",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Slippery",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Cannot Resist an Audience",
+     "x": 1,
+     "kind": "drives"
+    },
+    {
+     "text": "Code of Honour",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "She’s past the guard of whoever’s facing her before they’ve moved.",
+     "d": 12,
+     "at": "Body"
+    },
+    {
+     "text": "She sends the blade spinning out of the hand of whoever she’s toying with.",
+     "d": 12,
+     "at": "Body, Disarmed"
+    },
+    {
+     "text": "She tells whoever’s facing her, kindly, exactly where their guard is open.",
+     "d": 12,
+     "at": "Mind, Shaken"
+    }
+   ],
+   "voice": "“This is going to be delightful.”",
+   "secret": "Dying",
+   "more": "She wants one last duel worth losing. Give her a worthy one and she lets you win.",
+   "weak": true,
+   "group": "Bosses",
+   "h": "zyykjv",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#bosses-challenge-6"
+  },
+  {
+   "key": "the-guildmaster",
+   "kind": "person",
+   "name": "The Guildmaster",
+   "line": "Everything in this city touches their hand.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Silver-Tongued",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Calls for Help",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Beloved",
+     "x": 8,
+     "kind": "keeps"
+    },
+    {
+     "text": "Deep Pockets",
+     "x": 5,
+     "kind": "keeps"
+    },
+    {
+     "text": "Politically Untouchable",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Greedy",
+     "x": 1,
+     "kind": "drives"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "They praise whoever’s leading so warmly that the room starts to wonder what that person’s hiding.",
+     "d": 12,
+     "at": "Mind"
+    },
+    {
+     "text": "They lift one finger, and the Guild’s men start moving through the crowd.",
+     "d": 12,
+     "at": "the scene clock"
+    },
+    {
+     "text": "They name a price for whoever’s willing to walk away tonight.",
+     "d": 12,
+     "at": "Soul, Charmed"
+    }
+   ],
+   "voice": "“Let me say something generous. So you know exactly how much I am about to take from you.”",
+   "secret": "One Bad Year",
+   "more": "The fortune is paper. Expose the books and the allies leave.",
+   "weak": true,
+   "group": "Bosses",
+   "h": "1kf9cgt",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#bosses-challenge-6"
+  },
+  {
+   "key": "the-painted-knight",
+   "kind": "person",
+   "name": "The Painted Knight",
+   "line": "He’s been dying in this hall for a century and he’s thoroughly sick of it.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Reach",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "A Hundred Years of This",
+     "x": 8,
+     "kind": "keeps"
+    },
+    {
+     "text": "Armoured",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Bound",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "Reforms: when it falls, it stands again at the start of the next round, with its multipliers and tags back, until someone frees it.",
+   "teles": [
+    {
+     "text": "He sweeps his halberd across the hall at knee height.",
+     "d": 12,
+     "at": "everyone in reach, Body"
+    },
+    {
+     "text": "He steps on the tile he knows by heart, and the gate drops behind you.",
+     "d": 12,
+     "at": "a stake"
+    },
+    {
+     "text": "He sighs and tells whoever’s closest how this ends, because he’s seen it a hundred times.",
+     "d": 12,
+     "at": "Soul"
+    }
+   ],
+   "voice": "“...Oh. It is you again.”",
+   "secret": "A Prisoner",
+   "more": "He isn’t the guardian. He’s kept here. Free him and he kneels.",
+   "weak": true,
+   "group": "Bosses",
+   "h": "kdbntz",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#bosses-challenge-6"
+  },
+  {
+   "key": "the-thing-in-the-dark",
+   "kind": "person",
+   "name": "The Thing in the Dark",
+   "line": "You don’t see it, and then you do.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Fear",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Not Really Here",
+     "x": 5,
+     "kind": "keeps"
+    },
+    {
+     "text": "Out of Sight",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Forms (2)",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "Forms: When its last keeps-it-going tag goes, it changes: it takes 3 to 5 of these, and its multiplier goes on whichever of them matters most. *Hits Like a Wagon* · *Reach* · *Grapple* · *Fast* · *Fear* · *Armoured* · *Regrows* · *Relentless* · *Sees in the Dark* · *Out of Sight*. Its second form comes out of the dark, where you can see it.",
+   "teles": [
+    {
+     "text": "Something breathes right behind whoever’s carrying the light.",
+     "d": 12,
+     "at": "Mind, Frightened"
+    },
+    {
+     "text": "The lamps go out one by one, starting with the one furthest from the door.",
+     "d": 12,
+     "at": "the ground"
+    },
+    {
+     "text": "Something in the dark goes for whoever’s furthest from the light.",
+     "d": 12,
+     "at": "Body"
+    }
+   ],
+   "voice": "A sound like a language you almost know.",
+   "secret": "Bound to a Place You Know",
+   "more": "Break the binding and it goes back to sleep.",
+   "weak": true,
+   "group": "Bosses",
+   "h": "1cigc",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#bosses-challenge-6"
+  },
+  {
+   "key": "the-iron-warden",
+   "kind": "person",
+   "name": "The Iron Warden",
+   "line": "A door that’s learned to walk.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Reach",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Armoured",
+     "x": 8,
+     "kind": "keeps"
+    },
+    {
+     "text": "Fortified",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Bound to a Place",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Old",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "It drives its spear at whoever thinks they’re out of reach.",
+     "d": 12,
+     "at": "Body"
+    },
+    {
+     "text": "It closes in to pin whoever’s nearest against the wall.",
+     "d": 12,
+     "at": "Body, Pinned"
+    },
+    {
+     "text": "It plants itself in the doorway it was made to guard.",
+     "d": 12,
+     "at": "a stake"
+    }
+   ],
+   "voice": "A grinding sound, like a door opening.",
+   "secret": "A Person Inside",
+   "more": "Someone was built into the armour a hundred years ago. Speak to them, by name, and the armour stops.",
+   "weak": true,
+   "group": "Bosses",
+   "h": "16n6nbn",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#bosses-challenge-6"
+  },
+  {
+   "key": "the-silent-bell",
+   "kind": "person",
+   "name": "The Silent Bell",
+   "line": "A presence heard only in dreams.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Charming",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Patient",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Bound by Rules",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Feeds",
+     "x": 8,
+     "kind": "keeps"
+    },
+    {
+     "text": "Not Really Here",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "Whoever’s about to speak hears the words first, in their own voice, from right behind them.",
+     "d": 12,
+     "at": "Mind, Shaken"
+    },
+    {
+     "text": "The dream leaks into the house, and the doors aren’t where they were.",
+     "d": 12,
+     "at": "the ground"
+    },
+    {
+     "text": "It tolls, and one more sleeper in the house sinks too deep to wake.",
+     "d": 12,
+     "at": "a stake"
+    }
+   ],
+   "voice": "Whatever you were about to say, in your own voice, spoken from behind you.",
+   "secret": "The Ringer",
+   "more": "The bell is the servant. Silence whoever rings it and the bell is only a bell.",
+   "weak": true,
+   "group": "Bosses",
+   "h": "1p65ny8",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#bosses-challenge-6"
+  },
+  {
+   "key": "the-fallen-champion",
+   "kind": "person",
+   "name": "The Fallen Champion",
+   "line": "The best swordsman of a generation, on the wrong side of history.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Hits Like a Wagon",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Cornered is Worse",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Relentless",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Ancient",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Armoured",
+     "x": 8,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "",
+   "teles": [
+    {
+     "text": "Their greatsword comes round hard enough to crack the wall behind whoever’s facing them.",
+     "d": 12,
+     "at": "Body"
+    },
+    {
+     "text": "Cornered, they swing at everyone in reach at once.",
+     "d": 12,
+     "at": "everyone in reach, Body"
+    },
+    {
+     "text": "They lower their blade and ask whoever’s leading which side they think they’re on.",
+     "d": 12,
+     "at": "Soul"
+    }
+   ],
+   "voice": "“I have been waiting for someone to be worth this.”",
+   "secret": "Wants to Talk",
+   "more": "They can be talked to. They want to be. Try it and the fight changes.",
+   "weak": true,
+   "group": "Bosses",
+   "h": "x843ma",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#bosses-challenge-6"
+  },
+  {
+   "key": "the-nameless-king",
+   "kind": "person",
+   "name": "The Nameless King",
+   "line": "A thing that’s been ruling this land for longer than any of its records admit.",
+   "ch": 6,
+   "look": "",
+   "tags": [
+    {
+     "text": "Calls for Help",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Fear",
+     "x": 1,
+     "kind": "comes"
+    },
+    {
+     "text": "Unkillable",
+     "x": 4,
+     "kind": "keeps"
+    },
+    {
+     "text": "Old",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Ancient",
+     "x": 1,
+     "kind": "keeps"
+    },
+    {
+     "text": "Forms (3)",
+     "x": 1,
+     "kind": "keeps"
+    }
+   ],
+   "rules": "Forms: When its last keeps-it-going tag goes, it changes: it takes 3 to 5 of these, and its multiplier goes on whichever of them matters most. *Possessing* · *Commanding* · *Calls for Help* · *Fear* · *Beloved* · *Politically Untouchable* · *Trained* · *Armoured* · *Ancient* · *Unkillable*. Each new form is another body, the nearest one it can take.",
+   "teles": [
+    {
+     "text": "It calls, and every guard in the palace starts running for the throne room.",
+     "d": 12,
+     "at": "the scene clock"
+    },
+    {
+     "text": "It names whoever’s closest, by the name nobody’s called them in years.",
+     "d": 12,
+     "at": "Mind, Frightened"
+    },
+    {
+     "text": "It brings the iron sceptre down on whoever stands nearest the throne.",
+     "d": 12,
+     "at": "Body"
+    }
+   ],
+   "voice": "“You are the first to say my name. I had forgotten it myself.”",
+   "secret": "A Title, Not a Person",
+   "more": "It passes from body to body. Kill the body and it moves on. Break the title.",
+   "weak": true,
+   "group": "Bosses",
+   "h": "8qnifw",
+   "at": 1794619159815,
+   "link": "/rules/the-bestiary/#bosses-challenge-6"
+  }
+ ],
+ "links": {
+  "places": "/rules/twenty-places/",
+  "bestiary": "/rules/the-bestiary/"
+ }
+}

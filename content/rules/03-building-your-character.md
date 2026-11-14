@@ -6,7 +6,7 @@ order: 3
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::quote
 Your whole character fits in a few plain sentences and some numbers.
@@ -314,7 +314,7 @@ Each of these is a utility item, and you cross it off once it's used. You can ge
 | **Antidote** | Break *Poisoned*, no roll. Nothing can poison you for the rest of the scene. |
 | **Acid vial** | Strip one protective tag (*Armoured*, *Warded*, *Fortified*) from a threat, or one tick off it if it's got a multiplier. No roll. |
 | **Smoke bomb** | A burst of smoke one square out from where it lands, for one round. Anything aimed into it or out of it is one step less. |
-| **Caltrops** | Cover two squares. Anyone who crosses them is *Staggered d6*. In a chase, the Pursuer steps down one. |
+| **Caltrops** | Cover two squares. Anyone who crosses them is *Staggered d6*. |
 | **Purse of gold** | +1 step to one social roll, or buy something ordinary. About a month's wages. |
 | **Silver mirror** | Reveal one illusion or hidden thing in sight. |
 | **Salt packet** | Ward a threshold. Supernatural things can't cross for one scene. |

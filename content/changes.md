@@ -1,9 +1,19 @@
 ---
 title: "What's Changed"
 id: changes
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
+
+## 14 Nov 2026: The book, down to its core {#c-2026-11-14-core}
+
+**The book's down to its core mechanics.** A lot of it had gone wrong as the rules changed under it, so the lore and the side systems are out while the core gets settled, and they'll come back built on top of it.
+
+**The world part's gone:** the Steeplands, Frames, Twenty Places, the Bestiary and the worked campaign arc. [Building Your World](#world) and [The Threat Builder](#threat-builder) stay, and they're with the GM's chapters now. Examples don't send you to a world any more, and a threat's [multipliers](#s-tough-gm) are built for a starting crew of four without pointing at the Bestiary.
+
+**Set aside till the core's settled:** Tactical Play, Chases, Travelling, Exploring, Investigating and Playing Alone. [Movement and Range](#s-movement), [Playing without a grid](#s-theatre) and [Weapons and What They Let You Do](#s-weapons-tactics) are in Conflict now, and the rest of Tactical Play's out with the others.
+
+**The appendices** have lost what went: Chases is off the [quick reference](#appendix-quick) and the player reference, the glossary and the index have lost the words that only those chapters used, and the glossary's [Appendix E](#appendix-glossary) now.
 
 ## 9 Nov 2026: The GM's budgets, and the rest of the book {#c-2026-11-09-budgets}
 
@@ -13,23 +23,23 @@ To go with [Roots, specialties and three tracks](#c-2026-11-08-roots).
 
 **The threat budget's 15 a character as they start**, so 60 for four, and it climbs with every Title, archetype or attuned thing an Aspiration gives them: about 17 or 18 a character with one, 20 with two, 22 or 23 with three and 25 with four. It was 10 a character with two Titles, and more with every Title after. See [The Threat Budget](#s-threat-budget).
 
-**Every multiplier in the book is 2 bigger**, and a threat's Challenge plus 2 is the place to start, so a boss still takes about four rounds to bring down the long way. The bestiary's are written for a threat budget of 60, like the Iron Warden's *Armoured ×8*, and you add 1 to each for every 10 the budget's over that. Challenges still run from 2 to 6. See [Multipliers](#s-tough-gm), [Multipliers](#s-tough) in Conflict and [The Bestiary](#bestiary).
+**Every multiplier in the book is 2 bigger**, and a threat's Challenge plus 2 is the place to start, so a boss still takes about four rounds to bring down the long way. The bestiary's are written for a threat budget of 60, like the Iron Warden's *Armoured ×8*, and you add 1 to each for every 10 the budget's over that. Challenges still run from 2 to 6. See [Multipliers](#s-tough-gm), [Multipliers](#s-tough) in Conflict and The Bestiary.
 
 **How long a scene runs** is everything standing in the crew's way divided by half the actions they take a round, counting the ones they buy with Aura. See [How long a scene runs](#s-size-scene).
 
-**Every telegraph at the crew says Body, Mind or Soul**: blows and teeth at your Body, fear, lies and pressure at your Mind, and despair, temptation and curses at your Soul. Twenty Places, the Bestiary, the Threat Builder, the frames and the Tag Reference are redone to match. See [Telegraphs](#s-telegraphs) and [Twenty Places](#places).
+**Every telegraph at the crew says Body, Mind or Soul**: blows and teeth at your Body, fear, lies and pressure at your Mind, and despair, temptation and curses at your Soul. Twenty Places, the Bestiary, the Threat Builder, the frames and the Tag Reference are redone to match. See [Telegraphs](#s-telegraphs) and Twenty Places.
 
-**Playing alone, the first hit that gets through to you each scene doesn't drop a track**, the way the Toughness Boon works, and one character as they start takes 4 off every multiplier. See [Solo With a GM](#s-solo-gm).
+**Playing alone, the first hit that gets through to you each scene doesn't drop a track**, the way the Toughness Boon works, and one character as they start takes 4 off every multiplier. See Solo With a GM.
 
 **The GM's 1 Resolve for great roleplay is gone**, since Resolve's a track now. A great setup that doesn't land still gets 1 Aura. See [Aura](#s-aura).
 
 **Attuned things from the story have awakenings**, each with its own way to Aura, and their Burdens come off the new menu. See [Attuned Things from the Story](#s-rare).
 
-**In the frames**, Depth brings your Resolve up a size for every level you leave behind, Dread comes at your Mind, a favour called in brings your Resolve up a size like any bond thread, and the ship's and a holding's tags are a step for 1 Aura. See [Frames](#frames).
+**In the frames**, Depth brings your Resolve up a size for every level you leave behind, Dread comes at your Mind, a favour called in brings your Resolve up a size like any bond thread, and the ship's and a holding's tags are a step for 1 Aura. See Frames.
 
 **The *Healers* crew asset** puts one of everyone's tracks up a size, once a session. See [Crew assets](#s-crew-tags).
 
-**The rest of the book reads the new way**: [Tactical Play](#tactics), [Magic](#magic), [Chases](#chases), [Travelling](#travelling), [Exploring](#exploring), [Investigating](#investigating), [Growing](#growing), [Coin and Kit](#coin-kit), [Running the Game](#running), [Playing Alone](#solo), [the sheets](#appendix-sheet), [every lever](#appendix-levers), [the glossary](#appendix-glossary) and the index. The full fight in [Conflict](#s-fight) runs as a breather, since its Wardens are only half-woken.
+**The rest of the book reads the new way**: Tactical Play, [Magic](#magic), Chases, Travelling, Exploring, Investigating, [Growing](#growing), [Coin and Kit](#coin-kit), [Running the Game](#running), Playing Alone, [the sheets](#appendix-sheet), [every lever](#appendix-levers), [the glossary](#appendix-glossary) and the index. The full fight in [Conflict](#s-fight) runs as a breather, since its Wardens are only half-woken.
 
 ## 9 Nov 2026: No more traits {#c-2026-11-09-traits}
 
@@ -70,14 +80,14 @@ Mo's call in chat.
 
 **A faction's Power comes only from people who'll turn up when it calls**, like soldiers, dock gangs, a congregation or the dead it raises. Nothing else adds Power now, so a charter, a throne or an old name is an asset that does one thing. Before, a card could have anything add Power, like the Quiet Order's *Rooted* or the Harbour Guild's *Watchful*. See [What a Faction Is](#s-faction-board) and [People who turn up](#assets-people).
 
-**Every faction card in the book that had something else adding Power is redone.** Where the faction plainly had the people, that asset became people and the die stayed: the Steeplands' four, the Tithe Fleet, Tarrant & Daughters, the Brothers of the Lamp, the Lampwrights' Guild, the Meridian Combine, the Free Stations Compact and the Rustbacks. The Vane Estate's still a d12, with *The Courts' Bailiffs* and *Old Retainers* where *Friends in the Courts* and *The Old Name* were. See [the Steeplands' board](#the-board).
+**Every faction card in the book that had something else adding Power is redone.** Where the faction plainly had the people, that asset became people and the die stayed: the Steeplands' four, the Tithe Fleet, Tarrant & Daughters, the Brothers of the Lamp, the Lampwrights' Guild, the Meridian Combine, the Free Stations Compact and the Rustbacks. The Vane Estate's still a d12, with *The Courts' Bailiffs* and *Old Retainers* where *Friends in the Courts* and *The Old Name* were. See the Steeplands' board.
 
 **Where it didn't, the asset does one thing now and the die's smaller:**
--   **Brinewake:** the Drowned Choir's a d6, and *Calls the Tide* holds a channel in the Combs shut or open. See [its board](#frames-the-board).
--   **The Deep Company:** the Company's a d6, with its *Royal Charter* and *The Lift* to keep a team out, and Holloway's Team and the Underhold are d4s. See [its board](#the-board-1).
--   **Lanternfall:** the Night Watch and the Lamplighters' Guild are d4s, and the Carrow Society and the Thing in the Fog are d6s. See [its board](#the-board-2).
--   **The Gilded Court:** Houses Veraine and Marchetti and the Queen's Eyes are d6s, and the Crown's a d10. See [its board](#the-board-3).
--   **Long Haul:** Halberd Credit's a d4. See [its board](#the-board-4).
+-   **Brinewake:** the Drowned Choir's a d6, and *Calls the Tide* holds a channel in the Combs shut or open. See its board.
+-   **The Deep Company:** the Company's a d6, with its *Royal Charter* and *The Lift* to keep a team out, and Holloway's Team and the Underhold are d4s. See its board.
+-   **Lanternfall:** the Night Watch and the Lamplighters' Guild are d4s, and the Carrow Society and the Thing in the Fog are d6s. See its board.
+-   **The Gilded Court:** Houses Veraine and Marchetti and the Queen's Eyes are d6s, and the Crown's a d10. See its board.
+-   **Long Haul:** Halberd Credit's a d4. See its board.
 
 **Appendix B's got more people to borrow:** *Levies*, *Warships*, *Toughs*, *A Mob*, *Constables*, *Bailiffs*, *Guild Hands*, *Kin*, *Sworn Members* and *Thralls*. See [People who turn up](#assets-people).
 
@@ -168,7 +178,7 @@ These came out of the 23 Oct playtests.
 -   Heals and quick heals bring it down a size. See [Healing](#s-healing).
 -   After a Blaze, the wound becomes a Scar, and a Scar's a Catch. Each one starts your wound die a size bigger, and with five, your next Blaze is your last. That replaces a Scar crossing out a box.
 -   Nothing writes a Catch on your Hurt mid-scene any more, so your Confidence doesn't drop for it.
--   *Unyielding*, the Hurt Boon and [playing alone](#s-solo-gm) mean the first Hurt each scene doesn't move your wound die, instead of an extra bar.
+-   *Unyielding*, the Hurt Boon and playing alone mean the first Hurt each scene doesn't move your wound die, instead of an extra bar.
 -   *Tend the Crew* works on the rest now: everyone in the crew who was in the scene rolls two Confidence dice for it, and the best counts. It used to heal Catches in downtime.
 
 **Every archetype has a Resolve spend**, something big for 1 Resolve. See [1 Resolve on your mechanic](#s-abilities). And:

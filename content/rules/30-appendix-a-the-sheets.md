@@ -4,9 +4,9 @@ id: appendix-sheet
 slug: appendix-a-the-sheets
 order: 30
 part: "Appendices & Index"
-partNumber: "Part V"
+partNumber: "Part IV"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 There are three sheets: one for each character, one the whole crew shares, and a faction board you can print as often as you need.
 
@@ -51,7 +51,7 @@ What Aura buys and how it comes back, building a roll and your action aren't on 
 1.  **The round and rolling:** the round, your action and extra actions, building a roll and the steps ladder, the roll, splits, combos, and moving, how far and weapon properties.
 2.  **The tracks and defence:** Stamina, Confidence and Resolve, what they pay, 2 for 1, how they come back, Blaze, Scars and healing, answering, letting it ride, Defend, intercepting, what it costs, and conditions.
 3.  **Aura, archetypes and threads:** what Aura buys and how it comes back, Catches included, the eighteen archetypes, a line each with its sigil and its home track, and bonds and threads.
-4.  **Your character, downtime, threats and gear:** making a character, Boons and Burdens, things that climb, downtime, reading a threat, its multipliers and vulnerabilities, what a win does, Study, stakes and clocks, chases, what you carry, attunement and summoning.
+4.  **Your character, downtime, threats and gear:** making a character, Boons and Burdens, things that climb, downtime, reading a threat, its multipliers and vulnerabilities, what a win does, Study, stakes and clocks, what you carry, attunement and summoning.
 
 The GM's side of the quick reference stays in the book: factions, the session, the Oracle, and the round and threat budgets.
 

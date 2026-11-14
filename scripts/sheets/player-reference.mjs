@@ -68,7 +68,6 @@ const PAGES = [
         { id: "s-qr-threats", drop: ["**Round budget:**", "**Threat budget:**"] },
         { id: "study" },
         { id: "stakes-clocks-events", drop: ["Things that climb"] },
-        { id: "s-qr-chases" },
         { id: "s-qr-carry" },
         { id: "s-qr-summoning" },
       ] },

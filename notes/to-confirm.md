@@ -1,6 +1,20 @@
-# For Mo: calls to confirm (9 Nov 2026)
+# For Mo: calls to confirm (14 Nov 2026)
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
+
+## 14 Nov: the book down to its core
+
+You asked for the old stuff out, the lore above all, with the book down to its core mechanics, and Night City and Abnu off the site. You picked Down to the core. These are the calls the cut needed. The old book's at the tag `pre-core-cut-2026-11-14`.
+
+1. **Building Your World stays**, moved into the GM's part beside the Threat Builder. It's random tables for a region, a place, a person and a hook with no world in them, nothing in it changes when the rules do, and the site's world builder and her place pages run on its tables. (The question said it'd go with the rest of the world part.)
+2. **The crew's running story stays in the examples**: the Vane Estate, the Harbour Guild and the Quiet Order are the examples' cast now, the way the crew are, with the Steeplands themselves gone. A Goal that only made sense in the Steeplands (*free the Bound*, *bring peace to the Steeplands*) was reworded. Part 1 recounts every example anyway, so that's the time to rename or cut them.
+3. **Factions, the Party Sheet, the Oracle and the table chapters stay.** The site's faction board, faction turn and party sheet run on Factions and the Party Sheet, and the Oracle, Playing Carefully, Playing Your Way, Session Zero, The Session and When It's Not Working don't change when the core does.
+4. **Movement and Range, Playing without a grid and Weapons** moved into Conflict, after Your Action and after What a Win Does. The rest of Tactical Play (its advice and A Round on the Grid) is out with the side systems.
+5. **Two crew assets still point at what's set aside**: *Smugglers' Roads* (a journey's first stage) and *Rooted* (getting away in a chase). They're on the party sheet as they were, for when travelling and chases come back.
+6. **The glossary's Appendix E now**, since the worked campaign arc was E.
+7. **Night City and Abnu are off the site**: no pages under /worlds/, and nobody can bring them into a campaign. The Sapphire Queen and Cyberpunk keep their own copies, untouched, and Cyberpunk's World screen still shows the fan-made line and the companies' notices at its foot, from `content/worlds/retired.yaml`. The book won't send either game a note about a card changing any more.
+8. **The world builder** keeps its tables, the founding and Build the world. Without the book's boards there are no frames' mixes, so Add a faction on a board she built by hand asks for the region and genre, and one the builder dealt still deals at its own mix. Its Cyberpunk genre is still on its list as one to come.
+9. **Old links to the cut chapters** (Tactical Play, Chases, the Steeplands and the rest) land on the site's page that says there's nothing there.
 
 ## 9 Nov: the builder, the learning round and the live table on Roots
 
