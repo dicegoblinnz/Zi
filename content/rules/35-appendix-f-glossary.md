@@ -44,7 +44,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Challenge](#s-challenges)** | The die something defends with: 2 (d4) to 6 (d12). It never steps down, unless a tag like *Crumbling* says so. |
 | **[Climbs](#s-climb)** | How the Goal, an Aspiration, a project and an agenda move: from d2 up, a step on every win, one step a roll. Past d12, it's done. |
 | **[Clock](#s-stakes)** | A die on a stake that steps down every round nobody works it. |
-| **[Combo](#s-teamwork)** | Two or more actions into the same thing at the same time, yours or your friends'. One Root, every friend's action brings everything on their sheet that fits, 1 each, and a split, your own extra action's 1 step and a split, and you roll once, with no Aura for the combo. The same thing from two of you counts for each. |
+| **[Combo](#s-teamwork)** | Two or more actions into the same thing at the same time, yours or your friends'. One Root, and you roll once, with no Aura for the combo. Every friend's action brings everything on their sheet that fits, 1 each, and a split, and your own extra action in the roll is 1 step and a split. The same thing from two of you counts for each. |
 | **[Condition](#s-conditions)** | A tag carrying a die, for you or against you. One step while it lasts, or for a few, a vulnerability. Spend it for its big effect. One of each on a target, and the same one goes on once a round. |
 | **[Confidence](#s-tracks)** | Your Mind's track, and your defence against fear, lies and pressure. It starts at d12, drops a size for every hit that gets through to your Mind, and pays for the Face's, the Gambler's, the Hunter's, the Illusionist's, the Oracle's and the Scholar's abilities. |
 | **[Consequence](#s-consequences)** | What a landed telegraph or a costly miss does. The GM names it, usually a size off a track, and you can offer another that fits and costs about as much, or pay 2 for 1. |
@@ -106,7 +106,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Party holdings](#s-party-resources)** | Big things the crew owns together, like a horse and cart or a house. A step on any roll they fit, for 1 Aura. |
 | **[Perfected](#s-attunement)** | An attuned thing's third stage: 3 awakenings, and 3 more with a Burden and a Catch. Six at most. |
 | **[Permission](#s-permissions)** | Something your character can do, a doing word with how, what or where, like *climb sheer walls*. It lives on a Title, it's 1 on the Root it fits, and it's a step on every roll it fits. |
-| **[Points](#building-character)** | What you make your character with: 35 to start. A Title, an archetype or an attuned thing is 5, with the one permission, ability or awakening it comes with, and another permission, ability, awakening or thing you carry is 1. |
+| **[Points](#building-character)** | What you make your character with: 35 to start. A Title, an archetype or an attuned thing is 5, with the one permission, ability or awakening it comes with, another permission, ability, awakening or thing you carry is 1, and a Boon's 2. |
 | **[Power](#s-faction-board)** | A faction's muscle, on a die: 1 step, plus 1 for each lot of people who turn up when it calls. Nothing else adds Power. The crew has one too. |
 | **[Pressure](#downtime)** | One of the four things pushing on the crew each downtime: personal, party, faction, world. |
 | **[Project](#s-projects)** | Something the crew sets out to build or bring about. Starts at d2 and climbs. Past d12, what you wrote happens. |
