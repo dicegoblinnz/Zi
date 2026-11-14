@@ -1025,7 +1025,7 @@ if (part("3")) {
   has(await page.textContent("#cc-dialog"), "A permission on", "a permission on a tap, offline");
   await done();
   await page.click('.cc-tabs a[data-t="rules"]');
-  for (const [title, want] of [["Defend", "Defend"], ["Intercept", "1 Aura"], ["The Tracks", "d12"], ["Aura", "past 5"]]) {
+  for (const [title, want] of [["Defend", "Defend"], ["Intercept", "1 Aura"], ["The Tracks", "d12"], ["Aura", "past your maximum"]]) {
     const box = page.locator(".cc-rulebox", { has: page.locator(`summary:text-is("${title}")`) });
     if (!(await box.count())) note(`no ${title} on the Rules tab`);
     else {
