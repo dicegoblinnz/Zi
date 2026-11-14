@@ -515,7 +515,7 @@ The corridor's thirty feet of polished marble, lit by candles in iron brackets. 
 
 **Ground:** *Candlelight, Narrow Stair*, and one hidden tag.
 
-**Telegraphs:** about 10 steps a round for each of the four is 40, but the Wardens are only half-woken, so the GM runs it as a breather, about half that: 20.
+**Telegraphs:** about 11 steps a round for each of the four is 44, but the Wardens are only half-woken, so the GM runs it as a breather, about half that: 22.
 :::
 
 That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way. Everyone's tracks are on d12. Bram's wearing Fine plate and a Common shield, and Vesk's got her Common worn leathers, all of it Body armour. Everyone's got 7 Aura, their 5 and 2 for the one thing each of them has attuned, and it'll come and go all fight.
