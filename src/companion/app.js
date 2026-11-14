@@ -1542,11 +1542,17 @@ const andList = (list) => (list.length > 1 ? `${list.slice(0, -1).join(", ")} an
 // for, a permission first, and how many more. "Body, pick a mechanical lock
 // and 4 more".
 const LEAD = { perm: 0, awk: 1, ability: 2, item: 3, attuned: 4, title: 5, arch: 6 };
+const NAME_MAX = 60;
 function rollName(r, k, c, s) {
   const list = R.thingsOf(c, s).filter((x) => k.using.includes(x.key)).sort((a, b) => LEAD[a.kind] - LEAD[b.kind]);
   const again = k.extras.length;
-  const lead = list[0] ? (list[0].kind === "item" ? nameOf(c, list[0].where, list[0].name) : list[0].name) : "";
-  return `${r.root}${lead ? `, ${lead}` : ""}${list.length > 1 ? ` and ${list.length - 1} more` : ""}${again ? (again === 1 ? ", twice" : `, ${again + 1} times`) : ""}`.slice(0, 80);
+  let lead = list[0] ? (list[0].kind === "item" ? nameOf(c, list[0].where, list[0].name) : list[0].name) : "";
+  const tail = `${list.length > 1 ? ` and ${list.length - 1} more` : ""}${again ? (again === 1 ? ", twice" : `, ${again + 1} times`) : ""}`;
+  // It's the answer's name on the live table too, which keeps 60 letters, so
+  // a long lead's cut at a word.
+  const room = NAME_MAX - r.root.length - 2 - tail.length;
+  if (lead.length > room) lead = `${lead.slice(0, Math.max(0, room - 1)).replace(/\s+\S*$/, "")}…`;
+  return `${r.root}${lead ? `, ${lead}` : ""}${tail}`;
 }
 
 // A roll's name in its card's head: the Root big, and what it's for after
