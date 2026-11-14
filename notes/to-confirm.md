@@ -72,7 +72,14 @@ None yet.
 
 ### 7. The builder and downtime
 
-None yet.
+1. **An ability's only on one of your copies of an archetype.** It's the one ability, the way the Trait is, and Push already grows with every copy. The builder asks for another when one's on two, and downtime and an Aspiration's new archetype only offer the ones you haven't got.
+2. **A character from before with an archetype twice has its abilities shared out between the two**, where each copy used to have the lot. Vesk saved before stacking keeps Push on her first Shadow and Vanish on her second, the way the chapter has her, so nothing's paid for twice.
+3. **Starting on more is a number the player sets**, from 35 up, in the points along the bottom and on the last step. Its ? says the GM decides it for a one-shot or a catch-up, so the phone doesn't ask which.
+4. **Spending past the start is a warning on a new character, never a block**, saying how far over and to take some off or ask the GM. Change never warns about it, since downtime and characters from before go past it, and once everything's spent it says how many points are on the sheet instead of a count left. Points still to spend are a warning too, so a character can be saved while the player makes up their mind.
+5. **A Title from before starts with all 3 on its old Root**, with a line beside its spread saying so, and leaving it there is fine. Its specialties go without asking, its permissions keep their words and Roots, and what it grew in downtime stays.
+6. **A random character's the Quick Build's shape**: two archetypes (sometimes the same one twice) and two Titles, each with its one, an attuned thing, and the other 10 points on more permissions, abilities, now and then a Boon, and what they carry, so it spends exactly 35.
+7. **The Aspiration's roll in downtime is the Root you pick and a tap for each thing on your sheet that fits**, a step each, the way any roll's built now.
+8. **A character from before Roots is rebuilt on points too**, each permission's Root guessed from its words or the set action it was on, and each Title's 3 spread the way its permissions lean, for the player to check.
 
 ### 8. The live table
 
