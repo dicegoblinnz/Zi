@@ -10,7 +10,6 @@
 // For reading on a phone it also cuts each chapter into short sections, builds
 // the Learn deck (content/learn.md) and writes public/openings.json, the
 // opening of every section a link points at, for the pop-ups.
-import { createHash } from "node:crypto";
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -24,13 +23,13 @@ import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import { visit, SKIP } from "unist-util-visit";
 import { diceLabel, stepsToDice } from "../src/companion/dice.js";
-import { threadNote } from "../src/companion/threads.js";
 import { curlyQuotes, readAim, whoAndDoes } from "../src/companion/aims.js";
 import { CARD_WORDS, newestChange, reachOf, readCards, staleCards } from "./learn.mjs";
 import { bookFor, compileTables, readTablesDir } from "./world-tables.mjs";
 import { checkYears, compileWorld, readWorldsDir } from "./worlds.mjs";
 import { sealIn, sealKey } from "../src/kit/seals.js";
 import { diceCells, exampleCrews, ruleNames, statBlocks } from "./book-blocks.mjs";
+import { checkMirrors, crewFrom, qualitiesFrom } from "./crew-sheets.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const RULES = join(ROOT, "content", "rules");
@@ -357,262 +356,11 @@ function openingsOf(tree, { targets, page, title, chapterId }, toHtml) {
 // Titles and part blurbs come from front matter, so curl their apostrophes here.
 const curly = (s) => (typeof s === "string" ? s.replace(/'/g, "\u2019") : s);
 
-// The ready-made crew, read straight off their sheets so the home page and the
-// character companion always match the book. Each sheet becomes full data
-// (rootsFrom): archetypes, Titles with their Root, specialties and
-// permissions, Roots and specialties checked against the sums, what
-// they carry, armour on its Root, the attuned thing with its awakenings,
-// numbers, threads, Aspiration and trouble, which the companion plays.
-const ORDINAL = { first: 0, second: 1, third: 2, fourth: 3, fifth: 4, sixth: 5 };
-const COUNT = { one: 1, two: 2, three: 3, four: 4, five: 5, six: 6 };
+// Plain words off the Markdown: links and italics taken out, apostrophes
+// curled. The crew's sheets are read in scripts/crew-sheets.mjs.
 const plain = (s = "") => curly(s.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1").replace(/\*/g, "").trim());
 const italics = (s = "") => [...s.matchAll(/\*([^*]+)\*/g)].map((m) => plain(m[1]));
 const dropStop = (s = "") => s.trim().replace(/\.$/, "");
-// Split on the commas that aren't inside *italics*.
-const commaList = (s) => s.split(/,\s*(?=(?:[^*]*\*[^*]*\*)*[^*]*$)/).map((x) => x.trim()).filter(Boolean);
-
-// Armour's quality, from the table in Quality: Common, Fine and Masterwork,
-// with 1, 2 and 3 boxes. A tier is its place in the table, so a saved
-// character keeps its armour's quality if a name changes.
-function qualitiesFrom(doc, warn) {
-  const out = tableRows(sectionOf(doc?.body ?? "", "s-armour-quality")).map((r, i) => ({ tier: i + 1, name: plain(r[0]), boxes: Number(r[1]), text: plain(r[2] ?? "") }));
-  if (out.length !== 3 || out.some((q) => !(q.boxes >= 1))) warn(`armour should have three qualities, each with its boxes, and Quality has ${out.map((q) => `${q.name} ${q.boxes}`).join(", ") || "none"}`);
-  return out;
-}
-// "Fine plate armour" is plate armour, Fine, and "a Common shield" is a
-// shield, Common.
-function qualityOf(text, qualities = []) {
-  const art = text.match(/^(a|an|the|her|his|their) /i)?.[0] ?? "";
-  const rest = text.slice(art.length);
-  const q = qualities.find((x) => rest.startsWith(`${x.name} `));
-  if (!q) return null;
-  const noun = rest.slice(q.name.length + 1);
-  const a = /^an? $/i.test(art) ? (/^[aeiou]/i.test(noun) ? "an " : "a ") : art;
-  return { name: `${a}${noun}`, tier: q.tier };
-}
-
-// The crew under Roots (8 Nov 2026), read straight off their sheets, and
-// every number checked: a Title's 1 on its Root and on each of its three
-// specialties, a permission's 1 on a Root and 1 on a specialty, and the Roots
-// and Specialties lines have to be what those add up to. What they carry
-// never adds to a Root or a specialty, armour says which Root it guards and
-// its boxes by its quality, and an attuned thing has as many awakenings as
-// its stage and its Catch give it. The crests by an example and the
-// companion both read it.
-const ROOT_NAMES = ["Body", "Mind", "Soul"];
-const TRACK_OF = { Body: "Stamina", Mind: "Confidence", Soul: "Resolve" };
-const STAGE_AWAKENINGS = { Awakened: 1, Tempered: 2, Perfected: 3 };
-function rootsFrom(doc, ctx) {
-  const out = [];
-  for (const m of doc.body.matchAll(/^:::sheet\[([^:\]]+): ([^\]]+)\]\n([\s\S]*?)\n:::$/gm)) out.push(rootsSheet(m[1], m[2], m[3], m[0], ctx));
-  return out;
-}
-
-function rootsSheet(name, titleText, body, block, ctx) {
-  const warn = (msg) => ctx.warn(`${name}'s sheet: ${msg}`);
-  const rows = body.split("\n");
-  const field = {};
-  for (const row of rows) {
-    const f = row.match(/^\*\*([^*]+?):\*\* (.*)$/);
-    if (f) field[f[1]] = f[2].trim();
-  }
-  const labelled = (re) => Object.keys(field).find((k) => re.test(k));
-  for (const label of ["Plays like", "Archetypes", "Roots", "Specialties", "Carries", "Its Aura", "Awakenings", "Numbers", "Threads", "Aspiration"]) {
-    if (!(label in field)) warn(`there's no ${label} line`);
-  }
-  const rootOf = (s, what) => {
-    const r = s.trim();
-    if (!ROOT_NAMES.includes(r)) warn(`${what} is on "${r}", and a Root's Body, Mind or Soul`);
-    return r;
-  };
-
-  // Archetypes, apart from the Titles.
-  const archetypes = [...(field.Archetypes ?? "").matchAll(/\[([^\]]+)\]\(#(a-[a-z-]+)\)/g)].map((a) => {
-    const rule = ctx.archetypes[a[1]];
-    if (!rule) warn(`there's no archetype called ${a[1]}`);
-    return { name: a[1], id: a[2], home: rule?.home ?? null };
-  });
-  if (archetypes.length < 1) warn("there are no archetypes on the Archetypes line");
-
-  // Titles: each one a Root and three specialties, and its permissions, each
-  // a Root and a specialty.
-  const roots = Object.fromEntries(ROOT_NAMES.map((r) => [r, 0]));
-  const specs = new Map();
-  const addSpec = (s) => specs.set(s, (specs.get(s) ?? 0) + 1);
-  const titles = [];
-  for (const [label, value] of Object.entries(field)) {
-    if (!/^\w+ Title$/.test(label)) continue;
-    const t = value.match(/^\*([^*]+)\* \((\w+); ([^)]+)\)\. Permissions: (.+?)\.?$/);
-    if (!t) {
-      warn(`can't read the ${label}: it's *the Title* (Root; three specialties). Permissions: *a permission* (Root, specialty), …`);
-      continue;
-    }
-    const root = rootOf(t[2], `the ${label}`);
-    const specialties = t[3].split(/,\s*/).map((s) => curly(s.trim()));
-    if (specialties.length !== 3 || new Set(specialties).size !== 3) warn(`the ${label} names ${specialties.length} specialties, and a Title's three different ones`);
-    roots[root] = (roots[root] ?? 0) + 1;
-    specialties.forEach(addSpec);
-    const permissions = [...t[4].matchAll(/\*([^*]+)\* \((\w+), ([^)]+)\)/g)].map((p) => {
-      const r = rootOf(p[2], `*${p[1]}*`);
-      roots[r] = (roots[r] ?? 0) + 1;
-      addSpec(curly(p[3].trim()));
-      return { text: plain(p[1]), root: r, specialty: curly(p[3].trim()) };
-    });
-    if (!permissions.length) warn(`the ${label} has no permissions I can read: each one's *a permission* (Root, specialty)`);
-    if (permissions.length > 6) warn(`the ${label} has ${permissions.length} permissions, and a Title holds six at most`);
-    titles.push({ name: plain(t[1]), root, specialties, permissions });
-  }
-  if (!titles.length) warn("there are no Titles");
-
-  // The Roots and Specialties lines have to be what the Titles and permissions add up to.
-  const said = (text) => new Map(dots(dropStop(text ?? "")).map((seg) => {
-    const m = seg.match(/^(.+?) (\d+)$/);
-    if (!m) warn(`can't read "${seg}": it's a name and its steps`);
-    return m ? [curly(m[1]), Number(m[2])] : [seg, NaN];
-  }));
-  const saidRoots = said(field.Roots);
-  for (const r of ROOT_NAMES) {
-    if (!saidRoots.has(r)) warn(`the Roots line hasn't got ${r}`);
-    else if (saidRoots.get(r) !== roots[r]) warn(`the Roots line says ${r} ${saidRoots.get(r)}, but the Titles and permissions on it make ${roots[r]}`);
-  }
-  const saidSpecs = said(field.Specialties);
-  for (const [s, n] of specs) {
-    if (!saidSpecs.has(s)) warn(`${s} is on a Title or a permission, and it isn't on the Specialties line`);
-    else if (saidSpecs.get(s) !== n) warn(`the Specialties line says ${s} ${saidSpecs.get(s)}, but the Titles and permissions on it make ${n}`);
-  }
-  for (const s of saidSpecs.keys()) if (!specs.has(s)) warn(`the Specialties line has ${s}, and nothing on the Titles builds it`);
-
-  // What they carry, the same shape as before Roots.
-  const carry = { equipment: [], utility: [], keepsake: null, bag: { name: "a bag", max: 10 } };
-  for (const seg of dropStop(field.Carries).split(" · ").filter(Boolean)) {
-    const c = seg.match(/^(.+) \(([^()]+)\)$/);
-    const info = c?.[2] ?? "";
-    const kind = info.match(/^(equipment|utility|keepsake)\b/)?.[1] ?? (/\bof 10$/.test(info) ? "bag" : null);
-    if (!c || !kind) {
-      warn(`can't read "${seg}" in what they carry`);
-      continue;
-    }
-    if (kind === "keepsake") carry.keepsake = plain(c[1]);
-    else if (kind === "bag") carry.bag = { name: plain(c[1]), max: Number(info.match(/\bof (\d+)$/)?.[1] ?? 10) };
-    else carry[kind] = c[1].split(", ").map((x) => plain(x));
-  }
-
-  // Armour: each piece on a Root, its quality first and its boxes by it.
-  const armour = dots(dropStop(field.Armour ?? "")).map((seg) => {
-    const a = seg.match(/^(.+?) \((\w+), (\d+) box(?:es)?(?:, (when [^)]+))?\)$/);
-    if (!a) {
-      warn(`can't read the armour "${seg}": it's the piece, quality first, then (Root, its boxes)`);
-      return null;
-    }
-    const q = qualityOf(plain(a[1]), ctx.qualities);
-    if (!q) warn(`${a[1]} is armour, and it needs its quality first: ${ctx.qualities.map((x) => x.name).join(", ")}`);
-    else if (ctx.qualities[q.tier - 1]?.boxes !== Number(a[3])) warn(`${a[1]} says ${a[3]} boxes, but ${ctx.qualities[q.tier - 1]?.name} has ${ctx.qualities[q.tier - 1]?.boxes}`);
-    if (!carry.equipment.some((e) => plain(e) === plain(a[1]))) warn(`${a[1]} is armour, so it's one of their equipment, and it isn't`);
-    return { name: q ? q.name : plain(a[1]), root: rootOf(a[2], a[1]), quality: q ? ctx.qualities[q.tier - 1].name : null, boxes: Number(a[3]), when: a[4] ? curly(a[4]) : null };
-  }).filter(Boolean);
-
-  // The attuned thing: its stage, its own way to Aura and its awakenings.
-  const attunedLabel = labelled(/^Attuned\b/);
-  const stage = attunedLabel?.match(/\(([^)]+)\)/)?.[1] ?? null;
-  if (!attunedLabel) warn("there's no Attuned line");
-  else if (!(stage in STAGE_AWAKENINGS)) warn(`the attuned thing's stage is ${stage}, and it's Awakened, Tempered or Perfected`);
-  const thing = attunedLabel ? field[attunedLabel] : "";
-  const caught = thing.match(/, with its Catch, \*([^*]+)\*/);
-  const awakenings = dots(dropStop(field.Awakenings ?? "")).map((seg) => {
-    const w = seg.match(/^\*([^*]+)\* \((passive|active)\): (.+)$/);
-    if (!w) warn(`can't read the awakening "${seg.slice(0, 40)}…": it's *its name* (passive or active): what it does`);
-    return w ? { name: plain(w[1]), kind: w[2], text: curly(w[3]) } : null;
-  }).filter(Boolean);
-  const room = (STAGE_AWAKENINGS[stage] ?? 1) * (caught ? 2 : 1);
-  if (awakenings.length !== room) warn(`the attuned thing has ${awakenings.length} awakenings, and at ${stage}${caught ? " with its Catch" : ""} it's got ${room}`);
-  const attuned = { name: plain(thing.replace(/\..*$/, "").replace(/, with its Catch.*$/, "").replace(/ \([^)]*\)$/, "")), props: thing.match(/^[^(.]+\(([^)]+)\)/)?.[1] ?? null, stage, catch: caught ? plain(caught[1]) : null, aura: curly(plain(field["Its Aura"] ?? "")), awakenings };
-
-  // The numbers: Aura, the three tracks at d12 to start, and the stride.
-  const n = field.Numbers ?? "";
-  const num = (re, what) => {
-    const m = n.match(re);
-    if (!m) warn(`can't find ${what} in the numbers`);
-    return m;
-  };
-  const tracks = Object.fromEntries(Object.values(TRACK_OF).map((tr) => {
-    const m = num(new RegExp(`\\b${tr} d(\\d+)(?: \\(([^)]+)\\))?`), tr);
-    if (m && m[1] !== "12") warn(`${tr} starts at d12, and the sheet says d${m[1]}`);
-    return [tr.toLowerCase(), { die: Number(m?.[1] ?? 12), note: m?.[2] ? curly(m[2]) : null }];
-  }));
-  if (/\bWound die\b|\bConfidence starts\b|\bResolve \d\b/.test(n)) warn("the numbers still have the wound die, Confidence's start or a Resolve count, and the tracks are Stamina, Confidence and Resolve at d12");
-  const numbers = {
-    aura: Number(num(/\bAura (\d+)/, "Aura")?.[1] ?? 5),
-    stride: Number(num(/\bStride (\d+)/, "Stride")?.[1] ?? 3),
-    strideNote: n.match(/\bStride \d+ \(([^)]+)\)/)?.[1] ?? null,
-    ...tracks,
-  };
-
-  const threads = dropStop(field.Threads).split(" · ").filter(Boolean).map((seg) => {
-    const t = seg.match(/^([^:*]+): (.+)$/);
-    if (!t) {
-      warn(`can't read the threads "${seg}"`);
-      return null;
-    }
-    const person = curly(t[1]);
-    const list = [...t[2].matchAll(/\*([^*]+)\*(?: \(([^)]+)\))?/g)].map((x) => threadFrom(plain(x[1]), x[2], (msg) => warn(`the thread with ${person}, ${msg}`)));
-    if (!list.length) warn(`no threads with ${person}`);
-    return { person, threads: list };
-  }).filter(Boolean);
-  const crewQs = [...(field.Crew ?? "").matchAll(/\*([^*]+?\?)\*\s+([^*]+)/g)].map((x) => ({ q: curly(x[1]), a: curly(x[2].trim()) }));
-  const asp = (field.Aspiration ?? "").match(/^(.+) \(d(\d+)\)\.?$/);
-  if (!asp) warn("can't read the Aspiration");
-  const troubleLabel = labelled(/^Trouble that follows\b/);
-  if (!troubleLabel) warn("there's no trouble that follows them");
-  return {
-    id: name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
-    name,
-    title: curly(titleText),
-    blurb: plain(rows[0]),
-    hash: createHash("sha1").update(block).digest("hex").slice(0, 8),
-    pronoun: troubleLabel?.split(" ").pop() ?? "them",
-    playsLike: ctx.inline(field["Plays like"] ?? ""),
-    archetypes, titles,
-    roots: Object.fromEntries(ROOT_NAMES.map((r) => [r, roots[r]])),
-    specialties: [...saidSpecs].map(([s, steps]) => ({ name: s, steps })),
-    carry, armour, attuned, numbers, threads, crewQs,
-    aspiration: { text: curly(asp?.[1] ?? ""), die: Number(asp?.[2] ?? 2) },
-    trouble: troubleLabel ? italics(field[troubleLabel]) : [],
-  };
-}
-
-// One thread off a crew sheet. Its note has to say bond or hostile, and it can
-// say whose words it is and that it's strained, in that order. Anything else
-// stops the build, a debt included, since there's no debt any more.
-function threadFrom(text, raw, warn) {
-  const parts = raw ? curly(raw).split(/,\s*/) : [];
-  const whose = /’s$/.test(parts[0] ?? "") ? parts.shift() : null;
-  const kind = parts.shift();
-  const strained = parts[0] === "strained";
-  if (strained) parts.shift();
-  if (kind !== "bond" && kind !== "hostile") warn(`“${text}”, says ${raw ? `(${raw})` : "nothing in brackets"}, and every thread has to say bond or hostile`);
-  if (parts.length) warn(`“${text}”, has “${parts.join(", ")}” in its brackets, and they only take whose it is, bond or hostile, and strained`);
-  const t = { text, kind: kind === "hostile" ? "hostile" : "bond", whose, strained };
-  return { ...t, note: threadNote(t) };
-}
-
-// A thread with someone in the crew goes on both sheets, the same words and
-// the same kind, and it's in someone else's words on exactly one of them.
-function checkMirrors(crew, warn) {
-  const byName = new Map(crew.map((c) => [c.name, c]));
-  for (const c of crew) {
-    for (const p of c.threads) {
-      const other = byName.get(p.person);
-      if (!other) continue;
-      for (const t of p.threads) {
-        const back = other.threads.find((x) => x.person === c.name)?.threads.find((x) => x.text === t.text);
-        if (!back) warn(`${c.name}'s thread with ${p.person}, “${t.text}”, isn't on ${p.person}'s sheet`);
-        else if (back.kind !== t.kind) warn(`${c.name}'s thread with ${p.person}, “${t.text}”, is ${t.kind} on one sheet and ${back.kind} on the other`);
-        else if (Boolean(back.whose) === Boolean(t.whose)) warn(`${c.name}'s thread with ${p.person}, “${t.text}”, needs to say whose it is on one sheet and not the other`);
-        else if (back.strained !== t.strained) warn(`${c.name}'s thread with ${p.person}, “${t.text}”, is strained on one sheet and not the other`);
-      }
-    }
-  }
-}
 
 // What each archetype does, what 1 Aura gets it and what its 1 Resolve
 // spend is, from The Archetypes, and what it's for, from the table in Picking
@@ -1285,8 +1033,9 @@ const ctx = {
   qualities: qualitiesFrom(docWith("{#s-armour-quality}"), (msg) => companionWarn(msg)),
 };
 const crewDoc = docWith("{#s-pregens}");
-// The crew under Roots, checked and kept for the book and for stage 3.
-const roots = crewDoc ? rootsFrom(crewDoc, ctx) : [];
+// The crew on stacking (notes/stacking-plan.md), every sheet checked as it's
+// read (scripts/crew-sheets.mjs).
+const roots = crewDoc ? crewFrom(crewDoc, ctx) : [];
 if (roots.length !== 6) companionWarn(`expected the six crew sheets, found ${roots.length}`);
 checkMirrors(roots, companionWarn);
 const buildDoc = docWith("{#s-step-roots}");
@@ -1551,9 +1300,10 @@ writeFileSync(join(ROOT, "src", "generated", "worlds.json"), JSON.stringify(whol
 // What the World screen offers to bring into a campaign (stage 14), and what
 // the Worker knows is a whole world's: each year's id, its title and when it
 // starts, whose it is, and what's in it, but nothing of the world itself.
-// The crew's archetypes, for the Worker's live table, which caps the extra
-// actions each of them can buy with Aura at one for each archetype past the
-// first, and for the table screen's crests.
+// The crew's archetypes, one name for each, an archetype taken twice named
+// twice: the table screen's crests, and the Worker's live table, which caps
+// the extra actions bought with Aura by them till it checks their price
+// instead (notes/stacking-plan.md, prompt 8).
 writeFileSync(join(ROOT, "src", "generated", "crew-archetypes.json"), JSON.stringify(Object.fromEntries(crew.map((c) => [c.id, c.archetypes.map((a) => a.name)]))));
 writeFileSync(join(ROOT, "src", "generated", "worlds-index.json"), JSON.stringify(Object.values(wholeWorlds).flat().map((w) => ({
   id: w.id, universe: w.universe, name: w.name, title: w.title, when: w.when, own: w.own, whose: w.whose, notices: w.notices, recipe: w.recipe,

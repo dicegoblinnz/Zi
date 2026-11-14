@@ -25,7 +25,13 @@ None yet.
 
 ### 2. The crew and the character
 
-None yet.
+1. **The quick build spends 35 points the crew's way**: two archetypes with a second ability each (12), two Titles with three permissions each (14), one attuned thing (5) and four things you carry (4). Take the same archetype twice and each comes with its own ability, so that's 2 more points for what you carry, the way Vesk and Wren did.
+2. **A Boon's 2 points**, the two permissions it's in place of. A Title with no permission puts the one it comes with towards its first Boon, so that one's 1.
+3. **Armour's 1 point like anything else you carry**, whatever its quality. One piece can still be Fine at the start.
+4. **An attuned thing's awakenings past the ones it comes with are 1 point each** (its first, and a second with a Catch), whatever its stage.
+5. **A passive awakening now says "for each Aura powering it"** on the crew's sheets, where it said "for each Aura in it".
+6. **Characters already saved keep the Aura they had** when they move across. The extra 2 from their attuned thing comes at their next scene, when Aura's full again.
+7. **What a saved character's player gets asked to choose:** how each Title spreads its 3 Root points, if it was on one Root before (it starts as all 3 on that one), and any points they've got left, if a character built on the phone comes to less than 35 now.
 
 ### 3. Traits
 
