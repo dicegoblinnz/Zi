@@ -220,6 +220,7 @@ Built 14 Nov on `rules/2026-11-14-stacking-traits`, and landed. Mo said yes to t
 For the other prompts:
 
 - **12, bringing it together:** CLAUDE.md's archetypes and builder lines want the Traits (`trait` with `short` off Appendix D), seventeen archetypes and no Scholar. `tools/fight_sim.py` wants running again with the Traits, since six of them pay Aura and the Leader's, the Oracle's and the Warrior's change how a round goes. The kit keeps the Scholar's sigil (`src/kit/sigils.js`), since a character built with one on a phone before 14 Nov still has it: the play screen shows it with no Trait or abilities, paying from Stamina, and Change says it isn't one any more, with Pick one. If the move across (`normalRoots()`, `choose`) wants to ask them, that's the place.
+- **When the core cut (`rules/2026-11-14-core`) meets stacking:** the Scholar's lines in 06, 09, 10, 11 and 26 go with the chapters it sets aside, but it changed lines near the Scholar in 02, 19, 32, 33, 35 and 36 too, so keep stacking's Oracle and *Foretold* wherever they clash. `check_terms.py` flags any Scholar that comes back.
 - **Anyone writing an example with Isolde:** she's an Oracle twice, so Oracle's 2 steps where it fits (her foresight), and nothing on her sheet's a Scholar now. Her Study of something old is her Mind, her second Title and *know the history of anything old*, 9 steps.
 
 ### 4. Question bubbles
