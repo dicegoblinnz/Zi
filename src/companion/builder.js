@@ -364,7 +364,7 @@ function makeSheet(ch, b, B) {
     pronoun: b.pronoun,
     playsLike: esc(plays.join(", and ") || both(names) || "your own"),
     points: { start: b.start },
-    archetypes, titles, roots: rootsOf(b).roots, specialties: [],
+    archetypes, titles, roots: rootsOf(b).roots,
     carry: { equipment: kit.map((e) => e.text.trim()), utility: b.utility.slice(0, n.utility).map((x) => x.text.trim()).filter(Boolean), keepsake: b.keepsake.text.trim() || null, bag: { name: b.bagName || "a bag", max: 10, items: bagOf(b).slice(0, 10) } },
     armour, attuned,
     numbers: { aura: n.aura, stride: 3, strideNote: null, stamina: { die: 12, note: null }, confidence: { die: 12, note: null }, resolve: { die: 12, note: null } },

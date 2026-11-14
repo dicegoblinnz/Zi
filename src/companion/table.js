@@ -1692,7 +1692,9 @@ export function makeTable(d) {
         if (!was) return;
         const still = was.paid && hit ? hit.round.tele.find((t) => t.id !== o.id && s.tele.i?.[t.id] && t.at.user === hit.t.at.user && t.at.ch === hit.t.at.ch) : null;
         if (still) s.tele.i[still.id] = { ...s.tele.i[still.id], paid: 1 };
-        else if (was.paid) s.aura = Math.min(c.numbers.aura, s.aura + 1);
+        // Its Aura back, up to the maximum less what's powering, or past it
+        // while they're acting.
+        else if (was.paid) R.gainAura(s, c, 1);
         record(s, id, "i", o.id, null);
       } else {
         const round = local(id).rounds.find((r) => r.id === o.round);
@@ -2222,7 +2224,7 @@ export function makeTable(d) {
         // Still taking another one for the same friend, it carries the Aura now.
         const still = was.paid ? hit.round.tele.find((t) => t.id !== hit.t.id && s.tele.i?.[t.id] && t.at.user === hit.t.at.user && t.at.ch === hit.t.at.ch) : null;
         if (still) s.tele.i[still.id] = { ...s.tele.i[still.id], paid: 1 };
-        else if (was.paid) s.aura = Math.min(c.numbers.aura, s.aura + 1);
+        else if (was.paid) R.gainAura(s, c, 1);
         record(s, id, "i", hit.t.id, null);
         return `It’s back on ${hit.t.at.name}.${was.paid && !still ? ` Your Aura’s back too: ${s.aura}.` : ""}`;
       });

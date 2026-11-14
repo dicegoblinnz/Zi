@@ -1320,14 +1320,6 @@ if (existsSync(worldsDir)) {
 // The pages under /worlds/ read every year of each universe from here.
 mkdirSync(join(ROOT, "src", "generated"), { recursive: true });
 writeFileSync(join(ROOT, "src", "generated", "worlds.json"), JSON.stringify(wholeWorlds));
-// What the World screen offers to bring into a campaign (stage 14), and what
-// the Worker knows is a whole world's: each year's id, its title and when it
-// starts, whose it is, and what's in it, but nothing of the world itself.
-// The crew's archetypes, one name for each, an archetype taken twice named
-// twice: the table screen's crests, and the Worker's live table, which caps
-// the extra actions bought with Aura by them till it checks their price
-// instead (notes/stacking-plan.md, prompt 8).
-writeFileSync(join(ROOT, "src", "generated", "crew-archetypes.json"), JSON.stringify(Object.fromEntries(crew.map((c) => [c.id, c.archetypes.map((a) => a.name)]))));
 // A world taken off the site (content/worlds/retired.yaml, 14 Nov) stays in
 // the index as retired, with whose it is and its notices and nothing else,
 // so a campaign that brought it in before still shows them and the Worker
@@ -1340,6 +1332,9 @@ try {
   companionWarn(`worlds: can't read content/worlds/retired.yaml: ${String(err?.message ?? err).split("\n")[0]}`);
 }
 for (const r of retired) if (!r?.id || !r.universe || !r.name || !r.title || (!r.own && (!r.whose || !r.notices?.length))) companionWarn(`worlds: retired.yaml's ${r?.id ?? "?"} needs an id, a universe, a name, a title, and whose it is with its notices unless it's own`);
+// What the World screen offers to bring into a campaign (stage 14), and what
+// the Worker knows is a whole world's: each year's id, its title and when it
+// starts, whose it is, and what's in it, but nothing of the world itself.
 const builtIds = new Set(Object.values(wholeWorlds).flat().map((w) => w.id));
 writeFileSync(join(ROOT, "src", "generated", "worlds-index.json"), JSON.stringify([
   ...Object.values(wholeWorlds).flat().map((w) => ({
