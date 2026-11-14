@@ -581,7 +581,7 @@ Her d12 won, and that's 1 Aura, but she's already on 7, so it'll be gone once sh
 
 **Vesk:** 9, 3 and 1, and the d8's a 4. **GM:** Three padlocks open, three canvases cut free, and one roll under your arm. Only *Heavy Load* is left in the way.
 
-**Vesk:** That's 1 Aura, so I'm on 8, and I'll put 2 into my grappling line while I'm still acting. I've got a feeling I'll be climbing.
+**Vesk:** That's 1 Aura, so I'm on 8, and I'll power *Anywhere I can throw a hook* with 2 while I'm still acting. I've got a feeling I'll be climbing.
 
 **GM:** That's 6, and it comes off your maximum as well, so that's 5 till the scene ends, and you'll be on 5 when you're done. *Anywhere I can throw a hook* is +2 on one die of every roll you make with the line.
 :::
@@ -629,9 +629,9 @@ One Warden's down, and three of its four keeps-it-going tags weren't even touche
 
 **GM:** That strips *Blocked*, because you don't need the door. But hauling three canvases up a rope is *Heavy Load*.
 
-**Vesk:** My Body, my first Title, my grappling line and *Anywhere I can throw a hook*, 11 steps, a d12 and a d10, on *Blocked*. And there's 2 powering the line, so that's +2 on whichever die needs it. ...5 and 3, and the stake's d8 is a 6, so the +2 goes on the 5. **GM:** That's 7. You're up the rope before the Warden turns around.
+**Vesk:** My Body, my first Title, my grappling line and *Anywhere I can throw a hook*, 11 steps, a d12 and a d10, on *Blocked*. And there's 2 powering *Anywhere I can throw a hook*, so that's +2 on whichever die needs it. ...5 and 3, and the stake's d8 is a 6, so the +2 goes on the 5. **GM:** That's 7. You're up the rope before the Warden turns around.
 
-**Vesk:** Nothing on my sheet plainly fits hauling. **Bram:** Stay up there. I'll get it to you next round.
+**Vesk:** I can't haul three canvases up on my own. **Bram:** Stay up there. I'll get it to you next round.
 :::
 
 Her 7 won, but the line added to it after she rolled, so it doesn't pay any Aura.
@@ -658,7 +658,7 @@ Bram took the crew's spears last round, so Dorrie spends 3 Aura for an extra act
 
 At the end of the round the household clock steps down to its last die. When it runs out there'll be lamps lit on every floor, but by then the crew will be three roofs away, and the maid will be swearing she saw a stranger.
 
-When the scene ends, everyone rests. Two tracks are below d12. Isolde's Confidence is on d10, and it rolls a 6, so it's back to d12. Bram's Stamina's on d10 too, and it rolls a 3, so it stays there till downtime. Bram's plate keeps its ticked box and Vesk's leathers stay crossed out until they're mended in downtime. Nothing's powering Vesk's line any more, so her maximum's 7 again for the next scene.
+When the scene ends, everyone rests. Two tracks are below d12. Isolde's Confidence is on d10, and it rolls a 6, so it's back to d12. Bram's Stamina's on d10 too, and it rolls a 3, so it stays there till downtime. Bram's plate keeps its ticked box and Vesk's leathers stay crossed out until they're mended in downtime. Nothing's powering *Anywhere I can throw a hook* any more, so Vesk's maximum's 7 again for the next scene.
 
 ### What the fight taught {#what-the-fight-taught}
 
@@ -667,7 +667,7 @@ When the scene ends, everyone rests. Two tracks are below d12. Isolde's Confiden
 -   **Everything that fit went in.** Isolde's Study counted both her Titles, three permissions, Scholar and her lens, and when Bram had only one thing that fit the sigil, he brought that one.
 -   **Every cost was out in the open.** Bram traded a pin for a size of Stamina, Vesk gave up her leathers to keep her ward, Bram's plate took one spear and his Stamina the other, and Isolde chose to let the portrait shake her rather than pay 2 for 1. Nobody lost anything they didn't see coming.
 -   **One die stops one.** In round 1 Bram Defended, so he had four dice for two telegraphs. In round 2 his action went on the sigil, so his Stamina faced two spears on its own, and it cost him a box and a size.
--   **Aura moved all fight.** Every win paid. Isolde turned a good Study into an extra action and a ward she had to make a case for, Vesk powered her grappling line for the climb and played the rest of the scene on a maximum of 5, and Dorrie spent hers on an extra action and a quick heal.
+-   **Aura moved all fight.** Every win paid. Isolde turned a good Study into an extra action and a ward she had to make a case for, Vesk powered her line's awakening for the climb and played the rest of the scene on a maximum of 5, and Dorrie spent hers on an extra action and a quick heal.
 -   **One action each made them work together.** The sigil fell to a combo, Bram intercepted the spears at Dorrie and Isolde for free, and Dorrie spent her extra action patching him up.
 
 Isolde doesn't take a Scar this time. She takes something better: the name of the person who was inside the armour, and the knowledge that there are more of them in this house.

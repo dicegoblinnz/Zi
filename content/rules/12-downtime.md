@@ -121,7 +121,7 @@ Vesk's only thread with Bram is a bond thread: the fire he carried her out of, a
 
 Dorrie's slot is a roll at the Goal, sending Vane's investigators the wrong way: her Mind, both Titles, *make a lie sound like old news*, *keep my story straight under questions* and Face, 11 steps, a d12 and a d10, against the Goal's d4. Her best is 6 against 3, so the Goal climbs to d6. Her new permission puts her Soul up to 5.
 
-Isolde's Aspiration roll is her Mind, both Titles, *find what I need in any library* and Scholar, 11 steps, a d12 and a d10, against its d6. Her best is 5 against 5, and the tie goes to the Aspiration. There's no Aura in downtime, so she pays 1 Resolve to roll again, gets a 7, and it climbs to d8. Her new permission puts her Mind up to 8.
+Isolde's Aspiration roll is her Mind, both Titles, *find what I need in any library* and Scholar, 11 steps, a d12 and a d10, against its d6. Her best is 5 against 5, and the tie goes to the Aspiration. There's no Aura in downtime, so she pays 1 Resolve to roll again, gets a 7, and it climbs to d8. Her new permission goes on after that roll, and puts her Mind up to 8 for next time.
 
 Bram's slot mends his plate. His ribs don't need one: he finished last session with his Stamina on a d8, and downtime started by putting it up to d10. If he wants it back to d12 before the next job, that's a slot on healing.
 

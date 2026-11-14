@@ -196,7 +196,7 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 
 -   Four pressures: personal, party, faction, world. Ignore one and it gets worse, and twice makes it a scene. Every faction's action is telegraphed at the start, and rolled after the slots.
 -   Two personal slots each, and the crew takes one action, like any faction. A personal slot can go into the crew's action. Every downtime starts with each of your tracks up a size.
--   **Recover:** heal, 6 sizes back on your tracks however you like · mend something broken, or a piece of armour with boxes ticked. **Grow:** a slot buys what a point does: a new permission on a Title · a new ability off an archetype's list · something to carry. Or it's a new thread, or a roll at your Aspiration.
+-   **Recover:** heal, 6 sizes back on your tracks however you like · mend something broken, or a piece of armour with boxes ticked. **Grow:** a slot buys what a point does: a new permission on a Title · a new ability off an archetype's list · a new awakening · something to carry. Or it's a new thread, or a roll at your Aspiration.
 -   **Mend a thread** you've strained by making it right with them. Downtime's one place for it, and a scene with them is the other.
 -   **Swap** a permission for another that fits your Title, or two for a Boon, and back. **Attune:** a slot for each new awakening, and the material for a new stage. A soul you're carrying goes into your summoning attunement.
 -   Ties go to the defender. No Aura: pay 1 Resolve to roll your dice again, or an extra crew resource to take the tie.
