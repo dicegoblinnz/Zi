@@ -1,7 +1,7 @@
 // The player reference: Appendix D in Mo's words, four A4 pages in the kit's
 // Paper theme. The table's most-used rules come first: the round and rolling,
-// then the tracks and defence, then Aura and the archetypes, then your
-// character, threats and gear. Each page is one part, and each part
+// then the tracks, defence and threats, then Aura and the archetypes, then
+// your character, downtime and gear. Each page is one part, and each part
 // takes sections of Appendix D by id, whole or with some of their bullets, so
 // the reference never says anything the quick reference doesn't. A few are
 // drawn with the kit as well as said: the round as its three steps, the steps
@@ -41,11 +41,11 @@ const PAGES = [
     ],
   },
   {
-    title: "The tracks and defence",
-    short: "Tracks and defence",
+    title: "The tracks, defence and threats",
+    short: "Tracks and threats",
     blocks: [
       { panel: "tracks", ids: ["s-qr-tracks"] },
-      { flow: [{ id: "s-qr-tracks" }, { id: "telegraphs-and-defence" }, { id: "consequences-the-gm-names-one" }, { id: "conditions" }] },
+      { flow: [{ id: "s-qr-tracks" }, { id: "telegraphs-and-defence" }, { id: "consequences-the-gm-names-one" }, { id: "conditions" }, { id: "s-qr-threats", drop: ["**Round budget:**", "**Threat budget:**"] }] },
     ],
   },
   {
@@ -58,14 +58,13 @@ const PAGES = [
     ],
   },
   {
-    title: "Your character, downtime, threats and gear",
-    short: "Character and threats",
+    title: "Your character, downtime and gear",
+    short: "Character and gear",
     blocks: [
       { flow: [
         { id: "your-character" },
         { id: "stakes-clocks-events", heading: "Things that climb", only: ["Things that climb"] },
         { id: "s-qr-downtime" },
-        { id: "s-qr-threats", drop: ["**Round budget:**", "**Threat budget:**"] },
         { id: "study" },
         { id: "stakes-clocks-events", drop: ["Things that climb"] },
         { id: "s-qr-chases" },
@@ -182,10 +181,13 @@ function economy(sectionsFound) {
     const spend = items.find((b) => b.startsWith("**Spend 1:**"));
     const get = items.find((b) => b.startsWith("**Get 1 back:**"));
     if (!spend || !get) throw new Error(`Appendix D, ${section.heading}: there's no "Spend 1" or "Get 1 back" bullet any more`);
-    if (items.indexOf(get) !== items.indexOf(spend) + 1) throw new Error(`Appendix D, ${section.heading}: "Get 1 back" has to come straight after "Spend 1", since they're drawn side by side`);
+    if (items.indexOf(get) < items.indexOf(spend)) throw new Error(`Appendix D, ${section.heading}: "Get 1 back" has to come after "Spend 1", since they're drawn side by side in that order`);
     const list = (b, lead) => `<ul>${b.slice(lead.length).trim().replace(/\.$/, "").split(" · ").map((x) => `<li>${inline(x.charAt(0).toUpperCase() + x.slice(1))}</li>`).join("")}</ul>`;
+    // What comes before Spend 1 goes above the two lists, and everything
+    // after it that isn't Get 1 back (powering, extra actions) goes under them,
+    // in the order Appendix D has it.
     const before = items.slice(0, items.indexOf(spend)).map((b) => `<p>${inline(b)}</p>`).join("");
-    const after = items.slice(items.indexOf(get) + 1).map((b) => `<p>${inline(b)}</p>`).join("");
+    const after = items.slice(items.indexOf(spend) + 1).filter((b) => b !== get).map((b) => `<p>${inline(b)}</p>`).join("");
     return `<section class="qr"><h2>${icon[id] || ""}${section.heading}</h2>${before}<div class="lists"><div><h3>Spend 1</h3>${list(spend, "**Spend 1:**")}</div><div><h3>Get 1 back</h3>${list(get, "**Get 1 back:**")}</div></div>${after}</section>`;
   }).join("")}</section>`;
 }

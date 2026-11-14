@@ -6,7 +6,7 @@ order: 10
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::quote
 Somebody built this place to keep people out, and something else has moved in since.
@@ -71,11 +71,11 @@ When a place needs something in it, roll a d8.
 :::example[The vaults under the library]
 Vesk, Isolde and Bram are going down into the vaults under the burned library of Isolde's order, after the catalogue of everything it held. The GM's built the site at Challenge 4, a d8. *The catalogue* is the stake, with *Warded Door* and *Locked Cage* in the way. The alarm's a d8, and when it runs out, the Keeper wakes. There are four places, the stair, the scriptorium, the bone room and the archive, and the secret is that the fire started down here.
 
-**The stair.** Vesk goes first, and she Studies the stair before anyone puts a foot on it. A trap's a lock with teeth, so it's her Mind and her Locks, 7 steps. She's got time, so the GM gives her two actions, and the second brings in her Climbing, because she's testing every step for give before she trusts her weight to it. That's 9 steps, a d12 and a d6. She rolls 5 and 3, and the site's d8 comes up 2. She asks for a hidden tag and gets *Pressure Plate on the Fifth Step*. Now that they know it's there, nothing's pushing back, so they step over it without a roll.
+**The stair.** Vesk goes first, and she Studies the stair before anyone puts a foot on it. A cat burglar raised by the Guild knows a trap when she sees one, so it's her Mind and both Titles, and a trap's a lock with teeth, so she pays 1 Aura to make the case for *know how a lock's built*. She's got time, so the GM gives her an extra action, 1 more step and a split, and she spends it testing every step for give before she trusts her weight to it. That's 8 steps, a d12 and a d4. She rolls 5 and 3, and the site's d8 comes up 2. She asks for a hidden tag and gets *Pressure Plate on the Fifth Step*. Now that they know it's there, nothing's pushing back, so they step over it without a roll.
 
 **The scriptorium** is ash and fallen shelves, and they're through it in a sentence. **In the bone room**, a moor cat's asleep on a heap of old bones. It's helpless while it sleeps, so one win from Bram would end it, but a fight's loud, so they creep past.
 
-**The archive.** The door's warded with the order's own sigils. Isolde's ward-breaking is her Soul and her Warding, with her chalk and salt, 6 steps. Nobody's hurrying her either, so she takes two actions, and the second brings in her Dead languages, because the sigils are written in the order's old script. That's 10 steps, a d12 and a d8. Before she rolls, the GM telegraphs: "Break that badly and it screams. A d6 at the alarm." Isolde puts the d12 on the ward and the d8 on the scream. The d12 rolls 6 against the door's 5, and *Warded Door* is gone. The d8 rolls 3 against the scream's 6, so it lands. The alarm steps down to a d6, and somewhere below them, something turns over in its sleep.
+**The archive.** The door's warded with the order's own sigils. The sigils are written in the order's old script, so breaking the ward is her Soul, her first Title, *read the order's old script*, *read dead languages* and her chalk and salt, 9 steps. Nobody's hurrying her either, so she takes an extra action, 1 more step and a split. That's 10 steps, a d12 and a d8. Before she rolls, the GM telegraphs: "Break that badly and it screams. A d6 at the alarm." Isolde puts the d12 on the ward and the d8 on the scream. The d12 rolls 6 against the door's 5, and *Warded Door* is gone. The d8 rolls 3 against the scream's 6, so it lands. The alarm steps down to a d6, and somewhere below them, something turns over in its sleep.
 
-The catalogue's in an iron cage. Vesk's Body and her Locks, with her picks, are 10 steps, a d12 and a d8. Her best is a 6, and so's the cage. A tie goes to the defender, so she pays 1 Aura to win it, and the catalogue's theirs. Now they've got to carry it back up past the moor cat with the alarm at a d6.
+The catalogue's in an iron cage. Vesk's Body, both Titles, *pick a mechanical lock*, *know how a lock's built* and her picks are 13 steps, two d12s and a d2. Her best is a 6, and so's the cage. A tie goes to the defender, so she pays 1 Aura to win it, and the catalogue's theirs. Now they've got to carry it back up past the moor cat with the alarm at a d6.
 :::

@@ -29,6 +29,10 @@ Mo's calls in chat, the first part of a rework that comes in parts.
 
 **Characters already made keep everything they've got**, even past 35 points. Their Roots are recounted with each Title's 3 on the Root it was on, and you can spread them again.
 
+**The conditions *Inspired* and *Surging*** are a step on one kind of thing, named when they're placed, and a spent *Surging* makes one die of a roll it fits a d12. It replaces a step on one of your specialties. See [Conditions to start with](#s-conditions-list).
+
+**The rest of the player's chapters read the new way**, with every example on the crew's 35-point sheets: [Conflict](#conflict), [Tactical Play](#tactics), [Magic](#magic), where calling a Summoner's souls spends Aura like any active awakening, [Chases](#chases), [Travelling](#travelling), [Exploring](#exploring), [Investigating](#investigating), [Downtime](#grow), where a slot buys what a point does, [Growing](#vesk-session-1-to-20), with Vesk's twenty sessions on points, and [Coin and Kit](#s-rare), where every attuned thing from the story puts 2 on your Aura maximum and has its passive awakenings powered.
+
 ## 9 Nov 2026: The GM's budgets, and the rest of the book {#c-2026-11-09-budgets}
 
 To go with [Roots, specialties and three tracks](#c-2026-11-08-roots).

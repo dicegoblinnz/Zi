@@ -80,17 +80,34 @@ None yet.
 2. **Answering starts with the Root.** Answer it, Work it and Something else's roll show Body, Mind and Soul with each one's number and what it's for, and the roll card opens on the one you pick to tap what fits.
 3. **Putting your action into a friend's answer is a tap on everything of yours that fits**, a row to each Title, archetype and attuned thing, then how many of them you'll have to explain, 1 Aura each, paid when it goes in and given back if you take it back before they roll. It needs one thing at least.
 4. **An answer reads as its steps on its Root**, like "Wren answered it with 17 steps on Body: 11 against its 6", on the GM's phone, the player's and the table screen. A friend's part reads as their steps, "3 steps into whoever answers the attendant". One rolled before stacking still says the specialty it rolled.
-5. **The learning round's combo is 17 steps.** Wren's arrow is her Body, both Titles, Hunter twice, her longbow and *Long shot*, 12 steps, the same as shooting from cover. Bram's hammer under the club is *The wall that held the harbour gate*, *guard one person*, Guardian, his war hammer and *Ring the bell*, 5 steps, with his plate and shield left out since he's using his hammer. That's two d12s and a d10 against the club's d8.
+5. **The learning round's combo is 17 steps**, the same as the book's Answering together. Wren's arrow is her Body, both Titles, Hunter twice, her longbow and *Long shot*, 12 steps, the same as shooting from cover. Bram's hammer under the club is *The wall that held the harbour gate*, *guard one person*, Guardian, his war hammer and *Ring the bell*, 5 steps, with his plate and shield left out since he's using his hammer. That's two d12s and a d10 against the club's d8.
 6. **The table screen keeps its words on the screen.** Its code page is read on a TV from across the room, where nobody taps, so the bubbles are for the phone.
 7. **A roll on a Root from Something else goes down as "a roll on Body"**, and the roll card only opens once it's gone down as your action.
 
 ### 9. Print
 
-None yet.
+The paper sheet in today's look with part 1's fields (14 Nov, `notes/stacking-plan.md` section 9). None of these touch a rule.
+
+1. **Your attuned things moved to the front, under what you carry, and Notes to the back, under your bonds.** Two attuned things fit with all six awakening lines each that way, and the boxes for what's powering them sit on the same side as Aura's maximum they come off. On the back there wasn't room for a second one.
+2. **Each Root sits over its own track**: Body over Stamina, Mind over Confidence and Soul over Resolve, each with a big box for what it adds up to. That's how all three of your new looks put a Root's seal with its track, so whichever you pick can take each one whole.
+3. **Where a Root's points came from is each Title's spread and the permissions on it**, the way The Core counts Vesk's Body: 3 from her first Title, 1 from her second and 4 from her permissions. The Titles go by I to VI, the same as their cards on the back.
+4. **A permission's Root is B, M or S to ring**, which leaves its line room for the words.
+5. **Banked points is a box with nothing in it** till growing by points is settled, and print leaves it for you. Points spent says what you started on too, 35 of 35, so points still to spend show.
+6. **Extra actions' price is in the bar where Actions was**, with no box, since there's no cap to write down.
+7. **An archetype's card has its name with its home track ringed beside it**, with no labels, so its mechanic gets two lines like its Trait. The old card cut most mechanics off.
+8. **The player reference's Threats moved from page 4 to page 2**, now The tracks, defence and threats. Points made Your character longer, and page 4 was 10mm over.
 
 ### 10. The player's chapters
 
-None yet.
+Written into Conflict, Tactical Play, Magic, the side chapters, Downtime, Playing Your Way, Session Zero, Growing, Coin and Kit, the rest of Appendix D and the Learn deck on 14 Nov.
+
+1. **Isolde's wards are for the dead.** *Draw a ward the dead can't cross* plainly fits the dead, so against an Iron Warden, with a dead man inside it, she makes her case for 1 Aura, and against arrows or a living blade it's going beyond, 1 Aura. Her wards used to be her Warding specialty, which covered anything.
+2. **A keepsake's a step when it fits**, like anything you carry: Wren's torn map when she's finding the abbey road, and Dorrie's letter of introduction when she's getting in front of a magistrate.
+3. **The same roll can count differently.** Bram behind his shield is 14 steps, and 15 when he's guarding one of the crew, since *guard one person* fits then. The book counts what plainly fits each time.
+4. **Inspired and Surging** are a step on one kind of thing, named when they're placed, where they were a step on one of your specialties, and a spent *Surging* makes one die of a roll it fits a d12.
+5. **Someone joining later builds on what the crew's worth.** A new character, or one replacing a character who retired or died, gets about as many points as the crew's characters would cost built today, the way Building Your Character counts it. Vesk's worth 47 at session 20. It used to say the same progression.
+6. **Vesk's third Title comes at session 7**, *The woman who has never been seen* (Mind 2, Body 1, with *know who's watching a room*), the way Building's Aspiration example has it, so in Growing her picks are attuned at session 12 instead, and *The ghost of the harbour quarter* is gone. The two chapters disagreed before.
+7. **A Move counts everything that fits**, the same as any roll, so moves get long: Vesk's run over the rooftops is 12 steps, two d12s added together, and even Bram's Body on its own is a d12 and a d2. Worth watching at the table.
 
 ### 11. The GM's side
 
