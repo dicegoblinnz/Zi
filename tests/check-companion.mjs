@@ -2386,6 +2386,11 @@ if (part("7c")) {
     same(await sums(page), ["Action 1 d12 + d8 against d10 You’re going at them"], "the brute's action folded into a line");
     same([await line(page, ".dz-act.is-open .dz-act-head h3"), await page.evaluate(() => document.activeElement?.textContent ?? "")], ["Action 2", "Action 2"], "the new one open, with the phone on it");
     same([await tray(page, "you"), await tray(page, "them")], [[], []], "with nothing on it yet");
+    // Back to the brute's and Add another action again: the one with nothing
+    // on it opens, rather than another piling up.
+    await page.click(`${dlg} button[data-dz="pick"][data-a="0"]`);
+    await page.click(`${dlg} button[data-dz="more"]`);
+    same([await count(page, ".dz-act"), await line(page, ".dz-act.is-open .dz-act-head h3")], [2, "Action 2"], "adding again opens the empty one");
     await add(page, "you", [6]);
     await add(page, "them", [4]);
     same(await page.getAttribute(`${dlg} button[data-dz="def"][data-v="them"]`, "aria-pressed"), "true", "and once it's got dice on both sides, it's going at them");

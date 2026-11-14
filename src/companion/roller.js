@@ -387,10 +387,12 @@ export function makeRoller(k) {
       x.each = el.dataset.v === "1";
     } else if (what === "more") {
       // A new action's going at them, since several things to go at is what
-      // more than one action's mostly for.
+      // more than one action's mostly for. One left with nothing on it opens
+      // instead, so they don't pile up.
       if (r.acts.length >= ACTIONS || !hasDice(r.acts[r.at])) return;
-      r.acts.push({ you: [], them: [], def: "them", each: false });
-      r.at = look = r.acts.length - 1;
+      const empty = r.acts.findIndex((y) => !hasDice(y));
+      if (empty < 0) r.acts.push({ you: [], them: [], def: "them", each: false });
+      r.at = look = empty < 0 ? r.acts.length - 1 : empty;
     } else if (what === "pick") {
       r.at = look = a;
     } else if (what === "drop") {
