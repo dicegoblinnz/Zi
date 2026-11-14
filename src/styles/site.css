@@ -272,6 +272,10 @@ footer.site nav a:hover { color: var(--ink); }
   .topnav { order: 3; flex-basis: 100%; flex-wrap: nowrap; justify-content: space-between; margin: 0 -0.45rem; }
   .topnav a { padding: 0 0.45rem; }
 }
+@media (max-width: 360px) {
+  .topnav { margin: 0 -0.3rem; }
+  .topnav a { padding: 0 0.3rem; font-size: 0.97rem; }
+}
 @media (max-width: 420px) {
   .pager { grid-template-columns: 1fr; }
   .pager .next { grid-column: 1; }

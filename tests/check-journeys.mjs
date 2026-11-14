@@ -132,6 +132,9 @@ async function tappable(page) {
   });
 }
 
+// A home page that draws someone back's characters on the phone has drawn
+// them (one that doesn't, like main before 15 Nov, is ready as it loads).
+const drawn = (page) => page.waitForFunction(() => document.documentElement.getAttribute("data-home") !== "back" || document.querySelector("[data-home-back] .hm-make"), null, { timeout: 8000 });
 const isDone = (page, job) => Promise.resolve().then(() => job.done(page)).catch(() => false);
 async function settle(page, job) {
   await page.waitForLoadState("load").catch(() => {});
@@ -158,6 +161,7 @@ async function play(browser, job) {
   const page = await context.newPage();
   await page.goto(BASE + "/");
   await page.waitForSelector("main");
+  await drawn(page);
   const steps = [];
   const tried = new Set();
   let ok = await isDone(page, job);
@@ -205,13 +209,9 @@ async function home(browser, whoKey) {
   await context.route((u) => u.hostname !== "localhost", (r) => r.abort());
   await context.route((u) => u.pathname.startsWith("/api/"), (r) => r.fulfill({ status: 503, contentType: "application/json", body: "{}" }));
   const page = await context.newPage();
-  let bytes = 0;
-  page.on("response", async (r) => {
-    try { bytes += (await r.body()).length; } catch {}
-  });
   await page.goto(BASE + "/", { waitUntil: "load" });
   await page.waitForSelector("main");
-  await page.waitForTimeout(200);
+  await drawn(page);
   const seen = await page.evaluate((H) => {
     const inView = (el) => {
       const r = el.getBoundingClientRect();
@@ -230,7 +230,7 @@ async function home(browser, whoKey) {
     await page.screenshot({ path: join(SHOTS, `home-${whoKey}-whole.png`), fullPage: true });
   }
   await context.close();
-  return { who: whoKey, height: seen.height, firstScreen: { headings: seen.headings, actions: seen.actions }, kb: Math.round(bytes / 1024), words: seen.words };
+  return { who: whoKey, height: seen.height, firstScreen: { headings: seen.headings, actions: seen.actions }, words: seen.words };
 }
 
 // ------------------------------------------------------------ run it
@@ -247,12 +247,12 @@ server.close();
 
 // The home page's words against the book's retired rules words.
 const file = join(tmpdir(), "zi-home-words.md");
-await writeFile(file, homes[0].words);
+await writeFile(file, homes.map((h) => h.words).join("\n"));
 const said = execFileSync("python3", ["-I", "tools/check_terms.py", file], { encoding: "utf8" });
 const retired = said.split("\n").filter((l) => /^\s+\d+ \[/.test(l)).map((l) => l.trim().replace(/^\d+ /, "").slice(0, 120));
 
 for (const h of homes) {
-  console.log(`\nHome, ${h.who === "new" ? "someone new" : "a player who's back"}: ${h.height}px long at ${W} wide, ${h.kb} KB to open`);
+  console.log(`\nHome, ${h.who === "new" ? "someone new" : "a player who's back"}: ${h.height}px long at ${W} wide`);
   console.log(`  first screen: ${h.firstScreen.headings.join(" / ") || "no headings"}`);
   console.log(`  to tap there: ${h.firstScreen.actions.join(" · ") || "nothing"}`);
 }
