@@ -6,7 +6,7 @@ order: 32
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 A **lever** is anything that changes a result: a bigger die, a second try, a hit that lands somewhere else. Here's every one of them, and where it comes from. Use it to plan a character, to pick an archetype or a Boon, to write an item, or to answer a question at the table without making something up.
 
@@ -16,9 +16,10 @@ Where a lever comes from a condition or an item, treat those as examples and wri
 
 | Lever | Where it comes from |
 | --- | --- |
-| **One more step** | Every Title and permission on the Root and the specialty you're rolling. Every item you're using that fits, an attuned thing included. A specialty from every other action in the roll, or 1 more when it's the same specialty again. A condition for you, or on the threat you go at. A Scholar's truth, free for the crew on any roll it fits this scene. A Shifter's animal tag, when it fits. A tag a Maker gave your item, when it says so. A *Charge* weapon, on your first die. A *Purse of gold*, on one social roll. |
-| **One more step, for 1 Aura** | Anything that fits but isn't your Root, your specialty or an item you're using: the ground, a threat's tag you know, a Catch turned your way, or a friend's specialty through a bond thread you share. A specialty you have to make a case for. 1 Aura each, every time you bring one in. |
-| **Steps from friends** | A combo: they put their actions into the same thing, each bringing a specialty and the items they're using, and nobody pays Aura. A Leader's order or rallying song: steps handed to you for this round. They don't have to fit, and they don't bring a split. |
+| **A bigger Root** | 3 from every Title, spread across your Roots however you like, and 1 from every permission on that Root. Nothing else adds to a Root. |
+| **One more step** | Everything on your sheet that plainly fits what you're doing: each Title, permission, archetype, ability you're using, attuned thing, awakening and item. An archetype you've taken twice is two. Your own extra action, when it goes into the same roll. A condition for you, or on the threat you go at. A Scholar's truth, free for the crew on any roll it fits this scene. A Shifter's animal tag, when it fits. A tag a Maker gave your item, when it says so. A *Charge* weapon, on your first die. A *Purse of gold*, on one social roll. |
+| **One more step, for 1 Aura** | Each thing on your sheet you have to make a case for. Anything that fits but isn't on your sheet: the ground, a threat's tag you know, a Catch turned your way, or one thing off a friend's sheet through a bond thread you share. 1 Aura each, every time you bring one in. |
+| **Steps from friends** | A combo: they put their actions into the same thing, each bringing everything on their sheet that fits, 1 each, and nobody pays Aura for the combo. Anything of theirs they have to explain is 1 Aura, and they pay it. A Leader's order or rallying song: steps handed to you for this round. They don't have to fit, and they don't bring a split. |
 | **3 steps a size** | The Bloodsworn's: every size your Stamina drops adds 3 steps to an action. Pay it as you act and they go on that roll, and *Bleed for it* (1 Stamina) does it for nothing but the blood. A hit takes it, and they go on your next action. *Bleed out* (1 Stamina) is 3 steps on one roll for every size your Stamina's below d12. |
 | **Dice from hiding** | The Shadow's pool: the dice you rolled to get into hiding, added to any roll after that, talking and Study included, as their own dice or as steps (a d8 is 4 steps). Each one's gone once you use it. |
 | **A bigger die** | More steps. Two sides a step: 1 is a d2, and 6 is a d12. |
@@ -32,7 +33,7 @@ Where a lever comes from a condition or an item, treat those as examples and wri
 | **Win a tie** | Free, when you're defending. 1 Aura, when you're acting. An Illusionist's illusion only has to meet the Challenge. *Fortunate* (condition). The Ties Boon: every tie, attacking too, with no Aura. In downtime, an extra crew resource. The Ties Burden loses every one, even defending. |
 | **Roll again** | 1 Resolve, on a roll you just failed: all your dice or just one, and the threat's dice stay where they landed. It works in downtime too. *Blessed* (condition, if that action fails). |
 | **+2 on a die** | A Push, on most archetypes' mechanics, after you roll: 1 off the archetype's home track. It's +3 if you've taken the archetype twice, and +4 three times. A die it takes to its top face, or past it, doesn't give you Aura. See [Archetypes](#s-levers-archetypes). |
-| **Dice that add** | A Move action's dice. A Push. An awakening that adds to a die, like +1 for each Aura in it. A Warrior's dice in a fight: a top face gives you 1 Aura, then you roll that die again and add the new number on, for as long as it keeps landing on top. |
+| **Dice that add** | A Move action's dice. A Push. An awakening that adds to a die, like +1 for each Aura powering it. A Warrior's dice in a fight: a top face gives you 1 Aura, then you roll that die again and add the new number on, for as long as it keeps landing on top. |
 | **A die becomes a d12** | *Surging* (condition). |
 | **Their win becomes a tie** | *Hexed* (condition). |
 | **One of their dice doesn't count** | *Blinded* (condition). |
@@ -43,14 +44,14 @@ Where a lever comes from a condition or an item, treat those as examples and wri
 | Lever | Where it comes from |
 | --- | --- |
 | **Fill up** | Every new scene, to your maximum. There's none in downtime. |
-| **Gain 1** | Every die of yours that wins, your defence included. Every top face, win or lose, area dice included, but not a die a Push or an awakening took there, a summon's, a number an Oracle swapped in or a die a Gambler flipped. Letting a Catch or a hostile thread bite, as often as you like, as long as it brings real trouble. Bringing real trouble on yourself with no Catch. Your attuned thing's own way, like Bram's hammer when he knocks someone off their feet. The GM, when a great setup doesn't land. *Inspired* (condition). A top face when you roll [the Oracle](#oracle). The Boons *Beat a threat* and *In your element* (that one even past your maximum). |
-| **Past your maximum** | While you're acting, it can go past it. Once you've finished acting for the round, anything over is gone, so spend it first, on another action or on your attuned thing. |
-| **A bigger maximum** | The Aura Boon (+2). Anything else on your sheet that says so. |
-| **A smaller maximum** | The Aura Burden (−2). |
+| **Gain 1** | Every die of yours that wins, your defence included. Every top face, win or lose, area dice included, but not a die a Push or an awakening took there, a summon's, a number an Oracle swapped in or a die a Gambler flipped. Letting a Catch or a hostile thread bite, as often as you like, as long as it brings real trouble. Bringing real trouble on yourself with no Catch. The GM, when a great setup doesn't land. *Inspired* (condition). A top face when you roll [the Oracle](#oracle). The Boons *Beat a threat* and *In your element* (that one even past your maximum). |
+| **Past your maximum** | While you're acting, it can go past it. Once you've finished acting for the round, anything over is gone, so spend it first, on another action or on bringing something in. |
+| **A bigger maximum** | Every attuned thing you've got (+2). The Aura Boon (+2). Anything else on your sheet that says so. |
+| **A smaller maximum** | The Aura Burden (−2). Powering a passive awakening, till the scene ends. |
 | **Share it** | When it comes in while you're not acting, like off your defence, it stops at your maximum, and you can give the rest to a friend in the scene. |
-| **Spend 1** | Bring something in, make a case for a specialty, go beyond what something normally does, win a tie when you're acting, intercept for a friend within your stride (one friend for each Aura), a quick heal (with your action), or keep a Catch quiet this time. |
-| **Spend 3** | An extra action, up to one a round for each archetype you've got. |
-| **Pump it in** | Your attuned thing, free and with no action. A passive awakening holds up to 2, and 4 if you've taken it twice, and works for as much as it holds. An active one spends it when you use the thing, and more Aura gets more of it. It all empties at the end of the scene. Only you can pump Aura into it, or a Maker who can touch it. |
+| **Spend 1** | Bring something in, make a case for something on your sheet (1 for each thing), go beyond what something normally does, win a tie when you're acting, intercept for a friend within your stride (one friend for each Aura), a quick heal (with your action), or keep a Catch quiet this time. |
+| **Buy an extra action** | 3 for the first one you buy in a round, then 4, then 5 and so on, with no cap. Next round it's back to 3. |
+| **Power it** | Your attuned thing's passive awakenings, while you're acting, free and with no action. The Aura comes off what you've got and off your maximum till the scene ends, up to 2 in each awakening, and 4 if you've taken it twice, and it works for as much as is powering it. An active one spends Aura when you use the thing, and more Aura gets more of it. Only you can power it, or a Maker who can touch it. |
 | **Call a summon** | The Summoner's: a d4 of summons for each Aura, as part of an action, none of them bigger than the soul's own die. *Call the horde* (1 Resolve) makes them d6s, and d8s if you pay again. |
 
 ## Threads {#s-levers-threads}
@@ -58,7 +59,7 @@ Where a lever comes from a condition or an item, treat those as examples and wri
 | Lever | Where it comes from |
 | --- | --- |
 | **Two kinds** | A bond thread is something good between you, and a hostile thread is something gone bad. Either can be strained, which means nearly snapped, and with no thread at all you're neutral. |
-| **Borrow** | 1 Aura brings one of a friend's specialties into your roll through a bond thread you share, or one of a faction's assets through a bond thread with it. It doesn't strain anything. You can't borrow through a strained thread, or a hostile one. |
+| **Borrow** | 1 Aura brings one thing off a friend's sheet into your roll as a step, through a bond thread you share, or one of a faction's assets through a bond thread with it. It doesn't strain anything. You can't borrow through a strained thread, or a hostile one. |
 | **Strain** | Lean on them in the story, like calling in the favour, using their name, dragging them into it or using the secret, and your Resolve comes up a size. It's free, it doesn't take an action, and the bond thread's strained. A thread with someone in the crew is strained for both of you. |
 | **A hostile thread bites** | Like a Catch: when it brings you real trouble, take 1 Aura, or a size of Resolve for a big bite. Doing right by them strains it, and doing it again snaps it, and the grudge is over. |
 | **Mend** | Make it right with them, by roleplaying it, doing them a favour or paying them, whatever suits them. That happens in downtime or in a scene with them, not in the middle of the fight where you strained it. Then it's whole again. |
@@ -71,10 +72,10 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 
 | Lever | Where it comes from |
 | --- | --- |
-| **An extra action** | 3 Aura, up to one a round for each archetype you've got. On top of those, hold it (nothing this round but your stride, and you've got two next round), come out of hiding (one, even if you're *Unseen* as well), *Unseen* (condition) and the Extra action Boon (once a scene). |
-| **Put them together** | A combo: actions into the same thing at the same time, yours or your friends', rolled once on one Root, with every action bringing a specialty and no Aura. Your own extra action brings in another specialty as a new approach (Knives with Stealth is a sneak attack), or the same one again for +1. The same specialty from two of you counts for each. |
-| **Hand out steps** | The Leader's: build an order or a rallying song from a Root and a specialty, and give its steps to friends who can hear or see you, for this round. They don't have to fit. The Push (1 Resolve) is +2 on one of a friend's dice, on a roll your steps went into, and *Everyone gets it* (1 Resolve) gives every one of them all your steps. |
-| **A free action, for one thing** | *Quick* weapons (drawing, even from a bag). *Rallied* (an answer). Putting something away. Pumping Aura into your attuned thing. |
+| **An extra action** | Bought with Aura: 3 for the first in a round, then 4, then 5 and so on, with no cap, and back to 3 next round. On top of those, and without putting the price up: hold it (nothing this round but your stride, and you've got two next round), come out of hiding (one, even if you're *Unseen* as well), *Unseen* (condition) and the Extra action Boon (once a scene). |
+| **Put them together** | A combo: actions into the same thing at the same time, yours or your friends', rolled once on one Root, with no Aura for the combo and a split for every action. Every friend's action brings everything on their sheet that fits, 1 each. Your own extra action in the same roll is 1 step and a split, since everything of yours that fits is in already. The same thing from two of you counts for each. |
+| **Hand out steps** | The Leader's: build an order or a rallying song from a Root and everything that fits, and give its steps to friends who can hear or see you, for this round. They don't have to fit. The Push (1 Resolve) is +2 on one of a friend's dice, on a roll your steps went into, and *Everyone gets it* (1 Resolve) gives every one of them all your steps. |
+| **A free action, for one thing** | *Quick* weapons (drawing, even from a bag). *Rallied* (an answer). Putting something away. Powering your attuned thing. |
 | **Someone on your side** | The Summoner's: call a soul out with Aura, as part of an action, with a reason in the story, and it acts in the round like anyone. The Face's *Turn them* (1 Confidence): a Mook or a Named threat your influence took a die from fights for the crew till the round ends. |
 | **Take an action away** | *Exposed*, *Frightened* (condition). On a threat, that's one of its telegraphs. |
 | **Lock it in** | The Extra action Burden: you say your action before the GM telegraphs, and you're stuck with it. |
@@ -88,8 +89,8 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | Lever | Where it comes from |
 | --- | --- |
 | **Your defence** | Your tracks, each rolled once when the telegraphs land: your Stamina against what's at your Body, your Confidence against what's at your Mind and your Resolve against what's at your Soul. Every die stops one telegraph at its Root that it beats or ties, and everything else gets through. The more a track's taken, the smaller it defends. Ties go to you. |
-| **More dice to stop with** | Defend (your action): a Root and a specialty that fit how you're defending, with your armour and your shield as items, split as usual, and rolled with your tracks. Past 6 steps it's more than one die, and each die stops one telegraph it beats or ties, as long as how you're defending fits it. The Bard's song does the same against fear, lies and pressure for everyone who can hear it. |
-| **A bigger defence** | On your Defend: a better Root and specialty, and every item that fits, like a piece of armour, a shield or a helmet. On your tracks: *Warded* and *Covered* (a step on your Stamina), *Heartened* (a step on your Confidence). The Guardian's Push (1 Stamina): +2 on one of their defence dice, their Defend's or a track's. An awakening like *Turn the blow*. |
+| **More dice to stop with** | Defend (your action): a Root and everything on your sheet that fits how you're defending, your armour and your shield included, split as usual, and rolled with your tracks. Past 6 steps it's more than one die, and each die stops one telegraph it beats or ties, as long as how you're defending fits it. The Bard's song does the same against fear, lies and pressure for everyone who can hear it. |
+| **A bigger defence** | On your Defend: a better Root, and everything on your sheet that fits, like a piece of armour, a shield or a helmet. On your tracks: *Warded* and *Covered* (a step on your Stamina), *Heartened* (a step on your Confidence). The Guardian's Push (1 Stamina): +2 on one of their defence dice, their Defend's or a track's. An awakening like *Turn the blow*. |
 | **Defence down** | A track that's taken hits. Spending *Poisoned*: your Stamina rolls as a d2 when the telegraphs land this round. *Shaken*: a step less on your Confidence. A piece of armour broken, when its last box is ticked: it's gone till it's mended. |
 | **Armour takes it** | When a hit gets through to its Root, a piece of armour can take it: tick a box, and your track stays where it is. Its quality's how many boxes it's got: a Common piece has 1, a Fine one 2 and a Masterwork one 3, and the last box breaks it. The Armour Boon gives one piece one more box, and the Burden keeps your armour Common. A slot in downtime mends one piece. Attuned armour can't break, so it hasn't got boxes. |
 | **Take it for a friend** | Intercept: 1 Aura and no action, and any of the blows at a friend's Body within your stride come at you instead, for your own Stamina or Defend to handle. One friend for each Aura. Nobody can step in front of what's at a friend's Mind or Soul. The Guardian's, free, for every friend within their stride, and a Guardian who's a Teleporter as well reaches every friend within 10 units. A summon intercepts for free, and so do the GM's people. Answer for a friend, standing in the way. *Covered* (condition). The Intercept Burden: you can't. |
@@ -130,7 +131,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **One roll to beat** | The first time it's attacked in a round, it rolls its Challenge, and everyone who goes at it that round has to beat that roll. A *Layered* threat rolls its dice, and its best one stands. |
 | **Strip a tag** | A win aimed at it, or one tick off its multiplier. Spending *Burning*, *Bleeding* or *Poisoned*. An *Acid vial*. A *Piercing* weapon gets past *Armoured*, and a *Breaker* past *Shield*. |
 | **End it in one win** | An opening: its weak point, helpless, or getting around everything that keeps it going. A Boss only falls to its weak point. Any other opening strips two whole tags, multipliers and all. |
-| **Tick down a multiplier** | Every win against a tag with a multiplier, like *Armoured ×6*, ticks one off, and the GM says what's left. A condition that would strip a tag ticks one off instead. |
+| **Tick down a multiplier** | Every win against a tag with a multiplier, like *Armoured ×12*, ticks one off, and the GM says what's left. A condition that would strip a tag ticks one off instead. |
 | **Hit harder** | A vulnerability: every one that fits a win that strips a tag or takes a track down adds one more tick, and you choose where it goes, on the same tag or another one the hit could reach. *Prone*, *Exposed* (condition). The Warrior's *Opened* (1 Stamina). A Scholar's truth with *Find the flaw* (1 Confidence). Hidden ones are hidden tags, so Study finds them. |
 | **Find a hidden tag** | Study. *Sighted*, *Spotted* (condition). |
 | **Turn a tag against it** | Bring it into your roll (1 Aura). |
@@ -158,7 +159,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **Make something true** | The Scholar's truth: win a Study and say something that wasn't obvious to anyone else. It's true and it matters here, and it's a step for the crew this scene, free on any roll it fits. [The Oracle](#oracle), when all three dice match. |
 | **Use the place** | Bring the ground into your roll (1 Aura). *Guided* (condition) does it for free. |
 | **Do more than a permission does** | Go beyond, for 1 Aura: phase through a wall, an aimed shot that takes out the tag you choose, calling up someone who died a hundred years ago. The Going beyond Boon: once a scene, without spending Aura. |
-| **Do something big** | A bigger roll against a bigger Challenge: a better Root and specialty, items that fit, friends in a combo, a Leader's steps. |
+| **Do something big** | A bigger roll against a bigger Challenge: a better Root, everything on your sheet that fits, friends in a combo, a Leader's steps. |
 | **Hit many things** | The Elementalist's area. A *Sweep* weapon, within reach. |
 | **Make them believe it** | The Illusionist's: roll your illusion dice against the threats' Challenge, and if you meet or beat it, they believe your illusion until they interact with it or try to get through it. To see through it before then, a threat has to beat what you rolled. *Make it real* (1 Confidence): it's real till the round ends. |
 | **Do what an animal does** | The Shifter's animal tags: your action, rolled against the tag's die (most are a d4, swimming's a d6, flying's a d8 and a breath attack's a d12). Beat it and the tag's yours until downtime. *Become it* (1 Stamina) takes one with no roll. |
@@ -174,8 +175,9 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | Lever | Where it comes from |
 | --- | --- |
 | **A step closer** | Beat the die of your Aspiration, the Goal or a project: an action when it's within reach, or a slot in downtime. One step a roll. |
-| **A new Title, archetype or attuned thing** | An Aspiration climbs past d12, and you pick one. A new Title comes with its Root, its three specialties and one permission. A new archetype comes with its mechanic, its abilities and room for one more action a round, and taking one you've already got makes its Push bigger. A new attuned thing starts at Awakened. |
-| **A new permission** | A Grow in downtime, on one of your Titles, up to six on it. It has to fit inside the Title, and it's 1 on a Root and 1 on a specialty that fit it. |
+| **A new Title, archetype or attuned thing** | An Aspiration climbs past d12, and you pick one. A new Title's 3 on your Roots, spread however you like, and comes with one permission. A new archetype comes with its mechanic, its Trait and one ability, and taking one you've already got makes its Push bigger. A new attuned thing starts at Awakened with one awakening, and it's 2 more on your Aura maximum. |
+| **A new permission** | A Grow in downtime, on one of your Titles, up to six on it. It has to fit inside the Title, and it's 1 on its Root. |
+| **A new ability** | A downtime slot, off one of your archetypes' lists, up to six on it. |
 | **A different permission** | Swap one in downtime for another that fits your Title, as long as it makes sense for your character. |
 | **A Boon** | Two permission slots on one of your Titles: built in when you make your character, or two permissions swapped for it in downtime, and back. A Burden on an attuned thing can pay for one instead. |
 | **A new thread or item** | A Grow each: a new thread, or get something. Everyone writes a new thread when the Party Goal's done. |
@@ -212,8 +214,8 @@ Everything in Zi'Dara is built from the same few shapes, so price new things aga
 | **A plain item** | Just what it is: 1 more on a roll you use it in, when it fits, and it does what that thing does. A weapon brings its properties, and each piece of armour sits on a Root, with a box for every hit its quality lets it take. No Catch. |
 | **A utility item you use up** | One lever, used once, with no roll. Cross it off. |
 | **A keepsake** | Something that matters to your character. It does what it would plainly do in the story, and it has no rule of its own. |
-| **An attuned thing** | One to start, and another whenever an Aspiration gives you one. It's an item, it gets you Aura its own way, and it has awakenings: 1 at Awakened, 2 at Tempered and 3 at Perfected, and as many again for a Catch, then a Burden, then both. Six at most, with one Catch and one Burden. |
-| **An awakening** | Something the thing itself does, written like a permission, passive or active. A passive one holds up to 2 Aura and does a little for each Aura in it, like +1 on one die. An active one spends Aura as you use it, and more Aura gets more of it. |
+| **An attuned thing** | 5 points when you make your character, and another whenever an Aspiration gives you one. It's an item, it puts 2 on your Aura maximum, and it has awakenings: 1 at Awakened, 2 at Tempered and 3 at Perfected, and as many again for a Catch, then a Burden, then both. Six at most, with one Catch and one Burden. |
+| **An awakening** | Something the thing itself does, written like a permission, passive or active, and a step on any roll it fits. A passive one's powered with up to 2 Aura, off what you've got and off your maximum till the scene ends, and it does a little for each Aura powering it, like +1 on one die. An active one spends Aura as you use it, and more Aura gets more of it. |
 | **A Boon or a Burden** | One lever off the menu, with a name from the story. A Burden has to cost something you actually use. |
 
 :::rule
