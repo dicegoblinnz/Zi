@@ -95,29 +95,31 @@
 //    back on free and lets the rest go. Tamsin, built on the phone before
 //    Roots, shows as she was, set actions and all, with nothing to play till
 //    she's rebuilt (5c).
-// 5. Building your own on Roots: Vesk again, a step to a screen. Two
-//    Shadows, her Titles each on a Root with three specialties, a permission's
-//    Root and specialty, her Roots and specialties added up with where each
-//    comes from, her leathers as armour on her Body, her grappling line with
-//    a passive awakening, and threads from the crew questions. Saved, she
-//    plays her sheet from the chapter. Then a roll, a reload, offline, a
-//    change (a Boon for two slots, a fourth permission filling six, and a
-//    Masterwork shield), her Boon taking the first hit When it lands, a blank
-//    character saved with its warnings, a draft
+// 5. Building your own on stacking: Vesk again on 35 points, a step to a
+//    screen, with what's spent and what's left in the bar the whole way. Two
+//    Shadows with an ability each, her Titles' 3 Root points spread in a tap
+//    or two, a Root on each permission, her Roots added up with where each
+//    comes from, what she carries a point each, her grappling line with its
+//    one awakening and nothing to write for its Aura, and threads from the
+//    crew questions. Saved, her sheet is the chapter's. Then a reload,
+//    offline, a change (a Boon, a fourth permission and a Masterwork shield)
+//    past 35, a blank character with the nudges and a start of 36, a draft
 //    waiting on the list, and every step at 320 wide in both themes with axe.
 // 5b. The builder in one hand: full screen with the crest at the top, the
-//    first choice high up, the seven steps in one line, Back and Next in the
-//    bar at the bottom on every step, and a Root's die growing in the dock as
-//    a Title and a permission go on, or swapping straight away under
-//    reduce-motion. axe on every step and with things picked, dark and light.
-// 5c. The other ways in. Every crew member made into a build has the sheet
-//    the chapter gives them, and a thousand random characters pass every
-//    check with one attuned thing and both kinds of thread. Bram from the crew
-//    and a random one saved and played, a way in asking before it bins a
-//    draft, Vesk from the crew becoming your own with her play kept and no
-//    gold marks, Tamsin from before Roots rebuilt on them, her Roots guessed
-//    from her words and her notes and thread kept, and a Gambler's free flip
-//    on their die and Double or nothing on his own.
+//    seven steps in one line, the points and Back and Next in the bar at the
+//    bottom on every step, the step's tip and the menus away on Escape or a
+//    tap outside, a Root's die growing in the dock as a Title's spread and a
+//    permission go on, an ability, a Title idea and a Boon in the points,
+//    and axe on every step, dark and light.
+// 5c. The other ways in. Every crew member made into a build spends 35 and
+//    has the sheet the chapter gives them, and a thousand random characters
+//    spend exactly 35 and pass every check. A build from before stacking
+//    keeps everything, past 35 too: each Title all on its old Root to spread,
+//    its specialties gone and its archetypes' abilities dealt between them.
+//    Bram from the crew and a random one saved, a way in asking before it
+//    bins a draft, Vesk from the crew becoming your own with her play kept,
+//    Vesk saved before stacking spreading her Titles and saved on 35 with her
+//    Roots the chapter's, and Tamsin from before Roots rebuilt.
 // 6. Print on the phone, from the Sheet tab's button (saved characters put on
 //    the phone as they'd be part way through a scene, since the play screen's
 //    being redrawn): Vesk with a Scar, Burning, Aura spent and her hook
@@ -156,17 +158,22 @@
 //    44px, and axe on the set-up and a result, with one action and with two.
 //    With motion on the dice tumble, two actions' worth too, and a tap lands
 //    them.
-// 8. Downtime and rule changes. Vesk's week: every track up a size, Recover
-//    and a new permission on her Body and her Stealth, undone and done again,
-//    then her Aspiration with fixed dice and a new awakening with its Catch,
-//    and a reload. A made-up rule change against her saved sheet: a reworded
-//    permission, her Stride and a permission moved to Climbing get gold
-//    marks with old and new, typo fixes stay quiet, what she grew isn't
-//    marked, and Got it clears them for good.
-// 9. Every crew member's growth adds up on Roots (a permission, a thread, a
-//    Title, an archetype and an awakening), a Title stops at six permissions,
-//    a Boon takes two permissions' slots and one that won't fit takes nothing
-//    off, and Vesk's Aspiration past d12 gives her a third Title on the phone.
+// 8. Downtime on stacking. Vesk's week: every track up a size, Recover and a
+//    new permission with its Root, undone and done again, then her
+//    Aspiration rolled with her Mind and what fits on her sheet, with fixed
+//    dice, a new awakening with its Catch, and a reload. 8b (the play
+//    screen's): a made-up rule change against her saved sheet: a reworded
+//    permission, her Stride and a permission moved get gold marks with old
+//    and new, typo fixes stay quiet, what she grew isn't marked, and Got it
+//    clears them for good.
+// 9. Every crew member's growth adds up on stacking (a permission with its
+//    Root, a thread, a Title with its 3 spread and its one permission, an
+//    archetype with its one ability, an attuned thing with its awakening and
+//    an awakening), a Title stops at six permissions, a Boon takes two
+//    permissions' slots and one that won't fit takes nothing off, and what
+//    downtime grew folds into a build as the same sheet. On the phone, Vesk's
+//    Aspiration past d12 gives her a third Title spread Soul 2 and Mind 1,
+//    and Gil buys an ability a slot, never the same one twice.
 // 10. The rules on a phone. The Learn deck (content/learn.md) has 30 to 40
 //    cards of 40 to 120 words in book order, each teaching a section the book
 //    has, most with an example using the crew's real dice, and an example
@@ -202,7 +209,7 @@ import { diceLabel, diceRange, diceShapes, stepsToDice } from "../src/companion/
 import { ROOTS, rootFor, rootsSheet } from "../src/companion/roots.js";
 import * as RS from "../src/companion/roots.js";
 import { costOf } from "../src/companion/points.js";
-import { checksOf, sheetOf } from "../src/companion/builder.js";
+import { checksOf, foldGrown, normalBuild, pointsOf, sheetOf } from "../src/companion/builder.js";
 import { fromCrew, randomBuild } from "../src/companion/ways.js";
 import { CARD_WORDS, CREW, DECK_SIZE, newestChange, reachOf, readCards, staleCards } from "../scripts/learn.mjs";
 import * as T from "../src/companion/table-rules.js";
@@ -2089,8 +2096,48 @@ const unfold = async (page, key) => {
   if (!(await page.$eval(`details[data-open="${key}"]`, (el) => el.open))) await page.click(`details[data-open="${key}"] > summary`);
 };
 
-// 5. Building your own on Roots: Vesk again, a step to a screen, and every
-// Root and specialty on the phone against her sheet in the chapter.
+// What a sheet's made of, for comparing one built on the phone with the
+// chapter's: Roots, Titles with their spreads and permissions, archetypes
+// with their abilities, points, Aura, armour, attuned things, what's carried
+// (the bag by what's in it) and their own threads.
+const sheetParts = (c) => ({
+  roots: c.roots,
+  titles: c.titles.map((t) => [t.text, t.roots, t.permissions.map((p) => [p.text, p.root]), (t.boons ?? []).map((x) => x.lever)]),
+  archetypes: c.archetypes.map((a) => [a.name, a.have]),
+  points: c.points,
+  aura: c.numbers.aura,
+  armour: c.armour.map((a) => [a.name, a.root, a.quality, a.boxes]),
+  attuned: c.attuned.map((a) => [a.name, a.stage, a.catch, a.awakenings.map((w) => [w.name, w.kind])]),
+  carry: [c.carry.equipment, c.carry.utility, c.carry.keepsake, c.carry.bag.items],
+  threads: c.threads.map((p) => [p.person, p.threads.filter((t) => !t.whose).map((t) => [t.text, t.kind])]).filter(([, t]) => t.length),
+});
+// The characters saved on this phone, and one of them as the phone makes
+// their sheet: the build against the book, with what they grew on top.
+const savedAll = (page) => page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters") || "{}").characters ?? []);
+const sheetFor = (ch) => rootsSheet(ch.build ? sheetOf(ch, BUILD) : book.crew.find((c) => c.id === ch.crew), ch.state?.grown ?? [], BUILD);
+// A character's play screen, open: its tabs are what's always on it.
+const playing = (page) => page.waitForSelector(".cc-tabs a[data-t]");
+// One of the crew from the Characters list, saved on the phone.
+async function crewOn(page, id) {
+  await page.goto(`${BASE}/characters/`);
+  await page.click(`button[data-act="play"][data-c="${id}"]`);
+  await page.click('#cc-dialog button[type="submit"]');
+  await playing(page);
+  return (await savedAll(page)).at(-1);
+}
+// A saved character's state changed straight on the phone, then opened again.
+async function setState(page, id, patch) {
+  await page.evaluate(([cid, p]) => {
+    const all = JSON.parse(localStorage.getItem("zi-characters"));
+    const ch = all.characters.find((c) => c.id === cid);
+    ch.state = { ...ch.state, ...p, tracks: { ...(ch.state?.tracks ?? {}), ...(p.tracks ?? {}) } };
+    localStorage.setItem("zi-characters", JSON.stringify(all));
+  }, [id, patch]);
+}
+
+// 5. Building your own on stacking: Vesk again on 35 points, a step to a
+// screen, with what's spent and what's left in the bar the whole way, and
+// her sheet against the chapter's once she's saved.
 if (part("5")) {
   const vesk = book.crew.find((c) => c.name === "Vesk");
   const want = rootsSheet(vesk, [], BUILD);
@@ -2110,62 +2157,92 @@ if (part("5")) {
     await page.click(`.bd-dot[data-s="${s}"]`);
   };
   const pressedOn = (attrs) => page.getAttribute(`button[data-act="b"]${attrs}`, "aria-pressed");
-  // A permission typed in: its words, then its Root and its specialty.
-  const perm = async (t, j, text, root, spec) => {
+  // The points in the bar: what's left (or over), then what's spent.
+  const points = async () => (await page.textContent(".bd-pts-say")).replace(/\s+/g, " ").replace("Points: ", "").trim();
+  // A permission typed in, and its Root.
+  const perm = async (t, j, text, root) => {
     await page.fill(`#b-t${t}-p${j}`, text);
     await b(`[data-b="proot"][data-t="${t}"][data-j="${j}"][data-v="${root}"]`);
-    await page.fill(`#b-t${t}-p${j}-spec`, spec);
   };
-  const specTiles = () => page.$$eval(".cc-spectiles .tile[data-s]", (els) => els.map((el) => [el.querySelector(".tile-name").textContent, el.querySelector(".tile-steps").textContent]));
-  const wantTiles = want.specialties.map((sp) => {
-    const root = rootFor(want, sp.name);
-    return [sp.name, `${root} ${want.roots[root]} and ${sp.steps}`];
-  });
 
   await page.goto(`${BASE}/characters/`);
   await page.click('a[data-act="bopen"]');
   has(await step(), "Archetypes", "the builder's first step");
+  same(await points(), "35 left, 0 of 35 spent", "35 points to start, in the bar");
+  same(await page.$eval(".bd-foot", (el) => [getComputedStyle(el).position, el.contains(el.querySelector(".bd-pts"))]), ["fixed", true], "the points in the bar at the bottom");
+  // Two Shadows, each with the ability it comes with: Push, then Vanish.
   await b('[data-b="arch"][data-t="0"][data-v="Shadow"]');
+  has(await page.textContent(".bd-arch-what"), "The Shadow notices things from where nobody’s looking", "the Shadow's mechanic");
+  same(await page.$$eval('[data-b="abil"][data-t="0"]', (els) => els.map((el) => el.dataset.v)), BUILD.archetypes.find((a) => a.name === "Shadow").abilities.map((x) => x.name), "the Shadow's abilities to pick from");
+  await b('[data-b="abil"][data-t="0"][data-v="Push"]');
+  has(await page.textContent('[data-b="abil"][data-t="0"][data-v="Push"]'), "Comes with it", "Push the one it comes with");
+  same(await points(), "30 left, 5 of 35 spent", "an archetype's 5 points");
   await next("Archetypes");
   same(await page.getAttribute('.bd-seg[data-b="atab"][data-t="1"]', "aria-current"), "true", "Next going on to the second archetype first");
   await b('[data-b="arch"][data-t="1"][data-v="Shadow"]');
+  has(await page.textContent('[data-b="abil"][data-t="1"][data-v="Push"]'), "On your other Shadow", "Push already on her first Shadow");
+  await b('[data-b="abil"][data-t="1"][data-v="Vanish"]');
   has(await page.textContent(".bd-body"), "Shadow twice, so your Push is +3", "two Shadows");
   same(await page.$$eval(".bd-head .zd-crest.twice", (els) => els.length), 1, "the crest at the top doubled for Shadow twice");
+  // A second ability's a point, and tapped again it comes off.
+  await b('[data-b="abil"][data-t="1"][data-v="Push"]');
+  has(await page.textContent('[data-b="abil"][data-t="1"][data-v="Push"]'), "1 point", "a second ability a point");
+  same(await points(), "24 left, 11 of 35 spent", "the second ability on the points");
+  await b('[data-b="abil"][data-t="1"][data-v="Push"]');
+  same(await points(), "25 left, 10 of 35 spent", "and off again");
   await shot(page, "5-builder-archetypes");
   await next("Titles and permissions");
-  // Her first Title off the Rogue idea's cards, on her Body with its three
-  // specialties, and a permission's Root and specialty picked for each.
+  // Her first Title off the Rogue idea's cards, all 3 Root points on her Body
+  // in a tap, and its permissions with their Roots, one tapped in off the idea.
   await unfold(page, "bd-ideas-0");
   await b('[data-b="idea"][data-t="0"][data-v="k-rogue"]');
   await b('[data-b="title"][data-t="0"][data-v="The best cat burglar in the city"]');
-  await b('[data-b="root"][data-t="0"][data-v="Body"]');
-  for (const [k, sp] of ["Stealth", "Climbing", "Locks"].entries()) await page.fill(`#b-t0-s${k}`, sp);
-  await perm(0, 0, "move unseen", "Body", "Stealth");
-  await perm(0, 1, "run the rooftops", "Body", "Climbing");
-  await page.fill("#b-t0-p2", "pick a mechanical lock");
-  await b('[data-b="proot"][data-t="0"][data-j="2"][data-v="Body"]');
-  // One of the Title's own specialties is a tap.
-  await b('[data-b="pspec"][data-t="0"][data-j="2"][data-v="Locks"]');
-  same(await page.inputValue("#b-t0-p2-spec"), "Locks", "a permission's specialty tapped in from its Title's");
-  same(await page.getAttribute('.bd-rail .tile-dice[data-for="root:Body"] .zd-die', "data-d"), "8", "her Body a d8 with her first Title and its three permissions");
+  await b('[data-b="spread"][data-t="0"][data-n="3"][data-v="Body"]');
+  await perm(0, 0, "move unseen", "Body");
+  await perm(0, 1, "run the rooftops", "Body");
+  await b('[data-b="perm"][data-t="0"][data-v="pick a mechanical lock"]');
+  same([await page.inputValue("#b-t0-p2"), await pressedOn('[data-b="proot"][data-t="0"][data-j="2"][data-v="Body"]')], ["pick a mechanical lock", "true"], "a permission tapped in off the idea, its Root guessed");
+  same(await page.getAttribute('.bd-rail .tile-dice[data-for="root:Body"] .zd-die', "data-d"), "12", "her Body a d12 with her first Title's 3 and its three permissions");
+  same(await points(), "18 left, 17 of 35 spent", "a Title's 5 with its first permission, and 1 for each after");
   await next("Titles and permissions");
   same(await page.getAttribute('.bd-seg[data-b="tab"][data-t="1"]', "aria-current"), "true", "Next going on to her second Title");
+  // Her second Title spread 2 and 1: Mind 2 and Body 1, in three taps.
   await page.fill("#b-t1-text", "Raised by the Guild");
-  await b('[data-b="root"][data-t="1"][data-v="Mind"]');
-  for (const [k, sp] of ["Locks", "Knives", "Black market"].entries()) await page.fill(`#b-t1-s${k}`, sp);
-  await perm(1, 0, "know how a lock’s built", "Mind", "Locks");
-  await perm(1, 1, "fight dirty with a knife", "Body", "Knives");
-  await perm(1, 2, "find a buyer for anything", "Mind", "Black market");
+  await b('[data-b="shape"][data-t="1"][data-v="two"]');
+  await b('[data-b="spread"][data-t="1"][data-n="2"][data-v="Mind"]');
+  await b('[data-b="spread"][data-t="1"][data-n="1"][data-v="Body"]');
+  has(await page.textContent(".bd-title:has(#b-t1-text) .bd-ask"), "Body 1, Mind 2", "her second Title spread");
+  // Tapping the 2 onto the Root with the 1 swaps them, and back.
+  await b('[data-b="spread"][data-t="1"][data-n="2"][data-v="Body"]');
+  has(await page.textContent(".bd-title:has(#b-t1-text) .bd-ask"), "Body 2, Mind 1", "the spread swapped");
+  await b('[data-b="spread"][data-t="1"][data-n="2"][data-v="Mind"]');
+  await perm(1, 0, "know how a lock’s built", "Mind");
+  await perm(1, 1, "fight dirty with a knife", "Body");
+  await perm(1, 2, "find a buyer for anything", "Mind");
+  same(await points(), "11 left, 24 of 35 spent", "two Titles with three permissions each, 14 points");
   await shot(page, "5-builder-titles");
-  await next("Roots and specialties");
+  await next("Roots");
   // What it adds up to, and where each one comes from.
   const nums = await page.$$eval(".bd-from-list li", (els) => els.map((li) => [li.querySelector(".k").textContent, Number(li.querySelector("b").textContent)]));
-  same(nums.slice(0, 3), ROOTS.map((r) => [r, want.roots[r]]), "the built Vesk's Roots");
-  same(nums.slice(3).sort(), want.specialties.map((sp) => [sp.name, sp.steps]).sort(), "the built Vesk's specialties");
-  has(await page.textContent(".bd-from-list"), "your first Title, “move unseen”, “run the rooftops”, “pick a mechanical lock” and “fight dirty with a knife”", "where her Body comes from");
+  same(nums, ROOTS.map((r) => [r, want.roots[r]]), "the built Vesk's Roots");
+  has(await page.textContent(".bd-from-list"), "3 from your first Title, “move unseen”, “run the rooftops”, “pick a mechanical lock”, 1 from your second Title and “fight dirty with a knife”", "where her Body comes from");
+  same(await page.$$eval(".tile[data-s], .bd-specs3, [data-b='pspec']", (els) => els.length), 0, "no specialties anywhere");
+  has(await page.textContent(".bd-things"), "Shadow", "her archetypes among the things that are a step");
   await next("What you carry");
-  // What she carries, a part at a time: her leathers are armour on her Body,
-  // Common to start with a box.
+  // What she carries, a part at a time, her attuned thing first: her
+  // grappling line, 5 points, with the awakening it comes with and nothing
+  // to write for its own Aura.
+  same(await page.getAttribute('.bd-seg[data-v="a"]', "aria-current"), "true", "her attuned thing first");
+  same(await page.$$eval('[data-bin$=".aura"]', (els) => els.length), 0, "no Aura of its own to write");
+  await page.fill("#b-a0-name", "A grappling line");
+  await page.fill("#b-a0-w0-name", "Anywhere I can throw a hook");
+  await b('[data-b="awkkind"][data-i="0"][data-j="0"][data-v="passive"]');
+  await page.fill("#b-a0-w0-text", "+1 on one die of every roll she makes with it, for each Aura powering it");
+  same(await points(), "6 left, 29 of 35 spent", "her grappling line's 5");
+  await shot(page, "5-builder-attuned");
+  await next("What you carry");
+  // Her leathers off a card are armour on her Body, Common with a box, and
+  // everything she carries is a point.
   await b('[data-b="fillany"][data-k="e"][data-v="worn leathers"]');
   if ((await pressedOn('[data-b="arm"][data-i="0"][data-v="Body"]')) !== "true") await b('[data-b="arm"][data-i="0"][data-v="Body"]');
   same(await page.$$eval(".bd-quality .bd-qual", (els) => els.map((el) => [el.textContent.trim(), el.getAttribute("aria-pressed"), el.querySelectorAll(".zd-plate").length])), [["Common", "true", 1], ["Fine", "false", 2], ["Masterwork", "false", 3]], "her leathers' quality, Common to start");
@@ -2173,26 +2250,20 @@ if (part("5")) {
   has(await page.textContent(".bd-arm"), "on your Mind, for your Confidence", "armour moved to her Mind");
   await b('[data-b="arm"][data-i="0"][data-v="Body"]');
   await page.fill("#b-e1", "a knife");
+  await page.fill("#b-e2", "soft-soled boots");
   await next("What you carry");
   same(await page.getAttribute('.bd-seg[data-v="u"]', "aria-current"), "true", "Next going on to her utility items");
-  await b('[data-b="fillany"][data-k="u"][data-v="Purse of gold"]');
-  await b('[data-b="fillany"][data-k="u"][data-v="Smoke bomb"]');
+  await page.fill("#b-u0", "a purse of gold");
+  await page.fill("#b-u1", "a smoke bomb");
   await page.fill("#b-u2", "a perfect set of picks");
   await next("What you carry");
   await page.fill("#b-k", "the first coin she ever stole");
-  await next("What you carry");
-  // One attuned thing at the start: her grappling line, its own way to Aura,
-  // and a passive awakening that holds it.
-  same(await page.$$eval('[data-b="addatt"], #b-a1-name', (els) => els.length), 0, "nothing offering a second attuned thing at the start");
-  await page.fill("#b-a0-name", "A grappling line");
-  await page.fill("#b-a0-aura", "1 the first time each scene she gets somewhere nobody else could follow");
-  await page.fill("#b-a0-w0-name", "Anywhere I can throw a hook");
-  await b('[data-b="awkkind"][data-i="0"][data-j="0"][data-v="passive"]');
-  await page.fill("#b-a0-w0-text", "+1 on one die of every roll she makes with it, for each Aura in it");
-  await shot(page, "5-builder-attuned");
+  // The bar follows what's typed after a moment.
+  await page.waitForFunction(() => /^0 left/.test(document.querySelector(".bd-pts-say")?.textContent.replace("Points: ", "").trim() ?? ""));
+  same(await points(), "0 left, 35 of 35 spent", "all 35 spent, her keepsake free");
   await next("Threads");
   // Threads from the crew questions: an answer becomes a bond thread or a
-  // hostile one in a tap.
+  // hostile one in a tap, and they cost nothing.
   same(await page.$$eval(".bd-thread", (els) => els.map((el) => el.querySelector('[aria-pressed="true"]').textContent)), ["Bond", "Bond", "Hostile"], "two bond threads and a hostile one to start");
   await unfold(page, "bd-q-0");
   await page.fill("#b-cq0", "Dorrie. We have pulled a dozen jobs. I trust her with my life.");
@@ -2211,90 +2282,80 @@ if (part("5")) {
   await b('[data-b="pronoun"][data-v="her"]');
   const check = (await page.textContent(".bd-body")).replace(/\s+/g, " ");
   has(check, "Everything adds up", "nothing to flag on a finished Vesk");
-  for (const n of ["Aura 5", "Stride 3"]) has(check, n, "the built Vesk's numbers");
+  for (const n of ["35 of 35 spent, all of them", "Aura 7", "Stride 3"]) has(check, n, "the built Vesk's points and numbers");
+  same(await page.$$eval(".bd-nums .k", (els) => els.some((el) => /action/i.test(el.textContent))), false, "no actions a round to count");
   await shot(page, "5-builder-check");
   await b('[data-b="save"]');
-  await page.waitForSelector(".cc-spectiles .tile[data-s]");
-  same(await specTiles(), wantTiles, "the built Vesk's specialties against her sheet in the chapter");
-  same(await page.$$eval(".cc-roots .tile .tile-steps", (els) => els.map((e) => e.textContent)), ["5 steps", "3 steps", "nothing yet"], "the built Vesk's Roots");
-  same(await page.$$eval(".cc-stat.t-stamina .zd-plate", (els) => els.length), 1, "her leathers' box by her Stamina");
-  const saved = await page.evaluate(() => [JSON.parse(localStorage.getItem("zi-characters")).characters.at(-1), JSON.parse(localStorage.getItem("zi-drafts") || "{}")]);
-  same([saved[0].crew, saved[0].name, Boolean(saved[0].build), "new" in saved[1]], ["own", "Vesk", true, false], "the built Vesk saved, and the draft cleared");
+  await playing(page);
+  const built = (await savedAll(page)).at(-1);
+  const drafts = await page.evaluate(() => JSON.parse(localStorage.getItem("zi-drafts") || "{}"));
+  same([built.crew, built.name, built.build?.v, built.build?.start, "new" in drafts], ["own", "Vesk", 4, 35, false], "the built Vesk saved on 35 points, and the draft cleared");
+  same(JSON.stringify(built.build).includes("spec"), false, "nothing saved about specialties");
+  same(sheetParts(sheetFor(built)), sheetParts(want), "the built Vesk against her sheet in the chapter");
 
-  // Her Body and her Locks against a lock, then a reload and no signal.
-  await page.click('.cc-spectiles .tile[data-s]:has(.tile-name:text-is("Locks"))');
-  has(await page.textContent("#cc-dialog .cc-dice"), "9 steps", "the built Vesk's Body and Locks");
-  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="6"]');
-  await page.evaluate(() => window.ziCompanion.setDice([8, 2, 5]));
-  await page.click('#cc-dialog button[data-act="go"]');
-  await page.waitForSelector("#cc-dialog .res .res-out");
-  has(await page.textContent("#cc-dialog .cc-res"), "Beat it", "her 8 against the lock's 5");
-  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
-  await page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
+  // A reload and no signal keep her, and Change opens her offline.
   await page.reload();
-  await page.waitForSelector(".cc-spectiles .tile[data-s]");
-  same(await specTiles(), wantTiles, "the built Vesk after a reload");
+  await playing(page);
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null, null, { timeout: 15000 }).catch(() => note("the service worker never took over the page"));
   await context.setOffline(true);
   await page.reload();
-  await page.waitForSelector(".cc-spectiles .tile[data-s]", { timeout: 10000 }).catch(() => note("the built Vesk didn't open offline"));
-  await page.click('.cc-tabs a[data-t="sheet"]');
-  await page.click('.cc-changebar a[data-act="bopen"][data-key]');
+  await playing(page).catch(() => note("the built Vesk didn't open offline"));
+  await page.goto(`${BASE}/characters/?build=${encodeURIComponent(built.id)}`);
   has(await step(), "Change anything on her sheet", "changing her opens with everything on one page, offline");
+  same(await points(), "35 points on the sheet, 35 to start", "a saved character's points on the sheet");
   await context.setOffline(false);
 
   // Change her: a Boon instead of two permissions on her first Title, a
-  // fourth permission there filling its six slots, and a Masterwork shield.
+  // fourth permission there filling its six slots, and her boots for a
+  // Masterwork shield. A saved character keeps everything, even past 35.
   await unfold(page, "bd-boon-0");
   await b('[data-b="boon"][data-t="0"][data-v="Toughness"]');
   await page.fill("#b-t0-b0-name", "Iron Lungs");
   await b('[data-b="addperm"][data-t="0"]');
-  await perm(0, 3, "slip a grip", "Body", "Stealth");
+  await perm(0, 3, "slip a grip", "Body");
   has(await page.textContent(".bd-title:has(#b-t0-text)"), "That’s all six slots", "a Boon and four permissions filling her first Title");
   same(await page.$$eval('[data-b="addperm"][data-t="0"]', (els) => els.length), 0, "no seventh slot to add");
+  await page.fill("#b-e2", "");
   await b('[data-b="fillany"][data-k="e"][data-v="shield"]');
   if ((await pressedOn('[data-b="arm"][data-i="2"][data-v="Body"]')) !== "true") await b('[data-b="arm"][data-i="2"][data-v="Body"]');
   await b('[data-b="quality"][data-i="2"][data-v="3"]');
+  same(await points(), "38 points on the sheet, 35 to start", "38 points on her sheet now");
+  same((await page.textContent(".bd-part:last-of-type")).includes("past the 35"), false, "nothing flagged for being past 35");
   await page.click('.bd-foot button[data-b="save"]');
-  await page.waitForSelector(".cc-spectiles .tile[data-s]");
-  same(await page.$$eval(".cc-stat.t-stamina .zd-plate", (els) => els.length), 4, "her leathers' box and her Masterwork shield's three by her Stamina");
-  await page.click('.cc-tabs a[data-t="sheet"]');
-  await openFold(page, "titles");
-  has(await page.textContent(".cc-boons"), "Iron Lungs", "her Boon on her first Title");
-  has(await page.textContent(".cc-boons"), "The first hit you take each scene doesn’t drop a track", "what her Boon does, from the book");
-  same(await page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.filter((c) => c.build).length), 1, "changing her doesn't make a second Vesk");
-  // Iron Lungs takes the first hit this scene, and her Stamina stays put.
-  await page.click('.cc-tabs a[data-t="play"]');
-  await page.click('.tile[data-act="defence"]');
-  await page.click('#cc-dialog button[data-act="d-add-at"][data-v="Body"]');
-  await page.click('#cc-dialog button[data-act="d-add"][data-v="8"]');
-  await page.evaluate(() => window.ziCompanion.setDice([2, 7]));
-  await page.click('#cc-dialog button[data-act="d-go"]');
-  await page.click('#cc-dialog button[data-act="d-pay"][data-what="tough"]');
-  has(await page.textContent("#cc-dialog .cc-paid"), "Iron Lungs took it, and your Stamina stayed put", "her Toughness Boon taking the hit");
-  same(await page.$$eval('#cc-dialog button[data-what="tough"]', (els) => els.length), 0, "Iron Lungs used for the scene");
-  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
-  same(await page.textContent(".cc-stat.t-stamina .v"), "d12", "her Stamina where it was");
+  await playing(page);
+  const changed = (await savedAll(page)).filter((c) => c.build);
+  same(changed.length, 1, "changing her doesn't make a second Vesk");
+  const now = sheetFor(changed[0]);
+  same([now.titles[0].permissions.length, now.titles[0].boons.map((x) => [x.lever, x.name]), now.armour.map((a) => [a.name, a.quality, a.boxes]), now.points.spent], [4, [["Toughness", "Iron Lungs"]], [["worn leathers", "Common", 1], ["shield", "Masterwork", 3]], 38], "her Boon, her fourth permission and her Masterwork shield");
+  same(now.roots, { Body: 9, Mind: 4, Soul: 0 }, "her Body 1 more for her new permission, and nothing for the Boon");
 
-  // A blank character saves too: the builder warns, and never blocks. Leaving
-  // keeps the draft, and the list offers to carry on with it.
+  // A blank character saves too: the builder warns, and never blocks, and
+  // the recommendation's only a nudge. Leaving keeps the draft, and the list
+  // offers to carry on with it. Starting on more is a tap in the bar.
   await page.goto(`${BASE}/characters/?build`);
   await jump(6);
-  has(await page.textContent(".bd-body .is-warn"), "You can save anyway", "the warnings on a blank build");
+  const warns = await page.textContent(".bd-body .is-warn");
+  has(warns, "You can save anyway", "the warnings on a blank build");
+  for (const w of ["You haven’t got a Title. At least one’s recommended, but it’s your call.", "You haven’t got an archetype. At least one’s recommended, but it’s your call.", "You’ve got 35 points left to spend."]) has(warns, w, "a nudge on a blank build");
   await page.fill("#b-name", "Kaia");
+  await page.click(".bd-pts > summary");
+  await page.click('.bd-pts button[data-b="start"][data-v="1"]');
+  same([await page.$eval(".bd-pts", (el) => el.open), await points()], [true, "36 left, 0 of 36 spent"], "one more point to start on, the points staying open");
+  await page.keyboard.press("Escape");
+  same(await page.$eval(".bd-pts", (el) => [el.open, document.activeElement === el.querySelector("summary")]), [false, true], "Escape closing the points");
   await page.click('.cc-back[data-b="leave"]');
   has(await page.textContent('a[data-act="bopen"]'), "Carry on with Kaia", "a half-built character waiting on the list");
   await page.click('a[data-act="bopen"]');
   await b('[data-b="save"]');
-  await page.waitForSelector(".cc-roots .tile");
-  same(await page.$$eval(".cc-roots .tile .tile-steps", (els) => els.map((e) => e.textContent)), ["nothing yet", "nothing yet", "nothing yet"], "a blank character's Roots");
-  has(await page.textContent(".cc-head h1"), "Kaia", "the blank character's name");
+  await playing(page);
+  const kaia = (await savedAll(page)).at(-1);
+  same([kaia.name, kaia.build.start, sheetFor(kaia).roots, sheetFor(kaia).points], ["Kaia", 36, { Body: 0, Mind: 0, Soul: 0 }, { start: 36, spent: 0 }], "a blank character saved, on 36 points");
 
   // Every step at 320 wide, dark then light, with axe.
   await page.setViewportSize({ width: 320, height: 720 });
-  await page.click('.cc-tabs a[data-t="sheet"]');
-  await page.click('.cc-changebar a[data-act="bopen"][data-key]');
+  await page.goto(`${BASE}/characters/?build=${encodeURIComponent(kaia.id)}`);
+  await page.waitForSelector(".bd-head h1");
   await page.click('button[data-b="page"]');
   for (const theme of ["dark", "light"]) {
     await page.evaluate((t) => localStorage.setItem("zi-theme", t), theme);
@@ -2305,9 +2366,12 @@ if (part("5")) {
       if (scroll > client) note(`the builder's step ${s + 1} scrolls sideways at 320 wide, ${theme} (${scroll} > ${client})`);
       await axe(`the builder's step ${s + 1}, ${theme}`);
     }
+    await page.click(".bd-pts > summary");
+    await axe(`the builder's points open, ${theme}`);
+    await page.click(".bd-head h1");
   }
   await shot(page, "5-builder-320-light");
-  console.log("builder: Vesk built step by step on Roots and checked against her sheet");
+  console.log("builder: Vesk built step by step on 35 points and checked against her sheet, changed past 35, and a blank one on 36");
   await context.close();
 }
 
@@ -2337,17 +2401,25 @@ if (part("5b")) {
     const first = await page.$eval('[data-b="arch"]', (el) => Math.round(el.getBoundingClientRect().top + scrollY));
     if (first > 420) note(`the first archetype card starts ${first}px down at 390 by 844, ${theme}`);
     same(await page.$$eval(".bd-progress li", (els) => [els.length, new Set(els.map((el) => Math.round(el.getBoundingClientRect().top))).size]), [7, 1], `the seven steps in one line, ${theme}`);
-    // The steps a tap away from the bar close with Escape, or a tap anywhere else.
-    await page.click(".bd-jump > summary");
+    // The steps and the points a tap away from the bar close with Escape, or a
+    // tap anywhere else, and opening one shuts the other.
+    for (const menu of [".bd-jump", ".bd-pts"]) {
+      await page.click(`${menu} > summary`);
+      await page.keyboard.press("Escape");
+      same(await page.$eval(menu, (el) => [el.open, document.activeElement === el.querySelector("summary")]), [false, true], `Escape closing ${menu}, ${theme}`);
+      await page.click(`${menu} > summary`);
+      await page.click(".bd-lead");
+      same(await page.$eval(menu, (el) => el.open), false, `a tap elsewhere closing ${menu}, ${theme}`);
+    }
+    // The book's words for a step behind a ?, open and shut again.
+    await page.click(".bd-lead .tip");
+    has(await page.textContent(".bd-lead .tip-card:popover-open"), "An archetype’s 5 points", `the first step's words behind its ?, ${theme}`);
     await page.keyboard.press("Escape");
-    same(await page.$eval(".bd-jump", (el) => [el.open, document.activeElement === el.querySelector("summary")]), [false, true], `Escape closing the steps, ${theme}`);
-    await page.click(".bd-jump > summary");
-    await page.click(".bd-lead");
-    same(await page.$eval(".bd-jump", (el) => el.open), false, `a tap elsewhere closing the steps, ${theme}`);
+    same(await page.$$eval(".tip-card:popover-open", (els) => els.length), 0, `Escape putting the words away, ${theme}`);
     for (let s = 0; s < 7; s++) {
       if (s) await jump(s);
-      const bar = await page.$eval(".bd-foot", (el) => [getComputedStyle(el).position, Math.round(innerHeight - el.getBoundingClientRect().bottom)]);
-      same(bar, ["fixed", 0], `Back and Next at the bottom of the screen on step ${s + 1}, ${theme}`);
+      const bar = await page.$eval(".bd-foot", (el) => [getComputedStyle(el).position, Math.round(innerHeight - el.getBoundingClientRect().bottom), Boolean(el.querySelector(".bd-pts-say")?.checkVisibility())]);
+      same(bar, ["fixed", 0, true], `Back, Next and the points at the bottom of the screen on step ${s + 1}, ${theme}`);
       const small = await page.$$eval(".bd-foot button, .bd-foot summary", (els) => els.filter((el) => el.checkVisibility() && (el.getBoundingClientRect().height < 44 || el.getBoundingClientRect().width < 44)).length);
       same(small, 0, `the bar's buttons 44px or more on step ${s + 1}, ${theme}`);
       const wide = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -2355,31 +2427,39 @@ if (part("5b")) {
       await axe(`the builder's step ${s + 1} at 390 by 844, ${theme}`);
     }
     await shot(page, `5b-builder-check-${theme}`);
-    // A Title going on gives its Root a d2 in the dock above the bar, and a
-    // permission on the same Root grows it into a d4.
+    // A Title's 3 Root points going on give its Root a d6 in the dock above
+    // the bar, and a permission on the same Root grows it into a d8.
     await jump(1);
-    await b('[data-b="root"][data-t="0"][data-v="Body"]');
-    same(await page.getAttribute('.bd-rail .tile-dice[data-for="root:Body"] .zd-die', "data-d"), "2", `Body a d2 with a Title on it, ${theme}`);
+    await b('[data-b="spread"][data-t="0"][data-n="3"][data-v="Body"]');
+    same(await page.getAttribute('.bd-rail .tile-dice[data-for="root:Body"] .zd-die', "data-d"), "6", `Body a d6 with a Title's 3 on it, ${theme}`);
     await page.fill("#b-t0-p0", "hold the line");
     await b('[data-b="proot"][data-t="0"][data-j="0"][data-v="Body"]');
     const grown = await page.$eval('.bd-rail .tile-dice[data-for="root:Body"] .zd-die', (el) => [el.dataset.d, el.classList.contains("is-grown")]);
-    same(grown, ["4", !still], `Body a d4 with a permission on it too, ${still ? "swapped straight away under reduce-motion" : "growing into it"}, ${theme}`);
+    same(grown, ["8", !still], `Body a d8 with a permission on it too, ${still ? "swapped straight away under reduce-motion" : "growing into it"}, ${theme}`);
     if (still) same(await page.evaluate(() => document.getAnimations().filter((a) => a.playState === "running" && a.effect?.target?.closest?.(".companion")).length), 0, `nothing moving under reduce-motion, ${theme}`);
     await page.waitForTimeout(400);
     await shot(page, `5b-builder-titles-${theme}`);
-    // axe again with things picked: a Root and a permission, the archetype
-    // folded to the one picked, a Title idea, a Boon, and a crew question
-    // made into a thread.
-    await axe(`a Title with a Root and a permission, ${theme}`);
+    // 1 on each Root is one tap, and 2 and 1 a tap and a Root or two.
+    await b('[data-b="shape"][data-t="0"][data-v="each"]');
+    same(await page.$$eval(".bd-rail .tile-steps", (els) => els.map((el) => el.textContent)), ["2 steps", "1 step", "1 step"], `1 on each Root, ${theme}`);
+    // axe again with things picked: a spread and a permission, an archetype
+    // with its ability, a Title idea, a Boon, the points open, and a crew
+    // question made into a thread.
+    await axe(`a Title with a spread and a permission, ${theme}`);
     await jump(0);
     await b('[data-b="arch"][data-t="0"][data-v="Warrior"]');
-    await axe(`an archetype picked, ${theme}`);
+    await b(`[data-b="abil"][data-t="0"][data-v="${BUILD.archetypes.find((a) => a.name === "Warrior").abilities[0].name}"]`);
+    await axe(`an archetype and its ability picked, ${theme}`);
     await jump(1);
     await unfold(page, "bd-ideas-0");
     await b('[data-b="idea"][data-t="0"][data-v="k-warrior"]');
     await unfold(page, "bd-boon-0");
     await b('[data-b="boon"][data-t="0"][data-v="Stride"]');
     await axe(`a Title idea and a Boon, ${theme}`);
+    await page.click(".bd-pts > summary");
+    has(await page.textContent(".bd-pts-in"), "the Stride Boon", `the Boon's 2 points in what they went on, ${theme}`);
+    await axe(`the points open, ${theme}`);
+    await page.click(".bd-head h1");
     await jump(4);
     await unfold(page, "bd-q-0");
     await page.fill("#b-cq0", "Bram. We held the same wall.");
@@ -2393,23 +2473,29 @@ if (part("5b")) {
     same([await page.inputValue("#b-th0-person"), await page.getAttribute('[data-b="fromq"][data-q="0"][data-v="bond"]', "aria-pressed")], ["", "false"], `a bond thread taken back off its question, ${theme}`);
     await context.close();
   }
-  console.log("one hand: the builder full screen, the first choice high up, the steps in one line, Back and Next at the bottom, and the dice growing, in both themes");
+  console.log("one hand: the builder full screen, the first choice high up, the steps in one line, the points, Back and Next at the bottom, and the dice growing, in both themes");
 }
 
-// 5c. The other ways in, and characters becoming your own. Every crew member
-// made into a build has the sheet the chapter gives them, and a thousand
-// random characters pass every check. Then Bram from the crew and a random
-// one saved and played, a way in asking before it bins a draft, Vesk changed
-// from the crew keeping her play, and Tamsin from before Roots rebuilt.
+// 5c. The other ways in, and characters built before. Every crew member made
+// into a build has the sheet the chapter gives them, on 35 points, and a
+// thousand random characters spend exactly 35 and pass every check. A
+// character built before stacking keeps everything, even past 35: its Roots
+// recounted with a Title's old Root getting its 3, its specialties dropped,
+// and its archetypes keeping their abilities, dealt out between copies. Then
+// on the phone: Bram from the crew and a random one saved, a way in asking
+// before it bins a draft, Vesk from the crew becoming your own with her play
+// kept, one built before stacking told what changed and asked only what's
+// theirs to choose, and Tamsin from before Roots rebuilt.
 if (part("5c")) {
-  const strip = (c) => ({ roots: c.roots, specialties: c.specialties, titles: c.titles.map((t) => [t.name, t.root, t.specialties, t.permissions.map((p) => [p.text, p.root, p.specialty])]), archetypes: c.archetypes.map((a) => a.name), armour: c.armour.map((a) => [a.name, a.root, a.quality, a.boxes]), attuned: c.attuned.map((a) => [a.name, a.stage, a.catch, a.awakenings.map((w) => [w.name, w.kind])]), carry: c.carry, numbers: c.numbers, threads: c.threads.map((p) => [p.person, p.threads.map((t) => [t.text, t.kind])]) });
   for (const crew of book.crew) {
     const want = rootsSheet(crew, [], BUILD);
     const quick = fromCrew(crew, BUILD);
     // The name's left for the player, since they're making their own.
     same(checksOf(quick, BUILD).map((x) => x.text).filter((x) => !/needs a name/.test(x)), [], `${crew.name} made into a quick build, with nothing else to flag`);
-    same(rootsSheet(sheetOf({ id: `5c-${crew.id}`, name: crew.name, build: quick }, BUILD), [], BUILD).roots, want.roots, `${crew.name}'s Roots as a quick build`);
-    same(strip(rootsSheet(sheetOf({ id: `5c-${crew.id}-keep`, name: crew.name, build: fromCrew(crew, BUILD, { keep: true }) }, BUILD), [], BUILD)), strip(want), `${crew.name} made into a build that keeps everything`);
+    same(pointsOf(quick).spent, 35, `${crew.name} made into a build on 35 points`);
+    const sheet = rootsSheet(sheetOf({ id: `5c-${crew.id}`, name: crew.name, build: quick }, BUILD), [], BUILD);
+    same([sheet.roots, sheet.archetypes.map((a) => a.have), sheet.titles.map((t) => t.roots)], [want.roots, want.archetypes.map((a) => a.have), want.titles.map((t) => t.roots)], `${crew.name}'s Roots, abilities and spreads as a quick build`);
+    same(sheetParts(rootsSheet(sheetOf({ id: `5c-${crew.id}-keep`, name: crew.name, build: fromCrew(crew, BUILD, { keep: true }) }, BUILD), [], BUILD)), sheetParts(want), `${crew.name} made into a build that keeps everything`);
   }
   let failing = 0;
   for (let n = 0; n < 1000; n++) {
@@ -2418,32 +2504,55 @@ if (part("5c")) {
     const x = randomBuild(BUILD, book.crew, rand);
     const checks = checksOf(x, BUILD).map((c) => c.text);
     const kinds = new Set(x.threads.filter((t) => t.person.trim()).map((t) => t.kind));
-    if (checks.length || x.attuned.filter((a) => a.name.trim()).length !== 1 || !kinds.has("bond") || !kinds.has("hostile")) {
-      if (failing++ < 3) note(`random character ${n}: ${checks.join(" ") || "not one attuned thing, or not a bond and a hostile thread"}`);
+    const sheet = rootsSheet(sheetOf({ id: `rand-${n}`, name: x.name, build: x }, BUILD), [], BUILD);
+    if (checks.length || pointsOf(x).spent !== 35 || sheet.points.spent !== 35 || !sheet.titles.length || !sheet.archetypes.length || sheet.attuned.length !== 1 || !kinds.has("bond") || !kinds.has("hostile")) {
+      if (failing++ < 3) note(`random character ${n}: ${checks.join(" ") || `${sheet.points.spent} points, or not a Title, an archetype and one attuned thing, or not a bond and a hostile thread`}`);
     }
   }
-  console.log(`ways in: six crew made into builds, and ${1000 - failing} of 1000 random characters passing every check`);
+  console.log(`ways in: six crew made into builds on 35 points, and ${1000 - failing} of 1000 random characters spending exactly 35 and passing every check`);
+
+  // Built on the phone before stacking: Vesk with each Title on one Root,
+  // specialties, Shadow twice and a grappling line with its own way to Aura.
+  const OLD = { v: 3, archs: ["Shadow", "Shadow"], titles: [
+    { idea: "k-rogue", text: "The best cat burglar in the city", root: "Body", specs: ["Stealth", "Climbing", "Locks"], perms: [{ text: "move unseen", root: "Body", spec: "Stealth" }, { text: "run the rooftops", root: "Body", spec: "Climbing" }, { text: "pick a mechanical lock", root: "Body", spec: "Locks" }], boons: [] },
+    { idea: "", text: "Raised by the Guild", root: "Mind", specs: ["Locks", "Knives", "Black market"], perms: [{ text: "know how a lock’s built", root: "Mind", spec: "Locks" }, { text: "fight dirty with a knife", root: "Body", spec: "Knives" }, { text: "find a buyer for anything", root: "Mind", spec: "Black market" }], boons: [] }],
+    equipment: [{ text: "worn leathers", arm: "Body" }, { text: "a knife", arm: "" }, { text: "", arm: "" }], utility: [{ text: "a purse of gold" }, { text: "a smoke bomb" }, { text: "a perfect set of picks" }], keepsake: { text: "the first coin she ever stole" }, bag: "",
+    attuned: [{ name: "A grappling line", props: "", stage: "Awakened", catch: "", burden: "", aura: "1 the first time each scene she gets somewhere nobody else could follow", awk: [{ name: "Anywhere I can throw a hook", kind: "passive", text: "+1 on one die of every roll she makes with it, for each Aura in it" }] }],
+    threads: [{ person: "Dorrie", text: "We have pulled a dozen jobs. I trust her with my life.", kind: "bond", whose: "" }, { person: "Bram", text: "He once carried me out of a fire. I have never said thank you.", kind: "bond", whose: "" }, { person: "The fence", text: "I owe a debt I would rather not discuss.", kind: "hostile", whose: "" }],
+    connect: [], aspiration: "Own the score of a lifetime", name: "Vesk", pronoun: "her", blurb: "", trouble: [], order: ["Locks", "Stealth"] };
+  {
+    const nb = normalBuild(OLD, BUILD);
+    same([nb.v, nb.have, nb.titles.map((t) => [t.roots, t.from]), nb.stack], [4, [["Push"], ["Vanish"]], [[{ Body: 3, Mind: 0, Soul: 0 }, "Body"], [{ Body: 0, Mind: 3, Soul: 0 }, "Mind"]], true], "a build from before stacking: each Title's 3 on its old Root, and Shadow's abilities dealt between her two");
+    same(JSON.stringify(nb).match(/spec|order|"aura"/g), null, "its specialties and its thing's own Aura gone");
+    const old = rootsSheet(sheetOf({ id: "5c-old", name: "Vesk", build: OLD }, BUILD), [], BUILD);
+    same([old.roots, old.points, old.numbers.aura, RS.choicesOf(old)], [{ Body: 7, Mind: 5, Soul: 0 }, { start: 35, spent: 34 }, 7, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "points", left: 1 }]], "her Roots recounted, her points, Aura 7, and what's hers to choose");
+    same(checksOf(nb, BUILD, { changing: true }).map((x) => x.text), ["You’ve got a point left to spend."], "a saved character only told about the point she's got left");
+    // Grown past 35, it keeps everything, and nothing's flagged.
+    const grown = foldGrown(OLD, [{ k: "perm", t: 0, text: "slip a grip", root: "Body", spec: "Stealth" }, { k: "title", text: "The woman who has never been seen", root: "Body", specs: ["Hiding"], perm: { text: "vanish in a crowd", root: "Body", spec: "Hiding" } }, { k: "arch", arch: "Hunter" }], BUILD);
+    same([pointsOf(grown).spent, grown.have, grown.titles[2].roots, checksOf(grown, BUILD, { changing: true }).length], [46, [["Push"], ["Vanish"], ["Push", "Mark the pack"]], { Body: 3, Mind: 0, Soul: 0 }, 0], "what she grew before stacking folded in, 46 points and nothing flagged");
+    // From before Roots: each Title's spread the way its permissions lean.
+    const tam = normalBuild({ v: 2, titles: [{ arch: "Warrior", text: "The best blade on the docks", perms: [{ text: "fight with a sword", on: ["Fight"] }, { text: "read a fighter’s style", on: ["Study"] }] }], actions: ["Fight", "Study"], equipment: [], utility: [], attuned: [], threads: [] }, BUILD);
+    same([tam.titles[0].roots, tam.titles[0].perms.map((p) => p.root), tam.have], [{ Body: 2, Mind: 1, Soul: 0 }, ["Body", "Mind"], [BUILD.archetypes.find((a) => a.name === "Warrior").abilities.map((x) => x.name)]], "a Title from before Roots spread the way its permissions lean, its archetype with every ability");
+  }
 
   const { context, page } = await phone();
   const b = (attrs) => page.click(`button[data-act="b"]${attrs}`);
-  const specTiles = () => page.$$eval(".cc-spectiles .tile[data-s]", (els) => els.map((el) => [el.querySelector(".tile-name").textContent, el.querySelector(".tile-steps").textContent]));
-  const tilesOf = (c) => c.specialties.map((sp) => {
-    const root = rootFor(c, sp.name);
-    return [sp.name, `${root} ${c.roots[root]} and ${sp.steps}`];
-  });
-  // Bram from the crew, saved as is, plays his sheet.
+  // Bram from the crew, saved as is, has his sheet.
   await page.goto(`${BASE}/characters/`);
   await page.click('button[data-act="bway"][data-w="bram"]');
   has(await page.textContent(".bd-head"), "From Bram", "the builder from Bram");
+  same((await page.textContent(".bd-pts-say")).replace(/\s+/g, " ").replace("Points: ", "").trim(), "0 left, 35 of 35 spent", "Bram's 35 points spent");
   await page.click('.bd-foot button[data-b="save"]');
-  await page.waitForSelector(".cc-spectiles .tile[data-s]");
-  same(await specTiles(), tilesOf(rootsSheet(book.crew.find((c) => c.id === "bram"), [], BUILD)), "Bram from the crew, saved and played");
-  // A random one saves and plays.
+  await playing(page);
+  const bram = rootsSheet(book.crew.find((c) => c.id === "bram"), [], BUILD);
+  const mineBram = sheetFor((await savedAll(page)).at(-1));
+  same(sheetParts({ ...mineBram, threads: [] }), sheetParts({ ...bram, threads: [] }), "Bram from the crew, saved with his sheet");
+  // A random one saves on 35.
   await page.goto(`${BASE}/characters/`);
   await page.click('button[data-act="bway"][data-w="random"]');
   await page.click('.bd-foot button[data-b="save"]');
-  await page.waitForSelector(".cc-spectiles .tile[data-s]");
-  same(await page.$$eval(".cc-roots .tile", (els) => els.length), 3, "a random character's three Roots on the play screen");
+  await playing(page);
+  same(sheetFor((await savedAll(page)).at(-1)).points.spent, 35, "a random character saved on 35 points");
   // A way in asks before it bins a draft.
   await page.goto(`${BASE}/characters/?build`);
   await page.click(".bd-jump > summary");
@@ -2458,24 +2567,46 @@ if (part("5c")) {
 
   // Vesk from the crew, part way through a scene, becomes your own the first
   // time a change is saved, and keeps her play.
-  await play(page, "vesk");
-  await page.click('button[data-p="aura"]');
-  await page.click('#cc-panel button[data-act="aura"][data-d="-1"]:not([data-why])');
-  await page.click('button[data-p="stamina"]');
-  await page.click('#cc-panel button[data-act="hit"]');
-  await page.click('.cc-tabs a[data-t="sheet"]');
-  await page.click('.cc-changebar a[data-act="bopen"][data-key]');
+  const vesk = await crewOn(page, "vesk");
+  await setState(page, vesk.id, { aura: 4, tracks: { stamina: 10 } });
+  await page.goto(`${BASE}/characters/?build=${encodeURIComponent(vesk.id)}`);
   has(await page.textContent(".bd-head"), "Change anything on her sheet", "changing Vesk from the crew");
   await unfold(page, "bd-boon-1");
   await b('[data-b="boon"][data-t="1"][data-v="Ties"]');
   await page.click('.bd-foot button[data-b="save"]');
-  await page.waitForSelector(".cc-spectiles .tile[data-s]");
-  const mine = await page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.find((c) => c.from === "vesk"));
+  await playing(page);
+  const mine = (await savedAll(page)).find((c) => c.from === "vesk");
   same([mine.crew, Boolean(mine.build), mine.state.aura, mine.state.tracks?.stamina], ["own", true, 4, 10], "Vesk your own, with her Aura spent and her Stamina hit kept");
-  same(await page.$$eval(".cc-gold, .cc-gem, .cc-note.is-gold", (els) => els.length), 0, "no gold marks on Vesk once she's your own");
-  same(await specTiles(), tilesOf(rootsSheet(book.crew.find((c) => c.id === "vesk"), [], BUILD)), "her Roots and specialties as they were");
+  same(await page.$$eval(".cc-gold, .cc-gem", (els) => els.length), 0, "no gold marks on Vesk once she's your own");
+  same([sheetFor(mine).roots, sheetFor(mine).titles[1].boons.map((x) => x.lever), sheetFor(mine).points.spent], [rootsSheet(book.crew.find((c) => c.id === "vesk"), [], BUILD).roots, ["Ties"], 37], "her Roots as they were, and the Boon's 2 points");
 
-  // Tamsin, built on the phone before Roots, rebuilt on them.
+  // Vesk built on the phone before stacking: her play screen knows what's
+  // hers to choose, and Change says what changed and asks only that.
+  await page.evaluate((build) => {
+    const all = JSON.parse(localStorage.getItem("zi-characters"));
+    all.characters.push({ id: "own-v3", crew: "own", name: "Vesk", hash: "own", build, state: { v: 2, aura: 5, acting: false, tracks: { stamina: 12, confidence: 12, resolve: 12 }, scars: { stamina: [], confidence: [], resolve: [] }, store: { "0|Anywhere I can throw a hook": 1 }, conditions: [], threads: {}, crossed: {}, boxes: {}, picked: [], asp: 4, aspText: "", notes: "Owes the fence", grown: [] } });
+    localStorage.setItem("zi-characters", JSON.stringify(all));
+  }, OLD);
+  await page.goto(`${BASE}/characters/?c=own-v3`);
+  await playing(page);
+  const moved = (await savedAll(page)).find((c) => c.id === "own-v3").state;
+  same([moved.v, moved.stacked, moved.choose, moved.power], [3, true, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "points", left: 1 }], { "0|Anywhere I can throw a hook": 1 }], "moved onto stacking with what's hers to choose, her hook's Aura powering it");
+  await page.goto(`${BASE}/characters/?build=own-v3`);
+  const told = (await page.textContent(".cc-note.is-gold")).replace(/\s+/g, " ");
+  has(told, "Vesk keeps everything since the stacking change. Each Title that was on one Root has all 3 on it, so spread them how you like, and you’ve got 1 point to spend.", "what changed, and what's hers to choose");
+  has(await page.textContent(".bd-title:has(#b-t1-text) .bd-was"), "It was all on your Mind, so it still is.", "her second Title on its old Root");
+  same(await page.$$eval("[data-b='abil'][aria-pressed='true']", (els) => els.map((el) => `${el.dataset.t}:${el.dataset.v}`)), ["0:Push", "1:Vanish"], "her Shadows keeping Push and Vanish");
+  await b('[data-b="shape"][data-t="1"][data-v="two"]');
+  await b('[data-b="spread"][data-t="1"][data-n="1"][data-v="Body"]');
+  same(await page.$$eval(".bd-title:has(#b-t1-text) .bd-was", (els) => els.length), 0, "spread, it isn't on its old Root any more");
+  await page.fill("#b-e2", "soft-soled boots");
+  await page.click('.bd-foot button[data-b="save"]');
+  await playing(page);
+  const v3 = (await savedAll(page)).find((c) => c.id === "own-v3");
+  same([v3.build.v, "stack" in v3.build, v3.build.titles.some((t) => "from" in t), v3.state.choose, v3.state.notes, v3.state.asp], [4, false, false, [], "Owes the fence", 4], "saved on stacking, with nothing left to choose and her play kept");
+  same(sheetFor(v3).roots, rootsSheet(book.crew.find((c) => c.id === "vesk"), [], BUILD).roots, "her Roots recounted the chapter's way");
+
+  // Tamsin, built on the phone before Roots, rebuilt on stacking.
   await page.evaluate(() => {
     const list = JSON.parse(localStorage.getItem("zi-characters"));
     list.characters.push({ id: "own-old", crew: "own", name: "Tamsin", hash: "own", build: { v: 2, titles: [{ arch: "Warrior", idea: "", text: "The best blade on the docks", on: ["Fight"], perms: [{ text: "fight with a sword", on: ["Fight"] }] }], traits: [], actions: ["Fight", "Move", "Sneak", "Study", "Talk"], equipment: [{ text: "a sword", on: ["Fight"] }], utility: [], keepsake: { text: "", on: [] }, bag: "", attuned: [], threads: [{ person: "Dorrie", text: "She owes me.", kind: "hostile", whose: "" }], connect: [], aspiration: "Run the docks", name: "Tamsin", pronoun: "her" },
@@ -2483,52 +2614,21 @@ if (part("5c")) {
     localStorage.setItem("zi-characters", JSON.stringify(list));
   });
   await page.goto(`${BASE}/characters/?c=own-old`);
+  has(await page.textContent("main"), "Rebuild Tamsin on Roots", "Tamsin shown as she was, with a way to rebuild her");
   await page.click('a[data-act="bopen"][data-key="own-old"]');
   has(await page.textContent(".bd-head"), "Her sheet on Roots", "rebuilding Tamsin");
   same(await page.inputValue("#b-t0-text"), "The best blade on the docks", "her Title carried across");
   same(await page.inputValue("#b-t0-p0"), "fight with a sword", "her permission carried across");
-  // Her Title and her permission start on the Root their words suggest, a
-  // guess to check: here it's her Body, so a tap would take it back off.
-  same(await page.getAttribute('button[data-b="root"][data-t="0"][data-v="Body"]', "aria-pressed"), "true", "her Title's Root guessed from its words");
+  // Her Title's 3 and her permission start on the Root their words suggest,
+  // a guess to check: here it's her Body.
+  same(await page.getAttribute('button[data-b="spread"][data-t="0"][data-n="3"][data-v="Body"]', "aria-pressed"), "true", "her Title's 3 Root points guessed from its permission");
   same(await page.getAttribute('button[data-b="proot"][data-t="0"][data-j="0"][data-v="Body"]', "aria-pressed"), "true", "her permission's Root guessed from its words");
-  for (const [k, sp] of ["Swordplay", "Brawling", "The docks"].entries()) await page.fill(`#b-t0-s${k}`, sp);
-  await page.fill("#b-t0-p0-spec", "Swordplay");
   await page.click('.bd-foot button[data-b="save"]');
-  await page.waitForSelector(".cc-spectiles .tile[data-s]");
-  same((await specTiles())[0], ["Swordplay", "Body 2 and 2"], "Tamsin's Swordplay on Roots");
-  const tam = await page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.find((c) => c.id === "own-old"));
-  same([tam.build.v, tam.state.v, "before" in tam.state, tam.state.notes], [3, 2, false, "Owes Dorrie"], "Tamsin saved on Roots, her notes kept");
-  await page.click('.cc-tabs a[data-t="sheet"]');
-  has(await page.textContent("main"), "She owes me.", "her hostile thread with Dorrie kept");
-
-  // A Gambler flips a die once a round for free, theirs or yours, and pays a
-  // size of Confidence for Double or nothing, flipping every die of theirs.
-  const gil = fromCrew(book.crew.find((c) => c.id === "bram"), BUILD);
-  gil.archs = ["Gambler", "Leader"];
-  gil.name = "Gil";
-  await page.evaluate((build) => {
-    const list = JSON.parse(localStorage.getItem("zi-characters"));
-    list.characters.push({ id: "own-gil", crew: "own", name: "Gil", hash: "own", build, state: {} });
-    localStorage.setItem("zi-characters", JSON.stringify(list));
-  }, gil);
-  await page.goto(`${BASE}/characters/?c=own-gil`);
-  await page.click('.cc-spectiles .tile[data-s]:has(.tile-name:text-is("Shieldwork"))');
-  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="10"]');
-  await page.evaluate(() => window.ziCompanion.setDice([9, 3, 7]));
-  await page.click('#cc-dialog button[data-act="go"]');
-  await page.waitForSelector("#cc-dialog .res .res-out");
-  await page.click('#cc-dialog button[data-act="flip"]');
-  await page.click('#cc-dialog .cc-them button[data-act="pick"]');
-  has(await page.textContent("#cc-dialog .cc-log"), "Flipped their d10, so it’s a 4 now", "their 7 on a d10 flipped to a 4");
-  same(await page.$$eval("#cc-dialog .res-out", (els) => els.map((e) => e.textContent)), ["Beat it", "Under"], "his 9 beating their flipped 4, and his 3 still under");
-  same(await page.$$eval('#cc-dialog button[data-act="flip"]', (els) => els.length), 0, "the free flip used on this roll");
-  await unfold(page, "abil");
-  await page.click('#cc-dialog .cc-how button[data-act="ability"]:has-text("Double or nothing")');
-  await page.click('#cc-dialog button[data-act="pay-way"]');
-  has(await page.textContent("#cc-dialog .cc-log"), "Flipped every die of yours", "Double or nothing flipping every die");
-  same(await page.$$eval("#cc-dialog .res-note", (els) => els.map((e) => e.textContent).filter((x) => x === "Flipped").length), 2, "both dice marked flipped, so neither pays");
-  await page.click('#cc-dialog .dlg-foot button[data-act="close"]');
-  console.log("ways in: Bram and a random one played, a draft binned on a second tap, Vesk your own with her play kept, Tamsin rebuilt on Roots, and a Gambler's flips");
+  await playing(page);
+  const tam = (await savedAll(page)).find((c) => c.id === "own-old");
+  same([tam.build.v, tam.state.v, "before" in tam.state, tam.state.notes, sheetFor(tam).roots], [4, 3, false, "Owes Dorrie", { Body: 4, Mind: 0, Soul: 0 }], "Tamsin saved on stacking, her Body 4 and her notes kept");
+  same(sheetFor(tam).threads.find((p) => p.person === "Dorrie")?.threads[0]?.text, "She owes me.", "her hostile thread with Dorrie kept");
+  console.log("ways in: Bram and a random one saved, a draft binned on a second tap, Vesk your own with her play kept, one from before stacking asked only what's hers, and Tamsin rebuilt");
   await context.close();
 }
 
@@ -3114,61 +3214,66 @@ if (part("7c")) {
   console.log("dice roller: Bram's defence with a swap and read the other way, the Aura from wins and top faces, the sheet left alone, a question bubble, the set-up kept, one side added up, a tie, an area each on their own and as one, real dice, offline off the list, several actions thrown together and read on their own, read the other way, on real dice, kept and taken off, 320 wide in both themes with one and two, and the tumble");
 }
 
-// 8. Downtime and rule changes. Vesk's week: every track up a size first,
-// then 6 sizes of Recover and a new permission, undone and done again, and
-// a second week that chases her Aspiration with fixed dice and gives her
-// grappling line a new awakening. It all survives a reload. Then a made-up
-// rule change against her saved sheet: a reworded permission, her Stride and
-// a permission moved to another specialty get gold marks with old and new,
-// typo fixes stay quiet, what she grew isn't marked, and Got it clears them.
+// 8. Downtime on stacking. Vesk's week: every track up a size first, then 6
+// sizes of Recover and a new permission with its Root, undone and done
+// again, and a second week that chases her Aspiration with her Mind and the
+// two things on her sheet that fit, with fixed dice, and gives her grappling
+// line a new awakening and its Catch. It all survives a reload. Then (8b,
+// the play screen's, prompt 6 of notes/stacking-plan.md) a made-up rule
+// change against her saved sheet with its gold marks.
 if (part("8")) {
   const { context, page } = await phone();
   const t = tableOf(page);
   const dt = (sel) => page.click(`#cc-dialog button[data-act="dt"]${sel}`);
-  const spec = (name) => page.$eval(`.cc-spectiles .tile[data-s]:has(.tile-name:text-is("${name}"))`, (el) => `${el.querySelector(".tile-steps").textContent} · ${el.querySelector(".tile-die").textContent}`);
-  await play(page, "vesk");
-  await t.panel("stamina");
-  for (let i = 0; i < 4; i++) await page.click('#cc-panel button[data-act="hit"][data-t="stamina"]');
-  await t.panel("stamina", false);
-  await t.panel("confidence");
-  await page.click('#cc-panel button[data-act="hit"][data-t="confidence"]');
-  await t.panel("confidence", false);
-  same(await t.tracks(), ["d4", "d10", "d12"], "Vesk before her week");
-  await page.click('button[data-act="downtime"]');
-  has(await t.body(), "Stamina d4 to d6 and Confidence d10 to d12", "every track up a size, free");
-  await dt('[data-do="pick"][data-s="0"][data-v="heal"]');
-  for (let i = 0; i < 3; i++) await dt('[data-do="heal"][data-s="0"][data-f="stamina"][data-v="1"]');
-  same(await page.$eval('#cc-dialog button[data-act="dt"][data-do="heal"][data-s="0"][data-f="stamina"][data-v="1"]', (el) => el.disabled), true, "her Stamina can't go past d12");
-  await dt('[data-do="pick"][data-s="1"][data-v="perm"]');
-  await dt('[data-do="set"][data-s="1"][data-f="t"][data-v="0"]');
-  await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "slip through any crowd");
-  await dt('[data-do="set"][data-s="1"][data-f="root"][data-v="Body"]');
-  await dt('[data-do="set"][data-s="1"][data-f="spec"][data-v="Stealth"]');
+  // Vesk part way through her week: her Stamina down to d4 and her
+  // Confidence to d10.
+  const vesk = await crewOn(page, "vesk");
+  await setState(page, vesk.id, { tracks: { stamina: 4, confidence: 10, resolve: 12 } });
+  await page.reload();
+  await playing(page);
+  const me = async () => (await savedAll(page)).find((c) => c.id === vesk.id);
+  const tracksOf = async () => {
+    const s = (await me()).state.tracks;
+    return [s.stamina, s.confidence, s.resolve];
+  };
+  const base = rootsSheet(book.crew.find((c) => c.id === "vesk"), [], BUILD);
+  const week = async () => {
+    await page.click('button[data-act="downtime"]');
+    has(await t.body(), "Stamina d4 to d6 and Confidence d10 to d12", "every track up a size, free");
+    // Vesk's Shadows have both their abilities, so there's none to buy.
+    same(await page.$$eval('#cc-dialog button[data-do="pick"][data-v="ability"]', (els) => els.length), 0, "no ability to buy when every one's had");
+    await dt('[data-do="pick"][data-s="0"][data-v="heal"]');
+    for (let i = 0; i < 3; i++) await dt('[data-do="heal"][data-s="0"][data-f="stamina"][data-v="1"]');
+    same(await page.$eval('#cc-dialog button[data-act="dt"][data-do="heal"][data-s="0"][data-f="stamina"][data-v="1"]', (el) => el.disabled), true, "her Stamina can't go past d12");
+    await dt('[data-do="pick"][data-s="1"][data-v="perm"]');
+    await dt('[data-do="set"][data-s="1"][data-f="t"][data-v="0"]');
+    await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "slip through any crowd");
+    await dt('[data-do="set"][data-s="1"][data-f="root"][data-v="Body"]');
+    same(await page.$$eval('#cc-dialog [data-f="spec"], #cc-dialog datalist', (els) => els.length), 0, "no specialty to write");
+  };
+  await week();
   await shot(page, "8-downtime");
   await t.finish();
-  same(await t.tracks(), ["d12", "d12", "d12"], "her Stamina healed and every track up");
-  same(await spec("Stealth"), "Body 6 and 3 · d12 + d6", "her new permission on her Body and her Stealth");
-  same(await spec("Locks"), "Body 6 and 4 · d12 + d8", "her Body up 1 on every roll");
+  same(await tracksOf(), [12, 12, 12], "her Stamina healed and every track up");
+  same(sheetFor(await me()).roots, { ...base.roots, Body: base.roots.Body + 1 }, "her new permission 1 more on her Body");
+  same(sheetFor(await me()).titles[0].permissions.map((p) => [p.text, p.root]).at(-1), ["slip through any crowd", "Body"], "on her first Title");
   await page.click('button[data-act="undo"]');
-  same([await t.tracks(), await spec("Stealth")], [["d4", "d10", "d12"], "Body 5 and 2 · d12 + d2"], "Undo takes the week back");
-  await page.click('button[data-act="downtime"]');
-  await dt('[data-do="pick"][data-s="0"][data-v="heal"]');
-  for (let i = 0; i < 3; i++) await dt('[data-do="heal"][data-s="0"][data-f="stamina"][data-v="1"]');
-  await dt('[data-do="pick"][data-s="1"][data-v="perm"]');
-  await dt('[data-do="set"][data-s="1"][data-f="t"][data-v="0"]');
-  await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "slip through any crowd");
-  await dt('[data-do="set"][data-s="1"][data-f="root"][data-v="Body"]');
-  await dt('[data-do="set"][data-s="1"][data-f="spec"][data-v="Stealth"]');
+  same([await tracksOf(), sheetFor(await me()).roots], [[4, 10, 12], base.roots], "Undo takes the week back");
+  await week();
   await t.finish();
-  same(await spec("Stealth"), "Body 6 and 3 · d12 + d6", "her week again");
-  // A second week: her Aspiration with her Soul and her Black market, 2
-  // steps, a d4, against its d2, and a new awakening on her grappling line,
-  // a Catch with it since it's Awakened.
+  same(sheetFor(await me()).roots.Body, base.roots.Body + 1, "her week again");
+  // A second week: her Aspiration with her Mind and the two things on her
+  // sheet that fit, 6 steps, a d12, against its d2, and a new awakening on
+  // her grappling line, a Catch with it since it's Awakened.
   await page.click('button[data-act="downtime"]');
   await dt('[data-do="pick"][data-s="0"][data-v="asp"]');
   await dt('[data-do="set"][data-s="0"][data-f="root"][data-v="Mind"]');
-  await dt('[data-do="set"][data-s="0"][data-f="spec"][data-v="Black market"]');
-  has(await t.body(), "5 steps, d10, against its d2", "her Aspiration roll");
+  await dt('[data-do="use"][data-s="0"][data-v="title|1"]');
+  await dt('[data-do="use"][data-s="0"][data-v="perm|1|2"]');
+  has(await t.body(), "6 steps, d12, against its d2", "her Aspiration roll");
+  await dt('[data-do="use"][data-s="0"][data-v="perm|1|2"]');
+  has(await t.body(), "5 steps, d10, against its d2", "a thing tapped off again");
+  await dt('[data-do="use"][data-s="0"][data-v="perm|1|2"]');
   await page.evaluate(() => window.ziCompanion.setDice([7, 1]));
   await dt('[data-do="asp-roll"][data-s="0"]');
   has(await t.body(), "7 against 1. Beat it. It climbs to d4.", "her Aspiration climbing");
@@ -3180,138 +3285,169 @@ if (part("8")) {
   await page.fill('#cc-dialog input[data-dt="1"][data-f="catch"]', "Loud");
   await t.finish();
   await page.reload();
-  await page.waitForSelector(".tile[data-s]");
-  has(await page.textContent("main"), "Haul someone up after me", "her new awakening on the play screen after a reload");
-  await page.click('.cc-tabs a[data-t="sheet"]');
-  await page.$$eval("details.cc-fold", (els) => els.forEach((d) => (d.open = true)));
-  has(await page.textContent("main"), "slip through any crowd", "her new permission on the Sheet tab");
-  const saved = await page.evaluate(() => localStorage.getItem("zi-characters"));
-  const id = JSON.parse(saved).characters[0].id;
-  same(JSON.parse(saved).characters[0].state.asp, 4, "her Aspiration's die saved");
+  await playing(page);
+  const after = await me();
+  same([after.state.asp, sheetFor(after).attuned[0].awakenings.map((w) => w.name), sheetFor(after).attuned[0].catch], [4, ["Anywhere I can throw a hook", "Haul someone up after me"], "Loud"], "her Aspiration's die and her new awakening with its Catch, after a reload");
+  console.log("downtime: Vesk's two weeks, a permission with its Root, an Aspiration rolled on what fits, an undo and a reload");
 
-  // A made-up rule change against her saved sheet, on a phone that hasn't got
-  // the site kept yet, so the changed rules come straight from the page.
-  const second = await phone({ serviceWorkers: "block" });
-  const p2 = second.page;
-  await second.context.route((url) => url.pathname === "/characters/", async (route) => {
-    const res = await route.fetch();
-    const html = await res.text();
-    const out = html.replace(/(<script[^>]*id="zi-companion"[^>]*>)([\s\S]*?)(<\/script>)/, (m, open, json, close) => {
-      const data = JSON.parse(json);
-      const v = data.crew.find((c) => c.id === "vesk");
-      const perm = (text) => v.titles.flatMap((x) => x.permissions).find((p) => p.text === text);
-      perm("run the rooftops").text = "run and leap the rooftops";
-      perm("know how a lock’s built").text = "know how a locks built";
-      perm("pick a mechanical lock").specialty = "Climbing";
-      v.titles[1].name = "Raised by the guild";
-      v.numbers.stride = 4;
-      v.hash = "madeup01";
-      return `${open}${JSON.stringify(data).replace(/</g, "\\u003c")}${close}`;
+  // A made-up rule change against her saved sheet, with its gold marks
+  // (marks.js and the play screen's, prompt 6 of notes/stacking-plan.md).
+  // It runs on Vesk as 8 left her, so ZI_ONLY=8,8b.
+  if (part("8b")) {
+    const saved = await page.evaluate(() => localStorage.getItem("zi-characters"));
+    const id = vesk.id;
+    const second = await phone({ serviceWorkers: "block" });
+    const p2 = second.page;
+    await second.context.route((url) => url.pathname === "/characters/", async (route) => {
+      const res = await route.fetch();
+      const html = await res.text();
+      const out = html.replace(/(<script[^>]*id="zi-companion"[^>]*>)([\s\S]*?)(<\/script>)/, (m, open, json, close) => {
+        const data = JSON.parse(json);
+        const v = data.crew.find((c) => c.id === "vesk");
+        const perm = (text) => v.titles.flatMap((x) => x.permissions).find((p) => p.text === text);
+        perm("run the rooftops").text = "run and leap the rooftops";
+        perm("know how a lock’s built").text = "know how a locks built";
+        perm("pick a mechanical lock").specialty = "Climbing";
+        v.titles[1].name = "Raised by the guild";
+        v.numbers.stride = 4;
+        v.hash = "madeup01";
+        return `${open}${JSON.stringify(data).replace(/</g, "\\u003c")}${close}`;
+      });
+      return route.fulfill({ response: res, body: out });
     });
-    return route.fulfill({ response: res, body: out });
-  });
-  await p2.goto(`${BASE}/characters/`);
-  await p2.evaluate((json) => localStorage.setItem("zi-characters", json), saved);
-  await p2.goto(`${BASE}/characters/?c=${encodeURIComponent(id)}`);
-  await p2.waitForSelector(".tile[data-s]");
-  const seen = await p2.evaluate((cid) => JSON.parse(localStorage.getItem("zi-characters")).characters.find((c) => c.id === cid).state.seen, id);
-  same([seen["title:1"], seen["perm:1:0"], seen["perm:0:1"]], ["Raised by the guild (Mind; Locks, Knives, Black market)", "know how a locks built (Mind, Locks)", "run the rooftops (Body, Climbing)"], "the typo fixes taken in quietly, and the real change kept for its mark");
-  has(await p2.textContent(".cc-note.is-gold"), "lines on Vesk’s sheet have changed", "the note for a rule change");
-  const marked = await p2.$$eval(".cc-spectiles .tile.is-changed .tile-name", (els) => els.map((e) => e.textContent));
-  same(marked, ["Locks", "Climbing"], "gold corners on Locks and Climbing");
-  await p2.click('.cc-gold[data-k="num:stride"]');
-  has(await p2.textContent(".cc-head .cc-was"), "Was Stride 3", "Stride's old number");
-  has(await p2.textContent(".cc-head .cc-was"), "Now Stride 4", "Stride's new number");
-  await p2.click('.cc-tabs a[data-t="sheet"]');
-  await p2.$$eval("details.cc-fold", (els) => els.forEach((d) => (d.open = true)));
-  const golds = await p2.$$eval(".cc-gold", (els) => els.map((el) => el.dataset.k));
-  for (const k of ["perm:0:1", "perm:0:2", "spec:Locks", "spec:Climbing"]) same(golds.includes(k), true, `a gold mark on ${k}`);
-  for (const k of ["perm:1:0", "title:1"]) same(golds.includes(k), false, `no gold mark on ${k}, a typo fix`);
-  same(golds.some((k) => /:g\d/.test(k)), false, "nothing she grew in downtime marked");
-  await p2.click('.cc-gold[data-k="perm:0:1"]');
-  has(await p2.textContent('li:has(> .cc-gold[data-k="perm:0:1"]) .cc-was, li:has(.cc-gold[data-k="perm:0:1"]) .cc-was'), "Was run the rooftops (Body, Climbing)", "the permission as it was");
-  await p2.click('.cc-note.is-gold button[data-act="seen"]');
-  same(await p2.$$eval(".cc-gold", (els) => els.length), 0, "Got it clears the marks");
-  await p2.reload();
-  await p2.waitForSelector(".cc-page");
-  same(await p2.$$eval(".cc-gold", (els) => els.length), 0, "and they stay cleared");
-  console.log("downtime: Vesk's two weeks, an undo, a reload and a made-up rule change with its gold marks");
-  await second.context.close();
+    await p2.goto(`${BASE}/characters/`);
+    await p2.evaluate((json) => localStorage.setItem("zi-characters", json), saved);
+    await p2.goto(`${BASE}/characters/?c=${encodeURIComponent(id)}`);
+    await p2.waitForSelector(".tile[data-s]");
+    const seen = await p2.evaluate((cid) => JSON.parse(localStorage.getItem("zi-characters")).characters.find((c) => c.id === cid).state.seen, id);
+    same([seen["title:1"], seen["perm:1:0"], seen["perm:0:1"]], ["Raised by the guild (Mind; Locks, Knives, Black market)", "know how a locks built (Mind, Locks)", "run the rooftops (Body, Climbing)"], "the typo fixes taken in quietly, and the real change kept for its mark");
+    has(await p2.textContent(".cc-note.is-gold"), "lines on Vesk’s sheet have changed", "the note for a rule change");
+    const marked = await p2.$$eval(".cc-spectiles .tile.is-changed .tile-name", (els) => els.map((e) => e.textContent));
+    same(marked, ["Locks", "Climbing"], "gold corners on Locks and Climbing");
+    await p2.click('.cc-gold[data-k="num:stride"]');
+    has(await p2.textContent(".cc-head .cc-was"), "Was Stride 3", "Stride's old number");
+    has(await p2.textContent(".cc-head .cc-was"), "Now Stride 4", "Stride's new number");
+    await p2.click('.cc-tabs a[data-t="sheet"]');
+    await p2.$$eval("details.cc-fold", (els) => els.forEach((d) => (d.open = true)));
+    const golds = await p2.$$eval(".cc-gold", (els) => els.map((el) => el.dataset.k));
+    for (const k of ["perm:0:1", "perm:0:2", "spec:Locks", "spec:Climbing"]) same(golds.includes(k), true, `a gold mark on ${k}`);
+    for (const k of ["perm:1:0", "title:1"]) same(golds.includes(k), false, `no gold mark on ${k}, a typo fix`);
+    same(golds.some((k) => /:g\d/.test(k)), false, "nothing she grew in downtime marked");
+    await p2.click('.cc-gold[data-k="perm:0:1"]');
+    has(await p2.textContent('li:has(> .cc-gold[data-k="perm:0:1"]) .cc-was, li:has(.cc-gold[data-k="perm:0:1"]) .cc-was'), "Was run the rooftops (Body, Climbing)", "the permission as it was");
+    await p2.click('.cc-note.is-gold button[data-act="seen"]');
+    same(await p2.$$eval(".cc-gold", (els) => els.length), 0, "Got it clears the marks");
+    await p2.reload();
+    await p2.waitForSelector(".cc-page");
+    same(await p2.$$eval(".cc-gold", (els) => els.length), 0, "and they stay cleared");
+    console.log("rule changes: a made-up rule change against Vesk with its gold marks");
+    await second.context.close();
+  }
   await context.close();
 }
 
-// 9. Every crew member grows on Roots: a downtime's worth of each kind of
+// 9. Every crew member grows on stacking: a downtime's worth of each kind of
 // growth on top of their sheet adds up, a seventh permission never gets on,
-// and an Aspiration past d12 gives a Title, an archetype or an attuned thing.
+// and an Aspiration past d12 brings a Title with its 3 spread and its one
+// permission, an archetype with its one ability, or an attuned thing with
+// its one awakening. A slot buys an ability, never one another of the same
+// archetype has.
 if (part("9")) {
   // Two permissions for a Boon in downtime: the Boon takes their slots, and
   // one that wouldn't fit takes nothing off.
   {
     const vesk = structuredClone(book.crew.find((c) => c.id === "vesk"));
-    vesk.titles[0].permissions.push({ text: "slip a grip", root: "Body", specialty: "Stealth" }, { text: "hang off a ledge", root: "Body", specialty: "Climbing" });
+    vesk.titles[0].permissions.push({ text: "slip a grip", root: "Body" }, { text: "hang off a ledge", root: "Body" });
     const swapped = rootsSheet(vesk, [{ k: "boon", t: 0, lever: "Aura", name: "Second Wind", drop: [0], g: 0 }], BUILD);
-    same([swapped.titles[0].permissions.length, swapped.titles[0].boons.map((b) => b.name), swapped.numbers.aura], [4, ["Second Wind"], 7], "a permission off her five for a Boon, with Aura 2 more");
-    const full = rootsSheet(vesk, [{ k: "perm", t: 0, text: "palm a key", root: "Body", spec: "Locks", g: 0 }, { k: "boon", t: 0, lever: "Aura", drop: [0], g: 1 }], BUILD);
-    same([full.titles[0].permissions.length, full.titles[0].boons.length, full.numbers.aura], [6, 0, 5], "a Boon that won't fit beside six permissions takes none of them off");
+    same([swapped.titles[0].permissions.length, swapped.titles[0].boons.map((b) => b.name), swapped.numbers.aura], [4, ["Second Wind"], 9], "a permission off her five for a Boon, with Aura 2 more");
+    const full = rootsSheet(vesk, [{ k: "perm", t: 0, text: "palm a key", root: "Body", g: 0 }, { k: "boon", t: 0, lever: "Aura", drop: [0], g: 1 }], BUILD);
+    same([full.titles[0].permissions.length, full.titles[0].boons.length, full.numbers.aura], [6, 0, 7], "a Boon that won't fit beside six permissions takes none of them off");
   }
   for (const base of book.crew) {
     const c0 = rootsSheet(base, [], BUILD);
-    const sp = c0.specialties[0].name;
     const root = c0.titles[0].root;
     const grown = [
-      { k: "perm", t: 0, text: "a new permission", root, spec: sp },
+      { k: "perm", t: 0, text: "a new permission", root },
       { k: "thread", person: "Someone new", text: "They owe me.", kind: "hostile" },
-      { k: "title", text: "A Title from an Aspiration", root: "Soul", specs: ["Warding", sp, "Something new"], perm: { text: "its permission", root: "Soul", spec: "Something new" } },
-      { k: "arch", arch: "Scholar" },
+      { k: "title", text: "A Title from an Aspiration", roots: { Body: 0, Mind: 1, Soul: 2 }, perm: { text: "its permission", root: "Soul" } },
+      { k: "arch", arch: "Scholar", have: ["Find the flaw"] },
+      { k: "attune", name: "A new thing", awk: { name: "Its awakening", kind: "passive", text: "+1 on one die of every roll you make with it, for each Aura powering it" } },
       { k: "awk", a: 0, name: "Another awakening", kind: "active", text: "1 Aura and it does something", catch: "Loud" },
     ];
     const c = rootsSheet(base, grown, BUILD);
     const roots = { ...c0.roots };
     roots[root] += 1;
-    roots.Soul += 2;
-    same(c.roots, roots, `${base.name}'s Roots with a permission and a new Title`);
-    same(c.specialties.find((x) => x.name === sp).steps, c0.specialties[0].steps + 2, `${base.name}'s ${sp} with a permission and a Title`);
-    same(c.specialties.find((x) => x.name === "Something new")?.steps, 2, `${base.name}'s new specialty, from the Title and its permission`);
-    same([c.titles.length, c.archetypes.length, c.attuned[0].awakenings.length], [c0.titles.length + 1, c0.archetypes.length + 1, c0.attuned[0].awakenings.length + 1], `${base.name}'s Titles, archetypes and awakenings`);
+    roots.Mind += 1;
+    roots.Soul += 3;
+    same(c.roots, roots, `${base.name}'s Roots with a permission and a new Title spread Mind 1 and Soul 2`);
+    same(c.specialties, [], `${base.name} with no specialties`);
+    same([c.titles.length, c.archetypes.length, c.archetypes.at(-1).have, c.attuned.length, c.attuned[0].awakenings.length, c.numbers.aura], [c0.titles.length + 1, c0.archetypes.length + 1, ["Find the flaw"], c0.attuned.length + 1, c0.attuned[0].awakenings.length + 1, c0.numbers.aura + 2], `${base.name}'s Titles, archetypes with the one ability, a new attuned thing with Aura 2 more, and awakenings`);
     same(c.threads.find((p) => p.person === "Someone new")?.threads[0]?.kind, "hostile", `${base.name}'s new hostile thread`);
     // A seventh permission never gets on a Title.
-    const full = Array.from({ length: 6 }, (_, i) => ({ k: "perm", t: 0, text: `permission ${i}`, root, spec: sp }));
+    const full = Array.from({ length: 6 }, (_, i) => ({ k: "perm", t: 0, text: `permission ${i}`, root }));
     same(rootsSheet(base, full, BUILD).titles[0].permissions.length, 6, `${base.name}'s first Title stops at six permissions`);
+    // What downtime grew comes into Change as it was on the sheet.
+    const folded = rootsSheet(sheetOf({ id: `9-${base.id}`, name: base.name, build: foldGrown(fromCrew(base, BUILD, { keep: true }), grown, BUILD) }, BUILD), [], BUILD);
+    same(sheetParts({ ...folded, points: null }), sheetParts({ ...c, points: null }), `${base.name}'s growth folded into a build, the sheet they had`);
   }
-  // On the phone: Vesk's Aspiration past d12 gives her a new Title.
+
   const { context, page } = await phone();
   const t = tableOf(page);
-  await play(page, "vesk");
-  await page.evaluate(() => {
-    const all = JSON.parse(localStorage.getItem("zi-characters"));
-    all.characters[0].state.asp = 12;
-    localStorage.setItem("zi-characters", JSON.stringify(all));
-  });
-  await page.reload();
-  await page.waitForSelector(".tile[data-s]");
   const dt = (sel) => page.click(`#cc-dialog button[data-act="dt"]${sel}`);
+  // On the phone: Vesk's Aspiration past d12 gives her a new Title, its 3
+  // spread Soul 2 and Mind 1 in three taps, with its permission on her Mind.
+  const vesk = await crewOn(page, "vesk");
+  await setState(page, vesk.id, { asp: 12 });
+  await page.reload();
+  await playing(page);
   await page.click('button[data-act="downtime"]');
   await dt('[data-do="pick"][data-s="0"][data-v="asp"]');
   await dt('[data-do="set"][data-s="0"][data-f="root"][data-v="Body"]');
-  await dt('[data-do="set"][data-s="0"][data-f="spec"][data-v="Locks"]');
-  await page.evaluate(() => window.ziCompanion.setDice([11, 3, 9]));
+  for (const k of ["title|0", "title|1", "perm|0|2", "perm|1|0", "utility|a perfect set of picks"]) await dt(`[data-do="use"][data-s="0"][data-v="${k}"]`);
+  has(await t.body(), "13 steps, 2d12 + d2, against its d12", "her Aspiration rolled the way she picks a lock");
+  await page.evaluate(() => window.ziCompanion.setDice([11, 3, 2, 9]));
   await dt('[data-do="asp-roll"][data-s="0"]');
   has(await t.body(), "It climbs past d12 and resolves.", "her Aspiration resolving");
   await dt('[data-do="set"][data-s="0"][data-f="take"][data-v="title"]');
   await page.fill('#cc-dialog input[data-dt="0"][data-f="text"]', "Captain of the crew");
-  await dt('[data-do="set"][data-s="0"][data-f="troot"][data-v="Soul"]');
-  for (const [j, x] of ["Command", "Reading people", "Locks"].entries()) await page.fill(`#cc-dialog input[data-dt="0"][data-f="specs"][data-j="${j}"]`, x);
+  await dt('[data-do="tshape"][data-s="0"][data-v="two"]');
+  await dt('[data-do="tspread"][data-s="0"][data-n="2"][data-v="Soul"]');
+  await dt('[data-do="tspread"][data-s="0"][data-n="1"][data-v="Mind"]');
+  has(await t.body(), "Its 3 Root points: Mind 1, Soul 2", "her new Title's spread");
   await page.fill('#cc-dialog input[data-dt="0"][data-f="perm"]', "know who’s lying in my crew");
   await dt('[data-do="set"][data-s="0"][data-f="proot"][data-v="Mind"]');
-  await page.fill('#cc-dialog input[data-dt="0"][data-f="pspec"]', "Reading people");
+  // Her second slot can't buy an ability, so it's Get something.
+  await dt('[data-do="pick"][data-s="1"][data-v="get"]');
+  await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "a spare lockpick");
   await t.finish();
-  same(await page.$$eval(".cc-roots .tile .tile-steps", (els) => els.map((e) => e.textContent)), ["5 steps", "4 steps", "1 step"], "her Roots with the new Title on her Soul and its permission on her Mind");
-  has(await page.textContent(".cc-spectiles"), "Reading people", "her new specialty");
-  await page.click('.cc-tabs a[data-t="sheet"]');
-  await page.$$eval("details.cc-fold", (els) => els.forEach((d) => (d.open = true)));
-  has(await page.textContent("main"), "Captain of the crew", "her third Title");
-  same(await page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters[0].state.asp), 2, "her Aspiration back to d2");
-  console.log(`growing: every crew member's growth adds up, and Vesk's Aspiration past d12 is a Title`);
+  const v = (await savedAll(page)).find((c) => c.id === vesk.id);
+  const sheet = sheetFor(v);
+  same([sheet.roots, sheet.titles.at(-1).text, sheet.titles.at(-1).roots, sheet.titles.at(-1).permissions.map((p) => [p.text, p.root]), v.state.asp], [{ Body: 8, Mind: 6, Soul: 2 }, "Captain of the crew", { Body: 0, Mind: 1, Soul: 2 }, [["know who’s lying in my crew", "Mind"]], 2], "her third Title, its spread and its permission, and her Aspiration back to d2");
+
+  // Gil, a Guardian and a Leader with Push on each: a slot buys Stand firm,
+  // and the second slot can't take the one the first's taking.
+  const gil = fromCrew(book.crew.find((c) => c.id === "bram"), BUILD);
+  gil.have = [["Push"], ["Push"]];
+  gil.name = "Gil";
+  await page.evaluate((build) => {
+    const list = JSON.parse(localStorage.getItem("zi-characters"));
+    list.characters.push({ id: "own-gil", crew: "own", name: "Gil", hash: "own", build, state: {} });
+    localStorage.setItem("zi-characters", JSON.stringify(list));
+  }, gil);
+  await page.goto(`${BASE}/characters/?c=own-gil`);
+  await playing(page);
+  await page.click('button[data-act="downtime"]');
+  await dt('[data-do="pick"][data-s="0"][data-v="ability"]');
+  await dt('[data-do="set"][data-s="0"][data-f="a"][data-v="0"]');
+  await dt('[data-do="set"][data-s="0"][data-f="name"][data-v="Stand firm"]');
+  await dt('[data-do="pick"][data-s="1"][data-v="ability"]');
+  same(await page.$eval('#cc-dialog button[data-act="dt"][data-do="set"][data-s="1"][data-f="a"][data-v="0"]', (el) => el.disabled), true, "the second slot can't take the Guardian's last ability again");
+  await dt('[data-do="set"][data-s="1"][data-f="a"][data-v="1"]');
+  await dt('[data-do="set"][data-s="1"][data-f="name"][data-v="Everyone gets it"]');
+  await t.finish();
+  const g = sheetFor((await savedAll(page)).find((c) => c.id === "own-gil"));
+  same(g.archetypes.map((a) => a.have), [["Push", "Stand firm"], ["Push", "Everyone gets it"]], "Gil's two new abilities, a slot each");
+  console.log(`growing: every crew member's growth adds up, Vesk's Aspiration past d12 is a Title spread her way, and Gil buys two abilities`);
   await context.close();
 }
 
