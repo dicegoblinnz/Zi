@@ -2,15 +2,17 @@
 """Zi'Dara fight simulator: how long and how dangerous a fight is.
 
 Four of the crew as they start against a boss and its people, the way stage 2
-of notes/roots-plan.md and prompt 11 of notes/stacking-plan.md set the GM's
-budgets. Two sets of rules:
+of notes/roots-plan.md and prompts 11 and 12 of notes/stacking-plan.md set
+the GM's budgets. Run it again whenever the crew, the action economy or the
+Traits change, and move the numbers in Running the Game if they shift. Two
+sets of rules:
 
   now     Roots as it went live on 10 Nov: a Root and one specialty a roll,
           Aura 5, 3 Aura an extra action and one action for each archetype,
           an attuned thing getting Aura its own way, passive awakenings pumped.
   stack   part 1 of the 14 Nov rework: a Root and everything that fits, Aura 7
           with one attuned thing, powering off the maximum, extra actions 3, 4,
-          5 with no cap, the crew on 35 points.
+          5 with no cap, the crew on 35 points, and the archetypes' Traits.
 
 The fight: Redhand (Challenge 6, Armoured x8 first, Feeds x5, Relentless, each
 multiplier times --f), two named threats (Challenge 4, two tags) and three
@@ -18,10 +20,40 @@ mooks (Challenge 3). Three quarters of the round budget goes at the crew's
 tracks, the rest at stakes and clocks that don't hit anyone. Bram intercepts
 and Defends. --policy plain has everyone else hit things; table plays the
 archetypes too (orders with Everyone gets it, the Mark, the Shadow's pool,
-Ash's areas, Knock them flat, ties won for Aura). Traits aren't in.
+Ash's areas, Knock them flat, ties won for Aura).
+
+The Traits that change a fight for these four (stack only, since the 10 Nov
+rules had none; --no-traits plays stacking without them):
+  Better Me Than You  the Guardian's 1 Aura for every blow he intercepts.
+                      Played plain it comes in before anyone acts, up to his
+                      maximum, and the rest goes to a friend. Played hard he
+                      steps in on his own turn, so it can go past his maximum
+                      and buy actions.
+  Good Hunting        the Hunter's 1 Aura for every die a friend wins against
+                      the creature she's Marked, going at it or stopping it.
+                      Only when she's marked it, so only played hard.
+  Where It's Needed   the Leader's steps moved between the crew's rolls each
+                      round, up to one for each of them standing, from where a
+                      step's worth least to where it's worth most, played hard.
+Any Shadow Will Do, Eye of the Storm and I Know a Guy change nothing the sim
+plays (it always lets Vesk hide, nobody's areas catch a friend, and how much
+a contact helps is the GM's call). Dorrie and Isolde stay out, as before.
 
   python3 tools/fight_sim.py                         today against stacking, Even
   python3 tools/fight_sim.py --rules stack --f 3 --budget 44 --policy table
+  python3 tools/fight_sim.py --find                  the multiplier stacking needs
+                                                     to last as long as today
+  python3 tools/fight_sim.py --find --picks 4        and what each pick each needs
+                                                     on top, for the threat budget
+
+--find halves its way to the multiplier that makes a stacking fight last as
+long as one on the 10 Nov rules, played plain and played hard, then for each
+pick the multiplier that keeps it that long, against none. On 14 Nov, with the
+Traits (3,000 fights a try): plain needs x2.9 (x2.7 without them) and hard
+x5.4 (x4.1), and each pick each needs 1.34, 1.88, 2.52 and 3.14 times none
+played plain, 1.34, 1.80, 2.36 and 2.98 played hard. At x3 a fight runs 4.4
+rounds plain and 2.6 hard, against 4.4 and 3.3 on 10 Nov, and x5 only gets a
+hard one to 3.2 while a plain one goes to 6.5.
 """
 import random
 from functools import lru_cache
@@ -38,6 +70,14 @@ def pwin(d, D):
     if d <= 0:
         return 0.0
     return sum(min(x - 1, D) for x in range(1, d + 1)) / (d * D)
+
+
+@lru_cache(None)
+def pstop(d, D):
+    """Chance a dd defence die stops a dD telegraph: meets or beats it, since ties go to you."""
+    if d <= 0:
+        return 0.0
+    return sum(min(x, D) for x in range(1, d + 1)) / (d * D)
 
 
 @lru_cache(None)
@@ -121,7 +161,7 @@ class Char:
     PICK_NOW = 2      # an average pick: half of them fit the main roll (a Title that fits is 4 now and 6 stacking)
     PICK_STACK = 3
 
-    def __init__(self, name, rules, traits, picks=0):
+    def __init__(self, name, rules, picks=0):
         self.name = name
         self.rules = rules
         self.s = crew_sheet(name, rules)
@@ -140,7 +180,9 @@ class Char:
         self.hidden = False
         self.pool = []
         self.got_own_aura = False
-        self.traits = traits
+        self.due = 0                          # Aura his Trait gives him once he's acting
+        self.wn_turn = 0                      # steps the Leader moved onto (or off) their first roll this round
+        self.wn_def = 0                       # and onto (or off) their Defend
         self.hits = 0
         self.sizes = 0
         self.stand_firm = 0
@@ -202,10 +244,15 @@ class Fight:
         self.rules = rules
         self.now = rules == "now"
         self.rng = rng or random.Random()
-        self.crew = [Char(n, sheets or rules, traits or {}, picks) for n in names]
+        self.crew = [Char(n, sheets or rules, picks) for n in names]
         for c in self.crew:
             c.max = 5 if rules == 'now' else 7
             c.aura = c.max
+        # The Traits came in with part 1 (14 Nov), so the rules as they went
+        # live on 10 Nov have none. traits=False plays stacking without them.
+        self.traits = (not self.now) and traits is not False
+        has = lambda arch: next((c for c in self.crew if arch in c.s["arch"]), None) if self.traits else None
+        self.guardian, self.hunter, self.leader = has("Guardian"), has("Hunter"), has("Leader")
         self.boss, self.people = encounter(k, f)
         self.threats = [self.boss] + self.people
         self.R = R
@@ -319,6 +366,7 @@ class Fight:
                 if v > D or (v == D and c.aura >= 1 and self.pay_tie(c)):
                     won_any = True
                     wins += 1
+                    self.hunted(c, t)
                     t.tick(1 + self.vuln(t, melee))
             if won_any:
                 c.aura += 1
@@ -380,11 +428,20 @@ class Fight:
             c.aura += 1
         if won:
             c.aura += 1
+            self.hunted(c, t)
             t.tick(1 + self.vuln(t, melee))
             if t.boss:
                 self.boss_wins += 1
             return 1
         return 0
+
+    def hunted(self, c, t, n=1):
+        """Good Hunting: a friend's die that wins against the creature the
+        Hunter's Marked pays her 1 Aura as well. She isn't acting, so it stops
+        at her maximum and the rest goes to a friend."""
+        h = self.hunter
+        if n and h is not None and c is not h and not h.blazed and t is not None and t.marked:
+            self.gain(h, n)
 
     def own_aura(self, c, what):
         if self.now and not c.got_own_aura and c.s["its_aura"] == what:
@@ -403,6 +460,9 @@ class Fight:
         return 3 + self.STEP * bought
 
     def turn(self, c, teles, plan):
+        # Better Me Than You, played hard: he's acting, so it can go past his maximum.
+        c.aura += c.due
+        c.due = 0
         bought = 0
         acts = 1
         did = []
@@ -457,6 +517,11 @@ class Fight:
     def act(self, c, what, plan):
         lead = c.lead_steps
         c.lead_steps = 0
+        if what in ("hide", "strike", "mark", "attack") and c.wn_turn:
+            # Where It's Needed: the steps the Leader moved onto (or off) this
+            # roll before anyone rolled.
+            lead += c.wn_turn
+            c.wn_turn = 0
         if what == "defend":
             plan.setdefault("defending", set()).add(c.name)
             return
@@ -528,6 +593,75 @@ class Fight:
                 self.boss.prone_set = self.round
             return
 
+    # ---- Where It's Needed
+    def first_roll(self, c, plan):
+        """What each of the crew rolls first this round, the way choose() will
+        have it: (kind, steps). Bram's Defend and anyone else's roll at the
+        end of the round, with their tracks."""
+        n = c.name
+        if n == "Bram":
+            return ("defend", c.s["defend"]) if plan["bram_defend"] else ("attack", c.s["attack"])
+        if plan.get("defend_" + n):
+            return "defend", c.s["defend"]
+        if n == "Vesk":
+            return ("strike", c.s["strike"]) if c.hidden else ("hide", c.s["hide"])
+        if n == "Wren" and self.boss.alive and self.boss.marked < 8:
+            return "mark", c.s["attack"]
+        return "attack", c.s["attack"]
+
+    def worth(self, kind, S):
+        """What S steps on a roll are worth: wins against the boss's d12 (a d8
+        once he's down), the chance of getting into hiding, or for a Defend,
+        telegraphs stopped, at about a d10 each."""
+        if S < 1:
+            return float("-inf")
+        if kind == "defend":
+            return sum(pstop(2 * min(6, S - 6 * i), 10) for i in range(-(-S // 6)))
+        D = 12 if self.boss.alive else 8
+        dice = [s for s, _ in build(S, -(-S // 6) + 1, (D,))]
+        if kind == "hide":
+            miss = 1.0
+            for s in dice:
+                miss *= 1 - pwin(2 * s, D)
+            return 1 - miss
+        return sum(pwin(2 * s, D) for s in dice)
+
+    def where_needed(self, plan):
+        """Where It's Needed, played hard: before anyone rolls, the Leader moves
+        steps a step at a time from the roll that loses least to the roll that
+        gains most, while it's worth it, up to one for each of the crew
+        standing. Nobody's roll goes below 1 step."""
+        for c in self.crew:
+            c.wn_turn = c.wn_def = 0
+        L = self.leader
+        if L is None or L.blazed or self.policy != "table":
+            return
+        crew = self.standing()
+        rolls = [[c, *self.first_roll(c, plan), 0] for c in crew]   # [who, kind, steps, moved onto it]
+        for _ in range(len(crew)):
+            best = None
+            for give in rolls:
+                S = give[2] + give[3]
+                if S <= 1:
+                    continue
+                loss = self.worth(give[1], S) - self.worth(give[1], S - 1)
+                for get in rolls:
+                    if get is give:
+                        continue
+                    T = get[2] + get[3]
+                    net = self.worth(get[1], T + 1) - self.worth(get[1], T) - loss
+                    if net > 1e-9 and (best is None or net > best[0]):
+                        best = (net, give, get)
+            if best is None:
+                break
+            best[1][3] -= 1
+            best[2][3] += 1
+        for c, kind, _, moved in rolls:
+            if kind == "defend":
+                c.wn_def = moved
+            else:
+                c.wn_turn = moved
+
     # ---- the round
     def play_round(self):
         self.round += 1
@@ -539,18 +673,25 @@ class Fight:
         bram = next((c for c in self.standing() if c.name == "Bram"), None)
         if bram:
             if bram.tr["Body"] <= 2:
+                took = 0
                 for x in teles:
                     if x[2] == "Body" and x[1] is not bram:
                         x[1] = bram
-                if not self.now:
-                    pass
+                        took += 1
                 self.own_aura(bram, "intercept")
+                # Better Me Than You: 1 Aura for every blow he takes for a friend.
+                if took and bram is self.guardian:
+                    if self.policy == "table":
+                        bram.due += took
+                    else:
+                        self.gain(bram, took)
             mine = sum(1 for x in teles if x[1] is bram and x[2] == "Body")
             plan["bram_defend"] = mine >= 2
         for c in self.standing():
             if c.name != "Bram":
                 inc = sum(1 for x in teles if x[1] is c and x[2] == "Body")
                 plan["defend_" + c.name] = inc >= 1 and c.tr["Body"] >= 4
+        self.where_needed(plan)
         order = sorted(self.standing(), key=lambda c: 0 if c.name == "Bram" else (1 if c.name == "Wren" else 2))
         for c in order:
             if not self.living():
@@ -575,10 +716,10 @@ class Fight:
                 mine = [x for x in teles if x[1] is c and x[2] == root and (x[0] is None or x[0].alive)]
                 if not mine:
                     continue
-                rolls = sorted(self.r(x[3]) for x in mine)
+                rolls = sorted(((self.r(x[3]), x[0]) for x in mine), key=lambda p: p[0])
                 dd = [c.track(root)]
                 if root == "Body" and c.name in defending:
-                    S = c.s["defend"]
+                    S = max(1, c.s["defend"] + c.wn_def)
                     shaped = build(S, -(-S // 6) + 1, tuple([12] * 3))
                     dd += [die_of(s) for s, _ in shaped]
                 mine_rolls = []
@@ -593,13 +734,14 @@ class Fight:
                 j = 0
                 avail = mine_rolls[:]
                 through = 0
-                for tv in rolls:
+                for tv, src in rolls:
                     k = next((i for i, v in enumerate(avail) if v >= tv), None)
                     if k is None:
                         through += 1
                     else:
                         avail.pop(k)
                         stopped += 1
+                        self.hunted(c, src)
                 self.gain(c, stopped)
                 if through and c.name == "Bram" and root == "Body" and through >= 2 and c.tr["Body"] <= 3 and c.stand_firm == 0:
                     c.tr["Body"] += 1          # Stand firm, 1 Stamina
@@ -676,24 +818,63 @@ def run(rules, names, R, k=0, n=3000, seed=1, traits=None, plain=False, policy=N
     return out
 
 
+def find_f(target, names, R, policy, picks=0, n=3000, seed=1, traits=None, lo=1.0, hi=40.0, steps=16):
+    """The boss multipliers' factor that makes a stacking fight last target
+    rounds, by halving: the same seed every time, so each try plays the same
+    dice and only the multipliers move."""
+    for _ in range(steps):
+        mid = (lo + hi) / 2
+        if run("stack", names, R, n=n, seed=seed, policy=policy, f=mid, picks=picks, traits=traits)["rounds"] < target:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2
+
+
+def say(rules, policy, R, f, o, picks=0):
+    return ("%-5s %-5s budget %d, boss x%.2g%s: %.2f rounds, %.2f hits a player, a Blaze in %.1f%%, "
+            "%.1f wins and %.1f actions a round" % (rules, policy, R, f, ", %d picks" % picks if picks else "", o["rounds"], o["hits"],
+                                                     100 * o["any_blaze"], o["wins_per_round"], o["actions_per_round"]))
+
+
 def main():
     import argparse
     ap = argparse.ArgumentParser(description="Zi'Dara fight simulator")
     ap.add_argument("--rules", choices=("now", "stack"))
-    ap.add_argument("--policy", choices=("plain", "table"), default="plain")
-    ap.add_argument("--budget", type=int, default=40, help="round budget for four players")
+    ap.add_argument("--policy", choices=("plain", "table"), help="plain (the default) or table; --find does both")
+    ap.add_argument("--budget", type=int, help="round budget for four players (40, or 44 for --find)")
     ap.add_argument("--f", type=float, default=1.0, help="boss multipliers times this")
-    ap.add_argument("--picks", type=int, default=0, help="new Titles, archetypes or attuned things each")
+    ap.add_argument("--picks", type=int, default=0, help="new Titles, archetypes or attuned things each (--find: up to this many)")
     ap.add_argument("--n", type=int, default=3000, help="fights")
     ap.add_argument("--seed", type=int, default=1)
+    ap.add_argument("--no-traits", action="store_true", help="play stacking without the archetypes' Traits")
+    ap.add_argument("--find", action="store_true",
+                    help="the boss multipliers' factor stacking needs to last as long as a fight on the 10 Nov rules, "
+                         "and what each pick each needs on top")
     a = ap.parse_args()
     crew = ["Bram", "Vesk", "Wren", "Ash"]
-    rows = [(a.rules, a.budget, a.f)] if a.rules else [("now", 40, 1.0), ("stack", 40, 1.0), ("stack", 44, 3.0)]
+    traits = False if a.no_traits else None
+    if a.find:
+        R = a.budget or 44
+        for policy in [a.policy] if a.policy else ["plain", "table"]:
+            base = run("now", crew, 40, n=a.n, seed=a.seed, policy=policy)
+            print(say("now", policy, 40, 1.0, base))
+            f0 = None
+            for picks in range(a.picks + 1):
+                # Picks are measured against a fight with none, the way the
+                # threat budget grows them.
+                target = base["rounds"] if picks == 0 else first["rounds"]
+                f = find_f(target, crew, R, policy, picks, a.n, a.seed, traits)
+                o = run("stack", crew, R, n=a.n, seed=a.seed, policy=policy, f=f, picks=picks, traits=traits)
+                if picks == 0:
+                    f0, first = f, o
+                print(say("stack", policy, R, f, o, picks) + ("" if picks == 0 else ", %.2f times none" % (f / f0)))
+        return
+    policy = a.policy or "plain"
+    rows = [(a.rules, a.budget or 40, a.f)] if a.rules else [("now", 40, 1.0), ("stack", 40, 1.0), ("stack", 44, 3.0)]
     for rules, R, f in rows:
-        o = run(rules, crew, R, n=a.n, seed=a.seed, policy=a.policy, f=f, picks=a.picks)
-        print("%-5s %-5s budget %d, boss x%.2g: %.2f rounds, %.2f hits a player, a Blaze in %.1f%%, "
-              "%.1f wins and %.1f actions a round" % (rules, a.policy, R, f, o["rounds"], o["hits"],
-                                                       100 * o["any_blaze"], o["wins_per_round"], o["actions_per_round"]))
+        o = run(rules, crew, R, n=a.n, seed=a.seed, policy=policy, f=f, picks=a.picks, traits=traits)
+        print(say(rules, policy, R, f, o, a.picks))
 
 
 if __name__ == "__main__":
