@@ -4,7 +4,7 @@
 # before keeps its own copy. So the World screen still needs to know whose a
 # fan-made one is and its notices, word for word, for the foot of the screen,
 # and the Worker still keeps its cards Mo's alone to bring in. Nothing else of
-# them is here. The old files are at the tag pre-core-cut-2026-11-14. When one's
+# them is here. The old files are at the branch archive/pre-core-cut-2026-11-14. When one's
 # rebuilt on the new core, it goes back in its own folder and off this list.
 # Plain apostrophes: the build makes them curly.
 - id: night-city-2077

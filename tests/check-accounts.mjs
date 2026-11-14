@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e, 9f, 9g or 9h)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e, 9f, 9g, 9h or 9i)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -289,8 +289,10 @@
 //    The roll, the ground's turn, an old power, a founder's turn, the founding
 //    done and the board pass axe at 390 in both themes, and the ground and
 //    Sam's turn on a watcher's phone at 320, 360, 430 and 1280.
-//    9i. A whole world into a campaign was here till the 14 Nov cut, when
-//    Night City and Abnu came off the site. It comes back with a whole world.
+//    9i. A whole world's cards stay Mo's: Night City and Abnu came off the
+//    site in the 14 Nov cut, and the Worker still turns down Kai bringing a
+//    card from either into her own campaign. Bringing a whole world in comes
+//    back with the first one rebuilt on the core.
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -4682,6 +4684,26 @@ try {
   await checkFoundingGround();
   // ZI_UPTO=9h stops here.
   if (UPTO === "9h") break rest;
+
+  // 9i. A whole world's cards stay Mo's (stage 14). Night City and Abnu came
+  // off the site in the 14 Nov cut, but the campaigns that brought them in
+  // keep their own copies, so the Worker still knows their ids (from
+  // content/worlds/retired.yaml) and turns down anyone else bringing in a card
+  // that says it's from one, in a campaign of their own.
+  console.log("9i. A whole world's cards stay Mo's");
+  {
+    const card = PACK.boards[0].cards[0];
+    let n = 0;
+    for (const from of ["night-city-2077", "night-city-2045", "abnu-1000"]) {
+      n += 1;
+      const f = { ...card, id: `whole-check-${n}`, threads: [], res: [], assets: [], agendas: [], pub: [], mor: [], loy: [], shown: {}, book: { from, key: card.key, h: "x", at: 1, was: card } };
+      same((await got(kai.page, "POST", `/api/campaigns/${kaisTable.id}/world`, { dev: "kai-9i-000001", ops: [{ n, o: "new", f }] })).status, 403, `the Worker turns down Kai bringing a card from ${from} into Kai's Table`);
+    }
+    const stored = (await rows("SELECT data FROM world WHERE campaignId = ?1", kaisTable.id))[0]?.data ?? "";
+    yes(!stored.includes("whole-check-"), "and none of them's on her board");
+  }
+  // ZI_UPTO=9i stops here.
+  if (UPTO === "9i") break rest;
 
 
 
