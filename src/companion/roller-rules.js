@@ -16,10 +16,17 @@
 //   The dice are matched so the most get stopped, and you can swap two.
 // With dice on one side only there's nothing to beat, so it's just the
 // numbers, and added up, since a Move's the one roll where dice add.
+//
+// A throw can be several actions at once (Mo's 14 Nov ask): your d12 and d8
+// at the brute's d10, your d6 at the archer's d4, and their d8 coming at you.
+// Each one's read on its own, the way readDice reads one, and readLanes adds
+// up the Aura across them. The roll card's several targets read with it too.
 
 export const SIDES = [2, 4, 6, 8, 10, 12];
-// The most dice on one side.
+// The most dice on one side of an action.
 export const MOST = 12;
+// The most actions in one throw.
+export const ACTIONS = 8;
 
 const outOf = (v, to) => (v > to ? "beat" : v === to ? "tie" : "under");
 const count = (list, what) => list.filter((x) => x === what).length;
@@ -85,13 +92,45 @@ export function readDice({ mine = [], theirs = [], def = "them", each = false, a
   return { way: "act", tops, at, stands, outs, beat: count(outs, "beat"), ties: count(outs, "tie") };
 }
 
-// What's kept on the phone between rolls: the dice on each side, who's
-// defending and whether they're one thing or several. Anything that isn't
-// one of those comes back as it starts: no dice, and them coming at you,
-// since dice matched to blocks after the roll are what the roller was asked
-// for, till it's set the other way.
+// The dice of yours that won, read: each one that beat their roll, each one
+// that stopped one of theirs (a tie stops it, since ties are yours when it's
+// coming at you), and your area die once, however many it beat, since a die
+// that beats three men at once still pays once. A tie going at them is
+// theirs unless you pay 1 Aura, and paying for it pays nothing back.
+const wonIn = (x) => (x.way === "act" ? x.beat : x.way === "each" ? Math.min(1, x.beat) : x.way === "defend" ? x.stopped : 0);
+
+// A whole throw: lanes are the actions, each { mine, theirs, def, each,
+// assign } as readDice takes one, with each die { size, v }, v being what it
+// came up. Each lane comes back read just as readDice reads it on its own,
+// with won (your dice that won in it) and aura (those and its top faces).
+// Across the throw: wins, stops (the wins that were blows stopped), tops
+// (your top faces, win or lose) and aura, which is 1 for every die of yours
+// that won and 1 for every top face. Their top faces give nobody Aura.
+export function readLanes(lanes = []) {
+  const read = lanes.map((lane) => {
+    const x = readDice(lane);
+    const won = wonIn(x);
+    return { ...x, won, aura: won + x.tops.length };
+  });
+  const add = (f) => read.reduce((n, x) => n + f(x), 0);
+  const wins = add((x) => x.won);
+  const tops = add((x) => x.tops.length);
+  return { lanes: read, wins, stops: add((x) => (x.way === "defend" ? x.won : 0)), tops, aura: wins + tops };
+}
+
+// What's kept on the phone between rolls: the actions, each with the dice on
+// each side, who's defending and whether they're one thing or several. A
+// set-up kept before there were actions ({ you, them, def, each }) comes back
+// as one. An action with no dice is dropped beside one with some, but a lone
+// one keeps its way. Anything that isn't one comes back as an action starts:
+// no dice, and them coming at you, since dice matched to blocks after the
+// roll are what the roller was asked for, till it's set the other way.
+const side = (list) => (Array.isArray(list) ? list.map(Number).filter((d) => SIDES.includes(d)).slice(0, MOST) : []);
+const actOf = (x) => ({ you: side(x.you), them: side(x.them), def: x.def === "them" ? "them" : "you", each: x.each === true });
+export const hasDice = (a) => a.you.length > 0 || a.them.length > 0;
 export function setupOf(raw) {
-  const side = (list) => (Array.isArray(list) ? list.map(Number).filter((d) => SIDES.includes(d)).slice(0, MOST) : []);
   const x = raw && typeof raw === "object" ? raw : {};
-  return { you: side(x.you), them: side(x.them), def: x.def === "them" ? "them" : "you", each: x.each === true };
+  const acts = (Array.isArray(x.acts) ? x.acts : [x]).filter((a) => a && typeof a === "object" && !Array.isArray(a)).map(actOf);
+  const full = acts.filter(hasDice);
+  return { acts: (full.length ? full : [acts[0] ?? actOf({})]).slice(0, ACTIONS) };
 }

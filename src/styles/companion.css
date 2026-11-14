@@ -553,7 +553,7 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .dz-side { margin: 0 0 0.9rem; padding: 0.3rem 0.7rem 0.7rem; background: var(--surface); border: 1px solid var(--line-soft); border-left: 3px solid var(--zd-you-line); border-radius: 2px; }
 .dz-side.is-them { border-left-color: var(--zd-them-line); }
 .dz-side-head { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; }
-.dz-side-head h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.05rem; letter-spacing: 0.02em; }
+.dz-side-head :is(h3, h4) { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.05rem; letter-spacing: 0.02em; }
 .dz-count { min-width: 0; font-weight: 700; color: var(--zd-you-ink); overflow-wrap: anywhere; }
 .is-them .dz-count { color: var(--zd-them-ink); }
 .dz-clear { margin-left: auto; }
@@ -612,6 +612,65 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .dz-spare .zd-die { --s: 40px; }
 .cc-reveal .dz-lane.is-stopped, .cc-reveal .dz-lane.is-beat { animation: cc-shine 0.7s ease-out; }
 .cc-reveal .dz-verdict, .cc-reveal .dz-note, .cc-reveal .dz-lane .res-out { animation: cc-rise 0.32s ease-out both; }
+/* Several actions in one throw (Mo's 14 Nov ask): the one being set up is
+   open under its number, and the rest fold into a line each that opens it in
+   a tap. With one action there's no number, so it's the roller as it was.
+   Thrown, each action's a block of its own under the Aura they add up to,
+   its dice a size smaller so a few fit on a phone. */
+.dz-title { display: flex; align-items: center; gap: 0.15rem; }
+.dz-title .tip { margin: -10px -6px; }
+.dz-who legend, .dz-q { display: flex; align-items: center; gap: 0.15rem; }
+.dz-act-head { display: flex; align-items: center; gap: 0.6rem; min-height: 44px; margin: 0 0 0.5rem; padding-top: 0.55rem; border-top: 1px solid var(--line); }
+.dz-act:first-child .dz-act-head { padding-top: 0; border-top: 0; }
+.dz-act-head h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.2rem; letter-spacing: 0.04em; }
+.dz-act-head h3:focus { outline: none; }
+.dz-act-head h3:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+.dz-act-head .dz-drop { margin-left: auto; }
+.dz-act.is-shut { display: flex; align-items: center; gap: 6px; margin: 0 0 0.6rem; }
+.dz-sum { flex: 1 1 auto; min-width: 0; min-height: 44px; display: grid; justify-items: start; gap: 3px; padding: 0.5rem 0.75rem; font: inherit; text-align: left; color: var(--ink); background: var(--surface); border: 1px solid var(--line-soft); border-left: 3px solid var(--zd-you-line); border-radius: 2px; cursor: pointer; }
+.dz-sum:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+@media (hover: hover) and (pointer: fine) { .dz-sum:hover { border-color: var(--gold); border-left-color: var(--zd-you-line); } }
+.dz-sum-n { font-family: var(--display); font-weight: 600; font-size: 1rem; letter-spacing: 0.04em; }
+.dz-sum-dice { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 6px; font-weight: 700; }
+.dz-sum .zd-in.you b { color: var(--zd-you-ink); }
+.dz-sum .zd-in.them b { color: var(--zd-them-ink); }
+.dz-vs { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.dz-sum-note, .dz-sum-way { font-weight: 400; font-size: 0.92rem; color: var(--muted); }
+.dz.is-many .dz-act.is-open { margin-bottom: 0.4rem; }
+.dz.is-many .dz-act.is-open + .dz-act, .dz.is-many .dz-act.is-open + .dz-moreline { padding-top: 0.6rem; border-top: 1px solid var(--line); }
+.dz-moreline { margin: 0.2rem 0 0.4rem; }
+.dz-moreline .cc-small { margin: 0.4rem 0 0; }
+.dz-more { width: 100%; border-style: dashed; }
+.dz-more > span { margin-right: 0.4rem; font-size: 1.25em; line-height: 1; }
+.dz-said { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; column-gap: 0.15rem; }
+.dz-said .dz-lines { min-width: 0; }
+.dz-swaps { display: flex; align-items: center; gap: 0.15rem; }
+.dz-swaps .cc-small { margin: 0; }
+.dz-heard { margin-bottom: 0.7rem; }
+.dz-heard .dz-total { margin: 0; }
+.dz-out { margin: 0 0 0.8rem; padding: 0.15rem 0.75rem 0.6rem; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.dz-out-head { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.7rem; margin-bottom: 0.3rem; }
+.dz-out-head h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.1rem; letter-spacing: 0.04em; }
+.dz-out-how { display: flex; flex-wrap: wrap; align-items: center; column-gap: 0.4rem; margin: 0; font-size: 0.92rem; color: var(--muted); }
+.dz-out .dz-said { justify-content: flex-start; }
+.dz-out .dz-verdict { margin: 0 0 0.2rem; text-align: left; font-size: 1.1rem; }
+.dz-out .dz-note { margin: 0 0 0.4rem; text-align: left; }
+.dz-out .cc-stage { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 0; }
+.dz-out .cc-stage .cc-res { width: auto; justify-content: flex-start; gap: 8px 12px; }
+.dz-out .cc-stage .res { min-width: 4rem; }
+.dz-out .cc-stage .res .zd-die, .dz-out .cc-stage.n2 .res .zd-die { --s: 64px; }
+.dz-out .cc-stage.n3 .res .zd-die, .dz-out .cc-stage.n4 .res .zd-die { --s: 54px; }
+.dz-out .cc-stage .res-out { font-size: 1.05rem; }
+.dz-out .cc-stage .res-die { font-size: 0.85rem; }
+.dz-out .cc-stage .cc-them { padding: 4px 10px 4px 8px; }
+.dz-out .cc-stage .cc-them .zd-die { --s: 44px; }
+.dz-out .dz-stands { flex-basis: 100%; }
+.dz-out .dz-one { justify-content: flex-start; }
+.dz-out .dz-one .zd-die { --s: 64px; }
+.dz-out .dz-lanes, .dz-out .dz-spare { margin-bottom: 0.2rem; }
+.dz-padact > h3 { margin: 0.4rem 0 0.6rem; padding-top: 0.5rem; font-family: var(--display); font-weight: 600; font-size: 1.15rem; letter-spacing: 0.04em; border-top: 1px solid var(--line); }
+.dz-padact:first-child > h3 { padding-top: 0; border-top: 0; }
+.cc-reveal .dz-total { animation: cc-rise 0.32s ease-out both; }
 
 .cc-toast {
   position: fixed; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 30;
