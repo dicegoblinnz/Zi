@@ -6,14 +6,14 @@ order: 33
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 ## Building the roll {#building-the-die}
 
--   Pick the Root that fits how you're doing it (Body, Mind or Soul) and the specialty that fits what. Add them up, and add 1 for each item you're using that fits.
--   A specialty you have to make a case for is 1 Aura. Anything else that fits is 1 Aura each to bring in, a step each. Going beyond what something normally does is 1 Aura, sword or spell.
+-   Pick the Root that fits how you're doing it (Body, Mind or Soul), and add 1 for every thing on your sheet that fits what you're doing: each Title, permission, archetype, ability, attuned thing, awakening and item you're using. An archetype you've taken twice is two.
+-   Plainly fits is free, and each one you have to explain is 1 Aura. Bringing something in (the ground, a threat's tag, a Catch, or one thing off a friend's sheet through a bond thread) is 1 Aura and a step. Going beyond what something normally does is 1 Aura, sword or spell. Boons don't add steps.
 -   Two sides a step, up to a d12. Past 6 steps, more dice. Every roll's at least 1 step, a d2.
--   After you roll, your archetype's Push puts +2 on one die of its mechanic, for 1 of its home track, if you need it.
+-   After you roll, your archetype's Push puts +2 on one die of its mechanic, for 1 of its home track, if you've got it and you need it. It's never a step.
 
 | Steps | Dice |
 | --- | --- |
@@ -48,18 +48,19 @@ updated: 2026-11-09
 
 ## Your action {#s-qr-action}
 
--   One a round: act, answer a telegraph, Defend, move past your stride, pull something from your bag, break a condition, take a breath (your Confidence comes up a size, as far as d6), or lead if you're a Leader. Your stride, a few words, dropping something or putting it away, and pumping Aura into your attuned thing are free. Intercepting costs 1 Aura but no action.
--   **Extra actions:** 3 Aura each, up to one action a round for each archetype you've got, counting the one everybody gets · hold it (just your stride this round) and you've got two next round · coming out of hiding, one even if you're *Unseen* as well · the Boon that says so.
--   **Combo:** two or more actions into the same thing at the same time, yours or your friends'. One Root, whoever rolls, and every action brings its specialty and the items it's using. No Aura. The same specialty from two of you counts for each. Whoever rolls takes the Aura. Your own extra action brings in another specialty (Knives with Stealth), or the same one again for +1.
+-   One a round: act, answer a telegraph, Defend, move past your stride, pull something from your bag, break a condition, take a breath (your Confidence comes up a size, as far as d6), or lead if you're a Leader. Your stride, a few words, dropping something or putting it away, and powering your attuned thing are free. Intercepting costs 1 Aura but no action.
+-   **Extra actions:** buy them with Aura, 3 for the first in a round, then 4, then 5 and so on, with no cap, and back to 3 next round · hold it (just your stride this round) and you've got two next round · coming out of hiding, one even if you're *Unseen* as well · the Boon that says so. Those last three don't put the price up.
+-   **Combo:** two or more actions into the same thing at the same time, yours or your friends'. One Root, whoever rolls, and each friend's action brings every thing on their sheet that fits, 1 each, and a split. No Aura for the combo, and anything a friend has to explain is 1 of theirs. The same thing from two of you counts for each. Whoever rolls takes the Aura. Your own extra action in the same roll is 1 step and a split.
 -   **Lead** (the Leader's): build an order or a rallying song and hand its steps to friends who can hear or see you, this round. They don't have to fit, and they don't bring a split.
 -   Outside a round, it's one action for a quick go, two if you can take your time.
 
 ## Aura {#aura}
 
--   Up to your maximum, 5 to start. You're full every scene, and there's none in downtime. While you're acting it can go past your maximum, and once you've finished acting for the round, anything over is gone. Off your turn it stops at your maximum, and you can give the rest to a friend in the scene.
--   **Spend 1:** bring something in, a friend's specialty through a thread too · make a case for a specialty, or go beyond · keep a Catch quiet, or turn it your way · win a tie when you're acting · a quick heal · intercept for a friend within your stride · pump it into your attuned thing.
--   **Get 1 back:** every die of yours that wins · every top face · letting a Catch bite, as often as you like, as long as it's real trouble · bringing real trouble on yourself with no Catch · your attuned thing's own way · a great setup that didn't land, if the GM says so · Boons that say so.
--   **Spend 3:** an extra action, up to one a round for each archetype you've got.
+-   Up to your maximum: 5, and 2 more for each attuned thing, so 7 with one. You're full every scene, and there's none in downtime. While you're acting it can go past your maximum, and once you've finished acting for the round, anything over is gone. Off your turn it stops at your maximum, and you can give the rest to a friend in the scene.
+-   **Spend 1:** bring something in, one thing off a friend's sheet through a thread too · explain something that doesn't plainly fit, 1 a thing, or go beyond · keep a Catch quiet, or turn it your way · win a tie when you're acting · a quick heal · intercept for a friend within your stride.
+-   **Power a passive awakening:** free and no action, while you're acting. The Aura comes off what you've got and off your maximum till the scene ends, up to 2 in each awakening (4 for the same one twice), and it works for as much as is powering it. Wins and top faces fill you back up to the lower maximum. An active awakening spends Aura when you use it.
+-   **Get 1 back:** every die of yours that wins · every top face · letting a Catch bite, as often as you like, as long as it's real trouble · bringing real trouble on yourself with no Catch · a great setup that didn't land, if the GM says so · Boons that say so.
+-   **Extra actions:** 3 for the first you buy in a round, then 4, then 5 and so on, and back to 3 next round.
 
 ## The tracks {#s-qr-tracks}
 
@@ -130,13 +131,15 @@ A hit, a size off the track it's at · a box on your armour on that Root, or som
 
 ## Your character {#your-character}
 
--   **Titles:** two to start. Each one's 1 on a Root and 1 on each of three specialties that fit it, and holds three permissions to start, six at most.
--   **Permissions:** a doing word and how, what or where, like *climb sheer walls*. Each one's 1 on a Root and 1 on a specialty, and it fits both. You need a magic permission or a magic item to do magic at all, and magic's written narrow.
--   **Roots and specialties:** add them up. A specialty's something you could be known for or teach, and you name it. A roll's one Root and one specialty, plus the items you're using.
--   **Archetypes:** two to start, apart from your Titles, and you can take the same one twice. Each one's a mechanic and its abilities, and you can have one action a round for each archetype, so two let you buy one.
+-   **Points:** 35 to start, more for a one-shot or catching up. A Title, an archetype or an attuned thing is 5, and comes with one permission, ability or awakening. Another permission, ability or thing you carry is 1, and a Boon's 2. Your keepsake, bag, threads, Connect and Aspiration are free. Recommended: at least one Title, one archetype and one attuned thing.
+-   **Titles:** 3 on your Roots, spread however you like, and six permissions at most.
+-   **Permissions:** a doing word and how, what or where, like *climb sheer walls*. Each one's 1 on its Root, and it fits that and its Title. You need a magic permission or a magic item to do magic at all, and magic's written narrow.
+-   **Roots:** each one's what your Titles put on it, and 1 for every permission on it. A roll's one Root and every thing on your sheet that fits, a step each.
+-   **Archetypes:** apart from your Titles, and you can take the same one twice. Each one's a mechanic, a Trait that's always on, and the ability it comes with, and more abilities are bought, six at most. They don't cap your actions.
+-   **Attuned things:** 2 on your Aura maximum each, and one awakening. Awakened holds one, and its Catch brings a second, free.
 -   **Boons:** two permission slots on a Title buy one. Burdens only come on attuned things. The menu's in [Boons and Burdens](#s-boons).
--   **Aspiration:** starts at d2 and climbs. An action when it's within reach, or a slot. One step a roll. Past d12, take a new Title, archetype or attuned thing.
--   **To start:** 5 Aura, Stamina, Confidence and Resolve at d12, a stride of 3, one attuned thing, and two bond threads with the crew.
+-   **Aspiration:** starts at d2 and climbs. An action when it's within reach, or a slot. One step a roll. Past d12, take a new Title, archetype or attuned thing, with the one it comes with.
+-   **To start:** Aura 5 and 2 for each attuned thing, Stamina, Confidence and Resolve at d12, a stride of 3, and two bond threads with the crew.
 
 ## The archetypes {#s-qr-archetypes}
 

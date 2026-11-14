@@ -6,7 +6,7 @@ order: 5
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook, and Mo's chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::quote
 Every fight in this game runs on one engine, whether you're fighting with blades, with words or against the clock.
@@ -50,36 +50,36 @@ Nothing's been rolled yet. Now that you know exactly what's coming, it's up to y
 
 Every round you get **one action**. It can:
 
--   **Act.** Build a roll from a Root and a specialty and throw it: strike, trick, talk, climb, pick a lock, work a stake, strip a tag, study something, or heal someone if you're a [Healer](#a-healer).
+-   **Act.** Build a roll from a Root and everything on your sheet that fits, and throw it: strike, trick, talk, climb, pick a lock, work a stake, strip a tag, study something, or heal someone if you're a [Healer](#a-healer).
 -   **Answer a telegraph**: stop it before it lands.
--   **Defend**: roll a Root and a specialty on top of your tracks when the telegraphs land, so you can stop more of what's coming at you. See [Defend](#s-defend).
+-   **Defend**: roll a Root and everything that fits how you're defending, on top of your tracks when the telegraphs land, so you can stop more of what's coming at you. See [Defend](#s-defend).
 -   **Move** further than your stride. See [Movement and Range](#s-movement).
 -   **Lead**, if you're a [Leader](#a-leader): an order or a rallying song, with its steps handed out to friends who can hear or see you.
 -   **Pull something out of your bag.**
 -   **Break a condition**, yours or a friend's. Beat its die and it's gone.
 -   **Take a breath.** Your Confidence comes up a size, as far as d6.
 
-Some things are free: your stride (before or after your action, or between two), a few words, dropping something or putting it away, and pumping Aura into your attuned thing. [Intercepting](#s-intercept) for a friend costs 1 Aura but no action, and a Guardian does it for free.
+Some things are free: your stride (before or after your action, or between two), a few words, dropping something or putting it away, and powering your attuned thing. [Intercepting](#s-intercept) for a friend costs 1 Aura but no action, and a Guardian does it for free.
 
-There's no special action for helping. To help a friend, put your action into the same thing they're doing. That's a **combo**: one of you rolls, on their Root, and everyone who put an action in adds their specialty. It doesn't cost Aura, it has to be one thing in the story, and every action in it gives you a split. Any number of friends can pile into the same roll. There's one under [Answering a Telegraph](#s-answering), and the rest is in [Working Together](#s-teamwork).
+There's no special action for helping. To help a friend, put your action into the same thing they're doing. That's a **combo**: one of you rolls, on their Root, and everyone who put an action in brings every thing on their sheet that fits, 1 each. It doesn't cost Aura, it has to be one thing in the story, and every action in it gives you a split. Any number of friends can pile into the same roll. There's one under [Answering a Telegraph](#s-answering), and the rest is in [Working Together](#s-teamwork).
 
 ### Extra actions {#s-extra-actions}
 
-Now and then you'll get more than one action in a round:
+Now and then you'll want more than one action in a round:
 
--   **Spend 3 Aura** for an extra action this round. The most actions you can have in a round, counting the one everybody gets, is **one for each archetype you've got**, so with two archetypes you can buy one. See [Aura](#s-aura).
+-   **Buy one with Aura.** Your first action's free, and every one you buy after it costs more: **3 Aura** for the first, **4** for the next, then **5**, and so on. There's no cap, and next round the price starts at 3 again. See [Aura](#s-aura).
 -   **Hold it.** Do nothing this round apart from your stride, and you've got two actions next round.
 -   **Come out of hiding.** Whoever you are, coming out of hiding gives you an extra action. It's one extra action, even if you're *Unseen* as well.
 -   **The Extra action Boon** gives you one extra action a scene. See [Boons and Burdens](#s-boons).
 
-Holding, hiding and the Boon are on top of what you can buy. An extra action can be its own roll, or it can go into the same roll as a combo. Put the same specialty in again and it adds 1. Put a different one in and it brings its steps with it as a new approach, like Knives with Stealth for a sneak attack.
+Holding, hiding and the Boon are on top of what you buy, and they don't put the price up. An extra action can be its own roll, or it can go into the same roll as a combo. In the same roll it's 1 more step and a split, because everything on your sheet that fits is in already.
 
 :::example[Extra actions]
-**Holding:** Vesk spends round two crossing the gallery on her stride and nothing else. In round three she's got two actions, and she puts both into the vault door. Her Body and her Locks, with her picks, are 10 steps, and her Locks again adds 1, so it's 11: a d12 and a d10.
+**Holding:** Vesk spends round two crossing the gallery on her stride and nothing else. In round three she's got two actions, and she puts both into the vault door's lock. Picking it is her Body, both Titles, *pick a mechanical lock*, *know how a lock's built* and her picks, 13 steps, and her second action's 1 more and a split, so it's 14: two d12s and a d4, with two splits to shape it.
 
-**Aura:** Ash has 6 Aura after her fire's done its work, so she spends 3 for an extra action and puts it into the same roll, with her Intimidation as a new approach. Her Soul, her Fire and her ember stone are 10 steps, and her Intimidation's 2 more: 12, two d12s.
+**Aura:** Ash starts the round on 7, and her fire wins three times at the first guard, one on its top face, so she's on 11 while she's acting. She spends 3 on an extra action and throws fire at the archer on the gallery, then 4 on another for the guard at the door. A third would cost her 5, and next round her first one's back to 3.
 
-**Out of hiding:** Vesk's been up in the rafters since the guards came in. She drops on the one below her, and coming out of hiding gives her an extra action. She puts it in with her action as a new approach: her Body, her Stealth and her Knives, with her knife, 10 steps, a d12 and a d8, for one knife out of the dark.
+**Out of hiding:** Vesk's been up in the rafters since the guards came in. She drops on the one below her, and coming out of hiding gives her an extra action, which she puts in with her action. Her Body, her first Title, *move unseen*, Shadow twice and her boots get her there unheard, her second Title, *fight dirty with a knife* and her knife do the rest, and that's 16 steps. Her extra action's 1 more and a split, so it's 17, two d12s and a d10, for one knife out of the dark.
 :::
 
 You can't keep your action back to use later in *this* round once the telegraphs start landing, because there are no last-moment reactions in Zi'Dara. Everything you might react to is already on the table, so you deal with it on your turn.
