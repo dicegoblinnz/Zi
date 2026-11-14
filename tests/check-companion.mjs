@@ -2612,11 +2612,23 @@ if (part("7c")) {
   // verdict, what each die did and its note.
   const sums = (page) => page.$$eval(`${dlg} .dz-sum`, (els) => els.map((e) => e.textContent.replace(/\s+/g, " ").trim()));
   const blocks = (page) => page.$$eval(`${dlg} .dz-out`, (els) => els.map((e) => [e.querySelector(".dz-verdict")?.textContent ?? "", [...e.querySelectorAll(".res-out")].map((o) => o.textContent), e.querySelector(".dz-note")?.textContent ?? ""]));
+  // Vesk's play screen, waiting on the roller's own way in rather than
+  // anything else drawn there, since the play screen's moving onto stacking
+  // in its own prompt (6 of notes/stacking-plan.md).
+  const way = 'button[data-dz="open"][data-from="play"]';
+  const saved = (page) => page.evaluate(() => localStorage.getItem("zi-characters"));
+  const playing = async (page) => {
+    await page.goto(`${BASE}/characters/`);
+    await page.click('button[data-act="play"][data-c="vesk"]');
+    await page.fill("#cc-name", "Vesk");
+    await page.click('#cc-dialog button[type="submit"]');
+    await page.waitForSelector(way);
+  };
   {
     const { context, page } = await phone();
-    await play(page, "vesk", "Vesk");
-    const aura = await page.textContent('.cc-stat[data-p="aura"] .v');
-    await page.click(".tile-free");
+    await playing(page);
+    const vesk = await saved(page);
+    await page.click(way);
     await page.waitForSelector(`${dlg} .dz`);
     same(await page.$eval(`${dlg} button[data-dz="go"]`, (el) => el.disabled), true, "Roll waits for some dice");
     // What it's for is a question bubble rather than a paragraph, and Esc
@@ -2645,10 +2657,10 @@ if (part("7c")) {
     await page.click(`${dlg} .dz-flip`);
     same([await line(page, ".dz-verdict"), await outs(page, ".cc-stage .res-out"), await line(page, ".dz-total")], ["None of them beat it.", ["Under", "Under", "Under"], "A top face, so 1 Aura."], "the same dice read as Bram going at them, with their 7 standing");
     await page.click(`${dlg} button[data-act="close"]`);
-    same([await page.textContent('.cc-stat[data-p="aura"] .v'), await page.$(".cc-last")], [aura, null], "Vesk's Aura and last roll left as they were");
+    same(await saved(page) === vesk, true, "Vesk's saved sheet left just as it was");
     // Kept on the phone, with the way it was last read.
     await page.reload();
-    await page.click(".tile-free");
+    await page.click(way);
     same([await tray(page, "you"), await tray(page, "them"), await page.getAttribute(`${dlg} button[data-dz="def"][data-v="them"]`, "aria-pressed")], [[6, 6, 2], [8, 8, 8], "true"], "the set-up kept through a reload");
     // Nothing of theirs: the numbers, added up for a Move.
     await page.click(`${dlg} button[data-dz="clear"][data-side="them"]`);
