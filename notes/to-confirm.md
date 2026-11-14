@@ -88,7 +88,19 @@ None yet.
 
 ### 11. The GM's side
 
-None yet.
+**You said yes on 14 Nov** to the numbers (every multiplier three times what it was, about 11 a player and the threat budget's ladder, with extra actions left uncapped for now) and to leaving out the chapters the core cut takes out. These are the calls Claude made putting them through the book.
+
+1. **The runs** (`tools/fight_sim.py`): Bram, Vesk, Wren and Ash as they start against Redhand, two named threats and three mooks, 3,000 to 4,000 fights a setting, played plain (the way stage 2 did, which lands on its four rounds and two hits) and with the archetypes played hard. Dorrie and Isolde are left out, because influence and foresight decide a fight on their own. The Traits aren't in, since prompt 3 hadn't landed.
+2. **Three times sits between the two ways of playing.** Plain play needs about ×2.6 and the archetypes played hard about ×4, so a fight played plain runs a little long (4.7 rounds against 4.4) and one played hard about a round short (2.9 against 3.3).
+3. **Four times its Challenge** is the rule of thumb, so a boss starts at ×24. Three times the old Challenge plus 2 would be 24, 21 and 18 for Challenges 6, 5 and 4, and four times is 24, 20 and 16.
+4. **The threat budget multiplies** instead of adding 1 for every 10, because each pick each needs about a third more. It compounds: every new thing's a step on most rolls, and bigger rolls win more Aura for extra actions. So it's 5 a character a pick, and every multiplier times the threat budget over 60.
+5. **How long a scene runs divides by all the crew's actions**, not half, since a stacked roll lands about once an action. Four characters take about ten actions a round.
+6. **Forms keep their multipliers smaller**: about ×15 with two forms and ×12 with three, three times what they were.
+7. **The examples' big obstacles are three times bigger** too: a vault door that's *Reinforced ×12* and a crowd that's *Loyal ×9*.
+8. **A faction's assets keep their multipliers** (*Household Guard ×2*, *Standing Army ×3*), since the faction turn rolls Power, not stacked rolls.
+9. **Mooks and named threats stay as they are.** They fall about twice as fast, which is stacking working, and a named threat that should last takes a multiplier like a boss.
+10. **A character's own roll for the crew's faction action** is a Root and everything on their sheet that plainly fits, since there's no Aura in downtime to explain anything with.
+11. **The glossary loses *Its Aura* and *Specialty* and gains *Points***, and the index gains Points, Powering an awakening and Trait.
 
 ### 12. Bringing it together
 

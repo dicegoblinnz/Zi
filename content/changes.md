@@ -5,6 +5,18 @@ updated: 2026-11-14
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
 
+## 14 Nov 2026: The GM's budgets, for stacking {#c-2026-11-14-budgets}
+
+To go with [Stacking, and 35 points to start](#c-2026-11-14-stacking). With everything that fits stacked, a crew lands about twice the wins a round it did, so the numbers that keep a fight going grew to match.
+
+**Every multiplier's three times what it was**, and four times a threat's Challenge is the place to start, so a boss still takes about four rounds to bring down the long way. Redhand's *Armoured ×24 (first)* and *Feeds ×15* now, forty wins in all, and a crew of four lands about ten a round. It replaces a threat's Challenge plus 2. See [Multipliers](#s-tough-gm) and [Building a Threat, Start to Finish](#building-a-threat-start-to-finish).
+
+**The threat budget climbs 5 a character for every Title, archetype or attuned thing an Aspiration gives them**: 15 as they start, 20 with one, 25 with two, 30 with three and 35 with four. Multiply every multiplier by the threat budget and divide by 60, so it's a third bigger at 80 and twice as big at 120. It replaces about 2.5 a character for each, and 1 more on each multiplier for every 10 over 60. See [The Threat Budget](#s-threat-budget).
+
+**The round budget's about 11 steps a round for each player**, so a crew of four is 44 at Even, 22 for a breather and 66 at Hard, since a Defend with everything that fits stacked on it stops more than it did. It replaces about 10. See [Telegraphs a Round](#s-budget).
+
+**How long a scene runs** is everything standing in the crew's way divided by all the actions they take a round, counting the ones they buy with Aura, since a stacked roll lands about once an action. It replaces half their actions. See [How long a scene runs](#s-size-scene).
+
 ## 14 Nov 2026: Stacking, and 35 points to start {#c-2026-11-14-stacking}
 
 Mo's calls in chat, the first part of a rework that comes in parts.
@@ -33,17 +45,17 @@ Mo's calls in chat, the first part of a rework that comes in parts.
 
 To go with [Roots, specialties and three tracks](#c-2026-11-08-roots).
 
-**The round budget's about 10 steps a round for each player**, so a crew of four is 40 at Even, 20 for a breather and 60 at Hard. It was about 5 a player. Every track starts at d12 now, and a d12 stops a lone d10 about six times in ten, so it takes that much to push. See [Telegraphs a Round](#s-budget).
+**The round budget's about 10 steps a round for each player**, so a crew of four is 40 at Even, 20 for a breather and 60 at Hard. It was about 5 a player. Every track starts at d12 now, and a d12 stops a lone d10 about six times in ten, so it takes that much to push. (Since 14 Nov it's about 11.) See [Telegraphs a Round](#s-budget).
 
-**The threat budget's 15 a character as they start**, so 60 for four, and it climbs with every Title, archetype or attuned thing an Aspiration gives them: about 17 or 18 a character with one, 20 with two, 22 or 23 with three and 25 with four. It was 10 a character with two Titles, and more with every Title after. See [The Threat Budget](#s-threat-budget).
+**The threat budget's 15 a character as they start**, so 60 for four, and it climbs with every Title, archetype or attuned thing an Aspiration gives them: about 17 or 18 a character with one, 20 with two, 22 or 23 with three and 25 with four. It was 10 a character with two Titles, and more with every Title after. (Since 14 Nov it's 5 more a character for each, and the multipliers grow in step with it.) See [The Threat Budget](#s-threat-budget).
 
-**Every multiplier in the book is 2 bigger**, and a threat's Challenge plus 2 is the place to start, so a boss still takes about four rounds to bring down the long way. The bestiary's are written for a threat budget of 60, like the Iron Warden's *Armoured ×8*, and you add 1 to each for every 10 the budget's over that. Challenges still run from 2 to 6. See [Multipliers](#s-tough-gm), [Multipliers](#s-tough) in Conflict and [The Bestiary](#bestiary).
+**Every multiplier in the book is 2 bigger**, and a threat's Challenge plus 2 is the place to start, so a boss still takes about four rounds to bring down the long way. The bestiary's are written for a threat budget of 60, like the Iron Warden's *Armoured ×8*, and you add 1 to each for every 10 the budget's over that. Challenges still run from 2 to 6. (Since 14 Nov every multiplier's three times this, starting from four times a threat's Challenge.) See [Multipliers](#s-tough-gm), [Multipliers](#s-tough) in Conflict and [The Bestiary](#bestiary).
 
-**How long a scene runs** is everything standing in the crew's way divided by half the actions they take a round, counting the ones they buy with Aura. See [How long a scene runs](#s-size-scene).
+**How long a scene runs** is everything standing in the crew's way divided by half the actions they take a round, counting the ones they buy with Aura. (Since 14 Nov it's all their actions.) See [How long a scene runs](#s-size-scene).
 
 **Every telegraph at the crew says Body, Mind or Soul**: blows and teeth at your Body, fear, lies and pressure at your Mind, and despair, temptation and curses at your Soul. Twenty Places, the Bestiary, the Threat Builder, the frames and the Tag Reference are redone to match. See [Telegraphs](#s-telegraphs) and [Twenty Places](#places).
 
-**Playing alone, the first hit that gets through to you each scene doesn't drop a track**, the way the Toughness Boon works, and one character as they start takes 4 off every multiplier. See [Solo With a GM](#s-solo-gm).
+**Playing alone, the first hit that gets through to you each scene doesn't drop a track**, the way the Toughness Boon works, and one character as they start takes 4 off every multiplier. (Since 14 Nov that's a quarter of every multiplier.) See [Solo With a GM](#s-solo-gm).
 
 **The GM's 1 Resolve for great roleplay is gone**, since Resolve's a track now. A great setup that doesn't land still gets 1 Aura. See [Aura](#s-aura).
 
