@@ -78,6 +78,7 @@ None yet.
 8. **When a roll answers a telegraph on the live table**, only the dice at that telegraph go up as the answer. Anything else you aimed at on the same card is yours to sort out at the table.
 9. **The last roll on the play screen is the Again tile**, saying how it went last time. The GM's look still has the Last roll line.
 10. **Old traits from before Roots** say they don't come across, since archetypes have a Trait of their own again.
+11. **Putting your action into a friend's answer on the live table** brings a step for each thing that built the Root you pick, till the live table lets you tap in what fits a thing at a time (prompt 8).
 
 ### 7. The builder and downtime
 

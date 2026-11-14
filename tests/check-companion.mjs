@@ -1400,6 +1400,20 @@ if (part("3")) {
   await use("arch|0");
   same(await chipIs("arch|0"), "out", "a third tap takes it out");
   has(await live(), "13 steps", "13 again");
+  // Two permissions on one Title: the Title stays while either's in, and goes
+  // with the last of them.
+  await use(UNSEEN);
+  has(await live(), "14 steps", "move unseen as well, her first Title in already");
+  await use(LOCK);
+  await use(LOCK);
+  same([await chipIs(LOCK), await chipIs("title|0")], ["out", "in"], "the lock out, and her first Title still in with move unseen");
+  has(await live(), "13 steps", "13 with move unseen in place of the lock");
+  await use(UNSEEN);
+  await use(UNSEEN);
+  same(await chipIs("title|0"), "out", "her first Title goes with the last thing that brought it in");
+  has(await live(), "11 steps", "her Body, the Guild, know how a lock’s built and her picks");
+  await use(LOCK);
+  has(await live(), "13 steps", "the lock back, with her first Title");
   // Her Mind instead: the same things, and what built her Mind first.
   await page.click('#cc-dialog button[data-act="root"][data-v="Mind"]');
   has(await live(), "9 steps, d12 + d6", "her Mind and the same five things");

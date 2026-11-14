@@ -24,7 +24,7 @@ export function whenOf(at) {
 // and Aura.
 export function trackLine(c, s, esc) {
   const scars = R.TRACKS.reduce((t, k) => t + (s.scars?.[k]?.length ?? 0), 0);
-  return `<span class="cc-glance">${R.TRACKS.map((t) => `<span>${kitMini(s.tracks[t])}${R.TRACK[t].name} d${s.tracks[t]}</span>`).join("")}<span>Aura ${s.aura}/${c.numbers.aura}${scars ? `, ${scars} ${scars === 1 ? "Scar" : "Scars"}` : ""}</span></span>${s.conditions.length ? `<span class="cc-glance">${s.conditions.map((x) => `<span class="cc-tag is-${x.kind}">${kitMini(x.die, { own: x.kind === "for" ? "you" : "harm" })}<em>${esc(x.name)}</em> d${x.die}</span>`).join("")}</span>` : ""}`;
+  return `<span class="cc-glance">${R.TRACKS.map((t) => `<span>${kitMini(s.tracks[t])}${R.TRACK[t].name} d${s.tracks[t]}</span>`).join("")}<span>Aura ${s.aura}/${R.auraMax(c, s)}${scars ? `, ${scars} ${scars === 1 ? "Scar" : "Scars"}` : ""}</span></span>${s.conditions.length ? `<span class="cc-glance">${s.conditions.map((x) => `<span class="cc-tag is-${x.kind}">${kitMini(x.die, { own: x.kind === "for" ? "you" : "harm" })}<em>${esc(x.name)}</em> d${x.die}</span>`).join("")}</span>` : ""}`;
 }
 
 export function lookView(ch, c, x) {

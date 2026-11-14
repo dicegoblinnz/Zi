@@ -766,7 +766,6 @@ function missingView(ch) {
 
 // A rule from the book, kept in the page so it reads offline.
 const ruleHtml = (id) => `${RULE[id]?.html ?? ""}<p class="cc-small">${link(id, RULE[id] ? `${esc(RULE[id].title)} in the rules` : "Read it in the rules")}</p>`;
-const ruleBox = (id) => `<div class="cc-rule">${ruleHtml(id)}</div>`;
 // A rule from the book as a question bubble: its paragraphs and each of its
 // points a line, then where it is in the rules.
 const tipLines = (html) => String(html ?? "").replace(/<\/?(ul|ol)(\s[^>]*)?>/g, "").split(/<\/p>|<\/li>/).map((x) => x.replace(/<(p|li)(\s[^>]*)?>/g, "").trim()).filter(Boolean);
@@ -1063,7 +1062,7 @@ function againTile(ch, c, s) {
   if (!p) return "";
   const r = pickedRoll(c, s, p);
   const k = R.countRoll(c, s, { root: r.root, using: [...r.using], cases: [...r.cases] });
-  const name = rollName(r, k, c);
+  const name = rollName(r, k, c, s);
   const last = lastParts(s.last);
   const how = last.verdict ? `${last.verdict.toLowerCase()}${last.against}` : last.dice;
   return `<button type="button" class="tile card tile-again" data-act="again"><span class="tile-dice" aria-hidden="true">${diceOf(k.total)}</span><span class="tile-name"><span class="tile-k">Again</span> ${esc(name)}</span><span class="tile-says"><span class="tile-steps">${steps(k.total)}, ${esc(diceLabel(k.dice))}${k.aura ? `, ${k.aura} Aura` : ""}</span> · <span class="tile-last">last time ${esc(how)}</span></span></button>`;
@@ -1896,8 +1895,10 @@ function resultView(c, s, ch) {
     if (picking) return `<button type="button" class="cc-pickdie" data-act="pick" data-i="${i}" aria-label="The d${d.size} that came up ${v}">${drawn.replace('role="img"', 'aria-hidden="true"')}</button>`;
     return drawn;
   };
-  const used = r.foes.map((f, j) => ({ f, j })).filter(({ f }) => f.used || f.v != null);
-  const against = !used.length ? "with nothing to beat" : !many ? (r.foes[0].size ? `against their d${r.foes[0].size}, which came up ${r.spinning ? "…" : r.foes[0].v}` : `against the ${r.foes[0].v} to beat`) : `against ${andList(r.foes.map((f) => (f.size ? `their d${f.size}` : `a ${f.v}`)))}`;
+  // What had dice at it. Anything nobody went at is left out.
+  const used = r.foes.map((f, j) => ({ f, j })).filter(({ f }) => f.used);
+  const only = used.length === 1 ? used[0].f : null;
+  const against = !used.length ? "with nothing to beat" : only ? (only.size ? `against their d${only.size}, which came up ${r.spinning ? "…" : only.v}` : `against the ${only.v} to beat`) : `against ${andList(used.map(({ f }) => (f.size ? `their d${f.size}` : `a ${f.v}`)))}`;
   const flipping = picking && r.pick.type === "flip";
   // What it was up against, each one under "against". Their die only goes
   // dark when every one of yours at it beat it.
@@ -2999,7 +3000,7 @@ const ACT = {
       return "You’re acting. Aura can go past your maximum till you’ve finished.";
     }
     const over = R.doneActing(s, c);
-    return over ? `You’ve finished acting, so the ${over} Aura over your ${c.numbers.aura} is gone.` : "You’ve finished acting.";
+    return over ? `You’ve finished acting, so the ${over} Aura over your ${R.auraMax(c, s)} is gone.` : "You’ve finished acting.";
   }),
   aura: (el) => {
     const d = Number(el.dataset.d);
@@ -3024,7 +3025,7 @@ const ACT = {
     if (s.elem || !R.boonCount(c, "In your element")) return "";
     s.elem = true;
     s.aura += 1;
-    return `You’re in your element, so 1 Aura, even past your ${c.numbers.aura}. Aura’s ${s.aura}.`;
+    return `You’re in your element, so 1 Aura, even past your ${R.auraMax(c, s)}. Aura’s ${s.aura}.`;
   }),
   // Regen: at the end of a round, the lowest track's rolled, and a top face
   // puts it up a size.
@@ -3167,7 +3168,7 @@ const ACT = {
     const ch = current();
     const c = ch && normal(ch);
     if (!c) return;
-    if (big ? ch.state.tracks.resolve >= 12 : !ch.state.acting && ch.state.aura >= c.numbers.aura) return toast(big ? "A big bite. Your Resolve’s on d12 already." : "Real trouble. Your Aura’s full, so give 1 to a friend in the scene.", false);
+    if (big ? ch.state.tracks.resolve >= 12 : !ch.state.acting && ch.state.aura >= R.auraMax(c, ch.state)) return toast(big ? "A big bite. Your Resolve’s on d12 already." : "Real trouble. Your Aura’s full, so give 1 to a friend in the scene.", false);
     change(big ? "a big bite" : "letting it bite", (s) => (big ? `A big bite. ${upOne(s, "resolve")}` : `Real trouble. You take 1 Aura.${gainAura(s, c)}`));
   },
   cross: (el) => change("crossing something out", (s, c) => {
@@ -3278,10 +3279,15 @@ const ACT = {
     delete r.auto[k];
     if (!r.using.has(k)) {
       r.using.add(k);
+      // Its Title, attuned thing or archetype comes in with it, and stays
+      // while anything that brought it in is still in. One the player tapped
+      // in themselves stays theirs.
       const p = parentOf(x);
-      if (p && !r.using.has(p) && known.some((y) => y.key === p)) {
-        r.using.add(p);
-        r.auto[p] = [...(r.auto[p] ?? []), k];
+      if (p && known.some((y) => y.key === p)) {
+        if (!r.using.has(p)) {
+          r.using.add(p);
+          r.auto[p] = [k];
+        } else if (r.auto[p]) r.auto[p] = [...new Set([...r.auto[p], k])];
       }
     } else if (!r.cases.has(k)) r.cases.add(k);
     else {
