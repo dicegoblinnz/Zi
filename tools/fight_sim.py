@@ -50,8 +50,9 @@ a contact helps is the GM's call). Dorrie and Isolde stay out, as before.
 long as one on the 10 Nov rules, played plain and played hard, then for each
 pick the multiplier that keeps it that long, against none. On 14 Nov, with the
 Traits (3,000 fights a try): plain needs x2.9 (x2.7 without them) and hard
-x5.4 (x4.1), and each pick each needs 1.34, 1.88, 2.52 and 3.14 times none
-played plain, 1.34, 1.80, 2.36 and 2.98 played hard. At x3 a fight runs 4.4
+x5.4 (x4.1), and each pick each needs 1.40, 1.88, 2.52 and 3.14 times none
+played plain, 1.34, 1.80, 2.36 and 2.98 played hard (--seed 2 lands within
+0.05 of every one). At x3 a fight runs 4.4
 rounds plain and 2.6 hard, against 4.4 and 3.3 on 10 Nov, and x5 only gets a
 hard one to 3.2 while a plain one goes to 6.5.
 """
@@ -499,7 +500,7 @@ class Fight:
         if n == "Bram":
             if plan["bram_defend"] and "defend" not in did:
                 return "defend"
-            if not self.plain and "lead" not in did and c.tr["Soul"] <= (1 if self.policy == 'table' else 2) and len(self.standing()) > 1:
+            if "lead" not in did and self.leads_first(c):
                 return "lead"
             return "attack"
         if n == "Vesk":
@@ -594,20 +595,30 @@ class Fight:
             return
 
     # ---- Where It's Needed
-    def first_roll(self, c, plan):
+    def first_roll(self, c, plan, lead=0):
         """What each of the crew rolls first this round, the way choose() will
         have it: (kind, steps). Bram's Defend and anyone else's roll at the
-        end of the round, with their tracks."""
+        end of the round, with their tracks, and a Lead's no roll. lead is the
+        steps Bram's order hands each of them first, when he leads first."""
         n = c.name
         if n == "Bram":
-            return ("defend", c.s["defend"]) if plan["bram_defend"] else ("attack", c.s["attack"])
+            if plan["bram_defend"]:
+                return "defend", c.s["defend"]
+            if self.leads_first(c):
+                return "lead", 0
+            return "attack", c.s["attack"]
         if plan.get("defend_" + n):
             return "defend", c.s["defend"]
         if n == "Vesk":
-            return ("strike", c.s["strike"]) if c.hidden else ("hide", c.s["hide"])
+            return ("strike", c.s["strike"] + lead) if c.hidden else ("hide", c.s["hide"] + lead)
         if n == "Wren" and self.boss.alive and self.boss.marked < 8:
-            return "mark", c.s["attack"]
-        return "attack", c.s["attack"]
+            return "mark", c.s["attack"] + lead
+        return "attack", c.s["attack"] + lead
+
+    def leads_first(self, c):
+        """Whether Bram's first action this round is an order, as choose() has it."""
+        return (not self.plain and c.tr["Soul"] <= (1 if self.policy == "table" else 2)
+                and len(self.standing()) > 1)
 
     def worth(self, kind, S):
         """What S steps on a roll are worth: wins against the boss's d12 (a d8
@@ -637,7 +648,12 @@ class Fight:
         if L is None or L.blazed or self.policy != "table":
             return
         crew = self.standing()
-        rolls = [[c, *self.first_roll(c, plan), 0] for c in crew]   # [who, kind, steps, moved onto it]
+        # Bram acts first, so when his first action's an order, everyone else's
+        # first roll has its steps (Everyone gets it), and his isn't a roll.
+        bram = next((c for c in crew if c.name == "Bram"), None)
+        lead = bram.s["lead"] if bram and not plan["bram_defend"] and self.leads_first(bram) else 0
+        rolls = [[c, *self.first_roll(c, plan, lead), 0] for c in crew]   # [who, kind, steps, moved onto it]
+        rolls = [r for r in rolls if r[1] != "lead"]
         for _ in range(len(crew)):
             best = None
             for give in rolls:

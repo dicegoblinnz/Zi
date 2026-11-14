@@ -4228,7 +4228,9 @@ try {
     same((await got(sam.page, "GET", `/api/campaigns/${friday.id}/world`)).json?.world?.build, null, "and Sam's phone gets none of it again");
     await sam.page.reload();
     await sam.page.waitForSelector(".wb-sec");
-    same(await sam.page.$(".ws-sec"), null, "nothing of How it came to be on Sam's World screen");
+    // The World screen draws what the phone kept first, then what's come in,
+    // so How it came to be goes once the world's in.
+    await until(async () => !(await sam.page.$(".ws-sec")), "nothing of How it came to be on Sam's World screen");
   }
   console.log("9f. Building by answering");
   await checkAnswering();

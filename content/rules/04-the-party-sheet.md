@@ -30,7 +30,7 @@ The downtime page has the order downtime runs in, how downtime rolls work, the c
 
 ## Things That Climb {#s-climb}
 
-Most dice in Zi'Dara count down. A scene clock, a stake clock, an event, Supplies and the alarm all step down, and past d2, whatever they were counting to happens. Four things on the party sheet count up instead: the **Goal**, every **Aspiration**, every **project** and every faction's **agenda**. They start low and climb as someone works at them, so the first steps come easy and the last ones are hard work.
+Most dice in Zi'Dara count down. A scene clock, a stake clock and an event all step down, and past d2, whatever they were counting to happens. Four things on the party sheet count up instead: the **Goal**, every **Aspiration**, every **project** and every faction's **agenda**. They start low and climb as someone works at them, so the first steps come easy and the last ones are hard work.
 
 :::rule
 **Roll against its die. Beat it and it climbs one. Past d12, it's done.** One roll moves it one step at most, so more dice on it is advantage, and your best die counts. A setback steps it down one, but never below d2.

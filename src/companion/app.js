@@ -1276,7 +1276,7 @@ function putBackView(ch, c, s) {
     if (g.k === "perm" || g.k === "swap") {
       const t = c.titles[g.t];
       return `<li class="cc-item">${head("A permission", g.text)}${form(`<label class="cc-field">On <select name="t">${c.titles.map((x, i) => `<option value="${i}"${i === g.t ? " selected" : ""}${R.slotsOf(x) >= R.MAX_PERMS ? " disabled" : ""}>${esc(x.text ?? x.name)}</option>`).join("")}</select></label>
-        <label class="cc-field">Its Root ${rootPick("root", t?.root)}</label>`)}</li>`;
+        <label class="cc-field">Its Root ${rootPick("root", R.mostOf(t?.roots ?? {}))}</label>`)}</li>`;
     }
     if (g.k === "att") {
       return `<li class="cc-item">${head("On an attuned thing", g.text)}${form(`<label class="cc-field">On <select name="a">${c.attuned.map((a, i) => `<option value="${i}"${i === (g.a ?? 0) ? " selected" : ""}>${esc(a.name)}</option>`).join("")}</select></label>
