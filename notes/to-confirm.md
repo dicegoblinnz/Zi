@@ -4,7 +4,7 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 
 ## 14 Nov: stacking
 
-**Built, and not on `main` yet.** Part 1 of the stacking rework (`notes/stacking-plan.md`), from your 14 Nov chat (`notes/playtest-sheets/2026-11-14-chat-decisions.md`), built by thirteen chats on `rules/2026-11-14-stacking` with the book's core cut under it. These are the calls Claude made writing it down, before any chat built it, and each chat added its own in its subsection below. It goes to the website when you say yes.
+**Live since 14 Nov**, when you said to make it live. Part 1 of the stacking rework (`notes/stacking-plan.md`), from your 14 Nov chat (`notes/playtest-sheets/2026-11-14-chat-decisions.md`), built by thirteen chats on `rules/2026-11-14-stacking` with the book's core cut under it. These are the calls Claude made writing it down, before any chat built it, and each chat added its own in its subsection below. They're still yours to say yes or no to.
 
 1. **Every thing that fits is 1 step**, and an archetype taken twice counts twice.
 2. **Explaining costs 1 Aura for each thing you explain**, not 1 a roll.
