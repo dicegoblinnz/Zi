@@ -27,7 +27,7 @@ Mo's calls in chat, the first part of a rework that comes in parts.
 
 **The six crew are rebuilt on 35 points.** Each keeps both Titles, all six permissions, both archetypes with both their abilities, and their attuned thing, with an Aura maximum of 7, and every example in the book uses their new numbers. See [the crew](#s-pregens).
 
-**Characters already made keep everything they've got**, even past 35 points. Their Roots are recounted, with each Title's 3 on the Root it was on.
+**Characters already made keep everything they've got**, even past 35 points. Their Roots are recounted with each Title's 3 on the Root it was on, and you can spread them again.
 
 ## 9 Nov 2026: The GM's budgets, and the rest of the book {#c-2026-11-09-budgets}
 
