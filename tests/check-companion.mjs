@@ -35,7 +35,7 @@
 //    right. Bram and Wren's three dice on the guard captain against his one
 //    roll, a Layered vault door's best die standing, Ash's area with each man
 //    defending on his own, dice on one side added up. Then several actions in
-//    one throw: the study door's three dice at three things, Mo's own (a d12
+//    one throw: the study door's four dice at three things, Mo's own (a d12
 //    and a d8 at the brute, a d6 at the archer and a d8 coming at him), each
 //    read just as it would be on its own and the Aura added up across them, a
 //    swap in one leaving the rest alone, Bram's four dice for three blows, an
@@ -878,16 +878,17 @@ if (part("1d")) {
   // the Aura up across them, 1 for every die of yours that wins and 1 for
   // every top face, win or lose (The Core, #s-aura).
   const plain = ({ won, aura, ...x }) => x;
-  // Splitting at the study door (The Core): Vesk's one roll is three dice at
-  // three things, a d10 at the lock's d8, a d6 to keep it quiet against the
-  // guard's 3 (the book gives only his roll, so a d6 here) and a d4 at the
-  // quiet house, a d2. All three won, and the 6 was a top face, so 4 Aura.
+  // Splitting at the study door (The Core): Vesk's one roll is four dice at
+  // three things, a d12 and a d4 at the lock's d8 (to open it, and to leave
+  // it without a scratch), a d6 to keep it quiet against the guard's 3 (the
+  // book gives only his roll, so a d6 here) and a d4 at the quiet house, a
+  // d2. Three won, and the 6 was a top face as well, so that's 4 Aura.
   const study = readLanes([
-    { mine: dice([[10, 7]]), theirs: dice([[8, 5]]), def: "them" },
+    { mine: dice([[12, 7], [4, 2]]), theirs: dice([[8, 5]]), def: "them" },
     { mine: dice([[6, 6]]), theirs: dice([[6, 3]]), def: "them" },
     { mine: dice([[4, 3]]), theirs: dice([[2, 1]]), def: "them" },
   ]);
-  same([study.lanes.map((x) => x.outs), study.wins, study.tops, study.aura], [[["beat"], ["beat"], ["beat"]], 3, 1, 4], "the study door: three dice at three things, all three won and the 6 a top face, so 4 Aura");
+  same([study.lanes.map((x) => x.outs), study.wins, study.tops, study.aura], [[["beat", "under"], ["beat"], ["beat"]], 3, 1, 4], "the study door: four dice at three things, three won and the 6 a top face, so 4 Aura");
   // Mo's own: his d12 and d8 at the brute's d10, his d6 at the archer's d4,
   // and a d8 coming at him that his Stamina's d12 rolls against.
   const mo = [
@@ -908,9 +909,10 @@ if (part("1d")) {
   const landed = readLanes([{ mine: dice([[6, 6], [6, 3], [10, 8], [12, 9]]), theirs: dice([[8, 7], [8, 5], [8, 2]]), def: "you" }]);
   same([landed.lanes[0]?.stopped, landed.lanes[0]?.spare, landed.wins, landed.stops, landed.tops, landed.aura], [3, [3], 3, 3, 1, 4], "Bram stops all three blows with a die to spare: three won and a top face, 4 Aura");
   // A die that beats three men at once still pays once (Ash's burst), and a
-  // tie pays nothing (the guard captain's, 9, 4 and 6 against his 6).
+  // tie pays nothing (the guard captain's: Bram's three d12s come up 9, 4
+  // and 6 against his 6).
   same(readLanes([{ mine: dice([[6, 5]]), theirs: dice([[6, 2], [6, 4], [6, 6], [6, 1], [6, 5]]), each: true }]).aura, 1, "Ash's 5 beats three men and pays once");
-  same(readLanes([{ mine: dice([[10, 9], [8, 4], [8, 6]]), theirs: dice([[10, 6]]) }]).aura, 1, "the captain's tie pays nothing, so one die won is 1 Aura");
+  same(readLanes([{ mine: dice([[12, 9], [12, 4], [12, 6]]), theirs: dice([[10, 6]]) }]).aura, 1, "the captain's tie pays nothing, so one die won is 1 Aura");
   // With nothing to beat, a top face of yours still pays, and theirs never does.
   same([readLanes([{ mine: dice([[6, 4], [4, 4]]) }]).aura, readLanes([{ theirs: dice([[8, 8]]) }]).aura], [1, 0], "a Move's top face pays, and theirs gives nobody Aura");
   same(readLanes([]), { lanes: [], wins: 0, stops: 0, tops: 0, aura: 0 }, "nothing thrown pays nothing");
