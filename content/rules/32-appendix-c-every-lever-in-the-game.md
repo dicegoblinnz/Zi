@@ -17,7 +17,7 @@ Where a lever comes from a condition or an item, treat those as examples and wri
 | Lever | Where it comes from |
 | --- | --- |
 | **A bigger Root** | 3 from every Title, spread across your Roots however you like, and 1 from every permission on that Root. Nothing else adds to a Root. |
-| **One more step** | Everything on your sheet that plainly fits what you're doing: each Title, permission, archetype, ability you're using, attuned thing, awakening and item. An archetype you've taken twice is two. Your own extra action, when it goes into the same roll. A condition for you, or on the threat you go at. A Scholar's truth, free for the crew on any roll it fits this scene. A Shifter's animal tag, when it fits. A tag a Maker gave your item, when it says so. A *Charge* weapon, on your first die. A *Purse of gold*, on one social roll. |
+| **One more step** | Everything on your sheet that plainly fits what you're doing: each Title, permission, archetype, ability you're using, attuned thing, awakening and item. An archetype you've taken twice is two. Your own extra action, when it goes into the same roll. A condition for you, or on the threat you go at. An Oracle's truth from *Foretold*, free for the crew on any roll it fits this scene. A Shifter's animal tag, when it fits. A tag a Maker gave your item, when it says so, and a Maker's mark. A *Charge* weapon, on your first die. A *Purse of gold*, on one social roll. |
 | **One more step, for 1 Aura** | Each thing on your sheet you have to make a case for. Anything that fits but isn't on your sheet: the ground, a threat's tag you know, a Catch turned your way, or one thing off a friend's sheet through a bond thread you share. 1 Aura each, every time you bring one in. |
 | **Steps from friends** | A combo: they put their actions into the same thing, each bringing everything on their sheet that fits, 1 each, and nobody pays Aura for the combo. Anything of theirs they have to explain is 1 Aura, and they pay it. A Leader's order or rallying song: steps handed to you for this round. They don't have to fit, and they don't bring a split. |
 | **3 steps a size** | The Bloodsworn's: every size your Stamina drops adds 3 steps to an action. Pay it as you act and they go on that roll, and *Bleed for it* (1 Stamina) does it for nothing but the blood. A hit takes it, and they go on your next action. *Bleed out* (1 Stamina) is 3 steps on one roll for every size your Stamina's below d12. |
@@ -132,7 +132,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **Strip a tag** | A win aimed at it, or one tick off its multiplier. Spending *Burning*, *Bleeding* or *Poisoned*. An *Acid vial*. A *Piercing* weapon gets past *Armoured*, and a *Breaker* past *Shield*. |
 | **End it in one win** | An opening: its weak point, helpless, or getting around everything that keeps it going. A Boss only falls to its weak point. Any other opening strips two whole tags, multipliers and all. |
 | **Tick down a multiplier** | Every win against a tag with a multiplier, like *Armoured ×12*, ticks one off, and the GM says what's left. A condition that would strip a tag ticks one off instead. |
-| **Hit harder** | A vulnerability: every one that fits a win that strips a tag or takes a track down adds one more tick, and you choose where it goes, on the same tag or another one the hit could reach. *Prone*, *Exposed* (condition). The Warrior's *Opened* (1 Stamina). A Scholar's truth with *Find the flaw* (1 Confidence). Hidden ones are hidden tags, so Study finds them. |
+| **Hit harder** | A vulnerability: every one that fits a win that strips a tag or takes a track down adds one more tick, and you choose where it goes, on the same tag or another one the hit could reach. *Prone*, *Exposed* (condition). The Warrior's *Opened* (1 Stamina). Hidden ones are hidden tags, so Study finds them. |
 | **Find a hidden tag** | Study. *Sighted*, *Spotted* (condition). |
 | **Turn a tag against it** | Bring it into your roll (1 Aura). |
 | **Mark it** | The Hunter's: your action, rolled against a creature. Win and it's *Marked* at the die you won with, and anyone who acts against it rolls the Mark die too. The Push (1 Confidence) is +2 on the Mark die whenever it's rolled, whoever's rolling, and *Mark the pack* (1 Confidence) marks two more. It fades a size a round, and when what it's on falls, it jumps to another creature the Hunter can see. |
@@ -156,7 +156,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 
 | Lever | Where it comes from |
 | --- | --- |
-| **Make something true** | The Scholar's truth: win a Study and say something that wasn't obvious to anyone else. It's true and it matters here, and it's a step for the crew this scene, free on any roll it fits. [The Oracle](#oracle), when all three dice match. |
+| **Make something true** | The Oracle's *Foretold* (1 Confidence): win a Study and say something that wasn't obvious to anyone else. It's true and it matters here, and it's a step for the crew this scene, free on any roll it fits. [The Oracle](#oracle), when all three dice match. |
 | **Use the place** | Bring the ground into your roll (1 Aura). *Guided* (condition) does it for free. |
 | **Do more than a permission does** | Go beyond, for 1 Aura: phase through a wall, an aimed shot that takes out the tag you choose, calling up someone who died a hundred years ago. The Going beyond Boon: once a scene, without spending Aura. |
 | **Do something big** | A bigger roll against a bigger Challenge: a better Root, everything on your sheet that fits, friends in a combo, a Leader's steps. |
@@ -193,14 +193,15 @@ The menu covers toughness, recovery, regen, your Aura maximum, stride, getting a
 
 ### Archetypes {#s-levers-archetypes}
 
-Every archetype has a mechanic only it can do, and abilities you pay for out of your tracks, so a lot of the levers above come from them. [How Archetypes Work](#s-how-archetypes) has the whole of it, and each archetype is in [The Archetypes](#archetypes).
+Every archetype has a mechanic only it can do, a Trait that's always true of you, and abilities you pay for out of your tracks, so a lot of the levers above come from them. [How Archetypes Work](#s-how-archetypes) has the whole of it, and each archetype is in [The Archetypes](#archetypes).
 
 -   **Each ability's 1 off its home track**, Stamina, Confidence or Resolve, or 2 from your other two, in any mix. Paying never takes a track below d2.
 -   **They stack.** Pay again and you get it again: another +2, another target, another round.
 -   **The Push** is the one most archetypes have: +2 on one die of the mechanic, once you've rolled and you know you need it. A die it takes to its top face, or past it, doesn't give you Aura. A Warrior's still explodes.
--   **The same archetype twice.** Its Push becomes +3, three times it's +4, and so on, and every archetype is room for one more action a round.
+-   **The same archetype twice.** Its Push becomes +3, three times it's +4, and so on. It's two steps on every roll it fits, and it's still the one Trait.
+-   **Every Trait's a lever of its own.** Six get you Aura back: the Bloodsworn's, the Gambler's, the Guardian's, the Healer's, the Hunter's and the Illusionist's. The Leader's moves steps from one roll to another, the Oracle's shows the crew three of the threats' dice before anyone moves, and the Warrior's rolls their armour beside their tracks. A few have a price: the Bard pays 1 Aura for each threat that's watching, the Summoner pays the usual Aura to call their pocket summon back, and the Face's and the Teleporter's come once a scene.
 
-Two spears come at Bram, a d10 and a d8, and he's Defending: his Body and his Shieldwork, with his plate and his shield, 11 steps, a d12 and a d10, with his Stamina's d12 rolling beside them. The spears come up 8 and 4, and Bram rolls 7, 3 and a 5 on his Stamina. The 5 stops the 4, but nothing's beaten the 8, so he pays 1 Stamina for his Guardian's Push and makes the 7 a 9. Both spears are stopped, and his Stamina's a d10. If he'd taken Guardian twice, it'd be a 10.
+Two spears come at Bram, a d10 and a d8, and he's Defending: his Body, both Titles, *hold the line*, *fight in a shield wall*, Guardian, his plate and his shield, 14 steps, two d12s and a d4, with his Stamina's d12 rolling beside them. The spears come up 8 and 4, and Bram rolls 7, 3 and 2, and a 5 on his Stamina. The 5 stops the 4, but nothing's beaten the 8, so he pays 1 Stamina for his Guardian's Push and makes the 7 a 9. Both spears are stopped, and his Stamina's a d10. If he'd taken Guardian twice, it'd be a 10.
 
 ## Writing Your Own {#s-levers-writing}
 

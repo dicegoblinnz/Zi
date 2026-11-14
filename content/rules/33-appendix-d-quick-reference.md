@@ -74,7 +74,7 @@ updated: 2026-11-14
 
 ## Study {#study}
 
-Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer. A Scholar can introduce a truth instead: say something that wasn't obvious to anyone else, and it's true, and it's a step for the crew this scene.
+Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer. An Oracle can pay 1 Confidence for *Foretold* and introduce a truth instead: say something that wasn't obvious to anyone else, and it's true, and it's a step for the crew this scene.
 
 ## The round {#s-qr-round}
 
@@ -135,7 +135,7 @@ A hit, a size off the track it's at · a box on your armour on that Root, or som
 -   **Titles:** 3 on your Roots, spread however you like, and six permissions at most.
 -   **Permissions:** a doing word and how, what or where, like *climb sheer walls*. Each one's 1 on its Root, and it fits that and its Title. You need a magic permission or a magic item to do magic at all, and magic's written narrow.
 -   **Roots:** each one's what your Titles put on it, and 1 for every permission on it. A roll's one Root and every thing on your sheet that fits, a step each.
--   **Archetypes:** apart from your Titles, and you can take the same one twice. Each one's a mechanic, a Trait that's always on, and the ability it comes with, and more abilities are bought, six at most. They don't cap your actions.
+-   **Archetypes:** apart from your Titles, and you can take the same one twice. Each one's a mechanic, a Trait that's always true of you, and the ability it comes with, and more abilities are bought, six at most. They don't cap your actions.
 -   **Attuned things:** 2 on your Aura maximum each, and one awakening. Awakened holds one, and its Catch brings a second, free.
 -   **Boons:** two permission slots on a Title buy one. Burdens only come on attuned things. The menu's in [Boons and Burdens](#s-boons).
 -   **Aspiration:** starts at d2 and climbs. An action when it's within reach, or a slot. One step a roll. Past d12, take a new Title, archetype or attuned thing, with the one it comes with.
@@ -143,26 +143,25 @@ A hit, a size off the track it's at · a box on your armour on that Root, or som
 
 ## The archetypes {#s-qr-archetypes}
 
-Each ability's 1 from the archetype's home track, or 2 from your other two, and they stack. Most have a Push: +2 on one die of the mechanic after you roll, and +3 if you've taken it twice. The whole of each one is in [The Archetypes](#archetypes).
+Each ability's 1 from the archetype's home track, or 2 from your other two, and they stack. Most have a Push: +2 on one die of the mechanic after you roll, +3 if you've taken it twice. Each one's Trait comes after its mechanic, and the whole of each is in [The Archetypes](#archetypes).
 
--   **Bard:** (Resolve) your action has every friend who can hear you roll their Confidence, up a size on a 4 or more, as far as d10, or your song's a Defend against fear for all of them, with as many splits as you like.
--   **Bloodsworn:** (Stamina) every size your Stamina drops adds 3 steps to your action, and you can pay it on purpose.
--   **Elementalist:** (Resolve) one of your dice can be an area, a burst, a cone or a line, and it costs no Aura.
--   **Face:** (Confidence) build your dice but don't roll them, and put them on a threat as influence. Roll them against one of its telegraphs before it lands, and each of its dice your best one beats does what you say.
--   **Gambler:** (Confidence) once a round, flip any die you can see after it lands: its size plus 1, take away what it rolled.
--   **Guardian:** (Stamina) you intercept blows for free, for every friend within your stride, whoever they're from.
--   **Healer:** (Resolve) the only one who makes a heal roll: each die on a 4 or more puts a track up a size.
--   **Hunter:** (Confidence) mark a creature, and anyone who acts against it rolls your Mark die too. When it falls, the Mark jumps to another.
--   **Illusionist:** (Confidence) meet or beat the threats' Challenge, and they believe your illusion until they interact with it or try to get through it.
--   **Leader:** (Resolve) an order or a rallying song hands its steps to friends who can hear or see you.
--   **Maker:** (Stamina) roll against an item's size, and every die that beats it gives the item a tag for the scene. You can pump Aura into a friend's attuned thing.
--   **Oracle:** (Confidence) roll your action as foresight, then swap those numbers into anyone's dice before the round ends, as long as each one fits the die.
--   **Scholar:** (Confidence) win a Study and introduce a truth, a step for the crew this scene.
--   **Shadow:** (Stamina) the dice you hide with go into your shadow pool, to add to any roll after that.
--   **Shifter:** (Stamina) catch animal tags against their die, and keep them until downtime.
--   **Summoner:** (Resolve) the only one who catches souls and summons them.
--   **Teleporter:** (Resolve) your stride can be a teleport of up to 10 units, and 1 Resolve opens a portal.
--   **Warrior:** (Stamina) your dice explode in a fight, so a top face rolls again and adds on.
+-   **Bard:** (Resolve) your action has every friend who can hear you roll their Confidence, up a size on a 4 or more, to d10, or your song Defends you all against fear, split as you like. *All Eyes on Me:* 1 Aura a threat, and it watches only you while you perform.
+-   **Bloodsworn:** (Stamina) every size your Stamina drops is 3 steps on your action, and you can pay it on purpose. *Paid in Blood:* 1 Aura for every size your Stamina drops.
+-   **Elementalist:** (Resolve) one of your dice can be an area, a burst, a cone or a line, for no Aura. *Eye of the Storm:* your areas and your loose element never hurt you.
+-   **Face:** (Confidence) put your dice on a threat unrolled, as influence, and roll them before one of its telegraphs lands: each of its dice your best one beats does what you say. *I Know a Guy:* once a scene, someone you know turns up and helps.
+-   **Gambler:** (Confidence) once a round, flip any die you can see after it lands: its size plus 1, less what it rolled. *Bad Luck Pays:* 1 Aura for each 1 of yours that stays a 1.
+-   **Guardian:** (Stamina) you intercept for free, for every friend within your stride. *Better Me Than You:* 1 Aura for each blow you intercept for a friend.
+-   **Healer:** (Resolve) only you make heal rolls: each die on a 4 or more puts a track up a size. *Good Hands:* 1 Aura for each heal die that puts a track up.
+-   **Hunter:** (Confidence) mark a creature, and anyone acting against it rolls your Mark die too, which jumps when it falls. *Good Hunting:* 1 Aura for each die a friend wins against your Mark.
+-   **Illusionist:** (Confidence) meet or beat the threats' Challenge, and they believe your illusion till they interact with it or try to get through. *Made You Look:* 1 Aura when a threat swings at, talks to or walks into one.
+-   **Leader:** (Resolve) an order hands its steps to friends who can hear or see you. *Where It's Needed:* each round, move 1 step for each of you from roll to roll.
+-   **Maker:** (Stamina) each die that beats an item's size gives it a tag for the scene, and you can power a friend's awakening. *Maker's Mark:* one item keeps a tag of yours, a step or a hit taken.
+-   **Oracle:** (Confidence) roll your action as foresight, and swap the numbers into anyone's dice that round, if they fit. *Seen It Coming:* each round, roll 3 of the threats' dice before anyone moves. *Foretold* (1 Confidence): a Study you win can be a truth.
+-   **Shadow:** (Stamina) the dice you hide with go in your shadow pool, for any roll after. *Any Shadow Will Do:* any patch of dark's enough to hide in.
+-   **Shifter:** (Stamina) catch animal tags against their die, and keep them till downtime. *Something of the Beast:* a beast's sense or size, picked each scene.
+-   **Summoner:** (Resolve) only you catch souls and summon them. *Pocket Summon:* one soul out free once a scene, with no action.
+-   **Teleporter:** (Resolve) your stride can be a 10-unit teleport, and 1 Resolve opens a portal. *Not There:* once a scene, teleport, and what's landing on you misses.
+-   **Warrior:** (Stamina) your dice explode in a fight. *Second Skin:* if you haven't Defended, your armour's 1 step a piece beside your track.
 
 ## Bonds and threads {#s-qr-threads}
 

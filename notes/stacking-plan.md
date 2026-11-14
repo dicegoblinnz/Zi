@@ -70,14 +70,15 @@ Everyone keeps both Titles, all six permissions, both archetypes with both their
 
 ### Isolde
 
-- **Points:** 35. Two Titles 10, four more permissions 4, Oracle and Scholar 10, a second ability for each 2, her chalk and salt 5, and four things she carries 4.
+- **Points:** 35. Two Titles 10, four more permissions 4, Oracle twice 10 (*Push* and *Foretold* come with them), *Hold it* 1, her chalk and salt 5, and five things she carries 5. Mo took the Scholar out on 14 Nov (prompt 3), so her second archetype's a second Oracle, and the point that bought *Find the flaw* went on a deck of the order's cards.
 - **First Title:** *The last student of a dead order* (Soul 3). Permissions: *speak with the recently dead* (Soul), *draw a ward the dead can't cross* (Soul), *read the order's old script* (Mind).
 - **Second Title:** *A scholar of forbidden texts* (Mind 3). Permissions: *know the history of anything old* (Mind), *find what I need in any library* (Mind), *read dead languages* (Mind).
 - **Roots:** Body 0 · Mind 7 · Soul 5.
-- **Archetypes:** Oracle (*Push*, *Hold it*) · Scholar (*Push*, *Find the flaw*).
-- **Carries:** a Common coat with silver thread (equipment, 1 of 3) · a salt packet, a book she never finished, a reading lens (utility, 3 of 3) · an old letter (keepsake) · an empty bag (0 of 10).
+- **Archetypes:** Oracle (*Push*, *Hold it*) · Oracle (*Foretold*).
+- **Carries:** a Common coat with silver thread, a deck of the order's cards (equipment, 2 of 3) · a salt packet, a book she never finished, a reading lens (utility, 3 of 3) · an old letter (keepsake) · an empty bag (0 of 10).
 - **Attuned (Awakened):** chalk and salt, with *A circle anywhere I can kneel* (active).
-- **Reading the order's old script:** Mind 7, both Titles, *read the order's old script*, *read dead languages*, Scholar and her lens, 13 steps (2d12 and a d2). It was 9.
+- **Reading the order's old script:** Mind 7, both Titles, *read the order's old script*, *read dead languages* and her lens, 12 steps (2d12). It was 9.
+- **Her foresight:** Soul 5, Oracle twice and her deck of the order's cards, 8 steps, which one action only ever makes two numbers (a d12 and a d4, say). It was 5.
 - **Drawing a ward:** Soul 5, her first Title, *draw a ward the dead can't cross*, her chalk and salt, *A circle anywhere I can kneel* and her salt packet, 10 steps (a d12 and a d8). It was 6.
 
 ### Wren

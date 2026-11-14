@@ -45,7 +45,27 @@ Written into The Core, Building Your Character, How Archetypes Work, Conflict's 
 
 ### 3. Traits
 
-None yet.
+The seventeen Traits are Mo's from chat. These are the details I filled in round them.
+
+1. **Bard:** a threat stops watching when the performance stops, or for a scream or a blade.
+2. **Bloodsworn:** 1 Aura for every size, so a hit that's two sizes is 2.
+3. **Face:** once a scene, someone who could plausibly turn up there, and the GM plays them.
+4. **Gambler:** the 1 has to stay a 1, so a die you flip, push or roll again doesn't count.
+5. **Healer:** a heal die that puts a track up pays like a win, so a Push that takes it past its top face still pays nothing.
+6. **Hunter:** every die, not every action, and defence counts, so a friend's die that stops the *Marked* creature's blow pays you too.
+7. **Leader:** moved before either roll's rolled, the steps don't have to fit, and nobody's roll goes below 1 step.
+8. **Maker:** one item, not three, and it can be a friend's. It's back in downtime, free, on that item or another.
+9. **Oracle:** the dice are rolled once the telegraphs are out and before anything else, face up for everyone, and a threat's one roll for the round can be one of them.
+10. **Shadow:** you still roll to get into hiding. Only the place stops mattering.
+11. **Shifter:** it's not an animal tag, so it's not a step and can't take a hit.
+12. **Summoner:** the pocket summon comes out at its own die, and calling it back is also no action.
+13. **Teleporter:** within 10 units you can see, and everything landing on you right then misses.
+14. **Warrior:** only when Defend wasn't your action, so armour never counts twice. Each piece is 1 step, rolled as its own dice.
+15. **No Trait's a step.** They're not in the list of things that stack.
+16. **The Scholar's out:** Isolde's an Oracle twice. Foretold came with her second Oracle and she bought Hold it, and the point that's left went on a deck of the order's cards, which is a step on her foresight (Soul 5, Oracle twice and the cards, 8 steps). Her reading roll's 12, Studying the road 9, her Aspiration roll 10, and the Warden's Study 13, a d2 where it had a d4. The magistrate's combo keeps its 14, with *find what I need in any library* where Scholar was.
+17. **Foretold** is paid once you've won the Study, so it's not a step on it, and paying again says one more truth. With *Find the flaw* gone, a truth can't be a vulnerability, so Running the Game's *Rusted Through* example went.
+18. **The Scholar and Investigator Title ideas** suit the Oracle now. A wizard's an Oracle and a Guardian or an Elementalist, and Frames' Systems suits a Maker or a Face.
+19. **A Maker powers a friend's awakening with their own Aura**, off their own maximum.
 
 ### 4. Question bubbles
 

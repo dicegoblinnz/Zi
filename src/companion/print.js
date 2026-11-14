@@ -34,10 +34,12 @@ const spreadWords = (t) => R.ROOTS.filter((r) => t.roots?.[r]).map((r) => `${r} 
 // for where a Root's points came from stop at VI.
 const spreadNote = (t) => (spreadWords(t) ? `${spreadWords(t)} on your Roots` : "nothing on your Roots yet");
 const permWords = (p) => (R.ROOTS.includes(p.root) ? `${p.text} (${p.root})` : p.text);
-// An archetype's Trait, the way the book writes one: its name, then what it does.
+// An archetype's Trait, the way the book writes one: its name, then what it
+// does, in Appendix D's few words when the book's given them (the whole rule
+// won't fit on two lines).
 const traitLine = (t) => {
   const name = plain(t?.name);
-  const said = plain(t?.text);
+  const said = plain(t?.short || t?.text);
   return name && said ? `${name}${/[.!?]$/.test(name) ? "" : "."} ${said}` : name || said;
 };
 

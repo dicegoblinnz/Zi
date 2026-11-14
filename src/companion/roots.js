@@ -131,7 +131,7 @@ function titleOf(t, B) {
 // character's got, the one it came with first. One from before stacking came
 // with every ability it had, so it keeps them all. A Trait the book hasn't
 // got yet is there with nothing in it.
-const traitOf = (x) => (x && typeof x === "object" ? { name: text(x.name, 60), text: String(x.text ?? x.html ?? "") } : typeof x === "string" && x ? { name: text(x, 60), text: "" } : { name: "", text: "" });
+const traitOf = (x) => (x && typeof x === "object" ? { name: text(x.name, 60), text: String(x.text ?? x.html ?? ""), short: String(x.short ?? "") } : typeof x === "string" && x ? { name: text(x, 60), text: "" } : { name: "", text: "" });
 function archOf(a, B) {
   const rule = (B?.archetypes ?? []).find((x) => x.name === a.name) ?? null;
   const abilities = rule?.abilities ?? (Array.isArray(a.abilities) ? a.abilities : []);

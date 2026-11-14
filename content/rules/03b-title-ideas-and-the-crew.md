@@ -18,7 +18,7 @@ The quick build is the fast way to spend your 35 points, with most of the thinki
 
 You don't have to spend your points this way. Everything's priced in [Building Your Character](#building-character), and you can build whatever you like with them. I'd still take at least a Title, an archetype and an attuned thing. For a one-shot, or to catch someone up with the crew, the GM can give you more.
 
-1.  **Pick two archetypes, for 12 points.** Each one has a mechanic, something only it can do, a Trait that's always on, and abilities you pay for out of your tracks when you use them, and most of them have a Push: +2 to one die on the mechanic. An archetype's 5 points and comes with one of its abilities, your pick, and the quick build takes a second for 1 more. You can take the same archetype twice, and then that +2 is a +3. Each of the two comes with its own ability, so you've got two abilities for 10 points, and 2 more points for what you carry. Every Title idea says which archetypes suit it. See [How archetypes work](#s-how-archetypes).
+1.  **Pick two archetypes, for 12 points.** Each one has a mechanic, something only it can do, a Trait that's always true of you, and abilities you pay for out of your tracks when you use them, and most of them have a Push: +2 to one die on the mechanic. An archetype's 5 points and comes with one of its abilities, your pick, and the quick build takes a second for 1 more. You can take the same archetype twice, and then that +2 is a +3. Each of the two comes with its own ability, so you've got two abilities for 10 points, and 2 more points for what you carry. Every Title idea says which archetypes suit it. See [How archetypes work](#s-how-archetypes).
 2.  **Write two Titles, with three permissions on each, for 14 points.** A Title's 5 points and comes with one permission, and every one after that is 1. Take a Title off one of the ideas or write your own, and make it specific: *the best blade in the city* is fine, and *the best blade in the Low Market* is better. A Title puts 3 on your Roots, spread however you like: all 3 on one Root, 2 on one and 1 on another, or 1 on each. Then take three permissions that fit inside it, so you've got six, and give each one the Root it builds: *pick a mechanical lock* (Body). Change the words to suit your character, or write one that isn't on the list. See [Titles](#s-title) and [Permissions](#s-writing-permissions).
 3.  **Add up your Roots.** Each Root's what your Titles put on it and 1 for every permission on it. A roll's one Root, and a step for every thing on your sheet that fits what you're doing: a Title, a permission, an archetype, an ability, your attuned thing, an awakening or something you carry. One you have to explain is 1 Aura. See [Roots](#s-step-roots).
 4.  **Attune one thing for 5 points, and take what you carry with the last 4.** Your attuned thing starts at Awakened with one awakening, and puts 2 on your Aura. If there's trouble you'd like on it, give it a Catch and it gets a second awakening, free. Everything you carry is 1 point, bar your keepsake, which is free. You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more. Armour goes on the Root it guards, Common with 1 box, and one piece can be Fine, with 2. Getting your Aspiration can bring you another attuned thing. See [What you carry](#s-carrying) and [Attunement](#s-attunement).
@@ -62,7 +62,7 @@ If what you want to play isn't here, it's probably two of these put together, or
 | a swashbuckler or pirate | [Warrior](#a-warrior) and [Leader](#a-leader) | [Warrior](#k-warrior) and [Sailor](#k-sailor) |
 | a warlock | [Oracle](#a-oracle) or [Bloodsworn](#a-bloodsworn), and [Summoner](#a-summoner) | [Hexer](#k-warlock) and [Medium](#k-medium), with your patron as the trouble that follows you |
 | a witch | [Oracle](#a-oracle) and [Shifter](#a-shifter) | [Hexer](#k-warlock) and [Wildcraft](#k-druid) |
-| a wizard | [Scholar](#a-scholar), and [Guardian](#a-guardian) or [Oracle](#a-oracle) | [Scholar](#k-scholar) and a school, like [Warding](#k-wizard) |
+| a wizard | [Oracle](#a-oracle), and [Guardian](#a-guardian) or [Elementalist](#a-elementalist) | [Scholar](#k-scholar) and a school, like [Warding](#k-wizard) |
 
 ### Roles {#s-idea-roles}
 
@@ -141,7 +141,7 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 :::sheet[Investigator]{#k-investigator}
 **Plays like:** a detective, thief-taker or inquisitor.
 
-**Archetypes:** [Scholar](#a-scholar) or [Hunter](#a-hunter)
+**Archetypes:** [Hunter](#a-hunter) or [Oracle](#a-oracle)
 
 **Titles:** *The investigator the watch hates* · *The thief-taker who always gets her man* · *The coroner who sees what the dead saw*
 
@@ -253,7 +253,7 @@ A role is what you do. None of these needs magic, so any of them will sit next t
 :::sheet[Scholar]{#k-scholar}
 **Plays like:** a sage, archivist or lawyer.
 
-**Archetype:** [Scholar](#a-scholar)
+**Archetype:** [Oracle](#a-oracle)
 
 **Titles:** *A scholar of forbidden texts* · *The archivist who knows where everything's buried* · *The lawyer who's never lost a case*
 
@@ -601,9 +601,9 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 :::sheet[Isolde: The last student of a dead order]
 *The scholar. Reads the old books and works the rituals nobody else will touch.*
 
-**Plays like:** a mage, sage or medium. She's an [Oracle](#a-oracle) and a [Scholar](#a-scholar), and her Titles come from the [Medium](#k-medium) and [Scholar](#k-scholar) ideas.
+**Plays like:** a mage, sage or medium. She's an [Oracle](#a-oracle) twice over, and her Titles come from the [Medium](#k-medium) and [Scholar](#k-scholar) ideas.
 
-**Points:** 35. Two Titles 10, four more permissions 4, Oracle and Scholar 10, a second ability for each 2, her chalk and salt 5, and four things she carries 4.
+**Points:** 35. Two Titles 10, four more permissions 4, Oracle twice 10 (*Push* and *Foretold* come with them), *Hold it* 1, her chalk and salt 5, and five things she carries 5.
 
 **First Title:** *The last student of a dead order* (Soul 3). Permissions: *speak with the recently dead* (Soul), *draw a ward the dead can't cross* (Soul), *read the order's old script* (Mind).
 
@@ -611,9 +611,9 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Roots:** Body 0 · Mind 7 · Soul 5.
 
-**Archetypes:** [Oracle](#a-oracle) (*Push*, *Hold it*) · [Scholar](#a-scholar) (*Push*, *Find the flaw*).
+**Archetypes:** [Oracle](#a-oracle) (*Push*, *Hold it*) · [Oracle](#a-oracle) (*Foretold*).
 
-**Carries:** a Common coat with silver thread (equipment, 1 of 3) · a salt packet, a book she never finished, a reading lens (utility, 3 of 3) · an old letter (keepsake) · an empty bag (0 of 10).
+**Carries:** a Common coat with silver thread, a deck of the order's cards (equipment, 2 of 3) · a salt packet, a book she never finished, a reading lens (utility, 3 of 3) · an old letter (keepsake) · an empty bag (0 of 10).
 
 **Armour:** a Common coat with silver thread (Mind, 1 box, when it fits the scene).
 

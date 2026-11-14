@@ -40,7 +40,7 @@ Here's what you can do with your day:
 -   **Find the way.** One of you goes in front, and anyone else can join the roll. Roll against the way's Challenge, and if you win, the stage you're on is behind you. If something on your sheet plainly covers knowing the way, like a map of this road, and nothing's pushing back, you just walk it.
 -   **Feed the crew.** Hunt or forage, or buy from a farm. Beat the way's Challenge and Supplies doesn't step down this leg. Rations are a utility item, and every Rations somebody crosses off steps it up one.
 -   **Keep watch.** Answer whatever's coming, for yourself or for someone else.
--   **Study the road.** Find the hidden tag before you walk into it, or get a straight answer (*where would they ambush us?*). A [Scholar](#a-scholar) can introduce a truth instead, like a drove road or a ford the maps forgot. Say it, and it's out there. It counts as a step for anyone in the crew for the rest of the journey, free on any roll it fits.
+-   **Study the road.** Find the hidden tag before you walk into it, or get a straight answer (*where would they ambush us?*). An [Oracle](#a-oracle) with *Foretold* can introduce a truth instead, like a drove road or a ford the maps forgot. Say it, and it's out there. It counts as a step for anyone in the crew for the rest of the journey, free on any roll it fits.
 -   **Slow what's behind you.** Burn the bridge, or lay a false trail. Beat the deadline's die and it steps back up one.
 -   **Look after each other.** Join someone's roll, break a condition, or Defend. [Intercepting](#s-intercept) for a friend doesn't take your day at all, just 1 Aura.
 
@@ -82,7 +82,7 @@ The ford's in flood, so it's pushing back, and Wren has to roll for it even with
 
 Bram answers the river by carrying the packs across above his head. That's his Body and *lift what two men can't*, 8 steps, a d12 and a d4. He rolls 5 against the river's 3, and the packs stay dry. Ash answers the d6 at Isolde with a little fire at the back of the line. That's her Soul, her first Title, *throw fire*, Elementalist, her ember stone and *Fire without a word*, 13 steps, two d12s and a d2. Her best's an 8 against 2, and the wolves melt back into the heather.
 
-Isolde Studies the road ahead. That's her Mind, her second Title, *know the history of anything old* and Scholar, 10 steps, a d12 and a d8. Her best's a 5 against the way's 4. She's a Scholar, so instead of a hidden tag or a straight answer, she introduces a truth: there's an old drove road the monks used to bring their sheep down. Now there is, and it's a step for anyone in the crew for the rest of the journey.
+Isolde Studies the road ahead. That's her Mind, her second Title and *know the history of anything old*, 9 steps, a d12 and a d6. Her best's a 5 against the way's 4. She pays 1 Confidence for Foretold, so instead of a hidden tag or a straight answer, she introduces a truth: there's an old drove road the monks used to bring their sheep down. Now there is, and it's a step for anyone in the crew for the rest of the journey.
 
 Nobody fed the crew, so at the end of the leg Supplies steps down to a d6. The riders step down to a d6 as well.
 

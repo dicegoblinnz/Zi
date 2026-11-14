@@ -47,7 +47,7 @@ A trap's a hidden tag on a place until somebody finds it.
 
 ### Study does most of the work {#study-does-most-of-the-work}
 
-Study a place against the site's Challenge and win, and you get what Study always gives you: a hidden tag (the trap on the stair) or a straight answer (*what's behind that door?*). A [Scholar](#a-scholar) can introduce a truth instead, like the draught that means there's another way out. If you're an [Elementalist](#a-elementalist), one of your dice can be your area (it takes one of your splits), and you Study the whole room at once.
+Study a place against the site's Challenge and win, and you get what Study always gives you: a hidden tag (the trap on the stair) or a straight answer (*what's behind that door?*). An [Oracle](#a-oracle) with *Foretold* can introduce a truth instead, like the draught that means there's another way out. If you're an [Elementalist](#a-elementalist), one of your dice can be your area (it takes one of your splits), and you Study the whole room at once.
 
 ### One scene, until you come out {#one-scene-until-you-come-out}
 

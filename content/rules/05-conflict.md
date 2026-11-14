@@ -477,7 +477,7 @@ Social and mental conflict run on the same engine and the same dice. A threat ha
 :::example[A social conflict, played out]
 A few sessions in, Dorrie's trying to talk a magistrate into releasing Vesk from a cell before the Vane Estate's lawyers arrive in the morning. Isolde's come along as her clerk. The magistrate is *The Honest Magistrate*, Challenge 5. *Duty-bound* and *Wary* keep him going, and one hidden tag drives him. Dorrie's in her court clothes, and they fit a hearing, so she's got a box of Mind armour, and they're a step on her rolls here.
 
-**Round 1.** The magistrate's been bitter since they walked in, and Dorrie wants to know who at. The GM telegraphs: *"Show me the law that lets her walk."* That's a d10 at Dorrie's Mind. Dorrie answers it, and Isolde puts her action into the same thing. Isolde digs up a harbour statute nobody's used in forty years, and Dorrie swears the court leaned on it only last spring. Dorrie rolls, on her Mind, 6, and both her Titles, *make a lie sound like old news*, *keep my story straight under questions*, Face and her court clothes all fit, so that's 12. Isolde brings *know the history of anything old* and Scholar, 2 more. That's 14 steps between them, two d12s and a d4. One d12 goes on the answer, the other goes on Study (what's he so bitter about?), and the d4 has a go at *Wary*.
+**Round 1.** The magistrate's been bitter since they walked in, and Dorrie wants to know who at. The GM telegraphs: *"Show me the law that lets her walk."* That's a d10 at Dorrie's Mind. Dorrie answers it, and Isolde puts her action into the same thing. Isolde digs up a harbour statute nobody's used in forty years, and Dorrie swears the court leaned on it only last spring. Dorrie rolls, on her Mind, 6, and both her Titles, *make a lie sound like old news*, *keep my story straight under questions*, Face and her court clothes all fit, so that's 12. Isolde brings *know the history of anything old* and *find what I need in any library*, 2 more. That's 14 steps between them, two d12s and a d4. One d12 goes on the answer, the other goes on Study (what's he so bitter about?), and the d4 has a go at *Wary*.
 
 The telegraph rolls 4 and the first d12 rolls 9, so it's stopped. The magistrate's d10 rolls 4, and that stands for the round. The second d12 comes up 5, so the Study wins, but the d4 comes up 3, so *Wary* stays. The GM reveals the hidden tag: *Hates the Vane Estate.* Two dice won, so that's 2 Aura for Dorrie.
 
@@ -539,13 +539,13 @@ That's 5 + 4 + 5 + 5 + 2 = 21 steps, a breather for four players, and it's five 
 **Isolde** studies the right Warden.
 
 :::example
-**Isolde:** It's old, so my Mind, my second Title, *know the history of anything old* and Scholar all fit. And this binding's written in my order's old script, so my first Title, *read the order's old script* and *read dead languages* plainly fit as well, and so does my lens. That's 14 steps. I'll make it a d12 for what's holding it together, a d12 for what else it's hiding, and the d4 for what it wants.
+**Isolde:** It's old, so my Mind, my second Title and *know the history of anything old* fit. And this binding's written in my order's old script, so my first Title, *read the order's old script* and *read dead languages* plainly fit as well, and so does my lens. That's 13 steps. I'll make it a d12 for what's holding it together, a d12 for what else it's hiding, and the d2 for what it wants.
 
 **GM:** Nobody's gone at it yet this round, so roll its d10 too. Whatever it rolls stands till the round's over.
 
-**Isolde:** It's a 1. My d12s come up 7 and 12, and the d4's a 1.
+**Isolde:** It's a 1. My d12s come up 7 and 12, and the d2's a 1.
 
-**GM:** Both d12s beat it, and the d4's a tie, so that one's the Warden's. *Bound to a Place* is its weak point. There's a sigil cut into the floor under each Warden, and if you break the sigil, it falls. Its hidden tag is *A Person Inside*. Someone was built into that armour a hundred years ago.
+**GM:** Both d12s beat it, and the d2's a tie, so that one's the Warden's. *Bound to a Place* is its weak point. There's a sigil cut into the floor under each Warden, and if you break the sigil, it falls. Its hidden tag is *A Person Inside*. Someone was built into that armour a hundred years ago.
 :::
 
 That changes the whole fight, because now nobody has to grind through four tags. Both her d12s won and one was a top face, so that's 3 Aura, and she's on 10 while she's acting. Isolde isn't done, either.
@@ -664,7 +664,7 @@ When the scene ends, everyone rests. Two tracks are below d12. Isolde's Confiden
 
 -   **The crew never ground a Warden down.** They studied, found a weak point and a hidden tag, and took both routes.
 -   **The stakes mattered more than the enemies.** Vesk spent her whole first round on padlocks instead of spears, and it won the scene.
--   **Everything that fit went in.** Isolde's Study counted both her Titles, three permissions, Scholar and her lens, and when Bram had only one thing that fit the sigil, he brought that one.
+-   **Everything that fit went in.** Isolde's Study counted both her Titles, three permissions and her lens, and when Bram had only one thing that fit the sigil, he brought that one.
 -   **Every cost was out in the open.** Bram traded a pin for a size of Stamina, Vesk gave up her leathers to keep her ward, Bram's plate took one spear and his Stamina the other, and Isolde chose to let the portrait shake her rather than pay 2 for 1. Nobody lost anything they didn't see coming.
 -   **One die stops one.** In round 1 Bram Defended, so he had four dice for two telegraphs. In round 2 his action went on the sigil, so his Stamina faced two spears on its own, and it cost him a box and a size.
 -   **Aura moved all fight.** Every win paid. Isolde turned a good Study into an extra action and a ward she had to make a case for, Vesk powered her line's awakening for the climb and played the rest of the scene on a maximum of 5, and Dorrie spent hers on an extra action and a quick heal.

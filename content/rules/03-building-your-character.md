@@ -101,10 +101,10 @@ That's 7 points: 5 for the Title, which came with *hold the line*, and 1 each fo
 An **archetype**, like Guardian, Healer or Shadow, is the kind of character you are at the table. Each one's **5 points**, and it comes with three things:
 
 -   **Its mechanic**, something only it can do. A Guardian intercepts blows for free for every friend within his stride, and a Hunter marks a creature so everyone who acts against it rolls her Mark die as well.
--   **Its Trait**, something that's always true of you because of it. It's always on, and it's free.
+-   **Its Trait**, something that's always true of you because of it. Most cost nothing, and the few that cost Aura or come once a scene say so.
 -   **One ability**, your pick off its list, Push included. You pay for abilities out of your tracks when you use them, more are a point each, and an archetype holds six at most.
 
-There are eighteen, and you'll find them all in [The Archetypes](#s-how-archetypes). An archetype's a step on any roll it fits, like everything else on your sheet.
+There are seventeen, and you'll find them all in [The Archetypes](#s-how-archetypes). An archetype's a step on any roll it fits, like everything else on your sheet.
 
 Your archetypes don't belong to your Titles. Bram's a Guardian and a Leader, and his Titles are *The wall that held the harbour gate* and *A sergeant who lost his stripes*. **You can take the same archetype twice**, like Vesk, for 5 points each time. Each one comes with its own ability, so she's got Push and Vanish, and her Push is +3 instead of +2. On a roll they both fit, that's two steps. Your archetypes don't limit your actions, either: you can buy as many extra actions as your Aura pays for, 3 for the first in a round, then 4, then 5 (see [Extra actions](#s-extra-actions)).
 
@@ -673,7 +673,7 @@ For the second Title he asks himself where she learned it all, and writes *Raise
 
 ### Step 2: Archetypes {#step-2-archetypes}
 
-He picks the Shadow. When she gets into hiding, the dice she hid with go into her shadow pool, the things she noticed while nobody was looking, and she can add them to any roll after that. He takes it twice, for 10 points, and each one comes with an ability: Push, +2 on her roll to hide or on a shadow die for 1 Stamina, and Vanish, hidden again with no roll for 1 Stamina. She's taken Shadow twice, so her Push is +3, and she's got the Shadow's Trait, always on. That leaves 15.
+He picks the Shadow. When she gets into hiding, the dice she hid with go into her shadow pool, the things she noticed while nobody was looking, and she can add them to any roll after that. He takes it twice, for 10 points, and each one comes with an ability: Push, +2 on her roll to hide or on a shadow die for 1 Stamina, and Vanish, hidden again with no roll for 1 Stamina. She's taken Shadow twice, so her Push is +3, and she's got the Shadow's Trait, *Any Shadow Will Do*. That leaves 15.
 
 ### Step 3: Permissions {#step-3-permissions}
 

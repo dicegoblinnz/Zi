@@ -142,12 +142,12 @@ Vesk's at the study door with 13 steps, and Dorrie keeps the guard talking with 
 **Study** is an intent like any other. Build it from whatever fits how you're looking, usually your Mind and everything on your sheet that fits, and roll against the target's Challenge. Win, and pick one. Ask something specific, like *what's holding it together?*, and the GM reveals the [hidden tag](#s-hidden) that answers it, if there is one. Or ask one question about it, and she answers it truthfully.
 
 :::example
-Isolde studies the old construct with her Mind, her second Title, *know the history of anything old* and Scholar, 10 steps, a d12 and a d8. Its d8 rolls 4 and her d12 comes up 9, so she asks what's holding it together and gets the hidden tag that answers it.
+Isolde studies the old construct with her Mind, her second Title and *know the history of anything old*, 9 steps, a d12 and a d6. Its d8 rolls 4 and her d12 comes up 9, so she asks what's holding it together and gets the hidden tag that answers it.
 :::
 ::::
 
 ::::card[Archetypes]{#l-archetypes teaches=s-step-archetypes}
-An **archetype**, like Guardian or Shadow, is its own pick, apart from your Titles, and it's 5 points. Each one has a **mechanic** only it can do, which is free, a **Trait** that's always on, and one **ability** to start, your pick, paid for out of your [tracks](#s-tracks). You can take the same one twice, and it's a step on every roll it fits. Archetypes don't cap your actions.
+An **archetype**, like Guardian or Shadow, is its own pick, apart from your Titles, and it's 5 points. Each one has a **mechanic** only it can do, which is free, a **Trait** that's always true of you, and one **ability** to start, your pick, paid for out of your [tracks](#s-tracks). You can take the same one twice, and it's a step on every roll it fits. Archetypes don't cap your actions.
 
 :::example
 Bram's a Guardian and a Leader. As a Guardian he intercepts for free for every friend within his stride, and as a Leader he hands out the steps of his orders, his Soul, his second Title, *bark an order that gets obeyed* and Leader, 6 steps, a d12.

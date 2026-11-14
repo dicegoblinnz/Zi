@@ -365,8 +365,11 @@ const dropStop = (s = "") => s.trim().replace(/\.$/, "");
 // What each archetype does, what 1 Aura gets it and what its 1 Resolve
 // spend is, from The Archetypes, and what it's for, from the table in Picking
 // Your Archetypes (the builder's archetype cards say it).
-function archetypesFrom(doc, inline) {
+function archetypesFrom(doc, inline, qr) {
   const out = {};
+  // Appendix D's line for each archetype, which gives its Trait in a few
+  // words, *Its name:* what it does, short enough for the paper sheet.
+  const qrLines = new Map([...sectionOf(qr?.body ?? "", "s-qr-archetypes").matchAll(/^-\s+\*\*([^*:]+):\*\*\s+(.+)$/gm)].map((m) => [m[1], m[2]]));
   const picking = sectionOf(doc.body, "s-picking-archetypes").split(/^### /m)[0];
   const rows = tableRows(picking);
   const forLine = new Map(rows.map((r) => [plain(r[0]), plain(r[1] ?? "")]));
@@ -375,13 +378,24 @@ function archetypesFrom(doc, inline) {
     const [, archetype, id, text] = m;
     const home = text.match(/^\*\*Home track:\*\* (\w+)\.?$/m)?.[1] ?? null;
     const abilities = [...text.matchAll(/^\*\*(.+?) \(1 (\w+)\):\*\* (.+)$/gm)].map((a) => ({ name: curly(a[1]), cost: a[2], text: plain(a[3]), html: inline(a[3]) }));
+    // Its Trait, in the rule box as **Trait:** *Its name*. What it does.
+    const traitLine = text.match(/^\*\*Trait:\*\* \*([^*\n]+)\*\.\s+(\S.*)$/m);
+    const trait = traitLine ? { name: curly(traitLine[1]), text: plain(traitLine[2]), html: inline(traitLine[2]), short: "" } : { name: "", text: "", html: "", short: "" };
+    if (!traitLine) companionWarn(`the ${archetype} archetype has no Trait I can read (**Trait:** *Its name*. What it does.)`);
+    else if (qr) {
+      const line = qrLines.get(archetype) ?? "";
+      const at = line.indexOf(`*${traitLine[1]}:*`);
+      const said = at < 0 ? "" : line.slice(at + traitLine[1].length + 4).trim().match(/^(.+?\.)(?=\s|$)/)?.[1] ?? "";
+      if (!said) companionWarn(`Appendix D's line for the ${archetype} doesn't give its Trait as *${traitLine[1]}:* and what it does in a few words`);
+      else trait.short = plain(said.charAt(0).toUpperCase() + said.slice(1));
+    }
     if (!forLine.get(archetype)) companionWarn(`the ${archetype} archetype isn't in the table in Picking Your Archetypes, so its card in the builder has nothing to say what it's for`);
     if (!["Stamina", "Confidence", "Resolve"].includes(home)) companionWarn(`the ${archetype} archetype has no home track (**Home track:** Stamina, Confidence or Resolve)`);
     else if (homeLine.get(archetype) !== home) companionWarn(`the ${archetype} archetype's home track is ${home}, but the table in Picking Your Archetypes says ${homeLine.get(archetype) || "nothing"}`);
     if (!abilities.length) companionWarn(`the ${archetype} archetype has no abilities I can read (**Its name (1 ${home ?? "Track"}):** what it does)`);
     if (abilities.length > 6) companionWarn(`the ${archetype} archetype has ${abilities.length} abilities, and an archetype holds six at most`);
     for (const a of abilities) if (a.cost !== home) companionWarn(`the ${archetype}'s ${a.name} costs 1 ${a.cost}, and its home track's ${home}`);
-    out[archetype] = { id, summary: inline(text.trim().split(/\n\s*\n/)[0]), for: forLine.get(archetype) ?? "", home, abilities };
+    out[archetype] = { id, summary: inline(text.trim().split(/\n\s*\n/)[0]), for: forLine.get(archetype) ?? "", home, trait, abilities };
   }
   return out;
 }
@@ -1029,7 +1043,7 @@ const docWith = (marker) => docs.find((d) => d.body.includes(marker));
 const ctx = {
   warn: companionWarn,
   inline,
-  archetypes: docWith("{#s-how-archetypes}") ? archetypesFrom(docWith("{#s-how-archetypes}"), inline) : {},
+  archetypes: docWith("{#s-how-archetypes}") ? archetypesFrom(docWith("{#s-how-archetypes}"), inline, docWith("{#s-qr-archetypes}")) : {},
   qualities: qualitiesFrom(docWith("{#s-armour-quality}"), (msg) => companionWarn(msg)),
 };
 const crewDoc = docWith("{#s-pregens}");

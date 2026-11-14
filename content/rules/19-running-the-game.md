@@ -445,23 +445,21 @@ When a player shoves the shielded captain off a narrow bridge, *Shield* and *For
 
 -   **Put a secret in everything that matters.** Every named threat, every stake and every important place gets one hidden tag.
 -   **Reveal generously.** When a player looks at something nobody's hiding, and they've got a permission that covers it, tell them without a roll. A threat's hidden tags take Study, because the threat pushes back.
--   **When they Study and win, give them what they asked for.** That's a hidden tag or a straight answer. A Scholar can introduce a truth instead, and there's more on judging those in [Archetypes and Study at the Table](#s-gm-area).
+-   **When they Study and win, give them what they asked for.** That's a hidden tag or a straight answer. An Oracle with *Foretold* can introduce a truth instead, and there's more on judging those in [Archetypes and Study at the Table](#s-gm-area).
 -   **Leave three trails to every important secret.** A person who knows, a place that shows it and a thing that proves it. If they miss one, they'll find another.
 -   **Let secrets change the fight.** The best hidden tags turn a slog into a single roll: the weak point, the want, the name.
 
 ## Archetypes and Study at the Table {#s-gm-area}
 
--   **Let each archetype do its thing.** Every [archetype](#archetypes) has something only it can do, and a Trait that's always on. When it comes out, let it change the fight, and say what it looks like: Dorrie's influence turning the captain's cut onto his own sergeant, or an Illusionist's wall sending the guards the long way round.
+-   **Let each archetype do its thing.** Every [archetype](#archetypes) has something only it can do, and a Trait that's always true of it. When it comes out, let it change the fight, and say what it looks like: Dorrie's influence turning the captain's cut onto his own sergeant, or an Illusionist's wall sending the guards the long way round.
 -   **Let an ability be as big as it says.** Every archetype has [abilities](#s-abilities), paid for out of its home track, and every size a player pays is a size they can't defend with, so don't shave them down. When Bram pays for *Stand firm*, the next two hits that get through to him do nothing, however big they were. When Dorrie turns that captain, he fights for the crew till the round ends.
 -   **Areas are the Elementalist's.** An [Elementalist](#a-elementalist) can make a die their area, and it takes a split but no Aura. Say what it touches before they roll. Fire catches everyone in the squares it covers, friend and foe, so if a friend's standing in the fireball, say so, and let them make it smaller, or pay 1 Resolve for *Sculpt* so it skips them. Wards, blessings and heals reach one person, and a split's second die can reach another friend they can touch.
 -   **Big things are big Challenges.** Going beyond is 1 Aura whatever the size, so the size goes in the Challenge. Phasing through a garden wall and through the vault door both cost 1 Aura, but the vault door's a far bigger Challenge, with tags for what stands in the way. Set it by how hard it is in the world, and let them roll.
--   **Study finds what's there:** a hidden tag or a straight answer. Only a Scholar's truth makes something true that wasn't.
--   **Judge a Scholar's truth by the scene.** When a [Scholar](#a-scholar) wins a Study, they can introduce a truth instead, something that wasn't obvious to anyone else, and it counts as a step for anyone in the crew this scene, on any roll it fits. If it could be here, it is. If it's too big, ask them to make it smaller or pick something else.
+-   **Study finds what's there:** a hidden tag or a straight answer. Only an Oracle's *Foretold* makes something true that wasn't.
+-   **Judge a truth by the scene.** When an [Oracle](#a-oracle) wins a Study and pays for *Foretold*, they can introduce a truth instead, something that wasn't obvious to anyone else, and it counts as a step for anyone in the crew this scene, on any roll it fits. If it could be here, it is. If it's too big, ask them to make it smaller or pick something else.
 
 :::example[Isolde's truth]
-Isolde wins her Study on the Warden and says the chalk circle it's bound to has a crack in it. A crack could be there, so now there's one, and anyone in the crew can use it this scene. If she'd said the circle was never drawn at all, that's too big, so the GM asks her for something smaller.
-
-If she pays 1 Confidence for *Find the flaw* as well, her truth can be a [vulnerability](#s-vulnerable): say a hundred years has left the Warden *Rusted Through*. That could be true, so it is, and every hammer that wins on it gets one more tick.
+Isolde wins her Study on the Warden, pays 1 Confidence for Foretold and says the chalk circle it's bound to has a crack in it. A crack could be there, so now there's one, and anyone in the crew can use it this scene. If she'd said the circle was never drawn at all, that's too big, so the GM asks her for something smaller.
 :::
 
 ## Quick Rulings {#s-rulings}
@@ -518,7 +516,7 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 
 **Consequences.** Only when it matters. Name the cost of a blow or a miss, take a fair swap, and fail forward. What gets through to their Mind or Soul costs a size of Confidence or Resolve, the same as a blow, unless armour on that Root takes it or they pay 2 for 1. When a player chooses to die at a Blaze, slow right down and let them tell it.
 
-**Archetypes and Study.** Let each archetype do its thing, let an ability be as big as it says, and say what an Elementalist's burst touches. Going beyond is 1 Aura, so put the size in the Challenge. Study finds what's there, and if a Scholar's truth could be there, it is.
+**Archetypes and Study.** Let each archetype do its thing, let an ability be as big as it says, and say what an Elementalist's burst touches. Going beyond is 1 Aura, so put the size in the Challenge. Study finds what's there, and if an Oracle's truth could be there, it is.
 
 **Conditions.** Face up, with their die, and say when you'll spend them.
 

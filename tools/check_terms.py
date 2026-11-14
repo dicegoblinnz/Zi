@@ -23,10 +23,11 @@ RETIRED = [
     ("item rarity", r"\b(rarity|Rare|Legendary)\b"),
     ("stretch", r"\bstretch(es|ed|ing)?\b"),
     ("old names", r"\b(Insight|Truth|Limit Break|Spread|pour in)\b"),
-    ("pockets", r"\bpockets?\b"),
+    ("pockets", r"\bpockets?\b(?! [Ss]ummon)"),
     ("old Hurt", r"\b(three|3) Hurt boxes\b|\bHurt boxes\b|\bfourth Hurt\b"),
     ("Catch on a Title", r"\bTitle['’]?s? Catch(es)?\b|\bCatch on (each|your|a) Title\b|\bonce a scene\b.*\bCatch\b|\bCatch\b.*\bonce a scene\b"),
     ("big magic", r"\bbig magic\b"),
+    ("the Scholar archetype", r"\bthe Scholar archetype\b|\ban? Scholar\b|\bScholar['’]s truth\b|\bFind the flaw\b|#a-scholar\b"),
     ("quick-build kits", r"\bquick-build kits?\b"),
     # 14 Oct: archetypes
     ("area for anyone", r"\barea\b.*\b1 Aura\b|\b1 Aura\b.*\barea\b|\bmake a die your area\b|\bcounts? friends\b"),

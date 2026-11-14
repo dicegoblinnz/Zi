@@ -46,7 +46,7 @@ That's where the clues pay off. Every one the crew wrote down is a tag they know
 
 -   **If they name the wrong person**, play it out. Don't tell them they're wrong. The other side's event keeps stepping down while they're busy, and the truth's still where you left it.
 -   **If they're stuck**, make a move and bring a trail to them. Somebody knocks on the door, or a second body turns up.
--   **A [Scholar](#a-scholar) who wins a Study** can introduce a truth, like a back stair the servants use or a clerk who copied the will. That can get you to a trail, but it won't change what happened.
+-   **An [Oracle](#a-oracle) who wins a Study** can pay for *Foretold* and introduce a truth, like a back stair the servants use or a clerk who copied the will. That can get you to a trail, but it won't change what happened.
 
 ### Trails in a hurry {#trails-in-a-hurry}
 

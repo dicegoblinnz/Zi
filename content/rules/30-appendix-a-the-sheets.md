@@ -51,7 +51,7 @@ The rest of what you reach for at the table, what Aura buys, the round and your 
 
 1.  **The round and rolling:** the round, your action and extra actions, building a roll and the steps ladder, the roll, splits, combos, and moving, how far and weapon properties.
 2.  **The tracks, defence and threats:** Stamina, Confidence and Resolve, what they pay, 2 for 1, how they come back, Blaze, Scars and healing, answering, letting it ride, Defend, intercepting, what it costs, conditions, and reading a threat, its multipliers and vulnerabilities, and what a win does.
-3.  **Aura, archetypes and threads:** what Aura buys and how it comes back, Catches included, powering an attuned thing and what extra actions cost, the eighteen archetypes, a line each with its sigil and its home track, and bonds and threads.
+3.  **Aura, archetypes and threads:** what Aura buys and how it comes back, Catches included, powering an attuned thing and what extra actions cost, the seventeen archetypes, a line each with its sigil, its home track and its Trait, and bonds and threads.
 4.  **Your character, downtime and gear:** making a character on points, Boons and Burdens, things that climb, downtime, Study, stakes and clocks, chases, what you carry, attunement and summoning.
 
 The GM's side of the quick reference stays in the book: factions, the session, the Oracle, and the round and threat budgets.

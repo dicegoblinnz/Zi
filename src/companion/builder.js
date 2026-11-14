@@ -1059,7 +1059,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const cost = have.length ? `${have.length} of ${a.abilities.length}, ${pts(4 + have.length)} with the archetype` : "pick the one it comes with";
     return `<div class="bd-arch-what">
       <p class="bd-label">Its mechanic</p><p class="bd-mech">${a.summary}</p>
-      ${trait.name ? `<p class="bd-label">Its Trait <small>always on, and free</small></p><p class="bd-mech"><b>${esc(trait.name)}.</b> ${trait.html}</p>` : ""}
+      ${trait.name ? `<p class="bd-label">Its Trait <small>always true of you</small></p><p class="bd-mech"><b>${esc(trait.name)}.</b> ${trait.html}</p>` : ""}
       ${asked(`Its abilities <small>${cost}</small>`, `bd-ab-${i}`, [`An archetype’s ${pts(5)}, and it comes with one ability, your pick, Push included. The first you pick is the one it comes with, and each one after that is a point, up to six.`, `You pay for an ability out of your tracks when you use it: 1 of its home track, ${esc(a.home ?? "")}, or 2 from your other two.`], "Abilities", ` id="bd-ab-${i}-l"`)}
       <div class="bd-abils" role="group" aria-labelledby="bd-ab-${i}-l">${a.abilities.map(abil).join("")}</div>
       <p class="cc-small">${link(a.id, `The ${esc(a.name)} in full`)}</p></div>`;

@@ -1055,7 +1055,7 @@ if (part("1e")) {
     vesk: [["Shadow", ["Push"]], ["Shadow", ["Vanish"]]],
     bram: [["Guardian", ["Push", "Stand firm"]], ["Leader", ["Push", "Everyone gets it"]]],
     dorrie: [["Face", ["Push", "Turn them"]], ["Shadow", ["Push", "Vanish"]]],
-    isolde: [["Oracle", ["Push", "Hold it"]], ["Scholar", ["Push", "Find the flaw"]]],
+    isolde: [["Oracle", ["Push", "Hold it"]], ["Oracle", ["Foretold"]]],
     wren: [["Hunter", ["Push"]], ["Hunter", ["Mark the pack"]]],
     ash: [["Elementalist", ["Push", "Sculpt"]], ["Face", ["Push", "Turn them"]]],
   };
@@ -1103,7 +1103,7 @@ if (part("1e")) {
     ["bram", "Barking an order", "Soul", ["A sergeant who lost his stripes", "bark an order that gets obeyed", "Leader"], 6, "d12"],
     ["dorrie", "Lying past the gate guard", "Mind", ["The voice that talked a duke out of his own house", "The woman with a hundred names", "make a lie sound like old news", "keep my story straight under questions", "Face"], 11, "d12 + d10"],
     ["dorrie", "Passing as someone of rank", "Mind", ["The woman with a hundred names", "pass as someone I'm not", "Shadow", "A signet pin", "Someone who matters", "court clothes"], 12, "2d12"],
-    ["isolde", "Reading the order's old script", "Mind", ["The last student of a dead order", "A scholar of forbidden texts", "read the order's old script", "read dead languages", "Scholar", "a reading lens"], 13, "2d12 + d2"],
+    ["isolde", "Reading the order's old script", "Mind", ["The last student of a dead order", "A scholar of forbidden texts", "read the order's old script", "read dead languages", "a reading lens"], 12, "2d12"],
     ["isolde", "Drawing a ward", "Soul", ["The last student of a dead order", "draw a ward the dead can't cross", "Chalk and salt", "A circle anywhere I can kneel", "a salt packet"], 10, "d12 + d8"],
     ["wren", "Shooting from cover", "Body", ["The hunter who has never lost a trail", "An outrider from the border war", "Hunter", "Hunter", "Her longbow", "Long shot"], 12, "2d12"],
     ["wren", "Following a trail", "Mind", ["The hunter who has never lost a trail", "follow any trail", "Hunter", "Hunter"], 10, "d12 + d8"],
@@ -3461,7 +3461,7 @@ if (part("9")) {
       { k: "perm", t: 0, text: "a new permission", root },
       { k: "thread", person: "Someone new", text: "They owe me.", kind: "hostile" },
       { k: "title", text: "A Title from an Aspiration", roots: { Body: 0, Mind: 1, Soul: 2 }, perm: { text: "its permission", root: "Soul" } },
-      { k: "arch", arch: "Scholar", have: ["Find the flaw"] },
+      { k: "arch", arch: "Healer", have: ["Pull them back"] },
       { k: "attune", name: "A new thing", awk: { name: "Its awakening", kind: "passive", text: "+1 on one die of every roll you make with it, for each Aura powering it" } },
       { k: "awk", a: 0, name: "Another awakening", kind: "active", text: "1 Aura and it does something", catch: "Loud" },
     ];
@@ -3472,7 +3472,7 @@ if (part("9")) {
     roots.Soul += 3;
     same(c.roots, roots, `${base.name}'s Roots with a permission and a new Title spread Mind 1 and Soul 2`);
     same(c.specialties, [], `${base.name} with no specialties`);
-    same([c.titles.length, c.archetypes.length, c.archetypes.at(-1).have, c.attuned.length, c.attuned[0].awakenings.length, c.numbers.aura], [c0.titles.length + 1, c0.archetypes.length + 1, ["Find the flaw"], c0.attuned.length + 1, c0.attuned[0].awakenings.length + 1, c0.numbers.aura + 2], `${base.name}'s Titles, archetypes with the one ability, a new attuned thing with Aura 2 more, and awakenings`);
+    same([c.titles.length, c.archetypes.length, c.archetypes.at(-1).have, c.attuned.length, c.attuned[0].awakenings.length, c.numbers.aura], [c0.titles.length + 1, c0.archetypes.length + 1, ["Pull them back"], c0.attuned.length + 1, c0.attuned[0].awakenings.length + 1, c0.numbers.aura + 2], `${base.name}'s Titles, archetypes with the one ability, a new attuned thing with Aura 2 more, and awakenings`);
     same(c.threads.find((p) => p.person === "Someone new")?.threads[0]?.kind, "hostile", `${base.name}'s new hostile thread`);
     // A seventh permission never gets on a Title.
     const full = Array.from({ length: 6 }, (_, i) => ({ k: "perm", t: 0, text: `permission ${i}`, root }));

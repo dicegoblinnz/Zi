@@ -5,6 +5,20 @@ updated: 2026-11-14
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
 
+## 14 Nov 2026: Every archetype's Trait, and the Scholar out for now {#c-2026-11-14-traits}
+
+Mo's calls in chat, part of [Stacking, and 35 points to start](#c-2026-11-14-stacking).
+
+**Every archetype has a Trait**, something that's always true of you because of it, in its rule box with its name. Most cost nothing and never switch off, a few cost Aura or come once a scene, and an archetype taken twice is still the one Trait. They come in where an archetype used to be room for one more action a round. See [How Archetypes Work](#s-how-archetypes).
+
+**Six of them get you Aura back**, since an attuned thing doesn't any more: the [Bloodsworn](#a-bloodsworn)'s *Paid in Blood* (every size your Stamina drops), the [Gambler](#a-gambler)'s *Bad Luck Pays* (every 1 you leave a 1), the [Guardian](#a-guardian)'s *Better Me Than You* (every blow you intercept for a friend), the [Healer](#a-healer)'s *Good Hands* (every die that puts a track up), the [Hunter](#a-hunter)'s *Good Hunting* (every die a friend wins against your Mark) and the [Illusionist](#a-illusionist)'s *Made You Look* (a threat swinging at an illusion, talking to it or trying to get through it).
+
+**The other eleven:** the [Bard](#a-bard)'s *All Eyes on Me* (1 Aura for each threat that watches nothing else while you perform), the [Elementalist](#a-elementalist)'s *Eye of the Storm* (your own areas, and your element loose in the scene, never hurt you), the [Face](#a-face)'s *I Know a Guy* (once a scene, someone you know turns up and helps), the [Leader](#a-leader)'s *Where It's Needed* (each round, moving steps from one roll to another), the [Maker](#a-maker)'s *Maker's Mark* (a tag of your own on one item, a step or a hit taken), the [Oracle](#a-oracle)'s *Seen It Coming* (up to 3 of the threats' dice rolled before anyone moves), the [Shadow](#a-shadow)'s *Any Shadow Will Do* (a patch of dark's enough to hide in), the [Shifter](#a-shifter)'s *Something of the Beast* (a beast's sense or size, picked each scene), the [Summoner](#a-summoner)'s *Pocket Summon* (one soul out free once a scene, with no action), the [Teleporter](#a-teleporter)'s *Not There* (once a scene, teleport out from under whatever's landing) and the [Warrior](#a-warrior)'s *Second Skin* (your armour rolled beside your track when you haven't Defended).
+
+**The Scholar's gone for now**, and a new archetype will take its place later. Its truth is the [Oracle](#a-oracle)'s new ability, *Foretold* (1 Confidence): win a Study and say something true instead. *Find the flaw* went with it. Isolde's an Oracle twice now, with Push, Hold it and Foretold, and the point that bought *Find the flaw* went on a deck of the order's cards. See [Studying Something](#s-study) and [the crew](#s-pregens).
+
+**A Maker powers a friend's passive awakening** with their own Aura, the way the friend would, where they used to pump Aura into it. See [Maker](#a-maker).
+
 ## 14 Nov 2026: The GM's budgets, for stacking {#c-2026-11-14-budgets}
 
 To go with [Stacking, and 35 points to start](#c-2026-11-14-stacking). With everything that fits stacked, a crew lands about twice the wins a round it did, so the numbers that keep a fight going grew to match.
@@ -284,7 +298,7 @@ These all came out of the playtests.
 
 **Changes for everyone:**
 -   Wards and blessings reach one person, and the second die of a split can reach another friend you can touch. Healing a group is gone. See [Wards and blessings](#s-wards).
--   Study finds a hidden tag or a straight answer. *Something that helps* is gone, and a [Scholar](#a-scholar) can introduce a truth instead. See [Studying Something](#s-study).
+-   Study finds a hidden tag or a straight answer. *Something that helps* is gone, and a Scholar can introduce a truth instead (an Oracle with *Foretold* since [14 Nov](#c-2026-11-14-traits)). See [Studying Something](#s-study).
 -   Coming out of hiding gives you an extra action, whoever you are. See [Extra actions](#s-extra-actions).
 
 ## 13 Oct 2026: Items, attunement, taking the hit, and the name Zi'Dara {#c-2026-10-13}
