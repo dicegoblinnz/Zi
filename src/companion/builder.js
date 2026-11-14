@@ -1,12 +1,19 @@
-// The character builder on Roots (8 Nov 2026, stage 4 of notes/roots-plan.md):
-// the Quick Build from the rules, one step to a screen on a phone held in one
-// hand, with the book's own words for each step. Two archetypes, two Titles
-// each with a Root and three specialties, three permissions on each with a
-// Root and a specialty, the Roots and specialties added up, what you carry
-// with armour on the Root it guards, one attuned thing with its own way to
-// Aura and its awakening, threads and an Aspiration. It warns but never
-// blocks, bar one thing: a Title holds six permission slots, and a Boon takes
-// two of them.
+// The character builder on stacking (Mo's 14 Nov rework, prompt 7 of
+// notes/stacking-plan.md): the Quick Build from the rules, one step to a
+// screen on a phone held in one hand, with the book's own words for each step
+// behind a question bubble (tip.js). A character's bought with points
+// (points.js): 35, or more when the player says it's a one-shot or a
+// catch-up, with what's spent and what's left in the bar at the bottom the
+// whole way, and a tap on it saying what every point went on. A Title, an
+// archetype or an attuned thing is 5 and comes with its one permission,
+// ability or awakening, and every other permission, ability, awakening or
+// item is 1. A Title puts 3 on your Roots, spread in a tap or three (all on
+// one, 2 and 1, or 1 on each), and each permission 1 on the Root it's written
+// with. An archetype shows its mechanic, its Trait and its abilities, and the
+// player picks the one it comes with. There are no specialties. At least one
+// Title, one archetype and one attuned thing is recommended, and that's a
+// nudge. It warns but never blocks, bar one thing: a Title holds six
+// permission slots, and a Boon takes two of them.
 // Drafts are saved on the phone as you go, in one localStorage key, zi-drafts,
 // by "new" or by the id of the character being changed, so nothing's lost if
 // the page closes. A finished character keeps only what the player chose (its
@@ -16,10 +23,15 @@
 // the crew, or random, from ways.js) open with every step on one page.
 // Changing a saved character opens on one page too, with everything on their
 // sheet and whatever they grew in downtime (foldGrown), and so does rebuilding
-// one built before Roots (fromBefore).
+// one built before Roots (fromBefore). One built before stacking keeps
+// everything, even past 35: a Title that was on one Root has all 3 on it for
+// the player to spread how they like, its specialties go, and its archetypes
+// keep every ability they had.
 
 import { diceLabel, stepsToDice } from "./dice.js";
 import * as R from "./roots.js";
+import { costOf, START } from "./points.js";
+import { tip } from "./tip.js";
 import { many } from "./armour.js";
 import { bondKey, bondName, bondsOf, threadNote } from "./threads.js";
 import { SIGILS, aura as kitAura, boxes as kitBoxes, crest, die as kitDie, grow as growDie, sigil } from "../kit/kit.js";
@@ -30,6 +42,9 @@ const MAX_ARCHS = 12;
 const MAX_ATTUNED = 8;
 const MAX_THREADS = 40;
 const MAX_PERMS = R.MAX_PERMS;
+const MAX_ABILITIES = R.MAX_ABILITIES;
+// What a character can start on: 35, and more for a one-shot or catching up.
+export const MAX_START = 99;
 const ROOTS = R.ROOTS;
 const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth", "eleventh", "twelfth", "thirteenth", "fourteenth", "fifteenth", "sixteenth", "seventeenth", "eighteenth", "nineteenth", "twentieth", "twenty-first", "twenty-second", "twenty-third", "twenty-fourth"];
 const ord = (i) => ORD[i] ?? `${i + 1}${(i + 1) % 100 >= 11 && (i + 1) % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][(i + 1) % 10] ?? "th"}`;
@@ -43,42 +58,53 @@ export const tierOf = (x) => ([1, 2, 3].includes(Number(x?.q)) ? Number(x.q) : 1
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (ch) => `&#${ch.charCodeAt(0)};`);
 const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 const both = (list) => (list.length > 1 ? `${list.slice(0, -1).join(", ")} and ${list[list.length - 1]}` : list[0] ?? "");
-const ROOT_SAYS = { Body: "what your hands and feet do", Mind: "what goes on in your head", Soul: "who you are" };
+const pts = (n) => `${n} point${n === 1 ? "" : "s"}`;
 const TRACK_OF = { Body: "Stamina", Mind: "Confidence", Soul: "Resolve" };
 
 // ---------------------------------------------------------------- the build
 //
-//   { v: 3, archs: [name], titles: [{ idea, text, root, specs: [3],
-//     perms: [{ text, root, spec }], boons: [{ lever, name, on }] }],
-//     equipment: [{ text, arm, q }], utility: [{ text }], keepsake: { text },
-//     bag, attuned: [{ name, stage, catch, burden, aura,
+//   { v: 4, start, archs: [name], have: [[ability]], titles: [{ idea, text,
+//     roots: { Body, Mind, Soul }, perms: [{ text, root }], boons: [{ lever,
+//     name, on }] }], equipment: [{ text, arm, q }], utility: [{ text }],
+//     keepsake: { text }, bag, attuned: [{ name, props, stage, catch, burden,
 //     awk: [{ name, kind, text, kept }] }], threads, connect, aspiration,
 //     name, pronoun, blurb, trouble }
 //
-// arm is the Root a piece of armour guards ("" when it isn't armour). kept is
-// on an awakening that was on the sheet already past what its thing's stage
-// holds (a crew sheet, or downtime's Finish anyway), so it stays there.
+// start is the points they start on. archs stays a list of names, since the
+// Worker reads it for the crests, and have[i] is the abilities archetype i's
+// got, the one it came with first (null for every ability it has, from
+// before stacking, till the book's to hand to say which). A Title's roots is
+// its 3 Root points, spread. arm is the Root a piece of armour guards ("" when
+// it isn't armour). kept is on an awakening that was on the sheet already
+// past what its thing's stage holds (a crew sheet, or downtime's Finish
+// anyway), so it stays there.
+// While a change is open, a Title from before stacking says the Root it was
+// all on (from), and the build says it moved onto stacking (stack): neither
+// reaches a saved character.
 
 const line = () => ({ text: "" });
-const blankPerm = () => ({ text: "", root: "", spec: "" });
-const blankTitle = () => ({ idea: "", text: "", root: "", specs: ["", "", ""], perms: [blankPerm(), blankPerm(), blankPerm()], boons: [] });
+const noRoots = () => ({ Body: 0, Mind: 0, Soul: 0 });
+const blankPerm = () => ({ text: "", root: "" });
+const blankTitle = (n = 3) => ({ idea: "", text: "", roots: noRoots(), perms: Array.from({ length: n }, blankPerm), boons: [] });
 const blankKit = () => ({ text: "", arm: "" });
 const blankAwk = (kind = "passive") => ({ name: "", kind, text: "" });
-const blankThing = () => ({ name: "", props: "", stage: "Awakened", catch: "", burden: "", aura: "", awk: [blankAwk(), blankAwk("active")] });
+const blankThing = () => ({ name: "", props: "", stage: "Awakened", catch: "", burden: "", awk: [blankAwk(), blankAwk("active")] });
 // A thread is a bond thread or a hostile thread (threads.js). Whose is set
 // when it's in a crewmate's words, and strained only when a crew sheet says
 // so: what happens in play is kept in the character's state.
 const blankThread = (kind = "bond") => ({ person: "", text: "", kind, whose: "" });
 export function blankBuild() {
   return {
-    v: 3,
+    v: 4,
+    start: START,
     archs: ["", ""],
+    have: [[], []],
     titles: [blankTitle(), blankTitle()],
     equipment: [0, 1, 2].map(blankKit),
     utility: [0, 1, 2].map(line),
     keepsake: line(),
     bag: "",
-    // One attuned thing to start, and more later.
+    // One attuned thing to start, and more for 5 points each.
     attuned: [blankThing()],
     // Two bond threads with the crew, and a hostile thread with anyone.
     threads: [blankThread(), blankThread(), blankThread("hostile")],
@@ -92,11 +118,46 @@ export function blankBuild() {
 const str = (v, max = 160) => (typeof v === "string" ? v.slice(0, max) : "");
 const rootOf = (v) => (ROOTS.includes(v) ? v : "");
 const list = (v, max) => (Array.isArray(v) ? v.slice(0, max) : []);
+const int = (v, d = 0) => (Number.isFinite(Number(v)) ? Math.round(Number(v)) : d);
 const kindOf = (t) => (t?.kind === "hostile" || (t?.kind !== "bond" && t?.debt) ? "hostile" : "bond");
 const atLeast = (arr, n, make) => {
   while (arr.length < n) arr.push(make());
   return arr;
 };
+const sumOf = (roots) => ROOTS.reduce((t, r) => t + (roots?.[r] ?? 0), 0);
+// A Title's spread: whole numbers, never more than its 3 in all.
+function fixRoots(x) {
+  const out = noRoots();
+  let left = R.TITLE_ROOTS;
+  for (const r of ROOTS) {
+    const n = Math.min(left, Math.max(0, int(x?.[r], 0)));
+    out[r] = n;
+    left -= n;
+  }
+  return out;
+}
+// An archetype's abilities, from the book.
+const abilitiesOf = (B, name) => (B?.archetypes ?? []).find((a) => a.name === name)?.abilities ?? [];
+const cleanHave = (h) => [...new Set(h.map((x) => str(typeof x === "string" ? x : x?.name, 60).trim()).filter(Boolean))].slice(0, MAX_ABILITIES);
+// Every ability an archetype has, for one from before stacking, or null till
+// the book's to hand.
+const allOf = (B, name) => (B ? abilitiesOf(B, name).map((x) => x.name).slice(0, MAX_ABILITIES) : null);
+// An archetype from before stacking keeps every ability it had. One taken
+// more than once had them once, so they're dealt out between its copies, the
+// first ability to the first, the way the crew's Shadows have Push and
+// Vanish, less any another copy has already. Till the book's to hand, they
+// wait as null.
+function dealAll(b, B) {
+  if (!B) return;
+  for (const name of new Set(b.archs.map((a) => a.trim()).filter(Boolean))) {
+    const mine = b.archs.map((a, i) => (a.trim() === name && b.have[i] === null ? i : -1)).filter((i) => i >= 0);
+    if (!mine.length) continue;
+    const held = new Set(b.archs.flatMap((a, i) => (a.trim() === name && Array.isArray(b.have[i]) ? b.have[i] : [])));
+    const all = (allOf(B, name) ?? []).filter((x) => !held.has(x));
+    for (const i of mine) b.have[i] = [];
+    all.forEach((x, k) => b.have[mine[k % mine.length]].push(x));
+  }
+}
 // While a character's being changed, a line remembers what it said when the
 // change began (was), so whatever's crossed out or strained can follow it when
 // it's reworded, and a permission rebuilt from before Roots says which set
@@ -104,23 +165,47 @@ const atLeast = (arr, n, make) => {
 const was = (x) => (typeof x?.was === "string" && x.was ? { was: x.was.slice(0, 300) } : {});
 const from = (x) => (typeof x?.from === "string" && x.from ? { from: x.from.slice(0, 120) } : {});
 const fixLine = (x) => ({ text: str(x?.text), ...was(x) });
-const fixPerm = (x) => ({ text: str(x?.text, 120), root: rootOf(x?.root), spec: str(x?.spec, 40), ...from(x) });
+const fixPerm = (x) => ({ text: str(x?.text, 120), root: rootOf(x?.root), ...from(x) });
 const fixBoon = (x) => ({ lever: str(x?.lever, 40), name: str(x?.name, 40), on: str(x?.on, 60) });
 const fixAwk = (x) => ({ name: str(x?.name, 80), kind: x?.kind === "active" ? "active" : "passive", text: str(x?.text, 240), ...(x?.kept ? { kept: true } : {}) });
-export function normalBuild(raw) {
+// B is the builder's data from the book, for an archetype's abilities. A new
+// character's draft (fresh) from before stacking picks its abilities again,
+// where a saved one keeps them all.
+export function normalBuild(raw, B = null, { fresh = false } = {}) {
   const r = raw && typeof raw === "object" ? raw : {};
   // A draft or a build from before Roots comes across on the new rules.
-  if (R.isOldBuild(r)) return fromBefore(r);
+  if (R.isOldBuild(r)) return fromBefore(r, B);
   const b = blankBuild();
-  const archs = list(r.archs, MAX_ARCHS).map((a) => str(a, 24));
-  if (archs.length) b.archs = archs;
+  // A build from before stacking: a Title on one Root, specialties, and an
+  // archetype with every ability it had.
+  const before = r.v != null && Number(r.v) < 4;
+  b.start = Math.min(MAX_START, Math.max(START, int(r.start, START)));
+  const archs = list(r.archs, MAX_ARCHS).map((a) => str(typeof a === "string" ? a : a?.name, 24));
+  if (archs.length) {
+    b.archs = archs;
+    const had = Array.isArray(r.have) ? r.have : [];
+    b.have = archs.map((name, i) => {
+      const h = had[i] !== undefined ? had[i] : r.archs[i] && typeof r.archs[i] === "object" ? r.archs[i].have : undefined;
+      if (Array.isArray(h)) return cleanHave(h);
+      if (!name.trim()) return [];
+      return h === null || (before && !fresh) ? null : [];
+    });
+    dealAll(b, B);
+  }
   const titles = list(r.titles, MAX_TITLES);
   if (titles.length) {
     b.titles = titles.map((x) => {
       const boons = list(x?.boons, 3).filter((y) => y && str(y.lever, 40)).map(fixBoon);
       // Six slots a Title, and a Boon takes two.
-      const perms = list(x?.perms, MAX_PERMS - R.BOON_SLOTS * boons.length).map(fixPerm);
-      return { idea: str(x?.idea, 40), text: str(x?.text, 120), root: rootOf(x?.root), specs: atLeast(list(x?.specs, 3).map((s) => str(s, 40)), 3, () => ""), perms: boons.length || perms.length ? perms : [blankPerm()], boons };
+      const perms = list(x?.perms ?? x?.permissions, MAX_PERMS - R.BOON_SLOTS * boons.length).map(fixPerm);
+      const one = rootOf(x?.root);
+      const spread = Boolean(x?.roots && typeof x.roots === "object");
+      const t = { idea: str(x?.idea, 40), text: str(x?.text ?? x?.name, 120), roots: spread ? fixRoots(x.roots) : one ? { ...noRoots(), [one]: R.TITLE_ROOTS } : noRoots(), perms: boons.length || perms.length ? perms : [blankPerm()], boons };
+      // From before stacking it was all on one Root, so all 3 are on it,
+      // for the player to spread how they like.
+      const was1 = rootOf(x?.from) || (!spread && one ? one : "");
+      if (was1 && t.roots[was1] === R.TITLE_ROOTS) t.from = was1;
+      return t;
     });
   }
   b.equipment = b.equipment.map((e, i) => {
@@ -133,26 +218,33 @@ export function normalBuild(raw) {
   b.keepsake = fixLine(r.keepsake);
   b.bag = str(r.bag, 600);
   if (Array.isArray(r.bagWas)) b.bagWas = r.bagWas.slice(0, 40).map((x) => str(x, 120));
-  // One of the crew made into a build keeps their bag's name and the order
-  // their sheet lists their specialties in, for ties.
+  // One of the crew made into a build keeps their bag's name.
   if (str(r.bagName, 80).trim()) b.bagName = str(r.bagName, 80).trim();
-  if (Array.isArray(r.order) && r.order.length) b.order = r.order.slice(0, 40).map((x) => str(x, 40)).filter(Boolean);
   if (Array.isArray(r.attuned)) {
     b.attuned = r.attuned.slice(0, MAX_ATTUNED).map((x) => ({
-      name: str(x?.name, 80), props: str(x?.props, 80), stage: R.STAGES.includes(x?.stage) ? x.stage : "Awakened", catch: str(x?.catch, 120), burden: str(x?.burden, 120), aura: str(x?.aura, 160),
-      awk: atLeast(list(x?.awk, 6).map(fixAwk), 1, blankAwk),
+      name: str(x?.name, 80), props: str(x?.props, 80), stage: R.STAGES.includes(x?.stage) ? x.stage : "Awakened", catch: str(x?.catch, 120), burden: str(x?.burden, 120),
+      awk: atLeast(list(x?.awk ?? x?.awakenings, 6).map(fixAwk), 1, blankAwk),
     }));
+    if (!b.attuned.length) b.attuned = [blankThing()];
   }
   if (Array.isArray(r.threads)) b.threads = r.threads.slice(0, MAX_THREADS).map((t) => ({ person: str(t?.person, 120), text: str(t?.text, 200), kind: kindOf(t), whose: str(t?.whose, 40), ...(t?.strained ? { strained: true } : {}), ...was(t) }));
   b.connect = (Array.isArray(r.connect) ? r.connect : []).slice(0, 12).map((a) => str(a, 200));
   for (const k of ["aspiration", "name", "blurb"]) b[k] = str(r[k], k === "name" ? 40 : 160);
   b.pronoun = ["her", "him", "them"].includes(r.pronoun) ? r.pronoun : "them";
   b.trouble = (Array.isArray(r.trouble) ? r.trouble : []).filter((x) => typeof x === "string").slice(0, 12).map((x) => str(x, 120));
+  if (r.stack === true || (before && !fresh)) b.stack = true;
   return b;
+}
+// What's saved: the build without what only matters while it's open.
+function forSave(b) {
+  const out = JSON.parse(JSON.stringify(b));
+  delete out.stack;
+  for (const t of out.titles) delete t.from;
+  return out;
 }
 
 // What's in, and what to call it.
-const titleIn = (t) => Boolean(t.text.trim() || t.root || t.specs.some((s) => s.trim()) || t.perms.some((p) => p.text.trim()) || t.boons.length);
+const titleIn = (t) => Boolean(t.text.trim() || sumOf(t.roots) || t.perms.some((p) => p.text.trim()) || t.boons.length);
 const titleName = (t) => t.text.trim() || "Untitled";
 const thingIn = (a) => Boolean(a.name.trim() || a.awk.some((w) => w.name.trim() || w.text.trim()));
 const thingName = (a) => a.name.trim() || "Something attuned";
@@ -177,44 +269,52 @@ export function keepAttuned(b) {
   return b;
 }
 
+// The numbers on the sheet: Aura's 5, and 2 for each attuned thing and each
+// Aura Boon, the stride's 3, and the utility items you can carry.
 export function numbersOf(b) {
   const n = (lever) => b.titles.reduce((t, x) => t + x.boons.filter((y) => y.lever === lever).length, 0);
-  return { aura: 5 + 2 * n("Aura"), stride: 3 + 2 * n("Stride"), track: 12, utility: 3 + n("Kit"), actions: Math.max(1, b.archs.filter(Boolean).length) };
+  return { aura: R.BASE_AURA + R.ATTUNED_AURA * b.attuned.filter(thingIn).length + 2 * n("Aura"), stride: 3 + 2 * n("Stride"), track: 12, utility: 3 + n("Kit") };
 }
 
-// The Roots and specialties a build adds up to, the way How it adds up has it,
-// with where each one comes from.
-export function rootsOf(b) {
-  const titles = b.titles.filter(titleIn).map((t) => ({ name: titleName(t), root: t.root, specialties: t.specs.map((s) => s.trim()).filter(Boolean), permissions: t.perms.filter((p) => p.text.trim()).map((p) => ({ text: p.text.trim(), root: p.root, specialty: p.spec.trim() })) }));
-  const { roots, specialties } = R.countRoots(titles);
-  const fromR = { Body: [], Mind: [], Soul: [] };
-  const fromS = new Map();
-  const add = (sp, what) => {
-    const k = R.specKey(sp);
-    if (k) fromS.set(k, [...(fromS.get(k) ?? []), what]);
+// What a build costs, the way costOf() counts a sheet: only what goes on it,
+// so an empty line, an awakening its thing can't hold yet and a utility item
+// past the limit cost nothing.
+export function pointsOf(b, n = numbersOf(b)) {
+  const x = {
+    titles: b.titles.filter(titleIn).map((t) => ({ text: titleName(t), perms: t.perms.filter((p) => p.text.trim()).map((p) => p.text.trim()), boons: t.boons })),
+    archs: b.archs.map((name, i) => ({ name: name.trim(), have: b.have[i] ?? [] })).filter((a) => a.name),
+    attuned: b.attuned.filter(thingIn).map((a) => ({ name: thingName(a), catch: a.catch.trim(), awk: a.awk.filter((w, j) => awkIn(w) && counts(a, j)).map((w) => ({ name: w.name.trim() || "An awakening" })) })),
+    equipment: b.equipment.filter((e) => e.text.trim()).map((e) => e.text.trim()),
+    utility: b.utility.slice(0, n.utility).filter((u) => u.text.trim()).map((u) => u.text.trim()),
+    bag: bagOf(b).slice(0, 10).join("\n"),
   };
+  const { spent, lines } = costOf(x);
+  return { start: b.start, spent, left: b.start - spent, lines };
+}
+
+// The Roots a build adds up to, the way Roots has it, with where each one
+// comes from.
+export function rootsOf(b) {
+  const titles = b.titles.filter(titleIn).map((t) => ({ roots: t.roots, permissions: t.perms.filter((p) => p.text.trim()).map((p) => ({ text: p.text.trim(), root: p.root })) }));
+  const { roots } = R.countRoots(titles);
+  const from = { Body: [], Mind: [], Soul: [] };
   titles.forEach((t, i) => {
-    const which = `your ${ord(i)} Title`;
-    if (t.root) fromR[t.root].push(which);
-    for (const sp of t.specialties) add(sp, which);
-    for (const p of t.permissions) {
-      if (p.root) fromR[p.root].push(`“${p.text}”`);
-      add(p.specialty, `“${p.text}”`);
-    }
+    for (const r of ROOTS) if (t.roots[r]) from[r].push(`${t.roots[r]} from your ${ord(i)} Title`);
+    for (const p of t.permissions) if (p.root) from[p.root].push(`“${p.text}”`);
   });
-  return { roots, specialties: specialties.map((s) => ({ ...s, from: fromS.get(R.specKey(s.name)) ?? [] })), from: fromR };
+  return { roots, from };
 }
 
 // ---------------------------------------------------------------- the sheet
 
-// The full sheet, the same shape as the crew's (scripts/build-content.mjs),
+// The full sheet, the same shape as the crew's (scripts/crew-sheets.mjs),
 // which roots.js makes into the one the phone plays from.
 const made = new Map();
 export function sheetOf(ch, B) {
   const json = JSON.stringify(ch.build);
   const hit = made.get(ch.id);
   if (hit && hit.json === json && hit.name === ch.name) return hit.sheet;
-  const sheet = makeSheet(ch, normalBuild(ch.build), B);
+  const sheet = makeSheet(ch, normalBuild(ch.build, B), B);
   made.set(ch.id, { json, name: ch.name, sheet });
   return sheet;
 }
@@ -223,12 +323,15 @@ function makeSheet(ch, b, B) {
   const ARCH = new Map(B.archetypes.map((a) => [a.name, a]));
   const IDEA = new Map(B.ideas.map((x) => [x.id, x]));
   const n = numbersOf(b);
+  // A Title from before stacking that's still all on the Root it had goes on
+  // the sheet with that Root, so roots.js knows its spread is the player's to
+  // choose (fromRoot). Once a change is saved, it's a spread like any other.
   const titles = b.titles.filter(titleIn).map((t) => ({
-    name: titleName(t), root: t.root, specialties: t.specs.map((s) => s.trim()).filter(Boolean),
-    permissions: t.perms.filter((p) => p.text.trim()).map((p) => ({ text: p.text.trim(), root: p.root, specialty: p.spec.trim() })),
+    text: titleName(t), name: titleName(t), ...(t.from && t.roots[t.from] === R.TITLE_ROOTS ? { root: t.from } : { roots: { ...t.roots } }),
+    permissions: t.perms.filter((p) => p.text.trim()).map((p) => ({ text: p.text.trim(), root: p.root })),
     boons: t.boons.map((x) => ({ lever: x.lever, name: x.name.trim(), on: x.on.trim() })),
   }));
-  const archetypes = b.archs.map((a) => a.trim()).filter(Boolean).map((name) => ({ name, id: ARCH.get(name)?.id ?? null, home: ARCH.get(name)?.home ?? null }));
+  const archetypes = b.archs.map((a, i) => ({ name: a.trim(), i })).filter((a) => a.name).map(({ name, i }) => ({ name, id: ARCH.get(name)?.id ?? null, home: ARCH.get(name)?.home ?? null, ...(Array.isArray(b.have[i]) ? { have: [...b.have[i]] } : {}) }));
   const kit = b.equipment.filter((e) => e.text.trim());
   const qualities = B.qualities ?? [];
   const armour = kit.filter((e) => e.arm).map((e) => {
@@ -238,7 +341,7 @@ function makeSheet(ch, b, B) {
     return piece;
   });
   const attuned = b.attuned.filter(thingIn).map((a) => ({
-    name: thingName(a), props: a.props.trim() || null, stage: a.stage || "Awakened", catch: a.catch.trim() || null, burden: a.burden.trim() || null, aura: a.aura.trim() || null,
+    name: thingName(a), props: a.props.trim() || null, stage: a.stage || "Awakened", catch: a.catch.trim() || null, burden: a.burden.trim() || null,
     awakenings: a.awk.map((w, j) => ({ w, j })).filter(({ w, j }) => awkIn(w) && counts(a, j)).map(({ w }) => ({ name: w.name.trim() || "An awakening", kind: w.kind, text: w.text.trim() })),
   }));
   // Each person's one bond, with every thread with them under it, however
@@ -255,15 +358,16 @@ function makeSheet(ch, b, B) {
   const names = [...new Set(archetypes.map((a) => a.name))];
   return {
     id: ch.id, name: ch.name, own: true,
-    title: titles[0]?.name ?? "",
+    title: titles[0]?.text ?? "",
     blurb: b.blurb.trim() || (plays.length ? `${cap(plays.join(", and "))}.` : ""),
     hash: ch.hash,
     pronoun: b.pronoun,
     playsLike: esc(plays.join(", and ") || both(names) || "your own"),
-    archetypes, titles, roots: { Body: 0, Mind: 0, Soul: 0 }, specialties: (b.order ?? []).map((name) => ({ name, steps: 0 })),
+    points: { start: b.start },
+    archetypes, titles, roots: rootsOf(b).roots, specialties: [],
     carry: { equipment: kit.map((e) => e.text.trim()), utility: b.utility.slice(0, n.utility).map((x) => x.text.trim()).filter(Boolean), keepsake: b.keepsake.text.trim() || null, bag: { name: b.bagName || "a bag", max: 10, items: bagOf(b).slice(0, 10) } },
     armour, attuned,
-    numbers: { aura: 5, stride: 3, strideNote: null, stamina: { die: 12, note: null }, confidence: { die: 12, note: null }, resolve: { die: 12, note: null } },
+    numbers: { aura: n.aura, stride: 3, strideNote: null, stamina: { die: 12, note: null }, confidence: { die: 12, note: null }, resolve: { die: 12, note: null } },
     threads,
     crewQs: B.connect.map((q, i) => ({ q, a: (b.connect[i] ?? "").trim() })).filter((x) => x.a),
     aspiration: { text: b.aspiration.trim(), die: 2 },
@@ -278,35 +382,59 @@ export function threadCount(b) {
   return { bonds: filled.length - hostile, hostile };
 }
 
-// What the builder flags. Nothing here stops a save. A new character is held
-// to the Quick Build's numbers. A saved one that's grown isn't, so it's only
-// flagged for what makes no sense on any sheet.
+// What the builder flags. Nothing here stops a save. A new character's held
+// to the points they start on, and the threads they start with. A saved one
+// keeps everything it's got, even past what it started on, so it's only
+// flagged for points left to spend and what makes no sense on any sheet.
+// step says which step it's on, and null's the points.
 export function checksOf(b, B, { changing = false } = {}) {
   const out = [];
   const n = numbersOf(b);
-  const known = new Set(B.archetypes.map((a) => a.name));
-  const archs = b.archs.filter((a) => a.trim());
-  if (!changing && archs.length !== 2) out.push({ step: 0, text: `You’ve got ${archs.length === 1 ? "one archetype" : `${archs.length} archetypes`}. You start with two.` });
-  if (changing && !archs.length) out.push({ step: 0, text: "You haven’t got an archetype." });
+  const ARCH = new Map(B.archetypes.map((a) => [a.name, a]));
+  const p = pointsOf(b, n);
+  if (p.left > 0) out.push({ step: null, text: `You’ve got ${p.left === 1 ? "a point" : `${p.left} points`} left to spend.` });
+  if (!changing && p.left < 0) out.push({ step: null, text: `That’s ${p.spent} points, ${-p.left} past the ${p.start} you start on. Take ${-p.left === 1 ? "a point" : `${-p.left} points`} off, or ask the GM about starting on more.` });
+  // Archetypes. An empty slot costs nothing and goes on no sheet, so with
+  // none picked at all it's the one nudge.
+  const picked = b.archs.filter((a) => a.trim());
+  if (!picked.length) out.push({ step: 0, text: "You haven’t got an archetype. At least one’s recommended, but it’s your call." });
+  const had = new Map();
   b.archs.forEach((a, i) => {
-    if (!a.trim() && (!changing || b.archs.length > 1)) out.push({ step: 0, a: i, text: `Your ${ord(i)} archetype isn’t picked yet.` });
-    else if (a.trim() && !known.has(a.trim())) out.push({ step: 0, a: i, text: `${a.trim()} isn’t one of the archetypes any more. Pick another.` });
+    const name = a.trim();
+    if (!name) {
+      if (picked.length) out.push({ step: 0, a: i, text: `Your ${ord(i)} archetype isn’t picked yet. Pick one, or take it off.` });
+      return;
+    }
+    const rule = ARCH.get(name);
+    if (!rule) return out.push({ step: 0, a: i, text: `${name} isn’t one of the archetypes any more. Pick another.` });
+    const have = b.have[i] ?? [];
+    if (!have.length) out.push({ step: 0, a: i, text: `Your ${name} needs the ability it comes with. Pick one off its list.` });
+    for (const h of have) {
+      if (!rule.abilities.some((x) => x.name === h)) out.push({ step: 0, a: i, text: `${h} isn’t one of the ${name}’s abilities any more. Take it off, or pick another.` });
+      // The same ability on two of the same archetype is still the one ability.
+      const key = `${name}|${h}`;
+      if (had.get(key) === 1) out.push({ step: 0, a: i, text: `${h}’s on more than one of your ${name}s, and it’s the one ability. Pick another for this one.` });
+      had.set(key, (had.get(key) ?? 0) + 1);
+    }
   });
-  if (!changing && b.titles.length !== 2) out.push({ step: 1, text: `You’ve got ${b.titles.length} Titles. The quick build gives you two.` });
+  // Titles, the same way.
+  const titled = b.titles.filter(titleIn);
+  if (!titled.length) out.push({ step: 1, text: "You haven’t got a Title. At least one’s recommended, but it’s your call." });
   const seen = new Map();
   b.titles.forEach((t, i) => {
     const which = `Your ${ord(i)} Title`;
+    if (!titleIn(t)) {
+      if (titled.length) out.push({ step: 1, t: i, text: `${which}’s empty. Fill it in, or take it off.` });
+      return;
+    }
     if (!t.text.trim()) out.push({ step: 1, t: i, text: `${which} hasn’t got a name.` });
-    if (!t.root) out.push({ step: 1, t: i, text: `${which} hasn’t got a Root.` });
-    const specs = [...new Set(t.specs.map((s) => R.specKey(s)).filter(Boolean))].length;
-    if (specs < 3) out.push({ step: 1, t: i, text: `${which} has ${specs ? `${specs === 1 ? "one specialty" : `${specs} specialties`}` : "no specialties"}. A Title’s got three.` });
-    const perms = t.perms.filter((p) => p.text.trim());
-    const slots = slotsOf(t);
-    if (changing && !perms.length && !t.boons.length) out.push({ step: 1, t: i, text: `${which} hasn’t got a permission.` });
-    if (!changing && slots !== 3) out.push({ step: 1, t: i, text: `${which} has ${perms.length} permission${perms.length === 1 ? "" : "s"}${t.boons.length ? ` and ${t.boons.length === 1 ? "a Boon" : `${t.boons.length} Boons`}` : ""}. The quick build gives it three${t.boons.length ? ", and a Boon takes two of them" : ""}.` });
-    for (const p of perms) {
-      const w = p.text.trim();
-      if (!p.root || !p.spec.trim()) out.push({ step: 1, t: i, text: `“${w}” needs ${!p.root && !p.spec.trim() ? "a Root and a specialty" : !p.root ? "its Root" : "its specialty"}.` });
+    const sum = sumOf(t.roots);
+    if (sum < R.TITLE_ROOTS) out.push({ step: 1, t: i, text: sum ? `${which} has ${sum} of its 3 Root points on your Roots. Put the last ${R.TITLE_ROOTS - sum === 1 ? "one" : "two"} on one.` : `${which}’s 3 Root points aren’t on your Roots yet.` });
+    const perms = t.perms.filter((x) => x.text.trim());
+    if (!perms.length && !t.boons.length) out.push({ step: 1, t: i, text: `${which} hasn’t got its permission yet. It comes with one.` });
+    for (const x of perms) {
+      const w = x.text.trim();
+      if (!x.root) out.push({ step: 1, t: i, text: `“${w}” needs its Root.` });
       if (!/\s/.test(w)) out.push({ step: 1, t: i, text: `“${w}” is one word. A permission’s a doing word with how, what or where, like “pick a mechanical lock”.` });
       const k = w.toLowerCase();
       seen.set(k, [w, (seen.get(k)?.[1] ?? 0) + 1]);
@@ -314,24 +442,22 @@ export function checksOf(b, B, { changing = false } = {}) {
     for (const x of t.boons) if (!(B.boons ?? []).some((y) => y.lever === x.lever)) out.push({ step: 1, t: i, text: `The ${x.lever} Boon isn’t one of the Boons any more. Take it off, and the two slots are permissions again.` });
   });
   for (const [w, k] of seen.values()) if (k > 1) out.push({ step: 1, text: `“${w}” is on your sheet ${k === 2 ? "twice" : `${k} times`}, and the same permission only counts once. Use different words for one of them.` });
-  if (!changing && !b.keepsake.text.trim()) out.push({ step: 3, kit: "k", text: "You haven’t got a keepsake yet." });
-  // One attuned thing to start. More come later, so a saved character can
-  // have as many as they've earned.
-  const att = b.attuned.filter((a) => a.name.trim());
-  if (!changing && !att.length) out.push({ step: 3, kit: "a", text: "You haven’t attuned anything yet. You start with one thing." });
-  if (!changing && att.length > 1) out.push({ step: 3, kit: "a", text: `You’ve attuned ${att.length} things. You start with one, and an Aspiration can bring another.` });
+  // What you carry, with the attuned things first.
+  const att = b.attuned.filter(thingIn);
+  if (!att.length) out.push({ step: 3, kit: "a", text: "You haven’t attuned anything. At least one thing’s recommended, but it’s your call." });
   b.attuned.forEach((a) => {
     if (!thingIn(a)) return;
     const name = cap(a.name.trim() || "Your attuned thing");
     const filled = a.awk.map((w, j) => [w, j]).filter(([w]) => awkIn(w));
     if (!a.name.trim()) out.push({ step: 3, kit: "a", text: "Your attuned thing needs a name." });
-    if (!filled.length) out.push({ step: 3, kit: "a", text: `${name} needs an awakening.` });
+    if (!filled.length) out.push({ step: 3, kit: "a", text: `${name} needs the awakening it comes with.` });
     for (const [w] of filled) if (!w.name.trim() || !w.text.trim()) out.push({ step: 3, kit: "a", text: `An awakening on ${a.name.trim() || "your attuned thing"} needs ${!w.name.trim() ? "its name" : "what it does"}.` });
     const r = roomOf(a);
     const over = filled.filter(([, j]) => !counts(a, j));
     if (over.some(([, j]) => j >= r.all)) out.push({ step: 3, kit: "a", text: `${name} holds ${r.all} at ${r.stage}, so the rest stay off the sheet until it goes up a stage.` });
     else if (over.length) out.push({ step: 3, kit: "a", text: r.stage === "Awakened" ? `${name} only gets a second awakening with a Catch.` : `${name} needs ${both(r.missing.map((x) => (x === "catch" ? "its Catch" : "its Burden")))} to hold more than ${r.base}.` });
     if (!changing && a.burden.trim()) out.push({ step: 3, kit: "a", text: `${name} has a Burden, and a thing can’t take one before it’s Tempered.` });
+    if (!changing && a.stage !== "Awakened") out.push({ step: 3, kit: "a", text: `${name}’s ${a.stage}, and what you attune starts at Awakened.` });
   });
   // What you start with is Common, and one piece can be Fine.
   if (!changing) {
@@ -343,6 +469,7 @@ export function checksOf(b, B, { changing = false } = {}) {
   }
   if (b.utility.slice(n.utility).some((u) => u.text.trim())) out.push({ step: 3, kit: "u", text: `You can carry ${n.utility} utility items, so the last one won’t go on the sheet.` });
   if (bagOf(b).length > 10) out.push({ step: 3, kit: "u", text: `Your bag holds 10, so the last ${bagOf(b).length - 10} won’t go in.` });
+  if (!changing && !b.keepsake.text.trim()) out.push({ step: 3, kit: "k", text: "You haven’t got a keepsake yet. It’s free." });
   // Two bond threads with the crew to start. A hostile thread lets you write a
   // third bond thread, and three is the most.
   const { bonds, hostile } = threadCount(b);
@@ -355,19 +482,26 @@ export function checksOf(b, B, { changing = false } = {}) {
   return out;
 }
 
-// A permission's likely Root and specialty from its words, for a permission
-// idea tapped in and for random characters: in your head is Mind, who you
-// are and how you carry yourself is Soul, and the rest is your Body. The
-// specialty's the Title's own that shares a word with it, if one does.
+// A permission's likely Root from its words, for a permission idea tapped in
+// and for random characters: in your head is Mind, who you are and how you
+// carry yourself is Soul, and the rest is your Body.
 const MINDISH = /^(know|read|spot|remember|find|tell|feel|sense|hear|see|plan|question|follow a paper|smell|study|notice|recognise|work out)\b/i;
 const SOULISH = /^(talk|calm|make (someone|people|an ally)|give orders|bark|lead|bring|hold (a crowd|holy)|get (a crowd|credit|a seat|an audience|sanctuary)|drop a name|pass as|swear|bless|steady|speak|call|command|host|keep a crew|start a rumour|haggle|put (a moment|bad luck)|raise|ward|bar a door|keep a spirit|throw fire|light a room|smother|make a fire|still the|fill a sail|play|sing|make people|charm|carry myself|stop bleeding|draw out|ease)\b/i;
-const stem = (w) => w.toLowerCase().replace(/[’']s$/, "").replace(/(ing|ers|er|es|s)$/, "").slice(0, 5);
-export function guessFor(text, specs = [], root = "") {
+export function guessFor(text, root = "") {
   const words = String(text ?? "").trim();
   const r = MINDISH.test(words) ? "Mind" : SOULISH.test(words) ? "Soul" : root === "Soul" && !/^(fight|shoot|climb|run|move|lift|hold|guard|carry|ride|sail|swim|leap|slip|pick|fix|build|take|make|mix|stitch|live|track)\b/i.test(words) ? "Soul" : "Body";
-  const said = new Set(words.split(/[^A-Za-z’']+/).filter((w) => w.length > 2).map(stem));
-  const spec = specs.find((s) => String(s).split(/\s+/).some((w) => w.length > 2 && said.has(stem(w)))) ?? "";
-  return { root: r, spec };
+  return { root: r };
+}
+// A Title's likely spread from its permissions' Roots: all 3 on one when
+// they're all on one, 2 and 1 across two, and 1 on each across three.
+export function spreadFor(roots) {
+  const n = noRoots();
+  for (const r of roots) if (ROOTS.includes(r)) n[r] += 1;
+  const by = ROOTS.filter((r) => n[r]).sort((a, z) => n[z] - n[a]);
+  if (!by.length) return noRoots();
+  if (by.length === 1) return { ...noRoots(), [by[0]]: 3 };
+  if (by.length === 2) return { ...noRoots(), [by[0]]: 2, [by[1]]: 1 };
+  return { Body: 1, Mind: 1, Soul: 1 };
 }
 
 // ---------------------------------------------------------------- downtime's growth
@@ -378,7 +512,7 @@ export function guessFor(text, specs = [], root = "") {
 // after the Title's others, a new Title last, and so on, so the sheet it
 // makes is the one the player already had.
 export function foldGrown(raw, grown, B) {
-  const b = normalBuild(raw);
+  const b = normalBuild(raw, B);
   if (!Array.isArray(grown) || !grown.length) return b;
   // Empty lines aren't on the sheet, so they go, and a grown line's place
   // among the rest is its place on the sheet. On an attuned thing an
@@ -396,25 +530,33 @@ export function foldGrown(raw, grown, B) {
   }
   const titleAt = (k) => b.titles[b.titles.map((t, i) => (titleIn(t) ? i : -1)).filter((i) => i >= 0)[k]];
   const thingAt = (k) => b.attuned[b.attuned.map((a, i) => (thingIn(a) ? i : -1)).filter((i) => i >= 0)[k]];
+  const archAt = (k) => b.archs.map((a, i) => (a.trim() ? i : -1)).filter((i) => i >= 0)[k];
   const words = (v, max = 160) => str(String(v ?? "").trim(), max);
   for (const g of grown) {
     if (!g || typeof g !== "object") continue;
     const text = words(g.text, 120);
     const root = rootOf(g.root);
-    const spec = words(g.spec, 40);
     if (g.k === "perm") {
       const t = titleAt(g.t);
-      if (t && text && slotsOf(t) < MAX_PERMS) t.perms.push({ text, root, spec });
+      if (t && text && slotsOf(t) < MAX_PERMS) t.perms.push({ text, root });
     } else if (g.k === "swap") {
       const t = titleAt(g.t);
       const p = t?.perms[Number(g.j)];
-      if (p && text) Object.assign(p, { text, root, spec });
+      if (p && text) Object.assign(p, { text, root });
     } else if (g.k === "boon") {
       const t = titleAt(g.t);
       if (!t || !words(g.lever, 40)) continue;
       const drop = [...new Set((Array.isArray(g.drop) ? g.drop : []).map(Number))].filter((j) => t.perms[j]).sort((x, y) => y - x);
+      if (slotsOf(t) - drop.length + R.BOON_SLOTS > MAX_PERMS) continue;
       for (const j of drop) t.perms.splice(j, 1);
-      if (slotsOf(t) + R.BOON_SLOTS <= MAX_PERMS) t.boons.push({ lever: words(g.lever, 40), name: words(g.name, 40), on: words(g.on, 60) });
+      t.boons.push({ lever: words(g.lever, 40), name: words(g.name, 40), on: words(g.on, 60) });
+    } else if (g.k === "ability") {
+      const i = archAt(Number(g.a));
+      const name = words(g.name, 60);
+      if (i == null || !name) continue;
+      if (b.have[i] == null) dealAll(b, B);
+      const have = b.have[i] ?? (b.have[i] = []);
+      if (!have.includes(name) && have.length < MAX_ABILITIES) have.push(name);
     } else if (g.k === "awk") {
       const a = thingAt(g.a);
       if (!a || !words(g.name, 80)) continue;
@@ -438,18 +580,25 @@ export function foldGrown(raw, grown, B) {
       if (person && text) b.threads.push({ person, text: str(text, 200), kind: g.kind === "hostile" ? "hostile" : "bond", whose: "" });
     } else if (g.k === "title") {
       if (!text || b.titles.length >= MAX_TITLES) continue;
-      const specs = atLeast((Array.isArray(g.specs) ? g.specs : []).map((s) => words(s, 40)).filter(Boolean).slice(0, 3), 3, () => "");
-      const p = g.perm && typeof g.perm === "object" && words(g.perm.text, 120) ? { text: words(g.perm.text, 120), root: rootOf(g.perm.root), spec: words(g.perm.spec, 40) } : blankPerm();
-      b.titles.push({ idea: "", text, root, specs, perms: [p], boons: [] });
+      // A Title from before stacking had one Root, and all 3 go on it.
+      const spread = g.roots && typeof g.roots === "object";
+      const roots = spread ? fixRoots(g.roots) : root ? { ...noRoots(), [root]: R.TITLE_ROOTS } : noRoots();
+      const p = g.perm && typeof g.perm === "object" && words(g.perm.text, 120) ? { text: words(g.perm.text, 120), root: rootOf(g.perm.root) } : blankPerm();
+      b.titles.push({ idea: "", text, roots, perms: [p], boons: [], ...(!spread && root ? { from: root } : {}) });
     } else if (g.k === "arch") {
       const arch = words(g.arch, 24);
-      if (arch && b.archs.length < MAX_ARCHS) b.archs.push(arch);
+      if (!arch || b.archs.length >= MAX_ARCHS) continue;
+      b.archs.push(arch);
+      // One from before stacking came with every ability it had, less any
+      // another of the same archetype has.
+      b.have.push(Array.isArray(g.have) ? cleanHave(g.have) : null);
+      dealAll(b, B);
     } else if (g.k === "attune") {
       const name = words(g.name, 80);
       if (!name || b.attuned.length >= MAX_ATTUNED) continue;
       const w = g.awk && typeof g.awk === "object" && words(g.awk.name, 80) ? [{ name: words(g.awk.name, 80), kind: g.awk.kind === "active" ? "active" : "passive", text: words(g.awk.text, 240) }] : [];
       for (const x of w) onSheet.add(x);
-      b.attuned.push({ name, props: "", stage: "Awakened", catch: "", burden: "", aura: words(g.aura, 160), awk: w });
+      b.attuned.push({ name, props: "", stage: "Awakened", catch: "", burden: "", awk: w });
     }
   }
   for (const a of b.attuned) {
@@ -461,40 +610,40 @@ export function foldGrown(raw, grown, B) {
     atLeast(a.awk, 1, blankAwk);
   }
   for (const t of b.titles) if (!t.perms.length && !t.boons.length) t.perms.push(blankPerm());
-  return normalBuild(b);
+  return normalBuild(b, B);
 }
 
 // ---------------------------------------------------------------- from before Roots
 
 // A character built on the phone before the Roots change (8 Nov 2026), rebuilt
-// on it: their Titles and permissions with a Root and a specialty to write in
-// (each permission says which set actions it was on, and one of their own,
-// like Locks, is the specialty already), the archetypes their Titles had,
-// what they carry with their armour on their Body, their attuned things with
-// each old permission an awakening, as Coin and Kit's did, and their threads,
+// on stacking: their Titles and permissions, each permission with its Root
+// guessed from its words or the set action it was on (it says which), and
+// each Title's 3 Root points spread the way its permissions lean, for the
+// player to check, the archetypes their Titles had with every ability, what
+// they carry with their armour on their Body, their attuned things with each
+// old permission an awakening, as Coin and Kit's did, and their threads,
 // answers, Aspiration and trouble. Traits are gone from the rules, so they go.
 const CORE = ["Defend", "Fight", "Move", "Sneak", "Study", "Talk"];
 const CORE_ROOT = { Study: "Mind", Talk: "Soul" };
-export function fromBefore(old) {
+export function fromBefore(old, B = null) {
   const r = old && typeof old === "object" ? old : {};
   const b = blankBuild();
   const s = (v, max = 160) => str(typeof v === "string" ? v : v?.text, max).trim();
   const ons = (x) => (Array.isArray(x?.on) ? x.on.filter((a) => typeof a === "string") : []);
   const titles = list(r.titles, MAX_TITLES).filter((t) => s(t) || s(t?.arch) || list(t?.perms, 6).some((p) => s(p)));
-  b.archs = atLeast(titles.map((t) => str(t?.arch, 24).trim()).filter(Boolean).slice(0, MAX_ARCHS), 2, () => "");
+  b.archs = atLeast(titles.map((t) => str(t?.arch, 24).trim()).filter(Boolean).slice(0, MAX_ARCHS), 1, () => "");
+  b.have = b.archs.map((a) => (a ? null : []));
+  dealAll(b, B);
   if (titles.length) {
     b.titles = titles.map((t) => {
       const perms = list(t?.perms, MAX_PERMS).filter((p) => s(p)).map((p) => {
         const on = ons(p);
-        const own = on.find((a) => !CORE.includes(a)) ?? "";
         const core = on.find((a) => CORE.includes(a));
         const text = s(p, 120);
-        return { text, root: core ? CORE_ROOT[core] ?? "Body" : guessFor(text).root, spec: own, ...(on.length ? { from: `It was on your ${both(on)}` } : {}) };
+        return { text, root: core ? CORE_ROOT[core] ?? "Body" : guessFor(text).root, ...(on.length ? { from: `It was on your ${both(on)}` } : {}) };
       });
-      const specs = [...new Set(perms.map((p) => p.spec).filter(Boolean))].slice(0, 3);
-      const roots = perms.map((p) => p.root).filter(Boolean);
-      const root = ROOTS.map((x) => [x, roots.filter((y) => y === x).length]).sort((x, y) => y[1] - x[1])[0];
-      return { idea: str(t?.idea, 40), text: s(t, 120), root: root && root[1] ? root[0] : "", specs: atLeast(specs, 3, () => ""), perms: perms.length ? perms : [blankPerm()], boons: [] };
+      const roots = perms.length ? spreadFor(perms.map((p) => p.root)) : s(t) ? { ...noRoots(), [guessFor(s(t)).root]: R.TITLE_ROOTS } : noRoots();
+      return { idea: str(t?.idea, 40), text: s(t, 120), roots, perms: perms.length ? perms : [blankPerm()], boons: [] };
     });
   }
   const eq = list(r.equipment, 3);
@@ -515,8 +664,8 @@ export function fromBefore(old) {
   const things = list(r.attuned, MAX_ATTUNED).filter((a) => s(a?.name) || list(a?.perms, 6).some((p) => s(p)));
   if (things.length) {
     b.attuned = things.map((a) => ({
-      name: s(a?.name, 80), props: "", stage: R.STAGES.includes(a?.stage) ? a.stage : "Awakened", catch: str(a?.catch, 120), burden: str(a?.burden, 120), aura: "",
-      awk: atLeast(list(a?.perms, 6).filter((p) => s(p)).map((p) => ({ name: s(p, 80), kind: "passive", text: "+1 on one die of every roll you make with it, for each Aura in it", ...(p?.kept ? { kept: true } : {}) })), 1, blankAwk),
+      name: s(a?.name, 80), props: "", stage: R.STAGES.includes(a?.stage) ? a.stage : "Awakened", catch: str(a?.catch, 120), burden: str(a?.burden, 120),
+      awk: atLeast(list(a?.perms, 6).filter((p) => s(p)).map((p) => ({ name: s(p, 80), kind: "passive", text: "+1 on one die of every roll you make with it, for each Aura powering it", ...(p?.kept ? { kept: true } : {}) })), 1, blankAwk),
     }));
   }
   if (Array.isArray(r.threads)) b.threads = r.threads.slice(0, MAX_THREADS).map((t) => ({ person: str(t?.person, 120), text: str(t?.text, 200), kind: kindOf(t), whose: str(t?.whose, 40), ...(t?.strained ? { strained: true } : {}) }));
@@ -545,45 +694,60 @@ function writeDrafts(all) {
     return false;
   }
 }
-const blankJson = JSON.stringify(blankBuild());
+const blankJson = JSON.stringify(normalBuild(blankBuild()));
 export const hasDraft = () => {
   const d = readDrafts().new;
-  if (!d || JSON.stringify(normalBuild(d.build)) === blankJson) return null;
+  if (!d || JSON.stringify(normalBuild(d.build, null, { fresh: true })) === blankJson) return null;
   return { name: str(d.build?.name, 40) };
 };
+
+// A rule from the book as a question bubble's paragraphs: each paragraph and
+// each item of a list its own, with what's inside them kept, since a bubble
+// says its words in a line.
+const paras = (html) => String(html ?? "").replace(/<\/(?:p|li|h\d)>/g, "\n").replace(/<(?:p|li|ul|ol|h\d|div)(?:\s[^>]*)?>|<\/(?:ul|ol|div)>/g, "\n").split(/\n+/).map((x) => x.trim()).filter(Boolean);
+// A Trait from the book, however its reader gives it.
+const traitOf = (x) => (x && typeof x === "object" ? { name: str(x.name, 60), html: str(x.html, 600) || esc(str(x.text, 600)) } : typeof x === "string" && x ? { name: str(x, 60), html: "" } : { name: "", html: "" });
 
 // ---------------------------------------------------------------- the screens
 //
 // One step to a screen, for a phone held in one hand, the way a character
 // opens: full screen, the crest at the top filling in as the archetypes go on,
-// the step's first sentence from the book with the rest of it a tap away, and
-// Back and Next in a bar at the bottom, under the thumb. The archetypes go one
-// at a time, the Titles one at a time and what you carry a part at a time,
-// and Next walks through them before the next step. Everything you pick is a
-// card or a piece from the kit, and while the Titles are written, the Roots
-// and specialties ride in a dock above the bar as the dice they add up to,
-// each one growing into its next shape as a line goes on (after()). A blank
-// sheet, one of the crew, random and changing a character use the same
-// pieces with every step on one page.
+// the step's first sentence from the book with the rest of it behind a ?,
+// and Back and Next in a bar at the bottom, under the thumb, with the points
+// over them. The archetypes go one at a time, the Titles one at a time and
+// what you carry a part at a time, and Next walks through them before the
+// next step. Everything you pick is a card or a piece from the kit, and while
+// the Titles are written, the Roots ride in a dock above the bar as the dice
+// they add up to, each one growing into its next shape as a line goes on
+// (after()). A blank sheet, one of the crew, random and changing a character
+// use the same pieces with every step on one page.
 
 const WAYS = ["blank", "crew", "random"];
 const STEPS = [
   { name: "Archetypes", short: "Archetypes" },
   { name: "Titles and permissions", short: "Titles" },
-  { name: "Roots and specialties", short: "Roots" },
+  { name: "Roots", short: "Roots" },
   { name: "What you carry", short: "What you carry" },
   { name: "Threads", short: "Threads" },
   { name: "Aspiration", short: "Aspiration" },
   { name: "Check it and play", short: "Check it" },
 ];
 const LAST = STEPS.length - 1;
-// What you carry, a part to a screen.
-const KIT = [["e", "Equipment"], ["u", "Utility"], ["k", "Keepsake"], ["a", "Attuned"]];
+// What you carry, a part to a screen: the attuned thing first, for its 5,
+// then the rest with what's left.
+const KIT = [["a", "Attuned"], ["e", "Equipment"], ["u", "Utility"], ["k", "Keepsake"]];
 const PRO = { her: ["she", "her", "she’s"], him: ["he", "his", "he’s"], them: ["they", "their", "they’re"] };
 const PRICE = { Awakened: "a Catch", Tempered: "a Burden", Perfected: "a Burden and a Catch" };
 // A Boon that's on something says what: a piece of armour, a condition, or
 // which of climbing, swimming and rough ground.
 const BOON_ON = { Armour: ["Which piece", "your worn leathers"], Conditions: ["Which condition", "Frightened"], "Getting around": ["Climbing, swimming or rough ground", "climbing"] };
+// Where a Title's 3 Root points go: all on one, 2 and 1, or 1 on each.
+const SHAPES = [["one", "All 3 on one"], ["two", "2 and 1"], ["each", "1 on each"]];
+const shapeIs = (roots) => (ROOTS.some((r) => roots[r] === 3) ? "one" : ROOTS.some((r) => roots[r] === 2) ? "two" : ROOTS.every((r) => roots[r] === 1) ? "each" : "");
+const spreadSays = (roots) => ROOTS.filter((r) => roots[r]).map((r) => `${r} ${roots[r]}`).join(", ");
+// The groups of what a character's points went on.
+const SPENT = [["Titles", ["title", "perm", "boon"]], ["Archetypes", ["arch", "ability"]], ["Attuned", ["attuned", "awk"]], ["What you carry", ["item"]]];
+const KINDS = [["title", "Titles"], ["perm", "Permissions"], ["arch", "Archetypes"], ["ability", "Abilities"], ["attuned", "Attuned"], ["awk", "Awakenings"], ["item", "What you carry"]];
 // A link inside a card would be a link inside a button, so cards keep the words only.
 const unlink = (html) => String(html ?? "").replace(/<a [^>]*>|<\/a>/g, "");
 
@@ -600,17 +764,16 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
   let rolled = ""; // the random build as it was rolled
   let dropping = ""; // something tapped once to take it off
   let slide = ""; // "next" or "back": the way the next screen comes in
-  let shown = null; // each Root's and specialty's dice as last drawn, so a change grows them
+  let shown = null; // each Root's dice as last drawn, so a change grows them
 
-  // The steps a tap away from the bar close again with a tap anywhere else,
-  // or Escape, which puts the cursor back on them.
+  // The steps and the points a tap away from the bar close again with a tap
+  // anywhere else, or Escape, which puts the cursor back on them.
   if (typeof document !== "undefined") {
     document.addEventListener("click", (e) => {
-      const menu = document.querySelector(".bd-jump[open]");
-      if (menu && !menu.contains(e.target)) menu.removeAttribute("open");
+      for (const menu of document.querySelectorAll(".bd-jump[open], .bd-pts[open]")) if (!menu.contains(e.target)) menu.removeAttribute("open");
     });
     document.addEventListener("keydown", (e) => {
-      const menu = e.key === "Escape" && document.querySelector(".bd-jump[open]");
+      const menu = e.key === "Escape" && document.querySelector(".bd-jump[open], .bd-pts[open]");
       if (!menu) return;
       menu.removeAttribute("open");
       menu.querySelector("summary")?.focus();
@@ -637,9 +800,10 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const stale = Boolean(kept && changing() && kept.basis !== m.basis);
     if (stale) kept = null;
     const begun = kept ? null : typeof start === "function" ? start() : start;
+    const fresh = !changing();
     d = kept
-      ? { step: Math.min(LAST, Math.max(0, Number(kept.step) || 0)), deep: kept.deep && typeof kept.deep === "object" ? kept.deep : {}, page: Boolean(kept.page), way: WAYS.includes(kept.way) ? kept.way : "", from: str(kept.from, 40), build: normalBuild(kept.build), basis: str(kept.basis, 40) }
-      : { step: 0, deep: {}, page: Boolean(begun), way: "", from: "", build: normalBuild(begun ?? blankBuild()), basis: str(m.basis, 40) };
+      ? { step: Math.min(LAST, Math.max(0, Number(kept.step) || 0)), deep: kept.deep && typeof kept.deep === "object" ? kept.deep : {}, page: Boolean(kept.page), way: WAYS.includes(kept.way) ? kept.way : "", from: str(kept.from, 40), build: normalBuild(kept.build, B, { fresh }), basis: str(kept.basis, 40) }
+      : { step: 0, deep: {}, page: Boolean(begun), way: "", from: "", build: normalBuild(begun ?? blankBuild(), B, { fresh }), basis: str(m.basis, 40) };
     sure = false;
     dropping = "";
     slide = "";
@@ -654,7 +818,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
   function begin(build, way, fromName = "") {
     clearTimeout(saveTimer);
     slotKey = "new";
-    d = { step: 0, deep: {}, page: true, way, from: fromName, build: normalBuild(build) };
+    d = { step: 0, deep: {}, page: true, way, from: fromName, build: normalBuild(build, B, { fresh: true }) };
     sure = false;
     dropping = "";
     slide = "";
@@ -685,21 +849,23 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       : `<input id="${id}" data-bin="${path}"${cls ? ` class="${cls}"` : ""} value="${esc(value)}" maxlength="${max}" autocomplete="off" placeholder="${esc(ph || " ")}">`;
     return `<label class="cc-field" for="${id}">${label}</label>${input}`;
   };
+  // A small label with a question bubble beside it.
+  const asked = (label, id, words, title, attrs = "") => `<div class="bd-ask"><p class="bd-label"${attrs}>${label}</p>${tip(id, words, title)}</div>`;
   const sigilOf = (name) => (Object.hasOwn(SIGILS, name) ? sigil(name) : "");
   // Which archetype the first step's on, which Title the second's on, and
   // which part of what you carry.
   const archTab = () => Math.min(Math.max(0, Number(d.deep.atab) || 0), Math.max(0, b().archs.length - 1));
   const tabOf = () => Math.min(Math.max(0, Number(d.deep.tab) || 0), Math.max(0, b().titles.length - 1));
-  const kitOf = () => (KIT.some(([k]) => k === d.deep.kit) ? d.deep.kit : "e");
+  const kitOf = () => (KIT.some(([k]) => k === d.deep.kit) ? d.deep.kit : KIT[0][0]);
   const kitAt = () => KIT.findIndex(([k]) => k === kitOf());
 
   // The book's words for each step: its first sentence on the screen, and the
-  // rest a tap away, remembered open once it's been opened.
-  const how = (i) => (B.quick[i]?.more ? `<details class="bd-how" data-open="bd-how-${i}"${d.deep[`how${i}`] === true ? " open" : ""}><summary>How this step works</summary><p>${B.quick[i].more}</p></details>` : "");
+  // rest behind a ?.
+  const how = (i, where = "") => (B.quick[i]?.more ? tip(`bd-how-${where}${i}`, B.quick[i].more, "How this step works") : "");
   // Adding and taking off. Something with words in it asks for a second tap
   // before it goes.
   const dropBtn = (kind, i, label) => `<button type="button" class="button sm" data-act="b" data-b="drop${kind}" data-i="${i}">${dropping === `${kind}${i}` ? "Tap again to take it off" : label}</button>`;
-  const canDrop = (kind) => (kind === "title" ? b().titles.length > (changing() ? 1 : 2) : kind === "arch" ? b().archs.length > (changing() ? 1 : 2) : kind === "att" ? changing() || b().attuned.length > 1 : changing() || b().threads.length > 3);
+  const canDrop = (kind) => (kind === "title" ? b().titles.length > 1 : kind === "arch" ? b().archs.length > 1 : kind === "att" ? changing() || b().attuned.length > 1 : changing() || b().threads.length > 3);
   // A card to tap: picked, it's edged in gold with a gold diamond in its corner.
   const card = (cls, attrs, on, inner) => `<button type="button" class="bd-tok ${cls}" data-act="b" ${attrs}${pressed(on)}>${inner}</button>`;
   const rootChips = (attrs, now, label) => `<div class="cc-chips bd-roots" role="group" aria-label="${esc(label)}">${ROOTS.map((r) => chip(r, `${attrs} data-v="${r}"`, now === r, "sm")).join("")}</div>`;
@@ -719,14 +885,24 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     }
   }
   // One of the crew being changed stops following the chapter once it's
-  // saved, and one built before Roots moves onto it.
+  // saved, one built before Roots moves onto it, and one built before
+  // stacking keeps everything and hears what changed and what's theirs to
+  // choose.
   function crewNote() {
     if (!changing()) return "";
-    const [, their, theyre] = PRO[b().pronoun] ?? PRO.them;
-    if (meta.before) return `<div class="cc-note is-gold" role="status"><p>${esc(b().name || "They")} ${theyre === "they’re" ? "were" : "was"} built before the Roots change, so here’s everything that comes across. Each Title wants its Root and three specialties, and each permission its Root and specialty (it says which set actions it was on). ${cap(their)} attuned things’ permissions are awakenings now, and traits have gone from the rules. Save it and ${theyre} back in play, with ${their} threads, Aspiration and notes as they were.</p></div>`;
+    const x = b();
+    const [, their, theyre] = PRO[x.pronoun] ?? PRO.them;
+    const name = esc(x.name || "They");
+    if (meta.before) return `<div class="cc-note is-gold" role="status"><p>${name} ${theyre === "they’re" ? "were" : "was"} built before the Roots change, so here’s everything that comes across. ${tip("bd-before", [`Each Title’s 3 Root points are spread the way its permissions lean, and each permission’s Root is a guess from its words or the set action it was on (it says which), so check them.`, `${cap(their)} archetypes keep every ability, ${their} attuned things’ permissions are awakenings now, and traits have gone from the rules. Save it and ${theyre} back in play, with ${their} threads, Aspiration and notes as they were.`], "Rebuilding on Roots")}</p></div>`;
+    if (x.stack) {
+      const left = pointsOf(x).left;
+      const spread = x.titles.filter((t) => t.from).length;
+      const asks = [spread ? `${spread === 1 ? "a Title that was" : "each Title that was"} on one Root has all 3 on it, so spread ${spread === 1 ? "it" : "them"} how you like` : "", left > 0 ? `${spread ? "and " : ""}you’ve got ${pts(left)} to spend` : ""].filter(Boolean);
+      return `<div class="cc-note is-gold" role="status"><p>${name} keeps everything since the stacking change.${asks.length ? ` ${cap(asks.join(", "))}.` : ""} ${tip("bd-stacked", ["Every thing on your sheet that fits is a step on a roll now, and specialties have gone. A Title puts 3 on your Roots, spread however you like, and a permission puts 1 on its Root, so your Roots are counted again.", `${cap(their)} archetypes keep every ability they had, and nothing comes off for being past 35.`], "What changed")}</p></div>`;
+    }
     if (!meta.crew) return "";
-    const name = esc(b().name || meta.crew);
-    return `<div class="cc-note" role="status"><p>${name}’s sheet comes straight off the chapter for now, so when the rules change, ${their} sheet changes too. Save a change here and ${theyre} your own. ${cap(their)} sheet stops following the chapter, and ${their} tracks, Aura and everything else in play stay as they are.</p></div>`;
+    const crewName = esc(x.name || meta.crew);
+    return `<div class="cc-note" role="status"><p>${crewName}’s sheet comes straight off the chapter for now. Save a change here and ${theyre} your own. ${tip("bd-crew", [`When the rules change, ${their} sheet changes too, till a change is saved here. Then ${their} sheet stops following the chapter, and ${their} tracks, Aura and everything else in play stay as they are.`], "Making them your own")}</p></div>`;
   }
 
   const topbar = () => `<div class="cc-topbar">${backLink()}<div class="cc-tools">${tools()}</div></div>`;
@@ -735,7 +911,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const bars = STEPS.map((s, k) => `<li${k < i ? ' class="done"' : k === i ? ' class="on"' : ""}></li>`).join("");
     return `${topbar()}<header class="cc-head bd-head"><div class="bd-who">${crestNow()}<div class="bd-who-text"><p class="kicker">${kicker()} · Step ${i + 1} of ${STEPS.length}</p><h1 tabindex="-1">${STEPS[i].name}</h1></div></div>
       <ol class="bd-progress" aria-hidden="true">${bars}</ol>
-      <p class="bd-lead">${B.quick[i]?.lead ?? ""}</p>${how(i)}</header>${crewNote()}`;
+      <p class="bd-lead">${B.quick[i]?.lead ?? ""} ${how(i)}</p></header>${crewNote()}`;
   }
 
   // Where Next and Back go: through the archetypes, the Titles and the parts
@@ -756,7 +932,36 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     }
     return null;
   }
-  // The bar at the bottom: Back, the steps a tap away, and Next.
+  // The points over the bar: what's spent and what's left, always in view,
+  // and a tap away, what every point went on and what you start on.
+  function spentList(p) {
+    const groups = SPENT.map(([label, kinds]) => {
+      const rows = p.lines.filter((l) => kinds.includes(l.kind));
+      if (!rows.length) return "";
+      const sum = rows.reduce((t, l) => t + l.cost, 0);
+      return `<li class="bd-spent-g"><p><span>${label}</span><b>${sum}</b></p><ul>${rows.map((l) => `<li><span>${esc(l.what)}</span><b>${l.cost}</b></li>`).join("")}</ul></li>`;
+    }).join("");
+    return groups ? `<ul class="bd-spent">${groups}</ul>` : '<p class="cc-lead">Nothing’s bought yet.</p>';
+  }
+  // What they start on, a point at a time. It's in the bar's points and on
+  // the last step, so each has ids of its own (w).
+  function startStepper(w) {
+    const x = b();
+    return `<div class="bd-start" role="group" aria-labelledby="bd-start-${w}-l"><p class="bd-start-k"><span id="bd-start-${w}-l">Starting on</span> ${tip(`bd-start-${w}`, ["Most characters start on 35 points. For a one-shot with characters further along, or to catch someone up with the rest of the crew, the GM can start you on more."], "Starting on more")}</p>
+      <span class="cc-step"><button type="button" class="cc-stepbtn" data-act="b" data-b="start" data-w="${w}" data-v="-1" aria-label="One point less to start on"${x.start <= START ? " disabled" : ""}>−</button><output aria-live="polite">${x.start}</output><button type="button" class="cc-stepbtn" data-act="b" data-b="start" data-w="${w}" data-v="1" aria-label="One point more to start on"${x.start >= MAX_START ? " disabled" : ""}>+</button></span></div>`;
+  }
+  function pointsBar() {
+    const p = pointsOf(b());
+    const over = p.left < 0;
+    const kept = changing() && p.left <= 0;
+    const fill = Math.max(0, Math.min(100, Math.round((100 * p.spent) / Math.max(1, p.start))));
+    const big = kept ? `<b>${p.spent}</b> points on the sheet` : over ? `<b>${-p.left}</b> over` : `<b>${p.left}</b> left`;
+    const small = kept ? `${p.start} to start` : `${p.spent} of ${p.start} spent`;
+    return `<details class="bd-pts${over && !kept ? " is-over" : ""}${!p.left ? " is-done" : ""}" data-open="bd-pts"${d.deep.pts === true ? " open" : ""}>
+      <summary><span class="bd-pts-bar" aria-hidden="true"><i style="width:${fill}%"></i></span><span class="bd-pts-say"><span class="sr-only">Points: </span>${big}<small>, ${small}</small></span></summary>
+      <div class="bd-pts-in"><p class="bd-label">What your points went on</p>${spentList(p)}<p class="bd-pts-sum"><span>Spent</span><b>${p.spent} of ${p.start}</b></p>${startStepper("bar")}</div></details>`;
+  }
+  // The bar at the bottom: the points, then Back, the steps a tap away, and Next.
   function bar() {
     const i = d.step;
     const ahead = within(true);
@@ -765,7 +970,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       ? `<button type="button" class="button primary bd-next" data-act="b" data-b="save">${saveLabel()}</button>`
       : `<button type="button" class="button primary bd-next" data-act="b" data-b="next"><span>Next</span><small>${esc(ahead ? ahead.label : STEPS[i + 1].short)}</small></button>`;
     const reroll = d.page && d.way === "random" ? `<button type="button" class="button bd-back" data-act="b" data-b="reroll">${sure ? "Tap again to lose your changes" : "Roll again"}</button>` : "";
-    return `<div class="bd-foot"><div class="bd-foot-in" role="group" aria-label="${d.page ? "Save" : "Steps"}">
+    return `<div class="bd-foot"><div class="bd-foot-pts">${pointsBar()}</div><div class="bd-foot-in" role="group" aria-label="${d.page ? "Save" : "Steps"}">
       ${back ? '<button type="button" class="button bd-back" data-act="b" data-b="back">Back</button>' : ""}${reroll}${jump()}${next}</div></div>`;
   }
   // Every step, or every part on one page, a tap from the bar.
@@ -809,40 +1014,65 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
   // The same archetype taken again makes its Push bigger.
   function raised() {
     const taken = new Map();
-    for (const a of b().archs) if (a) taken.set(a, (taken.get(a) ?? 0) + 1);
-    return [...taken].filter(([a, n]) => n > 1 && (ARCH.get(a)?.abilities ?? []).some((x) => /^Push$/i.test(x.name))).map(([a, n]) => `<p class="cc-note" role="status">${esc(a)} ${n === 2 ? "twice" : `${n} times`}, so your Push is +${n + 1}.</p>`).join("");
+    b().archs.forEach((a, i) => {
+      if (!a) return;
+      const t = taken.get(a) ?? { n: 0, push: false };
+      t.n += 1;
+      t.push ||= (b().have[i] ?? []).some((h) => /^Push$/i.test(h));
+      taken.set(a, t);
+    });
+    return [...taken].filter(([, t]) => t.n > 1 && t.push).map(([a, t]) => `<p class="cc-note" role="status">${esc(a)} ${t.n === 2 ? "twice" : `${t.n} times`}, so your Push is +${t.n + 1}.</p>`).join("");
   }
 
-  // Step 1: two archetypes, picked by their sigils and what they're for.
+  // Step 1: archetypes, picked by their sigils and what they're for, each
+  // with its mechanic, its Trait and its abilities, the one it comes with
+  // picked and more for a point each.
   function stepArch() {
     const x = b();
     const which = d.page ? x.archs.map((_, i) => i) : [archTab()];
-    const add = x.archs.length < MAX_ARCHS && (changing() || x.archs.length < 2) ? `<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addarch">Add another archetype</button></div>${changing() ? '<p class="cc-lead">An archetype from an Aspiration comes with its mechanic and its abilities, and lets you buy one more action a round.</p>' : ""}` : "";
-    return `${d.page ? "" : switchOf("arch")}${which.map((i) => archOf(x.archs[i], i)).join("")}${raised()}${add}`;
+    const add = x.archs.length < MAX_ARCHS ? `<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addarch">Add another archetype</button><span class="bd-cost">${pts(5)}</span></div>` : "";
+    return `${d.page ? "" : switchOf("arch")}${which.map((i) => archView(x.archs[i], i)).join("")}${raised()}${add}`;
   }
-  function archOf(name, i) {
+  function archView(name, i) {
     const a = ARCH.get(name);
     // A step at a time, an empty slot shows every card. On one page they wait
     // behind a tap, so the page isn't eighteen cards an archetype.
     const picking = d.deep[`pick${i}`] === true || (!a && !d.page);
     const legend = `Your ${ord(i)} archetype`;
-    const grid = picking ? `<p class="bd-label" id="bd-archs-${i}">${a ? "Pick a different archetype" : "Pick one"}</p><div class="bd-archs" role="group" aria-labelledby="bd-archs-${i}">${B.archetypes.map((r) => card("bd-arch", `data-b="arch" data-t="${i}" data-v="${esc(r.name)}"`, name === r.name, `<span class="bd-sig">${sigilOf(r.name)}</span><b>${esc(r.name)}</b><span class="bd-for">${esc(r.for)}</span>`)).join("")}</div>` : "";
-    const abilities = (a?.abilities ?? []).map((x) => `<p><b>${esc(x.name)}</b> (1 ${esc(a.home ?? "")}): ${x.html}</p>`).join("");
-    const chosen = a ? `<div class="bd-chosen" tabindex="-1" role="group" aria-label="${esc(`${cap(legend.toLowerCase())}: ${a.name}`)}"><span class="bd-sig is-on">${sigilOf(a.name)}</span><span class="bd-chosen-text"><b>${esc(a.name)}</b><span class="bd-for">${esc(a.for)}</span></span><button type="button" class="button sm" data-act="b" data-b="archopen" data-t="${i}">${picking ? "Keep it" : "Change"}</button></div>
-      <details class="bd-more" data-open="bd-arch-${i}"${d.deep[`archmore${i}`] === true ? " open" : ""}><summary>What the ${esc(a.name)} does</summary><p>${a.summary}</p><p><b>Home track:</b> ${esc(a.home ?? "")}. Each ability’s 1 of it, or 2 from your other two tracks.</p>${abilities}<p class="cc-small">${link(a.id, `The ${esc(a.name)} in full`)}</p></details>` : "";
+    const grid = picking ? `<p class="bd-label" id="bd-archs-${i}">${a ? "Pick a different archetype" : "Pick one, for 5 points"}</p><div class="bd-archs" role="group" aria-labelledby="bd-archs-${i}">${B.archetypes.map((r) => card("bd-arch", `data-b="arch" data-t="${i}" data-v="${esc(r.name)}"`, name === r.name, `<span class="bd-sig">${sigilOf(r.name)}</span><b>${esc(r.name)}</b><span class="bd-for">${esc(r.for)}</span>`)).join("")}</div>` : "";
+    const chosen = a ? `<div class="bd-chosen" tabindex="-1" role="group" aria-label="${esc(`${cap(legend.toLowerCase())}: ${a.name}`)}"><span class="bd-sig is-on">${sigilOf(a.name)}</span><span class="bd-chosen-text"><b>${esc(a.name)}</b><span class="bd-for">${esc(a.for)}</span></span><button type="button" class="button sm" data-act="b" data-b="archopen" data-t="${i}">${picking ? "Keep it" : "Change"}</button></div>` : "";
     const none = !a && !picking ? `<div class="bd-chosen is-none"><span class="bd-sig"></span><span class="bd-chosen-text"><b>${name ? `${esc(name)} isn’t one any more` : "No archetype yet"}</b></span><button type="button" class="button sm" data-act="b" data-b="archopen" data-t="${i}">Pick one</button></div>` : "";
-    return `<fieldset class="bd-title"><legend${d.page ? "" : ' class="sr-only"'}>${legend}</legend>${chosen}${none}${grid}
+    return `<fieldset class="bd-title bd-archset"><legend${d.page ? "" : ' class="sr-only"'}>${legend}</legend>${chosen}${none}${grid}${a && !picking ? archWhat(a, i) : ""}
       ${canDrop("arch") ? `<div class="cc-row">${dropBtn("arch", i, "Take this archetype off")}</div>` : ""}</fieldset>`;
   }
+  function archWhat(a, i) {
+    const x = b();
+    const have = x.have[i] ?? [];
+    const trait = traitOf(a.trait);
+    // What another of the same archetype has already.
+    const twin = new Set(x.archs.flatMap((n, k) => (k !== i && n === a.name ? x.have[k] ?? [] : [])));
+    const abil = (ab) => {
+      const k = have.indexOf(ab.name);
+      const say = k === 0 ? "Comes with it" : k > 0 ? "1 point" : twin.has(ab.name) ? `On your other ${esc(a.name)}` : "";
+      return card(`bd-abil${twin.has(ab.name) && k < 0 ? " is-twin" : ""}`, `data-b="abil" data-t="${i}" data-v="${esc(ab.name)}"`, k >= 0, `<b>${esc(ab.name)} <small>1 ${esc(ab.cost || a.home || "")}</small></b><span class="bd-for">${unlink(ab.html ?? esc(ab.text))}</span>${say ? `<span class="bd-badge">${say}</span>` : ""}`);
+    };
+    const cost = have.length ? `${have.length} of ${a.abilities.length}, ${pts(4 + have.length)} with the archetype` : "pick the one it comes with";
+    return `<div class="bd-arch-what">
+      <p class="bd-label">Its mechanic</p><p class="bd-mech">${a.summary}</p>
+      ${trait.name ? `<p class="bd-label">Its Trait <small>always on, and free</small></p><p class="bd-mech"><b>${esc(trait.name)}.</b> ${trait.html}</p>` : ""}
+      ${asked(`Its abilities <small>${cost}</small>`, `bd-ab-${i}`, [`An archetype’s ${pts(5)}, and it comes with one ability, your pick, Push included. The first you pick is the one it comes with, and each one after that is a point, up to six.`, `You pay for an ability out of your tracks when you use it: 1 of its home track, ${esc(a.home ?? "")}, or 2 from your other two.`], "Abilities", ` id="bd-ab-${i}-l"`)}
+      <div class="bd-abils" role="group" aria-labelledby="bd-ab-${i}-l">${a.abilities.map(abil).join("")}</div>
+      <p class="cc-small">${link(a.id, `The ${esc(a.name)} in full`)}</p></div>`;
+  }
 
-  // Step 2: name each Title, its Root and its three specialties, and its
-  // permissions, three to start and six slots at most, two of which can be a Boon.
+  // Step 2: name each Title, put its 3 Root points on your Roots, and write
+  // its permissions, each with its Root, three to start and six slots at
+  // most, two of which can be a Boon.
   function stepTitles() {
     const x = b();
     const which = d.page ? x.titles.map((_, i) => i) : [tabOf()];
-    const add = x.titles.length < MAX_TITLES ? `<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addtitle">Add another Title</button></div>${changing() ? '<p class="cc-lead">A Title from an Aspiration starts with one permission.</p>' : ""}` : "";
-    return `${d.page ? "" : switchOf("title")}${which.map((i) => titleOf(x.titles[i], i)).join("")}${add}
-      <details class="bd-more" data-open="bd-test"${d.deep.test === true ? " open" : ""}><summary>Is it a permission? The quick test</summary><ol>${B.quickTest.map((q) => `<li>${q}</li>`).join("")}</ol><p>Four yeses and it’s a permission.</p></details>
+    const add = x.titles.length < MAX_TITLES ? `<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addtitle">Add another Title</button><span class="bd-cost">${pts(5)}, with a permission</span></div>` : "";
+    return `${d.page ? "" : switchOf("title")}${which.map((i) => titleView(x.titles[i], i)).join("")}${add}
       <div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="deep" data-s="1"${pressed(d.deep[1])}>${d.deep[1] ? "Fewer permission ideas" : "More permission ideas"}</button></div>
       ${d.page ? "" : rootTiles({ rail: true })}`;
   }
@@ -851,28 +1081,39 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const archs = b().archs.filter(Boolean);
     const all = d.deep[`ideas${i}`] === true || !archs.length;
     const suits = B.ideas.filter((idea) => idea.archetypes.some((a) => archs.includes(a)));
-    const shown = all ? B.ideas : suits;
-    const groups = [...new Set(shown.map((idea) => idea.group))];
+    const shownIdeas = all ? B.ideas : suits;
+    const groups = [...new Set(shownIdeas.map((idea) => idea.group))];
     const one = (idea) => card("bd-idea", `data-b="idea" data-t="${i}" data-v="${idea.id}"`, t.idea === idea.id, `<b>${esc(idea.name)}</b><span class="bd-for">${esc(cap(idea.playsLike))}</span>`);
-    const cards = all ? groups.map((g) => `<p class="bd-label">${esc(g)}</p><div class="bd-cards">${shown.filter((idea) => idea.group === g).map(one).join("")}</div>`).join("") : `<div class="bd-cards">${shown.map(one).join("")}</div>`;
+    const cards = all ? groups.map((g) => `<p class="bd-label">${esc(g)}</p><div class="bd-cards">${shownIdeas.filter((idea) => idea.group === g).map(one).join("")}</div>`).join("") : `<div class="bd-cards">${shownIdeas.map(one).join("")}</div>`;
     const open = d.deep[`idea${i}`] ?? !d.page;
     return `<details class="bd-more bd-ideas" data-open="bd-ideas-${i}"${open ? " open" : ""}><summary>A Title idea, if you like${t.idea && IDEA.get(t.idea) ? ` <small>${esc(IDEA.get(t.idea).name)}</small>` : ""}</summary>
-      ${shown.length ? cards : `<p class="cc-lead">None of the ideas lists your archetypes, so write your own Title, or look through every idea.</p>`}
+      ${shownIdeas.length ? cards : `<p class="cc-lead">None of the ideas lists your archetypes, so write your own Title, or look through every idea.</p>`}
       ${archs.length ? `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="ideas" data-t="${i}"${pressed(all)}>${all ? "Just the ones that suit your archetypes" : "Every Title idea"}</button></div>` : ""}</details>`;
   }
-  function permRow(t, i, p, j) {
-    const named = [...new Set(t.specs.map((s) => s.trim()).filter(Boolean))];
-    const fill = named.length ? `<div class="cc-chips bd-specs" role="group" aria-label="${esc(`Its specialty: one of the Title’s`)}">${named.map((s) => chip(esc(s), `data-b="pspec" data-t="${i}" data-j="${j}" data-v="${esc(s)}"`, R.specKey(p.spec) === R.specKey(s), "sm")).join("")}</div>` : "";
-    return `<div class="bd-perm">${field(`t${i}.p${j}`, `Permission ${j + 1}${p.from ? ` <small>${esc(p.from)}</small>` : ""}`, p.text, { ph: "a doing word, and how, what or where", max: 120 })}
-      <div class="bd-perm-how">${rootChips(`data-b="proot" data-t="${i}" data-j="${j}"`, p.root, `The Root for permission ${j + 1}`)}
-      ${field(`t${i}.p${j}.spec`, `<span class="sr-only">Permission ${j + 1}’s </span>Specialty`, p.spec, { ph: named[0] ? `like ${named[0]}` : "like Locks", max: 40, cls: "bd-spec" })}${fill}</div></div>`;
+  // Where a Title's 3 Root points go, in a tap or three: all on one, 2 and 1,
+  // or 1 on each, and then the Root or Roots.
+  const shapeNow = (t, i) => (sumOf(t.roots) === R.TITLE_ROOTS ? shapeIs(t.roots) : d.deep[`shape${i}`] || shapeIs(t.roots) || "one");
+  function spreadView(t, i) {
+    const shape = shapeNow(t, i);
+    const at = (n) => ROOTS.find((r) => t.roots[r] === n) ?? "";
+    const row = (n, label) => `<div class="bd-spread-row"><span class="bd-spread-k" aria-hidden="true">${label}</span>${rootChips(`data-b="spread" data-t="${i}" data-n="${n}"`, at(n), `${label}: which Root`)}</div>`;
+    const was1 = t.from ? `<p class="cc-note is-gold bd-was" role="status">It was all on your ${t.from}, so it still is. Spread it how you like.</p>` : "";
+    return `${asked(`Its 3 Root points <small>${sumOf(t.roots) ? esc(spreadSays(t.roots)) : "Body, Mind or Soul"}</small>`, `bd-spread-${i}`, ["A Title puts 3 on your Roots, spread however you like: all 3 on one, 2 on one and 1 on another, or 1 on each. Put them where the Title lives.", "Body’s what your hands and feet do, Mind’s what goes on in your head, and Soul’s who you are and how you carry yourself."], "Spreading a Title", ` id="bd-spread-${i}-l"`)}
+      ${was1}<div class="bd-spread" role="group" aria-labelledby="bd-spread-${i}-l">
+      <div class="cc-chips" role="group" aria-label="How they’re spread">${SHAPES.map(([v, label]) => chip(label, `data-b="shape" data-t="${i}" data-v="${v}"`, shape === v, "sm")).join("")}</div>
+      ${shape === "one" ? row(3, "All 3 on") : shape === "two" ? `${row(2, "2 on")}${row(1, "1 on")}` : ""}</div>`;
   }
-  function boonsOf(t, i) {
+  function permRow(t, i, p, j) {
+    const says = j === 0 ? "comes with the Title" : "1 point";
+    return `<div class="bd-perm">${field(`t${i}.p${j}`, `Permission ${j + 1} <small>${says}${p.from ? `. ${esc(p.from)}` : ""}</small>`, p.text, { ph: "a doing word, and how, what or where", max: 120 })}
+      <div class="bd-perm-how">${rootChips(`data-b="proot" data-t="${i}" data-j="${j}"`, p.root, `The Root for permission ${j + 1}`)}</div></div>`;
+  }
+  function boonsView(t, i) {
     const room = MAX_PERMS - slotsOf(t) >= R.BOON_SLOTS || t.perms.filter((p) => !p.text.trim()).length >= R.BOON_SLOTS;
     const mine = t.boons.map((x, k) => {
-      const rule = BOON.get(x.lever);
+      const rul = BOON.get(x.lever);
       const on = BOON_ON[x.lever];
-      return `<div class="bd-boon"><p><b>${esc(x.name.trim() || `The ${x.lever} Boon`)}</b> <small>${esc(x.lever)}${rule ? `: ${esc(rule.text)}` : ""}</small></p>
+      return `<div class="bd-boon"><p><b>${esc(x.name.trim() || `The ${x.lever} Boon`)}</b> <small>${esc(x.lever)}${rul ? `: ${esc(rul.text)}` : ""}</small></p>
         ${field(`t${i}.b${k}.name`, "Its name from the story, if you like", x.name, { ph: x.lever === "Toughness" ? "Iron Lungs" : "", max: 40 })}
         ${on ? field(`t${i}.b${k}.on`, on[0], x.on, { ph: on[1], max: 60 }) : ""}
         <div class="cc-row">${dropBtn(`boon${i}-`, k, "Take it off")}</div></div>`;
@@ -880,69 +1121,64 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const offer = room ? `<div class="bd-items is-wide bd-boons">${(B.boons ?? []).map((x) => card("bd-item", `data-b="boon" data-t="${i}" data-v="${esc(x.lever)}"`, false, `<b>${esc(x.lever)}</b><span class="bd-for">${esc(cap(x.text))}</span>`)).join("")}</div>` : `<p class="cc-lead">${esc(titleName(t))} hasn’t got two slots free. Take two permissions off first.</p>`;
     const open = d.deep[`boon${i}`] === true || t.boons.length > 0;
     return `<details class="bd-more" data-open="bd-boon-${i}"${open ? " open" : ""}><summary>A Boon instead of two permissions${t.boons.length ? ` <small>${t.boons.length === 1 ? "one" : t.boons.length}</small>` : ""}</summary>
-      <p class="cc-lead">A Boon’s a permanent upgrade, like shrugging off the first hit each scene or a longer stride. It takes two of this Title’s slots, and you can swap it back for permissions in downtime. ${link("s-boons", "Boons and Burdens")}</p>
+      <p class="cc-lead">${pts(2)}, in two of this Title’s slots. ${tip(`bd-boons-${i}`, [`A Boon’s a permanent upgrade, like shrugging off the first hit each scene or a longer stride. It takes two of this Title’s slots, for ${pts(2)}, the same as the two permissions it takes the place of, and you can swap it back for permissions in downtime. A Boon does what it says, and it’s never a step on a roll.`, link("s-boons", "Boons and Burdens")], "Boons")}</p>
       ${mine}${offer}</details>`;
   }
-  function titleOf(t, i) {
+  function titleView(t, i) {
     const idea = IDEA.get(t.idea);
     const used = new Set(t.perms.map((p) => p.text.trim().toLowerCase()));
     const offer = (perms) => `<div class="cc-chips bd-perms">${perms.map((p) => chip(`<em>${esc(p)}</em>`, `data-b="perm" data-t="${i}" data-v="${esc(p)}"`, used.has(p.toLowerCase()))).join("")}</div>`;
     const slots = slotsOf(t);
+    const cost = titleIn(t) ? pointsOf({ ...b(), titles: [t], archs: [], have: [], attuned: [], equipment: [], utility: [], bag: "" }).spent : 0;
     return `<fieldset class="bd-title"><legend${d.page ? "" : ' class="sr-only"'}>Your ${ord(i)} Title</legend>
       ${ideasOf(t, i)}
-      ${field(`t${i}.text`, "Your Title", t.text, { ph: "Make it specific: the best blade in the Low Market", max: 120 })}
+      ${field(`t${i}.text`, `Your Title <small>${cost ? `${pts(cost)} with what’s on it` : pts(5)}</small>`, t.text, { ph: "Make it specific: the best blade in the Low Market", max: 120 })}
       ${idea ? `<p class="bd-label">Or one of the ${esc(idea.name)} idea’s Titles</p><div class="bd-cards is-one">${idea.titles.map((name) => card("bd-name", `data-b="title" data-t="${i}" data-v="${esc(name)}"`, t.text.trim() === name, `<em>${esc(name)}</em>`)).join("")}</div>` : ""}
-      <p class="bd-label" id="bd-root-${i}">Its Root <small>${t.root ? esc(ROOT_SAYS[t.root]) : "Body, Mind or Soul"}</small></p>
-      ${rootChips(`data-b="root" data-t="${i}"`, t.root, `Your ${ord(i)} Title’s Root`)}
-      <p class="bd-label">Its three specialties <small>things you could be known for, or teach</small></p>
-      <div class="bd-specs3">${t.specs.map((s, k) => field(`t${i}.s${k}`, `<span class="sr-only">Specialty </span>${k + 1}`, s, { ph: ["Locks", "Climbing", "Stealth"][k], max: 40 })).join("")}</div>
-      <p class="bd-label">${!changing() && i < 2 ? "Three permissions" : "Its permissions"} <small>${slots} of 6 slots</small></p>
+      ${spreadView(t, i)}
+      ${asked(`Its permissions <small>${slots} of 6 slots</small>`, `bd-perms-${i}`, ["A permission’s something your character can do, a doing word and how, what or where, and it has to fit inside its Title. It puts 1 on the Root it’s written with, and it’s a step on every roll it fits.", "The Title comes with one, and each one after that is a point. Six slots is the most a Title holds.", "The quick test: is it something you can do? Can you picture the moment you’d use it? Would it come up a few times a session? Does it fit inside your Title, and its Root? Four yeses and it’s a permission."], "Permissions")}
       ${t.perms.map((p, j) => permRow(t, i, p, j)).join("")}
-      ${slots < MAX_PERMS && t.perms.every((p) => p.text.trim()) ? `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="addperm" data-t="${i}">Add a permission</button></div>` : slots >= MAX_PERMS ? '<p class="cc-lead">That’s all six slots. Six is the most a Title holds.</p>' : ""}
-      ${idea ? `<p class="cc-small">Tap one of the ${esc(idea.name)} idea’s permissions to put it in, and tap it again to take it out. Its Root and specialty are a guess, so check them.</p>${offer(idea.permissions)}` : ""}
+      ${slots < MAX_PERMS && t.perms.every((p) => p.text.trim()) ? `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="addperm" data-t="${i}">Add a permission</button><span class="bd-cost">${pts(1)}</span></div>` : slots >= MAX_PERMS ? '<p class="cc-lead">That’s all six slots. Six is the most a Title holds.</p>' : ""}
+      ${idea ? `<p class="cc-small">Tap one of the ${esc(idea.name)} idea’s permissions to put it in, and tap it again to take it out. Its Root’s a guess, so check it.</p>${offer(idea.permissions)}` : ""}
       ${d.deep[1] ? B.permIdeas.map((g) => `<p class="bd-label">${esc(g.for)}</p>${offer(g.perms)}`).join("") : ""}
-      ${boonsOf(t, i)}
+      ${boonsView(t, i)}
       ${canDrop("title") ? `<div class="cc-row">${dropBtn("title", i, "Take this Title off")}</div>` : ""}</fieldset>`;
   }
 
-  // The Roots and specialties as the dice they add up to. While the Titles
-  // are written they ride in a dock just above the bar.
+  // The Roots as the dice they add up to. While the Titles are written they
+  // ride in a dock just above the bar.
   function rootTiles({ rail = false } = {}) {
-    const { roots, specialties } = rootsOf(b());
+    const { roots } = rootsOf(b());
     const tile = (key, name, n) => {
       const dice = n ? stepsToDice(n) : [];
       return `<div class="tile${n ? "" : " is-none"}" role="listitem"><span class="tile-dice" data-for="${esc(key)}" aria-hidden="true">${dice.length ? dice.map((s, j) => kitDie(s, { hide: true, cls: j ? "is-next" : "" })).join("") : '<span class="bd-zero">0</span>'}</span><span class="tile-name">${esc(name)}</span><span class="tile-says"><span class="tile-steps">${n} step${n === 1 ? "" : "s"}</span><span class="tile-dot">, </span><span class="tile-die">${dice.length ? diceLabel(dice) : "nothing yet"}</span></span></div>`;
     };
-    const items = [...ROOTS.map((r) => tile(`root:${r}`, r, roots[r])), ...specialties.map((s) => tile(`spec:${R.specKey(s.name)}`, s.name, s.steps))];
-    return `<div class="bd-tiles${rail ? ' bd-rail" tabindex="0"' : ' bd-grid"'} role="list" aria-label="Your Roots and specialties">${items.join("")}</div>`;
+    return `<div class="bd-tiles${rail ? ' bd-rail" tabindex="0"' : ' bd-grid"'} role="list" aria-label="Your Roots">${ROOTS.map((r) => tile(`root:${r}`, r, roots[r])).join("")}</div>`;
   }
-  // Two specialties written two ways (Lock and Locks) can be made one.
-  function twins() {
-    const { specialties } = rootsOf(b());
-    const out = [];
-    const keys = specialties.map((s) => s.name);
-    for (const a of keys) for (const z of keys) if (a !== z && R.specKey(`${a}s`) === R.specKey(z) && !out.some((p) => p[0] === a)) out.push([a, z]);
-    return out;
-  }
-  // Step 3: what it all adds up to, and where each one comes from.
+  // The sheet the build makes, for everything on it that can be a step.
+  const draftSheet = () => R.rootsSheet(makeSheet({ id: "draft", name: b().name || "Draft", hash: "own" }, b(), B), [], B);
+  // Step 3: what the Roots add up to, where each one comes from, and every
+  // other thing on the sheet, each a step on a roll it fits.
   function stepRoots() {
-    const { roots, specialties, from } = rootsOf(b());
-    const row = (name, n, list) => `<li><span class="bd-num-text"><span class="k">${esc(name)}</span> <b>${n}</b>${list.length ? ` <small>${esc(both(list))}</small>` : ""}</span>${n ? kitDie(stepsToDice(n)[0], { hide: true, bare: true }) : ""}</li>`;
-    const tw = twins();
-    return `<p class="cc-lead">A roll’s one Root and one specialty, pitched to fit how you’re doing it, and what you carry counts while you’re using it.</p>
-      ${rootTiles()}
-      <h2>Your Roots</h2><ul class="bd-nums bd-from-list">${ROOTS.map((r) => row(r, roots[r], from[r])).join("")}</ul>
-      <h2>Your specialties</h2>${specialties.length ? `<ul class="bd-nums bd-from-list">${specialties.map((s) => row(s.name, s.steps, s.from)).join("")}</ul>` : '<p class="cc-lead">They show up here once your Titles have them.</p>'}
-      ${tw.map(([a, z]) => `<div class="cc-note" role="status"><p>${esc(a)} and ${esc(z)} look like one specialty written two ways.</p><div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="merge" data-v="${esc(a)}" data-w="${esc(z)}">Make them one: ${esc(z)}</button></div></div>`).join("")}`;
+    const { roots, from: whence } = rootsOf(b());
+    const row = (name, n, ways) => `<li><span class="bd-num-text"><span class="k">${esc(name)}</span> <b>${n}</b>${ways.length ? ` <small>${esc(both(ways))}</small>` : ""}</span>${n ? kitDie(stepsToDice(n)[0], { hide: true, bare: true }) : ""}</li>`;
+    const things = R.thingsOf(draftSheet());
+    const groups = KINDS.map(([kind, label]) => {
+      const these = things.filter((x) => x.kind === kind);
+      return these.length ? `<li><span class="k">${label}</span> ${these.map((x) => `<span class="bd-thing">${kind === "title" || kind === "perm" ? `<em>${esc(x.name)}</em>` : esc(x.name)}</span>`).join(" ")}</li>` : "";
+    }).join("");
+    return `${rootTiles()}
+      <h2>Your Roots</h2><ul class="bd-nums bd-from-list">${ROOTS.map((r) => row(r, roots[r], whence[r])).join("")}</ul>
+      <h2><span>Everything else, a step each</span> ${tip("bd-roll", ["A roll’s one Root that fits how you’re doing it, and 1 step for every thing on your sheet that fits what you’re doing: each Title, permission, archetype, ability, attuned thing, awakening and item you’re using.", "Plainly fits is free, and each one you have to explain is 1 Aura. Every roll’s at least 1 step, a d2.", link("s-roots", "Roots in the rules")], "How a roll adds up")}</h2><p class="cc-lead">${things.length ? `${things.length} thing${things.length === 1 ? "" : "s"} on your sheet, each a step on a roll it fits.` : "They show up here as they go on your sheet."}</p>
+      ${groups ? `<ul class="bd-things">${groups}</ul>` : ""}`;
   }
 
-  // Step 4: what you carry, picked from cards a part at a time, and the
-  // attuned things.
+  // Step 4: what you carry, picked from cards a part at a time, the attuned
+  // things first.
   function kitSwitch() {
     const x = b();
     const n = numbersOf(x);
     const count = (items, of) => `${items.filter((v) => v.text.trim()).length} of ${of}`;
-    const says = { e: count(x.equipment, 3), u: count(x.utility.slice(0, n.utility), n.utility), k: x.keepsake.text.trim() ? "Taken" : "Not yet", a: x.attuned.some((a) => a.name.trim()) ? "Attuned" : "Not yet" };
+    const says = { a: x.attuned.some((a) => a.name.trim()) ? `${x.attuned.filter((a) => a.name.trim()).length} attuned` : "Not yet", e: count(x.equipment, 3), u: count(x.utility.slice(0, n.utility), n.utility), k: x.keepsake.text.trim() ? "Taken" : "Not yet" };
     return `<div class="bd-switch is-kit" role="group" aria-label="What you carry">${KIT.map(([k, name]) => `<button type="button" class="bd-seg" data-act="b" data-b="kit" data-v="${k}"${k === kitOf() ? ' aria-current="true"' : ""}><span class="bd-seg-text"><small>${says[k]}</small><b>${name}</b></span></button>`).join("")}</div>`;
   }
   function stepCarry() {
@@ -972,15 +1208,15 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const catches = (i, a) => `<div class="bd-items is-wide bd-catches">${B.catches.map((c) => card("bd-item", `data-b="fill" data-p="a${i}.catch" data-v="${esc(c.name)}"`, a.catch.trim() === c.name, `<b>${esc(c.name)}</b><span class="bd-for">${esc(c.text)}</span>`)).join("")}</div>`;
     const drop = (i) => (canDrop("att") ? `<div class="cc-row">${dropBtn("att", i, "Take it off")}</div>` : "");
     const awkRow = (a, i, w, j, label) => `<div class="bd-awk">${field(`a${i}.w${j}.name`, label, w.name, { max: 80, ph: j ? "Hit anything I can see" : "Anywhere I can throw a hook" })}
-      <div class="cc-chips" role="group" aria-label="${esc(`${label.replace(/ ?<small>[\s\S]*<\/small>/, "")}: passive or active`)}">${chip("Passive <small>holds Aura</small>", `data-b="awkkind" data-i="${i}" data-j="${j}" data-v="passive"`, w.kind === "passive", "sm")}${chip("Active <small>spends it</small>", `data-b="awkkind" data-i="${i}" data-j="${j}" data-v="active"`, w.kind === "active", "sm")}</div>
-      ${field(`a${i}.w${j}.text`, `<span class="sr-only">${label.replace(/ ?<small>[\s\S]*<\/small>/, "")}: </span>What it does`, w.text, { max: 240, ph: w.kind === "passive" ? "+1 on one die of every roll you make with it, for each Aura in it" : "1 Aura and … Each Aura more …" })}</div>`;
-    const auraField = (a, i) => field(`a${i}.aura`, "Its own way to Aura <small>one thing it does that’s worth 1 Aura, most scenes but not every round</small>", a.aura, { max: 160, ph: "1 the first time each scene you get somewhere nobody else could follow" });
+      <div class="cc-chips" role="group" aria-label="${esc(`${label.replace(/ ?<small>[\s\S]*<\/small>/, "")}: passive or active`)}">${chip("Passive <small>you power it</small>", `data-b="awkkind" data-i="${i}" data-j="${j}" data-v="passive"`, w.kind === "passive", "sm")}${chip("Active <small>it spends Aura</small>", `data-b="awkkind" data-i="${i}" data-j="${j}" data-v="active"`, w.kind === "active", "sm")}</div>
+      ${field(`a${i}.w${j}.text`, `<span class="sr-only">${label.replace(/ ?<small>[\s\S]*<\/small>/, "")}: </span>What it does`, w.text, { max: 240, ph: w.kind === "passive" ? "+1 on one die of every roll you make with it, for each Aura powering it" : "1 Aura and … Each Aura more …" })}</div>`;
+    const awkTip = (i) => tip(`bd-awk-${i}`, ["An awakening’s something the thing itself does, written the way you’d write a permission, and it’s a step on any roll it fits.", "A passive one’s powered: while you’re acting, put Aura into it, free and no action. That Aura comes off what you’ve got and off your maximum till the scene ends, up to 2, and it works for as much as is powering it.", "An active one spends its Aura when you use it, as part of your action. Spend more for more: another target, further, bigger."], "Awakenings");
     // The Quick Build's: Awakened, one awakening, and a second with a Catch.
-    const quick = (a, i) => `<fieldset class="bd-box bd-att"><legend>${x.attuned.length > 1 ? `Attuned thing ${i + 1}` : "Your attuned thing"}</legend>
+    const quick = (a, i) => `<fieldset class="bd-box bd-att"><legend>${x.attuned.length > 1 ? `Attuned thing ${i + 1}` : "Your attuned thing"} <small>${pts(5)}</small></legend>
       ${field(`a${i}.name`, "What it is", a.name, { max: 80, ph: "a grappling line" })}${yours(i, a)}
-      ${auraField(a, i)}
+      <div class="bd-ask"><p class="bd-label">Its awakening <small>it comes with one</small></p>${awkTip(i)}</div>
       ${awkRow(a, i, a.awk[0], 0, "Its awakening")}
-      ${field(`a${i}.catch`, "Its Catch, if you’d like a second awakening", a.catch, { max: 60, ph: "Wanted" })}${catches(i, a)}
+      ${field(`a${i}.catch`, "Its Catch, if you’d like a second awakening, free", a.catch, { max: 60, ph: "Wanted" })}${catches(i, a)}
       ${a.catch.trim() || awkIn(a.awk[1] ?? blankAwk()) ? awkRow(a, i, a.awk[1] ?? blankAwk("active"), 1, "Its second awakening") : ""}${drop(i)}</fieldset>`;
     // A saved character's, at any stage, with up to six awakenings.
     const grown = (a, i) => {
@@ -989,31 +1225,33 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       return `<fieldset class="bd-box bd-att is-grown"><legend>Attuned thing ${i + 1}</legend>
         ${field(`a${i}.name`, "What it is", a.name, { max: 80, ph: "a grappling line" })}${yours(i, a)}
         <p class="bd-label" id="bd-stage-${i}">Its stage</p><div class="cc-chips" role="group" aria-labelledby="bd-stage-${i}">${R.STAGES.map((st) => chip(st, `data-b="stage" data-i="${i}" data-v="${st}"`, r.stage === st)).join("")}</div>
-        <p class="cc-small">${r.stage} holds ${r.base}, and ${r.base} more with ${PRICE[r.stage]}. ${link("attunement-stages", "The three stages")}</p>
-        ${auraField(a, i)}
+        <p class="cc-small">${r.stage} holds ${r.base}, and ${r.base} more with ${PRICE[r.stage]}. ${tip(`bd-stages-${i}`, ["An attuned thing grows in three stages, and each new stage needs a material, found in the story or bought. Awakened holds 1, and 1 more with a Catch. Tempered holds 2, and 2 more with a Burden. Perfected holds 3, and 3 more with a Burden and a Catch.", link("attunement-stages", "The three stages")], "The three stages")}</p>
         ${field(`a${i}.catch`, "Its Catch", a.catch, { max: 80, ph: "Wanted" })}${catches(i, a)}
         ${r.stage !== "Awakened" || a.burden.trim() ? field(`a${i}.burden`, "Its Burden <small>a cost for good, like <em>Bad Knee</em></small>", a.burden, { max: 80, ph: "Bad Knee" }) : ""}
+        <div class="bd-ask"><p class="bd-label">Its awakenings</p>${awkTip(i)}</div>
         ${a.awk.map((w, j) => awkRow(a, i, w, j, `Awakening ${j + 1}${awkIn(w) && !counts(a, j) ? ` <small>off the sheet ${off(j)}</small>` : ""}`)).join("")}
         ${a.awk.length < 6 ? `<div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="addawk" data-i="${i}">Add an awakening</button></div>` : '<p class="cc-lead">Six awakenings is the most anything holds.</p>'}
         ${drop(i)}</fieldset>`;
     };
+    // A part's heading: its section's named by the words in it, and the rest's behind its ?.
+    const head2 = (id, title, words, label, small = "") => `<h2><span id="${id}">${title}</span>${small ? ` <small>${small}</small>` : ""} ${tip(`${id}-t`, words, label)}</h2>`;
     const parts = {
-      e: `<section class="bd-carry" aria-labelledby="bd-eq"><h2 id="bd-eq">3 equipment</h2><p class="cc-lead">What you wear or wield. Armour goes on the Root it guards: plate, leathers and a shield on your Body, clothes that fit the scene on your Mind, a holy symbol or a ward on your Soul. ${changing() ? "Each piece is Common, Fine or Masterwork." : "Each piece is Common, and one can be Fine."} ${link("s-armour", "Armour")}</p>
+      a: `<section class="bd-carry" aria-labelledby="bd-at">${head2("bd-at", changing() ? "Attuned things" : "Attune something", ["An attuned thing’s bound to you, and it grows with you. It’s 5 points, and it comes with one awakening. It puts 2 on your Aura maximum, and that’s all the Aura it gets you, since powering it eats some of it back.", "It’s an item, so it’s a step on any roll it fits, and it doesn’t count towards what you carry. It can’t be broken.", "Give it a Catch, trouble the GM can run with, and it gets a second awakening, free. That’s all an Awakened thing holds, so the rest come as it grows.", link("s-attunement", "Attunement")], "Attunement")}
+        ${x.attuned.map((a, i) => (changing() ? grown(a, i) : quick(a, i))).join("")}
+        ${x.attuned.length < MAX_ATTUNED ? `<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addatt">${x.attuned.length ? "Attune another thing" : "Attune something"}</button><span class="bd-cost">${pts(5)}</span></div>` : ""}</section>`,
+      e: `<section class="bd-carry" aria-labelledby="bd-eq">${head2("bd-eq", "3 equipment", [`What you wear or wield, a point each. Armour goes on the Root it guards: plate, leathers and a shield on your Body, clothes that fit the scene on your Mind, a holy symbol or a ward on your Soul. ${changing() ? "Each piece is Common, Fine or Masterwork, with a box for every hit it can take for you." : "Each piece is Common, with a box for a hit it can take for you, and one can be Fine, with two."}`, "Each piece is an item too, so it’s a step on a roll it fits.", link("s-armour", "Armour")], "Equipment", "1 point each")}
         ${x.equipment.map((e, i) => slot("e", i, "Equipment")).join("")}
         ${offer("e", "Weapons", plain(group("Weapons")))}${offer("e", "Armour and wearables", plain(group("Armour & wearables")))}</section>`,
-      u: `<section class="bd-carry" aria-labelledby="bd-ut"><h2 id="bd-ut">${n.utility} utility items</h2><p class="cc-lead">Tools and things you use up. Each one’s 1 more on a roll you use it in, when it fits.</p>
+      u: `<section class="bd-carry" aria-labelledby="bd-ut">${head2("bd-ut", `${n.utility} utility items`, ["Tools and things you use up, a point each. Each one’s a step on a roll you use it in, when it fits, and something you use up is crossed off once it’s used.", "Your bag holds 10 more, a point each. Nothing in it can be used till you’ve pulled it out, and that takes your action."], "Utility items", "1 point each")}
         ${x.utility.slice(0, n.utility).map((u, i) => slot("u", i, "Utility")).join("")}
         ${offer("u", "Tools", plain(group("Tools")))}${offer("u", "Foci", plain(group("Foci")))}${offer("u", "Things you use up", B.usedUp.map((u) => ({ name: u.name, say: unlink(u.html) })))}
-        ${d.deep[4] ? `<h2 id="bd-bag">Your bag</h2>${field("bag", "Up to 10 more things, one a line", x.bag, { area: true, max: 600 })}` : ""}
+        ${d.deep[4] ? `<h2 id="bd-bag">Your bag <small>1 point each</small></h2>${field("bag", "Up to 10 more things, one a line", x.bag, { area: true, max: 600 })}` : ""}
         <div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="deep" data-s="4"${pressed(d.deep[4])}>${d.deep[4] ? "Put the bag away" : "Pack your bag too"}</button></div></section>`,
-      k: `<section class="bd-carry" aria-labelledby="bd-ks"><h2 id="bd-ks">A keepsake</h2><p class="cc-lead">Something that matters to your character.</p>
+      k: `<section class="bd-carry" aria-labelledby="bd-ks">${head2("bd-ks", "A keepsake", ["Something that matters to your character. It’s free."], "Your keepsake", "free")}
         <div class="bd-slot is-row">${field("k", '<span class="sr-only">Keepsake </span>1', x.keepsake.text, { max: 80, ph: "Type it, or pick a card below" })}</div>
         ${offer("k", "Keepsakes", B.keepsakes.map((k) => ({ name: k.name, say: esc(k.text) })))}${offer("k", "Signature things", plain(group("Signature")))}</section>`,
-      a: `<section class="bd-carry" aria-labelledby="bd-at"><h2 id="bd-at">${changing() ? "Attuned things" : "Attune one thing"}</h2><p class="cc-lead">${changing() ? "Each one holds what its stage allows, and they don’t count towards what you carry." : "It starts at Awakened with one awakening, and it doesn’t count towards what you carry. It’s 1 more on a roll you use it in, and it can’t be broken."} ${link("s-attunement", "Attunement")}</p>
-        ${x.attuned.map((a, i) => (changing() ? grown(a, i) : quick(a, i))).join("")}
-        ${x.attuned.length < (changing() ? MAX_ATTUNED : 1) ? `<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addatt">${x.attuned.length ? "Attune another thing" : "Attune something"}</button></div>` : ""}</section>`,
     };
-    if (d.page) return `${parts.e}${parts.u}${parts.k}${parts.a}`;
+    if (d.page) return KIT.map(([k]) => parts[k]).join("");
     return `${kitSwitch()}${parts[kitOf()]}`;
   }
 
@@ -1064,7 +1302,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
         <p class="bd-label" id="bd-qk-${i}">Make it a thread</p><div class="cc-chips" role="group" aria-label="Make your answer to ${esc(q)} a thread">${chip("Bond", `data-b="fromq" data-q="${i}" data-v="bond"`, th?.kind === "bond", "sm")}${chip("Hostile", `data-b="fromq" data-q="${i}" data-v="hostile"`, th?.kind === "hostile", "sm")}</div></div></details>`;
     };
     const room = !changing() && hostile && bonds < 3 && !x.threads.some((t) => t.kind !== "hostile" && !t.person.trim() && !t.text.trim());
-    const qs = `<p class="cc-lead">Answer at least two, naming someone in the crew in each, and make two of them bond threads. One that’s gone bad can be your hostile thread.</p><div class="bd-qs">${B.connect.map(question).join("")}</div>`;
+    const qs = `<p class="cc-lead">Answer at least two, naming someone in the crew in each, and make two of them bond threads. ${tip("bd-qs-t", ["Your threads, your answers and your Aspiration cost nothing. Answer at least two of the crew questions, naming someone in the crew in each, and turn two of your answers into bond threads, something good between you. One that’s gone bad can be your hostile thread, with anyone, and that gives you room for a third bond thread.", "A thread with someone in the crew goes on both your sheets, so agree on it together.", link("s-bonds", "Bonds and threads")], "Threads")}</p><div class="bd-qs">${B.connect.map(question).join("")}</div>`;
     return `${changing() ? `<details class="bd-more" data-open="bd-qs"${d.deep.qs === true ? " open" : ""}><summary>The ten crew questions</summary>${qs}</details>` : `<h2 id="bd-qs-h">The crew questions</h2>${qs}`}
       <h2 id="bd-th-h">Your bonds</h2>
       <p class="cc-lead">Each person’s one bond, with every thread you’ve got with them under it.</p>
@@ -1074,50 +1312,58 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
   }
 
   // Step 6: one thing you want, at d2. Past d12 you get it, so the book's
-  // tests for a good one sit under it, open on a new character until they're
-  // shut, and shut when changing one.
-  const goodOpen = () => d.deep.good ?? !changing();
+  // tests for a good one are a ? beside it.
   function stepAsp() {
-    return `<div class="bd-asp">${changing() ? "" : `<span class="bd-asp-die">${kitDie(2, { label: "Your Aspiration starts at d2" })}</span>`}<div class="bd-asp-f">${field("asp", changing() ? "Your Aspiration <small>its die’s on the Sheet tab</small>" : "Your Aspiration", b().aspiration, { max: 120, ph: "Own the score of a lifetime" })}</div></div>
-      <details class="bd-more bd-good" data-open="bd-good"${goodOpen() ? " open" : ""}><summary>What makes a good Aspiration</summary><div class="cc-rule">${rule("s-good-aspiration")}</div></details>`;
+    return `<div class="bd-asp">${changing() ? "" : `<span class="bd-asp-die">${kitDie(2, { label: "Your Aspiration starts at d2" })}</span>`}<div class="bd-asp-f"><div class="cc-field-h"><label class="cc-field" for="b-asp">${changing() ? "Your Aspiration <small>its die’s on the Sheet tab</small>" : "Your Aspiration"}</label>${tip("bd-good", paras(rule("s-good-aspiration")), "A good Aspiration")}</div><input id="b-asp" data-bin="asp" value="${esc(b().aspiration)}" maxlength="120" autocomplete="off" placeholder="Own the score of a lifetime"></div></div>`;
   }
 
-  // Step 7: the numbers in the kit's pieces, a name, and a last look.
+  // Step 7: the numbers in the kit's pieces, the points, a name, and a last look.
   function stepCheck() {
     const x = b();
     const n = numbersOf(x);
+    const p = pointsOf(x, n);
     const checks = checksOf(x, B, { changing: changing() });
     const trouble = [...new Set(x.titles.flatMap((t) => IDEA.get(t.idea)?.trouble ?? []))];
     const boons = x.titles.flatMap((t) => t.boons);
     const said = (lever) => boons.filter((y) => y.lever === lever).map((y) => y.name.trim() || `the ${lever} Boon`);
     const num = (k, v, note, piece = "", cls = "") => `<li${cls ? ` class="${cls}"` : ""}><span class="bd-num-text"><span class="k">${k}</span> <b>${v}</b>${note ? ` <small>(${esc(note)})</small>` : ""}</span>${piece}</li>`;
-    const go = (c) => `<button type="button" class="button sm" data-act="b" data-b="go" data-s="${c.step}"${c.t != null ? ` data-t="${c.t}"` : ""}${c.a != null ? ` data-a="${c.a}"` : ""}${c.kit ? ` data-k="${c.kit}"` : ""}>${d.page ? STEPS[c.step].name : `Step ${c.step + 1}`}</button>`;
+    const go = (c) => (c.step == null ? "" : `<button type="button" class="button sm" data-act="b" data-b="go" data-s="${c.step}"${c.t != null ? ` data-t="${c.t}"` : ""}${c.a != null ? ` data-a="${c.a}"` : ""}${c.kit ? ` data-k="${c.kit}"` : ""}>${d.page ? STEPS[c.step].name : `Step ${c.step + 1}`}</button>`);
     const track = (name) => kitDie(12, { hide: true, bare: true, label: `${name} starts at d12` });
+    const things = x.attuned.filter(thingIn).length;
+    const auraNote = [things ? `5, and ${2 * things} for ${things === 1 ? "your attuned thing" : `${things} attuned things`}` : "", ...said("Aura")].filter(Boolean);
     return `<fieldset class="bd-box"><legend>Who they are</legend>
         ${field("name", "Name", x.name, { max: 40 })}
         <p class="bd-label" id="bd-pro">Call them</p><div class="cc-chips" role="group" aria-labelledby="bd-pro">${[["her", "she, her"], ["him", "he, him"], ["them", "they, them"]].map(([v, l]) => chip(l, `data-b="pronoun" data-v="${v}"`, x.pronoun === v)).join("")}</div>
         ${field("blurb", "One line about them, if you like", x.blurb, { max: 160 })}</fieldset>
+      <h2>Your points</h2>
+      <p class="cc-lead bd-pts-line">${p.spent} of ${p.start} spent${p.left > 0 ? `, ${p.left} left` : p.left < 0 ? `, ${-p.left} over` : ", all of them"}.</p>
+      ${spentList(p)}${startStepper("check")}
       <h2>Your numbers</h2><ul class="bd-nums">
-        ${num("Aura", n.aura, said("Aura").length ? both(said("Aura")) : null, kitAura(n.aura, n.aura), "is-wide")}
+        ${num("Aura", n.aura, auraNote.length ? both(auraNote) : null, kitAura(n.aura, n.aura), "is-wide")}
         ${num("Stride", n.stride, said("Stride").length ? both(said("Stride")) : null)}
-        ${num("Actions a round", n.actions === 1 ? "1" : `up to ${n.actions}`, n.actions > 1 ? "one for each archetype, the rest 3 Aura each" : "one for each archetype")}
         ${num("Stamina", "d12", "your Body", track("Stamina"))}${num("Confidence", "d12", "your Mind", track("Confidence"))}${num("Resolve", "d12", "your Soul", track("Resolve"))}</ul>
-      <h2>Your Roots and specialties</h2>${rootTiles()}
+      <h2>Your Roots</h2>${rootTiles()}
       ${boons.length ? `<h2>Your Boons</h2><ul class="cc-list">${boons.map((y) => `<li class="cc-item"><p><b>${esc(y.name.trim() || y.lever)}</b>${y.name.trim() ? ` <small>${esc(y.lever)}</small>` : ""} ${esc(BOON.get(y.lever)?.text ?? "")}${y.on.trim() ? ` (${esc(y.on.trim())})` : ""}</p></li>`).join("")}</ul>` : ""}
-      ${trouble.length || x.trouble.length || changing() ? `<h2>Trouble that follows you</h2><p class="cc-lead">If you like. Let it cause real trouble and you take 1 Aura.</p>${trouble.length || x.trouble.length ? `<div class="cc-chips">${[...new Set([...trouble, ...x.trouble])].map((t) => chip(`<em>${esc(t)}</em>`, `data-b="trouble" data-v="${esc(t)}"`, x.trouble.includes(t))).join("")}</div>` : ""}
+      ${trouble.length || x.trouble.length || changing() ? `<h2><span>Trouble that follows you</span> ${tip("bd-trouble", ["If you like. Let it cause real trouble and you take 1 Aura."], "Trouble")}</h2>${trouble.length || x.trouble.length ? `<div class="cc-chips">${[...new Set([...trouble, ...x.trouble])].map((t) => chip(`<em>${esc(t)}</em>`, `data-b="trouble" data-v="${esc(t)}"`, x.trouble.includes(t))).join("")}</div>` : ""}
         <div class="cc-form">${field("newtrouble", "Or write your own", "", { max: 120, ph: "owes the wrong people" })}<button type="button" class="button" data-act="b" data-b="addtrouble">Add it</button></div>` : ""}
       ${checks.length ? `<div class="cc-note is-warn"><p>A few things to look at. You can save anyway, and change them later.</p><ul class="bd-checks">${checks.map((c) => `<li>${esc(c.text)} ${go(c)}</li>`).join("")}</ul></div>` : '<p class="cc-note" role="status">Everything adds up.</p>'}`;
   }
 
   const BODIES = [stepArch, stepTitles, stepRoots, stepCarry, stepThreads, stepAsp, stepCheck];
-  const part = (i) => `<h2 id="bd-part-${i}" tabindex="-1">${STEPS[i].name}</h2>${how(i)}${BODIES[i]().replace(/<(\/?)h2\b/g, "<$1h3")}`;
+  // A part on one page: its heading (the section's named by the words in it)
+  // with the book's words for the step behind its ?.
+  const part = (i) => `<h2 id="bd-h-${i}" tabindex="-1"><span id="bd-part-${i}">${STEPS[i].name}</span> ${how(i, "p")}</h2>${BODIES[i]().replace(/<(\/?)h2\b/g, "<$1h3")}`;
   // Typing on one page redraws the parts that add it all up (the Roots and
   // the last look) after a pause, but only below where you're typing, so
-  // nothing moves under the keyboard.
+  // nothing moves under the keyboard. The points in the bar follow straight
+  // away.
   function refreshSoon() {
     clearTimeout(refreshTimer);
     refreshTimer = setTimeout(() => {
-      if (!d?.page) return;
+      if (!d) return;
+      const pts0 = document.querySelector(".bd-foot-pts");
+      if (pts0) pts0.innerHTML = pointsBar();
+      if (!d.page) return;
       const at = document.activeElement?.closest(".bd-part");
       const fromPart = at ? Number(at.getAttribute("aria-labelledby").slice("bd-part-".length)) : -1;
       for (const i of [2, LAST]) {
@@ -1138,15 +1384,15 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       <p class="cc-lead bd-saved">Your work’s saved on this phone as you go.</p>
       <div class="cc-row"><button type="button" class="button sm" data-act="b" data-b="page">See it all on one page</button>${dropEdit()}</div></div>${bar()}`;
   }
-  // After a redraw, every Root and specialty whose dice changed grows into
-  // its new shape, or shrinks back, and a second die pops in past 6 steps.
-  // grow() leaves the new die as it's drawn under reduce-motion.
+  // After a redraw, every Root whose dice changed grows into its new shape,
+  // or shrinks back, and a second die pops in past 6 steps. grow() leaves the
+  // new die as it's drawn under reduce-motion.
   function after(root) {
     if (!d) return;
     const foot = root?.querySelector(".bd-foot");
     if (foot) document.documentElement.style.setProperty("--bd-bar", `${foot.offsetHeight}px`);
-    const { roots, specialties } = rootsOf(b());
-    const now = new Map([...ROOTS.map((r) => [`root:${r}`, roots[r] ? stepsToDice(roots[r]) : []]), ...specialties.map((s) => [`spec:${R.specKey(s.name)}`, stepsToDice(s.steps)])]);
+    const { roots } = rootsOf(b());
+    const now = new Map(ROOTS.map((r) => [`root:${r}`, roots[r] ? stepsToDice(roots[r]) : []]));
     const before = shown;
     shown = now;
     if (!before || !root) return;
@@ -1161,7 +1407,8 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     }
   }
 
-  // Everything typed goes straight into the draft. Nothing redraws mid-word.
+  // Everything typed goes straight into the draft. Nothing redraws mid-word,
+  // bar the points in the bar after a pause.
   function input(el) {
     const x = b();
     const path = el.dataset.bin;
@@ -1171,16 +1418,8 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     };
     let m;
     if ((m = path.match(/^t(\d+)\.text$/))) set(x.titles[m[1]], "text");
-    else if ((m = path.match(/^t(\d+)\.s(\d)$/))) {
-      const t = x.titles[m[1]];
-      if (t) t.specs[m[2]] = v;
-    } else if ((m = path.match(/^t(\d+)\.p(\d+)$/))) set(x.titles[m[1]]?.perms[m[2]], "text");
-    else if ((m = path.match(/^t(\d+)\.p(\d+)\.spec$/))) {
-      const p = x.titles[m[1]]?.perms[m[2]];
-      if (!p) return;
-      p.spec = v;
-      for (const btn of document.querySelectorAll(`[data-b="pspec"][data-t="${m[1]}"][data-j="${m[2]}"]`)) btn.setAttribute("aria-pressed", String(R.specKey(btn.dataset.v) === R.specKey(v)));
-    } else if ((m = path.match(/^t(\d+)\.b(\d+)\.(name|on)$/))) set(x.titles[m[1]]?.boons[m[2]], m[3]);
+    else if ((m = path.match(/^t(\d+)\.p(\d+)$/))) set(x.titles[m[1]]?.perms[m[2]], "text");
+    else if ((m = path.match(/^t(\d+)\.b(\d+)\.(name|on)$/))) set(x.titles[m[1]]?.boons[m[2]], m[3]);
     else if ((m = path.match(/^e(\d)$/))) {
       const item = x.equipment[m[1]];
       if (!item) return;
@@ -1194,7 +1433,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       }
     } else if ((m = path.match(/^u(\d)$/))) set(x.utility[m[1]], "text");
     else if (path === "k") x.keepsake.text = v;
-    else if ((m = path.match(/^a(\d+)\.(name|catch|burden|aura)$/))) set(x.attuned[m[1]], m[2]);
+    else if ((m = path.match(/^a(\d+)\.(name|catch|burden)$/))) set(x.attuned[m[1]], m[2]);
     else if ((m = path.match(/^a(\d+)\.w(\d+)\.(name|text)$/))) {
       const a = x.attuned[m[1]];
       if (!a) return;
@@ -1207,7 +1446,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     else if (["asp", "name", "blurb", "bag"].includes(path)) x[path === "asp" ? "aspiration" : path] = v;
     else return; // newtrouble is read when its button's tapped
     saveSoon();
-    if (d.page) refreshSoon();
+    refreshSoon();
   }
 
   // A hostile thread makes room for a third bond thread in the Quick Build.
@@ -1215,6 +1454,34 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     const x = b();
     const { bonds, hostile } = threadCount(x);
     if (!changing() && hostile && bonds < 3 && !x.threads.some((t) => t.kind !== "hostile" && !t.person.trim() && !t.text.trim()) && x.threads.length < MAX_THREADS) x.threads.push(blankThread());
+  }
+
+  // A Title's spread, a tap at a time. A shape picked keeps what fits it: all
+  // 3 on one keeps the Root with the most, and 2 and 1 keeps the 2.
+  function setShape(t, i, v) {
+    d.deep[`shape${i}`] = v;
+    const top = ROOTS.reduce((best, r) => (t.roots[r] > (t.roots[best] ?? 0) ? r : best), "");
+    if (v === "each") t.roots = { Body: 1, Mind: 1, Soul: 1 };
+    else if (v === "one") t.roots = top && t.roots[top] >= 2 ? { ...noRoots(), [top]: 3 } : noRoots();
+    else if (v === "two") t.roots = top && t.roots[top] === 3 ? { ...noRoots(), [top]: 2 } : top && t.roots[top] === 2 ? t.roots : noRoots();
+    delete t.from;
+  }
+  function setSpread(t, i, n, r) {
+    if (!ROOTS.includes(r)) return;
+    if (n === 3) t.roots = { ...noRoots(), [r]: 3 };
+    else {
+      // 2 and 1: the Root picked takes this one, and if it had the other,
+      // they swap.
+      const other = n === 2 ? 1 : 2;
+      const old = ROOTS.find((x) => t.roots[x] === n) ?? "";
+      const out = noRoots();
+      for (const x of ROOTS) if (t.roots[x] === other && x !== r) out[x] = other;
+      if (t.roots[r] === other && old) out[old] = other;
+      out[r] = n;
+      t.roots = out;
+    }
+    d.deep[`shape${i}`] = n === 3 ? "one" : "two";
+    delete t.from;
   }
 
   const value = (id) => document.getElementById(id)?.value ?? "";
@@ -1256,7 +1523,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       el.closest("details")?.removeAttribute("open");
       if (d.page) {
         d.step = to;
-        const h = document.getElementById(`bd-part-${to}`);
+        const h = document.getElementById(`bd-h-${to}`);
         h?.scrollIntoView({ block: "start" });
         return h?.focus({ preventScroll: true });
       }
@@ -1268,7 +1535,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       if (el.dataset.a != null) d.deep.atab = Number(el.dataset.a);
       else if (to === 0 && moved) d.deep.atab = 0;
       if (el.dataset.k) d.deep.kit = el.dataset.k;
-      else if (to === 3 && moved) d.deep.kit = "e";
+      else if (to === 3 && moved) d.deep.kit = KIT[0][0];
       save();
       render();
       return focusTop();
@@ -1303,7 +1570,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       const was0 = at();
       if (k === "tab") d.deep.tab = Math.min(Math.max(0, i), x.titles.length - 1);
       else if (k === "atab") d.deep.atab = Math.min(Math.max(0, i), x.archs.length - 1);
-      else d.deep.kit = KIT.some(([key]) => key === v) ? v : "e";
+      else d.deep.kit = KIT.some(([key]) => key === v) ? v : KIT[0][0];
       const now = at();
       slide = now > was0 ? "next" : now < was0 ? "back" : "";
       save();
@@ -1316,7 +1583,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
         return render();
       }
       sure = false;
-      d.build = normalBuild(roll());
+      d.build = normalBuild(roll(), B, { fresh: true });
       rolled = JSON.stringify(d.build);
       shown = null;
       save();
@@ -1327,22 +1594,33 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       d.step = 0;
       d.deep.tab = 0;
       d.deep.atab = 0;
-      d.deep.kit = "e";
+      d.deep.kit = KIT[0][0];
       save();
       render();
       return focusTop();
     }
     if (k === "save") {
       save();
-      return onSave(normalBuild(x), slotKey, () => discard(), d.basis);
+      return onSave(forSave(normalBuild(x, B)), slotKey, () => discard(), d.basis);
     }
-    if (k === "deep") d.deep[el.dataset.s] = !d.deep[el.dataset.s];
+    if (k === "start") {
+      // The points they start on: 35, or more for a one-shot or catching up.
+      const w = el.dataset.w ?? "bar";
+      const step = Number(v) < 0 ? -1 : 1;
+      x.start = Math.min(MAX_START, Math.max(START, x.start + step));
+      // Tapped in the bar's points, they stay open, and the cursor stays on
+      // the button, or the other one once this one can't go further.
+      if (w === "bar") d.deep.pts = true;
+      then = () => (document.querySelector(`[data-b="start"][data-w="${w}"][data-v="${step}"]:not(:disabled)`) ?? document.querySelector(`[data-b="start"][data-w="${w}"]:not(:disabled)`))?.focus({ preventScroll: true });
+    } else if (k === "deep") d.deep[el.dataset.s] = !d.deep[el.dataset.s];
     else if (k === "ideas") d.deep[`ideas${i}`] = !(d.deep[`ideas${i}`] === true);
     else if (k === "archopen") {
       d.deep[`pick${i}`] = !(d.deep[`pick${i}`] === true);
       then = d.deep[`pick${i}`] ? focusIn(`[data-b="arch"][data-t="${i}"][aria-pressed="true"]`, `[data-b="arch"][data-t="${i}"]`) : focusIn(`[data-b="archopen"][data-t="${i}"]`);
     } else if (k === "arch") {
       if (i >= x.archs.length) return;
+      // A different archetype has different abilities, so its pick starts again.
+      if (x.archs[i] !== v) x.have[i] = [];
       x.archs[i] = v;
       // Picked, the cards fold away to the one picked.
       delete d.deep[`pick${i}`];
@@ -1351,9 +1629,18 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
         box?.focus({ preventScroll: true });
         if (box && box.getBoundingClientRect().top < 0) box.scrollIntoView({ block: "start" });
       };
+    } else if (k === "abil") {
+      // The first ability picked is the one it comes with, and each one more
+      // is a point. Tapped again, it comes off.
+      const have = x.have[i] ?? (x.have[i] = []);
+      const at = have.indexOf(v);
+      if (at >= 0) have.splice(at, 1);
+      else if (have.length >= MAX_ABILITIES) return toast("Six abilities is the most an archetype holds.", false);
+      else have.push(v);
     } else if (k === "addarch") {
       if (x.archs.length >= MAX_ARCHS) return;
       x.archs.push("");
+      x.have.push([]);
       d.deep.atab = x.archs.length - 1;
       d.deep[`pick${x.archs.length - 1}`] = true;
       then = focusIn(`[data-b="arch"][data-t="${x.archs.length - 1}"]`);
@@ -1362,15 +1649,15 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       t.idea = t.idea === v ? "" : v;
       if (t.idea) d.deep[`idea${i}`] = true;
     } else if (k === "title") x.titles[i].text = v;
-    else if (k === "root") {
+    else if (k === "shape") {
       const t = x.titles[i];
-      if (t) t.root = t.root === v ? "" : rootOf(v);
+      if (t && SHAPES.some(([s]) => s === v)) setShape(t, i, v);
+    } else if (k === "spread") {
+      const t = x.titles[i];
+      if (t) setSpread(t, i, Number(el.dataset.n), v);
     } else if (k === "proot") {
       const p = x.titles[i]?.perms[j];
       if (p) p.root = p.root === v ? "" : rootOf(v);
-    } else if (k === "pspec") {
-      const p = x.titles[i]?.perms[j];
-      if (p) p.spec = R.specKey(p.spec) === R.specKey(v) ? "" : v;
     } else if (k === "perm") {
       const t = x.titles[i];
       const at = t.perms.findIndex((p) => p.text.trim().toLowerCase() === v.toLowerCase());
@@ -1378,14 +1665,12 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       else {
         let free = t.perms.findIndex((p) => !p.text.trim());
         if (free < 0 && slotsOf(t) >= MAX_PERMS) return toast("That’s all six slots on this Title. Tap one to take it off first, or change one by hand.", false);
-        if (free < 0 && !changing() && slotsOf(t) >= 3) return toast("That Title’s got three. Tap one to take it off first, or change one by hand.", false);
         if (free < 0) {
           t.perms.push(blankPerm());
           free = t.perms.length - 1;
         }
-        // Its Root and specialty are a guess from its words, for the player to check.
-        const g = guessFor(v, t.specs, t.root);
-        t.perms[free] = { text: v, root: g.root, spec: g.spec };
+        // Its Root's a guess from its words, for the player to check.
+        t.perms[free] = { text: v, root: guessFor(v).root };
       }
     } else if (k === "addperm") {
       const t = x.titles[i];
@@ -1401,7 +1686,6 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       const empty = t.perms.map((p, q) => (p.text.trim() ? -1 : q)).filter((q) => q >= 0);
       if (MAX_PERMS - slotsOf(t) < R.BOON_SLOTS) return toast("That Title hasn’t got two slots free. Take two permissions off first.", false);
       for (const q of empty.slice(-R.BOON_SLOTS).sort((p, q) => q - p)) t.perms.splice(q, 1);
-      if (!t.perms.length && !t.boons.length && slotsOf(t) + R.BOON_SLOTS < 3) t.perms.push(blankPerm());
       t.boons.push({ lever: v, name: "", on: "" });
       then = focusIn(`#b-t${i}-b${t.boons.length - 1}-name`);
     } else if (k.startsWith("dropboon")) {
@@ -1416,10 +1700,11 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       t.boons.splice(at, 1);
       // Its two slots are permissions again, on a new character.
       if (!changing()) for (let q = 0; q < R.BOON_SLOTS && slotsOf(t) + t.perms.filter((p) => !p.text.trim()).length < 3; q++) t.perms.push(blankPerm());
+      if (!t.perms.length && !t.boons.length) t.perms.push(blankPerm());
     } else if (k === "addtitle") {
       if (x.titles.length >= MAX_TITLES) return;
       // A Title from an Aspiration comes with one permission. The Quick Build's come with three.
-      x.titles.push(changing() ? { ...blankTitle(), perms: [blankPerm()] } : blankTitle());
+      x.titles.push(blankTitle(changing() ? 1 : 3));
       const n = x.titles.length - 1;
       d.deep.tab = n;
       then = focusIn(`#b-t${n}-text`);
@@ -1435,9 +1720,10 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
         return render();
       }
       arr.splice(i, 1);
+      if (kind === "arch") x.have.splice(i, 1);
       if (kind === "title" || kind === "arch") {
         // The switch and the open pickers follow the ones that are left.
-        const keys = kind === "title" ? ["ideas", "idea", "boon"] : ["pick", "archmore"];
+        const keys = kind === "title" ? ["ideas", "idea", "boon", "shape"] : ["pick"];
         for (const key of keys) {
           for (let q = i; q < arr.length; q++) d.deep[`${key}${q}`] = d.deep[`${key}${q + 1}`];
           delete d.deep[`${key}${arr.length}`];
@@ -1446,14 +1732,6 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
         else d.deep.atab = Math.min(archTab(), arr.length - 1);
       }
       then = focusIn(`[data-b="add${kind}"]`, `[data-b="${kind === "arch" ? "atab" : "tab"}"][aria-current="true"]`);
-    } else if (k === "merge") {
-      // Make two spellings of one specialty one: the second's the one kept.
-      const from0 = R.specKey(v);
-      const to = el.dataset.w ?? "";
-      for (const t of x.titles) {
-        t.specs = t.specs.map((s) => (R.specKey(s) === from0 ? to : s));
-        for (const p of t.perms) if (R.specKey(p.spec) === from0) p.spec = to;
-      }
     } else if (k === "addatt") {
       if (x.attuned.length >= MAX_ATTUNED) return;
       x.attuned.push(blankThing());
@@ -1555,16 +1833,16 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
     then?.();
   }
 
-  // The details boxes remember being opened, so the book's words and the
-  // questions stay as they were left.
+  // The folds remember being opened, so the ideas, the questions and the
+  // points stay as they were left.
   function toggled(el) {
     if (!d) return;
     const key = el.dataset.open ?? "";
     let m;
-    const name = (m = key.match(/^bd-how-(\d)$/)) ? `how${m[1]}` : (m = key.match(/^bd-q-(\d+)$/)) ? `q${m[1]}` : (m = key.match(/^bd-arch-(\d+)$/)) ? `archmore${m[1]}` : (m = key.match(/^bd-ideas-(\d+)$/)) ? `idea${m[1]}` : (m = key.match(/^bd-boon-(\d+)$/)) ? `boon${m[1]}` : key === "bd-test" ? "test" : key === "bd-qs" ? "qs" : key === "bd-good" ? "good" : "";
+    const name = (m = key.match(/^bd-q-(\d+)$/)) ? `q${m[1]}` : (m = key.match(/^bd-ideas-(\d+)$/)) ? `idea${m[1]}` : (m = key.match(/^bd-boon-(\d+)$/)) ? `boon${m[1]}` : key === "bd-qs" ? "qs" : key === "bd-pts" ? "pts" : "";
     if (!name) return;
     // A redraw puts a fold back the way it was, which isn't a change.
-    const now = name === "good" ? goodOpen() : name.startsWith("idea") ? d.deep[name] ?? !d.page : d.deep[name] === true;
+    const now = name.startsWith("idea") ? d.deep[name] ?? !d.page : d.deep[name] === true;
     if (now === el.open) return;
     d.deep[name] = el.open;
     saveSoon();

@@ -708,11 +708,21 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .dt-slot { padding-left: 0.8rem; border-left: 3px solid var(--line); }
 .dt-slot.is-picked { border-left-color: var(--gold); }
 .dt-slot > .cc-row:first-of-type { margin-top: 0; }
-.dt-toggles { display: grid; gap: 6px; margin-bottom: 0.6rem; }
 .dt-pads { display: flex; flex-wrap: wrap; gap: 8px; }
 .dt-pads .cc-field { flex: 0 1 7rem; }
 .dt-swap { margin-bottom: 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--line-soft); }
-.dt-test { margin: 0.4rem 0 0.6rem; padding-left: 1.3rem; border: 0; }
+/* A line that stays on the card, with the rest behind its ?, what fits a
+   roll at the Aspiration a tap each, a new Title's spread, and the abilities
+   to pick from. */
+.dt-say { margin: 0.5rem 0; }
+.dt-k { margin: 0.7rem 0 0.3rem; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
+.dt-using { margin-bottom: 0.4rem; }
+.dt-things { margin: 0; }
+.dt-spread-row { display: grid; grid-template-columns: 4.5rem minmax(0, 1fr); align-items: center; gap: 6px; margin-top: 6px; }
+.dt-spread-row .dt-k { margin: 0; }
+.dt-spread-row .cc-chips { margin: 0; }
+.dt-abils { display: grid; gap: 6px; margin: 0.4rem 0 0.6rem; }
+.dt-abil { padding-right: 34px; }
 .cc-dialog .cc-warn p { margin: 0 0 0.3rem; }
 
 /* Motion: the roll card turns over when it moves on, what the dice did comes
@@ -745,7 +755,7 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
   .tile:active, .cc-stat:active, .cc-undo:active, .cc-pickdie:active, .cc-ringbtn:active, .dz-die:active, .dz-adddie:active { transform: none; }
   /* The builder's further down, so its press and its colour changes need the !important. */
   button.bd-tok:active, .cc .bd-foot .button:active { transform: none !important; }
-  .bd-tok, .bd-seg, .cc .bd-foot .button { transition: none !important; }
+  .bd-tok, .bd-seg, .cc .bd-foot .button, .bd-pts-bar > i { transition: none !important; }
 }
 
 /* Sound and buzz, off until turned on. */
@@ -804,9 +814,9 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 /* Nothing the cursor lands on hides behind the bar or the dice above it. */
 html.cc-building { scroll-padding-bottom: calc(var(--bd-bar, 69px) + 16px); }
 html.cc-building.cc-docked { scroll-padding-bottom: calc(var(--bd-bar, 69px) + 96px); }
-html.cc-building body { padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
-html.cc-building .cc-toast { bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
-html.cc-building.cc-docked .cc-toast { bottom: calc(160px + env(safe-area-inset-bottom, 0px)); }
+html.cc-building body { padding-bottom: calc(var(--bd-bar, 118px) + 12px + env(safe-area-inset-bottom, 0px)); }
+html.cc-building .cc-toast { bottom: calc(var(--bd-bar, 118px) + 12px); }
+html.cc-building.cc-docked .cc-toast { bottom: calc(var(--bd-bar, 118px) + 92px); }
 /* A screen sliding in never makes the page scroll sideways. */
 html.cc-building .companion { overflow-x: clip; }
 .bd-head { margin-bottom: 0; }
@@ -817,8 +827,8 @@ html.cc-building .companion { overflow-x: clip; }
 .cc .bd-head h1 { margin: 0.1rem 0 0; font-size: clamp(1.5rem, 1.25rem + 1.2vw, 2.1rem); line-height: 1.1; }
 .bd-head h1:focus { outline: none; }
 .bd-head > .cc-row { margin-bottom: 0; }
-/* Eight steps in one line that never wraps: done, this one, still to come. */
-.bd-progress { list-style: none; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; margin: 0.85rem 0 0; padding: 0; }
+/* Seven steps in one line that never wraps: done, this one, still to come. */
+.bd-progress { list-style: none; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; margin: 0.85rem 0 0; padding: 0; }
 .bd-progress li { height: 5px; background: var(--zd-slot); clip-path: polygon(3px 0, calc(100% - 3px) 0, 100% 50%, calc(100% - 3px) 100%, 3px 100%, 0 50%); }
 .bd-progress li.done { background: color-mix(in srgb, var(--gold) 55%, var(--zd-slot)); }
 .bd-progress li.on { background: var(--gold); }
@@ -929,19 +939,38 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-grid .tile-die { font-weight: 700; color: var(--gold-ink); }
 @media (min-width: 560px) { .bd-tiles.bd-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
-/* What goes on each set action: a Title, then its permissions under it, then
-   the traits, each with a chip for every set action. */
-.bd-lines { list-style: none; margin: 0.4rem 0 0; padding: 0; }
-.bd-line { padding: 0.75rem 0 0.85rem; border-top: 1px solid var(--line-soft); }
-.bd-line.is-permission { padding-left: 14px; border-left: 2px solid var(--line-soft); }
-.bd-line-say { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 10px; margin: 0; }
-.bd-line-say small { flex-basis: 100%; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
-.bd-count { margin-left: auto; font-size: 0.8rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
-.bd-count.is-full { color: var(--gold-ink); }
-.bd-on { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.5rem 0 0; }
 .cc-chipbtn.sm { padding: 0 0.6rem; font-size: 0.92rem; }
-/* A permission on two set actions already: the rest look full, and a tap says why. */
-.cc-chipbtn.is-full { color: var(--muted); border-style: dashed; }
+/* A small label with a question bubble beside it, and what something costs
+   beside the button that adds it. */
+.bd-ask { display: flex; align-items: center; gap: 4px; margin: 1.1rem 0 0.45rem; }
+.bd-ask > .bd-label { margin: 0; }
+.bd-ask > .tip { margin: -12px -6px; }
+.bd-cost { align-self: center; font-size: 0.85rem; font-weight: 700; color: var(--muted); }
+.bd-label small { font-weight: 600; letter-spacing: 0.02em; text-transform: none; color: var(--muted); }
+.cc-field small { font-weight: 500; color: var(--muted); }
+/* An archetype once it's picked: its mechanic, its Trait and its abilities as
+   cards, the one it comes with picked first. */
+.bd-arch-what { margin-top: 0.6rem; }
+.bd-arch-what > .bd-label { margin-top: 0.9rem; }
+.bd-mech { margin: 0 0 0.4rem; line-height: 1.4; }
+.bd-abils { display: grid; gap: 6px; }
+.bd-abil { padding-right: 34px; }
+.bd-abil b small { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+.bd-abil.is-twin { border-style: dashed; }
+.bd-badge { margin-top: 3px; padding: 1px 8px; font-size: 0.76rem; font-weight: 700; color: var(--zd-on-you); background: var(--zd-you); border-radius: 2px; }
+.bd-abil.is-twin .bd-badge { color: var(--muted); background: none; border: 1px dashed var(--line); }
+/* A Title's 3 Root points: how they're spread, then the Root or Roots. */
+.bd-spread { display: grid; gap: 6px; }
+.bd-spread > .cc-chips, .bd-spread-row .cc-chips { margin: 0; }
+.bd-spread-row { display: grid; grid-template-columns: 4.6rem minmax(0, 1fr); align-items: center; gap: 6px; }
+.bd-spread-k { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold-ink); }
+.bd-spread-row .bd-roots { margin: 0; }
+.cc-note.bd-was { margin: 0 0 0.5rem; }
+/* Everything else on the sheet, each a step on a roll it fits. */
+.bd-things { list-style: none; margin: 0.4rem 0 0; padding: 0; }
+.bd-things > li { padding: 0.45rem 0; border-top: 1px solid var(--line-soft); line-height: 1.5; }
+.bd-things .k { display: block; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
+.bd-thing { display: inline-block; margin: 2px 4px 2px 0; padding: 0 8px; font-size: 0.9rem; background: var(--zd-token); border: 1px solid var(--bd-edge); border-radius: 2px; }
 
 /* What you carry: the slots, and the cards to fill them from. */
 .bd-slot { margin: 0.5rem 0 0.9rem; }
@@ -963,22 +992,12 @@ button.bd-tok:active { transform: scale(0.97); }
 @media (min-width: 560px) { .bd-items { grid-template-columns: repeat(3, minmax(0, 1fr)); } .bd-items.is-wide { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .bd-item { justify-content: center; padding: 9px 10px; }
 .bd-item b { font-size: 0.95rem; }
-.bd-att input:placeholder-shown + .bd-on { display: none; }
-/* A second permission waits for its Catch, unless there are words in it already. */
-.bd-att:has(input[data-bin$=".catch"]:placeholder-shown) .bd-perm2:has(input:placeholder-shown) { display: none; }
-/* Roots: a Title's Root and three specialties, and each permission's Root
-   and specialty under its words, with the Title's own specialties a tap away. */
+/* Roots: each permission's Root under its words. */
 .bd-roots { margin: 0.2rem 0 0.6rem; }
-.bd-specs3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 0.4rem; }
-.bd-specs3 > .cc-field { grid-row: 1; margin: 0; font-size: 0.78rem; color: var(--muted); }
-.bd-specs3 > input { grid-row: 2; min-width: 0; }
 .bd-perm { margin: 0.4rem 0 0.9rem; padding-left: 12px; border-left: 2px solid var(--line-soft); }
 .bd-perm > input:placeholder-shown ~ .bd-perm-how { display: none; }
 .bd-perm-how { display: grid; gap: 6px; margin-top: 6px; }
 .bd-perm-how .bd-roots { margin: 0; }
-.bd-perm-how > .cc-field { margin: 0; font-size: 0.85rem; color: var(--muted); }
-.bd-perm-how .bd-spec { max-width: 22rem; }
-.bd-specs { margin: 0; }
 .bd-boon { margin: 0.6rem 0 0.9rem; padding: 0.6rem 0.75rem; background: var(--surface); border-left: 2px solid var(--gold); }
 .bd-boon > p small { color: var(--muted); }
 .bd-boons { margin-top: 0.6rem; }
@@ -992,6 +1011,8 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-ideas > summary small { margin-left: 0.4rem; color: var(--gold-ink); font-weight: 700; }
 .bd-box { min-width: 0; margin: 1rem 0 0; padding: 0.8rem 0.9rem 0.95rem; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; }
 .bd-box > legend { padding: 0 0.3rem; font-family: var(--display); font-weight: 600; font-size: 1.05rem; letter-spacing: 0.02em; }
+.bd-box > legend small { font-family: var(--body); font-size: 0.82rem; font-weight: 700; letter-spacing: 0; color: var(--muted); }
+.bd-carry > h2 small, .bd-carry > h3 small, .bd-body h2 small { font-family: var(--body); font-size: 0.82rem; font-weight: 700; letter-spacing: 0; color: var(--muted); }
 .bd-att .bd-items { margin-bottom: 0.2rem; }
 .bd-att .bd-catches { margin-top: 8px; }
 /* Once it's named, or has its Catch, the cards fold away to the one picked,
@@ -1044,8 +1065,44 @@ button.bd-tok:active { transform: scale(0.97); }
 .bd-part > h2:focus { outline: none; }
 .bd-page h3 { margin-top: 1.4rem; }
 
-/* The bar at the bottom: Back, the steps a tap away, and Next. */
-.bd-foot { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 8px max(12px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)); background: var(--bar-bg); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
+/* The bar at the bottom: the points, then Back, the steps a tap away, and Next. */
+.bd-foot { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 2px max(12px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)); background: var(--bar-bg); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); border-top: 1px solid var(--line); }
+/* What's spent and what's left, always in view: a line of the meter and the
+   numbers, a tap from what every point went on and what you start on. */
+.bd-foot-pts { position: relative; max-width: 46rem; margin: 0 auto 2px; }
+.bd-pts > summary { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; min-height: 44px; padding: 0 2px; cursor: pointer; list-style: none; }
+.bd-pts > summary::-webkit-details-marker { display: none; }
+.bd-pts > summary:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
+.bd-pts-bar { position: relative; height: 6px; overflow: hidden; background: var(--zd-slot); clip-path: polygon(3px 0, calc(100% - 3px) 0, 100% 50%, calc(100% - 3px) 100%, 3px 100%, 0 50%); }
+.bd-pts-bar > i { position: absolute; inset: 0 auto 0 0; background: var(--gold); transition: width 220ms var(--bd-ease); }
+.bd-pts.is-over .bd-pts-bar > i { background: var(--zd-harm); }
+.bd-pts-say { white-space: nowrap; font-size: 0.95rem; color: var(--muted); }
+.bd-pts-say b { font-size: 1.15rem; font-weight: 800; color: var(--gold-ink); }
+.bd-pts-say small { font-size: 0.82rem; }
+.bd-pts.is-over .bd-pts-say b { color: var(--zd-harm-line); }
+.bd-pts-say::after { content: "\25B4"; margin-left: 6px; font-size: 0.8rem; color: var(--gold-ink); }
+.bd-pts[open] .bd-pts-say::after { content: "\25BE"; }
+.bd-pts-in { position: absolute; left: 0; right: 0; bottom: calc(100% + 8px); max-height: min(70vh, 32rem); overflow-y: auto; padding: 4px 12px 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 3px; box-shadow: 0 -12px 32px rgb(0 0 0 / 0.3); transform-origin: 50% 100%; }
+.bd-pts[open] .bd-pts-in { animation: bd-up 180ms var(--bd-ease) both; }
+.bd-pts-in .bd-label { margin: 0.6rem 0 0.3rem; }
+.bd-spent { list-style: none; margin: 0; padding: 0; }
+.bd-spent-g > p, .bd-spent li li, .bd-pts-sum { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0; }
+.bd-spent-g { padding: 0.35rem 0; border-bottom: 1px solid var(--line-soft); }
+.bd-spent-g > p { font-weight: 700; }
+.bd-spent-g > p b { color: var(--gold-ink); }
+.bd-spent-g ul { list-style: none; margin: 0.15rem 0 0; padding: 0 0 0 0.6rem; }
+.bd-spent li li { font-size: 0.88rem; color: var(--muted); line-height: 1.35; }
+.bd-spent li li span { min-width: 0; overflow-wrap: anywhere; }
+.bd-spent li li b { font-weight: 600; color: var(--ink); }
+.bd-pts-sum { padding: 0.5rem 0 0.2rem; font-weight: 700; }
+.bd-pts-sum b { color: var(--gold-ink); }
+.bd-start { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 0.4rem; }
+.bd-start-k { display: flex; align-items: center; gap: 4px; margin: 0; font-weight: 700; }
+.bd-start-k > .tip { margin: 0 -6px; }
+.bd-start .cc-step output { min-width: 2.2em; font-weight: 800; font-size: 1.1rem; text-align: center; }
+.bd-body > .bd-start, .bd-part .bd-start { max-width: 22rem; }
+.bd-pts-line { margin-bottom: 0.4rem; font-weight: 700; }
+.bd-body > .bd-spent, .bd-part .bd-spent { max-width: 32rem; }
 .bd-foot-in { position: relative; display: flex; align-items: stretch; gap: 8px; max-width: 46rem; margin: 0 auto; }
 .cc .bd-foot .button { min-height: 52px; line-height: 1.15; white-space: normal; transition: transform 140ms var(--bd-ease); }
 .cc .bd-foot .button:active { transform: scale(0.97); }
