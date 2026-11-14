@@ -6,7 +6,7 @@ order: 36
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::index-section
 ## A {#a}
@@ -137,7 +137,6 @@ updated: 2026-11-09
 -   **Investigating** — [Investigating](#investigating)
 -   **Items** — [Items](#s-items), [What You Carry](#s-carrying)
 -   **Items, attuned** — [Attunement](#s-attunement), [Attuned Things from the Story](#s-rare)
--   **Its Aura** — [Attunement](#s-attunement)
 
 ## J {#j}
 
@@ -191,12 +190,14 @@ updated: 2026-11-09
 
 -   **Party sheet** — [The Party Sheet](#party-sheet), [Appendix A](#s-sheet-party)
 -   **Perfected** — [Attunement](#s-attunement)
--   **Permission** — [Permissions](#s-permissions), [How permissions stack](#how-permissions-stack), [Writing Permissions](#s-writing-permissions)
+-   **Permission** — [Titles and Permissions](#s-permissions), [How it adds up](#how-permissions-stack), [Step 3: Permissions](#s-writing-permissions)
 -   **Places** — [Twenty Places](#places)
 -   **Planning scene** — [The planning scene](#s-planning)
 -   **Player reference** — [Appendix A](#s-sheet-character)
 -   **Playing Carefully** — [Playing Carefully](#playing-carefully)
+-   **Points** — [Building Your Character](#building-character), [Six Ready-Made Characters](#s-pregens)
 -   **Power, a faction's** — [What a Faction Is](#s-faction-board), [People who turn up](#assets-people), [The Crew](#s-party-faction)
+-   **Powering an awakening** — [Attunement](#s-attunement), [Aura](#s-aura)
 -   **Projects** — [Projects](#s-projects)
 -   **Prone** — [Conditions to start with](#s-conditions-list), [Vulnerabilities](#s-vulnerable)
 -   **Push** — [Abilities](#s-abilities)
@@ -220,7 +221,7 @@ updated: 2026-11-09
 -   **Rest** — [Healing](#s-healing)
 -   **Retiring** — [Retiring a character](#s-retiring)
 -   **Ritual** — [Rituals](#rituals)
--   **Roots** — [Roots](#s-roots), [Step 5: Roots and specialties](#s-step-roots)
+-   **Roots** — [Roots](#s-roots), [Step 4: Roots](#s-step-roots)
 -   **Round** — [The Round](#s-round)
 -   **Round budget** — [Telegraphs a Round](#s-budget)
 -   **Running doesn't dodge** — [Telegraphs](#s-telegraphs)
@@ -241,7 +242,6 @@ updated: 2026-11-09
 -   **Snapping a thread** — [Bonds and threads](#s-bonds), [Playing the strain](#s-playing-the-strain)
 -   **Soul** — [Roots](#s-roots), [Mind and Soul](#s-fear-gets-through)
 -   **Souls** — [Summoning](#s-summoning), [Summoner](#a-summoner)
--   **Specialties** — [Specialties and Permissions](#s-permissions), [How it adds up](#how-permissions-stack), [Step 5: Roots and specialties](#s-step-roots)
 -   **Splitting** — [Splitting](#s-splitting)
 -   **Spotlight** — [A moment for each character](#s-spotlight)
 -   **Stake** — [Stakes, Clocks and Events](#s-stakes), [Stakes, not obstacles](#s-stakes-gm)
@@ -268,10 +268,11 @@ updated: 2026-11-09
 -   **Threat budget** — [The Threat Budget](#s-threat-budget)
 -   **Threat, building a** — [The Threat Builder](#threat-builder)
 -   **Tie** — [The Roll](#s-the-roll)
--   **Title** — [Step 1: Titles](#s-title), [Title Ideas](#s-title-ideas)
+-   **Title** — [Step 1: Titles](#s-title), [Titles and Permissions](#s-permissions), [Title Ideas](#s-title-ideas)
 -   **Title ideas** — [Title Ideas](#s-title-ideas)
 -   **Tracks** — [The Tracks](#s-tracks), [When a Track Runs Out](#s-blaze), [Healing](#s-healing), [Aura and Your Tracks](#s-aura-tactics), [Appendix C](#s-levers-confidence)
 -   **Trail** — [Three trails to everything](#s-trails), [Secrets and Discovery](#s-discovery)
+-   **Trait** — [How Archetypes Work](#s-how-archetypes)
 -   **Traps** — [Traps](#s-traps)
 -   **Travelling** — [Travelling](#travelling)
 -   **Trouble** — [Catches and Trouble](#s-trouble), [Catches and Resolve at the Table](#s-catches-gm)

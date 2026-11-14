@@ -6,7 +6,7 @@ order: 31
 part: "Appendices & Index"
 partNumber: "Part V"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 Every tag in here tells you how it shows up in the story and what it opens up for the crew. Tags don't make a threat's dice bigger. A tag only changes dice when it says so. Players who know a tag can bring it into a roll for 1 Aura. A tag that takes more than one win to strip carries a [multiplier](#s-tough), like *Armoured ×3*, and a tag that makes a hit hurt more is a [vulnerability](#vulnerability-tags).
 
@@ -62,7 +62,7 @@ These tags say what its telegraphs can do to you.
 
 These tags are its health. Each one's a reason it's still standing, and when you strip them all, it falls. A few, like *Crumbling*, *Forms* and *Layered*, change how the rest works.
 
-Any of them can carry a **multiplier** when it should take more than one win, like *Natural Armour ×8* or *Beloved ×5*. It's as big as the creature needs, and where it goes says what the creature is: a dragon's hide might be *Hide ×10*, and a dark paladin who's the villain of the arc might be *Plate Armour ×7* and *Shield ×5*. Every win ticks one off, and the GM says what's left every time, so nobody has to guess. A named one only ticks to what fits it: blades on the hide, or turning the crowd. Marked *(first)*, nothing under it can be stripped till it's gone. A spent condition that would strip a tag, like *Burning*, ticks one off, and *Piercing* still gets through *Armoured*, whatever its multiplier. An opening ends a Mook or a Named threat, and takes two whole tags off a Boss, multipliers and all, and a weak point still ends the threat at once. There's more in [Multipliers](#s-tough).
+Any of them can carry a **multiplier** when it should take more than one win, like *Natural Armour ×24* or *Beloved ×15*. It's as big as the creature needs, and where it goes says what the creature is: a dragon's hide might be *Hide ×30*, and a dark paladin who's the villain of the arc might be *Plate Armour ×21* and *Shield ×15*. Every win ticks one off, and the GM says what's left every time, so nobody has to guess. A named one only ticks to what fits it: blades on the hide, or turning the crowd. Marked *(first)*, nothing under it can be stripped till it's gone. A spent condition that would strip a tag, like *Burning*, ticks one off, and *Piercing* still gets through *Armoured*, whatever its multiplier. An opening ends a Mook or a Named threat, and takes two whole tags off a Boss, multipliers and all, and a weak point still ends the threat at once. There's more in [Multipliers](#s-tough).
 
 | Tag | How it plays |
 | --- | --- |

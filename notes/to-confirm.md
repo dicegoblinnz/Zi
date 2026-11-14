@@ -90,7 +90,16 @@ None yet.
 
 ### 9. Print
 
-None yet.
+The paper sheet in today's look with part 1's fields (14 Nov, `notes/stacking-plan.md` section 9). None of these touch a rule.
+
+1. **Your attuned things moved to the front, under what you carry, and Notes to the back, under your bonds.** Two attuned things fit with all six awakening lines each that way, and the boxes for what's powering them sit on the same side as Aura's maximum they come off. On the back there wasn't room for a second one.
+2. **Each Root sits over its own track**: Body over Stamina, Mind over Confidence and Soul over Resolve, each with a big box for what it adds up to. That's how all three of your new looks put a Root's seal with its track, so whichever you pick can take each one whole.
+3. **Where a Root's points came from is each Title's spread and the permissions on it**, the way The Core counts Vesk's Body: 3 from her first Title, 1 from her second and 4 from her permissions. The Titles go by I to VI, the same as their cards on the back.
+4. **A permission's Root is B, M or S to ring**, which leaves its line room for the words.
+5. **Banked points is a box with nothing in it** till growing by points is settled, and print leaves it for you. Points spent says what you started on too, 35 of 35, so points still to spend show.
+6. **Extra actions' price is in the bar where Actions was**, with no box, since there's no cap to write down.
+7. **An archetype's card has its name with its home track ringed beside it**, with no labels, so its mechanic gets two lines like its Trait. The old card cut most mechanics off.
+8. **The player reference's Threats moved from page 4 to page 2**, now The tracks, defence and threats. Points made Your character longer, and page 4 was 10mm over.
 
 ### 10. The player's chapters
 
@@ -106,7 +115,19 @@ Written into Conflict, Tactical Play, Magic, the side chapters, Downtime, Playin
 
 ### 11. The GM's side
 
-None yet.
+**You said yes on 14 Nov** to the numbers (every multiplier three times what it was, about 11 a player and the threat budget's ladder, with extra actions left uncapped for now) and to leaving out the chapters the core cut takes out. These are the calls Claude made putting them through the book.
+
+1. **The runs** (`tools/fight_sim.py`): Bram, Vesk, Wren and Ash as they start against Redhand, two named threats and three mooks, 3,000 to 4,000 fights a setting, played plain (the way stage 2 did, which lands on its four rounds and two hits) and with the archetypes played hard. Dorrie and Isolde are left out, because influence and foresight decide a fight on their own. The Traits aren't in, since prompt 3 hadn't landed.
+2. **Three times sits between the two ways of playing.** Plain play needs about ×2.6 and the archetypes played hard about ×4, so a fight played plain runs a little long (4.7 rounds against 4.4) and one played hard about a round short (2.9 against 3.3).
+3. **Four times its Challenge** is the rule of thumb, so a boss starts at ×24. Three times the old Challenge plus 2 would be 24, 21 and 18 for Challenges 6, 5 and 4, and four times is 24, 20 and 16.
+4. **The threat budget multiplies** instead of adding 1 for every 10, because each pick each needs about a third more. It compounds: every new thing's a step on most rolls, and bigger rolls win more Aura for extra actions. So it's 5 a character a pick, and every multiplier times the threat budget over 60.
+5. **How long a scene runs divides by all the crew's actions**, not half, since a stacked roll lands about once an action. Four characters take about ten actions a round.
+6. **Forms keep their multipliers smaller**: about ×15 with two forms and ×12 with three, three times what they were.
+7. **The examples' big obstacles are three times bigger** too: a vault door that's *Reinforced ×12* and a crowd that's *Loyal ×9*.
+8. **A faction's assets keep their multipliers** (*Household Guard ×2*, *Standing Army ×3*), since the faction turn rolls Power, not stacked rolls.
+9. **Mooks and named threats stay as they are.** They fall about twice as fast, which is stacking working, and a named threat that should last takes a multiplier like a boss.
+10. **A character's own roll for the crew's faction action** is a Root and everything on their sheet that plainly fits, since there's no Aura in downtime to explain anything with.
+11. **The glossary loses *Its Aura* and *Specialty* and gains *Points***, and the index gains Points, Powering an awakening and Trait.
 
 ### 12. Bringing it together
 

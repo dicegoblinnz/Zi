@@ -11,8 +11,13 @@
 // Each PDF is stamped with the date and a hash of what it was built from, and
 // tests/check-site.mjs fails when that hash no longer matches.
 //
+// The character sheet's fields are src/companion/sheet-fields.js's, and the
+// build stops if the page it drew hasn't got exactly those, so print.js finds
+// every one whatever the page looks like.
+//
 // Workers Builds can't run Chromium, so the PDFs are committed. Rebuild them
-// whenever Appendix D, the kit or anything in scripts/sheets/ changes.
+// whenever Appendix D, the kit, the sheet's fields or anything in
+// scripts/sheets/ changes.
 import { mkdirSync, writeFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
@@ -25,6 +30,7 @@ import {
 import { ROOT, SHEETS, sourceHash } from "./sheets/sources.mjs";
 import { characterSheet } from "./sheets/character-sheet.mjs";
 import { playerReference, REFERENCE_PAGES } from "./sheets/player-reference.mjs";
+import { sheetFields } from "../src/companion/sheet-fields.js";
 
 const OUT = join(ROOT, "public", "sheets");
 const INK = rgb(0x1d / 255, 0x15 / 255, 0x26 / 255);
@@ -93,6 +99,30 @@ function measureFields() {
       multi: el.hasAttribute("data-multi"),
     };
   });
+}
+
+// The page has to hold exactly the fields print.js fills, each the same kind,
+// with every value of a ring.
+function checkFields(fields) {
+  const got = new Map();
+  for (const f of fields) {
+    if (f.kind === "radio") {
+      if (!got.has(f.name)) got.set(f.name, { kind: "radio", values: [] });
+      got.get(f.name).values.push(f.value);
+    } else got.set(f.name, { kind: f.kind });
+  }
+  const want = sheetFields();
+  const names = new Set(want.map((f) => f.name));
+  const say = (list) => list.slice(0, 12).join(", ") + (list.length > 12 ? ` and ${list.length - 12} more` : "");
+  const missing = want.filter((f) => !got.has(f.name)).map((f) => f.name);
+  const extra = [...got.keys()].filter((n) => !names.has(n));
+  const wrong = want.filter((f) => got.has(f.name) && (got.get(f.name).kind !== f.kind || (f.kind === "radio" && [...got.get(f.name).values].sort().join() !== [...f.values].sort().join()))).map((f) => f.name);
+  const problems = [
+    missing.length && `the page hasn't got ${say(missing)}`,
+    extra.length && `the page has ${say(extra)}, which src/companion/sheet-fields.js hasn't`,
+    wrong.length && `${say(wrong)} ${wrong.length === 1 ? "isn't" : "aren't"} the kind or the values the list says`,
+  ].filter(Boolean);
+  if (problems.length) throw new Error(`the character sheet's fields: ${problems.join("; ")}`);
 }
 
 // What a ticked box looks like: a cross for a snapped thread, a tick for a
@@ -251,6 +281,7 @@ try {
     const hash = sourceHash(name);
     const stamp = `Character sheet · built ${nice} · ${hash}`;
     const { pdf, fields } = await print(browser, name, page(SHEETS[name].title, characterSheet(stamp)), true);
+    checkFields(fields);
     const { pdf: doc, count } = await addFields(pdf, fields);
     if (doc.getPageCount() !== 2) throw new Error(`the character sheet is ${doc.getPageCount()} pages, not 2`);
     const size = await finish(doc, name, hash);
