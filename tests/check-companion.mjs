@@ -3352,8 +3352,9 @@ if (part("10")) {
   const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
   let dieChecks = 0;
   for (const c of cards) {
-    for (const m of c.example.matchAll(/\b(\d+) steps[,:] (an? d\d+(?: and an? d\d+)?|two d12s)/g)) {
-      const said = m[2] === "two d12s" ? "2d12" : m[2].replace(/\ban? /g, "").replace(" and ", " + ");
+    // Past 12 steps it's "two d12s and a d4", so the d12s are read as a count.
+    for (const m of c.example.matchAll(/\b(\d+) steps[,:] ((?:an? d\d+|two d12s|three d12s)(?: and an? d\d+)?)/g)) {
+      const said = m[2].replace("three d12s", "3d12").replace("two d12s", "2d12").replace(/\ban? /g, "").replace(" and ", " + ");
       dieChecks += 1;
       same(diceLabel(stepsToDice(Number(m[1]))), said, `learn: “${c.title}” gives ${m[1]} steps as ${m[2]}`);
     }

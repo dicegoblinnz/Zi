@@ -259,7 +259,21 @@ For the other prompts:
 
 ### 10. The player's chapters
 
-Not yet.
+Written 14 Nov on `rules/2026-11-14-stacking-book`, landed into `rules/2026-11-14-stacking`. The calls are in `notes/to-confirm.md` under 14 Nov, 10. The player's chapters.
+
+- **The chapters:** Welcome, the Party Sheet, the rest of Conflict, Tactical Play, Magic, Chases, Travelling, Exploring, Investigating, Downtime, Playing Your Way, Session Zero, Growing, Coin and Kit and the rest of Appendix D are on part 1, with no specialties, and every example's recounted on the crew's sheets above (a roll's the Root and what plainly fits, so the same move can count differently: Bram behind his shield is 14, and 15 when he's guarding one of the crew). The full fight in Conflict starts everyone on 7 Aura, Vesk powers her line in round 1 and plays the scene on a maximum of 5, and Isolde's wards are for the dead, so against a Warden she makes her case for 1 Aura. Magic's souls are active awakenings that spend Aura, Downtime's Grow buys what a point buys (a permission, an ability, an awakening or something to carry), and Growing's Vesk has a Points line, her third Title at session 7 (Building's Aspiration example) and her picks attuned at session 12, worth 47 at session 20. *Inspired* and *Surging* are a step on one kind of thing. Playing Your Way's Resolve for great roleplay (gone since 9 Nov) is the 1 Aura for a great setup that doesn't land, Welcome says eighteen archetypes, and Investigating's *The Truth* is *What Really Happened* (same id).
+- **Coin and Kit:** none of the twenty attuned things has an *Its Aura* line, every passive awakening says "for each Aura powering it", and the Lady Quell's Ring example's on Dorrie's numbers (a maximum of 9 less the Burden's 2).
+- **The Learn deck:** all 40 cards checked against their chapters, not only the 17 the entry named, each 40 to 120 words with the crew's real dice, and `checked: 2026-11-14`. Part 10's check reads "two d12s and a d4" now, so it checks rolls past 12 steps.
+- **The change log:** two paragraphs at the end of `c-2026-11-14-stacking` (prompt 1's): *Inspired* and *Surging*, and the player's chapters with their links, so their sections get New marks.
+- **Outside my files, the smallest changes:** `thingsFrom()` in `scripts/build-content.mjs` reads Coin and Kit's attuned things without an *Its Aura* line (each comes with `aura: ""`), and `checksOf()` in `src/companion/builder.js` doesn't ask for an attuned thing's own way to Aura any more, so `randomBuild()` still makes 1,000 of 1,000 characters that pass every check.
+- **Checks:** `check_terms.py` is clean in my chapters bar three that can't change (*Zi* as the word in Welcome and Magic, and Session Zero's `#the-character-connections` id). The rest of what it lists in 05 and 33 is prompt 1's Extra actions and prompt 3's Maker line. Parts 1 to 1e and 10 of `tests/check-companion.mjs` pass, so does `tests/check-world-engine.mjs`, and `tests/check-site.mjs` only fails on the player reference PDF being behind Appendix D (prompt 9's). The full companion and accounts checks still stop on the play screen's specialty tiles (prompts 6 and 8), and parts 5 and 5b on the builder's Roots (prompt 7), the way they did before this landed. Part 5c's 1,000 random characters all pass.
+
+What the other prompts need from it:
+
+- **7, the builder and downtime:** Coin and Kit's things have no Aura of their own (`aura: ""`), and the builder no longer warns about one, so the "Its own way to Aura" field and `aura` on a build can go.
+- **11, the GM's side:** Conflict's Telegraphs (about 10 steps a round for each of you), its full fight's breather, Tactical Play's grid round (about 40 for four) and Travelling's legs still say the budgets as they stand. If `c-2026-11-14-budgets` changes them, those lines are in my chapters.
+- **3, Traits:** Appendix D's Maker line still says pump, and The Archetypes' Shadow example (*In the rafters*) still rolls her Stealth, and both are in prompt 3's parts.
+- **12, bringing it together:** chapters 06 and 08 to 11 got part 1 here, and the core cut (`rules/2026-11-14-core`) sets them aside, so they'll clash when the two meet. For CLAUDE.md: Coin and Kit's attuned things have no own Aura, and part 10 of the companion check reads rolls past 12 steps.
 
 ### 11. The GM's side
 

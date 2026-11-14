@@ -1043,18 +1043,19 @@ const ideasDoc = docWith("{#s-quick}");
 const rootsBuild = buildDoc && ideasDoc ? buildFrom(buildDoc, ideasDoc, ctx.archetypes, inline, (msg) => companionWarn(`builder: ${msg}`)) : null;
 if (!rootsBuild) companionWarn("can't find Building Your Character or the Quick Build for the builder");
 else rootsBuild.qualities = ctx.qualities;
-// The book's attuned things from the story (Coin and Kit), each with its own
-// way to Aura and its awakenings, for random characters to start from.
+// The book's attuned things from the story (Coin and Kit), each with its
+// awakenings, for random characters to start from. Since 14 Nov none of them
+// gets you Aura its own way (notes/stacking-plan.md), so aura's left empty
+// till the builder stops asking for it (prompt 7).
 function thingsFrom(doc, warn) {
   const out = [];
   for (const id of ["twelve-rare-things", "eight-legendary-things"]) {
     const sec = sectionOf(doc.body, id);
     for (const m of sec.matchAll(/^:::sheet\[([^\]]+)\]\n([\s\S]*?)\n:::$/gm)) {
-      const aura = m[2].match(/^\*\*Its Aura\*\* (.+)$/m)?.[1] ?? "";
       const wakes = m[2].match(/^\*\*(?:Tempered|Perfected)\*\* (.+)$/m)?.[1] ?? "";
       const awakenings = dots(wakes).map((w) => w.match(/^\*([^*]+)\* \((passive|active)\): (.+)$/)).filter(Boolean).map((x) => ({ name: plain(x[1]), kind: x[2], text: plain(x[3]).replace(/\.$/, "") }));
-      if (!aura || !awakenings.length) warn(`can't read ${m[1]}'s Aura or awakenings in Coin and Kit`);
-      else out.push({ name: curly(m[1]), aura: plain(aura).replace(/\.$/, ""), awakenings });
+      if (!awakenings.length) warn(`can't read ${m[1]}'s awakenings in Coin and Kit`);
+      else out.push({ name: curly(m[1]), aura: "", awakenings });
     }
   }
   if (out.length < 12) warn(`found only ${out.length} attuned things in Coin and Kit`);

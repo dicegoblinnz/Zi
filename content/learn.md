@@ -8,13 +8,13 @@ id: learn
 # The cards teach the chapters and never change a rule. When a rules change
 # touches a section a card teaches, the build names the cards. Check them
 # against the chapters, then set checked to that change's date.
-checked: 2026-11-09
+checked: 2026-11-14
 ---
 ::::card[Did you succeed?]{#l-succeed teaches=the-core}
-You play someone who's properly good at something, like a thief who can open any lock in the city. Every roll's one of your three **Roots**, Body, Mind or Soul, plus one of your **specialties**, the things you could be known for, like Locks or Fire. Your Titles and permissions build both up, so the better you are, the bigger your dice. Then the question's simple: did you succeed? Roll against whatever's in your way, and if you beat the number, you did.
+You play someone who's properly good at something, like a thief who can open any lock in the city. Every roll's one of your three **Roots**, Body, Mind or Soul, plus a step for every thing on your sheet that fits what you're doing, like a Title or the picks in your hand. The better you are, the bigger your dice. Then the question's simple: did you succeed? Roll against whatever's in your way, and if you beat the number, you did.
 
 :::example
-Vesk's at the strongbox with her Body, her Locks and her picks, 10 steps: a d12 and a d8. Its d6 rolls 4, and her 9 opens it.
+Vesk's at the strongbox with her Body, both Titles, *pick a mechanical lock*, *know how a lock's built* and her picks, 13 steps: two d12s and a d2. Its d6 rolls 4, and her 9 opens it.
 :::
 ::::
 
@@ -22,31 +22,31 @@ Vesk's at the strongbox with her Body, her Locks and her picks, 10 steps: a d12 
 You've got three **Roots**, and every roll starts from one. **Body**'s what your hands and feet do, like climbing or swinging a hammer. **Mind**'s what goes on in your head, like noticing or lying. **Soul**'s who you are, like giving orders, holding your nerve or magic that pours out of you. Pick the one that fits *how* you're doing it, not what you're after. Each Root has a [track](#s-tracks) too, and that's what keeps you standing.
 
 :::example
-Dorrie can talk her way past the gate guard with her Mind and her Lying, 9 steps, a d12 and a d6, or her Soul and her Persuasion, 4 steps, a d8. It's the same door either way, so she lies.
+Dorrie can get past the gate guard with her Mind, a story he can't pick holes in, 11 steps, or her Soul, a smile and a bit of nerve, 7 steps. It's the same door either way, so she lies.
 :::
 ::::
 
 ::::card[Titles and permissions]{#l-permissions teaches=s-permissions}
-You start with two **Titles**. A Title's who you are, real and specific, like *the best cat burglar in the city*, and it adds 1 to one Root and 1 to each of three specialties that fit it. Your **permissions** go on your Titles, three on each to start and six at most. A permission's a doing word with how, what or where, like *pick a mechanical lock*, and it adds 1 to a Root and 1 to a specialty, both of which it has to fit.
+A **Title**'s who you are, real and specific, like *the best cat burglar in the city*, and it puts 3 on your Roots, spread however you like. Your **permissions** go on your Titles, six at most. A permission's a doing word with how, what or where, like *pick a mechanical lock*, and it puts 1 on the Root that fits how you do it. Nothing else adds to a Root.
 
 :::example
-Bram's first Title, *The wall that held the harbour gate*, is Body, and Shieldwork, Bodyguarding and Lifting. On it, *hold the line* is Body and Shieldwork, so that's 1 more on each.
+Bram's first Title, *The wall that held the harbour gate*, is all Body, so that's 3 on his Body. On it, *hold the line* is Body too, so that's 1 more.
 :::
 ::::
 
 ::::card[How it adds up]{#l-lines teaches=how-permissions-stack}
-A Root or a specialty is 1 for every Title and permission that puts 1 on it. A roll's **one Root and one specialty**, plus **1 for each item** you're using that fits, like a sword in a sword fight. An item never adds to a Root. There's **no cap**, so a Root of 10 is a d12 and a d8. Permissions don't come in levels.
+A roll's **one Root**, plus **1 for every thing on your sheet that fits** what you're doing: each Title, permission, archetype, ability, attuned thing, awakening and item you're using. An archetype you've taken twice is two. Plainly fits is free, and each one you have to explain is 1 [Aura](#s-aura). Boons don't add steps, and there's **no cap**.
 
 :::example
-Vesk's got 5 in her Body: her first Title, *move unseen*, *run the rooftops*, *pick a mechanical lock* and *fight dirty with a knife*. Her Locks is 4, from both Titles and two permissions. A lock with her picks is 10 steps, a d12 and a d8.
+Vesk's Body is 8: 3 from her first Title, 1 from her second and four permissions. Over Lord Vane's roof it's her Body, her first Title, *move unseen*, *run the rooftops*, Shadow twice, her grappling line, *Anywhere I can throw a hook* and her boots, 16 steps, two d12s and a d8.
 :::
 ::::
 
 ::::card[Building a roll]{#l-building teaches=s-building-die}
-Every roll goes the same way. Say what you're doing and how, then pick the Root that fits how and the specialty that fits what. Add them up, with 1 for each item that fits. If you have to make a case for your specialty, it's 1 [Aura](#s-aura). Anything else that fits, like the ground or a threat's tag, is 1 Aura and a step each. Then turn your steps into dice and roll.
+Every roll goes the same way. Say what you're doing and how, and pick the Root that fits how. Add 1 for every thing on your sheet that fits. Each one you have to explain is 1 [Aura](#s-aura), and so's going beyond what something normally does. Bringing in the ground or a threat's tag is 1 Aura and a step. Then turn your steps into dice and roll.
 
 :::example
-Bram's chasing a smuggler down the quay, and Shieldwork doesn't fit. He says a sergeant knows how a frightened man runs, and pays 1 Aura to bring his Soldiering in: his Body 5 and his Soldiering 2, 7 steps, a d12 and a d2.
+Bram's chasing a smuggler down the quay, and nothing on his sheet's about running a man down. He says a sergeant knows how a frightened man runs, and pays 1 Aura to bring his second Title in: his Body 7 and that Title, 8 steps, a d12 and a d4.
 :::
 ::::
 
@@ -54,7 +54,7 @@ Bram's chasing a smuggler down the quay, and Shieldwork doesn't fit. He says a s
 Your die is your steps × 2, up to a d12, so 1 step's a d2, 4 steps a d8 and 6 steps a d12. Every 6 steps gives you another d12, and whatever's left over makes one more die. No die you build is ever bigger than a d12, so getting stronger means throwing more dice. Every roll's at least 1 step, a d2, even with nothing that fits.
 
 :::example
-Wren's shot is her Body 4, her Archery 2 and her longbow, 7 steps, a d12 and a d2. When Bram [barks an order](#leading-and-inspiring) and hands her 2 steps, it's 9, a d12 and a d6.
+Wren's shot from cover is her Body 6, both Titles, Hunter twice, her longbow and *Long shot*, 12 steps, two d12s. When Bram [barks an order](#leading-and-inspiring) and hands her 3 steps, it's 15, two d12s and a d6.
 :::
 ::::
 
@@ -62,7 +62,7 @@ Wren's shot is her Body 4, her Archery 2 and her longbow, 7 steps, a d12 and a d
 Roll your dice and theirs too, in another colour, and compare. **Beat it** and you did it. A **tie** goes to whoever's defending, and if you're the one acting, 1 Aura wins it. **Roll under** and you didn't, or pay 1 Resolve to roll again. **Every die of yours that wins gives you 1 Aura, and so does every top face**, win or lose, your defence included.
 
 :::example
-Ash throws fire at two guards with her Soul, her Fire and her ember stone, 10 steps, a d12 and a d8, a die at each. Their d6s roll 4 and 5. Her d12 comes up 9 and her d8 lands on 8, its top face, so that's 3 Aura.
+Ash throws fire at two guards, 13 steps, two d12s and a d2: a d12 at each, and the d2 at the first as well. Their d6s roll 4 and 5. Her d12s come up 9 and 12, a top face, and the d2 lands on 2, another, so that's 4 Aura.
 :::
 ::::
 
@@ -70,7 +70,7 @@ Ash throws fire at two guards with her Soul, her Fire and her ember stone, 10 st
 A miss is just a miss, unless something's pushing back or time's running out. Then it costs you something, a [consequence](#s-consequences), and the GM names it: your Stamina, your Confidence or your Resolve, your gear, your dreams, the crew's Goal or the clock. If you'd rather pay something else that fits and costs about as much, offer it.
 
 :::example
-Picking a lock with all night and nobody around, Vesk's d12 and d8 can both come up short and it costs her nothing. With the guard coming up the stairs, it's a different story.
+Picking a lock with all night and nobody around, Vesk's two d12s and her d2 can all come up short and it costs her nothing. With the guard coming up the stairs, it's a different story.
 :::
 ::::
 
@@ -78,7 +78,7 @@ Picking a lock with all night and nobody around, Vesk's d12 and d8 can both come
 Before you roll, give every die an **intent**: what it's trying to do, and who or what it's aimed at. Whatever you gave the die, that's what happens if it wins. A target rolls its defence once a round, and each of your dice has to beat that one roll. Put more than one die on the same intent and that's **advantage**: your best die counts.
 
 :::example
-Bram and Wren throw a d10 to disarm the guard captain, a d8 to floor him and a d8 to make him give up. His d10 rolls 6. Theirs come up 9, 4 and 6, so he's disarmed, he keeps his feet, and the tie's his, so he won't give up.
+Bram and Wren throw three d12s at the guard captain: one to disarm him, one to floor him and one to make him give up. His d10 rolls 6. Theirs come up 9, 4 and 6, so he's disarmed, he keeps his feet, and the tie's his, so he won't give up.
 :::
 ::::
 
@@ -86,7 +86,7 @@ Bram and Wren throw a d10 to disarm the guard captain, a d8 to floor him and a d
 You can **split** your steps into more, smaller dice. Every action in the roll gives you one split, so one action can turn a d8 into two d4s, or a d2 and a d6. Dice past 6 steps are already separate, so they don't use up your splits. Your dice all have to go at things that belong to the same job.
 
 :::example
-Vesk's at the study door with her Body, her Locks and her picks, 10 steps, a d12 and a d8. Her split makes it three dice: a d10 for the lock, a d6 to keep it quiet and a d4 to listen for anyone coming.
+Vesk's at the study door with 13 steps, two d12s and a d2. Her split makes it four dice: a d12 for the lock, a d6 to keep it quiet, a d4 to listen for anyone coming and a d4 to leave no scratch.
 :::
 ::::
 
@@ -94,15 +94,15 @@ Vesk's at the study door with her Body, her Locks and her picks, 10 steps, a d12
 Every permission does what it says for free, magic or not, the same as a sword. **Going beyond** what something normally does costs 1 [Aura](#s-aura). It doesn't add a step: you spend the Aura and it does the bigger thing. If you have to make a case for why it's normal, it's going beyond, so spend the Aura and keep playing.
 
 :::example
-Isolde speaks with the recently dead for free. Calling up the mason who built the Vane vault, a hundred years dead, is going beyond, so that's 1 Aura, and she still rolls her Soul and The dead, 5 steps, a d10, to get him talking.
+Isolde speaks with the recently dead for free. Calling up the mason who built the Vane vault, a hundred years dead, is going beyond, so that's 1 Aura, and she still rolls her Soul, her first Title and *speak with the recently dead*, 7 steps, a d12 and a d2, to get him talking.
 :::
 ::::
 
 ::::card[Aura]{#l-aura teaches=s-aura}
-**Aura** is your luck and flair, and it's the one thing you spend. You start every scene full, and your maximum's 5. Spend 1 to bring something in, make a case, go beyond, win a tie when you're acting, or [intercept](#s-intercept). Spend 3 for an [extra action](#s-extra-actions), and two archetypes let you buy one a round. While you're acting it can go past 5, and what's over is gone once you're done.
+**Aura** is your luck and flair, and it's the one thing you spend. You start every scene full. Your maximum's 5, and 2 more for every attuned thing, so most start on 7. Spend 1 to bring something in, explain something, go beyond, win a tie when you're acting, or [intercept](#s-intercept). An [extra action](#s-extra-actions) is 3, then 4, then 5. While you're acting it can go past your maximum, and what's over is gone once you're done.
 
 :::example
-Ash's fire goes at three guards as a d10, a d6 and a d4. All three win and the d4 lands on 4, so she's on 9. She spends 3 on an extra action, pumps 1 into her ember stone and finishes on 5.
+Ash starts on 7. Her fire goes at three guards, all three dice win and one lands on its top face, so she's on 11. She spends 3 on an extra action and 4 on another, and finishes on 4.
 :::
 ::::
 
@@ -131,31 +131,31 @@ Wren's on d8 of Resolve, and her longbow's Catch is *Wanted*. At the Duke's hunt
 ::::
 
 ::::card[Working together]{#l-combo teaches=s-teamwork}
-There's no special action for helping. Put your action into the same thing a friend's doing, and that's a **combo**, rolled once between you. It's one Root, whoever's rolling, and every action in it brings a specialty and its items. Nobody pays Aura for it, but it has to be one thing in the story, and you've got to be able to join in from where you are. Every action gives you a split.
+There's no special action for helping. Put your action into the same thing a friend's doing, and that's a **combo**, rolled once between you. It's one Root, whoever's rolling, and every friend's action brings every thing on their sheet that fits, 1 each. Nobody pays Aura for it, but it has to be one thing in the story, and you've got to be able to join in. Every action gives you a split.
 
 :::example
-Vesk's at the study door with 10 steps, and Dorrie keeps the guard talking with her Lying, 4. That's 14 steps from two actions: a d10 for the lock, a d10 to keep it quiet and a d8 for the guard.
+Vesk's at the study door with 13 steps, and Dorrie keeps the guard talking with her first Title, two permissions and Face, 4 more. That's 17 steps between them: a d12 for the lock, a d12 to keep it quiet and a d10 for the guard.
 :::
 ::::
 
 ::::card[Studying something]{#l-study teaches=s-study}
-**Study** is an intent like any other. Build it from whatever fits how you're looking, usually your Mind and a specialty, and roll against the target's Challenge. Win, and pick one. Ask something specific, like *what's holding it together?*, and the GM reveals the [hidden tag](#s-hidden) that answers it, if there is one. Or ask one question about it, and she answers it truthfully.
+**Study** is an intent like any other. Build it from whatever fits how you're looking, usually your Mind and everything on your sheet that fits, and roll against the target's Challenge. Win, and pick one. Ask something specific, like *what's holding it together?*, and the GM reveals the [hidden tag](#s-hidden) that answers it, if there is one. Or ask one question about it, and she answers it truthfully.
 
 :::example
-Isolde studies the old construct with her Mind and her History, 7 steps, a d12 and a d2. Its d8 rolls 4 and her d12 comes up 9, so she asks what's holding it together and gets the hidden tag that answers it.
+Isolde studies the old construct with her Mind, her second Title, *know the history of anything old* and Scholar, 10 steps, a d12 and a d8. Its d8 rolls 4 and her d12 comes up 9, so she asks what's holding it together and gets the hidden tag that answers it.
 :::
 ::::
 
 ::::card[Archetypes]{#l-archetypes teaches=s-step-archetypes}
-You pick two **archetypes**, like Guardian or Shadow, and they're separate from your Titles. Each one has a **mechanic** only it can do, which is free, and **abilities** you pay for out of your [tracks](#s-tracks). You can take the same one twice. You can have one action a round for each archetype, so two let you buy one more for 3 Aura.
+An **archetype**, like Guardian or Shadow, is its own pick, apart from your Titles, and it's 5 points. Each one has a **mechanic** only it can do, which is free, a **Trait** that's always on, and one **ability** to start, your pick, paid for out of your [tracks](#s-tracks). You can take the same one twice, and it's a step on every roll it fits. Archetypes don't cap your actions.
 
 :::example
-Bram's a Guardian and a Leader. As a Guardian he intercepts for free for every friend within his stride, and as a Leader he hands out the steps of his orders, his Soul and his Command, 4 steps, a d8.
+Bram's a Guardian and a Leader. As a Guardian he intercepts for free for every friend within his stride, and as a Leader he hands out the steps of his orders, his Soul, his second Title, *bark an order that gets obeyed* and Leader, 6 steps, a d12.
 :::
 ::::
 
 ::::card[What you carry]{#l-carry teaches=s-carrying}
-You carry 3 **equipment** (what you wear or wield), 3 **utility** items (tools and things you use up) and a **keepsake**, and your **bag** holds 10 more. [Attuned things](#s-attunement) are on top of all that. Nothing in your bag can be used till you've pulled it out, which takes your action, but putting something away is free. A plain item's 1 more on a roll you use it in.
+You carry 3 **equipment** (what you wear or wield), 3 **utility** items (tools and things you use up) and a **keepsake**, and your **bag** holds 10 more. Each is a point when you make your character, bar the keepsake and the bag. [Attuned things](#s-attunement) are on top of all that. Pulling something out of your bag takes your action, and putting it away's free. A plain item's 1 more on a roll you use it in.
 
 :::example
 A few sessions in, Wren's utility is full when the trail runs into a cave. She puts her snare kit away in her pack for free, and spends her action pulling out the torch bundle.
@@ -163,18 +163,18 @@ A few sessions in, Wren's utility is full when the trail runs into a cave. She p
 ::::
 
 ::::card[Attuned things]{#l-attuned teaches=s-attunement}
-When you **attune** something, it's bound to you and it grows with you. You start with one, at Awakened. It's an item, so it's 1 more on a roll it fits, and it gets you Aura its own way, written when you attune it. It's got an **awakening**, something it does when you pour Aura into it, and you can give it its [Catch](#s-trouble) now for a second. It can't be broken.
+When you **attune** something, it's bound to you and it grows with you. It's 5 points, it starts at Awakened, and it puts 2 on your Aura maximum, so one takes you from 5 to 7. It's an item, so it's 1 more on a roll it fits, and it comes with one **awakening**, a step of its own. Give it its [Catch](#s-trouble) and it gets a second, free. It can't be broken.
 
 :::example
-Vesk's grappling line gets her 1 Aura the first time each scene she gets somewhere nobody else could follow. Going over a roof it's 1 more on her Body and her Stealth, 8 steps, a d12 and a d4.
+Over a roof, Vesk's grappling line and *Anywhere I can throw a hook* are a step each, so with her Body, her first Title, *move unseen*, *run the rooftops*, Shadow twice and her boots, it's 16 steps, two d12s and a d8.
 :::
 ::::
 
 ::::card[Awakenings]{#l-awakenings teaches=s-attunement}
-A **passive** awakening holds Aura. Pump it in while you're acting, free and with no action, up to 2, and it works for as much as it's holding. An **active** one spends Aura when you use the thing, and more Aura does more. Only you can pump Aura into your attuned thing, or a [Maker](#a-maker) can. Whatever it's holding is gone at the end of the scene.
+A **passive** awakening's powered. While you're acting, put up to 2 Aura into it, free and with no action. It comes off what you've got and off your maximum till the scene ends, and the awakening works for as much as is powering it. An **active** one spends Aura when you use it, and more Aura does more. Only you can power your attuned thing, or a [Maker](#a-maker) can.
 
 :::example
-Wren pumps 2 Aura into her longbow's *Long shot*, so every shot this scene is +2 on one die. When a lookout's behind a hedge, she spends 1 Aura on *Hit anything I can see*, and the hedge doesn't help him.
+Wren powers her longbow's *Long shot* with 2, so every shot this scene is +2 on one die, and her maximum's 5 till the scene ends. When a lookout's behind a hedge, she spends 1 Aura on *Hit anything I can see*, and the hedge doesn't help him.
 :::
 ::::
 
@@ -187,7 +187,7 @@ Vesk's bond with Dorrie holds two threads, one in her words and one in Dorrie's.
 ::::
 
 ::::card[Leaning on a bond]{#l-lean teaches=s-bonds}
-A bond thread's something you can lean on. Pay 1 Aura to borrow one of their specialties for your roll, as a step. Or lean on them in the story, like calling in a favour, and your **Resolve comes up a size**. It's free, and the thread's strained until you make it right with them. Strain it again before it's mended and it snaps. You can't borrow through a strained thread or lean on a hostile one.
+A bond thread's something you can lean on. Pay 1 Aura to borrow one thing off their sheet as a step. Or lean on them in the story, like calling in a favour, and your **Resolve comes up a size**. It's free, and the thread's strained until you make it right with them. Strain it again before it's mended and it snaps. You can't borrow through a strained thread or lean on a hostile one.
 
 :::example
 Vesk's on Vane's roof with her Resolve down to d4, so she whistles for Dorrie to pull the guards back down. Her Resolve comes up to d6, and their thread's strained on both sheets till she gives Dorrie the pick of the haul.
@@ -195,15 +195,15 @@ Vesk's on Vane's roof with her Resolve down to d4, so she whistles for Dorrie to
 ::::
 
 ::::card[Your Aspiration]{#l-aspiration teaches=s-aspiration}
-Your **Aspiration** is one thing you want. It starts at d2 and climbs as you chase it: when something you do really moves it along, roll against its die, and beat it to climb one. A setback steps it back down, never below d2. When it climbs past d12, it resolves: you get what you were after, take a new Title, archetype or attuned thing, and write a new Aspiration at d2.
+Your **Aspiration** is one thing you want. It starts at d2 and climbs as you chase it: when something you do really moves it along, roll against its die, and beat it to climb one. A setback steps it back down, never below d2. When it climbs past d12, it resolves: you get what you were after, take a new Title, archetype or attuned thing with the one it comes with, and write a new Aspiration at d2.
 
 :::example
-Vesk's *Own the score of a lifetime* is on d2 when she cracks a strongbox in the Low Market. Her Body and her Locks, with her picks, roll 7 and 2 against its 1, so it climbs to d4.
+Vesk's *Own the score of a lifetime* is on d2 when she cracks a strongbox in the Low Market. Her two d12s and a d2 roll 7, 2 and 1 against its 1, so it climbs to d4.
 :::
 ::::
 
 ::::card[Armour]{#l-armour teaches=s-armour}
-Armour sits on one of your Roots: leathers, plate and shields on your Body, court clothes or a disguise you trust on your Mind, and a holy symbol or a ward on your Soul. When a hit gets through to that Root, it can take it instead: tick one of its boxes and your track stays put. **Common**, **Fine** and **Masterwork** have 1, 2 and 3 boxes, and it breaks when the last one goes. When you Defend, each piece is 1 more.
+Armour sits on one of your Roots: leathers, plate and shields on your Body, court clothes or a disguise you trust on your Mind, and a holy symbol or a ward on your Soul. When a hit gets through to that Root, it can take it instead: tick one of its boxes and your track stays put. **Common**, **Fine** and **Masterwork** have 1, 2 and 3 boxes, and it breaks when the last one goes. Each piece is an item too, so it's 1 more on a roll it fits, like a Defend.
 
 :::example
 A spear gets through to Bram's Body, and he puts it on his Fine plate. That's one of its two boxes, and his Stamina stays on d12.
@@ -211,10 +211,10 @@ A spear gets through to Bram's Body, and he puts it on his Fine plate. That's on
 ::::
 
 ::::card[Abilities]{#l-abilities teaches=s-abilities}
-Every archetype has a **home track**, and each of its abilities costs 1 from it, or 2 from your other two in any mix. They stack, so pay again and you get it again. **Push** is the one most have: +2 to one die on your mechanic, once you've rolled and you know you need it, and +3 with the same archetype twice. Nothing you pay takes a track below d2.
+Every archetype comes with one ability, and more are a point each. It has a **home track**, and each of its abilities costs 1 from it, or 2 from your other two in any mix. They stack, so pay again and you get it again. **Push** is the one most have: +2 to one die on your mechanic, once you've rolled, and +3 with the same archetype twice. Nothing you pay takes a track below d2.
 
 :::example
-Vesk's a Shadow twice over, and her d12 to hide comes up 5 against the cellar guard's 7. She pays 1 Stamina for her Push, +3, so it's 8 and he walks right past. Her Stamina's a d10 now.
+Vesk's a Shadow twice over, and her best die to hide comes up 5 against the cellar guard's 7. She pays 1 Stamina for her Push, +3, so it's 8 and he walks right past. Her Stamina's a d10 now.
 :::
 ::::
 
@@ -235,18 +235,18 @@ A **telegraph** is the GM saying out loud what's about to happen, before anythin
 ::::
 
 ::::card[Your action]{#l-action teaches=s-actions}
-Every round you get **one action**. Roll a Root and a specialty at something, answer a telegraph, [Defend](#s-defend), move further than your stride, lead if you're a Leader, pull something out of your bag, break a [condition](#s-conditions) or take a breath. Your stride's free, and so's pumping Aura into your attuned thing. Hold your action and you've got two next round, or buy one more for 3 Aura.
+Every round you get **one action**. Roll a Root and everything that fits at something, answer a telegraph, [Defend](#s-defend), move further than your stride, lead if you're a Leader, pull something out of your bag, break a [condition](#s-conditions) or take a breath. Your stride's free, and so's powering your attuned thing. Hold your action and you've got another next round, or buy more with Aura: 3, then 4, then 5.
 
 :::example
-Bram crosses the hall on his stride, which is free, and spends his action going at the guard on the door: his Body, his Shieldwork and his hammer, 10 steps, a d12 and a d8.
+Bram crosses the hall on his stride, which is free, and spends his action going at the guard on the door: his Body, his second Title, his war hammer and *Ring the bell*, 10 steps, a d12 and a d8.
 :::
 ::::
 
 ::::card[Answering a telegraph]{#l-answer teaches=s-answering}
-To **answer** a telegraph, spend your action on a Root and a specialty that fit how you're stopping it, and roll against its dice. Win and it's stopped. Lose and it lands at once, with no defence roll, and a tie's a loss unless you pay 1 Aura. You can answer for someone else, and friends can put their actions in.
+To **answer** a telegraph, spend your action on a Root and everything that fits how you're stopping it, and roll against its dice. Win and it's stopped. Lose and it lands at once, with no defence roll, and a tie's a loss unless you pay 1 Aura. You can answer for someone else, and friends can put their actions in.
 
 :::example
-The brute's club is coming at Isolde, a d8. Wren puts an arrow in his arm with her Body, her Archery and her longbow, and Bram gets his hammer under the club with his Shieldwork and his hammer. That's 12 steps, two d12s. The club rolls 6 and a d12 comes up 8, so it never lands.
+The brute's club is coming at Isolde, a d8. Wren puts an arrow in his arm, 12 steps, and Bram gets his hammer under the club, bringing 5 more, so that's two d12s and a d10. The club rolls 6 and a d12 comes up 8, so it never lands.
 :::
 ::::
 
@@ -259,10 +259,10 @@ Two guards telegraph at Vesk's Body, a d8 and a d6. Her Stamina's d12 rolls 5. T
 ::::
 
 ::::card[Defend]{#l-defend teaches=s-defend}
-**Defend** takes your action. When the telegraphs land, roll a Root and a specialty that fit how you're defending, with your armour as items, and those dice go with your tracks. Each one stops one telegraph it beats or ties, as long as how you're defending fits it, so a shield won't stop a lie. Split it as usual, so you've got more dice for more blows.
+**Defend** takes your action. When the telegraphs land, roll a Root and everything that fits how you're defending, your armour included, and those dice go with your tracks. Each one stops one telegraph it beats or ties, as long as how you're defending fits it, so a shield won't stop a lie. Split it as usual, so you've got more dice for more blows.
 
 :::example
-Bram Defends with his Body and his Shieldwork, his plate and his shield, 11 steps, a d12 and a d10. He splits the d12 into two d6s, and his Stamina's d12 rolls with them, so he's got four dice for three blows.
+Bram Defends with his Body, both Titles, *hold the line*, *fight in a shield wall*, Guardian, his plate and his shield, 14 steps, two d12s and a d4. His Stamina's d12 rolls with them, so he's got four dice for four blows.
 :::
 ::::
 
@@ -302,7 +302,7 @@ A vault door's Challenge 4, and *Oak*, *Iron Bars* and *Warded* keep it shut. Th
 A **condition**'s a tag carrying a die. It can be against you, like *Burning d8*, or for you, like *Warded d8*, and its die is the die that placed it. While it lasts it's a step against you or for you, and you can spend it for its one big effect. At the end of every round it steps down a size, and past d2 it's gone.
 
 :::example
-Ash's fire beats a Warden with a d8 meant to set it alight, so it's *Burning d8*. That lasts four rounds, unless someone spends it or puts it out first.
+Ash's fire beats a Warden with a d12 meant to set it alight, so it's *Burning d12*. That lasts six rounds, unless someone spends it or puts it out first.
 :::
 ::::
 
@@ -323,9 +323,9 @@ The crew's got no Healer, so Dorrie spends 1 Aura and her action to bring Bram's
 ::::
 
 ::::card[Downtime]{#l-downtime teaches=your-slots}
-After every session there's a downtime, where the world moves and you heal and grow. It starts with each of your tracks up a size. Every player gets two personal slots, for things like putting 6 sizes back on your tracks, a new permission, mending armour or chasing your Aspiration. The crew gets one action between you, and a slot you put into it makes everything count twice.
+After every session there's a downtime, where the world moves and you heal and grow. It starts with each of your tracks up a size. Every player gets two personal slots, for things like putting 6 sizes back on your tracks, a new permission or ability, mending armour or chasing your Aspiration. The crew gets one action between you, and a slot you put into it makes everything count twice.
 
 :::example
-Bram's tracks come up a size as downtime starts. He spends one slot at the smithy to mend his plate, and his other slot puts *fight two at once* on his first Title, 1 more on his Body and his Shieldwork.
+Bram's tracks come up a size as downtime starts. He spends one slot at the smithy to mend his plate, and his other slot puts *fight two at once* on his first Title, 1 more on his Body, and a step whenever two come at him.
 :::
 ::::

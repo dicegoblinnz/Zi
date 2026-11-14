@@ -325,7 +325,6 @@ export function checksOf(b, B, { changing = false } = {}) {
     const name = cap(a.name.trim() || "Your attuned thing");
     const filled = a.awk.map((w, j) => [w, j]).filter(([w]) => awkIn(w));
     if (!a.name.trim()) out.push({ step: 3, kit: "a", text: "Your attuned thing needs a name." });
-    if (!a.aura.trim()) out.push({ step: 3, kit: "a", text: `${name} needs its own way to get you Aura.` });
     if (!filled.length) out.push({ step: 3, kit: "a", text: `${name} needs an awakening.` });
     for (const [w] of filled) if (!w.name.trim() || !w.text.trim()) out.push({ step: 3, kit: "a", text: `An awakening on ${a.name.trim() || "your attuned thing"} needs ${!w.name.trim() ? "its name" : "what it does"}.` });
     const r = roomOf(a);

@@ -6,7 +6,7 @@ order: 9
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::quote
 Three days over the fells is one sentence, unless the fells have something to say about it.
@@ -78,19 +78,19 @@ Wren, Bram, Isolde and Ash have to reach the abbey on the far side of the fells 
 
 **Leg 1.** The GM telegraphs: "The river's up. That's a d8 at Supplies, and if it lands, it takes a pack and Supplies drops two sizes. And something's been following you since the last farm. A d6 at Isolde's Body, at the back."
 
-The ford's in flood, so it's pushing back, and Wren has to roll for it even with the map. Finding a crossing's her Body and her Scouting, 7 steps, a d12 and a d2. She rolls 5 and 1, and the way's d8, which she rolls too, comes up 4. *The Ford*'s behind them.
+The ford's in flood, so it's pushing back, and Wren has to roll for it even with the map. Finding a crossing's her Body, both Titles, *scout ahead of an army* and her torn map, 10 steps, a d12 and a d8. She rolls 5 and 1, and the way's d8, which she rolls too, comes up 4. *The Ford*'s behind them.
 
-Bram answers the river by carrying the packs across above his head. That's his Body and his Lifting, 7 steps, a d12 and a d2. He rolls 5 against the river's 3, and the packs stay dry. Ash answers the d6 at Isolde with a little fire at the back of the line. That's her Soul and her Fire, with her ember stone, 10 steps, a d12 and a d8. She rolls 8 against 2, and the wolves melt back into the heather.
+Bram answers the river by carrying the packs across above his head. That's his Body and *lift what two men can't*, 8 steps, a d12 and a d4. He rolls 5 against the river's 3, and the packs stay dry. Ash answers the d6 at Isolde with a little fire at the back of the line. That's her Soul, her first Title, *throw fire*, Elementalist, her ember stone and *Fire without a word*, 13 steps, two d12s and a d2. Her best's an 8 against 2, and the wolves melt back into the heather.
 
-Isolde Studies the road ahead. That's her Mind and her History, 7 steps, a d12 and a d2. She rolls 5 against the way's 4. She's a Scholar, so instead of a hidden tag or a straight answer, she introduces a truth: there's an old drove road the monks used to bring their sheep down. Now there is, and it's a step for anyone in the crew for the rest of the journey.
+Isolde Studies the road ahead. That's her Mind, her second Title, *know the history of anything old* and Scholar, 10 steps, a d12 and a d8. Her best's a 5 against the way's 4. She's a Scholar, so instead of a hidden tag or a straight answer, she introduces a truth: there's an old drove road the monks used to bring their sheep down. Now there is, and it's a step for anyone in the crew for the rest of the journey.
 
 Nobody fed the crew, so at the end of the leg Supplies steps down to a d6. The riders step down to a d6 as well.
 
-**Leg 2.** Wren knows the way and nothing's pushing back on the open fells, so they just walk them. The GM telegraphs the weather instead: "Fog's coming down off the tops. A d8 at the way, and if it lands, you lose the day." Isolde answers it. The monks marked their drove road with cairns and she knows how to read them, so it's her Mind and her History again, 7 steps. The drove road counts too, and it's free, because it's something the crew's got for the whole journey. That's 8 steps, a d12 and a d4. She rolls 7 against the fog's 4, and she walks them from cairn to cairn until it lifts.
+**Leg 2.** Wren knows the way and nothing's pushing back on the open fells, so they just walk them. The GM telegraphs the weather instead: "Fog's coming down off the tops. A d8 at the way, and if it lands, you lose the day." Isolde answers it. The monks marked their drove road with cairns and she knows how to read them, so it's the same 10 steps again. The drove road counts too, and it's free, because it's something the crew's got for the whole journey. That's 11 steps, a d12 and a d10. Her best's a 7 against the fog's 4, and she walks them from cairn to cairn until it lifts.
 
-That leaves Wren free to hunt. She knows a beast's habits and it's the bow that puts venison on the fire, so it's her Mind and her Wildcraft, with her longbow, 8 steps, a d12 and a d4. She rolls 9, and the way's d8 comes up 5. There's venison tonight, so Supplies doesn't step down.
+That leaves Wren free to hunt. She knows a beast's habits and it's the bow that puts venison on the fire, so it's her Mind, her first Title, *know a beast's habits*, Hunter twice, her longbow and *Long shot*, 12 steps, two d12s. Her best's a 9, and the way's d8 comes up 5. There's venison tonight, so Supplies doesn't step down.
 
-Ash goes back up the drove road to set the heather alight behind them, and Bram drags a dead gorse bush across the road for it to catch. They've put their actions into the same thing, so it's a combo. Ash rolls: her Soul, her Fire and her ember stone are 10 steps, and Bram's Lifting is 2 more. That's 12 between them, two d12s, and they put both on the riders' d6. They roll 7 and 1 against 3, and the best die counts, so the riders step back up to a d8. Somebody worked them this leg, so they don't step down at the end of it.
+Ash goes back up the drove road to set the heather alight behind them, and Bram drags a dead gorse bush across the road for it to catch. They've put their actions into the same thing, so it's a combo. Ash rolls: her Soul, her first Title, *throw fire*, Elementalist, her ember stone and *Fire without a word* are 13 steps, and Bram's *lift what two men can't* is 1 more. That's 14 between them, two d12s and a d4, and they put all three on the riders' d6. They roll 7, 1 and 2 against 3, and the best die counts, so the riders step back up to a d8. Somebody worked them this leg, so they don't step down at the end of it.
 
-On the third morning they're at the edge of the Long Bog, with Supplies at a d6, the riders at a d8 and *The Fells* behind them. The bog's pushing back, and Wren's the only one who can hunt or find a way through it. She's only got one action a leg, so she'll have to pick one, unless she pays 3 Aura for a second, and with two archetypes she can.
+On the third morning they're at the edge of the Long Bog, with Supplies at a d6, the riders at a d8 and *The Fells* behind them. The bog's pushing back, and Wren's the only one who can hunt or find a way through it. She's only got one action a leg, so she'll have to pick one, unless she pays 3 Aura for another.
 :::
