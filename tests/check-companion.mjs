@@ -88,6 +88,11 @@
 //    plate's boxes and his shield's till they break, 2 for 1 pays one off his
 //    Confidence and his Resolve, his Defend loses what's broken, and downtime
 //    mends his plate.
+// 3d. Built characters at the table: Bram from the crew saved as his own
+//    plays the chapter's numbers and barks an order, a random character plays
+//    its Roots, a Toughness Boon takes the first hit When it lands, and a
+//    Gambler flips their die for free and every one of his for Double or
+//    nothing.
 // 4. The tracks: Vesk's Stamina to d2, Vanish paid 2 for 1 since paying never
 //    goes below the smallest size, a Blaze and its Scar written as a Catch,
 //    locking d2, the rest at the end of a scene with fixed dice, her grappling
@@ -2024,6 +2029,111 @@ if (part("3c")) {
   await context.close();
 }
 
+// 3d. Built characters at the table: Bram from the crew, saved as his own,
+// plays the chapter's numbers and barks an order, a random character plays
+// its Roots, Vesk built with a Toughness Boon has it take the first hit When
+// it lands, and a Gambler flips their die for free and every one of his for
+// Double or nothing.
+if (part("3d")) {
+  const { context, page } = await phone();
+  const t = tableOf(page);
+  const put = (id, name, build) => page.evaluate(([id, name, build]) => {
+    const list = JSON.parse(localStorage.getItem("zi-characters") ?? "null") ?? { v: 1, characters: [] };
+    list.characters.push({ id, crew: "own", name, hash: "own", build, state: {} });
+    localStorage.setItem("zi-characters", JSON.stringify(list));
+  }, [id, name, build]);
+  const open = async (id) => {
+    await page.goto(`${BASE}/characters/?c=${id}`);
+    await page.waitForSelector(".tile[data-r]");
+  };
+  const tiles = () => page.$$eval(".cc-roots .tile[data-r]", (els) => els.map((el) => `${el.dataset.r} ${el.querySelector(".tile-steps").textContent}`));
+  const want = (c) => ROOTS.map((r) => `${r} ${c.roots[r] ? `${c.roots[r]} ${c.roots[r] === 1 ? "step" : "steps"}` : "nothing yet"}`);
+  const chip = (k) => page.click(`#cc-dialog .cc-pick[data-act="use"][data-k="${k}"]`);
+  const live = () => page.textContent("#cc-dialog .cc-dice");
+  await page.goto(`${BASE}/characters/`);
+
+  // Bram from the crew, saved as his own: his order is his Soul, bark an
+  // order that gets obeyed (his second Title with it) and Leader, 6 steps.
+  const bram = book.crew.find((c) => c.id === "bram");
+  await put("own-bram", "Bram", fromCrew(bram, BUILD));
+  await open("own-bram");
+  same(await tiles(), want(rootsSheet(bram, [], BUILD)), "Bram from the crew, saved and played");
+  await page.click('.cc-roots .tile[data-r="Soul"]');
+  await chip("perm|1|1");
+  await chip("arch|1");
+  same(await page.$eval('#cc-dialog .cc-pick[data-k="arch|1"]', (el) => el.textContent.trim()), "Leader", "his Leader chip");
+  has(await live(), "6 steps, d12", "his order: his Soul, his second Title, the order and Leader");
+  await page.click('#cc-dialog button[data-act="foe-add"][data-v="6"]');
+  await page.evaluate(() => window.ziCompanion.setDice([9, 4]));
+  await page.click('#cc-dialog button[data-act="go"]');
+  await t.rolled();
+  same(await t.outs(), ["Beat it"], "his 9 against the guard's 4");
+  await t.done();
+
+  // A random one saves and plays: its three Roots, and a roll on its biggest.
+  const rand = randomBuild(BUILD, book.crew);
+  await put("own-rand", rand.name || "Random", rand);
+  await open("own-rand");
+  const rc = rootsSheet(sheetOf({ id: "own-rand", name: rand.name, build: rand }, BUILD), [], BUILD);
+  same(await tiles(), want(rc), "a random character's three Roots on the play screen");
+  const big = ROOTS.reduce((a, r) => (rc.roots[r] > rc.roots[a] ? r : a), "Body");
+  await page.click(`.cc-roots .tile[data-r="${big}"]`);
+  await page.click("#cc-dialog .cc-picks .cc-pick.k-title");
+  has(await live(), `${rc.roots[big] + 1} steps`, "its biggest Root and a Title");
+  await page.click('#cc-dialog button[data-act="foe-add"][data-v="4"]');
+  await page.evaluate(() => window.ziCompanion.setDice([3, 3, 3, 2]));
+  await page.click('#cc-dialog button[data-act="go"]');
+  await t.rolled();
+  await t.done();
+
+  // Vesk built with a Toughness Boon on her first Title: it takes the first
+  // hit this scene, and her Stamina stays put.
+  const vesk = fromCrew(book.crew.find((c) => c.id === "vesk"), BUILD);
+  vesk.titles[0].boons = [{ lever: "Toughness", name: "Iron Lungs", on: "" }];
+  await put("own-iron", "Vesk", vesk);
+  await open("own-iron");
+  await page.click('.tile[data-act="defence"]');
+  await page.click('#cc-dialog button[data-act="d-add-at"][data-v="Body"]');
+  await page.click('#cc-dialog button[data-act="d-add"][data-v="8"]');
+  await page.evaluate(() => window.ziCompanion.setDice([2, 7]));
+  await page.click('#cc-dialog button[data-act="d-go"]');
+  await t.landed();
+  await page.click('#cc-dialog button[data-act="d-pay"][data-what="tough"]');
+  has(await page.textContent("#cc-dialog .cc-paid"), "Iron Lungs took it, and your Stamina stayed put", "her Toughness Boon taking the hit");
+  same(await page.$$eval('#cc-dialog button[data-what="tough"]', (els) => els.length), 0, "Iron Lungs used for the scene");
+  await t.done();
+  same(await t.track("stamina"), "d12", "her Stamina where it was");
+
+  // A Gambler flips a die once a round for free, theirs or yours, and pays a
+  // size of Confidence for Double or nothing, flipping every die of theirs.
+  const gil = fromCrew(bram, BUILD);
+  gil.archs = ["Gambler", "Leader"];
+  gil.have = [["Double or nothing"], ["Push"]];
+  gil.name = "Gil";
+  await put("own-gil", "Gil", gil);
+  await open("own-gil");
+  await page.click('.cc-roots .tile[data-r="Body"]');
+  await chip("perm|0|0");
+  has(await live(), "9 steps, d12 + d6", "his Body, his first Title and hold the line");
+  await page.click('#cc-dialog button[data-act="foe-add"][data-v="10"]');
+  await page.evaluate(() => window.ziCompanion.setDice([9, 3, 7]));
+  await page.click('#cc-dialog button[data-act="go"]');
+  await t.rolled();
+  await page.click('#cc-dialog button[data-act="flip"]');
+  await page.click('#cc-dialog .cc-them button[data-act="pick"]');
+  has(await page.textContent("#cc-dialog .cc-log"), "Flipped their d10, so it’s a 4 now", "their 7 on a d10 flipped to a 4");
+  same(await t.outs(), ["Beat it", "Under"], "his 9 beating their flipped 4, and his 3 still under");
+  same(await page.$$eval('#cc-dialog button[data-act="flip"]', (els) => els.length), 0, "the free flip used on this roll");
+  if (!(await page.$eval('#cc-dialog details[data-open="abil"]', (d) => d.open))) await page.click('#cc-dialog details[data-open="abil"] > summary');
+  await page.click('#cc-dialog .cc-how button[data-act="ability"]:has-text("Double or nothing")');
+  await page.click('#cc-dialog button[data-act="pay-way"]');
+  has(await page.textContent("#cc-dialog .cc-log"), "Flipped every die of yours", "Double or nothing flipping every die");
+  same(await page.$$eval("#cc-dialog .res-note", (els) => els.map((e) => e.textContent).filter((x) => x === "Flipped").length), 2, "both dice marked flipped, so neither pays");
+  await t.done();
+  console.log("built: Bram from the crew played and his order, a random one played, a Toughness Boon taking the first hit, and a Gambler's flips");
+  await context.close();
+}
+
 // 4. The tracks. Vesk's Stamina down to a Blaze and a Scar, the rest at the
 // end of a scene, an ability paid in sizes, 2 for 1, her grappling line
 // powered, and Dorrie's Confidence against a lie and Isolde's Resolve against
@@ -3474,8 +3584,8 @@ if (part("8")) {
         const perm = (text) => v.titles.flatMap((x) => x.permissions).find((p) => p.text === text);
         perm("run the rooftops").text = "run and leap the rooftops";
         perm("know how a lock’s built").text = "know how a locks built";
-        perm("pick a mechanical lock").specialty = "Climbing";
-        v.titles[1].name = "Raised by the guild";
+        perm("pick a mechanical lock").root = "Mind";
+        v.titles[1].name = v.titles[1].text = "Raised by the guild";
         v.numbers.stride = 4;
         v.hash = "madeup01";
         return `${open}${JSON.stringify(data).replace(/</g, "\\u003c")}${close}`;
@@ -3485,23 +3595,22 @@ if (part("8")) {
     await p2.goto(`${BASE}/characters/`);
     await p2.evaluate((json) => localStorage.setItem("zi-characters", json), saved);
     await p2.goto(`${BASE}/characters/?c=${encodeURIComponent(id)}`);
-    await p2.waitForSelector(".tile[data-s]");
+    await p2.waitForSelector(".tile[data-r]");
     const seen = await p2.evaluate((cid) => JSON.parse(localStorage.getItem("zi-characters")).characters.find((c) => c.id === cid).state.seen, id);
-    same([seen["title:1"], seen["perm:1:0"], seen["perm:0:1"]], ["Raised by the guild (Mind; Locks, Knives, Black market)", "know how a locks built (Mind, Locks)", "run the rooftops (Body, Climbing)"], "the typo fixes taken in quietly, and the real change kept for its mark");
+    same([seen["title:1"], seen["perm:1:0"], seen["perm:0:1"]], ["Raised by the guild (Mind 2, Body 1)", "know how a locks built (Mind)", "run the rooftops (Body)"], "the typo fixes taken in quietly, and the real change kept for its mark");
     has(await p2.textContent(".cc-note.is-gold"), "lines on Vesk’s sheet have changed", "the note for a rule change");
-    const marked = await p2.$$eval(".cc-spectiles .tile.is-changed .tile-name", (els) => els.map((e) => e.textContent));
-    same(marked, ["Locks", "Climbing"], "gold corners on Locks and Climbing");
+    same(await p2.$$eval(".cc-roots .tile.is-changed", (els) => els.map((e) => e.dataset.r)), ["Body", "Mind"], "gold corners on her Body and her Mind, with the lock moved");
     await p2.click('.cc-gold[data-k="num:stride"]');
     has(await p2.textContent(".cc-head .cc-was"), "Was Stride 3", "Stride's old number");
     has(await p2.textContent(".cc-head .cc-was"), "Now Stride 4", "Stride's new number");
     await p2.click('.cc-tabs a[data-t="sheet"]');
     await p2.$$eval("details.cc-fold", (els) => els.forEach((d) => (d.open = true)));
     const golds = await p2.$$eval(".cc-gold", (els) => els.map((el) => el.dataset.k));
-    for (const k of ["perm:0:1", "perm:0:2", "spec:Locks", "spec:Climbing"]) same(golds.includes(k), true, `a gold mark on ${k}`);
+    for (const k of ["perm:0:1", "perm:0:2", "root:Body", "root:Mind"]) same(golds.includes(k), true, `a gold mark on ${k}`);
     for (const k of ["perm:1:0", "title:1"]) same(golds.includes(k), false, `no gold mark on ${k}, a typo fix`);
     same(golds.some((k) => /:g\d/.test(k)), false, "nothing she grew in downtime marked");
     await p2.click('.cc-gold[data-k="perm:0:1"]');
-    has(await p2.textContent('li:has(> .cc-gold[data-k="perm:0:1"]) .cc-was, li:has(.cc-gold[data-k="perm:0:1"]) .cc-was'), "Was run the rooftops (Body, Climbing)", "the permission as it was");
+    has(await p2.textContent('li:has(> .cc-gold[data-k="perm:0:1"]) .cc-was, li:has(.cc-gold[data-k="perm:0:1"]) .cc-was'), "Was run the rooftops (Body)", "the permission as it was");
     await p2.click('.cc-note.is-gold button[data-act="seen"]');
     same(await p2.$$eval(".cc-gold", (els) => els.length), 0, "Got it clears the marks");
     await p2.reload();
