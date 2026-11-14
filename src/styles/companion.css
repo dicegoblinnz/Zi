@@ -2893,12 +2893,76 @@ html.cc-tabbed .zr { bottom: calc(59px + env(safe-area-inset-bottom, 0px)); padd
 .cc-pool { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin: .4rem 0; }
 .cc-pool-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-block: .45rem; }
 
-/* Question bubbles (src/companion/tip.js, Mo's 14 Nov ask): a small ? with a
-   44px target, and its words over the screen in a card that a tap anywhere
-   else or Escape closes. Prompt 4 of notes/stacking-plan.md finishes them. */
-.tip { display: inline-grid; place-items: center; width: 44px; height: 44px; margin: -10px -8px; padding: 0; vertical-align: middle; color: var(--violet); background: none; border: 0; cursor: pointer; }
-.tip > span { display: grid; place-items: center; width: 1.4rem; height: 1.4rem; border: 1.5px solid currentColor; border-radius: 50%; font: 700 0.8rem/1 var(--body); }
-.tip:focus-visible { outline: 2px solid var(--gold); outline-offset: -6px; }
-.tip-card { display: none; max-width: min(26rem, calc(100vw - 2rem)); max-height: min(70vh, 32rem); overflow: auto; padding: 1rem 1.1rem; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 12px 40px rgb(0 0 0 / 0.35); font-size: 0.95rem; line-height: 1.45; text-align: left; }
+/* Question bubbles (src/companion/tip.js, Mo's 14 Nov ask): a small ? beside
+   what it explains, a token punched out of card like the kit's pieces, in ink
+   since it's nobody's (gold's yours, violet the GM's), with a 44px target that
+   takes no room in the line. Its words come up as a gold-cornered card over
+   the screen: under its ? (or over it, when there's no room under) where the
+   browser can anchor it, the width of a phone less a margin, and in the middle
+   of the screen where it can't. Every colour's a token, so both themes keep
+   4.5:1. */
+.tip { display: inline-grid; place-items: center; width: 44px; height: 44px; margin: -12px -10px; padding: 0; vertical-align: middle; color: var(--muted); background: none; border: 0; border-radius: 50%; cursor: pointer; font: inherit; -webkit-tap-highlight-color: transparent; }
+button.tip > zi-q { display: grid; place-items: center; width: 22px; height: 22px; box-sizing: border-box; padding-top: 1px; border: 1.5px solid currentColor; border-radius: 50%; background: var(--zd-token); font: 800 0.8rem/1 var(--body); letter-spacing: 0; text-transform: none; font-style: normal; transition: color 0.15s, background-color 0.15s, border-color 0.15s; }
+.tip:hover { color: var(--ink); }
+.tip:focus-visible { outline: 2px solid var(--violet); outline-offset: -7px; }
+.tip:has(+ .tip-card:popover-open) > zi-q { color: var(--surface); background: var(--ink); border-color: var(--ink); }
+.tip-card {
+  box-sizing: border-box; max-width: min(22rem, calc(100vw - 24px)); max-height: min(70dvh, 30rem); overflow: auto; overscroll-behavior: contain;
+  margin: auto; padding: 0.75rem 1rem 0.85rem;
+  color: var(--ink); text-align: start; text-indent: 0; text-transform: none; letter-spacing: normal; white-space: normal; overflow-wrap: break-word; font: 400 0.98rem/1.45 var(--body); font-style: normal; cursor: auto;
+  background:
+    linear-gradient(var(--bracket), var(--bracket)) left top / 12px 1px no-repeat,
+    linear-gradient(var(--bracket), var(--bracket)) left top / 1px 12px no-repeat,
+    linear-gradient(var(--bracket), var(--bracket)) right top / 12px 1px no-repeat,
+    linear-gradient(var(--bracket), var(--bracket)) right top / 1px 12px no-repeat,
+    linear-gradient(var(--bracket), var(--bracket)) left bottom / 12px 1px no-repeat,
+    linear-gradient(var(--bracket), var(--bracket)) left bottom / 1px 12px no-repeat,
+    linear-gradient(var(--bracket), var(--bracket)) right bottom / 12px 1px no-repeat,
+    linear-gradient(var(--bracket), var(--bracket)) right bottom / 1px 12px no-repeat,
+    var(--surface);
+  border: 1px solid var(--line); border-radius: 3px;
+  box-shadow: 0 14px 40px rgb(0 0 0 / 0.36), 0 2px 8px rgb(0 0 0 / 0.18);
+}
 .tip-card:popover-open { display: block; }
-.tip-card::backdrop { background: rgb(0 0 0 / 0.3); }
+.tip-card:focus { outline: none; }
+.tip-card:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.tip-card::backdrop { background: rgb(6 3 10 / 0.22); }
+.tip-card zi-tip-h { display: block; margin: 0 0 0.3rem; font-size: 0.74rem; font-weight: 700; line-height: 1.3; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-ink); }
+.tip-card zi-tip-b, .tip-card zi-tip-p { display: block; }
+.tip-card zi-tip-p + zi-tip-p { margin-top: 0.5rem; }
+.tip-card zi-tip-b b, .tip-card zi-tip-b strong { color: var(--ink); }
+.tip-card zi-tip-b .pt-reword { min-height: 44px; font-size: inherit; }
+@supports (position-area: bottom) {
+  .tip-card { inset: auto; margin: 2px 12px 12px; position-area: bottom; justify-self: stretch; max-width: none; position-try-fallbacks: flip-block, --tip-mid; }
+  @media (min-width: 40rem) {
+    .tip-card { justify-self: anchor-center; width: max-content; max-width: 22rem; margin-inline: 0; }
+  }
+}
+@position-try --tip-mid { position-area: none; inset: 12px; margin: auto; height: fit-content; }
+@media (prefers-reduced-motion: no-preference) {
+  .tip-card:popover-open:not(.is-kept) { animation: tip-in 0.16s cubic-bezier(0.23, 1, 0.32, 1); }
+}
+@keyframes tip-in { from { opacity: 0; transform: scale(0.97); } }
+/* Beside a button in a row, a ? sits in the middle of the row and takes its
+   own room, and a field's label can have one beside it. */
+:is(.cc-row, .tg-do, .wa-skip, .wk-rest, .wk-break, .cc-field-h) > .tip { margin: 0 -6px; align-self: center; }
+.cc-field-h { display: flex; align-items: center; gap: 4px; }
+.cc-field-h > :is(.cc-field, .tg-label) { flex: 0 1 auto; }
+/* A fold's ? can't go in its summary, so it's the first thing in its body,
+   which shows while the fold's open, and it sits beside the fold's title:
+   anchored to it where the browser can, and up on the right where it can't. */
+.cc-fold-ask > .tip { margin: 0; }
+@supports (anchor-name: --x) {
+  .cc-fold:has(> .cc-fold-b > .cc-fold-ask) { position: relative; }
+  .cc-fold:has(> .cc-fold-b > .cc-fold-ask) > summary .cc-fold-t { anchor-name: --cc-fold-t; width: fit-content; max-width: calc(100% - 30px); }
+  .cc-fold-ask { position: absolute; position-anchor: --cc-fold-t; left: anchor(right); top: anchor(center); translate: -6px -50%; }
+}
+@supports not (anchor-name: --x) {
+  .cc-fold-ask { float: right; margin: -8px -6px 0 8px; }
+}
+/* A browser too old for popovers gets the words in the line, small, and no ?. */
+@supports not selector(:popover-open) {
+  .tip { display: none; }
+  .tip-card { display: block; margin: 0.3rem 0; padding: 0; border: 0; background: none; box-shadow: none; color: var(--muted); font-size: 0.92rem; }
+  .tip-card zi-tip-h { display: none; }
+}

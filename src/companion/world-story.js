@@ -13,6 +13,7 @@
 // it's what they heard, unless she hides it again.
 import { agesOf, downtimeOf, isDowntime } from "./world-record.js";
 import { AGE_NAMES } from "./world-answer.js";
+import { tip } from "./tip.js";
 
 const AGE_SAY = { 1: "long ago", 2: "in living memory", 3: "this last year" };
 // What an age is, in a sentence: shown, hidden, and in a player's note.
@@ -61,8 +62,10 @@ export function makeStory(w) {
     const hersAll = lines.filter((l) => l.hers).length;
     const deck = lines.filter((l) => !isDowntime(l.age)).length;
     const downtimes = (doc.build.ages ?? []).filter((x) => lines.some((l) => l.age === 3 + x.n)).length;
-    const sum = [deck ? `${plural(deck, "line", "lines")} from the deck. You show the crew an age at a time${hersAll ? `, and ${hersAll === 1 ? "the line that made a Secret stays" : `the ${hersAll} lines that made Secrets stay`} on your phone` : ""}.` : "", downtimes ? `${downtimes === 1 ? "A downtime’s" : `${plural(downtimes, "downtime", "downtimes")}’`} worth of what changed, an age each, which the crew can read.` : ""].filter(Boolean).join(" ");
-    return `<section class="cc-sec ws-sec${glow}" data-wb="${esc(id)}" aria-labelledby="ws-h"><h2 id="ws-h">How it came to be</h2>
+    // What's here at a glance, and how showing it works behind the ?.
+    const sum = [deck ? `${plural(deck, "line", "lines")} from the deck${hersAll ? `, ${hersAll} of them yours` : ""}.` : "", downtimes ? `${downtimes === 1 ? "A downtime’s" : `${plural(downtimes, "downtime", "downtimes")}’`} worth of what changed.` : ""].filter(Boolean).join(" ");
+    const how = [deck ? `You show the crew an age at a time. A line whose answer made a Secret is yours, and it stays on your phone whatever you show.` : "", downtimes ? "Each downtime that’s ended is an age of its own, a line for each thing that changed, and the crew can read it unless you hide it again." : ""];
+    return `<section class="cc-sec ws-sec${glow}" data-wb="${esc(id)}" aria-labelledby="ws-h"><h2><span id="ws-h">How it came to be</span> ${tip("ws-how", how, "Showing the crew the history")}</h2>
       <p class="cc-small wb-sum">${sum}</p>
       <div class="cc-folds">${parts.join("")}</div></section>`;
   }

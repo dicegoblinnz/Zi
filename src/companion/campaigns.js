@@ -14,6 +14,7 @@
 // link's code waits in zi-join while you sign in or make a character.
 import { printSheet } from "./print.js";
 import { lookView, trackLine } from "./look.js";
+import { tip } from "./tip.js";
 
 const KEEP = "zi-campaigns";
 const JOIN = "zi-join";
@@ -191,7 +192,7 @@ export function makeCampaigns(d) {
       <span class="die${k.role === "gm" ? " is-gm" : ""}" aria-hidden="true">${initial(k.name)}</span>
       <span class="cc-saved-text"><b>${esc(k.name)}</b><small>${metaOf(k)}</small></span></a></li>`;
     const lead = st.list == null ? `<p class="cc-lead">${online() ? "Checking for your campaigns…" : "Your campaigns show up here when you’ve got a signal."}</p>`
-      : list.length ? "" : '<p class="cc-lead">Start one and you’re its GM. Your players join with its link, each bringing one of their characters, and you see every character in it. Got a link from your GM? Open it and you can join.</p>';
+      : list.length ? "" : `<p class="cc-lead">Start one and you’re its GM. ${tip("k-how", ["Your players join with its link, each bringing one of their characters, and you see every character in it.", "Got a link from your GM? Open it and you can join."], "How campaigns work")}</p>`;
     const stale = !online() && st.list ? `<p class="cc-small">No signal, so these are as they were at ${time(st.at)}.</p>` : "";
     return `<section class="cc-sec" id="cc-camps" aria-labelledby="cc-camps-h"><h2 id="cc-camps-h">Campaigns</h2>
       ${list.length ? `<ul class="cc-mine">${list.map(card).join("")}</ul>` : ""}${lead}${stale}
@@ -245,7 +246,7 @@ export function makeCampaigns(d) {
     if (gm) {
       const bring = bringView(c);
       const partyHtml = `<section class="cc-sec" aria-labelledby="k-party"><h2 id="k-party">The party</h2>
-        ${party.length ? `<ul class="cc-mine cc-party">${party.map((p) => memberCard(c, p)).join("")}</ul>` : '<p class="cc-lead">Nobody’s joined yet. When they do, their characters show up here, and you can open each one’s sheet.</p>'}</section>`;
+        ${party.length ? `<ul class="cc-mine cc-party">${party.map((p) => memberCard(c, p)).join("")}</ul>` : `<p class="cc-lead">Nobody’s joined yet. ${tip("k-nobody", "When they do, their characters show up here, and you can open each one’s sheet.", "When they join")}</p>`}</section>`;
       const sheet = d.party.sheet(id);
       // The round's telegraphs come first, since they're what she taps most in
       // a fight, bar a founding that's on, which is all a session zero's about.
@@ -263,11 +264,10 @@ export function makeCampaigns(d) {
   function bringView(c) {
     const share = typeof navigator.share === "function";
     return `<section class="cc-sec cc-bring" aria-labelledby="k-bring"><h2 id="k-bring">Bring your players in</h2>
-      <p class="cc-lead">Anyone with this link can join ${esc(c.name)} with one of their characters. Send it to your group chat, or show the code at the table and they scan it with their phone.</p>
+      <p class="cc-lead">Anyone with this link can join ${esc(c.name)} with one of their characters. ${tip("k-bring", "Send it to your group chat, or show the code at the table and they scan it with their phone.", "Getting it to your players")}</p>
       <label class="cc-field" for="k-link">The join link</label><input id="k-link" class="ac-link" readonly value="${esc(linkOf(c.code))}">
       <div class="cc-row">${share ? '<button type="button" class="button primary" data-act="k" data-do="share">Share the link</button>' : ""}<button type="button" class="button${share ? "" : " primary"}" data-act="k" data-do="copy">Copy the link</button><button type="button" class="button" data-act="k" data-do="qr">Show the code</button></div>
-      <p class="cc-lead">Link getting around? Reset it and the old one stops working. Everyone who’s joined stays in.</p>
-      <div class="cc-row"><button type="button" class="button" data-act="k" data-do="reset"${off("reset")}>${sure("reset", "Tap again to reset it", "Reset the link")}</button></div></section>`;
+      <div class="cc-row"><button type="button" class="button" data-act="k" data-do="reset"${off("reset")}>${sure("reset", "Tap again to reset it", "Reset the link")}</button>${tip("k-reset", "Link getting around? Reset it and the old one stops working. Everyone who’s joined stays in.", "Resetting the link")}</div></section>`;
   }
 
   // A player's card for the GM: their character and how they're doing, which
@@ -300,7 +300,7 @@ export function makeCampaigns(d) {
     return `<section class="cc-sec" aria-labelledby="k-this"><h2 id="k-this">This campaign</h2>
       <form class="ac-make" data-form="k-rename"><label class="cc-field" for="k-name-now">Its name</label>
         <div class="cc-row"><input id="k-name-now" name="name" maxlength="40" autocomplete="off" required value="${esc(c.name)}"><button type="submit" class="button"${off("rename")}>Rename it</button></div></form>
-      <p class="cc-lead">Ending it takes everyone out. Their characters are their own, so they keep them.</p>
+      <p class="cc-lead">Ending it takes everyone out. ${tip("k-end", "Their characters are their own, so they keep them.", "What they keep")}</p>
       <div class="cc-row"><button type="button" class="button danger" data-act="k" data-do="end"${off("end")}>${sure("end", "Tap again to end it for everyone", `End ${esc(c.name)}`)}</button></div></section>`;
   }
 
@@ -407,9 +407,8 @@ export function makeCampaigns(d) {
     else if (j.state === "in") body = `<div class="cc-note" role="status"><p>${a.role === "gm" ? `You run ${esc(a.name)}. Send your players the link.` : `You’re already in ${esc(a.name)}.`}</p></div><div class="cc-row"><a class="button primary" href="/characters/?camp=${encodeURIComponent(a.id)}" data-act="k" data-do="open" data-id="${esc(a.id)}">Open ${esc(a.name)}</a></div>`;
     else if (j.state === "out") {
       body = `${failed ? `<div class="cc-note is-warn" role="alert"><p>That didn’t sign you in. Try again, and if you’ve signed in before, use the same way you did then. <small>(It said ${esc(failed)}.)</small></p></div>` : ""}
-        <p class="cc-lead">Sign in first. It’s free, it keeps your characters on every phone you use, and it’s how ${esc(a.gm)} sees your character’s sheet as you play.</p>
-        <div class="cc-row">${j.providers.map((p) => `<button type="button" class="button primary" data-act="k" data-do="in" data-p="${esc(p)}"${off(`in-${p}`)}>Sign in with ${esc({ google: "Google", discord: "Discord" }[p] || p)}</button>`).join("")}</div>
-        <p class="cc-small">First time here? Signing in makes your account. It keeps your name, your email and your characters, and nothing else.</p>`;
+        <p class="cc-lead">Sign in first. ${tip("k-in", [`It’s free, it keeps your characters on every phone you use, and it’s how ${esc(a.gm)} sees your character’s sheet as you play.`, "First time here? Signing in makes your account. It keeps your name, your email and your characters, and nothing else."], "Why you sign in")}</p>
+        <div class="cc-row">${j.providers.map((p) => `<button type="button" class="button primary" data-act="k" data-do="in" data-p="${esc(p)}"${off(`in-${p}`)}>Sign in with ${esc({ google: "Google", discord: "Discord" }[p] || p)}</button>`).join("")}</div>`;
     } else if (j.state === "pick") {
       body = `<form class="cc-joinform" data-form="k-join"><h2>Who are you bringing?</h2>
         <p class="cc-lead">Pick one of your characters. ${esc(a.gm)} sees their sheet as you play.</p>${picker(null)}
@@ -452,8 +451,7 @@ export function makeCampaigns(d) {
     const close = `<button type="button" class="cc-x" data-act="close" aria-label="Close">${ICON.close}</button>`;
     if (roll.what === "start") {
       return `<form class="cc-dlgform" data-form="k-start"><div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">Start a campaign</h2></div>${close}</div>
-        <div class="dlg-body"><label class="cc-field" for="k-name">What’s it called?</label><input id="k-name" name="name" maxlength="40" autocomplete="off" required value="${esc(roll.name ?? "")}">
-          <p class="cc-lead">A name your players will know it by, like the night you play or where it’s set. You can change it later.</p>
+        <div class="dlg-body"><div class="cc-field-h"><label class="cc-field" for="k-name">What’s it called?</label>${tip("k-name", "A name your players will know it by, like the night you play or where it’s set. You can change it later.", "Naming it")}</div><input id="k-name" name="name" maxlength="40" autocomplete="off" required value="${esc(roll.name ?? "")}">
           ${roll.error ? `<p class="cc-warn" role="alert">${esc(roll.error)}</p>` : ""}</div>
         <div class="dlg-foot"><button type="submit" class="button primary"${roll.busy ? ' disabled aria-busy="true"' : ""}>Start it</button></div></form>`;
     }
@@ -476,10 +474,9 @@ export function makeCampaigns(d) {
         : `<div class="ts-give"><p class="cc-small">On the screen, go to</p><p class="ts-give-at">${esc(location.host)}/table</p><p class="cc-small">and type in</p><p class="ts-give-code">${esc(fours(k.screen))}</p></div>
           <p class="cc-lead">Or open its link on whatever’s showing it.</p>
           <div class="cc-row"><a class="button" href="${esc(screenLink(k.screen))}" target="_blank" rel="noopener">Open it here</a>${share ? '<button type="button" class="button" data-act="k" data-do="screenShare">Share the link</button>' : ""}<button type="button" class="button" data-act="k" data-do="screenCopy">Copy the link</button></div>
-          <p class="cc-lead">Link getting around? Reset it and the old one stops working, and any screen showing it goes blank till it gets the new code.</p>
-          <div class="cc-row"><button type="button" class="button" data-act="k" data-do="screenReset"${off("screenReset")}>${sure("screenReset", "Tap again to reset it", "Reset the screen’s link")}</button></div>`;
-      return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">The table screen</h2><p class="cc-small">${esc(k.name)}’s round, up where everyone can see it.</p></div>${close}</div>
-        <div class="dlg-body"><p class="cc-lead">It doesn’t sign in, and it only ever shows what the crew sees: the telegraphs, the scene and what everyone’s done this round. Your notes, the Secrets and anything you haven’t shown the crew stay with you.</p>${body}</div>
+          <div class="cc-row"><button type="button" class="button" data-act="k" data-do="screenReset"${off("screenReset")}>${sure("screenReset", "Tap again to reset it", "Reset the screen’s link")}</button>${tip("k-screen-reset", "Link getting around? Reset it and the old one stops working, and any screen showing it goes blank till it gets the new code.", "Resetting the screen’s link")}</div>`;
+      return `<div class="dlg-head"><div class="cc-live"><h2 id="dlg-title">The table screen</h2><p class="cc-small">${esc(k.name)}’s round, up where everyone can see it. ${tip("k-screen", "It doesn’t sign in, and it only ever shows what the crew sees: the telegraphs, the scene and what everyone’s done this round. Your notes, the Secrets and anything you haven’t shown the crew stay with you.", "What the screen shows")}</p></div>${close}</div>
+        <div class="dlg-body">${body}</div>
         <div class="dlg-foot"><button type="button" class="button primary" data-act="close">Done</button></div>`;
     }
     return "";

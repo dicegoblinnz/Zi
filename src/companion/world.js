@@ -46,6 +46,7 @@ import { makeMaps } from "./mapsui.js";
 import { makeWorldMake } from "./world-make.js";
 import { makeStory } from "./world-story.js";
 import { busiestOf, drawWeb, keyOf as webKey, tiesOf, webOf } from "./world-web.js";
+import { tip } from "./tip.js";
 import { cardNow, wholeOps } from "./world-whole.js";
 import { forgetMapsOf, keepMapsOf } from "./mapcache.js";
 
@@ -969,11 +970,14 @@ export function makeWorld(d) {
   const crewDice = (steps) => stepsToDice(steps);
   // A fold that reads at a glance while it's shut. On a faction's page its
   // parts sit straight under the faction's name, so their headings are h2s.
-  const fold = (key, title, glance, body, badge = "", h = 3) => {
+  // What a part's for is behind a ? in its row while it's open (help is
+  // [what the card's called, what it says]), since a ? can't go in a summary.
+  const fold = (key, title, glance, body, badge = "", h = 3, help = null) => {
     const k = `wb-${key}`;
-    return `<details class="cc-fold wb-fold" data-open="${k}"${d.isOpen(k) ? " open" : ""}><summary><h${h} class="cc-fold-t">${title}${badge}</h${h}><span class="cc-fold-g">${glance}</span></summary><div class="cc-fold-b">${body}</div></details>`;
+    const ask = help ? `<span class="cc-fold-ask">${tip(`${k}-how`, help[1], help[0])}</span>` : "";
+    return `<details class="cc-fold wb-fold" data-open="${k}"${d.isOpen(k) ? " open" : ""}><summary><h${h} class="cc-fold-t">${title}${badge}</h${h}><span class="cc-fold-g">${glance}</span></summary><div class="cc-fold-b">${ask}${body}</div></details>`;
   };
-  const part = (key, title, glance, body, badge = "") => fold(key, title, glance, body, badge, 2);
+  const part = (key, title, glance, body, badge = "", help = null) => fold(key, title, glance, body, badge, 2, help);
   const few = (items, n) => (items.length > n ? `${items.slice(0, n).join(" · ")} <small>and ${items.length - n} more</small>` : items.join(" · "));
   const topbar = (href, label) => `<div class="cc-topbar"><a class="cc-back" href="${esc(href)}" data-act="w" data-do="nav">${d.icon.back}${esc(label)}</a><div class="cc-tools">${d.tools()}</div></div>`;
   const ruleLink = (id, text) => `<button type="button" class="pt-reword pt-rule" data-act="rule" data-r="${id}">${text}</button>`;
@@ -1129,7 +1133,7 @@ export function makeWorld(d) {
     rows.sort((x, y) => Number(y.a.done) - Number(x.a.done) || y.a.die - x.a.die);
     const body = rows.length
       ? `<ul class="wb-close">${rows.map(({ f, a }) => `<li><a class="wb-ag${a.done || a.die >= 10 ? " is-hot" : ""}" href="${facHref(id, f)}" data-act="w" data-do="nav">${kitSeal(f.seal, { size: "sm" })}<span class="wb-ag-in"><b class="wb-ag-n">${esc(a.text)}</b><span class="wb-ag-w">${esc(f.name)} · <span class="wb-ag-when">${whenOf(a)}</span></span></span>${ladder(a)}</a></li>`).join("")}</ul>`
-      : '<p class="cc-small">You haven’t found out what any faction’s working on yet. When you do, it shows up here, nearest first.</p>';
+      : `<p class="cc-small">You haven’t found out what any faction’s working on yet. ${tip("wb-closing", "When you do, it shows up here, nearest first.", "What shows up here")}</p>`;
     return `<section class="cc-sec wb-closing" data-wb="${esc(id)}" aria-labelledby="wb-close-h"><h2 id="wb-close-h">Closing in</h2>${body}</section>`;
   }
 
@@ -1326,7 +1330,7 @@ export function makeWorld(d) {
     const say = status(id);
     if (!gm) {
       const list = order.length ? `<ul class="wb-toks wb-seals">${order.map((f) => token(id, f, doc, false)).join("")}</ul>` : "";
-      const none = !k.at && online() ? '<p class="cc-lead">Opening the board…</p>' : !order.length ? `<p class="cc-lead">${esc(gmName(id))} hasn’t shown you any of the ${doc.build?.history?.length ? "factions" : "world"} yet. The factions you find out about show up here, with whatever you’ve found out about each one.</p>` : "";
+      const none = !k.at && online() ? '<p class="cc-lead">Opening the board…</p>' : !order.length ? `<p class="cc-lead">${esc(gmName(id))} hasn’t shown you any of the ${doc.build?.history?.length ? "factions" : "world"} yet. ${tip("wb-none", "The factions you find out about show up here, with whatever you’ve found out about each one.", "What shows up here")}</p>` : "";
       return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${crewCard(id)}${list}${none}`;
     }
     const tools = order.length >= TOOLS_FROM;
@@ -1339,7 +1343,7 @@ export function makeWorld(d) {
     const shownCount = doc.factions.filter((f) => f.shown.card).length;
     const lead = order.length
       ? `<p class="cc-small wb-sum">${plural(doc.factions.length, "faction", "factions")} on the board, ${shownCount ? `${shownCount} shown to the crew` : "none of them shown to the crew yet"}.</p>`
-      : `<p class="cc-lead">Nothing on the board yet. Build the world from the tables, bring in ${isMo() && emptyWorld(doc) ? "a whole world or " : ""}a board from the book, or start with a faction of your own. Nothing on it shows on your players’ phones till you show it to them.</p>`;
+      : `<p class="cc-lead">Nothing on the board yet. ${tip("wb-none", `Build the world from the tables, bring in ${isMo() && emptyWorld(doc) ? "a whole world or " : ""}a board from the book, or start with a faction of your own. Nothing on it shows on your players’ phones till you show it to them.`, "Starting the board")}</p>`;
     return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${lead}${order.length ? "" : K.entry(id, doc)}${crewCard(id)}${tools ? boardTools(id, doc, order, KD, order.filter(on).length) : ""}${list}${order.length ? K.entry(id, doc) : ""}
       <div class="cc-folds wb-adds">${wholeFold(id, doc)}${bringFold(id, doc)}${newFold(id, doc)}</div>
       <p class="cc-small">${ruleLink("s-faction-board", "What a faction is")} ${ruleLink("s-faction-build", "Building a faction")}</p>`;
@@ -1362,7 +1366,8 @@ export function makeWorld(d) {
         <p class="cc-small">${esc(`${what.slice(0, -1).join(", ")} and ${what.at(-1)}, with How it came to be.`)}</p>
         <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="whole" data-w="${esc(x.id)}"${ui.whole ? " disabled" : ""}>${busy ? "Bringing it in…" : "Bring it in"}</button></div></li>`;
     }).join("");
-    return fold("whole", "Bring in a whole world", [...new Set(offer.map((x) => x.name))].join(" and "),`<p class="cc-lead">It comes in whole and running: every faction with its web, the places and people, the map and How it came to be, all of it hidden from the crew till you show them, and yours to change. Only your account can bring these in for now.</p>${online() ? "" : '<p class="cc-small">You’ll need a signal to bring one in.</p>'}<ul class="wb-brings">${cards}</ul>`);
+    return fold("whole", "Bring in a whole world", [...new Set(offer.map((x) => x.name))].join(" and "), `${online() ? "" : '<p class="cc-small">You’ll need a signal to bring one in.</p>'}<ul class="wb-brings">${cards}</ul>`, "", 3,
+      ["Bringing in a whole world", "It comes in whole and running: every faction with its web, the places and people, the map and How it came to be, all of it hidden from the crew till you show them, and yours to change. Only your account can bring these in for now."]);
   }
   // The line saying whose a fan-made world is, and the companies' notices, at
   // the foot of its World screen and tab. A player gets the world's id once
@@ -1384,14 +1389,14 @@ export function makeWorld(d) {
         <div class="cc-row">${all ? '<span class="chip sm pt-chip is-on">On your board</span>' : `<button type="button" class="button${doc.factions.length ? "" : " primary"}" data-act="w" data-do="bring" data-b="${esc(b.id)}">${sure(`bring-${b.id}`, `Tap again to add ${n ? "the rest" : `its ${b.cards.length}`}`, n ? "Bring in the rest" : "Bring in its board")}</button>`}
         <a class="pt-reword" href="${esc(b.link)}">Read it in the book</a></div></li>`;
     }).join("");
-    return fold("bring", "Bring in a board from the book", doc.factions.length ? "The Steeplands and the five frames" : `${W.boards.length} ready to go`, `<p class="cc-lead">Each one comes in as its factions’ cards, the way the book writes them, and they’re yours to change from then on. If the book changes one later, you’ll get a note and you pick which to keep. They’re in the book for anyone to read, so change whatever you’d rather keep a surprise.</p><ul class="wb-brings">${cards}</ul>`);
+    return fold("bring", "Bring in a board from the book", doc.factions.length ? "The Steeplands and the five frames" : `${W.boards.length} ready to go`, `<ul class="wb-brings">${cards}</ul>`, "", 3,
+      ["Bringing in a board", "Each one comes in as its factions’ cards, the way the book writes them, and they’re yours to change from then on. If the book changes one later, you’ll get a note and you pick which to keep. They’re in the book for anyone to read, so change whatever you’d rather keep a surprise."]);
   }
 
   function newFold(id, doc) {
     const sizes = W.sizes.map((s) => `<li><b>${esc(s.size)}</b> Power ${esc(s.power)}, ${esc(s.res)} resources. <small>${esc(s.eg)}</small></li>`).join("");
     const opts = (rows, f) => rows.map((r) => `<option value="${esc(f(r))}"></option>`).join("");
     return fold("new", "A faction of your own", "Rolled or picked off the book’s tables", `<form class="cc-form pt-form wb-new" data-form="w-new">
-      <p class="cc-lead">Roll on the book’s tables, or read down them and pick. Then it’s on the board, and you give it its resources and assets on its card. Its Power counts itself.</p>
       <div class="cc-row"><button type="button" class="button" data-act="w" data-do="rollnew">Roll on the tables</button></div>
       <label class="cc-field">Its name <input name="name" maxlength="${MAX.name}" autocomplete="off" required></label>
       <label class="cc-field">What it is <input name="is" maxlength="${MAX.line}" autocomplete="off" list="wb-is"></label><datalist id="wb-is">${opts(W.build.what, (r) => r.is)}</datalist>
@@ -1402,7 +1407,8 @@ export function makeWorld(d) {
       <label class="cc-field">Its agenda starts at <select name="die">${SIZES.map((s) => `<option value="${s}"${s === 6 ? " selected" : ""}>d${s}, ${ago(s)}</option>`).join("")}</select></label>
       <label class="cc-field">Its face, the person the crew deals with <input name="face" maxlength="${MAX.words}" autocomplete="off"></label>
       <div class="cc-row"><button type="submit" class="button primary">Put it on the board</button></div>
-      <details class="cc-group wb-sizes" data-open="wb-sizes"${d.isOpen("wb-sizes") ? " open" : ""}><summary>How big it is</summary><ul>${sizes}</ul></details></form>`);
+      <details class="cc-group wb-sizes" data-open="wb-sizes"${d.isOpen("wb-sizes") ? " open" : ""}><summary>How big it is</summary><ul>${sizes}</ul></details></form>`, "", 3,
+      ["Making your own", "Roll on the book’s tables, or read down them and pick. Then it’s on the board, and you give it its resources and assets on its card. Its Power counts itself."]);
   }
 
   // ------------------------------------------------------------ one faction's page
@@ -1610,8 +1616,8 @@ export function makeWorld(d) {
     const news = gm ? bookNews(f, doc) : null;
     const from = wholeIn(f.book?.from);
     const bookNote = news?.real.length ? `<div class="cc-note is-gold wb-book" role="status"><p><b>${from ? `There’s been a change to ${esc(midName(f.name))} in ${esc(from.title)} since you brought it in.` : `The book’s changed ${esc(midName(f.name))} since you brought it in.`}</b></p><ul>${news.real.map((x) => `<li>${x}</li>`).join("")}</ul>
-      <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="book" data-f="${esc(f.id)}" data-take="1">${from ? "Take the changes" : "Take the book’s changes"}</button><button type="button" class="button" data-act="w" data-do="book" data-f="${esc(f.id)}" data-take="0">Keep mine</button></div>
-      <p class="cc-small">Taking them only changes what ${from ? "changed" : "the book changed"}. Your ticks, threads and agendas’ dice stay where play’s put them.</p></div>` : "";
+      <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="book" data-f="${esc(f.id)}" data-take="1">${from ? "Take the changes" : "Take the book’s changes"}</button><button type="button" class="button" data-act="w" data-do="book" data-f="${esc(f.id)}" data-take="0">Keep mine</button>${tip(`wb-book-${f.id}`, `Taking them only changes what ${from ? "changed" : "the book changed"}. Your ticks, threads and agendas’ dice stay where play’s put them.`, "Taking the changes")}</div>
+      </div>` : "";
 
     // Its parts, each a fold that reads at a glance. Hers carry a switch in
     // the header, and a player's say New on what's just been shown.
@@ -1623,13 +1629,14 @@ export function makeWorld(d) {
     const powerAssets = f.assets.filter((a) => a.power);
     const otherAssets = f.assets.filter((a) => !a.power);
     const list = (l, items) => (items.length ? `<ul class="pt-lines">${items.map((x) => lineView(id, f, l, x, gm, doc)).join("")}</ul>` : "");
-    const moneyLine = gm ? (money.short ? `<p class="pt-money is-short">${plural(money.res, "resource", "resources")} and ${plural(money.paying, "asset", "assets")}, so ${money.short === 1 ? "one asset isn’t" : `${money.short} aren’t`} paid for. ${esc(f.name)} picks which goes unpaid: tap Nothing’s paying for it on that one, and it stops counting.</p>` : money.extra ? `<p class="pt-money">${plural(money.res, "resource", "resources")} paying for ${plural(money.paying, "asset", "assets")}, so ${money.extra === 1 ? "there’s 1 extra resource" : `there are ${money.extra} extra resources`} to spend this downtime.</p>` : money.res ? `<p class="pt-money">${plural(money.res, "resource pays", "resources pay")} for ${plural(money.paying, "asset", "assets")}, with nothing extra.</p>` : "") : "";
+    // It's in two folds, so its ? has an id for each.
+    const moneyLine = (where) => gm ? (money.short ? `<p class="pt-money is-short">${plural(money.res, "resource", "resources")} and ${plural(money.paying, "asset", "assets")}, so ${money.short === 1 ? "one asset isn’t" : `${money.short} aren’t`} paid for. ${tip(`wb-short-${where}-${f.id}`, `${esc(f.name)} picks which goes unpaid: tap Nothing’s paying for it on that one, and it stops counting.`, "When an asset isn’t paid for")}</p>` : money.extra ? `<p class="pt-money">${plural(money.res, "resource", "resources")} paying for ${plural(money.paying, "asset", "assets")}, so ${money.extra === 1 ? "there’s 1 extra resource" : `there are ${money.extra} extra resources`} to spend this downtime.</p>` : money.res ? `<p class="pt-money">${plural(money.res, "resource pays", "resources pay")} for ${plural(money.paying, "asset", "assets")}, with nothing extra.</p>` : "") : "";
 
     if (gm || f.shown.power) {
       const adds = powerAssets.filter((a) => !a.off).length;
       put("power", part(`power-${f.id}`, "Power", `${diceLabel(dice)} <small>· ${adds ? `1 step, plus ${plural(adds, "asset", "assets")} that add Power` : "1 step, and nothing adding Power"}</small>`,
-        `<p class="cc-lead">What it rolls when it acts and defends with: 1 step, plus 1 for each lot of people who turn up when it calls and have something paying for them.</p>${moneyLine}${list("assets", powerAssets)}${gm ? addForm(f, "assets", "Someone who turns up when it calls", doc).replace('name="power">', 'name="power" checked>') : ""}`,
-        nb("power")));
+        `${moneyLine("power")}${list("assets", powerAssets)}${gm ? addForm(f, "assets", "Someone who turns up when it calls", doc).replace('name="power">', 'name="power" checked>') : ""}`,
+        nb("power"), ["About its Power", "What it rolls when it acts and defends with: 1 step, plus 1 for each lot of people who turn up when it calls and have something paying for them."]));
     }
     if (gm || f.shown.agenda) {
       const agendas = f.agendas.map((a) => {
@@ -1642,36 +1649,35 @@ export function makeWorld(d) {
             <button type="button" class="button sm" data-act="w" data-do="edit" data-k="${esc(key)}" aria-label="Change ${esc(a.text)}">Change</button></div>` : ""}</li>`;
       }).join("");
       put("agenda", part(`agenda-${f.id}`, "Agendas", f.agendas.length ? `<span class="cc-gl-wrap">${f.agendas.map((a) => `<span class="cc-gl">${kitMini(a.die, { own: "them" })}${esc(a.text)} <small>${a.done ? "happened" : `d${a.die}, ${ago(a.die)}`}</small></span>`).join("")}</span>` : "None on the go",
-        `<p class="cc-lead">What it’s doing right now. Its die climbs as it works at it, and past d12 it happens. Two at most.</p>${agendas ? `<ul class="pt-lines">${agendas}</ul>` : ""}${gm && f.agendas.length < MAX.agendas ? addForm(f, "agendas", "A new agenda", doc) : ""}${ruleLink("s-agendas", "How agendas work")}`,
-        nb("agenda")));
+        `${agendas ? `<ul class="pt-lines">${agendas}</ul>` : ""}${gm && f.agendas.length < MAX.agendas ? addForm(f, "agendas", "A new agenda", doc) : ""}`,
+        nb("agenda"), ["About agendas", ["What it’s doing right now. Its die climbs as it works at it, and past d12 it happens. Two at most.", ruleLink("s-agendas", "How agendas work")]]));
     }
     if (gm || f.shown.threads) {
       const crewT = f.threads.filter((t) => t.to === "crew");
       const others = f.threads.filter((t) => t.to !== "crew" && find(doc, t.to));
       put("threads", part(`threads-${f.id}`, "Threads", `${STANDING[standingOf(f)]}${others.length ? ` <small>· ${plural(others.length, "toward another faction", "toward other factions")}</small>` : ""}`,
-        `<p class="cc-lead">How it sees the crew, and the factions it cares about. Mostly bond threads toward the crew and it’s friendly, mostly hostile and it’s hostile, and otherwise it does business.</p>
-        ${crewT.length || others.length ? `<ul class="pt-lines">${[...crewT, ...others].map((t) => threadLine(id, f, "threads", t, gm, doc)).join("")}</ul>` : '<p class="cc-small">None yet.</p>'}${gm ? addForm(f, "threads", "A new thread", doc) : ""}${ruleLink("s-standing", "How a faction sees the crew")}`,
-        nb("threads")));
+        `${crewT.length || others.length ? `<ul class="pt-lines">${[...crewT, ...others].map((t) => threadLine(id, f, "threads", t, gm, doc)).join("")}</ul>` : '<p class="cc-small">None yet.</p>'}${gm ? addForm(f, "threads", "A new thread", doc) : ""}`,
+        nb("threads"), ["About its threads", ["How it sees the crew, and the factions it cares about. Mostly bond threads toward the crew and it’s friendly, mostly hostile and it’s hostile, and otherwise it does business.", ruleLink("s-standing", "How a faction sees the crew")]]));
     }
     if (gm || f.shown.bonds) {
       const groups = BONDS.map(([l, label]) => `<div class="wb-bond"><h3>${label}</h3>${f[l].length ? `<ul class="pt-lines">${f[l].map((t) => threadLine(id, f, l, t, gm, doc)).join("")}</ul>` : '<p class="cc-small">None yet.</p>'}${gm ? addForm(f, l, `A thread on ${label}`, doc) : ""}</div>`).join("");
       const count = f.pub.length + f.mor.length + f.loy.length;
       put("bonds", part(`bonds-${f.id}`, "Bonds", count ? BONDS.filter(([l]) => f[l].length).map(([l, label]) => `${label} <small>${f[l].length}</small>`).join(" · ") : "No threads yet",
-        `<p class="cc-lead">Public Sentiment, Morale and Loyalty. A bond thread’s a step on any roll it fits, and a hostile one’s a vulnerability, so a win against it that fits ticks once more.</p>${groups}${ruleLink("s-faction-bonds", "How bonds work")}`,
-        nb("bonds")));
+        groups,
+        nb("bonds"), ["About its bonds", ["Public Sentiment, Morale and Loyalty. A bond thread’s a step on any roll it fits, and a hostile one’s a vulnerability, so a win against it that fits ticks once more.", ruleLink("s-faction-bonds", "How bonds work")]]));
     }
     if (gm || f.shown.res) {
       put("res", part(`res-${f.id}`, "Resources", f.res.length ? `${few(f.res.map((x) => `${esc(x.text)}${x.x > 1 ? ` ×${x.x}` : ""}`), 4)}${gm && money.extra ? ` <small>· ${money.extra} extra</small>` : ""}` : "None",
-        `<p class="cc-lead">Where its money comes from, one line each. Every asset needs one paying for it, every downtime.</p>${moneyLine}${list("res", f.res)}${gm ? addForm(f, "res", "A new resource", doc) : ""}${ruleLink("s-wealth", "Resources and assets")}`,
-        nb("res")));
+        `${moneyLine("res")}${list("res", f.res)}${gm ? addForm(f, "res", "A new resource", doc) : ""}`,
+        nb("res"), ["About its resources", ["Where its money comes from, one line each. Every asset needs one paying for it, every downtime.", ruleLink("s-wealth", "Resources and assets")]]));
     }
     if (gm || f.shown.assets) {
       const onCard = new Set(f.assets.map((a) => keyOf(a.text)));
       const groups = [...new Set(W.assets.map((a) => a.group))];
       const picks = gm ? `<details class="cc-group wb-picks" data-open="wb-picks-${esc(f.id)}"${d.isOpen(`wb-picks-${f.id}`) ? " open" : ""}><summary>Assets to pick from <small>Appendix B</small></summary>${groups.map((g) => `<h3>${esc(g)}</h3><ul class="pt-lines">${W.assets.map((a, i) => (a.group === g ? `<li class="pt-line pt-pick"><div class="pt-line-in"><p><b>${esc(a.text)}</b></p><p class="pt-does">${esc(a.does)}</p></div>${onCard.has(keyOf(a.text)) ? '<span class="chip sm pt-chip is-on">On the card</span>' : `<button type="button" class="button sm" data-act="w" data-do="pick" data-f="${esc(f.id)}" data-i="${i}" aria-label="Give ${esc(midName(f.name))} ${esc(a.text)}">Add it</button>`}</li>` : "")).join("")}</ul>`).join("")}</details>` : "";
       put("assets", part(`assets-${f.id}`, "Other assets", otherAssets.length ? few(otherAssets.map((x) => (x.off ? `<s>${esc(x.text)}</s>` : esc(x.text))), 4) : "None",
-        `<p class="cc-lead">What it can do besides turning up, one line each, and each one does exactly what it says.</p>${list("assets", otherAssets)}${gm ? addForm(f, "assets", "A new asset", doc) : ""}${picks}`,
-        nb("assets")));
+        `${list("assets", otherAssets)}${gm ? addForm(f, "assets", "A new asset", doc) : ""}${picks}`,
+        nb("assets"), ["About its other assets", "What it can do besides turning up, one line each, and each one does exactly what it says."]));
     }
     if (gm || f.shown.secret) {
       const key = editingKey(f, "secret");
@@ -1689,12 +1695,11 @@ export function makeWorld(d) {
         ? `<form class="cc-form pt-form wb-editing" data-form="w-outs" data-f="${esc(f.id)}"><fieldset class="wb-outs"><legend>The two outcomes it can do</legend>${OUTCOMES.map((o) => `<label class="pt-check"><input type="checkbox" name="out-${o}"${f.outs.includes(o) ? " checked" : ""}> ${o}</label>`).join("")}</fieldset>
           <div class="cc-row"><button type="submit" class="button primary">Save</button><button type="button" class="button" data-act="w" data-do="cancel">Cancel</button></div></form>`
         : `<p>${f.outs.length ? `${f.outs.join(" and ")}, and nothing else.` : "Not picked yet."}</p>${gm ? `<button type="button" class="pt-reword" data-act="w" data-do="edit" data-k="${esc(key)}">Change them</button>` : ""}`;
-      parts.push(part(`outs-${f.id}`, "What it can do", f.outs.length ? f.outs.join(" and ") : "Not picked yet", `<p class="cc-lead">A mini faction picks two of the six outcomes, and those are the only things it can do. Its Power doesn’t add to its maker’s.</p>${outsBody}${ruleLink("s-mini-factions", "Mini factions")}`));
+      parts.push(part(`outs-${f.id}`, "What it can do", f.outs.length ? f.outs.join(" and ") : "Not picked yet", outsBody, "", ["About what it can do", ["A mini faction picks two of the six outcomes, and those are the only things it can do. Its Power doesn’t add to its maker’s.", ruleLink("s-mini-factions", "Mini factions")]]));
     } else if (gm) {
       const kids = minisOf(doc, f.id);
       const can = kids.length < MAX.minis;
       const form = can ? `<form class="cc-form pt-form pt-add" data-form="w-mini" data-f="${esc(f.id)}">
-        <p class="cc-lead">Making one is Establish: ${esc(midName(f.name))}’s action, and it hands over one of its own resources and one of its own assets.</p>
         <label class="cc-field">Its name <input name="name" maxlength="${MAX.name}" autocomplete="off" placeholder="like The Night Boats"></label>
         <label class="cc-field">The resource it hands over <select name="res"><option value="">None</option>${f.res.map((x) => `<option value="${esc(x.id)}">${esc(x.text)}</option>`).join("")}</select></label>
         <label class="cc-field">The asset it hands over <select name="asset"><option value="">None</option>${f.assets.map((x) => `<option value="${esc(x.id)}">${esc(x.text)}${x.power ? " (+1 Power)" : ""}</option>`).join("")}</select></label>
@@ -1702,7 +1707,8 @@ export function makeWorld(d) {
         <label class="cc-field">Its Loyalty thread toward ${esc(midName(f.name))} <input name="loy" maxlength="${MAX.line}" autocomplete="off" placeholder="like The Guild pays better than the river ever did"></label>${kindField()}
         <div class="cc-row"><button type="submit" class="button">Make it</button></div></form>` : `<p class="cc-small">That’s three, which is as many as a faction can make.</p>`;
       parts.push(part(`minis-${f.id}`, "Mini factions", kids.length ? few(kids.map((x) => esc(x.name)), 3) : "None yet",
-        `${kids.length ? `<ul class="wb-toks wb-seals">${kids.map((x) => token(id, x, doc, gm)).join("")}</ul>` : ""}${form}${ruleLink("s-mini-factions", "Mini factions")}`));
+        `${kids.length ? `<ul class="wb-toks wb-seals">${kids.map((x) => token(id, x, doc, gm)).join("")}</ul>` : ""}${form}`, "",
+        ["About mini factions", [`Making one is Establish: ${esc(midName(f.name))}’s action, and it hands over one of its own resources and one of its own assets.`, ruleLink("s-mini-factions", "Mini factions")]]));
     }
     if (gm) {
       const key = editingKey(f, "note");
@@ -1712,7 +1718,7 @@ export function makeWorld(d) {
         : `${f.note ? `<p>${esc(f.note)}</p>` : '<p class="cc-small">Nothing yet.</p>'}<button type="button" class="pt-reword" data-act="w" data-do="edit" data-k="${esc(key)}">${f.note ? "Change it" : "Write one"}</button>`;
       const sealFold = SP.fold(id, f, doc);
       if (sealFold) parts.push(sealFold);
-      parts.push(part(`note-${f.id}`, "Your note", f.note ? esc(f.note.slice(0, 80)) + (f.note.length > 80 ? "…" : "") : "Only you see it", `<p class="cc-lead">Anything you want to remember about it. It never goes to the crew.</p>${body}`));
+      parts.push(part(`note-${f.id}`, "Your note", f.note ? esc(f.note.slice(0, 80)) + (f.note.length > 80 ? "…" : "") : "Only you see it", body, "", ["About your note", "Anything you want to remember about it. It never goes to the crew."]));
     }
     // What the crew's still to find out, as sealed rows, the same on every faction.
     const still = gm ? [] : PARTS.filter((p) => !f.shown[p]);

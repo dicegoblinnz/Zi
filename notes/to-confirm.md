@@ -33,7 +33,15 @@ None yet.
 
 ### 4. Question bubbles
 
-None yet.
+1. **A tap anywhere else only closes the bubble.** Whatever's under that tap isn't pressed too, so a stray tap can't hit Next, End the round or a link while you're reading.
+2. **The card comes up under its ?** (over it when there's no room under), as wide as the phone less a margin, with the screen dimmed a touch behind it. On a laptop it's a narrow card centred on its ?, and on a browser that can't place it by its ?, it's in the middle of the screen.
+3. **The ? is ink, not gold or violet**, a small token like the kit's pieces, since it's nobody's. It fills in while its card's open.
+4. **Every card has a title**, what it's about, which is also what a screen reader hears on its ? (How hiring works, About the scene clock).
+5. **In a fold, the ? sits at the top of the fold, on the right**, so it shows once the fold's open. A button can't go in a fold's heading.
+6. **Warnings and states stay on the screen**: a count, who can see something, Time's up, what a two-tap button's about to lose. Answer the deck instead now says what goes when it asks you to tap again, with the rest behind its ?.
+7. **A rule link that ended an explanation goes in the card with it** (The faction turn, How the Goal works, How agendas work).
+8. **Moving on with Tab closes it, and a screen that's drawn again keeps it open**, when something comes in from another phone while you're reading.
+9. **A browser too old for bubbles shows the words in the line**, small, with no ?.
 
 ### 5. The dice roller
 

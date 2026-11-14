@@ -23,6 +23,7 @@
 import { AGES, PARTS, answer, calledOf, current, deckOf, fillPrompt, finish, formedOf, historyOf, notThis, playedOf, prompted, startDeck, undo as undoDeck } from "./world-deck.js";
 import { cardsOf, fill, options, resume } from "./world-engine.js";
 import { die as kitDie } from "../kit/kit.js";
+import { tip } from "./tip.js";
 
 export const AGE_NAMES = { 1: "Long ago", 2: "In living memory", 3: "This last year", 0: "The rest of it" };
 const AGE_LEADS = {
@@ -201,7 +202,7 @@ export function makeAnswer(k) {
       <p class="wa-ask" id="wa-ask">${esc(o.ask)}</p>
       ${o.ideas.length ? `<div class="wa-ideas" role="group" aria-labelledby="wa-ask">${o.ideas.map((x, n) => `<button type="button" class="wa-idea" data-act="w" data-do="mk-idea" data-k="${n}">${esc(cap(x.text))}</button>`).join("")}</div>` : ""}
       <form class="cc-form wa-own" data-form="w-mk-word" autocomplete="off"><label class="cc-field">Or your own <input name="own" maxlength="${max}" spellcheck="true" autocomplete="off" enterkeyhint="done"></label><button type="submit" class="button">Use it</button></form>
-      <div class="wa-skip"><button type="button" class="button" data-act="w" data-do="mk-skip">Skip it</button><p class="cc-small">${skip}</p></div></div></article>`;
+      <div class="wa-skip"><button type="button" class="button" data-act="w" data-do="mk-skip">Skip it</button>${tip(`wa-skip-${o.pos}`, skip, "What Skip it does")}</div></div></article>`;
   }
   // A faction's card so far, on the card's place till she goes back to it.
   function soFar(T, W, i) {
@@ -239,16 +240,16 @@ export function makeAnswer(k) {
   function body(id, e, W) {
     const T = tables();
     const D = W.deck;
-    if (!D && W.factions.some((f) => f.room)) return `<div class="wa-way card"><p>The crew founded these factions in the room, so there’s no deck to answer. Their cards are a tap away on the board, with what the room made locked.</p></div>`;
+    if (!D && W.factions.some((f) => f.room)) return `<div class="wa-way card"><p>The crew founded these factions in the room, so there’s no deck to answer. ${tip("wa-room", "Their cards are a tap away on the board, with what the room made locked.", "Where their cards are")}</p></div>`;
     if (!D) {
       const sure = sureOf("deck", id);
-      return `<div class="wa-way card"><p>You’ve dealt the factions a step at a time. Answering the deck instead deals them again from where they sit, how big they are and what they are, and what you’ve locked or written on them past that goes.</p>
-        <div class="cc-row"><button type="button" class="button${sure ? " danger" : ""}" data-act="w" data-do="mk-deck">${sure ? "Tap again to answer the deck" : "Answer the deck instead"}</button></div></div>`;
+      return `<div class="wa-way card"><p>You’ve dealt the factions a step at a time. ${tip("wa-way", "Answering the deck instead deals them again from where they sit, how big they are and what they are, and what you’ve locked or written on them past that goes.", "Answering the deck instead")}</p>
+        ${sure ? `<p class="cc-warn">What you’ve locked or written on them past who’s who goes.</p>` : ""}<div class="cc-row"><button type="button" class="button${sure ? " danger" : ""}" data-act="w" data-do="mk-deck">${sure ? "Tap again to answer the deck" : "Answer the deck instead"}</button></div></div>`;
     }
     const F = formedOf(T, W);
     if (D.finished) {
       return `${ages(F, true)}<div class="wa-story">${storyOf(T, W)}</div>
-        <p class="cc-small wa-after">It all goes on the board hidden. On the World screen you show the crew How it came to be an age at a time, and a line that made a Secret never leaves your phone.</p>`;
+        <p class="cc-small wa-after">It all goes on the board hidden. ${tip("wa-after", "On the World screen you show the crew How it came to be an age at a time, and a line that made a Secret never leaves your phone.", "Showing the crew")}</p>`;
     }
     const o = prompted(W);
     const c = o ? null : current(T, W);
@@ -262,7 +263,7 @@ export function makeAnswer(k) {
     // What the last answer did, under the card.
     const before = o ? o.pos - 1 : D.cards.length - 1;
     const last = before >= 0 ? playedOf(T, W, before) : null;
-    const did = last ? `<p class="wa-did" role="status"><span>Card ${last.pos + 1}</span> ${esc(last.line)}</p>` : `<p class="wa-did is-first" role="status">${still() ? "Tap an answer" : "Swipe the card one way or the other, or tap an answer"}. Each one forms the factions on the card and writes a line of how it came to be.</p>`;
+    const did = last ? `<p class="wa-did" role="status"><span>Card ${last.pos + 1}</span> ${esc(last.line)}</p>` : `<p class="wa-did is-first" role="status">${still() ? "Tap an answer" : "Swipe the card one way or the other, or tap an answer"}. ${tip("wa-first", "Each answer forms the factions on the card and writes a line of how it came to be.", "What an answer does")}</p>`;
     const moves = `<div class="wa-moves">
         <button type="button" class="button wa-move" data-act="w" data-do="mk-not"${!c || c.chain || tile >= 0 ? " disabled" : ""}>Not this one</button>
         <button type="button" class="button wa-move" data-act="w" data-do="mk-undo" data-c="${esc(id)}"${D.log.length ? "" : " disabled"}>Undo</button></div>

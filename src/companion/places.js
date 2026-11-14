@@ -25,6 +25,7 @@ import { findMap } from "./maps.js";
 import { cardNow } from "./world-whole.js";
 import { typo } from "./marks.js";
 import { die as kitDie, mini as kitMini, tag as kitTag } from "../kit/kit.js";
+import { tip } from "./tip.js";
 
 const DICE = [2, 4, 6, 8, 10, 12];
 const SORT = (t) => String(t ?? "").replace(/^(The|A|An) /i, "").toLowerCase();
@@ -223,7 +224,7 @@ export function makePlaces(w) {
   const pageDie = (p) => (p.ch > 0 ? kitDie(dieOf(p.ch), { own: "them", hide: true }) : `<span class="wp-mark" aria-hidden="true">${MARK[p.kind]}</span>`);
   const badge = (p, k) => `<span class="wb-badge${p.shown.page && p.shown[k] ? " is-on" : ""}">${p.shown.page && p.shown[k] ? "Shown" : "Hidden"}</span>`;
   const hers = '<span class="wb-badge wp-hers">Only you</span>';
-  const fold = (key, title, glance, body, badgeHtml = "") => w.part(key, title, glance, body, badgeHtml);
+  const fold = (key, title, glance, body, badgeHtml = "", help = null) => w.part(key, title, glance, body, badgeHtml, help);
 
   // A page in a list: a glance and a tap to it.
   function token(id, p, gm) {
@@ -251,7 +252,7 @@ export function makePlaces(w) {
       const list = pages.length ? `<ul class="wp-toks">${pages.map((p) => token(id, p, gm)).join("")}</ul>` : "";
       const lead = !gm ? ""
         : pages.length ? `<p class="cc-small wb-sum">${plural(pages.length, kind === "place" ? "place" : "person", kind === "place" ? "places" : "people")}, ${shownN ? `${shownN} shown to the crew` : "none shown to the crew yet"}.</p>`
-        : `<p class="cc-small">${kind === "place" ? "No places yet. Bring one in from Twenty Places, or write your own." : "Nobody yet. Bring in a place and its people come with it, or bring in a threat from the Bestiary, or write someone of your own."} Nothing shows on your players’ phones till you show it to them.</p>`;
+        : `<p class="cc-small">${kind === "place" ? "No places yet." : "Nobody yet."} ${tip(`wp-none-${kind}`, `${kind === "place" ? "Bring one in from Twenty Places, or write your own." : "Bring in a place and its people come with it, or bring in a threat from the Bestiary, or write someone of your own."} Nothing shows on your players’ phones till you show it to them.`, kind === "place" ? "Putting places in" : "Putting people in")}</p>`;
       const adds = gm ? `<div class="cc-folds wb-adds">${kind === "place" ? bringPlaces(id, doc) + newPlace() : bringThreats(id, doc) + newPerson()}</div>` : "";
       out.push(`<section class="cc-sec wp-sec" data-wb="${esc(id)}" aria-labelledby="wp-h-${kind}"><h2 id="wp-h-${kind}">${title}</h2>${lead}${list}${adds}</section>`);
     }
@@ -273,7 +274,8 @@ export function makePlaces(w) {
         <div class="cc-row">${on ? '<span class="chip sm pt-chip is-on">In your world</span>' : `<button type="button" class="button" data-act="w" data-do="pbring" data-k="${esc(c.key)}">Bring it in</button>`}
         <a class="pt-reword" href="${esc(c.link)}">Read it in the book</a></div></li>`;
     }).join("") : "";
-    return w.fold("pbring", "Bring in a place from Twenty Places", B ? `${B.places.length} ready to run` : "From the book", `<p class="cc-lead">Each one comes in whole, with its people as pages of their own, and it’s yours to change from then on. If the book changes it later, you’ll get a note and you pick which to keep. They’re in the book for anyone to read, so change whatever you’d rather keep a surprise.</p>${B ? `<ul class="wb-brings">${cards}</ul>` : waitingBook()}`);
+    return w.fold("pbring", "Bring in a place from Twenty Places", B ? `${B.places.length} ready to run` : "From the book", B ? `<ul class="wb-brings">${cards}</ul>` : waitingBook(), "", 3,
+      ["Bringing in a place", "Each one comes in whole, with its people as pages of their own, and it’s yours to change from then on. If the book changes it later, you’ll get a note and you pick which to keep. They’re in the book for anyone to read, so change whatever you’d rather keep a surprise."]);
   }
 
   function bringThreats(id, doc) {
@@ -281,7 +283,8 @@ export function makePlaces(w) {
     const have = new Set(doc.pages.filter((p) => p.book?.from === "bestiary").map((p) => p.book.key));
     const groups = B ? [...new Set(B.threats.map((t) => t.group))] : [];
     const list = B ? groups.map((g) => `<h3 class="wp-group">${esc(g)}</h3><ul class="pt-lines">${B.threats.filter((t) => t.group === g).map((t) => `<li class="pt-line wp-pick"><span class="wp-pick-die" aria-hidden="true">${kitMini(dieOf(t.ch), { own: "them" })}</span><div class="pt-line-in"><p><b>${esc(t.name)}</b> <small>${chLabel(t.ch)}</small></p><p class="pt-does">${esc(flat(t.line))}</p></div>${have.has(t.key) ? '<span class="chip sm pt-chip is-on">In your world</span>' : `<button type="button" class="button sm" data-act="w" data-do="pthreat" data-k="${esc(t.key)}" aria-label="Bring in ${esc(t.name)}">Bring in</button>`}</li>`).join("")}</ul>`).join("") : waitingBook();
-    return w.fold("pthreats", "Bring in a threat from the Bestiary", B ? `${B.threats.length} built and ready` : "From the book", `<p class="cc-lead">Each one comes in as a person written as a threat, with its tags, telegraphs, voice and hidden tag, ready to rename and make your own.</p>${list}${B ? `<p class="cc-small"><a class="pt-reword" href="${esc(B.links.bestiary)}">Read the Bestiary</a></p>` : ""}`);
+    return w.fold("pthreats", "Bring in a threat from the Bestiary", B ? `${B.threats.length} built and ready` : "From the book", `${list}${B ? `<p class="cc-small"><a class="pt-reword" href="${esc(B.links.bestiary)}">Read the Bestiary</a></p>` : ""}`, "", 3,
+      ["Bringing in a threat", "Each one comes in as a person written as a threat, with its tags, telegraphs, voice and hidden tag, ready to rename and make your own."]);
   }
 
   function newPlace() {
@@ -380,7 +383,7 @@ export function makePlaces(w) {
   function threatBody(id, p, gm, L) {
     const key = ek(p, "ch");
     const chForm = gm && ui().editing === key ? `<form class="cc-form pt-form wb-editing" data-form="w-pg-ch" data-id="${esc(p.id)}"><label class="cc-field">Their Challenge <select name="ch">${chOptions(p.ch)}</select></label>${saveRow()}</form>` : "";
-    const head = chForm || `<div class="wp-ch">${p.ch > 0 ? `<p><b>${chLabel(p.ch)}</b>. They telegraph with their Challenge die.</p>` : '<p class="cc-small">No Challenge yet.</p>'}${gm ? reword(key, p.ch ? "Change it" : "Give them one") : ""}</div>`;
+    const head = chForm || `<div class="wp-ch">${p.ch > 0 ? `<p><b>${chLabel(p.ch)}</b> ${tip(`wp-ch-${p.id}`, "They telegraph with their Challenge die.", "Their Challenge")}</p>` : '<p class="cc-small">No Challenge yet.</p>'}${gm ? reword(key, p.ch ? "Change it" : "Give them one") : ""}</div>`;
     const groups = TAG_HEADS.map(([k, label]) => {
       const tags = p.tags.filter((t) => t.kind === k);
       if (!tags.length) return "";
@@ -457,29 +460,28 @@ export function makePlaces(w) {
       ${card ? `<div class="wb-card card wp-card" data-glow="${w.lit(id).includes(p.id) ? "1" : ""}">
         ${p.ch > 0 && chShown ? `<div class="wb-card-top"><div class="wb-card-die" role="img" aria-label="${chLabel(p.ch)}">${kitDie(dieOf(p.ch), { own: "them", hide: true })}</div><div class="wb-card-p"><p class="wb-k">Challenge</p><p class="wb-card-v">${p.ch}, a d${dieOf(p.ch)}</p></div></div>` : ""}
         ${words}</div>` : ""}`;
-    const showCard = gm ? `<div class="wb-show wb-show-card${p.shown.page ? " is-on" : ""}"><p>${p.shown.page ? (place ? "The crew can see it: its name, what it is, its Challenge and what it’s like inside, and whatever else you’ve shown them." : "The crew can see them: who they are and what you notice first, and whatever else you’ve shown them.") : `The crew can’t see ${place ? "it" : "them"} yet. Show ${place ? "it" : "them"} when the crew finds out ${place ? "it’s there" : "who they are"}.`}</p>
+    const showCard = gm ? `<div class="wb-show wb-show-card${p.shown.page ? " is-on" : ""}"><p>${p.shown.page ? `The crew can see ${place ? "it" : "them"}. ${tip(`wp-sees-${p.id}`, place ? "Its name, what it is, its Challenge and what it’s like inside, and whatever else you’ve shown them." : "Who they are and what you notice first, and whatever else you’ve shown them.", "What the crew can see")}` : `The crew can’t see ${place ? "it" : "them"} yet. ${tip(`wp-sees-${p.id}`, `Show ${place ? "it" : "them"} when the crew finds out ${place ? "it’s there" : "who they are"}. Each part below takes its own tap after that.`, "Showing the crew")}`}</p>
       <button type="button" class="button${p.shown.page ? "" : " primary"}" data-act="w" data-do="pshow" data-id="${esc(p.id)}" data-p="page" aria-pressed="${p.shown.page}">${p.shown.page ? `Hide ${place ? "it" : "them"} from the crew` : `Show the crew ${esc(p.name)}`}</button></div>` : "";
 
-    const onTable = gm && place && d.scene ? `<div class="wb-show wp-table"><p>When the crew’s here, its ground, stakes and scene clock go on the live table, face up on every phone.</p><button type="button" class="button" data-act="w" data-do="pscene" data-id="${esc(p.id)}">${sure(`pscene-${p.id}`, "Tap again to put it in place of what’s there", "Put it on the table")}</button></div>` : "";
+    const onTable = gm && place && d.scene ? `<div class="wb-show wp-table"><p>For when the crew’s here. ${tip(`wp-table-${p.id}`, "Its ground, stakes and scene clock go on the live table, face up on every phone.", "Putting it on the table")}</p><button type="button" class="button" data-act="w" data-do="pscene" data-id="${esc(p.id)}">${sure(`pscene-${p.id}`, "Tap again to put it in place of what’s there", "Put it on the table")}</button></div>` : "";
     const nw = gm ? pageNews(p) : null;
     const whole = p.book ? w.wholeIn(p.book.from) : null;
     const bookNote = nw?.real.length ? `<div class="cc-note is-gold wb-book" role="status"><p><b>${whole ? `There’s been a change to ${esc(p.name.replace(/^The /, "the "))} in ${esc(whole.title)} since you brought it in.` : `The book’s changed ${esc(p.name)} since you brought ${place ? "it" : "them"} in.`}</b></p><ul>${nw.real.map((x) => `<li>${x}</li>`).join("")}</ul>
-      <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="pbook" data-id="${esc(p.id)}" data-take="1">${whole ? "Take the changes" : "Take the book’s changes"}</button><button type="button" class="button" data-act="w" data-do="pbook" data-id="${esc(p.id)}" data-take="0">Keep mine</button></div>
-      <p class="cc-small">Taking them only changes what ${whole ? "changed" : "the book changed"}, and leaves what you’ve written alone.</p></div>` : "";
+      <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="pbook" data-id="${esc(p.id)}" data-take="1">${whole ? "Take the changes" : "Take the book’s changes"}</button><button type="button" class="button" data-act="w" data-do="pbook" data-id="${esc(p.id)}" data-take="0">Keep mine</button>${tip(`wp-book-${p.id}`, `Taking them only changes what ${whole ? "changed" : "the book changed"}, and leaves what you’ve written alone.`, "Taking the changes")}</div></div>` : "";
 
     const parts = [];
     const B = BOOK;
     const show = (k) => (gm ? shower(p, k) : "");
     if (place) {
-      if (gm || p.shown.here) parts.push(fold(`here-${p.id}`, "Who’s here", p.here.length ? few(namesIn(p.here), 3) : "Nobody yet", `${show("here")}<p class="cc-lead">Everyone here, with their Challenge and the tags that matter most. They telegraph with their own Challenge dice.</p>${lines(id, p, "here", gm, L)}${gm ? addForm(p, "here", "Someone new here") : ""}`, gm ? badge(p, "here") : ""));
-      if (gm || p.shown.ground) parts.push(fold(`ground-${p.id}`, "The ground", p.ground.length ? few(namesIn(p.ground), 3) : "Nothing yet", `${show("ground")}<p class="cc-lead">Tags on the place itself, there for anyone to use.</p>${lines(id, p, "ground", gm, L)}${gm ? addForm(p, "ground", "A new tag on the ground") : ""}`, gm ? badge(p, "ground") : ""));
-      if (gm || p.shown.stakes) parts.push(fold(`stakes-${p.id}`, "Stakes", p.stakes.length ? few(namesIn(p.stakes), 2) : "None yet", `${show("stakes")}<p class="cc-lead">What there is to win here, each with its Challenge and what’s in the way.</p>${lines(id, p, "stakes", gm, L)}${gm ? addForm(p, "stakes", "A new stake") : ""}`, gm ? badge(p, "stakes") : ""));
+      if (gm || p.shown.here) parts.push(fold(`here-${p.id}`, "Who’s here", p.here.length ? few(namesIn(p.here), 3) : "Nobody yet", `${show("here")}${lines(id, p, "here", gm, L)}${gm ? addForm(p, "here", "Someone new here") : ""}`, gm ? badge(p, "here") : "", ["About Who’s here", "Everyone here, with their Challenge and the tags that matter most. They telegraph with their own Challenge dice."]));
+      if (gm || p.shown.ground) parts.push(fold(`ground-${p.id}`, "The ground", p.ground.length ? few(namesIn(p.ground), 3) : "Nothing yet", `${show("ground")}${lines(id, p, "ground", gm, L)}${gm ? addForm(p, "ground", "A new tag on the ground") : ""}`, gm ? badge(p, "ground") : "", ["About the ground", "Tags on the place itself, there for anyone to use."]));
+      if (gm || p.shown.stakes) parts.push(fold(`stakes-${p.id}`, "Stakes", p.stakes.length ? few(namesIn(p.stakes), 2) : "None yet", `${show("stakes")}${lines(id, p, "stakes", gm, L)}${gm ? addForm(p, "stakes", "A new stake") : ""}`, gm ? badge(p, "stakes") : "", ["About stakes", "What there is to win here, each with its Challenge and what’s in the way."]));
       if (gm || p.shown.clock) {
         const key = ek(p, "clock");
         const body = gm && ui().editing === key
           ? `<form class="cc-form pt-form wb-editing" data-form="w-pg-clock" data-id="${esc(p.id)}"><label class="cc-field">Its die ${dieSelect("clockD", p.clockD, true)}</label>${field("clock", "What happens when it runs out", p.clock, PMAX.words)}${saveRow()}</form>`
           : `${p.clockD || p.clock ? `<div class="wp-clock">${p.clockD ? kitDie(p.clockD, { own: "them", hide: true }) : ""}<p>${p.clockD ? `<b>d${p.clockD}</b> ` : ""}${L.rich(p.clock, p.id)}</p></div>` : '<p class="cc-small">No scene clock yet.</p>'}${gm ? reword(key, p.clockD ? "Change it" : "Give it one") : ""}`;
-        parts.push(fold(`clock-${p.id}`, "Scene clock", p.clockD ? `d${p.clockD}${p.clock ? `: ${esc(flat(p.clock).slice(0, 60))}${p.clock.length > 60 ? "…" : ""}` : ""}` : "None", `${show("clock")}<p class="cc-lead">A die on the whole scene, face up from the start. It steps down, and past d2 the scene turns.</p>${body}`, gm ? badge(p, "clock") : ""));
+        parts.push(fold(`clock-${p.id}`, "Scene clock", p.clockD ? `d${p.clockD}${p.clock ? `: ${esc(flat(p.clock).slice(0, 60))}${p.clock.length > 60 ? "…" : ""}` : ""}` : "None", `${show("clock")}${body}`, gm ? badge(p, "clock") : "", ["About the scene clock", "A die on the whole scene, face up from the start. It steps down, and past d2 the scene turns."]));
       }
       if ((gm && (p.twist || !p.book)) || p.shown.twist) parts.push(fold(`twist-${p.id}`, "The complication", p.twist ? esc(flat(p.twist)) : "None", `${show("twist")}${wordPart(p, "twist", "Its complication", gm, L, { place: "like It’s watched" })}`, gm ? badge(p, "twist") : ""));
     } else {
@@ -491,12 +493,12 @@ export function makePlaces(w) {
     }
     if (gm || p.shown.secret) parts.push(fold(`secret-${p.id}`, "Secret", p.secret ? `<em>${esc(p.secret)}</em>` : "Not written yet", `${show("secret")}${secretBody(p, gm, L)}`, gm ? badge(p, "secret") : ""));
     if (gm) {
-      parts.push(fold(`teles-${p.id}`, "Telegraphs", p.teles.length ? plural(p.teles.length, "ready to go", "ready to go") : "None yet", `<p class="cc-lead">A starting point, so add your own. They come out of your round budget like any others${d.tele ? ", and Telegraph it puts one on the round from here" : ""}.</p>${lines(id, p, "teles", gm, L)}${addForm(p, "teles", "A new telegraph")}`, hers));
-      if (!place) parts.push(fold(`voice-${p.id}`, "Voice", p.voice ? esc(flat(p.voice).slice(0, 70)) : "Not written yet", `<p class="cc-lead">A line for you to say as them.</p>${wordPart(p, "voice", "Their voice", gm, L)}`, hers));
+      parts.push(fold(`teles-${p.id}`, "Telegraphs", p.teles.length ? plural(p.teles.length, "ready to go", "ready to go") : "None yet", `${lines(id, p, "teles", gm, L)}${addForm(p, "teles", "A new telegraph")}`, hers, ["About these telegraphs", `A starting point, so add your own. They come out of your round budget like any others${d.tele ? ", and Telegraph it puts one on the round from here" : ""}.`]));
+      if (!place) parts.push(fold(`voice-${p.id}`, "Voice", p.voice ? esc(flat(p.voice).slice(0, 70)) : "Not written yet", wordPart(p, "voice", "Their voice", gm, L), hers, ["About the voice", "A line for you to say as them."]));
       const trouble = B ? `<datalist id="wp-trouble">${opts(B.tables.trouble)}</datalist>` : "";
-      parts.push(fold(`hooks-${p.id}`, "Hooks", p.hooks.length ? few(p.hooks.map((x) => esc(flat(x.text))), 1) : "None yet", `<p class="cc-lead">${place ? "Ways to get the crew here." : "Ways to get the crew mixed up with them."}</p>${lines(id, p, "hooks", gm, L)}${addForm(p, "hooks", "A new hook", { list: B ? "wp-trouble" : "", roll: `<button type="button" class="button" data-act="w" data-do="proll" data-r="hook"${B ? "" : " disabled"}>Roll one</button>` })}${trouble}`, hers));
-      if (place && (p.elsewhere || p.book)) parts.push(fold(`elsewhere-${p.id}`, "Elsewhere", p.elsewhere ? esc(flat(p.elsewhere).slice(0, 70)) + (p.elsewhere.length > 70 ? "…" : "") : "Nothing", `<p class="cc-lead">How it looks in another kind of game.</p>${wordPart(p, "elsewhere", "Elsewhere", gm, L, { max: PMAX.elsewhere })}`, hers));
-      parts.push(fold(`note-${p.id}`, "Your note", p.note ? esc(p.note.slice(0, 80)) + (p.note.length > 80 ? "…" : "") : "Only you see it", `<p class="cc-lead">Anything you want to remember. It never goes to the crew.</p>${wordPart(p, "note", "Your note", gm, L, { max: PMAX.note, longer: true })}`, hers));
+      parts.push(fold(`hooks-${p.id}`, "Hooks", p.hooks.length ? few(p.hooks.map((x) => esc(flat(x.text))), 1) : "None yet", `${lines(id, p, "hooks", gm, L)}${addForm(p, "hooks", "A new hook", { list: B ? "wp-trouble" : "", roll: `<button type="button" class="button" data-act="w" data-do="proll" data-r="hook"${B ? "" : " disabled"}>Roll one</button>` })}${trouble}`, hers, ["About hooks", place ? "Ways to get the crew here." : "Ways to get the crew mixed up with them."]));
+      if (place && (p.elsewhere || p.book)) parts.push(fold(`elsewhere-${p.id}`, "Elsewhere", p.elsewhere ? esc(flat(p.elsewhere).slice(0, 70)) + (p.elsewhere.length > 70 ? "…" : "") : "Nothing", wordPart(p, "elsewhere", "Elsewhere", gm, L, { max: PMAX.elsewhere }), hers, ["About Elsewhere", "How it looks in another kind of game."]));
+      parts.push(fold(`note-${p.id}`, "Your note", p.note ? esc(p.note.slice(0, 80)) + (p.note.length > 80 ? "…" : "") : "Only you see it", wordPart(p, "note", "Your note", gm, L, { max: PMAX.note, longer: true }), hers, ["About your note", "Anything you want to remember. It never goes to the crew."]));
     }
 
     // Where else it comes up: every faction and page that names it.

@@ -16,6 +16,7 @@
 
 import { CHARGES, FIELDS, MARKS, chargeWeights, dealSeal, sealIn, sealKey, sealWords } from "../kit/seals.js";
 import { seal as kitSeal } from "../kit/kit.js";
+import { tip } from "./tip.js";
 
 const lower = (t) => String(t ?? "").charAt(0).toLowerCase() + String(t ?? "").slice(1);
 
@@ -60,7 +61,7 @@ export function makeSealPick({ d, esc, edit, fold }) {
     const s = sealIn(f.seal);
     const words = s ? sealWords(s) : "";
     const big = kitSeal(s, { size: "lg", label: words ? `Its seal: ${words}` : "No seal yet", cls: stamped === f.id ? "is-new" : "" });
-    const top = `<div class="sp-top">${big}<div class="sp-say"><p class="sp-w">${words ? esc(words) : "No seal yet."}</p><p class="cc-small">The crew sees it with its card, and never before.</p>
+    const top = `<div class="sp-top">${big}<div class="sp-say"><p class="sp-w">${words ? esc(words) : "No seal yet."} ${tip(`sp-${f.id}`, "The crew sees a faction’s seal with its card, and never before.", "When the crew sees it")}</p>
       <button type="button" class="button" data-act="w" data-do="seal-deal" data-f="${esc(f.id)}">${s ? "Deal another" : "Deal one"}</button></div></div>`;
     const charges = Object.keys(CHARGES).map((c) => option(f, "c", c, { c, f: s?.f ?? "plain", d: "" }, CHARGES[c].name, { on: s?.c === c })).join("");
     if (!s) return `${top}<fieldset class="sp-set"><legend>Or pick what’s on it</legend><div class="sp-grid">${charges}</div></fieldset>`;

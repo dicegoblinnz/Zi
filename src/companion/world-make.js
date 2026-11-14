@@ -54,6 +54,7 @@ import { drawWeb, webOf } from "./world-web.js";
 import { deckOn, deckOver, fixedBy, keptDeck, linesOf, makeAnswer, whoOnly } from "./world-answer.js";
 import { BMAX } from "./world-record.js";
 import { carriedWorld } from "./found-world.js";
+import { tip } from "./tip.js";
 
 const KEY = "zi-make";
 const MIX = "mix";
@@ -103,11 +104,12 @@ const ASKING = ["ask:holds", "tension", "ask:runs", "ask:notices"];
 const DIALS = [["tense", "How tense"], ["strange", "How strange"], ["rich", "How rich"], ["ruled", "How ruled"]];
 const DIAL_WORDS = ["low", "middling", "high"];
 const NUDGE = { tense: ["calmer", "more tense"], strange: ["less strange", "stranger"], rich: ["poorer", "richer"], ruled: ["less ruled", "more ruled"] };
+// Each part's screen: its name, its lead, and what's behind the lead's ?.
 const PARTS = [
   [1, "Where it sits", "Where it sits decides what it lives off, and how big it is sets its Power."],
   [2, "What it is", "What it is, how it works and what it wants, each one read off its seat and the cards before it."],
-  [3, "What it’s got", "Its resources pay for its assets. Its Power is 1 step, plus 1 for each asset that’s people who turn up when it calls."],
-  [4, "What it’s up to", "Its agenda, the person the crew deals with and what it’s hiding. Nobody sees its Secret till you show them."],
+  [3, "What it’s got", "Its resources pay for its assets.", "Its Power is 1 step, plus 1 for each asset that’s people who turn up when it calls.", "How its Power adds up"],
+  [4, "What it’s up to", "Its agenda, the person the crew deals with and what it’s hiding.", "Nobody sees its Secret till you show them.", "Who sees its Secret"],
 ];
 const BONDS = { pub: "Public Sentiment", mor: "Morale", loy: "Loyalty" };
 const CHECKS = { whole: "a card with a hole in it", power: "Power that its people didn’t add up to", rival: "a faction with no rival", block: "a trade nobody was blocking", secret: "no Secret naming another faction", unique: "two factions holding the same asset", aims: "an agenda aimed at nothing", crew: "no faction after anything the crew’s got", strange: "nothing strange on the board" };
@@ -657,21 +659,23 @@ export function makeWorldMake(w) {
     return `<span class="wk-card-w">${esc(v.text)}</span>${top ? `<span class="wk-card-m">${top}</span>` : ""}${why(v)}`;
   }
   // A step: its heading, its three cards, and Lock, Deal again and Write my own.
-  function step(e, W, C, path, title, { own = true, again = "Deal again", note = "", sub = "" } = {}) {
+  function step(e, W, C, path, title, { own = true, again = "Deal again", note = "", sub = "", help = null } = {}) {
     const h = handOf(e, W, path);
     const cur = pickKey(pickAt(W, path));
     const locked = Boolean(W.locks[path]);
     const hid = `wk-${path.replace(/:/g, "-")}`;
+    // Its heading, with a ? beside it when it's got something to explain.
+    const h2 = help ? `<h2><span id="${hid}">${title}</span> ${tip(hid, help[1], help[0])}</h2>` : `<h2 id="${hid}">${title}</h2>`;
     // The deck's playing on the asking and the ground, so only what's on stays.
     if (isGround(path) && fixedBy(W)) {
       const on = h.find((c) => pickKey(c) === cur) ?? pickAt(W, path);
-      return `<section class="wk-step is-fixed" aria-labelledby="${hid}"><div class="wk-step-h"><h2 id="${hid}">${title}</h2></div>${sub}
+      return `<section class="wk-step is-fixed" aria-labelledby="${hid}"><div class="wk-step-h">${h2}</div>${sub}
         <div class="wk-hand">${on ? `<div class="wk-card is-static is-on">${cardInner(W, path, on, C)}</div>` : ""}</div>${note}</section>`;
     }
     const cards = h.map((c, i) => card(path, c, i, pickKey(c) === cur, cardInner(W, path, c, C))).join("");
     const isFresh = fresh.has(path) ? " is-fresh" : "";
     return `<section class="wk-step${locked ? " is-locked" : ""}${isFresh}" aria-labelledby="${hid}">
-      <div class="wk-step-h"><h2 id="${hid}">${title}</h2>${locked ? '<span class="wk-locked">Locked</span>' : ""}</div>${sub}
+      <div class="wk-step-h">${h2}${locked ? '<span class="wk-locked">Locked</span>' : ""}</div>${sub}
       <div class="wk-hand${path.endsWith(":size") ? " is-row" : ""}" role="group" aria-labelledby="${hid}">${cards || '<p class="cc-small">Nothing on the tables fits here, so write your own.</p>'}</div>${note}
       ${tools(path, { locked, own, again })}${ui.own === ownKey(path) ? ownForm(W, path) : ""}</section>`;
   }
@@ -731,16 +735,16 @@ export function makeWorldMake(w) {
     let lead = "";
     if (key === "setup") {
       title = e.mode === "add" ? "Add a faction" : "Build the world";
-      lead = e.mode === "add" ? setupLead(e, W) : "Pick where it’s set and what kind of world it is. The tables deal the asking and the ground three cards at a time, then you answer a deck of moments from before the crew turned up, and the factions come out of how you answer.";
+      lead = e.mode === "add" ? setupLead(e, W) : `Pick where it’s set and what kind of world it is. ${tip("wk-how", "The tables deal the asking and the ground three cards at a time, then you answer a deck of moments from before the crew turned up, and the factions come out of how you answer.", "How building the world goes")}`;
     } else if (ASK[key]) {
       kicker = `${kicker} · The asking`;
       title = ASK[key].h;
-      lead = key === "tension" ? "Roll the d12 on the book’s tension table, or tap in a roll of your own dice." : key === "ask:holds" ? "Three answers off Building Your World’s tables, or write your own. Each answer sets how tense, strange, rich and ruled it is, and steers what’s dealt after it." : "Pick one of the three, or write your own.";
+      lead = key === "tension" ? "Roll the d12 on the book’s tension table, or tap in a roll of your own dice." : key === "ask:holds" ? `Three answers off Building Your World’s tables, or write your own. ${tip("wk-asking", "Each answer sets how tense, strange, rich and ruled it is, and steers what’s dealt after it.", "What an answer sets")}` : "Pick one of the three, or write your own.";
     } else if (key.startsWith("seat:")) {
       const k = Number(key.split(":")[1]);
       kicker = `The ground · Seat ${k + 1} of ${W.s}`;
       title = "The ground";
-      lead = k === 0 ? `The places the factions sit, what each one lives off and what a stranger notices there. There are two more than factions, so there’s always one worth fighting over.` : "Pick one of the three, write your own, or deal again.";
+      lead = k === 0 ? `The places the factions sit, what each one lives off and what a stranger notices there. ${tip("wk-ground", "There are two more than factions, so there’s always one worth fighting over.", "Why there are more seats")}` : "Pick one of the three, write your own, or deal again.";
     } else if (key === "deck") {
       const h = A.headOf(W);
       kicker = esc(h.kicker);
@@ -750,16 +754,16 @@ export function makeWorldMake(w) {
       const [, i, p] = key.split(":").map(Number);
       kicker = e.mode === "add" ? `Adding a faction · ${PARTS[p - 1][1]}` : `Faction ${i + 1} of ${W.n} · ${PARTS[p - 1][1]}`;
       title = esc(C.factions[i]?.name || `Faction ${i + 1}`);
-      lead = PARTS[p - 1][2];
+      lead = PARTS[p - 1][3] ? `${PARTS[p - 1][2]} ${tip(`wk-part-${p}`, PARTS[p - 1][3], PARTS[p - 1][4])}` : PARTS[p - 1][2];
     } else if (key === "board") {
       kicker = e.mode === "add" ? "Adding a faction · Its ties" : "Building the world · The board";
       title = e.mode === "add" ? "Its ties" : "The board";
-      lead = e.mode === "add" ? `Its rival, and its ally or debt, among the factions already on the board, written on both cards${W.crew?.who?.length ? ", and a thread toward the crew" : ""}. Swipe one away to leave it off.` : "Everything the tables dealt, before anyone sees it. Tap a faction to go through it again. Nothing shows on your players’ phones till you show it to them.";
+      lead = e.mode === "add" ? `Its rival, and its ally or debt, among the factions already on the board, written on both cards${W.crew?.who?.length ? ", and a thread toward the crew" : ""}. ${tip("wk-ties", "Swipe one away, or tap Leave it off, and it doesn’t go on.", "Leaving a tie off")}` : `Everything the tables dealt, before anyone sees it. ${tip("wk-board", "Tap a faction to go through it again. Nothing shows on your players’ phones till you show it to them.", "About the board")}`;
     } else if (key.startsWith("crew:")) {
       const all = crewScreens(W);
       kicker = `The crew · ${all.indexOf(key) + 1} of ${all.length}`;
       title = esc(crewAt(W, key)?.name ?? "");
-      lead = all.indexOf(key) === 0 ? "Everyone in the crew gets a friend and a foe among the factions. Each one’s that faction’s thread toward the crew, named for them, so it counts toward how the faction sees the crew." : "A friend and a foe among the factions. Pick one of three, deal again or write your own.";
+      lead = all.indexOf(key) === 0 ? `Everyone in the crew gets a friend and a foe among the factions. ${tip("wk-crew", "Each one’s that faction’s thread toward the crew, named for them, so it counts toward how the faction sees the crew.", "About a friend and a foe")}` : "A friend and a foe among the factions. Pick one of three, deal again or write your own.";
     }
     return `<header class="cc-head bd-head wk-head"><p class="kicker">${kicker}</p><h1 tabindex="-1">${title}</h1>
       <ol class="bd-progress wk-progress" style="--n: ${stages.length}" aria-hidden="true">${bars}</ol>
@@ -767,7 +771,7 @@ export function makeWorldMake(w) {
   }
   function setupLead(e, W) {
     if (e.mix && W) return `It’s dealt as ${esc(genreName(W.recipe))} at ${esc(regionName(W.recipe.region))}, ${e.mix.from === "build" ? "the mix this world was built with" : `${esc(whose(e.mix.name))} mix`}, to fit this board. Change it here if you’d rather.`;
-    return "This board hasn’t got a mix yet, so pick where it’s set and what kind of world it is. The new faction’s dealt to fit it, with ties to the factions already on the board.";
+    return `This board hasn’t got a mix yet, so pick where it’s set and what kind of world it is. ${tip("wk-mix", "The new faction’s dealt to fit it, with ties to the factions already on the board.", "Adding a faction")}`;
   }
 
   // The bar at the bottom: Back, every step a tap away, and Next.
@@ -832,11 +836,11 @@ export function makeWorldMake(w) {
     const chip = (k, v, label, ok, on) => `<button type="button" class="chip pt-chip wk-chip${on ? " is-on" : ""}" data-act="w" data-do="mk-set" data-k="${k}" data-v="${esc(v)}" aria-pressed="${on}"${ok ? "" : " disabled"}>${esc(label)}${ok ? "" : " <small>coming</small>"}</button>`;
     const mix = s.genre === MIX ? `<div class="wk-mix"><p class="bd-label">The era</p><div class="cc-row wk-chips">${Object.entries(T.eras).map(([k, name]) => chip("era", k, name, canDeal(T, { region: s.region, era: k }), s.era === k)).join("")}</div>
       <p class="bd-label">The twist</p><div class="cc-row wk-chips">${chip("twist", "", "No twist", true, !s.twist)}${Object.entries(T.twists).map(([k, name]) => chip("twist", k, name, Boolean(s.era) && canDeal(T, { region: s.region, era: s.era, twist: k }), s.twist === k)).join("")}</div></div>` : "";
-    const count = e.mode === "add" ? "" : `<section class="wk-sec" aria-labelledby="wk-count"><h2 id="wk-count">How many factions</h2>
+    const count = e.mode === "add" ? "" : `<section class="wk-sec" aria-labelledby="wk-count"><h2><span id="wk-count">How many factions</span> ${tip("wk-count", "It starts at your players and two more, and it’s never fewer than four. There are always two more seats than factions.", "Choosing how many")}</h2>
       <div class="wk-count"><button type="button" class="button wk-step-b" data-act="w" data-do="mk-set" data-k="n" data-v="-1" aria-label="One fewer"${s.n <= 4 ? " disabled" : ""}>−</button><output class="wk-count-n" aria-live="polite">${s.n}</output><button type="button" class="button wk-step-b" data-act="w" data-do="mk-set" data-k="n" data-v="1" aria-label="One more"${s.n >= 12 ? " disabled" : ""}>+</button></div>
-      <p class="cc-small">It starts at your players and two more, and it’s never fewer than four. There are always two more seats than factions.</p></section>`;
+      </section>`;
     const moved = W && setupMoved(e, W);
-    const all = e.mode === "add" ? "" : `<section class="wk-all card"><h2>Or deal it all in one tap</h2><p>Every step dealt by the tables at once. Then you go through it a faction at a time, lock what you like and deal the rest again.</p>
+    const all = e.mode === "add" ? "" : `<section class="wk-all card"><h2>Or deal it all in one tap</h2><p>Every step dealt by the tables at once. ${tip("wk-all", "Then you go through it a faction at a time, lock what you like and deal the rest again.", "Dealing it all")}</p>
       <div class="cc-row"><button type="button" class="button" data-act="w" data-do="mk-all"${dealsSetup(s) ? "" : " disabled"}>${moved && W ? (sureOf("all", id) ? "Tap again to deal a new one" : "Deal a new one, all of it") : "Deal it all"}</button></div></section>`;
     return `${moved && W ? `<div class="cc-note is-warn" role="status"><p>That’s different to the world you’ve dealt. Deal a new one and what you’ve dealt goes, or put these back to carry on.</p></div>` : ""}
       <section class="wk-sec" aria-labelledby="wk-region"><h2 id="wk-region">Where it’s set</h2><div class="wk-picks">${regions}</div></section>
@@ -889,10 +893,10 @@ export function makeWorldMake(w) {
     } else if (p === 3) {
       body = `${setStep(e, W, C, i, "res")}${setStep(e, W, C, i, "assets")}`;
     } else {
-      body = `${step(e, W, C, `f:${i}:agenda`, "Its agenda")}${step(e, W, C, `f:${i}:face`, "Its Face", { note: '<p class="cc-small wk-note">The person the crew deals with, as one of the Threat Builder’s threats at the Challenge its Power sends.</p>' })}
-        ${step(e, W, C, `f:${i}:secret`, "Its Secret", { note: '<p class="cc-small wk-note">A hidden tag, and two ways in the crew could find it.</p>' })}${step(e, W, C, `f:${i}:name`, "Its name")}${offers(e, W, C, i)}`;
+      body = `${step(e, W, C, `f:${i}:agenda`, "Its agenda")}${step(e, W, C, `f:${i}:face`, "Its Face", { help: ["About its Face", "The person the crew deals with, as one of the Threat Builder’s threats at the Challenge its Power sends."] })}
+        ${step(e, W, C, `f:${i}:secret`, "Its Secret", { help: ["About its Secret", "A hidden tag, and two ways in the crew could find it."] })}${step(e, W, C, `f:${i}:name`, "Its name")}${offers(e, W, C, i)}`;
     }
-    const again = f && !f.held ? `<div class="wk-again"><button type="button" class="button" data-act="w" data-do="mk-refaction" data-i="${i}">${ICON.deal}<span>Deal this faction again</span></button><p class="cc-small">Everything on its card that you haven’t locked or written yourself.</p></div>` : "";
+    const again = f && !f.held ? `<div class="wk-again"><button type="button" class="button" data-act="w" data-do="mk-refaction" data-i="${i}">${ICON.deal}<span>Deal this faction again</span></button> ${tip(`wk-again-${i}`, "Everything on its card that you haven’t locked or written yourself is dealt again.", "Dealing this faction again")}</div>` : "";
     return `${top}${body}${again}`;
   }
   // Where it sits: the seats nobody else holds. Adding to a board, that's the
@@ -927,7 +931,7 @@ export function makeWorldMake(w) {
   function exception(W, i) {
     const path = `f:${i}:exc`;
     const x = W.factions[i].exc;
-    if (!x) return `<div class="wk-break"><button type="button" class="button sm" data-act="w" data-do="mk-break" data-i="${i}">Break the logic</button><span class="cc-small">One card in six breaks it on purpose, with its reason.</span></div>`;
+    if (!x) return `<div class="wk-break"><button type="button" class="button sm" data-act="w" data-do="mk-break" data-i="${i}">Break the logic</button>${tip(`wk-break-${i}`, "One card in six breaks it on purpose, with its reason.", "Breaking the logic")}</div>`;
     return `<section class="wk-step wk-exc" aria-labelledby="wk-exc-${i}"><div class="wk-step-h"><h2 id="wk-exc-${i}">It breaks the logic</h2></div>
       <div class="wk-card is-on is-static"><span class="wk-card-w">${esc(cap(flat(x.text)))}, ${esc(flat(x.reason))}.</span></div>
       <div class="wk-tools"><button type="button" class="button sm wk-tool" data-act="w" data-do="mk-break" data-i="${i}">${ICON.deal}<span>Another one</span></button><button type="button" class="button sm wk-tool" data-act="w" data-do="mk-unbreak" data-i="${i}">${ICON.cut}<span>Take it off</span></button></div></section>`;
@@ -971,8 +975,8 @@ export function makeWorldMake(w) {
     const list = C.factions[i]?.offers ?? [];
     if (!list.length) return "";
     const items = list.map((o) => tie(e, `o:${i}:${o.text}`, `<span class="wk-tie-k">${esc(BONDS[o.bond] ?? "A bond")}, ${o.kind === "hostile" ? "gone bad" : "good for it"}</span><em>${esc(o.text)}</em>`, o.kind)).join("");
-    return `<section class="wk-step" aria-labelledby="wk-offers-${i}"><div class="wk-step-h"><h2 id="wk-offers-${i}">What’s already happened</h2></div>
-      <p class="cc-small wk-note">Its card says these have happened, so each goes on it as a bond. Swipe one away to leave it off.</p><ul class="wk-ties">${items}</ul></section>`;
+    return `<section class="wk-step" aria-labelledby="wk-offers-${i}"><div class="wk-step-h"><h2><span id="wk-offers-${i}">What’s already happened</span> ${tip(`wk-offers-${i}`, "Its card says these have happened, so each goes on it as a bond. Swipe one away, or tap Leave it off, and it doesn’t go on.", "About what’s already happened")}</h2></div>
+      <ul class="wk-ties">${items}</ul></section>`;
   }
   // A thread or a bond she can keep or swipe away.
   function tie(e, key, inner, kind) {
@@ -1015,9 +1019,9 @@ export function makeWorldMake(w) {
     }
     const who = `<div class="wk-who card">${crest ? `<span class="wk-who-crest" aria-hidden="true">${crest}</span>` : ""}<div class="wk-who-in"><p class="wb-k">${p?.name ? `Played by ${esc(p.name)}` : "In the crew"}</p><p class="wk-who-n">${esc(c.name)}</p></div></div>`;
     // A side the deck made is what happened, so it's locked, and the screen only deals the other.
-    const made = (side) => (c[side]?.made != null && W.locks[`crew:${c.k}:${side}`] ? `<p class="cc-small wk-note wk-made">Card ${c[side].made + 1} of the deck made this one, so it’s locked. Unlock it to deal it again.</p>` : "");
-    const friend = step(e, W, C, `crew:${c.k}:friend`, "A friend", { note: `${made("friend")}<p class="cc-small wk-note">That’s a bond thread toward the crew, and it counts toward the faction being friendly.</p>` });
-    const foe = step(e, W, C, `crew:${c.k}:foe`, "A foe", { note: `${made("foe")}<p class="cc-small wk-note">That’s a hostile thread toward the crew, and it counts toward the faction being hostile.</p>` });
+    const made = (side) => (c[side]?.made != null && W.locks[`crew:${c.k}:${side}`] ? `<p class="cc-small wk-note wk-made">Card ${c[side].made + 1} of the deck made this one, so it’s locked. ${tip(`wk-made-${side}`, "Unlock it to deal it again.", "Why it’s locked")}</p>` : "");
+    const friend = step(e, W, C, `crew:${c.k}:friend`, "A friend", { note: made("friend"), help: ["About a friend", "That’s a bond thread toward the crew, and it counts toward the faction being friendly."] });
+    const foe = step(e, W, C, `crew:${c.k}:foe`, "A foe", { note: made("foe"), help: ["About a foe", "That’s a hostile thread toward the crew, and it counts toward the faction being hostile."] });
     return `${who}${friend}${foe}${doneNote(e, W, list, key)}`;
   }
 
@@ -1031,8 +1035,9 @@ export function makeWorldMake(w) {
       <span class="wb-tok-die">${f.die ? kitDie(f.die, { own: "them", hide: true }) : ""}</span><span class="wb-tok-in"><span class="wb-k">${esc(cap(f.size ?? ""))}${f.die ? ` · d${f.die}` : ""}</span><b class="wb-tok-n">${esc(f.name)}</b>${f.want ? `<span class="wb-tok-w">${esc(f.want)}</span>` : ""}</span></button></li>${(C.minis ?? []).filter((m) => m.parent === i).map(miniTok).join("")}`).join("")}</ul></section>`;
     // Built by answering: How it came to be is a step back, and it goes on hidden.
     const told = e.mode !== "add" && W.deck ? linesOf(T, W) : [];
+    const yours = told.filter((l) => l.hers).length;
     const story = told.length ? `<section class="wk-sec" aria-labelledby="wk-story"><h2 id="wk-story">How it came to be</h2>
-      <p class="cc-small">${plural(told.length, "line", "lines")} from the deck, all hidden from the crew till you show them an age at a time on the World screen.${told.some((l) => l.hers) ? ` ${plural(told.filter((l) => l.hers).length, "line made a Secret, so it stays", "lines made Secrets, so they stay")} on your phone.` : ""}</p>
+      <p class="cc-small">${plural(told.length, "line", "lines")} from the deck${yours ? `, ${yours} of them yours` : ""}, all hidden from the crew. ${tip("wk-story-how", `You show the crew an age at a time on the World screen.${yours ? ` A line that made a Secret is yours, and it stays on your phone whatever you show.` : ""}`, "Showing the crew the history")}</p>
       <div class="cc-row"><button type="button" class="button" data-act="w" data-do="mk-go" data-s="deck">Read it</button></div></section>` : "";
     const web = (W.web ?? []).map((t) => {
       const key = `w:${t.a}-${t.b}`;
@@ -1079,11 +1084,11 @@ export function makeWorldMake(w) {
     });
     const fall = (W.fallbacks ?? []).length;
     const checks = `<section class="wk-sec" aria-labelledby="wk-checks"><h2 id="wk-checks">The checks</h2>
-      <p class="${failed.length ? "cc-note is-warn" : "cc-small"}">${failed.length ? `Still to sort out: ${esc(failed.map((c) => CHECKS[c.k] ?? c.k).join(", "))}. Whatever you’ve locked or written yourself, the checks leave alone.` : e.mode === "add" ? "Its card adds up, it’s got a rival, and everything it’s after is on the board." : `Every faction’s card adds up and has a rival${W.crew ? ", everything it’s after is on the board or the crew’s, and at least one of them’s after something the crew’s got" : ", and everything it’s after is on the board"}.`}</p>
+      <p class="${failed.length ? "cc-note is-warn" : "cc-small"}">${failed.length ? `Still to sort out: ${esc(failed.map((c) => CHECKS[c.k] ?? c.k).join(", "))}. ${tip("wk-checks", "Whatever you’ve locked or written yourself, the checks leave alone.", "About the checks")}` : e.mode === "add" ? "Its card adds up, it’s got a rival, and everything it’s after is on the board." : `Every faction’s card adds up and has a rival${W.crew ? ", everything it’s after is on the board or the crew’s, and at least one of them’s after something the crew’s got" : ", and everything it’s after is on the board"}.`}</p>
       ${fixes.length ? `<p class="cc-small">Dealt again for them: ${fixes.join(", ")}.</p>` : ""}${fall ? `<p class="cc-small">${plural(fall, "line", "lines")} from the core tables went in where three deals weren’t enough.</p>` : ""}</section>`;
     const say = w.status(id);
     return `${say ? `<p class="cc-small pt-status">${say}</p>` : ""}${toks}
-      ${web || crewTies ? (e.mode === "add" ? `<section class="wk-sec" aria-label="Its ties"><ul class="wk-ties">${web}${crewTies}</ul></section>` : `<section class="wk-sec" aria-labelledby="wk-web"><h2 id="wk-web">The web</h2>${ring}<p class="cc-small wk-note">Who’s at whose throat, and who owes whom. Swipe one away to leave it off.</p><ul class="wk-ties">${web}</ul></section>`) : ""}
+      ${web || crewTies ? (e.mode === "add" ? `<section class="wk-sec" aria-label="Its ties"><ul class="wk-ties">${web}${crewTies}</ul></section>` : `<section class="wk-sec" aria-labelledby="wk-web"><h2><span id="wk-web">The web</span> ${tip("wk-web", "Who’s at whose throat, and who owes whom. Swipe one away, or tap Leave it off, and it doesn’t go on.", "About the web")}</h2>${ring}<ul class="wk-ties">${web}</ul></section>`) : ""}
       ${needs ? `<section class="wk-sec" aria-labelledby="wk-needs"><h2 id="wk-needs">Who needs what</h2><ul class="wk-ties">${needs}</ul></section>` : ""}${checks}${story}
       ${doneNote(e, W, list, "board")}`;
   }
@@ -1133,11 +1138,11 @@ export function makeWorldMake(w) {
     else if (key.startsWith("crew:")) body = crewBody(id, e, W, C, key, list);
     else body = boardBody(id, e, W, C, list);
     if (W && (ASK[key] || key.startsWith("seat:")) && fixedBy(W)) body = `${fixedNote(id, W)}${body}`;
-    const rest = W && key !== "board" && key !== "setup" && key !== "deck" && !key.startsWith("crew:") && !fixedBy(W) ? `<div class="wk-rest"><button type="button" class="button" data-act="w" data-do="mk-rest">Deal the rest</button><p class="cc-small">Deals whatever’s still to deal and takes you to the board.</p></div>` : "";
+    const rest = W && key !== "board" && key !== "setup" && key !== "deck" && !key.startsWith("crew:") && !fixedBy(W) ? `<div class="wk-rest"><button type="button" class="button" data-act="w" data-do="mk-rest">Deal the rest</button>${tip("wk-rest", "Deals whatever’s still to deal and takes you to the board.", "Dealing the rest")}</div>` : "";
     keep();
     fresh = new Set();
     return `${top(Boolean(undos[id]?.length))}<div class="wk" data-wb="${esc(id)}">${head(e, W, C, key, list)}
-      <div class="bd-body wk-body${go ? ` bd-go-${go}` : ""}">${body}${rest}<p class="cc-lead bd-saved">It’s kept on this phone as you go, signal or not, and nothing goes on the board till you put it there.</p></div>
+      <div class="bd-body wk-body${go ? ` bd-go-${go}` : ""}">${body}${rest}<p class="cc-small bd-saved">Kept on this phone as you go. ${tip("wk-saved", "Signal or not, and nothing goes on the board till you put it there.", "Where it’s kept")}</p></div>
       ${bar(e, W, C, key, list)}</div>`;
   }
 

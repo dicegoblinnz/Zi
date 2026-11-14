@@ -3,7 +3,7 @@
 //
 //   npm run build && node tests/check-accounts.mjs
 //   SHOTS=folder node tests/check-accounts.mjs   (and screenshots of the campaign screens)
-//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e, 9f, 9g, 9h or 9i)
+//   ZI_UPTO=6c node tests/check-accounts.mjs     (parts 1 to 6c only, or 6d, 9b, 9c, 9d, 9e, 9f, 9g, 9h, 9i or 9j)
 //
 // The site's Worker runs here in workerd (Miniflare) with its own D1, built the
 // way a deploy builds it, with every migration applied in order. Google and
@@ -308,6 +308,20 @@
 //    opens on the capital and puts Alysta there on the web, and the capital's
 //    places tuck on Mo's at the whole map. The World screen and both maps
 //    pass axe at 390 in both themes.
+//    9j. Question bubbles (prompt 4 of notes/stacking-plan.md). Every
+//    explanation on the campaign, world, faction, place, party, builder and
+//    account screens is a ? that opens it as a card over the screen. Each of
+//    those screens is shorter than it'd be with the words back where their ?s
+//    are, with its folds shut and open (SHOTS has them whole, and
+//    ZI_TIPS_BEFORE=1 measures a build from before the bubbles the same way,
+//    for the plan's before and after). At 320 wide in both themes, with axe
+//    shut and open: a ? is 44px, a tap opens its card in the screen with the
+//    focus in it and named for its ?, a tap anywhere else only shuts it (the
+//    back link under that tap goes nowhere), Enter and Space open it, Escape
+//    shuts it and puts you back on its ?, and moving on with Tab shuts it.
+//    In a dialog, Escape and a tap shut the card and leave the dialog open.
+//    The screen drawn again under an open card keeps it open, and with no
+//    signal a card still has its words (ZI_UPTO=9j stops there).
 // 10. Who can do what: only Mo sees people, a player can't reset a link, rename,
 //    end a campaign or take anyone out, a signed-out request gets nothing
 //    private, and the join check's rate limit trips.
@@ -4088,7 +4102,8 @@ try {
     same(await lead(mo.page), "The board", "then the board");
     let e = await making(mo.page, friday.id);
     yes(e.W.deck.finished && e.W.checks?.every((c) => c.ok), "the deck's ended and the rest's dealt, and the checks pass");
-    has(await text(mo.page, ".wk"), "all hidden from the crew till you show them an age at a time", "the board says How it came to be goes on hidden");
+    has(await text(mo.page, ".wk"), "all hidden from the crew", "the board says How it came to be goes on hidden");
+    has(await text(mo.page, ".wk"), "You show the crew an age at a time", "and its ? says how it's shown");
     await mo.page.click('.wk [data-do="mk-go"][data-s="deck"]');
     await mo.page.waitForSelector(".wa-story");
     same(await lead(mo.page), "How it came to be", "the deck's last screen is How it came to be");
@@ -4674,6 +4689,237 @@ try {
     await until(async () => (await fOf(mo.page, mkt.id)) === null, "Mo clears the founding off");
   }
   // 9i. A whole world into a campaign (stage 14 of notes/builder-plan.md).
+  // 9j. Question bubbles: see the top of the file.
+  async function checkTips() {
+    const BEFORE = Boolean(process.env.ZI_TIPS_BEFORE);
+    const doc = JSON.parse((await rows("SELECT data FROM world WHERE campaignId = ?1", tuesday.id))[0]?.data ?? "null");
+    const fac = doc.factions.find((f) => f.shown?.card && !f.mini) ?? doc.factions[0];
+    const place = doc.pages.find((p) => p.kind === "place" && p.shown?.page) ?? doc.pages.find((p) => p.kind === "place");
+    const camp = `${BASE}/characters/?camp=${tuesday.id}`;
+    // Add a faction on Tuesday Lair is the builder's screen here, and the build
+    // it starts on Mo's phone goes again at the end.
+    const hadBuild = await mo.page.evaluate((id) => Boolean(JSON.parse(localStorage.getItem("zi-make") || "{}")?.k?.[id]), tuesday.id);
+    const SCREENS = [
+      { who: mo, name: "campaign-gm", url: camp, sel: "#k-link" },
+      { who: mo, name: "world-gm", url: `${camp}&world`, sel: ".wb-sec" },
+      { who: mo, name: "faction-gm", url: `${camp}&world&f=${fac.id}`, sel: ".wb-fhead" },
+      { who: mo, name: "place-gm", url: `${camp}&world&p=${place.id}`, sel: ".wp .wb-parts" },
+      { who: mo, name: "build-gm", url: `${camp}&world&make=add`, sel: ".wk-head" },
+      { who: mo, name: "account", url: `${BASE}/account/`, sel: "#ac-camps" },
+      { who: kai, name: "campaign-player", url: camp, sel: "#k-you" },
+      { who: kai, name: "world-tab", url: `${BASE}/characters/?c=vesk-aaaaaa&t=world`, sel: ".wb-tab .wb-sec" },
+      { who: kai, name: "party-tab", url: `${BASE}/characters/?c=vesk-aaaaaa&t=party`, sel: ".pt-goal" },
+      { who: kai, name: "faction-player", url: `${camp}&world&f=${fac.id}`, sel: ".wb-fhead" },
+    ];
+    const open = async (x) => {
+      await x.who.page.goto(x.url);
+      await x.who.page.waitForSelector(x.sel, { state: "attached" });
+      await x.who.page.evaluate(() => document.fonts.ready);
+      await x.who.page.waitForTimeout(250);
+    };
+    // Every fold on the screen open, or shut again, without the app keeping it.
+    const folds = (page, on) => page.evaluate((v) => {
+      for (const el of document.querySelectorAll("#app details")) if (el.open !== v) { el.dataset.tipsWas = String(el.open); el.open = v; }
+    }, on);
+    const height = (page) => page.evaluate(() => document.documentElement.scrollHeight);
+    // The words put back where their ?s are, small, the way the explanations
+    // were before: the screen it'd be without the bubbles.
+    const wordsBack = (page) => page.evaluate(() => {
+      for (const a of document.querySelectorAll(".cc-fold-ask")) a.style.cssText = "position:static;float:none;translate:none";
+      for (const c of document.querySelectorAll(".tip-card")) {
+        c.removeAttribute("popover");
+        c.style.cssText = "display:block;position:static;margin:0.3rem 0;padding:0;border:0;background:none;box-shadow:none;max-width:none;max-height:none;overflow:visible;font-size:0.92rem;line-height:1.45";
+        c.querySelector("zi-tip-h")?.remove();
+      }
+      for (const b of document.querySelectorAll(".tip")) b.style.display = "none";
+      return document.documentElement.scrollHeight;
+    });
+
+    // How long each screen is at 390, its folds shut and then open.
+    const heights = {};
+    for (const x of SCREENS) {
+      await open(x);
+      const shut = await height(x.who.page);
+      if (SHOTS) await x.who.page.screenshot({ path: join(SHOTS, `${BEFORE ? "before" : "after"}-${x.name}.png`), fullPage: true });
+      await folds(x.who.page, true);
+      await x.who.page.waitForTimeout(150);
+      const opened = await height(x.who.page);
+      const asks = await x.who.page.evaluate(() => [...document.querySelectorAll(".tip")].filter((q) => q.checkVisibility()).length);
+      if (SHOTS) await x.who.page.screenshot({ path: join(SHOTS, `${BEFORE ? "before" : "after"}-${x.name}-open.png`), fullPage: true });
+      heights[x.name] = { shut, open: opened };
+      if (!BEFORE) {
+        const back = await wordsBack(x.who.page);
+        await folds(x.who.page, false);
+        await x.who.page.waitForTimeout(150);
+        const backShut = await height(x.who.page);
+        heights[x.name].back = { shut: backShut, open: back };
+        yes(shut <= backShut, `${x.name}: no longer with its folds shut than with the words back (${shut}px against ${backShut}px)`);
+        // A screen with nothing to explain (a player's World tab, often) has no ? to save it room.
+        if (asks) yes(back - opened >= 20, `${x.name}: shorter with its folds open than with the words back (${opened}px against ${back}px)`);
+      }
+      console.log(`  ${x.name}: ${shut}px shut, ${opened}px open, ${asks} ?s${heights[x.name].back ? `, with the words back ${heights[x.name].back.shut}px and ${heights[x.name].back.open}px` : ""}`);
+      await x.who.page.goto("about:blank");
+    }
+    if (BEFORE) {
+      if (!hadBuild) await mo.page.goto(camp);
+      if (!hadBuild) await mo.page.evaluate((id) => {
+        const s = JSON.parse(localStorage.getItem("zi-make") || "null");
+        if (!s?.k?.[id]) return;
+        delete s.k[id];
+        localStorage.setItem("zi-make", JSON.stringify(s));
+      }, tuesday.id);
+      return;
+    }
+
+    // The ? and its card at 320 wide, in both themes.
+    const openCard = (page) => page.evaluate(() => {
+      const c = document.querySelector(".tip-card:popover-open");
+      if (!c) return null;
+      const r = c.getBoundingClientRect();
+      const q = document.querySelector(`[popovertarget="${c.id}"]`);
+      return { id: c.id, l: r.left, r: r.right, t: r.top, b: r.bottom, w: innerWidth, h: innerHeight, focus: c.contains(document.activeElement), name: q?.getAttribute("aria-label") ?? "", words: c.textContent.trim() };
+    });
+    // The first ? that's showing, brought into view.
+    const askBox = (page, sel) => page.evaluate((s) => {
+      const q = [...document.querySelectorAll(s)].find((el) => el.checkVisibility());
+      if (!q) return null;
+      q.scrollIntoView({ block: "center" });
+      const r = q.getBoundingClientRect();
+      const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      return { w: Math.round(r.width), h: Math.round(r.height), x: r.left + r.width / 2, y: r.top + r.height / 2, on: Boolean(hit && q.contains(hit)), id: q.getAttribute("popovertarget") };
+    }, sel);
+    // A link on the screen that the open card isn't over, to tap.
+    const elsewhere = (page) => page.evaluate(() => {
+      const c = document.querySelector(".tip-card:popover-open")?.getBoundingClientRect();
+      const clear = (r) => !c || r.right < c.left || r.left > c.right || r.bottom < c.top || r.top > c.bottom;
+      const el = [...document.querySelectorAll("a[href]")].find((a) => {
+        const r = a.getBoundingClientRect();
+        return r.width > 8 && r.height > 8 && r.top >= 0 && r.bottom <= innerHeight && clear(r) && !a.closest(".tip-card");
+      });
+      if (!el) return null;
+      const r = el.getBoundingClientRect();
+      return { x: r.left + Math.min(16, r.width / 2), y: r.top + r.height / 2 };
+    });
+    const firstAsk = async (page) => {
+      // A screen whose ?s are all in folds opens its first fold that has one.
+      if (!(await askBox(page, "#app .tip, #acct .tip"))) {
+        await page.evaluate(() => {
+          const d = [...document.querySelectorAll("#app details")].find((x) => x.querySelector(".tip"));
+          if (d) d.open = true;
+        });
+        await page.waitForTimeout(100);
+      }
+      return askBox(page, "#app .tip, #acct .tip");
+    };
+    const TRY = ["world-gm", "faction-gm", "campaign-gm", "build-gm", "account", "party-tab"];
+    for (const theme of ["dark", "light"]) {
+      for (const x of SCREENS.filter((y) => TRY.includes(y.name))) {
+        const page = x.who.page;
+        const what = `${x.name}, 320, ${theme}`;
+        await page.setViewportSize({ width: 320, height: 700 });
+        await page.evaluate((t) => localStorage.setItem("zi-theme", t), theme).catch(() => {});
+        await open(x);
+        await axe(page, `${what}, shut`);
+        const q = await firstAsk(page);
+        if (!q) {
+          note(`no ? to tap on ${what}`);
+          continue;
+        }
+        same([q.w, q.h], [44, 44], `a ? is a 44px target (${what})`);
+        yes(q.on, `nothing covers the ? (${what})`);
+        const sel = `[popovertarget="${q.id}"]`;
+        // A tap opens it, in the screen, with the focus in it and its name.
+        await page.touchscreen.tap(q.x, q.y);
+        await page.waitForSelector(".tip-card:popover-open", { timeout: 3000 }).catch(() => {});
+        let c = await openCard(page);
+        yes(c && c.l >= 0 && c.r <= c.w + 0.5 && c.t >= 0 && c.b <= c.h + 0.5, `a tap opens the ?'s card inside the screen (${what}): ${JSON.stringify(c)}`);
+        yes(c?.focus, `and the focus is in it (${what})`);
+        yes(c?.words.startsWith(c?.name ?? "\u0000") && c?.words.length > c?.name.length + 10, `and it's named for its ? and says something (${what})`);
+        const tree = c ? await page.locator(`#${c.id}`).ariaSnapshot().catch(() => "") : "";
+        has(tree, `dialog "${c?.name}"`, `a screen reader hears it as a dialog named for its ? (${what})`);
+        await axe(page, `${what}, a card open`);
+        // A tap anywhere else only shuts it: the back link under the tap goes nowhere.
+        const before = page.url();
+        await page.evaluate(() => scrollTo(0, 0));
+        const away = await elsewhere(page);
+        if (away) await page.touchscreen.tap(away.x, away.y);
+        else note(`no link clear of the card to tap (${what})`);
+        await page.waitForTimeout(300);
+        same(await openCard(page), null, `a tap anywhere else shuts it (${what})`);
+        same(page.url(), before, `and nothing under that tap gets pressed (${what})`);
+        // Enter opens it, Escape shuts it and puts you back on its ?.
+        await page.focus(sel);
+        await page.keyboard.press("Enter");
+        same(Boolean((await openCard(page))?.focus), true, `Enter opens it with the focus in it (${what})`);
+        await page.keyboard.press("Escape");
+        same(await openCard(page), null, `Escape shuts it (${what})`);
+        same(await page.evaluate((s) => document.activeElement === document.querySelector(s), sel), true, `and puts you back on its ? (${what})`);
+        // Space opens it, and moving on with Tab, past anything in the card, shuts it.
+        await page.keyboard.press(" ");
+        yes(Boolean(await openCard(page)), `Space opens it (${what})`);
+        for (let i = 0; i < 4 && (await openCard(page))?.focus; i++) await page.keyboard.press("Tab");
+        same(await openCard(page), null, `Tab moves on and shuts it (${what})`);
+        await shot(page, `tips-${x.name}-${theme}`);
+      }
+    }
+    for (const x of SCREENS) {
+      await x.who.page.setViewportSize({ width: 390, height: 844 });
+      await x.who.page.evaluate(() => localStorage.setItem("zi-theme", "dark")).catch(() => {});
+    }
+
+    // In a dialog: How long's this downtime, before Mo starts one. Escape and
+    // a tap shut the card and leave the dialog open, and closing the dialog
+    // starts nothing.
+    const world = SCREENS.find((y) => y.name === "world-gm");
+    await open(world);
+    await mo.page.click('.ft [data-do="start"]');
+    await mo.page.waitForSelector("#cc-dialog[open] .tip");
+    const dq = await askBox(mo.page, "#cc-dialog .tip");
+    await mo.page.touchscreen.tap(dq.x, dq.y);
+    let dc = await openCard(mo.page);
+    yes(dc?.focus, "a ? in a dialog opens its card with the focus in it");
+    yes(dc && (await mo.page.evaluate(([x, y]) => Boolean(document.elementFromPoint(x, y)?.closest(".tip-card")), [(dc.l + dc.r) / 2, (dc.t + dc.b) / 2])), "over the dialog");
+    await mo.page.keyboard.press("Escape");
+    same(await openCard(mo.page), null, "Escape shuts the card in a dialog");
+    yes(await mo.page.$("#cc-dialog[open]"), "and the dialog's still open");
+    await mo.page.touchscreen.tap(dq.x, dq.y);
+    const shut = await askBox(mo.page, '#cc-dialog [data-act="close"]');
+    await mo.page.touchscreen.tap(shut.x, shut.y);
+    await mo.page.waitForTimeout(300);
+    same(await openCard(mo.page), null, "a tap on the dialog's ×, with a card open, shuts the card");
+    yes(await mo.page.$("#cc-dialog[open]"), "and only the card");
+    await mo.page.click('#cc-dialog [data-act="close"]');
+    await mo.page.waitForSelector("#cc-dialog[open]", { state: "detached" }).catch(() => {});
+    yes(await mo.page.$(".ft.is-idle"), "closing the dialog starts no downtime");
+
+    // The screen drawn again under an open card keeps it open, and with no
+    // signal a card still has its words.
+    const party = SCREENS.find((y) => y.name === "party-tab");
+    await open(party);
+    const pq = await askBox(kai.page, "#app .tip");
+    await kai.page.touchscreen.tap(pq.x, pq.y);
+    const was = await openCard(kai.page);
+    await kai.page.evaluate(() => dispatchEvent(new StorageEvent("storage", { key: "zi-characters" })));
+    await kai.page.waitForTimeout(200);
+    const now = await openCard(kai.page);
+    same([now?.id, now?.focus], [was?.id, true], "the screen drawn again under an open card keeps it open, with the focus in it");
+    yes(await kai.page.evaluate(() => !document.querySelector(".tip-card:popover-open")?.getAnimations().length), "and it doesn't arrive all over again");
+    await kai.page.keyboard.press("Escape");
+    await kai.context.setOffline(true);
+    await kai.page.evaluate(() => dispatchEvent(new StorageEvent("storage", { key: "zi-characters" })));
+    const oq = await askBox(kai.page, "#app .tip");
+    await kai.page.touchscreen.tap(oq.x, oq.y);
+    yes(((await openCard(kai.page))?.words.length ?? 0) > 20, "with no signal, a card still has its words");
+    await kai.page.keyboard.press("Escape");
+    await kai.context.setOffline(false);
+    if (!hadBuild) await mo.page.evaluate((id) => {
+      const s = JSON.parse(localStorage.getItem("zi-make") || "null");
+      if (!s?.k?.[id]) return;
+      delete s.k[id];
+      localStorage.setItem("zi-make", JSON.stringify(s));
+    }, tuesday.id);
+  }
+
   async function checkWholeWorld() {
     const NC = JSON.parse(readFileSync("public/worlds/night-city-2077.json", "utf8"));
     const AB = JSON.parse(readFileSync("public/worlds/abnu-1000.json", "utf8"));
@@ -4928,6 +5174,11 @@ try {
   await checkWholeWorld();
   // ZI_UPTO=9i stops here.
   if (UPTO === "9i") break rest;
+
+  console.log("9j. Question bubbles");
+  await checkTips();
+  // ZI_UPTO=9j stops here.
+  if (UPTO === "9j") break rest;
 
 
   // ------------------------------------------------------------ 10. who can do what

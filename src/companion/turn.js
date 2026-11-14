@@ -28,6 +28,7 @@ import { lower } from "./table-rules.js";
 import { MAX, STEPS, ageOf, allDice, allFaces, best, crewDice, crewResult, crewSteps, defOf, diceOf, landed, powerAt, rolled, shapeOf, spentOf, stateOfAct } from "./turn-rules.js";
 import { die as kitDie, glyph as kitGlyph, seal as kitSeal } from "../kit/kit.js";
 import { feel } from "./feel.js";
+import { tip } from "./tip.js";
 
 const SIZES = [2, 4, 6, 8, 10, 12];
 const STEP_NAMES = { hire: "Hiring", tele: "Telegraphs", crew: "The crew", land: "Landing" };
@@ -155,7 +156,7 @@ export function makeTurn(d) {
       if (!gm) return lastHtml ? `<section class="cc-sec ft is-idle" data-ft="${esc(id)}" aria-labelledby="${hid}"><h2 id="${hid}">Downtime</h2>${lastHtml}</section>` : "";
       const n = boardOf(id).factions.length;
       return `<section class="cc-sec ft is-idle" data-ft="${esc(id)}" aria-labelledby="${hid}"><h2 id="${hid}">Downtime</h2>
-        <p class="cc-lead">Every faction on the board takes one action a downtime, and so does the crew. ${n ? "Start the faction turn when the crew’s downtime starts, and it goes step by step from there, the same as the book." : "Put a faction or two on the board first."} ${ruleLink("s-faction-turn", "The faction turn")}</p>
+        <p class="cc-lead">Every faction on the board takes one action a downtime, and so does the crew. ${n ? tip(`ft-idle-${id}`, ["Start the faction turn when the crew’s downtime starts, and it goes step by step from there, the same as the book.", ruleLink("s-faction-turn", "The faction turn")], "How downtime goes") : `Put a faction or two on the board first. ${tip(`ft-idle-${id}`, ruleLink("s-faction-turn", "The faction turn"), "How downtime goes")}`}</p>
         ${n ? btn("start", "Start the faction turn", { cls: "button primary ft-go" }) : ""}${lastHtml}</section>`;
     }
     const body = t.step === "hire" ? hireBody(id, t, gm) : t.step === "tele" ? teleBody(id, t, gm) : t.step === "crew" ? crewBody(id, t, gm) : landBody(id, t, gm);
@@ -189,8 +190,8 @@ export function makeTurn(d) {
     const can = gm || Boolean(mine(id));
     const money = left ? `The crew’s got ${left === 1 ? "1 extra resource" : `${left} extra resources`} to spend this downtime.` : ours.length ? "That’s the crew’s extra resources spent." : "The crew hasn’t got an extra resource to spend this downtime.";
     const lead = gm
-      ? `<p class="cc-lead">Hiring comes first. The crew says who it’s paying with an extra resource, and you say who the factions are paying. A hired faction spends its one action on the job, so once the actions are out, nobody can buy one off. ${ruleLink("s-crew-wealth", "Extra resources")}</p>`
-      : `<p class="cc-lead">Hiring comes first. If the crew’s paying a faction to do something this downtime, say who and what for. It spends its one action on the job, rolled with its own dice. ${esc(gmName(id))}’s getting the factions’ actions ready.</p>`;
+      ? `<p class="cc-lead">Hiring comes first. ${tip(`ft-hire-${id}`, ["The crew says who it’s paying with an extra resource, and you say who the factions are paying. A hired faction spends its one action on the job, so once the actions are out, nobody can buy one off.", ruleLink("s-crew-wealth", "Extra resources")], "How hiring works")}</p>`
+      : `<p class="cc-lead">Hiring comes first. ${tip(`ft-hire-${id}`, "If the crew’s paying a faction to do something this downtime, say who and what for. It spends its one action on the job, rolled with its own dice.", "How hiring works")} ${esc(gmName(id))}’s getting the factions’ actions ready.</p>`;
     const list = (hs, mineToo) => (hs.length ? `<ul class="ft-hires">${hs.map((h) => hireRow(id, t, h, mineToo)).join("")}</ul>` : "");
     return `${lead}
       <h3 class="ft-h3">The crew’s paying</h3>${list(ours, can) || '<p class="cc-small">Nobody yet.</p>'}<p class="cc-small">${money}</p>
@@ -228,14 +229,14 @@ export function makeTurn(d) {
   }
 
   function teleBody(id, t, gm) {
-    if (!gm) return `<p class="cc-lead">${esc(gmName(id))}’s picking every faction’s action. They show up here the moment they’re telegraphed.</p>${t.hires.length ? `<h3 class="ft-h3">The crew’s paying</h3><ul class="ft-hires">${t.hires.map((h) => hireRow(id, t, h, false)).join("")}</ul>` : ""}`;
+    if (!gm) return `<p class="cc-lead">${esc(gmName(id))}’s picking every faction’s action. ${tip(`ft-tele-${id}`, "They show up here the moment they’re telegraphed.", "When you’ll see them")}</p>${t.hires.length ? `<h3 class="ft-h3">The crew’s paying</h3><ul class="ft-hires">${t.hires.map((h) => hireRow(id, t, h, false)).join("")}</ul>` : ""}`;
     const doc = boardOf(id);
     const order = boardOrder(doc);
     const send = ui.sure === `send:${id}`;
     const hidden = toShow(id, t);
     const picked = t.acts.filter((a) => order.some((f) => f.id === a.f)).length;
     const note = hidden.length ? `Telegraphing them shows the crew ${andList(hidden.map((f) => f.name))} too, since ${hidden.length === 1 ? "it’s" : "they’re"} in a telegraph.` : "";
-    return `<p class="cc-lead">Pick every faction’s action, one each: what it’s doing, at what, and its dice. Nothing goes to the crew’s phones till you telegraph them. With a big board, move the ones the crew can’t reach off-screen. ${ruleLink("s-faction-turn", "The faction turn")}</p>
+    return `<p class="cc-lead">Pick every faction’s action, one each: what it’s doing, at what, and its dice. ${tip(`ft-tele-${id}`, ["Nothing goes to the crew’s phones till you telegraph them. With a big board, move the ones the crew can’t reach off-screen.", ruleLink("s-faction-turn", "The faction turn")], "Picking their actions")}</p>
       <p class="cc-small ft-sum">${picked} of ${order.length} picked${t.acts.some((a) => !a.off) && !t.pressure ? ". Mark whichever matters most to the crew as the faction pressure." : "."}</p>
       <ul class="ft-facs">${order.map((f) => facRow(id, t, f)).join("")}</ul>
       <div class="tg-do tg-bar">${send && note ? `<p class="cc-small">${esc(note)}</p>` : ""}${btn("send", send ? "Tap again to telegraph them" : "Telegraph them to the crew", { cls: "button primary" })}${btn("step", "Back to hiring", { attrs: ' data-s="hire"' })}</div>`;
@@ -328,7 +329,7 @@ export function makeTurn(d) {
 
   // Going at a bigger faction's Power, or stopping its action, takes the
   // crew's action and a personal slot on the same move.
-  function biggerNote(id, t, c) {
+  function biggerNote(id, t, c, where = "page") {
     if (c.slot || c.how !== "crew") return "";
     const doc = boardOf(id);
     const f = c.at.f && c.at.f !== "crew" ? find(doc, c.at.f) : null;
@@ -339,7 +340,7 @@ export function makeTurn(d) {
     if (!theirs) return "";
     const ours = crewPower(id);
     const bigger = best(theirs) > best(ours) || theirs.length > ours.length;
-    return bigger ? `<p class="cc-warn">${esc(f?.name ?? "That faction")}’s Power is bigger than the crew’s, so this takes a personal slot as well as the crew’s action. Without one, go at something smaller: one thing out on its own, its agenda or its face. ${ruleLink("s-faction-crew", "Going at a bigger faction")}</p>` : "";
+    return bigger ? `<p class="cc-warn">${esc(f?.name ?? "That faction")}’s Power is bigger than the crew’s, so this takes a personal slot as well as the crew’s action. ${tip(`ft-bigger-${where}`, ["Without one, go at something smaller: one thing out on its own, its agenda or its face.", ruleLink("s-faction-crew", "Going at a bigger faction")], "Going at a bigger faction")}</p>` : "";
   }
 
   function crewPanel(id, t, gm) {
@@ -348,7 +349,7 @@ export function makeTurn(d) {
     const can = gm || Boolean(place);
     if (!c) {
       return `<div class="ft-crew card"><h3 class="ft-h3">The crew’s action</h3>
-        <p class="cc-lead">The crew gets one action this downtime, like every faction: a move on one of them, the Goal, a project, or anything else its action can be. It can go at a faction before that faction’s action lands. ${ruleLink("s-faction-crew", "The crew and the factions")}</p>
+        <p class="cc-lead">The crew gets one action this downtime, like every faction. ${tip(`ft-crew-${id}`, ["A move on one of them, the Goal, a project, or anything else its action can be. It can go at a faction before that faction’s action lands.", ruleLink("s-faction-crew", "The crew and the factions")], "The crew’s action")}</p>
         ${can ? `<div class="tg-do">${btn("crew", "Pick the crew’s action", { cls: "button primary" })}</div>` : ""}</div>`;
     }
     const dice = crewDice(c);
@@ -361,7 +362,7 @@ export function makeTurn(d) {
     const how = c.how === "own" ? `${esc(c.who?.name ?? "Someone")}’s own roll, ${stepsSay(c.steps)}` : `The crew’s Power${c.fits.length ? ` and ${andList(c.fits.map((x) => `<em>${esc(x)}</em>`))}` : ""}, ${stepsSay(c.steps)}`;
     const slot = c.slot
       ? `<p class="ft-slot is-on">${esc(c.slot.name)} put a personal slot in, so everything counts twice: ${stepsSay(steps)}, ${diceLabel(stepsToDice(steps))}.</p>${place && c.slot.user === me() && !rolled(c) ? `<div class="tg-do">${btn("slot", `Take ${esc(place.cname)}’s slot out`, { attrs: ' data-on="0"' })}</div>` : ""}`
-      : !rolled(c) && place ? `<p class="ft-slot">Put one of ${esc(place.cname)}’s personal slots in and everything counts twice.</p><div class="tg-do">${btn("slot", `Put ${esc(place.cname)}’s slot in`, { attrs: ' data-on="1"' })}</div>` : "";
+      : !rolled(c) && place ? `<div class="tg-do">${btn("slot", `Put ${esc(place.cname)}’s slot in`, { attrs: ' data-on="1"' })}${tip(`ft-slot-${id}`, `Put one of ${esc(place.cname)}’s personal slots in and everything counts twice.`, "A personal slot")}</div>` : "";
     let foot = "";
     if (!rolled(c)) {
       const ready = c.vs.set;
@@ -459,8 +460,8 @@ export function makeTurn(d) {
   // Before anything lands: every move the crew can see, all at once.
   function movesBody(id, t, gm, seq) {
     const lead = gm
-      ? `Every move, in the order it lands: the crew’s action first, then Obstructs, then the rest${t.acts.some((a) => a.off) ? ", and the ones off-screen last" : ""}. Land them one at a time, and the crew’s phones follow you. ${ruleLink("s-faction-outcomes", "The six outcomes")}`
-      : `Every move you can see coming, in the order it lands. ${esc(gmName(id))} lands them one at a time, and this follows along.`;
+      ? `Every move, in the order it lands. ${tip(`ft-moves-${id}`, [`The crew’s action first, then Obstructs, then the rest${t.acts.some((a) => a.off) ? ", and the ones off-screen last" : ""}. Land them one at a time, and the crew’s phones follow you.`, ruleLink("s-faction-outcomes", "The six outcomes")], "The order they land in")}`
+      : `Every move you can see coming, in the order it lands. ${tip(`ft-moves-${id}`, `${esc(gmName(id))} lands them one at a time, and this follows along.`, "Following along")}`;
     return `<p class="cc-lead">${lead}</p>
       <div class="ft-in"><h3 class="ft-h3">What’s coming</h3>${seq.length ? `<ol class="ft-moves">${seq.map((x, i) => moveRow(id, t, x, i)).join("")}</ol>` : `<p class="cc-small">Nothing’s moving where the crew can see it this downtime.</p>`}</div>
       <div class="tg-do tg-bar">${gm ? (seq.length ? btn("focus", "Land the first one", { cls: "button primary", attrs: ` data-x="${esc(seq[0])}"` }) : "") : `<p class="cc-small ft-wait">Waiting on ${esc(gmName(id))} to land the first one.</p>`}${skipBtn(gm)}</div>`;
@@ -509,10 +510,10 @@ export function makeTurn(d) {
     const end = ui.sure === `end:${id}`;
     const list = t.said.length ? `<ul class="ft-said">${t.said.map((x, i) => `<li style="--i:${i}">${esc(x.text)}</li>`).join("")}</ul>` : `<p class="cc-small">Nothing the crew’s heard about has changed${left ? " yet" : ""}.</p>`;
     const foot = gm
-      ? `${end && left ? `<p class="cc-small">${left === 1 ? "One action hasn’t" : `${left} actions haven’t`} been finished. Ending it leaves ${left === 1 ? "it" : "them"} as they are.</p>` : ""}${btn("end", end ? "Tap again to end the downtime" : "End the downtime", { cls: "button primary" })}${btn("focus", "Back to the actions", { attrs: ` data-x="${esc(seqOf(t, gm).slice(-1)[0] ?? "")}"` })}`
+      ? `${end && left ? `<p class="cc-small">${left === 1 ? "One action hasn’t" : `${left} actions haven’t`} been finished. Ending it leaves ${left === 1 ? "it" : "them"} as they are.</p>` : ""}${btn("end", end ? "Tap again to end the downtime" : "End the downtime", { cls: "button primary" })}${tip(`ft-end-${id}`, `Ending it puts this in How it came to be, as downtime ${t.n}’s own age.`, "Ending the downtime")}${btn("focus", "Back to the actions", { attrs: ` data-x="${esc(seqOf(t, gm).slice(-1)[0] ?? "")}"` })}`
       : ui.skip === t.id ? btn("follow", `Follow ${esc(gmName(id))} again`) : `<p class="cc-small ft-wait">${esc(gmName(id))}’s ending the downtime.</p>`;
     return `<div class="ft-rest ft-in"><h3 class="ft-rest-h">While you rested</h3><p class="ft-rest-len">Downtime ${t.n}${t.len ? `, ${esc(midway(bare(t.len)))}` : ""}</p>
-      ${list}${gm ? `<p class="cc-small">Ending it puts this in How it came to be, as downtime ${t.n}’s own age.</p>${sayForm()}` : ""}</div>
+      ${list}${gm ? sayForm() : ""}</div>
       <div class="tg-do tg-bar">${foot}</div>`;
   }
 
@@ -538,8 +539,8 @@ export function makeTurn(d) {
     const takers = boardOrder(doc).filter((f) => f.id !== r.payer && !t.hires.some((h) => h.to === f.id) && (!crewPays || standingOf(f) !== "hostile"));
     const card = (doit, f, on, sub) => `<button type="button" class="tg-target" data-act="ft" data-do="${doit}" data-f="${esc(f.id)}"${pressed(on)}><span class="ft-fac-die" aria-hidden="true">${them(gm || f.shown.power ? powerOf(f) : [])}</span><span><b>${esc(f.name)}</b>${sub ? `<small>${esc(sub)}</small>` : ""}</span></button>`;
     const lead = crewPays
-      ? `<p class="cc-lead">Pay a faction with one of the crew’s extra resources and it spends its one action that downtime where the crew says, rolled with its own dice. The money buys the action, not the win, and a faction that’s hostile to the crew won’t take it.</p>`
-      : `<p class="cc-lead">A faction with an extra resource can pay another to spend its one action on a job. The crew doesn’t see who paid, only the job when it’s telegraphed.</p>`;
+      ? `<p class="cc-lead">Pay a faction with one of the crew’s extra resources and it spends its one action that downtime where the crew says, rolled with its own dice. ${tip("ft-pay", "The money buys the action, not the win, and a faction that’s hostile to the crew won’t take it.", "What the money buys")}</p>`
+      : `<p class="cc-lead">A faction with an extra resource can pay another to spend its one action on a job. ${tip("ft-pay", "The crew doesn’t see who paid, only the job when it’s telegraphed.", "What the crew sees")}</p>`;
     return `${head(crewPays ? "Pay a faction" : "A faction pays someone", `Downtime ${t.n} · hiring`)}
       <div class="dlg-body ft-dlg">${lead}
         ${crewPays ? "" : `<fieldset class="cc-group"><legend>Who’s paying</legend>${payers.length ? `<div class="tg-targets">${payers.map((f) => card("payer", f, r.payer === f.id, `${moneyOf(f).extra - paying(f)} extra to spend`)).join("")}</div>` : '<p class="cc-small">No faction’s got an extra resource to spend.</p>'}</fieldset>`}
@@ -696,8 +697,7 @@ export function makeTurn(d) {
     }
     if (a.what === "comes") {
       const t12 = comesTable(id, t, f);
-      at = `<fieldset class="cc-group"><legend>The d12, rolled now so the crew knows what’s coming</legend>
-        <p class="cc-small">${t12.why}</p>
+      at = `<fieldset class="cc-group"><legend>The d12, rolled now so the crew knows what’s coming ${tip("ft-d12", t12.why, "Which table it is")}</legend>
         ${a.comes ? `<p class="ft-comes"><b>${a.comes.n}.</b> ${esc(a.comes.text)}</p>` : ""}
         <div class="tg-do">${btn("d12", a.comes ? "Roll it again" : "Roll the d12", { cls: a.comes ? "button" : "button primary" })}</div>
         <p class="cc-small">Rolled a real one? Tap what it came up.</p><div class="ft-nums">${Array.from({ length: 12 }, (_, i) => `<button type="button" class="tg-size ft-num" data-act="ft" data-do="d12n" data-n="${i + 1}"${pressed(a.comes?.n === i + 1)}>${i + 1}</button>`).join("")}</div></fieldset>`;
@@ -709,14 +709,13 @@ export function makeTurn(d) {
       <div class="dlg-body ft-dlg tg-compose">
         ${preview ? `<ol class="tg-list tg-preview" aria-hidden="true">${preview}</ol>` : ""}
         ${hired ? `<p class="tg-for"><span class="k">Paid by ${esc(hired.by === "crew" ? "the crew" : hired.byName)}</span>${esc(hired.job)}. Its one action is the job.</p>` : ""}
-        ${f.mini ? `<p class="cc-small">A mini faction only does its two outcomes, and it doesn’t act in the downtime it’s made.</p>` : ""}
-        <fieldset class="cc-group"><legend>What it’s doing</legend>
+        <fieldset class="cc-group"><legend>What it’s doing${f.mini ? ` ${tip("ft-mini", "A mini faction only does its two outcomes, and it doesn’t act in the downtime it’s made.", "What a mini faction does")}` : ""}</legend>
           <div class="cc-chips tg-verbs">${btn("d6", "Not sure? Roll the d6", { cls: "cc-chipbtn sm" })}</div>
           ${rolledD6 ? `<p class="ft-comes"><b>${a.d6} on the d6.</b> ${esc(rolledD6.text)}</p>` : ""}
           ${whats}</fieldset>
         ${at}
         ${a.what ? `<fieldset class="cc-group"><legend>Its dice</legend>
-          <p class="cc-small">Its Power’s ${diceLabel(powerOf(f))}, ${stepsSay(stepsOf(f))}. Each bond thread that fits is a step.</p>
+          <p class="cc-small">Its Power’s ${diceLabel(powerOf(f))}, ${stepsSay(stepsOf(f))}. ${tip("ft-fits", "Each bond thread that fits is a step.", "What adds to it")}</p>
           ${fits.map((x) => choice("fit", a.fits.includes(x.id), `<em>${esc(x.text)}</em>`, esc(x.where), ` data-id="${esc(x.id)}"`)).join("")}
           <p class="ft-total">${them(dice.main)}${dice.split ? them([dice.split]) : ""} <span>${stepsSay(steps)}, ${diceLabel(allDice(dice))}</span></p>
           ${splitMax >= 1 ? `${choice("split", Boolean(a.split), "Split it", "one action gives it one split: two dice, each its own outcome")}
@@ -894,8 +893,8 @@ export function makeTurn(d) {
     if (c.move === "Project") at = `<fieldset class="cc-group"><legend>Which project</legend>${sheet.projects.filter((p) => !p.done).length ? sheet.projects.filter((p) => !p.done).map((p) => choice("cproj", c.lid === p.id, esc(p.text), `d${p.die}`, ` data-id="${esc(p.id)}"`)).join("") : '<p class="cc-small">There are no projects on the party sheet.</p>'}</fieldset>`;
     if (c.move === "Goal") at = `<p class="tg-for"><span class="k">The Party Goal, d${sheet.goal.die}</span>${esc(sheet.goal.text || "No Goal on the party sheet yet.")}</p>`;
     if (c.move === "Establish" || c.move === "Else") {
-      at = `<label class="tg-label" for="ft-est">${c.move === "Establish" ? "What the crew builds" : "What the crew’s doing"}</label><input id="ft-est" data-ft="est" maxlength="${MAX.at}" autocomplete="off" placeholder="${c.move === "Establish" ? "Muscle, paid for with Salt Contracts" : "Hold back the festival"}" value="${esc(c.est)}">
-        ${c.move === "Establish" ? `<p class="cc-small">A new asset paid for with an extra resource, a mini faction, or something the crew’s lost, built back.</p>${choice("inway", c.inWay, "Something’s in the way", `so ${esc(gmName(id))} says what it’s up against`)}` : ""}`;
+      at = `<div class="cc-field-h"><label class="tg-label" for="ft-est">${c.move === "Establish" ? "What the crew builds" : "What the crew’s doing"}</label>${c.move === "Establish" ? tip("ft-est", "A new asset paid for with an extra resource, a mini faction, or something the crew’s lost, built back.", "What it can build") : ""}</div><input id="ft-est" data-ft="est" maxlength="${MAX.at}" autocomplete="off" placeholder="${c.move === "Establish" ? "Muscle, paid for with Salt Contracts" : "Hold back the festival"}" value="${esc(c.est)}">
+        ${c.move === "Establish" ? `${choice("inway", c.inWay, "Something’s in the way", `so ${esc(gmName(id))} says what it’s up against`)}` : ""}`;
     }
     const built = c.move ? crewOfDraft(id, t, r) : null;
     const fits = crewFits(id);
@@ -908,7 +907,7 @@ export function makeTurn(d) {
     const withHtml = c.move && c.move !== "Work for it" && c.move !== "Else" ? `<fieldset class="cc-group"><legend>What it rolls</legend>
         ${choice("how", c.how === "crew", "The crew’s Power, and what fits", `${diceLabel(crewPower(id))}, plus a step for every Reputation and bond thread that fits`, ' data-v="crew"')}
         ${c.how === "crew" ? fits.map((x) => choice("cfit", c.fits.includes(x.text), `<em>${esc(x.text)}</em>`, esc(x.where), ` data-t="${esc(x.text)}"`)).join("") : ""}
-        ${choice("how", c.how === "own", "Someone’s own roll", "when one of the crew’s plainly the right person for it: a Root and a specialty that fit what they’re doing, and what they’re using", ' data-v="own"')}
+        ${choice("how", c.how === "own", "Someone’s own roll", "when one of the crew’s plainly the right person for it: a Root that fits how they’re doing it, and a step for everything on their sheet that fits", ' data-v="own"')}
         ${c.how === "own" ? `${gm ? `<div class="cc-chips">${roster.map((p) => `<button type="button" class="cc-chipbtn sm" data-act="ft" data-do="ownch" data-ch="${esc(p.ch)}"${pressed(c.ownCh === p.ch)}>${esc(p.cname)}</button>`).join("")}</div>` : ""}
           <div class="ft-stepper"><span>${esc(roster.find((p) => p.ch === c.ownCh)?.cname ?? place?.cname ?? "Their")} rolls</span>${btn("own", "−", { cls: "button sm", attrs: ' data-by="-1" aria-label="One step fewer"' })}<b>${stepsSay(Math.max(1, c.ownSteps))}</b>${btn("own", "+", { cls: "button sm", attrs: ' data-by="1" aria-label="One more step"' })}</div>` : ""}
         ${place && !gm ? choice("cslot", c.slot, `Put one of ${esc(place.cname)}’s personal slots in`, "two slots on one move count everything twice") : ""}
@@ -916,7 +915,7 @@ export function makeTurn(d) {
         ${splitMax >= 1 ? `${choice("csplit", Boolean(c.split), "Split it", "two dice, each with its own intent")}
           ${c.split ? `<div class="cc-chips">${Array.from({ length: splitMax }, (_, i) => `<button type="button" class="cc-chipbtn sm" data-act="ft" data-do="csplits" data-s="${i + 1}"${pressed(c.split.s === i + 1)}>A d${(i + 1) * 2}</button>`).join("")}</div>
             <label class="tg-label" for="ft-csplitfor">What that die’s for</label><input id="ft-csplitfor" data-ft="csplitfor" maxlength="${MAX.at}" autocomplete="off" placeholder="Keep it quiet" value="${esc(c.split.for)}">` : ""}` : ""}</fieldset>` : "";
-    const warn = built && c.how === "crew" && !slotIn ? biggerNote(id, t, { ...built, slot: null, at: built.at, vs: { ...built.vs, d: built.vs.k === "act" ? allDice(t.acts.find((x) => x.id === built.at.act) ?? { main: [], split: null }) : built.vs.d } }) : "";
+    const warn = built && c.how === "crew" && !slotIn ? biggerNote(id, t, { ...built, slot: null, at: built.at, vs: { ...built.vs, d: built.vs.k === "act" ? allDice(t.acts.find((x) => x.id === built.at.act) ?? { main: [], split: null }) : built.vs.d } }, "dlg") : "";
     return `${head("The crew’s action", `Downtime ${t.n} · one action, like every faction`)}
       <div class="dlg-body ft-dlg tg-compose">
         <fieldset class="cc-group"><legend>A move on a faction</legend>
@@ -925,7 +924,7 @@ export function makeTurn(d) {
         <fieldset class="cc-group"><legend>Or something else</legend>${moveBtn("Goal", `against the Goal’s die, d${sheet.goal.die}`)}${moveBtn("Project", "against the project’s die")}${moveBtn("Else", "advance a world event, support an Aspiration, anything else")}</fieldset>
         ${at}${withHtml}${warn}
         ${c.move ? `<label class="tg-label" for="ft-cdoes">In a line</label><input id="ft-cdoes" data-ft="cdoes" maxlength="${MAX.line}" autocomplete="off" value="${esc(built?.does ?? c.does)}">` : ""}
-        <p class="cc-small">Ties go to the faction. There’s no Aura in downtime, but a player can spend a size of their Resolve to roll the crew’s dice again, or the crew can spend an extra resource and take the tie. ${ruleLink("s-downtime-rolls", "Rolling in downtime")}</p>
+        <p class="cc-small">Ties go to the faction. ${tip("ft-ties", ["There’s no Aura in downtime, but a player can spend a size of their Resolve to roll the crew’s dice again, or the crew can spend an extra resource and take the tie.", ruleLink("s-downtime-rolls", "Rolling in downtime")], "Rolling in downtime")}</p>
       </div>
       <div class="dlg-foot">${r.err ? `<p class="cc-warn" role="alert">${esc(r.err)}</p>` : ""}${btn("savecrew", "That’s the crew’s action", { cls: "button primary" })}${t.crew && !rolled(t.crew) ? btn("dropcrew", ui.sure === "dropcrew" ? "Tap again to clear it" : "Clear it", { cls: "button danger" }) : ""}</div>`;
   }
@@ -967,9 +966,9 @@ export function makeTurn(d) {
         ${est ? `<div class="tg-do">${btn("vsd", "Nobody’s in the way, so it happens", { cls: "button primary", attrs: ' data-k="none" data-d=""' })}</div><p class="cc-small">Or pick the die of whatever’s in the way.</p>` : ""}
         ${kept ? `<p class="cc-lead">${esc(f?.name ?? "Its")} Power came up ${best(kept.v)} on its ${diceLabel(kept.d)} already this downtime, and that roll stands.</p>` : ""}
         ${suggest && !kept ? `<div class="tg-do">${btn("vsd", `${c.at.part === "power" ? "Its Power" : "Its agenda"}, ${diceLabel(suggest)}`, { cls: "button primary", attrs: ` data-d="${suggest.join(",")}" data-k="${c.at.part === "power" ? "power" : "die"}"` })}</div><p class="cc-small">Or pick another die.</p>` : ""}
-        ${thing && !kept ? `<p class="cc-small">One thing out on its own only has what’s guarding it: 1 step, plus each asset that adds Power and is really there. With every one there, that’s ${diceLabel(stepsToDice(thing))}.</p>` : ""}
+        ${thing && !kept ? `<p class="cc-small">With everything guarding it there, that’s ${diceLabel(stepsToDice(thing))}. ${tip("ft-thing", "One thing out on its own only has what’s guarding it: 1 step, plus each asset that adds Power and is really there.", "One thing on its own")}</p>` : ""}
         ${kept ? "" : sizesRow("vsd", c.vs.d.length === 1 ? c.vs.d[0] : 0)}
-        ${biggerNote(id, t, c)}
+        ${biggerNote(id, t, c, "dlg")}
       </div>
       <div class="dlg-foot">${kept ? btn("vsd", "That’s it", { cls: "button primary", attrs: ` data-d="${kept.d.join(",")}" data-k="power"` }) : '<p class="cc-small">A tap picks it, and the crew can roll.</p>'}</div>`;
   }
@@ -1104,7 +1103,7 @@ export function makeTurn(d) {
         if (move === "Destroy") out.push(tap("tick", `${onCrew ? "Take" : "Tick one off"} ${esc(y.text)}${onCrew ? " off the party sheet" : ""}${ticks}`, ` data-l="${y.l}" data-id="${esc(y.id)}"`));
         else out.push(tap("take", `${y.left > 1 ? "Tick one off" : "Take"} ${esc(y.text)}${y.left > 1 ? ticks : ` <small>it’s ${crew ? "the crew’s" : poss(lower(actorName))} now</small>`}`, ` data-l="${y.l}" data-id="${esc(y.id)}"`));
       }
-      if (T2 && list.some((y) => y.x > 1)) out.push(`<p class="cc-small">A multiplier takes that many wins. Every hostile thread that fits adds a tick, so tap again for each.</p>`);
+      if (T2 && list.some((y) => y.x > 1)) out.push(`<p class="cc-small">Tap again for each tick. ${tip("ft-ticks", "A multiplier takes that many wins. Every hostile thread that fits adds a tick, so tap again for each.", "Ticking them off")}</p>`);
       if (!list.length && !x.at.lid) out.push(`<p class="cc-small">There’s nothing left there to ${move === "Destroy" ? "tick off" : "take"}.</p>`);
     }
     if (move === "Undermine" && T2) {
@@ -1177,7 +1176,7 @@ export function makeTurn(d) {
     const line = r.line ?? lineFor(id, t, x);
     return `${head(title, `Downtime ${t.n} · what changes`)}
       <div class="dlg-body ft-dlg">${summary}
-        ${changesHtml ? `<fieldset class="cc-group"><legend>${x.won?.main || x.vs.k === "none" || (!crew && !x.roll) ? "On the cards" : "Nothing changes, unless they know"}</legend><div class="ft-chgs">${changesHtml}</div><p class="cc-small">Each change is made as you tap it, with Undo if you need it.</p></fieldset>` : ""}
+        ${changesHtml ? `<fieldset class="cc-group"><legend>${x.won?.main || x.vs.k === "none" || (!crew && !x.roll) ? "On the cards" : "Nothing changes, unless they know"} ${tip("ft-chgs", "Each change is made as you tap it, with Undo if you need it.", "Making the changes")}</legend><div class="ft-chgs">${changesHtml}</div></fieldset>` : ""}
         <label class="tg-label" for="ft-line">What changed, in a line for everyone</label>
         <input id="ft-line" data-ft="line" maxlength="${MAX.line}" autocomplete="off" value="${esc(line)}">
         <p class="cc-small">${x.off ? "It moved off-screen, so this is all the crew hears of it. Leave it empty and they hear nothing." : "Leave it empty if it’s nobody’s news."}</p>
@@ -1192,7 +1191,7 @@ export function makeTurn(d) {
     const t = turnOf(r.camp);
     const own = LENS.includes(r.len) ? "" : r.len;
     return `${head("How long’s this downtime?", t ? `Downtime ${t.n}` : "The faction turn")}
-      <div class="dlg-body ft-dlg"><p class="cc-lead">Pick it with the table. It’s only the story’s clock: it goes on this downtime’s age in How it came to be, and changes nothing in play.</p>
+      <div class="dlg-body ft-dlg"><p class="cc-lead">Pick it with the table. ${tip("ft-len", "It’s only the story’s clock: it goes on this downtime’s age in How it came to be, and changes nothing in play.", "What it changes")}</p>
         <div class="ft-lens">${LENS.map((x) => choice("lenpick", r.len === x, x, "", ` data-v="${esc(x)}"`)).join("")}</div>
         <label class="tg-label" for="ft-lenown">Or in your own words</label>
         <input id="ft-lenown" data-ft="lenown" maxlength="${MAX.len}" autocomplete="off" placeholder="Two weeks of rain" value="${esc(own)}">

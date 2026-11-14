@@ -29,6 +29,7 @@ import { calledIn, founderHand, freeSeats, keepName, lineIn, namable, oldHand, r
 import { REGIONS, canDeal, choose, fill, newSeed, options, start, tensionAt } from "./world-engine.js";
 import { rollDie } from "./dice.js";
 import { die as kitDie, mini as kitMini } from "../kit/kit.js";
+import { tip } from "./tip.js";
 
 const MIX = "mix";
 const SHORT = { holds: "What holds it together", tension: "What’s pulling it apart", runs: "Who runs it", notices: "What a stranger notices" };
@@ -263,7 +264,7 @@ export function makeFound(d) {
     const players = TB().rosterOf(id).length;
     return `<section class="cc-sec fd-tile" data-fd="${esc(id)}" aria-labelledby="fd-tile-${esc(id)}"><div class="card fd-tile-in">
       <p class="kicker is-gm">The founding</p><h2 id="fd-tile-${esc(id)}">Found the world with the crew</h2>
-      <p>A session zero on everyone’s phone. Your players answer the asking a turn each, round the table, from three answers the tables deal or their own words. Nothing goes on the board till you put it there.</p>
+      <p>A session zero on everyone’s phone. ${tip(`fd-what-${id}`, "Your players answer the asking a turn each, round the table, from three answers the tables deal or their own words. Nothing goes on the board till you put it there.", "How the founding goes")}</p>
       ${players ? `<div class="cc-row">${btn("setup", "Set it up", { cls: "button primary" })}</div>` : '<p class="cc-small">Once your players have joined, you can set it up here.</p>'}</div></section>`;
   }
 
@@ -312,10 +313,8 @@ export function makeFound(d) {
     return `<section class="wk-sec" aria-labelledby="fd-region"><h3 id="fd-region">Where it’s set</h3><div class="wk-picks">${regions}</div></section>
       <section class="wk-sec" aria-labelledby="fd-genre"><h3 id="fd-genre">What kind of world</h3><div class="wk-picks">${genres}</div>${mix}
       ${later.length ? `<p class="cc-small wk-later">Coming as their tables go in: ${esc(later.join(", "))}.</p>` : ""}</section>
-      <section class="wk-sec" aria-labelledby="fd-count"><h3 id="fd-count">How many factions</h3>${stepper("n", s.n, 4, 12, "How many factions")}
-      <p class="cc-small">It starts at your players and two more, and it’s never fewer than four.</p></section>
-      <section class="wk-sec" aria-labelledby="fd-clocks"><h3 id="fd-clocks">The clocks</h3><ul class="fd-ages">${clocks}</ul>
-      <p class="cc-small">Each age gets its own clock. The asking’s part of the ground, so the first one starts with it. When a clock runs out, the turn that’s on finishes and the tables deal whatever’s left.</p></section>`;
+      <section class="wk-sec" aria-labelledby="fd-count"><h3><span id="fd-count">How many factions</span> ${tip("fd-count", "It starts at your players and two more, and it’s never fewer than four.", "Choosing how many")}</h3>${stepper("n", s.n, 4, 12, "How many factions")}</section>
+      <section class="wk-sec" aria-labelledby="fd-clocks"><h3><span id="fd-clocks">The clocks</span> ${tip("fd-clocks", "Each age gets its own clock. The asking’s part of the ground, so the first one starts with it. When a clock runs out, the turn that’s on finishes and the tables deal whatever’s left.", "How the clocks work")}</h3><ul class="fd-ages">${clocks}</ul></section>`;
   }
   function setupView(id) {
     if (!tables()) return `<section class="cc-sec fd is-gm" data-fd="${esc(id)}" aria-labelledby="fd-setup-h"><p class="kicker is-gm">The founding</p><h2 id="fd-setup-h">Set it up</h2><p class="cc-lead" role="status">${failed ? "The tables didn’t come through. Check your signal and try again." : "Getting the tables…"}</p><div class="cc-row">${failed ? btn("retry", "Try again", { cls: "button primary" }) : ""}${btn("unsetup", "Cancel")}</div></section>`;
@@ -323,7 +322,7 @@ export function makeFound(d) {
     const s = settle(ui.setup[id]);
     const r = recipeOf(s);
     return `<section class="cc-sec fd fd-setup is-gm" data-fd="${esc(id)}" aria-labelledby="fd-setup-h"><p class="kicker is-gm">The founding</p><h2 id="fd-setup-h">Set it up</h2>
-      <p class="cc-lead">Pick where it’s set and what kind of world it is. Once the room’s open, your players join it from their World tab, and you start it when everyone’s in.</p>
+      <p class="cc-lead">Pick where it’s set and what kind of world it is. ${tip("fd-setup", "Once the room’s open, your players join it from their World tab, and you start it when everyone’s in.", "Opening the room")}</p>
       ${setupFields(s)}
       <div class="cc-row fd-go">${btn("open", "Open the room", { cls: "button primary", disabled: !r || !canDeal(T, r) })}${btn("unsetup", "Cancel")}</div></section>`;
   }
@@ -360,9 +359,9 @@ export function makeFound(d) {
     const gmn = esc(gmName(id));
     if (!gm) {
       const list = `<ol class="fd-in">${f.who.map((w) => `<li><span class="fd-in-n">${esc(first(w.name) || "Someone")}${w.key === me ? " <small>you</small>" : ""}</span><span class="fd-in-s${w.joined ? " is-here" : ""}">${w.joined ? "Here" : "Not here yet"}</span></li>`).join("")}</ol>`;
-      if (mine?.joined) return `<p class="cc-lead">You’re in. ${gmn} starts it once everyone’s here, and the turns go round in this order.</p>${list}`;
-      if (f.outs.includes(me)) return `<p class="cc-lead">${gmn}’s left you out of this one. Whatever the crew’s shown of the world turns up here.</p>`;
-      return `<p class="cc-lead">${gmn}’s opened the founding. The crew builds the world together, a turn each, round the table, starting with the asking. It’s ${esc(mixSaid(f))}, with ${WORDS[f.n] ?? f.n} factions.</p>
+      if (mine?.joined) return `<p class="cc-lead">You’re in. ${tip("fd-in", `${gmn} starts it once everyone’s here, and the turns go round in this order.`, "What happens next")}</p>${list}`;
+      if (f.outs.includes(me)) return `<p class="cc-lead">${gmn}’s left you out of this one. ${tip("fd-out", "Whatever the crew’s shown of the world turns up here.", "What you’ll see")}</p>`;
+      return `<p class="cc-lead">${gmn}’s opened the founding. It’s ${esc(mixSaid(f))}, with ${WORDS[f.n] ?? f.n} factions. ${tip("fd-open", "The crew builds the world together, a turn each, round the table, starting with the asking.", "How the founding goes")}</p>
         <div class="cc-row fd-go">${btn("join", "Join it", { cls: "button primary" })}</div>${f.who.length ? `<h3 class="fd-h3">Who’s in</h3>${list}` : ""}`;
     }
     const changing = ui.change === id && T;
@@ -374,7 +373,7 @@ export function makeFound(d) {
     const outs = TB().rosterOf(id).filter((m) => !whoOf(f, keyOf(m.user, m.ch)));
     const outRows = outs.map((m) => `<li class="fd-row is-out"><div class="fd-row-in"><b>${esc(first(m.name) || "Someone")}</b><small>playing ${esc(m.cname || "someone")}</small></div><span class="fd-in-s">Out</span>
       <div class="fd-row-b">${btn("in", "Put in", { cls: "button sm", attrs: ` data-key="${esc(keyOf(m.user, m.ch))}" data-on="1" aria-label="Put ${esc(first(m.name))} in"` })}</div></li>`).join("");
-    return `<p class="cc-lead">Your players join it from their World tab. Put them in the order you want the turns to go round, then start it.</p>
+    return `<p class="cc-lead">Put them in the order you want the turns to go round, then start it. ${tip("fd-order", "Your players join it from their World tab.", "Where they join")}</p>
       ${summary}${changing ? `<div class="fd-change">${setupFields(ui.setup[id] ?? setupFrom(f))}<div class="cc-row">${btn("save", "Save it", { cls: "button primary" })}</div></div>` : ""}
       <h3 class="fd-h3">Who’s in</h3><ol class="fd-rows">${rows || '<li class="cc-small">Nobody yet.</li>'}${outRows}</ol>
       <div class="cc-row fd-go">${btn("start", "Start the asking", { cls: "button primary", disabled: !f.who.length })}${btn("end", sureOf(`end:${id}`) ? "Tap again to end it" : "End it", { cls: "button danger" })}</div>`;
@@ -393,8 +392,7 @@ export function makeFound(d) {
     } else if (!f.who.length) turn = `<div class="card fd-turn"><p>${gm ? "Nobody’s in. Put someone in to carry on." : "Nobody’s in right now."}</p></div>`;
     const tools = gm ? `<details class="cc-fold fd-tools" data-open="fd-tools-${esc(id)}"${d.isOpen(`fd-tools-${id}`) ? " open" : ""}><summary><h3 class="cc-fold-t">Who’s in, Deal the rest and End it</h3><span class="cc-fold-g">${esc(andList(f.who.map((w) => first(w.name))))}</span></summary>
         <div class="cc-fold-b">${whoRows(id, f)}
-        <div class="cc-row fd-go">${btn("rest", sureOf(`rest:${id}`) ? "Tap again to deal the rest" : "Deal the rest", { attrs: ' data-sure="1"' })}${btn("end", sureOf(`end:${id}`) ? "Tap again to end it" : "End it", { cls: "button danger" })}</div>
-        <p class="cc-small">Deal the rest lets the tables answer everything that’s left, this turn included. Ending it drops the lot, and nothing’s on the board.</p></div></details>` : "";
+        <div class="cc-row fd-go">${btn("rest", sureOf(`rest:${id}`) ? "Tap again to deal the rest" : "Deal the rest", { attrs: ' data-sure="1"' })}${btn("end", sureOf(`end:${id}`) ? "Tap again to end it" : "End it", { cls: "button danger" })}${tip("fd-tools-ask", "Deal the rest lets the tables answer everything that’s left, this turn included. Ending it drops the lot, and nothing’s on the board.", "Dealing the rest or ending it")}</div></div></details>` : "";
     return `${turn}${strip(id, f)}${soFar(id, f, gm)}${dialsList(f)}${tools}`;
   }
 
@@ -431,7 +429,7 @@ export function makeFound(d) {
         return `<button type="button" class="wk-card${sure ? " is-sure" : ""}" data-act="fd" data-do="pick" data-c="${i}">${inner}${sure ? `<span class="fd-sure">Tap again to put this in for ${esc(name)}</span>` : ""}</button>`;
       }).join("")}</div>`;
     }
-    const lead = mine ? "Pick one of the three, or write your own. A card that makes the world more tense or richer says so under it." : gm ? `${esc(name)}’s picking one of these, or writing their own. If they haven’t got a phone with them, tap one in for them.` : `${esc(name)}’s picking one of these, or writing their own.`;
+    const lead = mine ? `Pick one of the three, or write your own. ${tip("fd-ask-mine", "A card that makes the world more tense or richer says so under it.", "What the cards say")}` : gm ? `${esc(name)}’s picking one of these, or writing their own. ${tip(`fd-tapin-ask`, "If they haven’t got a phone with them, tap one in for them.", "Tapping in for them")}` : `${esc(name)}’s picking one of these, or writing their own.`;
     const own = can ? `<div class="wk-tools">${btn("own", `${gm && !mine ? "Write theirs" : "Write my own"}`, { cls: "button sm wk-tool", attrs: ` aria-expanded="${ownOpen ? "true" : "false"}"` })}</div>
       ${ownOpen ? `<form class="cc-form pt-form wk-own fd-own" data-form="fd-own" data-part="${part}"><label class="cc-field">${gm && !mine ? `${esc(name)}’s answer` : "Your answer"} <input name="text" maxlength="160" autocomplete="off" required></label>
         <div class="cc-row"><button type="submit" class="button primary">Put it in</button>${btn("own", "Cancel")}</div></form>` : ""}` : "";
@@ -442,7 +440,7 @@ export function makeFound(d) {
     const can = mine || gm;
     const rolling = ui.roll === `${id}|${f.id}`;
     const big = kitDie(12, { own: gm && !mine ? "them" : "you", hide: true, label: "A d12" });
-    const lead = mine ? "Roll the d12 on the book’s tension table, or tap in a roll of your own dice." : gm ? `${esc(name)}’s rolling the d12 on the tension table. If they haven’t got a phone with them, roll it for them or tap in their roll.` : `${esc(name)}’s rolling the d12 on the tension table.`;
+    const lead = mine ? "Roll the d12 on the book’s tension table, or tap in a roll of your own dice." : gm ? `${esc(name)}’s rolling the d12 on the tension table. ${tip("fd-tapin-roll", "If they haven’t got a phone with them, roll it for them or tap in their roll.", "Rolling for them")}` : `${esc(name)}’s rolling the d12 on the tension table.`;
     if (!can) return `<div class="fd-roll"><span class="fd-roll-d" aria-hidden="true">${big}</span><p class="cc-small">${lead}</p></div>`;
     const sure = gm && !mine && sureOf(`roll:${id}:${f.turn.key}`);
     const grid = rolling ? `<div class="wk-roll" role="group" aria-label="The roll you got"><p class="cc-small">What did ${mine ? "your" : "their"} d12 come up?</p><div class="wk-roll-g">${Array.from({ length: 12 }, (_, k) => btn("real", String(k + 1), { cls: "button sm", attrs: ` data-v="${k + 1}"` })).join("")}</div></div>` : "";
@@ -480,19 +478,19 @@ export function makeFound(d) {
     const dropping = building ? '<p class="cc-small">You’ve got a build on the go on this phone already. Taking this into Build the world drops it.</p>' : "";
     const asking = f.step === "asked" || f.step === "carried" && !f.pool ? `${soFar(id, f, gm)}${dialsList(f)}` : pastFold(id, f, gm);
     if (f.step === "carried") {
-      const lead = gm ? "You’ve taken it into Build the world on this phone, with what the crew made locked. Clear this off once you’re done with it, and it goes from your players’ phones too." : `${gmn}’s building the rest of the world from what the crew made. Whatever you’re shown of it turns up here.`;
+      const lead = gm ? `You’ve taken it into Build the world on this phone, with what the crew made locked. ${tip("fd-carried", "Clear this off once you’re done with it, and it goes from your players’ phones too.", "Clearing it off")}` : `${gmn}’s building the rest of the world from what the crew made. ${tip("fd-carried", "Whatever you’re shown of it turns up here.", "What you’ll see")}`;
       return `<p class="cc-lead">${lead}</p>${gm ? `<div class="cc-row fd-go"><a class="button primary" href="/characters/?camp=${encodeURIComponent(id)}&amp;world&amp;make=world" data-act="fd" data-do="nav">Carry on building</a>${end}</div>` : ""}${f.fac?.length ? boardList(id, f, gm) : ""}${f.pool ? seatList(id, f, gm) : ""}${asking}`;
     }
     if (f.step === "grounded") {
       const firstUp = first([...f.who].reverse()[0]?.name) || "the last in the order";
-      const lead = gm ? `That’s the ground. Start the founding when the crew’s ready: you pick the old powers first, then they found a faction each, ${esc(firstUp)} first, since the turns go back the other way.` : `That’s the ground done. ${gmn} starts the founding next: the old powers first, then a faction each, ${esc(firstUp)} first.`;
+      const lead = gm ? `That’s the ground. ${tip("fd-grounded", `Start the founding when the crew’s ready: you pick the old powers first, then they found a faction each, ${esc(firstUp)} first, since the turns go back the other way.`, "How the founding goes")}` : `That’s the ground done. ${tip("fd-grounded", `${gmn} starts the founding next: the old powers first, then a faction each, ${esc(firstUp)} first.`, "What happens next")}`;
       return `<p class="cc-lead">${lead}</p>${gm ? `<div class="cc-row fd-go">${btn("age", "Start the founding", { cls: "button primary" })}${carry()}${end}</div>${dropping}` : ""}${seatList(id, f, gm)}${asking}`;
     }
     if (f.step === "founded") {
-      const lead = gm ? "That’s the founding. Take it into Build the world on your phone, everything the crew made locked, and deal the rest there: the old powers’ agendas, every Face and Secret, the web, and a friend and a foe for each of the crew." : `That’s the founding done. ${gmn} builds the rest from here, on her phone.`;
+      const lead = gm ? `That’s the founding. ${tip("fd-founded", "Take it into Build the world on your phone, everything the crew made locked, and deal the rest there: the old powers’ agendas, every Face and Secret, the web, and a friend and a foe for each of the crew.", "Building the rest")}` : `That’s the founding done. ${gmn} builds the rest from here, on her phone.`;
       return `<p class="cc-lead">${lead}</p>${gm ? `<div class="cc-row fd-go">${carry()}${end}</div>${dropping}` : ""}${boardList(id, f, gm)}${seatList(id, f, gm)}${asking}`;
     }
-    const lead = gm ? "That’s the crew’s asking. Roll the ground’s dice and the turns go round again, a die each for a seat. Or take it into Build the world on your phone and carry on from the ground there, the crew’s answers locked." : `That’s the asking done. ${gmn} rolls the ground’s dice next.`;
+    const lead = gm ? `That’s the crew’s asking. ${tip("fd-asked", ["Roll the ground’s dice and the turns go round again, a die each for a seat.", "Or take it into Build the world on your phone and carry on from the ground there, the crew’s answers locked."], "What comes next")}` : `That’s the asking done. ${gmn} rolls the ground’s dice next.`;
     return `<p class="cc-lead">${lead}</p>${gm ? `<div class="cc-row fd-go">${btn("ground", "Roll the ground", { cls: "button primary" })}${carry()}${end}</div>${dropping}` : ""}${asking}`;
   }
 
@@ -581,7 +579,7 @@ export function makeFound(d) {
     if (!f.pool?.length) return `<div class="card fd-turn" data-fdk="seat">${head}${poolRow(id, f)}</div>`;
     const k = selDie(id, f);
     const role = roleOf(T, f, k);
-    const lead = mine ? "Each die’s face picks what kind of seat it deals. Tap a die, then keep one of its three seats, or write your own." : gm ? `${esc(name)}’s taking a die. If they haven’t got a phone with them, tap one in for them.` : `${esc(name)}’s taking a die. Tap one to see what it deals.`;
+    const lead = mine ? `Tap a die, then keep one of its three seats, or write your own. ${tip("fd-seat-mine", "Each die’s face picks what kind of seat it deals.", "What a die deals")}` : gm ? `${esc(name)}’s taking a die. ${tip(`fd-tapin-seat`, "If they haven’t got a phone with them, tap one in for them.", "Tapping in for them")}` : `${esc(name)}’s taking a die. Tap one to see what it deals.`;
     const cards = k == null ? [] : handFor(`seat|${stateKey(f)}|${k}`, () => seatHand(T, f, k));
     const keep = T?.keeps?.[role];
     const inner = (c) => `<span class="wk-card-n">${esc(fill(c.text, {}))}</span><span class="wk-card-w">${esc(c.notice)}</span>${c.role !== role ? `<span class="wk-card-m"><span class="wk-mark">${esc(keepName(c.role))}</span></span>` : ""}${strangeMark(c)}`;
@@ -619,12 +617,12 @@ export function makeFound(d) {
   const FQ = { "f-seat": "Where do they found it?", before: "Who had it before them?", owes: "Who do they owe?", never: "What will they never do?", type: "What are they?", method: "How do they work?", want: "What do they want?", name: "What are they called?" };
   const FLEAD = {
     "f-seat": "Any seat nobody holds. The old powers are on theirs already.",
-    before: "Pick the faction that had it, or nobody. Whoever had it holds a grudge, so the words are theirs.",
+    before: ["Pick the faction that had it, or nobody.", "Whoever had it holds a grudge, so the words are theirs.", "Whose words they are"],
     owes: "Pick who they owe, then what’s owed.",
     never: "It’s a promise their own people hold them to.",
     type: "Pick one of the three, or write your own.",
     method: "Pick one of the three, or write your own.",
-    want: "Pick one of the three, or write your own. Their resources, people and agenda are dealt with it.",
+    want: ["Pick one of the three, or write your own.", "Their resources, people and agenda are dealt with it.", "What comes with it"],
     name: "Pick one of the three, or write your own.",
   };
   const SHORT_F = { "f-seat": "the seat", before: "who had it before", owes: "who they owe", never: "what they’ll never do", type: "what they are", method: "how they work", want: "what they want", name: "their name", old: "the old power" };
@@ -643,7 +641,7 @@ export function makeFound(d) {
     const i = f.turn.i;
     const gmn = esc(gmName(id));
     const head = `<p class="fd-turn-k"><span>${gm ? "Your turn" : `${gmn}’s turn`}</span><span class="fd-turn-n">Old power ${i + 1} of ${f.olds}</span></p><h3 class="fd-q">${gm ? "Deal an old power" : "The old powers"}</h3>`;
-    const lead = gm ? "Pick one of the three. It’s on its seat already, City or Great, and its resources and people come with it. Its agenda, Face and Secret wait for you, on your phone." : `${gmn}’s picking the old powers, the money that was here first. Everyone founds their own once they’re in.`;
+    const lead = gm ? `Pick one of the three. ${tip("fd-old", "It’s on its seat already, City or Great, and its resources and people come with it. Its agenda, Face and Secret wait for you, on your phone.", "An old power")}` : `${gmn}’s picking the old powers, the money that was here first. ${tip("fd-old", "Everyone founds their own once they’re in.", "Founding your own")}`;
     const sizes = T?.regions?.[f.recipe.region]?.sizes ?? {};
     const cards = handFor(`old|${stateKey(f)}|${i}`, () => oldHand(T, f, i));
     const W = cards?.length ? roomWorld(T, f) : null;
@@ -673,7 +671,8 @@ export function makeFound(d) {
     const segs = `<ol class="fd-segs" aria-hidden="true">${FOUNDER.map((p, k) => `<li class="${k < n ? "is-done" : k === n ? "is-on" : ""}"></li>`).join("")}</ol>`;
     const head = `<p class="fd-turn-k"><span>${turnWho(id, f)}</span><span class="fd-turn-n">${n + 1} of ${FOUNDER.length}</span></p>
       <p class="fd-turn-f">${mine ? "Founding your faction" : `${esc(name)}’s founding a faction`}, ${which} of ${founders.length}</p>${segs}<h3 class="fd-q">${esc(q)}</h3>`;
-    const lead = mine ? FLEAD[t.part] : gm ? `${esc(name)}’s answering this. If they haven’t got a phone with them, tap one in for them.` : `${esc(name)}’s answering this. Talk it over.`;
+    const fl = FLEAD[t.part];
+    const lead = mine ? (Array.isArray(fl) ? `${fl[0]} ${tip(`fd-f-${t.part}`, fl[1], fl[2])}` : fl) : gm ? `${esc(name)}’s answering this. ${tip(`fd-tapin-fac`, "If they haven’t got a phone with them, tap one in for them.", "Tapping in for them")}` : `${esc(name)}’s answering this. Talk it over.`;
     const sureKey = `f:${id}:${t.key}:${i}:${t.part}`;
     let body = "";
     if (!W) body = failed ? `<p class="cc-small">This phone couldn’t get the tables.</p><div class="cc-row">${btn("retry", "Try again", { cls: "button sm" })}</div>` : '<p class="cc-small" role="status">Dealing…</p>';
@@ -767,8 +766,8 @@ export function makeFound(d) {
     if (!gm) return "";
     return `<details class="cc-fold fd-tools" data-open="fd-tools-${esc(id)}"${d.isOpen(`fd-tools-${id}`) ? " open" : ""}><summary><h3 class="cc-fold-t">Who’s in, Deal the rest and End it</h3><span class="cc-fold-g">${esc(andList(f.who.map((w) => first(w.name))))}</span></summary>
         <div class="cc-fold-b">${whoRows(id, f)}
-        <div class="cc-row fd-go">${btn("rest", sureOf(`rest:${id}`) ? "Tap again to deal the rest" : "Deal the rest", { attrs: ' data-sure="1"' })}${btn("end", sureOf(`end:${id}`) ? "Tap again to end it" : "End it", { cls: "button danger" })}</div>
-        <p class="cc-small">Deal the rest lets the tables answer everything that’s left of ${age}, this turn included. Ending it drops the lot, and nothing’s on the board.</p></div></details>`;
+        <div class="cc-row fd-go">${btn("rest", sureOf(`rest:${id}`) ? "Tap again to deal the rest" : "Deal the rest", { attrs: ' data-sure="1"' })}${btn("end", sureOf(`end:${id}`) ? "Tap again to end it" : "End it", { cls: "button danger" })}${tip("fd-tools-age", `Deal the rest lets the tables answer everything that’s left of ${age}, this turn included. Ending it drops the lot, and nothing’s on the board.`, "Dealing the rest or ending it")}</div>
+        </div></details>`;
   }
 
   // ------------------------------------------------------------ a player's campaign page

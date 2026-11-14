@@ -29,6 +29,7 @@ import { LISTS, MAX, apply, blank, moneyOf, powerOf, readable, undoOf } from "./
 import { bondId, mateFor, threadState, wordsKey } from "./threads.js";
 import { stepsToDice } from "./dice.js";
 import { die as kitDie, grow as growDie, mini as kitMini } from "../kit/kit.js";
+import { tip } from "./tip.js";
 
 const KEY = "zi-party";
 const POLL = 20000;
@@ -564,9 +565,12 @@ export function makeParty(d) {
 
   // ------------------------------------------------------------ drawing it
 
-  const fold = (key, title, glance, body, lit = false) => {
+  // What a fold's for is behind a ? in its row while it's open (help is [what
+  // the card's called, what it says]), the way the World screen's folds do it.
+  const fold = (key, title, glance, body, lit = false, help = null) => {
     const k = `pt-${key}`;
-    return `<details class="cc-fold pt-fold${lit ? " is-new" : ""}" data-open="${k}"${d.isOpen(k) ? " open" : ""}><summary><h3 class="cc-fold-t">${title}</h3><span class="cc-fold-g">${glance}</span></summary><div class="cc-fold-b">${body}</div></details>`;
+    const ask = help ? `<span class="cc-fold-ask">${tip(`${k}-how`, help[1], help[0])}</span>` : "";
+    return `<details class="cc-fold pt-fold${lit ? " is-new" : ""}" data-open="${k}"${d.isOpen(k) ? " open" : ""}><summary><h3 class="cc-fold-t">${title}</h3><span class="cc-fold-g">${glance}</span></summary><div class="cc-fold-b">${ask}${body}</div></details>`;
   };
   const few = (items, max) => (items.length > max ? `${items.slice(0, max).join(" · ")} <small>and ${items.length - max} more</small>` : items.join(" · "));
   // A rule from the book, opened on a tap, with no signal needed.
@@ -605,7 +609,7 @@ export function makeParty(d) {
       : l === "projects"
         ? `<label class="cc-field">What happens when it’s done <input name="then" maxlength="${MAX.then}" autocomplete="off"></label>
           <label class="cc-field">Start it at <select name="die">${SIZES.slice(0, 5).map((s) => `<option value="${s}">d${s}</option>`).join("")}</select></label>
-          <p class="cc-small">If the crew’s already partway there, start it higher: a d6, or a d10 when one more push would do it.</p>`
+          <p class="cc-small">Partway there already? ${tip("pt-start", "If the crew’s already partway there, start it higher: a d6, or a d10 when one more push would do it.", "Where a project starts")}</p>`
         : "";
     return `<form class="cc-form pt-form pt-add" data-form="p-add" data-l="${l}">
       <label class="cc-field">${label} <input name="text" maxlength="${l === "assets" ? MAX.asset : l === "changed" ? MAX.then : MAX.line}" autocomplete="off"${hint ? ` placeholder="${esc(hint)}"` : ""}></label>${extra}
@@ -651,12 +655,12 @@ export function makeParty(d) {
         <div class="cc-row"><button type="button" class="button" data-act="p" data-do="climb" data-by="-1">Not done yet</button></div></div>`;
     }
     return `<div class="pt-goal card${glow}" data-pk="goal">
-      <div class="pt-goal-top"><span class="pt-goal-die">${kitDie(g.die, { hide: true })}</span><div class="pt-goal-in"><p class="pt-k">The Party Goal <span class="pt-at">d${g.die}</span></p>${words}
+      <div class="pt-goal-top"><span class="pt-goal-die">${kitDie(g.die, { hide: true })}</span><div class="pt-goal-in"><p class="pt-k">The Party Goal <span class="pt-at">d${g.die}</span> ${tip("pt-goal", ["When the GM says it’s within reach, roll against its die, and if you beat it, it climbs.", ruleLink("s-goal", "How the Goal works")], "How the Goal climbs")}</p>${words}
         ${g.text && !editing ? `<button type="button" class="pt-reword" data-act="p" data-do="edit" data-k="goal">Change its words</button>` : ""}</div></div>
       ${!g.text || editing ? goodGoal(!g.text) : ""}
       ${ladder(g)}
       <div class="cc-row pt-climb"><button type="button" class="button" data-act="p" data-do="climb" data-by="-1"${g.die <= 2 ? " disabled" : ""}>A setback</button><button type="button" class="button primary" data-act="p" data-do="climb" data-by="1">${g.die >= 12 ? "It climbs past d12" : "It climbs"}</button></div>
-      <p class="cc-lead pt-how">When the GM says it’s within reach, roll against its die, and if you beat it, it climbs.</p>${ruleLink("s-goal", "How the Goal works")}</div>`;
+      </div>`;
   }
 
   function projectView(id, p, k) {
@@ -699,8 +703,9 @@ export function makeParty(d) {
       <div class="pt-power" role="img" aria-label="Power ${dice.map((x) => `d${x}`).join(" and ")}">${dice.map((x) => kitDie(x, { hide: true, cls: x === power ? "" : "is-next" })).join("")}<span class="pt-power-k">Power</span><span class="pt-power-v">${dice.map((x) => `d${x}`).join(" + ")}</span></div>
       <p class="pt-size">${esc(steps <= 6 ? P.sizes?.[power] ?? "" : P.sizes?.[12] ?? "")} <small>${adds ? `1 step, plus ${adds} for ${adds === 1 ? "an asset that adds" : "assets that add"} Power.` : "1 step, and no assets that add Power yet."}</small></p></div>`;
 
-    const moneyLine = money.short
-      ? `<p class="pt-money is-short">${money.res} ${money.res === 1 ? "resource" : "resources"} and ${money.paying} ${money.paying === 1 ? "asset" : "assets"}, so ${money.short === 1 ? "one asset isn’t" : `${money.short} assets aren’t`} paid for. Tap Nothing’s paying for it on the one the crew picks, and it stops counting till something pays for it.</p>`
+    // It's in two folds, so its ? has an id for each.
+    const moneyLine = (where) => money.short
+      ? `<p class="pt-money is-short">${money.res} ${money.res === 1 ? "resource" : "resources"} and ${money.paying} ${money.paying === 1 ? "asset" : "assets"}, so ${money.short === 1 ? "one asset isn’t" : `${money.short} assets aren’t`} paid for. ${tip(`pt-short-${where}`, "Tap Nothing’s paying for it on the one the crew picks, and it stops counting till something pays for it.", "When an asset isn’t paid for")}</p>`
       : money.extra
         ? `<p class="pt-money">${money.res} ${money.res === 1 ? "resource" : "resources"} paying for ${money.paying} ${money.paying === 1 ? "asset" : "assets"}, so ${money.extra === 1 ? "there’s 1 extra resource" : `there are ${money.extra} extra resources`} to spend this downtime.</p>`
         : money.res ? `<p class="pt-money">${money.res} ${money.res === 1 ? "resource pays" : "resources pay"} for ${money.paying} ${money.paying === 1 ? "asset" : "assets"}, so there’s no extra resource yet.</p>` : "";
@@ -710,26 +715,26 @@ export function makeParty(d) {
     const none = "None yet";
 
     const reps = fold("reps", "Reputations", doc.reps.length ? few(doc.reps.map((x) => `<em>${esc(x.text)}</em>`), 3) : none,
-      `<p class="cc-lead">What the city says about the crew, one line each${P.rep ? `, like <em>${esc(P.rep)}</em>` : "."} Each one’s a step on any crew roll it fits, and the crew earns one every time a Goal’s done.</p>
-      ${list("reps", doc.reps)}${addForm("reps", "A new Reputation", "")}`, listLit("reps"));
+      `${list("reps", doc.reps)}${addForm("reps", "A new Reputation", "")}`, listLit("reps"),
+      ["About Reputations", `What the city says about the crew, one line each${P.rep ? `, like <em>${esc(P.rep)}</em>` : "."} Each one’s a step on any crew roll it fits, and the crew earns one every time a Goal’s done.`]);
 
     const res = fold("res", "Resources", doc.res.length ? `${few(doc.res.map((x) => esc(x.text)), 4)}${money.extra ? ` <small>· ${money.extra} extra</small>` : ""}` : none,
-      `<p class="cc-lead">Where the crew’s money comes from, one line each. Every asset needs one paying for it, every downtime, and one that isn’t paying for anything is an extra resource.</p>
-      ${moneyLine}${list("res", doc.res)}${addForm("res", "A new resource", "")}`, listLit("res"));
+      `${moneyLine("res")}${list("res", doc.res)}${addForm("res", "A new resource", "")}`, listLit("res"),
+      ["About resources", "Where the crew’s money comes from, one line each. Every asset needs one paying for it, every downtime, and one that isn’t paying for anything is an extra resource."]);
 
     const assets = fold("assets", "Assets", doc.assets.length ? `${few(doc.assets.map((x) => (x.off ? `<s>${esc(x.text)}</s>` : esc(x.text))), 4)}${money.short ? " <small>· not all paid for</small>" : ""}` : none,
-      `<p class="cc-lead">What the crew can do, one line each, with what it does. One that’s people who’ll turn up when the crew calls adds Power, and one with nothing paying for it stops counting till something does.</p>
-      ${moneyLine}${list("assets", doc.assets, (a) => `<div class="cc-row"><button type="button" class="button sm" data-act="p" data-do="paid" data-id="${esc(a.id)}" aria-pressed="${a.off}">${a.off ? "Something’s paying for it again" : "Nothing’s paying for it"}</button></div>`)}
-      ${addForm("assets", "A new asset of the crew’s own", "")}<p class="cc-small">Or pick one of the twelve, under Crew assets to pick from.</p>`, listLit("assets"));
+      `${moneyLine("assets")}${list("assets", doc.assets, (a) => `<div class="cc-row"><button type="button" class="button sm" data-act="p" data-do="paid" data-id="${esc(a.id)}" aria-pressed="${a.off}">${a.off ? "Something’s paying for it again" : "Nothing’s paying for it"}</button></div>`)}
+      ${addForm("assets", "A new asset of the crew’s own", "")}<p class="cc-small">Or pick one of the twelve, under Crew assets to pick from.</p>`, listLit("assets"),
+      ["About assets", "What the crew can do, one line each, with what it does. One that’s people who’ll turn up when the crew calls adds Power, and one with nothing paying for it stops counting till something does."]);
 
     const grows = fold("grows", "How it grows · What an extra resource can buy", "When the Goal’s done, a Reputation and two picks",
       `<div class="pt-rules"><h4>How it grows</h4>${d.rule("s-crew-grows")}<h4>What an extra resource can buy</h4>${d.rule("s-crew-wealth")}</div>`);
 
     const projects = fold("projects", "Projects", doc.projects.length ? `<span class="cc-gl-wrap">${doc.projects.map((p) => `<span class="cc-gl">${kitMini(p.die)}${esc(p.text)} <small>${p.done ? "done" : `d${p.die}`}</small></span>`).join("")}</span>` : none,
-      `<p class="cc-lead">Anything the crew, or one of them, sets out to build or bring about over time. It starts at d2 and climbs like the Goal, and past d12 it’s done and what you wrote happens. Keep two or three on the go, at most.</p>${ruleLink("s-projects", "How projects work")}
-      ${doc.projects.length ? `<ul class="pt-lines">${doc.projects.map((p) => projectView(id, p, k)).join("")}</ul>` : ""}
+      `${doc.projects.length ? `<ul class="pt-lines">${doc.projects.map((p) => projectView(id, p, k)).join("")}</ul>` : ""}
       ${doc.projects.length >= 3 ? '<p class="cc-small">Any more than two or three and none of them gets anywhere.</p>' : ""}
-      ${doc.projects.length < MAX.projects ? addForm("projects", "A new project: what it is", "") : ""}`, listLit("projects"));
+      ${doc.projects.length < MAX.projects ? addForm("projects", "A new project: what it is", "") : ""}`, listLit("projects"),
+      ["About projects", ["Anything the crew, or one of them, sets out to build or bring about over time. It starts at d2 and climbs like the Goal, and past d12 it’s done and what you wrote happens. Keep two or three on the go, at most.", ruleLink("s-projects", "How projects work")]]);
 
     // Every player's Aspiration, read off their own sheets: this phone's
     // player's straight off theirs, and everyone else's as their phone shared it.
@@ -741,20 +746,20 @@ export function makeParty(d) {
       return { name: m.character.name, player: m.id === me() ? "you" : first(m.name), a };
     });
     const aspsFold = fold("asps", "Aspirations", asps.length ? `<span class="cc-gl-wrap">${asps.map((x) => `<span class="cc-gl">${x.a ? kitMini(x.a.die) : ""}${esc(x.name)} <small>${x.a ? `d${x.a.die}` : "not shared yet"}</small></span>`).join("")}</span>` : online() ? "Nobody’s playing in it yet" : "They show up when you’ve got a signal",
-      `<p class="cc-lead">Every player’s, where everyone can see them. Each one changes on its player’s own sheet.</p>
-      ${asps.length ? `<ul class="pt-lines">${asps.map((x) => `<li class="pt-line pt-asp">${x.a ? kitMini(x.a.die) : ""}<div class="pt-line-in"><p><b>${esc(x.name)}</b> <small>${esc(x.player)}${x.a ? ` · d${x.a.die}` : ""}</small></p><p>${x.a ? `<em>${esc(x.a.text)}</em>` : "Shows up when their phone’s opened the campaign."}</p></div></li>`).join("")}</ul>` : ""}`);
+      `${asps.length ? `<ul class="pt-lines">${asps.map((x) => `<li class="pt-line pt-asp">${x.a ? kitMini(x.a.die) : ""}<div class="pt-line-in"><p><b>${esc(x.name)}</b> <small>${esc(x.player)}${x.a ? ` · d${x.a.die}` : ""}</small></p><p>${x.a ? `<em>${esc(x.a.text)}</em>` : "Shows up when their phone’s opened the campaign."}</p></div></li>`).join("")}</ul>` : ""}`, false,
+      ["About Aspirations", "Every player’s, where everyone can see them. Each one changes on its player’s own sheet."]);
 
     const holdings = fold("holdings", "Party holdings", doc.holdings.length ? few(doc.holdings.map((x) => esc(x.text)), 4) : none,
-      `<p class="cc-lead">Big things the crew owns together, like a horse, a cart, a small boat or a house. Whoever’s using one can bring it into a roll it fits for 1 Aura, the same as the ground. Nothing has to pay for a holding.</p>
-      ${list("holdings", doc.holdings)}${addForm("holdings", "A new holding", "like a horse and cart")}`, listLit("holdings"));
+      `${list("holdings", doc.holdings)}${addForm("holdings", "A new holding", "like a horse and cart")}`, listLit("holdings"),
+      ["About holdings", "Big things the crew owns together, like a horse, a cart, a small boat or a house. Whoever’s using one can bring it into a roll it fits for 1 Aura, the same as the ground. Nothing has to pay for a holding."]);
 
     const people = fold("people", "People the crew relies on", doc.people.length ? few(doc.people.map((x) => esc(x.text)), 4) : none,
-      `<p class="cc-lead">The people the crew leans on${P.people ? `, like ${esc(P.people.charAt(0).toLowerCase() + P.people.slice(1))}` : "."}</p>
-      ${list("people", doc.people)}${addForm("people", "Someone the crew relies on", "")}`, listLit("people"));
+      `${list("people", doc.people)}${addForm("people", "Someone the crew relies on", "")}`, listLit("people"),
+      ["About the people", `The people the crew leans on${P.people ? `, like ${esc(P.people.charAt(0).toLowerCase() + P.people.slice(1))}` : "."}`]);
 
     const changed = fold("changed", "What has changed", doc.changed.length ? few(doc.changed.slice().reverse().map((x) => esc(x.text)), 1) : none,
-      `<p class="cc-lead">A line for every agenda that happened. When one does, the world changes, and the GM says how in one sentence. They go on here from the faction turn, and you can write one in too.</p>
-      ${list("changed", doc.changed)}${addForm("changed", "What changed", "The Vanes are back in the city")}`, listLit("changed"));
+      `${list("changed", doc.changed)}${addForm("changed", "What changed", "The Vanes are back in the city")}`, listLit("changed"),
+      ["About what has changed", "A line for every agenda that happened. When one does, the world changes, and the GM says how in one sentence. They go on here from the faction turn, and you can write one in too."]);
 
     const onSheet = new Set(doc.assets.map((a) => a.text.toLowerCase()));
     const pick = fold("pick", "Crew assets to pick from", "All twelve, for when the crew grows",
@@ -763,11 +768,11 @@ export function makeParty(d) {
 
     lit[id] = [];
     return `<section class="cc-sec pt" data-pt="${esc(id)}" aria-labelledby="pt-h-${esc(id)}">
-      <h2 id="pt-h-${esc(id)}"${tab ? ' class="sr-only"' : ""}>The party sheet</h2>${status ? `<p class="cc-small pt-status">${status}</p>` : ""}
+      ${tab ? `<h2 id="pt-h-${esc(id)}" class="sr-only">The party sheet</h2>` : `<h2><span id="pt-h-${esc(id)}">The party sheet</span> ${tip("pt-who", "Everyone in the campaign can change it, and it changes on every phone in it.", "Who can change it")}</h2>`}${status ? `<p class="cc-small pt-status">${status}</p>` : ""}
       ${goalView(id, doc, k)}
       ${crew}
       <div class="cc-folds pt-folds">${reps}${res}${assets}${grows}${projects}${aspsFold}${holdings}${people}${changed}${pick}</div>
-      ${tab ? "" : `<p class="cc-small">Everyone in the campaign can change it, and it changes on every phone in it.</p>`}</section>`;
+      </section>`;
   }
 
   // The Party tab of a character who's playing in a campaign.

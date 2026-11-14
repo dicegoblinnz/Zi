@@ -5,6 +5,7 @@
 // what (src/worker/index.js), and this only draws it.
 import { openStore } from "./store.js";
 import { makeSync } from "./sync.js";
+import { tip } from "./tip.js";
 
 const box = document.getElementById("acct");
 const toastBox = document.getElementById("cc-toast");
@@ -37,7 +38,7 @@ function draw() {
     offline: "You’re offline. Signing in needs a signal, but your characters are on this phone, so carry on with those.",
     off: "Sign-in isn’t switched on yet. Your characters are saved on this phone in the meantime.",
     broken: "The site didn’t answer. Try again in a minute.",
-    out: "Sign in to keep your characters in your account, on every phone you use, and to start a campaign or join one. First time here? Signing in makes your account.",
+    out: `Sign in to keep your characters in your account, on every phone you use, and to start a campaign or join one. ${tip("ac-why", ["First time here? Signing in makes your account.", "An account keeps your name, your email, your characters and the campaigns you’re in, and nothing else. Once you’re in, you can download it all or delete it from here."], "What an account keeps")}`,
     in: me ? `Signed in as <b>${esc(me.name)}</b>${me.email ? ` (${esc(me.email)})` : ""}.` : "",
   }[st.state];
   let html = `<header class="cc-intro"><p class="kicker">Your characters, everywhere</p><h1>Account</h1><p class="lede">${lede}</p></header>`;
@@ -65,7 +66,6 @@ function outView() {
   else if (params.has("error") && !st.note) html += `<div class="cc-note is-warn" role="alert"><p>${why(params.get("error"))}</p></div>`;
   if (sync.me) html += '<div class="cc-note" role="status"><p>You’ve been signed out on this phone. Your characters are still here, and they’ll catch up with your account when you sign in again.</p></div>';
   html += `<div class="cc-row">${st.providers.map((p) => `<button type="button" class="button primary" data-act="in" data-p="${esc(p)}"${busy(`in-${p}`)}>Sign in with ${esc(NAMES[p] || p)}</button>`).join("")}</div>`;
-  html += '<p class="cc-lead">An account keeps your name, your email, your characters and the campaigns you’re in, and nothing else. Once you’re in, you can download it all or delete it from here.</p>';
   return html;
 }
 
@@ -74,20 +74,19 @@ function inView() {
   const loose = sync.loose();
   const kept = store.data.characters.filter((c) => c.acct === me.id).length;
   let html = `<section class="cc-sec" aria-labelledby="ac-chars"><h2 id="ac-chars">Your characters</h2>
-    <p class="cc-lead">${kept ? `${kept === 1 ? "One character is" : `${kept} characters are`} in your account, so ${kept === 1 ? "they’re" : "they’re all"} on every phone you sign in on.` : "Nothing’s in your account yet. Anything you build or pick from the crew while you’re signed in goes straight in."}</p>`;
+    <p class="cc-lead">${kept ? `${kept === 1 ? "One character is" : `${kept} characters are`} in your account, so ${kept === 1 ? "they’re" : "they’re all"} on every phone you sign in on.` : `Nothing’s in your account yet. ${tip("ac-none", "Anything you build or pick from the crew while you’re signed in goes straight in.", "What goes in your account")}`}</p>`;
   if (loose.length) {
     const n = loose.length;
     html += `<div class="cc-note" role="status"><p>${n === 1 ? "This one is" : `These ${n} are`} only on this phone: ${loose.map((c) => esc(c.name)).join(", ")}.</p>
       <div class="cc-row"><button type="button" class="button primary" data-act="move"${busy("move")}>Move ${n === 1 ? esc(loose[0].name) : `all ${n}`} into your account</button></div></div>`;
   }
   html += `<div class="cc-row"><a class="button${loose.length ? "" : " primary"}" href="/characters/">Characters</a></div></section>`;
-  html += `<section class="cc-sec" aria-labelledby="ac-camps"><h2 id="ac-camps">Campaigns</h2>
-    <p class="cc-lead">Start a campaign and you’re its GM, or open the join link your GM sent you. They’re on the Characters page, with your characters.</p>
+  html += `<section class="cc-sec" aria-labelledby="ac-camps"><h2><span id="ac-camps">Campaigns</span> ${tip("ac-camps", "Start a campaign and you’re its GM, or open the join link your GM sent you. They’re on the Characters page, with your characters.", "Where campaigns are")}</h2>
     <div class="cc-row"><a class="button" href="/characters/#cc-camps">Your campaigns</a></div></section>`;
   if (me.role === "admin") html += peopleView();
   html += `<section class="cc-sec" aria-labelledby="ac-you"><h2 id="ac-you">Your account</h2>
     <div class="cc-row"><button type="button" class="button" data-act="out"${busy("out")}>Sign out</button></div>
-    <p class="cc-lead">Download everything your account holds, or delete it and its characters for good. Deleting it takes you out of every campaign you’re in and ends the ones you run.</p>
+    <p class="cc-lead">Deleting your account deletes its characters for good, takes you out of every campaign you’re in and ends the ones you run.</p>
     <div class="cc-row"><a class="button" href="/api/me/data" download>Download my data</a><button type="button" class="button danger" data-act="delete"${busy("delete")}>${st.sure === "delete" ? "Tap again to delete it all for good" : "Delete my account"}</button></div></section>`;
   return html;
 }

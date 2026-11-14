@@ -51,6 +51,7 @@ import { linesOf, tiesOf } from "./world-web.js";
 import { die as kitDie } from "../kit/kit.js";
 import { CACHE } from "./mapcache.js";
 import { crewCanvas, drawFog, rub } from "./fog.js";
+import { tip } from "./tip.js";
 
 const SORT = (t) => String(t ?? "").replace(/^(The|A|An) /i, "").toLowerCase();
 const flat = (t) => String(t ?? "").replace(/\*/g, "");
@@ -293,7 +294,7 @@ export function makeMaps(w) {
     const shownN = doc.maps.filter((m) => m.shown).length;
     const lead = !gm ? ""
       : doc.maps.length ? `<p class="cc-small wb-sum">${plural(doc.maps.length, "map", "maps")}, ${shownN ? `${shownN} shown to the crew` : "none shown to the crew yet"}.</p>`
-      : '<p class="cc-small">No maps yet. Put one up from a photo of one you’ve drawn, or any picture on your phone. Nothing shows on your players’ phones till you show it to them.</p>';
+      : `<p class="cc-small">No maps yet. ${tip("wm-none", "Put one up from a photo of one you’ve drawn, or any picture on your phone. Nothing shows on your players’ phones till you show it to them.", "Putting up a map")}</p>`;
     const list = doc.maps.length ? `<ul class="wm-toks">${doc.maps.map((m) => token(id, m, gm, lit.includes(m.id))).join("")}</ul>` : "";
     const add = gm ? `<div class="cc-folds wb-adds">${putUp(id, doc)}</div>` : "";
     return `<section class="cc-sec wm-sec" data-wb="${esc(id)}" aria-labelledby="wm-h"><h2 id="wm-h">Maps</h2>${lead}${list}${add}</section>`;
@@ -321,9 +322,9 @@ export function makeMaps(w) {
     const maxed = doc.maps.length >= MMAX.maps;
     const body = dr ? draftBody(id, doc, dr)
       : maxed ? `<p class="cc-small">That’s ${MMAX.maps} maps, which is as many as a world holds. Take one down to put up another.</p>`
-      : `<p class="cc-lead">A photo of one you’ve drawn works, or any picture on your phone. Shoot a paper map flat, from straight above, in good light. It goes up sharp enough to read close up, and only you see it till you show the crew.</p>
-        <div class="cc-row">${chooser(id, "Choose a picture")}</div>${online() ? "" : '<p class="cc-small">You’ll need a signal to put it up.</p>'}`;
-    return w.fold("mput", "Put up a map", dr ? (dr.busy ? "Getting it ready" : "Ready to go up") : "From a photo, or a picture on your phone", body);
+      : `<div class="cc-row">${chooser(id, "Choose a picture")}</div>${online() ? "" : '<p class="cc-small">You’ll need a signal to put it up.</p>'}`;
+    return w.fold("mput", "Put up a map", dr ? (dr.busy ? "Getting it ready" : "Ready to go up") : "From a photo, or a picture on your phone", body, "", 3,
+      ["Which picture works", "A photo of one you’ve drawn works, or any picture on your phone. Shoot a paper map flat, from straight above, in good light. It goes up sharp enough to read close up, and only you see it till you show the crew."]);
   }
 
   // ------------------------------------------------------------ getting a picture ready
@@ -825,7 +826,7 @@ export function makeMaps(w) {
       const k = kindOf(doc, p);
       return `<li><button type="button" class="wm-row" data-act="w" data-do="mfind" data-pid="${esc(p.id)}"><span class="wm-row-mark is-${k}${gm && !p.shown ? " is-hidden" : ""}">${MARK[k]}</span><span class="wm-row-in"><b>${esc(labelOf(doc, p) || "A pin")}</b><small>${p.area ? esc(cap(areaOf(m, p))) : kindName(k)}${gm ? (p.shown ? " · Shown" : " · Hidden") : ""}</small></span></button></li>`;
     }).join("");
-    const empty = gm ? "No pins yet. Tap Drop a pin, move the map till the spot’s under the cross, and pin it." : "No pins on this one yet.";
+    const empty = gm ? `No pins yet. ${tip(`wm-nopins-${m.id}`, "Tap Drop a pin, move the map till the spot’s under the cross, and pin it.", "Dropping a pin")}` : "No pins on this one yet.";
     let mine = "";
     if (gm) {
       const places = doc.pages.filter((p) => p.kind === "place").sort((a, b) => SORT(a.name).localeCompare(SORT(b.name)));
@@ -836,14 +837,14 @@ export function makeMaps(w) {
         ? `<h3 class="wm-panel-h3">Fog</h3><p class="cc-small">${howMuch(m)} ${esc(crewSay(id, m))}</p>
           <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="mfogrub">${MARK.lift}Rub the fog</button><button type="button" class="button" data-act="w" data-do="mfogall">Cover all of it again</button></div>
           <div class="cc-row"><button type="button" class="button${sureOff ? " danger" : ""}" data-act="w" data-do="mfogoff">${sureOff ? "Tap again to take the fog off" : "Take the fog off"}</button></div>`
-        : `<h3 class="wm-panel-h3">Fog</h3><p class="cc-small">Cover it, then rub the fog away as the crew explores.</p><div class="cc-row"><button type="button" class="button" data-act="w" data-do="mfog">${MARK.fog}Cover it with fog</button></div>`;
+        : `<h3 class="wm-panel-h3">Fog ${tip(`wm-fogwhat-${m.id}`, "Cover it, then rub the fog away as the crew explores.", "About the fog")}</h3><div class="cc-row"><button type="button" class="button" data-act="w" data-do="mfog">${MARK.fog}Cover it with fog</button></div>`;
       mine = `<h2 class="wm-panel-h2">This map</h2>
         <form class="cc-form pt-form" data-form="w-map-set">
           <label class="cc-field">Its name <input name="name" maxlength="${MMAX.name}" autocomplete="off" required value="${esc(m.name)}"></label>
           ${places.length ? `<label class="cc-field">A map of <select name="of"><option value="">Nowhere in particular</option>${places.map((p) => `<option value="${esc(p.id)}"${m.of === p.id ? " selected" : ""}>${esc(p.name)}</option>`).join("")}</select></label>` : ""}
           <div class="cc-row"><button type="submit" class="button">Save</button></div></form>
         ${fog}
-        ${m.draw ? `<h3 class="wm-panel-h3">Drawn on every phone</h3><p class="cc-small">It came in with ${esc(w.wholeIn(m.from)?.title ?? "a whole world")}, and every phone draws it, so it opens with no signal. Pins and fog work on it the way they do on a picture.</p>` : `<h3 class="wm-panel-h3">A new picture</h3>${dr ? draftBody(id, doc, dr) : `<p class="cc-small">For when you’ve drawn more of it. The pins stay where they are on the picture${m.fog ? ", and so does the fog if it’s the same shape" : ""}.</p><div class="cc-row">${chooser(id, "Choose a new picture", m.id)}</div>`}`}
+        ${m.draw ? `<h3 class="wm-panel-h3">Drawn on every phone ${tip(`wm-drawn-${m.id}`, "Every phone draws it, so it opens with no signal. Pins and fog work on it the way they do on a picture.", "About a drawn map")}</h3><p class="cc-small">It came in with ${esc(w.wholeIn(m.from)?.title ?? "a whole world")}.</p>` : `<h3 class="wm-panel-h3">A new picture</h3>${dr ? draftBody(id, doc, dr) : `<p class="cc-small">For when you’ve drawn more of it. ${tip(`wm-newpic-${m.id}`, `The pins stay where they are on the picture${m.fog ? ", and so does the fog if it’s the same shape" : ""}.`, "What a new picture keeps")}</p><div class="cc-row">${chooser(id, "Choose a new picture", m.id)}</div>`}`}
         <div class="cc-row wm-gone"><button type="button" class="button danger" data-act="w" data-do="mgone">${sure ? "Tap again to take it down" : "Take the map down"}</button></div>`;
     }
     return `<section class="wm-panel card${fresh("panel", m.id)}" aria-labelledby="wm-panel-h"><div class="wm-card-top"><h2 id="wm-panel-h" class="wm-panel-t">${m.pins.length ? `Pins <small>${m.pins.length}</small>` : "Pins"}</h2><button type="button" class="cc-x" data-act="w" data-do="mpanel" aria-label="Close">${d.icon.close}</button></div>
@@ -856,7 +857,7 @@ export function makeMaps(w) {
     const all = targets(doc);
     const list = all.length ? `<label class="cc-field">Find a place, person or faction <input type="search" data-wmfind enterkeyhint="search" autocomplete="off" value="${esc(find)}"></label>
       <ul class="wm-picks">${all.map((t) => `<li data-find="${esc(t.name.toLowerCase())}"><button type="button" class="wm-row" data-act="w" data-do="mto" data-k="${t.k}" data-id="${esc(t.id)}"><span class="wm-row-mark is-${t.kind}">${MARK[t.kind]}</span><span class="wm-row-in"><b>${esc(t.name)}</b><small>${kindName(t.kind)}</small></span></button></li>`).join("")}</ul>`
-      : '<p class="cc-small">There’s nothing in your world to pin yet. Give it a name instead, and make it a page later.</p>';
+      : `<p class="cc-small">There’s nothing in your world to pin yet. ${tip("wm-pinname", "Give it a name instead, and make it a page later.", "Pinning a name")}</p>`;
     if (find) requestAnimationFrame(() => filter(find));
     return `<section class="wm-panel wm-pick card${fresh("pick", `${ui.picking.x},${ui.picking.y}`)}" aria-labelledby="wm-pick-h"><div class="wm-card-top"><h2 id="wm-pick-h" class="wm-panel-t">What’s here?</h2><button type="button" class="cc-x" data-act="w" data-do="mcancel" aria-label="Cancel">${d.icon.close}</button></div>
       ${list}
@@ -871,7 +872,7 @@ export function makeMaps(w) {
     return `<section class="wm-card card${fresh("fog", m.id)}" aria-labelledby="wm-fog-h"><div class="wm-card-top"><span class="wm-card-mark is-fog">${MARK.fog}</span>
       <div class="wm-card-t"><p class="wb-k">Fog</p><h2 class="wm-card-n" id="wm-fog-h">Cover it with fog</h2></div>
       <button type="button" class="cc-x" data-act="w" data-do="mfogx" aria-label="Close">${d.icon.close}</button></div>
-      <p class="cc-small wm-card-say">The crew only sees what you’ve uncovered, and you rub the fog away as they explore. A pin under it stays hidden till you uncover its spot, even one you’ve shown them.${seen}</p>
+      <p class="cc-small wm-card-say">The crew only sees what you’ve uncovered, and you rub the fog away as they explore. ${tip(`wm-fogpins-${m.id}`, "A pin under it stays hidden till you uncover its spot, even one you’ve shown them.", "Pins under the fog")}${seen}</p>
       <div class="cc-row"><button type="button" class="button primary" data-act="w" data-do="mfogon" data-v="all">Cover all of it</button><button type="button" class="button" data-act="w" data-do="mfogon" data-v="none">Brush some on</button></div></section>`;
   }
   // The fog's bar along the bottom while she's rubbing it: what her finger
