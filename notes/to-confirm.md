@@ -76,7 +76,13 @@ None yet.
 
 ### 8. The live table
 
-None yet.
+1. **The table and the roll card count extra actions together.** Buy one on the roll card and the next from Got another action on the live table is 4, and back the other way. The table keeps what each one cost and turns down one that's cheaper than its place in the round, so a phone can't get its second for 3.
+2. **Answering starts with the Root.** Answer it, Work it and Something else's roll show Body, Mind and Soul with each one's number and what it's for, and the roll card opens on the one you pick to tap what fits.
+3. **Putting your action into a friend's answer is a tap on everything of yours that fits**, a row to each Title, archetype and attuned thing, then how many of them you'll have to explain, 1 Aura each, paid when it goes in and given back if you take it back before they roll. It needs one thing at least.
+4. **An answer reads as its steps on its Root**, like "Wren answered it with 17 steps on Body: 11 against its 6", on the GM's phone, the player's and the table screen. A friend's part reads as their steps, "3 steps into whoever answers the attendant". One rolled before stacking still says the specialty it rolled.
+5. **The learning round's combo is 17 steps.** Wren's arrow is her Body, both Titles, Hunter twice, her longbow and *Long shot*, 12 steps, the same as shooting from cover. Bram's hammer under the club is *The wall that held the harbour gate*, *guard one person*, Guardian, his war hammer and *Ring the bell*, 5 steps, with his plate and shield left out since he's using his hammer. That's two d12s and a d10 against the club's d8.
+6. **The table screen keeps its words on the screen.** Its code page is read on a TV from across the room, where nobody taps, so the bubbles are for the phone.
+7. **A roll on a Root from Something else goes down as "a roll on Body"**, and the roll card only opens once it's gone down as your action.
 
 ### 9. Print
 

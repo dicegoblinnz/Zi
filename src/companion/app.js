@@ -208,8 +208,10 @@ const table = makeTable({
     const n = c.roots[root] + sp.steps;
     return { i, name: sp.name, n: sp.steps, says: `${root} ${c.roots[root]} and ${sp.steps} · ${diceLabel(stepsToDice(n))}`, dice: stepsToDice(n).map((d, j) => kitDie(d, { hide: true, cls: j ? "is-next" : "" })).join("") };
   }),
-  answer: (i, tele) => openAction({ spec: normal(current())?.specialties[i]?.name ?? "", tele }),
-  work: (i, w) => openAction({ spec: normal(current())?.specialties[i]?.name ?? "", work: w }),
+  // The live table's answer, a roll at the scene and a roll on a Root open
+  // the roll card on the Root picked there (prompt 8).
+  answer: (root, tele) => openAction({ root, tele }),
+  work: (root, w) => openAction({ root, work: w }),
   defend: (pre) => openDefence(pre),
   signedOut: () => {
     sync.signedOutHere();
@@ -524,12 +526,12 @@ function noteTable(s) {
     const answered = r.opp != null && r.dice.length > 0 && (r.vs === r.tele.d || r.vs === -1);
     // Whoever put their action in, while their steps are still in it.
     const with_ = r.friends.length ? (r.tele.with ?? []).map((w) => ({ user: w.user, ch: w.ch })) : [];
-    table.record(s, r.tele.camp, "a", r.tele.id, answered ? { act: r.name, steps: r.total, dice: rolled(), opp: r.opp, real: Boolean(r.real), ...(with_.length ? { with: with_ } : {}) } : null);
+    table.record(s, r.tele.camp, "a", r.tele.id, answered ? { root: r.root, steps: r.total, dice: rolled(), opp: r.opp, real: Boolean(r.real), ...(with_.length ? { with: with_ } : {}) } : null);
   }
   // A roll at a stake or an event on the live table's scene is an action.
   if (r.kind === "action" && r.work) {
     const worked = r.opp != null && r.dice.length > 0 && (r.vs === r.work.d || r.vs === -1);
-    table.noteWork(s, r, worked ? { id: r.work.actId, k: "work", ref: r.work.ref, act: r.name, steps: r.total, roll: { dice: rolled(), opp: r.opp, real: Boolean(r.real) }, aim: r.work.aim } : null);
+    table.noteWork(s, r, worked ? { id: r.work.actId, k: "work", ref: r.work.ref, root: r.root, steps: r.total, roll: { dice: rolled(), opp: r.opp, real: Boolean(r.real) }, aim: r.work.aim } : null);
   }
   if (r.kind === "defence" && r.camp && r.teles?.some(Boolean)) {
     for (const h of blocks(r)) {
