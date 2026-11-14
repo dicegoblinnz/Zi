@@ -1538,6 +1538,7 @@ try {
   same((await stateIn(kai.page, "vesk-aaaaaa")).aura, vNow - 3, "that cost her 3 Aura");
   same(await text(kai.page, '.tg-more [data-do="more"][data-k="aura"]'), "4 Aura", "and the next one's 4, since there's no cap");
   await until(async () => (await tableOf(tuesday.id))?.rounds?.at(-1)?.acts?.[`${kaiId}|vesk-aaaaaa`]?.paid?.join() === "3", "the table has what it cost", 4000);
+  same(await text(sam.page, '.tg-more [data-do="more"][data-k="aura"]'), "3 Aura", "while Bram's first is still 3, since each player's extra actions are their own");
   if (!(await kai.page.$eval(".tg-scenefold", (el) => el.open))) await kai.page.click(".tg-scenefold > summary");
   await piece(kai.page, "Dace’s satchel").locator('[data-do="work"]').click();
   await kai.page.waitForSelector('#cc-dialog [data-do="wwith"]');

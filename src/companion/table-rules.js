@@ -136,7 +136,8 @@ export function moresOf(a) {
     return { k, paid: Number.isInteger(paid) && paid > 0 ? paid : EXTRA_AURA };
   });
 }
-// Whether the Aura ones cost what they should: each one more than the one
+// Whether one character's Aura ones cost what they should (each player's
+// count on their own, never the crew's together): each one more than the one
 // before it, and never less than its place in the round says, 3 for the
 // first, 4 for the second and so on (extraCost()). The phone's count can be
 // ahead of the table's, when one bought on the roll card went into a roll of
@@ -954,7 +955,8 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
         if (t?.ans?.with?.some((w) => w.user === who.user && w.ch === who.ch)) return no(`${t.ans.name} answered ${lower(t.who)} with you in it, so it stays.`);
       }
       // There's no cap on extra actions, but each one bought with Aura costs
-      // more than the one before it this round: 3, then 4, then 5. A new one
+      // more than the one before it this round: 3, then 4, then 5, counted
+      // off this character's record alone, so nobody else's put it up. A new one
       // has to come with its price, so only one the table had before prices
       // were kept goes unchecked.
       const priced = moresOf(round.acts[key]).filter((m) => m.k === "aura").length;

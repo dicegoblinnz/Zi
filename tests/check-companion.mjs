@@ -374,6 +374,8 @@ if (part("1b")) {
     same(not2(buy("vesk", ["aura", "aura"], [3, 3], [1, 2, 3]), kai, "two for 3 each is turned down too", { phoneNow: 5000 }), "The second extra action you buy this round is 4 Aura, not 3.", "since the second's 4");
     same(not2({ ...buy("vesk", ["aura", "aura", "aura", "aura"], null, [1, 2, 3, 4, 5]), x: { ...buy("vesk", ["aura", "aura", "aura", "aura"], null, [1, 2, 3, 4, 5]).x, paid: [3, 4, 5] } }, kai, "a new one with no price is turned down", { phoneNow: 5000 }), "Your phone’s from before extra actions had a price. Reload the page and buy it again.", "since only one from before prices were kept goes unchecked");
     same(T.moresOf(actsOf("vesk")).length, 3, "and the table keeps the three she paid for");
+    ok2(buy("bram", ["aura"], [3], [1, 2]), sam, "Bram's first is 3 while Vesk's bought three, since each player's extra actions are their own", { phoneNow: 5000 });
+    same(T.moresOf(actsOf("vesk")).map((m) => m.paid), [3, 4, 5], "and hers stay as they were");
     ok2(buy("vesk", ["aura", "aura", "hiding"], [3, 4], [1, 2, 3, 4]), kai, "coming out of hiding's on top, and doesn't put the price up", { phoneNow: 5000 });
     ok2(buy("bram", ["aura"], [4], [1, 2]), sam, "Bram's first is 4, after one bought on his roll card", { phoneNow: 5000 });
     ok2(buy("bram", ["aura", "held"], [4], [1, 2, 3]), sam, "and holding his action last round gives him one more", { phoneNow: 5000 });
