@@ -26,7 +26,7 @@ You build your character with **35 points**. Here's what they buy:
 
 An awakening's a point as well, but what you attune starts out with room for the one it comes with and one more for its Catch, so the rest come as it grows (see [Attunement](#s-attunement)). Your threads, your answers in Connect and your Aspiration cost nothing.
 
-**I'd recommend at least one Title, one archetype and one attuned thing**, but the choice is yours, so build what you like. All six of the [ready-made characters](#s-pregens) went for two Titles, two archetypes and one attuned thing. Most characters start on 35. For a one-shot with characters further along, or to catch someone up with the rest of the crew, start on more.
+**I'd recommend at least one Title, one archetype and one attuned thing**, but the choice is yours, so build what you like. All six of the [ready-made characters](#s-pregens) went for two Titles, two archetypes and one attuned thing. Most characters start on 35. For a one-shot with characters further along, or to catch someone up with the rest of the crew, the GM can start you on more.
 
 Here's how it goes, step by step:
 
@@ -622,7 +622,7 @@ Downtime: he spends a slot and a purse of gold at the smithy, and his plate's me
 
 ## Boons and Burdens {#s-boons}
 
-A **Boon** is a permanent upgrade, like shrugging off the first hit each scene or a longer stride. It costs **two permission slots on one of your Titles**, and you can swap it back for permissions in downtime. You can build one in when you make your character, for **2 points**, the same as the two permissions it takes the place of, or you can swap two permissions for one in downtime. It does what it says, and it's never a step on a roll.
+A **Boon** is a permanent upgrade, like shrugging off the first hit each scene or a longer stride. It costs **two permission slots on one of your Titles**, and you can swap it back for permissions in downtime. You can build one in when you make your character, for **2 points**, the same as the two permissions it takes the place of, or you can swap two permissions for one in downtime. A Title with Boons and no permissions puts the permission it came with towards its first Boon, so that one's 1 point. A Boon does what it says, and it's never a step on a roll.
 
 A **Burden** is a permanent cost, and it only ever comes on an attuned thing. Titles never take them. A Burden's worth two awakenings on that thing, or a Boon for you, and a thing can't take one before it's Tempered (see [Attunement](#s-attunement)).
 
@@ -749,7 +749,7 @@ That's six threads on five bonds. Both of Dorrie's go under her name, on the one
 ### Final sheet {#final-sheet}
 
 :::sheet[The best cat burglar in the city]
-**Points:** 35. Two Titles 10, four more permissions 4, Shadow twice 10, her grappling line 5, and six things she carries 6.
+**Points:** 35. Two Titles 10, four more permissions 4, Shadow twice 10 (*Push* and *Vanish* come with them), her grappling line 5, and six things she carries 6.
 
 **Titles:** The best cat burglar in the city (Body 3) · Raised by the Guild (Mind 2, Body 1).
 
