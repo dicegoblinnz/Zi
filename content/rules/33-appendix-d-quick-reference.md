@@ -87,7 +87,7 @@ Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer
 -   **Body, Mind or Soul:** blows and teeth are at your Body, fear, lies and pressure at your Mind, and despair, temptation and curses at your Soul.
 -   **Answer:** your action against its dice, built from what fits how you stop it, and friends can join in. Win and it's stopped. Lose and it lands at once, with no defence roll. A tie's a loss unless you pay 1 Aura. You can answer for a friend, and if you stepped in the way and lose, it lands on you.
 -   **Let it ride:** whatever you don't answer lands at the end of the round. Roll each track once against what's at its Root, and each die stops one telegraph it beats or ties. Everything else gets through.
--   **Defend:** your action. When they land, roll a Root and a specialty that fit how you're defending, armour and shield as items, on top of your tracks. Each die stops one it beats or ties, as long as how you're defending fits it.
+-   **Defend:** your action. When they land, roll a Root and everything that fits how you're defending, armour and shield included, on top of your tracks. Each die stops one it beats or ties, as long as how you're defending fits it.
 -   **Intercept:** 1 Aura and no action. Take the blows at a friend's Body within your stride, and your Stamina handles them. A Guardian does it free, for every friend within his stride, and so does a summon. Nobody can intercept what's at a Mind or a Soul.
 -   **One die at each of you** from each threat, unless a tag like *Flurry* says it can do more.
 -   **Running doesn't dodge.** One aimed at you lands wherever you've gone. Only one aimed at a place can be walked out of.
@@ -95,7 +95,7 @@ Roll against its Challenge. Win, and pick one: a hidden tag · a straight answer
 
 ## Consequences: the GM names one {#consequences-the-gm-names-one}
 
-A hit, a size off the track it's at · a box on your armour on that Root, or something else you carry breaks (attuned things can't break) · Aspiration down · Party Goal down · a clock ticks. You can offer another that fits and costs about as much, and 2 for 1 from your other tracks always fits. A specific intent happens unless you take the hit on your track instead. A one-answer telegraph can't be traded.
+A hit, a size off the track it's at · a box on your armour on that Root, or something else you carry breaks (attuned things can't break) · Aspiration down · Party Goal down · a clock ticks. You can offer another that fits and costs about as much, and 2 for 1 from your other tracks always fits. A specific intent happens unless you take the size on your track instead. A one-answer telegraph can't be traded.
 
 ## Threats {#s-qr-threats}
 
@@ -124,7 +124,7 @@ A hit, a size off the track it's at · a box on your armour on that Root, or som
 
 ## Moving {#moving}
 
--   Stride 3, free, before, between or after your action. A Move action rolls your Body and whatever makes you fast here for extra squares, and those dice add. A Teleporter's stride can be a teleport of up to 10 units.
+-   Stride 3, free, before, between or after your action. A Move action rolls a Root and everything that fits how you're moving for extra squares, and those dice add. A Teleporter's stride can be a teleport of up to 10 units.
 -   Difficult ground costs 2 a square. Diagonals count as one. There are no opportunity attacks. Cover is line of sight, and it doesn't add steps.
 -   Close 1 · Reach 2 · Near · Far · Beyond. No grid? Close, Reach and Near are within your stride, Far takes a Move action, and Beyond takes more than a round.
 -   Weapon properties: Reach · Thrown · Ranged · Long · Grapple · Sweep · Piercing · Breaker · Charge · Concealed · Quick · Two-Handed · Reload.
@@ -168,7 +168,7 @@ Each ability's 1 from the archetype's home track, or 2 from your other two, and 
 
 -   A bond's usually a person, but it can be a faction, a place or a cause. Each thread is one truth between you, and it's a **bond thread**, something good, or a **hostile thread**, something gone bad. Either can be strained, which means nearly snapped, and with no thread at all you're neutral. Each person's one bond, with all your threads with them under it.
 -   **To start:** two bond threads with the crew, from your answers in Connect. Write a hostile thread too and you can write a third bond thread, and three's the most.
--   **Borrow** through a bond thread: 1 Aura brings something of theirs into your roll as a step (a faction's, one of its assets), and it doesn't strain anything. Not while it's strained.
+-   **Borrow** through a bond thread: 1 Aura brings one thing off their sheet into your roll as a step (a faction's, one of its assets), and it doesn't strain anything. Not while it's strained.
 -   **Strain** a bond thread: lean on them in the story and your Resolve comes up a size. It's free and takes no action, and the thread's strained. One with someone in the crew is strained for both of you.
 -   **Mend:** make it right with them, in downtime or in a scene with them (not the fight where you strained it), and it's whole again.
 -   **Snap:** strain it again before it's mended. Your Resolve still comes up, but cross the thread out. When the last one goes, so does the bond.
@@ -177,15 +177,15 @@ Each ability's 1 from the archetype's home track, or 2 from your other two, and 
 ## What you carry {#s-qr-carry}
 
 -   3 equipment (what you wear or wield), 3 utility (tools, and things you use up and cross off) and a keepsake. A bag holds 10 more. Getting something out takes your action, and putting it away's free.
--   A plain item's 1 more on a roll you're using it in, to your specialty or as one of its own, and never a Root. A purse of gold is a utility item, about a month's wages.
--   **Armour** sits on a Root: Body (leathers, plate, shields, helmets), Mind (clothes that fit the scene) or Soul (a holy symbol, a ward). Offer it when a hit gets through there and tick a box instead. Common has 1 box, Fine 2 and Masterwork 3, it breaks when the last one goes, and it's 1 more when you Defend till then. You start with Common, and one piece can be Fine.
--   **Attunement:** one attuned thing to start, on top of what you carry, and attuned things can't break. It's an item, it gets you Aura its own way, and it has awakenings. A passive one holds up to 2 Aura, pumped in free while you're acting, and works for as much as it holds. An active one spends Aura when you use it, more for more. It all empties at the end of the scene. Awakened: 1 awakening, or 2 with a Catch. Tempered: 2, or 4 with a Burden. Perfected: 3, or 6 with a Burden and a Catch. Each stage needs a material, and each new awakening a downtime slot.
+-   A plain item's 1 more on a roll you're using it in, and never a Root. Each thing you carry is a point when you make your character, bar your keepsake and your bag. A purse of gold is a utility item, about a month's wages.
+-   **Armour** sits on a Root: Body (leathers, plate, shields, helmets), Mind (clothes that fit the scene) or Soul (a holy symbol, a ward). Offer it when a hit gets through there and tick a box instead. Common has 1 box, Fine 2 and Masterwork 3, it breaks when the last one goes, and till then it's 1 more on a roll it fits, like a Defend. You start with Common, and one piece can be Fine.
+-   **Attunement:** 5 points for each attuned thing, on top of what you carry, and attuned things can't break. Each one's an item, puts 2 on your Aura maximum, and has awakenings, each a step on a roll it fits. A passive one's powered, free while you're acting: up to 2 Aura off what you've got and off your maximum till the scene ends, and it works for as much as is powering it. An active one spends Aura when you use it, more for more. Awakened: 1 awakening, or 2 with a Catch. Tempered: 2, or 4 with a Burden. Perfected: 3, or 6 with a Burden and a Catch. Each stage needs a material, and each new awakening a downtime slot.
 
 ## Summoning {#s-qr-summoning}
 
 -   Only a Summoner catches souls and summons them. A summoning attunement holds souls, one to an awakening, on the same ladder. Starting souls are d4s.
 -   **Catch one:** when a creature falls, spend your action and roll against its Challenge. Beat it and its soul goes in a utility slot, with its Challenge die, and into your attunement in downtime. Miss and it's gone.
--   **Call them out:** spend Aura on a soul as part of your action, with a reason in the story. Each Aura's a d4 of summons, built into one or several, none bigger than the soul's own die.
+-   **Call them out:** each soul's an active awakening, so calling it out spends Aura, as part of your action, with a reason in the story. Each Aura's a d4 of summons, built into one or several, none bigger than the soul's own die.
 -   A summon acts like anyone and rolls its own die. It drops a size every round and for every hit that gets through, and past d2 it's gone, back in your attunement. It intercepts for free and rolls its die to stop one of the dice it took. A horde rolls as one throw. Summons can't combo, and their dice never give Aura. They all go back at the end of the scene.
 
 ## Chases {#s-qr-chases}
@@ -196,7 +196,7 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 
 -   Four pressures: personal, party, faction, world. Ignore one and it gets worse, and twice makes it a scene. Every faction's action is telegraphed at the start, and rolled after the slots.
 -   Two personal slots each, and the crew takes one action, like any faction. A personal slot can go into the crew's action. Every downtime starts with each of your tracks up a size.
--   **Recover:** heal, 6 sizes back on your tracks however you like · mend something broken, or a piece of armour with boxes ticked. **Grow:** a new permission on a Title · a new thread · chase your Aspiration · get something.
+-   **Recover:** heal, 6 sizes back on your tracks however you like · mend something broken, or a piece of armour with boxes ticked. **Grow:** a slot buys what a point does: a new permission on a Title · a new ability off an archetype's list · a new awakening · something to carry. Or it's a new thread, or a roll at your Aspiration.
 -   **Mend a thread** you've strained by making it right with them. Downtime's one place for it, and a scene with them is the other.
 -   **Swap** a permission for another that fits your Title, or two for a Boon, and back. **Attune:** a slot for each new awakening, and the material for a new stage. A soul you're carrying goes into your summoning attunement.
 -   Ties go to the defender. No Aura: pay 1 Resolve to roll your dice again, or an extra crew resource to take the tie.
@@ -204,9 +204,9 @@ The Gap (past d2: caught, past d12: away) · The Pursuer (past d2: shaken off) �
 ## Factions {#s-qr-factions}
 
 -   Power (1 step, plus 1 for each lot of people who turn up when it calls), resources, assets, Want, Agenda, Face, Secret, and three bonds: Public Sentiment, Morale and Loyalty.
--   Every asset needs a resource paying for it, and one that isn't paid for stops counting. An extra resource, one that isn't paying for anything, hires another faction's action, buys an asset or goes in a trade. Nothing buys a second action.
+-   Every asset needs a resource paying for it, and one that isn't paid for stops counting. An extra resource, one that isn't paying for anything, hires another faction's action, buys an asset or goes in a trade. Nothing buys a faction another action.
 -   One action a downtime, telegraphed at the start: Destroy · Undermine · Obstruct · Influence · Acquire · Establish, or work its agenda (past d12, it happens). Up to three mini factions each, with two outcomes apiece, and a new one sits out the downtime it's made.
--   The crew's action: the six outcomes, Set back its agenda, or Work for it. Roll the crew's Power, plus Reputations and bond threads that fit, or one character's own Root and specialty that fit. A personal slot put into it counts everything twice, and a bigger faction's Power takes both.
+-   The crew's action: the six outcomes, Set back its agenda, or Work for it. Roll the crew's Power, plus Reputations and bond threads that fit, or one character's own Root and everything on their sheet that fits. A personal slot put into it counts everything twice, and a bigger faction's Power takes both.
 -   In its bonds, a bond thread's a step, a hostile one's a vulnerability, and a strained one doesn't count. Its threads toward the crew say how it sees them: mostly bond threads is friendly, mostly hostile is hostile, and anything else does business.
 
 ## The session {#s-qr-session}

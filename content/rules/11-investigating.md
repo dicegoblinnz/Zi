@@ -6,7 +6,7 @@ order: 11
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::quote
 Somebody knows what happened. Usually several somebodies, and none of them want to tell you.
@@ -14,7 +14,7 @@ Somebody knows what happened. Usually several somebodies, and none of them want 
 
 An investigation's a question the crew wants answered, and someone who'd rather it wasn't. You play it in ordinary scenes, like a wake or a back room at the docks, and what joins them is the trail.
 
-## Before You Play: The Truth {#s-truth}
+## Before You Play: What Really Happened {#s-truth}
 
 Write down what really happened, in three or four sentences: who did it, how and why, and what they're going to do next. Don't change it once the crew starts digging. Study finds what's really there, so there has to be something there to find.
 
@@ -66,13 +66,13 @@ Dorrie's uncle Anselm died at his own table, and the family thinks Dorrie poison
 
 The question is *Who killed Anselm?*, Challenge 4, a d8. *Looks Like His Heart*, *A Houseful of Suspects* and *Clean Hands* are in the way. The stake's the one from [Running the Game](#s-stakes-gm): clear Dorrie's name before the funeral, or her family never speaks to her again. *The steward leaves the city* is an event at a d8.
 
-**The wake.** Isolde sits with the body before they close the coffin. Anselm's been dead two days and he isn't making much sense, so she Studies him. That's her Soul and The dead, 5 steps, a d10. She rolls 7, and the question's d8 comes up 4. She asks for a straight answer: what did you taste last? "Almonds," he says. "Bitter." *Looks Like His Heart* is stripped, and the crew writes down *Bitter Almond in the Wine*.
+**The wake.** Isolde sits with the body before they close the coffin. Anselm's been dead two days and he isn't making much sense, so she Studies him. That's her Soul, her first Title and *speak with the recently dead*, 7 steps, a d12 and a d2. Her d12 rolls 7, and the question's d8 comes up 4. She asks for a straight answer: what did you taste last? "Almonds," he says. "Bitter." *Looks Like His Heart* is stripped, and the crew writes down *Bitter Almond in the Wine*.
 
 Across the room, Dorrie says a few words to the steward, and he's terrified, plain as day. Now she's watching him, she sees he keeps looking at the nephew.
 
-Bram doesn't do subtle. He corners the steward in the pantry with his Soul and his Command, 4 steps, a d8, against the steward's d6. He rolls 3, and the steward's d6 comes up 5. The steward says nothing, and now he knows they're onto him. That's the crew tipping its hand, so *The steward leaves the city* steps down to a d6, and at the end of the wake it steps down again, to a d4.
+Bram doesn't do subtle. He corners the steward in the pantry with his Soul, his second Title, *bark an order that gets obeyed* and Leader, 6 steps, a d12, against the steward's d6. He rolls 3, and the steward's d6 comes up 5. The steward says nothing, and now he knows they're onto him. That's the crew tipping its hand, so *The steward leaves the city* steps down to a d6, and at the end of the wake it steps down again, to a d4.
 
-**That night.** Vesk follows the steward across the rooftops. That's her Body and her Stealth, 7 steps, and her grappling line takes her over the gaps between roofs, so it's 8, a d12 and a d4, against the steward's d6, because he keeps looking over his shoulder. Her best is an 8 against his 3, and from the chapel roof she watches the nephew hand him a purse in the lane below. *Clean Hands* is stripped, and the crew writes down *Paid by the Nephew*.
+**That night.** Vesk follows the steward across the rooftops. That's her Body, her first Title, *move unseen*, *run the rooftops*, Shadow twice and her boots, and her grappling line and *Anywhere I can throw a hook* take her over the gaps between roofs, so it's 16, two d12s and a d8, against the steward's d6, because he keeps looking over his shoulder. Her best is an 8 against his 3, and from the chapel roof she watches the nephew hand him a purse in the lane below. *Clean Hands* is stripped, and the crew writes down *Paid by the Nephew*.
 
 At the end of the night the steward's event is at a d2, and he's packing. *A Houseful of Suspects* is still in the way, and the funeral's tomorrow. When Dorrie stands up in front of the family, she can bring both of the crew's clues into her roll for 1 Aura each.
 :::
