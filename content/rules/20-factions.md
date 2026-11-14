@@ -6,7 +6,7 @@ order: 20
 part: "The GM"
 partNumber: "Part III"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::quote
 The factions keep moving whatever the crew does, but the crew gets to choose where it stands.
@@ -291,7 +291,7 @@ Say the Harbour Guild makes *The Night Boats*, a smuggling crew. It hands over *
 
 ## The Crew and the Factions {#s-faction-crew}
 
-The crew's a faction too, on the same card (see [The Party Sheet](#s-party-faction)), so it takes **one action** a downtime, the same as every other faction. Roll the crew's **Power**, plus a step for every Reputation and bond thread that fits: when the crew goes to the Guildmaster for a favour, the Guild's bond thread toward them is a step. If one character's plainly the right person for it, they can roll their own instead, a Root and a specialty that fit what they're doing.
+The crew's a faction too, on the same card (see [The Party Sheet](#s-party-faction)), so it takes **one action** a downtime, the same as every other faction. Roll the crew's **Power**, plus a step for every Reputation and bond thread that fits: when the crew goes to the Guildmaster for a favour, the Guild's bond thread toward them is a step. If one character's plainly the right person for it, they can roll their own instead, a Root and everything on their sheet that fits what they're doing.
 
 **A player can put one of their personal slots into the crew's action**, and two slots on one move count everything twice. A personal slot can never be a second move on a faction, though, and nothing buys the crew another action (see [Downtime](#party-slots)).
 

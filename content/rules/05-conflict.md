@@ -40,7 +40,7 @@ Nothing's been rolled yet. Now that you know exactly what's coming, it's up to y
 -   **Body, Mind or Soul.** Blows, blades, teeth and falling rocks are at your Body. Fear, lies and pressure are at your Mind. Despair, temptation, curses and anything trying to take you over are at your Soul.
 -   **One die at each person.** A threat can telegraph at several of you, but it only aims one die at each, unless a tag says it can do more, like *Flurry*. To spread you thin, the GM aims at more of you, not more dice at one.
 -   **Anything can telegraph.** It can be a threat, the ground (the fire spreads to the stair), an event (the bell starts to ring), or something the GM's just decided the scene needs. If it's on the table, it came with a die.
--   **The GM has a budget.** It works out at about 10 steps a round for each of you, so about two d10s each, and she can split it into smaller telegraphs at more of you. Within it, threats can do as much as the story allows. The details are in [Running the Game](#s-budget), and you never need to track it.
+-   **The GM has a budget.** It works out at about 11 steps a round for each of you, so about a d12 and a d10 each, and she can split it into smaller telegraphs at more of you. Within it, threats can do as much as the story allows. The details are in [Running the Game](#s-budget), and you never need to track it.
 -   **Telegraphs are honest.** The GM never hides a telegraph's size or its target.
 -   **Running doesn't dodge.** A telegraph aimed at you lands on you at the end of the round, wherever you've gone. It's already coming. To stop it, answer it. A telegraph aimed at a place, like the burning stair or the doorway under the chandelier, only hits whoever's in it when it lands, so getting out of there gets you clear.
 -   **Some telegraphs have only one answer.** If the GM says so when she telegraphs it, that's what happens if it lands, and there's no trading it for something else.
@@ -228,7 +228,7 @@ A vault door is Challenge 4, and three tags keep it shut: *Oak*, *Iron Bars* and
 Some tags take more than one win to strip, and they carry a **multiplier**: *Armoured ×4* takes four wins, *Shield ×3* takes three and *Sword ×2* takes two. A tag with no multiplier goes in one win, the same as always. Every win ticks one off, and the GM says what's left out loud: *"Armoured ×2 left."* [Vulnerabilities](#s-vulnerable) add more ticks, and you choose where they go. A multiplier never changes the threat's dice. It's only how many wins the tag takes.
 
 -   **Most threats don't need them.** They're for bosses and the few things built to last.
--   **A multiplier's as big as the creature needs**, and where it goes says what the creature is. Its Challenge plus 2 is a good place to start, then go up or down from there: a dragon's hide might be *Hide ×10*, and a dark paladin who's the villain of the whole arc might be *Plate Armour ×7* and *Shield ×5*. Keep it in proportion to who they are, and make sure it makes sense.
+-   **A multiplier's as big as the creature needs**, and where it goes says what the creature is. Four times its Challenge is a good place to start, then go up or down from there: a dragon's hide might be *Hide ×30*, and a dark paladin who's the villain of the whole arc might be *Plate Armour ×21* and *Shield ×15*. Keep it in proportion to who they are, and make sure it makes sense.
 -   **A named tag only ticks to what fits it.** Blades and hammers tick *Natural Armour*, shaming a captain in front of his men ticks *Commanding Presence*, and bribes and threats tick a crowd that's *Loyal ×3*.
 -   **Some come first.** A tag marked *first*, like *Natural Armour ×5 (first)*, has to go before anything under it can be stripped.
 -   **Every die can tick it.** Call several dice at it, each as its own intent. It rolls its defence once that round, and every die that beats that roll ticks one off.
@@ -515,7 +515,7 @@ The corridor's thirty feet of polished marble, lit by candles in iron brackets. 
 
 **Ground:** *Candlelight, Narrow Stair*, and one hidden tag.
 
-**Telegraphs:** about 10 steps a round for each of the four is 40, but the Wardens are only half-woken, so the GM runs it as a breather, about half that: 20.
+**Telegraphs:** about 11 steps a round for each of the four is 44, but the Wardens are only half-woken, so the GM runs it as a breather, about half that: 22.
 :::
 
 That's four keeps-it-going tags each, so grinding a Warden down will take four wins. The crew doesn't know yet that there's a faster way. Everyone's tracks are on d12. Bram's wearing Fine plate and a Common shield, and Vesk's got her Common worn leathers, all of it Body armour. Everyone's got 7 Aura, their 5 and 2 for the one thing each of them has attuned, and it'll come and go all fight.

@@ -31,7 +31,7 @@ A journey's built from parts you already know: a stake, a clock, an event and te
 
 A **leg**'s a day on the road, or one stage of it, and it runs like a round.
 
-1.  **The GM telegraphs** what the road throws at you this leg, face up, like a river in flood or something following you. It comes out of the [round budget](#s-budget), about 10 steps for each player: half of it for an easy road, and all of it when the country's trying to kill you.
+1.  **The GM telegraphs** what the road throws at you this leg, face up, like a river in flood or something following you. It comes out of the [round budget](#s-budget), about 11 steps for each player: half of it for an easy road, and all of it when the country's trying to kill you.
 2.  **Everyone gets one action** for the day, the same as in a round.
 3.  **The leg ends.** Unanswered telegraphs land. Supplies steps down, unless somebody fed the crew. The deadline steps down too, unless somebody worked it, and every condition steps down one.
 
