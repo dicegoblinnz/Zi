@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Flag rules words that the 7 Oct to 9 Nov 2026 changes retired, and broken links.
+"""Flag rules words that the 7 Oct to 14 Nov 2026 changes retired, and broken links.
 
 Usage: python3 tools/check_terms.py [FILE.md ...]   (default: every chapter)
        add --links to check every #anchor link points at a real heading id
@@ -79,8 +79,14 @@ RETIRED = [
     ("old budgets", r"\babout 5 steps (a round|of telegraphs)\b|\b10 a character\b"),
     ("Title archetype", r"\bevery Title is an archetype\b|\bname you give your archetype\b"),
     ("step for the action", r"\b(1|a|one) (step )?for the action\b|\bthe action on its own is\b|\bwith the action,? (that's|it's)\b"),
-    # 9 Nov 2026: no more traits
-    ("traits", r"\btraits?\b"),
+    # 9 Nov 2026: no more traits. Since 14 Nov every archetype has a Trait,
+    # so the word's back, for archetypes only.
+    # 14 Nov 2026: stacking (everything that fits is a step, Roots from
+    # Titles and permissions, attuned things on your Aura maximum)
+    ("specialties", r"\bspecialt(y|ies)\b"),
+    ("an attuned thing's own Aura", r"\bIts Aura\b|\bAura its own way\b|\bown way to (get (them |you |her |him )?)?Aura\b|\bits own way\b.*\bAura\b|\bAura\b.*\bits own way\b"),
+    ("pumping", r"\bpump(s|ed|ing)?\b"),
+    ("action cap", r"\bfor each archetype\b"),
 ]
 
 
