@@ -14,21 +14,25 @@ import { ROWS } from "./sheet-fields.js";
 
 const SHEET = "/sheets/zidara-character-sheet.pdf";
 // A Boon as it's written on the paper.
-const boonLine = (b) => `Boon, ${b.name ? `${b.name} (${b.lever})` : b.lever}${b.on ? `, ${b.on}` : ""}: ${b.text}`;
+const boonLine = (b) => `Boon, ${b.name ? `${b.name} (${b.lever})` : b.lever}${b.on ? `, ${b.on}` : ""}: ${plain(b.text)}`;
 const PRONOUNS = { her: "she, her", him: "he, him", them: "they, them" };
 const TIMES = ["", "", "twice", "three times", "four times"];
 const NUMERALS = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 const TN = (t) => R.TRACK[t]?.name ?? t;
 const key = (r) => r.toLowerCase();
 
-// Words off the book, which can carry a little HTML, as plain text.
+// Words off the book, which can carry a little HTML or a chapter's *italics*,
+// as plain text.
 const ENT = { amp: "&", lt: "<", gt: ">", quot: "\"", apos: "'", nbsp: " ", rsquo: "’", lsquo: "‘", rdquo: "”", ldquo: "“", hellip: "…" };
-const plain = (v) => String(v ?? "").replace(/<[^>]*>/g, "").replace(/&(#\d+|[a-z]+);/gi, (m, e) => (e[0] === "#" ? String.fromCodePoint(Number(e.slice(1))) : ENT[e.toLowerCase()] ?? m)).replace(/\s+/g, " ").trim();
+const plain = (v) => String(v ?? "").replace(/<[^>]*>/g, "").replace(/&(#\d+|[a-z]+);/gi, (m, e) => (e[0] === "#" ? String.fromCodePoint(Number(e.slice(1))) : ENT[e.toLowerCase()] ?? m)).replace(/\*\*?([^*]+?)\*\*?/g, "$1").replace(/\s+/g, " ").trim();
 // A line for Notes, with one full stop at the end however its words end.
 const said = (x) => (/[.!?…]$/.test(x) ? x : `${x}.`);
 const slug = (s) => String(s).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 // A Title's spread in words, for Notes: Body 2, Mind 1.
 const spreadWords = (t) => R.ROOTS.filter((r) => t.roots?.[r]).map((r) => `${r} ${t.roots[r]}`).join(", ");
+// What a Title past the sixth puts on the Roots, for Notes, since the boxes
+// for where a Root's points came from stop at VI.
+const spreadNote = (t) => (spreadWords(t) ? `${spreadWords(t)} on your Roots` : "nothing on your Roots yet");
 const permWords = (p) => (R.ROOTS.includes(p.root) ? `${p.text} (${p.root})` : p.text);
 // An archetype's Trait, the way the book writes one: its name, then what it does.
 const traitLine = (t) => {
@@ -102,22 +106,27 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
   // Text along a run of single-line fields, at their own size, smaller (down
   // to min) when that's what it takes, and whatever still won't fit ends the
   // last row in an ellipsis. It says whether it all went in.
-  const flow = (names, value, min = 6, start = null) => {
+  // A line that's cut short goes in Notes in full, so nothing's lost.
+  const cut = [];
+  const flow = (names, value, min = 6, start = null, keep = true) => {
     const fs = names.map(field);
     const text = clean(value);
     if (!text || fs.some((f) => typeof f?.setText !== "function")) return true;
     const rooms = fs.map(roomOf);
-    let size = start ?? Math.min(...fs.map(sizeOf));
+    let size = Math.max(min, start ?? Math.min(...fs.map(sizeOf)));
     let laid = lay(text, size, rooms);
     while (laid.left.length && size > min) {
-      size -= 0.5;
+      size = Math.max(min, size - 0.5);
       laid = lay(text, size, rooms);
     }
     if (laid.left.length) {
       const last = laid.rows.length - 1;
       let words = laid.rows[last].split(" ");
       while (words.length > 1 && wide(`${words.join(" ")}…`, size) > rooms[last]) words = words.slice(0, -1);
-      laid.rows[last] = `${words.join(" ").replace(/[\s,.;:]+$/, "")}…`;
+      let end = words.join(" ").replace(/[\s,.;:]+$/, "");
+      while (end.length > 1 && wide(`${end}…`, size) > rooms[last]) end = end.slice(0, -1);
+      laid.rows[last] = `${end}…`;
+      if (keep) cut.push(text.replace(/\n/g, " "));
     }
     fs.forEach((f, i) => {
       if (!laid.rows[i]) return;
@@ -140,6 +149,7 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
     let size = sizeOf(f);
     while (size > 5 && !fits(size)) size -= 0.5;
     f.setFontSize(size);
+    if (!fits(size)) cut.push(text);
     return fits(size);
   };
   // Several things down a card's rows, all at one size: each gets the rows
@@ -185,7 +195,7 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
   };
   const ring = (name, value) => {
     const f = field(name);
-    if (typeof f?.select !== "function") return;
+    if (typeof f?.select !== "function" || /undefined|null|NaN/.test(String(value))) return;
     if (f.getOptions().includes(value)) f.select(value);
     else missing.push(`${name}=${value}`);
   };
@@ -221,6 +231,8 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
     share(rows, shown.map((a) => `${withQuality(a.name, a.quality)}${a.when ? `, ${a.when}` : ""}${s.crossed[`equipment|${a.name}`] ? " (broken)" : ""}`)).forEach((r, i) => {
       for (let j = 1; j <= Math.min(ROWS.boxes, tickedOf(s, shown[i])); j++) tick(`${rows[r]}_box_${j}`);
     });
+    // A Boon can give a piece more boxes than its line has.
+    for (const a of shown.filter((x) => x.boxes > ROWS.boxes)) notes.push(`Armour on ${R.TRACK[t].root}: ${withQuality(a.name, a.quality)} has ${a.boxes} boxes, ${tickedOf(s, a)} ticked.`);
     for (const a of pieces.slice(ROWS.armour)) notes.push(`Armour on ${R.TRACK[t].root}: ${withQuality(a.name, a.quality)}, ${tickedOf(s, a)} of ${a.boxes} ${a.boxes === 1 ? "box" : "boxes"} ticked.`);
   }
   s.conditions.slice(0, ROWS.conditions).forEach((x, i) => {
@@ -238,7 +250,7 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
   // In a campaign, the Party Goal's where the party sheet has it.
   if (goal?.text) {
     put("party_goal", goal.done ? `${goal.text} (done)` : goal.text);
-    ring("party_goal_die", `d${goal.die}`);
+    if (goal.die) ring("party_goal_die", `d${goal.die}`);
   }
   // Points: what they were made with, of what they started on. Banked is
   // the player's to write in.
@@ -270,27 +282,28 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
       return here;
     });
   };
-  const thingName = (a) => (a.props ? `${a.name} (${a.props})` : a.name);
+  const thingName = (a) => plain(a.props ? `${a.name} (${a.props})` : a.name);
+  const wakeLine = (w) => `${plain(w.name)}: ${plain(w.text)}`;
   c.attuned.slice(0, ROWS.attuned).forEach((a, i) => {
     const at = `attune_${i + 1}`;
     put(`${at}_thing`, thingName(a));
     ring(`${at}_stage`, (a.stage || "Awakened").toLowerCase());
-    put(`${at}_catch`, a.catch);
-    put(`${at}_burden`, a.burden);
+    put(`${at}_catch`, plain(a.catch));
+    put(`${at}_burden`, plain(a.burden));
     const held = powering(i, a.awakenings);
     const shown = a.awakenings.slice(0, ROWS.awakenings);
     const rows = Array.from({ length: ROWS.awakenings }, (_, j) => `${at}_awakening_${j + 1}`);
-    share(rows, shown.map((w) => `${w.name}: ${w.text}`)).forEach((r, j) => {
+    share(rows, shown.map(wakeLine)).forEach((r, j) => {
       const w = shown[j];
       ring(`${rows[r]}_kind`, w.kind === "active" ? "active" : "passive");
       for (let k = 1; k <= Math.min(ROWS.powering, held[j]); k++) tick(`${rows[r]}_aura_${k}`);
     });
-    a.awakenings.slice(ROWS.awakenings).forEach((w, j) => notes.push(said(`${a.name}, ${w.name} (${w.kind}${held[ROWS.awakenings + j] ? `, ${held[ROWS.awakenings + j]} Aura powering it` : ""}): ${w.text}`)));
+    a.awakenings.slice(ROWS.awakenings).forEach((w, j) => notes.push(said(`${thingName(a)}, ${plain(w.name)} (${w.kind}${held[ROWS.awakenings + j] ? `, ${held[ROWS.awakenings + j]} Aura powering it` : ""}): ${plain(w.text)}`)));
   });
   c.attuned.slice(ROWS.attuned).forEach((a, k) => {
     const i = ROWS.attuned + k;
     const held = powering(i, a.awakenings);
-    notes.push(`Attuned, ${thingName(a)}, ${a.stage}${a.catch ? `, its Catch ${a.catch}` : ""}${a.burden ? `, its Burden ${a.burden}` : ""}: ${a.awakenings.map((w, j) => `${w.name} (${w.kind}${held[j] ? `, ${held[j]} Aura powering it` : ""}), ${w.text.replace(/[.]$/, "")}`).join(" · ") || "no awakenings yet"}.`);
+    notes.push(`Attuned, ${thingName(a)}, ${a.stage}${a.catch ? `, its Catch ${plain(a.catch)}` : ""}${a.burden ? `, its Burden ${plain(a.burden)}` : ""}: ${a.awakenings.map((w, j) => `${plain(w.name)} (${w.kind}${held[j] ? `, ${held[j]} Aura powering it` : ""}), ${plain(w.text).replace(/[.]$/, "")}`).join(" · ") || "no awakenings yet"}.`);
   });
 
   // The back: Titles with their spread and each permission's Root, the
@@ -322,7 +335,7 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
     }
     if (over.length) notes.push(said(`On Title ${NUMERALS[i]}: ${over.map((x) => (x.root ? `${x.text} (${x.root})` : x.text)).join(", ")}`));
   });
-  c.titles.slice(ROWS.titles).forEach((t, k) => notes.push(`Title ${NUMERALS[ROWS.titles + k] ?? ROWS.titles + k + 1}, ${t.text ?? t.name} (${spreadWords(t) || "nothing spread yet"}): ${[...t.permissions.map(permWords), ...(t.boons ?? []).map(boonLine)].join(", ") || "no permissions yet"}.`));
+  c.titles.slice(ROWS.titles).forEach((t, k) => notes.push(said(`Title ${NUMERALS[ROWS.titles + k] ?? ROWS.titles + k + 1}, ${t.text ?? t.name} (${spreadNote(t)}): ${[...t.permissions.map(permWords), ...(t.boons ?? []).map(boonLine)].join(", ") || "no permissions yet"}`)));
   const ability = (a, x) => `${x.name} (1 ${TN(a.home)}): ${plain(x.text ?? x.html)}`;
   const archs = R.archetypesOf(c, B);
   archs.slice(0, ROWS.archetypes).forEach((a, i) => {
@@ -344,6 +357,7 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
   const threadOf = (t) => (t.whose ? `${t.text} (${t.whose} words)` : t.text);
   const strain = (p, t) => ({ strained: ", strained", snapped: ", snapped" })[threadState(s, p.person, t)] ?? "";
   const kindOf = (t) => (t.kind === "hostile" ? "hostile" : "bond");
+  const threadNote = (p, t) => said(`A ${kindOf(t)} thread with ${p.person}${t.whose ? `, in ${t.whose} words` : ""}${strain(p, t)}: ${t.text}`);
   c.threads.slice(0, ROWS.bonds).forEach((p, i) => {
     const at = `bond_${i + 1}`;
     put(at, p.person);
@@ -354,16 +368,20 @@ export async function fillSheet(ch, c, s, { goal = null, B = null, blank = null 
       if (st !== "whole") tick(`${at}_thread_${j + 1}_strained`);
       if (st === "snapped") tick(`${at}_thread_${j + 1}_snapped`);
     });
-    for (const t of p.threads.slice(ROWS.threads)) notes.push(said(`A ${kindOf(t)} thread with ${p.person}${strain(p, t)}: ${threadOf(t)}`));
+    for (const t of p.threads.slice(ROWS.threads)) notes.push(threadNote(p, t));
   });
-  for (const p of c.threads.slice(ROWS.bonds)) for (const t of p.threads) notes.push(said(`A ${kindOf(t)} thread with ${p.person}${strain(p, t)}: ${threadOf(t)}`));
+  for (const p of c.threads.slice(ROWS.bonds)) for (const t of p.threads) notes.push(threadNote(p, t));
 
   // The paper sheet has nowhere else for trouble, a Shadow's pool, the
   // player's own notes or whatever didn't fit, in that order, so their own
   // words come before anything the sheet's run out of room for. At its
   // smallest size Notes still might not fit, and then print says so.
   const pool = Array.isArray(s.pool) && s.pool.length ? `Shadow’s pool: ${s.pool.map((d) => `d${d}`).join(", ")}.` : "";
-  const roomy = flow(Array.from({ length: ROWS.notes }, (_, j) => `notes_${j + 1}`), [c.trouble.length ? `Trouble that follows ${them}: ${c.trouble.join(", ")}.` : "", pool, s.notes, ...notes].filter(Boolean).join("\n"));
+  const items = [c.trouble.length ? `Trouble that follows ${them}: ${c.trouble.join(", ")}.` : "", pool, s.notes, ...notes, ...cut.map((x) => said(`In full: ${x}`))].map(clean).filter(Boolean);
+  const rows = Array.from({ length: ROWS.notes }, (_, j) => `notes_${j + 1}`);
+  const f0 = form.getFieldMaybe(rows[0]);
+  const apiece = f0 && !lay(items.join("\n"), sizeOf(f0), rows.map(() => roomOf(f0))).left.length;
+  const roomy = flow(rows, items.join(apiece ? "\n" : " "), 6, null, false);
 
   form.updateFieldAppearances(font);
   pdf.setTitle(`${ch.name}, a Zi’Dara character`, { showInWindowTitleBar: true });

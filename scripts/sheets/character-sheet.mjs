@@ -124,7 +124,7 @@ const goals = () => `
     <div class="pair">${goal("aspiration", "Aspiration", "Past d12: a new Title, archetype or attuned thing, with its one, and a new Aspiration at d2.")}${goal("party_goal", "Party Goal", "Past d12: the crew’s done it, and everyone writes a new thread.")}</div>
     <div class="points"><h2 class="chip">Points</h2>
       <div class="row"><span class="lab">spent</span>${box("points_spent")}<span class="lab">of</span>${box("points_start")}</div>
-      <div class="row"><span class="lab">banked</span>${box("points_banked")}<span class="hint">not spent yet</span></div>
+      <div class="row"><span class="lab">banked</span>${box("points_banked")}</div>
     </div>
   </section>`;
 

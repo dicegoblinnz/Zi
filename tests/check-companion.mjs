@@ -1340,7 +1340,11 @@ if (part("1f")) {
     same(got.attune_1_thing, thing.props ? `${thing.name} (${thing.props})` : thing.name, `${who}'s attuned thing`);
     same([got.attune_1_stage, got.attune_1_catch, got.attune_2_thing], [lower(thing.stage), thing.catch ?? "", ""], `${who}'s attuned thing's stage and Catch, and no second one`);
     const wakes = joined(got, ...Array.from({ length: 6 }, (_, k) => `attune_1_awakening_${k + 1}`));
-    for (const w of thing.awakenings) has(wakes, `${w.name}: ${w.text}`, `${who}'s ${w.name}, whole`);
+    // The chapter's italics come off, so Bram's Prone prints as a word.
+    for (const w of thing.awakenings) has(wakes, `${w.name}: ${w.text.replace(/\*/g, "")}`, `${who}'s ${w.name}, whole, with no asterisks`);
+    // Nothing on a crew sheet's cut short.
+    const cutShort = Object.entries(got).filter(([, v]) => typeof v === "string" && v.endsWith("…")).map(([k]) => k);
+    same(cutShort, [], `lines cut short on ${who}'s sheet`);
     same(got.attune_1_awakening_1_kind, thing.awakenings[0].kind, `${who}'s first awakening, ringed passive or active`);
     same(got.bond_1, crew.threads[0].person, `${who}'s first bond`);
   }
@@ -1381,6 +1385,45 @@ if (part("1f")) {
     has(notes, "Trouble that follows her: wanted in three districts, owes the Guild.", "her trouble in Notes");
     has(notes, "Shadow’s pool: d8, d4.", "her Shadow's pool in Notes");
     has(notes, "A hostile thread with The fence: I owe a debt I would rather not discuss.", "her fifth bond's thread in Notes, with one full stop");
+  }
+
+  // Vesk with seven Titles: the boxes for where her Body came from stop at
+  // VI, so her seventh Title's spread is in Notes, and they all still add up.
+  {
+    const crew = structuredClone(book.crew.find((c) => c.id === "vesk"));
+    for (const n of ["third", "fourth", "fifth", "sixth", "seventh"]) crew.titles.push({ text: `The ${n} best climber`, roots: { Body: 3, Mind: 0, Soul: 0 }, permissions: [], boons: [] });
+    const c = rootsSheet(crew, [], BUILD);
+    const { got } = await print("Vesk", c, RS.normalRoots({}, c));
+    const boxes = [1, 2, 3, 4, 5, 6].reduce((n, i) => n + Number(got[`root_body_title_${i}`] || 0), 0) + Number(got.root_body_permissions);
+    same([got.root_body, boxes + 3], [String(c.roots.Body), c.roots.Body], "Vesk's Body with seven Titles, the boxes and her seventh's 3 in Notes adding up");
+    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "Title VII, The seventh best climber (Body 3 on your Roots)", "her seventh Title's spread in Notes");
+  }
+
+  // A line cut short goes in Notes in full: Vesk's leathers, said to count only
+  // on a rooftop, with two more pieces on her Body so it gets one line.
+  {
+    const crew = structuredClone(book.crew.find((c) => c.id === "vesk"));
+    crew.armour[0].when = "but only on a rooftop at night, with the wind behind her";
+    crew.armour.push({ name: "a padded hood", root: "Body", quality: "Common", boxes: 1, when: null }, { name: "bracers", root: "Body", quality: "Common", boxes: 1, when: null });
+    const c = rootsSheet(crew, [], BUILD);
+    const { got } = await print("Vesk", c, RS.normalRoots({}, c));
+    if (!got.stamina_armour_1.endsWith("…")) note(`Vesk's long armour line isn't cut short: "${got.stamina_armour_1}"`);
+    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "In full: Common worn leathers, but only on a rooftop at night, with the wind behind her.", "the leathers in full in Notes");
+  }
+
+  // Bram's plate made Masterwork, with an Armour Boon on it, has more boxes
+  // than its line: three ticked, and Notes say the rest.
+  {
+    const crew = structuredClone(book.crew.find((c) => c.id === "bram"));
+    crew.armour[0].quality = "Masterwork";
+    crew.armour[0].boxes = 3;
+    crew.titles[0].boons = [{ lever: "Armour", name: "Old plates", on: "plate armour" }];
+    const c = rootsSheet(crew, [], BUILD);
+    const s = RS.normalRoots({}, c);
+    s.boxes = { "equipment|plate armour": 4 };
+    const { got } = await print("Bram", c, s);
+    same([got.stamina_armour_1, got.stamina_armour_1_box_3], ["Masterwork plate armour", true], "Bram's Masterwork plate, its line's three boxes ticked");
+    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "Armour on Body: Masterwork plate armour has 4 boxes, 4 ticked.", "his plate's fourth box in Notes");
   }
 
   // Bram with a Boon on his second Title, which takes two lines and rings no Root.
