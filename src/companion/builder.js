@@ -1036,7 +1036,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
   function archView(name, i) {
     const a = ARCH.get(name);
     // A step at a time, an empty slot shows every card. On one page they wait
-    // behind a tap, so the page isn't eighteen cards an archetype.
+    // behind a tap, so the page isn't seventeen cards an archetype.
     const picking = d.deep[`pick${i}`] === true || (!a && !d.page);
     const legend = `Your ${ord(i)} archetype`;
     const grid = picking ? `<p class="bd-label" id="bd-archs-${i}">${a ? "Pick a different archetype" : "Pick one, for 5 points"}</p><div class="bd-archs" role="group" aria-labelledby="bd-archs-${i}">${B.archetypes.map((r) => card("bd-arch", `data-b="arch" data-t="${i}" data-v="${esc(r.name)}"`, name === r.name, `<span class="bd-sig">${sigilOf(r.name)}</span><b>${esc(r.name)}</b><span class="bd-for">${esc(r.for)}</span>`)).join("")}</div>` : "";
