@@ -16,7 +16,7 @@ export const SHEETS = {
   "character-sheet": {
     file: "zidara-character-sheet.pdf",
     title: "Zi’Dara character sheet",
-    sources: ["scripts/sheets/character-sheet.mjs", ...shared],
+    sources: ["scripts/sheets/character-sheet.mjs", "src/companion/sheet-fields.js", ...shared],
   },
   "player-reference": {
     file: "zidara-player-reference.pdf",
