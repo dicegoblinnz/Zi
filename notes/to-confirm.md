@@ -1,6 +1,71 @@
-# For Mo: calls to confirm (9 Nov 2026)
+# For Mo: calls to confirm (14 Nov 2026)
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
+
+## 14 Nov: stacking
+
+**Not built yet.** Part 1 of the stacking rework (`notes/stacking-plan.md`), from your 14 Nov chat (`notes/playtest-sheets/2026-11-14-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it, and each chat adds its own in its subsection below.
+
+1. **Every thing that fits is 1 step**, and an archetype taken twice counts twice.
+2. **Explaining costs 1 Aura for each thing you explain**, not 1 a roll.
+3. **Boons don't add steps.** They do what they say.
+4. **In a combo, friends bring what fits off their own sheets**, 1 each and a split, never their Root.
+5. **Your own extra action in the same roll is 1 step and a split**, since everything that fits is in already.
+6. **The price goes 3, 4, 5 within a round** and starts at 3 again next round, and the free extra actions (holding, coming out of hiding, the Extra action Boon) don't raise it.
+7. **Each passive awakening still holds up to 2** (4 for the same one twice), and the Aura powering it stays locked till the scene ends.
+8. **Calling a Summoner's souls still spends Aura**, as an active awakening.
+9. **A bond thread lends one thing off a friend's sheet**, for 1 Aura and a step, where it lent a specialty.
+10. **The ability an archetype comes with is the player's pick** off its list, Push included.
+11. **Growing stays as it is in part 1**: downtime slots buy what points buy, and the Aspiration's die still brings the new Title, archetype or attuned thing. Banking points and the five-thing Aspiration from 8 Nov wait for your yes.
+12. **Characters already saved keep everything they've got**, even past 35, with their Roots recounted.
+
+### 1. The rules
+
+None yet.
+
+### 2. The crew and the character
+
+None yet.
+
+### 3. Traits
+
+None yet.
+
+### 4. Question bubbles
+
+None yet.
+
+### 5. The dice roller
+
+None yet.
+
+### 6. The play screen
+
+None yet.
+
+### 7. The builder and downtime
+
+None yet.
+
+### 8. The live table
+
+None yet.
+
+### 9. Print
+
+None yet.
+
+### 10. The player's chapters
+
+None yet.
+
+### 11. The GM's side
+
+None yet.
+
+### 12. Bringing it together
+
+None yet.
 
 ## 9 Nov: the builder, the learning round and the live table on Roots
 

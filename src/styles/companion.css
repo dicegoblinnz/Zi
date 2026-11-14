@@ -2892,3 +2892,13 @@ html.cc-tabbed .zr { bottom: calc(59px + env(safe-area-inset-bottom, 0px)); padd
 .cc-boons p { margin: 0; }
 .cc-pool { display: flex; flex-wrap: wrap; align-items: center; gap: .35rem; margin: .4rem 0; }
 .cc-pool-row { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin-block: .45rem; }
+
+/* Question bubbles (src/companion/tip.js, Mo's 14 Nov ask): a small ? with a
+   44px target, and its words over the screen in a card that a tap anywhere
+   else or Escape closes. Prompt 4 of notes/stacking-plan.md finishes them. */
+.tip { display: inline-grid; place-items: center; width: 44px; height: 44px; margin: -10px -8px; padding: 0; vertical-align: middle; color: var(--violet); background: none; border: 0; cursor: pointer; }
+.tip > span { display: grid; place-items: center; width: 1.4rem; height: 1.4rem; border: 1.5px solid currentColor; border-radius: 50%; font: 700 0.8rem/1 var(--body); }
+.tip:focus-visible { outline: 2px solid var(--gold); outline-offset: -6px; }
+.tip-card { display: none; max-width: min(26rem, calc(100vw - 2rem)); max-height: min(70vh, 32rem); overflow: auto; padding: 1rem 1.1rem; color: var(--ink); background: var(--panel); border: 1px solid var(--line); border-radius: 4px; box-shadow: 0 12px 40px rgb(0 0 0 / 0.35); font-size: 0.95rem; line-height: 1.45; text-align: left; }
+.tip-card:popover-open { display: block; }
+.tip-card::backdrop { background: rgb(0 0 0 / 0.3); }

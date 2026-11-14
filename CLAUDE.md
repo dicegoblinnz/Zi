@@ -9,6 +9,7 @@ This repo is the master copy of the rules for **Zi'Dara**, Mo's tabletop rolepla
 - `content/learn.md`: the Learn deck (`/learn/`), the core rules as 40 cards in book order, one idea to a card, each saying which section it teaches. `scripts/learn.mjs` reads it for the build and the tests.
 - `content/figures/`: SVG figures the chapters use.
 - `notes/to-confirm.md`: calls Claude made to fill gaps in Mo's rules, waiting for Mo's yes or no.
+- `notes/stacking-plan.md`: the stacking rework (Mo's 14 Nov chat, `notes/playtest-sheets/2026-11-14-chat-decisions.md`), part 1 of a rework in parts, built by several chats at once on `rules/2026-11-14-stacking`: the rules after part 1, the crew on 35 points, the shared pieces every chat codes to, who owns which files, how a chat lands, and where each piece has got to. Read it before any work on the rework. Till its prompt 12 lands, the rest of this file still describes Roots.
 - `notes/website-brief.md`: what Mo wants from the website (look, companions, live play, worlds, order). Read it before any site work.
 - `notes/companion-plan.md`: the agreed first version of the character companion, and what comes after it.
 - `notes/faction-feel-plan.md`: the faction screens' design pass (1 Nov): Mo's calls, what stays true, the stages and what each built, and her own picture and the GM's ledger still to come. The research and the six changes behind it are in the doc "Zi'Dara faction screens: making them feel better".
