@@ -68,7 +68,16 @@ None yet.
 
 ### 6. The play screen
 
-None yet.
+1. **Tapping a permission in brings its Title with it**, an awakening brings its attuned thing and an ability its archetype, since the thing it's on usually fits too. Tap it out if it doesn't. That's what gets Vesk's lock to four taps: her Body, *pick a mechanical lock*, *know how a lock's built* and her picks, 13 steps.
+2. **The chips come in three groups:** what built that Root, then what you've rolled with that Root before (the latest first), then the rest of your sheet. Pick the same lock twice and its things are at the top the second time.
+3. **Again is the last roll's Root and what went in it**, counted on your sheet as it is now. What it was up against, its extra actions and anything brought in start fresh, since they change every roll, and anything crossed out since stays out.
+4. **An ability on a roll's paid when you roll it**: 1 off its home track, or 2 for 1 when that track hasn't got a size to spare. The card says what it'll cost as you tap it in, and Roll waits till it can be paid.
+5. **Going at more than one thing**, each die says which it's at. A new one takes the last die that's sharing a target, and you can move any die in Your dice. Aura's 1 for each die that beats what it's at and 1 for each top face, the way the roller reads it.
+6. **Your dice is folded away till there's more than one thing to aim at**, with how many dice and the intents a tap away.
+7. **Defend in When it lands uses the same chips**, with your armour on that Root in already, bar what's broken. A Defend's explaining and abilities are paid when it rolls.
+8. **When a roll answers a telegraph on the live table**, only the dice at that telegraph go up as the answer. Anything else you aimed at on the same card is yours to sort out at the table.
+9. **The last roll on the play screen is the Again tile**, saying how it went last time. The GM's look still has the Last roll line.
+10. **Old traits from before Roots** say they don't come across, since archetypes have a Trait of their own again.
 
 ### 7. The builder and downtime
 

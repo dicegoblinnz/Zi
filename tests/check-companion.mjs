@@ -53,37 +53,45 @@
 //    it, Old Vesk from before Roots, and Tamsin, built on the phone, recounted
 //    with her spreads and her last point flagged), and the build stopping on a
 //    crew sheet that doesn't add up.
-// 2. Every crew member's Roots and specialties on the phone match their sheet
-//    in the chapter: each specialty's tile on its usual Root with the dice it
-//    rolls, the Roots on their own, three tracks on d12, full Aura and a plate
-//    for every box of armour on their Body.
-// 3. Vesk at the table: her Body and her Locks are 9 steps, her picks make it
-//    10, her Mind makes it 8, making a case for her Stealth is 1 Aura, and her
-//    Soul with nothing that fits is still a d2. Over the wall on her grappling
-//    line with fixed dice, a win on a top face takes her Aura to 7 while she's
-//    acting, and finishing drops it back to 5. A reload and no signal keep it,
-//    with the rules on a tap. A tie won for 1 Aura pays nothing back, Undo
-//    takes it off, a split's three dice, bringing something in is 1 Aura and a
-//    step, and her Shadow's Push is +3, paid with 1 Stamina or 2 for 1. Getting
-//    into hiding puts the dice she hid with in her shadow pool, and a later
-//    roll uses one as steps and one as its own die.
-// 3c. Bram Defends the way the book's example does, three d8s against his
-//    Body and Shieldwork with his plate and shield split into a d10 and two
-//    d6s and his Stamina, so nothing gets through and the Aura stops at 5.
-//    Then blows on his tracks alone tick his plate's boxes and his shield's
-//    till they break, 2 for 1 pays one off his Confidence and his Resolve, his
-//    Defend loses what's broken, and downtime mends his plate.
+// 2. Every crew member's Roots on the phone match their sheet in the
+//    chapter: each Root's tile with its steps and the dice it rolls on its
+//    own, no specialty tiles, three tracks on d12, full Aura and a plate for
+//    every box of armour on their Body, saved on stacking.
+// 3. Vesk at the table, on stacking: her lock in four taps (her Body, pick a
+//    mechanical lock bringing its Title, know how a lock's built bringing the
+//    Guild, and her picks), 13 steps and free, a second tap explaining Shadow
+//    for 1 Aura and a third taking it out, her Mind with the same things,
+//    finding run the rooftops, and her Soul on its own still a d2. Over the
+//    wall with her grappling line's awakening, a win on a top face takes her
+//    Aura past 7 while she's acting and finishing drops it back, and Again
+//    puts the same things in. A reload and no signal keep it, with the rules
+//    a ? away. A tie won for 1 Aura pays nothing back, Undo takes it off, a
+//    split's three dice, two guards at once with a die at each and an extra
+//    action at 3 Aura, then 4 till she's finished acting, bringing something
+//    in is 1 Aura and a step, her Shadow's Push is +3, paid with 1 Stamina or
+//    2 for 1, and getting into hiding fills her shadow pool for a later roll.
+// 3c. Bram Defends the way the book's example does, the brute's club at him
+//    on the wall: his Body, both Titles, hold the line, fight in a shield
+//    wall, Guardian, his plate and his shield, 14 steps, through till his
+//    Guardian's Push makes the 7 a 9. Then blows on his tracks alone tick his
+//    plate's boxes and his shield's till they break, 2 for 1 pays one off his
+//    Confidence and his Resolve, his Defend loses what's broken, and downtime
+//    mends his plate.
 // 4. The tracks: Vesk's Stamina to d2, Vanish paid 2 for 1 since paying never
 //    goes below the smallest size, a Blaze and its Scar written as a Catch,
 //    locking d2, the rest at the end of a scene with fixed dice, her grappling
-//    line pumped, used and emptied by a new scene, and 2 for 1 on a hit.
-//    Dorrie's Confidence against a lie, with her court clothes on her Mind,
-//    and Isolde's Resolve Blazing at d2 and her choosing to die.
+//    line powered off her Aura and her maximum, used, and let go by a new
+//    scene, and 2 for 1 on a hit. Dorrie's Confidence against a lie, with her
+//    court clothes on her Mind, and Isolde's Resolve Blazing at d2 and her
+//    choosing to die.
 // 4b. Saved before Roots: Old Vesk moves onto it with her Scar on Stamina,
 //    her conditions, her strained thread and her notes, puts an old permission
-//    back on free and lets the rest go. Tamsin, built on the phone before
-//    Roots, shows as she was, set actions and all, with nothing to play till
-//    she's rebuilt (5c).
+//    back on free on its Root and lets the rest go. Tamsin, built on the phone
+//    before Roots, shows as she was, set actions and all, with nothing to play
+//    till she's rebuilt (5c). Saved on Roots, before stacking: Vesk's changed
+//    lines each get a gold mark, with old and new in the note, her held Aura
+//    powers her grappling line off her maximum, and Mara's Title on one Root
+//    is hers to spread or keep.
 // 5. Building your own on Roots: Vesk again, a step to a screen. Two
 //    Shadows, her Titles each on a Root with three specialties, a permission's
 //    Root and specialty, her Roots and specialties added up with where each
@@ -121,10 +129,11 @@
 //    landing, a top face, a hit and a hit that leaves her Stamina on d2 each
 //    get one.
 // 7b. A character in one hand: full screen with the crest at the top, the
-//    first specialty high up, the specialties as the dice they roll, no
-//    sideways scroll, 44px tap targets and every name fitting its tile, her
-//    12 front and centre with its top face lit, and the Sheet tab under two
-//    screens with its folds shut, with axe on all of it in both themes. A hit
+//    first Root high up, the Roots as the dice they roll, no sideways scroll,
+//    44px tap targets and every name fitting its tile, her lock built under
+//    two screens, her 12 front and centre with its top face lit, When it lands
+//    with Defend, and the Sheet tab under two screens with its folds shut and
+//    where each Root came from, with axe on all of it in both themes. A hit
 //    with reduce-motion on swaps the track's shape, and nothing moves.
 // 7c. The dice roller, off Vesk's play screen and the Characters list. Bram
 //    Defending against three d8s with fixed dice, the most stopped, a swap,
@@ -1303,35 +1312,31 @@ async function play(page, crewId, name) {
   await page.click(`button[data-act="play"][data-c="${crewId}"]`);
   if (name) await page.fill("#cc-name", name);
   await page.click('#cc-dialog button[type="submit"]');
-  await page.waitForSelector(".tile[data-s]");
+  await page.waitForSelector(".tile[data-r]");
 }
 
-// 2. The crew's Roots and specialties. The phone reads each sheet off the
-// chapter (book.json's crew, which the build checks adds up), so each
-// specialty's tile is its usual Root and its steps, as the dice they make.
+// 2. The crew's Roots. The phone reads each sheet off the chapter (book.json's
+// crew, which the build checks adds up), so each Root's tile is its steps and
+// the dice they make on their own.
 if (part("2")) {
   same(book.crew.length, 6, "the crew in book.json");
   const { context, page } = await phone();
   for (const base of book.crew) {
     const c = rootsSheet(base, [], BUILD);
     await play(page, base.id);
-    const tiles = await page.$$eval(".cc-spectiles .tile[data-s]", (els) => els.map((el) => [el.querySelector(".tile-name").textContent, el.querySelector(".tile-steps").textContent, el.querySelector(".tile-die").textContent]));
-    same(tiles, c.specialties.map((sp) => {
-      const root = rootFor(c, sp.name);
-      return [sp.name, `${root} ${c.roots[root]} and ${sp.steps}`, diceLabel(stepsToDice(c.roots[root] + sp.steps))];
-    }), `${base.name}'s specialties`);
-    same(await page.$$eval(".cc-roots .tile .tile-steps", (els) => els.map((e) => e.textContent)), ROOTS.map((r) => (c.roots[r] ? `${c.roots[r]} ${c.roots[r] === 1 ? "step" : "steps"}` : "nothing yet")), `${base.name}'s Roots`);
+    same(await page.$$eval(".cc-roots .tile[data-r]", (els) => els.map((el) => [el.dataset.r, el.querySelector(".tile-steps").textContent, el.querySelector(".tile-die").textContent])), ROOTS.map((r) => [r, c.roots[r] ? `${c.roots[r]} ${c.roots[r] === 1 ? "step" : "steps"}` : "nothing yet", c.roots[r] ? diceLabel(stepsToDice(c.roots[r])) : "a d2"]), `${base.name}'s Roots`);
+    same(await page.$$eval(".tile[data-s]", (els) => els.length), 0, `no specialty tiles for ${base.name}`);
     same(await page.$$eval(".cc-track .is-trk .v", (els) => els.map((e) => e.textContent)), ["d12", "d12", "d12"], `${base.name}'s tracks to start with`);
     same(await page.textContent('.cc-stat[data-p="aura"] .v'), `${c.numbers.aura}/${c.numbers.aura}`, `${base.name}'s Aura to start with`);
     same(await page.$$eval(".cc-stat.t-stamina .zd-plate", (els) => els.length), c.armour.filter((a) => a.root === "Body").reduce((t, a) => t + a.boxes, 0), `${base.name}'s armour on their Body`);
   }
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")));
-  same([saved.v, saved.characters.length, saved.characters.every((x) => x.state?.v === 2)], [1, 6, true], "the saved list's version and size, every one on Roots");
+  same([saved.v, saved.characters.length, saved.characters.every((x) => x.state?.v === 3)], [1, 6, true], "the saved list's version and size, every one on stacking");
   console.log(`crew: ${book.crew.length} sheets checked against the chapter`);
   await context.close();
 }
 
-// 3. Vesk at the table.
+// 3. Vesk at the table, on stacking.
 if (part("3")) {
   const { context, page } = await phone();
   await page.goto(`${BASE}/characters/`);
@@ -1341,79 +1346,123 @@ if (part("3")) {
   const live = () => page.textContent("#cc-dialog .cc-dice");
   const aura = () => page.textContent('.cc-stat[data-p="aura"] .v');
   const track = (t) => page.textContent(`.cc-stat[data-p="${t}"] .v`);
-  const spec = (name) => `.cc-spectiles .tile[data-s]:has(.tile-name:text-is("${name}"))`;
-  const tileOf = (name) => page.$eval(spec(name), (el) => `${el.querySelector(".tile-steps").textContent} · ${el.querySelector(".tile-die").textContent}`);
+  const rootTile = (r) => `.cc-roots .tile[data-r="${r}"]`;
+  const tileOf = (r) => page.$eval(rootTile(r), (el) => `${el.querySelector(".tile-steps").textContent} · ${el.querySelector(".tile-die").textContent}`);
   const closed = () => page.waitForFunction(() => !document.querySelector("#cc-dialog").open);
   const done = async () => { await page.click('#cc-dialog .dlg-foot button[data-act="close"]'); await closed(); };
   const shut = async () => { await page.click('#cc-dialog .dlg-head button[data-act="close"]'); await closed(); };
   const outs = () => page.$$eval("#cc-dialog .res-out", (els) => els.map((el) => el.textContent));
   const body = () => page.textContent("#cc-dialog .dlg-body");
   const rolled = () => page.waitForSelector("#cc-dialog .res .res-out");
-  const item = (k) => page.click(`#cc-dialog button[data-act="item"][data-k="${k}"]`);
+  const chip = (k) => `#cc-dialog .cc-pick[data-act="use"][data-k="${k}"]`;
+  const use = (k) => page.click(chip(k));
+  const chipIs = (k) => page.$eval(chip(k), (el) => (el.classList.contains("is-case") ? "explaining" : el.classList.contains("is-in") ? "in" : "out"));
+  const foe = (d) => page.click(`#cc-dialog button[data-act="foe-add"][data-v="${d}"]`);
+  const again = () => page.textContent(".tile-again");
+  const LOCK = "perm|0|2"; // pick a mechanical lock
+  const BUILT = "perm|1|0"; // know how a lock's built
+  const PICKS = "utility|a perfect set of picks";
+  const KNIFE = ["perm|1|1", "equipment|a knife"]; // fight dirty with a knife, and the knife
+  const UNSEEN = "perm|0|0"; // move unseen
+  const HOOK = "awk|0|Anywhere I can throw a hook";
 
-  same(await tileOf("Locks"), "Body 5 and 4 · d12 + d6", "her Locks tile");
-  same(await tileOf("Black market"), "Mind 3 and 2 · d10", "her Black market, on her Mind");
-  same([await track("stamina"), await track("confidence"), await track("resolve"), await aura()], ["d12", "d12", "d12", "5/5"], "her tracks and Aura to start with");
+  same([await tileOf("Body"), await tileOf("Mind"), await tileOf("Soul")], ["8 steps · d12 + d4", "4 steps · d8", "nothing yet · a d2"], "her three Roots as tiles");
+  same([await track("stamina"), await track("confidence"), await track("resolve"), await aura()], ["d12", "d12", "d12", "7/7"], "her tracks and Aura to start with");
+  same(await page.$$eval(".tile-again", (els) => els.length), 0, "no Again till she's rolled");
 
-  // Building a roll by pitching it: the vault door is her Body and her Locks,
-  // and her picks make it 10. Her Mind, knowing how a lock's built, is 8.
-  await page.click(spec("Locks"));
-  has(await live(), "9 steps, d12 + d6", "her Body and her Locks");
-  await item("utility|a perfect set of picks");
-  has(await live(), "10 steps, d12 + d8", "with her picks");
+  // Her lock in four taps: her Body, pick a mechanical lock (its Title comes
+  // with it), know how a lock's built (and the Guild), and her picks. That's
+  // 13 steps, two d12s and a d2, and all of it plainly fits, so it's free.
+  let taps = 0;
+  const tap = async (sel) => { await page.click(sel); taps += 1; };
+  await tap(rootTile("Body"));
+  has(await live(), "8 steps, d12 + d4", "her Body on its own");
+  same(await page.$$eval("#cc-dialog .cc-pick-h", (els) => els.map((e) => e.textContent)), ["Built your Body", "The rest of your sheet"], "what built her Body first");
+  await tap(chip(LOCK));
+  has(await live(), "10 steps, d12 + d8", "pick a mechanical lock, bringing her first Title with it");
+  same(await chipIs("title|0"), "in", "her first Title in with its permission");
+  await tap(chip(BUILT));
+  has(await live(), "12 steps, 2d12", "know how a lock’s built, bringing the Guild with it");
+  await tap(chip(PICKS));
+  has(await live(), "13 steps, 2d12 + d2", "her picks");
+  if (taps > 4) note(`Vesk's lock took ${taps} taps before Roll, wanted about four`);
+  same(await page.textContent("#dlg-title"), "Body, pick a mechanical lock and 4 more", "the roll named for what it's for");
+  same(await page.$$eval("#cc-dialog .cc-costs", (els) => els.length), 0, "everything that plainly fits is free");
+  await shot(page, "3-lock");
+
+  // Explaining: a second tap and Shadow's 1 Aura, a third and it's out.
+  await use("arch|0");
+  has(await live(), "14 steps", "Shadow in, a step");
+  await use("arch|0");
+  same(await chipIs("arch|0"), "explaining", "a second tap: she's explaining it");
+  has(await page.textContent("#cc-dialog .cc-costs"), "1 Aura", "explaining a thing is 1 Aura");
+  has(await live(), "14 steps", "and it's still a step");
+  await use("arch|0");
+  same(await chipIs("arch|0"), "out", "a third tap takes it out");
+  has(await live(), "13 steps", "13 again");
+  // Her Mind instead: the same things, and what built her Mind first.
   await page.click('#cc-dialog button[data-act="root"][data-v="Mind"]');
-  has(await live(), "8 steps, d12 + d4", "her Mind, her Locks and her picks");
-  same(await page.$$eval("#cc-dialog .cc-costs", (els) => els.length), 0, "a specialty that plainly fits is free");
-  await page.click('#cc-dialog button[data-act="spec"][data-v="Stealth"]');
-  await page.click('#cc-dialog button[data-act="pitch"]');
-  has(await page.textContent("#cc-dialog .cc-costs"), "1 Aura", "making a case for her Stealth");
-  await page.click('#cc-dialog button[data-act="pitch"]');
+  has(await live(), "9 steps, d12 + d6", "her Mind and the same five things");
+  same((await page.$$eval("#cc-dialog .cc-pick-h", (els) => els.map((e) => e.textContent)))[0], "Built your Mind", "what built her Mind first");
+  // Finding something lights it up.
+  await page.fill('#cc-dialog input[data-in="find"]', "rooftops");
+  same(await page.$$eval("#cc-dialog .cc-pick.is-lit", (els) => els.map((e) => e.dataset.k)), ["perm|0|1"], "rooftops finds run the rooftops");
+  await shut();
   // Nothing that fits: her Soul's nothing yet, and every roll's at least a d2.
-  await page.click('#cc-dialog button[data-act="root"][data-v="Soul"]');
-  await page.click('#cc-dialog button[data-act="spec"][data-v=""]');
-  await item("utility|a perfect set of picks");
+  await page.click(rootTile("Soul"));
   has(await live(), "1 step, d2", "her Soul on its own");
   await shut();
 
-  // Over the wall on her grappling line: her Body, her Climbing and the line,
-  // 8 steps, a d12 and a d4, against the guard's d6. Her d12 beats his 4 on a
-  // top face, so that's 2 Aura, past 5 while she's acting.
-  await page.click(spec("Climbing"));
-  await item("attuned|0");
-  has(await live(), "8 steps, d12 + d4", "her Body, her Climbing and her grappling line");
-  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="6"]');
-  await page.click('#cc-dialog button[data-act="intent"][data-k="0"][data-v="Your own"]').catch(() => {});
+  // Over the wall on her grappling line: her Body and the awakening, which
+  // brings the line with it, 10 steps, a d12 and a d8, against the guard's
+  // d6. Her d12 beats his 4 on a top face, so that's 2 Aura, past her 7 while
+  // she's acting.
+  await page.click(rootTile("Body"));
+  await use(HOOK);
+  same(await chipIs("attuned|0"), "in", "the awakening brings her grappling line");
+  has(await live(), "10 steps, d12 + d8", "her Body, her grappling line and its awakening");
+  await foe(6);
   await page.evaluate(() => window.ziCompanion.setDice([12, 1, 4]));
   await page.click('#cc-dialog button[data-act="go"]');
   await rolled();
   await shot(page, "3-roll");
-  same(await outs(), ["Beat it", "Under"], "her d12 and d4 against the guard's 4");
-  has(await body(), "You’ve got 7 Aura, and you’re acting", "a win and a top face, past 5 while she's acting");
+  same(await outs(), ["Beat it", "Under"], "her d12 and d8 against the guard's 4");
+  has(await body(), "You’ve got 9 Aura, and you’re acting", "a win and a top face, past 7 while she's acting");
   await done();
-  same(await aura(), "7/5", "Aura past 5 on her turn");
+  same(await aura(), "9/7", "Aura past 7 on her turn");
   has(await page.textContent('.cc-stat[data-p="aura"] .k'), "while acting", "the Aura says she's acting");
-  has(await page.textContent(".cc-last"), "8 steps: 12 on the d12, 1 on the d4, against 4. 1 of 2 beat it.", "the last roll");
+  has(await again(), "Body, Anywhere I can throw a hook and 1 more", "Again with the last roll's picks");
+  has(await again(), "10 steps, d12 + d8 · last time 1 of 2 beat it, against 4", "and how it went");
   await page.click('.cc-stat[data-p="aura"]');
-  has(await page.textContent("#cc-panel"), "anything over 5 is gone", "Aura's panel while she's acting");
+  has(await page.textContent("#cc-panel"), "I’ve finished acting: 2 goes", "Aura's panel while she's acting");
   await page.click('#cc-panel button[data-act="acting"][data-v="0"]');
-  same(await aura(), "5/5", "anything over 5 goes once she's finished acting");
+  same(await aura(), "7/7", "anything over 7 goes once she's finished acting");
   await page.click('.cc-stat[data-p="aura"]');
+  // Again is the same picks in one tap.
+  await page.click(".tile-again");
+  same([await chipIs(HOOK), await chipIs("attuned|0"), await chipIs(LOCK)], ["in", "in", "out"], "Again puts the same things in");
+  has(await live(), "10 steps, d12 + d8", "Again's steps");
+  same((await page.$$eval("#cc-dialog .cc-pick-h", (els) => els.map((e) => e.textContent)))[1], "Used with your Body before", "what she's used with her Body before comes next");
+  await shut();
 
   // A reload keeps it, and so does no signal once the service worker's got
   // the site.
   await page.reload();
-  await page.waitForSelector(".tile[data-s]");
-  same(await aura(), "5/5", "Aura after a reload");
-  has(await page.textContent(".cc-last"), "against 4", "the last roll after a reload");
+  await page.waitForSelector(".tile[data-r]");
+  same(await aura(), "7/7", "Aura after a reload");
+  has(await again(), "against 4", "the last roll after a reload");
   await page.evaluate(() => navigator.serviceWorker.ready);
   await page.reload();
   await page.waitForFunction(() => navigator.serviceWorker.controller !== null, null, { timeout: 15000 }).catch(() => note("the service worker never took over the page"));
   await context.setOffline(true);
   await page.reload();
-  await page.waitForSelector(".tile[data-s]", { timeout: 10000 }).catch(() => note("the play screen didn't open offline"));
-  same(await tileOf("Locks"), "Body 5 and 4 · d12 + d6", "her Locks offline");
+  await page.waitForSelector(".tile[data-r]", { timeout: 10000 }).catch(() => note("the play screen didn't open offline"));
+  same(await tileOf("Body"), "8 steps · d12 + d4", "her Body offline");
   await page.click('.cc-stat[data-p="stamina"]');
-  has(await page.textContent("#cc-panel .cc-rule"), "every hit that gets through", "the tracks' rule on a tap, offline");
+  await page.click('#cc-panel [popovertarget="tip-pa-stamina"]');
+  same(await page.$eval("#tip-pa-stamina", (el) => el.matches(":popover-open")), true, "the tracks' ? opens on a tap, offline");
+  has(await page.textContent("#tip-pa-stamina"), "every hit that gets through", "the tracks' rule in it");
+  await page.keyboard.press("Escape");
   await page.click('.cc-stat[data-p="stamina"]');
   await page.click('.cc-tabs a[data-t="sheet"]');
   await inFold(page, 'button.cc-perm:has-text("move unseen")');
@@ -1432,43 +1481,80 @@ if (part("3")) {
   await page.goto(`${BASE}/rules/the-core/`);
   has(await page.textContent("h1"), "The Core", "a rules page offline");
   await page.goBack();
-  await page.waitForSelector(".tile[data-s]");
+  await page.waitForSelector(".tile[data-r]");
   await context.setOffline(false);
 
-  // A tie on her Knives, won for 1 Aura, which pays nothing back. Then a
-  // split: the same 7 steps as three dice.
-  await page.click(spec("Knives"));
-  has(await live(), "7 steps, d12 + d2", "her Body and her Knives");
-  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="8"]');
+  // A knife fight: fight dirty with a knife (and the Guild) and her knife,
+  // 11 steps. A tie, won for 1 Aura, pays nothing back. Then a split: the same
+  // 11 steps as three dice.
+  await page.click(rootTile("Body"));
+  for (const k of KNIFE) await use(k);
+  has(await live(), "11 steps, d12 + d10", "her knife fight");
+  await foe(8);
   await page.evaluate(() => window.ziCompanion.setDice([5, 1, 5]));
   await page.click('#cc-dialog button[data-act="go"]');
   await rolled();
   same(await outs(), ["Tie", "Under"], "her 5 against their 5");
   await page.click('#cc-dialog button[data-act="win-tie"][data-i="0"]');
   same(await outs(), ["Tie, won for 1 Aura", "Under"], "the tie won");
-  has(await body(), "You’ve got 4 Aura", "a tie won for 1 Aura, and nothing back for it");
+  has(await body(), "You’ve got 6 Aura", "a tie won for 1 Aura, and nothing back for it");
   await done();
-  same(await aura(), "4/5", "Aura after winning the tie");
+  same(await aura(), "6/7", "Aura after winning the tie");
   await page.click('button[data-act="undo"]');
-  same(await aura(), "5/5", "Undo takes the tie back off");
-  await page.click(spec("Knives"));
+  same(await aura(), "7/7", "Undo takes the tie back off");
+  await page.click(".tile-again");
+  await page.click('#cc-dialog details[data-open="rc-dice"] > summary');
   await page.click('#cc-dialog button[data-act="step"][data-n="count"][data-d="1"]');
-  same(await page.$$eval("#cc-dialog .cc-dice .zd-die", (els) => els.length), 3, "her Knives split into three dice");
-  has(await live(), "7 steps", "a split's the same steps");
+  same(await page.$$eval("#cc-dialog .cc-dice .zd-die", (els) => els.length), 3, "her knife fight split into three dice");
+  has(await live(), "11 steps", "a split's the same steps");
   await shut();
 
+  // Two guards at once, their d8 and their d6, with an extra action bought
+  // for 3 Aura: 12 steps, two d12s, one at each. Both win, and a top face, so
+  // that's 3 Aura back. The next extra action's 4 till she's finished acting.
+  await page.click(".tile-again");
+  has(await page.textContent('#cc-dialog button[data-act="x-add"]'), "An extra action in it: 3 Aura", "an extra action's 3 Aura");
+  await page.click('#cc-dialog button[data-act="x-add"]');
+  has(await page.textContent('#cc-dialog button[data-act="x-add"]'), "Another extra action in it: 4 Aura", "the next one's 4");
+  has(await page.textContent("#cc-dialog .cc-costs"), "3 Aura", "this one's 3");
+  has(await live(), "12 steps, 2d12", "an extra action's a step");
+  await foe(8);
+  await foe(6);
+  same(await page.$$eval('#cc-dialog button[data-act="aim"][aria-pressed="true"]', (els) => els.map((e) => `${e.dataset.i} at ${e.dataset.j}`)), ["0 at 0", "1 at 1"], "a die at each guard");
+  has(await live(), "against their d8 and their d6", "both guards in the head");
+  await shot(page, "3-two");
+  await page.evaluate(() => window.ziCompanion.setDice([12, 7, 5, 6]));
+  await page.click('#cc-dialog button[data-act="go"]');
+  await rolled();
+  same(await outs(), ["Beat it", "Beat it"], "her 12 and 7 against their 5 and 6");
+  same(await page.$$eval("#cc-dialog .res-at", (els) => els.map((e) => e.textContent)), ["at their d8", "at their d6"], "each die says what it was at");
+  has(await body(), "2 dice won and a top face, so 3 Aura", "both guards beaten and a top face");
+  await done();
+  same(await aura(), "7/7", "3 Aura for the extra action and 3 back");
+  has(await again(), "last time 2 of 2 won, against 5 and 6", "the last roll against both");
+  await page.click(rootTile("Body"));
+  has(await page.textContent('#cc-dialog button[data-act="x-add"]'), "An extra action in it: 4 Aura", "the next extra action's 4 this round");
+  await shut();
+  await page.click('.cc-stat[data-p="aura"]');
+  has(await page.textContent("#cc-panel"), "The next extra action’s 4 Aura", "and Aura's panel says so");
+  await page.click('#cc-panel button[data-act="acting"][data-v="0"]');
+  has(await page.textContent("#cc-panel"), "The next extra action’s 3 Aura", "back to 3 once she's finished acting");
+  await page.click('.cc-stat[data-p="aura"]');
+
   // Bringing something in: the chandelier is 1 Aura and a step.
-  await page.click(spec("Climbing"));
+  await page.click(rootTile("Body"));
   await page.click('#cc-dialog details[data-open="bring"] > summary');
   await page.click('#cc-dialog button[data-act="step"][data-n="other"][data-d="1"]');
-  has(await live(), "8 steps", "the chandelier brought in");
+  has(await live(), "9 steps", "the chandelier brought in");
   has(await page.textContent("#cc-dialog .cc-costs"), "1 Aura", "bringing something in costs 1 Aura");
   await shut();
 
   // Her Shadow's Push: +3 on a die, since she's a Shadow twice, paid with 1
   // Stamina off her home track.
-  await page.click(spec("Stealth"));
-  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="10"]');
+  await page.click(rootTile("Body"));
+  await use(UNSEEN);
+  has(await live(), "10 steps, d12 + d8", "move unseen, with her first Title");
+  await foe(10);
   await page.evaluate(() => window.ziCompanion.setDice([7, 1, 9]));
   await page.click('#cc-dialog button[data-act="go"]');
   await rolled();
@@ -1486,28 +1572,29 @@ if (part("3")) {
 
   // Her shadow pool: getting into hiding puts the dice she hid with in it,
   // and a later roll takes one as steps (a d12's 6) and one as its own die.
-  await page.click(spec("Stealth"));
-  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="6"]');
+  await page.click(".tile-again");
+  await foe(6);
   await page.evaluate(() => window.ziCompanion.setDice([8, 2, 3]));
   await page.click('#cc-dialog button[data-act="go"]');
   await rolled();
   await page.click('#cc-dialog button[data-act="hid"]');
-  has(await body(), "your d12 and d2 go in your shadow pool", "the dice she hid with going in her pool");
+  has(await body(), "your d12 and d8 go in your shadow pool", "the dice she hid with going in her pool");
   await done();
-  has(await page.textContent(".cc-pool"), "d12 and d2. Add them to any roll from the roll card", "her shadow pool on the play screen");
-  await page.click(spec("Locks"));
+  has(await page.textContent(".cc-pool"), "d12 and d8. Add them to any roll from the roll card", "her shadow pool on the play screen");
+  await page.click(rootTile("Body"));
+  for (const k of [LOCK, BUILT, PICKS]) await use(k);
   await page.click('#cc-dialog button[data-act="pool"][data-i="0"][data-v="steps"]');
   await page.click('#cc-dialog button[data-act="pool"][data-i="1"][data-v="die"]');
-  has(await live(), "15 steps", "her Body and Locks with the shadow d12 as 6 steps");
-  same(await page.$$eval("#cc-dialog .cc-dice .zd-die", (els) => els.map((el) => el.dataset.d)), ["12", "12", "6", "2"], "15 steps as two d12s and a d6, and the shadow d2 on its own");
-  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="6"]');
-  await page.evaluate(() => window.ziCompanion.setDice([5, 4, 3, 1, 2]));
+  has(await live(), "19 steps", "her lock with the shadow d12 as 6 steps");
+  same(await page.$$eval("#cc-dialog .cc-dice .zd-die", (els) => els.map((el) => el.dataset.d)), ["12", "12", "12", "2", "8"], "19 steps as three d12s and a d2, and the shadow d8 on its own");
+  await foe(6);
+  await page.evaluate(() => window.ziCompanion.setDice([5, 4, 3, 1, 2, 2]));
   await page.click('#cc-dialog button[data-act="go"]');
   await rolled();
-  has(await body(), "Used your shadow d12 as 6 steps and shadow d2", "the shadow dice used");
+  has(await body(), "Used your shadow d12 as 6 steps and shadow d8", "the shadow dice used");
   await done();
   has(await page.textContent(".cc-pool"), "shadow pool’s empty", "her pool empty once it's used");
-  console.log("Vesk: pitching, a top face past 5, finished acting, a reload, offline, a tie won, Undo, a split, bringing something in, a Push and her shadow pool");
+  console.log(`Vesk: her lock in ${taps} taps, explaining, finding, a top face past 7, Again, a reload, offline, a tie won, Undo, a split, two guards and an extra action, bringing something in, a Push and her shadow pool`);
   await context.close();
 }
 
@@ -1530,8 +1617,9 @@ function tableOf(page) {
     panel: async (k, open = true) => {
       if ((await page.getAttribute(`.cc-stat[data-p="${k}"]`, "aria-expanded")) !== String(open)) await page.click(`.cc-stat[data-p="${k}"]`);
     },
-    // When it lands: each telegraph's die at a Root, then the dice that roll.
-    lands: async (list, { defend = false, spec = "", count = 0, shape = null, dice = [] } = {}) => {
+    // When it lands: each telegraph's die at a Root, then the dice that roll,
+    // with Defend's things tapped in by their keys when it was their action.
+    lands: async (list, { defend = false, use = [], count = 0, shape = null, dice = [] } = {}) => {
       await page.click('.tile[data-act="defence"]');
       for (const [d, at] of list) {
         await page.click(`#cc-dialog button[data-act="d-add-at"][data-v="${at}"]`);
@@ -1539,7 +1627,7 @@ function tableOf(page) {
       }
       if (defend) {
         await page.click('#cc-dialog button[data-act="d-defend"][data-v="1"]');
-        if (spec) await page.click(`#cc-dialog button[data-act="d-spec"][data-v="${spec}"]`);
+        for (const k of use) await page.click(`#cc-dialog .cc-pick[data-k="${k}"]`);
         for (let i = 0; i < count; i++) await page.click('#cc-dialog button[data-act="step"][data-n="count"][data-d="1"]');
         if (shape != null) await page.click(`#cc-dialog button[data-act="shape"][data-i="${shape}"]`);
       }
@@ -1567,35 +1655,37 @@ if (part("3c")) {
   await t.panel("stamina");
   same([await boxes("plate armour"), await boxes("a shield")], [["false", "false"], ["false"]], "his Fine plate's two boxes and his Common shield's one");
   await t.panel("stamina", false);
-
-  // Bram Defends (Defend, in Conflict): three d8s at Wren's Body, intercepted,
-  // and his Body and his Shieldwork with his plate and his shield, 11 steps,
-  // split so the d12's two d6s. His Stamina rolls 9 with them, against 7, 5
-  // and 2, so nothing gets through, and three dice won and a d6's top face
-  // is 4 Aura. He's not acting, so it stops at 5.
   await t.panel("aura");
   has(await page.textContent("#cc-panel"), "You intercept for free", "a Guardian intercepts for free");
   for (let i = 0; i < 3; i++) await page.click('#cc-panel button[data-act="aura"][data-d="-1"]');
   await t.panel("aura", false);
-  same(await t.aura(), "2/5", "Bram's Aura after spending 3");
-  const shapes = diceShapes(11, 3);
-  const six = shapes.findIndex((sh) => JSON.stringify(sh) === "[10,6,6]");
-  if (six < 0) note(`no d10, d6 and d6 among 11 steps in three dice: ${JSON.stringify(shapes)}`);
+  same(await t.aura(), "4/7", "Bram's Aura after spending 3");
+
+  // The brute's club at Bram on the wall (The Archetypes, Push): a d10 at his
+  // Body, and he Defends with his Body, both Titles, hold the line, fight in a
+  // shield wall, Guardian, his plate and his shield, 14 steps, two d12s and a
+  // d4, with his Stamina's d12. The club comes up 9, and he rolls 7, 6 and 3
+  // and his Stamina 4, so it's through, till he pays 1 Stamina for Guardian's
+  // Push and makes the 7 a 9. Ties go to him, so it's stopped.
   await page.click('.tile[data-act="defence"]');
-  for (let i = 0; i < 3; i++) await page.click('#cc-dialog button[data-act="d-add"][data-v="8"]');
+  await page.click('#cc-dialog button[data-act="d-add"][data-v="10"]');
   await page.click('#cc-dialog button[data-act="d-defend"][data-v="1"]');
-  await page.click('#cc-dialog button[data-act="d-spec"][data-v="Shieldwork"]');
-  has(await page.textContent("#cc-dialog .dlg-body"), "11 steps", "his Body, his Shieldwork, his plate and his shield");
-  await page.click('#cc-dialog button[data-act="step"][data-n="count"][data-d="1"]');
-  await page.click(`#cc-dialog button[data-act="shape"][data-i="${six}"]`);
-  await page.evaluate(() => window.ziCompanion.setDice([9, 8, 6, 3, 7, 5, 2]));
+  same(await page.$$eval("#cc-dialog .cc-pick.is-in", (els) => els.map((e) => e.dataset.k)), ["equipment|plate armour", "equipment|a shield"], "his armour on his Body in his Defend already");
+  for (const k of ["perm|0|0", "perm|1|0", "arch|0"]) await page.click(`#cc-dialog .cc-pick[data-k="${k}"]`);
+  has(await page.textContent("#cc-dialog .dlg-head"), "Defend 14 steps, 2d12 + d4", "his Body, both Titles, hold the line, fight in a shield wall, Guardian, his plate and his shield");
+  await shot(page, "3c-defend");
+  await page.evaluate(() => window.ziCompanion.setDice([4, 7, 6, 3, 9]));
   await page.click('#cc-dialog button[data-act="d-go"]');
   await t.landed();
-  await shot(page, "3c-defend");
-  same(await t.hits(), ["Stopped", "Stopped", "Stopped"], "nothing gets through Bram's Defend");
-  has(await t.body(), "You’ve got 5 Aura", "4 Aura, stopping at 5 since he's not acting");
+  same(await t.hits(), ["Gets through"], "his 7, 6, 3 and 4 against the club's 9");
+  await page.click('#cc-dialog button[data-act="push"]');
+  await page.click('#cc-dialog button[data-act="pick"][data-i="1"]');
+  same((await page.$$eval('#cc-dialog button[data-act="push-pay"]', (els) => els.map((e) => e.textContent)))[0], "1 Stamina", "his Push off his Stamina");
+  await page.click('#cc-dialog button[data-act="push-pay"]');
+  same(await t.hits(), ["Stopped"], "the 7 made a 9 ties the club, and ties go to him");
   await t.done();
-  same(await t.aura(), "5/5", "Bram's Aura after the book's Defend");
+  same(await t.tracks(), ["d10", "d12", "d12"], "on a d10 of Stamina now");
+  same(await t.aura(), "4/7", "nothing back for a die the Push made win");
 
   // A blow gets through on his tracks alone, and his plate takes it: a box
   // instead of his Stamina dropping. Two more, and the plate and the shield
@@ -1604,7 +1694,7 @@ if (part("3c")) {
   same(await t.hits(), ["Gets through"], "his Stamina's 2 against their 7");
   await t.pay("box", 0, "equipment|plate armour");
   await t.done();
-  same(await t.track("stamina"), "d12", "his plate took it, so his Stamina's still d12");
+  same(await t.track("stamina"), "d10", "his plate took it, so his Stamina's still d10");
   await t.lands([[10, "Body"]], { dice: [3, 9] });
   await t.pay("box", 0, "equipment|plate armour");
   await t.done();
@@ -1619,13 +1709,13 @@ if (part("3c")) {
   same(await page.$$eval('#cc-dialog button[data-act="d-pay"][data-what="box"]', (els) => els.length), 0, "no box left to take it");
   await page.click('#cc-dialog button[data-act="d-pay"][data-what="two"]:has-text("1 Confidence and 1 Resolve")');
   await t.done();
-  same(await t.tracks(), ["d12", "d10", "d10"], "2 for 1, off his Confidence and his Resolve");
-  // Defending with his plate and shield broken, they're not on it.
+  same(await t.tracks(), ["d10", "d10", "d10"], "2 for 1, off his Confidence and his Resolve");
+  // Defending with his plate and shield broken, they're not in it.
   await page.click('.tile[data-act="defence"]');
   await page.click('#cc-dialog button[data-act="d-add"][data-v="8"]');
   await page.click('#cc-dialog button[data-act="d-defend"][data-v="1"]');
-  await page.click('#cc-dialog button[data-act="d-spec"][data-v="Shieldwork"]');
-  has(await page.textContent("#cc-dialog .dlg-body"), "9 steps", "his Defend with his armour broken");
+  same(await page.$$eval("#cc-dialog .cc-pick.is-in", (els) => els.length), 0, "nothing broken in his Defend");
+  has(await page.textContent("#cc-dialog .dlg-head"), "Defend 7 steps", "his Defend with his armour broken");
   await page.click('#cc-dialog .dlg-head button[data-act="close"]');
   await t.closed();
 
@@ -1638,14 +1728,14 @@ if (part("3c")) {
   same([await boxes("plate armour"), await boxes("a shield")], [["false", "false"], ["true"]], "his plate mended in downtime, his shield still broken");
   await t.panel("stamina", false);
   same(await t.tracks(), ["d12", "d12", "d12"], "every track up a size in downtime");
-  console.log("Bram: the book's Defend, his plate and shield taking blows and breaking, 2 for 1, and his plate mended");
+  console.log("Bram: the book's Defend with his Push, his plate and shield taking blows and breaking, 2 for 1, and his plate mended");
   await context.close();
 }
 
 // 4. The tracks. Vesk's Stamina down to a Blaze and a Scar, the rest at the
-// end of a scene, an ability paid in sizes, 2 for 1, her grappling line's
-// Aura, and Dorrie's Confidence against a lie and Isolde's Resolve against a
-// curse.
+// end of a scene, an ability paid in sizes, 2 for 1, her grappling line
+// powered, and Dorrie's Confidence against a lie and Isolde's Resolve against
+// a curse.
 if (part("4")) {
   const { context, page } = await phone();
   const t = tableOf(page);
@@ -1690,17 +1780,19 @@ if (part("4")) {
   await page.click('#cc-dialog button[data-act="rest-done"]');
   await t.closed();
   same(await t.tracks(), ["d6", "d10", "d12"], "a 4 and a 9 go up, a 2 stays");
-  same(await t.aura(), "5/5", "Aura full for the new scene");
+  same(await t.aura(), "7/7", "Aura full for the new scene");
 
-  // Her grappling line: Aura pumped in holds, and +1 a die for each Aura in
-  // it when she uses it. The new scene empties it.
-  await page.click('main button[data-act="pump"]');
-  await page.click('main button[data-act="pump"]');
-  same(await t.aura(), "3/5", "2 Aura pumped into her grappling line");
-  has(await page.textContent("main .cc-held"), "2/2", "her grappling line holding 2");
-  await page.click('.cc-spectiles .tile[data-s]:has(.tile-name:text-is("Climbing"))');
-  await page.click('#cc-dialog button[data-act="item"][data-k="attuned|0"]');
-  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="10"]');
+  // Her grappling line: powering its awakening takes the Aura off what she's
+  // got and off her maximum, and it's +1 a die for each Aura powering it when
+  // she uses it. The new scene lets it go, and her maximum's back.
+  await page.click('main button[data-act="power"]');
+  await page.click('main button[data-act="power"]');
+  same(await t.aura(), "5/5", "2 Aura powering her grappling line, off her Aura and her maximum");
+  has(await page.textContent("main .cc-held"), "2/2", "her grappling line powered with 2");
+  has(await page.textContent("main .cc-held"), "Your maximum’s 5 till the scene ends", "and it says what her maximum is");
+  await page.click('.cc-roots .tile[data-r="Body"]');
+  await page.click('#cc-dialog .cc-pick[data-k="awk|0|Anywhere I can throw a hook"]');
+  await page.click('#cc-dialog button[data-act="foe-add"][data-v="10"]');
   await page.evaluate(() => window.ziCompanion.setDice([7, 2, 8]));
   await page.click('#cc-dialog button[data-act="go"]');
   await t.rolled();
@@ -1710,8 +1802,7 @@ if (part("4")) {
   same(await t.outs(), ["Beat it", "Under"], "+2 from her grappling line on the 7");
   await t.done();
   has(await page.textContent("main .cc-held"), "2/2", "using it doesn't empty it");
-  await page.click('main button[data-act="its-aura"]');
-  same(await t.aura(), "4/5", "no Aura for a die her line added to after she rolled, and 1 the first time she gets somewhere nobody could follow");
+  same(await t.aura(), "5/5", "no Aura for a die her line added to after she rolled");
   await page.click('button[data-act="scene"]');
   if (await page.isVisible("#cc-dialog")) {
     await page.evaluate(() => window.ziCompanion.setDice([1, 1, 1]));
@@ -1720,8 +1811,8 @@ if (part("4")) {
     await page.click('#cc-dialog button[data-act="rest-done"]');
     await t.closed();
   }
-  has(await page.textContent("main .cc-held"), "0/2", "the new scene empties her grappling line");
-  same(await t.aura(), "5/5", "and her Aura's full");
+  has(await page.textContent("main .cc-held"), "0/2", "the new scene lets her grappling line go");
+  same(await t.aura(), "7/7", "and her Aura and its maximum are full");
   // 2 for 1 on a hit: her Confidence and Resolve pay, and her Stamina stays.
   await t.panel("stamina");
   await page.click('#cc-panel button[data-act="two"][data-t="stamina"]:has-text("1 Confidence and 1 Resolve")');
@@ -1755,9 +1846,10 @@ if (part("4")) {
   await context.close();
 }
 
-// 4b. Saved before the Roots change. One of the crew moves onto Roots with
-// her Scars on her Stamina and her old growth waiting to go back on, and a
-// character built on the phone shows as it was till the builder rebuilds it.
+// 4b. Saved before the Roots change. One of the crew moves onto Roots, and on
+// to stacking, with her Scars on her Stamina and her old growth waiting to go
+// back on, and a character built on the phone shows as it was till the
+// builder rebuilds it.
 if (part("4b")) {
   const { context, page } = await phone();
   const t = tableOf(page);
@@ -1771,8 +1863,9 @@ if (part("4b")) {
   ] };
   await page.evaluate((json) => localStorage.setItem("zi-characters", json), JSON.stringify(old));
   await page.goto(`${BASE}/characters/?c=old-vesk`);
-  await page.waitForSelector(".tile[data-s]");
+  await page.waitForSelector(".tile[data-r]");
   has(await page.textContent(".cc-note"), "on the new rules", "the note that she's moved onto Roots");
+  has(await page.textContent(".cc-moved"), "Every roll’s a Root and everything on her sheet that fits", "and what's new, in a line");
   same(await page.$$eval(".cc-stat.t-stamina .zd-scars i.on", (els) => els.length), 1, "her old Scar on her Stamina");
   same(await t.tracks(), ["d12", "d12", "d12"], "her tracks fresh on Roots");
   await t.panel("stamina");
@@ -1787,20 +1880,23 @@ if (part("4b")) {
   has(await page.textContent("main"), "Captain of the crew", "her old Title waiting to go back on");
   same(await page.inputValue("#cc-notes"), "Owes the fence", "her notes kept");
   const st = await page.evaluate(() => JSON.parse(localStorage.getItem("zi-characters")).characters.find((c) => c.id === "old-vesk").state);
-  same([st.v, st.scars?.stamina?.length, "conf" in st, "wound" in st, st.threads["Dorrie|We have pulled a dozen jobs. I trust her with my life."]], [2, 1, false, false, "strained"], "her state saved on Roots, her strained thread kept");
-  has(await page.textContent(".cc-before"), "traits are gone from the rules", "her old trait, to let go");
-  // Her old permission goes back on free, with the Root and specialty it fits:
-  // her Body and her Stealth go up 1 each. Her old Title she lets go.
+  same([st.v, st.scars?.stamina?.length, "conf" in st, "wound" in st, st.threads["Dorrie|We have pulled a dozen jobs. I trust her with my life."]], [3, 1, false, false, "strained"], "her state saved on stacking, her strained thread kept");
+  has(await page.textContent(".cc-before"), "old traits don’t come across", "her old trait, to let go");
+  // Her old permission goes back on free, on the Root it fits: her Body goes
+  // up 1. Her old Title she lets go.
   const back = 'form[data-form="putback"]:has(button[data-act="letgo"])';
+  same(await page.$$eval(`.cc-before input[name="spec"]`, (els) => els.length), 0, "no specialty to put it back on");
   await page.selectOption(`.cc-before li:has-text("slip through any crowd") ${back} select[name="root"]`, "Body");
-  await page.fill(`.cc-before li:has-text("slip through any crowd") ${back} input[name="spec"]`, "Stealth");
   await page.click(`.cc-before li:has-text("slip through any crowd") ${back} button[type="submit"]`);
   await page.click('.cc-before li:has-text("Captain of the crew") button[data-act="letgo"]');
   await page.click('.cc-before li:has-text("Silent Step") button[data-act="letgo"]');
   same(await page.$$eval(".cc-before", (els) => els.length), 0, "nothing left waiting once it's all put back or let go");
   has(await page.textContent("main"), "slip through any crowd", "her permission back on her sheet");
   await page.click('.cc-tabs a[data-t="play"]');
-  same(await page.$eval('.cc-spectiles .tile[data-s]:has(.tile-name:text-is("Stealth"))', (el) => `${el.querySelector(".tile-steps").textContent} · ${el.querySelector(".tile-die").textContent}`), "Body 6 and 3 · d12 + d6", "her Stealth with the permission back on");
+  same(await page.$eval('.cc-roots .tile[data-r="Body"]', (el) => `${el.querySelector(".tile-steps").textContent} · ${el.querySelector(".tile-die").textContent}`), "9 steps · d12 + d6", "her Body with the permission back on");
+  await page.click('.cc-roots .tile[data-r="Body"]');
+  if (!(await page.$('#cc-dialog .cc-pick[data-act="use"]:has-text("slip through any crowd")'))) note("her old permission isn't on the roll card");
+  await page.click('#cc-dialog .dlg-head button[data-act="close"]');
   // Tamsin was built on the phone, so she's shown as she was.
   await page.goto(`${BASE}/characters/?c=own-old`);
   await page.waitForSelector(".cc-before, .cc-note.is-gold");
@@ -1808,8 +1904,43 @@ if (part("4b")) {
   has(await page.textContent("main"), "Fight", "her set actions as they were");
   has(await page.textContent("main"), "4 steps", "her Fight: the action, her Title, her permission and her sword");
   has(await page.textContent("main"), "The best blade on the docks", "her Title as it was");
-  same(await page.$$eval(".tile[data-s]", (els) => els.length), 0, "nothing of hers plays till she's rebuilt");
-  console.log("old saves: Old Vesk on Roots with her Scar, conditions, thread and growth, and Tamsin shown as she was");
+  same(await page.$$eval(".tile[data-r]", (els) => els.length), 0, "nothing of hers plays till she's rebuilt");
+
+  // Saved on Roots, before stacking: Vesk with what her sheet said then,
+  // 1 Aura held in her grappling line, and Mara, built on the phone with her
+  // Title on her Body. Vesk's lines that changed each get a gold mark, with
+  // old and new in the note, her held Aura's powering the awakening now, off
+  // her maximum, and Mara's Title is hers to spread or keep.
+  const roots = { v: 1, characters: [
+    { id: "roots-vesk", crew: "vesk", name: "Roots Vesk", hash: "roots", state: { v: 2, aura: 5, acting: false, tracks: { stamina: 12, confidence: 12, resolve: 12 }, scars: { stamina: [], confidence: [], resolve: [] }, conditions: [], threads: {}, crossed: {}, picked: [], asp: 2, aspText: "", notes: "", boxes: {}, store: { "0|Anywhere I can throw a hook": 1 },
+      seen: { "num:aura": "Aura 5", "root:Body": "Body 5", "root:Mind": "Mind 3", "title:0": "The best cat burglar in the city (Body; Stealth, Climbing, Locks)", "perm:0:1": "run the rooftops (Body, Climbing)", "spec:Locks": "Locks 4" } } },
+    { id: "roots-mara", crew: "own", name: "Mara", hash: "mara", build: { v: 3, archs: ["Warrior"], titles: [{ idea: "", text: "The best blade on the docks", root: "Body", specs: ["Blades", "", ""], perms: [{ text: "fight with a sword", root: "Body", spec: "Blades" }], boons: [] }], equipment: [{ text: "a sword", arm: "" }], utility: [], keepsake: { text: "" }, bag: "", attuned: [], threads: [{ person: "Dorrie", text: "She owes me.", kind: "hostile", whose: "" }], connect: [], aspiration: "Run the docks", name: "Mara", pronoun: "her", blurb: "", trouble: [] },
+      state: { v: 2, aura: 5, tracks: { stamina: 12, confidence: 12, resolve: 12 }, scars: { stamina: [], confidence: [], resolve: [] }, conditions: [], threads: {}, crossed: {}, picked: [], asp: 2, notes: "", boxes: {}, store: {} } },
+  ] };
+  await page.evaluate((json) => localStorage.setItem("zi-characters", json), JSON.stringify(roots));
+  await page.goto(`${BASE}/characters/?c=roots-vesk`);
+  await page.waitForSelector(".tile[data-r]");
+  has(await page.textContent(".cc-moved"), "Roots Vesk’s on the new rules", "the note that she's moved onto stacking");
+  has(await page.textContent(".cc-moved"), "lines on her sheet changed, each with a gold mark", "how many lines changed");
+  await page.click('.cc-moved details[data-open="g-list"] > summary');
+  has(await page.textContent(".cc-golds"), "It was run the rooftops (Body, Climbing), and now it’s run the rooftops (Body).", "a permission's old and new");
+  has(await page.textContent(".cc-golds"), "It was Body 5, and now it’s Body 8.", "her Body's old and new");
+  has(await page.textContent(".cc-moved"), "Gone from the sheet: Locks 4", "her old specialty gone");
+  same(await page.$eval('.cc-roots .tile[data-r="Body"]', (el) => el.classList.contains("is-changed")), true, "a gold mark on her Body tile");
+  same(await t.aura(), "5/6", "her held Aura powering her grappling line, off her maximum");
+  has(await page.textContent("main .cc-held"), "1/2", "and the awakening says so");
+  await page.click('button[data-act="moved"]');
+  same(await page.$$eval(".cc-moved, .cc-gold, .tile.is-changed", (els) => els.length), 0, "Got it puts the note and the gold marks away");
+  await page.reload();
+  await page.waitForSelector(".tile[data-r]");
+  same(await page.$$eval(".cc-moved, .cc-gold", (els) => els.length), 0, "and they stay away");
+  await page.goto(`${BASE}/characters/?c=roots-mara`);
+  await page.waitForSelector(".tile[data-r]");
+  has(await page.textContent(".cc-choose"), "The best blade on the docks puts all 3 on her Body, the way it was.", "Mara's Title, hers to spread");
+  if (!(await page.$('.cc-choose a.cc-change:has-text("Spread it")'))) note("no Spread it on Mara's Title");
+  await page.click('.cc-choose button[data-act="choose"]:has-text("Keep all 3 on Body")');
+  same(await page.$$eval('.cc-choose li:has-text("The best blade on the docks")', (els) => els.length), 0, "kept as it is, and gone from what's hers to choose");
+  console.log("old saves: Old Vesk on Roots with her Scar, conditions, thread and growth, Tamsin shown as she was, Vesk from before stacking with her gold marks and powering, and Mara's Title to spread");
   await context.close();
 }
 
@@ -2488,13 +2619,13 @@ if (part("7")) {
   same(await page.$$eval(".cc-page.cc-go-next", (els) => els.length), 1, "the Sheet tab sliding in");
   await page.click('.cc-tabs a[data-t="play"]');
   same(await page.$$eval(".cc-page.cc-go-back", (els) => els.length), 1, "the Play tab sliding back");
-  // Her Locks against a d6, her d12 on its top face, with 1 Aura spent so
+  // Her Body against a d6, her d12 on its top face, with 1 Aura spent so
   // there's room for it to come back.
   await page.click('.cc-stat[data-p="aura"]');
   await page.click('#cc-panel button[data-act="aura"][data-d="-1"]');
   await page.click('.cc-stat[data-p="aura"]');
-  await page.click('.cc-spectiles .tile[data-s="0"]');
-  await page.click('#cc-dialog .cc-chipbtn[data-act="vs"][data-v="6"]');
+  await page.click('.cc-roots .tile[data-r="Body"]');
+  await page.click('#cc-dialog button[data-act="foe-add"][data-v="6"]');
   await page.evaluate(() => window.ziCompanion.setDice([12, 3, 5]));
   await page.click('#cc-dialog button[data-act="go"]');
   same(await page.$$eval("#cc-dialog .dlg-body.cc-flip", (els) => els.length), 1, "the roll card turning over");
@@ -2514,7 +2645,7 @@ if (part("7")) {
   await page.click('#cc-panel button[data-act="aura"][data-d="-1"]');
   await page.click('#cc-panel button[data-act="acting"][data-v="0"]').catch(() => {});
   await page.click('.cc-stat[data-p="aura"]');
-  await page.click('.cc-spectiles .tile[data-s="0"]');
+  await page.click('.cc-roots .tile[data-r="Body"]');
   await page.evaluate(() => window.ziCompanion.setDice([12, 6]));
   await quiet();
   await page.click('#cc-dialog button[data-act="go"]');
@@ -2536,10 +2667,11 @@ if (part("7")) {
 }
 
 // 7b. A character in one hand: full screen with the crest at the top, the
-// first specialty high up, each drawn as the dice it rolls, her d12 front and
-// centre with its top face lit, and the Sheet tab under two screens with its
-// folds shut, with axe on all three in both themes. A hit with reduce-motion
-// on swaps the track's shape, and nothing moves.
+// first Root high up, the Roots drawn as the dice they roll, a roll built
+// (her lock) under two screens, her d12 front and centre with its top face
+// lit, and the Sheet tab under two screens with its folds shut, with axe on
+// all of it in both themes. A hit with reduce-motion on swaps the track's
+// shape, and nothing moves.
 if (part("7b")) {
   for (const theme of ["dark", "light"]) {
     const { context, page } = await phone();
@@ -2548,23 +2680,40 @@ if (part("7b")) {
       const result = await new AxeBuilder({ page }).analyze();
       for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on ${what}: ${v.id} (${v.nodes.length})`);
     };
+    // How tall the roll card's content is, head, body and foot, in screens.
+    const card = () => page.evaluate(() => {
+      const d = document.querySelector("#cc-dialog");
+      const h = [".dlg-head", ".dlg-body", ".dlg-foot"].reduce((t, sel) => t + (d.querySelector(sel)?.scrollHeight ?? 0), 0);
+      return h / innerHeight;
+    });
     await play(page, "vesk");
     same(await page.isVisible(".topbar"), false, `the site's bar off a character, ${theme}`);
     if (!(await page.$(".cc-head .zd-crest"))) note(`no crest at the top of Vesk's sheet, ${theme}`);
-    const top = await page.$eval(".cc-spectiles .tile", (el) => Math.round(el.getBoundingClientRect().top + scrollY));
-    if (top > 420) note(`the first specialty starts ${top}px down at 390 by 844, ${theme}`);
-    same(await page.$$eval(".cc-spectiles .tile .tile-dice .zd-die", (els) => els.map((e) => e.dataset.d)), ["12", "6", "12", "2", "12", "2", "12", "2", "10"], `Vesk's specialties drawn as the dice they roll, ${theme}`);
+    const top = await page.$eval(".cc-roots .tile[data-r]", (el) => Math.round(el.getBoundingClientRect().top + scrollY));
+    if (top > 420) note(`the first Root starts ${top}px down at 390 by 844, ${theme}`);
+    same(await page.$$eval(".cc-roots .tile .tile-dice .zd-die", (els) => els.map((e) => e.dataset.d)), ["12", "4", "8", "2"], `Vesk's Roots drawn as the dice they roll, ${theme}`);
     same(await page.$$eval(".cc-track .is-trk .zd-die", (els) => els.map((e) => e.dataset.d)), ["12", "12", "12"], `her three tracks as d12s, ${theme}`);
     const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     if (wide > 0) note(`the play screen scrolls sideways by ${wide}px, ${theme}`);
-    const small = await page.$$eval(".cc-spectiles .tile, .cc-roots .tile, .cc-stat, .cc-tabs a", (els) => els.filter((e) => e.getBoundingClientRect().height < 44).length);
+    const small = await page.$$eval(".cc-roots .tile, .cc-more .tile, .cc-stat, .cc-tabs a, .cc-play button, .cc-abilities button, .cc-attune button", (els) => els.filter((e) => e.getBoundingClientRect().height < 44).length);
     if (small) note(`${small} tap targets under 44px on the play screen, ${theme}`);
     const broken = await page.$$eval(".tile-name", (els) => els.filter((e) => e.scrollWidth > e.clientWidth + 1).map((e) => e.textContent));
     if (broken.length) note(`names that don't fit their tiles: ${broken.join(", ")}, ${theme}`);
     await axe(`the play screen, ${theme}`);
-    await page.click('.cc-spectiles .tile[data-s="0"]');
-    await page.click('#cc-dialog button[data-act="vs"][data-v="6"]');
-    await page.evaluate(() => window.ziCompanion.setDice([12, 2, 3]));
+    // Her lock, built: the card stays under two screens with every chip on it.
+    await page.click('.cc-roots .tile[data-r="Body"]');
+    for (const k of ["perm|0|2", "perm|1|0", "utility|a perfect set of picks"]) await page.click(`#cc-dialog .cc-pick[data-k="${k}"]`);
+    await page.click('#cc-dialog button[data-act="foe-add"][data-v="6"]');
+    has(await page.textContent("#cc-dialog .cc-dice"), "13 steps, 2d12 + d2", `her lock built, ${theme}`);
+    const tallCard = await card();
+    if (tallCard > 2) note(`a roll built runs ${tallCard.toFixed(1)} screens, ${theme}`);
+    const smallChips = await page.$$eval("#cc-dialog .cc-pick, #cc-dialog .cc-chipbtn, #cc-dialog .button", (els) => els.filter((e) => e.offsetParent && e.getBoundingClientRect().height < 44).map((e) => e.textContent.trim()));
+    if (smallChips.length) note(`tap targets under 44px on the roll card: ${smallChips.slice(0, 4).join(", ")}, ${theme}`);
+    const cardWide = await page.$eval("#cc-dialog .dlg-body", (el) => el.scrollWidth - el.clientWidth);
+    if (cardWide > 0) note(`the roll card scrolls sideways by ${cardWide}px, ${theme}`);
+    await shot(page, `one-hand-roll-${theme}`);
+    await axe(`a roll built, ${theme}`);
+    await page.evaluate(() => window.ziCompanion.setDice([12, 2, 1, 3]));
     await page.click('#cc-dialog button[data-act="go"]');
     await page.waitForSelector("#cc-dialog .res .res-out");
     same(await page.$eval("#cc-dialog .cc-stage .res .zd-die", (el) => [el.dataset.d, el.textContent, el.classList.contains("is-top")]), ["12", "12", true], `her 12 on the d12, front and centre with its top face lit, ${theme}`);
@@ -2572,12 +2721,16 @@ if (part("7b")) {
     await page.click('#cc-dialog button.primary[data-act="close"]');
     await page.click('.tile[data-act="defence"]');
     await page.click('#cc-dialog button[data-act="d-add"][data-v="8"]');
-    await axe(`When it lands, ${theme}`);
+    await page.click('#cc-dialog button[data-act="d-defend"][data-v="1"]');
+    await axe(`When it lands with Defend, ${theme}`);
     await page.click('#cc-dialog .dlg-head button[data-act="close"]');
     await page.click('.cc-tabs a[data-t="sheet"]');
     const tall = await page.evaluate(() => document.documentElement.scrollHeight / innerHeight);
     if (tall > 2) note(`the Sheet tab runs ${tall.toFixed(1)} screens with its folds shut, ${theme}`);
     same(await page.$$eval("details.cc-fold[open]", (els) => els.length), 0, `the Sheet tab's folds shut to start, ${theme}`);
+    same(await page.$$eval(".cc-fold-g .cc-gl", (els) => els.slice(0, 3).map((e) => e.textContent.replace(/\s+/g, " ").trim())), ["Body 8", "Mind 4", "Soul 0"], `her Roots at a glance, ${theme}`);
+    await page.click('details[data-open="sh-roots"] > summary');
+    same(await page.$$eval('details[data-open="sh-roots"] .cc-from', (els) => els.map((e) => e.textContent)), ["3 from your first Title, 1 from your second, move unseen, run the rooftops, pick a mechanical lock, fight dirty with a knife", "2 from your second Title, know how a lock’s built, find a buyer for anything", "nothing yet"], `where each Root came from, ${theme}`);
     await page.$$eval("details.cc-fold", (els) => els.forEach((d) => (d.open = true)));
     await axe(`the Sheet tab, ${theme}`);
     await shot(page, `one-hand-${theme}`);
@@ -2588,7 +2741,7 @@ if (part("7b")) {
     await axe(`a track's panel, ${theme}`);
     await context.close();
   }
-  console.log("one hand: the crest at the top, the specialties high up as dice, the roll as a moment and the Sheet tab at a glance, in both themes");
+  console.log("one hand: the crest at the top, the Roots high up as dice, a roll built and the Sheet tab each under two screens, and the roll as a moment, in both themes");
 }
 
 // 7c. The dice roller (roller.js): any dice of yours against any of theirs,
