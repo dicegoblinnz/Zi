@@ -149,7 +149,7 @@ The Bloodsworn gets more dangerous every time they bleed.
 :::example[Two hits]
 Two blows get through to you this round, and your Stamina goes from d12 to d8, so your next action's got 6 more steps, and *Paid in Blood* gives you 2 Aura. You weren't acting when they landed, so that Aura stops at your maximum, and anything over it can go to a friend.
 
-Next round you swing at the one who did it. It'd be 8 steps on its own, so it's 14 with the blood: two d12s and a d4. Pay 1 Stamina for Bleed for it as you swing, and that's the blood's 3 steps and 1 for the ability, 18 in all, three d12s. That size of Stamina's 1 more Aura as well.
+Next round you swing at the one who did it. It'd be 8 steps on its own, so it's 14 with the blood: two d12s and a d4. Pay 1 Stamina for Bleed for it as you swing, and that's the blood's 3 steps and 1 for the ability, 18 in all, three d12s. Paying it drops your Stamina another size, so *Paid in Blood* gives you 1 more Aura.
 :::
 
 **Title ideas:** [Warrior](#k-warrior) · [Hexer](#k-warlock)
@@ -413,7 +413,7 @@ The GM telegraphs the brute's club at Bram, a d10, and two guards' swords at Wre
 :::
 
 :::example[The crack in the circle]
-Isolde turns her Study on the Warden: her Mind and *know the history of anything old*, 8 steps, a d12 and a d4. Her d12 rolls 8 against its 6, so she's won, and she pays 1 Confidence for Foretold. She says the chalk circle it's bound to has a crack in it. Now it does, and anyone in the crew can use that this scene.
+Isolde turns her Study on the Warden: her Mind, her second Title and *know the history of anything old*, 9 steps, a d12 and a d6. Her d12 rolls 8 against its 6, so she's won, and she pays 1 Confidence for Foretold. She says the chalk circle it's bound to has a crack in it. Now it does, and anyone in the crew can use that this scene.
 :::
 
 **Title ideas:** [Divination](#k-divination) · [Warding](#k-wizard) · [Medium](#k-medium) · [Hexer](#k-warlock) · [Scholar](#k-scholar) · [Investigator](#k-investigator)
@@ -527,7 +527,7 @@ Your dice **explode** when you fight. A die that lands on its top face gives you
 :::rule
 **Home track:** Stamina.
 
-**Trait:** *Second Skin*. Your armour fights with you even when you haven't Defended. When something lands at a Root and Defend wasn't your action, every piece of armour on that Root is 1 step, rolled as its own dice beside your track.
+**Trait:** *Second Skin*. Your armour fights with you even when you haven't Defended. When something lands at a Root and Defend wasn't your action, every piece of armour on that Root is 1 step, and those steps make dice of their own that roll beside your track.
 
 **Push (1 Stamina):** +2 to any one of your dice in a fight. If that takes it to its top face or past, there's no Aura for it, but it still explodes.
 

@@ -60,7 +60,7 @@ The seventeen Traits are Mo's from chat. These are the details I filled in round
 11. **Shifter:** it's not an animal tag, so it's not a step and can't take a hit.
 12. **Summoner:** the pocket summon comes out at its own die, and calling it back is also no action.
 13. **Teleporter:** within 10 units you can see, and everything landing on you right then misses.
-14. **Warrior:** only when Defend wasn't your action, so armour never counts twice. Each piece is 1 step, rolled as its own dice.
+14. **Warrior:** only when Defend wasn't your action, so armour never counts twice. Each piece is 1 step, and the steps make dice the usual way, so two pieces are a d4 beside your track.
 15. **No Trait's a step.** They're not in the list of things that stack.
 16. **The Scholar's out:** Isolde's an Oracle twice. Foretold came with her second Oracle and she bought Hold it, and the point that's left went on a deck of the order's cards, which is a step on her foresight (Soul 5, Oracle twice and the cards, 8 steps). Her reading roll's 12, Studying the road 9, her Aspiration roll 10, and the Warden's Study 13, a d2 where it had a d4. The magistrate's combo keeps its 14, with *find what I need in any library* where Scholar was.
 17. **Foretold** is paid once you've won the Study, so it's not a step on it, and paying again says one more truth. With *Find the flaw* gone, a truth can't be a vulnerability, so Running the Game's *Rusted Through* example went.

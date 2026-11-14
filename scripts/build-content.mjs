@@ -370,6 +370,7 @@ function archetypesFrom(doc, inline, qr) {
   // Appendix D's line for each archetype, which gives its Trait in a few
   // words, *Its name:* what it does, short enough for the paper sheet.
   const qrLines = new Map([...sectionOf(qr?.body ?? "", "s-qr-archetypes").matchAll(/^-\s+\*\*([^*:]+):\*\*\s+(.+)$/gm)].map((m) => [m[1], m[2]]));
+  if (!qr) companionWarn("Appendix D has no The archetypes section, so the paper sheet has no short line for any Trait");
   const picking = sectionOf(doc.body, "s-picking-archetypes").split(/^### /m)[0];
   const rows = tableRows(picking);
   const forLine = new Map(rows.map((r) => [plain(r[0]), plain(r[1] ?? "")]));
