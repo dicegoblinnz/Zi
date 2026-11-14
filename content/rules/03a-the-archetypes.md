@@ -6,23 +6,25 @@ order: 3.2
 part: "Play"
 partNumber: "Part I"
 source: Mo's playtest sheets, 14 and 16 Oct 2026, and his chat decisions, 6 to 8 Nov 2026
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::quote
 Every archetype has something only it can do.
 :::
 
-Guardian, Healer and Shadow are archetypes, and there are fifteen more. An **archetype** is the kind of character you are at the table, and it's its own pick, apart from your Titles. Each one's got a **mechanic**, something only that archetype can do, and **abilities** you pay for out of your [tracks](#s-tracks). Ash is an Elementalist, so one of her dice can be a burst of fire that catches every guard in the doorway, and she's the only one in the crew who can do that.
+Guardian, Healer and Shadow are archetypes, and there are fifteen more. An **archetype** is the kind of character you are at the table, and it's its own pick, apart from your Titles. Each one's got a **mechanic**, something only that archetype can do, a **Trait** that's always on, and **abilities** you pay for out of your [tracks](#s-tracks). Ash is an Elementalist, so one of her dice can be a burst of fire that catches every guard in the doorway, and she's the only one in the crew who can do that.
 
-Start with how they work, then find your two in [Picking Your Archetypes](#s-picking-archetypes). After that, every archetype has a section of its own, in alphabetical order: what it does, its abilities, and an example.
+Start with how they work, then find yours in [Picking Your Archetypes](#s-picking-archetypes). After that, every archetype has a section of its own, in alphabetical order: what it does, its Trait, its abilities, and an example.
 
 ## How Archetypes Work {#s-how-archetypes}
 
--   **You start with two archetypes**, and they don't have to be different. Vesk's a Shadow twice over. They're separate from your Titles: Bram's a Guardian and a Leader, and his Titles are *The wall that held the harbour gate* and *A sergeant who lost his stripes*.
--   **Your mechanic** is the thing only your archetype can do, and it's free. When it has you roll, you build the dice the usual way, from a Root and a specialty that fit how you're doing it (see [Steps and Dice](#s-building-die)). Bram's orders come off his Soul and his Command, the same as anything else he says.
--   **Your abilities** are in your archetype's section, and you've got them all as soon as you take it. Each one costs a size of a track, and how that works is just below. An archetype holds six abilities at most.
--   **One action a round for each archetype.** The most actions you can have in a round is one for each archetype you've got, and every one past the first costs 3 Aura (see [Extra actions](#s-extra-actions)). With two archetypes, that's one you can buy.
--   **A new archetype** can come when your [Aspiration](#s-aspiration) climbs past d12, instead of a Title or an attuned thing.
+-   **An archetype's 5 points** when you make your character, and it comes with its mechanic, its Trait and one ability. You can take as many as you can pay for, and they don't have to be different: Vesk's a Shadow twice over. They're separate from your Titles: Bram's a Guardian and a Leader, and his Titles are *The wall that held the harbour gate* and *A sergeant who lost his stripes*.
+-   **Your mechanic** is the thing only your archetype can do, and it's free. When it has you roll, you build the dice the usual way, from a Root and everything on your sheet that fits (see [Steps and Dice](#s-building-die)). Bram's orders come off his Soul, his second Title, *bark an order that gets obeyed* and Leader, the same as anything else he says.
+-   **Your Trait** is something that's always true of you because of your archetype. It's always on and it's free, and every archetype's got one, in its own section. Take an archetype twice and it's still the one Trait, since it's on all the time already.
+-   **Your abilities** are in your archetype's section. Your archetype comes with one, your pick off its list, Push included. More are a point each when you make your character, or a downtime slot later on, and an archetype holds six at most. Each one costs a size of a track when you use it, and how that works is just below.
+-   **It's a step on every roll it fits**, like everything else on your sheet, and an archetype you've taken twice is two steps.
+-   **There's no action limit.** Your archetypes don't cap your actions. Extra actions are bought with Aura, 3 for the first in a round, then 4, then 5 and so on (see [Extra actions](#s-extra-actions)).
+-   **A new archetype** can come when your [Aspiration](#s-aspiration) climbs past d12, instead of a Title or an attuned thing, with the ability it comes with.
 
 ### Abilities {#s-abilities}
 
@@ -34,7 +36,9 @@ Every archetype has a **home track**: Stamina, Confidence or Resolve. **Each abi
 **Nothing you pay takes a track below d2.** Nobody Blazes on purpose.
 :::
 
-**Push** is the one most archetypes have: +2 to one die on your mechanic, once you've rolled and you know you need it. A die the +2 takes to its top face, or past it, doesn't pay Aura. **Take the same archetype twice** and its Push is +3, three times it's +4, and so on.
+An ability's a step on a roll you use it on, like anything else on your sheet that fits. Wren's roll to mark a creature gets 1 more when she pays for Mark the pack to mark three of them at once.
+
+**Push** is the one most archetypes have on their list: +2 to one die on your mechanic, once you've rolled and you know you need it, so it's never a step. A die the +2 takes to its top face, or past it, doesn't pay Aura. **Take the same archetype twice** and its Push is +3, three times it's +4, and so on. You only need Push the once: Vesk's first Shadow came with Push and her second with Vanish, and her Push is +3.
 
 | Home track | Archetypes |
 | --- | --- |
@@ -43,7 +47,7 @@ Every archetype has a **home track**: Stamina, Confidence or Resolve. **Each abi
 | Resolve | Bard, Elementalist, Healer, Leader, Summoner, Teleporter |
 
 :::example[Bram stays on the wall]
-The brute's club comes at Bram, a d10 to knock him off the wall, and Bram's Defending: his Body and his Shieldwork, with his plate and his shield, 11 steps, a d12 and a d10, and his Stamina's d12 rolls with them when it lands. The club comes up 9, and Bram rolls 7, 6 and 4. Nothing's beaten it, and he isn't going off that wall, so he pays 1 Stamina for his Guardian's Push and makes the 7 a 9. That's a tie, and ties go to him, so he's still standing on the wall, on a d10 of Stamina now. If he'd taken Guardian twice, it'd be a 10.
+The brute's club comes at Bram, a d10 to knock him off the wall, and Bram's Defending: his Body, both Titles, *hold the line*, *fight in a shield wall*, Guardian, his plate and his shield, 14 steps, two d12s and a d4, and his Stamina's d12 rolls with them when it lands. The club comes up 9, and Bram rolls 7, 6 and 3, and his Stamina 4. Nothing's stopped it, and he isn't going off that wall, so he pays 1 Stamina for his Guardian's Push and makes the 7 a 9. That's a tie, and ties go to him, so he's still standing on the wall, on a d10 of Stamina now. If he'd taken Guardian twice, it'd be a 10.
 :::
 
 ### What only one archetype does {#only-one-archetype}
@@ -86,16 +90,16 @@ If you've got a character in your head already, pick the archetypes that fit how
 
 Here's how the six [ready-made characters](#s-pregens) come out.
 
-| Who | Archetypes | Titles |
+| Who | Archetypes and their abilities | Titles |
 | --- | --- | --- |
-| Vesk | Shadow, twice | *The best cat burglar in the city* · *Raised by the Guild* |
-| Bram | Guardian and Leader | *The wall that held the harbour gate* · *A sergeant who lost his stripes* |
-| Dorrie | Face and Shadow | *The voice that talked a duke out of his own house* · *The woman with a hundred names* |
-| Isolde | Oracle and Scholar | *The last student of a dead order* · *A scholar of forbidden texts* |
-| Wren | Hunter, twice | *The hunter who has never lost a trail* · *An outrider from the border war* |
-| Ash | Elementalist and Face | *The last fire-speaker of the Ember Court* · *The Court's runaway heir* |
+| Vesk | Shadow (*Push*) · Shadow (*Vanish*) | *The best cat burglar in the city* · *Raised by the Guild* |
+| Bram | Guardian (*Push*, *Stand firm*) · Leader (*Push*, *Everyone gets it*) | *The wall that held the harbour gate* · *A sergeant who lost his stripes* |
+| Dorrie | Face (*Push*, *Turn them*) · Shadow (*Push*, *Vanish*) | *The voice that talked a duke out of his own house* · *The woman with a hundred names* |
+| Isolde | Oracle (*Push*, *Hold it*) · Scholar (*Push*, *Find the flaw*) | *The last student of a dead order* · *A scholar of forbidden texts* |
+| Wren | Hunter (*Push*) · Hunter (*Mark the pack*) | *The hunter who has never lost a trail* · *An outrider from the border war* |
+| Ash | Elementalist (*Push*, *Sculpt*) · Face (*Push*, *Turn them*) | *The last fire-speaker of the Ember Court* · *The Court's runaway heir* |
 
-Vesk and Wren have each taken one archetype twice, so their Push is +3: Vesk's on her Shadow, and Wren's on her Hunter. Bram, Dorrie and Ash get +2 on each of theirs, and Isolde gets +2 on her Study and on her foresight. Her foresight comes off her Soul and The dead, 5 steps: a d10, or a d6 and a d4.
+Every archetype came with one ability, and Bram, Dorrie, Isolde and Ash bought the other off each list for a point. Vesk and Wren took one archetype twice, so each of theirs came with one: Push and Vanish for Vesk, and Push and Mark the pack for Wren. That makes their Push +3, Vesk's on her Shadow and Wren's on her Hunter. Bram, Dorrie and Ash get +2 on each of theirs, and Isolde gets +2 on her Study and on her foresight.
 
 ## Bard {#a-bard}
 

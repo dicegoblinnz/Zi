@@ -21,7 +21,17 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 
 ### 1. The rules
 
-None yet.
+Written into The Core, Building Your Character, How Archetypes Work, Conflict's Your Action and Appendix D on 14 Nov. Where the book says what prompt 2's calls say (a Boon's 2 points, or 1 on a Title with no permissions, and an attuned thing's awakenings past the ones it comes with at a point each), they're under 2 and not here.
+
+1. **An ability's a step on a roll you use it on**, like Wren's roll to mark when she pays for Mark the pack. Push comes once you've rolled, so it's never a step. That's how the crew's rolls in the plan count (none of them counts an ability), and it stops Push being a free step on every roll.
+2. **An awakening's a step on any roll it fits, whether you power it or use it or not**, the way the crew's rolls count *Long shot* and *A circle anywhere I can kneel*. Powering a passive one is what gets you its +1s, and an active one costs its Aura only when you use what it does.
+3. **Armour's a step on any roll it fits**, not only when you Defend, since it's an item you're using: Dorrie's court clothes when she passes as someone of rank, the way the plan counts them.
+4. **Something you use up is a step on the roll you use it in, and then it's crossed off**, so Isolde's salt packet in her ward is gone after it. Otherwise a smoke bomb would be a step on every roll for ever.
+5. **Your keepsake and your bag are free**, and everything else you carry is a point, what's in your bag included. That's how the crew's points add up.
+6. **An Awakened thing hasn't got room for an awakening you buy.** It holds the one it comes with and one for its Catch, so the book says buying more waits till it's grown.
+7. **Take an archetype twice and it's still the one Trait**, since it's on all the time anyway. Its Push is +3, and one Push between the two is enough, the way Vesk's first Shadow came with Push and her second with Vanish.
+8. **In a combo, anything of a friend's they have to explain is 1 Aura, and they pay it.**
+9. **A ward's die past 6 steps reaches a second friend you can touch**, the way a split's second die does, so Isolde's 10-step ward is *Warded d12* on Bram and *Warded d8* on Vesk.
 
 ### 2. The crew and the character
 

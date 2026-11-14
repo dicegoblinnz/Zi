@@ -176,7 +176,15 @@ Written 14 Nov: the decisions, this plan, the calls, the line in CLAUDE.md and `
 
 ### 1. The rules
 
-Not yet.
+Written 14 Nov on `rules/2026-11-14-stacking-rules`, landed into `rules/2026-11-14-stacking`. The calls are in `notes/to-confirm.md` under 14 Nov, 1. The rules.
+
+- **The Core** (02) is part 1 throughout: Roots from Titles (3, spread) and permissions (1), a roll as a Root and every thing that fits, 1 Aura for each thing you explain, Aura's maximum with attuned things and powering, extra actions at 3, 4, 5 with no cap, and combos bringing what fits. *Specialties and Permissions* is *Titles and Permissions* now, with the same id (`#s-permissions`).
+- **Building Your Character** (03) builds on 35 points, with a table of what each thing costs and comes with, and Vesk built start to finish on points. *Step 4: Roots and specialties* is *Step 4: Roots*, and *Growing a specialty* is *Growing a Root*. Every id stayed, and the builder's sections (the quick test, the Catches, Connect, the Boons, the items) kept their shapes.
+- **The Archetypes**: its opening says Trait too, and How Archetypes Work, Abilities and The crew's archetypes are part 1, the crew's table listing the abilities each has. Each archetype's Trait is prompt 3's, so nothing names one.
+- **Conflict's Your Action and Extra actions**, and **Appendix D's** Building the roll, Your action, Aura and Your character.
+- **The change log entry** `c-2026-11-14-stacking`, with the earlier entries it replaces saying so, and *Growing by points* under Still open.
+- **`tools/check_terms.py`** retires *specialty*, an attuned thing's own Aura (*Its Aura*, *its own way to Aura*), *pump* and the action cap (*for each archetype*), and *traits* is off the list.
+- **For the other prompts:** the other chapters still say specialty, pump, an attuned thing's own Aura and one action for each archetype, and `check_terms.py` finds them. Prompt 3: the Maker's *pump Aura into a friend's attuned thing* is powering now. Prompt 10: 17 Learn cards are behind this entry, so `tests/check-companion.mjs` part 10 fails till the deck's checked. Prompt 9: Appendix D changed, so the player reference PDF is behind it and `tests/check-site.mjs` fails on it till the sheets are rebuilt. Prompts 3 and 10 change Appendix D too. Prompt 6: part 3 of `tests/check-companion.mjs` looks for "past your maximum" in Aura on the Rules tab now, since that's what The Core's Aura says (a one-line change in your part).
 
 ### 2. The crew and the character
 
