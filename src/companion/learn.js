@@ -1,15 +1,20 @@
-// The learning round, at /characters/?learn, on Roots (8 Nov 2026). The brute
-// swings his club at Isolde's Body, and a new player answers it with Wren and
-// Bram, the way it goes in Answering a Telegraph (#s-answering): Wren's Body
-// and her Archery with her longbow, and Bram's Shieldwork with his war hammer,
-// in one roll. Everything comes off their sheets (roots.js), so the round
-// follows the rules: Isolde's Stamina if nobody answers, Aura for every die
-// that wins and every top face, past 5 while Wren's acting, and a size off
+// The learning round, at /characters/?learn, on stacking (14 Nov 2026). The
+// brute swings his club at Isolde's Body, and a new player answers it with
+// Wren and Bram, the way it goes in Answering a Telegraph (#s-answering):
+// Wren's Body and everything of hers that fits an arrow into his arm (both her
+// Titles, Hunter twice, her longbow and Long shot), and everything of Bram's
+// that fits getting his hammer under the club (the wall that held the harbour
+// gate, guard one person, Guardian, his war hammer and Ring the bell), in one
+// roll. Everything comes off their sheets (roots.js), so the round follows the
+// rules: Isolde's Stamina if nobody answers, Aura for every die that wins and
+// every top face, past Wren's maximum while she's acting, and a size off
 // Isolde's Stamina if the answer loses. The club is the book's own d8.
-// Nothing in it is saved.
+// Explanations are question bubbles, so each step's lesson is what's on the
+// screen. Nothing in it is saved.
 
 import { sizeDown, stepsToDice } from "./dice.js";
 import * as R from "./roots.js";
+import { tip } from "./tip.js";
 import { aura as kitAura, die as kitDie } from "../kit/kit.js";
 
 const CLUB = 8;
@@ -18,6 +23,8 @@ const STEPS = ["The GM telegraphs", "Answer it", "Roll", "That’s a round"];
 // roll, and shows what the dice did once they land.
 const TURN = { next: "cc-go-next", back: "cc-go-back", flip: "cc-flip", reveal: "cc-reveal" };
 const WORDS = ["no", "one", "two", "three", "four", "five", "six"];
+const stepsSaid = (n) => `${n} ${n === 1 ? "step" : "steps"}`;
+const thingsSaid = (n) => `${WORDS[n] ?? n} ${n === 1 ? "thing" : "things"}`;
 
 // How often a die stops another when ties go to the one stopping it, as the
 // smallest "x times in y".
@@ -50,17 +57,46 @@ export function makeLearn(k) {
   const isolde = crew("isolde");
   const wren = crew("wren");
   const bram = crew("bram");
-  // Wren's Body and her Archery, with her longbow, and Bram's Shieldwork, with
-  // his war hammer, off their sheets.
+  // What fits, off their sheets, found by what each thing is so the book can
+  // reorder a sheet: for Wren's arrow, her Titles, her archetypes, her bow and
+  // its passive awakening, and for Bram getting his hammer under the club,
+  // the Title that makes him a wall, guard one person, Guardian, his hammer
+  // and its passive awakening.
+  const thingsOf = (c) => (c ? R.thingsOf(c, R.freshRoots(c)) : []);
   const bowOf = (c) => c?.attuned.findIndex((a) => /bow\b/i.test(a.name)) ?? -1;
   const hammerOf = (c) => c?.attuned.findIndex((a) => /\bhammer\b/i.test(a.name)) ?? -1;
-  const ready = () => Boolean(isolde && wren && bram && R.specSteps(wren, "Archery") && R.specSteps(bram, "Shieldwork") && bowOf(wren) >= 0 && hammerOf(bram) >= 0);
-  const wrenRoll = (friends = []) => R.countRoll(wren, R.freshRoots(wren), { root: "Body", spec: "Archery", items: [`attuned|${bowOf(wren)}`], friends });
-  const bramSteps = () => R.specSteps(bram, "Shieldwork") + 1;
+  const passiveOn = (c, i) => thingsOf(c).find((x) => x.kind === "awk" && x.a === i && x.passive);
+  const wrenFits = () => {
+    const all = thingsOf(wren);
+    const bow = bowOf(wren);
+    return [...all.filter((x) => x.kind === "title" || x.kind === "arch"), all.find((x) => x.kind === "attuned" && x.a === bow), passiveOn(wren, bow)];
+  };
+  const bramFits = () => {
+    const all = thingsOf(bram);
+    const hammer = hammerOf(bram);
+    return [all.find((x) => x.kind === "title" && /\bwall\b/i.test(x.name)), all.find((x) => x.kind === "perm" && /^guard one person$/i.test(x.name)), all.find((x) => x.kind === "arch" && x.name === "Guardian"), all.find((x) => x.kind === "attuned" && x.a === hammer), passiveOn(bram, hammer)];
+  };
+  const ready = () => Boolean(isolde && wren && bram && bowOf(wren) >= 0 && hammerOf(bram) >= 0 && wrenFits().every(Boolean) && bramFits().every(Boolean));
+  const wrenRoll = (friends = []) => R.countRoll(wren, R.freshRoots(wren), { root: "Body", using: wrenFits().map((x) => x.key), friends });
+  const bramSteps = () => bramFits().length;
   const total = () => wrenRoll([bramSteps()]).total;
   const auraMax = () => wren.numbers.aura ?? 5;
   const stamina = () => isolde.numbers.stamina?.die ?? 12;
   const thing = (c, i) => c.attuned[i].name.replace(/^(Her|His|Their) /, (m) => m.toLowerCase());
+  // "both her Titles, Hunter twice, her longbow and Long shot", off the sheet.
+  const said = (list, whose) => {
+    const titles = list.filter((x) => x.kind === "title");
+    const archs = list.filter((x) => x.kind === "arch");
+    const same = archs.length > 1 && archs.every((x) => x.name === archs[0].name);
+    const parts = [
+      titles.length > 1 ? `both ${whose} Titles` : titles.map((x) => `<em>${esc(x.name.replace(/^The /, "the "))}</em>`)[0],
+      ...list.filter((x) => x.kind === "perm").map((x) => `<em>${esc(x.name)}</em>`),
+      same ? `${esc(archs[0].name)} twice` : archs.map((x) => esc(x.name)).join(" and "),
+      ...list.filter((x) => x.kind === "attuned").map((x) => esc(x.name.replace(/^(Her|His|Their) /, (m) => m.toLowerCase()))),
+      ...list.filter((x) => x.kind === "awk").map((x) => `<em>${esc(x.name)}</em>`),
+    ].filter(Boolean);
+    return parts.length > 1 ? `${parts.slice(0, -1).join(", ")} and ${parts.at(-1)}` : parts[0] ?? "";
+  };
   let L;
   let stop = null;
   const reset = () => {
@@ -85,18 +121,18 @@ export function makeLearn(k) {
 
   function stepTelegraph() {
     const [x, y] = odds(stamina(), CLUB);
-    return `<p>Every round starts with the GM saying what’s coming, before anything’s rolled: what it’s doing, who it’s aimed at and which Root, and how hard, in dice. That’s a <b>telegraph</b>.</p>
+    return `<p>Every round starts with the GM saying what’s coming, before anything’s rolled. That’s a <b>telegraph</b>. ${tip("ln-tele", "What it’s doing, who it’s aimed at and which Root, and how hard, in dice, so everyone can see it coming and choose what to stop.", "What a telegraph says")}</p>
     <p class="ln-gm"><b>GM:</b> The brute swings his club at Isolde’s Body. That’s a d${CLUB}.</p>
     <div class="ln-vs"><div class="ln-who">${die(CLUB, { own: "them" })}<span>The brute’s club</span></div><span class="ln-arrow" aria-hidden="true">↓</span><div class="ln-who">${die(stamina())}<span>Isolde’s Stamina</span></div></div>
-    <p>If nobody answers it, it lands at the end of the round, and Isolde rolls her Stamina against it, the track for her Body. Ties go to her, and a d${stamina()} against a d${CLUB} stops it ${x} times in ${y}. If it gets through, it costs her a size of Stamina.</p>
-    <p>Bram’s a Guardian, so he could intercept it for free and take it on his own Stamina. This time you’re going to stop it before it ever lands, and every die that wins is Aura.</p>
+    <p>If nobody answers it, it lands at the end of the round, and Isolde rolls her Stamina against it. ${tip("ln-ride", [`Stamina’s the track for her Body. Ties go to her, so a d${stamina()} against a d${CLUB} stops it ${x} times in ${y}.`, "If it gets through, it costs her a size of Stamina."], "Letting it land")}</p>
+    <p>This time you’re going to stop it before it ever lands. ${tip("ln-why", ["Bram’s a Guardian, so he could intercept it for free and take it on his own Stamina.", "Answering it’s better than that: every die of yours that wins is Aura."], "Why answer it")}</p>
     ${rule("s-telegraphs")}
     <div class="cc-row ln-foot">${btn("next", "Answer it", "primary")}</div>`;
   }
 
   const tile = (who, title, says, steps) => {
     const on = L.in.includes(who);
-    return `<div class="ln-pick"><button type="button" class="tile card ln-tile${on ? " is-in" : ""}" data-act="learn" data-do="pick" data-who="${who}" aria-pressed="${on}"><span class="tile-dice" aria-hidden="true">${stepsToDice(steps).map((d, j) => die(d, { cls: j ? "is-next" : "" })).join("")}</span><span class="tile-name">${esc(title)}</span><span class="tile-says">${esc(says)}</span></button></div>`;
+    return `<div class="ln-pick"><button type="button" class="tile card ln-tile${on ? " is-in" : ""}" data-act="learn" data-do="pick" data-who="${who}" aria-pressed="${on}"><span class="tile-dice" aria-hidden="true">${stepsToDice(steps).map((d, j) => die(d, { cls: j ? "is-next" : "" })).join("")}</span><span class="tile-name">${esc(title)}</span><span class="tile-says">${says}</span></button></div>`;
   };
 
   function stepAnswer() {
@@ -105,13 +141,14 @@ export function makeLearn(k) {
     const both = L.in.length === 2;
     const sum = wrenRoll([bs]);
     const dice = stepsToDice(sum.total);
-    return `<p>To answer a telegraph, you spend your action and build a roll from a Root and a specialty that fit the way you’re stopping it. What you’re using counts too, 1 for each thing.</p>
-    <p>Wren puts an arrow into the brute’s arm, so that’s her Body and her Archery, with ${esc(thing(wren, bowOf(wren)))}. Tap it to put her action in.</p>
-    ${tile("wren", "Wren’s Body and Archery", `Body ${w.rootN}, Archery ${w.specN}, ${thing(wren, bowOf(wren))} 1 · ${w.total} steps`, w.total)}
-    ${L.in.includes("wren") ? `<p>Bram puts his action into the same thing, getting his hammer under the club. Two actions going into one thing is a <b>combo</b>: one of you rolls, on their own Root, and everyone who put an action in adds their specialty and what they’re using. Tap Bram’s Shieldwork.</p>${tile("bram", "Bram’s Shieldwork", `Shieldwork ${R.specSteps(bram, "Shieldwork")}, ${thing(bram, hammerOf(bram))} 1 · ${bs} steps`, bs)}` : ""}
+    const all = dice.length === 2 ? "Both dice" : `All ${WORDS[dice.length] ?? dice.length} dice`;
+    return `<p>To answer a telegraph, you spend your action and pick the Root that fits the way you’re stopping it. Then everything on your sheet that fits goes in, a step each. ${tip("ln-fits", ["Your Root’s number is its steps, and every Title, permission, archetype, ability, attuned thing, awakening and item you’re using is 1 more.", "Anything that plainly fits is free. Anything you have to explain to make it fit is 1 Aura."], "What goes in")}</p>
+    <p>Wren puts an arrow into the brute’s arm, so that’s her Body, and ${said(wrenFits(), "her")} all fit. Tap it to put her action in.</p>
+    ${tile("wren", "Wren’s arrow", `Body ${w.rootN}, and ${thingsSaid(w.using.length)} that fit · ${stepsSaid(w.total)}`, w.total)}
+    ${L.in.includes("wren") ? `<p>Bram puts his action into the same thing, getting his hammer under the club. Two actions going into one thing is a <b>combo</b>: one of you rolls, on their own Root, and everyone who put an action in adds everything of theirs that fits. ${tip("ln-combo", [`For Bram that’s ${said(bramFits(), "his")}. His Root stays out of it, since it’s Wren’s roll.`], "What Bram puts in")} Tap Bram’s hammer.</p>${tile("bram", "Bram’s hammer", `${thingsSaid(bs)} that fit, and no Root · ${stepsSaid(bs)}`, bs)}` : ""}
     ${both ? `<div class="ln-sum"><div class="ln-dice">${dice.map((d) => die(d, { cls: "big" })).join("")}</div>
-      <p><b>${w.total} steps and ${bs} steps is ${sum.total} steps</b> from two actions, on Wren’s Body. ${howDice(sum.total)}. A combo doesn’t cost Aura, and every action in it gives you a split.</p>
-      <p>Both dice go on the club, and your best die counts.</p></div>${rule("s-teamwork")}` : rule("s-answering")}
+      <p><b>${stepsSaid(w.total)} and ${stepsSaid(bs)} is ${stepsSaid(sum.total)}</b> from two actions, on Wren’s Body. ${howDice(sum.total)}. ${tip("ln-split", "A combo doesn’t cost Aura, and every action in it gives you a split, so Wren could break those dice into more, smaller ones.", "What a combo costs")}</p>
+      <p>${all} go on the club, and your best die counts.</p></div>${rule("s-teamwork")}` : rule("s-answering")}
     <div class="cc-row ln-foot">${btn("back", "Back")}${btn("next", "Roll it", "primary", both ? "" : " disabled")}</div>`;
   }
 
@@ -137,16 +174,17 @@ export function makeLearn(k) {
     const a = auraOf(out);
     const max = auraMax();
     const said = [a.won ? `${a.won === 1 ? "one die" : `${WORDS[a.won] ?? a.won} dice`} won` : "", a.tops ? `${a.tops === 1 ? "one came up on its top face" : `${WORDS[a.tops] ?? a.tops} came up on their top faces`}` : ""].filter(Boolean).join(", and ");
-    const head = out === "won" ? `Wren paid 1 Aura for the tie, and a tie that’s bought pays nothing back${a.n ? `, but ${said}, so that’s ${a.n} Aura` : ""}.` : a.n ? `${said[0].toUpperCase()}${said.slice(1)}, so Wren gets ${a.n} Aura back. Every die that wins pays 1, and so does every top face, and whoever rolls gets it.` : "None of Wren’s dice won and none came up on a top face, so there’s no Aura in it.";
-    const past = a.now > max ? ` She’s acting, so she can go past her ${max}: she’s on ${a.now}. Once she’s finished, anything over ${max}’s gone, so she’d spend it first, on an extra action for 3 or on her longbow.` : "";
-    return `<div class="ln-aura"><p>${head}${past}</p><p class="ln-hex"><span class="k">Wren’s Aura</span>${kitAura(a.now, Math.max(max, a.now))}<b>${a.now}</b></p></div>`;
+    const pays = tip("ln-pays", "Every die that wins pays 1 Aura, and so does every top face, and whoever rolls gets it.", "What pays Aura");
+    const head = out === "won" ? `Wren paid 1 Aura for the tie, and a tie that’s bought pays nothing back${a.n ? `, but ${said}, so that’s ${a.n} Aura` : ""}.` : a.n ? `${said[0].toUpperCase()}${said.slice(1)}, so Wren gets ${a.n} Aura back.` : "None of Wren’s dice won and none came up on a top face, so there’s no Aura in it.";
+    const past = a.now > max ? ` She’s acting, so she’s on ${a.now}, past her ${max}. ${tip("ln-past", `Once she’s finished acting, anything over ${max}’s gone, so she’d spend it first: on an extra action for ${R.extraCost(0)}, or on <em>Hit anything I can see</em>.`, "Past her maximum")}` : "";
+    return `<div class="ln-aura"><p>${head} ${pays}${past}</p><p class="ln-hex"><span class="k">Wren’s Aura</span>${kitAura(a.now, Math.max(max, a.now))}<b>${a.now}</b></p></div>`;
   }
 
   function stepRoll() {
     if (L.pads) return stepPads();
     const dice = stepsToDice(total());
     if (!L.rolled) {
-      return `<p>Wren rolls the lot: ${named(dice, "the")} against the brute’s d${CLUB}. Beat it and it never lands. Lose, and it lands on Isolde at once, and nobody rolls her Stamina against it. A tie’s a loss, unless you pay 1 Aura.</p>
+      return `<p>Wren rolls the lot: ${named(dice, "the")} against the brute’s d${CLUB}. Beat it and it never lands. ${tip("ln-lose", ["Lose, and it lands on Isolde at once, and nobody rolls her Stamina against it.", "A tie’s a loss, unless you pay 1 Aura."], "If it loses")}</p>
       <div class="cc-row ln-foot">${btn("back", "Back")}${btn("real", "Roll real dice")}${btn("roll", "Roll the dice", "primary")}</div>`;
     }
     const spin = L.tumbling;
@@ -176,9 +214,9 @@ export function makeLearn(k) {
 
   function stepRound() {
     const landed = outcome() === "lands";
-    return `<p>That’s a round. The GM telegraphs, everyone takes one action, and whatever nobody answered lands at the end, on the tracks for the Roots it’s at. Then she telegraphs the next one.</p>
+    return `<p>That’s a round. The GM telegraphs, everyone takes one action, and whatever nobody answered lands at the end. ${tip("ln-round", ["What lands rolls against the tracks for the Roots it’s at. Then she telegraphs the next one.", `Want more than one action? Buy another with Aura, ${R.extraCost(0)} for the first in a round, then ${R.extraCost(1)}, then ${R.extraCost(2)}.`], "How a round goes")}</p>
     <p>${landed ? "The club’s already landed on Isolde, so there’s nothing left to land, and the round’s over." : "There was only the club, and you stopped it, so nothing lands and the round’s over."}</p>
-    <p>Your own character works the same way. Tap a specialty and the phone builds the roll from a Root and that specialty, with what you’re using and anything that costs Aura marked in gold, and does the counting for you.</p>
+    <p>Your own character works the same way: pick a Root, tap everything on your sheet that fits, and the phone does the counting.</p>
     ${rule("s-round")}
     <div class="cc-row ln-foot">${btn("again", "Play it again")}<a class="button primary" href="/characters/" data-act="nav">Pick a character</a></div>`;
   }
@@ -188,7 +226,7 @@ export function makeLearn(k) {
     <header class="cc-head"><p class="kicker">Step ${L.step + 1} of ${STEPS.length}</p><h1>Learn to play</h1>
       <p class="cc-small">One round with Isolde, Wren and Bram. You play Wren and Bram, and the phone does the counting.</p>
       <ol class="ln-dots" aria-hidden="true">${STEPS.map((_, i) => `<li${i <= L.step ? ' class="on"' : ""}></li>`).join("")}</ol></header>`;
-    if (!ready()) return `${head}<div class="cc-note is-warn"><p>The learning round needs Isolde, Wren and Bram from the crew, with Wren’s Archery and longbow and Bram’s Shieldwork and hammer, and one of them isn’t in the rules right now.</p></div>`;
+    if (!ready()) return `${head}<div class="cc-note is-warn"><p>The learning round needs Isolde, Wren and Bram from the crew, with Wren’s longbow and <em>Long shot</em>, and Bram’s war hammer and <em>Ring the bell</em>, Guardian, <em>guard one person</em> and the Title that makes him a wall, and one of them isn’t in the rules right now.</p></div>`;
     const turn = L.turn;
     L.turn = null;
     const body = [stepTelegraph, stepAnswer, stepRoll, stepRound][L.step]();

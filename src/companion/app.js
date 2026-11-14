@@ -204,17 +204,10 @@ const table = makeTable({
     store.save();
     if (!dialog.open) render();
   },
-  // A character's Roots, as the answer picker shows them: a tap opens the
-  // roll card on that Root, and everything that fits goes in there. Putting
-  // your action into a friend's answer brings what fits off your sheet, so
-  // till the live table asks for it a thing at a time, its steps are the
-  // things that built that Root.
-  actions: (ch, c) => R.ROOTS.map((root, i) => {
-    const n = c.roots[root];
-    return { i, name: root, n: Math.max(1, builtOf(c, root).length), says: `${steps(n)} · ${n ? diceLabel(stepsToDice(n)) : "a d2"}`, dice: (n ? stepsToDice(n) : [2]).map((d, j) => kitDie(d, { hide: true, cls: j ? "is-next" : "" })).join("") };
-  }),
-  answer: (i, tele) => openAction({ root: R.ROOTS[i] ?? null, tele }),
-  work: (i, w) => openAction({ root: R.ROOTS[i] ?? null, work: w }),
+  // The live table's answer, a roll at the scene and a roll on a Root open
+  // the roll card on the Root picked there (prompt 8).
+  answer: (root, tele) => openAction({ root, tele }),
+  work: (root, w) => openAction({ root, work: w }),
   defend: (pre) => openDefence(pre),
   signedOut: () => {
     sync.signedOutHere();
@@ -553,12 +546,12 @@ function noteTable(s) {
     const answered = first?.v != null && at0.length > 0 && (first.size === r.tele.d || !first.size);
     // Whoever put their action in, while their steps are still in it.
     const with_ = r.friends.length ? (r.tele.with ?? []).map((w) => ({ user: w.user, ch: w.ch })) : [];
-    table.record(s, r.tele.camp, "a", r.tele.id, answered ? { act: r.name, steps: r.total, dice: rolled(), opp: first.v, real: Boolean(r.real), ...(with_.length ? { with: with_ } : {}) } : null);
+    table.record(s, r.tele.camp, "a", r.tele.id, answered ? { root: r.root, steps: r.total, dice: rolled(), opp: first.v, real: Boolean(r.real), ...(with_.length ? { with: with_ } : {}) } : null);
   }
   // A roll at a stake or an event on the live table's scene is an action.
   if (r.kind === "action" && r.work) {
     const worked = first?.v != null && at0.length > 0 && (first.size === r.work.d || !first.size);
-    table.noteWork(s, r, worked ? { id: r.work.actId, k: "work", ref: r.work.ref, act: r.name, steps: r.total, roll: { dice: rolled(), opp: first.v, real: Boolean(r.real) }, aim: r.work.aim } : null);
+    table.noteWork(s, r, worked ? { id: r.work.actId, k: "work", ref: r.work.ref, root: r.root, steps: r.total, roll: { dice: rolled(), opp: first.v, real: Boolean(r.real) }, aim: r.work.aim } : null);
   }
   if (r.kind === "defence" && r.camp && r.teles?.some(Boolean)) {
     for (const h of blocks(r)) {

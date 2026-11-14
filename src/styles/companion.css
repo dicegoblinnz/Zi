@@ -1583,11 +1583,25 @@ button.bd-tok:active { transform: scale(0.97); }
 .tg-v .tg-there .tg-q { color: var(--ink); font-size: 0.98rem; }
 .tg-there .cc-small { margin: 0; }
 
-/* Answering: pick the set action, and the roll card says what it's answering. */
+/* Answering, a roll at the scene and a roll on a Root: pick the Root, its
+   number in a gold token beside its name and what it's for, and the roll card
+   adds everything on the sheet that fits. */
 .tg-pick .tg-list { margin: 0 0 0.8rem; }
-.tg-acts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0.6rem 0 1rem; }
-.tg-acts .tile { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "dice name" "dice steps"; column-gap: 10px; row-gap: 1px; min-height: 72px; padding: 8px 10px 8px 8px; }
-.tg-acts .tile-name { align-self: end; }
+.tg-lose { margin: -0.35rem 0 0.2rem; }
+.tg-roots { display: grid; gap: 8px; margin: 0.6rem 0 1rem; }
+.tg-roots .tile { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "dice name" "dice steps"; column-gap: 12px; row-gap: 1px; min-height: 64px; padding: 8px 12px 8px 8px; }
+.tg-roots .tile-name { align-self: end; }
+.tg-rootn { grid-area: dice; display: grid; place-items: center; width: 46px; height: 46px; font: 800 1.3rem/1 var(--body); color: var(--gold-ink); background: var(--zd-token, var(--surface)); border: 2px solid var(--gold); border-radius: 50%; }
+/* Putting your action into a friend's answer: a tap on everything that fits,
+   in the sheet's groups, and how many of them you'll have to explain. */
+.tg-join .tg-h3 { color: var(--gold-ink); }
+.tg-things { margin: 0.2rem 0 0.4rem; }
+.tg-things + .tg-things { margin-top: 0.35rem; padding-top: 0.35rem; border-top: 1px dashed var(--line); }
+.tg-things .cc-chipbtn em { font-style: italic; }
+.tg-explain { align-items: center; justify-content: space-between; gap: 10px; margin: 0.8rem 0 0.4rem; padding-top: 0.6rem; border-top: 1px solid var(--line); }
+.tg-explain-l { flex: 1 1 10rem; font-weight: 700; line-height: 1.3; }
+.tg-explain-l small { display: block; font-weight: 400; color: var(--gold-ink); }
+.tg-more .cc-chips > .tip { margin: 0 -6px; align-self: center; }
 .tg-for { margin: 0 0 1rem; padding: 0.55rem 0.75rem; font-size: 0.95rem; line-height: 1.4; background: color-mix(in srgb, var(--zd-them) 10%, var(--surface)); border-left: 3px solid var(--zd-them); border-radius: 2px; overflow-wrap: anywhere; }
 .tg-for .k { display: block; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--zd-them-ink); }
 .tg-verdict { margin: 0.4rem 0 0.8rem; }

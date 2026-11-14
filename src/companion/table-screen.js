@@ -64,6 +64,10 @@ const net = { ws: null, open: false, tries: 0, failed: 0, timer: 0, steady: 0, b
 
 // ------------------------------------------------------------ the words
 
+// Where an extra action came from. One bought with Aura comes from the table
+// already said with its price ("4 Aura", screenOf() in table-rules.js), and
+// an answer's act is how it was rolled ("12 steps on Body"), or the Root and
+// specialty one from before stacking rolled, as it was.
 const MORE = { aura: "3 Aura", resolve: "3 Aura", held: "held last round", hiding: "out of hiding", boon: "the Extra action Boon", trait: "the Extra action Boon" };
 const GOOD = new Set(["stopped", "held", "clear"]);
 const BAD = new Set(["hit", "landed", "through"]);
@@ -283,7 +287,7 @@ function crewPart(v) {
     const lines = p.acts.map(actLine);
     const on = r && !r.over && p.left != null;
     const left = on ? (p.left ? `${p.left === 1 ? "One action" : `${cap(words(p.left))} actions`} left` : "Done this round") : "";
-    const more = p.more.length ? `${p.more.length === 1 ? "An extra action" : `${cap(words(p.more.length))} extra actions`}: ${p.more.map((k) => MORE[k] ?? k).join(", ")}` : "";
+    const more = p.more.length ? `${p.more.length === 1 ? "An extra action" : `${cap(words(p.more.length))} extra actions`}: ${andList(p.more.map((k) => MORE[k] ?? k))}` : "";
     const none = !r ? "" : r.over ? "Didn’t act this round" : "Hasn’t acted yet";
     return `<li class="ts-p card${on && !p.left ? " is-done" : ""}"><span class="ts-pc" aria-hidden="true">${crestOf(archOf(p))}</span><div class="ts-pb"><h3 class="ts-pn">${esc(p.name)}</h3>${lines.length ? `<ul class="ts-pa">${lines.map((x) => `<li>${esc(cap(x))}</li>`).join("")}</ul>` : none ? `<p class="ts-pq">${none}</p>` : ""}${left || more ? `<p class="ts-pl">${esc([left, more].filter(Boolean).join(" · "))}</p>` : ""}</div></li>`;
   };
