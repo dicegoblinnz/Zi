@@ -28,7 +28,81 @@ Newest wins, and everything from Roots that Mo hasn't changed stands: the three 
 
 ## The crew on 35 points
 
-Not yet: prompt 0 settles them with Mo, then writes them here. Their sheets in 03b and every example in the book come from this section.
+**Waiting on Mo's yes** (14 Nov). Their sheets in 03b (prompt 2) and every example in the book come from this section.
+
+Everyone keeps both Titles, all six permissions, both archetypes with both their abilities, and their attuned thing, so every example keeps its pieces. The keepsake's free, and everything else they carry is a point. Bram comes to 35 as he was, and the rest had a point or more spare, so each picks up something that stacks. Everyone's Aura maximum is 7, with one attuned thing each. A roll below counts the Root, then 1 for each thing that plainly fits.
+
+### Vesk
+
+- **Points:** 35. Two Titles 10, four more permissions 4, Shadow twice 10 (*Push* and *Vanish* come with them), her grappling line 5, and six things she carries 6.
+- **First Title:** *The best cat burglar in the city* (Body 3). Permissions: *move unseen* (Body), *run the rooftops* (Body), *pick a mechanical lock* (Body).
+- **Second Title:** *Raised by the Guild* (Mind 2, Body 1). Permissions: *know how a lock's built* (Mind), *fight dirty with a knife* (Body), *find a buyer for anything* (Mind).
+- **Roots:** Body 8 · Mind 4 · Soul 0.
+- **Archetypes:** Shadow (*Push*) · Shadow (*Vanish*).
+- **Carries:** Common worn leathers, a knife, soft-soled boots (equipment, 3 of 3) · a purse of gold, a smoke bomb, a perfect set of picks (utility, 3 of 3) · the first coin she ever stole (keepsake) · an empty bag (0 of 10).
+- **Attuned (Awakened):** a grappling line, with *Anywhere I can throw a hook* (passive).
+- **Picking a lock:** Body 8, both Titles, *pick a mechanical lock*, *know how a lock's built* and her picks, 13 steps (2d12 and a d2). It was 10.
+- **Over Lord Vane's roof:** Body 8, her first Title, *move unseen*, *run the rooftops*, Shadow twice, her grappling line, *Anywhere I can throw a hook* and her boots, 16 steps (2d12 and a d8). It was 8.
+
+### Bram
+
+- **Points:** 35. Two Titles 10, four more permissions 4, Guardian and Leader 10 (each comes with one ability, and the second of each is 1 more, 2), his war hammer 5 (its Catch brings *Knock them flat*), and four things he carries 4.
+- **First Title:** *The wall that held the harbour gate* (Body 3). Permissions: *hold the line* (Body), *guard one person* (Body), *lift what two men can't* (Body).
+- **Second Title:** *A sergeant who lost his stripes* (Soul 2, Mind 1). Permissions: *fight in a shield wall* (Body), *bark an order that gets obeyed* (Soul), *spot who's in charge* (Mind).
+- **Roots:** Body 7 · Mind 2 · Soul 3.
+- **Archetypes:** Guardian (*Push*, *Stand firm*) · Leader (*Push*, *Everyone gets it*).
+- **Carries:** Fine plate armour, a Common shield (equipment, 2 of 3) · a medical kit, his coin from home (utility, 2 of 3) · his old sergeant's stripes (keepsake) · an empty bag (0 of 10).
+- **Attuned (Awakened):** his war hammer (Breaker), with its Catch, *Marked*: *Ring the bell* (passive) and *Knock them flat* (active).
+- **Defending behind his shield:** Body 7, both Titles, *hold the line*, *fight in a shield wall*, Guardian, his plate and his shield, 14 steps (2d12 and a d4). It was 11.
+- **Barking an order:** Soul 3, his second Title, *bark an order that gets obeyed* and Leader, 6 steps (a d12). It was 4.
+
+### Dorrie
+
+- **Points:** 35. Two Titles 10, four more permissions 4, Face and Shadow 10, a second ability for each 2, her signet pin 5, and four things she carries 4.
+- **First Title:** *The voice that talked a duke out of his own house* (Soul 3). Permissions: *talk my way past a door* (Soul), *read a room in a glance* (Mind), *make a lie sound like old news* (Mind).
+- **Second Title:** *The woman with a hundred names* (Mind 2, Body 1). Permissions: *pass as someone I'm not* (Mind), *forge a letter in any hand* (Body), *keep my story straight under questions* (Mind).
+- **Roots:** Body 2 · Mind 6 · Soul 4.
+- **Archetypes:** Face (*Push*, *Turn them*) · Shadow (*Push*, *Vanish*).
+- **Carries:** Common court clothes (equipment, 1 of 3) · a fine bottle of wine, a deck of marked cards, a forger's kit (utility, 3 of 3) · a letter of introduction (keepsake) · an empty bag (0 of 10).
+- **Attuned (Awakened):** a signet pin, with *Someone who matters* (passive).
+- **Lying past the gate guard:** Mind 6, both Titles, *make a lie sound like old news*, *keep my story straight under questions* and Face, 11 steps (a d12 and a d10). It was 9.
+- **Passing as someone of rank:** Mind 6, her second Title, *pass as someone I'm not*, Shadow, her signet pin, *Someone who matters* and her court clothes, 12 steps (2d12). It was 8.
+
+### Isolde
+
+- **Points:** 35. Two Titles 10, four more permissions 4, Oracle and Scholar 10, a second ability for each 2, her chalk and salt 5, and four things she carries 4.
+- **First Title:** *The last student of a dead order* (Soul 3). Permissions: *speak with the recently dead* (Soul), *draw a ward the dead can't cross* (Soul), *read the order's old script* (Mind).
+- **Second Title:** *A scholar of forbidden texts* (Mind 3). Permissions: *know the history of anything old* (Mind), *find what I need in any library* (Mind), *read dead languages* (Mind).
+- **Roots:** Body 0 · Mind 7 · Soul 5.
+- **Archetypes:** Oracle (*Push*, *Hold it*) · Scholar (*Push*, *Find the flaw*).
+- **Carries:** a Common coat with silver thread (equipment, 1 of 3) · a salt packet, a book she never finished, a reading lens (utility, 3 of 3) · an old letter (keepsake) · an empty bag (0 of 10).
+- **Attuned (Awakened):** chalk and salt, with *A circle anywhere I can kneel* (active).
+- **Reading the order's old script:** Mind 7, both Titles, *read the order's old script*, *read dead languages*, Scholar and her lens, 13 steps (2d12 and a d2). It was 9.
+- **Drawing a ward:** Soul 5, her first Title, *draw a ward the dead can't cross*, her chalk and salt, *A circle anywhere I can kneel* and her salt packet, 10 steps (a d12 and a d8). It was 6.
+
+### Wren
+
+- **Points:** 35. Two Titles 10, four more permissions 4, Hunter twice 10 (*Push* and *Mark the pack* come with them), her longbow 5 (its Catch brings *Hit anything I can see*), and six things she carries 6.
+- **First Title:** *The hunter who has never lost a trail* (Mind 3). Permissions: *follow any trail* (Mind), *move through the wild unseen* (Body), *know a beast's habits* (Mind).
+- **Second Title:** *An outrider from the border war* (Body 3). Permissions: *scout ahead of an army* (Body), *ride hard over rough country* (Body), *read the land for an ambush* (Mind).
+- **Roots:** Body 6 · Mind 6 · Soul 0.
+- **Archetypes:** Hunter (*Push*) · Hunter (*Mark the pack*).
+- **Carries:** her hooded cloak, a hunting knife (equipment, 2 of 3) · rations, a waterskin, a snare kit (utility, 3 of 3) · a torn map (keepsake) · her hunter's pack, with a coil of rope (1 of 10).
+- **Attuned (Awakened):** her longbow (Long, Two-Handed), with its Catch, *Wanted*: *Long shot* (passive) and *Hit anything I can see* (active).
+- **Shooting from cover:** Body 6, both Titles, Hunter twice, her longbow and *Long shot*, 12 steps (2d12). It was 7.
+- **Following a trail:** Mind 6, her first Title, *follow any trail* and Hunter twice, 10 steps (a d12 and a d8). It was 6.
+
+### Ash
+
+- **Points:** 35. Two Titles 10, four more permissions 4, Elementalist and Face 10, a second ability for each 2, her ember stone 5, and four things she carries 4.
+- **First Title:** *The last fire-speaker of the Ember Court* (Soul 3). Permissions: *throw fire* (Soul), *make a threat stick* (Soul), *feel every flame in a room* (Mind).
+- **Second Title:** *The Court's runaway heir* (Mind 2, Soul 1). Permissions: *know the old courts' history* (Mind), *carry myself like royalty* (Soul), *command a room* (Soul).
+- **Roots:** Body 0 · Mind 4 · Soul 8.
+- **Archetypes:** Elementalist (*Push*, *Sculpt*) · Face (*Push*, *Turn them*).
+- **Carries:** a scorched coat (equipment, 1 of 3) · a tinderbox, flash powder, a flask of lamp oil (utility, 3 of 3) · a silver locket (keepsake) · an empty bag (0 of 10).
+- **Attuned (Awakened):** an ember stone on a chain, with *Fire without a word* (passive).
+- **Throwing fire:** Soul 8, her first Title, *throw fire*, Elementalist, her ember stone and *Fire without a word*, 13 steps (2d12 and a d2). It was 10.
+- **Commanding a room:** Soul 8, her second Title, *command a room*, *carry myself like royalty* and Face, 12 steps (2d12). It was 8.
 
 ## The shared pieces
 
