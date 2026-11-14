@@ -749,7 +749,8 @@ export function makeTable(d) {
   // ------------------------------------------------------------ actions and the scene
 
   // Where another action can come from (Extra actions, in Conflict): Aura,
-  // as many as they like, at 3, then 4, then 5 a round (R.extraCost()), and
+  // as many as they like, at 3, then 4, then 5 a round (R.extraCost()),
+  // counted for each player on their own, whatever the others have bought, and
   // holding last round's, coming out of hiding or the Extra action Boon, once
   // each, which don't put the price up. From before Roots, 1 Resolve reads as
   // Aura and a trait as the Boon (moresOf() in table-rules.js).
@@ -913,7 +914,7 @@ export function makeTable(d) {
     const price = nextPrice(rec, s);
     const boon = R.boonCount(c, "Extra action") > 0;
     const off = (k) => rec.more.length >= MAX.more || (k === "aura" ? s.aura < price : ONCE.includes(k) && rec.more.includes(k));
-    const ask = tip(`tg-more-${ch.id}`, [`Buy another with Aura, as many as you like: ${R.EXTRA_AURA} for the first this round, then ${R.EXTRA_AURA + 1}, then ${R.EXTRA_AURA + 2}, and next round it’s back to ${R.EXTRA_AURA}.`, `Holding last round’s action and coming out of hiding${boon ? ", and the Extra action Boon once a scene," : ""} give you one each on top, and they don’t put the price up.`, ruleLink("s-extra-actions", "Extra actions")], "Where another action comes from");
+    const ask = tip(`tg-more-${ch.id}`, [`Buy another with Aura, as many as you like: ${R.EXTRA_AURA} for the first you buy this round, then ${R.EXTRA_AURA + 1}, then ${R.EXTRA_AURA + 2}, whatever the rest of the crew have bought, and next round it’s back to ${R.EXTRA_AURA}.`, `Holding last round’s action and coming out of hiding${boon ? ", and the Extra action Boon once a scene," : ""} give you one each on top, and they don’t put the price up.`, ruleLink("s-extra-actions", "Extra actions")], "Where another action comes from");
     const extra = `<details class="tg-more" data-open="tg-more"${d.isOpen("tg-more") ? " open" : ""}><summary>Got another action?</summary><div class="cc-chips">${MORES.filter(([k]) => k !== "boon" || boon).map(([k, label]) => `<button type="button" class="cc-chipbtn sm" data-act="tg" data-do="more" data-k="${k}"${off(k) ? " disabled" : ""}>${esc(k === "aura" ? `${price} Aura` : label)}</button>`).join("")}${ask}</div></details>`;
     return `<div class="tg-yours" role="group" aria-label="Your action this round"><p class="tg-yours-head">${head}</p>${answers || backs ? `<ul class="tg-done">${answers}${backs}</ul>` : ""}${more}
       ${left > 0 ? `<div class="cc-row"><button type="button" class="button" data-act="tg" data-do="else">Something else</button></div>` : ""}${extra}</div>`;

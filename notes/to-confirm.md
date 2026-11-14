@@ -88,7 +88,16 @@ The seventeen Traits are Mo's from chat. These are the details I filled in round
 
 ### 6. The play screen
 
-None yet.
+1. **Tapping a permission in brings its Title with it**, an awakening brings its attuned thing and an ability its archetype, since the thing it's on usually fits too. Tap it out if it doesn't. That's what gets Vesk's lock to four taps: her Body, *pick a mechanical lock*, *know how a lock's built* and her picks, 13 steps.
+2. **The chips come in three groups:** what built that Root, then what you've rolled with that Root before (the latest first), then the rest of your sheet. Pick the same lock twice and its things are at the top the second time.
+3. **Again is the last roll's Root and what went in it**, counted on your sheet as it is now. What it was up against, its extra actions and anything brought in start fresh, since they change every roll, and anything crossed out since stays out.
+4. **An ability on a roll's paid when you roll it**: 1 off its home track, or 2 for 1 when that track hasn't got a size to spare. The card says what it'll cost as you tap it in, and Roll waits till it can be paid.
+5. **Going at more than one thing**, each die says which it's at. A new one takes the last die that's sharing a target, and you can move any die in Your dice. Aura's 1 for each die that beats what it's at and 1 for each top face, the way the roller reads it.
+6. **Your dice is folded away till there's more than one thing to aim at**, with how many dice and the intents a tap away.
+7. **Defend in When it lands uses the same chips**, with your armour on that Root in already, bar what's broken. A Defend's explaining and abilities are paid when it rolls.
+8. **When a roll answers a telegraph on the live table**, only the dice at that telegraph go up as the answer. Anything else you aimed at on the same card is yours to sort out at the table.
+9. **The last roll on the play screen is the Again tile**, saying how it went last time. The GM's look still has the Last roll line.
+10. **Old traits from before Roots** say they don't come across, since archetypes have a Trait of their own again.
 
 ### 7. The builder and downtime
 
@@ -103,7 +112,9 @@ None yet.
 
 ### 8. The live table
 
-1. **The table and the roll card count extra actions together.** Buy one on the roll card and the next from Got another action on the live table is 4, and back the other way. The table keeps what each one cost and turns down one that's cheaper than its place in the round, so a phone can't get its second for 3. A phone that hasn't reloaded since this went live is told to reload before it buys one, since it'd charge the old flat 3.
+**You said yes on 14 Nov** to all of these, with each player's extra actions counted on their own, never the crew's together, the way call 1 says now.
+
+1. **Each player's extra actions climb on their own.** Vesk buying three doesn't put Bram's first up, so his is still 3. The roll card and the live table count the same player's together, so buy one on your roll card and your next from Got another action is 4, and back the other way. The table keeps what each one cost and turns down one that's cheaper than its place in that player's round, so a phone can't get its second for 3. A phone that hasn't reloaded since this went live is told to reload before it buys one, since it'd charge the old flat 3.
 2. **Answering starts with the Root.** Answer it, Work it and Something else's roll show Body, Mind and Soul with each one's number and what it's for, and the roll card opens on the one you pick to tap what fits.
 3. **Putting your action into a friend's answer is a tap on everything of yours that fits**, a row to each Title, archetype and attuned thing, then how many of them you'll have to explain, 1 Aura each, paid when it goes in and given back if you take it back before they roll. It needs one thing at least.
 4. **An answer reads as its steps on its Root**, like "Wren answered it with 17 steps on Body: 11 against its 6", on the GM's phone, the player's and the table screen. A friend's part reads as their steps, "3 steps into whoever answers the attendant". One rolled before stacking still says the specialty it rolled.

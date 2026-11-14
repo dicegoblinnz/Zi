@@ -1228,7 +1228,7 @@ try {
   await shot(kai.page, "tele-pick");
   await axe(kai.page, "picking the answer");
   await kai.page.click('.tg-roots [data-do="with"][data-r="Body"]');
-  await kai.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="10"][aria-pressed="true"]');
+  await kai.page.waitForSelector('#cc-dialog .cc-foe .zd-die[data-d=\"10\"]');
   has(await kai.page.textContent("#cc-dialog .tg-for"), "The left Warden’s d10", "the roll card says what it's answering");
   await kai.page.evaluate(() => window.ziCompanion.setDice([5, 1, 4]));
   await kai.page.click('#cc-dialog [data-act="go"]');
@@ -1257,11 +1257,11 @@ try {
   await sam.page.click('.tg-play li.tg [data-do="answer"]');
   await sam.page.waitForSelector(".tg-roots");
   await sam.page.click('.tg-roots [data-do="with"][data-r="Body"]');
-  await sam.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="8"][aria-pressed="true"]');
+  await sam.page.waitForSelector('#cc-dialog .cc-foe .zd-die[data-d=\"8\"]');
   await sam.page.click('#cc-dialog [data-act="go-real"]');
   await sam.page.click('#cc-dialog [data-act="pad"][data-k="p0"][data-v="3"]');
   await sam.page.click('#cc-dialog [data-act="pad"][data-k="p1"][data-v="2"]');
-  await sam.page.click('#cc-dialog [data-act="pad"][data-k="opp"][data-v="6"]');
+  await sam.page.click('#cc-dialog [data-act="pad"][data-k="f0"][data-v="6"]');
   await sam.page.click('#cc-dialog [data-act="pad-done"]');
   await sam.page.waitForSelector("#cc-dialog .tg-verdict");
   has(await sam.page.textContent("#cc-dialog .tg-verdict"), "It lands now, and there’s no defence against it.", "his 3 doesn't beat its 6");
@@ -1511,7 +1511,7 @@ try {
   await kai.page.waitForSelector(".tg-roots");
   has(await text(kai.page, "#cc-dialog .tg-pick"), "Bram’s in on it, so 3 more steps go into your roll as a combo.", "the answer says Bram's in on it");
   await kai.page.click('.tg-roots [data-do="with"][data-r="Body"]');
-  await kai.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="6"][aria-pressed="true"]');
+  await kai.page.waitForSelector('#cc-dialog .cc-foe .zd-die[data-d=\"6\"]');
   has(await text(kai.page, "#cc-dialog"), "Friend 1’s steps", "Bram's steps are in the roll");
   has(await text(kai.page, "#cc-dialog .cc-dice"), "11 steps", "her Body, and Bram's three");
   const comboAura = (await stateIn(kai.page, "vesk-aaaaaa")).aura;
@@ -1538,6 +1538,7 @@ try {
   same((await stateIn(kai.page, "vesk-aaaaaa")).aura, vNow - 3, "that cost her 3 Aura");
   same(await text(kai.page, '.tg-more [data-do="more"][data-k="aura"]'), "4 Aura", "and the next one's 4, since there's no cap");
   await until(async () => (await tableOf(tuesday.id))?.rounds?.at(-1)?.acts?.[`${kaiId}|vesk-aaaaaa`]?.paid?.join() === "3", "the table has what it cost", 4000);
+  same(await text(sam.page, '.tg-more [data-do="more"][data-k="aura"]'), "3 Aura", "while Bram's first is still 3, since each player's extra actions are their own");
   if (!(await kai.page.$eval(".tg-scenefold", (el) => el.open))) await kai.page.click(".tg-scenefold > summary");
   await piece(kai.page, "Dace’s satchel").locator('[data-do="work"]').click();
   await kai.page.waitForSelector('#cc-dialog [data-do="wwith"]');
@@ -1546,7 +1547,7 @@ try {
   await shot(kai.page, "scene-work");
   await axe(kai.page, "working a stake");
   await kai.page.click('#cc-dialog [data-do="wwith"][data-r="Body"]');
-  await kai.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="6"][aria-pressed="true"]');
+  await kai.page.waitForSelector('#cc-dialog .cc-foe .zd-die[data-d=\"6\"]');
   await kai.page.evaluate(() => window.ziCompanion.setDice([7, 1, 3]));
   await kai.page.click('#cc-dialog [data-act="go"]');
   await kai.page.waitForSelector("#cc-dialog .tg-verdict");
@@ -1657,7 +1658,7 @@ try {
   await sam.page.waitForSelector(".tg-roots");
   has(await text(sam.page, "#cc-dialog .tg-pick"), "Lose and it lands now, and the scene clock drops a size.", "answering says what losing does");
   await sam.page.click('.tg-roots [data-do="with"][data-r="Body"]');
-  await sam.page.waitForSelector('#cc-dialog [data-act="vs"][data-v="6"][aria-pressed="true"]');
+  await sam.page.waitForSelector('#cc-dialog .cc-foe .zd-die[data-d=\"6\"]');
   await sam.page.evaluate(() => window.ziCompanion.setDice([1, 1, 5]));
   await sam.page.click('#cc-dialog [data-act="go"]');
   await sam.page.waitForSelector("#cc-dialog .tg-verdict");

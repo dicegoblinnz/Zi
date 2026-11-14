@@ -17,7 +17,7 @@ import book from "../generated/book.json";
 import { die, diceFor, inline, pips, aura, scars, boxes, condition, tag, crest, telegraph, cost, seal, glyph, DEFS, SIGILS, SHAPES, SIZES, CHARGES, FIELDS, MARKS, GLYPHS } from "../kit/kit.js";
 import { diceLabel, stepsToDice } from "../companion/dice.js";
 import { withQuality } from "../companion/armour.js";
-import { rootFor, rootsSheet, specSteps } from "../companion/roots.js";
+import { countRoll, rootsSheet, thingsOf } from "../companion/roots.js";
 
 const crew = Object.fromEntries(book.crew.map((c) => [c.id, rootsSheet(c, [], book.companion.build)]));
 const archOf = (c) => c.archetypes.map((a) => a.name);
@@ -27,24 +27,39 @@ for (const a of ARCH) if (!SIGILS[a.name]) throw new Error(`The kit has no sigil
 const vesk = crew.vesk;
 const n = vesk.numbers;
 const order = ["vesk", "dorrie", "bram", "isolde", "wren", "ash"];
-// Each specialty as a roll on the Root it's usually rolled with.
-const tilesOf = (c) => c.specialties.map((sp) => ({ name: sp.name, root: rootFor(c, sp.name), steps: c.roots[rootFor(c, sp.name)] + sp.steps, spec: sp.steps }));
-// Vesk at the vault door: her Body and her Locks, with her picks.
-const lock = { body: vesk.roots.Body, locks: specSteps(vesk, "Locks") };
-lock.steps = lock.body + lock.locks + 1;
-// Bram talks his way past the gate: his Soul and his Command, a d8.
-const talk = crew.bram.roots.Soul + specSteps(crew.bram, "Command");
-// Wren and Bram on the brute's club: her Body, her Archery and her longbow,
-// and his Shieldwork and his hammer.
-const wrenShot = crew.wren.roots.Body + specSteps(crew.wren, "Archery") + 1;
-const bramIn = specSteps(crew.bram, "Shieldwork") + 1;
-const combo = wrenShot + bramIn;
-// Bram Defends: his Body and his Shieldwork, with his plate and his shield.
-// The Core's own example: Vesk over the roof, and Bram making a case for his
-// Soldiering.
-const roof = vesk.roots.Body + specSteps(vesk, "Stealth");
-const chase = crew.bram.roots.Body + specSteps(crew.bram, "Soldiering");
-const bramDefend = crew.bram.roots.Body + specSteps(crew.bram, "Shieldwork") + crew.bram.armour.filter((a) => a.root === "Body").length;
+// A roll off a crew sheet, the way the roll card counts it: one Root, and
+// every thing named, a step each (stacking, notes/stacking-plan.md). Each
+// name's a thing's words on the sheet, and one taken twice (Shadow) is two.
+// The build stops if a sheet's lost one, or a roll doesn't come to the
+// plan's steps.
+function rollOf(c, root, names, { cases = [], want = 0 } = {}) {
+  const all = thingsOf(c, {});
+  const keys = names.flatMap((n) => {
+    const found = all.filter((x) => x.name === n);
+    if (!found.length) throw new Error(`The kit's ${c.name} hasn't got "${n}" on her sheet any more. Check src/pages/kit.astro against 03b.`);
+    return found.map((x) => x.key);
+  });
+  const caseKeys = cases.flatMap((n) => all.filter((x) => x.name === n).map((x) => x.key));
+  const k = countRoll(c, {}, { root, using: [...keys, ...caseKeys], cases: caseKeys });
+  if (want && k.total !== want) throw new Error(`The kit's ${c.name} comes to ${k.total} steps on ${root}, not ${want}. Check src/pages/kit.astro against notes/stacking-plan.md.`);
+  return { ...k, names: [...names, ...cases] };
+}
+const T = (c, i) => c.titles[i].text;
+const bram = crew.bram;
+// Vesk at the vault door: her Body, both Titles, the two permissions about
+// locks and her picks, 13 steps.
+const lock = rollOf(vesk, "Body", [T(vesk, 0), T(vesk, 1), "pick a mechanical lock", "know how a lock’s built", "a perfect set of picks"], { want: 13 });
+// Bram barks an order: his Soul, his second Title, the order and Leader, a d12.
+const barked = rollOf(bram, "Soul", [T(bram, 1), "bark an order that gets obeyed", "Leader"], { want: 6 });
+// Over Lord Vane's roof: past a d12, two d12s and a d8.
+const roof = rollOf(vesk, "Body", [T(vesk, 0), "move unseen", "run the rooftops", "Shadow", vesk.attuned[0].name, vesk.attuned[0].awakenings[0].name, "soft-soled boots"], { want: 16 });
+// Bram Defends: his Body, both Titles, the line and the shield wall,
+// Guardian, his plate and his shield.
+const bramDefend = rollOf(bram, "Body", [T(bram, 0), T(bram, 1), "hold the line", "fight in a shield wall", "Guardian", ...bram.armour.map((a) => a.name)], { want: 14 });
+// The Core's own example: Bram chasing a smuggler, explaining his second
+// Title for 1 Aura.
+const chase = rollOf(bram, "Body", [], { cases: [T(bram, 1)], want: 8 });
+const stepsSaid = (k) => `${k} ${k === 1 ? "step" : "steps"}`;
 // Seals (stage 1 of notes/faction-feel-plan.md): every charge with the kinds
 // of faction the builder deals it to, every field and mark, the Brinewake's
 // board as the book has it, and the faction turn's glyphs with the book's
@@ -119,15 +134,22 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
             <div class="vt"><span class="vl">Aura</span><Fragment set:html={aura(n.aura, n.aura)} /></div>
           </div>
           <div class="vtiles">
-            {tilesOf(vesk).map((a) => (
+            {["Body", "Mind", "Soul"].map((root) => (
               <div class="vtile">
-                <Fragment set:html={diceFor(a.steps, { hide: true })} />
+                <Fragment set:html={diceFor(Math.max(1, vesk.roots[root]), { hide: true })} />
                 <div>
-                  <p class="tn">{a.name}</p>
-                  <p class="ts">{a.root} {vesk.roots[a.root]} and {a.spec}, {diceLabel(stepsToDice(a.steps))}</p>
+                  <p class="tn">{root}</p>
+                  <p class="ts">{vesk.roots[root] ? `${stepsSaid(vesk.roots[root])}, ${diceLabel(stepsToDice(vesk.roots[root]))}` : "nothing yet, a d2"}</p>
                 </div>
               </div>
             ))}
+            <div class="vtile vtile-wide">
+              <Fragment set:html={diceFor(lock.total, { hide: true })} />
+              <div>
+                <p class="tn">Again</p>
+                <p class="ts">Her Body and {lock.using.length} things for the lock, {stepsSaid(lock.total)}, {diceLabel(stepsToDice(lock.total))}</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -135,10 +157,10 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
       <!-- The roll -->
       <section id="roll" class="ksec">
         <h2>The roll</h2>
-        <p class="note">Bram talks his way past the gate guard. His Soul and his Command are {talk} steps, a d{talk * 2}, against the guard’s d6.</p>
-        <div class="vroll lead">
+        <p class="note">Bram barks an order at the gate guard: his Soul, his second Title, <em>bark an order that gets obeyed</em> and Leader, {stepsSaid(barked.total)}, a d{barked.dice[0]}, against the guard’s d6.</p>
+        <div class="vroll lead" data-mine={barked.dice[0]} data-max={crew.bram.numbers.aura}>
           <div class="vs">
-            <figure><Fragment set:html={die(8, { face: 6, label: "Bram’s d8 came up 6" })} /><figcaption>Bram’s d8</figcaption></figure>
+            <figure><Fragment set:html={die(barked.dice[0], { face: 6, label: `Bram’s d${barked.dice[0]} came up 6` })} /><figcaption>Bram’s d{barked.dice[0]}</figcaption></figure>
             <span class="vsx" aria-hidden="true">against</span>
             <figure><Fragment set:html={die(6, { own: "them", face: 5, state: "low", label: "The guard’s d6 came up 5" })} /><figcaption>The guard’s d6</figcaption></figure>
           </div>
@@ -154,7 +176,7 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
       <!-- Dice -->
       <section id="dice" class="ksec">
         <h2>Dice</h2>
-        <p>Every die is its real shape: a d2’s a coin, a d4 a triangle, a d6 a square, a d8 a diamond, a d10 a kite and a d12 a pentagon. A Root and a specialty add up to steps, and the steps make the die, straight off the table in The Core.</p>
+        <p>Every die is its real shape: a d2’s a coin, a d4 a triangle, a d6 a square, a d8 a diamond, a d10 a kite and a d12 a pentagon. A Root and every thing that fits add up to steps, and the steps make the die, straight off the table in The Core.</p>
         <div class="kladder">
           {SIZES.map((d) => (
             <figure><Fragment set:html={die(d)} /><figcaption><b>{d / 2}</b> {d === 2 ? "step" : "steps"}, a {SHAPES[d].name}</figcaption></figure>
@@ -185,22 +207,21 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
           <figure><Fragment set:html={die(6, { own: "harm", label: "Harm, a d6" })} /><figcaption>Harm</figcaption></figure>
         </div>
         <h3>Past a d12</h3>
-        <p>Wren and Bram answer the brute’s club together: her Body, her Archery and her longbow, {wrenShot} steps, and his Shieldwork and his hammer, {bramIn} more, so {combo} steps, {diceLabel(stepsToDice(combo))}.</p>
-        <div class="beyond"><Fragment set:html={diceFor(combo)} /></div>
+        <p>Vesk goes over Lord Vane’s roof with everything that fits: her Body, her first Title, <em>move unseen</em>, <em>run the rooftops</em>, Shadow twice, her grappling line, <em>Anywhere I can throw a hook</em> and her boots, {stepsSaid(roof.total)}, {diceLabel(stepsToDice(roof.total))}.</p>
+        <div class="beyond"><Fragment set:html={diceFor(roof.total)} /></div>
       </section>
 
       <!-- Steps -->
       <section id="steps" class="ksec">
         <h2>Steps</h2>
-        <p>Vesk at the vault door, step by step: one Root, one specialty and the item in her hand, and they make {diceLabel(stepsToDice(lock.steps))}.</p>
+        <p>Vesk at the vault door, step by step: one Root and every thing on her sheet that fits, a step each, and they make {diceLabel(stepsToDice(lock.total))}.</p>
         <div class="buildup">
           <ul>
-            <li><Fragment set:html={pips(lock.body)} /><span>Her Body, {lock.body}</span></li>
-            <li><Fragment set:html={pips(lock.locks)} /><span>Her Locks, {lock.locks}</span></li>
-            <li><Fragment set:html={pips(1)} /><span>Her picks</span></li>
+            <li><Fragment set:html={pips(lock.rootN)} /><span>Her Body, {lock.rootN}</span></li>
+            {lock.names.map((name) => <li><Fragment set:html={pips(1)} /><span>{name.startsWith("a ") || name.startsWith("A ") ? `Her ${name.replace(/^an? /i, "")}` : name}</span></li>)}
           </ul>
           <span class="eq" aria-hidden="true">=</span>
-          <Fragment set:html={diceFor(lock.steps)} />
+          <Fragment set:html={diceFor(lock.total)} />
         </div>
       </section>
 
@@ -257,15 +278,16 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
       <!-- Defend -->
       <section id="defend" class="ksec">
         <h2>Defend</h2>
-        <p>Defend as your action and a Root and a specialty roll with your tracks when the telegraphs land, with your armour as items. Bram’s Body and his Shieldwork, with his plate and his shield, are {bramDefend} steps, {diceLabel(stepsToDice(bramDefend))}, and his Stamina’s d12 rolls with them, so each die stops one telegraph.</p>
+        <p>Defend as your action and a Root and everything that fits how you’re defending roll with your tracks when the telegraphs land, with your armour as items. Bram’s Body, both his Titles, <em>hold the line</em>, <em>fight in a shield wall</em>, Guardian, his plate and his shield are {stepsSaid(bramDefend.total)}, {diceLabel(stepsToDice(bramDefend.total))}, and his Stamina’s d12 rolls with them, so each die stops one telegraph.</p>
         <div class="defends">
           <div class="dfn">
             <ul>
-              <li><Fragment set:html={pips(crew.bram.roots.Body)} /><span>His Body</span></li>
-              <li><Fragment set:html={pips(specSteps(crew.bram, "Shieldwork"))} /><span>His Shieldwork</span></li>
+              <li><Fragment set:html={pips(bramDefend.rootN)} /><span>His Body</span></li>
+              <li><Fragment set:html={pips(4)} /><span>His Titles and two permissions</span></li>
+              <li><Fragment set:html={pips(1)} /><span>Guardian</span></li>
               {crew.bram.armour.map((a) => <li><Fragment set:html={pips(1)} /><span>{withQuality(a.name, a.quality)}</span></li>)}
             </ul>
-            <Fragment set:html={diceFor(bramDefend)} />
+            <Fragment set:html={diceFor(bramDefend.total)} />
           </div>
         </div>
         <p>Armour’s on a Root, and every piece has a box for every hit it can take there instead of the track dropping, from its quality: Common 1, Fine 2 and Masterwork 3. A ticked box is ember, and the last one breaks it.</p>
@@ -385,8 +407,8 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
             <Fragment set:html={crest(archOf(vesk), { size: "sm", label: "Vesk" })} />
             <span class="rk">Example</span><span class="rn">Building a roll</span>
           </div>
-          <p><b>Plainly fits:</b> Vesk’s going over Lord Vane’s roof without a sound. That’s her Body and her Stealth, {roof} steps, and her grappling line’s in her hand, so it’s {roof + 1}: <Fragment set:html={stepsToDice(roof + 1).map((d) => `a ${inline(d)}`).join(" and ")} />.</p>
-          <p><b>Making a case:</b> Bram’s chasing a smuggler down the quay. His Body’s {crew.bram.roots.Body}, but Shieldwork’s for holding a line, not running a man down. He says a sergeant knows exactly how a frightened man runs, and pays <Fragment set:html={cost(1)} /> to bring his Soldiering in, so it’s {chase} steps, <Fragment set:html={stepsToDice(chase).map((d) => `a ${inline(d)}`).join(" and ")} />. Without it, he’d have rolled his Body on its own, {crew.bram.roots.Body} steps, <Fragment set:html={stepsToDice(crew.bram.roots.Body).map((d) => `a ${inline(d)}`).join(" and ")} />.</p>
+          <p><b>Plainly fits:</b> Vesk’s going over Lord Vane’s roof without a sound. That’s her Body, her first Title, <em>move unseen</em>, <em>run the rooftops</em>, Shadow twice, her grappling line, <em>Anywhere I can throw a hook</em> and her soft-soled boots, {stepsSaid(roof.total)}: <Fragment set:html={stepsToDice(roof.total).map((d) => `a ${inline(d)}`).join(" and ")} />.</p>
+          <p><b>Explaining:</b> Bram’s chasing a smuggler down the quay. His Body’s {crew.bram.roots.Body}, but nothing else on his sheet’s about running a man down. He says a sergeant knows exactly how a frightened man runs, and pays <Fragment set:html={cost(chase.aura)} /> to bring his second Title in, so it’s {stepsSaid(chase.total)}, <Fragment set:html={stepsToDice(chase.total).map((d) => `a ${inline(d)}`).join(" and ")} />. Without it, he’d have rolled his Body on its own, {stepsSaid(crew.bram.roots.Body)}, <Fragment set:html={stepsToDice(crew.bram.roots.Body).map((d) => `a ${inline(d)}`).join(" and ")} />.</p>
         </div>
       </section>
     </main>
@@ -433,8 +455,10 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
 
       // The roll: Bram's d8 against the guard's d6, and the Aura it pays: 1
       // for a win and 1 for a top face.
-      let bramAura = 4;
       const rollBox = document.querySelector(".vroll");
+      const bramDie = Number(rollBox.dataset.mine) || 12;
+      const bramMax = Number(rollBox.dataset.max) || 7;
+      let bramAura = bramMax - 1;
       const figs = rollBox.querySelectorAll(".vs figure");
       const verdict = rollBox.querySelector(".verdict");
       const why = rollBox.querySelector(".why");
@@ -443,28 +467,28 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
       act("roll").addEventListener("click", async (e) => {
         const button = e.currentTarget;
         button.disabled = true;
-        const mine = rollDie(8), theirs = rollDie(6);
+        const mine = rollDie(bramDie), theirs = rollDie(6);
         if (!still()) {
           for (let i = 0; i < 7; i++) {
-            put(figs[0], die(8, { face: rollDie(8), spin: true }));
+            put(figs[0], die(bramDie, { face: rollDie(bramDie), spin: true }));
             put(figs[1], die(6, { own: "them", face: rollDie(6), spin: true }));
             await new Promise((r) => setTimeout(r, 70));
           }
         }
-        const top = mine === 8;
+        const top = mine === bramDie;
         const result = mine > theirs ? "beat" : mine === theirs ? "tie" : "under";
         put(figs[1], die(6, { own: "them", face: theirs, state: result === "beat" ? "low" : "", cls: "is-landed", label: `The guard’s d6 came up ${theirs}` }));
         await new Promise((r) => setTimeout(r, still() ? 0 : 140));
-        put(figs[0], die(8, { face: mine, state: top ? "top" : result === "under" ? "low" : result === "tie" ? "tie" : "", cls: "is-landed", label: `Bram’s d8 came up ${mine}` }));
+        put(figs[0], die(bramDie, { face: mine, state: top ? "top" : result === "under" ? "low" : result === "tie" ? "tie" : "", cls: "is-landed", label: `Bram’s d${bramDie} came up ${mine}` }));
         verdict.textContent = result === "beat" ? "Beat it" : result === "tie" ? "A tie" : "Under";
         const gain = (result === "beat" ? 1 : 0) + (top ? 1 : 0);
         const was = bramAura;
-        bramAura = Math.min(5, bramAura + gain);
+        bramAura = Math.min(bramMax, bramAura + gain);
         why.textContent = result === "beat" ? `His ${mine} beats the guard’s ${theirs}, so he’s through the gate` : result === "tie" ? `${mine} each. A tie’s the guard’s, unless Bram pays 1 Aura to make it his` : `The guard’s ${theirs} beats his ${mine}. He’s not getting through like that`;
         why.textContent += gain ? `, and that’s ${gain} Aura${top ? ", with a top face" : ""}.` : ".";
-        auraBox.innerHTML = aura(bramAura, 5);
+        auraBox.innerHTML = aura(bramAura, bramMax);
         [...auraBox.querySelectorAll(".zd-chit.on")].slice(was, bramAura).forEach((el) => el.classList.add("is-new"));
-        if (bramAura >= 5) bramAura = 3;
+        if (bramAura >= bramMax) bramAura = bramMax - 2;
         button.disabled = false;
       });
 
@@ -587,17 +611,21 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
   .vt { display: grid; gap: 0.35rem; justify-items: start; min-width: 0; }
   .vt.die-t { justify-items: center; }
   .vt.die-t .zd-die { --s: 46px; }
-  .vtiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.6rem; }
+  /* The three Roots side by side, then Again under them, the width of all three. */
+  .vtiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+  .vtile-wide { grid-column: 1 / -1; }
+  .vtile-wide .ts { white-space: normal; }
   .vtile { display: flex; align-items: center; gap: 0.65rem; min-height: 72px; padding: 0.5rem 0.6rem; border-radius: 4px; min-width: 0; background: var(--surface); border: 2px solid var(--line); }
   .vtile > div { min-width: 0; }
   .vtile .zd-dice { --s: 50px; flex-wrap: nowrap; gap: 0; flex: none; align-items: flex-end; }
   .vtile .zd-dice .zd-die + .zd-die { --s: 26px; margin-left: -8px; }
   .tn { margin: 0; font-family: var(--display); font-weight: 700; font-size: 1.12rem; line-height: 1.1; }
   .ts { margin: 0.25rem 0 0; font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
-  /* A specialty's name and its Root take the tile's width on a phone, with
-     the dice above them. */
+  /* A Root's name and its steps take the tile's width on a phone, with the
+     dice above them. Again keeps its dice beside its words. */
   @media (max-width: 480px) {
     .vtile { flex-direction: column; justify-content: center; text-align: center; gap: 0.35rem; padding: 0.6rem 0.4rem; }
+    .vtile-wide { flex-direction: row; text-align: left; }
     .ts { white-space: normal; }
   }
 

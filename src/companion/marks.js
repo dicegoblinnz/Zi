@@ -29,8 +29,13 @@ export function placesOf(c) {
   };
 }
 
-// Every line on a sheet on Roots (roots.js): where it sits, what it says, and
-// what to call it.
+// A Title's spread, the way the sheet writes it: Body 3, or Mind 2, Body 1.
+const spreadOf = (t) => ["Body", "Mind", "Soul"].filter((r) => (t.roots?.[r] ?? 0) > 0).sort((a, b) => t.roots[b] - t.roots[a]).map((r) => `${r} ${t.roots[r]}`).join(", ");
+
+// Every line on a sheet since stacking (roots.js): where it sits, what it
+// says, and what to call it. A Title says its spread, a permission its Root,
+// and an archetype its Trait and the abilities this character's got, so a
+// character saved before stacking gets a gold mark on each that changed.
 export function linesOf(c) {
   const out = [];
   const add = (id, text, name) => out.push({ id, text, name });
@@ -40,18 +45,23 @@ export function linesOf(c) {
   add("num:stride", `Stride ${n.stride}${note(n.strideNote)}`, "Stride");
   for (const [k, name] of [["stamina", "Stamina"], ["confidence", "Confidence"], ["resolve", "Resolve"]]) add(`num:${k}`, `${name} starts at d${n[k]?.die ?? 12}${note(n[k]?.note)}`, name);
   for (const root of ["Body", "Mind", "Soul"]) add(`root:${root}`, `${root} ${c.roots[root]}`, root);
-  for (const sp of c.specialties) add(`spec:${sp.name}`, `${sp.name} ${sp.steps}`, sp.name);
   c.titles.forEach((t, i) => {
     const title = `your ${ORD[i] ?? "next"} Title`;
-    add(`title:${P.titles[i]}`, `${t.name} (${t.root}; ${(t.specialties ?? []).join(", ")})`, `Your ${ORD[i] ?? "next"} Title`);
-    t.permissions.forEach((p, j) => add(`perm:${P.titles[i]}:${P.perms[i][j]}`, `${p.text} (${p.root}, ${p.specialty})`, `A permission on ${title}`));
+    add(`title:${P.titles[i]}`, `${t.text ?? t.name} (${spreadOf(t) || "nothing on a Root"})`, `Your ${ORD[i] ?? "next"} Title`);
+    t.permissions.forEach((p, j) => add(`perm:${P.titles[i]}:${P.perms[i][j]}`, `${p.text} (${p.root || "no Root"})`, `A permission on ${title}`));
     (t.boons ?? []).forEach((b, k) => add(`boon:${P.titles[i]}:${P.boons[i][k]}`, `${b.name ? `${b.name}, ` : ""}the ${b.lever} Boon${b.on ? ` (${b.on})` : ""}: ${b.text}`, `A Boon on ${title}`));
   });
-  const seen = new Set();
+  // Each archetype once, with what it's got between every time it's taken.
+  const archs = new Map();
   for (const a of c.archetypes) {
-    if (seen.has(a.name)) continue;
-    seen.add(a.name);
-    add(`arch:${a.name}`, `${a.name}, home ${a.home ?? ""}${a.abilities?.length ? `: ${a.abilities.map((x) => `${x.name}, ${plain(x.html ?? x.text)}`).join(" ")}` : ""}`, a.name);
+    const had = archs.get(a.name);
+    const have = new Set([...(had?.have ?? []), ...(Array.isArray(a.have) ? a.have : (a.abilities ?? []).map((x) => x.name))]);
+    archs.set(a.name, { a: had?.a ?? a, have });
+  }
+  for (const [name, { a, have }] of archs) {
+    const abilities = (a.abilities ?? []).filter((x) => have.has(x.name));
+    const trait = a.trait?.name ? ` Trait: ${a.trait.name}${a.trait.text ? `, ${plain(a.trait.text)}` : ""}.` : "";
+    add(`arch:${name}`, `${name}, home ${a.home ?? ""}.${trait}${abilities.length ? ` ${abilities.map((x) => `${x.name}, ${plain(x.html ?? x.text)}`).join(" ")}` : ""}`, name);
   }
   const kit = c.carry;
   // Armour says its quality and its Root, so a change to either is marked too.
@@ -65,7 +75,7 @@ export function linesOf(c) {
   add("kit:bag", `${kit.bag.name}${kit.bag.items?.length ? `: ${kit.bag.items.join(", ")}` : ""}`, "The bag");
   c.attuned.forEach((a, i) => {
     const name = a.name.charAt(0).toUpperCase() + a.name.slice(1);
-    add(`att:${i}`, `${a.name}${note(a.props)}, ${a.stage || "Awakened"}${a.aura ? `, its Aura ${a.aura}` : ""}${a.catch ? `, its Catch ${a.catch}` : ""}${a.burden ? `, its Burden ${a.burden}` : ""}`, name);
+    add(`att:${i}`, `${a.name}${note(a.props)}, ${a.stage || "Awakened"}${a.catch ? `, its Catch ${a.catch}` : ""}${a.burden ? `, its Burden ${a.burden}` : ""}`, name);
     (a.awakenings ?? []).forEach((w, j) => add(`att:${i}:${P.attuned[i][j]}`, `${w.name} (${w.kind}): ${plain(w.text)}`, `An awakening on ${a.name.replace(/^(A|An|The|His|Her|Their) /, (m) => m.toLowerCase())}`));
   });
   for (const p of c.threads) p.threads.forEach((t, j) => add(`thr:${p.person}:${P.threads[p.person][j]}`, `${t.text}${note(t.note)}`, `A thread with ${p.person}`));
