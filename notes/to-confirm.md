@@ -93,7 +93,15 @@ None yet.
 
 ### 10. The player's chapters
 
-None yet.
+Written into Conflict, Tactical Play, Magic, the side chapters, Downtime, Playing Your Way, Session Zero, Growing, Coin and Kit, the rest of Appendix D and the Learn deck on 14 Nov.
+
+1. **Isolde's wards are for the dead.** *Draw a ward the dead can't cross* plainly fits the dead, so against an Iron Warden, with a dead man inside it, she makes her case for 1 Aura, and against arrows or a living blade it's going beyond, 1 Aura. Her wards used to be her Warding specialty, which covered anything.
+2. **A keepsake's a step when it fits**, like anything you carry: Wren's torn map when she's finding the abbey road, and Dorrie's letter of introduction when she's getting in front of a magistrate.
+3. **The same roll can count differently.** Bram behind his shield is 14 steps, and 15 when he's guarding one of the crew, since *guard one person* fits then. The book counts what plainly fits each time.
+4. **Inspired and Surging** are a step on one kind of thing, named when they're placed, where they were a step on one of your specialties, and a spent *Surging* makes one die of a roll it fits a d12.
+5. **Someone joining later builds on what the crew's worth.** A new character, or one replacing a character who retired or died, gets about as many points as the crew's characters would cost built today, the way Building Your Character counts it. Vesk's worth 47 at session 20. It used to say the same progression.
+6. **Vesk's third Title comes at session 7**, *The woman who has never been seen* (Mind 2, Body 1, with *know who's watching a room*), the way Building's Aspiration example has it, so in Growing her picks are attuned at session 12 instead, and *The ghost of the harbour quarter* is gone. The two chapters disagreed before.
+7. **A Move counts everything that fits**, the same as any roll, so moves get long: Vesk's run over the rooftops is 12 steps, two d12s added together, and even Bram's Body on its own is a d12 and a d2. Worth watching at the table.
 
 ### 11. The GM's side
 

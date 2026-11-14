@@ -6,7 +6,7 @@ order: 4
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::quote
 Everything the crew wants, owns and owes, out on the table where everyone can see it.
@@ -38,7 +38,7 @@ Most dice in Zi'Dara count down. A scene clock, a stake clock, an event, Supplie
 
 -   **In a scene**, an action aimed at it rolls against its die, when the GM says it's within reach. That's usually once or twice a session, when a scene's really about it.
 -   **In downtime**, the crew's action or a personal slot spent on it is one roll.
--   **Whoever does it builds the roll**, a Root and a specialty that fit what they're doing about it, the same as any roll, in a scene or in downtime.
+-   **Whoever does it builds the roll**, a Root and everything on their sheet that fits what they're doing about it, the same as any roll, in a scene or in downtime.
 -   **Ties go to the die you're climbing.** In a scene you can pay 1 Aura to win one, the same as always. In downtime there's no Aura, so see [Rolling in downtime](#s-downtime-rolls).
 
 ## The Party Goal {#s-goal}
@@ -50,9 +50,9 @@ The Goal is what the crew's after this arc, like *clear Dorrie's name*, *free th
 -   **When it climbs past d12, the crew's done it.** Play the moment out. Then the crew grows (see [How the crew grows](#s-crew-grows)), everyone writes one new [thread](#s-bonds), to someone the Goal brought into their life, and the table writes the next Goal, at d2.
 
 :::example[Clearing Dorrie's name]
-**Session 1.** The crew corners the forger who's been signing Dorrie's hand on letters, and the GM says it out loud: the Goal's within reach. The proof's locked in his desk, so Vesk goes at it with her Body and her Locks, and her picks, 10 steps, a d12 and a d8. Her best is a 6 against the Goal's d2, which rolls a 2, and it climbs to d4.
+**Session 1.** The crew corners the forger who's been signing Dorrie's hand on letters, and the GM says it out loud: the Goal's within reach. The proof's locked in his desk, so Vesk goes at it with her Body, both Titles, *pick a mechanical lock*, *know how a lock's built* and her picks, 13 steps, two d12s and a d2. Her best is a 6 against the Goal's d2, which rolls a 2, and it climbs to d4.
 
-**Downtime.** The crew's action goes on getting the proof in front of the right magistrate, and Dorrie's plainly the right person for it. There's no lie in this, so it's her Soul and her Persuasion, 4 steps, a d8, against the d4. It's 3 against 3, and the tie goes to the Goal. She pays 1 Resolve to roll again and gets a 7, so it's d6.
+**Downtime.** The crew's action goes on getting the proof in front of the right magistrate, and Dorrie's plainly the right person for it. There's no lie in this, so it's her Soul, her first Title, *talk my way past a door*, Face and her letter of introduction, 8 steps, a d12 and a d4, against the d4. Her best is a 3 against its 3, and the tie goes to the Goal. She pays 1 Resolve to roll again and gets a 7, so it's d6.
 
 **Sessions 2 to 5.** It climbs slower as it goes, and a bad night at the magistrate's knocks it back a step. By session 5 it's at d12, and the last roll is Dorrie standing up in court. She wins it, the Goal climbs past d12, and the crew's done it.
 :::
