@@ -2946,7 +2946,8 @@ button.tip > zi-q { display: grid; place-items: center; width: 22px; height: 22p
 /* Beside a button in a row, a ? sits in the middle of the row and takes its
    own room, and a field's label can have one beside it. End the downtime
    keeps its ? on its own row, since it's as wide as the bar. */
-:is(.cc-row, .tg-do, .wa-skip, .wk-rest, .wk-break, .cc-field-h) > .tip { margin: 0 -6px; align-self: center; }
+:is(.cc-row, .tg-do, .wa-skip, .wk-rest, .wk-break, .cc-field-h, .wb-show) > .tip { margin: 0 -6px; align-self: center; }
+.wb-show.wp-table { justify-content: flex-start; }
 .cc-field-h { display: flex; align-items: center; gap: 4px; }
 .cc-field-h > :is(.cc-field, .tg-label) { flex: 0 1 auto; }
 .tg-do > .ft-endrow { flex: 1 1 100%; display: flex; align-items: center; gap: 4px; }

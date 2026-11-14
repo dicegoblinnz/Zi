@@ -49,7 +49,7 @@ None yet.
 
 ### 4. Question bubbles
 
-1. **A tap anywhere else only closes the bubble.** Whatever's under that tap isn't pressed too, so a stray tap can't hit Next, End the round or a link while you're reading.
+1. **A tap anywhere else only closes the bubble.** Whatever's under that tap isn't pressed too, so a stray tap can't hit Next, End the round or a link while you're reading. A tap on another ? opens that one.
 2. **The card comes up under its ?** (over it when there's no room under), as wide as the phone less a margin, with the screen dimmed a touch behind it. On a laptop it's a narrow card centred on its ?, and on a browser that can't place it by its ?, it's in the middle of the screen.
 3. **The ? is ink, not gold or violet**, a small token like the kit's pieces, since it's nobody's. It fills in while its card's open.
 4. **Every card has a title**, what it's about, which is also what a screen reader hears on its ? (How hiring works, About the scene clock).
