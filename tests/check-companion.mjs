@@ -100,6 +100,14 @@
 //    its Roots, a Toughness Boon takes the first hit When it lands, and a
 //    Gambler flips their die for free and every one of his for Double or
 //    nothing.
+// 3e. Names only (15 Nov): a Trait, an ability and an awakening each read by
+//    their name till they're tapped. Bram's play screen starts with every one
+//    shut and no Pay, Power it or Use it showing, a tap opens one with what it
+//    does and its button, it stays open through a change and a reload shuts
+//    it, Open all and Close all do what they say, what's powering an awakening
+//    stays on its name while it's shut, the keys work, and the Sheet tab's
+//    folds and a roll's Pay for an ability list them the same way, at 320 in
+//    both themes with axe.
 // 4. The tracks: Vesk's Stamina to d2, Vanish paid 2 for 1 since paying never
 //    goes below the smallest size, a Blaze and its Scar written as a Catch,
 //    locking d2, the rest at the end of a scene with fixed dice, her grappling
@@ -1664,6 +1672,13 @@ async function openFold(page, key) {
   const sel = `details[data-open="sh-${key}"]`;
   if (!(await page.$eval(sel, (d) => d.open))) await page.click(`${sel} > summary`);
 }
+// A Trait, an ability and an awakening read by their names till they're
+// tapped, wherever they're listed. Open the one called this, if it's shut.
+async function openNamed(page, scope, name) {
+  const exactly = new RegExp(`^${name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`);
+  const row = page.locator(`${scope} details.cc-named`).filter({ has: page.locator("summary .cc-named-n", { hasText: exactly }) }).first();
+  if (!(await row.evaluate((d) => d.open))) await row.locator("> summary").click();
+}
 async function inFold(page, sel) {
   const key = await page.$eval(sel, (el) => el.closest("details.cc-fold")?.dataset.open ?? "");
   if (key) await openFold(page, key.replace(/^sh-/, ""));
@@ -2205,6 +2220,8 @@ if (part("3d")) {
   same(await t.outs(), ["Beat it", "Under"], "his 9 beating their flipped 4, and his 3 still under");
   same(await page.$$eval('#cc-dialog button[data-act="flip"]', (els) => els.length), 0, "the free flip used on this roll");
   if (!(await page.$eval('#cc-dialog details[data-open="abil"]', (d) => d.open))) await page.click('#cc-dialog details[data-open="abil"] > summary');
+  same(await page.$$eval('#cc-dialog details[data-open="abil"] details.cc-named', (els) => els.map((d) => [d.querySelector(".cc-named-n").textContent, d.open])), [["Double or nothing", false]], "his ability to pay for by its name, shut");
+  await openNamed(page, '#cc-dialog details[data-open="abil"]', "Double or nothing");
   await page.click('#cc-dialog .cc-how button[data-act="ability"]:has-text("Double or nothing")');
   await page.click('#cc-dialog button[data-act="pay-way"]');
   has(await page.textContent("#cc-dialog .cc-log"), "Flipped every die of yours", "Double or nothing flipping every die");
@@ -2212,6 +2229,145 @@ if (part("3d")) {
   await t.done();
   console.log("built: Bram from the crew played and his order, a random one played, a Toughness Boon taking the first hit, and a Gambler's flips");
   await context.close();
+}
+
+// 3e. Names only. A Trait, an ability and an awakening each read by their name
+// till they're tapped, on the play screen, in the Sheet tab's folds and on a
+// roll's Pay for an ability. Bram's got two archetypes and an awakening of
+// each kind, so he's who it's played on.
+if (part("3e")) {
+  const { context, page } = await phone();
+  const t = tableOf(page);
+  const bram = rootsSheet(book.crew.find((x) => x.id === "bram"), [], BUILD);
+  const archs = RS.archetypesOf(bram, BUILD);
+  const names = archs.flatMap((a) => [a.trait.name, ...a.abilities.map((x) => x.name)]);
+  const wakes = bram.attuned.flatMap((a) => a.awakenings.map((w) => w.name));
+  const passive = bram.attuned[0].awakenings.find((w) => w.kind === "passive").name;
+  const lines = (scope) => page.$$eval(`${scope} details.cc-named`, (els) => els.map((d) => ({ name: d.querySelector(".cc-named-n").textContent, open: d.open, tall: d.querySelector(".cc-named-b").checkVisibility() ? Math.round(d.querySelector(".cc-named-b").getBoundingClientRect().height) : 0 })));
+  const openOf = async (scope) => (await lines(scope)).filter((x) => x.open).map((x) => x.name);
+  const showing = (sel) => page.$$eval(sel, (els) => els.filter((e) => e.checkVisibility()).length);
+  const BUTTONS = 'main button[data-act="ability"], main button[data-act="power"], main button[data-act="wake"]';
+  const all = (w) => page.textContent(`.cc-named-all[data-w="${w}"] > span:first-child`);
+  same([names.length, wakes.length], [6, 2], "Bram's two Traits, four abilities and two awakenings to check with");
+
+  await play(page, "bram");
+  let got = await lines(".cc-abilities");
+  same(got.map((x) => x.name), names, "every Trait and ability on Bram's play screen by its name, in his sheet's order");
+  same(got.filter((x) => x.open || x.tall).length, 0, "and none of them saying what it does till it's tapped");
+  same((await lines(".cc-attune")).map((x) => [x.name, x.open, x.tall]), wakes.map((w) => [w, false, 0]), "his awakenings by their names, shut");
+  same(await showing(BUTTONS), 0, "no Pay, Power it or Use it showing till its line's open");
+  same(await page.$$eval(".cc-abilities .cc-named > summary .k", (els) => els.map((e) => e.textContent)), ["Trait", "Trait"], "each Trait marked as one beside its name");
+  same(await page.$$eval(".cc-attune .cc-named-s", (els) => els.map((e) => e.textContent.trim())), ["passive", "active"], "each awakening saying which kind it is");
+  const shut = await page.evaluate(() => document.documentElement.scrollHeight / innerHeight);
+  if (shut > 2.2) note(`Bram's play screen runs ${shut.toFixed(1)} screens with every name shut`);
+
+  // A tap on a name opens it, and only it.
+  await openNamed(page, ".cc-abilities", "Stand firm");
+  same(await openOf(".cc-abilities"), ["Stand firm"], "a tap on Stand firm opens it and nothing else");
+  has(await page.innerText(".cc-abilities details.cc-named[open] .cc-named-b"), "the next two hits that get through to you this round do nothing", "and it says what it does");
+  same(await showing(BUTTONS), 1, "with its own button and no other");
+  same(await all("pl-ab"), "Open all", "Open all while some are shut");
+  // Paying from it keeps it open through the change, and so does a hit.
+  await page.click('.cc-abilities button[data-act="ability"]:has-text("Pay for Stand firm")');
+  await page.click('#cc-dialog button[data-act="pay-way"]');
+  await t.closed();
+  same([await t.track("stamina"), await openOf(".cc-abilities")], ["d10", ["Stand firm"]], "Stand firm paid from its line, and still open after the change");
+  // A Trait's a line like the rest, with nothing to pay.
+  await openNamed(page, ".cc-abilities", archs[0].trait.name);
+  has(await page.innerText(".cc-abilities details.cc-named[open] .cc-named-b"), "Every blow you intercept for a friend gives you 1 Aura", "his Guardian's Trait opened to what it does");
+  same(await showing(BUTTONS), 1, "and a Trait's got no button");
+  // The keys: a name's a button to the keyboard, and Enter shuts and opens it.
+  await page.focus(".cc-abilities details.cc-named[open] > summary");
+  await page.keyboard.press("Enter");
+  same(await openOf(".cc-abilities"), ["Stand firm"], "Enter on a name shuts it");
+  await page.keyboard.press("Enter");
+  same(await openOf(".cc-abilities"), [archs[0].trait.name, "Stand firm"], "and Enter opens it again");
+  // A hit redraws the screen, and what's open stays open.
+  await t.panel("stamina");
+  await page.click('#cc-panel button[data-act="hit"][data-t="stamina"]');
+  same([await t.track("stamina"), await openOf(".cc-abilities")], ["d8", [archs[0].trait.name, "Stand firm"]], "a hit redraws the screen and both stay open");
+  await t.panel("stamina", false);
+  // The keyboard stays on a name when the screen's drawn again under it, the
+  // way another tab saving a character draws it.
+  await page.focus(".cc-abilities details.cc-named[open] > summary");
+  await page.evaluate(() => window.dispatchEvent(new StorageEvent("storage", { key: "zi-characters" })));
+  same(await page.evaluate(() => [document.activeElement?.tagName, document.activeElement?.querySelector(".cc-named-n")?.textContent]), ["SUMMARY", archs[0].trait.name], "the keyboard's still on the name once the screen's drawn again");
+  same(await page.$$eval(".cc-named-all", (els) => els.map((e) => e.textContent)), ["Open all Traits and abilities", "Open all awakenings"], "each head's button says whose names it opens, for a screen reader");
+
+  // Open all and Close all, each head for its own lines.
+  await page.click('.cc-named-all[data-w="pl-ab"]');
+  same([await openOf(".cc-abilities"), await openOf(".cc-attune"), await all("pl-ab"), await all("pl-at")], [names, [], "Close all", "Open all"], "Open all opens every Trait and ability, and leaves his awakenings shut");
+  same(await page.evaluate(() => document.activeElement?.dataset.w), "pl-ab", "and the keyboard's still on the button");
+  await page.locator(".cc-abilities details.cc-named > summary").first().click();
+  // The browser says a line's shut a moment after the tap, so wait for it.
+  await page.waitForFunction(() => document.querySelector('.cc-named-all[data-w="pl-ab"] > span').textContent === "Open all", null, { timeout: 3000 }).catch(() => {});
+  same(await all("pl-ab"), "Open all", "shutting one by hand makes it Open all again");
+  await page.click('.cc-named-all[data-w="pl-ab"]');
+  await page.click('.cc-named-all[data-w="pl-ab"]');
+  same([await openOf(".cc-abilities"), await all("pl-ab")], [[], "Open all"], "Close all shuts them all");
+
+  // What's powering a passive awakening stays on its name while it's shut.
+  await openNamed(page, ".cc-attune", passive);
+  await page.click('.cc-attune button[data-act="power"]');
+  has(await page.textContent(".cc-attune .cc-held"), "1/2", "his hammer's awakening powered with 1");
+  await page.locator(".cc-attune details.cc-named > summary").first().click();
+  same([await openOf(".cc-attune"), await page.locator(".cc-attune details.cc-named.is-on .cc-named-on").isVisible(), (await page.textContent(".cc-attune details.cc-named.is-on .cc-named-s")).replace(/\s+/g, " ").trim()], [[], true, "passive, powering 1/2"], "shut again, its name still says 1 of 2 is powering it");
+  await shot(page, "names-play");
+
+  // The Sheet tab's folds list them the same way, with their own Open all.
+  await page.click('.cc-tabs a[data-t="sheet"]');
+  await openFold(page, "arch");
+  await openFold(page, "att");
+  same([(await lines('details[data-open="sh-arch"]')).map((x) => [x.name, x.open]), (await lines('details[data-open="sh-att"]')).map((x) => [x.name, x.open])], [names.map((n) => [n, false]), wakes.map((w) => [w, false])], "the Sheet tab's Archetypes and Attuned folds by name too, each shut on its own");
+  await page.click('.cc-named-all[data-w="sh-ab"]');
+  same([await openOf('details[data-open="sh-arch"]'), await openOf('details[data-open="sh-att"]')], [names, []], "and Open all in a fold opens that fold's lines");
+  await page.click('.cc-tabs a[data-t="play"]');
+  same(await openOf(".cc-abilities"), [], "what's open on the Sheet tab isn't open on the play screen");
+
+  // A roll's Pay for an ability lists them by name.
+  await page.click('.cc-roots .tile[data-r="Body"]');
+  await page.click('#cc-dialog button[data-act="foe-add"][data-v="10"]');
+  await page.evaluate(() => window.ziCompanion.setDice([5, 1, 7]));
+  await page.click('#cc-dialog button[data-act="go"]');
+  await t.rolled();
+  await page.click('#cc-dialog details[data-open="abil"] > summary');
+  same((await lines('#cc-dialog details[data-open="abil"]')).map((x) => [x.name, x.open]), archs.flatMap((a) => a.abilities.filter((x) => !x.push).map((x) => [x.name, false])), "the abilities to pay for once he's rolled, by name");
+  await openNamed(page, '#cc-dialog details[data-open="abil"]', "Everyone gets it");
+  same(await showing('#cc-dialog button[data-act="ability"]'), 1, "and a tap on one shows its button");
+  await t.done();
+
+  // A reload starts with every name shut again.
+  await page.reload();
+  await page.waitForSelector(".tile[data-r]");
+  same([await openOf(".cc-abilities"), await openOf(".cc-attune")], [[], []], "a reload shuts every name");
+  await context.close();
+
+  // At 320 wide in both themes: nothing sideways, every name and button big
+  // enough to tap, and axe on it shut and open.
+  for (const theme of ["dark", "light"]) {
+    const { context, page } = await phone({ viewport: { width: 320, height: 640 }, colorScheme: theme });
+    if (theme === "light") await page.addInitScript(() => localStorage.setItem("zi-theme", "light"));
+    const axe = async (what) => {
+      const result = await new AxeBuilder({ page }).analyze();
+      for (const v of result.violations.filter((v) => v.impact === "serious" || v.impact === "critical")) note(`axe on ${what}: ${v.id} (${v.nodes.length})`);
+    };
+    const fits = async (what) => {
+      const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+      if (wide > 0) note(`${what} scrolls sideways by ${wide}px at 320, ${theme}`);
+      const small = await page.$$eval(".cc-named > summary, .cc-named-all, .cc-abilities button, .cc-attune button", (els) => els.filter((e) => e.checkVisibility() && e.getBoundingClientRect().height < 44).map((e) => e.textContent.trim()));
+      if (small.length) note(`tap targets under 44px on ${what} at 320: ${small.slice(0, 4).join(", ")}, ${theme}`);
+    };
+    await play(page, "bram");
+    await fits("the names shut");
+    await axe(`the names shut, ${theme}`);
+    await page.click('.cc-named-all[data-w="pl-ab"]');
+    await page.click('.cc-named-all[data-w="pl-at"]');
+    await fits("the names open");
+    await axe(`the names open, ${theme}`);
+    await shot(page, `names-320-${theme}`);
+    await context.close();
+  }
+  console.log("names only: Traits, abilities and awakenings shut till they're tapped, open through a change, Open all and Close all, on the play screen, the Sheet tab and a roll");
 }
 
 // 4. The tracks. Vesk's Stamina down to a Blaze and a Scar, the rest at the
@@ -2228,6 +2384,7 @@ if (part("4")) {
   has(await page.textContent(".cc-stat.t-stamina"), "next hit Blazes", "the next one Blazes");
   // An ability never takes a track below its smallest size, so Vanish is
   // 2 for 1 now.
+  await openNamed(page, ".cc-abilities", "Vanish");
   await page.click('main button[data-act="ability"]');
   const ways = await page.$$eval('#cc-dialog button[data-act="pay-way"]', (els) => els.map((e) => e.textContent));
   same(ways.some((w) => /^1 Stamina/.test(w)), false, "nothing left to pay with on her Stamina");
@@ -2267,6 +2424,7 @@ if (part("4")) {
   // Her grappling line: powering its awakening takes the Aura off what she's
   // got and off her maximum, and it's +1 a die for each Aura powering it when
   // she uses it. The new scene lets it go, and her maximum's back.
+  await openNamed(page, ".cc-attune", "Anywhere I can throw a hook");
   await page.click('main button[data-act="power"]');
   await page.click('main button[data-act="power"]');
   same(await t.aura(), "5/5", "2 Aura powering her grappling line, off her Aura and her maximum");
@@ -3288,11 +3446,13 @@ if (part("7b")) {
     same(await page.$$eval(".cc-track .is-trk .zd-die", (els) => els.map((e) => e.dataset.d)), ["12", "12", "12"], `her three tracks as d12s, ${theme}`);
     const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
     if (wide > 0) note(`the play screen scrolls sideways by ${wide}px, ${theme}`);
-    const small = await page.$$eval(".cc-roots .tile, .cc-more .tile, .cc-stat, .cc-tabs a, .cc-play button, .cc-abilities button, .cc-attune button", (els) => els.filter((e) => e.getBoundingClientRect().height < 44).length);
+    const small = await page.$$eval(".cc-roots .tile, .cc-more .tile, .cc-stat, .cc-tabs a, .cc-play button, .cc-abilities button, .cc-attune button, .cc-named > summary", (els) => els.filter((e) => !e.closest("details.cc-named:not([open]) > .cc-named-b") && e.getBoundingClientRect().height < 44).length);
     if (small) note(`${small} tap targets under 44px on the play screen, ${theme}`);
     const broken = await page.$$eval(".tile-name", (els) => els.filter((e) => e.scrollWidth > e.clientWidth + 1).map((e) => e.textContent));
     if (broken.length) note(`names that don't fit their tiles: ${broken.join(", ")}, ${theme}`);
     await axe(`the play screen, ${theme}`);
+    const playTall = await page.evaluate(() => document.documentElement.scrollHeight / innerHeight);
+    if (playTall > 2) note(`Vesk's play screen runs ${playTall.toFixed(1)} screens with every name shut, ${theme}`);
     // Her lock, built: the card stays under two screens with every chip on it.
     await page.click('.cc-roots .tile[data-r="Body"]');
     for (const k of ["perm|0|2", "perm|1|0", "utility|a perfect set of picks"]) await page.click(`#cc-dialog .cc-pick[data-k="${k}"]`);

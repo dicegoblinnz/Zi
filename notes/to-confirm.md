@@ -1,6 +1,17 @@
-# For Mo: calls to confirm (14 Nov 2026)
+# For Mo: calls to confirm (15 Nov 2026)
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
+
+## 15 Nov: names only on a character
+
+On `site/sheet-names-only`, not live yet. You asked for Traits and the other parts with a lot of description to show only the name till it's tapped. These are the calls Claude made building it.
+
+1. **It covers Traits, abilities and awakenings**, on the play screen, in the Sheet tab's Archetypes and Attuned folds, on the GM's look and in a roll's Pay for an ability. Threads, what you carry and Catches stay as they are for now. The Sheet tab already shuts each of them to a line, and they're stage C of the rework in `notes/site-plan.md`.
+2. **The buttons go behind the name too.** Pay, Power it and Use it show once a line's open, so paying for an ability off the play screen is two taps where it was one. That's what keeps the screen to names, and a line you leave open stays open while you play.
+3. **What's live stays on the name.** Trait beside a Trait's name, passive or active beside an awakening's, and what's powering a passive one (its hexes, 1/2 and a gold edge), since that's a state and not a description.
+4. **Each head has Open all**, which turns into Close all, for reading a whole sheet through the first time.
+5. **A reload shuts every name again.** What's open is remembered while the character's open, and it isn't saved with them.
+6. **An ability's cost leads what it does** once it's open ("1 Stamina: the next two hits that get through to you this round do nothing"), where it sat between the name and the words.
 
 ## 14 Nov: stacking
 

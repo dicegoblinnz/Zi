@@ -2989,14 +2989,8 @@ html.cc-tabbed .zr { bottom: calc(59px + env(safe-area-inset-bottom, 0px)); padd
   .cc-play .cc-roots .tile.is-root .tile-dice .zd-die.is-next { --s: 24px; margin-left: -12px; }
   .cc-play .cc-roots .tile.is-root .tile-name { font-size: 1.02rem; }
 }
-.cc-abilities .cc-arch, .cc-attune .cc-attuned { padding: 0.6rem 0; border-top: 1px solid var(--line-soft); }
 .cc-arch-h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 0.25rem; }
 .cc-arch-h small { color: var(--muted); }
-.cc-abils, .cc-wakes { list-style: none; margin: 0.3rem 0 0; padding: 0; display: grid; gap: 8px; }
-.cc-abil p, .cc-wake p { margin: 0 0 0.25rem; }
-.cc-abil small, .cc-wake small { color: var(--muted); }
-.cc-wake { padding: 0.5rem 0.7rem; background: var(--surface); border: 1px solid var(--line-soft); border-left: 3px solid var(--gold); border-radius: 2px; }
-.cc-wake.is-active { border-left-color: var(--violet); }
 .cc-held { display: flex; align-items: center; gap: 8px; }
 .cc-held .k { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
 .cc-held .zd-chit { width: 14px; }
@@ -3174,9 +3168,48 @@ button.tip > zi-q { display: grid; place-items: center; width: 22px; height: 22p
 /* The archetypes with their Traits, the attuned thing powered with the
    maximum it leaves, and where each Root's points came from. */
 .cc-arch-h .cc-sigil { width: 20px; height: 20px; color: var(--gold-ink); }
-.cc-trait { margin: 0.25rem 0 0.4rem; line-height: 1.45; }
-.cc-trait .k, .cc-moved .k { margin-right: 0.3rem; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-ink); }
-.cc-wake.is-on { border-color: var(--gold); box-shadow: inset 3px 0 0 var(--gold); }
+.cc-named > summary > .k, .cc-named-flat .k, .cc-moved .k { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-ink); }
+.cc-named-flat .k, .cc-moved .k { margin-right: 0.3rem; }
+/* Named lines: a Trait, an ability or an awakening reads by its name till
+   it's tapped, then says what it does with its buttons under it. What's live
+   on one (how much is powering it) stays on its name. On the play screen each
+   archetype and attuned thing is a card of them, and in a fold or on the roll
+   card they're a plain list. */
+.cc-sec-h { display: flex; align-items: center; justify-content: space-between; gap: 4px 12px; margin: 1.4rem 0 0.2rem; }
+.cc-sec-h > .cc-h3 { min-width: 0; margin: 0; }
+.cc-fold-b > .cc-sec-h { margin: -6px 0 -2px; }
+.cc-named-all { flex: none; min-height: 44px; margin-left: auto; padding: 0 2px; background: none; border: 0; font: inherit; font-size: 0.95rem; font-weight: 700; color: var(--violet); cursor: pointer; }
+.cc-named-all:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+.cc-named { border-top: 1px solid var(--line-soft); }
+.cc-named > summary { display: flex; align-items: center; gap: 8px; min-height: 46px; padding: 6px 0; cursor: pointer; list-style: none; }
+.cc-named > summary::-webkit-details-marker { display: none; }
+.cc-named > summary::after { content: "+"; content: "+" / ""; flex: none; width: 1.1rem; margin-left: auto; font-size: 1.3rem; line-height: 1; text-align: center; color: var(--gold-ink); }
+.cc-named[open] > summary::after { content: "\2212"; content: "\2212" / ""; }
+.cc-named > summary:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
+.cc-named-n { min-width: 0; font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
+.cc-named-s { display: inline-flex; align-items: center; gap: 8px; font-size: 0.86rem; line-height: 1.2; color: var(--muted); }
+.cc-named-on { display: inline-flex; align-items: center; gap: 3px; font-weight: 700; color: var(--gold-ink); }
+.cc-named-on .zd-chit { width: 13px; }
+.cc-named[open] > summary .cc-named-on { display: none; }
+.cc-named.is-on { box-shadow: inset 3px 0 0 var(--gold); }
+.cc-named-b { padding: 0 0 12px; }
+.cc-named-b > p { margin: 0 0 0.5rem; line-height: 1.5; }
+.cc-named-b > :last-child { margin-bottom: 0; }
+.cc-named-cost { font-size: 0.9rem; font-weight: 700; color: var(--muted); }
+.cc-named-flat { min-height: 46px; margin: 0; padding: 6px 0; display: flex; align-items: center; border-top: 1px solid var(--line-soft); }
+.cc-how > .cc-nameds { margin-bottom: 0.4rem; border-bottom: 1px solid var(--line-soft); }
+.cc-abilities .cc-arch, .cc-attune .cc-attuned { margin-top: 10px; padding: 0; background: var(--surface); border: 1px solid var(--line-soft); border-radius: 2px; }
+.cc-abilities .cc-arch-h, .cc-attune .cc-arch-h { min-height: 46px; margin: 0; padding: 6px 12px; }
+.cc-abilities .cc-arch > .cc-pool, .cc-attune .cc-attuned-l { margin: 0; padding: 8px 12px; border-top: 1px solid var(--line-soft); }
+.cc-attune .cc-attuned-l + .cc-attuned-l { padding-top: 0; border-top: 0; }
+:is(.cc-abilities, .cc-attune) .cc-named > summary, :is(.cc-abilities, .cc-attune) .cc-named-flat { padding-inline: 12px; }
+:is(.cc-abilities, .cc-attune) .cc-named-b { padding-inline: 12px; }
+:is(.cc-abilities, .cc-attune) .cc-named[open] { background: var(--panel); }
+@media (hover: hover) and (pointer: fine) { .cc-named > summary:hover .cc-named-n { color: var(--gold-ink); } .cc-named-all:hover { text-decoration: underline; } }
+@media (prefers-reduced-motion: no-preference) {
+  .cc-named.is-tapped[open] > .cc-named-b { animation: named-in 0.18s cubic-bezier(0.23, 1, 0.32, 1); }
+}
+@keyframes named-in { from { opacity: 0; transform: translateY(-4px); } }
 .cc-held { flex-wrap: wrap; }
 .cc-held-max { flex-basis: 100%; font-size: 0.86rem; color: var(--muted); }
 .button.is-aura { border-color: var(--gold); }

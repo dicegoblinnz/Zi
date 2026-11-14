@@ -51,6 +51,48 @@ Each stage below is a chat of its own, smallest first, and each one's tested by 
 4. **Learn as the place to start.** The Learn tab opens on a choice of the learning round or the deck, and the deck's last card hands you to Make your character.
 5. **A GM's way in.** Run your first game as a page of steps (a Do page, `diataxis-pages`) off Campaigns and Running the Game: start a campaign, send the link, put the table screen up, and your first telegraphs.
 
+## The character sheet (Mo's second ask, 15 Nov)
+
+Mo's ask later the same day: Traits and the other parts with a lot of description should show only their name till they're tapped, and then a full rework so the site's simple and easy for everyone, the character sheet above all.
+
+### What a phone showed
+
+`tests/shoot-sheet.mjs` shoots a character's screens at 390 by 844 and measures them (`ZI_DIST=<folder>` for another build). This is Bram, on main and on `site/sheet-names-only`.
+
+| Screen | Main, 15 Nov | Names only |
+| --- | --- | --- |
+| Play | 2,361px, 2.8 screens, 377 words showing | 1,722px, 2 screens, 146 words |
+| Your archetypes | 776px, 198 words | 442px, 29 words |
+| Attuned | 576px, 90 words | 272px, 28 words |
+| The roll card, nothing tapped in | 1,189px, 1.4 screens, 20 chips, 62 buttons | the same |
+| The Sheet tab, folds shut | 1,210px, 1.4 screens | the same |
+
+What else it found:
+- More than half the play screen (1,352 of 2,361px) was Traits, abilities and awakenings written out in full, so everything under the Roll tiles was a long scroll. The whole crew's play screens are 1.75 to 2.04 screens now.
+- The roll card's where the time goes at the table. Mo's 15 Nov answers for the rules review: a roll takes 1 to 2 minutes on phones, and finding what fits is the slowest part of it. The card lists every line of the sheet, 20 for Bram, as one run of chips in two groups, and it's 1.4 screens before anything's tapped in.
+- The Sheet tab reads at a glance while its folds are shut. Open, Threads runs 1,200 to 1,600px for the crew, with a button under every thread, and Kit, Catches and About are about 600px each.
+- New scene, Downtime and Change sit in the middle of the play screen, between the Roll tiles and the archetypes, though they're used once a scene or less.
+- The Characters list is 5.1 screens for someone new, which is stage 1 below.
+
+### What's built (`site/sheet-names-only`)
+
+- **Names only** (`named()` in `src/companion/app.js`, `.cc-named` in `src/styles/companion.css`). A Trait, an ability and an awakening each read by their name till they're tapped, then say what they do with their button under it. Trait sits beside a Trait's name, passive or active beside an awakening's, and what's powering a passive one stays on its name while it's shut. Each archetype and attuned thing is a card of its names on the play screen.
+- **Everywhere they're listed**: the play screen, the Sheet tab's Archetypes and Attuned folds, the GM's look at a player's character, and Pay for an ability on a roll and on When it lands.
+- **Open all** on each head, which turns into Close all, for reading a sheet through the first time. What's open stays open through every change while the character's open, and a reload shuts it.
+- **The checks**: `tests/check-companion.mjs` part 3e plays it on Bram (shut to start, a tap, a change, the keys, Open all, powering, the Sheet tab, a roll, a reload, 320 wide in both themes with axe), and 7b notes a play screen past two screens.
+
+### The rework from here
+
+What every screen's held to: the thing you came for is on the first screen, names first with the detail a tap away, explanations in question bubbles, states and counts always showing, one hand and 44px, and the same move meaning the same thing everywhere (a + line opens in place, a ? explains, a chip goes in and out). Each stage is a chat of its own and is measured before and after, by `tests/shoot-sheet.mjs` or `tests/check-journeys.mjs`.
+
+A. **The roll card in four rows.** The Root. Then each Title with its own permissions under it. Then what you're using: your archetypes with their abilities, your attuned thing with its awakenings, and what you carry. Then everything else behind Find. It counts by today's rule, and it's the same card the led roll needs if Mo says yes to that in the review (only what a line costs changes). Aim: Vesk's lock and Bram's Defend each built on one screen with no scrolling, in fewer taps than now, and Again in one.
+B. **The play screen in one hand.** What's used every round on the first screen (tracks, Aura, conditions, the Roots, When it lands, Again), and what's used once a scene or less (New scene, Downtime, Change, the dice roller) in a row at the foot. Aim: every crew member's play screen in a screen and a half.
+C. **The Sheet tab by name.** Threads, what you carry and Catches as named lines the way archetypes are, with their buttons a tap in. Aim: no fold past a screen when it's open.
+D. **Stages 1 to 5 above**, Characters just yours first.
+E. **One pass over the look**, once the layout's settled: the same line, fold, bubble and chip on every screen, the campaign and world screens included, with the spacing and type sizes written down as tokens. Sigil stays unless Mo says otherwise.
+
+Mo's calls, asked on 15 Nov: whether the look stays Sigil, whether the roll card's built now on today's rule or waits for the led roll's test, and whether the roll card or Characters just yours goes next.
+
 ## Going live
 
 Mo said yes on 15 Nov and picked stage 1, Characters just yours, to build next. The home page's crew cards and Vesk's sheet read the crew straight off the chapter, so they follow the rules. The words round them are the home page's own, so `tests/check-journeys.mjs` checks them against the retired words every run.

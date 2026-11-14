@@ -1072,56 +1072,68 @@ const sigilOf = (name) => (SIGILS[name] ? sigil(name, { cls: "cc-sigil" }) : "")
 // A line from the book that might hold *italics* the way the chapters write them.
 const md = (text) => esc(text).replace(/\*([^*]+)\*/g, "<em>$1</em>");
 const sentence = (text) => (/[.?]$/.test(String(text ?? "").trim()) ? md(text) : `${md(text)}.`);
+// A line that reads by its name till it's tapped: a Trait, an ability or an
+// awakening. Shut, it's the name and whatever's live on it. Open, it's what it
+// does, with its buttons. What's open stays open through a redraw (ui.open, by
+// its key), and the head's button opens or closes every line under it.
+const named = (key, name, body, { kicker = "", state = "", cls = "" } = {}) => `<details class="cc-named${cls ? ` ${cls}` : ""}" data-open="${esc(key)}"${ui.open.has(key) ? " open" : ""}><summary>${kicker ? `<span class="k">${kicker}</span>` : ""}<span class="cc-named-n">${name}</span>${state ? `<span class="cc-named-s">${state}</span>` : ""}</summary><div class="cc-named-b">${body}</div></details>`;
+const namedAll = (keys, w, what) => (keys.length > 1 ? `<button type="button" class="cc-named-all" data-act="names" data-w="${esc(w)}"><span>${keys.every((k) => ui.open.has(k)) ? "Close all" : "Open all"}</span><span class="sr-only"> ${what}</span></button>` : "");
 function abilitiesView(ch, c, s, look = false, where = "pl") {
   const list = R.archetypesOf(c, DATA.build);
   if (!list.length) return "";
+  const keys = [];
+  const line = (key, ...rest) => (keys.push(key), named(key, ...rest));
   const arch = (a) => {
     const t = a.trait ?? {};
+    const at = `n-${where}-ab-${a.name}`;
+    const trait = !t.name ? "" : t.text ? line(`${at}|trait`, `<em>${esc(t.name)}</em>`, `<p>${t.text}</p>`, { kicker: "Trait" }) : `<p class="cc-named-flat"><span class="k">Trait</span><b><em>${esc(t.name)}</em></b></p>`;
     return `<div class="cc-arch"><p class="cc-arch-h">${sigilOf(a.name)}<b>${a.id ? link(a.id, esc(a.name)) : esc(a.name)}</b>${a.times > 1 ? ` <small>${TIMES[a.times] ?? `${a.times} times`}</small>` : ""} <span class="chip sm">Pays from ${TN(a.home)}</span>${gold(`arch:${a.name}`)}</p>${was(`arch:${a.name}`)}
-    ${t.name ? `<p class="cc-trait"><span class="k">Trait</span> <b><em>${esc(t.name)}</em></b>${t.text ? ` ${t.text}` : ""}</p>` : ""}
     ${a.name === "Shadow" ? `<p class="cc-pool">${s.pool?.length ? `<b>${look ? "Their" : "Your"} shadow pool:</b> ${s.pool.map((d) => kitMini(d, { own: "you" })).join("")} ${esc(andList(s.pool.map((d) => `d${d}`)))}.${look ? "" : ` Add ${s.pool.length === 1 ? "it" : "them"} to any roll from the roll card.`}` : `<b>${look ? "Their" : "Your"} shadow pool’s empty.</b>`}</p>` : ""}
-    <ul class="cc-abils">${a.abilities.map((x, j) => {
-      const ways = R.payWays(s, a.home);
-      return `<li class="cc-abil"><p><b>${esc(x.name)}</b> <small>${x.push ? "on a die once you’ve rolled, " : ""}1 ${TN(a.home)}</small> ${x.html}</p>${look || x.push ? "" : `<div class="cc-row"><button type="button" class="button sm" data-act="ability" data-a="${esc(a.name)}" data-j="${j}"${off(!ways.length)}>Pay for ${esc(x.name)}</button></div>`}</li>`;
-    }).join("")}</ul></div>`;
+    <div class="cc-nameds">${trait}${a.abilities.map((x, j) => line(`${at}|${x.name}`, esc(x.name), `<p><span class="cc-named-cost">1 ${TN(a.home)}${x.push ? ", on a die once you’ve rolled" : ""}:</span> ${x.html}</p>${look || x.push ? "" : `<div class="cc-row"><button type="button" class="button sm" data-act="ability" data-a="${esc(a.name)}" data-j="${j}"${off(!R.payWays(s, a.home).length)}>Pay for ${esc(x.name)}</button></div>`}`)).join("")}</div></div>`;
   };
+  const body = list.map(arch).join("");
   const ask = look ? "" : tip(`${where}-abil`, ["A Trait’s always on, and it’s free.", "Each ability’s 1 off its archetype’s home track, or 2 from your other two, and paying never takes a track below its smallest size. Pay again and you get it again.", "An ability’s a step on a roll you use it on: tap it in on the roll card and it’s paid when you roll. Push goes on a die once you’ve rolled, from the roll card.", link("s-abilities", "Abilities in the rules")], "How archetypes work");
-  return `<section class="cc-sec cc-abilities" aria-labelledby="${where}-ab-t"><h2 class="cc-h3"><span id="${where}-ab-t">${list.length > 1 ? "Your archetypes" : "Your archetype"}</span> ${ask}</h2>
-    ${list.map(arch).join("")}</section>`;
+  return `<section class="cc-sec cc-abilities" aria-labelledby="${where}-ab-t"><div class="cc-sec-h"><h2 class="cc-h3"><span id="${where}-ab-t">${list.length > 1 ? "Your archetypes" : "Your archetype"}</span> ${ask}</h2>${namedAll(keys, `${where}-ab`, "Traits and abilities")}</div>
+    ${body}</section>`;
 }
 
-// The attuned thing: 2 on Aura's maximum, and its awakenings. A passive one's
-// powered while you're acting, free and no action: the Aura comes off what
-// you've got and off your maximum till the scene ends, and it works for as
-// much as is powering it. An active one spends Aura when you use it.
+// The attuned thing: 2 on Aura's maximum, and its awakenings, each a named
+// line. A passive one's powered while you're acting, free and no action: the
+// Aura comes off what you've got and off your maximum till the scene ends, and
+// it works for as much as is powering it, which its line says while it's
+// shut. An active one spends Aura when you use it.
 function attunedView(ch, c, s, look = false, where = "pl") {
   if (!c.attuned.length) return "";
   const passives = R.passivesOf(c);
   const max = R.auraMax(c, s);
+  const keys = [];
+  const line = (key, ...rest) => (keys.push(key), named(key, ...rest));
   const thing = (a, i) => {
     const seen = new Set();
+    const at = `n-${where}-at-${i}`;
     const wakes = a.awakenings.map((w) => {
       if (w.kind === "passive") {
         const p = passives.find((x) => x.key === `${i}|${w.name}`);
         if (!p || seen.has(p.key)) return "";
         seen.add(p.key);
         const on = s.power?.[p.key] ?? 0;
-        return `<li class="cc-wake is-passive${on ? " is-on" : ""}"><p><b><em>${esc(w.name)}</em></b> <small>passive${p.holds > R.HOLDS ? `, twice, so it takes ${p.holds}` : ""}</small> ${sentence(w.text)}</p>
+        return line(`${at}|${w.name}`, `<em>${esc(w.name)}</em>`, `<p>${p.holds > R.HOLDS ? `<span class="cc-named-cost">Twice, so it takes ${p.holds}:</span> ` : ""}${sentence(w.text)}</p>
           <p class="cc-held"><span class="k">Powering</span>${quiet(kitAura(on, p.holds))}<span class="v">${on}<small>/${p.holds}</small></span>${on ? `<span class="cc-held-max">${look ? "Their" : "Your"} maximum’s ${max} till the scene ends</span>` : ""}</p>
-          ${look ? "" : `<div class="cc-row"><button type="button" class="button sm is-aura" data-act="power" data-k="${esc(p.key)}"${off(s.aura < 1 || on >= p.holds)}>${on >= p.holds ? "Powered all the way" : `Power it: 1 Aura, your maximum to ${max - 1}`}</button></div>`}</li>`;
+          ${look ? "" : `<div class="cc-row"><button type="button" class="button sm is-aura" data-act="power" data-k="${esc(p.key)}"${off(s.aura < 1 || on >= p.holds)}>${on >= p.holds ? "Powered all the way" : `Power it: 1 Aura, your maximum to ${max - 1}`}</button></div>`}`, { state: `passive${on ? `<span class="cc-named-on">${quiet(kitAura(on, p.holds))}<span class="sr-only">, powering </span>${on}/${p.holds}</span>` : ""}`, cls: `is-passive${on ? " is-on" : ""}` });
       }
-      return `<li class="cc-wake is-active"><p><b><em>${esc(w.name)}</em></b> <small>active</small> ${sentence(w.text)}</p>
-        ${look ? "" : `<div class="cc-row">${[1, 2, 3].filter((k) => k === 1 || k <= s.aura).map((k) => `<button type="button" class="button sm" data-act="wake" data-a="${i}" data-n="${esc(w.name)}" data-v="${k}"${off(s.aura < k)}>Use it: ${k} Aura</button>`).join("")}</div>`}</li>`;
+      return line(`${at}|${w.name}`, `<em>${esc(w.name)}</em>`, `<p>${sentence(w.text)}</p>
+        ${look ? "" : `<div class="cc-row">${[1, 2, 3].filter((k) => k === 1 || k <= s.aura).map((k) => `<button type="button" class="button sm" data-act="wake" data-a="${i}" data-n="${esc(w.name)}" data-v="${k}"${off(s.aura < k)}>Use it: ${k} Aura</button>`).join("")}</div>`}`, { state: "active", cls: "is-active" });
     }).join("");
     const room = R.attunedRoom(a);
     return `<div class="cc-attuned"><p class="cc-arch-h"><b>${esc(a.name)}</b>${a.props ? ` <small>(${esc(a.props)})</small>` : ""} <span class="chip sm">${esc(a.stage)}</span> <span class="chip sm">+${R.ATTUNED_AURA} Aura</span>${gold(`att:${i}`)}</p>${was(`att:${i}`)}
-      <ul class="cc-wakes">${wakes}</ul>
-      ${a.catch ? `<p>Its Catch: <em>${esc(a.catch)}</em></p>` : ""}${a.burden ? `<p>Its Burden: <em>${esc(a.burden)}</em></p>` : ""}
-      ${look ? "" : `<p class="cc-small">${room.n} of ${room.all} awakenings at ${esc(a.stage)}.</p>`}</div>`;
+      ${wakes ? `<div class="cc-nameds">${wakes}</div>` : ""}
+      ${a.catch ? `<p class="cc-attuned-l">Its Catch: <em>${esc(a.catch)}</em></p>` : ""}${a.burden ? `<p class="cc-attuned-l">Its Burden: <em>${esc(a.burden)}</em></p>` : ""}
+      ${look ? "" : `<p class="cc-small cc-attuned-l">${room.n} of ${room.all} awakenings at ${esc(a.stage)}.</p>`}</div>`;
   };
+  const body = c.attuned.map(thing).join("");
   const ask = look ? "" : tip(`${where}-att`, ["It’s an item on any roll it fits, and it can’t break. Each attuned thing puts 2 on your Aura’s maximum.", "Power a passive awakening while you’re acting: it’s free and takes no action. The Aura comes off what you’ve got and off your maximum till the scene ends, and it works for as much as is powering it.", "An active awakening spends Aura when you use it.", link("s-attunement", "Attunement in the rules")], "How attunement works");
-  return `<section class="cc-sec cc-attune" aria-labelledby="${where}-at-t"><h2 class="cc-h3"><span id="${where}-at-t">Attuned</span> ${ask}</h2>
-    ${c.attuned.map(thing).join("")}</section>`;
+  return `<section class="cc-sec cc-attune" aria-labelledby="${where}-at-t"><div class="cc-sec-h"><h2 class="cc-h3"><span id="${where}-at-t">Attuned</span> ${ask}</h2>${namedAll(keys, `${where}-at`, "awakenings")}</div>
+    ${body}</section>`;
 }
 
 
@@ -1830,6 +1842,9 @@ const pushesOf = (c, defence) => R.archetypesOf(c, DATA.build).flatMap((a) => a.
 const wakesOn = (c, s, r, defence) => R.passivesOf(c).filter((w) => R.addsToDie(w) && (s.power?.[w.key] ?? 0) > 0 && (defence ? R.onDefence(w) : !R.onDefence(w) && (r.used ?? []).includes(`attuned|${w.a}`)));
 // The rest of an archetype's abilities, paid for from a roll card.
 const otherAbilities = (c) => R.archetypesOf(c, DATA.build).flatMap((a) => a.abilities.map((x, j) => ({ ...x, j, arch: a.name, home: a.home })).filter((x) => !x.push));
+// The abilities to pay for once the dice have landed, each by its name with
+// what it does and its button a tap away, the way the play screen has them.
+const payList = (others, s) => `<div class="cc-nameds">${others.map((x) => named(`n-rr-${x.arch}|${x.name}`, esc(x.name), `<p><span class="cc-named-cost">1 ${TN(x.home)}:</span> ${x.html}</p><div class="cc-row"><button type="button" class="button sm" data-act="ability" data-a="${esc(x.arch)}" data-j="${x.j}"${off(!R.payWays(s, x.home).length)}>Pay for ${esc(x.name)}</button></div>`, { state: esc(x.arch) })).join("")}</div>`;
 const isA = (c, name) => c.archetypes.some((a) => a.name === name);
 // A number said out loud: an 8, an 11, an 18, and a for the rest.
 const aNum = (n) => `${/^(8|11|18)$|^8\d$/.test(String(n)) ? "an" : "a"} ${n}`;
@@ -1948,7 +1963,7 @@ function resultView(c, s, ch) {
     ${offers ? `<div class="cc-row cc-offers">${offers}</div>` : ""}
     ${spent.length ? `<div class="cc-row cc-usedup"><span class="cc-small">Used something up?</span>${spent.map((x) => `<button type="button" class="button sm" data-act="cross" data-k="${esc(x.key)}"${pressed(Boolean(s.crossed[x.key]))}>${s.crossed[x.key] ? `${esc(nameOf(c, x.where, x.name))}: crossed off` : `Cross off ${esc(nameOf(c, x.where, x.name))}`}</button>`).join("")}</div>` : ""}
     <p class="cc-small cc-left">You’ve got ${s.aura} Aura${s.acting ? ", and you’re acting" : ""}. ${glanceTracks(s)}.</p>
-    ${others.length && !r.spinning && !r.pick ? `<details class="cc-how" data-open="abil"${ui.open.has("abil") ? " open" : ""}><summary>Pay for an ability</summary>${others.map((x) => `<p><b>${esc(x.arch)}, ${esc(x.name)}:</b> ${x.html}</p><div class="cc-row"><button type="button" class="button sm" data-act="ability" data-a="${esc(x.arch)}" data-j="${x.j}"${off(!R.payWays(s, x.home).length)}>Pay for ${esc(x.name)}</button></div>`).join("")}</details>` : ""}
+    ${others.length && !r.spinning && !r.pick ? `<details class="cc-how" data-open="abil"${ui.open.has("abil") ? " open" : ""}><summary>Pay for an ability</summary>${payList(others, s)}</details>` : ""}
     ${how && !r.spinning ? `<details class="cc-how" data-open="how"${ui.open.has("how") ? " open" : ""}><summary>How it counted</summary>${how}</details>` : ""}
   </div>
   <div class="dlg-foot"><button type="button" class="button" data-act="undo"${off(!lastUndo(ch))}>Undo</button><button type="button" class="button primary" data-act="close">Done</button></div>`;
@@ -2215,7 +2230,7 @@ function defenceResult(c, s, ch) {
     <ul class="cc-hits">${hs.map(row).join("")}</ul>
     ${offers ? `<div class="cc-row cc-offers">${offers}</div>` : ""}
     <p class="cc-small cc-left">You’ve got ${s.aura} Aura. ${glanceTracks(s)}.</p>
-    ${others.length && !spin && !r.pick ? `<details class="cc-how" data-open="abil"${ui.open.has("abil") ? " open" : ""}><summary>Pay for an ability</summary>${others.map((x) => `<p><b>${esc(x.arch)}, ${esc(x.name)}:</b> ${x.html}</p><div class="cc-row"><button type="button" class="button sm" data-act="ability" data-a="${esc(x.arch)}" data-j="${x.j}"${off(!R.payWays(s, x.home).length)}>Pay for ${esc(x.name)}</button></div>`).join("")}</details>` : ""}
+    ${others.length && !spin && !r.pick ? `<details class="cc-how" data-open="abil"${ui.open.has("abil") ? " open" : ""}><summary>Pay for an ability</summary>${payList(others, s)}</details>` : ""}
     ${r.log.length && !spin ? `<details class="cc-how" data-open="how"${ui.open.has("how") ? " open" : ""}><summary>How it counted</summary><ul class="cc-log">${r.log.map((l) => `<li>${esc(l)}</li>`).join("")}</ul></details>` : ""}
   </div>
   <div class="dlg-foot"><button type="button" class="button" data-act="undo"${off(!lastUndo(ch))}>Undo</button><button type="button" class="button primary" data-act="close">Done</button></div>`;
@@ -2345,11 +2360,14 @@ function nameView() {
 
 // ---------------------------------------------------------------- drawing
 
-const sig = (el) => (el && el.dataset && el.dataset.act ? Object.entries(el.dataset).sort().join("|") : el && el.id ? `#${el.id}` : null);
+// What the keyboard's on, to find it again once the screen's drawn: a button
+// by what it does, anything with an id by its id, and a fold's or a named
+// line's summary by its key.
+const sig = (el) => (el && el.dataset && el.dataset.act ? Object.entries(el.dataset).sort().join("|") : el && el.id ? `#${el.id}` : el?.tagName === "SUMMARY" && el.parentElement?.dataset?.open ? `^${el.parentElement.dataset.open}` : null);
 function refocus(key) {
   if (!key) return;
   const scope = dialog.open ? dialog : document;
-  const el = key.startsWith("#") ? scope.querySelector(key) : [...scope.querySelectorAll("[data-act]")].find((x) => sig(x) === key && !x.disabled);
+  const el = key.startsWith("#") ? scope.querySelector(key) : key.startsWith("^") ? [...scope.querySelectorAll("details[data-open] > summary")].find((x) => sig(x) === key) : [...scope.querySelectorAll("[data-act]")].find((x) => sig(x) === key && !x.disabled);
   el?.focus({ preventScroll: true });
 }
 
@@ -2953,6 +2971,16 @@ const ACT = {
     const [x] = s.choose.splice(i, 1);
     return x.k === "spread" ? `It stays all 3 on your ${x.root}. You can spread it any time with Change.` : "They’ll wait. Spend them any time with Change.";
   }),
+  // Open all, or Close all: every named line under the same head.
+  names(el) {
+    const rows = [...(el.closest("section, .cc-fold-b")?.querySelectorAll("details.cc-named") ?? [])];
+    const open = rows.some((d) => !d.open);
+    for (const d of rows) {
+      if (open) ui.open.add(d.dataset.open);
+      else ui.open.delete(d.dataset.open);
+    }
+    render();
+  },
   gold(el) {
     const key = `g-${el.dataset.k}`;
     if (ui.open.has(key)) ui.open.delete(key);
@@ -3790,12 +3818,24 @@ document.addEventListener("input", (e) => {
   ui.notesTimer = setTimeout(persist, 400);
 });
 
+// A named line fades in when it's tapped open, and never on a redraw.
+document.addEventListener("click", (e) => {
+  e.target.closest?.("details.cc-named > summary")?.parentElement.classList.add("is-tapped");
+}, true);
+
 document.addEventListener("toggle", (e) => {
   const key = e.target.dataset?.open;
   if (!key) return;
   if (key.startsWith("bd-")) builder.toggled(e.target);
   if (e.target.open) ui.open.add(key);
   else ui.open.delete(key);
+  // A named line opened or shut by hand keeps its head's button saying what a
+  // tap on it would do.
+  if (e.target.classList.contains("cc-named")) {
+    const box = e.target.closest("section, .cc-fold-b");
+    const all = box?.querySelector(".cc-named-all");
+    if (all) all.firstElementChild.textContent = [...box.querySelectorAll("details.cc-named")].some((d) => !d.open) ? "Open all" : "Close all";
+  }
   // A Sheet tab fold the player shut stays shut, even one holding a gold mark,
   // and so does any other fold that's open until it's shut (data-shut).
   if (key.startsWith("sh-") || key.startsWith("lk-") || e.target.hasAttribute("data-shut")) {
