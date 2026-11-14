@@ -175,16 +175,18 @@ export function makeCampaigns(d) {
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState !== "visible") return;
     if (view.name === "camp" || view.name === "look") refresh(view.id);
-    else if (view.name === "list") refreshList();
+    else if (view.name === "list" || view.name === "camps") refreshList();
   });
-  addEventListener("online", () => (view.name === "join" ? check() : view.name === "list" ? refreshList() : poll()));
+  addEventListener("online", () => (view.name === "join" ? check() : view.name === "list" || view.name === "camps" ? refreshList() : poll()));
 
   // ------------------------------------------------------------ the list
 
   const metaOf = (k) => (k.role === "gm" ? `You’re the GM · ${players(k.players)}` : `${k.character ? `Playing ${esc(k.character.name)}` : "No character here yet"} · run by ${esc(k.gm)}`);
   const initial = (name) => esc(Array.from(String(name || "?").trim())[0] || "?");
 
-  function section() {
+  // On the Characters list, and as the body of the Campaigns page, where the
+  // page's own title says what they are (title: "Yours").
+  function section(title = "Campaigns") {
     load();
     if (!sync.me || sync.out) return "";
     const list = st.list || [];
@@ -194,9 +196,23 @@ export function makeCampaigns(d) {
     const lead = st.list == null ? `<p class="cc-lead">${online() ? "Checking for your campaigns…" : "Your campaigns show up here when you’ve got a signal."}</p>`
       : list.length ? "" : `<p class="cc-lead">Start one and you’re its GM. ${tip("k-how", ["Your players join with its link, each bringing one of their characters, and you see every character in it.", "Got a link from your GM? Open it and you can join."], "How campaigns work")}</p>`;
     const stale = !online() && st.list ? `<p class="cc-small">No signal, so these are as they were at ${time(st.at)}.</p>` : "";
-    return `<section class="cc-sec" id="cc-camps" aria-labelledby="cc-camps-h"><h2 id="cc-camps-h">Campaigns</h2>
+    return `<section class="cc-sec" id="cc-camps" aria-labelledby="cc-camps-h"><h2 id="cc-camps-h">${esc(title)}</h2>
       ${list.length ? `<ul class="cc-mine">${list.map(card).join("")}</ul>` : ""}${lead}${stale}
       <div class="cc-row"><button type="button" class="button" data-act="k" data-do="start">Start a campaign</button></div></section>`;
+  }
+
+  // Campaigns on a page of their own, the top bar's Campaigns (Mo's 1 Nov
+  // pick): every campaign you're in with Start a campaign, or, signed out,
+  // what a campaign is and how to get into one.
+  function page() {
+    load();
+    const intro = `<header class="cc-intro"><p class="kicker">Play together</p><h1>Campaigns</h1>
+      <p class="lede">A campaign keeps your group together. Start one and you’re its GM, your players join with its link and bring their characters, and the party sheet, the world and your telegraphs are on every phone.</p></header>`;
+    if (!sync.me) return `${intro}<section class="cc-sec" aria-labelledby="cc-camps-in"><h2 id="cc-camps-in">Sign in first</h2>
+      <p class="cc-lead">Campaigns live in your account, so sign in to start one. Got a link from your GM? Open it and it takes you through signing in and picking who you’re bringing.</p>
+      <div class="cc-row"><a class="button primary" href="/account/">Sign in</a></div></section>`;
+    if (sync.out) return `${intro}<div class="cc-note is-warn" role="status"><p>You’ve been signed out on this phone, so <a href="/account/">sign in</a> again to see your campaigns.</p></div>`;
+    return intro + section("Yours");
   }
 
   // ------------------------------------------------------------ a campaign
@@ -221,6 +237,9 @@ export function makeCampaigns(d) {
   const off = (what) => (st.busy ? ` disabled${st.busy === what ? ' aria-busy="true"' : ""}` : "");
   const warn = () => (st.note ? `<div class="cc-note is-warn" role="alert"><p>${esc(st.note)}</p></div>` : "");
 
+  // A campaign's Back: to the Campaigns page when that's where it was opened.
+  const backTo = () => (history.state?.from === "camps" ? ["/characters/?camps", "Campaigns"] : ["/characters/", "Characters"]);
+
   function campView(id) {
     load();
     const k = st.camps[id];
@@ -230,7 +249,7 @@ export function makeCampaigns(d) {
         : st.why[id] === "gone" ? "You’re not in that campaign any more. Your GM might’ve ended it or taken you out of it."
         : !online() ? "No signal, and this phone hasn’t opened this campaign before. Open it again when you’ve got a signal."
         : st.why[id] === "net" ? "That didn’t open. Check your signal and try again." : "";
-      return `${topbar("/characters/", "Characters")}<header class="cc-camp-head"><p class="kicker">Campaign</p><h1>${esc(item?.name ?? "A campaign")}</h1>
+      return `${topbar(...backTo())}<header class="cc-camp-head"><p class="kicker">Campaign</p><h1>${esc(item?.name ?? "A campaign")}</h1>
         ${why ? "" : '<p class="lede">Opening it…</p>'}</header>${why ? `<div class="cc-note is-warn"><p>${why}</p></div>` : ""}`;
     }
     const c = k.campaign;
@@ -240,7 +259,7 @@ export function makeCampaigns(d) {
     const myChar = mine?.character ?? null;
     const kicker = gm ? "You’re the GM" : myChar ? `Playing ${esc(myChar.name)}` : "No character here yet";
     const stale = !online() ? `<p class="cc-small">No signal, so this is how it was at ${time(k.at)}.</p>` : "";
-    const head = `${topbar("/characters/", "Characters")}${strip(id)}
+    const head = `${topbar(...backTo())}${strip(id)}
       <header class="cc-camp-head"><p class="kicker${gm ? " is-gm" : ""}">${kicker}</p><h1>${esc(c.name)}</h1>
         <p class="cc-small">${gm ? cap(players(party.length)) : `Run by ${esc(c.gm)} · ${players(party.length)}`}</p></header>${warn()}${stale}`;
     if (gm) {
@@ -524,11 +543,12 @@ export function makeCampaigns(d) {
   const ACT = {
     open(el, e) {
       e.preventDefault();
-      d.go(`/characters/?camp=${encodeURIComponent(el.dataset.id)}`);
+      // Opened from the Campaigns page, its Back goes back there.
+      d.go(`/characters/?camp=${encodeURIComponent(el.dataset.id)}`, { from: view.name === "camps" ? "camps" : null });
     },
     switch(el, e) {
       e.preventDefault();
-      if (el.dataset.id !== view.id) d.go(`/characters/?camp=${encodeURIComponent(el.dataset.id)}`, { replace: true });
+      if (el.dataset.id !== view.id) d.go(`/characters/?camp=${encodeURIComponent(el.dataset.id)}`, { replace: true, from: history.state?.from === "camps" ? "camps" : null });
     },
     look(el, e) {
       e.preventDefault();
@@ -798,6 +818,7 @@ export function makeCampaigns(d) {
 
   return {
     section,
+    page,
     gone,
     // The campaigns this phone last saw, for the party sheet.
     list() {
@@ -823,7 +844,7 @@ export function makeCampaigns(d) {
       // A character's only made on the way to joining while you're on the way.
       if (!["join", "camp", "build"].includes(next.name) && read(JOIN)?.make) write(JOIN, { ...read(JOIN), make: null });
       if (next.name === "join" && was.name !== "join") check();
-      if (next.name === "list" && was.name !== "list") refreshList();
+      if ((next.name === "list" || next.name === "camps") && was.name !== next.name) refreshList();
       poll();
     },
     view(v) {

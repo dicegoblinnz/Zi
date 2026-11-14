@@ -13,7 +13,7 @@ import "../styles/site.css";
 interface Props {
   title: string;
   description?: string;
-  current?: "home" | "rules" | "characters" | "changes" | "search";
+  current?: "home" | "learn" | "rules" | "characters" | "campaigns" | "search" | "sheets";
 }
 const { title, description = "The rules of Zi’Dara, a tabletop roleplaying game.", current } = Astro.props;
 const pageTitle = title === "Zi’Dara" ? title : `${title} · Zi’Dara`;
@@ -54,16 +54,23 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         <svg class="mark" width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><path class="edge" d="M16 2.5 L29.5 16 L16 29.5 L2.5 16 Z"></path><path class="core" d="M16 10 L22 16 L16 22 L10 16 Z"></path></svg>
         Zi’Dara
       </a>
+      <!-- Mo's 1 Nov pick: Learn, Rules, Characters and Campaigns, with search a
+           button beside the light switch and What's changed under Rules. -->
       <nav class="topnav" aria-label="Site">
+        <a href="/learn/" aria-current={current === "learn" ? "page" : undefined}>Learn</a>
         <a href="/rules/" aria-current={current === "rules" ? "page" : undefined}>Rules</a>
         <a href="/characters/" aria-current={current === "characters" ? "page" : undefined}>Characters</a>
-        <a href="/changes/" aria-current={current === "changes" ? "page" : undefined}>What’s changed</a>
-        <a href="/search/" aria-current={current === "search" ? "page" : undefined}>Search</a>
+        <a href="/characters/?camps" aria-current={current === "campaigns" ? "page" : undefined}>Campaigns</a>
       </nav>
-      <button class="theme-toggle" type="button" aria-label="Switch to light mode">
-        <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
-        <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
-      </button>
+      <div class="bar-tools">
+        <a class="bar-icon" href="/search/" aria-label="Search the rules" aria-current={current === "search" ? "page" : undefined}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.4 15.4L21 21"></path></svg>
+        </a>
+        <button class="theme-toggle" type="button" aria-label="Switch to light mode">
+          <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+          <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+        </button>
+      </div>
     </header>
     <slot />
     <footer class="site frame">
@@ -72,9 +79,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         Zi’Dara
       </a>
       <nav aria-label="Footer">
-        <a href="/rules/">Rules</a>
         <a href="/learn/">Learn</a>
+        <a href="/rules/">Rules</a>
         <a href="/characters/">Characters</a>
+        <a href="/characters/?camps">Campaigns</a>
         <a href="/sheets/">Sheets</a>
         <a href="/changes/">What’s changed</a>
         <a href="/search/">Search</a>

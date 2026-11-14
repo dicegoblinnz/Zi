@@ -2527,7 +2527,7 @@ function render() {
   const camping = view.name === "camp" || view.name === "look" || view.name === "join" || view.name === "world";
   // The builder's full screen too, with its own bar of Back and Next at the bottom.
   document.documentElement.classList.toggle("cc-full", view.name === "sheet" || view.name === "build" || camping);
-  app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : view.name === "world" ? world.view(view) : camping ? camps.view(view) : view.name !== "sheet" ? listView()
+  app.innerHTML = view.name === "build" ? builderView() : view.name === "learn" ? learn.view() : view.name === "world" ? world.view(view) : camping ? camps.view(view) : view.name === "camps" ? camps.page() : view.name !== "sheet" ? listView()
     : c ? characterView(ch, c) : isBefore(ch) ? beforeView(ch, { esc, link, back: ICON.back, tools: `${soundButton()}${themeButton()}`, crew: CREW }) : missingView(ch);
   document.documentElement.classList.toggle("cc-building", Boolean(app.querySelector(".bd-foot")));
   // With the dice in a dock above the bar, a toast sits above them both.
@@ -2606,19 +2606,26 @@ function route() {
   const learning = !building && !id && q.has("learn");
   const camp = !building && !id && !learning ? q.get("camp") : null;
   const joining = !building && !id && !learning && !camp && q.has("join");
+  // Campaigns on a page of their own, the top bar's Campaigns (Mo's 1 Nov pick).
+  const listing = !building && !id && !learning && !camp && !joining && q.has("camps");
   if (view.name === "learn" && !learning) learn.stop();
   // Leaving the builder keeps the draft, and coming back reads it again.
   if (view.name === "build" && view.key !== key) builder.close();
   // A Sheet tab fold shut on one character opens as usual on another.
   if (id !== (view.name === "sheet" ? view.id : null)) ui.shut.clear();
   view = building ? { name: "build", key } : learning ? { name: "learn" } : id ? { name: "sheet", id }
-    : camp ? (q.get("look") ? { name: "look", id: camp, who: q.get("look") } : q.has("world") ? { name: "world", id: camp, f: q.get("f") || "", p: q.get("p") || "", m: q.get("m") || "", pin: q.get("pin") || "", make: q.get("make") || "" } : { name: "camp", id: camp }) : joining ? { name: "join" } : { name: "list" };
+    : camp ? (q.get("look") ? { name: "look", id: camp, who: q.get("look") } : q.has("world") ? { name: "world", id: camp, f: q.get("f") || "", p: q.get("p") || "", m: q.get("m") || "", pin: q.get("pin") || "", make: q.get("make") || "" } : { name: "camp", id: camp }) : joining ? { name: "join" } : listing ? { name: "camps" } : { name: "list" };
+  // Characters and Campaigns are both this page, so the bar says which it is.
+  for (const a of document.querySelectorAll(".topnav a[href^='/characters/']")) {
+    if ((a.getAttribute("href") === "/characters/?camps") === listing) a.setAttribute("aria-current", "page");
+    else a.removeAttribute("aria-current");
+  }
   ui.tab = ["sheet", "rules", "party", "world"].includes(q.get("t")) ? q.get("t") : "play";
   ui.panel = null;
   ui.sure = false;
   document.documentElement.classList.toggle("cc-open", Boolean(id || building || learning || camp || joining));
   const ch = current();
-  document.title = building ? `${key === "new" ? "Make your own" : "Change a character"} · Zi’Dara` : learning ? "Learn to play · Zi’Dara" : ch ? `${ch.name} · Zi’Dara` : view.name === "world" ? `${world.title(view)} · Zi’Dara` : camp || joining ? `${camps.title(view)} · Zi’Dara` : "Characters · Zi’Dara";
+  document.title = building ? `${key === "new" ? "Make your own" : "Change a character"} · Zi’Dara` : learning ? "Learn to play · Zi’Dara" : ch ? `${ch.name} · Zi’Dara` : view.name === "world" ? `${world.title(view)} · Zi’Dara` : camp || joining ? `${camps.title(view)} · Zi’Dara` : listing ? "Campaigns · Zi’Dara" : "Characters · Zi’Dara";
   camps.route(view);
   render();
 }
@@ -3818,5 +3825,19 @@ addEventListener("storage", (e) => {
 });
 
 if (history.state?.dlg) history.replaceState(null, "");
+// From the home page: one of the crew to play (?play=vesk), or a way in to
+// make your own (?way=random or ?way=blank), the same as tapping it on the
+// list. The address goes back to the list first, so a reload or Back doesn't
+// do it again.
+const asked = new URLSearchParams(location.search);
+const playing = asked.get("play");
+const way = asked.get("way");
+if (playing != null || way != null) history.replaceState(null, "", "/characters/");
 route();
+if (CREW.has(playing)) ACT.play({ dataset: { c: playing } });
+else if (way === "random" || way === "blank") {
+  ACT.bway({ dataset: { w: way } });
+  // With a draft on the go, its button asks for a second tap first, so show it.
+  if (view.name === "list") app.querySelector(`[data-act="bway"][data-w="${way}"]`)?.scrollIntoView({ block: "center" });
+}
 sync.pull();

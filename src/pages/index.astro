@@ -1,138 +1,173 @@
 ---
+// The home page (Mo's 8 Nov ask, built 15 Nov): making a character comes first.
+// Someone new gets the builder and the other ways in, then the crew to play
+// tonight. Someone who's been here before gets their characters and games
+// first (Mo's 1 Nov pick), drawn on the phone by src/home/home.js from what
+// the companion keeps there. Everything else is the same for both.
 import Base from "../layouts/Base.astro";
 import book from "../generated/book.json";
-// Each archetype once, "twice" for one taken twice, the way the companion says it.
-const archNames = (c) => [...c.archetypes.reduce((m, a) => m.set(a.name, (m.get(a.name) ?? 0) + 1), new Map())].map(([n, k]) => (k > 1 ? `${n} twice` : n));
 import { recentEntries } from "../lib/whats-new.js";
+import { crest, die, telegraph } from "../kit/kit.js";
+import { stepsToDice } from "../companion/dice.js";
+import "../styles/kit.css";
+import "../styles/home.css";
 
+const ROOTS = ["Body", "Mind", "Soul"];
+// Each archetype once, "twice" for one taken twice, the way the companion says it.
+const archNames = (list) => [...list.reduce((m, a) => m.set(a, (m.get(a) ?? 0) + 1), new Map())].map(([n, k]) => (k > 1 ? `${n} twice` : n));
+// A crest beside a name says nothing a screen reader needs.
+const quiet = (html) => html.replace(/role="img" aria-label="[^"]*"/, 'aria-hidden="true"');
+const crew = book.crew.map((c) => {
+  const archs = c.archetypes.map((a) => a.name);
+  return { id: c.id, name: c.name, title: c.title, archs, says: archNames(archs).join(" · "), roots: ROOTS.map((r) => ({ r, n: c.roots?.[r] ?? 0 })) };
+});
+const vesk = crew.find((c) => c.id === "vesk") ?? crew[0];
+const isolde = crew.find((c) => c.id === "isolde");
+const rootsSaid = (c) => c.roots.map(({ r, n }) => `${r} ${n}`).join(", ");
+// The book's own round (Answering a Telegraph, #s-answering): the brute's d8
+// at Isolde's Body, answered by Wren and Bram with 17 steps.
+const club = telegraph({ who: "The brute", does: "Swings his club at Isolde.", at: "Isolde’s Body", atCrest: isolde?.archs ?? null, d: 8, face: 6, state: "stopped", when: "Stopped, so it never lands" });
+const answer = [{ d: 12, face: 8, won: true }, { d: 12, face: 3 }, { d: 10, face: 5 }];
+const cards = book.learn?.cards.length ?? 0;
 const latest = book.changes.headings[0];
 const updated = book.updated
   ? new Date(book.updated).toLocaleDateString("en-NZ", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })
   : null;
-// The dice ladder, drawn as each die's outline and a few of its edges: 1 step is a d2, up to a d12 at 6.
-const ladder = [
-  { die: "d2", steps: "1 step", points: "50,28 47.1,39 39,47.1 28,50 17,47.1 8.9,39 6,28 8.9,17 17,8.9 28,6 39,8.9 47.1,17" },
-  { die: "d4", steps: "2 steps", points: "28,6 50,46 6,46", edges: "M28 6 L28 46" },
-  { die: "d6", steps: "3 steps", points: "9,9 47,9 47,47 9,47" },
-  { die: "d8", steps: "4 steps", points: "28,4 52,28 28,52 4,28", edges: "M4 28 L52 28" },
-  { die: "d10", steps: "5 steps", points: "28,4 50,24 28,52 6,24", edges: "M6 24 L28 32 L50 24 M28 32 L28 52" },
-  { die: "d12", steps: "6 steps", points: "28,4 51,21 42,49 14,49 5,21", edges: "M28 16.4 L39.5 24.9 L35 38.9 L21 38.9 L16.5 24.9 Z M28 16.4 L28 4 M39.5 24.9 L51 21 M35 38.9 L42 49 M21 38.9 L14 49 M16.5 24.9 L5 21" },
-];
+// What home.js needs to draw a crew member saved on the phone.
+const forPhone = JSON.stringify(Object.fromEntries(crew.map((c) => [c.id, { title: c.title, archs: c.archs }]))).replace(/</g, "\\u003c");
 ---
-<Base title="Zi’Dara" current="home" description="A tabletop roleplaying game where the GM tells you what’s coming before anyone rolls.">
-  <main id="main" class="landing">
-    <section class="band hero frame">
-      <div class="hero-copy">
+<Base title="Zi’Dara" current="home" description="A tabletop roleplaying game. Make your character on your phone, or pick one of the crew and play tonight.">
+  <script is:inline slot="head">
+    // Someone who's been here before (a character on this phone, or signed in)
+    // gets their characters and games first. Decided before anything paints.
+    try {
+      var kept = JSON.parse(localStorage.getItem("zi-characters") || "null");
+      if ((kept && kept.characters && kept.characters.length) || JSON.parse(localStorage.getItem("zi-account") || "null")) document.documentElement.setAttribute("data-home", "back");
+    } catch (e) {}
+  </script>
+  <main id="main" class="hm">
+    <section class="hm-back frame" data-home-back aria-labelledby="hm-yours">
+      <div class="hm-head"><h1 id="hm-yours">Your characters</h1></div>
+    </section>
+
+    <section class="hm-hero frame hm-new-only" aria-labelledby="hm-make">
+      <div class="hm-hero-copy">
         <p class="kicker">A tabletop roleplaying game</p>
-        <h1>The GM tells you what’s coming before anyone rolls.</h1>
-        <p class="lede">You play people who are good at what they do. Each round the GM puts every threat’s dice on the table: what it’s doing, who it’s aimed at and how hard. Your sheet’s already done the counting, so you spend the round choosing what to answer and what to let ride.</p>
-        <div class="hero-actions">
-          <a class="button primary" href="/rules/welcome/">Read the rules</a>
-          <a class="more" href="#crew">Or pick one of the crew and play tonight</a>
-        </div>
-        {recentEntries.length > 0 && (
-          <a class="whats-new-line" href={`/changes/#${recentEntries[0].id}`}>
-            <span class="new-mark">New · {recentEntries[0].date}</span>
-            <span class="line-title">{recentEntries[0].title}</span>
-          </a>
-        )}
+        <h1 id="hm-make">Make your character</h1>
+        <p class="lede">Two archetypes, two Titles and 35 points to spend. The builder takes you through it a step at a time, with the rules right there, and your phone keeps the sheet and rolls the dice at the table.</p>
+        <a class="button primary hm-start" href="/characters/?build">Start building</a>
+        <ul class="hm-ways" aria-label="Other ways in">
+          <li><a href="#crew"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"></circle><path d="M3.5 19.5c.6-3.3 2.8-5.2 5.5-5.2s4.9 1.9 5.5 5.2"></path><circle cx="16.6" cy="9.3" r="2.6"></circle><path d="M15.8 14.4c2.4.1 4.1 1.8 4.7 4.6"></path></svg><span>Play one of the crew</span></a></li>
+          <li><a href="/characters/?way=random"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="2.5"></rect><circle cx="9" cy="9" r="1.1" class="dot"></circle><circle cx="15" cy="15" r="1.1" class="dot"></circle><circle cx="15" cy="9" r="1.1" class="dot"></circle><circle cx="9" cy="15" r="1.1" class="dot"></circle></svg><span>Random in one tap</span></a></li>
+          <li><a href="/characters/?way=blank"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8.5L19 7.5V21H6z"></path><path d="M14 3v5h5M9 12.5h7M9 16h5"></path></svg><span>A blank sheet</span></a></li>
+        </ul>
+        <p class="hm-signin-line">Played before? <a href="/account/">Sign in</a> and your characters come with you.</p>
       </div>
-      <figure class="scene" aria-label="A telegraph, and the crew answering it">
-        <div class="card">
-          <div class="head"><span class="label">Telegraph</span><span class="small">Round 1</span></div>
-          <p class="who">The brute</p>
-          <p>He swings his club at Isolde.</p>
-          <div class="dice"><span><span class="die">d8</span><span class="small">At Isolde, and her Defend’s a d2.</span></span></div>
+      <figure class="hm-sheet card" aria-labelledby="hm-sheet-cap">
+        <div class="hm-sheet-top">
+          <Fragment set:html={quiet(crest(vesk.archs))} />
+          <div class="hm-sheet-who"><b>{vesk.name}</b><span class="hm-sheet-title">{vesk.title}</span><span class="hm-sheet-archs">{vesk.says}</span></div>
         </div>
-        <div class="card answer">
-          <span class="label">Answered together</span>
-          <p>Wren puts an arrow in his arm and Bram gets his hammer under the club.</p>
-          <p class="small">Fight 5 and Fight 4 make 9 steps from two actions: a d12 and a d6.</p>
-          <div class="dice">
-            <span><span class="die">8</span><span class="small">on the d12</span></span>
-            <span><span class="die ghost">6</span><span class="small">on his d8</span></span>
+        <div class="hm-tiles" role="img" aria-label={`${rootsSaid(vesk)}.`}>
+          {vesk.roots.map(({ r, n }) => (
+            <div class={`hm-tile${n ? "" : " is-none"}`}>
+              <span class="k">{r}</span>
+              <span class="v">{n}</span>
+              <span class="hm-tile-dice">{n ? <Fragment set:html={stepsToDice(n).map((d) => die(d, { hide: true })).join("")} /> : "No dice"}</span>
+            </div>
+          ))}
+        </div>
+        <figcaption id="hm-sheet-cap">{vesk.name}, one of the crew. Each Root rolls its own dice, and everything on her sheet that fits a roll adds a step.</figcaption>
+      </figure>
+    </section>
+
+    <section class="hm-learn frame hm-new-only" aria-label="New here?">
+      <a class="card hm-learn-a" href="/characters/?learn">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8 20.6 12 12 21.2 3.4 12z"></path><path d="M12 8.4 15.6 12 12 15.6 8.4 12z" class="dot"></path></svg>
+        <span><b>New here? Play one round first</b><small>The brute swings his club at Isolde, and you answer it with Wren and Bram.</small></span>
+        <svg class="hm-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+      </a>
+      {cards > 0 && (
+        <a class="card hm-learn-a" href="/learn/">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="3.5" width="12" height="16" rx="1.5"></rect><path d="M5 6.5v13.5a1.5 1.5 0 0 0 1.5 1.5H15"></path></svg>
+          <span><b>Learn the rules in {cards} cards</b><small>One idea to a card, with the crew’s real dice.</small></span>
+          <svg class="hm-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"></path></svg>
+        </a>
+      )}
+    </section>
+
+    <section id="crew" class="hm-crew frame" aria-labelledby="crew-title">
+      <div class="hm-head"><h2 id="crew-title">Meet the crew</h2><a href={book.crewLink}>Their full sheets</a></div>
+      <p class="hm-intro">Six ready-made characters. Tap one to play them tonight, as they are or with a name of your own.</p>
+      <ul class="hm-crew-list">
+        {crew.map((c) => (
+          <li>
+            <a class="card hm-crew-a" href={`/characters/?play=${c.id}`} aria-label={`Play ${c.name}, ${c.title}. ${c.says}. ${rootsSaid(c)}.`}>
+              <Fragment set:html={quiet(crest(c.archs))} />
+              <span class="hm-crew-name">{c.name}</span>
+              <span class="hm-crew-title">{c.title}</span>
+              <span class="hm-crew-archs">{c.says}</span>
+              <span class="hm-crew-roots">
+                {c.roots.map(({ r, n }) => <span class={n ? "" : "is-none"}><small>{r}</small> {n}</span>)}
+              </span>
+              <span class="hm-crew-go">Play {c.name}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="hm-round frame" aria-labelledby="round-title">
+      <div class="hm-round-copy">
+        <h2 id="round-title">How a round goes</h2>
+        <p>Before anyone rolls, the GM puts every threat’s dice on the table: what it’s doing, who it’s at and how hard. You won’t answer everything, so you pick what to stop, and whatever’s left lands at the end of the round.</p>
+        <p>Here the brute’s club is coming at Isolde’s Body, a d8. Wren puts an arrow in his arm and Bram gets his hammer under the club, 17 steps between them, two d12s and a d10. His club comes up 6 and their best die’s an 8, so it never lands.</p>
+        <div class="hm-round-go">
+          <a class="button primary" href="/characters/?learn">Play this round yourself</a>
+          <a class="hm-more" href="/rules/conflict/#s-answering">Answering a telegraph in the rules</a>
+        </div>
+      </div>
+      <figure class="hm-scene" aria-label="The brute’s telegraph, and Wren and Bram answering it">
+        <Fragment set:html={club} />
+        <div class="card hm-answer">
+          <span class="hm-answer-k">Answered together</span>
+          <p>Wren’s arrow and Bram’s hammer, 17 steps on Wren’s Body.</p>
+          <div class="hm-answer-dice">
+            {answer.map((a) => <Fragment set:html={die(a.d, { face: a.face, state: a.won ? "" : "low", label: `A d${a.d} that came up ${a.face}${a.won ? ", which beats the club’s 6" : ""}` })} />)}
           </div>
-          <p class="verdict">Stopped. It never lands.</p>
+          <p class="hm-answer-said">The 8 beats his 6. Stopped, and Wren gets 1 Aura for the die that won.</p>
         </div>
       </figure>
     </section>
 
-    <section class="band section frame" aria-labelledby="how">
-      <h2 id="how">How it plays</h2>
-      <div class="features">
-        <div class="card feature">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          <h3>You see it coming</h3>
-          <p>A threat telegraphs with its Challenge die, and the GM never hides its size or its target. You’re never going to answer everything, so every round’s a choice.</p>
-        </div>
-        <div class="card feature">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 6h10M10 12h10M10 18h10"></path><path d="M3.5 6l1.2 1.2L7 5M3.5 12l1.2 1.2L7 11M3.5 18l1.2 1.2L7 17"></path></svg>
-          <h3>Every roll starts from a number</h3>
-          <p>Your sheet does the counting before you play. If a line’s on your set action and it fits, it’s free, and anything else that fits costs 1 Aura.</p>
-        </div>
-        <div class="card feature">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"></path></svg>
-          <h3>Any world you like</h3>
-          <p>The rules don’t come with a world attached. Build your own with the GM’s tools in the book, or found one with your crew when you start a campaign.</p>
-        </div>
-        <a class="card feature feature-link" href="/characters/">
-          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2" width="11" height="20" rx="2.5"></rect><path d="M11 18h2"></path></svg>
-          <h3>Your phone at the table</h3>
-          <p>Pick one of the crew and play them from your phone, with the counting done and every roll a tap away.</p>
-          <span class="go">Open Characters</span>
-        </a>
-      </div>
-    </section>
-
-    <section class="ladder-band" aria-labelledby="steps">
-      <div class="band frame">
-        <div class="ladder-copy">
-          <h2 id="steps">Steps make dice</h2>
-          <p class="muted">A set action’s steps are 1 for the action and 1 for every line on it. Then turn your steps into dice: 1 step is a d2, 2 steps a d4, and so on up to a d12 at 6.</p>
-          <p>Vesk’s Sneak is her first Title, <em>move unseen</em> and Silent Step, plus the action. That’s 4 steps, a d8.</p>
-        </div>
-        <ol class="ladder" aria-label="Steps and their dice">
-          {ladder.map((d) => (
-            <li class="card">
-              <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><polygon points={d.points}></polygon>{d.edges && <path class="edges" d={d.edges}></path>}</svg>
-              <b>{d.die}</b>
-              <span>{d.steps}</span>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-
-    <section id="crew" class="band section frame" aria-labelledby="crew-title">
-      <div>
-        <h2 id="crew-title">Meet the crew</h2>
-        <p class="intro">Pick one and play tonight. Take one as written, or copy one and change anything you like.</p>
-      </div>
-      <div class="crew">
-        {book.crew.map((c) => (
-          <article class="card">
-            <div class="art"><span class="die" aria-hidden="true">{c.name[0]}</span></div>
-            <div class="body">
-              <h3>{c.name}</h3>
-              <p class="title">{c.title}</p>
-              <div class="chips">{archNames(c).map((a) => <span class="chip">{a}</span>)}</div>
-              <p class="blurb">{c.blurb}</p>
-            </div>
-          </article>
-        ))}
-      </div>
-      <p><a href={book.crewLink}>See their full sheets</a></p>
-    </section>
-
-    <section class="band frame">
-      <div class="card cta">
+    <section class="hm-together frame hm-new-only" aria-labelledby="together-title">
+      <div class="card hm-band">
         <div>
-          <h2>The rules are free to read</h2>
-          <p>Every chapter’s here, and it’s the master copy, so it’s always the current rules.{updated && <> Last updated {updated}.</>}</p>
-          {latest && <p><a href={`/changes/#${latest.id}`}>See what’s changed</a></p>}
+          <h2 id="together-title">Play together</h2>
+          <p>Start a campaign and you’re its GM. Your players join with its link and bring their characters, and the party sheet, the world and your telegraphs are on every phone, live.</p>
         </div>
-        <a class="button primary" href="/rules/welcome/">Read the rules</a>
+        <a class="button" href="/characters/?camps">Start or join a campaign</a>
+      </div>
+    </section>
+
+    <section class="hm-rules frame" aria-labelledby="rules-title">
+      <div class="card hm-band">
+        <div>
+          <h2 id="rules-title">The rules are free to read</h2>
+          <p>Every chapter’s here, and it’s the master copy, so it’s always the current rules.{updated && <> Last updated {updated}.</>}</p>
+          {recentEntries.length > 0 ? (
+            <a class="whats-new-line" href={`/changes/#${recentEntries[0].id}`}>
+              <span class="new-mark">New · {recentEntries[0].date}</span>
+              <span class="line-title">{recentEntries[0].title}</span>
+            </a>
+          ) : latest && <p><a href={`/changes/#${latest.id}`}>See what’s changed</a></p>}
+        </div>
+        <a class="button primary" href="/rules/">Read the rules</a>
       </div>
     </section>
   </main>
+  <script type="application/json" id="hm-crew-data" set:html={forPhone}></script>
+  <script>
+    import "../home/home.js";
+  </script>
 </Base>

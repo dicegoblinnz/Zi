@@ -1,0 +1,131 @@
+/* The home page (src/pages/index.astro, and src/home/home.js for someone
+   who's back): making a character first, or your characters and games.
+   Sigil's tokens from site.css, and the kit's crests, dice and telegraph. */
+.hm { --wide: 75rem; padding-bottom: clamp(3.5rem, 9vw, 7rem); }
+.hm > section { max-width: var(--wide); margin-inline: auto; }
+
+/* Who's here: someone new, or someone back (set in the page's head). */
+.hm-back { display: none; }
+:root[data-home="back"] .hm-back { display: block; }
+:root[data-home="back"] .hm-new-only { display: none; }
+
+.hm h1 { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(2.1rem, 1.3rem + 3.2vw, 3.9rem); line-height: 1.08; letter-spacing: 0.02em; text-wrap: balance; }
+.hm h2 { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(1.5rem, 1.15rem + 1.5vw, 2.3rem); line-height: 1.15; letter-spacing: 0.02em; }
+.hm-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 1rem; }
+.hm-head a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+.hm-intro { margin: 0.35rem 0 1.1rem; color: var(--muted); max-width: 40em; }
+.hm-go { flex: none; width: 20px; height: 20px; margin-left: auto; fill: none; stroke: var(--muted); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ── Make your character */
+.hm-hero { display: grid; gap: clamp(1.8rem, 5vw, 4rem); align-items: center; padding-block: clamp(1.6rem, 6vw, 5rem) 0; }
+.hm-hero-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 1.1rem; }
+.hm-hero .lede { font-size: 1.15rem; }
+.hm-start { align-self: stretch; min-height: 58px; font-size: 1.08rem; }
+.hm-ways { list-style: none; margin: 0; padding: 0; align-self: stretch; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+.hm-ways a { height: 100%; min-height: 86px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem; padding: 0.7rem 0.35rem; text-align: center; text-decoration: none; color: var(--ink); font-weight: 700; font-size: 0.95rem; line-height: 1.25; background: var(--panel); border: 1px solid var(--line); border-radius: 2px; }
+.hm-ways a:hover { border-color: var(--gold); }
+.hm-ways svg, .hm-learn-a svg { flex: none; fill: none; stroke: var(--gold); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.hm-ways svg { width: 26px; height: 26px; }
+.hm-ways svg .dot, .hm-learn-a svg .dot { fill: var(--gold); stroke: none; }
+.hm-signin-line { margin: 0; color: var(--muted); font-size: 0.98rem; }
+.hm-signin-line a { font-weight: 700; }
+
+/* Vesk's sheet beside it, from a tablet up: her Roots as the play screen's tiles. */
+.hm-sheet { display: none; margin: 0; padding: clamp(1.2rem, 3vw, 1.8rem); flex-direction: column; gap: 1.1rem; }
+.hm-sheet-top { display: flex; align-items: center; gap: 1.1rem; }
+.hm-sheet .zd-crest { --s: 88px; }
+.hm-sheet-who { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.hm-sheet-who b { font-family: var(--display); font-weight: 600; font-size: 2rem; line-height: 1.1; letter-spacing: 0.02em; }
+.hm-sheet-title { font-style: italic; line-height: 1.35; }
+.hm-sheet-archs { color: var(--violet); font-weight: 700; font-size: 0.95rem; }
+.hm-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.6rem; }
+.hm-tile { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; padding: 0.85rem 0.4rem 0.75rem; background: var(--panel); border: 1px solid var(--line-soft); border-radius: 2px; }
+.hm-tile .k { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-ink); }
+.hm-tile .v { font-family: var(--display); font-weight: 600; font-size: 2.1rem; line-height: 1; }
+.hm-tile.is-none .v { color: var(--muted); }
+.hm-tile-dice { display: flex; align-items: center; justify-content: center; gap: 0.25rem; min-height: 42px; color: var(--muted); font-size: 0.88rem; }
+.hm-tile-dice .zd-die { width: 42px; height: 42px; }
+.hm-sheet figcaption { color: var(--muted); font-size: 0.98rem; line-height: 1.5; }
+
+/* ── New here? */
+.hm-learn { display: grid; gap: 0.7rem; padding-top: clamp(1.6rem, 5vw, 3rem); }
+.hm-learn-a { display: flex; align-items: center; gap: 0.9rem; min-height: 76px; padding: 0.85rem 1rem; text-decoration: none; color: var(--ink); }
+.hm-learn-a:hover, .hm-crew-a:hover, .hm-char:hover, .hm-game:hover { border-color: var(--gold); }
+.hm-learn-a svg { width: 34px; height: 34px; stroke-width: 1.5; }
+.hm-learn-a .hm-go { width: 20px; height: 20px; stroke: var(--muted); stroke-width: 2; }
+.hm-learn-a > span { display: flex; flex-direction: column; gap: 0.1rem; min-width: 0; }
+.hm-learn-a b { font-weight: 700; line-height: 1.3; }
+.hm-learn-a small { color: var(--muted); font-size: 0.95rem; line-height: 1.4; }
+
+/* ── The crew, and your own characters: a card a character, crest first. */
+.hm-crew { padding-top: clamp(2.4rem, 7vw, 4.5rem); }
+.hm-crew-list, .hm-chars { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.7rem; }
+.hm-crew-a, .hm-char { height: 100%; display: flex; flex-direction: column; align-items: center; gap: 0.3rem; padding: 1.1rem 0.6rem 0.9rem; text-align: center; text-decoration: none; color: var(--ink); }
+.hm-crew-a .zd-crest, .hm-char .zd-crest { --s: 64px; margin-bottom: 0.35rem; }
+.hm-crew-name, .hm-char-name { font-family: var(--display); font-weight: 600; font-size: 1.28rem; line-height: 1.15; letter-spacing: 0.02em; overflow-wrap: anywhere; }
+.hm-crew-title, .hm-char-title { font-style: italic; font-size: 0.95rem; line-height: 1.35; color: var(--muted); overflow-wrap: anywhere; }
+.hm-crew-archs { font-size: 0.86rem; font-weight: 700; line-height: 1.3; color: var(--violet); }
+.hm-crew-roots { display: flex; justify-content: center; gap: 0.35rem; margin-top: auto; padding-top: 0.55rem; font-weight: 700; font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.hm-crew-roots > span { display: flex; flex-direction: column; align-items: center; min-width: 2.7rem; line-height: 1.15; }
+.hm-crew-roots small { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
+.hm-crew-roots .is-none { color: var(--muted); }
+.hm-crew-go { margin-top: 0.45rem; font-size: 0.92rem; font-weight: 700; color: var(--violet); }
+
+/* ── How a round goes, drawn with the kit */
+.hm-round { display: grid; gap: clamp(1.6rem, 5vw, 3.5rem); align-items: center; padding-top: clamp(2.8rem, 8vw, 5.5rem); }
+.hm-round-copy { display: flex; flex-direction: column; gap: 1rem; }
+.hm-round-copy p { margin: 0; max-width: 34em; }
+.hm-round-go { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.4rem; margin-top: 0.3rem; }
+.hm-more { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
+.hm-scene { margin: 0; display: flex; flex-direction: column; min-width: 0; }
+.hm-scene .zd-tele { width: 100%; }
+.hm-answer { position: relative; max-width: 26rem; margin: -0.4rem 0 0 clamp(0px, 6vw, 4.5rem); padding: 1.05rem 1.15rem; display: flex; flex-direction: column; gap: 0.6rem; box-shadow: 0 0 0 1px var(--gold); }
+.hm-answer-k { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold-ink); }
+.hm-answer p { margin: 0; }
+.hm-answer-dice { display: flex; gap: 0.6rem; }
+.hm-answer-dice .zd-die { width: 54px; height: 54px; }
+.hm-answer-said { font-weight: 700; color: var(--gold-ink); }
+
+/* ── Play together, and the rules */
+.hm-together, .hm-rules { padding-top: clamp(2.8rem, 8vw, 5.5rem); }
+.hm-band { padding: clamp(1.4rem, 5vw, 3rem); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.2rem 2rem; }
+.hm-band > div { display: flex; flex-direction: column; gap: 0.6rem; max-width: 42rem; }
+.hm-band p { margin: 0; color: var(--muted); }
+.hm-band .whats-new-line { margin-top: 0.2rem; }
+
+/* ── Back again: your characters, then your games */
+.hm-back { padding-top: clamp(1.4rem, 5vw, 3.5rem); }
+.hm-back h1 { font-size: clamp(1.8rem, 1.25rem + 2.4vw, 3rem); }
+.hm-back .hm-head + .hm-chars, .hm-back .hm-head + .hm-games, .hm-back .hm-head + .hm-make { margin-top: 0.8rem; }
+.hm-back .hm-make + .hm-head, .hm-back .hm-make + .hm-none { margin-top: 1.9rem; }
+.hm-char-camp { margin-top: auto; padding: 0.1rem 0.65rem; border: 1px solid var(--line); border-radius: 999px; font-size: 0.82rem; font-weight: 700; line-height: 1.5; color: var(--violet); }
+.hm-make { display: flex; align-items: center; justify-content: center; gap: 0.6rem; min-height: 56px; margin-top: 0.7rem; padding: 0.5rem 1rem; border: 1px dashed var(--line); border-radius: 2px; text-decoration: none; color: var(--ink); font-family: var(--display); font-weight: 600; font-size: 1.05rem; letter-spacing: 0.03em; }
+.hm-make:hover { border-color: var(--gold); border-style: solid; }
+.hm-plus { font-size: 1.7rem; line-height: 1; color: var(--gold-ink); }
+.hm-games { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+.hm-game { display: flex; align-items: center; gap: 0.8rem; min-height: 64px; padding: 0.7rem 1rem; text-decoration: none; color: var(--ink); }
+.hm-game.is-gm { box-shadow: inset 3px 0 0 var(--violet); }
+.hm-game-text { display: flex; flex-direction: column; min-width: 0; }
+.hm-game-text b { font-weight: 700; font-size: 1.08rem; line-height: 1.3; }
+.hm-game-text small { color: var(--muted); font-size: 0.93rem; }
+.hm-none { margin: 0.7rem 0 0; color: var(--muted); max-width: 40em; }
+.hm-none a { font-weight: 700; }
+
+@media (min-width: 640px) {
+  .hm-start { align-self: flex-start; min-width: 17rem; }
+  .hm-ways { align-self: flex-start; width: 31rem; max-width: 100%; }
+  .hm-sheet { display: flex; }
+  .hm-learn { grid-template-columns: 1fr 1fr; }
+}
+@media (min-width: 700px) {
+  .hm-crew-list, .hm-chars { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+  .hm-games { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 900px) {
+  .hm-hero { grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); }
+  .hm-round { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+@media (min-width: 1100px) {
+  .hm-crew-list { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .hm-chars { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}

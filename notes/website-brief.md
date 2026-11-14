@@ -10,7 +10,7 @@ Mo's answers from 16 Oct 2026, given before the redesign. Everything built for z
 - Mo likes the feel of D&D Beyond (the sheet front and centre), World Anvil (rich lore), Demiplane (dark, glossy cards with big art) and Alchemy (cinematic and atmospheric).
 - It has to look good with no art, with spaces that get better as art arrives.
 - Fully separate from Dice Goblin: no shop branding and no credit. The home page gets its own intro about the game. The Welcome chapter keeps Mo's words, Dice Goblin line included.
-- The home page depends on who's there. Newcomers get what Zi'Dara is and why it's great. Signed-in players go straight to their characters and games.
+- The home page depends on who's there. Newcomers get what Zi'Dara is and why it's great. Signed-in players go straight to their characters and games. Since 8 Nov, making a character comes first for newcomers (built 15 Nov, below).
 - Silent unless someone turns sound on. A telegraph landing buzzes the phone.
 
 ## The look Mo chose: Sigil
@@ -94,3 +94,9 @@ Mo's answers in the drill from `notes/app-rework.md`, round by round.
 - The learn-to-play round is in (the brute swings his club at Isolde, and a new player answers with Wren and Bram). A roll log isn't, for now.
 - The guided builder goes to the next playtest first.
 - Stages stay small, each smaller than the companion's first version, so something new reaches the table every week.
+
+## The site's layout, 1 Nov, 8 Nov and 15 Nov
+
+- 1 Nov, after comparing the site with others like it: the top bar becomes Learn, Rules, Characters and Campaigns with a search button, What's changed goes under Rules, and campaigns get a page of their own. Signed-in players land on their characters and games, not the intro. Guest seats: a player can join a campaign with just a name on that phone, and is nudged to sign in after the session. A roll log still not yet.
+- 8 Nov: the home screen introduces character creation first, with the book reached from a tab along the top, and the companion's screens quicker at the table. Three home screens were drawn for him on `look/2026-11-09`.
+- 15 Nov: he asked for the home page to be about the character, the layout and orientation made better, a real test, and suggestions for the whole site. Built on `site/home-character-first`: Home 1 from the 8 Nov options on stacking, the 1 Nov top bar and Campaigns as a page of its own. The test, what it found and the stages from here are in `notes/site-plan.md`.
