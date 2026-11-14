@@ -6,7 +6,7 @@ order: 8
 part: "Play"
 partNumber: "Part I"
 source: 2026-10-02 rulebook
-updated: 2026-11-09
+updated: 2026-11-14
 ---
 :::quote
 In a chase, the world's trying to trip you up while something behind you wants you for dinner.
@@ -42,7 +42,7 @@ There are three dice, and each one wants something different from you. The crew 
 :::example[The harbour at dawn]
 The crew's running for the harbour with a painting wrapped in sailcloth, and the harbour patrol is two streets behind. The GM puts out the dice: the Gap at d8, the Pursuer at d6 (the patrol's Challenge 3), and the Ground at d10, because it's market morning.
 
-**Round 1.** The patrol telegraphs a whistle, a d6 aimed at the Gap: more of them are on the way. Vesk answers it and gains ground in the same go, because she knows the rooftops and she's taking them where the whistle can't follow. That's her Body and her Climbing, with her grappling line, 8 steps, a d12 and a d4, and past 6 steps they're separate already: the d12 for the Gap and the d4 for the whistle. The d12 rolls 5 against the Gap's 4, so it steps up to d10, and the d4 rolls 4 against the whistle's 3. That's a win and a top face as well, so 2 Aura. Bram shakes the pursuer by tipping a fish cart across the alley, and the Pursuer steps down to d4. Nobody deals with the ground, so at the end of the round it steps down to a d8.
+**Round 1.** The patrol telegraphs a whistle, a d6 aimed at the Gap: more of them are on the way. Vesk answers it and gains ground in the same go, because she knows the rooftops and she's taking them where the whistle can't follow. That's her Body, her first Title, *run the rooftops*, her grappling line and *Anywhere I can throw a hook*, 12 steps, two d12s, and past 6 steps they're separate already: one for the Gap and one for the whistle. The first rolls 5 against the Gap's 4, so it steps up to d10, and the second rolls 12 against the whistle's 3. That's two wins and a top face as well, so 3 Aura. Bram shakes the pursuer by tipping a fish cart across the alley, and the Pursuer steps down to d4. Nobody deals with the ground, so at the end of the round it steps down to a d8.
 
-**Round 2.** The Ground telegraphs a dead end, a d8. Isolde answers it: she's read the old city maps, and there's a cut-through behind the chandlery. Vesk gains ground again, and the Gap's a d12. Bram doubles back at the mouth of the cut-through and spends 3 Aura on an extra action. He shoulders the lead runner with his Body and his Shieldwork, 9 steps without the hammer, a d12 and a d6, then heaves a stack of lobster pots across the lane with his Body and his Lifting, 7 steps, a d12 and a d2. The patrol's d4 comes up 2, and that one roll stands for the whole round. Bram's best is a 5, then a 4. That's two wins, so the Pursuer steps down to a d2, then past it. The patrol's shaken off, and it's all over before the Gap even gets past d12. They walk the last street to the harbour.
+**Round 2.** The Ground telegraphs a dead end, a d8. Isolde answers it: she's read the old city maps, and there's a cut-through behind the chandlery. Vesk gains ground again, and the Gap's a d12. Bram doubles back at the mouth of the cut-through and spends 3 Aura on an extra action. He shoulders the lead runner with his Body, his second Title and his shield, 9 steps, a d12 and a d6, then heaves a stack of lobster pots across the lane with his Body and *lift what two men can't*, 8 steps, a d12 and a d4. The patrol's d4 comes up 2, and that one roll stands for the whole round. Bram's best is a 5, then a 4. That's two wins, so the Pursuer steps down to a d2, then past it. The patrol's shaken off, and it's all over before the Gap even gets past d12. They walk the last street to the harbour.
 :::

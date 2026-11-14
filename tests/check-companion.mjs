@@ -53,6 +53,17 @@
 //    it, Old Vesk from before Roots, and Tamsin, built on the phone, recounted
 //    with her spreads and her last point flagged), and the build stopping on a
 //    crew sheet that doesn't add up.
+// 1f. Print, with no browser: the blank sheet holds exactly the fields
+//    src/companion/sheet-fields.js lists, and every crew member printed reads
+//    back field by field (each Root and where its points came from, adding up
+//    to it, each Title's words, spread and permissions with their Roots, the
+//    archetypes, the attuned thing, Aura's 7 and 35 points), the same from the
+//    GM's look with no book to hand. Vesk part way through a scene (her hook
+//    powered, a Scar, Burning, a strained thread, her smoke bomb used and her
+//    Shadow's pool), Bram with a Boon taking two lines, and Rook, made up with
+//    more of everything than the paper holds. Nothing print writes is missing
+//    from the sheet, every field bar the ones only a pencil fills gets
+//    something from one of them, and what doesn't fit goes in Notes.
 // 2. Every crew member's Roots and specialties on the phone match their sheet
 //    in the chapter: each specialty's tile on its usual Root with the dice it
 //    rolls, the Roots on their own, three tracks on d12, full Aura and a plate
@@ -109,10 +120,12 @@
 //    bins a draft, Vesk from the crew becoming your own with her play kept,
 //    Vesk saved before stacking spreading her Titles and saved on 35 with her
 //    Roots the chapter's, and Tamsin from before Roots rebuilt.
-// 6. Print: Vesk part way through a scene (a Scar, Burning, Aura spent and
-//    pumped, a strained thread and her smoke bomb used) read back field by
-//    field off the new sheet, then Bram's plate with a box ticked and Dorrie's
-//    court clothes on her Confidence.
+// 6. Print on the phone, from the Sheet tab's button (saved characters put on
+//    the phone as they'd be part way through a scene, since the play screen's
+//    being redrawn): Vesk with a Scar, Burning, Aura spent and her hook
+//    powered, a strained thread and her smoke bomb used, read back field by
+//    field off the stacking sheet, then Bram's plate with a box ticked and
+//    Dorrie's court clothes on her Confidence, over two lines.
 // 7. Dice, feel and learning. The learning round on the crew's sheets three
 //    ways: the club beaten with Aura past 5, a tie won for 1 Aura that pays
 //    nothing back, and real dice that lose, so the club takes a size off
@@ -186,12 +199,12 @@
 //    themes on the deck, a section, its contents, a pop-up, a place's tabs,
 //    threats and the crew's sheets.
 import { createServer } from "node:http";
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
 import { extname, join } from "node:path";
 import { chromium } from "playwright";
 import { AxeBuilder } from "@axe-core/playwright";
-import { PDFDocument } from "pdf-lib";
+import { PDFCheckBox, PDFDocument, PDFRadioGroup, PDFTextField } from "pdf-lib";
 import { diceLabel, diceRange, diceShapes, stepsToDice } from "../src/companion/dice.js";
 import { ROOTS, rootFor, rootsSheet } from "../src/companion/roots.js";
 import * as RS from "../src/companion/roots.js";
@@ -1252,6 +1265,264 @@ if (part("1e")) {
     }
   }
   console.log("the crew and the character on stacking checked");
+}
+
+// 1f. Print, with no browser. The blank sheet first, against the list of its
+// fields, then the crew, Vesk part way through a scene, Bram with a Boon, and
+// Rook, made up with more of everything than the paper holds.
+if (part("1f")) {
+  const { fillSheet } = await import("../src/companion/print.js");
+  const { sheetFields } = await import("../src/companion/sheet-fields.js");
+  const blank = readFileSync("public/sheets/zidara-character-sheet.pdf");
+  const kindOf = (f) => (f instanceof PDFTextField ? "text" : f instanceof PDFCheckBox ? "check" : f instanceof PDFRadioGroup ? "radio" : "other");
+  const fieldsOf = async (bytes) => (await PDFDocument.load(bytes)).getForm().getFields();
+  const valuesOf = async (bytes) => Object.fromEntries((await fieldsOf(bytes)).map((f) => [f.getName(), f instanceof PDFTextField ? f.getText() ?? "" : f instanceof PDFRadioGroup ? f.getSelected() ?? "" : f instanceof PDFCheckBox ? f.isChecked() : null]));
+  const list = sheetFields();
+  const want = new Map(list.map((f) => [f.name, f]));
+  const onSheet = await fieldsOf(blank);
+  const there = new Map(onSheet.map((f) => [f.getName(), f]));
+  same(list.filter((f) => !there.has(f.name)).map((f) => f.name), [], "fields the list has that the blank sheet hasn't");
+  same(onSheet.map((f) => f.getName()).filter((n) => !want.has(n)), [], "fields on the blank sheet the list hasn't");
+  for (const f of list) {
+    const got = there.get(f.name);
+    if (!got) continue;
+    if (kindOf(got) !== f.kind) note(`${f.name} is a ${kindOf(got)} field on the sheet, and the list says ${f.kind}`);
+    else if (f.kind === "radio") same([...got.getOptions()].sort(), [...f.values].sort(), `what can be ringed for ${f.name}`);
+  }
+
+  // Everything print fills, by anyone, so a field nobody fills shows up.
+  const filled = new Set();
+  let printed = 0;
+  const print = async (who, c, s, extra = {}) => {
+    const out = await fillSheet({ name: who }, c, s, { B: BUILD, blank, ...extra });
+    // With a folder for screenshots, each printed sheet goes there too.
+    if (SHOTS) writeFileSync(join(SHOTS, `print-${++printed}-${who.toLowerCase()}.pdf`), out.bytes);
+    same(out.missing, [], `fields print looked for on ${who}'s sheet that it hasn't got`);
+    const got = await valuesOf(out.bytes);
+    for (const [k, v] of Object.entries(got)) if (v) filled.add(k);
+    return { ...out, got };
+  };
+  const joined = (got, ...names) => names.map((n) => got[n]).filter(Boolean).join(" ");
+  const box = (n) => (n ? String(n) : "");
+  const lower = (r) => r.toLowerCase();
+  for (const crew of book.crew) {
+    const c = rootsSheet(crew, [], BUILD);
+    const s = RS.normalRoots({}, c);
+    const { got, short } = await print(crew.name, c, s);
+    const who = crew.name;
+    if (short) note(`${who}'s Notes ran out of room`);
+    same([got.name, got.aura_now, got.aura_max, got.aura_powering, got.points_spent, got.points_start, got.points_banked], [who, "7", "7", "", "35", "35", ""], `${who}'s name, Aura and points`);
+    for (const r of ROOTS) {
+      const perms = crew.titles.flatMap((t) => t.permissions).filter((p) => p.root === r).length;
+      same(got[`root_${lower(r)}`], String(crew.roots[r]), `${who}'s ${r}`);
+      crew.titles.forEach((t, i) => same(got[`root_${lower(r)}_title_${i + 1}`], box(t.roots[r]), `${who}'s ${r} from Title ${i + 1}`));
+      same(got[`root_${lower(r)}_permissions`], box(perms), `${who}'s ${r} from permissions`);
+      same(crew.titles.reduce((n, t) => n + t.roots[r], 0) + perms, crew.roots[r], `${who}'s ${r}, added up from where it came from`);
+    }
+    crew.titles.forEach((t, i) => {
+      const at = `title_${i + 1}`;
+      same(joined(got, at, `${at}_more`), t.text, `${who}'s Title ${i + 1}`);
+      same(ROOTS.map((r) => got[`${at}_${lower(r)}`]), ROOTS.map((r) => box(t.roots[r])), `${who}'s Title ${i + 1}'s spread`);
+      t.permissions.forEach((p, j) => same([got[`${at}_permission_${j + 1}`], got[`${at}_permission_${j + 1}_root`]], [p.text, lower(p.root)], `${who}'s permission ${j + 1} on Title ${i + 1}, with its Root`));
+      same(got[`${at}_permission_${t.permissions.length + 1}`], "", `nothing after ${who}'s permissions on Title ${i + 1}`);
+    });
+    same(got.title_3, "", `${who}'s third Title, which she hasn't got`);
+    const names = [...new Set(crew.archetypes.map((a) => a.name))];
+    names.forEach((n, i) => {
+      const at = `archetype_${i + 1}`;
+      const times = crew.archetypes.filter((a) => a.name === n).length;
+      same(got[at], times > 1 ? `${n}, twice` : n, `${who}'s archetype ${i + 1}`);
+      const rule = BUILD.archetypes.find((a) => a.name === n);
+      same(got[`${at}_track`], lower(rule.home), `${n}'s home track on ${who}'s sheet`);
+      same(joined(got, `${at}_mechanic`, `${at}_mechanic_more`), rule.for, `${n}'s mechanic on ${who}'s sheet`);
+      const abilities = joined(got, ...Array.from({ length: 6 }, (_, k) => `${at}_ability_${k + 1}`));
+      for (const h of new Set(crew.archetypes.filter((a) => a.name === n).flatMap((a) => a.have))) {
+        const x = rule.abilities.find((y) => y.name === h);
+        // Push is +2, and a point more for each time the same one's taken again.
+        const said = h === "Push" ? x.text.replace("+2", `+${times + 1}`) : x.text;
+        has(abilities, `${h} (1 ${rule.home}): ${said}`, `${n}'s ${h}, whole, on ${who}'s sheet`);
+      }
+    });
+    const thing = crew.attuned;
+    same(got.attune_1_thing, thing.props ? `${thing.name} (${thing.props})` : thing.name, `${who}'s attuned thing`);
+    same([got.attune_1_stage, got.attune_1_catch, got.attune_2_thing], [lower(thing.stage), thing.catch ?? "", ""], `${who}'s attuned thing's stage and Catch, and no second one`);
+    const wakes = joined(got, ...Array.from({ length: 6 }, (_, k) => `attune_1_awakening_${k + 1}`));
+    // The chapter's italics come off, so Bram's Prone prints as a word.
+    for (const w of thing.awakenings) has(wakes, `${w.name}: ${w.text.replace(/\*/g, "")}`, `${who}'s ${w.name}, whole, with no asterisks`);
+    // Nothing on a crew sheet's cut short.
+    const cutShort = Object.entries(got).filter(([, v]) => typeof v === "string" && v.endsWith("…")).map(([k]) => k);
+    same(cutShort, [], `lines cut short on ${who}'s sheet`);
+    same(got.attune_1_awakening_1_kind, thing.awakenings[0].kind, `${who}'s first awakening, ringed passive or active`);
+    same(got.bond_1, crew.threads[0].person, `${who}'s first bond`);
+  }
+  // From the GM's look, with no book to hand: the sheet the phone already has.
+  {
+    const crew = book.crew.find((c) => c.id === "bram");
+    const c = rootsSheet(crew, [], BUILD);
+    const out = await fillSheet({ name: "Bram" }, c, RS.normalRoots({}, c), { blank });
+    same(out.missing, [], "fields print looked for on Bram's sheet from the GM's look");
+    const got = await valuesOf(out.bytes);
+    same([got.archetype_1, got.archetype_1_track, got.archetype_2], ["Guardian", "stamina", "Leader"], "Bram's archetypes from the GM's look");
+    has(joined(got, ...Array.from({ length: 6 }, (_, k) => `archetype_1_ability_${k + 1}`)), "Stand firm (1 Stamina):", "Bram's Stand firm from the GM's look");
+  }
+
+  // Vesk part way through a scene: her hook powered with 2 off a maximum of
+  // 7, a Scar at her Stamina, Burning, a strained thread, her smoke bomb used
+  // and two dice in her Shadow's pool.
+  {
+    const crew = book.crew.find((c) => c.id === "vesk");
+    const c = rootsSheet(crew, [], BUILD);
+    const s = RS.normalRoots({}, c);
+    s.acting = true;
+    same(RS.powerUp(s, c, "0|Anywhere I can throw a hook", 2), true, "Vesk powering her hook with 2");
+    RS.doneActing(s, c);
+    s.aura -= 1;
+    s.tracks.stamina = 4;
+    s.scars.stamina = ["a burn across the back"];
+    s.conditions = [{ name: "Burning", die: 6, kind: "against" }];
+    s.threads["Dorrie|We have pulled a dozen jobs. I trust her with my life."] = "strained";
+    s.crossed["utility|a smoke bomb"] = true;
+    s.pool = [8, 4];
+    const { got } = await print("Vesk", c, s, { goal: { text: "Get the Vane collection out of the city", die: 4 } });
+    const want = [["aura_now", "4"], ["aura_max", "7"], ["aura_powering", "2"], ["stamina", "d4"], ["stamina_scar_2", true], ["stamina_scar_4", false], ["scar_1", "a burn across the back (Stamina)"],
+      ["condition_1", "Burning"], ["condition_1_die", "d6"], ["utility_2", "a smoke bomb (used)"], ["party_goal", "Get the Vane collection out of the city"], ["party_goal_die", "d4"],
+      ["attune_1_awakening_1_aura_1", true], ["attune_1_awakening_1_aura_2", true], ["bond_1_thread_1_strained", true], ["bond_1_thread_1_snapped", false], ["stamina_armour_1", "Common worn leathers"]];
+    for (const [name, value] of want) same(got[name], value, `${name} on Vesk part way through a scene`);
+    const notes = joined(got, "notes_1", "notes_2", "notes_3", "notes_4");
+    has(notes, "Trouble that follows her: wanted in three districts, owes the Guild.", "her trouble in Notes");
+    has(notes, "Shadow’s pool: d8, d4.", "her Shadow's pool in Notes");
+    has(notes, "A hostile thread with The fence: I owe a debt I would rather not discuss.", "her fifth bond's thread in Notes, with one full stop");
+  }
+
+  // Vesk with seven Titles: the boxes for where her Body came from stop at
+  // VI, so her seventh Title's spread is in Notes, and they all still add up.
+  {
+    const crew = structuredClone(book.crew.find((c) => c.id === "vesk"));
+    for (const n of ["third", "fourth", "fifth", "sixth", "seventh"]) crew.titles.push({ text: `The ${n} best climber`, roots: { Body: 3, Mind: 0, Soul: 0 }, permissions: [], boons: [] });
+    const c = rootsSheet(crew, [], BUILD);
+    const { got } = await print("Vesk", c, RS.normalRoots({}, c));
+    const boxes = [1, 2, 3, 4, 5, 6].reduce((n, i) => n + Number(got[`root_body_title_${i}`] || 0), 0) + Number(got.root_body_permissions);
+    same([got.root_body, boxes + 3], [String(c.roots.Body), c.roots.Body], "Vesk's Body with seven Titles, the boxes and her seventh's 3 in Notes adding up");
+    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "Title VII, The seventh best climber (Body 3 on your Roots)", "her seventh Title's spread in Notes");
+  }
+
+  // A line cut short goes in Notes in full: Vesk's leathers, said to count only
+  // on a rooftop, with two more pieces on her Body so it gets one line.
+  {
+    const crew = structuredClone(book.crew.find((c) => c.id === "vesk"));
+    crew.armour[0].when = "but only on a rooftop at night, with the wind behind her";
+    crew.armour.push({ name: "a padded hood", root: "Body", quality: "Common", boxes: 1, when: null }, { name: "bracers", root: "Body", quality: "Common", boxes: 1, when: null });
+    const c = rootsSheet(crew, [], BUILD);
+    const { got } = await print("Vesk", c, RS.normalRoots({}, c));
+    if (!got.stamina_armour_1.endsWith("…")) note(`Vesk's long armour line isn't cut short: "${got.stamina_armour_1}"`);
+    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "In full: Common worn leathers, but only on a rooftop at night, with the wind behind her.", "the leathers in full in Notes");
+  }
+
+  // Bram's plate made Masterwork, with an Armour Boon on it, has more boxes
+  // than its line: three ticked, and Notes say the rest.
+  {
+    const crew = structuredClone(book.crew.find((c) => c.id === "bram"));
+    crew.armour[0].quality = "Masterwork";
+    crew.armour[0].boxes = 3;
+    crew.titles[0].boons = [{ lever: "Armour", name: "Old plates", on: "plate armour" }];
+    const c = rootsSheet(crew, [], BUILD);
+    const s = RS.normalRoots({}, c);
+    s.boxes = { "equipment|plate armour": 4 };
+    const { got } = await print("Bram", c, s);
+    same([got.stamina_armour_1, got.stamina_armour_1_box_3], ["Masterwork plate armour", true], "Bram's Masterwork plate, its line's three boxes ticked");
+    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "Armour on Body: Masterwork plate armour has 4 boxes, 4 ticked.", "his plate's fourth box in Notes");
+  }
+
+  // Bram with a Boon on his second Title, which takes two lines and rings no Root.
+  {
+    const crew = structuredClone(book.crew.find((c) => c.id === "bram"));
+    crew.titles[1].boons = [{ lever: "Toughness", name: "Thick skull" }];
+    const c = rootsSheet(crew, [], BUILD);
+    const { got } = await print("Bram", c, RS.normalRoots({}, c));
+    same(joined(got, "title_2_permission_4", "title_2_permission_5"), "Boon, Thick skull (Toughness): the first hit you take each scene doesn’t drop a track", "Bram's Boon after his permissions, over its two lines");
+    same([got.title_2_permission_4_root, got.title_2_permission_5_root, got.title_2_permission_6], ["", "", ""], "no Root ringed for his Boon, and his last line free");
+  }
+
+  // The longest mechanic in the book, the Bard's, whole over its two lines.
+  {
+    const crew = structuredClone(book.crew.find((c) => c.id === "ash"));
+    crew.archetypes[1] = { name: "Bard", id: "a-bard", home: "Resolve", have: ["Push"] };
+    const c = rootsSheet(crew, [], BUILD);
+    const { got } = await print("Ash", c, RS.normalRoots({}, c));
+    same(joined(got, "archetype_2_mechanic", "archetype_2_mechanic_more"), BUILD.archetypes.find((a) => a.name === "Bard").for, "the Bard's mechanic, whole");
+  }
+
+  // Rook, made up with more of everything than the paper holds: seven
+  // Titles spread across every Root, four archetypes past the three cards
+  // (one taken twice), three attuned things powered to the full, armour on
+  // every Root, five bonds of four threads, five conditions and six Scars.
+  {
+    const ord = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
+    const titles = ord.map((o, i) => ({
+      text: `The ${o} ferry keeper on the drowned river road`,
+      roots: { Body: 1, Mind: 1, Soul: 1 },
+      permissions: Array.from({ length: i === 6 ? 4 : 6 }, (_, j) => ({ text: `cross ${o} water ${j + 1}`, root: ROOTS[j % 3] })),
+      boons: i === 6 ? [{ lever: "Aura", name: "Deep reserves" }] : [],
+    }));
+    const made = (name, home) => ({
+      name, id: null, home,
+      for: `${name}: a lantern held up to whatever the crew can't see`,
+      trait: { name: `${name}'s calm`, text: "Nothing in the dark ever takes you by surprise." },
+      abilities: Array.from({ length: 6 }, (_, k) => ({ name: `${name} ${k + 1}`, cost: home, text: `a short thing it does, ${k + 1}` })),
+      have: Array.from({ length: 6 }, (_, k) => `${name} ${k + 1}`),
+    });
+    const wakes = (tag, n) => Array.from({ length: n }, (_, k) => ({ name: `${tag} ${k + 1}`, kind: "passive", text: `+1 on one die ${k + 1}` }));
+    const people = ["Ada", "Bo", "Cy", "Di", "Ed"];
+    const base = {
+      ...structuredClone(book.crew.find((c) => c.id === "bram")),
+      name: "Rook", pronoun: "them", points: { start: 120 }, titles,
+      archetypes: [made("Lanternkeeper", "Resolve"), made("Ferryman", "Stamina"), made("Ferryman", "Stamina"), made("Gatewarden", "Confidence"), { name: "Warrior", id: "a-warrior", home: "Stamina", have: ["Push"] }],
+      attuned: [
+        { name: "A lantern", props: "Bright", stage: "Perfected", catch: "Smoky", burden: "Heavy", awakenings: [...wakes("Lantern", 6), { name: "Lantern 7", kind: "active", text: "the dark lifts" }] },
+        { name: "A pole", props: null, stage: "Tempered", catch: "Slippery", burden: "Long", awakenings: wakes("Pole", 6) },
+        { name: "A bell", props: null, stage: "Awakened", catch: null, burden: null, awakenings: wakes("Bell", 1) },
+      ],
+      carry: { equipment: ["a coat", "a hook", "a boot", "a spare boot"], utility: ["rope", "tar", "salt", "wax"], keepsake: "a river stone", bag: { name: "a bag", max: 10, items: Array.from({ length: 12 }, (_, k) => `a thing ${k + 1}`) } },
+      armour: ROOTS.flatMap((r) => [1, 2, 3].map((k) => ({ name: `${lower(r)} guard ${k}`, root: r, quality: "Masterwork", boxes: 3, when: k === 1 ? "while the lantern's lit" : null }))),
+      threads: people.map((p, i) => ({ person: p, threads: Array.from({ length: 4 }, (_, k) => ({ text: `${p} and I, ${k + 1}`, kind: (i + k) % 2 ? "hostile" : "bond", whose: null, strained: false })) })),
+      trouble: ["owes the ferry guild"],
+    };
+    const c = rootsSheet(base, [], BUILD);
+    const s = RS.normalRoots({}, c);
+    s.power = Object.fromEntries([...wakes("Lantern", 6), ...wakes("Pole", 6)].map((w) => [`${w.name.startsWith("Pole") ? 1 : 0}|${w.name}`, 2]));
+    s.aura = 1;
+    s.tracks = { stamina: 2, confidence: 6, resolve: 12 };
+    s.scars = { stamina: ["one", "two", "three", "four", "five"], confidence: ["six", "seven", "eight", "nine", "ten"], resolve: ["eleven", "twelve", "thirteen", "fourteen", "fifteen"] };
+    s.conditions = ["Burning", "Slowed", "Shaken", "Prone", "Blinded"].map((name, k) => ({ name, die: 2 + 2 * k, kind: "against" }));
+    s.boxes = Object.fromEntries(c.armour.map((a) => [`equipment|${a.name}`, 3]));
+    s.threads = Object.fromEntries(c.threads.flatMap((p) => p.threads.map((t) => [`${p.person}|${t.text}`, "snapped"])));
+    s.notes = "Owes the ferryman a song.";
+    s.asp = 8;
+    const { got, short } = await print("Rook", c, s, { goal: { text: "Bring the last ferry home", die: 10 } });
+    same(short, true, "Rook's Notes running out of room, so the phone says so");
+    same([got.title_1, got.title_1_more].join(" "), titles[0].text, "Rook's first Title over two lines");
+    same([got.root_soul, got.root_soul_title_6, got.root_soul_permissions], [String(c.roots.Soul), "1", String(c.titles.flatMap((t) => t.permissions).filter((p) => p.root === "Soul").length)], "Rook's Soul, from six Titles' spreads and every permission on it");
+    same([got.archetype_1, got.archetype_2, got.archetype_3], ["Lanternkeeper", "Ferryman, twice", "Gatewarden"], "Rook's three archetype cards, the Ferryman taken twice");
+    same(joined(got, "archetype_1_trait", "archetype_1_trait_more"), "Lanternkeeper's calm. Nothing in the dark ever takes you by surprise.", "the Lanternkeeper's Trait, its name and what it does");
+    same(joined(got, "archetype_1_mechanic", "archetype_1_mechanic_more"), "Lanternkeeper: a lantern held up to whatever the crew can't see", "the Lanternkeeper's mechanic over two lines");
+    same([got.archetype_2_ability_1, got.archetype_2_ability_6], ["Ferryman 1 (1 Stamina): a short thing it does, 1", "Ferryman 6 (1 Stamina): a short thing it does, 6"], "six abilities on the Ferryman's card, a line each");
+    same([got.attune_2_thing, got.attune_2_stage, got.attune_2_burden, got.attune_2_awakening_6_aura_2], ["A pole", "tempered", "Long", true], "Rook's second attuned thing, powered");
+    same([got.equipment_3, got.bag_10], ["a boot, a spare boot", "a thing 10, a thing 11, a thing 12"], "what doesn't fit its lines sharing the last one");
+    has(got.stamina_armour_1, "Masterwork body guard 1, while the", "Rook's first armour on Body, cut short since the lines are full");
+    if (!/…$/.test(got.stamina_armour_1)) note(`Rook's first armour on Body doesn't end with an ellipsis: "${got.stamina_armour_1}"`);
+    same([got.stamina_armour_1_box_3, got.stamina_armour_2], [true, "Masterwork body guard 2"], "Rook's armour on Body, a line each when the lines are full");
+    same([got.stamina_scar_10, got.resolve_scar_10, got.scar_5], [true, true, "five (Stamina)"], "Rook's Scars");
+    same([got.bond_4_thread_3_strained, got.bond_4_thread_3_snapped], [true, true], "a snapped thread ticked both ways");
+    const notes = joined(got, "notes_1", "notes_2", "notes_3", "notes_4");
+    has(notes, "Trouble that follows them: owes the ferry guild.", "Rook's trouble in Notes");
+    has(notes, "Owes the ferryman a song.", "Rook's own notes, before what didn't fit");
+    if (!/…$/.test(got.notes_4)) note(`Rook's Notes don't end with an ellipsis where they ran out: "${got.notes_4}"`);
+  }
+
+  // Every field gets filled by one of them, bar what only a pencil fills.
+  const PENCIL = ["player", "points_banked", "attune_1_material", "attune_2_material"];
+  same(list.map((f) => f.name).filter((n) => !filled.has(n) && !PENCIL.includes(n)), [], "fields print never fills for anyone");
+  console.log("print checked field by field: the crew, Vesk mid-scene, Bram's Boon and Rook past the paper's room");
 }
 
 // A small static server that answers the way Cloudflare's assets do.
@@ -2361,13 +2632,28 @@ if (part("5c")) {
   await context.close();
 }
 
-// 6. Print: Vesk part way through a scene, on the new sheet's fields, read
-// back field by field, then Bram's armour and Dorrie's Mind.
+// 6. Print on the phone, from the Sheet tab's button: Vesk part way through a
+// scene, read back field by field, then Bram's plate and Dorrie's court
+// clothes. They go on the phone as saved characters, so this doesn't lean on
+// the play screen's buttons to get them there.
 if (part("6")) {
   const { context, page } = await phone();
-  const t = tableOf(page);
-  const print = async () => {
-    if (!(await page.isVisible('button[data-act="print"]'))) await page.click('.cc-tabs a[data-t="sheet"]');
+  const crewOf = (id) => book.crew.find((c) => c.id === id);
+  const saved = (id, state) => ({ id: `print-${id}`, crew: id, name: crewOf(id).name, made: Date.now(), hash: crewOf(id).hash, state: { v: 3, ...state } });
+  await page.goto(`${BASE}/characters/`);
+  await page.evaluate((list) => localStorage.setItem("zi-characters", list), JSON.stringify({ v: 1, characters: [
+    // A Scar at her Stamina, Burning on her, her hook powered with 2 and 1
+    // Aura spent, a strained thread and her smoke bomb used.
+    saved("vesk", {
+      aura: 4, tracks: { stamina: 4, confidence: 12, resolve: 12 }, scars: { stamina: ["a burn across the back"], confidence: [], resolve: [] },
+      power: { "0|Anywhere I can throw a hook": 2 }, conditions: [{ name: "Burning", die: 6, kind: "against" }],
+      threads: { "Dorrie|We have pulled a dozen jobs. I trust her with my life.": "strained" }, crossed: { "utility|a smoke bomb": true },
+    }),
+    saved("bram", { boxes: { "equipment|plate armour": 1 } }),
+    saved("dorrie", {}),
+  ] }));
+  const print = async (id) => {
+    await page.goto(`${BASE}/characters/?c=print-${id}&t=sheet`);
     const [download] = await Promise.all([page.waitForEvent("download"), page.click('button[data-act="print"]')]);
     const pdf = await PDFDocument.load(readFileSync(await download.path()));
     const form = pdf.getForm();
@@ -2381,55 +2667,32 @@ if (part("6")) {
   const want = (f, list, who) => {
     for (const [name, value] of list) same(f.get(name), value, `${name} on ${who}`);
   };
-  await play(page, "vesk");
-  // A Blaze at her Stamina and its Scar, Burning on her, 1 Aura spent and 1
-  // pumped into her grappling line, a strained thread and her smoke bomb used.
-  await t.panel("stamina");
-  await page.click('#cc-panel button[data-act="track-set"][data-t="stamina"][data-v="2"]');
-  await page.click('#cc-panel button[data-act="hit"][data-t="stamina"]');
-  await page.fill('form[data-form="scar"] input', "a burn across the back");
-  await page.click('form[data-form="scar"] button[type="submit"]');
-  await t.panel("stamina", false);
-  await t.panel("cond");
-  await page.selectOption('form[data-form="cond"] select[name="pick"]', "Burning");
-  await page.selectOption('form[data-form="cond"] select[name="die"]', "6");
-  await page.click('form[data-form="cond"] button[type="submit"]');
-  await t.panel("cond", false);
-  await t.panel("aura");
-  await page.click('#cc-panel button[data-act="aura"][data-d="-1"]');
-  await t.panel("aura", false);
-  await page.click('main button[data-act="pump"]');
-  await page.click('.cc-tabs a[data-t="sheet"]');
-  await inFold(page, 'button[data-act="strain"][data-k="Dorrie|We have pulled a dozen jobs. I trust her with my life."]');
-  await inFold(page, 'button[data-act="cross"][data-k="utility|a smoke bomb"]');
-  let f = await print();
+  let f = await print("vesk");
   same([f.pages, f.file], [2, "vesk-zidara-sheet.pdf"], "Vesk's printed sheet");
-  want(f, [["name", "Vesk"], ["pronouns", "she, her"], ["aura_now", "3"], ["aura_max", "5"], ["actions", "2"], ["stride", "3"],
+  want(f, [["name", "Vesk"], ["pronouns", "she, her"], ["aura_now", "4"], ["aura_max", "7"], ["aura_powering", "2"], ["stride", "3"],
     ["stamina", "d4"], ["confidence", "d12"], ["resolve", "d12"], ["stamina_scar_2", true], ["stamina_scar_4", false], ["scar_1", "a burn across the back (Stamina)"],
     ["stamina_armour_1", "Common worn leathers"], ["stamina_armour_1_box_1", false],
-    ["root_body", "5"], ["root_mind", "3"], ["root_soul", "0"], ["spec_1_name", "Locks"], ["spec_1_steps", "4"], ["spec_5_name", "Black market"], ["spec_5_steps", "2"], ["spec_6_name", ""],
+    ["root_body", "8"], ["root_body_title_1", "3"], ["root_body_title_2", "1"], ["root_body_permissions", "4"], ["root_mind", "4"], ["root_mind_title_1", ""], ["root_mind_title_2", "2"], ["root_mind_permissions", "2"], ["root_soul", "0"], ["root_soul_permissions", ""],
+    ["points_spent", "35"], ["points_start", "35"], ["points_banked", ""],
     ["aspiration", "Own the score of a lifetime"], ["aspiration_die", "d2"],
     ["equipment_1", "Common worn leathers"], ["equipment_2", "a knife"], ["utility_2", "a smoke bomb (used)"], ["keepsake", "the first coin she ever stole"],
-    ["title_1", "The best cat burglar in the city"], ["title_1_root", "Body"], ["title_1_specialties", "Stealth, Climbing, Locks"], ["title_1_permission_1", "move unseen (Body, Stealth)"], ["title_2_permission_2", "fight dirty with a knife (Body, Knives)"],
+    ["title_1", "The best cat burglar in the city"], ["title_1_body", "3"], ["title_1_mind", ""], ["title_1_permission_1", "move unseen"], ["title_1_permission_1_root", "body"],
+    ["title_2", "Raised by the Guild"], ["title_2_body", "1"], ["title_2_mind", "2"], ["title_2_permission_2", "fight dirty with a knife"], ["title_2_permission_2_root", "body"], ["title_2_permission_3_root", "mind"],
     ["archetype_1", "Shadow, twice"], ["archetype_1_track", "stamina"], ["archetype_2", ""],
-    ["attune_1_thing", "A grappling line"], ["attune_1_stage", "awakened"], ["attune_1_awakening_1", "Anywhere I can throw a hook: +1 on one die of every roll she makes with it, for each Aura in it"], ["attune_1_awakening_1_kind", "passive"], ["attune_1_awakening_1_aura_1", true], ["attune_1_awakening_1_aura_2", false],
+    ["attune_1_thing", "A grappling line"], ["attune_1_stage", "awakened"], ["attune_1_awakening_1_kind", "passive"], ["attune_1_awakening_1_aura_1", true], ["attune_1_awakening_1_aura_2", true], ["attune_2_thing", ""],
     ["bond_1", "Dorrie"], ["bond_1_thread_1", "We have pulled a dozen jobs. I trust her with my life."], ["bond_1_thread_1_kind", "bond"], ["bond_1_thread_1_strained", true], ["bond_1_thread_2", "We came up on the same streets. She never asks why. (Dorrie’s words)"]], "Vesk");
   same([f.get("condition_1"), f.get("condition_1_die")], ["Burning", "d6"], "Vesk's condition");
-  has(f.get("archetype_1_ability_1"), "(1 Stamina)", "her Shadow's abilities, paid off Stamina");
-  has(f.get("notes"), "Trouble that follows her: wanted in three districts, owes the Guild.", "her trouble in Notes");
+  has([1, 2, 3, 4, 5, 6].map((k) => f.get(`attune_1_awakening_${k}`)).filter(Boolean).join(" "), "Anywhere I can throw a hook: +1 on one die of every roll she makes with it, for each Aura powering it", "her hook's awakening, whole over its lines");
+  has(`${f.get("archetype_1_ability_1")} ${f.get("archetype_1_ability_2")}`, "Push (1 Stamina): +3", "her Shadow's Push, +3 for taking it twice, paid off Stamina");
+  has(f.get("notes_1"), "Trouble that follows her: wanted in three districts, owes the Guild.", "her trouble in Notes");
   // Bram's plate with a box ticked, and Dorrie's court clothes on her Mind.
-  await play(page, "bram");
-  await t.lands([[8, "Body"]], { dice: [2, 7] });
-  await t.pay("box", 0, "equipment|plate armour");
-  await t.done();
-  f = await print();
+  f = await print("bram");
   want(f, [["stamina_armour_1", "Fine plate armour"], ["stamina_armour_1_box_1", true], ["stamina_armour_1_box_2", false], ["archetype_1", "Guardian"], ["archetype_2", "Leader"], ["attune_1_thing", "His war hammer (Breaker)"], ["attune_1_catch", "Marked"]], "Bram");
   has(f.get("stamina_armour_2"), "shield", "Bram's shield on his Stamina");
-  await play(page, "dorrie");
-  f = await print();
-  has(f.get("confidence_armour_1"), "court clothes, when they fit the scene", "Dorrie's court clothes on her Confidence");
+  f = await print("dorrie");
+  same(`${f.get("confidence_armour_1")} ${f.get("confidence_armour_2")}`.trim(), "Common court clothes, when they fit the scene", "Dorrie's court clothes on her Confidence, over its two lines");
   same(f.get("stamina_armour_1"), "", "nothing on Dorrie's Body");
-  console.log("print: Vesk mid-scene, Bram's plate and Dorrie's court clothes, read back field by field");
+  console.log("print on the phone: Vesk mid-scene, Bram's plate and Dorrie's court clothes, read back field by field");
   await context.close();
 }
 
@@ -3225,8 +3488,9 @@ if (part("10")) {
   const book = JSON.parse(readFileSync("src/generated/book.json", "utf8"));
   let dieChecks = 0;
   for (const c of cards) {
-    for (const m of c.example.matchAll(/\b(\d+) steps[,:] (an? d\d+(?: and an? d\d+)?|two d12s)/g)) {
-      const said = m[2] === "two d12s" ? "2d12" : m[2].replace(/\ban? /g, "").replace(" and ", " + ");
+    // Past 12 steps it's "two d12s and a d4", so the d12s are read as a count.
+    for (const m of c.example.matchAll(/\b(\d+) steps[,:] ((?:an? d\d+|two d12s|three d12s)(?: and an? d\d+)?)/g)) {
+      const said = m[2].replace("three d12s", "3d12").replace("two d12s", "2d12").replace(/\ban? /g, "").replace(" and ", " + ");
       dieChecks += 1;
       same(diceLabel(stepsToDice(Number(m[1]))), said, `learn: “${c.title}” gives ${m[1]} steps as ${m[2]}`);
     }

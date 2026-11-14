@@ -1,26 +1,32 @@
 // The character sheet: one A4 sheet, printed back to back. The front's for
-// play and the back's who you are. Every write-in space carries a field name
+// play, with the attuned things beside Aura since powering them comes off it,
+// and the back's who you are. Every write-in space carries a field name
 // (data-f, data-cb or data-radio), and scripts/build-sheets.mjs puts a
 // fillable field over each one, so it can be typed into or printed blank.
-// src/companion/print.js fills them by name when someone prints a character,
-// so keep every name as it is. What's on it comes from Appendix A
-// (#s-sheet-character), and the pieces are the kit's (src/kit/kit.js), drawn
-// in its Paper theme: dice in their real shapes, the crest, Aura's hexes and
-// the three tracks with their Scars.
+// The names are src/companion/sheet-fields.js's, and the build stops if this
+// page hasn't got exactly those, so print.js (which fills them by name when
+// someone prints a character) always finds them. Each block is its own
+// function, so a new look can take the same fields and lay them out its way.
+// What's on it comes from Appendix A (#s-sheet-character), and the pieces are
+// the kit's (src/kit/kit.js), drawn in its Paper theme: dice in their real
+// shapes, the crest, Aura's hexes and the three tracks with their Scars.
 import { die, crest, mini, aura, SIZES } from "../../src/kit/kit.js";
 import { stepsToDice, diceLabel } from "../../src/companion/dice.js";
+import { ROWS, ROOTS, TRACKS, LOCKS, STAGES, WAKES, THREADS } from "../../src/companion/sheet-fields.js";
 
-const STAGES = ["Awakened", "Tempered", "Perfected"];
-const KINDS = ["bond", "hostile"];
-const TRACKS = ["Stamina", "Confidence", "Resolve"];
 const range = (n) => Array.from({ length: n }, (_, i) => i + 1);
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const NUMERALS = ["I", "II", "III", "IV", "V", "VI"];
+// What each Root is, from The Core.
+const ROOT_IS = { body: "what your hands and feet do", mind: "what goes on in your head", soul: "who you are" };
 
 // Field markers. size is the typed text's size in points (0 fits it to the box).
 const w = (name, { size, cls = "", align, multi = false } = {}) =>
   `<span class="w ${cls}" data-f="${name}"${size !== undefined ? ` data-size="${size}"` : ""}${align ? ` data-align="${align}"` : ""}${multi ? " data-multi" : ""}></span>`;
-const box = (name) => `<span class="box" data-f="${name}" data-size="11" data-align="center"></span>`;
+const box = (name, cls = "box", size = 11) => `<span class="${cls}" data-f="${name}" data-size="${size}" data-align="center"></span>`;
 const tick = (name, look) => `<span class="tick" data-cb="${name}" data-look="${look}"></span>`;
-const lines = (prefix, n, opts) => range(n).map((i) => w(`${prefix}_${i}`, opts)).join("");
+// Words to ring, one of them: a stage, bond or hostile, a Root.
+const words = (name, values, label = cap, sep = "<i></i>") => values.map((v) => `<span class="word" data-radio="${name}" data-value="${v}">${label(v)}</span>`).join(sep);
 const tab = (title, aside = "", level = 2) => `<div class="tab"><h${level}>${title}</h${level}>${aside ? `<span class="aside">${aside}</span>` : ""}</div>`;
 
 // The kit's die, with its size a little bigger on the hub than on a phone,
@@ -33,29 +39,12 @@ const svgOf = (html) => html.match(/<svg[\s\S]*<\/svg>/)[0];
 const HEX = svgOf(aura(0, 1));
 // A Title's numeral sits on a diamond cut like the crest's.
 const numeral = (n) => `<span class="numeral"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 2.6 L61.4 32 L32 61.4 L2.6 32 Z" style="fill:var(--ink)"/></svg><b>${n}</b></span>`;
-
-// Specialties: two columns of rows, each a name and its steps.
-const SPEC_ROWS = 6;
 // Steps into dice, straight off the companion's table, so the two can't differ.
 const LADDER = [...range(12), 18, 24].map((s) => [s, stepsToDice(s)]);
-const NUMERALS = ["I", "II", "III", "IV", "V", "VI"];
 
-function front(stamp) {
-  // A track: its dice to ring, d12 to d2, the Blaze past them, a tick to lock
-  // each size a Scar takes from the bottom, and two lines of armour on it.
-  const track = (id, name, root) => `
-    <section class="blk track3">
-      <div class="th"><h2>${name}</h2><span class="lab">${root}</span></div>
-      <div class="row">${ringDice(id, { own: "harm", down: true })}<div class="blaze"><b>→ Blaze</b><span>a hit at d2</span></div></div>
-      <div class="locks"><span class="lab">Scars lock</span>${[2, 4, 6, 8, 10].map((d) => `<span class="lock">${tick(`${id}_scar_${d}`, "cross")}<i>d${d}</i></span>`).join("")}</div>
-      ${range(2).map((i) => `<div class="arm"><span class="lab">Armour</span>${w(`${id}_armour_${i}`)}<span class="boxes">${range(3).map((j) => tick(`${id}_armour_${i}_box_${j}`, "check")).join("")}</span></div>`).join("")}
-    </section>`;
-  const spec = (i) => `
-        <tr><td class="name">${w(`spec_${i}_name`)}</td><td class="steps">${w(`spec_${i}_steps`, { size: 10, align: "center" })}</td></tr>`;
-  const goal = (id, title, after) => `
-    <div class="goal"><h2 class="chip">${title}</h2>${w(id)}${ringDice(`${id}_die`)}<p class="hint">${after}</p></div>`;
-  return `
-<section class="page front">
+// ---------------------------------------------------------------- the front
+
+const head = () => `
   <header class="head">
     ${crest([], { label: "Zi’Dara" })}
     <div class="brand"><div class="wordmark">Zi’Dara</div><div class="doc">Character sheet</div></div>
@@ -64,94 +53,156 @@ function front(stamp) {
       <div class="field" style="flex:1.1"><span class="lab">Pronouns</span>${w("pronouns")}</div>
       <div class="field" style="flex:1.5"><span class="lab">Player</span>${w("player")}</div>
     </div>
-  </header>
+  </header>`;
 
+// Aura, what's powering your awakenings off its maximum, the price of an
+// extra action, and your stride, in a bar under the name since they move most.
+const pool = () => `
   <div class="pool">
-    <div class="cell"><h2>Aura<small>full every scene · 5 to start · 1 for every die that wins and every top face</small></h2>
-      <div class="row"><span class="lab">now</span><span class="hex">${HEX}<span class="f" data-f="aura_now" data-size="11" data-align="center"></span></span><span class="lab">max</span><span class="hex">${HEX}<span class="f" data-f="aura_max" data-size="11" data-align="center"></span></span></div></div>
-    <div class="cell"><h2>Actions<small>the most a round, one for each archetype · 3 Aura buys one</small></h2>${box("actions")}</div>
+    <div class="cell"><h2>Aura<small>full every scene · 5, and 2 for each attuned thing · 1 back for every die that wins and every top face</small></h2>
+      <div class="row"><span class="lab">now</span><span class="hex">${HEX}<span class="f" data-f="aura_now" data-size="11" data-align="center"></span></span><span class="lab">max</span><span class="hex">${HEX}<span class="f" data-f="aura_max" data-size="11" data-align="center"></span></span><span class="lab">less<br>powering</span>${box("aura_powering")}</div></div>
+    <div class="cell"><h2>Extra actions<small>your first’s free · then 3 Aura, 4, 5 and on, no cap · back to 3 next round</small></h2></div>
     <div class="cell"><h2>Stride<small>3 to start</small></h2>${box("stride")}</div>
-  </div>
+  </div>`;
 
+// A Root and its track, side by side with the other two: what it adds up to
+// and where each point came from (each Title's spread, and 1 for every
+// permission on it), then the track's dice to ring, d12 to d2, the Blaze past
+// them, a tick to lock each size a Scar takes from the bottom, and two lines
+// of armour on that Root.
+function rootCol(r, i) {
+  const t = TRACKS[i];
+  return `
+    <section class="blk rootcol">
+      <div class="rhead">
+        <div class="rname"><h2>${cap(r)}</h2>${box(`root_${r}`, "rbox", 13)}</div>
+        <div class="from">
+          <div class="frow"><span class="lab">Titles</span>${range(ROWS.titles).map((n) => `<span class="fcell"><i>${NUMERALS[n - 1]}</i>${box(`root_${r}_title_${n}`, "sbox", 9)}</span>`).join("")}</div>
+          <div class="frow"><span class="lab">Permissions</span>${box(`root_${r}_permissions`, "sbox", 9)}<span class="hint">${ROOT_IS[r]}</span></div>
+        </div>
+      </div>
+      <div class="th"><h3>${cap(t)}</h3><span class="lab">its track</span></div>
+      <div class="row">${ringDice(t, { own: "harm", down: true })}<div class="blaze"><b>→ Blaze</b><span>a hit at d2</span></div></div>
+      <div class="locks"><span class="lab">Scars lock</span>${LOCKS.map((d) => `<span class="lock">${tick(`${t}_scar_${d}`, "cross")}<i>d${d}</i></span>`).join("")}</div>
+      ${range(ROWS.armour).map((n) => `<div class="arm"><span class="lab">Armour</span>${w(`${t}_armour_${n}`)}<span class="boxes">${range(ROWS.boxes).map((j) => tick(`${t}_armour_${n}_box_${j}`, "check")).join("")}</span></div>`).join("")}
+    </section>`;
+}
+const roots = () => `
   <section>
-    ${tab("Tracks", "d12 to start · ring where you are · a size off for every hit that gets through · back a size on a 4 or more when a scene ends")}
-    <div class="tracks3">${track("stamina", "Stamina", "Body")}${track("confidence", "Confidence", "Mind")}${track("resolve", "Resolve", "Soul")}</div>
-    <p class="hint"><b>Pay</b> for an ability: 1 off its home track, or 2 from the other two · <b>2 for 1:</b> when a hit gets through, pay 2 from the other two tracks and this one stays put · never below d2 · armour on that Root can take a hit instead: tick a box · <b>Blaze:</b> something extraordinary, then die, or leave the scene with a Scar</p>
-  </section>
+    ${tab("Roots and tracks", "a Title puts 3 on your Roots, spread how you like · a permission puts 1 on its Root · a track’s d12 to start, so ring where you are")}
+    <div class="roots3">${ROOTS.map(rootCol).join("")}</div>
+    <p class="hint">A size off a track for every hit that gets through, and back a size on a 4 or more when a scene ends · <b>Pay</b> for an ability: 1 off its home track, or 2 from the other two · <b>2 for 1:</b> when a hit gets through, pay 2 from the other two tracks and this one stays put · never below d2 · armour on that Root can take a hit instead: tick a box · <b>Blaze:</b> something extraordinary, then die, or leave the scene with a Scar</p>
+  </section>`;
 
-  <section class="blk">
-    ${tab("Roots and specialties", "a roll's one Root and one specialty, plus 1 for each item you're using · anything else that fits is 1 Aura")}
-    <div class="roots">${["Body", "Mind", "Soul"].map((r) => `<div class="root"><h2>${r}</h2>${box(`root_${r.toLowerCase()}`)}</div>`).join("")}
-      <p class="hint">Body: what your hands and feet do · Mind: what goes on in your head · Soul: who you are. Each one's 1 for every Title and permission on it.</p></div>
-    <div class="specs">${[0, 1].map((c) => `<table class="sa"><thead><tr><th class="name">Specialty</th><th class="steps">Steps</th></tr></thead><tbody>${range(SPEC_ROWS).map((i) => spec(i + c * SPEC_ROWS)).join("")}</tbody></table>`).join("")}</div>
+// Building a roll, and the steps ladder under it.
+const roll = () => `
+  <section class="blk roll">
+    ${tab("A roll", "two sides a step, up to a d12 · past 6 steps, more dice")}
+    <p class="hint"><b>One Root</b> that fits how you’re doing it, and <b>1 step</b> for every thing on your sheet that fits what you’re doing: each Title, permission, archetype, ability, attuned thing, awakening and item you’re using · plainly fits is free, and each one you have to explain is <b>1 Aura</b> · going beyond’s 1 Aura · bringing something in is 1 Aura and a step · Boons don’t add steps · every roll’s at least 1 step</p>
     <div class="ladder" aria-label="Steps into dice">${LADDER.map(([s, dice]) => `<div><b>${s}</b><span class="shapes${dice.length > 2 ? " many" : ""}">${dice.map((d) => mini(d)).join("")}</span><span>${diceLabel(dice).replace(/\s/g, "")}</span></div>`).join("")}</div>
-  </section>
+  </section>`;
 
+const conditionsAndScars = () => `
   <div class="grid">
     <section class="blk">
       ${tab("Conditions", "ring the die that placed it · it steps down a size every round")}
-      ${range(4).map((i) => `<div class="cond">${w(`condition_${i}`)}${ringDice(`condition_${i}_die`)}</div>`).join("")}
+      ${range(ROWS.conditions).map((n) => `<div class="cond">${w(`condition_${n}`)}${ringDice(`condition_${n}_die`)}</div>`).join("")}
     </section>
     <section class="blk scars">
       ${tab("Scars", "each one a Catch, and a size locked on its track")}
-      <div class="rows">${range(5).map((i) => `<div class="scar"><span class="cut"></span>${w(`scar_${i}`)}</div>`).join("")}</div>
+      <div class="rows">${range(ROWS.scars).map((n) => `<div class="scar"><span class="cut"></span>${w(`scar_${n}`)}</div>`).join("")}</div>
     </section>
-  </div>
+  </div>`;
 
-  <section class="goals">${goal("aspiration", "Aspiration", "Past d12: a new Title, archetype or attuned thing, and a new Aspiration at d2.")}${goal("party_goal", "Party Goal", "Past d12: the crew’s done it, and everyone writes a new thread.")}
-  </section>
+// The Aspiration and the Party Goal, a line each and the dice it climbs, and
+// your points: what you've spent of what you started on, and room for any
+// you've got banked.
+const goal = (id, title, after) => `
+    <div class="goal"><h2 class="chip">${title}</h2>${w(id)}${ringDice(`${id}_die`)}<p class="hint">${after}</p></div>`;
+const goals = () => `
+  <section class="goals">
+    <div class="pair">${goal("aspiration", "Aspiration", "Past d12: a new Title, archetype or attuned thing, with its one, and a new Aspiration at d2.")}${goal("party_goal", "Party Goal", "Past d12: the crew’s done it, and everyone writes a new thread.")}</div>
+    <div class="points"><h2 class="chip">Points</h2>
+      <div class="row"><span class="lab">spent</span>${box("points_spent")}<span class="lab">of</span>${box("points_start")}</div>
+      <div class="row"><span class="lab">banked</span>${box("points_banked")}</div>
+    </div>
+  </section>`;
 
+const kit = () => `
   <section class="blk kit">
-      ${tab("Kit", "an item's 1 more on a roll you use it in · armour goes on its track")}
+      ${tab("Kit", "an item’s a step on a roll you use it in · armour goes on its Root’s track too")}
       <div class="cols">
-        <div class="sub"><span class="lab">Equipment · what you wear or wield</span>${lines("equipment", 3)}</div>
-        <div class="sub"><span class="lab">Utility · cross it off once it’s used</span>${lines("utility", 3)}</div>
+        <div class="sub"><span class="lab">Equipment · what you wear or wield</span>${range(ROWS.equipment).map((n) => w(`equipment_${n}`)).join("")}</div>
+        <div class="sub"><span class="lab">Utility · cross it off once it’s used</span>${range(ROWS.utility).map((n) => w(`utility_${n}`)).join("")}</div>
       </div>
       <div class="sub row"><span class="lab">Keepsake · something that matters to you</span>${w("keepsake")}</div>
       <div class="sub"><span class="lab">Bag · holds 10 · getting something out takes your action</span>
-        <div class="cols"><div>${range(5).map((i) => w(`bag_${i}`)).join("")}</div><div>${range(5).map((i) => w(`bag_${i + 5}`)).join("")}</div></div></div>
-  </section>
+        <div class="cols"><div>${range(ROWS.bag / 2).map((n) => w(`bag_${n}`)).join("")}</div><div>${range(ROWS.bag / 2).map((n) => w(`bag_${n + ROWS.bag / 2}`)).join("")}</div></div></div>
+  </section>`;
 
-  <section class="blk notes">
-    ${tab("Notes", "whatever your archetype’s holding, like a Shadow’s pool, and a thread that won’t fit on its bond")}
-    <div class="w ruled" data-f="notes" data-multi data-size="9"></div>
-  </section>
+// An attuned thing: what it is, its material and stage, its Catch and
+// Burden, and its awakenings, each passive or active to ring, with a box for
+// each Aura powering a passive one.
+const wake = (a, n) => `<div class="wake">${w(`attune_${a}_awakening_${n}`, { size: 8 })}<span class="kind">${words(`attune_${a}_awakening_${n}_kind`, WAKES, (v) => v)}</span><span class="boxes">${range(ROWS.powering).map((j) => tick(`attune_${a}_awakening_${n}_aura_${j}`, "check")).join("")}</span></div>`;
+const attuneCard = (a) => `
+      <div class="card acard">
+        <div class="row"><span class="lab">Thing</span>${w(`attune_${a}_thing`)}<div class="stage">${words(`attune_${a}_stage`, STAGES, cap, "<i>›</i>")}</div></div>
+        <div class="row"><span class="lab">Material</span>${w(`attune_${a}_material`)}<span class="lab">Catch</span>${w(`attune_${a}_catch`)}<span class="lab">Burden</span>${w(`attune_${a}_burden`)}</div>
+        <div class="wakes"><div class="top"><span class="lab">Awakenings</span><span>passive or active</span><span>powering</span></div>${range(ROWS.awakenings).map((n) => wake(a, n)).join("")}</div>
+      </div>`;
+const attunement = () => `
+  <section class="blk attune">
+    ${tab("Attunement", "bound to you · it can’t break")}
+    <p class="hint">Each one puts 2 on your Aura maximum · <b>Power</b> a passive awakening while you’re acting, free and no action: tick a box for each Aura, up to 2, and it comes off what you’ve got and off your maximum till the scene ends · an active one spends Aura when you use it · a Summoner’s souls go on the lines, with their dice</p>
+    <div class="grid2">${range(ROWS.attuned).map(attuneCard).join("")}</div>
+  </section>`;
 
+function front(stamp) {
+  return `
+<section class="page front">
+  ${head()}
+  ${pool()}
+  ${roots()}
+  ${roll()}
+  ${conditionsAndScars()}
+  ${goals()}
+  ${kit()}
+  ${attunement()}
   <footer class="stamp"><span>zidara.world/sheets</span><span>${stamp}</span></footer>
 </section>`;
 }
 
-function back(stamp) {
-  const titleCard = (t) => `
+// ---------------------------------------------------------------- the back
+
+// A Title: its words, its spread (3 in all), and its permissions, each with
+// its Root to ring. A Boon takes two lines and rings nothing.
+const titleCard = (t) => `
       <div class="card tcard">
-        <div class="top">${numeral(NUMERALS[t - 1])}<span class="w two" data-f="title_${t}" data-multi data-size="8.5"></span></div>
-        <div class="row"><span class="lab">Root</span>${w(`title_${t}_root`, { cls: "short" })}<span class="lab">Specialties</span>${w(`title_${t}_specialties`, { size: 8 })}</div>
-        <div class="perms">${lines(`title_${t}_permission`, 6, { size: 8 })}</div>
+        <div class="top">${numeral(NUMERALS[t - 1])}<span class="lines">${w(`title_${t}`, { size: 8.5 })}${w(`title_${t}_more`, { size: 8.5 })}</span></div>
+        <div class="spread"><span class="lab">Spread</span>${ROOTS.map((r) => `<span class="sp"><i>${cap(r)}</i>${box(`title_${t}_${r}`, "sbox", 9)}</span>`).join("")}<span class="hint">3 in all</span></div>
+        <div class="perms"><div class="phead"><span class="lab">Permissions</span><span class="lab">its Root</span></div>${range(ROWS.perms).map((j) => `<div class="perm">${w(`title_${t}_permission_${j}`, { size: 8 })}<span class="kind">${words(`title_${t}_permission_${j}_root`, ROOTS, (v) => v.charAt(0).toUpperCase())}</span></div>`).join("")}</div>
       </div>`;
-  const archCard = (a) => `
+
+// An archetype: its name with its home track to ring beside it, its
+// mechanic, its Trait and its abilities.
+const archCard = (a) => `
       <div class="card xcard">
-        <div class="row"><span class="lab">Archetype</span>${w(`archetype_${a}`)}</div>
-        <div class="row home"><span class="lab">Home track</span><span class="kind">${TRACKS.map((k) => `<span class="word" data-radio="archetype_${a}_track" data-value="${k.toLowerCase()}">${k}</span>`).join("<i></i>")}</span></div>
-        <div class="row"><span class="lab">Mechanic</span>${w(`archetype_${a}_mechanic`, { size: 8 })}</div>
-        <div class="perms">${lines(`archetype_${a}_ability`, 6, { size: 8 })}</div>
+        <div class="row">${w(`archetype_${a}`)}<span class="kind">${words(`archetype_${a}_track`, TRACKS)}</span></div>
+        <div class="lines"><div class="row"><span class="lab">Mechanic</span>${w(`archetype_${a}_mechanic`, { size: 8 })}</div>${w(`archetype_${a}_mechanic_more`, { size: 8 })}</div>
+        <div class="lines"><div class="row"><span class="lab">Trait</span>${w(`archetype_${a}_trait`, { size: 8 })}</div>${w(`archetype_${a}_trait_more`, { size: 8 })}</div>
+        <div class="perms"><span class="lab">Abilities</span>${range(ROWS.abilities).map((k) => w(`archetype_${a}_ability_${k}`, { size: 8 })).join("")}</div>
       </div>`;
-  // One attuned thing, the width of the page, with its six awakenings in two
-  // columns. A second one's rare, and goes in Notes till there's a sheet for it.
-  const wake = (a, i) => `<div class="wake">${w(`attune_${a}_awakening_${i}`, { size: 8 })}<span class="kind">${["passive", "active"].map((k) => `<span class="word" data-radio="attune_${a}_awakening_${i}_kind" data-value="${k}">${k}</span>`).join("<i></i>")}</span><span class="boxes">${range(2).map((j) => tick(`attune_${a}_awakening_${i}_aura_${j}`, "check")).join("")}</span></div>`;
-  const attuneCard = (a) => `
-      <div class="card acard wide">
-        <div class="row"><span class="lab">Thing</span><span class="grow2">${w(`attune_${a}_thing`)}</span><span class="lab">Material</span>${w(`attune_${a}_material`)}<div class="stage">${STAGES.map((s) => `<span class="word" data-radio="attune_${a}_stage" data-value="${s.toLowerCase()}">${s}</span>`).join("<i>›</i>")}</div></div>
-        <div class="row"><span class="lab">Its Aura</span><span class="grow2">${w(`attune_${a}_aura`, { size: 8 })}</span><span class="lab">Catch</span>${w(`attune_${a}_catch`)}<span class="lab">Burden</span>${w(`attune_${a}_burden`)}</div>
-        <div class="wakes2">${[0, 1].map((c) => `<div class="wakes"><div class="top"><span></span><span>passive or active</span><span>stored</span></div>${range(3).map((r) => wake(a, c * 3 + r)).join("")}</div>`).join("")}</div>
-      </div>`;
-  // Each thread: its truth, bond or hostile to ring, and a box for strained
-  // and one for snapped. A thread's a sentence, so it gets the width, and a
-  // long one wraps onto a second, smaller line when it's printed.
-  const bondCard = (b) => `
+
+// Each thread: its words, bond or hostile to ring, and a box for strained
+// and one for snapped. A thread's a sentence, so it gets the width, and a
+// long one wraps onto a second, smaller line when it's printed.
+const bondCard = (b) => `
       <div class="card bcard">
         <div class="top"><div class="row"><span class="lab">Bond</span>${w(`bond_${b}`)}</div><span></span><span>strained</span><span>snapped</span></div>
-        ${range(3).map((t) => `<div class="thread">${w(`bond_${b}_thread_${t}`, { size: 8, multi: true })}<span class="kind">${KINDS.map((k) => `<span class="word" data-radio="bond_${b}_thread_${t}_kind" data-value="${k}">${k}</span>`).join("<i></i>")}</span>${tick(`bond_${b}_thread_${t}_strained`, "check")}${tick(`bond_${b}_thread_${t}_snapped`, "cross")}</div>`).join("")}
+        ${range(ROWS.threads).map((t) => `<div class="thread">${w(`bond_${b}_thread_${t}`, { size: 8, multi: true })}<span class="kind">${words(`bond_${b}_thread_${t}_kind`, THREADS, (v) => v)}</span>${tick(`bond_${b}_thread_${t}_strained`, "check")}${tick(`bond_${b}_thread_${t}_snapped`, "cross")}</div>`).join("")}
       </div>`;
+
+function back(stamp) {
   return `
 <section class="page back">
   <header class="slim">
@@ -161,26 +212,25 @@ function back(stamp) {
 
   <section>
     ${tab("Titles")}
-    <p class="hint">I and II to start with three permissions each, more earned in play · a Title's 1 on a Root and 1 on each of three specialties · a permission's 1 on a Root and 1 on a specialty, so write them next to it · a Boon takes two lines</p>
-    <div class="grid3">${range(6).map(titleCard).join("")}</div>
+    <p class="hint">Write where each Title’s 3 Root points go, all on one or spread · ring each permission’s Root, B, M or S, for 1 on it · six permissions at most · a Boon takes two lines and puts nothing on a Root</p>
+    <div class="grid3">${range(ROWS.titles).map(titleCard).join("")}</div>
   </section>
 
   <section>
     ${tab("Archetypes")}
-    <p class="hint">Two to start, and the same one twice is fine · each ability's 1 off its home track, or 2 from the other two, and they stack · six abilities at most</p>
-    <div class="grid3">${range(3).map(archCard).join("")}</div>
-  </section>
-
-  <section>
-    ${tab("Attunement")}
-    <p class="hint">One thing, on top of what you carry · ring its stage · a passive awakening holds up to 2 Aura, ticked as you pump it in, and it all empties when the scene ends · an active one spends it · a Summoner's souls go on the lines, with their dice</p>
-    ${attuneCard(1)}
+    <p class="hint">Write its name and ring its home track · the same one twice is fine, and it’s two things on a roll · its Trait’s always on · each ability’s 1 off its home track, or 2 from the other two · six abilities at most</p>
+    <div class="grid3">${range(ROWS.archetypes).map(archCard).join("")}</div>
   </section>
 
   <section>
     ${tab("Bonds")}
     <p class="hint">A bond’s usually a person, but it can be a faction, a place or a cause · ring each thread bond or hostile · tick the first box when it’s strained, and the second when it snaps</p>
-    <div class="grid2">${range(4).map(bondCard).join("")}</div>
+    <div class="grid2">${range(ROWS.bonds).map(bondCard).join("")}</div>
+  </section>
+
+  <section class="blk notes">
+    ${tab("Notes", "whatever your archetype’s holding, like a Shadow’s pool · trouble that follows you · whatever won’t fit")}
+    <div class="lines">${range(ROWS.notes).map((n) => w(`notes_${n}`, { size: 9 })).join("")}</div>
   </section>
 
   <footer class="stamp"><span>zidara.world/sheets</span><span>${stamp}</span></footer>
