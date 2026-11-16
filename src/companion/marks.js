@@ -43,7 +43,6 @@ export function linesOf(c) {
   const P = placesOf(c);
   add("num:aura", `Aura ${n.aura}`, "Aura");
   add("num:stride", `Stride ${n.stride}${note(n.strideNote)}`, "Stride");
-  for (const [k, name] of [["stamina", "Stamina"], ["confidence", "Confidence"], ["resolve", "Resolve"]]) add(`num:${k}`, `${name} starts at d${n[k]?.die ?? 12}${note(n[k]?.note)}`, name);
   for (const root of ["Body", "Mind", "Soul"]) add(`root:${root}`, `${root} ${c.roots[root]}`, root);
   c.titles.forEach((t, i) => {
     const title = `your ${ORD[i] ?? "next"} Title`;
@@ -61,7 +60,7 @@ export function linesOf(c) {
   for (const [name, { a, have }] of archs) {
     const abilities = (a.abilities ?? []).filter((x) => have.has(x.name));
     const trait = a.trait?.name ? ` Trait: ${a.trait.name}${a.trait.text ? `, ${plain(a.trait.text)}` : ""}.` : "";
-    add(`arch:${name}`, `${name}, home ${a.home ?? ""}.${trait}${abilities.length ? ` ${abilities.map((x) => `${x.name}, ${plain(x.html ?? x.text)}`).join(" ")}` : ""}`, name);
+    add(`arch:${name}`, `${name}.${trait}${abilities.length ? ` ${abilities.map((x) => `${x.name}${x.cost ? ` (${x.cost} Aura)` : ""}, ${plain(x.html ?? x.text)}`).join(" ")}` : ""}`, name);
   }
   const kit = c.carry;
   // Armour says its quality and its Root, so a change to either is marked too.
@@ -76,7 +75,7 @@ export function linesOf(c) {
   c.attuned.forEach((a, i) => {
     const name = a.name.charAt(0).toUpperCase() + a.name.slice(1);
     add(`att:${i}`, `${a.name}${note(a.props)}, ${a.stage || "Awakened"}${a.catch ? `, its Catch ${a.catch}` : ""}${a.burden ? `, its Burden ${a.burden}` : ""}`, name);
-    (a.awakenings ?? []).forEach((w, j) => add(`att:${i}:${P.attuned[i][j]}`, `${w.name} (${w.kind}): ${plain(w.text)}`, `An awakening on ${a.name.replace(/^(A|An|The|His|Her|Their) /, (m) => m.toLowerCase())}`));
+    (a.awakenings ?? []).forEach((w, j) => add(`att:${i}:${P.attuned[i][j]}`, `${w.name} (${w.root ?? w.kind ?? ""}): ${plain(w.text)}`, `An awakening on ${a.name.replace(/^(A|An|The|His|Her|Their) /, (m) => m.toLowerCase())}`));
   });
   for (const p of c.threads) p.threads.forEach((t, j) => add(`thr:${p.person}:${P.threads[p.person][j]}`, `${t.text}${note(t.note)}`, `A thread with ${p.person}`));
   if (c.aspiration?.text) add("asp", c.aspiration.text, "Your Aspiration");

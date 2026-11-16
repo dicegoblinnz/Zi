@@ -63,6 +63,34 @@ Written into 03, 03a, 03b and 18 on 16 Nov, with the crew in `notes/core-plan.md
 20. **Items are never steps on their own.** A weapon, armour or anything you carry does what it is. What changes a roll says so: a *Charge* weapon, a purse of gold, a smoke bomb, and the Warrior's *Second Skin*, which puts 1 step a piece of armour on the roll when it lands.
 21. **The *Slow* Catch's awakenings take a round to wake**, where they took two actions.
 
+### 4. The play screen and the roller
+
+Built on 16 Nov on `rules/2026-11-16-core-play`: the play screen, When it lands, a heal, the end of a scene, the dice roller and the learning round on the new core.
+
+1. **A Root's tile is the roll in one tap.** Tapping Body, Mind or Soul opens the roll card on that Root at full, ready to roll, and everything else on it (bringing a Root in, awakenings, what it's up against, splitting) is there if you want it. The tile says its dice and the points it's got left.
+2. **Bringing in a Root** is a tap on the Root, then the permission that explains it, the brought Root's own permissions first, or your own words for a friend's permission or a truth from *Foretold*. A friend's borrowed through a bond thread is 1 Aura more. It's paid with a point of that Root when it's got one, or 3 Aura, your pick.
+3. **Every awakening's offered on every roll**, since it's yours to say it fits, with a stepper for Aura on it. One with nothing free on its Root to lock is shown but can't go in.
+4. **Splitting** is how many dice (from the table's up to one a step, 24 at most) and then a choice of the 8 most even ways to share them, the table's own first.
+5. **Roll again is a point of Soul**, so it isn't offered when your Soul's on 0, or on a heal.
+6. **When it lands rolls each Root something's at as its own roll**, split its own way, with a Root brought in or an awakening a fold away, and Defend's Root on top. The dice are matched so the most are stopped: the lowest telegraph takes the lowest die that stops it, a Root's own die before Defend's on a tie, since Defend's can go anywhere.
+7. **What gets through is settled a hit at a time.** A telegraph's hits are its own (1, or what a deadly threat's says) and one more for each vulnerability on you. Each hit's a point off its Root, a box of armour there, 2 for 1 on another Root, Toughness or Stand firm. The condition it was going for, or something else the GM names, settles the whole telegraph, and only before any of its hits are settled.
+8. **A telegraph you add by hand gets a Hits choice, 1 to 4**, for a deadly threat. One from the live table takes its hits from the table when prompt 6 sends them.
+9. **Stand firm's two hits**: the first takes its point, the second takes nothing.
+10. **The Blaze is a button on a wounded Root's panel**, with Not yet to back out before the Scar's written. The Scar's form is the same for a Blaze and for the hit that did it. A Root that's 0 to start with can still take a Scar, which locks nothing.
+11. **Out of the scene** after a Scar, no more hits land on you, and New scene brings you back.
+12. **The rest at the end of a scene** rolls each Root that's below what it holds, unsplit, with the Recovery Boon's 2 on top, and drops Toll by 1. Its top faces aren't counted for Aura, since Aura's full when the next scene starts anyway.
+13. **A heal coming in is on the patient's phone**: what it heals (what was rolled and any bonus), whether it's from someone or something else (1 Toll once it's done) or their own, whether the healer's heals ignore a step of Toll, and where it goes, the most room first, which they can move. A Healer's roll card has A heal, unsplit and with nothing to beat, and says what it heals, with the bonus from any awakening that says it adds to every heal. It's for me heals the Healer with no Toll.
+14. **A quick heal is two taps on two phones**: 1 Aura off the giver's Aura panel, and A point back on the patient's Root.
+15. **Take a breath** is a point back on your Mind, as far as half what it holds, as The Core has it.
+16. **Regen** rolls the Root that's lost most, unsplit, and each top face is a point back.
+17. **A wound clears** with downtime, or with The story clears it on that Root's panel, for when the GM says so.
+18. **Toll sits with the conditions**, with one less and one more on its panel for anything the phone can't see.
+19. **Downtime puts everything back** after its slots, and while its card isn't on the new core yet (prompt 5), the button does just that, everything back with no slots.
+20. **The live table still hears a Root's roll by its old track's name** (Stamina for Body, Confidence for Mind, Resolve for Soul), since the server checks it that way. Prompt 6 reads them as Roots.
+21. **The dice roller's actions are targets now**, since there's one action a round and every die's an intent. A target coming at you says how many hits each that gets through is, 1 to 4, and the result says the hits.
+22. **The learning round's combo** brings Bram's Body as well as his hammer's *Ring the bell*, so it's Wren's 10 and Bram's 11, three d12s and a d6. Isolde's Body is 0, so it's a d2 against the club, 3 times in 16, and the club landing leaves her Bloodied, or 2 points off her Mind.
+23. **The faction turn's reroll in downtime is a point of Soul**, a small change in `turn.js`.
+
 ## 14 Nov: stacking
 
 **Live since 14 Nov**, when you said to make it live. Part 1 of the stacking rework (`notes/stacking-plan.md`), from your 14 Nov chat (`notes/playtest-sheets/2026-11-14-chat-decisions.md`), built by thirteen chats on `rules/2026-11-14-stacking` with the book's core cut under it. These are the calls Claude made writing it down, before any chat built it, and each chat added its own in its subsection below. They're still yours to say yes or no to.

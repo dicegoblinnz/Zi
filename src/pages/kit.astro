@@ -17,7 +17,7 @@ import book from "../generated/book.json";
 import { die, diceFor, inline, pips, aura, scars, boxes, condition, tag, crest, telegraph, cost, seal, glyph, DEFS, SIGILS, SHAPES, SIZES, CHARGES, FIELDS, MARKS, GLYPHS } from "../kit/kit.js";
 import { diceLabel, stepsToDice } from "../companion/dice.js";
 import { withQuality } from "../companion/armour.js";
-import { countRoll, rootsSheet, thingsOf } from "../companion/roots.js";
+import { WOUNDS, awakeningsOf, capOf, countRoll, freshCore, lockedOf, rootsSheet, thingsOf } from "../companion/roots.js";
 
 const crew = Object.fromEntries(book.crew.map((c) => [c.id, rootsSheet(c, [], book.companion.build)]));
 const archOf = (c) => c.archetypes.map((a) => a.name);
@@ -27,39 +27,43 @@ for (const a of ARCH) if (!SIGILS[a.name]) throw new Error(`The kit has no sigil
 const vesk = crew.vesk;
 const n = vesk.numbers;
 const order = ["vesk", "dorrie", "bram", "isolde", "wren", "ash"];
-// A roll off a crew sheet: on the new core (16 Nov, notes/core-plan.md) it's
-// one Root at full and 2 for each awakening named, and nothing else named
-// counts. Each name's a thing's words on the sheet. The build stops if a
-// sheet's lost one, or a roll doesn't come to the plan's steps. Prompt 4 of
-// notes/core-plan.md moves the rest of this page onto the new core.
-function rollOf(c, root, names, { cases = [], want = 0 } = {}) {
-  const all = thingsOf(c, {});
-  const keys = names.flatMap((n) => {
-    const found = all.filter((x) => x.name === n);
-    if (!found.length) throw new Error(`The kit's ${c.name} hasn't got "${n}" on her sheet any more. Check src/pages/kit.astro against 03b.`);
-    return found.map((x) => x.key);
+// A roll off a crew sheet on the new core (16 Nov, notes/core-plan.md): one
+// Root at full, a Root brought in on a permission (its words on the sheet),
+// and 2 for each awakening named. The build stops if a sheet's lost a
+// permission or an awakening, or a roll doesn't come to the plan's steps.
+function rollOf(c, root, { awk = [], bring = [], want = 0 } = {}) {
+  const woke = awakeningsOf(c, {});
+  const perms = thingsOf(c, {}).filter((x) => x.kind === "perm");
+  const keys = awk.map((name) => {
+    const w = woke.find((x) => x.name === name);
+    if (!w) throw new Error(`The kit's ${c.name} hasn't got the awakening "${name}" on her sheet any more. Check src/pages/kit.astro against 03b.`);
+    return { key: w.key, aura: 0 };
   });
-  const caseKeys = cases.flatMap((n) => all.filter((x) => x.name === n).map((x) => x.key));
-  const awk = keys.filter((key) => key.startsWith("awk|")).map((key) => ({ key }));
-  const k = countRoll(c, {}, { root, using: [...keys, ...caseKeys], cases: caseKeys, awk });
+  const brought = bring.map((b) => {
+    const p = perms.find((x) => x.name === b.perm);
+    if (!p) throw new Error(`The kit's ${c.name} hasn't got "${b.perm}" on her sheet any more. Check src/pages/kit.astro against 03b.`);
+    return { root: b.root, perm: p.key, pay: "pt" };
+  });
+  const k = countRoll(c, freshCore(c), { root, awk: keys, bring: brought });
   if (want && k.total !== want) throw new Error(`The kit's ${c.name} comes to ${k.total} steps on ${root}, not ${want}. Check src/pages/kit.astro against notes/core-plan.md.`);
-  return { ...k, names: [...names, ...cases] };
+  return { ...k, names: awk, perms: bring.map((b) => b.perm) };
 }
-const T = (c, i) => c.titles[i].text;
 const bram = crew.bram;
-// Vesk at the vault door: her Body, both Titles, the two permissions about
-// locks and her picks, 13 steps.
-const lock = rollOf(vesk, "Body", [T(vesk, 0), T(vesk, 1), "pick a mechanical lock", "know how a lock’s built", "a perfect set of picks"], { want: 11 });
-// Bram barks an order: his Soul, his second Title, the order and Leader, a d12.
-const barked = rollOf(bram, "Soul", [T(bram, 1), "bark an order that gets obeyed", "Leader"], { want: 4 });
-// Over Lord Vane's roof: past a d12, two d12s and a d8.
-const roof = rollOf(vesk, "Body", [T(vesk, 0), "move unseen", "run the rooftops", "Shadow", vesk.attuned[0].name, vesk.attuned[0].awakenings[0].name, "soft-soled boots"], { want: 13 });
-// Bram Defends: his Body, both Titles, the line and the shield wall,
-// Guardian, his plate and his shield.
-const bramDefend = rollOf(bram, "Body", [T(bram, 0), T(bram, 1), "hold the line", "fight in a shield wall", "Guardian", ...bram.armour.map((a) => a.name)], { want: 9 });
-// The Core's own example: Bram chasing a smuggler, explaining his second
-// Title for 1 Aura.
-const chase = rollOf(bram, "Body", [], { cases: [T(bram, 1)], want: 9 });
+// Vesk at the vault door: her Body, 11 steps, a d12 and a d10.
+const lock = rollOf(vesk, "Body", { want: 11 });
+// Bram barks an order: his Soul, 4 steps, a d8.
+const barked = rollOf(bram, "Soul", { want: 4 });
+// Over Lord Vane's roof: her Body and her hook's awakening, two d12s and a d2.
+const roof = rollOf(vesk, "Body", { awk: [vesk.attuned[0].awakenings[0].name], want: 13 });
+// Bram Defends: his Body at full, 9 steps.
+const bramDefend = rollOf(bram, "Body", { want: 9 });
+// The Core's own example: Bram's hammer at the guard captain, his Mind
+// brought in on spot who's in charge for a point of Mind, 12 steps.
+const captain = rollOf(bram, "Body", { bring: [{ root: "Mind", perm: "spot who’s in charge" }], want: 12 });
+// Bram on points: his Body's 9, and his hammer's two awakenings lock 2.
+const bramS = freshCore(bram);
+const bramCap = capOf(bram, bramS, "Body");
+const bramLock = lockedOf(bram, bramS).Body;
 const stepsSaid = (k) => `${k} ${k === 1 ? "step" : "steps"}`;
 // Seals (stage 1 of notes/faction-feel-plan.md): every charge with the kinds
 // of faction the builder deals it to, every field and mark, the Brinewake's
@@ -118,7 +122,7 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
         <h1>The kit</h1>
         <p class="lede">Every piece of the game, drawn once and used everywhere: on your phone at the table, in the rules and in the builder. They’re tokens punched out of card, and every die is its real shape, so you can see how big it is before you read it.</p>
         <nav class="kjump" aria-label="On this page">
-          <a href="#table">At the table</a><a href="#roll">The roll</a><a href="#dice">Dice</a><a href="#steps">Steps</a><a href="#numbers">Aura</a><a href="#tracks">The tracks</a><a href="#wounds">Blaze and Scars</a><a href="#defend">Defend</a><a href="#tags">Tags</a><a href="#telegraphs">Telegraphs</a><a href="#sigils">Sigils</a><a href="#seals">Seals</a><a href="#rules">In the rules</a>
+          <a href="#table">At the table</a><a href="#roll">The roll</a><a href="#dice">Dice</a><a href="#steps">Steps</a><a href="#numbers">Aura</a><a href="#tracks">Your points</a><a href="#wounds">Wounds and Scars</a><a href="#defend">Defend</a><a href="#tags">Tags</a><a href="#telegraphs">Telegraphs</a><a href="#sigils">Sigils</a><a href="#seals">Seals</a><a href="#rules">In the rules</a>
         </nav>
       </header>
 
@@ -136,9 +140,7 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
             </div>
           </div>
           <div class="vtrack">
-            <div class="vt die-t"><span class="vl">Stamina</span><Fragment set:html={die(n.stamina?.die ?? 12, { label: `Stamina d${n.stamina?.die ?? 12}` })} /></div>
-            <div class="vt die-t"><span class="vl">Confidence</span><Fragment set:html={die(n.confidence?.die ?? 12, { label: `Confidence d${n.confidence?.die ?? 12}` })} /></div>
-            <div class="vt die-t"><span class="vl">Resolve</span><Fragment set:html={die(n.resolve?.die ?? 12, { label: `Resolve d${n.resolve?.die ?? 12}` })} /></div>
+            {["Body", "Mind", "Soul"].map((root) => <div class="vt"><span class="vl">{root} {capOf(vesk, freshCore(vesk), root)}/{capOf(vesk, freshCore(vesk), root)}</span><Fragment set:html={pips(capOf(vesk, freshCore(vesk), root))} /></div>)}
             <div class="vt"><span class="vl">Aura</span><Fragment set:html={aura(n.aura, n.aura)} /></div>
           </div>
           <div class="vtiles">
@@ -152,10 +154,10 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
               </div>
             ))}
             <div class="vtile vtile-wide">
-              <Fragment set:html={diceFor(lock.total, { hide: true })} />
+              <Fragment set:html={diceFor(roof.total, { hide: true })} />
               <div>
                 <p class="tn">Again</p>
-                <p class="ts">Her Body and {lock.using.length} things for the lock, {stepsSaid(lock.total)}, {diceLabel(stepsToDice(lock.total))}</p>
+                <p class="ts">Her Body and her hook over the roof, {stepsSaid(roof.total)}, {diceLabel(stepsToDice(roof.total))}</p>
               </div>
             </div>
           </div>
@@ -165,7 +167,7 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
       <!-- The roll -->
       <section id="roll" class="ksec">
         <h2>The roll</h2>
-        <p class="note">Bram barks an order at the gate guard: his Soul, his second Title, <em>bark an order that gets obeyed</em> and Leader, {stepsSaid(barked.total)}, a d{barked.dice[0]}, against the guard’s d6.</p>
+        <p class="note">Bram barks an order at the gate guard: his Soul, {stepsSaid(barked.total)}, a d{barked.dice[0]}, against the guard’s d6.</p>
         <div class="vroll lead" data-mine={barked.dice[0]} data-max={crew.bram.numbers.aura}>
           <div class="vs">
             <figure><Fragment set:html={die(barked.dice[0], { face: 6, label: `Bram’s d${barked.dice[0]} came up 6` })} /><figcaption>Bram’s d{barked.dice[0]}</figcaption></figure>
@@ -215,21 +217,21 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
           <figure><Fragment set:html={die(6, { own: "harm", label: "Harm, a d6" })} /><figcaption>Harm</figcaption></figure>
         </div>
         <h3>Past a d12</h3>
-        <p>Vesk goes over Lord Vane’s roof with everything that fits: her Body, her first Title, <em>move unseen</em>, <em>run the rooftops</em>, Shadow twice, her grappling line, <em>Anywhere I can throw a hook</em> and her boots, {stepsSaid(roof.total)}, {diceLabel(stepsToDice(roof.total))}.</p>
+        <p>Vesk goes over Lord Vane’s roof: her Body, {roof.rootN}, and her grappling line’s <em>{roof.names[0]}</em>, 2 more, {stepsSaid(roof.total)}, {diceLabel(stepsToDice(roof.total))}.</p>
         <div class="beyond"><Fragment set:html={diceFor(roof.total)} /></div>
       </section>
 
       <!-- Steps -->
       <section id="steps" class="ksec">
         <h2>Steps</h2>
-        <p>Vesk at the vault door, step by step: one Root and every thing on her sheet that fits, a step each, and they make {diceLabel(stepsToDice(lock.total))}.</p>
+        <p>Bram’s hammer at the guard captain, step by step: one Root at full, and his Mind brought in on <em>{captain.perms[0]}</em>, all of it, for a point of Mind. They make {diceLabel(stepsToDice(captain.total))}.</p>
         <div class="buildup">
           <ul>
-            <li><Fragment set:html={pips(lock.rootN)} /><span>Her Body, {lock.rootN}</span></li>
-            {lock.names.map((name) => <li><Fragment set:html={pips(1)} /><span>{name.startsWith("a ") || name.startsWith("A ") ? `Her ${name.replace(/^an? /i, "")}` : name}</span></li>)}
+            <li><Fragment set:html={pips(captain.rootN)} /><span>His Body, {captain.rootN}</span></li>
+            {captain.brought.map((b) => <li><Fragment set:html={pips(b.steps)} /><span>His {b.root}, {b.steps}, brought in</span></li>)}
           </ul>
           <span class="eq" aria-hidden="true">=</span>
-          <Fragment set:html={diceFor(lock.total)} />
+          <Fragment set:html={diceFor(captain.total)} />
         </div>
       </section>
 
@@ -241,64 +243,48 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
           <div><span class="vl">Full</span><Fragment set:html={aura(n.aura, n.aura)} /></div>
           <div><span class="vl">After 1 Aura</span><Fragment set:html={aura(n.aura - 1, n.aura)} /></div>
           <div><span class="vl">While acting</span><Fragment set:html={aura(n.aura + 2, n.aura + 2)} /></div>
-          <div><span class="vl">After 3 for an action</span><Fragment set:html={aura(n.aura - 1, n.aura)} /></div>
+          <div><span class="vl">After 3 to bring a Root in</span><Fragment set:html={aura(n.aura - 1, n.aura)} /></div>
         </div>
       </section>
 
-      <!-- The tracks -->
+      <!-- Your points -->
       <section id="tracks" class="ksec">
-        <h2>The tracks</h2>
-        <p>Stamina for your Body, Confidence for your Mind and Resolve for your Soul. Each starts every character on d12, and every hit that gets through to that Root drops it a size. They’re the dice you roll when the telegraphs land, and they pay for your archetype’s abilities.</p>
-        <div class="kladder conf">
-          <figure><Fragment set:html={die(12, { label: "Stamina d12, where it starts" })} /><figcaption><b>d12</b> to start</figcaption></figure>
-          <figure><Fragment set:html={die(8, { label: "Stamina d8, two hits in" })} /><figcaption><b>d8</b> two hits in</figcaption></figure>
-          <figure><Fragment set:html={die(4, { label: "Stamina d4" })} /><figcaption><b>d4</b> worn down</figcaption></figure>
-          <figure><Fragment set:html={die(2, { state: "low", label: "Stamina d2, the next hit Blazes" })} /><figcaption><b>d2</b> the next hit Blazes</figcaption></figure>
-        </div>
+        <h2>Your points</h2>
+        <p>A Root’s number is its dice, its health and what you spend. Bram’s Body is {crew.bram.roots.Body}, and his hammer’s awakenings lock {bramLock}, so he holds {bramCap} points of it. A hit takes a point, and his dice never shrink: he still rolls {diceLabel(stepsToDice(crew.bram.roots.Body))} on his last one.</p>
         <div class="swingdemo">
-          <span class="swing-now"><Fragment set:html={die(12, { label: "Stamina d12" })} /></span>
-          <p class="small" aria-live="polite" data-swing-say>d12, where every character starts.</p>
+          <span class="pts-now" data-cap={bramCap} data-lock={bramLock}><Fragment set:html={pips(bramCap)} /></span>
+          <p class="small" aria-live="polite" data-swing-say>His Body’s on {bramCap} of {bramCap}.</p>
         </div>
         <div class="kbtns">
           <button type="button" class="kbtn" data-act="win">A hit gets through</button>
-          <button type="button" class="kbtn" data-act="miss">Pay for an ability</button>
+          <button type="button" class="kbtn" data-act="miss">Spend a point to bring it in</button>
           <button type="button" class="kbtn" data-act="fresh">The scene ends</button>
         </div>
       </section>
 
-      <!-- Blaze and Scars -->
+      <!-- Wounds and Scars -->
       <section id="wounds" class="ksec">
-        <h2>Blaze and Scars</h2>
-        <p>A hit that gets through at d2 and you Blaze: something extraordinary, and then the character dies, your call, or leaves the scene with a Scar on that track. A Scar’s a Catch in your words, and it locks the track’s smallest open size for good.</p>
+        <h2>Wounds and Scars</h2>
+        <p>A hit on a Root at 0 wounds it: {WOUNDS.Body} for your Body, {WOUNDS.Mind} for your Mind and {WOUNDS.Soul} for your Soul. A wounded Root heals only to half what it holds. A hit on a wounded Root at 0 is a Scar, a Catch in your words that locks a point of it for good, and you leave the scene. While you’re wounded you can take the Blaze instead, and go out on your own terms.</p>
         <div class="wounddemo">
-          <div class="wd"><span class="vl">Stamina</span><span class="wound-now"><Fragment set:html={die(12, { label: "Stamina d12" })} /></span></div>
-          <div class="wd"><span class="vl">Scars</span><span class="scars-now"><Fragment set:html={scars(0, { slots: true })} /></span></div>
+          <div class="wd"><span class="vl">Scars</span><span class="scars-now"><Fragment set:html={scars(1, { slots: true })} /></span></div>
         </div>
-        <div class="kbtns">
-          <button type="button" class="kbtn" data-act="hurt">A hit gets through</button>
-          <button type="button" class="kbtn" data-act="heal">Up a size</button>
-          <button type="button" class="kbtn" data-act="scar" hidden>Take the Scar</button>
-        </div>
-        <p class="small" aria-live="polite" data-hurt-say>Fresh, on d12.</p>
-        <p>With five Scars on a track, only its d12’s left, and the next Blaze there is the last. Nobody Blazes on purpose: paying for an ability never takes a track below its smallest size.</p>
       </section>
 
       <!-- Defend -->
       <section id="defend" class="ksec">
         <h2>Defend</h2>
-        <p>Defend as your action and a Root and everything that fits how you’re defending roll with your tracks when the telegraphs land, with your armour as items. Bram’s Body, both his Titles, <em>hold the line</em>, <em>fight in a shield wall</em>, Guardian, his plate and his shield are {stepsSaid(bramDefend.total)}, {diceLabel(stepsToDice(bramDefend.total))}, and his Stamina’s d12 rolls with them, so each die stops one telegraph.</p>
+        <p>When the telegraphs land, Bram rolls his Body at full against everything at it, {stepsSaid(bramDefend.total)}, {diceLabel(stepsToDice(bramDefend.total))}, split however he likes, and each die stops one telegraph. Defend as his action and a Root rolls on top: his Body again, so two d12s and two d6s for four blows.</p>
         <div class="defends">
           <div class="dfn">
             <ul>
-              <li><Fragment set:html={pips(bramDefend.rootN)} /><span>His Body</span></li>
-              <li><Fragment set:html={pips(4)} /><span>His Titles and two permissions</span></li>
-              <li><Fragment set:html={pips(1)} /><span>Guardian</span></li>
-              {crew.bram.armour.map((a) => <li><Fragment set:html={pips(1)} /><span>{withQuality(a.name, a.quality)}</span></li>)}
+              <li><Fragment set:html={pips(bramDefend.rootN)} /><span>His Body, as it lands</span></li>
+              <li><Fragment set:html={pips(bramDefend.rootN)} /><span>His Body again, for Defend</span></li>
             </ul>
-            <Fragment set:html={diceFor(bramDefend.total)} />
+            <Fragment set:html={diceFor(bramDefend.total * 2)} />
           </div>
         </div>
-        <p>Armour’s on a Root, and every piece has a box for every hit it can take there instead of the track dropping, from its quality: Common 1, Fine 2 and Masterwork 3. A ticked box is ember, and the last one breaks it.</p>
+        <p>Armour’s on a Root, and every piece has a box for every hit it can take there instead of you losing a point, from its quality: Common 1, Fine 2 and Masterwork 3. A ticked box is ember, and the last one breaks it.</p>
         <div class="chips">
           {crew.bram.armour.map((a) => <span class="armourline"><span>{withQuality(a.name, a.quality)}, on {a.root}</span><Fragment set:html={boxes(0, a.boxes, { label: `${a.boxes} ${a.boxes === 1 ? "box" : "boxes"}, none ticked` })} /></span>)}
           <span class="armourline"><span>His plate, after a hit</span><Fragment set:html={boxes(1, crew.bram.armour[0]?.boxes ?? 2)} /></span>
@@ -415,15 +401,15 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
             <Fragment set:html={crest(archOf(vesk), { size: "sm", label: "Vesk" })} />
             <span class="rk">Example</span><span class="rn">Building a roll</span>
           </div>
-          <p><b>Plainly fits:</b> Vesk’s going over Lord Vane’s roof without a sound. That’s her Body, her first Title, <em>move unseen</em>, <em>run the rooftops</em>, Shadow twice, her grappling line, <em>Anywhere I can throw a hook</em> and her soft-soled boots, {stepsSaid(roof.total)}: <Fragment set:html={stepsToDice(roof.total).map((d) => `a ${inline(d)}`).join(" and ")} />.</p>
-          <p><b>Explaining:</b> Bram’s chasing a smuggler down the quay. His Body’s {crew.bram.roots.Body}, but nothing else on his sheet’s about running a man down. He says a sergeant knows exactly how a frightened man runs, and pays <Fragment set:html={cost(chase.aura)} /> to bring his second Title in, so it’s {stepsSaid(chase.total)}, <Fragment set:html={stepsToDice(chase.total).map((d) => `a ${inline(d)}`).join(" and ")} />. Without it, he’d have rolled his Body on its own, {stepsSaid(crew.bram.roots.Body)}, <Fragment set:html={stepsToDice(crew.bram.roots.Body).map((d) => `a ${inline(d)}`).join(" and ")} />.</p>
+          <p><b>A Root at full:</b> Vesk’s going over Lord Vane’s roof without a sound. That’s her Body and her grappling line’s <em>{roof.names[0]}</em>, {stepsSaid(roof.total)}: <Fragment set:html={stepsToDice(roof.total).map((d) => `a ${inline(d)}`).join(" and ")} />.</p>
+          <p><b>Bringing one in:</b> Bram swings at the guard captain. His Body’s {crew.bram.roots.Body}, and <em>{captain.perms[0]}</em> is how his Mind gets in on it, so he pays a point of Mind and it’s {stepsSaid(captain.total)}, <Fragment set:html={stepsToDice(captain.total).map((d) => `a ${inline(d)}`).join(" and ")} />. He could have paid <Fragment set:html={cost(3)} /> instead.</p>
         </div>
       </section>
     </main>
 
     <script>
-      import { die, diceFor, aura, scars, grow, MAX_SCARS } from "../kit/kit.js";
-      import { rollDie, stepsToDice, diceLabel, sizeUp, sizeDown } from "../companion/dice.js";
+      import { die, diceFor, aura, pips, grow } from "../kit/kit.js";
+      import { rollDie, stepsToDice, diceLabel } from "../companion/dice.js";
 
       const root = document.documentElement;
       const still = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -500,76 +486,43 @@ const glyphWords = { agenda: doesOf(/agenda/i), crew: doesOf(/crew/i) };
         button.disabled = false;
       });
 
-      // A track on its own: a hit through, paying for an ability, and the
-      // rest at the end of a scene.
-      let track = 12;
-      const swingBox = document.querySelector(".swing-now");
-      const swingSay = document.querySelector("[data-swing-say]");
-      const setTrack = (to, why) => {
-        const was = track;
-        track = to;
-        swap(swingBox, was, track, die(track, { label: `Stamina d${track}`, state: track === 2 ? "low" : "" }));
-        swingSay.textContent = `${why} d${track}.${track === 2 ? " The next hit through Blazes." : ""}`;
+      // A Root's points on their own: a hit takes one (at 0 it wounds, and on
+      // a wounded Root at 0 it's a Scar), spending one to bring it in, and the
+      // rest at the end of a scene, rolling it unsplit.
+      const ptsBox = document.querySelector(".pts-now");
+      const ptsSay = document.querySelector("[data-swing-say]");
+      const full = Number(ptsBox?.dataset.cap) || 7;
+      let pts = full, hurt = false;
+      const holds = () => (hurt ? Math.ceil(full / 2) : full);
+      const drawPts = (said) => {
+        ptsBox.innerHTML = pips(pts);
+        ptsSay.textContent = said;
       };
-      act("win").addEventListener("click", () => setTrack(track === 2 ? 12 : sizeDown(track), track === 2 ? "A hit at d2 Blazes, so start again on" : "A hit gets through:"));
-      act("miss").addEventListener("click", () => (track > 2 ? setTrack(sizeDown(track), "1 Stamina for an ability:") : (swingSay.textContent = "Paying never takes a track below d2, so it stays on d2.")));
+      act("win").addEventListener("click", () => {
+        if (pts > 0) {
+          pts -= 1;
+          return drawPts(`A hit: his Body’s on ${pts} of ${holds()}.${pts ? "" : " The next one leaves him Bloodied."}`);
+        }
+        if (!hurt) {
+          hurt = true;
+          return drawPts(`A hit at 0, so he’s Bloodied, and his Body heals only to ${holds()} now. The next hit there is a Scar.`);
+        }
+        pts = 0;
+        hurt = false;
+        pts = full - 1;
+        drawPts(`A hit on a wounded Body at 0 is a Scar, and he leaves the scene. Say it’s downtime: he’s back on ${pts}, a point locked by the Scar.`);
+      });
+      act("miss").addEventListener("click", () => {
+        if (pts < 1) return (ptsSay.textContent = "He can’t spend points he hasn’t got, so pushing never hurts him.");
+        pts -= 1;
+        drawPts(`He spends a point to bring it in, so his Body’s on ${pts}. His dice don’t shrink.`);
+      });
       act("fresh").addEventListener("click", () => {
-        if (track >= 12 || track <= 2) return (swingSay.textContent = track >= 12 ? "It’s on d12 already." : "A d2 can’t roll a 4, so it waits for downtime.");
-        const r = rollDie(track);
-        if (r >= 4) setTrack(sizeUp(track), `It rolls ${r}, a 4 or more, so it comes up to`);
-        else swingSay.textContent = `It rolls ${r}, under 4, so it stays on d${track}.`;
-      });
-
-      // Blaze and Scars: hits drop Stamina a size, a hit at its smallest open
-      // size Blazes, and each Scar locks the smallest size left.
-      let wound = 12, scarred = 0, blazed = false;
-      const woundBox = document.querySelector(".wound-now");
-      const scarBox = document.querySelector(".scars-now");
-      const say = document.querySelector("[data-hurt-say]");
-      const scarButton = act("scar");
-      const floor = () => Math.min(12, 2 + 2 * scarred);
-      const drawWound = (wasWound, fresh) => {
-        swap(woundBox, wasWound, wound, die(wound, { label: `Stamina d${wound}`, state: wound <= floor() ? "low" : "" }));
-        scarBox.innerHTML = scars(scarred, { slots: true });
-        if (fresh) scarBox.querySelectorAll("i.on")[scarred - 1]?.classList.add("is-new");
-        scarButton.hidden = !blazed;
-        scarButton.textContent = scarred >= MAX_SCARS ? "Start again" : "Take the Scar";
-        act("hurt").disabled = blazed;
-      };
-      act("hurt").addEventListener("click", () => {
-        if (blazed) return;
-        const w = wound;
-        if (wound <= floor()) {
-          blazed = true;
-          say.textContent = `A hit at d${wound}, so she Blazes. She declares something extraordinary and it happens, no roll.${scarred >= MAX_SCARS ? " With five Scars, it’s her last." : " Then she leaves the scene, and her Stamina takes a Scar."}`;
-          drawWound(w, false);
-          return;
-        }
-        wound = sizeDown(wound);
-        say.textContent = `A hit gets through, and her Stamina’s a d${wound}${wound <= floor() ? ". The next one Blazes" : ""}.`;
-        drawWound(w, false);
-      });
-      act("heal").addEventListener("click", () => {
-        const w = wound;
-        if (wound >= 12) { say.textContent = "It’s on d12 already."; return; }
-        wound = sizeUp(wound);
-        blazed = false;
-        say.textContent = `Up a size, to d${wound}.`;
-        drawWound(w, false);
-      });
-      scarButton.addEventListener("click", () => {
-        const w = wound;
-        if (scarred >= MAX_SCARS) {
-          scarred = 0; wound = 12; blazed = false;
-          say.textContent = "Fresh, on d12.";
-          drawWound(w, false);
-          return;
-        }
-        scarred++;
-        blazed = false;
-        wound = floor();
-        say.textContent = scarred === MAX_SCARS ? "Five Scars, so only her d12’s left, and her next Blaze is her last." : `The hit’s a Scar now, a Catch in her words. It locks her d${floor() - 2}, and her Stamina’s on d${wound}.`;
-        drawWound(w, true);
+        if (pts >= holds()) return (ptsSay.textContent = `He’s on ${pts}, as far as it goes${hurt ? " while he’s Bloodied" : ""}.`);
+        const dice = stepsToDice(9);
+        const rolled = dice.reduce((t, d) => t + rollDie(d), 0);
+        pts = Math.min(holds(), pts + rolled);
+        drawPts(`He rolls his Body unsplit, ${diceLabel(dice)}, for ${rolled}, so he’s on ${pts} of ${holds()}.`);
       });
     </script>
   </body>

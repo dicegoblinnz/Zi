@@ -784,7 +784,7 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
 .ln-tile.is-in { border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); }
 .ln-lines { margin: 0.45rem 0 0; padding-left: 1.1rem; font-size: 0.95rem; color: var(--muted); }
 .ln-sum { margin: 0 0 1rem; padding: 0.8rem 0.9rem 0.1rem; background: var(--surface); border: 1px solid var(--gold); border-radius: 2px; }
-.ln-dice { display: flex; gap: 8px; margin-bottom: 0.6rem; }
+.ln-dice { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 0.6rem; }
 .ln-roll { margin-bottom: 0.8rem; }
 .ln-card .cc-nums { grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); }
 .ln-out h3 { font-family: var(--display); font-weight: 600; font-size: 1.15rem; color: var(--gold-ink); margin: 0.4rem 0 0.4rem; }
@@ -2942,9 +2942,9 @@ html.cc-tabbed .zr { bottom: calc(59px + env(safe-area-inset-bottom, 0px)); padd
 .cc-track.is-roots .is-trk > .zd-die { grid-row: 2; grid-column: 1; --s: 44px; }
 .cc-track.is-roots .is-trk .cc-now { grid-row: 2; grid-column: 2; flex-direction: column; align-items: flex-start; gap: 2px; }
 .cc-track.is-roots .is-trk .v { font-size: 1.2rem; line-height: 1.05; color: var(--ink); }
-.cc-track.is-roots .t-stamina { grid-column: 1; }
-.cc-track.is-roots .t-confidence { grid-column: 2; }
-.cc-track.is-roots .t-resolve { grid-column: 3 / 5; }
+.cc-track.is-roots .t-stamina, .cc-track.is-roots .t-body { grid-column: 1; }
+.cc-track.is-roots .t-confidence, .cc-track.is-roots .t-mind { grid-column: 2; }
+.cc-track.is-roots .t-resolve, .cc-track.is-roots .t-soul { grid-column: 3 / 5; }
 .cc-track.is-roots .t-aura { grid-column: 1 / 4; }
 .cc-track.is-roots .cc-undo { grid-column: 4; }
 .cc-track.is-roots .t-cond { grid-column: 1 / -1; }
@@ -3184,3 +3184,39 @@ button.tip > zi-q { display: grid; place-items: center; width: 22px; height: 22p
 .cc-act-in > p:first-child { margin: 0; }
 .cc-choose h2 { display: flex; align-items: center; gap: 0 0.4rem; margin: 0 0 0.4rem; }
 .cc-choose .cc-list { margin: 0; }
+
+/* The new core (16 Nov): each Root's points as a number out of what it can
+   hold and a row of pips (the points it's got, the room to heal, what a wound
+   shuts away and what's locked), with its wound in harm's colour, its Scars
+   and its armour's plates. The Root tiles say what's left too. */
+.cc-track.is-core .is-trk { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; align-content: start; row-gap: 3px; min-height: 0; padding: 6px 8px 7px; }
+.cc-track.is-core .is-trk .k { grid-column: 1; }
+.cc-track.is-core .is-trk .cc-now { grid-row: 2; grid-column: 1; flex-direction: row; align-items: baseline; flex-wrap: wrap; gap: 2px 6px; }
+.cc-track.is-core .is-trk .v small { display: inline; font-size: 0.78rem; color: var(--muted); }
+.cc-pips { grid-row: 3; display: flex; flex-wrap: wrap; gap: 2px; max-width: 100%; }
+.cc-pips i { width: 6px; height: 6px; border: 1.5px solid var(--gold); border-radius: 1px; transform: rotate(45deg); margin: 1px; }
+.cc-pips.is-many i { width: 5px; height: 5px; }
+.cc-pips i.on { background: var(--gold); }
+.cc-pips i.shut { border-color: var(--zd-harm-line); border-style: dashed; }
+.cc-pips i.lock { border-color: var(--line); background: repeating-linear-gradient(45deg, var(--line) 0 1.5px, transparent 1.5px 3px); }
+.cc-pips i.is-new { animation: cc-halo 0.9s ease-out; }
+.cc-now .cc-plates, .cc-now .zd-scars { align-self: center; }
+.cc-mood.is-hurt { color: var(--zd-harm-ink); }
+.cc-track .is-trk.is-down { animation: cc-ember 0.9s ease-out; }
+.cc-track .is-trk.is-up { animation: cc-halo 0.9s ease-out; }
+.cc-tag.is-toll { border-color: var(--zd-harm-line); }
+.cc-play .cc-roots .tile.is-root .tile-pts { font-size: 0.8rem; color: var(--muted); }
+.cc-play .cc-roots .tile.is-root.is-hurt, .cc-look-play .tile.is-root.is-hurt { border-color: var(--zd-harm-line); }
+.cc-play .cc-roots .tile.is-root.is-hurt .tile-pts { color: var(--zd-harm-ink); font-weight: 700; }
+.cc-toll { margin-bottom: 0.75rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--line); }
+/* Bringing in a Root and the awakenings that fit, on any roll. */
+.cc-bringgrp .cc-line { width: 100%; margin-top: 6px; }
+.cc-bring { margin: 6px 0 4px; padding: 8px 0 6px 12px; border-left: 2px solid var(--violet); }
+.cc-bring .cc-pick-h { margin: 0 0 4px; }
+.cc-bring .cc-own { margin-top: 4px; }
+.cc-own-perm { margin-top: 4px; }
+.cc-awkrow { margin-top: 6px; }
+.cc-awkrow .cc-stepper { margin-top: 4px; }
+.cc-healnote .cc-row { margin-top: 6px; }
+.cc-rest-h { margin: 0.6rem 0 0.2rem; }
+.cc-rest-h .res-out { margin-left: 0.4rem; color: var(--gold-ink); }

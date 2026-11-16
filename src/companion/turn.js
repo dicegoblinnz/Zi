@@ -374,14 +374,14 @@ export function makeTurn(d) {
       const lostAny = c.faces && (!c.won.main || c.won.split === false);
       const opts = [];
       const ch = place ? d.character(place.ch) : null;
-      if (place && lostAny && ch) opts.push(btn("again", `Roll again for a size of Resolve <small>${esc(place.cname)}’s Resolve is a d${ch.die}${ch.resolve < 1 ? ", as small as it goes" : ""}</small>`, { disabled: ch.resolve < 1 }));
+      if (place && lostAny && ch) opts.push(btn("again", ch.soul ? `Roll again for a point of Soul <small>${esc(place.cname)}’s Soul is on ${ch.resolve}${ch.resolve < 1 ? ", with nothing to spend" : ""}</small>` : `Roll again for a size of Resolve <small>${esc(place.cname)}’s Resolve is a d${ch.die}${ch.resolve < 1 ? ", as small as it goes" : ""}</small>`, { disabled: ch.resolve < 1 }));
       if (tied && can) opts.push(btn("tie", extrasLeft(id, t) ? "Take the tie with an extra resource" : "No extra resource left for the tie", { disabled: !extrasLeft(id, t), attrs: ` data-w="${best(c.faces.main) === def && !c.tie.main ? "main" : "split"}"` }));
       if (gm) opts.push(btn("out", "Make the changes", { cls: "button primary", attrs: ' data-x="crew"' }));
       foot = opts.length ? `<div class="tg-do">${opts.join("")}</div>` : "";
     }
     const result = c.won
       ? c.vs.k === "none" ? `<div class="tg-v is-good"><p><b>It happens.</b></p></div>`
-        : `<div class="tg-v ${c.won.main ? "is-good" : "is-bad"}"><p><b>${cap(crewResult(c))}.</b> The crew’s best came up ${best(c.faces.main)} against ${def}${c.tie.main ? ", and an extra resource bought the tie" : ""}.${c.again.length ? ` ${andList(c.again.map((x) => esc(x.name)))} spent Resolve to roll it again.` : ""}${c.real ? ' <span class="tg-real">Real dice</span>' : ""}</p></div>`
+        : `<div class="tg-v ${c.won.main ? "is-good" : "is-bad"}"><p><b>${cap(crewResult(c))}.</b> The crew’s best came up ${best(c.faces.main)} against ${def}${c.tie.main ? ", and an extra resource bought the tie" : ""}.${c.again.length ? ` ${andList(c.again.map((x) => esc(x.name)))} paid to roll it again.` : ""}${c.real ? ' <span class="tg-real">Real dice</span>' : ""}</p></div>`
       : "";
     return `<div class="ft-crew card" data-ftk="crew"><h3 class="ft-h3">The crew’s action <small>${esc(MOVE_NAMES[c.move] ?? c.move)}</small></h3>
       <div class="ft-crew-tb"><span class="ft-dice">${diceHtml}</span><div><p class="ft-crew-does">${esc(c.does)}</p>${c.at.name ? `<p class="cc-small">At ${esc(lower(c.at.name))}</p>` : ""}</div></div>
@@ -926,7 +926,7 @@ export function makeTurn(d) {
         <fieldset class="cc-group"><legend>Or something else</legend>${moveBtn("Goal", `against the Goal’s die, d${sheet.goal.die}`)}${moveBtn("Project", "against the project’s die")}${moveBtn("Else", "advance a world event, support an Aspiration, anything else")}</fieldset>
         ${at}${withHtml}${warn}
         ${c.move ? `<label class="tg-label" for="ft-cdoes">In a line</label><input id="ft-cdoes" data-ft="cdoes" maxlength="${MAX.line}" autocomplete="off" value="${esc(built?.does ?? c.does)}">` : ""}
-        <p class="cc-small">Ties go to the faction. ${tip("ft-ties", ["There’s no Aura in downtime, but a player can spend a size of their Resolve to roll the crew’s dice again, or the crew can spend an extra resource and take the tie.", ruleLink("s-downtime-rolls", "Rolling in downtime")], "Rolling in downtime")}</p>
+        <p class="cc-small">Ties go to the faction. ${tip("ft-ties", ["There’s no Aura in downtime, but a player can spend a point of their Soul to roll the crew’s dice again, or the crew can spend an extra resource and take the tie.", ruleLink("s-downtime-rolls", "Rolling in downtime")], "Rolling in downtime")}</p>
       </div>
       <div class="dlg-foot">${r.err ? `<p class="cc-warn" role="alert">${esc(r.err)}</p>` : ""}${btn("savecrew", "That’s the crew’s action", { cls: "button primary" })}${t.crew && !rolled(t.crew) ? btn("dropcrew", ui.sure === "dropcrew" ? "Tap again to clear it" : "Clear it", { cls: "button danger" }) : ""}</div>`;
   }
@@ -1379,7 +1379,7 @@ export function makeTurn(d) {
       // The Resolve's only spent on a roll the table will take.
       const ok = T().check(id, op);
       if (!ok.ok) return d.toast(ok.why || "That can’t be rolled again now.", false);
-      if (!d.spendResolve(place.ch)) return d.toast(`${place.cname} hasn’t got a size of Resolve to pay with.`, false);
+      if (!d.spendResolve(place.ch)) return d.toast(`${place.cname} hasn’t got a point of Soul to pay with.`, false);
       ui.spin = "crew";
       push(id, op);
     },
