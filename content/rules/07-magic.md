@@ -243,5 +243,5 @@ Every ritual worth rolling for has three things: something *interfering*, someth
 :::example[The Unbinding, at the Vane manor]
 Isolde kneels in the binding room with the three paintings, and the crew gathers round the circle. She speaks her own true name aloud, and the GM starts the interference: Vane's household is at the door, a d10 each round.
 
-Isolde works *Old Ink* with her Mind, both Titles, *read the order's old script* and *read dead languages*, because this binding's in her order's own script. Bram answers the interference at the door. Vesk works *Names*, since she stole these paintings and knows whose they were, and Dorrie puts her action into the same roll: she knows the old families, and she reads their names off the frames. Three rounds later, *Mercy*'s the last tag standing, and it's Isolde's to strip. She has to mean it.
+Isolde works *Old Ink* with her Mind, 9 steps, a d12 and a d6, since this binding's in her order's own script, and *read the order's old script* is what lets her read it at all. Bram answers the interference at the door. Vesk works *Names*, since she stole these paintings and knows whose they were, and Dorrie puts her action into the same roll: she knows the old families, and she reads their names off the frames. Three rounds later, *Mercy*'s the last tag standing, and it's Isolde's to strip. She has to mean it.
 :::

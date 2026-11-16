@@ -285,12 +285,10 @@ What the other prompts need from it:
 
 ### 7. Bringing it together
 
-Run 16 Nov on `rules/2026-11-16-core`, with prompt 4 still to build. Its calls are under 7 in `notes/to-confirm.md`'s 16 Nov section.
+Run 16 Nov on `rules/2026-11-16-core`, once prompt 4 had landed. Its calls are under 7 in `notes/to-confirm.md`'s 16 Nov section.
 
-- **Merged:** prompts 1, 2, 3, 5 and 6 had all landed on `rules/2026-11-16-core` already, with nothing left on their branches. Prompt 4 has no branch and nothing built, so the play screen, the roller, the learning round and most of `/kit/` are still on stacking.
-- **Fixed:** Magic (07) on the new core (a school's Title 5, the ember stone's awakening locking a point, every example a Root at full, area magic's Push and *Sculpt* in Aura, souls that don't lock a point or add to Aura, catching a soul on the Root that fits), with a line in `c-2026-11-16-core`. The site's search check looks for *Bloodied*. `tools/check_terms.py` finds nothing in the book it didn't on `main`.
+- **Merged:** all six pieces were on `rules/2026-11-16-core`, with nothing left on their branches.
+- **Fixed:** Magic (07) on the new core (a school's Title 5, the ember stone's awakening locking a point, every example a Root at full, area magic's Push and *Sculpt* in Aura, souls that don't lock a point or add to Aura, catching a soul on the Root that fits), with a line in `c-2026-11-16-core`. The site's search check looks for *Bloodied*. `tools/check_terms.py` finds nothing in the book it didn't on `main`. Finishing downtime on the play screen put every Root back a second time after `downtime.js` had, which handed back the Soul paid to roll again, so `finishDowntime()` only ends the scene now (5's note to 4).
 - **Rebuilt:** the site, the sheets (`npm run sheets`) and the reading copy (`tools/build_book.py`).
-- **Checks:** `tests/check-site.mjs` and `tests/check-world-engine.mjs` pass whole. `tests/check-companion.mjs` passes every part that isn't prompt 4's (1, 1b, 1c, 1e, 1f, 5, 5b, 5c, 6, 8, 8b, 9 and 10), and part 3 (Vesk at the table) fails on stacking's numbers and stops the run, as it should till the play screen moves. `tests/check-accounts.mjs` passes whole, the live table on the new crew included.
-- **CLAUDE.md** has a New core section saying what's on it, what's still stacking's, and the shared pieces, and its crew, sheet and fight_sim lines are on the new core.
-
-**Not ready for `main`.** The play screen is where a player rolls, and on this branch it still counts tracks, extra actions and everything that fits, while the book, the builder, the sheets and the live table don't. Once prompt 4 lands, what's left of this prompt is short: CLAUDE.md's play screen, roller and learning round lines, the full `tests/check-companion.mjs` once, the Preview, and Mo's yes.
+- **CLAUDE.md** has a New core section saying what's on it and the shared pieces, its play screen line is on the new core, and its crew, sheet and fight_sim lines are too. The long lines on the builder, downtime, print and the live table still carry stacking's detail where the section says otherwise.
+- **Checks:** see the end of this section.

@@ -139,14 +139,16 @@ Built into the live table, the table screen and the Worker on 16 Nov, on `rules/
 
 ### 7. Bringing it together
 
-Made on 16 Nov on `rules/2026-11-16-core`, bringing Magic (07) onto the new core, since it wasn't on anyone's list.
+Made on 16 Nov on `rules/2026-11-16-core`, bringing Magic (07) onto the new core, since it wasn't on anyone's list, and the play screen's end of downtime.
 
 1. **A summoning attunement's souls don't lock a point or add to Aura**, as 03a's Summoner already says, so a starting one's 5 points and nothing else. Calling souls out is Aura spent as part of your action, a d4 of summons for each, as before.
 2. **Catching a soul rolls the Root that fits how you catch it**, with nothing else counted. Sable's catch is her Soul, 7 steps, a d12 and a d2.
 3. **The made-up storm-caller has a Soul of 6** (a d8 for the bolt and a d4 for the line), and the Elementalist's Push and *Sculpt* in Area magic are 1 Aura, as 03a has them.
 4. **Ash and Bram at the gate are 24 steps, four d12s**: his Body and *Ring the bell*, her Soul and *Fire without a word*, one d12 on *Iron* and three on *Barred*, where the best counts. The rest of the example's as it was.
 5. **Isolde's ward against arrows is her Soul, 7 steps, a d8 and a d6**, the same split as Conflict's Wards and blessings.
-6. **The change log's `c-2026-11-16-core` says Magic's on it too**, rather than a new entry, since it follows from that change.
+6. **Isolde works *Old Ink* in the Unbinding with her Mind, 9 steps, a d12 and a d6**, her script explaining why she can, not adding to it.
+7. **The change log's `c-2026-11-16-core` says Magic's on it too**, rather than a new entry, since it follows from that change.
+8. **Finishing downtime on the play screen no longer puts the Roots back twice**, so the Soul paid to roll again stays paid.
 
 ## 14 Nov: stacking
 

@@ -2739,8 +2739,9 @@ function finishDowntime(ch, c) {
   change("downtime", (s, was) => {
     const before = said(was);
     const happened = dt.apply(s, was, d);
+    // dt.apply() has put everything back already and taken off the Soul paid
+    // to roll again, so nothing here fills the Roots a second time.
     const now = sheetFor(ch);
-    R.downtimeRest(now, s);
     endScene(s, now);
     if (s.seen) s.seen = ownChanges(s.seen, before, said(now));
     message = `Downtime’s done. ${happened.map((x) => `${x}.`).join(" ")}`.replace(/\s+/g, " ").trim();
