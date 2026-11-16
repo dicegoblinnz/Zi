@@ -69,6 +69,7 @@ Players who've played other roleplaying games bring habits with them, and most o
 -   **Nobody goes first.** The GM shows you everything that's coming, then the crew acts in any order. Talk it through.
 -   **Most threats don't have hit points.** They have tags, and every win strips one, so look for the weak point instead of grinding. The big ones carry multipliers, like *Armoured ×4*, which takes four wins.
 -   **You roll their dice too.** The GM almost never rolls, so pick up the threat's die in another colour.
+-   **Your Roots are your health.** The number you roll with is how many hits you can take there too, and pushing yourself spends from it.
 
 There's more in [Welcome to Zi'Dara](#s-from-dnd).
 

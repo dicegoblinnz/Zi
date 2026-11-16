@@ -81,7 +81,7 @@ The **downtime page** has the order a downtime runs in, how downtime rolls and t
 
 ## The faction board and the Faction Sheet {#s-sheet-faction}
 
-Each tile has **six seats**, three down each side. A seat holds one faction: its name and Power, its resources and assets, its Want, two agendas (each a track from d2 up to d12), its face, its secret once the crew finds it, its threads, and a few lines of notes. There are no lines printed between seats. Draw your own, from anything to anything, because the crew decides who's tied to who.
+Each tile has **six seats**, three down each side. A seat holds one faction: its name and Power, its resources and assets, its Want, two agendas (each a die that climbs from d2 to d12), its face, its secret once the crew finds it, its threads, and a few lines of notes. There are no lines printed between seats. Draw your own, from anything to anything, because the crew decides who's tied to who.
 
 The **Faction Sheet** is the same board on one A4 page, for tables that need more seats or a board of their own. Print as many as you like.
 

@@ -16,7 +16,7 @@ Here's that shape for a three-hour night. Stretch it or squeeze it to fit your t
 
 | Part | Time | What happens |
 | --- | --- | --- |
-| Opening | 20 min | Recap, downtime, the party sheet, a check-in, and everyone's tracks where downtime left them. |
+| Opening | 20 min | Recap, downtime, the party sheet, a check-in, and everyone back on full points. |
 | Planning | 20 min | The crew decides what it's doing tonight. |
 | Confrontation | 90 min | The job, the fight, the chase or the ball. |
 | Aftermath | 30 min | What it cost, and what it changed. |
@@ -28,7 +28,7 @@ Here's that shape for a three-hour night. Stretch it or squeeze it to fit your t
 2.  **Downtime.** The four pressures land, then everyone spends their slots.
 3.  **Read the party sheet.** Go through the Goal, every Aspiration and every faction.
 4.  **Check-in.** "Anything anyone wants to flag before we start?"
-5.  **Tracks.** Everyone starts the session with their [tracks](#s-tracks) where downtime left them. Every downtime puts each one up a size, and a slot spent recovering puts 6 sizes back, but nothing opens a size a [Scar](#s-blaze)'s locked.
+5.  **Points.** Everyone starts the session on full [points](#s-tracks), every Root on its maximum and every wound cleared, because downtime puts everything back. A point a [Scar](#s-blaze)'s locked stays locked.
 
 Take turns doing the recap, so it isn't always the same person. If the log doesn't jog anyone's memory, the GM fills in the gaps.
 
@@ -40,7 +40,7 @@ Take turns doing the recap, so it isn't always the same person. If the log doesn
 
 ### The planning scene {#s-planning}
 
-Let them plan, and answer their questions honestly: who's on the door, or when the guard changes. Anything a permission plainly covers knowing, they know. When the plan's good enough to start, start, even if it isn't finished. Nobody can plan for everything, and when the plan goes sideways, they've still got their Resolve to push through it.
+Let them plan, and answer their questions honestly: who's on the door, or when the guard changes. Anything a permission plainly covers knowing, they know. When the plan's good enough to start, start, even if it isn't finished. Nobody can plan for everything, and when the plan goes sideways, they've still got their points to push through it.
 
 If the planning's still going after twenty minutes, make a move. Something in the world shifts, and the plan has to start now.
 
@@ -67,4 +67,4 @@ The log is one sentence a session, written by a different player each time, in a
 
 ## Sharing the Spotlight {#sharing-the-spotlight}
 
-Keep a rough count of who's had a moment tonight. Before the session ends, everyone should have had at least one problem that was theirs to solve. If someone's had a quiet night, aim the next scene at their Aspiration or at someone they've got a thread with, or put something in it one of their Catches or hostile threads could bite on, like a forester in the market for Wren's *Wanted* longbow. Whether it bites is up to them (see [Catches and Resolve at the Table](#s-catches-gm)). There's more in [A moment for each character](#s-spotlight).
+Keep a rough count of who's had a moment tonight. Before the session ends, everyone should have had at least one problem that was theirs to solve. If someone's had a quiet night, aim the next scene at their Aspiration or at someone they've got a thread with, or put something in it one of their Catches or hostile threads could bite on, like a forester in the market for Wren's *Wanted* longbow. Whether it bites is up to them (see [Catches and Trouble at the Table](#s-catches-gm)). There's more in [A moment for each character](#s-spotlight).

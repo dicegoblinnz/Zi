@@ -291,7 +291,7 @@ Say the Harbour Guild makes *The Night Boats*, a smuggling crew. It hands over *
 
 ## The Crew and the Factions {#s-faction-crew}
 
-The crew's a faction too, on the same card (see [The Party Sheet](#s-party-faction)), so it takes **one action** a downtime, the same as every other faction. Roll the crew's **Power**, plus a step for every Reputation and bond thread that fits: when the crew goes to the Guildmaster for a favour, the Guild's bond thread toward them is a step. If one character's plainly the right person for it, they can roll their own instead, a Root and everything on their sheet that fits what they're doing.
+The crew's a faction too, on the same card (see [The Party Sheet](#s-party-faction)), so it takes **one action** a downtime, the same as every other faction. Roll the crew's **Power**, plus a step for every Reputation and bond thread that fits: when the crew goes to the Guildmaster for a favour, the Guild's bond thread toward them is a step. If one character's plainly the right person for it, they can roll their own instead, the Root that fits how they're doing it and any Root a permission brings in.
 
 **A player can put one of their personal slots into the crew's action**, and two slots on one move count everything twice. A personal slot can never be a second move on a faction, though, and nothing buys the crew another action (see [Downtime](#party-slots)).
 
@@ -316,7 +316,7 @@ The crew's moves are the six outcomes, the same as any faction's, plus two of it
 
 Trading's agreed in the story, so it doesn't take the crew's action: a favour for a favour, or an extra resource for something a faction will sell (see [Extra Resources](#s-crew-wealth)).
 
-Ties go to the faction. There's no Aura in downtime, but a player can pay 1 Resolve to roll again (their own dice only), or the crew can spend an extra resource and take the tie. Only the crew gets to do that. See [Rolling in downtime](#s-downtime-rolls).
+Ties go to the faction. There's no Aura in downtime, but a player can pay a point of Soul to roll again (their own dice only), or the crew can spend an extra resource and take the tie. Only the crew gets to do that. See [Rolling in downtime](#s-downtime-rolls).
 
 Scenes move factions too. If the crew burns a Guild warehouse in play, that's a Destroy, and it doesn't cost the crew its action. Tick it off the Guild's card, and if the Guild knows who did it, it writes a hostile thread toward the crew.
 

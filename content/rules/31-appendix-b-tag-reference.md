@@ -27,10 +27,11 @@ These tags say what its telegraphs can do to you.
 | **Charming** | It's easy to like. People around it take its side, and so might you. Remember what it did, not what it said. |
 | **Commanding** | It gives orders and people obey. While it watches, the others telegraph a step bigger. Take it out of earshot and they waver. |
 | **Cornered is Worse** | Trap it and it gets more dangerous, not less. Leave it a way out and it might take it. |
+| **Deadly** | Every die of it that gets through is 2 hits, and *Deadly (3)* is 3. Its telegraphs say so, face up, and each one costs its steps once for every hit. Don't let it land. |
 | **Fast** | It is on you before the sentence ends. It closes distance, takes the door first, gets the knife in. Slow the ground down and it loses its edge. |
 | **Fast Hands** | Your purse is lighter and you didn't feel it. It takes things mid-conversation. Watch the hands, not the face. |
 | **Faster Than You** | Whoever you are, it's faster. Racing it loses. Tricking it, blocking it or making it choose doesn't. |
-| **Fear** | It aims at your Mind, so your Confidence rides against it and a shield won't stop it. Something in the chest goes cold. Naming what it is takes some of that away. |
+| **Fear** | It aims at your Mind, so your Mind rolls against it and a shield won't stop it. Something in the chest goes cold. Naming what it is takes some of that away. |
 | **Flurry** | Blow after blow. It can aim two dice at one person in a round, and each one has to be stopped on its own. Get out of its reach, or put a shield in front of it. |
 | **Grapple** | It grabs and doesn't let go. Its telegraphs can leave you *Grabbed*, at the die that lands. A friend can pry you loose. |
 | **Grasping** | It wants what you're holding, and it'll take it. Its hits steal as well as hurt. |
@@ -117,7 +118,7 @@ Any of them can carry a **multiplier** when it should take more than one win, li
 
 ## Vulnerabilities {#vulnerability-tags}
 
-A vulnerability makes a hit hurt more. When a win strips one of its tags or lands a hit, every vulnerability that fits adds one more tick, and whoever won chooses where each one goes: another off the same tag, or a tick on another tag that keeps it going, which strips a plain one outright. So one vulnerability can strip two plain tags, or take two off one multiplier. It has to make sense, so the hit has to be able to reach what it takes, and nothing under a *first* tag can go till that tag's gone. On the crew, each one's another size off the track. The same one never counts twice, so a thing that's really weak to fire has two different ones. Plenty are hidden, and Study finds them. There's more in [Vulnerabilities](#s-vulnerable).
+A vulnerability makes a hit hurt more. When a win strips one of its tags or lands a hit, every vulnerability that fits adds one more tick, and whoever won chooses where each one goes: another off the same tag, or a tick on another tag that keeps it going, which strips a plain one outright. So one vulnerability can strip two plain tags, or take two off one multiplier. It has to make sense, so the hit has to be able to reach what it takes, and nothing under a *first* tag can go till that tag's gone. On the crew, each one's another hit, so another point off the Root. The same one never counts twice, so a thing that's really weak to fire has two different ones. Plenty are hidden, and Study finds them. There's more in [Vulnerabilities](#s-vulnerable).
 
 | Tag | How it plays |
 | --- | --- |
@@ -130,7 +131,7 @@ A vulnerability makes a hit hurt more. When a win strips one of its tags or land
 | **Soft Underbelly** | Its belly's bare. Get underneath it, and every hit there gets one more tick. |
 | **Easily Shamed** | Shame works on it. A win that shames it in front of its people gets one more tick. |
 | **Holy Ground** | On holy ground, everything hurts it more. Lure it there. |
-| **Opened** | The Warrior's, for 1 Stamina: every hit on it gets one more tick till the round ends. |
+| **Opened** | The Warrior's, for 1 Aura: every hit on it gets one more tick till the round ends. |
 
 ## What drives it {#what-drives-it}
 
@@ -193,7 +194,7 @@ The ground is the place itself, and anyone can use it. For a player, that means 
 | **Bells** | Ring them and the whole district hears. Silence them and nobody does. |
 | **Candlelight** | Warm light and deep shadows. Knock the candles over and it's dark, or on fire. |
 | **Chandelier** | A great iron ring of candles overhead, held by one rope. Everybody looks at the rope eventually. |
-| **Deep Snow** | Every step is work. Tracks everywhere. Anyone who falls is slow to get up. |
+| **Deep Snow** | Every step is work. Footprints everywhere. Anyone who falls is slow to get up. |
 | **Echoes** | Every sound comes back three times. Nobody can tell where a voice is coming from. |
 | **Fire** | It spreads. It gives light, smoke and a reason to leave. Anyone can use it, and it doesn't care who. |
 | **Fog** | Ten paces and the world ends. Easy to hide, easy to get lost, easy to be ambushed. |
@@ -316,7 +317,7 @@ Each of these is +1 Power whenever it fits the roll, and its people in a scene c
 
 | Asset | What it does |
 | --- | --- |
-| **Healers** | Once a session, between two scenes, everyone in the crew puts one of their tracks up a size. |
+| **Healers** | Once a session, between two scenes, everyone in the crew rests a second time: one Root each, rolled unsplit, and they get back what it rolls. It isn't a heal, so it gives no Toll. |
 | **Relic** | Something old and powerful. Its card says what it does, often through its Secret, and without it, the faction's just another power. |
 | **A Curse on Its Goods** | Anyone who steals from it is *Hexed*, at its Power, at the start of every scene till they give it back. |
 | **A Bound Spirit** | Once a session, ask it about anything that happened inside the walls it haunts, and it tells the truth. |
@@ -331,8 +332,8 @@ A condition you put on a friend, like a ward or a blessing, goes on one friend a
 
 **For you: one step more while it lasts.** *Warded* · *Heartened* · *Covered* · *Braced* · *Unseen* · *Fleet* · *Blessed* · *Inspired* · *Rallied* · *Sighted* · *Guided* · *Disguised* · *Fortunate* · *Surging*
 
-Two of them move your Confidence. Spend *Heartened* and it comes back up a size, and spend *Shaken* and it drops a size.
+Two of them move your Mind's points. Spend *Heartened* and you get a point of Mind back, and spend *Shaken* and you take a hit at your Mind.
 
-*Unseen* gives you an extra action when you spend it. Coming out of hiding gives you one too, and with both it's still one.
+Two of them bring a Root in for nothing when you spend them, where you'd otherwise pay a point of it or 3 Aura: *Unseen* on the roll you spend it on, and *Rallied* on a roll that answers a telegraph. You still need the permission that explains it.
 
 **The Hunter's mark.** *Marked* is a special condition only a Hunter puts on, carrying the die they won with, like *Marked d10*. It doesn't give a step and nobody spends it. Anyone who acts against whatever's *Marked* rolls the Mark die too, as one more die against it, and it fades a size every round like any condition. When what it's on falls, the Mark jumps to another creature the Hunter can see. See [Hunter](#a-hunter).
