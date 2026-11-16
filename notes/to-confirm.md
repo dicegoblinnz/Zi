@@ -35,8 +35,7 @@ Written into The Core, Conflict (bar A Full Fight), Downtime, Appendix D and the
 12. **Items, the ground and your threads are never steps.** A plain weapon does what it does. Bringing the ground, a tag or a Catch in as a step goes with counting, and *Guided*'s spend finds your way with no roll, where it brought the ground in. A bond thread still borrows one thing off a friend's sheet for 1 Aura, and it does on your roll what that thing does, so their permission can bring a Root of yours in. Prompt 2 writes threads, so that's theirs to settle.
 13. **2 for 1 keeps its name**, for taking a hit on another Root for 2 points of it, and with several hits, each one goes where you like.
 14. **Downtime's Recover is Mend now**, since you don't need a slot to heal, and mending what you carry still takes one.
-15. **Appendix D's archetype lines are the plan's swaps, not new designs**: the Bard's Lift rests the crew's Mind like a scene's end, the Bloodsworn counts points of Body for sizes of Stamina, the Healer's *Good Hands* ignores a step of Toll, a Maker puts their Aura into a friend's awakening, a Teleporter's portal is 1 Aura, and the Warrior's *Second Skin* is a step a piece on your Body's defence. Prompt 2's archetypes are the truth, and prompt 7 brings these into line.
-16. **A truth from the Oracle's *Foretold* is a tag on whatever it's about**, for the whole crew for the rest of the scene, like a tag they've found, since it can't be a free step any more.
+15. **Appendix D's archetype lines and *Foretold* follow prompt 2's 03a word for word**, bar the Healer's Trait, which keeps the name *Good Hands* till prompt 2's *Come Prepared* lands, since the build checks it against 03a. A truth from *Foretold* is something anyone in the crew can bring a Root in on, this scene.
 
 ### 2. The character
 
@@ -50,11 +49,11 @@ Written into 03, 03a, 03b and 18 on 16 Nov, with the crew in `notes/core-plan.md
 6. **Straining a bond thread, and a big bite, give a point of Soul back**, as The Core has it (1's call 7). Vesk and Wren have Soul 0, so they'd get nothing from them, and 03's examples say so. If you'd rather it were a point back on any Root, it's a word in 02, 03 and Appendix D.
 7. **Borrowing through a bond thread lends one thing off their sheet**, for 1 Aura, and it does on your roll what it does for them, so their permission can justify bringing a Root of yours in, which you still pay for (1's call 12).
 8. **Every ability's 1 Aura**, and the home tracks go.
-9. **The Healer's heal is a Root rolled unsplit**, less 5 for each Toll. Its Trait keeps your name, *Good Hands*, and now ignores a step of Toll, since what's healed never gives Aura. Its Push is the flat bonus, +2 a heal. *Pull them back* keeps someone in the scene when they take a Scar.
+9. **The Healer's heal is a Root rolled unsplit**, less 5 for each Toll. Its Trait keeps your name, *Good Hands*, and ignores a step of Toll now, since nothing healed gives Aura any more. If you'd rather it had a new name, like *Come Prepared*, it's a word in 03a and Appendix D. Its Push is the flat bonus, +2 a heal. *Pull them back* keeps someone in the scene when they take a Scar.
 10. **The Guardian's *Stand firm* makes the next two hits take 1 point between them**, not nothing. *Better Me Than You* pays 1 Aura for every blow he takes, so with both in Aura, nothing would ever get through him.
 11. **The Bard's Lift is a point back on the Mind** of every friend who hears it, and Crescendo makes it 2, then 3. It isn't a heal, so it adds no Toll.
 12. **The Bloodsworn's 3 steps are for every point of Body lost.** *Bleed for it* (1 Aura) spends a point for 3 steps, *Bleed out* (1 Aura) is 3 for every point it's down, and *Paid in Blood* is 1 Aura a point.
-13. **The Oracle's foresight stays two numbers an action**, however it's split, or with no limit on splitting it could swap a pile of 1s into every telegraph. *Foretold*'s truth is a tag on whatever it's about for the whole crew this scene (1's call 16).
+13. **The Oracle's foresight stays two numbers an action**, however it's split, or with no limit on splitting it could swap a pile of 1s into every telegraph. *Foretold*'s truth lets anyone in the crew bring a Root in on it this scene, like a permission they've all got, which The Core and Appendix D say too (1's call 15).
 14. **The Maker spends Aura on a friend's awakening**, 2 steps each, where it powered it. A Maker's tags and a Shifter's animal tags work like permissions, so they can justify bringing a Root in.
 15. **The Shadow's extra action for coming out of hiding goes**, with extra actions.
 16. **A Summoner's souls don't lock points** till the table's worked souls out on this core.

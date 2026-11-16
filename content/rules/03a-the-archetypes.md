@@ -368,7 +368,7 @@ Your foresight's two numbers at most, however many steps you've got, so make the
 
 **Hold it (1 Aura):** your foresight lasts till you use it or the scene ends.
 
-**Foretold (1 Aura):** win a [Study](#s-study) and introduce a truth instead. It's true from now on, a tag on whatever it's about for the whole crew this scene.
+**Foretold (1 Aura):** win a [Study](#s-study) and introduce a truth instead. It's true from now on, and anyone in the crew can bring a Root in on it this scene, like a permission they've all got.
 :::
 
 :::example[Seeing the brute's club]
@@ -380,7 +380,7 @@ The GM telegraphs the brute's club at Bram, a d10, and two guards' swords at Wre
 :::
 
 :::example[The crack in the circle]
-Isolde turns her Study on the Warden: her Mind, 9 steps, a d12 and a d6. Her d12 rolls 8 against its 6, so she's won, and she pays 1 Aura for Foretold. She says the chalk circle it's bound to has a crack in it. Now it does, *Cracked* on the circle for the whole crew this scene.
+Isolde turns her Study on the Warden: her Mind, 9 steps, a d12 and a d6. Her d12 rolls 8 against its 6, so she's won, and she pays 1 Aura for Foretold. She says the chalk circle it's bound to has a crack in it. Now it does, and anyone in the crew can bring a Root in on it this scene.
 :::
 
 **Title ideas:** [Divination](#k-divination) · [Warding](#k-wizard) · [Medium](#k-medium) · [Hexer](#k-warlock) · [Scholar](#k-scholar) · [Investigator](#k-investigator)
