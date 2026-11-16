@@ -967,7 +967,7 @@ export function apply(doc, op, who, roster, now, { phoneNow = null, server = fal
       if (now0 && (r.stopped || r.mine != null)) return no(`${cap(lower(t.who))} landed then and there, so there’s no defence against it.`);
       // Its own Root rolls against it. Defend can stop anything it fits.
       const at = rootOf(t);
-      if (!now0 && r.on !== "Defend" && r.on !== at) return no(`${cap(lower(t.who))} was at ${atRoot(t)}, so it’s ${at === "Body" ? "a Body" : `a ${at}`} or Defend that rolls against it.`);
+      if (!now0 && r.on !== "Defend" && r.on !== at) return no(`${cap(lower(t.who))} was at ${atRoot(t)}, so that’s what rolls against it, or Defend.`);
       if (mine) mine.def = { ...r, at: now };
       else t.def = { ...r, at: now };
       return yes();
