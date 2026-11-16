@@ -2,6 +2,21 @@
 
 Your rules left a few gaps, and the book has to say something in each one, so Claude made a call. Every one of these is in the book now, written as a rule. Tell Claude "yes", "no, do this instead" or "leave it for now", and the book and the change log get updated. Your own open questions are at the bottom of `content/changes.md`, and your decisions are in `notes/playtest-sheets/` (the 27 Oct ones in `2026-10-27-chat-decisions.md`).
 
+## 16 Nov: the new core
+
+**Not built yet.** Part 2 of the rework (`notes/core-plan.md`), from your 16 Nov chat (`notes/playtest-sheets/2026-11-16-chat-decisions.md`). These are the calls Claude made writing it down, before any chat built it. Each chat adds its own in a subsection below.
+
+1. **Defence comes from the Root.** When telegraphs land, you roll the Root they're at, at full, split how you like, and each die stops one it meets or beats, the job the tracks did. Defending as your action puts its dice in too. (Your 8 Nov idea: "defence is the Root, +action if Defending".)
+2. **Bringing in a Root costs 1 point from it or 3 Aura**, and you can bring in both other Roots, each paid on its own.
+3. **Aura stays at a maximum of 5**, full each scene, gained on every die that wins and every top face, now that attuned things don't add to it.
+4. **Archetypes' abilities cost Aura**, 1 for each use where they cost 1 size of the home track, and paying from outside the home track at 2 for 1 goes.
+5. **Each awakening locks 1 point** of the Root it fits, adds 2 steps when it fits, and 2 more for each Aura spent on it. Powering a passive awakening goes.
+6. **Armour ticks a box instead of you losing a point**, as it did instead of a track dropping.
+7. **A Scar is a Catch on its Root and locks 1 point of it for good**, as it locked a size of a track.
+8. **A wounded Root heals to half its maximum, rounded up**, its maximum being the Root less what's locked.
+9. **Downtime's Recover slot goes**, since downtime puts everything back.
+10. **Characters already saved move across** with each Title's 3 made 5 (the 2 more spread the way the 3 were, flagged for the player to check), every Root full, and a track's Scars on its Root.
+
 ## 14 Nov: stacking
 
 **Live since 14 Nov**, when you said to make it live. Part 1 of the stacking rework (`notes/stacking-plan.md`), from your 14 Nov chat (`notes/playtest-sheets/2026-11-14-chat-decisions.md`), built by thirteen chats on `rules/2026-11-14-stacking` with the book's core cut under it. These are the calls Claude made writing it down, before any chat built it, and each chat added its own in its subsection below. They're still yours to say yes or no to.
