@@ -227,6 +227,26 @@ What the other prompts need from it:
 - **6:** a telegraph from a *Deadly* threat is 2 hits or more, and costs its steps once for each hit.
 - **7:** Chapter 07, Magic, still has stacking's words (9 retired-word lines). The site's search check looks for *Stamina*. Prompt 5 landed before this one, so the sheets were built again on both.
 
+### 4. The play screen and the roller
+
+Built 16 Nov on `rules/2026-11-16-core-play` and landed, with 6's live table merged in first. Its calls are in `notes/to-confirm.md` under 16 Nov, 4.
+
+- **The play screen** (`app.js`): the trackers are Body, Mind and Soul, each its points out of what it holds as pips (open, spent, locked by an awakening, and a Scar's lock), its wound, Scars and a plate for every box of armour on it, then Aura, Undo and the conditions with Toll. A Root's panel takes a hit (with 2 for 1 on another Root and a box of armour), spends a point, gives one back, takes a heal, takes a breath on Mind, takes the Blaze, clears a wound when the story does, Regen, and its Scars. The Root tiles say their dice and points left, and Again, When it lands and the dice roller sit beside them. Abilities are paid in Aura, and each awakening says the Root it locks.
+- **The roll card** (`openAction()`, `buildView()`): a group `{ root, bring: { Root: { perm, own, borrow, pay } }, awk: { key: aura }, count, shape }` counted by `R.countRoll()` (`asRoll()`), a Root in one tap at full, Bring in a Root (its permission, or your own words, borrowed for 1 Aura more, paid with a point or 3 Aura), every awakening with a stepper for Aura, how many dice and which split (`shaped()`, 24 dice at most and the 8 most even ways), what it's up against and friends. Push is the ability's Aura, Roll again a point of Soul, and Again keeps `{ root, bring, awk }`.
+- **When it lands** (`openDefence()`): a group for each Root something's at and Defend's on top, the incoming dice with their hits (1 to 4 for one added by hand), matched by `assignBest()`, settled a hit at a time (`d-pay`: Toughness, Stand firm, a point, a box, 2 for 1, a condition or something else), with a vulnerability one more hit. One whose answer lost (`nodef`) has nothing against it.
+- **Healing**: a Healer's A heal on the roll card, unsplit and nothing to beat, and the patient's heal card (`openHeal()`) with `R.healBy()`, Toll, an ease and a bonus read off the awakenings. A quick heal is the giver's 1 Aura and the patient's A point back.
+- **Wounds, Scars and the Blaze**: the Scar form on a Root that's taken one (or the Blaze), Not yet before it's written, the last Scar's retire or die, out of the scene, and New scene's rest (`newScene()`: each Root below what it holds rolled unsplit, Toll down 1, Aura full).
+- **For the live table** (6's interface): an answer's `{ root, bring, steps, rid, dice, opp, real, with }`, its steps without the friends' in it, a roll on a Root from Something else opening with its `rid`, a roll at the scene with its `rid`, and When it lands's `{ on: Root or "Defend", stopped, mine, v, paid, real, hits, lost, box, wound, scar }`, worked out from the state before and after each hit.
+- **The dice roller** (`roller.js`, `roller-rules.js`): its actions are targets, and a target coming at you has hits, 1 to 4 (`hits` in `setupOf()`, `readDice()` and `readLanes()`).
+- **The learning round** (`learn.js`) and **the kit** (`src/pages/kit.astro`) on the new core, the GM's look (`look.js`) with each Root's points, wounds, Toll and Scars, and the gold marks (`marks.js`) without tracks or homes.
+- **Checks**: `tests/check-companion.mjs` parts 1d, 2, 3, 3c, 3d, 4, 4b, 7, 7b, 7c and 8b, and `tests/check-site.mjs`. Small changes in 6's part of `tests/check-accounts.mjs`, since its checks were written against the play screen on stacking: the maid's words on the new core, and fixed dice for every die the combo and Vesk's Body roll now.
+- **One small change outside my files**: `turn.js`'s reroll is a point of Soul.
+
+What the other prompts need from it:
+
+- **5:** the play screen's Downtime button calls `downtime.js` and falls back to everything back, with no slots, when it can't draw (`R.downtimeRest()` and the end of a scene). `fromCrew()` and `randomBuild()` still drop an awakening's Root, so a crew member made your own locks their biggest Root (part 3d reads Hale's maximum rather than assume it). Print reads the tracks still, and part 6 waits on it.
+- **7:** CLAUDE.md's play screen lines (the trackers, the roll card's chips and `s.fits`, explaining, powering, extra actions, When it lands's tracks) move onto the above. `R.TRACK` isn't used by the play screen any more. Parts 5, 5c, 6, 8, 9 and 10 of `tests/check-companion.mjs` and part 1f are 5's and 3's.
+
 ### 5. The builder, downtime and print
 
 Built 16 Nov on `rules/2026-11-16-core-build` and landed. Its calls are in `notes/to-confirm.md` under 16 Nov, 5.
