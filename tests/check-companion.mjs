@@ -1444,22 +1444,27 @@ if (part("1f")) {
   const lower = (r) => String(r ?? "").toLowerCase();
   for (const crew of book.crew) {
     const c = rootsSheet(crew, [], BUILD);
-    const s = RS.normalRoots({}, c);
+    const s = RS.normalCore({}, c);
     const { got, short } = await print(crew.name, c, s);
     const who = crew.name;
     if (short) note(`${who}'s Notes ran out of room`);
-    same([got.name, got.aura_now, got.aura_max, got.aura_powering, got.points_spent, got.points_start, got.points_banked], [who, "7", "7", "", "35", "35", ""], `${who}'s name, Aura and points`);
+    same([got.name, got.aura_now, got.aura_max, got.toll, got.points_spent, got.points_start, got.points_banked], [who, "5", "5", "", "35", "35", ""], `${who}'s name, Aura, Toll and points`);
+    const locked = RS.lockedOf(c, s);
     for (const r of ROOTS) {
       const perms = crew.titles.flatMap((t) => t.permissions).filter((p) => p.root === r).length;
       same(got[`root_${lower(r)}`], String(crew.roots[r]), `${who}'s ${r}`);
+      same(got[`root_${lower(r)}_dice`], crew.roots[r] ? diceLabel(stepsToDice(crew.roots[r])) : "nothing", `${who}'s ${r}'s dice`);
       crew.titles.forEach((t, i) => same(got[`root_${lower(r)}_title_${i + 1}`], box(t.roots[r]), `${who}'s ${r} from Title ${i + 1}`));
       same(got[`root_${lower(r)}_permissions`], box(perms), `${who}'s ${r} from permissions`);
       same(crew.titles.reduce((n, t) => n + t.roots[r], 0) + perms, crew.roots[r], `${who}'s ${r}, added up from where it came from`);
+      // Each awakening locks a point of its Root, and a fresh character's full.
+      same([got[`root_${lower(r)}_locked`], got[`root_${lower(r)}_holds`], got[`root_${lower(r)}_now`], got[`root_${lower(r)}_wound`]], [box(locked[r]), String(crew.roots[r] - locked[r]), String(crew.roots[r] - locked[r]), false], `${who}'s ${r}: locked, holds, now and no wound`);
     }
     crew.titles.forEach((t, i) => {
       const at = `title_${i + 1}`;
       same(joined(got, at, `${at}_more`), t.text, `${who}'s Title ${i + 1}`);
       same(ROOTS.map((r) => got[`${at}_${lower(r)}`]), ROOTS.map((r) => box(t.roots[r])), `${who}'s Title ${i + 1}'s spread`);
+      same(ROOTS.reduce((n, r) => n + Number(got[`${at}_${lower(r)}`] || 0), 0), 5, `${who}'s Title ${i + 1} spreading 5`);
       t.permissions.forEach((p, j) => same([got[`${at}_permission_${j + 1}`], got[`${at}_permission_${j + 1}_root`]], [p.text, lower(p.root)], `${who}'s permission ${j + 1} on Title ${i + 1}, with its Root`));
       same(got[`${at}_permission_${t.permissions.length + 1}`], "", `nothing after ${who}'s permissions on Title ${i + 1}`);
     });
@@ -1470,14 +1475,13 @@ if (part("1f")) {
       const times = crew.archetypes.filter((a) => a.name === n).length;
       same(got[at], times > 1 ? `${n}, twice` : n, `${who}'s archetype ${i + 1}`);
       const rule = BUILD.archetypes.find((a) => a.name === n);
-      same(got[`${at}_track`], lower(rule.home), `${n}'s home track on ${who}'s sheet`);
       same(joined(got, `${at}_mechanic`, `${at}_mechanic_more`), rule.for, `${n}'s mechanic on ${who}'s sheet`);
       const abilities = joined(got, ...Array.from({ length: 6 }, (_, k) => `${at}_ability_${k + 1}`));
       for (const h of new Set(crew.archetypes.filter((a) => a.name === n).flatMap((a) => a.have))) {
         const x = rule.abilities.find((y) => y.name === h);
         // Push is +2, and a point more for each time the same one's taken again.
         const said = h === "Push" ? x.text.replace("+2", `+${times + 1}`) : x.text;
-        has(abilities, `${h} (1 ${rule.home}): ${said}`, `${n}'s ${h}, whole, on ${who}'s sheet`);
+        has(abilities, `${h}${(x.cost ?? 1) > 1 ? ` (${x.cost} Aura)` : ""}: ${said}`, `${n}'s ${h}, whole, on ${who}'s sheet`);
       }
     });
     const thing = crew.attuned;
@@ -1489,45 +1493,58 @@ if (part("1f")) {
     // Nothing on a crew sheet's cut short.
     const cutShort = Object.entries(got).filter(([, v]) => typeof v === "string" && v.endsWith("…")).map(([k]) => k);
     same(cutShort, [], `lines cut short on ${who}'s sheet`);
-    same(got.attune_1_awakening_1_kind, thing.awakenings[0].kind, `${who}'s first awakening, ringed passive or active`);
+    same(got.attune_1_awakening_1_root, lower(thing.awakenings[0].root), `${who}'s first awakening, its Root ringed`);
     same(got.bond_1, crew.threads[0].person, `${who}'s first bond`);
   }
   // From the GM's look, with no book to hand: the sheet the phone already has.
   {
     const crew = book.crew.find((c) => c.id === "bram");
     const c = rootsSheet(crew, [], BUILD);
-    const out = await fillSheet({ name: "Bram" }, c, RS.normalRoots({}, c), { blank });
+    const out = await fillSheet({ name: "Bram" }, c, RS.normalCore({}, c), { blank });
     same(out.missing, [], "fields print looked for on Bram's sheet from the GM's look");
     const got = await valuesOf(out.bytes);
-    same([got.archetype_1, got.archetype_1_track, got.archetype_2], ["Guardian", "stamina", "Leader"], "Bram's archetypes from the GM's look");
-    has(joined(got, ...Array.from({ length: 6 }, (_, k) => `archetype_1_ability_${k + 1}`)), "Stand firm (1 Stamina):", "Bram's Stand firm from the GM's look");
+    same([got.archetype_1, got.archetype_2], ["Guardian", "Leader"], "Bram's archetypes from the GM's look");
+    has(joined(got, ...Array.from({ length: 6 }, (_, k) => `archetype_1_ability_${k + 1}`)), "Stand firm:", "Bram's Stand firm from the GM's look");
   }
-
-  // Vesk part way through a scene: her hook powered with 2 off a maximum of
-  // 7, a Scar at her Stamina, Burning, a strained thread, her smoke bomb used
-  // and two dice in her Shadow's pool.
+  // A state saved before the new core (stacking's, with tracks) prints the
+  // way it moves across: every Root full, and a track's Scar on its Root.
   {
     const crew = book.crew.find((c) => c.id === "vesk");
     const c = rootsSheet(crew, [], BUILD);
-    const s = RS.normalRoots({}, c);
-    s.acting = true;
-    same(RS.powerUp(s, c, "0|Anywhere I can throw a hook", 2), true, "Vesk powering her hook with 2");
-    RS.doneActing(s, c);
-    s.aura -= 1;
-    s.tracks.stamina = 4;
-    s.scars.stamina = ["a burn across the back"];
+    const old = RS.freshRoots(c);
+    old.tracks.stamina = 4;
+    old.scars.stamina = ["a burn across the back"];
+    const { got } = await print("Vesk", c, old);
+    same([got.root_body_now, got.root_body_holds, got.root_body_locked, got.root_body_scar_1], ["9", "9", "2", "a burn across the back"], "Vesk saved on stacking: her Body full, and her Stamina's Scar on her Body locking a point");
+  }
+
+  // Vesk part way through a scene: her Body down to 0 and Bloodied, a Scar
+  // on it, 2 Toll, Burning, a strained thread, her smoke bomb used and two
+  // dice in her Shadow's pool.
+  {
+    const crew = book.crew.find((c) => c.id === "vesk");
+    const c = rootsSheet(crew, [], BUILD);
+    const s = RS.normalCore({}, c);
+    s.aura = 4;
+    s.scars.Body = ["a burn across the back"];
+    s.pts.Body = 0;
+    s.wound.Body = true;
+    s.pts.Mind = 3;
+    s.toll = 2;
     s.conditions = [{ name: "Burning", die: 6, kind: "against" }];
     s.threads["Dorrie|We have pulled a dozen jobs. I trust her with my life."] = "strained";
     s.crossed["utility|a smoke bomb"] = true;
     s.pool = [8, 4];
     const { got } = await print("Vesk", c, s, { goal: { text: "Get the Vane collection out of the city", die: 4 } });
-    const want = [["aura_now", "4"], ["aura_max", "7"], ["aura_powering", "2"], ["stamina", "d4"], ["stamina_scar_2", true], ["stamina_scar_4", false], ["scar_1", "a burn across the back (Stamina)"],
+    const want = [["aura_now", "4"], ["aura_max", "5"], ["toll", "2"], ["root_body", "11"], ["root_body_dice", "d12 + d10"], ["root_body_locked", "2"], ["root_body_holds", "9"], ["root_body_now", "0"], ["root_body_wound", true], ["root_body_scar_1", "a burn across the back"], ["root_body_scar_2", ""],
+      ["root_mind_now", "3"], ["root_mind_wound", false], ["root_soul", "0"], ["root_soul_dice", "nothing"],
       ["condition_1", "Burning"], ["condition_1_die", "d6"], ["utility_2", "a smoke bomb (used)"], ["party_goal", "Get the Vane collection out of the city"], ["party_goal_die", "d4"],
-      ["attune_1_awakening_1_aura_1", true], ["attune_1_awakening_1_aura_2", true], ["bond_1_thread_1_strained", true], ["bond_1_thread_1_snapped", false], ["stamina_armour_1", "Common worn leathers"]];
+      ["attune_1_awakening_1_root", "body"], ["bond_1_thread_1_strained", true], ["bond_1_thread_1_snapped", false], ["root_body_armour_1", "Common worn leathers"]];
     for (const [name, value] of want) same(got[name], value, `${name} on Vesk part way through a scene`);
     const notes = joined(got, "notes_1", "notes_2", "notes_3", "notes_4");
     has(notes, "Trouble that follows her: wanted in three districts, owes the Guild.", "her trouble in Notes");
     has(notes, "Shadow’s pool: d8, d4.", "her Shadow's pool in Notes");
+    has(notes, "Bloodied: your Body heals only to 5 till downtime.", "her wound in Notes, with what her Body heals to");
     has(notes, "A hostile thread with The fence: I owe a debt I would rather not discuss.", "her fifth bond's thread in Notes, with one full stop");
   }
 
@@ -1535,12 +1552,12 @@ if (part("1f")) {
   // VI, so her seventh Title's spread is in Notes, and they all still add up.
   {
     const crew = structuredClone(book.crew.find((c) => c.id === "vesk"));
-    for (const n of ["third", "fourth", "fifth", "sixth", "seventh"]) crew.titles.push({ text: `The ${n} best climber`, roots: { Body: 3, Mind: 0, Soul: 0 }, permissions: [], boons: [] });
+    for (const n of ["third", "fourth", "fifth", "sixth", "seventh"]) crew.titles.push({ text: `The ${n} best climber`, roots: { Body: 5, Mind: 0, Soul: 0 }, permissions: [], boons: [] });
     const c = rootsSheet(crew, [], BUILD);
-    const { got } = await print("Vesk", c, RS.normalRoots({}, c));
+    const { got } = await print("Vesk", c, RS.normalCore({}, c));
     const boxes = [1, 2, 3, 4, 5, 6].reduce((n, i) => n + Number(got[`root_body_title_${i}`] || 0), 0) + Number(got.root_body_permissions);
-    same([got.root_body, boxes + 3], [String(c.roots.Body), c.roots.Body], "Vesk's Body with seven Titles, the boxes and her seventh's 3 in Notes adding up");
-    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "Title VII, The seventh best climber (Body 3 on your Roots)", "her seventh Title's spread in Notes");
+    same([got.root_body, boxes + 5], [String(c.roots.Body), c.roots.Body], "Vesk's Body with seven Titles, the boxes and her seventh's 5 in Notes adding up");
+    has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "Title VII, The seventh best climber (Body 5 on your Roots)", "her seventh Title's spread in Notes");
   }
 
   // A line cut short goes in Notes in full: Vesk's leathers, said to count only
@@ -1550,8 +1567,8 @@ if (part("1f")) {
     crew.armour[0].when = "but only on a rooftop at night, with the wind behind her";
     crew.armour.push({ name: "a padded hood", root: "Body", quality: "Common", boxes: 1, when: null }, { name: "bracers", root: "Body", quality: "Common", boxes: 1, when: null });
     const c = rootsSheet(crew, [], BUILD);
-    const { got } = await print("Vesk", c, RS.normalRoots({}, c));
-    if (!got.stamina_armour_1.endsWith("…")) note(`Vesk's long armour line isn't cut short: "${got.stamina_armour_1}"`);
+    const { got } = await print("Vesk", c, RS.normalCore({}, c));
+    if (!got.root_body_armour_1.endsWith("…")) note(`Vesk's long armour line isn't cut short: "${got.root_body_armour_1}"`);
     has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "In full: Common worn leathers, but only on a rooftop at night, with the wind behind her.", "the leathers in full in Notes");
   }
 
@@ -1563,10 +1580,10 @@ if (part("1f")) {
     crew.armour[0].boxes = 3;
     crew.titles[0].boons = [{ lever: "Armour", name: "Old plates", on: "plate armour" }];
     const c = rootsSheet(crew, [], BUILD);
-    const s = RS.normalRoots({}, c);
+    const s = RS.normalCore({}, c);
     s.boxes = { "equipment|plate armour": 4 };
     const { got } = await print("Bram", c, s);
-    same([got.stamina_armour_1, got.stamina_armour_1_box_3], ["Masterwork plate armour", true], "Bram's Masterwork plate, its line's three boxes ticked");
+    same([got.root_body_armour_1, got.root_body_armour_1_box_3], ["Masterwork plate armour", true], "Bram's Masterwork plate, its line's three boxes ticked");
     has(joined(got, "notes_1", "notes_2", "notes_3", "notes_4"), "Armour on Body: Masterwork plate armour has 4 boxes, 4 ticked.", "his plate's fourth box in Notes");
   }
 
@@ -1575,47 +1592,48 @@ if (part("1f")) {
     const crew = structuredClone(book.crew.find((c) => c.id === "bram"));
     crew.titles[1].boons = [{ lever: "Toughness", name: "Thick skull" }];
     const c = rootsSheet(crew, [], BUILD);
-    const { got } = await print("Bram", c, RS.normalRoots({}, c));
-    same(joined(got, "title_2_permission_4", "title_2_permission_5"), "Boon, Thick skull (Toughness): the first hit you take each scene doesn’t drop a track", "Bram's Boon after his permissions, over its two lines");
+    const { got } = await print("Bram", c, RS.normalCore({}, c));
+    has(`Boon, Thick skull (Toughness): ${BUILD.boons.find((b) => b.lever === "Toughness").text}`, joined(got, "title_2_permission_4", "title_2_permission_5").replace(/…$/, ""), "Bram's Boon after his permissions, over its two lines");
     same([got.title_2_permission_4_root, got.title_2_permission_5_root, got.title_2_permission_6], ["", "", ""], "no Root ringed for his Boon, and his last line free");
   }
 
   // The longest mechanic in the book, the Bard's, whole over its two lines.
   {
     const crew = structuredClone(book.crew.find((c) => c.id === "ash"));
-    crew.archetypes[1] = { name: "Bard", id: "a-bard", home: "Resolve", have: ["Push"] };
+    crew.archetypes[1] = { name: "Bard", id: "a-bard", have: ["Push"] };
     const c = rootsSheet(crew, [], BUILD);
-    const { got } = await print("Ash", c, RS.normalRoots({}, c));
+    const { got } = await print("Ash", c, RS.normalCore({}, c));
     same(joined(got, "archetype_2_mechanic", "archetype_2_mechanic_more"), BUILD.archetypes.find((a) => a.name === "Bard").for, "the Bard's mechanic, whole");
   }
 
   // Rook, made up with more of everything than the paper holds: seven
   // Titles spread across every Root, four archetypes past the three cards
-  // (one taken twice), three attuned things powered to the full, armour on
-  // every Root, five bonds of four threads, five conditions and six Scars.
+  // (one taken twice), three attuned things, armour on every Root, five
+  // bonds of four threads, five conditions, every Root wounded and five
+  // Scars on each.
   {
     const ord = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh"];
     const titles = ord.map((o, i) => ({
       text: `The ${o} ferry keeper on the drowned river road`,
-      roots: { Body: 1, Mind: 1, Soul: 1 },
+      roots: { Body: 2, Mind: 2, Soul: 1 },
       permissions: Array.from({ length: i === 6 ? 4 : 6 }, (_, j) => ({ text: `cross ${o} water ${j + 1}`, root: ROOTS[j % 3] })),
       boons: i === 6 ? [{ lever: "Aura", name: "Deep reserves" }] : [],
     }));
-    const made = (name, home) => ({
-      name, id: null, home,
+    const made = (name) => ({
+      name, id: null,
       for: `${name}: a lantern held up to whatever the crew can't see`,
       trait: { name: `${name}'s calm`, text: "Nothing in the dark ever takes you by surprise." },
-      abilities: Array.from({ length: 6 }, (_, k) => ({ name: `${name} ${k + 1}`, cost: home, text: `a short thing it does, ${k + 1}` })),
+      abilities: Array.from({ length: 6 }, (_, k) => ({ name: `${name} ${k + 1}`, cost: k === 5 ? 2 : 1, text: `a short thing it does, ${k + 1}` })),
       have: Array.from({ length: 6 }, (_, k) => `${name} ${k + 1}`),
     });
-    const wakes = (tag, n) => Array.from({ length: n }, (_, k) => ({ name: `${tag} ${k + 1}`, kind: "passive", text: `+1 on one die ${k + 1}` }));
+    const wakes = (tag, n) => Array.from({ length: n }, (_, k) => ({ name: `${tag} ${k + 1}`, root: ROOTS[k % 3], text: `2 steps when it fits ${k + 1}` }));
     const people = ["Ada", "Bo", "Cy", "Di", "Ed"];
     const base = {
       ...structuredClone(book.crew.find((c) => c.id === "bram")),
       name: "Rook", pronoun: "them", points: { start: 120 }, titles,
-      archetypes: [made("Lanternkeeper", "Resolve"), made("Ferryman", "Stamina"), made("Ferryman", "Stamina"), made("Gatewarden", "Confidence"), { name: "Warrior", id: "a-warrior", home: "Stamina", have: ["Push"] }],
+      archetypes: [made("Lanternkeeper"), made("Ferryman"), made("Ferryman"), made("Gatewarden"), { name: "Warrior", id: "a-warrior", have: ["Push"] }],
       attuned: [
-        { name: "A lantern", props: "Bright", stage: "Perfected", catch: "Smoky", burden: "Heavy", awakenings: [...wakes("Lantern", 6), { name: "Lantern 7", kind: "active", text: "the dark lifts" }] },
+        { name: "A lantern", props: "Bright", stage: "Perfected", catch: "Smoky", burden: "Heavy", awakenings: [...wakes("Lantern", 6), { name: "Lantern 7", root: "Soul", text: "the dark lifts" }] },
         { name: "A pole", props: null, stage: "Tempered", catch: "Slippery", burden: "Long", awakenings: wakes("Pole", 6) },
         { name: "A bell", props: null, stage: "Awakened", catch: null, burden: null, awakenings: wakes("Bell", 1) },
       ],
@@ -1625,11 +1643,12 @@ if (part("1f")) {
       trouble: ["owes the ferry guild"],
     };
     const c = rootsSheet(base, [], BUILD);
-    const s = RS.normalRoots({}, c);
-    s.power = Object.fromEntries([...wakes("Lantern", 6), ...wakes("Pole", 6)].map((w) => [`${w.name.startsWith("Pole") ? 1 : 0}|${w.name}`, 2]));
+    const s = RS.normalCore({}, c);
     s.aura = 1;
-    s.tracks = { stamina: 2, confidence: 6, resolve: 12 };
-    s.scars = { stamina: ["one", "two", "three", "four", "five"], confidence: ["six", "seven", "eight", "nine", "ten"], resolve: ["eleven", "twelve", "thirteen", "fourteen", "fifteen"] };
+    s.toll = 3;
+    s.scars = { Body: ["one", "two", "three", "four", "five"], Mind: ["six", "seven", "eight", "nine", "ten"], Soul: ["eleven", "twelve", "thirteen", "fourteen", "fifteen"] };
+    s.wound = { Body: true, Mind: true, Soul: true };
+    s.pts = { Body: 0, Mind: 2, Soul: 1 };
     s.conditions = ["Burning", "Slowed", "Shaken", "Prone", "Blinded"].map((name, k) => ({ name, die: 2 + 2 * k, kind: "against" }));
     s.boxes = Object.fromEntries(c.armour.map((a) => [`equipment|${a.name}`, 3]));
     s.threads = Object.fromEntries(c.threads.flatMap((p) => p.threads.map((t) => [`${p.person}|${t.text}`, "snapped"])));
@@ -1642,13 +1661,13 @@ if (part("1f")) {
     same([got.archetype_1, got.archetype_2, got.archetype_3], ["Lanternkeeper", "Ferryman, twice", "Gatewarden"], "Rook's three archetype cards, the Ferryman taken twice");
     same(joined(got, "archetype_1_trait", "archetype_1_trait_more"), "Lanternkeeper's calm. Nothing in the dark ever takes you by surprise.", "the Lanternkeeper's Trait, its name and what it does");
     same(joined(got, "archetype_1_mechanic", "archetype_1_mechanic_more"), "Lanternkeeper: a lantern held up to whatever the crew can't see", "the Lanternkeeper's mechanic over two lines");
-    same([got.archetype_2_ability_1, got.archetype_2_ability_6], ["Ferryman 1 (1 Stamina): a short thing it does, 1", "Ferryman 6 (1 Stamina): a short thing it does, 6"], "six abilities on the Ferryman's card, a line each");
-    same([got.attune_2_thing, got.attune_2_stage, got.attune_2_burden, got.attune_2_awakening_6_aura_2], ["A pole", "tempered", "Long", true], "Rook's second attuned thing, powered");
+    same([got.archetype_2_ability_1, got.archetype_2_ability_6], ["Ferryman 1: a short thing it does, 1", "Ferryman 6 (2 Aura): a short thing it does, 6"], "six abilities on the Ferryman's card, a line each");
+    same([got.attune_2_thing, got.attune_2_stage, got.attune_2_burden, got.attune_2_awakening_6_root], ["A pole", "tempered", "Long", "soul"], "Rook's second attuned thing, each awakening's Root ringed");
     same([got.equipment_3, got.bag_10], ["a boot, a spare boot", "a thing 10, a thing 11, a thing 12"], "what doesn't fit its lines sharing the last one");
-    has(got.stamina_armour_1, "Masterwork body guard 1, while the", "Rook's first armour on Body, cut short since the lines are full");
-    if (!/…$/.test(got.stamina_armour_1)) note(`Rook's first armour on Body doesn't end with an ellipsis: "${got.stamina_armour_1}"`);
-    same([got.stamina_armour_1_box_3, got.stamina_armour_2], [true, "Masterwork body guard 2"], "Rook's armour on Body, a line each when the lines are full");
-    same([got.stamina_scar_10, got.resolve_scar_10, got.scar_5], [true, true, "five (Stamina)"], "Rook's Scars");
+    has(got.root_body_armour_1, "Masterwork body guard 1, while the", "Rook's first armour on Body, cut short since the lines are full");
+    if (!/…$/.test(got.root_body_armour_1)) note(`Rook's first armour on Body doesn't end with an ellipsis: "${got.root_body_armour_1}"`);
+    same([got.root_body_armour_1_box_3, got.root_body_armour_2], [true, "Masterwork body guard 2"], "Rook's armour on Body, a line each when the lines are full");
+    same([got.root_body_scar_2, got.root_soul_scar_1, got.root_mind_wound, got.root_soul_wound, got.toll], ["two", "eleven", true, true, "3"], "Rook's Scars, wounds and Toll");
     same([got.bond_4_thread_3_strained, got.bond_4_thread_3_snapped], [true, true], "a snapped thread ticked both ways");
     const notes = joined(got, "notes_1", "notes_2", "notes_3", "notes_4");
     has(notes, "Trouble that follows them: owes the ferry guild.", "Rook's trouble in Notes");
@@ -1659,7 +1678,7 @@ if (part("1f")) {
   // Every field gets filled by one of them, bar what only a pencil fills.
   const PENCIL = ["player", "points_banked", "attune_1_material", "attune_2_material"];
   same(list.map((f) => f.name).filter((n) => !filled.has(n) && !PENCIL.includes(n)), [], "fields print never fills for anyone");
-  console.log("print checked field by field: the crew, Vesk mid-scene, Bram's Boon and Rook past the paper's room");
+  console.log("print checked field by field: the crew, Vesk mid-scene and saved on stacking, Bram's Boon and Rook past the paper's room");
 }
 
 // A small static server that answers the way Cloudflare's assets do.
@@ -2485,7 +2504,7 @@ const sheetParts = (c) => ({
   points: c.points,
   aura: c.numbers.aura,
   armour: c.armour.map((a) => [a.name, a.root, a.quality, a.boxes]),
-  attuned: c.attuned.map((a) => [a.name, a.stage, a.catch, a.awakenings.map((w) => [w.name, w.kind])]),
+  attuned: c.attuned.map((a) => [a.name, a.stage, a.catch, a.awakenings.map((w) => [w.name, w.root])]),
   carry: [c.carry.equipment, c.carry.utility, c.carry.keepsake, c.carry.bag.items],
   threads: c.threads.map((p) => [p.person, p.threads.filter((t) => !t.whose).map((t) => [t.text, t.kind])]).filter(([, t]) => t.length),
 });
@@ -2570,30 +2589,37 @@ if (part("5")) {
   same(await points(), "25 left, 10 of 35 spent", "and off again");
   await shot(page, "5-builder-archetypes");
   await next("Titles and permissions");
-  // Her first Title off the Rogue idea's cards, all 3 Root points on her Body
+  // Her first Title off the Rogue idea's cards, all 5 Root points on her Body
   // in a tap, and its permissions with their Roots, one tapped in off the idea.
   await unfold(page, "bd-ideas-0");
   await b('[data-b="idea"][data-t="0"][data-v="k-rogue"]');
   await b('[data-b="title"][data-t="0"][data-v="The best cat burglar in the city"]');
-  await b('[data-b="spread"][data-t="0"][data-n="3"][data-v="Body"]');
+  await b('[data-b="sall"][data-t="0"][data-v="Body"]');
   await perm(0, 0, "move unseen", "Body");
   await perm(0, 1, "run the rooftops", "Body");
   await b('[data-b="perm"][data-t="0"][data-v="pick a mechanical lock"]');
   same([await page.inputValue("#b-t0-p2"), await pressedOn('[data-b="proot"][data-t="0"][data-j="2"][data-v="Body"]')], ["pick a mechanical lock", "true"], "a permission tapped in off the idea, its Root guessed");
-  same(await page.getAttribute('.bd-rail .tile-dice[data-for="root:Body"] .zd-die', "data-d"), "12", "her Body a d12 with her first Title's 3 and its three permissions");
+  same(await page.$$eval('.bd-rail .tile-dice[data-for="root:Body"] .zd-die', (els) => els.map((el) => el.getAttribute("data-d"))), ["12", "4"], "her Body a d12 and a d4 with her first Title's 5 and its three permissions");
   same(await points(), "18 left, 17 of 35 spent", "a Title's 5 with its first permission, and 1 for each after");
   await next("Titles and permissions");
   same(await page.getAttribute('.bd-seg[data-b="tab"][data-t="1"]', "aria-current"), "true", "Next going on to her second Title");
-  // Her second Title spread 2 and 1: Mind 2 and Body 1, in three taps.
+  // Her second Title spread Mind 3 and Body 2 in three taps: all on her
+  // Mind, then + on her Body twice, each one off her Mind.
   await page.fill("#b-t1-text", "Raised by the Guild");
-  await b('[data-b="shape"][data-t="1"][data-v="two"]');
-  await b('[data-b="spread"][data-t="1"][data-n="2"][data-v="Mind"]');
-  await b('[data-b="spread"][data-t="1"][data-n="1"][data-v="Body"]');
-  has(await page.textContent(".bd-title:has(#b-t1-text) .bd-ask"), "Body 1, Mind 2", "her second Title spread");
-  // Tapping the 2 onto the Root with the 1 swaps them, and back.
-  await b('[data-b="spread"][data-t="1"][data-n="2"][data-v="Body"]');
-  has(await page.textContent(".bd-title:has(#b-t1-text) .bd-ask"), "Body 2, Mind 1", "the spread swapped");
-  await b('[data-b="spread"][data-t="1"][data-n="2"][data-v="Mind"]');
+  const spreadSaid = async () => (await page.textContent(".bd-title:has(#b-t1-text) .bd-ask")).replace(/\s+/g, " ");
+  await b('[data-b="sall"][data-t="1"][data-v="Mind"]');
+  has(await spreadSaid(), "Mind 5", "all 5 on her Mind in a tap");
+  await b('[data-b="snudge"][data-t="1"][data-v="Body"][data-n="1"]');
+  await b('[data-b="snudge"][data-t="1"][data-v="Body"][data-n="1"]');
+  has(await spreadSaid(), "Body 2, Mind 3", "her second Title spread, + taking each one off her Mind");
+  // One more on her Body takes it off the biggest of the others, and − leaves
+  // one to go till it's put back.
+  await b('[data-b="snudge"][data-t="1"][data-v="Body"][data-n="1"]');
+  has(await spreadSaid(), "Body 3, Mind 2", "one more on her Body, off her Mind");
+  await b('[data-b="snudge"][data-t="1"][data-v="Body"][data-n="-1"]');
+  has(await spreadSaid(), "Body 2, Mind 2, 1 to go", "one off her Body, and one to go");
+  await b('[data-b="snudge"][data-t="1"][data-v="Mind"][data-n="1"]');
+  has(await spreadSaid(), "Body 2, Mind 3", "and back on her Mind");
   await perm(1, 0, "know how a lock’s built", "Mind");
   await perm(1, 1, "fight dirty with a knife", "Body");
   await perm(1, 2, "find a buyer for anything", "Mind");
@@ -2603,19 +2629,20 @@ if (part("5")) {
   // What it adds up to, and where each one comes from.
   const nums = await page.$$eval(".bd-from-list li", (els) => els.map((li) => [li.querySelector(".k").textContent, Number(li.querySelector("b").textContent)]));
   same(nums, ROOTS.map((r) => [r, want.roots[r]]), "the built Vesk's Roots");
-  has(await page.textContent(".bd-from-list"), "3 from your first Title, “move unseen”, “run the rooftops”, “pick a mechanical lock”, 1 from your second Title and “fight dirty with a knife”", "where her Body comes from");
+  has(await page.textContent(".bd-from-list"), "5 from your first Title, “move unseen”, “run the rooftops”, “pick a mechanical lock”, 2 from your second Title and “fight dirty with a knife”", "where her Body comes from");
   same(await page.$$eval(".tile[data-s], .bd-specs3, [data-b='pspec']", (els) => els.length), 0, "no specialties anywhere");
-  has(await page.textContent(".bd-things"), "Shadow", "her archetypes among the things that are a step");
+  has(await page.textContent(".bd-body"), "Soul at 0 has no points, so the first hit there wounds you", "her Soul at 0 said for what it means");
   await next("What you carry");
   // What she carries, a part at a time, her attuned thing first: her
-  // grappling line, 5 points, with the awakening it comes with and nothing
-  // to write for its own Aura.
+  // grappling line, 5 points, with the awakening it comes with on the Root it
+  // locks a point of, and nothing to write for its own Aura.
   same(await page.getAttribute('.bd-seg[data-v="a"]', "aria-current"), "true", "her attuned thing first");
   same(await page.$$eval('[data-bin$=".aura"]', (els) => els.length), 0, "no Aura of its own to write");
   await page.fill("#b-a0-name", "A grappling line");
   await page.fill("#b-a0-w0-name", "Anywhere I can throw a hook");
-  await b('[data-b="awkkind"][data-i="0"][data-j="0"][data-v="passive"]');
-  await page.fill("#b-a0-w0-text", "+1 on one die of every roll she makes with it, for each Aura powering it");
+  await b('[data-b="awkroot"][data-i="0"][data-j="0"][data-v="Body"]');
+  await page.fill("#b-a0-w0-text", "2 steps on every roll she makes with it, and 2 more for each Aura");
+  has(await page.textContent(".bd-awk"), "it locks a point of your Body", "her hook locking a point of her Body");
   same(await points(), "6 left, 29 of 35 spent", "her grappling line's 5");
   await shot(page, "5-builder-attuned");
   await next("What you carry");
@@ -2625,7 +2652,7 @@ if (part("5")) {
   if ((await pressedOn('[data-b="arm"][data-i="0"][data-v="Body"]')) !== "true") await b('[data-b="arm"][data-i="0"][data-v="Body"]');
   same(await page.$$eval(".bd-quality .bd-qual", (els) => els.map((el) => [el.textContent.trim(), el.getAttribute("aria-pressed"), el.querySelectorAll(".zd-plate").length])), [["Common", "true", 1], ["Fine", "false", 2], ["Masterwork", "false", 3]], "her leathers' quality, Common to start");
   await b('[data-b="arm"][data-i="0"][data-v="Mind"]');
-  has(await page.textContent(".bd-arm"), "on your Mind, for your Confidence", "armour moved to her Mind");
+  has(await page.textContent(".bd-arm"), "on your Mind, a box for a hit there", "armour moved to her Mind");
   await b('[data-b="arm"][data-i="0"][data-v="Body"]');
   await page.fill("#b-e1", "a knife");
   await page.fill("#b-e2", "soft-soled boots");
@@ -2660,14 +2687,15 @@ if (part("5")) {
   await b('[data-b="pronoun"][data-v="her"]');
   const check = (await page.textContent(".bd-body")).replace(/\s+/g, " ");
   has(check, "Everything adds up", "nothing to flag on a finished Vesk");
-  for (const n of ["35 of 35 spent, all of them", "Aura 7", "Stride 3"]) has(check, n, "the built Vesk's points and numbers");
+  for (const n of ["35 of 35 spent, all of them", "Aura 5", "Stride 3", "every one full to start"]) has(check, n, "the built Vesk's points and numbers");
+  same(/Stamina|Confidence|Resolve/.test(check), false, "no tracks on her numbers");
   same(await page.$$eval(".bd-nums .k", (els) => els.some((el) => /action/i.test(el.textContent))), false, "no actions a round to count");
   await shot(page, "5-builder-check");
   await b('[data-b="save"]');
   await playing(page);
   const built = (await savedAll(page)).at(-1);
   const drafts = await page.evaluate(() => JSON.parse(localStorage.getItem("zi-drafts") || "{}"));
-  same([built.crew, built.name, built.build?.v, built.build?.start, "new" in drafts], ["own", "Vesk", 4, 35, false], "the built Vesk saved on 35 points, and the draft cleared");
+  same([built.crew, built.name, built.build?.v, built.build?.start, "new" in drafts, sheetFor(built).core], ["own", "Vesk", 5, 35, false, true], "the built Vesk saved on 35 points on the new core, and the draft cleared");
   same(JSON.stringify(built.build).includes("spec"), false, "nothing saved about specialties");
   same(sheetParts(sheetFor(built)), sheetParts(want), "the built Vesk against her sheet in the chapter");
 
@@ -2706,7 +2734,7 @@ if (part("5")) {
   same(changed.length, 1, "changing her doesn't make a second Vesk");
   const now = sheetFor(changed[0]);
   same([now.titles[0].permissions.length, now.titles[0].boons.map((x) => [x.lever, x.name]), now.armour.map((a) => [a.name, a.quality, a.boxes]), now.points.spent], [4, [["Toughness", "Iron Lungs"]], [["worn leathers", "Common", 1], ["shield", "Masterwork", 3]], 38], "her Boon, her fourth permission and her Masterwork shield");
-  same(now.roots, { Body: 9, Mind: 4, Soul: 0 }, "her Body 1 more for her new permission, and nothing for the Boon");
+  same(now.roots, { Body: 12, Mind: 5, Soul: 0 }, "her Body 1 more for her new permission, and nothing for the Boon");
 
   // A blank character saves too: the builder warns, and never blocks, and
   // the recommendation's only a nudge. Leaving keeps the draft, and the list
@@ -2805,21 +2833,24 @@ if (part("5b")) {
       await axe(`the builder's step ${s + 1} at 390 by 844, ${theme}`);
     }
     await shot(page, `5b-builder-check-${theme}`);
-    // A Title's 3 Root points going on give its Root a d6 in the dock above
-    // the bar, and a permission on the same Root grows it into a d8.
+    // A Title's 5 Root points going on give its Root a d10 in the dock above
+    // the bar, and a permission on the same Root grows it into a d12.
     await jump(1);
-    await b('[data-b="spread"][data-t="0"][data-n="3"][data-v="Body"]');
-    same(await page.getAttribute('.bd-rail .tile-dice[data-for="root:Body"] .zd-die', "data-d"), "6", `Body a d6 with a Title's 3 on it, ${theme}`);
+    await b('[data-b="sall"][data-t="0"][data-v="Body"]');
+    same(await page.getAttribute('.bd-rail .tile-dice[data-for="root:Body"] .zd-die', "data-d"), "10", `Body a d10 with a Title's 5 on it, ${theme}`);
     await page.fill("#b-t0-p0", "hold the line");
     await b('[data-b="proot"][data-t="0"][data-j="0"][data-v="Body"]');
     const grown = await page.$eval('.bd-rail .tile-dice[data-for="root:Body"] .zd-die', (el) => [el.dataset.d, el.classList.contains("is-grown")]);
-    same(grown, ["8", !still], `Body a d8 with a permission on it too, ${still ? "swapped straight away under reduce-motion" : "growing into it"}, ${theme}`);
+    same(grown, ["12", !still], `Body a d12 with a permission on it too, ${still ? "swapped straight away under reduce-motion" : "growing into it"}, ${theme}`);
     if (still) same(await page.evaluate(() => document.getAnimations().filter((a) => a.playState === "running" && a.effect?.target?.closest?.(".companion")).length), 0, `nothing moving under reduce-motion, ${theme}`);
     await page.waitForTimeout(400);
     await shot(page, `5b-builder-titles-${theme}`);
-    // 1 on each Root is one tap, and 2 and 1 a tap and a Root or two.
-    await b('[data-b="shape"][data-t="0"][data-v="each"]');
-    same(await page.$$eval(".bd-rail .tile-steps", (els) => els.map((el) => el.textContent)), ["2 steps", "1 step", "1 step"], `1 on each Root, ${theme}`);
+    // + on Mind and on Soul each take one off Body, a tap each.
+    await b('[data-b="snudge"][data-t="0"][data-v="Mind"][data-n="1"]');
+    await b('[data-b="snudge"][data-t="0"][data-v="Soul"][data-n="1"]');
+    same(await page.$$eval(".bd-rail .tile-steps", (els) => els.map((el) => el.textContent)), ["4 steps", "1 step", "1 step"], `one each on Mind and Soul off Body, ${theme}`);
+    const steppers = await page.$$eval('.bd-spread .cc-stepbtn', (els) => els.filter((el) => el.checkVisibility() && (el.getBoundingClientRect().height < 44 || el.getBoundingClientRect().width < 44)).length);
+    same(steppers, 0, `the spread's + and − 44px or more, ${theme}`);
     // axe again with things picked: a spread and a permission, an archetype
     // with its ability, a Title idea, a Boon, the points open, and a crew
     // question made into a thread.
@@ -2900,17 +2931,24 @@ if (part("5c")) {
     connect: [], aspiration: "Own the score of a lifetime", name: "Vesk", pronoun: "her", blurb: "", trouble: [], order: ["Locks", "Stealth"] };
   {
     const nb = normalBuild(OLD, BUILD);
-    same([nb.v, nb.have, nb.titles.map((t) => [t.roots, t.from]), nb.stack], [4, [["Push"], ["Vanish"]], [[{ Body: 3, Mind: 0, Soul: 0 }, "Body"], [{ Body: 0, Mind: 3, Soul: 0 }, "Mind"]], true], "a build from before stacking: each Title's 3 on its old Root, and Shadow's abilities dealt between her two");
+    same([nb.v, nb.have, nb.titles.map((t) => [t.roots, t.from]), nb.stack, nb.attuned[0].awk.map((w) => [w.root, w.guessed])], [5, [["Push"], ["Vanish"]], [[{ Body: 5, Mind: 0, Soul: 0 }, "Body"], [{ Body: 0, Mind: 5, Soul: 0 }, "Mind"]], true, [["Body", true]]], "a build from before stacking: each Title's 5 on its old Root, Shadow's abilities dealt between her two, and her hook on her biggest Root till she says");
     same(JSON.stringify(nb).match(/spec|order|"aura"/g), null, "its specialties and its thing's own Aura gone");
     const old = rootsSheet(sheetOf({ id: "5c-old", name: "Vesk", build: OLD }, BUILD), [], BUILD);
-    same([old.roots, old.points, old.numbers.aura, RS.choicesOf(old)], [{ Body: 7, Mind: 5, Soul: 0 }, { start: 35, spent: 34 }, 7, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "points", left: 1 }]], "her Roots recounted, her points, Aura 7, and what's hers to choose");
+    same([old.roots, old.points, old.numbers.aura, RS.choicesOf(old)], [{ Body: 9, Mind: 7, Soul: 0 }, { start: 35, spent: 34 }, 5, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "lock", a: 0, name: "Anywhere I can throw a hook", root: "Body" }, { k: "points", left: 1 }]], "her Roots recounted, her points, Aura 5, and what's hers to choose");
     same(checksOf(nb, BUILD, { changing: true }).map((x) => x.text), ["You’ve got a point left to spend."], "a saved character only told about the point she's got left");
     // Grown past 35, it keeps everything, and nothing's flagged.
     const grown = foldGrown(OLD, [{ k: "perm", t: 0, text: "slip a grip", root: "Body", spec: "Stealth" }, { k: "title", text: "The woman who has never been seen", root: "Body", specs: ["Hiding"], perm: { text: "vanish in a crowd", root: "Body", spec: "Hiding" } }, { k: "arch", arch: "Hunter" }], BUILD);
-    same([pointsOf(grown).spent, grown.have, grown.titles[2].roots, checksOf(grown, BUILD, { changing: true }).length], [46, [["Push"], ["Vanish"], ["Push", "Mark the pack"]], { Body: 3, Mind: 0, Soul: 0 }, 0], "what she grew before stacking folded in, 46 points and nothing flagged");
+    same([pointsOf(grown).spent, grown.have, grown.titles[2].roots, checksOf(grown, BUILD, { changing: true }).length], [46, [["Push"], ["Vanish"], ["Push", "Mark the pack"]], { Body: 5, Mind: 0, Soul: 0 }, 0], "what she grew before stacking folded in, 46 points and nothing flagged");
+    // Built on stacking: each Title's 3 made 5 the way they were spread, said
+    // till it's saved, and her hook on her biggest Root.
+    const STACKED = { ...structuredClone(OLD), v: 4, titles: OLD.titles.map((t, i) => ({ ...t, root: undefined, specs: undefined, roots: i ? { Body: 1, Mind: 2, Soul: 0 } : { Body: 3, Mind: 0, Soul: 0 } })) };
+    const st = normalBuild(STACKED, BUILD);
+    same([st.v, st.core, st.titles.map((t) => [t.roots, t.three]), st.attuned[0].awk[0].root], [5, true, [[{ Body: 5, Mind: 0, Soul: 0 }, { Body: 3, Mind: 0, Soul: 0 }], [{ Body: 2, Mind: 3, Soul: 0 }, { Body: 1, Mind: 2, Soul: 0 }]], "Body"], "a build from stacking: each Title's 3 made 5 the way it was spread, saying what it was");
+    const stSheet = rootsSheet(sheetOf({ id: "5c-stacked", name: "Vesk", build: STACKED }, BUILD), [], BUILD);
+    same([stSheet.roots, stSheet.core, RS.choicesOf(stSheet).map((x) => x.k)], [{ Body: 11, Mind: 5, Soul: 0 }, undefined, ["five", "five", "lock", "points"]], "its sheet the chapter's Vesk, with each Title's 5 and her hook for her to check");
     // From before Roots: each Title's spread the way its permissions lean.
     const tam = normalBuild({ v: 2, titles: [{ arch: "Warrior", text: "The best blade on the docks", perms: [{ text: "fight with a sword", on: ["Fight"] }, { text: "read a fighter’s style", on: ["Study"] }] }], actions: ["Fight", "Study"], equipment: [], utility: [], attuned: [], threads: [] }, BUILD);
-    same([tam.titles[0].roots, tam.titles[0].perms.map((p) => p.root), tam.have], [{ Body: 2, Mind: 1, Soul: 0 }, ["Body", "Mind"], [BUILD.archetypes.find((a) => a.name === "Warrior").abilities.map((x) => x.name)]], "a Title from before Roots spread the way its permissions lean, its archetype with every ability");
+    same([tam.titles[0].roots, tam.titles[0].perms.map((p) => p.root), tam.have], [{ Body: 3, Mind: 2, Soul: 0 }, ["Body", "Mind"], [BUILD.archetypes.find((a) => a.name === "Warrior").abilities.map((x) => x.name)]], "a Title from before Roots spread the way its permissions lean, its archetype with every ability");
   }
 
   const { context, page } = await phone();
@@ -2968,20 +3006,24 @@ if (part("5c")) {
   await page.goto(`${BASE}/characters/?c=own-v3`);
   await playing(page);
   const moved = (await savedAll(page)).find((c) => c.id === "own-v3").state;
-  same([moved.v, moved.stacked, moved.choose, moved.power], [3, true, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "points", left: 1 }], { "0|Anywhere I can throw a hook": 1 }], "moved onto stacking with what's hers to choose, her hook's Aura powering it");
+  // The play screen moves her state on (stacking's, or the new core's once
+  // it's there), with what's hers to choose.
+  same([[3, 4].includes(moved.v), moved.choose], [true, [{ k: "spread", t: 0, root: "Body" }, { k: "spread", t: 1, root: "Mind" }, { k: "lock", a: 0, name: "Anywhere I can throw a hook", root: "Body" }, { k: "points", left: 1 }]], "moved on with what's hers to choose: two Titles to spread, her hook's Root and a point");
   await page.goto(`${BASE}/characters/?build=own-v3`);
   const told = (await page.textContent(".cc-note.is-gold")).replace(/\s+/g, " ");
-  has(told, "Vesk keeps everything since the stacking change. Each Title that was on one Root has all 3 on it, so spread them how you like, and you’ve got 1 point to spend.", "what changed, and what's hers to choose");
+  has(told, "Vesk keeps everything since the stacking change. Each Title that was on one Root has all 5 on it, so spread them how you like, and you’ve got 1 point to spend.", "what changed, and what's hers to choose");
   has(await page.textContent(".bd-title:has(#b-t1-text) .bd-was"), "It was all on your Mind, so it still is.", "her second Title on its old Root");
   same(await page.$$eval("[data-b='abil'][aria-pressed='true']", (els) => els.map((el) => `${el.dataset.t}:${el.dataset.v}`)), ["0:Push", "1:Vanish"], "her Shadows keeping Push and Vanish");
-  await b('[data-b="shape"][data-t="1"][data-v="two"]');
-  await b('[data-b="spread"][data-t="1"][data-n="1"][data-v="Body"]');
+  await b('[data-b="snudge"][data-t="1"][data-v="Body"][data-n="1"]');
   same(await page.$$eval(".bd-title:has(#b-t1-text) .bd-was", (els) => els.length), 0, "spread, it isn't on its old Root any more");
+  await b('[data-b="snudge"][data-t="1"][data-v="Body"][data-n="1"]');
+  await b('[data-b="snudge"][data-t="1"][data-v="Mind"][data-n="-1"]');
+  await b('[data-b="snudge"][data-t="1"][data-v="Mind"][data-n="1"]');
   await page.fill("#b-e2", "soft-soled boots");
   await page.click('.bd-foot button[data-b="save"]');
   await playing(page);
   const v3 = (await savedAll(page)).find((c) => c.id === "own-v3");
-  same([v3.build.v, "stack" in v3.build, v3.build.titles.some((t) => "from" in t), v3.state.choose, v3.state.notes, v3.state.asp], [4, false, false, [], "Owes the fence", 4], "saved on stacking, with nothing left to choose and her play kept");
+  same([v3.build.v, "stack" in v3.build, v3.build.titles.some((t) => "from" in t || "three" in t), v3.build.attuned[0].awk[0], v3.state.choose, v3.state.notes, v3.state.asp], [5, false, false, { name: "Anywhere I can throw a hook", root: "Body", text: "+1 on one die of every roll she makes with it, for each Aura in it" }, [], "Owes the fence", 4], "saved on the new core, her hook on her Body, with nothing left to choose and her play kept");
   same(sheetFor(v3).roots, rootsSheet(book.crew.find((c) => c.id === "vesk"), [], BUILD).roots, "her Roots recounted the chapter's way");
 
   // Tamsin, built on the phone before Roots, rebuilt on stacking.
@@ -2999,12 +3041,12 @@ if (part("5c")) {
   same(await page.inputValue("#b-t0-p0"), "fight with a sword", "her permission carried across");
   // Her Title's 3 and her permission start on the Root their words suggest,
   // a guess to check: here it's her Body.
-  same(await page.getAttribute('button[data-b="spread"][data-t="0"][data-n="3"][data-v="Body"]', "aria-pressed"), "true", "her Title's 3 Root points guessed from its permission");
+  same(await page.getAttribute('button[data-b="sall"][data-t="0"][data-v="Body"]', "aria-pressed"), "true", "her Title's 5 Root points guessed from its permission");
   same(await page.getAttribute('button[data-b="proot"][data-t="0"][data-j="0"][data-v="Body"]', "aria-pressed"), "true", "her permission's Root guessed from its words");
   await page.click('.bd-foot button[data-b="save"]');
   await playing(page);
   const tam = (await savedAll(page)).find((c) => c.id === "own-old");
-  same([tam.build.v, tam.state.v, "before" in tam.state, tam.state.notes, sheetFor(tam).roots], [4, 3, false, "Owes Dorrie", { Body: 4, Mind: 0, Soul: 0 }], "Tamsin saved on stacking, her Body 4 and her notes kept");
+  same([tam.build.v, [3, 4].includes(tam.state.v), "before" in tam.state, tam.state.notes, sheetFor(tam).roots], [5, true, false, "Owes Dorrie", { Body: 6, Mind: 0, Soul: 0 }], "Tamsin saved on the new core, her Body 6 and her notes kept");
   same(sheetFor(tam).threads.find((p) => p.person === "Dorrie")?.threads[0]?.text, "She owes me.", "her hostile thread with Dorrie kept");
   console.log("ways in: Bram and a random one saved, a draft binned on a second tap, Vesk your own with her play kept, one from before stacking asked only what's hers, and Tamsin rebuilt");
   await context.close();
@@ -3047,29 +3089,31 @@ if (part("6")) {
   };
   let f = await print("vesk");
   same([f.pages, f.file], [2, "vesk-zidara-sheet.pdf"], "Vesk's printed sheet");
-  want(f, [["name", "Vesk"], ["pronouns", "she, her"], ["aura_now", "4"], ["aura_max", "7"], ["aura_powering", "2"], ["stride", "3"],
-    ["stamina", "d4"], ["confidence", "d12"], ["resolve", "d12"], ["stamina_scar_2", true], ["stamina_scar_4", false], ["scar_1", "a burn across the back (Stamina)"],
-    ["stamina_armour_1", "Common worn leathers"], ["stamina_armour_1_box_1", false],
-    ["root_body", "8"], ["root_body_title_1", "3"], ["root_body_title_2", "1"], ["root_body_permissions", "4"], ["root_mind", "4"], ["root_mind_title_1", ""], ["root_mind_title_2", "2"], ["root_mind_permissions", "2"], ["root_soul", "0"], ["root_soul_permissions", ""],
+  // Saved by the play screen as it is now, her state's read the way it moves
+  // onto the new core: every Root full, and her Stamina's Scar on her Body.
+  want(f, [["name", "Vesk"], ["pronouns", "she, her"], ["aura_now", "4"], ["aura_max", "5"], ["toll", ""], ["stride", "3"],
+    ["root_body_now", "9"], ["root_body_holds", "9"], ["root_body_locked", "2"], ["root_body_wound", false], ["root_body_scar_1", "a burn across the back"], ["root_mind_now", "5"], ["root_soul_now", "0"],
+    ["root_body_armour_1", "Common worn leathers"], ["root_body_armour_1_box_1", false],
+    ["root_body", "11"], ["root_body_dice", "d12 + d10"], ["root_body_title_1", "5"], ["root_body_title_2", "2"], ["root_body_permissions", "4"], ["root_mind", "5"], ["root_mind_title_1", ""], ["root_mind_title_2", "3"], ["root_mind_permissions", "2"], ["root_soul", "0"], ["root_soul_permissions", ""],
     ["points_spent", "35"], ["points_start", "35"], ["points_banked", ""],
     ["aspiration", "Own the score of a lifetime"], ["aspiration_die", "d2"],
     ["equipment_1", "Common worn leathers"], ["equipment_2", "a knife"], ["utility_2", "a smoke bomb (used)"], ["keepsake", "the first coin she ever stole"],
-    ["title_1", "The best cat burglar in the city"], ["title_1_body", "3"], ["title_1_mind", ""], ["title_1_permission_1", "move unseen"], ["title_1_permission_1_root", "body"],
-    ["title_2", "Raised by the Guild"], ["title_2_body", "1"], ["title_2_mind", "2"], ["title_2_permission_2", "fight dirty with a knife"], ["title_2_permission_2_root", "body"], ["title_2_permission_3_root", "mind"],
-    ["archetype_1", "Shadow, twice"], ["archetype_1_track", "stamina"], ["archetype_2", ""],
-    ["attune_1_thing", "A grappling line"], ["attune_1_stage", "awakened"], ["attune_1_awakening_1_kind", "passive"], ["attune_1_awakening_1_aura_1", true], ["attune_1_awakening_1_aura_2", true], ["attune_2_thing", ""],
+    ["title_1", "The best cat burglar in the city"], ["title_1_body", "5"], ["title_1_mind", ""], ["title_1_permission_1", "move unseen"], ["title_1_permission_1_root", "body"],
+    ["title_2", "Raised by the Guild"], ["title_2_body", "2"], ["title_2_mind", "3"], ["title_2_permission_2", "fight dirty with a knife"], ["title_2_permission_2_root", "body"], ["title_2_permission_3_root", "mind"],
+    ["archetype_1", "Shadow, twice"], ["archetype_2", ""],
+    ["attune_1_thing", "A grappling line"], ["attune_1_stage", "awakened"], ["attune_1_awakening_1_root", "body"], ["attune_2_thing", ""],
     ["bond_1", "Dorrie"], ["bond_1_thread_1", "We have pulled a dozen jobs. I trust her with my life."], ["bond_1_thread_1_kind", "bond"], ["bond_1_thread_1_strained", true], ["bond_1_thread_2", "We came up on the same streets. She never asks why. (Dorrie’s words)"]], "Vesk");
   same([f.get("condition_1"), f.get("condition_1_die")], ["Burning", "d6"], "Vesk's condition");
-  has([1, 2, 3, 4, 5, 6].map((k) => f.get(`attune_1_awakening_${k}`)).filter(Boolean).join(" "), "Anywhere I can throw a hook: +1 on one die of every roll she makes with it, for each Aura powering it", "her hook's awakening, whole over its lines");
-  has(`${f.get("archetype_1_ability_1")} ${f.get("archetype_1_ability_2")}`, "Push (1 Stamina): +3", "her Shadow's Push, +3 for taking it twice, paid off Stamina");
+  has([1, 2, 3, 4, 5, 6].map((k) => f.get(`attune_1_awakening_${k}`)).filter(Boolean).join(" "), "Anywhere I can throw a hook: 2 steps on every roll she makes with it, and 2 more for each Aura", "her hook's awakening, whole over its lines");
+  has(`${f.get("archetype_1_ability_1")} ${f.get("archetype_1_ability_2")}`, "Push: +3", "her Shadow's Push, +3 for taking it twice");
   has(f.get("notes_1"), "Trouble that follows her: wanted in three districts, owes the Guild.", "her trouble in Notes");
   // Bram's plate with a box ticked, and Dorrie's court clothes on her Mind.
   f = await print("bram");
-  want(f, [["stamina_armour_1", "Fine plate armour"], ["stamina_armour_1_box_1", true], ["stamina_armour_1_box_2", false], ["archetype_1", "Guardian"], ["archetype_2", "Leader"], ["attune_1_thing", "His war hammer (Breaker)"], ["attune_1_catch", "Marked"]], "Bram");
-  has(f.get("stamina_armour_2"), "shield", "Bram's shield on his Stamina");
+  want(f, [["root_body_armour_1", "Fine plate armour"], ["root_body_armour_1_box_1", true], ["root_body_armour_1_box_2", false], ["archetype_1", "Guardian"], ["archetype_2", "Leader"], ["attune_1_thing", "His war hammer (Breaker)"], ["attune_1_catch", "Marked"]], "Bram");
+  has(f.get("root_body_armour_2"), "shield", "Bram's shield on his Body");
   f = await print("dorrie");
-  same(`${f.get("confidence_armour_1")} ${f.get("confidence_armour_2")}`.trim(), "Common court clothes, when they fit the scene", "Dorrie's court clothes on her Confidence, over its two lines");
-  same(f.get("stamina_armour_1"), "", "nothing on Dorrie's Body");
+  same(`${f.get("root_mind_armour_1")} ${f.get("root_mind_armour_2")}`.trim(), "Common court clothes, when they fit the scene", "Dorrie's court clothes on her Mind, over its two lines");
+  same(f.get("root_body_armour_1"), "", "nothing on Dorrie's Body");
   console.log("print on the phone: Vesk mid-scene, Bram's plate and Dorrie's court clothes, read back field by field");
   await context.close();
 }
@@ -3648,11 +3692,72 @@ if (part("7c")) {
 // the play screen's, prompt 6 of notes/stacking-plan.md) a made-up rule
 // change against her saved sheet with its gold marks.
 if (part("8")) {
+  // Downtime on the new core, with no browser: Isolde as the chapter has her
+  // week, Frayed, her Mind on 2, her Soul on 3 and 2 Toll. Everything's back
+  // first, her new permission's point is on her Mind, her Aspiration roll
+  // ties 5 against 5 and a point of Soul rolls hers again, and she starts
+  // the next session a point of Soul down for it.
+  {
+    const { makeDowntime } = await import("../src/companion/downtime.js");
+    const dice = [];
+    const D = makeDowntime({ B: BUILD, esc: (x) => String(x ?? ""), steps: (n) => `${n} steps`, link: () => "", icon: { close: "" }, throwDie: (n) => dice.shift() ?? n, crewNames: () => new Set(), isOpen: () => false, rule: () => "" });
+    const c = rootsSheet(book.crew.find((x) => x.id === "isolde"), [], BUILD);
+    const s = RS.normalCore({}, c);
+    Object.assign(s, { pts: { Body: 0, Mind: 2, Soul: 3 }, wound: { Body: false, Mind: true, Soul: false }, toll: 2, asp: 6 });
+    const ch = { id: "isolde-week" };
+    const d = D.start(ch);
+    const tap = (data) => D.act({ dataset: data }, d, c, s);
+    const type = (where, f, value) => D.input({ dataset: { dt: String(where), f }, value }, d);
+    const card = () => D.view(c, s, ch, d).replace(/<[^>]*>/g, "").replace(/\s+/g, " ");
+    has(card(), "Every downtime starts with everything back, free: Mind 2 to 9, Soul 3 to 6, Frayed gone and 2 Toll gone", "everything back, said on the card");
+    same(card().includes("6 sizes back"), false, "no slot to recover in");
+    tap({ do: "pick", s: "0", v: "asp" });
+    tap({ do: "set", s: "0", f: "root", v: "Mind" });
+    has(card(), "9 steps, d12 + d6, against its d6", "her Aspiration rolled on her Mind at full");
+    dice.push(5, 1, 5);
+    tap({ do: "asp-roll", s: "0" });
+    has(card(), "Roll yours again: a point of Soul", "a tie, and a point of Soul to roll again");
+    dice.push(7, 2);
+    tap({ do: "asp-again", s: "0" });
+    has(card(), "7 against 5. Beat it. It climbs to d8.", "her Aspiration climbing on the second roll");
+    tap({ do: "pick", s: "1", v: "perm" });
+    tap({ do: "set", s: "1", f: "t", v: "0" });
+    type(1, "text", "read how a spirit’s been bound");
+    tap({ do: "set", s: "1", f: "root", v: "Mind" });
+    same(D.warnings(d, c, s), [], "nothing to flag on her week");
+    const said = D.apply(s, c, d);
+    same([s.pts, s.wound, s.toll, s.asp, s.grown.at(-1)], [{ Body: 0, Mind: 10, Soul: 5 }, { Body: false, Mind: false, Soul: false }, 0, 8, { k: "perm", t: 0, text: "read how a spirit’s been bound", root: "Mind" }], "everything back, her new point on her Mind, and a point of Soul down for rolling again");
+    has(said.join(". "), "You paid a point of Soul to roll again", "what she paid, said");
+    // A new Title from an Aspiration past d12 spreads 5, a tap at a time.
+    const d2 = D.start({ id: "isolde-title" });
+    Object.assign(s, { asp: 12 });
+    // Her sheet now, with the permission she grew last week.
+    const cNow = rootsSheet(book.crew.find((x) => x.id === "isolde"), s.grown, BUILD);
+    D.act({ dataset: { do: "pick", s: "0", v: "asp" } }, d2, cNow, s);
+    dice.push(12, 6, 1);
+    D.act({ dataset: { do: "asp-roll", s: "0" } }, d2, cNow, s);
+    D.act({ dataset: { do: "set", s: "0", f: "take", v: "title" } }, d2, cNow, s);
+    D.input({ dataset: { dt: "0", f: "text" }, value: "Keeper of the last library" }, d2);
+    D.act({ dataset: { do: "tall", s: "0", v: "Mind" } }, d2, cNow, s);
+    D.act({ dataset: { do: "tnudge", s: "0", v: "Soul", n: "1" } }, d2, cNow, s);
+    D.act({ dataset: { do: "tnudge", s: "0", v: "Soul", n: "1" } }, d2, cNow, s);
+    D.input({ dataset: { dt: "0", f: "perm" }, value: "find any book in a library" }, d2);
+    D.act({ dataset: { do: "set", s: "0", f: "proot", v: "Mind" } }, d2, cNow, s);
+    D.act({ dataset: { do: "pick", s: "1", v: "party" } }, d2, cNow, s);
+    same(D.warnings(d2, cNow, s), [], "nothing to flag on her new Title");
+    D.apply(s, cNow, d2);
+    same(s.grown.at(-1), { k: "title", text: "Keeper of the last library", roots: { Body: 0, Mind: 3, Soul: 2 }, perm: { text: "find any book in a library", root: "Mind" } }, "her new Title spread Mind 3 and Soul 2, with its permission");
+    const grownSheet = rootsSheet(book.crew.find((x) => x.id === "isolde"), s.grown, BUILD);
+    same([grownSheet.roots, s.pts], [{ Body: 0, Mind: 14, Soul: 9 }, { Body: 0, Mind: 14, Soul: 8 }], "her Roots with the new Title, and every Root full on it");
+  }
+
   const { context, page } = await phone();
   const t = tableOf(page);
   const dt = (sel) => page.click(`#cc-dialog button[data-act="dt"]${sel}`);
   // Vesk part way through her week: her Stamina down to d4 and her
-  // Confidence to d10.
+  // Confidence to d10, saved the way the play screen keeps her for now
+  // (stacking's tracks, till it's on the new core), so everything back is
+  // every track on d12.
   const vesk = await crewOn(page, "vesk");
   await setState(page, vesk.id, { tracks: { stamina: 4, confidence: 10, resolve: 12 } });
   await page.reload();
@@ -3665,12 +3770,11 @@ if (part("8")) {
   const base = rootsSheet(book.crew.find((c) => c.id === "vesk"), [], BUILD);
   const week = async () => {
     await page.click('button[data-act="downtime"]');
-    has(await t.body(), "Stamina d4 to d6 and Confidence d10 to d12", "every track up a size, free");
-    // Vesk's Shadows have both their abilities, so there's none to buy.
-    same(await page.$$eval('#cc-dialog button[data-do="pick"][data-v="ability"]', (els) => els.length), 0, "no ability to buy when every one's had");
-    await dt('[data-do="pick"][data-s="0"][data-v="heal"]');
-    for (let i = 0; i < 3; i++) await dt('[data-do="heal"][data-s="0"][data-f="stamina"][data-v="1"]');
-    same(await page.$eval('#cc-dialog button[data-act="dt"][data-do="heal"][data-s="0"][data-f="stamina"][data-v="1"]', (el) => el.disabled), true, "her Stamina can't go past d12");
+    has(await t.body(), "Every downtime starts with everything back, free: Stamina d4 to d12 and Confidence d10 to d12", "everything back, free");
+    // Vesk's Shadows have both their abilities, so there's none to buy, and
+    // there's no slot to recover in.
+    same(await page.$$eval('#cc-dialog button[data-do="pick"][data-v="ability"], #cc-dialog button[data-do="pick"][data-v="heal"]', (els) => els.length), 0, "no ability to buy when every one's had, and no Recover slot");
+    await dt('[data-do="pick"][data-s="0"][data-v="pressure"]');
     await dt('[data-do="pick"][data-s="1"][data-v="perm"]');
     await dt('[data-do="set"][data-s="1"][data-f="t"][data-v="0"]');
     await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "slip through any crowd");
@@ -3680,7 +3784,7 @@ if (part("8")) {
   await week();
   await shot(page, "8-downtime");
   await t.finish();
-  same(await tracksOf(), [12, 12, 12], "her Stamina healed and every track up");
+  same(await tracksOf(), [12, 12, 12], "every track back on d12");
   same(sheetFor(await me()).roots, { ...base.roots, Body: base.roots.Body + 1 }, "her new permission 1 more on her Body");
   same(sheetFor(await me()).titles[0].permissions.map((p) => [p.text, p.root]).at(-1), ["slip through any crowd", "Body"], "on her first Title");
   await page.click('button[data-act="undo"]');
@@ -3688,18 +3792,16 @@ if (part("8")) {
   await week();
   await t.finish();
   same(sheetFor(await me()).roots.Body, base.roots.Body + 1, "her week again");
-  // A second week: her Aspiration with her Mind and the two things on her
-  // sheet that fit, 6 steps, a d12, against its d2, and a new awakening on
-  // her grappling line, a Catch with it since it's Awakened.
+  // A second week: her Aspiration on her Mind at full, 5 steps, a d10,
+  // against its d2, and a new awakening on her grappling line with the Root
+  // it locks, a Catch with it since it's Awakened.
   await page.click('button[data-act="downtime"]');
   await dt('[data-do="pick"][data-s="0"][data-v="asp"]');
   await dt('[data-do="set"][data-s="0"][data-f="root"][data-v="Mind"]');
-  await dt('[data-do="use"][data-s="0"][data-v="title|1"]');
-  await dt('[data-do="use"][data-s="0"][data-v="perm|1|2"]');
-  has(await t.body(), "6 steps, d12, against its d2", "her Aspiration roll");
-  await dt('[data-do="use"][data-s="0"][data-v="perm|1|2"]');
-  has(await t.body(), "5 steps, d10, against its d2", "a thing tapped off again");
-  await dt('[data-do="use"][data-s="0"][data-v="perm|1|2"]');
+  has(await t.body(), "5 steps, d10, against its d2", "her Aspiration roll");
+  await dt('[data-do="set"][data-s="0"][data-f="root"][data-v="Body"]');
+  has((await t.body()).replace(/\s+/g, " "), "12 steps, 2d12, against its d2", "on her Body instead, with last week’s permission on it");
+  await dt('[data-do="set"][data-s="0"][data-f="root"][data-v="Mind"]');
   await page.evaluate(() => window.ziCompanion.setDice([7, 1]));
   await dt('[data-do="asp-roll"][data-s="0"]');
   has(await t.body(), "7 against 1. Beat it. It climbs to d4.", "her Aspiration climbing");
@@ -3707,14 +3809,14 @@ if (part("8")) {
   if (await page.$('#cc-dialog button[data-act="dt"][data-do="set"][data-s="1"][data-f="a"][data-v="0"]')) await dt('[data-do="set"][data-s="1"][data-f="a"][data-v="0"]');
   await page.fill('#cc-dialog input[data-dt="1"][data-f="name"]', "Haul someone up after me");
   await page.fill('#cc-dialog input[data-dt="1"][data-f="text"]', "1 Aura and a friend climbs with her, no roll");
-  await dt('[data-do="set"][data-s="1"][data-f="kind"][data-v="active"]');
+  await dt('[data-do="set"][data-s="1"][data-f="root"][data-v="Body"]');
   await page.fill('#cc-dialog input[data-dt="1"][data-f="catch"]', "Loud");
   await t.finish();
   await page.reload();
   await playing(page);
   const after = await me();
-  same([after.state.asp, sheetFor(after).attuned[0].awakenings.map((w) => w.name), sheetFor(after).attuned[0].catch], [4, ["Anywhere I can throw a hook", "Haul someone up after me"], "Loud"], "her Aspiration's die and her new awakening with its Catch, after a reload");
-  console.log("downtime: Vesk's two weeks, a permission with its Root, an Aspiration rolled on what fits, an undo and a reload");
+  same([after.state.asp, sheetFor(after).attuned[0].awakenings.map((w) => [w.name, w.root]), sheetFor(after).attuned[0].catch], [4, [["Anywhere I can throw a hook", "Body"], ["Haul someone up after me", "Body"]], "Loud"], "her Aspiration's die and her new awakening on her Body with its Catch, after a reload");
+  console.log("downtime: Isolde's week on the new core, and Vesk's two weeks: everything back, a permission with its Root, an Aspiration on a Root at full, an undo and a reload");
 
   // A made-up rule change against her saved sheet, with its gold marks
   // (marks.js and the play screen's, prompt 6 of notes/stacking-plan.md).
@@ -3746,7 +3848,7 @@ if (part("8")) {
     await p2.goto(`${BASE}/characters/?c=${encodeURIComponent(id)}`);
     await p2.waitForSelector(".tile[data-r]");
     const seen = await p2.evaluate((cid) => JSON.parse(localStorage.getItem("zi-characters")).characters.find((c) => c.id === cid).state.seen, id);
-    same([seen["title:1"], seen["perm:1:0"], seen["perm:0:1"]], ["Raised by the guild (Mind 2, Body 1)", "know how a locks built (Mind)", "run the rooftops (Body)"], "the typo fixes taken in quietly, and the real change kept for its mark");
+    same([seen["title:1"], seen["perm:1:0"], seen["perm:0:1"]], ["Raised by the guild (Mind 3, Body 2)", "know how a locks built (Mind)", "run the rooftops (Body)"], "the typo fixes taken in quietly, and the real change kept for its mark");
     has(await p2.textContent(".cc-note.is-gold"), "lines on Vesk’s sheet have changed", "the note for a rule change");
     same(await p2.$$eval(".cc-roots .tile.is-changed", (els) => els.map((e) => e.dataset.r)), ["Body", "Mind"], "gold corners on her Body and her Mind, with the lock moved");
     await p2.click('.cc-gold[data-k="num:stride"]');
@@ -3771,9 +3873,9 @@ if (part("8")) {
   await context.close();
 }
 
-// 9. Every crew member grows on stacking: a downtime's worth of each kind of
-// growth on top of their sheet adds up, a seventh permission never gets on,
-// and an Aspiration past d12 brings a Title with its 3 spread and its one
+// 9. Every crew member grows on the new core: a downtime's worth of each kind
+// of growth on top of their sheet adds up, a seventh permission never gets on,
+// and an Aspiration past d12 brings a Title with its 5 spread and its one
 // permission, an archetype with its one ability, or an attuned thing with
 // its one awakening. A slot buys an ability, never one another of the same
 // archetype has.
@@ -3784,9 +3886,9 @@ if (part("9")) {
     const vesk = structuredClone(book.crew.find((c) => c.id === "vesk"));
     vesk.titles[0].permissions.push({ text: "slip a grip", root: "Body" }, { text: "hang off a ledge", root: "Body" });
     const swapped = rootsSheet(vesk, [{ k: "boon", t: 0, lever: "Aura", name: "Second Wind", drop: [0], g: 0 }], BUILD);
-    same([swapped.titles[0].permissions.length, swapped.titles[0].boons.map((b) => b.name), swapped.numbers.aura], [4, ["Second Wind"], 9], "a permission off her five for a Boon, with Aura 2 more");
+    same([swapped.titles[0].permissions.length, swapped.titles[0].boons.map((b) => b.name), swapped.numbers.aura], [4, ["Second Wind"], 7], "a permission off her five for a Boon, with Aura 2 more");
     const full = rootsSheet(vesk, [{ k: "perm", t: 0, text: "palm a key", root: "Body", g: 0 }, { k: "boon", t: 0, lever: "Aura", drop: [0], g: 1 }], BUILD);
-    same([full.titles[0].permissions.length, full.titles[0].boons.length, full.numbers.aura], [6, 0, 7], "a Boon that won't fit beside six permissions takes none of them off");
+    same([full.titles[0].permissions.length, full.titles[0].boons.length, full.numbers.aura], [6, 0, 5], "a Boon that won't fit beside six permissions takes none of them off");
   }
   for (const base of book.crew) {
     const c0 = rootsSheet(base, [], BUILD);
@@ -3794,19 +3896,20 @@ if (part("9")) {
     const grown = [
       { k: "perm", t: 0, text: "a new permission", root },
       { k: "thread", person: "Someone new", text: "They owe me.", kind: "hostile" },
-      { k: "title", text: "A Title from an Aspiration", roots: { Body: 0, Mind: 1, Soul: 2 }, perm: { text: "its permission", root: "Soul" } },
+      { k: "title", text: "A Title from an Aspiration", roots: { Body: 0, Mind: 2, Soul: 3 }, perm: { text: "its permission", root: "Soul" } },
       { k: "arch", arch: "Healer", have: ["Pull them back"] },
-      { k: "attune", name: "A new thing", awk: { name: "Its awakening", kind: "passive", text: "+1 on one die of every roll you make with it, for each Aura powering it" } },
-      { k: "awk", a: 0, name: "Another awakening", kind: "active", text: "1 Aura and it does something", catch: "Loud" },
+      { k: "attune", name: "A new thing", awk: { name: "Its awakening", root: "Mind", text: "2 steps on every roll you make with it" } },
+      { k: "awk", a: 0, name: "Another awakening", root: "Mind", text: "1 Aura and it does something", catch: "Loud" },
     ];
     const c = rootsSheet(base, grown, BUILD);
     const roots = { ...c0.roots };
     roots[root] += 1;
-    roots.Mind += 1;
-    roots.Soul += 3;
-    same(c.roots, roots, `${base.name}'s Roots with a permission and a new Title spread Mind 1 and Soul 2`);
+    roots.Mind += 2;
+    roots.Soul += 4;
+    same(c.roots, roots, `${base.name}'s Roots with a permission and a new Title spread Mind 2 and Soul 3`);
     same("specialties" in c, false, `${base.name} with no specialties`);
-    same([c.titles.length, c.archetypes.length, c.archetypes.at(-1).have, c.attuned.length, c.attuned[0].awakenings.length, c.numbers.aura], [c0.titles.length + 1, c0.archetypes.length + 1, ["Pull them back"], c0.attuned.length + 1, c0.attuned[0].awakenings.length + 1, c0.numbers.aura + 2], `${base.name}'s Titles, archetypes with the one ability, a new attuned thing with Aura 2 more, and awakenings`);
+    same([c.titles.length, c.archetypes.length, c.archetypes.at(-1).have, c.attuned.length, c.attuned[0].awakenings.length, c.numbers.aura, c.attuned.at(-1).awakenings.map((w) => w.root)], [c0.titles.length + 1, c0.archetypes.length + 1, ["Pull them back"], c0.attuned.length + 1, c0.attuned[0].awakenings.length + 1, c0.numbers.aura, ["Mind"]], `${base.name}'s Titles, archetypes with the one ability, a new attuned thing with no Aura of its own, and awakenings on their Roots`);
+    same(RS.lockedOf(c).Mind, RS.lockedOf(c0).Mind + 2, `${base.name}'s two new awakenings each locking a point of their Mind`);
     same(c.threads.find((p) => p.person === "Someone new")?.threads[0]?.kind, "hostile", `${base.name}'s new hostile thread`);
     // A seventh permission never gets on a Title.
     const full = Array.from({ length: 6 }, (_, i) => ({ k: "perm", t: 0, text: `permission ${i}`, root }));
@@ -3815,12 +3918,19 @@ if (part("9")) {
     const folded = rootsSheet(sheetOf({ id: `9-${base.id}`, name: base.name, build: foldGrown(fromCrew(base, BUILD, { keep: true }), grown, BUILD) }, BUILD), [], BUILD);
     same(sheetParts({ ...folded, points: null }), sheetParts({ ...c, points: null }), `${base.name}'s growth folded into a build, the sheet they had`);
   }
+  // A Title grown on stacking was spread 3, and it's made 5 the same way.
+  {
+    const c = rootsSheet(book.crew.find((x) => x.id === "wren"), [{ k: "title", text: "Grown on stacking", roots: { Body: 0, Mind: 1, Soul: 2 }, perm: null }], BUILD);
+    same([c.titles.at(-1).roots, c.titles.at(-1).fromThree, RS.choicesOf(c).map((x) => x.k)], [{ Body: 0, Mind: 2, Soul: 3 }, { Body: 0, Mind: 1, Soul: 2 }, ["five"]], "a Title grown on stacking made 5, for the player to check");
+    const folded = foldGrown(fromCrew(book.crew.find((x) => x.id === "wren"), BUILD, { keep: true }), [{ k: "title", text: "Grown on stacking", roots: { Body: 0, Mind: 1, Soul: 2 }, perm: null }], BUILD);
+    same([folded.titles.at(-1).roots, folded.titles.at(-1).three], [{ Body: 0, Mind: 2, Soul: 3 }, { Body: 0, Mind: 1, Soul: 2 }], "and the same in Change, saying what it was");
+  }
 
   const { context, page } = await phone();
   const t = tableOf(page);
   const dt = (sel) => page.click(`#cc-dialog button[data-act="dt"]${sel}`);
-  // On the phone: Vesk's Aspiration past d12 gives her a new Title, its 3
-  // spread Soul 2 and Mind 1 in three taps, with its permission on her Mind.
+  // On the phone: Vesk's Aspiration past d12 gives her a new Title, its 5
+  // spread Soul 3 and Mind 2 in three taps, with its permission on her Mind.
   const vesk = await crewOn(page, "vesk");
   await setState(page, vesk.id, { asp: 12 });
   await page.reload();
@@ -3828,17 +3938,16 @@ if (part("9")) {
   await page.click('button[data-act="downtime"]');
   await dt('[data-do="pick"][data-s="0"][data-v="asp"]');
   await dt('[data-do="set"][data-s="0"][data-f="root"][data-v="Body"]');
-  for (const k of ["title|0", "title|1", "perm|0|2", "perm|1|0", "utility|a perfect set of picks"]) await dt(`[data-do="use"][data-s="0"][data-v="${k}"]`);
-  has(await t.body(), "13 steps, 2d12 + d2, against its d12", "her Aspiration rolled the way she picks a lock");
-  await page.evaluate(() => window.ziCompanion.setDice([11, 3, 2, 9]));
+  has(await t.body(), "11 steps, d12 + d10, against its d12", "her Aspiration rolled on her Body at full");
+  await page.evaluate(() => window.ziCompanion.setDice([11, 3, 9]));
   await dt('[data-do="asp-roll"][data-s="0"]');
   has(await t.body(), "It climbs past d12 and resolves.", "her Aspiration resolving");
   await dt('[data-do="set"][data-s="0"][data-f="take"][data-v="title"]');
   await page.fill('#cc-dialog input[data-dt="0"][data-f="text"]', "Captain of the crew");
-  await dt('[data-do="tshape"][data-s="0"][data-v="two"]');
-  await dt('[data-do="tspread"][data-s="0"][data-n="2"][data-v="Soul"]');
-  await dt('[data-do="tspread"][data-s="0"][data-n="1"][data-v="Mind"]');
-  has(await t.body(), "Its 3 Root points: Mind 1, Soul 2", "her new Title's spread");
+  await dt('[data-do="tall"][data-s="0"][data-v="Soul"]');
+  await dt('[data-do="tnudge"][data-s="0"][data-v="Mind"][data-n="1"]');
+  await dt('[data-do="tnudge"][data-s="0"][data-v="Mind"][data-n="1"]');
+  has(await t.body(), "Its 5 Root points: Mind 2, Soul 3", "her new Title's spread");
   await page.fill('#cc-dialog input[data-dt="0"][data-f="perm"]', "know who’s lying in my crew");
   await dt('[data-do="set"][data-s="0"][data-f="proot"][data-v="Mind"]');
   // Her second slot can't buy an ability, so it's Get something.
@@ -3847,7 +3956,7 @@ if (part("9")) {
   await t.finish();
   const v = (await savedAll(page)).find((c) => c.id === vesk.id);
   const sheet = sheetFor(v);
-  same([sheet.roots, sheet.titles.at(-1).text, sheet.titles.at(-1).roots, sheet.titles.at(-1).permissions.map((p) => [p.text, p.root]), v.state.asp], [{ Body: 8, Mind: 6, Soul: 2 }, "Captain of the crew", { Body: 0, Mind: 1, Soul: 2 }, [["know who’s lying in my crew", "Mind"]], 2], "her third Title, its spread and its permission, and her Aspiration back to d2");
+  same([sheet.roots, sheet.titles.at(-1).text, sheet.titles.at(-1).roots, sheet.titles.at(-1).permissions.map((p) => [p.text, p.root]), v.state.asp], [{ Body: 11, Mind: 8, Soul: 3 }, "Captain of the crew", { Body: 0, Mind: 2, Soul: 3 }, [["know who’s lying in my crew", "Mind"]], 2], "her third Title, its spread and its permission, and her Aspiration back to d2");
 
   // Gil, a Guardian and a Leader with Push on each: a slot buys Stand firm,
   // and the second slot can't take the one the first's taking.

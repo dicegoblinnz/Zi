@@ -71,7 +71,7 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .field.name { flex: 3.2; }
 .field.name .w { height: 6.8mm; border-bottom-width: 0.35mm; border-bottom-color: var(--ink); }
 
-/* Aura, extra actions and Stride in a bar under the name, since they move
+/* Aura, Toll and Stride in a bar under the name, since they move
    most. Aura's boxes are the kit's hex. */
 .pool { display: flex; align-items: stretch; border-bottom: 0.4mm solid var(--ink); margin-top: -0.6mm; }
 .pool .cell { display: flex; align-items: center; gap: 2.4mm; padding: 1.2mm 3.6mm 1.2mm 0; }
@@ -80,7 +80,7 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .pool h2 { font: 700 9pt/1 var(--display); letter-spacing: 0.06em; }
 .pool h2 small { display: block; font: italic 400 6.4pt/1.2 var(--body); letter-spacing: 0; color: var(--muted); margin-top: 0.7mm; }
 .pool .cell:nth-child(1) h2 { width: 44mm; }
-.pool .cell:nth-child(2) h2 { width: 38mm; }
+.pool .cell:nth-child(2) h2 { width: 52mm; }
 .pool .cell:nth-child(3) h2 { width: 13mm; }
 .pool .lab { line-height: 1.15; text-align: right; }
 .hex { position: relative; display: inline-block; flex: none; width: 10.6mm; height: 9.2mm; }
@@ -242,7 +242,7 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .ref h1 { display: flex; align-items: baseline; gap: 3mm; margin: 4mm 0 3mm; font: 700 17pt/1 var(--display); letter-spacing: 0.05em; }
 .ref h1 .num { font: 800 12pt/1 var(--body); padding: 1.2mm 2.4mm; background: var(--ink); color: #fff; align-self: center; }
 
-/* The text runs in two columns. Panels (a ladder, a track, the round) run
+/* The text runs in two columns. Panels (a ladder, a Root's points, the round) run
    across both. */
 .flow { columns: 2; column-gap: 7mm; column-rule: 0.25mm solid var(--hair); column-fill: balance; }
 .flow + .flow, .panel + .flow { margin-top: 3mm; }
@@ -262,7 +262,7 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .qr th, .qr td { padding: 0.4mm 3mm 0.4mm 0; border-bottom: 0.25mm solid var(--hair); text-align: left; }
 .qr th { font: 500 6.4pt/1.2 var(--body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
 
-/* A panel across the page: the round, the steps ladder, a track. */
+/* A panel across the page: the round, the steps ladder, a Root's points. */
 .panel { break-inside: avoid; margin: 0 0 3mm; }
 .panel .cap { display: flex; align-items: baseline; gap: 2mm; margin-bottom: 1.4mm; }
 .panel .cap h2 { font: 700 9pt/1.15 var(--display); letter-spacing: 0.05em; }
@@ -286,14 +286,21 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .steps-ladder .many .zd-mini { width: 3.6mm; height: 3.6mm; }
 .steps-ladder span { font: 700 7.6pt/1 var(--body); }
 
-/* The tracks: Stamina, Confidence and Resolve from d12 down to d2, and the Blaze past them. */
-.track-panel { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0 4mm; }
-.track-panel .side { display: flex; flex-direction: column; }
-.trk { display: flex; align-items: flex-start; justify-content: space-between; padding: 1.4mm 0 1.2mm; border-top: 0.4mm solid var(--ink); border-bottom: 0.25mm solid var(--hair); }
-.trk > div { display: flex; flex-direction: column; align-items: center; gap: 0.8mm; flex: 1; }
-.trk .zd-die { width: 6.4mm; height: 6.4mm; }
-.trk span { font: italic 500 5.8pt/1.1 var(--body); color: var(--muted); text-align: center; white-space: nowrap; }
-.trk .end b { font: 700 8pt/1 var(--display); letter-spacing: 0.05em; height: 6.4mm; display: flex; align-items: center; }
+/* A Root's points, from full to a Scar, with the three wounds and Toll on a heal. */
+.points-panel .psteps { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 0.4mm solid var(--ink); border-bottom: 0.25mm solid var(--hair); margin-top: 0.8mm; }
+.pstep { display: flex; flex-direction: column; align-items: center; gap: 0.6mm; padding: 1.2mm 1mm 1mm; text-align: center; }
+.pstep + .pstep { border-left: 0.25mm solid var(--hair); }
+.pstep b { font: 700 7.6pt/1 var(--display); letter-spacing: 0.04em; }
+.pstep > span:last-child { font: italic 500 6pt/1.15 var(--body); color: var(--muted); }
+.pdice { display: flex; gap: 0.6mm; height: 6.2mm; }
+.pdice .zd-die { width: 6.2mm; height: 6.2mm; }
+.pbox { display: inline-flex; align-items: center; justify-content: center; min-width: 8mm; height: 6.2mm; padding: 0 1mm; border: 0.4mm solid var(--ink); border-radius: 1mm; font: 700 7.4pt/1 var(--body); }
+.pbox.harm { border-color: var(--harm, var(--ink)); color: var(--harm, var(--ink)); }
+.pfoot { display: flex; align-items: center; justify-content: space-between; gap: 4mm; padding-top: 1mm; }
+.pws, .ptoll { display: flex; align-items: center; gap: 2.4mm; }
+.pw, .ptl { display: inline-flex; flex-direction: column; align-items: center; font: italic 500 5.8pt/1.1 var(--body); color: var(--muted); }
+.pw b, .ptl b { font: 700 7pt/1.1 var(--display); color: var(--ink); font-style: normal; letter-spacing: 0.03em; }
+.ptoll .lab { font-size: 5.8pt; }
 
 /* Aura and Resolve, side by side: what one buys and how it comes back. */
 .econ { display: grid; grid-template-columns: 1fr; gap: 0 7mm; }
@@ -314,11 +321,11 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .arch p { margin: 0; }
 .arch p strong { font: 700 7.9pt/1 var(--display); letter-spacing: 0.04em; }
 
-/* ---------- Roots and tracks, a roll, the archetypes and awakenings. ---------- */
-/* Each Root over its track, side by side: what it adds up to, where each
-   point came from (each Title's spread, and its permissions), then its
-   track's dice from d12 down to d2, the Blaze past them, a tick for each size
-   a Scar locks, and two lines of armour on that Root. */
+/* ---------- Roots and their points, a roll, the archetypes and awakenings. ---------- */
+/* Each Root, side by side: its number and where each point came from (each
+   Title's spread, and its permissions), the dice it rolls, what's locked,
+   what it holds and the points it has now, its wound to tick, a line for
+   each Scar's Catch, and two lines of armour on that Root. */
 .roots3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 4mm; margin-top: 0.8mm; }
 .rootcol { border-top: 0.4mm solid var(--ink); padding-top: 1mm; min-width: 0; }
 .rhead { display: flex; align-items: flex-start; gap: 2.2mm; }
@@ -331,17 +338,18 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .frow .sbox { width: 5.2mm; height: 4.4mm; }
 .fcell { display: inline-flex; flex-direction: column; align-items: center; gap: 0.35mm; }
 .fcell i { font: 700 5.4pt/1 var(--display); color: var(--muted); font-style: normal; letter-spacing: 0.02em; }
-.frow .hint { flex: 1; min-width: 0; font-size: 6pt; line-height: 1.1; margin: 0 0 0.4mm 0.6mm; }
-.rootcol .th { display: flex; align-items: baseline; gap: 1.6mm; margin-top: 1.4mm; }
-.rootcol .th h3 { font: 700 7.6pt/1 var(--display); letter-spacing: 0.06em; }
-.rootcol > .row { gap: 0; margin-left: -0.7mm; }
-.rootcol .blaze { display: flex; flex-direction: column; align-items: flex-start; margin-left: 0.6mm; }
-.rootcol .blaze b { font: 700 7.4pt/1 var(--display); letter-spacing: 0.04em; white-space: nowrap; }
-.rootcol .blaze span { font: italic 400 6pt/1.15 var(--body); color: var(--muted); margin-top: 0.5mm; white-space: nowrap; }
-.locks { display: flex; align-items: center; gap: 1.2mm; margin: 0.6mm 0 0.4mm; }
-.lock { display: inline-flex; align-items: center; gap: 0.5mm; }
-.lock i { font: italic 500 6pt/1 var(--body); color: var(--muted); }
-.lock .tick { width: 3mm; height: 3mm; }
+.frow .w { height: 4.4mm; min-width: 0; }
+.frow .sbox + .lab { margin-left: 1mm; }
+.pts { display: flex; align-items: flex-end; gap: 1.6mm; margin-top: 1.1mm; }
+.pt { display: inline-flex; flex-direction: column; align-items: center; gap: 0.4mm; }
+.pt .lab { font-size: 5.6pt; }
+.pts .sbox { width: 6.4mm; height: 5mm; }
+.nbox { display: inline-block; width: 11.6mm; height: 7.6mm; border: 0.45mm solid var(--ink); border-radius: 1.2mm; background: #fff; }
+.wound { display: inline-flex; align-items: center; gap: 0.9mm; margin: 0 0 1.6mm auto; }
+.wound b { font: 700 7.2pt/1 var(--display); letter-spacing: 0.04em; }
+.wound .tick { width: 3.4mm; height: 3.4mm; }
+.rootcol .scars { margin-top: 0.6mm; }
+.rootcol .scar .w { height: 4.6mm; }
 .arm { display: flex; align-items: flex-end; gap: 1.2mm; }
 .arm .w { height: 4.6mm; }
 .arm .lab { margin-bottom: 0.9mm; }
@@ -350,25 +358,22 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .roots3 + .hint { margin-top: 0.9mm; }
 .roll .hint { margin-top: 0.9mm; }
 
-/* The Scars on the front: a cut and its Catch. */
-.scars .scar .w { height: 4.8mm; }
+/* Getting it back: the two rests, beside the conditions. */
+.rests .hint + .hint { margin-top: 0.7mm; }
 
-/* An archetype: its name and its home track to ring, its mechanic, its Trait and its abilities. */
+/* An archetype: its name, its mechanic, its Trait and its abilities. */
 .xcard > .row:first-child { gap: 1.2mm; }
 .xcard > .row:first-child > .w { height: 5.2mm; }
-.xcard > .row:first-child .kind { flex: none; margin-bottom: 0.3mm; }
 /* A mechanic and a Trait: its label and a line, then a whole line more. */
 .xcard > .lines { margin-top: 0.2mm; }
 .xcard > .lines .w { height: 4.6mm; }
 .xcard > .lines .row .lab { margin-bottom: 0.9mm; }
 
-/* An awakening: its line, passive or active to ring, and two boxes for the
-   Aura it's holding. */
-.wakes .top, .wake { display: grid; grid-template-columns: 1fr 22mm 8.6mm; align-items: end; }
+/* An awakening: its line, and the Root it locks to ring. */
+.wakes .top, .wake { display: grid; grid-template-columns: 1fr 22mm; align-items: end; }
 .wakes .top > span { font: italic 500 6pt/1 var(--body); color: var(--muted); text-align: center; padding-bottom: 0.4mm; white-space: nowrap; }
 .wake .w { margin-right: 1.2mm; }
-.wake .boxes { display: flex; justify-content: center; gap: 0.7mm; margin-bottom: 0.6mm; }
-.wake .tick { width: 3mm; height: 3mm; }
+.wake .kind .word { padding: 0.8mm 1.6mm; font: 700 6pt/1 var(--body); }
 /* An attuned thing on the front, two side by side, each with its six awakenings. */
 .front .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5mm 5mm; margin-top: 1.2mm; }
 .acard .row + .row { margin-top: 0.4mm; }

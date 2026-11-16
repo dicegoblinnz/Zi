@@ -63,6 +63,22 @@ Written into 03, 03a, 03b and 18 on 16 Nov, with the crew in `notes/core-plan.md
 20. **Items are never steps on their own.** A weapon, armour or anything you carry does what it is. What changes a roll says so: a *Charge* weapon, a purse of gold, a smoke bomb, and the Warrior's *Second Skin*, which puts 1 step a piece of armour on the roll when it lands.
 21. **The *Slow* Catch's awakenings take a round to wake**, where they took two actions.
 
+### 5. The builder, downtime and print
+
+Built into the builder, downtime, print and the paper sheets on 16 Nov, on `rules/2026-11-16-core-build`.
+
+1. **Spreading a Title's 5 is All on and a stepper on each Root.** All on Body puts all 5 there in a tap, and + on another Root moves one there off the biggest of the others, so Mind 3 and Body 2 is All on Mind and + on Body twice. − takes one off and leaves it to place. Downtime's new Title from an Aspiration spreads the same way.
+2. **A character built on stacking has each Title's 3 made 5 the way they were spread**, the same thing a saved sheet gets, and Change says what each one was till it's saved. Each awakening of theirs sits on their biggest Root till they pick one. Saving it puts it on the new core for good.
+3. **The builder warns on an awakening with no Root**, and on one whose Root hasn't got a point free to lock, since it'd do nothing. It never blocks.
+4. **Downtime puts everything back first, then what it grows lands on a full character.** A new permission's point is there to spend at the next session, and a new awakening's lock comes off what that Root holds. A point of Soul paid to roll again comes off after, so it's still spent when the next session starts, as 12 has Isolde.
+5. **A roll at your Aspiration in downtime is the Root that fits, at full, and that's all.** You can't bring a second Root in there, since there's no Aura in downtime and the chapter says to roll the Root that fits. Say if you'd like a point of the Root brought in to do it.
+6. **Mend is its own choice** where Recover was, for something broken or armour with boxes ticked.
+7. **The paper sheet's Roots** each have their number and the dice it rolls, where it came from, what's locked, what it holds, a big box for the points it has now, a tick for its wound by name, two lines for Scars and two for armour. Toll sits beside Aura and stride at the top, where extra actions were, and the Scars section beside conditions is now Getting it back, the two rests and a heal in a few words. Two Scar lines a Root, six in all, was what fit the page. A third goes in Notes.
+8. **Print writes what a Root holds less what's locked**, and when it's wounded, Notes say what it heals to till downtime, so the box isn't halved and unhalved in pencil.
+9. **An ability prints its cost only when it's more than 1 Aura**, and the archetype cards say an ability's 1 Aura unless its line says more. Isolde's three Oracle abilities wouldn't fit their six lines with "(1 Aura)" on each.
+10. **The player reference's second page opens on a Root's points**, drawn: full, a hit, at 0, wounded at 0, the three wounds by name and what Toll takes off a heal, its words checked against Appendix D's.
+11. **A random character's attuned thing has to fit their Roots.** If its awakening's Root is at 0, another of the book's things that fits takes its place, with the same Catch, so it still costs 35.
+
 ## 14 Nov: stacking
 
 **Live since 14 Nov**, when you said to make it live. Part 1 of the stacking rework (`notes/stacking-plan.md`), from your 14 Nov chat (`notes/playtest-sheets/2026-11-14-chat-decisions.md`), built by thirteen chats on `rules/2026-11-14-stacking` with the book's core cut under it. These are the calls Claude made writing it down, before any chat built it, and each chat added its own in its subsection below. They're still yours to say yes or no to.

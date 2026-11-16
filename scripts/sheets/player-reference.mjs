@@ -1,12 +1,13 @@
 // The player reference: Appendix D in Mo's words, four A4 pages in the kit's
 // Paper theme. The table's most-used rules come first: the round and rolling,
-// then the tracks, defence and threats, then Aura and the archetypes, then
+// then your points, defence and threats, then Aura and the archetypes, then
 // your character, downtime and gear. Each page is one part, and each part
 // takes sections of Appendix D by id, whole or with some of their bullets, so
 // the reference never says anything the quick reference doesn't. A few are
 // drawn with the kit as well as said: the round as its three steps, the steps
-// ladder with the dice in their shapes, Stamina, Confidence and Resolve as
-// tracks, Aura's spends and gains side by side, and each archetype with its sigil.
+// ladder with the dice in their shapes, a Root's points from full to a Scar
+// with the three wounds and Toll, Aura's spends and gains side by side, and
+// each archetype with its sigil.
 // A section that's new to Appendix D stops the build until it's given a part
 // (or left out on purpose), so nothing gets missed, and a page that's too
 // full stops it too (scripts/build-sheets.mjs says by how much).
@@ -44,6 +45,7 @@ const PAGES = [
     title: "Your points, defence and threats",
     short: "Points and threats",
     blocks: [
+      { panel: "points", id: "s-qr-tracks" },
       { flow: [{ id: "s-qr-tracks" }, { id: "telegraphs-and-defence" }, { id: "consequences-the-gm-names-one" }, { id: "conditions" }, { id: "s-qr-threats", drop: ["**Round budget:**", "**Threat budget:**"] }] },
     ],
   },
@@ -156,17 +158,28 @@ function ladder(section) {
   return `<section class="panel"><div class="cap"><h2>Steps into dice</h2></div><div class="steps-ladder">${cells.join("")}</div></section>`;
 }
 
-// Stamina, Confidence and Resolve, as the tracks they move along: d12 down
-// to d2, and the Blaze past it. The words come from the bullets below them.
-function tracks(section) {
-  for (const text of ["**Stamina** (Body), **Confidence** (Mind) and **Resolve** (Soul)", "Each starts at d12", "**Blaze:**", "a 4 or more puts it up a size"]) {
-    if (!section.body.includes(text)) throw new Error(`Appendix D, ${section.heading}: the tracks panel's labels come from "${text}", which isn't there any more`);
+// A Root's points, from full to a Scar, a step at a time, with the three
+// wounds by name and what Toll takes off a heal. The words are checked
+// against Appendix D's bullets, so the panel can't say what the section
+// doesn't.
+function points(section) {
+  for (const text of ["**Hits:**", "1 point off its Root", "**Wounds:**", "**Bloodied** (Body), **Frayed** (Mind) or **Hollow** (Soul)", "**Scar:**", "**Blaze:**", "**Toll:**", "a heal loses 5 for each Toll", "Downtime puts everything back"]) {
+    if (!section.body.includes(text)) throw new Error(`Appendix D, ${section.heading}: the points panel's words come from "${text}", which isn't there any more`);
   }
-  const row = (name, root) => {
-    const dice = [...SIZES].reverse().map((d) => `<div>${die(d, { own: "harm", hide: true })}<span>${d === 12 ? "starts here" : ""}</span></div>`).join("");
-    return `<div class="side"><div class="cap"><h2>${name}</h2><p>${root}</p></div><div class="trk">${dice}<div class="end"><b>Blaze</b><span>a hit at d2</span></div></div></div>`;
-  };
-  return `<section class="panel track-panel">${row("Stamina", "Body")}${row("Confidence", "Mind")}${row("Resolve", "Soul")}</section>`;
+  const step = (head, say, piece = "") => `<div class="pstep">${piece}<b>${head}</b><span>${say}</span></div>`;
+  const pip = (n, cls = "") => `<span class="pbox${cls}">${n}</span>`;
+  const wounds = [["Bloodied", "Body"], ["Frayed", "Mind"], ["Hollow", "Soul"]].map(([w, r]) => `<span class="pw"><b>${w}</b>${r}</span>`).join("");
+  const tolls = [0, 1, 2, 3].map((t) => `<span class="ptl"><b>${t ? `−${5 * t}` : "full"}</b>${t === 0 ? "first heal" : `${t} Toll`}</span>`).join("");
+  return `<section class="panel points-panel">
+    <div class="cap"><h2>A Root’s points</h2><p>Body 9 rolls a d12 and a d6, and it’s 9 points</p></div>
+    <div class="psteps">
+      ${step("Full", "a new character, and after downtime", `<span class="pdice">${die(12, { own: "you", hide: true })}${die(6, { own: "you", hide: true })}</span>`)}
+      ${step("A hit", "1 point off, or 2 off another Root", pip("−1", " harm"))}
+      ${step("At 0", "a hit wounds it, and it heals to half", pip("0"))}
+      ${step("Wounded at 0", "a hit’s a Scar, and you leave", pip("Scar", " harm"))}
+    </div>
+    <div class="pfoot"><div class="pws">${wounds}</div><div class="ptoll"><span class="lab">Toll on a heal</span>${tolls}</div></div>
+  </section>`;
 }
 
 // Aura: what one buys and how it comes back, side by side.
@@ -182,7 +195,7 @@ function economy(sectionsFound) {
     if (items.indexOf(get) < items.indexOf(spend)) throw new Error(`Appendix D, ${section.heading}: "Get 1 back" has to come after "Spend 1", since they're drawn side by side in that order`);
     const list = (b, lead) => `<ul>${b.slice(lead.length).trim().replace(/\.$/, "").split(" · ").map((x) => `<li>${inline(x.charAt(0).toUpperCase() + x.slice(1))}</li>`).join("")}</ul>`;
     // What comes before Spend 1 goes above the two lists, and everything
-    // after it that isn't Get 1 back (powering, extra actions) goes under them,
+    // after it that isn't Get 1 back (Spend 3, bringing a Root in) goes under them,
     // in the order Appendix D has it.
     const before = items.slice(0, items.indexOf(spend)).map((b) => `<p>${inline(b)}</p>`).join("");
     const after = items.slice(items.indexOf(spend) + 1).filter((b) => b !== get).map((b) => `<p>${inline(b)}</p>`).join("");
@@ -227,7 +240,7 @@ export function playerReference(stamp) {
       if (b.flow) return flowOf(found, b.flow, used);
       if (b.panel === "round") return round(get(b.id));
       if (b.panel === "ladder") return ladder(get(b.id));
-      if (b.panel === "tracks") return tracks(...b.ids.map(get));
+      if (b.panel === "points") return points(get(b.id));
       if (b.panel === "economy") return economy(b.ids.map((id) => [id, get(id)]));
       if (b.panel === "archetypes") return archetypes(get(b.id));
       throw new Error(`the player reference has no panel called ${b.panel}`);
