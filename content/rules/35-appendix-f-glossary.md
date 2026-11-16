@@ -23,7 +23,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Archetype](#archetypes)** | One of seventeen, picked apart from your Titles. It's 5 points, and the same one twice is fine. Each has a mechanic only it can do, a Trait that's always true of you, and abilities you pay for in Aura. They're the Bard, Bloodsworn, Elementalist, Face, Gambler, Guardian, Healer, Hunter, Illusionist, Leader, Maker, Oracle, Shadow, Shifter, Summoner, Teleporter and Warrior. |
 | **[Area die](#s-area)** | The Elementalist's: one die that says how far your roll reaches instead of an intent, a burst, a cone or a line twice as long. It costs no Aura. Threats have areas too. |
 | **[Armour](#s-armour)** | Plate, leathers, a shield, a helmet, or clothes that fit the scene. Each piece sits on a Root, and when a hit gets through to that Root it can take it instead, ticking one of its boxes. |
-| **[Aspiration](#s-aspiration)** | What your character wants: one thing, and you'd know the day it's done (see [A good Aspiration](#s-good-aspiration)). Starts at d2 and climbs. Past d12 you get what you were after, and a new Title, archetype or attuned thing, your pick. |
+| **[Aspiration](#s-aspiration)** | What your character wants: one thing, and you'd know the day it's done (see [A good Aspiration](#s-good-aspiration)). It takes 5 points, a downtime slot each, and there's no roll. At 5 it comes good: you get what you were after, and a new Title, archetype or attuned thing, your pick. |
 | **[Asset](#s-wealth)** | A permission on a faction's card for what it can do. People who turn up, like *Standing Army*, are +1 Power, and the rest do one thing. It needs a resource paying for it every downtime, or it stops counting. |
 | **[Attunement](#s-attunement)** | Something personal bound to you, on top of what you carry, for 5 points. It's an item, it's got awakenings, each locking a point of the Root it fits, it grows in three stages, and it can't be broken. |
 | **[Aura](#s-aura)** | Your luck and flair. Up to 5, full every scene. 3 brings a Root in, and 1 puts 2 more steps on an awakening, pays for an ability, borrows through a bond thread, goes beyond, wins a tie when you're acting, intercepts for a friend or pays for a quick heal. 1 back for every die that wins, every top face, and every time you let a Catch bite. |
@@ -40,9 +40,9 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Break](#s-conditions)** | Putting a die on a condition and beating its die to end it. |
 | **[Bring a Root in](#s-bring)** | Putting a second Root on a roll, all of it, when a permission explains how it gets in on what you're doing. It costs 1 point of that Root, or 3 Aura. |
 | **[Burden](#s-boons)** | A permanent downside, like −2 stride. It only ever comes on an attuned thing, once it's Tempered, where it pays for two more awakenings, or for a Boon for you. |
-| **[Catch](#s-trouble)** | Trouble that's ready to go: on an attuned thing, or a Scar. Let it bite for 1 Aura, as often as you like, as long as it's real trouble, or a point of Soul for a big bite. |
+| **[Catch](#s-trouble)** | Trouble that's ready to go, on an attuned thing. Let it bite for 1 Aura, as often as you like, as long as it's real trouble, or a point of Soul for a big bite. |
 | **[Challenge](#s-challenges)** | The die something defends with: 2 (d4) to 6 (d12). It never steps down, unless a tag like *Crumbling* says so. |
-| **[Climbs](#s-climb)** | How the Goal, an Aspiration, a project and an agenda move: from d2 up, a step on every win, one step a roll. Past d12, it's done. |
+| **[Climbs](#s-climb)** | How the Goal, a project and an agenda move: from d2 up, a step on every win, one step a roll. Past d12, it's done. |
 | **[Clock](#s-stakes)** | A die on a stake that steps down every round nobody works it. |
 | **[Combo](#s-teamwork)** | Two or more actions into the same thing at the same time, yours or your friends'. You roll once between you, every action brings the Root that fits how they're helping, all of it, and there's no Aura for the combo. |
 | **[Condition](#s-conditions)** | A tag carrying a die, for you or against you. One step while it lasts, or for a few, a vulnerability. Spend it for its big effect. One of each on a target, and the same one goes on once a round. |
@@ -120,7 +120,7 @@ Here are the rule terms in the book, one line each, and each one links to its ru
 | **[Root](#s-roots)** | Body, Mind or Soul. Every roll's one of them, rolled at full. Each Title puts 5 on your Roots, spread however you like, and each permission 1 on its Root. A Root's number is its dice and its points. |
 | **[Round](#s-round)** | The GM telegraphs, everyone takes one action, the round ends. |
 | **[Round budget](#s-budget)** | What the GM telegraphs with each round, worked out for each player. A Breather's about half, and Hard's about half again. |
-| **[Scar](#s-blaze)** | A hit on a wounded Root with no points left, or the Scar you take when you Blaze. You leave the scene, and it's a Catch on that Root that locks a point of it for good. A Scar that locks a Root's last point is your last. |
+| **[Scar](#s-blaze)** | A hit on a wounded Root with no points left, or the Scar you take when you Blaze. You leave the scene, and it's a negative permission on that Root, something you can't do that the GM holds you to, and it locks a point of it for good. Three downtime slots grow it into a Trait as well. A Scar that locks a Root's last point is your last. |
 | **[Scene](#s-aura)** | One place and one problem. Aura refills when a new one starts, and you rest when it ends. |
 | **[Scene clock](#s-scene-clock)** | A die on the whole scene. It steps down every round. Past d2, the scene turns. |
 | **[Shadow pool](#a-shadow)** | A Shadow's: the dice you rolled to get into hiding, to add to any roll after that, as dice or as steps. Each one's gone once you use it. |

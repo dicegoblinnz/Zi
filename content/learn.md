@@ -123,7 +123,7 @@ A spear gets through to Bram's Body. He takes it without a flinch and pays 2 poi
 ::::
 
 ::::card[Catches and trouble]{#l-catches teaches=s-trouble}
-A **Catch** is trouble written on your sheet, from an [attuned thing](#s-attunement) or a [Scar](#s-blaze). Letting it bite is up to you: say how it causes trouble, the GM runs with it, and you take 1 Aura. A big bite, one that changes the scene or costs you something you wanted, gets you a point of Soul back instead. A [hostile thread](#s-bonds) bites the same way, and with no Catch you can still bring real trouble on yourself for 1 Aura.
+A **Catch** is trouble written on your sheet, from an [attuned thing](#s-attunement). Letting it bite is up to you: say how it causes trouble, the GM runs with it, and you take 1 Aura. A big bite, one that changes the scene or costs you something you wanted, gets you a point of Soul back instead. A [hostile thread](#s-bonds) bites the same way, and with no Catch you can still bring real trouble on yourself for 1 Aura.
 
 :::example
 Bram's Soul is down to 2 when his old captain turns up at the inn and names him, and the room turns on the crew. That's a big bite, so his Soul's on 3.
@@ -195,10 +195,10 @@ Dorrie's Soul is down to 3 on Vane's stair, so she whistles for Vesk to pull the
 ::::
 
 ::::card[Your Aspiration]{#l-aspiration teaches=s-aspiration}
-Your **Aspiration** is one thing you want. It starts at d2 and climbs as you chase it: when something you do really moves it along, roll against its die, and beat it to climb one. A setback steps it back down, never below d2. When it climbs past d12, it resolves: you get what you were after, take a new Title, archetype or attuned thing with the one it comes with, and write a new Aspiration at d2.
+Your **Aspiration** is one thing you want, and it takes 5 points to get there. There's no roll: each downtime slot you spend on it is a point, and a setback takes one back off. At 5 it comes good: you get what you were after, and take a new Title, archetype or attuned thing with the one it comes with.
 
 :::example
-Vesk's *Own the score of a lifetime* is on d2 when she cracks a strongbox in the Low Market. Her Body's d12 and d10 roll 7 and 2 against its 1, so it climbs to d4.
+Vesk's *Own the score of a lifetime* has nothing in it after her first session. She puts a downtime slot in it, so it's 1 of 5. Six sessions and four more slots later, she's robbed the Vane Estate, it comes good, and she takes a third Title.
 :::
 ::::
 
@@ -275,10 +275,10 @@ The brute's club is coming down at Isolde, and her Body's 0. Vesk's right beside
 ::::
 
 ::::card[Consequences]{#l-cost teaches=s-consequences}
-When a blow gets through, the GM names what it costs you, picking one that fits. Usually it's a **hit**, a point off the Root it was aimed at. It might be a box on your [armour](#s-armour), something you carry breaking, your [Aspiration](#s-aspiration) or the [Party Goal](#s-goal) stepping back down, or a [clock](#s-stakes). You can offer another that fits and costs about as much, and **2 for 1** always fits, if the other Root's got the points.
+When a blow gets through, the GM names what it costs you, picking one that fits. Usually it's a **hit**, a point off the Root it was aimed at. It might be a box on your [armour](#s-armour), something you carry breaking, a point off your [Aspiration](#s-aspiration), the [Party Goal](#s-goal) stepping back down, or a [clock](#s-stakes). You can offer another that fits and costs about as much, and **2 for 1** always fits, if the other Root's got the points.
 
 :::example
-A guard's blade gets through, and the GM names a point of Vesk's Body. Her Aspiration's on d4, so she offers that instead, and it steps back down to d2.
+A guard's d8 rolls 6 against Vesk's d12's 4, and the GM names a point of her Body. Her Aspiration's got 2 points, so she offers one instead, and it's down to 1.
 :::
 ::::
 
@@ -307,7 +307,7 @@ Ash's fire beats a Warden with a d12 meant to set it alight, so it's *Burning d1
 ::::
 
 ::::card[Wounds, Scars and the Blaze]{#l-blaze teaches=s-blaze}
-A hit on a Root with no points left **wounds** it: **Bloodied** for your Body, **Frayed** for your Mind and **Hollow** for your Soul. A wounded Root heals only to half its maximum till downtime. Another hit there at 0 is a **Scar**, a Catch that locks a point for good, and you leave the scene. While you're wounded you can take the **Blaze** on your turn: the Scar, something extraordinary, then out, or die if you choose.
+A hit on a Root with no points left **wounds** it: **Bloodied** for your Body, **Frayed** for your Mind and **Hollow** for your Soul. A wounded Root heals only to half its maximum till downtime. Another hit there at 0 is a **Scar**, something you can't do any more that locks a point for good, and you leave the scene. Three downtime slots grow it into a Trait. Wounded, you can take the **Blaze** on your turn: the Scar, something extraordinary, then out.
 
 :::example
 Bram's Body is Bloodied when the Warden comes for the gate. On his turn he Blazes and holds it alone till the crew's clear, and he does. His Body takes a Scar, so it holds 6 now.

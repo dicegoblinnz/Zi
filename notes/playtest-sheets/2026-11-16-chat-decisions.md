@@ -77,3 +77,12 @@ He said "I'm happy with all that you said" after these, so they're his:
 - Toll counts only heals from someone or something else. Scene recovery never adds Toll, and Toll can't take a heal below 0.
 - No heal goes past a Root's maximum, or past half while it's wounded.
 - At the table, note the round the first Bloodied lands in a big fight. Round 3 or 4 of a 45-minute fight feels right. Earlier means telegraphs are too heavy, later means heals are.
+
+## Later on 16 Nov: his answers to prompt 5's calls
+
+In his words:
+
+- "No aspiration rolls it should just be 5 points to invest in it."
+- "Sure two scar lines is fine. After each scar you suffer a negative permission that is upheld, but 3 downtime can turn the scar into a trait for the character. Like lost left eye affecting vision. But then you now get magical detection on it and see all magical effects around you etc."
+- "Yes all ability prints the cost of aura for each."
+

@@ -85,7 +85,7 @@ function rootCol(r) {
         <span class="pt now"><span class="lab">now</span>${box(`root_${r}_now`, "nbox", 13)}</span>
         <span class="wound">${tick(`root_${r}_wound`, "cross")}<b>${WOUNDS[r]}</b></span>
       </div>
-      <div class="scars">${range(ROWS.scars).map((n) => `<div class="scar"><span class="cut"></span>${w(`root_${r}_scar_${n}`, { size: 8 })}</div>`).join("")}</div>
+      <div class="scars">${range(ROWS.scars).map((n) => `<div class="scar"><span class="cut"></span>${w(`root_${r}_scar_${n}`, { size: 8 })}<span class="boxes">${range(ROWS.grow).map((j) => tick(`root_${r}_scar_${n}_grow_${j}`, "check")).join("")}</span></div>`).join("")}</div>
       ${range(ROWS.armour).map((n) => `<div class="arm"><span class="lab">Armour</span>${w(`root_${r}_armour_${n}`)}<span class="boxes">${range(ROWS.boxes).map((j) => tick(`root_${r}_armour_${n}_box_${j}`, "check")).join("")}</span></div>`).join("")}
     </section>`;
 }
@@ -93,7 +93,7 @@ const roots = () => `
   <section>
     ${tab("Roots", "a Title puts 5 on your Roots · a permission 1 on its Root · a Root’s number is its dice, its points to take hits with and its points to spend")}
     <div class="roots3">${ROOTS.map(rootCol).join("")}</div>
-    <p class="hint"><b>A hit</b>’s a point off, or 2 off another Root · armour can take it · <b>at 0</b> it wounds, and you heal to half · <b>wounded at 0</b> it’s a Scar and you leave · <b>Blaze:</b> take the Scar, do the extraordinary, leave</p>
+    <p class="hint"><b>A hit</b>’s a point off, or 2 off another Root · armour can take it · <b>at 0</b> it wounds, and you heal to half · <b>wounded at 0</b> it’s a Scar, something you can’t do, and you leave · <b>Blaze:</b> take the Scar, do the extraordinary, leave</p>
   </section>`;
 
 // Building a roll, and the steps ladder under it.
@@ -114,19 +114,20 @@ const conditionsAndScars = () => `
     <section class="blk rests">
       ${tab("Getting it back", "two rests")}
       <p class="hint"><b>When a scene ends:</b> roll each Root below what it holds, unsplit, d12s first (8 is a d12 and a d4), and get back what you roll · its top faces are Aura, what it heals never is · Toll down 1</p>
-      <p class="hint"><b>Downtime:</b> everything back, every Root full and every wound and your Toll gone · Scars stay</p>
+      <p class="hint"><b>Downtime:</b> everything back, every Root full and every wound and your Toll gone · Scars stay, and 3 slots on one grow it into a Trait: tick a box for each</p>
       <p class="hint"><b>A heal</b> (a Healer’s) is rolled unsplit, less 5 for each Toll, spread on any of your Roots · <b>quick heal:</b> 1 Aura and an action, 1 point back</p>
     </section>
   </div>`;
 
-// The Aspiration and the Party Goal, a line each and the dice it climbs, and
-// your points: what you've spent of what you started on, and room for any
-// you've got banked.
-const goal = (id, title, after) => `
-    <div class="goal"><h2 class="chip">${title}</h2>${w(id)}${ringDice(`${id}_die`)}<p class="hint">${after}</p></div>`;
+// The Aspiration, a line and a box for each of its 5 points, the Party Goal,
+// a line and the dice it climbs, and your points: what you've spent of what
+// you started on, and room for any you've got banked.
+const goal = (id, title, after, marks) => `
+    <div class="goal"><h2 class="chip">${title}</h2>${w(id)}${marks}<p class="hint">${after}</p></div>`;
+const aspPoints = () => `<span class="apts">${range(ROWS.aspiration).map((n) => tick(`aspiration_${n}`, "check")).join("")}</span>`;
 const goals = () => `
   <section class="goals">
-    <div class="pair">${goal("aspiration", "Aspiration", "Past d12: a new Title, archetype or attuned thing, with its one, and a new Aspiration at d2.")}${goal("party_goal", "Party Goal", "Past d12: the crew’s done it, and everyone writes a new thread.")}</div>
+    <div class="pair">${goal("aspiration", "Aspiration", "A slot’s a point, no roll · at 5: a new Title, archetype or attuned thing, with its one", aspPoints())}${goal("party_goal", "Party Goal", "Past d12: the crew’s done it, and everyone writes a new thread.", ringDice("party_goal_die"))}</div>
     <div class="points"><h2 class="chip">Points</h2>
       <div class="row"><span class="lab">spent</span>${box("points_spent")}<span class="lab">of</span>${box("points_start")}</div>
       <div class="row"><span class="lab">banked</span>${box("points_banked")}</div>
@@ -221,7 +222,7 @@ function back(stamp) {
 
   <section>
     ${tab("Archetypes")}
-    <p class="hint">The same one twice is fine · its Trait’s always on · each ability’s 1 Aura when you use it, unless its line says more · six abilities at most</p>
+    <p class="hint">The same one twice is fine · its Trait’s always on · each ability says what it costs in Aura · six abilities at most</p>
     <div class="grid3">${range(ROWS.archetypes).map(archCard).join("")}</div>
   </section>
 

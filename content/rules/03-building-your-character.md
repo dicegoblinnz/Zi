@@ -38,7 +38,7 @@ Here's how it goes, step by step:
 6.  **Attunement**: each attuned thing starts at Awakened, with its awakening, which locks a point of the Root it fits.
 7.  **Your numbers**, and **two bond threads** with the crew, or three if you write a hostile thread as well.
 8.  **A few answers** that tie you to the rest of the crew, and they're where your bond threads come from.
-9.  **An Aspiration** at d2.
+9.  **An Aspiration**, with nothing in it yet.
 
 You start with every Root full, a stride of 3, and an Aura maximum of 5. Your armour sits on whichever Root it guards.
 
@@ -94,7 +94,7 @@ One role or one school per Title. *Archmage* is too wide, so pick the school you
 
 That's 7 points: 5 for the Title, which came with *hold the line*, and 1 each for the other two.
 
-**Titles are the biggest growth in the game.** When your Aspiration climbs past d12, a new Title is one of the things you can take. It comes with its 5 for your Roots and one permission, and Grow fills it from there. It counts the same way your first ones do, and it raises the stakes for the whole table: the GM's [threat budget](#s-threat-budget) grows as the crew earns them.
+**Titles are the biggest growth in the game.** When your Aspiration comes good, a new Title is one of the things you can take. It comes with its 5 for your Roots and one permission, and Grow fills it from there. It counts the same way your first ones do, and it raises the stakes for the whole table: the GM's [threat budget](#s-threat-budget) grows as the crew earns them.
 
 ## Step 2: Archetypes {#s-step-archetypes}
 
@@ -121,7 +121,8 @@ A **permission** is something your character can do. Each Title comes with one, 
 | Title | who you are, a name, and 5 on your Roots | *The best cat burglar in the city* |
 | Root | how you're doing it, Body, Mind or Soul, and your dice, your health and what you spend there | Body |
 | Permission | something you can do, 1 on its Root, and what lets you bring a Root into a roll | *pick a mechanical lock* |
-| Catch | trouble the GM can run with, from an attuned thing or a Scar | *Wanted* · *a spear through the shoulder* |
+| Catch | trouble the GM can run with, from an attuned thing | *Wanted* · *Loud* |
+| Scar | what a hit at your worst took from you, written as something you can't do, and a point of its Root locked | *can't see on my left* |
 
 If what you've written reads like a name, like *Combat master*, it's a Title. If it's something you can do, like *pick a mechanical lock*, it's a permission. If it's one word for what kind of person you are, like *Strong* or *Deceptive*, that's what your Roots are for, so build the Root instead.
 
@@ -412,7 +413,7 @@ If you're a [Summoner](#a-summoner), your summoning attunement holds souls, one 
 
 ### Catch ideas: 12 {#catches-12}
 
-A **Catch** is trouble that comes with an attuned thing. (The other Catches on your sheet come from [Scars](#s-blaze).) It has to be something that can bring real trouble into a scene, something the GM can run with, and if it'd never come up, it isn't a Catch. You can let it bite as often as you like for 1 Aura, as long as it brings real trouble every time, and 1 Aura on your own roll keeps it quiet (see [Getting it back](#getting-it-back)). Letting it bite is always your call. When it bites in a big way, one that changes the scene or costs you something you wanted, you get a point of Soul back instead of the Aura (see [Catches and Trouble](#s-trouble)).
+A **Catch** is trouble that comes with an attuned thing. It has to be something that can bring real trouble into a scene, something the GM can run with, and if it'd never come up, it isn't a Catch. You can let it bite as often as you like for 1 Aura, as long as it brings real trouble every time, and 1 Aura on your own roll keeps it quiet (see [Getting it back](#getting-it-back)). Letting it bite is always your call. When it bites in a big way, one that changes the scene or costs you something you wanted, you get a point of Soul back instead of the Aura (see [Catches and Trouble](#s-trouble)).
 
 | \# | Catch | What it means |
 | --- | --- | --- |
@@ -532,34 +533,35 @@ Bram answers three. He already knows Isolde, because he's guarded her since she 
 
 ## Step 9: Aspiration {#s-aspiration}
 
-Your **Aspiration** is one thing you want. It starts at **d2** and climbs as you chase it, so the first steps come easy and the last ones are hard work. The crew writes its [Party Goal](#s-goal) at d2 as well, and it climbs the same way.
+Your **Aspiration** is one thing you want, and it takes **5 points** to get there. There's no roll for it. You put the points in yourself, so you get it when you've decided it's worth the time.
 
--   **Chase it.** When something you do really moves it along, roll against its die, with the Root that fits what you're doing about it. Beat it and it climbs one. In a scene, that's an action aimed at it, when the GM says it's within reach (usually once or twice a session). In downtime, it's a slot.
--   **One step a roll.** However many dice you put on it, one roll moves it one step at most. More dice is advantage, and your best die counts.
--   **A setback** steps it back down one, never below d2.
+-   **Put a point in.** Every downtime slot you spend on it is a point in it, the same way a slot buys a permission or an ability. Both your slots can go on it, and the crew's action can put a point in anyone's.
+-   **A setback** takes a point back off it, never below 0.
 
-When it climbs past d12, it **resolves**: you get what you were after, and you take **a new Title**, **a new archetype** or **a new attuned thing**, your pick, with the permission, ability or awakening it comes with. Then write a new Aspiration at d2.
+When it's got all 5, it **comes good**: you get what you were after, and you take **a new Title**, **a new archetype** or **a new attuned thing**, your pick, with the permission, ability or awakening it comes with. That's what 5 points buy when you make a character, so the points you put in are what you get back. Then write a new Aspiration, with nothing in it yet.
 
-Your Aspiration is also somewhere a consequence can land. When a blow or a failure costs you, you can step your Aspiration back down instead of taking it on your Roots or your gear, so the fight costs you your dream instead of your skin. You can't do it while it's at d2.
+Your Aspiration is also somewhere a consequence can land. When a blow or a failure costs you, you can take a point off your Aspiration instead of taking it on your Roots or your gear, so the fight costs you your dream instead of your skin. You can't do it while it's got nothing in it.
+
+The crew's [Party Goal](#s-goal) is different. It's a die, and it climbs with rolls.
 
 :::example[Vesk's Aspiration, session by session]
-**Session 1:** *Own the score of a lifetime*, at d2. She's cracking a merchant's strongbox in the Low Market when the GM says it's within reach. That's her Body, 11 steps, a d12 and a d10, all on the one intent. Her best die's a 7 against the Aspiration's d2, which rolls a 1, and it climbs to d4.
+**Session 1:** *Own the score of a lifetime*, with nothing in it yet.
 
-**Downtime:** she spends a slot on it, the same 11 steps. 6 against the d4's 2, so it's d6.
+**Downtime:** she puts a slot in it, so it's 1 of 5.
 
-**Session 2:** She gets run out of a warehouse. That's a setback, so it's back to d4.
+**Session 2:** She gets run out of a warehouse. That's a setback, so it's back to nothing.
 
-**Sessions 3 to 6:** She spends a slot on it most downtimes and pulls one good job, and it climbs to d12. The last few steps took her a few goes, because a d12 and a d10 against a d12 is still no sure thing.
+**Sessions 3 to 6:** She puts a slot in it most downtimes, and the other one goes on mending whatever the last job broke. By session 6 it's got 4.
 
-**Session 7:** She robs the Vane Estate. Her last roll is at the vault itself, her d12 and d10 against the Aspiration's d12. Her best is 9 against its 9, and she pays 1 Aura to take the tie. It climbs past d12 and resolves. Vesk takes a third Title, *The woman who has never been seen*, with its 5 for her Roots and one permission. Her new Aspiration, *Find out who the fence really is*, starts at d2.
+**Session 7:** She robs the Vane Estate, and in the downtime after, her slot's its fifth point. It comes good. Vesk takes a third Title, *The woman who has never been seen*, with its 5 for her Roots and one permission. Her new Aspiration, *Find out who the fence really is*, starts with nothing in it.
 :::
 
 ### A good Aspiration {#s-good-aspiration}
 
-When your Aspiration climbs past d12, you get what you wrote, so make it something you could have in an arc or two. Vesk's first one took her seven sessions. A good one passes all four of these:
+When your Aspiration comes good, you get what you wrote, so make it something you could have in an arc or two. Vesk's first one took her seven sessions. A good one passes all four of these:
 
 -   **It's one thing.** Wren has to find the thing before she can put it down, and Ash will either burn the Ember Court down or take it back, but each of them is after one thing. If you want two things, write the first, and the other can be your next Aspiration.
--   **You'd know the day it's done.** There's a moment you could point at, like Vesk walking out of the vault or Bram getting his rank back. *Be rich* hasn't got one, so when it climbs past d12, nobody knows what you've got.
+-   **You'd know the day it's done.** There's a moment you could point at, like Vesk walking out of the vault or Bram getting his rank back. *Be rich* hasn't got one, so when it comes good, nobody knows what you've got.
 -   **It's about someone or something in the world.** That's what lets the GM put it within reach. Dorrie's *Get a seat at the table that ruined my family* points at the people who did it, so the GM knows who to put in her way.
 -   **The story goes on after it.** You get it, and then everyone else gets to react. *Never get caught again* would mean nothing could ever catch Vesk, so leave out words like *never* and *can't*.
 
@@ -570,7 +572,7 @@ Each of these has a version that's too big or too vague, then what the crew wrot
 -   *Bring my order back* is a whole campaign. *Find out who burned my order's library* is where Isolde starts.
 -   *Kill the thing that took my brother and make sure it never happens again* is two things, and the second one never ends. *Find the thing that took my brother, and put it down* keeps the first.
 
-If yours is too big or too vague, the GM says so, and you work it out together before it goes on your sheet. Usually that means keeping the first piece of it, and the rest makes a good next Aspiration for when this one resolves.
+If yours is too big or too vague, the GM says so, and you work it out together before it goes on your sheet. Usually that means keeping the first piece of it, and the rest makes a good next Aspiration for when this one comes good.
 
 ## Armour {#s-armour}
 
@@ -739,7 +741,7 @@ That's six threads on five bonds. Both of Dorrie's go under her name, on the one
 
 ### Step 9: Aspiration {#step-8-aspiration}
 
-*Own the score of a lifetime.* It starts at d2.
+*Own the score of a lifetime.* It starts with nothing in it.
 
 ### Final sheet {#final-sheet}
 
@@ -762,7 +764,7 @@ That's six threads on five bonds. Both of Dorrie's go under her name, on the one
 
 **Crew:** Already knows Dorrie · Unfinished business with Bram.
 
-**Aspiration:** Own the score of a lifetime (d2).
+**Aspiration:** Own the score of a lifetime (0 of 5).
 
 **Numbers:** Aura 5 · Stride 3.
 :::

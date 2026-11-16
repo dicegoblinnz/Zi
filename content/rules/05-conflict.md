@@ -205,7 +205,7 @@ When a telegraph lands on you, or when a miss costs you something because it mat
 Instead of a hit, the GM can name something else that fits:
 
 -   **Your armour takes it, or something breaks.** A piece of armour on that Root ticks one of its boxes instead of you losing the point, and it breaks when the last one's ticked (see [Armour](#s-armour)). Anything else you carry just breaks: cross it out until it's mended. Your attuned things are magic, and they can't be broken.
--   **Step your Aspiration back down** one size, never below d2. The blow costs you your dream instead of your body.
+-   **Take a point off your Aspiration**, never below 0. The blow costs you your dream instead of your body.
 -   **Step the Party Goal back down** one size, never below d2.
 -   **Tick a clock**: step one of the scene's clocks, or one of the campaign's, down one.
 -   **Something else** the table agrees fits.
@@ -493,7 +493,13 @@ So Bram, on 7 points of Body, can take seven hits there and still be on his feet
 Vesk's down to 2 points of Body after a long night on the rooftops. In round one a spear gets through, so she's on 1. In round two a guard's blow lands while she's *Exposed*, which makes it 2 hits: the first takes her last point, and the second leaves her **Bloodied**. Her Body can only heal to 5 now, half of its 10, till downtime. One more hit on her Body and it's a Scar. She could Blaze on her turn and go out on her own terms, but she's got the prize in her hand, so she runs for it instead.
 :::
 
-A **Scar** is the hit that did it, written down as a Catch on that Root: *a spear through the shoulder*, *can't stand the dark*. It bites like any Catch, so let it cause real trouble and you take 1 Aura, or a point of Soul for a big bite. **A Scar locks a point of that Root for good**, so its maximum's a point smaller from now on, though its dice never are. Where it is on your body or your mind is up to you.
+A **Scar** is the hit that did it, written down as a **negative permission** on that Root: something you can't do any more, or can't do the way you could, like *can't see on my left* or *can't stand the dark*. It's upheld, so the GM holds you to it every time it matters, the same way your permissions say what you can do. **A Scar locks a point of that Root for good**, so its maximum's a point smaller from now on, though its dice never are. Where it is on your body or your mind is up to you.
+
+**A Scar can grow into a Trait.** Spend three downtime slots on it, in one downtime or across a few, and it becomes a Trait of yours, something that grew out of what happened to you, worked out with the GM and always true. It's still a Scar, so it still holds you and its point's still locked, but now it gives as well.
+
+:::example[Bram's eye]
+A spear takes Bram's left eye at the harbour gate, and he writes the Scar on his Body: *can't see on my left*. Anyone coming at him from that side gets past his guard, and the GM holds him to it. Over the next two downtimes he puts three slots into it, learning to fight with what he's got left, and it grows into a Trait: *The Eye That Isn't There*. The eye's still gone, but where it was, he sees magic, every ward, curse and spell around him, plain as daylight.
+:::
 
 **When you take a Scar, you leave the scene.** You're carried out, you run, you pass out, or you just can't any more, whatever fits.
 
@@ -507,7 +513,7 @@ A **Scar** is the hit that did it, written down as a Catch on that Root: *a spea
 
 Some of you take more wearing down than others, and some less. A few Boons and Burdens change how much you can take, and they're in [Boons and Burdens](#s-boons).
 
-The GM can take a Scar away when the story's earned it, like a miracle, a ritual or a year of rest. Cross it out, Catch and all, and the point it locked comes back.
+The GM can take a Scar away when the story's earned it, like a miracle, a ritual or a year of rest. Cross it out, and the point it locked comes back. A Trait it's grown into stays.
 
 ## Healing {#s-healing}
 

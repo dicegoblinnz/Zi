@@ -280,7 +280,7 @@ At the end of the scene his Body rolls a d12 and a d6, 5 and 2, and that's more 
 
 ## Catches and Trouble {#s-trouble}
 
-A **Catch** is trouble written on your sheet, ready to go. It comes from an attuned thing (see [Attunement](#s-attunement)), or from a Scar (see [Wounds, Scars and the Blaze](#s-blaze)). It's got to be something that can bring real trouble into a scene, something the GM can run with. If it'd never come up, it isn't a Catch.
+A **Catch** is trouble written on your sheet, ready to go. It comes from an attuned thing (see [Attunement](#s-attunement)). It's got to be something that can bring real trouble into a scene, something the GM can run with. If it'd never come up, it isn't a Catch.
 
 Trouble's yours to bring. Letting your Catches bite is up to you, and the GM doesn't hand out trouble. She makes things go wrong in all the usual ways, like telegraphs and the cost of a miss.
 

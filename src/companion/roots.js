@@ -64,6 +64,10 @@ export const BRING_AURA = 3;
 export const TOLL_STEP = 5;
 // The Recovery Boon puts 2 on each Root's roll at the end of a scene.
 export const REST_BOON = 2;
+// An Aspiration takes 5 points, put in a downtime slot at a time, and a Scar
+// grows into a Trait with 3 slots on it (Mo's 16 Nov answers, after the core).
+export const ASP_PTS = 5;
+export const SCAR_SLOTS = 3;
 
 const int = (v, d = 0) => (Number.isFinite(Number(v)) ? Math.round(Number(v)) : d);
 const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, int(v, lo)));
@@ -443,10 +447,22 @@ export function freshCore(c) {
     scars: { Body: [], Mind: [], Soul: [] },
     blaze: null, out: false, dead: false,
     conditions: [], threads: {}, crossed: {}, boxes: {}, picked: [],
-    asp: even(c.aspiration?.die ?? 2, 2, 12), aspText: "", notes: "", last: null, grown: [], choose: [],
+    asp: even(c.aspiration?.die ?? 2, 2, 12), aspPts: aspOf({ aspPts: c.aspiration?.pts ?? 0 }), aspText: "", notes: "", last: null, grown: [], choose: [],
   };
   for (const r of ROOTS) s.pts[r] = capOf(c, s, r);
   return s;
+}
+
+// The points in an Aspiration, 0 to 5. A state from before they were points
+// has its old die (asp) read as a point for each size it had climbed, d2 as
+// nothing and d12 as 4, since 5 would have come good already.
+export const aspOf = (s) => (s?.aspPts != null && Number.isFinite(Number(s.aspPts)) ? clamp(s.aspPts, 0, ASP_PTS) : Math.min(ASP_PTS - 1, Math.max(0, (even(s?.asp ?? 2, 2, 12) - 2) / 2)));
+// A Scar's growth toward its Trait, by its Root and its place on it: the
+// slots on it so far (n, up to 3) and, once it's grown, the Trait (trait).
+export const scarKey = (root, i) => `${root}|${i}`;
+export function scarGrowOf(s, root, i) {
+  const g = s?.scarGrow?.[scarKey(root, i)];
+  return { n: clamp(g?.n, 0, SCAR_SLOTS), trait: text(g?.trait, 200) };
 }
 
 // The Root a track was on, for a state from before the new core.
@@ -506,6 +522,15 @@ export function normalCore(raw, c) {
   if (!s.out) delete s.out;
   s.dead = Boolean(s.dead);
   s.asp = even(s.asp, 2, 12);
+  s.aspPts = aspOf(r && r.aspPts != null && Number.isFinite(Number(r.aspPts)) ? r : { asp: s.asp });
+  // Each Scar's slots toward its Trait, kept only for a Scar that's there.
+  const grow = obj(s.scarGrow);
+  s.scarGrow = {};
+  for (const root of ROOTS) s.scars[root].forEach((_, n) => {
+    const g = scarGrowOf({ scarGrow: grow }, root, n);
+    if (g.n || g.trait) s.scarGrow[scarKey(root, n)] = g.trait ? g : { n: g.n };
+  });
+  if (!Object.keys(s.scarGrow).length) delete s.scarGrow;
   s.conditions = (Array.isArray(s.conditions) ? s.conditions : []).filter((x) => x && x.name).map((x) => ({ name: text(x.name, 40), die: even(x.die, 2, 12), kind: x.kind === "for" ? "for" : "against" }));
   s.picked = (Array.isArray(s.picked) ? s.picked : []).filter((p) => p && p.name && ["equipment", "utility", "bag"].includes(p.where));
   for (const key of ["threads", "crossed", "boxes"]) if (!s[key] || typeof s[key] !== "object" || Array.isArray(s[key])) s[key] = {};

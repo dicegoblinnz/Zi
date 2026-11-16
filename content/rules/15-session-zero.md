@@ -50,7 +50,7 @@ If anyone wants to play tonight without building, they can take one of the [read
 
 ## 6. The Party Sheet {#the-party-sheet}
 
-Draw it up together. Put every Aspiration at d2 and the Party Goal at d2. Give the crew its starting card, Power d4 with one resource and one asset (see [The Crew](#s-party-faction)), and a name if you've got one. Then add your first factions, and any holdings the crew starts with.
+Draw it up together. Every Aspiration starts with nothing in it, and the Party Goal's at d2. Give the crew its starting card, Power d4 with one resource and one asset (see [The Crew](#s-party-faction)), and a name if you've got one. Then add your first factions, and any holdings the crew starts with.
 
 The Goal is what the first arc's about, so take your time over it. A good first Goal is something the whole crew wants and can't get in one night, like *clear Dorrie's name* or *own the Low Market*, and it's one arc's worth (see [A good Goal](#s-good-goal)). Four factions is enough to start, as long as one of them wants something the crew's got.
 

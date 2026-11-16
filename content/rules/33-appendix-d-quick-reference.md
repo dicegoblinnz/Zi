@@ -67,7 +67,7 @@ updated: 2026-11-16
 -   **Hits:** every telegraph die that gets through is a hit, and a hit's 1 point off its Root. A vulnerability's one more hit, and a deadly threat's telegraph says how many. **2 for 1:** take a hit on another Root instead, for 2 points of it, if it's got them.
 -   **Spending:** a point of the Root you bring in, or a point of Soul to roll again. You can't spend what you haven't got, so pushing never hurts you, and spending to 0 only leaves you exposed.
 -   **Wounds:** a hit on a Root with no points left wounds it, **Bloodied** (Body), **Frayed** (Mind) or **Hollow** (Soul), one each. A wounded Root heals only to half its maximum, rounded up, till downtime or a story moment clears it. Damage carries on past 0.
--   **Scar:** a hit on a wounded Root with no points left. You leave the scene, and it's a Catch on that Root that locks a point of it for good. A Scar that locks a Root's last point is your last: die or retire, your call.
+-   **Scar:** a hit on a wounded Root at 0. You leave the scene, and it's something you can't do, held to, that locks a point for good. Three downtime slots grow it into a Trait. One that locks a Root's last point is your last.
 -   **Blaze:** while you're wounded, on your turn, take the Scar, declare something extraordinary and it happens, no roll, then leave the scene. From your first Blaze, you can choose to die.
 -   **They come back:** at the end of every scene, roll each Root below its maximum, unsplit, and get back what you roll. Downtime puts everything back, wounds and Toll included. A big bite from a Catch or a hostile thread, or straining a bond thread, gets you a point of Soul back.
 -   **Heal** (the Healer's): an action, rolled unsplit, and the patient gets back what it rolls, spread across their Roots. It reaches one person. **Toll:** every heal from someone or something else is 1 Toll, and a heal loses 5 for each Toll they've already got, never below 0. It drops by 1 at the end of each scene, and downtime clears it. **Quick heal**, for anyone: 1 Aura and your action, 1 point back on one Root, no roll and no Toll.
@@ -119,7 +119,7 @@ A hit, a point off the Root it's at · a box on your armour on that Root instead
 ## Stakes, clocks, events {#stakes-clocks-events}
 
 -   A stake: Challenge + tags in the way. Strip them all and it's yours.
--   Things that climb (the Goal, Aspirations, projects, agendas) start low, step up on a win, one step a roll, and past d12 they're done.
+-   Things that climb (the Goal, projects, agendas) start low, step up on a win, one step a roll, and past d12 they're done.
 -   A clock steps down each round nobody works the stake. An event steps down each round nobody touches it. Past d2, it happens.
 -   Every scene gets a scene clock: past d2, the scene turns.
 
@@ -139,7 +139,7 @@ A hit, a point off the Root it's at · a box on your armour on that Root instead
 -   **Archetypes:** apart from your Titles, and you can take the same one twice. Each one's a mechanic, a Trait that's always true of you, and the ability it comes with, and more abilities are bought, six at most. Abilities cost Aura.
 -   **Attuned things:** each awakening locks a point of the Root it fits, and it's 2 steps on a roll it fits, 2 more for each Aura you put in it. Awakened holds one, and its Catch brings a second, free.
 -   **Boons:** two permission slots on a Title buy one. Burdens only come on attuned things. The menu's in [Boons and Burdens](#s-boons).
--   **Aspiration:** starts at d2 and climbs. An action when it's within reach, or a slot. One step a roll. Past d12, take a new Title, archetype or attuned thing, with the one it comes with.
+-   **Aspiration:** 5 points to get there, and no roll. Each downtime slot you spend on it is a point, and a setback takes one back off. At 5 it comes good: take a new Title, archetype or attuned thing, with the one it comes with.
 -   **To start:** Aura 5, every Root full, a stride of 3, and two bond threads with the crew.
 
 ## The archetypes {#s-qr-archetypes}
@@ -192,7 +192,7 @@ Each ability's 1 Aura, and they stack. Most have a Push: +2 on one die of the me
 
 -   Four pressures: personal, party, faction, world. Ignore one and it gets worse, and twice makes it a scene. Every faction's action is telegraphed at the start, and rolled after the slots.
 -   Two personal slots each, and the crew takes one action, like any faction. A personal slot can go into the crew's action. Every downtime starts with everything back: every Root full, wounds and Toll gone.
--   **Mend:** something broken, or a piece of armour with boxes ticked. **Grow:** a slot buys what a point does: a new permission on a Title · a new ability off an archetype's list · a new awakening · something to carry. Or it's a new thread, or a roll at your Aspiration.
+-   **Mend:** something broken, or a piece of armour with boxes ticked. **Grow:** a slot buys what a point does: a new permission on a Title · a new ability off an archetype's list · a new awakening · something to carry. Or it's a new thread, a point in your Aspiration, or a slot toward growing a Scar into a Trait (three slots).
 -   **Mend a thread** you've strained by making it right with them. Downtime's one place for it, and a scene with them is the other.
 -   **Swap** a permission for another that fits your Title, or two for a Boon, and back. **Attune:** a slot for each new awakening, and the material for a new stage. A soul you're carrying goes into your summoning attunement.
 -   Ties go to the defender. No Aura: pay a point of Soul to roll your dice again, or an extra crew resource to take the tie.

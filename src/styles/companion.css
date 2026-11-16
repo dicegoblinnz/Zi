@@ -715,6 +715,12 @@ details.cc-group > summary small { margin-left: auto; font-family: var(--body); 
    roll at the Aspiration a tap each, a new Title's spread, and the abilities
    to pick from. */
 .dt-say { margin: 0.5rem 0; }
+/* An Aspiration's five points in downtime: the ones in it, and this slot's. */
+.dt-say:has(.dt-pips) { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+.dt-pips { display: inline-flex; gap: 0.3rem; }
+.dt-pips i { width: 0.9rem; height: 0.9rem; border: 2px solid var(--gold, currentColor); border-radius: 50%; }
+.dt-pips i.on { background: var(--gold, currentColor); }
+.dt-pips i.new { background: repeating-linear-gradient(45deg, var(--gold, currentColor) 0 2px, transparent 2px 4px); }
 .dt-k { margin: 0.7rem 0 0.3rem; font-size: 0.74rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold-ink); }
 .dt-using { margin-bottom: 0.4rem; }
 .dt-things { margin: 0; }

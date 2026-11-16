@@ -21,12 +21,12 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 -   Aura (now \_\_\_ · max \_\_\_ · full every scene, and 5 to start · 1 for every die of yours that wins and every top face)
 -   Toll (\_\_\_ · 1 for every heal from someone or something else · a heal loses 5 for each · it drops by 1 at the end of each scene, and downtime clears it)
 -   Stride (3 to start)
--   Roots: Body, Mind and Soul side by side, each with a box for its number, where its points came from (a box for each Title's spread, I to VI, and one for its permissions) and the dice it rolls · then what's locked (a point for each awakening on it and each Scar), what it holds, and a big box for the points it has now · a box to tick for its wound, **Bloodied** (Body), **Frayed** (Mind) or **Hollow** (Soul) · two lines for its Scars, each one's Catch · and two armour lines, with three boxes beside each line
--   Under the Roots: a hit's a point off, or 2 off another Root, armour can take it, a hit at 0 wounds the Root and it heals to half, a hit on it wounded at 0 is a Scar and you leave, and the Blaze
+-   Roots: Body, Mind and Soul side by side, each with a box for its number, where its points came from (a box for each Title's spread, I to VI, and one for its permissions) and the dice it rolls · then what's locked (a point for each awakening on it and each Scar), what it holds, and a big box for the points it has now · a box to tick for its wound, **Bloodied** (Body), **Frayed** (Mind) or **Hollow** (Soul) · two lines for its Scars, each one's negative permission, what you can't do any more, with three boxes beside it for the downtime slots that grow it into a Trait, and the Trait written after it once it has · and two armour lines, with three boxes beside each line
+-   Under the Roots: a hit's a point off, or 2 off another Root, armour can take it, a hit at 0 wounds the Root and it heals to half, a hit on it wounded at 0 is a Scar and you leave, three slots grow a Scar into a Trait, and the Blaze
 -   A roll (one Root at full, bringing another in on a permission for a point of it or 3 Aura, an awakening's 2 steps and 2 more for each Aura, and splitting any way) and the steps into dice under it (1 step is a d2, 6 is a d12, 12 is two d12s, and 24 is four)
 -   Conditions (4 · the die that placed it, with its size to ring · it steps down a size every round)
 -   Getting it back (when a scene ends, roll each Root below what it holds, unsplit, and get back what you roll · downtime puts everything back · a heal, and the quick heal)
--   Aspiration (d2 → d4 → d6 → d8 → d10 → d12 · past d12: a new Title, archetype or attuned thing, with the one it comes with, and a new Aspiration at d2)
+-   Aspiration (five boxes, one ticked for each point in it · a downtime slot's a point, and there's no roll · at 5 it comes good: a new Title, archetype or attuned thing, with the one it comes with, and a new Aspiration with nothing in it)
 -   Party Goal (d2 → d4 → d6 → d8 → d10 → d12 · past d12: the crew's done it, and everyone writes a new thread)
 -   Points (spent \_\_\_ of \_\_\_ · banked \_\_\_, for any you haven't spent yet)
 -   Kit: equipment (3 · what you wear or wield, with a weapon's properties and each piece of armour's quality and Root) · utility (3 · tools and things you use up · cross it off once it's used) · a keepsake (something that matters to your character) · the bag (holds 10 · getting something out takes your action, and putting it away is free)
@@ -38,7 +38,7 @@ The character sheet is one A4 sheet, printed back to back. The front's for play 
 
 -   Six Titles, I to VI, each with two lines for the Title · its spread, a box each for Body, Mind and Soul, 5 in all · six permission lines, each with B, M or S to ring for its Root
 -   A Boon takes two permission lines on the Title that pays for it, and puts nothing on a Root
--   Archetypes (three cards · the same one twice is fine · on each: the archetype · its mechanic · its Trait · six ability lines · an ability's 1 Aura when you use it, unless its line says more)
+-   Archetypes (three cards · the same one twice is fine · on each: the archetype · its mechanic · its Trait · seven ability lines, each saying what it costs in Aura, so a long one can take two)
 -   Bonds (4 · three thread lines on each · a bond's usually a person, but it can be a faction, a place or a cause · ring each thread bond or hostile · tick the first box when it's strained, and the second when it snaps)
 -   Notes (four lines: whatever your archetype's holding, like a Shadow's pool or a Shifter's animal tags, trouble that follows you, and anything that won't fit)
 :::

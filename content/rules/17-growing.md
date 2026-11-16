@@ -22,7 +22,7 @@ Every session ends in a [downtime](#downtime), and you choose what your two slot
 
 ## What changes over an arc {#what-changes-over-an-arc}
 
--   **An Aspiration resolves.** You get what you were after, and you take a new Title, a new archetype or a new attuned thing, your pick, with the permission, ability or awakening it comes with, and growth doesn't get any bigger than that. See [Aspiration](#s-aspiration).
+-   **An Aspiration comes good.** You get what you were after, and you take a new Title, a new archetype or a new attuned thing, your pick, with the permission, ability or awakening it comes with, and growth doesn't get any bigger than that. See [Aspiration](#s-aspiration).
 -   **Your Titles fill up**, a permission at a time, and your attuned things wake up, an awakening at a time and a stage at a time.
 -   **The crew grows**, the way a character does. See [The Crew](#s-party-faction), and [The Crew, Session 1 to 20](#s-crew-1-20) below.
 -   **Your bonds grow.** When the Party Goal's done, everyone writes a new thread, with someone the Goal brought into their life.
@@ -36,11 +36,11 @@ Nothing on your sheet levels up. You get stronger by putting more on it: every T
 -   **Things you carry**, got in downtime or found in play. Each one does what it is, as far as your equipment, your utility and your bag will hold (see [What you carry](#s-carrying)).
 -   **Boons.** Two permission slots on a Title buy a permanent upgrade, like shrugging off the first hit each scene (see [Boons and Burdens](#s-boons)).
 -   **Attuned things**, a stage at a time: Awakened, Tempered, Perfected. Each stage needs its material, and each new awakening takes a downtime slot, locks a point of the Root it fits, and is 2 steps on every roll it fits (see [Attunement](#s-attunement)).
--   **Your Aspiration**, every time it climbs past d12. Take a new Title, with its 5 Root points spread however you like and the permission it comes with, so that's 6 more across your Roots. Or a new archetype, with its mechanic, its Trait and the ability it comes with. Or a new attuned thing, with its awakening.
+-   **Your Aspiration**, every time it's got its 5 points. Take a new Title, with its 5 Root points spread however you like and the permission it comes with, so that's 6 more across your Roots. Or a new archetype, with its mechanic, its Trait and the ability it comes with. Or a new attuned thing, with its awakening.
 
-**Which archetype you take matters too.** One you haven't got yet brings its mechanic, something only that archetype can do, its Trait and one of its abilities. One you've already got makes its Push bigger: twice is +3, and three times is +4 (see [How archetypes work](#s-how-archetypes)). Say Bram's Aspiration climbs past d12 and he wants an archetype. He could take Healer, and he'd be the only one in the crew who can make a heal roll. Or he could take Guardian again, with another of its abilities, and his Push would put +3 on a defence die instead of +2.
+**Which archetype you take matters too.** One you haven't got yet brings its mechanic, something only that archetype can do, its Trait and one of its abilities. One you've already got makes its Push bigger: twice is +3, and three times is +4 (see [How archetypes work](#s-how-archetypes)). Say Bram's Aspiration comes good and he wants an archetype. He could take Healer, and he'd be the only one in the crew who can make a heal roll. Or he could take Guardian again, with another of its abilities, and his Push would put +3 on a defence die instead of +2.
 
-**Scars don't upgrade.** A Scar's a Catch, so it bites like one, but it doesn't turn into anything else (see [Wounds, Scars and the Blaze](#s-blaze)).
+**Scars grow.** A Scar's a negative permission, and it holds you, but three downtime slots on it grow it into a Trait as well (see [Wounds, Scars and the Blaze](#s-blaze)).
 
 The [threat budget](#s-threat-budget) is the crew's Roots added up, so it climbs with every new Title and permission, the world keeps pace, and threats that used to be bosses become lieutenants.
 
@@ -111,20 +111,22 @@ Here's what growth actually looks like.
 
 **Attuned:** Her grappling line, Awakened, with *Anywhere I can throw a hook* (Body).
 
-**Aspiration:** *Own the score of a lifetime*, d2.
+**Aspiration:** *Own the score of a lifetime*, nothing in it yet.
 
 **Numbers:** Aura 5 · Stride 3.
 :::
 
-**Session 6: The first arc.** Her Aspiration's climbed from d2 to d12. Most downtimes, one slot went on it and the other on mending whatever the last job broke. She hasn't added a permission, so she's the same person, just further along. That's her call.
+**Session 6: The first arc.** Her Aspiration's got 4 of its 5 points. Most downtimes, one slot went on it and the other on mending whatever the last job broke. She hasn't added a permission, so she's the same person, just further along. That's her call.
 
-**Session 7: A third Title.** She robs the Vane Estate, and her Aspiration climbs past d12 (the roll's in [Aspiration](#s-aspiration)). She could take a new attuned thing, or Shadow a third time for a +4 Push, but she takes a Title: *The woman who has never been seen*, Mind 3 and Body 2, with *know who's watching a room* (Mind). Her Body's 13 and her Mind's 9 now, bigger dice and more to lose before she's hurt. She writes *Find out who the fence really is* at d2, and on her way out she takes a sliver of steel from the vault's bolt, because she's got plans for her picks.
+**Session 7: A third Title.** She robs the Vane Estate, and the slot she puts in her Aspiration after it is its fifth point, so it comes good (see [Aspiration](#s-aspiration)). She could take a new attuned thing, or Shadow a third time for a +4 Push, but she takes a Title: *The woman who has never been seen*, Mind 3 and Body 2, with *know who's watching a room* (Mind). Her Body's 13 and her Mind's 9 now, bigger dice and more to lose before she's hurt. She writes *Find out who the fence really is*, with nothing in it, and on her way out she takes a sliver of steel from the vault's bolt, because she's got plans for her picks.
 
 **Session 10: Locks.** A Grow puts *work a lock in the dark* (Body) on her first Title, so her Body's 14. A lock in the dark is her Body, 14 steps, two d12s and a d4, and when *know how a lock's built* brings her Mind in for a point, it's 23, three d12s and a d10.
 
-**Session 12: Her picks.** Her second Aspiration climbs past d12, and this time she wants her picks bound to her. They're attuned now, at Awakened, so they're on top of what she carries and they can't break. Their awakening is *Open any lock with a mechanism* (Body): 2 steps on every lock she picks with them, and 2 more for each Aura, and it locks another point of her Body. In the downtime after, the vault steel takes them to Tempered, and a slot wakes their second awakening, *Through the ward* (Body): her dice on a lock go through any magic holding it shut, as if it were only steel. That's a third point of her Body locked, so she can hold 11 of its 14. She writes *Train someone who will outlive me* at d2.
+**Session 12: Her picks.** Her second Aspiration gets its fifth point, and this time she wants her picks bound to her. They're attuned now, at Awakened, so they're on top of what she carries and they can't break. Their awakening is *Open any lock with a mechanism* (Body): 2 steps on every lock she picks with them, and 2 more for each Aura, and it locks another point of her Body. In the downtime after, the vault steel takes them to Tempered, and a slot wakes their second awakening, *Through the ward* (Body): her dice on a lock go through any magic holding it shut, as if it were only steel. That's a third point of her Body locked, so she can hold 11 of its 14. She writes *Train someone who will outlive me*.
 
-**Session 14: A Blaze.** In a burning warehouse a falling beam takes the last point of her Body, and the next one leaves her Bloodied. On her turn she takes the Blaze: she walks out through the fire with both crewmates over her shoulders. Her player could choose for her to die there, and doesn't, so she leaves the scene, and the burn becomes a Scar on her Body, written down as a Catch: *a burn across the back*. Whenever she lets it cause real trouble, she takes 1 Aura. It locks a point of her Body for good, so she can hold 10 of its 14 now, though her dice are still all 14.
+**Session 14: A Blaze.** In a burning warehouse a falling beam takes the last point of her Body, and the next one leaves her Bloodied. On her turn she takes the Blaze: she walks out through the fire with both crewmates over her shoulders. Her player could choose for her to die there, and doesn't, so she leaves the scene, and the burn becomes a Scar on her Body, written down as something she can't do any more: *can't go near open flame without freezing*. The GM holds her to it, and it locks a point of her Body for good, so she can hold 10 of its 14 now, though her dice are still all 14.
+
+**Sessions 15 and 16: The Scar grows.** She spends a slot on the Scar in one downtime and two in the next, and it grows into a Trait: *Walked out of the fire*. She still freezes near open flame, but she always knows which way a fire's going to spread, and smoke never chokes her.
 
 **Session 17: Perfected.** A pin from the Quiet Order's vault lock takes her picks to Perfected, and a slot wakes their third awakening, *Find the trap before it springs* (Mind): 2 steps on any roll at a trap, and 2 more for each Aura. It locks a point of her Mind.
 
@@ -149,9 +151,9 @@ Here's what growth actually looks like.
 
 **Threads:** She's written a new bond thread for each Goal the crew finished, and the old ones have all been rewritten at least once. Paying the fence on time strained her hostile thread with him, and keeping his name out of it when the watch came asking snapped it, so she owes him nothing now.
 
-**Aspiration:** *Train someone who will outlive me*, d8.
+**Aspiration:** *Train someone who will outlive me*, 3 of 5.
 
-**Scars:** *a burn across the back*, on her Body.
+**Scars:** *can't go near open flame without freezing*, on her Body, grown into a Trait, *Walked out of the fire*.
 
 **Numbers:** Aura 5 · Stride 3.
 :::

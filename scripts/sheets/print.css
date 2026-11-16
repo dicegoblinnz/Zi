@@ -350,6 +350,11 @@ h1, h2, h3, h4, p, ul, ol { margin: 0; }
 .wound .tick { width: 3.4mm; height: 3.4mm; }
 .rootcol .scars { margin-top: 0.6mm; }
 .rootcol .scar .w { height: 4.6mm; }
+.rootcol .scar .boxes { display: flex; flex: none; gap: 0.6mm; margin-bottom: 0.45mm; }
+.rootcol .scar .tick { width: 2.8mm; height: 2.8mm; }
+/* The Aspiration's five points, a box each. */
+.apts { display: flex; gap: 1.2mm; flex: none; margin-bottom: 1mm; }
+.apts .tick { width: 4.2mm; height: 4.2mm; }
 .arm { display: flex; align-items: flex-end; gap: 1.2mm; }
 .arm .w { height: 4.6mm; }
 .arm .lab { margin-bottom: 0.9mm; }

@@ -23,7 +23,7 @@ You don't have to spend your points this way. Everything's priced in [Building Y
 3.  **Add up your Roots.** Each Root's what your Titles put on it and 1 for every permission on it. That number's three things at once: the steps you roll, the points you can lose before you're hurt, and the points you can spend. A roll's one Root at full, and your permissions are what let you bring another Root in. See [Roots](#s-step-roots).
 4.  **Attune one thing for 5 points, and take what you carry with the last 4.** Your attuned thing starts at Awakened with one awakening. An awakening locks a point of the Root it fits, and it's 2 steps on any roll it fits, and 2 more for each Aura you spend on it. If there's trouble you'd like on it, give it a Catch and it gets a second awakening, free, which locks a point of its own. Everything you carry is 1 point, bar your keepsake, which is free. You carry 3 equipment, 3 utility items and a keepsake, and your bag holds 10 more. Armour goes on the Root it guards, Common with 1 box, and one piece can be Fine, with 2. Getting your Aspiration can bring you another attuned thing. See [What you carry](#s-carrying) and [Attunement](#s-attunement).
 5.  **Write your threads.** They cost nothing, and nor do your answers or your Aspiration. Answer at least two of the [ten crew questions](#s-connect), and turn two of your answers into **bond threads** with the crew, something good between you. A thread with someone in the crew goes on both your sheets, so agree on it together. Write a **hostile thread** as well, with anyone, and you can write a third bond thread. With two players, one of your bond threads goes to someone outside the crew, and playing alone, both do. See [Bonds and threads](#s-bonds).
-6.  **Write your Aspiration** at d2. It's one thing you want, and it climbs as you chase it. Past d12 you get it, so make it something you'd know the day it's done: *be a hero again* is too vague, and *earn back the rank they stripped from me* is better. See [Aspiration](#s-aspiration) and [A good Aspiration](#s-good-aspiration).
+6.  **Write your Aspiration.** It's one thing you want, and it takes 5 points to get there, a downtime slot at a time. When it's got all 5 you get it, so make it something you'd know the day it's done: *be a hero again* is too vague, and *earn back the rank they stripped from me* is better. See [Aspiration](#s-aspiration) and [A good Aspiration](#s-good-aspiration).
 7.  **Check the numbers.** That's your 35 points. You've got 5 Aura and a stride of 3, and every Root starts full, less a point for each awakening. Each hit that gets through to a Root takes a point off it, and one that gets through when it's got none left wounds it. At the end of every scene, each Root rolls and gets back what it rolls. See [Roots](#s-roots), [Wounds and Scars](#s-blaze) and [Aura](#s-aura).
 
 :::example[Wren, the quick way]
@@ -525,7 +525,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Crew:** *Who in the crew do you already know, and how?* Dorrie. We have pulled a dozen jobs together. *Who do you have unfinished business with?* Bram. He carried me out of a fire and I never thanked him.
 
-**Aspiration:** Own the score of a lifetime (d2).
+**Aspiration:** Own the score of a lifetime (0 of 5).
 
 **Trouble that follows her:** *wanted in three districts* · *owes the Guild*.
 :::
@@ -559,7 +559,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Crew:** *Who in the crew do you already know, and how?* Vesk. We came up on the same streets. *Who do you have unfinished business with?* Bram. He thinks I sold him out on the harbour job. *Who in the crew do you trust most, and why?* Isolde. She is the only one who knows my real name.
 
-**Aspiration:** Get a seat at the table that ruined my family (d2).
+**Aspiration:** Get a seat at the table that ruined my family (0 of 5).
 
 **Trouble that follows her:** *every noble house knows my face* · *one of my names is wanted for murder*.
 :::
@@ -593,7 +593,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Crew:** *Who in the crew do you already know, and how?* Isolde. I have guarded her since she was twelve. *Who do you have unfinished business with?* Dorrie. The harbour job went wrong and she walked away clean. *Who in the crew do you trust most, and why?* Wren. We held the same wall in the border war.
 
-**Aspiration:** Earn back the rank they stripped from me (d2).
+**Aspiration:** Earn back the rank they stripped from me (0 of 5).
 
 **Trouble that follows him:** *can't leave anyone behind* · *the captain who broke me still runs the Watch*.
 :::
@@ -627,7 +627,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Crew:** *Who in the crew do you already know, and how?* Bram. He has guarded me since I was twelve. *Who do you have unfinished business with?* Vesk. The book she stole belonged to my order. I have not told her. *Which crewmate do you know a secret about?* Dorrie. I am the only one who knows her real name.
 
-**Aspiration:** Find out who burned my order's library (d2).
+**Aspiration:** Find out who burned my order's library (0 of 5).
 
 **Trouble that follows her:** *the people who burned the order hunt its students* · *can't leave a forbidden book unread*.
 :::
@@ -659,7 +659,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Crew:** *Who in the crew do you already know, and how?* Bram. We fought in the same border war. *Who do you have unfinished business with?* Isolde. She knows more about my brother than she has said. *Who saved your life, or nearly got you killed?* Vesk. She hid me from the watch.
 
-**Aspiration:** Find the thing that took my brother, and put it down (d2).
+**Aspiration:** Find the thing that took my brother, and put it down (0 of 5).
 
 **Trouble that follows her:** *wanted by the Duke's foresters* · *my old company wants me back*.
 :::
@@ -691,7 +691,7 @@ The last line on each sheet is the trouble that follows them. It's yours to brin
 
 **Crew:** *Who in the crew do you already know, and how?* Dorrie. She smuggled me out of the Ember Court. *Who do you have unfinished business with?* Wren. We have never agreed on anything, and we are both usually right. *Who in the crew do you trust most, and why?* Isolde. She is the only one who is not afraid of me.
 
-**Aspiration:** Burn the Ember Court down, or take it back (d2).
+**Aspiration:** Burn the Ember Court down, or take it back (0 of 5).
 
 **Trouble that follows her:** *fire answers my temper* · *someone's paid to bring me home*.
 :::

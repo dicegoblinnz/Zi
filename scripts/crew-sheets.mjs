@@ -265,8 +265,9 @@ function crewSheet(name, titleText, body, block, ctx) {
     return { person, threads: list };
   }).filter(Boolean);
   const crewQs = [...(field.Crew ?? "").matchAll(/\*([^*]+?\?)\*\s+([^*]+)/g)].map((x) => ({ q: curly(x[1]), a: curly(x[2].trim()) }));
-  const asp = (field.Aspiration ?? "").match(/^(.+) \(d(\d+)\)\.?$/);
-  if (!asp) warn("can't read the Aspiration");
+  // An Aspiration's points in it, of the 5 it takes: (0 of 5).
+  const asp = (field.Aspiration ?? "").match(/^(.+) \((\d) of 5\)\.?$/);
+  if (!asp) warn("can't read the Aspiration: its words, then (0 of 5)");
   const troubleLabel = labelled(/^Trouble that follows\b/);
   if (!troubleLabel) warn("there's no trouble that follows them");
 
@@ -283,7 +284,7 @@ function crewSheet(name, titleText, body, block, ctx) {
     archetypes, titles,
     roots: Object.fromEntries(ROOT_NAMES.map((r) => [r, roots[r]])),
     carry, armour, attuned, numbers, threads, crewQs,
-    aspiration: { text: curly(asp?.[1] ?? ""), die: Number(asp?.[2] ?? 2) },
+    aspiration: { text: curly(asp?.[1] ?? ""), pts: Math.min(5, Number(asp?.[2] ?? 0)) },
     trouble: troubleLabel ? italics(field[troubleLabel]) : [],
   };
 

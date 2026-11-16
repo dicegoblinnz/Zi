@@ -7,11 +7,12 @@
 // Aspiration, a bond, something to carry), a new awakening on an attuned
 // thing, or a slot toward the crew. A slot buys what a point does: a
 // permission written with its Root, an ability off an archetype's list, or an
-// awakening with the Root it locks a point of, a slot each. The Aspiration's
-// roll is the Root that fits, at full, and rolling again costs a point of
-// Soul. An Aspiration past d12 brings a new Title (its 5 Root points spread
-// and its one permission), a new archetype (with the ability it comes with)
-// or a new attuned thing (with its awakening). Swapping a permission, two
+// awakening with the Root it locks a point of, a slot each. An Aspiration
+// has no roll (Mo's answer, 16 Nov): a slot's a point in it, and at 5 it
+// comes good, bringing a new Title (its 5 Root points spread and its one
+// permission), a new archetype (with the ability it comes with) or a new
+// attuned thing (with its awakening). A slot can go on a Scar too, and its
+// third grows it into a Trait. Swapping a permission, two
 // permissions for a Boon, mending a strained bond thread and marking that you
 // did right by someone you've a hostile thread with don't take a slot. The
 // card's a draft until it's finished, kept on the page by character (not
@@ -19,9 +20,8 @@
 // explanation on it is a question bubble (tip.js).
 // Till the play screen's on the new core (prompt 4), the state it hands this
 // card is stacking's, with tracks and no points, so everything back is every
-// track on d12 and rolling again costs Resolve, the way that state counts.
+// track on d12, and its Scars are by track, read as the Root each was on.
 
-import { diceLabel, sizeUp, stepsToDice } from "./dice.js";
 import { nudgeSpread } from "./builder.js";
 import * as R from "./roots.js";
 import { tip } from "./tip.js";
@@ -31,7 +31,7 @@ import { isBroken, keyOf, many, mend, nameOf, pieceAt, tickedOf, worn, yours } f
 const CHOICES = [
   ["Face a pressure", [["pressure", "Deal with a pressure"]]],
   ["Mend", [["mend", "Mend something"]]],
-  ["Grow", [["perm", "A new permission"], ["ability", "A new ability"], ["asp", "Chase your Aspiration"], ["thread", "Deepen a bond"], ["get", "Get something"]]],
+  ["Grow", [["perm", "A new permission"], ["ability", "A new ability"], ["asp", "A point in your Aspiration"], ["scar", "Grow a Scar"], ["thread", "Deepen a bond"], ["get", "Get something"]]],
   ["Attunement", [["awk", "A new awakening"]]],
   ["The crew", [["party", "Toward the crew"]]],
 ];
@@ -83,9 +83,17 @@ function backOf(c, s) {
     ...(s.toll ? [`${s.toll} Toll gone`] : []),
   ];
 }
-// Soul to pay with for rolling again: all of it, once it's back, or the
-// Resolve on stacking's state.
-const soulOf = (c, s) => (onCore(s) ? restedOf(c, s).pts.Soul ?? 0 : Math.max(0, (12 - R.lowOf(s, "resolve")) / 2));
+// Every Scar, by the Root it's on and its place there, with its slots toward
+// its Trait. Stacking's state keeps them by track, each on the Root it was on.
+const TRACK_ROOT = { stamina: "Body", confidence: "Mind", resolve: "Soul" };
+function scarsOf(s) {
+  const out = [];
+  for (const root of R.ROOTS) {
+    const list = onCore(s) ? s.scars?.[root] ?? [] : s.scars?.[Object.keys(TRACK_ROOT).find((t) => TRACK_ROOT[t] === root)] ?? [];
+    list.forEach((text, i) => out.push({ key: R.scarKey(root, i), root, i, text: String(text || "a Scar"), ...R.scarGrowOf(s, root, i) }));
+  }
+  return out;
+}
 // An archetype's abilities it hasn't got yet, leaving out what another of the
 // same archetype has, since that's the one ability, and what's taken.
 const spareOf = (c, i, taken = []) => {
@@ -121,6 +129,7 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     if (k === "perm") return c.titles.some((t) => R.slotsOf(t) < R.MAX_PERMS);
     if (k === "ability") return c.archetypes.some((_, i) => spareOf(c, i).length > 0);
     if (k === "awk") return c.attuned.length > 0;
+    if (k === "scar") return scarsOf(s).some((x) => !x.trait);
     return true;
   }
 
@@ -131,7 +140,8 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       pressure: { k, text: "" }, mend: { k, key: crossed(c, s)[0]?.key ?? "" },
       perm: { k, t: firstTitle, text: "", root: R.mostOf(c.titles[firstTitle]?.roots ?? {}) || "Body" },
       ability: { k, a: firstArch, name: "" },
-      asp: { k, root: R.bestRoot(c), dice: null, opp: null, real: false, pads: [], padOpp: "", rerolls: 0, tie: false, take: "", text: "", roots: noRoots(), perm: "", proot: "Body", arch: "", ability: "", name: "", wname: "", wroot: R.bestRoot(c), wtext: "" },
+      asp: { k, take: "", text: "", roots: noRoots(), perm: "", proot: "Body", arch: "", ability: "", name: "", wname: "", wroot: R.bestRoot(c), wtext: "" },
+      scar: { k, key: scarsOf(s).find((x) => !x.trait)?.key ?? "", trait: "" },
       thread: { k, person: "", text: "", tkind: "bond" }, get: { k, text: "", where: "bag" },
       awk: { k, a: 0, name: "", root: R.bestRoot(c), text: "", catch: "", burden: "", up: false }, party: { k, text: "" },
     }[k] ?? blank();
@@ -140,10 +150,9 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
   // What the slots before this one have done, so the second builds on the
   // first: permissions on each Title, abilities on each archetype,
   // awakenings on each attuned thing and a stage gone up, a Catch or Burden
-  // written, and the Aspiration's die. Soul paid to roll again counts across
-  // both.
+  // written, the points in the Aspiration, and the slots on each Scar.
   function earlier(d, i, s) {
-    const out = { perms: {}, abil: {}, awk: {}, up: {}, catch: {}, burden: {}, asp: s.asp, waiting: false };
+    const out = { perms: {}, abil: {}, awk: {}, up: {}, catch: {}, burden: {}, asp: R.aspOf(s), scar: {} };
     for (const sl of d.slots.slice(0, i)) {
       if (sl.k === "perm" && sl.text.trim()) out.perms[sl.t] = (out.perms[sl.t] ?? 0) + 1;
       if (sl.k === "ability" && sl.name) out.abil[sl.a] = [...(out.abil[sl.a] ?? []), sl.name];
@@ -153,19 +162,19 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
         if (sl.catch.trim()) out.catch[sl.a] = sl.catch.trim();
         if (sl.burden.trim()) out.burden[sl.a] = sl.burden.trim();
       }
-      if (sl.k === "asp") {
-        if (!sl.dice) out.waiting = true;
-        else if (Math.max(...sl.dice) > sl.opp || sl.tie) out.asp = out.asp >= 12 ? 2 : sizeUp(out.asp);
-      }
+      if (sl.k === "asp") out.asp = out.asp + 1 >= R.ASP_PTS ? 0 : out.asp + 1;
+      if (sl.k === "scar" && sl.key) out.scar[sl.key] = (out.scar[sl.key] ?? 0) + 1;
     }
     return out;
   }
   // Abilities an earlier slot's taking, on this archetype or another of the same.
-  const takenBefore = (c, d, i, a) => c.archetypes.flatMap((x, k) => (x.name === c.archetypes[a]?.name ? earlier(d, i, { asp: 2 }).abil[k] ?? [] : []));
-  const spent = (d) => d.slots.reduce((t, sl) => t + (sl.k === "asp" ? sl.rerolls : 0), 0);
-  // Soul to pay with, once everything's back, less what's been paid.
-  const soulRoom = (d, c, s) => Math.max(0, soulOf(c, s) - spent(d));
-  const PAY = (s) => (onCore(s) ? "a point of Soul" : "1 Resolve");
+  const takenBefore = (c, d, i, a) => c.archetypes.flatMap((x, k) => (x.name === c.archetypes[a]?.name ? earlier(d, i, { aspPts: 0 }).abil[k] ?? [] : []));
+  // A Scar's slots once the earlier slot's done, and whether this one's the
+  // third, the one that grows it into a Trait.
+  const scarAt = (s, d, i, key) => {
+    const x = scarsOf(s).find((y) => y.key === key);
+    return x ? { ...x, n: x.n + (earlier(d, i, s).scar[key] ?? 0) } : null;
+  };
   // An attuned thing as it stands once the earlier slot's done.
   function thingAt(c, d, i, j, s) {
     const a = c.attuned[j];
@@ -175,11 +184,6 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     const stage = e.up[j] && r.next ? r.next : r.stage;
     return { ...a, stage, catch: a.catch || e.catch[j] || null, burden: a.burden || e.burden[j] || null, awakenings: { length: a.awakenings.length + (e.awk[j] ?? 0) }, wentUp: Boolean(e.up[j]) };
   }
-  // A roll at the Aspiration: the Root that fits, at full. Nothing else on
-  // the sheet's counted, and there's no Aura in downtime to bring another
-  // Root in with.
-  const aspSteps = (sl, c) => Math.max(1, c.roots[sl.root] ?? 0);
-  const aspDice = (sl, c) => stepsToDice(aspSteps(sl, c));
 
   // ---------------------------------------------------------------- drawing
 
@@ -189,7 +193,6 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
   const say = (line, id, words, label) => `<p class="cc-lead dt-say">${line} ${tip(id, words, label)}</p>`;
   const quickTest = () => (B.quickTest?.length ? `The quick test: ${B.quickTest.map((q) => q.replace(/\?$/, "")).join("? ")}? Four yeses and it’s a permission.` : "");
   const roots = (where, f, now, label = "Its Root") => chips(where, f, R.ROOTS.map((r) => [r, r]), now, label);
-  const die = (n, cls = "on") => `<span class="hex ${cls}">${esc(n)}</span>`;
 
   // A new Title's 5 Root points: All on for one Root in a tap, and a stepper
   // on each, the builder's way (nudgeSpread).
@@ -201,46 +204,36 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       ${R.ROOTS.map(step).join("")}`;
   }
 
+  // A point in the Aspiration, and when it's the fifth, what it brings.
   function aspView(sl, i, c, s, d) {
-    const e = earlier(d, i, s);
-    const asp = e.asp;
-    const total = aspSteps(sl, c);
-    const dice = stepsToDice(total);
-    const head = `<p class="cc-dice">${dice.map((x) => die(`d${x}`)).join("")}${die(`d${asp}`, "them")}<span><b>${steps(total)}</b>, ${diceLabel(dice)}, against its d${asp}</span></p>`;
-    let body = "";
-    if (sl.dice) {
-      const best = Math.max(...sl.dice);
-      const beat = best > sl.opp || sl.tie;
-      const tie = best === sl.opp && !sl.tie;
-      const climbs = asp >= 12 ? "It climbs past d12 and resolves." : `It climbs to d${sizeUp(asp)}.`;
-      const verdict = beat ? (sl.tie ? `The crew takes the tie. ${climbs}` : `${best} against ${sl.opp}. Beat it. ${climbs}`) : tie ? `${best} against ${sl.opp}. A tie goes to the Aspiration, so it holds at d${asp}.` : `${best} against ${sl.opp}. It holds at d${asp}.`;
-      const takes = [["title", "A new Title"], ["arch", "A new archetype"], ["attune", "A new attuned thing"]];
-      const arch = (B.archetypes ?? []).find((a) => a.name === sl.arch);
-      const others = new Set(c.archetypes.filter((x) => x.name === sl.arch).flatMap((x) => x.have ?? []));
-      body = `<p class="cc-dice">${sl.dice.map((n) => die(String(n))).join("")}${die(String(sl.opp), "them")}<span>${dice.length > 1 ? "Your best die counts. " : ""}${esc(verdict)}</span></p>
-        ${beat ? "" : `<div class="cc-row">${soulRoom(d, c, s) >= 1 ? `<button type="button" class="button sm" data-act="dt" data-do="asp-again" data-s="${i}">Roll yours again: ${PAY(s)}</button>` : ""}${tie ? `<button type="button" class="button sm" data-act="dt" data-do="asp-tie" data-s="${i}">The crew spends an extra resource to take the tie</button>` : ""}</div>
-        ${say("There’s no Aura in downtime.", `dt-tie-${i}`, [`You can’t pay Aura to win a tie in downtime. Pay ${PAY(s)} to roll yours again, or spend one of the crew’s extra resources and take the tie. It’s the crew’s money, so ask the table first.`, ...(onCore(s) ? ["Downtime put your points back when it started, so a point of Soul you spend now is still spent when the next session starts."] : [])], "Ties in downtime")}`}
-        ${beat && asp >= 12 ? `<h3>What it gives you</h3>${chips(i, "take", takes.map(([v, t]) => [v, t]), sl.take, "What your Aspiration gives you")}
-          ${sl.take === "title" ? `${field(i, "text", "Your new Title", sl.text)}${spreadView(sl, i)}
-            ${field(i, "perm", "The permission it comes with", sl.perm)}<p class="cc-lead">Its Root</p>${roots(i, "proot", sl.proot, "The permission’s Root")}` : ""}
-          ${sl.take === "arch" ? `<label class="cc-field">The archetype <select id="dt-arch-${i}" data-dt="${i}" data-f="arch"><option value="">Pick one</option>${B.archetypes.map((a) => `<option value="${esc(a.name)}"${sl.arch === a.name ? " selected" : ""}>${esc(a.name)}${c.archetypes.some((x) => x.name === a.name) ? " again" : ""}</option>`).join("")}</select></label>
-            ${arch ? `<p class="cc-lead">${arch.summary}</p><p class="cc-lead dt-say">The ability it comes with ${tip(`dt-abl-${i}`, ["An archetype comes with one ability, your pick. It costs Aura when you use it, like any ability, and more come a downtime slot each."], "Its ability")}</p>
-              <div class="cc-chips" role="group" aria-label="The ability it comes with">${abilitiesOf(B, arch.name).map((x) => `<button type="button" class="cc-chipbtn" data-act="dt" data-do="set" data-s="${i}" data-f="ability" data-v="${esc(x.name)}"${pressed(sl.ability === x.name)}${off(others.has(x.name))}>${esc(x.name)}${others.has(x.name) ? " <small>you’ve got it</small>" : ""}</button>`).join("")}</div>` : ""}` : ""}
-          ${sl.take === "attune" ? `${field(i, "name", "The thing", sl.name)}${field(i, "wname", "The awakening it comes with", sl.wname)}
-            <p class="cc-lead">The Root it fits</p>${roots(i, "wroot", sl.wroot, "The Root the awakening fits")}${field(i, "wtext", "What it does", sl.wtext)}
-            ${say("Its awakening locks a point of its Root.", `dt-att-${i}`, ["A new attuned thing starts at Awakened with the one awakening it comes with. That awakening locks a point of the Root it fits, and it’s 2 steps on any roll it fits. Attuned things don’t touch your Aura."], "A new attuned thing")}` : ""}
-          <p class="cc-lead">Your Aspiration starts again at d2. Write the new one on the Sheet tab.</p>` : ""}`;
-    } else if (sl.real) {
-      body = `<div class="dt-pads">${dice.map((x, j) => `<label class="cc-field">Your d${x} <input type="number" inputmode="numeric" min="1" max="${x}" data-dt="${i}" data-f="pad" data-j="${j}" value="${esc(sl.pads[j] ?? "")}"></label>`).join("")}
-        ${sl.rerolls ? "" : `<label class="cc-field">Its d${asp} <input type="number" inputmode="numeric" min="1" max="${asp}" data-dt="${i}" data-f="padOpp" value="${esc(sl.padOpp)}"></label>`}</div>
-        <div class="cc-row"><button type="button" class="button primary" data-act="dt" data-do="asp-call" data-s="${i}">That’s what they rolled</button></div>`;
-    } else if (e.waiting) {
-      body = `<p class="cc-lead">Roll your first slot’s Aspiration first, since this one rolls against whatever die it leaves.</p>`;
-    } else {
-      body = `<p class="cc-lead">The Root that fits what you’re doing about it, all of it</p>${roots(i, "root", sl.root, "The Root")}
-        <div class="cc-row"><button type="button" class="button primary" data-act="dt" data-do="asp-roll" data-s="${i}">Roll</button><button type="button" class="button" data-act="dt" data-do="asp-real" data-s="${i}">Roll real dice</button></div>`;
-    }
-    return `${say("Roll against its die, built from whatever you’re doing about it.", `dt-asp-${i}`, ["Roll the Root that fits what you’re doing about it, at full, against its die. Beat it and it climbs one. Ties go to the Aspiration.", ...paras(rule("s-downtime-rolls")), link("s-aspiration", "How Aspiration works")], "Chasing your Aspiration")}${head}${body}`;
+    const had = earlier(d, i, s).asp;
+    const good = had + 1 >= R.ASP_PTS;
+    const takes = [["title", "A new Title"], ["arch", "A new archetype"], ["attune", "A new attuned thing"]];
+    const arch = (B.archetypes ?? []).find((a) => a.name === sl.arch);
+    const others = new Set(c.archetypes.filter((x) => x.name === sl.arch).flatMap((x) => x.have ?? []));
+    const pips = `<span class="dt-pips" aria-hidden="true">${Array.from({ length: R.ASP_PTS }, (_, k) => `<i class="${k < had ? "on" : k === had ? "new" : ""}"></i>`).join("")}</span>`;
+    const head = `<p class="cc-lead dt-say">${pips}<span>${good ? `This slot’s its fifth point, so it comes good.` : `It’s got ${had} of ${R.ASP_PTS}, and this slot makes it ${had + 1}.`}</span> ${tip(`dt-asp-${i}`, ["Your Aspiration takes 5 points to get there, and there’s no roll. Every downtime slot you spend on it is a point in it, and a setback takes one back off.", "When it’s got all 5 it comes good: you get what you were after, and a new Title, archetype or attuned thing, the same as 5 points buy when you make a character.", link("s-aspiration", "How Aspiration works")], "Your Aspiration")}</p>`;
+    if (!good) return head;
+    return `${head}<h3>What it gives you</h3>${chips(i, "take", takes.map(([v, t]) => [v, t]), sl.take, "What your Aspiration gives you")}
+      ${sl.take === "title" ? `${field(i, "text", "Your new Title", sl.text)}${spreadView(sl, i)}
+        ${field(i, "perm", "The permission it comes with", sl.perm)}<p class="cc-lead">Its Root</p>${roots(i, "proot", sl.proot, "The permission’s Root")}` : ""}
+      ${sl.take === "arch" ? `<label class="cc-field">The archetype <select id="dt-arch-${i}" data-dt="${i}" data-f="arch"><option value="">Pick one</option>${B.archetypes.map((a) => `<option value="${esc(a.name)}"${sl.arch === a.name ? " selected" : ""}>${esc(a.name)}${c.archetypes.some((x) => x.name === a.name) ? " again" : ""}</option>`).join("")}</select></label>
+        ${arch ? `<p class="cc-lead">${arch.summary}</p><p class="cc-lead dt-say">The ability it comes with ${tip(`dt-abl-${i}`, ["An archetype comes with one ability, your pick. It costs Aura when you use it, like any ability, and more come a downtime slot each."], "Its ability")}</p>
+          <div class="cc-chips" role="group" aria-label="The ability it comes with">${abilitiesOf(B, arch.name).map((x) => `<button type="button" class="cc-chipbtn" data-act="dt" data-do="set" data-s="${i}" data-f="ability" data-v="${esc(x.name)}"${pressed(sl.ability === x.name)}${off(others.has(x.name))}>${esc(x.name)}${others.has(x.name) ? " <small>you’ve got it</small>" : ""}</button>`).join("")}</div>` : ""}` : ""}
+      ${sl.take === "attune" ? `${field(i, "name", "The thing", sl.name)}${field(i, "wname", "The awakening it comes with", sl.wname)}
+        <p class="cc-lead">The Root it fits</p>${roots(i, "wroot", sl.wroot, "The Root the awakening fits")}${field(i, "wtext", "What it does", sl.wtext)}
+        ${say("Its awakening locks a point of its Root.", `dt-att-${i}`, ["A new attuned thing starts at Awakened with the one awakening it comes with. That awakening locks a point of the Root it fits, and it’s 2 steps on any roll it fits. Attuned things don’t touch your Aura."], "A new attuned thing")}` : ""}
+      <p class="cc-lead">Your new Aspiration starts with nothing in it. Write it on the Sheet tab.</p>`;
+  }
+
+  // A slot on a Scar, and on its third, the Trait it grows into.
+  function scarView(sl, i, c, s, d) {
+    const list = scarsOf(s);
+    const now = scarAt(s, d, i, sl.key);
+    const third = now && now.n + 1 >= R.SCAR_SLOTS;
+    return `${chips(i, "key", list.map((x) => [x.key, `<em>${esc(x.text)}</em> <small>${x.root}, ${x.trait ? "a Trait already" : `${x.n + (earlier(d, i, s).scar[x.key] ?? 0)} of ${R.SCAR_SLOTS}`}</small>`, Boolean(x.trait) || x.n + (earlier(d, i, s).scar[x.key] ?? 0) >= R.SCAR_SLOTS]), sl.key, "Which Scar")}
+      ${now ? say(third ? "This slot’s its third, so it grows into a Trait." : `This slot makes it ${now.n + 1} of ${R.SCAR_SLOTS}.`, `dt-scar-${i}`, ["Three downtime slots on a Scar, in one downtime or across a few, grow it into a Trait: something that grew out of what happened to you, always true, worked out with the GM.", "It’s still a Scar, so it still holds you and its point’s still locked, but now it gives as well. A lost eye that sees magic, a burn that knows where fire goes.", link("s-blaze", "Scars")], "Growing a Scar") : ""}
+      ${third ? field(i, "trait", "The Trait it grows into", sl.trait) : ""}`;
   }
 
   function awkView(sl, i, c, s, d) {
@@ -291,6 +284,8 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       }
       case "asp":
         return aspView(sl, i, c, s, d);
+      case "scar":
+        return scarView(sl, i, c, s, d);
       case "thread": {
         // Someone you've already got a bond with, or someone new. Either
         // way it goes under their one bond.
@@ -409,8 +404,9 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       else if (sl.k === "perm" && (empty(sl.text) || !R.ROOTS.includes(sl.root))) out.push(`${which} needs the new permission’s words and its Root.`);
       else if (sl.k === "perm" && c.titles[sl.t] && R.slotsOf(c.titles[sl.t]) + (earlier(d, i, s).perms[sl.t] ?? 0) >= R.MAX_PERMS) out.push(`${which} would be a seventh permission on ${c.titles[sl.t].text ?? c.titles[sl.t].name}, and six is the most a Title holds.`);
       else if (sl.k === "ability" && (!sl.name || !spareOf(c, sl.a, takenBefore(c, d, i, sl.a)).some((x) => x.name === sl.name))) out.push(`${which} needs the ability.`);
-      else if (sl.k === "asp" && !sl.dice) out.push(`${which} hasn’t rolled at your Aspiration yet.`);
-      else if (sl.k === "asp" && earlier(d, i, s).asp >= 12 && (Math.max(...sl.dice) > sl.opp || sl.tie)) {
+      else if (sl.k === "scar" && !scarAt(s, d, i, sl.key)) out.push(`${which} needs the Scar it’s going on.`);
+      else if (sl.k === "scar" && scarAt(s, d, i, sl.key).n + 1 >= R.SCAR_SLOTS && empty(sl.trait)) out.push(`${which} grows your Scar into a Trait, so it needs the Trait.`);
+      else if (sl.k === "asp" && earlier(d, i, s).asp + 1 >= R.ASP_PTS) {
         if (!sl.take) out.push(`${which} resolves your Aspiration, so pick a new Title, archetype or attuned thing.`);
         else if (sl.take === "title" && (empty(sl.text) || sumOf(sl.roots) !== R.TITLE_ROOTS || empty(sl.perm))) out.push(`${which} needs your new Title, its 5 Root points spread and the permission it comes with.`);
         else if (sl.take === "arch" && (!sl.arch || !sl.ability)) out.push(`${which} needs the archetype and the ability it comes with.`);
@@ -463,27 +459,36 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
       } else if (sl.k === "ability" && sl.name && spareOf(c, sl.a, takenBefore(c, d, i, sl.a)).some((x) => x.name === sl.name)) {
         grow({ k: "ability", a: sl.a, name: sl.name });
         said.push(`Your ${c.archetypes[sl.a].name} gets ${sl.name}`);
-      } else if (sl.k === "asp" && sl.dice) {
-        const beat = Math.max(...sl.dice) > sl.opp || sl.tie;
-        if (!beat) said.push(`Your Aspiration holds at d${s.asp}`);
-        else if (s.asp >= 12) {
-          s.asp = 2;
+      } else if (sl.k === "asp") {
+        // A point in it, and at 5 it comes good and starts again with nothing.
+        const pts = R.aspOf(s) + 1;
+        if (pts < R.ASP_PTS) {
+          s.aspPts = pts;
+          said.push(`Your Aspiration’s got ${pts} of ${R.ASP_PTS}`);
+        } else {
+          s.aspPts = 0;
           if (sl.take === "title" && text && sumOf(sl.roots) === R.TITLE_ROOTS) {
             grow({ k: "title", text, roots: { ...sl.roots }, perm: sl.perm.trim() ? { text: sl.perm.trim(), root: sl.proot } : null });
-            said.push(`Your Aspiration resolves, and ${text} is your new Title`);
+            said.push(`Your Aspiration comes good, and ${text} is your new Title`);
           } else if (sl.take === "arch" && sl.arch) {
             grow({ k: "arch", arch: sl.arch, have: sl.ability ? [sl.ability] : [] });
-            said.push(`Your Aspiration resolves, and you’re a ${sl.arch} too${sl.ability ? `, with ${sl.ability}` : ""}`);
+            said.push(`Your Aspiration comes good, and you’re a ${sl.arch} too${sl.ability ? `, with ${sl.ability}` : ""}`);
           } else if (sl.take === "attune" && sl.name.trim()) {
             grow({ k: "attune", name: sl.name.trim(), awk: sl.wname.trim() ? { name: sl.wname.trim(), root: sl.wroot, text: sl.wtext.trim() } : null });
-            said.push(`Your Aspiration resolves, and ${sl.name.trim()} is attuned to you`);
-          } else said.push("Your Aspiration resolves");
+            said.push(`Your Aspiration comes good, and ${sl.name.trim()} is attuned to you`);
+          } else said.push("Your Aspiration comes good");
           said.push("Write your new Aspiration on the Sheet tab");
-        } else {
-          s.asp = sizeUp(s.asp);
-          said.push(`Your Aspiration climbs to d${s.asp}`);
         }
-        if (sl.tie) said.push("The crew spends an extra resource for the tie");
+        // Stacking's play screen still shows a die, so it's kept in step.
+        s.asp = Math.min(12, 2 + 2 * s.aspPts);
+      } else if (sl.k === "scar") {
+        const x = scarsOf(s).find((y) => y.key === sl.key);
+        if (x && !x.trait) {
+          const n = Math.min(R.SCAR_SLOTS, x.n + 1);
+          const trait = n >= R.SCAR_SLOTS ? String(sl.trait ?? "").trim().slice(0, 200) : "";
+          s.scarGrow = { ...(s.scarGrow ?? {}), [x.key]: trait ? { n, trait } : { n } };
+          said.push(trait ? `Your Scar, ${x.text}, grows into a Trait: ${trait}` : `Your Scar, ${x.text}, is ${n} of ${R.SCAR_SLOTS} toward its Trait`);
+        }
       } else if (sl.k === "thread" && text && sl.person.trim()) {
         const kind = sl.tkind === "hostile" ? "hostile" : "bond";
         grow({ k: "thread", person: sl.person.trim(), text, kind });
@@ -536,26 +541,19 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     }
     // What it grew lands on a character who's full, so every Root's full on
     // the sheet it makes (a new permission's point included, and less a point
-    // a new awakening locks), then the Soul paid for rolling again comes off.
-    const paid = spent(d);
+    // a new awakening locks).
     if (onCore(s)) {
       const c2 = R.growRoots(JSON.parse(JSON.stringify(c)), fresh, B);
       c2.roots = R.countRoots(c2.titles).roots;
       for (const r of R.ROOTS) s.pts[r] = R.capOf(c2, s, r);
-      R.spendPts(s, "Soul", Math.min(paid, s.pts.Soul));
-    } else for (let k = 0; k < paid; k++) R.payTrack(s, "resolve");
-    if (paid) said.push(`You paid ${paid === 1 ? PAY(s) : `${paid} ${onCore(s) ? "points of Soul" : "Resolve"}`} to roll again`);
+    }
     return said;
   }
 
-  // A second slot's Aspiration roll was made against the die the first one
-  // left, so it's rolled again if that changes. A second slot's ability can't
-  // be one the first one's taking.
+  // A second slot's ability can't be one the first one's taking.
   function act(el, d, c, s) {
-    const basis = d.slots.map((x, j) => earlier(d, j, s).asp);
     act1(el, d, c, s);
     d.slots.forEach((sl, j) => {
-      if (sl.k === "asp" && (sl.dice || sl.real) && earlier(d, j, s).asp !== basis[j]) Object.assign(sl, { dice: null, opp: null, real: false, pads: [], padOpp: "", rerolls: 0, tie: false });
       if (sl.k === "ability" && sl.name && !spareOf(c, sl.a, takenBefore(c, d, j, sl.a)).some((x) => x.name === sl.name)) sl.name = "";
     });
   }
@@ -588,28 +586,6 @@ export function makeDowntime({ B, esc, steps, link, icon, throwDie, crewNames, i
     } else if (go === "tall" && sl) sl.roots = nudgeSpread(sl.roots, v, "all");
     else if (go === "tnudge" && sl) sl.roots = nudgeSpread(sl.roots, v, Number(el.dataset.n) > 0 ? "up" : "down");
     else if (go === "flip" && sl) sl[f] = !sl[f];
-    else if (go === "asp-roll" && sl && !earlier(d, i, s).waiting) {
-      sl.dice = aspDice(sl, c).map((size) => throwDie(size));
-      sl.opp = throwDie(earlier(d, i, s).asp);
-    } else if (go === "asp-real" && sl) sl.real = true;
-    else if (go === "asp-call" && sl) {
-      const dice = aspDice(sl, c);
-      const nums = dice.map((size, j) => Math.min(size, Math.max(1, Math.round(Number(sl.pads[j]) || 0))));
-      const asp = earlier(d, i, s).asp;
-      const opp = sl.rerolls ? sl.opp : Math.min(asp, Math.max(1, Math.round(Number(sl.padOpp) || 0)));
-      if (nums.some((x, j) => !(Number(sl.pads[j]) > 0)) || (!sl.rerolls && !(Number(sl.padOpp) > 0))) {
-        d.say = "Put in every die’s number first.";
-        return;
-      }
-      sl.dice = nums;
-      sl.opp = opp;
-    } else if (go === "asp-again" && sl && soulRoom(d, c, s) >= 1) {
-      sl.rerolls += 1;
-      if (sl.real) {
-        sl.dice = null;
-        sl.pads = [];
-      } else sl.dice = aspDice(sl, c).map((size) => throwDie(size));
-    } else if (go === "asp-tie" && sl) sl.tie = true;
     else if (go === "swap-add") d.swaps.push({ t: 0, j: -1, text: "", root: "Body" });
     else if (go === "boon-add") d.boons.push({ t: 0, drop: [], lever: "", name: "", on: "" });
     else if (go === "boon-off") d.boons.splice(Number(el.dataset.s), 1);

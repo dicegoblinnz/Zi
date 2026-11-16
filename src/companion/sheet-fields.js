@@ -13,10 +13,10 @@
 
 export const ROWS = {
   titles: 6, perms: 6,
-  archetypes: 3, abilities: 6,
+  archetypes: 3, abilities: 7,
   attuned: 2, awakenings: 6,
   armour: 2, boxes: 3,
-  conditions: 4, scars: 2,
+  conditions: 4, scars: 2, grow: 3, aspiration: 5,
   bonds: 4, threads: 3,
   equipment: 3, utility: 3, bag: 10,
   notes: 4,
@@ -39,7 +39,8 @@ export function sheetFields() {
   // The front: who, Aura, Toll and stride, then each Root (on the new core,
   // 16 Nov 2026): its number and its dice, where its points came from, what
   // it holds once its awakenings and Scars have locked theirs, the points it
-  // has now, its wound, its Scars and its armour. Then conditions, the
+  // has now, its wound, its Scars (each with its slots toward a Trait) and its
+  // armour. Then conditions, the
   // Aspiration, the Party Goal, points, what you carry and your attuned
   // things, each awakening with the Root it locks.
   for (const f of ["name", "pronouns", "player", "aura_now", "aura_max", "toll", "stride"]) text(f);
@@ -48,7 +49,12 @@ export function sheetFields() {
     for (const i of range(ROWS.titles)) text(`root_${r}_title_${i}`);
     for (const f of ["permissions", "locked", "holds", "now"]) text(`root_${r}_${f}`);
     check(`root_${r}_wound`);
-    for (const i of range(ROWS.scars)) text(`root_${r}_scar_${i}`);
+    // Each Scar's negative permission, and a box for each downtime slot
+    // that grows it into a Trait.
+    for (const i of range(ROWS.scars)) {
+      text(`root_${r}_scar_${i}`);
+      for (const j of range(ROWS.grow)) check(`root_${r}_scar_${i}_grow_${j}`);
+    }
     for (const i of range(ROWS.armour)) {
       text(`root_${r}_armour_${i}`);
       for (const j of range(ROWS.boxes)) check(`root_${r}_armour_${i}_box_${j}`);
@@ -58,8 +64,9 @@ export function sheetFields() {
     text(`condition_${i}`);
     radio(`condition_${i}_die`, DICE);
   }
+  // The Aspiration's words, and a box for each of its 5 points.
   text("aspiration");
-  radio("aspiration_die", DICE);
+  for (const i of range(ROWS.aspiration)) check(`aspiration_${i}`);
   text("party_goal");
   radio("party_goal_die", DICE);
   for (const f of ["points_spent", "points_start", "points_banked"]) text(f);

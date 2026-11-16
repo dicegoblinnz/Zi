@@ -112,7 +112,7 @@ Then Isolde finds the deed, and the GM makes another move. She reveals something
 
 ## Catches and Trouble at the Table {#s-catches-gm}
 
-Letting a Catch bite is up to the player. You've got telegraphs, the cost of a miss and every move above to make things go wrong, so leave their Catches to them. That goes for their [Scars](#s-blaze) too, because a Scar's a Catch, and for their hostile [threads](#s-bonds), which bite the same way. When one bites, or a player drops their character in it without a Catch at all, run with it and make it real trouble: a new telegraph, a new stake, or someone who wants something. They take 1 Aura each time, as often as they like.
+Letting a Catch bite is up to the player. You've got telegraphs, the cost of a miss and every move above to make things go wrong, so leave their Catches to them. That goes for their hostile [threads](#s-bonds) too, which bite the same way. A [Scar](#s-blaze)'s different: it's something they can't do, so hold them to it every time it matters. When one bites, or a player drops their character in it without a Catch at all, run with it and make it real trouble: a new telegraph, a new stake, or someone who wants something. They take 1 Aura each time, as often as they like.
 
 When a Catch bites big, because it changes the scene or costs them something they wanted, they get a point of Soul back instead of the Aura. It's their call when.
 
@@ -499,7 +499,7 @@ When the rules don't say, find the nearest rule. Most questions come down to one
 
 -   **An arc is four to six sessions.** It's got a Party Goal, a faction moving against the crew, and at least one Aspiration coming to a head.
 -   **Aspirations are your map.** Every player's written down what their character wants, so build scenes that put it within reach, then make them choose between it and something else.
--   **Aspirations are the milestones.** When one resolves and a new Title, archetype or attuned thing goes on a sheet, the campaign's turned a page, so mark it.
+-   **Aspirations are the milestones.** When one comes good and a new Title, archetype or attuned thing goes on a sheet, the campaign's turned a page, so mark it.
 -   **The world grows with them.** The [threat budget](#s-threat-budget) rises with every new Title and permission, and threats that were bosses become lieutenants. Factions notice the crew and start writing threads toward it, bond threads and hostile ones (see [How a Faction Sees the Crew](#s-standing)).
 -   **Size the faction board to the campaign.** Four to twelve core [factions](#s-faction-board), each with up to three [mini factions](#s-mini-factions), and the same card works at any size: factions inside a city, cities inside a country, countries on the world stage. Each downtime, only telegraph the ones the crew can reach, and let the rest move off-screen: say what changed, with no roll (see [The Faction Turn](#s-faction-turn)).
 -   **Remember everything.** Bring back the maid who swore she saw a stranger, and the Warden who knelt, because a world that remembers is one worth being competent in.

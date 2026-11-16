@@ -414,7 +414,7 @@ function makeSheet(ch, b, B, { draft = false } = {}) {
     numbers: { aura: n.aura, stride: 3, strideNote: null },
     threads,
     crewQs: B.connect.map((q, i) => ({ q, a: (b.connect[i] ?? "").trim() })).filter((x) => x.a),
-    aspiration: { text: b.aspiration.trim(), die: 2 },
+    aspiration: { text: b.aspiration.trim(), pts: 0, die: 2 },
     trouble: b.trouble,
   };
 }
@@ -1334,7 +1334,7 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       e: `<section class="bd-carry" aria-labelledby="bd-eq">${head2("bd-eq", "3 equipment", [`What you wear or wield, a point each. Armour goes on the Root it guards: plate, leathers and a shield on your Body, clothes that fit the scene on your Mind, a holy symbol or a ward on your Soul. ${changing() ? "Each piece is Common, Fine or Masterwork, with a box for every hit it can take for you instead of a point." : "Each piece is Common, with a box for a hit it can take for you instead of a point, and one can be Fine, with two."}`, "A plain item does what it is. It’s never a step or a Root.", link("s-armour", "Armour")], "Equipment", "1 point each")}
         ${x.equipment.map((e, i) => slot("e", i, "Equipment")).join("")}
         ${offer("e", "Weapons", plain(group("Weapons")))}${offer("e", "Armour and wearables", plain(group("Armour & wearables")))}</section>`,
-      u: `<section class="bd-carry" aria-labelledby="bd-ut">${head2("bd-ut", `${n.utility} utility items`, ["Tools and things you use up, a point each. Each one’s a step on a roll you use it in, when it fits, and something you use up is crossed off once it’s used.", "Your bag holds 10 more, a point each. Nothing in it can be used till you’ve pulled it out, and that takes your action."], "Utility items", "1 point each")}
+      u: `<section class="bd-carry" aria-labelledby="bd-ut">${head2("bd-ut", `${n.utility} utility items`, ["Tools and things you use up, a point each. Each one does what it is, and something you use up is crossed off once it’s used.", "Your bag holds 10 more, a point each. Nothing in it can be used till you’ve pulled it out, and that takes your action."], "Utility items", "1 point each")}
         ${x.utility.slice(0, n.utility).map((u, i) => slot("u", i, "Utility")).join("")}
         ${offer("u", "Tools", plain(group("Tools")))}${offer("u", "Foci", plain(group("Foci")))}${offer("u", "Things you use up", B.usedUp.map((u) => ({ name: u.name, say: unlink(u.html) })))}
         ${d.deep[4] ? `<h2 id="bd-bag">Your bag <small>1 point each</small></h2>${field("bag", "Up to 10 more things, one a line", x.bag, { area: true, max: 600 })}` : ""}
@@ -1403,10 +1403,10 @@ export function makeBuilder({ B, link, icon, onSave, onLeave, toast, roll, rule 
       ${x.threads.length < MAX_THREADS ? '<div class="cc-row"><button type="button" class="button" data-act="b" data-b="addthread">A bond with someone new</button></div>' : ""}`;
   }
 
-  // Step 6: one thing you want, at d2. Past d12 you get it, so the book's
+  // Step 6: one thing you want, 5 points to get there. When it's got them you get it, so the book's
   // tests for a good one are a ? beside it.
   function stepAsp() {
-    return `<div class="bd-asp">${changing() ? "" : `<span class="bd-asp-die">${kitDie(2, { label: "Your Aspiration starts at d2" })}</span>`}<div class="bd-asp-f"><div class="cc-field-h"><label class="cc-field" for="b-asp">${changing() ? "Your Aspiration <small>its die’s on the Sheet tab</small>" : "Your Aspiration"}</label>${tip("bd-good", paras(rule("s-good-aspiration")), "A good Aspiration")}</div><input id="b-asp" data-bin="asp" value="${esc(b().aspiration)}" maxlength="120" autocomplete="off" placeholder="Own the score of a lifetime"></div></div>`;
+    return `<div class="bd-asp"><div class="bd-asp-f"><div class="cc-field-h"><label class="cc-field" for="b-asp">${changing() ? "Your Aspiration <small>its points are on the Sheet tab</small>" : "Your Aspiration <small>5 points to get there, a downtime slot each</small>"}</label>${tip("bd-good", paras(rule("s-good-aspiration")), "A good Aspiration")}</div><input id="b-asp" data-bin="asp" value="${esc(b().aspiration)}" maxlength="120" autocomplete="off" placeholder="Own the score of a lifetime"></div></div>`;
   }
 
   // Step 7: the numbers in the kit's pieces, the points, a name, and a last look.

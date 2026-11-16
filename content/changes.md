@@ -5,6 +5,16 @@ updated: 2026-11-16
 ---
 This is the record of every rules change since the 2 Oct 2026 book, newest first. Each entry's date is the day the change went to the table. When a later change replaces an earlier one, the earlier entry says so. The rules chapters always show the game as it is now, so if you only want to play, read those and skip this.
 
+## 16 Nov 2026: An Aspiration's 5 points, and Scars that grow {#c-2026-11-16-aspiration}
+
+On top of [The new core](#c-2026-11-16-core).
+
+**An Aspiration takes 5 points, and there's no roll.** Every downtime slot you spend on it is a point in it, the crew's action can put a point in anyone's, and a setback takes one back off. At 5 it comes good, and you take a new Title, archetype or attuned thing, the same as 5 points buy when you make a character. A new one starts with nothing in it. It replaces the Aspiration's die, from d2 up, and rolling against it in a scene or a slot. See [Aspiration](#s-aspiration) and [What you can do with a slot](#what-you-can-do-with-a-slot).
+
+**A Scar's a negative permission.** It's what you can't do any more, written on its Root, and the GM holds you to it every time it matters. It still locks a point for good. It replaces a Scar being a Catch you let bite for Aura. See [Wounds, Scars and the Blaze](#s-blaze).
+
+**A Scar can grow into a Trait.** Three downtime slots on it, in one downtime or across a few, and it becomes a Trait as well: a lost eye that sees every bit of magic around you. It's still a Scar. See [Wounds, Scars and the Blaze](#s-blaze) and [Growing](#how-power-grows).
+
 ## 16 Nov 2026: The GM's budgets, for the new core {#c-2026-11-16-budgets}
 
 To go with [The new core](#c-2026-11-16-core). With one action each and one Root a roll, a crew lands about a third of the wins it did on stacking, three or four a round between four of them, and every point on their Roots is a hit they can take, so the numbers that keep a fight going and the ones that press the crew both moved.

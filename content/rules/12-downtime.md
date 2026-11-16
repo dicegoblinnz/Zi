@@ -15,7 +15,7 @@ Downtime's the half of the game where the world decides what it's been doing whi
 After **every session** there's a downtime: a week, a month, a season, however long the story needs. It's where the world moves, and where you heal and grow.
 
 :::rule
-**Progression in Zi'Dara is yours.** Nobody hands out levels, and there's no experience to count. Every downtime, you choose what your character gets: a new permission, a new ability, a new awakening on something you've attuned, a roll at your Aspiration, a new thread. What you don't get to choose is how much time you have, and the world's always asking for some of it.
+**Progression in Zi'Dara is yours.** Nobody hands out levels, and there's no experience to count. Every downtime, you choose what your character gets: a new permission, a new ability, a new awakening on something you've attuned, a point in your Aspiration, a new thread. What you don't get to choose is how much time you have, and the world's always asking for some of it.
 :::
 
 ## The Four Pressures {#the-four-pressures}
@@ -51,7 +51,8 @@ A slot buys what a point buys when you make your character: a permission, an abi
 
 -   **A new permission** on one of your Titles, up to six on it. It has to fit inside the Title, and the story should say where you learned it. It puts 1 on its Root, the same as the ones you started with, so that's a step more on every roll of that Root, a point more to take hits with and spend, and one more thing that can bring a Root in. See [Permissions](#s-writing-permissions).
 -   **A new ability** off one of your archetypes' lists, up to six on it. The story should say where it came from, the same as a permission. See [Abilities](#s-abilities).
--   **Chase your Aspiration.** Roll the Root that fits what you're doing about it against its die. Beat it and it climbs one. See [Aspiration](#s-aspiration).
+-   **Put a point in your Aspiration.** Each slot's a point in it, and at 5 it comes good. There's no roll. See [Aspiration](#s-aspiration).
+-   **Grow a Scar.** A slot toward turning a Scar into a Trait. Three slots on it, in one downtime or across a few, and it's a Trait as well as a Scar. See [Wounds, Scars and the Blaze](#s-blaze).
 -   **Deepen a bond.** Write a new thread with someone, a bond thread or a hostile one, whichever the story's given you. If you've already got a bond with them, it goes under that one. If they're in the crew, it goes on both your sheets, so agree on it together.
 -   **Get something** the story can give you, whether it's bought, made, won or owed: something to carry, a purse of gold, or the material an attuned thing needs for its next stage.
 
@@ -70,9 +71,9 @@ The crew's action is its one move a downtime, and it can be any of these. When s
 -   **Move on a faction.** Destroy, Undermine, Obstruct, Influence, Acquire or Establish, set back its agenda, or work for it. See [Factions](#s-faction-crew).
 -   **Rebuild.** Establish an asset or a resource the crew's lost. An asset still needs a resource paying for it. See [How the crew grows](#s-crew-grows).
 -   **Advance a world event.** Push something along, or hold it back.
--   **Support an Aspiration.** One more roll at someone's Aspiration, built by whoever's helping.
+-   **Support an Aspiration.** A point in someone's Aspiration.
 
-A personal slot that chases the Goal, works a project or supports an Aspiration on its own rolls the same way. Something that climbs still only climbs one step a roll, however many slots went into it.
+A personal slot that chases the Goal or works a project on its own rolls the same way, and one that supports a friend's Aspiration puts a point in it. Something that climbs still only climbs one step a roll, however many slots went into it.
 
 ### Rolling in downtime {#s-downtime-rolls}
 
@@ -120,7 +121,7 @@ Vesk's only thread with Bram is a bond thread: the fire he carried her out of, a
 
 Dorrie's slot is a roll at the Goal, sending Vane's investigators the wrong way: her Mind, 7 steps, a d12 and a d2, against the Goal's d4. Her best is 6 against 3, so the Goal climbs to d6. Her new permission puts her Soul up to 7.
 
-Isolde's Aspiration roll is her Mind, 9 steps, a d12 and a d6, against its d6. Her best is 5 against 5, and the tie goes to the Aspiration. There's no Aura in downtime, so she pays a point of Soul to roll again, gets a 7, and it climbs to d8. She'll start the next session a point of Soul down for it. Her new permission goes on after that roll, and puts her Mind up to 10 for next time.
+Isolde's other slot is a point in her Aspiration, its third, so it's 3 of 5. Her new permission puts her Mind up to 10 for next time.
 
 Bram's slot mends his plate. His ribs don't need one: he finished last session Bloodied, with no points of Body left, and downtime started by putting him back on 7 with the wound gone.
 

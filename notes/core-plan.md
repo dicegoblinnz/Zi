@@ -35,6 +35,8 @@ Newest wins. Everything Mo hasn't changed stands: Aspirations, threads and bonds
 - **Aura on recovery.** Recovery rolls are never split. Their top faces give Aura, and the amount healed never does.
 - **Armour** sits on a Root as now: tick a box instead of losing a point.
 - **Making a character** is 35 points as now. A Title, archetype or attuned thing is 5, with its one permission, ability or awakening. Each extra permission, ability, awakening or item is 1.
+- **An Aspiration takes 5 points** (Mo's answer, later on 16 Nov), and there's no roll. Each downtime slot spent on it is a point, the crew's action can put a point in anyone's, and a setback takes one off. At 5 it comes good: a new Title, archetype or attuned thing, and a new Aspiration with nothing in it.
+- **A Scar's a negative permission** (the same answer): something you can't do, upheld, on its Root, still locking a point. Three downtime slots grow it into a Trait as well, and it's still a Scar. Every ability prints its Aura on the paper.
 - **Characters already saved** keep everything they've got, recounted: each Title's 3 becomes 5 (the 2 more spread the way the 3 were, as near as it goes, flagged for the player to check), every Root starts full, the tracks go, and a track's Scars become Scars on its Root.
 
 ## Still to work out at the table
@@ -243,6 +245,15 @@ For the prompts after this one:
 - **4:** the play screen still keeps stacking's state (`v: 3`, tracks), so downtime has a bridge (`onCore()`): on a state with `pts` it's the new core, and on one without, everything back is every track on d12 and rolling again's 1 Resolve. Once the play screen's on `normalCore()`, downtime needs nothing more, but `endScene()` straight after `dt.apply()` in `finishDowntime()` shouldn't roll a scene's recovery on a character downtime's just filled (Toll's 0 already). Part 8's Vesk on the phone expects stacking's words (*Stamina d4 to d12*), so change them to her points when the play screen moves (the no-browser half already plays the new core), and parts 5c and 6 take a state on either.
 - **3:** the player reference's points panel reads Appendix D's Your points for *Hits:*, *Wounds:*, the three wounds, *Scar:*, *Blaze:*, *Toll:*, *a heal loses 5 for each Toll* and *Downtime puts everything back*, and the build stops if they go.
 - **7:** CLAUDE.md's lines on the builder, downtime, print and the paper sheet.
+
+**Later on 16 Nov, Mo's answers to its calls** (`c-2026-11-16-aspiration`, the calls are 12 to 17 under 5 in `notes/to-confirm.md`), built on the same branch and landed:
+
+- **The book:** the Aspiration on 5 points with no roll and Scars as negative permissions that grow into Traits, in 02, 03, 03a, 03b (each crew sheet's *Aspiration: … (0 of 5).*, which `scripts/crew-sheets.mjs` reads as `aspiration: { text, pts }`), 04's Things That Climb, 05, 12, 15, 17 (Vesk's arc, her Scar growing into *Walked out of the fire*), 19, Appendices A, C and D, the glossary and three Learn cards, with the Aspiration's die and a Scar as a Catch retired in `tools/check_terms.py`.
+- **`roots.js` (prompt 2's, the smallest change):** `ASP_PTS` (5), `SCAR_SLOTS` (3), `aspOf(s)` (the points, `s.aspPts`, or an old die read as points), `scarKey(root, i)` and `scarGrowOf(s, root, i)` (`{ n, trait }`, from `s.scarGrow` by `Body|0`), and `normalCore()` keeping both. `s.asp` stays as it was for stacking's screens, and downtime keeps it in step (2 and 2 for each point).
+- **Downtime:** A point in your Aspiration (no roll, the take on its fifth) and Grow a Scar (a slot each, the third writing its Trait). The roll, the rerolls and paying Soul for them are gone.
+- **The paper:** five boxes for the Aspiration, three by each Scar line with its Trait written after it, and seven ability lines on each archetype card, every one with its Aura.
+- **4 still to do on the play screen:** the Sheet tab's Aspiration as its points (`R.aspOf()`, the setback taking one off) where its die and *asp-set* and *asp* are now, a Scar written as what they can't do (When it lands' Scar and the Blaze ask for its Catch), and each Scar's slots and Trait on the Sheet tab (`R.scarGrowOf()`).
+- **7:** the party sheet (`party.js`, `src/worker/party.js`) still shares each Aspiration as a die, which downtime keeps in step, so it reads right till it shows the points.
 
 ### 6. The live table
 

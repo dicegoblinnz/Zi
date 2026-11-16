@@ -239,11 +239,18 @@ export async function fillSheet(ch, c, s0, { goal = null, B = null, blank = null
       tick(`${at}_wound`);
       notes.push(`${R.WOUNDS[r]}: your ${r} heals only to ${R.capOf(c, s, r)} till downtime.`);
     }
-    // Each Scar's Catch on its line. One that hasn't been written yet still
-    // takes its line.
-    const scars = (s.scars?.[r] ?? []).map((x) => x || "a Scar");
-    scars.slice(0, ROWS.scars).forEach((x, i) => put(`${at}_scar_${i + 1}`, x));
-    if (scars.length > ROWS.scars) notes.push(`More Scars on ${r}: ${scars.slice(ROWS.scars).join(", ")}.`);
+    // Each Scar on its line, what it stops them doing and, once it's grown,
+    // its Trait, with a box ticked for each slot toward it. One that hasn't
+    // been written yet still takes its line.
+    const scars = (s.scars?.[r] ?? []).map((x, i) => {
+      const g = R.scarGrowOf(s, r, i);
+      return { text: g.trait ? `${x || "a Scar"}, its Trait: ${g.trait}` : x || "a Scar", n: g.n };
+    });
+    scars.slice(0, ROWS.scars).forEach((x, i) => {
+      put(`${at}_scar_${i + 1}`, x.text);
+      for (let j = 1; j <= Math.min(ROWS.grow, x.n); j++) tick(`${at}_scar_${i + 1}_grow_${j}`);
+    });
+    if (scars.length > ROWS.scars) notes.push(`More Scars on ${r}: ${scars.slice(ROWS.scars).map((x) => (x.n && x.n < R.SCAR_SLOTS ? `${x.text} (${x.n} of ${R.SCAR_SLOTS} toward its Trait)` : x.text)).join(", ")}.`);
     // Each piece of armour on this Root, its boxes ticked on its first line,
     // and a piece that's said when it counts gets the next line too if it's free.
     const pieces = piecesOf(c).filter((a) => (a.root ?? "Body") === r);
@@ -263,7 +270,7 @@ export async function fillSheet(ch, c, s0, { goal = null, B = null, blank = null
   });
   for (const x of s.conditions.slice(ROWS.conditions)) notes.push(`Condition, ${x.name} (d${x.die}).`);
   put("aspiration", s.aspText || c.aspiration.text);
-  ring("aspiration_die", `d${s.asp}`);
+  for (let i = 1; i <= Math.min(ROWS.aspiration, R.aspOf(s)); i++) tick(`aspiration_${i}`);
   // In a campaign, the Party Goal's where the party sheet has it.
   if (goal?.text) {
     put("party_goal", goal.done ? `${goal.text} (done)` : goal.text);
@@ -338,9 +345,8 @@ export async function fillSheet(ch, c, s0, { goal = null, B = null, blank = null
     if (over.length) notes.push(said(`On Title ${NUMERALS[i]}: ${over.map((x) => (x.root ? `${x.text} (${x.root})` : x.text)).join(", ")}`));
   });
   c.titles.slice(ROWS.titles).forEach((t, k) => notes.push(said(`Title ${NUMERALS[ROWS.titles + k] ?? ROWS.titles + k + 1}, ${t.text ?? t.name} (${spreadNote(t)}): ${[...t.permissions.map(permWords), ...(t.boons ?? []).map(boonLine)].join(", ") || "no permissions yet"}`)));
-  // An ability's 1 Aura unless it says, the way the card's hint has it, so
-  // only one that costs more says so.
-  const ability = (a, x) => `${x.name}${Number(x.cost) > 1 ? ` (${Number(x.cost)} Aura)` : ""}: ${plain(x.text ?? x.html)}`;
+  // Every ability says what it costs in Aura.
+  const ability = (a, x) => `${x.name} (${Math.max(1, Number(x.cost) || 1)} Aura): ${plain(x.text ?? x.html)}`;
   const archs = R.archetypesOf(c, B);
   archs.slice(0, ROWS.archetypes).forEach((a, i) => {
     const at = `archetype_${i + 1}`;

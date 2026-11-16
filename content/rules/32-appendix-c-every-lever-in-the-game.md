@@ -96,7 +96,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **Armour takes it** | When a hit gets through to its Root, a piece of armour can take it: tick a box, and you don't lose the point. Its quality's how many boxes it's got: a Common piece has 1, a Fine one 2 and a Masterwork one 3, and the last box breaks it. The Armour Boon gives one piece one more box, and the Burden keeps your armour Common. A slot in downtime mends one piece. Attuned armour can't break, so it hasn't got boxes. |
 | **Take it for a friend** | Intercept: 1 Aura and no action, and any of the blows at a friend's Body within your stride come at you instead, for your own Body or Defend to handle. One friend for each Aura. Nobody can step in front of what's at a friend's Mind or Soul. The Guardian's, free, for every friend within their stride, and a Guardian who's a Teleporter as well reaches every friend within 10 units. A summon intercepts for free, and so do the GM's people. Answer for a friend, standing in the way. *Covered* (condition). The Intercept Burden: you can't. |
 | **One die at each of you** | A threat aims one die at each person, unless a tag like *Flurry* says it can do more. |
-| **Put the hit somewhere else** | The GM names the cost. Offer another that fits and costs about as much: a box of armour on that Root, something else you carry breaking, your Aspiration, the Party Goal, a clock. Attuned things can't be broken. 2 for 1 always fits: take it on another Root for 2 points of it, if it's got them. |
+| **Put the hit somewhere else** | The GM names the cost. Offer another that fits and costs about as much: a box of armour on that Root, something else you carry breaking, a point off your Aspiration, the Party Goal, a clock. Attuned things can't be broken. 2 for 1 always fits: take it on another Root for 2 points of it, if it's got them. |
 | **Cancel a hit** | *Warded* (spend it and the hit lands on it instead). The Toughness Boon (the first hit each scene, wherever it's at). The Guardian's *Stand firm* (1 Aura: the next two hits this round take 1 point between them). Break a tag a Maker gave the thing you're holding. Strip one of your animal tags, if you're a Shifter. |
 | **Stay where you are** | *Braced* (condition). |
 
@@ -126,7 +126,7 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 | **As far as it goes** | Nothing goes past a Root's maximum, or past half of it, rounded up, while it's wounded, and nothing heals a Scar. |
 | **A wound** | A hit on a Root with no points left: **Bloodied** (Body), **Frayed** (Mind) or **Hollow** (Soul), one each. Your dice don't change. Downtime or a story moment clears it. |
 | **Blaze** | While you're wounded, on your turn: take the Scar, declare something extraordinary, and it happens, no roll, then leave the scene. From your first Blaze, you can choose to die. |
-| **A Scar** | A hit on a wounded Root with no points left, and you leave the scene. It's a Catch on that Root and locks a point of it for good. A Scar that locks a Root's last point is your last scene. The Healer's *Pull them back* (1 Aura) keeps someone in the scene when they take one. The GM can take a Scar away when the story's earned it. |
+| **A Scar** | A hit on a wounded Root with no points left, and you leave the scene. It's a negative permission on that Root, something they can't do that the GM holds them to, and it locks a point of it for good. Three downtime slots grow it into a Trait as well, and the Scar still holds. A Scar that locks a Root's last point is your last scene. The Healer's *Pull them back* (1 Aura) keeps someone in the scene when they take one. The GM can take a Scar away when the story's earned it. |
 
 ## Threats {#s-levers-threats}
 
@@ -178,8 +178,9 @@ How a strained thread plays out at the table, from both sides, is in [Playing th
 
 | Lever | Where it comes from |
 | --- | --- |
-| **A step closer** | Beat the die of your Aspiration, the Goal or a project: an action when it's within reach, or a slot in downtime. One step a roll. |
-| **A new Title, archetype or attuned thing** | An Aspiration climbs past d12, and you pick one. A new Title's 5 on your Roots, spread however you like, and comes with one permission. A new archetype comes with its mechanic, its Trait and one ability, and taking one you've already got makes its Push bigger. A new attuned thing starts at Awakened with one awakening, which locks a point of the Root it fits. |
+| **A step closer** | Beat the die of the Goal or a project: an action when it's within reach, or a slot in downtime. One step a roll. |
+| **A point in your Aspiration** | A downtime slot, or the crew's action supporting it. No roll. A setback takes one back off. |
+| **A new Title, archetype or attuned thing** | An Aspiration gets its 5 points, and you pick one. A new Title's 5 on your Roots, spread however you like, and comes with one permission. A new archetype comes with its mechanic, its Trait and one ability, and taking one you've already got makes its Push bigger. A new attuned thing starts at Awakened with one awakening, which locks a point of the Root it fits. |
 | **A new permission** | A Grow in downtime, on one of your Titles, up to six on it. It has to fit inside the Title, and it's 1 on its Root. |
 | **A new ability** | A downtime slot, off one of your archetypes' lists, up to six on it. |
 | **A different permission** | Swap one in downtime for another that fits your Title, as long as it makes sense for your character. |

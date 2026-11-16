@@ -23,7 +23,7 @@ Start with how they work, then find yours in [Picking Your Archetypes](#s-pickin
 -   **Your Trait** is something that's always true of you because of your archetype, and every archetype's got one, in its own section. Most cost nothing and never switch off. A few cost Aura or come once a scene, and those say so. Take an archetype twice and it's still the one Trait. Bram's a Guardian, so every blow he intercepts for a friend gives him 1 Aura, whether it gets through or not.
 -   **Your abilities** are in your archetype's section. Your archetype comes with one, your pick off its list, Push included. More are a point each when you make your character, or a downtime slot later on, and an archetype holds six at most. Each one costs Aura when you use it, and how that works is just below.
 -   **One action a round**, the same as everyone. Your archetypes don't give you more of them. More dice is how you do more (see [Splitting](#s-splitting)).
--   **A new archetype** can come when your [Aspiration](#s-aspiration) climbs past d12, instead of a Title or an attuned thing, with the ability it comes with.
+-   **A new archetype** can come when your [Aspiration](#s-aspiration) comes good, instead of a Title or an attuned thing, with the ability it comes with.
 
 ### Abilities {#s-abilities}
 

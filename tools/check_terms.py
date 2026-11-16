@@ -99,6 +99,10 @@ RETIRED = [
     ("Aura from attuned things", r"\b2 (more )?(on|to) (your|her|his|their|the) Aura maximum\b|\b2 (more )?for (each|every) attuned thing\b|\b(Aura|maximum)['’]?s? (of )?7\b|\bpower(s|ed|ing)? (a |your |her |his |the |its |their )?(passive )?awakenings?\b|\bpowering\b"),
     ("a Title's 3", r"\bTitle puts 3\b|\b3 on your Roots\b|\bspread(s|ing)? (its|their|her|his) 3\b|\bTitle['’]s 3\b"),
     ("old healing", r"\b4 or more puts\b|\bsizes back\b|\bRecover slot\b|\bslot (spent )?(on )?(recovering|healing)\b|\b(hit|gets through) at d2\b"),
+    # 16 Nov, later: an Aspiration is 5 points put in, with no roll, and a
+    # Scar is a negative permission that can grow into a Trait, not a Catch.
+    ("Aspiration die", r"\bAspiration[’']?s?\b[^.|]{0,40}\b(at|on|to) d(2|4|6|8|10|12)\b|\bAspiration (roll|climbs|resolves)\b|\bclimbs past d12 and resolves\b|\bAspirations? at d2\b"),
+    ("Scar as a Catch", r"\bScars? (is|as|written down as) a Catch\b|\bCatches? (come|comes) from (a )?Scars?\b|\bScar's a Catch\b|\bor a Scar\b"),
     ("splits by action", r"\b(takes?|uses?) (a|one of your|up your) splits?\b|\bsplits? to spare\b|\bevery action in the roll gives\b|\bgives? you a split\b"),
 ]
 
