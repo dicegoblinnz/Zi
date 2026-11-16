@@ -17,6 +17,27 @@ Your rules left a few gaps, and the book has to say something in each one, so Cl
 9. **Downtime's Recover slot goes**, since downtime puts everything back.
 10. **Characters already saved move across** with each Title's 3 made 5 (the 2 more spread the way the 3 were, flagged for the player to check), every Root full, and a track's Scars on its Root.
 
+### 1. The rules
+
+Written into The Core, Conflict (bar A Full Fight), Downtime, Appendix D and the glossary on 16 Nov, on `rules/2026-11-16-core-rules`. The examples use the crew moved across by the plan's own rule for saved characters (each Title's 2 more spread the way its 3 were), so prompt 2's crew may move a number or two.
+
+1. **Every die's as good as an action.** One roll can answer a telegraph, go at a threat, break a condition and get you across the room, a die each, as long as the Root fits how you're doing each one. Answering and moving take dice now, not your whole action, and dice you put on moving add up. Marking a creature and catching a soul are a die's intent too.
+2. **Nothing gives you a second action.** Holding your action, coming out of hiding and taking your time outside a round go with extra actions, so outside a round it's one roll for each go. The two conditions whose spend was an action bring a Root in free instead, permission and all: *Unseen* on the roll you spend it on, and *Rallied* on a roll that answers a telegraph. Bringing a Root in costs 3 Aura, which is what an extra action cost.
+3. **You can bring a Root in on any roll**, your defence, a Defend and a heal included.
+4. **Defend is a Root at full, rolled on top of the Root the telegraphs land on**, split how you like, and it has to fit how you're defending, as it did.
+5. **A Root that's 0 rolls a d2**, since every roll's at least 1 step, and it's got no points, so its first hit wounds it. Vesk's Soul and Isolde's Body are like that.
+6. **Rolling again after a miss is a point of Soul**, where it was 1 Resolve, in downtime too. Downtime puts everything back as it starts, so a point spent in downtime is still spent when the next session starts.
+7. **Everything that put your Resolve up a size gets you a point of Soul back**: a big bite from a Catch or a hostile thread, and straining or snapping a bond thread. *Take a breath* is 1 point back on your Mind, as far as half its maximum, where it was a size of Confidence, as far as d6. The conditions that moved a track move a point: *Heartened* gives you a point of Mind back, *Shaken* and refusing *Charmed* are a hit at your Mind, and *Poisoned* has your Body defend as a d2.
+8. **The Blaze is your action, on your turn, while you're wounded**, since there are no last-moment reactions. So the hit that Scars you only takes you out of the scene, and the Blaze is for going out on your own terms first.
+9. **A Scar that locks a Root's last point is your last scene**, and your character dies or retires, your call, the way a Scar on a track's last size was your last Blaze. A Root with no points has nothing for a Scar to lock.
+10. **A quick heal's 1 point on one Root, no roll, and it isn't a heal roll, so Toll doesn't touch it and it gives none.** It was a size, and a hit's a point now. A heal reaches one person, since it's rolled unsplit. A flat bonus on a heal goes on before the Toll comes off.
+11. **A deadly threat's hits are said on its telegraph**, face up like its die (*a d12, 2 hits*), and a vulnerability's one more on top.
+12. **Items, the ground and your threads are never steps.** A plain weapon does what it does. Bringing the ground, a tag or a Catch in as a step goes with counting, and *Guided*'s spend finds your way with no roll, where it brought the ground in. A bond thread still borrows one thing off a friend's sheet for 1 Aura, and it does on your roll what that thing does, so their permission can bring a Root of yours in. Prompt 2 writes threads, so that's theirs to settle.
+13. **2 for 1 keeps its name**, for taking a hit on another Root for 2 points of it, and with several hits, each one goes where you like.
+14. **Downtime's Recover is Mend now**, since you don't need a slot to heal, and mending what you carry still takes one.
+15. **Appendix D's archetype lines are the plan's swaps, not new designs**: the Bard's Lift rests the crew's Mind like a scene's end, the Bloodsworn counts points of Body for sizes of Stamina, the Healer's *Good Hands* ignores a step of Toll, a Maker puts their Aura into a friend's awakening, a Teleporter's portal is 1 Aura, and the Warrior's *Second Skin* is a step a piece on your Body's defence. Prompt 2's archetypes are the truth, and prompt 7 brings these into line.
+16. **A truth from the Oracle's *Foretold* is a tag on whatever it's about**, for the whole crew for the rest of the scene, like a tag they've found, since it can't be a free step any more.
+
 ### 2. The character
 
 Written into 03, 03a, 03b and 18 on 16 Nov, with the crew in `notes/core-plan.md`.
@@ -26,14 +47,14 @@ Written into 03, 03a, 03b and 18 on 16 Nov, with the crew in `notes/core-plan.md
 3. **Each crew awakening locks the Root it's used with**: Vesk's hook and Wren's bow on Body, Bram's hammer two of Body, Dorrie's pin on Mind, Isolde's chalk and Ash's stone on Soul.
 4. **An awakening needs a free point to lock**, and Scars lock theirs first. One on a Root with nothing left does nothing till there's room.
 5. **A saved character's awakening with no Root locks a point of their biggest Root**, flagged for them to check, the way a Title's spread is.
-6. **Straining a bond thread, and a big bite, give a point back on any of your Roots**, where they put Resolve up a size. On your Soul alone, Vesk and Wren would get nothing.
-7. **Borrowing through a bond thread lends one of their permissions** to justify bringing a Root into your roll, for 1 Aura, and you still pay for the Root.
+6. **Straining a bond thread, and a big bite, give a point of Soul back**, as The Core has it (1's call 7). Vesk and Wren have Soul 0, so they'd get nothing from them, and 03's examples say so. If you'd rather it were a point back on any Root, it's a word in 02, 03 and Appendix D.
+7. **Borrowing through a bond thread lends one thing off their sheet**, for 1 Aura, and it does on your roll what it does for them, so their permission can justify bringing a Root of yours in, which you still pay for (1's call 12).
 8. **Every ability's 1 Aura**, and the home tracks go.
-9. **The Healer's heal is a Root rolled unsplit**, less 5 for each Toll. Its Trait's *Come Prepared*, ignoring a step of Toll, and *Good Hands* goes, since what's healed never gives Aura. Its Push is the flat bonus, +2 a heal. *Pull them back* keeps someone in the scene when they take a Scar.
+9. **The Healer's heal is a Root rolled unsplit**, less 5 for each Toll. Its Trait keeps your name, *Good Hands*, and now ignores a step of Toll, since what's healed never gives Aura. Its Push is the flat bonus, +2 a heal. *Pull them back* keeps someone in the scene when they take a Scar.
 10. **The Guardian's *Stand firm* makes the next two hits take 1 point between them**, not nothing. *Better Me Than You* pays 1 Aura for every blow he takes, so with both in Aura, nothing would ever get through him.
 11. **The Bard's Lift is a point back on the Mind** of every friend who hears it, and Crescendo makes it 2, then 3. It isn't a heal, so it adds no Toll.
 12. **The Bloodsworn's 3 steps are for every point of Body lost.** *Bleed for it* (1 Aura) spends a point for 3 steps, *Bleed out* (1 Aura) is 3 for every point it's down, and *Paid in Blood* is 1 Aura a point.
-13. **The Oracle's foresight stays two numbers an action**, however it's split, or with no limit on splitting it could swap a pile of 1s into every telegraph. *Foretold*'s truth lets anyone in the crew bring a Root in on it this scene, like a permission they've all got.
+13. **The Oracle's foresight stays two numbers an action**, however it's split, or with no limit on splitting it could swap a pile of 1s into every telegraph. *Foretold*'s truth is a tag on whatever it's about for the whole crew this scene (1's call 16).
 14. **The Maker spends Aura on a friend's awakening**, 2 steps each, where it powered it. A Maker's tags and a Shifter's animal tags work like permissions, so they can justify bringing a Root in.
 15. **The Shadow's extra action for coming out of hiding goes**, with extra actions.
 16. **A Summoner's souls don't lock points** till the table's worked souls out on this core.

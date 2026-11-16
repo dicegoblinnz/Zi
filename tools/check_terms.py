@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Flag rules words that the 7 Oct to 14 Nov 2026 changes retired, and broken links.
+"""Flag rules words that the 7 Oct to 16 Nov 2026 changes retired, and broken links.
 
 Usage: python3 tools/check_terms.py [FILE.md ...]   (default: every chapter)
        add --links to check every #anchor link points at a real heading id
@@ -30,7 +30,7 @@ RETIRED = [
     ("the Scholar archetype", r"\bthe Scholar archetype\b|\ban? Scholar\b|\bScholar['’]s truth\b|\bFind the flaw\b|#a-scholar\b"),
     ("quick-build kits", r"\bquick-build kits?\b"),
     # 14 Oct: archetypes
-    ("area for anyone", r"\barea\b.*\b1 Aura\b|\b1 Aura\b.*\barea\b|\bmake a die your area\b|\bcounts? friends\b"),
+    ("area for anyone", r"\barea\b.*\b1 Aura\b|\b1 Aura\b(?!\):).*\barea\b|\bmake a die your area\b|\bcounts? friends\b"),
     ("heal a group", r"\bheal(ing)? a group\b|\bgroup heal\b"),
     ("something that helps", r"\bsomething that helps\b"),
     ("Defend from two", r"\bpull(s|ing)? from two\b|\bfrom two enemies\b"),
@@ -88,6 +88,18 @@ RETIRED = [
     ("an attuned thing's own Aura", r"\bIts Aura\b|\bAura its own way\b|\bown way to (get (them |you |her |him )?)?Aura\b|\bits own way\b.*\bAura\b|\bAura\b.*\bits own way\b"),
     ("pumping", r"\bpump(s|ed|ing)?\b"),
     ("action cap", r"\bfor each archetype\b"),
+    # 16 Nov 2026: the new core (a roll's one Root at full, and a Root's points
+    # are its dice, its health and what you spend). The three tracks, extra
+    # actions, and counting what's on your sheet on a roll are gone. "Keep
+    # track", "track it down" and a hound that tracks are fine.
+    ("tracks", r"\b(Stamina|Confidence|Resolve)\b|(?<![-#])(?<!keep )(?<!keeps )(?<!need to )(?<!hound )(?<!that )\b[Tt]racks?\b(?! (down|it|them|him|her|for|and|by)\b)|\b2 from your other two\b|\bnobody Blazes on purpose\b"),
+    ("extra actions", r"\b[Ee]xtra actions?\b|\bholding your action\b|\bactions? next round\b|\bcoming out of hiding gives\b"),
+    ("counting on a roll", r"\b(every|each) thing (on (your|their|her|his) sheet )?that fits\b|\beverything (on (your|their|her|his) sheet )?that fits\b|\b1 (more )?for (every|each) thing\b|\b[Pp]lainly fits\b|\bstep on (every|a|any) roll\b|\b1 more on (a|any|every) roll\b"),
+    ("bringing something in", r"\b[Bb]ring(s|ing)? (something|the ground|a tag|a threat's tag|a Catch|one thing) in\b"),
+    ("Aura from attuned things", r"\b2 (more )?(on|to) (your|her|his|their|the) Aura maximum\b|\b2 (more )?for (each|every) attuned thing\b|\b(Aura|maximum)['’]?s? (of )?7\b|\bpower(s|ed|ing)? (a |your |her |his |the |its |their )?(passive )?awakenings?\b|\bpowering\b"),
+    ("a Title's 3", r"\bTitle puts 3\b|\b3 on your Roots\b|\bspread(s|ing)? (its|their|her|his) 3\b|\bTitle['’]s 3\b"),
+    ("old healing", r"\b4 or more puts\b|\bsizes back\b|\bRecover slot\b|\bslot (spent )?(on )?(recovering|healing)\b|\b(hit|gets through) at d2\b"),
+    ("splits by action", r"\b(takes?|uses?) (a|one of your|up your) splits?\b|\bsplits? to spare\b|\bevery action in the roll gives\b|\bgives? you a split\b"),
 ]
 
 

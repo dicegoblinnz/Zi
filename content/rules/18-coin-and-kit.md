@@ -71,7 +71,7 @@ For Catches, use the [Catch ideas](#catches-12), or write your own in the same s
 
 Go easy with them. I'd give each character about one Tempered thing over an arc. Perfected things shouldn't turn up more than a handful of times in a whole campaign, and only at the moments that matter, like the end of an arc or a boss that nearly broke the crew. Any more than that and they'll stop feeling rare. Go easy with materials too, because each one's a whole stage.
 
-**Their Catches are some of the best trouble you'll get.** The player took each one for an awakening, and letting it bite is up to them. When they do, run with it and make it real: the pilots want their glass back the night before the crew sails, or the skull starts lecturing halfway down the vault stairs. They take 1 Aura for it, or a point back on any of their Roots when it changes the scene or costs them something they wanted (see [Catches at the table](#s-catches-gm)).
+**Their Catches are some of the best trouble you'll get.** The player took each one for an awakening, and letting it bite is up to them. When they do, run with it and make it real: the pilots want their glass back the night before the crew sails, or the skull starts lecturing halfway down the vault stairs. They take 1 Aura for it, or a point of Soul back when it changes the scene or costs them something they wanted (see [Catches at the table](#s-catches-gm)).
 
 ### Twelve Tempered things {#twelve-rare-things}
 
@@ -326,7 +326,7 @@ The steward's Challenge 4, so she rolls his d8 with hers. Hers come up 7 and 2, 
 
 She gets her ten minutes. On the way down he asks what she was after, and she tells him she wanted to see Lady Quell's portrait. That's a lie, and the ring's *Honest*. Keeping it quiet would cost the 1 Aura she's just got back, so her player lets the Catch bite instead: the ring goes cold on her finger, and the stone clouds over right under his nose. He knows what that means.
 
-The steward's off down the stair to find his master, and the GM telegraphs it with his d8: if nobody deals with it, the house knows somebody's been in those rooms before the toasts. That changes the scene, so it's a big bite, and instead of the Aura Dorrie gets a point back on her Mind, which a long evening of lying had worn down to 2. She's got a new problem with a name and a reason.
+The steward's off down the stair to find his master, and the GM telegraphs it with his d8: if nobody deals with it, the house knows somebody's been in those rooms before the toasts. That changes the scene, so it's a big bite, and instead of the Aura Dorrie gets a point of Soul back, on a Soul she'd spent down to 2 rolling again all evening. She's got a new problem with a name and a reason.
 :::
 
 ### Writing your own {#s-kit-writing-your-own}

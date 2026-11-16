@@ -5,8 +5,8 @@ slug: downtime
 order: 12
 part: "Play"
 partNumber: "Part I"
-source: 2026-10-02 rulebook
-updated: 2026-11-14
+source: 2026-10-02 rulebook, and Mo's chat decisions, 16 Nov 2026
+updated: 2026-11-16
 ---
 :::quote
 Downtime's the half of the game where the world decides what it's been doing while you were bleeding in a warehouse.
@@ -33,7 +33,7 @@ If you ignore a pressure, it doesn't go away. It gets worse, and the GM brings i
 
 Every player gets **two personal slots**. The crew gets **one action**, the same as every faction on the board, and nothing buys it another. Put one of your personal slots into the crew's action and everything counts twice. A personal slot can also chase the Goal, work a project or support an Aspiration on its own, but it can never be a second move on a faction.
 
-Some things happen without costing a slot. **Every downtime starts with each of your [tracks](#s-tracks) up a size**, Stamina, Confidence and Resolve, as far as d12.
+Some things happen without costing a slot. **Every downtime starts with everything back**: every Root on its maximum, every wound cleared and your Toll gone (see [Healing](#s-healing)). Scars stay, and so do the points your awakenings lock. You never need a slot to heal.
 
 ## What You Can Do With a Slot {#what-you-can-do-with-a-slot}
 
@@ -41,18 +41,17 @@ Some things happen without costing a slot. **Every downtime starts with each of 
 
 -   **Deal with it.** Pay the debt, answer the letter, lie low, meet the man. One slot usually settles a pressure, and the GM says if it needs two. If something pushes back, roll for it.
 
-### Recover {#recover}
+### Mend {#recover}
 
--   **Heal.** Put 6 sizes back on your tracks, spread however you like. Nothing goes past d12, and nothing heals a Scar (see [Healing](#s-healing)).
 -   **Mend something you carry that's broken**, usually for a purse of gold as well. Armour is the usual one, after it's taken a hit for you, and a piece with boxes ticked that hasn't broken is mended the same way, every box on it at once. Attuned things can't break.
 
 ### Grow {#grow}
 
 A slot buys what a point buys when you make your character: a permission, an ability, an awakening or something to carry. A new Title, archetype or attuned thing comes from your [Aspiration](#s-aspiration).
 
--   **A new permission** on one of your Titles, up to six on it. It has to fit inside the Title, and the story should say where you learned it. It puts 1 on its Root, the same as the ones you started with, and it's a step on every roll it fits. See [Permissions](#s-writing-permissions).
+-   **A new permission** on one of your Titles, up to six on it. It has to fit inside the Title, and the story should say where you learned it. It puts 1 on its Root, the same as the ones you started with, so that's a step more on every roll of that Root, a point more to take hits with and spend, and one more thing that can bring a Root in. See [Permissions](#s-writing-permissions).
 -   **A new ability** off one of your archetypes' lists, up to six on it. The story should say where it came from, the same as a permission. See [Abilities](#s-abilities).
--   **Chase your Aspiration.** Roll against its die, built from whatever you're doing about it. Beat it and it climbs one. See [Aspiration](#s-aspiration).
+-   **Chase your Aspiration.** Roll the Root that fits what you're doing about it against its die. Beat it and it climbs one. See [Aspiration](#s-aspiration).
 -   **Deepen a bond.** Write a new thread with someone, a bond thread or a hostile one, whichever the story's given you. If you've already got a bond with them, it goes under that one. If they're in the crew, it goes on both your sheets, so agree on it together.
 -   **Get something** the story can give you, whether it's bought, made, won or owed: something to carry, a purse of gold, or the material an attuned thing needs for its next stage.
 
@@ -60,13 +59,13 @@ A slot buys what a point buys when you make your character: a permission, an abi
 
 ### Attunement {#s-downtime-attunement}
 
-Every new awakening on an attuned thing takes a slot, up to what its stage allows. The thing can't go up a stage until you've got its material, found in the story or bought (see [Attunement](#s-attunement)). If you're a Summoner, this is when the souls you've caught go into your summoning attunement, one to an awakening, if there's room (see [Summoning](#s-summoning)).
+Every new awakening on an attuned thing takes a slot, up to what its stage allows, and locks a point of the Root it fits. The thing can't go up a stage until you've got its material, found in the story or bought (see [Attunement](#s-attunement)). If you're a Summoner, this is when the souls you've caught go into your summoning attunement, one to an awakening, if there's room (see [Summoning](#s-summoning)).
 
 ### The crew's action {#party-slots}
 
 The crew's action is its one move a downtime, and it can be any of these. When someone puts a personal slot into it as well, that's two slots on one thing, and everything counts twice.
 
--   **Chase the Goal.** Whoever does it rolls against the Goal's die, a Root and everything on their sheet that fits. Beat it and it climbs one. See [The Party Goal](#s-goal).
+-   **Chase the Goal.** Whoever does it rolls the Root that fits how they go at it, against the Goal's die. Beat it and it climbs one. See [The Party Goal](#s-goal).
 -   **Work a project.** The same, against the project's die. See [Projects](#s-projects).
 -   **Move on a faction.** Destroy, Undermine, Obstruct, Influence, Acquire or Establish, set back its agenda, or work for it. See [Factions](#s-faction-crew).
 -   **Rebuild.** Establish an asset or a resource the crew's lost. An asset still needs a resource paying for it. See [How the crew grows](#s-crew-grows).
@@ -80,7 +79,7 @@ A personal slot that chases the Goal, works a project or supports an Aspiration 
 Most slots just happen. When something pushes back (the fence wants his money, or the Guild's watching the smithy), roll for it like any Challenge.
 
 -   **Ties go to the defender**, every time. A die you're climbing counts as the defender.
--   **There's no Aura in downtime**, so you can't pay to win a tie. You've got two other ways out: pay 1 Resolve to roll again (your dice only), or spend one of the crew's extra resources and take the tie. It's the crew's money, so ask the table first.
+-   **There's no Aura in downtime**, so you can't pay to win a tie. You've got two other ways out: pay a point of Soul to roll again (your dice only), or spend one of the crew's extra resources and take the tie. It's the crew's money, so ask the table first. Downtime put your points back when it started, so a point of Soul you spend now is still spent when the next session starts.
 -   **Only the crew can do that.** A faction never rerolls, and never buys a tie.
 
 ## Mending Threads {#s-downtime-threads}
@@ -117,12 +116,12 @@ Vesk's only thread with Bram is a bond thread: the fire he carried her out of, a
 **Bram:** The Warden's spear ticked my plate, so one slot mends it. My ribs'll knit on their own, so my other slot goes in with the crew's action. We're going at the Estate, and it's too big for the action on its own.
 :::
 
-**Resolution.** Vesk's slot pays the fence what he asked for. That's doing right by him, so her hostile thread with him, *I owe a debt I would rather not discuss*, is strained now, and one more good turn would snap it. *Haul someone up after me* is an active awakening: 1 Aura and a friend comes up the line with her, and each Aura more brings one more.
+**Resolution.** Vesk's slot pays the fence what he asked for. That's doing right by him, so her hostile thread with him, *I owe a debt I would rather not discuss*, is strained now, and one more good turn would snap it. *Haul someone up after me* is an active awakening: 1 Aura and a friend comes up the line with her, and each Aura more brings one more. It locks another point of her Body, so its maximum's 9 now.
 
-Dorrie's slot is a roll at the Goal, sending Vane's investigators the wrong way: her Mind, both Titles, *make a lie sound like old news*, *keep my story straight under questions* and Face, 11 steps, a d12 and a d10, against the Goal's d4. Her best is 6 against 3, so the Goal climbs to d6. Her new permission puts her Soul up to 5.
+Dorrie's slot is a roll at the Goal, sending Vane's investigators the wrong way: her Mind, 7 steps, a d12 and a d2, against the Goal's d4. Her best is 6 against 3, so the Goal climbs to d6. Her new permission puts her Soul up to 7.
 
-Isolde's Aspiration roll is her Mind, both Titles and *find what I need in any library*, 10 steps, a d12 and a d8, against its d6. Her best is 5 against 5, and the tie goes to the Aspiration. There's no Aura in downtime, so she pays 1 Resolve to roll again, gets a 7, and it climbs to d8. Her new permission goes on after that roll, and puts her Mind up to 8 for next time.
+Isolde's Aspiration roll is her Mind, 9 steps, a d12 and a d6, against its d6. Her best is 5 against 5, and the tie goes to the Aspiration. There's no Aura in downtime, so she pays a point of Soul to roll again, gets a 7, and it climbs to d8. She'll start the next session a point of Soul down for it. Her new permission goes on after that roll, and puts her Mind up to 10 for next time.
 
-Bram's slot mends his plate. His ribs don't need one: he finished last session with his Stamina on a d8, and downtime started by putting it up to d10. If he wants it back to d12 before the next job, that's a slot on healing.
+Bram's slot mends his plate. His ribs don't need one: he finished last session Bloodied, with no points of Body left, and downtime started by putting him back on 7 with the wound gone.
 
 The Estate's Power is a d12 and the crew's is a d4, so the crew needs its action and a personal slot on the same move to go at it. Bram's other slot makes it two, and two slots count everything twice: the crew's d4 becomes a d8. They Obstruct, so the d8 has to beat the Estate's d12. The crew rolls 5 and the d12 rolls 9, so the action goes ahead: 9 against the agenda's d10, which rolls 4, and *Vane comes home* climbs to d12. And nobody touched the festival, so next session the law will be on every street.

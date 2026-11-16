@@ -1130,7 +1130,7 @@ if (part("1e")) {
       if ("home" in a) note(`the ${a.name} still has a home track in book.json`);
       for (const x of a.abilities) if (!(x.cost >= 1)) note(`the ${a.name}'s ${x.name} has no price in Aura`);
     }
-    same(BUILD.archetypes.find((a) => a.name === "Healer")?.trait?.name, "Come Prepared", "the Healer's Trait eases Toll");
+    same([BUILD.archetypes.find((a) => a.name === "Healer")?.trait?.name, /\bToll\b/.test(BUILD.archetypes.find((a) => a.name === "Healer")?.trait?.text ?? "")], ["Good Hands", true], "the Healer's Trait, Good Hands, eases Toll");
     same(["Splits", "Extra action"].filter((l) => BUILD.boons.some((b) => b.lever === l)), [], "there's no Splits or Extra action Boon");
   });
 
@@ -1889,7 +1889,7 @@ if (part("3")) {
   has(await page.textContent("#cc-dialog"), "A permission on", "a permission on a tap, offline");
   await done();
   await page.click('.cc-tabs a[data-t="rules"]');
-  for (const [title, want] of [["Defend", "Defend"], ["Intercept", "1 Aura"], ["The Tracks", "d12"], ["Aura", "past your maximum"]]) {
+  for (const [title, want] of [["Defend", "Defend"], ["Intercept", "1 Aura"], ["Your Points", "maximum"], ["Aura", "past your maximum"]]) {
     const box = page.locator(".cc-rulebox", { has: page.locator(`summary:text-is("${title}")`) });
     if (!(await box.count())) note(`no ${title} on the Rules tab`);
     else {

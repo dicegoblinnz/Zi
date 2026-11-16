@@ -112,7 +112,7 @@ If you're not sure which ones you're after, the table in [Picking Your Archetype
 
 ## Step 3: Permissions {#s-writing-permissions}
 
-A **permission** is something your character can do. Each Title comes with one, more are **a point each**, and they have to fit inside the Title they're on. **Each permission puts 1 on its Root**, the one that fits how you do it, and you write it next to it: *pick a mechanical lock* (Body). It's also what lets you bring another Root into a roll: name the permission that says why, and pay for it (see [Roots](#s-step-roots)). So it's worth a couple of minutes to get right. Here's how I write them.
+A **permission** is something your character can do. Each Title comes with one, more are **a point each**, and they have to fit inside the Title they're on. **Each permission puts 1 on its Root**, the one that fits how you do it, and you write it next to it: *pick a mechanical lock* (Body). It's also what lets you bring another Root into a roll: name the permission that says why, and pay for it (see [Bringing In a Root](#s-bring)). So it's worth a couple of minutes to get right. Here's how I write them.
 
 ### Every part of your sheet does a different job {#kinds-of-word}
 
@@ -205,7 +205,7 @@ Now add them up. **Each Root is what your Titles put on it, and 1 for every perm
 That number does three jobs at once. It's **the steps you roll**, since a roll's one Root at full, so a Body of 9 is a d12 and a d6. It's **your health** there: every hit that gets through to it takes a point, and once it's got none left, the next one wounds it. And it's **what you spend** to bring it into a roll. So the stronger you get, the harder you are to put down.
 
 :::rule
-**A roll** is one Root, the one that fits how you're doing it, at full, whatever it's got left. **Bring another Root in** by naming the permission that justifies it and paying 1 point from that Root, or 3 Aura, and all of it goes on the roll too. An awakening's 2 steps on any roll it fits.
+**A roll** is one Root, the one that fits how you're doing it, at full, whatever it's got left. **Bring another Root in** by naming the permission that justifies it and paying 1 point from that Root, or 3 Aura, and all of it goes on the roll too (see [Bringing In a Root](#s-bring)). An awakening's 2 steps on any roll it fits.
 :::
 
 | Bram's | Where it comes from | Points |
@@ -412,7 +412,7 @@ If you're a [Summoner](#a-summoner), your summoning attunement holds souls, one 
 
 ### Catch ideas: 12 {#catches-12}
 
-A **Catch** is trouble that comes with an attuned thing. (The other Catches on your sheet come from [Scars](#s-blaze).) It has to be something that can bring real trouble into a scene, something the GM can run with, and if it'd never come up, it isn't a Catch. You can let it bite as often as you like for 1 Aura, as long as it brings real trouble every time, and 1 Aura on your own roll keeps it quiet (see [Getting it back](#getting-it-back)). Letting it bite is always your call. When it bites in a big way, one that changes the scene or costs you something you wanted, you get a point back on any of your Roots instead of the Aura (see [Catches and Trouble](#s-trouble)).
+A **Catch** is trouble that comes with an attuned thing. (The other Catches on your sheet come from [Scars](#s-blaze).) It has to be something that can bring real trouble into a scene, something the GM can run with, and if it'd never come up, it isn't a Catch. You can let it bite as often as you like for 1 Aura, as long as it brings real trouble every time, and 1 Aura on your own roll keeps it quiet (see [Getting it back](#getting-it-back)). Letting it bite is always your call. When it bites in a big way, one that changes the scene or costs you something you wanted, you get a point of Soul back instead of the Aura (see [Catches and Trouble](#s-trouble)).
 
 | \# | Catch | What it means |
 | --- | --- | --- |
@@ -457,12 +457,12 @@ Any thread can be **strained**, which means it's nearly snapped. So a single thr
 
 Every thread's a hook the GM can pull, and a bond thread's something you can lean on, too:
 
--   **Borrow through a bond thread.** 1 Aura lets one of their permissions justify bringing a Root into your roll, which you still pay for, and it doesn't strain anything. Through a faction, it's one of its assets. A place or a cause has nothing to lend, but you can still strain a thread with it. You can't borrow through a strained thread until it's mended.
--   **Strain a bond thread.** Lean on them in the story, like calling in the favour, using their name, dragging them into it or using the secret, and you get **a point back on any of your Roots**. It's free, it doesn't take an action, and the thread's now **strained**.
+-   **Borrow through a bond thread.** 1 Aura borrows one thing off their sheet for your roll, and it does there what it does for them, so one of their permissions can justify bringing a Root of yours in, which you still pay for. It doesn't strain anything. Through a faction, it's one of its assets. A place or a cause has nothing to lend, but you can still strain a thread with it. You can't borrow through a strained thread until it's mended.
+-   **Strain a bond thread.** Lean on them in the story, like calling in the favour, using their name, dragging them into it or using the secret, and you get **a point of Soul back**. It's free, it doesn't take an action, and the thread's now **strained**.
 -   **Mend it.** Make it right with them, by roleplaying it, doing them a favour or paying them, whatever suits them. That happens in downtime or in a scene with them, not in the middle of the fight where you strained it. Then it's whole again.
--   **Strain it again before it's mended and it snaps.** You still get the point, but cross the thread out. When the last thread goes, so does the bond.
+-   **Strain it again before it's mended and it snaps.** You still get the point of Soul, but cross the thread out. When the last thread goes, so does the bond.
 
-**A hostile thread bites like a Catch.** Let it bring you real trouble and take 1 Aura, or a point back on any of your Roots for a big bite, one that changes the scene or costs you something you wanted (see [Catches and Trouble](#s-trouble)). You can't borrow through it, and you can't strain it for a point. Doing right by them strains it instead, and doing right by them again snaps it, and the grudge is over. Wrong them again before it snaps, and it's whole again.
+**A hostile thread bites like a Catch.** Let it bring you real trouble and take 1 Aura, or a point of Soul for a big bite, one that changes the scene or costs you something you wanted (see [Catches and Trouble](#s-trouble)). You can't borrow through it, and you can't strain it for Soul. Doing right by them strains it instead, and doing right by them again snaps it, and the grudge is over. Wrong them again before it snaps, and it's whole again.
 
 :::example[Vesk's threads]
 *Dorrie: we have pulled a dozen jobs. I trust her with my life.* (bond)
@@ -479,9 +479,9 @@ The first two come from her answers in Connect. The fence is outside the crew, a
 New threads come from [Grow](#grow) in downtime, and when the crew's [Party Goal](#s-goal) is done, everyone writes one to someone the Goal brought into their life.
 
 :::example[Straining a thread]
-Vesk's on Vane's roof with her Body down to 2, and the guards are coming up the stairs. She whistles down to Dorrie in the courtyard to make a fuss and pull them back down, and Dorrie does, so now Dorrie's the one with the whole household looking at her. That's leaning on their thread, *We have pulled a dozen jobs. I trust her with my life.* Vesk gets a point back on her Body, so it's 3, and the thread's strained on both their sheets. After the job she gives Dorrie the pick of the haul, and it's mended.
+Dorrie's in the courtyard at Vane's with her Soul down to 2, and the steward's started asking who invited her. She signals up to Vesk on the roof to drop a slate into the next yard and pull him off, and Vesk does, so now Vesk's the one with the whole household looking for her. That's leaning on their thread, *We have pulled a dozen jobs. I trust her with my life.* Dorrie gets a point of Soul back, so it's 3, and the thread's strained on both their sheets. After the job she gives Vesk the pick of the haul, and it's mended.
 
-Her thread with the fence, *I owe a debt I would rather not discuss*, is hostile, so she can't lean on it for a point. She brings the fence a cut of the haul anyway. That's doing right by him, so the thread's strained, and one more good turn will snap it and clear the debt.
+Vesk's thread with the fence, *I owe a debt I would rather not discuss*, is hostile, so she can't lean on it for Soul. She brings the fence a cut of the haul anyway. That's doing right by him, so the thread's strained, and one more good turn will snap it and clear the debt.
 :::
 
 ### Playing the strain {#s-playing-the-strain}
@@ -506,7 +506,7 @@ A hostile thread goes the other way. It's strained because they've done right by
 It never stops you working together in the moment. You still combo and still intercept for each other.
 
 :::example[Vesk and Bram]
-Vesk's bond thread with Bram is *He once carried me out of a fire. I have never said thank you.* Her Body's down to 1 on a wall and she yells for him to haul her up again, so she strains it, and her Body's back up to 2. Bram's player says he's starting to feel like her ladder, and she can fix it by saying thank you. It was their only thread, so none are whole now, and he's cold with her until she makes it right. At the bar afterwards she finally says it. The thread's mended, and she rewrites it now that it's said.
+Vesk's bond thread with Bram is *He once carried me out of a fire. I have never said thank you.* She's halfway up a wall with the watch coming and yells for him to haul her up again, so she strains it. Her Soul's 0, so there's no point for her to get back, but she needs him, and that's what a strain's for. Bram's player says he's starting to feel like her ladder, and she can fix it by saying thank you. It was their only thread, so none are whole now, and he's cold with her until she makes it right. At the bar afterwards she finally says it. The thread's mended, and she rewrites it now that it's said.
 :::
 
 ## Step 8: Connect {#s-connect}
@@ -602,7 +602,7 @@ So the more you wear, the more hits you can take. Bram's plate is Fine and his s
 
 ### Broken Armour {#recovering-armour}
 
-Broken armour's mended in downtime, the same as anything else you carry: it takes a downtime slot, and usually a purse of gold as well (see [Downtime](#downtime)). A piece with boxes ticked that hasn't broken yet is mended the same way, every box on it at once.
+Broken armour's mended in downtime, the same as anything else you carry: it takes a downtime slot, and usually a purse of gold as well (see [Mend](#recover)). A piece with boxes ticked that hasn't broken yet is mended the same way, every box on it at once.
 
 :::example[Armour at the table]
 Bram's wearing Fine plate, with two boxes, and a Common shield, with one, and they're both Body armour.
@@ -618,7 +618,7 @@ Downtime: he spends a slot and a purse of gold at the smithy, and his plate's me
 
 ## Boons and Burdens {#s-boons}
 
-A **Boon** is a permanent upgrade, like shrugging off the first hit each scene or a longer stride. It costs **two permission slots on one of your Titles**, and you can swap it back for permissions in downtime. You can build one in when you make your character, for **2 points**, the same as the two permissions it takes the place of, or you can swap two permissions for one in downtime. A Title with Boons and no permissions puts the permission it came with towards its first Boon, so that one's 1 point. A Boon does what it says, and it's never a step on a roll.
+A **Boon** is a permanent upgrade, like shrugging off the first hit each scene or a longer stride. It costs **two permission slots on one of your Titles**, and you can swap it back for permissions in downtime. You can build one in when you make your character, for **2 points**, the same as the two permissions it takes the place of, or you can swap two permissions for one in downtime. A Title with Boons and no permissions puts the permission it came with towards its first Boon, so that one's 1 point. A Boon does what it says, and it never adds to a roll.
 
 A **Burden** is a permanent cost, and it only ever comes on an attuned thing. Titles never take them. A Burden's worth two awakenings on that thing, or a Boon for you, and a thing can't take one before it's Tempered (see [Attunement](#s-attunement)).
 

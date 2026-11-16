@@ -246,7 +246,7 @@ Only a Healer can make a **heal roll**. It's an action: roll the Root that fits 
 A heal reaches one person. Anyone can [quick heal](#s-healing) for 1 Aura, though.
 
 :::rule
-**Trait:** *Come Prepared*. Your heals ignore a step of Toll: each one loses 5 less for the Toll your patient's got, so a heal from you on someone with 1 Toll is whole.
+**Trait:** *Good Hands*. Your heals ignore a step of Toll: each one loses 5 less for the Toll your patient's got, so a heal from you on someone with 1 Toll is whole.
 
 **Push (1 Aura):** +2 to one of your dice when you heal.
 
@@ -254,7 +254,7 @@ A heal reaches one person. Anyone can [quick heal](#s-healing) for 1 Aura, thoug
 :::
 
 :::example[Healing Vesk]
-Say you're a Healer, *The field surgeon of the Red Company*, and you heal with your Mind, 7 steps, so it's a d12 and a d2. Vesk's Body is down to 3 of the 10 it can hold, and her Mind to 2 of 5, and she's had one heal from you already this scene, so she's got 1 Toll. You roll 6 and 2, 8 in all. Her Toll would take 5 off that, but you've *Come Prepared*, so she gets the whole 8. She puts 7 on her Body and 1 on her Mind, and now she's got 2 Toll. The d2 landed on its top face, so that's 1 Aura for you, and what you healed gets you nothing.
+Say you're a Healer, *The field surgeon of the Red Company*, and you heal with your Mind, 7 steps, so it's a d12 and a d2. Vesk's Body is down to 3 of the 10 it can hold, and her Mind to 2 of 5, and she's had one heal from you already this scene, so she's got 1 Toll. You roll 6 and 2, 8 in all. Her Toll would take 5 off that, but your *Good Hands* ignore a step of it, so she gets the whole 8. She puts 7 on her Body and 1 on her Mind, and now she's got 2 Toll. The d2 landed on its top face, so that's 1 Aura for you, and what you healed gets you nothing.
 :::
 
 **Title ideas:** [Healer](#k-healer) · [Mending](#k-mending) · [Faith](#k-faith)
@@ -368,7 +368,7 @@ Your foresight's two numbers at most, however many steps you've got, so make the
 
 **Hold it (1 Aura):** your foresight lasts till you use it or the scene ends.
 
-**Foretold (1 Aura):** win a [Study](#s-study) and introduce a truth instead. It's true from now on, and anyone in the crew can bring a Root in on it this scene, like a permission they've all got.
+**Foretold (1 Aura):** win a [Study](#s-study) and introduce a truth instead. It's true from now on, a tag on whatever it's about for the whole crew this scene.
 :::
 
 :::example[Seeing the brute's club]
@@ -380,7 +380,7 @@ The GM telegraphs the brute's club at Bram, a d10, and two guards' swords at Wre
 :::
 
 :::example[The crack in the circle]
-Isolde turns her Study on the Warden: her Mind, 9 steps, a d12 and a d6. Her d12 rolls 8 against its 6, so she's won, and she pays 1 Aura for Foretold. She says the chalk circle it's bound to has a crack in it. Now it does, and anyone in the crew can bring a Root in on it this scene.
+Isolde turns her Study on the Warden: her Mind, 9 steps, a d12 and a d6. Her d12 rolls 8 against its 6, so she's won, and she pays 1 Aura for Foretold. She says the chalk circle it's bound to has a crack in it. Now it does, *Cracked* on the circle for the whole crew this scene.
 :::
 
 **Title ideas:** [Divination](#k-divination) · [Warding](#k-wizard) · [Medium](#k-medium) · [Hexer](#k-warlock) · [Scholar](#k-scholar) · [Investigator](#k-investigator)
@@ -400,7 +400,7 @@ When you get into hiding, the dice you rolled to hide go into your **shadow pool
 :::
 
 :::example[Under the gallery]
-The hall's lit up for the party, and the only dark's the shadow under the gallery. That's enough for Vesk. She slips into it on her Body, 11 steps, a d12 and a d10, and gets away with it, so both dice go in her pool. Later the steward's lying to her face, and she saw him pocket the letter from under there. Her Mind's 5, so she takes the d12 from her pool as 6 steps, and that's 11: a d12 and a d10.
+The hall's lit up for the party, and the only dark's the shadow under the gallery. That's enough for Vesk. She slips into it on her Body, 11 steps, a d12 and a d10, and gets away with it, so both dice go in her pool. Later the steward's lying to her face, and from under there she saw him slip the letter into his coat. Her Mind's 5, so she takes the d12 from her pool as 6 steps, and that's 11: a d12 and a d10.
 :::
 
 **Title ideas:** [Rogue](#k-rogue) · [Face](#k-face) · [Streetwise](#k-streetwise) · [Veil](#k-veil)
